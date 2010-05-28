@@ -1,0 +1,73 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+
+<h1>{L_TITLE}</h1>
+<p>{L_EXPLAIN}</p>
+
+<form method="post" action="{F_CONFIG}" name="post">
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+			<tr>
+   				 <th align="center" colspan="2">{L_GENERAL}</th>
+			</tr>
+			<tr>
+				<td width="60%" class="row2">{L_HEADERTYPE}</td>
+				<td width="40%" class="row1">
+					<select size="1" name="Headertype">
+						<option value="0" {HEADER_SEL_OLDPHOTO}>{L_OLDPHOTO}</option>
+						<option value="1" {HEADER_SEL_BW}>{L_BW}</option>
+						<option value="2" {HEADER_SEL_NONE}>{L_NONE}</option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				 <td class="row2">{L_STYLE}</td>
+				 <td class="row1">
+				 	<select name="style" class="input">
+					<!-- BEGIN style_row -->
+						<option value="{style_row.VALUE}"{style_row.SELECTED}>{style_row.OPTION}</option>
+					<!-- END style_row -->
+					</select>
+				</td>
+			</tr>
+		
+			<tr>
+				<td width="70%" class="row2">{L_SHOWSB}</td>
+				<td width="30%" class="row1"><input type="checkbox" name="showSB" value="1" {BP_SHOWSB} /></td>
+			</tr>
+			<tr>
+				<td width="30%" class="row2">{L_DYNLOC}</td>
+				<td width="70%" class="row1"><input type="checkbox" name="dynloc" value="1" {BP_DYNLOC} /></td>
+			</tr>
+			<tr>
+				<td width="70%" class="row2">{L_DYNBOSS}</td>
+				<td width="30%" class="row1"><input type="checkbox" name="dynboss" value="1" {BP_DYNBOSS} /></td>
+			</tr>
+</table>
+<br/>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" id="bossprog">
+	<thead>
+	<tr>
+		<th colspan="2">{L_SHOWZONES}</th>
+	</tr>
+	</thead>
+	<tbody>
+<!-- BEGIN gamezone -->
+	<tr>
+		<td style="text-align: left; width:40%;" class="row2">{gamezone.ZONE_NAME}</td>
+		<td style="text-align: left; width:60%;" class="row1">
+		  <input type="checkbox" name="{gamezone.BOSS_SHOWN}" value="1" {gamezone.BOSS_CHK} />
+		</td>
+	</tr>
+<!-- END gamezone -->
+	</tbody>
+</table>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+ <tr><th align="center" colspan="2"><input type="submit" name="bpsavebu" value="{L_SUBMIT}" class="mainoption" /></th></tr>
+</table>
+</form>
+
+<!-- INCLUDE dkp/overall_footer.html -->
+

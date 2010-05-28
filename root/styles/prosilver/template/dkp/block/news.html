@@ -1,0 +1,78 @@
+<!--  begin news  -->
+
+<div class="panel">
+<!-- <div class="forabg" style="clear: none;"> -->
+
+<span class="corners-top"><span></span></span>
+<div style="margin-bottom: 0px">
+<div class="inner">
+
+<ul class="topiclist">
+	<li class="header">
+	<dl class="icon">
+		<dt>{L_NEWS}</dt>
+		<dd></dd>
+	</dl>
+	</li>
+</ul>
+</div>
+</div>
+
+<!-- BEGIN date_row -->
+
+<div class="post bg2" style="margin-bottom: 0px">
+<div class="inner">
+<span class="corners-top"><span></span></span>
+
+<!-- BEGIN news_row -->
+<div class="postbody" style="width: 100%">
+
+<h4 class="first">{date_row.news_row.ATTACH_ICON_IMG}<a href="{date_row.news_row.LINK}"><strong>{date_row.news_row.HEADLINE}</strong></a></h4>
+
+<ul class="linklist">
+<li>{L_POST_BY_AUTHOR} : {date_row.news_row.AUTHOR} &raquo;&nbsp;{date_row.DATE}<a href="{date_row.news_row.LINK}">
+<span> &raquo;&nbsp;<a href="{date_row.news_row.LINK}" title="{L_VIEW_COMMENTS}">{L_COMMENT}: {date_row.news_row.MORE}</a></span>
+
+</li>
+<li class="rightside">{L_INFORUM}: <strong><a href="{date_row.news_row.U_VIEWFORUM}">{INFORUMNAME}</a></strong></li>
+</ul>
+<div class="content"><br />
+{date_row.news_row.MESSAGE} 
+</div>
+
+<!-- IF date_row.news_row.S_HAS_ATTACHMENTS -->
+<dl class="attachbox">
+	<dt>{L_ATTACHMENTS}</dt>
+	<!-- BEGIN attachment -->
+		<dd>{date_row.news_row.attachment.DISPLAY_ATTACHMENT}</dd>
+	<!-- END attachment -->
+</dl>
+<!-- ENDIF -->
+
+<!-- IF date_row.news_row.EDITED_MESSAGE or date_row.news_row.EDIT_REASON -->
+	<div class="notice">{date_row.news_row.EDITED_MESSAGE}
+		<!-- IF date_row.news_row.EDIT_REASON --><br /><strong>{L_REASON}:</strong> <em>{date_row.news_row.EDIT_REASON}</em><!-- ENDIF -->
+	</div>
+<!-- ENDIF -->
+
+<div class="leftside"></div>
+<div class="rightside"><a href="#wrap" class="top" title="{L_BACK_TO_TOP}">{L_BACK_TO_TOP}</a></div>
+</div>
+
+<!-- END news_row -->
+<hr class="dashed">
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
+
+<!-- END date_row --> 
+<span class="corners-bottom"><span></span></span>
+
+<!-- IF NEWS_PAGINATION -->  
+<div class="pagination">
+	 <span>{TOTALNEWS} &bull; {NEWS_PAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
+</div>
+
+<!--  end news  -->

@@ -1,0 +1,339 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr" lang="en" xml:lang="en">
+<head>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta http-equiv="content-style-type" content="text/css" />
+<meta http-equiv="content-language" content="en" />
+<meta http-equiv="imagetoolbar" content="no" />
+<meta name="resource-type" content="document" />
+<meta name="distribution" content="global" />
+<meta name="copyright" content="2009 bbdkp" />
+<meta name="keywords" content="" />
+<meta name="description" content="bbdkp Changelog" />
+<title>bbDkp &bull; Changelog</title>
+
+<link href="stylesheet.css" rel="stylesheet" type="text/css" media="screen, projection" />
+
+</head>
+
+<body id="phpbb" class="section-docs">
+
+<div id="wrap">
+	<a id="top" name="top" accesskey="t"></a>
+	<div id="page-header">
+		<div class="headerbar">
+			<div class="inner"><span class="corners-top"><span></span></span>
+
+			<div id="doc-description">
+			<a><img src="bbdkp.png" alt="" /></a>
+				<p style="display: none;"><a href="#start_here">Skip</a></p>
+			</div>
+
+			<span class="corners-bottom"><span></span></span></div>
+		</div>
+	</div>
+
+	<a name="start_here"></a>
+
+	<div id="page-body">
+
+<h1>bbdkp Changelog</h1>
+	<hr />
+
+	<div class="paragraph">
+		<div class="inner"><span class="corners-top"><span></span></span></div>
+		
+		<div class="content">
+1.1.0 25-05-2010<br />
+<br />
+<change>[FIXED] Removed all hardcoded language from html and php</change><br /> 
+<change>[FIXED] changed language files to uppercase, reorganised descriptions</change><br /> 
+<change>[FIXED] removed L_ references from php files</change><br /> 
+<change>[NEW] Added updater from 1.0.9rc1</change><br /> 
+<change>[FIX] reduced installer complexity, combined RC1-RC2 changes</change><br />
+<change>[CHANGE] All overall_header script inclusion moved to dkp_header.html, which has anchors for each plugin. jquery scripts are in this file now. </change><br /> 
+<change>[NEW] Added plugin anchors in constants file</change><br /> 
+<change>[NEW] recoded the Items, Raid ACP</change><br /> 
+
+<change>[NEW] recruitment block now only shows classes that are open</change><br /> 
+<change>[NEW] new bossprogress block with progress bars</change><br /> 
+
+<change>[NEW] new bossprogress excel spreadsheet to facilitate config of new bosses</change><br /> 
+<change>[NEW] backported new request_var function from phpbb 3.1 to 3.0 to allow Raidtracker to treat deep arrays</change><br /> 
+<change>[UPD] updated UMIL to 1.0.2</change><br /> 
+<change>[UPD] added form tokens in acp submit forms when no confirm box was present</change><br /> 
+<change>[FIX] Fixed outstanding tickets</change><br /> 
+
+<br />	
+
+1.1.0-RC3 7-02-2010<br /> 
+<br />
+<change>[NEW] breadcrumbs menu navigation</change><br /> 
+<change>[NEW] whoisonline block in Portal</change><br />
+<change>[FIXED] ticket 9 guild id 1 cant be deleted anymore (http://www.bbdkp.com/viewtopic.php?f=54&t=1358#p6093)</change><br /> 
+<change>[FIXED] ticket 8 logging, removed {}, no longer necessary to use mb_ereg_replace in function getaction</change><br />
+<change>[FIXED] ticket 7 removing raidmembers didnt get deleted (svn 932-933) </change><br /> 
+<change>[FIXED] ticket 5 : removing a guildmember would cause an error</change><br /> 
+<change>[FIXED] ticket 4 (date zone checks) r906 </change><br /> 
+<change>[FIXED] ticket 3 guildname is now max 255 chars</change><br /> 
+<br />
+1.1.0-RC2 24-01-2010<br /> 
+<br />
+<change>[NEW] about box now done with jQueryTools</change><br /> 
+<change>[NEW] lotro bossprogress</change><br /> 
+<change>[NEW] EQ2 bossprogress tier 8</change><br /> 
+<change>[FIXED] tracker issue 2 :Addmember ACP rank dropdown, now updates when guild dropdown value changed, added ajax js</change><br /> 
+<change>[FIXED] Member Raidattendance pct will now correct for members who joined within
+attendance period. new ratio = (memberattendance count within 30/90 days) /
+(number of raids within 30/90 days or since member joined)</change><br /> 
+<change>[FIXED] RC1 member_ranks installer</change><br /> 
+<change>[FIXED] Item search ACP</change><br /> 
+<change>[FIXED] guild add ACP</change><br /> 
+
+<br />
+1.1.0-RC1 17-01-2010<br /> 
+<br />
+<change>[FIX] listmembers now supports composite sorting on all columns</change><br /> 
+<change>[NEW] Portal rewritten, now supports paging</change><br /> 
+<change>[FIXED] bbdkp is now compatible with PHP 5.3.0</change><br /> 
+<change>[NEW] Aion support</change><br /> 
+<change>[NEW] Eq2 bossprogress till Kingdom of Sky</change><br /> 
+<change>[NEW] Wow bossprogress till Icecrown</change><br /> 
+<change>[NEW] Multiple guilds</change><br /> 
+<change>[NEW] Itemstats removed, it is now a plugin (bbTips)</change><br /> 
+<change>[NEW] Leaderboard works for all games</change><br /> 
+<change>[NEW] Roster works for all games, but only has player portraits for Wow & Aion</change><br /> 
+<change>[NEW] Player Stats page works for all games</change><br /> 
+<change>[NEW] Database table backup, uses phpbb functionality</change><br /> 
+<change>[NEW] Installer rewritten using UMIL class</change><br /> 
+<change>[SPLIT] Game installer files are separate now</change> <br /> 
+<change>[CHANGED] Armoryplugin, Ctrt, Apply installer moved to plugin Installers using Umil.</change><br /> 
+<change>[FIXED] includes all patches up to RC1 Patch 10, ensured all html is XHTML validated</change><br /> 
+
+<br />
+1.0.9<br /> 
+not released<br />
+
+1.0.9 RC2<br /> 
+not released<br />
+
+<br /> 
+1.0.9 RC1 04-2009<br /> 
+<br />
+[CHANGE] changed roster table to reflect new blizzard xml<br /> 
+[CHANGE] Moved phpbb_itemstats inclusion to common.php to minimize patching.<br /> 
+[FIXED] removed all stripslashes to comply with coding guidelines because addslashes is not used since we use the phpbb mysqli_real_escape_string() wrapper<br /> 
+[FIXED] Warcraft leaderboard will now not show when another game is installed<br /> 
+[FIXED] Added css to change indexpage width to 100% <br /> 
+[NEW] Added bbdkp killswitch in config.php<br /> 
+[NEW] Bossprogress for Wow updated to Ulduar (thanks to Orshee for Ulduar sql)<br /> 
+[CHANGED] eqdkp validation class replaced by phpbb<br /> 
+[CHANGED] log system now uses xml format, no longer eval<br /> 
+[CHANGED] installer and updater now require you to be logged as founder<br /> 
+[NEW] now supports Automod (tested on v1.0.0b2)<br /> 
+[FIXED] php files now follow javadoc documentation guidelines<br /> 
+[CHANGED] link section removed in install.xml and all bbdkp plugins moved to their own package.<br /> 
+[FIXED] roster membercount <br /> 
+[CHANGED] moved dkp link query in to global $config (thanks DorEli)<br /> 
+<br /> 
+
+1.0.9 Beta 4 02-2009<br /> 
+<br />
+[CHANGED] changed variable constants from common.php to $config array, so less lines to edit in common.php<br /> 
+[CHANGED] moved /includesdkp/bossprogress to /includes/bossprogress<br /> 
+[CHANGED] rewritten bossprogress block, no more include errors.<br /> 
+[FIXED] corrected raid log bug in bossprogress (AnubRekhan - svn 292 - thanks digitaldew)<br /> 
+[ADDED] Armory character import added<br /> 
+[ADDED] Armory multiple guilds import added<br /> 
+[CHANGED] new Roster template per class<br /> 
+[CHANGED] new About.php<br /> 
+[CHANGED] moved logic in /includesdkp/komptab.class.php to about.php, since this is pure html.<br /> 
+[CHANGED] moved html part of about.php to /styles/<stylename>/template/dkp.about.html because of code clarity<br /> 
+[CHANGED] dropped bbeqdkp_config table and moved values to phpbb_config. the /includes/cache.php doen‚Äôt have to be patched anymore.<br /> 
+[ADDED] new file /includes/bbdkp/constants_bbdkp for storing all constants. this is cleaner than having to patch it all in common.php<br /> 
+[CHANGED] changed all root pathes to $phpbb_root_path = (defined(‚ÄôPHPBB_ROOT_PATH‚Äô)) ? PHPBB_ROOT_PATH : ‚Äò./‚Äô;<br /> 
+[CHANGED] replaced all $SID with append_sid() function (no more logouts if cookies are disabled!!!)<br /> 
+[FIXED] fixed pagination on viewmember.php, listitems.php, listmembers.php<br /> 
+[CHANGED] mpv validation tool changes : changed file endings to LF, removed center tags to Style align, used ‚Äú&amp;‚Äù instead of plain ‚Äú&‚Äù, eliminated <Font> tags, moved them to a style section, fixed nonclosing UL and LI tags
+[CHANGED] added IN_PHPBB checks<br /> 
+[FIXED] fixed the /adm/adm ACP link bug (due to forgotten braces in in /includes/functions.php patch)<br /> 
+[CHANGED] moved /itemstats to /includes/bbdkp/itemstats. changed all /include paths.<br /> 
+[DELETED] itemstats sqlhelper.php is now deleted, since it uses the $dbal class from phpbb. all query calls have been changed to reflect this.<br /> 
+[DELETED] No more Itemstats/config.php since database connection is now handled through phpbb.<br /> 
+[CHANGED] new itemstats ACP to change providers and other preferences. no more editing config files<br /> 
+[CHANGED] permissions_phpbb.php doesn‚Äôt have to be patched anymore since there is a new permissions file now in /language/en/mods<br /> 
+[FIXED] and some other bugfixes<br /> 
+
+<br /> 
+1.0.9 Beta 3 28-12-2008
+<br /> 
+[UPDATED] - Listmembers/leaderboard + stats redone - details see svn 226,230,241<br /> 
+[ADDED] - Subsilver2 support (svn 216,217,239)<br /> 
+[ADDED]	- new ACP eqdkp config for attendance days : can change from 30-90 to something else (svn 228)<br /> 
+[FIXED] - Item dkp price update, details see svn r227, r237<br /> 
+[FIXED] - listitems itemstats popup, itemstats config - details see svn r237<br /> 
+[FIXED] - Ctrt : import defaults to UTF-8, "dkp invalid string" when too long, Ctrt prefs options changed - details see svn r229,r237,r238<br /> 
+[FIXED] - Ctrt : Death Knights were created as 'unknown' with class id 0 (svn 231,238)<br /> 
+[updated] - member transfers in ACP (svn 233,235,236)<br /> 
+[FIXED] - header sorting in Listmemberdkp ACP (svn 234)<br /> 
+[FIXED] - armory transfer realms with apostrophes (svn 232)<br /> 
+[ADDED] - min. level armory transfer (svn 232,240)<br /> 
+[ADDED] - Apply : mandataory functionality added (svn 223,224,225)<br /> 
+
+
+<br /> 
+1.0.9 Beta 2 15-12-2008<br /> 
+[FIXED] issue in armory parser (svn 205-206)<br /> 
+[FIXED] issue with updater and class_id =0 (svn 205-206)<br /> 
+[FIXED] issue in armory downloader (svn 204)<br /> 
+[FIXED] added checks in apply plugin (svn 203)<br /> 
+[FIXED] issue with itemstats in listitems.php and viewmember.php (svn 200)
+
+<br /> 
+<br /> 
+1.0.9 Beta 1 14-12-2008<br /> 
+[ADDED] - Wotlk update<br /> 
+[CHANGED]- DKP ACP Module link in Menu is now dynamic, no longer fixed to 190<br /> 
+[CHANGED]- bbDkp installer rewritten : plugin and bbdkp in one<br /> 
+[ADDED] - multiple dkp pools are now implemented. Dkp pool popup added to Stats, Listmembers, Items pages, and in ACP<br /> 
+[CHANGED] - Database structure : a new indexed field for DKP pools was added in transaction tables<br /> 
+[CHANGED] - Database structure : new tables for Member DKP, Member List, DKP Pools.<br /> 
+[ADDED]- bbDkp automated DB bbdkp and plugin updater from 1.08 to 1.09<br /> 
+[CHANGED] - Member screen allows keeping notes, guild entry and leave dates, based on armory import.<br /> 
+[CHANGED] - Leaderboard is now stretched over 2 lines (5+5) because 10 classes on one row became too cramped.<br /> 
+[CHANGED] - CTRT : updated for multiple dkp<br /> 
+[UPDATED] - Bossprogress : Added support for Eq2: Boss/instance arrays are in eq2_data.php, <br /> 
+[UPDATED] - Bossprogress: updated lotro_data.php with data from Annuminas to Carn Dum.<br /> 
+[UPDATED] - Bossprogress : bossdate.php is complete with Wow, Eq2 and Lotro<br /> 
+[CHANGED] - Bossprogress : Installer will write offset data for all Eq2, Wow, Lotro Raids.So this means <br /> 
+that all games are now supported, just need the right boss information, for  Warhammer, FFXI, eq & others, i put dummy data. <br /> 
+[UPDATED] - Bossprogress : refreshed boss instance pictures for Wow, added Wotlk images.<br /> 
+[CHANGED] - Bossprogress : progressblock colour is now css based<br /> 
+[UPDATED] - Roster : Now shows different icons for class 70 / 80<br /> 
+[ADDED] - Roster : Deathknights added as class<br /> 
+[CHANGED] - Roster : acp redone : Transfer to Members Table tab will Insert new, Update existing and Set <br /> 
+old members to inactive. You can also Edit Guildrank names and set some ranks to 'Hidden'<br /> 
+[UPDATED] - Recruitment block : Updated icon, added Death Knights.
+[FIXED] - Recruitment block  : now supports spaces, Hyphens removed in name.
+[ADDED] - Application plugin : Posts a post in a forum specified in the ACP with the answers to the <br /> 
+questions that can be added in the ACP. Also supports getting information from the armory <br /> 
+like race, class, talents, professions.<br />
+<br />
+<br />
+1.0.8 Beta 5 revision 72 23.9.2008<br /> 
+[ADDED] - raidprogress block added<br />
+<br />
+1.0.8 Beta 5 revision 60>70 15.9.2008<br /> 
+[FIXED] - correction in template footer<br />
+[FIXED] - copyright links in install process wasnt documented<br />
+[FIXED] - Bossprogress Kiljaeden ID was wrong<br />
+[FIXED] - ctrt importing raids with ' sign in eventname<br />  
+<br />
+1.0.8 Beta 5 revision 59 x.7.2008<br />
+[FIXED] - Intall process is redone, core phpbb3 files removed from bbdkp distribution<br />
+[NEW] - Itemstats FR/DE support<br />
+[FIXED] - viewmember.php item pagination is fixed<br />
+[FIXED] - Bossprogress showed Halazzi as Janalai kills and viceversa<br />
+[ADDED] - Roster shows level<br />
+
+<br />
+1.0.8 Beta 4 - 25.4.2008<br />
+[ADDED] - Leaderboard under the standings page as well as Class Colors. :D<br />
+[ADDED] - Enhanced Recruitment Block (can now specify spec's, like Shadow Priest, Enhance Shamans, Fury Warriors etc...)<br />
+[ADDED] - Instructions on how to add [item] [/item] buttons to phpbb3 forums.<br />
+[ADDED] - "DKP" text & link to language file (now it can be multi-lingual) as well as many other variables to increase multi-lingual support :D .
+[ADDED] - "Forum Index" link to both templates (so theres both an "Index" and "Forum Index" in the menus for easier navigation.<br />
+[ADDED] - Added SQL statements to index.php to make more forum data available for use (login times etc).<br />
+[ADDED] - Event & Raid Triggers for CTRA.<br />
+[ADDED] - Install Folder for plugins/main install for added security and vulnerabilities that can arise when files are not deleted after install.
+[UPDATED] - CTRT Updated 1.16.8.<br />
+[UPDATED] - Bossprogress for Zul'Aman, and Sunwell.<br />
+[UPDATED] - Raidnote/event triggers for ZA/Sunwell (SW Untested).<br />
+[UPDATED] - Project/Team Information Information.<br />
+[UPDATED] - Armory plugin now inserts ranks, and removes members who leave/quit/kicked from the guild.<br />
+[UPDATED] - Functions.php to work with phpbb3 3.0.1 updated.<br />
+[UPDATED] - Updated Wowhead image directory for Itemstats<br />
+[CHANGED] - Changed the way you install/update plugins. Plugins are no longer installed on standard default installation of bbDKP.<br />
+[CHANGED] - WoW is the Default install for bbDKP (Mainly concerns items stats, But you can easily edit config files to change it to LOTRO.<br />
+[CHANGED] - When clicking the "Admin" button under the DKP section it will automatically take you to the DKP tab of the ACP.<br />
+[FIXED] - Raid Note Parsing error for CTRT when using an apostrophe.<br />
+[FIXED] - Main Installer updated, fixed syntax problem.<br />
+[FIXED] - Itemstats fix, wowhead default and function itemstats_decorate_name2($name, $buyer, $price, $class) is back alive.<br />
+[FIXED] - Fixed CTRT import error. (returning 0 no matter what).<br />
+[FIXED] - CTRT now works with special characters so that name like "Ani√´r", and works as intended.<br />
+[FIXED] - Roster support names like "Ani√´r", and should link to armory correctly.<br />
+[FIXED] - Now can scroll through items if the users have more than X amount of items looted to them(20 is default).<br />
+[FIXED] - function GetRankIdByRankName.<br />
+[FIXED] - all mySQL tables should now be utf8 (including plugins).<br />
+[FIXED] - UCP auth fix.<br />
+[FIXED] - The ACP check for newest version should be less sensitive to test version being tested. and not always saying that a new version is out when there is not public version out.<br />
+[REMOVED] - dkp/overall_header_menu.html and dkp/overall_footer.html .Now you just use your standard template overall_header.html overall_footer for your new themes. :idea: :D
+[REMOVED] - "Who is Online" menu box.<br />
+[REMOVED] - All old references to "phpbb3 + eqdkp Integrated" as project name, with the new project name of "bbDKP"<br />
+
+<br />
+1.0.8 beta 1-3 - x.x.2007<br />
+- installer<br />
+- templates moved /dkp/<br />
+- eq, eq2, lotro, DAoC, Vanguard-SoH support<br />
+
+<br />
+1.0.7 - 16.7.2007<br />
+- php4 support to roster<br />
+- bossprogress image update<br />
+- plugin ctrt-1.16.3 (first test version)<br />
+<br />
+1.0.6 - 28.6.2007<br />
+- Wowhead support<br />
+- About page<br />
+- DB fix: armory member_name from 30 to 100.<br />
+<br />
+1.0.5 - 10.6.2007 <br />
+- Hotfix<br />
+<br />
+1.0.4 - 10.6.2007<br />
+- Bossprogress first version<br />
+- Attendees Parse Log<br />
+- many fixes<br />
+<br />
+1.0.3 - 23.5.2007<br />
+- armory plugin fix <br />
+<br />
+1.0.2 - 23.5.2007<br />
+- armory plugin is now beta =), please give feedback<br />
+- new table to DB PREFIX_armory_settings<br />
+- add item is showing a blank page error fixed<br />
+- add raid is showing a blank page error fixed <br />
+- mm_ranks bug fixed<br />
+- prosilver template fix<br />
+<br />
+1.0.1 - 20.5.2007 <br />
+- add/update raid function update_player_status fixed <br />
+- prefix changed eqdkp -> bbeqdkp <br />
+- prosilver templates edited <br />
+- adj manager links fixed 1.0.0 <br />
+<br />
+18.5.2007 <br />
+- first release<br /><br /><br />
+
+		</div>
+		
+		<div class="back2top"><a href="#wrap" class="top">Back to Top</a></div>
+		<div class="inner"><span class="corners-bottom"><span></span></span></div>
+		
+	</div>	
+	
+
+
+	<div id="page-footer">
+		<div class="version">&nbsp;</div>
+	</div>
+</div></div>
+
+<div>
+	<a id="bottom" name="bottom" accesskey="z"></a>
+</div>
+
+</body>
+</html>

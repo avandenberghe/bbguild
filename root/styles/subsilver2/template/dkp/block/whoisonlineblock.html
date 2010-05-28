@@ -1,0 +1,39 @@
+<!-- @version $Id: whoisonlineblock.html 839 2010-01-03 22:17:48Z Sajaki9 $ //-->
+<!--  begin whoisonlineblock  -->
+
+<table class="tablebg" width="100%" cellspacing = "1">
+<tbody>
+	<tr>
+		<th><img src="{T_THEME_PATH}/images/dkp/<!-- IF S_USER_LOGGED_IN -->door_open.png<!-- ELSE -->door.png<!-- ENDIF -->" width="16" height="16" alt="" /> &nbsp;&nbsp;{L_WHO_IS_ONLINE}</th>
+	</tr>
+</tbody>
+</table>
+
+
+<table class="tablebg" width="100%" cellspacing = "1">
+<tbody>
+<tr class="row1">
+<td>
+
+<div class="portalmenu">
+	<table>
+	<td>
+		<ul class="topiclist bg1">
+		<li>
+		<dl>
+			<dd style="border-left:0px">
+				<p style="margin: 0 5px 0 5px;">{TOTAL_USERS_ONLINE} ({L_ONLINE_EXPLAIN})<br />{RECORD_USERS}<br /> <br />{LOGGED_IN_USER_LIST}
+				<!-- IF LEGEND --><br /><em>{L_LEGEND}: {LEGEND}</em><!-- ENDIF --></p>
+			</dd>
+		</dl>
+		</li>
+		</ul>
+	</td>
+	</table>
+</div>
+		
+</td>
+</tr>
+</tbody>
+</table>
+<!--  end whoisonlineblock  -->

@@ -1,0 +1,109 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+<form method="post" action="{F_EDIT_MEMBER}" name="editmemberdkp" onsubmit="return check_form(this)">
+<script type="text/javascript">
+
+//<![CDATA[
+
+function check_form()
+{
+    if (document.editmemberdkp.member_name.value.length < 2)
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    return true;
+}               
+//]]>
+
+</script>
+
+<div>
+
+<input type="hidden" name="hidden_name" value="{V_MEMBER_NAME}" />
+<input type="hidden" name="hidden_dkpid" value="{V_MEMBER_DKPID}" />
+
+<div style="float: left; width: 100%;">
+<fieldset>
+<legend>{L_ADD_MEMBER_TITLE}</legend>
+
+  <dl>
+    <dt>DKP Pool</dt>
+    <dd><label for="member_dkpname"> {MEMBER_DKPNAME}</label></dd>
+  </dl>
+  
+  <dl>
+    <dt><STRONG><label for="member_name">{L_NAME}:</label></STRONG></dt>
+    <dd><label for="member_name"> {MEMBER_NAME}</label></dd>
+  </dl>
+  
+  <dl>
+    <dt><label for="member_level">{L_LEVEL}:</label></dt>
+    <dd><label for="member_level"> {MEMBER_LEVEL}</label></dd>
+  </dl> 
+
+  
+  <dl>
+    <dt><label for="member_race_id">{L_RACE}:</label></dt>
+    <dd><label for="member_race_id"> {MEMBER_RACE}</label></dd>
+ </dl>
+   
+  <dl>
+    <dt><label for="member_class_id">{L_CLASS}:</label></dt>
+    <dd><label for="member_class_id"> {MEMBER_CLASS}</label></dd>
+  </dl> 
+
+
+  <dl>
+    <dt><label for="member_rank_id">{L_MEMBER_RANK}:</label></dt>
+    <dd><label for="member_rank_id"> {MEMBER_RANK}</label></dd>
+  </dl> 
+  
+  
+  <dl>
+    <dt><label for="member_earned">{L_EARNED}:</label></dt>
+		<dd><input type="text" name="member_earned" size="20" maxlength="14" value="{MEMBER_EARNED}" class="input" /> 
+		/ {L_SHOULD_BE}: {CORRECT_MEMBER_EARNED}</dd>
+  </dl> 
+    
+  <dl>
+    <dt><label for="member_spent">{L_SPENT}:</label></dt>
+	<dd><input type="text" name="member_spent" size="20" maxlength="14" value="{MEMBER_SPENT}" class="input" /> 
+	/ {L_SHOULD_BE}: {CORRECT_MEMBER_SPENT}</dd>
+  </dl> 
+    
+  <dl>
+    <dt><label for="member_adjustment">{L_ADJUSTMENT}:</label></dt>
+	<dd><input type="text" name="member_adjustment" size="20" maxlength="14" value="{MEMBER_ADJUSTMENT}" class="input" /></dd>
+  </dl> 
+
+  <dl>
+    <dt><label>{L_CURRENT}:</label></dt>
+	<dd><span class="{C_MEMBER_CURRENT}">{MEMBER_CURRENT}</span></dd>
+  </dl>
+
+<div style="float: left; width: 100%;">
+ <p class="quick">
+    <input type="submit" name="update" value="{L_UPDATE_MEMBER}" class="button1" /> 
+    <input type="submit"  name="delete" value="{L_DELETE_MEMBER}" class="button1" />
+ </p>
+</div>
+
+</fieldset>
+
+</div>
+
+</div>
+</form>
+
+
+<!-- INCLUDE dkp/overall_footer.html -->
+

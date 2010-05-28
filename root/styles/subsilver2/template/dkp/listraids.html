@@ -1,0 +1,59 @@
+<!-- INCLUDE overall_header.html -->
+<!-- INCLUDE dkp/dkpmenu.html -->
+<!--
+		Integrated by bbDKP
+		http://code.google.com/p/bbdkp/
+		$Id$
+//-->
+
+<form method="post" action="{U_LIST_RAIDS}">
+<p><input type="hidden" name="{URI_SESSION}" value="{V_SID}" /></p>
+<table width="100%" class="tablebg" cellpadding="0" cellspacing="1" >
+<tr>
+<th style="color:#dfc065" class="tablebg"><h2>Raids</h2></th>
+</tr>
+
+<tr>     
+<td style="color:white; text-align:left; width:56 white-space:nowrap;" align="left" width="56" nowrap="nowrap">{L_POOL}:
+      <select name="pool" class="input" onchange="javascript:form.submit();">
+        <!-- BEGIN pool_row -->
+        <option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
+        <!-- END pool_row -->
+      </select>
+</td>
+</tr>
+</table>
+</form>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{RAID_PAGINATION}</td>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th style="text-align:center; width:10%; whitespace:nowrap;"> <a href="{O_DATE}">{L_DATE}</a></th>
+    <th style="text-align:center; width:10%; whitespace:nowrap"> <a href="{O_POOL}">{L_POOL}</a></th>
+    <th style="text-align:left; width:25%; whitespace:nowrap;"> <a href="{O_NAME}">{L_NAME}</a></th>
+    <th style="text-align:left; width:45%"> <a href="{O_NOTE}">{L_NOTE}</a></th>
+    <th style="text-align:center; width:10%; whitespace:nowrap;"><a href="{O_VALUE}">{L_VALUE}</a></th>
+  </tr>
+  <!-- BEGIN raids_row -->
+  <!-- IF raids_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+    <td style="text-align: center; width:10%; whitespace:nowrap;">{raids_row.DATE}</td>
+    <td style="text-align: center; width:10%; whitespace:nowrap;">{raids_row.POOL}</td>
+    <td style="text-align:left; width:25% whitespace:nowrap;"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
+    <td style="text-align:left; width:45%;">{raids_row.NOTE}</td>
+    <td style="text-align: center; width:10%; whitespace:nowrap;" class="positive">{raids_row.VALUE}</td>
+  </tr>
+  <!-- END raids_row -->
+  <tr>
+    <th colspan="5" class="footer">{LISTRAIDS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">
+  <tr>
+    <td align="center" class="menu">{RAID_PAGINATION}</td>
+  </tr>
+</table>
+<!-- INCLUDE overall_footer.html -->

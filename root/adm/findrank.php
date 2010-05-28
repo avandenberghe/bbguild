@@ -1,0 +1,36 @@
+<?php
+/**
+ * returns rank xml based on ajax call 
+ * @package bbDkp.acp
+ * @copyright (c) 2009 bbDkp <http://code.google.com/p/bbdkp/>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version $Id$
+ */
+define('IN_PHPBB', true);
+define('ADMIN_START', true);
+$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
+$phpEx = substr(strrchr(__FILE__, '.'), 1);
+include($phpbb_root_path . 'common.' . $phpEx);
+
+$guildid = request_var('guild', 0);
+
+$sql = 'SELECT rank_id, rank_name  
+		FROM ' . MEMBER_RANKS_TABLE . ' WHERE
+		guild_id =  '. $guildid . ' ORDER BY rank_id';
+$result = $db->sql_query($sql);
+header('Content-type: text/xml');
+// preparing xml
+$xml = '<?xml version="1.0" encoding="UTF-8"?>
+<ranklist>';
+while ( $row = $db->sql_fetchrow($result)) 
+{
+	 $xml .= '<rank>'; 
+	 $xml .= "<rank_id>" . $row['rank_id'] . "</rank_id>";
+	 $xml .= "<rank_name>" . $row['rank_name'] . "</rank_name>";
+	 $xml .= '</rank>'; 	 
+}
+$xml .= '</ranklist>';
+$db->sql_freeresult($result);
+//return xml to ajax
+echo($xml); 
+?>

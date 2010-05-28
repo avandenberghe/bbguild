@@ -1,0 +1,246 @@
+<!-- INCLUDE overall_header.html -->
+<!-- INCLUDE dkp/dkpmenu.html -->
+<!--
+		Integrated by bbDKP
+		http://code.google.com/p/bbdkp/
+		$Id$
+//-->
+<form method="post" action="{F_STATS}">
+<p><input type="hidden" name="{URI_SESSION}" value="{V_SID}" /></p>
+
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+<table width="30%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
+<colgroup  span="2">
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="90%"></col>
+</colgroup>
+<tr>
+<td style="color:#dfc065"><h4>{L_MENU_STATS}</h4>	</td>
+<td></td>
+<td style="color:white; text-align:left; width:56 white-space:nowrap;">{L_POOL}:
+      <select name="pool" class="input" onchange="javascript:form.submit();">
+        <!-- BEGIN pool_row -->
+        <option value="{pool_row.VALUE}" {pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
+        <!-- END pool_row -->
+      </select>
+  </td>
+</tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+</form> 
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+
+	<div class="post">
+	
+<table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+<colgroup>
+<col width="40%"></col>
+<col width="20%"></col>
+<col width="20%"></col>
+<col width="20%"></col>
+</colgroup>
+	  
+<tr>
+<th style="font-size :10pt; text-align: center  color:white">{L_RAIDS}</th>
+<th style="font-size :10pt; text-align: left; color:green">{L_EARNED}</th>
+<th style="font-size :10pt; text-align: left; color:red">{L_SPENT}</th>
+<th style="font-size :10pt; text-align: left; color:white">{L_PCT_EARNED_LOST_TO}</th>
+</tr>
+</table>
+
+
+<table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+<colgroup span="15">
+	<col width="2%"></col>
+	<col width="8%"></col>
+	<col width="6%"></col>
+	<col width="6%"></col>
+	<col width="4%"></col>
+	<col width="4%"></col>
+	<col width="8%"></col>
+	<col width="8%"></col>
+	<col width="8%"></col>
+	<col width="8%"></col>
+	<col width="7%"></col>
+	<col width="7%"></col>
+	<col width="6%"></col>
+	<col width="4%"></col>
+	<col width="4%"></col>
+</colgroup>
+<tr>	  
+	<th>	
+    <th><a href="{O_NAME}">{L_NAME}</a></th>
+    <th align = "center"><a href="{O_FIRSTRAID}">{L_FIRST}</a></th>
+    <th align = "center"><a href="{O_LASTRAID}">{L_LAST}</a></th>
+    <th align = "center"><a href="{O_RAIDCOUNT}">{L_ATTENDED}</a></th>
+    <th align = "right"><a href="{O_EARNED}">{L_TOTAL}</a></th>
+    <th align = "right"><a href="{O_EARNED_PER_DAY}">{L_PER_DAY}</a></th>
+    <th align = "right"><a href="{O_EARNED_PER_RAID}">{L_PER_RAID}</a></th>
+    <th align = "right"><a href="{O_SPENT}">{L_TOTAL}</a></th>
+    <th align = "right"><a href="{O_SPENT_PER_DAY}">{L_PER_DAY}</a></th>
+    <th align = "right"><a href="{O_SPENT_PER_RAID}">{L_PER_RAID}</a></th>
+    <th align = "right"><a href="{O_LOST_TO_ADJUSTMENT}">{L_ADJUSTMENT}</a></th>
+    <th align = "right"><a href="{O_LOST_TO_SPENT}">{L_SPENT}</a></th>
+    <th align = "right"><a href="{O_CURRENT}">{L_CURRENT}</a></th>
+</tr>
+
+</table>
+</div>
+</li>
+</ul>
+
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="post">
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+
+				<colgroup span="15">
+				<col width="2%"></col>
+				<col width="8%"></col>
+				<col width="6%"></col>
+				<col width="6%"></col>
+				<col width="4%"></col>
+				<col width="4%"></col>
+				<col width="8%"></col>
+				<col width="8%"></col>
+				<col width="8%"></col>
+				<col width="8%"></col>
+				<col width="7%"></col>
+				<col width="7%"></col>
+				<col width="6%"></col>
+				<col width="4%"></col>
+				<col width="4%"></col>
+				</colgroup>
+<!-- BEGIN stats_row -->
+
+    
+    <!-- IF stats_row.COUNT is odd -->
+    <tr class= "row bg1">
+    <!-- ELSE -->
+    <tr class= "row bg2">
+    <!-- ENDIF -->
+    
+	<td></td>
+    <td><a href="{stats_row.U_VIEW_MEMBER}"><b>{stats_row.NAME}</b></a></td>
+    <td style="font-size :8pt; text-align: right;">{stats_row.FIRST_RAID}</td>
+    <td style="font-size :8pt; text-align: right;">{stats_row.LAST_RAID}</td>
+    <td style="font-size :8pt; text-align: right;">{stats_row.ATTENDED_COUNT}</td>
+    <td style="font-size :8pt; text-align: right;">{stats_row.ATTENDED_PERCENT}%</td>
+    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EARNED_TOTAL}</td>
+    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EARNED_PER_DAY}</td>
+    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EARNED_PER_RAID}</td>
+    <td style="font-size :8pt; color: red; text-align: right;"> {stats_row.SPENT_TOTAL}</td>
+    <td style="font-size :8pt; color: red; text-align: right;">{stats_row.SPENT_PER_DAY}</td>
+    <td style="font-size :8pt; color: red; text-align: right;">{stats_row.SPENT_PER_RAID}</td>
+    <td style="font-size :8pt; text-align: right;" >{stats_row.LOST_TO_ADJUSTMENT}%</td>
+    <td style="font-size :8pt; text-align: right;">{stats_row.LOST_TO_SPENT}%</td>
+    <td {stats_row.DKPCOLOUR} >{stats_row.CURRENT}</td>
+  </tr>
+<!-- END stats_row -->
+</table>
+</div>
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	
+<table width="100%">
+
+
+				<colgroup span="1">
+				<col width="100%"></col>
+				</colgroup>
+		  
+<tr>
+<td align="center" style="color:white; font-weight:bold;">{STATS_FOOTCOUNT}</td>
+</tr>
+
+</table>
+</li>
+</ul>
+
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<!--  xxxxxxxxxx -->
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	<div class="post">
+	
+<table width="100%" border="0" cellspacing="1" cellpadding="2"> 
+<colgroup>
+<col width="55%"></col>
+<col width="15%"></col>
+<col width="15%"></col>
+<col width="15%"></col>
+</colgroup>
+
+<tr>
+<th style="color:white; font-size :9pt; text-align: left;">{L_CLASS}</th>
+<th style="color:white; font-size :9pt; text-align: center;">{L_LOOTS}</th>
+<th style="color:white; font-size :9pt; text-align: center;">{L_MEMBERS}</th>
+<th style="color:white; font-size :9pt; text-align: left;">{L_LOOT_FACTOR}</th>
+</tr>
+</table>
+</div>
+</li>
+</ul>
+
+<span class="corners-bottom"><span></span></span>
+</div>
+
+
+<div class="post">
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+	
+<!-- BEGIN class_row -->  
+   <!-- IF class_row.COUNT is odd -->
+   <tr class= "row bg1">
+   <!-- ELSE -->
+   <tr class= "row bg2">
+   <!-- ENDIF -->
+  <td style="width:55%;" ><a href="{class_row.U_LIST_MEMBERS}">{class_row.CLASS}</a></td>
+  <td style="width:7.5%; " align="center" >{class_row.LOOT_COUNT}</td>
+  <td style="width:7.5%; " align="center" >{class_row.LOOT_PCT}</td>
+  <td style="width:7.5%; " align="center" >{class_row.CLASS_COUNT}</td>
+  <td style="width:7.5%; " align="center" >{class_row.CLASS_PCT}</td>
+  <td style="width:15%; "  align="center" class="{class_row.C_LOOT_FACTOR}">{class_row.LOOT_FACTOR}</td>
+  </tr>
+  
+<!-- END class_row -->
+</table>
+</div>
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	
+<table width="100%">
+<colgroup span="1">
+<col width="100%"></col>
+</colgroup>
+<tr><td></td></tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<!-- INCLUDE overall_footer.html -->

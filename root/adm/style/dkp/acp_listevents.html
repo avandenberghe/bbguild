@@ -1,0 +1,51 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+<!-- IF EVENT_PAGINATION -->
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{EVENT_PAGINATION}</span>
+</div>
+<!-- ENDIF -->
+
+<table cellspacing="1">
+<thead>
+  <tr>
+    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="30%"><a href="{U_LIST_EVENTS}&amp;o={O_DKPSYS}&amp;start={START}">{L_POOL}</a></th>
+    <th align="left" width="70%"><a href="{U_LIST_EVENTS}&amp;o={O_NAME}&amp;start={START}">{L_EVENT_NAME}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_EVENTS}&amp;o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+  </tr>
+</thead>
+<tbody>
+  <!-- BEGIN events_row -->
+  <!-- IF events_row.S_ROW_COUNT is even -->
+  <tr class="row1">
+  <!-- ELSE -->
+  <tr class="row2">
+  <!-- ENDIF -->
+    <td width="16" nowrap="nowrap" align="center"><a href="{events_row.U_VIEW_EVENT}"><img src="images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
+    <td width="100">{events_row.DKPSYS_EVENT}</td>
+    <td width="900"><a href="{events_row.U_VIEW_EVENT}">{events_row.NAME}</a></td>
+    <td width="60" nowrap="nowrap" class="positive">{events_row.VALUE}</td>
+  </tr>
+  <!-- END events_row -->
+  <tr>
+    <th colspan="4" class="footer">{LISTEVENTS_FOOTCOUNT}</th>
+  </tr>
+  </tbody>
+</table>
+
+<!-- IF EVENT_PAGINATION -->
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{EVENT_PAGINATION}</span>
+</div>
+<!-- ENDIF -->
+
+<!-- INCLUDE dkp/overall_footer.html -->

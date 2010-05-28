@@ -1,0 +1,88 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+<!-- IF DKPSYS_PAGINATION -->
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{DKPSYS_PAGINATION}</span>
+</div>
+<!-- ENDIF -->
+
+<table cellspacing="1">
+<thead>
+  <tr>
+    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="200"><a href="{U_LIST_DKPSYS}&amp;o={O_NAME}&amp;start={START}">{L_POOL}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_DKPSYS}&amp;o={O_STATUS}&amp;start={START}">{L_STATUS}</a></th>
+    <th align="left" width="60" nowrap="nowrap">DEFAULT</th>
+
+
+  </tr>
+</thead>
+<tbody>
+  <!-- BEGIN dkpsys_row -->
+  <!-- IF dkpsys_row.S_ROW_COUNT is even -->
+  	<tr class="row1">
+  <!-- ELSE -->
+  	<tr class="row2">
+  <!-- ENDIF -->
+    <td width="16" nowrap="nowrap" align="center">
+    <a href="{dkpsys_row.U_VIEW_DKPSYS}">
+    <img src="images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
+    <td width="900"><a href="{dkpsys_row.U_VIEW_DKPSYS}">{dkpsys_row.NAME}</a></td>
+    <td width="60" nowrap="nowrap">{dkpsys_row.STATUS}</td>
+    <td width="60" nowrap="nowrap">{dkpsys_row.DEFAULT}</td>
+  </tr>
+  <!-- END dkpsys_row -->
+  <tr>
+    <th colspan="4" class="footer">{LISTDKPSYS_FOOTCOUNT}</th>
+  </tr>
+  </tbody>
+</table>
+
+<!-- IF DKPSYS_PAGINATION -->
+<div class="pagination">
+	<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{DKPSYS_PAGINATION}</span>
+</div>
+<!-- ENDIF -->
+
+<br />
+
+<FORM action="{S_DEFAULTDKP}" method="post">
+
+<table cellspacing="1">
+<tbody>
+<td width="16" nowrap="nowrap" align="center">
+Default DKP Pool
+</td>
+
+<td width="16" nowrap="nowrap" align="center">
+<select name="defaultsys" class="input" id="defaultsys">
+      <!-- BEGIN dkpsysdef_row -->
+         <option value="{dkpsysdef_row.VALUE}"{dkpsysdef_row.SELECTED}>{dkpsysdef_row.OPTION}</option>
+      <!-- END dkpsysdef_row -->
+</select>
+</td>
+
+<td width="40" nowrap="nowrap" align="right">
+<INPUT type="submit" name="upddkpsysdef" value="Confirm default Pool" class="button1" >
+</td>
+
+</tbody>
+</table>
+</FORM>
+
+
+
+
+
+					
+
+<!-- INCLUDE dkp/overall_footer.html -->
+

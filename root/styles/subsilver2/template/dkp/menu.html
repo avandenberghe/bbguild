@@ -1,0 +1,135 @@
+<!--
+		Integrated by bbDKP
+		http://code.google.com/p/bbdkp/
+		$Id$
+//-->
+
+ <!--  drops  -->
+ <table width="220">
+<tr><td width="220" class="cat">
+<h4 style="text-align:center">Latest Drops</h4></td></tr></table>
+	<br />
+	<table width="100%">
+	<tr>
+	<td style="width:200px" align="center" class="cat2">
+	<!-- BEGIN itemit -->&nbsp;
+	{itemit.ITEMI1}<br/><br/>
+	<!-- END itemit -->
+	</td>
+	</tr>
+	</table>
+<!--  end drops  -->
+
+<br/>
+
+<!--  recruit  -->
+<div style="float: center; width: 90%;" class="post bg2">
+<div class="inner">
+<span class="corners-top"><span></span></span>	  
+<h4 style="text-align:center">Recruitment Status</h4>
+<table width="100%">
+<!-- BEGIN status -->
+<tr>
+<td class="row1" align="center">{status.MESSAGE}</td>
+</tr>
+<!-- END status -->
+</table>
+<table width="100%" cellpadding="2" cellspacing="1" border="0" class="forumline">
+<tr>
+
+<th>
+Class
+</th>
+
+<th>
+
+</th>
+<th>
+T
+</th>
+<th>
+D
+</th>
+<th>
+H
+</th>
+
+</tr>
+
+<!-- BEGIN rec -->
+    <tr>
+    <td style="width:2%"  class="row1">
+	    <span class="genmed">
+		<img src="images/class_images/{GAME}_{rec.CLASS}_small.png" alt="{rec.CLASS}"></img></span>
+	</td>
+    <td class="row1" align="left"><span class="genmed"><b>&nbsp;{rec.CLASS}</b></span></td>
+
+    <td class="row1" align="right">{rec.TANK}</td>
+    <td class="row1" align="right">{rec.DPS}</td>
+    <td class="row1" align="right">{rec.HEAL}</td>
+
+
+    </tr>
+<!-- END rec -->
+</table>
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
+<!--  end recruit  -->
+
+ <br />
+
+<!-- IF S_BPSHOW -->
+	 <!--  BossProgress -->
+    <div style="float: center; width: 90%;" class="post bg2">
+    <div class="inner">
+    <span class="corners-top"><span></span></span>    
+    <h4 style="text-align:center">BossProgress</h4>
+    <table width:100%" cellpadding="2" cellspacing="0" border="0" >
+          <colgroup span="2" >
+          <col width="60%"></col>
+          <col width="40%"></col>
+          </colgroup>
+
+    <!-- BEGIN boss -->
+        <tr>
+        <td class="row1" align="left">
+           <span class="genmed">{boss.ZONE}</span>
+        </td>
+        <td align="right" class="{boss.CSSCLASS}">
+        <span class="genmed">{boss.COMPLETE}</span>
+        </td>
+        </tr>
+    <!-- END boss -->
+
+    </table>
+    <span class="corners-bottom"><span></span></span>
+    </div>
+    </div>
+    <!-- end BossProgress -->
+<!-- ENDIF -->
+
+<br />
+
+<!-- links -->
+<table width="220">
+<tr><td width="220" class="cat">
+<h4 style="text-align:center">Links</h4></td></tr></table>
+<table width="100%" cellpadding="0" cellspacing="0" border="0" class="forumline">
+	<tr>
+	<td class="row1">
+	<p class="genviestit">
+		&raquo;&nbsp;Powered By:<a href="http://code.google.com/p/bbdkp">bbDKP</a><br/>
+		&raquo;&nbsp;<a href="http://www.wowace.com/files">Wowace.com</a><br/>
+		&raquo;&nbsp;<a href="http://www.wowarmory.com">WoW Armory</a><br/>
+		&raquo;&nbsp;<a href="http://www.wowjutsu.com">WoW Jutsu</a><br/>
+		&raquo;&nbsp;<a href="http://www.worldofwarcraft.com">World of Warcraft</a><br/>
+		&raquo;&nbsp;<a href="http://www.warcraftmovies.com">Warcraftmovies.com</a><br/>
+		&raquo;&nbsp;<a href="http://www.wowwiki.com">Wowwiki.com</a><br/>
+	</p>
+	</td>
+	</tr>
+	</table>
+<!-- end links -->
+  
+ 

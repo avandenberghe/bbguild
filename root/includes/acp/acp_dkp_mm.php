@@ -1,0 +1,1820 @@
+<?php
+/**
+* This class manages member general info
+* 
+* @package bbDkp.acp
+* @version $Id$
+* @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+* 
+*/
+
+/**
+* @ignore
+*/
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+if (! defined('EMED_BBDKP')) 
+{
+	$user->add_lang ( array ('mods/dkp_admin' ));
+	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
+}
+
+class acp_dkp_mm extends bbDkp_Admin
+{
+	/***********************************/
+	// member management
+	/***********************************/
+	
+	var $u_action;
+	
+function main($id, $mode) 
+	{
+		
+		global $db, $user, $auth, $template, $sid, $cache;
+		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
+		
+		$user->add_lang(array('mods/dkp_admin'));
+		$user->add_lang(array('mods/dkp_common'));
+
+		$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>Return to Index</h3></a>'; 
+		switch ($mode)
+		{
+			/***************************************/
+		    // add member 
+			/***************************************/
+			case 'mm_addmember':
+					
+					$Addmemberlink = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember") . '"><h3>Return to Add Member screen</h3></a>'; 
+					$S_ADD = false;
+					
+					// identify checkbox to delete
+			        $member_names = array();
+			        if ( isset($_POST['delete']) )
+					{
+						if ( isset($_POST['compare_ids']) )
+						{
+						    
+						    $compare_ids = request_var('compare_ids', array(0 => 0));
+							foreach ( $compare_ids as $id )
+							{
+           						$sql = 'SELECT member_name 
+										FROM ' . MEMBER_LIST_TABLE . ' 
+										WHERE member_id= ' . (int) $id ; 
+           						
+								$result = $db->sql_query($sql);	
+								while ( $row = $db->sql_fetchrow($result) )
+								{	
+									$member_names[] = $row['member_name'];
+								}
+							}
+							$s_hidden_fields = build_hidden_fields(array(
+								'delete'	=> true,
+								'member_name'	=> $member_names,
+								)
+							);
+										
+							$names = implode(', ', $member_names);
+							confirm_box(false, $user->lang['CONFIRM_DELETE_MEMBERS'] . ' <br />  ' . $names  , $s_hidden_fields);				
+						}
+					}
+					
+					
+					if ( (isset($_GET[URI_NAME])) && (strval($_GET[URI_NAME] != '')) )
+					{
+						
+						//
+						// build member array if clicked on name in listing
+						//  
+						$S_ADD = true;
+
+						$sql_array = array(
+						    'SELECT'    => 'm.*, c.class_name AS member_class, r.race_name AS member_race, 
+						    				g.id as guild_id, g.name as guild_name, g.realm , g.region',
+						 
+						    'FROM'      => array(
+						        MEMBER_LIST_TABLE  => 'm',
+						        CLASS_TABLE        => 'c',
+						        RACE_TABLE        => 'r',
+						        GUILD_TABLE        => 'g',
+						    ),
+						 
+						    'WHERE'     => "r.race_id = m.member_race_id 
+							AND c.class_id = m.member_class_id 
+							AND m.member_guild_id = g.id 
+							AND member_name='" . trim($db->sql_escape(utf8_normalize_nfc(request_var(URI_NAME,'', true)))) . "'" ,
+						    
+						);
+
+						$sql = $db->sql_build_query('SELECT', $sql_array);
+						
+						$result = $db->sql_query($sql);
+						$row = $db->sql_fetchrow($result);
+						$db->sql_freeresult($result);
+
+						$this->member = array(
+							'member_id'             => $row['member_id'],
+							'member_name'           => $row['member_name'],
+							'member_race_id'        => $row['member_race_id'],
+							'member_race'           => $row['member_race'],
+							'member_class_id'       => $row['member_class_id'],
+							'member_class'          => $row['member_class'],
+							'member_level'          => $row['member_level'],
+							'member_rank_id'        => $row['member_rank_id'],
+							'member_comment'        => $row['member_comment'],
+						    'member_gender_id'		 => $row['member_gender_id'],
+							'member_joindate_d'     =>  date('j', $row['member_joindate']),
+							'member_joindate_mo'    =>  date('n', $row['member_joindate']),
+							'member_joindate_y'     =>  date('Y', $row['member_joindate']),
+							'member_outdate_d'      =>  date('j', $row['member_outdate']),
+							'member_outdate_mo'     =>  date('n', $row['member_outdate']),
+							'member_outdate_y'      =>  date('Y', $row['member_outdate']),
+						    'member_guild_name'	     => $row['guild_name'],  
+						    'member_guild_id'	     => $row['guild_id'], 
+						    'member_guild_realm'	 => $row['realm'],  
+						    'member_guild_region'	 => $row['region'],  
+						 );
+							
+					}
+					
+					//guild dropdown
+			        $sql = 'SELECT a.id, a.name, a.realm, a.region 
+			        FROM '. GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b 
+					where a.id = b.guild_id
+					group by a.id, a.name, a.realm, a.region
+					order by a.id'; 
+			        
+					$result = $db->sql_query($sql);
+
+					if (isset ($this->member))
+					{
+					    while ( $row = $db->sql_fetchrow($result) )
+					    {
+					        $template->assign_block_vars('guild_row', 
+					        array(
+							'VALUE' => $row['id'],
+							'SELECTED' => (  $this->member['member_guild_id'] == $row['id'] ) ? ' selected="selected"' : '',
+							'OPTION'   => $row['name'] )
+						    );
+					    }
+					}
+					else 
+					{
+					    while ( $row = $db->sql_fetchrow($result) )
+					    {
+					        $template->assign_block_vars('guild_row', array(
+							'VALUE' => $row['id'],
+							'SELECTED' =>  '',
+							'OPTION'   => $row['name'] )
+					    	);
+					    }
+					}
+					$db->sql_freeresult($result);
+
+					//
+					// Rank drop-down -> for initial load
+					// reloading is done from ajax to prevent redraw
+					//
+                    if (isset($this->member['member_guild_id']))
+                    {
+                    	$sql = 'SELECT rank_id, rank_name
+                        FROM ' . MEMBER_RANKS_TABLE . ' 
+                        WHERE guild_id =  '. $this->member['member_guild_id'] . ' ORDER BY rank_id';
+                        $result = $db->sql_query($sql);
+                    	
+                        while ( $row = $db->sql_fetchrow($result) )
+                        {
+                            $template->assign_block_vars('rank_row', array(
+                                        'VALUE'    => $row['rank_id'],
+                                        'SELECTED' => ( $this->member['member_rank_id'] == $row['rank_id'] ) ? ' selected="selected"' : '',
+                                        'OPTION'   => ( !empty($row['rank_name']) ) ? $row['rank_name'] : '(None)')
+                                );
+	                    }
+                    }
+                    else 
+                    {
+                    	// no member is set, get the 'noguild' rank 
+                    	$sql = 'SELECT rank_id, rank_name
+                        FROM ' . MEMBER_RANKS_TABLE . ' 
+                        WHERE guild_id = 0 ORDER BY rank_id';
+                        $result = $db->sql_query($sql);
+                    	
+                        while ( $row = $db->sql_fetchrow($result) )
+                        {
+                            $template->assign_block_vars('rank_row', array(
+                                        'VALUE'    => $row['rank_id'],
+                                        'SELECTED' => '',
+                                        'OPTION'   => ( !empty($row['rank_name']) ) ? $row['rank_name'] : '(None)')
+                            );
+                        }
+                    }
+
+                    //
+					// Race dropdown
+					//
+			
+					$sql = 'SELECT race_id, race_name 
+							FROM ' . RACE_TABLE .' 
+							GROUP BY race_name';
+					$result = $db->sql_query($sql);
+			
+					
+					if (isset ($this->member))
+					{
+					    while ( $row = $db->sql_fetchrow($result) )
+					    {
+					        $template->assign_block_vars('race_row', array(
+							'VALUE' => $row['race_id'],
+							'SELECTED' => ( $this->member['member_race_id'] == $row['race_id'] ) ? ' selected="selected"' : '',
+							'OPTION'   => ( !empty($row['race_name']) ) ? $row['race_name'] : '(None)')
+						    );
+					    }
+					    
+					}
+					else 
+					{
+					    while ( $row = $db->sql_fetchrow($result) )
+					    {
+					        $template->assign_block_vars('race_row', array(
+							'VALUE' => $row['race_id'],
+							'SELECTED' =>  '',
+							'OPTION'   => ( !empty($row['race_name']) ) ? $row['race_name'] : '(None)')
+					    	);
+					    }
+					}
+	
+					$db->sql_freeresult($result);
+					
+		            //
+					// Class dropdown
+					//
+					$sql = 'SELECT class_id, class_name, class_min_level, class_max_level 
+							FROM ' . CLASS_TABLE .' GROUP BY class_id';
+					$result = $db->sql_query($sql);
+					while ( $row = $db->sql_fetchrow($result) )
+					{
+						if ( $row['class_min_level'] <= 1  ) 
+					   	{
+							 $option = ( !empty($row['class_name']) ) ? $row['class_name'] . " 
+							 Level (". $row['class_min_level'] . " - ".$row['class_max_level'].")" : '(None)';
+						}
+						else
+						{
+							 $option = ( !empty($row['class_name']) ) ? $row['class_name'] . " 
+							 Level ". $row['class_min_level'] . "+" : '(None)';
+					   	}
+				
+					   	
+					   	if (isset ($this->member))
+					   	{
+					   	    $template->assign_block_vars('class_row', array(
+							'VALUE' => $row['class_id'],
+							'SELECTED' => ( $this->member['member_class_id'] == $row['class_id'] ) ? ' selected="selected"' : '',
+							'OPTION'   => $option ));
+						
+					   	}
+						else 
+						{
+						    $template->assign_block_vars('class_row', array(
+							'VALUE' => $row['class_id'],
+							'SELECTED' => '',
+							'OPTION'   => $option ));
+						
+						}
+						
+					}
+
+					// set the genderdefault to male if a new form is opened, otherwise take rowdata.
+					$genderid = isset($this->member) ? $this->member['member_gender_id'] : '0'; 
+
+					$db->sql_freeresult($result);
+
+					// end formbuilding
+					
+					$submit	 = (isset($_POST['add'])) ? true : false;
+					$update	 = (isset($_POST['update'])) ? true : false;
+					$delete	 = (isset($_POST['delete'])) ? true : false;	
+					
+					//
+					// add guildmember handler 
+					//
+					if ($submit)
+					{
+						// get member name
+                        $member_name = utf8_normalize_nfc(request_var('member_name', '',true));
+                        // check if membername exists
+                        $sql = 'SELECT count(*) as memberexists 
+                                FROM ' . MEMBER_LIST_TABLE . "  
+                                WHERE member_name= '" . $db->sql_escape($member_name) . "'"; 
+      					$result = $db->sql_query($sql);
+						$countm = $db->sql_fetchfield('memberexists');
+						$db->sql_freeresult($result);
+						if ($countm != 0)
+						{
+							 trigger_error($user->lang['ERROR_MEMBEREXIST'] . $Addmemberlink, E_USER_WARNING);
+						}
+                        
+                        // set member active
+                        $member_status = 1; 
+                        
+                        $guild_id = request_var('member_guild_id', 0);
+                        
+						// get rank                   
+                        $rank_id = request_var('member_rank_id',99);
+                        
+                        // check if rank exists
+                        $sql = 'SELECT count(*) as rankccount 
+                                FROM ' . MEMBER_RANKS_TABLE . '
+                                WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id; 
+      					$result = $db->sql_query($sql);
+						$countm = $db->sql_fetchfield('rankccount');
+						$db->sql_freeresult($result);
+						if ( $countm == 0)
+						{
+							 trigger_error($user->lang['ERROR_INCORRECTRANK'] . $Addmemberlink, E_USER_WARNING);
+						}
+
+						
+                        $member_lvl = request_var('member_level', 0);
+                        // check level
+                        $sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE; 
+                        $result = $db->sql_query($sql);
+						$maxlevel = $db->sql_fetchfield('maxlevel');
+						$db->sql_freeresult($result);
+						if ( $member_lvl > $maxlevel)
+						{
+							$member_lvl = $maxlevel;  
+						}
+                        
+                        $race_id = request_var('member_race_id', 0); 
+                        $class_id = request_var('member_class_id', 0); 
+                        
+                        $member_comment = utf8_normalize_nfc(request_var('member_comment', '', true)); 
+                        $joindate = $this->time; 
+                        $leavedate = mktime(0, 0, 0, 12, 31, 2015); 
+                        $gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
+                        $achievpoints = 0; 
+                        $url = '';
+                        
+                        if ($this->insertnewmember($member_name, $member_status, $member_lvl, $race_id, $class_id,
+                            $rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url))
+                        {
+                            $success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($member_name));
+                            trigger_error($success_message . $Addmemberlink, E_USER_NOTICE);
+                        }
+                        else 
+                        {
+                            $failure_message = sprintf($user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($member_name), $member_id);
+	                    	 trigger_error($failure_message . $Addmemberlink, E_USER_WARNING);
+                        }
+                            
+					}	
+
+					//
+					// update guild member handler 
+					//
+					if ($update)
+					{
+
+						// old data array
+						$sql = 'SELECT *
+								FROM ' . MEMBER_LIST_TABLE . "
+								WHERE member_name='" . $db->sql_escape(utf8_normalize_nfc(request_var('hidden_name', '', true ))) . "'";
+						$result = $db->sql_query($sql);
+						while ( $row = $db->sql_fetchrow($result) )
+						{
+							$this->old_member = array(
+								'member_name'       => $row['member_name'],
+								'member_id'			=> $row['member_id'],
+								'member_level'      => $row['member_level'],
+								'member_race_id'    => $row['member_race_id'],
+								'member_class_id'   => $row['member_class_id'],
+							    'member_guild_id'	=> $row['member_guild_id'],
+								'member_comment'    => $row['member_comment']
+				        		);
+						}
+						$db->sql_freeresult($result);
+						
+						$member_id = $this->old_member['member_id'];
+						$old_member_name = $this->old_member['member_name'];
+						
+						$gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
+						$member_name = utf8_normalize_nfc(request_var('member_name', '',true));
+						
+					    // check if new membername exists
+                        $sql = 'SELECT count(*) as memberexists 
+                                FROM ' . MEMBER_LIST_TABLE . '  
+                                WHERE member_id <> ' . $member_id . " 
+                                AND member_name= '" . $db->sql_escape($member_name) . "'"; 
+      					$result = $db->sql_query($sql);
+						$countm = $db->sql_fetchfield('memberexists');
+						$db->sql_freeresult($result);
+						if ($countm != 0)
+						{
+							 trigger_error(sprintf($user->lang['ADMIN_UPDATE_MEMBER_FAIL'], ucwords($member_name))
+							  . $Addmemberlink, E_USER_WARNING);
+						}
+						
+						// get rank                   
+                        $rank_id = request_var('member_rank_id',99);
+                        // check if rank exists
+                        $sql = 'SELECT count(*) as rankccount 
+                                FROM ' . MEMBER_RANKS_TABLE . '  
+                                WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . request_var('member_guild_id',0); 
+      					$result = $db->sql_query($sql);
+						$countm = $db->sql_fetchfield('rankccount');
+						$db->sql_freeresult($result);
+						
+						if ( $countm == 0)
+						{
+							 trigger_error( $user->lang['ERROR_INCORRECTRANK'] . $Addmemberlink, E_USER_WARNING);
+						}
+						
+					    // check level
+                        $level =  request_var('member_level',0); 
+						$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE; 
+                        $result = $db->sql_query($sql);
+						$maxlevel = $db->sql_fetchfield('maxlevel');
+						$db->sql_freeresult($result);
+						if ( $level > $maxlevel)
+						{
+							$level = $maxlevel;  
+						}
+
+						$outdate_upd= mktime(12,0,0, request_var('member_outdate_mo', 0)  , 
+							request_var('member_outdate_d', 0) , 
+							request_var('member_outdate_y', 0) );
+						$joindate_upd= mktime(12,0,0, request_var('member_joindate_mo', 0)  , 
+							request_var('member_joindate_d', 0) , 
+							request_var('member_joindate_y', 0) );
+						
+						// update the data
+						$query = $db->sql_build_array('UPDATE', array(
+							'member_name'       => $member_name,
+							'member_level'      => $level, 
+							'member_race_id'    => request_var('member_race_id',0),
+							'member_class_id'   => request_var('member_class_id',0),
+							'member_rank_id'    => $rank_id, 
+						    'member_gender_id'	=> $gender,
+							'member_comment'    => utf8_normalize_nfc(request_var('member_comment','',true)),  
+					    	'member_guild_id'   => request_var('member_guild_id',0),
+							'member_outdate'    =>  $outdate_upd, 
+							'member_joindate'   =>  $joindate_upd )						
+						);
+							
+						$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' 
+										SET ' . $query . " 
+										WHERE member_name='" . $db->sql_escape($old_member_name) . "'");
+
+						// what if he changes name ? update other tables too
+						if ( !($member_name == $old_member_name) ) 
+						{
+    						$sql = "UPDATE " . RAID_ATTENDEES_TABLE . " 
+    								SET member_name = '" . $db->sql_escape($member_name) ."' 
+    								WHERE member_name = '". $db->sql_escape($old_member_name) . "'";
+    						$db->sql_query($sql);
+    						
+    						$sql = "UPDATE " . ITEMS_TABLE . " 
+    								SET item_buyer = '" . $db->sql_escape($member_name) ."' 
+    								WHERE item_buyer = '". $db->sql_escape($old_member_name) . "'";
+    						$db->sql_query($sql);
+						}
+				
+						// log it
+						$log_action = array(
+							'header'                => 'L_ACTION_MEMBER_UPDATED' ,
+							'L_NAME_BEFORE'       => $this->old_member['member_name'],
+							'L_LEVEL_BEFORE'      => $this->old_member['member_level'],
+							'L_RACE_BEFORE'       => $this->old_member['member_race_id'],
+							'L_CLASS_BEFORE'      => $this->old_member['member_class_id'],
+							'L_NAME_AFTER'        => $member_name,
+							'L_LEVEL_AFTER'       => request_var('member_level',0),
+							'L_RACE_AFTER'        => request_var('member_race_id',0),
+							'L_CLASS_AFTER'       => request_var('member_class_id',0),
+							'L_UPDATED_BY'        => $user->data['username']);
+							
+						$this->log_insert(array(
+							'log_type'   => $log_action['header'],
+							'log_action' => $log_action)
+						);
+						
+						$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], $member_name);
+						trigger_error($success_message . $link);
+						
+						}	
+
+					//
+					// delete guildmember handler 
+					// deletes Everything!
+					//
+					if ($delete)
+						{	
+							
+							if ( (isset($_POST['member_name']))  )
+							{
+								$del_member= array();
+								$del_member = request_var('member_name',  array(0 => ''), true);
+								if (confirm_box(true))
+								{
+									if (count($del_member) > 1)
+									{
+										$names = implode(', ', $del_member);
+									}
+									else
+									{ 
+										$names = $del_member[0];
+									}
+									
+									for ($i = 0; $i < count($del_member); $i++)
+									{
+										
+										$sql = 'SELECT * FROM ' . MEMBER_LIST_TABLE . "
+											WHERE member_name='" . $db->sql_escape(utf8_normalize_nfc($del_member[$i])) . "'";
+							
+										$result = $db->sql_query($sql);
+										while ( $row = $db->sql_fetchrow($result) )
+										{
+										$this->old_member = array(
+											'member_name'       => $row['member_name'],
+											'member_id'			 => $row['member_id'],
+											'member_level'      => $row['member_level'],
+											'member_race_id'    => $row['member_race_id'],
+											'member_class_id'   => $row['member_class_id']);
+										}
+										$db->sql_freeresult($result);
+										
+										$log_action = array(
+										'header'         =>  sprintf( $user->lang['ACTION_MEMBER_DELETED'], $this->old_member['member_name']),  
+										'L_NAME'       => $this->old_member['member_name'],
+										'L_LEVEL'      => $this->old_member['member_level'],
+										'L_RACE'       => $this->old_member['member_race_id'],
+										'L_CLASS'      => $this->old_member['member_class_id']);
+
+										$this->log_insert(array(
+										'log_type'   => $log_action['header'],
+										'log_action' => $log_action)
+										);
+
+										$sql = 'DELETE FROM ' . RAID_ATTENDEES_TABLE . "
+												WHERE member_name='" . $db->sql_escape(utf8_normalize_nfc($del_member[$i])) . "'";
+										$db->sql_query($sql);
+							
+										$sql = 'DELETE FROM ' . ITEMS_TABLE . "
+												WHERE item_buyer='" . $db->sql_escape(utf8_normalize_nfc($del_member[$i])) . "'";
+										$db->sql_query($sql);
+
+										
+										$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . "
+												WHERE member_id ='" . $this->old_member['member_id'] . "'";
+										$db->sql_query($sql);
+										
+										
+										$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . "
+												WHERE member_id ='" . $this->old_member['member_id'] . "'";
+										$db->sql_query($sql);
+	
+										$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . "
+												WHERE member_name='" . $db->sql_escape(utf8_normalize_nfc($del_member[$i]) ) . "'";
+										$db->sql_query($sql);
+									}
+									$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $names);
+									trigger_error($success_message . $link);
+								}
+								else
+								{
+									$s_hidden_fields = build_hidden_fields(array(
+										'delete'	=> true,
+										'member_name'	=> $del_member,
+										)
+									);
+	
+									confirm_box(false, $user->lang['CONFIRM_DELETE_MEMBERS'], $s_hidden_fields);
+								}
+							}
+							else
+							{
+							    $success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_FAILED'], 'UNKNOWN');
+							    trigger_error($success_message . $link, E_USER_WARNING);
+							}
+							
+							
+						}	
+				
+				        $template->assign_vars(array(
+							'L_TITLE'				=> $user->lang['ACP_MM_ADDMEMBER'],
+							'L_EXPLAIN'				=> $user->lang['ACP_MM_ADDMEMBER_EXPLAIN'],
+							'F_ADD_MEMBER' 			=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;"),
+				        	
+							'MEMBER_NAME'           => isset($this->member) ? $this->member['member_name'] : '',
+							'V_MEMBER_NAME'         => ( isset($_POST['add']) ) ? '' : isset($this->member) ? $this->member['member_name'] : '' ,
+							'MEMBER_ID'             => isset($this->member) ? $this->member['member_id'] : '',
+							'MEMBER_LEVEL'          => isset($this->member) ? $this->member['member_level'] : '',
+							'MALE_CHECKED'      	 => ($genderid == '0') ? ' checked="checked"' : '' , 
+                		    'FEMALE_CHECKED'    	 => ($genderid == '1') ? ' checked="checked"' : '' , 
+							'MEMBER_JOINDATE_D'     => isset($this->member) ? $this->member['member_joindate_d'] : '',
+							'MEMBER_JOINDATE_MO'    => isset($this->member) ? $this->member['member_joindate_mo']: '',
+							'MEMBER_JOINDATE_Y'     => isset($this->member) ? $this->member['member_joindate_y']: '',
+							'MEMBER_OUTDATE_D'      => isset($this->member) ? $this->member['member_outdate_d']: '',
+							'MEMBER_OUTDATE_MO'     => isset($this->member) ? $this->member['member_outdate_mo']: '',
+							'MEMBER_OUTDATE_Y'      => isset($this->member) ? $this->member['member_outdate_y']: '' ,
+							'MEMBER_COMMENT'        => isset($this->member) ? stripmultslashes($this->member['member_comment']) : '', 
+				
+				        	// javascript
+							'LA_ALERT_AJAX'	 	  => $user->lang['ALERT_AJAX'],
+				        	'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
+				        	'LA_MSG_NAME_EMPTY'   => $user->lang['FV_REQUIRED_NAME'],
+				        	'UA_FINDRANK'		  => append_sid("findrank.$phpEx"),
+				        
+							'S_ADD' => !$S_ADD,
+							)
+				);
+			
+				$this->page_title = 'ACP_MM_ADDMEMBER';
+				$this->tpl_name = 'dkp/acp_'. $mode;
+				
+			break;
+			
+			/***************************************/
+			//
+			// List members
+            //
+			/***************************************/
+
+			case 'mm_listmembers':
+				
+				/**************  Guild drop-down query ****************/
+				$sql = 'SELECT id, name, realm, region  
+                       FROM ' . GUILD_TABLE . ' 
+                       ORDER BY id';
+				$resultg = $db->sql_query ( $sql );
+				
+				/* check if page was posted back */
+				$submit = (isset ( $_POST ['member_guild_id'] ) ) ? true : false;
+				if ($submit) 
+				{
+				    // user selected dropdow - get guildid 
+					$guild_id = request_var ( 'member_guild_id', 0 );
+					
+					// fill popup and set selected to Post value
+					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
+					{
+						$template->assign_block_vars ( 	'guild_row', 
+						array (
+							'VALUE' => $row ['id'], 
+							'SELECTED' => ($row ['id'] == $guild_id) ? ' selected="selected"' : '', 
+							'OPTION' => (! empty ( $row ['name'] )) ?  $row ['name']  : '(None)' ) );
+					}
+					$db->sql_freeresult ( $resultg );
+				
+				} 
+				else // default pageloading
+				{
+					
+				    $guild_id = request_var ( URI_GUILD, 1 ); 
+				    // fill popup and set selected to default selection
+					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
+					{
+						$template->assign_block_vars ( 'guild_row', array (
+    						'VALUE' => $row ['id'], 
+    						'SELECTED' => '', 
+    						'OPTION' => $row ['name'] ));
+					}
+				}
+				
+				$previous_data = '';
+				
+				$sort_order = array(
+					0 => array('member_name', 'member_name desc'),
+					1 => array('member_level desc', 'member_level'),
+					2 => array('member_class', 'member_class desc'),
+					3 => array('rank_name', 'rank_name desc'),
+					4 => array('class_armor_type', 'class_armor_type desc'),
+					5 => array('member_joindate', 'member_joindate desc'),
+					6 => array('member_outdate', 'member_outdate desc'),
+					7 => array('member_comment', 'member_comment desc'),
+				);
+				
+				$current_order = switch_order($sort_order);
+				$sort_index = explode('.', $current_order['uri']['current']);
+				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
+				$show_all = (( isset($_GET['show'])) && request_var('show','') == 'all') ? true : false;
+				
+				$sql_array = array(
+				    'SELECT'    => 	'm.* , g.name, c.class_name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
+									 c.class_armor_type AS armor_type', 
+				 
+				    'FROM'      => array(
+				        MEMBER_LIST_TABLE 	=> 'm',
+				        MEMBER_RANKS_TABLE 	=> 'r',
+				        CLASS_TABLE  		=> 'c',
+				        GUILD_TABLE  		=> 'g',
+				    	),
+				 
+				    'WHERE'     =>  ' (m.member_rank_id = r.rank_id)
+									AND (m.member_guild_id = g.id)
+									AND (m.member_guild_id = r.guild_id)
+									AND (m.member_guild_id = ' . $guild_id . ')
+									AND (m.member_class_id = c.class_id)', 
+				    	
+					'ORDER_BY'	=> $current_order['sql'],
+				    	
+				    );
+				    
+				$sql = $db->sql_build_query('SELECT', $sql_array);
+				
+				if ( !($members_result = $db->sql_query($sql)) )
+				{
+					trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
+				}
+				
+				$lines = 0;
+				$member_count = 0;
+				while ( $row = $db->sql_fetchrow($members_result) )
+				{
+					++$member_count;
+					++$lines;
+					$template->assign_block_vars('members_row', array(
+						'ID'            => $row['member_id'],
+						'COUNT'         => $member_count,
+						'NAME'          => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
+						'RANK'          => $row['rank_name'],
+						'LEVEL'         => ( $row['member_level'] > 0 ) ? $row['member_level'] : '&nbsp;',
+						'ARMOR'         => ( !empty($row['armor_type']) ) ? $row['armor_type'] : '&nbsp;',
+						'CLASS'         => ( $row['member_class'] != 'NULL' ) ? $row['member_class'] : '&nbsp;',
+						'COMMENT'       => $row['member_comment'],
+						'JOINDATE'      => date($config['bbdkp_date_format'], $row['member_joindate']),
+						'OUTDATE'       => date($config['bbdkp_date_format'], $row['member_outdate']),  
+						'U_VIEW_MEMBER' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember") . '&amp;'. URI_NAME . '='.$row['member_name']
+						)
+					); 
+					
+					$previous_data = $row[$previous_source];
+				}
+				
+				$db->sql_freeresult ( $members_result );
+				
+				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
+				
+				$template->assign_vars(array(
+					'F_MEMBERS' => append_sid("index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember',
+					'F_MEMBERS_LIST' => append_sid("index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers',
+					'L_TITLE'		=> $user->lang['ACP_MM_LISTMEMBERS'],
+					'L_EXPLAIN'		=> $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'],
+					
+					'BUTTON_NAME' 	=> 'delete',
+					'BUTTON_VALUE' 	=> $user->lang['DELETE_SELECTED_MEMBERS'],
+					'O_NAME' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
+					'O_LEVEL' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_CLASS' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_RANK' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_ARMOR' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_JOINDATE' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_OUTDATE' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][6] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_COMMENT' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'U_LIST_MEMBERS' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;"), 		
+					'LISTMEMBERS_FOOTCOUNT' => $footcount_text
+					)
+				);			
+			
+				$this->page_title = 'ACP_MM_LISTMEMBERS';
+				$this->tpl_name = 'dkp/acp_'. $mode;
+				
+			break;
+
+			
+			/***************************************/
+			// ranks setup
+			/***************************************/
+			
+			
+			case 'mm_ranks':
+			    
+               $guild_id = request_var ( 'guild_id', 0 );
+               if ($guild_id == 0)
+               {
+                   // nothing selected
+                   $sql = 'SELECT id FROM ' . GUILD_TABLE . ' where id = 1';
+                   $result = $db->sql_query($sql);
+                   $row = $db->sql_fetchrow($result); 
+                    if (!$row)
+                    {
+                        trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
+                    }
+                    else 
+                    {
+                       $guild_id = $row['id']; 
+                       $db->sql_freeresult($result);
+                    }
+               }
+               
+               
+				$submit	 = (isset($_POST['update'])) ? true : false;
+				$add = (isset($_POST['add'])) ? true : false;
+				
+				
+				if ($submit)
+				{
+				    $modrank = request_var('ranks', array( 0 => ''));
+				    
+					foreach ( $modrank as $rank_id => $rank_name )
+					{
+						// loop the RANKS_TABLE
+						
+				    	// get old values for rank to delete or update
+                        $sql = 'SELECT rank_name, rank_hide, rank_prefix, rank_suffix
+                                FROM ' . MEMBER_RANKS_TABLE . '  
+                                WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id; 
+                        $result = $db->sql_query($sql);
+                        // loop through object until sql_fetchrow returns false, fill object
+                        while ( $row = $db->sql_fetchrow($result) )
+                        {
+                            $old_rank = array(
+                                'rank_name'	    => $row['rank_name'],
+                                'rank_hide'	    => $row['rank_hide'],
+                                'rank_prefix'	=> $row['rank_prefix'],
+                                'rank_suffix'	=> $row['rank_suffix']                                
+                            );
+                        }
+                        $db->sql_freeresult($result); 
+                            
+						
+						if ( $rank_name == '' ) 
+						{
+						    // rank deletion routine
+                            
+							// delete the rank that is blanked only if there are no users with the rank being deleted
+							$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . ' where member_rank_id = ' . $rank_id;
+							$result = $db->sql_query($sql);
+							$countm = $db->sql_fetchfield('countm');
+							
+							if ( $countm != 0)
+							{
+								 trigger_error('Cannot delete this rank. There are still members with this rank. ' . $link, E_USER_WARNING);
+							}
+							else
+							{
+									$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id=' . $rank_id . ' and guild_id = ' . $guild_id; 
+									$db->sql_query($sql); 
+							}
+							
+							 // log the action
+                            $log_action = array(
+                                                'header'       => 'L_ACTION_RANK_DELETED',
+                                                'id'           => (int) $rank_id,
+                                                'L_NAME'     => $old_rank['rank_name'],
+                                                'L_ADDED_BY' => $user->data['username']);
+                                            
+                            $this->log_insert(array(
+                                    'log_type'   => $log_action['header'],
+                                    'log_action' => $log_action)
+                            );
+                    
+						}
+						else
+						{
+						    // update routine
+						    
+                          // get new values
+							$rank_prefix = ( isset($_POST['prefix'][$rank_id]) ) ? utf8_normalize_nfc(request_var('prefix',  array((int) $rank_id => ''), true)) : '';
+							$rank_suffix = ( isset($_POST['suffix'][$rank_id]) ) ? utf8_normalize_nfc(request_var('suffix',  array((int) $rank_id => ''), true)) : '';
+							
+							$sql_ary =     array( 
+								'rank_name'   => $rank_name,
+								'rank_hide'   => ( isset($_POST['hide'][$rank_id]) ) ? 1 : 0, 
+								'rank_prefix' =>  $rank_prefix[$rank_id],
+								'rank_suffix' =>  $rank_suffix[$rank_id]
+							);
+
+							// compare old with new, 
+							if ($old_rank == $sql_ary )
+							{
+							    // no difference
+							}
+							else
+							{
+							    // difference so update and log it
+							    
+							   $sql = 'UPDATE ' . MEMBER_RANKS_TABLE . '
+ 							   SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
+					   	       WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id; 
+                           
+    							$db->sql_query($sql); 
+    							
+        						// log it
+        						$log_action = array(
+        							'header'               => 'L_ACTION_RANK_UPDATED' ,
+        							'L_NAME_BEFORE'      => $old_rank['rank_name'],
+        							'L_HIDE_BEFORE'      => $old_rank['rank_hide'],
+        							'L_PREFIX_BEFORE'    => $old_rank['rank_prefix'],
+        							'L_SUFFIX_BEFORE'    => $old_rank['rank_suffix'],
+        							'L_NAME_AFTER'       => $sql_ary['rank_name'],
+        							'L_HIDE_AFTER'       => $sql_ary['rank_hide'],
+        							'L_PREFIX_AFTER'     => $sql_ary['rank_prefix'],
+        							'L_SUFFIX_AFTER'     => $sql_ary['rank_suffix'],
+        						    'L_UPDATED_BY'       => $user->data['username']);
+        							
+        						$this->log_insert(array(
+        							'log_type'   => $log_action['header'],
+        							'log_action' => $log_action)
+        						);
+							}
+						}
+					}
+					
+					$success_message = $user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
+					trigger_error($success_message . $link);
+				}
+				
+				
+				if ($add)
+				{
+				    //check if rankname exists
+				    $nrank_name  = utf8_normalize_nfc(request_var('nrankname', '', true));
+				    if($nrank_name == '')
+				    {
+				        trigger_error( $user->lang('ERROR_RANK_NAME_EMPTY'), E_USER_WARNING);
+				    }
+				    
+				    //check if guildid is valid
+				    if($guild_id == 0)				    
+				    {
+				        trigger_error( $user->lang('ERROR_INVALID_GUILDID'), E_USER_WARNING);
+				    }
+				    
+				    //check if rank exists				    
+				     $nrankid = request_var('nrankid', 0);
+                    $sql = 'SELECT count(*) as rankcount FROM ' . MEMBER_RANKS_TABLE . ' 
+                    	WHERE rank_id != 99 
+                    	AND rank_id = ' . $nrankid . ' 
+                    	AND guild_id = '. $guild_id . ' 
+                    	ORDER BY rank_id, rank_hide ASC ';
+                     $result = $db->sql_query($sql);
+                     if ( (int) $db->sql_fetchfield('rankcount', false, $result) == 1)
+                     {
+                         trigger_error( sprintf($user->lang('ERROR_RANK_EXISTS'),$nrankid,$guild_id ) . $link, E_USER_WARNING);
+                     }
+                     
+                    
+                    $nrank_hide = ( isset($_POST['nhide']) ) ? 1 : 0; 
+                    $nprefix = utf8_normalize_nfc(request_var('nprefix', '', true));
+                    $nsuffix = utf8_normalize_nfc(request_var('nsuffix', '', true));
+
+                    $this->insertnewrank($nrankid,$nrank_name, $nrank_hide, $nprefix, $nsuffix ,  $guild_id); 
+                    
+                    // display success                    
+                    $success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
+					trigger_error($success_message . $link);                       
+                     
+				}
+			
+				// template filling 
+				
+				$sql = 'SELECT id, name FROM ' . GUILD_TABLE . ' where id > 0 ORDER BY id';
+				$resultg = $db->sql_query ( $sql );
+                while ( $row = $db->sql_fetchrow ( $resultg ) ) 
+                {
+                	$template->assign_block_vars ( 
+                	'guild_row', 
+                	array (
+                	'VALUE' => $row ['id'], 
+                	'SELECTED' => ($row ['id'] == $guild_id) ? ' selected="selected"' : '', 
+                	'OPTION' => $row ['name'])); 
+                }
+                $db->sql_freeresult ( $resultg );
+                
+				// rank 99 is the out-rank
+		        $sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . ' 
+		        WHERE rank_id != 99
+				AND guild_id = '. $guild_id . ' 
+		        ORDER BY rank_id, rank_hide  ASC ';
+
+		        $result = $db->sql_query($sql);
+		        while ( $row = $db->sql_fetchrow($result) )
+		        {
+		            $prefix = $row['rank_prefix'];
+		            $suffix = $row['rank_suffix'];
+		            
+		            $template->assign_block_vars('ranks_row', array(
+		                'RANK_ID'      => $row['rank_id'],
+		                'RANK_NAME'    => $row['rank_name'],
+		                'RANK_PREFIX'  => $prefix,
+		                'RANK_SUFFIX'  => $suffix,
+		                'HIDE_CHECKED' => ($row['rank_hide'] == 1 ) ? 'checked="checked"' : '')
+		            );
+		           
+		        }
+		        $db->sql_freeresult($result);
+		        
+		        $template->assign_vars(array(
+                    'F_EDIT_RANKS'		  	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") ,
+                    'GUILD_ID'		      	=> $guild_id ,
+                    )
+		        );
+					
+						$this->page_title = 'ACP_MM_RANKS';
+						$this->tpl_name = 'dkp/acp_'. $mode;
+				
+			break;
+			
+			/***************************************/
+			// List Guilds
+			/***************************************/
+
+			case 'mm_listguilds':
+
+				$sort_order = array(
+					0 => array('id', 'id desc'),
+					1 => array('name', 'name desc'),
+					2 => array('realm desc', 'realm desc'),
+					3 => array('region', 'region desc'),
+					4 => array('roster', 'roster desc'),
+				);
+				$current_order = switch_order($sort_order);
+				
+				$guild_count = 0;
+				$previous_data = '';
+				$sort_index = explode('.', $current_order['uri']['current']);
+				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
+				
+				$show_all = (( isset($_GET['show'])) && request_var('show','') == 'all') ? true : false;
+				
+				// we select only guilds with id greater than zero
+				$sql = 'SELECT id, name, realm, region, roster FROM ' . GUILD_TABLE . ' where id > 0  ORDER BY ' . $current_order['sql'];
+				
+				if ( !($guild_result = $db->sql_query($sql)) )
+				{
+					trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
+				}
+				$lines = 0;
+				
+				while ( $row = $db->sql_fetchrow($guild_result) )
+				{
+					$guild_count++;
+					$template->assign_block_vars('guild_row', array(
+						'ID'           => $row['id'],
+						'NAME'         => $row['name'] ,
+						'REALM'        => $row['realm'],
+						'REGION'       => $row['region'],
+						'SHOW_ROSTER'  => ($row['roster'] == 1 ? 'yes' : 'no'),
+						'U_VIEW_GUILD' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild&amp;" . URI_GUILD .'='.$row['id']), 
+						)
+					); 
+					
+					$previous_data = $row[$previous_source];
+				}
+				
+				
+				$template->assign_vars(array(
+					'F_GUILD' => append_sid("index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addguild',
+					'L_TITLE'		=> $user->lang['ACP_MM_LISTGUILDS'],
+					'L_EXPLAIN'		=> $user->lang['ACP_MM_LISTGUILDS_EXPLAIN'],
+					'BUTTON_VALUE' => $user->lang['DELETE_SELECTED_GUILDS'],
+					'O_ID' => $current_order['uri'][0],
+					'O_NAME' => $current_order['uri'][1],
+					'O_REALM' => $current_order['uri'][2],
+					'O_REGION' => $current_order['uri'][3],
+					'O_ROSTER' => $current_order['uri'][4],
+					'U_LIST_GUILD' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") ,		
+					'GUILDMEMBERS_FOOTCOUNT' => sprintf($user->lang['GUILD_FOOTCOUNT'], $guild_count),
+					)
+				);			
+			
+				$this->page_title = 'ACP_MM_LISTGUILDS';
+				$this->tpl_name = 'dkp/acp_'. $mode;
+				
+			break;
+			
+			/*************************************
+			 * ************ Add Guild ************
+			 *************************************/
+			case 'mm_addguild':
+			    
+                /* select data */
+                $update = false;
+
+                if  (isset($_GET[URI_GUILD]) )
+                {
+                    $this->url_id = request_var(URI_GUILD, 0 );
+                }
+                
+                $regionlist = array( 
+                          	'US'=> 'US', 
+							'EU'=> 'EU',
+                        );
+               
+                if ( $this->url_id != 0 )   
+                  {
+                    // we have a GET
+                    $update = true;
+                   
+                    $sql = 'SELECT id, name, realm, region, roster
+                            FROM ' . GUILD_TABLE . '  
+                            WHERE id = ' . $this->url_id ; 
+                    $result = $db->sql_query($sql);
+                    $row = $db->sql_fetchrow($result); 
+                    $db->sql_freeresult($result);
+
+                    if (!$row)
+                    {
+                        trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
+                    }
+                    else 
+                    {
+                        
+                        // load guild object
+                        $this->guild = array(
+                            'guild_id'	        => $row['id'],
+                            'guild_name'	    => $row['name'],
+                            'guild_realm'	    => $row['realm'],
+                            'guild_region'	    => $row['region'],
+                         	'guild_showroster'	    => $row['roster']
+                        );
+                        
+
+                    	foreach ( $regionlist as $key => $value)
+				        {
+						    $template->assign_block_vars('region_row', array(
+    							'VALUE'    => $value,
+	    						'SELECTED' => ( $this->guild['guild_region'] == $key ) ? ' selected="selected"' : '',
+		    					'OPTION'   => ( !empty($key) ) ? $key : '(None)')
+					    );
+				        }
+				
+                    }
+                  }
+                  else 
+                  {
+                      // NEW PAGE                          
+                      foreach ( $regionlist as $key => $value)
+				        {
+						    $template->assign_block_vars('region_row', array(
+    							'VALUE'    => $value,
+	    						'SELECTED' =>  '',
+		    					'OPTION'   => ( !empty($key) ) ? $key : '(None)')
+					        );
+				        }
+				        
+                      
+                  }
+                $add        = (isset($_POST['add'])) ? true : false;
+                $submit     = (isset($_POST['update'])) ? true : false;
+                $delete     = (isset($_POST['delete'])) ? true : false;   
+
+                if ($add)
+                    {
+                       $guild_name = utf8_normalize_nfc(request_var('guild_name','', true));
+                       $realm_name = utf8_normalize_nfc(request_var('realm','', true));
+                       $region= request_var('region_id', '');
+                       $showroster= request_var('showroster', 0);
+                       
+                       if ($guild_name == null || $realm_name == null)
+                       {
+                            trigger_error($user->lang['ERROR_GUILDEMPTY'] . $link, E_USER_WARNING);
+                       }   
+                       else
+                       {
+                            // check existing
+                            $result = $db->sql_query("SELECT count(*) as evcount from " . GUILD_TABLE . 
+                            " WHERE UPPER(name) = '" . strtoupper($db->sql_escape($guild_name))  .  "'");
+                            
+                            $grow = $db->sql_fetchrow($result);
+                            if($grow['evcount'] !=0 )
+                            {
+                                 trigger_error($user->lang['ERROR_GUILDTAKEN'] . $link, E_USER_WARNING);
+                            }
+                            
+                            // we always add guilds with an id greater then zero. this way, the guild with id=zero is the "guildless" guild
+                            // the zero guild is added by default in a new install. 
+                            // do not delete the zero record in the guild table or you will see that guildless members 
+                            // become invisible in the roster and in the memberlist or in any list member selection that makes 
+                            // an inner join with the guild table. 
+                            
+                            if ($this->insertnewguild($guild_name,$realm_name,$region,$showroster ) > 0) 
+                            {
+                                $success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'],  $guild_name);
+                                trigger_error($success_message . $link, E_USER_NOTICE);
+                            }
+                            else 
+                            {
+                                $success_message = sprintf($user->lang['ADMIN_ADD_GUILD_FAIL'],  $guild_name);
+                                 trigger_error($success_message . $link, E_USER_WARNING);
+                            }
+                       }
+                        
+                    }
+                       
+                    if ($submit)
+                    {
+                        // Update
+                        
+                        // get the guild id from the url parameter (via GET)
+                        if (isset($_GET[URI_GUILD]))
+                        {
+                            $this->url_id = request_var(URI_GUILD,0);
+                        }
+                        else 
+                        {
+                             trigger_error($user->lang['error_invalid_guild_provided'], E_USER_WARNING);
+                        }
+
+                        // get old value
+                        $sql = 'SELECT id, name, realm, region, roster 
+                                FROM ' . GUILD_TABLE . '  
+                                WHERE id = ' . (int) $this->url_id ; 
+                        $result = $db->sql_query($sql);
+                        
+                        // if we have a wrong id then error, this should not happen. 
+                        if (!$row)
+                        {
+                            trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
+                        }
+                       
+                        // loop through object until sql_fetchrow returns false, fill object
+                        while ( $row = $db->sql_fetchrow($result) )
+                        {
+                            $this->old_guild = array(
+                                'guild_id'	        => $row['id'],
+                                'guild_name'	    => $row['name'],
+                                'guild_realm'	    => $row['realm'],
+                                'guild_region'	    => $row['region'], 
+                                'guild_showroster'	=> $row['roster']
+                            
+                            );
+                        }
+                        $db->sql_freeresult($result);           
+                        
+                        $new_guild_name = utf8_normalize_nfc(request_var('guild_name', ' ', true));
+                        $new_realm_name = utf8_normalize_nfc(request_var('realm', ' ', true));
+                        $new_region_name = request_var('region_id', ' ');
+                        $new_showroster = request_var('showroster', 0);
+                        
+                        //
+                        // Update the guild
+                        //
+                        $query = $db->sql_build_array('UPDATE', array(
+                            'name'	  => $new_guild_name,
+                            'realm'   => $new_realm_name, 
+                            'region'  => $new_region_name,
+    						'roster'  => $new_showroster,                        
+                        
+                            ));
+                        $sql = 'UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id=' . (int) $this->url_id; 
+                        $db->sql_query($sql);
+               
+                        $success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
+                        trigger_error($success_message . $link);
+                       
+                    }   
+
+                    if ($delete)
+                    {   
+
+                        if  (isset($_GET[URI_GUILD]))
+                        {
+                            // give a warning 
+                            if (confirm_box(true))
+                            {
+					            $guildid = request_var(URI_GUILD,0); 
+					            if ($guildid < 2 )
+					            {
+					                trigger_error( $user->lang['ERROR_GUILDIDRESERVED'] , E_USER_WARNING); 
+					            }   
+					                                        	
+                            	// check if guild has members
+                            	$sql = 'SELECT COUNT(*) as mcount FROM  ' . MEMBER_LIST_TABLE . '
+                                        WHERE member_guild_id = ' . $guildid ;
+                            	$result = $db->sql_query($sql);
+                                if ((int) $db->sql_fetchfield('mcount') >= 1)
+					            {
+					                trigger_error( $user->lang['ERROR_GUILDHASMEMBERS'] , E_USER_WARNING); 
+					            }       
+
+					            $sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . '
+                                        WHERE guild_id = ' . $guildid ;
+                                $db->sql_query($sql);   
+
+                                $sql = 'DELETE FROM ' . GUILD_TABLE . '
+                                        WHERE id = ' . $guildid ;
+                                $db->sql_query($sql);   
+
+                                $success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $this->guild['guild_id']);
+                                trigger_error($success_message . adm_back_link($this->u_action), E_USER_NOTICE);
+                            }
+                            else
+                            {
+                                $s_hidden_fields = build_hidden_fields(array(
+                                    'delete'    => true,
+                                    'event_id'    => request_var(URI_GUILD,0) ,
+                                    )
+                                );
+   
+                                $template->assign_vars(array(
+                                    'S_HIDDEN_FIELDS'    => $s_hidden_fields)
+                                );
+
+                                confirm_box(false, $user->lang['CONFIRM_DELETE_GUILD'], $s_hidden_fields);
+                            }
+                        }
+                    }   
+       
+                $template->assign_vars(array(
+                
+                        // Form values                       
+                      	'GUILD_ID'  => $this->url_id,
+                		'GUILD_NAME'         => isset($this->guild['guild_name']) ? $this->guild['guild_name']: '' ,
+                        'REALM'              => isset($this->guild['guild_realm']) ? $this->guild['guild_realm']: '' ,
+                        'REGION'             => isset($this->guild['guild_region']) ? $this->guild['guild_region']: '' ,
+						'SHOW_ROSTER'        => isset($this->guild['guild_showroster']) ? (($this->guild['guild_showroster'] == 1 ) ? 'checked="checked"' : '' ): '' ,                
+                           
+                        // Language
+                        'L_TITLE'             => $user->lang['ACP_MM_ADDGUILD'],
+                        'L_EXPLAIN'           => $user->lang['ACP_MM_ADDGUILD_EXPLAIN'],
+                		'L_ADD_GUILD_TITLE'   => ( !$this->url_id ) ? $user->lang['ADD_GUILD'] : $user->lang['EDIT_GUILD'],
+                       
+                        // Javascript messages
+                        'MSG_NAME_EMPTY'  => $user->lang['FV_REQUIRED_NAME'],
+                       
+                     
+                        'S_ADD' => ( !$this->url_id ) ? true : false
+                        )
+                    );
+                   
+                $this->page_title = 'ACP_ADDGUILD';
+                $this->tpl_name = 'dkp/acp_'. $mode;
+               
+            break;
+			
+			default:
+			
+			$this->page_title = 'ACP_DKP_MAINPAGE';
+			$this->tpl_name = 'dkp/acp_mainpage';
+			$success_message = 'Error';
+			trigger_error($success_message . $link, E_USER_WARNING);
+			
+		}
+	}
+	
+	
+	 /**
+	 * get membername given an id
+	 *
+	 * @param int $member_id
+	 * @return string
+	 */
+	function get_member_name($member_id)
+    {
+        global $db;
+        
+        $sql = 'SELECT member_name
+                FROM ' . MEMBER_LIST_TABLE . "
+                WHERE member_id = " . (int) $member_id;
+        $result = $db->sql_query($sql);
+        while ( $row = $db->sql_fetchrow($result) )
+        {
+            $membname = $row['member_name'];
+        }
+        $db->sql_freeresult($result);
+        
+        if (isset($membname))
+        {
+        	 return $membname;
+ 	    }
+ 	    else 
+    	{
+        	 return '';
+ 	    }
+    }
+    
+
+	/**
+	 * get id given a membername
+	 *
+	 * @param string $membername
+	 * @return int
+	 */
+	function get_member_id($membername)
+    {
+        global $db;
+        
+        $sql = 'SELECT member_id
+                FROM ' . MEMBER_LIST_TABLE . "
+                WHERE member_name ='" . $db->sql_escape($membername) . "'";
+        
+        $result = $db->sql_query($sql);
+        while ( $row = $db->sql_fetchrow($result) )
+        {
+            $membid = $row['member_id'];
+        }
+        $db->sql_freeresult($result);
+        
+        if (isset($membid))
+        {
+        	 return $membid;
+ 	    }
+ 	    else 
+    	{
+        	 return 0;
+ 	    }
+    }
+    
+     /***
+     * function for inserting a new guild
+     * you have to perform argument and ifexist validations befre you call this function!
+     * is also called from armory plugin
+     * 
+     */
+    function insertnewguild($guild_name,$realm_name,$region, $showroster, $aionlegionid = 0, $aionserverid = 0) 
+    {
+        
+        global $db, $user, $config;   	
+		
+        $this_guild_id = $db->sql_query("SELECT MAX(id) as id FROM " . GUILD_TABLE . ";");
+        $this_guild_id = $db->sql_fetchrow($this_guild_id);
+        $this_guild_id = (int) $this_guild_id['id'] + 1;
+        
+        $query = $db->sql_build_array('INSERT', array(   
+                'id'       => $this_guild_id,   
+                'name'     => $guild_name,   
+                'realm'    => $realm_name,  
+                'region'   => $region, 
+                'roster'   => $showroster, 
+                'aion_legion_id' =>  $aionlegionid, 
+                'aion_server_id' =>  $aionserverid,
+                )   
+            );       
+                   
+        $db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
+           
+        $log_action = array(
+                'header'       => 'L_ACTION_GUILD_ADDED',
+                'id'           => $this_guild_id,
+                'L_NAME'     => $guild_name,
+                'L_REALM'    => $realm_name,
+                'L_ADDED_BY' => $user->data['username']);
+            
+        $this->log_insert(array(
+                'log_type'   => $log_action['header'],
+                'log_action' => $log_action)
+            );
+            
+        return  $this_guild_id; 
+    }
+    
+
+    /***
+     * function for deleting rank
+     * $nrankid = int
+     * $guild_id = int
+     * $override = boolean true to delete even when members exist
+     * 				boolean false to not delete when members exist
+     * is also called from armory plugin
+     */
+    function deleterank( $nrankid, $guild_id, $override)
+    {
+        global $db, $user, $config;   	
+        
+        if (!$override)
+        {
+            // check if rank is used  
+            $sql = 'select count(*) as rankcount from '. MEMBER_LIST_TABLE . ' WHERE 
+            		 member_rank_id   = ' . (int) $nrankid . ' and
+            		 member_guild_id =  '. (int) $guild_id; 
+            $result = $db->sql_query($sql);
+            if ((int) $db->sql_fetchfield('rankcount') >= 1)
+            {
+                trigger( 'Cannot delete rank ' . $nrankid . '. There are members with this rank in guild . ' . $guild_id , E_USER_WARNING); 
+            }
+        }
+        
+        // ok proceed to delete
+        $sql =  'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE 
+        		 rank_id   = ' . (int) $nrankid . ' and
+        		 guild_id =  '. (int) $guild_id; 
+        $db->sql_query($sql);
+        
+        // log the action
+        $log_action = array(
+                            'header'       => 'L_ACTION_RANK_DELETED',
+                            'id'           => (int) $nrankid,
+                            'GUILD_ID'     => (int) $guild_id,
+                            'L_ADDED_BY' => $user->data['username']);
+                        
+        $this->log_insert(array(
+                'log_type'   => $log_action['header'],
+                'log_action' => $log_action)
+        );
+        
+        return true;
+        
+    }
+    
+    
+    /***
+     * function for inserting a new rank
+     * you have to perform argument and ifexist validations before you call this function!
+     * $nrankid = int
+     * $guild_id = int
+     * $nrank_name = string
+     * $nprefix = string
+     * $nsuffix = string
+     * is also called from armory plugin
+     * 
+     */
+    function insertnewrank($nrankid,$nrank_name, $nrank_hide, $nprefix, $nsuffix ,  $guild_id)
+    {
+        global $db, $user, $config;   	
+          
+        // build insert array                     
+        $query = $db->sql_build_array('INSERT', array(
+        		'rank_id'     => (int) $nrankid,
+        		'rank_name'   => $nrank_name,
+        		'rank_hide'   => $nrank_hide, 
+        		'rank_prefix' => $nprefix,
+        		'rank_suffix' => $nsuffix, 
+                'guild_id'    => (int) $guild_id)
+        	);
+        	
+        // insert new rank                    	
+        $db->sql_query('INSERT INTO ' . MEMBER_RANKS_TABLE . $query);
+        
+        // log the action
+        $log_action = array(
+                            'header'       => 'L_ACTION_RANK_ADDED',
+                            'id'           => (int) $nrankid,
+                            'L_NAME'     => $nrank_name,
+                            'L_ADDED_BY' => $user->data['username']);
+                        
+        $this->log_insert(array(
+                'log_type'   => $log_action['header'],
+                'log_action' => $log_action)
+        );
+        
+        return true;
+        
+    }
+    
+    /***
+     * function for inserting a new member
+     * you have to perform argument and ifexist validations before you call this function!
+     * is also called from armory plugin
+     */
+    function insertnewmember($member_name, $member_status, $member_lvl, 
+    $race_id ,  $class_id, $rank_id, $member_comment, $joindate, $leavedate, 
+    $guild_id, $gender, $achievpoints, $url )
+    {
+        global $db, $user, $config;   	
+        
+		// Check for existing member name
+		$sql = "SELECT member_id 
+				FROM " . MEMBER_LIST_TABLE ." 
+				WHERE member_name = '". $db->sql_escape($member_name) ."'";
+		$result = $db->sql_query($sql);
+
+		while ($row = $db->sql_fetchrow($result) )
+		{
+			$member_id = $row['member_id'];
+		}
+		
+		if ( isset($member_id) && $member_id > 0 )
+		{
+		    return false;
+		}
+		
+		// check level and set to maxlevel if null
+		if ($member_lvl == 0)
+		{
+		    // get maxlevel
+		    $sql = "SELECT max(class_max_level) as maxlevel FROM " . CLASS_TABLE;
+		    $result = $db->sql_query($sql);
+			$member_lvl = (int) $db->sql_fetchfield('maxlevel', 1, $result); 
+		}
+
+		$query = $db->sql_build_array('INSERT', array(
+			'member_id'             => NULL,
+			'member_name'           => ucwords($member_name),
+			'member_status'         => 1,
+			'member_level'          => $member_lvl,
+			'member_race_id'        => $race_id,
+			'member_class_id'       => $class_id,
+			'member_rank_id'        => $rank_id,
+			'member_comment'        => $member_comment,
+			'member_joindate'       => $joindate,  
+		    'member_outdate'        => $leavedate,
+			'member_guild_id'       => $guild_id,
+		    'member_gender_id'	     => $gender,
+			'member_achiev'	         => $achievpoints, 
+		    'member_armory_url'      => $url)
+		); 
+		
+		$log_action = array(
+		'header'         => 'L_ACTION_MEMBER_ADDED',
+		'L_NAME'       => $member_name,
+		'L_LEVEL'      => $member_lvl,
+		'L_RACE'       => $race_id,
+		'L_CLASS'      => $class_id,
+		'L_ADDED_BY'   => $user->data['username']);
+		
+		
+		try 
+		{
+		    $db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
+            
+		}
+		catch (Exception $e)
+		{
+		    
+		    $this->log_insert(array(
+			'log_type'   => $log_action['header'],
+			'log_action' => $log_action,
+		    'log_result'    => 'L_FAILURE')
+		    );
+		
+		    trigger( 'Caught exception: ',  $e->getMessage(), "\n" , E_USER_WARNING); 
+		    
+		    return false;
+		}
+		
+	    $this->log_insert(array(
+		'log_type'   => $log_action['header'],
+		'log_action' => $log_action)
+	    );
+	    
+	    return true;
+	    
+    }
+    
+  
+ 	/***
+ 	 * 
+     * function for removing member from guild but leave him in the system. this is called from armory plugin
+     *
+     */
+    function removemember($member_name, $guild_id ) 
+    {
+        global $db, $user, $config;   	
+        
+		// find id for existing member name
+		$sql = "SELECT * 
+				FROM " . MEMBER_LIST_TABLE ." 
+				WHERE member_name = '". $db->sql_escape($member_name) ."' and member_guild_id = " . (int) $guild_id ;
+		$result = $db->sql_query($sql);
+
+		// get old data
+		while ($row = $db->sql_fetchrow($result) )
+		{
+            $this->old_member = array(
+                'member_id'         => $row['member_id'],
+                'member_rank_id'    => $row['member_rank_id'],
+                'member_guild_id'   => $row['member_guild_id'],
+                'member_comment'    => $row['member_comment'],
+            );
+		}
+		$db->sql_freeresult($result);
+		 
+		$sql_arr = 	array(
+			'member_rank_id'      => 99,
+			'member_comment'      => "Member left " . date("F j, Y, g:i a") . ' by Armory plugin',
+			'member_outdate'      => $this->time,
+		    'member_guild_id'	  => 0,
+		); 
+		
+        $sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
+        SET ' . $db->sql_build_array('UPDATE', $sql_arr) . '
+        WHERE member_id = ' . (int) $this->old_member['member_id']  .  ' and member_guild_id = ' . (int) $this->old_member['member_guild_id'] ;
+        
+        $db->sql_query($sql);
+        
+        $log_action = array(
+        'header'                => 'L_ACTION_MEMBER_UPDATED' ,
+        'L_NAME'			     => $member_name,
+        'L_RANK_BEFORE'       => $this->old_member['member_rank_id'],
+        'L_COMMENT_BEFORE'    => $this->old_member['member_comment'],
+        'L_RANK_AFTER'        => 99,
+        'L_COMMENT_AFTER'     => "Member left " . date("F j, Y, g:i a") . ' by Armory plugin',
+        'L_UPDATED_BY'        => $user->data['username']
+        );
+        
+        $this->log_insert(array(
+        'log_type'   => $log_action['header'],
+        'log_action' => $log_action)
+        );
+        
+        return true;
+        
+    }
+    
+    
+ 	/***
+     * function for updating a new member
+     * does not deal with changing names/guilds
+     * is also called from armory plugin for updating existing guildmembers
+     * url is not updated
+     */
+    function updatemember($member_name, 
+    $member_lvl, $race_id, $class_id, $rank_id, $member_comment, $guild_id, $gender, $achievpoints) 
+    {
+        global $db, $user, $config;   	
+        
+		// find id for existing member name
+		$sql = "SELECT * 
+				FROM " . MEMBER_LIST_TABLE ." 
+				WHERE member_name = '". $db->sql_escape($member_name) ."' and member_guild_id = " . (int) $guild_id ;
+		$result = $db->sql_query($sql);
+
+		// get old data
+		$member_id = 0;
+		while ($row = $db->sql_fetchrow($result) )
+		{
+			$member_id = $row['member_id'];
+            $this->old_member = array(
+                'member_level'      => $row['member_level'],
+                'member_race_id'    => $row['member_race_id'],
+                'member_rank_id'    => $row['member_rank_id'],
+                'member_class_id'   => $row['member_class_id'],
+                'member_gender_id'	 => $row['member_gender_id'],	   
+                'member_achiev'	 => $row['member_achiev'],	       
+            );
+		}
+		$db->sql_freeresult($result);
+		
+		if ($member_id == 0)
+		{
+		    // could not find member - this shouldnt happen
+		    return false; 
+		}
+		 
+		// check level and set to maxlevel if zero
+		if ($member_lvl == 0)
+		{
+		    // get maxlevel
+		    $sql = "SELECT max(class_max_level) as maxlevel FROM " . CLASS_TABLE;
+		    $result = $db->sql_query($sql);
+			$member_lvl = (int) $db->sql_fetchfield('maxlevel', 1, $result); 
+		}
+		
+		$sql_arr = 	array(
+			'member_level'          => $member_lvl,
+			'member_race_id'        => $race_id,
+			'member_rank_id'        => $rank_id,
+			'member_class_id'       => $class_id,
+		    'member_gender_id'	     => $gender,
+			'member_achiev'	         => $achievpoints
+		); 
+		
+		if ($sql_arr != $this->old_member)
+		{
+		    // we have changes, so update 
+	        $sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
+            SET ' . $db->sql_build_array('UPDATE', $sql_arr) . '
+            WHERE member_id = ' . (int) $member_id .  ' and member_guild_id = ' . (int) $guild_id;
+
+	        $db->sql_query($sql);
+
+	        // update the comment - its not included in array comparison because it always changes.
+	        $sql = 'UPDATE ' . MEMBER_LIST_TABLE . "
+            SET member_comment  = '" . $db->sql_escape($member_comment) . "'
+            WHERE member_id = " . (int) $member_id .  ' and member_guild_id = ' . (int) $guild_id;
+	        
+	        $db->sql_query($sql);
+	        
+	        $log_action = array(
+			'header'                => 'L_ACTION_MEMBER_UPDATED' ,
+    		'L_NAME'			     => $member_name,
+			'L_NAME_BEFORE'       => $this->old_member['member_level'],
+    		'L_LEVEL_BEFORE'      => $this->old_member['member_level'],
+			'L_RACE_BEFORE'       => $this->old_member['member_race_id'],
+			'L_RANK_BEFORE'       => $this->old_member['member_rank_id'],
+			'L_CLASS_BEFORE'      => $this->old_member['member_class_id'],
+			'L_GENDER_BEFORE'     => $this->old_member['member_gender_id'],
+    		'L_ACHIEV_BEFORE'     => $this->old_member['member_achiev'],
+    		'L_LEVEL_AFTER'       => $member_lvl,
+			'L_RACE_AFTER'        => $race_id,
+    		'L_RANK_AFTER'        => $rank_id,
+			'L_CLASS_AFTER'       => $class_id,
+    		'L_GENDER_AFTER'      => $gender,
+    		'L_ACHIEV_AFTER'      => $achievpoints,
+			'L_UPDATED_BY'        => $user->data['username']
+    		);
+		
+    	    $this->log_insert(array(
+    		'log_type'   => $log_action['header'],
+    		'log_action' => $log_action)
+    	    );
+    	    
+    	    return true; 
+		}
+		else
+		{
+		    // no change
+		    return false;
+		    
+		}
+        
+    }
+    
+	
+}
+
+?>

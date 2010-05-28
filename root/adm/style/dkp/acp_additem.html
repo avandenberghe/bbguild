@@ -1,0 +1,294 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+<script type="text/javascript">
+
+//<![CDATA[
+
+function check_form()
+{
+    if ((document.additem.select_item_name.value.length < 2) && (document.additem.item_name.value.length < 2))
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    if (document.additem.raid_id.value.length < 1)
+    {
+        alert('{MSG_RAID_ID_EMPTY}');
+        return false;
+    }
+    if (document.additem.item_value.value.length < 1)
+    {
+        alert('{MSG_VALUE_EMPTY}');
+        return false;
+    }
+    return true;
+}
+
+function switch_item_val()
+{
+  document.additem.item_name.value  = document.additem.select_item_name.options[document.additem.select_item_name.selectedIndex].value;
+  document.additem.item_value.value = document.additem.select_item_name.options[document.additem.select_item_name.selectedIndex].text.replace(/[^\.0-9]/g, "");
+}
+
+function pop_search()
+{   
+    search = window.open('index.php{SID}&i=dkp_item&mode=search','search','resizable=no,toolbar=no,status=no,height=335,width=775,screenX=50,screenY=25,left=200,top=300')
+    search.focus();
+}
+
+function fnSearch( searchField, searchItem )
+{
+    thisForm = document.additem;
+    
+    searchBox = thisForm.elements[searchField];
+    selectBox = thisForm.elements[searchItem];
+    
+    // Don't select anybody if the search box is blank
+    if ( searchBox.value == "" )
+    {
+        return;
+    }
+    
+    reSearch = new RegExp( searchBox.value, "i" );
+    
+    len = selectBox.options.length;
+    for ( var i = 0; i < len; i++ )
+    {
+        selectBox.options[i].selected = false;
+        
+        if ( reSearch.test(selectBox.options[i].value) )
+        {
+            selectBox.options[i].selected = true;
+            break;
+        }
+    }
+}
+
+function fnAddMember()
+{
+	
+    var form = document.additem;
+    var fromField = form.all_members;
+    //destination
+    var toField = form.elements["item_buyers[]"];
+
+    var fromSize = fromField.options.length
+    var toSize = toField.options.length
+
+    var aSelected = new Array();
+
+    // Build an array of the selected members
+    for (var i = 0; i < fromSize; i++)
+    {
+        if ( fromField.options[i].selected == true )
+        {
+            aSelected[aSelected.length] = i;
+        }
+    }
+
+    var offset = 0;
+    
+    for(var i = 0; i < aSelected.length; i++ )
+    {
+        var index = aSelected[i];
+
+        var memberValue = fromField.options[index].value;
+        var memberText = fromField.options[index].text;
+
+        // Remove the initial spacer member
+        if ( (toSize == 1) && (toField.options[0].value == "") )
+        {
+            toSize = 0;
+        }
+
+        // Loop through the destination list, don't add if it's a duplicate
+        for (var j = 0, exists = false; j < toSize; j++ )
+        {
+            // destination already exists
+            if ( toField.options[ j ].value == memberValue )
+            {
+                var exists = true;
+                offset++;
+            }
+        }
+
+        // destination doesn't exist, add them
+        if ( exists != true )
+        {
+            toField.options[toSize + i - offset] = new Option(memberText, memberValue);
+            toField.options[toSize + i - offset].selected = true;
+        }
+    }
+    
+    /* We're done - clear the search box and focus it for the next entry */
+    form.memberSearch.value = "";
+    form.memberSearch.focus();
+
+    //return false;
+}
+
+
+function fnRemoveMember()
+{
+  var form = document.additem;
+  var toField = form.elements["raid_attendees[]"];
+  var toSize = toField.options.length;
+    
+  var i;
+  for (i = toField.length - 1; i>=0; i--) 
+  {
+  	if (toField.options[i].selected) 
+  	  {
+     	 toField.remove(i);
+  	  }
+  }
+}
+
+
+
+//]]>
+
+</script>
+<style type="text/css" >
+
+fieldset dt {
+	width: 34%;
+	text-align: left;
+	border: none;
+	border-right: 1px solid #CCCCCC;
+	padding-top: 3px;
+}
+
+fieldset dd {
+	margin: 0 0 0 34%;
+	padding: 0 0 0 5px;
+	border: none;
+	border-left: 1px solid #CCCCCC;
+	vertical-align: top;
+	font-size: 1.00em;
+}
+
+</style>
+
+
+<form method="post" action="{F_ADD_ITEM}" name="additem">
+
+<input type="hidden" name="hidden_id" value="{ITEM_ID}" />
+<input type="hidden" name="{URI_ITEM}" value="{ITEM_ID}" />
+<input type="hidden" name="show" value="{SHOW_ALL}" />
+
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+
+<h2>{ITEMTITLE}</h2>
+
+<div style="float: left; width: 100%;">
+<fieldset>
+<legend>{L_ADD_ITEM_TITLE}</legend>
+  <b>{L_RAID}:</b> (<a href="{U_ADD_RAID}">{L_ADD_RAID}</a>)<br />
+	<select name="dkpsys_id" class="input" onchange="javascript:form.submit();" >
+		<!-- BEGIN dkpsys_row -->
+		<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
+		<!-- END dkpsys_row -->
+	</select>
+   <br />
+     <select name="raid_id" id="raid_id" class="input" onchange="javascript:form.submit();" size="10" style="width: 100%;" >
+		<!-- BEGIN raids_row -->
+			<option value="{raids_row.VALUE}"{raids_row.SELECTED}>{raids_row.OPTION}</option>
+		<!-- END raids_row -->
+    </select>{FV_RAID_ID}
+</fieldset>
+</div>
+
+<div style="float: right; width: 50%;">
+<fieldset>
+<legend>{FV_ITEM_BUYERS}{L_BUYERS}:</legend>
+ <span class="small">{L_HOLD_CTRL_NOTE}</span>
+
+<dl>  
+  {L_SEARCH_MEMBERS} : <input type="text" name="memberSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'all_members')" />	
+</dl>
+
+<dl>
+     <select style="float: left; width: 48%;" name="all_members" size="20" multiple="multiple" class="input">
+         <!-- BEGIN members_row -->
+       <option value="{members_row.VALUE}">{members_row.OPTION}</option>
+       <!-- END members_row -->
+     </select>
+     <select style="float: right; width: 48%;" name="item_buyers[]" size="20" multiple="multiple" class="input">
+       <!-- BEGIN buyers_row -->
+       <option value="{buyers_row.VALUE}" selected="selected">{buyers_row.OPTION}</option>
+       <!-- END buyers_row -->
+     </select>
+ </dl>
+      <dl>
+        <center>
+          <input type="button" name="button1" value="&lt;&lt;" accesskey="r" onclick="return fnRemoveMember()" class="button1" />
+          <input type="button" name="button2" value="&gt;&gt;" accesskey="m" onclick="return fnAddMember()" class="button1" />
+			  </center>
+			</dl> 
+     </fieldset>
+     
+    </div>
+    
+    
+<div style="float: left; width: 49%;"> 
+ <fieldset> 
+ <legend>{L_ITEM} </legend>
+    
+ <span class="small">(<a href="javascript:pop_search();">{L_SEARCH}</a>)</span><br />
+ <dl>   
+   <dt><label>{L_SEARCH_EXISTING}:</label>
+   </dt>
+   	<dd>
+   		<input type="text" name="itemSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'select_item_name'); switch_item_val();" />
+   	</dd>
+   	<dd>
+   	  &nbsp;
+   	</dd>
+   	<dd>
+	   	 <select name="select_item_name" style="width: 100%;" onchange="javascript:switch_item_val();" class="input">
+	      <option value=""></option>
+	      <!-- BEGIN items_row -->
+	      <option value="{items_row.VALUE}"{items_row.SELECTED}>{items_row.OPTION}</option>
+	      <!-- END items_row -->
+	    </select>
+   	</dd>
+ </dl>
+ 
+    <b>- {L_OR} -</b>
+    <dl>
+	   	<dt><label>{L_ENTER_NEW}:</label></dt>
+   		<dd><input type="text" name="item_name" size="30" maxlength="255" value="{ITEM_NAME}" class="input" />{FV_ITEM_NAME}</dd>
+	</dl>
+	<dl>
+    	<dt><label>{L_VALUE}:</label></dt>
+    	<dd> <input type="text" name="item_value" size="10" maxlength="10" value="{ITEM_VALUE}" class="input" />{FV_ITEM_VALUE}</dd>
+	 </dl>
+ </fieldset>
+ </div>
+ 
+
+ <div style="float: left; width: 100%;"> 
+     <p class="quick">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_ITEM}" class="button1" /> 
+    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_ITEM}" class="button1" />
+    <input type="submit"  name="delete" value="{L_DELETE_ITEM}" class="button1" />
+    <!-- ENDIF -->
+    </p>
+</div>
+</form>
+
+
+
+
+<!-- INCLUDE dkp/overall_footer.html -->

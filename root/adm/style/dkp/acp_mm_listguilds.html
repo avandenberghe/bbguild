@@ -1,0 +1,42 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id: acp_bossprogress.html 402 2009-04-26 23:15:04Z Sajaki9 $
+//-->
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+<form method="post" action="{F_GUILD}" name="post">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="5" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="100"><a href="{U_LIST_GUILD}&amp;o={O_NAME}">{L_GUILD_NAME}</a></th>
+    <th align="left" width="40"><a href="{U_LIST_GUILD}&amp;o={O_REALM}">{L_REALM_NAME}</a></th>
+    <th align="left" width="20" nowrap="nowrap"><a href="{U_LIST_GUILD}&amp;o={O_REGION}">{L_REGION}</a></th>
+    <th align="left" width="20" nowrap="nowrap"><a href="{U_LIST_GUILD}&amp;o={O_ROSTER}">{L_SHOWONROSTER}</a></th>
+  </tr>
+  
+  <!-- BEGIN guild_row -->
+  <!-- IF guild_row.S_ROW_COUNT is even -->
+  <tr class="row1">
+  <!-- ELSE -->
+  <tr class="row2">
+  <!-- ENDIF -->
+    <td width="5" nowrap="nowrap" align="right">{guild_row.ID}</td>
+    <td width="100" nowrap="nowrap"><a href="{guild_row.U_VIEW_GUILD}">{guild_row.NAME}</a></td>
+    <td width="40" nowrap="nowrap">{guild_row.REALM}</td>
+    <td width="20" nowrap="nowrap">{guild_row.REGION}</td>
+	<td width="20" nowrap="nowrap">{guild_row.SHOW_ROSTER}</td>    
+  </tr>
+  <!-- END guild_row -->
+  <tr>
+    <th colspan="9" class="footer">{GUILDMEMBERS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<br />
+
+
+</form>
+<!-- INCLUDE dkp/overall_footer.html -->

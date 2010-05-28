@@ -1,0 +1,102 @@
+<!-- INCLUDE overall_header.html -->
+<!-- INCLUDE dkp/dkpmenu.html -->
+<!--
+		Integrated by bbDKP
+		http://code.google.com/p/bbdkp/
+		$Id$
+//-->
+<form method="post" action="{F_MEMBERS}">
+
+
+<table width="100%" class="tablebg" cellpadding="0" cellspacing="1" >
+<tr>
+<th class="row1"><h2><font color="#dfc065">{L_MENU_STATS}</font></h2></th>
+</tr>
+<tr>
+<td class="row1" align="left" width="56" nowrap="nowrap">{L_POOL}:
+      <select name="pool" class="input" onchange="javascript:form.submit();">
+        <!-- BEGIN pool_row -->
+        <option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
+        <!-- END pool_row -->
+      </select>
+</td>
+</tr>
+</table>  
+</form>
+
+<table width="100%" border="0" cellpadding="3" cellspacing="1">
+  <tr>
+    <th align="left" width="20%"></th>
+    <th colspan="4">{L_RAIDS}</th>
+    <th colspan="3">{L_EARNED}</th>
+    <th colspan="3">{L_SPENT}</th>
+    <th colspan="2">{L_PCT_EARNED_LOST_TO}</th>
+    <th class="smalltitle"></th>
+  </tr>
+  <tr>
+  	<th align="left" class="smalltitle"><a href="{O_NAME}">{L_NAME}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_FIRSTRAID}">{L_FIRST}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_LASTRAID}">{L_LAST}</a></th>
+    <th align="left" class="smalltitle" colspan="2"><a href="{O_RAIDCOUNT}">{L_ATTENDED}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_EARNED}">{L_TOTAL}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_EARNED_PER_DAY}">{L_PER_DAY}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_EARNED_PER_RAID}">{L_PER_RAID}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_SPENT}">{L_TOTAL}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_SPENT_PER_DAY}">{L_PER_DAY}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_SPENT_PER_RAID}">{L_PER_RAID}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_LOST_TO_ADJUSTMENT}">{L_ADJUSTMENT}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_LOST_TO_SPENT}">{L_SPENT}</a></th>
+    <th align="left" class="smalltitle"><a href="{O_CURRENT}">{L_CURRENT}</a></th>
+  </tr>
+  <!-- BEGIN stats_row -->
+  <!-- IF stats_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+    <td><a href="{stats_row.U_VIEW_MEMBER}">{stats_row.NAME}</a></td>
+    <td>{stats_row.FIRST_RAID}</td>
+    <td>{stats_row.LAST_RAID}</td>
+    <td>{stats_row.ATTENDED_COUNT}</td>
+    <td class="{stats_row.C_ATTENDED_PERCENT}">{stats_row.ATTENDED_PERCENT}%</td>
+    <td class="positive">{stats_row.EARNED_TOTAL}</td>
+    <td class="positive">{stats_row.EARNED_PER_DAY}</td>
+    <td class="positive">{stats_row.EARNED_PER_RAID}</td>
+    <td class="negative">{stats_row.SPENT_TOTAL}</td>
+    <td class="negative">{stats_row.SPENT_PER_DAY}</td>
+    <td class="negative">{stats_row.SPENT_PER_RAID}</td>
+    <td>{stats_row.LOST_TO_ADJUSTMENT}%</td>
+    <td>{stats_row.LOST_TO_SPENT}%</td>
+    <td class="{stats_row.C_CURRENT}">{stats_row.CURRENT}</td>
+  </tr>
+  <!-- END stats_row -->
+  <tr>
+    <th colspan="14" class="footer">{STATS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<br />
+
+<br />
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th align="left" width="20%">{L_CLASS}</th>
+    <th align="center" colspan="2" nowrap="nowrap">{L_LOOTS}</th>
+    <th align="center" colspan="2" nowrap="nowrap">{L_MEMBERS}</th>
+    <th align="center">{L_LOOT_FACTOR}</th>
+    
+  </tr>
+  <!-- BEGIN class_row -->
+    <!-- IF stats_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+    <td width="20%"><a href="{class_row.U_LIST_MEMBERS}">{class_row.CLASS}</a></td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.LOOT_COUNT}</td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.LOOT_PCT}</td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.CLASS_COUNT}</td>
+    <td width="50" align="center" nowrap="nowrap">{class_row.CLASS_PCT}</td>
+    <td width="100" align="center" class="{class_row.C_LOOT_FACTOR}">{class_row.LOOT_FACTOR}</td>
+   
+  </tr>
+  <!-- END class_row -->
+  <tr>
+    <th colspan="6" class="footer">&nbsp;</th>
+  </tr>
+</table>
+
+<!-- INCLUDE overall_footer.html -->
+

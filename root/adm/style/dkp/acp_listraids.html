@@ -1,0 +1,58 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+<p>{L_EXPLAIN}</p>
+
+<!-- IF RAID_PAGINATION -->
+<div class="pagination">
+	<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{RAID_PAGINATION}</span>
+</div>
+<!-- ENDIF -->
+
+<form method="post" action="{F_DKPSYS}">
+<fieldset>
+     <label for="dkpsys_id">{L_POOL}:</label>
+  	<select name="dkpsys_id" class="input" onchange="javascript:form.submit();" > 	
+       <!-- BEGIN dkpsys_row -->
+         <option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
+       <!-- END dkpsys_row -->
+    </select>
+ </fieldset>
+</form>
+
+<table cellspacing="1">
+<thead>
+  <tr>
+    <th align="center" width="16">&nbsp;</th>
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <th align="left" width="35%"><a href="{U_LIST_RAIDS}&amp;o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
+    <th align="left" width="65%"><a href="{U_LIST_RAIDS}&amp;o={O_NOTE}&amp;start={START}">{L_NOTE}</a></th>
+    <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+  </tr>
+  </thead>
+<tbody>
+  <!-- BEGIN raids_row -->
+  <!-- IF raids_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+  <td width="16" nowrap="nowrap" align="center"><a href="{raids_row.U_VIEW_RAID}"><img src="images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
+    <td width="70" nowrap="nowrap">{raids_row.DATE}</td>
+    <td width="35%"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
+    <td width="65%">{raids_row.NOTE}</td>
+    <td width="60" nowrap="nowrap" class="positive">{raids_row.VALUE}</td>
+  </tr>
+  <!-- END raids_row -->
+  <tr>
+    <th colspan="5" class="footer">{LISTRAIDS_FOOTCOUNT}</th>
+  </tr>
+  </tbody>
+</table>
+<!-- IF RAID_PAGINATION -->
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{RAID_PAGINATION}</span>
+</div>
+<!-- ENDIF -->
+
+<!-- INCLUDE dkp/overall_footer.html -->

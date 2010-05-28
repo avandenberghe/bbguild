@@ -1,0 +1,211 @@
+<!-- INCLUDE overall_header.html -->
+<!-- INCLUDE dkp/dkpmenu.html -->
+<!--
+		Integrated by bbDKP
+		http://code.google.com/p/bbdkp/
+		$Id$
+//-->
+<style type="text/css">
+dl { 
+	margin: 0; 
+	padding: 0;     				
+}
+dd { 
+	position: relative; /* IE is dumb */
+	display: block;     			
+	float: left;     
+	width: 800px; 
+	height: 120px; 
+	margin: 0 0 0px; 
+	background: url("images/bossprogress/rp/g_colorbar2.jpg"); 
+}
+* html dd { float: none; } 
+
+dd div { 
+  	position: relative; 
+	background: url("images/bossprogress/rp/g_colorbar.jpg"); 
+	height: 120px; 
+	width: 100%; 
+	text-align:right; 
+}
+dd div strong 
+{ 
+	position: absolute;
+	right: -5px; 
+	top: -2px; 
+	display: block; 
+	background: url("images/bossprogress/rp/g_marker.gif"); 
+	height: 24px; 
+	width: 9px; 
+	text-align: left;
+	text-indent: -9999px; 
+	overflow: hidden;
+}
+</style>
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	
+<table width="100%">
+	<colgroup span="4">
+	<col width="80%"></col>
+	<col width="20%"></col>
+	</colgroup>
+<tr><td>
+   <h2 style ="color:#dfc065;">Bossprogress</h2>
+</td></tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div style="text-align:center">
+<table style="width:800px; border:0; margin-left:auto;margin-right:auto" >
+
+<!-- IF S_STYLE == 0 -->
+<colgroup  span="4">
+<col width="20%"></col>
+<col width="30%"></col>
+<col width="30%"></col>
+<col width="20%"></col>
+</colgroup>
+<!-- ENDIF -->
+<!-- IF S_STYLE == 1 -->
+<colgroup  span="4">
+<col width="50%"></col>
+<col width="20%"></col>
+<col width="20%"></col>
+<col width="10%"></col>
+</colgroup>
+<!-- ENDIF -->
+<!-- IF S_STYLE == 2 -->
+<colgroup  span="3">
+<col width="33%"></col>
+<col width="33%"></col>
+<col width="33%"></col>
+</colgroup>
+<!-- ENDIF -->
+
+<!-- BEGIN zone -->
+<tbody>
+<tr class="bg1">
+	<td  colspan="4">
+		<dl>
+		<dd style="text-align:center; background: url({zone.ZONEBACKIMG})">
+			<div style="width:{zone.ZONECOMPLETE}%; background: url({zone.ZONEPROGRESSIMG});">
+			</div>
+			</dd>
+		</dl>
+	</td>
+</tr>
+
+<!-- IF S_STYLE == 2 -->
+<tr>
+<td colspan="1" class="bg2" style="text-align:center;">
+	<dl style="width:197px; height:20px">
+		<dd style="width:197px; height:20px">
+			<div style="width:{zone.ZONECOMPLETE}%; height:18px"><strong></strong> 
+			</div>
+		</dd>
+	</dl>
+</td>
+<td colspan="2" class="bg2" style="text-align:center;">
+	<b>{zone.ZONENAME}</b> -- {zone.ZONESTATS}
+</td>
+</tr>
+<!-- ELSE -->
+<tr>
+	<td style="text-align:center" colspan="4" class="bg2">
+	<span><b>{zone.ZONENAME}</b> -- {zone.ZONESTATS}</span></td>
+</tr>
+<!-- ENDIF -->
+
+
+<!-- IF S_STYLE == 0 -->
+<!-- BEGIN boss -->
+<!-- IF boss.S_ROW_COUNT is even -->
+<tr class="bg1" >
+	<td style="text-align:center">
+		<img src="{zone.boss.BOSSIMG}" height="70" width="70" alt="{zone.boss.BOSSIMGALT}"/>
+	</td>
+	<td style="text-align:left">
+		<!-- IF zone.boss.BOSSCOUNT > 0 -->
+		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a>	
+		<img src="{T_IMAGES_PATH}bossprogress/rp/checkmark.gif" width="20" height="15" alt="check" ></img><br />
+		<!-- ELSE -->
+		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a><br />	
+		<!-- ENDIF -->
+		{zone.boss.FIRSTKILL}<br />
+		{zone.boss.LASTKILL}<br />
+		{zone.boss.BOSSCOUNTSTR}<br />
+	</td>
+	<!-- IF boss.S_LAST_ROW -->
+	<td></td><td></td></tr>
+	<!-- ENDIF -->
+<!-- ELSE -->
+	<td style="text-align:right">
+		<!-- IF zone.boss.BOSSCOUNT > 0 -->
+		<img src="{T_IMAGES_PATH}bossprogress/rp/checkmark.gif" width="20" height="15" alt="check" ></img>
+		<!-- ENDIF -->
+		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a><br />	
+		{zone.boss.FIRSTKILL}<br />
+		{zone.boss.LASTKILL}<br />
+		{zone.boss.BOSSCOUNTSTR}<br />
+	</td>
+	<td style="text-align:center">
+		<img src="{zone.boss.BOSSIMG}" height="70" width="70" alt="{zone.boss.BOSSIMGALT}"/>
+	</td>
+	</tr>
+<!-- ENDIF -->
+<!-- END boss -->
+</tbody>
+<!-- ENDIF -->
+
+<!-- IF S_STYLE == 1 -->
+<!-- BEGIN boss -->
+<tr class="bg1" >
+	<td style="text-align:left"> Name: <a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a></td>
+	<td> {zone.boss.FIRSTKILL} </td>
+	<td> {zone.boss.LASTKILL} </td>
+	<td> {zone.boss.BOSSCOUNTSTR} </td>
+	</tr>
+<!-- END boss -->
+</tbody>
+<!-- ENDIF -->
+
+<!-- IF S_STYLE == 2 -->
+<!-- BEGIN boss -->
+<!-- IF boss.S_ROW_COUNT % 3 == 0 -->
+	<tr class="bg1" >
+<!-- ENDIF -->
+	<td style="text-align:left">
+	<!-- IF zone.boss.BOSSCOUNT > 0 -->
+		<img src="{T_IMAGES_PATH}bossprogress/rp/checkmark.gif" width="20" height="15" alt="check" ></img>
+		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME} : {zone.boss.BOSSCOUNTSTR}</b></a>				
+	<!-- ELSE -->
+		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a>	
+	<!-- ENDIF -->	
+	</td>
+<!-- IF boss.S_ROW_COUNT % 3 == 0 -->
+	<!-- IF boss.S_LAST_ROW -->
+	<td></td><td></td></tr>
+	<!-- ENDIF -->
+<!-- ELSEIF boss.S_ROW_COUNT % 3 == 1 -->
+	<!-- IF boss.S_LAST_ROW -->
+	<td></td></tr>
+	<!-- ENDIF -->
+<!-- ELSEIF boss.S_ROW_COUNT % 3 == 2 -->
+	</tr>
+<!-- ENDIF -->
+<!-- END boss -->
+</tbody>
+<!-- ENDIF -->
+
+<!-- END zone -->
+</table>
+</div>
+
+<!-- INCLUDE overall_footer.html -->

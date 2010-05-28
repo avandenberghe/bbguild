@@ -1,0 +1,57 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+<!-- IF ADJUSTMENT_PAGINATION -->
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{ADJUSTMENT_PAGINATION}</span>
+</div>
+<!-- ENDIF -->
+
+
+<table cellspacing="1">
+
+  <tr>
+    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+
+    
+    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    
+    <th align="left" width="30" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_DKPID}&amp;start={START}">{L_DKPID}</a></th>
+    <th align="left" width="50" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_DKPPOOL}&amp;start={START}">{L_DKPPOOL}</a></th>
+    
+    
+    <th align="left" width="90" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADJUSTMENT}&amp;start={START}">{L_ADJUSTMENT}</a></th>
+    <th align="left" width="100%"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADDED_BY}&amp;start={START}">{L_ADDED_BY}</a></th>
+  </tr>
+  <!-- BEGIN adjustments_row -->
+  <!-- IF menu_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+    <td width="16" nowrap="nowrap" align="center"><a href="{adjustments_row.U_ADD_ADJUSTMENT}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
+    <td width="70" nowrap="nowrap">{adjustments_row.DATE}</td>
+    
+    <td width="30" nowrap="nowrap">{adjustments_row.DKPID}</td>
+    <td width="50" nowrap="nowrap">{adjustments_row.DKPPOOL}</td>
+    
+    
+    <td width="90" nowrap="nowrap" class="{adjustments_row.C_ADJUSTMENT}">{adjustments_row.ADJUSTMENT}</td>
+    <td width="100%">{adjustments_row.ADDED_BY}</td>
+  </tr>
+  <!-- END adjustments_row -->
+  <tr>
+    <th colspan="6" class="footer">{LISTADJ_FOOTCOUNT}</th>
+  </tr>
+</table>
+
+<!-- IF ADJUSTMENT_PAGINATION -->
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{ADJUSTMENT_PAGINATION}</span>
+</div>
+<!-- ENDIF -->
+
+<!-- INCLUDE dkp/overall_footer.html -->

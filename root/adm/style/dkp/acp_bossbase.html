@@ -1,0 +1,94 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+<form method="post" action="{F_CONFIG}" name="post">
+
+<table border="0" width="100%" cellspacing="1" cellpadding="2">
+	<thead>
+	<tr>
+		<th align="center" colspan="2">{L_GENERAL}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+	    <td class="row2">{L_SOURCE}</td>
+	    <td class="row1">
+		    <select name="source" class="input">
+		    <!-- BEGIN source_row -->
+			    <option value="{source_row.VALUE}"{source_row.SELECTED}>{source_row.OPTION}</option>
+		    <!-- END source_row --> 
+		    </select>
+	    </td>
+       </tr>
+	<tr>
+		<td width="60%" class="row2">{L_ZONEINFO}</td>
+		<td width="40%" class="row1">
+			<select size="1" name="zoneInfo">
+				<option value="rname" {ZONEINFO_SEL_RNAME}>{L_RNAME}</option>
+				<option value="rnote" {ZONEINFO_SEL_RNOTE}>{L_RNOTE}</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td width="60%" class="row2">{L_BOSSINFO}</td>
+		<td width="40%" class="row1">
+			<select size="1" name="bossInfo">
+				<option value="rname" {BOSSINFO_SEL_RNAME}>{L_RNAME}</option>
+				<option value="rnote" {BOSSINFO_SEL_RNOTE}>{L_RNOTE}</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td width="10%" class="row2">{L_NOTEDELIM}</td>
+		<td width="90%" class="row1"><input type="text" name="notedelim" size="32" value="{BP_NOTEDELIM}" class="input" /></td>
+	</tr>
+	<tr>
+		<td width="60%" class="row2">{L_NAMEDELIM}</td>
+		<td width="40%" class="row1"><input type="text" name="namedelim" size="32" value="{BP_NAMEDELIM}" class="input" /></td>
+	</tr>
+	</tbody>
+</table>
+
+<br/>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+	<tr>
+		<td align="center" colspan="2">{L_PINFO}</td>
+	</tr>
+</table>
+
+<!-- BEGIN gamezone -->
+<table cellspacing="1" id="bossbase">
+	<thead>
+	<tr>
+		<th colspan="2">{gamezone.ZONE_NAME}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td style="text-align: left; width:40%;" class="row2"  >{gamezone.PARSE_ZONE}</td>
+		<td style="text-align: left; width:60%;"><input type="text" name="{gamezone.PARSE_ZONE_TXTNAME}" size="64" value="{gamezone.PARSE_ZONE_TXTVAL}" class="input" /></td>
+	</tr>
+		<!-- BEGIN boss -->
+			<tr>
+				<td style="text-align: left; width:40%;" class="row2"  >{gamezone.boss.PARSE_BOSS}</td>
+				<td style="text-align: left; width:60%;"><input type="text" name="{gamezone.boss.PARSE_BOSS_TXTNAME}" size="64" value="{gamezone.boss.PARSE_BOSS_TXTVAL}" class="input" /></td>
+			</tr>
+		<!-- END boss -->
+	</tbody>
+</table>
+<!-- END gamezone -->
+
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+ <tr><th align="center" colspan="2"><input type="submit" name="bpsaveconfig" value="{L_SUBMIT}" class="mainoption" /></th></tr>
+</table>
+</form>
+<!-- INCLUDE dkp/overall_footer.html -->
+

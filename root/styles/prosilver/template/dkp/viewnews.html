@@ -1,0 +1,58 @@
+<!-- INCLUDE overall_header.html -->
+<!-- INCLUDE dkp/dkpmenu.html -->
+<!--
+		Integrated by bbDKP
+		http://code.google.com/p/bbdkp/
+		$Id$
+//-->
+
+<div class="forabg" >
+
+<span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+<h2 style=" color:#dfc065">{L_NEWS}</h2>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+  
+  <!-- BEGIN date_row -->
+  <div style=" color:white" class="forabg">
+  <span class="corners-top"><span></span></span>
+      {date_row.DATE}
+  <span class="corners-bottom"><span></span></span>   
+  </div>
+  
+  <!-- BEGIN news_row -->
+  
+
+<div class="post">
+   <!-- IF date_row.news_row.S_ROW_COUNT is even -->
+   <div class="row bg1">
+   <!-- ELSE -->
+   <div class="row bg2">
+    <!-- ENDIF -->
+    <span class="corners-top"><span></span></span>    
+    <div class="rowbg">
+      <b style="font-size:13px">
+      {date_row.news_row.HEADLINE}</b> 
+     
+      <span class="small">(submitted by {date_row.news_row.AUTHOR} at {date_row.news_row.TIME})</span><br /><br />
+      {date_row.news_row.MESSAGE}
+     </div> 
+   <span class="corners-bottom"><span></span></span>
+   </div>
+</div>
+
+  <!-- END news_row -->
+  <!-- END date_row -->
+	<!-- IF NEWS_PAGINATION -->  
+<div class="pagination">
+<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; 
+<span>{NEWS_PAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
+
+
+<!-- INCLUDE overall_footer.html -->

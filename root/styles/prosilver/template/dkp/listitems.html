@@ -1,0 +1,146 @@
+<!-- INCLUDE overall_header.html -->
+<!-- INCLUDE dkp/dkpmenu.html -->
+<!--
+		Integrated by bbDKP
+		http://code.google.com/p/bbdkp/
+		$Id$
+//-->
+<form method="post" action="{F_LISTITEM}">
+
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+
+<table width="100%" class="tablebg" cellpadding="0" cellspacing="1" >
+<colgroup  span="3">
+<col width="20%"></col>
+<col width="30%"></col>
+<col width="50%"></col>
+</colgroup>
+<tr>
+
+<!-- IF S_HISTORY -->
+<th style="color:#dfc065" class="tablebg"><h4>{L_MENU_ITEMHIST}</h4></th>
+ <!-- ELSE -->
+<th style="color:#dfc065" class="tablebg"><h4>{L_MENU_ITEMVAL}</h4></th>
+ <!-- ENDIF -->
+
+<th style="color:white; text-align:left; width:56 white-space:nowrap;" align="left" width="56" nowrap="nowrap">{L_POOL}:
+      <select name="pool" class="input" onchange="javascript:form.submit();">
+        <!-- BEGIN pool_row -->
+        <option value="{pool_row.VALUE}" {pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
+        <!-- END pool_row -->
+      </select>
+</th>
+
+</tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+</form> 
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	
+<table width="100%">
+    <!-- IF S_HISTORY -->
+				<colgroup span="7">
+				<col width="16px"></col>
+				<col width="10%"></col>
+				<col width="10%"></col>
+				<col width="30%"></col>
+    <!-- ELSE -->
+				<colgroup span="5">
+				<col width="16px"></col>
+				<col width="11%"></col>
+				<col width="40%"></col>
+    <!-- ENDIF -->
+				<col width="39%"></col>
+				<col width="10%"></col>
+				</colgroup>
+		  
+<tr>
+	<th align="center"><img src="{ROOT_PATH}/images/icons/view.gif" width="16" height="16" alt="View" /></th>
+    <th style=" text-align:center;" ><a href="{O_DATE}">{L_DATE}</a></th>
+    <!-- IF S_HISTORY -->
+    <th style="text-align:left;" ><a href="{O_BUYER}">{L_BUYER}</a></th>
+    <!-- ENDIF -->
+    <th style="text-align:left;" ><a href="{O_NAME}">{L_ITEM}</a></th>
+    <th style="text-align:left;" ><a href="{O_RAID}">{L_RAID}</a></th>
+    <th style="text-align:right;" ><a href="{O_VALUE}">{L_VALUE}</a></th>
+</tr>
+
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="post">
+ <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+
+    <!-- IF S_HISTORY -->
+				<colgroup span="6">
+				<col width="16px"></col>
+				<col width="10%"></col>
+				<col width="10%"></col>
+				<col width="30%"></col>
+    <!-- ELSE -->
+				<colgroup span="5">
+				<col width="16px"></col>
+				<col width="10%"></col>
+				<col width="40%"></col>
+    <!-- ENDIF -->
+				<col width="39%"></col>
+				<col width="10%"></col>
+				</colgroup>
+
+    <!-- BEGIN items_row -->
+  <tr class="row bg1">
+    <td width="16px" align="center"><a href="{items_row.U_VIEW_ITEM}"><img src="{ROOT_PATH}/images/icons/view.gif" width="16" height="16" alt="View" /></a></td>
+    <td style="text-align:center; ">{items_row.DATE}</td>
+    <!-- IF S_HISTORY -->
+    <td style="text-align:left; " class="{items_row.CSSCLASS}"><a href="{items_row.U_VIEW_BUYER}"><b>{items_row.BUYER}</b></a></td>
+	<!-- ENDIF -->
+    <td style="text-align:left; "><a href="{items_row.U_VIEW_ITEM}"><strong>{items_row.ITEMNAME}</strong></a></td>
+    <td style="text-align:left; "><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
+    <td style="text-align:right; ">{items_row.VALUE}</td>
+  </tr>
+  <!-- END items_row -->
+</table>
+</div>
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	
+<table width="100%">
+
+<colgroup span="1">
+<col width="100%"></col>
+</colgroup>
+		  
+<tr>
+<td style="color:white; text-weight:bold; text-align:center; white-space: nowrap">{LISTITEMS_FOOTCOUNT}</td>
+</tr>
+
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<!-- IF ITEM_PAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{ITEM_PAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
+
+<!-- INCLUDE overall_footer.html -->

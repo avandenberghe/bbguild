@@ -1,0 +1,95 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+
+<script language="JavaScript" type="text/javascript">
+
+//<![CDATA[
+function check_form()
+{
+    if (document.post.adjustment_value.value.length < 1)
+    {
+        alert('{MSG_VALUE_EMPTY}');
+        return false;
+    }
+    return true;
+}
+//]]>
+
+</script>
+<form method="post" action="{F_ADD_ADJUSTMENT}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="{URI_ADJUSTMENT}" value="{ADJUSTMENT_ID}" />
+<input type="hidden" name="hidden_id" value="{ADJUSTMENT_ID}" />
+
+<input type="hidden" name="{URI_DKPSYS}" value="{DKP_ID}" />
+<input type="hidden" name="hidden_dkpid" value="{DKP_ID}" />
+
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+<div style="float: left; width: 48%;">
+<fieldset>
+
+<legend>{L_ADD_IADJ_TITLE}</legend>
+
+<dl>
+ <dt><label for="adj_dkpid">{L_POOL}:</label></dt>
+<dd>
+ 	<select name="adj_dkpid" class="input">	
+		<!-- BEGIN adj_dkpid_row -->
+ 			<option value="{adj_dkpid_row.VALUE}"{adj_dkpid_row.SELECTED}>{adj_dkpid_row.OPTION}</option>
+		<!-- END adj_dkpid_row -->
+	</select>
+ 	</dd>
+</dl>
+
+
+<dl>
+ <dt>{L_REASON}:</dt>
+ <dd><input type="text" name="adjustment_reason" size="35" maxlength="255" value="{ADJUSTMENT_REASON}" class="input" /></dd>
+</dl>
+	
+<dl>
+  <dt>{L_VALUE}:
+  </dt><dd><input type="text" name="adjustment_value" size="7" maxlength="10" 
+  value="{ADJUSTMENT_VALUE}" class="input" />{FV_ADJUSTMENT}</dd>
+  <span class="small">({L_ADJUSTMENT_VALUE_NOTE})</span>
+</dl>
+
+<dl>
+  <dt>{L_DATE}:</dt><dd><input type="text" name="mo" size="3" maxlength="2" value="{MO}" class="input" />/
+  <input type="text" name="d" size="3" maxlength="2" value="{D}" class="input" />/
+  <input type="text" name="y" size="5" maxlength="4" value="{Y}" class="input" />
+  <br />{FV_MO}{FV_D}{FV_Y}</dd>
+</dl>
+   
+</fieldset>
+</div>
+
+<div style="float: right; width: 48%;"><fieldset>
+<legend>{L_MEMBERS}</legend>
+  <dl>
+    {FV_MEMBERS}<br /><br />{L_HOLD_CTRL_NOTE}
+      <select name="member_names[]" style="float: left; width: 48%;" multiple="multiple" class="input">
+        <!-- BEGIN members_row -->
+        <option value="{members_row.VALUE}"{members_row.SELECTED}>{members_row.OPTION}</option>
+        <!-- END members_row -->
+      </select> 
+    </dl>
+</fieldset></div>  
+<div style="float: left; width: 100%;">
+  <p class="quick"> 
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_ADJUSTMENT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_ADJUSTMENT}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_ADJUSTMENT}" class="button1" />
+    <!-- ENDIF -->
+</p>
+</div>
+
+</form>
+<!-- INCLUDE overall_footer.html -->

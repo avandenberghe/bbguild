@@ -1,0 +1,52 @@
+<!-- begin recruit  -->
+<table class="tablebg" width="100%" cellspacing = "1">
+<div style="padding: 2px;">
+<tbody>
+<tr>
+<th>{L_RECRUITMENT_BLOCK}</th>
+</tr>
+
+<table width="100%">
+<!-- BEGIN status -->
+<tr>
+<td class="row1" align="center">'<p style="color:#ff0000; font-weight:bold">'{status.MESSAGE}</p></td>
+</tr>
+<!-- END status -->
+</table>
+<table width="100%" cellpadding="2" cellspacing="1" border="0" class="forumline">
+<tr>
+
+<th>
+{L_CLASS}
+</th>
+
+<th>
+
+</th>
+<th>
+{L_TANK}
+</th>
+<th>
+{L_DPS}
+</th>
+<th>
+{L_HEAL}
+</th>
+
+</tr>
+
+<!-- BEGIN rec -->
+    <tr>
+    <td style="width:2%"  class="row1">
+	    <span class="genmed">
+		<img src="{ROOT_PATH}images/class_images/{GAME}_{rec.CLASS}_small.png" alt="{rec.CLASS}"></img></span>
+	</td>
+    <td class="row1" align="left"><span class="genmed"><b>&nbsp;{rec.CLASS}</b></span></td>
+    <td class="row1" align="right"><span class="genmed"><a style="font-weight:bold; color:{rec.TANKCOLOR};" href="{rec.TANKFORUM}">{rec.TANKTEXT}</a></span></td>
+    <td class="row1" align="right"><span class="genmed"><a style="font-weight:bold; color:{rec.DPSCOLOR};" href="{rec.DPSFORUM}">{rec.DPSTEXT}</a></span></td>
+    <td class="row1" align="right"><span class="genmed"><a style="font-weight:bold; color:{rec.HEALCOLOR};" href="{rec.HEALFORUM}">{rec.HEALTEXT}</a></span></td>
+    </tr>
+<!-- END rec -->
+</tbody>
+</table>
+<!--  end recruit  -->

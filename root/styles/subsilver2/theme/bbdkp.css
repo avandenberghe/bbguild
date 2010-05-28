@@ -1,0 +1,646 @@
+/*  bbdkp css  
+ @package bbDkp
+ @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ @version $Id$
+*/
+ul.dkpmenu li {
+	overflow: none;
+	text-align: center;
+	font-size: 11px;
+	list-style-type: none;
+	margin: 0 auto;
+}
+
+a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
+	text-decoration: none;
+	color: #FFF;
+	white-space: nowrap;
+}
+
+/*  Index page
+--------------------*/ /* news_body.html */
+.portalbody table {
+	width: 100%;
+}
+
+.portalbody td.portalleft {
+	padding-right: 1px;
+	width: 20%;
+}
+
+.portalbody td.portalcenter {
+	padding: 2px;
+	width: 60%;
+}
+
+.portalbody td.portalright {
+	padding-left: 1px;
+	width: 20%;
+}
+
+/* mainmenu.html  */
+.portalmenu ul {
+	list-style-type: none;
+	margin: 0 0 8px;
+	padding: 0;
+}
+
+.portalmenu a:hover {
+	background-color: #F9F9F9;
+	color: #D31141;
+}
+
+.portalmenu li {
+	text-decoration: none;
+}
+
+.portalmenu a {
+	background-image: url("./images/dkp/menu.png");
+	background-position: 2% center;
+	background-repeat: no-repeat;
+	font-size: 90%;
+	font-weight: bold;
+	display: block;
+	margin-bottom: 0px;
+	padding: 5px 0px 0px 20px;
+	text-decoration: none;
+}
+
+/*  Class Colors 
+--------------------*/ 
+/* warriors */
+.wowclass1,.wowclass1:link,.wowclass1:visited,.wowclass1:active,td.wowclass1,td.wowclass1 a:link,td.wowclass1 a:visited,td.wowclass1 a:active
+	{
+	font-weight: 700;
+	text-decoration: none;
+	color: #C69B6D;
+	white-space: nowrap;
+}
+
+.wowclass1:link :hover,td.wowclass1 a:hover {
+	font-weight: 700;
+	text-decoration: underline;
+	color: #C69B6D;
+	white-space: nowrap;
+}
+
+/* paladins */
+.wowclass2,.wowclass2:link,.wowclass2:visited,.wowclass2:active,td.wowclass2,td.wowclass2 a:link,td.wowclass2 a:visited,td.wowclass2 a:active
+	{
+	font-weight: 700;
+	text-decoration: none;
+	color: #F48CBA;
+	white-space: nowrap;
+}
+
+.wowclass2:link :hover,td.wowclass2 a:hover {
+	font-weight: 700;
+	text-decoration: underline;
+	color: #F48CBA;
+	white-space: nowrap;
+}
+
+/* hunters */
+.wowclass3,.wowclass3:link,.wowclass3:visited,.wowclass3:active,td.wowclass3,td.wowclass3 a:link,td.wowclass3 a:visited,td.wowclass3 a:active
+	{
+	font-weight: 700;
+	text-decoration: none;
+	color: #AAD372;
+	white-space: nowrap;
+}
+
+.wowclass3:link :hover,td.wowclass3 a:hover {
+	font-weight: 700;
+	text-decoration: underline;
+	color: #AAD372;
+	white-space: nowrap;
+}
+
+/* rogues */
+.wowclass4,.wowclass4:link,.wowclass4:visited,.wowclass4:active,td.wowclass4,td.wowclass4 a:link,td.wowclass4 a:visited,td.wowclass4 a:active
+	{
+	font-weight: 700;
+	text-decoration: none;
+	color: #FF0;
+	white-space: nowrap;
+}
+
+.wowclass4:link :hover,td.wowclass4 a:hover {
+	font-weight: 700;
+	text-decoration: underline;
+	color: #F48CBA;
+	white-space: nowrap;
+}
+
+/* priests */
+.wowclass5,.wowclass5:link,.wowclass5:visited,.wowclass5:active,td.wowclass5,td.wowclass5 a:link,td.wowclass5 a:visited,td.wowclass5 a:active
+	{
+	font-weight: 700;
+	text-decoration: none;
+	color: #999;
+	white-space: nowrap;
+}
+
+.wowclass5:link :hover,td.wowclass5 a:hover {
+	font-weight: 700;
+	text-decoration: underline;
+	color: #999;
+	white-space: nowrap;
+}
+
+/* death knight */
+.wowclass6,.wowclass6:link,.wowclass6:visited,.wowclass6:active,td.wowclass6,td.wowclass6 a:link,td.wowclass6 a:visited,td.wowclass6 a:active
+	{
+	font-weight: 700;
+	text-decoration: none;
+	color: #F14;
+	white-space: nowrap;
+}
+
+.wowclass6:link :hover,td.wowclass6 a:hover {
+	font-weight: 700;
+	text-decoration: underline;
+	color: #F14;
+	white-space: nowrap;
+}
+
+/*shaman*/
+.wowclass7,.wowclass7:link,.wowclass7:visited,.wowclass7:active,td.wowclass7,td.wowclass7 a:link,td.wowclass7 a:visited,td.wowclass7 a:active
+	{
+	font-weight: 700;
+	text-decoration: none;
+	color: #214FDE;
+	white-space: nowrap;
+}
+
+.wowclass7:link :hover,td.wowclass7 a:hover {
+	font-weight: 700;
+	text-decoration: underline;
+	color: #214FDE;
+	white-space: nowrap;
+}
+
+/* mage */
+.wowclass8,.wowclass8:link,.wowclass8:visited,.wowclass8:active,td.wowclass8,td.wowclass8 a:link,td.wowclass8 a:visited,td.wowclass8 a:active
+	{
+	font-weight: 700;
+	text-decoration: none;
+	color: #68CCEF;
+	white-space: nowrap;
+}
+
+.wowclass8:link :hover,td.wowclass8 a:hover {
+	font-weight: 700;
+	text-decoration: underline;
+	color: #68CCEF;
+	white-space: nowrap;
+}
+
+/* warlock */
+.wowclass9,.wowclass9:link,.wowclass9:visited,.wowclass9:active,td.wowclass9,td.wowclass9 a:link,td.wowclass9 a:visited,td.wowclass9 a:active
+	{
+	font-weight: 700;
+	text-decoration: none;
+	color: #B0B;
+	white-space: nowrap;
+}
+
+.wowclass9:link :hover,td.wowclass9 a:hover {
+	font-weight: 700;
+	text-decoration: underline;
+	color: #B0B;
+	white-space: nowrap;
+}
+
+/* druid */
+.wowclass11,.wowclass11:link,.wowclass11:visited,.wowclass11:active,td.wowclass11,td.wowclass11 a:link,td.wowclass11 a:visited,td.wowclass11 a:active
+	{
+	font-weight: 700;
+	text-decoration: none;
+	color: #FF7C0A;
+	white-space: nowrap;
+}
+
+.wowclass11:link :hover,td.wowclass11 a:hover {
+	font-weight: 700;
+	text-decoration: underline;
+	color: #FF7C0A;
+	white-space: nowrap;
+}
+
+/* Bossprogress block Colors 
+----------------------------------*/
+.bpprogress00,.bpprogress00:link,.bpprogress00:visited,.bpprogress00:active
+	{
+	text-decoration: none;
+	color: #FF0000;
+}
+
+.bpprogress00:link :hover {
+	text-decoration: underline;
+	color: #FF0000;
+}
+
+.bpprogress25,.bpprogress25:link,.bpprogress25:visited,.bpprogress25:active
+	{
+	text-decoration: none;
+	color: #FF0000;
+}
+
+.bpprogress25:link :hover {
+	text-decoration: underline;
+	color: #FF0000;
+}
+
+.bpprogress50,.bpprogress50:link,.bpprogress50:visited,.bpprogress50:active
+	{
+	text-decoration: none;
+	color: #FFCC00;
+}
+
+.bpprogress50:link :hover {
+	text-decoration: underline;
+	color: #FFCC00;
+}
+
+.bpprogress75,.bpprogress75:link,.bpprogress75:visited,.bpprogress75:active
+	{
+	text-decoration: none;
+	color: #88FFDD;
+}
+
+.bpprogress75:link :hover {
+	text-decoration: underline;
+	color: #88FFDD;
+}
+
+.bpprogress99,.bpprogress99:link,.bpprogress99:visited,.bpprogress99:active
+	{
+	text-decoration: none;
+	color: #00EE00;
+}
+
+.bpprogress99:link :hover {
+	text-decoration: underline;
+	color: #00EE00;
+}
+
+.bpprogress100,.bpprogress100:link,.bpprogress100:visited,.bpprogress100:active
+	{
+	text-decoration: none;
+	color: #00EE00;
+}
+
+.bpprogress100:link :hover {
+	text-decoration: underline;
+	color: #00EE00;
+}
+
+/* apply
+    ----------- */
+.apply_armory_bg {
+	width: 517px;
+	height: 695px;
+	position: relative;
+	background: url("./images/dkp/apply/3d_model_armory.png") no-repeat;
+}
+
+.apply_armory_pane_overlay_container {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1001;
+}
+
+.apply_armory_shadow {
+	width: 467px;
+	height: 645px;
+	position: absolute;
+	top: 25px;
+	left: 25px;
+	z-index: 1000;
+	-moz-box-shadow: 0 0 35px 35px #000;
+	-webkit-box-shadow: 0 0 35px 35px #000;
+}
+
+.apply_gearlist_bg {
+	width: 673px;
+	height: 952px;
+	position: relative;
+	background: url("./images/dkp/apply/gear_list.png") no-repeat;
+}
+
+.gear_list_pane_overlay_container {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1001;
+}
+
+.gear_list_shadow {
+	width: 623px;
+	height: 902px;
+	position: absolute;
+	top: 25px;
+	left: 25px;
+	z-index: 1000;
+	-moz-box-shadow: 0 0 35px 35px #000;
+	-webkit-box-shadow: 0 0 35px 35px #000;
+}
+
+.apply_achievements_bg {
+	width: 593px;
+	height: 867px;
+	position: relative;
+	background: url("./images/dkp/apply/achievements_list.png") no-repeat;
+}
+
+.achievements_list_pane_overlay_container {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	z-index: 1001;
+}
+
+.achievements_list_shadow {
+	width: 543px;
+	height: 817px;
+	position: absolute;
+	top: 25px;
+	left: 25px;
+	z-index: 1000;
+	-moz-box-shadow: 0 0 35px 35px #000;
+	-webkit-box-shadow: 0 0 35px 35px #000;
+}
+
+.achievementslist {
+	margin-left: auto;
+	margin-right: auto;
+	width: 80%;
+	font-size: 10px;
+	font-weight: bold;
+	font-family: arial;
+	text-align: center;
+}
+
+.tab_container {
+	width: 440px;
+	min-width: 440px;
+	max-width: 440px;
+	height: 50px;
+	min-height: 50px;
+	max-height: 50px;
+}
+
+.Horde {
+	background: url("./images/dkp/apply/achievements_list_horde_top.jpg")
+		no-repeat;
+	position: absolute;
+	top: 22px;
+	left: 173px;
+	width: 254px;
+	min-width: 254px;
+	max-width: 254px;
+	height: 80px;
+	min-height: 80px;
+	max-height: 80px;
+}
+
+.Alliance {
+	background: url("./images/dkp/apply/achievements_list_alliance_top.jpg")
+		no-repeat;
+	position: absolute;
+	top: 22px;
+	left: 173px;
+	width: 254px;
+	min-width: 254px;
+	max-width: 254px;
+	height: 80px;
+	min-height: 80px;
+	max-height: 80px;
+}
+
+/*jquery tools*/ /* start overlayed element */
+.simple_overlay { /* must be initially hidden */
+	display: none;
+	/* place overlay on top of other elements */
+	z-index: 10000;
+	/* styling */
+	/* background: transparent url("./images/row2_bg.png") top repeat-x; */
+	width: auto;
+	padding: 0px 0px 0px 0px;
+	min-height: 600px;
+	border: 0px solid #666;
+	/* CSS3 styling for latest browsers */
+	-moz-box-shadow: 0 0 0 0 #000;
+	-webkit-box-shadow: 0 0 0 0 #000;
+}
+
+/* end overlayed element */
+	/* start close button positioned on upper right corner */
+.simple_overlay .close {
+	background-image: url("./images/dkp/apply/close.png");
+	background-position: 0px 0px;
+	position: absolute;
+	right: -40px;
+	top: -15px;
+	cursor: pointer;
+	height: 36px;
+	width: 36px;
+}
+
+.simple_overlay .close:hover {
+	background-image: url("./images/dkp/apply/close.png");
+	background-position: 0px 36px;
+}
+
+/* end close button positioned on upper right corner */
+	/* start Layout helpers */
+.ui-helper-hidden {
+	display: none;
+}
+
+.ui-helper-hidden-accessible {
+	position: absolute;
+	left: -99999999px;
+}
+
+.ui-helper-reset {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: 0;
+	line-height: 1.3;
+	text-decoration: none;
+	font-size: 100%;
+	list-style: none;
+}
+
+.ui-helper-clearfix:after {
+	content: ".";
+	display: block;
+	height: 0;
+	clear: both;
+	visibility: hidden;
+}
+
+.ui-helper-clearfix {
+	display: inline-block;
+}
+
+/* end Layout helpers */
+	/* required comment for clearfix to work in Opera \*/
+* html .ui-helper-clearfix {
+	height: 1%;
+}
+
+.ui-helper-clearfix {
+	display: block;
+}
+
+/* end clearfix */
+.ui-helper-zfix {
+	width: 100%;
+	height: 100%;
+	top: 0;
+	left: 0;
+	position: absolute;
+	opacity: 0;
+	filter: Alpha(Opacity = 0);
+}
+
+/* Interaction Cues */
+.ui-state-disabled {
+	cursor: default !important;
+}
+
+/* Icons */ /* states and images */
+.ui-icon {
+	display: block;
+	text-indent: -99999px;
+	overflow: hidden;
+	background-repeat: no-repeat;
+}
+
+/* Misc visuals */ /* Overlays */
+.ui-widget-overlay {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+}
+
+/* element for tabs  */
+ul.tabs {
+	list-style: none;
+	margin: 0 !important;
+	padding: 0 0 5px 0;
+	border-bottom: 0px solid #666;
+	height: 38px;
+}
+
+/* single tab */
+ul.tabs li {
+	float: left;
+	text-indent: 0;
+	padding: 0 4px 0 0;
+	margin: 0 !important;
+	list-style-image: none !important;
+}
+
+/* link inside the tab. uses a background image */
+ul.tabs a {
+	background: url(./images/dkp/apply/bliz_red.png) no-repeat;
+	font-size: 14px;
+	font-weight: bold;
+	font-family: arial;
+	display: block;
+	height: 38px;
+	line-height: 38px;
+	width: 142px;
+	text-align: center;
+	text-decoration: none;
+	color: #ffc800;
+	padding: 0px;
+	margin: 0px;
+	position: relative;
+	top: 1px;
+	border: 0px;
+}
+
+ul.tabs a:active {
+	outline: none;
+}
+
+/* when mouse enters the tab move the background image */
+ul.tabs a:hover {
+	background-position: 0px -76px;
+	color: #fff;
+}
+
+/* active tab uses a class name "current". it's highlight is also done by moving the background image. */
+ul.tabs a.current,ul.tabs a.current:hover,ul.tabs li.current a {
+	background-position: 0px -38px;
+	cursor: default !important;
+	color: #fff !important;
+}
+
+/* Different widths for tabs: use a class name: w1, w2, w3 or w2 */
+	/* width 1 */
+ul.tabs a.s {
+	background-position: -553px 0;
+	width: 81px;
+}
+
+ul.tabs a.s:hover {
+	background-position: -553px -31px;
+}
+
+ul.tabs a.s.current {
+	background-position: -553px -62px;
+}
+
+/* width 2 */
+ul.tabs a.l {
+	background-position: -248px -0px;
+	width: 174px;
+}
+
+ul.tabs a.l:hover {
+	background-position: -248px -31px;
+}
+
+ul.tabs a.l.current {
+	background-position: -248px -62px;
+}
+
+/* width 3 */
+ul.tabs a.xl {
+	background-position: 0 -0px;
+	width: 248px;
+}
+
+ul.tabs a.xl:hover {
+	background-position: 0 -31px;
+}
+
+ul.tabs a.xl.current {
+	background-position: 0 -62px;
+}
+
+/* initially all panes are hidden */
+div.panes div.pane {
+	display: none;
+}
+
+#triggers img {
+	cursor: pointer;
+	margin: 0 5px;
+	background-color: #FFCC66;
+	border: 1px solid #ccc;
+	padding: 2px;
+	-moz-border-radius: 4px;
+	-webkit-border-radius: 4px;
+}

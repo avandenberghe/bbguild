@@ -1,0 +1,176 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->    
+<style type="text/css">
+fieldset dd {
+	margin: 0 0 0 25%;
+	padding: 0 0 0 5px;
+	border: none;
+	border-left: 1px solid #CCCCCC;
+	vertical-align: top;
+	font-size: 1.00em;
+}
+
+fieldset dt {
+	width: 25%;
+	text-align: left;
+	border: none;
+	border-right: 1px solid #CCCCCC;
+	padding-top: 3px;
+}
+
+
+</style>
+
+
+<a name="maincontent"></a>
+
+<h1>{L_ACP_INDEXPAGE}</h1>
+
+<p>{L_ACP_INDEXPAGE_EXPLAIN}</p>
+
+<form method="post" action="{F_ADD_CONFIG}" name="post">
+
+
+<fieldset>
+<legend>{L_NEWSBLOCKSETTING}</legend>
+<br />
+ <dl>
+    <dt><label>{L_NEWSFORUM}</label></dt>
+    <dd>
+    <select name="news_id" class="input" id="news_id">
+       <!-- BEGIN news_id -->
+      <option value="{news_id.VALUE}"{news_id.SELECTED}>{news_id.OPTION}</option>
+      <!-- END news_id -->
+     </select>
+     
+     <dd>
+  </dl> 
+ 
+ <dl>
+    <dt><label for="n_news">{L_NEWSNUMBER}</label></dt>
+    <dd><input type="text" name="n_news" id="n_news" size="20" maxlength="30" value="{N_NEWS}" class="input" /></dd>
+  </dl>
+ 
+</fieldset>
+
+<fieldset>
+<legend>{L_RECBLOCK}</legend>
+
+ <dl>
+    <dt><label for="show_recrblock">{L_SHOWRECBLOCK}</label><br /></dt>
+    <dd>
+    <input type="radio" name="show_recrblock" value="1"{SHOW_REC_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_recrblock" value="0"{SHOW_REC_NO_CHECKED} /> {L_NO}
+   </dd>
+ </dl>
+ 
+ <dl>
+    <dt><label>{L_RECFORUM}</label></dt>
+    <dd>
+    <select name="rec_id" class="input" id="rec_id">
+       <!-- BEGIN rec_id -->
+      <option value="{rec_id.VALUE}"{rec_id.SELECTED}>{rec_id.OPTION}</option>
+      <!-- END rec_id -->
+     </select>
+     <dd>
+  </dl> 
+
+  <dl>
+    <dt><label>Recruitment Status :</label></dt>
+    <dd>
+    <select name="bbdkp_recruitment" class="input" id="bbdkp_recruitment">
+       <!-- BEGIN recruitment_status_row -->
+      <option value="{recruitment_status_row.VALUE}"{recruitment_status_row.SELECTED}>{recruitment_status_row.OPTION}</option>
+      <!-- END recruitment_status_row -->
+     </select>
+     
+     <dd>
+  </dl> 
+
+
+ <!-- BEGIN recruitment -->
+  <dl>
+    <dt><label>{recruitment.CLASSID}) {recruitment.CLASS} :</label></dt>
+
+    <dd>
+    <img src="{T_IMAGES_PATH}icons/{recruitment.TANKCOLOR}" alt="tank" />
+    <select name="T{recruitment.CLASSID}" class="input" id="T{recruitment.CLASSID}">
+      <!-- BEGIN tankstatus_row -->
+      <option value="{recruitment.tankstatus_row.VALUE}"{recruitment.tankstatus_row.SELECTED}>Tank : {recruitment.tankstatus_row.OPTION}</option>
+      <!-- END tankstatus_row  -->
+    </select>
+    
+    <img src="{T_IMAGES_PATH}icons/{recruitment.DPSCOLOR}" alt="dps" />
+    <select name="D{recruitment.CLASSID}" class="input" id="D{recruitment.CLASSID}">
+      <!-- BEGIN dpsstatus_row -->
+      <option value="{recruitment.dpsstatus_row.VALUE}"{recruitment.dpsstatus_row.SELECTED}>DPS : {recruitment.dpsstatus_row.OPTION}</option>
+      <!-- END dpsstatus_row  -->
+    </select>
+
+    <img src="{T_IMAGES_PATH}icons/{recruitment.HEALCOLOR}" alt="heal" />  
+    <select name="H{recruitment.CLASSID}" class="input" id="H{recruitment.CLASSID}">
+      <!-- BEGIN healstatus_row -->
+      <option value="{recruitment.healstatus_row.VALUE}"{recruitment.healstatus_row.SELECTED}>Heal : {recruitment.healstatus_row.OPTION}</option>
+      <!-- END healstatus_row  -->
+    </select>
+    </dd> 
+
+  </dl> 
+ <!-- END recruitment -->
+</fieldset>
+
+
+<fieldset>
+<legend>{L_LOOTBLOCKSETTING}</legend>
+
+ <dl>
+    <dt><label for="show_lootblock">{L_SHOWLOOTBLOCK}</label><br /></dt>
+    <dd>
+    <input type="radio" name="show_lootblock" value="1"{SHOW_LOOT_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_lootblock" value="0"{SHOW_LOOT_NO_CHECKED} /> {L_NO}
+   </dd>
+ </dl>
+ 
+    <dl>
+    <dt><label for="n_items">{L_NUMBITEMS}</label></dt>
+    <dd><input type="text" name="n_items" id="n_items" size="20" maxlength="30" value="{N_ITEMS}" class="input" /></dd>
+  </dl>
+</fieldset>
+
+
+<fieldset>
+<legend>{L_BOSSBLOCKSETTING}</legend>
+
+ <dl>
+    <dt><label for="show_bosspblock">{L_SHOWBOSSBLOCK}</label><br />{L_SHOWBOSSBLOCKNOTE}</dt>
+    <dd>
+    <input type="radio" name="show_bosspblock" value="1"{SHOW_BOSS_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_bosspblock" value="0"{SHOW_BOSS_NO_CHECKED} /> {L_NO}
+   </dd>
+ </dl>
+ 
+ </fieldset>
+
+
+<fieldset>
+<legend>{L_LINKBLOCKSETTING}</legend>
+
+  <dl>
+    <dt><label for="show_linkblock">{L_SHOWLINKBLOCK}</label><br /></dt>
+    <dd>
+    <input type="radio" name="show_linkblock" value="1"{SHOW_LINK_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_linkblock" value="0"{SHOW_LINK_NO_CHECKED} /> {L_NO}
+   </dd>
+ </dl>
+</fieldset>
+
+
+  <p class="quick">
+	  {S_FORM_TOKEN}
+	  <input type="submit" name="update" value="{L_SUBMIT}" class="button1" /> 
+	  <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+	</p>
+
+
+</form>
+
+<!-- INCLUDE overall_footer.html -->
+

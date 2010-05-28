@@ -1,0 +1,172 @@
+<!-- INCLUDE overall_header.html -->
+<!-- INCLUDE dkp/dkpmenu.html -->
+<!--
+		Integrated by bbDKP
+		http://code.google.com/p/bbdkp/
+		$Id$
+//-->
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td nowrap="nowrap"><h4 style = "color:#dfc065">{L_MEMBERS_PRESENT_AT}</h4></td>
+  </tr>
+</table>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="navbar">
+<div class="inner">
+<span class="corners-top"><span></span></span>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr>
+    <td class="row2" width="50%"><b>{L_ADDED_BY}:</b> {RAID_ADDED_BY}</td>
+	<td class="row1" width="50%"><b>{L_UPDATED_BY}:</b> {RAID_UPDATED_BY}</td>
+</tr>
+<tr>
+    <td class="row2" width="50%"><b>{L_NOTE}:</b> {RAID_NOTE}</td>
+    <td class="row1" width="50%"><b>{DKP_NAME} {L_VALUE}:</b> <span class="positive">{RAID_VALUE}</span></td>
+  </tr>
+</table>
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
+
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+<tr>
+<th style="text-align:center; color:white;" colspan="{COLSPAN}">{L_ATTENDEES}</th>
+</tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="post">
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+  </tr>
+  <!-- BEGIN attendees_row -->
+  <tr>
+    <!-- IF S_COLUMN0 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN1 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg1">{attendees_row.COLUMN1_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN2 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN2_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN3 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg1">{attendees_row.COLUMN3_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN4 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN4_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN5 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg1">{attendees_row.COLUMN5_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN6 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN6_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN7 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg1">{attendees_row.COLUMN7_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN8 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN8_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN9 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg1">{attendees_row.COLUMN9_NAME}</td><!-- ENDIF -->
+  </tr>
+  <!-- END attendees_row -->
+
+</table>
+</div>  
+
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+<tr>
+   <td style="text-align:center; white-space: nowrap; color:white;" colspan="{COLSPAN}">{ATTENDEES_FOOTCOUNT}</td>
+</tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+
+<br />
+<!-- IF S_COMP -->
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+<tr>
+    <th style="text-align:left; color:white; width: 25% ; white-space: nowrap">{L_BUYER}</th>
+    <th style="text-align:left; color:white; width: 45% ;">{L_ITEM}</th>
+    <th style="text-align:left; color:white; width: 30%; white-space: nowrap">{L_SPENT}</th>
+</tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="post">
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+ <!-- BEGIN items_row -->
+  <!-- IF items_row.S_ROW_COUNT is even -->
+  <tr class="row bg1">
+  <!-- ELSE -->
+  <tr class="row bg2">
+  <!-- ENDIF -->
+    <td style="text-align:left; width: 25% ; white-space: nowrap"><a href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></td>
+    <td style="text-align:left; width: 45% ;"> <a href="{items_row.U_VIEW_ITEM}">{items_row.NAME}</a></td>
+    <td style="text-align:left; width: 30%; white-space: nowrap" class="negative">{items_row.VALUE}</td>
+  </tr>
+  <!-- END items_row -->
+</table>
+</div>  
+
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <td align="center" colspan="3" class="footer"><font color="white">{ITEM_FOOTCOUNT}</td>
+  </tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+  <!-- ELSE -->
+  <!-- ENDIF -->
+
+<!-- IF ITEM_PAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{ITEM_PAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
+
+
+<br />
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+<table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+  <tr>
+    <th style="text-align:left; color:white; width: 20%; white-space: nowrap" >{L_CLASS}</th>
+    <th style="text-align:left; color:white; width: 20%; white-space: nowrap" >{L_PERCENT}</th>
+    <th style="text-align:left; color:white; width: 60%; white-space: nowrap" >{L_ATTENDEES}</th>
+  </tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="post">
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+  <!-- BEGIN class_row -->
+  <tr>
+    <td style="text-align:left;   width: 20%; white-space: nowrap" class="row bg1">{class_row.CLASS}</td>
+    <td style="text-align:left;   width: 20%; white-space: nowrap" class="row bg1">{class_row.BAR}</td>
+    <td style="text-align:left;   width: 60%; white-space: nowrap" class="row bg2"><span class="small">{class_row.ATTENDEES}</span></td>
+  </tr>
+   <!-- END class_row -->
+</table>
+</div>  
+
+<!-- INCLUDE overall_footer.html -->

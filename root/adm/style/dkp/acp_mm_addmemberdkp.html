@@ -1,0 +1,118 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->    
+<script language="JavaScript" type="text/javascript">
+//<![CDATA[ 
+function check_form()
+{
+    if (document.post.member_name.value.length < 2)
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    return true;
+}               
+//]]> 
+</script>
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+<form method="post" action="{F_ADD_MEMBER}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="hidden_name" value="{V_MEMBER_NAME}" />
+<input type="hidden" name="compare_ids[]" value="{MEMBER_ID}" />
+
+
+<fieldset>
+<legend>{L_ADD_MEMBER_TITLE}</legend>
+<br />
+
+  <dl>
+    <dt><label for="member_name">{L_NAME}:</label></dt>
+    <dd><input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" /></dd>
+  </dl>
+  
+  <dl>
+    <dt><label for="member_level">{L_LEVEL}:</label></dt>
+		<dd><input type="text" name="member_level" size="20" maxlength="2" value="{MEMBER_LEVEL}" class="input" /></dd>
+  </dl> 
+
+
+  
+
+  
+  <dl>
+    <dt><label for="member_race_id">{L_RACE}:</label></dt>
+ 
+  		<dd><select name="member_race_id" class="input">
+       <!-- BEGIN race_row -->
+       <option value="{race_row.VALUE}"{race_row.SELECTED}>{race_row.OPTION}</option>
+        <!-- END race_row -->
+      </select></dd>
+ </dl>
+   
+   
+     <dl>
+    <dt><label for="member_class_id">{L_CLASS}:</label></dt>
+		<dd>
+		  <select name="member_class_id" class="input">
+        <!-- BEGIN class_row -->
+        <option value="{class_row.VALUE}"{class_row.SELECTED}>{class_row.OPTION}</option>
+        <!-- END class_row -->
+      </select>
+		</dd>
+  </dl> 
+
+
+  <dl>
+    <dt><label for="member_rank_id">{L_MEMBER_RANK}:</label></dt>
+		<dd>
+		<select name="member_rank_id" class="input">
+        <!-- BEGIN rank_row -->
+        <option value="{rank_row.VALUE}"{rank_row.SELECTED}>{rank_row.OPTION}</option>
+        <!-- END rank_row -->
+      </select>
+		</dd>
+  </dl> 
+  
+  
+  <dl>
+    <dt><label for="member_earned">{L_EARNED}:</label></dt>
+		<dd><input type="text" name="member_earned" size="20" maxlength="14" value="{MEMBER_EARNED}" class="input" /> / {L_SHOULD_BE}: {CORRECT_MEMBER_EARNED}</dd>
+  </dl> 
+    
+  <dl>
+    <dt><label for="member_spent">{L_SPENT}:</label></dt>
+		<dd><input type="text" name="member_spent" size="20" maxlength="14" value="{MEMBER_SPENT}" class="input" /> / {L_SHOULD_BE}: {CORRECT_MEMBER_SPENT}</dd>
+  </dl> 
+    
+  <dl>
+    <dt><label for="member_adjustment">{L_ADJUSTMENT}:</label></dt>
+		<dd><input type="text" name="member_adjustment" size="20" maxlength="14" value="{MEMBER_ADJUSTMENT}" class="input" /></dd>
+  </dl> 
+
+  <dl>
+    <dt><label>{L_CURRENT}:</label></dt>
+		<dd><span class="{C_MEMBER_CURRENT}">{MEMBER_CURRENT}</span></dd>
+  </dl>
+
+
+
+
+  <p class="quick">
+    <!-- IF S_ADD -->
+    <input type="submit" name="add" value="{L_ADD_MEMBER}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    <!-- ELSE -->
+    <input type="submit" name="update" value="{L_UPDATE_MEMBER}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_MEMBER}" class="button1" />
+    <!-- ENDIF -->
+	</p>
+</fieldset>
+
+</form>
+
+
+<!-- INCLUDE dkp/overall_footer.html -->
+

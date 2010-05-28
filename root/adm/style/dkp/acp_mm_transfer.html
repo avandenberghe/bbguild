@@ -1,0 +1,47 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+    
+<form method="post" action="{F_TRANSFER}" name="post">
+<fieldset>
+<legend>{L_TRANSFER_MEMBER_HISTORY}</legend>
+<br />
+
+	<dl>
+ 		<dt><label for="transfer_from">{L_FROM}:</label></dt>
+ 		<dd>
+      <select name="transfer_from" class="input">
+        <option value="">{L_SELECT_1_OF_X_MEMBERS}</option>
+        <!-- BEGIN transfer_from_row -->
+        <option value="{transfer_from_row.VALUE}"{transfer_from_row.SELECTED}>{transfer_from_row.OPTION}</option>
+        <!-- END transfer_from_row -->
+      </select>
+     </dd>
+	</dl>
+	
+		<dl>
+ 		<dt><label for="transfer_to">{L_TO}:</label></dt>
+ 		<dd>
+      <select name="transfer_to" class="input">
+        <option value="">{L_SELECT_1_OF_Y_MEMBERS}</option>
+        <!-- BEGIN transfer_to_row -->
+        <option value="{transfer_to_row.VALUE}"{transfer_to_row.SELECTED}>{transfer_to_row.OPTION}</option>
+        <!-- END transfer_to_row -->
+      </select>
+     </dd>
+	</dl>
+
+<p class="quick">
+    <input type="submit" name="update" value="{L_TRANSFER_HISTORY}" class="button1" />
+</p> 
+</fieldset>
+</form>
+
+<!-- INCLUDE dkp/overall_footer.html -->

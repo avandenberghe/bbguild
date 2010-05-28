@@ -1,0 +1,87 @@
+<!-- INCLUDE dkp/overall_header_search.html -->
+<!--
+		$Id$
+//-->
+
+<script language="javascript" type="text/javascript">
+//<![CDATA[ 
+function insert_log()
+{
+	
+    opener.document.post.raid_attendees.value = document.post.log.value;
+    opener.document.post.h.value = document.post.h.value;
+    opener.document.post.mi.value = document.post.mi.value;
+    opener.document.post.s.value = document.post.s.value;
+    opener.document.post.mo.value = document.post.mo.value;
+    opener.document.post.d.value = document.post.d.value;
+    opener.document.post.Y.value = document.post.y.value;
+
+    opener.changed = "True";
+    window.close();
+    opener.window.focus();
+}
+//]]>
+</script>
+
+<form method="post" action="{F_PARSE_LOG}" name="post">
+<!-- IF S_STEP1 -->
+<fieldset style="float: center; width: 90%;">
+  <legend>{L_PASTE_LOG}</legend>
+  <br/>
+    <center><textarea name="log" rows="20" cols="60" id="log" style="width: 450px" class="input"></textarea></center>
+  <br/>
+  <p class="quick">
+    <input type="submit" name="parse" value="{L_PARSE_LOG}" class="button1" /> <input type="button" name="button" value="{L_CLOSE_WINDOW}" onclick="javascript:window.close(); window.opener.window.focus();" class="button1" /></th>
+</p>
+</fieldset>
+<fieldset style="float: center; width: 90%;">
+  <legend>{L_OPTIONS}</legend>
+    
+ <dl>
+
+        <!-- BEGIN options_row -->
+       
+          <td width="20" class="row2" align="center"><input type="checkbox" name="{options_row.CBNAME}" value="{options_row.CBVALUE}"{options_row.CBCHECKED} /></td>
+          <td width="100%" class="row1" align="left">{options_row.OPTION}</td>
+        
+        <!-- END options_row -->
+    
+ </dl>
+
+    
+        <!-- BEGIN ranks_row -->
+   
+          <input type="checkbox" name="{ranks_row.CBNAME}" value="{ranks_row.CBVALUE}"{ranks_row.CBCHECKED} />
+          {ranks_row.OPTION}
+       <br />
+        <!-- END ranks_row -->
+
+</fieldset>
+
+<!-- ELSE -->
+
+<fieldset style="float: center; width: 90%;">
+  <legend>{L_FOUND_MEMBERS}</legend>
+
+  <textarea name="log" rows="20" cols="20" id="log" class="input">{FOUND_MEMBERS}</textarea><br />
+
+<br />
+    {L_LOG_DATE_TIME}
+<br />
+
+<br />
+      <input type="text" name="mo" size="3" maxlength="2" value="{MO}" id="mo" class="input" />
+      /<input type="text" name="d" size="3" maxlength="2" value="{D}" id="d" class="input" />
+      /<input type="text" name="y" size="5" maxlength="4" value="{Y}" id="y" class="input" />
+      &nbsp; &nbsp;<input type="text" name="h" size="3" maxlength="2" value="{H}" id="h" class="input" />
+      :<input type="text" name="mi" size="3" maxlength="2" value="{MI}" id="mi" class="input" />
+      :<input type="text" name="s" size="3" maxlength="2" value="{S}" id="s" class="input" />
+<br />
+
+   
+   <p class="quick">
+ <input type="button" name="button" value="{L_LOG_ADD_DATA}" class="button1" onclick="javascript:insert_log();" />
+  </p>
+<!-- ENDIF -->
+
+</form>

@@ -1,0 +1,178 @@
+<!-- INCLUDE overall_header.html -->
+<!-- INCLUDE dkp/dkpmenu.html -->
+<!--
+		Integrated by bbDKP
+		http://code.google.com/p/bbdkp/
+		$Id: roster.html 516 2009-05-21 15:54:55Z Sajaki9 $
+//-->
+
+
+<table width="100%" class="tablebg" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+  	<th style="text-align: center" ><h4>{L_GUILD} {L_GUILDROSTER} </h4></th>
+  </tr>
+  <tr>
+    <th align="center">
+    <a href="{U_LIST_MEMBERS0}">{L_NAME}</a> - 
+	<!-- IF S_RSTYLE == 0 -->
+    	<a href="{U_LIST_MEMBERS1}">{L_CLASS}</a> -
+	<!-- ENDIF --> 
+    <a href="{U_LIST_MEMBERS2}">{L_RANK}</a> -
+    <a href="{U_LIST_MEMBERS3}">{L_LVL}</a> 
+   	<!-- IF S_SHOWACH == 1 -->
+- <a href="{U_LIST_MEMBERS4}">{L_ACHIEV}</a> 
+	<!-- ENDIF -->  
+    </th>
+  </tr>
+</table>
+
+
+
+<div class="post">
+
+
+<!-- IF S_RSTYLE == 0 -->
+<table style="width: 100%"  border="0" cellspacing="0" cellpadding="0">
+
+<colgroup span="12">
+	<col width="8.3%"></col>
+	<col width="8.3%"></col>
+	<col width="8.3%"></col>
+	<col width="8.3%"></col>
+	<col width="8.3%"></col>
+	<col width="8.3%"></col>
+	<col width="8.3%"></col>
+	<col width="8.3%"></col>
+	<col width="8.3%"></col>
+	<col width="8.3%"></col>
+</colgroup>
+
+<tbody>
+<!-- BEGIN members_row -->
+   <!-- IF members_row.S_ROW_COUNT % 6 == 0 -->
+    <tr class="bg1">
+  <!-- ENDIF -->
+ 	<td style="width:150; text-align:center" class="bg2" >
+	<a href="{members_row.ARMORY}" >
+	<img src="{class.members_row.PORTRAIT}" alt="image" width="64" height="64"></img></a></td>
+  	
+  	<td "width:150; text-align:center" class="bg2" >
+  
+	<a class="{members_row.CSSCLASS}" href="{members_row.ARMORY}">{members_row.NAME}</a><br/><p>{members_row.GNOTE}<br/>{members_row.CLASS} {members_row.LVL}
+	<!-- IF S_SHOWACH == 1 -->
+    	<br/> Apt: {members_row.ACHIEVPTS}
+	<!-- ENDIF --> 
+	</p>
+	</td>
+
+    <!-- IF members_row.S_ROW_COUNT % 6 == 0 -->
+   	  <!-- IF members_row.S_LAST_ROW -->
+    	<td colspan=10></td></tr>
+  	  <!-- ENDIF -->
+      <!-- ELSEIF members_row.S_ROW_COUNT % 6 == 1 -->
+       <!-- IF members_row.S_LAST_ROW -->
+    	 <td colspan=8></td></tr>
+  	   <!-- ENDIF -->
+    <!-- ELSEIF members_row.S_ROW_COUNT % 6 == 2 -->
+       <!-- IF members_row.S_LAST_ROW -->
+        <td colspan=6></td></tr>
+  	   <!-- ENDIF -->
+    <!-- ELSEIF members_row.S_ROW_COUNT % 6 == 3 -->
+       <!-- IF members_row.S_LAST_ROW -->
+         <td colspan=4></td></tr>
+  	   <!-- ENDIF -->
+    <!-- ELSEIF members_row.S_ROW_COUNT % 6 == 4 -->
+       <!-- IF members_row.S_LAST_ROW -->
+         <td colspan=2></td></tr>
+       <!-- ENDIF -->
+    <!-- ELSEIF members_row.S_ROW_COUNT % 6 == 5 -->
+         <td></td></tr>
+  	<!-- ENDIF -->  
+
+<!-- END members_row -->
+</tbody>
+</table>
+<!-- ENDIF --> 
+
+<!-- IF S_RSTYLE == 1 --> 
+<!-- BEGIN class -->
+<h3> <img src="{class.CLASSIMG}" alt="{class.CLASSNAME}" width="64" height="64" ></img>&nbsp; {class.CLASSNAME}  </h3>
+
+<table  style="width: 100%" border="0" cellspacing="0" cellpadding="0">
+  
+  <colgroup span="10">
+	<col width="10%"></col>
+	<col width="10%"></col>
+	<col width="10%"></col>
+	<col width="10%"></col>
+	<col width="10%"></col>
+	<col width="10%"></col>
+	<col width="10%"></col>
+	<col width="10%"></col>
+	<col width="10%"></col>
+	<col width="10%"></col>
+</colgroup>
+  
+  <!-- BEGIN members_row -->
+  
+  <!-- IF members_row.S_ROW_COUNT % 5 == 0 -->
+  <tr class="bg1">
+  <!-- ENDIF -->
+ 	<td class="row1" style="text-align:center; width:100;" class="bg1" >
+	<a href="{class.members_row.ARMORY}">
+	<img src="{class.members_row.PORTRAIT}" alt="pic" width="64" height="64"></img></a></td>
+  	
+  	<td class="row1"  style="text-align:left; width:100" class="bg2" >
+	<a class="{class.members_row.CSSCLASS}" href="{class.members_row.ARMORY}" >
+	{class.members_row.NAME}</a>
+	<p>
+	{class.members_row.GNOTE}<br/>
+	{class.members_row.CLASS} 
+	{class.members_row.LVL}
+	<!-- IF S_SHOWACH == 1 -->
+    	<br/> Apt: {class.members_row.ACHIEVPTS}
+	<!-- ENDIF --> 
+	</p>
+	</td>
+    <!-- IF members_row.S_ROW_COUNT % 5 == 0 -->
+   	  <!-- IF members_row.S_LAST_ROW -->
+    	<td class="row1" colspan=10></td></tr>
+  	  <!-- ENDIF -->
+      <!-- ELSEIF members_row.S_ROW_COUNT % 5 == 1 -->
+       <!-- IF members_row.S_LAST_ROW -->
+    	 <td class="row1" colspan=8></td></tr>
+  	   <!-- ENDIF -->
+    <!-- ELSEIF members_row.S_ROW_COUNT % 5 == 2 -->
+       <!-- IF members_row.S_LAST_ROW -->
+        <td class="row1" colspan=6></td></tr>
+  	   <!-- ENDIF -->
+    <!-- ELSEIF members_row.S_ROW_COUNT % 5 == 3 -->
+       <!-- IF members_row.S_LAST_ROW -->
+         <td class="row1" colspan=4></td></tr>
+  	   <!-- ENDIF -->
+    <!-- ELSEIF members_row.S_ROW_COUNT % 5 == 4 -->
+         <td class="row1"  colspan=2></td></tr>
+  	<!-- ENDIF -->  
+
+ 
+  <!-- END members_row -->
+</table>
+ <br />
+<!-- END class -->
+
+<!-- ENDIF --> 
+
+</div>
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+    <th style="color: white; text-align:center">{LISTMEMBERS_FOOTCOUNT}</th>
+  </tr>
+</table>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+
+<!-- INCLUDE overall_footer.html -->

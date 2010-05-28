@@ -1,0 +1,52 @@
+<?php
+/**
+* This acp class manages raid editing
+* 
+* @package bbDkp.acp
+* @author Ippehe, Sajaki
+* @version $Id$
+* @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
+* @license http://opensource.org/licenses/gpl-license.php GNU Public License
+* 
+*/
+
+
+/**
+* @ignore
+*/
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+
+
+/**
+* @package module_install
+*/
+
+
+class acp_dkp_raid_info
+{
+	function module()
+	{
+		return array(
+			'filename'	=> 'acp_dkp_raid',
+			'title'		=> 'ACP_DKP_RAIDS',
+			'version'	=> '1.1.0',
+			'modes'		=> array(
+				'addraid'		=> array('title' => 'ACP_DKP_RAID_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS')),
+				'listraids'		=> array('title' => 'ACP_DKP_RAID_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS')),
+				),
+		);
+	}
+
+	function install()
+	{
+	}
+
+	function uninstall()
+	{
+	}
+}
+
+?>

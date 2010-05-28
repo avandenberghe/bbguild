@@ -1,0 +1,255 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
+<a name="maincontent"></a>
+
+<h1>{L_TITLE}</h1>
+
+<p>{L_EXPLAIN}</p>
+
+<form method="post" action="{F_ADD_RAID}" name="addraid" onsubmit="return check_form(this)">
+<script type="text/javascript">
+
+//<![CDATA[
+
+function check_form()
+{
+	// checking length of raidmembername
+	if (document.addraid.elements["raid_attendees[]"].value.length < 2)
+    {
+        alert('{MSG_ATTENDEES_EMPTY}');
+        return false;
+    }
+    
+    // checking if there is an event selected	
+    if (document.addraid.elements["raid_name[]"].value.length < 1)
+    {
+        alert('{MSG_NAME_EMPTY}');
+        return false;
+    }
+    return true;
+}
+   
+function fnSearch( searchField, searchItem )
+{
+    var searchBox = document.addraid.elements[searchField];
+    var selectBox = document.addraid.elements[searchItem];
+   
+    var reSearch = new RegExp( searchBox.value, "i" );
+   
+    var len = selectBox.options.length;
+    for ( var i = 0; i < len; i++ )
+    {
+        if( reSearch.test( selectBox.options[i].value ) )
+        {
+            selectBox.options[i].selected = true;
+            break;
+        }
+    }
+}
+
+
+function fnAddMember()
+{
+	
+    var form = document.addraid;
+    var fromField = form.all_members;
+    //destination
+    var toField = form.elements["raid_attendees[]"];
+
+    var fromSize = fromField.options.length
+    var toSize = toField.options.length
+
+    var aSelected = new Array();
+
+    // Build an array of the selected members
+    for (var i = 0; i < fromSize; i++)
+    {
+        if ( fromField.options[i].selected == true )
+        {
+            aSelected[aSelected.length] = i;
+        }
+    }
+
+    var offset = 0;
+    for(var i = 0; i < aSelected.length; i++ )
+    {
+        var index = aSelected[i];
+
+        var memberValue = fromField.options[index].value;
+        var memberText = fromField.options[index].text;
+
+        // Remove the initial spacer member
+        if ( (toSize == 1) && (toField.options[0].value == "") )
+        {
+            toSize = 0;
+        }
+
+        // Loop through the destination list, don't add if it's a duplicate
+        for (var j = 0, exists = false; j < toSize; j++ )
+        {
+            // destination already exists
+            if ( toField.options[ j ].value == memberValue )
+            {
+                var exists = true;
+                offset++;
+            }
+        }
+
+        // destination doesnt exist, add them
+        if ( exists != true )
+        {
+            toField.options[toSize + i - offset] = new Option(memberText, memberValue);
+            toField.options[toSize + i - offset].selected = true;
+        }
+    }
+    
+    // We're done - clear the search box and focus it for the next entry
+    form.memberSearch.value = "";
+    form.memberSearch.focus();
+
+    //return false;
+}
+
+function fnRemoveMember()
+{
+  var form = document.addraid;
+  var toField = form.elements["raid_attendees[]"];
+  var toSize = toField.options.length;
+    
+  var i;
+  for (i = toField.length - 1; i>=0; i--) 
+  {
+  	if (toField.options[i].selected) 
+  	  {
+     	 toField.remove(i);
+  	  }
+  }
+}
+
+//]]>
+
+</script>
+
+
+<div>
+<input type="hidden"
+	name="hidden_id" value="{RAID_ID}" /> <input type="hidden"
+	name="{URI_RAID}" value="{RAID_ID}" /> <input type="hidden"
+	name="hidden_dkpsysid" value="{RAID_DKPSYSID}" />
+	
+<fieldset><label>{L_POOL}:</label> <select name="dkpsys_id" class="input" onchange="javascript:form.submit();">
+	<!-- BEGIN dkpsys_row -->
+	<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
+	<!-- END dkpsys_row -->
+</select>
+</fieldset>
+
+<h1>{RAIDTITLE}</h1>
+
+<div style="float: left; width: 48%;">
+<fieldset><legend>{L_ADD_RAID_TITLE}</legend>
+	<dl>
+		<dt><b>{L_EVENT}:</b> (<a href="{U_ADD_EVENT}">{L_ADD_EVENT}</a>)</dt>
+    <dd>
+	    <select name="raid_name" id="raid_name" class="input" size="10" style="width: 100%;" >
+			<!-- BEGIN events_row -->
+			<option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
+			<!-- END events_row -->
+		</select>
+	</dd>
+	</dl>		
+	
+	
+	<dl>
+		<dt><label>{L_VALUE}:</label>({L_ADD_RAID_VALUE_NOTE})</dt>
+		
+		<dd>
+			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />{FV_VALUE}
+		</dd>
+	</dl>
+		
+	<dl>
+		<dt><label>{L_DATE}:</label></dt>
+		<dd><input type="text" name="d" size="3" maxlength="2"
+			value="{D}" id="d" class="input" /> / <input type="text" name="mo"
+			size="3" maxlength="2" value="{MO}" id="mo" class="input" /> / <input
+			type="text" name="Y" size="5" maxlength="4" value="{Y}" id="Y"
+			class="input" />{FV_D}{FV_MO}{FV_Y}</dd>
+	</dl>
+	<dl>
+		<dt><label>{L_TIME}:</label></dt>
+		<dd><input type="text" name="h" size="3" maxlength="2"
+			value="{H}" id="h" class="input" /> : <input type="text" name="mi"
+			size="3" maxlength="2" value="{MI}" id="mi" class="input" /> : <input
+			type="text" name="s" size="3" maxlength="2" value="{S}" id="s"
+			class="input" />{FV_H}{FV_MI}{FV_S}</dd>
+
+	</dl>
+	<dl>
+
+		<dt><label>{L_NOTE}:</label></dt>
+		<dd><input type="text" name="raid_note" size="40" maxlength="255"
+			value="{RAID_NOTE}" class="input" /></dd>
+	</dl>
+</fieldset>
+</div>
+
+<div style="float: right; width: 50%;">
+<fieldset>
+
+<legend>{L_SEARCH_MEMBERS}</legend>
+
+<span class="small">{L_HOLD_CTRL_NOTE}</span>
+
+<dl>
+	{L_SEARCH_MEMBERS}:
+	<input type="text" name="memberSearch" size="35" maxlength="255" 
+	value="" class="input" onkeyup="fnSearch(this.name, 'all_members')" />
+</dl>
+<dl>
+	<select style="float: left; width: 47%;" name="all_members" size="20"
+		multiple="multiple" class="input">
+		<!-- BEGIN members_row -->
+		<option value="{members_row.VALUE}">{members_row.OPTION}</option>
+		<!-- END members_row -->
+	</select>
+
+	<select style="float: right; width: 47%;" name="raid_attendees[]"
+		size="20" multiple="multiple" class="input">
+		<!-- BEGIN raid_attendees_row -->
+		<option value="{raid_attendees_row.VALUE}" selected="selected">{raid_attendees_row.OPTION}</option>
+		<!-- END raid_attendees_row -->
+	</select>
+</dl>
+<dl>
+	<center>
+	<input type="button" name="button1" value="&lt;&lt;" accesskey="r" 
+	    onclick="return fnRemoveMember()" class="button1" /> 
+	<input type="button" name="button2" value="&gt;&gt;" accesskey="m"
+		onclick="return fnAddMember()" class="button1" />
+	</center>
+</dl>
+</fieldset>
+</div>
+
+<div style="float: left; width: 100%;">
+
+<p class="quick">
+{S_FORM_TOKEN}
+<!-- IF S_ADD --> 
+    <input type="submit" name="add"	value="{L_ADD_RAID}" class="button1" /> 
+    <input type="reset" name="reset" value="{L_RESET}" class="button1" /> 
+<!-- ELSE --> 
+<input type="submit" name="update" value="{L_UPDATE_RAID}" class="button1" />
+<input type="submit" name="delete" value="{L_DELETE_RAID}"	class="button1" />
+<input type="submit" name="additem" value="{L_ADD_ITEM}" class="button1" />
+<!-- ENDIF -->
+</p>
+</div>
+</div>
+</form>
+
+
+<!-- INCLUDE dkp/overall_footer.html -->

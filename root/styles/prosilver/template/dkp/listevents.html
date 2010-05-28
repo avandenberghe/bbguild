@@ -1,0 +1,73 @@
+<!-- INCLUDE overall_header.html -->
+<!-- INCLUDE dkp/dkpmenu.html -->
+<!--
+		Integrated by bbDKP
+		http://code.google.com/p/bbdkp/
+		$Id$
+//-->
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	
+<table width="100%">
+	<colgroup span="2">
+	<col width="80%"></col>
+	<col width="20%"></col>
+	</colgroup>
+<tr><td>
+   <h2 style ="color:#dfc065;">Events</h2>
+</td></tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="post">
+<table  class="table1" width="100%" border="0" cellspacing="0" cellpadding="5">
+<colgroup span="2">
+<col width="80%"></col>
+<col width="20%"></col>
+</colgroup>
+
+<!-- BEGIN dkpsys_row -->
+<tr class="row bg2">
+  <td><h4>{dkpsys_row.NAME}</h4></td><td></td>
+</tr>
+<!-- BEGIN events_row -->
+<tr>
+  <tr class="row bg1">
+    <td align="left"><a href="{dkpsys_row.events_row.U_VIEW_EVENT}">{dkpsys_row.events_row.NAME}</a></td>
+    <td align="right">{dkpsys_row.events_row.VALUE}</td>
+  </tr>
+</tr>
+<!-- END events_row -->
+<!-- END dkpsys_row -->
+</table>
+</div>
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+<table width="100%">
+<colgroup span="1">
+<col width="100%"></col>
+</colgroup>  
+<tr>
+<td style ="color:white; text-align:center" >{LISTEVENTS_FOOTCOUNT}</td>
+</tr>
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<!-- IF EVENT_PAGINATION -->  
+<div class="pagination">
+	<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{EVENT_PAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
+<!-- INCLUDE overall_footer.html -->
