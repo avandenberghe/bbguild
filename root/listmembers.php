@@ -64,17 +64,24 @@ if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [UR
 			$dkpsys_id = intval($pulldownval); 	
 		}
 	}
+	
 	if (isset( $_POST ['getdksysid']) )
 	{
 		$query_by_pool = true;
 		$dkpsys_id = request_var('getdksysid', 0); 
 		
 	}
+	
 	if (isset ( $_GET [URI_DKPSYS] ))
 	{
 		$query_by_pool = true;
 		$dkpsys_id = request_var(URI_DKPSYS, 0); 
 	}
+}
+else 
+{
+	$query_by_pool = true;
+	$dkpsys_id = $defaultpool; 
 }
 
 foreach ( $dkpvalues as $key => $value )
