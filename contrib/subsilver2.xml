@@ -198,6 +198,7 @@ function pop_search()
  ------------ */
 ]]></find>
 	<action type="after-add"><![CDATA[@import url("bbdkp.css");
+					@import url("bbtips.css");
 ]]></action>
       </edit>
     </open>
