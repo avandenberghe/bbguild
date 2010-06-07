@@ -168,7 +168,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
         $current_earned = $member['member_earned'];
         
        	$sql_array = array(
-	    	'SELECT'    => 	'sum(r.raid_value), as earned_result, count(*) as raidlines', 
+	    	'SELECT'    => 	'sum(r.raid_value) as earned_result, count(*) as raidlines', 
 	    	'FROM'      => array(
 		        RAIDS_TABLE => 'r',
 		        RAID_ATTENDEES_TABLE => 'ra',
