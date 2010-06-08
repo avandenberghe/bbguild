@@ -47,7 +47,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 }
 
 .portalmenu a:hover {
-	background-color: #F9F9F9;
+	background-color: #1B1B1B;
 	color: #D31141;
 }
 
@@ -304,7 +304,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	width: 517px;
 	height: 695px;
 	position: relative;
-	background: url("{T_THEME_PATH}/images/dkp/apply/3d_model_armory.png")
+	background: url("./images/dkp/apply/3d_model_armory.png")
 		no-repeat;
 }
 
@@ -330,7 +330,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	width: 673px;
 	height: 952px;
 	position: relative;
-	background: url("{T_THEME_PATH}/images/dkp/apply/gear_list.png")
+	background: url("./images/dkp/apply/gear_list.png")
 		no-repeat;
 }
 
@@ -356,7 +356,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	width: 593px;
 	height: 867px;
 	position: relative;
-	background: url("{T_THEME_PATH}/images/dkp/apply/achievements_list.png")
+	background: url("./images/dkp/apply/achievements_list.png")
 		no-repeat;
 }
 
@@ -399,7 +399,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 
 .Horde {
 	background:
-		url("{T_THEME_PATH}/images/dkp/apply/achievements_list_horde_top.jpg")
+		url("./images/dkp/apply/achievements_list_horde_top.jpg")
 		no-repeat;
 	position: absolute;
 	top: 22px;
@@ -414,7 +414,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 
 .Alliance {
 	background:
-		url("{T_THEME_PATH}/images/dkp/apply/achievements_list_alliance_top.jpg")
+		url("./images/dkp/apply/achievements_list_alliance_top.jpg")
 		no-repeat;
 	position: absolute;
 	top: 22px;
@@ -433,7 +433,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	/* place overlay on top of other elements */
 	z-index: 10000;
 	/* styling */
-	/* background: transparent url("{T_THEME_PATH}/images/row2_bg.png") top repeat-x; */
+	/* background: transparent url("./images/row2_bg.png") top repeat-x; */
 	width: auto;
 	padding: 0px 0px 0px 0px;
 	min-height: 600px;
@@ -446,7 +446,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 /* end overlayed element */
 	/* start close button positioned on upper right corner */
 .simple_overlay .close {
-	background-image: url("{T_THEME_PATH}/images/dkp/apply/close.png");
+	background-image: url("./images/dkp/apply/close.png");
 	background-position: 0px 0px;
 	position: absolute;
 	right: -40px;
@@ -457,7 +457,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 }
 
 .simple_overlay .close:hover {
-	background-image: url("{T_THEME_PATH}/images/dkp/apply/close.png");
+	background-image: url("./images/dkp/apply/close.png");
 	background-position: 0px 36px;
 }
 
@@ -558,7 +558,7 @@ ul.tabs li {
 
 /* link inside the tab. uses a background image */
 ul.tabs a {
-	background: url({T_THEME_PATH}/images/dkp/apply/bliz_red.png) no-repeat;
+	background: url(./images/dkp/apply/bliz_red.png) no-repeat;
 	font-size: 14px;
 	font-weight: bold;
 	font-family: arial;
