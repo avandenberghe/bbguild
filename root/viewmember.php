@@ -47,8 +47,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
 	$member_name= request_var(URI_NAME, '', true);
 	$dkp_pool=request_var(URI_DKPSYS, 0);
 	
-	
-    /*****************************
+	/*****************************
     /***   general info      *****
     ******************************/
 	$sql_array = array(
@@ -80,83 +79,16 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
  		trigger_error($user->lang['ERROR_MEMBERNOTFOUND']);
     }
     $db->sql_freeresult($member_result);
-    
-    $range1 = $config['bbdkp_list_p1'];
-    $range2 = $config['bbdkp_list_p2']; 
-    $range3 = 300;  
-
-    $mc1 = memberraid_count($dkp_pool, $range1, $member['member_id'], false);
-    $mc2 = memberraid_count($dkp_pool, $range2, $member['member_id'], false);
-    $mc3 = memberraid_count($dkp_pool, $range3, $member['member_id'], false);
-    $mclife = memberraid_count($dkp_pool, 0, $member['member_id'], true);
-
-    $pc1 = poolraid_count($dkp_pool, $range1, false);
-    $pc2 = poolraid_count($dkp_pool, $range2, false);
-    $pc3 = poolraid_count($dkp_pool, $range3, false);
-    $pclife = poolraid_count($dkp_pool, 0, true);
-        
-    $pct1 =  percentage_raidcount(true, $dkp_pool, $range1, $member['member_id']);
-    $pct2 =  percentage_raidcount(true, $dkp_pool, $range2, $member['member_id']);
-    $pct3 =  percentage_raidcount(true, $dkp_pool, $range3, $member['member_id']);
-    $pctlife = ( $pclife > 0 ) ? round(($mclife / $pclife) * 100, 1) : 0;
-    
-    $percent_of_raids = array(
-        'x1'       => $mc1 .'/'. $pc1 .':'. $pct1,
-        'x2'       => $mc2 .'/'. $pc2 .':'. $pct2,
-        'x3'       => $mc3 .'/'. $pc3 .':'. $pct3,
-        'lifetime' => $mclife .'/'. $pclife .':'. $pctlife
-    );
-    
-    $dkppoolname= $member['dkpsys_name'];
-    
-    $template->assign_vars(array(
-   		'GUILDTAG' =>  $config['bbdkp_guildtag'],
-        'NAME'     =>  $member['member_name'],
-        'PROFILE'  =>  $member['member_name'],
-    	'POOL'		=> $dkppoolname , 
-
-        'RAIDS_X1_DAYS'   => sprintf($user->lang['RAIDS_X_DAYS'], $range1),
-        'RAIDS_X2_DAYS'   => sprintf($user->lang['RAIDS_X_DAYS'], $range2),
-        'RAIDS_X3_DAYS'   => sprintf($user->lang['RAIDS_X_DAYS'], $range3),
-        'RAIDS_LIFETIME'  => sprintf($user->lang['RAIDS_LIFETIME'],
-               date($config['bbdkp_date_format'], $member['member_firstraid']),
-               date($config['bbdkp_date_format'], $member['member_lastraid'])),
-                                                
-        'EARNED'         => $member['member_earned'],
-        'SPENT'          => $member['member_spent'],
-        'ADJUSTMENT'     => $member['member_adjustment'],
-        'CURRENT'        => $member['member_current'],
-                                                
-        'RAIDS_X1_DAYS'  => $percent_of_raids['x1'],
-        'RAIDS_X2_DAYS'  => $percent_of_raids['x2'],
-        'RAIDS_X3_DAYS'  => $percent_of_raids['x3'],
-        'RAIDS_LIFETIME' => $percent_of_raids['lifetime'],
-
-		'C_ADJUSTMENT'     => $member['member_adjustment'],
-        'C_CURRENT'        => $member['member_current'],
-        'C_RAIDS_X1_DAYS'  => $percent_of_raids['x1'],
-        'C_RAIDS_X2_DAYS'  => $percent_of_raids['x2'],
-        'C_RAIDS_X3_DAYS'  => $percent_of_raids['x3'],
-        'C_RAIDS_LIFETIME' => $percent_of_raids['lifetime'],
-
-        'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAME . '=' . $member['member_name'] .'&amp;' . URI_DKPSYS . '=' . $dkp_pool . '&amp;')
-    ));
-    
-    
-    /*****************************
+  
+	/*****************************
     /***   Raid Attendance   *****
     *****************************/
-	// how many raids per page
-    $raidlines = $config['bbdkp_user_rlimit'] ;
-    
     $sort_order = array(
         0 => array('raid_name', 'raid_name desc'),
         1 => array('raid_count desc', 'raid_count')
     );
     $current_order = switch_order($sort_order);
     
-    // Find $current_earned based on the page.  This prevents us having to pass the
-    // current earned as a GET variable which could result in user error
     if (!isset($_GET['rstart']))  
     {
         $current_earned = $member['member_earned'];
@@ -177,7 +109,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
 	    	'WHERE'     =>  "(ra.raid_id = r.raid_id)
                AND (ra.member_name='" . $db->sql_escape($member['member_name']) ."')
                AND (r.raid_dkpid=" . (int) $dkp_pool . ' )', 
-           );
+        );
                
     	$sql = $db->sql_build_query('SELECT', $sql_array);
     	$result = $db->sql_query($sql);
@@ -186,10 +118,10 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
         $raidlines = (int) $db->sql_fetchfield('raidlines');
         
         $db->sql_freeresult($earned_result);
-        
     }
     
     // raid lines
+    $raidlines = $config['bbdkp_user_rlimit'] ;
     $sql_array = array(
     	'SELECT'    => 	'r.raid_id, r.raid_name, r.raid_date, r.raid_note, r.raid_value ', 
     	'FROM'      => array(
@@ -481,6 +413,69 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     ));
      unset($raid_counts, $event_ids);
     $db->sql_freeresult($adjustments_result);
+    
+        
+    $range1 = $config['bbdkp_list_p1'];
+    $range2 = $config['bbdkp_list_p2']; 
+    $range3 = 300;  
+
+    $mc1 = memberraid_count($dkp_pool, $range1, $member['member_id'], false);
+    $mc2 = memberraid_count($dkp_pool, $range2, $member['member_id'], false);
+    $mc3 = memberraid_count($dkp_pool, $range3, $member['member_id'], false);
+    $mclife = memberraid_count($dkp_pool, 0, $member['member_id'], true);
+
+    $pc1 	= poolraid_count($dkp_pool, $range1, false);
+    $pc2 	= poolraid_count($dkp_pool, $range2, false);
+    $pc3 	= poolraid_count($dkp_pool, $range3, false);
+    $pclife = poolraid_count($dkp_pool, 0, true);
+        
+    $pct1 =  percentage_raidcount(true, $dkp_pool, $range1, $member['member_id']);
+    $pct2 =  percentage_raidcount(true, $dkp_pool, $range2, $member['member_id']);
+    $pct3 =  percentage_raidcount(true, $dkp_pool, $range3, $member['member_id']);
+    $pctlife = ( $pclife > 0 ) ? round(($mclife / $pclife) * 100, 1) : 0;
+    
+    $percent_of_raids = array(
+        'x1'       => $mc1 .'/'. $pc1 .':'. $pct1,
+        'x2'       => $mc2 .'/'. $pc2 .':'. $pct2,
+        'x3'       => $mc3 .'/'. $pc3 .':'. $pct3,
+        'lifetime' => $mclife .'/'. $pclife .':'. $pctlife
+    );
+    
+    $dkppoolname= $member['dkpsys_name'];    
+    
+    
+    $template->assign_vars(array(
+   		'GUILDTAG' =>  $config['bbdkp_guildtag'],
+        'NAME'     =>  $member['member_name'],
+        'PROFILE'  =>  $member['member_name'],
+    	'POOL'		=> $dkppoolname , 
+
+        'RAIDS_X1_DAYS'   => sprintf($user->lang['RAIDS_X_DAYS'], $range1),
+        'RAIDS_X2_DAYS'   => sprintf($user->lang['RAIDS_X_DAYS'], $range2),
+        'RAIDS_X3_DAYS'   => sprintf($user->lang['RAIDS_X_DAYS'], $range3),
+        'RAIDS_LIFETIME'  => sprintf($user->lang['RAIDS_LIFETIME'],
+             date($config['bbdkp_date_format'], $member['member_firstraid']),
+             date($config['bbdkp_date_format'], $member['member_lastraid'])),
+                                                
+        'EARNED'         => $member['member_earned'],
+        'SPENT'          => $member['member_spent'],
+        'ADJUSTMENT'     => $member['member_adjustment'],
+        'CURRENT'        => $member['member_current'],
+                                                
+        'RAIDS_X1_DAYS'  => $percent_of_raids['x1'],
+        'RAIDS_X2_DAYS'  => $percent_of_raids['x2'],
+        'RAIDS_X3_DAYS'  => $percent_of_raids['x3'],
+        'RAIDS_LIFETIME' => $percent_of_raids['lifetime'],
+
+		'C_ADJUSTMENT'     => $member['member_adjustment'],
+        'C_CURRENT'        => $member['member_current'],
+        'C_RAIDS_X1_DAYS'  => $percent_of_raids['x1'],
+        'C_RAIDS_X2_DAYS'  => $percent_of_raids['x2'],
+        'C_RAIDS_X3_DAYS'  => $percent_of_raids['x3'],
+        'C_RAIDS_LIFETIME' => $percent_of_raids['lifetime'],
+
+        'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAME . '=' . $member['member_name'] .'&amp;' . URI_DKPSYS . '=' . $dkp_pool . '&amp;')
+    ));
     
     // Output page
     page_header($user->lang['MEMBER']);

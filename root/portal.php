@@ -82,7 +82,9 @@ $template->set_filenames(array(
 
 make_jumpbox(append_sid("{$phpbb_root_path}viewforum.$phpEx"));
 
-meta_refresh(60, append_sid("{$phpbb_root_path}portal.$phpEx")); 
+// auto-refreshing portal is disabled
+// uncomment this line if you want it back
+//meta_refresh(60, append_sid("{$phpbb_root_path}portal.$phpEx")); 
 
 page_footer();
 

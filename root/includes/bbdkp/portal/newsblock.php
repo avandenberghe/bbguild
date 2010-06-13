@@ -51,7 +51,7 @@ $db->sql_freeresult($result);
 $l_edited_by = ''; 
 $edit_reason = '' ; 
 // retrieve $newsperpage topics starting from page $start
-$newsperpage = 4;
+$newsperpage = $n_news;
 $previous_date = null;
 $sql = 'SELECT * FROM ' . TOPICS_TABLE . '
 		WHERE forum_id = ' . $forum_id . ' 
@@ -214,11 +214,6 @@ while ( $news = $db->sql_fetchrow($result) )
 	if (isset($user->data['session_page']) && !$user->data['is_bot'] &&
 		 (strpos($user->data['session_page'], '&t=' . $news['topic_id']) === false || isset($user->data['session_created'])))
 	{
-		$sql = 'UPDATE ' . TOPICS_TABLE . '
-			SET topic_views = topic_views + 1, topic_last_view_time = ' . time() . '
-			WHERE topic_id = '. $news['topic_id'];
-		$db->sql_query($sql);
-	
 		// Update the attachment download counts
 		if (sizeof($update_count))
 		{
