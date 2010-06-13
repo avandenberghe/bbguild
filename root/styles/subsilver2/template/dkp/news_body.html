@@ -5,15 +5,6 @@
 
 <td valign="top"; class="portalleft">
 <br style="clear:both" />
-<!-- INCLUDE dkp/block/mainmenu.html -->
-
-<!-- IF S_DISPLAY_RECRUIT -->
-<!-- INCLUDE dkp/block/recruitment.html -->
-<!-- ENDIF -->
-
-<!-- IF S_DISPLAY_LINKS -->
-<!-- INCLUDE dkp/block/links.html -->		
-<!-- ENDIF -->
 </td>
 
 <td valign="top"; class="portalcenter">
@@ -38,9 +29,20 @@
 <!-- INCLUDE dkp/block/lastloot.html -->
 <!-- ENDIF -->
 
+<!-- IF S_DISPLAY_RECRUIT -->
+<!-- INCLUDE dkp/block/recruitment.html -->
+<!-- ENDIF -->
+
 <!-- IF S_BPSHOW -->
 <!-- INCLUDE dkp/block/bossprogress.html -->
 <!-- ENDIF -->
+
+<!-- INCLUDE dkp/block/mainmenu.html -->
+
+<!-- IF S_DISPLAY_LINKS -->
+<!-- INCLUDE dkp/block/links.html -->		
+<!-- ENDIF -->
+
 </td>
 
 </tr>

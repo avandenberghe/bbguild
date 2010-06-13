@@ -1,23 +1,10 @@
 <!-- INCLUDE overall_header.html -->
-
 <table class="portalbody" cellpadding="0" cellspacing="0" border="0" width="100%">
 <tbody>
 <tr>	
 
 <td valign="top"; class="portalleft">
 <br style="clear:both" />
-<!-- INCLUDE dkp/block/mainmenu.html -->
-
-
-<!-- IF S_DISPLAY_RECRUIT -->
-<!-- INCLUDE dkp/block/recruitment.html -->
-<!-- ENDIF -->
-
-<!-- IF S_DISPLAY_LINKS -->
-<!-- INCLUDE dkp/block/links.html -->		
-<!-- ENDIF -->
-
-
 </td>
 
 <td valign="top"; class="portalcenter">
@@ -30,7 +17,6 @@
 
 <td valign="top"; class="portalright">
 <br style="clear:both" />
-
 <!-- IF not S_USER_LOGGED_IN -->
 <!-- INCLUDE dkp/block/loginblock.html -->
 <!-- ENDIF -->
@@ -43,8 +29,18 @@
 <!-- INCLUDE dkp/block/lastloot.html -->
 <!-- ENDIF -->
 
+<!-- IF S_DISPLAY_RECRUIT -->
+<!-- INCLUDE dkp/block/recruitment.html -->
+<!-- ENDIF -->
+
 <!-- IF S_BPSHOW -->
 <!-- INCLUDE dkp/block/bossprogress.html -->
+<!-- ENDIF -->
+
+<!-- INCLUDE dkp/block/mainmenu.html -->
+
+<!-- IF S_DISPLAY_LINKS -->
+<!-- INCLUDE dkp/block/links.html -->		
 <!-- ENDIF -->
 
 </td>
@@ -52,5 +48,4 @@
 </tr>
 </tbody>
 </table>
-
 <!-- INCLUDE overall_footer.html -->
