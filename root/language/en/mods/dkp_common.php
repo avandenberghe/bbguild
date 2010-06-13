@@ -271,6 +271,7 @@ $lang = array_merge($lang, array(
 'LISTMEMBERS_ACTIVE_FOOTCOUNT' => '... found %d active members / %sshow all</a>',
 'LISTMEMBERS_COMPARE_FOOTCOUNT' => '... comparing %d members',
 'LISTPURCHASED_FOOTCOUNT' => '... found %d item(s) / %d per page',
+'LISTPURCHASED_FOOTCOUNT_SHORT' => '... found %d item(s)',
 'LISTRAIDS_FOOTCOUNT' => '... found %d raid(s) / %d per page',
 'STATS_ACTIVE_FOOTCOUNT' => '... found %d active member(s) / %sshow all</a>',
 'STATS_FOOTCOUNT' => '... found %d member(s)',

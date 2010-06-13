@@ -519,7 +519,7 @@ class acp_dkp_item extends bbDkp_Admin
 		{
 			// get dkp pool value from popup
 			$dkpid = request_var ( 'dkpsys_id', 0 );
-		} 
+		}
 		else
 		{
 			// just select first row
@@ -541,7 +541,6 @@ class acp_dkp_item extends bbDkp_Admin
 				'OPTION' => (! empty ( $row ['dkpsys_name'] )) ? $row ['dkpsys_name'] : '(None)' ) );
 		}
 		$db->sql_freeresult ( $result );
-		
 		
 		// select all raids that have items	for pool			
 		$sql_array = array(
@@ -597,7 +596,7 @@ class acp_dkp_item extends bbDkp_Admin
 			);
 		$current_order = switch_order ($sort_order);
 		
-		//prepare list sql
+		//prepare item list sql
 		$sql_array = array(
 	    'SELECT'    => 'd.dkpsys_name,r.raid_dkpid, i.item_id, i.item_name, 
 	    				i.item_buyer, i.item_date, i.raid_id, i.item_value, r.raid_name ',
@@ -612,17 +611,12 @@ class acp_dkp_item extends bbDkp_Admin
 
  
 		$sql = $db->sql_build_query('SELECT', $sql_array);					
-		$items_result = $db->sql_query_limit($sql, $config['bbdkp_user_ilimit'], $start);
+		$items_result = $db->sql_query ( $sql );
 		
 		$listitems_footcount = sprintf 
 		( 
-			$user->lang ['LISTPURCHASED_FOOTCOUNT'], 
-			$total_items, 
-			$config['bbdkp_user_ilimit'] );
-		
-		$pagination = generate_pagination ( 
-		append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ) .
-		 '&amp;o=' . $current_order ['uri'] ['current'], $total_items, $config['bbdkp_user_ilimit'], $start );
+			$user->lang ['LISTPURCHASED_FOOTCOUNT_SHORT'], 
+			$total_items);
 		
 		while ( $item = $db->sql_fetchrow ( $items_result ) ) 
 		{
