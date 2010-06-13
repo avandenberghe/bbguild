@@ -169,7 +169,7 @@ EQDkp (c) 2003 The EqDkp Project Team
 <edit>
 	<comment lang="en">insert bbDkp links</comment>
 	<find><![CDATA[<p class="breadcrumbs"><a href="{U_INDEX}">{L_INDEX}</a>]]></find>
-	<action type="replace-with"><![CDATA[<p class="breadcrumbs"><a href="{U_PORTAL}">{L_PORTAL}</a>&#187;<a href="{U_DKP}">{L_DKP}</a>&#187;<a href="{U_INDEX}">{L_INDEX}</a>]]></action>
+	<action type="replace-with"><![CDATA[<p class="breadcrumbs"><a href="{U_PORTAL}">{L_PORTAL}</a>&nbsp;&#187;&nbsp;<a href="{U_DKP}">{L_DKP}</a>&nbsp;&#187;&nbsp;<a href="{U_INDEX}">{L_INDEX}</a>]]></action>
 </edit>
 
 </open>

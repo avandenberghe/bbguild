@@ -25,40 +25,31 @@ $(document).ready(
 	;}
 );
 </script>
-<table class="tablebg" width="100%" cellspacing = "1">
 <div style="padding: 2px;">
+<table class="tablebg" width="100%" cellspacing = "1">
+
 <tbody>
 	<tr>
 		<th>{L_BOSSPROGRESS}</th>
 	</tr>
 	<tr>
-    <table width:"100%" cellpadding="2" cellspacing="0" border="0" >
+	<td>
+    <table width="100%" cellpadding="2" cellspacing="0" border="0" >
           <colgroup span="2" >
           <col width="35%"></col>
           <col width="65%"></col>
           </colgroup>
 	<!-- BEGIN boss -->
 	<tr>
-	<!-- IF boss.PROGRESSCOUNT is even -->
- 	<td class="row1"
-  	<!-- ELSE -->
-  	<td class="row2"
-  	<!-- ENDIF -->
-         align="justify" class="{boss.CSSCLASS}"><span>{boss.ZONE}</span></td>
-        
-	<!-- IF boss.PROGRESSCOUNT is even -->
- 	<td class="row1"
-  	<!-- ELSE -->
-  	<td class="row2"
-  	<!-- ENDIF -->        
-        align="justify"><span id="pb{boss.PROGRESSCOUNT}" class="progressBar">{boss.PERCOMP}</span>&nbsp;{boss.LOC_KILLED}/{boss.TOTAL_BCOUNT}</td>
-        </tr>
+	 	<td align="justify" class="{boss.CSSCLASS}"><span>{boss.ZONE}</span></td>
+	 	<td align="justify"><span id="pb{boss.PROGRESSCOUNT}" class="progressBar">{boss.PERCOMP}</span>&nbsp;{boss.LOC_KILLED}/{boss.TOTAL_BCOUNT}</td>
+     </tr>
     <!-- END boss -->
 
 	</table>
+	</td>
 	</tr>
 </tbody>
-</div>
 </table>
-
+</div>
 <!-- end BossProgress block -->

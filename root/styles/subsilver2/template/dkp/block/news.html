@@ -18,7 +18,7 @@
 
 <tr>
 <td class="cat">
-<h4>{date_row.news_row.ATTACH_ICON_IMG}<a href="{date_row.news_row.LINK}"><strong>{date_row.news_row.HEADLINE}</strong></a><h4>
+{date_row.news_row.ATTACH_ICON_IMG}<a href="{date_row.news_row.LINK}"><strong>{date_row.news_row.HEADLINE}</strong></a>
 </td>
 </tr>
 
@@ -63,7 +63,7 @@
 </tr>
 <tr class="row<!-- IF date_row.news_row.S_ROW_COUNT is odd -->1<!-- ELSE -->2<!-- ENDIF -->">
 <td>
-<span style="float: left;"><a href="{date_row.news_row.LINK}" title="{L_VIEW_COMMENTS}">{L_COMMENT}: {date_row.news_row.MORE}</span>
+<span style="float: left;"><a href="{date_row.news_row.LINK}" >{L_COMMENT}: {date_row.news_row.MORE}</a></span>
 <span style="float: right;"><a href="#wrapheader" class="top" title="{L_BACK_TO_TOP}">{L_BACK_TO_TOP}</a></span>
 </td>
 </tr>
