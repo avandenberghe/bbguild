@@ -41,6 +41,22 @@ if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
     trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
 }
 
+ //trigger_error('Warning! please do these DIY instructions before. : <........>', E_USER_WARNING);
+ 
+ 
+/*
+if (isset($config['MOD1']))
+{
+   if($config['MOD1'] <= '1.0.3')
+   
+     trigger_error('Warning! please do these DIY instructions before. : <........>', E_USER_WARNING);
+}
+*/
+    
+
+
+
+
 // The name of the mod to be displayed during installation.
 $mod_name = 'bbDKP 1.1.0';
 
@@ -739,9 +755,6 @@ function bbdkp_game_data($action, $version)
 		case 'update' :
 			// Run this when installing/updating
 			// Run this when updating
-			$db->sql_query("update " .  $bbdkp_table_prefix . "classes set dps = 0 "); 
-		    $db->sql_query("update " .  $bbdkp_table_prefix . "classes set tank = 0 "); 
-     	    $db->sql_query("update " .  $bbdkp_table_prefix . "classes set heal = 0 ");   
      	    
 			$game = request_var('game', '');
 			switch ($game)
@@ -795,7 +808,13 @@ function bbdkp_game_data($action, $version)
 				default :
 				    break; 
 			}
+			$db->sql_query("update " .  $bbdkp_table_prefix . "classes set dps = 0 "); 
+		    $db->sql_query("update " .  $bbdkp_table_prefix . "classes set tank = 0 "); 
+     	    $db->sql_query("update " .  $bbdkp_table_prefix . "classes set heal = 0 ");   
+			
+			
 			break; 
+			
 			
 		case 'uninstall' :
 			// Run this when uninstalling
@@ -1157,6 +1176,11 @@ function bbdkp_109_uninstall()
     	$umil->config_remove('bbdkp_list_p2');
     }    
     
+    if($umil->config_exists('bbdkp_module_id'))
+    {
+    	$umil->config_remove('bbdkp_module_id');
+    }    
+    
     //removing all 1.0.9 tables if they exist !!
     if ($umil->table_exists($bbdkp_table_prefix . 'item_cache'))
     {
@@ -1231,6 +1255,10 @@ function bbdkp_109_uninstall()
     	}
    	    $sql = 'CREATE TABLE temp_memberlist AS SELECT * FROM ' . $bbdkp_table_prefix . 'memberlist';
 	    $result = $db->sql_query($sql);
+	    
+	    $sql = 'UPDATE temp_memberlist SET member_outdate = 0 where member_outdate < 0';
+	    $result = $db->sql_query($sql);
+	    
     	$umil->table_remove($bbdkp_table_prefix . 'memberlist');
     }
         
