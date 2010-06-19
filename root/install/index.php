@@ -70,7 +70,7 @@ $options = array(
 * $phpbb_root_path will get prepended to the path specified
 * Image height should be 50px to prevent cut-off or stretching.
 */
-//$logo_img = 'images/bbdkp.png';
+$logo_img = 'install/logo.jpg';
 
 /*
 * The array of versions and actions within each.
