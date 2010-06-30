@@ -833,14 +833,13 @@ function bbdkp_109rc1_uninstall()
  *  restoring data from temp table
  * 
  */
-function bbdkp_restore109rc1($action, $version)
+function bbdkp_restore109rc1()
 {
 	global $db, $table_prefix, $umil, $bbdkp_table_prefix, $backup;
 
+	//did we make a backup ?
 	if ($backup)
 	{
-		
-			   
    	   // insert dkp dkpsystem
 	   $sql='delete from ' . $bbdkp_table_prefix . 'dkpsystem';
 	   $db->sql_query($sql); 

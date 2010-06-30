@@ -987,7 +987,7 @@ function bbdkp_caches($action, $version)
  */
 function bbdkp_cleanupold($action, $version)
 {
-	global $user, $config, $db, $table_prefix, $umil, $bbdkp_table_prefix, $bbdkpold;
+	global $user, $config, $db, $table_prefix, $umil, $phpbb_root_path, $bbdkp_table_prefix, $phpEx, $bbdkpold;
 
 	switch ($action)
 	{
@@ -1001,9 +1001,9 @@ function bbdkp_cleanupold($action, $version)
     			if($umil->config_exists('bbdkp_version', true))
 				{
 					// insure against cleared config array 
-					$sql = 'select config_name from ' . CONFIG_TABLE . " WHERE config_name = 'bbdkp_version' " . 
+					$sql = 'select config_value from ' . CONFIG_TABLE . " WHERE config_name = 'bbdkp_version' ";
 					$result = $db->sql_query($sql);
-					$bbdkpold = $db->sql_fetchfield('config_value');
+					$bbdkpold = $db->sql_fetchfield('config_value', 0, $result); 
 					$db->sql_freeresult($result);
 					
 					switch ($bbdkpold)
@@ -1013,7 +1013,7 @@ function bbdkp_cleanupold($action, $version)
 							break;
 						case '1.0.9rc1':
 							include($phpbb_root_path .'install/update109rc1.' . $phpEx);
-			    			bbdkp_109_uninstall();
+			    			bbdkp_109rc1_uninstall();
 			    			return array('command' => sprintf($user->lang['UMIL_109_UNINSTALL_SUCCESS'], $config), 'result' => 'SUCCESS');
 							break;
 						default:
