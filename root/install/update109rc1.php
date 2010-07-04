@@ -1,4 +1,22 @@
 <?php
+/**
+ * bbdkp updater
+ * 
+ * @package bbDkp-installer
+ * @copyright (c) 2009 bbDkp <http://code.google.com/p/bbdkp/>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version $Id$
+ * 
+ */
+
+
+/**
+* @ignore
+*/
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
 
 /****************************** 
  * wrapperfunction for uninstalling bbdkp 1.0.9rc1
