@@ -57,7 +57,7 @@ function bbdkp_old_uninstall($bbdkpold)
     	
     	$sql = 'CREATE TABLE temp_config AS SELECT * FROM ' . $bbdkp_table_prefix . 'config';
 	    $result = $db->sql_query($sql);
-		$umil->table_remove($bbdkp_table_prefix . 'temp_config');
+		$umil->table_remove($bbdkp_table_prefix . 'config');
     }
     
    if ($umil->table_exists($bbdkp_table_prefix . 'events'))
@@ -284,9 +284,9 @@ function bbdkp_old_uninstall($bbdkpold)
 	    $umil->module_remove('acp', $dkp1, 'Config'); 
     }
     
-    if( $umil->module_exists('acp', $dkp1, 'indexpage config'))
+    if( $umil->module_exists('acp', $dkp1, 'Indexpage config'))
     {
-	    $umil->module_remove('acp', $dkp1, 'indexpage config'); 
+	    $umil->module_remove('acp', $dkp1, 'Indexpage config'); 
     }
 
     if( $umil->module_exists('acp', $dkp0, 'Menu'))
