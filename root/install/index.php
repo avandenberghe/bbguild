@@ -997,7 +997,8 @@ function bbdkp_cleanupold($action, $version)
 			// check for oldstyle acp
 			if ($umil->module_exists('acp', false, 'DKP'))
     		{
-    			
+    		
+    			//we have found an old dkp tab, now check for version
     			if($umil->config_exists('bbdkp_version', true))
 				{
 					// insure against cleared config array 
@@ -1023,7 +1024,28 @@ function bbdkp_cleanupold($action, $version)
 				}
 				else 
 				{
-					trigger_error('UMIL_109_ILLEGALVERSION', E_USER_WARNING);
+					// no config entry before 1.0.9rc1, so look in old config table
+					if(!defined('OLD_CONFIG_TABLE'))
+					{
+					    define('OLD_CONFIG_TABLE',  'bbeqdkp_config');
+					}
+
+					//get game
+					$sql = 'SELECT config_value FROM ' . OLD_CONFIG_TABLE . " where config_name = 'bbdkp_default_game' " ;
+					$result = @$db->sql_query($sql);
+					$game = @$db->sql_fetchrow( $result );
+					$game = strtolower($game['config_value']);
+					
+					//get version
+					$sql = 'SELECT config_value FROM ' . OLD_CONFIG_TABLE . " where config_name = 'bbdkp_version' " ;
+					$result = @$db->sql_query($sql);
+					$current_version = @$db->sql_fetchrow( $result );
+					$current_version = strtolower($current_version['config_value']);
+	
+					//include updater
+					include($phpbb_root_path .'install/update108.' . $phpEx);	
+					bbdkp_old_uninstall($current_version, $game); 
+			
 				}
     			
 		    }
@@ -1031,6 +1053,7 @@ function bbdkp_cleanupold($action, $version)
 		    {
 		        //don't bother to try to delete child modules if DKP category doesnt exist 
 		        // this means user is at 1.1.0-RC or new install
+		        // we will just follow the umil procedure
 		        return array('command' => 'UMIL_109_RESTORE_NOT', 'result' => 'SUCCESS');
 		    }
 			break;
