@@ -26,8 +26,7 @@ if (!defined('IN_PHPBB'))
 function bbdkp_old_uninstall($current_version, $game)
 {
     global $db, $user, $table_prefix, $umil, $bbdkp_table_prefix, $backup, $version, $config;
-    
-      
+          
     if(!defined('OLD_CONFIG_TABLE'))
     {
         define('OLD_CONFIG_TABLE',  'bbeqdkp_config');
@@ -56,22 +55,18 @@ function bbdkp_old_uninstall($current_version, $game)
     
     if ($umil->table_exists($bbdkp_table_prefix . 'config'))
     {
-		$umil->table_remove($bbdkp_table_prefix . 'config');
-    }
-    
-    if ($umil->table_exists($bbdkp_table_prefix . 'dkpsystem'))
-    {
-        if ($umil->table_exists('temp_dkpsystem'))
+    	//saving old config table
+        if ($umil->table_exists('temp_config'))
     	{
-    		$umil->table_remove('temp_dkpsystem');
+    		$umil->table_remove('temp_config');
     	}  
-    	$sql = 'CREATE TABLE temp_dkpsystem AS SELECT * FROM ' . $bbdkp_table_prefix . 'dkpsystem';
+    	
+    	$sql = 'CREATE TABLE temp_config AS SELECT * FROM ' . $bbdkp_table_prefix . 'config';
 	    $result = $db->sql_query($sql);
-		$umil->table_remove($bbdkp_table_prefix . 'dkpsystem');
+		$umil->table_remove($bbdkp_table_prefix . 'temp_config');
     }
-
     
-    if ($umil->table_exists($bbdkp_table_prefix . 'events'))
+   if ($umil->table_exists($bbdkp_table_prefix . 'events'))
     {
     	//make backup
         if ($umil->table_exists('temp_events'))
@@ -108,35 +103,19 @@ function bbdkp_old_uninstall($current_version, $game)
     	$umil->table_remove($bbdkp_table_prefix . 'member_ranks');
     }
     
-    if ($umil->table_exists($bbdkp_table_prefix . 'memberlist'))
+    if ($umil->table_exists($bbdkp_table_prefix . 'members'))
     {
     	//make backup
-        if ($umil->table_exists('temp_memberlist'))
+        if ($umil->table_exists('temp_members'))
     	{
-    		$umil->table_remove('temp_memberlist');
+    		$umil->table_remove('temp_members');
     	}
-   	    $sql = 'CREATE TABLE temp_memberlist AS SELECT * FROM ' . $bbdkp_table_prefix . 'memberlist';
+   	    $sql = 'CREATE TABLE temp_members AS SELECT * FROM ' . $bbdkp_table_prefix . 'members';
 	    $result = $db->sql_query($sql);
 	    
-	    $sql = 'UPDATE temp_memberlist SET member_outdate = 0 where member_outdate < 0';
-	    $result = $db->sql_query($sql);
-	    
-    	$umil->table_remove($bbdkp_table_prefix . 'memberlist');
+    	$umil->table_remove($bbdkp_table_prefix . 'members');
     }
         
-    if ($umil->table_exists($bbdkp_table_prefix . 'memberdkp'))
-    {
-    	//make backup
-        if ($umil->table_exists('temp_memberdkp'))
-    	{
-    		$umil->table_remove('temp_memberdkp');
-    	}    	
-   	    $sql = 'CREATE TABLE temp_memberdkp AS SELECT * FROM ' . $bbdkp_table_prefix . 'memberdkp';
-	    $result = $db->sql_query($sql);
-    	$umil->table_remove($bbdkp_table_prefix . 'memberdkp');
-    }
-    
-    
     if ($umil->table_exists($bbdkp_table_prefix . 'adjustments'))
     {
     	//make backup
@@ -282,24 +261,23 @@ function bbdkp_old_uninstall($current_version, $game)
 		$umil->table_remove($bbdkp_table_prefix . 'apptemplate');
     }    
     
-    
     /*** removing old modules ****/
-
+	// this will be module id 190 normally
     $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'DKP'";
     $result = $db->sql_query($sql);
     $dkp0 = (int) $db->sql_fetchfield('module_id'); 
     $db->sql_freeresult($result);
     
-    /*******/    
+    /*** removing 1.0.8 main modules ****/    
     
-    $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'bbDkp Menu'";
+    $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'Menu'";
     $result = $db->sql_query($sql);
     $dkp1 = (int) $db->sql_fetchfield('module_id'); 
     $db->sql_freeresult($result);
-    
-    if($umil->module_exists('acp', $dkp1, 'bbDkp Settings'))
+
+    if( $umil->module_exists('acp', $dkp1, 'EQdkp Index'))
     {
-	    $umil->module_remove('acp', $dkp1, 'bbDkp Settings'); 
+	    $umil->module_remove('acp', $dkp1, 'EQdkp Index'); 
     }
     
     if( $umil->module_exists('acp', $dkp1, 'View Logs'))
@@ -312,28 +290,17 @@ function bbdkp_old_uninstall($current_version, $game)
 	    $umil->module_remove('acp', $dkp1, 'Config'); 
     }
     
-    if( $umil->module_exists('acp', $dkp1, 'Indexpage'))
+    if( $umil->module_exists('acp', $dkp1, 'indexpage config'))
     {
-	    $umil->module_remove('acp', $dkp1, 'Indexpage'); 
-    }
-    
-    if( $umil->module_exists('acp', $dkp1, 'Indexpage'))
-    {
-	    $umil->module_remove('acp', $dkp1, 'Indexpage'); 
+	    $umil->module_remove('acp', $dkp1, 'indexpage config'); 
     }
 
-    // old apply module 
-    if( $umil->module_exists('acp', $dkp1, 'Application config'))
+    if( $umil->module_exists('acp', $dkp0, 'Menu'))
     {
-	    $umil->module_remove('acp', $dkp1, 'Application config'); 
+	    $umil->module_remove('acp', $dkp0, 'Menu'); 
     }
     
-    if( $umil->module_exists('acp', $dkp0, 'bbDkp Menu'))
-    {
-	    $umil->module_remove('acp', $dkp0, 'bbDkp Menu'); 
-    }
-    
-	/*******/    
+	/*** removing 1.0.8 news modules ****/    
     
     $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'News management'";
     $result = $db->sql_query($sql);
@@ -355,22 +322,22 @@ function bbdkp_old_uninstall($current_version, $game)
 	    $umil->module_remove('acp', $dkp0, 'News management'); 
     }
     
-    /*******/    
+    /*** removing 1.0.8 raid modules ****/    
     
     $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'Raid management'";
     $result = $db->sql_query($sql);
     $dkp3 = (int) $db->sql_fetchfield('module_id'); 
     $db->sql_freeresult($result);
     
-    if( $umil->module_exists('acp', $dkp3, 'Add DKP Pool'))
+    if( $umil->module_exists('acp', $dkp3, 'Add Raid'))
     {
-	    $umil->module_remove('acp', $dkp3, 'Add DKP Pool'); 
-    }
+	    $umil->module_remove('acp', $dkp3, 'Add Raid'); 
+    }    
     
-    if( $umil->module_exists('acp', $dkp3, 'List DKP Pools'))
+    if( $umil->module_exists('acp', $dkp3, 'List Raid'))
     {
-	    $umil->module_remove('acp', $dkp3, 'List DKP Pools'); 
-    }
+	    $umil->module_remove('acp', $dkp3, 'List Raid'); 
+    }    
 
     if( $umil->module_exists('acp', $dkp3, 'Add Event'))
     {
@@ -382,16 +349,6 @@ function bbdkp_old_uninstall($current_version, $game)
 	    $umil->module_remove('acp', $dkp3, 'List Event'); 
     }
     
-    if( $umil->module_exists('acp', $dkp3, 'Add Raid'))
-    {
-	    $umil->module_remove('acp', $dkp3, 'Add Raid'); 
-    }    
-    
-    if( $umil->module_exists('acp', $dkp3, 'List Raid'))
-    {
-	    $umil->module_remove('acp', $dkp3, 'List Raid'); 
-    }    
-        
     if( $umil->module_exists('acp', $dkp3, 'Add Item'))
     {
 	    $umil->module_remove('acp', $dkp3, 'Add Item'); 
@@ -400,6 +357,11 @@ function bbdkp_old_uninstall($current_version, $game)
     if( $umil->module_exists('acp', $dkp3, 'List Items'))
     {
 	    $umil->module_remove('acp', $dkp3, 'List Items'); 
+    }    
+    
+    if( $umil->module_exists('acp', $dkp3, 'Parse Wow (hide)'))
+    {
+	    $umil->module_remove('acp', $dkp3, 'Parse Wow (hide)'); 
     }    
     
     if( $umil->module_exists('acp', $dkp3, 'View Item'))
@@ -417,7 +379,7 @@ function bbdkp_old_uninstall($current_version, $game)
 	    $umil->module_remove('acp', $dkp0, 'Raid management'); 
     }    
     
-    /*******/    
+    /** removing 1.0.8 member module *****/    
     
     $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'Member management'";
     $result = $db->sql_query($sql);
@@ -449,38 +411,26 @@ function bbdkp_old_uninstall($current_version, $game)
 	    $umil->module_remove('acp', $dkp0, 'Member management'); 
     }    
     
-    /*******/      
+    /***** removing 1.0.8 adjustments  *****/      
     
-    $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'Member DKP management'";
+    $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'Adjustments management'";
     $result = $db->sql_query($sql);
     $dkp5 = (int) $db->sql_fetchfield('module_id'); 
     $db->sql_freeresult($result);
     
-    
-    if( $umil->module_exists('acp', $dkp5, 'List member DKP'))
-    {
-	    $umil->module_remove('acp', $dkp5, 'List member DKP'); 
-    }    
-
-    
-    if( $umil->module_exists('acp', $dkp5, 'Edit member DKP'))
-    {
-	    $umil->module_remove('acp', $dkp5, 'Edit member DKP'); 
-    }    
-
     if( $umil->module_exists('acp', $dkp5, 'Add Group Adjustments'))
     {
 	    $umil->module_remove('acp', $dkp5, 'Add Group Adjustments'); 
     }    
     
-    if( $umil->module_exists('acp', $dkp5, 'List Group Adjustments'))
-    {
-	    $umil->module_remove('acp', $dkp5, 'List Group Adjustments'); 
-    }    
-
     if( $umil->module_exists('acp', $dkp5, 'Add Individual Adjustments'))
     {
 	    $umil->module_remove('acp', $dkp5, 'Add Individual Adjustments'); 
+    }    
+
+    if( $umil->module_exists('acp', $dkp5, 'List Group Adjustments'))
+    {
+	    $umil->module_remove('acp', $dkp5, 'List Group Adjustments'); 
     }    
     
     if( $umil->module_exists('acp', $dkp5, 'List Individual Adjustments'))
@@ -488,29 +438,12 @@ function bbdkp_old_uninstall($current_version, $game)
 	    $umil->module_remove('acp', $dkp5, 'List Individual Adjustments'); 
     }    
     
-    if( $umil->module_exists('acp', $dkp0, 'Member DKP management'))
+    if( $umil->module_exists('acp', $dkp0, 'Adjustments management'))
     {
-	    $umil->module_remove('acp', $dkp0, 'Member DKP management'); 
+	    $umil->module_remove('acp', $dkp0, 'Adjustments management'); 
     }    
           
-    /*******/      
-    
-    $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'Itemstats'";
-    $result = $db->sql_query($sql);
-    $dkp6 = (int) $db->sql_fetchfield('module_id'); 
-    $db->sql_freeresult($result);
-    
-    if( $umil->module_exists('acp', $dkp6, 'Settings'))
-    {
-	    $umil->module_remove('acp', $dkp6, 'Settings'); 
-    }    
-        
-    if( $umil->module_exists('acp', $dkp0, 'Itemstats'))
-    {
-	    $umil->module_remove('acp', $dkp0, 'Itemstats'); 
-    }    
-
-    /*******/      
+    /*** removing 1.0.8 bossprogress  ****/      
     
     $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'Bossprogress'";
     $result = $db->sql_query($sql);
@@ -536,9 +469,27 @@ function bbdkp_old_uninstall($current_version, $game)
     {
 	    $umil->module_remove('acp', $dkp0, 'Bossprogress'); 
     }    
-
-
-    /*******/     
+ 	
+	/***removing 1.0.8 roster ****/     
+    
+ 	$sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'Roster'";
+    $result = $db->sql_query($sql);
+    $dkp8 = (int) $db->sql_fetchfield('module_id'); 
+    $db->sql_freeresult($result);
+    if(isset($dkp8))
+    {
+   		if( $umil->module_exists('acp', $dkp8, 'Armory config'))
+	    {
+		    $umil->module_remove('acp', $dkp8, 'Armory config'); 
+	    }    
+	    
+	    if( $umil->module_exists('acp', $dkp0, 'Roster'))
+	    {
+		    $umil->module_remove('acp', $dkp0, 'Roster'); 
+	    }    
+    }
+    
+    /*** removing 1.0.8 ctrt  ****/     
     
  	$sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'CTRT'";
     $result = $db->sql_query($sql);
@@ -685,25 +636,6 @@ function bbdkp_old_uninstall($current_version, $game)
 	    
     }
     
-    /*******/     
-    
- 	$sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'Roster'";
-    $result = $db->sql_query($sql);
-    $dkp8 = (int) $db->sql_fetchfield('module_id'); 
-    $db->sql_freeresult($result);
-    if(isset($dkp8))
-    {
-   		if( $umil->module_exists('acp', $dkp8, 'Armory config'))
-	    {
-		    $umil->module_remove('acp', $dkp8, 'Armory config'); 
-	    }    
-	    
-	    if( $umil->module_exists('acp', $dkp0, 'Roster'))
-	    {
-		    $umil->module_remove('acp', $dkp0, 'Roster'); 
-	    }    
-    }
-	    
     if( $umil->module_exists('acp', 0, 'DKP'))
 	{
 	   $umil->module_remove('acp', 0, 'DKP'); 
