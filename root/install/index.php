@@ -1015,7 +1015,7 @@ function bbdkp_cleanupold($action, $version)
 						case '1.0.9rc1':
 							include($phpbb_root_path .'install/update109rc1.' . $phpEx);
 			    			bbdkp_109rc1_uninstall();
-			    			return array('command' => sprintf($user->lang['UMIL_109_UNINSTALL_SUCCESS'], $config), 'result' => 'SUCCESS');
+			    			return array('command' => sprintf($user->lang['UMIL_109_UNINSTALL_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
 							break;
 						default:
 							trigger_error('UMIL_109_ILLEGALVERSION', E_USER_WARNING); 
@@ -1039,12 +1039,14 @@ function bbdkp_cleanupold($action, $version)
 					//get version
 					$sql = 'SELECT config_value FROM ' . OLD_CONFIG_TABLE . " where config_name = 'bbdkp_version' " ;
 					$result = @$db->sql_query($sql);
-					$current_version = @$db->sql_fetchrow( $result );
-					$current_version = strtolower($current_version['config_value']);
+					$row = @$db->sql_fetchrow( $result );
+					$bbdkpold = strtolower($row['config_value']);
 	
 					//include updater
 					include($phpbb_root_path .'install/update108.' . $phpEx);	
-					bbdkp_old_uninstall($current_version, $game); 
+					bbdkp_old_uninstall($bbdkpold); 
+					return array('command' => sprintf($user->lang['UMIL_109_UNINSTALL_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
+					
 			
 				}
     			

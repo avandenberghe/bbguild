@@ -23,17 +23,11 @@ if (!defined('IN_PHPBB'))
  * 
  * makes backup of old data 
  */
-function bbdkp_old_uninstall($current_version, $game)
+function bbdkp_old_uninstall($bbdkpold)
 {
-    global $db, $user, $table_prefix, $umil, $bbdkp_table_prefix, $backup, $version, $config;
+    global $db, $user, $table_prefix, $umil, $bbdkp_table_prefix, $backup, $config;
           
-    if(!defined('OLD_CONFIG_TABLE'))
-    {
-        define('OLD_CONFIG_TABLE',  'bbeqdkp_config');
-    }
-    
-    $sql = array();
-    			
+    //remove old permissions
     if($umil->permission_exists('a_dkp'))
     {
 	    $umil->permission_remove(array(
