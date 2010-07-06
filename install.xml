@@ -257,31 +257,6 @@ function pop_search()
 				<action type="before-add"><![CDATA[<!-- ENDIF -->]]></action>
 			</edit>
 		</open>
-		<diy-instructions lang="en"><![CDATA[copy these folders to /images by hand. Automod cannot handle it as it is too big (19mb) !
------------------------------------------------------------------------------------------
-  <file from="root/images/class_images/*.*" to="images/class_images/*.*" />
-  <file from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" />
-  <file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" />
-  <file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />
-
-Run database installer
------------------------------
-Browse to install/index.php and run the bbDKP 1.1.0 installer/updater. 
-This will either do a full install or an update from 1.0.9rc1, or 1.1.0-RC3 of the ACP modules and database tables. 
-Afterwards the caches will be cleared (template, theme, imagesets). 
-
-Finish
-------------
-Finally rename the install folder
-
-Note
-------------
-: should you need to deactivate bbDKP you can open config.php
-change 
-@define('EMED_BBDKP', true); 
-to 
-//@define('EMED_BBDKP', true);
-
-Enjoy ;)]]></diy-instructions>
+		<diy-instructions lang="en"><![CDATA[copy these folders to /images by hand. Automod cannot handle it as it is too big (19mb) ! -----------------------------------------------------------------------------------------   <file from="root/images/class_images/*.*" to="images/class_images/*.*" />   <file from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" />   <file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" />   <file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  Run database installer ----------------------------- Browse to install/index.php and run the bbDKP 1.1.0 installer/updater.  This will either do a full install or an update from 1.0.8, 1.0.9rc1, or 1.1.0 of the ACP modules and database tables.  Afterwards the caches will be cleared (template, theme, imagesets).   Finish ------------ Finally rename the install folder  Note ------------ : should you need to deactivate bbDKP you can open config.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  Enjoy ;)]]></diy-instructions>
 	</action-group>
 </mod>

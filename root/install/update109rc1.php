@@ -851,7 +851,7 @@ function bbdkp_109rc1_uninstall()
  *  restoring data from temp table
  * 
  */
-function bbdkp_restore109rc1()
+function bbdkp_restore109rc1($bbdkpold)
 {
 	global $db, $table_prefix, $umil, $bbdkp_table_prefix, $backup;
 

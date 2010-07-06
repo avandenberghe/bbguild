@@ -648,10 +648,10 @@ function bbdkp_old_uninstall($bbdkpold)
  */
 function bbdkp_restore108($bbdkpold)
 {
-	global $db, $table_prefix, $umil, $bbdkp_table_prefix, $backup;
+	global $db, $table_prefix, $umil, $bbdkp_table_prefix, $user, $backup;
 	
 	$installtime = time() + $user->timezone + $user->dst - date('Z');
-   
+    
 	//did we make a backup ?
 	if ($backup)
 	{
@@ -719,7 +719,7 @@ function bbdkp_restore108($bbdkpold)
 		   				'member_level'		    => (int) $row['member_level'] ,  
 		   				'member_race_id' 	    => (int) $row['member_race_id'] , 
 		   				'member_class_id' 		=> (int) $row['member_class_id'], 
-	   		 			'member_rank_id' 		=> (int) $row['member_rank_id'] , 
+	   		 			'member_rank_id' 		=> 0 , 
 	   		 			'member_comment' 		=> ' ',
 	   		 			'member_joindate' 		=> (int) $installtime , 
 	   		 			'member_outdate' 		=> (int) mktime(0, 0, 0, 12, 31, 2011) ,

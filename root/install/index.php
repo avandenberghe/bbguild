@@ -672,8 +672,6 @@ $versions = array(
         'custom' => array( 
             'bbdkp_game_data',
             'upd110dkplink', 
-            'bbdkp_caches',
-            'bbdkp_restoreold'
        ), 
     ),
     
@@ -724,8 +722,10 @@ $versions = array(
 		
 		'1.1.1'  => array(
 		
-		
-		//
+		'custom' => array( 
+            'bbdkp_restoreold', 
+		    'bbdkp_caches',
+       		), 
 		
 		),
         
@@ -1025,6 +1025,7 @@ function bbdkp_cleanupold($action, $version)
 				}
 				else 
 				{
+					// legacy versions updater
 					// no config entry before 1.0.9rc1, so look in old config table
 					if(!defined('OLD_CONFIG_TABLE'))
 					{
@@ -1041,7 +1042,9 @@ function bbdkp_cleanupold($action, $version)
 					$sql = 'SELECT config_value FROM ' . OLD_CONFIG_TABLE . " where config_name = 'bbdkp_version' " ;
 					$result = @$db->sql_query($sql);
 					$row = @$db->sql_fetchrow( $result );
-					$bbdkpold = strtolower($row['config_value']);
+					
+					//very early versions had no version number
+					$bbdkpold = isset($row['config_value']) ? strtolower($row['config_value']) : '1.0.8';
 	
 					//include updater
 					include($phpbb_root_path .'install/update108.' . $phpEx);	
@@ -1085,10 +1088,8 @@ function bbdkp_restoreold($action, $version)
 		        	bbdkp_restore108($bbdkpold);
 		        	return array('command' => sprintf($user->lang['UMIL_OLD_RESTORE_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
 					break;
-	        	case '1.0.9b4' :
-					break;
 				case '1.0.9rc1':
-	    			bbdkp_restore109rc1();
+	    			bbdkp_restore109rc1($bbdkpold);
 	    			return array('command' => sprintf($user->lang['UMIL_OLD_RESTORE_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
 					break;
 				default:
