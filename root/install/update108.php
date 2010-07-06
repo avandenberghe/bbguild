@@ -641,4 +641,257 @@ function bbdkp_old_uninstall($bbdkpold)
 }
 
 
+/******************************
+ * 
+ *  restoring data from temp table
+ * 
+ */
+function bbdkp_restore108($bbdkpold)
+{
+	global $db, $table_prefix, $umil, $bbdkp_table_prefix, $backup;
+	
+	$installtime = time() + $user->timezone + $user->dst - date('Z');
+   
+	//did we make a backup ?
+	if ($backup)
+	{
+   	   // LEAVE DEFAULT DKP SYSTEM
+		
+	   // insert all events with id=1
+	   $sql='select * from temp_events'; 
+	   if($result = $db->sql_query($sql))
+	   {
+	   		 $sql_ary = array();
+	   		 while ($row = $db->sql_fetchrow($result))
+	   		 {
+	   		 	$sql_ary [] = array (
+		   				'event_dkpid' 		    => 1 ,
+	   		 			'event_id' 		    	=> (int) $row['event_id'] , 
+	   		 			'event_name' 			=> (string) $row['event_name'] , 
+	   		 			'event_value' 			=> (float) $row['event_value'] , 
+	   		 			'event_added_by' 		=> (string) $row['event_added_by'] , 
+						'event_updated_by' 		=> (string) isset($row['event_updated_by']) ? $row['event_updated_by'] : $row['event_added_by'] ,	   		 	
+		  			);
+	   		 }
+	   		 $db->sql_multi_insert($bbdkp_table_prefix . 'events' , $sql_ary);
+	   }
+	   $db->sql_freeresult($result);
+	   
+	   // insert raids
+	   $sql = "select * from temp_raids "; 
+	   if($result = $db->sql_query($sql))
+	   {
+	   		 $sql_ary = array();
+	   		 while ($row = $db->sql_fetchrow($result))
+	   		 {
+	   		 	$sql_ary [] = array (
+		   				'raid_dkpid' 		    => 1 ,
+	   		 			'raid_id' 		    	=> (int) $row['raid_id'] , 
+	   		 			'raid_name' 			=> (string) $row['raid_name'] , 
+	   		 			'raid_date' 			=> (int) $row['raid_date'] , 
+	   		 			'raid_note' 			=> (string) $row['raid_note'] , 
+	   		 			'raid_value' 			=> (float) $row['raid_value'] , 
+	   		 			'raid_added_by' 		=> (string) $row['raid_added_by'] , 
+	   		 			'raid_updated_by' 		=> (string) isset($row['raid_updated_by']) ? $row['raid_updated_by'] : $row['raid_added_by'] , 
+		  			);
+	   		 }
+	   		 $db->sql_multi_insert($bbdkp_table_prefix . 'raids' , $sql_ary);
+	   		 
+	   }
+	   $db->sql_freeresult($result);
+	   unset ($sql_ary);
+	   
+	   
+	   // old ranks from 1.0.8 are *not* retained so we assign every member the rank "0"
+	   // important !!!! user must run the armory updater tool to fetch correct ranks, gender and achievement points 
+	   // from Blizz/Aion or use custom ranks. 
+	   $sql = "select * from temp_members "; 
+	   if($result2 = $db->sql_query($sql))
+	   {
+	   		 $sql_ary = array();
+	   		 while ($row = $db->sql_fetchrow($result2))
+	   		 {
+	   		 	$sql_ary [] = array (
+		   				'member_id' 		    => (int) $row['member_id'],
+	   		 			'member_name' 		    => (string) $row['member_name'] ,
+	   		 			// dkp status is now set in the dkp member table !! 
+	   		 			'member_status' 		=> 1, 
+		   				'member_level'		    => (int) $row['member_level'] ,  
+		   				'member_race_id' 	    => (int) $row['member_race_id'] , 
+		   				'member_class_id' 		=> (int) $row['member_class_id'], 
+	   		 			'member_rank_id' 		=> (int) $row['member_rank_id'] , 
+	   		 			'member_comment' 		=> ' ',
+	   		 			'member_joindate' 		=> (int) $installtime , 
+	   		 			'member_outdate' 		=> (int) mktime(0, 0, 0, 12, 31, 2011) ,
+	   		 			'member_guild_id' 		=> 1 ,
+						// we cant guess it --> you have to adapt it 
+	   		 			'member_gender_id' 		=> 1 , 
+		   				'member_achiev' 		=> 0 ,
+	   		 			'member_armory_url' 	=> ' ' , 
+		  			);
+	   		 }
+	   		 $db->sql_multi_insert($bbdkp_table_prefix . 'memberlist' , $sql_ary);
+	   		 
+	   }
+	   $db->sql_freeresult($result2);
+	   unset ($sql_ary); 
+	   
+	   $memberid = array();
+	   
+	   // insert dkp points
+	   // member dkp status set to 1 everywhere
+	   $sql = "select * from temp_members "; 
+	   if($result3 = $db->sql_query($sql))
+	   {
+	   		 $sql_ary = array();
+	   		 while ($row = $db->sql_fetchrow($result3))
+	   		 {
+	   		 	$sql_ary [] = array (
+		   				'member_dkpid' 		    => 1 ,  // again we just assign dkp id  1 to all dkp records
+	   		 			'member_id' 		    => (int) $row['member_id'] , 
+	   		 			'member_earned' 		=> (float) $row['member_earned'] , 
+	   		 			'member_spent' 			=> (float) $row['member_spent'] , 
+	   		 			'member_adjustment' 	=> (float) $row['member_adjustment'] , 
+	   		 			'member_status' 		=> 1 , 
+	   		 			'member_firstraid' 		=> (int) $row['member_firstraid'] , 
+	   		 			'member_lastraid' 		=> (int) $row['member_lastraid'] , 
+	   		 			'member_raidcount' 		=> (int) $row['member_raidcount'] , 
+		  			);
+		  		$memberid[$row['member_name']] = (int) $row['member_id'];
+	   		 }
+	   		 $db->sql_multi_insert($bbdkp_table_prefix . 'memberdkp' , $sql_ary);
+	   		 
+	   		 
+	   }
+	   $db->sql_freeresult($result3);
+	   unset ($sql_ary);
+
+	   // insert dkp adjustments
+	   $sql = "select * from temp_adjustments "; 
+	   if($result = $db->sql_query($sql))
+	   {
+	   		 $sql_ary = array();
+	   		 while ($row = $db->sql_fetchrow($result))
+	   		 {
+	   		 	// only if the member exists add the adjustment
+	   		 	if(isset( $memberid[$row['member_name']] ))
+	   		 	{
+		   		 	$sql_ary [] = array (
+			   				'adjustment_dkpid' 		    => 1 ,
+		   		 			'adjustment_id' 		    => (int) $row['adjustment_id'] , 
+		   		 			'adjustment_value' 			=> (float) $row['adjustment_value'] , 
+		   		 			'adjustment_date' 			=> (int) $row['adjustment_date'] , 
+		   		 			'member_id'	 				=> (int) $memberid[$row['member_name']] , 
+		   		 			'adjustment_reason' 		=> (string) $row['adjustment_reason'] , 
+		   		 			'adjustment_added_by' 		=> (string) $row['adjustment_added_by'] , 
+		   		 			'adjustment_updated_by' 	=> (string) isset($row['adjustment_updated_by']) ? $row['adjustment_updated_by'] : $row['adjustment_added_by'] ,
+		   		 			'adjustment_group_key' 		=> (string) $row['adjustment_group_key'] , 
+			  			);
+	   		 	}
+	   		 }
+	   		 $db->sql_multi_insert($bbdkp_table_prefix . 'adjustments' , $sql_ary);
+	   		 
+	   }
+	   $db->sql_freeresult($result3);
+	   unset ($sql_ary);
+	   	   
+	   
+	   // raidattendees
+	   // the group by is done because raid attendees has pk now
+	   $sql_array = array(
+		    'SELECT'    => 'a.raid_id, a.member_name, d.member_id ',
+		    'FROM'      => array(
+				'temp_raid_attendees' 	=> 'a',
+				'temp_raids'    		=> 'r',
+				'temp_members'    		=> 'd',
+		    ),
+		 
+		    'WHERE'     =>  'a.raid_id = r.raid_id
+		        			AND a.member_name = d.member_name' ,
+		    'GROUP_BY'  => 'a.raid_id, a.member_name, d.member_id '
+		);
+	   
+	   $sql = $db->sql_build_query('SELECT', $sql_array);
+	   
+	   
+	   if($result = $db->sql_query($sql))
+	   {
+	   		 $sql_ary = array();
+	   		 while ($row = $db->sql_fetchrow($result))
+	   		 {
+	   		 	$sql_ary [] = array (
+		   				'raid_id' 		    	=> (int) $row['raid_id'] ,
+	   		 			'member_id'	 			=> (int) $row['member_id'] ,
+	   		 			'member_name' 			=> (string) $row['member_name'] ,
+		  			);
+	   		 }
+	   		 $db->sql_multi_insert($bbdkp_table_prefix . 'raid_attendees' , $sql_ary);
+	   		 
+	   }
+	   $db->sql_freeresult($result);
+	   unset ($sql_ary);
+
+	   // insert items
+	   $sql = "select * from temp_items "; 
+	   if($result = $db->sql_query($sql))
+	   {
+	   		 $sql_ary = array();
+	   		 while ($row = $db->sql_fetchrow($result))
+	   		 {
+	   		 	$sql_ary [] = array (
+		   				'item_dkpid' 		    => 1 ,
+	   		 			'item_id' 		    	=> (int) $row['item_id'] , 
+	   		 			'item_name' 			=> (string) $row['item_name'] ,
+						'item_buyer' 			=> (string) $row['item_buyer'] ,	   		 		 
+	   		 			'raid_id'	 			=> (int) $row['raid_id'] ,
+	   		 			'item_value' 			=> (float) $row['item_value'] , 
+	   		 			'item_date'	 			=> (int) $row['item_date'] , 
+	   		 			'item_added_by' 		=> (string) $row['item_added_by'] , 
+	   		 			'item_updated_by' 		=> (string) isset($row['item_updated_by']) ? $row['item_updated_by'] : $row['item_added_by'] , 
+	   		 			'item_group_key' 		=> (string) $row['item_group_key'] ,
+		  			);
+	   		 }
+	   		 $db->sql_multi_insert($bbdkp_table_prefix . 'items' , $sql_ary);
+	   		 
+	   }
+	   $db->sql_freeresult($result);
+	   unset ($sql_ary);
+	   	   
+	   // insert dkp news
+	   $sql = " select * from temp_news "; 
+	   if($result = $db->sql_query($sql))
+	   {
+	   		 $sql_ary = array();
+	   		 while ($row = $db->sql_fetchrow($result))
+	   		 {
+	   		 	$sql_ary [] = array (
+		   				'news_id' 		    	=> (int) $row['news_id'] ,
+	   		 			'user_id' 		    	=> (int) $row['user_id'] , 
+	   		 			'news_date' 			=> (int) $row['news_date'] , 
+	   		 			'news_message' 			=> (string) $row['news_message'] , 
+	   		 			'news_headline' 		=> (string) $row['news_headline'] , 
+		  			);
+	   		 }
+	   		 $db->sql_multi_insert($bbdkp_table_prefix . 'news' , $sql_ary);
+	   		 
+	   }
+	   $db->sql_freeresult($result);
+	   unset ($sql_ary);
+	   
+	   
+	   // restore successfull
+	   return array('command' => sprintf($user->lang['UMIL_OLD_RESTORE_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
+	}
+	else 
+	{
+		// no restore performed
+	    return array('command' => sprintf($user->lang['UMIL_OLD_RESTORE_NOT'], $bbdkpold), 'result' => 'SUCCESS');
+	}
+    
+}
+
+
+
+
+
 ?>

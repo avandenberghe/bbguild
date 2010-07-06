@@ -147,11 +147,11 @@ $lang = array_merge($lang, array(
 'TOTAL_RAIDATTENDEES_INSERTED' => 'Total raid attendees inserted : %s.', 
 
 // installer
-'IMPORT_EQDKP132' => 'Import EQDKP 1.3.2 data Into bbdkp 1.1.0-RC4', 
+'IMPORT_EQDKP132' => 'Import EQDKP 1.3.2 data Into bbdkp 1.1.1', 
 'IMPORT_EQDKP132_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with \'EQDKP\', and only dynamic data will be imported, not static data like class definitions etc. ', 
-'IMPORT_EQDKP140' => 'Import EQDKP 1.4.0 data Into bbdkp 1.1.0-RC4', 
+'IMPORT_EQDKP140' => 'Import EQDKP 1.4.0 data Into bbdkp 1.1.1', 
 'IMPORT_EQDKP140_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with \'EQDKP\', and only dynamic data will be imported, not static data like class definitions etc. ', 
-'IMPORT_EQDKPPLUS' => 'Import EQDKP-PLUS data Into bbdkp 1.1.0-RC4', 
+'IMPORT_EQDKPPLUS' => 'Import EQDKP-PLUS data Into bbdkp 1.1.1', 
 'IMPORT_EQDKPPLUS_CONFIRM' => 'Are you ready to import ? Your EQDKP-PLUS tables need to begin with \'EQDKP\', and only dynamic data will be imported, not static data like class definitions etc. ', 
 'UMIL_INSERT_COMMON_ROW' => 'Insert common bbdkp data for index/ranks/Bprogress', 
 'UMIL_REMOVE_COMMON_ROW' => 'Remove common bbdkp data for index/ranks/Bprogress',
@@ -178,11 +178,10 @@ $lang = array_merge($lang, array(
 'UMIL_CACHECLEARED' => 'Caches Cleared', 
 'UMIL_RANKCHANGED' => 'Added guild_id and index to ranks table', 
 'UMIL_CLASSCHANGED' => 'WOW Class ids updated', 
-'UMIL_109_RESTORE_SUCCESS' => 'bbdkp (%s) dkpsystem, events, raids, raid_attendees, items, member_ranks, memberlist, temp_memberdkp tables restored successfully.', 
-'UMIL_109_RESTORE_NOT' => 'No bbdkp 1.0.9rc1 installation found to restore.', 
-'UMIL_109_UNINSTALL_SUCCESS' => 'bbdkp (%s) uninstalled. ',
-'UMIL_109_UNINSTALL_NOT' => 'No bbdkp 1.0.9rc1 installation found to uninstall.',
-'UMIL_109_ILLEGALVERSION' => 'pre-1.09 DKP ACP found but no bbdkp version number - cannot upgrade - no changes were done ! <br /> Go into your ACP -> System -> Administration control Panel and delete "DKP" category <br /> If this is an attempt to install over bbDKP 1.07 or 1.08, please delete your old tables first aswell as any $config entries', 
+'UMIL_OLD_RESTORE_SUCCESS' => 'bbdkp (%s) dkpsystem, events, raids, raid_attendees, items, member_ranks, memberlist, temp_memberdkp tables restored successfully.', 
+'UMIL_OLD_RESTORE_NOT' => 'No bbdkp (%s) installation found to restore.', 
+'UMIL_OLD_UNINSTALL_SUCCESS' => 'bbdkp (%s) uninstalled. ',
+'UMIL_109_ILLEGALVERSION' => '1.0.9 beta found, you need to upgrade to 1.0.9rc1 and from there you can upgrade to 1.1', 
 
 // ACP titles
 'BBDKP_WELCOME' => 'Welcome to bbDKP',

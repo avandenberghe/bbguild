@@ -1015,9 +1015,10 @@ function bbdkp_cleanupold($action, $version)
 						case '1.0.9rc1':
 							include($phpbb_root_path .'install/update109rc1.' . $phpEx);
 			    			bbdkp_109rc1_uninstall();
-			    			return array('command' => sprintf($user->lang['UMIL_109_UNINSTALL_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
+			    			return array('command' => sprintf($user->lang['UMIL_OLD_UNINSTALL_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
 							break;
 						default:
+							//1.0.9 betas not upgradable to 1.1, you have to update to 1.09rc1
 							trigger_error('UMIL_109_ILLEGALVERSION', E_USER_WARNING); 
 							break;
 					}
@@ -1045,9 +1046,7 @@ function bbdkp_cleanupold($action, $version)
 					//include updater
 					include($phpbb_root_path .'install/update108.' . $phpEx);	
 					bbdkp_old_uninstall($bbdkpold); 
-					return array('command' => sprintf($user->lang['UMIL_109_UNINSTALL_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
-					
-			
+					return array('command' => sprintf($user->lang['UMIL_OLD_UNINSTALL_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
 				}
     			
 		    }
@@ -1056,7 +1055,7 @@ function bbdkp_cleanupold($action, $version)
 		        //don't bother to try to delete child modules if DKP category doesnt exist 
 		        // this means user is at 1.1.0-RC or new install
 		        // we will just follow the umil procedure
-		        return array('command' => 'UMIL_109_RESTORE_NOT', 'result' => 'SUCCESS');
+			    return array('command' => sprintf($user->lang['UMIL_OLD_RESTORE_NOT'], $bbdkpold), 'result' => 'SUCCESS');
 		    }
 			break;
 	}
@@ -1079,11 +1078,18 @@ function bbdkp_restoreold($action, $version)
 		case 'update' :
 			switch ($bbdkpold)
 			{
-				case '1.0.9b4' :
+	            case '1.0.8': 
+		        case '1.0.8b3':  
+		        case '1.0.8b4':  
+		        case '1.0.8b5':
+		        	bbdkp_restore108($bbdkpold);
+		        	return array('command' => sprintf($user->lang['UMIL_OLD_RESTORE_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
+					break;
+	        	case '1.0.9b4' :
 					break;
 				case '1.0.9rc1':
 	    			bbdkp_restore109rc1();
-	    			return array('command' => sprintf($user->lang['UMIL_109_UNINSTALL_SUCCESS'], $config), 'result' => 'SUCCESS');
+	    			return array('command' => sprintf($user->lang['UMIL_OLD_RESTORE_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
 					break;
 				default:
 					break;

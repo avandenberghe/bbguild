@@ -1140,12 +1140,12 @@ function bbdkp_restore109rc1()
 	   
 	   
 	   // restore successfull
-	   return array('command' => 'UMIL_109_RESTORE_SUCCESS', 'result' => 'SUCCESS');
+	   return array('command' => sprintf($user->lang['UMIL_OLD_RESTORE_SUCCESS'], $bbdkpold), 'result' => 'SUCCESS');
 	}
 	else 
 	{
 		// no restore performed
-		return array('command' => 'UMIL_109_RESTORE_NOT', 'result' => 'SUCCESS');
+		return array('command' => sprintf($user->lang['UMIL_OLD_RESTORE_NOT'], $bbdkpold), 'result' => 'SUCCESS');
 	}
     
 }
