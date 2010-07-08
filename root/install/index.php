@@ -722,6 +722,13 @@ $versions = array(
 		
 		'1.1.1'  => array(
 		
+
+       	//new config for hiding the portal menublock
+		 'config_add' => array(
+		      array('bbdkp_portal_menu', 1, true),
+	        ), 
+		
+		
 		'custom' => array( 
             'bbdkp_restoreold', 
 		    'bbdkp_caches',

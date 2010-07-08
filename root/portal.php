@@ -33,7 +33,7 @@ $user->add_lang(array('mods/dkp_common'));
 /***** blocks ************/
 
 /* fixed bocks */
-include($phpbb_root_path . 'includes/bbdkp/portal/mainmenublock.' . $phpEx);
+
 include($phpbb_root_path . 'includes/bbdkp/portal/newsblock.' . $phpEx);
 
 /* show loginbox or usermenu */
@@ -67,6 +67,11 @@ if ($config['bbdkp_portal_recruitment'])
 if ($config['bbdkp_portal_links'])
 {
 	include($phpbb_root_path . 'includes/bbdkp/portal/linksblock.' . $phpEx);
+}
+
+if ($config['bbdkp_portal_menu'])
+{
+	include($phpbb_root_path . 'includes/bbdkp/portal/mainmenublock.' . $phpEx);
 }
 
 /***** end blocks ********/

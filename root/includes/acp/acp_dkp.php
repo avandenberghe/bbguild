@@ -598,6 +598,7 @@ class acp_dkp extends bbDkp_Admin
                     set_config('bbdkp_portal_bossprogress', request_var('show_bosspblock', 0), true);
                     set_config('bbdkp_portal_recruitment', request_var('show_recrblock', 0), true);
                     set_config('bbdkp_portal_links', request_var('show_linkblock', 0), true);
+                    set_config('bbdkp_portal_menu', request_var('show_menublock', 0), true);	
                     
                     $sql = "SELECT class_id FROM " . CLASS_TABLE . " where class_id > 0 order by class_id ";
                     $result = $db->sql_query($sql);
@@ -727,6 +728,9 @@ class acp_dkp extends bbDkp_Admin
                 	
                     'SHOW_LINK_YES_CHECKED' => ($config['bbdkp_portal_links'] == '1') ? ' checked="checked"' : '' , 
                 	'SHOW_LINK_NO_CHECKED' => ($config['bbdkp_portal_links'] == '0') ? ' checked="checked"' : '' , 
+                
+               	    'SHOW_MENU_YES_CHECKED' => ($config['bbdkp_portal_menu'] == '1') ? ' checked="checked"' : '' , 
+                	'SHOW_MENU_NO_CHECKED' => ($config['bbdkp_portal_menu'] == '0') ? ' checked="checked"' : '' , 
                 ));
                 
                 

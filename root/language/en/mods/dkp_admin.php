@@ -129,6 +129,9 @@ $lang = array_merge($lang, array(
 'SHOWBOSSBLOCKNOTE' => 'For block settings, see Bossprogress Config.',
 'LINKBLOCKSETTING' => 'Link block Settings',
 'SHOWLINKBLOCK' => 'Show Link block',
+'MENUBLOCKSETTING' => 'Menu block Settings',
+'SHOWMENUBLOCK' => 'Show Menu block',
+
 
 'RANK_INSERTED' => 'Rank inserted : %s. ', 
 'TOTAL_RANKS_INSERTED' => 'Total ranks inserted : %s. ', 
