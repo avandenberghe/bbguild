@@ -494,6 +494,8 @@ class acp_dkp_item extends bbDkp_Admin
 			$bbtips = new bbtips;
 		}
 		
+		 
+		
 		// select all dkp pools that have items				
 		$sql_array = array(
 	    'SELECT'    => 'd.dkpsys_id, d.dkpsys_name, d.dkpsys_default',
@@ -569,7 +571,7 @@ class acp_dkp_item extends bbDkp_Admin
 			$db->sql_freeresult ( $result );
 		}
 		
-		// populate selectbox
+		// populate raid selectbox
 		$result = $db->sql_query ($sql);
 		while ( $row = $db->sql_fetchrow ( $result ) )
 		{
@@ -596,9 +598,13 @@ class acp_dkp_item extends bbDkp_Admin
 			);
 		$current_order = switch_order ($sort_order);
 		
+       $pagination = generate_pagination ( 
+       append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ) .
+        '&amp;o=' . $current_order ['uri'] ['current'], $total_items, $config['bbdkp_user_ilimit'], $start );
+		
 		//prepare item list sql
 		$sql_array = array(
-	    'SELECT'    => 'd.dkpsys_name,r.raid_dkpid, i.item_id, i.item_name, 
+	    'SELECT'    => 'd.dkpsys_name,r.raid_dkpid, i.item_id, i.item_name, i.item_gameid, 
 	    				i.item_buyer, i.item_date, i.raid_id, i.item_value, r.raid_name ',
 	    'FROM'      => array(
 	        ITEMS_TABLE    => 'i',
@@ -622,7 +628,15 @@ class acp_dkp_item extends bbDkp_Admin
 		{
 		    if ($this->bbtips == true)
 			{
-				$item_name = $bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]'); 
+				if ($item['item_gameid'] > 0 )
+				{
+					$item_name = $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]'); 
+				}
+				else 
+				{
+					$item_name = $bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]');
+				}
+		
 			}
 			else
 			{
