@@ -157,7 +157,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		/* add a new raid */
 		$this->raid = array (
-			'raid_date' 		=> $this->time, 
+			'raid_date' 		=> mktime(request_var('h', 0), request_var('mi', 0), request_var('s', 0), 
+			  					   		request_var('mo', 0), request_var('d', 0), request_var('Y', 0)), 
 			'raid_dkpid' 		=> $dkpsys_id, 
 			'raid_attendees' 	=> utf8_normalize_nfc ( request_var ( 'raid_attendees', array ( 0 => '' ), true ) ), 
 			'raid_note' 		=> utf8_normalize_nfc ( request_var ( 'raid_note', ' ', true ) ), 
@@ -266,7 +267,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		$this->raid = array (
 			'raid_dkpid' 	 => $dkpsys_id, 
-			'raid_date' 	 => $this->time, 
+			'raid_date' 	 => mktime(request_var('h', 0), request_var('mi', 0), request_var('s', 0), 
+			  					   		request_var('mo', 0), request_var('d', 0), request_var('Y', 0)), 
 			'raid_attendees' => utf8_normalize_nfc ( request_var ( 'raid_attendees', array ( 0 => '' ), true ) ), 
 			'raid_name' 	 => utf8_normalize_nfc ( request_var ( 'raid_name', ' ', true ) ), 
 			'raid_note' 	 => utf8_normalize_nfc ( request_var ( 'raid_note', ' ', true ) ), 
@@ -359,7 +361,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		// RAIDS_TABLE
 		// Update the raid
 		$query = $db->sql_build_array ( 'UPDATE', array (
-			'raid_date' => $this->time, 
+			'raid_date' => mktime(request_var('h', 0), request_var('mi', 0), request_var('s', 0), 
+			  					   		request_var('mo', 0), request_var('d', 0), request_var('Y', 0)), 
 			'raid_note' => utf8_normalize_nfc ( request_var ( 'raid_note', ' ', true ) ), 
 			'raid_value' => $raid_value, 
 			'raid_name' => utf8_normalize_nfc ( request_var ( 'raid_name', ' ', true ) ), 
@@ -533,7 +536,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		{
 			
 			$this->raid = array (
-				'raid_date' => $this->time, 
+				
 				'raid_dkpid' => $dkpsys_id, 
 				'raid_attendees' => utf8_normalize_nfc ( request_var ( 'raid_attendees', array (0 => '' ), true ) ), 
 				'raid_name' => utf8_normalize_nfc ( request_var ( 'raid_name', ' ', true ) ), 
