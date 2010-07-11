@@ -169,7 +169,8 @@ if ( isset($_GET[URI_RAID])  )
 
 	$droppagination = generate_pagination( append_sid("{$phpbb_root_path}viewraid.$phpEx" , URI_RAID . '=' . request_var(URI_RAID, 0)) , $total_items, $config['bbdkp_user_ilimit'], $startdrops);
 	
-    $sql = 'SELECT i.item_id, i.item_buyer, i.item_name, i.item_value, m.member_class_id, c.class_id, m.member_name
+    $sql = 'SELECT i.item_id, i.item_buyer, i.item_name, i.item_value, item_gameid,
+    		 m.member_class_id, c.class_id, m.member_name
             FROM ' . CLASS_TABLE . ' c, ' . MEMBER_LIST_TABLE . ' m, ' . ITEMS_TABLE . " i 
             WHERE i.item_buyer = m.member_name
             AND m.member_class_id = c.class_id
@@ -191,18 +192,26 @@ if ( isset($_GET[URI_RAID])  )
 		{
 			require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx); 
 		}
-		$bbtips = new bbtips;
+		$bbtips = new bbtips;		
 	}
 		
     while ( $item = $db->sql_fetchrow($items_result) )
     {
 		if ($bbDkp_Admin->bbtips == true)
 		{
-			$item_name = '<b>' . $bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]') . '</b>'; 
+			if ($item['item_gameid'] > 0 )
+			{
+				$item_name = '<strong>' . $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]') . '</strong>' ; 
+			}
+			else 
+			{
+				$item_name = '<strong>' . $bbtips->parse ( '[itemdkp]' . $item ['item_name'] . '[/itemdkp]' . '</strong>'  );
+			}
+			
 		}
 		else
 		{
-			$item_name = '<b>' . $item['item_name'] . '</b>';
+			$item_name = '<strong>' . $item['item_name'] . '</strong>';
 		}
 		
         $items_re++;

@@ -174,7 +174,7 @@ switch ($mode)
 {
 	case 'values' :
 		$sql_array = array (
-			'SELECT' => 'i.item_dkpid, i.item_id, i.item_name, i.item_buyer, 
+			'SELECT' => 'i.item_dkpid, i.item_id, i.item_name, i.item_buyer, i.item_gameid, 
 						 i.item_date, i.raid_id, min(i.item_value) AS item_value, r.raid_name', 
 			'FROM' => array (ITEMS_TABLE => 'i', RAIDS_TABLE => 'r' ), 
 			'WHERE' => ' i.raid_id = r.raid_id', 
@@ -186,8 +186,8 @@ switch ($mode)
 	case 'history' :
 		
 		$sql_array = array (
-			'SELECT' => 'i.item_dkpid, i.item_id, i.item_name, i.item_buyer, i.item_date, i.raid_id, i.item_value, r.raid_name, 
-    					m.member_id, m.member_dkpid, l.member_class_id, l.member_name', 
+			'SELECT' => 'i.item_dkpid, i.item_id, i.item_name, i.item_buyer, i.item_date, i.raid_id, i.item_value, i.item_gameid, 
+				 r.raid_name, m.member_id, m.member_dkpid, l.member_class_id, l.member_name', 
     		'FROM' => array (
 				ITEMS_TABLE => 'i', 
 				RAIDS_TABLE => 'r', 
@@ -224,7 +224,16 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 	
 	if ($bbDkp_Admin->bbtips == true)
 	{
-		$valuename = $bbtips->parse ( '[itemdkp]' . $item ['item_name'] . '[/itemdkp]' );
+
+		if ($item['item_gameid'] > 0 )
+		{
+			$valuename = $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]'); 
+		}
+		else 
+		{
+			$valuename = $bbtips->parse ( '[itemdkp]' . $item ['item_name'] . '[/itemdkp]' );
+		}
+				
 	} 
 	else
 	{

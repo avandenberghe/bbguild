@@ -193,7 +193,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     
     // inner join the raids and items table
      $sql_array = array(
-    	'SELECT'    => 	'i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, r.raid_name ', 
+    	'SELECT'    => 	'i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_gameid, r.raid_name ', 
     	'FROM'      => array(
 	        ITEMS_TABLE => 'i',
 	        RAIDS_TABLE => 'r',
@@ -229,7 +229,15 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     {
 		if ($bbDkp_Admin->bbtips == true)
 		{
-			$item_name = '<strong>' . $bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]') . '</strong>'; 
+			if ($item['item_gameid'] > 0 )
+			{
+				$item_name = '<strong>' . $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]') . '</strong>' ; 
+			}
+			else 
+			{
+				$item_name = '<strong>' . $bbtips->parse ( '[itemdkp]' . $item ['item_name'] . '[/itemdkp]' . '</strong>'  );
+			}
+			
 		}
 		else
 		{

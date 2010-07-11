@@ -41,7 +41,7 @@ if (isset($_GET[URI_ITEM]) )
     $itemid = request_var(URI_ITEM, 0);
     
     // We want to view items by name and not id, so get the name
-    $sql = 'SELECT item_name FROM ' . ITEMS_TABLE . " WHERE item_id = " . $itemid ;
+    $sql = 'SELECT item_name, item_gameid FROM ' . ITEMS_TABLE . " WHERE item_id = " . $itemid ;
     $result = $db->sql_query($sql);
 	if (! $result)
 	{
@@ -52,7 +52,8 @@ if (isset($_GET[URI_ITEM]) )
 	$total_items = 0;
 	while ( $row = $db->sql_fetchrow($result) )
     {
-	    $item_name = $row["item_name"];
+	    $item_name = $row['item_name'];
+	    $item_gameid = (int) $row['item_gameid'];
 	    $total_items++;
     } 
     $db->sql_freeresult ( $result );
@@ -74,8 +75,8 @@ if (isset($_GET[URI_ITEM]) )
 	}
 	
      $sql_array = array(
-	    'SELECT'    => 	'i.item_dkpid, i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_buyer, 
-	         			 r.raid_name, m.member_id, m.member_dkpid, l.member_class_id, l.member_name', 
+	    'SELECT'    => 	'i.item_dkpid, i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_buyer,
+	    				 i.item_gameid, r.raid_name, m.member_id, m.member_dkpid, l.member_class_id, l.member_name', 
 	    'FROM'      => array(
      			ITEMS_TABLE 		=> 'i', 
 		        RAIDS_TABLE 		=> 'r',
@@ -101,11 +102,19 @@ if (isset($_GET[URI_ITEM]) )
 	
     if ($bbDkp_Admin->bbtips == true)
 	{
-		$item_name = $bbtips->parse('[itemdkp]' . $item_name  . '[/itemdkp]'); 
+		if ($item_gameid > 0 )
+		{
+			$item_name = '<strong>' . $bbtips->parse('[itemdkp]' . $item_gameid  . '[/itemdkp]') . '</strong>' ; 
+		}
+		else 
+		{
+			$item_name = '<strong>' . $bbtips->parse ( '[itemdkp]' . $item_name . '[/itemdkp]' . '</strong>'  );
+		}
+		
 	}
 	else
 	{
-		$item_name = $item_name;
+		$item_name = '<strong>' . $item_name . '</strong>';
 	}    
     
 	while ( $item = $db->sql_fetchrow($result) )
