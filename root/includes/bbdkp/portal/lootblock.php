@@ -27,13 +27,20 @@ if ($bbDkp_Admin->bbtips == true)
 $n_items = $config['bbdkp_n_items'];
 
 /**  begin loot block ***/
-$sql = "SELECT item_name FROM " . ITEMS_TABLE . ' ORDER BY item_date DESC ';
+$sql = "SELECT item_name, item_gameid FROM " . ITEMS_TABLE . ' ORDER BY item_date DESC ';
 $result = $db->sql_query_limit($sql, $n_items, 0);
 while ($row = $db->sql_fetchrow($result))
 {         
 	if ($bbDkp_Admin->bbtips == true)
 	{
-		$item_name = $bbtips->parse('[itemdkp]' . $row['item_name']  . '[/itemdkp]'); 
+		if ($row['item_gameid'] > 0 )
+		{
+			$item_name = $bbtips->parse('[itemdkp]' . $row['item_gameid']  . '[/itemdkp]'); 
+		}
+		else 
+		{
+			$item_name = $bbtips->parse('[itemdkp]' . $row['item_name']  . '[/itemdkp]');
+		}
 	}
 	else
 	{
