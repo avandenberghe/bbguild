@@ -13,11 +13,14 @@ function check_form()
         alert('{MSG_NAME_EMPTY}');
         return false;
     }
+
     if (document.additem.raid_id.value.length < 1)
     {
         alert('{MSG_RAID_ID_EMPTY}');
         return false;
     }
+
+    
     if (document.additem.item_value.value.length < 1)
     {
         alert('{MSG_VALUE_EMPTY}');
@@ -28,7 +31,8 @@ function check_form()
 
 function switch_item_val()
 {
-  document.additem.item_name.value  = document.additem.select_item_name.options[document.additem.select_item_name.selectedIndex].value;
+  document.additem.item_name.value  = document.additem.select_item_name.options[document.additem.select_item_name.selectedIndex].value.replace(/[\.0-9]/g, "");
+  document.additem.item_gameid.value  = document.additem.select_item_name.options[document.additem.select_item_name.selectedIndex].value.replace(/[^\.0-9]/g, "");
   document.additem.item_value.value = document.additem.select_item_name.options[document.additem.select_item_name.selectedIndex].text.replace(/[^\.0-9]/g, "");
 }
 
@@ -266,7 +270,12 @@ fieldset dd {
     <dl>
 	   	<dt><label>{L_ENTER_NEW}:</label></dt>
    		<dd><input type="text" name="item_name" size="30" maxlength="255" value="{ITEM_NAME}" class="input" />{FV_ITEM_NAME}</dd>
+   		<br />
+	   	<dt><label>{L_ENTER_NEW_GAMEITEMID}:</label></dt>
+   		<dd><input type="text" name="item_gameid" size="15" maxlength="255" value="{ITEM_GAMEID}" class="input" /></dd>
+   		
 	</dl>
+	<br />		
 	<dl>
     	<dt><label>{L_VALUE}:</label></dt>
     	<dd> <input type="text" name="item_value" size="10" maxlength="10" value="{ITEM_VALUE}" class="input" />{FV_ITEM_VALUE}</dd>

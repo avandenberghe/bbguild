@@ -325,7 +325,8 @@ $lang = array_merge($lang, array(
 // Miscellaneous
 'ADDED' => 'Added',
 'DELETED' => 'Deleted',
-'ENTER_NEW' => 'Enter New',
+'ENTER_NEW' => 'Enter New Name',
+'ENTER_NEW_GAMEITEMID' => 'Game item ID',
 'FEMALE'	=> 'Female',
 'GENDER'	=> 'Gender',
 'GUILD'	=> 'Guild', 

@@ -62,6 +62,8 @@ class acp_dkp_item extends bbDkp_Admin
 				$submititem = isset ($_GET [URI_ITEM]);
 				$item_id = request_var( URI_ITEM, 0); 
 				$itemvalue = request_var( 'item_value' , 0.0) ; 
+				$itemgameid = request_var( 'item_gameid' , 0) ;
+				
 				$item_buyers = utf8_normalize_nfc(request_var('item_buyers', array(0 => ''),true)); 
 				$item_name = (isset ( $_POST ['item_name'] )) ? 
 					utf8_normalize_nfc(request_var('item_name','', true)) : 
@@ -74,13 +76,13 @@ class acp_dkp_item extends bbDkp_Admin
 
 				if ($submit) 
 				{
-					$this->additem( $item_buyers, $dkpid, $raid_id, $itemvalue, $item_name); 
+					$this->additem( $item_buyers, $dkpid, $raid_id, $itemvalue, $item_name, $itemgameid); 
 				}
 				
 				if ($update) 
 				{
 					$item_id = request_var('hidden_id', 0); 
-					$this->updateitem($item_buyers, $dkpid, $raid_id, $itemvalue, $item_name, $item_id );  
+					$this->updateitem($item_buyers, $dkpid, $raid_id, $itemvalue, $item_name, $item_id, $itemgameid );  
 				}
 				
 				if ($delete) 
@@ -90,7 +92,7 @@ class acp_dkp_item extends bbDkp_Admin
 					$this->deleteitem($item_id, false);
 				}
 				
-				$this->displayloot($dkpid, $submitdkp, $getraid, $submitraid, $raid_id, $submititem, $item_id, $itemvalue, $item_buyers, $item_name );
+				$this->displayloot($dkpid, $submitdkp, $getraid, $submitraid, $raid_id, $submititem, $item_id, $itemvalue, $item_buyers, $item_name, $itemgameid );
 				
 				$this->page_title = 'ACP_ADDITEM';
 				$this->tpl_name = 'dkp/acp_' . $mode;
@@ -175,7 +177,9 @@ class acp_dkp_item extends bbDkp_Admin
 					$bbdkp_item = str_replace ( '<table class="borderless" width="100%" cellspacing="0" cellpadding="0">', " ", $bbdkp_item );
 					$bbdkp_item = str_replace ( "<table cellpadding='0' border='0' class='borderless'>", "", $bbdkp_item );
 					
-					$template->assign_block_vars ( 'items_row', array ('VALUE' => $bbdkp_item ) );
+					$template->assign_block_vars ( 'items_row',
+						 array ('VALUE' => $bbdkp_item ) 
+					 );
 				
 				}
 				
@@ -191,15 +195,15 @@ class acp_dkp_item extends bbDkp_Admin
 	
 	
 	/**
-	 * template filling
+	 * template filling for item
 	 * 
 	 * $submitdkp
 	 * $submitraid
 	 * 
 	 * 
-	 * 
 	 */
-	function displayloot($dkpid, $submitdkp, $getraid, $submitraid, $raid_id, $submititem, $item_id, $itemvalue, $item_buyers, $item_name )
+	function displayloot($dkpid, $submitdkp, $getraid, $submitraid, $raid_id, $submititem, $item_id,
+	 $itemvalue, $item_buyers, $item_name, $itemgameid )
 	{
 		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
 		
@@ -316,7 +320,7 @@ class acp_dkp_item extends bbDkp_Admin
 			
 			// item info
 			$sql = 'SELECT  item_dkpid, item_name, item_buyer, 
-           		raid_id, item_value, item_date, 
+           		raid_id, item_value, item_date, item_gameid, 
            		item_group_key FROM ' . ITEMS_TABLE . '
                    WHERE item_id=' . (int) $item_id; 
 			$result = $db->sql_query ( $sql );
@@ -327,7 +331,8 @@ class acp_dkp_item extends bbDkp_Admin
 			$db->sql_freeresult ( $result );
 			$this->item = array (
 				'select_item_name' 	=> utf8_normalize_nfc(request_var('select_item_name', ''),true) ,  
-				'item_name' 		=> $row['item_name'], 
+				'item_name' 		=> $row['item_name'],
+			    'item_gameid' 		=> $row['item_gameid'],
 				'raid_id' 			=> $row['raid_id'], 
 				'item_value' 		=> $row[ 'item_value'],
 			);
@@ -424,7 +429,7 @@ class acp_dkp_item extends bbDkp_Admin
 		$floatlen = @strlen ( $float [0] );
 		$format = '%0' . $floatlen . '.2f';
 		
-		$sql = 'SELECT item_value, item_name FROM ' . ITEMS_TABLE . ' where item_dkpid = ' . $dkpid . ' 
+		$sql = 'SELECT item_value, item_name, item_gameid FROM ' . ITEMS_TABLE . ' where item_dkpid = ' . $dkpid . ' 
 			GROUP BY item_name, item_value  
 			ORDER BY item_name, item_date DESC';
 		$result = $db->sql_query ( $sql );
@@ -435,9 +440,11 @@ class acp_dkp_item extends bbDkp_Admin
 		{
 			
 				$template->assign_block_vars ( 'items_row', array (
-				'VALUE' 	=> $row ['item_name'], 
+				'VALUE' 	=> $row ['item_name'] . ' ' . $row ['item_gameid'] , 
 				'SELECTED' 	=> (($row ['item_name'] == $item_name) || ($row ['item_name'] == $item_select_name)) ? ' selected="selected"' : '', 
-				'OPTION' 	=> $row ['item_name'] . ' (' . sprintf ( $format, $row ['item_value'] ) . ')' ) );						
+				'OPTION' 	=> $row ['item_name'] . ' (' . sprintf ( $format, $row ['item_value'] ) . ' dkp) ', 
+				
+				) );						
 		}
 		
 		$db->sql_freeresult ( $result );
@@ -450,8 +457,11 @@ class acp_dkp_item extends bbDkp_Admin
 		
 		'U_ADD_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid" ), 
 		'S_MULTIPLE_BUYERS' => (! $this->url_id) ? true : false, 
+
 		'ITEM_NAME' 		=> isset($this->item['item_name']) ? $this->item['item_name'] : '' , 
-  			'ITEM_VALUE' 		=> isset($this->item['item_value']) ? $this->item['item_value'] : 0.00 ,
+		'ITEM_GAMEID' 		=> isset($this->item['item_gameid']) ? $this->item['item_gameid'] : '' ,
+		'ITEM_VALUE' 		=> isset($this->item['item_value']) ? $this->item['item_value'] : 0.00 ,
+		
 		// Language
 		'MSG_NAME_EMPTY' 	=> $user->lang ['FV_REQUIRED_ITEM_NAME'],
 		'MSG_RAID_ID_EMPTY' => $user->lang ['FV_REQUIRED_RAIDID'], 
@@ -692,7 +702,7 @@ class acp_dkp_item extends bbDkp_Admin
 	 * @param itemname
 	 * 
 	 */
-	function additem($item_buyers, $dkpid, $raid_id, $itemvalue, $item_name)
+	function additem($item_buyers, $dkpid, $raid_id, $itemvalue, $item_name, $itemgameid)
 	{
 		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
 		$errors_exist = $this->error_check ();
@@ -719,7 +729,7 @@ class acp_dkp_item extends bbDkp_Admin
 		//
 		// Add item to selected members
 		//
-		$this->add_new_item ( $item_name, $item_buyers, $group_key, $dkpid, $itemvalue, $raid_id, $loottime);
+		$this->add_new_item ( $item_name, $item_buyers, $group_key, $dkpid, $itemvalue, $raid_id, $loottime, $itemgameid);
 		
 		//
 		// Logging
@@ -745,7 +755,7 @@ class acp_dkp_item extends bbDkp_Admin
 
 	/**
 	 * does the actual item-adding database operations
-	 * called from : item acp adding, updating, Raidtracker
+	 * called from : item acp adding, updating
 	 * 
 	 * @param item_name
 	 * @param item_buyers = array with buyers
@@ -754,10 +764,12 @@ class acp_dkp_item extends bbDkp_Admin
 	 * @param raidid = the raid to which we add the item
 	 * @param itemvalue (float) the item cost
 	 * @param raidid
+	 * @param $itemgameid : if this is zero we dont care
 	 * 
 	 */
-	function add_new_item($item_name, $item_buyers, $group_key, $dkpid, $itemvalue, $raidid, $loottime) 
+	function add_new_item($item_name, $item_buyers, $group_key, $dkpid, $itemvalue, $raidid, $loottime, $itemgameid) 
 	{
+
 		global $db, $user;
 		$query = array ();
 		
@@ -786,6 +798,7 @@ class acp_dkp_item extends bbDkp_Admin
 	    				'item_value' 		=> (float) $itemvalue, 
 	    				'item_date' 		=> (int) $loottime, 
 	    				'item_group_key' 	=> (string) $group_key, 
+						'item_gameid' 		=> (int) $itemgameid,
 	    				'item_added_by' 	=> (string) $user->data ['username'] 
 	    				);
 			}
@@ -801,6 +814,7 @@ class acp_dkp_item extends bbDkp_Admin
 	    				'item_value' 		=> (float) $itemvalue, 
 	    				'item_date' 		=> (int) $loottime, 
 	    				'item_group_key' 	=> (string) $group_key, 
+						'item_gameid' 		=> (int) $itemgameid,
 	    				'item_added_by' 	=> (string) $user->data ['username'] 
 	    				);
 			$sql = 'INSERT INTO ' . ITEMS_TABLE . ' ' . $db->sql_build_array('INSERT', $query);
@@ -955,10 +969,11 @@ class acp_dkp_item extends bbDkp_Admin
 	 * @param item_buyers, 
 	 * @param itemvalue*  
 	 * @param itemname* 
+	 * @param itemgameid*
 	 * 
 	 */
 
-	function updateitem( $item_buyers, $dkpid, $raid_id, $itemvalue, $item_name, $item_id )  
+	function updateitem( $item_buyers, $dkpid, $raid_id, $itemvalue, $item_name, $item_id, $itemgameid )  
 	{
 		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
 		$errors_exist = $this->error_check ();
@@ -1010,7 +1025,8 @@ class acp_dkp_item extends bbDkp_Admin
 		//
 		// Add new item to selected members
 		//
-		$this->add_new_item ( $item_name, $item_buyers, $group_key, $dkpid, $itemvalue,  $old_item ['raid_id'], $old_item ['item_date']);
+		$this->add_new_item ( $item_name, $item_buyers, $group_key, $dkpid, $itemvalue, 
+			$old_item ['raid_id'], $old_item ['item_date'], $itemgameid);
 		
 		//
 		// Logging
@@ -1036,7 +1052,7 @@ class acp_dkp_item extends bbDkp_Admin
 		// Success message
 		//
 		$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_ITEM_SUCCESS'], $old_item ['item_name'], 
-			(is_array($old_item ['item_buyers']) ? implode ( ', ', $old_item ['item_buyers']  ) : trim($old_item ['item_buyers']))     ,
+			(is_array($old_item ['item_buyers']) ? implode ( ', ', $old_item ['item_buyers']  ) : trim($old_item ['item_buyers'])) ,
 			$old_item ['item_value'] );
 			
 		trigger_error ( $success_message . $this->link, E_USER_NOTICE );
