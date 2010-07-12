@@ -730,6 +730,7 @@ $versions = array(
 		
 		
 		'custom' => array( 
+	        'gameupdate111', 
             'bbdkp_restoreold', 
 		    'bbdkp_caches',
        		), 
@@ -1104,6 +1105,32 @@ function bbdkp_restoreold($action, $version)
 			}
 	}
     
+}
+
+function gameupdate111($action, $version)
+{
+	global $db;
+	switch ($action)
+	{
+		
+		case 'install' :
+		case 'update' :
+				// Run this when installing/updating
+				// Run this when updating
+				$game = request_var('game', '');
+				switch ($game)
+				{
+					case 'lotro':
+						 $db->sql_query('update ' . $bbdkp_table_prefix . "classes set class_max_level = 60	");
+	       				return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
+						break; 
+					default :
+					    break; 
+				}
+			break;
+	}
+		
+	
 }
 
 
