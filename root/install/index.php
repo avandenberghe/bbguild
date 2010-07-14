@@ -733,10 +733,27 @@ $versions = array(
 	        'gameupdate111', 
             'bbdkp_restoreold', 
 		    'bbdkp_caches',
-       		), 
+       		),
 		
-		),
+	    //  remove a_dkp_no permission
+	   'permission_remove' => array(array('a_dkp_no'),         
+      	),
+      	
+       // basic user permissions
+	   'permission_add' => array( array('u_dkp', true),         
+      	),
+      	
+      
+        // Assign default permissions to Full admin
+        'permission_set' => array(
+            // Global Role permissions give to the role "Full admin"
+            array('ROLE_ADMIN_FULL', 'u_dkp'),
+            array('ROLE_USER_STANDARD', 'u_dkp'),
+        ),
         
+        
+		), 
+
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
