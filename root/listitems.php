@@ -86,6 +86,12 @@ if (isset ( $_POST ['pool'] ) or isset ( $_POST ['getdksysid'] ) or isset ( $_GE
 		$dkpsys_id = request_var ( URI_DKPSYS, 0 );
 	}
 }
+else 
+{
+	$query_by_pool = true;
+	$dkpsys_id = $defaultpool; 
+}
+
 
 foreach ( $dkpvalues as $key => $value )
 {
