@@ -474,12 +474,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
         'ADJUSTMENT'     => $member['member_adjustment'],
         'CURRENT'        => $member['member_current'],
                                                 
-        'RAIDS_X1_DAYS'  => $percent_of_raids['x1'],
-        'RAIDS_X2_DAYS'  => $percent_of_raids['x2'],
-        'RAIDS_X3_DAYS'  => $percent_of_raids['x3'],
-        'RAIDS_LIFETIME' => $percent_of_raids['lifetime'],
-
-		'C_ADJUSTMENT'     => $member['member_adjustment'],
+        'C_ADJUSTMENT'     => $member['member_adjustment'],
         'C_CURRENT'        => $member['member_current'],
         'C_RAIDS_X1_DAYS'  => $percent_of_raids['x1'],
         'C_RAIDS_X2_DAYS'  => $percent_of_raids['x2'],
