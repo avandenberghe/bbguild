@@ -21,15 +21,19 @@ include($phpbb_root_path . 'common.' . $phpEx);
 // Start session management
 $user->session_begin();
 $auth->acl($user->data);
-$user->setup('viewforum');
-$user->add_lang(array('mods/bossbase_general'));
-$user->add_lang(array('mods/bossbase_' . $config['bbdkp_default_game']));
+$user->setup();
 $user->add_lang(array('mods/dkp_common'));
+if (!$auth->acl_get('u_dkp'))
+{
+	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
+}
 if (! defined ( "EMED_BBDKP" ))
 {
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
+$user->add_lang(array('mods/bossbase_general'));
+$user->add_lang(array('mods/bossbase_' . $config['bbdkp_default_game']));
 include($phpbb_root_path . 'includes/bbdkp/bossprogress/extfunc.' . $phpEx);
 $bb_config = bb_get_bossprogress_config();
 $bb_pzone = bb_get_parse_zones();
