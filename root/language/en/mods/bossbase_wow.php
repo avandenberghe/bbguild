@@ -435,6 +435,19 @@ Start WOW Bosses
 'sindragosa_25_hc' => array('id' =>'37755', 'long' => 'Sindragosa (25HM)', 'short' => 'Sindragosa (25HM)'),
 'the_lich_king_25_hc' => array('id' =>'29983', 'long' => 'The Lich King (25HM)', 'short' => 'Lich King (25HM)'),
 
+/******Ruby Sanctum (25) *****/
+'rs_25' => array('long' => 'The Ruby Sanctum (25)', 'short' => 'Ruby Sanctum (25)'),
+'halion_25'    => array('id' =>'39863', 'long' => 'Halion (25)', 'short' => 'Halion (25)'),
+'halion_25_hc' => array('id' =>'39863', 'long' => 'Halion (25HM)', 'short' => 'Halion (25)'),
+
+/******Ruby Sanctum (10) *****/
+'rs_10' => array('long' => 'The Ruby Sanctum (10)', 'short' => 'Ruby Sanctum (10)'),
+'halion_10'    => array('id' =>'39863', 'long' => 'Halion (10)', 'short' => 'Halion (10)'),
+'halion_10_hc' => array('id' =>'39863', 'long' => 'Halion (10HM)', 'short' => 'Halion (10)'),
+
+
+
+
 /* 
 End WOW Bosses
 */

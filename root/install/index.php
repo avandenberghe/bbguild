@@ -1126,7 +1126,9 @@ function bbdkp_restoreold($action, $version)
 
 function gameupdate111($action, $version)
 {
-	global $db;
+	
+	global $user, $config, $db, $table_prefix, $bbdkp_table_prefix; 
+	
 	switch ($action)
 	{
 		
@@ -1141,6 +1143,9 @@ function gameupdate111($action, $version)
 						 $db->sql_query('update ' . $bbdkp_table_prefix . "classes set class_max_level = 60	");
 	       				return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
 						break; 
+					case 'wow': 
+						install_wow5($bbdkp_table_prefix); 
+						return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
 					default :
 					    break; 
 				}

@@ -966,5 +966,55 @@ function upd110_classid($bbdkp_table_prefix)
                     
 }
 
+/*
+ * installation of zone and boss names for wow patch 3.3.5 
+ * The Ruby Sanctum
+ * 
+  * 
+ */
+function install_wow5($bbdkp_table_prefix)
+{
+    global  $db, $table_prefix, $umil, $user;
+    
+	if ($umil->table_exists($bbdkp_table_prefix . 'bb_config') and ($umil->table_exists($bbdkp_table_prefix . 'bb_offsets')) )
+	{
+	     // check if installed manually, otherwise install
+	     $sql = 'SELECT count(*) as countx FROM ' . $bbdkp_table_prefix . "bb_config WHERE config_name = 'pz_rs_10'";
+         $result = $db->sql_query($sql);
+         $countx = (int) $db->sql_fetchfield('countx'); 
+         if ($countx == 0)
+         {
+                $sql_ary = array();
+                $sql_ary[] = array('config_name' =>  'sz_rs_10', 'config_value' => '1'  );
+                $sql_ary[] = array('config_name' =>  'sz_rs_25', 'config_value' => '1'  );
+                $sql_ary[] = array('config_name' =>  'pz_rs_10', 'config_value' => 'The Ruby Sanctum (10), RS (10)'  );
+                $sql_ary[] = array('config_name' =>  'pz_rs_25', 'config_value' => 'The Ruby Sanctum (25), RS (25)'  );
+                $sql_ary[] = array('config_name' =>  'pb_halion_10', 'config_value' => 'Halion (10)'  );
+                $sql_ary[] = array('config_name' =>  'pb_halion_10_hc', 'config_value' => 'Halion (10HM)'  );
+                $sql_ary[] = array('config_name' =>  'pb_halion_25', 'config_value' => 'Halion (25)'  );
+                $sql_ary[] = array('config_name' =>  'pb_halion_25_hc', 'config_value' => 'Halion (25HM)'  );
+				$db->sql_multi_insert( $bbdkp_table_prefix . 'bb_config', $sql_ary);
+
+                
+                unset ($sql_ary); 
+            	
+        	    // new boss offsets
+               $sql_ary = array();
+            	$sql_ary[] = array('name' => 'rs_10' , 'fdate' => '1419980400' , 'ldate' => '946594800', 'counter' =>  '0' );
+            	$sql_ary[] = array('name' => 'rs_25' , 'fdate' => '1419980400' , 'ldate' => '946594800', 'counter' =>  '0' );
+            	$sql_ary[] = array('name' => 'halion_10' , 'fdate' => '1419980400' , 'ldate' => '946594800', 'counter' =>  '0' );
+            	$sql_ary[] = array('name' => 'halion_10_hc' , 'fdate' => '1419980400' , 'ldate' => '946594800', 'counter' =>  '0' );
+            	$sql_ary[] = array('name' => 'halion_25' , 'fdate' => '1419980400' , 'ldate' => '946594800', 'counter' =>  '0' );
+            	$sql_ary[] = array('name' => 'halion_25_hc' , 'fdate' => '1419980400' , 'ldate' => '946594800', 'counter' =>  '0' );
+            	$db->sql_multi_insert( $bbdkp_table_prefix . 'bb_offsets', $sql_ary);
+        	    unset ($sql_ary);
+	        }
+	    
+	}
+   
+}
+
+
+
 
 ?>

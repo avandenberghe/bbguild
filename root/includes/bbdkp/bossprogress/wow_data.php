@@ -28,6 +28,16 @@ $credits2= ' by sz3
 unset($bzone);
 $bzone = array (
 
+	  'rs_25' => array (
+	  'halion_25',
+	  'halion_25_hc',
+	   ),
+
+	  'rs_10' => array (
+	  'halion_10',
+	  'halion_10_hc',	   
+	   ),
+	   
       'icecrown_citadel_10'=> array (
       'lord_marrowgar_10',
       'lord_marrowgar_10_hc',
