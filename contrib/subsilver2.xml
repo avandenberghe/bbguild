@@ -8,7 +8,7 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
   <header>
     <license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-    <title lang="en">bbDkp 1.1.0 - subsilver2 style</title>
+    <title lang="en">bbDkp 1.1.1 - subsilver2 style</title>
     <description lang="en">
     <![CDATA[
 bbDKP for phpBB3 brings together the DKP management facilites of EQdkp and 
@@ -119,7 +119,7 @@ EQDkp (c) 2003 The EqDkp Project Team
     
     </author-group>
 
-<mod-version>1.1.0</mod-version>
+<mod-version>1.1.1</mod-version>
 
 <installation>
       <level>intermediate</level>
