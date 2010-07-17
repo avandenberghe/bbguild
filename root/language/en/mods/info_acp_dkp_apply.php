@@ -5,7 +5,7 @@
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id: info_acp_dkp_bossprogress.php 538 2009-05-31 22:30:48Z Sajaki9 $
+ * @version $Id: info_acp_dkp_apply.php 1280 2010-05-25 11:09:16Z Sajaki9 $
  * 
  */
 
