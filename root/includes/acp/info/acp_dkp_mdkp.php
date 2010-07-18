@@ -32,7 +32,7 @@ class acp_dkp_mdkp_info
 			'modes'		=> array(
 				'mm_editmemberdkp'	=> array('title' => 'ACP_DKP_EDITMEMBERDKP',  'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MDKP'), 'display' => '0' ),
 				'mm_listmemberdkp'	=> array('title' => 'ACP_DKP_LISTMEMBERDKP', 'auth' => 'acl_a_dkp',  'cat' => array('ACP_DKP_MDKP')),
-		        'mm_transfer'	    => array('title' => 'ACP_DKP_MEMBER_TRF', 'auth' => 'acl_a_dkp_no', 'cat' => array('ACP_DKP_MEMBER')),
+		        'mm_transfer'	    => array('title' => 'ACP_DKP_MEMBER_TRF', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER')),
 			),
 		);
 	}

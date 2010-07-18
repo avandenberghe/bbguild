@@ -729,12 +729,6 @@ $versions = array(
 	        ), 
 		
 		
-		'custom' => array( 
-	        'gameupdate111', 
-            'bbdkp_restoreold', 
-		    'bbdkp_caches',
-       		),
-		
 	    //  remove a_dkp_no permission
 	   'permission_remove' => array(array('a_dkp_no'),         
       	),
@@ -751,7 +745,12 @@ $versions = array(
             array('ROLE_USER_STANDARD', 'u_dkp'),
         ),
         
-        
+		'custom' => array( 
+	        'gameupdate111', 
+            'bbdkp_restoreold', 
+		    'bbdkp_caches',
+       		),
+       	
 		), 
 
 );
@@ -1134,8 +1133,9 @@ function gameupdate111($action, $version)
 		
 		case 'install' :
 		case 'update' :
+		
+			    $db->sql_query( " update " . MODULES_TABLE . " set module_auth = 'acl_a_dkp' where module_auth = 'acl_a_dkp_no' " );
 				// Run this when installing/updating
-				// Run this when updating
 				$game = request_var('game', '');
 				switch ($game)
 				{

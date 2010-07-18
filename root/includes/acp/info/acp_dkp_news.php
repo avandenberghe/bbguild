@@ -33,8 +33,8 @@ class acp_dkp_news_info
 			'title'		=> 'ACP_DKP_NEWS',
 			'version'	=> '1.1.0',
 			'modes'		=> array(
-				'addnews'			=> array('title' => 'ACP_DKP_NEWS_ADD', 'auth' => 'acl_a_dkp_no', 'cat' => array('ACP_DKP_NEWS')),
-				'listnews'			=> array('title' => 'ACP_DKP_NEWS_LIST', 'auth' => 'acl_a_dkp_no', 'cat' => array('ACP_DKP_NEWS')),
+				'addnews'			=> array('title' => 'ACP_DKP_NEWS_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_NEWS')),
+				'listnews'			=> array('title' => 'ACP_DKP_NEWS_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_NEWS')),
 				),
 		);
 	}

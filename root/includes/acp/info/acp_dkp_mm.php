@@ -35,7 +35,7 @@ class acp_dkp_mm_info
 				'mm_listguilds'	    => array('title' => 'ACP_DKP_GUILD_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER')),
 				'mm_addmember'	    => array('title' => 'ACP_DKP_MEMBER_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER')),
 				'mm_listmembers'	=> array('title' => 'ACP_DKP_MEMBER_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER')),
-				'mm_ranks'	        => array('title' => 'ACP_DKP_MEMBER_RANK', 'auth' => 'acl_a_dkp_no', 'cat' => array('ACP_DKP_MEMBER')),
+				'mm_ranks'	        => array('title' => 'ACP_DKP_MEMBER_RANK', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER')),
 			),
 		);
 	}
