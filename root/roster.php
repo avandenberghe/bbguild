@@ -295,17 +295,6 @@ foreach( $navlinks_array as $name )
 
 // constants
 $template->assign_vars(array(
-    'U_LISTITEMS'         => append_sid("{$phpbb_root_path}listitems.$phpEx"),  
-	'U_LISTITEMHIST'      => append_sid("{$phpbb_root_path}listitems.$phpEx?&amp;page=history"),
-	'U_LISTMEMBERS'       => append_sid("{$phpbb_root_path}listmembers.$phpEx"),
-	'U_LISTEVENTS'        => append_sid("{$phpbb_root_path}listevents.$phpEx"),
-	'U_LISTRAIDS'         => append_sid("{$phpbb_root_path}listraids.$phpEx"),
-	'U_VIEWITEM'          => append_sid("{$phpbb_root_path}viewitem.$phpEx"),
-	'U_BP'                => append_sid("{$phpbb_root_path}bossprogress.$phpEx"),
-	'U_ROSTER'             => append_sid("{$phpbb_root_path}roster.$phpEx"),
-	'U_ABOUT'             => append_sid("{$phpbb_root_path}about.$phpEx"),
-	'U_STATS'             => append_sid("{$phpbb_root_path}stats.$phpEx"),
-	'U_VIEWNEWS'          => append_sid("{$phpbb_root_path}viewnews.$phpEx"),
     'GUILDNAME'			=>  $config['bbdkp_guildtag'],
     'U_LIST_MEMBERS0'	=> append_sid("{$phpbb_root_path}roster.$phpEx", '&amp;'. URI_ORDER. '='. $current_order['uri'][0]),
     'U_LIST_MEMBERS1'	=> append_sid("{$phpbb_root_path}roster.$phpEx", '&amp;'. URI_ORDER. '='. $current_order['uri'][1]),

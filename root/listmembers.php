@@ -521,17 +521,7 @@ $template->assign_vars ( array ('F_MEMBERS' => append_sid ( "{$phpbb_root_path}l
 	'RAIDS_P1_DAYS' => sprintf ( $user->lang ['RAIDS_X_DAYS'], $list_p1 ), 
 	'RAIDS_P2_DAYS' => sprintf ( $user->lang ['RAIDS_X_DAYS'], $list_p2 ), 
 	'S_SHOWLEAD' => $s_showlb, 
-	'U_LISTITEMS' => append_sid ( "{$phpbb_root_path}listitems.$phpEx" ), 
-	'U_LISTITEMHIST' => append_sid ( "{$phpbb_root_path}listitems.$phpEx?&amp;page=history" ), 
-	'U_LISTMEMBERS' => append_sid ( "{$phpbb_root_path}listmembers.$phpEx" ), 
-	'U_LISTEVENTS' => append_sid ( "{$phpbb_root_path}listevents.$phpEx" ), 
-	'U_LISTRAIDS' => append_sid ( "{$phpbb_root_path}listraids.$phpEx" ), 
-	'U_VIEWITEM' => append_sid ( "{$phpbb_root_path}viewitem.$phpEx" ), 
-	'U_BP' => append_sid ( "{$phpbb_root_path}bossprogress.$phpEx" ), 
-	'U_ROSTER' => append_sid ( "{$phpbb_root_path}roster.$phpEx" ), 
-	'U_ABOUT' => append_sid ( "{$phpbb_root_path}about.$phpEx" ), 
-	'U_STATS' => append_sid ( "{$phpbb_root_path}stats.$phpEx" ), 
-	'U_VIEWNEWS' => append_sid ( "{$phpbb_root_path}viewnews.$phpEx" ), 
+	
 	'FOOTCOUNT' => (isset ( $_POST ['compare'] )) ? 
 		sprintf ( $footcount_text, sizeof (request_var ( 'compare_ids', array ('' => 0 )))) : 
 		$footcount_text )

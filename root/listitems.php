@@ -297,17 +297,7 @@ foreach ( $navlinks_array as $name )
 
 $template->assign_vars ( array (
 	'F_LISTITEM' => $u_list_items, 
-	'U_LISTITEMS' => append_sid ( "{$phpbb_root_path}listitems.$phpEx" ), 
-	'U_LISTITEMHIST' => append_sid ( "{$phpbb_root_path}listitems.$phpEx?&amp;page=history" ), 
-	'U_LISTMEMBERS' => append_sid ( "{$phpbb_root_path}listmembers.$phpEx" ), 
-	'U_LISTEVENTS' => append_sid ( "{$phpbb_root_path}listevents.$phpEx" ), 
-	'U_LISTRAIDS' => append_sid ( "{$phpbb_root_path}listraids.$phpEx" ), 
-	'U_VIEWITEM' => append_sid ( "{$phpbb_root_path}viewitem.$phpEx" ), 
-	'U_BP' => append_sid ( "{$phpbb_root_path}bossprogress.$phpEx" ), 
-	'U_ROSTER' => append_sid ( "{$phpbb_root_path}roster.$phpEx" ), 
-	'U_ABOUT' => append_sid ( "{$phpbb_root_path}about.$phpEx" ), 
-	'U_STATS' => append_sid ( "{$phpbb_root_path}stats.$phpEx" ), 
-	'U_VIEWNEWS' => append_sid ( "{$phpbb_root_path}viewnews.$phpEx" ), 
+
 	'O_DATE' => $sortlink [0], 
 	'O_BUYER' => $sortlink [1], 
 	'O_NAME' => $sortlink [2], 
