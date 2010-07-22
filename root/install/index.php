@@ -42,7 +42,7 @@ if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
 }
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.1.1';
+$mod_name = 'bbDKP 1.1.2';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -752,6 +752,99 @@ $versions = array(
        		),
        	
 		), 
+		
+		
+		'1.1.2'  => array(
+		/* bossprogress refit */ 
+		 'table_add' => array(
+		
+		/*	CREATE TABLE `bbeqdkp_zonetable` (
+		  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+		  `zonename` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
+		  `zonename_short` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+		  `imagename` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+		  `game` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
+		  `tier` varchar(30) COLLATE utf8_bin DEFAULT '',
+		  `completed` tinyint(1) unsigned NOT NULL DEFAULT '0',
+		  `completedate` int(11) unsigned NOT NULL DEFAULT '0',
+		  `zoneid` int(11) unsigned NOT NULL DEFAULT '0',
+		  PRIMARY KEY (`id`)
+		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+		*/
+        
+        array($bbdkp_table_prefix . 'bb_zonetable', array(
+              'COLUMNS'            => array(
+                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
+                  'zonename'       => array('VCHAR_UNI:255', ''), 
+                  'zonename_short' => array('VCHAR_UNI:255', ''),
+        		  'imagename'      => array('VCHAR_UNI:255', ''),
+				  'game'           => array('VCHAR:10', ''),
+				  'tier'           => array('VCHAR:30', ''),
+				  'completed'      => array('BOOL', 0),
+				  'completedate'   => array('TIMESTAMP', 0), 
+				  'zoneid'         => array('UINT', 0),
+                ),
+                'PRIMARY_KEY'      => 'id',
+            ),
+          ),
+		
+          
+		/*CREATE TABLE `bbeqdkp_bb_bosstable` (
+		  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+		  `bossname` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
+		  `bossname_short` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
+		  `imagename` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+		  `game` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
+		  `zoneid` int(11) unsigned NOT NULL DEFAULT '0',
+		  `type` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
+		  `npcid` int(11) unsigned NOT NULL DEFAULT '0',
+		  `killed` tinyint(1) unsigned NOT NULL DEFAULT '0',
+		  `killdate` int(11) unsigned NOT NULL DEFAULT '0',
+		  `counter` int(11) unsigned NOT NULL DEFAULT '0',
+		  PRIMARY KEY (`id`),
+		  KEY `zoneid` (`zoneid`)
+		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+		*/          
+        
+          array($bbdkp_table_prefix . 'bb_zonetable', array(
+              'COLUMNS'            => array(
+                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
+                  'bossname'       => array('VCHAR_UNI:255', ''), 
+                  'bossname_short' => array('VCHAR_UNI:255', ''),
+        		  'imagename'      => array('VCHAR_UNI:255', ''),
+                  'game'           => array('VCHAR:10', ''),
+				  'zoneid'         => array('UINT', 0), 
+				  'type'           => array('VCHAR:10', ''),
+				  'npcid'          => array('UINT', 0),
+				  'killed'         => array('BOOL', 0),
+				  'killdate'   	   => array('TIMESTAMP', 0), 
+				  'counter'        => array('UINT', 0),                ),
+                'PRIMARY_KEY'      => 'id',
+          		'KEYS'            => array('zoneid'    => array('INDEX', 'zoneid')),
+            ),
+          ),          
+          
+          
+          )            
+		
+		
+		
+		
+		
+		
+
+		), 
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
+		
 
 );
 
