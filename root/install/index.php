@@ -317,7 +317,7 @@ $versions = array(
             			'member_guild_id'  => array('USINT', 0),
             			'member_gender_id' => array('USINT', 0),
             			'member_achiev'    => array('UINT', 0),
-            			'member_armory_url' => array('VCHAR:500', 0),
+            			'member_armory_url' => array('VCHAR:255', 0),
             
                     ),
                     'PRIMARY_KEY'  => 'member_id',
