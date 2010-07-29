@@ -42,7 +42,7 @@ if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
 }
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.1.2';
+$mod_name = 'bbDKP 1.1.2 ';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -670,7 +670,7 @@ $versions = array(
         ),
 
         'custom' => array( 
-            'bbdkp_game_data',
+            'gameupdate',
             'upd110dkplink', 
        ), 
     ),
@@ -680,49 +680,47 @@ $versions = array(
 		),
 
      '1.1.0-RC3'    => array(
-        
-        // guildname fieldsize increased to max 255 chars - see ticket 3
-		'table_column_update' => array(
-            array($bbdkp_table_prefix . 'memberguild' , 'name', array('VCHAR_UNI', '')), 
-            ), 
-            
-        'custom' => array( 
-            'custom110RC3', 
-       	), 
+	        // guildname fieldsize increased to max 255 chars - see ticket 3
+			'table_column_update' => array(
+	            array($bbdkp_table_prefix . 'memberguild' , 'name', array('VCHAR_UNI', '')), 
+	            ), 
+	            
+	        'custom' => array( 
+	            'gameupdate', 
+	       	), 
        		
         ),        
      
-       '1.1.0'    => array(
-        'table_column_update' => array(
-            array($bbdkp_table_prefix . 'adjustments' , 'adjustment_id', array('UINT', NULL, 'auto_increment')), 
-			array($bbdkp_table_prefix . 'dkpsystem' , 'dkpsys_updatedby', array('VCHAR_UNI:255', '')),
-            array($bbdkp_table_prefix . 'items' , 'item_id',array('UINT', NULL, 'auto_increment')),
-            array($bbdkp_table_prefix . 'items' , 'raid_id', array('UINT', 0)), 
-            array($bbdkp_table_prefix . 'memberguild' , 'id', array('USINT', 0)), 
-            array($bbdkp_table_prefix . 'memberguild' , 'realm', array('VCHAR_UNI:255', '')), 
-            array($bbdkp_table_prefix . 'member_ranks' , 'rank_hide', array('BOOL', 0)),
-            array($bbdkp_table_prefix . 'memberlist' , 'member_id', array('UINT', NULL, 'auto_increment')), 
-            array($bbdkp_table_prefix . 'memberdkp' , 'member_id', array('UINT', 0)),
-            array($bbdkp_table_prefix . 'memberdkp' , 'member_raidcount', array('UINT', 0)),            
-            array($bbdkp_table_prefix . 'raid_attendees' , 'raid_id', array('UINT', 0)),            
-            array($bbdkp_table_prefix . 'raid_attendees' , 'member_id', array('UINT', 0)),
-            array($bbdkp_table_prefix . 'raid_attendees' , 'member_name',  array('VCHAR_UNI:255', '')),            
-            array($bbdkp_table_prefix . 'raids' , 'raid_id', array('UINT', NULL, 'auto_increment'),
-            ), 
+     '1.1.0'    => array(
+	        'table_column_update' => array(
+	            array($bbdkp_table_prefix . 'adjustments' , 'adjustment_id', array('UINT', NULL, 'auto_increment')), 
+				array($bbdkp_table_prefix . 'dkpsystem' , 'dkpsys_updatedby', array('VCHAR_UNI:255', '')),
+	            array($bbdkp_table_prefix . 'items' , 'item_id',array('UINT', NULL, 'auto_increment')),
+	            array($bbdkp_table_prefix . 'items' , 'raid_id', array('UINT', 0)), 
+	            array($bbdkp_table_prefix . 'memberguild' , 'id', array('USINT', 0)), 
+	            array($bbdkp_table_prefix . 'memberguild' , 'realm', array('VCHAR_UNI:255', '')), 
+	            array($bbdkp_table_prefix . 'member_ranks' , 'rank_hide', array('BOOL', 0)),
+	            array($bbdkp_table_prefix . 'memberlist' , 'member_id', array('UINT', NULL, 'auto_increment')), 
+	            array($bbdkp_table_prefix . 'memberdkp' , 'member_id', array('UINT', 0)),
+	            array($bbdkp_table_prefix . 'memberdkp' , 'member_raidcount', array('UINT', 0)),            
+	            array($bbdkp_table_prefix . 'raid_attendees' , 'raid_id', array('UINT', 0)),            
+	            array($bbdkp_table_prefix . 'raid_attendees' , 'member_id', array('UINT', 0)),
+	            array($bbdkp_table_prefix . 'raid_attendees' , 'member_name',  array('VCHAR_UNI:255', '')),            
+	            array($bbdkp_table_prefix . 'raids' , 'raid_id', array('UINT', NULL, 'auto_increment'),
+	            ), 
+			
+			), 
 		
-		), 
 		
-		
-		'table_column_add' => array(
-			array($bbdkp_table_prefix . 'items', 'item_gameid' , array('UINT', 0)) 
-		),
+			'table_column_add' => array(
+				array($bbdkp_table_prefix . 'items', 'item_gameid' , array('UINT', 0)) 
+			),
 		
 		),
 		    
 		
-		'1.1.1'  => array(
-		
-
+	'1.1.1'  => array(
+	
        	//new config for hiding the portal menublock
 		 'config_add' => array(
 		      array('bbdkp_portal_menu', 1, true),
@@ -746,9 +744,9 @@ $versions = array(
         ),
         
 		'custom' => array( 
-	        'gameupdate111', 
+	        'gameupdate', 
+		     // restore old data
             'bbdkp_restoreold', 
-		    'bbdkp_caches',
        		),
        	
 		), 
@@ -756,198 +754,51 @@ $versions = array(
 		
 		'1.1.2'  => array(
 		/* bossprogress refit */ 
-		 'table_add' => array(
-		
-		/*	CREATE TABLE `bbeqdkp_zonetable` (
-		  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-		  `zonename` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-		  `zonename_short` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-		  `imagename` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-		  `game` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
-		  `tier` varchar(30) COLLATE utf8_bin DEFAULT '',
-		  `completed` tinyint(1) unsigned NOT NULL DEFAULT '0',
-		  `completedate` int(11) unsigned NOT NULL DEFAULT '0',
-		  `zoneid` int(11) unsigned NOT NULL DEFAULT '0',
-		  PRIMARY KEY (`id`)
-		) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-		*/
-        
-        array($bbdkp_table_prefix . 'bb_zonetable', array(
-              'COLUMNS'            => array(
-                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
-                  'zonename'       => array('VCHAR_UNI:255', ''), 
-                  'zonename_short' => array('VCHAR_UNI:255', ''),
-        		  'imagename'      => array('VCHAR_UNI:255', ''),
-				  'game'           => array('VCHAR:10', ''),
-				  'tier'           => array('VCHAR:30', ''),
-				  'completed'      => array('BOOL', 0),
-				  'completedate'   => array('TIMESTAMP', 0), 
-				  'zoneid'         => array('UINT', 0),
-                ),
-                'PRIMARY_KEY'      => 'id',
-            ),
-          ),
-		
-          
-		/*CREATE TABLE `bbeqdkp_bb_bosstable` (
-		  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
-		  `bossname` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-		  `bossname_short` varchar(255) CHARACTER SET latin1 NOT NULL DEFAULT '',
-		  `imagename` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-		  `game` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
-		  `zoneid` int(11) unsigned NOT NULL DEFAULT '0',
-		  `type` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
-		  `npcid` int(11) unsigned NOT NULL DEFAULT '0',
-		  `killed` tinyint(1) unsigned NOT NULL DEFAULT '0',
-		  `killdate` int(11) unsigned NOT NULL DEFAULT '0',
-		  `counter` int(11) unsigned NOT NULL DEFAULT '0',
-		  PRIMARY KEY (`id`),
-		  KEY `zoneid` (`zoneid`)
-		) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-		*/          
-        
-          array($bbdkp_table_prefix . 'bb_bosstable', array(
-              'COLUMNS'            => array(
-                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
-                  'bossname'       => array('VCHAR_UNI:255', ''), 
-                  'bossname_short' => array('VCHAR_UNI:255', ''),
-        		  'imagename'      => array('VCHAR_UNI:255', ''),
-                  'game'           => array('VCHAR:10', ''),
-				  'zoneid'         => array('UINT', 0), 
-				  'type'           => array('VCHAR:10', ''),
-				  'npcid'          => array('UINT', 0),
-				  'killed'         => array('BOOL', 0),
-				  'killdate'   	   => array('TIMESTAMP', 0), 
-				  'counter'        => array('UINT', 0),                ),
-                'PRIMARY_KEY'      => 'id',
-          		'KEYS'            => array('zoneid'    => array('INDEX', 'zoneid')),
-            ),
-          ),          
+		'table_add' => array(
+		        array($bbdkp_table_prefix . 'bb_zonetable', array(
+		              'COLUMNS'            => array(
+		                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
+		                  'zonename'       => array('VCHAR_UNI:255', ''), 
+		                  'zonename_short' => array('VCHAR_UNI:255', ''),
+		        		  'imagename'      => array('VCHAR_UNI:255', ''),
+						  'game'           => array('VCHAR:10', ''),
+						  'tier'           => array('VCHAR:30', ''),
+						  'completed'      => array('BOOL', 0),
+						  'completedate'   => array('TIMESTAMP', 0), 
+						  'webid'          => array('VCHAR:30', ''),
+		                ),
+		                'PRIMARY_KEY'      => 'id',
+		            ),
+		          ),
+		          array($bbdkp_table_prefix . 'bb_bosstable', array(
+		              'COLUMNS'            => array(
+		                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
+		                  'bossname'       => array('VCHAR_UNI:255', ''), 
+		                  'bossname_short' => array('VCHAR_UNI:255', ''),
+		        		  'imagename'      => array('VCHAR_UNI:255', ''),
+		                  'game'           => array('VCHAR:10', ''),
+						  'zoneid'         => array('UINT', 0), 
+						  'type'           => array('VCHAR:10', ''),
+						  'webid'          => array('VCHAR:30', ''),
+						  'killed'         => array('BOOL', 0),
+						  'killdate'   	   => array('TIMESTAMP', 0), 
+						  'counter'        => array('UINT', 0),                ),
+		                'PRIMARY_KEY'      => 'id',
+		          		'KEYS'            => array('zoneid'    => array('INDEX', 'zoneid')),
+		            ),
+		          ),          
+          	),           
 
-          )            
-          
-          
-          
+		'custom' => array( 
+			'gameupdate', 
+			'bbdkp_caches',
+			),
 		), 
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
 
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
 include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
-
-function bbdkp_game_data($action, $version)
-{
-	global $db, $table_prefix, $umil, $bbdkp_table_prefix, $phpbb_root_path, $phpEx, $backup;
-	switch ($action)
-	{
-		case 'install' :
-		case 'update' :
-			// Run this when installing/updating
-			// Run this when updating
-     	    
-			$game = request_var('game', '');
-			switch ($game)
-			{
-				case 'wow':
-       				install_wow($bbdkp_table_prefix);
-       				// update bossprogress for trial of champion
-       				install_wow2($bbdkp_table_prefix);
-       				// update bossprogress onyxia
-       				install_wow3($bbdkp_table_prefix);
-       				// update 3.3
-       				install_wow4($bbdkp_table_prefix);
-       				// update the class id of members
-       				upd110_classid($bbdkp_table_prefix);
-       				
-       				return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
-					break;
-				case 'aion':
-       				install_aion($bbdkp_table_prefix);
-       				return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
-					break;
-		    	case 'daoc':
-       				install_daoc($bbdkp_table_prefix);
-       				return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
-					break; 
-				case 'FFXI':
-       				install_ffxi($bbdkp_table_prefix);
-       				return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
-					break; 
-				case 'vanguard':
-       				install_vanguard($bbdkp_table_prefix);
-       				return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
-					break; 
-				case 'warhammer':
-       				install_warhammer($bbdkp_table_prefix);
-       				install_warhammer_rc2($bbdkp_table_prefix);
-       				return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
-					break; 
-				case 'eq':
-       				install_eq($bbdkp_table_prefix);
-       				return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
-					break; 
-				case 'eq2':
-       				install_eq2($bbdkp_table_prefix);
-       				return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
-					break; 
-				case 'lotro':
-       				install_lotro($bbdkp_table_prefix);
-       				return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
-					break; 
-				default :
-				    break; 
-			}
-			$db->sql_query("update " .  $bbdkp_table_prefix . "classes set dps = 0 "); 
-		    $db->sql_query("update " .  $bbdkp_table_prefix . "classes set tank = 0 "); 
-     	    $db->sql_query("update " .  $bbdkp_table_prefix . "classes set heal = 0 ");   
-			
-			
-			break; 
-			
-			
-		case 'uninstall' :
-			// Run this when uninstalling
-			if ($umil->table_exists($bbdkp_table_prefix . 'classes'))
-			{
-				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'classes ';
-				$db->sql_query($sql);
-			}
-			
-			if ($umil->table_exists($bbdkp_table_prefix . 'races'))
-			{
-				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'races ';
-				$db->sql_query($sql);
-			}
-			
-			if ($umil->table_exists($bbdkp_table_prefix . 'factions'))
-			{
-				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'factions ';
-				$db->sql_query($sql);
-			}
-			
-			if ($umil->table_exists($bbdkp_table_prefix . 'classes'))
-			{
-				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'classes ';
-				$db->sql_query($sql);
-			}
-			return array(
-					'command' => 'UMIL_REMOVE_GAME_ROW', 
-					'result' => 'SUCCESS');
-			break;
-	
-	}
-}
 
 /***************************************
  *
@@ -985,33 +836,6 @@ function upd110dkplink($action, $version)
 	}
 }
 
-
-function custom110RC3($action, $version)
-{
-    global $db, $umil, $bbdkp_table_prefix;
-	
-    switch ($action)
-	{
-	   case 'install' :
-	   case 'update' :
-		     // logging max 255 chars - see ticket 3
-		     if  ($umil->table_exists($bbdkp_table_prefix . 'logs') == true)
-		     {
-		        $db->sql_query('update ' . $bbdkp_table_prefix . "logs set log_type = replace(log_type,'{','')");
-		        $db->sql_query('update ' . $bbdkp_table_prefix . "logs set log_type = replace(log_type,'}','')");
-		        $db->sql_query('update ' . $bbdkp_table_prefix . "logs set log_action = replace(log_action,'{','')");
-		        $db->sql_query('update ' . $bbdkp_table_prefix . "logs set log_action = replace(log_action,'}','')"); 
-		     }
-		     
-          return array(
-          	'command' => 'UMIL_LOGCLEANED', 
-          	'result' => 'SUCCESS');
-	      break;
-	   case 'uninstall' :
-	      break;
-	      // do nothing since were just deleting table in automatic mode
-	}
-}
 
 /****************************
  *  
@@ -1211,36 +1035,195 @@ function bbdkp_restoreold($action, $version)
     
 }
 
-function gameupdate111($action, $version)
+/******************************
+ * 
+ *  gametable update calls 
+ * 
+ */
+function gameupdate($action, $version)
 {
-	
 	global $user, $config, $db, $table_prefix, $bbdkp_table_prefix; 
-	
 	switch ($action)
 	{
-		
 		case 'install' :
 		case 'update' :
 		
-			    $db->sql_query( " update " . MODULES_TABLE . " set module_auth = 'acl_a_dkp' where module_auth = 'acl_a_dkp_no' " );
-				// Run this when installing/updating
-				$game = request_var('game', '');
-				switch ($game)
-				{
-					case 'lotro':
-						 $db->sql_query('update ' . $bbdkp_table_prefix . "classes set class_max_level = 60	");
-	       				return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
-						break; 
-					case 'wow': 
-						install_wow5($bbdkp_table_prefix); 
-						return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
-					default :
-					    break; 
-				}
+			switch ($version)
+			{
+				case '1.1.0-RC1': 
+					$game = request_var('game', '');
+					switch ($game)
+					{
+						case 'wow':
+							install_wow($bbdkp_table_prefix);
+							// update bossprogress for trial of champion
+							install_wow2($bbdkp_table_prefix);
+							// update bossprogress onyxia
+							install_wow3($bbdkp_table_prefix);
+							// update 3.3
+							install_wow4($bbdkp_table_prefix);
+							// update the class id of members
+							upd110_classid($bbdkp_table_prefix);
+	
+							return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
+							break;
+						case 'aion':
+							install_aion($bbdkp_table_prefix);
+							return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
+							break;
+						case 'daoc':
+							install_daoc($bbdkp_table_prefix);
+							return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
+							break;
+						case 'FFXI':
+							install_ffxi($bbdkp_table_prefix);
+							return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
+							break;
+						case 'vanguard':
+							install_vanguard($bbdkp_table_prefix);
+							return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
+							break;
+						case 'warhammer':
+							install_warhammer($bbdkp_table_prefix);
+							install_warhammer_rc2($bbdkp_table_prefix);
+							return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
+							break;
+						case 'eq':
+							install_eq($bbdkp_table_prefix);
+							return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
+							break;
+						case 'eq2':
+							install_eq2($bbdkp_table_prefix);
+							return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
+							break;
+						case 'lotro':
+							install_lotro($bbdkp_table_prefix);
+							return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
+							break;
+						default :
+							break;
+					}
+					$db->sql_query("update " .  $bbdkp_table_prefix . "classes set dps = 0 ");
+					$db->sql_query("update " .  $bbdkp_table_prefix . "classes set tank = 0 ");
+					$db->sql_query("update " .  $bbdkp_table_prefix . "classes set heal = 0 ");
+					break;
+					
+				case '1.1.0-RC3':
+				   // logging max 255 chars - see ticket 3
+				   if  ($umil->table_exists($bbdkp_table_prefix . 'logs') == true)
+				   {
+				       $db->sql_query('update ' . $bbdkp_table_prefix . "logs set log_type = replace(log_type,'{','')");
+				       $db->sql_query('update ' . $bbdkp_table_prefix . "logs set log_type = replace(log_type,'}','')");
+				       $db->sql_query('update ' . $bbdkp_table_prefix . "logs set log_action = replace(log_action,'{','')");
+				       $db->sql_query('update ' . $bbdkp_table_prefix . "logs set log_action = replace(log_action,'}','')"); 
+				   }
+		           return array(
+		          	 'command' => 'UMIL_LOGCLEANED', 
+		          	 'result' => 'SUCCESS');
+	
+					break;
+				
+				case '1.1.1' :
+					$db->sql_query( " update " . MODULES_TABLE . " set module_auth = 'acl_a_dkp' where module_auth = 'acl_a_dkp_no' " );
+					// Run this when installing/updating
+					$game = request_var('game', '');
+					switch ($game)
+					{
+						case 'lotro':
+							 $db->sql_query('update ' . $bbdkp_table_prefix . "classes set class_max_level = 60	");
+		       				return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
+							break; 
+						case 'wow': 
+							install_wow5($bbdkp_table_prefix); 
+							return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
+						default :
+						    break; 
+					}
+					break;
+	
+				case '1.1.2' : 
+					// bossprogress updaters
+					$game = request_var('game', '');
+					switch ($game)
+					{
+						case 'wow':
+		       				install_wow_bb2($bbdkp_table_prefix);
+		       				return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
+							break;
+						case 'aion':
+		       				//install_aion_bb2($bbdkp_table_prefix);
+		       				return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
+							break;
+				    	case 'daoc':
+		       				//install_daoc_bb2($bbdkp_table_prefix);
+		       				return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
+							break; 
+						case 'FFXI':
+		       				//install_ffxi_bb2($bbdkp_table_prefix);
+		       				return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
+							break; 
+						case 'vanguard':
+		       				//install_vanguard_bb2($bbdkp_table_prefix);
+		       				return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
+							break; 
+						case 'warhammer':
+		       				//install_warhammer_bb2($bbdkp_table_prefix);
+		       				return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
+							break; 
+						case 'eq':
+		       				//install_eq_bb2($bbdkp_table_prefix);
+		       				return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
+							break; 
+						case 'eq2':
+		       				//install_eq2_bb2($bbdkp_table_prefix);
+		       				return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
+							break; 
+						case 'lotro':
+		       				//install_lotro_bb2($bbdkp_table_prefix);
+		       				return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
+							break; 
+						default :
+						    break; 
+					}
+					
+					break;	
+				
+			}
+			break;
+			
+		case 'uninstall' :
+			
+			// Run this when uninstalling
+			if ($umil->table_exists($bbdkp_table_prefix . 'classes'))
+			{
+				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'classes ';
+				$db->sql_query($sql);
+			}
+			
+			if ($umil->table_exists($bbdkp_table_prefix . 'races'))
+			{
+				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'races ';
+				$db->sql_query($sql);
+			}
+			
+			if ($umil->table_exists($bbdkp_table_prefix . 'factions'))
+			{
+				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'factions ';
+				$db->sql_query($sql);
+			}
+			
+			if ($umil->table_exists($bbdkp_table_prefix . 'classes'))
+			{
+				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'classes ';
+				$db->sql_query($sql);
+			}
+			return array(
+					'command' => 'UMIL_REMOVE_GAME_ROW', 
+					'result' => 'SUCCESS');
 			break;
 	}
 		
-	
+	 
 }
 
 

@@ -1014,6 +1014,57 @@ function install_wow5($bbdkp_table_prefix)
    
 }
 
+function install_wow_bb2($bbdkp_table_prefix)
+{
+global  $db, $table_prefix, $umil, $user;
+    
+	if ($umil->table_exists($bbdkp_table_prefix . 'bb_config') and ($umil->table_exists($bbdkp_table_prefix . 'bb_offsets')) )
+	{
+		$sql_ary = array();
+		$sql_ary[] = array( 'id' => 1 , 'zonename' => 'Miscellaneous bosses', 'zonename_short' =>  'Misc' , 'imagename' =>  'misc' , 'game' =>  wow ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 2 , 'zonename' => 'Onyxia\s Lair', 'zonename_short' =>  'Onyxia' , 'imagename' =>  'onylair' , 'game' =>  wow ,  'tier' =>  'T2' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 3 , 'zonename' => 'The Emerald Dream', 'zonename_short' =>  'Dream' , 'imagename' =>  'dream' , 'game' =>  wow ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 4 , 'zonename' => 'Zul\Gurub', 'zonename_short' =>  'ZG' , 'imagename' =>  'zg' , 'game' =>  wow ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 5 , 'zonename' => 'Blackwing Lair', 'zonename_short' =>  'BWL' , 'imagename' =>  'bwl' , 'game' =>  wow ,  'tier' =>  'T3' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 6 , 'zonename' => 'Molten Core', 'zonename_short' =>  'MC' , 'imagename' =>  'mc' , 'game' =>  wow ,  'tier' =>  'T1' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 7 , 'zonename' => 'Ruins of Ahn\Qiraj', 'zonename_short' =>  'AQ20' , 'imagename' =>  'aq20' , 'game' =>  wow ,  'tier' =>  'T2.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 8 , 'zonename' => 'Gates of Ahn\Qiraj', 'zonename_short' =>  'AQ40' , 'imagename' =>  'aq40' , 'game' =>  wow ,  'tier' =>  'T2.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 9 , 'zonename' => 'Naxxramas', 'zonename_short' =>  'Naxx' , 'imagename' =>  'naxx' , 'game' =>  wow ,  'tier' =>  'T3' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 10 , 'zonename' => 'Karazhan', 'zonename_short' =>  'Kara' , 'imagename' =>  'kara' , 'game' =>  wow ,  'tier' =>  'T4' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 11 , 'zonename' => 'Zul\Aman', 'zonename_short' =>  'ZA' , 'imagename' =>  'za' , 'game' =>  wow ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 12 , 'zonename' => 'Gruul\s Lair', 'zonename_short' =>  'GL' , 'imagename' =>  'gruuls' , 'game' =>  wow ,  'tier' =>  'T4' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 13 , 'zonename' => 'Magtheridon\s Lair', 'zonename_short' =>  'Magtheridon' , 'imagename' =>  'maglair' , 'game' =>  wow ,  'tier' =>  'T4' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 14 , 'zonename' => 'Outland Outdoor Bosses', 'zonename_short' =>  'Outdoor' , 'imagename' =>  'outdoor2' , 'game' =>  wow ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 15 , 'zonename' => 'Serpentshrine Cavern', 'zonename_short' =>  'SC' , 'imagename' =>  'serpent' , 'game' =>  wow ,  'tier' =>  'T5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 16 , 'zonename' => 'The Eye', 'zonename_short' =>  'Eye' , 'imagename' =>  'eye' , 'game' =>  wow ,  'tier' =>  'T5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 17 , 'zonename' => 'Battle of Mount Hyjal', 'zonename_short' =>  'Hyjal' , 'imagename' =>  'hyjal' , 'game' =>  wow ,  'tier' =>  'T6' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 18 , 'zonename' => 'The Black Temple', 'zonename_short' =>  'Temple' , 'imagename' =>  'temple' , 'game' =>  wow ,  'tier' =>  'T6' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 19 , 'zonename' => 'The Sunwell Plateau', 'zonename_short' =>  'Sunwell' , 'imagename' =>  'sunwell' , 'game' =>  wow ,  'tier' =>  'T6.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 20 , 'zonename' => 'Naxxramas (10)', 'zonename_short' =>  'Naxx (10)' , 'imagename' =>  'naxx_10' , 'game' =>  wow ,  'tier' =>  'T7' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 21 , 'zonename' => 'Vault of Archavon (10)', 'zonename_short' =>  'VoA (10)' , 'imagename' =>  'vault_of_archavon_10' , 'game' =>  wow ,  'tier' =>  'T8' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 22 , 'zonename' => 'The Obsidian Sanctum (10)', 'zonename_short' =>  'OS (10)' , 'imagename' =>  'obsidian_sanctum_10' , 'game' =>  wow ,  'tier' =>  'T7' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 23 , 'zonename' => 'Eye of Eternity (10)', 'zonename_short' =>  'EoE (10)' , 'imagename' =>  'eye_of_eternity_10' , 'game' =>  wow ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 24 , 'zonename' => 'Naxxramas (25)', 'zonename_short' =>  'Naxx (25)' , 'imagename' =>  'naxx_25' , 'game' =>  wow ,  'tier' =>  'T7.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 25 , 'zonename' => 'Vault of Archavon (25)', 'zonename_short' =>  'VoA (25)' , 'imagename' =>  'vault_of_archavon_25' , 'game' =>  wow ,  'tier' =>  'T8' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 26 , 'zonename' => 'The Obsidian Sanctum (25)', 'zonename_short' =>  'OS (25)' , 'imagename' =>  'obsidian_sanctum_25' , 'game' =>  wow ,  'tier' =>  'T7.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 27 , 'zonename' => 'Eye of Eternity (25)', 'zonename_short' =>  'EoE (25)' , 'imagename' =>  'eye_of_eternity_25' , 'game' =>  wow ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 28 , 'zonename' => 'Ulduar (10)', 'zonename_short' =>  'EoE (25)' , 'imagename' =>  'ulduar_10' , 'game' =>  wow ,  'tier' =>  'T8' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 29 , 'zonename' => 'Ulduar (25)', 'zonename_short' =>  '' , 'imagename' =>  'ulduar_25' , 'game' =>  wow ,  'tier' =>  'T8.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 30 , 'zonename' => 'Trial of the Crusader (10)', 'zonename_short' =>  'ToC (10)' , 'imagename' =>  'trial_of_the_crusader_10' , 'game' =>  wow ,  'tier' =>  'T9.1' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 31 , 'zonename' => 'Trial of the Crusader (25)', 'zonename_short' =>  'ToC (25)' , 'imagename' =>  'trial_of_the_crusader_25' , 'game' =>  wow ,  'tier' =>  'T9.2' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 32 , 'zonename' => 'Trial of the Grand Crusader (10)', 'zonename_short' =>  'ToGC (10)' , 'imagename' =>  'trial_of_the_grand_crusader_10' , 'game' =>  wow ,  'tier' =>  'T9.2' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 33 , 'zonename' => 'Trial of the Grand Crusader (25)', 'zonename_short' =>  'ToGC (25)' , 'imagename' =>  'trial_of_the_grand_crusader_25' , 'game' =>  wow ,  'tier' =>  'T9.3' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 34 , 'zonename' => 'Onyxia\s Lair (10)', 'zonename_short' =>  'Onyxia (10)' , 'imagename' =>  'onylair_10' , 'game' =>  wow ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 35 , 'zonename' => 'Onyxia\s Lair (25)', 'zonename_short' =>  'Onyxia (25)' , 'imagename' =>  'onylair_25' , 'game' =>  wow ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 36 , 'zonename' => 'Icecrown Citadel (25)', 'zonename_short' =>  'ICC (25)' , 'imagename' =>  'icecrown_citadel_25' , 'game' =>  wow ,  'tier' =>  'T10.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+		$sql_ary[] = array( 'id' => 37 , 'zonename' => 'Icecrown Citadel (10)', 'zonename_short' =>  'ICC (10)' , 'imagename' =>  'icecrown_citadel_10' , 'game' =>  wow ,  'tier' =>  'T10' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '');
+
+		$db->sql_multi_insert( $bbdkp_table_prefix . 'bb_zonetable', $sql_ary);
+		unset ($sql_ary);
+	    
+	}
+}
+
 
 
 
