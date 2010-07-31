@@ -765,7 +765,7 @@ $versions = array(
 						  'tier'           => array('VCHAR:30', ''),
 						  'completed'      => array('BOOL', 0),
 						  'completedate'   => array('TIMESTAMP', 0), 
-						  'webid'          => array('VCHAR:30', ''),
+						  'webid'          => array('VCHAR:255', ''),
 		                ),
 		                'PRIMARY_KEY'      => 'id',
 		            ),
@@ -779,7 +779,7 @@ $versions = array(
 		                  'game'           => array('VCHAR:10', ''),
 						  'zoneid'         => array('UINT', 0), 
 						  'type'           => array('VCHAR:10', ''),
-						  'webid'          => array('VCHAR:30', ''),
+						  'webid'          => array('VCHAR:255', ''),
 						  'killed'         => array('BOOL', 0),
 						  'killdate'   	   => array('TIMESTAMP', 0), 
 						  'counter'        => array('UINT', 0),                ),
@@ -1151,35 +1151,35 @@ function gameupdate($action, $version)
 		       				return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
 							break;
 						case 'aion':
-		       				//install_aion_bb2($bbdkp_table_prefix);
+		       				install_aion_bb2($bbdkp_table_prefix);
 		       				return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
 							break;
 				    	case 'daoc':
-		       				//install_daoc_bb2($bbdkp_table_prefix);
+		       				install_daoc_bb2($bbdkp_table_prefix);
 		       				return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
 							break; 
 						case 'FFXI':
-		       				//install_ffxi_bb2($bbdkp_table_prefix);
+		       				install_ffxi_bb2($bbdkp_table_prefix);
 		       				return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
 							break; 
 						case 'vanguard':
-		       				//install_vanguard_bb2($bbdkp_table_prefix);
+		       				install_vanguard_bb2($bbdkp_table_prefix);
 		       				return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
 							break; 
 						case 'warhammer':
-		       				//install_warhammer_bb2($bbdkp_table_prefix);
+		       				install_warhammer_bb2($bbdkp_table_prefix);
 		       				return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
 							break; 
 						case 'eq':
-		       				//install_eq_bb2($bbdkp_table_prefix);
+		       				install_eq_bb2($bbdkp_table_prefix);
 		       				return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
 							break; 
 						case 'eq2':
-		       				//install_eq2_bb2($bbdkp_table_prefix);
+		       				install_eq2_bb2($bbdkp_table_prefix);
 		       				return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
 							break; 
 						case 'lotro':
-		       				//install_lotro_bb2($bbdkp_table_prefix);
+		       				install_lotro_bb2($bbdkp_table_prefix);
 		       				return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
 							break; 
 						default :
