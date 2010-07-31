@@ -561,7 +561,7 @@ function install_eq2($bbdkp_table_prefix)
  * generated with the spreadsheet
  * 
  */
-function install_eq_bb2($bbdkp_table_prefix)
+function install_eq2_bb2($bbdkp_table_prefix)
 {
 	global $db, $table_prefix, $umil, $user;
 	
