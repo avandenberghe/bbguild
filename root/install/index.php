@@ -1042,7 +1042,7 @@ function bbdkp_restoreold($action, $version)
  */
 function gameupdate($action, $version)
 {
-	global $user, $config, $db, $table_prefix, $bbdkp_table_prefix; 
+	global $user, $config, $db, $table_prefix, $umil, $bbdkp_table_prefix; 
 	switch ($action)
 	{
 		case 'install' :
