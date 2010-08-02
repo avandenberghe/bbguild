@@ -787,7 +787,10 @@ $versions = array(
 		          		'KEYS'            => array('zoneid'    => array('INDEX', 'zoneid')),
 		            ),
 		          ),          
-          	),           
+          	),
+		
+        // removing old table
+        'table_remove' => array( $bbdkp_table_prefix . 'bb_config', $bbdkp_table_prefix . 'bb_offsets'), 
 
 		'custom' => array( 
 			'gameupdate', 
@@ -1143,6 +1146,9 @@ function gameupdate($action, $version)
 	
 				case '1.1.2' : 
 					// bossprogress updaters
+					//removing old table
+
+
 					$game = request_var('game', '');
 					switch ($game)
 					{
@@ -1185,6 +1191,7 @@ function gameupdate($action, $version)
 						default :
 						    break; 
 					}
+					
 					
 					break;	
 				
