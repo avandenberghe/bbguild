@@ -271,7 +271,7 @@ function install_warhammer_rc2($bbdkp_table_prefix)
  * generated with the spreadsheet
  * 
  */
-function install_war_bb2($bbdkp_table_prefix)
+function install_warhammer_bb2($bbdkp_table_prefix)
 {
 	global $db, $table_prefix, $umil, $user;
 	
