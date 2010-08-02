@@ -266,4 +266,68 @@ function install_warhammer_rc2($bbdkp_table_prefix)
 }  
 
 
+/*
+ * new boss progress data for warhammer
+ * generated with the spreadsheet
+ * 
+ */
+function install_war_bb2($bbdkp_table_prefix)
+{
+	global $db, $table_prefix, $umil, $user;
+	
+	if ($umil->table_exists ( $bbdkp_table_prefix . 'bb_config' ) and ($umil->table_exists ( $bbdkp_table_prefix . 'bb_offsets' )))
+	{
+		$sql_ary = array ();
+		$sql_ary[] = array( 'id' => 1 , 'zonename' => 'Altdorf Sewers', 'zonename_short' =>  'Altdorf Sewers' , 'imagename' =>  'altdorf' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0');
+		$sql_ary[] = array( 'id' => 2 , 'zonename' => 'The Sacellum Dungeon', 'zonename_short' =>  'The Sacellum Dungeon' , 'imagename' =>  'sacellum' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0');
+		$sql_ary[] = array( 'id' => 3 , 'zonename' => 'Mount Gunbad', 'zonename_short' =>  'Mount Gunbad' , 'imagename' =>  'gunbad' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0');
+		$sql_ary[] = array( 'id' => 4 , 'zonename' => 'The Bastion Stair', 'zonename_short' =>  'The Bastion Stair' , 'imagename' =>  'stair' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0');
+		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_zonetable', $sql_ary );
+		unset ( $sql_ary );
+
+		$sql_ary[] = array('id' => 1 , 'bossname' => 'Kokrit Man-Eater' , 'bossname_short' => 'Kokrit', 'imagename' =>  'kokrit' , 'game' =>  'warhammer' , 'zoneid' =>  2 , 'type' =>  'npc'  , 'webid' =>  '19409' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 2 , 'bossname' => 'Bulbous One' , 'bossname_short' => 'Bulbous', 'imagename' =>  'bulbous' , 'game' =>  'warhammer' , 'zoneid' =>  2 , 'type' =>  'npc'  , 'webid' =>  '3650' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 3 , 'bossname' => 'Prot and Vermer Fangchitter' , 'bossname_short' => 'Fangchitter', 'imagename' =>  'fangchitter' , 'game' =>  'warhammer' , 'zoneid' =>  2 , 'type' =>  'npc'  , 'webid' =>  '3651' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 4 , 'bossname' => 'Master Moulder Vitchek' , 'bossname_short' => 'Vitchek', 'imagename' =>  'vitchek' , 'game' =>  'warhammer' , 'zoneid' =>  2 , 'type' =>  'npc'  , 'webid' =>  '18762' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 5 , 'bossname' => 'Goradian the Creator' , 'bossname_short' => 'Goradian', 'imagename' =>  'goradian' , 'game' =>  'warhammer' , 'zoneid' =>  2 , 'type' =>  'npc'  , 'webid' =>  '33401' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 6 , 'bossname' => 'Ghalmar Ragehorn' , 'bossname_short' => 'Ghalmar', 'imagename' =>  'ghalmar' , 'game' =>  'warhammer' , 'zoneid' =>  3 , 'type' =>  'npc'  , 'webid' =>  '25721' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 7 , 'bossname' => 'Guzhak the Betrayer' , 'bossname_short' => 'Guzhak', 'imagename' =>  'guzhak' , 'game' =>  'warhammer' , 'zoneid' =>  3 , 'type' =>  'npc'  , 'webid' =>  '22044' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 8 , 'bossname' => 'Vul The Bloodchosen' , 'bossname_short' => 'Vul', 'imagename' =>  'vul' , 'game' =>  'warhammer' , 'zoneid' =>  3 , 'type' =>  'npc'  , 'webid' =>  '33173' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 9 , 'bossname' => 'Hoarfrost' , 'bossname_short' => 'Hoarfrost', 'imagename' =>  'hoarfrost' , 'game' =>  'warhammer' , 'zoneid' =>  3 , 'type' =>  'npc'  , 'webid' =>  '10256' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 10 , 'bossname' => 'Sebcraw the Discarded' , 'bossname_short' => 'Sebcraw', 'imagename' =>  'sebcraw' , 'game' =>  'warhammer' , 'zoneid' =>  3 , 'type' =>  'npc'  , 'webid' =>  '26812' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 11 , 'bossname' => 'Slorth and Lorth Thunderbelly' , 'bossname_short' => 'Thunderbelly', 'imagename' =>  'thunder' , 'game' =>  'warhammer' , 'zoneid' =>  3 , 'type' =>  'npc'  , 'webid' =>  '93573' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 12 , 'bossname' => 'Snaptail the Breeder' , 'bossname_short' => 'Snaptail', 'imagename' =>  'breeder' , 'game' =>  'warhammer' , 'zoneid' =>  3 , 'type' =>  'npc'  , 'webid' =>  '33172' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 13 , 'bossname' => 'Goremane' , 'bossname_short' => 'Goremane', 'imagename' =>  'goremane' , 'game' =>  'warhammer' , 'zoneid' =>  3 , 'type' =>  'npc'  , 'webid' =>  '33182' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 14 , 'bossname' => 'Viraxil the Broken' , 'bossname_short' => 'Viraxil', 'imagename' =>  'viraxil' , 'game' =>  'warhammer' , 'zoneid' =>  3 , 'type' =>  'npc'  , 'webid' =>  '33181' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 15 , 'bossname' => 'Griblik da Stinka' , 'bossname_short' => 'Griblik', 'imagename' =>  'griblik' , 'game' =>  'warhammer' , 'zoneid' =>  4 , 'type' =>  'npc'  , 'webid' =>  '36549' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 16 , 'bossname' => 'Bilebane the Rager' , 'bossname_short' => 'Bilebane', 'imagename' =>  'bilebane' , 'game' =>  'warhammer' , 'zoneid' =>  4 , 'type' =>  'npc'  , 'webid' =>  '36547' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 17 , 'bossname' => 'Garrolath the Poxbearer' , 'bossname_short' => 'Garrolath', 'imagename' =>  'garrolath' , 'game' =>  'warhammer' , 'zoneid' =>  4 , 'type' =>  'npc'  , 'webid' =>  '38234' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 18 , 'bossname' => 'Foul Mouf da \'ungry' , 'bossname_short' => 'Foul', 'imagename' =>  'foulm' , 'game' =>  'warhammer' , 'zoneid' =>  4 , 'type' =>  'npc'  , 'webid' =>  '38623' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 19 , 'bossname' => 'Kurga da Squig-Maker' , 'bossname_short' => 'Kurga', 'imagename' =>  'kurga' , 'game' =>  'warhammer' , 'zoneid' =>  4 , 'type' =>  'npc'  , 'webid' =>  '38624' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 20 , 'bossname' => 'Glomp the Squig Masta' , 'bossname_short' => 'Glomp', 'imagename' =>  'glomp' , 'game' =>  'warhammer' , 'zoneid' =>  4 , 'type' =>  'npc'  , 'webid' =>  '38829' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 21 , 'bossname' => 'Solithex' , 'bossname_short' => 'Solithex', 'imagename' =>  'solithex' , 'game' =>  'warhammer' , 'zoneid' =>  4 , 'type' =>  'npc'  , 'webid' =>  '37964' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 22 , 'bossname' => 'Borzar Rageborn' , 'bossname_short' => 'Rageborn', 'imagename' =>  'borzar' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '9227' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 23 , 'bossname' => 'Gahlvoth Darkrage' , 'bossname_short' => 'Gahlvoth', 'imagename' =>  'gahlvoth' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '45224' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 24 , 'bossname' => 'Azuk\'Thul' , 'bossname_short' => 'Azuk\'Thul', 'imagename' =>  'azuk' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '47390' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 25 , 'bossname' => 'Thar\'lgnan' , 'bossname_short' => 'Thar\'lgnan', 'imagename' =>  'thar' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '45084' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 26 , 'bossname' => 'Urlf Daemonblessed' , 'bossname_short' => 'Urlf', 'imagename' =>  'urlf' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '7622' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 27 , 'bossname' => 'Garithex the Mountain' , 'bossname_short' => 'Garithex', 'imagename' =>  'garithex' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '7597' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 28 , 'bossname' => 'Chorek the Unstoppable' , 'bossname_short' => 'Chorek', 'imagename' =>  'chorek' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '49164' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 29 , 'bossname' => 'Lord Slaurith' , 'bossname_short' => 'Slaurith', 'imagename' =>  'slarith' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '48112' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 30 , 'bossname' => 'Wrackspite' , 'bossname_short' => 'Wrackspite', 'imagename' =>  'wrackspite' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '16078' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 31 , 'bossname' => 'Clawfang and Doomspike' , 'bossname_short' => 'Clawfang', 'imagename' =>  'clawfang' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '46327' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 32 , 'bossname' => 'Zekaraz the Bloodcaller' , 'bossname_short' => 'Zekaraz', 'imagename' =>  'zekaraz' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '46325' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 33 , 'bossname' => 'Kaarn the Vanquisher' , 'bossname_short' => 'Kaarn', 'imagename' =>  'kaarn' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '46330' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+		$sql_ary[] = array('id' => 34 , 'bossname' => 'Skull Lord Var\'Ithrok' , 'bossname_short' => 'Var\'Ithrok', 'imagename' =>  'skullord' , 'game' =>  'warhammer' , 'zoneid' =>  5 , 'type' =>  'npc'  , 'webid' =>  '64106' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0'    );
+				
+		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_bosstable', $sql_ary );
+		unset ( $sql_ary );
+		
+		
+	}
+}
+
+
+
+
 ?>
