@@ -67,11 +67,25 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				  	set_config ('bbdkp_bp_zonephoto',  request_var('headertype', 0), 0); 				  	
 				  	set_config ('bbdkp_bp_zoneprogress', ( isset($_POST['showzone']) ) ? 1 : 0);
 				  	set_config ('bbdkp_bp_zonestyle',  request_var('style', 0));
-//					foreach ( $bzone as $zoneid => $bosslist )
-//					{
-//						$this->bossprogress_update_config ( 'sz_' . $zoneid, (isset ( $_POST ['sz_' . $zoneid] )) ? '1' : '0' );
-//					}
+
+				  	$sql = "select imagename, showzone from " . ZONEBASE ;
+					$result = $db->sql_query($sql);
+                	$row = $db->sql_fetchrow($result); 
+	                while ( $row = $db->sql_fetchrow($result) )
+	                {
+	                	$zonenames[] = $row['imagename']; 
+	                }
+	                $db->sql_freeresult($result);
+	                
+	                foreach ($zonenames as $key => $zonename) 
+					{
+						$insertvalue = isset ( $_POST [$zonename] ) ? 1 : 0;
+						$sql = 'UPDATE ' . ZONEBASE . ' SET showzone = '.  $insertvalue .'  WHERE imagename= "'. $db->sql_escape($zonename) .'"';
+						$db->sql_query($sql);
+					}
+					
 					trigger_error($user->lang['BP_SAVED'] . $link, E_USER_NOTICE);
+					
 				}
 				
 				$bp_styles['0'] = $user->lang['BP_STYLE_BP'];
@@ -105,14 +119,13 @@ class acp_dkp_bossprogress extends bbDkp_Admin
                 {
                     $template->assign_block_vars('gamezone', array(
                     'ZONE_NAME' => $user->lang['SHOWZONE'] . $row['zonename']  ,
-                    'BOSS_SHOWN' => $row['showzone'],
+                    'BOSS_SHOWN' => $row['imagename'],
                     'BOSS_CHK'   => ($row['showzone'] == 1) ? ' checked="checked"' : '',
                     ));
                 }
                 $db->sql_freeresult($result);
 
-				
-				
+				$this->page_title =  $user->lang['RP_BP'] . ' - '. $user->lang['RP_BP_CONF'];
 				$this->tpl_name = 'dkp/acp_'. $mode;
 				break;		
 		}
