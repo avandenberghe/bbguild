@@ -754,6 +754,26 @@ $versions = array(
 		
 		'1.1.2'  => array(
 		/* bossprogress refit */ 
+		
+  		'config_add' => array(
+        	//global config
+        	
+        	//Hide zones with no boss kills
+        	array('bbdkp_bp_hidenewzone', 0, true),
+        	
+        	//Hide never killed bosses?
+        	array('bbdkp_bp_hidenonkilled', 0, true),
+        	
+        	//header image style : sepia, photo, blue
+	        array('bbdkp_bp_zonephoto', 0, true),
+	        
+	        //show zoneprogressionbar
+	        array('bbdkp_bp_zoneprogress', 1, true),
+	        
+	        //bp style : 2 row, 3 row, simple, photo
+	        array('bbdkp_bp_zonestyle', 0, true),
+	      ),
+					
 		'table_add' => array(
 		        array($bbdkp_table_prefix . 'bb_zonetable', array(
 		              'COLUMNS'            => array(
@@ -766,6 +786,7 @@ $versions = array(
 						  'completed'      => array('BOOL', 0),
 						  'completedate'   => array('TIMESTAMP', 0), 
 						  'webid'          => array('VCHAR:255', ''),
+		        		  'showzone'	   => array('BOOL', 0), 
 		                ),
 		                'PRIMARY_KEY'      => 'id',
 		            ),
@@ -782,7 +803,9 @@ $versions = array(
 						  'webid'          => array('VCHAR:255', ''),
 						  'killed'         => array('BOOL', 0),
 						  'killdate'   	   => array('TIMESTAMP', 0), 
-						  'counter'        => array('UINT', 0),                ),
+						  'counter'        => array('UINT', 0),
+		            	  'showboss'	   => array('BOOL', 0), 
+		          	),
 		                'PRIMARY_KEY'      => 'id',
 		          		'KEYS'            => array('zoneid'    => array('INDEX', 'zoneid')),
 		            ),
@@ -790,7 +813,7 @@ $versions = array(
           	),
 		
         // removing old table
-        'table_remove' => array( $bbdkp_table_prefix . 'bb_config', $bbdkp_table_prefix . 'bb_offsets'), 
+        //'table_remove' => array( $bbdkp_table_prefix . 'bb_config', $bbdkp_table_prefix . 'bb_offsets'), 
 
 		'custom' => array( 
 			'gameupdate', 
