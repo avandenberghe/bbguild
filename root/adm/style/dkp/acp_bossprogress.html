@@ -3,8 +3,8 @@
 		$Id$
 //-->
 
-<h1>{L_TITLE}</h1>
-<p>{L_EXPLAIN}</p>
+<h1>{L_RP_BP}</h1>
+<p>{L_RP_BP_CONF}</p>
 
 <form method="post" action="{F_CONFIG}" name="post">
 <table border="0" width="100%" cellspacing="1" cellpadding="2">
@@ -14,15 +14,15 @@
 			<tr>
 				<td width="60%" class="row2">{L_HEADERTYPE}</td>
 				<td width="40%" class="row1">
-					<select size="1" name="Headertype">
+					<select size="1" name="headertype">
 						<option value="0" {HEADER_SEL_OLDPHOTO}>{L_OLDPHOTO}</option>
-						<option value="1" {HEADER_SEL_BW}>{L_BW}</option>
+						<option value="1" {HEADER_SEL_BW}>{L_BLUE}</option>
 						<option value="2" {HEADER_SEL_NONE}>{L_NONE}</option>
 					</select>
 				</td>
 			</tr>
 			<tr>
-				 <td class="row2">{L_STYLE}</td>
+				 <td class="row2">{L_BPSTYLE}</td>
 				 <td class="row1">
 				 	<select name="style" class="input">
 					<!-- BEGIN style_row -->
@@ -33,19 +33,21 @@
 			</tr>
 		
 			<tr>
-				<td width="70%" class="row2">{L_SHOWSB}</td>
-				<td width="30%" class="row1"><input type="checkbox" name="showSB" value="1" {BP_SHOWSB} /></td>
+				<td width="70%" class="row2">{L_SHOWZONEPROGRESS}</td>
+				<td width="30%" class="row1"><input type="checkbox" name="showzone" value="1" {BP_SHOWSB} /></td>
 			</tr>
 			<tr>
-				<td width="30%" class="row2">{L_DYNLOC}</td>
-				<td width="70%" class="row1"><input type="checkbox" name="dynloc" value="1" {BP_DYNLOC} /></td>
+				<td width="30%" class="row2">{L_HIDENEWZONE}</td>
+				<td width="70%" class="row1"><input type="checkbox" name="hidenewzone" value="1" {BP_HIDENEWZONE} /></td>
 			</tr>
 			<tr>
-				<td width="70%" class="row2">{L_DYNBOSS}</td>
-				<td width="30%" class="row1"><input type="checkbox" name="dynboss" value="1" {BP_DYNBOSS} /></td>
+				<td width="70%" class="row2">{L_HIDENEWBOSS}</td>
+				<td width="30%" class="row1"><input type="checkbox" name="hidenewboss" value="1" {BP_HIDENONKIBOSS} /></td>
 			</tr>
 </table>
+
 <br/>
+
 <table width="100%" border="0" cellspacing="1" cellpadding="2" id="bossprog">
 	<thead>
 	<tr>
@@ -64,8 +66,15 @@
 	</tbody>
 </table>
 
+
+  
+
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
- <tr><th align="center" colspan="2"><input type="submit" name="bpsavebu" value="{L_SUBMIT}" class="mainoption" /></th></tr>
+ <tr><th align="center" colspan="2">
+   <p class="quick">
+    <input type="submit" name="bpsave" value="{L_SUBMIT}" class="button1" />
+  </p>
+ </th></tr>
 </table>
 </form>
 

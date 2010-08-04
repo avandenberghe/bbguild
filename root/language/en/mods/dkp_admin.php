@@ -704,6 +704,30 @@ $lang = array_merge($lang, array(
 'ALERT_OLDBROWSER' => 'Browser does not support HTTP Request', 
 
 
+//bossprogress
+'GENERAL' => 'General settings',
+'BP_SAVED' => 'Bossprogress settings Saved', 
+
+'HEADERTYPE' => 'How to display the progress in the header image?',
+'OLDPHOTO' => 'old photo overlay',
+'BLUE' => 'Blue overlay',
+'NONE' => 'No progressbar',
+
+'BPSTYLE' => 'Style: ',
+'BP_STYLE_BP'   => 'RaidProgress default',
+'BP_STYLE_BPS'  => 'RaidProgress simple',
+'BP_STYLE_RP2R' => 'Raidprogress 2/row',
+'BP_STYLE_RP3R' => 'Raidprogress 3/row',
+
+'SHOWZONEPROGRESS' => 'Show a zone progression bar?',
+'HIDENEWZONE' => 'Hide zones with no boss kills?',
+'HIDENEWBOSS' => 'Hide never killed bosses?',
+
+'SHOWZONE' => 'Show: ',
+
+'SHOWZONES' => 'Show Zones',
+'RP_BP' => 'Raid Progress',
+'RP_BP_CONF' => 'Setings'
 
 ));
 
