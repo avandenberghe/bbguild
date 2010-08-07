@@ -45,12 +45,9 @@ class acp_dkp_bossprogress extends bbDkp_Admin
         switch ($mode)
 		{
 			case 'bossbase':
-    			$this->page_title =  $user->lang['bossbase'] . ' - '. $user->lang['bb_am_conf'];
-    			$this->tpl_name = 'dkp/acp_'. $mode;
-				break;	
-			
-			case 'bossbase_offset':
-    			$this->page_title =  $user->lang['bossbase'] . ' - '. $user->lang['bb_am_offs'];
+				
+				// list of bosses
+				$this->page_title =  $user->lang['bossbase'] . ' - '. $user->lang['bb_am_conf'];
     			$this->tpl_name = 'dkp/acp_'. $mode;
 				break;	
 		
@@ -88,6 +85,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					
 				}
 				
+				
+				
 				$bp_styles['0'] = $user->lang['BP_STYLE_BP'];
 				$bp_styles['1'] = $user->lang['BP_STYLE_BPS'];
 				$bp_styles['2'] = $user->lang['BP_STYLE_RP3R'];
@@ -112,15 +111,36 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				);
 				$template->assign_vars($arrvals);
 				
-				$sql = "select zonename, showzone, imagename from " . ZONEBASE ;
+				// list of zones
+				$sql_array = array(
+				    'SELECT'    => 	' zonename, zonename_short, imagename, completed, completedate, webid, showzone  ', 
+				 
+				    'FROM'      => array(
+				        ZONEBASE 	=> 'z',
+				    	),
+					'ORDER_BY'	=> $current_order['sql'],
+				    	
+				    );
+				    
+				$sql = $db->sql_build_query('SELECT', $sql_array);
 				$result = $db->sql_query($sql);
                 $row = $db->sql_fetchrow($result); 
                 while ( $row = $db->sql_fetchrow($result) )
                 {
                     $template->assign_block_vars('gamezone', array(
-                    'ZONE_NAME' => $user->lang['SHOWZONE'] . $row['zonename']  ,
-                    'BOSS_SHOWN' => $row['imagename'],
-                    'BOSS_CHK'   => ($row['showzone'] == 1) ? ' checked="checked"' : '',
+	                    'ZONE_NAME' 		=> $row['zonename']  ,
+	                    'ZONE_NAME_SHORT' 	=> $row['zonename_short']  ,
+	                    'ZONE_IMAGENAME' 	=> $row['imagename']  ,
+	                    'ZONE_WEBID' 		=> $row['webid']  ,
+	                    'ZONE_COMPLETED' 	=> ($row['completed'] == 1) ? ' checked="checked"' : '',
+	                    'ZONE_COMPLETEDATE' => ($row['completedate'] == 0) ? ' ' :  date($config['bbdkp_date_format'], $row['completedate'])  ,
+                    	
+	                    'ZONE_DD' => ($row['completedate'] == 0) ? ' ' :  date($config['bbdkp_date_format'], $row['completedate'])  ,
+                    	'ZONE_MM' => ($row['completedate'] == 0) ? ' ' :  date($config['bbdkp_date_format'], $row['completedate'])  ,
+                    	'ZONE_YY' => ($row['completedate'] == 0) ? ' ' :  date($config['bbdkp_date_format'], $row['completedate'])  ,
+                    
+                    
+	                    'ZONE_SHOW'   		=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
                     ));
                 }
                 $db->sql_freeresult($result);

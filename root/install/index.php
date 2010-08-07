@@ -755,6 +755,7 @@ $versions = array(
 		'1.1.2'  => array(
 		/* bossprogress refit */ 
 		
+		
   		'config_add' => array(
         	//global config
         	
@@ -1169,8 +1170,9 @@ function gameupdate($action, $version)
 	
 				case '1.1.2' : 
 					// bossprogress updaters
-					//removing old table
 
+					//removing module
+					$umil->module_remove('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_OFFSET');
 
 					$game = request_var('game', '');
 					switch ($game)

@@ -704,9 +704,9 @@ $lang = array_merge($lang, array(
 'ALERT_OLDBROWSER' => 'Browser does not support HTTP Request', 
 
 
-//bossprogress
+//Raid progress
 'GENERAL' => 'General settings',
-'BP_SAVED' => 'Bossprogress settings Saved', 
+'BP_SAVED' => 'Raid progress settings Saved', 
 
 'HEADERTYPE' => 'How to display the progress in the header image?',
 'OLDPHOTO' => 'old photo overlay',
@@ -727,7 +727,18 @@ $lang = array_merge($lang, array(
 
 'SHOWZONES' => 'Show Zones',
 'RP_BP' => 'Raid Progress',
-'RP_BP_CONF' => 'Setings'
+'RP_BP_CONF' => 'Settings', 
+
+'ZONE_NAME' => 'Zone name', 
+'ZONE_NAME_SHORT' => 'Short name',
+'ZONE_IMAGENAME' => 'Imagename <br /> (jpg, no extension)',
+'ZONE_WEBID' => 'Web id',
+'ZONE_COMPLETED' => 'Completed',
+'ZONE_COMPLETEDATE' => 'Completiondate  <br /> (dd/mm/yyyy)',
+'ZONE_SHOW' => 'Show',
+
+
+
 
 ));
 

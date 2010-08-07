@@ -8,74 +8,112 @@
 
 <form method="post" action="{F_CONFIG}" name="post">
 <table border="0" width="100%" cellspacing="1" cellpadding="2">
-			<tr>
-   				 <th align="center" colspan="2">{L_GENERAL}</th>
-			</tr>
-			<tr>
-				<td width="60%" class="row2">{L_HEADERTYPE}</td>
-				<td width="40%" class="row1">
-					<select size="1" name="headertype">
-						<option value="0" {HEADER_SEL_OLDPHOTO}>{L_OLDPHOTO}</option>
-						<option value="1" {HEADER_SEL_BW}>{L_BLUE}</option>
-						<option value="2" {HEADER_SEL_NONE}>{L_NONE}</option>
-					</select>
-				</td>
-			</tr>
-			<tr>
-				 <td class="row2">{L_BPSTYLE}</td>
-				 <td class="row1">
-				 	<select name="style" class="input">
-					<!-- BEGIN style_row -->
-						<option value="{style_row.VALUE}"{style_row.SELECTED}>{style_row.OPTION}</option>
-					<!-- END style_row -->
-					</select>
-				</td>
-			</tr>
-		
-			<tr>
-				<td width="70%" class="row2">{L_SHOWZONEPROGRESS}</td>
-				<td width="30%" class="row1"><input type="checkbox" name="showzone" value="1" {BP_SHOWSB} /></td>
-			</tr>
-			<tr>
-				<td width="30%" class="row2">{L_HIDENEWZONE}</td>
-				<td width="70%" class="row1"><input type="checkbox" name="hidenewzone" value="1" {BP_HIDENEWZONE} /></td>
-			</tr>
-			<tr>
-				<td width="70%" class="row2">{L_HIDENEWBOSS}</td>
-				<td width="30%" class="row1"><input type="checkbox" name="hidenewboss" value="1" {BP_HIDENONKIBOSS} /></td>
-			</tr>
+	<tr>
+		<th align="center" colspan="2">{L_GENERAL}</th>
+	</tr>
+	<tr>
+		<td width="60%" class="row2">{L_HEADERTYPE}</td>
+		<td width="40%" class="row1"><select size="1" name="headertype">
+			<option value="0"{HEADER_SEL_OLDPHOTO}>{L_OLDPHOTO}</option>
+			<option value="1"{HEADER_SEL_BW}>{L_BLUE}</option>
+			<option value="2"{HEADER_SEL_NONE}>{L_NONE}</option>
+		</select></td>
+	</tr>
+	<tr>
+		<td class="row2">{L_BPSTYLE}</td>
+		<td class="row1"><select name="style" class="input">
+			<!-- BEGIN style_row -->
+			<option value="{style_row.VALUE}"{style_row.SELECTED}>{style_row.OPTION}</option>
+			<!-- END style_row -->
+		</select></td>
+	</tr>
+
+	<tr>
+		<td width="70%" class="row2">{L_SHOWZONEPROGRESS}</td>
+		<td width="30%" class="row1"><input type="checkbox"
+			name="showzone" value="1" {BP_SHOWSB} /></td>
+	</tr>
+	<tr>
+		<td width="30%" class="row2">{L_HIDENEWZONE}</td>
+		<td width="70%" class="row1"><input type="checkbox"
+			name="hidenewzone" value="1" {BP_HIDENEWZONE} /></td>
+	</tr>
+	<tr>
+		<td width="70%" class="row2">{L_HIDENEWBOSS}</td>
+		<td width="30%" class="row1"><input type="checkbox"
+			name="hidenewboss" value="1" {BP_HIDENONKIBOSS} /></td>
+	</tr>
 </table>
 
-<br/>
+<br />
 
-<table width="100%" border="0" cellspacing="1" cellpadding="2" id="bossprog">
+<table width="100%" border="0" cellspacing="1" cellpadding="2"
+	id="bossprog">
+
 	<thead>
-	<tr>
-		<th colspan="2">{L_SHOWZONES}</th>
-	</tr>
+		<tr>
+			<th align="left" nowrap="nowrap">{L_ZONE_NAME}</th>
+			<th align="left" width="20" nowrap="nowrap">{L_ZONE_NAME_SHORT}</th>
+			<th align="left" width="35" nowrap="nowrap">{L_ZONE_IMAGENAME}</th>
+			<th align="left" width="15" nowrap="nowrap">{L_ZONE_WEBID}</th>
+			<th align="center" width="40">{L_ZONE_COMPLETED}</th>
+			<th align="left" width="20" >{L_ZONE_COMPLETEDATE}</th>
+			<th align="center" width="20" nowrap="nowrap">{L_ZONE_SHOW}</th>
+			<th align="center" width="5">{L_DELETE}</th>
+		</tr>
 	</thead>
+
 	<tbody>
-<!-- BEGIN gamezone -->
-	<tr>
-		<td style="text-align: left; width:40%;" class="row2">{gamezone.ZONE_NAME}</td>
-		<td style="text-align: left; width:60%;" class="row1">
-		  <input type="checkbox" name="{gamezone.BOSS_SHOWN}" value="1" {gamezone.BOSS_CHK} />
-		</td>
-	</tr>
-<!-- END gamezone -->
+		<!-- BEGIN gamezone -->
+
+		<!-- IF gamezone.S_ROW_COUNT is even -->
+		<tr class="row1">
+			<!-- ELSE -->
+		</tr>
+		<tr class="row2">
+			<!-- ENDIF -->
+			<td width="40" nowrap="nowrap"><input class="text post" type="text" size="30" name="zonename[{gamezone.ZONE_IMAGENAME}]" value="{gamezone.ZONE_NAME}" />  </td>
+			<td width="40" nowrap="nowrap"><input class="text post" type="text" size="10" name="zonenameshort[{gamezone.ZONE_IMAGENAME}]" value="{gamezone.ZONE_NAME_SHORT}" />    </td>
+			<td width="35" nowrap="nowrap"><input class="text post" type="text" size="25" name="zoneimagename[{gamezone.ZONE_IMAGENAME}]" value="{gamezone.ZONE_IMAGENAME}" />    </td>
+			<td width="10" nowrap="nowrap"><input class="text post" type="text" size="10" name="zonewebid[{gamezone.ZONE_IMAGENAME}]" value="{gamezone.ZONE_WEBID}" />   </td>
+			<td width="20" nowrap="nowrap" align="center"><input type="checkbox" name="zonecompleted[{gamezone.ZONE_IMAGENAME}]" value="1" {gamezone.ZONE_COMPLETED} /> </td>
+			<td width="40" nowrap="nowrap" style="text-align: center;">
+				<input type="text" name="zonedd{gamezone.DD}" size="3" maxlength="2" value="{gamezone.DD}" class="input" />/
+				<input type="text" name="zonemm{gamezone.MM}" size="3" maxlength="2" value="{gamezone.MM}" class="input" />/
+				<input type="text" name="zoneyy{gamezone.YY}" size="5" maxlength="4" value="{gamezone.YY}" class="input" />
+			</td>
+			<td width="5" nowrap="nowrap" align="center">
+				<input type="checkbox" name="{gamezone.ZONE_IMAGENAME}" value="1" {gamezone.ZONE_SHOW} />
+			</td>
+			<td>
+				<a href="{items.U_DELETE}">{ICON_DELETE}</a>
+			</td>
+			
+		</tr>
+		<!-- END gamezone -->
+
+		<tr>
+			<th colspan="9" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+		</tr>
 	</tbody>
 </table>
+<br />
 
-
-  
 
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
- <tr><th align="center" colspan="2">
-   <p class="quick">
-    <input type="submit" name="bpsave" value="{L_SUBMIT}" class="button1" />
-  </p>
- </th></tr>
+	<tr>
+		<th align="center" colspan="2">
+		<p class="quick">
+		<input type="submit" name="bpsave" value="{L_SUBMIT}" class="button1" />
+		&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+			</p>
+		</th>
+	</tr>
 </table>
+
+
+{S_FORM_TOKEN}
 </form>
 
 <!-- INCLUDE dkp/overall_footer.html -->
