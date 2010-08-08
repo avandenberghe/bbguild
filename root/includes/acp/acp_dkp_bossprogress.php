@@ -131,12 +131,37 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				if ($delete)
 				{
 					//
+					//delete a zone
 					//
-					//
-					
-					
+					$imagename = request_var('imagename', ''); 
+					if (confirm_box(true))
+					{
+					$sql = ' SELECT id FROM ' . ZONEBASE . " where imagename = '" . $db->sql_escape($imagename) . "' ";	
+			        $result = $db->sql_query($sql);
+			        while ( $row = $db->sql_fetchrow($result) )
+			        {
+			        	$zoneid = $row['id']; 
+			        }
+			        $db->sql_freeresult ( $result);
+        
+					$sql = 'DELETE FROM ' . ZONEBASE . ' WHERE id = ' . $zoneid;  
+					$db->sql_query($sql);	
+					$sql = 'DELETE FROM ' . BOSSBASE . ' WHERE zoneid=' . $zoneid;  
+					$db->sql_query($sql);
 					trigger_error($user->lang['RP_ZONEDEL'] . $link, E_USER_NOTICE);
 					
+							
+					}
+					else
+					{
+						$s_hidden_fields = build_hidden_fields(array(
+							'delete'		=> true,
+							'imagename'		=> $imagename,
+							)
+						);
+		
+						confirm_box(false, sprintf($user->lang['RP_ZONEDELETCONFIRM'], $imagename), $s_hidden_fields);
+					}
 					
 				}
 				
@@ -154,7 +179,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				}
 				
 				$arrvals = array (
-					'F_CONFIG' 			 => append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress"),
+					'F_CONFIG' 			 => append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress"),
 					'BP_HIDENEWZONE'	 => ($config['bbdkp_bp_hidenewzone'] == 1) ? ' checked="checked"' : '',
 					'BP_HIDENONKIBOSS' 	 => ($config['bbdkp_bp_hidenonkilled'] == 1) ? ' checked="checked"' : '',
 					'BP_SHOWSB' 		 => ($config['bbdkp_bp_zoneprogress'] == 1) ? ' checked="checked"' : '',
@@ -187,7 +212,6 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                    'ZONE_WEBID' 		=> $row['webid']  ,
 	                    'ZONE_COMPLETED' 	=> ($row['completed'] == 1) ? ' checked="checked"' : '',
 	                  
-                    	
 	                    'ZONE_DD' => ($row['completedate'] == 0) ? ' ' : date('d', $row['completedate'])  ,
                     	'ZONE_MM' => ($row['completedate'] == 0) ? ' ' : date('m', $row['completedate'])  ,
                     	'ZONE_YY' => ($row['completedate'] == 0) ? ' ' : date('y', $row['completedate'])  ,
@@ -199,7 +223,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
                 $db->sql_freeresult($result);
 
 				$this->page_title =  $user->lang['RP_BP'] . ' - '. $user->lang['RP_BP_CONF'];
-				$this->tpl_name = 'dkp/acp_'. $mode;
+				$this->tpl_name = 'dkp/acp_zoneprogress';
 				break;		
 		}
 				

@@ -738,8 +738,7 @@ you can also delete a Zone, this will also delete any bosses in that zone.' ,
 'ZONE_COMPLETED' => 'Completed',
 'ZONE_COMPLETEDATE' => 'Completiondate  <br /> (dd/mm/yyyy)',
 'ZONE_SHOW' => 'Show',
-
-
+'RP_ZONEDELETCONFIRM' => 'Please confirm deletion of zone %s. This will also delete any bosses attached to this zone.',   
 
 
 ));
