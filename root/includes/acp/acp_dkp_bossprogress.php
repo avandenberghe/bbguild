@@ -39,23 +39,24 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	{
 	    global $db, $user, $template, $config, $phpEx;   
         $user->add_lang(array('mods/dkp_admin'));   
-		$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress") . 
+		$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress") . 
 			'"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
 		
         switch ($mode)
 		{
-			case 'bossbase':
+			case 'bossprogress':
 				
 				// list of bosses
 				$this->page_title =  $user->lang['bossbase'] . ' - '. $user->lang['bb_am_conf'];
     			$this->tpl_name = 'dkp/acp_'. $mode;
 				break;	
 		
-			case 'bossprogress':	
+			case 'zoneprogress':	
 				// page layout
 				$submit = (isset($_POST['bpsave'])) ? true : false;
+				$delete = (isset($_GET['step'])) ? true : false;
 				
-				// Saving
+				// updating 
 				if ($submit)
 				{
 					// global config
@@ -65,19 +66,61 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				  	set_config ('bbdkp_bp_zoneprogress', ( isset($_POST['showzone']) ) ? 1 : 0);
 				  	set_config ('bbdkp_bp_zonestyle',  request_var('style', 0));
 
-				  	$sql = "select imagename, showzone from " . ZONEBASE ;
+				  	$sql = "select imagename, showzone, completedate from " . ZONEBASE ;
 					$result = $db->sql_query($sql);
                 	$row = $db->sql_fetchrow($result); 
 	                while ( $row = $db->sql_fetchrow($result) )
 	                {
 	                	$zonenames[] = $row['imagename']; 
+	                	$completedate[$row['imagename']] = $row['completedate']; 
 	                }
 	                $db->sql_freeresult($result);
-	                
+
+	                $newzonenames =  request_var('zonename', array( ''=> ''));
+					$newzonenameshorts =  request_var('zonenameshort', array( ''=> ''));
+					$newzoneimagenames =  request_var('zoneimagename', array( ''=> ''));
+					$newzonewebids =  request_var('zonewebid', array( ''=> ''));
+					$newzonedds =  request_var('zonedd', array( ''=> ''));
+					$newzonemms =  request_var('zonemm', array( ''=> ''));
+					$newzoneyys =  request_var('zoneyy', array( ''=> ''));
 	                foreach ($zonenames as $key => $zonename) 
 					{
-						$insertvalue = isset ( $_POST [$zonename] ) ? 1 : 0;
-						$sql = 'UPDATE ' . ZONEBASE . ' SET showzone = '.  $insertvalue .'  WHERE imagename= "'. $db->sql_escape($zonename) .'"';
+						$month = (int) $newzonemms[$zonename];
+						$month = min (12, max(1,$month) );
+						$day = (int) $newzonedds[$zonename];
+						$year = (int) $newzoneyys[$zonename]; 
+						$year = min ( date("Y") ,  max(1999,$year) );
+						if (checkdate($month, $day, $year))
+						{
+							// correct date found
+							$data = array(
+								'newzonename' => $newzonenames[$zonename],
+								'newzonenameshort' => $newzonenameshorts[$zonename],
+								'newzoneimagename' => $newzoneimagenames[$zonename], 
+								'completed' => isset ( $_POST ['zonecompleted'][$zonename] ) ? 1 : 0,		
+								'completedate' =>  mktime(0, 0, 0, $month, $day, $year), 
+								'webid' => $newzonewebids[$zonename],
+								'showzone' => isset ( $_POST ['zoneshow'][$zonename] ) ? 1 : 0,
+							);
+						}
+						else 
+						{
+							// incorrect completedate entered so this completedate not be updated with user provided date
+							$data= array(
+								'zonename' => $newzonenames[$zonename],
+								'zonename_short' => $newzonenameshorts[$zonename],
+								'imagename' => $newzoneimagenames[$zonename], 
+								'completed' => isset ( $_POST ['zonecompleted'][$zonename] ) ? 1 : 0,		
+								'completedate' => $completedate[$zonename], 
+								'webid' => $newzonewebids[$zonename],
+								'showzone' => isset ( $_POST ['zoneshow'][$zonename] ) ? 1 : 0,
+							);
+							
+							
+						}
+						
+						// And doing an update query 
+						$sql = 'UPDATE ' . ZONEBASE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE imagename = "'. $db->sql_escape($zonename) .'"';
 						$db->sql_query($sql);
 					}
 					
@@ -85,7 +128,17 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					
 				}
 				
-				
+				if ($delete)
+				{
+					//
+					//
+					//
+					
+					
+					trigger_error($user->lang['RP_ZONEDEL'] . $link, E_USER_NOTICE);
+					
+					
+				}
 				
 				$bp_styles['0'] = $user->lang['BP_STYLE_BP'];
 				$bp_styles['1'] = $user->lang['BP_STYLE_BPS'];
@@ -133,14 +186,14 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                    'ZONE_IMAGENAME' 	=> $row['imagename']  ,
 	                    'ZONE_WEBID' 		=> $row['webid']  ,
 	                    'ZONE_COMPLETED' 	=> ($row['completed'] == 1) ? ' checked="checked"' : '',
-	                    'ZONE_COMPLETEDATE' => ($row['completedate'] == 0) ? ' ' :  date($config['bbdkp_date_format'], $row['completedate'])  ,
+	                  
                     	
-	                    'ZONE_DD' => ($row['completedate'] == 0) ? ' ' :  date($config['bbdkp_date_format'], $row['completedate'])  ,
-                    	'ZONE_MM' => ($row['completedate'] == 0) ? ' ' :  date($config['bbdkp_date_format'], $row['completedate'])  ,
-                    	'ZONE_YY' => ($row['completedate'] == 0) ? ' ' :  date($config['bbdkp_date_format'], $row['completedate'])  ,
-                    
-                    
-	                    'ZONE_SHOW'   		=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
+	                    'ZONE_DD' => ($row['completedate'] == 0) ? ' ' : date('d', $row['completedate'])  ,
+                    	'ZONE_MM' => ($row['completedate'] == 0) ? ' ' : date('m', $row['completedate'])  ,
+                    	'ZONE_YY' => ($row['completedate'] == 0) ? ' ' : date('y', $row['completedate'])  ,
+                                        
+	                    'ZONE_SHOW'   	=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
+                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;step=delete&amp;imagename={$row['imagename']}")  ,  
                     ));
                 }
                 $db->sql_freeresult($result);

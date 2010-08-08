@@ -726,8 +726,10 @@ $lang = array_merge($lang, array(
 'SHOWZONE' => 'Show: ',
 
 'SHOWZONES' => 'Show Zones',
-'RP_BP' => 'Raid Progress',
-'RP_BP_CONF' => 'Settings', 
+'RP_ZONE' => 'Zone configuration',
+'RP_ZONE_EXPLAIN' => 'Here you can configure the Zones header photo, Boss progress style, whether a zone has a progressbar, or that zones without kills will be shown (overrides the "shown" column), hide bosses that were never killed.<br /><br />In the list, you can edit the Zone name, shortname, Imagename (this must be unique), whether the zone is completed and the completiondate. 
+you can also delete a Zone, this will also delete any bosses in that zone.' , 
+'RP_ZONEDEL' => 'Zone deleted',
 
 'ZONE_NAME' => 'Zone name', 
 'ZONE_NAME_SHORT' => 'Short name',

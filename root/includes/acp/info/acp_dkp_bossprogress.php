@@ -35,11 +35,10 @@ class acp_dkp_bossprogress_info
 		return array(
 			'filename'	=> 'acp_dkp_bossprogress',
 			'title'		=> 'ACP_DKP_BOSS',
-			'version'	=> '1.1.0',
+			'version'	=> '1.1.2',
 			'modes'		=> array(
-				'bossbase'			=> array('title' => 'ACP_DKP_BOSS_BOSSBASE', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_BOSS')),
-				'bossbase_offset'	=> array('title' => 'ACP_DKP_BOSS_OFFSET', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_BOSS')),
-				'bossprogress'		=> array('title' => 'ACP_DKP_BOSS_CONFIG', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_BOSS')),
+				'bossprogress'		=> array('title' => 'ACP_DKP_BOSS_BOSSPROGRESS', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_BOSS')),
+				'zoneprogress'		=> array('title' => 'ACP_DKP_BOSS_ZONEPROGRESS', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_BOSS')),
 				),
 		);
 	}

@@ -753,8 +753,22 @@ $versions = array(
 		
 		
 		'1.1.2'  => array(
+		
 		/* bossprogress refit */ 
 		
+		/* remove two modes */
+		'module_remove' => array(
+           array('acp', 'ACP_DKP_BOSS', array(
+          		 'module_basename' => 'dkp_bossprogress',
+            	 'modes'           => array('bossbase', 'bossbase_offset' ),
+         ))),
+        
+		/* add 1 mode */
+         'module_add' => array(
+           array('acp', 'ACP_DKP_BOSS', array(
+          		 'module_basename' => 'dkp_bossprogress',
+            	 'modes'           => array('zoneprogress' ),
+         ))),
 		
   		'config_add' => array(
         	//global config
@@ -1170,10 +1184,7 @@ function gameupdate($action, $version)
 	
 				case '1.1.2' : 
 					// bossprogress updaters
-
-					//removing module
-					$umil->module_remove('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_OFFSET');
-
+					
 					$game = request_var('game', '');
 					switch ($game)
 					{
