@@ -393,7 +393,13 @@ class acp_dkp extends bbDkp_Admin
 
                 if ($info === false)
         		{
-        			// version file reference does not exist, do not perform comparison.
+        			// version file reference does not exist, show error
+                    $template->assign_vars(array(
+        				'S_UP_TO_DATE' => false , 
+                       'BBDKPVERSION' => $user->lang['YOURVERSION']  . $installed_version ,
+                    	'UPDATEINSTR' => $user->lang['VERSION_NOTONLINE']
+                       ));
+        			
         		}
         		else
         		{

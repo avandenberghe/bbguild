@@ -259,6 +259,13 @@ class acp_dkp_adj extends bbDkp_Admin
 				************************************/
 				case 'listiadj':
 				
+				$showadd = (isset($_POST['addiadj'])) ? true : false;
+			    if($showadd)
+			    {
+					redirect(append_sid("index.$phpEx", "i=dkp_adj&amp;mode=addiadj"));            		
+			        break;
+			    }
+			    
 				/**************  DKPSYS drop-down query ****************/
 				
 				$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 

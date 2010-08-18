@@ -335,7 +335,16 @@ class acp_dkp_event extends bbDkp_Admin
             break;
    
             case 'listevents':
-           
+
+            	$showadd = (isset($_POST['eventadd'])) ? true : false;
+            	
+            	if($showadd)
+            	{
+					redirect(append_sid("index.$phpEx", "i=dkp_event&amp;mode=addevent"));            		
+            		break;
+            	}
+            	
+            	
                 $sort_order = array(
                     0 => array('dkpsys_name', 'dkpsys_name desc'),
                     1 => array('event_name', 'dkpsys_name, event_name desc'),
@@ -365,7 +374,6 @@ class acp_dkp_event extends bbDkp_Admin
                 while ( $event = $db->sql_fetchrow($events_result) )
                 {
                     $template->assign_block_vars('events_row', array(
-
                         'U_VIEW_EVENT' =>  append_sid("index.$phpEx", "i=dkp_event&amp;mode=addevent&amp;" . URI_EVENT ."={$event['event_id']}"),
                         'DKPSYS_EVENT' => $event['dkpsys_name'],
                         'NAME' => $event['event_name'],
@@ -382,7 +390,7 @@ class acp_dkp_event extends bbDkp_Admin
                     'O_VALUE' => $current_order['uri'][2],   
                     'U_LIST_EVENTS' => append_sid("index.$phpEx", "i=dkp_event&amp;mode=listevents&amp;"),       
                     'START' => $start,
-                    
+                
                     'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events, $config['bbdkp_user_elimit']),
                     'EVENT_PAGINATION' => generate_pagination(append_sid("index.$phpEx", "i=dkp_event&amp;mode=listevents&amp;" . URI_ORDER . '='.$current_order['uri']['current']), $total_events, $config['bbdkp_user_elimit'],$start))
 

@@ -388,9 +388,10 @@ $lang = array_merge($lang, array(
 'JOB' => 'Job', 
 'DEVLINK' => 'Link',
 'PROD' => 'bbDKP',
-'DEVELOPERS' => '<a href=mailto:ippe.he@gmail.com>Ippeh</a>, 
-          	  <a href=mailto:cs.krushin@gmail.com>Malfate</a>,  
-          	  <a href=mailto:sajaki9@gmail.com>Sajaki</a>',
+'DEVELOPERS' => '<a href=mailto:sajaki9@gmail.com>Sajaki</a>
+				<a href=mailto:cs.krushin@gmail.com>Malfate</a>
+				<a href=mailto:ippe.he@gmail.com>Ippeh</a>',  
+          	  ,
 'PHPBB' => 'phpBB', 
 'PHPBBGR' => 'phpBB Group', 
 'PHPBBLINK' => 'http://www.phpbb.com', 

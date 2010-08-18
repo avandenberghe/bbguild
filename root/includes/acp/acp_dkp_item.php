@@ -495,6 +495,15 @@ class acp_dkp_item extends bbDkp_Admin
 	{
 		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
 		
+		// add member button redirect
+		$showadd = (isset($_POST['itemadd'])) ? true : false;
+	    if($showadd)
+	    {
+			redirect(append_sid("index.$phpEx", "i=dkp_item&amp;mode=additem"));            		
+	        break;
+	    }
+		
+            	
 		if ($this->bbtips == true)
 		{
 			if ( !class_exists('bbtips')) 
@@ -503,8 +512,6 @@ class acp_dkp_item extends bbDkp_Admin
 			}
 			$bbtips = new bbtips;
 		}
-		
-		 
 		
 		// select all dkp pools that have items				
 		$sql_array = array(
@@ -520,171 +527,172 @@ class acp_dkp_item extends bbDkp_Admin
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ( $sql );
 		$row = $db->sql_fetchrow ($result);
-		if(!$row)
+		
+		if( !$row )
 		{
-			trigger_error ( $user->lang['ERROR_NOITEMS'], E_USER_NOTICE );
-		}
-
-		$dkpid = 1; 
-		$submitdkp = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
-		if ($submitdkp) 
-		{
-			// get dkp pool value from popup
-			$dkpid = request_var ( 'dkpsys_id', 0 );
-		}
-		else
-		{
-			// just select first row
-			$result = $db->sql_query_limit ( $sql, 1 );
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			$dkpid = 1; 
+			$submitdkp = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
+			if ($submitdkp) 
 			{
-				$dkpid = $row ['dkpsys_id'];
-			} 
-			$db->sql_freeresult ( $result );
-		}
-		$result = $db->sql_query ( $sql );
-		
-		while ( $row = $db->sql_fetchrow ( $result ) ) 
-		{
-			$template->assign_block_vars ( 'dkpsys_row', 
-				array (
-				'VALUE' => $row ['dkpsys_id'], 
-				'SELECTED' => ($row ['dkpsys_id'] == $dkpid) ? ' selected="selected"' : '', 
-				'OPTION' => (! empty ( $row ['dkpsys_name'] )) ? $row ['dkpsys_name'] : '(None)' ) );
-		}
-		$db->sql_freeresult ( $result );
-		
-		// select all raids that have items	for pool			
-		$sql_array = array(
-		    'SELECT'    => 'r.raid_id, r.raid_dkpid, r.raid_name, r.raid_date, raid_note  ',
-		    'FROM'    	=> array(DKPSYS_TABLE => 'd', 
-								 RAIDS_TABLE => 'r' ),
-		    'WHERE'     =>  'r.raid_dkpid = d.dkpsys_id
-		    				 and d.dkpsys_id = ' . $dkpid ,
-			'ORDER_BY'  =>  'raid_date DESC '
-		);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		
-		$submitraid = (isset ( $_POST ['raid_id'] )) ? true : false;
-		if ($submitraid)
-		{
-			$raid_id  = request_var('raid_id', 0);  
-		}
-		else
-		{
-			//get 1st raid
-			$result = $db->sql_query_limit ( $sql, 1 );
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$raid_id = (int) $row ['raid_id'];
-			}
-			$db->sql_freeresult ( $result );
-		}
-		
-		// populate raid selectbox
-		$result = $db->sql_query ($sql);
-		while ( $row = $db->sql_fetchrow ( $result ) )
-		{
-			$template->assign_block_vars ( 'raids_row', array (
-				'VALUE' => $row ['raid_id'], 
-				'SELECTED' => ($raid_id == $row ['raid_id']) ? ' selected="selected"' : '', 
-				'OPTION' => $user->format_date($row['raid_date']) . ' - ' .  $row ['raid_name'] . ' ' . $row['raid_note'] ) );
-		}
-		$db->sql_freeresult ( $result );
-		$sql1 = 'SELECT count(*) as countitems FROM ' . ITEMS_TABLE . ' where raid_id = ' .  $raid_id; 
-
-		$result1 = $db->sql_query ( $sql1 );
-		$total_items = (int) $db->sql_fetchfield('countitems', false,$result1 );
-		$db->sql_freeresult ( $result1 );
-
-		$start = request_var('start', 0);
-   		$sort_order = array (
-			0 => array ('i.item_date desc', 'item_date' ), 
-			1 => array ('i.item_buyer', 'item_buyer desc' ), 
-			2 => array ('i.item_name', 'item_name desc' ), 
-			3 => array ('r.raid_name', 'raid_name desc' ), 
-			4 => array ('i.item_value desc', 'item_value' ),
-			5 => array ('d.dkpsys_name desc', 'dkpsys_name' )
-			);
-		$current_order = switch_order ($sort_order);
-		
-       $pagination = generate_pagination ( 
-       append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ) .
-        '&amp;o=' . $current_order ['uri'] ['current'], $total_items, $config['bbdkp_user_ilimit'], $start );
-		
-		//prepare item list sql
-		$sql_array = array(
-	    'SELECT'    => 'd.dkpsys_name,r.raid_dkpid, i.item_id, i.item_name, i.item_gameid, 
-	    				i.item_buyer, i.item_date, i.raid_id, i.item_value, r.raid_name ',
-	    'FROM'      => array(
-	        ITEMS_TABLE    => 'i',
-	        RAIDS_TABLE    => 'r', 
-	        DKPSYS_TABLE   => 'd'
-	    ),
-	    'WHERE'     =>  'r.raid_id = i.raid_id AND d.dkpsys_id = r.raid_dkpid and i.item_dkpid = ' . $dkpid . ' AND i.raid_id = ' .  $raid_id,  
-	    'ORDER_BY'  => $current_order ['sql'], 
-		);
-
- 
-		$sql = $db->sql_build_query('SELECT', $sql_array);					
-		$items_result = $db->sql_query ( $sql );
-		
-		$listitems_footcount = sprintf 
-		( 
-			$user->lang ['LISTPURCHASED_FOOTCOUNT_SHORT'], 
-			$total_items);
-		
-		while ( $item = $db->sql_fetchrow ( $items_result ) ) 
-		{
-		    if ($this->bbtips == true)
-			{
-				if ($item['item_gameid'] > 0 )
-				{
-					$item_name = $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]'); 
-				}
-				else 
-				{
-					$item_name = $bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]');
-				}
-		
+				// get dkp pool value from popup
+				$dkpid = request_var ( 'dkpsys_id', 0 );
 			}
 			else
 			{
-				$item_name = $item['item_name'];
+				// just select first row
+				$result = $db->sql_query_limit ( $sql, 1 );
+				while ( $row = $db->sql_fetchrow ( $result ) ) 
+				{
+					$dkpid = $row ['dkpsys_id'];
+				} 
+				$db->sql_freeresult ( $result );
 			}
-
-			$template->assign_block_vars ( 'items_row', array (
-			'DATE' 			=> (! empty ( $item ['item_date'] )) ? $user->format_date($item['item_date']) : '&nbsp;', 
-			'BUYER' 		=> (! empty ( $item ['item_buyer'] )) ? $item ['item_buyer'] : '&lt;<i>Not Found</i>&gt;', 
-			'U_VIEW_BUYER' 	=> (! empty ( $item ['item_buyer'] )) ? append_sid ( "index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;" . URI_NAME . "={$item['item_buyer']}&amp;" . URI_DKPSYS . "={$item['raid_dkpid']}") : '' ,
-			'ITEMNAME'      => $item_name, 
-			'U_VIEW_ITEM' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_ITEM . "={$item['item_id']}" ),
-			'RAIDDKP' 		=> (! empty ( $item ['raid_name'] )) ?  $item ['dkpsys_name']  : '&lt;<i>Not Found</i>&gt;',
-			'RAID' 			=> (! empty ( $item ['raid_name'] )) ?  $item ['raid_name']  : '&lt;<i>Not Found</i>&gt;', 
-			'U_VIEW_RAID' 	=> (! empty ( $item ['raid_name'] )) ? append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid&amp;" . URI_DKPSYS . "={$item['raid_dkpid']}&amp; " . URI_RAID . "={$item['raid_id']}" ) : '', 
-			'VALUE' 		=> $item ['item_value']));
+			$result = $db->sql_query ( $sql );
+			
+			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			{
+				$template->assign_block_vars ( 'dkpsys_row', 
+					array (
+					'VALUE' => $row ['dkpsys_id'], 
+					'SELECTED' => ($row ['dkpsys_id'] == $dkpid) ? ' selected="selected"' : '', 
+					'OPTION' => (! empty ( $row ['dkpsys_name'] )) ? $row ['dkpsys_name'] : '(None)' ) );
+			}
+			$db->sql_freeresult ( $result );
+			
+			// select all raids that have items	for pool			
+			$sql_array = array(
+			    'SELECT'    => 'r.raid_id, r.raid_dkpid, r.raid_name, r.raid_date, raid_note  ',
+			    'FROM'    	=> array(DKPSYS_TABLE => 'd', 
+									 RAIDS_TABLE => 'r' ),
+			    'WHERE'     =>  'r.raid_dkpid = d.dkpsys_id
+			    				 and d.dkpsys_id = ' . $dkpid ,
+				'ORDER_BY'  =>  'raid_date DESC '
+			);
+			$sql = $db->sql_build_query('SELECT', $sql_array);
+			
+			$submitraid = (isset ( $_POST ['raid_id'] )) ? true : false;
+			$raid_id = 0;
+			if ($submitraid)
+			{
+				$raid_id  = request_var('raid_id', 0);  
+			}
+			else
+			{
+				//get 1st raid
+				$result = $db->sql_query_limit ( $sql, 1 );
+				while ( $row = $db->sql_fetchrow ( $result ) ) 
+				{
+					$raid_id = (int) $row ['raid_id'];
+				}
+				$db->sql_freeresult ( $result );
+			}
+			
+			// populate raid selectbox
+			$result = $db->sql_query ($sql);
+			while ( $row = $db->sql_fetchrow ( $result ) )
+			{
+				$template->assign_block_vars ( 'raids_row', array (
+					'VALUE' => $row ['raid_id'], 
+					'SELECTED' => ($raid_id == $row ['raid_id']) ? ' selected="selected"' : '', 
+					'OPTION' => $user->format_date($row['raid_date']) . ' - ' .  $row ['raid_name'] . ' ' . $row['raid_note'] ) );
+			}
+			$db->sql_freeresult ( $result );
+			$sql1 = 'SELECT count(*) as countitems FROM ' . ITEMS_TABLE . ' where raid_id = ' .  $raid_id; 
+	
+			$result1 = $db->sql_query ( $sql1 );
+			$total_items = (int) $db->sql_fetchfield('countitems', false,$result1 );
+			$db->sql_freeresult ( $result1 );
+	
+			$start = request_var('start', 0);
+	   		$sort_order = array (
+				0 => array ('i.item_date desc', 'item_date' ), 
+				1 => array ('i.item_buyer', 'item_buyer desc' ), 
+				2 => array ('i.item_name', 'item_name desc' ), 
+				3 => array ('r.raid_name', 'raid_name desc' ), 
+				4 => array ('i.item_value desc', 'item_value' ),
+				5 => array ('d.dkpsys_name desc', 'dkpsys_name' )
+				);
+			$current_order = switch_order ($sort_order);
+			
+	       $pagination = generate_pagination ( 
+	       append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ) .
+	        '&amp;o=' . $current_order ['uri'] ['current'], $total_items, $config['bbdkp_user_ilimit'], $start );
+			
+			//prepare item list sql
+			$sql_array = array(
+		    'SELECT'    => 'd.dkpsys_name,r.raid_dkpid, i.item_id, i.item_name, i.item_gameid, 
+		    				i.item_buyer, i.item_date, i.raid_id, i.item_value, r.raid_name ',
+		    'FROM'      => array(
+		        ITEMS_TABLE    => 'i',
+		        RAIDS_TABLE    => 'r', 
+		        DKPSYS_TABLE   => 'd'
+		    ),
+		    'WHERE'     =>  'r.raid_id = i.raid_id AND d.dkpsys_id = r.raid_dkpid and i.item_dkpid = ' . $dkpid . ' AND i.raid_id = ' .  $raid_id,  
+		    'ORDER_BY'  => $current_order ['sql'], 
+			);
+	
+	 
+			$sql = $db->sql_build_query('SELECT', $sql_array);					
+			$items_result = $db->sql_query ( $sql );
+			
+			$listitems_footcount = sprintf 
+			( 
+				$user->lang ['LISTPURCHASED_FOOTCOUNT_SHORT'], 
+				$total_items);
+			
+			while ( $item = $db->sql_fetchrow ( $items_result ) ) 
+			{
+			    if ($this->bbtips == true)
+				{
+					if ($item['item_gameid'] > 0 )
+					{
+						$item_name = $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]'); 
+					}
+					else 
+					{
+						$item_name = $bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]');
+					}
+			
+				}
+				else
+				{
+					$item_name = $item['item_name'];
+				}
+	
+				$template->assign_block_vars ( 'items_row', array (
+				'DATE' 			=> (! empty ( $item ['item_date'] )) ? $user->format_date($item['item_date']) : '&nbsp;', 
+				'BUYER' 		=> (! empty ( $item ['item_buyer'] )) ? $item ['item_buyer'] : '&lt;<i>Not Found</i>&gt;', 
+				'U_VIEW_BUYER' 	=> (! empty ( $item ['item_buyer'] )) ? append_sid ( "index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;" . URI_NAME . "={$item['item_buyer']}&amp;" . URI_DKPSYS . "={$item['raid_dkpid']}") : '' ,
+				'ITEMNAME'      => $item_name, 
+				'U_VIEW_ITEM' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_ITEM . "={$item['item_id']}" ),
+				'RAIDDKP' 		=> (! empty ( $item ['raid_name'] )) ?  $item ['dkpsys_name']  : '&lt;<i>Not Found</i>&gt;',
+				'RAID' 			=> (! empty ( $item ['raid_name'] )) ?  $item ['raid_name']  : '&lt;<i>Not Found</i>&gt;', 
+				'U_VIEW_RAID' 	=> (! empty ( $item ['raid_name'] )) ? append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid&amp;" . URI_DKPSYS . "={$item['raid_dkpid']}&amp; " . URI_RAID . "={$item['raid_id']}" ) : '', 
+				'VALUE' 		=> $item ['item_value']));
+			}
+			
+			$db->sql_freeresult ( $items_result );
+			
+			$template->assign_vars ( array (
+				'F_LIST_ITEM' 	=>   append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
+				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
+				'L_EXPLAIN' 	=> $user->lang ['ACP_LISTITEMS_EXPLAIN'], 
+				'O_DATE' 		=> $current_order ['uri'] [0], 
+				'O_BUYER' 		=> $current_order ['uri'] [1], 
+				'O_NAME' 		=> $current_order ['uri'] [2], 
+				'O_RAID' 		=> $current_order ['uri'] [3], 
+				'O_VALUE' 		=> $current_order ['uri'] [4], 
+				'O_RAIDDKP' 	=> $current_order ['uri'] [5], 
+				'U_LIST_ITEMS' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ), 
+				'S_BBTIPS' 		=> $this->bbtips, 
+				'START' 		=> $start, 
+				'LISTITEMS_FOOTCOUNT' => $listitems_footcount, 
+				'ITEM_PAGINATION' => $pagination 
+			));
+			
+			//trigger_error ( $user->lang['ERROR_NOITEMS'], E_USER_NOTICE );
+			
 		}
-		
-		$db->sql_freeresult ( $items_result );
-		
-		$template->assign_vars ( array (
-			'F_LIST_ITEM' 	=>   append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
-			'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
-			'L_EXPLAIN' 	=> $user->lang ['ACP_LISTITEMS_EXPLAIN'], 
-			'O_DATE' 		=> $current_order ['uri'] [0], 
-			'O_BUYER' 		=> $current_order ['uri'] [1], 
-			'O_NAME' 		=> $current_order ['uri'] [2], 
-			'O_RAID' 		=> $current_order ['uri'] [3], 
-			'O_VALUE' 		=> $current_order ['uri'] [4], 
-			'O_RAIDDKP' 	=> $current_order ['uri'] [5], 
-			'U_LIST_ITEMS' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ), 
-			'S_BBTIPS' 		=> $this->bbtips, 
-			'START' 		=> $start, 
-			'LISTITEMS_FOOTCOUNT' => $listitems_footcount, 
-			'ITEM_PAGINATION' => $pagination 
-		));
-		
-		
 		
 	}
 	

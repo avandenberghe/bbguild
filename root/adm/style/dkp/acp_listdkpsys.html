@@ -4,9 +4,24 @@
 //-->
 <a name="maincontent"></a>
 
+<form id="acp_listdkpsys" method="post" action="{S_DEFAULTDKP}">
+
 <h1>{L_TITLE}</h1>
 
 <p>{L_EXPLAIN}</p>
+
+<fieldset><legend>Default DKP Pool</legend>
+	<dl>
+		<dt>
+			<select name="defaultsys" class="input" id="defaultsys">
+			      <!-- BEGIN dkpsysdef_row -->
+			         <option value="{dkpsysdef_row.VALUE}"{dkpsysdef_row.SELECTED}>{dkpsysdef_row.OPTION}</option>
+			      <!-- END dkpsysdef_row -->
+			</select>
+			<INPUT type="submit" name="upddkpsysdef" value="Confirm default Pool" class="button1" >
+		</dt>
+</dl>
+</fieldset>
 
 <!-- IF DKPSYS_PAGINATION -->
 <div class="pagination">
@@ -17,12 +32,11 @@
 <table cellspacing="1">
 <thead>
   <tr>
-    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
     <th align="left" width="200"><a href="{U_LIST_DKPSYS}&amp;o={O_NAME}&amp;start={START}">{L_POOL}</a></th>
     <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_DKPSYS}&amp;o={O_STATUS}&amp;start={START}">{L_STATUS}</a></th>
     <th align="left" width="60" nowrap="nowrap">DEFAULT</th>
-
-
+    <th align="center" width="16" nowrap="nowrap">{L_ACTION}</th>
+    
   </tr>
 </thead>
 <tbody>
@@ -32,12 +46,12 @@
   <!-- ELSE -->
   	<tr class="row2">
   <!-- ENDIF -->
-    <td width="16" nowrap="nowrap" align="center">
-    <a href="{dkpsys_row.U_VIEW_DKPSYS}">
-    <img src="images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
     <td width="900"><a href="{dkpsys_row.U_VIEW_DKPSYS}">{dkpsys_row.NAME}</a></td>
     <td width="60" nowrap="nowrap">{dkpsys_row.STATUS}</td>
     <td width="60" nowrap="nowrap">{dkpsys_row.DEFAULT}</td>
+    <td style="text-align: center;"><a href="{dkpsys_row.U_VIEW_DKPSYS}">{ICON_EDIT}</a>
+    	<a href="{dkpsys_row.U_DELETE_DKPSYS}">{ICON_DELETE}</a></td>
+    
   </tr>
   <!-- END dkpsys_row -->
   <tr>
@@ -52,37 +66,11 @@
 </div>
 <!-- ENDIF -->
 
-<br />
 
-<FORM action="{S_DEFAULTDKP}" method="post">
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input class="button2" name="dkpsysadd" type="submit" value="{L_ADD}" />
+</fieldset>
 
-<table cellspacing="1">
-<tbody>
-<td width="16" nowrap="nowrap" align="center">
-Default DKP Pool
-</td>
-
-<td width="16" nowrap="nowrap" align="center">
-<select name="defaultsys" class="input" id="defaultsys">
-      <!-- BEGIN dkpsysdef_row -->
-         <option value="{dkpsysdef_row.VALUE}"{dkpsysdef_row.SELECTED}>{dkpsysdef_row.OPTION}</option>
-      <!-- END dkpsysdef_row -->
-</select>
-</td>
-
-<td width="40" nowrap="nowrap" align="right">
-<INPUT type="submit" name="upddkpsysdef" value="Confirm default Pool" class="button1" >
-</td>
-
-</tbody>
-</table>
-</FORM>
-
-
-
-
-
-					
-
+</form>
 <!-- INCLUDE dkp/overall_footer.html -->
 

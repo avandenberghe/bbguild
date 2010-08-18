@@ -26,8 +26,8 @@
 
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
-    <th align="center" width="20" nowrap="nowrap">&nbsp;</th>
-    <th align="left" width="35" nowrap="nowrap">&nbsp;</th>
+    
+    <th align="left" width="35" nowrap="nowrap">{L_ID}</th>
     <th align="left" width="100"><a href="{O_NAME}">{L_NAME}</a></th>
     <th align="left" width="40"><a href="{O_RANK}">{L_RANK}</a></th>
     <th align="left" width="20" nowrap="nowrap"><a href="{O_LEVEL}">{L_LEVEL}</a></th>
@@ -35,6 +35,7 @@
     <th align="left" width="40" nowrap="nowrap"><a href="{O_JOINDATE}">{L_JOINDATE}</a></th>
     <th align="left" width="40" nowrap="nowrap"><a href="{O_OUTDATE}">{L_OUTDATE}</a></th>
     <th align="left" width="200" nowrap="nowrap"><a href="{O_COMMENT}">{L_COMMENT}</a></th>
+  	<th align="center" width="5">{L_ACTION}</th>
   </tr>
   <!-- BEGIN members_row -->
   <!-- IF members_row.S_ROW_COUNT is even -->
@@ -42,8 +43,7 @@
   <!-- ELSE -->
   <tr class="row2">
   <!-- ENDIF -->
-    <td width="20" nowrap="nowrap" align="center"><input type="checkbox" name="compare_ids[]" value="{members_row.ID}" /></td>
-    <td width="35" nowrap="nowrap" align="right">{members_row.COUNT}</td>
+    <td width="35" nowrap="nowrap" align="right">{members_row.ID}</td>
     <td width="100" nowrap="nowrap"><a href="{members_row.U_VIEW_MEMBER}">{members_row.NAME}</a></td>
     <td width="40" nowrap="nowrap">{members_row.RANK}</td>
     <td width="20" nowrap="nowrap">{members_row.LEVEL}</td>
@@ -51,6 +51,10 @@
     <td width="40" nowrap="nowrap">{members_row.JOINDATE}</td>
     <td width="40" nowrap="nowrap">{members_row.OUTDATE}</td>
     <td width="200">{members_row.COMMENT}</td>
+	<td width="5" nowrap="nowrap">
+		<a href="{members_row.U_VIEW_MEMBER}">{ICON_EDIT}</a>
+	</td>
+
 
   </tr>
   <!-- END members_row -->
@@ -60,14 +64,9 @@
 </table>
 <br />
 
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-  <center>
-  <input type="submit" name="{BUTTON_NAME}" value="{BUTTON_VALUE}" class="button1" />
-  </center>
-  </tr>
-</table>
-
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input class="button2" name="memberadd" type="submit" value="{L_ADD}" />
+</fieldset>
 
 
 </form>

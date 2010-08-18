@@ -8,54 +8,72 @@
 
 
 <form method="post" action="{F_LIST_ITEM}">
-<fieldset>
-     <label for="dkpsys_id">{L_POOL}:</label>
-  	<select name="dkpsys_id" class="input" onchange="javascript:form.submit();" > 	
-       <!-- BEGIN dkpsys_row -->
-         <option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
-       <!-- END dkpsys_row -->
-    </select>
-    <br /><br />
-     <select name="raid_id" id="raid_id" class="input" onchange="javascript:form.submit();" size="10" style="width: 100%;" >
-		<!-- BEGIN raids_row -->
-			<option value="{raids_row.VALUE}"{raids_row.SELECTED}>{raids_row.OPTION}</option>
-		<!-- END raids_row -->
-    </select>
-     <br /><br />
+
+<label for="dkpsys_id">{L_POOL}:</label>
+<select name="dkpsys_id" class="input"
+	onchange="javascript:form.submit();">
+	<!-- BEGIN dkpsys_row -->
+	<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
+	<!-- END dkpsys_row -->
+</select> <br />
+<br />
+<select name="raid_id" id="raid_id" class="input"
+	onchange="javascript:form.submit();" size="10" style="width: 100%;">
+	<!-- BEGIN raids_row -->
+	<option value="{raids_row.VALUE}"{raids_row.SELECTED}>{raids_row.OPTION}</option>
+	<!-- END raids_row -->
+</select> <br />
+<br />
 
 
 <table cellspacing="1">
-<thead>
-  <tr>
-    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
-    <th align="left" width="11%"><a href="{U_LIST_ITEMS}&amp;o={O_RAIDDKP}&amp;start={START}">{L_POOL}</a></th>
-    <th align="left" width="25%"><a href="{U_LIST_ITEMS}&amp;o={O_RAID}&amp;start={START}">{L_RAID}</a></th>
-    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_ITEMS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
-    <th align="left" width="15%" nowrap="nowrap"><a href="{U_LIST_ITEMS}&amp;o={O_BUYER}&amp;start={START}">{L_BUYER}</a></th>
-    <th align="left" width="35%"><a href="{U_LIST_ITEMS}&amp;o={O_NAME}&amp;start={START}">{L_ITEM}</a></th>
-    <th align="left" width="10%" nowrap="nowrap"><a href="{U_LIST_ITEMS}&amp;o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
-  </tr>
-</thead>
-<tbody>
-  <!-- BEGIN items_row -->
-  <!-- IF items_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td width="16" nowrap="nowrap" align="center"><a href="{items_row.U_VIEW_ITEM}"><img src="{ROOT_PATH}/images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
-    <td width="11%"><a href="{items_row.U_VIEW_RAIDDKP}">{items_row.RAIDDKP}</a></td>
-    <td width="25%"><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
-    <td width="70" nowrap="nowrap">{items_row.DATE}</td>
-    <td width="15%" nowrap="nowrap"><a href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></td>
-    <td width="35%"><a href="{items_row.U_VIEW_ITEM}">{items_row.ITEMNAME}</a></td>
-    <td width="10%" nowrap="nowrap" class="negative">{items_row.VALUE}</td>
-  </tr>
-  <!-- END items_row -->
-  <tr>
-    <th colspan="7" class="footer">{LISTITEMS_FOOTCOUNT}</th>
-  </tr>
-</tbody>  
+	<thead>
+		<tr>
+			<th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+			<th align="left" width="11%"><a
+				href="{U_LIST_ITEMS}&amp;o={O_RAIDDKP}&amp;start={START}">{L_POOL}</a></th>
+			<th align="left" width="25%"><a
+				href="{U_LIST_ITEMS}&amp;o={O_RAID}&amp;start={START}">{L_RAID}</a></th>
+			<th align="left" width="70" nowrap="nowrap"><a
+				href="{U_LIST_ITEMS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+			<th align="left" width="15%" nowrap="nowrap"><a
+				href="{U_LIST_ITEMS}&amp;o={O_BUYER}&amp;start={START}">{L_BUYER}</a></th>
+			<th align="left" width="35%"><a
+				href="{U_LIST_ITEMS}&amp;o={O_NAME}&amp;start={START}">{L_ITEM}</a></th>
+			<th align="left" width="10%" nowrap="nowrap"><a
+				href="{U_LIST_ITEMS}&amp;o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+		</tr>
+	</thead>
+	<tbody>
+		<!-- BEGIN items_row -->
+		<!-- IF items_row.S_ROW_COUNT is even -->
+		<tr class="row1">
+			<!-- ELSE -->
+		<tr class="row2">
+			<!-- ENDIF -->
+			<td width="16" nowrap="nowrap" align="center"><a
+				href="{items_row.U_VIEW_ITEM}"><img
+				src="{ROOT_PATH}/images/glyphs/edit.gif" width="16" height="16"
+				alt="Edit" /></a></td>
+			<td width="11%"><a href="{items_row.U_VIEW_RAIDDKP}">{items_row.RAIDDKP}</a></td>
+			<td width="25%"><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
+			<td width="70" nowrap="nowrap">{items_row.DATE}</td>
+			<td width="15%" nowrap="nowrap"><a
+				href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></td>
+			<td width="35%"><a href="{items_row.U_VIEW_ITEM}">{items_row.ITEMNAME}</a></td>
+			<td width="10%" nowrap="nowrap" class="negative">{items_row.VALUE}</td>
+		</tr>
+		<!-- END items_row -->
+		<tr>
+			<th colspan="7" class="footer">{LISTITEMS_FOOTCOUNT}</th>
+		</tr>
+	</tbody>
 </table>
 
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN}">
+	<input class="button2" name="itemadd" type="submit" value="{L_ADD}" />
+</fieldset>
 
- </fieldset>
 </form>
 
 <!-- INCLUDE dkp/overall_footer.html -->

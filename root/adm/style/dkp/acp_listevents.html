@@ -4,6 +4,8 @@
 //-->
 <a name="maincontent"></a>
 
+<form id="acp_listevents" method="post" action="{U_ACTION}">
+
 <h1>{L_TITLE}</h1>
 
 <p>{L_EXPLAIN}</p>
@@ -17,10 +19,10 @@
 <table cellspacing="1">
 <thead>
   <tr>
-    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
     <th align="left" width="30%"><a href="{U_LIST_EVENTS}&amp;o={O_DKPSYS}&amp;start={START}">{L_POOL}</a></th>
     <th align="left" width="70%"><a href="{U_LIST_EVENTS}&amp;o={O_NAME}&amp;start={START}">{L_EVENT_NAME}</a></th>
     <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_EVENTS}&amp;o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+  	<th align="center" width="16">{L_ACTION}</th>
   </tr>
 </thead>
 <tbody>
@@ -30,10 +32,12 @@
   <!-- ELSE -->
   <tr class="row2">
   <!-- ENDIF -->
-    <td width="16" nowrap="nowrap" align="center"><a href="{events_row.U_VIEW_EVENT}"><img src="images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
     <td width="100">{events_row.DKPSYS_EVENT}</td>
     <td width="900"><a href="{events_row.U_VIEW_EVENT}">{events_row.NAME}</a></td>
     <td width="60" nowrap="nowrap" class="positive">{events_row.VALUE}</td>
+	<td align="center" width="5" nowrap="nowrap"><a href="{events_row.U_VIEW_EVENT}">{ICON_EDIT}</a>
+	</td>
+	    
   </tr>
   <!-- END events_row -->
   <tr>
@@ -47,5 +51,10 @@
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{EVENT_PAGINATION}</span>
 </div>
 <!-- ENDIF -->
+
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input class="button2" name="eventadd" type="submit" value="{L_ADD}" />
+</fieldset>
+</form>
 
 <!-- INCLUDE dkp/overall_footer.html -->

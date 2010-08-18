@@ -2,14 +2,13 @@
 <!--
 		$Id$
 //-->
-
 <a name="maincontent"></a>
 
 <h1>{L_TITLE}</h1>
 
 <p>{L_EXPLAIN}</p>
 
-<form method="post" action="{F_DKPSYS}">
+<form method="post" action="{F_LISTIADJ}">
 <fieldset>
 <legend>Filter</legend>
   <dl>
@@ -29,16 +28,14 @@
   <dl>
   <input type="submit" name="submit_options" value="GO" class="button1" />
   </dl>
- </fieldset>
- 
-</form>
+</fieldset>
 
 <!-- IF ADJUSTMENT_PAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{ADJUSTMENT_PAGINATION}</span>
 </div>
+ 
 <!-- ENDIF -->
-
 
 <table cellspacing="1">
   <tr class="rowhead">
@@ -75,5 +72,11 @@
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{ADJUSTMENT_PAGINATION}</span>
 </div>
 <!-- ENDIF -->
+
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN}">
+	<input class="button2" name="addiadj" type="submit" value="{L_ADD}" />
+</fieldset>
+
+</form>
 
 <!-- INCLUDE dkp/overall_footer.html -->	

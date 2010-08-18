@@ -27,7 +27,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
   	'ACP_DKP_MDKP'	        => 'Member DKP Management', 
 	'ACP_DKP_ADDADJ'		=> 'Add Individual Adjustments',
-	'ACP_DKP_LISTADJ'		=> 'List Individual Adjustments',
+	'ACP_DKP_LISTADJ'		=> 'Individual Adjustments',
 ));
 
 ?>

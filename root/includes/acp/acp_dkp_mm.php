@@ -50,41 +50,8 @@ function main($id, $mode)
 					$Addmemberlink = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember") . '"><h3>Return to Add Member screen</h3></a>'; 
 					$S_ADD = false;
 					
-					// identify checkbox to delete
-			        $member_names = array();
-			        if ( isset($_POST['delete']) )
-					{
-						if ( isset($_POST['compare_ids']) )
-						{
-						    
-						    $compare_ids = request_var('compare_ids', array(0 => 0));
-							foreach ( $compare_ids as $id )
-							{
-           						$sql = 'SELECT member_name 
-										FROM ' . MEMBER_LIST_TABLE . ' 
-										WHERE member_id= ' . (int) $id ; 
-           						
-								$result = $db->sql_query($sql);	
-								while ( $row = $db->sql_fetchrow($result) )
-								{	
-									$member_names[] = $row['member_name'];
-								}
-							}
-							$s_hidden_fields = build_hidden_fields(array(
-								'delete'	=> true,
-								'member_name'	=> $member_names,
-								)
-							);
-										
-							$names = implode(', ', $member_names);
-							confirm_box(false, $user->lang['CONFIRM_DELETE_MEMBERS'] . ' <br />  ' . $names  , $s_hidden_fields);				
-						}
-					}
-					
-					
 					if ( (isset($_GET[URI_NAME])) && (strval($_GET[URI_NAME] != '')) )
 					{
-						
 						//
 						// build member array if clicked on name in listing
 						//  
@@ -285,14 +252,62 @@ function main($id, $mode)
 						}
 						
 					}
+					$db->sql_freeresult($result);
 
 					// set the genderdefault to male if a new form is opened, otherwise take rowdata.
 					$genderid = isset($this->member) ? $this->member['member_gender_id'] : '0'; 
 
-					$db->sql_freeresult($result);
+					// build presets for joindate pulldowns
+					$now = getdate();
+					$s_memberjoin_day_options = '<option value="0"	>--</option>';
+					for ($i = 1; $i < 32; $i++)
+					{
+						$day = isset($this->member['member_joindate_d']) ? $this->member['member_joindate_d'] : $now['mday'] ;
+						$selected = ($i == $day ) ? ' selected="selected"' : '';
+						$s_memberjoin_day_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+			
+					$s_memberjoin_month_options = '<option value="0">--</option>';
+					for ($i = 1; $i < 13; $i++)
+					{
+						$month = isset($this->member['member_joindate_mo']) ? $this->member['member_joindate_mo'] : $now['mon'] ;
+						$selected = ($i == $month ) ? ' selected="selected"' : '';
+						$s_memberjoin_month_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+			
+					$s_memberjoin_year_options = '<option value="0">--</option>';
+					for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+					{
+						$yr = isset($this->member['member_joindate_y']) ? $this->member['member_joindate_y'] : $now['year'] ;
+						$selected = ($i == $yr ) ? ' selected="selected"' : '';
+						$s_memberjoin_year_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+					
+					// build presets for outdate pulldowns
+					$s_memberout_day_options = '<option value="0"' . ((!$this->member['member_outdate_d']) ? ' selected="selected"' : '') . '>--</option>';
+					for ($i = 1; $i < 32; $i++)
+					{
+						$selected = ($i == $this->member['member_outdate_d']) ? ' selected="selected"' : '';
+						$s_memberout_day_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+	
+					$s_memberout_month_options = '<option value="0"' . ((!$this->member['member_outdate_mo']) ? ' selected="selected"' : '') . '>--</option>';
+					for ($i = 1; $i < 13; $i++)
+					{
+						$selected = ($i == $this->member['member_outdate_mo']) ? ' selected="selected"' : '';
+						$s_memberout_month_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+					$s_memmberout_year_options = '';
+
+					$s_memberout_year_options = '<option value="0"' . ((!$this->member['member_outdate_y']) ? ' selected="selected"' : '') . '>--</option>';
+					for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+					{
+						$selected = ($i == $this->member['member_outdate_y']) ? ' selected="selected"' : '';
+						$s_memberout_year_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+					unset($now);
 
 					// end formbuilding
-					
 					$submit	 = (isset($_POST['add'])) ? true : false;
 					$update	 = (isset($_POST['update'])) ? true : false;
 					$delete	 = (isset($_POST['delete'])) ? true : false;	
@@ -613,6 +628,15 @@ function main($id, $mode)
 							'MEMBER_LEVEL'          => isset($this->member) ? $this->member['member_level'] : '',
 							'MALE_CHECKED'      	 => ($genderid == '0') ? ' checked="checked"' : '' , 
                 		    'FEMALE_CHECKED'    	 => ($genderid == '1') ? ' checked="checked"' : '' , 
+					
+							'S_JOINDATE_DAY_OPTIONS'	=> $s_memberjoin_day_options,
+							'S_JOINDATE_MONTH_OPTIONS'	=> $s_memberjoin_month_options,
+							'S_JOINDATE_YEAR_OPTIONS'	=> $s_memberjoin_year_options,
+
+				        	'S_OUTDATE_DAY_OPTIONS'		=> $s_memberout_day_options,
+							'S_OUTDATE_MONTH_OPTIONS'	=> $s_memberout_month_options,
+							'S_OUTDATE_YEAR_OPTIONS'	=> $s_memberout_year_options,
+							/*				        
 							'MEMBER_JOINDATE_D'     => isset($this->member) ? $this->member['member_joindate_d'] : '',
 							'MEMBER_JOINDATE_MO'    => isset($this->member) ? $this->member['member_joindate_mo']: '',
 							'MEMBER_JOINDATE_Y'     => isset($this->member) ? $this->member['member_joindate_y']: '',
@@ -620,7 +644,8 @@ function main($id, $mode)
 							'MEMBER_OUTDATE_MO'     => isset($this->member) ? $this->member['member_outdate_mo']: '',
 							'MEMBER_OUTDATE_Y'      => isset($this->member) ? $this->member['member_outdate_y']: '' ,
 							'MEMBER_COMMENT'        => isset($this->member) ? stripmultslashes($this->member['member_comment']) : '', 
-				
+							*/
+				        	
 				        	// javascript
 							'LA_ALERT_AJAX'	 	  => $user->lang['ALERT_AJAX'],
 				        	'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
@@ -643,7 +668,18 @@ function main($id, $mode)
 			/***************************************/
 
 			case 'mm_listmembers':
+
+				// add member button redirect
+				$showadd = (isset($_POST['memberadd'])) ? true : false;
+				$submit = (isset ( $_POST ['member_guild_id'] ) ) ? true : false;
 				
+				
+            	if($showadd)
+            	{
+					redirect(append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember"));            		
+            		break;
+            	}
+            	
 				/**************  Guild drop-down query ****************/
 				$sql = 'SELECT id, name, realm, region  
                        FROM ' . GUILD_TABLE . ' 
@@ -651,7 +687,6 @@ function main($id, $mode)
 				$resultg = $db->sql_query ( $sql );
 				
 				/* check if page was posted back */
-				$submit = (isset ( $_POST ['member_guild_id'] ) ) ? true : false;
 				if ($submit) 
 				{
 				    // user selected dropdow - get guildid 
@@ -671,14 +706,15 @@ function main($id, $mode)
 				} 
 				else // default pageloading
 				{
-					
-				    $guild_id = request_var ( URI_GUILD, 1 ); 
-				    // fill popup and set selected to default selection
+					// select guild with lowest id but not unguilded
+					$guild_id = request_var ( URI_GUILD, 1 );
+
+					// fill popup and set selected to default selection
 					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
 					{
 						$template->assign_block_vars ( 'guild_row', array (
     						'VALUE' => $row ['id'], 
-    						'SELECTED' => '', 
+    						'SELECTED' => ($row ['id'] == 1) ? ' selected="selected"' : '', 
     						'OPTION' => $row ['name'] ));
 					}
 				}
@@ -763,8 +799,6 @@ function main($id, $mode)
 					'L_TITLE'		=> $user->lang['ACP_MM_LISTMEMBERS'],
 					'L_EXPLAIN'		=> $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'],
 					
-					'BUTTON_NAME' 	=> 'delete',
-					'BUTTON_VALUE' 	=> $user->lang['DELETE_SELECTED_MEMBERS'],
 					'O_NAME' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
 					'O_LEVEL' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=". $guild_id),
 					'O_CLASS' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=". $guild_id),
@@ -1023,6 +1057,14 @@ function main($id, $mode)
 			/***************************************/
 
 			case 'mm_listguilds':
+		   		
+				$showadd = (isset($_POST['guildadd'])) ? true : false;
+            	
+            	if($showadd)
+            	{
+					redirect(append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild"));            		
+            		break;
+            	}
 
 				$sort_order = array(
 					0 => array('id', 'id desc'),

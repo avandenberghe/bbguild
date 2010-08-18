@@ -16,6 +16,7 @@
     <th align="left" width="40"><a href="{U_LIST_GUILD}&amp;o={O_REALM}">{L_REALM_NAME}</a></th>
     <th align="left" width="20" nowrap="nowrap"><a href="{U_LIST_GUILD}&amp;o={O_REGION}">{L_REGION}</a></th>
     <th align="left" width="20" nowrap="nowrap"><a href="{U_LIST_GUILD}&amp;o={O_ROSTER}">{L_SHOWONROSTER}</a></th>
+    <th align="center" width="16" nowrap="nowrap">{L_ACTION}</th>
   </tr>
   
   <!-- BEGIN guild_row -->
@@ -29,6 +30,8 @@
     <td width="40" nowrap="nowrap">{guild_row.REALM}</td>
     <td width="20" nowrap="nowrap">{guild_row.REGION}</td>
 	<td width="20" nowrap="nowrap">{guild_row.SHOW_ROSTER}</td>    
+	<td style="text-align: center;"><a href="{guild_row.U_VIEW_GUILD}">{ICON_EDIT}</a></td>
+    	
   </tr>
   <!-- END guild_row -->
   <tr>
@@ -38,5 +41,9 @@
 <br />
 
 
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input class="button2" name="guildadd" type="submit" value="{L_ADD}" />
+</fieldset>
 </form>
+
 <!-- INCLUDE dkp/overall_footer.html -->

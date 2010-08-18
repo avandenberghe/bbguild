@@ -3,9 +3,11 @@
 		$Id$
 //-->
 <a name="maincontent"></a>
+<form id="acp_listraids" method="post" action="{F_DKPSYS}">
 
 <h1>{L_TITLE}</h1>
 <p>{L_EXPLAIN}</p>
+
 
 <!-- IF RAID_PAGINATION -->
 <div class="pagination">
@@ -13,7 +15,6 @@
 </div>
 <!-- ENDIF -->
 
-<form method="post" action="{F_DKPSYS}">
 <fieldset>
      <label for="dkpsys_id">{L_POOL}:</label>
   	<select name="dkpsys_id" class="input" onchange="javascript:form.submit();" > 	
@@ -22,7 +23,6 @@
        <!-- END dkpsys_row -->
     </select>
  </fieldset>
-</form>
 
 <table cellspacing="1">
 <thead>
@@ -55,4 +55,9 @@
 </div>
 <!-- ENDIF -->
 
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input class="button2" name="raidadd" type="submit" value="{L_ADD}" />
+</fieldset>
+
+</form>
 <!-- INCLUDE dkp/overall_footer.html -->

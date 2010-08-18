@@ -27,10 +27,10 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
     'ACP_DKP_MEMBER'	    => 'Guild and Member management',
  	'ACP_DKP_GUILD_ADD'	    => 'Add Guild',  
-	'ACP_DKP_GUILD_LIST'	=> 'List Guilds',   
+	'ACP_DKP_GUILD_LIST'	=> 'Guilds',   
 	'ACP_DKP_MEMBER_ADD'	=> 'Add member',  
-	'ACP_DKP_MEMBER_LIST'	=> 'List members',
-	'ACP_DKP_MEMBER_RANK'	=> 'Guild Ranks',
+	'ACP_DKP_MEMBER_LIST'	=> 'Members',
+	'ACP_DKP_MEMBER_RANK'	=> 'Ranks',
 	'ACP_DKP_ARMORYUPDATER'	=> 'Armory updater',	
 ));
 

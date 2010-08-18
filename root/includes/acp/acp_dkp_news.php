@@ -183,7 +183,14 @@ class acp_dkp_news extends bbDkp_Admin
 
 			case 'listnews':
 
-	
+   		     	$showadd = (isset($_POST['newsadd'])) ? true : false;
+            	
+            	if($showadd)
+            	{
+					redirect(append_sid("index.$phpEx", "i=dkp_news&amp;mode=addnews"));            		
+            		break;
+            	}
+   	
 				$sort_order = array(
 					0 => array('news_date desc', 'news_date'),
 					1 => array('news_headline', 'news_headline desc'),

@@ -27,7 +27,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
     'ACP_DKP_EVENT'			=> 'Events',
 	'ACP_DKP_EVENT_ADD'		=> 'Add Event',  
-	'ACP_DKP_EVENT_LIST'	=> 'List Events',
+	'ACP_DKP_EVENT_LIST'	=> 'Events',
 ));
 
 ?>

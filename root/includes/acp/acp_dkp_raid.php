@@ -1010,6 +1010,15 @@ class acp_dkp_raid extends bbDkp_Admin
 	{
 		global $db, $user, $config, $template, $phpEx;
 		
+		// add dkpsys button redirect
+		$showadd = (isset($_POST['raidadd'])) ? true : false;
+        if($showadd)
+        {
+			redirect(append_sid("index.$phpEx", "i=dkp_raid&amp;mode=addraid"));            		
+         	break;
+        }
+            	
+		
 		$dkpsys_id = 1;
 		$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
 		if ($submit) 

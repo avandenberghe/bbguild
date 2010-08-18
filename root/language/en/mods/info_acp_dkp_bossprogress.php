@@ -26,8 +26,8 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
 	'ACP_DKP_BOSS'					=> 'Bossprogress',  
-	'ACP_DKP_BOSS_BOSSPROGRESS'		=> 'Boss config',
-	'ACP_DKP_BOSS_ZONEPROGRESS'		=> 'Zone config',
+	'ACP_DKP_BOSS_BOSSPROGRESS'		=> 'Boss Settings',
+	'ACP_DKP_BOSS_ZONEPROGRESS'		=> 'Zone Settings',
 ));
 
 ?>

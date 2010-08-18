@@ -26,8 +26,7 @@ if (! defined('EMED_BBDKP'))
 class acp_dkp_sys extends bbDkp_Admin
 {
 	var $u_action;
-	
-		
+
 	function error_check()
     {
     	// we want the dkp name to be filled. 
@@ -84,7 +83,7 @@ class acp_dkp_sys extends bbDkp_Admin
 					
 					$add	 = (isset($_POST['add'])) ? true : false;
 					$submit	 = (isset($_POST['update'])) ? true : false;
-					$delete	 = (isset($_POST['delete'])) ? true : false;	
+					
 					if ($add)
 					{
 								$this->dkpsys = array(
@@ -187,84 +186,6 @@ class acp_dkp_sys extends bbDkp_Admin
 						
 					}	
 							
-					if ($delete)
-						{	
-							if (isset($_GET[URI_DKPSYS]))
-							{ 
-								if (confirm_box(true))
-								{
-									$this->url_id = request_var(URI_DKPSYS, 0);
-									$this->dkpsys = array(
-										'dkpsys_name'  	=> utf8_normalize_nfc(request_var('dkpsys_name', ' ', true)),
-										'dkpsys_status' => request_var('dkpsys_status', 'N')
-									);
-									
-									$sql = 'SELECT * FROM ' . RAIDS_TABLE . " WHERE 
-											raid_dkpid = '" . (int)  $this->url_id . "'";
-									
-									$result = $db->sql_query($sql);
-									
-									if ( $row = $db->sql_fetchrow($result) )
-									{	
-										// there is a fk raid_dkpid 'on delete restrict' on dkpsys_id
-										// so you cant delete a dkpsys when theres still child raid records
-										trigger_error($user->lang['FV_RAIDEXIST'], E_USER_WARNING);
-										
-									}
-									else
-									{
-									    	// no events found ?
-									    	$sql = 'SELECT * FROM ' . EVENTS_TABLE . "
-											WHERE event_dkpid = '" . (int) $this->url_id . "'";
-									    	
-									    	$result = $db->sql_query($sql);
-									    	
-											if ( $row = $db->sql_fetchrow($result) )
-											{	
-												trigger_error($user->lang['FV_EVENTEXIST'], E_USER_WARNING);
-												// there is a fk event_dkpid 'on delete restrict' on dkpsys_id
-												// so you cant delete a dkpsys when theres still child event records
-											}
-											else
-											{
-												
-											    $sql = 'DELETE FROM ' . DKPSYS_TABLE . "
-												WHERE dkpsys_id = '" . $this->url_id . "'";
-											    
-												$db->sql_query($sql);
-
-												
-										
-												$log_action = array(
-													'header'   			=> 'L_ACTION_DKPSYS_DELETED',
-													'id'       			=> $this->url_id ,
-													'L_DKPSYS_NAME'  	=> $this->dkpsys['dkpsys_name'],
-													'L_DKPSYS_STATUS' =>  $this->dkpsys['dkpsys_status']);
-												$this->log_insert(array(
-													'log_type'   => $log_action['header'],
-													'log_action' => $log_action)
-			       								 );
-												$success_message = sprintf($user->lang['ADMIN_DELETE_DKPSYS_SUCCESS'], $this->dkpsys['dkpsys_name']);
-												trigger_error($success_message  . adm_back_link($this->u_action));
-											}
-									}
-								}
-								else
-								{
-									$s_hidden_fields = build_hidden_fields(array(
-										'delete'	=> true,
-										'dkpsys_id'	=> request_var(URI_DKPSYS, 0) ,
-										)
-									);
-		
-									$template->assign_vars(array(
-										'S_HIDDEN_FIELDS'	=> $s_hidden_fields)
-									);
-	
-									confirm_box(false, $user->lang['CONFIRM_DELETE_DKPSYS'], $s_hidden_fields);
-								}
-							}
-						}	
 		
 				$template->assign_vars(array(			
 						'DKPSYS_ID'     => $this->url_id,
@@ -298,7 +219,91 @@ class acp_dkp_sys extends bbDkp_Admin
 	
 			case 'listdkpsys':
 			
-			
+				// add dkpsys button redirect
+				$showadd = (isset($_POST['dkpsysadd'])) ? true : false;
+				$delete	 = (isset($_GET['delete']) && isset($_GET[URI_DKPSYS]) ) ? true : false;	
+            	if($showadd)
+            	{
+					redirect(append_sid("index.$phpEx", "i=dkp_sys&amp;mode=adddkpsys"));            		
+            		break;
+            	}
+            	
+				if ($delete)
+					{	
+						if (confirm_box(true))
+						{
+							$this->url_id = request_var(URI_DKPSYS, 0);
+							$this->dkpsys = array(
+								'dkpsys_name'  	=> utf8_normalize_nfc(request_var('dkpsys_name', ' ', true)),
+								'dkpsys_status' => request_var('dkpsys_status', 'N')
+							);
+							
+							$sql = 'SELECT * FROM ' . RAIDS_TABLE . " WHERE 
+									raid_dkpid = '" . (int)  $this->url_id . "'";
+							
+							$result = $db->sql_query($sql);
+							
+							if ( $row = $db->sql_fetchrow($result) )
+							{	
+								// there is a fk raid_dkpid 'on delete restrict' on dkpsys_id
+								// so you cant delete a dkpsys when theres still child raid records
+								trigger_error($user->lang['FV_RAIDEXIST'], E_USER_WARNING);
+								
+							}
+							else
+							{
+							    	// no events found ?
+							    	$sql = 'SELECT * FROM ' . EVENTS_TABLE . "
+									WHERE event_dkpid = '" . (int) $this->url_id . "'";
+							    	
+							    	$result = $db->sql_query($sql);
+							    	
+									if ( $row = $db->sql_fetchrow($result) )
+									{	
+										trigger_error($user->lang['FV_EVENTEXIST'], E_USER_WARNING);
+										// there is a fk event_dkpid 'on delete restrict' on dkpsys_id
+										// so you cant delete a dkpsys when theres still child event records
+									}
+									else
+									{
+										
+									    $sql = 'DELETE FROM ' . DKPSYS_TABLE . "
+										WHERE dkpsys_id = '" . $this->url_id . "'";
+									    
+										$db->sql_query($sql);
+
+										
+								
+										$log_action = array(
+											'header'   			=> 'L_ACTION_DKPSYS_DELETED',
+											'id'       			=> $this->url_id ,
+											'L_DKPSYS_NAME'  	=> $this->dkpsys['dkpsys_name'],
+											'L_DKPSYS_STATUS' =>  $this->dkpsys['dkpsys_status']);
+										$this->log_insert(array(
+											'log_type'   => $log_action['header'],
+											'log_action' => $log_action)
+	       								 );
+										$success_message = sprintf($user->lang['ADMIN_DELETE_DKPSYS_SUCCESS'], $this->dkpsys['dkpsys_name']);
+										trigger_error($success_message  . adm_back_link($this->u_action));
+									}
+							}
+						}
+						else
+						{
+							$s_hidden_fields = build_hidden_fields(array(
+								'delete'	=> true,
+								'dkpsys_id'	=> request_var(URI_DKPSYS, 0) ,
+								)
+							);
+
+							$template->assign_vars(array(
+								'S_HIDDEN_FIELDS'	=> $s_hidden_fields)
+							);
+
+							confirm_box(false, $user->lang['CONFIRM_DELETE_DKPSYS'], $s_hidden_fields);
+						}
+					}	
+            	
 				$sort_order = array(
 					0 => array('dkpsys_name', 'dkpsys_name desc'),
 					1 => array('dkpsys_id desc', 'dkpsys_id')
@@ -324,10 +329,10 @@ class acp_dkp_sys extends bbDkp_Admin
 				}
 				while ( $dkpsys = $db->sql_fetchrow($dkpsys_result) )
 				{
-					/*  d={$dkpsys['dkpsys_id'] refers to hidden value  */
 					$template->assign_block_vars('dkpsys_row', array(
-    					'U_VIEW_DKPSYS' =>  append_sid("index.$phpEx", "i=dkp_sys&amp;mode=adddkpsys&amp;" . URI_DKPSYS . "={$dkpsys['dkpsys_id']}"),
-    					'NAME' => $dkpsys['dkpsys_name'],
+    					'U_VIEW_DKPSYS'   => append_sid("index.$phpEx", "i=dkp_sys&amp;mode=adddkpsys&amp;" . URI_DKPSYS . "={$dkpsys['dkpsys_id']}"),
+						'U_DELETE_DKPSYS' => append_sid("index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;delete=1&amp;" . URI_DKPSYS . "={$dkpsys['dkpsys_id']}"),
+						'NAME' => $dkpsys['dkpsys_name'],
     					'STATUS' => $dkpsys['dkpsys_status'],
     					'DEFAULT' => $dkpsys['dkpsys_default']
 					)
@@ -383,7 +388,7 @@ class acp_dkp_sys extends bbDkp_Admin
 					'L_EXPLAIN'		=> $user->lang['ACP_LISTDKPSYS_EXPLAIN'],
 					'O_NAME' 		=> $current_order['uri'][0],
 					'O_STATUS' 		=> $current_order['uri'][1],	
-					'U_LIST_DKPSYS' => append_sid("index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;"),		
+					'U_LIST_DKPSYS' => append_sid("index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;"),
 					'START' 		=> $start,    
 					'LISTDKPSYS_FOOTCOUNT' => sprintf($user->lang['LISTDKPSYS_FOOTCOUNT'], 
 												$total_dkpsys, $config['bbdkp_user_elimit']),

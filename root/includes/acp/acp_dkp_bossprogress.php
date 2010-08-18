@@ -12,9 +12,9 @@
 * retain the copyright notice below.  While not required for free use,
 * it will help build interest in the bbDkp project.
 * 
-* Thanks for sz3 for Bossprogress.
-* Integrated by: ippeh
-*  
+* Thanks for sz3 for the original Bossprogress.
+* Thanks to ippeh for bbDKP integration
+* 
 **/
 
 
@@ -37,93 +37,353 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	
 	function main($id, $mode) 
 	{
-	    global $db, $user, $template, $config, $phpEx;   
+	    global $db, $user, $template, $config, $phpEx, $cache;   
         $user->add_lang(array('mods/dkp_admin'));   
-		$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress") . 
-			'"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
-		
+
+        // build presets for date pulldown
+		$now = getdate();
+		$s_day_options = '<option value="0"	>--</option>';
+		for ($i = 1; $i < 32; $i++)
+		{
+			$selected = ($i == $now['mday']) ? ' selected="selected"' : '';
+			$s_day_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_month_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 13; $i++)
+		{
+			$selected = ($i == $now['mon']) ? ' selected="selected"' : '';
+			$s_month_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_year_options = '<option value="0">--</option>';
+		for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+		{
+			$selected = ($i == $now['year']) ? ' selected="selected"' : '';
+			$s_year_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+		unset($now);
+        
+        
         switch ($mode)
 		{
 			case 'bossprogress':
+				$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress") . 
+					'"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
 				
-				// list of bosses
-				$this->page_title =  $user->lang['bossbase'] . ' - '. $user->lang['bb_am_conf'];
+				$showadd = (isset($_POST['bpadd'])) ? true : false;
+				$addnew = (isset($_POST['addnew'])) ? true : false;
+				$delete = (isset($_GET['step'])) ? true : false;
+				$submit = (isset($_POST['bpsave'])) ? true : false;
+				
+				if ($showadd)
+				{
+					// load template for adding 
+					$s_zonelist_options = '';
+				    
+                    $sql = 'SELECT id, zonename
+                            FROM ' . ZONEBASE . " 
+                            WHERE game= '" . $config['bbdkp_default_game'] . "'";
+                    $result = $db->sql_query($sql);
+                    while ( $row = $db->sql_fetchrow($result) )
+                    {
+						$s_zonelist_options .= '<option value="' . $row['id'] . '"> ' . $row['zonename'] . '</option>';                    
+                    }
+					
+					$template->assign_vars(array(
+						'S_KILLDATE_DAY_OPTIONS'	=> $s_day_options,
+						'S_KILLDATE_MONTH_OPTIONS'	=> $s_month_options,
+						'S_KILLDATE_YEAR_OPTIONS'	=> $s_year_options,
+						'S_ZONELIST_OPTIONS'  		=> $s_zonelist_options, 
+						'S_ADD'   	=> true,
+	                 )
+	    			);
+				}
+				elseif ($addnew)
+				{
+					// add the new boss
+					
+					$bossname = utf8_normalize_nfc(request_var('bossname', '', true));
+					$bossname_short = utf8_normalize_nfc(request_var('bossname_short', '', true));
+					$boss_image = request_var('boss_image', '');
+					$boss_type = request_var('boss_type', '');
+					$boss_webid = request_var('boss_webid', '');
+					$boss_zone = request_var('boss_zone', 0);
+					$boss_completed= request_var('boss_completed', 0);
+					$boss_killdate_day= request_var('boss_killdate_day', '');
+					$boss_killdate_month= request_var('boss_killdate_month', '');
+					$boss_killdate_year= request_var('boss_killdate_year', '');
+					$kdate = mktime(0,0,0,$boss_killdate_month,$boss_killdate_day , $boss_killdate_year);
+					$boss_show = request_var('boss_show', 0);
+					
+					$sql = 'INSERT INTO ' . BOSSBASE . ' ' . $db->sql_build_array('INSERT', array(
+						'bossname'		=> (string) $bossname,
+						'bossname_short'=> (string) $bossname_short,
+						'imagename'		=> (string) $boss_image,
+						'game'			=> (string) $config['bbdkp_default_game'],
+						'zoneid'		=> (int) $boss_zone,
+						'type'			=> (string) $boss_type, 
+						'webid'			=> (int) $boss_webid,
+						'killed'		=> (int) $boss_completed,
+						'killdate'		=> (int) $kdate,
+						'showboss'		=> (int) $boss_show	,										
+						)
+					);
+					$db->sql_query($sql);					
+					
+					trigger_error( sprintf( $user->lang['RP_BOSSADDED'], $bossname, $boss_zone) . $link, E_USER_NOTICE);
+				
+					
+				}
+				
+				elseif ($delete)
+				{
+					//
+					//delete a boss
+					//
+					$id = request_var('id', ''); 
+					if (confirm_box(true))
+					{
+						$sql = 'DELETE FROM ' . BOSSBASE . ' WHERE id=' . $id;  
+						$db->sql_query($sql);
+						trigger_error($user->lang['RP_BOSSDEL'] . $link, E_USER_NOTICE);
+							
+					}
+					else
+					{
+						$s_hidden_fields = build_hidden_fields(array(
+							'delete'		=> true,
+							'id'			=> $id,
+							)
+						);
+						confirm_box(false, sprintf($user->lang['RP_BOSSDELETCONFIRM'], $id), $s_hidden_fields);
+					}
+					
+				}
+				elseif ($submit)
+				{
+					// save update 
+					set_config ('bbdkp_bp_hidenonkilled', ( isset($_POST['hidenewboss']) ) ? 1 : 0 );
+					
+					
+					
+					
+				}
+				else
+				{
+					// show boss list 
+					$sql_array = array(
+					    'SELECT'    => 	'z.sequence, z.id, z.zonename, z.imagename', 
+					    'FROM'      => array(
+					        ZONEBASE 	=> 'z',
+					    	),
+						'ORDER_BY'	=> 'z.sequence, z.id desc ',
+					    	
+					    );
+					
+					$sql = $db->sql_build_query('SELECT', $sql_array);
+					$result = $db->sql_query($sql);
+	                $row = $db->sql_fetchrow($result); 
+	                while ( $row = $db->sql_fetchrow($result) )
+	                {
+	                	$zoneid = $row['id'];
+	                    $template->assign_block_vars('zone', array(
+		                    'ZONE_NAME' 			=> $row['zonename']  ,
+	                    	'ZONE_IMAGENAME' 		=> $row['imagename']  ,
+	                    ));
+	                    
+						$sql_array2 = array(
+						    'SELECT'    => 	' b.id, b.bossname, b.bossname_short, b.imagename, 
+						    b.webid, b.killed, b.killdate,
+						    b.counter, b.showboss, b.zoneid  ', 
+						    'FROM'      => array(
+						        BOSSBASE 	=> 'b',
+						    	),
+						    'WHERE'		=> 'b.zoneid = ' . $zoneid,
+							'ORDER_BY'	=> 'b.zoneid, b.id ASC ',
+						    );
+						    
+						$sql = $db->sql_build_query('SELECT', $sql_array2);
+						$resultx = $db->sql_query($sql);
+		                while ( $row2 = $db->sql_fetchrow($resultx) )
+		                {
+		                    $template->assign_block_vars('zone.boss', array(
+			                    'BOSS_NAME' 		=> $row2['bossname']  ,
+			                    'BOSS_NAME_SHORT' 	=> $row2['bossname_short']  ,
+			                    'BOSS_IMAGENAME' 	=> $row2['imagename']  ,
+			                    'BOSS_WEBID' 		=> $row2['webid']  ,
+			                    'BOSS_KILLED' 	=> ($row2['killed'] == 1) ? ' checked="checked"' : '',
+			                    'BOSS_DD' => ($row2['killdate'] == 0) ? ' ' : date('d', $row2['killdate'])  ,
+		                    	'BOSS_MM' => ($row2['killdate'] == 0) ? ' ' : date('m', $row2['killdate'])  ,
+		                    	'BOSS_YY' => ($row2['killdate'] == 0) ? ' ' : date('y', $row2['killdate'])  ,
+			                    'BOSS_SHOW'   	=> ($row2['bosszone'] == 1) ? ' checked="checked"' : '',
+		                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;step=delete&amp;id={$row2['id']}")  ,  
+		                    ));
+		                }
+		                $db->sql_freeresult($resultx);
+	                }
+	                $db->sql_freeresult($result);
+				}
+                
+				$this->page_title =  $user->lang['RP_BOSS'];
     			$this->tpl_name = 'dkp/acp_'. $mode;
 				break;	
 		
 			case 'zoneprogress':	
 				// page layout
+				$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress") . 
+					'"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
 				$submit = (isset($_POST['bpsave'])) ? true : false;
 				$delete = (isset($_GET['step'])) ? true : false;
-				
-				// updating 
-				if ($submit)
+				$showadd = (isset($_POST['bpadd'])) ? true : false;
+				$addnew = (isset($_POST['addnew'])) ? true : false;
+				$move_up = (isset($_GET['move_up'])) ? true : false;
+				$move_down = (isset($_GET['move_down'])) ? true : false;  
+				 
+				if ($move_down or $move_up)
+				{
+					$sql = 'SELECT sequence FROM ' . ZONEBASE . ' where id =  ' . request_var('id', 0); 
+					$result = $db->sql_query($sql);
+					$current_sequence = (int) $db->sql_fetchfield('sequence', 0, $result);
+					$db->sql_freeresult($result);
+	
+					if ($move_down)
+					{
+						$new_sequence = $current_sequence - 1; 
+					}
+					else 
+					{
+						$new_sequence = $current_sequence + 1;
+					}
+	
+					// find current id with new sequence and move that one notch, if any
+					$sql = 'UPDATE  ' . ZONEBASE . ' set sequence = ' . $current_sequence . ' where sequence = ' . $new_sequence;
+					$db->sql_query($sql);
+					
+					// now increase old sequence
+					$sql = 'UPDATE  ' . ZONEBASE . ' set sequence = ' . $new_sequence . ' where id = ' . request_var('id', 0);
+					$db->sql_query($sql);			
+
+					$cache->destroy('_zoneprogress');
+					$cache->destroy('sql', ZONEBASE);
+					
+				}
+				if ($showadd)
+				{
+					// load template for adding 
+					$s_zonelist_options = '';
+				    
+                    $sql = 'SELECT id, zonename
+                            FROM ' . ZONEBASE . " 
+                            WHERE game= '" . $config['bbdkp_default_game'] . "'";
+                    $result = $db->sql_query($sql);
+                    while ( $row = $db->sql_fetchrow($result) )
+                    {
+						$s_zonelist_options .= '<option value="' . $row['id'] . '"> ' . $row['zonename'] . '</option>';                    
+                    }
+					
+					$template->assign_vars(array(
+						'S_KILLDATE_DAY_OPTIONS'	=> $s_day_options,
+						'S_KILLDATE_MONTH_OPTIONS'	=> $s_month_options,
+						'S_KILLDATE_YEAR_OPTIONS'	=> $s_year_options,
+						'S_ZONELIST_OPTIONS'		=> $s_zonelist_options, 
+						'S_ADD'   	=> true,
+	                 )
+	    			);
+					
+					
+				}
+				elseif ($addnew)
+				{
+					// add the new zone
+					$zonename = utf8_normalize_nfc(request_var('zonename', '', true));
+					$zonename_short = utf8_normalize_nfc(request_var('zonename_short', '', true));
+					$zone_image = request_var('zone_image', '');
+					$zone_completed= request_var('zone_completed', 0);
+					$zone_killdate_day= request_var('zone_killdate_day', '');
+					$zone_killdate_month= request_var('zone_killdate_month', '');
+					$zone_killdate_year= request_var('zone_killdate_year', '');
+					$kdate = mktime(0,0,0,$zone_killdate_month,$zone_killdate_day,$zone_killdate_year);
+					$zone_webid = request_var('zone_webid', '');
+					$zone_show = request_var('zone_show', 0);
+					$zonesequence = request_var('zonesequence', 0);
+					
+					
+					$sql = 'INSERT INTO ' . ZONEBASE . ' ' . $db->sql_build_array('INSERT', array(
+						'zonename'		=> (string) $zonename,
+						'zonename_short'=> (string) $zonename_short,
+						'imagename'		=> (string) $zone_image,
+						'game'			=> (string) $config['bbdkp_default_game'],
+						'tier'			=> ' ',						 
+						'completed'		=> (int) $zone_completed,
+						'completedate'	=> (int) $kdate,
+						'webid'			=> (int) $zone_webid,
+						'showzone'		=> (int) $zone_show	,
+						'sequence'		=> (int) $zonesequence	,															
+						)
+					);
+					$db->sql_query($sql);					
+					
+					trigger_error( sprintf( $user->lang['RP_ZONEADDED'], $zonename) . $link, E_USER_NOTICE);
+				}
+				elseif ($submit)
 				{
 					// global config
 				  	set_config ('bbdkp_bp_hidenewzone',  ( isset($_POST['hidenewzone']) ) ? 1 : 0);
-				  	set_config ('bbdkp_bp_hidenonkilled', ( isset($_POST['hidenewboss']) ) ? 1 : 0 );
 				  	set_config ('bbdkp_bp_zonephoto',  request_var('headertype', 0), 0); 				  	
 				  	set_config ('bbdkp_bp_zoneprogress', ( isset($_POST['showzone']) ) ? 1 : 0);
 				  	set_config ('bbdkp_bp_zonestyle',  request_var('style', 0));
-
-				  	$sql = "select imagename, showzone, completedate from " . ZONEBASE ;
-					$result = $db->sql_query($sql);
-                	$row = $db->sql_fetchrow($result); 
-	                while ( $row = $db->sql_fetchrow($result) )
-	                {
-	                	$zonenames[] = $row['imagename']; 
-	                	$completedate[$row['imagename']] = $row['completedate']; 
-	                }
-	                $db->sql_freeresult($result);
-
-	                $newzonenames =  request_var('zonename', array( ''=> ''));
-					$newzonenameshorts =  request_var('zonenameshort', array( ''=> ''));
-					$newzoneimagenames =  request_var('zoneimagename', array( ''=> ''));
-					$newzonewebids =  request_var('zonewebid', array( ''=> ''));
-					$newzonedds =  request_var('zonedd', array( ''=> ''));
-					$newzonemms =  request_var('zonemm', array( ''=> ''));
-					$newzoneyys =  request_var('zoneyy', array( ''=> ''));
-	                foreach ($zonenames as $key => $zonename) 
+					
+				  	$zoneids = request_var('zoneid', array( 0 => ''));
+				  	$sequence = request_var('zonesequence', array( 0 => ''));
+	                $newzonenames = request_var('zonename', array( 0 => ''));
+					$newzonenameshorts = request_var('zonenameshort', array( 0 => ''));
+					$newzoneimagenames = request_var('zoneimagename', array( 0 => ''));
+					$newzonewebids = request_var('zonewebid', array( 0 => ''));
+					$newzonedds = request_var('zonedd', array( 0 => ''));
+					$newzonemms = request_var('zonemm', array( 0 => ''));
+					$newzoneyys = request_var('zoneyy', array( 0 => ''));
+					
+	                foreach ($zoneids as $key) 
 					{
-						$month = (int) $newzonemms[$zonename];
+						$month = (int) $newzonemms[$key];
 						$month = min (12, max(1,$month) );
-						$day = (int) $newzonedds[$zonename];
-						$year = (int) $newzoneyys[$zonename]; 
+						$day = (int) $newzonedds[$key];
+						$year = (int) $newzoneyys[$key]; 
 						$year = min ( date("Y") ,  max(1999,$year) );
+						
 						if (checkdate($month, $day, $year))
 						{
 							// correct date found
 							$data = array(
-								'newzonename' => $newzonenames[$zonename],
-								'newzonenameshort' => $newzonenameshorts[$zonename],
-								'newzoneimagename' => $newzoneimagenames[$zonename], 
-								'completed' => isset ( $_POST ['zonecompleted'][$zonename] ) ? 1 : 0,		
+								'zonename' => $newzonenames[$key],
+								'zonename_short' => $newzonenameshorts[$key],
+								'sequence' => $sequence[$key],
+								'imagename' => $newzoneimagenames[$key], 
+								'completed' => isset ( $_POST ['zonecompleted'][$key] ) ? 1 : 0,		
 								'completedate' =>  mktime(0, 0, 0, $month, $day, $year), 
-								'webid' => $newzonewebids[$zonename],
-								'showzone' => isset ( $_POST ['zoneshow'][$zonename] ) ? 1 : 0,
+								'webid' => $newzonewebids[$key],
+								'showzone' => isset ( $_POST ['zoneshow'][$key] ) ? 1 : 0,
 							);
 						}
 						else 
 						{
 							// incorrect completedate entered so this completedate not be updated with user provided date
 							$data= array(
-								'zonename' => $newzonenames[$zonename],
-								'zonename_short' => $newzonenameshorts[$zonename],
-								'imagename' => $newzoneimagenames[$zonename], 
-								'completed' => isset ( $_POST ['zonecompleted'][$zonename] ) ? 1 : 0,		
-								'completedate' => $completedate[$zonename], 
-								'webid' => $newzonewebids[$zonename],
-								'showzone' => isset ( $_POST ['zoneshow'][$zonename] ) ? 1 : 0,
+								'zonename' => $newzonenames[$key],
+								'zonename_short' => $newzonenameshorts[$key],
+								'sequence' => $sequence[$key],
+								'imagename' => $newzoneimagenames[$key], 
+								'completed' => isset ( $_POST ['zonecompleted'][$key] ) ? 1 : 0,		
+								'webid' => $newzonewebids[$key],
+								'showzone' => isset ( $_POST ['zoneshow'][$key] ) ? 1 : 0,
 							);
-							
-							
 						}
 						
 						// And doing an update query 
-						$sql = 'UPDATE ' . ZONEBASE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE imagename = "'. $db->sql_escape($zonename) .'"';
+						$sql = 'UPDATE ' . ZONEBASE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = '. $key;
 						$db->sql_query($sql);
 					}
-					
 					trigger_error($user->lang['BP_SAVED'] . $link, E_USER_NOTICE);
 					
 				}
@@ -133,38 +393,28 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					//
 					//delete a zone
 					//
-					$imagename = request_var('imagename', ''); 
+					$id = request_var('id', ''); 
 					if (confirm_box(true))
 					{
-					$sql = ' SELECT id FROM ' . ZONEBASE . " where imagename = '" . $db->sql_escape($imagename) . "' ";	
-			        $result = $db->sql_query($sql);
-			        while ( $row = $db->sql_fetchrow($result) )
-			        {
-			        	$zoneid = $row['id']; 
-			        }
-			        $db->sql_freeresult ( $result);
-        
-					$sql = 'DELETE FROM ' . ZONEBASE . ' WHERE id = ' . $zoneid;  
-					$db->sql_query($sql);	
-					$sql = 'DELETE FROM ' . BOSSBASE . ' WHERE zoneid=' . $zoneid;  
-					$db->sql_query($sql);
-					trigger_error($user->lang['RP_ZONEDEL'] . $link, E_USER_NOTICE);
-					
+						$sql = 'DELETE FROM ' . ZONEBASE . ' WHERE id = ' . $id;  
+						$db->sql_query($sql);	
+						$sql = 'DELETE FROM ' . BOSSBASE . ' WHERE zoneid=' . $id;  
+						$db->sql_query($sql);
+						trigger_error($user->lang['RP_ZONEDEL'] . $link, E_USER_NOTICE);
 							
 					}
 					else
 					{
 						$s_hidden_fields = build_hidden_fields(array(
 							'delete'		=> true,
-							'imagename'		=> $imagename,
+							'id'		=> $id,
 							)
 						);
-		
-						confirm_box(false, sprintf($user->lang['RP_ZONEDELETCONFIRM'], $imagename), $s_hidden_fields);
+						confirm_box(false, sprintf($user->lang['RP_ZONEDELETCONFIRM'], $id), $s_hidden_fields);
 					}
-					
 				}
 				
+				// display 
 				$bp_styles['0'] = $user->lang['BP_STYLE_BP'];
 				$bp_styles['1'] = $user->lang['BP_STYLE_BPS'];
 				$bp_styles['2'] = $user->lang['BP_STYLE_RP3R'];
@@ -191,22 +441,23 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				
 				// list of zones
 				$sql_array = array(
-				    'SELECT'    => 	' zonename, zonename_short, imagename, completed, completedate, webid, showzone  ', 
+				    'SELECT'    => 	' id, sequence, zonename, zonename_short, imagename, completed, completedate, webid, showzone  ', 
 				 
 				    'FROM'      => array(
 				        ZONEBASE 	=> 'z',
 				    	),
-					'ORDER_BY'	=> $current_order['sql'],
+					'ORDER_BY'	=> 'sequence desc, id desc ',
 				    	
 				    );
 				    
 				$sql = $db->sql_build_query('SELECT', $sql_array);
 				$result = $db->sql_query($sql);
-                $row = $db->sql_fetchrow($result); 
                 while ( $row = $db->sql_fetchrow($result) )
                 {
                     $template->assign_block_vars('gamezone', array(
-	                    'ZONE_NAME' 		=> $row['zonename']  ,
+	                    'ZONE_ID' 			=> $row['id'],
+                    	'ZONE_SEQUENCE' 	=> $row['sequence'] ,
+	                    'ZONE_NAME' 		=> $row['zonename'] ,
 	                    'ZONE_NAME_SHORT' 	=> $row['zonename_short']  ,
 	                    'ZONE_IMAGENAME' 	=> $row['imagename']  ,
 	                    'ZONE_WEBID' 		=> $row['webid']  ,
@@ -217,18 +468,18 @@ class acp_dkp_bossprogress extends bbDkp_Admin
                     	'ZONE_YY' => ($row['completedate'] == 0) ? ' ' : date('y', $row['completedate'])  ,
                                         
 	                    'ZONE_SHOW'   	=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
-                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;step=delete&amp;imagename={$row['imagename']}")  ,  
+                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;step=delete&amp;id={$row['id']}")  ,  
+						'U_MOVE_UP'		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;move_up=1&amp;id={$row['id']}"), 
+						'U_MOVE_DOWN'	=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;move_down=1&amp;id={$row['id']}"), 
+                    
                     ));
                 }
                 $db->sql_freeresult($result);
 
-				$this->page_title =  $user->lang['RP_BP'] . ' - '. $user->lang['RP_BP_CONF'];
+				$this->page_title =  $user->lang['RP_ZONE'];
 				$this->tpl_name = 'dkp/acp_zoneprogress';
 				break;		
 		}
-				
-								
 	}
-
 }
 ?>

@@ -49,9 +49,10 @@ define('RAIDS_TABLE',              $bbdkp_table_prefixx . 'raids');
 define('CLASS_TABLE',              $bbdkp_table_prefixx . 'classes'); 	 
 define('RACE_TABLE',               $bbdkp_table_prefixx . 'races'); 	 
 define('FACTION_TABLE',            $bbdkp_table_prefixx . 'factions'); 
-define('DKPSYS_TABLE',     			$bbdkp_table_prefixx . 'dkpsystem');
+define('DKPSYS_TABLE',     			$bbdkp_table_prefixx . 'dkppool');
 define('PLUGINS_TABLE',	        	$bbdkp_table_prefixx . 'plugins');
 define('GUILD_TABLE',	        	$bbdkp_table_prefixx . 'memberguild');
+define('LOOTSYS_TABLE',	        	$bbdkp_table_prefixx . 'lootsystem');
 
 // plugin anchors
 

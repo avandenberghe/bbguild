@@ -3,6 +3,62 @@
 		$Id$
 //-->
 
+
+<!-- IF S_ADD -->
+	<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
+
+	<h1>{L_RP_ZONE}</h1>
+	<p>{L_RP_ZONE_ADD_EXPLAIN}</p>
+
+	<form id="acp_zoneprogress_add" method="post" action="{U_ACTION}">
+	<fieldset>
+	<dl>
+		<dt><label for="zonename">{L_ZONE_NAME}:</label><br /><span>{L_ZONE_NAME_EXPLAIN}</span></dt>
+		<dd><input name="zonename" type="text" id="zonename" maxlength="255" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="zonename_short">{L_ZONE_NAME_SHORT}:</label><br /><span>{L_ZONE_NAME_SHORT_EXPLAIN}</span></dt>
+		<dd><input name="zonename_short" type="text" id="zonename_short" maxlength="255" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="zone_image">{L_ZONE_IMAGENAME}:</label><br /><span>{L_ZONE_IMAGENAME_EXPLAIN}</span></dt>
+		<dd><input name="zone_image" type="text" id="zone_image" maxlength="255" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="zone_webid">{L_ZONE_WEBID}:</label><br /><span>{L_ZONE_WEBID_EXPLAIN}</span></dt>
+		<dd><input name="zone_webid" type="text" id="zone_webid" maxlength="255" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="zonesequence">{L_ZONE_SEQUENCE}:</label><br /><span>{L_ZONE_SEQUENCE_EXPLAIN}</span></dt>
+		<dd><select id="zonesequence" name="zonesequence">{S_ZONELIST_OPTIONS}</select></dd>
+	</dl>
+	<dl>
+		<dt><label for="zone_completed">{L_ZONE_COMPLETED}:</label><br /><span>{L_ZONE_COMPLETED_EXPLAIN}</span></dt>
+		&nbsp;<input type="checkbox" name="zone_completed" value="1" />
+	</dl>
+	<dl>
+		<dt><label for="zone_killdate">{L_ZONE_COMPLETEDATE}:</label><br /><span>{L_ZONE_COMPLETEDATE_EXPLAIN}</span></dt>
+		<dd>
+		 {L_DAY}: <select id="zone_killdate" name="zone_killdate_day">{S_KILLDATE_DAY_OPTIONS}</select>
+		 {L_MONTH}: <select name="zone_killdate_month">{S_KILLDATE_MONTH_OPTIONS}</select> 
+		 {L_YEAR}: <select name="zone_killdate_year">{S_KILLDATE_YEAR_OPTIONS}</select></dd>
+	</dl>
+	<dl>
+		<dt><label for="zone_show">{L_ZONE_SHOW}:</label><br /><span>{L_ZONE_SHOW_EXPLAIN}</span></dt>
+		&nbsp;<input type="checkbox" name="zone_show" value="1"  />
+	</dl>
+
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="addnew" name="addnew" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		{S_FORM_TOKEN}
+	</p>
+	</fieldset>
+	</form>
+
+
+<!-- ELSE -->
+
 <h1>{L_RP_ZONE}</h1>
 <p>{L_RP_ZONE_EXPLAIN}</p>
 
@@ -38,11 +94,6 @@
 		<td width="70%" class="row1"><input type="checkbox"
 			name="hidenewzone" value="1" {BP_HIDENEWZONE} /></td>
 	</tr>
-	<tr>
-		<td width="70%" class="row2">{L_HIDENEWBOSS}</td>
-		<td width="30%" class="row1"><input type="checkbox"
-			name="hidenewboss" value="1" {BP_HIDENONKIBOSS} /></td>
-	</tr>
 </table>
 
 <br />
@@ -59,7 +110,7 @@
 			<th align="center" width="40">{L_ZONE_COMPLETED}</th>
 			<th align="left" width="20" >{L_ZONE_COMPLETEDATE}</th>
 			<th align="center" width="20" nowrap="nowrap">{L_ZONE_SHOW}</th>
-			<th align="center" width="5">{L_DELETE}</th>
+			<th align="center" width="5">{L_OPTIONS}</th>
 		</tr>
 	</thead>
 
@@ -72,21 +123,26 @@
 		</tr>
 		<tr class="row2">
 			<!-- ENDIF -->
-			<td width="40" nowrap="nowrap"><input class="text post" type="text" size="30" name="zonename[{gamezone.ZONE_IMAGENAME}]" value="{gamezone.ZONE_NAME}" />  </td>
-			<td width="40" nowrap="nowrap"><input class="text post" type="text" size="10" name="zonenameshort[{gamezone.ZONE_IMAGENAME}]" value="{gamezone.ZONE_NAME_SHORT}" />    </td>
-			<td width="35" nowrap="nowrap"><input class="text post" type="text" size="25" name="zoneimagename[{gamezone.ZONE_IMAGENAME}]" value="{gamezone.ZONE_IMAGENAME}" />    </td>
-			<td width="10" nowrap="nowrap"><input class="text post" type="text" size="10" name="zonewebid[{gamezone.ZONE_IMAGENAME}]" value="{gamezone.ZONE_WEBID}" />   </td>
-			<td width="20" nowrap="nowrap" align="center"><input type="checkbox" name="zonecompleted[{gamezone.ZONE_IMAGENAME}]" value="1" {gamezone.ZONE_COMPLETED} /> </td>
+			
+			<input type="hidden" name="zoneid[{gamezone.ZONE_ID}]"  value="{gamezone.ZONE_ID}" />
+			<td width="40" nowrap="nowrap"><input class="text post" type="text" size="30" name="zonename[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_NAME}" />  </td>
+			<td width="40" nowrap="nowrap"><input class="text post" type="text" size="10" name="zonenameshort[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_NAME_SHORT}" />    </td>
+			<td width="35" nowrap="nowrap"><input class="text post" type="text" size="25" name="zoneimagename[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_IMAGENAME}" />    </td>
+			<td width="10" nowrap="nowrap"><input class="text post" type="text" size="10" name="zonewebid[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_WEBID}" />   </td>
+			<td width="20" nowrap="nowrap" align="center"><input type="checkbox" name="zonecompleted[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_COMPLETED} /> </td>
 			<td width="40" nowrap="nowrap" style="text-align: center;">
-				<input type="text" name="zonedd{gamezone.ZONE_DD}" size="3" maxlength="2" value="{gamezone.ZONE_DD}" class="input" />/
-				<input type="text" name="zonemm{gamezone.ZONE_MM}" size="3" maxlength="2" value="{gamezone.ZONE_MM}" class="input" />/
-				<input type="text" name="zoneyy{gamezone.ZONE_YY}" size="5" maxlength="4" value="{gamezone.ZONE_YY}" class="input" />
+				<input type="text" name="zonedd[{gamezone.ZONE_ID}]" size="3" maxlength="2" value="{gamezone.ZONE_DD}" class="input" />/
+				<input type="text" name="zonemm[{gamezone.ZONE_ID}]" size="3" maxlength="2" value="{gamezone.ZONE_MM}" class="input" />/
+				<input type="text" name="zoneyy[{gamezone.ZONE_ID}]" size="5" maxlength="4" value="{gamezone.ZONE_YY}" class="input" />
 			</td>
 			<td width="5" nowrap="nowrap" align="center">
-				<input type="checkbox" name="zoneshow[{gamezone.ZONE_IMAGENAME}]" value="1" {gamezone.ZONE_SHOW} />
+				<input type="checkbox" name="zoneshow[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_SHOW} />
 			</td>
-			<td>
+			<td width="5" nowrap="nowrap">
 				<a href="{gamezone.U_DELETE}">{ICON_DELETE}</a>
+				<!-- IF gamezone.S_FIRST_ROW and not PREVIOUS_PAGE -->{ICON_MOVE_UP_DISABLED}<!-- ELSE --><a href="{gamezone.U_MOVE_UP}">{ICON_MOVE_UP}</a><!-- ENDIF -->&nbsp;
+				<!-- IF gamezone.S_LAST_ROW and not NEXT_PAGE -->{ICON_MOVE_DOWN_DISABLED}<!-- ELSE --><a href="{gamezone.U_MOVE_DOWN}">{ICON_MOVE_DOWN}</a><!-- ENDIF -->
+				
 			</td>
 			
 		</tr>
@@ -95,21 +151,19 @@
 </table>
 <br />
 
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
-	<tr>
-		<th align="center" colspan="2">
-		<p class="quick">
-		<input type="submit" name="bpsave" value="{L_SUBMIT}" class="button1" />
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input class="button2" name="bpadd" type="submit" value="{L_ADD}" />
+</fieldset>
+
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+	<input type="submit" name="bpsave" value="{L_SUBMIT}" class="button1" />
 		&nbsp;
 		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-			</p>
-		</th>
-	</tr>
-</table>
+		{S_FORM_TOKEN}
+</fieldset>
 
-
-{S_FORM_TOKEN}
 </form>
+<!-- ENDIF -->
 
 <!-- INCLUDE dkp/overall_footer.html -->
 

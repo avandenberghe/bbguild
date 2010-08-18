@@ -28,8 +28,8 @@ $lang = array_merge($lang, array(
     'ACP_CAT_DKP'			=> 'BBDKP',
 	'ACP_DKP_MAINPAGE'		=> 'General Settings',  
 	'ACP_DKP_PANEL'		    => 'Adminpanel',  
-	'ACP_DKP_CONFIG'		=> 'Main Config',
-	'ACP_DKP_INDEX'			=> 'Portal Config',
+	'ACP_DKP_CONFIG'		=> 'Main Settings',
+	'ACP_DKP_INDEX'			=> 'Portal Settings',
 	'ACP_DKP_LOGS'			=> 'View Logs',
 ));
 

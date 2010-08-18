@@ -28,8 +28,8 @@ $lang = array_merge($lang, array(
     'ACP_DKP_NEWS'			=> 'News Management',
 	'ACP_ADD_NEWS_EXPLAIN' => 'Here you can add / change Guild news.',
 	'ACP_DKP_NEWS_ADD'		=> 'Add News',  
-	'ACP_DKP_NEWS_LIST'		=> 'List News',
-	'ACP_DKP_NEWS_LIST_EXPLAIN'		=> 'List of newsitem(s)',
+	'ACP_DKP_NEWS_LIST'		=> 'News',
+	'ACP_DKP_NEWS_LIST_EXPLAIN'	=> 'List of newsitem(s)',
 ));
 
 ?>
