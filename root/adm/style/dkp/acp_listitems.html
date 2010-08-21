@@ -29,7 +29,7 @@
 <table cellspacing="1">
 	<thead>
 		<tr>
-			<th align="center" width="16" nowrap="nowrap">&nbsp;</th>
+			
 			<th align="left" width="11%"><a
 				href="{U_LIST_ITEMS}&amp;o={O_RAIDDKP}&amp;start={START}">{L_POOL}</a></th>
 			<th align="left" width="25%"><a
@@ -42,6 +42,7 @@
 				href="{U_LIST_ITEMS}&amp;o={O_NAME}&amp;start={START}">{L_ITEM}</a></th>
 			<th align="left" width="10%" nowrap="nowrap"><a
 				href="{U_LIST_ITEMS}&amp;o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+			<th align="center" width="16">{L_ACTION}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -51,10 +52,6 @@
 			<!-- ELSE -->
 		<tr class="row2">
 			<!-- ENDIF -->
-			<td width="16" nowrap="nowrap" align="center"><a
-				href="{items_row.U_VIEW_ITEM}"><img
-				src="{ROOT_PATH}/images/glyphs/edit.gif" width="16" height="16"
-				alt="Edit" /></a></td>
 			<td width="11%"><a href="{items_row.U_VIEW_RAIDDKP}">{items_row.RAIDDKP}</a></td>
 			<td width="25%"><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
 			<td width="70" nowrap="nowrap">{items_row.DATE}</td>
@@ -62,6 +59,10 @@
 				href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></td>
 			<td width="35%"><a href="{items_row.U_VIEW_ITEM}">{items_row.ITEMNAME}</a></td>
 			<td width="10%" nowrap="nowrap" class="negative">{items_row.VALUE}</td>
+		    <td width="5" nowrap="nowrap">
+				<a href="{items_row.U_VIEW_ITEM}">{ICON_EDIT}</a>
+			</td>
+	
 		</tr>
 		<!-- END items_row -->
 		<tr>

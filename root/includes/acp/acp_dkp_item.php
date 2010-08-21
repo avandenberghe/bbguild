@@ -502,7 +502,6 @@ class acp_dkp_item extends bbDkp_Admin
 			redirect(append_sid("index.$phpEx", "i=dkp_item&amp;mode=additem"));            		
 	        break;
 	    }
-		
             	
 		if ($this->bbtips == true)
 		{
@@ -528,7 +527,7 @@ class acp_dkp_item extends bbDkp_Admin
 		$result = $db->sql_query ( $sql );
 		$row = $db->sql_fetchrow ($result);
 		
-		if( !$row )
+		if( $row )
 		{
 			$dkpid = 1; 
 			$submitdkp = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
