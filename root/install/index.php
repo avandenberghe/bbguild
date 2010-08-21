@@ -1184,6 +1184,19 @@ function gameupdate($action, $version)
 					break;
 	
 				case '1.1.2' : 
+					
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_NEWS_ADD' " );
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_GUILD_ADD' " );
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_MEMBER_ADD' " );
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_NEWS_ADD' " );
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_POOL_ADD' " );
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_EVENT_ADD' " );
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_RAID_ADD' " );
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_ITEM_ADD' " );
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_ITEM_SEARCH' " );
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_EDITMEMBERDKP' " );
+					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_ADDADJ' " );
+					
 					// bossprogress updaters
 					
 					$game = request_var('game', '');
