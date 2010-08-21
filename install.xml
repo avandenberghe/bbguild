@@ -23,16 +23,10 @@ bbDKP (c) 2008 Sajaki, Malfate, Kapli
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
 		<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5 with Libxml 2.6.0 (simplexml usage), Curl 
-
+Install instructions : please see /contrib/readme/install.html
+What has changed ? see here : /contrib/readme/changelog.html
 Please Backup your phpbb3 installation and database before beginning. 
-1) If you have a bbdkp release before 1.1.0, uninstall its php/html files (not the db!). 
-   If you're using automod for uninstalling, first restore any folders you might have removed/renamed such as Install.   
-
-2) Then remove the old files to not clutter up your install. 
-
-3) Then install 1.1.2 with Automod to copy the files and do the core edits. There are considerably less core edits than before. 
-
-4) See DIY section]]>
+]]>
 </author-notes>
 		<author-group>
 			<author>
@@ -103,7 +97,7 @@ Please Backup your phpbb3 installation and database before beginning.
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.1.1</mod-version>
+		<mod-version>1.1.2</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
@@ -288,7 +282,7 @@ Automod cannot handle it as it would lead to a timeout due to the size (19mb) !
 <file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  
 ------------------------------------------------------------------------------
 2) Run database installer 
-Browse to install/index.php and run the bbDKP 1.1.1 installer/updater.  
+Browse to install/index.php and run the bbDKP 1.1.2 installer/updater.  
 This will either do a full install or an update from 1.0.8, 1.0.9rc1, or 1.1.0 of the ACP modules and database tables.  
 Afterwards the caches will be cleared (template, theme, imagesets).
 ------------------------------------------------------------------------------

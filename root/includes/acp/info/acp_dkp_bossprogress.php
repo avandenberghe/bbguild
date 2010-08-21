@@ -37,8 +37,8 @@ class acp_dkp_bossprogress_info
 			'title'		=> 'ACP_DKP_BOSS',
 			'version'	=> '1.1.2',
 			'modes'		=> array(
-				'bossprogress'		=> array('title' => 'ACP_DKP_BOSS_BOSSPROGRESS', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_BOSS')),
-				'zoneprogress'		=> array('title' => 'ACP_DKP_BOSS_ZONEPROGRESS', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_BOSS')),
+				'bossprogress'		=> array('title' => 'ACP_DKP_BOSS_BOSSPROGRESS', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_BOSS') , 'display' => true),
+				'zoneprogress'		=> array('title' => 'ACP_DKP_BOSS_ZONEPROGRESS', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_BOSS') , 'display' => true),
 				),
 		);
 	}

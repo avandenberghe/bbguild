@@ -34,7 +34,7 @@ class acp_dkp_raid_info
 			'title'		=> 'ACP_DKP_RAIDS',
 			'version'	=> '1.1.0',
 			'modes'		=> array(
-				'addraid'		=> array('title' => 'ACP_DKP_RAID_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS')),
+				'addraid'		=> array('title' => 'ACP_DKP_RAID_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS') , 'display' => false),
 				'listraids'		=> array('title' => 'ACP_DKP_RAID_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS')),
 				),
 		);

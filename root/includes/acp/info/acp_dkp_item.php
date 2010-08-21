@@ -39,10 +39,10 @@ class acp_dkp_item_info
 			'title'		=> 'ACP_DKP_ITEM',
 			'version'	=> '1.1.0',
 			'modes'		=> array(
-				'additem'			=> array('title' => 'ACP_DKP_ITEM_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM'), 'display' => '1' ),
-				'listitems'			=> array('title' => 'ACP_DKP_ITEM_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM') , 'display' => '1' ),
-				'search'			=> array('title' => 'ACP_DKP_ITEM_SEARCH', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM'), 'display' => '0'  ),
-				'viewitem'			=> array('title' => 'ACP_DKP_ITEM_VIEW', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM') , 'display' => '0' ),
+				'additem'			=> array('title' => 'ACP_DKP_ITEM_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM'), 'display' => false ),
+				'listitems'			=> array('title' => 'ACP_DKP_ITEM_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM') , 'display' => true ),
+				'search'			=> array('title' => 'ACP_DKP_ITEM_SEARCH', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM'), 'display' => false  ),
+				'viewitem'			=> array('title' => 'ACP_DKP_ITEM_VIEW', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM') , 'display' => false ),
 				),
 		);
 	}
