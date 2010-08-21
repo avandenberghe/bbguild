@@ -36,10 +36,8 @@
 </div>
  
 <!-- ENDIF -->
-
 <table cellspacing="1">
   <tr class="rowhead">
-    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
     <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
     <th align="left" width="30" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_DKPID}&amp;start={START}">{L_POOLID}</a></th>
     <th align="left" width="50" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_DKPPOOL}&amp;start={START}">{L_POOL}</a></th>
@@ -47,19 +45,20 @@
     <th align="left" width="400"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_REASON}&amp;start={START}">{L_REASON}</a></th>
     <th align="left" width="90" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADJUSTMENT}&amp;start={START}">{L_ADJUSTMENT}</a></th>
     <th align="left" width="90" nowrap="nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADDED_BY}&amp;start={START}">{L_ADDED_BY}</a></th>
+    <th align="center" width="5">{L_ACTION}</th>
   </tr>
   <!-- BEGIN adjustments_row -->
   <!-- IF menu_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td width="16" nowrap="nowrap" align="center"><a href="{adjustments_row.U_ADD_ADJUSTMENT}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
     <td width="70" nowrap="nowrap">{adjustments_row.DATE}</td>
-    
     <td width="30" nowrap="nowrap">{adjustments_row.DKPID}</td>
     <td width="50" nowrap="nowrap">{adjustments_row.DKPPOOL}</td>
-    
     <td width="150" nowrap="nowrap"><a href="{adjustments_row.U_VIEW_MEMBER}">{adjustments_row.MEMBER}</a></td>
     <td width="400">{adjustments_row.REASON}</td>
     <td width="90" nowrap="nowrap" class="{adjustments_row.C_ADJUSTMENT}">{adjustments_row.ADJUSTMENT}</td>
     <td width="90" nowrap="nowrap" class="{adjustments_row.ADDED_BY}">{adjustments_row.ADDED_BY}</td>
+    <td width="5" nowrap="nowrap">
+		<a href="{adjustments_row.U_ADD_ADJUSTMENT}">{ICON_EDIT}</a>
+	</td>
   </tr>
   <!-- END adjustments_row --> 
   <tr>
@@ -78,5 +77,4 @@
 </fieldset>
 
 </form>
-
 <!-- INCLUDE dkp/overall_footer.html -->	

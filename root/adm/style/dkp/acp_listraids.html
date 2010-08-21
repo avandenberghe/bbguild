@@ -27,21 +27,24 @@
 <table cellspacing="1">
 <thead>
   <tr>
-    <th align="center" width="16">&nbsp;</th>
     <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
     <th align="left" width="35%"><a href="{U_LIST_RAIDS}&amp;o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
     <th align="left" width="65%"><a href="{U_LIST_RAIDS}&amp;o={O_NOTE}&amp;start={START}">{L_NOTE}</a></th>
     <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+    <th align="center" width="5">{L_ACTION}</th>
   </tr>
   </thead>
 <tbody>
   <!-- BEGIN raids_row -->
   <!-- IF raids_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-  <td width="16" nowrap="nowrap" align="center"><a href="{raids_row.U_VIEW_RAID}"><img src="images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
     <td width="70" nowrap="nowrap">{raids_row.DATE}</td>
     <td width="35%"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
     <td width="65%">{raids_row.NOTE}</td>
     <td width="60" nowrap="nowrap" class="positive">{raids_row.VALUE}</td>
+    <td width="5" nowrap="nowrap">
+		<a href="{raids_row.U_VIEW_RAID}">{ICON_EDIT}</a>
+	</td>
+	
   </tr>
   <!-- END raids_row -->
   <tr>

@@ -19,19 +19,22 @@
 <thead>
  
   <tr>
-    <th align="center" width="16" nowrap="nowrap">&nbsp;</th>
     <th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_NEWS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
     <th align="left" width="100" nowrap="nowrap"><a href="{U_LIST_NEWS}&amp;o={O_USERNAME}&amp;start={START}">{L_USERNAME}</a></th>
     <th align="left" width="100%"><a href="{U_LIST_NEWS}&amp;o={O_HEADLINE}&amp;start={START}">{L_HEADLINE}</a></th>
+    <th align="center" width="5">{L_ACTION}</th>
   </tr>
 </thead>
 <tbody>
   <!-- BEGIN news_row -->
   <!-- IF news_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td width="16" nowrap="nowrap" align="center"><a href="{news_row.U_VIEW_NEWS}"><img src="{EQDKP_ROOT_PATH}images/glyphs/edit.gif" width="16" height="16" alt="Edit" /></a></td>
     <td width="150" nowrap="nowrap">{news_row.DATE}</td>
     <td width="100" nowrap="nowrap">{news_row.USERNAME}</td>
     <td width="100%"><a href="{news_row.U_VIEW_NEWS}">{news_row.HEADLINE}</a></td>
+    <td width="5" nowrap="nowrap">
+		<a href="{news_row.U_VIEW_NEWS}">{ICON_EDIT}</a>
+	</td>
+	
   </tr>
   <!-- END news_row -->
   <tr>
