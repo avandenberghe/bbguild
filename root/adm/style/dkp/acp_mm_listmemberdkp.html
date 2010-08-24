@@ -34,6 +34,7 @@
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ADJUSTMENT}{URI_ADDON}">{L_ADJUSTMENT}</a></th>
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_CURRENT}{URI_ADDON}">{L_CURRENT}</a></th>
     <th align="left" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_LASTRAID}{URI_ADDON}">{L_LASTRAID}</a></th>
+    <th align="center" width="5">{L_ACTION}</th>
   </tr>
   <!-- BEGIN members_row -->
   <!-- IF members_row.S_ROW_COUNT is even -->
@@ -44,7 +45,7 @@
     <td width="5%" nowrap="nowrap" align="center"><input type="checkbox" name="activate_ids[]" value="{members_row.ID}" {members_row.STATUS} /></td>
     <td width="5%" nowrap="nowrap" align="right">{members_row.ID}</td>
     <td width="10%" nowrap="nowrap">{members_row.DKPSYS_NAME}</td>
-    <td width="15%" nowrap="nowrap"><b><a href="{members_row.U_VIEW_MEMBER}">{members_row.NAME}</a></b></td>
+    <td width="15%" nowrap="nowrap"><b>{members_row.NAME}</b></td>
     <td width="10%" nowrap="nowrap">{members_row.RANK}</td>
     <td width="10%" nowrap="nowrap">{members_row.LEVEL}</td>
     <td width="10%" nowrap="nowrap">{members_row.CLASS}</td>
@@ -53,10 +54,14 @@
     <td width="10%"  align="right" nowrap="nowrap" class="{members_row.C_ADJUSTMENT}">{members_row.ADJUSTMENT}</td>
     <td width="10%"  align="right" nowrap="nowrap" class="{members_row.C_CURRENT}">{members_row.CURRENT}</td>
     <td width="10%" nowrap="nowrap" class="{members_row.C_LASTRAID}">{members_row.LASTRAID}</td>
+ 	<td width="5" nowrap="nowrap">
+		<a href="{members_row.U_VIEW_MEMBER}">{ICON_EDIT}</a>
+	</td>
+    
   </tr>
   <!-- END members_row -->
   <tr>
-    <th colspan="12" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+    <th colspan="13" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
   </tr>
 </table>
 	<input type="hidden" NAME="dkpsys" VALUE="{DKPSYS}" />
