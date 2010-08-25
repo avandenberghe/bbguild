@@ -671,8 +671,9 @@ class acp_dkp_item extends bbDkp_Admin
 			}
 			
 			$db->sql_freeresult ( $items_result );
-			
-			$template->assign_vars ( array (
+		}
+		
+		$template->assign_vars ( array (
 				'F_LIST_ITEM' 	=>   append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
 				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
 				'L_EXPLAIN' 	=> $user->lang ['ACP_LISTITEMS_EXPLAIN'], 
@@ -688,11 +689,6 @@ class acp_dkp_item extends bbDkp_Admin
 				'LISTITEMS_FOOTCOUNT' => $listitems_footcount, 
 				'ITEM_PAGINATION' => $pagination 
 			));
-			
-			//trigger_error ( $user->lang['ERROR_NOITEMS'], E_USER_NOTICE );
-			
-		}
-		
 	}
 	
 	/***

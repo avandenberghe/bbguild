@@ -841,6 +841,26 @@ $versions = array(
 	                    'PRIMARY_KEY'    => 'lootsys_id',
 	                ),
 	            ),
+	            
+	            array($bbdkp_table_prefix . 'transactions', array(
+	                    'COLUMNS'        => array(
+	                        'id'    		=> array('USINT', NULL, 'auto_increment'),
+	                        'account'   		=> array('VCHAR:11', ''),
+	            			'member_id'			=> array('UINT', 0),
+	            			'raid_id'			=> array('UINT', 0),
+	            			'dkp_id'			=> array('UINT', 0),
+	            			'game'  			=> array('VCHAR:10', ''),
+	                        'user'    			=> array('VCHAR:255', 'Y'),
+	                        'value'				=> array('DECIMAL:11', 0),
+	            			'time'				=> array('TIMESTAMP', 0),
+	                    ),
+	                    'PRIMARY_KEY'    => 'id',
+	                ),
+	            ),
+	            	            
+
+	            
+	            
           	),
           	
                 'table_row_insert'	=> array(
@@ -933,8 +953,11 @@ con : hard to manage because you have to set gear prices. <br /> ',
 		
           // adding epgp GP column to items table
          'table_column_add' => array(
-            	array($bbdkp_table_prefix .'items', 'item_gearpoints',  array('DECIMAL:11', 0)
-            	 ),
+            	array($bbdkp_table_prefix .'items', 'item_gearpoints',  array('DECIMAL:11', 0)), 
+            	array($bbdkp_table_prefix .'memberdkp', 'member_timepoints',  array('DECIMAL:11', 0)),
+            	array($bbdkp_table_prefix .'memberdkp', 'member_bonuspoints',  array('DECIMAL:11', 0)),
+            	array($bbdkp_table_prefix .'memberdkp', 'member_effortpoints',  array('DECIMAL:11', 0)),
+            	 
             ),
             
             
