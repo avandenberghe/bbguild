@@ -37,9 +37,9 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	
 	function main($id, $mode) 
 	{
-	    global $db, $user, $template, $config, $phpEx, $cache;   
+	    global $db, $user, $template, $config, $phpEx, $cache, $phpbb_root_path;   
         $user->add_lang(array('mods/dkp_admin'));   
-
+		
         // build presets for date pulldown
 		$now = getdate();
 		$s_day_options = '<option value="0"	>--</option>';
@@ -73,7 +73,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				
 				$showadd = (isset($_POST['bpadd'])) ? true : false;
 				$addnew = (isset($_POST['addnew'])) ? true : false;
-				$delete = (isset($_GET['step'])) ? true : false;
+				$delete = (isset($_GET['delete'])) ? true : false;
+				$edit = (isset($_GET['edit'])) ? true : false;
 				$submit = (isset($_POST['bpsave'])) ? true : false;
 				
 				if ($showadd)
@@ -102,7 +103,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				elseif ($addnew)
 				{
 					// add the new boss
-					
+					$boss_id = request_var('bossid', 0);
 					$bossname = utf8_normalize_nfc(request_var('bossname', '', true));
 					$bossname_short = utf8_normalize_nfc(request_var('bossname_short', '', true));
 					$boss_image = request_var('boss_image', '');
@@ -116,7 +117,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					$kdate = mktime(0,0,0,$boss_killdate_month,$boss_killdate_day , $boss_killdate_year);
 					$boss_show = request_var('boss_show', 0);
 					
-					$sql = 'INSERT INTO ' . BOSSBASE . ' ' . $db->sql_build_array('INSERT', array(
+					$data = array(
 						'bossname'		=> (string) $bossname,
 						'bossname_short'=> (string) $bossname_short,
 						'imagename'		=> (string) $boss_image,
@@ -127,15 +128,117 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 						'killed'		=> (int) $boss_completed,
 						'killdate'		=> (int) $kdate,
 						'showboss'		=> (int) $boss_show	,										
-						)
 					);
-					$db->sql_query($sql);					
-					
-					trigger_error( sprintf( $user->lang['RP_BOSSADDED'], $bossname, $boss_zone) . $link, E_USER_NOTICE);
-				
+
+					if ($edit)
+					{
+						$sql = 'UPDATE ' . BOSSBASE . ' set ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = ' . $boss_id;
+						$db->sql_query($sql);		
+						trigger_error( sprintf( $user->lang['BP_BOSSEDITED'], $bossname, $boss_zone) . $link, E_USER_NOTICE);									
+					}
+					else 
+					{
+						$sql = 'INSERT INTO ' . BOSSBASE . ' ' . $db->sql_build_array('INSERT', $data) ;
+						$db->sql_query($sql);					
+						trigger_error( sprintf( $user->lang['RP_BOSSADDED'], $bossname, $boss_zone) . $link, E_USER_NOTICE);
+					}
 					
 				}
+				elseif ($edit)
+				{
+					// load template for editing
+
+					$id = request_var('id', 0); 
+					$s_zonelist_options = '';
+					
+					$sql = 'SELECT zoneid FROM ' . BOSSBASE . ' WHERE id= ' . $id;
+					$result = $db->sql_query($sql);	
+					$zoneid = $db->sql_fetchfield('zoneid', 0 ,$result );	
+					$db->sql_freeresult($result);
+					
+                    $sql = 'SELECT id, zonename FROM ' . ZONEBASE . " 
+                            WHERE game= '" . $config['bbdkp_default_game'] . "'";
+                    $resultzones = $db->sql_query($sql);
+					while ( $rowzones = $db->sql_fetchrow($resultzones) )
+                    {
+                    	$selected = ($rowzones['id'] == $zoneid) ? ' selected="selected"' : '';
+						$s_zonelist_options .= '<option value="' . $rowzones['id'] . '" '.$selected.'> ' . $rowzones['zonename'] . '</option>';                    
+                    }
+                    $db->sql_freeresult($result);
+
+					$sql_array2 = array(
+					    'SELECT'    => 	' b.id, b.bossname, b.bossname_short, b.imagename, 
+						    b.webid, b.killed, b.killdate, b.counter, b.showboss, b.zoneid, b.type  ', 
+					    'FROM'      => array(
+					        BOSSBASE 	=> 'b',
+					    	),
+					    'WHERE'		=> 'b.id = ' . $id
+					    );
+                    	
+					$sql = $db->sql_build_query('SELECT', $sql_array2);
+					$resultx = $db->sql_query($sql);
+                	$now = getdate();
+	                while ( $row2 = $db->sql_fetchrow($resultx) )
+	                {
+	                	
+
+                    
+						$s_day_options = '<option value="0"	>--</option>';
+						$day = ($row2['killdate'] == 0) ? '' : date('d', $row2['killdate']); 
+						for ($i = 1; $i < 32; $i++)
+						{
+							$selected = ($i == $day) ? ' selected="selected"' : '';
+							$s_day_options .= "<option value=\"$i\"$selected>$i</option>";
+						}
 				
+						$month = ($row2['killdate'] == 0) ? '' : date('m', $row2['killdate']);
+						$s_month_options = '<option value="0">--</option>';
+						for ($i = 1; $i < 13; $i++)
+						{
+							$selected = ($i == $month) ? ' selected="selected"' : '';
+							$s_month_options .= "<option value=\"$i\"$selected>$i</option>";
+						}
+				
+						$year = ($row2['killdate'] == 0) ? 0 : date('Y', $row2['killdate']);
+						$s_year_options = '<option value="0">--</option>';
+						for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+						{
+							$selected = ($i == $year) ? ' selected="selected"' : '';
+							$s_year_options .= "<option value=\"$i\"$selected>$i</option>";
+						}
+	                	
+	                    $template->assign_vars( array(
+		                    'BOSS_ID' 			=> $row2['id']  ,
+		                    'BOSS_NAME' 		=> $row2['bossname']  ,
+		                    'BOSS_NAME_SHORT' 	=> $row2['bossname_short']  ,
+		                    'BOSS_IMAGENAME' 	=> $row2['imagename']  ,
+	                    	'BOSS_IMAGE_COLOR' 	=> $phpbb_root_path . "images/bossprogress/".$config['bbdkp_default_game']."/bosses/" . $row2['imagename'] . ".gif",
+	                    	'BOSS_IMAGE_BW' 	=> $phpbb_root_path . "images/bossprogress/".$config['bbdkp_default_game']."/bosses/" . $row2['imagename'] . "_b.gif",
+	                    	'BOSS_TYPE' 		=> $row2['type']  ,
+		                    'BOSS_WEBID' 		=> $row2['webid']  ,
+	                    	'BOSS_ZONEID' 		=> $row2['zoneid']  ,
+							'S_ZONELIST_OPTIONS'  		=> $s_zonelist_options, 
+	                    
+		                    'S_KILLDATE_DAY_OPTIONS'	=> $s_day_options,
+							'S_KILLDATE_MONTH_OPTIONS'	=> $s_month_options,
+							'S_KILLDATE_YEAR_OPTIONS'	=> $s_year_options,
+	                    
+		                    'BOSS_KILLED' 	=> ($row2['killed'] == 1) ? ' checked="checked"' : '',
+		                    'BOSS_SHOW'   	=> ($row2['showboss'] == 1) ? ' checked="checked"' : '',
+	                    
+	                    	'BOSS_KILLDATE' => ( !empty($row2['killdate']) ) ? date($config['bbdkp_date_format'], $row2['killdate']) : '&nbsp;',   
+		                    'BOSS_DD' => ($row2['killdate'] == 0) ? ' ' : date('d', $row2['killdate'])  ,
+	                    	'BOSS_MM' => ($row2['killdate'] == 0) ? ' ' : date('m', $row2['killdate'])  ,
+	                    	'BOSS_YY' => ($row2['killdate'] == 0) ? ' ' : date('Y', $row2['killdate'])  ,
+
+	                    	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;edit=1&amp;id={$row2['id']}")  ,
+	                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;delete=1&amp;id={$row2['id']}")  ,  
+							'S_ADD'   	=> true,
+	                    ));
+	                }
+	                $db->sql_freeresult($resultx);
+					
+				}
 				elseif ($delete)
 				{
 					//
@@ -160,12 +263,62 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					}
 					
 				}
+				
+				
 				elseif ($submit)
 				{
 					// save update 
 					set_config ('bbdkp_bp_hidenonkilled', ( isset($_POST['hidenewboss']) ) ? 1 : 0 );
 					
+					$bossids = request_var('bossid', array(0 => 0 ));
+	                $newbossname = utf8_normalize_nfc(request_var('bossname', array( 0 => ''), true));
+					$newbossnameshorts = utf8_normalize_nfc(request_var('bossnameshort', array( 0 => ''), true));
+					$newbossimagenames = request_var('bossimagename', array( 0 => ''));
+					$newbosswebids = request_var('bosswebid', array( 0 => ''));
+					$newbossdds = request_var('bossdd', array( 0 => ''));
+					$newbossmms = request_var('bossmm', array( 0 => ''));
+					$newbossyys = request_var('bossyy', array( 0 => ''));
 					
+					foreach ($bossids as $key) 
+					{
+						$month = (int) $newbossmms[$key];
+						$month = min (12, max(1,$month) );
+						$day = (int) $newbossdds[$key];
+						$year = (int) $newbossyys[$key]; 
+						$year = min ( date("Y") ,  max(1999,$year));
+						
+						if (checkdate($month, $day, $year))
+						{
+							// correct date found
+							$data = array(
+								'bossname' => $newbossname[$key],
+								'bossname_short' => $newbossnameshorts[$key],
+								'imagename' => $newbossimagenames[$key], 
+								'webid' => $newbosswebids[$key],
+								'killed' => isset ( $_POST ['bosskilled'][$key] ) ? 1 : 0,		
+								'killdate' =>  mktime(0, 0, 0, $month, $day, $year), 
+								'showboss' => isset ( $_POST ['bossshow'][$key] ) ? 1 : 0,
+							);
+						}
+						else 
+						{
+							// incorrect killdate-- no update
+							$data= array(
+								'bossname' => $newbossname[$key],
+								'bossname_short' => $newbossnameshorts[$key],
+								'imagename' => $newbossimagenames[$key], 
+								'webid' => $newbosswebids[$key],
+								'killed' => isset ( $_POST ['bosskilled'][$key] ) ? 1 : 0,		
+								'showboss' => isset ( $_POST ['bossshow'][$key] ) ? 1 : 0,
+							);
+						}
+						
+						// And doing an update query 
+						$sql = 'UPDATE ' . BOSSBASE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = '. $key;
+						$db->sql_query($sql);
+						
+					}
+					trigger_error( printf($user->lang['BP_BPSAVED'] ) . $link, E_USER_NOTICE);
 					
 					
 				}
@@ -194,8 +347,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                    
 						$sql_array2 = array(
 						    'SELECT'    => 	' b.id, b.bossname, b.bossname_short, b.imagename, 
-						    b.webid, b.killed, b.killdate,
-						    b.counter, b.showboss, b.zoneid  ', 
+						    b.webid, b.killed, b.killdate, b.counter, b.showboss, b.zoneid  ', 
 						    'FROM'      => array(
 						        BOSSBASE 	=> 'b',
 						    	),
@@ -205,19 +357,52 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 						    
 						$sql = $db->sql_build_query('SELECT', $sql_array2);
 						$resultx = $db->sql_query($sql);
+	                	$now = getdate();
 		                while ( $row2 = $db->sql_fetchrow($resultx) )
 		                {
+							$s_day_options = '<option value="0"	>--</option>';
+							$day = ($row2['killdate'] == 0) ? '' : date('d', $row2['killdate']); 
+							for ($i = 1; $i < 32; $i++)
+							{
+								$selected = ($i == $day) ? ' selected="selected"' : '';
+								$s_day_options .= "<option value=\"$i\"$selected>$i</option>";
+							}
+					
+							$month = ($row2['killdate'] == 0) ? '' : date('m', $row2['killdate']);
+							$s_month_options = '<option value="0">--</option>';
+							for ($i = 1; $i < 13; $i++)
+							{
+								$selected = ($i == $month) ? ' selected="selected"' : '';
+								$s_month_options .= "<option value=\"$i\"$selected>$i</option>";
+							}
+					
+							$year = ($row2['killdate'] == 0) ? 0 : date('Y', $row2['killdate']);
+							$s_year_options = '<option value="0">--</option>';
+							for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+							{
+								$selected = ($i == $year) ? ' selected="selected"' : '';
+								$s_year_options .= "<option value=\"$i\"$selected>$i</option>";
+							}
+		                	
 		                    $template->assign_block_vars('zone.boss', array(
+			                    'BOSS_ID' 			=> $row2['id']  ,
 			                    'BOSS_NAME' 		=> $row2['bossname']  ,
 			                    'BOSS_NAME_SHORT' 	=> $row2['bossname_short']  ,
 			                    'BOSS_IMAGENAME' 	=> $row2['imagename']  ,
+		                    	
+			                    'S_KILLDATE_DAY_OPTIONS'	=> $s_day_options,
+								'S_KILLDATE_MONTH_OPTIONS'	=> $s_month_options,
+								'S_KILLDATE_YEAR_OPTIONS'	=> $s_year_options,
+		                    
 			                    'BOSS_WEBID' 		=> $row2['webid']  ,
 			                    'BOSS_KILLED' 	=> ($row2['killed'] == 1) ? ' checked="checked"' : '',
+		                    	'BOSS_KILLDATE' => ( !empty($row2['killdate']) ) ? date($config['bbdkp_date_format'], $row2['killdate']) : '&nbsp;',   
 			                    'BOSS_DD' => ($row2['killdate'] == 0) ? ' ' : date('d', $row2['killdate'])  ,
 		                    	'BOSS_MM' => ($row2['killdate'] == 0) ? ' ' : date('m', $row2['killdate'])  ,
-		                    	'BOSS_YY' => ($row2['killdate'] == 0) ? ' ' : date('y', $row2['killdate'])  ,
-			                    'BOSS_SHOW'   	=> ($row2['bosszone'] == 1) ? ' checked="checked"' : '',
-		                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;step=delete&amp;id={$row2['id']}")  ,  
+		                    	'BOSS_YY' => ($row2['killdate'] == 0) ? ' ' : date('Y', $row2['killdate'])  ,
+			                    'BOSS_SHOW'   	=> ($row2['showboss'] == 1) ? ' checked="checked"' : '',
+		                    	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;edit=1&amp;id={$row2['id']}")  ,
+		                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;delete=1&amp;id={$row2['id']}")  ,  
 		                    ));
 		                }
 		                $db->sql_freeresult($resultx);
@@ -239,7 +424,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				$addnew = (isset($_POST['addnew'])) ? true : false;
 				$move_up = (isset($_GET['move_up'])) ? true : false;
 				$move_down = (isset($_GET['move_down'])) ? true : false;  
-				 
+
 				if ($move_down or $move_up)
 				{
 					$sql = 'SELECT sequence FROM ' . ZONEBASE . ' where id =  ' . request_var('id', 0); 
@@ -290,8 +475,6 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 						'S_ADD'   	=> true,
 	                 )
 	    			);
-					
-					
 				}
 				elseif ($addnew)
 				{

@@ -705,9 +705,8 @@ $lang = array_merge($lang, array(
 'ALERT_OLDBROWSER' => 'Browser does not support HTTP Request', 
 
 
-//Raid progress
+//Boss progress
 'GENERAL' => 'General settings',
-'BP_SAVED' => 'Raid progress settings Saved', 
 
 'HEADERTYPE' => 'How to display the progress in the header image?',
 'OLDPHOTO' => 'old photo overlay',
@@ -757,7 +756,7 @@ Imagename (filename without extension), if the zone is completed and the complet
 'RP_BOSS_EXPLAIN' => 'Here you can configure the boss photo, select to hide bosses that
  were never killed.<br />In the list, you can edit the boss name, shortname, 
  Imagename (this must be unique), whether the boss was killed and the completiondate. ', 
-'RP_BOSS_ADD_EXPLAIN' => 'Here you can add a boss.', 
+'RP_BOSS_ADD_EXPLAIN' => 'Here you can add or edit a Boss.', 
 'RP_BOSSDEL' => 'Boss deleted',
 
 'BOSS_NAME' => 'Boss name', 
@@ -778,6 +777,8 @@ Imagename (filename without extension), if the zone is completed and the complet
 'BOSS_SHOW_EXPLAIN' => 'Check if you want to see this boss on the Boss progress page.',
 'RP_BOSSDELETCONFIRM' => 'Please confirm deletion of boss %s.',   
 'RP_BOSSADDED' => 'boss %s was added successfully to zone %s.',   
+'BP_BOSSEDITED' => 'Boss %s changes were saved. ', 
+'BP_BPSAVED' => 'Bossprogress changes were saved. ',
 
 'AION_BASEURL' => 'http://db.aion.ign.com/npc/', 
 'EQ_BASEURL' => 'http://eqbeastiary.allakhazam.com/search.shtml?zone=', 
