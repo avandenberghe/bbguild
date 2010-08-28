@@ -509,7 +509,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					$zone_killdate_year= request_var('zone_killdate_year', '');
 					$kdate = mktime(0,0,0,$zone_killdate_month,$zone_killdate_day,$zone_killdate_year);
 					$zone_webid = request_var('zone_webid', '');
-					$zone_show = request_var('zone_show', 0);
+					$zone_show = request_var('showzone', 0);
+					$zone_showportal = request_var('showzoneportal', 0); 
 					$zonesequence = request_var('zonesequence', 0);
 					
 					$data = array( 
@@ -522,6 +523,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 						'completedate'	=> (int) $kdate,
 						'webid'			=> (int) $zone_webid,
 						'showzone'		=> (int) $zone_show	,
+						'showzoneportal' => (int) $zone_showportal, 
 						'sequence'		=> (int) $zonesequence	,	
 						);
 
@@ -613,8 +615,9 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                    
 		                    'ZONE_WEBID' 		=> $row['webid']  ,
 		                    'ZONE_COMPLETED' 	=> ($row['completed'] == 1) ? ' checked="checked"' : '',
-		                    'ZONE_SHOW'   	=> 	($row['showzone'] == 1) ? ' checked="checked"' : '',
-	                                        
+		                    'SHOW_ZONE'   		=> 	($row['showzone'] == 1) ? ' checked="checked"' : '',
+	                        'SHOW_ZONE_PORTAL'  => ($row['showzoneportal'] == 1) ? ' checked="checked"' : '',
+	                    
 							'S_KILLDATE_DAY_OPTIONS'	=> $s_day_options,
 							'S_KILLDATE_MONTH_OPTIONS'	=> $s_month_options,
 							'S_KILLDATE_YEAR_OPTIONS'	=> $s_year_options,
@@ -663,7 +666,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 								'completed' => isset ( $_POST ['zonecompleted'][$key] ) ? 1 : 0,		
 								'completedate' =>  mktime(0, 0, 0, $month, $day, $year), 
 								'webid' => $newzonewebids[$key],
-								'showzone' => isset ( $_POST ['zoneshow'][$key] ) ? 1 : 0,
+								'showzone' => isset ( $_POST ['showzone'][$key] ) ? 1 : 0,
+								'showzoneportal' => isset ( $_POST ['showzoneportal'][$key] ) ? 1 : 0,
 							);
 						}
 						else 
@@ -676,7 +680,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 								'imagename' => $newzoneimagenames[$key], 
 								'completed' => isset ( $_POST ['zonecompleted'][$key] ) ? 1 : 0,		
 								'webid' => $newzonewebids[$key],
-								'showzone' => isset ( $_POST ['zoneshow'][$key] ) ? 1 : 0,
+								'showzone' => isset ( $_POST ['showzone'][$key] ) ? 1 : 0,
+								'showzoneportal' => isset ( $_POST ['showzoneportal'][$key] ) ? 1 : 0,
 							);
 						}
 						
@@ -741,8 +746,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				
 				// list of zones
 				$sql_array = array(
-				    'SELECT'    => 	' id, sequence, zonename, zonename_short, imagename, completed, completedate, webid, showzone  ', 
-				 
+				    'SELECT'    => 	' id, sequence, zonename, zonename_short, imagename, completed, completedate, webid, showzone, showzoneportal  ', 
 				    'FROM'      => array(ZONEBASE 	=> 'z',),
 					'ORDER_BY'	=> 'sequence desc, id desc ',
 				    	
@@ -765,7 +769,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
                     	'ZONE_MM' => ($row['completedate'] == 0) ? ' ' : date('m', $row['completedate'])  ,
                     	'ZONE_YY' => ($row['completedate'] == 0) ? ' ' : date('y', $row['completedate'])  ,
                                         
-	                    'ZONE_SHOW'   	=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
+	                    'ZONE_SHOW'   		=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
+                    	'ZONE_SHOW_PORTAL'  => ($row['showzoneportal'] == 1) ? ' checked="checked"' : '',
                     	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;edit=1&amp;id={$row['id']}")  ,
                     	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;delete=1&amp;id={$row['id']}")  ,  
 						'U_MOVE_UP'		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;move_up=1&amp;id={$row['id']}"), 

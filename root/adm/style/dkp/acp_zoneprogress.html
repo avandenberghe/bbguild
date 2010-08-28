@@ -48,10 +48,14 @@
 		 {L_YEAR}: <select name="zone_killdate_year">{S_KILLDATE_YEAR_OPTIONS}</select></dd>
 	</dl>
 	<dl>
-		<dt><label for="zone_show">{L_ZONE_SHOW}:</label><br /><span>{L_ZONE_SHOW_EXPLAIN}</span></dt>
-		&nbsp;<input type="checkbox" name="zone_show" value="1" {ZONE_SHOW} />
+		<dt><label for="showzone">{L_ZONE_SHOW}:</label><br /><span>{L_ZONE_SHOW_EXPLAIN}</span></dt>
+		&nbsp;<input type="checkbox" name="showzone" value="1" {ZONE_SHOW} />
 	</dl>
-
+	<dl>
+		<dt><label for="showzoneportal">{L_SHOW_ZONE_PORTAL}:</label><br /><span>{L_SHOW_ZONE_PORTAL_EXPLAIN}</span></dt>
+		&nbsp;<input type="checkbox" name="showzoneportal" value="1" {SHOW_ZONE_PORTAL} />
+	</dl>
+	
 	<p class="submit-buttons">
 		<input class="button1" type="submit" id="addnew" name="addnew" value="{L_SUBMIT}" />&nbsp;
 		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
@@ -134,7 +138,8 @@
 			<td width="20" nowrap="nowrap" align="center"><input type="checkbox" name="zonecompleted[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_COMPLETED} /> </td>
 			<td width="10" nowrap="nowrap" style="text-align: center">{gamezone.ZONE_DATE}</td>
 			<td width="5" nowrap="nowrap" align="center">
-				<input type="checkbox" name="zoneshow[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_SHOW} />
+				<input type="checkbox" name="showzone[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_SHOW} />
+				<input type="checkbox" name="showzoneportal[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_SHOW_PORTAL} />
 			</td>
 			<td width="5" nowrap="nowrap">
 				<!-- IF gamezone.S_FIRST_ROW and not PREVIOUS_PAGE -->{ICON_MOVE_UP_DISABLED}<!-- ELSE --><a href="{gamezone.U_MOVE_UP}">{ICON_MOVE_UP}</a><!-- ENDIF -->&nbsp;
