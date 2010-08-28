@@ -751,6 +751,7 @@ Imagename (filename without extension), if the zone is completed and the complet
 'ZONE_SHOW_EXPLAIN' => 'Check if you want to see this zone on the progress page.',
 'RP_ZONEDELETCONFIRM' => 'Please confirm deletion of zone %s. This will also delete any bosses attached to this zone.',   
 'RP_ZONEADDED' => 'Zone %s was added successfully',  
+'RP_ZONEUPDATED' => 'Zone %s was updated successfully',  
 
 'RP_BOSS' => 'Boss configuration',
 'RP_BOSS_EXPLAIN' => 'Here you can configure the boss photo, select to hide bosses that

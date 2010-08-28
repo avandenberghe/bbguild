@@ -11,30 +11,34 @@
 	<p>{L_RP_ZONE_ADD_EXPLAIN}</p>
 
 	<form id="acp_zoneprogress_add" method="post" action="{U_ACTION}">
+	<input type="hidden" name= zoneid" value="{ZONE_ID}" />
 	<fieldset>
 	<dl>
 		<dt><label for="zonename">{L_ZONE_NAME}:</label><br /><span>{L_ZONE_NAME_EXPLAIN}</span></dt>
-		<dd><input name="zonename" type="text" id="zonename" maxlength="255" /></dd>
+		<dd><input name="zonename" type="text" id="zonename" maxlength="255" value="{ZONE_NAME}"/></dd>
 	</dl>
 	<dl>
 		<dt><label for="zonename_short">{L_ZONE_NAME_SHORT}:</label><br /><span>{L_ZONE_NAME_SHORT_EXPLAIN}</span></dt>
-		<dd><input name="zonename_short" type="text" id="zonename_short" maxlength="255" /></dd>
+		<dd><input name="zonename_short" type="text" id="zonename_short" maxlength="255" value="{ZONE_NAME_SHORT}"/></dd>
 	</dl>
 	<dl>
-		<dt><label for="zone_image">{L_ZONE_IMAGENAME}:</label><br /><span>{L_ZONE_IMAGENAME_EXPLAIN}</span></dt>
-		<dd><input name="zone_image" type="text" id="zone_image" maxlength="255" /></dd>
+		<dt><label for="zone_image">{L_ZONE_IMAGENAME}:</label><br /><span>{L_XZONE_IMAGENAME_EXPLAIN}</span></dt>
+		<dd><input name="zone_image" type="text" id="zone_image" maxlength="255" value= "{ZONE_IMAGENAME}"/></dd>
+		<img src="{ZONE_IMAGE_COLOR}" alt="{ZONE_IMAGENAME}" /><br />
+		<img src="{ZONE_IMAGE_SEPIA}" alt="{ZONE_IMAGENAME}" /><br />
+		<img src="{ZONE_IMAGE_SW}" alt="{ZONE_IMAGENAME}" />
 	</dl>
 	<dl>
 		<dt><label for="zone_webid">{L_ZONE_WEBID}:</label><br /><span>{L_ZONE_WEBID_EXPLAIN}</span></dt>
-		<dd><input name="zone_webid" type="text" id="zone_webid" maxlength="255" /></dd>
+		<dd><input name="zone_webid" type="text" id="zone_webid" maxlength="255" value="{ZONE_WEBID}"/></dd>
 	</dl>
 	<dl>
 		<dt><label for="zonesequence">{L_ZONE_SEQUENCE}:</label><br /><span>{L_ZONE_SEQUENCE_EXPLAIN}</span></dt>
-		<dd><select id="zonesequence" name="zonesequence">{S_ZONELIST_OPTIONS}</select></dd>
+		<dd><select id="zonesequence" name="zonesequence">{S_ZONELIST_OPTIONS}</select> &nbsp;{ZONE_SEQUENCE} </dd>
 	</dl>
 	<dl>
 		<dt><label for="zone_completed">{L_ZONE_COMPLETED}:</label><br /><span>{L_ZONE_COMPLETED_EXPLAIN}</span></dt>
-		&nbsp;<input type="checkbox" name="zone_completed" value="1" />
+		&nbsp;<input type="checkbox" name="zone_completed" value="1" {ZONE_COMPLETED} />
 	</dl>
 	<dl>
 		<dt><label for="zone_killdate">{L_ZONE_COMPLETEDATE}:</label><br /><span>{L_ZONE_COMPLETEDATE_EXPLAIN}</span></dt>
@@ -45,7 +49,7 @@
 	</dl>
 	<dl>
 		<dt><label for="zone_show">{L_ZONE_SHOW}:</label><br /><span>{L_ZONE_SHOW_EXPLAIN}</span></dt>
-		&nbsp;<input type="checkbox" name="zone_show" value="1"  />
+		&nbsp;<input type="checkbox" name="zone_show" value="1" {ZONE_SHOW} />
 	</dl>
 
 	<p class="submit-buttons">
@@ -96,8 +100,6 @@
 	</tr>
 </table>
 
-<br />
-
 <table width="100%" border="0" cellspacing="1" cellpadding="2"
 	id="bossprog">
 
@@ -113,7 +115,6 @@
 			<th align="center" width="5">{L_OPTIONS}</th>
 		</tr>
 	</thead>
-
 	<tbody>
 		<!-- BEGIN gamezone -->
 
@@ -131,19 +132,15 @@
 			<td width="35" nowrap="nowrap"><input class="text post" type="text" size="25" name="zoneimagename[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_IMAGENAME}" />    </td>
 			<td width="10" nowrap="nowrap"><input class="text post" type="text" size="10" name="zonewebid[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_WEBID}" />   </td>
 			<td width="20" nowrap="nowrap" align="center"><input type="checkbox" name="zonecompleted[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_COMPLETED} /> </td>
-			<td width="40" nowrap="nowrap" style="text-align: center;">
-				<input type="text" name="zonedd[{gamezone.ZONE_ID}]" size="3" maxlength="2" value="{gamezone.ZONE_DD}" class="input" />/
-				<input type="text" name="zonemm[{gamezone.ZONE_ID}]" size="3" maxlength="2" value="{gamezone.ZONE_MM}" class="input" />/
-				<input type="text" name="zoneyy[{gamezone.ZONE_ID}]" size="5" maxlength="4" value="{gamezone.ZONE_YY}" class="input" />
-			</td>
+			<td width="10" nowrap="nowrap" style="text-align: center">{gamezone.ZONE_DATE}</td>
 			<td width="5" nowrap="nowrap" align="center">
 				<input type="checkbox" name="zoneshow[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_SHOW} />
 			</td>
 			<td width="5" nowrap="nowrap">
-				<a href="{gamezone.U_DELETE}">{ICON_DELETE}</a>
 				<!-- IF gamezone.S_FIRST_ROW and not PREVIOUS_PAGE -->{ICON_MOVE_UP_DISABLED}<!-- ELSE --><a href="{gamezone.U_MOVE_UP}">{ICON_MOVE_UP}</a><!-- ENDIF -->&nbsp;
 				<!-- IF gamezone.S_LAST_ROW and not NEXT_PAGE -->{ICON_MOVE_DOWN_DISABLED}<!-- ELSE --><a href="{gamezone.U_MOVE_DOWN}">{ICON_MOVE_DOWN}</a><!-- ENDIF -->
-				
+				<a href="{gamezone.U_EDIT}">{ICON_EDIT}</a>
+				<a href="{gamezone.U_DELETE}">{ICON_DELETE}</a>
 			</td>
 			
 		</tr>

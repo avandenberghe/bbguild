@@ -40,31 +40,6 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	    global $db, $user, $template, $config, $phpEx, $cache, $phpbb_root_path;   
         $user->add_lang(array('mods/dkp_admin'));   
 		
-        // build presets for date pulldown
-		$now = getdate();
-		$s_day_options = '<option value="0"	>--</option>';
-		for ($i = 1; $i < 32; $i++)
-		{
-			$selected = ($i == $now['mday']) ? ' selected="selected"' : '';
-			$s_day_options .= "<option value=\"$i\"$selected>$i</option>";
-		}
-
-		$s_month_options = '<option value="0">--</option>';
-		for ($i = 1; $i < 13; $i++)
-		{
-			$selected = ($i == $now['mon']) ? ' selected="selected"' : '';
-			$s_month_options .= "<option value=\"$i\"$selected>$i</option>";
-		}
-
-		$s_year_options = '<option value="0">--</option>';
-		for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
-		{
-			$selected = ($i == $now['year']) ? ' selected="selected"' : '';
-			$s_year_options .= "<option value=\"$i\"$selected>$i</option>";
-		}
-		unset($now);
-        
-        
         switch ($mode)
 		{
 			case 'bossprogress':
@@ -81,7 +56,30 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				{
 					// load template for adding 
 					$s_zonelist_options = '';
-				    
+					
+				    $now = getdate();
+					$s_day_options = '<option value="0"	>--</option>';
+					for ($i = 1; $i < 32; $i++)
+					{
+						$selected = ($i == $now['mday']) ? ' selected="selected"' : '';
+						$s_day_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+			
+					$s_month_options = '<option value="0">--</option>';
+					for ($i = 1; $i < 13; $i++)
+					{
+						$selected = ($i == $now['mon']) ? ' selected="selected"' : '';
+						$s_month_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+			
+					$s_year_options = '<option value="0">--</option>';
+					for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+					{
+						$selected = ($i == $now['year']) ? ' selected="selected"' : '';
+						$s_year_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+					unset($now);
+					
                     $sql = 'SELECT id, zonename
                             FROM ' . ZONEBASE . " 
                             WHERE game= '" . $config['bbdkp_default_game'] . "'";
@@ -264,7 +262,6 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					
 				}
 				
-				
 				elseif ($submit)
 				{
 					// save update 
@@ -419,7 +416,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress") . 
 					'"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
 				$submit = (isset($_POST['bpsave'])) ? true : false;
-				$delete = (isset($_GET['step'])) ? true : false;
+				$edit = (isset($_GET['edit'])) ? true : false;
+				$delete = (isset($_GET['delete'])) ? true : false;
 				$showadd = (isset($_POST['bpadd'])) ? true : false;
 				$addnew = (isset($_POST['addnew'])) ? true : false;
 				$move_up = (isset($_GET['move_up'])) ? true : false;
@@ -456,6 +454,29 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				if ($showadd)
 				{
 					// load template for adding 
+					$now = getdate();
+					$s_day_options = '<option value="0"	>--</option>';
+					for ($i = 1; $i < 32; $i++)
+					{
+						$selected = ($i == $now['mday']) ? ' selected="selected"' : '';
+						$s_day_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+			
+					$s_month_options = '<option value="0">--</option>';
+					for ($i = 1; $i < 13; $i++)
+					{
+						$selected = ($i == $now['mon']) ? ' selected="selected"' : '';
+						$s_month_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+			
+					$s_year_options = '<option value="0">--</option>';
+					for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+					{
+						$selected = ($i == $now['year']) ? ' selected="selected"' : '';
+						$s_year_options .= "<option value=\"$i\"$selected>$i</option>";
+					}
+					unset($now);
+					
 					$s_zonelist_options = '';
 				    
                     $sql = 'SELECT id, zonename
@@ -478,7 +499,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				}
 				elseif ($addnew)
 				{
-					// add the new zone
+					// add or update the zone
 					$zonename = utf8_normalize_nfc(request_var('zonename', '', true));
 					$zonename_short = utf8_normalize_nfc(request_var('zonename_short', '', true));
 					$zone_image = request_var('zone_image', '');
@@ -491,8 +512,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					$zone_show = request_var('zone_show', 0);
 					$zonesequence = request_var('zonesequence', 0);
 					
-					
-					$sql = 'INSERT INTO ' . ZONEBASE . ' ' . $db->sql_build_array('INSERT', array(
+					$data = array( 
 						'zonename'		=> (string) $zonename,
 						'zonename_short'=> (string) $zonename_short,
 						'imagename'		=> (string) $zone_image,
@@ -502,12 +522,109 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 						'completedate'	=> (int) $kdate,
 						'webid'			=> (int) $zone_webid,
 						'showzone'		=> (int) $zone_show	,
-						'sequence'		=> (int) $zonesequence	,															
+						'sequence'		=> (int) $zonesequence	,	
+						);
+
+					if($edit)
+					
+					$sql = 'INSERT INTO ' . ZONEBASE . ' ' . $db->sql_build_array('INSERT', array(
 						)
 					);
-					$db->sql_query($sql);					
+					$db->sql_query($sql);	
+
+					if ($edit)
+					{
+						$id = request_var('id', 0);
+						$sql = 'UPDATE ' . ZONEBASE . ' set ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = ' . $id;
+						$db->sql_query($sql);		
+						trigger_error( sprintf( $user->lang['RP_ZONEUPDATED'], $zonename) . $link, E_USER_NOTICE);									
+					}
+					else 
+					{
+						$sql = 'INSERT INTO ' . ZONEBASE . ' ' . $db->sql_build_array('INSERT', $data) ;
+						$db->sql_query($sql);					
+						trigger_error( sprintf( $user->lang['RP_ZONEADDED'], $zonename) . $link, E_USER_NOTICE);
+					}					
 					
-					trigger_error( sprintf( $user->lang['RP_ZONEADDED'], $zonename) . $link, E_USER_NOTICE);
+				}
+				elseif ($edit)
+				{
+					$s_zonelist_options = '';
+                    $id = request_var('id', 0);
+                    
+				    $sql = 'SELECT id, zonename
+                           FROM ' . ZONEBASE . " 
+                           WHERE game= '" . $config['bbdkp_default_game'] . "'";
+                   	$result = $db->sql_query($sql);
+                    while ( $rowzones = $db->sql_fetchrow($result))
+                    {
+	                   	$selected = ($rowzones['id'] == $id) ? ' selected="selected"' : '';
+						$s_zonelist_options .= '<option value="' . $rowzones['id'] . '"'.$selected.'> ' . $rowzones['zonename'] . '</option>';                    
+                    }
+                    $db->sql_freeresult($result);
+	                    
+					$sql_array = array(
+					    'SELECT'    => 	' id, sequence, zonename, zonename_short, imagename, completed, completedate, webid, showzone  ', 
+					    'FROM'      => array(
+							ZONEBASE => 'b'), 
+					    'WHERE'		=> 'id = ' . $id, 
+				    );
+				    
+					$sql = $db->sql_build_query('SELECT', $sql_array);
+					$result = $db->sql_query($sql);
+	                while ( $row = $db->sql_fetchrow($result) )
+	                {
+                		// build presets for date pulldown
+						$now = getdate();
+						$s_day_options = '<option value="0"	>--</option>';
+						$day = ($row['completedate'] == 0) ? $now['mday'] : date('d', $row['completedate']); 
+						for ($i = 1; $i < 32; $i++)
+						{
+							$selected = ($i == $day) ? ' selected="selected"' : '';
+							$s_day_options .= "<option value=\"$i\"$selected>$i</option>";
+						}
+				
+						$s_month_options = '<option value="0">--</option>';
+						$month = ($row['completedate'] == 0) ? $now['mon'] : date('m', $row['completedate']);
+						for ($i = 1; $i < 13; $i++)
+						{
+							$selected = ($i == $month) ? ' selected="selected"' : '';
+							$s_month_options .= "<option value=\"$i\"$selected>$i</option>";
+						}
+				
+						$s_year_options = '<option value="0">--</option>';
+						$year = ($row['completedate'] == 0) ? $now['year'] : date('Y', $row['completedate']); 
+						for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+						{
+							$selected = ($i == $year) ? ' selected="selected"' : '';
+							$s_year_options .= "<option value=\"$i\"$selected>$i</option>";
+						}
+						unset($now);
+				
+	                    $template->assign_vars(array(
+		                    'ZONE_ID' 			=> $row['id'],
+	                    	'ZONE_SEQUENCE' 	=> $row['sequence'] ,
+		                    'ZONE_NAME' 		=> $row['zonename'] ,
+		                    'ZONE_NAME_SHORT' 	=> $row['zonename_short']  ,
+		                    'ZONE_IMAGENAME' 	=> $row['imagename']  ,
+	                    	'ZONE_IMAGE_COLOR' 	=> $phpbb_root_path . "images/bossprogress/".$config['bbdkp_default_game']."/zones/normal/" . $row['imagename'] . ".jpg",
+	                    	'ZONE_IMAGE_SEPIA' 	=> $phpbb_root_path . "images/bossprogress/".$config['bbdkp_default_game']."/zones/photo/" . $row['imagename'] . ".jpg",
+	                    	'ZONE_IMAGE_SW' 	=> $phpbb_root_path . "images/bossprogress/".$config['bbdkp_default_game']."/zones/sw/" . $row['imagename'] . ".jpg",
+	                    
+		                    'ZONE_WEBID' 		=> $row['webid']  ,
+		                    'ZONE_COMPLETED' 	=> ($row['completed'] == 1) ? ' checked="checked"' : '',
+		                    'ZONE_SHOW'   	=> 	($row['showzone'] == 1) ? ' checked="checked"' : '',
+	                                        
+							'S_KILLDATE_DAY_OPTIONS'	=> $s_day_options,
+							'S_KILLDATE_MONTH_OPTIONS'	=> $s_month_options,
+							'S_KILLDATE_YEAR_OPTIONS'	=> $s_year_options,
+							'S_ZONELIST_OPTIONS'		=> $s_zonelist_options, 
+							'S_ADD'   	=> true,
+	                    	'L_XZONE_IMAGENAME_EXPLAIN'  => sprintf($user->lang['ZONE_IMAGENAME_EXPLAIN'], $config['bbdkp_default_game']), 
+	                    ));
+	                }
+	                $db->sql_freeresult($result);
+					
 				}
 				elseif ($submit)
 				{
@@ -626,9 +743,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				$sql_array = array(
 				    'SELECT'    => 	' id, sequence, zonename, zonename_short, imagename, completed, completedate, webid, showzone  ', 
 				 
-				    'FROM'      => array(
-				        ZONEBASE 	=> 'z',
-				    	),
+				    'FROM'      => array(ZONEBASE 	=> 'z',),
 					'ORDER_BY'	=> 'sequence desc, id desc ',
 				    	
 				    );
@@ -645,13 +760,14 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                    'ZONE_IMAGENAME' 	=> $row['imagename']  ,
 	                    'ZONE_WEBID' 		=> $row['webid']  ,
 	                    'ZONE_COMPLETED' 	=> ($row['completed'] == 1) ? ' checked="checked"' : '',
-	                  
+	                    'ZONE_DATE' => ( !empty($row['completedate']) ) ? date($config['bbdkp_date_format'], $row['completedate']) : 'no date',  
 	                    'ZONE_DD' => ($row['completedate'] == 0) ? ' ' : date('d', $row['completedate'])  ,
                     	'ZONE_MM' => ($row['completedate'] == 0) ? ' ' : date('m', $row['completedate'])  ,
                     	'ZONE_YY' => ($row['completedate'] == 0) ? ' ' : date('y', $row['completedate'])  ,
                                         
 	                    'ZONE_SHOW'   	=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
-                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;step=delete&amp;id={$row['id']}")  ,  
+                    	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;edit=1&amp;id={$row['id']}")  ,
+                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;delete=1&amp;id={$row['id']}")  ,  
 						'U_MOVE_UP'		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;move_up=1&amp;id={$row['id']}"), 
 						'U_MOVE_DOWN'	=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;move_down=1&amp;id={$row['id']}"), 
                     
