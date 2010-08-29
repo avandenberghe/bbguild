@@ -47,7 +47,7 @@ $(document).ready( function() {
  left:0px;
  top:0px;
  width:12px; /* top slice width */
- margin-left:-12px;
+ margin-left:-10px;
  height:100%;
  background-position:top left;
 }
@@ -60,7 +60,7 @@ $(document).ready( function() {
 
 .bbtooltip .b,
 .bbtooltip .b div {
- height:10px; /* height of bottom cap/shade */
+ height:1px; /* height of bottom cap/shade */
  font-size:1px;
 }
 
@@ -70,10 +70,18 @@ $(document).ready( function() {
 
 .bbtooltip .b div {
  position:absolute;
- width:12px; /* bottom corner width */
- margin-left:-12px;
+ width:100%; /* bottom corner width */
+ margin-left:-10px;
  background-position:bottom right;
 }
+
+a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active {
+	text-decoration: none;
+	color: #FFF;
+	white-space: nowrap;
+}
+
+
 
 </style>
  
@@ -102,7 +110,7 @@ $(document).ready( function() {
 	<br />
 	<h4>{zone.ZONENAME}</h4>
 	<!-- BEGIN boss -->
-    {zone.boss.BOSSNAME}&nbsp;<img src="{T_IMAGES_PATH}/bossprogress/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}"></img><br />
+    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="{T_IMAGES_PATH}/bossprogress/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}"></img><br />
     <!-- END boss -->
     <br />
      </div>

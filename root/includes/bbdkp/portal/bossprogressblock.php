@@ -63,7 +63,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 		'completed' => $row ['completed'] );
 	
 	$sql_array = array (
-		'SELECT' => 'b.bossname, b.id, b.bossname_short, b.killed ', 
+		'SELECT' => 'b.bossname, b.id, b.bossname_short, b.killed, b.webid ', 
 		'FROM' => array (
 			ZONEBASE => 'z' , 
 			BOSSBASE => 'b'), 
@@ -83,7 +83,8 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 			'bossid' => $row2 ['id'], 
 			'bossname' => $row2 ['bossname'], 
 			'bossname_short' => $row2 ['bossname_short'], 
-			'killed' => $row2 ['killed']
+			'killed' => $row2 ['killed'], 
+			'url' => $user->lang[strtoupper($config['bbdkp_default_game']).'_BASEURL'] . $row2 ['webid']
 		 ); 
 		 if ($row2 ['killed'] == 1)
 		 {
@@ -142,11 +143,9 @@ foreach($zones as $key => $zone)
 		$template->assign_block_vars('zone.boss', array(
 				'BOSSNAME'  	=> $boss['bossname'],
 				'KILLED'  		=> $boss['killed'],
+				'BOSSURL'  		=> $boss['url'],
 		));
 	}
-	
-	
-	
 }
 
 $template->assign_vars ( array (
