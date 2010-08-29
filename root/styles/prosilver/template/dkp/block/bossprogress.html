@@ -1,58 +1,64 @@
-<!--  BossProgress block -->
 <!--  
  @package bbDkp
  @version $Id: bossprogress.html 1288 2010-05-25 17:28:18Z Sajaki9 $
-  
  -->
+ 
 <script type="text/javascript"> 
-$(document).ready(
-	function() {
-	<!-- BEGIN boss -->
-			$("#pb{boss.PROGRESSCOUNT}").progressBar(
-	{	showText : false,
-		width  : 100,
-		height : 10,
-		boxImage : '{T_THEME_PATH}/images/jqueryui/progressbar.gif',	// boxImage : image around the progress bar
-		barImage :
-		{
-		5:  '{T_THEME_PATH}/images/jqueryui/progressbg_black.gif',
-		20:  '{T_THEME_PATH}/images/jqueryui/progressbg_red.gif',
-		40:  '{T_THEME_PATH}/images/jqueryui/progressbg_orange.gif',
-		60:  '{T_THEME_PATH}/images/jqueryui/progressbg_yellow.gif',
-		100: '{T_THEME_PATH}/images/jqueryui/progressbg_green.gif'
-		}
-	})
-	<!-- END boss -->
-	;}
-);
-</script>
 
+$(document).ready( function() {
+	<!-- BEGIN zone -->  
+	$("#zone{zone.ZONEID}").tooltip({ effect: 'slide'});  <!-- END zone -->
+	});
+</script>	
+<style>
+.tooltip 
+{
+	display:none;
+	background:url(http://static.flowplayer.org/tools/img/tooltip/black_arrow_big.png);
+	background:#3E3E3E;
+	padding:5px 5px 5px 5px;
+	font-size:11px;
+	color:#fff;
+}
+
+/* a .label element inside tooltip */
+.tooltip .label {
+	color:yellow;
+	width:35px;
+}
+
+.tooltip a {
+	color:#ad4;
+	font-size:11px;
+	font-weight:bold;
+}
+</style>
+ 
 	<div class="panel">
-	
     <div class="inner">
     <span class="corners-top"><span></span></span>    
     <h3 style="text-align:center">{L_BOSSPROGRESS}</h3>
     <table width="100%" cellpadding="2" cellspacing="0" border="0" >
           <colgroup span="2" >
-          <col width="35%"></col>
-          <col width="65%"></col>
+          <col width="75%"></col>
+          <col width="25%"></col>
           </colgroup>
-
-    <!-- BEGIN boss -->
-    
-    <!-- IF boss.PROGRESSCOUNT is even -->
- 	<tr class="row bg1">
-  	<!-- ELSE -->
-  	<tr class="row bg2">
-  	<!-- ENDIF -->
-        <td align="justify" class="{boss.CSSCLASS}"><span>{boss.ZONE}</span></td>
-        <td align="justify"><span id="pb{boss.PROGRESSCOUNT}" class="progressBar">{boss.PERCOMP}</span>&nbsp;{boss.LOC_KILLED}/{boss.TOTAL_BCOUNT}</td>
-        </tr>
+    <!-- BEGIN zone -->
+ 	<tr>
+        <td align="center" class="{zone.CSSCLASS}"><span><a id="zone{zone.ZONEID}" >{zone.ZONENAME}</a><div class="tooltip">
+    <div>
+    <h3>{zone.ZONENAME}</h3><!-- BEGIN boss -->
+    {zone.boss.BOSSNAME}&nbsp;<img src="{T_IMAGES_PATH}/bossprogress/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}"></img><br />
     <!-- END boss -->
+    </div>
+        </div></span></td>
+        <td align="center" class="{zone.CSSCLASS}"><span>({zone.BOSSKILLS}/{zone.BOSSCOUNT})  </span></td>
+    </tr>
+    <!-- END zone -->
 	
     </table>
     <span class="corners-bottom"><span></span></span>
     </div>
     </div>
 
-<!-- end BossProgress block -->
+

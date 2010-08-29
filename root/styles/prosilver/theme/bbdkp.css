@@ -234,55 +234,88 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 ----------------------------------*/
 .bpprogress00,.bpprogress00:link,.bpprogress00:visited,.bpprogress00:active
 	{
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	line-height:150%;
 	text-decoration: none;
 	color: #FF0000;
 }
 
 .bpprogress00:link :hover {
-	text-decoration: underline;
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	line-height:150%;
+		text-decoration: underline;
 	color: #FF0000;
 }
 
 .bpprogress25,.bpprogress25:link,.bpprogress25:visited,.bpprogress25:active
 	{
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	line-height:150%;
 	text-decoration: none;
 	color: #FF0000;
 }
 
 .bpprogress25:link :hover {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	line-height:150%;
 	text-decoration: underline;
 	color: #FF0000;
 }
 
 .bpprogress50,.bpprogress50:link,.bpprogress50:visited,.bpprogress50:active
 	{
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	line-height:150%;
 	text-decoration: none;
 	color: #FFCC00;
 }
 
 .bpprogress50:link :hover {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	line-height:150%;
 	text-decoration: underline;
 	color: #FFCC00;
 }
 
 .bpprogress75,.bpprogress75:link,.bpprogress75:visited,.bpprogress75:active
 	{
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	line-height:150%;
 	text-decoration: none;
 	color: #88FFDD;
 }
 
 .bpprogress75:link :hover {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	line-height:150%;
+	
 	text-decoration: underline;
 	color: #88FFDD;
 }
 
 .bpprogress99,.bpprogress99:link,.bpprogress99:visited,.bpprogress99:active
 	{
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	line-height:150%;
+	
 	text-decoration: none;
 	color: #00EE00;
 }
 
 .bpprogress99:link :hover {
+	font-family:Arial,Helvetica,sans-serif;
+	font-size:13px;
+	line-height:150%;
+	
 	text-decoration: underline;
 	color: #00EE00;
 }

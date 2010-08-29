@@ -46,7 +46,7 @@ $sql_array = array (
 	'FROM' => array (
 		ZONEBASE => 'z' , 
 		), 
-	'WHERE' => 'z.showzoneportal = 0 and  length(z.zonename) >0  ', 
+	'WHERE' => 'z.showzoneportal = 1 and  length(z.zonename) > 0  ', 
 	'ORDER_BY' => 'z.sequence desc ' 
 );
 $sql = $db->sql_build_query ( 'SELECT', $sql_array );
@@ -56,7 +56,7 @@ $row = $db->sql_fetchrow ( $result );
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
 	$bpshow = true;
-	$zone [$i] = array (
+	$zones [$i] = array (
 		'zoneid' => $row ['zoneid'], 
 		'zonename' => $row ['zonename'], 
 		'zonename_short' => $row ['zonename_short'], 
@@ -91,32 +91,67 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 		 }
 		 $j++;
 	}
-	$zone[$i]['bosses'] = $boss; 
-	$zone[$i]['bosscount'] = $j; 
-	$zone[$i]['completed'] = ($j>0) ? round($bosskill/$j)*100 : 0;
+	$zones[$i]['bosses'] = $boss; 
+	$zones[$i]['bosscount'] = $j;
+	$zones[$i]['bosskills'] = $bosskill; 
+	$zones[$i]['completed'] = ($j>0) ? round($bosskill/$j)*100 : 0;
+  	if ((int)$zones[$i]['completed']  <= 0) 
+ 		{
+		$zones[$i]['cssclass'] = 'bpprogress00';
+  	}
+	elseif ((int)$zones[$i]['completed'] <= 25) 
+	{
+		$zones[$i]['cssclass'] = 'bpprogress25';
+	}
+	elseif ((int)$zones[$i]['completed'] <= 50) 
+	{
+		$zones[$i]['cssclass'] = 'bpprogress50';
+	}
+	elseif ((int)$zones[$i]['completed'] <= 75) 
+	{	
+		$zones[$i]['cssclass'] = 'bpprogress75';
+	}
+	elseif ((int)$zones[$i]['completed'] <= 99) 
+	{
+		$zones[$i]['cssclass'] = 'bpprogress99';
+	}
+	elseif ((int)$zones[$i]['completed'] >= 100) 
+	{
+		$zones[$i]['cssclass'] = 'bpprogress100';
+	}
 	unset ($boss);
 	$i++;
 	$db->sql_freeresult ($result2);
 }
 $db->sql_freeresult ($result);	
 
-/*
-$template->assign_block_vars ( 'zone.boss', array (
-	'BOSS_NAME' => $row2 ['bossname'], 
-	'BOSS_NAME_SHORT' => $row2 ['bossname_short'], 
-	'BOSS_WEBID' => $row2 ['webid'], 
-	'BOSS_KILLED' => ($row2 ['killed'] == 1) ? ' checked="checked"' : '', 
-	'BOSS_DD' => ($row2 ['killdate'] == 0) ? ' ' : date ( 'd', $row2 ['killdate'] ), 
-	'BOSS_MM' => ($row2 ['killdate'] == 0) ? ' ' : date ( 'm', $row2 ['killdate'] ), 
-	'BOSS_YY' => ($row2 ['killdate'] == 0) ? ' ' : date ( 'y', $row2 ['killdate'] ), 
-	'BOSS_SHOW' => ($row2 ['bosszone'] == 1) ? ' checked="checked"' : '' ) );
-*/
+foreach($zones as $key => $zone)
+{
+	$template->assign_block_vars('zone', array(
+			'ZONEID'  		=> $zone['zoneid'],
+			'CSSCLASS'  	=> $zone['cssclass'],
+			'ZONENAME' 		=> $zone['zonename'],
+			'BOSSKILLS'		=> $zone['bosskills'], 
+			'BOSSCOUNT'		=> $zone['bosscount'],
+			'COMPLETED' 	=> $zone['completed'],
+	));
 
-/** global template vars **/
+	foreach($zone['bosses'] as $key => $boss)
+	{
+		$a = 1;
+		$template->assign_block_vars('zone.boss', array(
+				'BOSSNAME'  	=> $boss['bossname'],
+				'KILLED'  		=> $boss['killed'],
+		));
+	}
+	
+	
+	
+}
+
 $template->assign_vars ( array (
-'GAME' => $config ['bbdkp_default_game'], 
-	'S_BPSHOW' => $bpshow ));
+		'GAME' => $config ['bbdkp_default_game'], 
+		'S_BPSHOW' => $bpshow ));
 
-/**  end bossprogress block ***/
 
 ?>
