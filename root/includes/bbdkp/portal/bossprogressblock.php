@@ -1,5 +1,5 @@
 <?php
- 
+
 /* bossprogress block
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
@@ -8,17 +8,21 @@
  * 
 
  MOD Title: Raid Progress Block (uses bossprogress) a bbdkp addon.
- MOD Author: Teksonic (admin@pinnaclewow.com)
+ MOD Version: 0.5
+ MOD Author: Sajaki, Teksonic (admin@pinnaclewow.com)
  MOD Description: A raid progress block for the bbdkp system, 
  utilizing the bossprogress addon to automatically
  track raid progress and display it in a quick convient block 
  on your main site page.    
- MOD Version: 0.3
+
  Author Notes: 
  Live demo at http://www.pinnaclewow.com/test.php
  Much respect to the BBDKP group and all the loyal community.
  Original idea for this mod by: Ordon
+
  MOD History:
+* 2010-08-30 ver 0.5 
+   - completely recoded for bbdkp 1.1.2
 * 2010-01-03 ver 0.4
   - moved to block plugin 
 * 2009-01-09 ver 0.3 Sajaki
@@ -30,152 +34,89 @@
   - first revision
 */
 
-if (!defined('IN_PHPBB'))
+if (! defined ( 'IN_PHPBB' ))
 {
-   exit;
+	exit ();
 }
-	
-	$user->add_lang(array('mods/bossbase_general'));
-    $user->add_lang(array('mods/bossbase_' . $config['bbdkp_default_game']));
-	require( $phpbb_root_path . 'includes/bbdkp/bossprogress/extfunc.' . $phpEx);
-	
-	$bb_config = bb_get_bossprogress_config();
-	$bb_pzone = bb_get_parse_zones();
-	$bb_pboss = bb_get_parse_bosses();
-	$bzone = bb_get_zonebossarray();
-	
-	require ($phpbb_root_path . 'includes/bbdkp/bossprogress/bp_functions.' . $phpEx);
-	$bp_all_config = bp_get_config();
-	
-	// get visible zones only
-	$sbzone = array ();
-	if ($bzone != null) 
-	{
-	    $bpshow = true;
-    	    
-    	foreach ( $bzone as $zone => $bosses ) 
-    	{
-    		if ($bp_all_config ['sz_' . $zone] == '1') 
-    		{
-    			$sbzone [$zone] = $bosses;
-    		}
-    	}
-    	
-    	//Get killdata from database
-    	switch ($bb_config['source']) 
-    	{
-    	    case 'database':
-    			$data = bp_init_data_array($bzone);
-    			$data = bp_fetch_raidinfo($sbzone, $data, $bb_config, $bb_pzone, $bb_pboss);
-    		break;
-    	    case 'offsets':
-    	    	$bb_boffs = bb_get_boss_offsets();
-    		    $bb_zoffs = bb_get_zone_offsets();
-    		    foreach($bzone as $zone => $bosses)
-    		    {
-    			    $data[$zone]['firstzd'] = $bb_zoffs[$zone]['fd'];
-    			    $data[$zone]['lastzd'] = $bb_zoffs[$zone]['ld'];
-    			    $data[$zone]['zonecount'] = $bb_zoffs[$zone]['co'];		
-    			    foreach($bosses as $boss)
-    			    {
-    				    $data[$zone]['bosses'][$boss]['firstkd'] = $bb_boffs[$boss]['fd'];
-    				    $data[$zone]['bosses'][$boss]['lastkd']  = $bb_boffs[$boss]['ld'];
-    				    $data[$zone]['bosses'][$boss]['bosscount'] = $bb_boffs[$boss]['co'];		
-    			    }
-    		    }
-    	    break;
-    	    case 'both':
-    	   		$bb_boffs = bb_get_boss_offsets();
-    	    	$bb_zoffs = bb_get_zone_offsets();
-    	    	foreach($bzone as $zone => $bosses)
-    	    	{
-    	    		$data[$zone]['firstzd'] = $bb_zoffs[$zone]['fd'];
-    	    		$data[$zone]['lastzd'] = $bb_zoffs[$zone]['ld'];
-    	    		$data[$zone]['zonecount'] = $bb_zoffs[$zone]['co'];		
-    	    		foreach($bosses as $boss)
-    	    		{
-    	    			$data[$zone]['bosses'][$boss]['firstkd'] = $bb_boffs[$boss]['fd'];
-    	    			$data[$zone]['bosses'][$boss]['lastkd'] = $bb_boffs[$boss]['ld'];
-    	    			$data[$zone]['bosses'][$boss]['bosscount'] = $bb_boffs[$boss]['co'];		
-    	    		}
-    	    	}
-    	    	$data = bp_fetch_raidinfo($sbzone, $data, $bb_config, $bb_pzone, $bb_pboss);	
-    	    break;
-    	}
-    	
-    	$progressCount=0;
-    	foreach ( $sbzone as $zone => $bosses ) 
-    	{  
-    		// loop visible zones
-    		$loc_killed = 0;
-    		foreach ( $data [$zone] ['bosses'] as $boss ) 
-    		{  // loop bosses
-    			if ($boss ['bosscount'] > 0)
-    			{	
-    			    $loc_killed ++;
-    			}
-    			
-    		}
-    		
-    		if ((! $bp_all_config ['dynZone']) or ($loc_killed > 0)) 
-    		{
-    			$loc_completed = round ( $loc_killed / count ( $bosses ) * 100 );
-    			$totalbosscount = count ($bosses);
-    			
-    			if ($loc_completed == 0) 
-    			{
-    				$cssclass = 'bpprogress00';
-    			} 
-    			elseif ($loc_completed <= 25) 
-    			{
-    				$cssclass = 'bpprogress25';
-    			} 
-    			elseif ($loc_completed <= 50)
-    			{
-    				$cssclass = 'bpprogress50';
-    			} 
-    			elseif ($loc_completed <= 75) 
-    			{
-    				$cssclass = 'bpprogress75';
-    			} 
-    			elseif ($loc_completed <= 99) 
-    			{
-    				$cssclass = 'bpprogress99';
-    			} 
-    			elseif ($loc_completed == 100) 
-    			{
-    				$cssclass = 'bpprogress100';
-    			} 
-    			$template->assign_block_vars('boss', 
-    			array(
-    			'CSSCLASS'  => $cssclass,
-    			'ZONE'  => '<b><a class="' . $cssclass . '" href="' . append_sid("{$phpbb_root_path}bossprogress.$phpEx#$zone") . '">' . $user->lang [$zone] ['short'] . '</a></b>',
-    			'LOC_KILLED'	=> $loc_killed, 
-    			'TOTAL_BCOUNT'	=> $totalbosscount,
-    			'PERCOMP' 		=> $loc_completed,
-    			'PROGRESSCOUNT' => $progressCount,
-    			'LOCCOMPLETED' 	=> $loc_completed,
-									
-    			));
-    		}
-			$progressCount++;
-    	}
-	
-	}
-	else
-    {
-	     $bpshow = false;
-    }
+$bpshow = false;
+$user->add_lang ( array ('mods/dkp_admin' ) );
 
+$sql_array = array (
+	'SELECT' => 'z.id as zoneid, z.zonename, zonename_short, z.completed   ', 
+	'FROM' => array (
+		ZONEBASE => 'z' , 
+		), 
+	'WHERE' => 'z.showzoneportal = 0 and  length(z.zonename) >0  ', 
+	'ORDER_BY' => 'z.sequence desc ' 
+);
+$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+$result = $db->sql_query ( $sql );
+$i = 0;
+$row = $db->sql_fetchrow ( $result );
+while ( $row = $db->sql_fetchrow ( $result ) )
+{
+	$bpshow = true;
+	$zone [$i] = array (
+		'zoneid' => $row ['zoneid'], 
+		'zonename' => $row ['zonename'], 
+		'zonename_short' => $row ['zonename_short'], 
+		'completed' => $row ['completed'] );
+	
+	$sql_array = array (
+		'SELECT' => 'b.bossname, b.id, b.bossname_short, b.killed ', 
+		'FROM' => array (
+			ZONEBASE => 'z' , 
+			BOSSBASE => 'b'), 
+		'WHERE' => ' b.zoneid = z.id and b.showboss=1 and z.id = ' . $row ['zoneid'], 
+		'ORDER_BY' => 'z.sequence desc , b.id asc ' 
+	);
+	
+	$bosskill=0;
+	$j = 0;
+	$sql2 = $db->sql_build_query ( 'SELECT', $sql_array );
+	$result2 = $db->sql_query ( $sql2 );
+	$row = $db->sql_fetchrow ( $result2 );
+	
+	while ( $row2 = $db->sql_fetchrow ( $result2 ) )
+	{
+		$boss[$j] = array( 
+			'bossid' => $row2 ['id'], 
+			'bossname' => $row2 ['bossname'], 
+			'bossname_short' => $row2 ['bossname_short'], 
+			'killed' => $row2 ['killed']
+		 ); 
+		 if ($row2 ['killed'] == 1)
+		 {
+			$bosskill++;	 
+		 }
+		 $j++;
+	}
+	$zone[$i]['bosses'] = $boss; 
+	$zone[$i]['bosscount'] = $j; 
+	$zone[$i]['completed'] = ($j>0) ? round($bosskill/$j)*100 : 0;
+	unset ($boss);
+	$i++;
+	$db->sql_freeresult ($result2);
+}
+$db->sql_freeresult ($result);	
+
+/*
+$template->assign_block_vars ( 'zone.boss', array (
+	'BOSS_NAME' => $row2 ['bossname'], 
+	'BOSS_NAME_SHORT' => $row2 ['bossname_short'], 
+	'BOSS_WEBID' => $row2 ['webid'], 
+	'BOSS_KILLED' => ($row2 ['killed'] == 1) ? ' checked="checked"' : '', 
+	'BOSS_DD' => ($row2 ['killdate'] == 0) ? ' ' : date ( 'd', $row2 ['killdate'] ), 
+	'BOSS_MM' => ($row2 ['killdate'] == 0) ? ' ' : date ( 'm', $row2 ['killdate'] ), 
+	'BOSS_YY' => ($row2 ['killdate'] == 0) ? ' ' : date ( 'y', $row2 ['killdate'] ), 
+	'BOSS_SHOW' => ($row2 ['bosszone'] == 1) ? ' checked="checked"' : '' ) );
+*/
 
 /** global template vars **/
-$template->assign_vars(array(
-		
-	  'GAME' => $config['bbdkp_default_game'],
-	  'S_BPSHOW' => $bpshow,
-));
+$template->assign_vars ( array (
+'GAME' => $config ['bbdkp_default_game'], 
+	'S_BPSHOW' => $bpshow ));
 
 /**  end bossprogress block ***/
-
 
 ?>
