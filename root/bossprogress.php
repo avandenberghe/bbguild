@@ -22,7 +22,7 @@ include($phpbb_root_path . 'common.' . $phpEx);
 $user->session_begin();
 $auth->acl($user->data);
 $user->setup();
-$user->add_lang(array('mods/dkp_common'));
+$user->add_lang(array('mods/dkp_common', 'mods/dkp_admin'));
 if (!$auth->acl_get('u_dkp'))
 {
 	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
@@ -32,59 +32,97 @@ if (! defined ( "EMED_BBDKP" ))
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
-$user->add_lang(array('mods/bossbase_general'));
-$user->add_lang(array('mods/bossbase_' . $config['bbdkp_default_game']));
-include($phpbb_root_path . 'includes/bbdkp/bossprogress/extfunc.' . $phpEx);
-$bb_config = bb_get_bossprogress_config();
-$bb_pzone = bb_get_parse_zones();
-$bb_pboss = bb_get_parse_bosses();
-$bzone = bb_get_zonebossarray();
+$sql_array = array (
+	'SELECT' => 'z.id as zoneid, z.zonename, zonename_short, z.completed   ', 
+	'FROM' => array (
+		ZONEBASE => 'z' , 
+		), 
+	'WHERE' => 'z.showzone = 1 and  length(z.zonename) > 0 ', 
+	'ORDER_BY' => 'z.sequence desc ' 
+);
 
-require ($phpbb_root_path . 'includes/bbdkp/bossprogress/bp_functions.' . $phpEx);
-$bp_all_config = bp_get_config();
-
-$visiblezone = bp_get_visible_bzone($bzone, $bp_all_config);
-
-switch ($bb_config['source']) 
+$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+$result = $db->sql_query ( $sql );
+$i = 0;
+$row = $db->sql_fetchrow ( $result );
+while ( $row = $db->sql_fetchrow ( $result ) )
 {
-    case 'database':
-      	$data = bp_init_data_array($bzone);
-	    $data = bp_fetch_raidinfo($visiblezone, $data, $bb_config, $bb_pzone, $bb_pboss);
-	break;
-    case 'offsets':
-        $bb_boffs = bb_get_boss_offsets();
-	    $bb_zoffs = bb_get_zone_offsets();
-	    foreach($bzone as $zone => $bosses)
-	    {
-		    $data[$zone]['firstzd'] = $bb_zoffs[$zone]['fd'];
-		    $data[$zone]['lastzd'] = $bb_zoffs[$zone]['ld'];
-		    $data[$zone]['zonecount'] = $bb_zoffs[$zone]['co'];		
-		    foreach($bosses as $boss)
-		    {
-			    $data[$zone]['bosses'][$boss]['firstkd'] = $bb_boffs[$boss]['fd'];
-			    $data[$zone]['bosses'][$boss]['lastkd']  = $bb_boffs[$boss]['ld'];
-			    $data[$zone]['bosses'][$boss]['bosscount'] = $bb_boffs[$boss]['co'];		
-		    }
-	    }
-        break;
-    case 'both':
-    	$bb_boffs = bb_get_boss_offsets();
-    	$bb_zoffs = bb_get_zone_offsets();
-    	foreach($bzone as $zone => $bosses)
-    	{
-    		$data[$zone]['firstzd'] = $bb_zoffs[$zone]['fd'];
-    		$data[$zone]['lastzd'] = $bb_zoffs[$zone]['ld'];
-    		$data[$zone]['zonecount'] = $bb_zoffs[$zone]['co'];		
-    		foreach($bosses as $boss)
-    		{
-    			$data[$zone]['bosses'][$boss]['firstkd'] = $bb_boffs[$boss]['fd'];
-    			$data[$zone]['bosses'][$boss]['lastkd'] = $bb_boffs[$boss]['ld'];
-    			$data[$zone]['bosses'][$boss]['bosscount'] = $bb_boffs[$boss]['co'];		
-    		}
-    	}
-    	$data = bp_fetch_raidinfo($visiblezone, $data, $bb_config, $bb_pzone, $bb_pboss);	
-    break;
+	$bpshow = true;
+	$zones [$i] = array (
+		'zoneid' => $row ['zoneid'], 
+		'zonename' => $row ['zonename'], 
+		'zonename_short' => $row ['zonename_short'], 
+		'completed' => $row ['completed'], 
+		'completedate' => $row ['completedate'], 
+		'zoneimage' => $row ['zoneimage'], 
+	);
+	
+	$sql_array = array (
+		'SELECT' => 'b.bossname, b.id, b.bossname_short, b.imagename, b.type, b.killed, b.webid, b.killdate ', 
+		'FROM' => array (
+			ZONEBASE => 'z' , 
+			BOSSBASE => 'b'), 
+		'WHERE' => ' b.zoneid = z.id and b.showboss=1 and z.id = ' . $row ['zoneid'], 
+		'ORDER_BY' => 'z.sequence desc , b.id asc ' 
+	);
+	
+	$bosskill=0;
+	$j = 0;
+	$sql2 = $db->sql_build_query ( 'SELECT', $sql_array );
+	$result2 = $db->sql_query ( $sql2 );
+	$row = $db->sql_fetchrow ( $result2 );
+	
+	while ( $row2 = $db->sql_fetchrow ( $result2 ) )
+	{
+		$boss[$j] = array( 
+			'bossid' => $row2 ['id'], 
+			'bossname' => $row2 ['bossname'], 
+			'imagename' => $row2 ['imagename'],
+			'bossname_short' => $row2 ['bossname_short'], 
+			'killdate' => $row2 ['killdate'],
+			'killed' => $row2 ['killed'], 
+			'url' => $user->lang[strtoupper($config['bbdkp_default_game']).'_BASEURL'] . $row2 ['webid']
+		 ); 
+		 if ($row2 ['killed'] == 1)
+		 {
+			$bosskill++;	 
+		 }
+		 $j++;
+	}
+	$zones[$i]['bosses'] = $boss; 
+	$zones[$i]['bosscount'] = $j;
+	$zones[$i]['bosskills'] = $bosskill; 
+	$zones[$i]['completed'] = ($j>0) ? round($bosskill/$j)*100 : 0;
+  	if ((int)$zones[$i]['completed']  <= 0) 
+ 	{
+		$zones[$i]['cssclass'] = 'bpprogress00';
+  	}
+	elseif ((int)$zones[$i]['completed'] <= 25) 
+	{
+		$zones[$i]['cssclass'] = 'bpprogress25';
+	}
+	elseif ((int)$zones[$i]['completed'] <= 50) 
+	{
+		$zones[$i]['cssclass'] = 'bpprogress50';
+	}
+	elseif ((int)$zones[$i]['completed'] <= 75) 
+	{	
+		$zones[$i]['cssclass'] = 'bpprogress75';
+	}
+	elseif ((int)$zones[$i]['completed'] <= 99) 
+	{
+		$zones[$i]['cssclass'] = 'bpprogress99';
+	}
+	elseif ((int)$zones[$i]['completed'] >= 100) 
+	{
+		$zones[$i]['cssclass'] = 'bpprogress100';
+	}
+	unset ($boss);
+	$i++;
+	$db->sql_freeresult ($result2);
 }
+$db->sql_freeresult ($result);	
+
 
 foreach ( $visiblezone as $zone => $bosses )
 {
@@ -129,7 +167,7 @@ foreach ( $visiblezone as $zone => $bosses )
 		}
 		
 		
-		
+		  
 		$template->assign_block_vars('zone', array(
 			'ZONENAME' 			=> $zonename[0],
 			'ZONEPROGRESSIMG'	=> $progrimg, 
