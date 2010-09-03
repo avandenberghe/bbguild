@@ -43,33 +43,33 @@ if (empty($lang) || !is_array($lang))
 
 // DKP
 $lang = array_merge($lang, array(
-'BBDKPDISABLED' => 'bbDKP is currently disabled.', 
+'BBDKPDISABLED' => 'bbDKP est temporairement désactivé.', 
 
 //addnews
-'ADD_NEWS' => 'Add News',
-'ADDNEWS_TITLE' => 'Add a News Entry',
-'DELETE_NEWS' => 'Delete News',
-'HEADLINE' => 'Headline',
-'MESSAGE_BODY' => 'Message Body',
-'UPDATE_NEWS' => 'Update News',
-'UPDATE_DATE_TO' => 'Update date to<br />%s?',
+'ADD_NEWS' => 'Ajouter Nouvelles',
+'ADDNEWS_TITLE' => 'Ajouter un article',
+'DELETE_NEWS' => 'Supprimer un article',
+'HEADLINE' => 'Titre',
+'MESSAGE_BODY' => 'Article',
+'UPDATE_NEWS' => 'Mise à jour d\'un qrticle',
+'UPDATE_DATE_TO' => 'M.a.j. date à<br />%s?',
 
 //JAVASCRIPT
-'B_HELP' => 'Bold text: [b]text[/b]',
-'I_HELP' => 'Italic text: [i]text[/i]',
-'U_HELP' => 'Underlined text: [u]text[/u]',
-'Q_HELP' => 'Quote text: [quote]text[/quote]',
-'C_HELP' => 'Center text: [center]text[/center]',
-'P_HELP' => 'Insert image: [img]http://image_url[/img]',
-'W_HELP' => 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
+'B_HELP' => 'texte gras: [b]text[/b]',
+'I_HELP' => 'texte italique: [i]text[/i]',
+'U_HELP' => 'texte sousligné: [u]text[/u]',
+'Q_HELP' => 'texte cité: [quote]text[/quote]',
+'C_HELP' => 'texte Centré: [center]text[/center]',
+'P_HELP' => 'image inseré: [img]http://image_url[/img]',
+'W_HELP' => 'URL Inseré : [url]http://url[/url] or [url=http://url]URL text[/url]',
 'ITEM_HELP' => 'Wowhead : [item]text[/item]',
 
 // Form Validation Errors
-'FV_FORMVALIDATION' => 'Form validation Error',
-'FV_ALPHA_ATTENDEES' => 'Characters\' names in EverQuest contain only alphabetic characters.',
-'FV_DIFFERENCE_TRANSFER' => 'A history transfer must be made between two different people.',
-'FV_NUMBER' => 'Must be a number.',
-'FV_NUMBER_ADJUSTMENT' => 'The adjustment value field must be a number.',
+'FV_FORMVALIDATION' => 'Erreur de validation',
+'FV_ALPHA_ATTENDEES' => 'Les noms en EverQuest ne contiennent que les caractères alphabétiques.',
+'FV_DIFFERENCE_TRANSFER' => 'Un transfert d\'historique doit se faire entre 2 personnes différentes.',
+'FV_NUMBER' => 'doit être numerique.',
+'FV_NUMBER_ADJUSTMENT' => 'Lq valeur ajustée doit être numerique.',
 'FV_NUMBER_ALIMIT' => 'The adjustments limit field must be a number.',
 'FV_NUMBER_ILIMIT' => 'The items limit field must be a number.',
 'FV_NUMBER_INACTIVEPD' => 'The inactive period must be a number.',
