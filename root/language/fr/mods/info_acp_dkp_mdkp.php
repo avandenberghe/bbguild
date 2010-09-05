@@ -1,6 +1,6 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
+ * bbdkp acp language file for DKP accounts (FR)
  * 
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
@@ -25,10 +25,10 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-  	'ACP_DKP_MDKP'	        => 'Member DKP Management', 
-    'ACP_DKP_EDITMEMBERDKP'		=> 'Edit member DKP',
-	'ACP_DKP_LISTMEMBERDKP'		=> 'Member DKP',  
-	'ACP_DKP_MEMBER_TRF'		=> 'DKP Transfer',
+  	'ACP_DKP_MDKP'	        => 'Gestion Comptes DKP', 
+    'ACP_DKP_EDITMEMBERDKP'		=> 'Editer compte DKP',
+	'ACP_DKP_LISTMEMBERDKP'		=> 'Liste des comptes',  
+	'ACP_DKP_MEMBER_TRF'		=> 'Transfert d’un compte'',
 ));
 
 ?>

@@ -1,6 +1,6 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
+ * bbdkp acp language file for Items (FR)
  * 
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
@@ -25,11 +25,11 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-	'ACP_DKP_ITEM'	=> 'Item management',  
-	'ACP_DKP_ITEM_ADD'		=> 'Add Item',
-	'ACP_DKP_ITEM_LIST'		=> 'Items',
-	'ACP_DKP_ITEM_SEARCH'	=> 'Search Item',
-	'ACP_DKP_ITEM_VIEW'		=> 'View Item',
+	'ACP_DKP_ITEM'			=> 'Gestion des Objets',  
+	'ACP_DKP_ITEM_ADD'		=> 'Ajouter objet',
+	'ACP_DKP_ITEM_LIST'		=> 'Liste des Objets',
+	'ACP_DKP_ITEM_SEARCH'	=> 'Recherche d’objets',
+	'ACP_DKP_ITEM_VIEW'		=> 'Visualisation d’objets'',
 ));
 
 ?>

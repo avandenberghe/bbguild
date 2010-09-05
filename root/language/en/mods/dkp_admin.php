@@ -1,7 +1,7 @@
 <?php
 /**
  * bbdkp admin language file [English]
- * @author Sajaki@betenoire
+ * @author Sajaki@bbdkp.com
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -194,10 +194,8 @@ $lang = array_merge($lang, array(
 'ACP_LISTEVENTS' => 'List Events', 
 'ACP_ADDDKPSYS' => 'Add DKP Pool', 
 'ACP_LISTDKPSYS' => 'List DKP Pools', 
-'ACP_ADDADJ' => 'Add Group Adjustments', 
-'ACP_ADDIADJ'=> 'Add Individual Adjustments', 
-'ACP_LISTADJ' => 'List Group Adjustments', 
-'ACP_LISTIADJ' => 'List Individual Adjustments', 
+'ACP_ADDIADJ'=> 'Add Adjustments', 
+'ACP_LISTIADJ' => 'List Adjustments', 
 'ACP_ADDITEM' => 'Add Item',
 'ACP_LISTITEMS' => 'List Items',
 'ACP_ADDRAID' => 'Add Raid',
@@ -225,9 +223,7 @@ $lang = array_merge($lang, array(
 'ACP_LISTDKPSYS_EXPLAIN' => 'List DKP Pools; a DKP pool combines a series of Events, Raids and Items. This way you can manage multiple DKP Tiers separately. ', 
 'ACP_ADDEVENT_EXPLAIN' => 'Here you can add / change event information. DKP Pools must be set up first.', 
 'ACP_LISTEVENTS_EXPLAIN' => 'List of Events. The preset values will be used as standard dkp value for any raid on that event.', 
-'ACP_ADDADJ_EXPLAIN' => 'Here you can add / change group adjustments. ', 
 'ACP_ADDIADJ_EXPLAIN'=> 'Here you can add / change individual adjustments. ', 
-'ACP_LISTADJ_EXPLAIN' => 'List Group Adjustments', 
 'ACP_LISTIADJ_EXPLAIN' => 'List Individual Adjustments', 
 'ACP_ADDITEM_EXPLAIN' => 'Here you can add / change item information.',
 'ACP_LISTITEMS_EXPLAIN' => 'List of Purchased Items. you can filter by Dkp pool and raid. ',
@@ -266,7 +262,6 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_RAID_DEL' => 'You do not have permission to delete raids.',
 'NOAUTH_A_CONFIG_MAN' => 'You do not have permission to manage bbDkp configuration settings.',
 'NOAUTH_A_MEMBERS_MAN' => 'You do not have permission to manage guild members.',
-'NOAUTH_A_PLUGINS_MAN' => 'You do not have permission to manage bbDkp plugins.',
 'NOAUTH_A_LOGS_VIEW' => 'You do not have permission to view bbDkp logs.',
 
 // Manage Members Menu (yes, MMM)
@@ -433,7 +428,6 @@ $lang = array_merge($lang, array(
 
 // Submission Success Messages
 'ADMIN_ADD_ADJ_SUCCESS' => 'A %s adjustment of %.2f has been added to the database for your guild.',
-'ADMIN_ADD_ADMIN_SUCCESS' => 'An e-mail has been sent to %s with their administrative information.',
 'ADMIN_ADD_DKPSYS_SUCCESS' => 'A new dkp system %s has been added to the database for your guild.',
 'ADMIN_ADD_EVENT_SUCCESS' => 'A value preset of %s for a raid on %s has been added to the database for your guild.',
 'ADMIN_ADD_IADJ_SUCCESS' => 'An individual %s adjustment of %.2f for %s has been added to the database for your guild.',
@@ -443,15 +437,14 @@ $lang = array_merge($lang, array(
 'ADMIN_ADD_GUILD_SUCCESS' => '%s has been added as a guild to your database.',
 'ADMIN_ADD_NEWS_SUCCESS' => 'The news entry has been added to the database for your guild.',
 'ADMIN_ADD_RAID_SUCCESS' => 'The %s raid on %s has been added to the database for your guild.',
-'ADMIN_ADD_STYLE_SUCCESS' => 'The new style has been added successfully.',
 'ADMIN_DELETE_ADJ_SUCCESS' => 'The %s adjustment of %.2f has been deleted from the database for your guild.',
 'ADMIN_DELETE_DKPSYS_SUCCESS' => 'the dkp system %s has been deleted from the database for your guild !!! ',
 'ADMIN_DELETE_EVENT_SUCCESS' => 'The value preset of %s for a raid on %s has been deleted from the database for your guild.',
 'ADMIN_DELETE_GUILD_SUCCESS' => 'The guild with id %s has been deleted from the database for your guild.',
 'ADMIN_DELETE_IADJ_SUCCESS' => 'The individual %s adjustment of %.2f for %s has been deleted from the database for your guild.',
 'ADMIN_DELETE_ITEM_SUCCESS' => 'The item purchase entry for %s, purchased by %s for %.2f has been deleted from the database for your guild.',
-'ADMIN_DELETE_MEMBERS_SUCCESS' => '%s, including all of his/her history, has been deleted from the database for your guild.',
-'ADMIN_DELETE_MEMBERDKP_SUCCESS' => 'Dkp for %s in Dkp pool %s has been deleted. (The member still exists in the member list)',
+'ADMIN_DELETE_MEMBERS_SUCCESS' => '%s, including all of his/her history, has been deleted from the database for your guild.','ADMIN_DELETE_MEMBERDKP_SUCCESS' => 'Dkp for %s in Dkp pool %s has been deleted. (The member still exists in the member list)',
+'ADMIN_DELETE_MEMBERDKP_SUCCESS' => 'Dkp for %s in Dkp pool %s was deleted.',
 'ADMIN_DELETE_MEMBERDKP_FAILED' => 'Dkp for %s in Dkp pool %s could not be deleted.',
 'ADMIN_DELETE_MEMBERS_FAILED' => 'ERROR : %s, including all of his/her history, could not be deleted.',
 'ADMIN_DELETE_NEWS_SUCCESS' => 'The news entry has been deleted from the database for your guild.',
@@ -557,8 +550,6 @@ $lang = array_merge($lang, array(
 'ADD_RAID_TITLE' => 'Add a Raid',
 'ADMIN_INDEX_TITLE' => 'bbDkp Administration',
 'MANAGE_MEMBERS_TITLE' => 'Manage Guild Members',
-'PARSELOG_TITLE' => 'Parse a Log File',
-'PLUGINS_TITLE' => 'Manage Plugins',
 'VIEWLOGS_TITLE' => 'Log Viewer',
 'EDITMEMBER_DKP_TITLE' => 'Edit Guildmember DKP', 
 
@@ -568,7 +559,6 @@ $lang = array_merge($lang, array(
 'LISTEVENTS_FOOTCOUNT' => '... found %d events / %d per page',
 'LISTRAIDS_FOOTCOUNT' => '... found %d raid(s) / %d per page',
 'MANAGE_MEMBERS_FOOTCOUNT' => '... found %d member(s)',
-'ONLINE_FOOTCOUNT' => '... %d users are online',
 'VIEWLOGS_FOOTCOUNT' => '... found %d log(s) / %d per page',
 'GUILD_FOOTCOUNT' => '... found %d guild(s)', 
 'NEWS_FOOTCOUNT' => '... found %d newsitem(s)',
@@ -577,7 +567,6 @@ $lang = array_merge($lang, array(
 
 // Submit Buttons
 'ADD_ADJUSTMENT' => 'Add Adjustment',
-'ADD_ACCOUNT' => 'Add Account',
 'ADD_EVENT' => 'Add Event',
 'ADD_DKPSYS' => 'Add DKP system',
 'ADD_ITEM' => 'Add Item',
@@ -619,7 +608,6 @@ $lang = array_merge($lang, array(
 'DKP_STATUS' => 'DKP pool status (Y or N)',
 'EVENT_NAME' => 'Event name', 
 'EVENT_VALUE' => 'Event Value',
-'FOUND_MEMBERS' => 'Parsed %d lines, found %d members',
 'STATUS' => 'Status', 
 'HIDE' => 'Hide?',
 'ID' => 'Id', 
@@ -628,10 +616,6 @@ $lang = array_merge($lang, array(
 'LIST_PREFIX' => 'List Prefix',
 'LIST_SUFFIX' => 'List Suffix',
 'LOGS' => 'Logs',
-'LOG_FIND_ALL' => 'Find all (including anonymous)',
-'MANAGE_MEMBERS' => 'Manage Members',
-'MANAGE_PLUGINS' => 'Manage Plugins',
-'MANAGE_USERS' => 'Manage Users',
 'MEMBERS' => 'Members',
 'MEMBER_RANK' => 'Member Rank',
 'POOL' => 'Dkp Pool',
@@ -643,9 +627,7 @@ $lang = array_merge($lang, array(
 'LOOTUPD' => 'Updating items to %s Raid on %s',
 'RESULTS' => '%d Results (%s)',
 'SEARCH' => 'Search',
-'SEARCH_MEMBERS' => 'Search Members',
 'SHOULD_BE' => 'Should be',
-'STYLES' => 'Styles',
 'TITLE' => 'Title',
 'UNINSTALL' => 'Uninstall',
 'VERSION' => 'Version',
@@ -656,7 +638,6 @@ $lang = array_merge($lang, array(
 
 
 // Admin Index
-'ANONYMOUS' => 'Anonymous',
 'BBDKP_STARTED' => 'bbDkp Started',
 'IP_ADDRESS' => 'IP Address',
 'ITEMS_PER_DAY' => 'Items per Day',
@@ -677,28 +658,6 @@ $lang = array_merge($lang, array(
 'ATTENDANCEDAYS' => 'Attendance days (for Standings)',
 'STATISTICS' => 'Statistics',
 'TOTALS' => 'Totals',
-
-
-
-// Location messages
-'ADDING_GROUPADJ' => 'Adding a Group Adjustment',
-'ADDING_INDIVADJ' => 'Adding an Individual Adjustment',
-'ADDING_ITEM' => 'Adding an Item',
-
-'ADDING_RAID' => 'Adding a Raid',
-'EDITING_INDIVADJ' => 'Editing Individual Adjustment',
-'EDITING_ITEM' => 'Editing Item',
-'EDITING_NEWS' => 'Editing News Entry',
-'EDITING_RAID' => 'Editing Raid',
-'LISTING_EVENTS' => 'Listing Events',
-'LISTING_GROUPADJ' => 'Listing Group Adjustments',
-'LISTING_INDIVADJ' => 'Listing Individual Adjustments',
-'LISTING_ITEMHIST' => 'Listing Item History',
-'LISTING_ITEMVALS' => 'Listing Item Values',
-'LISTING_MEMBERS' => 'Listing Members',
-'LISTING_RAIDS' => 'Listing Raids',
-'VIEWING_LOGS' => 'Viewing Logs',
-'VIEWING_MEMBER' => 'Viewing Member',
 
 //js alerts
 'ALERT_AJAX' => 'There was a problem while using XMLHTTP', 

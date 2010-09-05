@@ -1,6 +1,6 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
+ * bbdkp acp language file for Raid menu (FR)
  * 
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
@@ -25,9 +25,9 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-	'ACP_DKP_RAIDS'		    => 'Raid Management',  
-	'ACP_DKP_RAID_ADD'		=> 'Add Raid',
-	'ACP_DKP_RAID_LIST'		=> 'Raids',
+	'ACP_DKP_RAIDS'		    => 'Gestion des Raids',  
+	'ACP_DKP_RAID_ADD'		=> 'Ajouter Raid manuellement',
+	'ACP_DKP_RAID_LIST'		=> 'Liste des Raids',
 ));
 
 ?>

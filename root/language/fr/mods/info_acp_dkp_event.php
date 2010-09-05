@@ -1,6 +1,6 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
+ * bbdkp acp language file for Events (FR)
  * 
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
@@ -25,9 +25,9 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-    'ACP_DKP_EVENT'			=> 'Events',
-	'ACP_DKP_EVENT_ADD'		=> 'Add Event',  
-	'ACP_DKP_EVENT_LIST'	=> 'Events',
+    'ACP_DKP_EVENT'			=> 'Evènements',
+	'ACP_DKP_EVENT_ADD'		=> 'Ajouter Evènement',  
+	'ACP_DKP_EVENT_LIST'	=> 'Liste Evènements',
 ));
 
 ?>
