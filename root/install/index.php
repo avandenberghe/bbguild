@@ -7,7 +7,6 @@
  * @version $Id$
  * 
  */
-
 define('UMIL_AUTO', true);
 define('IN_PHPBB', true);
 define('IN_INSTALL', true);
@@ -769,7 +768,16 @@ $versions = array(
            array('acp', 'ACP_DKP_BOSS', array(
           		 'module_basename' => 'dkp_bossprogress',
             	 'modes'           => array('zoneprogress' ),
-         ))),
+         )),
+            // add game-race-class
+            array('acp', 'ACP_DKP_MEMBER', array(
+           		 'module_basename' => 'dkp_game',
+            	 'modes'           => array('listgames', 'addgame', 'addrace', 'addclass'),
+        		),
+            ),        
+         
+         
+         ),
 		
   		'config_add' => array(
         	//global config
@@ -807,6 +815,7 @@ $versions = array(
 		                'PRIMARY_KEY'      => 'id',
 		            ),
 		          ),
+		          
 		          array($bbdkp_table_prefix . 'bb_bosstable', array(
 		              'COLUMNS'            => array(
 		                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
@@ -824,6 +833,7 @@ $versions = array(
 		          		'KEYS'            => array('zoneid'    => array('INDEX', 'zoneid')),
 		            ),
 		          ),        
+		          
 		          array($bbdkp_table_prefix . 'bb_language', array(
 		              'COLUMNS'            => array(
 		          		  'id'     	       => array('UINT', NULL, 'auto_increment'), 
@@ -868,9 +878,6 @@ $versions = array(
 	                    'PRIMARY_KEY'    => 'id',
 	                ),
 	            ),
-	            	            
-
-	            
 	            
           	),
           	
@@ -973,7 +980,7 @@ con : hard to manage because you have to set gear prices. <br /> ',
             
             
         // removing old table
-        //'table_remove' => array( $bbdkp_table_prefix . 'bb_config', $bbdkp_table_prefix . 'bb_offsets'), 
+        'table_remove' => array( $bbdkp_table_prefix . 'bb_config', $bbdkp_table_prefix . 'bb_offsets'), 
 
 		'custom' => array( 
 			'gameupdate', 
