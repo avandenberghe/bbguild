@@ -34,7 +34,7 @@ define('USER_LLIMIT', 40);  // LOG LIMIT
 $bbdkp_table_prefixx = 'bbeqdkp_';
 
 // TABLE DEFINITIONS
-define('ITEMCACHE_TABLE',	        $bbdkp_table_prefixx . 'item_cache');
+define('ITEMCACHE_TABLE',	       $bbdkp_table_prefixx . 'item_cache');
 define('ADJUSTMENTS_TABLE',        $bbdkp_table_prefixx . 'adjustments'); 	 
 define('EVENTS_TABLE',             $bbdkp_table_prefixx . 'events'); 	 
 define('ITEMS_TABLE',              $bbdkp_table_prefixx . 'items'); 	 
@@ -49,10 +49,10 @@ define('RAIDS_TABLE',              $bbdkp_table_prefixx . 'raids');
 define('CLASS_TABLE',              $bbdkp_table_prefixx . 'classes'); 	 
 define('RACE_TABLE',               $bbdkp_table_prefixx . 'races'); 	 
 define('FACTION_TABLE',            $bbdkp_table_prefixx . 'factions'); 
-define('DKPSYS_TABLE',     			$bbdkp_table_prefixx . 'dkppool');
-define('PLUGINS_TABLE',	        	$bbdkp_table_prefixx . 'plugins');
-define('GUILD_TABLE',	        	$bbdkp_table_prefixx . 'memberguild');
-define('LOOTSYS_TABLE',	        	$bbdkp_table_prefixx . 'lootsystem');
+define('DKPSYS_TABLE',     		   $bbdkp_table_prefixx . 'dkpsystem');
+define('PLUGINS_TABLE',	           $bbdkp_table_prefixx . 'plugins');
+define('GUILD_TABLE',	           $bbdkp_table_prefixx . 'memberguild');
+define('LOOTSYS_TABLE',	           $bbdkp_table_prefixx . 'lootsystem');
 
 // plugin anchors
 
