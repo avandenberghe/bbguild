@@ -8,27 +8,42 @@
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
 		<title lang="en"><![CDATA[bbDKP 1.1.2]]></title>
-		<description lang="en"><![CDATA[bbDKP is a PHPBB3-based DKP solution, evolved from EQDKP to help guilds in MMORPGs (Massive(ly) Multiplayer Online Role-playing Games) track guild members attendance, item purchases and other statistics. It updates and brings together the Dkp/game managment facilites of EQdkp, and integrates them with phpBB3's facilites. This means your users gain single sign on to dkp and phpbb, and you as an administrator or raidleader gain a clean interface, robust admin facilities and less integration headaches. Games supported : Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, Wow. Features : Multiple Dkp Pools and guilds, DKP Standings, Raids, Events, Item values, Item history, Raid Stats, Bossprogress, Roster, backup, import from eqdkp+. Plugins : Armory Import (Wow & Aion), bbTips (Wow), Raidtracker (wow), Apply.  
+		<description lang="en"><![CDATA[bbDKP is a PHPBB3-based DKP solution, evolved from EQDKP to help guilds in MMORPGs (Massive(ly) Multiplayer Online Role-playing Games) track guild members attendance, item purchases and other statistics. It updates and brings together the Dkp/game managment facilites of EQdkp, and integrates them with phpBB3's facilites. This means your users gain single sign on to dkp and phpbb, and you as an administrator or raidleader gain a clean interface, robust admin facilities and less integration headaches. 
+		Games supported : Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, Wow. 
+		Features : Multiple Dkp Pools and guilds, DKP Standings, Raids, Events, Item values, Item history, Raid Stats, Bossprogress, Roster, backup, import from eqdkp+. 
+		Plugins : Armory Import (Wow & Aion), bbTips (Wow), Raidtracker (wow), Apply.  
 This release was completely rewritten, for details see the changelog. 
 
-Further development requests, support questions are welcome at http://www.bbdkp.com. 
-As of the current release, it does not (yet) make coffee ;)
+Further development requests, support questions are welcome at http://www.bbdkp.com. As of the current release, it does not (yet) make coffee ;)
 
 Copyright
 Powered by bbDKP (c) 2009 The bbDKP Project Team
-If you use this software and find it to be useful, we ask that you retain the copyright notice in overall_footer.html in any Styles you use. It will help build interest in the bbDKP project, and is required for obtaining support.
+We ask that you retain the copyright notice in overall_footer.html in any Styles you use. It will help build interest in the bbDKP project, and is required for obtaining support.
 http://code.google.com/p/bbdkp/
 bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-		<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5 with Libxml 2.6.0 (simplexml usage), Curl 
-Install instructions : please see /contrib/readme/install.html
-What has changed ? see here : /contrib/readme/changelog.html
-Please Backup your phpbb3 installation and database before beginning. 
-]]>
+<description lang="fr"><![CDATA[bbDKP est une solution DKP pour votre forum PHPBB3, évoluée de EQDKP assistant les guildes à gérer leur Guilde, à savoir la gérance de la participation des membres au raids, la gestion des achats des objets, et bien d’autres statistiques. Il met à jour et incorpore les fonctions de gestion de eqdkp, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer et World of Warcraft. 
+Liste non exhaustive des fonctionnalités : Multiples groupes DKP et guildes, Tribune des points DKP, Raids, Evènements, Valeurs des Objets, Historique des Objets, Statistique des Raids, Page d’avancée des Boss, Armurerie, module PCA avec Backup, Import de EQDKP+. 
+Les Plugins : Importation depuis l’armurerie de Blizzard et Aion, bbTips (Wow), Raidtracker (wow), Formulaire de Recrutement.  
+Pour de plus amples détails, veuillez consulter le changelog. Demandes de développement, questions de support sont les bienvenues à http://www.bbdkp.com. 
+
+Copyright
+Powered by bbDKP (c) 2009 The bbDKP Project Team
+Veuillez montrer le la notice de copyright dans overall_footer.html dans les Styles que vous utilisez. Ceci aide à soutenir l’intérêt dans le proeèt bbDKP et c’est requis afin d’obtenir du support.
+http://code.google.com/p/bbdkp/
+bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
+bbDKP (c) 2008 Sajaki, Malfate, Kapli 
+bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
+EQDkp (c) 2003 The EqDkp Project Team]]></description>
+<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5 with Libxml 2.6.0 (simplexml usage), Curl 
+Please Backup your phpbb3 installation and database before beginning. ]]>
 </author-notes>
-		<author-group>
+<author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, PHP 5 avec Libxml 2.6.0 (simplexml), Curl 
+Veuillez faire une sauvegarde avant de commencer. ]]>
+</author-notes>
+<author-group>
 			<author>
 				<realname><![CDATA[Andy Vandenberghe]]></realname>
 				<username><![CDATA[Sajaki]]></username>
@@ -287,7 +302,7 @@ Automod cannot handle it as it would lead to a timeout due to the size (19mb) !
 ------------------------------------------------------------------------------
 2) Run database installer 
 Browse to install/index.php and run the bbDKP 1.1.2 installer/updater.  
-This will either do a full install or an update from 1.0.8, 1.0.9rc1, or 1.1.0 of the ACP modules and database tables.  
+This will either do a full install or an update from 1.0.8, 1.0.9rc1, 1.1.0 or 1.1.2 of the ACP modules and database tables.  
 Afterwards the caches will be cleared (template, theme, imagesets).
 ------------------------------------------------------------------------------
 3) Finish 
@@ -297,5 +312,29 @@ Finally rename the install folder.
 Note : Should you need to deactivate bbDKP you can open config.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
 
 		Enjoy ;)]]></diy-instructions>
+<diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /contrib/readme/install.html
+Liste des changements : /contrib/readme/changelog.html
+
+Résumé des étapes de post-installation : Après que Automod - ou vous-même manuellement a copié les fichiers à leur emplacement et fait les changements nécessaires dans le code php, il reste encore ces choses à faire :
+
+1) Copier ces fichiers vers le repertoire /images  
+En raison de la taille de ces répertoires (±20mb), Automod ne sait pas les copier du au timeout. 
+<file from="root/images/class_images/*.*" to="images/class_images/*.*" />   
+<file from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" />   
+<file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" />   
+<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  
+------------------------------------------------------------------------------
+2) lancer l’installateur
+Surfez vers install/index.php et lancez l’installateur bbDKP 1.1.2  
+Ceci effectuera soit une mise à jour ou bien une m.a.j de 1.0.8, 1.0.9rc1, 1.1.0, ou 1.1.1 à 1.1.2 de la base de données.  
+Aussi, les caches seront vidées. 
+------------------------------------------------------------------------------
+3) Fin
+Rennomer le repertoire /install pour réactiver le forum.
+------------------------------------------------------------------------------
+
+Note : Il est possible de désactiver le MOD en ouvrant config.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
+
+Success ;)	]]></diy-instructions>		
 	</action-group>
 </mod>
