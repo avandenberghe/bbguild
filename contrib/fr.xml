@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="modx.prosilver.en.xsl"?>
+<!-- bbdkp installer $id$ -->
+<!--NOTICE: Please open this file in your web browser. If presented with a security warning, you may safely tell it to allow the blocked content.-->
+<!--For security purposes, please check: http://www.phpbb.com/mods/ for the latest version of this MOD.\nAlthough MODs are checked before being allowed in the MODs Database there is no guarantee that there are no security problems within the MOD.\nNo support will be given for MODs not found within the MODs Database which can be found at http://www.phpbb.com/mods/-->
+<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
+	<header>
+		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
+		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
+		<title lang="en"><![CDATA[bbDKP 1.1.2]]></title>
+		<description lang="en"><![CDATA[bbDKP est une solution DKP pour votre forum PHPBB3, évoluée de EQDKP assistant les guildes à gérer leur Guilde, à savoir la gérance de la participation des membres au raids, la gestion des achats des objets, et bien d’autres statistiques. Il met à jour et incorpore les fonctions de gestion de EQdkp, et les intègre dans PHPBB3. Ceci ap^portera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, et World of Warcraft. Liste non exhaustive des fonctionnalités : Multiples groupes DKP et guildes, Tribune des points DKP, Raids, Evènements, Valeurs des Objets, Historique des Objets, Statistique des Raids, Page d’avancée des Boss, Armurerie, module PCA avec Backup, Import de EQDKP+. Les Plugins suivants existent : Importation depuis l’armurerie de Blizzard et Aion, bbTips (Wow), Raidtracker (wow), Formulaire de Recrutement. . 
+		  Pour de plus amples détails, veuillez consulter le changelog. 
+		  Demandes de développement, questions de support sont les bienvenues à http://www.bbdkp.com. 
+
+Copyright
+Powered by bbDKP (c) 2009 The bbDKP Project Team
+If you use this software and find it to be useful, we ask that you retain the copyright notice in overall_footer.html in any Styles you use. It will help build interest in the bbDKP project, and is required for obtaining support.
+http://code.google.com/p/bbdkp/
+bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
+bbDKP (c) 2008 Sajaki, Malfate, Kapli 
+bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
+EQDkp (c) 2003 The EqDkp Project Team]]></description>
+		<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5 with Libxml 2.6.0 (simplexml usage), Curl 
+
+Instruction d’installation : /contrib/readme/install.html
+Liste des changements ? /contrib/readme/changelog.html
+Veuillez faire un backup de votre installation phpBB3 avant de commencer.
+
+]]>
+</author-notes>
+		<author-group>
+			<author>
+				<realname><![CDATA[Andy Vandenberghe]]></realname>
+				<username><![CDATA[Sajaki]]></username>
+				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
+				<email><![CDATA[sajaki9@gmail.com]]></email>
+				<contributions-group>
+					<contributions status="current" from="2008-04-04" position="développeur"/>
+				</contributions-group>
+			</author>
+			<author>
+				<realname><![CDATA[Kevin Rushin]]></realname>
+				<username><![CDATA[Malfate / Medraut]]></username>
+				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
+				<email><![CDATA[cs.krushin@gmail.com]]></email>
+				<contributions-group>
+					<contributions status="current" from="2009-09-01" position="développeur"/>
+					<contributions status="past" from="2007-12-27" to="2009-01-01" position="Former Leader, bbDKP Supporter"/>
+				</contributions-group>
+			</author>
+			<author>
+				<realname><![CDATA[Morten Boegeskov]]></realname>
+				<username><![CDATA[Hroar]]></username>
+				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
+				<email><![CDATA[morten.boegeskov@gmail.com]]></email>
+				<contributions-group>
+					<contributions status="past" from="2009-05-01" to="2009-09-04" position="développeur"/>
+				</contributions-group>
+			</author>
+			<author>
+				<username><![CDATA[Kapli]]></username>
+				<contributions-group>
+					<contributions status="past" from="2008-08-01" to="2009-04-01" position="développeur"/>
+				</contributions-group>
+			</author>
+			<author>
+				<realname><![CDATA[Teksonic]]></realname>
+				<username><![CDATA[Teksonic]]></username>
+				<contributions-group>
+					<contributions status="past" from="2008-04-06" to="2008-06-01" position="développeur"/>
+				</contributions-group>
+			</author>
+			<author>
+				<realname><![CDATA[Ippeh]]></realname>
+				<username><![CDATA[Ippeh]]></username>
+				<homepage><![CDATA[http://www.explodinglabrats.com/]]></homepage>
+				<email><![CDATA[ippe.he@gmail.com]]></email>
+				<contributions-group>
+					<contributions status="past" from="2007-12-24" to="2008-10-01" position="créateur de bbDKP"/>
+				</contributions-group>
+			</author>
+			<author>
+				<realname><![CDATA[sz3]]></realname>
+				<username><![CDATA[sz3]]></username>
+				<homepage><![CDATA[http://www.eqdkp.com]]></homepage>
+				<contributions-group>
+					<contributions status="past" position="auteur de EQDKP BossProgress v3.0.3"/>
+				</contributions-group>
+			</author>
+			<author>
+				<realname><![CDATA[Tsigo]]></realname>
+				<username><![CDATA[Tsigo]]></username>
+				<homepage><![CDATA[http://www.eqdkp.com]]></homepage>
+				<contributions-group>
+					<contributions status="past" position="developpeur original de EQDKP."/>
+				</contributions-group>
+			</author>
+		</author-group>
+		<mod-version>1.1.2</mod-version>
+		<installation>
+			<level>advanced</level>
+			<time>1200</time>
+			<target-version>3.0.7-PL1</target-version>
+		</installation>
+		<link-group>
+			<link type="parent" lang="en" href="../install.xml">Installation manual</link>
+			<link type="parent" lang="fr" href="../install.xml">Manuel d’installation</link>
+			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2 Style</link>
+			<link type="template" href="contrib/subsilver2.xml" lang="fr">subsilver2</link>
+		</link-group>
+	</header>
+	<action-group>
+		<copy>
+			<file from="root/language/fr/mods/*.*" to="language/fr/mods/*.*"/>
+		</copy>
+	<diy-instructions lang="en">See general install.xml file</diy-instructions>
+	<diy-instructions lang="fr">Voir install.xml</diy-instructions>	
+	</action-group>
+</mod>

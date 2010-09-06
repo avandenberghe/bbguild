@@ -55,7 +55,7 @@ Please Backup your phpbb3 installation and database before beginning.
 				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
 				<email><![CDATA[morten.boegeskov@gmail.com]]></email>
 				<contributions-group>
-					<contributions status="current" from="2009-05-01" position="Developer"/>
+					<contributions status="past" from="2009-05-01"  to="2009-09-04" position="Developer"/>
 				</contributions-group>
 			</author>
 			<author>
@@ -104,7 +104,10 @@ Please Backup your phpbb3 installation and database before beginning.
 			<target-version>3.0.7-PL1</target-version>
 		</installation>
 		<link-group>
-			<link type="template" href="contrib/subsilver2.xml" lang="en">Manual for subsilver2 Style</link>
+			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2</link>
+			<link type="template" href="contrib/subsilver2.xml" lang="fr">subsilver2</link>
+			<link type="language" lang="en" href="contrib/fr.xml">French</link>
+			<link type="language" lang="fr" href="contrib/fr.xml">Français</link>
 		</link-group>
 	</header>
 	<action-group>
@@ -267,6 +270,7 @@ function pop_search()
 				<action type="before-add"><![CDATA[<!-- ENDIF -->]]></action>
 			</edit>
 		</open>
+		<php-installer><![CDATA[install/index.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /contrib/readme/install.html
 What has changed ? see here : /contrib/readme/changelog.html
 
