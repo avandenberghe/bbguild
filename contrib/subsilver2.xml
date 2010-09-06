@@ -137,8 +137,7 @@ EQDkp (c) 2003 The EqDkp Project Team
      <file from="root/styles/subsilver2/template/dkp/*.*" to="styles/subsilver2/template/dkp/*.*"/>
      <file from="root/styles/subsilver2/template/dkp/block/*.*" to="styles/subsilver2/template/dkp/block/*.*"/>     
      <file from="root/styles/subsilver2/theme/*.*" to="styles/subsilver2/theme/*.*"/>
-     <file from="root/styles/subsilver2/theme/images/dkp/*.*" to="styles/subsilver2/theme/images/dkp/*.*"/>
-     <file from="root/styles/subsilver2/theme/images/jqueryui/*.*" to="styles/subsilver2/theme/images/jqueryui/*.*"/>     
+     <file from="root/styles/subsilver2/theme/images/dkp/*.*" to="styles/subsilver2/theme/images/dkp/*.*"/>    
     </copy>
 <open src="styles/subsilver2/template/overall_header.html">
 

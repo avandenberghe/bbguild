@@ -149,7 +149,6 @@ Veuillez faire une sauvegarde avant de commencer. ]]>
 			<file from="root/images/bbdkp.png" to="images/bbdkp.png"/>
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
-			<file from="root/includes/bbdkp/bossprogress/*.*" to="includes/bbdkp/bossprogress/*.*"/>
 			<file from="root/includes/bbdkp/portal/*.*" to="includes/bbdkp/portal/*.*"/>
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
@@ -157,7 +156,6 @@ Veuillez faire une sauvegarde avant de commencer. ]]>
 			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>
 			<file from="root/styles/prosilver/theme/*.*" to="styles/prosilver/theme/*.*"/>
 			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
-			<file from="root/styles/prosilver/theme/images/jqueryui/*.*" to="styles/prosilver/theme/images/jqueryui/*.*"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
 		<open src=".htaccess">
