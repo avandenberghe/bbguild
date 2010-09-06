@@ -495,8 +495,8 @@ $versions = array(
         // add new parameters
         'config_add' => array(
 
-        	//global config
-	        array('bbdkp_active_point_adj', '0.00', true),
+			     	//global config
+			array('bbdkp_active_point_adj', '0.00', true),
 			array('bbdkp_date_format', 'd.m.y', true),
 			array('bbdkp_default_game', request_var('game', ''), true),
 			array('bbdkp_dkp_name', 'DKP', true),
@@ -515,38 +515,38 @@ $versions = array(
 			array('bbdkp_user_rlimit', '20', true),
         
 	        // guildfaction : limit the possible races to be available to users to those available in the guild's chosen faction
-	         array('bbdkp_guild_faction', '1', true),
+			array('bbdkp_guild_faction', '1', true),
 	        // roster layout: main parameter for steering roster layout 
-	         array('bbdkp_roster_layout', '1', true),
+			array('bbdkp_roster_layout', '1', true),
 	        // showachiev : show the achievement points
-	         array('bbdkp_show_achiev', '0', true),
+	        array('bbdkp_show_achiev', '0', true),
 	        // list_p3 : third standings option
-	         array('bbdkp_list_p3', '0', true),    
+         	array('bbdkp_list_p3', '0', true),    
 	        // default realm & region
-	         array('bbdkp_default_realm', ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default') , true),  
-	         array('bbdkp_default_region', request_var('region', ''), true),  
+	        array('bbdkp_default_realm', ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default') , true),  
+	        array('bbdkp_default_region', request_var('region', ''), true),  
 	
 	        // new portal configuragion
 	        // number of news
-	         array('bbdkp_n_news', 5, true),   
+	        array('bbdkp_n_news', 5, true),   
 	        // news forum id
-	         array('bbdkp_news_forumid', 2 , true),   
+	        array('bbdkp_news_forumid', 2 , true),   
 	        // number of items
-	         array('bbdkp_n_items',5 , true),   
+	        array('bbdkp_n_items',5 , true),   
 	        // recruitment forum id
-	         array('bbdkp_recruit_forumid', 3, true),
+	        array('bbdkp_recruit_forumid', 3, true),
 			// 1 if open,  if closed             
-	         array('bbdkp_recruitment', 0, true ), 
+	        array('bbdkp_recruitment', 0, true ), 
 			// show loot block          
-	         array('bbdkp_portal_loot', 1, true ), 
+	        array('bbdkp_portal_loot', 1, true ), 
 			// show bossprogress block
-	         array('bbdkp_portal_bossprogress', 1, true ), 
+	        array('bbdkp_portal_bossprogress', 1, true ), 
 			// show recruitment block          
-	         array('bbdkp_portal_recruitment', 1, true ), 
+	        array('bbdkp_portal_recruitment', 1, true ), 
 			// show link block          
-	         array('bbdkp_portal_links', 1, true ), 
+	        array('bbdkp_portal_links', 1, true ), 
 		    // show post edits in portal          
-	         array('bbdkp_portal_showedits', 1, true ),
+	        array('bbdkp_portal_showedits', 1, true ),
 	         
           ),
 
@@ -750,9 +750,10 @@ $versions = array(
        		),
        	
 		), 
+	/// end 1.1.1
 		
-		
-		'1.1.2'  => array(
+	/// begin 1.1.2
+	'1.1.2'  => array(
 		
 		/* bossprogress refit */ 
 		
@@ -793,8 +794,6 @@ $versions = array(
 		        array($bbdkp_table_prefix . 'bb_zonetable', array(
 		              'COLUMNS'            => array(
 		                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
-		                  'zonename'       => array('VCHAR_UNI:255', ''), 
-		                  'zonename_short' => array('VCHAR_UNI:255', ''),
 		        		  'imagename'      => array('VCHAR_UNI:255', ''),
 						  'game'           => array('VCHAR:10', ''),
 						  'tier'           => array('VCHAR:30', ''),
@@ -811,8 +810,6 @@ $versions = array(
 		          array($bbdkp_table_prefix . 'bb_bosstable', array(
 		              'COLUMNS'            => array(
 		                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
-		                  'bossname'       => array('VCHAR_UNI:255', ''), 
-		                  'bossname_short' => array('VCHAR_UNI:255', ''),
 		        		  'imagename'      => array('VCHAR_UNI:255', ''),
 		                  'game'           => array('VCHAR:10', ''),
 						  'zoneid'         => array('UINT', 0), 
@@ -827,7 +824,20 @@ $versions = array(
 		          		'KEYS'            => array('zoneid'    => array('INDEX', 'zoneid')),
 		            ),
 		          ),        
-
+		          array($bbdkp_table_prefix . 'bb_language', array(
+		              'COLUMNS'            => array(
+		          		  'id'     	       => array('UINT', NULL, 'auto_increment'), 
+		                  'attribute_id'   => array('UINT', 0), 
+		                  'language'       => array('CHAR:2', ''),
+		          		  'attribute'	   => array('VCHAR:30', ''), 
+		                  'name'       	   => array('VCHAR_UNI:255', ''), 
+		                  'name_short' 	   => array('VCHAR_UNI:255', ''),
+		          	),
+		                'PRIMARY_KEY'     => array('id'),
+		          		'KEYS'            => array('unq_mtch' => array('UNIQUE', array('id', 'language', 'attribute')),
+					),
+		            ),
+		          ),   
 		        
 	            array($bbdkp_table_prefix . 'lootsystem', array(
 	                    'COLUMNS'        => array(
@@ -969,7 +979,9 @@ con : hard to manage because you have to set gear prices. <br /> ',
 			'gameupdate', 
 			'bbdkp_caches',
 			),
-		), 
+		),
+		/// end 1.1.2
+		/// 
 
 );
 
