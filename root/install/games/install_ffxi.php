@@ -132,16 +132,19 @@ function install_ffxi_bb2($bbdkp_table_prefix)
 	if ($umil->table_exists ( $bbdkp_table_prefix . 'bb_zonetable' ) and ($umil->table_exists ( $bbdkp_table_prefix . 'bb_bosstable' )))
 	{
 		$sql_ary = array ();
-		$sql_ary[] = array( 'id' => 1 , 'zonename' => 'Dummy Zone', 'zonename_short' =>  'Dummy Zone' , 'imagename' =>  'dummyzone' , 'game' =>  'ffxi' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
+		$sql_ary[] = array( 'id' => 1 , 'imagename' =>  'dummyzone' , 'game' =>  'ffxi' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
 		
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_zonetable', $sql_ary );
 		unset ( $sql_ary );
 
-		$sql_ary[] = array('id' => 1 , 'bossname' => 'Dummy Boss' , 'bossname_short' => 'Dummy Boss', 'imagename' =>  'dummyboss' , 'game' =>  'ffxi' , 'zoneid' =>  1 , 'type' =>  'npc'  , 'webid' =>  '' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+		$sql_ary[] = array('id' => 1 ,  'imagename' =>  'dummyboss' , 'game' =>  'ffxi' , 'zoneid' =>  1 , 'type' =>  'npc'  , 'webid' =>  '' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_bosstable', $sql_ary );
 		unset ( $sql_ary );
-		
-		
+
+		$sql_ary[] = array( 'id' => 1 , 'attribute_id' => '1', 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Dummy Zone' ,  'name_short' =>  'Dummy Zone' );
+		$sql_ary[] = array( 'id' => 2 , 'attribute_id' => '1', 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Dummy Boss' ,  'name_short' =>  'Dummy Boss' );
+		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
+		unset ( $sql_ary );
 	}
 }
 
