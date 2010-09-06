@@ -834,7 +834,7 @@ $versions = array(
 		                  'name_short' 	   => array('VCHAR_UNI:255', ''),
 		          	),
 		                'PRIMARY_KEY'     => array('id'),
-		          		'KEYS'            => array('unq_mtch' => array('UNIQUE', array('id', 'language', 'attribute')),
+		          		'KEYS'            => array('unq_mtch' => array('UNIQUE', array('attribute_id', 'language', 'attribute')),
 					),
 		            ),
 		          ),   
