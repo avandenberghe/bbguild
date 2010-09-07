@@ -449,14 +449,15 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				// page layout
 				$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress") . 
 					'"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
-				$submit = (isset($_POST['bpsave'])) ? true : false;
+				$submitlist = (isset($_POST['bpsave'])) ? true : false;
 				$edit = (isset($_GET['edit'])) ? true : false;
 				$delete = (isset($_GET['delete'])) ? true : false;
 				$showadd = (isset($_POST['bpadd'])) ? true : false;
-				$addnew = (isset($_POST['addnew'])) ? true : false;
+				$submitzone = (isset($_POST['addnew'])) ? true : false;
 				$move_up = (isset($_GET['move_up'])) ? true : false;
 				$move_down = (isset($_GET['move_down'])) ? true : false;  
 
+				// user pressed the arrows
 				if ($move_down or $move_up)
 				{
 					$sql = 'SELECT sequence FROM ' . ZONEBASE . ' where id =  ' . request_var('id', 0); 
@@ -485,6 +486,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					$cache->destroy('sql', ZONEBASE);
 					
 				}
+				// user pressed the add button in the list
 				if ($showadd)
 				{
 					// load template for adding 
@@ -512,14 +514,24 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					unset($now);
 					
 					$s_zonelist_options = '';
+
+					
+					// list of zones
+					$sql_array = array(
+				    'SELECT'    => 	' z.id, l.name ', 
+				    'FROM'      => array(
+							ZONEBASE 		=> 'z',
+							BB_LANGUAGE 	=> 'l',
+								),
+					'WHERE'		=> " z.id = l.attribute_id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."' AND game= '" . $config['bbdkp_default_game'] . "'",
+					'ORDER_BY'	=> 'sequence desc, id desc ',
+				    );
 				    
-                    $sql = 'SELECT id, zonename
-                            FROM ' . ZONEBASE . " 
-                            WHERE game= '" . $config['bbdkp_default_game'] . "'";
+				    $sql = $db->sql_build_query('SELECT', $sql_array);					
                     $result = $db->sql_query($sql);
                     while ( $row = $db->sql_fetchrow($result) )
                     {
-						$s_zonelist_options .= '<option value="' . $row['id'] . '"> ' . $row['zonename'] . '</option>';                    
+						$s_zonelist_options .= '<option value="' . $row['id'] . '"> ' . $row['name'] . '</option>';                    
                     }
 					
 					$template->assign_vars(array(
@@ -531,7 +543,9 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                 )
 	    			);
 				}
-				elseif ($addnew)
+				
+				// user pressed the submit button in the add/edit zone screen 
+				elseif ($submitzone)
 				{
 					// add or update the zone
 					$zonename = utf8_normalize_nfc(request_var('zonename', '', true));
@@ -561,26 +575,26 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 						'sequence'		=> (int) $zonesequence	,	
 						);
 
-					if($edit)
+						$sql = 'INSERT INTO ' . ZONEBASE . ' ' . $db->sql_build_array('INSERT', array(
+							)
+						);
+						$db->sql_query($sql);	
 					
-					$sql = 'INSERT INTO ' . ZONEBASE . ' ' . $db->sql_build_array('INSERT', array(
-						)
-					);
-					$db->sql_query($sql);	
-
-					if ($edit)
-					{
-						$id = request_var('id', 0);
-						$sql = 'UPDATE ' . ZONEBASE . ' set ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = ' . $id;
-						$db->sql_query($sql);		
-						trigger_error( sprintf( $user->lang['RP_ZONEUPDATED'], $zonename) . $link, E_USER_NOTICE);									
-					}
-					else 
-					{
-						$sql = 'INSERT INTO ' . ZONEBASE . ' ' . $db->sql_build_array('INSERT', $data) ;
-						$db->sql_query($sql);					
-						trigger_error( sprintf( $user->lang['RP_ZONEADDED'], $zonename) . $link, E_USER_NOTICE);
-					}					
+						// if this screen was the result of a $get, we will have an id 
+						if ($edit)
+						{
+							$id = request_var('id', 0);
+							$sql = 'UPDATE ' . ZONEBASE . ' set ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = ' . $id;
+							$db->sql_query($sql);		
+							trigger_error( sprintf( $user->lang['RP_ZONEUPDATED'], $zonename) . $link, E_USER_NOTICE);									
+						}
+						// or else it is a new submit
+						else 
+						{
+							$sql = 'INSERT INTO ' . ZONEBASE . ' ' . $db->sql_build_array('INSERT', $data) ;
+							$db->sql_query($sql);					
+							trigger_error( sprintf( $user->lang['RP_ZONEADDED'], $zonename) . $link, E_USER_NOTICE);
+						}					
 					
 				}
 				elseif ($edit)
@@ -663,7 +677,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                $db->sql_freeresult($result);
 					
 				}
-				elseif ($submit)
+				//user pressed submit in the zone list
+				elseif ($submitlist)
 				{
 					// global config
 				  	set_config ('bbdkp_bp_hidenewzone',  ( isset($_POST['hidenewzone']) ) ? 1 : 0);
