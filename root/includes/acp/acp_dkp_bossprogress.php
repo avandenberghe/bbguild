@@ -3,6 +3,7 @@
 * This class manages Bossprogress 
 *  
 * @package bbDkp.acp
+* @author Sajaki@bbdkp.com 
 * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * $Id$
@@ -80,13 +81,22 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					}
 					unset($now);
 					
-                    $sql = 'SELECT id, zonename
-                            FROM ' . ZONEBASE . " 
-                            WHERE game= '" . $config['bbdkp_default_game'] . "'";
+					// list of zones
+					$sql_array = array(
+				    'SELECT'    => 	' z.id, l.name ', 
+				    'FROM'      => array(
+							ZONEBASE 		=> 'z',
+							BB_LANGUAGE 	=> 'l',
+								),
+					'WHERE'		=> " z.id = l.attribute_id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."' AND game= '" . $config['bbdkp_default_game'] . "'",
+					'ORDER_BY'	=> 'sequence desc, id desc ',
+				    );
+				    
+				    $sql = $db->sql_build_query('SELECT', $sql_array);
                     $result = $db->sql_query($sql);
                     while ( $row = $db->sql_fetchrow($result) )
                     {
-						$s_zonelist_options .= '<option value="' . $row['id'] . '"> ' . $row['zonename'] . '</option>';                    
+						$s_zonelist_options .= '<option value="' . $row['id'] . '"> ' . $row['name'] . '</option>';                    
                     }
 					
 					$template->assign_vars(array(
@@ -116,8 +126,6 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					$boss_show = request_var('boss_show', 0);
 					
 					$data = array(
-						'bossname'		=> (string) $bossname,
-						'bossname_short'=> (string) $bossname_short,
 						'imagename'		=> (string) $boss_image,
 						'game'			=> (string) $config['bbdkp_default_game'],
 						'zoneid'		=> (int) $boss_zone,
@@ -131,13 +139,41 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					if ($edit)
 					{
 						$sql = 'UPDATE ' . BOSSBASE . ' set ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = ' . $boss_id;
-						$db->sql_query($sql);		
+						$db->sql_query($sql);	
+
+						$names = array(
+							'name'		=> (string) $bossname,
+							'name_short'=> (string) $bossname_short,	
+						);
+						
+						$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $boss_id . 
+							" AND attribute='boss'  AND language= '" . $config['bbdkp_lang'] ."'";
+						$db->sql_query($sql);							
+						
+						
 						trigger_error( sprintf( $user->lang['BP_BOSSEDITED'], $bossname, $boss_zone) . $link, E_USER_NOTICE);									
 					}
 					else 
 					{
+						// insert 
+						
 						$sql = 'INSERT INTO ' . BOSSBASE . ' ' . $db->sql_build_array('INSERT', $data) ;
 						$db->sql_query($sql);					
+						
+						// fetch the fk  
+						$boss_id = $db->sql_nextid();
+						
+						$names = array(
+							'attribute_id'	=>  $boss_id,
+							'language'		=>  $config['bbdkp_lang'],
+							'attribute'		=>  'boss', 
+							'name'			=> (string) $bossname,
+							'name_short'	=> (string) $bossname_short,	
+						);
+						
+						$sql = 'INSERT INTO ' . BB_LANGUAGE . ' ' . $db->sql_build_array('INSERT', $names);
+						$db->sql_query($sql);							
+						
 						trigger_error( sprintf( $user->lang['RP_BOSSADDED'], $bossname, $boss_zone) . $link, E_USER_NOTICE);
 					}
 					
@@ -154,26 +190,37 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					$zoneid = $db->sql_fetchfield('zoneid', 0 ,$result );	
 					$db->sql_freeresult($result);
 					
-                    $sql = 'SELECT id, zonename FROM ' . ZONEBASE . " 
-                            WHERE game= '" . $config['bbdkp_default_game'] . "'";
+					// list of zones
+					$sql_array = array(
+				    'SELECT'    => 	' z.id, l.name ', 
+				    'FROM'      => array(
+							ZONEBASE 		=> 'z',
+							BB_LANGUAGE 	=> 'l',
+								),
+					'WHERE'		=> " z.id = l.attribute_id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."' AND game= '" . $config['bbdkp_default_game'] . "'",
+					'ORDER_BY'	=> 'sequence desc, id desc ',
+				    );
+				    
+					$sql = $db->sql_build_query('SELECT', $sql_array);
                     $resultzones = $db->sql_query($sql);
 					while ( $rowzones = $db->sql_fetchrow($resultzones) )
                     {
                     	$selected = ($rowzones['id'] == $zoneid) ? ' selected="selected"' : '';
-						$s_zonelist_options .= '<option value="' . $rowzones['id'] . '" '.$selected.'> ' . $rowzones['zonename'] . '</option>';                    
+						$s_zonelist_options .= '<option value="' . $rowzones['id'] . '" '.$selected.'> ' . $rowzones['name'] . '</option>';                    
                     }
                     $db->sql_freeresult($result);
 
+					// get boss  
 					$sql_array2 = array(
-					    'SELECT'    => 	' b.id, b.bossname, b.bossname_short, b.imagename, 
-						    b.webid, b.killed, b.killdate, b.counter, b.showboss, b.zoneid, b.type  ', 
+					    'SELECT'    => 	'b.id, l.name, l.name_short, b.imagename, b.webid, b.killed, b.killdate, b.counter, b.showboss, b.zoneid, b.type ', 
 					    'FROM'      => array(
 					        BOSSBASE 	=> 'b',
+					        BB_LANGUAGE 	=> 'l',
 					    	),
-					    'WHERE'		=> 'b.id = ' . $id
-					    );
-                    	
-					$sql = $db->sql_build_query('SELECT', $sql_array2);
+						'WHERE'	=> "b.id = l.attribute_id AND l.attribute='boss' AND l.language= '" . $config['bbdkp_lang'] ."' AND b.id = " .  $id
+					  );
+					
+				    $sql = $db->sql_build_query('SELECT', $sql_array2);
 					$resultx = $db->sql_query($sql);
                 	$now = getdate();
 	                while ( $row2 = $db->sql_fetchrow($resultx) )
@@ -207,8 +254,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                	
 	                    $template->assign_vars( array(
 		                    'BOSS_ID' 			=> $row2['id']  ,
-		                    'BOSS_NAME' 		=> $row2['bossname']  ,
-		                    'BOSS_NAME_SHORT' 	=> $row2['bossname_short']  ,
+		                    'BOSS_NAME' 		=> $row2['name']  ,
+		                    'BOSS_NAME_SHORT' 	=> $row2['name_short']  ,
 		                    'BOSS_IMAGENAME' 	=> $row2['imagename']  ,
 	                    	'BOSS_IMAGE_COLOR' 	=> $phpbb_root_path . "images/bossprogress/".$config['bbdkp_default_game']."/bosses/" . $row2['imagename'] . ".gif",
 	                    	'BOSS_IMAGE_BW' 	=> $phpbb_root_path . "images/bossprogress/".$config['bbdkp_default_game']."/bosses/" . $row2['imagename'] . "_b.gif",
@@ -247,6 +294,10 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					{
 						$sql = 'DELETE FROM ' . BOSSBASE . ' WHERE id=' . $id;  
 						$db->sql_query($sql);
+						
+						$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'boss' and attribute_id= " . $id;  
+						$db->sql_query($sql);
+						
 						trigger_error($user->lang['RP_BOSSDEL'] . $link, E_USER_NOTICE);
 							
 					}
@@ -270,52 +321,32 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					$bossids = request_var('bossid', array(0 => 0 ));
 	                $newbossname = utf8_normalize_nfc(request_var('bossname', array( 0 => ''), true));
 					$newbossnameshorts = utf8_normalize_nfc(request_var('bossnameshort', array( 0 => ''), true));
-					$newbossimagenames = request_var('bossimagename', array( 0 => ''));
 					$newbosswebids = request_var('bosswebid', array( 0 => ''));
-					$newbossdds = request_var('bossdd', array( 0 => ''));
-					$newbossmms = request_var('bossmm', array( 0 => ''));
-					$newbossyys = request_var('bossyy', array( 0 => ''));
 					
 					foreach ($bossids as $key) 
 					{
-						$month = (int) $newbossmms[$key];
-						$month = min (12, max(1,$month) );
-						$day = (int) $newbossdds[$key];
-						$year = (int) $newbossyys[$key]; 
-						$year = min ( date("Y") ,  max(1999,$year));
+						// incorrect killdate-- no update
+						$data= array(
+							'webid' => $newbosswebids[$key],
+							'killed' => isset ( $_POST ['bosskilled'][$key] ) ? 1 : 0,		
+							'showboss' => isset ( $_POST ['bossshow'][$key] ) ? 1 : 0,
+						);
 						
-						if (checkdate($month, $day, $year))
-						{
-							// correct date found
-							$data = array(
-								'bossname' => $newbossname[$key],
-								'bossname_short' => $newbossnameshorts[$key],
-								'imagename' => $newbossimagenames[$key], 
-								'webid' => $newbosswebids[$key],
-								'killed' => isset ( $_POST ['bosskilled'][$key] ) ? 1 : 0,		
-								'killdate' =>  mktime(0, 0, 0, $month, $day, $year), 
-								'showboss' => isset ( $_POST ['bossshow'][$key] ) ? 1 : 0,
-							);
-						}
-						else 
-						{
-							// incorrect killdate-- no update
-							$data= array(
-								'bossname' => $newbossname[$key],
-								'bossname_short' => $newbossnameshorts[$key],
-								'imagename' => $newbossimagenames[$key], 
-								'webid' => $newbosswebids[$key],
-								'killed' => isset ( $_POST ['bosskilled'][$key] ) ? 1 : 0,		
-								'showboss' => isset ( $_POST ['bossshow'][$key] ) ? 1 : 0,
-							);
-						}
-						
-						// And doing an update query 
+						// And doing an update  
 						$sql = 'UPDATE ' . BOSSBASE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = '. $key;
 						$db->sql_query($sql);
 						
+						// updating names											
+						$names= array(
+							'name' 		 => $newbossname[$key],
+							'name_short' => $newbossnameshorts[$key],
+						);
+						
+						$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $key . 
+							" AND attribute='boss'  AND language= '" . $config['bbdkp_lang'] ."'";
+						$db->sql_query($sql);							
 					}
-					trigger_error( printf($user->lang['BP_BPSAVED'] ) . $link, E_USER_NOTICE);
+					trigger_error( sprintf($user->lang['BP_BPSAVED'] ) . $link, E_USER_NOTICE);
 					
 					
 				}
@@ -323,10 +354,12 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				{
 					// show boss list 
 					$sql_array = array(
-					    'SELECT'    => 	'z.sequence, z.id, z.zonename, z.imagename', 
+					    'SELECT'    => 	'z.sequence, z.id, l.name, z.imagename', 
 					    'FROM'      => array(
 					        ZONEBASE 	=> 'z',
+					        BB_LANGUAGE 	=> 'l',
 					    	),
+						'WHERE'	=> "z.id = l.attribute_id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."'",
 						'ORDER_BY'	=> 'z.sequence, z.id desc ',
 					    	
 					    );
@@ -338,17 +371,18 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                {
 	                	$zoneid = $row['id'];
 	                    $template->assign_block_vars('zone', array(
-		                    'ZONE_NAME' 			=> $row['zonename']  ,
+		                    'ZONE_NAME' 			=> $row['name']  ,
 	                    	'ZONE_IMAGENAME' 		=> $row['imagename']  ,
 	                    ));
 	                    
 						$sql_array2 = array(
-						    'SELECT'    => 	' b.id, b.bossname, b.bossname_short, b.imagename, 
+						    'SELECT'    => 	' b.id, l.name, l.name_short, b.imagename, 
 						    b.webid, b.killed, b.killdate, b.counter, b.showboss, b.zoneid  ', 
 						    'FROM'      => array(
 						        BOSSBASE 	=> 'b',
+					            BB_LANGUAGE 	=> 'l',
 						    	),
-						    'WHERE'		=> 'b.zoneid = ' . $zoneid,
+						    'WHERE'		=> 'b.zoneid = ' . $zoneid . " AND b.id = l.attribute_id AND l.attribute='boss' AND l.language= '" . $config['bbdkp_lang'] ."'",
 							'ORDER_BY'	=> 'b.zoneid, b.id ASC ',
 						    );
 						    
@@ -383,8 +417,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 		                	
 		                    $template->assign_block_vars('zone.boss', array(
 			                    'BOSS_ID' 			=> $row2['id']  ,
-			                    'BOSS_NAME' 		=> $row2['bossname']  ,
-			                    'BOSS_NAME_SHORT' 	=> $row2['bossname_short']  ,
+			                    'BOSS_NAME' 		=> $row2['name']  ,
+			                    'BOSS_NAME_SHORT' 	=> $row2['name_short']  ,
 			                    'BOSS_IMAGENAME' 	=> $row2['imagename']  ,
 		                    	
 			                    'S_KILLDATE_DAY_OPTIONS'	=> $s_day_options,
@@ -746,8 +780,12 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				
 				// list of zones
 				$sql_array = array(
-				    'SELECT'    => 	' id, sequence, zonename, zonename_short, imagename, completed, completedate, webid, showzone, showzoneportal  ', 
-				    'FROM'      => array(ZONEBASE 	=> 'z',),
+				    'SELECT'    => 	' z.id, z.sequence, l.name, l.name_short, z.imagename, z.completed, z.completedate, z.webid, z.showzone, z.showzoneportal  ', 
+				    'FROM'      => array(
+							ZONEBASE 		=> 'z',
+							BB_LANGUAGE 	=> 'l',
+								),
+					'WHERE'		=> " z.id = l.attribute_id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."'",
 					'ORDER_BY'	=> 'sequence desc, id desc ',
 				    	
 				    );
@@ -759,8 +797,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
                     $template->assign_block_vars('gamezone', array(
 	                    'ZONE_ID' 			=> $row['id'],
                     	'ZONE_SEQUENCE' 	=> $row['sequence'] ,
-	                    'ZONE_NAME' 		=> $row['zonename'] ,
-	                    'ZONE_NAME_SHORT' 	=> $row['zonename_short']  ,
+	                    'ZONE_NAME' 		=> $row['name'] ,
+	                    'ZONE_NAME_SHORT' 	=> $row['name_short']  ,
 	                    'ZONE_IMAGENAME' 	=> $row['imagename']  ,
 	                    'ZONE_WEBID' 		=> $row['webid']  ,
 	                    'ZONE_COMPLETED' 	=> ($row['completed'] == 1) ? ' checked="checked"' : '',
