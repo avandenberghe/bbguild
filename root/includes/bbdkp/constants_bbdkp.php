@@ -53,6 +53,7 @@ define('DKPSYS_TABLE',     		   $bbdkp_table_prefixx . 'dkpsystem');
 define('PLUGINS_TABLE',	           $bbdkp_table_prefixx . 'plugins');
 define('GUILD_TABLE',	           $bbdkp_table_prefixx . 'memberguild');
 define('LOOTSYS_TABLE',	           $bbdkp_table_prefixx . 'lootsystem');
+define('BB_LANGUAGE',	           $bbdkp_table_prefixx . 'bb_language');
 
 // plugin anchors
 

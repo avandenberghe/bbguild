@@ -796,6 +796,9 @@ $versions = array(
 	        
 	        //bp style : 2 row, 3 row, simple, photo
 	        array('bbdkp_bp_zonestyle', 0, true),
+	        
+	        //default dkp language
+	        array('bbdkp_lang', 'en', true),
 	      ),
 					
 		'table_add' => array(
