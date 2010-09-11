@@ -1,21 +1,16 @@
 <!-- INCLUDE overall_header.html -->
 
 <!--
-		$Id$
+	$Id$
 //-->
 
 <script  type="text/javascript">
 //<![CDATA[
 function check_form()
 {
-    if (document.post.event_name.value.length < 2)
+    if (document.post.faction_name.value.length < 2)
     {
         alert('{MSG_NAME_EMPTY}');
-        return false;
-    }
-    if (document.post.event_value.value.length < 1)
-    {
-        alert('{MSG_VALUE_EMPTY}');
         return false;
     }
     return true;
@@ -23,55 +18,24 @@ function check_form()
 //]]>
 
 </script>
+<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
 
-<a name="maincontent"></a>
+<h1>{L_ACP_ADDFACTION}</h1>
+<p>{L_ACP_ADDFACTIONS_EXPLAIN}</p>
 
-<h1>{L_TITLE}</h1>
-
-<p>{L_EXPLAIN}</p>
-
-
-<form method="post" action="{F_ADD_EVENT}" name="post" onsubmit="return check_form(this)">
-<input type="hidden" name="{URI_EVENT}" value="{EVENT_ID}" />
-<input type="hidden" name="hidden_id" value="{EVENT_ID}" />
-
+<form method="post" action="{F_ADD_FACTION}" name="post" onsubmit="return check_form(this)">
+<input type="hidden" name="faction_id" value="{FACTION_ID}" />
 
 <fieldset>
-<legend>{L_ADD_EVENT_TITLE}</legend>
 	<dl>
-		<dt><label for="event_dkpid">{L_POOL}:</label></dt>
-		<dd>
-    	 	<select name="event_dkpid" class="input">	
-       			<!-- BEGIN event_dkpid_row -->
-       			<option value="{event_dkpid_row.VALUE}"{event_dkpid_row.SELECTED}>{event_dkpid_row.OPTION}</option>
-       			<!-- END event_dkpid_row -->
-    		</select>
-	 	</dd>
-	</dl>
-
-	<dl>
-		<dt><label for="event_name">{L_EVENT_NAME}:</label></dt>
-		<dd><input class="medium" type="text" id="event_name" name="event_name" value="{EVENT_NAME}" /></dd>
-	</dl>
-
-	<dl>
-		<dt><label for="event_value">{L_EVENT_VALUE}:</label></dt>
-		<dd><input class="medium" type="text" id="event_value" name="event_value" value="{EVENT_VALUE}" /></dd>
+		<dt><label for="faction">{L_FACTION_NAME}:</label></dt>
+		<dd><input class="medium" type="text" id="factionname" name="factionname" value="{FACTION_NAME}" /></dd>
 	</dl>
 
 </fieldset>
-
-
-
    <p class="quick">
-    <!-- IF S_ADD -->
-    <input type="submit" name="add" value="{L_ADD_EVENT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
-    <!-- ELSE -->
-    <input type="submit" name="update" value="{L_UPDATE_EVENT}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_EVENT}" class="button1" />
-    <!-- ENDIF -->
+    <input type="submit" name="factionadd" value="{L_ACP_DKP_FACTION_ADD}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
 	</p>
-
-
 </form>
 
 <!-- INCLUDE dkp/overall_footer.html -->

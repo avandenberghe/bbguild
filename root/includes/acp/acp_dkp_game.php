@@ -31,7 +31,7 @@ class acp_dkp_game extends bbDkp_Admin
     var $u_action;
     
    	/** 
-	* validationfunction for event : requiredvalues
+	* validationfunction 
 	* @access public 
 	*/ 
     function error_check()
@@ -48,7 +48,7 @@ class acp_dkp_game extends bbDkp_Admin
     }
     
 	/** 
-	* main ACP dkp event function
+	* main ACP game function
 	* @param int $id the id of the node who parent has to be returned by function 
 	* @param int $mode id of the submenu
 	* @access public 
@@ -59,7 +59,7 @@ class acp_dkp_game extends bbDkp_Admin
         global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
         $user->add_lang(array('mods/dkp_admin'));   
         $user->add_lang(array('mods/dkp_common'));   
-        $link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_event&amp;mode=listevents") . '"><h3>'. $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
+        $link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames") . '"><h3>'. $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 
          /***  DKPSYS drop-down ***/
         $dkpsys_id = 1;
@@ -77,6 +77,28 @@ class acp_dkp_game extends bbDkp_Admin
 				if($factionadd)
 				{
 					
+				}
+				
+				// user pressed add in
+				elseif ($addnew)
+				{
+					$sql = 'select max(faction_id) as max from ' . FACTION_TABLE; 
+					$result = $db->sql_query($sql);	
+					$factionid = (int) $db->sql_fetchfield('max', 0 ,$result );	
+					$db->sql_freeresult($result);
+
+					$factionname = utf8_normalize_nfc(request_var('factionname', '', true));
+					$data = array( 
+						'faction_name'		=> (string) $factionname,
+						'faction_id'		=> (string) $factionid + 1,
+						'faction_hide'		=> 0,
+					);
+
+					$sql = 'INSERT INTO ' . FACTION_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
+					$db->sql_query($sql);							
+						
+					trigger_error( sprintf( $user->lang['ADMIN_ADD_FACTION_SUCCESS'], $factionname) . $link, E_USER_NOTICE);
+						
 				}
 				
                 $this->page_title = 'ACP_LISTGAME';
@@ -109,9 +131,63 @@ class acp_dkp_game extends bbDkp_Admin
                         
             case 'listgames':
 
-            	$showrace = (isset($_POST['raceadd'])) ? true : false;
-            	$showclass = (isset($_POST['classadd'])) ? true : false;
+            	$showrace = (isset($_POST['showraceadd'])) ? true : false;
+            	$showclass = (isset($_POST['showclassadd'])) ? true : false;
+            	$showfaction = (isset($_POST['showfactionadd'])) ? true : false;
+            	$deletefaction = (isset($_GET['factiondelete'])) ? true : false;
             	
+                if($showfaction)
+            	{
+					redirect(append_sid("index.$phpEx", "i=dkp_game&amp;mode=addfaction"));            		
+            		break;
+            	}
+            	
+            	// user pressed cross
+            	if ($deletefaction)
+            	{
+            		$id = request_var('id', 0); 
+                	$sql_array = array(
+					    'SELECT'    => 	' count(*) as racecount  ', 
+					    'FROM'      => array(
+					        RACE_TABLE 		=> 'r',
+					        FACTION_TABLE	=> 'f',
+					    	),
+					    'WHERE' => 'r.race_faction_id = f.faction_id and f.f_index =  ' . $id
+				    );        
+				    $sql = $db->sql_build_query('SELECT', $sql_array);    		
+            		$result = $db->sql_query($sql);	
+					$racecount = (int) $db->sql_fetchfield('racecount', 0 ,$result );	
+					$db->sql_freeresult($result);
+					if ($racecount == 0)
+					{
+						// ask for permission
+						if (confirm_box(true))
+						{
+							$sql = 'DELETE FROM ' . FACTION_TABLE . ' WHERE f_index =' . $id;  
+							$db->sql_query($sql);
+							
+							trigger_error(sprintf($user->lang['ADMIN_DELETE_FACTION_SUCCESS'], $id) . $link, E_USER_WARNING);
+								
+						}
+						else
+						{
+							// get field content
+							$s_hidden_fields = build_hidden_fields(array(
+								'delete'	=> true,
+								'id'		=> $id,
+								)
+							);
+							confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_FACTION'], $id), $s_hidden_fields);
+						}
+					
+					}
+					else 
+					{
+						//no really ?
+						trigger_error(sprintf($user->lang['ADMIN_DELETE_FACTION_FAILED'], $id) . $link, E_USER_WARNING);
+					}
+            		
+            	}
             	if($showrace)
             	{
 					redirect(append_sid("index.$phpEx", "i=dkp_game&amp;mode=addrace"));            		
@@ -144,7 +220,7 @@ class acp_dkp_game extends bbDkp_Admin
                 // list the factions
 				$total_factions = 0;
                 $sql_array = array(
-				    'SELECT'    => 	' f.faction_id, f.faction_name  ', 
+				    'SELECT'    => 	'f_index, f.faction_id, f.faction_name  ', 
 				    'FROM'      => array(
 				        FACTION_TABLE	=> 'f',
 				    	),
@@ -155,8 +231,10 @@ class acp_dkp_game extends bbDkp_Admin
                 {
                 	$total_factions++;
                     $template->assign_block_vars('faction_row', array(
+                        'ID' 			=> $row['f_index'],
                         'FACTIONID' 	=> $row['faction_id'],
-                        'FACTIONNAME' 	=> $row['faction_name'])
+                        'FACTIONNAME' 	=> $row['faction_name'], 
+                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;factiondelete=1&amp;id={$row['f_index']}"))  
                     );
                 }
                 $db->sql_freeresult($result);
@@ -221,7 +299,7 @@ class acp_dkp_game extends bbDkp_Admin
                     'O_RACEID' 		  => $current_order['uri'][0],
                     'O_RACENAME' 	  => $current_order['uri'][1],
                     'O_FACTIONNAME'   => $current_order['uri'][2],   
-                    'U_LIST_GAMES' 	  => append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;"),    
+                    'U_LIST_GAMES' 	  => append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;"),  
                    	'LISTFACTION_FOOTCOUNT' => sprintf($user->lang['LISTFACTION_FOOTCOUNT'], $total_factions),
                     'LISTRACE_FOOTCOUNT' => sprintf($user->lang['LISTRACE_FOOTCOUNT'], $total_races),
                 	'LISTCLASS_FOOTCOUNT' => sprintf($user->lang['LISTCLASS_FOOTCOUNT'], $total_classes),
