@@ -199,6 +199,14 @@ $lang = array_merge($lang, array(
 'ACP_LISTITEMS' => 'Liste des Objets',
 'ACP_ADDRAID' => 'Ajouter un Raid',
 'ACP_LISTRAIDS' => 'Liste des Raids', 
+'ACP_ADDGAME' => 'Ajouter Game',
+'ACP_LISTGAME' => 'Liste Games',
+'ACP_ADDRACE' => 'Ajouter Race',
+'ACP_LISTRACE' => 'Liste Races',
+'ACP_ADDCLASS' => 'Ajouter Classe',
+'ACP_LISTCLASS' => 'Liste des Classes',
+'ACP_ADDFACTION' => 'Ajouter Faction',
+'ACP_LISTFACTION' => 'Liste des Factions',
 'ACP_MM_ADDMEMBER' => 'Ajouter un Membre',
 'ACP_MM_LISTMEMBERS' => 'Liste des Membres',
 'ACP_MM_ADDGUILD' => 'Ajouter une Guilde',
@@ -241,7 +249,9 @@ $lang = array_merge($lang, array(
 'ACP_ITEMSTATS_EXPLAIN' => 'Ici vous pouvez régler la configuration d’Itemstats',
 'ACP_INDEXPAGE_EXPLAIN' => 'Réglage du Portail bbDKP, interrupteurs des blocks, Réglage des blocs.',
 'TRANSFER_MEMBER_HISTORY_DESCRIPTION' => 'Ceci transfère la totalité des données historiques d’un membre (raids, objets, ajustments) vers un autre membre.',
-
+'ACP_LISTRACE_EXPLAIN' => 'Ici vous pouvez éditer les Races du jeu. Faites attention que pour WOW, les ID doivent être identiques à ceux de l’armurerie de Blizzard', 
+'ACP_LISTCLASS_EXPLAIN' => 'Ici vous pouvez éditer les Classes du jeu. Faites attention que pour WOW, les ID doivent être identiques à ceux de l’armurerie de Blizzard', 
+'ACP_LISTFACTIONS_EXPLAIN' => 'Ici vous pouvez éditer les differentes factions', 
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'Vous n’avez pas la permission d’ajouter des évènements.',
@@ -563,6 +573,9 @@ $lang = array_merge($lang, array(
 'NEWS_FOOTCOUNT' => '... trouvé %d titres d\actualité(s)',
 'LISTADJ_FOOTCOUNT' => '... trouvé %d ajustment(s) / %d per page',
 'LISTDKPSYS_FOOTCOUNT' => '... trouvé %d groupes dkp / %d per page',
+'LISTRACE_FOOTCOUNT' => '... trouvé %d races',
+'LISTCLASS_FOOTCOUNT' => '... trouvé %d classes',
+'LISTFACTION_FOOTCOUNT' => '... trouvé	%d Factions',
 
 // Submit Buttons
 'ADD_ADJUSTMENT' => 'Ajouter un Ajustement',

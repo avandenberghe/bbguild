@@ -199,7 +199,14 @@ $lang = array_merge($lang, array(
 'ACP_ADDITEM' => 'Add Item',
 'ACP_LISTITEMS' => 'List Items',
 'ACP_ADDRAID' => 'Add Raid',
-'ACP_LISTRAIDS' => 'List Raids', 
+'ACP_LISTRAIDS' => 'List Raids',
+'ACP_ADDGAME' => 'Add Game',
+'ACP_LISTGAME' => 'List Games',
+'ACP_ADDRACE' => 'Add Race',
+'ACP_LISTRACE' => 'List Races',
+'ACP_ADDCLASS' => 'Add Class',
+'ACP_LISTCLASS' => 'List Classes',
+'ACP_ADDFACTION' => 'Add Faction',
 'ACP_MM_ADDMEMBER' => 'Add Member',
 'ACP_MM_LISTMEMBERS' => 'List Members',
 'ACP_MM_ADDGUILD' => 'Add Guild',
@@ -242,7 +249,9 @@ $lang = array_merge($lang, array(
 'ACP_ITEMSTATS_EXPLAIN' => 'Here you can change the Item, Itemicon Popup settings',
 'ACP_INDEXPAGE_EXPLAIN' => 'bbDkp Portal Settings, Block on/off switches, Block configuration can be changed here',
 'TRANSFER_MEMBER_HISTORY_DESCRIPTION' => 'This transfers all of a member\'s history (raids, items, adjustments) to another member.',
-
+'ACP_LISTRACE_EXPLAIN' => 'Here you can edit the game races. Please mind that for WoW the race id has to match those of the Blizzard Armory. ', 
+'ACP_LISTCLASS_EXPLAIN' => 'Here you can edit the game classes. Please mind that for WoW the Class id has to match those of the Blizzard Armory. ', 
+'ACP_LISTFACTIONS_EXPLAIN' => 'Here you can edit the game Factions. ', 
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -533,7 +542,6 @@ $lang = array_merge($lang, array(
 'ARM_SHOWACH' => 'Show Achievement points ?', 
 'ARM_STAND' => 'Standard', 
 'ARM_CLASS' => 'Class',
-
 'SHOWONROSTER'	=> 'Show on Roster',  
 
 
@@ -566,6 +574,9 @@ $lang = array_merge($lang, array(
 'NEWS_FOOTCOUNT' => '... found %d newsitem(s)',
 'LISTADJ_FOOTCOUNT' => '... found %d adjustment(s) / %d per page',
 'LISTDKPSYS_FOOTCOUNT' => '... found %d dkp systems / %d per page',
+'LISTRACE_FOOTCOUNT' => '... found %d races',
+'LISTCLASS_FOOTCOUNT' => '... found %d classes',
+'LISTFACTION_FOOTCOUNT' => '... found %d Factions',
 
 // Submit Buttons
 'ADD_ADJUSTMENT' => 'Add Adjustment',

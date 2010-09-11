@@ -772,7 +772,7 @@ $versions = array(
             // add game-race-class
             array('acp', 'ACP_DKP_MEMBER', array(
            		 'module_basename' => 'dkp_game',
-            	 'modes'           => array('listgames', 'addgame', 'addrace', 'addclass'),
+            	 'modes'           => array('listgames', 'addfaction', 'addrace', 'addclass'),
         		),
             ),        
          
@@ -972,12 +972,13 @@ con : hard to manage because you have to set gear prices. <br /> ',
            ),
            ),  	
 		
-          // adding epgp GP column to items table
+          // adding epgp GP column to items table, image column to class table
          'table_column_add' => array(
             	array($bbdkp_table_prefix .'items', 'item_gearpoints',  array('DECIMAL:11', 0)), 
             	array($bbdkp_table_prefix .'memberdkp', 'member_timepoints',  array('DECIMAL:11', 0)),
             	array($bbdkp_table_prefix .'memberdkp', 'member_bonuspoints',  array('DECIMAL:11', 0)),
             	array($bbdkp_table_prefix .'memberdkp', 'member_effortpoints',  array('DECIMAL:11', 0)),
+            	array($bbdkp_table_prefix .'classes', 'imagename',  array('VCHAR:255', 0)),
             	 
             ),
             
