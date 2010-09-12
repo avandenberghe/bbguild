@@ -1341,6 +1341,8 @@ function gameupdate($action, $version)
 					break;
 	
 				case '1.1.2' : 
+					$game = request_var('game', '');
+					
 					
 					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_NEWS_ADD' " );
 					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_GUILD_ADD' " );
@@ -1354,9 +1356,21 @@ function gameupdate($action, $version)
 					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_EDITMEMBERDKP' " );
 					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_ADDADJ' " );
 					
+					// updating class imagenames
+					//would use concat() but it’s not cross db compatible (thnks Bill) so we need to loop the class table...
+					$sql = 'select c_index, class_name from ' . $bbdkp_table_prefix . 'classes'; 
+					$result = $db->sql_query($sql);	
+					while ( $row = $db->sql_fetchrow($result) )
+					{	
+						$sql = 'UPDATE ' . $bbdkp_table_prefix . "classes 
+								SET imagename = '" . $game . "_" . $db->sql_escape($row['class_name']) . "_small' 
+								WHERE c_index = " . (int) $row['c_index']; 
+						$db->sql_query($sql); 
+					}
+					$db->sql_freeresult($result);
+					
 					// bossprogress updaters
 					
-					$game = request_var('game', '');
 					switch ($game)
 					{
 						case 'wow':
@@ -1408,7 +1422,8 @@ function gameupdate($action, $version)
 						default :
 						    break; 
 					}
-					
+
+
 					
 					break;	
 				
