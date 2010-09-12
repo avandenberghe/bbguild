@@ -52,11 +52,7 @@ $lang = array_merge($lang, array(
 'INFORUM'	=> 'Posted in', 
 'DKP'	=> 'DKP', 
 'NEWS' => 'News',
-'LISTNEWS_TITLE' => 'News Entries',
-'SUMMARY_TITLE' => 'News Summary',
 'COMMENT' => 'Comment',
-'LISTNEWS_FOOTCOUNT' => '... found %d news entries / %d per page',
-'CREATE_NEWS_SUMMARY' => 'Create News Summary',
 'LIST_NEWS' => 'List News',
 'NO_NEWS' => 'No news entries found.',
 'NEWS_PER_PAGE' => 'News Entries per Page',
@@ -65,17 +61,14 @@ $lang = array_merge($lang, array(
 
 // Main Menu
 'MENU' => 'Menu', 
-'MENU_ADJUSTMENTS' => 'Adjustment settings', 
 'MENU_ADMIN_PANEL' => 'Administration Panel',
 'MENU_BOSS' => 'Bossprogress',
 'MENU_EVENTS' => 'Events',
-'MENU_GENERAL' => 'General Settings',
 'MENU_ITEMVAL' => 'Item Values',
 'MENU_ITEMHIST' => 'Item History',
 'MENU_NEWS' => 'News',
 'MENU_RAIDS' => 'Raids',
 'MENU_ROSTER'	=> 'Roster',
-'MENU_SETTINGS' => 'Settings',
 'MENU_STATS' => 'Statistics',
 'MENU_SUMMARY' => 'Summary',
 'MENU_STANDINGS' => 'Standings',
@@ -88,7 +81,7 @@ $lang = array_merge($lang, array(
 'MENU_LINKS' => 'Weblinks',
 'LINK1' => 'http://www.bbdkp.com', 
 'LINK1T' => 'Powered By: bbDKP',
- 'LINK2' => 'http://everquest2.station.sony.com/', 
+'LINK2' => 'http://everquest2.station.sony.com/', 
 'LINK2T' => 'Everquest 2', 
 'LINK3' => 'http://www.playonline.com/ff11us/index.shtml', 
 'LINK3T' => 'FFXI', 
@@ -139,8 +132,6 @@ $lang = array_merge($lang, array(
 'COMPARE_MEMBERS' => 'Compare Members',
 'LISTMEMBERS_FOOTCOUNT' => '... found %d members',
 
-
-'ADMIN_TITLE_PREFIX' => '%s %s Admin',
 'LISTADJ_TITLE' => 'Group Adjustment Listing',
 'LISTEVENTS_TITLE' => 'Event Values',
 'LISTIADJ_TITLE' => 'Individual Adjustment Listing',
@@ -177,6 +168,12 @@ $lang = array_merge($lang, array(
 
 'ARMOR' => 'Armor',
 'TYPE' => 'Armor',
+// TYPES of armor are static across games, no need to put it in DB
+'CLOTH' => 'Very light / Cloth', 
+'LEATHER' => 'Light / Leather', 
+'MAIL' =>  'Medium / Chain Mail', 
+'PLATE' => 'Heavy / Plate', 
+
 'CLASSID' => 'Class ID',
 'CLASSARMOR' => 'Class Armor',
 'CLASSIMAGE' => 'Image',

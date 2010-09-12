@@ -201,9 +201,9 @@ $lang = array_merge($lang, array(
 'ACP_LISTRAIDS' => 'Liste des Raids', 
 'ACP_ADDGAME' => 'Ajouter Game',
 'ACP_LISTGAME' => 'Liste Games',
-'ACP_ADDRACE' => 'Ajouter Race',
+'ACP_ADDRACE' => 'Maintien Races',
 'ACP_LISTRACE' => 'Liste Races',
-'ACP_ADDCLASS' => 'Ajouter Classe',
+'ACP_ADDCLASS' => 'Maintien des Classes',
 'ACP_LISTCLASS' => 'Liste des Classes',
 'ACP_ADDFACTION' => 'Ajouter Faction',
 'ACP_LISTFACTION' => 'Liste des Factions',
@@ -251,7 +251,16 @@ $lang = array_merge($lang, array(
 'TRANSFER_MEMBER_HISTORY_DESCRIPTION' => 'Ceci transfère la totalité des données historiques d’un membre (raids, objets, ajustments) vers un autre membre.',
 'ACP_LISTRACE_EXPLAIN' => 'Ici vous pouvez éditer les Races du jeu. Faites attention que pour WOW, les ID doivent être identiques à ceux de l’armurerie de Blizzard', 
 'ACP_LISTCLASS_EXPLAIN' => 'Ici vous pouvez éditer les Classes du jeu. Faites attention que pour WOW, les ID doivent être identiques à ceux de l’armurerie de Blizzard', 
-'ACP_LISTFACTIONS_EXPLAIN' => 'Ici vous pouvez éditer les differentes factions', 
+'ACP_LISTFACTIONS_EXPLAIN' => 'Ici vous pouvez éditer ou supprimer les differentes factions', 
+'ACP_ADDRACE_EXPLAIN' => 'Ici vous pouvez Ajouter/éditer les Races du jeu. Faites attention que pour WOW, les ID doivent être identiques à ceux de l’armurerie de Blizzard', 
+'ACP_ADDCLASS_EXPLAIN' => 'Ici vous pouvez Ajouter/éditer les Classes du jeu. Faites attention que pour WOW, les ID doivent être identiques à ceux de l’armurerie de Blizzard', 
+'ACP_ADDFACTIONS_EXPLAIN' => 'Ici vous pouvez Ajouter des factions', 
+'ACP_ADDRACE_EXPLAIN' => 'Ici vous pouvez Ajouter/éditer des Races.', 
+'RACEID_EXPLAIN' =>'Note. le ID est unique. pour Wow, il doit correspondre au raceId de l’XML de l’armurerie.  ',
+'RACE_EXPLAIN' =>'Nom de la Race. ',
+'CLASS_ID_EXPLAIN' => 'Note. le ID est unique. pour Wow, il doit correspondre au classId de l’XML de l’armurerie. ',
+'CLASS_ARMORY_EXPLAIN' => 'Armurerie maximale que cette classe peut porter.',
+'CLASS_IMAGE_EXPLAIN' => 'nom d’image png en couleur, sans extension. ce fichier doit exister dans le répertoire /images/class_images',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'Vous n’avez pas la permission d’ajouter des évènements.',
@@ -292,6 +301,9 @@ $lang = array_merge($lang, array(
 'CONFIRM_DELETE_NEWS' => 'êtes-vous sûr de vouloir supprimer cette actualité ?',
 'CONFIRM_DELETE_RAID' => 'êtes-vous sûr de vouloir supprimer ce raid?',
 'CONFIRM_DELETE_BBDKPLOG' => 'êtes-vous sûr de vouloir supprimer ces logs ?',
+'CONFIRM_DELETE_FACTION' => 'êtes-vous sûr de vouloir supprimer la faction  %s ?',
+'CONFIRM_DELETE_RACE' => 'êtes-vous sûr de vouloir supprimer la race %s ?',
+'CONFIRM_DELETE_CLASS' => 'êtes-vous sûr de vouloir supprimer la classe %s ?',
 
 // Log Actions
 'ACTION_DEFAULT_DKP_CHANGED' => 'le groupe DKP par défaut est changé', 
@@ -478,6 +490,20 @@ $lang = array_merge($lang, array(
 'ADMIN_LOG_DELETE_SUCCESS' => 'les logs %s ont été supprimés.',
 'ADMIN_LOG_DELETE_FAIL' => 'Les logs %s n’ont pas été supprimés.',
 'ADMIN_DEFAULTPOOL_SUCCESS' => 'le Groupe DKP est changé vers %s. ', 
+'ADMIN_ADD_FACTION_SUCCESS' => 'la Faction % a été ajoutée avec succès ',
+'ADMIN_DELETE_FACTION_SUCCESS' => 'la Faction %s a été supprimée avec succès ',
+'ADMIN_DELETE_FACTION_FAILED' => 'Il est Interdit de supprimer la faction %s car elle contient des Races.',
+'ADMIN_DELETE_RACE_SUCCESS' => 'Race %s supprimée avec succès', 
+'ADMIN_DELETE_RACE_FAILED' => 'Il est Interdit de supprimer la race %s car elle contient des membres!', 
+'ADMIN_DELETE_CLASS_SUCCESS' => 'Classe %s supprimée avec succès', 
+'ADMIN_DELETE_CLASS_FAILED' => 'Il est Interdit de supprimer la Classe %s car elle contient des membres!', 
+'ADMIN_ADD_RACE_FAILED' => 'la race n’a pu être crée car l’id %s est déjà utilisé. ',
+'ADMIN_ADD_RACE_SUCCESS' => 'La race %s a été crée avec succès', 
+'ADMIN_ADD_CLASS_FAILED' => 'la classe n’a pu être crée car l’id %s est déjà utilisé. ',
+'ADMIN_ADD_CLASS_FAILED_NAME' => 'la classe n’a pu être crée car le nom %s est déjà utilisé. ',
+'ADMIN_ADD_CLASS_SUCCESS' => 'La classe %s a été crée avec succès', 
+'ADMIN_UPDATE_CLASS_SUCCESS' => 'La classe %s a été mise à jour avec succès', 
+'ADMIN_UPDATE_RACE_FAILED' =>  'la classe n’a pu être mise à jour car le id %s est déjà utilisé. ',
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Ajustement pour réactivation',
@@ -543,7 +569,6 @@ $lang = array_merge($lang, array(
 
 'SHOWONROSTER'	=> 'Montrer sur le Tableau des membres',  
 
-
 'ADD_ITEM_RAIDID_NOTE' => 'Montrer que les raids à moins de deux semaines/ %s Voir tous</a>',
 'ADD_ITEM_RAIDID_SHOWALL_NOTE' => 'Tous les raids / %s Montrer que les récentes</a>',
 'ADD_RAID_VALUE_NOTE' => ' si cette zone est à blanc, la valeur préfigée de l\évènement est utilisée comme Bonus pour le Raid',
@@ -561,6 +586,9 @@ $lang = array_merge($lang, array(
 'MANAGE_MEMBERS_TITLE' => 'Modifier les Membres',
 'VIEWLOGS_TITLE' => 'Voir les Logs',
 'EDITMEMBER_DKP_TITLE' => 'Editer un compte DKP', 
+'EDIT_RACE_TITLE' => 'Editer une Race', 
+'ADD_RACE_TITLE' => 'Paramètres de la Race',
+'ADD_CLASS_TITLE' => 'Paramètres de la classe',
 
 // Page Foot Counts
 'LISTMEMBERS_FOOTCOUNT' => '... trouvé %d membres',
@@ -585,6 +613,8 @@ $lang = array_merge($lang, array(
 'ADD_MEMBER' => 'Ajouter Membre',
 'ADD_GUILD' => 'Ajouter Guilde',
 'ADD_RAID' => 'Ajouter Raid',
+'ADD_RACE' => 'Ajouter Race', 
+'ADD_CLASS' => 'Ajouter Classe', 
 'DELETE_ADJUSTMENT' => 'Supprimer Ajustment',
 'DELETE_EVENT' => 'Supprimer Evènement',
 'DELETE_DKPSYS' => 'Supprimer groupe DKP',
@@ -607,10 +637,17 @@ $lang = array_merge($lang, array(
 'UPDATE_MEMBER' => 'Mise à jour Membre',
 'UPDATE_MEMBER_DKP' => 'Mise à jour compte DKP',
 'UPDATE_RAID' => 'Mise à jour Raid',
+'UPDATE_RACE' => 'mise à jour Race', 
+'UPDATE_CLASS' => 'mise à jour Classe', 
 
 // Misc
 'ADJUSTMENT_VALUE' => 'Valeur d’Ajustement',
 'ADJUSTMENT_VALUE_NOTE' => 'Peut-être négatif',
+'CLASS_NAME' => 'Nom de la classe',
+'CLASS_ID' => 'ID de la classe',
+'CLASS_ARMORY' => 'Type d’Armurerie',
+'CLASS_IMAGE' => 'Nom de l’Image',
+'CLASS_LEVEL' => 'Niveau minimum et maximum de la classe',
 'CODE' => 'Code',
 'CONTACT' => 'Contact',
 'CREATE' => 'Créér',
@@ -621,6 +658,7 @@ $lang = array_merge($lang, array(
 'EVENT_NAME' => 'Nom d’Evènement', 
 'EVENT_VALUE' => 'Valeur d’Evènement',
 'STATUS' => 'Statut', 
+'FACTION_NAME' => 'Nom de la Faction',
 'HIDE' => 'Cachez ?',
 'ID' => 'Id', 
 'INSTALL' => 'Installer',

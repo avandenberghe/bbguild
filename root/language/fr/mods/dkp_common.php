@@ -166,6 +166,12 @@ $lang = array_merge($lang, array(
 
 'ARMOR' => 'Armure',
 'TYPE' => 'Armure',
+// TYPES of armor are static across games, no need to put it in DB
+'CLOTH' => 'Tissu', 
+'LEATHER' => 'Cuir', 
+'MAIL' =>  'Mailles', 
+'PLATE' => 'Plate', 
+
 'CLASSID' => 'id Classe',
 'CLASSARMOR' => 'Armure de la Classe',
 'CLASSIMAGE' => 'Image',
