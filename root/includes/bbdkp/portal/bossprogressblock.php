@@ -41,14 +41,19 @@ if (! defined ( 'IN_PHPBB' ))
 $bpshow = false;
 $user->add_lang ( array ('mods/dkp_admin' ) );
 
-$sql_array = array (
-	'SELECT' => 'z.id as zoneid, z.zonename, zonename_short, z.completed   ', 
-	'FROM' => array (
-		ZONEBASE => 'z' , 
-		), 
-	'WHERE' => 'z.showzoneportal = 1 and  length(z.zonename) > 0  ', 
-	'ORDER_BY' => 'z.sequence desc ' 
-);
+$sql_array = array(
+   'SELECT'    => 	' z.id as zoneid, 
+   					  l.name as zonename, 
+   					  l.name_short as zonename_short, 
+   					  z.completed ',
+   'FROM'      => array(
+		ZONEBASE 		=> 'z',
+		BB_LANGUAGE 	=> 'l',
+			),
+'WHERE'		=> " z.id = l.attribute_id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."' AND game= '" . $config['bbdkp_default_game'] . "'",
+'ORDER_BY'	=> 'z.sequence desc, z.id desc ',
+   );
+				    
 $sql = $db->sql_build_query ( 'SELECT', $sql_array );
 $result = $db->sql_query ( $sql );
 $i = 0;
@@ -62,14 +67,16 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 		'zonename_short' => $row ['zonename_short'], 
 		'completed' => $row ['completed'] );
 	
-	$sql_array = array (
-		'SELECT' => 'b.bossname, b.id, b.bossname_short, b.killed, b.webid ', 
-		'FROM' => array (
-			ZONEBASE => 'z' , 
-			BOSSBASE => 'b'), 
-		'WHERE' => ' b.zoneid = z.id and b.showboss=1 and z.id = ' . $row ['zoneid'], 
-		'ORDER_BY' => 'z.sequence desc , b.id asc ' 
-	);
+	$sql_array = array(
+	    'SELECT'    => 	' b.id, l.name as bossname, l.name_short as bossname_short, b.imagename, 
+	    b.webid, b.killed, b.killdate, b.counter, b.showboss, b.zoneid  ', 
+	    'FROM'      => array(
+	        BOSSBASE 		=> 'b',
+            BB_LANGUAGE 	=> 'l',
+	    	),
+	    'WHERE'		=> 'b.zoneid = ' . $row ['zoneid'] . " AND b.id = l.attribute_id AND l.attribute='boss' AND l.language= '" . $config['bbdkp_lang'] ."'",
+		'ORDER_BY'	=> 'b.zoneid, b.id ASC ',
+	    );	
 	
 	$bosskill=0;
 	$j = 0;
@@ -78,11 +85,11 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 	while ( $row2 = $db->sql_fetchrow ( $result2 ) )
 	{
 		$boss[$j] = array( 
-			'bossid' => $row2 ['id'], 
-			'bossname' => $row2 ['bossname'], 
+			'bossid' 		 => $row2 ['id'], 
+			'bossname' 		 => $row2 ['bossname'], 
 			'bossname_short' => $row2 ['bossname_short'], 
-			'killed' => $row2 ['killed'], 
-			'url' => $user->lang[strtoupper($config['bbdkp_default_game']).'_BASEURL'] . $row2 ['webid']
+			'killed'  		 => $row2 ['killed'], 
+			'url' 			 => $user->lang[strtoupper($config['bbdkp_default_game']).'_BASEURL'] . $row2 ['webid']
 		 ); 
 		 if ($row2 ['killed'] == 1)
 		 {

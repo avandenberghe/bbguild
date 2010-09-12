@@ -198,7 +198,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 							BB_LANGUAGE 	=> 'l',
 								),
 					'WHERE'		=> " z.id = l.attribute_id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."' AND game= '" . $config['bbdkp_default_game'] . "'",
-					'ORDER_BY'	=> 'sequence desc, id desc ',
+					'ORDER_BY'	=> 'z.sequence desc, z.id desc ',
 				    );
 				    
 					$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -225,9 +225,6 @@ class acp_dkp_bossprogress extends bbDkp_Admin
                 	$now = getdate();
 	                while ( $row2 = $db->sql_fetchrow($resultx) )
 	                {
-	                	
-
-                    
 						$s_day_options = '<option value="0"	>--</option>';
 						$day = ($row2['killdate'] == 0) ? '' : date('d', $row2['killdate']); 
 						for ($i = 1; $i < 32; $i++)
