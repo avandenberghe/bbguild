@@ -24,18 +24,17 @@ function install_aion($bbdkp_table_prefix)
    
     $sql_ary = array();
     // class general
-    $sql_ary[] = array('class_id' => '0', 'class_name' => 'Unknown', 'class_armor_type' => 'Leather' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
+    $sql_ary[] = array('class_id' => '0', 'class_name' => 'Unknown', 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
 
     // sub classes, excluding the original 4 classes, which are irrelavant end game 
-    $sql_ary[] = array('class_id' => '1', 'class_name' => 'Spiritmaster', 'class_armor_type' => 'Cloth' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
-    $sql_ary[] = array('class_id' => '2', 'class_name' => 'Sorcerer', 'class_armor_type' => 'Cloth' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
-    $sql_ary[] = array('class_id' => '3', 'class_name' => 'Assassin', 'class_armor_type' => 'Leather' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
-    $sql_ary[] = array('class_id' => '4', 'class_name' => 'Ranger', 'class_armor_type' => 'Leather' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
-    $sql_ary[] = array('class_id' => '5', 'class_name' => 'Chanter', 'class_armor_type' => 'Chanter' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
-    $sql_ary[] = array('class_id' => '6', 'class_name' => 'Cleric', 'class_armor_type' => 'Cleric' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
-    $sql_ary[] = array('class_id' => '7', 'class_name' => 'Gladiator', 'class_armor_type' => 'Plate' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
-    $sql_ary[] = array('class_id' => '8', 'class_name' => 'Templar', 'class_armor_type' => 'Plate' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
-    
+    $sql_ary[] = array('class_id' => '1', 'class_name' => 'Spiritmaster', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
+    $sql_ary[] = array('class_id' => '2', 'class_name' => 'Sorcerer', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
+    $sql_ary[] = array('class_id' => '3', 'class_name' => 'Assassin', 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
+    $sql_ary[] = array('class_id' => '4', 'class_name' => 'Ranger', 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
+    $sql_ary[] = array('class_id' => '5', 'class_name' => 'Chanter', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
+    $sql_ary[] = array('class_id' => '6', 'class_name' => 'Cleric', 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
+    $sql_ary[] = array('class_id' => '7', 'class_name' => 'Gladiator', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
+    $sql_ary[] = array('class_id' => '8', 'class_name' => 'Templar', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50 );
 
     $db->sql_multi_insert( $bbdkp_table_prefix . 'classes', $sql_ary);
    	unset ($sql_ary); 

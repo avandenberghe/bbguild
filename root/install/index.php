@@ -1358,12 +1358,13 @@ function gameupdate($action, $version)
 					
 					// updating class imagenames
 					//would use concat() but it’s not cross db compatible (thnks Bill) so we need to loop the class table...
-					$sql = 'select c_index, class_name from ' . $bbdkp_table_prefix . 'classes'; 
+					$sql = 'select c_index, class_name, class_armor_type from ' . $bbdkp_table_prefix . 'classes'; 
 					$result = $db->sql_query($sql);	
 					while ( $row = $db->sql_fetchrow($result) )
 					{	
 						$sql = 'UPDATE ' . $bbdkp_table_prefix . "classes 
-								SET imagename = '" . $game . "_" . $db->sql_escape($row['class_name']) . "_small' 
+								SET imagename = '" . $game . "_" . $db->sql_escape($row['class_name']) . "_small',
+									class_armor_type = '" .  strtoupper($db->sql_escape( $row['class_armor_type'] )) . "'
 								WHERE c_index = " . (int) $row['c_index']; 
 						$db->sql_query($sql); 
 					}

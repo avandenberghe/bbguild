@@ -30,17 +30,17 @@ function install_wow($bbdkp_table_prefix)
 	$sql_ary = array ();
 	
 	// class : note these eqdkp class_ids are changed in release 1.1 to follow blizz
-	$sql_ary [] = array ('class_id' => '0', 'class_name' => 'Unknown', 'class_armor_type' => 'Plate', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => '1', 'class_name' => 'Warrior', 'class_armor_type' => 'Plate', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => '2', 'class_name' => 'Rogue', 'class_armor_type' => 'Leather', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => '3', 'class_name' => 'Hunter', 'class_armor_type' => 'Mail', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => '4', 'class_name' => 'Paladin', 'class_armor_type' => 'Plate', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => '5', 'class_name' => 'Shaman', 'class_armor_type' => 'Mail', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => '6', 'class_name' => 'Druid', 'class_armor_type' => 'Leather', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => '7', 'class_name' => 'Warlock', 'class_armor_type' => 'Cloth', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => '8', 'class_name' => 'Mage', 'class_armor_type' => 'Cloth', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => '9', 'class_name' => 'Priest', 'class_armor_type' => 'Cloth', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => '10', 'class_name' => 'Death Knight', 'class_armor_type' => 'Plate', 'class_min_level' => 55, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '0', 'class_name' => 'Unknown', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '1', 'class_name' => 'Warrior', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '2', 'class_name' => 'Rogue', 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '3', 'class_name' => 'Hunter', 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '4', 'class_name' => 'Paladin', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '5', 'class_name' => 'Shaman', 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '6', 'class_name' => 'Druid', 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '7', 'class_name' => 'Warlock', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '8', 'class_name' => 'Mage', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '9', 'class_name' => 'Priest', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => '10', 'class_name' => 'Death Knight', 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 80 );
 	
 	$db->sql_multi_insert ( $bbdkp_table_prefix . 'classes', $sql_ary );
 	unset ( $sql_ary );
@@ -1011,7 +1011,6 @@ function install_wow5($bbdkp_table_prefix)
 
 }
 
-
 /*
  * new boss progress data for WoW
  * generated with the spreadsheet
@@ -1661,7 +1660,6 @@ function install_wow_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 312 , 'attribute_id' => '273', 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Halion (25)' ,  'name_short' =>  'Halion (25)' );
 		$sql_ary[] = array( 'id' => 313 , 'attribute_id' => '274', 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Halion (25HM)' ,  'name_short' =>  'Halion (25HM)' );
 				
-		
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
 		unset ( $sql_ary );
 		

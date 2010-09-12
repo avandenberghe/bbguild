@@ -25,16 +25,16 @@ function install_lotro($bbdkp_table_prefix)
     $sql_ary = array();
 
     // class : 
-    $sql_ary[] = array('class_id' => '0', 'class_name' => 'Unknown', 'class_armor_type' => 'Medium Armour' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
-    $sql_ary[] = array('class_id' => '1', 'class_name' => 'Burglar', 'class_armor_type' => 'Medium Armour' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
-    $sql_ary[] = array('class_id' => '2', 'class_name' => 'Captain', 'class_armor_type' => 'Heavy Armour' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
-    $sql_ary[] = array('class_id' => '3', 'class_name' => 'Champion', 'class_armor_type' => 'Heavy Armour' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
-    $sql_ary[] = array('class_id' => '4', 'class_name' => 'Guardian', 'class_armor_type' => 'Heavy Armour' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
-    $sql_ary[] = array('class_id' => '5', 'class_name' => 'Hunter', 'class_armor_type' => 'Medium Armour' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
-    $sql_ary[] = array('class_id' => '6', 'class_name' => 'Lore-master', 'class_armor_type' => 'Light Armour' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
-    $sql_ary[] = array('class_id' => '7', 'class_name' => 'Minstrel', 'class_armor_type' => 'Light Armour' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
-    $sql_ary[] = array('class_id' => '8', 'class_name' => 'Rune-keeper', 'class_armor_type' => 'Light Armour' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
-    $sql_ary[] = array('class_id' => '9', 'class_name' => 'Warden', 'class_armor_type' => 'Medium Armour' , 'class_min_level' => 1 , 'class_max_level'  => 60 );   
+    $sql_ary[] = array('class_id' => '0', 'class_name' => 'Unknown', 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
+    $sql_ary[] = array('class_id' => '1', 'class_name' => 'Burglar', 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
+    $sql_ary[] = array('class_id' => '2', 'class_name' => 'Captain', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
+    $sql_ary[] = array('class_id' => '3', 'class_name' => 'Champion', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
+    $sql_ary[] = array('class_id' => '4', 'class_name' => 'Guardian', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
+    $sql_ary[] = array('class_id' => '5', 'class_name' => 'Hunter', 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
+    $sql_ary[] = array('class_id' => '6', 'class_name' => 'Lore-master', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
+    $sql_ary[] = array('class_id' => '7', 'class_name' => 'Minstrel', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
+    $sql_ary[] = array('class_id' => '8', 'class_name' => 'Rune-keeper', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60 );
+    $sql_ary[] = array('class_id' => '9', 'class_name' => 'Warden', 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60 );   
     $db->sql_multi_insert( $bbdkp_table_prefix . 'classes', $sql_ary);
  	unset ($sql_ary); 
  

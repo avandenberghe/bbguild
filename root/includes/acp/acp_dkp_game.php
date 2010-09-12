@@ -621,7 +621,7 @@ class acp_dkp_game extends bbDkp_Admin
                         'ID' 			=> $row['c_index'],
                         'CLASSID' 		=> $row['class_id'],
                         'CLASSNAME' 	=> $row['class_name'],
-                    	'CLASSARMOR' 	=> $row['class_armor_type'], 	
+                    	'CLASSARMOR' 	=> $user->lang[$row['class_armor_type']], 	
                     	'CLASSMIN' 		=> $row['class_min_level'], 	
                     	'CLASSMAX' 		=> $row['class_max_level'], 	
                         'CLASSHIDE' 	=> $row['class_hide'], 	

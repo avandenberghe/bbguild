@@ -24,27 +24,27 @@ function install_warhammer($bbdkp_table_prefix)
     $sql_ary = array();
 
     // class : 
-    $sql_ary[] = array('class_id' => '0', 'class_name' => 'Unknown', 'class_armor_type' => 'Light Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '1', 'class_name' => 'Witch Elf', 'class_armor_type' => 'Light Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '2', 'class_name' => 'Sorcerer', 'class_armor_type' => 'Robe' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '3', 'class_name' => 'Disciple of Khaine', 'class_armor_type' => 'Medium Robe' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '4', 'class_name' => 'Chosen', 'class_armor_type' => 'Heavy Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '5', 'class_name' => 'Marauder', 'class_armor_type' => 'Medium Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '6', 'class_name' => 'Zealot', 'class_armor_type' => 'Robe' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '7', 'class_name' => 'Magus', 'class_armor_type' => 'Robe' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '8', 'class_name' => 'Squig Herder', 'class_armor_type' => 'Light Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '9', 'class_name' => 'Black Orc', 'class_armor_type' => 'Heavy Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '10', 'class_name' => 'Shaman', 'class_armor_type' => 'Robe' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '11', 'class_name' => 'Rune Priest', 'class_armor_type' => 'Robe' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '12', 'class_name' => 'Iron Breaker', 'class_armor_type' => 'Heavy Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '13', 'class_name' => 'Engineer', 'class_armor_type' => 'Medium Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '14', 'class_name' => 'Witch Hunter', 'class_armor_type' => 'Light Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '15', 'class_name' => 'Bright Wizard', 'class_armor_type' => 'Robe' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '16', 'class_name' => 'Warrior Priest', 'class_armor_type' => 'Medium Robe' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '17', 'class_name' => 'Archmage', 'class_armor_type' => 'Robe' , 'class_min_level' => 1 , 'class_max_level'  => 40 );    
-    $sql_ary[] = array('class_id' => '18', 'class_name' => 'Swordmaster', 'class_armor_type' => 'Heavy Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );    
-    $sql_ary[] = array('class_id' => '19', 'class_name' => 'Shadow Warrior', 'class_armor_type' => 'Light Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
-    $sql_ary[] = array('class_id' => '20', 'class_name' => 'White Lion', 'class_armor_type' => 'Medium Armor' , 'class_min_level' => 1 , 'class_max_level'  => 40 );    
+    $sql_ary[] = array('class_id' => '0', 'class_name' => 'Unknown', 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '1', 'class_name' => 'Witch Elf', 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '2', 'class_name' => 'Sorcerer', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '3', 'class_name' => 'Disciple of Khaine', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '4', 'class_name' => 'Chosen', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '5', 'class_name' => 'Marauder', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '6', 'class_name' => 'Zealot', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '7', 'class_name' => 'Magus', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '8', 'class_name' => 'Squig Herder', 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '9', 'class_name' => 'Black Orc', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '10', 'class_name' => 'Shaman', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '11', 'class_name' => 'Rune Priest', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '12', 'class_name' => 'Iron Breaker', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '13', 'class_name' => 'Engineer', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '14', 'class_name' => 'Witch Hunter', 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '15', 'class_name' => 'Bright Wizard', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '16', 'class_name' => 'Warrior Priest', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '17', 'class_name' => 'Archmage', 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40 );    
+    $sql_ary[] = array('class_id' => '18', 'class_name' => 'Swordmaster', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40 );    
+    $sql_ary[] = array('class_id' => '19', 'class_name' => 'Shadow Warrior', 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40 );
+    $sql_ary[] = array('class_id' => '20', 'class_name' => 'White Lion', 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40 );    
     
     $db->sql_multi_insert( $bbdkp_table_prefix . 'classes', $sql_ary);
    	unset ($sql_ary); 
