@@ -261,6 +261,7 @@ $lang = array_merge($lang, array(
 'CLASS_ID_EXPLAIN' => 'Note. le ID est unique. pour Wow, il doit correspondre au classId de l’XML de l’armurerie. ',
 'CLASS_ARMORY_EXPLAIN' => 'Armurerie maximale que cette classe peut porter.',
 'CLASS_IMAGE_EXPLAIN' => 'nom d’image png en couleur, sans extension. ce fichier doit exister dans le répertoire /images/class_images',
+'ACP_LISTGAME_EXPLAIN' => 'Maintainance des Paramètres du Jeu',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'Vous n’avez pas la permission d’ajouter des évènements.',
@@ -504,6 +505,7 @@ $lang = array_merge($lang, array(
 'ADMIN_ADD_CLASS_SUCCESS' => 'La classe %s a été crée avec succès', 
 'ADMIN_UPDATE_CLASS_SUCCESS' => 'La classe %s a été mise à jour avec succès', 
 'ADMIN_UPDATE_RACE_FAILED' =>  'la classe n’a pu être mise à jour car le id %s est déjà utilisé. ',
+'ADMIN_UPDATE_RACE_SUCCESS' => 'La race %s a été mise à jour avec succès', 
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Ajustement pour réactivation',

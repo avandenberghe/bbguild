@@ -262,7 +262,7 @@ $lang = array_merge($lang, array(
 'CLASS_ID_EXPLAIN' => 'Note. the ID is unique. for Wow, it should match the ClassId XML Armory tag.',
 'CLASS_ARMORY_EXPLAIN' => 'Max gearlevel for this class',
 'CLASS_IMAGE_EXPLAIN' => 'color png imagename, without extension. file should exist in /images/class_images',
-
+'ACP_LISTGAME_EXPLAIN' => 'Maintain Game Parameters',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -492,6 +492,7 @@ $lang = array_merge($lang, array(
 'ADMIN_LOG_DELETE_SUCCESS' => 'The log enties %s were deleted successfully.',
 'ADMIN_LOG_DELETE_FAIL' => 'The log enties %s were not deleted.',
 'ADMIN_DEFAULTPOOL_SUCCESS' => 'Default Dkp Pool changed to %s successfully. ', 
+'ADMIN_UPDATE_RACE_SUCCESS' => 'The race %s was updated successfully. ',
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Active Point Adjustment',

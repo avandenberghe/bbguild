@@ -115,7 +115,7 @@ class acp_dkp_game extends bbDkp_Admin
 					$sql = 'INSERT INTO ' . RACE_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
 					$db->sql_query($sql);							
 						
-					trigger_error( sprintf( $user->lang['ADMIN_ADD_RACE_SUCCESS'], $factionname) . $link, E_USER_NOTICE);
+					trigger_error( sprintf( $user->lang['ADMIN_ADD_RACE_SUCCESS'], $racename) . $link, E_USER_NOTICE);
 				}
 				
 				if ($raceupdate)
@@ -128,9 +128,9 @@ class acp_dkp_game extends bbDkp_Admin
 					
 					$sql = 'UPDATE ' . RACE_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) .  '  
 						    WHERE race_id = ' . $id ;
-					$db->sql_query($sql);		
-					
-					$db->sql_freeresult($result);
+					$db->sql_query($sql);	
+
+					trigger_error( sprintf( $user->lang['ADMIN_UPDATE_RACE_SUCCESS'], $racename) . $link, E_USER_NOTICE);
 					
 				}
                 $this->page_title = 'ACP_LISTGAME';
@@ -463,6 +463,7 @@ class acp_dkp_game extends bbDkp_Admin
             		}
             		else 
             		{
+            			$s_armor_options = '';
            		        foreach ( $armortype as $armor => $armorname )
 						{
 							$s_armor_options .= '<option value="' . $armor . '" > ' . $armorname . '</option>';                    
@@ -616,7 +617,7 @@ class acp_dkp_game extends bbDkp_Admin
                 {
                 	 $total_classes++;
                     $template->assign_block_vars('class_row', array(
-                        'U_VIEW_CLASS' =>  append_sid("index.$phpEx", "i=dkp_game&amp;mode=addclass&amp;r=". $row['race_id']),
+                        'U_VIEW_CLASS' =>  append_sid("index.$phpEx", "i=dkp_game&amp;mode=addclass&amp;r=". $row['c_index']),
                         'ID' 			=> $row['c_index'],
                         'CLASSID' 		=> $row['class_id'],
                         'CLASSNAME' 	=> $row['class_name'],
