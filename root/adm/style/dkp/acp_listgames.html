@@ -4,7 +4,6 @@
 //-->
 <a name="maincontent"></a>
 
-
 <form id="acp_listgames" method="post" action="{U_ACTION}">
 
 <h1>{L_ACP_LISTFACTION}</h1>
@@ -74,7 +73,7 @@
     <td width="40%"><a href="{race_row.U_VIEW_EVENT}">{race_row.FACTIONNAME}</a></td>
 	<td align="center" width="10%" nowrap="nowrap">
 	<a href="{race_row.U_DELETE}">{ICON_DELETE}</a>
-	<a href="{race_row.U_VIEW_RACE}">{ICON_EDIT}</a>
+	<a href="{race_row.U_EDIT}">{ICON_EDIT}</a>
 	</td>
   </tr>
   <!-- END race_row -->
@@ -115,14 +114,14 @@
   <tr class="row2">
   <!-- ENDIF -->
     <td width="10%">{class_row.CLASSID}</td>
-    <td width="30%"><a href="{class_row.U_VIEW_CLASS}">{class_row.CLASSNAME}</a></td>
-    <td width="10%"><a href="{class_row.U_VIEW_CLASS}"><img src="{class_row.CLASSIMAGE}" alt="{class_row.CLASSNAME}" /></a></td>
+    <td width="30%"><a href="{class_row.U_EDIT}">{class_row.CLASSNAME}</a></td>
+    <td width="10%"><!-- IF class_row.S_CLASS_IMAGE_EXISTS -->  <img src="{class_row.CLASSIMAGE}" alt="{class_row.CLASSNAME}" />  <!-- ELSE -->no image<!-- ENDIF --> </td>
     <td width="30%">{class_row.CLASSARMOR}</td>
     <td width="5%">{class_row.CLASSMIN}</td>
     <td width="5%">{class_row.CLASSMAX}</td>
     <td align="center" width="5%" nowrap="nowrap">
     <a href="{class_row.U_DELETE}">{ICON_DELETE}</a>
-    <a href="{class_row.U_VIEW_CLASS}">{ICON_EDIT}</a></td>
+    <a href="{class_row.U_EDIT}">{ICON_EDIT}</a></td>
   </tr>
   <!-- END class_row -->
   <tr>

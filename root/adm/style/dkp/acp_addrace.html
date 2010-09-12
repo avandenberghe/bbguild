@@ -1,23 +1,26 @@
 <!-- INCLUDE overall_header.html -->
 
 <!--
-		$Id$
+	$Id$
 //-->
 
 <script  type="text/javascript">
 //<![CDATA[
 function check_form()
 {
-    if (document.post.event_name.value.length < 2)
+    if (document.acp_addrace.racename.value.length < 2)
     {
         alert('{MSG_NAME_EMPTY}');
         return false;
     }
-    if (document.post.event_value.value.length < 1)
+
+    if (document.acp_addrace.race_id.value.length < 1 )
     {
-        alert('{MSG_VALUE_EMPTY}');
+        alert('{MSG_NAME_EMPTY}');
         return false;
     }
+    
+    
     return true;
 }
 //]]>
@@ -26,52 +29,48 @@ function check_form()
 
 <a name="maincontent"></a>
 
-<h1>{L_TITLE}</h1>
-
-<p>{L_EXPLAIN}</p>
-
-
-<form method="post" action="{F_ADD_EVENT}" name="post" onsubmit="return check_form(this)">
-<input type="hidden" name="{URI_EVENT}" value="{EVENT_ID}" />
-<input type="hidden" name="hidden_id" value="{EVENT_ID}" />
-
+<h1>{L_ACP_ADDRACE}</h1>
+<p>{L_ACP_ADDRACE_EXPLAIN}</p>
+<form id="acp_addrace" name="acp_addrace" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
+<input type="hidden" name="race_id" value="{RACE_ID}" />
 
 <fieldset>
-<legend>{L_ADD_EVENT_TITLE}</legend>
+    <!-- IF S_ADD -->
+<legend>{L_ADD_RACE_TITLE}</legend>
+    <!-- ELSE -->
+<legend>{L_EDIT_RACE_TITLE}</legend>    
+        <!-- ENDIF -->
 	<dl>
-		<dt><label for="event_dkpid">{L_POOL}:</label></dt>
+		<dt><label for="faction">{L_FACTION}:</label></dt>
 		<dd>
-    	 	<select name="event_dkpid" class="input">	
-       			<!-- BEGIN event_dkpid_row -->
-       			<option value="{event_dkpid_row.VALUE}"{event_dkpid_row.SELECTED}>{event_dkpid_row.OPTION}</option>
-       			<!-- END event_dkpid_row -->
-    		</select>
+      		<select id="faction" name="faction">{S_FACTIONLIST_OPTIONS}</select>
 	 	</dd>
 	</dl>
-
 	<dl>
-		<dt><label for="event_name">{L_EVENT_NAME}:</label></dt>
-		<dd><input class="medium" type="text" id="event_name" name="event_name" value="{EVENT_NAME}" /></dd>
+		<dt><label for="racename">{L_RACE}:</label><br />{L_RACE_EXPLAIN}</dt>
+		<dd><input class="medium" type="text" id="racename" name="racename" value="{RACE_NAME}" /></dd>
 	</dl>
-
 	<dl>
-		<dt><label for="event_value">{L_EVENT_VALUE}:</label></dt>
-		<dd><input class="medium" type="text" id="event_value" name="event_value" value="{EVENT_VALUE}" /></dd>
+		<dt><label for="race_id">{L_RACEID}:</label><br />{L_RACEID_EXPLAIN}</dt>
+		
+		<dd><br />
+		<!-- IF S_ADD -->
+		<input class="medium" type="text" id="race_id" name="race_id" value="{RACE_ID}" />
+		<!-- ELSE -->
+		{RACE_ID}
+		<!-- ENDIF -->
+		</dd>
 	</dl>
 
 </fieldset>
 
-
-
    <p class="quick">
     <!-- IF S_ADD -->
-    <input type="submit" name="add" value="{L_ADD_EVENT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    <input type="submit" name="add" value="{L_ADD_RACE}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
-    <input type="submit" name="update" value="{L_UPDATE_EVENT}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_EVENT}" class="button1" />
+    <input type="submit" name="update" value="{L_UPDATE_RACE}" class="button1" /> 
     <!-- ENDIF -->
 	</p>
-
-
 </form>
 
 <!-- INCLUDE dkp/overall_footer.html -->

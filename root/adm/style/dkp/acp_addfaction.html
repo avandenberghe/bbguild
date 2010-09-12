@@ -8,7 +8,7 @@
 //<![CDATA[
 function check_form()
 {
-    if (document.post.faction_name.value.length < 2)
+    if (document.post.factionname.value.length < 2)
     {
         alert('{MSG_NAME_EMPTY}');
         return false;
@@ -22,8 +22,8 @@ function check_form()
 
 <h1>{L_ACP_ADDFACTION}</h1>
 <p>{L_ACP_ADDFACTIONS_EXPLAIN}</p>
+<form id="acp_addfaction" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
 
-<form method="post" action="{F_ADD_FACTION}" name="post" onsubmit="return check_form(this)">
 <input type="hidden" name="faction_id" value="{FACTION_ID}" />
 
 <fieldset>

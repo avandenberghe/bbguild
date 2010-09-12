@@ -1,21 +1,21 @@
 <!-- INCLUDE overall_header.html -->
 
 <!--
-		$Id$
+	$Id$
 //-->
 
 <script  type="text/javascript">
 //<![CDATA[
 function check_form()
 {
-    if (document.post.event_name.value.length < 2)
+    if (document.post.class_name.value.length < 2)
     {
         alert('{MSG_NAME_EMPTY}');
         return false;
     }
-    if (document.post.event_value.value.length < 1)
+    if (document.post.class_name.value.length < 2)
     {
-        alert('{MSG_VALUE_EMPTY}');
+        alert('{MSG_NAME_EMPTY}');
         return false;
     }
     return true;
@@ -26,48 +26,53 @@ function check_form()
 
 <a name="maincontent"></a>
 
-<h1>{L_TITLE}</h1>
+<h1>{L_ACP_ADDCLASS}</h1>
+<p>{L_ACP_ADDCLASS_EXPLAIN}</p>
 
-<p>{L_EXPLAIN}</p>
-
-
-<form method="post" action="{F_ADD_EVENT}" name="post" onsubmit="return check_form(this)">
-<input type="hidden" name="{URI_EVENT}" value="{EVENT_ID}" />
-<input type="hidden" name="hidden_id" value="{EVENT_ID}" />
-
+<form id="acp_addclass" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
+<input type="hidden" name="c_index" value="{ID}" />
 
 <fieldset>
-<legend>{L_ADD_EVENT_TITLE}</legend>
+<legend>{L_ADD_CLASS_TITLE}</legend>
 	<dl>
-		<dt><label for="event_dkpid">{L_POOL}:</label></dt>
+		<dt><label for="class_name">{L_CLASS_NAME}:</label></dt>
+		<dd><input class="medium" type="text" id="class_name" name="class_name" value="{CLASS_NAME}" /></dd>
+	</dl>
+
+	<dl>
+		<dt><label for="class_id">{L_CLASS_ID}:</label><br/>{L_CLASS_ID_EXPLAIN}</dt>
+		<dd><input class="medium" type="text" id="class_id" name="class_id" value="{CLASS_ID}" /></dd>
+	</dl>
+
+	<dl>
+		<dt><label for="class_id">{L_CLASS_LEVEL}:</label><br/></dt>
 		<dd>
-    	 	<select name="event_dkpid" class="input">	
-       			<!-- BEGIN event_dkpid_row -->
-       			<option value="{event_dkpid_row.VALUE}"{event_dkpid_row.SELECTED}>{event_dkpid_row.OPTION}</option>
-       			<!-- END event_dkpid_row -->
-    		</select>
-	 	</dd>
+			<input class="small" type="text" id="class_level_min" name="class_level_min" value="{CLASS_MIN}" />
+			<input class="small" type="text" id="class_level_max" name="class_level_max" value="{CLASS_MAX}" />
+		</dd>
 	</dl>
 
-	<dl>
-		<dt><label for="event_name">{L_EVENT_NAME}:</label></dt>
-		<dd><input class="medium" type="text" id="event_name" name="event_name" value="{EVENT_NAME}" /></dd>
-	</dl>
 
 	<dl>
-		<dt><label for="event_value">{L_EVENT_VALUE}:</label></dt>
-		<dd><input class="medium" type="text" id="event_value" name="event_value" value="{EVENT_VALUE}" /></dd>
+		<dt><label for="armory">{L_CLASS_ARMORY}:</label><br/>{L_CLASS_ARMORY_EXPLAIN}</dt>
+		<dd><select id="armory" name="armory">{S_ARMOR_OPTIONS}</select></dd>
 	</dl>
+	
+	<dl>
+		<dt><label for="image">{L_CLASS_IMAGE}:</label><br/>{L_CLASS_IMAGE_EXPLAIN}</dt>
+		<dd><input class="medium" type="text" id="image" name="image" value="{CLASS_IMAGENAME}" />
+			<!-- IF S_CLASS_IMAGE_EXISTS -->   <img src="{CLASS_IMAGE}" alt="{CLASS_NAME}" />  <!-- ENDIF -->
+		</dd>
+	</dl>
+
 
 </fieldset>
 
-
-
    <p class="quick">
     <!-- IF S_ADD -->
-    <input type="submit" name="add" value="{L_ADD_EVENT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    <input type="submit" name="add" value="{L_ADD_CLASS}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
-    <input type="submit" name="update" value="{L_UPDATE_EVENT}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_EVENT}" class="button1" />
+    <input type="submit" name="update" value="{L_UPDATE_CLASS}" class="button1" /> 
     <!-- ENDIF -->
 	</p>
 
