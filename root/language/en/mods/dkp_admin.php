@@ -184,7 +184,7 @@ $lang = array_merge($lang, array(
 'UMIL_OLD_RESTORE_SUCCESS' => 'bbdkp (%s) dkpsystem, events, raids, raid_attendees, items, member_ranks, memberlist, temp_memberdkp tables restored successfully.', 
 'UMIL_OLD_RESTORE_NOT' => 'No bbdkp (%s) installation found to restore.', 
 'UMIL_OLD_UNINSTALL_SUCCESS' => 'bbdkp (%s) uninstalled. ',
-'UMIL_109_ILLEGALVERSION' => '1.0.9 beta found, you need to upgrade to 1.0.9rc1 and from there you can upgrade to 1.1', 
+'UMIL_109_ILLEGALVERSION' => '1.0.9 beta found, you need to upgrade to 1.0.9rc1 and from there you can upgrade to 1.1.2', 
 
 // ACP titles
 'BBDKP_WELCOME' => 'Welcome to bbDKP',
@@ -207,6 +207,7 @@ $lang = array_merge($lang, array(
 'ACP_ADDCLASS' => 'Add Class',
 'ACP_LISTCLASS' => 'List Classes',
 'ACP_ADDFACTION' => 'Add Faction',
+'ACP_LISTFACTION' => 'Faction List',
 'ACP_MM_ADDMEMBER' => 'Add Member',
 'ACP_MM_LISTMEMBERS' => 'List Members',
 'ACP_MM_ADDGUILD' => 'Add Guild',
@@ -252,6 +253,16 @@ $lang = array_merge($lang, array(
 'ACP_LISTRACE_EXPLAIN' => 'Here you can edit the game races. Please mind that for WoW the race id has to match those of the Blizzard Armory. ', 
 'ACP_LISTCLASS_EXPLAIN' => 'Here you can edit the game classes. Please mind that for WoW the Class id has to match those of the Blizzard Armory. ', 
 'ACP_LISTFACTIONS_EXPLAIN' => 'Here you can edit the game Factions. ', 
+'ACP_ADDRACE_EXPLAIN' => 'Here you can add/edit the game races.  Please mind that for WoW the race id has to match those of the Blizzard Armory. ', 
+'ACP_ADDCLASS_EXPLAIN' => 'Here you can add/edit the game Classes.  Please mind that for WoW the race id has to match those of the Blizzard Armory.', 
+'ACP_ADDFACTIONS_EXPLAIN' => 'Here you can add/edit the Factions', 
+'ACP_ADDRACE_EXPLAIN' => 'Here you can add/edit the Races.', 
+'RACEID_EXPLAIN' =>'Note. the ID is unique. for Wow, it should match the raceId XML Armory tag. ',
+'RACE_EXPLAIN' =>'Race name',
+'CLASS_ID_EXPLAIN' => 'Note. the ID is unique. for Wow, it should match the ClassId XML Armory tag.',
+'CLASS_ARMORY_EXPLAIN' => 'Max gearlevel for this class',
+'CLASS_IMAGE_EXPLAIN' => 'color png imagename, without extension. file should exist in /images/class_images',
+
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -292,6 +303,9 @@ $lang = array_merge($lang, array(
 'CONFIRM_DELETE_NEWS' => 'Are you sure you want to delete this news entry?',
 'CONFIRM_DELETE_RAID' => 'Are you sure you want to delete this raid?',
 'CONFIRM_DELETE_BBDKPLOG' => 'Are you sure you want to delete these bbDKP log entries?',
+'CONFIRM_DELETE_FACTION' => 'Are you sure you want to delete the faction  %s ?',
+'CONFIRM_DELETE_RACE' => 'Are you sure you want to delete the race %s ?',
+'CONFIRM_DELETE_CLASS' => 'Are you sure you want to delete the class %s ?',
 
 // Log Actions
 'ACTION_DEFAULT_DKP_CHANGED' => 'Default DKP Pool changed', 
@@ -562,6 +576,9 @@ $lang = array_merge($lang, array(
 'MANAGE_MEMBERS_TITLE' => 'Manage Guild Members',
 'VIEWLOGS_TITLE' => 'Log Viewer',
 'EDITMEMBER_DKP_TITLE' => 'Edit Guildmember DKP', 
+'EDIT_RACE_TITLE' => 'Edit a Race', 
+'ADD_RACE_TITLE' => 'Race Parameters',
+'ADD_CLASS_TITLE' => 'Class parameters',
 
 // Page Foot Counts
 'LISTMEMBERS_FOOTCOUNT' => '... found %d members',
