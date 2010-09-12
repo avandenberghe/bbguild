@@ -79,6 +79,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 	    );	
 	
 	$bosskill=0;
+	$boss = array();
 	$j = 0;
 	$sql2 = $db->sql_build_query ( 'SELECT', $sql_array );
 	$result2 = $db->sql_query ( $sql2 );
@@ -97,6 +98,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 		 }
 		 $j++;
 	}
+	
 	$zones[$i]['bosses'] = (array) $boss; 
 	$zones[$i]['bosscount'] = $j;
 	$zones[$i]['bosskills'] = $bosskill; 

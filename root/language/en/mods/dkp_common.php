@@ -146,8 +146,6 @@ $lang = array_merge($lang, array(
 'VIEWMEMBER_TITLE' => 'History for %s',
 'VIEWRAID_TITLE' => 'Raid Summary',
 
-
-
 // Various
 'ACCOUNT' => 'Account',
 'ACTION' => 'Action',
@@ -272,6 +270,7 @@ $lang = array_merge($lang, array(
 'LISTEVENTS_FOOTCOUNT' => '... found %d events / %d per page',
 'LISTIADJ_FOOTCOUNT' => '... found %d individual adjustment(s) / %d per page',
 'LISTITEMS_FOOTCOUNT' => '... found %d unique items / %d per page',
+'LISTNEWS_FOOTCOUNT' => '... found %d Nexs Items',
 'LISTMEMBERS_ACTIVE_FOOTCOUNT' => '... found %d active members / %sshow all</a>',
 'LISTMEMBERS_COMPARE_FOOTCOUNT' => '... comparing %d members',
 'LISTPURCHASED_FOOTCOUNT' => '... found %d item(s) / %d per page',

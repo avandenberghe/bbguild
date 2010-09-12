@@ -131,7 +131,7 @@ $lang = array_merge($lang, array(
 'SPENT' => 'Dépensé',
 'COMPARE_MEMBERS' => 'Comparer Membres',
 'LISTMEMBERS_FOOTCOUNT' => '... trouvé %d membres',
-
+'LISTNEWS_FOOTCOUNT' => '... trouvé %d Actualités',
 'LISTADJ_TITLE' => 'Liste ajustements groupe',
 'LISTEVENTS_TITLE' => 'Valeurs d’évènements',
 'LISTIADJ_TITLE' => 'Liste ajustements',
