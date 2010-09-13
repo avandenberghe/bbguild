@@ -29,7 +29,7 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_ITEM_ADD'		=> 'Ajouter objet',
 	'ACP_DKP_ITEM_LIST'		=> 'Liste des Objets',
 	'ACP_DKP_ITEM_SEARCH'	=> 'Recherche d’objets',
-	'ACP_DKP_ITEM_VIEW'		=> 'Visualisation d’objets'',
+	'ACP_DKP_ITEM_VIEW'		=> 'Visualisation d’objets',
 ));
 
 ?>

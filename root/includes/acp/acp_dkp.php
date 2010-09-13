@@ -472,8 +472,9 @@ class acp_dkp extends bbDkp_Admin
                     'warhammer'  => "Warhammer Online" ,
                     'aion'       => "Aion" , 
                     'FFXI'       => "Final Fantasy XI");
-                                
-                                
+
+
+                
                 $submit = (isset($_POST['update'])) ? true : false;
                 
                 $day = request_var('bbdkp_start_dd', 0);
@@ -507,9 +508,24 @@ class acp_dkp extends bbDkp_Admin
                     set_config('bbdkp_roster_layout', request_var('rosterlayout', 0), true);
                     set_config('bbdkp_show_achiev', request_var('showachievement', 0), true);
                     set_config('bbdkp_date_format', request_var('date_format', ''), true);
+                    set_config('bbdkp_lang', request_var('language', 'en'), true);
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
                 }
+                
+                $languages = array(
+                	'de'	=> 'Deutsch', 
+                	'en' 	=> 'English', 
+                	'fr'	=> 'Français',
+                );
+                
+                $s_lang_options = '';
+                foreach ( $languages as $lang => $langname )
+				{
+                   	$selected = ($config['bbdkp_lang'] == $lang) ? ' selected="selected"' : '';
+					$s_lang_options .= '<option value="' . $lang . '" '.$selected.'> ' . $langname . '</option>';  					
+					                  
+				}
                 
                 $template->assign_block_vars('hide_row', array(
                 			'VALUE' => "YES" , 
@@ -553,6 +569,7 @@ class acp_dkp extends bbDkp_Admin
     		    add_form_key('acp_dkp');
                 
                 $template->assign_vars(array(
+                		'S_LANG_OPTIONS'	=> $s_lang_options, 
                 		'GUILDTAG' 			=> $config['bbdkp_guildtag'] , 
                 		'REALM' 			=> $config['bbdkp_default_realm'] , 
                 		'EQDKP_START_DD' 	=> date('d', $config['bbdkp_eqdkp_start']) , 

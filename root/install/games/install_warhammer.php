@@ -363,6 +363,48 @@ function install_warhammer_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 36 , 'attribute_id' => '32', 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Zekaraz the Bloodcaller' ,  'name_short' =>  'Zekaraz' );
 		$sql_ary[] = array( 'id' => 37 , 'attribute_id' => '33', 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Kaarn the Vanquisher' ,  'name_short' =>  'Kaarn' );
 		$sql_ary[] = array( 'id' => 38 , 'attribute_id' => '34', 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Skull Lord Var’Ithrok' ,  'name_short' =>  'Var’Ithrok' );
+		
+				
+		$sql_ary[] = array( 'id' => 39 , 'attribute_id' => '1', 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Altdorf Sewers' ,  'name_short' =>  'Altdorf Sewers' );
+		$sql_ary[] = array( 'id' => 40 , 'attribute_id' => '2', 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'The Sacellum Dungeon' ,  'name_short' =>  'The Sacellum Dungeon' );
+		$sql_ary[] = array( 'id' => 41 , 'attribute_id' => '3', 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Mount Gunbad' ,  'name_short' =>  'Mount Gunbad' );
+		$sql_ary[] = array( 'id' => 42 , 'attribute_id' => '4', 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'The Bastion Stair' ,  'name_short' =>  'The Bastion Stair' );
+		$sql_ary[] = array( 'id' => 43 , 'attribute_id' => '1', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Kokrit Man-Eater' ,  'name_short' =>  'Kokrit' );
+		$sql_ary[] = array( 'id' => 44 , 'attribute_id' => '2', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Bulbous One' ,  'name_short' =>  'Bulbous' );
+		$sql_ary[] = array( 'id' => 45 , 'attribute_id' => '3', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Prot and Vermer Fangchitter' ,  'name_short' =>  'Fangchitter' );
+		$sql_ary[] = array( 'id' => 46 , 'attribute_id' => '4', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Master Moulder Vitchek' ,  'name_short' =>  'Vitchek' );
+		$sql_ary[] = array( 'id' => 47 , 'attribute_id' => '5', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Goradian the Creator' ,  'name_short' =>  'Goradian' );
+		$sql_ary[] = array( 'id' => 48 , 'attribute_id' => '6', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Ghalmar Ragehorn' ,  'name_short' =>  'Ghalmar' );
+		$sql_ary[] = array( 'id' => 49 , 'attribute_id' => '7', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Guzhak the Betrayer' ,  'name_short' =>  'Guzhak' );
+		$sql_ary[] = array( 'id' => 50 , 'attribute_id' => '8', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Vul The Bloodchosen' ,  'name_short' =>  'Vul' );
+		$sql_ary[] = array( 'id' => 51 , 'attribute_id' => '9', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Hoarfrost' ,  'name_short' =>  'Hoarfrost' );
+		$sql_ary[] = array( 'id' => 52 , 'attribute_id' => '10', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Sebcraw the Discarded' ,  'name_short' =>  'Sebcraw' );
+		$sql_ary[] = array( 'id' => 53 , 'attribute_id' => '11', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Slorth and Lorth Thunderbelly' ,  'name_short' =>  'Thunderbelly' );
+		$sql_ary[] = array( 'id' => 54 , 'attribute_id' => '12', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Snaptail the Breeder' ,  'name_short' =>  'Snaptail' );
+		$sql_ary[] = array( 'id' => 55 , 'attribute_id' => '13', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Goremane' ,  'name_short' =>  'Goremane' );
+		$sql_ary[] = array( 'id' => 56 , 'attribute_id' => '14', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Viraxil the Broken' ,  'name_short' =>  'Viraxil' );
+		$sql_ary[] = array( 'id' => 57 , 'attribute_id' => '15', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Griblik da Stinka' ,  'name_short' =>  'Griblik' );
+		$sql_ary[] = array( 'id' => 58 , 'attribute_id' => '16', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Bilebane the Rager' ,  'name_short' =>  'Bilebane' );
+		$sql_ary[] = array( 'id' => 59 , 'attribute_id' => '17', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Garrolath the Poxbearer' ,  'name_short' =>  'Garrolath' );
+		$sql_ary[] = array( 'id' => 60 , 'attribute_id' => '18', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Foul Mouf da ’ungry' ,  'name_short' =>  'Foul' );
+		$sql_ary[] = array( 'id' => 61 , 'attribute_id' => '19', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Kurga da Squig-Maker' ,  'name_short' =>  'Kurga' );
+		$sql_ary[] = array( 'id' => 62 , 'attribute_id' => '20', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Glomp the Squig Masta' ,  'name_short' =>  'Glomp' );
+		$sql_ary[] = array( 'id' => 63 , 'attribute_id' => '21', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Solithex' ,  'name_short' =>  'Solithex' );
+		$sql_ary[] = array( 'id' => 64 , 'attribute_id' => '22', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Borzar Rageborn' ,  'name_short' =>  'Rageborn' );
+		$sql_ary[] = array( 'id' => 65 , 'attribute_id' => '23', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Gahlvoth Darkrage' ,  'name_short' =>  'Gahlvoth' );
+		$sql_ary[] = array( 'id' => 66 , 'attribute_id' => '24', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Azuk’Thul' ,  'name_short' =>  'Azuk’Thul' );
+		$sql_ary[] = array( 'id' => 67 , 'attribute_id' => '25', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Thar’lgnan' ,  'name_short' =>  'Thar’lgnan' );
+		$sql_ary[] = array( 'id' => 68 , 'attribute_id' => '26', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Urlf Daemonblessed' ,  'name_short' =>  'Urlf' );
+		$sql_ary[] = array( 'id' => 69 , 'attribute_id' => '27', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Garithex the Mountain' ,  'name_short' =>  'Garithex' );
+		$sql_ary[] = array( 'id' => 70 , 'attribute_id' => '28', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Chorek the Unstoppable' ,  'name_short' =>  'Chorek' );
+		$sql_ary[] = array( 'id' => 71 , 'attribute_id' => '29', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Lord Slaurith' ,  'name_short' =>  'Slaurith' );
+		$sql_ary[] = array( 'id' => 72 , 'attribute_id' => '30', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Wrackspite' ,  'name_short' =>  'Wrackspite' );
+		$sql_ary[] = array( 'id' => 73 , 'attribute_id' => '31', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Clawfang and Doomspike' ,  'name_short' =>  'Clawfang' );
+		$sql_ary[] = array( 'id' => 74 , 'attribute_id' => '32', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Zekaraz the Bloodcaller' ,  'name_short' =>  'Zekaraz' );
+		$sql_ary[] = array( 'id' => 75 , 'attribute_id' => '33', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Kaarn the Vanquisher' ,  'name_short' =>  'Kaarn' );
+		$sql_ary[] = array( 'id' => 76 , 'attribute_id' => '34', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Skull Lord Var’Ithrok' ,  'name_short' =>  'Var’Ithrok' );
+				
+		
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
 		unset ( $sql_ary );
 						

@@ -26,7 +26,7 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
     'ACP_DKP_NEWS'			=> 'Gestion des Actualités',
-	'ACP_ADD_NEWS_EXPLAIN' => 'Ici vous pouvez ajouter et modifier diverses actualités de la Guilde.',
+	'ACP_ADD_NEWS_EXPLAIN' =>  'Ici vous pouvez ajouter et modifier diverses actualités de la Guilde.',
 	'ACP_DKP_NEWS_ADD'		=> 'Ajouter une Actualité',  
 	'ACP_DKP_NEWS_LIST'		=> 'Liste des Actualités',
 	'ACP_DKP_NEWS_LIST_EXPLAIN'	=> 'Ceci montre les Informations de la Guilde. ',

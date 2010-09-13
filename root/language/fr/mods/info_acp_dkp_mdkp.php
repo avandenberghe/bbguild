@@ -28,7 +28,7 @@ $lang = array_merge($lang, array(
   	'ACP_DKP_MDKP'	        => 'Gestion Comptes DKP', 
     'ACP_DKP_EDITMEMBERDKP'		=> 'Editer compte DKP',
 	'ACP_DKP_LISTMEMBERDKP'		=> 'Liste des comptes',  
-	'ACP_DKP_MEMBER_TRF'		=> 'Transfert d’un compte'',
+	'ACP_DKP_MEMBER_TRF'		=> 'Transfert d’un compte',
 ));
 
 ?>

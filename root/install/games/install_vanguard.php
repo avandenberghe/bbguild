@@ -144,6 +144,10 @@ function install_vanguard_bb2($bbdkp_table_prefix)
 
 		$sql_ary[] = array( 'id' => 1 , 'attribute_id' => '1', 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Dummy Zone' ,  'name_short' =>  'Dummy Zone' );
 		$sql_ary[] = array( 'id' => 2 , 'attribute_id' => '1', 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Dummy Boss' ,  'name_short' =>  'Dummy Boss' );
+		
+		$sql_ary[] = array( 'id' => 3 , 'attribute_id' => '1', 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Zone par défaut' ,  'name_short' =>  'Zone par défaut' );
+		$sql_ary[] = array( 'id' => 4 , 'attribute_id' => '1', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Boss par défaut' ,  'name_short' =>  'Boss par défaut' );
+		
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
 		unset ( $sql_ary );
 		
