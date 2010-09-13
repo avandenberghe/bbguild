@@ -27,19 +27,25 @@ if (!$auth->acl_get('u_dkp'))
 {
 	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
 }
+
 if (! defined ( "EMED_BBDKP" ))
 {
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
-
+   
 $sql_array = array (
-	'SELECT' => 'z.id as zoneid, z.zonename, z.zonename_short, z.completed,  z.completedate , z.imagename   ', 
+	'SELECT' => 'z.id as zoneid, l.name as zonename, l.name_short as zonename_short, z.completed, z.completedate, z.imagename ', 
 	'FROM' => array (
-		ZONEBASE => 'z' , 
+		ZONEBASE 		=> 'z' , 
+		BB_LANGUAGE 	=> 'l',		
 		), 
-	'WHERE' => 'z.showzone = 1 and  length(z.zonename) > 0 ', 
+	'WHERE' => "	z.showzone = 1 
+				AND l.attribute_id = z.id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."' 
+				AND z.game= '" . $config['bbdkp_default_game'] . "'",
 	'ORDER_BY' => 'z.sequence desc ' 
 );
+$zones = array(); 
+$boss = array();
 
 $sql = $db->sql_build_query ( 'SELECT', $sql_array );
 $result = $db->sql_query ( $sql );
@@ -49,22 +55,30 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 {
 	$bpshow = true;
 	$zones [$i] = array (
-		'zoneid' => $row ['zoneid'], 
-		'zonename' => $row ['zonename'], 
+		'zoneid' 		 => $row ['zoneid'], 
+		'zonename' 		 => $row ['zonename'], 
 		'zonename_short' => $row ['zonename_short'], 
-		'completed' => $row ['completed'], 
-		'completedate' => $row ['completedate'], 
-		'zoneimage' => $row ['imagename'], 
+		'completed'      => $row ['completed'], 
+		'completedate'   => $row ['completedate'], 
+		'zoneimage'      => $row ['imagename'], 
 	);
 	
 	$sql_array = array (
-		'SELECT' => 'b.bossname, b.id, b.bossname_short, b.imagename, b.type, b.killed, b.webid, b.killdate, b.counter ', 
+		'SELECT' => 'b1.name as bossname, b.id, b1.name_short as bossname_short, 
+					 b.imagename, b.type, b.killed, b.webid, b.killdate, b.counter ', 
 		'FROM' => array (
-			ZONEBASE => 'z' , 
-			BOSSBASE => 'b'), 
-		'WHERE' => ' b.zoneid = z.id and b.showboss=1 and z.id = ' . $row ['zoneid'], 
+			ZONEBASE 	=> 'z' , 
+			BOSSBASE 	=> 'b', 
+			BB_LANGUAGE => 'b1'
+			), 
+		'WHERE' => ' b.zoneid = z.id and b.showboss=1 and z.id = ' . $row ['zoneid'] . "
+				AND b1.attribute_id = b.id AND b1.attribute='boss'
+				AND b1.language= '" . $config['bbdkp_lang'] ."' 
+				AND z.game= '" . $config['bbdkp_default_game'] . "'",
 		'ORDER_BY' => 'z.sequence desc , b.id asc ' 
 	);
+	
+	$boss = array();
 	
 	$bosskill=0;
 	$j = 0;
@@ -166,8 +180,8 @@ foreach($zones as $key => $zone)
 			$template->assign_block_vars('zone.boss', array(
 				'LASTKILL'	    => (!empty($boss['killdate']) ) ? $user->lang ['LASTKILL'] . date($config['bbdkp_date_format'], $boss['killdate']) : ' ',              
 				'BOSSCOUNTSTR'	=> $user->lang ['BOSSKILLCOUNT'] . $boss['counter'],  
-			    'BOSSCOUNT'		=> $bosscount, 
-				'BOSSLINK'		=> $user->lang[strtoupper($config['bbdkp_default_game']).'_BASEURL'] . $boss['webid'],  
+			    'BOSSCOUNT'		=> $boss['counter'], 
+				'BOSSLINK'		=> $boss['url'],  
 			    'BOSSNAME'		=> $boss['bossname'],
 			    'BOSSIMG'		=> $bossimg,
 			    'BOSSIMGALT'	=> $boss['bossname'], 

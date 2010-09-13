@@ -147,7 +147,7 @@ $show_all = ( (isset($_GET['show'])) && (request_var('show', '') == "all") ) ? t
 
 $sql_array = array(
     'SELECT'    => 	'l.member_name,	l.member_class_id, r.rank_prefix, r.rank_suffix, 
-		c.class_name as classr_name, 
+		c1.name as classr_name, 
 		m.member_id, 
 		m.member_dkpid, 
 		m.member_earned, 
@@ -166,16 +166,19 @@ $sql_array = array(
         m.member_spent/m.member_raidcount AS spent_per_raid', 
  
     'FROM'      => array(
-        CLASS_TABLE 	=> 'c',
-        MEMBER_DKP_TABLE 		=> 'm',
+        CLASS_TABLE 		=> 'c',
+        MEMBER_DKP_TABLE 	=> 'm',
         MEMBER_LIST_TABLE 	=> 'l',
         MEMBER_RANKS_TABLE  => 'r',
+        BB_LANGUAGE			=> 'c1'
     	),
  
-    'WHERE'     =>  'l.member_id=m.member_id 
+    'WHERE'     =>  "l.member_id=m.member_id 
         AND l.member_guild_id = r.guild_id 
         AND l.member_rank_id = r.rank_id
-        AND l.member_class_id = c.class_id' ,
+        AND l.member_class_id = c.class_id 
+    	AND c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
+    	
     	
     'ORDER_BY' => $current_order['sql'], 
 );
@@ -268,7 +271,7 @@ else
 // Classes array - if an element is false, that class has gotten no
 // loot and won't show up from the SQL query
 // Otherwise it contains an array with the SQL data
-$eq_classes = array();
+$classes = array();
 
 // Find the total members existing with a dkp record
 $sql = 'SELECT count(member_id) AS members FROM ' . MEMBER_DKP_TABLE ;
@@ -296,6 +299,7 @@ $class_counts = array();
 $sql = 'SELECT l.member_class_id, count(m.member_id) AS class_count	
         FROM ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_LIST_TABLE . ' l , ' . CLASS_TABLE .' c
         where m.member_id=l.member_id and l.member_class_id = c.class_id';
+
 if ($query_by_pool)
    {
 	    $sql .= ' and m.member_dkpid = '. $dkpsys_id . ' ';
@@ -304,18 +308,6 @@ $sql .= ' GROUP BY l.member_class_id';
 
 $result = $db->sql_query($sql);
 
-$eq_classes['Druid']=null;
-$eq_classes['Unknown']=null;
-$eq_classes['Paladin']=null;
-$eq_classes['Mage']=null;
-$eq_classes['Priest']=null;
-$eq_classes['Warrior']=null;
-$eq_classes['Hunter']=null;
-$eq_classes['Rogue']=null;
-$eq_classes['Warlock']=null;
-$eq_classes['Shaman']=null;
-$eq_classes['Death Knight']=null;
-
 while ( $row = $db->sql_fetchrow($result) )
 {
 	$class_counts[ $row['member_class_id'] ] = $row['class_count'];
@@ -323,19 +315,48 @@ while ( $row = $db->sql_fetchrow($result) )
 $db->sql_freeresult($result);
 
 // Query finds all items purchased by each class; will not find items that are unpriced
-$sql = 'SELECT c.class_name, c.class_id, count(i.item_id) AS class_drops
-        FROM ' . ITEMS_TABLE . ' i, ' . CLASS_TABLE . ' c, ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_LIST_TABLE . ' l  
-        WHERE l.member_name = i.item_buyer 
+$sql_array = array(
+    'SELECT'    => 	'c1.name as class_name, c.class_id, count(i.item_id) AS class_drops', 
+    'FROM'      => array(
+        ITEMS_TABLE 		=> 'i',
+        CLASS_TABLE 		=> 'c',
+        MEMBER_DKP_TABLE 	=> 'm',
+        MEMBER_LIST_TABLE  	=> 'l',
+        BB_LANGUAGE			=> 'c1'
+    	),
+    'WHERE'     =>  "l.member_name = i.item_buyer 
         AND l.member_class_id = c.class_id
         AND i.item_dkpid = m.member_dkpid  
         AND l.member_id = m.member_id
-        AND (i.item_value != 0.00)  ';
+        AND (i.item_value != 0.00) 
+    	AND c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
+    	
+    'GROUP_BY' => ' c1.name, c.class_id ',	
+    'ORDER_BY' => $current_order['sql'], 
+    
+);
 if ($query_by_pool)
    {
-	    $sql .= ' and m.member_dkpid = '. $dkpsys_id . ' ';
+	    $sql_array['WHERE'] .= ' AND m.member_dkpid = '. $dkpsys_id . ' ';
    }
-$sql .= ' GROUP BY c.class_name, c.class_id ';  
+$sql = $db->sql_build_query('SELECT', $sql_array);
+
+
 $result = $db->sql_query($sql);
+
+$classes = array();
+/*$classes['Druid']=null;
+$classes['Unknown']=null;
+$classes['Paladin']=null;
+$classes['Mage']=null;
+$classes['Priest']=null;
+$classes['Warrior']=null;
+$classes['Hunter']=null;
+$classes['Rogue']=null;
+$classes['Warlock']=null;
+$classes['Shaman']=null;
+$classes['Death Knight']=null;
+*/
 
 while ( $row = $db->sql_fetchrow($result) )
 {
@@ -348,7 +369,7 @@ while ( $row = $db->sql_fetchrow($result) )
     $class_members = ( isset($class_counts[$class_id]) ) ? $class_counts[$class_id] : 0;
     $class_factor = ( $class_members > 0 ) ? round(($class_drops / $class_members) * 100) : 0;
 
-    $eq_classes[$class] = array(
+    $classes[$class] = array(
          'drops' => $class_drops,
          'drop_pct' => $class_drop_pct,
          'class_count' => $class_members,
@@ -361,30 +382,40 @@ $db->sql_freeresult($result);
 
 $class_counts = array();
 
+$sql_array = array(
+    'SELECT'    => 	'c1.name as class_name, count(m.member_id) AS class_count, c.class_id  ', 
+    'FROM'      => array(
+        ITEMS_TABLE 		=> 'i',
+        CLASS_TABLE 		=> 'c',
+        MEMBER_DKP_TABLE 	=> 'm',
+        MEMBER_LIST_TABLE  	=> 'l',
+        BB_LANGUAGE			=> 'c1'
+    	),
+    'WHERE'     =>  "m.member_id = l.member_id 
+        AND l.member_class_id = c.class_id 
+    	AND c1.attribute_id = c.c_index 
+    	AND c1.language= '" . $config['bbdkp_lang'] . "' 
+    	AND c1.attribute = 'class'" ,
+    	
+    'GROUP_BY' => ' c1.name, c.class_id ',	
+     
+);
+
 if ($query_by_pool)
 {
-    $sql = 'SELECT c.class_name, count(m.member_id) AS class_count, c.class_id
-        FROM ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_LIST_TABLE . ' l , ' . CLASS_TABLE .' c
-        where m.member_id=l.member_id 
-        and l.member_class_id = c.class_id 
-	    and m.member_dkpid = '. $dkpsys_id . ' GROUP BY c.class_name, c.class_id ';
+     $sql_array['WHERE'] .= ' AND m.member_dkpid = '. $dkpsys_id . ' ';
 }
-else 
-{
-    $sql = 'SELECT c.class_name, count(m.member_id) AS class_count, c.class_id
-        FROM ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_LIST_TABLE . ' l , ' . CLASS_TABLE .' c
-        where m.member_id=l.member_id 
-        and l.member_class_id = c.class_id GROUP BY c.class_name, c.class_id';
-}
+$sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query($sql);
+
+
 
 
 while ( $row = $db->sql_fetchrow($result) )
 {
-    $class = $row['class_name'];
+    $class 		 = $row['class_name'];
 	$class_count = $row['class_count'];
-
-    $cssclass = $config['bbdkp_default_game'] . 'class'. $row['class_id'];
+    $cssclass    = $config['bbdkp_default_game'] . 'class'. $row['class_id'];
    
     if( (empty($class)) || ($class == 'NULL') )
     {
@@ -392,7 +423,7 @@ while ( $row = $db->sql_fetchrow($result) )
     }
 
     // if this isn't an array, define blank values
-    if ( !is_array($eq_classes[$class]) )
+    if ( !is_array($classes[$class]) )
     {
         $v = array(
             'drops' 		=> 0,
@@ -404,8 +435,10 @@ while ( $row = $db->sql_fetchrow($result) )
     }
     else
     {
-        $v = $eq_classes[$class];
+        $v = $classes[$class];
     }
+    
+    
     $loot_factor = ( $v['class_pct'] > 0 ) ? round((($v['drop_pct'] / $v['class_pct']) - 1) * 100) : '0';
     
     if ($query_by_pool)

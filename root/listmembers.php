@@ -249,7 +249,7 @@ if (isset ( $_GET ['rank'] ))
 
 if ($query_by_class == 1)
 {
-	$sql_array['WHERE'] .= " AND c.class_name =  '" . $db->sql_escape ( $filter ) . "' ";
+	$sql_array['WHERE'] .= " AND l1.name =  '" . $db->sql_escape ( $filter ) . "' ";
 }
 
 if ($query_by_armor == 1)
