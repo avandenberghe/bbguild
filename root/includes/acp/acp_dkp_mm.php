@@ -27,12 +27,10 @@ class acp_dkp_mm extends bbDkp_Admin
 	/***********************************/
 	// member management
 	/***********************************/
-	
 	var $u_action;
 	
 function main($id, $mode) 
 	{
-		
 		global $db, $user, $auth, $template, $sid, $cache;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		
@@ -58,17 +56,21 @@ function main($id, $mode)
 						$S_ADD = true;
 
 						$sql_array = array(
-						    'SELECT'    => 'm.*, c.class_name AS member_class, r.race_name AS member_race, 
+						    'SELECT'    => 'm.*, l.name AS member_class, l1.name AS member_race, 
 						    				g.id as guild_id, g.name as guild_name, g.realm , g.region',
 						 
 						    'FROM'      => array(
 						        MEMBER_LIST_TABLE  => 'm',
 						        CLASS_TABLE        => 'c',
+						        BB_LANGUAGE		  => 'l',
+						        BB_LANGUAGE		  => 'l1', 
 						        RACE_TABLE        => 'r',
 						        GUILD_TABLE        => 'g',
 						    ),
 						 
-						    'WHERE'     => "r.race_id = m.member_race_id 
+						    'WHERE'     => "r.race_id = m.member_race_id
+						    AND l1.attribute_id = r.race_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'race'
+						    AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'  
 							AND c.class_id = m.member_class_id 
 							AND m.member_guild_id = g.id 
 							AND member_name='" . trim($db->sql_escape(utf8_normalize_nfc(request_var(URI_NAME,'', true)))) . "'" ,
@@ -181,12 +183,20 @@ function main($id, $mode)
                     //
 					// Race dropdown
 					//
-			
-					$sql = 'SELECT race_id, race_name 
-							FROM ' . RACE_TABLE .' 
-							GROUP BY race_name';
+					$sql_array = array(
+				    'SELECT'    => 	'  r.race_id, l.name as race_name ', 
+				    'FROM'      => array(
+							RACE_TABLE 		=> 'r',
+							BB_LANGUAGE 	=> 'l',
+								),
+					'WHERE'		=> " r.race_id = l.attribute_id 
+									AND l.attribute='race' 
+									AND l.language= '" . $config['bbdkp_lang'] ."'",
+				    );
+					
+				    $sql = $db->sql_build_query('SELECT', $sql_array);
+
 					$result = $db->sql_query($sql);
-			
 					
 					if (isset ($this->member))
 					{
@@ -217,8 +227,18 @@ function main($id, $mode)
 		            //
 					// Class dropdown
 					//
-					$sql = 'SELECT class_id, class_name, class_min_level, class_max_level 
-							FROM ' . CLASS_TABLE .' GROUP BY class_id';
+					$sql_array = array(
+					    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name, c.class_hide,
+					    				  c.class_min_level, class_max_level, c.class_armor_type , c.imagename ', 
+					    'FROM'      => array(
+					        CLASS_TABLE 	=> 'c',
+					        BB_LANGUAGE		=> 'l', 
+					    	),
+					    'WHERE'		=> " l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				 
+					    );
+					    
+					$sql = $db->sql_build_query('SELECT', $sql_array);					
+					
 					$result = $db->sql_query($sql);
 					while ( $row = $db->sql_fetchrow($result) )
 					{
@@ -284,25 +304,28 @@ function main($id, $mode)
 					}
 					
 					// build presets for outdate pulldowns
-					$s_memberout_day_options = '<option value="0"' . ((!$this->member['member_outdate_d']) ? ' selected="selected"' : '') . '>--</option>';
+					$s_memberout_day_options = '<option value="0"' . (isset($this->member['member_outdate_d'])   ? ' selected="selected"' : '') . '>--</option>';
 					for ($i = 1; $i < 32; $i++)
 					{
-						$selected = ($i == $this->member['member_outdate_d']) ? ' selected="selected"' : '';
+						$day = isset($this->member['member_outdate_d']) ? $this->member['member_outdate_d'] : $now['mday'] ;
+						$selected = ($i == $day) ? ' selected="selected"' : '';
 						$s_memberout_day_options .= "<option value=\"$i\"$selected>$i</option>";
 					}
 	
-					$s_memberout_month_options = '<option value="0"' . ((!$this->member['member_outdate_mo']) ? ' selected="selected"' : '') . '>--</option>';
+					$s_memberout_month_options = '<option value="0"' . (isset($this->member['member_outdate_mo']) ? ' selected="selected"' : '') . '>--</option>';
 					for ($i = 1; $i < 13; $i++)
 					{
-						$selected = ($i == $this->member['member_outdate_mo']) ? ' selected="selected"' : '';
+						$month = isset($this->member['member_outdate_mo']) ? $this->member['member_outdate_mo'] : $now['mday'] ;
+						$selected = ($i == $month) ? ' selected="selected"' : '';
 						$s_memberout_month_options .= "<option value=\"$i\"$selected>$i</option>";
 					}
 					$s_memmberout_year_options = '';
 
-					$s_memberout_year_options = '<option value="0"' . ((!$this->member['member_outdate_y']) ? ' selected="selected"' : '') . '>--</option>';
+					$s_memberout_year_options = '<option value="0"' . (isset($this->member['member_outdate_mo']) ? ' selected="selected"' : '') . '>--</option>';
 					for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
 					{
-						$selected = ($i == $this->member['member_outdate_y']) ? ' selected="selected"' : '';
+						$yr = isset($this->member['member_outdate_y']) ? $this->member['member_outdate_y'] : $now['year'] ;
+						$selected = ($i == $yr) ? ' selected="selected"' : '';
 						$s_memberout_year_options .= "<option value=\"$i\"$selected>$i</option>";
 					}
 					unset($now);
@@ -636,15 +659,6 @@ function main($id, $mode)
 				        	'S_OUTDATE_DAY_OPTIONS'		=> $s_memberout_day_options,
 							'S_OUTDATE_MONTH_OPTIONS'	=> $s_memberout_month_options,
 							'S_OUTDATE_YEAR_OPTIONS'	=> $s_memberout_year_options,
-							/*				        
-							'MEMBER_JOINDATE_D'     => isset($this->member) ? $this->member['member_joindate_d'] : '',
-							'MEMBER_JOINDATE_MO'    => isset($this->member) ? $this->member['member_joindate_mo']: '',
-							'MEMBER_JOINDATE_Y'     => isset($this->member) ? $this->member['member_joindate_y']: '',
-							'MEMBER_OUTDATE_D'      => isset($this->member) ? $this->member['member_outdate_d']: '',
-							'MEMBER_OUTDATE_MO'     => isset($this->member) ? $this->member['member_outdate_mo']: '',
-							'MEMBER_OUTDATE_Y'      => isset($this->member) ? $this->member['member_outdate_y']: '' ,
-							'MEMBER_COMMENT'        => isset($this->member) ? stripmultslashes($this->member['member_comment']) : '', 
-							*/
 				        	
 				        	// javascript
 							'LA_ALERT_AJAX'	 	  => $user->lang['ALERT_AJAX'],
@@ -738,20 +752,22 @@ function main($id, $mode)
 				$show_all = (( isset($_GET['show'])) && request_var('show','') == 'all') ? true : false;
 				
 				$sql_array = array(
-				    'SELECT'    => 	'm.* , g.name, c.class_name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
+				    'SELECT'    => 	'm.* , g.name, l.name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
 									 c.class_armor_type AS armor_type', 
 				 
 				    'FROM'      => array(
 				        MEMBER_LIST_TABLE 	=> 'm',
 				        MEMBER_RANKS_TABLE 	=> 'r',
 				        CLASS_TABLE  		=> 'c',
+				        BB_LANGUAGE			=> 'l', 
 				        GUILD_TABLE  		=> 'g',
 				    	),
 				 
-				    'WHERE'     =>  ' (m.member_rank_id = r.rank_id)
+				    'WHERE'     =>  " (m.member_rank_id = r.rank_id)
+				    				AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
 									AND (m.member_guild_id = g.id)
 									AND (m.member_guild_id = r.guild_id)
-									AND (m.member_guild_id = ' . $guild_id . ')
+									AND (m.member_guild_id = " . $guild_id . ')
 									AND (m.member_class_id = c.class_id)', 
 				    	
 					'ORDER_BY'	=> $current_order['sql'],
@@ -821,7 +837,6 @@ function main($id, $mode)
 			/***************************************/
 			// ranks setup
 			/***************************************/
-			
 			
 			case 'mm_ranks':
 			    
