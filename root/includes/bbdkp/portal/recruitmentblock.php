@@ -32,7 +32,19 @@ if ($config['bbdkp_recruitment'] == 1)
 	$rec_forum_id  = $config['bbdkp_recruit_forumid'];
 	
 	// get recruitment statuses from class table
-    $sql = "SELECT class_id, class_name, dps, tank, heal FROM " . CLASS_TABLE . " where class_id > 0 and (tank+heal+dps)>0  order by class_id ";
+    $sql_array = array(
+	    'SELECT'    => 	' c.class_id, l.name as class_name,
+	    				  c.imagename, c.dps, c.tank, c.heal ', 
+	    'FROM'      => array(
+	        CLASS_TABLE 	=> 'c',
+	        BB_LANGUAGE		=> 'l', 
+	    	),
+	    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+		'ORDER_BY'	=> ' c.class_id ',
+	    );
+	    
+	$sql = $db->sql_build_query('SELECT', $sql_array);    
+    
     $result = $db->sql_query($sql);
     while ($row = $db->sql_fetchrow($result)) 
     {
