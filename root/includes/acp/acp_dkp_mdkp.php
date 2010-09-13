@@ -218,7 +218,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 									m.member_adjustment, 
 									m.member_lastraid,
 									s.dkpsys_name, 
-									c.class_name AS member_class, 
+									l.name AS member_class, 
 									r.rank_name, 
 									r.rank_prefix, 
 									r.rank_suffix, 
@@ -229,15 +229,17 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				        MEMBER_DKP_TABLE 	=> 'm', 
 				        MEMBER_RANKS_TABLE  => 'r', 
 				        CLASS_TABLE    		=> 'c', 
+				        BB_LANGUAGE			=> 'l', 
 				        DKPSYS_TABLE    	=> 's', 
 					    ),
 				 
-				    'WHERE'     =>  '(a.member_rank_id = r.rank_id)
+				    'WHERE'     =>  "(a.member_rank_id = r.rank_id)
 				    			AND (a.member_guild_id = r.guild_id)   
 								AND (a.member_id = m.member_id) 
 								AND (a.member_class_id = c.class_id)  
 								AND (m.member_dkpid = s.dkpsys_id)   
-								AND (s.dkpsys_id = ' . (int) $dkpsys_id . ')' ,
+								AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    		
+								AND (s.dkpsys_id = " . (int) $dkpsys_id . ')' ,
 				
 					'ORDER_BY' => $current_order['sql'], 
 					);
@@ -337,7 +339,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 							m.member_lastraid,
 							t.race_name AS member_race,
 							s.dkpsys_name, 
-							c.class_name AS member_class, 
+							l.name AS member_class, 
 							r.rank_name, 
 							r.rank_prefix, 
 							r.rank_suffix, 
@@ -348,17 +350,19 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					        MEMBER_DKP_TABLE    => 'm',
 					        MEMBER_RANKS_TABLE  => 'r',
 							CLASS_TABLE 		=> 'c', 
+							BB_LANGUAGE			=> 'l', 
 					        RACE_TABLE    		=> 't',
 					        DKPSYS_TABLE    	=> 's',
 					    ),
 					 
-					    'WHERE'     =>  '(a.member_rank_id = r.rank_id) 
+					    'WHERE'     =>  "(a.member_rank_id = r.rank_id) 
 					    				AND (a.member_guild_id = r.guild_id)  
 										AND (a.member_id = m.member_id) 
 			 							AND t.race_id = a.member_race_id 
 										AND (a.member_class_id = c.class_id)  
 										AND (m.member_dkpid = s.dkpsys_id)   
-										AND (s.dkpsys_id = ' . request_var(URI_DKPSYS, 0) . ')' . 
+										AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    
+										AND (s.dkpsys_id = " . request_var(URI_DKPSYS, 0) . ')' . 
 									   "AND (a.member_name = '" . $db->sql_escape(  utf8_normalize_nfc(request_var(URI_NAME, '', true))) . "')",
 						);
 					 
