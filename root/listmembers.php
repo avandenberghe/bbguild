@@ -123,16 +123,25 @@ $sql = 'SELECT class_armor_type FROM ' . CLASS_TABLE . ' GROUP BY class_armor_ty
 $result = $db->sql_query ( $sql );
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
-	$filtervalues [] = $row ['class_armor_type'];
-	$armor_type [] = $row ['class_armor_type'];
+	$filtervalues [] = $user->lang[$row ['class_armor_type']];
+	$armor_type [] = $user->lang[$row ['class_armor_type']];
 }
 $db->sql_freeresult ( $result );
 $filtervalues [] = '--------';
 
 
-// followup with classlist
-$sql = 'SELECT class_name, class_id, class_min_level, class_max_level FROM ' . CLASS_TABLE . '';
-$sql .= ' GROUP BY class_name order by class_id';
+// get classlist
+   $sql_array = array(
+    'SELECT'    => 	' l.name as class_name, c.class_min_level, c.class_max_level, c.imagename ', 
+    'FROM'      => array(
+        CLASS_TABLE 	=> 'c',
+        BB_LANGUAGE		=> 'l', 
+    	),
+    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+	'ORDER_BY'	=> ' c.class_id ',
+    );
+    
+$sql = $db->sql_build_query('SELECT', $sql_array);   
 $result = $db->sql_query ( $sql );
 
 while ( $row = $db->sql_fetchrow ( $result ) )
@@ -200,7 +209,7 @@ $sql_array = array(
    					(m.member_earned-m.member_spent+m.member_adjustment) AS member_current, 
    					l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
        				r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix, 
-       				c.class_name AS member_class, c.class_id, 
+       				l1.name AS member_class, c.class_id, 
        				c.class_armor_type AS armor_type,
 					c.class_min_level AS min_level,
 					c.class_max_level AS max_level', 
@@ -211,13 +220,15 @@ $sql_array = array(
         MEMBER_LIST_TABLE 	=> 'l',
         MEMBER_RANKS_TABLE  => 'r',
         CLASS_TABLE    		=> 'c',
+        BB_LANGUAGE			=> 'l1', 
     	),
  
-    'WHERE'     =>  '(m.member_id = l.member_id)  
+    'WHERE'     =>  "(m.member_id = l.member_id)  
+    		AND l1.attribute_id = c.c_index AND l1.language= '" . $config['bbdkp_lang'] . "' AND l1.attribute = 'class' 
 			AND (c.class_id = l.member_class_id) 
 			AND (r.rank_id = l.member_rank_id) 
 			AND (m.member_dkpid = d.dkpsys_id) 
-			AND (l.member_guild_id = r.guild_id) ' ,
+			AND (l.member_guild_id = r.guild_id) " ,
 );
 
 if  (isset($_POST['compare']) && isset($_POST['compare_ids']))
@@ -540,8 +551,19 @@ function leaderboard($dkpsys_id, $query_by_pool)
 	// get needed global vars
 	global $db, $template, $config;
 	global $phpbb_root_path, $phpEx;
+
+    $sql_array = array(
+	    'SELECT'    => 	' c.class_id, l.name as class_name, c.imagename ', 
+	    'FROM'      => array(
+	        CLASS_TABLE 	=> 'c',
+	        BB_LANGUAGE		=> 'l', 
+	    	),
+	    'WHERE'		=> "class_id != 0 AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+		'ORDER_BY'	=> 'l.name ',
+    );
+	$sql = $db->sql_build_query('SELECT', $sql_array);
 	
-	$sql = 'SELECT class_id, class_name FROM ' . CLASS_TABLE . ' where class_id != 0 order by class_name';
+	
 	$result = $db->sql_query ( $sql );
 	$classes = array ();
 	
@@ -549,9 +571,10 @@ function leaderboard($dkpsys_id, $query_by_pool)
 	{
 		$cssclass = $config ['bbdkp_default_game'] . 'class' . $row ['class_id'];
 		$template->assign_block_vars ( 'class', 
-			array ('CLASSNAME' 		=> $row ['class_name'], 
-					'CLASSIMGPATH' 	=> $config ['bbdkp_default_game'] . '_' . $row ['class_name'] . '_small.png', 
-					'CSSCLASS' => $config ['bbdkp_default_game'] . 'class' . $row ['class_id'] ) 
+			array (
+				'CLASSNAME' 	=> $row ['class_name'], 
+				'CLASSIMGPATH'	=> (strlen($row['imagename']) > 1) ? $row['imagename'] . ".png" : '',
+				'CSSCLASS' 		=> $config ['bbdkp_default_game'] . 'class' . $row ['class_id'] ) 
 			);
 		
 		$sql_array = array(
