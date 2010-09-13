@@ -21,15 +21,16 @@ if (!defined('IN_PHPBB'))
 {
 	exit;
 }
+
 if (! defined('EMED_BBDKP')) 
 {
 	$user->add_lang ( array ('mods/dkp_admin' ));
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
+
 class acp_dkp_game extends bbDkp_Admin
 {
     var $u_action;
-    
 	/** 
 	* main ACP game function
 	* @param int $id the id of the node who parent has to be returned by function 
@@ -73,7 +74,7 @@ class acp_dkp_game extends bbDkp_Admin
 					
 					$sql = 'INSERT INTO ' . FACTION_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
 					$db->sql_query($sql);							
-						
+
 					trigger_error( sprintf( $user->lang['ADMIN_ADD_FACTION_SUCCESS'], $factionname) . $link, E_USER_NOTICE);
 						
 				}
@@ -106,15 +107,25 @@ class acp_dkp_game extends bbDkp_Admin
 					}
 					$db->sql_freeresult($result);
 					$data = array( 
-						'race_name'				=> (string) $racename,
 						'race_id'				=> (int) $id,
 						'race_faction_id'		=> (int) $factionid,
 						'race_hide'				=> 0,
 					);
 					
 					$sql = 'INSERT INTO ' . RACE_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
-					$db->sql_query($sql);							
+					$db->sql_query($sql);
 						
+					$names = array(
+						'attribute_id'	=>  $id,
+						'language'		=>  $config['bbdkp_lang'],
+						'attribute'		=>  'race', 
+						'name'			=> (string) $racename,
+						'name_short'	=> (string) $racename,	
+					);
+					
+					$sql = 'INSERT INTO ' . BB_LANGUAGE . ' ' . $db->sql_build_array('INSERT', $names);
+					$db->sql_query($sql);						
+					
 					trigger_error( sprintf( $user->lang['ADMIN_ADD_RACE_SUCCESS'], $racename) . $link, E_USER_NOTICE);
 				}
 				
@@ -122,7 +133,6 @@ class acp_dkp_game extends bbDkp_Admin
 				{
 					// update the race to db
 					$data = array( 
-						'race_name'				=> (string) $racename,
 						'race_faction_id'		=> (int) $factionid,
 					);
 					
@@ -130,6 +140,15 @@ class acp_dkp_game extends bbDkp_Admin
 						    WHERE race_id = ' . $id ;
 					$db->sql_query($sql);	
 
+					$names = array(
+						'name'		=> (string) $racename,
+						'name_short'=> (string) $racename,	
+					);
+					
+					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $id . 
+						" AND attribute='race'  AND language= '" . $config['bbdkp_lang'] ."'";
+					$db->sql_query($sql);	
+						
 					trigger_error( sprintf( $user->lang['ADMIN_UPDATE_RACE_SUCCESS'], $racename) . $link, E_USER_NOTICE);
 					
 				}
@@ -162,7 +181,6 @@ class acp_dkp_game extends bbDkp_Admin
 					
 					$data = array( 
 						'class_id'				=> (int) $class_id,
-						'class_name'			=> (string) $classname,
 						'class_min_level'		=> (int) $min,
 						'class_max_level'		=> (int) $max,
 						'class_armor_type'		=> (string) $armorytype,
@@ -172,7 +190,20 @@ class acp_dkp_game extends bbDkp_Admin
 					
 					$sql = 'INSERT INTO ' . CLASS_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
 					$db->sql_query($sql);							
-						
+
+					$id = $db->sql_nextid();
+					 
+					$names = array(
+						'attribute_id'	=>  $id,
+						'language'		=>  $config['bbdkp_lang'],
+						'attribute'		=>  'class', 
+						'name'			=> (string) $classname,
+						'name_short'	=> (string) $classname,	
+					);
+					
+					$sql = 'INSERT INTO ' . BB_LANGUAGE . ' ' . $db->sql_build_array('INSERT', $names);
+					$db->sql_query($sql);			
+										
 					trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_SUCCESS'], $classname) . $link, E_USER_NOTICE);
 					
 				}
@@ -193,18 +224,8 @@ class acp_dkp_game extends bbDkp_Admin
 					}
 					$db->sql_freeresult($result);
 					
-					// check for unique name exception
-					$sql = 'select count(*) as count from ' . CLASS_TABLE . ' where c_index != ' . $id . " and class_name = '" . $db->sql_escape($classname) . "'";  
-					$result = $db->sql_query($sql);	
-					if( (int) $db->sql_fetchfield('count', 0 ,$result ) > 0 )
-					{
-						 trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_FAILED_NAME'], $id) . $link, E_USER_WARNING);	
-					}
-					$db->sql_freeresult($result);
-					
 					$data = array( 
 						'class_id'				=> (int) $class_id,
-						'class_name'			=> (string) $classname,
 						'class_min_level'		=> (int) $min,
 						'class_max_level'		=> (int) $max,
 						'class_armor_type'		=> (string) $armorytype,
@@ -214,7 +235,16 @@ class acp_dkp_game extends bbDkp_Admin
 					
 					$sql = 'UPDATE ' . CLASS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) .  '  
 						    WHERE c_index = ' . $id ;
-					$db->sql_query($sql);							
+					$db->sql_query($sql);		
+
+					$names = array(
+						'name'		=> (string) $classname,
+						'name_short'=> (string) $classname,	
+					);
+					
+					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $id . 
+						" AND attribute='class'  AND language= '" . $config['bbdkp_lang'] ."'";
+					$db->sql_query($sql);	
 						
 					trigger_error( sprintf( $user->lang['ADMIN_UPDATE_CLASS_SUCCESS'], $classname) . $link, E_USER_NOTICE);
 					
@@ -294,9 +324,21 @@ class acp_dkp_game extends bbDkp_Admin
             		if(isset ($_GET['id']))
             		{
 	            		$id = request_var('id', 0); 
-	            		//edit
-						$sql = 'SELECT race_id, race_name, race_faction_id  FROM ' . RACE_TABLE . ' WHERE race_id = ' . $id;
-						$result = $db->sql_query($sql);	
+	            		//edit					
+						$sql_array = array(
+					    'SELECT'    => 	'  r.race_id, l.name as race_name, r.race_faction_id ', 
+					    'FROM'      => array(
+								RACE_TABLE 		=> 'r',
+								BB_LANGUAGE 	=> 'l',
+									),
+						'WHERE'		=> " r.race_id = l.attribute_id 
+										AND l.attribute='race' 
+										AND l.language= '" . $config['bbdkp_lang'] ."'
+										AND r.race_id = " . $id ,
+					    );
+						
+					    $sql = $db->sql_build_query('SELECT', $sql_array);
+					    $result = $db->sql_query($sql);	
 						$factionid = $db->sql_fetchfield('race_faction_id', 0 ,$result );	
 						$race_name = $db->sql_fetchfield('race_name', 0 ,$result );	
 						$db->sql_freeresult($result);
@@ -386,6 +428,9 @@ class acp_dkp_game extends bbDkp_Admin
 							$sql = 'DELETE FROM ' . RACE_TABLE . ' WHERE race_id =' . $id;  
 							$db->sql_query($sql);
 							
+							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'race' and attribute_id= " . $id;  
+							$db->sql_query($sql);
+													
 							trigger_error(sprintf($user->lang['ADMIN_DELETE_RACE_SUCCESS'], $id) . $link, E_USER_WARNING);
 								
 						}
@@ -423,8 +468,20 @@ class acp_dkp_game extends bbDkp_Admin
             		{
             			// get pk
 	            		$id = request_var('id', 0); 
-						$sql = 'SELECT class_id, class_name, class_min_level, class_max_level, class_armor_type, imagename 
-								FROM ' . CLASS_TABLE . ' WHERE c_index = ' . $id;
+						
+						$sql_array = array(
+					    'SELECT'    => 	'  c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename ', 
+					    'FROM'      => array(
+								CLASS_TABLE 	=> 'c',
+								BB_LANGUAGE 	=> 'l',
+									),
+						'WHERE'		=> " c.c_index = l.attribute_id 
+										AND l.attribute='class' 
+										AND l.language= '" . $config['bbdkp_lang'] ."'
+										AND c.c_index = " . $id ,
+					    );						
+					    $sql = $db->sql_build_query('SELECT', $sql_array);    		
+						
 						$result = $db->sql_query($sql);	
 						$class_id = (int)  $db->sql_fetchfield('class_id', 0 ,$result );
 						$class_name = (string)  $db->sql_fetchfield('class_name', 0 ,$result );	
@@ -510,6 +567,9 @@ class acp_dkp_game extends bbDkp_Admin
 							$sql = 'DELETE FROM ' . CLASS_TABLE . ' WHERE c_index =' . $id;  
 							$db->sql_query($sql);
 							
+							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'class' and attribute_id= " . $id;  
+							$db->sql_query($sql);
+							
 							trigger_error(sprintf($user->lang['ADMIN_DELETE_CLASS_SUCCESS'], $id) . $link, E_USER_WARNING);
 								
 						}
@@ -576,12 +636,14 @@ class acp_dkp_game extends bbDkp_Admin
                 // list the races
 				$total_races = 0;
                 $sql_array = array(
-				    'SELECT'    => 	' r.race_id, r.race_name, r.race_faction_id, r.race_hide, f.faction_name  ', 
+				    'SELECT'    => 	' r.race_id, l.name as race_name, r.race_faction_id, r.race_hide, f.faction_name  ', 
 				    'FROM'      => array(
 				        RACE_TABLE 		=> 'r',
 				        FACTION_TABLE	=> 'f',
+				        BB_LANGUAGE		=> 'l', 
 				    	),
-				    'WHERE'		=> 'r.race_faction_id = f.faction_id' ,
+				    'WHERE'		=> "r.race_faction_id = f.faction_id
+				    				AND l.attribute_id = r.race_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'race' ",   
 					'ORDER_BY'	=> $current_order['sql'],
 				    );
 				$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -604,10 +666,12 @@ class acp_dkp_game extends bbDkp_Admin
                 // list the classes
                 $total_classes = 0;
                 $sql_array = array(
-				    'SELECT'    => 	' c.c_index, c.class_id, c.class_name, c.class_hide, c.class_min_level, class_max_level, c.class_armor_type , c.imagename ', 
+				    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name, c.class_hide, c.class_min_level, class_max_level, c.class_armor_type , c.imagename ', 
 				    'FROM'      => array(
 				        CLASS_TABLE 	=> 'c',
+				        BB_LANGUAGE		=> 'l', 
 				    	),
+				    'WHERE'		=> " l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
 					'ORDER_BY'	=> $current_order2['sql'],
 				    );
 				    
