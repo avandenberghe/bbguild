@@ -56,21 +56,26 @@ function main($id, $mode)
 						$S_ADD = true;
 
 						$sql_array = array(
-						    'SELECT'    => 'm.*, l.name AS member_class, l1.name AS member_race, 
+						    'SELECT'    => 'm.*, c1.name AS member_class, l1.name AS member_race, 
 						    				g.id as guild_id, g.name as guild_name, g.realm , g.region',
 						 
 						    'FROM'      => array(
 						        MEMBER_LIST_TABLE  => 'm',
 						        CLASS_TABLE        => 'c',
-						        BB_LANGUAGE		  => 'l',
-						        BB_LANGUAGE		  => 'l1', 
-						        RACE_TABLE        => 'r',
+						        BB_LANGUAGE		   => 'l1', 
+						        RACE_TABLE         => 'r',
 						        GUILD_TABLE        => 'g',
 						    ),
-						 
+						    
+						     'LEFT_JOIN' => array(
+						        array(
+						            'FROM'  => array(BB_LANGUAGE => 'c1'),
+						            'ON'    => "c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
+						        )
+						    ),
+						    
 						    'WHERE'     => "r.race_id = m.member_race_id
-						    AND l1.attribute_id = r.race_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'race'
-						    AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'  
+						    AND l1.attribute_id = r.race_id AND l1.language= '" . $config['bbdkp_lang'] . "' AND l1.attribute = 'race'
 							AND c.class_id = m.member_class_id 
 							AND m.member_guild_id = g.id 
 							AND member_name='" . trim($db->sql_escape(utf8_normalize_nfc(request_var(URI_NAME,'', true)))) . "'" ,

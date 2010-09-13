@@ -58,23 +58,33 @@ switch ($layout)
         //default layout 
          case 0:
         $sql_array = array(
-            'SELECT'    => 'm.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e.race_name, 
+            'SELECT'    => 'm.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name, 
             				 m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url,
             				 r.rank_prefix , r.rank_name, r.rank_suffix,  
             				 g.name, g.realm, g.region, 
-            				 c.class_name' , 
+            				 c1.name as class_name ' , 
             'FROM'      => array(
                 MEMBER_LIST_TABLE    =>  'm',
                 CLASS_TABLE          =>  'c',
                 GUILD_TABLE          =>  'g',
                 MEMBER_RANKS_TABLE   =>  'r',
                 RACE_TABLE           =>  'e',
+                BB_LANGUAGE			 =>  'e1', 
                 ),
-            'WHERE'     => 'g.id = m.member_guild_id AND
-            				 c.class_id = m.member_class_id AND
-            				 e.race_id = m.member_race_id AND
-            				 r.guild_id = m.member_guild_id AND 
-            				 r.rank_id = m.member_rank_id AND r.rank_hide = 0',
+             						    
+		     'LEFT_JOIN' => array(
+		        array(
+		            'FROM'  => array(BB_LANGUAGE => 'c1'),
+		            'ON'    => "c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
+		      )),
+		                      
+            'WHERE'     => " g.id = m.member_guild_id 
+            				 AND c.class_id = m.member_class_id 
+            				 AND e.race_id = m.member_race_id 
+            				 AND r.guild_id = m.member_guild_id  
+            				 AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
+            				 AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "' AND e1.attribute = 'race'
+            				 ",
             'ORDER_BY'  => $current_order['sql']
         );
         
@@ -150,58 +160,69 @@ switch ($layout)
     case 1:
         // class layout
         $sql_array = array(
-            'SELECT'    => 'c.class_id, c.class_name' , 
+            'SELECT'    => 'c.class_id, c1.name as class_name, c.imagename' , 
             'FROM'      => array(
                 MEMBER_LIST_TABLE    =>  'm',
                 CLASS_TABLE          =>  'c',
+                BB_LANGUAGE			 =>  'c1',
                 MEMBER_RANKS_TABLE   =>  'r',
                 ),
-            'WHERE'     => 'c.class_id = m.member_class_id AND
-            				 r.guild_id = m.member_guild_id AND 
-            				 r.rank_id = m.member_rank_id AND r.rank_hide = 0', 
-            'ORDER_BY'  =>  'c.class_name'
+            'WHERE'     => " c.class_id = m.member_class_id 
+            				 AND r.guild_id = m.member_guild_id 
+            				 AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
+            				 AND c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class' ", 
+            'ORDER_BY'  =>  'c1.name asc'
          );
         $sql2 = $db->sql_build_query('SELECT', $sql_array);
         $result2 = $db->sql_query($sql2);
-        $class = array();
+        $classes = array();
         while ( $row = $db->sql_fetchrow($result2) )
         {
-            $class[$row['class_id']] = $row['class_name'];
+            $classes[$row['class_id']]['name'] = $row['class_name'];
+            $classes[$row['class_id']]['imagename'] = $row['imagename'];
         }
         $db->sql_freeresult($result2);
         
-        foreach ($class as  $classid => $classname )
+        foreach ($classes as  $classid => $class )
         {
             
-            $classimgurl =  $phpbb_root_path . 'images/roster_classes/' . $config['bbdkp_default_game'] . '_' . $classname . '.png'; 
+            $classimgurl =  $phpbb_root_path . "images/roster_classes/" . $config['bbdkp_default_game'] . '_' . $class['name'] .'.png'; 
             
             $template->assign_block_vars('class', array(	
-            		'CLASSNAME'     => $classname, 
+            		'CLASSNAME'     => $class['name'], 
             		'CLASSIMG'		=> $classimgurl,
             ));
             $classmembers=1;
             
-            
-            
             $sql_array = array(
-            'SELECT'    => 'm.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e.race_name, 
+            'SELECT'    => 'm.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name, 
             				 m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev,  m.member_armory_url,
             				 r.rank_prefix , r.rank_name, r.rank_suffix,  
             				 g.name, g.realm, g.region, 
-            				 c.class_name' , 
+            				 c1.name as class_name' , 
             'FROM'      => array(
                 MEMBER_LIST_TABLE    =>  'm',
                 CLASS_TABLE          =>  'c',
                 GUILD_TABLE          =>  'g',
                 MEMBER_RANKS_TABLE   =>  'r',
                 RACE_TABLE           =>  'e',
+                BB_LANGUAGE			 =>  'e1',
                 ),
-            'WHERE'     => 'g.id = m.member_guild_id AND
-            				 c.class_id = m.member_class_id AND
-            				 r.rank_id = m.member_rank_id AND r.rank_hide = 0 AND
-            				 r.guild_id = m.member_guild_id AND
-            				 e.race_id = m.member_race_id AND
-                            m.member_class_id = ' . (int) $classid,
+             						    
+		     'LEFT_JOIN' => array(
+		        array(
+		            'FROM'  => array(BB_LANGUAGE => 'c1'),
+		            'ON'    => "c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
+		      )),
+             
+            'WHERE'     => "g.id = m.member_guild_id 
+            				AND c.class_id = m.member_class_id 
+            				AND r.rank_id = m.member_rank_id AND r.rank_hide = 0 
+            				AND r.guild_id = m.member_guild_id 
+            				AND e.race_id = m.member_race_id 
+            				AND c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'
+            				AND e1.attribute_id = r.rank_id AND e1.language= '" . $config['bbdkp_lang'] . "' AND e1.attribute = 'race'  
+                            AND m.member_class_id = " . (int) $classid,
             'ORDER_BY'  => $current_order['sql']
             );
             $sql = $db->sql_build_query('SELECT', $sql_array);
