@@ -603,6 +603,7 @@ class acp_dkp_item extends bbDkp_Admin
 			$db->sql_freeresult ( $result1 );
 	
 			$start = request_var('start', 0);
+			
 	   		$sort_order = array (
 				0 => array ('i.item_date desc', 'item_date' ), 
 				1 => array ('i.item_buyer', 'item_buyer desc' ), 
@@ -671,9 +672,8 @@ class acp_dkp_item extends bbDkp_Admin
 			}
 			
 			$db->sql_freeresult ( $items_result );
-		}
-		
-		$template->assign_vars ( array (
+			
+			$template->assign_vars ( array (
 				'F_LIST_ITEM' 	=>   append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
 				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
 				'L_EXPLAIN' 	=> $user->lang ['ACP_LISTITEMS_EXPLAIN'], 
@@ -689,6 +689,19 @@ class acp_dkp_item extends bbDkp_Admin
 				'LISTITEMS_FOOTCOUNT' => $listitems_footcount, 
 				'ITEM_PAGINATION' => $pagination 
 			));
+		}
+		else 
+		{
+			$template->assign_vars ( array (
+				'F_LIST_ITEM' 	=>  append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
+				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
+				'L_EXPLAIN' 	=> $user->lang ['ACP_LISTITEMS_EXPLAIN'], 
+				'U_LIST_ITEMS' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ), 
+				'S_BBTIPS' 		=> $this->bbtips, 
+			));			
+		}
+		
+
 	}
 	
 	/***
