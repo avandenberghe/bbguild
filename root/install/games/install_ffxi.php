@@ -147,6 +147,64 @@ function install_ffxi_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 3 , 'attribute_id' => '1', 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Zone par défaut' ,  'name_short' =>  'Zone par défaut' );
 		$sql_ary[] = array( 'id' => 4 , 'attribute_id' => '1', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Boss par défaut' ,  'name_short' =>  'Boss par défaut' );
 		
+		$sql_ary[] = array( 'id' => 5 , 'attribute_id' => '1', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+		$sql_ary[] = array( 'id' => 6 , 'attribute_id' => '2', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
+		$sql_ary[] = array( 'id' => 7 , 'attribute_id' => '3', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Monk' ,  'name_short' =>  'Monk' );
+		$sql_ary[] = array( 'id' => 8 , 'attribute_id' => '4', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Thief' ,  'name_short' =>  'Thief' );
+		$sql_ary[] = array( 'id' => 9 , 'attribute_id' => '5', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'White Mage' ,  'name_short' =>  'White Mage' );
+		$sql_ary[] = array( 'id' => 10 , 'attribute_id' => '6', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Black Mage' ,  'name_short' =>  'Black Mage' );
+		$sql_ary[] = array( 'id' => 11 , 'attribute_id' => '7', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Blue Mage' ,  'name_short' =>  'Blue Mage' );
+		$sql_ary[] = array( 'id' => 12 , 'attribute_id' => '8', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Red Mage' ,  'name_short' =>  'Red Mage' );
+		$sql_ary[] = array( 'id' => 13 , 'attribute_id' => '9', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
+		$sql_ary[] = array( 'id' => 14 , 'attribute_id' => '10', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Dark Knight' ,  'name_short' =>  'Dark Knight' );
+		$sql_ary[] = array( 'id' => 15 , 'attribute_id' => '11', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Dragoon' ,  'name_short' =>  'Dragoon' );
+		$sql_ary[] = array( 'id' => 16 , 'attribute_id' => '12', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Ninja' ,  'name_short' =>  'Ninja' );
+		$sql_ary[] = array( 'id' => 17 , 'attribute_id' => '13', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Samurai' ,  'name_short' =>  'Samurai' );
+		$sql_ary[] = array( 'id' => 18 , 'attribute_id' => '14', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Summoner' ,  'name_short' =>  'Summoner' );
+		$sql_ary[] = array( 'id' => 19 , 'attribute_id' => '15', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Ranger' ,  'name_short' =>  'Ranger' );
+		$sql_ary[] = array( 'id' => 20 , 'attribute_id' => '16', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Dancer' ,  'name_short' =>  'Dancer' );
+		$sql_ary[] = array( 'id' => 21 , 'attribute_id' => '17', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Scholar' ,  'name_short' =>  'Scholar' );
+		$sql_ary[] = array( 'id' => 22 , 'attribute_id' => '18', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Corsair' ,  'name_short' =>  'Corsair' );
+		$sql_ary[] = array( 'id' => 23 , 'attribute_id' => '19', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Bard' ,  'name_short' =>  'Bard' );
+		$sql_ary[] = array( 'id' => 24 , 'attribute_id' => '20', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Beastmaster' ,  'name_short' =>  'Beastmaster' );
+		$sql_ary[] = array( 'id' => 25 , 'attribute_id' => '21', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Puppetmaster' ,  'name_short' =>  'Puppetmaster' );
+		
+		$sql_ary[] = array( 'id' => 26 , 'attribute_id' => '1', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+		$sql_ary[] = array( 'id' => 27 , 'attribute_id' => '2', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
+		$sql_ary[] = array( 'id' => 28 , 'attribute_id' => '3', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Monk' ,  'name_short' =>  'Monk' );
+		$sql_ary[] = array( 'id' => 29 , 'attribute_id' => '4', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Thief' ,  'name_short' =>  'Thief' );
+		$sql_ary[] = array( 'id' => 30 , 'attribute_id' => '5', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'White Mage' ,  'name_short' =>  'White Mage' );
+		$sql_ary[] = array( 'id' => 31 , 'attribute_id' => '6', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Black Mage' ,  'name_short' =>  'Black Mage' );
+		$sql_ary[] = array( 'id' => 32 , 'attribute_id' => '7', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Blue Mage' ,  'name_short' =>  'Blue Mage' );
+		$sql_ary[] = array( 'id' => 33 , 'attribute_id' => '8', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Red Mage' ,  'name_short' =>  'Red Mage' );
+		$sql_ary[] = array( 'id' => 34 , 'attribute_id' => '9', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
+		$sql_ary[] = array( 'id' => 35 , 'attribute_id' => '10', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Dark Knight' ,  'name_short' =>  'Dark Knight' );
+		$sql_ary[] = array( 'id' => 36 , 'attribute_id' => '11', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Dragoon' ,  'name_short' =>  'Dragoon' );
+		$sql_ary[] = array( 'id' => 37 , 'attribute_id' => '12', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Ninja' ,  'name_short' =>  'Ninja' );
+		$sql_ary[] = array( 'id' => 38 , 'attribute_id' => '13', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Samurai' ,  'name_short' =>  'Samurai' );
+		$sql_ary[] = array( 'id' => 39 , 'attribute_id' => '14', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Summoner' ,  'name_short' =>  'Summoner' );
+		$sql_ary[] = array( 'id' => 40 , 'attribute_id' => '15', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Ranger' ,  'name_short' =>  'Ranger' );
+		$sql_ary[] = array( 'id' => 41 , 'attribute_id' => '16', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Dancer' ,  'name_short' =>  'Dancer' );
+		$sql_ary[] = array( 'id' => 42 , 'attribute_id' => '17', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Scholar' ,  'name_short' =>  'Scholar' );
+		$sql_ary[] = array( 'id' => 43 , 'attribute_id' => '18', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Corsair' ,  'name_short' =>  'Corsair' );
+		$sql_ary[] = array( 'id' => 44 , 'attribute_id' => '19', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Bard' ,  'name_short' =>  'Bard' );
+		$sql_ary[] = array( 'id' => 45 , 'attribute_id' => '20', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Beastmaster' ,  'name_short' =>  'Beastmaster' );
+		$sql_ary[] = array( 'id' => 46 , 'attribute_id' => '21', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Puppetmaster' ,  'name_short' =>  'Puppetmaster' );
+		
+		$sql_ary[] = array( 'id' => 47 , 'attribute_id' => '1', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+		$sql_ary[] = array( 'id' => 48 , 'attribute_id' => '2', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Galka' ,  'name_short' =>  'Galka' );
+		$sql_ary[] = array( 'id' => 49 , 'attribute_id' => '3', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Hume' ,  'name_short' =>  'Hume' );
+		$sql_ary[] = array( 'id' => 50 , 'attribute_id' => '4', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Elvaan' ,  'name_short' =>  'Elvaan' );
+		$sql_ary[] = array( 'id' => 51 , 'attribute_id' => '5', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Tarutaru' ,  'name_short' =>  'Tarutaru' );
+		$sql_ary[] = array( 'id' => 52 , 'attribute_id' => '6', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Mithra' ,  'name_short' =>  'Mithra' );
+				
+		$sql_ary[] = array( 'id' => 53 , 'attribute_id' => '1', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+		$sql_ary[] = array( 'id' => 54 , 'attribute_id' => '2', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Galka' ,  'name_short' =>  'Galka' );
+		$sql_ary[] = array( 'id' => 55 , 'attribute_id' => '3', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Hume' ,  'name_short' =>  'Hume' );
+		$sql_ary[] = array( 'id' => 56 , 'attribute_id' => '4', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Elvaan' ,  'name_short' =>  'Elvaan' );
+		$sql_ary[] = array( 'id' => 57 , 'attribute_id' => '5', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Tarutaru' ,  'name_short' =>  'Tarutaru' );
+		$sql_ary[] = array( 'id' => 58 , 'attribute_id' => '6', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Mithra' ,  'name_short' =>  'Mithra' );
+		
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
 		unset ( $sql_ary );
 	}
