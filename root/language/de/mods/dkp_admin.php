@@ -1,6 +1,6 @@
 <?php
 /**
- * bbdkp admin language file [English]
+ * bbdkp admin language file [German]
  * @author Sajaki@bbdkp.com
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
@@ -43,49 +43,49 @@ if (empty($lang) || !is_array($lang))
 
 // DKP
 $lang = array_merge($lang, array(
-'BBDKPDISABLED' => 'bbDKP is currently disabled.', 
+'BBDKPDISABLED' => 'bbDKP ist momentan nicht verfügbar.', 
 
 //addnews
-'ADD_NEWS' => 'Add News',
-'ADDNEWS_TITLE' => 'Add a News Entry',
-'DELETE_NEWS' => 'Delete News',
-'HEADLINE' => 'Headline',
-'MESSAGE_BODY' => 'Message Body',
-'UPDATE_NEWS' => 'Update News',
-'UPDATE_DATE_TO' => 'Update date to<br />%s?',
+'ADD_NEWS' => 'News zufügen',
+'ADDNEWS_TITLE' => 'Newsbeitrag zufügen',
+'DELETE_NEWS' => 'Newsbeitrag löschen',
+'HEADLINE' => 'Kopfzeile',
+'MESSAGE_BODY' => 'Nachrichtentext',
+'UPDATE_NEWS' => 'Newsbeitragaktualisieren',
+'UPDATE_DATE_TO' => 'Aktualisiere Datum zu<br /> %s ?',
 
 //JAVASCRIPT
-'B_HELP' => 'Bold text: [b]text[/b]',
-'I_HELP' => 'Italic text: [i]text[/i]',
-'U_HELP' => 'Underlined text: [u]text[/u]',
-'Q_HELP' => 'Quote text: [quote]text[/quote]',
-'C_HELP' => 'Center text: [center]text[/center]',
-'P_HELP' => 'Insert image: [img]http://image_url[/img]',
-'W_HELP' => 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
-'ITEM_HELP' => 'Wowhead : [item]text[/item]',
+'B_HELP' => 'fetter Text: [b]text[/b]',
+'I_HELP' => 'kursiver Text: [i]text[/i]',
+'U_HELP' => 'Unterstrichener Text: [u]text[/u]',
+'Q_HELP' => 'Zitat: [quote]text[/quote]',
+'C_HELP' => 'zentrierter Text: [center]text[/center]',
+'P_HELP' => 'Bild einfügen: [img]http://image_url[/img]',
+'W_HELP' => 'URL einfügen: [url]http://url[/url] or [url=http://url]URL text[/url]',
+'ITEM_HELP' => 'Wowhead Item einfügen : [item]text[/item]',
 
 // Form Validation Errors
 'FV_FORMVALIDATION' => 'Form validation Error',
-'FV_ALPHA_ATTENDEES' => 'Characters\' names in EverQuest contain only alphabetic characters.',
-'FV_DIFFERENCE_TRANSFER' => 'A history transfer must be made between two different people.',
-'FV_NUMBER' => 'Must be a number.',
-'FV_NUMBER_ADJUSTMENT' => 'The adjustment value field must be a number.',
-'FV_NUMBER_ALIMIT' => 'The adjustments limit field must be a number.',
-'FV_NUMBER_ILIMIT' => 'The items limit field must be a number.',
-'FV_NUMBER_INACTIVEPD' => 'The inactive period must be a number.',
-'FV_NUMBER_PILIMIT' => 'The purchased items limit must be a number.',
-'FV_NUMBER_RLIMIT' => 'The raids limit must be a number.',
-'FV_NUMBER_VALUE' => 'The value field must be a number.',
-'FV_NUMBER_VOTE' => 'The vote field must be a number.',
-'FV_RANGE_DAY' => 'The day field must be an integer between 1 and 31.',
-'FV_RANGE_HOUR' => 'The hour field must be an integer between 0 and 23.',
-'FV_RANGE_MINUTE' => 'The minute field must be an integer between 0 and 59.',
-'FV_RANGE_MONTH' => 'The month field must be an integer between 1 and 12.',
-'FV_RANGE_SECOND' => 'The second field must be an integer between 0 and 59.',
-'FV_RANGE_YEAR' => 'The year field must be an integer with a value of at least 1998.',
-'FV_REQUIRED' => 'Required Field',
-'FV_REQUIRED_ACRO' => 'The guild acronym field is required.',
-'FV_REQUIRED_ADJUSTMENT' => 'The adjustment value field is required.',
+'FV_ALPHA_ATTENDEES' => 'Char\' Namen in EverQuest beinhalten nur alphabetische Zeichen.',
+'FV_DIFFERENCE_TRANSFER' => 'Ein Historientransfer geht nur zwischen zwei unterschiedlichen Leuten.',
+'FV_NUMBER' => 'Muss eine Zahl sein.',
+'FV_NUMBER_ADJUSTMENT' => 'Das Korrekturwert-Feld muss eine Zahl sein.',
+'FV_NUMBER_ALIMIT' => 'Das Korrekturgrenze-Feld muss eine Zahl sein.',
+'FV_NUMBER_ILIMIT' => 'Das Itemgrenze-Feld muss eine Zahl sein.',
+'FV_NUMBER_INACTIVEPD' => 'Der inaktive Zeitraum muss eine Zahl sein.',
+'FV_NUMBER_PILIMIT' => 'Die gekaufte-Items-Grenze muss eine Zahl sein.',
+'FV_NUMBER_RLIMIT' => 'Die Raidgrenze muss eine Zahl sein.',
+'FV_NUMBER_VALUE' => 'Das Werte-Feld muss eine Zahl sein.',
+'FV_NUMBER_VOTE' => 'Das Abstimmungs-Feld muss eine Zahl sein.',
+'FV_RANGE_DAY' => 'Das Tag-Feld muss eine Zahl zwischen 1 und 31 sein.',
+'FV_RANGE_HOUR' => 'Das Stunden-Feld muss eine Zahl zwischen 0 und 23 sein.',
+'FV_RANGE_MINUTE' => 'Das Minuten-Feld muss eine Zahl zwischen 0 und 59 sein.',
+'FV_RANGE_MONTH' => 'Das Monats-Feld muss eine Zahl zwischen 1 und 12 sein.',
+'FV_RANGE_SECOND' => 'Das zweite Feld muss eine Zahl zwischen 0 und 59 sein.',
+'FV_RANGE_YEAR' => 'Das Jahr-Feld muss mindestens eine Zahl ab 1998 sein.',
+'FV_REQUIRED' => 'Pflichtfeld',
+'FV_REQUIRED_ACRO' => 'Das Gildenkurzwort-Feld ist notwendig.',
+'FV_REQUIRED_ADJUSTMENT' => 'TDas Korrekturwert-Feld ist notwendig.',
 'FV_REQUIRED_ATTENDEES' => 'There must be at least one attendee on this raid.',
 'FV_REQUIRED_BUYER' => 'A buyer must be selected.',
 'FV_REQUIRED_BUYERS' => 'At least one buyer must be selected.',
