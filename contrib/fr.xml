@@ -23,64 +23,7 @@ Veuillez faire un backup de votre installation phpBB3 avant de commencer.
 					<contributions status="current" from="2008-04-04" position="développeur"/>
 				</contributions-group>
 			</author>
-			<author>
-				<realname><![CDATA[Kevin Rushin]]></realname>
-				<username><![CDATA[Malfate / Medraut]]></username>
-				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
-				<email><![CDATA[cs.krushin@gmail.com]]></email>
-				<contributions-group>
-					<contributions status="current" from="2009-09-01" position="développeur"/>
-					<contributions status="past" from="2007-12-27" to="2009-01-01" position="Former Leader, bbDKP Supporter"/>
-				</contributions-group>
-			</author>
-			<author>
-				<realname><![CDATA[Morten Boegeskov]]></realname>
-				<username><![CDATA[Hroar]]></username>
-				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
-				<email><![CDATA[morten.boegeskov@gmail.com]]></email>
-				<contributions-group>
-					<contributions status="past" from="2009-05-01" to="2009-09-04" position="développeur"/>
-				</contributions-group>
-			</author>
-			<author>
-				<username><![CDATA[Kapli]]></username>
-				<contributions-group>
-					<contributions status="past" from="2008-08-01" to="2009-04-01" position="développeur"/>
-				</contributions-group>
-			</author>
-			<author>
-				<realname><![CDATA[Teksonic]]></realname>
-				<username><![CDATA[Teksonic]]></username>
-				<contributions-group>
-					<contributions status="past" from="2008-04-06" to="2008-06-01" position="développeur"/>
-				</contributions-group>
-			</author>
-			<author>
-				<realname><![CDATA[Ippeh]]></realname>
-				<username><![CDATA[Ippeh]]></username>
-				<homepage><![CDATA[http://www.explodinglabrats.com/]]></homepage>
-				<email><![CDATA[ippe.he@gmail.com]]></email>
-				<contributions-group>
-					<contributions status="past" from="2007-12-24" to="2008-10-01" position="créateur de bbDKP"/>
-				</contributions-group>
-			</author>
-			<author>
-				<realname><![CDATA[sz3]]></realname>
-				<username><![CDATA[sz3]]></username>
-				<homepage><![CDATA[http://www.eqdkp.com]]></homepage>
-				<contributions-group>
-					<contributions status="past" position="auteur de EQDKP BossProgress v3.0.3"/>
-				</contributions-group>
-			</author>
-			<author>
-				<realname><![CDATA[Tsigo]]></realname>
-				<username><![CDATA[Tsigo]]></username>
-				<homepage><![CDATA[http://www.eqdkp.com]]></homepage>
-				<contributions-group>
-					<contributions status="past" position="developpeur original de EQDKP."/>
-				</contributions-group>
-			</author>
-		</author-group>
+			</author-group>
 		<mod-version>1.1.2</mod-version>
 		<installation>
 			<level>advanced</level>
