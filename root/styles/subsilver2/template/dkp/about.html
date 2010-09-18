@@ -82,7 +82,7 @@ div.css-panes div {
 
 /* alternate colors: skin2 */
 ul.skin2 a {
-	background-color:#313131;		
+	background-color:#000000;		
 	color:#fff !important;
 }
 
@@ -99,13 +99,19 @@ ul.skin2 a.current {
 
 /* tab pane with background gradient */
 div.skin2 div {
-	background: none repeat scroll 0 0 #313131;
+	background: none repeat scroll 0 0 #000000;
 	border: 1px solid #000000;
 	display:block;
 	/*padding : 2px;*/
 	min-height:200px;
 	color:#FFDD88;	
 }
+
+a:link	{ color: #FFFFFF; text-decoration: none; }
+a:visited	{ color: #FFFFFF; text-decoration: none; }
+a:hover	{ color: #FFFFFF; text-decoration: underline; }
+a:active	{ color: #FFFFFF; text-decoration: none; }
+
 </style>
 
 <!-- tabs -->
@@ -114,6 +120,7 @@ div.skin2 div {
 	<li><a href="#">{L_TCOPYRIGHT}</a></li>
 	<li><a href="#">{L_TCREDITS}</a></li>
 	<li><a href="#">{L_TEAM}</a></li>	
+	<li><a href="#">{L_PLUGINS}</a></li>
 	<li><a href="#">{L_TSPONSORS}</a></li>
 </ul>
 
@@ -188,8 +195,6 @@ div.skin2 div {
 		</table>
 	</div>
 	
-
-
 	<div>
 		<table width="100%" border="0"> 
 	     	<tr>
@@ -199,7 +204,7 @@ div.skin2 div {
 	        </tr>
 			
 			<tr>
-	          <td><b>Sajaki</b></td>
+	          <td><b><a href=mailto:sajaki9@gmail.com>Sajaki</a></b></td>
 	          <td>Developer, Project leader</td>
 	          <td>4.4.2008 -</td>
 	        </tr>
@@ -209,7 +214,7 @@ div.skin2 div {
 	          <td>1.8.2008 - 5.2009</td>
 	        </tr>
 	        <tr>
-	          <td><b>Malfate</b></td>
+	          <td><b><a href=mailto:cs.krushin@gmail.com>Malfate</a></b></td>
 	          <td>Former Leader, bbDKP Supporter</td>
 	          <td>24.12.2007 -</td>
 	        </tr>
@@ -228,21 +233,41 @@ div.skin2 div {
 	          <td>Previous Developer</td>
 	        </tr>
 	        <tr>
-	          <td><b>Ippeh</b></td>
+	          <td><b><a href=mailto:ippe.he@gmail.com>Ippeh</a></b></td>
 	          <td>bbDKP Project Founder, Previous Developer</td>
 	          <td></td>
 	        </tr>
 	</table>
 	</div>
 	
+		<div>
+		<table width="100%" border="0"> 
+	     	<tr>
+	          <td bgcolor="#333333"><strong>{L_PLUGINS}</strong></td>
+	          <td bgcolor="#333333"><strong>{L_PLUGINVERS}</strong></td>
+	          <td bgcolor="#333333"><strong>{L_AUTHOR}</strong></td>
+	          <td bgcolor="#333333"><strong>{L_MAINT}</strong></td>
+	        </tr>
+			
+			<!-- BEGIN plugins_row -->
+			<tr>
+	          <td><b>{plugins_row.NAME}</b></td>
+	          <td>{plugins_row.VERSION}</td>
+	          <td>{plugins_row.AUTHOR}</td>
+	          <td>{plugins_row.MAINTAINER}</td>
+	        </tr>
+			<!-- END plugins_row -->
+			
+			
+	</table>
+	</div>
+	
 	<div>
 		<p>{L_DONATORS}</p>
 	</div>
-
-
 </div>
 
-<!-- activate tabs with JavaScript -->
+<!-- activate tabs with jquery -->
 <script>
 $(function() 
 {

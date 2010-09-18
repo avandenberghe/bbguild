@@ -270,7 +270,7 @@ $lang = array_merge($lang, array(
 'LISTEVENTS_FOOTCOUNT' => '... found %d events / %d per page',
 'LISTIADJ_FOOTCOUNT' => '... found %d individual adjustment(s) / %d per page',
 'LISTITEMS_FOOTCOUNT' => '... found %d unique items / %d per page',
-'LISTNEWS_FOOTCOUNT' => '... found %d Nexs Items',
+'LISTNEWS_FOOTCOUNT' => '... found %d News Items',
 'LISTMEMBERS_ACTIVE_FOOTCOUNT' => '... found %d active members / %sshow all</a>',
 'LISTMEMBERS_COMPARE_FOOTCOUNT' => '... comparing %d members',
 'LISTPURCHASED_FOOTCOUNT' => '... found %d item(s) / %d per page',
@@ -391,7 +391,7 @@ $lang = array_merge($lang, array(
 
    You should have received a copy of the GNU General Public License
    along with bbDKP.  If not, see http://www.gnu.org/licenses', 
-'LICENSE2' => 'Powered by bbDkp (c) 2009 The bbDkp Project Team. If you use this software and find it to be useful, we ask that you retain the copyright notice below. While not required for free use, it will help build interest in the bbDkp project and is <b>required for obtaining support</b>.',
+'LICENSE2' => 'Powered by bbDkp (c) 2009 The bbDKP Project Team. If you use this software and find it to be useful, we ask that you retain the copyright notice below. While not required for free use, it will help build interest in the bbDkp project and is <b>required for obtaining support</b>.',
 'COPYRIGHT3' => 'bbDKP (c) 2010 Sajaki, Malfate, Blazeflack <br />
 bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'COPYRIGHT2' => 'bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN',
@@ -403,10 +403,7 @@ bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'JOB' => 'Job', 
 'DEVLINK' => 'Link',
 'PROD' => 'bbDKP',
-'DEVELOPERS' => '<a href=mailto:sajaki9@gmail.com>Sajaki</a>
-				<a href=mailto:cs.krushin@gmail.com>Malfate</a>
-				<a href=mailto:ippe.he@gmail.com>Ippeh</a>',  
-          	  
+'DEVELOPERS' => '<a href=mailto:sajaki9@gmail.com>Sajaki</a>',           	  
 'PHPBB' => 'phpBB', 
 'PHPBBGR' => 'phpBB Group', 
 'PHPBBLINK' => 'http://www.phpbb.com', 
