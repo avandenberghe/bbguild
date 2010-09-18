@@ -31,7 +31,20 @@ Pour de plus amples détails, veuillez consulter le changelog. Demandes de déve
 
 Copyright
 Powered by bbDKP (c) 2009 The bbDKP Project Team
-Veuillez montrer le la notice de copyright dans overall_footer.html dans les Styles que vous utilisez. Ceci aide à soutenir l’intérêt dans le proeèt bbDKP et c’est requis afin d’obtenir du support.
+Veuillez montrer le la notice de copyright dans overall_footer.html dans les Styles que vous utilisez. Ceci aide à soutenir l’intérêt dans le projèt bbDKP et c’est requis afin d’obtenir du support.
+http://code.google.com/p/bbdkp/
+bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
+bbDKP (c) 2008 Sajaki, Malfate, Kapli 
+bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
+EQDkp (c) 2003 The EqDkp Project Team]]></description>
+<description lang="de"><![CDATA[bbDKP ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Sie ermöglicht Gilden ihr Geschehen zu verwalten, nämlich die Verwaltung der Tailnahme der Gildenmitglieder, die Raidteilnahme zu Raids, die Verwaltung der Gegenstandsankäufe, der DKP Konten, Der Bossvorgang, und die Visualisation von GildenStatistiken. Dies erbringt an ihre Benutzer ein einziges Angriffspunkt zum DKP und das forum, und ermöglicht Ihnen als Administrator oder Raid Leader eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP implementiert die Spiele Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer und World of Warcraft. 
+Nicht vollständige Funktionalitätenliste : Support für Vielfache DKP Gruppen (Pools), Vielfache Gilden, Ein Übersicht der DKP Punkte pro Spieler, Raidsliste, Ereignisliste, Gegenstandswerte, Historiken, Raidstatistiken, Bossvorgang, Gildenarsenalseite, ACP Modulen, Backupfunktionen, Import von EQDKP und EQDKP+. 
+Vorhandene Plugins : Importation von Mitglieder von das Blizzard oder Aion Arsenal, bbTips (tooltips), Raidtracker (wow), Rekrutierungsformular.  
+Für weitere Entwicklungsanfragen und Support heissen wir Sie wilkommen auf unsere internetseite http://www.bbdkp.com. 
+
+Copyright
+Powered by bbDKP (c) 2009 The bbDKP Project Team
+Bitte zeige den copyright link in overall_footer.html in den Stylen die gebraucht werden. Es hilft dabei, Interesse in bbDKP zu verbreiten und ist erforderlich falls du Support bekommen willst.
 http://code.google.com/p/bbdkp/
 bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
@@ -42,6 +55,9 @@ Please Backup your phpbb3 installation and database before beginning. ]]>
 </author-notes>
 <author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, PHP 5 avec Libxml 2.6.0 (simplexml), Curl 
 Veuillez faire une sauvegarde avant de commencer. ]]>
+</author-notes>
+<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5 mit Libxml 2.6.0 (simplexml), Curl 
+Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. ]]>
 </author-notes>
 <author-group>
 			<author>
@@ -121,8 +137,15 @@ Veuillez faire une sauvegarde avant de commencer. ]]>
 		<link-group>
 			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2</link>
 			<link type="template" href="contrib/subsilver2.xml" lang="fr">subsilver2</link>
+			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2</link>
+
 			<link type="language" lang="en" href="contrib/fr.xml">French</link>
 			<link type="language" lang="fr" href="contrib/fr.xml">Français</link>
+			<link type="language" lang="de" href="contrib/fr.xml">Franzözisch</link>
+
+			<link type="language" lang="en" href="contrib/de.xml">German</link>
+			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
+			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>			
 		</link-group>
 	</header>
 	<action-group>
@@ -161,6 +184,8 @@ Veuillez faire une sauvegarde avant de commencer. ]]>
 		<open src=".htaccess">
 			<edit>
 				<comment lang="en"><![CDATA[adding htaccess rule to redirect to portal]]></comment>
+				<comment lang="fr"><![CDATA[Ajout d’une règle htaccess pour rediriger aux to portail]]></comment>
+				<comment lang="de"><![CDATA[Zufügen einer htaccess Regel zum weiterleiten nach dem Portal]]></comment>
 				<find><![CDATA[<Files "common.php">
 Order Allow,Deny
 Deny from All
@@ -170,7 +195,9 @@ Deny from All
 		</open>
 		<open src="common.php">
 			<edit>
-				<comment lang="en"><![CDATA[adding required classfiles for bbdkp support. ]]></comment>
+				<comment lang="en"><![CDATA[adding required classfiles for bbdkp in common.php.]]></comment>
+				<comment lang="fr"><![CDATA[Ajout des fichiers requis pour inclusion dans common.php]]></comment>
+				<comment lang="de"><![CDATA[Zufügung bbDKP Dateien im common.php]]></comment>
 				<find><![CDATA[require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);]]></find>
 				<action type="after-add"><![CDATA[// bbDdp
 if(@defined("EMED_BBDKP")) 
@@ -183,7 +210,9 @@ if(@defined("EMED_BBDKP"))
 		</open>
 		<open src="config.php">
 			<edit>
-				<comment lang="en"><![CDATA[adding bbdkp kill switch ]]></comment>
+				<comment lang="en"><![CDATA[Adding bbdkp kill switch ]]></comment>
+				<comment lang="fr"><![CDATA[Ajout d'un interrupteur ]]></comment>
+				<comment lang="de"><![CDATA[Zufügung eines Ein-Aus Schalters ]]></comment>
 				<find><![CDATA[?>]]></find>
 				<action type="before-add"><![CDATA[@define('EMED_BBDKP', true);
         ]]></action>
@@ -191,6 +220,9 @@ if(@defined("EMED_BBDKP"))
 		</open>
 		<open src="/styles/prosilver/template/overall_footer.html">
 			<edit>
+				<comment lang="en"><![CDATA[Adding bbdkp credits link in overall_footer ]]></comment>
+				<comment lang="fr"><![CDATA[Ajout lien les crédits dans overall_footer ]]></comment>
+				<comment lang="de"><![CDATA[Zufügung Credits link in overall_footer ]]></comment>			
 				<find><![CDATA[2000, 2002, 2005, 2007 phpBB Group]]></find>
 				<action type="after-add"><![CDATA[<br />
 <script type="text/javascript">
@@ -207,6 +239,8 @@ function pop_search()
 		<open src="/styles/prosilver/theme/stylesheet.css">
 			<edit>
 				<comment lang="en"><![CDATA[bbdkp css]]></comment>
+				<comment lang="fr"><![CDATA[bbdkp css]]></comment>
+				<comment lang="de"><![CDATA[bbdkp css]]></comment>								
 				<find><![CDATA[@import url("colours.css");]]></find>
 				<action type="after-add"><![CDATA[@import url("bbdkp.css");
 ]]></action>
@@ -214,18 +248,24 @@ function pop_search()
 		</open>
 		<open src="includes/functions.php">
 			<edit>
-				<comment lang="en"><![CDATA[ adding dkp breadcrumbs]]></comment>
+				<comment lang="en"><![CDATA[ preloading dkp language files in functions.php]]></comment>
+				<comment lang="fr"><![CDATA[ ajouter le fichier de langue dans fonctions.php ]]></comment>
+				<comment lang="de"><![CDATA[ zufügen dkp Sprachdatei in functions.php]]></comment>								
 				<find><![CDATA[if (defined('HEADER_INC'))]]></find>
 				<action type="before-add"><![CDATA[	$user->add_lang(array('mods/dkp_common'));
 ]]></action>
 			</edit>
 			<edit>
 				<comment lang="en"><![CDATA[ adding labels  ]]></comment>
+				<comment lang="en"><![CDATA[ ajouter des labels ]]></comment>
+				<comment lang="en"><![CDATA[ zufügen labels  ]]></comment>
 				<find><![CDATA[		'L_INDEX'			=> $user->lang['FORUM_INDEX'],]]></find>
 				<action type="after-add"><![CDATA[		'L_PORTAL'			=> $user->lang['PORTAL'],]]></action>
 			</edit>
 			<edit>
 				<comment lang="en"><![CDATA[adding links]]></comment>
+				<comment lang="en"><![CDATA[ajouter links]]></comment>
+				<comment lang="en"><![CDATA[zufügen Links]]></comment>
 				<find><![CDATA[		'U_INDEX'				=> append_sid("{$phpbb_root_path}index.$phpEx"),]]></find>
 				<action type="after-add"><![CDATA[		'U_PORTAL'		=> append_sid("{$phpbb_root_path}portal.$phpEx"),
 		'U_DKP'			=> append_sid("{$phpbb_root_path}listmembers.$phpEx"),
@@ -247,12 +287,16 @@ function pop_search()
 		</open>
 		<open src="includes/acp/acp_database.php">
 			<edit>
-				<comment lang="en"><![CDATA[declaring table prefix ]]></comment>
+				<comment lang="en"><![CDATA[declaring table prefix so that we can use the backup ]]></comment>
+				<comment lang="fr"><![CDATA[déclaration du préfix de table pour le backup ]]></comment>
+				<comment lang="de"><![CDATA[Deklaration des Dateipräfixes zum backup ]]></comment>
 				<find><![CDATA[$user->add_lang('acp/database');]]></find>
 				<action type="after-add"><![CDATA[        global $bbdkp_table_prefixx;]]></action>
 			</edit>
 			<edit>
 				<comment lang="en"><![CDATA[adding condition ]]></comment>
+				<comment lang="fr"><![CDATA[ajouter condition ]]></comment>
+				<comment lang="de"><![CDATA[Zufügen Kondition ]]></comment>
 				<find><![CDATA[if (strlen($table_prefix) === 0 || stripos($table_name, $table_prefix) === 0)]]></find>
 				<action type="replace-with"><![CDATA[if (strlen($table_prefix) === 0 || stripos($table_name, $table_prefix) === 0 || stripos($table_name, $bbdkp_table_prefixx) === 0)]]></action>
 			</edit>
@@ -260,16 +304,22 @@ function pop_search()
 		<open src="styles/prosilver/template/overall_header.html">
 			<edit>
 				<comment lang="en"><![CDATA[install bbDKP header - All in one file]]></comment>
+				<comment lang="fr"><![CDATA[installation du fichier header - tous en un]]></comment>
+				<comment lang="de"><![CDATA[Installation Headerdatei - Alles in einem]]></comment>
 				<find><![CDATA[</head>]]></find>
 				<action type="before-add"><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></action>
 			</edit>
 			<edit>
 				<comment lang="en"><![CDATA[Insert portal navbar exclusion]]></comment>
+				<comment lang="fr"><![CDATA[Insertion d’une exception pour le portail ]]></comment>
+				<comment lang="de"><![CDATA[Inseriere eine Ausnahme für das Portal]]></comment>								
 				<find><![CDATA[<div class="navbar">]]></find>
 				<action type="before-add"><![CDATA[<!-- IF not S_PORTAL -->]]></action>
 			</edit>
 			<edit>
 				<comment lang="en"><![CDATA[insert links in template]]></comment>
+				<comment lang="fr"><![CDATA[inserer liens dans template]]></comment>
+				<comment lang="de"><![CDATA[inseriere Links im Template]]></comment>								
 				<find><![CDATA[<li class="icon-home"><a href="{U_INDEX}" accesskey="h">{L_INDEX}</a>]]></find>
 				<action type="before-add"><![CDATA[				<li class="icon-home"><a href="{U_PORTAL}">{L_PORTAL}</a></li>
 				<li class="icon-faq"><a href="{U_DKP}">{L_DKPPAGE}</a><!-- BEGIN dkpnavlinks --> <strong>&#8249;</strong> <a href="{dkpnavlinks.U_DKPPAGE}">{dkpnavlinks.DKPPAGE}</a><!-- END dkpnavlinks --></li>
@@ -277,6 +327,8 @@ function pop_search()
 			</edit>
 			<edit>
 				<comment lang="en"><![CDATA[Close portal navbar exclusion]]></comment>
+				<comment lang="fr"><![CDATA[Ferme exception pour le portail]]></comment>
+				<comment lang="de"><![CDATA[Schliesse Kondition]]></comment>				
 				<find><![CDATA[</div>
 
 	<a name="start_here"></a>]]></find>
@@ -334,5 +386,28 @@ Rennomer le repertoire /install pour réactiver le forum.
 Note : Il est possible de désactiver le MOD en ouvrant config.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
 
 Success ;)	]]></diy-instructions>		
+<diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /contrib/readme/install.html
+Liste der änderungen : /contrib/readme/changelog.html
+
+Zuzammenfassung der Post-installationsetappen : Nachdem Automod - oder Sie selber die Dateien kopiert hat und die notwendigen bearbeitungen abgewickelt in die Dateien, gibt es noch diese sachen zu erledigen :
+
+1) Kopiere diese Dateien zum Verzeichnis /images  
+Aus Berücksichtigung der grösse der Verzeichnisse (±20mb), kann Automod dies nicht kopieren wegen das Timeout. 
+<file from="root/images/class_images/*.*" to="images/class_images/*.*" />   
+<file from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" />   
+<file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" />   
+<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  
+------------------------------------------------------------------------------
+2) Datenbank Installation
+Gehe nach diesen link: install/index.php und starte das Installationsprogramma für bbDKP 1.1.2  
+Dies macht entweder eine Vollinstallation oder eine Aktualisierungsinstallation von Version 1.0.8, 1.0.9rc1, 1.1.0, oder 1.1.1 bis zu 1.1.2.  
+------------------------------------------------------------------------------
+3) Ende
+Umbenennen den Verzeichnis /install damit das Forum wieder zugänglich wird.
+------------------------------------------------------------------------------
+
+Notiz : Es ist Möglich bbDKP zu deaktivieren wenn Sie onfig.php öffnen und @define('EMED_BBDKP', true);  ändern nach  //@define('EMED_BBDKP', true);  
+
+Viel Spaß ;)	]]></diy-instructions>		
 	</action-group>
 </mod>
