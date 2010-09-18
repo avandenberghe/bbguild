@@ -25,9 +25,9 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-	'ACP_DKP_RAIDS'		    => 'Raid Management',  
-	'ACP_DKP_RAID_ADD'		=> 'Add Raid',
-	'ACP_DKP_RAID_LIST'		=> 'Raids',
+	'ACP_DKP_RAIDS'		    => 'Raid Verwaltung',  
+	'ACP_DKP_RAID_ADD'		=> 'Raid zufügen',
+	'ACP_DKP_RAID_LIST'		=> 'Raid Liste',
 ));
 
 ?>

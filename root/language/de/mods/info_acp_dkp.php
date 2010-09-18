@@ -25,12 +25,12 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-    'ACP_CAT_DKP'			=> 'BBDKP',
-	'ACP_DKP_MAINPAGE'		=> 'General Settings',  
-	'ACP_DKP_PANEL'		    => 'Adminpanel',  
-	'ACP_DKP_CONFIG'		=> 'Main Settings',
-	'ACP_DKP_INDEX'			=> 'Portal Settings',
-	'ACP_DKP_LOGS'			=> 'View Logs',
+    'ACP_CAT_DKP'			=> 'bbDKP',
+	'ACP_DKP_MAINPAGE'		=> 'Allgemeine Einstellungen',  
+	'ACP_DKP_PANEL'		    => 'Allgemein',  
+	'ACP_DKP_CONFIG'		=> 'bbDKP verwalten',
+	'ACP_DKP_INDEX'			=> 'Portal verwalten',
+	'ACP_DKP_LOGS'			=> 'Protokoll',
 ));
 
 ?>

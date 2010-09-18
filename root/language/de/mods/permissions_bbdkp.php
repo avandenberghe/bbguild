@@ -1,6 +1,6 @@
 <?php
 /**
- * bbDkp Permission Set English
+ * bbDkp Permission Set German
  * 
  * @author sajaki
  * @package bbDkp
@@ -32,8 +32,8 @@ $lang['permission_type']['bbdkp_'] = 'bbDkp Permissions';
 
 // bbDkp Permissions
 $lang = array_merge($lang, array(
-	'acl_a_dkp'		=> array('lang' => 'bbDkp - can access bbDKP ACP', 'cat' => 'bbdkp'),
-	'acl_u_dkp'		=> array('lang' => 'bbDkp - can see DKP pages', 'cat' => 'bbdkp'),
+	'acl_a_dkp'		=> array('lang' => 'bbDKP - Hat Zugriff auf den bbDKP Administrationsbereich', 'cat' => 'bbdkp'),
+	'acl_u_dkp'		=> array('lang' => 'bbDKP - kann die bbDKP seiten sehen', 'cat' => 'bbdkp'),
 ));
 
 ?>

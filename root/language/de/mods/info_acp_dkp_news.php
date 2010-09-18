@@ -1,6 +1,6 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
+ * bbdkp acp language file for mainmenu - German
  * 
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
@@ -25,11 +25,11 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-    'ACP_DKP_NEWS'			=> 'News Management',
-	'ACP_ADD_NEWS_EXPLAIN' => 'Here you can add / change Guild news.',
-	'ACP_DKP_NEWS_ADD'		=> 'Add News',  
-	'ACP_DKP_NEWS_LIST'		=> 'News',
-	'ACP_DKP_NEWS_LIST_EXPLAIN'	=> 'List of newsitem(s)',
+    'ACP_DKP_NEWS'				=> 'Nachrichten Verwalten',
+	'ACP_ADD_NEWS_EXPLAIN' 		=> 'Hier kannst du Gildennachrichten zufügen o. löschen.',
+	'ACP_DKP_NEWS_ADD'			=> 'Nachricht zufügen',  
+	'ACP_DKP_NEWS_LIST'			=> 'Nachrichten',
+	'ACP_DKP_NEWS_LIST_EXPLAIN'	=> 'Hier kannst du Gildennachrichten zufügen oder löschen.',
 ));
 
 ?>
