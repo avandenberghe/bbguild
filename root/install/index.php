@@ -884,94 +884,8 @@ $versions = array(
 	            
           	),
           	
-                'table_row_insert'	=> array(
+            
 
-       // new loot systemtable    
-         array($bbdkp_table_prefix .'lootsystem',
-           array(
-           		  // zero sum
-                  array('lootsys_id'  => 1,
-                      'lootsys_name' => 'Zerosum',
-                      'lootsys_description' => 'Zero sum. \n a lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. The raid members will thusly gain dkp points when someone received an item. this ensures that there is no inflation, or point hoarding. example : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  \n The balance at the end is : earned 20, spent 20. <br /> Advantage : 
-no point inflation if all players start at the same gearlevel. <br /> Disadvantage :<br /> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he\'s at a disequilibrium towards the other players. 
-Not much incentive to join a raid if it is a difficult progress raid and wipes are expected and no loot likely will drop. ',
-                      'lootsys_status' => 'Y', 
-                      'lootsys_addedby' => $user->data['username'],
-                  	  'lootsys_updatedby' => '',
-                  	  'lootsys_default' => 'Y',
-                  		),
-                  
-           		  // Zerosum + bonuspoints
-                  array('lootsys_id'  => 2,
-                      'lootsys_name' => 'Zerosum + bonuspoints',
-                      'lootsys_description' => 'Zero sum + bonus points <br /> a lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. <br /> Any bonus points earned are offset to a dummy account.<br /> The raid members will gain dkp points when someone received an item, plus a bonus. this ensures that there is no inflation, or point hoarding. <br /> example : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. 
-<br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br /> on top of that, players receive 5 points for a bosskill, 2 points for being on time or on attendance. these extra points are offset with the zerosum dummy account. 
-The balance at the end is : earned 20+7=27, spent 20+7=27. <br /> Advantage :<br />  no point inflation if all players start at the same gearlevel. The bonus points are added to the system so as to offer an incentive to play, since a raid without loots will earn no points. <br /> Disadvantage :<br />  
-hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he\'s at a disequilibrium towards the other players.',  
-                      'lootsys_status' => 'N',
-                      'lootsys_addedby' => $user->data['username'],
-                  	  'lootsys_updatedby' => '',
-                  	  'lootsys_default' => 'N',
-                  		),
-                  		
-           		  // Bonus system 
-                  array('lootsys_id'  => 3,
-                      'lootsys_name' => 'Bonus system',
-                      'lootsys_description' => 'Bonus system  <br />a lootsystem where players only receive bonus points as a result of being on time, or staying on bench, or killing a boss, or just plain participating.  <br />
-Points are spent on loot just like in zero sum, but there is no resitribution.  <br /> example : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points.  <br /> 
-players receive 5 points for slaying a dragon, 2 points for being on time or on attendance.  <br />
- <br />net result for whole raid : earned : (5+2) * 10 = 70 <br /> spent : 20 <br /> difference= 50 <br />  <br />
-Advantage : simple. no calculation necessary for loot distribution.   <br />
-Disadvantage : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.',
-                      'lootsys_status' => 'N', 
-                      'lootsys_addedby' => $user->data['username'],
-                  	  'lootsys_updatedby' => '',
-                  	  'lootsys_default' => 'N',
-                  		),
-                  		
-           		  // time based
-                  array('lootsys_id'  => 4,
-                      'lootsys_name' => 'time based',
-                      'lootsys_description' => 'time based system  <br />a lootsystem where players receive points per minute present in the raid or being available. time is measured from when the raid starts to the end. 
-Points are spent on loot just like in bonus system.  <br />example : 10 raiders, each present for 90 minutes.  <br />dkp/hour is 20 points, so this means that each raider gets 90/60 * 20 = 1,5 * 20 = 30 points <br />1 item dropped, for 20 points <br />
-net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20 <br />difference = 280  <br /><br />Advantage : will reward players for time spent on the raid <br />
-Disadvantage : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.',
-                      'lootsys_status' => 'N', 
-                      'lootsys_addedby' => $user->data['username'],
-                  	  'lootsys_updatedby' => '',
-                  	  'lootsys_default' => 'N',
-                  		),
-                  		
-           		  // zero sum
-                  array('lootsys_id'  => 5,
-                      'lootsys_name' => 'epgp',
-                      'lootsys_description' => 'EPGP effort - gearpoints<br /> gain points by aquiring effort points, example <br /> - Raid and standby get the same EP including bonuses. <br /> 
-- 1000 EP per 15m while in raid or standby for a raid.<br /> - Bonus EP points to the raid and standby when execution of boss fights is perfect<br /> <br /> 
-spend on loot by loot points (gearpoints)<br /> 
-loot priority goes to highest ratio ep/gp. <br /> 
-example : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />  
-ep      gp<br /> 
-202   20  10,1<br /> 
-342   20  17,1<br /> 
-123<br /> 
-10<br /> 
-332<br /> 
-121<br /> 
-121<br /> 
-121<br /> 
-so the loot would go to player 2 <br /> <br /> 
-pro: no inflation, no hoarding <br /> 
-con : hard to manage because you have to set gear prices. <br /> ',
-                      'lootsys_status' => 'N', 
-                      'lootsys_addedby' => $user->data['username'],
-                  	  'lootsys_updatedby' => '',
-                  	  'lootsys_default' => 'N',
-                  		),
-              
-           ),
-           ),
-           ),  	
-		
           // adding epgp GP column to items table, image column to class table
          'table_column_add' => array(
             	array($bbdkp_table_prefix .'items', 'item_gearpoints',  array('DECIMAL:11', 0)), 
@@ -982,7 +896,7 @@ con : hard to manage because you have to set gear prices. <br /> ',
             	 
             ),
             
-            
+
         // removing old table
         'table_remove' => array( $bbdkp_table_prefix . 'bb_config', $bbdkp_table_prefix . 'bb_offsets'), 
 
@@ -990,6 +904,15 @@ con : hard to manage because you have to set gear prices. <br /> ',
 			'gameupdate', 
 			'bbdkp_caches',
 			),
+			
+		 // removing class_name, race_name column
+         'table_column_remove' => array(
+            	array($bbdkp_table_prefix .'races', 'race_name' ), 
+            	array($bbdkp_table_prefix .'classes', 'class_name'),
+            ),
+
+            
+            
 		),
 		/// end 1.1.2
 		/// 
@@ -1104,7 +1027,7 @@ function regionoptions($selected_value, $key)
  */
 function bbdkp_caches($action, $version)
 {
-    global $db, $table_prefix, $umil, $bbdkp_table_prefix;
+    global $umil;
     
     $umil->cache_purge();
     $umil->cache_purge('imageset');
@@ -1370,7 +1293,7 @@ function gameupdate($action, $version)
 					}
 					$db->sql_freeresult($result);
 					
-					// bossprogress updaters
+					// game updaters
 					
 					switch ($game)
 					{

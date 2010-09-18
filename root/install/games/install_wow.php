@@ -2104,7 +2104,7 @@ function install_wow_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 737 , 'attribute_id' => '6', 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Emeriss' ,  'name_short' =>  'Emeriss' );
 		$sql_ary[] = array( 'id' => 738 , 'attribute_id' => '7', 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Lethon' ,  'name_short' =>  'Lethon' );
 		$sql_ary[] = array( 'id' => 739 , 'attribute_id' => '8', 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Blutfürst Mandokir' ,  'name_short' =>  'Mandokir' );
-		$sql_ary[] = array( 'id' => 740 , 'attribute_id' => '9', 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Jin'do der Verhexer' ,  'name_short' =>  'Jin’do' );
+		$sql_ary[] = array( 'id' => 740 , 'attribute_id' => '9', 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Jin’do der Verhexer' ,  'name_short' =>  'Jin’do' );
 		$sql_ary[] = array( 'id' => 741 , 'attribute_id' => '10', 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Gahz’ranka' ,  'name_short' =>  'Gahz’ranka' );
 		$sql_ary[] = array( 'id' => 742 , 'attribute_id' => '11', 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Gri’lek' ,  'name_short' =>  'Gri’lek' );
 		$sql_ary[] = array( 'id' => 743 , 'attribute_id' => '12', 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Hazza’rah' ,  'name_short' =>  'Hazza’rah' );
