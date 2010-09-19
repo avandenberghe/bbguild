@@ -333,7 +333,8 @@ function install_daoc_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 132 , 'attribute_id' => '18', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Valkyn' ,  'name_short' =>  'Valkyn' );
 		$sql_ary[] = array( 'id' => 133 , 'attribute_id' => '19', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Frostalf' ,  'name_short' =>  'Frostalf' );
 		$sql_ary[] = array( 'id' => 134 , 'attribute_id' => '20', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Deifrang' ,  'name_short' =>  'Deifrang' );
-				
+
+		
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
 		unset ( $sql_ary );
 		

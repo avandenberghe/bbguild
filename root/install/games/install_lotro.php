@@ -666,7 +666,6 @@ function install_lotro_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 191 , 'attribute_id' => '83', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Captain-General Meldun' ,  'name_short' =>  'Meldun' );
 		$sql_ary[] = array( 'id' => 192 , 'attribute_id' => '84', 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Captain-General Harvestgain' ,  'name_short' =>  'Harvestgain' );
 
-		// classes
 		$sql_ary[] = array( 'id' => 193 , 'attribute_id' => '1', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array( 'id' => 194 , 'attribute_id' => '2', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Burglar' ,  'name_short' =>  'Burglar' );
 		$sql_ary[] = array( 'id' => 195 , 'attribute_id' => '3', 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Captain' ,  'name_short' =>  'Captain' );
@@ -689,7 +688,7 @@ function install_lotro_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 211 , 'attribute_id' => '9', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Gardien des Rune' ,  'name_short' =>  'Gardien des Rune' );
 		$sql_ary[] = array( 'id' => 212 , 'attribute_id' => '10', 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Sentinelle' ,  'name_short' =>  'Sentinelle' );
 		
-		//races
+
 		$sql_ary[] = array( 'id' => 213 , 'attribute_id' => '1', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Man' ,  'name_short' =>  'Man' );
 		$sql_ary[] = array( 'id' => 214 , 'attribute_id' => '2', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Hobbit' ,  'name_short' =>  'Hobbit' );
 		$sql_ary[] = array( 'id' => 215 , 'attribute_id' => '3', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Elf' ,  'name_short' =>  'Elf' );
@@ -700,6 +699,23 @@ function install_lotro_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 219 , 'attribute_id' => '3', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Elfe' ,  'name_short' =>  'Elfe' );
 		$sql_ary[] = array( 'id' => 220 , 'attribute_id' => '4', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Nain' ,  'name_short' =>  'Nain' );
 				
+		$sql_ary[] = array( 'id' => 221 , 'attribute_id' => '1', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Mensch' ,  'name_short' =>  'Mensch' );
+		$sql_ary[] = array( 'id' => 222 , 'attribute_id' => '2', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Hobbit' ,  'name_short' =>  'Hobbit' );
+		$sql_ary[] = array( 'id' => 223 , 'attribute_id' => '3', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Elb' ,  'name_short' =>  'Elb' );
+		$sql_ary[] = array( 'id' => 224 , 'attribute_id' => '4', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Zwerg' ,  'name_short' =>  'Zwerg' );
+		
+		$sql_ary[] = array( 'id' => 225 , 'attribute_id' => '1', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unbekannt' ,  'name_short' =>  'Unbekannt' );
+		$sql_ary[] = array( 'id' => 226 , 'attribute_id' => '2', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Schurke' ,  'name_short' =>  'Schurke' );
+		$sql_ary[] = array( 'id' => 227 , 'attribute_id' => '3', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Hauptmann' ,  'name_short' =>  'Capitaine' );
+		$sql_ary[] = array( 'id' => 228 , 'attribute_id' => '4', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Waffenmeister' ,  'name_short' =>  'Champion' );
+		$sql_ary[] = array( 'id' => 229 , 'attribute_id' => '5', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Wächter' ,  'name_short' =>  'Guardien' );
+		$sql_ary[] = array( 'id' => 230 , 'attribute_id' => '6', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Jager' ,  'name_short' =>  'Chasseur' );
+		$sql_ary[] = array( 'id' => 231 , 'attribute_id' => '7', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Kundiger' ,  'name_short' =>  'Kundiger' );
+		$sql_ary[] = array( 'id' => 232 , 'attribute_id' => '8', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Barde' ,  'name_short' =>  'Barde' );
+		$sql_ary[] = array( 'id' => 233 , 'attribute_id' => '9', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Runenbewahrer' ,  'name_short' =>  'Runenbewahrer' );
+		$sql_ary[] = array( 'id' => 234 , 'attribute_id' => '10', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Hüter' ,  'name_short' =>  'Hüter' );
+				
+
 		
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
 		unset ( $sql_ary );

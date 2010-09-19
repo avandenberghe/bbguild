@@ -175,7 +175,21 @@ function install_aion_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 26 , 'attribute_id' => '1', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Elyséens' ,  'name_short' =>  'Elyséens' );
 		$sql_ary[] = array( 'id' => 27 , 'attribute_id' => '2', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Asmodiens' ,  'name_short' =>  'Asmodiens' );
 		$sql_ary[] = array( 'id' => 28 , 'attribute_id' => '3', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Balaur' ,  'name_short' =>  'Balaur' );
-				
+
+		$sql_ary[] = array( 'id' => 29 , 'attribute_id' => '1', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unbekannt' ,  'name_short' =>  'Inconnu' );
+		$sql_ary[] = array( 'id' => 30 , 'attribute_id' => '2', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Beschwörer' ,  'name_short' =>  'Beschwörer' );
+		$sql_ary[] = array( 'id' => 31 , 'attribute_id' => '3', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Zauberer' ,  'name_short' =>  'Zauberer' );
+		$sql_ary[] = array( 'id' => 32 , 'attribute_id' => '4', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Assassinen' ,  'name_short' =>  'Assassinen' );
+		$sql_ary[] = array( 'id' => 33 , 'attribute_id' => '5', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Jäger' ,  'name_short' =>  'Jäger' );
+		$sql_ary[] = array( 'id' => 34 , 'attribute_id' => '6', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Kantor' ,  'name_short' =>  'Kantor' );
+		$sql_ary[] = array( 'id' => 35 , 'attribute_id' => '7', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Kleriker' ,  'name_short' =>  'Kleriker' );
+		$sql_ary[] = array( 'id' => 36 , 'attribute_id' => '8', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Gladiator' ,  'name_short' =>  'Gladiator' );
+		$sql_ary[] = array( 'id' => 37 , 'attribute_id' => '9', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Templer' ,  'name_short' =>  'Templer' );
+		
+		$sql_ary[] = array( 'id' => 38 , 'attribute_id' => '1', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Elyos' ,  'name_short' =>  'Elyos' );
+		$sql_ary[] = array( 'id' => 39 , 'attribute_id' => '2', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Asmodier' ,  'name_short' =>  'Asmodian' );
+		$sql_ary[] = array( 'id' => 40 , 'attribute_id' => '3', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Balaur' ,  'name_short' =>  'Balaur' );
+
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
 		unset ( $sql_ary );
 		
