@@ -840,9 +840,9 @@ $versions = array(
 		          array($bbdkp_table_prefix . 'bb_language', array(
 		              'COLUMNS'            => array(
 		          		  'id'     	       => array('UINT', NULL, 'auto_increment'), 
-		                  'attribute_id'   => array('UINT', 0), 
-		                  'language'       => array('CHAR:2', ''),
-		          		  'attribute'	   => array('VCHAR:30', ''), 
+		                  'attribute_id'   => array('UINT', 0), 	 /* foreign primary key */
+		                  'language'       => array('CHAR:2', ''),   /* languageID */
+		          		  'attribute'	   => array('VCHAR:30', ''), /* table identifier */
 		                  'name'       	   => array('VCHAR_UNI:255', ''), 
 		                  'name_short' 	   => array('VCHAR_UNI:255', ''),
 		          	),
