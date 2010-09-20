@@ -840,9 +840,9 @@ $versions = array(
 		          array($bbdkp_table_prefix . 'bb_language', array(
 		              'COLUMNS'            => array(
 		          		  'id'     	       => array('UINT', NULL, 'auto_increment'), 
-		                  'attribute_id'   => array('UINT', 0), 	 /* foreign primary key */
-		                  'language'       => array('CHAR:2', ''),   /* languageID */
-		          		  'attribute'	   => array('VCHAR:30', ''), /* table identifier */
+		                  'attribute_id'   => array('UINT', 0), 
+		                  'language'       => array('CHAR:2', ''),
+		          		  'attribute'	   => array('VCHAR:30', ''), 
 		                  'name'       	   => array('VCHAR_UNI:255', ''), 
 		                  'name_short' 	   => array('VCHAR_UNI:255', ''),
 		          	),
@@ -888,15 +888,9 @@ $versions = array(
 
           // adding epgp GP column to items table, image column to class table
          'table_column_add' => array(
-            	array($bbdkp_table_prefix .'items', 'item_gearpoints',  array('DECIMAL:11', 0)), 
-            	array($bbdkp_table_prefix .'memberdkp', 'member_timepoints',  array('DECIMAL:11', 0)),
-            	array($bbdkp_table_prefix .'memberdkp', 'member_bonuspoints',  array('DECIMAL:11', 0)),
-            	array($bbdkp_table_prefix .'memberdkp', 'member_effortpoints',  array('DECIMAL:11', 0)),
             	array($bbdkp_table_prefix .'classes', 'imagename',  array('VCHAR:255', 0)),
-            	 
             ),
             
-
         // removing old table
         'table_remove' => array( $bbdkp_table_prefix . 'bb_config', $bbdkp_table_prefix . 'bb_offsets'), 
 

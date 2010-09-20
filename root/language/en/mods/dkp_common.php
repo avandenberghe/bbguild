@@ -149,7 +149,6 @@ $lang = array_merge($lang, array(
 // Various
 'ACCOUNT' => 'Account',
 'ACTION' => 'Action',
-'ACTIVE' => 'Active',
 'ADD' => 'Add',
 'ADDED_BY' => 'Added By',
 
@@ -204,9 +203,7 @@ $lang = array_merge($lang, array(
 'JOINDATE' => 'Guild Join date',
 'LAST' => 'Last',
 'LASTLOOT' => 'Last Loot',
-
 'LAST_VISIT' => 'Last Visit',
-
 'LOG_DATE_TIME' => 'Date/Time of this Log',
 'LOOT_FACTOR' => 'Loot Factor',
 'LOOTS' => 'Loots',
@@ -215,13 +212,9 @@ $lang = array_merge($lang, array(
 'MEMBERS' => 'Members',
 'MEMBERS_PRESENT_AT' => 'Members Present at %s on %s',
 'MISCELLANEOUS' => 'Miscellaneous',
-
-
 'NOTE' => 'Note',
-'ONLINE' => 'Online',
 'OPTIONS' => 'Options',
 'OUTDATE' => 'Guild leave date',
-'PASTE_LOG' => 'Paste a Log Below',
 'PERCENT' => 'Percent',
 'PERMISSIONS' => 'Permissions',
 'PER_DAY' => 'Per Day',
@@ -240,12 +233,9 @@ $lang = array_merge($lang, array(
 'RECORDED_RAID_HISTORY' => 'Recorded Raid History for %s',
 'RECORDED_DROP_HISTORY' => 'Recorded Purchase History for %s',
 'REASON' => 'Reason',
-'REGISTRATION_INFORMATION' => 'Registration Information',
 'RESULT' => 'Result',
 'SESSION_ID' => 'Session ID',
-'SETTINGS' => 'Settings',
 
-'STATUS' => 'Status',
 'SUMMARY_DATES' => 'Raid Summary: %s to %s',
 'TIME' => 'Time',
 'TOTAL' => 'Total',
@@ -254,7 +244,6 @@ $lang = array_merge($lang, array(
 'TOTAL_RAIDS' => 'Total Raids',
 'TOTAL_SPENT' => 'Total Spent',
 'TRANSFER_MEMBER_HISTORY' => 'Transfer Member History',
-'TURN_INS' => 'Turn-ins',
 'TYPE' => 'Type',
 'UPDATE' => 'Update',
 'UPDATED_BY' => 'Updated By',
@@ -288,26 +277,16 @@ $lang = array_merge($lang, array(
 'VIEWRAID_DROPS_FOOTCOUNT' => '... found %d drop(s)',
 
 // Submit Buttons
-'CLOSE_WINDOW' => 'Close Window',
-
-
 'LOG_ADD_DATA' => 'Add Data to Form',
-'NO' => 'No',
 'PROCEED' => 'Proceed',
-'RESET' => 'Reset',
-'SUBMIT' => 'Submit',
 'UPGRADE' => 'Upgrade',
-'YES' => 'Yes',
 
 // Form Element Descriptions
 'ENDING_DATE' => 'Ending Date',
-'FROM' => 'From',
 'GUILD_TAG' => 'Guild Tag',
 'LANGUAGE' => 'Language',
 'STARTING_DATE' => 'Starting Date',
 'TO' => 'To',
-'USERNAME' => 'Username',
-'USERS' => 'Users',
 
 // Pagination
 'NEXT_PAGE' => 'Next Page',
@@ -327,6 +306,7 @@ $lang = array_merge($lang, array(
 
 // Miscellaneous
 'ADDED' => 'Added',
+'BOSSKILLCOUNT' => 'Bosskills',
 'DELETED' => 'Deleted',
 'ENTER_NEW' => 'Enter New Name',
 'ENTER_NEW_GAMEITEMID' => 'Game item ID',
@@ -334,7 +314,6 @@ $lang = array_merge($lang, array(
 'GENDER'	=> 'Gender',
 'GUILD'	=> 'Guild', 
 'LIST' => 'List',
-'LIST_GROUPADJ' => 'List Group Adjustments',
 'LIST_EVENTS' => 'List Events',
 'LIST_INDIVADJ' => 'List Individual Adjustments',
 'LIST_ITEMS' => 'List Items',
@@ -345,9 +324,8 @@ $lang = array_merge($lang, array(
 'NOT_AVAILABLE' => 'Not Available',
 'OF_RAIDS' => '%d',
 'OF_RAIDS_CHAR' => '%s', 
-'OR' => 'Or',
+'OR' => 'or',
 'POWERED_BY' => 'Powered by',
-'PREVIEW' => 'Preview',
 'REQUIRED_FIELD_NOTE' => 'Items marked with a * are required fields.',
 'SELECT_EXISTING' => 'Select Existing',
 'UPDATED' => 'Updated',
@@ -391,7 +369,7 @@ $lang = array_merge($lang, array(
 
    You should have received a copy of the GNU General Public License
    along with bbDKP.  If not, see http://www.gnu.org/licenses', 
-'LICENSE2' => 'Powered by bbDkp (c) 2009 The bbDKP Project Team. If you use this software and find it to be useful, we ask that you retain the copyright notice below. While not required for free use, it will help build interest in the bbDkp project and is <b>required for obtaining support</b>.',
+'LICENSE2' => 'Powered by bbDkp (c) 2009 The bbDKP Project Team. If you use this software and find it to be useful, we ask that you retain the copyright notice below. While not required for free use, it will help build interest in the bbDkp project and is <strong>required for obtaining support</strong>.',
 'COPYRIGHT3' => 'bbDKP (c) 2010 Sajaki, Malfate, Blazeflack <br />
 bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'COPYRIGHT2' => 'bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN',

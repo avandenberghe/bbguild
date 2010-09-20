@@ -53,8 +53,8 @@ $lang = array_merge($lang, array(
 'DKP'	=> 'DKP', 
 'NEWS' => 'Informations de la Guilde',
 'COMMENT' => 'Commentaire',
-'LIST_NEWS' => 'Liste d’actualités',
-'NO_NEWS' => 'Aucun titre d’infos trouvé.',
+'LIST_NEWS' => 'Liste des Entrées',
+'NO_NEWS' => 'Pas d’entrées trouvés.',
 'NEWS_PER_PAGE' => 'Entrées par page',
 'ERROR_INVALID_NEWS_PROVIDED' => 'Cette information n’a pas été trouvé',
 'BOSSPROGRESS' => 'Avancée des Boss', 	
@@ -149,7 +149,6 @@ $lang = array_merge($lang, array(
 // Various
 'ACCOUNT' => 'Compte',
 'ACTION' => 'Action',
-'ACTIVE' => 'Actif',
 'ADD' => 'Ajouter',
 'ADDED_BY' => 'Ajouté par',
 
@@ -204,9 +203,7 @@ $lang = array_merge($lang, array(
 'JOINDATE' => 'Date Recrutement',
 'LAST' => 'Dernier',
 'LASTLOOT' => 'Dernier Loot',
-
 'LAST_VISIT' => 'Dernière Visite',
-
 'LOG_DATE_TIME' => 'Temps/date de ce Log',
 'LOOT_FACTOR' => 'Facteur de Loot',
 'LOOTS' => 'Trésors',
@@ -215,13 +212,9 @@ $lang = array_merge($lang, array(
 'MEMBERS' => 'Membres',
 'MEMBERS_PRESENT_AT' => 'Membres Présent à %s sur %s',
 'MISCELLANEOUS' => 'Divers',
-
-
 'NOTE' => 'Note',
-'ONLINE' => 'En ligne',
 'OPTIONS' => 'Options',
 'OUTDATE' => 'Date de sortie',
-'PASTE_LOG' => 'Collez un log ci-dessous',
 'PERCENT' => 'Pourcent',
 'PERMISSIONS' => 'Permissions',
 'PER_DAY' => 'Par Journée',
@@ -240,12 +233,9 @@ $lang = array_merge($lang, array(
 'RECORDED_RAID_HISTORY' => 'Historique des Raids de %s',
 'RECORDED_DROP_HISTORY' => 'Historique des Achats par %s',
 'REASON' => 'Raison',
-'REGISTRATION_INFORMATION' => 'Information d’enregistrement',
 'RESULT' => 'Resultat',
 'SESSION_ID' => 'ID de Session',
-'SETTINGS' => 'Réglages',
 
-'STATUS' => 'Statut',
 'SUMMARY_DATES' => 'Sommaire du Raid: %s à %s',
 'TIME' => 'Temps',
 'TOTAL' => 'Total',
@@ -254,7 +244,6 @@ $lang = array_merge($lang, array(
 'TOTAL_RAIDS' => 'Total Raids',
 'TOTAL_SPENT' => 'Total Dépensé',
 'TRANSFER_MEMBER_HISTORY' => 'Transfert Historique Membre',
-'TURN_INS' => 'Turn-ins',
 'TYPE' => 'Type',
 'UPDATE' => 'M.a.j',
 'UPDATED_BY' => 'Mis à jour par',
@@ -270,6 +259,7 @@ $lang = array_merge($lang, array(
 'LISTEVENTS_FOOTCOUNT' => '... trouvé %d évènements / %d par page',
 'LISTIADJ_FOOTCOUNT' => '... trouvé %d ajustment(s) / %d par page',
 'LISTITEMS_FOOTCOUNT' => '... trouvé %d Objets uniques / %d par page',
+'LISTNEWS_FOOTCOUNT' => '... trouvé %d Nouvelles / %d par page',
 'LISTMEMBERS_ACTIVE_FOOTCOUNT' => '... trouvé %d membres actifs / %s montrer tous</a>',
 'LISTMEMBERS_COMPARE_FOOTCOUNT' => '... Comparaison %d membres',
 'LISTPURCHASED_FOOTCOUNT' => '... trouvé %d objets(s) / %d par page',
@@ -287,26 +277,16 @@ $lang = array_merge($lang, array(
 'VIEWRAID_DROPS_FOOTCOUNT' => '... trouvé %d dépouilles(s)',
 
 // Submit Buttons
-'CLOSE_WINDOW' => 'Fermer Fenètre',
-
-
 'LOG_ADD_DATA' => 'Ajouter Donnée',
-'NO' => 'Non',
 'PROCEED' => 'Procédez',
-'RESET' => 'Réinitialiser',
-'SUBMIT' => 'Envoyer',
 'UPGRADE' => 'Mise à jour',
-'YES' => 'Oui',
 
 // Form Element Descriptions
 'ENDING_DATE' => 'Date de fin',
-'FROM' => 'de',
 'GUILD_TAG' => 'Nom de Guilde',
 'LANGUAGE' => 'Langue',
 'STARTING_DATE' => 'Date de début',
 'TO' => 'vers',
-'USERNAME' => 'Nom d’utilisateur',
-'USERS' => 'Utilisateurs',
 
 // Pagination
 'NEXT_PAGE' => 'Page Suivante',
@@ -327,34 +307,31 @@ $lang = array_merge($lang, array(
 // Miscellaneous
 'ADDED' => 'Ajouté',
 'BOSSKILLCOUNT' => 'Bosscount',
-
 'DELETED' => 'Supprimé',
 'ENTER_NEW' => 'Entres nouveau nom',
 'ENTER_NEW_GAMEITEMID' => 'ID d’objet',
-'FEMALE'	=> 'Féminin',
-'GENDER'	=> 'Sexe',
+'FEMALE'	=> 'féminin',
+'GENDER'	=> 'sexe',
 'GUILD'	=> 'Guilde', 
 'LIST' => 'Liste',
-'LIST_GROUPADJ' => 'Liste Ajustements',
 'LIST_EVENTS' => 'Liste Evènements',
 'LIST_INDIVADJ' => 'Liste Ajustements',
 'LIST_ITEMS' => 'Liste Objets',
 'LIST_MEMBERS' => 'Liste Membres',
 'LIST_RAIDS' => 'Liste Raids',
-'MALE'	=> 'Mâle',
+'MALE'	=> 'mâle',
 'MAY_BE_NEGATIVE_NOTE' => 'peut être négatif',
 'NOT_AVAILABLE' => 'Pas disponible',
 'OF_RAIDS' => '%d',
 'OF_RAIDS_CHAR' => '%s', 
-'OR' => 'Ou',
-'POWERED_BY' => 'Powered by',
-'PREVIEW' => 'Preview',
+'OR' => 'ou',
+'POWERED_BY' => 'Soutenu par',
 'REQUIRED_FIELD_NOTE' => 'Champs marqué par un * sont requis.',
 'SELECT_EXISTING' => 'Sélectionner existant',
 'UPDATED' => 'Mis à jour',
 
 // Error messages
-'NOT_ADMIN' => 'Vous n’êtes pas un administrateur',
+'NOT_ADMIN' => 'Vous n’êtes pas administrateur',
 
 //---- About --- do not change anything here 
 //tabs
@@ -390,8 +367,8 @@ de tous les services, corrections ou réparations nécessaires. <br />
 Vous devez avoir reçu une copie de la Licence Publique Générale GNU en même temps que ce programme ; si ce n’est pas le cas, écrivez à la Free Software Foundation, 
 Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, États-Unis. http://www.gnu.org/licenses', 
 
-'LICENSE2' => 'Powered by bbDkp (c) 2007 The bbDkp Project Team. If you use this software and find it to be useful, we ask that you retain the copyright notice below. 
-While not required for free use, it will help build interest in the bbDkp project and is <b>required for obtaining support</b>.',
+'LICENSE2' => 'Powered by bbDkp (c) 2007 The bbDkp Project Team. Si vous utilisez ce logiciel et vous trouvez qu’il vous plâit,  nous vous demandons que vous retenez la marque de copyright au dessous. 
+Même si elle n’est pas requise pour l’usage gratuit, elle aide à soutenir l’intérêt dans le projet bbDKP et est <strong>requis pour obtenir du support</strong>.',
 'COPYRIGHT3' => 'bbDKP (c) 2010 Sajaki, Malfate, Blazeflack <br />
 bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'COPYRIGHT2' => 'bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN',
