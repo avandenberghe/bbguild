@@ -737,7 +737,7 @@ Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />G
 'ZONE_COMPLETED_EXPLAIN' => 'Bitte Ankreuzen wenn dieses Gebiet besiegt worden ist',
 'ZONE_COMPLETEDATE' => 'Siegestag',
 'ZONE_COMPLETEDATE_EXPLAIN' => 'Wähle den Tag andem dieses Gebiet vollendet ist.',
-'ZONE_SHOW' => 'Zeige Gebiet an',
+'SHOW_ZONE' => 'Show',
 'SHOW_ZONE_EXPLAIN' => 'Bitte ankreuzen wenn dieses Gebiet auf der Vorgangsanzeigetafel gesehen werden soll.',
 'SHOW_ZONE_PORTAL' => 'Zeige auf Portal',
 'SHOW_ZONE_PORTAL_EXPLAIN' => 'Bitte ankreuzen wenn dieses Gebiet im Bossvorgang Block erscheinen soll.',

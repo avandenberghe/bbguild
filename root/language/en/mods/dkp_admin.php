@@ -730,7 +730,7 @@ Imagename (filename without extension), if the zone is completed and the complet
 'ZONE_NAME_SHORT' => 'Short name',
 'ZONE_NAME_SHORT_EXPLAIN' => 'The short name of the Zone',
 'ZONE_IMAGENAME' => 'Imagename',
-'ZONE_IMAGENAME_EXPLAIN' => 'the colour imagename, without file extension. the file has to exist in /images/bossprogress/%s/zones/normal' ,
+'XZONE_IMAGENAME_EXPLAIN' => 'the colour imagename, without file extension. the file has to exist in /images/bossprogress/%s/zones/normal' ,
 'ZONE_WEBID' => 'Web id',
 'ZONE_WEBID_EXPLAIN' => 'The wowhead or allakhazam or other id to create the url',
 'ZONE_SEQUENCE' => 'Zone sequence', 

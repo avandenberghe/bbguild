@@ -748,7 +748,7 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 'ZONE_NAME_SHORT' => 'Nom raccourci',
 'ZONE_NAME_SHORT_EXPLAIN' => 'le nom raccourci de la Zone',
 'ZONE_IMAGENAME' => 'Nom de l’image',
-'ZONE_IMAGENAME_EXPLAIN' => 'l’image en couleur, sans extension. le fichier doit exister dans le repertoire /images/bossprogress/%s/zones/normal' ,
+'XZONE_IMAGENAME_EXPLAIN' => 'l’image en couleur, sans extension. le fichier doit exister dans le repertoire /images/bossprogress/%s/zones/normal' ,
 'ZONE_WEBID' => 'Web id',
 'ZONE_WEBID_EXPLAIN' => 'le id wowhead ou allakhazam ou autre id web. utilisé pour construire le lien.',
 'ZONE_SEQUENCE' => 'Ordre des Zones', 

@@ -339,9 +339,7 @@ function pop_search()
 		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /contrib/readme/install.html
 What has changed ? see here : /contrib/readme/changelog.html
 
-Short post-install instructions : 
-
-After Automod copied the php files and made the above codechanges, you'll have to do these 3 steps by youself :
+Post-install instructions : 
 
 1) copy the image folders to /images manually. 
 Automod cannot handle it as it would lead to a timeout due to the size (19mb) ! 
@@ -365,7 +363,7 @@ Note : Should you need to deactivate bbDKP you can open config.php change  @defi
 <diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /contrib/readme/install.html
 Liste des changements : /contrib/readme/changelog.html
 
-Résumé des étapes de post-installation : Après que Automod - ou vous-même manuellement a copié les fichiers à leur emplacement et fait les changements nécessaires dans le code php, il reste encore ces choses à faire :
+Résumé des étapes de post-installation
 
 1) Copier ces fichiers vers le repertoire /images  
 En raison de la taille de ces répertoires (±20mb), Automod ne sait pas les copier du au timeout. 
@@ -376,8 +374,7 @@ En raison de la taille de ces répertoires (±20mb), Automod ne sait pas les cop
 ------------------------------------------------------------------------------
 2) lancer l’installateur
 Surfez vers install/index.php et lancez l’installateur bbDKP 1.1.2  
-Ceci effectuera soit une mise à jour ou bien une m.a.j de 1.0.8, 1.0.9rc1, 1.1.0, ou 1.1.1 à 1.1.2 de la base de données.  
-Aussi, les caches seront vidées. 
+Ceci effectue soit une mise à jour ou bien une m.a.j de 1.0.8, 1.0.9rc1, 1.1.0, ou 1.1.1 à 1.1.2 de la base de données.  Aussi, les caches seront vidées. 
 ------------------------------------------------------------------------------
 3) Fin
 Rennomer le repertoire /install pour réactiver le forum.
@@ -389,8 +386,6 @@ Success ;)	]]></diy-instructions>
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /contrib/readme/install.html
 Liste der änderungen : /contrib/readme/changelog.html
 
-Zuzammenfassung der Post-installationsetappen : Nachdem Automod - oder Sie selber die Dateien kopiert hat und die notwendigen bearbeitungen abgewickelt in die Dateien, gibt es noch diese sachen zu erledigen :
-
 1) Kopiere diese Dateien zum Verzeichnis /images  
 Aus Berücksichtigung der grösse der Verzeichnisse (±20mb), kann Automod dies nicht kopieren wegen das Timeout. 
 <file from="root/images/class_images/*.*" to="images/class_images/*.*" />   
@@ -399,14 +394,14 @@ Aus Berücksichtigung der grösse der Verzeichnisse (±20mb), kann Automod dies 
 <file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  
 ------------------------------------------------------------------------------
 2) Datenbank Installation
-Gehe nach diesen link: install/index.php und starte das Installationsprogramma für bbDKP 1.1.2  
-Dies macht entweder eine Vollinstallation oder eine Aktualisierungsinstallation von Version 1.0.8, 1.0.9rc1, 1.1.0, oder 1.1.1 bis zu 1.1.2.  
+Rufe install/index.php auf und führe den Installer aus. Dies macht entweder eine Vollinstallation 
+oder eine Aktualisierung von Version 1.0.8, 1.0.9rc1, 1.1.0, oder 1.1.1 bis zu 1.1.2.  
 ------------------------------------------------------------------------------
 3) Ende
-Umbenennen den Verzeichnis /install damit das Forum wieder zugänglich wird.
+lösche, verschiebe oder benenne das Installations-Verzeichnis „install" damit das Forum wieder zugänglich wird.
 ------------------------------------------------------------------------------
 
-Notiz : Es ist Möglich bbDKP zu deaktivieren wenn Sie onfig.php öffnen und @define('EMED_BBDKP', true);  ändern nach  //@define('EMED_BBDKP', true);  
+Notiz : Es ist möglich bbDKP zu deaktivieren wenn Sie config.php öffnen und @define('EMED_BBDKP', true);  ändern nach  //@define('EMED_BBDKP', true);  
 
 Viel Spaß ;)	]]></diy-instructions>		
 	</action-group>
