@@ -886,9 +886,11 @@ $versions = array(
           	
             
 
-          // adding epgp GP column to items table, image column to class table
+          // adding image, class color code column to class table
+          // the class css will dissapear since all is now dynamic
          'table_column_add' => array(
             	array($bbdkp_table_prefix .'classes', 'imagename',  array('VCHAR:255', 0)),
+            	array($bbdkp_table_prefix .'classes', 'colorcode',  array('VCHAR:10', '')),
             ),
             
         // removing old table
@@ -1292,7 +1294,42 @@ function gameupdate($action, $version)
 					switch ($game)
 					{
 						case 'wow':
-		       				install_wow_bb2($bbdkp_table_prefix);
+							/* update class color code for Wow. other games will have to do this in the acp.
+							 * 1 warrior
+							 * 2 paladin
+							 * 3 hunter
+							 * 4 Rogue
+							 * 5 Priest
+							 * 6 Death knight
+							 * 7 Shaman
+							 * 8 Mage
+							 * 9 Warlock
+							 * 10 
+							 * 11 Druid
+							 */
+
+							$sql = 'update ' . $bbdkp_table_prefix . "classes set colorcode = '#C69B6D' where class_id = '1'" ;
+							$db->sql_query ($sql);
+							$sql = 'update ' . $bbdkp_table_prefix . "classes set colorcode = '#F48CBA' where class_id = '2'" ;
+							$db->sql_query ($sql);
+							$sql = 'update ' . $bbdkp_table_prefix . "classes set colorcode = '#AAD372' where class_id = '3'" ;
+							$db->sql_query ($sql);
+							$sql = 'update ' . $bbdkp_table_prefix . "classes set colorcode = '#F48CBA' where class_id = '4'" ;
+							$db->sql_query ($sql);
+							$sql = 'update ' . $bbdkp_table_prefix . "classes set colorcode = '#999' where class_id = '5'" ;
+							$db->sql_query ($sql);
+							$sql = 'update ' . $bbdkp_table_prefix . "classes set colorcode = '#F14' where class_id = '6'" ;
+							$db->sql_query ($sql);
+							$sql = 'update ' . $bbdkp_table_prefix . "classes set colorcode = '#214FDE' where class_id = '7'" ;
+							$db->sql_query ($sql);
+							$sql = 'update ' . $bbdkp_table_prefix . "classes set colorcode = '#68CCEF' where class_id = '8'" ;
+							$db->sql_query ($sql);
+							$sql = 'update ' . $bbdkp_table_prefix . "classes set colorcode = '#B0B' where class_id = '9'" ;
+							$db->sql_query ($sql);
+							$sql = 'update ' . $bbdkp_table_prefix . "classes set colorcode = '#FF7C0A' where class_id = '11'" ;
+		       				$db->sql_query ($sql);
+							
+							install_wow_bb2($bbdkp_table_prefix);
 		       				$db->sql_query ( 'update ' . $bbdkp_table_prefix . 'bb_zonetable  set sequence = id '  ); 
 		       				
 		       				return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
