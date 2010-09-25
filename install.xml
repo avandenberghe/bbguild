@@ -194,45 +194,6 @@ Deny from All
 			</edit>
 		</open>
 		
-		
-		<open src="adm/style/overall_header.html">
-			<edit>
-				<comment lang="en"><![CDATA[adding scripts to admin header]]></comment>
-				<comment lang="fr"><![CDATA[ajout de scripts au header admin ]]></comment>
-				<comment lang="de"><![CDATA[Zufügung header scripts im admin]]></comment>
-				<find><![CDATA[</head>]]></find>
-				<action type="before-add"><![CDATA[
-				<!-- begin bbdkp -->
-				<script type="text/javascript" src="style/dkp/jquery.js"></script>
-				<script type="text/javascript" src="style/dkp/farbtastic.js"></script>
-				<link rel="stylesheet" href="style/dkp/farbtastic.css" type="text/css" />
-				<script type="text/javascript" charset="utf-8">
-				 $(document).ready(function() {
-				   $('#nojquery').hide();
-				   $('#picker').farbtastic('#applyquestioncolor');
-				 });
-				</script>
-				<!-- end bbdkp -->
-				]]></action>
-			</edit>
-		</open>
-		
-		
-				<!-- begin bbdkp -->
-		<script type="text/javascript" src="style/dkp/jquery.js"></script>
-		<script type="text/javascript" src="style/dkp/farbtastic.js"></script>
-		
-		<link rel="stylesheet" href="style/dkp/farbtastic.css" type="text/css" />
-		<script type="text/javascript" charset="utf-8">
-		 $(document).ready(function() {
-		   $('#nojquery').hide();
-		   $('#picker').farbtastic('#applyquestioncolor');
-		 });
-		</script>
-		<!-- end bbdkp -->
-		
-		
-		
 		<open src="common.php">
 			<edit>
 				<comment lang="en"><![CDATA[adding required classfiles for bbdkp in common.php.]]></comment>
@@ -341,6 +302,25 @@ function pop_search()
 				<action type="replace-with"><![CDATA[if (strlen($table_prefix) === 0 || stripos($table_name, $table_prefix) === 0 || stripos($table_name, $bbdkp_table_prefixx) === 0)]]></action>
 			</edit>
 		</open>
+		
+		
+		<open src="adm/style/overall_header.html">
+		        <edit>
+		                <comment lang="en"><![CDATA[adding jquery scripts to admin header]]></comment>
+		                <comment lang="fr"><![CDATA[ajout de scripts jquery au header admin ]]></comment>
+		                <comment lang="de"><![CDATA[Zufügung jquery header scripts im admin]]></comment>
+		                <find><![CDATA[</head>]]></find>
+		                <action type="before-add"><![CDATA[
+		                <!-- begin bbdkp -->
+		                <script type="text/javascript" src="style/dkp/jquery.js"></script>
+		                <script type="text/javascript" src="style/dkp/farbtastic.js"></script>
+		                <link rel="stylesheet" href="style/dkp/farbtastic.css" type="text/css" />
+		                <!-- end bbdkp -->
+		                ]]></action>
+		        </edit>
+		</open>
+		
+		
 		<open src="styles/prosilver/template/overall_header.html">
 			<edit>
 				<comment lang="en"><![CDATA[install bbDKP header - All in one file]]></comment>
