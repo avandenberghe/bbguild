@@ -492,6 +492,20 @@ $lang = array_merge($lang, array(
 'ADMIN_LOG_DELETE_SUCCESS' => 'The log enties %s were deleted successfully.',
 'ADMIN_LOG_DELETE_FAIL' => 'The log enties %s were not deleted.',
 'ADMIN_DEFAULTPOOL_SUCCESS' => 'Default Dkp Pool changed to %s successfully. ', 
+'ADMIN_ADD_FACTION_SUCCESS' => 'The Faction %s was added successfully',
+'ADMIN_DELETE_FACTION_SUCCESS' => 'The Faction %s was deleted successfully',
+'ADMIN_DELETE_FACTION_FAILED' => 'You can’t delete faction %s because it has connected races.',
+'ADMIN_DELETE_RACE_SUCCESS' => 'Race %s was deleted successfully', 
+'ADMIN_DELETE_RACE_FAILED' => 'You can’t delete race %s because it has members!', 
+'ADMIN_DELETE_CLASS_SUCCESS' => 'Class %s deleted successfully', 
+'ADMIN_DELETE_CLASS_FAILED' => 'You can’t delete class %s because there are mambers in it!', 
+'ADMIN_ADD_RACE_FAILED' => 'The race could not be created because id %s is already in use. ',
+'ADMIN_ADD_RACE_SUCCESS' => 'The race %s was created successfully', 
+'ADMIN_ADD_CLASS_FAILED' => 'The class could not be created because id %s is in use. ',
+'ADMIN_ADD_CLASS_FAILED_NAME' => 'The class could not be created because name %s is in use. ',
+'ADMIN_ADD_CLASS_SUCCESS' => 'The class %s was created successfully', 
+'ADMIN_UPDATE_CLASS_SUCCESS' => 'The class %s was updated successfully', 
+'ADMIN_UPDATE_RACE_FAILED' =>  'Thr race could not be updated because %s is already in use', 
 'ADMIN_UPDATE_RACE_SUCCESS' => 'The race %s was updated successfully. ',
 
  // Configuration
@@ -628,10 +642,17 @@ $lang = array_merge($lang, array(
 'UPDATE_MEMBER' => 'Update Member',
 'UPDATE_MEMBER_DKP' => 'Update Member Dkp',
 'UPDATE_RAID' => 'Update Raid',
+'UPDATE_RACE' => 'Update Race', 
+'UPDATE_CLASS' => 'Update Class', 
 
 // Misc
 'ADJUSTMENT_VALUE' => 'Adjustment Value',
 'ADJUSTMENT_VALUE_NOTE' => 'May be negative',
+'CLASS_NAME' => 'Class Name',
+'CLASS_ID' => 'Class ID',
+'CLASS_ARMORY' => 'Armory level',
+'CLASS_IMAGE' => 'Image name',
+'CLASS_LEVEL' => 'Min/Max Class level',
 'CODE' => 'Code',
 'CONTACT' => 'Contact',
 'CREATE' => 'Create',
@@ -642,6 +663,7 @@ $lang = array_merge($lang, array(
 'EVENT_NAME' => 'Event name', 
 'EVENT_VALUE' => 'Event Value',
 'STATUS' => 'Status', 
+'FACTION_NAME' => 'Faction Name',
 'HIDE' => 'Hide?',
 'ID' => 'Id', 
 'INSTALL' => 'Install',
@@ -667,8 +689,6 @@ $lang = array_merge($lang, array(
 'X_MEMBERS_S' => '%d member',
 'X_MEMBERS_P' => '%d members',
 'SELECT_1OFX_MEMBERS' => 'Select 1 of %d members...',
-
-
 
 // Admin Index
 'BBDKP_STARTED' => 'bbDkp Started',
