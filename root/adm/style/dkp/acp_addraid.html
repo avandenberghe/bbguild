@@ -132,7 +132,6 @@ function fnRemoveMember()
 
 </script>
 
-
 <div>
 <input type="hidden"
 	name="hidden_id" value="{RAID_ID}" /> <input type="hidden"
@@ -148,7 +147,7 @@ function fnRemoveMember()
 
 <h1>{RAIDTITLE}</h1>
 
-<div style="float: left; width: 48%;">
+<div style="float: left; width: 55%;">
 <fieldset><legend>{L_ADD_RAID_TITLE}</legend>
 	<dl>
 		<dt><b>{L_EVENT}:</b> (<a href="{U_ADD_EVENT}">{L_ADD_EVENT}</a>)</dt>
@@ -172,39 +171,38 @@ function fnRemoveMember()
 		
 	<dl>
 		<dt><label>{L_DATE}:</label></dt>
-		<dd><input type="text" name="d" size="3" maxlength="2"
-			value="{D}" id="d" class="input" /> / <input type="text" name="mo"
-			size="3" maxlength="2" value="{MO}" id="mo" class="input" /> / <input
-			type="text" name="Y" size="5" maxlength="4" value="{Y}" id="Y"
-			class="input" />{FV_D}{FV_MO}{FV_Y}</dd>
+		<dd>
+		<select name="d">{S_RAIDDATE_DAY_OPTIONS}</select>
+		<select name="mo">{S_RAIDDATE_MONTH_OPTIONS}</select> 
+		<select name="Y">{S_RAIDDATE_YEAR_OPTIONS}</select>
+			
+	   </dd>
 	</dl>
 	<dl>
 		<dt><label>{L_TIME}:</label></dt>
-		<dd><input type="text" name="h" size="3" maxlength="2"
-			value="{H}" id="h" class="input" /> : <input type="text" name="mi"
-			size="3" maxlength="2" value="{MI}" id="mi" class="input" /> : <input
-			type="text" name="s" size="3" maxlength="2" value="{S}" id="s"
-			class="input" />{FV_H}{FV_MI}{FV_S}</dd>
-
+		<dd>
+			<select id="h">{S_RAIDDATE_H_OPTIONS}</select>
+			<select name="mi">{S_RAIDDATE_MI_OPTIONS}</select> 
+			<select name="s">{S_RAIDDATE_S_OPTIONS}</select>
+		</dd>
 	</dl>
 	<dl>
 
 		<dt><label>{L_NOTE}:</label></dt>
-		<dd><input type="text" name="raid_note" size="40" maxlength="255"
-			value="{RAID_NOTE}" class="input" /></dd>
+		<dd><textarea name="raid_note" cols="40" rows="5" wrap="soft">{RAID_NOTE}</textarea></dd>
 	</dl>
 </fieldset>
 </div>
 
-<div style="float: right; width: 50%;">
+<div style="float: left; width: 45%;">
 <fieldset>
 
-<legend>{L_SEARCH_MEMBERS}</legend>
+<legend>{L_SEARCH}</legend>
 
 <span class="small">{L_HOLD_CTRL_NOTE}</span>
-
+<br/>
 <dl>
-	{L_SEARCH_MEMBERS}:
+	{L_SEARCH}:
 	<input type="text" name="memberSearch" size="35" maxlength="255" 
 	value="" class="input" onkeyup="fnSearch(this.name, 'all_members')" />
 </dl>
@@ -234,7 +232,7 @@ function fnRemoveMember()
 </fieldset>
 </div>
 
-<div style="float: left; width: 100%;">
+<div style="float: right; width: 45%;">
 
 <p class="quick">
 {S_FORM_TOKEN}

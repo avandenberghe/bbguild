@@ -523,8 +523,6 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 	}
 	
-	
-	
 	/*
 	 * delete a raid
 	 */
@@ -537,11 +535,11 @@ class acp_dkp_raid extends bbDkp_Admin
 			
 			$this->raid = array (
 				
-				'raid_dkpid' => $dkpsys_id, 
+				'raid_dkpid' 	 => $dkpsys_id, 
 				'raid_attendees' => utf8_normalize_nfc ( request_var ( 'raid_attendees', array (0 => '' ), true ) ), 
-				'raid_name' => utf8_normalize_nfc ( request_var ( 'raid_name', ' ', true ) ), 
-				'raid_note' => utf8_normalize_nfc ( request_var ( 'raid_note', ' ', true ) ), 
-				'raid_value' => request_var ( 'raid_value', 0.00 ) );
+				'raid_name' 	 => utf8_normalize_nfc ( request_var ( 'raid_name', ' ', true ) ), 
+				'raid_note' 	 => utf8_normalize_nfc ( request_var ( 'raid_note', ' ', true ) ), 
+				'raid_value' 	 => request_var ( 'raid_value', 0.00 ) );
 			
 			$sql = 'SELECT raid_dkpid, raid_name, raid_value, raid_note, raid_date
 			 FROM ' . RAIDS_TABLE . " WHERE raid_id= " . (int) $raid_id;
@@ -848,7 +846,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		$result = $db->sql_query($sql);
 		$max_value = (float) $db->sql_fetchfield('event_value', 0, $result);
 		$db->sql_freeresult ( $result );
-				
+
+		
 		if ($raid_id != 0) 
 		{
 			/*** prepare to display data for this raid  ***/
@@ -892,12 +891,6 @@ class acp_dkp_raid extends bbDkp_Admin
 			
 			$template->assign_vars ( array (
 			  'RAIDTITLE' => sprintf($user->lang['RAIDDESCRIPTION'], $raid_id, $this->raid['raid_name'], $user->format_date($this->raid['raid_date'])), 
-			  'MO'    => date('m', $this->raid['raid_date']),
-              'D'     => date('d', $this->raid['raid_date']),
-              'Y'     => date('Y', $this->raid['raid_date']),
-              'H'     => date('H', $this->raid['raid_date']),
-              'MI'    => date('i', $this->raid['raid_date']),
-              'S'     => date('s', $this->raid['raid_date']),
 			  'RAID_VALUE' 		=> $this->raid['raid_value'], 
  			  'RAID_ATTENDEES' 	=> str_replace ( ',', "\n", $this->raid ['raid_attendees'] ), 
 			  'RAID_NOTE' 		=> $this->raid['raid_note'], 
@@ -908,18 +901,63 @@ class acp_dkp_raid extends bbDkp_Admin
 		else 
 		{
 			// no raid 
-			
 			$template->assign_vars ( array (
 			 'RAIDTITLE' => sprintf($user->lang['NEWRAIDDESCRIPTION']), 
-              'MO'    => date('m', $this->time),
-              'D'     => date('d', $this->time),
-              'Y'     => date('Y', $this->time),
-              'H'     => date('H', $this->time),
-              'MI'    => date('i', $this->time),
-              'S'     => date('s', $this->time),
-			  'RAID_VALUE' 		=> $max_value, 
-			  'S_ADD' => true ));
+		     'RAID_VALUE' 		=> $max_value, 
+			 'S_ADD' => true ));
 		}
+		
+		// build presets for raiddate and hour pulldown
+		$now = getdate();
+		$s_raid_day_options = '<option value="0"	>--</option>';
+		for ($i = 1; $i < 32; $i++)
+		{
+			$day = isset($this->raid['raid_date']) ? date('j', $this->raid['raid_date']) : $now['mday'] ;
+			$selected = ($i == $day ) ? ' selected="selected"' : '';
+			$s_raid_day_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_month_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 13; $i++)
+		{
+			$month = isset($this->raid['raid_date']) ? date('n', $this->raid['raid_date']) : $now['mon'] ;
+			$selected = ($i == $month ) ? ' selected="selected"' : '';
+			$s_raid_month_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_year_options = '<option value="0">--</option>';
+		for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+		{
+			$yr = isset($this->raid['raid_date']) ?  date('Y',$this->raid['raid_date']) : $now['year'] ;
+			$selected = ($i == $yr ) ? ' selected="selected"' : '';
+			$s_raid_year_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+		
+		
+		$s_raid_hh_options = '<option value="0"	>--</option>';
+		for ($i = 1; $i < 24; $i++)
+		{
+			$hh = isset($this->raid['raid_date']) ? date('H', $this->raid['raid_date']) : $now['hours'] ;
+			$selected = ($i == $hh ) ? ' selected="selected"' : '';
+			$s_raid_hh_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_mi_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 59; $i++)
+		{
+			$mi = isset($this->raid['raid_date']) ? date('i', $this->raid['raid_date']) : $now['minutes'] ;
+			$selected = ($i == $mi ) ? ' selected="selected"' : '';
+			$s_raid_mi_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_s_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 59; $i++)
+		{
+			$s = isset($this->raid['raid_date']) ?  date('s',$this->raid['raid_date']) : $now['seconds'] ;
+			$selected = ($i == $s ) ? ' selected="selected"' : '';
+			$s_raid_s_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+		
 
 		/* event pulldown */
 		$max_value = 0.00;
@@ -962,9 +1000,15 @@ class acp_dkp_raid extends bbDkp_Admin
 				'F_ADD_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid" ), 
 				'U_ADD_EVENT' 		=> append_sid ( "index.$phpEx", "i=dkp_event&amp;mode=addevent" ), 
 
+				'S_RAIDDATE_DAY_OPTIONS'	=> $s_raid_day_options,
+				'S_RAIDDATE_MONTH_OPTIONS'	=> $s_raid_month_options,
+				'S_RAIDDATE_YEAR_OPTIONS'	=> $s_raid_year_options,
+				'S_RAIDDATE_H_OPTIONS'		=> $s_raid_hh_options,
+				'S_RAIDDATE_MI_OPTIONS'		=> $s_raid_mi_options,
+				'S_RAIDDATE_S_OPTIONS'		=> $s_raid_s_options,
+		
 				// Form values
 				'RAID_DKPSYSID' 	=> $dkpsys_id, 
-				
 		
               	'L_DATE' => $user->lang ['DATE'] . ' dd/mm/yyyy', 
 				'L_TIME' => $user->lang ['TIME'] . ' hh:mm:ss', 
@@ -986,18 +1030,18 @@ class acp_dkp_raid extends bbDkp_Admin
        
         $this->fv->is_filled(request_var('raid_attendees', array(0=>'')), $user->lang['FV_REQUIRED_ATTENDEES']);
         $this->fv->is_alpha(request_var('raid_attendees', array(0=>'')), 	$user->lang['FV_ALPHA_ATTENDEES']);
-        $this->fv->is_within_range(request_var('mo', '') , 1, 12,      $user->lang['FV_RANGE_MONTH']);
-        $this->fv->is_within_range(request_var('d', '') ,  1, 31,      $user->lang['FV_RANGE_DAY']);
-        $this->fv->is_within_range(request_var('Y', '') ,  1998, 2030, $user->lang['FV_RANGE_YEAR']); 
-        $this->fv->is_within_range(request_var('h', '') ,  0, 23,      $user->lang['FV_RANGE_HOUR']);
-        $this->fv->is_within_range(request_var('mi', ''), 0, 59,      $user->lang['FV_RANGE_MINUTE']);
-        $this->fv->is_within_range(request_var('s', '') ,  0, 59,      $user->lang['FV_RANGE_SECOND']); 
+        $this->fv->is_within_range(request_var('mo', 1) , 1, 12,      $user->lang['FV_RANGE_MONTH']);
+        $this->fv->is_within_range(request_var('d', 1) ,  1, 31,      $user->lang['FV_RANGE_DAY']);
+        $this->fv->is_within_range(request_var('Y', 1998) ,  1998, 2030, $user->lang['FV_RANGE_YEAR']); 
+        $this->fv->is_within_range(request_var('h', 0) ,  0, 23,      $user->lang['FV_RANGE_HOUR']);
+        $this->fv->is_within_range(request_var('mi', 0), 0, 59,      $user->lang['FV_RANGE_MINUTE']);
+        $this->fv->is_within_range(request_var('s', 0) ,  0, 59,      $user->lang['FV_RANGE_SECOND']); 
    
         if ( !isset($_POST['raid_name'])) 
         {
             $this->fv->errors['raid_name'] = $user->lang['FV_REQUIRED_EVENT_NAME'];
         }
-        $this->time = mktime(request_var('h', ' '), request_var('mi', ' '), request_var('s', ' '), request_var('mo', ' '), request_var('d', ' '), request_var('Y', ' '));
+        $this->time = mktime(request_var('h', 0), request_var('mi', 0), request_var('s', 0), request_var('mo', 0), request_var('d', 0), request_var('Y', 0));
        
         return $this->fv->is_error();
     }
