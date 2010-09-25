@@ -110,7 +110,6 @@ foreach ( $dkpvalues as $key => $value )
 	}
 }
 
-
 $query_by_pool = ($dkpsys_id != 0) ? true : false;
 /**** end dkpsys pulldown  ****/
 
@@ -210,7 +209,7 @@ $sql_array = array(
    					l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
        				r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix, 
        				l1.name AS member_class, c.class_id, 
-       				c.class_armor_type AS armor_type,
+       				c.colorcode, c.class_armor_type AS armor_type,
 					c.class_min_level AS min_level,
 					c.class_max_level AS max_level', 
  
@@ -304,6 +303,7 @@ while ( $row = $db->sql_fetchrow ( $members_result ) )
 		$memberarray [$member_count] ['rank_hide'] = $row ['rank_hide'];
 		$memberarray [$member_count] ['member_level'] = $row ['member_level'];
 		$memberarray [$member_count] ['member_class'] = $row ['member_class'];
+		$memberarray [$member_count] ['colorcode'] = $row ['colorcode'];
 		$memberarray [$member_count] ['armor_type'] = $row ['armor_type'];
 		$memberarray [$member_count] ['member_earned'] = $row ['member_earned'];
 		$memberarray [$member_count] ['member_spent'] = $row ['member_spent'];
@@ -438,7 +438,7 @@ foreach ( $memberarray as $key => $member )
 	$u_rank_search .= ($filter != 'All') ? '&amp;filter=' . $filter : '';
 	
 	$template->assign_block_vars ( 'members_row', array (
-		'CSSCLASS' 		=> $config ['bbdkp_default_game'] . 'class' . $member ['class_id'], 
+		'COLORCODE' 	=> $member ['colorcode'], 
 		'DKPCOLOUR1' 	=> ($member ['member_adjustment'] >= 0) ? 'green' : 'red', 
 		'DKPCOLOUR2' 	=> ($row ['member_current'] >= 0) ? 'green' : 'red', 
 		'ID' 			=> $member ['member_id'], 
@@ -553,7 +553,7 @@ function leaderboard($dkpsys_id, $query_by_pool)
 	global $phpbb_root_path, $phpEx;
 
     $sql_array = array(
-	    'SELECT'    => 	' c.class_id, l.name as class_name, c.imagename ', 
+	    'SELECT'    => 	' c.class_id, l.name as class_name, c.imagename, c.colorcode ', 
 	    'FROM'      => array(
 	        CLASS_TABLE 	=> 'c',
 	        BB_LANGUAGE		=> 'l', 
@@ -574,7 +574,8 @@ function leaderboard($dkpsys_id, $query_by_pool)
 			array (
 				'CLASSNAME' 	=> $row ['class_name'], 
 				'CLASSIMGPATH'	=> (strlen($row['imagename']) > 1) ? $row['imagename'] . ".png" : '',
-				'CSSCLASS' 		=> $config ['bbdkp_default_game'] . 'class' . $row ['class_id'] ) 
+				'COLORCODE' 	=> $row['colorcode']
+				) 
 			);
 		
 		$sql_array = array(

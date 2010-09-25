@@ -21,8 +21,7 @@
 <!-- ENDIF -->
 <td class="row1" style="text-align:center;">
 <img src="{ROOT_PATH}/images/class_images/{class.CLASSIMGPATH}" alt="pic" width="20" height="20"></img>
-<span class="{class.CSSCLASS}"> {class.CLASSNAME}</span>
-
+<span style="color:{class.COLORCODE}"><strong>{class.CLASSNAME}</strong></span>
 
 <table style="width: 100%"  border="0" cellspacing="0" cellpadding="0">
 <colgroup span="2">
@@ -34,7 +33,7 @@
 <!-- BEGIN dkp_row -->
 <tr class="row2">
 <td style="text-align:left;" >
-<a class="{class.CSSCLASS}" href="{class.dkp_row.U_VIEW_MEMBER}">{class.dkp_row.NAME}</a>
+<a style="color:{class.COLORCODE}" href="{class.dkp_row.U_VIEW_MEMBER}"><strong>{class.dkp_row.NAME}</strong></a>
 </td>
 <td>
 <span {class.dkp_row.DKPCOLOUR} > {class.dkp_row.CURRENT}</span>
