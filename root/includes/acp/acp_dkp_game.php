@@ -167,6 +167,7 @@ class acp_dkp_game extends bbDkp_Admin
 				$max = request_var('class_level_max', 0); 
 				$armorytype = request_var('armory', '' );
 				$image = request_var('image', '' );
+				$colorcode = request_var('classcolor', '' );
 
 				if($classadd)
 				{
@@ -186,6 +187,7 @@ class acp_dkp_game extends bbDkp_Admin
 						'class_armor_type'		=> (string) $armorytype,
 						'imagename'				=> $image,
 						'class_hide'			=> 0,
+						'colorcode'				=> $colorcode,
 					);
 					
 					$sql = 'INSERT INTO ' . CLASS_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
@@ -231,6 +233,7 @@ class acp_dkp_game extends bbDkp_Admin
 						'class_armor_type'		=> (string) $armorytype,
 						'imagename'				=> $image,
 						'class_hide'			=> 0,
+						'colorcode'				=> $colorcode,
 					);
 					
 					$sql = 'UPDATE ' . CLASS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) .  '  
@@ -470,7 +473,7 @@ class acp_dkp_game extends bbDkp_Admin
 	            		$id = request_var('id', 0); 
 						
 						$sql_array = array(
-					    'SELECT'    => 	'  c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename ', 
+					    'SELECT'    => 	'  c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename, c.colorcode ', 
 					    'FROM'      => array(
 								CLASS_TABLE 	=> 'c',
 								BB_LANGUAGE 	=> 'l',
@@ -489,6 +492,8 @@ class acp_dkp_game extends bbDkp_Admin
 						$class_max_level = (int) $db->sql_fetchfield('class_max_level', 0 ,$result );	
 						$class_armor_type = (string) $db->sql_fetchfield('class_armor_type', 0 ,$result );	
 						$class_imagename = (string) $db->sql_fetchfield('imagename', 0 ,$result );	
+						$class_colorcode = (string) $db->sql_fetchfield('colorcode', 0 ,$result );
+						
 						$db->sql_freeresult($result);
 
 						$s_armor_options = ''; 
@@ -508,6 +513,7 @@ class acp_dkp_game extends bbDkp_Admin
 	                    		'CLASS_MAX' 		 => $class_max_level  ,
 	                    		'S_ARMOR_OPTIONS' 	 => $s_armor_options ,
 	                    		'CLASS_IMAGENAME' 	 => $class_imagename,
+	                    		'COLORCODE' 		 => $class_colorcode,
 	                    		'CLASS_IMAGE' 		 => (strlen($class_imagename) > 1) ? $phpbb_root_path . "images/class_images/" . $class_imagename . ".png" : '',  
 								'S_CLASS_IMAGE_EXISTS' => (strlen($class_imagename) > 1) ? true : false, 
 								'S_ADD'   			 => FALSE,
@@ -593,7 +599,9 @@ class acp_dkp_game extends bbDkp_Admin
             		
             	}            	
 
-            	
+            	/********************
+            	 * template filling
+            	 *******************/
                 $sort_order = array(
                     0 => array('race_id', 'race_id desc'),
                     1 => array('race_name', 'race_name, event_name desc'),

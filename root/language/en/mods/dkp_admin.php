@@ -263,6 +263,7 @@ $lang = array_merge($lang, array(
 'CLASS_ARMORY_EXPLAIN' => 'Max gearlevel for this class',
 'CLASS_IMAGE_EXPLAIN' => 'color png imagename, without extension. file should exist in /images/class_images',
 'ACP_LISTGAME_EXPLAIN' => 'Maintain Game Parameters',
+'CLASS_COLOR_EXPLAIN' => 'Choose the color of the class tags',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -652,6 +653,7 @@ $lang = array_merge($lang, array(
 'CLASS_ID' => 'Class ID',
 'CLASS_ARMORY' => 'Armory level',
 'CLASS_IMAGE' => 'Image name',
+'CLASS_COLOR' => 'Class color',
 'CLASS_LEVEL' => 'Min/Max Class level',
 'CODE' => 'Code',
 'CONTACT' => 'Contact',
@@ -715,6 +717,7 @@ $lang = array_merge($lang, array(
 //js alerts
 'ALERT_AJAX' => 'There was a problem while using XMLHTTP', 
 'ALERT_OLDBROWSER' => 'Browser does not support HTTP Request', 
+'JQUERY_MISSING'		=> 'jquery.js is not present. You must install jquery.js in adm/style/dkp for the colorwheel to work.', 
 
 
 //Boss progress

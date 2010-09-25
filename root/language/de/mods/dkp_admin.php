@@ -263,6 +263,7 @@ $lang = array_merge($lang, array(
 'CLASS_ARMORY_EXPLAIN' => '',
 'CLASS_IMAGE_EXPLAIN' => 'png Farbblidname ohne Dateiendung. Diese Datei soll existieren im bereich /images/class_images',
 'ACP_LISTGAME_EXPLAIN' => 'Verwalte die Spieleinstellungen',
+'CLASS_COLOR_EXPLAIN' => 'Wähle die Farbe der Klassetikette',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'Du hast keine Berechtigung Ereignisse zuzufügen.',
@@ -631,6 +632,12 @@ $lang = array_merge($lang, array(
 // Misc
 'ADJUSTMENT_VALUE' => 'Punkte Anpassung',
 'ADJUSTMENT_VALUE_NOTE' => 'darf negativ sein',
+'CLASS_NAME' => 'Klassenname',
+'CLASS_ID' => 'KlassenID',
+'CLASS_ARMORY' => 'Rüstung',
+'CLASS_IMAGE' => 'Bilddatei',
+'CLASS_COLOR' => 'Farbe',
+'CLASS_LEVEL' => 'Min. und Max. level',
 'CODE' => 'Kode',
 'CONTACT' => 'Kontakt',
 'CREATE' => 'Schaffe',
@@ -694,6 +701,7 @@ $lang = array_merge($lang, array(
 //js alerts
 'ALERT_AJAX' => 'Es ist ein Problem aufgetreten beim versuch XMLHTTP Ajax zu nutzen.', 
 'ALERT_OLDBROWSER' => 'Ihr Browser ist veraltet.', 
+'JQUERY_MISSING' => 'jquery.js fehlt. Diese Datei muss sich im ordner adm/style/dkp befinden damit der Farbenzirkel angezeigt wird.', 
 
 //Boss progress
 'GENERAL' => 'Allgemeine Einstellungen',

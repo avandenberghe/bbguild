@@ -6,7 +6,13 @@
 
 <script  type="text/javascript">
 //<![CDATA[
-function check_form()
+ $(document).ready(function() {
+   $('#nojquery').hide();
+   $('#picker').farbtastic('#classcolor');
+
+ });
+
+ function check_form()
 {
     if (document.post.class_name.value.length < 2)
     {
@@ -21,7 +27,6 @@ function check_form()
     return true;
 }
 //]]>
-
 </script>
 
 <a name="maincontent"></a>
@@ -65,8 +70,24 @@ function check_form()
 		</dd>
 	</dl>
 
-
+	<dl>
+		<dt><label>{L_CLASS_COLOR}</label><br />{L_CLASS_COLOR_EXPLAIN}</dt>
+		<dd>
+			<table style=" border-width: 0px;"> 
+			<tr>
+				<td >
+				<span id="nojquery" style="color: red; font-size: 1.4em">{L_JQUERY_MISSING}</span>
+				  <span id="picker"></span>
+		       	</td>
+	       		<td><p>
+				<span class="form-item"><input type="text" id="classcolor" name="classcolor" value="{COLORCODE}" /></span>
+	    	 	</td>
+		     </tr>
+			</table>
+		</dd>
+	</dl>
 </fieldset>
+
 
    <p class="quick">
     <!-- IF S_ADD -->
@@ -75,7 +96,6 @@ function check_form()
     <input type="submit" name="update" value="{L_UPDATE_CLASS}" class="button1" /> 
     <!-- ENDIF -->
 	</p>
-
 
 </form>
 

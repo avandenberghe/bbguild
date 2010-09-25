@@ -262,6 +262,7 @@ $lang = array_merge($lang, array(
 'CLASS_ARMORY_EXPLAIN' => 'Armurerie maximale que cette classe peut porter.',
 'CLASS_IMAGE_EXPLAIN' => 'nom d’image png en couleur, sans extension. ce fichier doit exister dans le répertoire /images/class_images',
 'ACP_LISTGAME_EXPLAIN' => 'Maintainance des Paramètres du Jeu',
+'CLASS_COLOR_EXPLAIN' => 'Choisis la couleur des étiquettes de la classe',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'Vous n’avez pas la permission d’ajouter des évènements.',
@@ -651,6 +652,7 @@ $lang = array_merge($lang, array(
 'CLASS_ID' => 'ID de la classe',
 'CLASS_ARMORY' => 'Type d’Armurerie',
 'CLASS_IMAGE' => 'Nom de l’Image',
+'CLASS_COLOR' => 'Couleur Classe',
 'CLASS_LEVEL' => 'Niveau minimum et maximum de la classe',
 'CODE' => 'Code',
 'CONTACT' => 'Contact',
@@ -714,6 +716,7 @@ $lang = array_merge($lang, array(
 //js alerts
 'ALERT_AJAX' => 'Probelem lors du lancement XMLHTTP', 
 'ALERT_OLDBROWSER' => 'Votre browser est incompatible', 
+'JQUERY_MISSING'	=> 'jquery.js n’est pas présent. Vous devez installer jquery.js dans adm/style/dkp pour le cercle de couleurs à apparaitre.', 
 
 //Boss progress
 'GENERAL' => 'Paramètres générals',
