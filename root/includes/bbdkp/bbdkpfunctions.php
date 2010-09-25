@@ -167,9 +167,9 @@ function color_item($item, $percentage = false)
 * @param $sort_order Sorting order array
 * @return array SQL/URI information
 */
-function switch_order($sort_order)
+function switch_order($sort_order, $arg = URI_ORDER)
 {
-    $uri_order = ( isset($_GET[URI_ORDER]) ) ? $_GET[URI_ORDER] : '0.0';
+    $uri_order = ( isset($_GET[$arg]) ) ? $_GET[$arg] : '0.0';
     $uri_order = explode('.', $uri_order);
     $element1 = ( isset($uri_order[0]) ) ? $uri_order[0] : 0;
     $element2 = ( isset($uri_order[1]) ) ? $uri_order[1] : 0;

@@ -604,20 +604,13 @@ class acp_dkp_game extends bbDkp_Admin
             	 *******************/
                 $sort_order = array(
                     0 => array('race_id', 'race_id desc'),
-                    1 => array('race_name', 'race_name, event_name desc'),
+                    1 => array('race_name', 'race_name desc'),
                     2 => array('faction_name desc', 'faction_name, race_name desc')
                 );
                 
-                $sort_order2 = array(
-                    0 => array('class_id', 'class_id desc'),
-                    1 => array('class_name', 'class_name desc'),
-                    2 => array('class_armor_type', 'class_armor_type, class_id desc'),
-                    3 => array('class_min_level', 'class_min_level, class_id desc'),
-                    4 => array('class_max_level', 'class_max_level, class_id desc'),
-                );
-                
+  
                 $current_order = switch_order($sort_order);
-                $current_order2 = switch_order($sort_order2);
+              
                 
                 // list the factions
 				$total_factions = 0;
@@ -672,9 +665,19 @@ class acp_dkp_game extends bbDkp_Admin
                 $db->sql_freeresult($result);
                 
                 // list the classes
+                
+                $sort_order2 = array(
+                    0 => array('class_id', 'class_id desc'),
+                    1 => array('class_name', 'class_name desc'),
+                    2 => array('class_armor_type', 'class_armor_type, class_id desc'),
+                    3 => array('class_min_level', 'class_min_level, class_id desc'),
+                    4 => array('class_max_level', 'class_max_level, class_id desc'),
+                );
+                $current_order2 = switch_order($sort_order2, "o1");
+                
                 $total_classes = 0;
                 $sql_array = array(
-				    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name, c.class_hide, c.class_min_level, class_max_level, c.class_armor_type , c.imagename ', 
+				    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name, c.class_hide, c.class_min_level, class_max_level, c.class_armor_type , c.imagename, c.colorcode ', 
 				    'FROM'      => array(
 				        CLASS_TABLE 	=> 'c',
 				        BB_LANGUAGE		=> 'l', 
@@ -693,6 +696,7 @@ class acp_dkp_game extends bbDkp_Admin
                         'ID' 			=> $row['c_index'],
                         'CLASSID' 		=> $row['class_id'],
                         'CLASSNAME' 	=> $row['class_name'],
+                    	'COLORCODE' 	=> $row['colorcode'],
                     	'CLASSARMOR' 	=> $user->lang[$row['class_armor_type']], 	
                     	'CLASSMIN' 		=> $row['class_min_level'], 	
                     	'CLASSMAX' 		=> $row['class_max_level'], 	
@@ -711,7 +715,12 @@ class acp_dkp_game extends bbDkp_Admin
                     'L_EXPLAIN'       => $user->lang['ACP_LISTGAME_EXPLAIN'],
                     'O_RACEID' 		  => $current_order['uri'][0],
                     'O_RACENAME' 	  => $current_order['uri'][1],
-                    'O_FACTIONNAME'   => $current_order['uri'][2],   
+                    'O_FACTIONNAME'   => $current_order['uri'][2], 
+	                'O_CLASSID'   	  => $current_order2['uri'][0], 
+	                'O_CLASSNAME'     => $current_order2['uri'][1], 
+	                'O_CLASSARMOR'    => $current_order2['uri'][2], 
+	                'O_CLASSMIN'      => $current_order2['uri'][3], 
+	                'O_CLASSMAX'      => $current_order2['uri'][4], 
                     'U_LIST_GAMES' 	  => append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;"),  
                    	'LISTFACTION_FOOTCOUNT' => sprintf($user->lang['LISTFACTION_FOOTCOUNT'], $total_factions),
                     'LISTRACE_FOOTCOUNT' => sprintf($user->lang['LISTRACE_FOOTCOUNT'], $total_races),
