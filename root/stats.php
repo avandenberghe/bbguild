@@ -147,7 +147,7 @@ $show_all = ( (isset($_GET['show'])) && (request_var('show', '') == "all") ) ? t
 
 $sql_array = array(
     'SELECT'    => 	'l.member_name,	l.member_class_id, r.rank_prefix, r.rank_suffix, 
-		c1.name as classr_name, 
+		c1.name as classr_name, c.colorcode, 
 		m.member_id, 
 		m.member_dkpid, 
 		m.member_earned, 
@@ -206,7 +206,7 @@ while ( $row = $db->sql_fetchrow($members_result) )
 {
 	$member_count++;
 	
-	$cssclass = $config['bbdkp_default_game'] . 'class'. $row['member_class_id'];
+	$colorcode = $row['colorcode'];
 	
     // Default the values of these in case they have no earned or spent or adjustment   
     $row['earned_per_day'] = ( ( (!empty($row['earned_per_day']) ) && ( $row['zero_check'] > '0.01') )) ? $row['earned_per_day'] : '0.00';
@@ -229,10 +229,10 @@ while ( $row = $db->sql_fetchrow($members_result) )
     
 
     $template->assign_block_vars('stats_row', array(
-    	'CSSCLASS'				=> $cssclass,
+    	'COLORCODE'				=> $colorcode,
     	'ID'            		=> $row['member_id'],
 	    'COUNT'         		=> ($row[$previous_source] == $previous_data) ? '&nbsp;' : $member_count,
-        'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAME . '='.$row['member_name']) . '" class="' . $cssclass ,    
+        'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAME . '='.$row['member_name']) . '"' ,    
         'NAME' 					=> $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
         'FIRST_RAID' 			=> ( !empty($row['member_firstraid']) ) ? date($config['bbdkp_date_format'], $row['member_firstraid']) : '&nbsp;',
         'LAST_RAID' 			=> ( !empty($row['member_lastraid']) ) ? date($config['bbdkp_date_format'], $row['member_lastraid']) : '&nbsp;',
@@ -345,18 +345,6 @@ $sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query($sql);
 
 $classes = array();
-/*$classes['Druid']=null;
-$classes['Unknown']=null;
-$classes['Paladin']=null;
-$classes['Mage']=null;
-$classes['Priest']=null;
-$classes['Warrior']=null;
-$classes['Hunter']=null;
-$classes['Rogue']=null;
-$classes['Warlock']=null;
-$classes['Shaman']=null;
-$classes['Death Knight']=null;
-*/
 
 while ( $row = $db->sql_fetchrow($result) )
 {

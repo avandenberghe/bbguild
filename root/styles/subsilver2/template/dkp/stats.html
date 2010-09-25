@@ -50,7 +50,7 @@
   </tr>
   <!-- BEGIN stats_row -->
   <!-- IF stats_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td><a href="{stats_row.U_VIEW_MEMBER}">{stats_row.NAME}</a></td>
+    <td><a style="color:{stats_row.COLORCODE}" href="{stats_row.U_VIEW_MEMBER}"><strong>{stats_row.NAME}</strong></a></td>
     <td>{stats_row.FIRST_RAID}</td>
     <td>{stats_row.LAST_RAID}</td>
     <td>{stats_row.ATTENDED_COUNT}</td>
