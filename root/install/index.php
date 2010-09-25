@@ -799,7 +799,10 @@ $versions = array(
 	        
 	        //default dkp language
 	        array('bbdkp_lang', 'en', true),
-	      ),
+	        
+	        //show 3darmory in viewmember
+	        array('bbdkp_show_3darmory', 1, true),
+	     ),
 					
 		'table_add' => array(
 		        array($bbdkp_table_prefix . 'bb_zonetable', array(

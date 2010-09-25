@@ -41,7 +41,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     /***   general info      *****
     ******************************/
 	$sql_array = array(
-    'SELECT'    => 	'b.member_dkpid, d.dkpsys_name, a.member_id, a.member_name, 
+    'SELECT'    => 	'g.region, g.name as guildname, g.realm, b.member_dkpid, d.dkpsys_name, a.member_id, a.member_name, 
     				 b.member_earned, b.member_spent, b.member_adjustment, 
     				(b.member_earned-b.member_spent+b.member_adjustment) AS member_current,
 				    b.member_firstraid, b.member_lastraid, b.member_raidcount ', 
@@ -49,9 +49,11 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
         MEMBER_LIST_TABLE => 'a',
         MEMBER_DKP_TABLE => 'b',
         DKPSYS_TABLE => 'd',
+        GUILD_TABLE => 'g',
     	),
  
-    'WHERE'     =>  'a.member_id= b.member_id
+    'WHERE'     =>  'a.member_guild_id = g.id 
+    				AND a.member_id= b.member_id
     				AND b.member_dkpid = d.dkpsys_id
 					AND b.member_dkpid= ' . (int) $dkp_pool . " 
     				AND a.member_name='". $db->sql_escape($member_name) ."'" ,);
@@ -443,10 +445,14 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     
     
     $template->assign_vars(array(
+    	'S_3DARMORY' => $config['bbdkp_show_3darmory'],
    		'GUILDTAG' =>  $config['bbdkp_guildtag'],
         'NAME'     =>  $member['member_name'],
         'PROFILE'  =>  $member['member_name'],
-    	'POOL'		=> $dkppoolname , 
+    	'GUILD'	   =>  $member['guildname'], 
+	    'REGION'   =>  $member['region'], 
+	    'REALM'	   =>  $member['realm'],  
+    	'POOL'	   =>  $dkppoolname , 
 
         'RAIDS_X1_DAYS'   => sprintf($user->lang['RAIDS_X_DAYS'], $range1),
         'RAIDS_X2_DAYS'   => sprintf($user->lang['RAIDS_X_DAYS'], $range2),

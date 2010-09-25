@@ -509,6 +509,8 @@ class acp_dkp extends bbDkp_Admin
                     set_config('bbdkp_show_achiev', request_var('showachievement', 0), true);
                     set_config('bbdkp_date_format', request_var('date_format', ''), true);
                     set_config('bbdkp_lang', request_var('language', 'en'), true);
+                    set_config('bbdkp_show_3darmory', request_var('show3darmory', 0), true);
+                    
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
                 }
@@ -570,6 +572,7 @@ class acp_dkp extends bbDkp_Admin
                 
                 $template->assign_vars(array(
                 		'S_LANG_OPTIONS'	=> $s_lang_options, 
+                		'SHOW3DARMORY'		=> $config['bbdkp_show_3darmory'], 
                 		'GUILDTAG' 			=> $config['bbdkp_guildtag'] , 
                 		'REALM' 			=> $config['bbdkp_default_realm'] , 
                 		'EQDKP_START_DD' 	=> date('d', $config['bbdkp_eqdkp_start']) , 

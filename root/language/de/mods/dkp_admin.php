@@ -667,6 +667,7 @@ $lang = array_merge($lang, array(
 'RESULTS' => '%d Ergebnisse (%s)',
 'SEARCH' => 'Suche',
 'SHOULD_BE' => 'Sollte sein',
+'SHOW3DARMORY' => 'Zeige das WoW Character in 3D', 
 'TITLE' => 'Titel',
 'UNINSTALL' => 'Deinstalliere',
 'VERSION' => 'Version',

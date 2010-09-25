@@ -684,6 +684,7 @@ $lang = array_merge($lang, array(
 'LOOTUPD' => 'Updating items to %s Raid on %s',
 'RESULTS' => '%d Results (%s)',
 'SEARCH' => 'Search',
+'SHOW3DARMORY' => 'Show the WoW Character in 3D', 
 'SHOULD_BE' => 'Should be',
 'TITLE' => 'Title',
 'UNINSTALL' => 'Uninstall',
