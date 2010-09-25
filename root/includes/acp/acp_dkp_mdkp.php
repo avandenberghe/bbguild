@@ -337,7 +337,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 							m.member_spent,  
 							m.member_adjustment, 
 							m.member_lastraid,
-							t.race_name AS member_race,
+							r1.name AS member_race,
 							s.dkpsys_name, 
 							l.name AS member_class, 
 							r.rank_name, 
@@ -351,14 +351,19 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					        MEMBER_RANKS_TABLE  => 'r',
 							CLASS_TABLE 		=> 'c', 
 							BB_LANGUAGE			=> 'l', 
-					        RACE_TABLE    		=> 't',
 					        DKPSYS_TABLE    	=> 's',
 					    ),
+					    
+					     'LEFT_JOIN' => array(
+					        array(
+					            'FROM'  => array(BB_LANGUAGE => 'r1'),
+					            'ON'    => "r1.attribute_id = a.member_race_id AND r1.language= '" . $config['bbdkp_lang'] . "' AND r1.attribute = 'race'" 
+					            )
+					        ),
 					 
 					    'WHERE'     =>  "(a.member_rank_id = r.rank_id) 
 					    				AND (a.member_guild_id = r.guild_id)  
 										AND (a.member_id = m.member_id) 
-			 							AND t.race_id = a.member_race_id 
 										AND (a.member_class_id = c.class_id)  
 										AND (m.member_dkpid = s.dkpsys_id)   
 										AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    
@@ -469,7 +474,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 							'log_action' => $log_action)
 						);
 						
-						$success_message = sprintf($user->lang['admin_update_memberdkp_success'],  
+						$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBERDKP_SUCCESS'],  
 							utf8_normalize_nfc( request_var('hidden_name', '', true))  );
 							trigger_error($success_message . $link);
 						
@@ -499,7 +504,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 							'CORRECT_MEMBER_EARNED' => ( !empty($correct_earned) ) ? $correct_earned : '0.00',
 							'CORRECT_MEMBER_SPENT'  => ( !empty($correct_spent) ) ? $correct_spent : '0.00',
 							'C_MEMBER_CURRENT'      => $this->member['member_current'],
-							'MSG_NAME_EMPTY' => $user->lang['fv_required_name'],
+							'MSG_NAME_EMPTY' => $user->lang['FV_REQUIRED_NAME'],
 						
 							)
 						);
@@ -517,39 +522,38 @@ class acp_dkp_mdkp extends bbDkp_Admin
 								
 								$del_member = utf8_normalize_nfc(request_var('hidden_name', '', true));
 								$del_dkpid = request_var('hidden_dkpid', 0);
+								// get data on dkp to be deleted
+								$sql_array = array(
+								    'SELECT'    => 'd.member_id, d.member_earned, d.member_spent, d.member_adjustment',
+								 
+								    'FROM'      => array(
+								        MEMBER_LIST_TABLE 	=> 'm',
+								        MEMBER_DKP_TABLE    => 'd'
+								    ),
+								 
+								    'WHERE'     =>  "m.member_name = '" . $db->sql_escape($del_member) . "'
+								       				AND d.member_dkpid = " . $del_dkpid . '
+								   					AND d.member_id = m.member_id' 
+									);
+								 
+								$sql = $db->sql_build_query('SELECT', $sql_array);
+								$result = $db->sql_query($sql);
+								while ( $row = $db->sql_fetchrow($result) )
+								{
+								$this->old_member = array(
+										'member_id'			=> (int) $row['member_id'],
+										'member_name'		=> $del_member,
+										'member_earned'     => (float) $row['member_earned'],
+										'member_spent'      => (float) $row['member_spent'],
+										'member_adjustment' => (float) $row['member_adjustment']);
+								}
+								$db->sql_freeresult($result);
 								
 								if (confirm_box(true))
 								{
 									
 									$names = $del_member;
-									
-									// get data on dkp to be deleted
-									$sql_array = array(
-									    'SELECT'    => 'd.member_id',
-									 
-									    'FROM'      => array(
-									        MEMBER_LIST_TABLE 	=> 'm',
-									        MEMBER_DKP_TABLE    => 'd'
-									    ),
-									 
-									    'WHERE'     =>  "m.member_name = '" . $db->sql_escape($del_member) . "'
-									       				AND b.member_dkpid = " . $del_dkpid . '
-									   					AND d.member_id = m.member_id' 
-										);
-									 
-									$sql = $db->sql_build_query('SELECT', $sql_array);
-									$result = $db->sql_query($sql);
-									while ( $row = $db->sql_fetchrow($result) )
-									{
-									$this->old_member = array(
-											'member_id'			=> (int) $row['member_id'],
-											'member_name'		=> $del_member,
-											'member_earned'     => (float) $row['member_earned'],
-											'member_spent'      => (float) $row['member_spent'],
-											'member_adjustment' => (float) $row['member_adjustment']);
-									}
-									$db->sql_freeresult($result);
-										
+
 									//remove member from attendees table but only if linked to raids in selected dkp pool
 									$sql = 'DELETE FROM ' . RAID_ATTENDEES_TABLE . '
 											WHERE member_id= ' . $this->old_member['member_id'] . ' 
@@ -564,7 +568,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 	
 									//delete player adjustments
 									$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . "
-											WHERE member_id =' . $this->old_member['member_id'] . '
+											WHERE member_id ='" . $this->old_member['member_id'] . "'
 											AND adjustment_dkpid= " .  $del_dkpid ;
 									$db->sql_query($sql);
 
@@ -594,7 +598,8 @@ class acp_dkp_mdkp extends bbDkp_Admin
 									array(
 										'delete'	=> true,
 										'hidden_name'	=> $del_member,
-										'hidden_dkpid'	=> $del_dkpid
+										'hidden_dkpid'	=> $del_dkpid, 
+										'old_member'	=> $this->old_member, 
 										)
 									);
 									confirm_box(false, $user->lang['CONFIRM_DELETE_MEMBERDKP'], $s_hidden_fields);
@@ -932,7 +937,6 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					trigger_error($success_message . $link);
 				}
 				// end submit handler
-				
 				
 				// from member dkp table 
 				$sqlfrom = 'SELECT member_name FROM ' . MEMBER_LIST_TABLE . ' where member_id in (select member_id from ' . MEMBER_DKP_TABLE . ' ) 

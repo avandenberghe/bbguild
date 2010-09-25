@@ -2014,7 +2014,7 @@ function install_wow_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 656 , 'attribute_id' => '7', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Gnome' ,  'name_short' =>  'Gnome' );
 		$sql_ary[] = array( 'id' => 657 , 'attribute_id' => '8', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Troll' ,  'name_short' =>  'Troll' );
 		$sql_ary[] = array( 'id' => 658 , 'attribute_id' => '9', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Blood Elf' ,  'name_short' =>  'Blood Elf' );
-		$sql_ary[] = array( 'id' => 659 , 'attribute_id' => '10', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Draenei' ,  'name_short' =>  'Draenei' );
+		$sql_ary[] = array( 'id' => 659 , 'attribute_id' => '11', 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Draenei' ,  'name_short' =>  'Draenei' );
 		
 		// races in fr
 		$sql_ary[] = array( 'id' => 660 , 'attribute_id' => '0', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -2027,7 +2027,7 @@ function install_wow_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 667 , 'attribute_id' => '7', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Gnome' ,  'name_short' =>  'Gnome' );
 		$sql_ary[] = array( 'id' => 668 , 'attribute_id' => '8', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Troll' ,  'name_short' =>  'Troll' );
 		$sql_ary[] = array( 'id' => 669 , 'attribute_id' => '9', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Elfe de Sang' ,  'name_short' =>  'Elfe de Sang' );
-		$sql_ary[] = array( 'id' => 670 , 'attribute_id' => '10', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Draeneï' ,  'name_short' =>  'Draeneï' );
+		$sql_ary[] = array( 'id' => 670 , 'attribute_id' => '11', 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Draeneï' ,  'name_short' =>  'Draeneï' );
 				
 		//classes in de
 		$sql_ary[] = array( 'id' => 671 , 'attribute_id' => '1', 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unbekannt' ,  'name_short' =>  'Unbekannt' );
@@ -2053,7 +2053,7 @@ function install_wow_bb2($bbdkp_table_prefix)
 		$sql_ary[] = array( 'id' => 689 , 'attribute_id' => '7', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Gnome' ,  'name_short' =>  'Gnome' );
 		$sql_ary[] = array( 'id' => 690 , 'attribute_id' => '8', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Troll' ,  'name_short' =>  'Troll' );
 		$sql_ary[] = array( 'id' => 691 , 'attribute_id' => '9', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Blutelf' ,  'name_short' =>  'Blutelf' );
-		$sql_ary[] = array( 'id' => 692 , 'attribute_id' => '10', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Draenei' ,  'name_short' =>  'Draenei' );
+		$sql_ary[] = array( 'id' => 692 , 'attribute_id' => '11', 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Draenei' ,  'name_short' =>  'Draenei' );
 				
 		
 		// bosses en zones de
@@ -2374,9 +2374,6 @@ function install_wow_bb2($bbdkp_table_prefix)
 
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
 		unset ( $sql_ary );
-		
-		
-		
 		
 		
 	}
