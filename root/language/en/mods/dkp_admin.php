@@ -574,7 +574,6 @@ $lang = array_merge($lang, array(
 'ARM_CLASS' => 'Class',
 'SHOWONROSTER'	=> 'Show on Roster',  
 
-
 'ADD_ITEM_RAIDID_NOTE' => 'Only raids less than two weeks old are shown / %sshow all</a>',
 'ADD_ITEM_RAIDID_SHOWALL_NOTE' => 'All raids are shown / %s show some</a>',
 'ADD_RAID_VALUE_NOTE' => 'for a one-time bonus; preset value for the event selected is used if left blank',
