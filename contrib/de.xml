@@ -32,10 +32,7 @@
 		<link-group>
 			<link type="parent" lang="en" href="../install.xml">Installation manual</link>
 			<link type="parent" lang="fr" href="../install.xml">Manuel d’installation</link>
-			<link type="parent" lang="de" href="../install.xml">Installationshinweise</link>			
-			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2</link>
-			<link type="template" href="contrib/subsilver2.xml" lang="fr">subsilver2</link>
-			<link type="template" href="contrib/subsilver2.xml" lang="de">subsilver2</link>			
+			<link type="parent" lang="de" href="../install.xml">Installationshinweise</link>					
 		</link-group>
 	</header>
 	<action-group>
