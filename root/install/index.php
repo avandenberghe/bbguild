@@ -756,27 +756,25 @@ $versions = array(
 		
 		/* bossprogress refit */ 
 		
-		/* remove two modes */
+		/* remove 3 modes */
 		'module_remove' => array(
-           array('acp', 'ACP_DKP_BOSS', array(
-          		 'module_basename' => 'dkp_bossprogress',
-            	 'modes'           => array('bossbase', 'bossbase_offset' ),
-         ))),
+           array('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_BOSSBASE'),
+           array('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_OFFSET'),
+           array('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_CONFIG'),
+           ),
         
-		/* add 1 mode */
+		/* add 2 modules, 1 category */
          'module_add' => array(
            array('acp', 'ACP_DKP_BOSS', array(
           		 'module_basename' => 'dkp_bossprogress',
-            	 'modes'           => array('zoneprogress' ),
-         )),
-            // add game-race-class
-            array('acp', 'ACP_DKP_MEMBER', array(
+            	 'modes'           => array('bossprogress', 'zoneprogress' ),
+         		)),
+         
+          // add game-race-class
+          array('acp', 'ACP_DKP_MEMBER', array(
            		 'module_basename' => 'dkp_game',
             	 'modes'           => array('listgames', 'addfaction', 'addrace', 'addclass'),
-        		),
-            ),        
-         
-         
+        		)),        
          ),
 		
   		'config_add' => array(
