@@ -50,13 +50,17 @@ $sql_array = array(
 		ZONEBASE 		=> 'z',
 		BB_LANGUAGE 	=> 'l',
 			),
-'WHERE'		=> " z.id = l.attribute_id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."' AND game= '" . $config['bbdkp_default_game'] . "'",
+'WHERE'		=> " z.id = l.attribute_id 
+AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."'
+AND z.showzoneportal = 1  
+AND game= '" . $config['bbdkp_default_game'] . "'",
 'ORDER_BY'	=> 'z.sequence desc, z.id desc ',
    );
 				    
 $sql = $db->sql_build_query ( 'SELECT', $sql_array );
 $result = $db->sql_query ( $sql );
 $i = 0;
+$zones = array();
 $row = $db->sql_fetchrow ( $result );
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
@@ -74,9 +78,18 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 	        BOSSBASE 		=> 'b',
             BB_LANGUAGE 	=> 'l',
 	    	),
-	    'WHERE'		=> 'b.zoneid = ' . $row ['zoneid'] . " AND b.id = l.attribute_id AND l.attribute='boss' AND l.language= '" . $config['bbdkp_lang'] ."'",
+	    'WHERE'		=> 'b.zoneid = ' . $row ['zoneid'] . " AND b.id = l.attribute_id 
+	    AND b.showboss=1 
+	    AND l.attribute='boss' AND l.language= '" . $config['bbdkp_lang'] ."'",
 		'ORDER_BY'	=> 'b.zoneid, b.id ASC ',
 	    );	
+	    
+	
+	// skip new bosses?
+	if ($config['bbdkp_bp_hidenonkilled'] == 1 )
+	{
+		$sql_array['WHERE'] .= ' AND b.killed = 1 '; 
+	}
 	
 	$bosskill=0;
 	$boss = array();

@@ -39,18 +39,22 @@ $sql_array = array (
 		ZONEBASE 		=> 'z' , 
 		BB_LANGUAGE 	=> 'l',		
 		), 
-	'WHERE' => "	z.showzone = 1 
+	'WHERE' => " z.showzone = 1 
 				AND l.attribute_id = z.id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."' 
 				AND z.game= '" . $config['bbdkp_default_game'] . "'",
 	'ORDER_BY' => 'z.sequence desc ' 
 );
+
+if ($config['bbdkp_bp_hidenewzone'] == '1' )
+{
+	$sql_array['WHERE'] .= ' AND z.completed = 1 '; 
+}
+
 $zones = array(); 
 $boss = array();
-
 $sql = $db->sql_build_query ( 'SELECT', $sql_array );
 $result = $db->sql_query ( $sql );
 $i = 0;
-$row = $db->sql_fetchrow ( $result );
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
 	$bpshow = true;
@@ -71,13 +75,19 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 			BOSSBASE 	=> 'b', 
 			BB_LANGUAGE => 'b1'
 			), 
-		'WHERE' => ' b.zoneid = z.id and b.showboss=1 and z.id = ' . $row ['zoneid'] . "
+		'WHERE' => ' b.zoneid = z.id and b.showboss = 1 and z.id = ' . $row ['zoneid'] . "
 				AND b1.attribute_id = b.id AND b1.attribute='boss'
 				AND b1.language= '" . $config['bbdkp_lang'] ."' 
 				AND z.game= '" . $config['bbdkp_default_game'] . "'",
 		'ORDER_BY' => 'z.sequence desc , b.id asc ' 
 	);
 	
+	// skip new bosses?
+	if ($config['bbdkp_bp_hidenonkilled'] == 1 )
+	{
+		$sql_array['WHERE'] .= ' AND b.killed = 1 '; 
+	}
+
 	$boss = array();
 	
 	$bosskill=0;
@@ -96,6 +106,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 			'killed' => $row2 ['killed'], 
 			'url' => $user->lang[strtoupper($config['bbdkp_default_game']).'_BASEURL'] . $row2 ['webid']
 		 ); 
+		 
 		 if ($row2 ['killed'] == 1)
 		 {
 			$bosskill++;	 
@@ -118,11 +129,6 @@ $db->sql_freeresult ($result);
 
 foreach($zones as $key => $zone)
 {
-	// skip new zone?
-	if ($config['bbdkp_bp_hidenonkilled'] == 1 and $zone['bosskills'] == 0 )
-	{
-		continue;
-	}
 	
 	// set the background / progress zone image
 	switch ($config['bbdkp_bp_zonephoto'])
@@ -197,11 +203,8 @@ $template->assign_block_vars('dkpnavlinks', array(
 		'U_DKPPAGE' => append_sid("{$phpbb_root_path}bossprogress.$phpEx"),
 	));
 	
-
 // Output page
 page_header($user->lang['MENU_BOSS']);
-
 $template->set_filenames(array('body' => 'dkp/bossprogress.html'));
-
 page_footer();
 ?>

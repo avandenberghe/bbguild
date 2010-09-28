@@ -436,6 +436,14 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 		                $db->sql_freeresult($resultx);
 	                }
 	                $db->sql_freeresult($result);
+	                $arrvals = array (
+						'F_CONFIG' 			 => append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress"),
+						'BP_HIDENONKIBOSS' 	 => ($config['bbdkp_bp_hidenonkilled'] == 1) ? ' checked="checked"' : '',
+					);
+					
+					$template->assign_vars($arrvals);
+				
+				
 				}
                 
 				$this->page_title =  $user->lang['RP_BOSS'];
@@ -746,7 +754,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 						$sql = 'UPDATE ' . ZONEBASE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = '. $key;
 						$db->sql_query($sql);
 					}
-					trigger_error($user->lang['BP_SAVED'] . $link, E_USER_NOTICE);
+					trigger_error($user->lang['BP_BPSAVED'] . $link, E_USER_NOTICE);
 					
 				}
 				

@@ -159,7 +159,52 @@ function bbDkp_Admin()
 		$read_phperror=false;
 		$xml_data= '';
 	    
-	    if ( function_exists ( 'curl_init' )) 
+		
+		    // for file_get_contents to work allow_url_fopen must be set
+		    // safe mode must be OFF
+			if (@ini_get('allow_url_fopen') and !(@ini_get("safe_mode"))) 
+			{
+				ini_set ( 'user_agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9) Gecko/2008052906 Firefox/3.0' );
+				$xml_data = @file_get_contents (rtrim ($url));
+				$status_code = isset($http_response_header [0]) ? $http_response_header [0] : 0; 
+				switch ($status_code) 
+				{
+					case 200 :
+					    $read_phperror = false; 
+					    // success
+						break;
+					case 503 :
+					    $read_phperror = true; 
+						$errmsg2 = 'file_get_contents error : HTTP error status 503 :  Service unavailable. An internal problem prevented Blizzard from returning Armory data to you.';				
+						break;
+					case 403 :
+					    $read_phperror = true; 
+						$errmsg2 = 'file_get_contents error : HTTP status 403 : Forbidden. You do not have permission to access this resource, or are over your rate limit.';		
+						break;
+					case 400 :
+					    $read_phperror = true; 
+						$errmsg2 = 'file_get_contents error : HTTP status 400. Bad request using file_get_contents. The parameters passed did not match as expected. The exact error is returned in the XML response.';
+						break;
+					case 500 :
+					    $read_phperror = true; 
+						$errmsg2 = 'file_get_contents error : HTTP status 500.  Internal Server Error. The other side is down.';
+						break; 
+					case 0 : 
+						$read_phperror = true;
+						$errmsg2 = 'file_get_contents error : No response header. The other side is down.';
+					default :
+					    $read_phperror = true; 
+						$errmsg2 = 'file_get_contents error : Unexpected HTTP status of : ' . $status_code . '.';
+						
+				}
+			}
+		
+			if (strlen (rtrim ($xml_data)) == 0) 
+		{
+		
+		
+		
+		if ( function_exists ( 'curl_init' )) 
 		{
 			 /* Create a CURL handle. */
 			if (($curl = curl_init($url)) === false)
@@ -252,45 +297,8 @@ function bbDkp_Admin()
 			$xml_data = @curl_exec ($curl);
 			@curl_close ($curl);
 		}
-		
-		if (strlen (rtrim ($xml_data)) == 0) 
-		{
-		    // for file_get_contents to work allow_url_fopen must be set
-		    // safe mode must be OFF
-			if (@ini_get('allow_url_fopen') and !(@ini_get("safe_mode"))) 
-			{
-				ini_set ( 'user_agent', 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9) Gecko/2008052906 Firefox/3.0' );
-				$xml_data = @file_get_contents (rtrim ($url));
-				list ( $version, $status_code, $msg ) = explode ( ' ', $http_response_header [0], 3 );
-				switch ($status_code) 
-				{
-					case 200 :
-					    $read_phperror = false; 
-					    // success
-						break;
-					case 503 :
-					    $read_phperror = true; 
-						$errmsg2 = 'file_get_contents error : HTTP error status 503 :  Service unavailable. An internal problem prevented Blizzard from returning Armory data to you.';				
-						break;
-					case 403 :
-					    $read_phperror = true; 
-						$errmsg2 = 'file_get_contents error : HTTP status 403 : Forbidden. You do not have permission to access this resource, or are over your rate limit.';		
-						break;
-					case 400 :
-					    $read_phperror = true; 
-						$errmsg2 = 'file_get_contents error : HTTP status 400. Bad request using file_get_contents. The parameters passed did not match as expected. The exact error is returned in the XML response.';
-						break;
-					case 500 :
-					    $read_phperror = true; 
-						$errmsg2 = 'file_get_contents error : HTTP status 500.  Internal Server Error. The other side is down.';
-						break; 
-					default :
-					    $read_phperror = true; 
-						$errmsg2 = 'file_get_contents error : Unexpected HTTP status of : ' . $status_code . '.';
-						
-				}
-			}
 		}
+		
 			
 		if ( strlen (rtrim ($xml_data) ) == 0) 
 		{
