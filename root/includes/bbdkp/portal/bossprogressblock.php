@@ -61,7 +61,6 @@ $sql = $db->sql_build_query ( 'SELECT', $sql_array );
 $result = $db->sql_query ( $sql );
 $i = 0;
 $zones = array();
-$row = $db->sql_fetchrow ( $result );
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
 	$bpshow = true;
