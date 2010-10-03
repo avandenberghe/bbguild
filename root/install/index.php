@@ -913,6 +913,11 @@ $versions = array(
 		),
 		/// end 1.1.2
 		/// 
+		
+		'1.1.2.1'    => array(
+			// no db changes
+		),
+		
 
 );
 
