@@ -41,7 +41,7 @@ if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
 }
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.1.2 ';
+$mod_name = 'bbDKP 1.1.2.2';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -754,29 +754,6 @@ $versions = array(
 	/// begin 1.1.2
 	'1.1.2'  => array(
 		
-		/* bossprogress refit */ 
-		
-		/* remove 3 modes */
-		'module_remove' => array(
-           array('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_BOSSBASE'),
-           array('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_OFFSET'),
-           array('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_CONFIG'),
-           ),
-        
-		/* add 2 modules, 1 category */
-         'module_add' => array(
-           array('acp', 'ACP_DKP_BOSS', array(
-          		 'module_basename' => 'dkp_bossprogress',
-            	 'modes'           => array('bossprogress', 'zoneprogress' ),
-         		)),
-         
-          // add game-race-class
-          array('acp', 'ACP_DKP_MEMBER', array(
-           		 'module_basename' => 'dkp_game',
-            	 'modes'           => array('listgames', 'addfaction', 'addrace', 'addclass'),
-        		)),        
-         ),
-		
   		'config_add' => array(
         	//global config
         	
@@ -899,7 +876,7 @@ $versions = array(
 
 		'custom' => array( 
 			'gameupdate', 
-			'bbdkp_caches',
+			'bbdkp_caches'
 			),
 			
 		 // removing class_name, race_name column
@@ -908,16 +885,29 @@ $versions = array(
             	array($bbdkp_table_prefix .'classes', 'class_name'),
             ),
 
-            
+          // module adding - do this last
+         'module_add' => array(
+		 array('acp', 'ACP_DKP_BOSS', array(
+          		 'module_basename' => 'dkp_bossprogress',
+            	 'modes'           => array('zoneprogress' ),
+         		)),
+          array('acp', 'ACP_DKP_MEMBER', array(
+           		 'module_basename' => 'dkp_game',
+            	 'modes'           => array('listgames', 'addfaction', 'addrace', 'addclass'),
+        		)),        
+         ),
+                     
             
 		),
-		/// end 1.1.2
-		/// 
 		
 		'1.1.2.1'    => array(
 			// no db changes
 		),
 		
+		'1.1.2.2'    => array(
+			// no db changes
+			
+		),
 
 );
 
@@ -1383,9 +1373,22 @@ function gameupdate($action, $version)
 						default :
 						    break; 
 					}
-
-
 					
+					/* bossprogress refit */ 
+					/* remove 3 modes */
+					if($umil->module_exists('acp', 'ACP_DKP_BOSS','ACP_DKP_BOSS_BOSSBASE'))
+					{
+						$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_BOSSBASE');
+					}
+					if($umil->module_exists('acp', 'ACP_DKP_BOSS','ACP_DKP_BOSS_OFFSET'))
+					{
+						$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_OFFSET');
+					}
+					if($umil->module_exists('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_CONFIG'))
+					{
+						$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_CONFIG');
+					}
+
 					break;	
 				
 			}
@@ -1417,6 +1420,13 @@ function gameupdate($action, $version)
 				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'classes ';
 				$db->sql_query($sql);
 			}
+			
+			if($umil->module_exists('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_CONFIG'))
+			{
+				$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_CONFIG');
+			}
+					
+			
 			return array(
 					'command' => 'UMIL_REMOVE_GAME_ROW', 
 					'result' => 'SUCCESS');

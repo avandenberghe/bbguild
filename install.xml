@@ -7,7 +7,7 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.1.2]]></title>
+		<title lang="en"><![CDATA[bbDKP 1.1.2.2]]></title>
 		<description lang="en"><![CDATA[bbDKP is a PHPBB3-based DKP solution, evolved from EQDKP to help guilds in MMORPGs (Massive(ly) Multiplayer Online Role-playing Games) track guild members attendance, item purchases and other statistics. It updates and brings together the Dkp/game managment facilites of EQdkp, and integrates them with phpBB3's facilites. This means your users gain single sign on to dkp and phpbb, and you as an administrator or raidleader gain a clean interface, robust admin facilities and less integration headaches. 
 		Games supported : Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, Wow. 
 		Features : Multiple Dkp Pools and guilds, DKP Standings, Raids, Events, Item values, Item history, Raid Stats, Bossprogress, Roster, backup, import from eqdkp+. 
@@ -128,7 +128,7 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.1.2</mod-version>
+		<mod-version>1.1.2.2</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
