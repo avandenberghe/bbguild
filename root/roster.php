@@ -62,7 +62,7 @@ switch ($layout)
             				 m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url,
             				 r.rank_prefix , r.rank_name, r.rank_suffix,  
             				 g.name, g.realm, g.region, 
-            				 c1.name as class_name ' , 
+            				 c1.name as class_name, c.colorcode ' , 
             'FROM'      => array(
                 MEMBER_LIST_TABLE    =>  'm',
                 CLASS_TABLE          =>  'c',
@@ -96,7 +96,7 @@ switch ($layout)
             switch ($config['bbdkp_default_game'])
             {
                 case 'wow':
-                    
+                    // individual portraits
                     if($row['member_level'] <= "59")
         		    {
                         $maxlvlid ="wow-default";
@@ -128,7 +128,8 @@ switch ($layout)
                 	$memberarmoryurl = $site . '/character-sheet.xml?r=' . $row['realm'] . '&amp;n=' .  $row['member_name'];
                    break;
     		    case 'aion': 
-    		        $memberportraiturl =  $phpbb_root_path .'images/roster_portraits/aion/' . $row['member_race_id'] . '_' . $row['member_gender_id'] . '.jpg';
+                    // individual portraits
+                    $memberportraiturl =  $phpbb_root_path .'images/roster_portraits/aion/' . $row['member_race_id'] . '_' . $row['member_gender_id'] . '.jpg';
                     $memberarmoryurl = $row['member_armory_url']; 
                     $cssclass = ''; 
                      break;     		        
@@ -141,7 +142,7 @@ switch ($layout)
     		
     		$template->assign_block_vars('members_row', array(
         			'CLASS'			=> $row['class_name'],
-        			'CSSCLASS'		=> $cssclass,
+        			'COLORCODE'		=> $row['colorcode'],
         			'NAME'			=> $row['member_name'],
         			'RACE'			=> $row['race_name'],
         			'GNOTE'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
@@ -160,7 +161,7 @@ switch ($layout)
     case 1:
         // class layout
         $sql_array = array(
-            'SELECT'    => 'c.class_id, c1.name as class_name, c.imagename' , 
+            'SELECT'    => 'c.class_id, c1.name as class_name, c.imagename, c.colorcode' , 
             'FROM'      => array(
                 MEMBER_LIST_TABLE    =>  'm',
                 CLASS_TABLE          =>  'c',
@@ -180,17 +181,19 @@ switch ($layout)
         {
             $classes[$row['class_id']]['name'] = $row['class_name'];
             $classes[$row['class_id']]['imagename'] = $row['imagename'];
+            $classes[$row['class_id']]['colorcode'] = $row['colorcode'];
         }
         $db->sql_freeresult($result2);
         
         foreach ($classes as  $classid => $class )
         {
-            
-            $classimgurl =  $phpbb_root_path . "images/roster_classes/" . $config['bbdkp_default_game'] . '_' . $class['name'] .'.png'; 
-            
+            $classimgurl =  $phpbb_root_path . "images/roster_classes/" . removeFromEnd($class['imagename'], '_small') .'.png'; 
+			$classcolor = $class['colorcode']; 
+			
             $template->assign_block_vars('class', array(	
             		'CLASSNAME'     => $class['name'], 
             		'CLASSIMG'		=> $classimgurl,
+            		'COLORCODE'		=> $classcolor,
             ));
             $classmembers=1;
             
@@ -281,8 +284,6 @@ switch ($layout)
                 
         		$template->assign_block_vars('class.members_row', array(
         			'CLASS'			=> $row['class_name'],
-        			'CSSCLASS'		=> $cssclass,
-        		
         			'NAME'			=> $row['member_name'],
         			'RACE'			=> $row['race_name'],
         			'GNOTE'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
@@ -340,4 +341,16 @@ switch ($config['bbdkp_default_game'])
 	          break;
 }
 page_footer();
+
+function removeFromEnd($string, $stringToRemove) 
+{
+    $stringToRemoveLen = strlen($stringToRemove);
+    $stringLen = strlen($string);
+   
+    $pos = $stringLen - $stringToRemoveLen;
+
+    $out = substr($string, 0, $pos);
+
+    return $out;
+}
 ?>

@@ -59,8 +59,7 @@
   	
   	<td "width:150; text-align:center" class="bg2" >
   
-	<a class="{members_row.CSSCLASS}" href="{members_row.ARMORY}"  >
-	{members_row.NAME}</a><br/>
+	<strong><a style="color: {members_row.COLORCODE};" href="{members_row.ARMORY}" >{members_row.NAME}</a></strong><br/>
 	<p>{members_row.GNOTE}<br/>
 	{members_row.CLASS} {members_row.LVL}
 	<!-- IF S_SHOWACH == 1 -->
@@ -100,7 +99,7 @@
 
 <!-- IF S_RSTYLE == 1 --> 
 <!-- BEGIN class -->
-<h3> <img src="{class.CLASSIMG}" alt="{class.CLASSNAME}" width="64" height="64" ></img>&nbsp; {class.CLASSNAME}  </h3>
+<h2> <img src="{class.CLASSIMG}" alt="{class.CLASSNAME}" width="64" height="64" ></img>&nbsp;<span style="color: {class.COLORCODE};">{class.CLASSNAME}</span>  </h2>
 
 <table  style="width: 100%" border="0" cellspacing="0" cellpadding="0">
   
@@ -126,8 +125,7 @@
 	<a href="{class.members_row.ARMORY}">
 	<img src="{class.members_row.PORTRAIT}" alt="pic" width="64" height="64"></img></a></td>
   	<td style="text-align:left; width:100" class="bg2" >
-	<a class="{class.members_row.CSSCLASS}" href="{class.members_row.ARMORY}" >
-	{class.members_row.NAME}</a>
+	<strong><a style="color: {class.COLORCODE};" href="{class.members_row.ARMORY}" >{class.members_row.NAME}</a></strong>
 	<p>
 	{class.members_row.GNOTE}<br/>
 	{class.members_row.CLASS} 
@@ -159,7 +157,7 @@
 
   <!-- END members_row -->
 </table>
- 
+ <br />
 <!-- END class -->
 <!-- ENDIF --> 
 
