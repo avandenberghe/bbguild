@@ -31,6 +31,10 @@ if (! defined('EMED_BBDKP'))
 class acp_dkp_adj extends bbDkp_Admin
 {
     var $u_action;   
+    var $dkp_id; 
+    var $url_id; 
+    var $old_adjustment; 
+    var $adjustment; 
 	
 	/** 
 	* validationfunction for adjustment values : required and numeric, date is in range
@@ -141,7 +145,7 @@ class acp_dkp_adj extends bbDkp_Admin
          // no global scope
         $member_id = (int) $member_id;
         $adjval= (float) $adjval;  
-        $this->dkp_id = (int) $this->dkp_id;
+        $this->dkp_id = (int) $dkpid;
 
         if ($member_id == 0)
         {
