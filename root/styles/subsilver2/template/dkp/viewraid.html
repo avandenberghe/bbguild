@@ -56,7 +56,7 @@
   
   <!-- BEGIN items_row -->
   <!-- IF items_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td width="100" nowrap="nowrap"><a href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></td>
+    <td width="100" nowrap="nowrap"><strong><a style="color:{items_row.CLASSCOLORCODE}" href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></strong></td>
     <td width="100%"><a href="{items_row.U_VIEW_ITEM}">{items_row.NAME}</a></td>
     <td width="60" class="negative">{items_row.VALUE}</td>
   </tr>
@@ -87,7 +87,7 @@
   </tr>
   <!-- BEGIN class_row -->
   <tr>
-    <td width="100" nowrap="nowrap" class="row2">{class_row.CLASS}</td>
+    <td width="100" nowrap="nowrap" class="row2"><strong> <span style="color:{class_row.CLASSCOLOR};"> {class_row.CLASS} </span> </strong> </td>
     <td width="50%" class="row1">{class_row.BAR}</td>
     <td width="50%" class="row2"><span class="small">{class_row.ATTENDEES}</span></td>
   </tr>

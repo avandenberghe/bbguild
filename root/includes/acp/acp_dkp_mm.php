@@ -28,6 +28,7 @@ class acp_dkp_mm extends bbDkp_Admin
 	// member management
 	/***********************************/
 	var $u_action;
+	var $member;
 	
 function main($id, $mode) 
 	{
@@ -88,28 +89,84 @@ function main($id, $mode)
 						$row = $db->sql_fetchrow($result);
 						$db->sql_freeresult($result);
 
-						$this->member = array(
-							'member_id'             => $row['member_id'],
-							'member_name'           => $row['member_name'],
-							'member_race_id'        => $row['member_race_id'],
-							'member_race'           => $row['member_race'],
-							'member_class_id'       => $row['member_class_id'],
-							'member_class'          => $row['member_class'],
-							'member_level'          => $row['member_level'],
-							'member_rank_id'        => $row['member_rank_id'],
-							'member_comment'        => $row['member_comment'],
-						    'member_gender_id'		 => $row['member_gender_id'],
-							'member_joindate_d'     =>  date('j', $row['member_joindate']),
-							'member_joindate_mo'    =>  date('n', $row['member_joindate']),
-							'member_joindate_y'     =>  date('Y', $row['member_joindate']),
-							'member_outdate_d'      =>  date('j', $row['member_outdate']),
-							'member_outdate_mo'     =>  date('n', $row['member_outdate']),
-							'member_outdate_y'      =>  date('Y', $row['member_outdate']),
-						    'member_guild_name'	     => $row['guild_name'],  
-						    'member_guild_id'	     => $row['guild_id'], 
-						    'member_guild_realm'	 => $row['realm'],  
-						    'member_guild_region'	 => $row['region'],  
-						 );
+						if($row)
+						{
+							$this->member = array(
+								'member_id'             => $row['member_id'],
+								'member_name'           => $row['member_name'],
+								'member_race_id'        => $row['member_race_id'],
+								'member_race'           => $row['member_race'],
+								'member_class_id'       => $row['member_class_id'],
+								'member_class'          => $row['member_class'],
+								'member_level'          => $row['member_level'],
+								'member_rank_id'        => $row['member_rank_id'],
+								'member_comment'        => $row['member_comment'],
+							    'member_gender_id'		 => $row['member_gender_id'],
+								'member_joindate_d'     =>  date('j', $row['member_joindate']),
+								'member_joindate_mo'    =>  date('n', $row['member_joindate']),
+								'member_joindate_y'     =>  date('Y', $row['member_joindate']),
+								'member_outdate_d'      =>  date('j', $row['member_outdate']),
+								'member_outdate_mo'     =>  date('n', $row['member_outdate']),
+								'member_outdate_y'      =>  date('Y', $row['member_outdate']),
+							    'member_guild_name'	     => $row['guild_name'],  
+							    'member_guild_id'	     => $row['guild_id'], 
+							    'member_guild_realm'	 => $row['realm'],  
+							    'member_guild_region'	 => $row['region'],  
+							 );
+							
+						}
+						else 
+						{
+							
+							// try a less restrictive join... there is a dirty datbase entry in class or race
+							$sql_array = array(
+							    'SELECT'    => 'm.*, g.id as guild_id, g.name as guild_name, g.realm , g.region',
+							 
+							    'FROM'      => array(
+							        MEMBER_LIST_TABLE  => 'm',
+							        GUILD_TABLE        => 'g',
+							    ),
+
+							    'WHERE'     => " m.member_guild_id = g.id 
+								AND member_name='" . trim($db->sql_escape(utf8_normalize_nfc(request_var(URI_NAME,'', true)))) . "'" ,
+							);
+							
+							$sql = $db->sql_build_query('SELECT', $sql_array);
+							
+							$result = $db->sql_query($sql);
+							$row = $db->sql_fetchrow($result);
+							$db->sql_freeresult($result);
+
+							if($row)
+							{
+								$this->member = array(
+									'member_id'             => $row['member_id'],
+									'member_name'           => $row['member_name'],
+									'member_race_id'        => 0,
+									'member_class_id'       => 0,
+									'member_level'          => $row['member_level'],
+									'member_rank_id'        => $row['member_rank_id'],
+									'member_comment'        => $row['member_comment'],
+								    'member_gender_id'		 => $row['member_gender_id'],
+									'member_joindate_d'     =>  date('j', $row['member_joindate']),
+									'member_joindate_mo'    =>  date('n', $row['member_joindate']),
+									'member_joindate_y'     =>  date('Y', $row['member_joindate']),
+									'member_outdate_d'      =>  date('j', $row['member_outdate']),
+									'member_outdate_mo'     =>  date('n', $row['member_outdate']),
+									'member_outdate_y'      =>  date('Y', $row['member_outdate']),
+								    'member_guild_name'	     => $row['guild_name'],  
+								    'member_guild_id'	     => $row['guild_id'], 
+								    'member_guild_realm'	 => $row['realm'],  
+								    'member_guild_region'	 => $row['region'],  
+								 );
+							}
+							else 
+							{
+								// now there really is a problem
+								trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
+							}
+
+						}
 							
 					}
 					
@@ -118,7 +175,7 @@ function main($id, $mode)
 			        FROM '. GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b 
 					where a.id = b.guild_id
 					group by a.id, a.name, a.realm, a.region
-					order by a.id'; 
+					order by a.id desc'; 
 			        
 					$result = $db->sql_query($sql);
 
@@ -702,7 +759,7 @@ function main($id, $mode)
 				/**************  Guild drop-down query ****************/
 				$sql = 'SELECT id, name, realm, region  
                        FROM ' . GUILD_TABLE . ' 
-                       ORDER BY id';
+                       ORDER BY id desc';
 				$resultg = $db->sql_query ( $sql );
 				
 				/* check if page was posted back */
@@ -725,15 +782,17 @@ function main($id, $mode)
 				} 
 				else // default pageloading
 				{
-					// select guild with lowest id but not unguilded
-					$guild_id = request_var ( URI_GUILD, 1 );
+					$sql = 'SELECT max(id) as max FROM ' . GUILD_TABLE;                        
+					$result = $db->sql_query($sql);
+					$guild_id = $db->sql_fetchfield('max',0,$result);
+					$db->sql_freeresult($result);
 
 					// fill popup and set selected to default selection
 					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
 					{
 						$template->assign_block_vars ( 'guild_row', array (
     						'VALUE' => $row ['id'], 
-    						'SELECTED' => ($row ['id'] == 1) ? ' selected="selected"' : '', 
+    						'SELECTED' => ($row ['id'] == $guild_id) ? ' selected="selected"' : '', 
     						'OPTION' => $row ['name'] ));
 					}
 				}
@@ -848,25 +907,14 @@ function main($id, $mode)
                $guild_id = request_var ( 'guild_id', 0 );
                if ($guild_id == 0)
                {
-                   // nothing selected
-                   $sql = 'SELECT id FROM ' . GUILD_TABLE . ' where id = 1';
-                   $result = $db->sql_query($sql);
-                   $row = $db->sql_fetchrow($result); 
-                    if (!$row)
-                    {
-                        trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
-                    }
-                    else 
-                    {
-                       $guild_id = $row['id']; 
-                       $db->sql_freeresult($result);
-                    }
+					$sql = 'SELECT max(id) as max FROM ' . GUILD_TABLE;                        
+					$result = $db->sql_query($sql);
+					$guild_id = $db->sql_fetchfield('max',0,$result);
+					$db->sql_freeresult($result);
                }
-               
                
 				$submit	 = (isset($_POST['update'])) ? true : false;
 				$add = (isset($_POST['add'])) ? true : false;
-				
 				
 				if ($submit)
 				{

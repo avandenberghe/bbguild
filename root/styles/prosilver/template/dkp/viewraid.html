@@ -20,12 +20,12 @@
 <span class="corners-top"><span></span></span>
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-    <td class="row2" width="50%"><b>{L_ADDED_BY}:</b> {RAID_ADDED_BY}</td>
-	<td class="row1" width="50%"><b>{L_UPDATED_BY}:</b> {RAID_UPDATED_BY}</td>
+    <td class="row2" width="50%"><strong>{L_ADDED_BY}:</strong>{RAID_ADDED_BY}</td>
+	<td class="row1" width="50%"><strong>{L_UPDATED_BY}:</strong> {RAID_UPDATED_BY}</td>
 </tr>
 <tr>
-    <td class="row2" width="50%"><b>{L_NOTE}:</b> {RAID_NOTE}</td>
-    <td class="row1" width="50%"><b>{DKP_NAME} {L_VALUE}:</b> <span class="positive">{RAID_VALUE}</span></td>
+    <td class="row2" width="50%"><strong>{L_NOTE}:</strong> {RAID_NOTE}</td>
+    <td class="row1" width="50%"><strong>{DKP_NAME} {L_VALUE}:</strong> <span class="positive">{RAID_VALUE}</span></td>
   </tr>
 </table>
 <span class="corners-bottom"><span></span></span>
@@ -83,12 +83,12 @@
 
 
 <br />
-<!-- IF S_COMP -->
 <div class="forabg" >
 <span class="corners-top"><span></span></span>
 <ul class="topiclist">
 <li class="header">
 <table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+ <th style="text-align:center; color:white;" align="center" colspan="3">{L_DROPS}</th>
 <tr>
     <th style="text-align:left; color:white; width: 25% ; white-space: nowrap">{L_BUYER}</th>
     <th style="text-align:left; color:white; width: 45% ;">{L_ITEM}</th>
@@ -102,20 +102,19 @@
 
 <div class="post">
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
- <!-- BEGIN items_row -->
+  <!-- BEGIN items_row -->
   <!-- IF items_row.S_ROW_COUNT is even -->
   <tr class="row bg1">
   <!-- ELSE -->
   <tr class="row bg2">
   <!-- ENDIF -->
-    <td style="text-align:left; width: 25% ; white-space: nowrap"><a href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></td>
+    <td style="text-align:left; width: 25% ; white-space: nowrap"><strong><a style="color:{items_row.CLASSCOLORCODE}" href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></strong></td>
     <td style="text-align:left; width: 45% ;"> <a href="{items_row.U_VIEW_ITEM}">{items_row.NAME}</a></td>
     <td style="text-align:left; width: 30%; white-space: nowrap" class="negative">{items_row.VALUE}</td>
   </tr>
   <!-- END items_row -->
 </table>
 </div>  
-
 <div class="forabg" >
 <span class="corners-top"><span></span></span>
 <ul class="topiclist">
@@ -129,16 +128,12 @@
 </ul>
 <span class="corners-bottom"><span></span></span>
 </div>
-  <!-- ELSE -->
-  <!-- ENDIF -->
-
-<!-- IF ITEM_PAGINATION -->  
+<!-- IF ITEM_PAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{ITEM_PAGINATION}<br /><br /></span>
 </div>
 <!-- ENDIF -->
-
 
 <br />
 <div class="forabg" >
@@ -146,6 +141,7 @@
 <ul class="topiclist">
 <li class="header">
 <table width="100%" border="0" cellspacing="0" cellpadding="0"> 
+<th style="text-align:center; color:white;" colspan="3">{L_CLASS_DISTRIBUTION}</th>
   <tr>
     <th style="text-align:left; color:white; width: 20%; white-space: nowrap" >{L_CLASS}</th>
     <th style="text-align:left; color:white; width: 20%; white-space: nowrap" >{L_PERCENT}</th>
@@ -161,12 +157,14 @@
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
   <!-- BEGIN class_row -->
   <tr>
-    <td style="text-align:left;   width: 20%; white-space: nowrap" class="row bg1">{class_row.CLASS}</td>
-    <td style="text-align:left;   width: 20%; white-space: nowrap" class="row bg1">{class_row.BAR}</td>
-    <td style="text-align:left;   width: 60%; white-space: nowrap" class="row bg2"><span class="small">{class_row.ATTENDEES}</span></td>
+    <td style="text-align:left;  width: 20%; white-space: nowrap" class="row bg1"><strong> <span style="color:{class_row.CLASSCOLOR};"> {class_row.CLASS} </span> </strong> </td>
+    <td style="text-align:left;  width: 20%; white-space: nowrap" class="row bg1">{class_row.BAR}</td>
+    <td style="text-align:left;  width: 60%; white-space: nowrap" class="row bg2"><span class="small">{class_row.ATTENDEES}</span></td>
   </tr>
    <!-- END class_row -->
 </table>
 </div>  
+
+
 
 <!-- INCLUDE overall_footer.html -->
