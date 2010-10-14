@@ -33,7 +33,7 @@ if ($config['bbdkp_recruitment'] == 1)
 	
 	// get recruitment statuses from class table
     $sql_array = array(
-	    'SELECT'    => 	' c.class_id, l.name as class_name,
+	    'SELECT'    => 	' c.class_id, l.name as class_name, c.colorcode, 
 	    				  c.imagename, c.dps, c.tank, c.heal ', 
 	    'FROM'      => array(
 	        CLASS_TABLE 	=> 'c',
@@ -54,6 +54,8 @@ if ($config['bbdkp_recruitment'] == 1)
         $template->assign_block_vars('rec', array(
     	    'CLASSID' => $row['class_id'],
             'CLASS'   => $row['class_name'],  
+        	'IMAGENAME' => $row['imagename'],
+			'CLASSCOLOR' => $row['colorcode'],        
         	'TANKCOLOR'  => $color[$row['tank']][2],
 			'TANKFORUM'  => append_sid("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $rec_forum_id), 
 			'TANKTEXT'  => $color[$row['tank']][1], 
