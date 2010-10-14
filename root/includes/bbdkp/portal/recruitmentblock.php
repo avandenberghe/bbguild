@@ -5,6 +5,8 @@
   @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
   @license http://opensource.org/licenses/gpl-license.php GNU Public License
   @version $Id$
+  @author Sajaki, Blazeflack, Malfate
+
  */
 
 
@@ -16,12 +18,12 @@ if (!defined('IN_PHPBB'))
 /**  begin recruitment block ***/
 
 $color =array(
-     array(0, "  ",   "#000000", "bullet_white.png" ),
-     array(1, "Clos", "#AAAAAA", "bullet_white.png" ),
-     array(2, "Low",  "#FFBB44", "bullet_yellow.png" ),
-     array(3, "Med",  "#FF3300", "bullet_red.png" ),
-     array(4, "High", "#AA00AA", "bullet_purple.png" ),
-    );
+         array(0, "N/A", "#000000", "rec.png" ),
+         array(1, "Closed", "#AAAAAA", "rec_closed.png" ),
+         array(2, "Low", "#FFBB44", "rec_low.png" ),
+         array(3, "Medium", "#FF3300", "rec_med.png" ),
+         array(4, "High", "#AA00AA", "rec_high.png" ),
+);
 
 if ($config['bbdkp_recruitment'] == 1)
 {
@@ -48,26 +50,28 @@ if ($config['bbdkp_recruitment'] == 1)
     $result = $db->sql_query($sql);
     while ($row = $db->sql_fetchrow($result)) 
     {
-
-        $class[$row['class_id']] =$row['class_name'] ; 
-        
+        $class[$row['class_id']] =$row['class_name']; 
         $template->assign_block_vars('rec', array(
-    	    'CLASSID' => $row['class_id'],
-            'CLASS'   => $row['class_name'],  
-        	'IMAGENAME' => $row['imagename'],
-			'CLASSCOLOR' => $row['colorcode'],        
-        	'TANKCOLOR'  => $color[$row['tank']][2],
-			'TANKFORUM'  => append_sid("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $rec_forum_id), 
-			'TANKTEXT'  => $color[$row['tank']][1], 
-			'DPSCOLOR' => $color[$row['dps']][2],
-        	'DPSFORUM' => append_sid("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $rec_forum_id),   
-		    'DPSTEXT'  => $color[$row['dps']][1], 
-			'HEALCOLOR' => $color[$row['heal']][2],
-        	'HEALFORUM' => append_sid("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $rec_forum_id),   
-		    'HEALTEXT' => $color[$row['heal']][1], 
+    	    'CLASSID' 		=> $row['class_id'],
+            'CLASS'   		=> $row['class_name'],  
+        	'IMAGENAME' 	=> $row['imagename'],
+			'CLASSCOLOR' 	=> $row['colorcode'],        
+        	'TANKCOLOR'  	=> $color[$row['tank']][2],
+			'TANKFORUM'  	=> append_sid("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $rec_forum_id), 
+			'TANKTEXT'  	=> $color[$row['tank']][1], 
+            'TANK'      	=> $color[$row['tank']][3],
+			'DPSCOLOR' 		=> $color[$row['dps']][2],
+        	'DPSFORUM' 		=> append_sid("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $rec_forum_id),   
+		    'DPSTEXT'  		=> $color[$row['dps']][1], 
+            'DPS'      		=> $color[$row['dps']][3],
+			'HEALCOLOR' 	=> $color[$row['heal']][2],
+        	'HEALFORUM' 	=> append_sid("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $rec_forum_id),   
+		    'HEALTEXT' 		=> $color[$row['heal']][1], 
+            'HEAL'      	=> $color[$row['heal']][3],
         ));
-                  
 	}
+	
+	
 	$db->sql_freeresult($result);
 }
 else 
