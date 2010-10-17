@@ -1,13 +1,15 @@
 <!--  
  @package bbDkp
  @version $Id: bossprogress.html 1288 2010-05-25 17:28:18Z Sajaki9 $
+ @author Sajaki
+ @credit http://www.schillmania.com/projects/dialog2 for css3 counded corners technique
+ @credit jquery Tools for Tooltips
  -->
  
 <script type="text/javascript"> 
 
 $(document).ready( function() {
-	<!-- BEGIN zone -->  
-	$("#zone{zone.ZONEID}").tooltip({ effect: 'slide'});  <!-- END zone -->
+	<!-- BEGIN zone -->  $("#zone{zone.ZONEID}").tooltip({ effect: 'slide'});  <!-- END zone -->
 	});
 </script>	
 <style>
@@ -16,14 +18,11 @@ $(document).ready( function() {
 	 display: none;
 	 position:relative;
 	 margin:0px auto;
-	 min-width:8em;
-	 
-	 
-	 
-	 max-width:300px; 
+	 min-width:200px;
+	 max-width:200px; 
 	 color:#fff;
 	 z-index:1;
-	 margin-left:12px; /* default, width of left corner */
+	 margin-left:10px; /* default, width of left corner */
 	 margin-bottom:0.5em; /* spacing under dialog */	
 	font-size: 11px;
 }
@@ -37,8 +36,8 @@ $(document).ready( function() {
 	
 .bbtooltip .bbinner {
  position:relative;
-
- padding:0px 12px 0px 0px;
+ zoom:1;
+ padding:0px 10px 0px 0px;
 }
 
 .bbtooltip .t {
@@ -46,8 +45,8 @@ $(document).ready( function() {
  position:absolute;
  left:0px;
  top:0px;
- width:12px; /* top slice width */
- margin-left:-12px;
+ width:10px; /* top slice width */
+ margin-left:-10px;
  height:100%;
  background-position:top left;
 }
@@ -60,7 +59,7 @@ $(document).ready( function() {
 
 .bbtooltip .b,
 .bbtooltip .b div {
- height:1px; /* height of bottom cap/shade */
+ height:30px; /* height of bottom cap/shade */
  font-size:1px;
 }
 
@@ -69,10 +68,33 @@ $(document).ready( function() {
 }
 
 .bbtooltip .b div {
- position:absolute;
- width:100%; /* bottom corner width */
- margin-left:-12px;
- background-position:bottom right;
+ position:relative;
+ width:10px; /* bottom corner width */
+ margin-left:-210px;
+ background-position:bottom left;
+}
+
+.bbtooltip .hd,
+.bbtooltip .bd,
+.bbtooltip .ft {
+ position:relative;
+}
+
+.bbtooltip .wrapper {
+ /* extra content protector - preventing vertical overflow (past background) */
+ position:static;
+ max-height:1000px;
+ overflow:auto; 
+}
+
+.bbtooltip h1,
+.bbtooltip p {
+ margin:0px; /* margins will blow out backgrounds, leaving whitespace. */
+ padding:0.5em 0px 0.5em 0px;
+}
+
+.bbtooltip h1 {
+ padding-bottom:0px;
 }
 
 a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active {
@@ -84,7 +106,8 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 
 
 </style>
- 
+
+
  <table class="tablebg" width="100%" cellspacing = "1">
 <tbody>
 <tr>
@@ -102,25 +125,32 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
           </colgroup>
     <!-- BEGIN zone -->
  	<tr>
-        <td align="center" class="{zone.CSSCLASS}"><span><a id="zone{zone.ZONEID}" >{zone.ZONENAME}</a>
+    <td align="center" class="{zone.CSSCLASS}">
+    <span>
+    <a id="zone{zone.ZONEID}" >{zone.ZONENAME}</a>
     <div class="bbtooltip">
-    
-    <div class="bbinner">
-    <div class="t"></div>
-	<br />
-	<h4>{zone.ZONENAME}</h4>
-	<!-- BEGIN boss -->
-    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="{T_IMAGES_PATH}/bossprogress/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}"></img><br />
-    <!-- END boss -->
-    <br />
-     </div>
+    	 <!-- top/right PNG -->
+	    <div class="bbinner">
+
+	    
+	    <div class="t"></div>
+	     
+				<br />
+				<h4>{zone.ZONENAME}</h4>
+				<!-- BEGIN boss -->
+			    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="{T_IMAGES_PATH}/bossprogress/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}"></img><br />
+			    <!-- END boss -->
+			    <br />
+	    </div>
+	    
+     <!-- bottom PNG -->
      <div class="b"><div></div></div> 
-     
-      
-   </div></span></td>
-        <td align="center" class="{zone.CSSCLASS}"><span>({zone.BOSSKILLS}/{zone.BOSSCOUNT})  </span></td>
+   </div>
+   </span>
+   </td>
+    <td align="center" class="{zone.CSSCLASS}"><span>({zone.BOSSKILLS}/{zone.BOSSCOUNT})  </span></td>
     </tr>
     <!-- END zone -->
+	
 </table>
-
 
