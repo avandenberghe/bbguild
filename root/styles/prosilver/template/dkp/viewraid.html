@@ -157,7 +157,15 @@
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
   <!-- BEGIN class_row -->
   <tr>
-    <td style="text-align:left;  width: 20%; white-space: nowrap" class="row bg1"><strong> <span style="color:{class_row.CLASSCOLOR};"> {class_row.CLASS} </span> </strong> </td>
+    <td style="text-align:left;  width: 20%; white-space: nowrap" class="row bg1"><strong> 
+    
+    <span style="color:{class_row.CLASSCOLOR}">
+    <img src="{ROOT_PATH}images/class_images/{class_row.CLASSIMAGE}.png" alt="class" width="20" height="20"></img>&nbsp;
+    <strong>{class_row.CLASS}</strong>
+    </span>
+    
+    
+    </td>
     <td style="text-align:left;  width: 20%; white-space: nowrap" class="row bg1">{class_row.BAR}</td>
     <td style="text-align:left;  width: 60%; white-space: nowrap" class="row bg2"><span class="small">{class_row.ATTENDEES}</span></td>
   </tr>

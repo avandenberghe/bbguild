@@ -87,7 +87,15 @@
   </tr>
   <!-- BEGIN class_row -->
   <tr>
-    <td width="100" nowrap="nowrap" class="row2"><strong> <span style="color:{class_row.CLASSCOLOR};"> {class_row.CLASS} </span> </strong> </td>
+  
+    <td width="100" nowrap="nowrap" class="row2">
+    
+    <span style="color:{class_row.CLASSCOLOR}">
+    <img src="{ROOT_PATH}images/class_images/{class_row.CLASSIMAGE}.png" alt="class" width="20" height="20"></img>&nbsp;
+    <strong>{class_row.CLASS}</strong>
+    </span>
+    
+    </td>
     <td width="50%" class="row1">{class_row.BAR}</td>
     <td width="50%" class="row2"><span class="small">{class_row.ATTENDEES}</span></td>
   </tr>

@@ -108,8 +108,10 @@ if ( isset($_GET[URI_RAID])  )
     $eq_classes = array();
     $total_attendees = count($attendees);
 
-	$sql = 'SELECT a.class_id, c1.name, a.colorcode, a.imagename from ' . CLASS_TABLE . ' a, '  . BB_LANGUAGE . " c1 where a.class_id != 0 
-		and c1.attribute_id = a.c_index ANDc1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'";
+	$sql = 'SELECT a.class_id, c1.name, a.colorcode, a.imagename from ' . CLASS_TABLE . ' a, '  . BB_LANGUAGE . " c1 
+	   WHERE a.class_id != 0 
+	   AND c1.attribute_id = a.c_index 
+	   AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'";
 	
     $result = $db->sql_query($sql);
 	while ( $row = $db->sql_fetchrow($result) )
@@ -117,6 +119,7 @@ if ( isset($_GET[URI_RAID])  )
     	$class_name[$row['class_id']] = $row['name'];
     	$class_id[$row['name']] = $row['class_id'];
     	$colorcode[$row['class_id']] = $row['colorcode'];
+    	$imagename[$row['class_id']] = $row['imagename'];
     	$class_count[$row['name']]=null;
         $eq_classes[$row['name']]=null;
     }
@@ -336,6 +339,7 @@ if ( isset($_GET[URI_RAID])  )
 	    $percentage =  ( $total_attendees > 0 ) ? round(($class_count[$class] / $total_attendees) * 100) : 0;
         $template->assign_block_vars('class_row', array(
             'CLASS'     	=> $class,
+            'CLASSIMAGE'	=> $imagename[$class_id[$class]], 
         	'CLASSCOLOR' 	=> $colorcode[$class_id[$class]], 
             'BAR'       	=> create_bar(($class_count[ $class ] * 10), $class_count[$class] . ' (' . $percentage . '%)'),
             'ATTENDEES' => '<span style="color: ' . $colorcode[$class_id[$class]] . '"><strong>' . $members . '</strong></span>' )        );
