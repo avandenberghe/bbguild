@@ -736,6 +736,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				  	set_config ('bbdkp_bp_zonephoto',  request_var('headertype', 0), 0); 				  	
 				  	set_config ('bbdkp_bp_zoneprogress', ( isset($_POST['showzone']) ) ? 1 : 0);
 				  	set_config ('bbdkp_bp_zonestyle',  request_var('style', 0));
+				  	set_config ('bbdkp_bp_blockshowprogressbar',  request_var('blockprogressbar', 0));
 					
 				  	$sequence = request_var('zonesequence', array( 0 => ''));
 					$newzonewebids = request_var('zonewebid', array( 0 => ''));
@@ -811,6 +812,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					'HEADER_SEL_SEPIA'   => ($config['bbdkp_bp_zonephoto'] == 0 ) ? ' selected="selected"' : '',
 					'HEADER_SEL_BLUE'    => ($config['bbdkp_bp_zonephoto'] == 1 ) ? ' selected="selected"' : '',
 					'HEADER_SEL_NONE'    => ($config['bbdkp_bp_zonephoto'] == 2 ) ? ' selected="selected"' : '',
+					'BP__BLOCKSHOWPROGRESSBAR' => ($config['bbdkp_bp_blockshowprogressbar'] == 1) ? ' checked="checked"' : '',
 				);
 				$template->assign_vars($arrvals);
 				

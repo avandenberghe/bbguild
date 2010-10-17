@@ -131,6 +131,7 @@ $lang = array_merge($lang, array(
 'SHOWLINKBLOCK' => 'Motrer bloc de liens',
 'MENUBLOCKSETTING' => 'Bloc de menus',
 'SHOWMENUBLOCK' => 'Montrer bloc de menus',
+'BLOCKSHOWPROGRESSBAR' => 'Montrer barre de progression dans Portail', 
 
 'RANK_INSERTED' => 'Grade inseré : %s. ', 
 'TOTAL_RANKS_INSERTED' => 'Nombre de grades inserés : %s. ', 

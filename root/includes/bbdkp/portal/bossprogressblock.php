@@ -21,6 +21,9 @@
  Original idea for this mod by: Ordon
 
  MOD History:
+* 2010-10-15 ver 0.6 
+    bbDKP 1.1.2.2
+	tooltip bottom border fixed, progressbar added
 * 2010-08-30 ver 0.5 
    - completely recoded for bbdkp 1.1.2
 * 2010-01-03 ver 0.4
@@ -50,11 +53,11 @@ $sql_array = array(
 		ZONEBASE 		=> 'z',
 		BB_LANGUAGE 	=> 'l',
 			),
-'WHERE'		=> " z.id = l.attribute_id 
-AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."'
-AND z.showzoneportal = 1  
-AND game= '" . $config['bbdkp_default_game'] . "'",
-'ORDER_BY'	=> 'z.sequence desc, z.id desc ',
+	'WHERE'		=> " z.id = l.attribute_id 
+		AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."'
+		AND z.showzoneportal = 1  
+		AND game= '" . $config['bbdkp_default_game'] . "'",
+	'ORDER_BY'	=> 'z.sequence desc, z.id desc ',
    );
 				    
 $sql = $db->sql_build_query ( 'SELECT', $sql_array );
@@ -114,7 +117,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 	$zones[$i]['bosses'] = (array) $boss; 
 	$zones[$i]['bosscount'] = $j;
 	$zones[$i]['bosskills'] = $bosskill; 
-	$zones[$i]['completed'] = ($j>0) ? round($bosskill/$j)*100 : 0;
+	$zones[$i]['completed'] = ($j>0) ? round($bosskill/$j,2)*100 : 0;
   	if ((int)$zones[$i]['completed']  <= 0) 
  		{
 		$zones[$i]['cssclass'] = 'bpprogress00';

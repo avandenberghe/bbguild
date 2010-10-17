@@ -905,7 +905,13 @@ $versions = array(
 		),
 		
 		'1.1.2.2'    => array(
-			// no db changes
+
+  		'config_add' => array(
+        	//show progressbar on block
+        	array('bbdkp_bp_blockshowprogressbar', 1, true),
+	     ),
+				
+				
 			
 		),
 

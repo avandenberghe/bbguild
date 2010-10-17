@@ -2,7 +2,7 @@
  * jQuery Progress Bar plugin
  * Version 2.0 (06/22/2009)
  * @requires jQuery v1.2.1 or later
- * @works with jquery v1.4.x  //bbdkp.com
+ * @works with jquery v1.4.x 
  *
  * Copyright (c) 2008 Gary Teo
  * http://t.wits.sg
@@ -14,11 +14,9 @@
 USAGE:
 	$(".someclass").progressBar();
 	$("#progressbar").progressBar();
-	$("#progressbar").progressBar(45);							// percentage
-	$("#progressbar").progressBar({showText: false });			// percentage with config
+	$("#progressbar").progressBar(45);		// percentage
+	$("#progressbar").progressBar({showText: false });	// percentage with config
 	$("#progressbar").progressBar(45, {showText: false });		// percentage with config
-	
-  
 
 */
 (function($) {
@@ -34,15 +32,15 @@ USAGE:
 				width			: 100,			// Width of the progressbar - don't forget to resize your image too!!!												
 				height			: 12,			// Height of the progressbar - don't forget to resize your image too!!!
 				callback		: null,			// Calls back with the config object that has the current percentage, target percentage, current image, etc
-				boxImage		: 'styles/prosilver/theme/images/jqueryui/progressbar.gif',	// boxImage : image around the progress bar
+				boxImage		: '{T_IMAGES_PATH}progressbar/progressbar.gif',	// boxImage : image around the progress bar
 				// Image to use in the progressbar. Can be a single image too: 'images/progressbg_green.gif'
 				//overridden
 				barImage		: {
-									5:   'styles/prosilver/theme/images/jqueryui/progressbg_black.gif',
-									20:  'styles/prosilver/theme/images/jqueryui/progressbg_red.gif',
-									40:  'styles/prosilver/theme/images/jqueryui/progressbg_orange.gif',
-									60:  'styles/prosilver/theme/images/jqueryui/progressbg_yellow.gif',
-									100: 'styles/prosilver/theme/images/jqueryui/progressbg_green.gif'										
+									5:   '{T_IMAGES_PATH}progressbar/progressbg_black.gif',
+									20:  '{T_IMAGES_PATH}progressbar/progressbg_red.gif',
+									40:  '{T_IMAGES_PATH}progressbar/progressbg_orange.gif',
+									60:  '{T_IMAGES_PATH}progressbar/progressbg_yellow.gif',
+									100: '{T_IMAGES_PATH}progressbar/progressbg_green.gif'										
 								},
 				
 				

@@ -131,7 +131,7 @@ $lang = array_merge($lang, array(
 'SHOWLINKBLOCK' => 'Link Block Anzeigen',
 'MENUBLOCKSETTING' => 'Menü Block Einstellungen',
 'SHOWMENUBLOCK' => 'Menü Block Anzeigen',
-
+'BLOCKSHOWPROGRESSBAR' => 'Vorgangsbalke im Portal Block zeigen', 
 
 'RANK_INSERTED' => 'Neuer Rang eingefügt : %s. ', 
 'TOTAL_RANKS_INSERTED' => 'Anzahl der eingefügten Rangs : %s. ', 

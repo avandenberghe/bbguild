@@ -1,16 +1,34 @@
 <!--  
- @package bbDkp
+ @package bbDKP
  @version $Id: bossprogress.html 1288 2010-05-25 17:28:18Z Sajaki9 $
  @author Sajaki
  @credit http://www.schillmania.com/projects/dialog2 for css3 counded corners technique
  @credit jquery Tools for Tooltips
+ @credit http://t.wits.sg for progressbar
+ prosilver version 1.1.2.2
  -->
  
 <script type="text/javascript"> 
 
-$(document).ready( function() {
-	<!-- BEGIN zone -->  $("#zone{zone.ZONEID}").tooltip({ effect: 'slide'});  <!-- END zone -->
-	});
+$(document).ready( function() 
+{
+	<!-- BEGIN zone -->  
+	$("#zone{zone.ZONEID}").tooltip({ position: "top center", effect: 'fade', opacity: 0.95});  
+	$("#progressbar{zone.COMPLETED}").progressBar(
+	{	showText : false,
+		width  : 100,
+		height : 10,
+		boxImage : '{T_IMAGES_PATH}progressbar/progressbar.gif',	// boxImage : image around the progress bar
+		barImage :
+		{
+			5:  '{T_IMAGES_PATH}progressbar/progressbg_black.gif',
+			20:  '{T_IMAGES_PATH}progressbar/progressbg_red.gif',
+			40:  '{T_IMAGES_PATH}progressbar/progressbg_orange.gif',
+			60:  '{T_IMAGES_PATH}progressbar/progressbg_yellow.gif',
+			100: '{T_IMAGES_PATH}progressbar/progressbg_green.gif'
+		}
+	})
+	<!-- END zone -->});
 </script>	
 <style>
 
@@ -98,8 +116,8 @@ $(document).ready( function() {
 }
 
 a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active {
-	text-decoration: none;
-	color: #FFD100;
+	text-decoration: none; 
+	 color: #FFD100; /* tooltip boss link color */
 	white-space: nowrap;
 }
 
@@ -119,12 +137,11 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
  	<tr>
     <td align="center" class="{zone.CSSCLASS}">
     <span>
-    <a id="zone{zone.ZONEID}" >{zone.ZONENAME}</a>
+    <a id="zone{zone.ZONEID}" ><strong>{zone.ZONENAME}</strong></a>
     <div class="bbtooltip">
     	 <!-- top/right PNG -->
 	    <div class="bbinner">
 
-	    
 	    <div class="t"></div>
 	     
 				<br />
@@ -140,13 +157,20 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
    </div>
    </span>
    </td>
-    <td align="center" class="{zone.CSSCLASS}"><span>({zone.BOSSKILLS}/{zone.BOSSCOUNT})  </span></td>
+    <td align="center" class="{zone.CSSCLASS}"><span><strong>({zone.BOSSKILLS}/{zone.BOSSCOUNT})</strong></span></td>
     </tr>
+    
+    <!-- IF S_PROGRESSBAR -->
+    <tr>
+    <td align="center" colspan="2">
+	    <span id="progressbar{zone.COMPLETED}" class="progressBar">{zone.COMPLETED}</span>
+    </td>
+	</tr>
+    <!-- ENDIF -->
+    
     <!-- END zone -->
 	
     </table>
     <span class="corners-bottom"><span></span></span>
     </div>
     </div>
-
-
