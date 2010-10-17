@@ -185,7 +185,7 @@
 	
 <table width="100%" border="0" cellspacing="1" cellpadding="2"> 
 <colgroup>
-<col width="55%"></col>
+<col width="20%"></col>
 <col width="15%"></col>
 <col width="15%"></col>
 <col width="15%"></col>
@@ -195,7 +195,7 @@
 <th style="color:white; font-size :9pt; text-align: left;">{L_CLASS}</th>
 <th style="color:white; font-size :9pt; text-align: center;">{L_LOOTS}</th>
 <th style="color:white; font-size :9pt; text-align: center;">{L_MEMBERS}</th>
-<th style="color:white; font-size :9pt; text-align: left;">{L_LOOT_FACTOR}</th>
+<th style="color:white; font-size :9pt; text-align: right;">{L_LOOT_FACTOR}</th>
 </tr>
 </table>
 </div>
@@ -204,7 +204,6 @@
 
 <span class="corners-bottom"><span></span></span>
 </div>
-
 
 <div class="post">
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
@@ -215,7 +214,13 @@
    <!-- ELSE -->
    <tr class= "row bg2">
    <!-- ENDIF -->
-  <td style="width:55%;" ><a href="{class_row.U_LIST_MEMBERS}">{class_row.CLASS}</a></td>
+   
+  <td style="width:20%;" >
+  <span>
+  <img src="{ROOT_PATH}images/class_images/{class_row.CLASSIMAGE}.png" alt="class" width="20" height="20"></img>&nbsp;
+  <strong><a style="color:{class_row.CLASSCOLOR}" href="{class_row.U_LIST_MEMBERS}">{class_row.CLASS}</a></strong>
+  </span>
+  </td>
   <td style="width:7.5%; " align="center" >{class_row.LOOT_COUNT}</td>
   <td style="width:7.5%; " align="center" >{class_row.LOOT_PCT}</td>
   <td style="width:7.5%; " align="center" >{class_row.CLASS_COUNT}</td>

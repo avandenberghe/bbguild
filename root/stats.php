@@ -371,7 +371,7 @@ $db->sql_freeresult($result);
 $class_counts = array();
 
 $sql_array = array(
-    'SELECT'    => 	'c1.name as class_name, count(m.member_id) AS class_count, c.class_id  ', 
+    'SELECT'    => 	'c1.name as class_name, count(m.member_id) AS class_count, c.class_id , c.colorcode, c.imagename ', 
     'FROM'      => array(
         ITEMS_TABLE 		=> 'i',
         CLASS_TABLE 		=> 'c',
@@ -396,14 +396,10 @@ if ($query_by_pool)
 $sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query($sql);
 
-
-
-
 while ( $row = $db->sql_fetchrow($result) )
 {
     $class 		 = $row['class_name'];
 	$class_count = $row['class_count'];
-    $cssclass    = $config['bbdkp_default_game'] . 'class'. $row['class_id'];
    
     if( (empty($class)) || ($class == 'NULL') )
     {
@@ -431,16 +427,18 @@ while ( $row = $db->sql_fetchrow($result) )
     
     if ($query_by_pool)
     {
-        $lmlink =  append_sid("{$phpbb_root_path}listmembers.$phpEx" , 'filter=' . $class . '&amp;' . URI_DKPSYS .'=' . $dkpsys_id . '" class="' . $cssclass); 
+        $lmlink =  append_sid("{$phpbb_root_path}listmembers.$phpEx" , 'filter=' . $class . '&amp;' . URI_DKPSYS .'=' . $dkpsys_id); 
     }
     else 
     {
-        $lmlink =  append_sid("{$phpbb_root_path}listmembers.$phpEx" , 'filter=' . $class . '" class="' . $cssclass);
+        $lmlink =  append_sid("{$phpbb_root_path}listmembers.$phpEx" , 'filter=' . $class);
     }
     
     $template->assign_block_vars('class_row', array(
 
         'U_LIST_MEMBERS' 	=> $lmlink ,
+        'CLASSCOLOR' 		=> $row['colorcode'],
+        'CLASSIMAGE' 		=> $row['imagename'],        
         'CLASS' 			=> $class,
         'LOOT_COUNT' 		=> $v['drops'],
         'LOOT_PCT' 			=> sprintf("%d%%", $v['drop_pct']),

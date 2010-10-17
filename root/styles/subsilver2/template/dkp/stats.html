@@ -77,19 +77,24 @@
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
     <th align="left" width="20%">{L_CLASS}</th>
-    <th align="center" colspan="2" nowrap="nowrap">{L_LOOTS}</th>
-    <th align="center" colspan="2" nowrap="nowrap">{L_MEMBERS}</th>
-    <th align="center">{L_LOOT_FACTOR}</th>
+    <th width="15%"  align="center" colspan="2" nowrap="nowrap">{L_LOOTS}</th>
+    <th width="15%" abbralign="center" colspan="2" nowrap="nowrap">{L_MEMBERS}</th>
+    <th width="15%" align="center">{L_LOOT_FACTOR}</th>
     
   </tr>
   <!-- BEGIN class_row -->
     <!-- IF stats_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td width="20%"><a href="{class_row.U_LIST_MEMBERS}">{class_row.CLASS}</a></td>
-    <td width="50" align="center" nowrap="nowrap">{class_row.LOOT_COUNT}</td>
-    <td width="50" align="center" nowrap="nowrap">{class_row.LOOT_PCT}</td>
-    <td width="50" align="center" nowrap="nowrap">{class_row.CLASS_COUNT}</td>
-    <td width="50" align="center" nowrap="nowrap">{class_row.CLASS_PCT}</td>
-    <td width="100" align="center" class="{class_row.C_LOOT_FACTOR}">{class_row.LOOT_FACTOR}</td>
+    <td width="20%">
+	<span>
+	<img src="{ROOT_PATH}images/class_images/{class_row.CLASSIMAGE}.png" alt="class" width="20" height="20"></img>&nbsp;
+	<strong><a style="color:{class_row.CLASSCOLOR}" href="{class_row.U_LIST_MEMBERS}">{class_row.CLASS}</a></strong>
+	</span>
+    </td>
+    <td width="7.5%" align="center" nowrap="nowrap"><strong>{class_row.LOOT_COUNT}</strong></td>
+    <td width="7.5%" align="center" nowrap="nowrap"><em>{class_row.LOOT_PCT}</em></td>
+    <td width="7.5%" align="center" nowrap="nowrap"><strong>{class_row.CLASS_COUNT}</strong></td>
+    <td width="7.5%" align="center" nowrap="nowrap"><em>{class_row.CLASS_PCT}</em></td>
+    <td style="width:15%; " align="center" class="{class_row.C_LOOT_FACTOR}"><em>{class_row.LOOT_FACTOR}</em></td>
    
   </tr>
   <!-- END class_row -->
