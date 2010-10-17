@@ -131,7 +131,7 @@ $lang = array_merge($lang, array(
 'SHOWLINKBLOCK' => 'Show Link block',
 'MENUBLOCKSETTING' => 'Menu block Settings',
 'SHOWMENUBLOCK' => 'Show Menu block',
-'BLOCKSHOWPROGRESSBAR' => 'Show Zone pregressbar in Portal block', 
+'BLOCKSHOWPROGRESSBAR' => 'Show Zone progressbar in Portal block', 
 
 
 'RANK_INSERTED' => 'Rank inserted : %s. ', 
