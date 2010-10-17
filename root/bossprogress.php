@@ -185,7 +185,7 @@ foreach($zones as $key => $zone)
 
 			$template->assign_block_vars('zone.boss', array(
 				'LASTKILL'	    => (!empty($boss['killdate']) ) ? $user->lang ['LASTKILL'] . date($config['bbdkp_date_format'], $boss['killdate']) : ' ',              
-				'BOSSCOUNTSTR'	=> $user->lang ['BOSSKILLCOUNT'] . $boss['counter'],  
+				'BOSSCOUNTSTR'	=> $boss['counter'] > 0 ? ($user->lang ['BOSSKILLCOUNT'] . ' : ' . $boss['counter']) : '' ,  
 			    'BOSSCOUNT'		=> $boss['counter'], 
 				'BOSSLINK'		=> $boss['url'],  
 			    'BOSSNAME'		=> $boss['bossname'],
@@ -197,6 +197,11 @@ foreach($zones as $key => $zone)
 	}
 
 }
+
+
+ $template->assign_vars(array(
+	'S_STYLE'  => $config['bbdkp_bp_zonestyle']
+   ));
 
 $template->assign_block_vars('dkpnavlinks', array(
 		'DKPPAGE' => $user->lang['MENU_BOSS'],

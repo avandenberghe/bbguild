@@ -659,7 +659,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                    
                      // dropdown list
 					$sql_array = array(
-				    'SELECT'    => 	' z.id, z.sequence, l.name, l.name_short, z.imagename, z.completed, z.completedate, z.webid, z.showzone    ', 
+				    'SELECT'    => 	' z.id, z.sequence, l.name, l.name_short, z.imagename, z.completed, 
+				    				  z.completedate, z.webid, z.showzone , z.showzoneportal ', 
 				    'FROM'      => array(
 							ZONEBASE 		=> 'z',
 							BB_LANGUAGE 	=> 'l',
@@ -713,7 +714,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                    
 		                    'ZONE_WEBID' 		=> $row['webid']  ,
 		                    'ZONE_COMPLETED' 	=> ($row['completed'] == 1) ? ' checked="checked"' : '',
-		                    'SHOW_ZONE'   		=> 	($row['showzone'] == 1) ? ' checked="checked"' : '',
+		                    'SHOW_ZONE'   		=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
 	                        'SHOW_ZONE_PORTAL'  => ($row['showzoneportal'] == 1) ? ' checked="checked"' : '',
 	                    
 							'S_KILLDATE_DAY_OPTIONS'	=> $s_day_options,

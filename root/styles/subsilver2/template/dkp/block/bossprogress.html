@@ -13,18 +13,18 @@
 $(document).ready( function() {
 	<!-- BEGIN zone -->  $("#zone{zone.ZONEID}").tooltip({ position: "top center", effect: 'fade', opacity: 0.95});  
 
-		$("#pb{zone.COMPLETED}").progressBar(
+	$("#pb{zone.COMPLETED}").progressBar(
 	{	showText : false,
 		width  : 100,
 		height : 10,
-		boxImage : '{T_IMAGES_PATH}/progressbar/progressbar.gif',	// boxImage : image around the progress bar
+		boxImage : './images/progressbar/progressbar.gif',	// boxImage : image around the progress bar
 		barImage :
 		{
-		5:  '{T_IMAGES_PATH}/progressbar/progressbg_black.gif',
-		20:  '{T_IMAGES_PATH}/progressbar/progressbg_red.gif',
-		40:  '{T_IMAGES_PATH}/progressbar/progressbg_orange.gif',
-		60:  '{T_IMAGES_PATH}/progressbar/progressbg_yellow.gif',
-		100: '{T_IMAGES_PATH}progressbar/progressbg_green.gif'
+		5:  './images/progressbar/progressbg_black.gif',
+		20:  './images/progressbar/progressbg_red.gif',
+		40:  './images/progressbar/progressbg_orange.gif',
+		60:  './images/progressbar/progressbg_yellow.gif',
+		100: './images/progressbar/progressbg_green.gif'
 		}
 	})
 	<!-- END zone -->
@@ -49,7 +49,7 @@ $(document).ready( function() {
 .bbtooltip .t,
 .bbtooltip .b,
 .bbtooltip .b div {
- background:transparent url({T_IMAGES_PATH}tooltip/tooltip.png) no-repeat top right;
+ background:transparent url(./images/tooltip/tooltip.png) no-repeat top right;
 }
 	
 .bbtooltip .bbinner {
@@ -156,7 +156,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 				<br />
 				<h4>{zone.ZONENAME}</h4>
 				<!-- BEGIN boss -->
-			    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="{T_IMAGES_PATH}/bossprogress/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}"></img><br />
+			    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="./images/bossprogress/rp/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}"></img><br />
 			    <!-- END boss -->
 			    <br />
 	    </div>
@@ -169,14 +169,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
     <td align="center" class="{zone.CSSCLASS}"><span>({zone.BOSSKILLS}/{zone.BOSSCOUNT})  </span></td>
     </tr>
     
-    <!-- IF S_PROGRESSBAR == 1 -->
-    <tr>
-    <td align="center" colspan="2">
-        <span id="progressbar{zone.COMPLETED}" class="progressBar">{zone.COMPLETED}</span>
-    </td>
-    </tr>
-    <!-- ENDIF -->
-    
+      
     <!-- END zone -->
 	
 </table>

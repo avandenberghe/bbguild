@@ -113,6 +113,13 @@ dd div strong
 
 
 <!-- IF S_STYLE == 0 -->
+
+<!--  
+************************
+  raidprogress default 
+************************
+-->
+
 <!-- BEGIN boss -->
 <!-- IF boss.S_ROW_COUNT is even -->
 <tr class="row1" >
@@ -120,11 +127,11 @@ dd div strong
 		<img src="{zone.boss.BOSSIMG}" height="70" width="70" alt="{zone.boss.BOSSIMGALT}"/>
 	</td>
 	<td style="text-align:left">
+		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a><br />
 		<!-- IF zone.boss.BOSSCOUNT > 0 -->
-		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a>	
-		<img src="{T_IMAGES_PATH}bossprogress/rp/checkmark.gif" width="20" height="15" alt="check" ></img><br />
+		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="20" height="15" alt="check" ></img><br />
 		<!-- ELSE -->
-		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a><br />	
+		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif" width="20" height="15" alt="check" ></img>
 		<!-- ENDIF -->
 		{zone.boss.FIRSTKILL}<br />
 		{zone.boss.LASTKILL}<br />
@@ -136,7 +143,9 @@ dd div strong
 <!-- ELSE -->
 	<td style="text-align:right">
 		<!-- IF zone.boss.BOSSCOUNT > 0 -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/checkmark.gif" width="20" height="15" alt="check" ></img>
+		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="20" height="15" alt="check" ></img><br />
+		<!-- ELSE -->
+		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif" width="20" height="15" alt="check" ></img>
 		<!-- ENDIF -->
 		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a><br />	
 		{zone.boss.FIRSTKILL}<br />
@@ -153,6 +162,14 @@ dd div strong
 <!-- ENDIF -->
 
 <!-- IF S_STYLE == 1 -->
+
+<!--  
+************************
+  raidprogress simple 
+************************
+-->
+
+
 <!-- BEGIN boss -->
 <tr class="row1" >
 	<td style="text-align:left"> Name: <a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a></td>
@@ -165,15 +182,23 @@ dd div strong
 <!-- ENDIF -->
 
 <!-- IF S_STYLE == 2 -->
+
+<!--  
+************************
+  raidprogress 3/row 
+************************
+-->
+
 <!-- BEGIN boss -->
 <!-- IF boss.S_ROW_COUNT % 3 == 0 -->
 	<tr class="row1" >
 <!-- ENDIF -->
 	<td style="text-align:left">
 	<!-- IF zone.boss.BOSSCOUNT > 0 -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/checkmark.gif" width="20" height="15" alt="check" ></img>
+		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="20" height="15" alt="check" ></img>
 		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME} : {zone.boss.BOSSCOUNTSTR}</b></a>				
 	<!-- ELSE -->
+		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif"  width="20" height="15" alt="check" ></img>	
 		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a>	
 	<!-- ENDIF -->	
 	</td>
