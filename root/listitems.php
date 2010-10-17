@@ -196,15 +196,22 @@ switch ($mode)
 	case 'history' :
 		
 		$sql_array = array (
-			'SELECT' => 'i.item_dkpid, i.item_id, i.item_name, i.item_buyer, i.item_date, i.raid_id, i.item_value, i.item_gameid, 
-				 r.raid_name, m.member_id, m.member_dkpid, l.member_class_id, l.member_name', 
+			'SELECT' => '
+				 i.item_dkpid, i.item_id, i.item_name, 
+				 i.item_buyer, i.item_date, 
+				 c.colorcode, c.imagename,
+				 i.raid_id, i.item_value, i.item_gameid, 
+				 r.raid_name, m.member_id, m.member_dkpid, 
+				 l.member_class_id, l.member_name', 
     		'FROM' => array (
 				ITEMS_TABLE => 'i', 
 				RAIDS_TABLE => 'r', 
+			    CLASS_TABLE	=> 'c', 
 				MEMBER_DKP_TABLE => 'm', 
 				MEMBER_LIST_TABLE => 'l'), 
 
-			'WHERE' => ' i.raid_id = r.raid_id
+			'WHERE' => ' l.member_class_id = c.class_id 
+						AND i.raid_id = r.raid_id
     					AND i.item_buyer = l.member_name
            				AND l.member_id = m.member_id 
            				AND i.item_dkpid = m.member_dkpid', 
@@ -253,6 +260,8 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 	$template->assign_block_vars ( 'items_row', array (
 		'DATE' => (! empty ( $item ['item_date'] )) ? date ( 'd.m.y', $item ['item_date'] ) : '&nbsp;', 
 		'BUYER' => (! empty ( $item ['item_buyer'] )) ? $item ['item_buyer'] : '&lt;<i>Not Found</i>&gt;', 
+		'CLASSCOLOR' => ( !empty($item['item_buyer']) ) ? $item['colorcode'] : '',
+		'CLASSIMAGE' => ( !empty($item['item_buyer']) ) ? $item['imagename'] : '',         
 		'ITEMNAME' => $valuename, 
 		'U_VIEW_ITEM' => append_sid ( "{$phpbb_root_path}viewitem.$phpEx", URI_ITEM . '=' . $item ['item_id'] ), 
 		'RAID' => (! empty ( $item ['raid_name'] )) ? $item ['raid_name'] : '&lt;<i>Not Found</i>&gt;', 

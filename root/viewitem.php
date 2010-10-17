@@ -79,16 +79,18 @@ if (isset($_GET[URI_ITEM]) )
 	}
 	
      $sql_array = array(
-	    'SELECT'    => 	'i.item_dkpid, i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_buyer,
-	    				 i.item_gameid, r.raid_name, m.member_id, m.member_dkpid, l.member_class_id, l.member_name', 
+	    'SELECT'    => 	'i.item_dkpid, i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_buyer, 
+	      c.colorcode, c.imagename, i.item_gameid, r.raid_name, m.member_id, m.member_dkpid, l.member_class_id, l.member_name', 
 	    'FROM'      => array(
      			ITEMS_TABLE 		=> 'i', 
 		        RAIDS_TABLE 		=> 'r',
+		        CLASS_TABLE			=> 'c', 
 		        MEMBER_DKP_TABLE 	=> 'm',
 		        MEMBER_LIST_TABLE 	=> 'l',
 	    	),
 	 
-	    'WHERE'     =>  "i.item_buyer = l.member_name
+	    'WHERE'     =>  " l.member_class_id = c.class_id 
+	    				AND i.item_buyer = l.member_name
     					AND l.member_id = m.member_id 
     					AND i.item_dkpid = m.member_dkpid
     					AND r.raid_id = i.raid_id 
@@ -124,7 +126,10 @@ if (isset($_GET[URI_ITEM]) )
 	while ( $item = $db->sql_fetchrow($result) )
     {
         $template->assign_block_vars('items_row', array(
+        
             'DATE' => ( !empty($item['item_date']) ) ? date('d.m.y', $item['item_date']) : '&nbsp;',
+            'CLASSCOLOR' => ( !empty($item['item_buyer']) ) ? $item['colorcode'] : '',
+            'CLASSIMAGE' => ( !empty($item['item_buyer']) ) ? $item['imagename'] : '',            
             'BUYER' => ( !empty($item['item_buyer']) ) ? $item['item_buyer'] : '&nbsp;',
             'U_VIEW_BUYER' => append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_NAME . '='.$item['item_buyer']. '&amp;' . URI_DKPSYS . '=' . $item['item_dkpid']) ,
             'U_VIEW_RAID' => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '='.$item['raid_id']) ,
@@ -134,7 +139,7 @@ if (isset($_GET[URI_ITEM]) )
     }
     $db->sql_freeresult ( $result );
     
-    // breadcrumbs
+    // breadcrumbs ////
     $navlinks_array = array(
     array(
      'DKPPAGE' => $user->lang['MENU_ITEMVAL'],

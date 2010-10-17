@@ -61,7 +61,9 @@
   <!-- ENDIF -->   
 
     <td>{items_row.DATE}</td>
-    <td><a href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></td>
+    <td>
+    <span><img src="{ROOT_PATH}images/class_images/{items_row.CLASSIMAGE}.png" alt="class" width="20" height="20"></img>&nbsp;
+    <strong><a style="color:{items_row.CLASSCOLOR}" href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></strong></td>
     <td><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
     <td>{items_row.VALUE}</td>
   </tr>

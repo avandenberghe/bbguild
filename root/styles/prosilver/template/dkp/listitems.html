@@ -105,7 +105,12 @@
     <td width="16px" align="center"><a href="{items_row.U_VIEW_ITEM}"><img src="{ROOT_PATH}/images/icons/view.gif" width="16" height="16" alt="View" /></a></td>
     <td style="text-align:center; ">{items_row.DATE}</td>
     <!-- IF S_HISTORY -->
-    <td style="text-align:left; " class="{items_row.CSSCLASS}"><a href="{items_row.U_VIEW_BUYER}"><b>{items_row.BUYER}</b></a></td>
+    <td style="text-align:left; " class="{items_row.CSSCLASS}">
+    
+    <span><img src="{ROOT_PATH}images/class_images/{items_row.CLASSIMAGE}.png" alt="class" width="20" height="20"></img>&nbsp;
+    <strong><a style="color:{items_row.CLASSCOLOR}" href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></strong>
+    
+    </td>
 	<!-- ENDIF -->
     <td style="text-align:left; "><a href="{items_row.U_VIEW_ITEM}"><strong>{items_row.ITEMNAME}</strong></a></td>
     <td style="text-align:left; "><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>

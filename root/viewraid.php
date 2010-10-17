@@ -109,7 +109,7 @@ if ( isset($_GET[URI_RAID])  )
     $total_attendees = count($attendees);
 
 	$sql = 'SELECT a.class_id, c1.name, a.colorcode, a.imagename from ' . CLASS_TABLE . ' a, '  . BB_LANGUAGE . " c1 where a.class_id != 0 
-		and c1.attribute_id = a.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'";
+		and c1.attribute_id = a.c_index ANDc1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'";
 	
     $result = $db->sql_query($sql);
 	while ( $row = $db->sql_fetchrow($result) )
