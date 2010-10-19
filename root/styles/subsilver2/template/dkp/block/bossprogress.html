@@ -1,5 +1,5 @@
 <!--  
- @package bbDkp
+ @package bbDKP
  @version $Id: bossprogress.html 1288 2010-05-25 17:28:18Z Sajaki9 $
  @author Sajaki
  @credit http://www.schillmania.com/projects/dialog2 for css3 counded corners technique
@@ -55,6 +55,7 @@ $(document).ready( function() {
 .bbtooltip .bbinner {
  position:relative;
  zoom:1;
+  _overflow-y:hidden;
  padding:0px 10px 0px 0px;
 }
 
@@ -85,12 +86,16 @@ $(document).ready( function() {
  background-position:bottom right;
 }
 
+/* bottom corner width */
 .bbtooltip .b div {
- position:relative;
- width:10px; /* bottom corner width */
- margin-left:-210px;
+ position:absolute;
+ width:10px; 
+ margin-left:-10px;
  background-position:bottom left;
 }
+
+
+
 
 .bbtooltip .hd,
 .bbtooltip .bd,
@@ -129,9 +134,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
  <table class="tablebg" width="100%" cellspacing = "1">
 <tbody>
 <tr>
-<th>
-	<h3 style="text-align:center">{L_BOSSPROGRESS}</h3>
-</th>
+<th style="text-align:center">{L_BOSSPROGRESS}</th>
 </tr>
 </tbody>
 </table>
@@ -145,7 +148,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
  	<tr>
     <td align="center" class="{zone.CSSCLASS}">
     <span>
-    <a id="zone{zone.ZONEID}" >{zone.ZONENAME}</a>
+    <a id="zone{zone.ZONEID}" ><strong>{zone.ZONENAME}</strong></a>
     <div class="bbtooltip">
     	 <!-- top/right PNG -->
 	    <div class="bbinner">
@@ -156,7 +159,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 				<br />
 				<h4>{zone.ZONENAME}</h4>
 				<!-- BEGIN boss -->
-			    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="./images/bossprogress/rp/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}"></img><br />
+			    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="./images/bossprogress/rp/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}" /><br />
 			    <!-- END boss -->
 			    <br />
 	    </div>

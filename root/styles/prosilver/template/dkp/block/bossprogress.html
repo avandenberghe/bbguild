@@ -55,6 +55,7 @@ $(document).ready( function()
 .bbtooltip .bbinner {
  position:relative;
  zoom:1;
+  _overflow-y:hidden;
  padding:0px 10px 0px 0px;
 }
 
@@ -85,12 +86,16 @@ $(document).ready( function()
  background-position:bottom right;
 }
 
+/* bottom corner width */
 .bbtooltip .b div {
- position:relative;
- width:10px; /* bottom corner width */
- margin-left:-210px;
+ position:absolute;
+ width:10px; 
+ margin-left:-10px;
  background-position:bottom left;
 }
+
+
+
 
 .bbtooltip .hd,
 .bbtooltip .bd,
@@ -147,7 +152,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 				<br />
 				<h4>{zone.ZONENAME}</h4>
 				<!-- BEGIN boss -->
-			    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="{T_IMAGES_PATH}/bossprogress/rp/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}"></img><br />
+			    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="{T_IMAGES_PATH}/bossprogress/rp/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}" /><br />
 			    <!-- END boss -->
 			    <br />
 	    </div>
