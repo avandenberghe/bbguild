@@ -15,22 +15,18 @@
 <tr class="row1">
 <td>
 
-<div class="portalmenu">
+<div>
 	<table>
-	<tr>
-	<td>
-		<ul class="topiclist bg1">
-		<li>
-		<dl>
-			<dd style="border-left:0px">
-				<p style="margin: 0 5px 0 5px;">{TOTAL_USERS_ONLINE} ({L_ONLINE_EXPLAIN})<br />{RECORD_USERS}<br /> <br />{LOGGED_IN_USER_LIST}
-				<!-- IF LEGEND --><br /><em>{L_LEGEND}: {LEGEND}</em><!-- ENDIF --></p>
-			</dd>
-		</dl>
-		</li>
-		</ul>
-	</td>
-	</tr>
+		<tr>
+		<td>
+			<span style="margin: 0 5px 0 5px;">{TOTAL_USERS_ONLINE} ({L_ONLINE_EXPLAIN})<br />{RECORD_USERS}<br /> <br />{LOGGED_IN_USER_LIST}</span>
+		</td>
+		</tr>
+		<!-- IF LEGEND -->
+		<tr>
+		<td colspan="3"><b class="gensmall">{L_LEGEND} : {LEGEND}</b></td>
+		</tr>
+		<!-- ENDIF -->
 	</table>
 </div>
 		
