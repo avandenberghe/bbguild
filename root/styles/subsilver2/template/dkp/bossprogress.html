@@ -124,14 +124,14 @@ dd div strong
 <!-- IF boss.S_ROW_COUNT is even -->
 <tr class="row1" >
 	<td style="text-align:center">
-		<img src="{zone.boss.BOSSIMG}" height="70" width="70" alt="{zone.boss.BOSSIMGALT}"/>
+		<a href="{boss.BOSSLINK}"><img src="{zone.boss.BOSSIMG}" height="70" width="70" alt="{zone.boss.BOSSIMGALT}" /></a>
 	</td>
 	<td style="text-align:left">
 		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a><br />
 		<!-- IF zone.boss.BOSSCOUNT > 0 -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="20" height="15" alt="check" ></img><br />
+		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="15" height="15" alt="check" /><br />
 		<!-- ELSE -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif" width="20" height="15" alt="check" ></img>
+		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif" width="15" height="15" alt="check" />
 		<!-- ENDIF -->
 		{zone.boss.FIRSTKILL}<br />
 		{zone.boss.LASTKILL}<br />
@@ -143,9 +143,9 @@ dd div strong
 <!-- ELSE -->
 	<td style="text-align:right">
 		<!-- IF zone.boss.BOSSCOUNT > 0 -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="20" height="15" alt="check" ></img><br />
+		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="15" height="15" alt="check" /><br />
 		<!-- ELSE -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif" width="20" height="15" alt="check" ></img>
+		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif" width="15" height="15" alt="check" />
 		<!-- ENDIF -->
 		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a><br />	
 		{zone.boss.FIRSTKILL}<br />
@@ -153,7 +153,7 @@ dd div strong
 		{zone.boss.BOSSCOUNTSTR}<br />
 	</td>
 	<td style="text-align:center">
-		<img src="{zone.boss.BOSSIMG}" height="70" width="70" alt="{zone.boss.BOSSIMGALT}"/>
+		<a href="{boss.BOSSLINK}"><img src="{zone.boss.BOSSIMG}" height="70" width="70" alt="{zone.boss.BOSSIMGALT}" /></a> 
 	</td>
 	</tr>
 <!-- ENDIF -->
@@ -195,10 +195,10 @@ dd div strong
 <!-- ENDIF -->
 	<td style="text-align:left">
 	<!-- IF zone.boss.BOSSCOUNT > 0 -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="20" height="15" alt="check" ></img>
+		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="20" height="15" alt="check" />
 		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME} : {zone.boss.BOSSCOUNTSTR}</b></a>				
 	<!-- ELSE -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif"  width="20" height="15" alt="check" ></img>	
+		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif"  width="20" height="15" alt="check" />	
 		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a>	
 	<!-- ENDIF -->	
 	</td>
