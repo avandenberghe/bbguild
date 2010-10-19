@@ -170,7 +170,7 @@ foreach($zones as $key => $zone)
 			if (file_exists ( "{$phpbb_root_path}images/bossprogress/" . $config['bbdkp_default_game'] . '/bosses/' . $boss['imagename'].'.gif' )) 
             {
 				if ($boss['killed'] == 0)
-				{
+				{	//grey image
 					$bossimg="{$phpbb_root_path}images/bossprogress/" . $config['bbdkp_default_game'] . '/bosses/' . $boss['imagename'] . '_b.gif';  
 				}
                 else
@@ -186,7 +186,7 @@ foreach($zones as $key => $zone)
 			$template->assign_block_vars('zone.boss', array(
 				'LASTKILL'	    => (!empty($boss['killdate']) ) ? $user->lang ['LASTKILL'] . date($config['bbdkp_date_format'], $boss['killdate']) : ' ',              
 				'BOSSCOUNTSTR'	=> $boss['counter'] > 0 ? ($user->lang ['BOSSKILLCOUNT'] . ' : ' . $boss['counter']) : '' ,  
-			    'BOSSCOUNT'		=> $boss['counter'], 
+			    'BOSSCOUNT'		=> max( (int) $boss['killed'], (int) $boss['counter']), 
 				'BOSSLINK'		=> $boss['url'],  
 			    'BOSSNAME'		=> $boss['bossname'],
 			    'BOSSIMG'		=> $bossimg,
