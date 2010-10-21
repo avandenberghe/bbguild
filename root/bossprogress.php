@@ -170,7 +170,7 @@ foreach($zones as $key => $zone)
 			if (file_exists ( "{$phpbb_root_path}images/bossprogress/" . $config['bbdkp_default_game'] . '/bosses/' . $boss['imagename'].'.gif' )) 
             {
 				if ($boss['killed'] == 0)
-				{	//grey image
+				{
 					$bossimg="{$phpbb_root_path}images/bossprogress/" . $config['bbdkp_default_game'] . '/bosses/' . $boss['imagename'] . '_b.gif';  
 				}
                 else
