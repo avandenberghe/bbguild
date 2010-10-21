@@ -889,7 +889,7 @@ $versions = array(
          'module_add' => array(
 		 array('acp', 'ACP_DKP_BOSS', array(
           		 'module_basename' => 'dkp_bossprogress',
-            	 'modes'           => array('zoneprogress', 'bossprogress' ),
+            	 'modes'           => array('zoneprogress' ),
          		)),
           array('acp', 'ACP_DKP_MEMBER', array(
            		 'module_basename' => 'dkp_game',
