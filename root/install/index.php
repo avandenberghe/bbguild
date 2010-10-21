@@ -889,7 +889,7 @@ $versions = array(
          'module_add' => array(
 		 array('acp', 'ACP_DKP_BOSS', array(
           		 'module_basename' => 'dkp_bossprogress',
-            	 'modes'           => array('zoneprogress' ),
+            	 'modes'           => array('zoneprogress', 'bossprogress' ),
          		)),
           array('acp', 'ACP_DKP_MEMBER', array(
            		 'module_basename' => 'dkp_game',
@@ -901,7 +901,10 @@ $versions = array(
 		),
 		
 		'1.1.2.1'    => array(
-			// no db changes
+			'custom' => array( 
+				'gameupdate', 
+				'bbdkp_caches'
+			),
 		),
 		
 		'1.1.2.2'    => array(
@@ -1291,6 +1294,22 @@ function gameupdate($action, $version)
 					}
 					$db->sql_freeresult($result);
 					
+					
+					/* bossprogress refit */ 
+					/* remove 3 modes */
+					if($umil->module_exists('acp', 'ACP_DKP_BOSS','ACP_DKP_BOSS_BOSSBASE'))
+					{
+						$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_BOSSBASE');
+					}
+					if($umil->module_exists('acp', 'ACP_DKP_BOSS','ACP_DKP_BOSS_OFFSET'))
+					{
+						$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_OFFSET');
+					}
+					if($umil->module_exists('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_CONFIG'))
+					{
+						$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_CONFIG');
+					}
+
 					// game updaters
 					
 					switch ($game)
@@ -1380,8 +1399,11 @@ function gameupdate($action, $version)
 						    break; 
 					}
 					
+					break;	
+					
+				case '1.1.2.1':
+
 					/* bossprogress refit */ 
-					/* remove 3 modes */
 					if($umil->module_exists('acp', 'ACP_DKP_BOSS','ACP_DKP_BOSS_BOSSBASE'))
 					{
 						$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_BOSSBASE');
@@ -1395,8 +1417,8 @@ function gameupdate($action, $version)
 						$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_CONFIG');
 					}
 
-					break;	
-				
+					break;
+	
 			}
 			break;
 			
