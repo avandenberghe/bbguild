@@ -1404,6 +1404,7 @@ function gameupdate($action, $version)
 				case '1.1.2.1':
 
 					/* bossprogress refit */ 
+					/* remove 3 modes */
 					if($umil->module_exists('acp', 'ACP_DKP_BOSS','ACP_DKP_BOSS_BOSSBASE'))
 					{
 						$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_BOSSBASE');

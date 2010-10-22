@@ -170,9 +170,9 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
 			<file from="root/images/icons/*.*" to="images/icons/*.*"/>
 			<file from="root/images/bbdkp.png" to="images/bbdkp.png"/>
-			<file from="root/images/class_images/*.*" to="images/class_images/*.*" />  
 			<file from="root/images/progressbar/*.*" to="images/progressbar/*.*" />  
 			<file from="root/images/recruitblock_images/*.*" to="images/recruitblock_images/*.*" />   
+			<file from="root/images/tooltip/*.*" to="images/tooltip/*.*" />  			
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/includes/bbdkp/portal/*.*" to="includes/bbdkp/portal/*.*"/>
@@ -369,6 +369,7 @@ Automod cannot handle it as it would lead to a timeout due to the size (19mb) !
 <file from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" />   
 <file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" />   
 <file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  
+<file from="root/images/class_images/*.*" to="images/class_images/*.*" /> 
 ------------------------------------------------------------------------------
 2) Run database installer 
 Browse to install/index.php and run the bbDKP 1.1.2 installer/updater.  
@@ -392,6 +393,7 @@ En raison de la taille de ces répertoires (±20mb), Automod ne sait pas les cop
 <file from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" />   
 <file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" />   
 <file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  
+<file from="root/images/class_images/*.*" to="images/class_images/*.*" /> 
 ------------------------------------------------------------------------------
 2) lancer l’installateur
 Surfez vers install/index.php et lancez l’installateur bbDKP 1.1.2  
@@ -408,10 +410,11 @@ Success ;)	]]></diy-instructions>
 Liste der änderungen : /contrib/readme/changelog.html
 
 1) Kopiere diese Dateien zum Verzeichnis /images  
-Aus Berücksichtigung der grösse der Verzeichnisse (±20mb), kann Automod dies nicht kopieren wegen das Timeout. 
+Aus Berücksichtigung der grösse der Verzeichnisse (±20mb), kann Automod dies nicht kopieren wegen Timeout. 
 <file from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" />   
 <file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" />   
 <file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  
+<file from="root/images/class_images/*.*" to="images/class_images/*.*" /> 
 ------------------------------------------------------------------------------
 2) Datenbank Installation
 Rufe install/index.php auf und führe den Installer aus. Dies macht entweder eine Vollinstallation 
