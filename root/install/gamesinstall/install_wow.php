@@ -24,17 +24,17 @@ function install_wow()
 	// note class 10 does not exist
 	$db->sql_query ( 'TRUNCATE TABLE ' . $table_prefix . 'bbdkp_classes' );
 	$sql_ary = array ();
-	$sql_ary [] = array ('class_id' => 0, 'class_name' => 'Unknown', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Unknown_small');
-	$sql_ary [] = array ('class_id' => 1, 'class_name' => 'Warrior', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Warrior_small');
-	$sql_ary [] = array ('class_id' => 2, 'class_name' => 'Paladin', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Paladin_small');
-	$sql_ary [] = array ('class_id' => 3, 'class_name' => 'Hunter', 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Hunter_small');
-	$sql_ary [] = array ('class_id' => 4, 'class_name' => 'Rogue', 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85, 'imagename' => 'wow_Rogue_small');
-	$sql_ary [] = array ('class_id' => 5, 'class_name' => 'Priest', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Priest_small');
-	$sql_ary [] = array ('class_id' => 6, 'class_name' => 'Death Knight', 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 , 'imagename' => 'wow_Death_Knight_small');  
-	$sql_ary [] = array ('class_id' => 7, 'class_name' => 'Shaman', 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Shaman_small');
-	$sql_ary [] = array ('class_id' => 8, 'class_name' => 'Mage', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Mage_small');
-	$sql_ary [] = array ('class_id' => 9, 'class_name' => 'Warlock', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Warlock_small');
-	$sql_ary [] = array ('class_id' => 11, 'class_name' => 'Druid', 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Druid_small');
+	$sql_ary [] = array ('class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Unknown_small');
+	$sql_ary [] = array ('class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Warrior_small');
+	$sql_ary [] = array ('class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Paladin_small');
+	$sql_ary [] = array ('class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Hunter_small');
+	$sql_ary [] = array ('class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85, 'imagename' => 'wow_Rogue_small');
+	$sql_ary [] = array ('class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Priest_small');
+	$sql_ary [] = array ('class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 , 'imagename' => 'wow_Death_Knight_small');  
+	$sql_ary [] = array ('class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Shaman_small');
+	$sql_ary [] = array ('class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Mage_small');
+	$sql_ary [] = array ('class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Warlock_small');
+	$sql_ary [] = array ('class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85 , 'imagename' => 'wow_Druid_small');
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
 	unset ( $sql_ary ); 
 
