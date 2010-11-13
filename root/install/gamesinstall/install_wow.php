@@ -62,32 +62,7 @@ function install_wow()
 	$sql_ary [] = array ('race_id' => 11, 'race_faction_id' => 1 ); //Draenei
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 	
-	unset ( $sql_ary );
-	// index page recruitment status
-	$sql_ary = array ();
-	$sql_ary [] = array ('setting' => 'Death Knight (Blood)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Death Knight (Frost)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Death Knight (Unholy)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Druid (Resto)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Druid (Feral)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Druid (Balance)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Hunter', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Priest (Shadow)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Priest (Holy)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Priest (Disc)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Rogue', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Shaman (Enh)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Shaman (Resto)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Shaman (Ele)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Warlock', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Mage', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Paladin (Holy)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Paladin (Ret)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Paladin (Prot)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Warrior (Tank)', 'value' => 'Closed' );
-	$sql_ary [] = array ('setting' => 'Warrior (DPS)', 'value' => 'Closed' );
-	$db->sql_multi_insert ( $table_prefix . 'bbdkp_indexpage', $sql_ary );
-	
+
 	// dkp system
 	unset ( $sql_ary );
 	$db->sql_query ( 'TRUNCATE TABLE ' . $table_prefix . 'bbdkp_dkpsystem' );
