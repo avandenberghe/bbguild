@@ -35,9 +35,9 @@ if (!file_exists($phpbb_root_path . 'umil/umil_auto.' . $phpEx))
     trigger_error('Please download the latest UMIL (Unified MOD Install Library) from: <a href="http://www.phpbb.com/mods/umil/">phpBB.com/mods/umil</a>', E_USER_ERROR);
 }
 
-if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
+if (!file_exists($phpbb_root_path . 'update/updatedkp.' . $phpEx))
 {
-    trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
+    trigger_error('Warning! Install directory has wrong name. it must be \'update\'. Please rename it and launch again.', E_USER_WARNING);
 }
 
 // The name of the mod to be displayed during installation.
@@ -913,11 +913,19 @@ $versions = array(
         	//show progressbar on block
         	array('bbdkp_bp_blockshowprogressbar', 1, true),
 	     ),
-				
-				
-			
+	     
 		),
 
+		'1.1.3'    => array(
+
+			'custom' => array( 
+				'tablerename', 
+				'bbdkp_caches'
+			),
+		
+		),
+		
+		
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
@@ -1419,7 +1427,6 @@ function gameupdate($action, $version)
 					}
 
 					break;
-	
 			}
 			break;
 			
@@ -1464,6 +1471,235 @@ function gameupdate($action, $version)
 		
 	 
 }
+
+/******************************
+ * 
+ *  table rename update calls 
+ * 
+ */
+function tablerename($action, $version)
+{
+	global $user, $config, $db, $table_prefix, $umil, $bbdkp_table_prefix; 
+	switch ($action)
+	{
+		case 'install' :
+		case 'update' :
+		
+			switch ($version)
+			{
+				case '1.1.3':
+					
+					$sql = "UPDATE  bbeqdkp_bb_language SET attribute_id = '10' where attribute='race' and attribute_id='9'" ;
+					$db->sql_query($sql);
+					// renaming tables
+					if ($umil->table_exists($bbdkp_table_prefix . 'adjustments'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'adjustments TO ' . $table_prefix . 'bbdkp_adjustments ';
+						$db->sql_query($sql);
+					}
+					if ($umil->table_exists($bbdkp_table_prefix . 'events'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'events TO ' . $table_prefix . 'bbdkp_events ';
+						$db->sql_query($sql);
+					}
+					if ($umil->table_exists($bbdkp_table_prefix . 'items'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'items TO ' . $table_prefix . 'bbdkp_items ';
+						$db->sql_query($sql);
+					}
+					if ($umil->table_exists($bbdkp_table_prefix . 'logs'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'logs TO ' . $table_prefix . 'bbdkp_logs ';
+						$db->sql_query($sql);
+					}										
+					if ($umil->table_exists($bbdkp_table_prefix . 'logs'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'logs TO ' . $table_prefix . 'bbdkp_logs ';
+						$db->sql_query($sql);
+					}										
+					if ($umil->table_exists($bbdkp_table_prefix . 'member_ranks'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'member_ranks TO ' . $table_prefix . 'bbdkp_member_ranks ';
+						$db->sql_query($sql);
+					}
+					if ($umil->table_exists($bbdkp_table_prefix . 'memberlist'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'memberlist TO ' . $table_prefix . 'bbdkp_memberlist ';
+						$db->sql_query($sql);
+					}
+					if ($umil->table_exists($bbdkp_table_prefix . 'memberdkp'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'memberdkp TO ' . $table_prefix . 'bbdkp_memberdkp ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists($bbdkp_table_prefix . 'news'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'news TO ' . $table_prefix . 'bbdkp_news ';
+						$db->sql_query($sql);
+					}			
+					if ($umil->table_exists($bbdkp_table_prefix . 'raid_attendees'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'raid_attendees TO ' . $table_prefix . 'bbdkp_raid_attendees ';
+						$db->sql_query($sql);
+					}			
+					if ($umil->table_exists($bbdkp_table_prefix . 'raids'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'raids TO ' . $table_prefix . 'bbdkp_raids ';
+						$db->sql_query($sql);
+					}																					
+					if ($umil->table_exists($bbdkp_table_prefix . 'classes'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'classes TO ' . $table_prefix . 'bbdkp_classes ';
+						$db->sql_query($sql);
+					}																					
+					if ($umil->table_exists($bbdkp_table_prefix . 'races'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'races TO ' . $table_prefix . 'bbdkp_races ';
+						$db->sql_query($sql);
+					}																					
+					if ($umil->table_exists($bbdkp_table_prefix . 'factions'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'factions TO ' . $table_prefix . 'bbdkp_factions ';
+						$db->sql_query($sql);
+					}																					
+					if ($umil->table_exists($bbdkp_table_prefix . 'dkpsystem'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'dkpsystem TO ' . $table_prefix . 'bbdkp_dkpsystem ';
+						$db->sql_query($sql);
+					}												
+					if ($umil->table_exists($bbdkp_table_prefix . 'plugins'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'plugins TO ' . $table_prefix . 'bbdkp_plugins ';
+						$db->sql_query($sql);
+					}												
+					if ($umil->table_exists($bbdkp_table_prefix . 'memberguild'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'memberguild TO ' . $table_prefix . 'bbdkp_memberguild ';
+						$db->sql_query($sql);
+					}												
+					if ($umil->table_exists($bbdkp_table_prefix . 'lootsystem'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'lootsystem TO ' . $table_prefix . 'bbdkp_lootsystem ';
+						$db->sql_query($sql);
+					}												
+					if ($umil->table_exists($bbdkp_table_prefix . 'bb_language'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'bb_language TO ' . $table_prefix . 'bbdkp_language ';
+						$db->sql_query($sql);
+					}						
+					
+					return array(
+					'command' => 'UMIL_RENAMETABLESNEW', 
+					'result' => 'SUCCESS');
+					
+					break;
+			}
+			break;
+			
+		case 'uninstall' :
+				// Run this when uninstalling
+				// renaming tables back to old
+					if ($umil->table_exists($table_prefix . 'adjustments '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_adjustments TO ' . $bbdkp_table_prefix . 'adjustments ';
+						$db->sql_query($sql);
+					}
+					if ($umil->table_exists( $table_prefix . 'bbdkp_events '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_events TO ' . $bbdkp_table_prefix . 'events ';
+						$db->sql_query($sql);
+					}
+					if ($umil->table_exists( $table_prefix . 'bbdkp_items '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_items TO ' . $bbdkp_table_prefix . 'items ';
+						$db->sql_query($sql);
+					}
+					if ($umil->table_exists( $table_prefix . 'bbdkp_logs '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_logs TO ' . $bbdkp_table_prefix . 'logs ';
+						$db->sql_query($sql);
+					}
+					if ($umil->table_exists( $table_prefix . 'bbdkp_member_ranks '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_member_ranks TO ' . $bbdkp_table_prefix . 'member_ranks ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists( $table_prefix . 'bbdkp_memberlist '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_memberlist TO ' . $bbdkp_table_prefix . 'memberlist ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists( $table_prefix . 'bbdkp_memberdkp '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_memberdkp TO ' . $bbdkp_table_prefix . 'memberdkp ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists( $table_prefix . 'bbdkp_news '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_news TO ' . $bbdkp_table_prefix . 'news ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists( $table_prefix . 'bbdkp_raid_attendees '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_raid_attendees TO ' . $bbdkp_table_prefix . 'raid_attendees ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists( $table_prefix . 'bbdkp_raids '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_raids TO ' . $bbdkp_table_prefix . 'raids ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists( $table_prefix . 'bbdkp_classes '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_classes TO ' . $bbdkp_table_prefix . 'classes ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists( $table_prefix . 'bbdkp_races '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_races TO ' . $bbdkp_table_prefix . 'races ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists( $table_prefix . 'bbdkp_factions '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_factions TO ' . $bbdkp_table_prefix . 'factions ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists( $table_prefix . 'bbdkp_dkpsystem '))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_dkpsystem TO ' . $bbdkp_table_prefix . 'dkpsystem ';
+						$db->sql_query($sql);
+					}					
+					if ($umil->table_exists( $table_prefix . 'bbdkp_plugins'))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_plugins TO ' . $bbdkp_table_prefix . 'plugins ';
+						$db->sql_query($sql);
+					}		
+					if ($umil->table_exists( $table_prefix . 'bbdkp_memberguild'))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_memberguild TO ' . $bbdkp_table_prefix . 'memberguild ';
+						$db->sql_query($sql);
+					}		
+					if ($umil->table_exists( $table_prefix . 'bbdkp_lootsystem'))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_lootsystem TO ' . $bbdkp_table_prefix . 'lootsystem ';
+						$db->sql_query($sql);
+					}							
+					if ($umil->table_exists( $table_prefix . 'bbdkp_language'))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_language TO ' . $bbdkp_table_prefix . 'bb_language ';
+						$db->sql_query($sql);
+					}						
+					
+					return array(
+					'command' => 'UMIL_RENAMETABLESOLD', 
+					'result' => 'SUCCESS');
+			break;
+	}
+		
+	 
+}
+
+
 
 
 
