@@ -37,7 +37,7 @@ if (!file_exists($phpbb_root_path . 'umil/umil_auto.' . $phpEx))
 
 if (!file_exists($phpbb_root_path . 'install/updatedkp.' . $phpEx))
 {
-    trigger_error('Warning! Install directory has wrong name. it must be \'update\'. Please rename it and launch again.', E_USER_WARNING);
+    trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
 }
 
 // The name of the mod to be displayed during installation.

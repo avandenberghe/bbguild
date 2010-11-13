@@ -41,9 +41,12 @@ if (!file_exists($phpbb_root_path . 'install/installdkp.' . $phpEx))
 }
 
 // check for dkp acp
+include($phpbb_root_path . 'umil/umil.' . $phpEx);
+$umil = new umil; 
 if ($umil->module_exists('acp', false, 'DKP'))
 {
-	   trigger_error('Warning! existing DKP ACP found, cannot proceed', E_USER_WARNING);
+     //bbDKP seems already installed, redirect to older umil updater
+     redirect($phpbb_root_path . '/install/updatedkp'. $phpEx); 
 }
 
 // The name of the mod to be displayed during installation.
@@ -90,31 +93,31 @@ $game = request_var('game', '');
 switch ($game)
 {
 		case 'aion':
-			include($phpbb_root_path .'install/games/install_aion.' . $phpEx);
+			include($phpbb_root_path .'install/gamesinstall/install_aion.' . $phpEx);
 			break;
     	case 'daoc':
-			include($phpbb_root_path .'install/games/install_daoc.' . $phpEx);
+			include($phpbb_root_path .'install/gamesinstall/install_daoc.' . $phpEx);
 			break; 
 		case 'eq':
-			include($phpbb_root_path .'install/games/install_eq.' . $phpEx);
+			include($phpbb_root_path .'install/gamesinstall/install_eq.' . $phpEx);
 			break; 
 		case 'eq2':
-			include($phpbb_root_path .'install/games/install_eq2.' . $phpEx);
+			include($phpbb_root_path .'install/gamesinstall/install_eq2.' . $phpEx);
 			break; 
 		case 'FFXI':
-			include($phpbb_root_path .'install/games/install_ffxi.' . $phpEx);
+			include($phpbb_root_path .'install/gamesinstall/install_ffxi.' . $phpEx);
 			break; 
 		case 'lotro':
-			include($phpbb_root_path .'install/games/install_lotro.' . $phpEx);
+			include($phpbb_root_path .'install/gamesinstall/install_lotro.' . $phpEx);
 			break;
 		case 'vanguard':
-			include($phpbb_root_path .'install/games/install_vanguard.' . $phpEx);
+			include($phpbb_root_path .'install/gamesinstall/install_vanguard.' . $phpEx);
 			break; 
 		case 'warhammer':
-			include($phpbb_root_path .'install/games/install_warhammer.' . $phpEx);
+			include($phpbb_root_path .'install/gamesinstall/install_warhammer.' . $phpEx);
 			break; 
 		case 'wow':				    
-			include($phpbb_root_path .'install/games/install_wow.' . $phpEx);
+			include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
 			break;
 		default :
 			break; 
@@ -468,7 +471,7 @@ $versions = array(
        'table_row_insert'	=> array(
 
        // we insert a dummy guild (None) for guildless people and also the default guild
-         array($table_prefix .'bbdk_memberguild',
+         array($table_prefix .'bbdkp_memberguild',
            array(
            		  // guildless -> do show on roster
                   array('id'  => 0,
