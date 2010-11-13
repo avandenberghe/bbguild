@@ -860,47 +860,53 @@ function gameinstall($action, $version)
 {
 	global $table_prefix; 
 	$game = request_var('game', '');
-	switch ($game)
+	switch ($action)
 	{
-		case 'aion':
-			install_aion();
-			return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
+		case 'install' :
+		case 'update' :
+			switch ($game)
+			{
+				case 'aion':
+					install_aion();
+					return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
+					break;
+				case 'daoc':
+					install_daoc();
+		     		return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
+					break;
+				case 'eq':
+					install_eq();
+		     		return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
+					break;
+				case 'eq2':
+					install_eq2();
+		     		return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
+					break;
+				case 'FFXI':
+					install_ffxi();
+		     		return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
+					break;
+				case 'lotro':
+					install_lotro();
+		     		return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
+					break;
+				case 'vanguard':
+					install_vanguard();
+		     		return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
+					break;
+				case 'wow':
+					install_wow();
+					return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
+					break;
+				case 'warhammer':
+					install_warhammer();
+					return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
+					break;
+				default :
+					break;
+			}  
 			break;
-		case 'daoc':
-			install_daoc();
-     		return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
-			break;
-		case 'eq':
-			install_eq();
-     		return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
-			break;
-		case 'eq2':
-			install_eq2();
-     		return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
-			break;
-		case 'FFXI':
-			install_ffxi();
-     		return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
-			break;
-		case 'lotro':
-			install_lotro();
-     		return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
-			break;
-		case 'vanguard':
-			install_vanguard();
-     		return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
-			break;
-		case 'wow':
-			install_wow();
-			return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
-			break;
-		case 'warhammer':
-			install_warhammer();
-			return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
-			break;
-		default :
-			break;
-	}  
+	}
 					
 }
 

@@ -25,7 +25,7 @@ function install_aion()
     $sql_ary = array();
     // class general
     // sub classes, excluding the original 4 classes, which are irrelevant endgame 
-    $sql_ary[] = array('class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55 );
+    $sql_ary[] = array('class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Unknown_small' );
     $sql_ary[] = array('class_id' => 1, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Spiritmaster_small' );
     $sql_ary[] = array('class_id' => 2, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Sorcerer_small' );
     $sql_ary[] = array('class_id' => 3, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Assassin_small' );
