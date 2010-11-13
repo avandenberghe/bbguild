@@ -31,37 +31,32 @@ define('URI_RAID',       'raid');
 define('URI_GUILD',       'guild');  	 
 define('USER_LLIMIT', 40);  // LOG LIMIT
 
-$bbdkp_table_prefixx = 'bbeqdkp_';
-
 // TABLE DEFINITIONS
-define('ITEMCACHE_TABLE',	       $bbdkp_table_prefixx . 'item_cache');
-define('ADJUSTMENTS_TABLE',        $bbdkp_table_prefixx . 'adjustments'); 	 
-define('EVENTS_TABLE',             $bbdkp_table_prefixx . 'events'); 	 
-define('ITEMS_TABLE',              $bbdkp_table_prefixx . 'items'); 	 
-define('LOGS_TABLE',               $bbdkp_table_prefixx . 'logs'); 	 
-define('MEMBER_RANKS_TABLE',       $bbdkp_table_prefixx . 'member_ranks');
-define('OLD_CONFIG_TABLE',         $bbdkp_table_prefixx . 'config');
-define('MEMBER_LIST_TABLE',        $bbdkp_table_prefixx . 'memberlist'); 	
-define('MEMBER_DKP_TABLE',         $bbdkp_table_prefixx . 'memberdkp');  
-define('NEWS_TABLE',               $bbdkp_table_prefixx . 'news'); 	 
-define('RAID_ATTENDEES_TABLE',     $bbdkp_table_prefixx . 'raid_attendees'); 	 
-define('RAIDS_TABLE',              $bbdkp_table_prefixx . 'raids'); 	 
-define('CLASS_TABLE',              $bbdkp_table_prefixx . 'classes'); 	 
-define('RACE_TABLE',               $bbdkp_table_prefixx . 'races'); 	 
-define('FACTION_TABLE',            $bbdkp_table_prefixx . 'factions'); 
-define('DKPSYS_TABLE',     		   $bbdkp_table_prefixx . 'dkpsystem');
-define('PLUGINS_TABLE',	           $bbdkp_table_prefixx . 'plugins');
-define('GUILD_TABLE',	           $bbdkp_table_prefixx . 'memberguild');
-define('LOOTSYS_TABLE',	           $bbdkp_table_prefixx . 'lootsystem');
-define('BB_LANGUAGE',	           $bbdkp_table_prefixx . 'bb_language');
+define('ADJUSTMENTS_TABLE',        $table_prefix . 'bbdkp_adjustments'); 	 
+define('EVENTS_TABLE',             $table_prefix . 'bbdkp_events'); 	 
+define('ITEMS_TABLE',              $table_prefix . 'bbdkp_items'); 	 
+define('LOGS_TABLE',               $table_prefix . 'bbdkp_logs'); 	 
+define('MEMBER_RANKS_TABLE',       $table_prefix . 'bbdkp_member_ranks');
+define('MEMBER_LIST_TABLE',        $table_prefix . 'bbdkp_memberlist'); 	
+define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_memberdkp');  
+define('NEWS_TABLE',               $table_prefix . 'bbdkp_news'); 	 
+define('RAID_ATTENDEES_TABLE',     $table_prefix . 'bbdkp_raid_attendees'); 	 
+define('RAIDS_TABLE',              $table_prefix . 'bbdkp_raids'); 	 
+define('CLASS_TABLE',              $table_prefix . 'bbdkp_classes'); 	 
+define('RACE_TABLE',               $table_prefix . 'bbdkp_races'); 	 
+define('FACTION_TABLE',            $table_prefix . 'bbdkp_factions'); 
+define('DKPSYS_TABLE',     		   $table_prefix . 'bbdkp_dkpsystem');
+define('PLUGINS_TABLE',	           $table_prefix . 'bbdkp_plugins');
+define('GUILD_TABLE',	           $table_prefix . 'bbdkp_memberguild');
+define('LOOTSYS_TABLE',	           $table_prefix . 'bbdkp_lootsystem');
+define('BB_LANGUAGE',	           $table_prefix . 'bbdkp_language');
+define('BOSSBASE',          	   $table_prefix . 'bbdkp_bosstable'); 	 
+define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable'); 
 
 // plugin anchors
 
-// BOSSPROGRESS
-define('BOSSBASE',          	$bbdkp_table_prefixx . 'bb_bosstable'); 	 
-define('ZONEBASE',         		$bbdkp_table_prefixx . 'bb_zonetable'); 
-
 // RAIDTRACKER
+
 
 // BBTIPS
 
