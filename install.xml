@@ -7,7 +7,7 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.1.2.2]]></title>
+		<title lang="en"><![CDATA[bbDKP 1.1.3]]></title>
 		<description lang="en"><![CDATA[bbDKP is a PHPBB3-based DKP solution, evolved from EQDKP to help guilds in MMORPGs (Massive(ly) Multiplayer Online Role-playing Games) track guild members attendance, item purchases and other statistics. It updates and brings together the Dkp/game managment facilites of EQdkp, and integrates them with phpBB3's facilites. This means your users gain single sign on to dkp and phpbb, and you as an administrator or raidleader gain a clean interface, robust admin facilities and less integration headaches. 
 		Games supported : Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, Wow. 
 		Features : Multiple Dkp Pools and guilds, DKP Standings, Raids, Events, Item values, Item history, Raid Stats, Bossprogress, Roster, backup, import from eqdkp+. 
@@ -128,7 +128,7 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.1.2.2</mod-version>
+		<mod-version>1.1.3</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
@@ -168,11 +168,6 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
-			<file from="root/images/icons/*.*" to="images/icons/*.*"/>
-			<file from="root/images/bbdkp.png" to="images/bbdkp.png"/>
-			<file from="root/images/progressbar/*.*" to="images/progressbar/*.*" />  
-			<file from="root/images/recruitblock_images/*.*" to="images/recruitblock_images/*.*" />   
-			<file from="root/images/tooltip/*.*" to="images/tooltip/*.*" />  			
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/includes/bbdkp/portal/*.*" to="includes/bbdkp/portal/*.*"/>
@@ -358,7 +353,7 @@ function pop_search()
 				<action type="before-add"><![CDATA[<!-- ENDIF -->]]></action>
 			</edit>
 		</open>
-		<php-installer><![CDATA[install/index.php]]></php-installer>
+		<php-installer><![CDATA[install/installdkp.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /contrib/readme/install.html
 What has changed ? see here : /contrib/readme/changelog.html
 
@@ -366,15 +361,11 @@ Post-install instructions :
 
 1) copy the image folders to /images manually. 
 Automod cannot handle it as it would lead to a timeout due to the size (19mb) ! 
-<file from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" />   
-<file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" />   
-<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  
-<file from="root/images/class_images/*.*" to="images/class_images/*.*" /> 
+<file from="root/images/*.*" to="images/*.*" />   
 ------------------------------------------------------------------------------
 2) Run database installer 
-Browse to install/index.php and run the bbDKP 1.1.2 installer/updater.  
-This will either do a full install or an update from 1.0.8, 1.0.9rc1, 1.1.0 or 1.1.2 of the ACP modules and database tables.  
-Afterwards the caches will be cleared (template, theme, imagesets).
+For a new install/installdkp.php and run the bbDKP 1.1.3 installer
+For update browse to install/updatedkp.php
 ------------------------------------------------------------------------------
 3) Finish 
 Finally rename the install folder. 
@@ -390,14 +381,11 @@ Résumé des étapes de post-installation
 
 1) Copier ces fichiers vers le repertoire /images  
 En raison de la taille de ces répertoires (±20mb), Automod ne sait pas les copier du au timeout. 
-<file from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" />   
-<file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" />   
-<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  
-<file from="root/images/class_images/*.*" to="images/class_images/*.*" /> 
+<file from="root/images/*.*" to="images/*.*" />   
 ------------------------------------------------------------------------------
 2) lancer l’installateur
-Surfez vers install/index.php et lancez l’installateur bbDKP 1.1.2  
-Ceci effectue soit une mise à jour ou bien une m.a.j de 1.0.8, 1.0.9rc1, 1.1.0, ou 1.1.1 à 1.1.2 de la base de données.  Aussi, les caches seront vidées. 
+Pour un nouvelle installation 1.1.3 : demarrez install/installdkp.php 
+Pour une mise à jour vers 1.1.3 :  : demarrez install/updatedkp.php 
 ------------------------------------------------------------------------------
 3) Fin
 Rennomer le repertoire /install pour réactiver le forum.
@@ -411,14 +399,11 @@ Liste der änderungen : /contrib/readme/changelog.html
 
 1) Kopiere diese Dateien zum Verzeichnis /images  
 Aus Berücksichtigung der grösse der Verzeichnisse (±20mb), kann Automod dies nicht kopieren wegen Timeout. 
-<file from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" />   
-<file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" />   
-<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" />  
-<file from="root/images/class_images/*.*" to="images/class_images/*.*" /> 
+<file from="root/images/*.*" to="images/*.*" />   
 ------------------------------------------------------------------------------
 2) Datenbank Installation
-Rufe install/index.php auf und führe den Installer aus. Dies macht entweder eine Vollinstallation 
-oder eine Aktualisierung von Version 1.0.8, 1.0.9rc1, 1.1.0, oder 1.1.1 bis zu 1.1.2.  
+Für eine Neuinstallation 1.1.3 : install/installdkp.php 
+Für aktualisierung bis auf 1.1.3 : install/updatedkp.php 
 ------------------------------------------------------------------------------
 3) Ende
 lösche, verschiebe oder benenne das Installations-Verzeichnis „install" damit das Forum wieder zugänglich wird.
