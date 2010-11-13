@@ -724,7 +724,7 @@ $versions = array(
           ),        
             
         'custom' => array( 
-            'gamesinstall',
+            'gameinstall',
             'acplink', 
        ), 
     ),

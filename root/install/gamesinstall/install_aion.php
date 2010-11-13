@@ -54,17 +54,17 @@ function install_aion()
     $sql_ary[] = array('role_id' => 3, 'role_name' => 'Caster DPS' );
     $sql_ary[] = array('role_id' => 4, 'role_name' => 'Melee DPS' );
 	$sql_ary[] = array('role_id' => 5, 'role_name' => 'Off Tank' );      
-    $sql_ary[] = array('role_id' => 5, 'role_name' => 'Tank' );        
+    $sql_ary[] = array('role_id' => 6, 'role_name' => 'Tank' );        
     $db->sql_multi_insert( $table_prefix . 'bbdkp_roles', $sql_ary);
     unset ($sql_ary); 
     
     // races (No races, only factions, dummy value)
     $db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
     $sql_ary = array();
-    $sql_ary[] = array('race_id' => 1, 'race_name' => 'Elyos' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 2, 'race_name' => 'Asmodian' , 'race_faction_id' => 2 );
+    $sql_ary[] = array('race_id' => 1, 'race_faction_id' => 1 );
+    $sql_ary[] = array('race_id' => 2, 'race_faction_id' => 2 );
     // balaur race is non playable but we add them anyway
-    $sql_ary[] = array('race_id' => 3, 'race_name' => 'Balaur' , 'race_faction_id' => 3 );
+    $sql_ary[] = array('race_id' => 3, 'race_faction_id' => 3 );
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 	unset ($sql_ary);	
 

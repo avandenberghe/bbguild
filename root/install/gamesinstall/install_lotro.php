@@ -49,10 +49,10 @@ function install_lotro()
       // races
     $db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
     $sql_ary = array();
-    $sql_ary[] = array('race_id' => 1, 'race_name' => 'Man' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 2, 'race_name' => 'Hobbit' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 3, 'race_name' => 'Elf' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 4, 'race_name' => 'Dwarf' , 'race_faction_id' => 1 );
+    $sql_ary[] = array('race_id' => 1, 'race_faction_id' => 1 ); //Man
+    $sql_ary[] = array('race_id' => 2, 'race_faction_id' => 1 ); //Hobbit
+    $sql_ary[] = array('race_id' => 3, 'race_faction_id' => 1 ); //Elf
+    $sql_ary[] = array('race_id' => 4, 'race_faction_id' => 1 ); //Dwarf
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
     unset ($sql_ary); 
     

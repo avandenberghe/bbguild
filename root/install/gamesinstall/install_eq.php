@@ -67,23 +67,23 @@ function install_eq()
     // Everquest races
     $db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
     $sql_ary = array();
-    $sql_ary[] = array('race_id' => 0, 'race_name' => 'Unknown' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 1, 'race_name' => 'Gnome' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 2, 'race_name' => 'Human' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 3, 'race_name' => 'Barbarian' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 4, 'race_name' => 'Dwarf' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 5, 'race_name' => 'High Elf' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 6, 'race_name' => 'Half Elf' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 7, 'race_name' => 'Dark Elf' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 8, 'race_name' => 'Wood Elf' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 9, 'race_name' => 'Vah Shir' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 10, 'race_name' => 'Troll' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 11, 'race_name' => 'Ogre' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 12, 'race_name' => 'Froglok' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 13, 'race_name' => 'Iksar' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 14, 'race_name' => 'Erudite' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 15, 'race_name' => 'Halfling' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 16, 'race_name' => 'Drakkin' , 'race_faction_id' => 3 );
+    $sql_ary[] = array('race_id' => 0, 'race_faction_id' => 2 ); //Unknown
+    $sql_ary[] = array('race_id' => 1, 'race_faction_id' => 3 ); //Gnome
+    $sql_ary[] = array('race_id' => 2, 'race_faction_id' => 3 ); //Human
+    $sql_ary[] = array('race_id' => 3, 'race_faction_id' => 1 ); //Barbarian
+    $sql_ary[] = array('race_id' => 4, 'race_faction_id' => 1 ); //Dwarf
+    $sql_ary[] = array('race_id' => 5, 'race_faction_id' => 1 ); //High Elf
+    $sql_ary[] = array('race_id' => 6, 'race_faction_id' => 3 ); //Half Elf
+    $sql_ary[] = array('race_id' => 7, 'race_faction_id' => 2 ); //Dark Elf
+    $sql_ary[] = array('race_id' => 8, 'race_faction_id' => 1 ); //Wood Elf'
+    $sql_ary[] = array('race_id' => 9, 'race_faction_id' => 3 ); //Vah Shir
+    $sql_ary[] = array('race_id' => 10, 'race_faction_id' => 2 ); //Troll
+    $sql_ary[] = array('race_id' => 11, 'race_faction_id' => 2 ); //Ogre
+    $sql_ary[] = array('race_id' => 12, 'race_faction_id' => 3 ); //Froglok
+    $sql_ary[] = array('race_id' => 13, 'race_faction_id' => 2 ); //Iksar
+    $sql_ary[] = array('race_id' => 14, 'race_faction_id' => 3 ); //Erudite
+    $sql_ary[] = array('race_id' => 15, 'race_faction_id' => 1 ); //Halfling
+    $sql_ary[] = array('race_id' => 16, 'race_faction_id' => 3 ); //Drakkin
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
     unset ($sql_ary); 
    

@@ -62,12 +62,12 @@ function install_ffxi()
     // races
     $db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
     $sql_ary = array();
-    $sql_ary[] = array('race_id' => 1, 'race_name' => 'Unknown' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 2, 'race_name' => 'Galka' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 3, 'race_name' => 'Hume' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 4, 'race_name' => 'Elvaan' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 5, 'race_name' => 'Tarutaru' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 6, 'race_name' => 'Mithra' , 'race_faction_id' => 3 );
+    $sql_ary[] = array('race_id' => 1, 'race_faction_id' => 3 ); //Unknown
+    $sql_ary[] = array('race_id' => 2, 'race_faction_id' => 1 ); //Galka
+    $sql_ary[] = array('race_id' => 3, 'race_faction_id' => 1 ); //Hume
+    $sql_ary[] = array('race_id' => 4, 'race_faction_id' => 2 ); ///Elvaan
+    $sql_ary[] = array('race_id' => 5, 'race_faction_id' => 3 ); //Tarutaru
+    $sql_ary[] = array('race_id' => 6, 'race_faction_id' => 3 ); //Mithra
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 
     // dkp system  set to default

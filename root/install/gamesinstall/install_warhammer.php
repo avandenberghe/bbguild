@@ -58,13 +58,13 @@ function install_warhammer()
     unset ($sql_ary);
     $db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
     $sql_ary = array();
-    $sql_ary[] = array('race_id' => 0, 'race_name' => 'Unknown' , 'race_faction_id' => 0 );
-    $sql_ary[] = array('race_id' => 1, 'race_name' => 'Dwarf' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 2, 'race_name' => 'The Empire' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 3, 'race_name' => 'High Elves' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 4, 'race_name' => 'Dark Elves' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 5, 'race_name' => 'Chaos' , 'race_factio<n_id' => 2 );
-    $sql_ary[] = array('race_id' => 6, 'race_name' => 'Greenskins' , 'race_faction_id' => 2 );
+    $sql_ary[] = array('race_id' => 0, 'race_faction_id' => 0 ); //Unknown
+    $sql_ary[] = array('race_id' => 1, 'race_faction_id' => 1 ); //Dwarf
+    $sql_ary[] = array('race_id' => 2, 'race_faction_id' => 1 ); //The Empire'
+    $sql_ary[] = array('race_id' => 3, 'race_faction_id' => 1 );//High Elves
+    $sql_ary[] = array('race_id' => 4, 'race_faction_id' => 2 ); //Dark Elves
+    $sql_ary[] = array('race_id' => 5, 'race_faction_id' => 2 ); // Chaos
+    $sql_ary[] = array('race_id' => 6, 'race_faction_id' => 2 ); //Greenskins
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 
 	// dkp system 

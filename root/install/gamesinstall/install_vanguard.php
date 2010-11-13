@@ -55,25 +55,25 @@ function install_vanguard()
     // races
     $db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
     $sql_ary = array();
-    $sql_ary[] = array('race_id' => 1, 'race_name' => 'Thestran Human' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 2, 'race_name' => 'Dwarf' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 3, 'race_name' => 'Halfling' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 4, 'race_name' => 'High Elf' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 5, 'race_name' => 'Vulmane' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 6, 'race_name' => 'Varanjar' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 7, 'race_name' => 'Lesser Giant' , 'race_faction_id' => 1 );
-    $sql_ary[] = array('race_id' => 8, 'race_name' => 'Kojani Human' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 9, 'race_name' => 'Wood Elf' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 10, 'race_name' => 'Half Elf' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 11, 'race_name' => 'Orc' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 12, 'race_name' => 'Goblin' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 13, 'race_name' => 'Raki' , 'race_faction_id' => 2 );
-    $sql_ary[] = array('race_id' => 14, 'race_name' => 'Qaliathar' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 15, 'race_name' => 'Gnome' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 16, 'race_name' => 'Dark Elf' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 17, 'race_name' => 'Kurashasa' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 18, 'race_name' => 'Mordebi Human' , 'race_faction_id' => 3 );
-    $sql_ary[] = array('race_id' => 19, 'race_name' => 'Varanthari' , 'race_faction_id' => 3 );
+    $sql_ary[] = array('race_id' => 1, 'race_faction_id' => 1 ); //Thestran Human
+    $sql_ary[] = array('race_id' => 2, 'race_faction_id' => 1 ); //Dwarf
+    $sql_ary[] = array('race_id' => 3, 'race_faction_id' => 1 ); //Halfling
+    $sql_ary[] = array('race_id' => 4, 'race_faction_id' => 1 ); //High Elf
+    $sql_ary[] = array('race_id' => 5, 'race_faction_id' => 1 ); ///Vulmane
+    $sql_ary[] = array('race_id' => 6, 'race_faction_id' => 1 ); //Varanjar
+    $sql_ary[] = array('race_id' => 7, 'race_faction_id' => 1 ); //Lesser Giant
+    $sql_ary[] = array('race_id' => 8, 'race_faction_id' => 2 ); //Kojani Human
+    $sql_ary[] = array('race_id' => 9, 'race_faction_id' => 2 ); //Wood Elf
+    $sql_ary[] = array('race_id' => 10, 'race_faction_id' => 2 ); //Half Elf
+    $sql_ary[] = array('race_id' => 11, 'race_faction_id' => 2 ); //Orc
+    $sql_ary[] = array('race_id' => 12, 'race_faction_id' => 2 ); //Goblin
+    $sql_ary[] = array('race_id' => 13, 'race_faction_id' => 2 ); //Raki
+    $sql_ary[] = array('race_id' => 14, 'race_faction_id' => 3 ); //Qaliathar
+    $sql_ary[] = array('race_id' => 15, 'race_faction_id' => 3 ); //Gnome
+    $sql_ary[] = array('race_id' => 16, 'race_faction_id' => 3 ); //Dark Elf
+    $sql_ary[] = array('race_id' => 17, 'race_faction_id' => 3 ); //Kurashasa
+    $sql_ary[] = array('race_id' => 18, 'race_faction_id' => 3 ); //Mordebi Human
+    $sql_ary[] = array('race_id' => 19, 'race_faction_id' => 3 ); //Varanthari
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 
     // dkp system bbeqdkp_dkpsystem 

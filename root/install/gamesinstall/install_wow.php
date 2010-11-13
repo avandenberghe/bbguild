@@ -49,17 +49,17 @@ function install_wow()
 	// races
 	$db->sql_query ('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
 	$sql_ary = array ();
-	$sql_ary [] = array ('race_id' => 0, 'race_name' => 'Unknown', 'race_faction_id' => 0 );
-	$sql_ary [] = array ('race_id' => 1, 'race_name' => 'Human', 'race_faction_id' => 1 );
-	$sql_ary [] = array ('race_id' => 2, 'race_name' => 'Orc', 'race_faction_id' => 2 );
-	$sql_ary [] = array ('race_id' => 3, 'race_name' => 'Dwarf', 'race_faction_id' => 1 );
-	$sql_ary [] = array ('race_id' => 4, 'race_name' => 'Night Elf', 'race_faction_id' => 1 );
-	$sql_ary [] = array ('race_id' => 5, 'race_name' => 'Undead', 'race_faction_id' => 2 );
-	$sql_ary [] = array ('race_id' => 6, 'race_name' => 'Tauren', 'race_faction_id' => 2 );
-	$sql_ary [] = array ('race_id' => 7, 'race_name' => 'Gnome', 'race_faction_id' => 1 );
-	$sql_ary [] = array ('race_id' => 8, 'race_name' => 'Troll', 'race_faction_id' => 2 );
-	$sql_ary [] = array ('race_id' => 10, 'race_name' => 'Blood Elf', 'race_faction_id' => 2 );
-	$sql_ary [] = array ('race_id' => 11, 'race_name' => 'Draenei', 'race_faction_id' => 1 );
+	$sql_ary [] = array ('race_id' => 0, 'race_faction_id' => 0 ); //Unknown
+	$sql_ary [] = array ('race_id' => 1, 'race_faction_id' => 1 ); //Human
+	$sql_ary [] = array ('race_id' => 2, 'race_faction_id' => 2 ); //Orc
+	$sql_ary [] = array ('race_id' => 3, 'race_faction_id' => 1 ); //Dwarf
+	$sql_ary [] = array ('race_id' => 4, 'race_faction_id' => 1 ) ; //Night Elf
+	$sql_ary [] = array ('race_id' => 5, 'race_faction_id' => 2 ); //Undead
+	$sql_ary [] = array ('race_id' => 6, 'race_faction_id' => 2 ); // Tauren
+	$sql_ary [] = array ('race_id' => 7, 'race_faction_id' => 1 );// Gnome
+	$sql_ary [] = array ('race_id' => 8, 'race_faction_id' => 2 );// Troll
+	$sql_ary [] = array ('race_id' => 10, 'race_faction_id' => 2 ); //Blood Elf'
+	$sql_ary [] = array ('race_id' => 11, 'race_faction_id' => 1 ); //Draenei
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 	
 	unset ( $sql_ary );
@@ -1440,7 +1440,7 @@ function install_wow()
 	$sql_ary[] = array( 'id' => 1005 , 'attribute_id' => 274, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Halion (25HM)' ,  'name_short' =>  'Halion (25HM)' );
 			
 
-	$db->sql_multi_insert ( $table_prefix . 'bb_language', $sql_ary );
+	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 }
 ?>
