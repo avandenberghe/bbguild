@@ -95,31 +95,31 @@ $game = request_var('game', '');
 switch ($game)
 {
 		case 'aion':
-			include($phpbb_root_path .'install/games/install_aion.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/install_aion.' . $phpEx);
 			break;
     	case 'daoc':
-			include($phpbb_root_path .'install/games/install_daoc.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/install_daoc.' . $phpEx);
 			break; 
 		case 'eq':
-			include($phpbb_root_path .'install/games/install_eq.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/install_eq.' . $phpEx);
 			break; 
 		case 'eq2':
-			include($phpbb_root_path .'install/games/install_eq2.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/install_eq2.' . $phpEx);
 			break; 
 		case 'FFXI':
-			include($phpbb_root_path .'install/games/install_ffxi.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/install_ffxi.' . $phpEx);
 			break; 
 		case 'lotro':
-			include($phpbb_root_path .'install/games/install_lotro.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/install_lotro.' . $phpEx);
 			break;
 		case 'vanguard':
-			include($phpbb_root_path .'install/games/install_vanguard.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/install_vanguard.' . $phpEx);
 			break; 
 		case 'warhammer':
-			include($phpbb_root_path .'install/games/install_warhammer.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/install_warhammer.' . $phpEx);
 			break; 
 		case 'wow':				    
-			include($phpbb_root_path .'install/games/install_wow.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/install_wow.' . $phpEx);
 			break;
 		default :
 			break; 
