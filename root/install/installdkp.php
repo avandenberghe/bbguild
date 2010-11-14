@@ -868,44 +868,53 @@ function gameinstall($action, $version)
 			{
 				case 'aion':
 					install_aion();
+					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 					return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
 					break;
 				case 'daoc':
 					install_daoc();
+					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
 					break;
 				case 'eq':
 					install_eq();
+					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
 					break;
 				case 'eq2':
 					install_eq2();
+					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
 					break;
 				case 'FFXI':
 					install_ffxi();
+					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
 					break;
 				case 'lotro':
 					install_lotro();
+					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
 					break;
 				case 'vanguard':
 					install_vanguard();
+					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
 					break;
 				case 'wow':
 					install_wow();
+					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 					return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
 					break;
 				case 'warhammer':
 					install_warhammer();
+					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 					return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
 					break;
 				default :
 					break;
 			}
-			$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
+			
 			 
 			break;
 	}
