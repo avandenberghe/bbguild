@@ -748,7 +748,6 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 						$data= array(
 							'sequence' => $sequence[$key],
 							'completed' => isset ( $_POST ['zonecompleted'][$key] ) ? 1 : 0,		
-							'webid' => $newzonewebids[$key],
 							'showzone' => isset ( $_POST ['showzone'][$key] ) ? 1 : 0,
 							'showzoneportal' => isset ( $_POST ['showzoneportal'][$key] ) ? 1 : 0,
 						);
@@ -766,7 +765,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 					//
 					//delete a zone
 					//
-					$id = request_var('id', ''); 
+					$id = request_var('id', 0); 
 					if (confirm_box(true))
 					{
 						$sql = 'DELETE FROM ' . ZONEBASE . ' WHERE id = ' . $id;  

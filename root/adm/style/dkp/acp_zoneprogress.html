@@ -117,14 +117,13 @@
 
 	<thead>
 		<tr>
-			<th align="left" width="30" style="white-space: nowrap;">{L_ZONE_NAME}</th>
-			<th align="left" width="20" style="white-space: nowrap;">{L_ZONE_NAME_SHORT}</th>
-			<th align="left" width="15" style="text-align: center">{L_ZONE_WEBLINK}</th>
-			<th align="center" width="40" style="text-align: center">{L_ZONE_COMPLETED}</th>
+			<th align="left" width="40" style="white-space: nowrap;">{L_ZONE_NAME}</th>
+			<th align="left" width="30" style="text-align: center">{L_ZONE_WEBLINK}</th>
+			<th align="center" width="20" style="text-align: center">{L_ZONE_COMPLETED}</th>
 			<th align="center" width="20" style="white-space: nowrap; text-align: center;">{L_SHOW_ZONE}</th>
 			<th align="center" width="20"  style="white-space: normal; text-align: center;">{L_SHOW_ZONE_PORTAL}</th>
-			<th align="center" width="5" style="text-align: center">{L_ZONE_SEQUENCE}</th>
-			<th align="center" width="5" style="text-align: center">{L_OPTIONS}</th>
+			<th align="center" width="10" style="text-align: center">{L_ZONE_SEQUENCE}</th>
+			<th align="center" width="10" style="text-align: center">{L_OPTIONS}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -138,18 +137,17 @@
 			<!-- ENDIF -->
 			<input type="hidden" name="zoneid[{gamezone.ZONE_ID}]"  value="{gamezone.ZONE_ID}" />
 			<input type="hidden" name="zonesequence[{gamezone.ZONE_ID}]"  value="{gamezone.ZONE_SEQUENCE}" />
-			<td width="30" style="white-space: nowrap;"><input class="text post" type="text" size="30" name="zonename[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_NAME}" />  </td>
-			<td width="40" ><input class="text post" type="text" size="10" name="zonenameshort[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_NAME_SHORT}" />    </td>
-			<td width="15" style="white-space: nowrap;"><a href="{gamezone.ZONE_URL}">{gamezone.ZONE_NAME_SHORT}</a></td>
-			<td width="10" style=" white-space: nowrap; text-align: center"><input type="checkbox" name="zonecompleted[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_COMPLETED} /> </td>
-			<td width="5" style="white-space: nowrap; text-align: center">
+			<td width="40" style="white-space: nowrap;">{gamezone.ZONE_NAME}</td>
+			<td width="30" style="white-space: nowrap;"><a href="{gamezone.ZONE_URL}">{gamezone.ZONE_NAME_SHORT}</a></td>
+			<td width="20" style=" white-space: nowrap; text-align: center"><input type="checkbox" name="zonecompleted[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_COMPLETED} /> </td>
+			<td width="20" style="white-space: nowrap; text-align: center">
 				<input type="checkbox" name="showzone[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_SHOW} />
 			</td>
-			<td width="5" style="white-space: nowrap; text-align: center">
+			<td width="10" style="white-space: nowrap; text-align: center">
 				<input type="checkbox" name="showzoneportal[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_SHOW_PORTAL} />
 			</td>
 
-			<td width="5" style="white-space: nowrap;  text-align: center">
+			<td width="10" style="white-space: nowrap;  text-align: center">
 				<!-- IF gamezone.S_FIRST_ROW and not PREVIOUS_PAGE -->{ICON_MOVE_UP_DISABLED}<!-- ELSE --><a href="{gamezone.U_MOVE_UP}">{ICON_MOVE_UP}</a><!-- ENDIF -->&nbsp;
 				<!-- IF gamezone.S_LAST_ROW and not NEXT_PAGE -->{ICON_MOVE_DOWN_DISABLED}<!-- ELSE --><a href="{gamezone.U_MOVE_DOWN}">{ICON_MOVE_DOWN}</a><!-- ENDIF -->
 			</td>
