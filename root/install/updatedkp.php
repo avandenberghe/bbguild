@@ -917,7 +917,10 @@ $versions = array(
 		),
 
 		'1.1.3'    => array(
-		
+		/*
+		 * 
+		 * 
+		 */
 		
 			// module adding
          	'module_add' => array(
@@ -1439,7 +1442,20 @@ function gameupdate($action, $version)
 					break;
 				
 				case '1.1.3':	
-				
+					$game = request_var('game', '');
+					switch ($game)
+					{
+						case 'wow':
+							$sql = 'UPDATE  ' . $bbdkp_table_prefix . "bb_language  SET attribute_id = '10' where attribute='race' and attribute_id='9'" ;
+							$db->sql_query($sql);
+						break;
+					}
+						
+					// this table serves no purpose.
+					if ($umil->table_exists($bbdkp_table_prefix . 'roles'))
+					{
+						$umil->table_remove($bbdkp_table_prefix . 'roles');
+					}
 					break;
 				
 			}
@@ -1476,8 +1492,7 @@ function gameupdate($action, $version)
 			{
 				$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_CONFIG');
 			}
-					
-			
+				
 			return array(
 					'command' => 'UMIL_REMOVE_GAME_ROW', 
 					'result' => 'SUCCESS');
@@ -1599,11 +1614,14 @@ function tablerename($action, $version)
 						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'lootsystem TO ' . $table_prefix . 'bbdkp_lootsystem ';
 						$db->sql_query($sql);
 					}												
+					if ($umil->table_exists($bbdkp_table_prefix . 'transactions'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'transactions TO ' . $table_prefix . 'bbdkp_transactions ';
+						$db->sql_query($sql);
+					}	
 					if ($umil->table_exists($bbdkp_table_prefix . 'bb_language'))
 					{
 						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'bb_language TO ' . $table_prefix . 'bbdkp_language ';
-						$db->sql_query($sql);
-						$sql = 'UPDATE  ' . $table_prefix . "bbdkp_language  SET attribute_id = '10' where attribute='race' and attribute_id='9'" ;
 						$db->sql_query($sql);
 					}
 					
@@ -1619,22 +1637,22 @@ function tablerename($action, $version)
 		case 'uninstall' :
 				// Run this when uninstalling
 				// renaming tables back to old
-					if ($umil->table_exists($table_prefix . 'adjustments '))
+					if ($umil->table_exists($table_prefix . 'bbdkp_adjustments'))
 					{
-						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_adjustments TO ' . $bbdkp_table_prefix . 'adjustments ';
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_adjustments TO ' . $bbdkp_table_prefix . 'adjustments';
 						$db->sql_query($sql);
 					}
-					if ($umil->table_exists( $table_prefix . 'bbdkp_events '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_events'))
 					{
-						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_events TO ' . $bbdkp_table_prefix . 'events ';
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_events TO ' . $bbdkp_table_prefix . 'events';
 						$db->sql_query($sql);
 					}
-					if ($umil->table_exists( $table_prefix . 'bbdkp_items '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_items'))
 					{
-						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_items TO ' . $bbdkp_table_prefix . 'items ';
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_items TO ' . $bbdkp_table_prefix . 'items';
 						$db->sql_query($sql);
 					}
-					if ($umil->table_exists( $table_prefix . 'bbdkp_logs '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_logs'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_logs TO ' . $bbdkp_table_prefix . 'logs ';
 						$db->sql_query($sql);
@@ -1649,52 +1667,52 @@ function tablerename($action, $version)
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_bosstable TO ' . $bbdkp_table_prefix . 'bb_bosstable ';
 						$db->sql_query($sql);
 					}										
-					if ($umil->table_exists( $table_prefix . 'bbdkp_member_ranks '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_member_ranks'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_member_ranks TO ' . $bbdkp_table_prefix . 'member_ranks ';
 						$db->sql_query($sql);
 					}					
-					if ($umil->table_exists( $table_prefix . 'bbdkp_memberlist '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_memberlist'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_memberlist TO ' . $bbdkp_table_prefix . 'memberlist ';
 						$db->sql_query($sql);
 					}					
-					if ($umil->table_exists( $table_prefix . 'bbdkp_memberdkp '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_memberdkp'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_memberdkp TO ' . $bbdkp_table_prefix . 'memberdkp ';
 						$db->sql_query($sql);
 					}					
-					if ($umil->table_exists( $table_prefix . 'bbdkp_news '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_news'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_news TO ' . $bbdkp_table_prefix . 'news ';
 						$db->sql_query($sql);
 					}					
-					if ($umil->table_exists( $table_prefix . 'bbdkp_raid_attendees '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_raid_attendees'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_raid_attendees TO ' . $bbdkp_table_prefix . 'raid_attendees ';
 						$db->sql_query($sql);
 					}					
-					if ($umil->table_exists( $table_prefix . 'bbdkp_raids '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_raids'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_raids TO ' . $bbdkp_table_prefix . 'raids ';
 						$db->sql_query($sql);
 					}					
-					if ($umil->table_exists( $table_prefix . 'bbdkp_classes '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_classes'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_classes TO ' . $bbdkp_table_prefix . 'classes ';
 						$db->sql_query($sql);
 					}					
-					if ($umil->table_exists( $table_prefix . 'bbdkp_races '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_races'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_races TO ' . $bbdkp_table_prefix . 'races ';
 						$db->sql_query($sql);
 					}					
-					if ($umil->table_exists( $table_prefix . 'bbdkp_factions '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_factions'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_factions TO ' . $bbdkp_table_prefix . 'factions ';
 						$db->sql_query($sql);
 					}					
-					if ($umil->table_exists( $table_prefix . 'bbdkp_dkpsystem '))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_dkpsystem'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_dkpsystem TO ' . $bbdkp_table_prefix . 'dkpsystem ';
 						$db->sql_query($sql);
@@ -1713,7 +1731,12 @@ function tablerename($action, $version)
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_lootsystem TO ' . $bbdkp_table_prefix . 'lootsystem ';
 						$db->sql_query($sql);
-					}							
+					}
+					if ($umil->table_exists( $table_prefix . 'bbdkp_transactions'))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_transactions TO ' . $bbdkp_table_prefix . 'transactions ';
+						$db->sql_query($sql);
+					}
 					if ($umil->table_exists( $table_prefix . 'bbdkp_language'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_language TO ' . $bbdkp_table_prefix . 'bb_language ';

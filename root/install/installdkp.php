@@ -184,17 +184,6 @@ $versions = array(
                 ),
             ),            
            
-           array($table_prefix . 'bbdkp_roles', array(
-                    'COLUMNS'        => array(
-                        'r_index'    		=> array('USINT', NULL, 'auto_increment'),
-                        'role_id'   		=> array('USINT', 0),
-                        'role_name'     	=> array('VCHAR_UNI', ''),
-                    ),
-                    'PRIMARY_KEY'    => 'r_index',                   
-                    
-                ),
-            ),
-                        
             // Guild table 
             // realm, region is for wow
             // last two columns are for aion
