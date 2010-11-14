@@ -193,13 +193,19 @@ function main($id, $mode)
 					}
 					else 
 					{
+						$i=0;
 					    while ( $row = $db->sql_fetchrow($result) )
 					    {
+					    	if ($i==0)
+					    	{
+					    		$noguild_id = (int) $row['id']; 
+					    	}
 					        $template->assign_block_vars('guild_row', array(
 							'VALUE' => $row['id'],
 							'SELECTED' =>  '',
 							'OPTION'   => $row['name'] )
 					    	);
+					    	$i+=1;
 					    }
 					}
 					$db->sql_freeresult($result);
@@ -226,10 +232,10 @@ function main($id, $mode)
                     }
                     else 
                     {
-                    	// no member is set, get the 'noguild' rank 
+                    	// no member is set, get the ranks from the highest numbered guild
                     	$sql = 'SELECT rank_id, rank_name
                         FROM ' . MEMBER_RANKS_TABLE . ' 
-                        WHERE guild_id = 0 ORDER BY rank_id';
+                        where guild_id = ' . $noguild_id . ' ORDER BY rank_id desc';
                         $result = $db->sql_query($sql);
                     	
                         while ( $row = $db->sql_fetchrow($result) )
