@@ -30,17 +30,17 @@ function install_wow($bbdkp_table_prefix)
 	$sql_ary = array ();
 	
 	// class : note these eqdkp class_ids are changed in release 1.1 to follow blizz
-	$sql_ary [] = array ('class_id' => 0, 'class_name' => 'Unknown', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => 1, 'class_name' => 'Warrior', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => 2, 'class_name' => 'Rogue', 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => 3, 'class_name' => 'Hunter', 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => 4, 'class_name' => 'Paladin', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => 5, 'class_name' => 'Shaman', 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => 6, 'class_name' => 'Druid', 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => 7, 'class_name' => 'Warlock', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => 8, 'class_name' => 'Mage', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => 9, 'class_name' => 'Priest', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 80 );
-	$sql_ary [] = array ('class_id' => 10, 'class_name' => 'Death Knight', 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 80 );
+	$sql_ary [] = array ('class_id' => 0, 'class_name' => 'Unknown', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 );
+	$sql_ary [] = array ('class_id' => 1, 'class_name' => 'Warrior', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 );
+	$sql_ary [] = array ('class_id' => 2, 'class_name' => 'Rogue', 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85 );
+	$sql_ary [] = array ('class_id' => 3, 'class_name' => 'Hunter', 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 );
+	$sql_ary [] = array ('class_id' => 4, 'class_name' => 'Paladin', 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 );
+	$sql_ary [] = array ('class_id' => 5, 'class_name' => 'Shaman', 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 );
+	$sql_ary [] = array ('class_id' => 6, 'class_name' => 'Druid', 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85 );
+	$sql_ary [] = array ('class_id' => 7, 'class_name' => 'Warlock', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 );
+	$sql_ary [] = array ('class_id' => 8, 'class_name' => 'Mage', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 );
+	$sql_ary [] = array ('class_id' => 9, 'class_name' => 'Priest', 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 );
+	$sql_ary [] = array ('class_id' => 10, 'class_name' => 'Death Knight', 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 );
 	
 	$db->sql_multi_insert ( $bbdkp_table_prefix . 'classes', $sql_ary );
 	unset ( $sql_ary );
@@ -1025,45 +1025,45 @@ function install_wow_bb2($bbdkp_table_prefix)
 	{
 		$sql_ary = array ();
 
-		$sql_ary[] = array( 'id' => 1 , 'imagename' =>  'misc' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 2 , 'imagename' =>  'onylair' , 'game' =>  'wow' ,  'tier' =>  'T2' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 3 , 'imagename' =>  'dream' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 4 , 'imagename' =>  'zg' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 5 , 'imagename' =>  'bwl' , 'game' =>  'wow' ,  'tier' =>  'T3' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 6 , 'imagename' =>  'mc' , 'game' =>  'wow' ,  'tier' =>  'T1' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 7 , 'imagename' =>  'aq20' , 'game' =>  'wow' ,  'tier' =>  'T2.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 8 , 'imagename' =>  'aq40' , 'game' =>  'wow' ,  'tier' =>  'T2.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 9 , 'imagename' =>  'naxx' , 'game' =>  'wow' ,  'tier' =>  'T3' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 10 , 'imagename' =>  'kara' , 'game' =>  'wow' ,  'tier' =>  'T4' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 11 , 'imagename' =>  'za' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 12 , 'imagename' =>  'gruuls' , 'game' =>  'wow' ,  'tier' =>  'T4' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 13 , 'imagename' =>  'maglair' , 'game' =>  'wow' ,  'tier' =>  'T4' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 14 , 'imagename' =>  'outdoor2' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 15 , 'imagename' =>  'serpent' , 'game' =>  'wow' ,  'tier' =>  'T5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 16 , 'imagename' =>  'eye' , 'game' =>  'wow' ,  'tier' =>  'T5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 17 , 'imagename' =>  'hyjal' , 'game' =>  'wow' ,  'tier' =>  'T6' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 18 , 'imagename' =>  'temple' , 'game' =>  'wow' ,  'tier' =>  'T6' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 19 , 'imagename' =>  'sunwell' , 'game' =>  'wow' ,  'tier' =>  'T6.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 20 , 'imagename' =>  'naxx_10' , 'game' =>  'wow' ,  'tier' =>  'T7' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 21 , 'imagename' =>  'naxx_25' , 'game' =>  'wow' ,  'tier' =>  'T7.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 22 , 'imagename' =>  'vault_of_archavon_10' , 'game' =>  'wow' ,  'tier' =>  'T8' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 23 , 'imagename' =>  'vault_of_archavon_25' , 'game' =>  'wow' ,  'tier' =>  'T8' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 24 , 'imagename' =>  'obsidian_sanctum_10' , 'game' =>  'wow' ,  'tier' =>  'T7' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 25 , 'imagename' =>  'obsidian_sanctum_25' , 'game' =>  'wow' ,  'tier' =>  'T7.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 26 , 'imagename' =>  'eye_of_eternity_10' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 27 , 'imagename' =>  'eye_of_eternity_25' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 28 , 'imagename' =>  'ulduar_10' , 'game' =>  'wow' ,  'tier' =>  'T8' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 29 , 'imagename' =>  'ulduar_25' , 'game' =>  'wow' ,  'tier' =>  'T8.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 30 , 'imagename' =>  'trial_of_the_crusader_10' , 'game' =>  'wow' ,  'tier' =>  'T9.1' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 31 , 'imagename' =>  'trial_of_the_crusader_25' , 'game' =>  'wow' ,  'tier' =>  'T9.2' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 32 , 'imagename' =>  'trial_of_the_grand_crusader_10' , 'game' =>  'wow' ,  'tier' =>  'T9.2' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 33 , 'imagename' =>  'trial_of_the_grand_crusader_25' , 'game' =>  'wow' ,  'tier' =>  'T9.3' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 34 , 'imagename' =>  'onylair_10' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 35 , 'imagename' =>  'onylair_25' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 37 , 'imagename' =>  'icecrown_citadel_25' , 'game' =>  'wow' ,  'tier' =>  'T10.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 36 , 'imagename' =>  'icecrown_citadel_10' , 'game' =>  'wow' ,  'tier' =>  'T10' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 38 , 'imagename' =>  'rs_10' , 'game' =>  'wow' ,  'tier' =>  'T10' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 39 , 'imagename' =>  'rs_25' , 'game' =>  'wow' ,  'tier' =>  'T10' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
+		$sql_ary[] = array( 'id' => 1 , 'imagename' =>  'misc' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 2 , 'imagename' =>  'onylair' , 'game' =>  'wow' ,  'tier' =>  'T2' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 3 , 'imagename' =>  'dream' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 4 , 'imagename' =>  'zg' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 5 , 'imagename' =>  'bwl' , 'game' =>  'wow' ,  'tier' =>  'T3' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 6 , 'imagename' =>  'mc' , 'game' =>  'wow' ,  'tier' =>  'T1' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 7 , 'imagename' =>  'aq20' , 'game' =>  'wow' ,  'tier' =>  'T2.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 8 , 'imagename' =>  'aq40' , 'game' =>  'wow' ,  'tier' =>  'T2.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 9 , 'imagename' =>  'naxx' , 'game' =>  'wow' ,  'tier' =>  'T3' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 10 , 'imagename' =>  'kara' , 'game' =>  'wow' ,  'tier' =>  'T4' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 11 , 'imagename' =>  'za' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 12 , 'imagename' =>  'gruuls' , 'game' =>  'wow' ,  'tier' =>  'T4' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 13 , 'imagename' =>  'maglair' , 'game' =>  'wow' ,  'tier' =>  'T4' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 14 , 'imagename' =>  'outdoor2' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 15 , 'imagename' =>  'serpent' , 'game' =>  'wow' ,  'tier' =>  'T5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 16 , 'imagename' =>  'eye' , 'game' =>  'wow' ,  'tier' =>  'T5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 17 , 'imagename' =>  'hyjal' , 'game' =>  'wow' ,  'tier' =>  'T6' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 18 , 'imagename' =>  'temple' , 'game' =>  'wow' ,  'tier' =>  'T6' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 19 , 'imagename' =>  'sunwell' , 'game' =>  'wow' ,  'tier' =>  'T6.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 20 , 'imagename' =>  'naxx_10' , 'game' =>  'wow' ,  'tier' =>  'T7' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 21 , 'imagename' =>  'naxx_25' , 'game' =>  'wow' ,  'tier' =>  'T7.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 22 , 'imagename' =>  'vault_of_archavon_10' , 'game' =>  'wow' ,  'tier' =>  'T8' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 23 , 'imagename' =>  'vault_of_archavon_25' , 'game' =>  'wow' ,  'tier' =>  'T8' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 24 , 'imagename' =>  'obsidian_sanctum_10' , 'game' =>  'wow' ,  'tier' =>  'T7' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 25 , 'imagename' =>  'obsidian_sanctum_25' , 'game' =>  'wow' ,  'tier' =>  'T7.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 26 , 'imagename' =>  'eye_of_eternity_10' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 27 , 'imagename' =>  'eye_of_eternity_25' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 28 , 'imagename' =>  'ulduar_10' , 'game' =>  'wow' ,  'tier' =>  'T8' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 29 , 'imagename' =>  'ulduar_25' , 'game' =>  'wow' ,  'tier' =>  'T8.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 30 , 'imagename' =>  'trial_of_the_crusader_10' , 'game' =>  'wow' ,  'tier' =>  'T9.1' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 31 , 'imagename' =>  'trial_of_the_crusader_25' , 'game' =>  'wow' ,  'tier' =>  'T9.2' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 32 , 'imagename' =>  'trial_of_the_grand_crusader_10' , 'game' =>  'wow' ,  'tier' =>  'T9.2' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 33 , 'imagename' =>  'trial_of_the_grand_crusader_25' , 'game' =>  'wow' ,  'tier' =>  'T9.3' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 34 , 'imagename' =>  'onylair_10' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 35 , 'imagename' =>  'onylair_25' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 37 , 'imagename' =>  'icecrown_citadel_25' , 'game' =>  'wow' ,  'tier' =>  'T10.5' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 36 , 'imagename' =>  'icecrown_citadel_10' , 'game' =>  'wow' ,  'tier' =>  'T10' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 38 , 'imagename' =>  'rs_10' , 'game' =>  'wow' ,  'tier' =>  'T10' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 39 , 'imagename' =>  'rs_25' , 'game' =>  'wow' ,  'tier' =>  'T10' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
 				
 
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_zonetable', $sql_ary );
@@ -1974,7 +1974,7 @@ function install_wow_bb2($bbdkp_table_prefix)
 	
 		// classes in en
 		$sql_ary[] = array( 'id' => 627 , 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
-		$sql_ary[] = array( 'id' => 628 , 'attribute_id' => 1 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
+		$sql_ary[] = array( 'id' => 628 , 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
 		$sql_ary[] = array( 'id' => 629 , 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Rogue' ,  'name_short' =>  'Rogue' );
 		$sql_ary[] = array( 'id' => 630 , 'attribute_id' => 3, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Hunter' ,  'name_short' =>  'Hunter' );
 		$sql_ary[] = array( 'id' => 631 , 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );

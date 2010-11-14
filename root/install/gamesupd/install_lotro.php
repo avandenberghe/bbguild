@@ -367,18 +367,18 @@ function install_lotro_bb2($bbdkp_table_prefix)
 	{
 		$sql_ary = array ();
 		
-		$sql_ary[] = array( 'id' => 1 ,  'imagename' =>  'lotro_misc' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 2 ,  'imagename' =>  'annuminas' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 3 ,  'imagename' =>  'fornost' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 4 ,  'imagename' =>  'helegrod' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 5 ,  'imagename' =>  'rift' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 6 ,  'imagename' =>  'urugarth' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 7 ,  'imagename' =>  'barad_gularan' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 8 ,  'imagename' =>  'carn_dum' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 9 ,  'imagename' =>  'great_barrow' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 10 ,  'imagename' =>  'garth_agarwen' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 11 ,  'imagename' =>  'ettenmoors_creeps' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 12 ,  'imagename' =>  'ettenmoors_freeps' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1);
+		$sql_ary[] = array( 'id' => 1 ,  'imagename' =>  'lotro_misc' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 2 ,  'imagename' =>  'annuminas' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 3 ,  'imagename' =>  'fornost' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 4 ,  'imagename' =>  'helegrod' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 5 ,  'imagename' =>  'rift' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 6 ,  'imagename' =>  'urugarth' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 7 ,  'imagename' =>  'barad_gularan' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 8 ,  'imagename' =>  'carn_dum' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 9 ,  'imagename' =>  'great_barrow' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 10 ,  'imagename' =>  'garth_agarwen' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 11 ,  'imagename' =>  'ettenmoors_creeps' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 12 ,  'imagename' =>  'ettenmoors_freeps' , 'game' =>  'lotro' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
 				
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_zonetable', $sql_ary );
 		unset ( $sql_ary );

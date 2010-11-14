@@ -278,10 +278,10 @@ function install_warhammer_bb2($bbdkp_table_prefix)
 	if ($umil->table_exists ( $bbdkp_table_prefix . 'bb_zonetable' ) and ($umil->table_exists ( $bbdkp_table_prefix . 'bb_bosstable' )))
 	{
 		$sql_ary = array ();
-		$sql_ary[] = array( 'id' => 1 , 'imagename' =>  'altdorf' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 2 , 'imagename' =>  'sacellum' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 3 , 'imagename' =>  'gunbad' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0' ,  'showzone' =>  1);
-		$sql_ary[] = array( 'id' => 4 , 'imagename' =>  'stair' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0' ,  'showzone' =>  1);
+		$sql_ary[] = array( 'id' => 1 , 'imagename' =>  'altdorf' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 2 , 'imagename' =>  'sacellum' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 3 , 'imagename' =>  'gunbad' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+		$sql_ary[] = array( 'id' => 4 , 'imagename' =>  'stair' , 'game' =>  'warhammer' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '0' ,  'showzone' =>  1, 'showzoneportal' =>  1);
 		
 		$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_zonetable', $sql_ary );
 		unset ( $sql_ary );
