@@ -755,6 +755,7 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 'ZONE_IMAGENAME' => 'Nom de l’image',
 'XZONE_IMAGENAME_EXPLAIN' => 'l’image en couleur, sans extension. le fichier doit exister dans le repertoire /images/bossprogress/%s/zones/normal' ,
 'ZONE_WEBID' => 'Web id',
+'ZONE_WEBLINK' => 'Web link',
 'ZONE_WEBID_EXPLAIN' => 'le id wowhead ou allakhazam ou autre id web. utilisé pour construire le lien.',
 'ZONE_SEQUENCE' => 'Ordre des Zones', 
 'ZONE_SEQUENCE_EXPLAIN' => 'Choisir le nom de la zone après laquelle cette zone est placée',
@@ -801,10 +802,14 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 'EQ2_BASEURL' => 'http://eq2.wikia.com/wiki/index.php/',
 'DAOC_BASEURL' => 'http://camelot.allakhazam.com/db/search.html?cmob=',
 'LOTRO_BASEURL' => 'http://lotro.allakhazam.com/db/bestiary.html?lotrmob=',
-'VANGUARD_BASEURL' => 'http://vg.mmodb.com/bestiary/', 
-'FFXI_BASEURL' => 'http://ffxi.allakhazam.com/db/bestiary.html?fmob=', 
-'WARHAMMER_BASEURL' => 'http://www.wardb.com/npc.aspx?id=',
-'WOW_BASEURL' => 'http://fr.wowhead.com/?npc=',
+'VANGUARD_BASEURL' => 'http://vg.mmodb.com/bestiary/%s.php', 
+'VANGUARD_ZONEURL' => 'http://vg.mmodb.com/zones/%s.php',
+'FFXI_BASEURL' => 'http://ffxi.allakhazam.com/db/bestiary.html?fmob=%s', 
+'FFXI_ZONEEURL' => 'http://ffxi.allakhazam.com/db/areas.html?farea=%s', 
+'WARHAMMER_BASEURL' => 'NOT AVAILABLE',
+'WARHAMMER_ZONEEURL' => 'NOT AVAILABLE',
+'WOW_BASEURL' => 'http://fr.wowhead.com/?npc=%s',
+'WOW_ZONEEURL' => 'http://fr.wowhead.com/?zone=%s',
 
 ));
 

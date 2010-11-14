@@ -858,7 +858,7 @@ function bbdkp_caches($action, $version)
  */
 function gameinstall($action, $version)
 {
-	global $table_prefix; 
+	global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx; 
 	$game = request_var('game', '');
 	switch ($action)
 	{
@@ -904,7 +904,9 @@ function gameinstall($action, $version)
 					break;
 				default :
 					break;
-			}  
+			}
+			$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
+			 
 			break;
 	}
 					

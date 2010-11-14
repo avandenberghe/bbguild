@@ -787,6 +787,7 @@ Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />G
 'BOSS_TYPE_EXPLAIN' => 'Parametername (npc, object, boss, ...) zum konstruieren des URL',
 'BOSS_WEBID' => 'Web id',
 'BOSS_WEBID_EXPLAIN' => 'Wowhead oder Allakhazam zum konstruieren des URL',
+'ZONE_WEBLINK' => 'Web link',
 'BOSS_COMPLETED' => 'Besiegt',
 'BOSS_COMPLETED_EXPLAIN' => 'Bitte ankreuzen ob dieser Boss getötet worden ist',
 'BOSS_COMPLETEDATE' => 'Siegestag',
@@ -803,10 +804,14 @@ Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />G
 'EQ2_BASEURL' => 'http://eq2.wikia.com/wiki/index.php/',
 'DAOC_BASEURL' => 'http://camelot.allakhazam.com/db/search.html?cmob=',
 'LOTRO_BASEURL' => 'http://lotro.allakhazam.com/db/bestiary.html?lotrmob=',
-'VANGUARD_BASEURL' => 'http://vg.mmodb.com/bestiary/', 
-'FFXI_BASEURL' => 'http://ffxi.allakhazam.com/db/bestiary.html?fmob=', 
-'WARHAMMER_BASEURL' => 'http://www.wardb.com/npc.aspx?id=',
-'WOW_BASEURL' => 'http://de.wowhead.com/?npc=',
+'VANGUARD_BASEURL' => 'http://vg.mmodb.com/bestiary/%s.php', 
+'VANGUARD_ZONEURL' => 'http://vg.mmodb.com/zones/%s.php',
+'FFXI_BASEURL' => 'http://ffxi.allakhazam.com/db/bestiary.html?fmob=%s', 
+'FFXI_ZONEEURL' => 'http://ffxi.allakhazam.com/db/areas.html?farea=%s', 
+'WARHAMMER_BASEURL' => 'NOT AVAILABLE',
+'WARHAMMER_ZONEEURL' => 'NOT AVAILABLE',
+'WOW_BASEURL' => 'http://de.wowhead.com/?npc=%s',
+'WOW_ZONEEURL' => 'http://de.wowhead.com/?zone=%s',
 
 ));
 

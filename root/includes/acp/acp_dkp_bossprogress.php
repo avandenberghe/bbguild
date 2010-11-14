@@ -825,7 +825,6 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 								),
 					'WHERE'		=> " z.id = l.attribute_id AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."'",
 					'ORDER_BY'	=> 'sequence desc, id desc ',
-				    	
 				    );
 				    
 				$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -840,11 +839,11 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                    'ZONE_IMAGENAME' 	=> $row['imagename']  ,
 	                    'ZONE_WEBID' 		=> $row['webid']  ,
 	                    'ZONE_COMPLETED' 	=> ($row['completed'] == 1) ? ' checked="checked"' : '',
-	                    'ZONE_DATE' => ( !empty($row['completedate']) ) ? date($config['bbdkp_date_format'], $row['completedate']) : 'no date',  
-	                    'ZONE_DD' => ($row['completedate'] == 0) ? ' ' : date('d', $row['completedate'])  ,
-                    	'ZONE_MM' => ($row['completedate'] == 0) ? ' ' : date('m', $row['completedate'])  ,
-                    	'ZONE_YY' => ($row['completedate'] == 0) ? ' ' : date('y', $row['completedate'])  ,
-                                        
+	                    'ZONE_DATE' 		=> ( !empty($row['completedate']) ) ? date($config['bbdkp_date_format'], $row['completedate']) : 'no date',  
+	                    'ZONE_DD' 			=> ($row['completedate'] == 0) ? ' ' : date('d', $row['completedate'])  ,
+                    	'ZONE_MM' 			=> ($row['completedate'] == 0) ? ' ' : date('m', $row['completedate'])  ,
+                    	'ZONE_YY' 			=> ($row['completedate'] == 0) ? ' ' : date('y', $row['completedate'])  ,
+                        'ZONE_URL'			=> sprintf($user->lang[strtoupper($config['bbdkp_default_game']).'_ZONEEURL'], $row ['webid']),         
 	                    'ZONE_SHOW'   		=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
                     	'ZONE_SHOW_PORTAL'  => ($row['showzoneportal'] == 1) ? ' checked="checked"' : '',
                     	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;edit=1&amp;id={$row['id']}")  ,

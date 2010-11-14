@@ -1488,9 +1488,6 @@ function tablerename($action, $version)
 			switch ($version)
 			{
 				case '1.1.3':
-					
-					$sql = "UPDATE  bbeqdkp_bb_language SET attribute_id = '10' where attribute='race' and attribute_id='9'" ;
-					$db->sql_query($sql);
 					// renaming tables
 					if ($umil->table_exists($bbdkp_table_prefix . 'adjustments'))
 					{
@@ -1512,9 +1509,14 @@ function tablerename($action, $version)
 						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'logs TO ' . $table_prefix . 'bbdkp_logs ';
 						$db->sql_query($sql);
 					}										
-					if ($umil->table_exists($bbdkp_table_prefix . 'logs'))
+					if ($umil->table_exists($bbdkp_table_prefix . 'bb_zonetable'))
 					{
-						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'logs TO ' . $table_prefix . 'bbdkp_logs ';
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'bb_zonetable TO ' . $table_prefix . 'bbdkp_zonetable ';
+						$db->sql_query($sql);
+					}										
+					if ($umil->table_exists($bbdkp_table_prefix . 'bb_bosstable'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'bb_bosstable TO ' . $table_prefix . 'bbdkp_bosstable ';
 						$db->sql_query($sql);
 					}										
 					if ($umil->table_exists($bbdkp_table_prefix . 'member_ranks'))
@@ -1586,7 +1588,10 @@ function tablerename($action, $version)
 					{
 						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'bb_language TO ' . $table_prefix . 'bbdkp_language ';
 						$db->sql_query($sql);
-					}						
+						$sql = 'UPDATE  ' . $table_prefix . "bbdkp_language  SET attribute_id = '10' where attribute='race' and attribute_id='9'" ;
+						$db->sql_query($sql);
+					}
+					
 					
 					return array(
 					'command' => 'UMIL_RENAMETABLESNEW', 
@@ -1619,6 +1624,16 @@ function tablerename($action, $version)
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_logs TO ' . $bbdkp_table_prefix . 'logs ';
 						$db->sql_query($sql);
 					}
+					if ($umil->table_exists($table_prefix . 'bbdkp_zonetable'))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_zonetable TO ' . $bbdkp_table_prefix . 'bb_zonetable ';
+						$db->sql_query($sql);
+					}										
+					if ($umil->table_exists($table_prefix . 'bbdkp_bosstable'))
+					{
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_bosstable TO ' . $bbdkp_table_prefix . 'bb_bosstable ';
+						$db->sql_query($sql);
+					}										
 					if ($umil->table_exists( $table_prefix . 'bbdkp_member_ranks '))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_member_ranks TO ' . $bbdkp_table_prefix . 'member_ranks ';

@@ -117,14 +117,14 @@
 
 	<thead>
 		<tr>
-			<th align="left" nowrap="nowrap">{L_ZONE_NAME}</th>
-			<th align="left" width="20" nowrap="nowrap">{L_ZONE_NAME_SHORT}</th>
-			<th align="left" width="35" nowrap="nowrap">{L_ZONE_IMAGENAME}</th>
-			<th align="left" width="15" nowrap="nowrap">{L_ZONE_WEBID}</th>
-			<th align="center" width="40">{L_ZONE_COMPLETED}</th>
-			<th align="left" width="20" >{L_ZONE_COMPLETEDATE}</th>
-			<th align="center" width="20" nowrap="nowrap">{L_SHOW_ZONE}</th>
-			<th align="center" width="5">{L_OPTIONS}</th>
+			<th align="left" width="30" style="white-space: nowrap;">{L_ZONE_NAME}</th>
+			<th align="left" width="20" style="white-space: nowrap;">{L_ZONE_NAME_SHORT}</th>
+			<th align="left" width="15" style="text-align: center">{L_ZONE_WEBLINK}</th>
+			<th align="center" width="40" style="text-align: center">{L_ZONE_COMPLETED}</th>
+			<th align="center" width="20" style="white-space: nowrap; text-align: center;">{L_SHOW_ZONE}</th>
+			<th align="center" width="20"  style="white-space: normal; text-align: center;">{L_SHOW_ZONE_PORTAL}</th>
+			<th align="center" width="5" style="text-align: center">{L_ZONE_SEQUENCE}</th>
+			<th align="center" width="5" style="text-align: center">{L_OPTIONS}</th>
 		</tr>
 	</thead>
 	<tbody>
@@ -136,22 +136,24 @@
 		</tr>
 		<tr class="row2">
 			<!-- ENDIF -->
-			
 			<input type="hidden" name="zoneid[{gamezone.ZONE_ID}]"  value="{gamezone.ZONE_ID}" />
 			<input type="hidden" name="zonesequence[{gamezone.ZONE_ID}]"  value="{gamezone.ZONE_SEQUENCE}" />
-			<td width="40" nowrap="nowrap"><input class="text post" type="text" size="30" name="zonename[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_NAME}" />  </td>
-			<td width="40" nowrap="nowrap"><input class="text post" type="text" size="10" name="zonenameshort[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_NAME_SHORT}" />    </td>
-			<td width="35" nowrap="nowrap"><input class="text post" type="text" size="25" name="zoneimagename[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_IMAGENAME}" />    </td>
-			<td width="10" nowrap="nowrap"><input class="text post" type="text" size="10" name="zonewebid[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_WEBID}" />   </td>
-			<td width="20" nowrap="nowrap" align="center"><input type="checkbox" name="zonecompleted[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_COMPLETED} /> </td>
-			<td width="10" nowrap="nowrap" style="text-align: center">{gamezone.ZONE_DATE}</td>
-			<td width="5" nowrap="nowrap" align="center">
+			<td width="30" style="white-space: nowrap;"><input class="text post" type="text" size="30" name="zonename[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_NAME}" />  </td>
+			<td width="40" ><input class="text post" type="text" size="10" name="zonenameshort[{gamezone.ZONE_ID}]" value="{gamezone.ZONE_NAME_SHORT}" />    </td>
+			<td width="15" style="white-space: nowrap;"><a href="{gamezone.ZONE_URL}">{gamezone.ZONE_NAME_SHORT}</a></td>
+			<td width="10" style=" white-space: nowrap; text-align: center"><input type="checkbox" name="zonecompleted[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_COMPLETED} /> </td>
+			<td width="5" style="white-space: nowrap; text-align: center">
 				<input type="checkbox" name="showzone[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_SHOW} />
+			</td>
+			<td width="5" style="white-space: nowrap; text-align: center">
 				<input type="checkbox" name="showzoneportal[{gamezone.ZONE_ID}]" value="1" {gamezone.ZONE_SHOW_PORTAL} />
 			</td>
-			<td width="5" nowrap="nowrap">
+
+			<td width="5" style="white-space: nowrap;  text-align: center">
 				<!-- IF gamezone.S_FIRST_ROW and not PREVIOUS_PAGE -->{ICON_MOVE_UP_DISABLED}<!-- ELSE --><a href="{gamezone.U_MOVE_UP}">{ICON_MOVE_UP}</a><!-- ENDIF -->&nbsp;
 				<!-- IF gamezone.S_LAST_ROW and not NEXT_PAGE -->{ICON_MOVE_DOWN_DISABLED}<!-- ELSE --><a href="{gamezone.U_MOVE_DOWN}">{ICON_MOVE_DOWN}</a><!-- ENDIF -->
+			</td>
+			<td width="5" style="white-space: nowrap;  text-align: center">
 				<a href="{gamezone.U_EDIT}">{ICON_EDIT}</a>
 				<a href="{gamezone.U_DELETE}">{ICON_DELETE}</a>
 			</td>
