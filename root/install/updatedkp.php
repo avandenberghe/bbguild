@@ -917,8 +917,18 @@ $versions = array(
 		),
 
 		'1.1.3'    => array(
-
+		
+		
+			// module adding
+         	'module_add' => array(
+		 	array('acp', 'ACP_DKP_RAIDS', array(
+          		 'module_basename' => 'dkp_sys',
+            	 'modes'           => array('lootsystem' ))
+            	 ),
+	         ),
+                     
 			'custom' => array( 
+				'gameupdate', 
 				'tablerename', 
 				'bbdkp_caches'
 			),
@@ -1427,6 +1437,11 @@ function gameupdate($action, $version)
 					}
 
 					break;
+				
+				case '1.1.3':	
+				
+					break;
+				
 			}
 			break;
 			

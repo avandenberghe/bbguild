@@ -1,6 +1,6 @@
 <?php
 /**
-* This acp class manages DKP pools
+* This acp class manages DKP pools and Loot systems
 * 
 * @package bbDkp.acp
 * @author Sajaki
@@ -399,6 +399,15 @@ class acp_dkp_sys extends bbDkp_Admin
 				$this->tpl_name = 'dkp/acp_'. $mode;
 				
 			break;
+			
+				case 'lootsystem':
+				
+				
+				$this->page_title = 'ACP_DKP_LOOTSYSTEM';
+				$this->tpl_name = 'dkp/acp_'. $mode;
+			break;
+				
+				
 		}
 	}
 

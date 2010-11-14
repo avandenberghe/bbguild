@@ -1,0 +1,33 @@
+<!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->   
+
+<a name="maincontent"></a>
+
+<h1>{L_ACP_LOOTSETTINGS}</h1>
+<p>{L_ACP_LOOTSETTINGS_EXPLAIN}</p>
+
+<form method="post" action="{F_ADD_CONFIG}" name="post" >
+
+<fieldset>
+<legend>{L_MENU_GENERAL}</legend>
+<br />
+
+  <dl>
+    <dt><label for="guildtag">{L_GUILDTAG}:</label></dt>
+    <dd><input type="text" name="guildtag" id="guildtag" size="20" maxlength="50" value="{GUILDTAG}" class="input" /></dd>
+  </dl>
+
+</fieldset>
+
+<p class="quick">
+	{S_FORM_TOKEN}
+  <input type="submit" name="update" value="{L_SUBMIT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+</p>
+
+</form>
+
+
+<!-- INCLUDE dkp/overall_footer.html -->
+

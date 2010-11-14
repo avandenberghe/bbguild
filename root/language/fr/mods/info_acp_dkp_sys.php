@@ -27,6 +27,8 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'ACP_DKP_POOL_ADD'		=> 'Ajouter groupe DKP',  
 	'ACP_DKP_POOL_LIST'		=> 'Groupes DKP',
+	'ACP_DKP_LOOTSYSTEM'	=> 'Systeme Loot',
+	'ACP_DKP_LOOTSYSTEM_EXPLAIN'	=> 'Ici vous pouvez selectionnner le système de distribution de Loot',
 ));
 
 ?>

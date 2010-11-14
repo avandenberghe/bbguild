@@ -659,10 +659,10 @@ $versions = array(
              */
             array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS'),
             
-            // add raid pools
+            // add raid pools - lootsystem
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_sys',
-            	 'modes'           => array('adddkpsys', 'listdkpsys'),
+            	 'modes'           => array('adddkpsys', 'listdkpsys', 'lootsystem' ),
         		),
             ),
             
@@ -680,7 +680,7 @@ $versions = array(
         		),
             ),            
             
-            /*
+			/*
              * add item management menu
              */
             array('acp', 'ACP_CAT_DKP', 'ACP_DKP_ITEM'),

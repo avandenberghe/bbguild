@@ -26,7 +26,9 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
 	'ACP_DKP_POOL_ADD'		=> 'Add DKP Pool',  
-	'ACP_DKP_POOL_LIST'		=> '	DKP Pools',
+	'ACP_DKP_POOL_LIST'		=> 'DKP Pools',
+	'ACP_DKP_LOOTSYSTEM'	=> 'Loot Systems',
+	'ACP_DKP_LOOTSYSTEM_EXPLAIN'	=> 'Here you can select the loot distribution system',
 ));
 
 ?>
