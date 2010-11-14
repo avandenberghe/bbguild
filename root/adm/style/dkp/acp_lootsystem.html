@@ -1,33 +1,132 @@
 <!-- INCLUDE overall_header.html -->
 <!--
-		$Id$
-//-->   
-
+ Lootsystem ACP html
+ @package bbDkp.acp
+ @copyright (c) 2010 bbDkp <http://code.google.com/p/bbdkp/>
+ @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ @version $Id$
+//-->
 <a name="maincontent"></a>
 
-<h1>{L_ACP_LOOTSETTINGS}</h1>
-<p>{L_ACP_LOOTSETTINGS_EXPLAIN}</p>
+<style type="text/css" >
+fieldset 
+{
+	background :transparent url(../images/bg_tabs_alt1.gif) no-repeat scroll 100% -35px; 
+	/*border-color:#D7D7D7 #CCCCCC #CCCCCC #D7D7D7;*/
+	border-style:solid;
+	border-width:0	px;
+	margin:15px 0;
+	padding:10px;
+	position:relative;
+}
+fieldset dt {
+	width: 55%;
+	text-align: left;
+	border: none;
+	border-right: 1px solid #CCCCCC;
+	padding-top: 3px;
+}
 
-<form method="post" action="{F_ADD_CONFIG}" name="post" >
+fieldset dd {
+	margin: 0 0 0 55%;
+	padding: 0 0 0 5px;
+	border: none;
+	border-left: 1px solid #CCCCCC;
+	vertical-align: top;
+	font-size: 1.00em;
+}
 
+</style>
+<h1>{L_ACP_DKP_LOOTSYSTEM}</h1>
 <fieldset>
-<legend>{L_MENU_GENERAL}</legend>
-<br />
-
-  <dl>
-    <dt><label for="guildtag">{L_GUILDTAG}:</label></dt>
-    <dd><input type="text" name="guildtag" id="guildtag" size="20" maxlength="50" value="{GUILDTAG}" class="input" /></dd>
-  </dl>
-
-</fieldset>
+	<div id="advanced00">
+		<div class="permissions-category">
+		<ul>
+			<li class="permissions-preset-yes activetab">
+				<a href="{U_LOOTSYSTEM}"><span class="tabbg"><span class="colour"></span>{L_LOOTSYSTEM}</span></a></li>	
+			<li class="permissions">
+				<a href="{U_MANAGE_ZEROSUM}"><span class="tabbg"><span class="colour"></span>{L_ZEROSUM_SETTINGS}</span></a>
+			</li>
+			<li class="permissions">
+				<a href="{U_MANAGE_TIMESETTING}"><span class="tabbg"><span class="colour"></span>{L_TIME_SETTINGS}</span></a>
+			</li>
+			<li class="permissions">
+				<a href="{U_MANAGE_EPGP}"><span class="tabbg"><span class="colour"></span>{L_EPGP_SETTINGS}</span></a>
+			</li>
+		</ul>
+	</div>
+<div class="permissions-panel" id="options001">
+<span class="corners-top"><span></span></span>
+<div>
+<fieldset>
+<dl>
+	 <span>{L_ACP_DKP_LOOTSYSTEM_EXPLAIN}</span>
+</dl>
+<dl>				
+<form method="post" action="{U_ACTION}" name="lootsystems"  width="100%" cellspacing="5" >
+<table cellspacing="1">
+<col class="col2" />
+<col class="col2" />
+<col class="col2" />
+<col class="col1" />
+<thead>
+<tr>
+	<th width="10%" align="center">{L_DESCRIPTION}</th>
+	<th width="50%" align="left" >{L_EXAMPLE}</th>
+	<th width="35%" align="left">{L_ADVANTAGE}</th>
+	<th width="5%">{L_OPTIONS}</th>
+	</tr>
+</thead>
+<tbody>
+<tr>
+    <td class="row1" width="10%">{L_STANDARDDKP}:</td>
+    <td class="row1" align="left" width="50%">{L_STANDARDDKP_EXPLAIN}<hr/>{L_STANDARDDKP_EXAMPLE}</td>
+    <td class="row1" align="left" width="35%">{L_STANDARDDKP_ADVANTAGE}<hr/>{L_STANDARDDKP_DISADVANTAGE} </td>
+    <td class="row1" width="5%"> <input type="radio" name="lootsystem" value="0"{STANDARDCHECKED}/> </td>
+</tr>
+<tr>
+    <td class="row2" width="10%">{L_ZEROSUM}:</td>
+    <td class="row2" align="left" width="50%">{L_ZEROSUM_EXPLAIN}<hr/> {L_ZEROSUM_EXAMPLE}</td>
+    <td class="row2" align="left" width="35%">{L_ZEROSUM_ADVANTAGE}<hr/>{L_ZEROSUM_DISADVANTAGE}:</td>
+    <td class="row2" width="5%"><input type="radio" name="lootsystem" value="1"{ZEROSUMCHECKED} /> </td>
+</tr>
+<tr>
+    <td class="row1" width="10%">{L_ZEROSUMPLUS}:</td>
+    <td class="row1" align="left" width="50%">{L_ZEROSUMPLUS_EXPLAIN} <hr/> {L_ZEROSUMPLUS_EXAMPLE}</td>
+    <td class="row1" align="left" width="35%">{L_ZEROSUMPLUS_ADVANTAGE}<hr/>{L_ZEROSUMPLUS_DISADVANTAGE}:</td>
+    <td class="row1" width="5%"><input type="radio" name="lootsystem" value="2"{ZEROSUMPLUSCHECKED} /> </td>
+</tr>
+<tr>
+    <td class="row2" width="10%">{L_TIMEDKP}:</td>
+    <td class="row2" align="left" width="50%">{L_TIMEDKP_EXPLAIN}<hr/> {L_TIMEDKP_EXAMPLE}</td></td>
+    <td class="row2" align="left" width="35%">{L_TIMEDKP_ADVANTAGE}<hr/>{L_TIMEDKP_DISADVANTAGE}:</td>
+    <td class="row2" width="5%"> <input type="radio" name="lootsystem" value="3"{TIMEDKPCHECKED} /></td>
+ </tr>
+<tr>
+    <td class="row1" width="10%">{L_EPGP}:</td>
+    <td class="row1" align="left" width="50%">{L_EPGP_EXPLAIN}: <hr/>{L_EPGP_EXAMPLE}</td>
+    <td class="row1" align="left" width="35%">{L_EPGP_ADVANTAGE}<hr/>{L_EPGP_DISADVANTAGE}</td>
+    <td class="row1" width="5%"><input type="radio" name="lootsystem" value="4"{EPGPCHECKED} /> </td>
+</tr>
+</tbody>
+</table>
 
 <p class="quick">
 	{S_FORM_TOKEN}
-  <input type="submit" name="update" value="{L_SUBMIT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+  <input type="submit" name="updatelootsyst" value="{L_SUBMIT}" class="button1" />
+  <input type="reset" name="reset" value="{L_RESET}" class="button1" />
 </p>
 
+
 </form>
+</dl>
+</fieldset>
+</div>
 
+<span class="corners-bottom"><span></span></span>
+</div>
 
-<!-- INCLUDE dkp/overall_footer.html -->
+</fieldset>
+<!-- INCLUDE overall_footer.html -->
+
 

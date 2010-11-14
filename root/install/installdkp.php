@@ -590,6 +590,8 @@ $versions = array(
 	        //show 3darmory in viewmember
 	        array('bbdkp_show_3darmory', 1, true),
 
+	        //lootsystem in use
+	        array('bbdkp_lootsystem', 0, true),
 	        ),
 
           

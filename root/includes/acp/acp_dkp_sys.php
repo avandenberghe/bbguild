@@ -402,7 +402,44 @@ class acp_dkp_sys extends bbDkp_Admin
 			
 				case 'lootsystem':
 				
+				$submit  = (isset($_POST["updatelootsyst"])) ? true : false;
+				// DEFAULT lootsystem updater
+				if ($submit)
+				{				
+					$lootsystem = request_var('lootsystem', 0);
+					set_config  ( 'bbdkp_lootsystem',  $lootsystem,0);
+					switch ($lootsystem)
+					{
+						case 0:
+							$success_message = sprintf( $user->lang['ADMIN_UPDATE_LOOTSYS_SUCCESS'] , $user->lang['STANDARDDKP'] );
+							break;
+						case 1:
+							$success_message = sprintf( $user->lang['ADMIN_UPDATE_LOOTSYS_SUCCESS'] , $user->lang['ZEROSUM']);
+							break;
+						case 2:
+							$success_message = sprintf( $user->lang['ADMIN_UPDATE_LOOTSYS_SUCCESS'] , $user->lang['ZEROSUMPLUS']);
+							break;
+						case 3:
+							$success_message = sprintf( $user->lang['ADMIN_UPDATE_LOOTSYS_SUCCESS'] , $user->lang['TIMEDKP']);
+							break;
+						case 4:
+							$success_message = sprintf( $user->lang['ADMIN_UPDATE_LOOTSYS_SUCCESS'] , $user->lang['EPGP']);
+							break;
+					}
+					trigger_error($success_message .  adm_back_link($this->u_action));
+				}
 				
+				
+				$template->assign_vars(array(
+					'STANDARDCHECKED'	=> $config[bbdkp_lootsystem] == '0' ? ' checked="checked"' : '' ,
+					'ZEROSUMCHECKED'	=> $config[bbdkp_lootsystem] == '1' ? ' checked="checked"' : '' ,
+					'ZEROSUMPLUSCHECKED'	=> $config[bbdkp_lootsystem] == '2' ? ' checked="checked"' : '' ,
+					'TIMEDKPCHECKED'	=> $config[bbdkp_lootsystem] == '3' ? ' checked="checked"' : '' ,
+					'EPGPCHECKED'	=> $config[bbdkp_lootsystem] == '4' ? ' checked="checked"' : '' ,
+				));
+				
+				
+					
 				$this->page_title = 'ACP_DKP_LOOTSYSTEM';
 				$this->tpl_name = 'dkp/acp_'. $mode;
 			break;
