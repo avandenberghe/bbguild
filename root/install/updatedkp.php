@@ -917,18 +917,16 @@ $versions = array(
 		),
 
 		'1.1.3'    => array(
-		
-		  	'config_add' => array(
-			        //Lootsystem in use
-		        	array('bbdkp_lootsystem', 0, true),
-	    	),
-	     
+		/*
+		 * 
+		 * 
+		 */
 		
 			// module adding
          	'module_add' => array(
 		 	array('acp', 'ACP_DKP_RAIDS', array(
           		 'module_basename' => 'dkp_sys',
-            	 'modes'           => array('lootsystem' ))
+            	 'modes'           => array('lootsystem', 'lootsystem_options', 'lootsystem_explain' ))
             	 ),
 	         ),
                      

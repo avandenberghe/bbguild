@@ -590,8 +590,6 @@ $versions = array(
 	        //show 3darmory in viewmember
 	        array('bbdkp_show_3darmory', 1, true),
 
-	        //lootsystem in use
-	        array('bbdkp_lootsystem', 0, true),
 	        ),
 
           
@@ -653,7 +651,7 @@ $versions = array(
             // add raid pools - lootsystem
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_sys',
-            	 'modes'           => array('adddkpsys', 'listdkpsys', 'lootsystem' ),
+            	 'modes'           => array('adddkpsys', 'listdkpsys', 'lootsystem', 'lootsystem_options', 'lootsystem_explain'   ),
         		),
             ),
             
