@@ -362,8 +362,8 @@ class acp_dkp_sys extends bbDkp_Admin
 				// main tabs
 				$template->assign_vars ( array (
 					'U_LOOTSYSTEM' 			=> append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem" ), 
-					'U_LOOTSYSTEM_OPTIONS' 	=> append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_explain" ), 
-					'U_LOOTSYSTEM_EXPLAIN' 	=> append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_options" ), 
+					'U_LOOTSYSTEM_OPTIONS' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_options" ), 
+					'U_LOOTSYSTEM_EXPLAIN' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_explain" ),
 					'STANDARDCHECKED' 		=> $config ['bbdkp_lootsystem'] == '0' ? ' checked="checked"' : '', 
 					'ZEROSUMCHECKED' 		=> $config ['bbdkp_lootsystem'] == '1' ? ' checked="checked"' : '', 
 					'ZEROSUMPLUSCHECKED' 	=> $config ['bbdkp_lootsystem'] == '2' ? ' checked="checked"' : '', 
@@ -373,24 +373,25 @@ class acp_dkp_sys extends bbDkp_Admin
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
 
-			case 'lootsystem_explain' :
-				$template->assign_vars ( array (
-					'U_LOOTSYSTEM' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem" ), 
-					'U_LOOTSYSTEM_OPTIONS' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_explain" ), 
-					'U_LOOTSYSTEM_EXPLAIN' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_options" ) ) );
-				$this->page_title = 'ACP_DKP_LOOTSYSTEM_EXPLAIN';
-				$this->tpl_name = 'dkp/acp_' . $mode;
-				break;
-
 			case 'lootsystem_options' :
 				
 				$template->assign_vars ( array (
 					'U_LOOTSYSTEM' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem" ), 
 					'U_LOOTSYSTEM_OPTIONS' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_explain" ), 
-					'U_LOOTSYSTEM_EXPLAIN' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_options" ) ) );
+					'U_LOOTSYSTEM_EXPLAIN' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_explain" ) ) );
 				$this->page_title = 'ACP_DKP_LOOTSYSTEM_OPTIONS';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
+
+			case 'lootsystem_explain' :
+				$template->assign_vars ( array (
+					'U_LOOTSYSTEM' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem" ), 
+					'U_LOOTSYSTEM_OPTIONS' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_options" ), 
+					'U_LOOTSYSTEM_EXPLAIN' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=lootsystem_explain" )));
+				$this->page_title = 'ACP_DKP_LOOTSYSTEM_EXPLAIN';
+				$this->tpl_name = 'dkp/acp_' . $mode;
+				break;
+
 		
 		}
 	}

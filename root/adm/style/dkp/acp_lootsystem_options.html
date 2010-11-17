@@ -48,10 +48,10 @@ fieldset dd {
 			<li class="permissions"> 
 				<a href="{U_LOOTSYSTEM}"><span class="tabbg"><span class="colour"></span>{L_LOOTSYSTEM}</span></a></li>	
 			<li class="permissions-preset-yes activetab">
-				<a href="{U_LOOTSYSTEM_OPTIONS}"><span class="tabbg"><span class="colour"></span>{L_LOOTSYSTEM_OPTIONS}</span></a>
+				<a href="{U_LOOTSYSTEM_OPTIONS}"><span class="tabbg"><span class="colour"></span>{L_OPTIONS}</span></a>
 			</li>
 			<li class="permissions">
-				<a href="{U_LOOTSYSTEM_EXPLAIN}"><span class="tabbg"><span class="colour"></span>{L_LOOTSYSTEM_EXPLAIN}</span></a>
+				<a href="{U_LOOTSYSTEM_EXPLAIN}"><span class="tabbg"><span class="colour"></span>{L_ACP_DKP_LOOTSYSTEMEXPLAIN}</span></a>
 			</li>		
 		</ul>
 	</div>
@@ -59,16 +59,10 @@ fieldset dd {
 <span class="corners-top"><span></span></span>
 <div>
 <fieldset class="permissions">
- <legend>{L_ACP_DKP_LOOTSYSTEM_EXPLAIN}</legend>
+ <legend>{L_OPTIONS}</legend>
 <form method="post" action="{U_ACTION}" name="lootsystems">
 	<dl>
-		<dt><label for="faction">{L_ACP_DKP_LOOTSYSTEM}:</label></dt>
-		<dd><input type="radio" name="lootsystem" value="0"{STANDARDCHECKED}/>  {L_STANDARDDKP}  <br />
-			<input type="radio" name="lootsystem" value="1"{ZEROSUMCHECKED} />  {L_ZEROSUM}<br />
-			<input type="radio" name="lootsystem" value="2"{ZEROSUMPLUSCHECKED} /> {L_ZEROSUMPLUS}  <br />
-			<input type="radio" name="lootsystem" value="3"{TIMEDKPCHECKED} />  {L_TIMEDKP}<br />
-			<input type="radio" name="lootsystem" value="4"{EPGPCHECKED} /> {L_EPGP}
-		</dd>
+	
 	</dl>
 <p class="quick">
 	{S_FORM_TOKEN}
