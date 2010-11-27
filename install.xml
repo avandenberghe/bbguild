@@ -167,6 +167,7 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 			<file from="root/adm/findrank.php" to="adm/findrank.php"/>
 			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
+			<file from="root/images_upl/*.*" to="images/*.*"/>
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
@@ -360,7 +361,7 @@ What has changed ? see here : /contrib/readme/changelog.html
 Post-install instructions : 
 
 1) copy the image folders to /images manually. 
-Automod cannot handle it as it would lead to a timeout due to the size (19mb) ! 
+Automod cannot handle it as it would lead to a timeout due to the size (24,9mb) ! 
 <file from="root/images/*.*" to="images/*.*" />   
 ------------------------------------------------------------------------------
 2) Run bbDKP 1.1.3 database installation or upgrade : install/installdkp.php 
@@ -378,10 +379,10 @@ Liste des changements : /contrib/readme/changelog.html
 Résumé des étapes de post-installation
 
 1) Copier ces fichiers vers le repertoire /images  
-En raison de la taille de ces répertoires (±20mb), Automod ne sait pas les copier du au timeout. 
+En raison de la taille de ce répertoires (±24,9mb), Automod ne sait pas les copier, cela causerait un 'timeout'. 
 <file from="root/images/*.*" to="images/*.*" />   
 ------------------------------------------------------------------------------
-2) lancer l’installateur ou m.a.j, demarrez install/installdkp.php 
+2) lancer l’installateur ou m.a.j, demarrez install/installdkp.php
 ------------------------------------------------------------------------------
 3) Fin
 Rennomer le repertoire /install pour réactiver le forum.
@@ -393,8 +394,8 @@ Success ;)	]]></diy-instructions>
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /contrib/readme/install.html
 Liste der änderungen : /contrib/readme/changelog.html
 
-1) Kopiere diese Dateien zum Verzeichnis /images  
-Aus Berücksichtigung der grösse der Verzeichnisse (±20mb), kann Automod dies nicht kopieren wegen Timeout. 
+1) Kopiere diese Dateien zum Verzeichnis /images 
+Aus Berücksichtigung der Grösse der Verzeichnisse (±24,9mb), kann Automod dies nicht kopieren wegen Auszeit. 
 <file from="root/images/*.*" to="images/*.*" />   
 ------------------------------------------------------------------------------
 2) Datenbank Installation order aktualisierung : install/installdkp.php 
