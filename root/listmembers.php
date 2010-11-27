@@ -136,7 +136,7 @@ $filtervalues [] = '--------';
         CLASS_TABLE 	=> 'c',
         BB_LANGUAGE		=> 'l', 
     	),
-    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
 	'ORDER_BY'	=> ' c.class_id ',
     );
     
@@ -223,7 +223,7 @@ $sql_array = array(
     	),
  
     'WHERE'     =>  "(m.member_id = l.member_id)  
-    		AND l1.attribute_id = c.c_index AND l1.language= '" . $config['bbdkp_lang'] . "' AND l1.attribute = 'class' 
+    		AND l1.attribute_id =  c.class_id AND l1.language= '" . $config['bbdkp_lang'] . "' AND l1.attribute = 'class' 
 			AND (c.class_id = l.member_class_id) 
 			AND (r.rank_id = l.member_rank_id) 
 			AND (m.member_dkpid = d.dkpsys_id) 
@@ -558,7 +558,7 @@ function leaderboard($dkpsys_id, $query_by_pool)
 	        CLASS_TABLE 	=> 'c',
 	        BB_LANGUAGE		=> 'l', 
 	    	),
-	    'WHERE'		=> "class_id != 0 AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+	    'WHERE'		=> "class_id != 0 AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
 		'ORDER_BY'	=> 'l.name ',
     );
 	$sql = $db->sql_build_query('SELECT', $sql_array);

@@ -177,7 +177,7 @@ $sql_array = array(
         AND l.member_guild_id = r.guild_id 
         AND l.member_rank_id = r.rank_id
         AND l.member_class_id = c.class_id 
-    	AND c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
+    	AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
     	
     	
     'ORDER_BY' => $current_order['sql'], 
@@ -329,7 +329,7 @@ $sql_array = array(
         AND i.item_dkpid = m.member_dkpid  
         AND l.member_id = m.member_id
         AND (i.item_value != 0.00) 
-    	AND c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
+    	AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
     	
     'GROUP_BY' => ' c1.name, c.class_id ',	
     'ORDER_BY' => $current_order['sql'], 
@@ -381,7 +381,7 @@ $sql_array = array(
     	),
     'WHERE'     =>  "m.member_id = l.member_id 
         AND l.member_class_id = c.class_id 
-    	AND c1.attribute_id = c.c_index 
+    	AND c1.attribute_id = c.class_id 
     	AND c1.language= '" . $config['bbdkp_lang'] . "' 
     	AND c1.attribute = 'class'" ,
     	

@@ -238,7 +238,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 								AND (a.member_id = m.member_id) 
 								AND (a.member_class_id = c.class_id)  
 								AND (m.member_dkpid = s.dkpsys_id)   
-								AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    		
+								AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    		
 								AND (s.dkpsys_id = " . (int) $dkpsys_id . ')' ,
 				
 					'ORDER_BY' => $current_order['sql'], 
@@ -366,7 +366,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 										AND (a.member_id = m.member_id) 
 										AND (a.member_class_id = c.class_id)  
 										AND (m.member_dkpid = s.dkpsys_id)   
-										AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    
+										AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    
 										AND (s.dkpsys_id = " . request_var(URI_DKPSYS, 0) . ')' . 
 									   "AND (a.member_name = '" . $db->sql_escape(  utf8_normalize_nfc(request_var(URI_NAME, '', true))) . "')",
 						);

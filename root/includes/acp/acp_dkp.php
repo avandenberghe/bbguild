@@ -702,13 +702,13 @@ class acp_dkp extends bbDkp_Admin
                  // get recruitment statuses from class table
 
                 $sql_array = array(
-				    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name,
+				    'SELECT'    => 	' c.class_id, l.name as class_name,
 				    				  c.imagename, c.dps, c.tank, c.heal ', 
 				    'FROM'      => array(
 				        CLASS_TABLE 	=> 'c',
 				        BB_LANGUAGE		=> 'l', 
 				    	),
-				    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+				    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
 					'ORDER_BY'	=> ' c.class_id ',
 				    );
 				    

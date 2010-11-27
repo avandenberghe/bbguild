@@ -20,6 +20,15 @@ function check_form()
     }
     return true;
 }
+
+ $(document).ready(
+ function() 
+ {
+   $('#nojquery').hide();
+   $('#picker').farbtastic('#event_color');
+
+ });
+
 //]]>
 
 </script>
@@ -27,9 +36,7 @@ function check_form()
 <a name="maincontent"></a>
 
 <h1>{L_TITLE}</h1>
-
 <p>{L_EXPLAIN}</p>
-
 
 <form method="post" action="{F_ADD_EVENT}" name="post" onsubmit="return check_form(this)">
 <input type="hidden" name="{URI_EVENT}" value="{EVENT_ID}" />
@@ -50,12 +57,31 @@ function check_form()
 	</dl>
 
 	<dl>
-		<dt><label for="event_name">{L_EVENT_NAME}:</label></dt>
+		<dt><label for="event_name">{L_EVENT_NAME}:</label><br/>{L_EVENT_NAME_EXPLAIN}</dt>
 		<dd><input class="medium" type="text" id="event_name" name="event_name" value="{EVENT_NAME}" /></dd>
 	</dl>
-
 	<dl>
-		<dt><label for="event_value">{L_EVENT_VALUE}:</label></dt>
+		<dt><label for="event_color">{L_EVENT_COLOR}:</label><br/>{L_EVENT_COLOR_EXPLAIN}</dt>
+		<dd>
+		<table style=" border-width: 0px;"> 
+			<tr>
+				<td >
+				<span id="nojquery" style="color: red; font-size: 1.4em">{L_JQUERY_MISSING}</span>
+				  <span id="picker"></span>
+		       	</td>
+	       		<td><p>
+				<span class="form-item"><input type="text" id="event_color" name="event_color" value="{EVENT_COLOR}" /></span>
+	    	 	</td>
+		     </tr>
+			</table>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label for="event_name">{L_EVENT_IMAGE}:</label><br/>{L_EVENT_IMAGE_EXPLAIN}</dt>
+		<dd><input class="medium" type="text" id="event_image" name="event_image" value="{EVENT_IMAGE}" /></dd>
+	</dl>
+	<dl>
+		<dt><label for="event_value">{L_EVENT_VALUE}:</label><br/>{L_EVENT_VALUE_EXPLAIN}</dt>
 		<dd><input class="medium" type="text" id="event_value" name="event_value" value="{EVENT_VALUE}" /></dd>
 	</dl>
 
@@ -63,13 +89,14 @@ function check_form()
 
 
 
-   <p class="quick">
+<p class="quick">
+{S_FORM_TOKEN}
     <!-- IF S_ADD -->
     <input type="submit" name="add" value="{L_ADD_EVENT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
     <input type="submit" name="update" value="{L_UPDATE_EVENT}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_EVENT}" class="button1" />
     <!-- ENDIF -->
-	</p>
+</p>
 
 
 </form>

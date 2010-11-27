@@ -75,7 +75,7 @@ switch ($layout)
 		     'LEFT_JOIN' => array(
 		        array(
 		            'FROM'  => array(BB_LANGUAGE => 'c1'),
-		            'ON'    => "c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
+		            'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
 		      )),
 		                      
             'WHERE'     => " g.id = m.member_guild_id 
@@ -171,7 +171,7 @@ switch ($layout)
             'WHERE'     => " c.class_id = m.member_class_id 
             				 AND r.guild_id = m.member_guild_id 
             				 AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
-            				 AND c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class' ", 
+            				 AND c1.attribute_id =  c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class' ", 
             'ORDER_BY'  =>  'c1.name asc'
          );
         $sql2 = $db->sql_build_query('SELECT', $sql_array);
@@ -215,7 +215,7 @@ switch ($layout)
 		     'LEFT_JOIN' => array(
 		        array(
 		            'FROM'  => array(BB_LANGUAGE => 'c1'),
-		            'ON'    => "c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
+		            'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
 		      )),
              
             'WHERE'     => "g.id = m.member_guild_id 
@@ -223,7 +223,7 @@ switch ($layout)
             				AND r.rank_id = m.member_rank_id AND r.rank_hide = 0 
             				AND r.guild_id = m.member_guild_id 
             				AND e.race_id = m.member_race_id 
-            				AND c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'
+            				AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'
             				AND e1.attribute_id = r.rank_id AND e1.language= '" . $config['bbdkp_lang'] . "' AND e1.attribute = 'race'  
                             AND m.member_class_id = " . (int) $classid,
             'ORDER_BY'  => $current_order['sql']

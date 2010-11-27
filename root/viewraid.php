@@ -110,7 +110,7 @@ if ( isset($_GET[URI_RAID])  )
 
 	$sql = 'SELECT a.class_id, c1.name, a.colorcode, a.imagename from ' . CLASS_TABLE . ' a, '  . BB_LANGUAGE . " c1 
 	   WHERE a.class_id != 0 
-	   AND c1.attribute_id = a.c_index 
+	   AND c1.attribute_id = a.class_id 
 	   AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'";
 	
     $result = $db->sql_query($sql);
@@ -132,7 +132,7 @@ if ( isset($_GET[URI_RAID])  )
             LEFT JOIN ' . MEMBER_RANKS_TABLE . " r
             ON m.member_rank_id = r.rank_id )
             WHERE m.member_class_id = c.class_id 
-            AND c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'  
+            AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'  
             AND " . $db->sql_in_set('m.member_name', $attendees, false, true); 
     
     $result = $db->sql_query($sql);
@@ -311,7 +311,7 @@ if ( isset($_GET[URI_RAID])  )
     $sql = 'SELECT m.member_name, m.member_class_id, c1.name as class_name 
             FROM ' . MEMBER_LIST_TABLE . ' m, ' . CLASS_TABLE . ' c, '.  BB_LANGUAGE . " c1 
 	    	WHERE (m.member_class_id = c.class_id)  
-	    	AND c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'  
+	    	AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'  
 			AND " . $db->sql_in_set('m.member_name', $attendees, false, true);
     
     $result = $db->sql_query($sql);

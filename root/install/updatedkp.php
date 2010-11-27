@@ -7,8 +7,9 @@
  * @version $Id$
  * 
  */
+
+define('IN_INSTALL', true);
 define('UMIL_AUTO', true);
-define('IN_PHPBB', true);
 define('IN_INSTALL', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : '../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
@@ -922,8 +923,13 @@ $versions = array(
 			        //Lootsystem in use
 		        	array('bbdkp_lootsystem', 0, true),
 	    	),
-	     
+	     					
+	    	//remove this
+	    	'table_remove' => array($bbdkp_table_prefix . 'roles'), 
 		
+	    	// should be unique
+	    	'table_index_add' => array($bbdkp_table_prefix . 'classes', 'class_id', 'class_id'),
+	    	
 			// module adding
          	'module_add' => array(
 		 	array('acp', 'ACP_DKP_RAIDS', array(
@@ -931,10 +937,12 @@ $versions = array(
             	 'modes'           => array('lootsystem', 'lootsystem_options', 'lootsystem_explain' ))
             	 ),
 	         ),
+	         
+	         
 	         // adding event color & image
          	'table_column_add' => array(
             	array($bbdkp_table_prefix .'events', 'event_imagename',  array('VCHAR:255', '')),
-            	array($bbdkp_table_prefix .'events', 'event_colorcode',  array('VCHAR:10', '')),
+            	array($bbdkp_table_prefix .'events', 'event_color',  array('VCHAR:10', '')),
             ),
                      
 			'custom' => array( 
@@ -1455,16 +1463,72 @@ function gameupdate($action, $version)
 						case 'wow':
 							$sql = 'UPDATE  ' . $bbdkp_table_prefix . "bb_language  SET attribute_id = '10' where attribute='race' and attribute_id='9'" ;
 							$db->sql_query($sql);
+							
+							//reinsert classes with correct color
+							$db->sql_query ( 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'classes' );
+							$sql_ary = array ();
+							$sql_ary [] = array ('class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#999', 'imagename' => 'wow_Unknown_small');   
+							$sql_ary [] = array ('class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_Warrior_small');   
+							$sql_ary [] = array ('class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_Rogue_small');    
+							$sql_ary [] = array ('class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_Hunter_small');    
+							$sql_ary [] = array ('class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_Paladin_small'); 
+							$sql_ary [] = array ('class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_Shaman_small'); 
+							$sql_ary [] = array ('class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_Druid_small');  
+							$sql_ary [] = array ('class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_Warlock_small'); 
+							$sql_ary [] = array ('class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_Mage_small');   
+							$sql_ary [] = array ('class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_Priest_small');  
+							$sql_ary [] = array ('class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_Death_Knight_small'); 
+							$db->sql_multi_insert ( $bbdkp_table_prefix . 'classes', $sql_ary );
+							
+							
+							$db->sql_query ( 'DELETE FROM ' . $bbdkp_table_prefix . "bb_language where attribute = 'class'" );
+							unset ( $sql_ary );
+							// reinsert class language table to correct id
+							// classes in en
+							$sql_ary[] = array( 'id' => 627 , 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+							$sql_ary[] = array( 'id' => 628 , 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
+							$sql_ary[] = array( 'id' => 629 , 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Rogue' ,  'name_short' =>  'Rogue' );
+							$sql_ary[] = array( 'id' => 630 , 'attribute_id' => 3, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Hunter' ,  'name_short' =>  'Hunter' );
+							$sql_ary[] = array( 'id' => 631 , 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
+							$sql_ary[] = array( 'id' => 632 , 'attribute_id' => 7, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Shaman' ,  'name_short' =>  'Shaman' );
+							$sql_ary[] = array( 'id' => 633 , 'attribute_id' => 11, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Druid' ,  'name_short' =>  'Druid' );
+							$sql_ary[] = array( 'id' => 634 , 'attribute_id' => 9, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warlock' ,  'name_short' =>  'Warlock' );
+							$sql_ary[] = array( 'id' => 635 , 'attribute_id' => 8, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Mage' ,  'name_short' =>  'Mage' );
+							$sql_ary[] = array( 'id' => 636 , 'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Priest' ,  'name_short' =>  'Priest' );
+							$sql_ary[] = array( 'id' => 637 , 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Death Knight' ,  'name_short' =>  'Death Knight' );
+						
+							//classes in fr
+							$sql_ary[] = array( 'id' => 638 , 'attribute_id' => 0, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+							$sql_ary[] = array( 'id' => 639 , 'attribute_id' => 1, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
+							$sql_ary[] = array( 'id' => 640 , 'attribute_id' => 4, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Voleur' ,  'name_short' =>  'Voleur' );
+							$sql_ary[] = array( 'id' => 641 , 'attribute_id' => 3, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chasseur' ,  'name_short' =>  'Chasseur' );
+							$sql_ary[] = array( 'id' => 642 , 'attribute_id' => 2, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
+							$sql_ary[] = array( 'id' => 643 , 'attribute_id' => 7, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chaman' ,  'name_short' =>  'Chaman' );
+							$sql_ary[] = array( 'id' => 644 , 'attribute_id' => 11, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Druide' ,  'name_short' =>  'Druide' );
+							$sql_ary[] = array( 'id' => 645 , 'attribute_id' => 9, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Démoniste' ,  'name_short' =>  'Démoniste' );
+							$sql_ary[] = array( 'id' => 646 , 'attribute_id' => 8, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Mage' ,  'name_short' =>  'Mage' );
+							$sql_ary[] = array( 'id' => 647 , 'attribute_id' => 5, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Prêtre' ,  'name_short' =>  'Prêtre' );
+							$sql_ary[] = array( 'id' => 648 , 'attribute_id' => 6, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chevalier de la Mort' ,  'name_short' =>  'Chevalier de la Mort' );
+							
+							//classes in de	
+							$sql_ary[] = array( 'id' => 671 , 'attribute_id' => 0, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unbekannt' ,  'name_short' =>  'Unbekannt' );
+							$sql_ary[] = array( 'id' => 672 , 'attribute_id' => 1, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Krieger' ,  'name_short' =>  'Krieger' );
+							$sql_ary[] = array( 'id' => 673 , 'attribute_id' => 4, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Schurke' ,  'name_short' =>  'Schurke' );
+							$sql_ary[] = array( 'id' => 674 , 'attribute_id' => 3, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Jäger' ,  'name_short' =>  'Jäger' );
+							$sql_ary[] = array( 'id' => 675 , 'attribute_id' => 2, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
+							$sql_ary[] = array( 'id' => 676 , 'attribute_id' => 7, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Schamane' ,  'name_short' =>  'Schamane' );
+							$sql_ary[] = array( 'id' => 677 , 'attribute_id' => 11, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Druide' ,  'name_short' =>  'Druide' );
+							$sql_ary[] = array( 'id' => 678 , 'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Hexenmeister' ,  'name_short' =>  'Hexenmeister' );
+							$sql_ary[] = array( 'id' => 679 , 'attribute_id' => 8, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Magier' ,  'name_short' =>  'Magier' );
+							$sql_ary[] = array( 'id' => 680 , 'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Priester' ,  'name_short' =>  'Priester' );
+							$sql_ary[] = array( 'id' => 681 , 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Todesritter' ,  'name_short' =>  'Todesritter' );
+							
+							$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
+							
 						break;
 					}
-						
 					
-					
-					// this table serves no purpose.
-					if ($umil->table_exists($bbdkp_table_prefix . 'roles'))
-					{
-						$umil->table_remove($bbdkp_table_prefix . 'roles');
-					}
+
 					break;
 				
 			}

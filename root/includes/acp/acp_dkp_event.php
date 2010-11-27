@@ -21,31 +21,16 @@ if (!defined('IN_PHPBB'))
 {
 	exit;
 }
+
 if (! defined('EMED_BBDKP')) 
 {
 	$user->add_lang ( array ('mods/dkp_admin' ));
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
+
 class acp_dkp_event extends bbDkp_Admin
 {
     var $u_action;
-    
-   	/** 
-	* validationfunction for event : requiredvalues
-	* @access public 
-	*/ 
-    function error_check()
-    {
-        global $user;
-        $this->fv->is_number(request_var('event_value',0.00), $user->lang['FV_NUMBER_VALUE']);
-       
-        $this->fv->is_filled(array(
-           request_var('event_dkpsys_name',' ')  => $user->lang['FV_REQUIRED_DKPSYS_NAME'],
-           request_var('event_name',' ')  => $user->lang['FV_REQUIRED_NAME'],
-           request_var('event_value', 0.00)    => $user->lang['FV_REQUIRED_VALUE'])
-        );
-        return $this->fv->is_error();
-    }
     
 	/** 
 	* main ACP dkp event function
@@ -63,11 +48,12 @@ class acp_dkp_event extends bbDkp_Admin
 
          /***  DKPSYS drop-down ***/
         $dkpsys_id = 1;
-        $sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default 
-                FROM ' . DKPSYS_TABLE . '
-                ORDER BY dkpsys_name';
+        $sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE . ' ORDER BY dkpsys_name';
         $resultdkpsys = $db->sql_query($sql);
-       
+        
+        $form_key = 'acp_dkp_event';
+		add_form_key($form_key);
+					
         switch ($mode)
         {
             case 'addevent':
@@ -84,7 +70,7 @@ class acp_dkp_event extends bbDkp_Admin
                         // we have a GET
                         $update = true;
                        
-                        $sql = 'SELECT b.dkpsys_name, a.event_name, a.event_value, a.event_id
+                        $sql = 'SELECT b.dkpsys_name, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename 
                                 FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b 
                                 WHERE a.event_id = '" . $this->url_id . "'
                                 AND b.dkpsys_id = a.event_dkpid  ";
@@ -100,6 +86,8 @@ class acp_dkp_event extends bbDkp_Admin
                             $this->event = array(
                                 'event_dkpsys_name'  => $row['dkpsys_name'],
                                 'event_name'  	     => $row['event_name'],
+	                            'event_color'  	     => $row['event_color'],
+	                            'event_imagename'  	 => $row['event_imagename'],
                                 'event_value' 	     => $row['event_value'],
                                 'event_id' 		     => $row['event_id']
                             );
@@ -129,37 +117,50 @@ class acp_dkp_event extends bbDkp_Admin
                         }
                     }
                    
-                    $add     = (isset($_POST['add'])) ? true : false;
+                    $add     	= (isset($_POST['add'])) ? true : false;
                     $submit     = (isset($_POST['update'])) ? true : false;
                     $delete     = (isset($_POST['delete'])) ? true : false;   
    
+                    if ( $add || $submit || $delete )
+                    {
+                    	if (!check_form_key('acp_dkp_event'))
+						{
+							trigger_error('FORM_INVALID');
+						}
+        			}
+		
                     if ($add)
                         {
                            $this_dkp_id = request_var('event_dkpid',0);
-                           $clean_event_name = utf8_normalize_nfc(request_var('event_name','', true));
+                           $event_name = utf8_normalize_nfc(request_var('event_name','', true));
+                           $event_imagename = utf8_normalize_nfc(request_var('event_image','', true));
+                           $event_color = utf8_normalize_nfc(request_var('event_color','', true));
                            $event_value= request_var('event_value', 0.0);
-                           if ($clean_event_name == null)
+                           if ($event_name == null)
                            {
                                 trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
                            }   
                            else
                            {
-                               
                                // check existing
                                 $eventexistsrow = $db->sql_query("SELECT count(*) as evcount from " . EVENTS_TABLE . 
                                 " WHERE UPPER(event_name) = '" . strtoupper($db->sql_escape(utf8_normalize_nfc(request_var('event_name',' ', true))))  .  "' ;");
                                 $eventexistsrow = $db->sql_fetchrow($eventexistsrow);
+                                
                                 if($eventexistsrow['evcount'] !=0 )
                                 {
                                      trigger_error($user->lang['ERROR_RESERVED_EVENTNAME']   . $link, E_USER_WARNING);
                                 }
+                                
                                 $this_event_id = $db->sql_query("SELECT MAX(event_id) as id FROM " . EVENTS_TABLE . ";");
                                 $this_event_id = $db->sql_fetchrow($this_event_id);
                                 $this_event_id = $this_event_id['id'] + 1;
                                 $query = $db->sql_build_array('INSERT', array(   
                                         'event_dkpid'    => $this_dkp_id,   
                                         'event_id'       => $this_event_id,   
-                                        'event_name'     => $clean_event_name,   
+                                        'event_name'     => $event_name,  
+		                                'event_imagename'    => $event_imagename,  
+		                                'event_color'    => $event_color,   
                                         'event_value'    => $event_value,  
                                         'event_added_by' => $user->data['username'])   
                                     );       
@@ -222,6 +223,8 @@ class acp_dkp_event extends bbDkp_Admin
                         //
                         $query = $db->sql_build_array('UPDATE', array(
                             'event_name'  => $new_event_name,
+                        	'event_imagename' => utf8_normalize_nfc(request_var('event_image','', true)),
+                           	'event_color' => utf8_normalize_nfc(request_var('event_color','', true)),
                             'event_value' => request_var('event_value', 0.0))
                         );
                         
@@ -309,9 +312,11 @@ class acp_dkp_event extends bbDkp_Admin
                         'EVENT_ID'    => $this->url_id,
                        
                         // Form values
-                        'EVENT_DKPPOOLNAME'   =>isset($this->event['event_dkpsys_name']) ? $this->event['event_dkpsys_name']: '',
-                        'EVENT_NAME'          =>isset($this->event['event_name']) ? $this->event['event_name']: '' ,
-                        'EVENT_VALUE'         =>isset($this->event['event_value']) ? $this->event['event_value']: '' ,
+                        'EVENT_DKPPOOLNAME'   => isset($this->event['event_dkpsys_name']) ? $this->event['event_dkpsys_name']: '',
+                        'EVENT_NAME'          => isset($this->event['event_name']) ? $this->event['event_name']: '' ,
+                        'EVENT_VALUE'         => isset($this->event['event_value']) ? $this->event['event_value']: '' ,
+                        'EVENT_COLOR'         => isset($this->event['event_color']) ? (($this->event['event_color'] == '') ? '#123456' : $this->event['event_color']) : '#123456'  ,
+                        'EVENT_IMAGENAME'     => isset($this->event['event_imagename']) ? $this->event['event_imagename']: '' ,
                        
                         // Language
                         'L_DKP_VALUE'       => sprintf($user->lang['DKP_VALUE'], $config['bbdkp_dkp_name']),
@@ -361,7 +366,7 @@ class acp_dkp_event extends bbDkp_Admin
                
                 $start = request_var('start',0);
                
-                $sql = 'SELECT b.dkpsys_name, a.event_name, a.event_value, a.event_id 
+                $sql = 'SELECT b.dkpsys_name, a.event_name, a.event_value, a.event_id , a.event_color, a.event_imagename 
                         FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . ' b 
                         WHERE  b.dkpsys_id = a.event_dkpid 
                         ORDER BY '. $current_order['sql']; 
@@ -376,6 +381,8 @@ class acp_dkp_event extends bbDkp_Admin
                     $template->assign_block_vars('events_row', array(
                         'U_VIEW_EVENT' =>  append_sid("index.$phpEx", "i=dkp_event&amp;mode=addevent&amp;" . URI_EVENT ."={$event['event_id']}"),
                         'DKPSYS_EVENT' => $event['dkpsys_name'],
+                        'COLOR' => $event['event_color'],
+                        'IMAGENAME' => $event['event_imagename'],
                         'NAME' => $event['event_name'],
                         'VALUE' => $event['event_value'])
                     );

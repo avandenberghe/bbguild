@@ -176,7 +176,7 @@ class acp_dkp_game extends bbDkp_Admin
 					$result = $db->sql_query($sql);	
 					if( (int) $db->sql_fetchfield('count', 0 ,$result ) > 0 )
 					{
-						 trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_FAILED'], $id) . $link, E_USER_WARNING);	
+						 trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_FAILED'], $class_id) . $link, E_USER_WARNING);	
 					}
 					$db->sql_freeresult($result);
 					
@@ -214,18 +214,23 @@ class acp_dkp_game extends bbDkp_Admin
 				{
 					// update class in db
 
-					// get primary key !!
-					$id = request_var('c_index', 0); 
-
-					// check for unique classid exception
-					$sql = 'select count(*) as count from ' . CLASS_TABLE . ' where c_index != ' . $id . " and class_id = '" . $db->sql_escape($class_id)  . "'"; 
+					// get unique key !!
+					$class_id0 = request_var('class_id0', 0); 
+					//get pk
+					$c_index = request_var('c_index', 0);
+					//new classid
+					$class_id = request_var('class_id', 0); 
+					
+					// check for unique classid exception : if this class id exists already 
+					$sql = 'select count(*) as count from ' . CLASS_TABLE . ' where c_index != ' . $c_index . " and class_id = '" . $db->sql_escape($class_id0)  . "'"; 
 					$result = $db->sql_query($sql);	
 					if( (int) $db->sql_fetchfield('count', 0 ,$result ) > 0 )
-					{
-						 trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_FAILED'], $id) . $link, E_USER_WARNING);	
+					{	// nubcake earned !
+						 trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_FAILED'], $class_id0) . $link, E_USER_WARNING);	
 					}
 					$db->sql_freeresult($result);
 					
+					// ok proceed
 					$data = array( 
 						'class_id'				=> (int) $class_id,
 						'class_min_level'		=> (int) $min,
@@ -237,15 +242,17 @@ class acp_dkp_game extends bbDkp_Admin
 					);
 					
 					$sql = 'UPDATE ' . CLASS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) .  '  
-						    WHERE c_index = ' . $id ;
+						    WHERE c_index = ' . $c_index ;
 					$db->sql_query($sql);		
 
+					// now update the language table!
 					$names = array(
-						'name'		=> (string) $classname,
-						'name_short'=> (string) $classname,	
+						'attribute_id'		=> (string) $class_id, //new classid
+						'name'				=> (string) $classname, 
+						'name_short'		=> (string) $classname,	
 					);
 					
-					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $id . 
+					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $class_id0 . 
 						" AND attribute='class'  AND language= '" . $config['bbdkp_lang'] ."'";
 					$db->sql_query($sql);	
 						
@@ -469,23 +476,24 @@ class acp_dkp_game extends bbDkp_Admin
 					
 					if( isset($_GET['id']))
             		{
-            			// get pk
+            			//edit this class_id
 	            		$id = request_var('id', 0); 
+	            		
 						
 						$sql_array = array(
-					    'SELECT'    => 	'  c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename, c.colorcode ', 
+					    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename, c.colorcode ', 
 					    'FROM'      => array(
 								CLASS_TABLE 	=> 'c',
 								BB_LANGUAGE 	=> 'l',
 									),
-						'WHERE'		=> " c.c_index = l.attribute_id 
+						'WHERE'		=> " c.class_id = l.attribute_id 
 										AND l.attribute='class' 
 										AND l.language= '" . $config['bbdkp_lang'] ."'
-										AND c.c_index = " . $id ,
+										AND c.class_id = " . $id ,
 					    );						
 					    $sql = $db->sql_build_query('SELECT', $sql_array);    		
-						
 						$result = $db->sql_query($sql);	
+						$c_index  =  $db->sql_fetchfield('c_index', 0 ,$result );
 						$class_id = (int)  $db->sql_fetchfield('class_id', 0 ,$result );
 						$class_name = (string)  $db->sql_fetchfield('class_name', 0 ,$result );	
 						$class_min_level = (int) $db->sql_fetchfield('class_min_level', 0 ,$result );	
@@ -506,14 +514,14 @@ class acp_dkp_game extends bbDkp_Admin
 						
 						// send parameters to template
 	                    $template->assign_vars( array(
-	                    		'ID' 				 => $id, 
+	                    		'ID' 				 => $c_index, 
 			                    'CLASS_ID' 			 => $class_id  ,
 			                    'CLASS_NAME' 		 => $class_name  ,
 								'CLASS_MIN' 		 => $class_min_level  ,
 	                    		'CLASS_MAX' 		 => $class_max_level  ,
 	                    		'S_ARMOR_OPTIONS' 	 => $s_armor_options ,
 	                    		'CLASS_IMAGENAME' 	 => $class_imagename,
-	                    		'COLORCODE' 		 => $class_colorcode,
+	                    		'COLORCODE' 		 => ($class_colorcode == '') ? '#123456' : $class_colorcode,
 	                    		'CLASS_IMAGE' 		 => (strlen($class_imagename) > 1) ? $phpbb_root_path . "images/class_images/" . $class_imagename . ".png" : '',  
 								'S_CLASS_IMAGE_EXISTS' => (strlen($class_imagename) > 1) ? true : false, 
 								'S_ADD'   			 => FALSE,
@@ -526,6 +534,7 @@ class acp_dkp_game extends bbDkp_Admin
             		}
             		else 
             		{
+            			// new class
             			$s_armor_options = '';
            		        foreach ( $armortype as $armor => $armorname )
 						{
@@ -547,54 +556,56 @@ class acp_dkp_game extends bbDkp_Admin
             	}
             	
             	
-                // user pressed delete class
+                // user pressed delete class in the listing
             	if ($classdelete)
             	{
-            		$id = request_var('id', 0); 
+            		//unique key
+            		$class_id = request_var('id', 0); 
             		
-            		// look up classcount with primary key passed
+            		// see if there are mambers in this class
                 	$sql_array = array(
-					    'SELECT'    => 	' count(*) as classcount  ', 
+					    'SELECT'    => 	' c.class_id, count(*) as classcount  ', 
 					    'FROM'      => array(
 					        MEMBER_LIST_TABLE 	=> 'm',
 					        CLASS_TABLE			=> 'c',
 					    	),
-					    'WHERE' => 'm.member_class_id = c.class_id and c.c_index =  ' . $id
+					    'WHERE' => 'm.member_class_id = c.class_id and c.class_id =  ' . $class_id
 				    );
+				    
 				    $sql = $db->sql_build_query('SELECT', $sql_array);    		
             		$result = $db->sql_query($sql);	
-					$classcount = (int) $db->sql_fetchfield('classcount', 0 ,$result );	
+					$classcount = (int) $db->sql_fetchfield('classcount', 0 ,$result );
 					$db->sql_freeresult($result);
 					if ($classcount == 0)
 					{
+						
 						// ask for permission
 						if (confirm_box(true))
 						{
-							$sql = 'DELETE FROM ' . CLASS_TABLE . ' WHERE c_index =' . $id;  
+							$sql = 'DELETE FROM ' . CLASS_TABLE . ' WHERE c.class_id  =' . $class_id;  
 							$db->sql_query($sql);
 							
-							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'class' and attribute_id= " . $id;  
+							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'class' and attribute_id= " . $classid;  
 							$db->sql_query($sql);
 							
-							trigger_error(sprintf($user->lang['ADMIN_DELETE_CLASS_SUCCESS'], $id) . $link, E_USER_WARNING);
-								
+							trigger_error(sprintf($user->lang['ADMIN_DELETE_CLASS_SUCCESS'], $class_id) . $link, E_USER_WARNING);
 						}
 						else
 						{
 							// get field content
 							$s_hidden_fields = build_hidden_fields(array(
 								'delete'	=> true,
-								'id'		=> $id,
+								'id'		=> $class_id,
 								)
 							);
-							confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_CLASS'], $id), $s_hidden_fields);
+							confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_CLASS'], $class_id), $s_hidden_fields);
 						}
 					
 					}
 					else 
 					{
 						//no really ?
-						trigger_error(sprintf($user->lang['ADMIN_DELETE_CLASS_FAILED'], $id) . $link, E_USER_WARNING);
+						trigger_error(sprintf($user->lang['ADMIN_DELETE_CLASS_FAILED'], $class_id) . $link, E_USER_WARNING);
 					}
             		
             	}            	
@@ -610,7 +621,6 @@ class acp_dkp_game extends bbDkp_Admin
                 
   
                 $current_order = switch_order($sort_order);
-              
                 
                 // list the factions
 				$total_factions = 0;
@@ -665,7 +675,6 @@ class acp_dkp_game extends bbDkp_Admin
                 $db->sql_freeresult($result);
                 
                 // list the classes
-                
                 $sort_order2 = array(
                     0 => array('class_id', 'class_id desc'),
                     1 => array('class_name', 'class_name desc'),
@@ -677,12 +686,12 @@ class acp_dkp_game extends bbDkp_Admin
                 
                 $total_classes = 0;
                 $sql_array = array(
-				    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name, c.class_hide, c.class_min_level, class_max_level, c.class_armor_type , c.imagename, c.colorcode ', 
+				    'SELECT'    => 	'c.c_index, c.class_id, l.name as class_name, c.class_hide, c.class_min_level, class_max_level, c.class_armor_type , c.imagename, c.colorcode ', 
 				    'FROM'      => array(
 				        CLASS_TABLE 	=> 'c',
 				        BB_LANGUAGE		=> 'l', 
 				    	),
-				    'WHERE'		=> " l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+				    'WHERE'		=> " l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
 					'ORDER_BY'	=> $current_order2['sql'],
 				    );
 				    
@@ -692,9 +701,9 @@ class acp_dkp_game extends bbDkp_Admin
                 {
                 	 $total_classes++;
                     $template->assign_block_vars('class_row', array(
-                        'U_VIEW_CLASS' =>  append_sid("index.$phpEx", "i=dkp_game&amp;mode=addclass&amp;r=". $row['c_index']),
-                        'ID' 			=> $row['c_index'],
-                        'CLASSID' 		=> $row['class_id'],
+                        'U_VIEW_CLASS' =>  append_sid("index.$phpEx", "i=dkp_game&amp;mode=addclass&amp;r=". $row['class_id']),
+						'C_INDEX' 		=> $row['c_index'],
+                    	'CLASSID' 		=> $row['class_id'],
                         'CLASSNAME' 	=> $row['class_name'],
                     	'COLORCODE' 	=> $row['colorcode'],
                     	'CLASSARMOR' 	=> $user->lang[$row['class_armor_type']], 	
@@ -703,8 +712,8 @@ class acp_dkp_game extends bbDkp_Admin
                         'CLASSHIDE' 	=> $row['class_hide'], 	
                     	'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
                     	'CLASSIMAGE'	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',
-                        'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classdelete=1&amp;id={$row['c_index']}"), 
-                    	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classedit=1&amp;id={$row['c_index']}"), 
+                        'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classdelete=1&amp;id={$row['class_id']}"), 
+                    	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classedit=1&amp;id={$row['class_id']}"), 
                     )
                     );
                 }

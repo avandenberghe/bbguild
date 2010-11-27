@@ -3,12 +3,12 @@
 		$Id$
 //-->
 <a name="maincontent"></a>
-
+<div>
 <form id="acp_listevents" method="post" action="{U_ACTION}">
 
 <h1>{L_TITLE}</h1>
-
 <p>{L_EXPLAIN}</p>
+<br /> 
 
 <!-- IF EVENT_PAGINATION -->
 <div class="pagination">
@@ -19,10 +19,11 @@
 <table cellspacing="1">
 <thead>
   <tr>
-    <th align="left" width="30%"><a href="{U_LIST_EVENTS}&amp;o={O_DKPSYS}&amp;start={START}">{L_POOL}</a></th>
-    <th align="left" width="70%"><a href="{U_LIST_EVENTS}&amp;o={O_NAME}&amp;start={START}">{L_EVENT_NAME}</a></th>
-    <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_EVENTS}&amp;o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
-  	<th align="center" width="16">{L_ACTION}</th>
+    <th style="text-align:left" width="20%"><a href="{U_LIST_EVENTS}&amp;o={O_DKPSYS}&amp;start={START}">{L_POOL}</a></th>
+    <th style="text-align:left" width="40%"><a href="{U_LIST_EVENTS}&amp;o={O_NAME}&amp;start={START}">{L_EVENT_NAME}</a></th>
+    <th style="text-align:left" width="20%">{L_EVENT_IMAGE}</th>
+    <th style="text-align:center" width="20%" nowrap="nowrap"><a href="{U_LIST_EVENTS}&amp;o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+  	<th style="text-align:center" width="5%">{L_ACTION}</th>
   </tr>
 </thead>
 <tbody>
@@ -32,16 +33,17 @@
   <!-- ELSE -->
   <tr class="row2">
   <!-- ENDIF -->
-    <td width="100">{events_row.DKPSYS_EVENT}</td>
-    <td width="900"><a href="{events_row.U_VIEW_EVENT}">{events_row.NAME}</a></td>
-    <td width="60" nowrap="nowrap" class="positive">{events_row.VALUE}</td>
-	<td align="center" width="5" nowrap="nowrap"><a href="{events_row.U_VIEW_EVENT}">{ICON_EDIT}</a>
+    <td width="20%">{events_row.DKPSYS_EVENT}</td>
+    <td width="40%"><a style="color:{events_row.COLOR}" href="{events_row.U_VIEW_EVENT}">{events_row.NAME}</a></td>
+    <td width="20%">{events_row.IMAGENAME}</td>
+    <td style="text-align:center" width="20%" nowrap="nowrap" class="positive">{events_row.VALUE}</td>
+	<td style="text-align:center" width="5%" nowrap="nowrap"><a href="{events_row.U_VIEW_EVENT}">{ICON_EDIT}</a>
 	</td>
 	    
   </tr>
   <!-- END events_row -->
   <tr>
-    <th colspan="4" class="footer">{LISTEVENTS_FOOTCOUNT}</th>
+    <th colspan="5" class="footer">{LISTEVENTS_FOOTCOUNT}</th>
   </tr>
   </tbody>
 </table>
@@ -54,7 +56,10 @@
 
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
 	<input class="button2" name="eventadd" type="submit" value="{L_ADD}" />
+	<input class="button2" name="importbosszones" type="submit" value="{L_IMPORTBOSSZONE}" />
 </fieldset>
+
 </form>
+</div>
 
 <!-- INCLUDE dkp/overall_footer.html -->

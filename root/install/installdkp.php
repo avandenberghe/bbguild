@@ -6,6 +6,10 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
  * 
+ * bbDKP clean install script
+ * if previous install found then redirect to updater
+ * 
+ * 
  */
 define('UMIL_AUTO', true);
 define('IN_PHPBB', true);
@@ -46,7 +50,7 @@ $umil = new umil;
 if ($umil->module_exists('acp', false, 'DKP'))
 {
      //bbDKP seems already installed, redirect to older umil updater
-     redirect($phpbb_root_path . '/install/updatedkp'. $phpEx); 
+     redirect($phpbb_root_path . '/install/updatedkp.'. $phpEx); 
 }
 
 // The name of the mod to be displayed during installation.
@@ -171,6 +175,7 @@ $versions = array(
             
                     ),
                     'PRIMARY_KEY'    => 'c_index',
+                    'KEYS'         => array('class_id'    => array('UNIQUE', 'class_id')),
                 ),
             ),
             

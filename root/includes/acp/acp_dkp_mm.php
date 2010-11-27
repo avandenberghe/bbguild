@@ -71,7 +71,7 @@ function main($id, $mode)
 						     'LEFT_JOIN' => array(
 						        array(
 						            'FROM'  => array(BB_LANGUAGE => 'c1'),
-						            'ON'    => "c1.attribute_id = c.c_index AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
+						            'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
 						        )
 						    ),
 						    
@@ -296,13 +296,13 @@ function main($id, $mode)
 					// Class dropdown
 					//
 					$sql_array = array(
-					    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name, c.class_hide,
+					    'SELECT'    => 	' c.class_id, l.name as class_name, c.class_hide,
 					    				  c.class_min_level, class_max_level, c.class_armor_type , c.imagename ', 
 					    'FROM'      => array(
 					        CLASS_TABLE 	=> 'c',
 					        BB_LANGUAGE		=> 'l', 
 					    	),
-					    'WHERE'		=> " l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				 
+					    'WHERE'		=> " l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				 
 					    );
 					    
 					$sql = $db->sql_build_query('SELECT', $sql_array);					
@@ -834,7 +834,7 @@ function main($id, $mode)
 				    	),
 				 
 				    'WHERE'     =>  " (m.member_rank_id = r.rank_id)
-				    				AND l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+				    				AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
 									AND (m.member_guild_id = g.id)
 									AND (m.member_guild_id = r.guild_id)
 									AND (m.member_guild_id = " . $guild_id . ')
