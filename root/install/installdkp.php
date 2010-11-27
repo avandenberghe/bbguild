@@ -303,6 +303,8 @@ $versions = array(
                         'event_id'    		=> array('UINT', NULL, 'auto_increment'),
                         'event_dkpid'   	=> array('USINT', 0),
                         'event_name'     	=> array('VCHAR_UNI:255', ''),
+            		'event_color'     	=> array('VCHAR:8', ''),
+            		'event_imagename'       => array('VCHAR:255', ''),
                         'event_value'		=> array('DECIMAL:11', 0),
                         'event_added_by'	=> array('VCHAR_UNI:255', ''),
                         'event_updated_by'	=> array('VCHAR_UNI:255', ''),
@@ -589,6 +591,8 @@ $versions = array(
 	        array('bbdkp_lang', 'en', true),
 	        //show 3darmory in viewmember
 	        array('bbdkp_show_3darmory', 1, true),
+
+	        array('bbdkp_lootsystem', 0, true)
 
 	        ),
 

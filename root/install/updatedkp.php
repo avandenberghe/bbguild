@@ -917,10 +917,12 @@ $versions = array(
 		),
 
 		'1.1.3'    => array(
-		/*
-		 * 
-		 * 
-		 */
+		
+		  	'config_add' => array(
+			        //Lootsystem in use
+		        	array('bbdkp_lootsystem', 0, true),
+	    	),
+	     
 		
 			// module adding
          	'module_add' => array(
@@ -929,6 +931,11 @@ $versions = array(
             	 'modes'           => array('lootsystem', 'lootsystem_options', 'lootsystem_explain' ))
             	 ),
 	         ),
+	         // adding event color & image
+         	'table_column_add' => array(
+            	array($bbdkp_table_prefix .'events', 'event_imagename',  array('VCHAR:255', '')),
+            	array($bbdkp_table_prefix .'events', 'event_colorcode',  array('VCHAR:10', '')),
+            ),
                      
 			'custom' => array( 
 				'gameupdate', 
@@ -1451,6 +1458,8 @@ function gameupdate($action, $version)
 						break;
 					}
 						
+					
+					
 					// this table serves no purpose.
 					if ($umil->table_exists($bbdkp_table_prefix . 'roles'))
 					{
