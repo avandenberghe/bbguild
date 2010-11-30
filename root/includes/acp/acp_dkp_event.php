@@ -58,6 +58,7 @@ class acp_dkp_event extends bbDkp_Admin
         {
             case 'addevent':
                 /* select data */
+	    			
                     $update = false;
 
                     if  (isset($_GET[URI_EVENT]) )
@@ -132,55 +133,64 @@ class acp_dkp_event extends bbDkp_Admin
                     if ($add)
                         {
                            $this_dkp_id = request_var('event_dkpid',0);
+                           
+                           $zone= utf8_normalize_nfc(request_var('zoneevent','', true));
                            $event_name = utf8_normalize_nfc(request_var('event_name','', true));
+                           
+                           if ($zone != "--")
+                           {
+                              	$event_name= $zone;
+                           }
+                           
+                           if (strlen($event_name) < 3)
+                           {
+                                trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
+                           }
+                           
                            $event_imagename = utf8_normalize_nfc(request_var('event_image','', true));
                            $event_color = utf8_normalize_nfc(request_var('event_color','', true));
                            $event_value= request_var('event_value', 0.0);
-                           if ($event_name == null)
-                           {
-                                trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
-                           }   
-                           else
-                           {
-                               // check existing
-                                $eventexistsrow = $db->sql_query("SELECT count(*) as evcount from " . EVENTS_TABLE . 
-                                " WHERE UPPER(event_name) = '" . strtoupper($db->sql_escape(utf8_normalize_nfc(request_var('event_name',' ', true))))  .  "' ;");
-                                $eventexistsrow = $db->sql_fetchrow($eventexistsrow);
+                           
+
+                           // check existing
+                            $eventexistsrow = $db->sql_query("SELECT count(*) as evcount from " . EVENTS_TABLE . 
+                            " WHERE UPPER(event_name) = '" . strtoupper($db->sql_escape(utf8_normalize_nfc(request_var('event_name',' ', true))))  .  "' ;");
+                            $eventexistsrow = $db->sql_fetchrow($eventexistsrow);
+                            
+                            if($eventexistsrow['evcount'] !=0 )
+                            {
+                                 trigger_error($user->lang['ERROR_RESERVED_EVENTNAME']   . $link, E_USER_WARNING);
+                            }
+                            
+                            $this_event_id = $db->sql_query("SELECT MAX(event_id) as id FROM " . EVENTS_TABLE . ";");
+                            $this_event_id = $db->sql_fetchrow($this_event_id);
+                            $this_event_id = $this_event_id['id'] + 1;
+                            $query = $db->sql_build_array('INSERT', array(   
+                                    'event_dkpid'    => $this_dkp_id,   
+                                    'event_id'       => $this_event_id,   
+                                    'event_name'     => $event_name,  
+                                    'event_imagename'    => $event_imagename,  
+                                    'event_color'    => $event_color,   
+                                    'event_value'    => $event_value,  
+                                    'event_added_by' => $user->data['username'])   
+                                );       
+                                       
+                            $db->sql_query('INSERT INTO ' . EVENTS_TABLE . $query);
+                               
+                            $log_action = array(
+                                    'header'       => 'L_ACTION_EVENT_ADDED',
+                                    'id'           => $this_event_id,
+                                    'L_NAME'     => ($clean_event_name),
+                                    'L_VALUE'    => $event_value,
+                                    'L_ADDED_BY' => $user->data['username']);
                                 
-                                if($eventexistsrow['evcount'] !=0 )
-                                {
-                                     trigger_error($user->lang['ERROR_RESERVED_EVENTNAME']   . $link, E_USER_WARNING);
-                                }
-                                
-                                $this_event_id = $db->sql_query("SELECT MAX(event_id) as id FROM " . EVENTS_TABLE . ";");
-                                $this_event_id = $db->sql_fetchrow($this_event_id);
-                                $this_event_id = $this_event_id['id'] + 1;
-                                $query = $db->sql_build_array('INSERT', array(   
-                                        'event_dkpid'    => $this_dkp_id,   
-                                        'event_id'       => $this_event_id,   
-                                        'event_name'     => $event_name,  
-		                                'event_imagename'    => $event_imagename,  
-		                                'event_color'    => $event_color,   
-                                        'event_value'    => $event_value,  
-                                        'event_added_by' => $user->data['username'])   
-                                    );       
-                                           
-                                $db->sql_query('INSERT INTO ' . EVENTS_TABLE . $query);
-                                   
-                                $log_action = array(
-                                        'header'       => 'L_ACTION_EVENT_ADDED',
-                                        'id'           => $this_event_id,
-                                        'L_NAME'     => ($clean_event_name),
-                                        'L_VALUE'    => $event_value,
-                                        'L_ADDED_BY' => $user->data['username']);
-                                    
-                                $this->log_insert(array(
-                                        'log_type'   => $log_action['header'],
-                                        'log_action' => $log_action)
-                                    );
-                                    $success_message = sprintf($user->lang['ADMIN_ADD_EVENT_SUCCESS'], request_var('event_value', 0.0), $clean_event_name);
-                                    trigger_error($success_message . $link);
-                           }
+                            $this->log_insert(array(
+                                    'log_type'   => $log_action['header'],
+                                    'log_action' => $log_action)
+                                );
+                                $success_message = sprintf($user->lang['ADMIN_ADD_EVENT_SUCCESS'], request_var('event_value', 0.0), $clean_event_name);
+                                trigger_error($success_message . $link);
+                       
                             
                         }
                        
@@ -205,8 +215,19 @@ class acp_dkp_event extends bbDkp_Admin
                         }
                         $db->sql_freeresult($result);           
                                    
-                        $new_event_name = utf8_normalize_nfc(request_var('event_name', ' ', true));
-                       
+                        $zone= utf8_normalize_nfc(request_var('zoneevent','', true));
+                        $new_event_name = utf8_normalize_nfc(request_var('event_name','', true));
+                        
+                        if ($zone != "--")
+                        {
+                           	$new_event_name = $zone;
+                        }
+                        
+                        if (strlen($new_event_name) < 3)
+                        {
+                             trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
+                        }
+                           
                         //
                         // Update any raids with the old name
                         //
@@ -302,13 +323,55 @@ class acp_dkp_event extends bbDkp_Admin
                                 }
                             }
                         }   
-       
+
+                if (isset($this->event))
+                {
+                	$s_zonelist_options = '<option value="--">--</option>';	      
+                }
+                else 
+                {
+                	$s_zonelist_options = '<option value="--" selected="selected">--</option>';
+                }
+
+                // list of zones
+				$sql_array = array(
+			    'SELECT'    => 	' z.id, l.name ', 
+			    'FROM'      => array(
+						ZONEBASE 		=> 'z',
+						BB_LANGUAGE 	=> 'l',
+							),
+				'WHERE'		=> " z.id = l.attribute_id 
+								AND l.attribute='zone' 
+								AND l.language= '" . $config['bbdkp_lang'] ."' 
+								AND game= '" . $config['bbdkp_default_game'] . "'",
+				'ORDER_BY'	=> 'sequence desc, id desc ',
+			    );
+			    
+			    $sql = $db->sql_build_query('SELECT', $sql_array);					
+				$result = $db->sql_query($sql);
+				while ( $row = $db->sql_fetchrow($result) )
+				{
+					if (!isset($this->event))
+					{
+						$s_zonelist_options .= '<option value="' . $row['name'] . '"> ' . $row['name'] . '</option>';	
+					}
+					else
+					{
+						$select == ($row['name'] == $this->event_name ) ? ' selected="selected" ' : ' ';
+						$s_zonelist_options .= '<option value="' . $row['name'] . '" ' . $select . ' > ' . $row['name'] . '</option>';
+					}
+					                    
+				}
+                        
+                '<option value="--" selected="selected">--</option>';
+				
                 $template->assign_vars(array(
                         'EVENT_ID'  => $this->url_id,
                         'L_TITLE'   => $user->lang['ACP_ADDEVENT'],
                         'L_EXPLAIN' => $user->lang['ACP_ADDEVENT_EXPLAIN'],
                         // Form vars
-
+						'S_ZONEEVENT_OPTIONS'		=> $s_zonelist_options,
+                
                         'EVENT_ID'    => $this->url_id,
                        
                         // Form values

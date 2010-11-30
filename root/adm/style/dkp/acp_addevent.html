@@ -8,11 +8,7 @@
 //<![CDATA[
 function check_form()
 {
-    if (document.post.event_name.value.length < 2)
-    {
-        alert('{MSG_NAME_EMPTY}');
-        return false;
-    }
+   
     if (document.post.event_value.value.length < 1)
     {
         alert('{MSG_VALUE_EMPTY}');
@@ -60,6 +56,12 @@ function check_form()
 		<dt><label for="event_name">{L_EVENT_NAME}:</label><br/>{L_EVENT_NAME_EXPLAIN}</dt>
 		<dd><input class="medium" type="text" id="event_name" name="event_name" value="{EVENT_NAME}" /></dd>
 	</dl>
+	
+	<dl>
+		<dt><label for="zoneevent">{L_IMPORTBOSSZONE}:</label><br /><span>{L_IMPORTBOSSZONE_EXPLAIN}</span></dt>
+		<dd><select id="zoneevent" name="zoneevent">{S_ZONEEVENT_OPTIONS}</select> &nbsp;{ZONE_EVENT} </dd>
+	</dl>
+	
 	<dl>
 		<dt><label for="event_color">{L_EVENT_COLOR}:</label><br/>{L_EVENT_COLOR_EXPLAIN}</dt>
 		<dd>
