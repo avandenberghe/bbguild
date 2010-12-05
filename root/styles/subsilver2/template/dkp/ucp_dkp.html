@@ -1,0 +1,30 @@
+<!-- INCLUDE ucp_header.html -->
+
+<form id="characters" method="post" action="{U_ACTION}">
+
+<table class="tablebg" width="100%" cellspacing="1">
+<tr>
+	<th colspan="2" valign="middle">{DKPCHAR_TITLE}</th>
+</tr>
+<!-- IF ERROR -->
+	<tr>
+		<td class="row3" colspan="2" align="center"><span class="gensmall error">{ERROR}</span></td>
+	</tr>
+<!-- ENDIF -->
+<tr>
+	<td class="row1" width="50%"><b class="genmed">{L_CHARACTER}:</b><br />{L_CHARACTER_EXPLAIN}</td>
+	<td class="row2">
+			  <select id="dkpmember" name="dkpmember">{S_DKPMEMBER_OPTIONS}</select>
+	</td>
+</tr>
+<!-- IF S_SHOW_BUTTONS -->
+<tr>
+	<td class="cat" colspan="2" align="center">
+	<input class="btnmain" type="submit" name="submit" value="{L_SUBMIT}" />&nbsp;&nbsp;<input class="btnlite" type="reset" value="{L_RESET}" name="reset" /></td>
+</tr>
+<!-- ENDIF -->
+</table>
+</form>
+									
+
+<!-- INCLUDE ucp_footer.html -->
