@@ -264,6 +264,7 @@ $lang = array_merge($lang, array(
 'CLASS_IMAGE_EXPLAIN' => 'png Farbblidname ohne Dateiendung. Diese Datei soll existieren im bereich /images/class_images',
 'ACP_LISTGAME_EXPLAIN' => 'Verwalte die Spieleinstellungen',
 'CLASS_COLOR_EXPLAIN' => 'Wähle die Farbe der Klassetikette',
+'USERNAME_EXPLAIN' => 'Wähle den phpBB Gebrauchername verbunden mit diesen Spieler. '
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'Du hast keine Berechtigung Ereignisse zuzufügen.',

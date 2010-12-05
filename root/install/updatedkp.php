@@ -942,7 +942,7 @@ $versions = array(
 	         	
 				// Add one UCP module to the new category
 				array('ucp', 'UCP_DKP', array(
-						'module_basename'   => 'bbdkpchar',
+						'module_basename'   => 'dkp',
 						'module_langname'   => 'UCP_DKP_CHARACTERS',
 						'module_mode'       => 'characters',
 						'module_auth'       => '',
@@ -951,11 +951,15 @@ $versions = array(
 		        
 			),
 	         
+         		
+	         
+	         
+	         
 	         // adding event color & image
          	'table_column_add' => array(
             	array($bbdkp_table_prefix .'events', 'event_imagename',  array('VCHAR:255', '')),
             	array($bbdkp_table_prefix .'events', 'event_color',  array('VCHAR:10', '')),  
-            	array($bbdkp_table_prefix .'memberlist', 'phpbb_user_id',  array('UINT', 0)),  
+            	array($bbdkp_table_prefix .'memberlist', 'phpbb_user_id',  array('INT', 0)),  
             ),
                      
 			'custom' => array( 

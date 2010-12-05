@@ -264,6 +264,7 @@ $lang = array_merge($lang, array(
 'CLASS_IMAGE_EXPLAIN' => 'color png imagename, without extension. file should exist in /images/class_images',
 'ACP_LISTGAME_EXPLAIN' => 'Maintain Game Parameters',
 'CLASS_COLOR_EXPLAIN' => 'Choose the color of the class tags',
+'USERNAME_EXPLAIN' => 'Choose the phpBB username that is associated with this Game membername. This overrides the user choice in the UCP. ', 
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',

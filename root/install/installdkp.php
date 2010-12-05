@@ -725,7 +725,7 @@ $versions = array(
          	
 			// Add one UCP module to the new category
 			array('ucp', 'UCP_DKP', array(
-					'module_basename'   => 'bbdkpchar',
+					'module_basename'   => 'dkp',
 					'module_langname'   => 'UCP_DKP_CHARACTERS',
 					'module_mode'       => 'characters',
 					'module_auth'       => '',
