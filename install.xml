@@ -150,7 +150,7 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 	</header>
 	<action-group>
 		<copy>
-			<file from="root/about.php" to="about.php"/>
+			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
 			<file from="root/bossprogress.php" to="bossprogress.php"/>
 			<file from="root/listevents.php" to="listevents.php"/>
 			<file from="root/listitems.php" to="listitems.php"/>
@@ -169,6 +169,7 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
 			<file from="root/images_upl/*.*" to="images/*.*"/>
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
+			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/includes/bbdkp/portal/*.*" to="includes/bbdkp/portal/*.*"/>
@@ -228,7 +229,7 @@ if(@defined("EMED_BBDKP"))
 <script type="text/javascript">
 function pop_search()
 {
-    search = window.open('about.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')
+    search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')
     search.focus();
 }
 </script>
@@ -279,7 +280,7 @@ function pop_search()
 		'U_VIEWITEM'      => append_sid("{$phpbb_root_path}viewitem.$phpEx"),
 		'U_BP'            => append_sid("{$phpbb_root_path}bossprogress.$phpEx"),
 		'U_ROSTER'        => append_sid("{$phpbb_root_path}roster.$phpEx"),
-		'U_ABOUT'         => append_sid("{$phpbb_root_path}about.$phpEx"),
+		'U_ABOUT'         => append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
 		'U_STATS'         => append_sid("{$phpbb_root_path}stats.$phpEx"),
 		'U_VIEWNEWS'      => append_sid("{$phpbb_root_path}viewnews.$phpEx"),
 ]]></action>

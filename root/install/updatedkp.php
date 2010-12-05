@@ -932,17 +932,34 @@ $versions = array(
 	    	
 			// module adding
          	'module_add' => array(
-		 	array('acp', 'ACP_DKP_RAIDS', array(
-          		 'module_basename' => 'dkp_sys',
-            	 'modes'           => array('lootsystem', 'lootsystem_options', 'lootsystem_explain' ))
-            	 ),
-	         ),
+			 	array('acp', 'ACP_DKP_RAIDS', array(
+	          		 'module_basename' => 'dkp_sys',
+	            	 'modes'           => array('lootsystem', 'lootsystem_options', 'lootsystem_explain' ))
+	            	 ),
+				
+	            // Add the UCP category in which you link bbDKP memberids to your phpbb account
+				array('ucp', 0, 'UCP_DKP'),
+	         	
+				// Add one UCP module to the new category
+				array('ucp', 'UCP_DKP', array(
+						'module_basename'   => 'bbdkpchar',
+						'module_langname'   => 'UCP_DKP_CHARACTERS',
+						'module_mode'       => 'characters',
+						'module_auth'       => '',
+					),
+				),	         
+		        
+			),
+	         
+         		
+	         
 	         
 	         
 	         // adding event color & image
          	'table_column_add' => array(
             	array($bbdkp_table_prefix .'events', 'event_imagename',  array('VCHAR:255', '')),
-            	array($bbdkp_table_prefix .'events', 'event_color',  array('VCHAR:10', '')),
+            	array($bbdkp_table_prefix .'events', 'event_color',  array('VCHAR:10', '')),  
+            	array($bbdkp_table_prefix .'memberlist', 'phpbb_user_id',  array('INT', 0)),  
             ),
                      
 			'custom' => array( 

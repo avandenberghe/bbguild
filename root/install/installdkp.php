@@ -132,7 +132,6 @@ $versions = array(
     '1.1.3'    => array(
     	// bbdkp tables (this uses the layout from develop/create_schema_files.php and from phpbb_db_tools)
         'table_add' => array(
-
 		  array($table_prefix . 'bbdkp_language', array(
 	              'COLUMNS'            => array(
 	          		  'id'     	       => array('UINT', NULL, 'auto_increment'), 
@@ -237,6 +236,7 @@ $versions = array(
             			'member_gender_id' => array('USINT', 0),
             			'member_achiev'    => array('UINT', 0),
             			'member_armory_url' => array('VCHAR:255', 0),
+            			'phpbb_user_id' 	=> array('INT', 0),
             
                     ),
                     'PRIMARY_KEY'  => 'member_id',
@@ -718,6 +718,20 @@ $versions = array(
           		 'module_basename' => 'dkp_bossprogress',
             	 'modes'           => array('bossprogress', 'zoneprogress' ),
          		)),
+         		
+         		
+			// Add the UCP module in which you link bbDKP memberids to your phpbb account
+			array('ucp', 0, 'UCP_DKP'),
+         	
+			// Add one UCP module to the new category
+			array('ucp', 'UCP_DKP', array(
+					'module_basename'   => 'bbdkpchar',
+					'module_langname'   => 'UCP_DKP_CHARACTERS',
+					'module_mode'       => 'characters',
+					'module_auth'       => '',
+				),
+			),
+				
 
           ),        
             
