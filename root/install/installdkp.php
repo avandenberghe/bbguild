@@ -236,7 +236,7 @@ $versions = array(
             			'member_gender_id' => array('USINT', 0),
             			'member_achiev'    => array('UINT', 0),
             			'member_armory_url' => array('VCHAR:255', 0),
-            			'phpbb_user_id' 	=> array('INT', 0),
+            			'phpbb_user_id' 	=> array('UINT', 0),
             
                     ),
                     'PRIMARY_KEY'  => 'member_id',

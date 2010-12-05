@@ -29,6 +29,7 @@
     
     <th align="left" width="35" nowrap="nowrap">{L_ID}</th>
     <th align="left" width="100"><a href="{O_NAME}">{L_NAME}</a></th>
+    <th align="left" width="100"><a href="{O_PHPBBNAME}">{L_USERNAME}</a></th>
     <th align="left" width="40"><a href="{O_RANK}">{L_RANK}</a></th>
     <th align="left" width="20" nowrap="nowrap"><a href="{O_LEVEL}">{L_LEVEL}</a></th>
     <th align="left" width="40" nowrap="nowrap"><a href="{O_CLASS}">{L_CLASS}</a></th>
@@ -45,6 +46,7 @@
   <!-- ENDIF -->
     <td width="35" nowrap="nowrap" align="right">{members_row.ID}</td>
     <td width="100" nowrap="nowrap"><a href="{members_row.U_VIEW_MEMBER}">{members_row.NAME}</a></td>
+    <td width="100" nowrap="nowrap"><a href="{members_row.U_VIEW_USER}">{members_row.USERNAME}</a></td>
     <td width="40" nowrap="nowrap">{members_row.RANK}</td>
     <td width="20" nowrap="nowrap">{members_row.LEVEL}</td>
     <td width="40" nowrap="nowrap">{members_row.CLASS}</td>
@@ -59,7 +61,7 @@
   </tr>
   <!-- END members_row -->
   <tr>
-    <th colspan="9" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+    <th colspan="10" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
   </tr>
 </table>
 <br />

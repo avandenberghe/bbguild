@@ -186,30 +186,16 @@ function stateChanged()
 		{L_YEAR}: <select name="member_joindate_y">{S_JOINDATE_YEAR_OPTIONS}</select>
 	</dd>
     
-    <!-- 
-    <dd>
-		<input type="text" name="member_joindate_y" size="5" maxlength="4" value="{MEMBER_JOINDATE_Y}" id="Y" class="input" /> -
-      	<input type="text" name="member_joindate_mo" size="3" maxlength="2" value="{MEMBER_JOINDATE_MO}" id="mo" class="input" /> -  
-      	<input type="text" name="member_joindate_d" size="3" maxlength="2" value="{MEMBER_JOINDATE_D}" id="d" class="input" />
-    </dd>
-    -->
    </dl> 
   
     <dl>
     <dt><label for="member_outdate">{L_OUTDATE} (YYYY-MM-DD):</label></dt>
-    
      
     <dd>
 		{L_DAY}: <select id="member_outdate_d" name="member_outdate_d">{S_OUTDATE_DAY_OPTIONS}</select>
 		{L_MONTH}: <select name="member_outdate_mo">{S_OUTDATE_MONTH_OPTIONS}</select> 
 		{L_YEAR}: <select name="member_outdate_y">{S_OUTDATE_YEAR_OPTIONS}</select>
 	</dd>
-    <!--
-	<dd>
-		<input type="text" name="member_outdate_y" size="5" maxlength="4" value="{MEMBER_OUTDATE_Y}" id="Y" class="input" /> -
-		<input type="text" name="member_outdate_mo" size="3" maxlength="2" value="{MEMBER_OUTDATE_MO}" id="mo" class="input" /> -  
-      	<input type="text" name="member_outdate_d" size="3" maxlength="2" value="{MEMBER_OUTDATE_D}" id="d" class="input" /></dd>
-    -->
 	</dl> 
   
     <dl>
@@ -217,7 +203,14 @@ function stateChanged()
 	<dd><textarea name="member_comment" rows="15" cols="30" style="width: 100%" class="input">{MEMBER_COMMENT}</textarea></dd>
 
   </dl> 
-  
+
+    <dl>
+    <dt><label for="phpbb_user_id">{L_USERNAME}:</label><br />{L_USERNAME_EXPLAIN}</dt>
+	  <dd>
+		  <select id="phpbb_user_id" name="phpbb_user_id">{S_PHPBBUSER_OPTIONS}</select>
+	</dd>
+	</dl> 
+	  
   <p class="quick">
     <!-- IF S_ADD -->
     <input type="submit" name="add" value="{L_ADD_MEMBER}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />

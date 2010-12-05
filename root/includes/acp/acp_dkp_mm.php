@@ -101,17 +101,18 @@ function main($id, $mode)
 								'member_level'          => $row['member_level'],
 								'member_rank_id'        => $row['member_rank_id'],
 								'member_comment'        => $row['member_comment'],
-							    'member_gender_id'		 => $row['member_gender_id'],
+							    'member_gender_id'		=> $row['member_gender_id'],
 								'member_joindate_d'     =>  date('j', $row['member_joindate']),
 								'member_joindate_mo'    =>  date('n', $row['member_joindate']),
 								'member_joindate_y'     =>  date('Y', $row['member_joindate']),
 								'member_outdate_d'      =>  date('j', $row['member_outdate']),
 								'member_outdate_mo'     =>  date('n', $row['member_outdate']),
 								'member_outdate_y'      =>  date('Y', $row['member_outdate']),
-							    'member_guild_name'	     => $row['guild_name'],  
-							    'member_guild_id'	     => $row['guild_id'], 
-							    'member_guild_realm'	 => $row['realm'],  
-							    'member_guild_region'	 => $row['region'],  
+							    'member_guild_name'	    => $row['guild_name'],  
+							    'member_guild_id'	    => $row['guild_id'], 
+							    'member_guild_realm'	=> $row['realm'],  
+							    'member_guild_region'	=> $row['region'], 
+								'phpbb_user_id'	 		=> $row['phpbb_user_id'], 
 							 );
 							
 						}
@@ -158,6 +159,7 @@ function main($id, $mode)
 								    'member_guild_id'	     => $row['guild_id'], 
 								    'member_guild_realm'	 => $row['realm'],  
 								    'member_guild_region'	 => $row['region'],  
+									'phpbb_user_id'	 		=> $row['phpbb_user_id'],  
 								 );
 							}
 							else 
@@ -398,7 +400,31 @@ function main($id, $mode)
 					}
 					unset($now);
 
-					// end formbuilding
+					// phpbb User dropdown
+					$phpbb_user_id = isset($this->member['phpbb_user_id']) ? $this->member['phpbb_user_id'] : 0 ;
+					
+					$sql_array = array(
+					    'SELECT'    => 	' u.user_id, u.username ', 
+					    'FROM'      => array(
+					        USERS_TABLE 	=> 'u',
+					    	),
+					    // exclude bots and guests
+					    'WHERE'		=> " u.group_id != 6 and u.group_id != 1 ",   				 
+					    );
+					$sql = $db->sql_build_query('SELECT', $sql_array);					
+					$result = $db->sql_query($sql);
+					
+					$s_phpbb_user = '<option value="0"'. (($phpbb_user_id == 0) ? ' selected="selected"' : '') .'>--</option>';
+					while ( $row = $db->sql_fetchrow($result))
+					{
+						$selected = ($row['user_id'] == $phpbb_user_id ) ? ' selected="selected"' : '';
+						$s_phpbb_user .= '<option value="'. $row['user_id'] . '"'. $selected .'>' .$row['username'] . '</option>';
+					}
+					
+					/* 
+					 * end formbuilding
+					 */
+					
 					$submit	 = (isset($_POST['add'])) ? true : false;
 					$update	 = (isset($_POST['update'])) ? true : false;
 					$delete	 = (isset($_POST['delete'])) ? true : false;	
@@ -464,8 +490,10 @@ function main($id, $mode)
                         $achievpoints = 0; 
                         $url = '';
                         
+                        $phpbb_user_id = request_var('phpbb_user_id', 0); 
+                        
                         if ($this->insertnewmember($member_name, $member_status, $member_lvl, $race_id, $class_id,
-                            $rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url))
+                            $rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url, $phpbb_user_id))
                         {
                             $success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($member_name));
                             trigger_error($success_message . $Addmemberlink, E_USER_NOTICE);
@@ -498,7 +526,8 @@ function main($id, $mode)
 								'member_race_id'    => $row['member_race_id'],
 								'member_class_id'   => $row['member_class_id'],
 							    'member_guild_id'	=> $row['member_guild_id'],
-								'member_comment'    => $row['member_comment']
+								'member_comment'    => $row['member_comment'], 
+								'phpbb_user_id'		=> $row['phpbb_user_id'],
 				        		);
 						}
 						$db->sql_freeresult($result);
@@ -556,7 +585,9 @@ function main($id, $mode)
 							request_var('member_joindate_d', 0) , 
 							request_var('member_joindate_y', 0) );
 						
-						// update the data
+					 	$phpbb_user_id = request_var('phpbb_user_id', 0);
+					 	 
+						// update the data including the phpbb userid
 						$query = $db->sql_build_array('UPDATE', array(
 							'member_name'       => $member_name,
 							'member_level'      => $level, 
@@ -567,7 +598,8 @@ function main($id, $mode)
 							'member_comment'    => utf8_normalize_nfc(request_var('member_comment','',true)),  
 					    	'member_guild_id'   => request_var('member_guild_id',0),
 							'member_outdate'    =>  $outdate_upd, 
-							'member_joindate'   =>  $joindate_upd )						
+							'member_joindate'   =>  $joindate_upd, 
+							'phpbb_user_id'		=>  $phpbb_user_id)	 					
 						);
 							
 						$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' 
@@ -705,7 +737,6 @@ function main($id, $mode)
 							    trigger_error($success_message . $link, E_USER_WARNING);
 							}
 							
-							
 						}	
 				
 				        $template->assign_vars(array(
@@ -728,6 +759,7 @@ function main($id, $mode)
 							'S_OUTDATE_MONTH_OPTIONS'	=> $s_memberout_month_options,
 							'S_OUTDATE_YEAR_OPTIONS'	=> $s_memberout_year_options,
 				        	
+							'S_PHPBBUSER_OPTIONS' 		=> $s_phpbb_user, 
 				        	// javascript
 							'LA_ALERT_AJAX'	 	  => $user->lang['ALERT_AJAX'],
 				        	'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
@@ -807,13 +839,14 @@ function main($id, $mode)
 				
 				$sort_order = array(
 					0 => array('member_name', 'member_name desc'),
-					1 => array('member_level desc', 'member_level'),
-					2 => array('member_class', 'member_class desc'),
-					3 => array('rank_name', 'rank_name desc'),
-					4 => array('class_armor_type', 'class_armor_type desc'),
-					5 => array('member_joindate', 'member_joindate desc'),
-					6 => array('member_outdate', 'member_outdate desc'),
-					7 => array('member_comment', 'member_comment desc'),
+					1 => array('username', 'username desc'),
+					2 => array('member_level desc', 'member_level'),
+					3 => array('member_class', 'member_class desc'),
+					4 => array('rank_name', 'rank_name desc'),
+					5 => array('class_armor_type', 'class_armor_type desc'),
+					6 => array('member_joindate', 'member_joindate desc'),
+					7 => array('member_outdate', 'member_outdate desc'),
+					8 => array('member_comment', 'member_comment desc'),
 				);
 				
 				$current_order = switch_order($sort_order);
@@ -822,7 +855,7 @@ function main($id, $mode)
 				$show_all = (( isset($_GET['show'])) && request_var('show','') == 'all') ? true : false;
 				
 				$sql_array = array(
-				    'SELECT'    => 	'm.* , g.name, l.name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
+				    'SELECT'    => 	'm.* , u.username, g.name, l.name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
 									 c.class_armor_type AS armor_type', 
 				 
 				    'FROM'      => array(
@@ -832,7 +865,14 @@ function main($id, $mode)
 				        BB_LANGUAGE			=> 'l', 
 				        GUILD_TABLE  		=> 'g',
 				    	),
-				 
+
+				    'LEFT_JOIN' => array(
+				        array(
+				            'FROM'  => array(USERS_TABLE => 'u'),
+				            'ON'    => 'u.user_id = m.phpbb_user_id '
+				        )
+				    ),
+				    
 				    'WHERE'     =>  " (m.member_rank_id = r.rank_id)
 				    				AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
 									AND (m.member_guild_id = g.id)
@@ -855,12 +895,14 @@ function main($id, $mode)
 				$member_count = 0;
 				while ( $row = $db->sql_fetchrow($members_result) )
 				{
+					$phpbb_user_id = $row['phpbb_user_id']; 
 					++$member_count;
 					++$lines;
 					$template->assign_block_vars('members_row', array(
 						'ID'            => $row['member_id'],
 						'COUNT'         => $member_count,
 						'NAME'          => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
+						'USERNAME'      => $row['username'],
 						'RANK'          => $row['rank_name'],
 						'LEVEL'         => ( $row['member_level'] > 0 ) ? $row['member_level'] : '&nbsp;',
 						'ARMOR'         => ( !empty($row['armor_type']) ) ? $row['armor_type'] : '&nbsp;',
@@ -868,6 +910,7 @@ function main($id, $mode)
 						'COMMENT'       => $row['member_comment'],
 						'JOINDATE'      => date($config['bbdkp_date_format'], $row['member_joindate']),
 						'OUTDATE'       => date($config['bbdkp_date_format'], $row['member_outdate']),  
+						'U_VIEW_USER' 	=> append_sid("index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"), 
 						'U_VIEW_MEMBER' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember") . '&amp;'. URI_NAME . '='.$row['member_name']
 						)
 					); 
@@ -886,13 +929,14 @@ function main($id, $mode)
 					'L_EXPLAIN'		=> $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'],
 					
 					'O_NAME' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
-					'O_LEVEL' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_CLASS' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_RANK' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_ARMOR' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_JOINDATE' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_OUTDATE' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][6] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_COMMENT' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_USERNAME'	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
+					'O_LEVEL' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_CLASS' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_RANK' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_ARMOR' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_JOINDATE' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][6] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_OUTDATE' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_COMMENT' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][8] . "&amp;" . URI_GUILD . "=". $guild_id),
 					'U_LIST_MEMBERS' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;"), 		
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text
 					)
@@ -1675,10 +1719,12 @@ function main($id, $mode)
      * function for inserting a new member
      * you have to perform argument and ifexist validations before you call this function!
      * is also called from armory plugin
+     * 
+     * $phpbb_user_id is an optional value, set to zero when not given
      */
     function insertnewmember($member_name, $member_status, $member_lvl, 
     $race_id ,  $class_id, $rank_id, $member_comment, $joindate, $leavedate, 
-    $guild_id, $gender, $achievpoints, $url )
+    $guild_id, $gender, $achievpoints, $url, $phpbb_user_id = 0 )
     {
         global $db, $user, $config;   	
         
@@ -1719,9 +1765,11 @@ function main($id, $mode)
 			'member_joindate'       => $joindate,  
 		    'member_outdate'        => $leavedate,
 			'member_guild_id'       => $guild_id,
-		    'member_gender_id'	     => $gender,
-			'member_achiev'	         => $achievpoints, 
-		    'member_armory_url'      => $url)
+		    'member_gender_id'	    => $gender,
+			'member_achiev'	        => $achievpoints, 
+		    'member_armory_url'     => $url, 
+			'phpbb_user_id'			=> (int) $phpbb_user_id
+			)
 		); 
 		
 		$log_action = array(
