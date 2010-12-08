@@ -90,6 +90,79 @@ class ucp_dkp
 						)
 					);
 					
+					
+					// make a listing of my own characters with dkp for each pool
+
+					$sql_array = array(
+					    'SELECT'    => 	'm.member_id, m.member_name, m.member_level, u.username, g.name as guildname, l.name as member_class ', 
+					    'FROM'      => array(
+					        MEMBER_LIST_TABLE 	=> 'm',
+					        CLASS_TABLE  		=> 'c',
+					        BB_LANGUAGE			=> 'l', 
+					        GUILD_TABLE  		=> 'g',
+					    	),
+					    'LEFT_JOIN' => array(
+					        array(
+					            'FROM'  => array(USERS_TABLE => 'u'),
+					            'ON'    => 'u.user_id = m.phpbb_user_id and u.user_id = ' .$user->data['user_id'],
+					        )
+					      ),
+					    'WHERE'     =>  "  l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+										  AND (m.member_guild_id = g.id) AND (m.member_class_id = c.class_id) " ,
+						'ORDER_BY'	=> " m.member_name ",
+					    );
+
+				    $sql = $db->sql_build_query('SELECT', $sql_array);
+					if (!($members_result = $db->sql_query($sql)) )
+					{
+						trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
+					}
+					$lines = 0;
+					$member_count = 0;
+					while ( $row = $db->sql_fetchrow($members_result) )
+					{
+						++$member_count;
+						$template->assign_block_vars('members_row', array(
+							'COUNT'         => $member_count,
+							'NAME'          => $row['member_name'],
+							'CLASS'         => $row['member_class'],
+							'LEVEL'         => $row['member_level'],
+							'GUILD'         => $row['guildname'],
+							)
+						); 
+						
+						$sql_array2 = array(
+						    'SELECT'    => ' d.dkpsys_id, d.dkpsys_name, sum(b.member_earned) as earned, 
+						    				 sum(b.member_spent) as spent, sum(b.member_adjustment) as adjustment, 
+	    									 sum(b.member_earned-b.member_spent+b.member_adjustment) AS current ', 
+						    'FROM'      => array(
+							        MEMBER_DKP_TABLE 	=> 'b', 
+							        DKPSYS_TABLE 		=> 'd',
+						    	),
+						    'WHERE'     => " b.member_dkpid = d.dkpsys_id and b.member_id = " . $row['member_id'],
+							'GROUP_BY'  => " d.dkpsys_name " , 
+							'ORDER_BY'	=> " d.dkpsys_name ",
+						    );
+	
+					    $sql2 = $db->sql_build_query('SELECT', $sql_array2);
+					    $dkp_result = $db->sql_query($sql2); 
+						while ($row2 = $db->sql_fetchrow($dkp_result))
+						{
+							$template->assign_block_vars('members_row.dkp_row', array(
+								'DKPSYS'        => $row2['dkpsys_name'],
+								'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAME . '=' . $row['member_name'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id'] ), 
+								'EARNED'       => $row2['earned'],
+								'SPENT'        => $row2['spent'],
+								'ADJUSTMENT'   => $row2['adjustment'],
+								'CURRENT'      => $row2['current'],
+								)
+							); 
+						}
+    					$db->sql_freeresult ($dkp_result);	
+							
+					}
+					
+					$db->sql_freeresult ($members_result);
 					// this mode is shown to users in order to select the character with which they will raid
 					$this->page_title 	= $user->lang['UCP_DKP_CHARACTERS'];
 					

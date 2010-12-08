@@ -11,16 +11,47 @@
 		<td class="row3" colspan="2" align="center"><span class="gensmall error">{ERROR}</span></td>
 	</tr>
 <!-- ENDIF -->
+ <table width="100%" border="0" cellspacing="1" cellpadding="2">
+		<!-- BEGIN members_row -->
+		<!-- IF members_row.S_ROW_COUNT is even -->
+		<tr class="row11">
+			<!-- ELSE -->
+		<tr class="row2">
+			<!-- ENDIF -->
+			<td width="15" nowrap="nowrap" align="center"><strong>{members_row.COUNT}</strong></td>
+			<td width="20" nowrap="nowrap"><strong>{members_row.NAME}</strong></td>
+			<td width="20" nowrap="nowrap"><strong>{members_row.CLASS}</strong></td>
+			<td width="20" nowrap="nowrap"><strong>{L_LEVEL} {members_row.LEVEL}</strong></td>
+		</tr>
+
+		<!-- BEGIN dkp_row -->
+			<!-- IF members_row.S_ROW_COUNT is even -->
+			<tr class="row1">
+				<!-- ELSE -->
+			<tr class="row2">
+			<!-- ENDIF -->
+			<td width="20" nowrap="nowrap"><a href="{members_row.dkp_row.U_VIEW_MEMBER}"> {members_row.dkp_row.DKPSYS}</td>
+			<td width="20" nowrap="nowrap">{L_EARNED} : {members_row.dkp_row.EARNED}</td>
+			<td width="20" nowrap="nowrap">{L_SPENT} : {members_row.dkp_row.SPENT}</td>
+			<td width="20" nowrap="nowrap">{L_ADJUSTMENT} : {members_row.dkp_row.ADJUSTMENT}</td>
+			<td width="20" nowrap="nowrap">{L_CURRENT}  : {members_row.dkp_row.CURRENT}</td>
+		</tr>
+		<!-- END dkp_row -->
+		
+		<!-- END members_row -->
+	</table>
+
+<!-- IF S_SHOW_BUTTONS -->
 <tr>
-	<td class="row1" width="50%"><b class="genmed">{L_CHARACTER}:</b><br />{L_CHARACTER_EXPLAIN}</td>
+	<td class="row1" width="50%"><b class="genmed"></b><br />{L_CHARACTER_EXPLAIN}</td>
 	<td class="row2">
 			  <select id="dkpmember" name="dkpmember">{S_DKPMEMBER_OPTIONS}</select>
 	</td>
 </tr>
-<!-- IF S_SHOW_BUTTONS -->
+
 <tr>
 	<td class="cat" colspan="2" align="center">
-	<input class="btnmain" type="submit" name="submit" value="{L_SUBMIT}" />&nbsp;&nbsp;<input class="btnlite" type="reset" value="{L_RESET}" name="reset" /></td>
+	<input class="btnmain" type="submit" name="submit" value="{L_SUBMIT}" />&nbsp;&nbsp;<input class="btnlite" type="reset" value="{L_RESET}" name="reset" />{S_FORM_TOKEN}</td>
 </tr>
 <!-- ENDIF -->
 </table>
