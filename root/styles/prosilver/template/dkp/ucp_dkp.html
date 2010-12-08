@@ -26,11 +26,15 @@
 			<!-- ELSE -->
 		<tr class="row bg2">
 			<!-- ENDIF -->
-			<td width="15" nowrap="nowrap" align="center"><strong>{members_row.COUNT}</strong></td>
-			<td width="20" nowrap="nowrap"><strong>{members_row.NAME}</strong></td>
-			<td width="20" nowrap="nowrap"><strong>{members_row.CLASS}</strong></td>
-			<td width="20" nowrap="nowrap"><strong>{L_LEVEL}
-			{members_row.LEVEL}</strong></td>
+			<td width="15%" nowrap="nowrap" style="text-align:center;"><strong>{members_row.COUNT}</strong></td>
+			<td width="20%" nowrap="nowrap" style="text-align:center;" ><strong> <span style="color:{members_row.COLORCODE}">{members_row.NAME}</span>
+</strong></td>
+			<td width="20%" nowrap="nowrap" style="text-align:center;"><strong>
+			<img src="{ROOT_PATH}/images/class_images/{members_row.CLASSIMGPATH}" alt="pic" width="20" height="20"></img> &nbsp;&nbsp; 
+			<span style="color:{members_row.COLORCODE}">{members_row.CLASS}</span> 
+			</strong></td>
+			<td width="20%" nowrap="nowrap" style="text-align:center;">
+			{L_LEVEL} <strong> {members_row.LEVEL}</strong></td>
 		</tr>
 
 		<!-- BEGIN dkp_row -->
