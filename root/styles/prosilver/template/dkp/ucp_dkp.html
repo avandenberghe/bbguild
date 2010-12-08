@@ -9,12 +9,18 @@
 <fieldset><!-- IF ERROR -->
 <p class="error">{ERROR}</p>
 <!-- ENDIF -->
+</fieldset>
+
+<!-- IF S_SHOW -->
 
 <dl>
-	<dt><label for="dkpmember">{L_CHARACTER}:</label><br /></dt>
+	<dt><label for="dkpmember">{L_CHARACTER}</label>
+	</dt>
 	<dd>
+	<!-- IF  .members_row -->
 	<table width="100%" border="0" cellspacing="1" cellpadding="2">
 		<!-- BEGIN members_row -->
+		
 		<!-- IF members_row.S_ROW_COUNT is even -->
 		<tr class="row bg1">
 			<!-- ELSE -->
@@ -23,42 +29,52 @@
 			<td width="15" nowrap="nowrap" align="center"><strong>{members_row.COUNT}</strong></td>
 			<td width="20" nowrap="nowrap"><strong>{members_row.NAME}</strong></td>
 			<td width="20" nowrap="nowrap"><strong>{members_row.CLASS}</strong></td>
-			<td width="20" nowrap="nowrap"><strong>{L_LEVEL} {members_row.LEVEL}</strong></td>
+			<td width="20" nowrap="nowrap"><strong>{L_LEVEL}
+			{members_row.LEVEL}</strong></td>
 		</tr>
 
 		<!-- BEGIN dkp_row -->
-			<!-- IF members_row.S_ROW_COUNT is even -->
-			<tr class="row bg1">
-				<!-- ELSE -->
-			<tr class="row bg2">
+		<!-- IF members_row.S_ROW_COUNT is even -->
+		<tr class="row bg1">
+			<!-- ELSE -->
+		<tr class="row bg2">
 			<!-- ENDIF -->
-			<td width="20" nowrap="nowrap"><a href="{members_row.dkp_row.U_VIEW_MEMBER}"> {members_row.dkp_row.DKPSYS}</td>
+			<td width="20" nowrap="nowrap"><a
+				href="{members_row.dkp_row.U_VIEW_MEMBER}"> {members_row.dkp_row.DKPSYS}</td>
 			<td width="20" nowrap="nowrap">{L_EARNED} : {members_row.dkp_row.EARNED}</td>
 			<td width="20" nowrap="nowrap">{L_SPENT} : {members_row.dkp_row.SPENT}</td>
 			<td width="20" nowrap="nowrap">{L_ADJUSTMENT} : {members_row.dkp_row.ADJUSTMENT}</td>
-			<td width="20" nowrap="nowrap">{L_CURRENT}  : {members_row.dkp_row.CURRENT}</td>
+			<td width="20" nowrap="nowrap">{L_CURRENT} : {members_row.dkp_row.CURRENT}</td>
 		</tr>
 		<!-- END dkp_row -->
 		
 		<!-- END members_row -->
 	</table>
+	<!-- ENDIF -->
 	</dd>
 </dl>
-
 <!-- IF S_SHOW_BUTTONS -->
+<hr />
+<fieldset class="submit-buttons">
 <dl>
 	<dt><label for="dkpmember"></label>{L_CHARACTER_EXPLAIN}</dt>
 	<dd><select id="dkpmember" name="dkpmember">
 		{S_DKPMEMBER_OPTIONS}
 	</select></dd>
 </dl>
-</fieldset>
 
-<fieldset class="submit-buttons"><input class="button2"
+<input class="button2"
 	type="reset" id="reset" name="reset" value="{L_RESET}" />&nbsp; <input
 	class="button1" type="submit" id="submit" name="submit"
-	value="{L_SUBMIT}" /> {S_FORM_TOKEN}</fieldset>
-<!-- ENDIF -->
+	value="{L_SUBMIT}" /> {S_FORM_TOKEN}
+</fieldset>
+<!-- ENDIF --> 
+
+<!-- ELSE --> 
+
+{L_NO_CHARACTERS} 
+
+<!-- ENDIF --> 
 
 
 <span class="corners-bottom"><span></span></span></div>

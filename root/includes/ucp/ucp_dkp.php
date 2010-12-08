@@ -36,7 +36,6 @@ class ucp_dkp
 			{
 				trigger_error('FORM_INVALID');
 			}
-			// Handle the form processing by storing digest settings
 			
 			switch ($mode)
 			{
@@ -63,27 +62,43 @@ class ucp_dkp
 
 			// Set up the page
 			$this->tpl_name 	= 'dkp/ucp_dkp';
-			// newpage
+			
 			// GET processing logic
 			add_form_key('digests');
 			switch ($mode)
 			{
-			
+				// this mode is shown to users in order to select the character with which they will raid
 				case 'characters':
+					
+					$show_buttons = false;
+					$show = false;
+					
+					//if there are no chars at all, show a message and do not show add button
+					$sql = 'select count(*) as mcount from ' . MEMBER_LIST_TABLE .' ';
+					$result = $db->sql_query($sql, 0);
+					$mcount = (int) $db->sql_fetchfield('mcount');
+					if ( $mcount > 0)
+					{
+						$show = true;
+					}
+					$db->sql_freeresult ($dkp_result);
+					
 					// build popup for adding new chars to user account, get only those that are not assigned yet.
-					// if someone picks a guildmember that does not belong to them then the guild admin wen override it in acp
+					// do not show if all accounts are assigned
+					// if someone picks a guildmember that does not belong to them then the guild admin can override it in acp
 					$sql = 'select member_id, member_name from ' . MEMBER_LIST_TABLE .' where phpbb_user_id = 0 order by member_name asc';
 					$result = $db->sql_query($sql, 0);
 					$s_guildmembers = ' '; 
 					while ( $row = $db->sql_fetchrow($result) )
                     {
-						$show_buttons = true;
 						$s_guildmembers .= '<option value="' . $row['member_id'] .'">' . $row['member_name'] . '</option>';
+                    	$show_buttons = true;
                     }
 					
 					// These template variables are used on all the pages
 					$template->assign_vars(array(
 						'S_DKPMEMBER_OPTIONS'	=> $s_guildmembers,
+						'S_SHOW'				=> $show,
 						'S_SHOW_BUTTONS'		=> $show_buttons,
 						'U_ACTION'  			=> $this->u_action,
 						'DKPCHAR_TITLE'			=> $user->lang['UCP_DKP_CHARACTERS'],
@@ -92,23 +107,19 @@ class ucp_dkp
 					
 					
 					// make a listing of my own characters with dkp for each pool
-
 					$sql_array = array(
-					    'SELECT'    => 	'm.member_id, m.member_name, m.member_level, u.username, g.name as guildname, l.name as member_class ', 
+					    'SELECT'    => 	'm.member_id, m.member_name, m.member_level, u.username, g.name as guildname, l.name as member_class , c.imagename, c.colorcode  ', 
 					    'FROM'      => array(
 					        MEMBER_LIST_TABLE 	=> 'm',
 					        CLASS_TABLE  		=> 'c',
 					        BB_LANGUAGE			=> 'l', 
 					        GUILD_TABLE  		=> 'g',
+					        USERS_TABLE 		=> 'u', 
 					    	),
-					    'LEFT_JOIN' => array(
-					        array(
-					            'FROM'  => array(USERS_TABLE => 'u'),
-					            'ON'    => 'u.user_id = m.phpbb_user_id and u.user_id = ' .$user->data['user_id'],
-					        )
-					      ),
+					 
 					    'WHERE'     =>  "  l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
-										  AND (m.member_guild_id = g.id) AND (m.member_class_id = c.class_id) " ,
+										  AND (m.member_guild_id = g.id) AND (m.member_class_id = c.class_id) 
+										  AND u.user_id = m.phpbb_user_id and u.user_id = " . $user->data['user_id']  ,
 						'ORDER_BY'	=> " m.member_name ",
 					    );
 
@@ -125,9 +136,11 @@ class ucp_dkp
 						$template->assign_block_vars('members_row', array(
 							'COUNT'         => $member_count,
 							'NAME'          => $row['member_name'],
-							'CLASS'         => $row['member_class'],
 							'LEVEL'         => $row['member_level'],
+							'CLASS'         => $row['member_class'],
 							'GUILD'         => $row['guildname'],
+							'CLASSIMGPATH'	=> (strlen($row['imagename']) > 1) ? $row['imagename'] . ".png" : '',
+							'COLORCODE' 	=> $row['colorcode']
 							)
 						); 
 						
@@ -163,15 +176,12 @@ class ucp_dkp
 					}
 					
 					$db->sql_freeresult ($members_result);
-					// this mode is shown to users in order to select the character with which they will raid
+
 					$this->page_title 	= $user->lang['UCP_DKP_CHARACTERS'];
 					
-				break;
-					
-			}
-			
+				break;		
+			}	
 		}
 	}
 }
-
 ?>
