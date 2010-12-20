@@ -148,22 +148,6 @@ EQDkp (c) 2003 The EqDkp Project Team
 <!-- INCLUDE dkp/dkpheader.html -->]]></action>
 </edit>
 	
-<edit>
-	<comment lang="en">Insert Subsilver2 portal navbar exclusion</comment>
-	<find><![CDATA[
-	<div id="menubar">]]></find>
-	<action type="before-add"><![CDATA[<!-- IF not S_PORTAL -->]]></action>
-</edit>
-
-<edit>
-	<comment lang="en">Close Subsilver2 portal navbar exclusion</comment>
-	<find><![CDATA[</div>
-
-<div id="wrapcentre">]]></find>
-	<action type="before-add"><![CDATA[<!-- ENDIF -->]]></action>
-</edit>
-</open>
-
 <open src="/styles/subsilver2/template/breadcrumbs.html">
 <edit>
 	<comment lang="en">insert bbDkp links</comment>
