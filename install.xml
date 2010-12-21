@@ -330,13 +330,6 @@ function pop_search()
 				<action type="before-add"><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></action>
 			</edit>
 			<edit>
-				<comment lang="en"><![CDATA[Insert portal navbar exclusion]]></comment>
-				<comment lang="fr"><![CDATA[Insertion d’une exception pour le portail ]]></comment>
-				<comment lang="de"><![CDATA[Inseriere eine Ausnahme für das Portal]]></comment>								
-				<find><![CDATA[<div class="navbar">]]></find>
-				<action type="before-add"><![CDATA[<!-- IF not S_PORTAL -->]]></action>
-			</edit>
-			<edit>
 				<comment lang="en"><![CDATA[insert links in template]]></comment>
 				<comment lang="fr"><![CDATA[inserer liens dans template]]></comment>
 				<comment lang="de"><![CDATA[inseriere Links im Template]]></comment>								
@@ -344,15 +337,6 @@ function pop_search()
 				<action type="before-add"><![CDATA[				<li class="icon-home"><a href="{U_PORTAL}">{L_PORTAL}</a></li>
 				<li class="icon-faq"><a href="{U_DKP}">{L_DKPPAGE}</a><!-- BEGIN dkpnavlinks --> <strong>&#8249;</strong> <a href="{dkpnavlinks.U_DKPPAGE}">{dkpnavlinks.DKPPAGE}</a><!-- END dkpnavlinks --></li>
 				]]></action>
-			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[Close portal navbar exclusion]]></comment>
-				<comment lang="fr"><![CDATA[Ferme exception pour le portail]]></comment>
-				<comment lang="de"><![CDATA[Schliesse Kondition]]></comment>				
-				<find><![CDATA[</div>
-
-	<a name="start_here"></a>]]></find>
-				<action type="before-add"><![CDATA[<!-- ENDIF -->]]></action>
 			</edit>
 		</open>
 		<php-installer><![CDATA[install/installdkp.php]]></php-installer>
