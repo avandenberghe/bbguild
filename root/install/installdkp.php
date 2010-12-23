@@ -142,7 +142,7 @@ $versions = array(
 	                  'name_short' 	   => array('VCHAR_UNI:255', ''),
 	          	),
 	                'PRIMARY_KEY'     => array('id'),
-	          		'KEYS'            => array('unq_mtch' => array('UNIQUE', array('attribute_id', 'language', 'attribute')),
+	          		'KEYS'            => array('attribute_id' => array('UNIQUE', array('attribute_id', 'language', 'attribute')),
 				)
 	            )),   
 
@@ -209,7 +209,7 @@ $versions = array(
            array($table_prefix . 'bbdkp_member_ranks', array(
                     'COLUMNS'        => array(
             			//rank_id is not auto-increment 
-                       'guild_id'		=> array('USINT', 0),
+                        'guild_id'		=> array('USINT', 0),
                         'rank_id'		=> array('USINT', 0),
                         'rank_name'		=> array('VCHAR_UNI:50', ''),
                         'rank_hide'		=> array('BOOL', 0),
@@ -270,25 +270,24 @@ $versions = array(
                 ),
             ),
 
-            
-		  array($table_prefix . 'bbdkp_memberdkp', array(
-                    'COLUMNS'        	 => array(
-                        'member_dkpid'		=> array('USINT', 0),
-                        'member_id'			=> array('UINT', 0),
-                        'member_earned'		=> array('DECIMAL:11', 0),
-						'member_spent'		=> array('DECIMAL:11', 0),
-						'member_adjustment' => array('DECIMAL:11', 0),
-						'member_status' 	=> array('BOOL', 0) ,
-						'member_firstraid'  => array('TIMESTAMP', 0),
-						'member_lastraid'	=> array('TIMESTAMP', 0),
-						'member_raidcount'	=> array('UINT', 0),
-            
+            array($table_prefix . 'bbdkp_events', array(
+                    'COLUMNS'        => array(
+                        'event_id'    		=> array('UINT', NULL, 'auto_increment'),
+                        'event_dkpid'   	=> array('USINT', 0),
+                        'event_name'     	=> array('VCHAR_UNI:255', ''),
+            			'event_color'     	=> array('VCHAR:8', ''),
+            			'event_imagename'       => array('VCHAR:255', ''),
+                        'event_value'		=> array('DECIMAL:11', 0),
+                        'event_added_by'	=> array('VCHAR_UNI:255', ''),
+                        'event_updated_by'	=> array('VCHAR_UNI:255', ''),
                     ),
-                    'PRIMARY_KEY'  => array('member_dkpid', 'member_id'),
+                    'PRIMARY_KEY'    => 'event_id',
+                    'KEYS'            => array('event_dkpid'    => array('INDEX', 'event_dkpid')),
+                    
                 ),
-           ),
-
-		 array($table_prefix . 'bbdkp_transactions', array(
+            ),
+            
+          array($table_prefix . 'bbdkp_transactions', array(
                'COLUMNS'        => array(
 					'id'    		=> array('USINT', NULL, 'auto_increment'),
 					'account'   		=> array('VCHAR:11', ''),
@@ -302,31 +301,32 @@ $versions = array(
 	               ),
 	               'PRIMARY_KEY'    => 'id',
 	        )),
-	                       
-            array($table_prefix . 'bbdkp_events', array(
-                    'COLUMNS'        => array(
-                        'event_id'    		=> array('UINT', NULL, 'auto_increment'),
-                        'event_dkpid'   	=> array('USINT', 0),
-                        'event_name'     	=> array('VCHAR_UNI:255', ''),
-            		'event_color'     	=> array('VCHAR:8', ''),
-            		'event_imagename'       => array('VCHAR:255', ''),
-                        'event_value'		=> array('DECIMAL:11', 0),
-                        'event_added_by'	=> array('VCHAR_UNI:255', ''),
-                        'event_updated_by'	=> array('VCHAR_UNI:255', ''),
-                    ),
-                    'PRIMARY_KEY'    => 'event_id',
-                    'KEYS'            => array('event_dkpid'    => array('INDEX', 'event_dkpid')),
-                    
-                ),
-            ),
+                        
             
+		  array($table_prefix . 'bbdkp_memberdkp', array(
+                    'COLUMNS'        	 => array(
+                        'member_id'			=> array('UINT', 0),
+                        'member_dkpid'		=> array('USINT', 0),
+                        'member_earned'		=> array('DECIMAL:11', 0),
+						'member_spent'		=> array('DECIMAL:11', 0),
+						'member_adjustment' => array('DECIMAL:11', 0),
+						'member_status' 	=> array('BOOL', 0) ,
+						'member_firstraid'  => array('TIMESTAMP', 0),
+						'member_lastraid'	=> array('TIMESTAMP', 0),
+						'member_raidcount'	=> array('UINT', 0),
+            
+                    ),
+                    'PRIMARY_KEY'  => array('member_dkpid', 'member_id'),
+                ),
+           ),
+
             array($table_prefix . 'bbdkp_adjustments', array(
               'COLUMNS'        => array(
-                  'adjustment_dkpid'     => array('USINT', 0),
                   'adjustment_id'        => array('UINT', NULL, 'auto_increment'),
+				  'member_id'        	 => array('UINT', 0),
+                  'adjustment_dkpid'     => array('USINT', 0),
                   'adjustment_value'     => array('DECIMAL:11', 0),
         		  'adjustment_date'      => array('TIMESTAMP', 0),
-				  'member_id'        	 => array('UINT', 0),
 				  'adjustment_reason'    => array('VCHAR_UNI', ''),
 				  'adjustment_added_by'  => array('VCHAR_UNI:255', ''),
 				  'adjustment_updated_by'=> array('VCHAR_UNI:255', ''),
@@ -335,24 +335,39 @@ $versions = array(
                 'PRIMARY_KEY'    => 'adjustment_id',
             ),
           ),
+
+         array($table_prefix . 'bbdkp_raids', array(
+				'COLUMNS'        	=> array(
+					'raid_id'			=> array('UINT', NULL, 'auto_increment'),
+					'event_id'			=> array('UINT', 0),
+					'raid_name'  		=> array('VCHAR_UNI:255', ''),
+					'raid_note'   		=> array('VCHAR_UNI:255', ''),
+					'raid_date'  		=> array('TIMESTAMP', 0) ,
+					'raid_value' 		=> array('DECIMAL:11', 0),
+					'raid_added_by' 	=> array('VCHAR_UNI:255', ''),
+					'raid_updated_by' 	=> array('VCHAR_UNI:255', ''),
+					),
+				'PRIMARY_KEY'  => array('raid_id'),
+				'KEYS'         => array('event_id'    => array('INDEX', 'event_id'),
+                ),
+            )),
             
           array($table_prefix . 'bbdkp_items', array(
-                    'COLUMNS'        => array(
-                       'item_dkpid'       => array('USINT', 0),
-                       'item_id'          => array('UINT', NULL, 'auto_increment'),
-                       'item_name'        => array('VCHAR_UNI:255', ''),
-						'item_buyer'      => array('VCHAR_UNI:255', ''),
-						'raid_id'         => array('UINT', 0),
-						'item_value'      => array('DECIMAL:11', 0.00),
-						'item_date'       => array('TIMESTAMP', 0),
-						'item_added_by'   => array('VCHAR_UNI:255', ''),
-						'item_updated_by' => array('VCHAR_UNI:255', ''),
-            			'item_group_key'  => array('VCHAR', ''),
-            			'item_gameid' 	  => array('UINT', 0),  
+                    'COLUMNS'     => array(
+                    'item_id'         => array('UINT', NULL, 'auto_increment'),
+					'raid_id'         => array('UINT', 0),
+                    'item_name'       => array('VCHAR_UNI:255', ''),
+          			'member_id'		  => array('UINT', 0),
+					'item_value'      => array('DECIMAL:11', 0.00),
+					'item_date'       => array('TIMESTAMP', 0),
+					'item_added_by'   => array('VCHAR_UNI:255', ''),
+					'item_updated_by' => array('VCHAR_UNI:255', ''),
+           			'item_group_key'  => array('VCHAR', ''),
+           			'item_gameid' 	  => array('UINT', 0),  
             
                     ),
                     'PRIMARY_KEY'     => 'item_id',
-                    'KEYS'         => array('item_dkpid'    => array('INDEX', 'item_dkpid')),					
+                    'KEYS'         => array('raid_id'    => array('INDEX', 'raid_id')),					
                  ),
             ),
             
@@ -371,21 +386,6 @@ $versions = array(
                 ),
             ),
           
-         array($table_prefix . 'bbdkp_raids', array(
-				'COLUMNS'        	=> array(
-					'raid_dkpid'		=> array('USINT', 0),
-					'raid_id'			=> array('UINT', NULL, 'auto_increment'),
-					'raid_name'  		=> array('VCHAR_UNI:255', ''),
-					'raid_note'   		=> array('VCHAR_UNI:255', ''),
-					'raid_date'  		=> array('TIMESTAMP', 0) ,
-					'raid_value' 		=> array('DECIMAL:11', 0),
-					'raid_added_by' 	=> array('VCHAR_UNI:255', ''),
-					'raid_updated_by' 	=> array('VCHAR_UNI:255', ''),
-					),
-				'PRIMARY_KEY'  => array('raid_id'),
-				'KEYS'         => array('raid_dkpid'    => array('INDEX', 'raid_dkpid'),
-                ),
-            )),
               
 		  array($table_prefix . 'bbdkp_raid_attendees', array(
                     'COLUMNS'		=> array(
