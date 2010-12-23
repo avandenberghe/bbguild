@@ -253,9 +253,9 @@ $versions = array(
             
             array($bbdkp_table_prefix . 'items', array(
                     'COLUMNS'        => array(
-                       'item_dkpid'       => array('USINT', 0),
-                       'item_id'          => array('UINT', NULL, 'auto_increment'),
-                       'item_name'        => array('VCHAR_UNI:255', ''),
+                        'item_id'         => array('UINT', NULL, 'auto_increment'),
+                        'item_dkpid'      => array('USINT', 0),
+                        'item_name'       => array('VCHAR_UNI:255', ''),
 						'item_buyer'      => array('VCHAR_UNI:255', ''),
 						'raid_id'         => array('UINT', 0),
 						'item_value'      => array('DECIMAL:11', 0.00),
@@ -927,9 +927,36 @@ $versions = array(
 	    	//remove this
 	    	'table_remove' => array($bbdkp_table_prefix . 'roles'), 
 		
+            // new event_id column added to raid table
+            // memberid added to items table
+            'table_column_add' => array(
+	            array($bbdkp_table_prefix . 'raids' , 'event_id', array('UINT', 0)),
+	            array($bbdkp_table_prefix . 'items' , 'member_id', array('UINT', 0)),
+	            ),            
+            ),
+
+            //  removing obsolete indexes
+	    	'table_index_remove' => array(
+            	array($bbdkp_table_prefix . 'classes', 'class_id', 'class_id'),
+            	array($bbdkp_table_prefix . 'items', 'item_dkpid' ), 
+            	array($bbdkp_table_prefix . 'items', 'item_dkpid' ), 
+	    	), 
+	    	            
 	    	// should be unique
-	    	'table_index_add' => array($bbdkp_table_prefix . 'classes', 'class_id', 'class_id'),
-	    	
+	    	'table_index_add' => array(
+				array($bbdkp_table_prefix .'items', 'raid_id' ),
+				array($bbdkp_table_prefix . 'classes', 'class_id', 'class_id'),
+				array($bbdkp_table_prefix .'raids', 'event_id' ),
+				
+	    	), 
+
+	    	// removing obsolete columns
+	    	'table_column_remove' => array(
+            	array($bbdkp_table_prefix .'items', 'item_dkpid' ), 
+            	array($bbdkp_table_prefix .'items', 'item_buyer' ), 
+            	array($bbdkp_table_prefix .'classes', 'class_name'),
+            ),
+            
 			// module adding
          	'module_add' => array(
 			 	array('acp', 'ACP_DKP_RAIDS', array(
@@ -950,10 +977,6 @@ $versions = array(
 				),	         
 		        
 			),
-	         
-         		
-	         
-	         
 	         
 	         // adding event color & image
          	'table_column_add' => array(
