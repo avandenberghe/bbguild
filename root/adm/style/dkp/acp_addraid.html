@@ -4,11 +4,6 @@
 //-->
 <a name="maincontent"></a>
 
-<h1>{L_TITLE}</h1>
-
-<p>{L_EXPLAIN}</p>
-
-<form method="post" action="{F_ADD_RAID}" name="addraid" onsubmit="return check_form(this)">
 <script type="text/javascript">
 
 //<![CDATA[
@@ -132,27 +127,36 @@ function fnRemoveMember()
 
 </script>
 
+<form method="post" action="{F_ADD_RAID}" name="addraid" onsubmit="return check_form(this)">
 <div>
-<input type="hidden"
-	name="hidden_id" value="{RAID_ID}" /> <input type="hidden"
-	name="{URI_RAID}" value="{RAID_ID}" /> <input type="hidden"
-	name="hidden_dkpsysid" value="{RAID_DKPSYSID}" />
-	
-<fieldset><label>{L_POOL}:</label> <select name="dkpsys_id" class="input" onchange="javascript:form.submit();">
-	<!-- BEGIN dkpsys_row -->
-	<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
-	<!-- END dkpsys_row -->
-</select>
-</fieldset>
 
 <h1>{RAIDTITLE}</h1>
-
+<p>{L_EXPLAIN}</p>
+<fieldset>
 <div style="float: left; width: 55%;">
-<fieldset><legend>{L_ADD_RAID_TITLE}</legend>
+<fieldset>
+
+<legend>{L_ADD_RAID_TITLE}</legend>
+
+<input type="hidden" name="hidden_id" value="{RAID_ID}" /> 
+<input type="hidden" name="{URI_RAID}" value="{RAID_ID}" /> 
+<input type="hidden" name="hidden_eventid" value="{RAID_EVENTID}" />
+	
+	<dl><dt><label>{L_POOL}:</label></dt>
+	<dd>
+	
+	<select name="dkpsys_id" class="input" onchange="javascript:form.submit();">
+		<!-- BEGIN dkpsys_row -->
+		<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
+		<!-- END dkpsys_row -->
+	</select>
+	</dd>
+	</dl>
+	
 	<dl>
-		<dt><b>{L_EVENT}:</b> (<a href="{U_ADD_EVENT}">{L_ADD_EVENT}</a>)</dt>
+		<dt><label>{L_EVENT}:</label> (<a href="{U_ADD_EVENT}">{L_ADD_EVENT}</a>)</dt>
     <dd>
-	    <select name="raid_name" id="raid_name" class="input" size="10" style="width: 100%;" >
+	    <select name="event_id" id="event_id" class="input" size="10" style="width: 100%;" >
 			<!-- BEGIN events_row -->
 			<option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
 			<!-- END events_row -->
@@ -232,7 +236,8 @@ function fnRemoveMember()
 </fieldset>
 </div>
 
-<div style="float: right; width: 45%;">
+
+<div style="float: right; width: 40%;">
 
 <p class="quick">
 {S_FORM_TOKEN}
@@ -246,6 +251,8 @@ function fnRemoveMember()
 <!-- ENDIF -->
 </p>
 </div>
+</fieldset>
+
 </div>
 </form>
 

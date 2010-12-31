@@ -385,11 +385,10 @@ function main($id, $mode)
 					$s_memberout_month_options = '<option value="0"' . (isset($this->member['member_outdate_mo']) ? ' selected="selected"' : '') . '>--</option>';
 					for ($i = 1; $i < 13; $i++)
 					{
-						$month = isset($this->member['member_outdate_mo']) ? $this->member['member_outdate_mo'] : $now['mday'] ;
+						$month = isset($this->member['member_outdate_mo']) ? $this->member['member_outdate_mo'] : $now['mon'] ;
 						$selected = ($i == $month) ? ' selected="selected"' : '';
 						$s_memberout_month_options .= "<option value=\"$i\"$selected>$i</option>";
 					}
-					$s_memmberout_year_options = '';
 
 					$s_memberout_year_options = '<option value="0"' . (isset($this->member['member_outdate_mo']) ? ' selected="selected"' : '') . '>--</option>';
 					for ($i = $now['year'] - 10; $i <= $now['year']; $i++)

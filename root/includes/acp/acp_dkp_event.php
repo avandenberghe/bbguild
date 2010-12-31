@@ -150,7 +150,6 @@ class acp_dkp_event extends bbDkp_Admin
                            $event_imagename = utf8_normalize_nfc(request_var('event_image','', true));
                            $event_color = utf8_normalize_nfc(request_var('event_color','', true));
                            $event_value= request_var('event_value', 0.0);
-                           
 
                            // check existing
                             $eventexistsrow = $db->sql_query("SELECT count(*) as evcount from " . EVENTS_TABLE . 
@@ -199,7 +198,7 @@ class acp_dkp_event extends bbDkp_Admin
                         $this->url_id = request_var('hidden_id',0);
 
                         // get old event name, value from db
-                        $sql = 'SELECT event_name, event_value
+                        $sql = 'SELECT event_dkpid, event_name, event_value
                                 FROM ' . EVENTS_TABLE . "
                                 WHERE event_id='" . (int) $this->url_id . "'";
                        
@@ -209,14 +208,21 @@ class acp_dkp_event extends bbDkp_Admin
                         while ( $row = $db->sql_fetchrow($result) )
                         {
                             $this->old_event = array(
+                          	    'event_dkpid' => $row['event_dkpid'],
                                 'event_name'  => $row['event_name'],
                                 'event_value' => $row['event_value']
                             );
                         }
                         $db->sql_freeresult($result);           
-                                   
+
+                        $dkpid = request_var('event_dkpid','');
                         $zone= utf8_normalize_nfc(request_var('zoneevent','', true));
                         $new_event_name = utf8_normalize_nfc(request_var('event_name','', true));
+                        
+                        if ($dkpid == '')
+                        {
+                        	trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
+                        }
                         
                         if ($zone != "--")
                         {
@@ -229,21 +235,11 @@ class acp_dkp_event extends bbDkp_Admin
                         }
                            
                         //
-                        // Update any raids with the old name
-                        //
-                        if ( $this->old_event['event_name'] != $new_event_name )
-                        {
-                            $sql = 'UPDATE ' . RAIDS_TABLE . "
-                                    SET raid_name='" . $db->sql_escape($new_event_name) . "'
-                                    WHERE raid_name='" . $db->sql_escape($this->old_event['event_name']) . "'";
-                            $db->sql_query($sql);
-                        }
-                       
-                        //
                         // Update the event
                         //
                         $query = $db->sql_build_array('UPDATE', array(
-                            'event_name'  => $new_event_name,
+                            'event_dkpid' => $dkpid, 
+                        	'event_name'  => $new_event_name,
                         	'event_imagename' => utf8_normalize_nfc(request_var('event_image','', true)),
                            	'event_color' => utf8_normalize_nfc(request_var('event_color','', true)),
                             'event_value' => request_var('event_value', 0.0))
@@ -256,8 +252,8 @@ class acp_dkp_event extends bbDkp_Admin
                         // Logging
                         //
                         $log_action = array(
-                            'header'           => 'L_ACTION_EVENT_UPDATED',
-                            'id'			     => request_var(URI_EVENT,0),
+                            'header'         => 'L_ACTION_EVENT_UPDATED',
+                            'id'			 => request_var(URI_EVENT,0),
                             'L_NAME_BEFORE'  => $this->old_event['event_name'],
                             'L_VALUE_BEFORE' => $this->old_event['event_value'],
                             'L_NAME_AFTER'   => $new_event_name, 

@@ -202,7 +202,8 @@ $versions = array(
             		   'aion_server_id' => array('USINT', 0),
             			 
                       ),
-                    'PRIMARY_KEY'  	=> array('id', 'name'),
+                    'PRIMARY_KEY'  	=> array('id'),
+					'KEYS'         => array('gname'    => array('UNIQUE', 'name')),                    
               ),
             ),  
 
