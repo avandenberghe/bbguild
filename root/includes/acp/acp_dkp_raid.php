@@ -49,12 +49,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				elseif (isset ( $_POST['add']) || isset ($_POST['update']) || isset ($_POST ['delete']) || isset ($_POST ['additem']) ) 
 				{
 					/* commit update delete */
-					$event_id = request_var ( 'hidden_eventid', 0 );
 					$raid_id = request_var ( 'hidden_id', 0 );
-					if (($dkpsys_id == 0)) 
-					{
-						trigger_error ( $user->lang ['ERROR_INVALID_EVENT_PROVIDED'], E_USER_WARNING );
-					}
 					$submit = (isset ( $_POST ['add'] )) ? true : false;
 					$update = (isset ( $_POST ['update'] )) ? true : false;
 					$delete = (isset ( $_POST ['delete'] )) ? true : false;
@@ -62,6 +57,11 @@ class acp_dkp_raid extends bbDkp_Admin
 					
 					if($submit)
 					{
+						$event_id = request_var ( 'event_id', 0 );
+						if (($event_id == 0)) 
+						{
+							trigger_error ( $user->lang ['ERROR_INVALID_EVENT_PROVIDED'], E_USER_WARNING );
+						}
 						$this->addraid($event_id);
 					}
 					
@@ -86,10 +86,8 @@ class acp_dkp_raid extends bbDkp_Admin
 				else 
 				{
 					/* newpage */
-					// new page, no post or get -> we get pool from DKPSYS table
 					$this->displayraid(0);
 				}
-				
 				
 				$this->page_title = 'ACP_ADDRAID';
 				$this->tpl_name = 'dkp/acp_' . $mode;
@@ -111,12 +109,10 @@ class acp_dkp_raid extends bbDkp_Admin
 	function addraid($event_id)
 	{
 		global $db, $user, $config, $template, $phpEx ;
-		
 		if(!check_form_key('acp_dkp_addraid'))
 		{
 			trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);	
 		}
-		
 		/* add a new raid */
 		$this->raid = array (
 			'raid_date' 		=> mktime(request_var('h', 0), request_var('mi', 0), request_var('s', 0), 
@@ -131,7 +127,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		//
 		// Get the raid value, dkpid
 		// raid value passed is zero, getting default event value from database
-		$sql = "SELECT event_id, event_dkpid, event_value FROM " . EVENTS_TABLE . "  WHERE 
+		$sql = "SELECT event_id, event_name, event_dkpid, event_value FROM " . EVENTS_TABLE . "  WHERE 
                   event_id = " . $event_id;
 		$result = $db->sql_query ( $sql );
 		while ( $row = $db->sql_fetchrow ($result) ) 
@@ -140,7 +136,8 @@ class acp_dkp_raid extends bbDkp_Admin
 			{
 				$this->raid['raid_value'] = max ( $row ['event_value'], 0.00 );
 			}
-			$dkpsys_id =  $row ['event_dkpid'];
+			$this->raid['event_dkpid'] = $row ['event_dkpid'];
+			$this->raid['event_name'] = $row ['event_name'];
 		}
 		$db->sql_freeresult ( $result );
 		
@@ -150,7 +147,6 @@ class acp_dkp_raid extends bbDkp_Admin
 		//
 		$query = $db->sql_build_array ( 'INSERT', array (
 				'event_id' 		=> (int) $this->raid['event_id'], 
-				'raid_name' 	=> (string) $this->raid['raid_event'], 
 				'raid_date' 	=> (int) $this->raid['raid_date'], 
 				'raid_note' 	=> (string) $this->raid['raid_note'], 
 				'raid_value' 	=> (float) $this->raid['raid_value'], 
@@ -160,14 +156,15 @@ class acp_dkp_raid extends bbDkp_Admin
 		$db->sql_query ( "INSERT INTO " . RAIDS_TABLE . $query );
 		$this_raid_id = $db->sql_nextid();
 		
-		//
 		// Attendee handling
-		// pass the raidmembers array, raid value, and dkp pool.
-		$this->handle_memberdkp ( $this->raid ['raid_attendees'], $this->raid['raid_value'], $dkpsys_id );
 		
 		// Insert the attendees in the raid attendees table
-		// pass the raidmembers array and dkp pool.
-		$this->add_attendees ( $this->raid ['raid_attendees'], $this_raid_id );
+		$attendees = $this->add_attendees ( $this->raid ['raid_attendees'], $this_raid_id );
+
+		//
+		// pass the raidmembers array, raid value, and dkp pool.
+		$this->handle_memberdkp ($attendees, $this->raid['raid_value'], $this->raid['event_dkpid'] );
+		
 		
 		//
 		// Logging
@@ -175,7 +172,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		$log_action = array (
 			'header' => 'L_ACTION_RAID_ADDED', 
 			'id' 			=> $this_raid_id, 
-			'L_EVENT' 		=> $this->raid['raid_event'], 
+			'L_EVENT' 		=> $this->raid['event_name'], 
 			'L_ATTENDEES' 	=> implode ( ', ', $this->raid ['raid_attendees'] ), 
 			'L_NOTE' 		=> $this->raid ['raid_note'], 
 			'L_VALUE' 		=> $this->raid['raid_value'], 
@@ -186,7 +183,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			'log_action' 	=> $log_action ) );
 		
 		$success_message = sprintf ( $user->lang ['ADMIN_ADD_RAID_SUCCESS'], 
-			$user->format_date($this->time), $this->raid['raid_note'] ) . '<br />';
+			$user->format_date($this->time), $this->raid['event_name'] ) . '<br />';
 			
 		//
 		// Update active / inactive player status if needed
@@ -194,7 +191,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		if ($config ['bbdkp_hide_inactive'] == 1) 
 		{
 			$success_message .= '<br /><br />' . $user->lang ['ADMIN_RAID_SUCCESS_HIDEINACTIVE'];
-			$success_message .= ' ' . (($this->update_player_status ( $dkpsys_id )) ? 
+			$success_message .= ' ' . (($this->update_player_status ( $this->raid['event_dkpid'] )) ? 
 				strtolower ( $user->lang ['DONE'] ) : strtolower ( $user->lang ['ERROR'] ));
 		}
 		
@@ -212,31 +209,33 @@ class acp_dkp_raid extends bbDkp_Admin
 	 */
 	function updateraid($raid_id)
 	{
-		global $db, $user, $config, $template, $phpEx ;
-		
+		global $db, $user, $config, $template, $phpEx;
 		if(!check_form_key('acp_dkp_addraid'))
 		{
 			trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);	
 		}
 		
-		$this->raid = array (
-			'raid_date' 	 => mktime(request_var('h', 0), request_var('mi', 0), request_var('s', 0), 
-			  					   		request_var('mo', 0), request_var('d', 0), request_var('Y', 0)), 
-			'raid_attendees' => utf8_normalize_nfc ( request_var ( 'raid_attendees', array ( 0 => '' ), true ) ), 
-			'event_id' 	 	 => request_var ( 'event_id', 0 ), 
-			'raid_note' 	 => utf8_normalize_nfc ( request_var ( 'raid_note', ' ', true ) ), 
-			'raid_value' 	 => request_var ( 'raid_value', 0.00 ) );
-		
-		
 		// get old raid data
-		$raid_id = request_var ( 'hidden_id', 0 );
-		$sql = 'SELECT event_id, raid_value, raid_note, raid_date 
-			FROM ' . RAIDS_TABLE . " WHERE raid_id= " . (int) $raid_id;
-		$result = $db->sql_query ( $sql );
+		$sql_array = array (
+			'SELECT' => ' e.event_dkpid, e.event_name,  
+						  r.raid_id, r.raid_date, r.raid_note, 
+						  r.raid_value, r.raid_added_by, r.raid_updated_by ', 
+			'FROM' => array (
+				RAIDS_TABLE 		=> 'r' , 
+				EVENTS_TABLE 		=> 'e',		
+				), 
+			'WHERE' => "  r.event_id = e.event_id and r.raid_id = " . (int) $raid_id, 
+			'ORDER_BY' => $current_order ['sql'], 
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		
+		$result = $db->sql_query ($sql);
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
 			$this->old_raid = array (
 				'event_id' 		=> (int) $row ['event_id'], 
+				'event_dkpid' 	=> (int) $row ['event_dkpid'],
+			 	'event_name' 	=> (string) $row ['event_name'],
 				'raid_value' 	=> (float) $row ['raid_value'], 
 				'raid_note' 	=> (string) $row ['raid_note'], 
 				'raid_date' 	=> (int) $row ['raid_date'], 
@@ -244,46 +243,40 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 		$db->sql_freeresult ( $result );
 		
-		// Get old event information
-		$result = $db->sql_query ( "SELECT event_dkpid, event_value FROM " . EVENTS_TABLE . " 
-               WHERE event_id = " . $this->old_raid ['event_id']);
-		while ( $row = $db->sql_fetchrow ( $result ) ) 
-		{
-			$dkpsys_id = $row ['event_dkpid'];
-			if (!isset ( $_POST ['raid_value'] ))
-			{
-				$raid_value = $row ['event_value'];
-			}
-			else 
-			{	
-				//get user input
-				$raid_value = request_var ( 'raid_value', 0.00 );
-			}
-		}
-		$db->sql_freeresult ( $result );
-		
 		// get old attendee list
 		$this->old_raid ['raid_attendees'] = array();
-		$sql = 'SELECT member_name
-                FROM ' . RAID_ATTENDEES_TABLE . " 
-	            WHERE raid_id= " . (int) $raid_id . " ORDER BY member_name";
-		$result = $db->sql_query ( $sql );
+		
+		$sql = ' SELECT member_id FROM ' . RAID_ATTENDEES_TABLE . ' 
+	             WHERE raid_id= ' . (int) $raid_id . ' ORDER BY member_id' ;
+		
+		$result = $db->sql_query($sql);
 		if ($result)
 		{
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			while ( $row = $db->sql_fetchrow ($result)) 
 			{
-				$this->old_raid ['raid_attendees'] [] = $row ['member_name'];
+				$this->old_raid ['raid_attendees'] [] = $row ['member_id'];
 			}
 		}
 		else 
 		{
-			// should never get here
+			// no attendees found, should never get here
 			trigger_error ( $user->lang['ERROR_RAID_NOATTENDEES'] . $this->link, E_USER_WARNING );
-		} 
+		}
 		$db->sql_freeresult ( $result );
 		
+		// get updated data		
+		$this->raid = array (
+			'raid_attendeenames' 	=> utf8_normalize_nfc ( request_var ( 'raid_attendees', array ( 0 => '' ), true ) ), 
+			'event_id' 	 	 		=> request_var ( 'event_id', 0 ), 
+			'raid_value' 	 		=> request_var ( 'raid_value', 0.00 ),  
+			'raid_note' 	 		=> utf8_normalize_nfc ( request_var ( 'raid_note', ' ', true ) ), 
+			'raid_date' 	 		=> mktime(request_var('h', 0), request_var('mi', 0), request_var('s', 0), 
+			  					request_var('mo', 0), request_var('d', 0), request_var('Y', 0)), 
+		);
+		
+		
 		// Remove the attendees from the old raid
-		$db->sql_query ( 'DELETE FROM ' . RAID_ATTENDEES_TABLE . " WHERE raid_id= " . (int) $raid_id );
+		$db->sql_query ( 'DELETE FROM ' . RAID_ATTENDEES_TABLE . " WHERE raid_id = " . (int) $raid_id );
 		
 		if (sizeof($this->old_raid ['raid_attendees']) > 0)
 		{
@@ -475,36 +468,38 @@ class acp_dkp_raid extends bbDkp_Admin
 	{
 		global $db, $user, $config, $template, $phpEx ;
 		
+		$sql_array = array (
+			'SELECT' => ' e.event_id, event_dkpid, e.event_name, r.raid_date, r.raid_value ', 
+			'FROM' => array (
+				RAIDS_TABLE 		=> 'r' , 
+				EVENTS_TABLE 		=> 'e',		
+				), 
+			'WHERE' => " r.event_id = e.event_id and r.raid_id=" . ( int ) $raid_id, 
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ($sql);
+		
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$this->old_raid = array (
+				'event_id' 		=> $row ['event_id'],
+				'event_dkpid' 	=> $row ['event_dkpid'], 
+				'event_name' 	=> $row ['event_name'], 
+				'raid_date' 	=> $row ['raid_date'],  
+				'raid_value' 	=> (float) $row ['raid_value'], 
+			);
+		}
+		$db->sql_freeresult ( $result );
+	
 		if (confirm_box ( true )) 
 		{
-			$sql = 'SELECT event_id, raid_value, raid_note, raid_date
-			 FROM ' . RAIDS_TABLE . " WHERE raid_id= " . (int) $raid_id;
-			$result = $db->sql_query ( $sql );
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$this->old_raid = array (
-					'event_id' => $row ['event_id'], 
-					'raid_value' => (float) $row ['raid_value'], 
-					'raid_note' => $row ['raid_note'], 
-					'raid_date' => $row ['raid_date'] );
-			}
-			$db->sql_freeresult ( $result );
-
-			// get dkp pool
-			$result = $db->sql_query ( "SELECT event_dkpid FROM " . EVENTS_TABLE . " 
-               WHERE event_id = " . $this->old_raid ['event_id']);
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$dkpsys_id = $row ['event_dkpid'];
-			}
-			$db->sql_freeresult ( $result );
-			
 			// get participating members
-			$sql = 'SELECT member_name FROM ' . RAID_ATTENDEES_TABLE . "  WHERE raid_id = " . ( int ) 
-					$raid_id . "  ORDER BY member_name";
+			$sql = 'SELECT member_name FROM ' . RAID_ATTENDEES_TABLE . "  
+					WHERE raid_id = " . ( int ) $raid_id . "  
+					ORDER BY member_name";
 			$attendees = array ();
-			$result = $db->sql_query ( $sql );
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			$result = $db->sql_query ($sql);
+			while ( $row = $db->sql_fetchrow ($result)) 
 			{
 				$attendees [] = $row ['member_name'];
 			}
@@ -537,10 +532,11 @@ class acp_dkp_raid extends bbDkp_Admin
 			//
 			// Take the value away from the attendees
 			//
+		
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
                 SET member_earned = member_earned - ' . $this->old_raid ['raid_value'] . ',
                 member_raidcount = member_raidcount - 1
-		        WHERE member_dkpid = ' . $dkpsys_id . ' 
+		        WHERE member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
                 AND member_id in (  
                 SELECT member_id from ' . MEMBER_LIST_TABLE . ' 
                 WHERE ' . $db->sql_in_set ( 'member_name', $attendees ) . ' ) ';
@@ -550,7 +546,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			//
 			// Remove cost of items from this raid from buyers
 			//
-			$sql = 'SELECT item_id, item_buyer, item_value FROM ' . ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id;
+			$sql = 'SELECT item_id, member_id, item_value FROM ' . ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id;
 			$result = $db->sql_query ( $sql );
 			
 			while ( $row = $db->sql_fetchrow ( $result ) ) 
@@ -559,10 +555,8 @@ class acp_dkp_raid extends bbDkp_Admin
 				
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
            		SET member_spent = member_spent - ' . $item_value . '
-		        WHERE member_dkpid = ' . $dkpsys_id . ' 
-       	        AND member_id in (  
-           	    SELECT member_id from ' . MEMBER_LIST_TABLE . " 
-               	WHERE member_name='" . $row ['item_buyer'] . "')";
+		        WHERE member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
+       	        AND member_id = ' . $row ['member_id'];
 				
 				$db->sql_query ( $sql );
 			
@@ -593,7 +587,7 @@ class acp_dkp_raid extends bbDkp_Admin
 
 			$sql = 'SELECT a.member_id, b.member_name, a.member_firstraid, a.member_lastraid, a.member_raidcount
                FROM ' . MEMBER_DKP_TABLE . ' a , ' . MEMBER_LIST_TABLE . ' b 
-               WHERE a.member_dkpid = ' . $dkpsys_id . ' 
+               WHERE a.member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
                        AND a.member_id = b.member_id  
                AND a.member_id in ( 
                SELECT member_id from ' . MEMBER_LIST_TABLE . ' 
@@ -632,7 +626,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			{
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
                 SET member_firstraid = 0,  member_lastraid = 0
-                WHERE member_dkpid = ' . $dkpsys_id . ' 
+                WHERE member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
             	AND member_id in ( 
                 SELECT member_id from ' . MEMBER_LIST_TABLE . ' 
 				 WHERE ' . $db->sql_in_set ( 'member_name', $zero_firstlast ) . '  )';
@@ -656,7 +650,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				{
 					$queries [] = 'UPDATE ' . MEMBER_DKP_TABLE . "
                             SET member_firstraid = '" . $row ['member_firstraid'] . "'
-                            WHERE member_dkpid = " . $dkpsys_id . " 
+                            WHERE member_dkpid = " . $this->old_raid['event_dkpid'] . " 
               			   AND member_id in ( 
               			   SELECT member_id from " . MEMBER_LIST_TABLE . " 
                             WHERE member_name = '" . $row ['member_name'] . "')";
@@ -678,7 +672,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				while ( $row = $db->sql_fetchrow ( $result ) ) {
 					$queries [] = 'UPDATE ' . MEMBER_DKP_TABLE . "
                            SET member_lastraid = '" . $row ['member_lastraid'] . "'
-                           WHERE member_dkpid = " . $dkpsys_id . " 
+                           WHERE member_dkpid = " . $this->old_raid['event_dkpid'] . " 
               			   AND member_id in ( 
               			   SELECT member_id from " . MEMBER_LIST_TABLE . " 
                            WHERE member_name = '" . $db->sql_escape ( $row ['member_name'] ) . "')";
@@ -711,7 +705,8 @@ class acp_dkp_raid extends bbDkp_Admin
 			$success_message = $user->lang ['ADMIN_DELETE_RAID_SUCCESS'];
 			
 			// Update player status if needed
-			if ($config ['bbdkp_hide_inactive'] == 1) {
+			if ($config ['bbdkp_hide_inactive'] == 1) 
+			{
 				$success_message .= '<br /><br />' . $user->lang ['ADMIN_RAID_SUCCESS_HIDEINACTIVE'];
 				$success_message .= ' ' . (($this->update_player_status ( $dkpsys_id )) ? 
 				strtolower ( $user->lang ['DONE'] ) : 
@@ -725,6 +720,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		{
 			$s_hidden_fields = build_hidden_fields ( array (
 				'delete' 			=> true, 
+				'raid'				=> $this->old_raid,
 				'hidden_id' 		=> request_var ( 'hidden_id', 0 ), 
 				'hidden_eventid' 	=> request_var ( 'hidden_eventid', 0 ) ) );
 			
@@ -734,11 +730,9 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 	
 	}
-
 	
 	/*
 	 * displays a raid
-	 * 
 	 */
 	function displayraid($raid_id)
 	{
@@ -746,7 +740,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		/* getting left memberlist only with rank not hidden */
 		$sql_array = array(
-    		'SELECT'    => 'm.member_name',
+    		'SELECT'    => 'm.member_id ,m.member_name',
  
 	    	'FROM'      => array(
     		    MEMBER_LIST_TABLE 	  => 'm',
@@ -764,7 +758,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
 			$template->assign_block_vars ( 'members_row', array (
-				'VALUE' 	=> $row ['member_name'], 
+				'VALUE' 	=> $row ['member_id'], 
 				'OPTION' 	=> $row ['member_name'] ) );
 		}
 		$db->sql_freeresult ( $result );
@@ -809,12 +803,12 @@ class acp_dkp_raid extends bbDkp_Admin
 		elseif ($raid_id != 0)
 		{
 			// get pool from raid 
-			$a = 'SELECT a.event_dkpid FROM ' . EVENTS_TABLE . ' a , ' . RAIDS_TABLE . ' b 
+			$sql1 = 'SELECT a.event_dkpid FROM ' . EVENTS_TABLE . ' a , ' . RAIDS_TABLE . ' b 
 				where a.event_id = b.event_id and b.raid_id = '. $raid_id ;
 			$result1 = $db->sql_query_limit ( $sql1, 1, 0 );
 			while ( $row = $db->sql_fetchrow ( $result1 ) ) 
 			{
-				$dkpsys_id = $row ['dkpsys_id'];
+				$dkpsys_id = $row ['event_dkpid'];
 			}
 			$db->sql_freeresult ( $result1 );
 			
@@ -842,16 +836,16 @@ class acp_dkp_raid extends bbDkp_Admin
 		{
 			/*** prepare to display data for this raid  ***/
 			$sql_array = array (
-				'SELECT' => ' e.event_id, e.event_name,  
+				'SELECT' => ' e.event_id, e.event_name, e.event_value, 
 							  r.raid_id, r.raid_date, r.raid_note, 
 							  r.raid_value, r.raid_added_by, r.raid_updated_by ', 
 				'FROM' => array (
 					RAIDS_TABLE 		=> 'r' , 
 					EVENTS_TABLE 		=> 'e',		
 					), 
-				'WHERE' => " raid_id=" . ( int ) $raid_id, 
+				'WHERE' => " r.event_id = e.event_id and r.raid_id=" . ( int ) $raid_id, 
 			);
-			
+			$sql = $db->sql_build_query('SELECT', $sql_array);
 			$result = $db->sql_query ($sql);
 			while ( $row = $db->sql_fetchrow ( $result ) ) 
 			{
@@ -869,15 +863,31 @@ class acp_dkp_raid extends bbDkp_Admin
 			
 			// display raid attendees
 			$attendees = array ();
-			$sql = 'SELECT member_name FROM ' . RAID_ATTENDEES_TABLE . " WHERE raid_id= " . ( int ) $raid_id . " ORDER BY member_name ";
+			$sql_array = array(
+	    		'SELECT'    => 'm.member_id ,m.member_name',
+		    	'FROM'      => array(
+	    		    MEMBER_LIST_TABLE 	  => 'm',
+	        		RAID_ATTENDEES_TABLE    => 'r', 
+	    			),
+	 
+	    		'WHERE'     =>  'm.member_id = r.member_id
+	    	    				 AND r.raid_id = ' . (int) $raid_id  , 
+	    		'ORDER_BY' => 'm.member_name',
+			);
+			$sql = $db->sql_build_query('SELECT', $sql_array);
 			$result = $db->sql_query ( $sql );
 			while ( $row = $db->sql_fetchrow ( $result ) ) 
 			{
 				$template->assign_block_vars ( 'raid_attendees_row', array (
-					'VALUE' => $row ['member_name'], 
+					'VALUE' => $row ['member_id'], 
 					'OPTION' => $row ['member_name'] ) );
-				$attendees [] = $row ['member_name'];
+				
+				$attendees [] = array (
+					'member_id' => $row ['member_id'], 
+					'member_name' => $row ['member_id']
+				);
 			}
+			
 			$db->sql_freeresult ( $result );
 			$this->raid ['raid_attendees'] = $attendees;
 			$preset_value = $this->raid ['event_value'];
@@ -885,10 +895,9 @@ class acp_dkp_raid extends bbDkp_Admin
 			$db->sql_freeresult ( $result );
 			
 			$template->assign_vars ( array (
-			  'RAIDTITLE' 			=> sprintf($user->lang['RAIDDESCRIPTION'], $raid_id, $this->raid['raid_name'], 
+			  'RAIDTITLE' 			=> sprintf($user->lang['RAIDDESCRIPTION'], $raid_id, $this->raid['event_name'], 
 									   $user->format_date($this->raid['raid_date'])), 
 			  'RAID_VALUE' 			=> $this->raid['raid_value'], 
- 			  'RAID_ATTENDEES' 		=> str_replace ( ',', "\n", $this->raid ['raid_attendees'] ), 
 			  'RAID_NOTE' 			=> $this->raid['raid_note'], 
 			  'RAID_ID' 			=> $raid_id, 
 			  'S_ADD' => false ));
@@ -903,15 +912,14 @@ class acp_dkp_raid extends bbDkp_Admin
 			 'S_ADD' => true ));
 		}
 		
-		/* event pulldown */
+		/* event listbox */
 		$max_value = 0.00;
 		$sql = 'SELECT max(event_value) AS max_value FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . $dkpsys_id; 
 		$result = $db->sql_query ($sql);
 		$max_value = (float) $db->sql_fetchfield('max_value', 0, $result);
-		$db->sql_freeresult ( $result );
-		
 		$float = @explode ( '.', $max_value );
 		$format = '%0' . @strlen ( $float [0] ) . '.2f';
+		$db->sql_freeresult ( $result );
 		
 		$sql = ' SELECT  event_id, event_name, event_value 
 				 FROM ' . EVENTS_TABLE . 
@@ -936,12 +944,11 @@ class acp_dkp_raid extends bbDkp_Admin
 					'OPTION' => $row ['event_name'] . ' - (' . sprintf ( $format, $row ['event_value'] ) . ')' 
 			));
 		}
-		$db->sql_freeresult ( $result );
-		
+		$db->sql_freeresult ($result);
 		
 		// build presets for raiddate and hour pulldown
 		$now = getdate();
-		$s_raid_day_options = '<option value="0"	>--</option>';
+		$s_raid_day_options = '<option value="0">--</option>';
 		for ($i = 1; $i < 32; $i++)
 		{
 			$day = isset($this->raid['raid_date']) ? date('j', $this->raid['raid_date']) : $now['mday'] ;
@@ -1018,7 +1025,6 @@ class acp_dkp_raid extends bbDkp_Admin
 				'MSG_GAME_NAME' 	  => $config ['bbdkp_default_game'], 
 
 				) );
-		
 	}
 	 
 	/*
@@ -1037,14 +1043,13 @@ class acp_dkp_raid extends bbDkp_Admin
         }
             	
 		$dkpsys_id = 1;
-		
 		$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
-		
 		if ($submit) 
 		{
 			$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
 			        FROM ' . DKPSYS_TABLE . ' ORDER BY dkpsys_name';
 			$result = $db->sql_query ( $sql );
+
 			// get dkp pool value from popup
 			$dkpsys_id = request_var ( 'dkpsys_id', 0 );
 			// fill popup and set selected to Post value
@@ -1089,7 +1094,15 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		$current_order = switch_order ( $sort_order );
 		
-		$sql = 'SELECT count(*) as raidcount FROM ' . RAIDS_TABLE . ' WHERE event_id = ' . (int) $dkpsys_id;
+		$sql_array = array (
+			'SELECT' => ' count(*) as raidcount', 
+			'FROM' => array (
+				RAIDS_TABLE 		=> 'r' , 
+				EVENTS_TABLE 		=> 'e',		
+				), 
+			'WHERE' => " r.event_id = e.event_id and e.event_dkpid = " . ( int ) $dkpsys_id, 
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 		$total_raids = (int) $db->sql_fetchfield('raidcount');
 		$db->sql_freeresult ($result);
@@ -1104,14 +1117,11 @@ class acp_dkp_raid extends bbDkp_Admin
 				RAIDS_TABLE 		=> 'r' , 
 				EVENTS_TABLE 		=> 'e',		
 				), 
-			'WHERE' => " raid_id=" . ( int ) $raid_id, 
+			'WHERE' => "  r.event_id = e.event_id and e.event_dkpid = " . ( int ) $dkpsys_id,
+			'ORDER_BY' => $current_order ['sql'], 
 		);
-			
-		
-		$sql = 'SELECT event_id, raid_id, raid_date, raid_note, raid_value
-		      FROM ' . RAIDS_TABLE . ' WHERE event_id = ' . ( int ) $dkpsys_id . '
-		      ORDER BY ' . $current_order ['sql'];
-		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+
 		$raids_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_rlimit'], $start );
 		if (! $raids_result) 
 		{
@@ -1121,9 +1131,10 @@ class acp_dkp_raid extends bbDkp_Admin
 		while ( $row = $db->sql_fetchrow ( $raids_result ) ) 
 		{
 			$template->assign_block_vars ( 'raids_row', array (
-				'DATE' => (! empty ( $row ['raid_date'] )) ? date ( $config ['bbdkp_date_format'], $row ['raid_date'] ) : '&nbsp;', 
-				'U_VIEW_RAID' => append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=addraid&amp;" . URI_RAID . "={$row['raid_id']}&amp;" . URI_DKPSYS . "={$row['raid_dkpid']}" ), 
-				'NAME' => $row ['raid_name'], 
+				'DATE' => (! empty ( $row ['raid_date'] )) ? 
+						date ( $config ['bbdkp_date_format'], $row ['raid_date'] ) : '&nbsp;', 
+				'U_VIEW_RAID' => append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=addraid&amp;" . URI_RAID . "={$row['raid_id']}" ), 
+				'NAME' => $row ['event_name'], 
 				'NOTE' => (! empty ( $row ['raid_note'] )) ? $row ['raid_note'] : '&nbsp;', 
 				'VALUE' => $row ['raid_value'] ) );
 		}
@@ -1146,7 +1157,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				
 	}
 	
-	 /**
+    /**
     * RAID_ATTENDEES_TABLE handler : Insert members into raid attendees table
     * @param $members_array Array of members
     * @param $raid_id
@@ -1154,7 +1165,7 @@ class acp_dkp_raid extends bbDkp_Admin
     function add_attendees(&$members_array, $raid_id)
     {
         global $db;
-        $query = array();
+        $attendees = array();
         foreach ( $members_array as $member_name )
         {
             $sql = "SELECT member_id FROM " . MEMBER_LIST_TABLE . " WHERE member_name = '" . $db->sql_escape($member_name) . "'";
@@ -1164,54 +1175,53 @@ class acp_dkp_raid extends bbDkp_Admin
                 $member_id = $row['member_id'];
             }
             $db->sql_freeresult($result);
-
-
-            $query[] = array(
+            $attendees[] = array(
                 'raid_id'      => (int) $raid_id,
                 'member_id'   => (int) $member_id,
-                'member_name'   => $member_name );
+				);
         }
-        $db->sql_multi_insert(RAID_ATTENDEES_TABLE, $query);
+        $db->sql_multi_insert(RAID_ATTENDEES_TABLE, $attendees);
        
+        return $attendees;
     }
    
    
-/**
+	/**
     * MEMBER_DKP_TABLE table handler : Update existing members / add new members
     *
     * @param $members_array
     * @param $raid_value
     * @param $time_check
     */
-    function handle_memberdkp(&$members_array, $raid_value, $dkpid)
+    function handle_memberdkp($members_array, $raid_value, $dkpid)
     {
         global $db, $user;
         // we loop new raidmember array
-        foreach ( (array) $members_array as $id => $member_name)
+        foreach ( (array) $members_array['member_id'] as $member_id )
         {
             // has dkp record ?
-			$sql = 'SELECT count(a.member_id) as present
-				FROM ' . MEMBER_LIST_TABLE . ' a, ' . MEMBER_DKP_TABLE . " m
-				WHERE (a.member_id = m.member_id)
-				AND  (a.member_name = '" . $db->sql_escape($member_name) . "')
-				AND  (m.member_dkpid = " . $dkpid . ')'  ;      
+			$sql = 'SELECT count(member_id) as present
+				FROM ' . MEMBER_DKP_TABLE . '  
+				WHERE member_id = ' . $member_id . ' 
+				AND member_dkpid = ' . $dkpid;
+			      
              $result = $db->sql_query($sql);
              $present = (int) $db->sql_fetchfield('present', false, $result);
              $db->sql_freeresult($result);
              if ($present == 1)
              {
                  //update
-                  $sql = 'SELECT a.member_id, m.member_lastraid
-                  FROM ' . MEMBER_LIST_TABLE . ' a, ' . MEMBER_DKP_TABLE . " m
-                  WHERE (a.member_id = m.member_id)
-                  AND  (a.member_name = '" . $db->sql_escape($member_name) . "')
-                  AND  (m.member_dkpid = " . $dkpid . ')'  ;  
+                  $sql = 'SELECT m.member_lastraid
+                  FROM ' . MEMBER_DKP_TABLE . " 
+                  WHERE member_id = ' . $member_id . ' 
+                  AND  member_dkpid = " . $dkpid;  
                   $result = $db->sql_query($sql);
-                 
-                  while ( $row = $db->sql_fetchrow($result) )  
+
+                  while ($row = $db->sql_fetchrow($result) )  
                   {
                      $sql  = 'UPDATE ' . MEMBER_DKP_TABLE . ' m
                      SET m.member_earned = m.member_earned + ' . $raid_value . ', ';
+                     
                      // Do not update their lastraid if it's greater than this raid's date
                      if ( $row['member_lastraid'] < $this->time )
                      {
@@ -1226,11 +1236,7 @@ class acp_dkp_raid extends bbDkp_Admin
              }
              elseif ($present == 0)
              {
-                 // insert new dkp record
-                $sql = "SELECT member_id FROM " . MEMBER_LIST_TABLE . " WHERE member_name = '"  . $db->sql_escape($member_name) .  "'" ;
-                $result = $db->sql_query($sql);
-                $member_id = (int) $db->sql_fetchfield('member_id', false, $result);
-                $db->sql_freeresult($result);
+                // insert new dkp record
                 $query = $db->sql_build_array('INSERT', array(
                     'member_dkpid'       => $dkpid,
                     'member_id'          => $member_id,
@@ -1254,7 +1260,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	 * Update active inactive player status column member_status
 	 * active = 1 inactive = 0
 	 * @return bool
-	 * @param $dkpsys_id int
+	 * @param $dkpid int
 	 *
 	 */
 	function update_player_status($dkpid)
@@ -1270,20 +1276,16 @@ class acp_dkp_raid extends bbDkp_Admin
 		if (($config ['bbdkp_active_point_adj'] != 0) || ($config ['bbdkp_inactive_point_adj'] != 0))
 		{
 			// adapt status and set adjustment points 
-			
 			$sql_array = array (
 				'SELECT' => 'a.member_id, b.member_name, a.member_status, a.member_lastraid', 
-	
 				'FROM' => array (
 					MEMBER_DKP_TABLE => 'a', 
 					MEMBER_LIST_TABLE => 'b' 
 					), 
-	
 				'WHERE' => ' a.member_id = b.member_id AND a.member_dkpid =' . $dkpid 
 			);
 			
 			$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-			
 			$result = $db->sql_query ( $sql );
 			while ( $row = $db->sql_fetchrow ( $result ) )
 			{
@@ -1313,13 +1315,13 @@ class acp_dkp_raid extends bbDkp_Admin
 					$group_key = $this->gen_group_key ( $this->time, $adj_reason, $adj_value );
 					$query = $db->sql_build_array ( 'INSERT', 
 						array (
-							'adjustment_dkpid' 	=> $dkpid, 
-							'adjustment_value' 	=> $adj_value, 
-							'adjustment_date' 	=> $this->time, 
-							'member_id' 		=> $row ['member_id'], 
-							'adjustment_reason' => $adj_reason, 
-							'adjustment_group_key' => $group_key, 
-							'adjustment_added_by' => $user->data ['username'] ));
+							'adjustment_dkpid' 		=> $dkpid, 
+							'adjustment_value' 		=> $adj_value, 
+							'adjustment_date' 		=> $this->time, 
+							'member_id' 			=> $row['member_id'], 
+							'adjustment_reason' 	=> $adj_reason, 
+							'adjustment_group_key' 	=> $group_key, 
+							'adjustment_added_by' 	=> $user->data ['username'] ));
 					
 					$db->sql_query ( 'INSERT INTO ' . ADJUSTMENTS_TABLE . $query );
 				}
@@ -1347,6 +1349,7 @@ class acp_dkp_raid extends bbDkp_Admin
 					'L_MEMBERS' 	=> implode ( ', ', $inactive_membernames ), 
 					'L_REASON' 		=> $user->lang['INACTIVE_POINT_ADJ'],  
 					'L_ADDED_BY'	=> $user->data ['username'] );
+				
 				$this->log_insert ( array (
 					'log_type' 		=> $log_action ['header'], 
 					'log_action' 	=> $log_action ));
@@ -1375,16 +1378,18 @@ class acp_dkp_raid extends bbDkp_Admin
 					'L_ADDED_BY' 	=> $user->data ['username'] );
 				$this->log_insert ( array ('log_type' => $log_action ['header'], 'log_action' => $log_action ) );
 			}
-		} 
+		}
 		else
 		{
 			// only adapt status 
+			
 			// Active -> Inactive
-			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . " SET member_status= 0 WHERE member_dkpid = " . $dkpid . "
-	     		AND (member_lastraid < " . $inactive_time . ") AND (member_status= 1)" );
+			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . " SET member_status = 0 WHERE member_dkpid = " . $dkpid . "
+	     		AND (member_lastraid <  " . $inactive_time . ") AND (member_status= 1)" );
+			
 			// Inactive -> Active
-			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . " SET member_status=1 WHERE member_dkpid = " . $dkpid . "  
-	   			AND (member_lastraid >= " . $inactive_time . ") AND (member_status= 0 )" );
+			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . " SET member_status = 1 WHERE member_dkpid = " . $dkpid . "  
+	   			AND (member_lastraid >= " . $inactive_time . ") AND (member_status= 0)" );
 		}
 		
 		return true;
