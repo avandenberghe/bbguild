@@ -162,7 +162,7 @@ class acp_dkp_raid extends bbDkp_Admin
 
 		//
 		// pass the raidmembers array, raid value, and dkp pool.
-		$this->handle_memberdkp ($attendees, $this->raid['raid_value'], $this->raid['event_dkpid'] );
+		$this->add_dkp ($attendees, $this->raid['raid_value'], $this->raid['event_dkpid'], $this->raid['raid_date'] );
 		
 		
 		//
@@ -273,30 +273,17 @@ class acp_dkp_raid extends bbDkp_Admin
 			  					request_var('mo', 0), request_var('d', 0), request_var('Y', 0)), 
 		);
 		
-		
-		// Remove the attendees from the old raid
+		// Remove the old attendees from the raid
 		$db->sql_query ( 'DELETE FROM ' . RAID_ATTENDEES_TABLE . " WHERE raid_id = " . (int) $raid_id );
 		
-		// Insert in attendee table
+		// Insert the new attendees in attendee table
 		$this->add_attendees ( $this->raid['raid_attendees'], $raid_id );
-		
-		//  MEMBER_DKP_TABLE
-		// decrease number of raids by one for old raid participants
-		// decrease earned by old value one for old raid participants
-		if (sizeof($this->old_raid ['raid_attendees']) > 0)
-		{
-			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET 
-               member_earned = member_earned - ' . $this->old_raid ['raid_value'] . ',
-               member_raidcount = max(member_raidcount - 1, 0)  
-               WHERE member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
-               AND '. $db->sql_in_set ('member_id', $this->old_raid ['raid_attendees']);
-			$db->sql_query ( $sql );
-			
-		}
-		
-		// MEMBER_DKP_TABLE
-		// Add the new dkp, updated raid to attendees' earned
-		$this->handle_memberdkp ( $this->raid['raid_attendees'] , $raid_value, $this->old_raid['event_dkpid'] );
+
+		// decrease raidcount with one, remove dkp from old raidparticipants
+		$this->remove_dkp ( $this->old_raid ['raid_attendees'] , $this->old_raid ['raid_value'], $this->old_raid['event_dkpid'] );
+
+		// Add or update the new dkp to new particpants
+		$this->add_dkp ( $this->raid['raid_attendees'] , $this->raid['raid_value'], $this->old_raid['event_dkpid'], $this->raid['raid_date'] );
 		
 		// RAIDS_TABLE
 		// Update the raid
@@ -1165,13 +1152,13 @@ class acp_dkp_raid extends bbDkp_Admin
    
    
 	/**
-    * MEMBER_DKP_TABLE table handler : Update existing members / add new members
+    * add_dkp : adds raid value as earned to each raider
     *
     * @param $members_array
     * @param $raid_value
-    * @param $time_check
+    * @param $dkpid
     */
-    function handle_memberdkp($members_array, $raid_value, $dkpid)
+    function add_dkp($members_array, $raid_value, $dkpid, $raiddate)
     {
         global $db, $user;
         // we loop new raidmember array
@@ -1200,11 +1187,12 @@ class acp_dkp_raid extends bbDkp_Admin
                      $sql  = 'UPDATE ' . MEMBER_DKP_TABLE . ' m
                      SET m.member_earned = m.member_earned + ' . $raid_value . ', ';
                      
-                     // Do not update their lastraid if it's greater than this raid's date
-                     if ( $row['member_lastraid'] < $this->time )
+                     // Do update their lastraid if it's smaller than this raid's date
+                     if ( $row['member_lastraid'] < $raiddate )
                      {
-                        $sql .= 'm.member_lastraid = ' . $this->time . ', ';
+                        $sql .= 'm.member_lastraid = ' . $raiddate . ', ';
                      }
+                     
                      $sql .= ' m.member_raidcount = m.member_raidcount + 1
                      WHERE m.member_dkpid = ' . (int) $dkpid . '
                      AND m.member_id = ' . (int) $row['member_id'];
@@ -1220,8 +1208,8 @@ class acp_dkp_raid extends bbDkp_Admin
                     'member_id'          => $member_id,
                     'member_earned'      => $raid_value,
                     'member_status'      => 1,
-                    'member_firstraid'   => $this->time,
-                    'member_lastraid'    => $this->time,
+                    'member_firstraid'   => $raiddate,
+                    'member_lastraid'    => $raiddate,
                     'member_raidcount'   => 1
                     )
                 );
@@ -1231,6 +1219,52 @@ class acp_dkp_raid extends bbDkp_Admin
         }
     }
  
+/**
+    * remove_dkp : removes raid value
+    *
+    * @param $members_array
+    * @param $raid_value
+    * @param $dkpid
+		 decrease number of raids by one 
+		 decrease earned by old value 
+    */
+    function remove_dkp($oldmembers_array, $oldraid_value, $olddkpid)
+    {
+        global $db, $user;
+        // we loop old raidmember array
+        foreach ( (array) $members_array['member_id'] as $member_id )
+        {
+        	//get last raid
+            $sql = 'SELECT m.member_lastraid, m.member_raidcount, member_earned 
+            FROM ' . MEMBER_DKP_TABLE . " 
+            WHERE member_id = ' . $member_id . ' 
+            AND  member_dkpid = " . $dkpid;  
+            $result = $db->sql_query($sql);
+
+            while ($row = $db->sql_fetchrow($result) )  
+            {
+             	$member_raidcount = $row['member_raidcount'];
+             	$earned = $row['member_earned'];
+             	$last_raid = $row['member_lastraid'];
+            }
+            
+            $newraidcount = max(0, $member_raidcount - 1);
+            $newdkp = $earned - $oldraid_value;
+            
+            $query = $db->sql_build_array ( 'UPDATE', array (
+				'member_raidcount' 		=> $newraidcount,
+				'member_earned' 		=> $newdkp, 
+            ));
+            
+			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . " 
+					WHERE member_dkpid = " . ( int ) $member_id );
+		
+            
+            
+             $db->sql_freeresult($result);
+        }
+    }
+    
     
 
 	/***
