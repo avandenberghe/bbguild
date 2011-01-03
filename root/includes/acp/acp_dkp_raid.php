@@ -25,10 +25,8 @@ if (! defined('EMED_BBDKP'))
 
 class acp_dkp_raid extends bbDkp_Admin 
 {
-	var $u_action;
-	var $link; 
 
-	function main($id, $mode) 
+	public function main($id, $mode) 
 	{
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$user->add_lang ( array ('mods/dkp_admin' ) );
@@ -106,7 +104,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	/*
 	 * add raid
 	 */
-	function addraid($event_id)
+	private function addraid($event_id)
 	{
 		global $db, $user, $config, $template, $phpEx ;
 		if(!check_form_key('acp_dkp_addraid'))
@@ -206,7 +204,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	/*
 	 * update a raid
 	 */
-	function updateraid($raid_id)
+	private function updateraid($raid_id)
 	{
 		global $db, $user, $config, $template, $phpEx;
 		if(!check_form_key('acp_dkp_addraid'))
@@ -279,10 +277,16 @@ class acp_dkp_raid extends bbDkp_Admin
 		// Insert the new attendees in attendee table
 		$this->add_attendees ( $this->raid['raid_attendees'], $raid_id );
 
-		// decrease raidcount with one, remove dkp from old raidparticipants
+		// decrease raidcount with one old raidparticipants, 
+		// decrease dkp from old raidparticipants
 		$this->remove_dkp ( $this->old_raid ['raid_attendees'] , $this->old_raid ['raid_value'], $this->old_raid['event_dkpid'] );
 
+		// update last raiddate for old raidparticipants
+		$this->remove_raiddate( $this->old_raid ['raid_attendees'] , $this->old_raid ['raid_date'], $this->old_raid['event_dkpid'] );
+		
 		// Add or update the new dkp to new particpants
+		// add to raidcount
+		// update last raiddate for new raidparticipants
 		$this->add_dkp ( $this->raid['raid_attendees'] , $this->raid['raid_value'], $this->old_raid['event_dkpid'], $this->raid['raid_date'] );
 		
 		// RAIDS_TABLE
@@ -295,111 +299,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			'raid_updated_by' 	=> $user->data ['username'] ) );
 		$db->sql_query ( 'UPDATE ' . RAIDS_TABLE . ' SET ' . $query . " WHERE raid_id = " . ( int ) $raid_id );
 		
-		// Update firstraid / lastraid
-		$update_firstraid = array (); // Members who need their firstraid updated
-		$update_lastraid = array (); // Members who need their lastraid updated
-		
-		$sql = 'SELECT member_firstraid, member_lastraid, member_raidcount 
-               FROM ' . MEMBER_DKP_TABLE . '  
-               WHERE member_dkpid = ' . $dkpsys_id . " 
-               AND " .  $db->sql_in_set ( 'member_id', $this->raid['raid_attendees'] ); 
-		$result = $db->sql_query ( $sql );
-		while ( $row = $db->sql_fetchrow ( $result ) ) 
-		{
-			// If the raid's date changed...
-			if ($this->time != $this->old_raid ['raid_date']) 
-			{
-				// If the raid's old date is their firstraid, update their firstraid
-				if ($row ['member_firstraid'] == $this->old_raid ['raid_date']) 
-				{
-					$update_firstraid [] = $row ['member_name'];
-				}
-				
-				// If the raid's old date is their lastraid, update their lastraid
-				if ($row ['member_lastraid'] == $this->old_raid ['raid_date']) 
-				{
-					$update_lastraid [] = $row ['member_name'];
-				}
-			}
-		}
-		$db->sql_freeresult ( $result );
-		
-		// Find members who were deleted from this raid and revert their first/last					
-		if (sizeof($this->old_raid ['raid_attendees']) > 0)
-		{
-			foreach ( $this->old_raid ['raid_attendees'] as $oldmemberid ) 
-			{
-				if (! in_array ( $oldmember, $this->raid['raid_attendees'] )) 
-				{
-					$update_firstraid [] = $oldmemberid;
-					$update_lastraid [] = $oldmemberid;
-				}
-			}
-		}
-		
-		// eliminate duplicates
-		$update_firstraid = array_unique ( $update_firstraid );
-		$update_lastraid = array_unique ( $update_lastraid );
-		
-		//sort
-		sort ( $update_firstraid );
-		sort ( $update_lastraid );
-		
-		// reset pointer to first element
-		reset ( $update_firstraid );
-		reset ( $update_lastraid );
-		
-		$queries = array ();
-		
-		// Update selected firstraids if needed
-		// this raid == $this->time
-		if (sizeof ( $update_firstraid ) > 0) 
-		{
-			$sql = 'SELECT min( r.raid_date ) AS member_firstraid, ra.member_id
-                        FROM ' . RAIDS_TABLE . ' r, ' . RAID_ATTENDEES_TABLE . " ra
-                        WHERE ra.raid_id = r.raid_id 
-                        AND " . $db->sql_in_set ( 'ra.member_id', $update_lastraid ) . ' 
-                        AND r.raid_date > 0 
-                        GROUP BY ra.member_id';
-			$result = $db->sql_query ( $sql );
-			
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$queries [] = 'UPDATE ' . MEMBER_DKP_TABLE . "
-	               SET member_firstraid = '" . $row ['member_firstraid'] . "'
-	               WHERE member_dkpid = " . $dkpsys_id . " 
-	               and member_id = " . $row ['member_id'];
-			}
-			$db->sql_freeresult ($result);
-		}
-		
-		// Updated selected lastraids if needed
-		if (sizeof ( $update_lastraid ) > 0) 
-		{
-			$sql = 'SELECT MAX(r.raid_date) AS member_lastraid, ra.member_id
-                        FROM ' . RAIDS_TABLE . ' r, ' . RAID_ATTENDEES_TABLE . " ra
-                        WHERE ra.raid_id = r.raid_id
-                        AND " . $db->sql_in_set ( 'ra.member_id', $update_lastraid ) . ' 
-                        AND r.raid_date > 0
-                        GROUP BY ra.member_id';
-			$result = $db->sql_query ( $sql );
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$queries [] = 'UPDATE ' . MEMBER_DKP_TABLE . "
-                                  SET member_lastraid = '" . $row ['member_lastraid'] . "'
-                                  WHERE member_dkpid = " . $dkpsys_id . " 
-                                  and member_id = " . $row ['member_id'];
-			
-			}
-			$db->sql_freeresult ( $result );
-		}
-		
-		foreach ( $queries as $sql ) 
-		{
-			$db->sql_query ( $sql );
-		}
-		unset ( $queries, $sql );
-		
+
 		//
 		// Logging
 		//
@@ -442,7 +342,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	/*
 	 * delete a raid
 	 */
-	function deleteraid($raid_id)
+	private function deleteraid($raid_id)
 	{
 		global $db, $user, $config, $template, $phpEx ;
 		
@@ -712,7 +612,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	/*
 	 * displays a raid
 	 */
-	function displayraid($raid_id)
+	private function displayraid($raid_id)
 	{
 		global $db, $user, $config, $template, $phpEx ;
 		
@@ -1002,7 +902,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	/*
 	 * lists all raids
 	 */
-	function listraids()
+	private function listraids()
 	{
 		global $db, $user, $config, $template, $phpEx;
 		
@@ -1134,7 +1034,7 @@ class acp_dkp_raid extends bbDkp_Admin
     * @param $members_array array of member_id
     * @param $raid_id
     */
-    function add_attendees(&$members_array, $raid_id)
+    private function add_attendees(&$members_array, $raid_id)
     {
         global $db;
         $attendees = array();
@@ -1152,13 +1052,16 @@ class acp_dkp_raid extends bbDkp_Admin
    
    
 	/**
-    * add_dkp : adds raid value as earned to each raider
+    * function add_dkp : 
+    * adds raid value as earned to each raider, 
+    * increase raidcount
+    * set last and first raiddates for the attending raiders
     *
     * @param $members_array
     * @param $raid_value
     * @param $dkpid
     */
-    function add_dkp($members_array, $raid_value, $dkpid, $raiddate)
+    private function add_dkp($members_array, $raid_value, $dkpid, $raiddate)
     {
         global $db, $user;
         // we loop new raidmember array
@@ -1176,7 +1079,7 @@ class acp_dkp_raid extends bbDkp_Admin
              if ($present == 1)
              {
                  //update
-                  $sql = 'SELECT m.member_lastraid
+                  $sql = 'SELECT member_lastraid, member_firstraid
                   FROM ' . MEMBER_DKP_TABLE . " 
                   WHERE member_id = ' . $member_id . ' 
                   AND  member_dkpid = " . $dkpid;  
@@ -1187,10 +1090,16 @@ class acp_dkp_raid extends bbDkp_Admin
                      $sql  = 'UPDATE ' . MEMBER_DKP_TABLE . ' m
                      SET m.member_earned = m.member_earned + ' . $raid_value . ', ';
                      
-                     // Do update their lastraid if it's smaller than this raid's date
+                     // Do update their lastraid if it's earlier than this raid's date
                      if ( $row['member_lastraid'] < $raiddate )
                      {
                         $sql .= 'm.member_lastraid = ' . $raiddate . ', ';
+                     }
+                     
+                     // Do update their firstraid if it's later than this raid's date
+                     if ( $row['member_firstraid'] > $raiddate )
+                     {
+                        $sql .= 'm.member_firstraid = ' . $raiddate . ', ';
                      }
                      
                      $sql .= ' m.member_raidcount = m.member_raidcount + 1
@@ -1219,7 +1128,7 @@ class acp_dkp_raid extends bbDkp_Admin
         }
     }
  
-/**
+	/**
     * remove_dkp : removes raid value
     *
     * @param $members_array
@@ -1228,7 +1137,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		 decrease number of raids by one 
 		 decrease earned by old value 
     */
-    function remove_dkp($oldmembers_array, $oldraid_value, $olddkpid)
+    private function remove_dkp($oldmembers_array, $oldraid_value, $olddkpid)
     {
         global $db, $user;
         // we loop old raidmember array
@@ -1265,6 +1174,105 @@ class acp_dkp_raid extends bbDkp_Admin
         }
     }
     
+	/**
+    * remove_dkp : removes raid date from old participants, sets to the closest date found in attendeelist
+    *
+    * @param $members_array
+    * @param $oldraid_date
+    * @param $dkpid
+    */
+    private function remove_raiddate($oldmembers_array, $olddkpid)
+    {
+        global $db, $user;
+        
+        // scan attendeelist
+        $sql_array = array (
+		'SELECT' => 'MIN( r.raid_date ) AS member_firstraid, 
+					 MAX(r.raid_date) AS member_lastraid, 
+					 ra.member_id, ', 
+		'FROM' => array (
+			RAIDS_TABLE => 'r', 
+			RAID_ATTENDEES_TABLE => 'ra' ,
+			EVENTS_TABLE => 'e' 
+			), 
+		'WHERE' => ' ra.raid_id = r.raid_id 
+					AND r.event_id = e.event_id 
+					AND a.event_dkpid = ' . $olddkpid . '
+					AND ' . $db->sql_in_set ( 'ra.member_id',  $oldmembers_array['member_id'] ), 
+		'GROUP_BY' => 'member_id'
+		);
+		
+		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+		$result = $db->sql_query ( $sql );
+		$battledate = array();
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$battledate['member_id'] = array(
+				'member_firstraid' => 'member_firstraid',
+				'member_lastraid' => 'member_lastraid',
+			);
+			
+		}
+		$db->sql_freeresult ($result);
+			
+        // we loop old raidmember array
+        foreach ( (array) $oldmembers_array['member_id'] as $member_id )
+        {
+        	//get last raid
+            $sql = 'SELECT m.member_lastraid, m.member_firstraid 
+            FROM ' . MEMBER_DKP_TABLE . " 
+            WHERE member_id = ' . $member_id . ' 
+            AND  member_dkpid = " . $dkpid;  
+            $result = $db->sql_query($sql);
+
+            $first_raid =0;
+			$last_raid =0;
+            
+			while ($row = $db->sql_fetchrow($result) )  
+            {
+             	$first_raid = $row['member_firstraid'];
+             	$last_raid = $row['member_lastraid'];
+            }
+			$db->sql_freeresult ($result);
+			
+            if ( isset($battledate[$member_id]['member_firstraid']))
+            {
+            	if( $first_raid > $battledate[$member_id]['member_firstraid'])
+            	{
+	            	$first_raid = $battledate[$member_id]['member_firstraid'];
+            	}
+            	
+            }
+            else 
+            {
+            	// no firstraid
+            	$first_raid = 0;
+            }
+            
+            if ( isset($battledate[$member_id]['member_lastraid']))
+            {
+            	if( $last_raid > $battledate[$member_id]['member_lastraid'])
+            	{
+	            	$last_raid = $battledate[$member_id]['member_lastraid'];
+            	}
+            }
+            else 
+            {
+            	// no lastraid
+            	$last_raid = 0;
+            }            
+            
+            $query = $db->sql_build_array ( 'UPDATE', array (
+				'member_firstraid' 		=> $first_raid,
+				'member_lastraid' 		=> $last_raid, 
+            ));
+            
+			$db->sql_query ( 
+				'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . " 
+	             WHERE member_id = ' . $member_id . ' 
+	             AND  member_dkpid = ' . $dkpid;  
+        }
+    }
     
 
 	/***
@@ -1275,7 +1283,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	 * @param $dkpid int
 	 *
 	 */
-	function update_player_status($dkpid)
+	private function update_player_status($dkpid)
 	{
 		global $db, $user, $config;
 		
