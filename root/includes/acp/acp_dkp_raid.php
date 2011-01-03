@@ -1044,7 +1044,7 @@ class acp_dkp_raid extends bbDkp_Admin
         $sql_array = array (
 		'SELECT' => 'MIN( r.raid_date ) AS member_firstraid, 
 					 MAX(r.raid_date) AS member_lastraid, 
-					 ra.member_id, ', 
+					 ra.member_id ', 
 		'FROM' => array (
 			RAIDS_TABLE => 'r', 
 			RAID_ATTENDEES_TABLE => 'ra' ,
@@ -1052,7 +1052,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			), 
 		'WHERE' => ' ra.raid_id = r.raid_id 
 					AND r.event_id = e.event_id 
-					AND a.event_dkpid = ' . $olddkpid . '
+					AND e.event_dkpid = ' . $olddkpid . '
 					AND ' . $db->sql_in_set ( 'ra.member_id',  $oldmembers_array ), 
 		'GROUP_BY' => 'member_id'
 		);
