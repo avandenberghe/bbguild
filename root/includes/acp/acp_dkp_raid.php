@@ -31,7 +31,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
-		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
+		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) 
+			. '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
 		$dkpsys_id=0;
 		$raid_id=0;
 		
@@ -160,7 +161,7 @@ class acp_dkp_raid extends bbDkp_Admin
 
 		//
 		// pass the raidmembers array, raid value, and dkp pool.
-		$this->add_dkp ($attendees, $this->raid['raid_value'], $this->raid['event_dkpid'], $this->raid['raid_date'] );
+		$this->add_dkp ($this->raid ['raid_attendees'], $this->raid['raid_value'], $this->raid['event_dkpid'], $this->raid['raid_date'] );
 		
 		
 		//
@@ -368,204 +369,59 @@ class acp_dkp_raid extends bbDkp_Admin
 			);
 		}
 		$db->sql_freeresult ( $result );
-	
+
 		if (confirm_box ( true )) 
 		{
-			// get participating members
-			$sql = 'SELECT member_name FROM ' . RAID_ATTENDEES_TABLE . "  
-					WHERE raid_id = " . ( int ) $raid_id . "  
-					ORDER BY member_name";
-			$attendees = array ();
-			$result = $db->sql_query ($sql);
-			while ( $row = $db->sql_fetchrow ($result)) 
-			{
-				$attendees [] = $row ['member_name'];
-			}
+			$this->old_raid ['raid_attendees'] = array();
+			$sql = ' SELECT member_id FROM ' . RAID_ATTENDEES_TABLE . ' 
+		             WHERE raid_id= ' . (int) $raid_id . ' ORDER BY member_id' ;
 			
-			if (count ( $attendees ) == 0) 
+			$result = $db->sql_query($sql);
+			if ($result)
 			{
+				while ( $row = $db->sql_fetchrow ($result)) 
+				{
+					$this->old_raid ['raid_attendees'] [] = $row ['member_id'];
+				}
+			}
+			else
+			{
+				
 				// not possible after 1.1
 				$db->sql_query ( 'DELETE FROM ' . RAIDS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
 				$db->sql_query ( 'DELETE FROM ' . ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
-				//
-				// Logging
-				//
 				$log_action = array (
-					'header' => 'L_ACTION_RAID_DELETED', 
-					'id' => $raid_id, 
-					'L_EVENT' => $this->old_raid ['raid_name'], 
-					'L_NOTE' => $this->old_raid ['raid_note'] );
-				
-				$this->log_insert ( array (
-					'log_type' => $log_action ['header'], 
-					'log_action' => $log_action ) );
-				
-				$success_message = $user->lang ['ADMIN_DELETE_RAID_SUCCESS'] . ' ' . 
-					$user->lang['WARNING_NOATTENDEES'];
-				trigger_error ( $success_message . $this->link, E_USER_WARNING );
+						'header' => 'L_ACTION_RAID_DELETED', 
+						'id' => $raid_id, 
+						'L_EVENT' => $this->old_raid ['raid_name'], 
+						'L_NOTE' => $this->old_raid ['raid_note'] );
+					
+					$this->log_insert ( array (
+						'log_type' => $log_action ['header'], 
+						'log_action' => $log_action ) );
+					
+					$success_message = $user->lang ['ADMIN_DELETE_RAID_SUCCESS'] . ' ' . 
+						$user->lang['WARNING_NOATTENDEES'];
+					trigger_error ( $success_message . $this->link, E_USER_WARNING );
 			}
 
-			$this->old_raid ['raid_attendees'] = $attendees;
-			
-			//
-			// Take the value away from the attendees
-			//
+			// Remove the old attendees from the raid
+			$db->sql_query ( 'DELETE FROM ' . RAID_ATTENDEES_TABLE . " WHERE raid_id = " . (int) $raid_id );
 		
-			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-                SET member_earned = member_earned - ' . $this->old_raid ['raid_value'] . ',
-                member_raidcount = member_raidcount - 1
-		        WHERE member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
-                AND member_id in (  
-                SELECT member_id from ' . MEMBER_LIST_TABLE . ' 
-                WHERE ' . $db->sql_in_set ( 'member_name', $attendees ) . ' ) ';
-			
-			$db->sql_query ( $sql );
-			
-			//
+			// decrease raidcount with one old raidparticipants, 
+			// decrease dkp from old raidparticipants
+			$this->remove_dkp ( $this->old_raid ['raid_attendees'] , $this->old_raid ['raid_value'], $this->old_raid['event_dkpid'] );
+	
+			// update last raiddate for old raidparticipants
+			$this->remove_raiddate( $this->old_raid ['raid_attendees'] , $this->old_raid ['raid_date'], $this->old_raid['event_dkpid'] );
+					
 			// Remove cost of items from this raid from buyers
-			//
-			$sql = 'SELECT item_id, member_id, item_value FROM ' . ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id;
-			$result = $db->sql_query ( $sql );
+			$this->remove_loot($raid_id);
 			
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$item_value = (! empty ( $row ['item_value'] )) ? $row ['item_value'] : '0.00';
-				
-				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-           		SET member_spent = member_spent - ' . $item_value . '
-		        WHERE member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
-       	        AND member_id = ' . $row ['member_id'];
-				
-				$db->sql_query ( $sql );
-			
-			}
-			$db->sql_freeresult ( $result );
-			
-			//
-			// Delete associated items
-			//
-			$db->sql_query ( 'DELETE FROM ' . ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
-			
-			//
-			// Delete attendees
-			//
-			$db->sql_query ( 'DELETE FROM ' . RAID_ATTENDEES_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
-			
-			//
 			// Remove the raid itself
-			//
 			$db->sql_query ( 'DELETE FROM ' . RAIDS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
 			
-			//
-			// Update firstraid / lastraid 
-			//
-			$update_firstraid = array (); // Members who need their firstraid updated
-			$update_lastraid = array (); // Members who need their lastraid updated
-			$zero_firstlast = array (); // Members who only attended one raid: this one - reset their first/last raid
-
-			$sql = 'SELECT a.member_id, b.member_name, a.member_firstraid, a.member_lastraid, a.member_raidcount
-               FROM ' . MEMBER_DKP_TABLE . ' a , ' . MEMBER_LIST_TABLE . ' b 
-               WHERE a.member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
-                       AND a.member_id = b.member_id  
-               AND a.member_id in ( 
-               SELECT member_id from ' . MEMBER_LIST_TABLE . ' 
-               WHERE ' . $db->sql_in_set ( 'member_name', $attendees ) . ' ) ';
-			$result = $db->sql_query ( $sql );
-			
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				// We already updated their raidcount to reflect this deleted raid; 
-				// so if it's 0, this was their only raid;
-				if ($row ['member_raidcount'] == 0) 
-				{
-					$zero_firstlast [] = $row ['member_name'];
-				} 
-				else 
-				{
-					// If the raid's old date is their firstraid, update their firstraid
-					if ($row ['member_firstraid'] == $this->old_raid ['raid_date']) 
-					{
-						$update_firstraid [] = $row ['member_name'];
-					}
-					// If the raid's old date is their lastraid, update their lastraid
-					if ($row ['member_lastraid'] == $this->old_raid ['raid_date']) 
-					{
-						$update_lastraid [] = $row ['member_name'];
-					}
-				}
-			}
-			
-			$db->sql_freeresult ( $result );
-			
-			unset ( $attendees );
-			
-			// Zero the first/last raids if this was their only raid
-			if (sizeof ( $zero_firstlast ) > 0) 
-			{
-				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-                SET member_firstraid = 0,  member_lastraid = 0
-                WHERE member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
-            	AND member_id in ( 
-                SELECT member_id from ' . MEMBER_LIST_TABLE . ' 
-				 WHERE ' . $db->sql_in_set ( 'member_name', $zero_firstlast ) . '  )';
-				
-				$db->sql_query ( $sql );
-			}
-			
-			$queries = array ();
-			// Update selected firstraids if needed
-			if (sizeof ( $update_firstraid ) > 0) 
-			{
-				$sql = 'SELECT MIN( r.raid_date ) AS member_firstraid, ra.member_name
-                    FROM ' . RAIDS_TABLE . ' r, ' . RAID_ATTENDEES_TABLE . " ra
-                    WHERE ra.raid_id = r.raid_id
-                    AND " . $db->sql_in_set ( 'ra.member_name', $update_firstraid ) . '  
-                    AND r.raid_date > 0
-                    GROUP BY ra.member_name';
-				
-				$result = $db->sql_query ( $sql );
-				while ( $row = $db->sql_fetchrow ( $result ) ) 
-				{
-					$queries [] = 'UPDATE ' . MEMBER_DKP_TABLE . "
-                            SET member_firstraid = '" . $row ['member_firstraid'] . "'
-                            WHERE member_dkpid = " . $this->old_raid['event_dkpid'] . " 
-              			   AND member_id in ( 
-              			   SELECT member_id from " . MEMBER_LIST_TABLE . " 
-                            WHERE member_name = '" . $row ['member_name'] . "')";
-				}
-				$db->sql_freeresult ( $result );
-			}
-
-			// Updated selected lastraids if needed
-			if (sizeof ( $update_lastraid ) > 0) 
-			{
-				$sql = 'SELECT MAX(r.raid_date) AS member_lastraid, ra.member_name
-                    FROM ' . RAIDS_TABLE . ' r, ' . RAID_ATTENDEES_TABLE . " ra
-                    WHERE ra.raid_id = r.raid_id
-                    AND " . $db->sql_in_set ( 'ra.member_name', $update_firstraid ) . '
-                    AND r.raid_date > 0
-                    GROUP BY ra.member_name';
-				
-				$result = $db->sql_query ( $sql );
-				while ( $row = $db->sql_fetchrow ( $result ) ) {
-					$queries [] = 'UPDATE ' . MEMBER_DKP_TABLE . "
-                           SET member_lastraid = '" . $row ['member_lastraid'] . "'
-                           WHERE member_dkpid = " . $this->old_raid['event_dkpid'] . " 
-              			   AND member_id in ( 
-              			   SELECT member_id from " . MEMBER_LIST_TABLE . " 
-                           WHERE member_name = '" . $db->sql_escape ( $row ['member_name'] ) . "')";
-				}
-				$db->sql_freeresult ( $result );
-			}
-			foreach ( $queries as $sql ) 
-			{
-				$db->sql_query ( $sql );
-			}
-			unset ( $queries, $sql );
-			
-			//
 			// Logging
-			//
 			$log_action = array (
 				'header' => 
 				'L_ACTION_RAID_DELETED', 
@@ -603,7 +459,6 @@ class acp_dkp_raid extends bbDkp_Admin
 				'hidden_eventid' 	=> request_var ( 'hidden_eventid', 0 ) ) );
 			
 			$template->assign_vars ( array ('S_HIDDEN_FIELDS' => $s_hidden_fields ) );
-			
 			confirm_box ( false, $user->lang ['CONFIRM_DELETE_RAID'], $s_hidden_fields );
 		}
 	
@@ -1065,7 +920,7 @@ class acp_dkp_raid extends bbDkp_Admin
     {
         global $db, $user;
         // we loop new raidmember array
-        foreach ( (array) $members_array['member_id'] as $member_id )
+        foreach ( (array) $members_array as $member_id )
         {
             // has dkp record ?
 			$sql = 'SELECT count(member_id) as present
@@ -1198,7 +1053,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		'WHERE' => ' ra.raid_id = r.raid_id 
 					AND r.event_id = e.event_id 
 					AND a.event_dkpid = ' . $olddkpid . '
-					AND ' . $db->sql_in_set ( 'ra.member_id',  $oldmembers_array['member_id'] ), 
+					AND ' . $db->sql_in_set ( 'ra.member_id',  $oldmembers_array ), 
 		'GROUP_BY' => 'member_id'
 		);
 		
@@ -1267,10 +1122,9 @@ class acp_dkp_raid extends bbDkp_Admin
 				'member_lastraid' 		=> $last_raid, 
             ));
             
-			$db->sql_query ( 
-				'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . " 
+			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . ' 
 	             WHERE member_id = ' . $member_id . ' 
-	             AND  member_dkpid = ' . $dkpid;  
+	             AND  member_dkpid = ' . $dkpid);
         }
     }
     
@@ -1413,6 +1267,32 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 		
 		return true;
+	}
+	
+	private function remove_loot($raid_id)
+	{
+		global $db;
+		
+		$sql = 'SELECT item_id, member_id, item_value FROM ' . ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id;
+			$result = $db->sql_query ( $sql );
+			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			{
+				$item_value = (! empty ( $row ['item_value'] )) ? $row ['item_value'] : 0.00;
+				
+				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+	           		SET member_spent = member_spent - ' . $item_value . '
+			        WHERE member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
+	       	        AND member_id = ' . $row ['member_id'];
+				$db->sql_query ( $sql );
+			}
+			$db->sql_freeresult ( $result );
+						
+			//
+			// Delete associated items
+			//
+			$db->sql_query ( 'DELETE FROM ' . ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
+			
+		
 	}
 
 	
