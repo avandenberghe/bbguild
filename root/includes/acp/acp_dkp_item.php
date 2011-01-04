@@ -517,10 +517,14 @@ class acp_dkp_item extends bbDkp_Admin
 	    'SELECT'    => 'd.dkpsys_id, d.dkpsys_name, d.dkpsys_default',
 	    'FROM'      => array(
 	        DKPSYS_TABLE => 'd',
+	        EVENTS_TABLE => 'e',
+	        RAIDS_TABLE => 'r',
 	        ITEMS_TABLE    => 'i'
 	    ),
-	    'WHERE'     =>  'd.dkpsys_id = i.item_dkpid',  
-	    'GROUP_BY'  => 'i.item_dkpid', 
+	    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
+	    				and e.event_id = r.event_id 
+	    				and r.raid_id = i.raid_id',  
+	    'GROUP_BY'  => 'd.dkpsys_id', 
 		);
  
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -562,10 +566,13 @@ class acp_dkp_item extends bbDkp_Admin
 			$sql_array = array(
 			    'SELECT'    => 'r.raid_id, r.raid_dkpid, r.raid_name, r.raid_date, raid_note  ',
 			    'FROM'    	=> array(DKPSYS_TABLE => 'd', 
-									 RAIDS_TABLE => 'r' ),
-			    'WHERE'     =>  'r.raid_dkpid = d.dkpsys_id
-			    				 and d.dkpsys_id = ' . $dkpid ,
-				'ORDER_BY'  =>  'raid_date DESC '
+									 EVENTS_TABLE => 'e',
+	        						 RAIDS_TABLE => 'r'
+									 ),
+			    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
+	    						and e.event_id = r.event_id 
+			    				and d.dkpsys_id = ' . $dkpid ,
+				'ORDER_BY'  =>  'r.raid_date DESC '
 			);
 			$sql = $db->sql_build_query('SELECT', $sql_array);
 			
@@ -623,11 +630,16 @@ class acp_dkp_item extends bbDkp_Admin
 		    'SELECT'    => 'd.dkpsys_name,r.raid_dkpid, i.item_id, i.item_name, i.item_gameid, 
 		    				i.item_buyer, i.item_date, i.raid_id, i.item_value, r.raid_name ',
 		    'FROM'      => array(
+		        DKPSYS_TABLE   => 'd', 
+				EVENTS_TABLE   => 'e',
+		        RAIDS_TABLE    => 'r',
 		        ITEMS_TABLE    => 'i',
-		        RAIDS_TABLE    => 'r', 
-		        DKPSYS_TABLE   => 'd'
 		    ),
-		    'WHERE'     =>  'r.raid_id = i.raid_id AND d.dkpsys_id = r.raid_dkpid and i.item_dkpid = ' . $dkpid . ' AND i.raid_id = ' .  $raid_id,  
+		    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
+	    					and e.event_id = r.event_id 
+	    					and r.raid_id = i.raid_id 
+		     				and d.dkpsys_id = ' . $dkpid . ' 
+		     				AND i.raid_id = ' .  $raid_id,  
 		    'ORDER_BY'  => $current_order ['sql'], 
 			);
 	
@@ -635,10 +647,7 @@ class acp_dkp_item extends bbDkp_Admin
 			$sql = $db->sql_build_query('SELECT', $sql_array);					
 			$items_result = $db->sql_query ( $sql );
 			
-			$listitems_footcount = sprintf 
-			( 
-				$user->lang ['LISTPURCHASED_FOOTCOUNT_SHORT'], 
-				$total_items);
+			$listitems_footcount = sprintf ($user->lang ['LISTPURCHASED_FOOTCOUNT_SHORT'], $total_items);
 			
 			while ( $item = $db->sql_fetchrow ( $items_result ) ) 
 			{
@@ -674,15 +683,16 @@ class acp_dkp_item extends bbDkp_Admin
 			$db->sql_freeresult ( $items_result );
 			
 			$template->assign_vars ( array (
+				'S_SHOW' 		=> true,
 				'F_LIST_ITEM' 	=>   append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
 				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
 				'L_EXPLAIN' 	=> $user->lang ['ACP_LISTITEMS_EXPLAIN'], 
-				'O_DATE' 		=> $current_order ['uri'] [0], 
-				'O_BUYER' 		=> $current_order ['uri'] [1], 
-				'O_NAME' 		=> $current_order ['uri'] [2], 
-				'O_RAID' 		=> $current_order ['uri'] [3], 
-				'O_VALUE' 		=> $current_order ['uri'] [4], 
-				'O_RAIDDKP' 	=> $current_order ['uri'] [5], 
+				'O_DATE' 		=> $current_order ['uri'][0], 
+				'O_BUYER' 		=> $current_order ['uri'][1], 
+				'O_NAME' 		=> $current_order ['uri'][2], 
+				'O_RAID' 		=> $current_order ['uri'][3], 
+				'O_VALUE' 		=> $current_order ['uri'][4], 
+				'O_RAIDDKP' 	=> $current_order ['uri'][5], 
 				'U_LIST_ITEMS' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ), 
 				'S_BBTIPS' 		=> $this->bbtips, 
 				'START' 		=> $start, 
@@ -697,6 +707,8 @@ class acp_dkp_item extends bbDkp_Admin
 				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
 				'L_EXPLAIN' 	=> $user->lang ['ACP_LISTITEMS_EXPLAIN'], 
 				'U_LIST_ITEMS' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ), 
+				'S_SHOW' 		=> false,
+				
 				'S_BBTIPS' 		=> $this->bbtips, 
 			));			
 		}
@@ -739,12 +751,10 @@ class acp_dkp_item extends bbDkp_Admin
 	
 		//
 		// Generate random group key
-		//
 		$group_key = $this->gen_group_key ( $item_name, $loottime, $raid_id + rand(10,100) );
 		
 		//
 		// Add item to selected members
-		//
 		$this->add_new_item ( $item_name, $item_buyers, $group_key, $dkpid, $itemvalue, $raid_id, $loottime, $itemgameid);
 		
 		//
@@ -790,7 +800,8 @@ class acp_dkp_item extends bbDkp_Admin
 		$query = array ();
 		
 		// increase dkp spent value for buyers 
-		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d, ' . MEMBER_LIST_TABLE  . ' m 
+		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d, 
+				' . MEMBER_LIST_TABLE  . ' m 
 				SET d.member_spent = d.member_spent + ' . (float) $itemvalue  .  ' 
 				WHERE d.member_dkpid = ' . (int) $dkpid  . ' 
 			  	 AND  d.member_id =  m.member_id 
@@ -801,7 +812,6 @@ class acp_dkp_item extends bbDkp_Admin
 		//
 		// Add purchase(s) to items table
 		// note : itemid is generated with pk autoincrease
-		
 		if (is_array($item_buyers))
 		{
 			foreach ( $item_buyers as $key => $this_member_name ) 
@@ -950,19 +960,16 @@ class acp_dkp_item extends bbDkp_Admin
 		global $db, $user;
 		$query = array ();
 		
-		//
 		// 1) Remove the item purchase from the items table
-		//
 		$sql = 'DELETE FROM ' . ITEMS_TABLE . ' WHERE ' . $db->sql_in_set('item_id', $item_ids);
 		$db->sql_query ( $sql );
 			
-		//
 		// decrease dkp spent value from buyers with purchase value
 		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d, ' . MEMBER_LIST_TABLE  . ' m 
 				SET d.member_spent  = d.member_spent - ' . $old_item ['item_value'] .  ' 
 				WHERE d.member_dkpid = ' . $old_item ['item_dkpid'] . ' 
-			  	AND d.member_id =  m.member_id 
-			  	AND '. $db->sql_in_set('member_name', $item_buyers) ;
+			  	  AND d.member_id =  m.member_id 
+			  	  AND '. $db->sql_in_set('member_name', $item_buyers) ;
 	
 		$db->sql_query ( $sql );
 		

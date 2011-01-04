@@ -6,7 +6,7 @@
 <h1>{L_TITLE}</h1>
 <p>{L_EXPLAIN}</p>
 
-
+<!-- IF S_SHOW -->
 <form method="post" action="{F_LIST_ITEM}">
 
 <label for="dkpsys_id">{L_POOL}:</label>
@@ -76,5 +76,11 @@
 </fieldset>
 
 </form>
+<!-- ELSE -->
+<div class="errorbox">
+<p>{L_ERROR_NOITEMS}</p>
+	</div>
+
+<!-- ENDIF -->
 
 <!-- INCLUDE dkp/overall_footer.html -->
