@@ -332,6 +332,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					    'SELECT'    => '
 					    	a.*, 
 							(m.member_earned-m.member_spent+m.member_adjustment) AS member_current, 
+							m.member_id, 
 							m.member_dkpid, 
 							m.member_earned, 
 							m.member_spent,  
@@ -399,25 +400,45 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					if ( !empty($this->member['member_name']) )  // ??
 					{
 						// Get their correct earned/spent
-						
-						$sql = $db->sql_query('SELECT sum(r.raid_value) AS member_summa
-								FROM ' . RAIDS_TABLE . ' r, ' . RAID_ATTENDEES_TABLE . " ra 
-								WHERE ra.raid_id = r.raid_id 
-								AND ra.member_name='" . $db->sql_escape($this->member['member_name']) . "'
-								AND r.raid_dkpid=" . (int) $this->member['member_dkpid'] );
-						
-						while ( $row = $db->sql_fetchrow($sql) )
+						$sql_array = array(
+						    'SELECT'    => 'sum(r.raid_value) AS member_summa',
+						    'FROM'      => array(
+						        EVENTS_TABLE => 'e',
+						        RAIDS_TABLE => 'r',
+						        RAID_ATTENDEES_TABLE    => 'ra'
+						    ),
+						    'WHERE'     =>  ' ra.raid_id = r.raid_id 
+						    	and e.event_id = r.event_id
+								AND ra.member_id=' . $this->member['member_id'] . '
+								AND e.event_dkpid=' . (int) $this->member['member_dkpid'],
+						);
+						 
+						$sql = $db->sql_build_query('SELECT', $sql_array);
+						$result = $db->sql_query($sql);
+						while ( $row = $db->sql_fetchrow($result) )
 						{
 							$correct_earned = $row['member_summa'];
 						}
 						$db->sql_freeresult($sql);
 						
-						$sql  = $db->sql_query('SELECT sum(item_value) AS member_summa 
-								FROM ' . ITEMS_TABLE . " 
-								WHERE item_buyer='" . $db->sql_escape($this->member['member_name']) . "'
-								AND item_dkpid='" . (int) $this->member['member_dkpid'] . "'");
+						$sql_array = array(
+						    'SELECT'    => 'sum(item_value) AS member_summa',
+						    'FROM'      => array(
+							        DKPSYS_TABLE  => 'd',
+							        EVENTS_TABLE  => 'e',
+							        RAIDS_TABLE   => 'r',
+							        ITEMS_TABLE   => 'i'
+						    ),
+						    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
+					    				and e.event_id = r.event_id 
+					    				and r.raid_id = i.raid_id 
+										and i.member_id=' . $this->member['member_id'] . '
+										and e.event_dkpid=' . (int) $this->member['member_dkpid'],
+						);
 						
-						while ( $row = $db->sql_fetchrow($sql) )
+						$sql = $db->sql_build_query('SELECT', $sql_array);
+						$result = $db->sql_query($sql);
+						while ( $row = $db->sql_fetchrow($result) )
 						{
 							$correct_spent = $row['member_summa'];
 						}
@@ -430,12 +451,18 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					if ($update)
 					{
 					
-						$sql = 'SELECT *
-								FROM ' . MEMBER_DKP_TABLE . " WHERE member_id = 
-								(SELECT member_id from " . MEMBER_LIST_TABLE . " 
-								WHERE member_name = '" . $db->sql_escape( utf8_normalize_nfc( request_var('hidden_name', '', true))) . "')  
-								AND member_dkpid= " . (int) request_var('hidden_dkpid', 0) ;
+						$sql_array = array(
+						    'SELECT'    => 'm.member_id, m.member_earned, m.member_spent, m.member_adjustment',
+						    'FROM'      => array(
+							        MEMBER_DKP_TABLE => 'm',
+							        MEMBER_LIST_TABLE => 'l',
+						    ),
+						    'WHERE'     =>  "m.member_id = l.member_id 
+										and m.member_name='" . $db->sql_escape( utf8_normalize_nfc( request_var('hidden_name', '', true))) . "
+										and m.member_dkpid=" . (int) request_var('hidden_dkpid', 0),
+						);
 						
+						$sql = $db->sql_build_query('SELECT', $sql_array);
 						$result = $db->sql_query($sql);
 						while ( $row = $db->sql_fetchrow($result) )
 						{
@@ -525,7 +552,6 @@ class acp_dkp_mdkp extends bbDkp_Admin
 								// get data on dkp to be deleted
 								$sql_array = array(
 								    'SELECT'    => 'd.member_id, d.member_earned, d.member_spent, d.member_adjustment',
-								 
 								    'FROM'      => array(
 								        MEMBER_LIST_TABLE 	=> 'm',
 								        MEMBER_DKP_TABLE    => 'd'
