@@ -28,45 +28,40 @@ function check_form()
 
 <div>
 
-<input type="hidden" name="hidden_name" value="{V_MEMBER_NAME}" />
+<input type="hidden" name="hidden_id" value="{V_MEMBER_ID}" />
 <input type="hidden" name="hidden_dkpid" value="{V_MEMBER_DKPID}" />
-
 <div style="float: left; width: 100%;">
 <fieldset>
 <legend>{L_ADD_MEMBER_TITLE}</legend>
-
   <dl>
-    <dt>DKP Pool</dt>
-    <dd><label for="member_dkpname"> {MEMBER_DKPNAME}</label></dd>
+    <dt>{L_POOL}</dt>
+    <dd><label for="member_dkpname"><strong>{MEMBER_DKPNAME}</strong></label></dd>
   </dl>
   
   <dl>
-    <dt><STRONG><label for="member_name">{L_NAME}:</label></STRONG></dt>
-    <dd><label for="member_name"> {MEMBER_NAME}</label></dd>
+    <dt><label for="member_name">{L_NAME}</strong>:</label>	</dt>
+    <dd><label for="member_name"><strong>{MEMBER_NAME}</strong></label></dd>
   </dl>
   
   <dl>
     <dt><label for="member_level">{L_LEVEL}:</label></dt>
-    <dd><label for="member_level"> {MEMBER_LEVEL}</label></dd>
-  </dl> 
-
+    <dd><label for="member_level"><strong>{MEMBER_LEVEL}</strong></label></dd>
+  </dl>
   
   <dl>
     <dt><label for="member_race_id">{L_RACE}:</label></dt>
-    <dd><label for="member_race_id"> {MEMBER_RACE}</label></dd>
+    <dd><label for="member_race_id"><strong>{MEMBER_RACE}</strong></label></dd>
  </dl>
    
   <dl>
     <dt><label for="member_class_id">{L_CLASS}:</label></dt>
-    <dd><label for="member_class_id"> {MEMBER_CLASS}</label></dd>
+    <dd><label for="member_class_id"><strong><img src="{IMAGENAME}" alt="" />&nbsp;<span style="color:{COLORCODE}">{MEMBER_CLASS}</span></strong></label></dd>
   </dl> 
-
 
   <dl>
     <dt><label for="member_rank_id">{L_MEMBER_RANK}:</label></dt>
-    <dd><label for="member_rank_id"> {MEMBER_RANK}</label></dd>
+    <dd><label for="member_rank_id"><em>{MEMBER_RANK}</em></label></dd>
   </dl> 
-  
   
   <dl>
     <dt><label for="member_earned">{L_EARNED}:</label></dt>
@@ -87,7 +82,7 @@ function check_form()
 
   <dl>
     <dt><label>{L_CURRENT}:</label></dt>
-	<dd><span class="{C_MEMBER_CURRENT}">{MEMBER_CURRENT}</span></dd>
+	<dd><span class="{C_MEMBER_CURRENT}"><strong>{MEMBER_CURRENT}</strong></span></dd>
   </dl>
 
 <div style="float: left; width: 100%;">
