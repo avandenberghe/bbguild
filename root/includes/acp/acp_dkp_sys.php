@@ -76,7 +76,15 @@ class acp_dkp_sys extends bbDkp_Admin
 				
 				$add = (isset ( $_POST ['add'] )) ? true : false;
 				$submit = (isset ( $_POST ['update'] )) ? true : false;
-				
+   
+                if ( $add || $submit)
+                {
+                  	if (!check_form_key('adddkpsys'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+      			}
+        			
 				if ($add)
 				{
 					$this->dkpsys = array (
@@ -168,6 +176,9 @@ class acp_dkp_sys extends bbDkp_Admin
 				
 				}
 				
+				$form_key = 'adddkpsys';
+				add_form_key($form_key);
+		
 				$template->assign_vars ( array (
 					'DKPSYS_ID' => $this->url_id, 
 					'L_TITLE' => $user->lang ['ACP_ADDDKPSYS'], 

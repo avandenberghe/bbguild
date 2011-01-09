@@ -451,6 +451,14 @@ class acp_dkp_mdkp extends bbDkp_Admin
 
 					$update	 = (isset($_POST['update'])) ? true : false;
 					$delete	 = (isset($_POST['delete'])) ? true : false;	
+		            if ( $update || $delete )
+                    {
+                    	if (!check_form_key('mm_editmemberdkp'))
+						{
+							trigger_error('FORM_INVALID');
+						}
+        			}
+        			
 					if ($update)
 					{
 					
@@ -667,7 +675,9 @@ class acp_dkp_mdkp extends bbDkp_Admin
 						}
 						else
 						{
-							
+							$form_key = 'mm_editmemberdkp';
+							add_form_key($form_key);
+		
 							/******** no post **********/
 							$template->assign_vars(array(
 								'L_TITLE'		=> $user->lang['ACP_DKP_EDITMEMBERDKP'],
@@ -714,17 +724,19 @@ class acp_dkp_mdkp extends bbDkp_Admin
 			/***************************************/
 			
 			case 'mm_transfer':
-			    
 			    $this->transfer = array(
             		'from' => utf8_normalize_nfc(request_var('transfer_from',' ',true)),    
             		'to'   =>  utf8_normalize_nfc(request_var('transfer_to',' ',true)),     
         		);
         		
 				$submit	 = (isset($_POST['update'])) ? true : false;
-				
 				if ($submit)
 				{
 				    
+                   	if (!check_form_key('mm_transfer'))
+					{
+						trigger_error('FORM_INVALID');
+					}
 				    // make small array of dkp pools 
 					$dkp = array();
 					$sql1 = 'SELECT * FROM ' . DKPSYS_TABLE; 
@@ -1019,8 +1031,9 @@ class acp_dkp_mdkp extends bbDkp_Admin
 						'OPTION'   => $row['member_name'])
 					);
 				}
-				
 
+				$form_key = 'mm_transfer';
+				add_form_key($form_key);
 				
 				$template->assign_vars(array(
 					'L_TITLE'					=> $user->lang['ACP_MM_TRANSFER'],

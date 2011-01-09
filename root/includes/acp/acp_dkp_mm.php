@@ -427,10 +427,16 @@ function main($id, $mode)
 					$submit	 = (isset($_POST['add'])) ? true : false;
 					$update	 = (isset($_POST['update'])) ? true : false;
 					$delete	 = (isset($_POST['delete'])) ? true : false;	
-					
-					//
+	                if ( $add || $submit || $delete)
+	                {
+	                   	if (!check_form_key('mm_addmember'))
+						{
+							trigger_error('FORM_INVALID');
+						}
+	        		}
+
+	        		//
 					// add guildmember handler 
-					//
 					if ($submit)
 					{
 						// get member name
@@ -737,7 +743,10 @@ function main($id, $mode)
 							}
 							
 						}	
-				
+						
+				        $form_key = 'mm_addmember';
+						add_form_key($form_key);
+		
 				        $template->assign_vars(array(
 							'L_TITLE'				=> $user->lang['ACP_MM_ADDMEMBER'],
 							'L_EXPLAIN'				=> $user->lang['ACP_MM_ADDMEMBER_EXPLAIN'],
@@ -952,8 +961,8 @@ function main($id, $mode)
 			/***************************************/
 			
 			case 'mm_ranks':
-			    
-               $guild_id = request_var ( 'guild_id', 0 );
+
+			   $guild_id = request_var ( 'guild_id', 0 );
                if ($guild_id == 0)
                {
 					$sql = 'SELECT max(id) as max FROM ' . GUILD_TABLE;                        
@@ -964,7 +973,15 @@ function main($id, $mode)
                
 				$submit	 = (isset($_POST['update'])) ? true : false;
 				$add = (isset($_POST['add'])) ? true : false;
-				
+		   
+                if ( $add || $submit)
+                {
+                   	if (!check_form_key('mm_ranks'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+        		}
+        							
 				if ($submit)
 				{
 				    $modrank = request_var('ranks', array( 0 => ''));
@@ -1006,8 +1023,8 @@ function main($id, $mode)
 							}
 							else
 							{
-									$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id=' . $rank_id . ' and guild_id = ' . $guild_id; 
-									$db->sql_query($sql); 
+								$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id=' . $rank_id . ' and guild_id = ' . $guild_id; 
+								$db->sql_query($sql);
 							}
 							
 							 // log the action
@@ -1158,6 +1175,9 @@ function main($id, $mode)
 		        }
 		        $db->sql_freeresult($result);
 		        
+		        $form_key = 'mm_ranks';
+				add_form_key($form_key);
+				
 		        $template->assign_vars(array(
                     'F_EDIT_RANKS'		  	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") ,
                     'GUILD_ID'		      	=> $guild_id ,
@@ -1320,7 +1340,14 @@ function main($id, $mode)
                 $add        = (isset($_POST['add'])) ? true : false;
                 $submit     = (isset($_POST['update'])) ? true : false;
                 $delete     = (isset($_POST['delete'])) ? true : false;   
-
+		        if ( $add || $submit || $delete )
+                {
+                  	if (!check_form_key('addguild'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+       			}
+        			
                 if ($add)
                     {
                        $guild_name = utf8_normalize_nfc(request_var('guild_name','', true));
@@ -1477,7 +1504,10 @@ function main($id, $mode)
                             }
                         }
                     }   
-       
+                
+                $form_key = 'addguild';
+				add_form_key($form_key);
+				
                 $template->assign_vars(array(
                 
                         // Form values                       

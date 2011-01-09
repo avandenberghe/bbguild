@@ -43,7 +43,14 @@ class acp_dkp_item extends bbDkp_Admin
 				$submit = (isset ( $_POST ['add'] )) ? true : false;
 				$update = (isset ( $_POST ['update'] )) ? true : false;
 				$delete = (isset ( $_GET ['itemdelete'] ) || isset($_POST['delete']) ) ? true : false;
-
+		        if ( $add || $submit || $delete )
+                {
+                   	if (!check_form_key('additem'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+       			}
+        			
 				//fetch $_GET from meta refresh in acp_dkp_raid or $_POST from postback
 				$raid_id = request_var(URI_RAID, 0); 
 				$itemvalue = request_var( 'item_value' , 0.0) ; 
@@ -332,6 +339,10 @@ class acp_dkp_item extends bbDkp_Admin
 		
 		$db->sql_freeresult ( $result );
 				
+		$form_key = 'additem';
+		add_form_key($form_key);
+					
+		
 		//constant template variables
 		$template->assign_vars ( array (
 		'L_TITLE' 			=> $user->lang ['ACP_ADDITEM'], 

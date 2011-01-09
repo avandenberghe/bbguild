@@ -460,7 +460,9 @@ class acp_dkp_adj extends bbDkp_Admin
 		   	 * 
 			************************************/
 			case 'addiadj':
-    				
+    			$form_key = 'acp_dkp_adj';
+				add_form_key($form_key);
+			
     			/***  DKPSYS drop-down ***/
                 $dkpsys_id = 1;
                 $this->url_dkpid = 1;
@@ -574,6 +576,14 @@ class acp_dkp_adj extends bbDkp_Admin
 				$update	 = (isset($_POST['update'])) ? true : false;
 				$delete	 = (isset($_POST['delete'])) ? true : false;	
 			
+	            if ( $add || $submit || $delete )
+                {
+                   	if (!check_form_key('acp_dkp_adj'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+       			}
+        			
 				/************************************
 				// ADD INDIVIDUAL ADJUSTMENT
 				************************************/

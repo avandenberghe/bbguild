@@ -59,10 +59,14 @@ class acp_dkp_game extends bbDkp_Admin
         {
             case 'addfaction':
 				$addnew = (isset($_POST['factionadd'])) ? true : false;
-				
-				// user pressed add in
+
 				if ($addnew)
 				{
+                   	if (!check_form_key('acp_dkp_game'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+					
 					$sql = 'select max(faction_id) as max from ' . FACTION_TABLE; 
 					$result = $db->sql_query($sql);	
 					$factionid = (int) $db->sql_fetchfield('max', 0 ,$result );	

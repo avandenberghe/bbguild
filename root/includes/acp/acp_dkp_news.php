@@ -69,6 +69,14 @@ class acp_dkp_news extends bbDkp_Admin
 					
 				$submit	 = (isset($_POST['update'])) ? true : false;
 				$delete	 = (isset($_POST['delete'])) ? true : false;	
+		        if ( $submit || $delete )
+                {
+                   	if (!check_form_key('addnews'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+        		}
+        			
 				if ($submit)
 				{
 						if ($update == false)
@@ -166,7 +174,10 @@ class acp_dkp_news extends bbDkp_Admin
 								}
 							}
 						}	
-
+        
+		        $form_key = 'addnews';
+				add_form_key($form_key);
+				
 				$template->assign_vars(array(
 					'S_ADD'         	=> !$update,
 					'S_UPDATE' 			=> $update,

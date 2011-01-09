@@ -298,8 +298,6 @@ class acp_dkp_event extends bbDkp_Admin
                                         'log_action' => $log_action)
                                         );
        
-       
-       
                                     $success_message = sprintf($user->lang['ADMIN_DELETE_EVENT_SUCCESS'], $this->event['event_value'], $this->event['event_name']);
                                     trigger_error($success_message . adm_back_link($this->u_action));
                                 }
