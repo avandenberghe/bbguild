@@ -76,7 +76,7 @@ class acp_dkp_raid extends bbDkp_Admin
 					
 					if($additem)
 					{
-						meta_refresh(0, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=additem&raid=' . $raid_id));
+						meta_refresh(0, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=additem&amp;' . URI_RAID .'=' . $raid_id));
 					}
 					
 					$this->displayraid($raid_id);
@@ -101,7 +101,6 @@ class acp_dkp_raid extends bbDkp_Admin
 	
 	}
 	
-	
 	/*
 	 * add raid
 	 */
@@ -124,9 +123,9 @@ class acp_dkp_raid extends bbDkp_Admin
 		);
 		
 		//
-		// Get the raid value, dkpid, raid value passed is zero, getting default event value from database
+		// Get event info
 		$sql = "SELECT event_id, event_name, event_dkpid, event_value FROM " . EVENTS_TABLE . "  WHERE 
-                  event_id = " . $event_id;
+                event_id = " . $event_id;
 		$result = $db->sql_query ( $sql );
 		while ( $row = $db->sql_fetchrow ($result) ) 
 		{
@@ -139,6 +138,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 		$db->sql_freeresult ( $result );
 		
+		//start transaction
+		$db->sql_transaction('begin');
 		//
 		// Insert the raid
 		// raid id is auto-increment so it is increased automatically
@@ -153,7 +154,6 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		$db->sql_query ( "INSERT INTO " . RAIDS_TABLE . $query );
 		$this_raid_id = $db->sql_nextid();
-		
 		// Attendee handling
 		
 		// Insert the attendees in the raid attendees table
@@ -163,6 +163,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		// pass the raidmembers array, raid value, and dkp pool.
 		$this->add_dkp ($this->raid ['raid_attendees'], $this->raid['raid_value'], $this->raid['event_dkpid'], $this->raid['raid_date'] );
 		
+		//commit
+		$db->sql_transaction('commit');
 		
 		//
 		// Logging
@@ -272,6 +274,8 @@ class acp_dkp_raid extends bbDkp_Admin
 			  					request_var('mo', 0), request_var('d', 0), request_var('Y', 0)), 
 		);
 		
+		$db->sql_transaction('begin');
+		
 		// Remove the old attendees from the raid
 		$db->sql_query ( 'DELETE FROM ' . RAID_ATTENDEES_TABLE . " WHERE raid_id = " . (int) $raid_id );
 		
@@ -289,6 +293,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		// add to raidcount
 		// update last raiddate for new raidparticipants
 		$this->add_dkp ( $this->raid['raid_attendees'] , $this->raid['raid_value'], $this->old_raid['event_dkpid'], $this->raid['raid_date'] );
+		
+		$db->sql_transaction('commit');
 		
 		// RAIDS_TABLE
 		// Update the raid
@@ -393,7 +399,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				$log_action = array (
 						'header' => 'L_ACTION_RAID_DELETED', 
 						'id' => $raid_id, 
-						'L_EVENT' => $this->old_raid ['raid_name'], 
+						'L_EVENT' => $this->old_raid ['event_name'], 
 						'L_NOTE' => $this->old_raid ['raid_note'] );
 					
 					$this->log_insert ( array (
@@ -813,13 +819,6 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 		
 		/*** end DKPSYS drop-down ***/
-		$sort_order = array (
-				0 => array ('raid_date desc', 'raid_date' ), 
-				1 => array ('raid_name', 'raid_name desc' ), 
-				2 => array ('raid_note', 'raid_note desc' ), 
-				3 => array ('raid_value desc', 'raid_value' ));
-		
-		$current_order = switch_order ( $sort_order );
 		
 		$sql_array = array (
 			'SELECT' => ' count(*) as raidcount', 
@@ -835,7 +834,13 @@ class acp_dkp_raid extends bbDkp_Admin
 		$db->sql_freeresult ($result);
 		
 		$start = request_var ( 'start', 0, false );
+		$sort_order = array (
+				0 => array ('raid_date desc', 'raid_date' ), 
+				1 => array ('event_name', 'event_name desc' ), 
+				2 => array ('raid_note', 'raid_note desc' ), 
+				3 => array ('raid_value desc', 'raid_value' ));
 		
+		$current_order = switch_order ( $sort_order );		
 		$sql_array = array (
 			'SELECT' => ' e.event_dkpid, e.event_name,  
 						  r.raid_id, r.raid_date, r.raid_note, 
@@ -891,6 +896,11 @@ class acp_dkp_raid extends bbDkp_Admin
     */
     private function add_attendees(&$members_array, $raid_id)
     {
+        if(sizeof($members_array) == 0)
+    	{
+    		return;	
+    	}
+    	
         global $db;
         $attendees = array();
         foreach ( $members_array as $member_id )
@@ -918,6 +928,11 @@ class acp_dkp_raid extends bbDkp_Admin
     */
     private function add_dkp($members_array, $raid_value, $dkpid, $raiddate)
     {
+        if(sizeof($members_array) == 0)
+    	{
+    		return;	
+    	}
+    	
         global $db, $user;
         // we loop new raidmember array
         foreach ( (array) $members_array as $member_id )
@@ -934,16 +949,13 @@ class acp_dkp_raid extends bbDkp_Admin
              if ($present == 1)
              {
                  //update
-                  $sql = 'SELECT member_lastraid, member_firstraid
-                  FROM ' . MEMBER_DKP_TABLE . " 
-                  WHERE member_id = ' . $member_id . ' 
-                  AND  member_dkpid = " . $dkpid;  
+                  $sql = 'SELECT member_lastraid, member_firstraid FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' AND  member_dkpid = ' . $dkpid;  
                   $result = $db->sql_query($sql);
 
                   while ($row = $db->sql_fetchrow($result) )  
                   {
                      $sql  = 'UPDATE ' . MEMBER_DKP_TABLE . ' m
-                     SET m.member_earned = m.member_earned + ' . $raid_value . ', ';
+                     SET m.member_earned = m.member_earned + ' . (float) $raid_value . ', ';
                      
                      // Do update their lastraid if it's earlier than this raid's date
                      if ( $row['member_lastraid'] < $raiddate )
@@ -959,7 +971,7 @@ class acp_dkp_raid extends bbDkp_Admin
                      
                      $sql .= ' m.member_raidcount = m.member_raidcount + 1
                      WHERE m.member_dkpid = ' . (int) $dkpid . '
-                     AND m.member_id = ' . (int) $row['member_id'];
+                     AND m.member_id = ' . (int) $member_id;
                      $db->sql_query($sql);
                    }
                    $db->sql_freeresult($result);
@@ -978,7 +990,6 @@ class acp_dkp_raid extends bbDkp_Admin
                     )
                 );
                 $db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
-               
              }
         }
     }
@@ -994,6 +1005,11 @@ class acp_dkp_raid extends bbDkp_Admin
     */
     private function remove_dkp($oldmembers_array, $oldraid_value, $olddkpid)
     {
+        if(sizeof($oldmembers_array) == 0)
+    	{
+    		return;	
+    	}
+    	
         global $db, $user;
         // we loop old raidmember array
         foreach ( (array) $members_array['member_id'] as $member_id )
@@ -1038,6 +1054,12 @@ class acp_dkp_raid extends bbDkp_Admin
     */
     private function remove_raiddate($oldmembers_array, $olddkpid)
     {
+    	
+    	if(sizeof($oldmembers_array) == 0)
+    	{
+    		return;	
+    	}
+    	
         global $db, $user;
         
         // scan attendeelist
