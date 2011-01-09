@@ -62,7 +62,7 @@ function fnSearch( searchField, searchItem )
     {
         selectBox.options[i].selected = false;
         
-        if ( reSearch.test(selectBox.options[i].value) )
+        if ( reSearch.test(selectBox.options[i].text) )
         {
             selectBox.options[i].selected = true;
             break;
@@ -102,7 +102,7 @@ function fnAddMember()
         var memberText = fromField.options[index].text;
 
         // Remove the initial spacer member
-        if ( (toSize == 1) && (toField.options[0].value == "") )
+        if ( (toSize == 1) && (toField.options[0].text == "") )
         {
             toSize = 0;
         }
@@ -111,7 +111,7 @@ function fnAddMember()
         for (var j = 0, exists = false; j < toSize; j++ )
         {
             // destination already exists
-            if ( toField.options[ j ].value == memberValue )
+            if ( toField.options[ j ].text == memberValue )
             {
                 var exists = true;
                 offset++;
@@ -129,8 +129,6 @@ function fnAddMember()
     /* We're done - clear the search box and focus it for the next entry */
     form.memberSearch.value = "";
     form.memberSearch.focus();
-
-    //return false;
 }
 
 
@@ -176,40 +174,14 @@ fieldset dd {
 
 </style>
 
-
 <form method="post" action="{F_ADD_ITEM}" name="additem">
-
 <input type="hidden" name="hidden_id" value="{ITEM_ID}" />
-<input type="hidden" name="{URI_ITEM}" value="{ITEM_ID}" />
 <input type="hidden" name="show" value="{SHOW_ALL}" />
 
 <a name="maincontent"></a>
-
-<h1>{L_TITLE}</h1>
-
+<h1>{ITEMTITLE}</h1>
 <p>{L_EXPLAIN}</p>
-
-
-<h2>{ITEMTITLE}</h2>
-
-<div style="float: left; width: 100%;">
-<fieldset>
-<legend>{L_ADD_ITEM_TITLE}</legend>
-  <b>{L_RAID}:</b> (<a href="{U_ADD_RAID}">{L_ADD_RAID}</a>)<br />
-	<select name="dkpsys_id" class="input" onchange="javascript:form.submit();" >
-		<!-- BEGIN dkpsys_row -->
-		<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
-		<!-- END dkpsys_row -->
-	</select>
-   <br />
-     <select name="raid_id" id="raid_id" class="input" onchange="javascript:form.submit();" size="10" style="width: 100%;" >
-		<!-- BEGIN raids_row -->
-			<option value="{raids_row.VALUE}"{raids_row.SELECTED}>{raids_row.OPTION}</option>
-		<!-- END raids_row -->
-    </select>{FV_RAID_ID}
-</fieldset>
-</div>
-
+ 
 <div style="float: right; width: 50%;">
 <fieldset>
 <legend>{FV_ITEM_BUYERS}{L_BUYERS}:</legend>
@@ -218,28 +190,26 @@ fieldset dd {
 <dl>  
   {L_SEARCH_MEMBERS} : <input type="text" name="memberSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'all_members')" />	
 </dl>
-
 <dl>
-     <select style="float: left; width: 48%;" name="all_members" size="20" multiple="multiple" class="input">
+     <select style="float: left; width: 49%;" name="all_members" size="20" multiple="multiple" class="input">
          <!-- BEGIN members_row -->
        <option value="{members_row.VALUE}">{members_row.OPTION}</option>
        <!-- END members_row -->
      </select>
-     <select style="float: right; width: 48%;" name="item_buyers[]" size="20" multiple="multiple" class="input">
+     <select style="float: right; width: 49%;" name="item_buyers[]" size="20" multiple="multiple" class="input">
        <!-- BEGIN buyers_row -->
        <option value="{buyers_row.VALUE}" selected="selected">{buyers_row.OPTION}</option>
        <!-- END buyers_row -->
      </select>
  </dl>
-      <dl>
+    <dl>
         <center>
           <input type="button" name="button1" value="&lt;&lt;" accesskey="r" onclick="return fnRemoveMember()" class="button1" />
           <input type="button" name="button2" value="&gt;&gt;" accesskey="m" onclick="return fnAddMember()" class="button1" />
-			  </center>
-			</dl> 
+		</center>
+	</dl> 
      </fieldset>
-     
-    </div>
+</div>
     
     
 <div style="float: left; width: 49%;"> 
