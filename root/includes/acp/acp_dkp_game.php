@@ -51,7 +51,10 @@ class acp_dkp_game extends bbDkp_Admin
                 FROM ' . DKPSYS_TABLE . '
                 ORDER BY dkpsys_name';
         $resultdkpsys = $db->sql_query($sql);
-       
+        
+        $form_key = 'acp_dkp_game';
+		add_form_key($form_key);
+				
         switch ($mode)
         {
             case 'addfaction':
@@ -64,7 +67,8 @@ class acp_dkp_game extends bbDkp_Admin
 					$result = $db->sql_query($sql);	
 					$factionid = (int) $db->sql_fetchfield('max', 0 ,$result );	
 					$db->sql_freeresult($result);
-
+					
+					
 					$factionname = utf8_normalize_nfc(request_var('factionname', '', true));
 					$data = array( 
 						'faction_name'		=> (string) $factionname,
@@ -72,9 +76,13 @@ class acp_dkp_game extends bbDkp_Admin
 						'faction_hide'		=> 0,
 					);
 					
+					$db->sql_transaction('begin');
+					
 					$sql = 'INSERT INTO ' . FACTION_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
-					$db->sql_query($sql);							
-
+					$db->sql_query($sql);			
+									
+					$db->sql_transaction('commit');
+					
 					trigger_error( sprintf( $user->lang['ADMIN_ADD_FACTION_SUCCESS'], $factionname) . $link, E_USER_NOTICE);
 						
 				}
@@ -92,6 +100,14 @@ class acp_dkp_game extends bbDkp_Admin
 				$raceadd = (isset($_POST['add'])) ? true : false;
 				$raceupdate = (isset($_POST['update'])) ? true : false;
 
+        		if ( $raceadd || $raceupdate )
+                {
+                   	if (!check_form_key('acp_dkp_game'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+       			}
+       			
 				$id = request_var('race_id', 0);
 				$racename = utf8_normalize_nfc(request_var('racename', '', true));
 				$factionid = request_var('faction', 0 );
@@ -112,6 +128,7 @@ class acp_dkp_game extends bbDkp_Admin
 						'race_hide'				=> 0,
 					);
 					
+					$db->sql_transaction('begin');
 					$sql = 'INSERT INTO ' . RACE_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
 					$db->sql_query($sql);
 						
@@ -124,7 +141,9 @@ class acp_dkp_game extends bbDkp_Admin
 					);
 					
 					$sql = 'INSERT INTO ' . BB_LANGUAGE . ' ' . $db->sql_build_array('INSERT', $names);
-					$db->sql_query($sql);						
+					$db->sql_query($sql);		
+									
+					$db->sql_transaction('commit');
 					
 					trigger_error( sprintf( $user->lang['ADMIN_ADD_RACE_SUCCESS'], $racename) . $link, E_USER_NOTICE);
 				}
@@ -135,6 +154,8 @@ class acp_dkp_game extends bbDkp_Admin
 					$data = array( 
 						'race_faction_id'		=> (int) $factionid,
 					);
+					
+					$db->sql_transaction('begin');
 					
 					$sql = 'UPDATE ' . RACE_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) .  '  
 						    WHERE race_id = ' . $id ;
@@ -148,6 +169,8 @@ class acp_dkp_game extends bbDkp_Admin
 					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $id . 
 						" AND attribute='race'  AND language= '" . $config['bbdkp_lang'] ."'";
 					$db->sql_query($sql);	
+					
+					$db->sql_transaction('commit');
 						
 					trigger_error( sprintf( $user->lang['ADMIN_UPDATE_RACE_SUCCESS'], $racename) . $link, E_USER_NOTICE);
 					
@@ -157,9 +180,18 @@ class acp_dkp_game extends bbDkp_Admin
             	break;
                         
             case 'addclass':
+            	
         		$classadd 	 = (isset($_POST['add'])) ? true : false;
         		$classupdate = (isset($_POST['update'])) ? true : false;
-        		
+        	    
+        		if ( $classadd || $classupdate )
+                {
+                   	if (!check_form_key('acp_dkp_game'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+       			}
+       			
 				//user pressed add or update in list
 				$classname = utf8_normalize_nfc(request_var('class_name', '', true));
 				$class_id = request_var('class_id', 0);
@@ -190,13 +222,15 @@ class acp_dkp_game extends bbDkp_Admin
 						'colorcode'				=> $colorcode,
 					);
 					
+					$db->sql_transaction('begin');
+					
 					$sql = 'INSERT INTO ' . CLASS_TABLE . ' ' . $db->sql_build_array('INSERT', $data);
 					$db->sql_query($sql);							
 
 					$id = $db->sql_nextid();
 					 
 					$names = array(
-						'attribute_id'	=>  $id,
+						'attribute_id'	=>  $class_id,
 						'language'		=>  $config['bbdkp_lang'],
 						'attribute'		=>  'class', 
 						'name'			=> (string) $classname,
@@ -205,7 +239,9 @@ class acp_dkp_game extends bbDkp_Admin
 					
 					$sql = 'INSERT INTO ' . BB_LANGUAGE . ' ' . $db->sql_build_array('INSERT', $names);
 					$db->sql_query($sql);			
-										
+
+					$db->sql_transaction('commit');
+					
 					trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_SUCCESS'], $classname) . $link, E_USER_NOTICE);
 					
 				}
@@ -240,7 +276,7 @@ class acp_dkp_game extends bbDkp_Admin
 						'class_hide'			=> 0,
 						'colorcode'				=> $colorcode,
 					);
-					
+					$db->sql_transaction('begin');
 					$sql = 'UPDATE ' . CLASS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) .  '  
 						    WHERE c_index = ' . $c_index ;
 					$db->sql_query($sql);		
@@ -255,6 +291,8 @@ class acp_dkp_game extends bbDkp_Admin
 					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $class_id0 . 
 						" AND attribute='class'  AND language= '" . $config['bbdkp_lang'] ."'";
 					$db->sql_query($sql);	
+					
+					$db->sql_transaction('commit');
 						
 					trigger_error( sprintf( $user->lang['ADMIN_UPDATE_CLASS_SUCCESS'], $classname) . $link, E_USER_NOTICE);
 					
@@ -435,11 +473,15 @@ class acp_dkp_game extends bbDkp_Admin
 						// ask for permission
 						if (confirm_box(true))
 						{
+							$db->sql_transaction('begin');
+							
 							$sql = 'DELETE FROM ' . RACE_TABLE . ' WHERE race_id =' . $id;  
 							$db->sql_query($sql);
 							
 							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'race' and attribute_id= " . $id;  
 							$db->sql_query($sql);
+							
+							$db->sql_transaction('commit');
 													
 							trigger_error(sprintf($user->lang['ADMIN_DELETE_RACE_SUCCESS'], $id) . $link, E_USER_WARNING);
 								
@@ -478,7 +520,6 @@ class acp_dkp_game extends bbDkp_Admin
             		{
             			//edit this class_id
 	            		$id = request_var('id', 0); 
-	            		
 						
 						$sql_array = array(
 					    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename, c.colorcode ', 
@@ -514,7 +555,7 @@ class acp_dkp_game extends bbDkp_Admin
 						
 						// send parameters to template
 	                    $template->assign_vars( array(
-	                    		'ID' 				 => $c_index, 
+	                    		'C_INDEX' 				 => $c_index, 
 			                    'CLASS_ID' 			 => $class_id  ,
 			                    'CLASS_NAME' 		 => $class_name  ,
 								'CLASS_MIN' 		 => $class_min_level  ,
@@ -582,11 +623,15 @@ class acp_dkp_game extends bbDkp_Admin
 						// ask for permission
 						if (confirm_box(true))
 						{
-							$sql = 'DELETE FROM ' . CLASS_TABLE . ' WHERE c.class_id  =' . $class_id;  
+							$db->sql_transaction('begin');
+							
+							$sql = 'DELETE FROM ' . CLASS_TABLE . ' WHERE class_id  = ' . $class_id;  
 							$db->sql_query($sql);
 							
-							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'class' and attribute_id= " . $classid;  
+							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'class' and attribute_id= " . $class_id;  
 							$db->sql_query($sql);
+							
+							$db->sql_transaction('commit');
 							
 							trigger_error(sprintf($user->lang['ADMIN_DELETE_CLASS_SUCCESS'], $class_id) . $link, E_USER_WARNING);
 						}
