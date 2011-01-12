@@ -58,11 +58,13 @@ function install_wow()
 	$sql_ary [] = array ('race_id' => 3, 'race_faction_id' => 1 ); //Dwarf
 	$sql_ary [] = array ('race_id' => 4, 'race_faction_id' => 1 ) ; //Night Elf
 	$sql_ary [] = array ('race_id' => 5, 'race_faction_id' => 2 ); //Undead
-	$sql_ary [] = array ('race_id' => 6, 'race_faction_id' => 2 ); // Tauren
-	$sql_ary [] = array ('race_id' => 7, 'race_faction_id' => 1 );// Gnome
-	$sql_ary [] = array ('race_id' => 8, 'race_faction_id' => 2 );// Troll
+	$sql_ary [] = array ('race_id' => 6, 'race_faction_id' => 2 ); //Tauren
+	$sql_ary [] = array ('race_id' => 7, 'race_faction_id' => 1 ); //Gnome
+	$sql_ary [] = array ('race_id' => 8, 'race_faction_id' => 2 ); //Troll
+	$sql_ary [] = array ('race_id' => 9, 'race_faction_id' => 2 ); //Goblin
 	$sql_ary [] = array ('race_id' => 10, 'race_faction_id' => 2 ); //Blood Elf'
 	$sql_ary [] = array ('race_id' => 11, 'race_faction_id' => 1 ); //Draenei
+	$sql_ary [] = array ('race_id' => 22, 'race_faction_id' => 1 ); //Worgen
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 	
 
@@ -72,12 +74,13 @@ function install_wow()
 	$sql_ary = array ();
 	$sql_ary [] = array ('dkpsys_id' => 1, 'dkpsys_name' => 'Classic', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 	$sql_ary [] = array ('dkpsys_id' => 2, 'dkpsys_name' => 'TBC', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-	$sql_ary [] = array ('dkpsys_id' => 3, 'dkpsys_name' => 'WLK10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'Y' );
+	$sql_ary [] = array ('dkpsys_id' => 3, 'dkpsys_name' => 'WLK10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 	$sql_ary [] = array ('dkpsys_id' => 4, 'dkpsys_name' => 'WLK25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-	$sql_ary [] = array ('dkpsys_id' => 5, 'dkpsys_name' => 'CATA10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+	$sql_ary [] = array ('dkpsys_id' => 5, 'dkpsys_name' => 'CATA10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'Y' );
 	$sql_ary [] = array ('dkpsys_id' => 6, 'dkpsys_name' => 'CATA25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
 
+	// zones
 	unset ( $sql_ary );
 	$sql_ary = array ();
 	$sql_ary[] = array( 'id' => 1 , 'imagename' =>  'misc' , 'game' =>  'wow' ,  'tier' =>  '' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '' ,  'showzone' =>  1, 'showzoneportal' =>  1);
@@ -119,8 +122,15 @@ function install_wow()
 	$sql_ary[] = array( 'id' => 36 , 'imagename' =>  'icecrown_citadel_10' , 'game' =>  'wow' ,  'tier' =>  'T10' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '4812' ,  'showzone' =>  1, 'showzoneportal' =>  1);
 	$sql_ary[] = array( 'id' => 38 , 'imagename' =>  'rs_10' , 'game' =>  'wow' ,  'tier' =>  'T10' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '4987' ,  'showzone' =>  1, 'showzoneportal' =>  1);
 	$sql_ary[] = array( 'id' => 39 , 'imagename' =>  'rs_25' , 'game' =>  'wow' ,  'tier' =>  'T10' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '4987' ,  'showzone' =>  1, 'showzoneportal' =>  1);
-			
+	$sql_ary[] = array( 'id' => 40 , 'imagename' =>  'bd_10' , 'game' =>  'wow' ,  'tier' =>  'T11' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '5094' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+	$sql_ary[] = array( 'id' => 41 , 'imagename' =>  'bd_25' , 'game' =>  'wow' ,  'tier' =>  'T11' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '5094' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+	$sql_ary[] = array( 'id' => 42 , 'imagename' =>  'bot_10' , 'game' =>  'wow' ,  'tier' =>  'T11' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '5334' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+	$sql_ary[] = array( 'id' => 43 , 'imagename' =>  'bot_25' , 'game' =>  'wow' ,  'tier' =>  'T11' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '5334' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+	$sql_ary[] = array( 'id' => 44 , 'imagename' =>  'tfw_10' , 'game' =>  'wow' ,  'tier' =>  'T11' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '5638' ,  'showzone' =>  1, 'showzoneportal' =>  1);
+	$sql_ary[] = array( 'id' => 45 , 'imagename' =>  'tfw_25' , 'game' =>  'wow' ,  'tier' =>  'T11' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '5638' ,  'showzone' =>  1, 'showzoneportal' =>  1);
 	$db->sql_multi_insert ($table_prefix . 'bbdkp_zonetable', $sql_ary );
+	
+	// bosses
 	unset ($sql_ary);
 	$sql_ary[] = array('id' => 1 ,  'imagename' =>  'azuregos' , 'game' =>  'wow' , 'zoneid' =>  1 , 'type' =>  'npc'  , 'webid' =>  '6109' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
 	$sql_ary[] = array('id' => 2 ,  'imagename' =>  'kazzak' , 'game' =>  'wow' , 'zoneid' =>  1 , 'type' =>  'npc'  , 'webid' =>  '12397' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
@@ -394,10 +404,61 @@ function install_wow()
 	$sql_ary[] = array('id' => 270 ,  'imagename' =>  'the_lich_king_25_hc' , 'game' =>  'wow' , 'zoneid' =>  37 , 'type' =>  'npc'  , 'webid' =>  '29983' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
 	$sql_ary[] = array('id' => 271 ,  'imagename' =>  'halion_10' , 'game' =>  'wow' , 'zoneid' =>  38 , 'type' =>  'npc'  , 'webid' =>  '39863' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
 	$sql_ary[] = array('id' => 272 ,  'imagename' =>  'halion_10_hc' , 'game' =>  'wow' , 'zoneid' =>  38 , 'type' =>  'npc'  , 'webid' =>  '39863' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
-	$sql_ary[] = array('id' => 273 ,  'imagename' =>  'Halion_25' , 'game' =>  'wow' , 'zoneid' =>  39 , 'type' =>  'npc'  , 'webid' =>  '39863' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
-	$sql_ary[] = array('id' => 274 ,  'imagename' =>  'Halion_25_hc' , 'game' =>  'wow' , 'zoneid' =>  39 , 'type' =>  'npc'  , 'webid' =>  '39863' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 273 ,  'imagename' =>  'halion_25' , 'game' =>  'wow' , 'zoneid' =>  39 , 'type' =>  'npc'  , 'webid' =>  '39863' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 274 ,  'imagename' =>  'halion_25_hc' , 'game' =>  'wow' , 'zoneid' =>  39 , 'type' =>  'npc'  , 'webid' =>  '39863' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 275 ,  'imagename' =>  'magmaw_10' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '41570' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 276 ,  'imagename' =>  'magmaw_10_hc' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '41570' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 277 ,  'imagename' =>  'magmaw_25' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '41570' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 278 ,  'imagename' =>  'magmaw_25_hc' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '41570' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 279 ,  'imagename' =>  'omnotron_defense_system_10' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '42179' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 280 ,  'imagename' =>  'omnotron_defense_system_10_hc' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '42179' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 281 ,  'imagename' =>  'omnotron_defense_system_25' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '42179' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 282 ,  'imagename' =>  'omnotron_defense_system_25_hc' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '42179' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 283 ,  'imagename' =>  'maloriak_10' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '41378' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 284 ,  'imagename' =>  'maloriak_10_hc' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '41378' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 285 ,  'imagename' =>  'maloriak_25' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '41378' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 286 ,  'imagename' =>  'maloriak_25_hc' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '41378' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 287 ,  'imagename' =>  'atramedes_10' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '41442' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 288 ,  'imagename' =>  'atramedes_10_hc' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '41442' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 289 ,  'imagename' =>  'atramedes_25' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '41442' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 290 ,  'imagename' =>  'atramedes_25_hc' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '41442' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 291 ,  'imagename' =>  'chimaeron_10' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '43296' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 292 ,  'imagename' =>  'chimaeron_10_hc' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '43296' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 293 ,  'imagename' =>  'chimaeron_25' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '43296' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 294 ,  'imagename' =>  'chimaeron_25_hc' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '43296' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 295 ,  'imagename' =>  'nefarian_10' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '41376' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 296 ,  'imagename' =>  'nefarian_10_hc' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '41376' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 297 ,  'imagename' =>  'nefarian_25' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '41376' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 298 ,  'imagename' =>  'nefarian_25_hc' , 'game' =>  'wow' , 'zoneid' =>  41 , 'type' =>  'npc'  , 'webid' =>  '41376' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 299 ,  'imagename' =>  'halfus_wyrmbreaker_10' , 'game' =>  'wow' , 'zoneid' =>  42 , 'type' =>  'npc'  , 'webid' =>  '44600' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 300 ,  'imagename' =>  'halfus_wyrmbreaker_10_hc' , 'game' =>  'wow' , 'zoneid' =>  42 , 'type' =>  'npc'  , 'webid' =>  '44600' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 301 ,  'imagename' =>  'halfus_wyrmbreaker_25' , 'game' =>  'wow' , 'zoneid' =>  43 , 'type' =>  'npc'  , 'webid' =>  '44600' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 302 ,  'imagename' =>  'halfus_wyrmbreaker_25_hc' , 'game' =>  'wow' , 'zoneid' =>  43 , 'type' =>  'npc'  , 'webid' =>  '44600' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 303 ,  'imagename' =>  'valiona_theralion_10' , 'game' =>  'wow' , 'zoneid' =>  42 , 'type' =>  'npc'  , 'webid' =>  '45992' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 304 ,  'imagename' =>  'valiona_theralion_10_hc' , 'game' =>  'wow' , 'zoneid' =>  42 , 'type' =>  'npc'  , 'webid' =>  '45992' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 305 ,  'imagename' =>  'valiona_theralion_25' , 'game' =>  'wow' , 'zoneid' =>  43 , 'type' =>  'npc'  , 'webid' =>  '45992' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 306 ,  'imagename' =>  'valiona_theralion_25_hc' , 'game' =>  'wow' , 'zoneid' =>  43 , 'type' =>  'npc'  , 'webid' =>  '45992' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 307 ,  'imagename' =>  'twilight_ascendant_council_10' , 'game' =>  'wow' , 'zoneid' =>  42 , 'type' =>  'npc'  , 'webid' =>  '43735' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 308 ,  'imagename' =>  'twilight_ascendant_council_10_hc' , 'game' =>  'wow' , 'zoneid' =>  42 , 'type' =>  'npc'  , 'webid' =>  '43735' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 309 ,  'imagename' =>  'twilight_ascendant_council_25' , 'game' =>  'wow' , 'zoneid' =>  43 , 'type' =>  'npc'  , 'webid' =>  '43735' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 310 ,  'imagename' =>  'twilight_ascendant_council_25_hc' , 'game' =>  'wow' , 'zoneid' =>  43 , 'type' =>  'npc'  , 'webid' =>  '43735' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image missing still
+	$sql_ary[] = array('id' => 311 ,  'imagename' =>  'chogall_10' , 'game' =>  'wow' , 'zoneid' =>  42 , 'type' =>  'npc'  , 'webid' =>  '43324' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); 
+	$sql_ary[] = array('id' => 312 ,  'imagename' =>  'chogall_10_hc' , 'game' =>  'wow' , 'zoneid' =>  42 , 'type' =>  'npc'  , 'webid' =>  '43324' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 313 ,  'imagename' =>  'chogall_25' , 'game' =>  'wow' , 'zoneid' =>  43 , 'type' =>  'npc'  , 'webid' =>  '43324' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 314 ,  'imagename' =>  'chogall_25_hc' , 'game' =>  'wow' , 'zoneid' =>  43 , 'type' =>  'npc'  , 'webid' =>  '43324' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 315 ,  'imagename' =>  'sinestra_10_hc' , 'game' =>  'wow' , 'zoneid' =>  42 , 'type' =>  'npc'  , 'webid' =>  '' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image & web ID missing still
+	$sql_ary[] = array('id' => 316 ,  'imagename' =>  'sinestra_25_hc' , 'game' =>  'wow' , 'zoneid' =>  43 , 'type' =>  'npc'  , 'webid' =>  '' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     ); //image & web ID missing still
+	$sql_ary[] = array('id' => 317 ,  'imagename' =>  'conclave_of_wind_10' , 'game' =>  'wow' , 'zoneid' =>  44 , 'type' =>  'npc'  , 'webid' =>  '45871' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 318 ,  'imagename' =>  'conclave_of_wind_10_hc' , 'game' =>  'wow' , 'zoneid' =>  44 , 'type' =>  'npc'  , 'webid' =>  '45871' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 319 ,  'imagename' =>  'conclave_of_wind_25' , 'game' =>  'wow' , 'zoneid' =>  45 , 'type' =>  'npc'  , 'webid' =>  '45871' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 320 ,  'imagename' =>  'conclave_of_wind_25_hc' , 'game' =>  'wow' , 'zoneid' =>  45 , 'type' =>  'npc'  , 'webid' =>  '45871' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 321 ,  'imagename' =>  'alakir_10' , 'game' =>  'wow' , 'zoneid' =>  44 , 'type' =>  'npc'  , 'webid' =>  '46753' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 322 ,  'imagename' =>  'alakir_10_hc' , 'game' =>  'wow' , 'zoneid' =>  44 , 'type' =>  'npc'  , 'webid' =>  '46753' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 323 ,  'imagename' =>  'alakir_25' , 'game' =>  'wow' , 'zoneid' =>  45 , 'type' =>  'npc'  , 'webid' =>  '46753' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
+	$sql_ary[] = array('id' => 324 ,  'imagename' =>  'alakir_25_hc' , 'game' =>  'wow' , 'zoneid' =>  45 , 'type' =>  'npc'  , 'webid' =>  '46753' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_bosstable', $sql_ary );
 
+	// language table
 	unset ( $sql_ary );
 	$sql_ary[] = array( 'id' => 1 , 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Miscellaneous bosses' ,  'name_short' =>  'Misc' );
 	$sql_ary[] = array( 'id' => 2 , 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Onyxia\'s Lair' ,  'name_short' =>  'Onyxia' );
