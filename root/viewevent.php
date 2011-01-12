@@ -167,7 +167,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
     // Items
     $start = request_var('start' ,0);
         
-    $sql = 'SELECT item_date, raid_id, item_name, item_buyer, item_id, item_value, item_dkpid
+    $sql = 'SELECT item_date, raid_id, item_name, item_buyer, member_id, item_id, item_value, item_dkpid
             FROM ' . ITEMS_TABLE . ' WHERE ' . $db->sql_in_set('raid_id', $raid_ids) . ' ORDER BY item_date DESC ';
     
     $result = $db->sql_query_limit($sql, $config['bbdkp_user_ilimit'], $start);
@@ -197,7 +197,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
           'DATE'          => date('d.m.y', $row['item_date']),
           'U_VIEW_RAID'   => append_sid("{$phpbb_root_path}viewraid.$phpEx" , URI_RAID . '=' . $row['raid_id']) ,
           'BUYER'         => $row['item_buyer'],
-          'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_NAME . '=' . $row['item_buyer'] . '&amp;' . URI_DKPSYS . '='. $row['item_dkpid']) ,
+          'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '='. $row['item_dkpid']) ,
           'NAME'          => $item_name, 
           'U_VIEW_ITEM'   => append_sid("{$phpbb_root_path}viewitem.$phpEx" , URI_ITEM . '=' . $row['item_id']) ,
           'SPENT'         => sprintf("%.2f", $row['item_value']))

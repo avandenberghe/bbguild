@@ -20,6 +20,7 @@ global $config;
 $user->session_begin ();
 $auth->acl ( $user->data );
 $user->add_lang ( array ('mods/dkp_common' ) );
+// if not authorised redirect to portal
 if (!$auth->acl_get('u_dkp'))
 {
 	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
@@ -56,7 +57,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 }
 $db->sql_freeresult ( $result );
 
-$dkpsys_id = 0; 
+$dkpsys_id = 0;
 if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [URI_DKPSYS] ) )
 {
 	if (isset( $_POST ['pool']) )
@@ -136,7 +137,8 @@ $filtervalues [] = '--------';
         CLASS_TABLE 	=> 'c',
         BB_LANGUAGE		=> 'l', 
     	),
-    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id 
+     AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
 	'ORDER_BY'	=> ' c.class_id ',
     );
     
@@ -462,7 +464,7 @@ foreach ( $memberarray as $key => $member )
 		'RAIDS_P1_DAYS' => $member ['attendanceP1'], 
 		'RAIDS_P2_DAYS' => $member ['attendanceP2'], 
 		'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}viewmember.$phpEx", 
-			'&amp;' . URI_NAME . '=' . $member ['member_name'] . 
+			'&amp;' . URI_NAMEID . '=' . $member ['member_id'] . 
 			'&amp;' . URI_DKPSYS . '=' . $member ['member_dkpid']) ) );
 }
 
@@ -621,7 +623,7 @@ function leaderboard($dkpsys_id, $query_by_pool)
 				'CURRENT' => $dkprow ['member_current'], //point color
 				'DKPCOLOUR' => ($dkprow ['member_current'] >= 0) ? 'style="font-size :8pt; color: green; text-align: right;"' : 'style="font-size :8pt; color: red; text-align: right;"', 
 				'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}viewmember.$phpEx", '&amp;' . 
-						URI_NAME . '=' . $dkprow ['member_name'] . '&amp;' . 
+						URI_NAMEID . '=' . $dkprow ['member_id'] . '&amp;' . 
 						URI_DKPSYS . '=' . $dkprow['member_dkpid'] ) ) );
 		}
 		$db->sql_freeresult ( $result2 );

@@ -163,7 +163,7 @@ class ucp_dkp
 						{
 							$template->assign_block_vars('members_row.dkp_row', array(
 								'DKPSYS'        => $row2['dkpsys_name'],
-								'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAME . '=' . $row['member_name'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id'] ), 
+								'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id'] ), 
 								'EARNED'       => $row2['earned'],
 								'SPENT'        => $row2['spent'],
 								'ADJUSTMENT'   => $row2['adjustment'],

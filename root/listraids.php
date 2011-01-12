@@ -126,11 +126,20 @@ $sort_order = array
  
 $current_order = switch_order($sort_order);
 //get total nr of raids 
-$sql = 'SELECT count(*) as numraids FROM ' . RAIDS_TABLE;
-if ($query_by_pool)
+$sql_array = array(
+    'SELECT'    => 	' COUNT(*) as numraids  ', 
+    'FROM'      => array(
+		EVENTS_TABLE			=> 'e', 	        
+		RAIDS_TABLE 			=> 'r'	         
+    	),
+    'WHERE'		=> 'r.event_id = e.event_id ',
+   );
+
+if ($query_by_pool == true)
 {
-    $sql .= ' where raid_dkpid = '. $dkpsys_id . ' ';
+	$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkpsys_id; 
 }
+$sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query($sql);
 $total_raids = (int) $db->sql_fetchfield('numraids');
 $db->sql_freeresult ( $result );
@@ -151,23 +160,21 @@ else
 }
 
 $sql_array = array(
-    'SELECT'    => 	'b.dkpsys_name, b.dkpsys_id, a.raid_id, a.raid_name, a.raid_date, a.raid_note, a.raid_value ', 
- 
+    'SELECT'    => 	'b.dkpsys_name, b.dkpsys_id, r.raid_id, e.event_name, r.raid_date, r.raid_note, r.raid_value  ', 
     'FROM'      => array(
-        RAIDS_TABLE 	=> 'a',
-        DKPSYS_TABLE 		=> 'b',
+        DKPSYS_TABLE 			=> 'b',
+		EVENTS_TABLE			=> 'e', 	        
+		RAIDS_TABLE 			=> 'r'	         
     	),
- 
-    'WHERE'     =>  'a.raid_dkpid = b.dkpsys_id ' ,
+    'WHERE'		=> 'e.event_dkpid = b.dkpsys_id
+    	AND r.event_id = e.event_id ' , 
     'ORDER_BY'	=>  $current_order['sql'], 
-);
+   );
 
-if ($query_by_pool)
+if ($query_by_pool == true)
 {
-    $sql_array['WHERE'] .= ' AND a.raid_dkpid = '. $dkpsys_id . ' ';
+	$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkpsys_id; 
 }
-$sql .= ' ORDER BY ' . $current_order['sql']; 
-
 $sql = $db->sql_build_query('SELECT', $sql_array);
 
 $raids_result = $db->sql_query_limit($sql, $raidlines , $start);
@@ -184,7 +191,7 @@ while ( $row = $db->sql_fetchrow($raids_result) )
         'DATE' => ( !empty($row['raid_date']) ) ? date($config['bbdkp_date_format'], $row['raid_date']) : '&nbsp;',
         'U_VIEW_RAID' => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '='.$row['raid_id']),
 		'POOL' => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '&lt;<i>Not Found</i>&gt;',
-    	'NAME' => ( !empty($row['raid_name']) ) ? $row['raid_name'] : '&lt;<i>Not Found</i>&gt;',
+    	'NAME' => ( !empty($row['event_name']) ) ? $row['event_name'] : '&lt;<i>Not Found</i>&gt;',
     	'NOTE' => ( !empty($row['raid_note']) ) ? $row['raid_note'] : '&nbsp;',
         'VALUE' => $row['raid_value'])
     );

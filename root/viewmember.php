@@ -31,14 +31,13 @@ if (! defined ( "EMED_BBDKP" ))
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
-if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS])) 
+if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS])) 
 {
-
-	$member_name= request_var(URI_NAME, '', true);
-	$dkp_pool=request_var(URI_DKPSYS, 0);
+	$member_id = request_var(URI_NAMEID, 0);
+	$dkp_pool = request_var(URI_DKPSYS, 0);
 	
 	/*****************************
-    /***   general info      *****
+    /***   make member array
     ******************************/
 	$sql_array = array(
     'SELECT'    => 	'g.region, g.name as guildname, g.realm, b.member_dkpid, d.dkpsys_name, a.member_id, a.member_name, 
@@ -55,32 +54,26 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     'WHERE'     =>  'a.member_guild_id = g.id 
     				AND a.member_id= b.member_id
     				AND b.member_dkpid = d.dkpsys_id
-					AND b.member_dkpid= ' . (int) $dkp_pool . " 
-    				AND a.member_name='". $db->sql_escape($member_name) ."'" ,);
+					AND b.member_dkpid= ' . (int) $dkp_pool . ' 
+    				AND a.member_id='. $member_id
+    	);
 
     $sql = $db->sql_build_query('SELECT', $sql_array);
-    
     if ( !($member_result = $db->sql_query($sql)) )
     {
         trigger_error($user->lang['ERROR_MEMBERNOTFOUND']);
     }
 	
-    // Make sure they provided a valid member name
+    // Make sure they provided a valid member
     if ( !$member = $db->sql_fetchrow($member_result) )
     {
  		trigger_error($user->lang['ERROR_MEMBERNOTFOUND']);
     }
     $db->sql_freeresult($member_result);
   
-	/*****************************
-    /***   Raid Attendance   *****
+	/****************************
+    /*   Get Raid Attendance    *
     *****************************/
-    $sort_order = array(
-        0 => array('raid_name', 'raid_name desc'),
-        1 => array('raid_count desc', 'raid_count')
-    );
-    $current_order = switch_order($sort_order);
-    
     if (!isset($_GET['rstart']))  
     {
         $current_earned = $member['member_earned'];
@@ -91,39 +84,49 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
         $rstart = request_var('rstart',0) ;
         $current_earned = $member['member_earned'];
         
-       	$sql_array = array(
-	    	'SELECT'    => 	'sum(r.raid_value) as earned_result, count(*) as raidlines', 
-	    	'FROM'      => array(
-		        RAIDS_TABLE => 'r',
-		        RAID_ATTENDEES_TABLE => 'ra',
-		    	),
-	 
-	    	'WHERE'     =>  "(ra.raid_id = r.raid_id)
-               AND (ra.member_name='" . $db->sql_escape($member['member_name']) ."')
-               AND (r.raid_dkpid=" . (int) $dkp_pool . ' )', 
-        );
-               
+        $sql_array = array(
+	    'SELECT'    => 	' sum(r.raid_value) as earned_result, count(*) as raidlines ', 
+	    'FROM'      => array(
+			EVENTS_TABLE			=> 'e', 	        
+			RAIDS_TABLE 			=> 'r',
+			MEMBER_LIST_TABLE 		=> 'l',
+	        RAID_ATTENDEES_TABLE	=> 'ra', 
+	    	),
+	    'WHERE'		=> " r.event_id = e.event_id
+	    	AND ra.raid_id = r.raid_id
+	    	AND l.member_id = ra.member_id
+            AND (ra.member_name='" . $db->sql_escape($member['member_name']) ."')
+            AND r.raid_date BETWEEN " . $start_date . ' AND ' . $end_date . ' 
+			AND e.event_dkpid = ' . $dkp_pool, 
+	    );
+		
     	$sql = $db->sql_build_query('SELECT', $sql_array);
     	$result = $db->sql_query($sql);
-    	
         $current_earned = (int) $db->sql_fetchfield('earned_result');
         $raidlines = (int) $db->sql_fetchfield('raidlines');
         
         $db->sql_freeresult($earned_result);
     }
     
+/*    $sort_order = array(
+        0 => array('raid_name', 'raid_name desc'),
+        1 => array('raid_count desc', 'raid_count')
+    );
+    $current_order = switch_order($sort_order);*/
+    
     // raid lines
     $raidlines = $config['bbdkp_user_rlimit'] ;
     $sql_array = array(
-    	'SELECT'    => 	'r.raid_id, r.raid_name, r.raid_date, r.raid_note, r.raid_value ', 
+    	'SELECT'    => 	'r.raid_id, e.event_name, e.event_dkpid, r.raid_date, r.raid_note, r.raid_value ', 
     	'FROM'      => array(
-	        RAIDS_TABLE => 'r',
-	        RAID_ATTENDEES_TABLE => 'ra',
+    		EVENTS_TABLE			=> 'e', 	        
+	        RAIDS_TABLE 			=> 'r',
+	        RAID_ATTENDEES_TABLE 	=> 'ra',
 	    	),
  
     	'WHERE'     =>  "(ra.raid_id = r.raid_id)
-              AND (ra.member_name='" . $db->sql_escape($member['member_name']) ."')
-              AND (r.raid_dkpid=" . (int) $dkp_pool . ' )', 
+             AND (ra.member_name='" . $db->sql_escape($member['member_name']) ."')
+             AND (e.event_dkpid=" . (int) $dkp_pool . ' )', 
 	    'ORDER_BY'  => 'r.raid_date DESC',
           );
               
@@ -138,7 +141,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
         $template->assign_block_vars('raids_row', array(
             'DATE'           => ( !empty($raid['raid_date']) ) ? date($config['bbdkp_date_format'], $raid['raid_date']) : '&nbsp;',
             'U_VIEW_RAID'    => append_sid("{$phpbb_root_path}viewraid.$phpEx" , URI_RAID . '='.$raid['raid_id']),
-            'NAME'           => ( !empty($raid['raid_name']) ) ? $raid['raid_name'] : '&lt;<em>'.$user->lang['EMPTYRAIDNAME'].'</em>&gt;',
+            'NAME'           => $raid['event_name'],
             'NOTE'           => ( !empty($raid['raid_note']) ) ? $raid['raid_note'] : '&nbsp;',
             'EARNED'         => $raid['raid_value'],
             'CURRENT_EARNED' => sprintf("%.2f", $current_earned))
@@ -149,7 +152,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     // get number of attended raids
     $db->sql_freeresult($raids_result);
 
-	$total_attended_raids = memberraid_count($dkp_pool, 0, $member['member_id'], true); 
+	$total_attended_raids = memberraid_count($dkp_pool, 0, $member_id, true); 
     
     /**********************************
     /***   Item purchase history  *****
@@ -166,10 +169,24 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
         $istart = request_var('istart', 0);
         $current_spent = $member['member_spent'];
         
-        $sql = 'SELECT item_value FROM ' . ITEMS_TABLE . " WHERE item_buyer='" . $db->sql_escape($member['member_name']) . "' 
-				AND  item_dkpid= " . (int) $dkp_pool . ' ORDER BY item_date DESC' ;
+        $sql_array = array(
+    	'SELECT'    => 	'i.item_value ', 
+    	'FROM'      => array(
+    		EVENTS_TABLE		=> 'e',
+    		RAIDS_TABLE			=> 'r',
+    		ITEMS_TABLE			=> 'i', 	        
+    	),
+ 
+    	'WHERE'     =>  " e.event_id = r.event_id
+             AND e.event_dkpid=" . (int) $dkp_pool . '   
+             AND r.raid_id = i.raid_id
+             AND i.member_id  = ' . $member_id, 
+
+    	'ORDER_BY'  => 'i.item_date DESC',
+          );
+              
+   		$sql = $db->sql_build_query('SELECT', $sql_array);
         $spent_result = $db->sql_query_limit($sql, $itemlines, $istart);
-                
         if ( !$spent_result  )
         {
            trigger_error("Error in database");
@@ -181,26 +198,24 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
         }
         $db->sql_freeresult($spent_result);
     }
-
     
     // inner join the raids and items table
      $sql_array = array(
-    	'SELECT'    => 	'i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_gameid, r.raid_name ', 
+    	'SELECT'    => 	'i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_gameid, e.event_name ', 
     	'FROM'      => array(
-	        ITEMS_TABLE => 'i',
-	        RAIDS_TABLE => 'r',
+     		EVENTS_TABLE	=> 'e',
+	        ITEMS_TABLE 	=> 'i',
+	        RAIDS_TABLE 	=> 'r',
 	    	),
  
-    	'WHERE'     =>  "( r.raid_id = i.raid_id )
-              AND ( i.item_buyer='" . $db->sql_escape($member['member_name']) . "')
-              AND ( i.item_dkpid= " . (int) $dkp_pool . ' ) 
-              AND ( r.raid_dkpid=' .  (int) $dkp_pool . ' )', 
-	    	
+    	'WHERE'     =>  ' e.event_id = r.event_id
+              AND e.event_dkpid=' .  (int) $dkp_pool . ' 
+    		  AND r.raid_id = i.raid_id 	 
+              AND i.member_id = ' . $member_id, 
 	    'ORDER_BY'  => 'i.item_date DESC',
           );
               
    	$sql = $db->sql_build_query('SELECT', $sql_array);
-    
     $items_result = $db->sql_query_limit($sql, $itemlines, $istart);
     if ( !$items_result)
     {
@@ -241,7 +256,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
             'U_VIEW_ITEM'   => append_sid("{$phpbb_root_path}viewitem.$phpEx", URI_ITEM . '=' . $item['item_id']),
             'U_VIEW_RAID'   => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item['raid_id']),
             'NAME'          => $item_name, 
-            'RAID'          => ( !empty($item['raid_name']) ) ? $item['raid_name'] : '&lt;<i>Not Found</i>&gt;',
+            'RAID'          => ( !empty($item['event_name']) ) ? $item['event_name'] : '&lt;<i>Not Found</i>&gt;',
             'SPENT'         => $item['item_value'],
             'CURRENT_SPENT' => sprintf("%.2f", $current_spent))
         );
@@ -249,40 +264,48 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     }
     $db->sql_freeresult($items_result);
 
-    $sql6 = 'SELECT count(*) as itemcount FROM ' . ITEMS_TABLE . " 
-    WHERE  item_dkpid= " .  $dkp_pool . " and item_buyer='" . $db->sql_escape($member['member_name']) . "'";
-  	$result6 = $db->sql_query($sql6);
+	$sql_array = array(
+    	'SELECT'    => 	'count(*) as itemcount  ', 
+    	'FROM'      => array(
+    		EVENTS_TABLE		=> 'e',
+    		RAIDS_TABLE			=> 'r',
+    		ITEMS_TABLE			=> 'i', 	        
+    	),
+ 
+    	'WHERE'     =>  " e.event_id = r.event_id
+             AND e.event_dkpid=" . (int) $dkp_pool . '   
+             AND r.raid_id = i.raid_id
+             AND i.member_id  = ' . $member_id, 
+          );
+    $sql6 = $db->sql_build_query('SELECT', $sql_array);
+    $result6 = $db->sql_query($sql6);
 	$total_purchased_items = $db->sql_fetchfield('itemcount');
 	$db->sql_freeresult($result6);  
 	    
-    $raidpag  = generate_pagination2(append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_DKPSYS.'='.$dkp_pool.
-    '&amp;name='.$member['member_name']. '&amp;istart='.$istart), 
+    $raidpag  = generate_pagination2(append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_DKPSYS.'='.$dkp_pool. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart='.$istart), 
     $total_attended_raids, $raidlines, $rstart, 1, 'rstart');
 	     
-    $itpag =   generate_pagination2(append_sid("{$phpbb_root_path}viewmember.$phpEx" ,URI_DKPSYS.'='.$dkp_pool.
-    '&amp;name='.$member['member_name'].  '&amp;rstart='.$rstart),
+    $itpag =   generate_pagination2(append_sid("{$phpbb_root_path}viewmember.$phpEx" ,URI_DKPSYS.'='.$dkp_pool. '&amp;' . URI_NAMEID. '='.$member_id.  '&amp;rstart='.$rstart),
     $total_purchased_items,  $itemlines, $istart, 1 ,'istart');
 	
 	$template->assign_vars(array(
-
-		'RAID_PAGINATION'      => $raidpag, 
-        'RSTART' 		       => $rstart,   
+		'RAID_PAGINATION'     => $raidpag, 
+        'RSTART' 		      => $rstart,   
         'RAID_FOOTCOUNT'      => sprintf($user->lang['VIEWMEMBER_RAID_FOOTCOUNT'], $total_attended_raids, $raidlines),
-	
-		'ITEM_PAGINATION'      => $itpag, 
-        'ISTART'               => $istart, 
-        'ITEM_FOOTCOUNT'       => sprintf($user->lang['VIEWMEMBER_ITEM_FOOTCOUNT'], $total_purchased_items, $itemlines),
-		'ITEMS'					=> ( is_null($total_purchased_items) ) ? false : true,
+		'ITEM_PAGINATION'     => $itpag, 
+        'ISTART'              => $istart, 
+        'ITEM_FOOTCOUNT'      => sprintf($user->lang['VIEWMEMBER_ITEM_FOOTCOUNT'], $total_purchased_items, $itemlines),
+		'ITEMS'				  => ( is_null($total_purchased_items) ) ? false : true,
     ));
     
-	/****************************************
-    ***** Individual Adjustment History   ***
-    ****************************************/
+	/***************************************
+     **** Individual Adjustment History   **
+     ***************************************/
     $sql = 'SELECT adjustment_value, adjustment_date, adjustment_reason
-            FROM ' . ADJUSTMENTS_TABLE . '
-            WHERE member_id = (select member_id from ' . MEMBER_LIST_TABLE . " where member_name='" . $db->sql_escape($member['member_name']) . "')
-            AND ( adjustment_dkpid = " . (int) $dkp_pool . " )
-            ORDER BY adjustment_date DESC";
+            FROM ' . ADJUSTMENTS_TABLE . '	
+            WHERE member_id = ' . $member_id . ' 
+            AND  adjustment_dkpid = ' . (int) $dkp_pool . ' 
+            ORDER BY adjustment_date DESC ';
             
     if ( !($adjustments_result = $db->sql_query($sql)) )
     {
@@ -314,16 +337,22 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     ****************************************/
     $raid_counts = array();
 
-    // Find the count for each for for this member
-    $sql = 'SELECT e.event_id, r.raid_name, count(ra.raid_id) AS raid_count
-            FROM ' . EVENTS_TABLE . ' e, ' . RAID_ATTENDEES_TABLE . ' ra, ' . RAIDS_TABLE . " r
-            WHERE (e.event_name = r.raid_name) 
-            AND (e.event_dkpid = " . (int) $dkp_pool . ") 
-            AND (r.raid_id = ra.raid_id)  
-            AND (ra.member_name = '" . $db->sql_escape($member['member_name']) . "')
-            AND (r.raid_date >= " . (int) $member['member_firstraid'] . ")
-            GROUP BY ra.member_name, r.raid_name";
-    
+    // Find the raidcount after firstdate for this player
+    $sql_array = array(
+	    'SELECT'    => 	' e.event_id, e.event_name, count(r.raid_id) AS raid_count ', 
+	    'FROM'      => array(
+			EVENTS_TABLE			=> 'e', 	        
+			RAIDS_TABLE 			=> 'r',
+	        RAID_ATTENDEES_TABLE	=> 'ra', 
+	    	),
+	    'WHERE'		=> ' r.event_id = e.event_id
+			AND e.event_dkpid = ' . (int) $dkp_pool . '  
+	    	AND ra.raid_id = r.raid_id 
+            AND ra.member_id=' . (int) $member_id .  '
+            AND r.raid_date >= ' . (int) $member['member_firstraid'], 
+         'GROUP_BY' => 'ra.member_name, e.event_name'
+    );
+   	$sql = $db->sql_build_query('SELECT', $sql_array);
     $result = $db->sql_query($sql);
     while ( $row = $db->sql_fetchrow($result) )
     {
@@ -333,22 +362,28 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     }
     $db->sql_freeresult($result);
 
-    // Find the count for reach raid
-    $sql = 'SELECT raid_name, count(raid_id) AS raid_count
-            FROM ' . RAIDS_TABLE . '
-            WHERE raid_dkpid= ' . $dkp_pool . ' 
-            and raid_date >= ' . (int) $member['member_firstraid'] . '
-            GROUP BY raid_name';
-    
+    // Find the global raidcount after player firstraid
+    $sql_array = array(
+	    'SELECT'    => 	' e.event_name, count(r.raid_id) AS raid_count ', 
+	    'FROM'      => array(
+			EVENTS_TABLE			=> 'e', 	        
+			RAIDS_TABLE 			=> 'r',
+	    	),
+	    'WHERE'		=> ' r.event_id = e.event_id 
+			AND e.event_dkpid = ' . (int) $dkp_pool . '  
+            AND r.raid_date >= ' . (int) $member['member_firstraid'], 
+         'GROUP_BY' => 'e.event_name'
+    );
+   	$sql = $db->sql_build_query('SELECT', $sql_array);
     $result = $db->sql_query($sql);
     while ( $row = $db->sql_fetchrow($result) )
     {
-        if ( isset($raid_counts[$row['raid_name']]) )
+        if ( isset($raid_counts[$row['event_name']]) )
         {
-            $percent = round(($raid_counts[ $row['raid_name'] ] / $row['raid_count']) * 100);
-            $raid_counts[$row['raid_name']] = array(
+            $percent = round(($raid_counts[ $row['event_name'] ] / $row['raid_count']) * 100);
+            $raid_counts[$row['event_name']] = array(
             	'percent' => $percent, 
-            	'count' => $raid_counts[ $row['raid_name'] ]);
+            	'count' => $raid_counts[ $row['event_name'] ]);
             unset($percent);
         }
     }
@@ -359,10 +394,10 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     switch ( $current_order['sql'] )
     {
         // Sort by key
-        case 'raid_name':
+        case 'event_name':
             ksort($raid_counts);
             break;
-        case 'raid_name desc':
+        case 'event_name desc':
             krsort($raid_counts);
             break;
         // Sort by value (keeping relational keys in-tact)
@@ -392,7 +427,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
 
     array(
      'DKPPAGE' => sprintf($user->lang['MENU_VIEWMEMBER'], $member['member_name']) ,
-     'U_DKPPAGE' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAME . '=' . $member['member_name'] .'&amp;' . URI_DKPSYS . '=' . $dkp_pool . '&amp;'), 
+     'U_DKPPAGE' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $dkp_pool . '&amp;'), 
     ),
     );
 
@@ -419,19 +454,19 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
     $range2 = $config['bbdkp_list_p2']; 
     $range3 = 300;  
 
-    $mc1 = memberraid_count($dkp_pool, $range1, $member['member_id'], false);
-    $mc2 = memberraid_count($dkp_pool, $range2, $member['member_id'], false);
-    $mc3 = memberraid_count($dkp_pool, $range3, $member['member_id'], false);
-    $mclife = memberraid_count($dkp_pool, 0, $member['member_id'], true);
+    $mc1 = memberraid_count($dkp_pool, $range1, $member_id, false);
+    $mc2 = memberraid_count($dkp_pool, $range2, $member_id, false);
+    $mc3 = memberraid_count($dkp_pool, $range3, $member_id, false);
+    $mclife = memberraid_count($dkp_pool, 0, $member_id, true);
 
     $pc1 	= poolraid_count($dkp_pool, $range1, false);
     $pc2 	= poolraid_count($dkp_pool, $range2, false);
     $pc3 	= poolraid_count($dkp_pool, $range3, false);
     $pclife = poolraid_count($dkp_pool, 0, true);
         
-    $pct1 =  percentage_raidcount(true, $dkp_pool, $range1, $member['member_id']);
-    $pct2 =  percentage_raidcount(true, $dkp_pool, $range2, $member['member_id']);
-    $pct3 =  percentage_raidcount(true, $dkp_pool, $range3, $member['member_id']);
+    $pct1 =  percentage_raidcount(true, $dkp_pool, $range1, $member_id);
+    $pct2 =  percentage_raidcount(true, $dkp_pool, $range2, $member_id);
+    $pct3 =  percentage_raidcount(true, $dkp_pool, $range3, $member_id);
     $pctlife = ( $pclife > 0 ) ? round(($mclife / $pclife) * 100, 1) : 0;
     
     $percent_of_raids = array(
@@ -473,7 +508,7 @@ if 	(isset($_GET[URI_NAME]) && isset($_GET[URI_DKPSYS]))
         'C_RAIDS_X3_DAYS'  => $percent_of_raids['x3'],
         'C_RAIDS_LIFETIME' => $percent_of_raids['lifetime'],
 
-        'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAME . '=' . $member['member_name'] .'&amp;' . URI_DKPSYS . '=' . $dkp_pool . '&amp;')
+        'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $dkp_pool . '&amp;')
     ));
     
     // Output page

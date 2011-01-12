@@ -131,7 +131,7 @@ if (isset($_GET[URI_ITEM]) )
             'CLASSCOLOR' => ( !empty($item['item_buyer']) ) ? $item['colorcode'] : '',
             'CLASSIMAGE' => ( !empty($item['item_buyer']) ) ? $item['imagename'] : '',            
             'BUYER' => ( !empty($item['item_buyer']) ) ? $item['item_buyer'] : '&nbsp;',
-            'U_VIEW_BUYER' => append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_NAME . '='.$item['item_buyer']. '&amp;' . URI_DKPSYS . '=' . $item['item_dkpid']) ,
+            'U_VIEW_BUYER' => append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_NAMEID . '='.$item['member_id']. '&amp;' . URI_DKPSYS . '=' . $item['item_dkpid']) ,
             'U_VIEW_RAID' => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '='.$item['raid_id']) ,
             'RAID' => ( !empty($item['raid_name']) ) ? $item['raid_name'] : '&lt;<i>Not Found</i>&gt;',
             'VALUE' => $item['item_value'])

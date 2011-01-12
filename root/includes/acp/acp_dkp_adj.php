@@ -373,15 +373,6 @@ class acp_dkp_adj extends bbDkp_Admin
 					
 				$s_group_adj = false;
 				
-				$sql = 'SELECT  
-						FROM ' . ADJUSTMENTS_TABLE . ' a, ' . DKPSYS_TABLE . ' b, ' . MEMBER_LIST_TABLE . ' c 
-						WHERE b.dkpsys_id = a.adjustment_dkpid 
-						AND a.adjustment_dkpid 	= ' . (int) $dkpsys_id . '  
-						AND a.member_id=c.member_id
-						AND a.member_id IS NOT NULL '; 
-		
-				$sql .=	 ' ORDER BY '. $current_order['sql'] ;
-
 				$sql_array = array(
 			    'SELECT'    => 'a.adjustment_dkpid, a.adjustment_reason, 
 			    				b.dkpsys_name, a.adjustment_id, 
@@ -418,7 +409,7 @@ class acp_dkp_adj extends bbDkp_Admin
 						'DATE' => date($config['bbdkp_date_format'], $adj['adjustment_date']),
 						'DKPID' => $adj['adjustment_dkpid'],
 						'DKPPOOL' => $adj['dkpsys_name'],
-						'U_VIEW_MEMBER' => ( isset($adj['member_name']) ) ? append_sid($phpbb_root_path.'viewmember.php', URI_NAME . '='.$adj['member_name'] . '&amp;' . URI_DKPSYS . '='.$adj['adjustment_dkpid'])  : '',
+						'U_VIEW_MEMBER' => ( isset($adj['member_name']) ) ? append_sid($phpbb_root_path.'viewmember.php', URI_NAMEID . '='.$adj['member_id'] . '&amp;' . URI_DKPSYS . '='.$adj['adjustment_dkpid'])  : '',
 						'MEMBER' => ( isset($adj['member_name']) ) ? $adj['member_name'] : '',
 						'REASON' => ( isset($adj['adjustment_reason']) ) ? $adj['adjustment_reason']  : '',
 						'ADJUSTMENT' => $adj['adjustment_value'],

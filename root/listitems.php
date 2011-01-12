@@ -268,8 +268,8 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 		'U_VIEW_RAID' => append_sid ( "{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item ['raid_id'] ), 
 		'VALUE' => $item ['item_value'],
 		'CSSCLASS' 		=> ($mode == 'history') ? $config ['bbdkp_default_game'] . 'class' . $item ['member_class_id'] : '', 
-		'U_VIEW_BUYER' 	=> ($mode == 'history') ?  append_sid ( "{$phpbb_root_path}viewmember.$phpEx", URI_NAME . '=' . 
-			$item ['item_buyer'] . '&amp;' . URI_DKPSYS . '=' . $item ['item_dkpid'] ) : '', 
+		'U_VIEW_BUYER' 	=> ($mode == 'history') ?  append_sid ( "{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . 
+			$item ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $item ['item_dkpid'] ) : '', 
 	
 		));
 	
