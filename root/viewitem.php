@@ -37,15 +37,13 @@ if (isset($_GET[URI_ITEM]) )
 {
     $sort_order = array(
         0 => array('i.item_date desc', 	'i.item_date'),
-        1 => array('i.item_buyer', 		'i.item_buyer desc'),
+        1 => array('m.item_buyer', 		'm.item_buyer desc'),
         2 => array('i.item_value desc', 'i.item_value')
     );
 
     $current_order = switch_order($sort_order);
-    $itemid = request_var(URI_ITEM, 0);
-    
-    // We want to view items by name and not id, so get the name
-    $sql = 'SELECT item_name, item_gameid FROM ' . ITEMS_TABLE . " WHERE item_id = " . $itemid ;
+    $item_id = request_var(URI_ITEM, 0);
+    $sql = 'SELECT item_name, item_gameid FROM ' . ITEMS_TABLE . " WHERE item_id = " . $item_id ;
     $result = $db->sql_query($sql);
 	if (! $result)
 	{
@@ -77,23 +75,24 @@ if (isset($_GET[URI_ITEM]) )
 		}
 		$bbtips = new bbtips;
 	}
-	
+	 
+	//get info on all buyers of this item
      $sql_array = array(
-	    'SELECT'    => 	'i.item_dkpid, i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_buyer, 
-	      c.colorcode, c.imagename, i.item_gameid, r.raid_name, m.member_id, m.member_dkpid, l.member_class_id, l.member_name', 
+	    'SELECT'    => 	' e.event_name, e.event_dkpid, 
+	      i.item_id, i.item_gameid, i.item_name, i.item_value, i.item_date, i.raid_id, i.member_id, 
+	      c.colorcode, c.imagename, c.class_id, l.member_name', 
 	    'FROM'      => array(
-     			ITEMS_TABLE 		=> 'i', 
-		        RAIDS_TABLE 		=> 'r',
+				EVENTS_TABLE 		=> 'e', 
+		        RAIDS_TABLE 		=> 'r', 
 		        CLASS_TABLE			=> 'c', 
-		        MEMBER_DKP_TABLE 	=> 'm',
-		        MEMBER_LIST_TABLE 	=> 'l',
+		        MEMBER_LIST_TABLE 	=> 'l', 
+     			ITEMS_TABLE 		=> 'i', 
 	    	),
 	 
-	    'WHERE'     =>  " l.member_class_id = c.class_id 
-	    				AND i.item_buyer = l.member_name
-    					AND l.member_id = m.member_id 
-    					AND i.item_dkpid = m.member_dkpid
+	    'WHERE'     =>  " e.event_id = r.event_id
     					AND r.raid_id = i.raid_id 
+	    				AND l.member_class_id = c.class_id 
+	    				AND i.member_id = l.member_id
 				        AND i.item_name='". $db->sql_escape($item_name) . "'",
 	    'ORDER_BY'	=> $current_order['sql'], 
 	    );
@@ -128,12 +127,12 @@ if (isset($_GET[URI_ITEM]) )
         $template->assign_block_vars('items_row', array(
         
             'DATE' => ( !empty($item['item_date']) ) ? date('d.m.y', $item['item_date']) : '&nbsp;',
-            'CLASSCOLOR' => ( !empty($item['item_buyer']) ) ? $item['colorcode'] : '',
-            'CLASSIMAGE' => ( !empty($item['item_buyer']) ) ? $item['imagename'] : '',            
-            'BUYER' => ( !empty($item['item_buyer']) ) ? $item['item_buyer'] : '&nbsp;',
-            'U_VIEW_BUYER' => append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_NAMEID . '='.$item['member_id']. '&amp;' . URI_DKPSYS . '=' . $item['item_dkpid']) ,
+            'CLASSCOLOR' => ( !empty($item['member_name']) ) ? $item['colorcode'] : '',
+            'CLASSIMAGE' => ( !empty($item['member_name']) ) ? $item['imagename'] : '',            
+            'BUYER' => ( !empty($item['member_name']) ) ? $item['member_name'] : '&nbsp;',
+            'U_VIEW_BUYER' => append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_NAMEID . '='.$item['member_id']. '&amp;' . URI_DKPSYS . '=' . $item['event_dkpid']) ,
             'U_VIEW_RAID' => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '='.$item['raid_id']) ,
-            'RAID' => ( !empty($item['raid_name']) ) ? $item['raid_name'] : '&lt;<i>Not Found</i>&gt;',
+            'RAID' => ( !empty($item['event_name']) ) ? $item['event_name'] : '&lt;<i>Not Found</i>&gt;',
             'VALUE' => $item['item_value'])
         );
     }
@@ -148,7 +147,7 @@ if (isset($_GET[URI_ITEM]) )
 
     array(
      'DKPPAGE' => $user->lang['MENU_VIEWITEM'],
-     'U_DKPPAGE' => append_sid("{$phpbb_root_path}viewitem.$phpEx" , URI_ITEM . '='. $itemid),
+     'U_DKPPAGE' => append_sid("{$phpbb_root_path}viewitem.$phpEx" , URI_ITEM . '='. $item_id),
     ),
     );
 
@@ -165,7 +164,7 @@ if (isset($_GET[URI_ITEM]) )
         'O_DATE' 				=> $current_order['uri'][0],
         'O_BUYER'				 => $current_order['uri'][1],
         'O_VALUE'			 	=> $current_order['uri'][2],
-        'U_VIEW_ITEM' 			=> append_sid("{$phpbb_root_path}viewitem.$phpEx" , URI_ITEM . '='. $itemid) ,
+        'U_VIEW_ITEM' 			=> append_sid("{$phpbb_root_path}viewitem.$phpEx" , URI_ITEM . '='. $item_id) ,
         'VIEWITEM_FOOTCOUNT' => sprintf($user->lang['VIEWITEM_FOOTCOUNT'], $total_items)
         )
     );
