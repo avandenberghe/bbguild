@@ -180,7 +180,7 @@ foreach($zones as $key => $zone)
             } 
 			else 
 			{
-				$bossimg ="$phpbb_root_path/images/bossprogress/" . $config['bbdkp_default_game'] . "/bosses/turkey.gif"; 
+				$bossimg ="{$phpbb_root_path}images/bossprogress/" . $config['bbdkp_default_game'] . "/bosses/turkey.gif"; 
 			}
 
 			$template->assign_block_vars('zone.boss', array(
