@@ -130,32 +130,37 @@ $sort_order = array (
 	2 => array ('item_name', 'item_name desc' ), 
 	3 => array ('raid_name', 'raid_name desc' ), 
 	4 => array ('item_value desc', 'item_value' ) );
+$current_order = switch_order ($sort_order);
 
-$current_order = switch_order ( $sort_order );
-
+$sql_array = array();
 switch ($mode)
 {
 	case 'values' :
 		$u_list_items = append_sid ( "{$phpbb_root_path}listitems.$phpEx" );
-		$sql3 = 'SELECT COUNT(DISTINCT item_name) as itemcount FROM ' . ITEMS_TABLE;
+		$sql_array['SELECT'] = ' COUNT(DISTINCT item_name) as itemcount ' ;
 		$s_history = false;
 		break;
 	case 'history' :
 		$u_list_items = append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=history' );
-		$sql3 = 'SELECT count(*) as itemcount FROM ' . ITEMS_TABLE;
+		$sql_array['SELECT'] = ' COUNT(*) as itemcount ' ;
 		$s_history = true;
 		break;
 }
 
-// select discinct!
+$sql_array['FROM'] = array( 	
+	EVENTS_TABLE 		=> 'e', 
+    RAIDS_TABLE 		=> 'r', 
+	ITEMS_TABLE 		=> 'i', 
+);
+$sql_array['WHERE'] = ' e.event_id = r.event_id AND r.raid_id = i.raid_id '; 
 if ($query_by_pool)
 {
-	$sql3 .= ' where item_dkpid = ' . $dkpsys_id . ' ';
+	$sql_array['WHERE'] .= ' AND event_dkpid = ' . $dkpsys_id . ' ';
 }
-$result3 = $db->sql_query ( $sql3 );
-$total_items = $db->sql_fetchfield ( 'itemcount', 1, $result3 );
+$sql = $db->sql_build_query('SELECT', $sql_array);
+$result = $db->sql_query ( $sql);
+$total_items = $db->sql_fetchfield ( 'itemcount', 1, $result);
 $db->sql_freeresult ( $result3 );
-
 $start = request_var ( 'start', 0 );
 
 switch ($mode)
@@ -184,10 +189,17 @@ switch ($mode)
 {
 	case 'values' :
 		$sql_array = array (
-			'SELECT' => 'i.item_dkpid, i.item_id, i.item_name, i.item_buyer, i.item_gameid, 
-						 i.item_date, i.raid_id, min(i.item_value) AS item_value, r.raid_name', 
-			'FROM' => array (ITEMS_TABLE => 'i', RAIDS_TABLE => 'r' ), 
-			'WHERE' => ' i.raid_id = r.raid_id', 
+			'SELECT' => ' e.event_dkpid, i.item_id, i.item_name, i.member_id, l.member_name, i.item_gameid, 
+						 i.item_date, i.raid_id, min(i.item_value) AS item_value, e.event_name', 
+			'FROM' => array (
+				EVENTS_TABLE => 'e', 
+				RAIDS_TABLE => 'r', 
+				MEMBER_LIST_TABLE => 'l', 
+				ITEMS_TABLE => 'i', 
+				), 
+			'WHERE' => ' i.raid_id = r.raid_id
+						AND l.member_id = i.member_id
+						AND r.event_id = e.event_id ', 
 			'GROUP_BY' => 'i.item_name', 
 			'ORDER_BY' => $current_order ['sql'] );
 		
@@ -197,24 +209,26 @@ switch ($mode)
 		
 		$sql_array = array (
 			'SELECT' => '
-				 i.item_dkpid, i.item_id, i.item_name, 
-				 i.item_buyer, i.item_date, 
+				 e.event_dkpid, i.item_id, i.item_name, 
+				 i.member_id, l.member_name, i.item_date, 
 				 c.colorcode, c.imagename,
 				 i.raid_id, i.item_value, i.item_gameid, 
-				 r.raid_name, m.member_id, m.member_dkpid, 
+				  e.event_name, m.member_id, m.member_dkpid, 
 				 l.member_class_id, l.member_name', 
     		'FROM' => array (
-				ITEMS_TABLE => 'i', 
+				EVENTS_TABLE => 'e', 
 				RAIDS_TABLE => 'r', 
+				ITEMS_TABLE => 'i', 
 			    CLASS_TABLE	=> 'c', 
 				MEMBER_DKP_TABLE => 'm', 
 				MEMBER_LIST_TABLE => 'l'), 
 
-			'WHERE' => ' l.member_class_id = c.class_id 
-						AND i.raid_id = r.raid_id
-    					AND i.item_buyer = l.member_name
-           				AND l.member_id = m.member_id 
-           				AND i.item_dkpid = m.member_dkpid', 
+			'WHERE' => ' e.event_dkpid = m.member_dkpid
+					AND r.event_id = e.event_id
+					AND i.raid_id = r.raid_id
+           			AND i.member_id = m.member_id 
+    				AND i.member_id = l.member_id
+           			AND l.member_class_id = c.class_id', 
            	'ORDER_BY' => $current_order ['sql'] );
 		
 		break;
@@ -222,7 +236,7 @@ switch ($mode)
 
 if ($query_by_pool)
 {
-	$sql_array ['WHERE'] .= ' AND r.raid_dkpid = ' . $dkpsys_id . ' ';
+	$sql_array ['WHERE'] .= ' AND e.event_dkpid = ' . $dkpsys_id . ' ';
 }
 
 $sql = $db->sql_build_query ( 'SELECT', $sql_array );
@@ -258,18 +272,18 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 	}
 	
 	$template->assign_block_vars ( 'items_row', array (
-		'DATE' => (! empty ( $item ['item_date'] )) ? date ( 'd.m.y', $item ['item_date'] ) : '&nbsp;', 
-		'BUYER' => (! empty ( $item ['item_buyer'] )) ? $item ['item_buyer'] : '&lt;<i>Not Found</i>&gt;', 
-		'CLASSCOLOR' => ( !empty($item['item_buyer']) ) ? $item['colorcode'] : '',
-		'CLASSIMAGE' => ( !empty($item['item_buyer']) ) ? $item['imagename'] : '',         
-		'ITEMNAME' => $valuename, 
-		'U_VIEW_ITEM' => append_sid ( "{$phpbb_root_path}viewitem.$phpEx", URI_ITEM . '=' . $item ['item_id'] ), 
-		'RAID' => (! empty ( $item ['raid_name'] )) ? $item ['raid_name'] : '&lt;<i>Not Found</i>&gt;', 
-		'U_VIEW_RAID' => append_sid ( "{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item ['raid_id'] ), 
-		'VALUE' => $item ['item_value'],
+		'DATE' 			=> (! empty ( $item ['item_date'] )) ? date ( 'd.m.y', $item ['item_date'] ) : '&nbsp;', 
+		'BUYER' 		=> $item ['member_name'], 
+		'CLASSCOLOR' 	=> $item['colorcode'], 
+		'CLASSIMAGE' 	=> $item['imagename'],          
+		'ITEMNAME' 		=> $valuename, 
+		'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}viewitem.$phpEx", URI_ITEM . '=' . $item ['item_id'] ), 
+		'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>Not Found</i>&gt;', 
+		'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item ['raid_id'] ), 
+		'VALUE' 		=> $item ['item_value'],
 		'CSSCLASS' 		=> ($mode == 'history') ? $config ['bbdkp_default_game'] . 'class' . $item ['member_class_id'] : '', 
 		'U_VIEW_BUYER' 	=> ($mode == 'history') ?  append_sid ( "{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . 
-			$item ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $item ['item_dkpid'] ) : '', 
+			$item ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $item ['event_dkpid'] ) : '', 
 	
 		));
 	

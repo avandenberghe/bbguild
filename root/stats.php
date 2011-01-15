@@ -26,6 +26,7 @@ if (!$auth->acl_get('u_dkp'))
 {
 	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
 }
+
 if (! defined ( "EMED_BBDKP" ))
 {
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
@@ -133,10 +134,10 @@ $sort_index = explode('.', $current_order['uri']['current']);
 $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 $previous_data = '';
 
-$sql = 'SELECT count(*) as raidcount FROM ' . RAIDS_TABLE ;
+$sql = 'SELECT count(*) as raidcount FROM ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE . ' e where r.event_id = e.event_id ';
 if ($query_by_pool)
 {
-    $sql .= ' WHERE raid_dkpid = '. $dkpsys_id; 
+    $sql .= ' AND event_dkpid = '. $dkpsys_id; 
 }
 $result = $db->sql_query($sql);
 $total_raids = (int) $db->sql_fetchfield('raidcount',0,$result);   
@@ -284,30 +285,39 @@ $result = $db->sql_query($sql);
 $total_members = (int) $db->sql_fetchfield('members');
 
 // Find the total priced items
-$sql = 'SELECT count(item_id) AS items
-        FROM ' . ITEMS_TABLE . '
-        WHERE item_value != 0.00';
+$sql_array = array (
+	'SELECT' => ' count(item_id) AS items ', 
+	'FROM' => array (
+		EVENTS_TABLE => 'e', 
+		RAIDS_TABLE => 'r', 
+		ITEMS_TABLE => 'i', 
+		), 
+	'WHERE' => ' e.event_id = r.event_id 
+			  AND i.raid_id = r.raid_id
+			  AND item_value != 0', 
+	'GROUP_BY' => 'i.item_name', 
+);
+		
 if ($query_by_pool)
-   {
-	    $sql .= ' and item_dkpid = '. $dkpsys_id . ' ';
-   }
+{
+  $sql_array['WHERE'] .= ' and event_dkpid = '. $dkpsys_id . ' ';
+}
+$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 $result = $db->sql_query($sql);
 $total_drops = (int) $db->sql_fetchfield('items');
+$db->sql_freeresult($result);
 	
 // Find out how many members of each class exist
 $class_counts = array();
 $sql = 'SELECT l.member_class_id, count(m.member_id) AS class_count	
         FROM ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_LIST_TABLE . ' l , ' . CLASS_TABLE .' c
         where m.member_id=l.member_id and l.member_class_id = c.class_id';
-
 if ($query_by_pool)
    {
 	    $sql .= ' and m.member_dkpid = '. $dkpsys_id . ' ';
    }
 $sql .= ' GROUP BY l.member_class_id';
-
 $result = $db->sql_query($sql);
-
 while ( $row = $db->sql_fetchrow($result) )
 {
 	$class_counts[ $row['member_class_id'] ] = $row['class_count'];
@@ -318,15 +328,21 @@ $db->sql_freeresult($result);
 $sql_array = array(
     'SELECT'    => 	'c1.name as class_name, c.class_id, count(i.item_id) AS class_drops', 
     'FROM'      => array(
+
+        EVENTS_TABLE 		=> 'e',
+        RAIDS_TABLE 		=> 'r',
         ITEMS_TABLE 		=> 'i',
         CLASS_TABLE 		=> 'c',
         MEMBER_DKP_TABLE 	=> 'm',
         MEMBER_LIST_TABLE  	=> 'l',
         BB_LANGUAGE			=> 'c1'
     	),
-    'WHERE'     =>  "l.member_name = i.item_buyer 
+    'WHERE'     =>  "
+    	e.event_dkpid = m.member_dkpid 
+    	AND e.event_id = r.event_id
+    	AND i.raid_id = r.raid_id
+    	AND l.member_id = i.member_id 
         AND l.member_class_id = c.class_id
-        AND i.item_dkpid = m.member_dkpid  
         AND l.member_id = m.member_id
         AND (i.item_value != 0.00) 
     	AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
