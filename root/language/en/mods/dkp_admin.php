@@ -265,6 +265,9 @@ $lang = array_merge($lang, array(
 'ACP_LISTGAME_EXPLAIN' => 'Maintain Game Parameters',
 'CLASS_COLOR_EXPLAIN' => 'Choose the color of the class tags',
 'USERNAME_EXPLAIN' => 'Choose the phpBB username that is associated with this Game membername. This overrides the user choice in the UCP. ', 
+'ACP_DKP_LOOTSYSTEMOPTIONS'	=> 'Lootsystem options, Raid Decay rate, Item Decay rate, Zerosum Bank account',
+'ACP_DKP_LOOTSYSTEMEXPLAIN'	=> 'A short guide to Loot systems',
+
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -555,7 +558,7 @@ $lang = array_merge($lang, array(
 
 'LOOTSYSTEM' => 'lootsystem', 
 
-'STANDARDDKP' => '<strong>Bonus DKP</strong>',
+'STANDARDDKP' => 'Bonus DKP',
 'STANDARDDKP_EXPLAIN' => '<strong>Description: </strong> A lootsystem where players only receive DKP points as a result of being on time, or staying on bench, or killing a boss, or just plain participating. 
 Points are spent on loot just like in zero sum, but there is no redistribution. ',
 'STANDARDDKP_EXAMPLE'=> '<strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points.  <br /> 
@@ -564,14 +567,14 @@ players receive 5 points for slaying a dragon, 2 points for being on time or on 
 'STANDARDDKP_ADVANTAGE' => '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',  
 'STANDARDDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.', 
 
-'ZEROSUM' => '<strong>Zero Sum DKP</strong>', 
+'ZEROSUM' => 'Zero Sum DKP', 
 'ZEROSUM_EXPLAIN' => '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. The raid members will thusly gain dkp points when someone received an item. this ensures that there is no inflation, or point hoarding. <br/>',
 'ZEROSUM_EXAMPLE' => ' <strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br/> The balance at the end is : earned 20, spent 20.', 
 'ZEROSUM_ADVANTAGE' => ' <strong>Advantage</strong> : no point inflation if all players start at the same gearlevel.', 
 'ZEROSUM_DISADVANTAGE' => '<strong>Disadvantage</strong> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points untill he\'s at a disequilibrium towards the other players. 
 Not much incentive to join a raid if it is a difficult progress raid and wipes are expected and no loot likely will drop. ',
 
-'ZEROSUMPLUS' => '<strong>Zero Sum DKP + Bonus</strong>', 
+'ZEROSUMPLUS' => 'Zero Sum DKP + Bonus', 
 'ZEROSUMPLUS_EXPLAIN' => '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. <br /> Any bonus points earned are offset to a dummy account.<br /> The raid members will gain dkp points when someone received an item, plus a bonus. this ensures that there is no inflation, or point hoarding. <br />', 
 'ZEROSUMPLUS_EXAMPLE' => ' <strong>example</strong>: there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. 
 <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br /> on top of that, players receive 5 points for a bosskill, 2 points for being on time or on attendance. these extra points are offset with the zerosum dummy account. 
@@ -579,7 +582,7 @@ The balance at the end is : earned 20+7=27, spent 20+7=27.',
 'ZEROSUMPLUS_ADVANTAGE' => ' <strong>Advantage</strong> :<br />  no point inflation if all players start at the same gearlevel. The bonus points are added to the system so as to offer an incentive to play, since a raid without loots will earn no points. ', 
 'ZEROSUMPLUS_DISADVANTAGE' => '   <strong>Disadvantage</strong> :<br /> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he\'s at a disequilibrium towards the other players.',
 
-'TIMEDKP' => '<strong>Time based</strong>',
+'TIMEDKP' => 'Time based',
 'TIMEDKP_EXPLAIN' => '<strong>Description: </strong>Lootsystem where players receive points per started Hour present in the raid or being available. Time is measured from when the raid starts to the end. 
 Points are spent on loot just like in bonus system. Bonus points may be awarded for other reasons aswell.',
 'TIMEDKP_EXAMPLE'=> '<strong>Example</strong> : 10 raiders, each present for 90 minutes.  <br />dkp/hour is 20 points, so this means that each raider gets 90/60 * 20 = 1,5 * 20 = 30 points <br />1 item dropped, for 20 points <br />
@@ -587,7 +590,7 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 'TIMEDKP_ADVANTAGE' => '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',  
 'TIMEDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.', 
 
-'EPGP' => '<strong>EPGP Effort / Gearpoints</strong>', 
+'EPGP' => 'EPGP Effort / Gearpoints', 
 'EPGP_EXPLAIN' => '<strong>Description: </strong>A Lootsystem where the loot is allocated to the person with the highest ep/gp ratio. Effort points are gained through diverse means, like attending, being on time. Standby could also get EP. Bonuse EP could be given when the boss was killed with skill. Effort Points also decay over time. Loot is then paid with Gear points.', 
 'EPGP_EXAMPLE' => '<strong>Example</strong> : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />  
 The item costs 20 Gearpoints<br />
@@ -596,7 +599,6 @@ effortpoints player 2 : 342, EP/GP ratio 17.1<br />
 So the loot would go to player 2 <br />', 
 'EPGP_ADVANTAGE' => '<strong>Advantage</strong> : no inflation, no hoarding. ', 
 'EPGP_DISADVANTAGE' => '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ', 
-
 
 'MENU_RAIDS' => 'Raids',
 'MENU_EVENTS' => 'Events',
@@ -712,10 +714,20 @@ So the loot would go to player 2 <br />',
 'CODE' => 'Code',
 'CONTACT' => 'Contact',
 'CREATE' => 'Create',
-'DATE_FORMAT' => 'Date Format in lists', 
+'DATE_FORMAT' => 'Date Format in lists',
+'DECAYPCTRAIDS' => 'Raid decay rate (%)', 
+'DECAYPCTRAIDS_EXPLAIN' => 'The Raid earned value depreciate by this percentage per set period.', 
+'DECAYPCTITEM' => 'Item/Gearpoint decay rate (%)',  
+'DECAYPCTITEM_EXPLAIN' => 'The cost of items will depreciate by this percentage per set period.', 
+'DECAYFREQ' => 'Decay frequency',  
+'DECAYFREQ_EXPLAIN' => 'Decay will occur every n times.', 
+'DECAYFREQTYPE' => 'Decay frequency type',  
+'DECAYFREQTYPE_EXPLAIN' => 'Choose days, weeks or months.', 
 'DONE' => 'Done',
 'HOLD_CTRL_NOTE' => 'Hold CTRL(PC) or CMD(Mac) to select multiple<br />',
 'DKP_STATUS' => 'DKP pool status (Y or N)',
+'DKPHOUR' => 'DKP per hour passed', 
+'DKPHOUR_EXPLAIN' => 'will assign x DKP as earned for each hour passed that member present in raid',
 'EVENT_NAME' => 'Event name', 
 'EVENT_NAME_EXPLAIN' => 'Raids and Planner events will be created under this name',
 'EVENT_VALUE' => 'Event Value',
@@ -739,6 +751,8 @@ So the loot would go to player 2 <br />',
 'MEMBER_RANK' => 'Member Rank',
 'POOL' => 'Dkp Pool',
 'POOLID' => 'Dkp id',
+'PRCALC' => 'Priority Ratio Calculation', 
+'PRCALC_EXPLAIN' => 'Calculate the EP/GP ratio as (sum of Earned)/(Sum of Item Cost) ', 
 'RANKID' => 'Rank Id', 
 'RAIDDESCRIPTION' => 'Overview of Raid %s in %s on %s ', 
 'NEWRAIDDESCRIPTION' => 'Adding a new raid ', 
@@ -749,12 +763,21 @@ So the loot would go to player 2 <br />',
 'SEARCH_MEMBERS' => 'Search Members', 
 'SHOW3DARMORY' => 'Show the WoW Character in 3D', 
 'SHOULD_BE' => 'Should be',
+'STARTING_DKP' => 'Starting DKP',
+'STARTING_DKP_EXPLAIN' => 'When creating a new DKP account, if this is &gt; 0, it will add an adjustment to the member as starting dkp.',
+'START_RAID_DKP_EXPLAIN' => 'Default starting Raid dkp.',
 'TITLE' => 'Title',
 'UNINSTALL' => 'Uninstall',
 'VERSION' => 'Version',
 'X_MEMBERS_S' => '%d member',
 'X_MEMBERS_P' => '%d members',
 'SELECT_1OFX_MEMBERS' => 'Select 1 of %d members...',
+'ZEROSUM' => 'Calculate Zero sum DKP',
+'ZEROSUM_EXPLAIN' => 'Zero Sum DKP : (Item cost/#attendees) will be distributed as Earned points to all attendees at the bosskill. (ex. 120 itemprice / 10 attendees = 12 DKP/attendee)',
+'ZEROSUMBANKER' => 'Zerosum banker account',
+'ZEROSUMBANKER_EXPLAIN' => 'Select the player to which any excess earnings over loot distribution will be posted in order to keep the balance to zero.',
+
+
 
 // Admin Index
 'BBDKP_STARTED' => 'bbDkp Started',
