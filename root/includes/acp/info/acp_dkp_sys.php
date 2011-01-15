@@ -34,9 +34,6 @@ class acp_dkp_sys_info
 			'modes'		=> array(
 				'adddkpsys'		=> array('title' => 'ACP_DKP_POOL_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS') , 'display' => false),
 				'listdkpsys'	=> array('title' => 'ACP_DKP_POOL_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS') , 'display' => true ),
-				'lootsystem'	=> array('title' => 'ACP_DKP_LOOTSYSTEM', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => true),
-				'lootsystem_options'	=> array('title' => 'ACP_DKP_LOOTSYSTEMOPTIONS', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => false),
-				'lootsystem_explain'	=> array('title' => 'ACP_DKP_LOOTSYSTEMEXPLAIN', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => false),
 				),
 		);
 	}

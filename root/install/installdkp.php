@@ -527,37 +527,62 @@ $versions = array(
         
         // add new parameters
         'config_add' => array(
-			array('bbdkp_active_point_adj', '0.00', true),
-			array('bbdkp_date_format', 'd.m.y', true),
-			array('bbdkp_default_game', request_var('game', ''), true),
-			array('bbdkp_dkp_name', 'DKP', true),
-			array('bbdkp_eqdkp_start', mktime(0, 0, 0, date("m")  , date("d"), date("Y")) , true),
-			array('bbdkp_guildtag', utf8_normalize_nfc(request_var('guildtag', '', true)), true),
-			array('bbdkp_hide_inactive', '0', true),
-			array('bbdkp_inactive_period', '14', true),
-			array('bbdkp_inactive_point_adj', '0.00', true),
-			array('bbdkp_list_p1', '30', true),
-			array('bbdkp_list_p2', '90', true),
-			array('bbdkp_user_alimit', '30', true),
-			array('bbdkp_user_elimit', '30', true),
-			array('bbdkp_user_ilimit', '20', true),
-			array('bbdkp_user_llimit', '20', true),
-			array('bbdkp_user_nlimit', '5', true),
-			array('bbdkp_user_rlimit', '20', true),
         
-	        // guildfaction : limit the possible races to be available to users to those available in the guild's chosen faction
-			array('bbdkp_guild_faction', '1', true),
+        	//bbdkp settings
+        	
+        	// guildname				
+			array('bbdkp_guildtag', utf8_normalize_nfc(request_var('guildtag', '', true)), true),
+	        // default realm & region
+	        array('bbdkp_default_realm', ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default') , true),  
+	        array('bbdkp_default_region', request_var('region', ''), true),  
+			array('bbdkp_eqdkp_start', mktime(0, 0, 0, date("m")  , date("d"), date("Y")) , true),
+			array('bbdkp_date_format', 'd.m.y', true),
+			array('bbdkp_dkp_name', 'DKP', true),
+			array('bbdkp_default_game', request_var('game', ''), true),
+	        //default dkp language
+	        array('bbdkp_lang', 'en', true),
+	        
+	        // news limit
+			array('bbdkp_user_nlimit', '5', true),
 	        // roster layout: main parameter for steering roster layout 
 			array('bbdkp_roster_layout', '1', true),
 	        // showachiev : show the achievement points
 	        array('bbdkp_show_achiev', '0', true),
-	        // list_p3 : third standings option
+			// guildfaction : limit the possible races to be available to users to those available in the guild's chosen faction
+			array('bbdkp_guild_faction', '1', true),
+	        //show 3darmory in viewmember
+	        array('bbdkp_show_3darmory', 1, true),
+	        //guildmemberlist paging
+	        array('bbdkp_user_llimit', '20', true),
+	        
+	        //standings
+			array('bbdkp_hide_inactive', '0', true),
+			array('bbdkp_inactive_period', '14', true),
+			array('bbdkp_list_p1', '30', true),
+			array('bbdkp_list_p2', '90', true),
          	array('bbdkp_list_p3', '0', true),    
-	        // default realm & region
-	        array('bbdkp_default_realm', ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default') , true),  
-	        array('bbdkp_default_region', request_var('region', ''), true),  
+			array('bbdkp_prcalculation', 0, true),	
+			
+			//events
+			array('bbdkp_user_elimit', '30', true),
+			//adjustments
+			array('bbdkp_user_alimit', '30', true),
+			array('bbdkp_active_point_adj', '0.00', true),
+			array('bbdkp_inactive_point_adj', '0.00', true),
+			//items
+			array('bbdkp_user_ilimit', '20', true),
+			array('bbdkp_itemdecaypct', 0, true),			
+			//raids
+			array('bbdkp_user_rlimit', '20', true),
+			array('bbdkp_raiddecaypct', 0, true),	
+			array('bbdkp_decayfrequency', 0, true),
+			array('bbdkp_decayfreqtype', 0, true),
+			array('bbdkp_dkphour', 0.00, true),
+			array('bbdkp_zerosum', 0.00, true),
+			array('bbdkp_bankerid', 0, true),
 	
-	        // new portal configuragion
+	        // portal settings
+	        
 	        // number of news
 	        array('bbdkp_n_news', 5, true),   
 	        // news forum id
@@ -578,11 +603,12 @@ $versions = array(
 	        array('bbdkp_portal_links', 1, true ), 
 		    // show post edits in portal          
 	        array('bbdkp_portal_showedits', 1, true ),
-	        
 	        // showing or hiding portal
 	        array('bbdkp_portal_menu', 1, true),
 	        array('bbdkp_bp_blockshowprogressbar', 1, true),
 	         
+        	//bossprogress settings
+        	
         	//Hide zones with no boss kills
         	array('bbdkp_bp_hidenewzone', 0, true),
         	//Hide never killed bosses?
@@ -593,15 +619,8 @@ $versions = array(
 	        array('bbdkp_bp_zoneprogress', 1, true),
 	        //bp style : 2 row, 3 row, simple, photo
 	        array('bbdkp_bp_zonestyle', 0, true),
-	        //default dkp language
-	        array('bbdkp_lang', 'en', true),
-	        //show 3darmory in viewmember
-	        array('bbdkp_show_3darmory', 1, true),
-
-	        array('bbdkp_lootsystem', 0, true)
 
 	        ),
-
           
         // add the bbdkp modules to ACP using the info files, 
 		'module_add' => array(
