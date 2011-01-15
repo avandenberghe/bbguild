@@ -686,13 +686,13 @@ class acp_dkp_item extends bbDkp_Admin
 	 * @param $itemgameid : if this is zero we dont care
 	 * 
 	 */
-	function add_new_item($item_name, $item_buyers, $group_key, $itemvalue, $raidid, $loottime, $itemgameid) 
+	function add_new_item($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid) 
 	{
 
 		global $db, $user;
 		$query = array ();
 		
-		$sql = "select e.event_dkpid from " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r where r.raid_id = " . $raidid . " and e.event_id = r.event_id"; 
+		$sql = "select e.event_dkpid from " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r where r.raid_id = " . $raid_id . " and e.event_id = r.event_id"; 
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('event_dkpid', false, $result);
 		$db->sql_freeresult ( $result);
@@ -715,7 +715,7 @@ class acp_dkp_item extends bbDkp_Admin
 					$query [] = array (
 	    				'item_name' 		=> (string) $item_name , 
 	    				'member_id' 		=> (int) $this_member_id, 
-	    				'raid_id' 			=> (int) $raidid, 
+	    				'raid_id' 			=> (int) $raid_id, 
 	    				'item_value' 		=> (float) $itemvalue, 
 	    				'item_date' 		=> (int) $loottime, 
 	    				'item_group_key' 	=> (string) $group_key, 
@@ -731,7 +731,7 @@ class acp_dkp_item extends bbDkp_Admin
 			$query = array (
 	    				'item_name' 		=> (string) $item_name , 
 	    				'member_id' 		=> (int) $item_buyers, 
-	    				'raid_id' 			=> (int) $raidid, 
+	    				'raid_id' 			=> (int) $raid_id, 
 	    				'item_value' 		=> (float) $itemvalue, 
 	    				'item_date' 		=> (int) $loottime, 
 	    				'item_group_key' 	=> (string) $group_key, 
@@ -917,7 +917,7 @@ class acp_dkp_item extends bbDkp_Admin
 		$item_ids = array ();
 		$old_buyers = array ();
 		
-		$sql = "select e.event_dkpid from " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r where r.raid_id = " . $raidid . " and e.event_id = r.event_id"; 
+		$sql = "select e.event_dkpid from " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r where r.raid_id = " . $raid_id . " and e.event_id = r.event_id"; 
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('event_dkpid', false, $result);
 		$db->sql_freeresult ( $result);
@@ -941,7 +941,7 @@ class acp_dkp_item extends bbDkp_Admin
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
 			$item_ids 	[] = $row ['item_id'];
-			$old_buyers [] = $row ['item_buyer'];
+			$old_buyers [] = $row ['member_id'];
 			
 			$old_item = array (
 			'item_name' 	=>  (string) $row ['item_name'] , 
@@ -951,8 +951,7 @@ class acp_dkp_item extends bbDkp_Admin
 			'item_value' 	=>  (float) $row ['item_value']  );
 		}
 
-		$item_buyers = implode ( ', ', $old_item ['item_buyers'] );
-		$this->delete_old_item($dkpid, $item_ids, $item_buyers, $old_item) ; 
+		$this->delete_old_item($dkpid, $item_ids, $old_item ['item_buyers'], $old_item) ; 
 		
 		//generate hash 
 		$group_key = $this->gen_group_key ( $item_name, $old_item ['item_date'], $item_id + rand(10,100) );
