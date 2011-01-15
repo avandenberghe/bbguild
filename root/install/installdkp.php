@@ -565,20 +565,24 @@ $versions = array(
 			
 			//events
 			array('bbdkp_user_elimit', '30', true),
+			
 			//adjustments
 			array('bbdkp_user_alimit', '30', true),
 			array('bbdkp_active_point_adj', '0.00', true),
 			array('bbdkp_inactive_point_adj', '0.00', true),
+			array('bbdkp_starting_dkp', '0.00', true), 
+			
 			//items
 			array('bbdkp_user_ilimit', '20', true),
 			array('bbdkp_itemdecaypct', 0, true),			
+
 			//raids
 			array('bbdkp_user_rlimit', '20', true),
 			array('bbdkp_raiddecaypct', 0, true),	
 			array('bbdkp_decayfrequency', 0, true),
 			array('bbdkp_decayfreqtype', 0, true),
-			array('bbdkp_dkphour', 0.00, true),
-			array('bbdkp_zerosum', 0.00, true),
+			array('bbdkp_dkphour', '0.00', true),
+			array('bbdkp_zerosum', 0, true),
 			array('bbdkp_bankerid', 0, true),
 	
 	        // portal settings
@@ -680,7 +684,7 @@ $versions = array(
             // add raid pools - lootsystem
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_sys',
-            	 'modes'           => array('adddkpsys', 'listdkpsys', 'lootsystem', 'lootsystem_options', 'lootsystem_explain'   ),
+            	 'modes'           => array('adddkpsys', 'listdkpsys' ),
         		),
             ),
             

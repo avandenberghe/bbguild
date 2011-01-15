@@ -127,8 +127,6 @@
 		<dd><input type="text" name="inactive_period" id="inactive_period" size="20" maxlength="30" value="{INACTIVE_PERIOD}" class="input" /></dd>
   </dl>
    
-  
-  
   <dl>
     <dt><label for="user_rlimit">{L_ATTENDANCEDAYS}:</label></dt>
     <dd>
@@ -138,14 +136,20 @@
     </dd>
   </dl>
   
+    <dl><dt>  
+     <label for="add_loot_dkp">{L_PRCALC}:</label>
+     <br />{L_PRCALC_EXPLAIN}
+     </dt>
+     <dd>
+     <input name="prcalc" type="checkbox" id="prcalc" value="1" <!-- IF F_PRCALC == 1 --> checked="checked"<!-- ENDIF --> />
+ 		 </dd>
+	</dl> 
+  
 
 </fieldset>
 
-
-
  <fieldset>
  <legend>{L_MENU_EVENTS}</legend>
-
   
   <dl>
     <dt><label for="user_elimit">{L_EVENTS_PER_PAGE}:</label></dt>
@@ -213,14 +217,7 @@
     <dd><input type="text" name="bbdkp_user_rlimit" id="bbdkp_user_rlimit" size="20" maxlength="30" value="{USER_RLIMIT}" class="input" />{FV_DEFAULT_RLIMIT}</dd>
   </dl>
   
-  <dl><dt>  
-     <label for="add_loot_dkp">{L_PRCALC}:</label>
-     <br />{L_PRCALC_EXPLAIN}
-     </dt>
-     <dd>
-     <input name="prcalc" type="checkbox" id="prcalc" value="1" {PRCALC}  />
- 		 </dd>
-</dl> 
+
 
 <hr/>
 <dl>
@@ -263,7 +260,7 @@
      <br />{L_ZEROSUM_EXPLAIN}
      </dt>
      <dd>
-     <input name="zerosum" type="checkbox" id="zerosum" value="1" {ZEROSUM}  />
+     <input name="zerosum" type="checkbox" id="zerosum" value="1" <!-- IF F_ZEROSUM == 1 --> checked="checked"<!-- ENDIF -->  />
  		 </dd>
 </dl> 
 
