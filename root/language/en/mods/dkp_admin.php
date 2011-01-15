@@ -302,6 +302,7 @@ $lang = array_merge($lang, array(
 'CONFIRM_DELETE_ITEM' => 'Are you sure you want to delete the item "%s" from player(s) %s ?',
 'CONFIRM_DELETE_MEMBERS' => 'Are you sure you want to delete the following members?',
 'CONFIRM_DELETE_MEMBERDKP' => 'Are you sure you want to delete the following member dkp records? ',
+'CONFIRM_TRANSFER_MEMBERDKP' => 'Are you sure you want to transfer the member dkp account from %s to %s ? ',
 'CONFIRM_DELETE_NEWS' => 'Are you sure you want to delete this news entry?',
 'CONFIRM_DELETE_RAID' => 'Are you sure you want to delete this raid?',
 'CONFIRM_DELETE_BBDKPLOG' => 'Are you sure you want to delete these bbDKP log entries?',
@@ -450,6 +451,7 @@ $lang = array_merge($lang, array(
 'ERROR_NOITEMS'				=>  'There are no items in the database.',
 'FORM_ERROR'				=>  'Form validation Error : Check input <br />',  
 'ERROR_RAID_NOATTENDEES'    =>  'Error : old raid has no attendees. Cannot remove value of old raid attendees. STOP ', 
+'ERROR_NODKPACCOUNT'    	=>  'Error : no DKP accounts found to transfer ', 
 
 // Submission Success Messages
 'ADMIN_ADD_ADJ_SUCCESS' => 'A %s adjustment of %.2f has been added to the database for your guild.',

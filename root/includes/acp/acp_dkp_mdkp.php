@@ -721,331 +721,296 @@ class acp_dkp_mdkp extends bbDkp_Admin
 			
 			/***************************************/
 			// member dkp transfer
+			// this transfers dkp from one member to another.
+			// the old account will still exist
 			/***************************************/
 			
 			case 'mm_transfer':
-			    $this->transfer = array(
-            		'from' => utf8_normalize_nfc(request_var('transfer_from',' ',true)),    
-            		'to'   =>  utf8_normalize_nfc(request_var('transfer_to',' ',true)),     
-        		);
-        		
-				$submit	 = (isset($_POST['update'])) ? true : false;
+				$submit	 = (isset($_POST['transfer'])) ? true : false;
 				if ($submit)
 				{
-				    
-                   	if (!check_form_key('mm_transfer'))
+	        		if (confirm_box(true))
 					{
-						trigger_error('FORM_INVALID');
-					}
-				    // make small array of dkp pools 
-					$dkp = array();
-					$sql1 = 'SELECT * FROM ' . DKPSYS_TABLE; 
-					$result1 = $db->sql_query($sql1);
-					while ($row1 = $db->sql_fetchrow($result1) )
-					{
-						$dkp[] = $row1['dkpsys_id'];
-					}
-					
-					$db->sql_freeresult($result1);
-					if(count($dkp) == 0) 
-					{
-					    trigger_error($user->lang['ERROR_NODKP'], E_USER_WARNING);
-					} 
+						//fetch hidden variables
+						$member_from = request_var('hidden_idfrom', 0);
+						$member_to = request_var('hidden_idto', 0);
 						
-					$member_from = utf8_normalize_nfc(request_var('transfer_from', '', true));
-					$member_to   = utf8_normalize_nfc(request_var('transfer_to', '', true));
-	
-					if ($member_from == $member_to)
-					{
-					     trigger_error($user->lang['ERROR_TRFSAME'], E_USER_WARNING);
-					}
-					
-					// from array
-					$sql_array = array(
-					   'SELECT'    => 'd.member_id, m.member_name',
-					   'FROM'      => array(
-					        MEMBER_LIST_TABLE 	=> 'm',
-					        MEMBER_DKP_TABLE    => 'd'),
-					   'WHERE'     =>  "m.member_name = '" . $db->sql_escape($member_from) . "'
-					   					AND d.member_id = m.member_id" , 
-					   'GROUP_BY'	=>  'd.member_id, m.member_name', 
-					   'ORDER_BY'	=>  'm.member_name'
-					    );
-					$sql = $db->sql_build_query('SELECT', $sql_array);					
-					$result = $db->sql_query($sql, 0);
-					
-					$member_id_from = 0;
-					while ( $rowa = $db->sql_fetchrow($result))
-					{
-						$member_id_from = (int) $rowa['member_id'];
-					}
-					
-					// to array
-					$sql = 'SELECT member_name, member_id
-							FROM ' . MEMBER_LIST_TABLE . "
-							WHERE member_name='". $db->sql_escape($member_to)."'";
-					$result = $db->sql_query($sql, 0);
-                   
-					$member_id_to =0;					
-					while ( $rowb = $db->sql_fetchrow($result) )
-					{
-						$member_id_to = (int) $rowb['member_id'];
-					}
-					
-					if (($member_id_from == 0) or ($member_id_to == 0) ) 
-					{
-						$_message = $USER->LANG['ERROR_FROMTO']; 
-						trigger_error($_message . $link, E_USER_WARNING);
-					}
-					$db->sql_freeresult($result);
+						//declare transfer array
+						$transfer = array();
 
-					
-					// start 
-					// get itemvalue from
-					
-					$totalspent= 0.00;
-					$sql = 'SELECT SUM(item_value) AS item_sum_from
-							FROM ' . ITEMS_TABLE . "
-							WHERE item_buyer='". $db->sql_escape($member_from) ."'";
-					$result = $db->sql_query($sql, 0);
-					$totalspent += (float) $db->sql_fetchfield('item_sum_from');
-				    $db->sql_freeresult($result);
-
-					// transfer items
-					$sql = 'UPDATE ' . ITEMS_TABLE . "
-							  SET item_buyer='". $db->sql_escape($member_to) ."'
-							WHERE item_buyer='". $db->sql_escape($member_from) ."'";
-					$db->sql_query($sql);
-
-					// get adjustment from
-					$sql = 'SELECT SUM(adjustment_value) AS member_summa
-							FROM ' . ADJUSTMENTS_TABLE . "
-							WHERE member_id=". (int) $member_id_to;
-					$result = $db->sql_query($sql, 0);
-					$total_iadj = 0.00; 
-					while ($row = $db->sql_fetchrow($result) )
-					{
-						$total_iadj += $row['member_summa'];
-					}
-					$db->sql_freeresult($result);
-					
-					// Transfer adjustments
-					$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . '
-							SET member_id='. $member_id_to . '
-							WHERE member_id= '. $member_id_from ;
-					$db->sql_query($sql);
-					
-					// dkp 
-					foreach ((array) $dkp as $dkpid)
-					{
-                        $sql = 'SELECT count(*) as memberpoolcount FROM ' . MEMBER_DKP_TABLE . ' 
-                        WHERE member_id = '  . $member_id_from . ' and member_dkpid = ' .  $dkpid ; 
-                        $result = $db->sql_query($sql, 0);
-                        $total_rowfrom = (int) $db->sql_fetchfield('memberpoolcount');
-                        $db->sql_freeresult($result);
-                        
-                        $sql = 'SELECT count(*) as memberpoolcount FROM ' . MEMBER_DKP_TABLE . ' 
-                        WHERE member_id = '  . $member_id_to . ' and member_dkpid = ' .  $dkpid ; 
-                        $result = $db->sql_query($sql, 0);
-                        $total_rowto = (int) $db->sql_fetchfield('memberpoolcount');
-                        $db->sql_freeresult($result);
-                        
-                        if ($total_rowfrom == 1 && $total_rowto == 0 )
-      			        {
-     			             // insert new
-    						$sql = "SELECT member_dkpid, member_earned, member_spent, member_adjustment, member_status, 
-    						member_firstraid, member_lastraid, member_raidcount  FROM " . MEMBER_DKP_TABLE . " 
-    						WHERE member_id = " . (int) $member_id_from  . " and member_dkpid = " . $dkpid;
+						/* 1) collect and transfer adjustments to new owner */
+						$sql = 'SELECT sum(adjustment_value) as adjustments, adjustment_dkpid FROM ' . 
+							ADJUSTMENTS_TABLE . ' 
+							where member_id = ' .  $member_from . ' 
+							GROUP BY adjustment_dkpid';
+						$result = $db->sql_query($sql, 0);
+						while ( $row = $db->sql_fetchrow($result) )
+						{
+							$transfer[$row['adjustment_dkpid']]['adjustments'] = (float) $row['adjustments'] ;
+						}
+						$db->sql_freeresult($result);
 						
-    						$result = $db->sql_query($sql, 0);
+						/* 2) calculate $member_from item cost by dkp pool to transfer to new dkp account */
+						$sql = 'SELECT sum(i.item_value) as itemvalue, e.event_dkpid FROM ' . 
+							ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
+		        			where e.event_id=r.event_id
+		        			and r.raid_id=i.raid_id 
+		        			and i.member_id = ' .  $member_from . ' 
+							GROUP BY e.event_dkpid';
+						$result = $db->sql_query($sql, 0);
+						while ( $row = $db->sql_fetchrow($result) )
+						{
+							$transfer[$row['event_dkpid']]['itemcost'] = (float) $row['itemvalue'] ;
+						}
+						$db->sql_freeresult($result);
+					
+						/* 3) calculate battlepoints earned, raidcount, first, last raiddate by dkp pool to transfer to new dkp account 
+						 exclude raids where the member_to was also participating to avoid double counting raids */
+						$sql = 'SELECT sum(r.raid_value) as raidvalue, 
+									   max(r.raid_date) as maxraiddate, 
+									   min(r.raid_date) as minraiddate, 
+									   count(a.member_id) as raidcount, 
+									   e.event_dkpid 
+							FROM ' . RAID_ATTENDEES_TABLE . ' a,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
+		        			WHERE e.event_id = r.event_id
+		        			AND r.raid_id = a.raid_id 
+		        			AND a.member_id = ' .  $member_from . ' 
+		        			AND a.raid_id not in( select raid_id from ' . RAID_ATTENDEES_TABLE . ' where member_id = '. $member_to . ')
+							GROUP BY e.event_dkpid';
+						$result = $db->sql_query($sql, 0);
+						while ( $row = $db->sql_fetchrow($result) )
+						{
+							$transfer[$row['event_dkpid']]['raidvalue'] = (float) $row['raidvalue'] ;
+							$transfer[$row['event_dkpid']]['maxraiddate'] = (int) $row['maxraiddate'] ;
+							$transfer[$row['event_dkpid']]['minraiddate'] = (int) $row['minraiddate'] ;
+							$transfer[$row['event_dkpid']]['raidcount'] = (int) $row['raidcount'] ;
+						}
+						$db->sql_freeresult($result);
+
+						// begin transaction
+						$db->sql_transaction('begin'); 
 						
-                        	while ( $row = $db->sql_fetchrow($result) )
-    						{
-    							$query = $db->sql_build_array('INSERT', array(
-    			                    'member_dkpid'		    => $row['member_dkpid'],
-    			                    'member_id'		   		=> $member_id_to,
-    			                    'member_earned'	    	=> $row['member_earned'],
-    					 			'member_spent'		    => $row['member_spent'],
-    								'member_adjustment'		=> $row['member_adjustment'],
-    			                    'member_status'	    	=> $row['member_status'],
-    			                    'member_firstraid'	    => $row['member_firstraid'],
-    			                    'member_lastraid'	    => $row['member_lastraid'],
-    			                    'member_raidcount'		=> $row['member_raidcount']
-    			                    )
-    			                );
-    			                
-    			                $db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
-    						}
-    						$db->sql_freeresult($result);
-      			            
-      			        }
-      			        
-					    if ($total_rowfrom == 1 && $total_rowto == 1 )
-      			        {
-      			            // update 
-      			            unset($result); 
-    						$sql = "SELECT member_dkpid, member_earned, member_spent, member_adjustment, member_status, 
-    						member_firstraid, member_lastraid, member_raidcount  FROM " . MEMBER_DKP_TABLE . " 
-    						WHERE member_id = " . (int) $member_id_from  . " and member_dkpid = " . $dkpid;
-    						$result = $db->sql_query($sql, 0);
-                        	while ( $row = $db->sql_fetchrow($result) )
-    						{
-			                    $member_earned	  = $row['member_earned'];
-					 			$member_spent	  = $row['member_spent'];
-								$member_adjustment = $row['member_adjustment'];
-			                    $member_status	    = $row['member_status'];
-			                    $member_firstraid	= $row['member_firstraid'];
-			                    $member_lastraid	= $row['member_lastraid'];
-    						}
-    						$db->sql_freeresult($result);
-    						
-                           /* calculate new earned and raidcount
-                           * we avoid double counting raids :
-                           * we're only adding raidcount if the to_member did not participate in the same raid as the from_member 
-                           * we're only adding earned if the to_member did not participate in the same raid as the from_member
-							*/                               
-                           $raidcount_addon = 0; 
-                           $earned_addon = 0.00; 
-    						$sql = 'SELECT raid_id, member_name, member_id
-									FROM ' . RAID_ATTENDEES_TABLE . "
-									WHERE member_name='". $db->sql_escape($member_from) . "'
-									AND raid_id in (select raid_id from " . RAIDS_TABLE . ' where raid_dkpid = ' . $dkpid . ')';
-							$result = $db->sql_query($sql,0);
-							while ( $row0 = $db->sql_fetchrow($result) )
-							{
-									// Check if the TO attended the same raid
-									$sql1 = 'SELECT member_name
-											FROM ' . RAID_ATTENDEES_TABLE . "
-											WHERE raid_id='".$row0['raid_id']."'
-											AND member_name='". $db->sql_escape($member_to). "'";
-									$sql2='';			
-									if ( $db->sql_affectedrows($db->sql_query($sql1,0)) == 0 )
-									{
-									    // in this raid only member_from participated. so we will add this raid to the raidcount of member_to
-										$sql2 = 'UPDATE ' . RAID_ATTENDEES_TABLE . "
-												SET member_name='". $db->sql_escape($member_to) ."', member_id='". $member_id_to ."'
-												WHERE raid_id='". $row0['raid_id'] ."'
-												AND member_name='". $db->sql_escape($member_from) ."'";
-										$db->sql_query($sql2);
-										// add to raidcount
-										$raidcount_addon++; 
-										
-									    // in this raid only member_from participated. so we will add this earned to the earned of member_to										
-									    $sql2 = 'SELECT raid_value from ' . RAIDS_TABLE . "
-												WHERE raid_id=". $row0['raid_id']; 
-									    $resultx = $db->sql_query($sql,0);
-                                       $earned_addon += (float) $db->sql_fetchfield('raid_value', false, $resultx);
-                                       $db->sql_freeresult($resultx);
-										
-									}
-							}	
-									
-							$sql = "SELECT member_dkpid, member_earned, member_spent, member_adjustment, member_status, 
-    						member_firstraid, member_lastraid, member_raidcount  FROM " . MEMBER_DKP_TABLE . " 
-    						WHERE member_id = " . (int) $member_id_to  . " and member_dkpid = " . $dkpid;
-    						$result = $db->sql_query($sql,0);
-                        	while ( $row = $db->sql_fetchrow($result) )
-    						{
-    						    $newfirstraid = ($member_firstraid < $row['member_firstraid'] ) ? $member_firstraid : $row['member_firstraid']; 
-    						    $newlastraid  = ($member_lastraid > $row['member_lastraid'] ) ? $member_lastraid : $row['member_lastraid'] ; 
-    							$sql_ary =  array(
-    			                    'member_earned'	    	=> $row['member_earned'] + $earned_addon,
-    					 			'member_spent'		    => $row['member_spent'] + $member_spent,
-    								'member_adjustment'	=> $row['member_adjustment'] + $member_adjustment,
-    			                    'member_status'	    	=> $member_status,
-    			                    'member_firstraid'	    => $newfirstraid,
-    			                    'member_lastraid'	    => $newlastraid, 
-    			                    'member_raidcount'		=> $row['member_raidcount'] + $raidcount_addon, 
+						/* 4) now update dkp table */
+						// loop the transfer array
+						foreach ($transfer as $dkpid => $data) 
+						{ 
+								// check if pool exists for $member_to
+							    $sql = 'SELECT count(*) as memberpoolcount FROM ' . MEMBER_DKP_TABLE . ' 
+		                        WHERE member_id = '  . $member_to . ' and member_dkpid = ' .  $dkpid ; 
+		                        $result = $db->sql_query($sql, 0);
+		                        $total_rowto = (int) $db->sql_fetchfield('memberpoolcount');
+		                        $db->sql_freeresult($result);
+							    
+		                        if ($total_rowto == 1)
+		                        {
+		                        	// get old data
+		                        	$sql = 'SELECT member_earned, member_spent, member_adjustment, member_firstraid, member_lastraid, member_raidcount  
+		                        	FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . (int) $member_to  . ' and member_dkpid = ' . $dkpid;
+		    						$result = $db->sql_query($sql,0);
+		    						while ( $row = $db->sql_fetchrow($result) )
+		    						{
+		    							$oldmember_earned	  = (float) $row['member_earned'];
+					 					$oldmember_spent	  = (float) $row['member_spent'];
+										$oldmember_adjustment = (float) $row['member_adjustment'];
+			                    		$oldmember_firstraid  = (int) $row['member_firstraid'];
+			                    		$oldmember_lastraid	  = (int) $row['member_lastraid'];
+			                    		$oldmember_raidcount  = (int) $row['member_raidcount'];
+			                    		
+			                    		if(isset($data['minraiddate']))
+			                    		{
+			                    			$newfirstraid = ( $oldmember_firstraid <= $data['minraiddate'] ) ? $oldmember_firstraid : $data['minraiddate'];
+			                    		}
+			                    		else
+			                    		{
+			                    			$newfirstraid = $oldmember_firstraid; 	
+			                    		}
+			                    		
+			                    		if(isset($data['maxraiddate']))
+			                    		{
+			                    			$newlastraid = ( $oldmember_lastraid <= $data['maxraiddate'] ) ? $oldmember_lastraid : $data['maxraiddate'];
+			                    		}
+			                    		else
+			                    		{
+			                    			$newlastraid = $oldmember_lastraid; 	
+			                    		}
+    						    		
+		    						}
+		    						$db->sql_freeresult($result);
+		    						
+		    						//build update query
+		                        	$query = $db->sql_build_array('UPDATE', array(
+	    			                    'member_earned'	    	=> $oldmember_earned + (isset( $data['raidvalue']) ? $data['raidvalue'] : 0.00) ,  
+	    					 			'member_spent'		    => $oldmember_spent + (isset( $data['itemcost']) ? $data['itemcost'] : 0.00), 
+	    								'member_adjustment'		=> $oldmember_adjustment + (isset( $data['adjustments']) ? $data['adjustments'] : 0.00), 
+	    			                    'member_firstraid'	    => $newfirstraid, 
+	    			                    'member_lastraid'	    => $newlastraid, 
+	    			                    'member_raidcount'		=> $oldmember_raidcount + (isset( $data['raidcount']) ? $data['raidcount'] : 0))  
     			                    ); 
-    						}
-					
-    						// update member_to
-                           $sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-                                SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
-                                WHERE member_id = ' . (int) $member_id_to  . ' and member_dkpid = ' . $dkpid;
-                           $db->sql_query($sql);
-                            
-                           // Delete the member_from
-        					$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . '
-        							WHERE member_id= '. (int) $member_id_from  . ' and member_dkpid = ' . $dkpid;
-        					$db->sql_query($sql);
-                            
-                        }
+    			                    
+           			                $sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . ' WHERE member_id = ' . $member_to . ' and member_dkpid = ' .  $dkpid ; 
+           			                $db->sql_query($sql); 
+		                        	
+		                        }
+		                        // the only other case possible : insert a new record 
+		                        elseif  ($total_rowto == 0)
+		                        {
+		                        	//insert
+		                        	$query = $db->sql_build_array('INSERT', array(
+	    			                    'member_dkpid'		    => $dkpid,
+	    			                    'member_id'		   		=> $member_to,
+	    			                    'member_earned'	    	=> (isset( $data['raidvalue']) ? $data['raidvalue'] : 0.00) ,  
+	    					 			'member_spent'		    => (isset( $data['itemcost']) ? $data['itemcost'] : 0.00), 
+	    								'member_adjustment'		=> (isset( $data['adjustments']) ? $data['adjustments'] : 0.00), 
+	    			                    'member_status'	    	=> 1,
+	    			                    'member_firstraid'	    => (isset( $data['minraiddate']) ? $data['minraiddate'] : 0), 
+	    			                    'member_lastraid'	    => (isset( $data['maxraiddate']) ? $data['maxraiddate'] : 0), 
+	    			                    'member_raidcount'		=> (isset( $data['raidcount']) ? $data['raidcount'] : 0))  
+    			                    ); 
+    			                    $sql = 'INSERT INTO ' . MEMBER_DKP_TABLE . $query; 
+           			                $db->sql_query($sql);
+		                        }
+
+		                        // finally delete the member_from account
+		       					$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . '
+		       							WHERE member_id= '. (int) $member_from  . ' and member_dkpid = ' . $dkpid;
+		       					$db->sql_query($sql);
+						}
+						/* 5) transfer old attendee name to new member */
+						// if $member_from participated in a raid the $member_to did too, delete the entry. (unique key) 
+						$sql = 'select raid_id from ' . RAID_ATTENDEES_TABLE . ' where member_id = '. $member_to; 
+						$result = $db->sql_query($sql, 0);
+						while ( $row = $db->sql_fetchrow($result) )
+						{
+							$raid_id[] = $row['raid_id'];
+						}
+						$sql = 'DELETE FROM ' . RAID_ATTENDEES_TABLE . '  
+								WHERE member_id='. $member_from . '
+								AND ' . $db->sql_in_set('raid_id', $raid_id, false, true);  
+								
+						$db->sql_query($sql);
+						
+						// 6) now update the remaining raids where old member participated (the last 'not in' condition is not necessary)
+						$sql = 'UPDATE ' . RAID_ATTENDEES_TABLE . ' SET member_id ='. $member_to . ' 
+								WHERE member_id='. $member_from . '
+								AND ' . $db->sql_in_set('raid_id', $raid_id, true, true);
+						
+						/* 7) transfer items to new owner */
+						$sql = 'UPDATE ' . ITEMS_TABLE . ' SET member_id ='. $member_to . ' WHERE member_id='. $member_from;
+						$db->sql_query($sql);
                         
+                        // 8) update the adjustments table
+						$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET member_id='. $member_to . ' WHERE member_id= '. $member_from ;
+						$db->sql_query($sql);
+				
+						//commit 
+						$db->sql_transaction('commit');
+						
+						//pick up this info from the hidden variables
+						$member_from_name = utf8_normalize_nfc(request_var('name_from', '', true));
+						$member_to_name = utf8_normalize_nfc(request_var('name_to', '', true));
+						
+						//log the action
+						$log_action = array(
+							'header'   => 'L_ACTION_HISTORY_TRANSFER',
+							'L_FROM' => $member_from_name,
+							'L_TO'   => $member_to_name
+						);
+
+						$this->log_insert(array(
+							'log_type'   => $log_action['header'],
+							'log_action' => $log_action)
+						);
+					
+						$success_message = sprintf($user->lang['ADMIN_TRANSFER_HISTORY_SUCCESS'], $member_from_name, $member_to_name, $member_from_name);
+						trigger_error($success_message . $link);
+					
 					}
-					// end dkp loop
-                    
-					// Delete the member_from
-					$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . "
-							WHERE member_name='". $db->sql_escape($member_from) ."'";
-					$db->sql_query($sql);
+					else 
+					{
+						// check if user trues to transfer from one to the same 
+						$member_from = request_var('transfer_from', 0);
+						$member_to = request_var('transfer_to', 0);
+						if ($member_from == $member_to)
+						{
+						     trigger_error($user->lang['ERROR_TRFSAME'], E_USER_WARNING);
+						}
 					
-					// Delete any remaining raids that the FROM attended
-					$sql = 'DELETE FROM ' . RAID_ATTENDEES_TABLE . "
-							WHERE member_name='". $db->sql_escape($member_from) ."'";
-					$db->sql_query($sql);
-                    
-					$log_action = array(
-						'header'   => 'L_ACTION_HISTORY_TRANSFER',
-						'L_FROM' => $member_from,
-						'L_TO'   => $member_to);
-					$this->log_insert(array(
-						'log_type'   => $log_action['header'],
-						'log_action' => $log_action)
-					);
+						// prepare some logging information 
+						$sql = 'select member_name from ' . MEMBER_LIST_TABLE . ' where member_id =  ' . $member_from; 
+						$result = $db->sql_query($sql, 0);
+						$member_from_name = (string) $db->sql_fetchfield('member_name');
+						$db->sql_freeresult($result);
+						
+						$sql = 'select member_name from ' . MEMBER_LIST_TABLE . ' where member_id =  ' . $member_to; 
+						$result = $db->sql_query($sql, 0);
+						$member_to_name = (string) $db->sql_fetchfield('member_name');						
+						$db->sql_freeresult($result);
+
+						$s_hidden_fields = build_hidden_fields(array(
+								'transfer'    		=> true, 
+								'name_from'			=> $member_from_name,
+								'name_to'			=> $member_to_name,
+								'hidden_idfrom'		=> $member_from,
+								'hidden_idto'		=> $member_to, 
+								)
+							);
+						confirm_box(false, sprintf($user->lang['CONFIRM_TRANSFER_MEMBERDKP'], $member_from_name, $member_to_name ), $s_hidden_fields);
+						
+					}
 					
-					$success_message = sprintf($user->lang['ADMIN_TRANSFER_HISTORY_SUCCESS'], $member_from, $member_to, $member_from);
-					trigger_error($success_message . $link);
+					
 				}
 				// end submit handler
 				
+				// build template
 				// from member dkp table 
-				$sqlfrom = 'SELECT member_name FROM ' . MEMBER_LIST_TABLE . ' where member_id in (select member_id from ' . MEMBER_DKP_TABLE . ' ) 
-						ORDER BY member_name';
-				$resultfrom = $db->sql_query($sqlfrom);
+				$sql = 'SELECT m.member_id, l.member_name FROM ' . MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m 
+						where m.member_id = l.member_id GROUP BY m.member_id ORDER BY l.member_name';
+				$resultfrom = $db->sql_query($sql);
 				$maara = 0;
 				while ( $row = $db->sql_fetchrow($resultfrom) )
 				{
 					$maara++;
 					$template->assign_block_vars('transfer_from_row', array(
-						'VALUE'    => $row['member_name'],
-						'SELECTED' => ( $this->transfer['from'] == $row['member_name'] ) ? ' selected="selected"' : '',
+						'VALUE'    => $row['member_id'],
+						'SELECTED' => ( $this->transfer['from'] == $row['member_id'] ) ? ' selected="selected"' : '',
 						'OPTION'   => $row['member_name'])
 					);
 					
 				}
-				
+				$db->sql_freeresult($resultfrom);
 				// to member table 
-				$sqlto = "SELECT member_name 
-						FROM " . MEMBER_LIST_TABLE . " where member_rank_id not in (select rank_id 
-						from " . MEMBER_RANKS_TABLE . " where rank_hide = '1') ORDER BY member_name";
-				
-				$resultto = $db->sql_query($sqlto);
+				$sql = 'SELECT m.member_id, l.member_name FROM ' . MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_RANKS_TABLE . ' k   
+						where l.member_rank_id = k.rank_id and k.rank_hide != 1 and m.member_id = l.member_id GROUP BY m.member_id  ORDER BY l.member_name';
+				$resultto = $db->sql_query($sql);
 				$teller_to = 0;
 				while ( $row = $db->sql_fetchrow($resultto) )
 				{
 					$teller_to++;				
 					$template->assign_block_vars('transfer_to_row', array(
-						'VALUE'    => $row['member_name'],
-						'SELECTED' => ( $this->transfer['to'] == $row['member_name'] ) ? ' selected="selected"' : '',
+						'VALUE'    => $row['member_id'],
+						'SELECTED' => ( $this->transfer['to'] == $row['member_id'] ) ? ' selected="selected"' : '',
 						'OPTION'   => $row['member_name'])
 					);
 				}
-
-				$form_key = 'mm_transfer';
-				add_form_key($form_key);
-				
+        		$db->sql_freeresult($resultto);
+        		
+        		$show = true;
+        		if ($maara ==0)
+        		{
+        			$show=false;
+        		}
+        		
 				$template->assign_vars(array(
 					'L_TITLE'					=> $user->lang['ACP_MM_TRANSFER'],
+					'ERROR_MSG'					=> $user->lang['ERROR_NODKPACCOUNT'],
 					'L_EXPLAIN'					=> $user->lang['TRANSFER_MEMBER_HISTORY_DESCRIPTION'],
+					'S_SHOW'					=> $show,  
 					'F_TRANSFER' 				=> append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_transfer"),
 					'L_SELECT_1_OF_X_MEMBERS'   => sprintf($user->lang['SELECT_1OFX_MEMBERS'], $maara),
 					'L_SELECT_1_OF_Y_MEMBERS'   => sprintf($user->lang['SELECT_1OFX_MEMBERS'], $teller_to),
 					)
 				);
-				$db->sql_freeresult($resultfrom);
-        		$db->sql_freeresult($resultto);
-				
 				$this->page_title = 'ACP_MM_TRANSFER';
 				$this->tpl_name = 'dkp/acp_'. $mode;
 				
