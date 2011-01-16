@@ -34,13 +34,13 @@ define('USER_LLIMIT', 40);  // LOG LIMIT
 // TABLE DEFINITIONS
 define('ADJUSTMENTS_TABLE',        $table_prefix . 'bbdkp_adjustments'); 	 
 define('EVENTS_TABLE',             $table_prefix . 'bbdkp_events'); 	 
-define('ITEMS_TABLE',              $table_prefix . 'bbdkp_items'); 	 
+define('RAID_ITEMS_TABLE',         $table_prefix . 'bbdkp_raid_items'); 	 
 define('LOGS_TABLE',               $table_prefix . 'bbdkp_logs'); 	 
 define('MEMBER_RANKS_TABLE',       $table_prefix . 'bbdkp_member_ranks');
 define('MEMBER_LIST_TABLE',        $table_prefix . 'bbdkp_memberlist'); 	
 define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_memberdkp');  
 define('NEWS_TABLE',               $table_prefix . 'bbdkp_news'); 	 
-define('RAID_ATTENDEES_TABLE',     $table_prefix . 'bbdkp_raid_attendees'); 	 
+define('RAID_DETAIL_TABLE',        $table_prefix . 'bbdkp_raid_detail'); 	 
 define('RAIDS_TABLE',              $table_prefix . 'bbdkp_raids'); 	 
 define('CLASS_TABLE',              $table_prefix . 'bbdkp_classes'); 	 
 define('RACE_TABLE',               $table_prefix . 'bbdkp_races'); 	 
@@ -56,6 +56,26 @@ define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable');
 // plugin anchors
 
 // RAIDTRACKER
+define('RT_TEMP_RAIDINFO', $table_prefix . 'rt_temp_raidinfo');
+define('RT_TEMP_PLAYERINFO', $table_prefix . 'rt_temp_playerinfo');
+define('RT_TEMP_JOININFO', $table_prefix . 'rt_temp_joininfo');
+define('RT_TEMP_BOSSKILLS', $table_prefix . 'rt_temp_bosskills');
+define('RT_TEMP_ATTENDEES', $table_prefix . 'rt_temp_attendees');
+define('RT_TEMP_LOOT', $table_prefix . 'rt_temp_loot');
+define('RT_ALIASES_TABLE', $table_prefix . 'rt_aliases'); 	 
+define('RT_EVENT_TRIGGERS_TABLE', $table_prefix . 'rt_eventtriggers'); 	 
+define('RT_RAID_NOTE_TRIGGERS_TABLE', $table_prefix . 'rt_raidnote_triggers'); 	 
+define('RT_OWN_RAIDS_TABLE', $table_prefix . 'rt_ownraids'); 	 
+define('RT_ADD_ITEMS_TABLE', $table_prefix . 'rt_additems'); 	 
+define('RT_IGNORE_ITEMS_TABLE', $table_prefix . 'rt_ignoreitems'); 
+define('RT_IQ_POOR',          0); 	 
+define('RT_IQ_COMMON',        1); 	 
+define('RT_IQ_UNCOMMON',      2); 	 
+define('RT_IQ_RARE',          3); 	 
+define('RT_IQ_EPIC',          4); 	 
+define('RT_IQ_LEGENDARY',     5); 	 
+define('RT_AF_NONE',      0);         // 0 = None 	 
+define('RT_AF_BOSS_KILL', 1);         // 1 = Boss Kill Time
 
 
 // BBTIPS

@@ -246,7 +246,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		// get old attendee list
 		$this->old_raid ['raid_attendees'] = array();
 		
-		$sql = ' SELECT member_id FROM ' . RAID_ATTENDEES_TABLE . ' 
+		$sql = ' SELECT member_id FROM ' . RAID_DETAIL_TABLE . ' 
 	             WHERE raid_id= ' . (int) $raid_id . ' ORDER BY member_id' ;
 		
 		$result = $db->sql_query($sql);
@@ -277,7 +277,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		$db->sql_transaction('begin');
 		
 		// Remove the old attendees from the raid
-		$db->sql_query ( 'DELETE FROM ' . RAID_ATTENDEES_TABLE . " WHERE raid_id = " . (int) $raid_id );
+		$db->sql_query ( 'DELETE FROM ' . RAID_DETAIL_TABLE . " WHERE raid_id = " . (int) $raid_id );
 		
 		// Insert the new attendees in attendee table
 		$this->add_attendees ( $this->raid['raid_attendees'], $raid_id );
@@ -379,7 +379,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		if (confirm_box ( true )) 
 		{
 			$this->old_raid ['raid_attendees'] = array();
-			$sql = ' SELECT member_id FROM ' . RAID_ATTENDEES_TABLE . ' 
+			$sql = ' SELECT member_id FROM ' . RAID_DETAIL_TABLE . ' 
 		             WHERE raid_id= ' . (int) $raid_id . ' ORDER BY member_id' ;
 			
 			$result = $db->sql_query($sql);
@@ -395,7 +395,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				
 				// not possible after 1.1
 				$db->sql_query ( 'DELETE FROM ' . RAIDS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
-				$db->sql_query ( 'DELETE FROM ' . ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
+				$db->sql_query ( 'DELETE FROM ' . RAID_ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
 				$log_action = array (
 						'header' => 'L_ACTION_RAID_DELETED', 
 						'id' => $raid_id, 
@@ -412,7 +412,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			}
 
 			// Remove the old attendees from the raid
-			$db->sql_query ( 'DELETE FROM ' . RAID_ATTENDEES_TABLE . " WHERE raid_id = " . (int) $raid_id );
+			$db->sql_query ( 'DELETE FROM ' . RAID_DETAIL_TABLE . " WHERE raid_id = " . (int) $raid_id );
 		
 			// decrease raidcount with one old raidparticipants, 
 			// decrease dkp from old raidparticipants
@@ -606,7 +606,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	    		'SELECT'    => 'm.member_id ,m.member_name',
 		    	'FROM'      => array(
 	    		    MEMBER_LIST_TABLE 	  => 'm',
-	        		RAID_ATTENDEES_TABLE    => 'r', 
+	        		RAID_DETAIL_TABLE    => 'r', 
 	    			),
 	 
 	    		'WHERE'     =>  'm.member_id = r.member_id
@@ -890,7 +890,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	}
 	
     /**
-    * RAID_ATTENDEES_TABLE handler : Insert members into raid attendees table
+    * RAID_DETAIL_TABLE handler : Insert members into raid attendees table
     * @param $members_array array of member_id
     * @param $raid_id
     */
@@ -910,7 +910,7 @@ class acp_dkp_raid extends bbDkp_Admin
                 'member_id'   => (int) $member_id,
 				);
         }
-        $db->sql_multi_insert(RAID_ATTENDEES_TABLE, $attendees);
+        $db->sql_multi_insert(RAID_DETAIL_TABLE, $attendees);
        
         return $attendees;
     }
@@ -1069,7 +1069,7 @@ class acp_dkp_raid extends bbDkp_Admin
 					 ra.member_id ', 
 		'FROM' => array (
 			RAIDS_TABLE => 'r', 
-			RAID_ATTENDEES_TABLE => 'ra' ,
+			RAID_DETAIL_TABLE => 'ra' ,
 			EVENTS_TABLE => 'e' 
 			), 
 		'WHERE' => ' ra.raid_id = r.raid_id 
@@ -1295,7 +1295,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	{
 		global $db;
 		
-		$sql = 'SELECT item_id, member_id, item_value FROM ' . ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id;
+		$sql = 'SELECT item_id, member_id, item_value FROM ' . RAID_ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id;
 			$result = $db->sql_query ( $sql );
 			while ( $row = $db->sql_fetchrow ( $result ) ) 
 			{
@@ -1312,7 +1312,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			//
 			// Delete associated items
 			//
-			$db->sql_query ( 'DELETE FROM ' . ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
+			$db->sql_query ( 'DELETE FROM ' . RAID_ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
 			
 		
 	}

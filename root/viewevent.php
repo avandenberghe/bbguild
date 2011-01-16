@@ -113,7 +113,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
     // Find the item drops for each raid
     // raid-id is primary key
     $sql = 'SELECT raid_id, count(item_id) AS count 
-            FROM ' . ITEMS_TABLE . ' 
+            FROM ' . RAID_ITEMS_TABLE . ' 
             WHERE ' . $db->sql_in_set('raid_id', $raid_ids) . ' GROUP BY raid_id';
     
     $result = $db->sql_query($sql);
@@ -126,7 +126,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
     
     // Find the attendees at each raid
     $sql = 'SELECT raid_id, count(member_name) AS count 
-            FROM ' . RAID_ATTENDEES_TABLE . ' 
+            FROM ' . RAID_DETAIL_TABLE . ' 
             WHERE ' . $db->sql_in_set('raid_id', $raid_ids) . ' 
             GROUP BY raid_id';
     $result = $db->sql_query($sql);
@@ -168,7 +168,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
     $start = request_var('start' ,0);
         
     $sql = 'SELECT item_date, raid_id, item_name, item_buyer, member_id, item_id, item_value, item_dkpid
-            FROM ' . ITEMS_TABLE . ' WHERE ' . $db->sql_in_set('raid_id', $raid_ids) . ' ORDER BY item_date DESC ';
+            FROM ' . RAID_ITEMS_TABLE . ' WHERE ' . $db->sql_in_set('raid_id', $raid_ids) . ' ORDER BY item_date DESC ';
     
     $result = $db->sql_query_limit($sql, $config['bbdkp_user_ilimit'], $start);
     

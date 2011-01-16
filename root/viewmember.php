@@ -90,7 +90,7 @@ if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]))
 			EVENTS_TABLE			=> 'e', 	        
 			RAIDS_TABLE 			=> 'r',
 			MEMBER_LIST_TABLE 		=> 'l',
-	        RAID_ATTENDEES_TABLE	=> 'ra', 
+	        RAID_DETAIL_TABLE	=> 'ra', 
 	    	),
 	    'WHERE'		=> " r.event_id = e.event_id
 	    	AND ra.raid_id = r.raid_id
@@ -121,7 +121,7 @@ if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]))
     	'FROM'      => array(
     		EVENTS_TABLE			=> 'e', 	        
 	        RAIDS_TABLE 			=> 'r',
-	        RAID_ATTENDEES_TABLE 	=> 'ra',
+	        RAID_DETAIL_TABLE 	=> 'ra',
 	    	),
  
     	'WHERE'     =>  "(ra.raid_id = r.raid_id)
@@ -204,7 +204,7 @@ if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]))
     	'SELECT'    => 	'i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_gameid, e.event_name ', 
     	'FROM'      => array(
      		EVENTS_TABLE	=> 'e',
-	        ITEMS_TABLE 	=> 'i',
+	        RAID_ITEMS_TABLE 	=> 'i',
 	        RAIDS_TABLE 	=> 'r',
 	    	),
  
@@ -343,7 +343,7 @@ if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]))
 	    'FROM'      => array(
 			EVENTS_TABLE			=> 'e', 	        
 			RAIDS_TABLE 			=> 'r',
-	        RAID_ATTENDEES_TABLE	=> 'ra', 
+	        RAID_DETAIL_TABLE	=> 'ra', 
 	    	),
 	    'WHERE'		=> ' r.event_id = e.event_id
 			AND e.event_dkpid = ' . (int) $dkp_pool . '  

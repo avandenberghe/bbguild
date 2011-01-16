@@ -409,7 +409,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 						    'FROM'      => array(
 						        EVENTS_TABLE => 'e',
 						        RAIDS_TABLE => 'r',
-						        RAID_ATTENDEES_TABLE    => 'ra'
+						        RAID_DETAIL_TABLE    => 'ra'
 						    ),
 						    'WHERE'     =>  ' ra.raid_id = r.raid_id 
 						    	and e.event_id = r.event_id
@@ -431,7 +431,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 							        DKPSYS_TABLE  => 'd',
 							        EVENTS_TABLE  => 'e',
 							        RAIDS_TABLE   => 'r',
-							        ITEMS_TABLE   => 'i'
+							        RAID_ITEMS_TABLE   => 'i'
 						    ),
 						    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
 					    				and e.event_id = r.event_id 
@@ -598,7 +598,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 									
 									$names = $del_member;
 									//remove member from attendees table but only if linked to raids in selected dkp pool
-									$sql = 'DELETE FROM ' . RAID_ATTENDEES_TABLE . '
+									$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . '
 											WHERE member_id= ' . $del_member . ' 
 											AND raid_id IN( SELECT r.raid_id from ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE .' e 
 												where r.event_id = e.event_id and e.event_dkpid = ' . (int) $del_dkpid . ')';
@@ -608,7 +608,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 									/*
 									 *  not crossdb compatible but works in ansi sql
 									$sql = 'DELETE i  
-											FROM ' . ITEMS_TABLE . ' i 
+											FROM ' . RAID_ITEMS_TABLE . ' i 
 											INNER JOIN ' . RAIDS_TABLE . ' r 
 											ON r.raid_id = i.raid_id 
 											INNER JOIN ' . EVENTS_TABLE . ' e 
@@ -616,7 +616,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 											WHERE i.member_id = ' . $del_member;
 									$db->sql_query($sql);
 									*/
-									$sql = 'DELETE FROM ' . ITEMS_TABLE . ' where member_id = ' . $del_member . ' and raid_id in ( 
+									$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' where member_id = ' . $del_member . ' and raid_id in ( 
 									select raid_id from ' . RAIDS_TABLE . ' r , ' . EVENTS_TABLE . ' e where r.event_id  = e.event_id and e.event_dkpid = ' . (int) $del_dkpid . ')'; 
 									$db->sql_query($sql);
 									
@@ -771,11 +771,11 @@ class acp_dkp_mdkp extends bbDkp_Admin
 									   min(r.raid_date) as minraiddate, 
 									   count(a.member_id) as raidcount, 
 									   e.event_dkpid 
-							FROM ' . RAID_ATTENDEES_TABLE . ' a,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
+							FROM ' . RAID_DETAIL_TABLE . ' a,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
 		        			WHERE e.event_id = r.event_id
 		        			AND r.raid_id = a.raid_id 
 		        			AND a.member_id = ' .  $member_from . ' 
-		        			AND a.raid_id not in( select raid_id from ' . RAID_ATTENDEES_TABLE . ' where member_id = '. $member_to . ')
+		        			AND a.raid_id not in( select raid_id from ' . RAID_DETAIL_TABLE . ' where member_id = '. $member_to . ')
 							GROUP BY e.event_dkpid';
 						$result = $db->sql_query($sql, 0);
 						while ( $row = $db->sql_fetchrow($result) )
@@ -877,25 +877,25 @@ class acp_dkp_mdkp extends bbDkp_Admin
 						}
 						/* 5) transfer old attendee name to new member */
 						// if $member_from participated in a raid the $member_to did too, delete the entry. (unique key) 
-						$sql = 'select raid_id from ' . RAID_ATTENDEES_TABLE . ' where member_id = '. $member_to; 
+						$sql = 'select raid_id from ' . RAID_DETAIL_TABLE . ' where member_id = '. $member_to; 
 						$result = $db->sql_query($sql, 0);
 						while ( $row = $db->sql_fetchrow($result) )
 						{
 							$raid_id[] = $row['raid_id'];
 						}
-						$sql = 'DELETE FROM ' . RAID_ATTENDEES_TABLE . '  
+						$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . '  
 								WHERE member_id='. $member_from . '
 								AND ' . $db->sql_in_set('raid_id', $raid_id, false, true);  
 								
 						$db->sql_query($sql);
 						
 						// 6) now update the remaining raids where old member participated (the last 'not in' condition is not necessary)
-						$sql = 'UPDATE ' . RAID_ATTENDEES_TABLE . ' SET member_id ='. $member_to . ' 
+						$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET member_id ='. $member_to . ' 
 								WHERE member_id='. $member_from . '
 								AND ' . $db->sql_in_set('raid_id', $raid_id, true, true);
 						
 						/* 7) transfer items to new owner */
-						$sql = 'UPDATE ' . ITEMS_TABLE . ' SET member_id ='. $member_to . ' WHERE member_id='. $member_from;
+						$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET member_id ='. $member_to . ' WHERE member_id='. $member_from;
 						$db->sql_query($sql);
                         
                         // 8) update the adjustments table

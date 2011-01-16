@@ -103,7 +103,7 @@ if ( isset($_GET[URI_RAID])  )
 	 ********************************/ 
 
     $raiders = array();
-    $sql = 'SELECT a.member_id from ' . RAID_ATTENDEES_TABLE . ' a , ' . MEMBER_LIST_TABLE . ' l 
+    $sql = 'SELECT a.member_id from ' . RAID_DETAIL_TABLE . ' a , ' . MEMBER_LIST_TABLE . ' l 
 	where a.member_id = l.member_id and a.raid_id = ' .  $raid_id . ' ORDER BY l.member_name ';     
     $result = $db->sql_query($sql);
     while ( $arow = $db->sql_fetchrow($result) )
@@ -228,7 +228,7 @@ if ( isset($_GET[URI_RAID])  )
     $startdrops = request_var('start',0);
 
     $sql = 'SELECT count(*) as itemscount    
-            FROM  ' . ITEMS_TABLE . '  
+            FROM  ' . RAID_ITEMS_TABLE . '  
             WHERE raid_id='. $raid_id ;
     
 	$total_result = $db->sql_query($sql);

@@ -614,12 +614,12 @@ function main($id, $mode)
 						// what if he changes name ? update other tables too
 						if ( !($member_name == $old_member_name) ) 
 						{
-    						$sql = "UPDATE " . RAID_ATTENDEES_TABLE . " 
+    						$sql = "UPDATE " . RAID_DETAIL_TABLE . " 
     								SET member_name = '" . $db->sql_escape($member_name) ."' 
     								WHERE member_name = '". $db->sql_escape($old_member_name) . "'";
     						$db->sql_query($sql);
     						
-    						$sql = "UPDATE " . ITEMS_TABLE . " 
+    						$sql = "UPDATE " . RAID_ITEMS_TABLE . " 
     								SET item_buyer = '" . $db->sql_escape($member_name) ."' 
     								WHERE item_buyer = '". $db->sql_escape($old_member_name) . "'";
     						$db->sql_query($sql);
@@ -700,11 +700,11 @@ function main($id, $mode)
 										'log_action' => $log_action)
 										);
 
-										$sql = 'DELETE FROM ' . RAID_ATTENDEES_TABLE . "
+										$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . "
 												WHERE member_name='" . $db->sql_escape(utf8_normalize_nfc($del_member[$i])) . "'";
 										$db->sql_query($sql);
 							
-										$sql = 'DELETE FROM ' . ITEMS_TABLE . "
+										$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . "
 												WHERE item_buyer='" . $db->sql_escape(utf8_normalize_nfc($del_member[$i])) . "'";
 										$db->sql_query($sql);
 

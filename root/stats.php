@@ -331,7 +331,7 @@ $sql_array = array(
 
         EVENTS_TABLE 		=> 'e',
         RAIDS_TABLE 		=> 'r',
-        ITEMS_TABLE 		=> 'i',
+        RAID_ITEMS_TABLE 		=> 'i',
         CLASS_TABLE 		=> 'c',
         MEMBER_DKP_TABLE 	=> 'm',
         MEMBER_LIST_TABLE  	=> 'l',
@@ -389,7 +389,7 @@ $class_counts = array();
 $sql_array = array(
     'SELECT'    => 	'c1.name as class_name, count(m.member_id) AS class_count, c.class_id , c.colorcode, c.imagename ', 
     'FROM'      => array(
-        ITEMS_TABLE 		=> 'i',
+        RAID_ITEMS_TABLE 		=> 'i',
         CLASS_TABLE 		=> 'c',
         MEMBER_DKP_TABLE 	=> 'm',
         MEMBER_LIST_TABLE  	=> 'l',

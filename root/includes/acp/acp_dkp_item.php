@@ -94,7 +94,7 @@ class acp_dkp_item extends bbDkp_Admin
 					//
 					// Get item names from our standard items table
 					//
-					$sql = 'SELECT item_name FROM ' . ITEMS_TABLE . ' WHERE item_name ' . 
+					$sql = 'SELECT item_name FROM ' . RAID_ITEMS_TABLE . ' WHERE item_name ' . 
 			 		$db->sql_like_expression($db->any_char . $db->sql_escape(utf8_normalize_nfc(request_var('query', ' ', true))) . $db->any_char) . ' ORDER BY item_name';
 					$result = $db->sql_query ( $sql );
 					while ( $row = $db->sql_fetchrow ( $result ) ) 
@@ -143,7 +143,7 @@ class acp_dkp_item extends bbDkp_Admin
 				if (isset($_GET['item'])) 
 				{
 					
-					$sql = 'SELECT * FROM ' . ITEMS_TABLE . ' WHERE item_name ' .
+					$sql = 'SELECT * FROM ' . RAID_ITEMS_TABLE . ' WHERE item_name ' .
 			 		$db->sql_like_expression($db->any_char . $db->sql_escape(utf8_normalize_nfc(request_var('item', ' ', true)))  . $db->any_char) ; 
 					
 					$result = $db->sql_query ( $sql );
@@ -261,7 +261,7 @@ class acp_dkp_item extends bbDkp_Admin
 			$db->sql_freeresult ( $result );
 	
 			//left selection member pane : select all members from the raid where this item dropped
-			$sql = 'SELECT a.member_id, l.member_name from ' . RAID_ATTENDEES_TABLE . ' a, ' . ITEMS_TABLE . ' b,  ' . MEMBER_LIST_TABLE . ' l 
+			$sql = 'SELECT a.member_id, l.member_name from ' . RAID_DETAIL_TABLE . ' a, ' . RAID_ITEMS_TABLE . ' b,  ' . MEMBER_LIST_TABLE . ' l 
 			where a.member_id = l.member_id  and a.raid_id = b.raid_id
 			and b.item_id = ' . (int) $item_id . ' ORDER BY a.member_name ';
 		
@@ -272,7 +272,7 @@ class acp_dkp_item extends bbDkp_Admin
 			if ($raid_id != 0)
 			{
 				//left selection member pane : get all raidatendees
-				$sql = 'SELECT a.member_id, l.member_name from ' . RAID_ATTENDEES_TABLE . ' a , ' . MEMBER_LIST_TABLE . ' l 
+				$sql = 'SELECT a.member_id, l.member_name from ' . RAID_DETAIL_TABLE . ' a , ' . MEMBER_LIST_TABLE . ' l 
 				where a.member_id = l.member_id and a.raid_id = ' .  $raid_id . ' ORDER BY l.member_name '; 
 			}
 		
@@ -309,7 +309,7 @@ class acp_dkp_item extends bbDkp_Admin
 		*  Build item drop-down
 		****************************/
 		$max_value = 0;
-		$result = $db->sql_query ('SELECT max(item_value) AS max_value FROM ' . ITEMS_TABLE );
+		$result = $db->sql_query ('SELECT max(item_value) AS max_value FROM ' . RAID_ITEMS_TABLE );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
 			$max_value = $row ['max_value'];
@@ -411,7 +411,7 @@ class acp_dkp_item extends bbDkp_Admin
 	        DKPSYS_TABLE => 'd',
 	        EVENTS_TABLE => 'e',
 	        RAIDS_TABLE => 'r',
-	        ITEMS_TABLE    => 'i'
+	        RAID_ITEMS_TABLE    => 'i'
 	    ),
 	    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
 	    				and e.event_id = r.event_id 
@@ -495,7 +495,7 @@ class acp_dkp_item extends bbDkp_Admin
 					'OPTION' => $user->format_date($row['raid_date']) . ' - ' .  $row ['event_name'] . ' ' . $row['raid_note'] ) );
 			}
 			$db->sql_freeresult ( $result );
-			$sql1 = 'SELECT count(*) as countitems FROM ' . ITEMS_TABLE . ' where raid_id = ' .  $raid_id; 
+			$sql1 = 'SELECT count(*) as countitems FROM ' . RAID_ITEMS_TABLE . ' where raid_id = ' .  $raid_id; 
 	
 			$result1 = $db->sql_query ( $sql1 );
 			$total_items = (int) $db->sql_fetchfield('countitems', false,$result1 );
@@ -526,7 +526,7 @@ class acp_dkp_item extends bbDkp_Admin
 				EVENTS_TABLE   => 'e',
 		        RAIDS_TABLE    => 'r',
 		        MEMBER_LIST_TABLE => 'l', 
-		        ITEMS_TABLE    => 'i',
+		        RAID_ITEMS_TABLE    => 'i',
 		    ),
 		    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
 	    					and e.event_id = r.event_id 
@@ -738,7 +738,7 @@ class acp_dkp_item extends bbDkp_Admin
 						'item_gameid' 		=> (int) $itemgameid,
 	    				'item_added_by' 	=> (string) $user->data ['username'] 
 	    				);
-			$sql = 'INSERT INTO ' . ITEMS_TABLE . ' ' . $db->sql_build_array('INSERT', $query);
+			$sql = 'INSERT INTO ' . RAID_ITEMS_TABLE . ' ' . $db->sql_build_array('INSERT', $query);
 			$db->sql_query($sql);		
 			
 		}
@@ -770,7 +770,7 @@ class acp_dkp_item extends bbDkp_Admin
 			trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] , E_USER_WARNING);
 		}
 		
-		$sql = "select distinct e.event_dkpid from " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r, " . ITEMS_TABLE . " i 
+		$sql = "select distinct e.event_dkpid from " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r, " . RAID_ITEMS_TABLE . " i 
 				where i.item_id = " . $item_id . " 
 				and e.event_id = r.event_id and i.raid_id = r.raid_id "; 
 		$result = $db->sql_query($sql);
@@ -798,7 +798,7 @@ class acp_dkp_item extends bbDkp_Admin
 		}
 		else 
 		{
-			$sql = 'SELECT * FROM ' . ITEMS_TABLE . ' WHERE item_id= ' . $item_id;
+			$sql = 'SELECT * FROM ' . RAID_ITEMS_TABLE . ' WHERE item_id= ' . $item_id;
 		}
 		
 		$result = $db->sql_query ( $sql );
@@ -873,7 +873,7 @@ class acp_dkp_item extends bbDkp_Admin
 		$db->sql_transaction('begin');
 		
 		// 1) Remove the item purchase from the items table
-		$sql = 'DELETE FROM ' . ITEMS_TABLE . ' WHERE ' . $db->sql_in_set('item_id', $item_ids);
+		$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' WHERE ' . $db->sql_in_set('item_id', $item_ids);
 		$db->sql_query ( $sql );
 			
 		// decrease dkp spent value from buyers with purchase value
@@ -1024,6 +1024,39 @@ class acp_dkp_item extends bbDkp_Admin
 		}
 		return $this->fv->is_error ();
 	}
+	
+	 /***
+     * Zero-sum DKP function
+     * will increase earned points for members present at loot time (== bosskill time) or present in Raid, depending on Settings
+     * ex. player A pays 100dkp for item A
+     * there are 15 players in raid
+     * so each raider gets 100/15 = earned bonus 6.67 
+     * 
+     * called from _loot_add
+     * 
+     * @param $raiders : list of raiders
+     * @param 
+     * @param $itemvalue : all itemvalue 
+     * 
+     * returns the sql to update
+     * 
+     */
+    function zero_balance($itemvalue)
+    {
+    	global $db;
+    	
+    	$zerosumdkp = round( $itemvalue / count($this->bossattendees[$this->batchid][$boss] , 2)); 
+    	
+    	$sql = ' UPDATE ' . MEMBER_DKP_TABLE . ' d, ' . MEMBER_LIST_TABLE  . ' m 
+			SET d.member_earned = d.member_earned + ' . (float) $zerosumdkp  .  ' 
+			WHERE d.member_dkpid = ' . (int) $this->dkp  . ' 
+		  	 AND  d.member_id =  m.member_id 
+		  	 AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]  ) ;
+
+    	return $sql; 
+    }
+    
+    
 	
 
 } // end class

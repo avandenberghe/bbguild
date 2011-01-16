@@ -319,7 +319,7 @@ function percentage_raidcount($query_by_pool, $dkpsys_id, $days, $member_id)
 	    'FROM'      => array(
 			EVENTS_TABLE			=> 'e', 	        
 			RAIDS_TABLE 			=> 'r',
-	        RAID_ATTENDEES_TABLE	=> 'ra', 
+	        RAID_DETAIL_TABLE	=> 'ra', 
 	    	),
 	    'WHERE'		=> ' 
 	    	r.event_id = e.event_id
@@ -387,7 +387,7 @@ function memberraid_count($dkpsys_id, $days, $member_id, $all)
 	    'FROM'      => array(
 			EVENTS_TABLE			=> 'e', 	        
 			RAIDS_TABLE 			=> 'r',
-	        RAID_ATTENDEES_TABLE	=> 'ra', 
+	        RAID_DETAIL_TABLE	=> 'ra', 
 	    	),
 	    'WHERE'		=> ' 
 	    	r.event_id = e.event_id

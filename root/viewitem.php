@@ -43,7 +43,7 @@ if (isset($_GET[URI_ITEM]) )
 
     $current_order = switch_order($sort_order);
     $item_id = request_var(URI_ITEM, 0);
-    $sql = 'SELECT item_name, item_gameid FROM ' . ITEMS_TABLE . " WHERE item_id = " . $item_id ;
+    $sql = 'SELECT item_name, item_gameid FROM ' . RAID_ITEMS_TABLE . " WHERE item_id = " . $item_id ;
     $result = $db->sql_query($sql);
 	if (! $result)
 	{
