@@ -89,14 +89,13 @@ if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]))
 	    'FROM'      => array(
 			EVENTS_TABLE			=> 'e', 	        
 			RAIDS_TABLE 			=> 'r',
-			MEMBER_LIST_TABLE 		=> 'l',
 	        RAID_DETAIL_TABLE	=> 'ra', 
 	    	),
-	    'WHERE'		=> " r.event_id = e.event_id
+	    'WHERE'		=> ' r.event_id = e.event_id
 	    	AND ra.raid_id = r.raid_id
 	    	AND l.member_id = ra.member_id
-            AND (ra.member_name='" . $db->sql_escape($member['member_name']) ."')
-            AND r.raid_date BETWEEN " . $start_date . ' AND ' . $end_date . ' 
+            AND (ra.member_id=' . $member_id .')
+            AND r.raid_date BETWEEN ' . $start_date . ' AND ' . $end_date . ' 
 			AND e.event_dkpid = ' . $dkp_pool, 
 	    );
 		
@@ -124,9 +123,9 @@ if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]))
 	        RAID_DETAIL_TABLE 	=> 'ra',
 	    	),
  
-    	'WHERE'     =>  "(ra.raid_id = r.raid_id)
-             AND (ra.member_name='" . $db->sql_escape($member['member_name']) ."')
-             AND (e.event_dkpid=" . (int) $dkp_pool . ' )', 
+    	'WHERE'     =>  ' ra.raid_id = r.raid_id
+             AND ra.member_id=' . $memberid . '
+             AND e.event_dkpid=' . (int) $dkp_pool, 
 	    'ORDER_BY'  => 'r.raid_date DESC',
           );
               
@@ -174,7 +173,7 @@ if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]))
     	'FROM'      => array(
     		EVENTS_TABLE		=> 'e',
     		RAIDS_TABLE			=> 'r',
-    		ITEMS_TABLE			=> 'i', 	        
+    		RAID_ITEMS_TABLE			=> 'i', 	        
     	),
  
     	'WHERE'     =>  " e.event_id = r.event_id
@@ -269,7 +268,7 @@ if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]))
     	'FROM'      => array(
     		EVENTS_TABLE		=> 'e',
     		RAIDS_TABLE			=> 'r',
-    		ITEMS_TABLE			=> 'i', 	        
+    		RAID_ITEMS_TABLE			=> 'i', 	        
     	),
  
     	'WHERE'     =>  " e.event_id = r.event_id
@@ -350,7 +349,7 @@ if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]))
 	    	AND ra.raid_id = r.raid_id 
             AND ra.member_id=' . (int) $member_id .  '
             AND r.raid_date >= ' . (int) $member['member_firstraid'], 
-         'GROUP_BY' => 'ra.member_name, e.event_name'
+         'GROUP_BY' => 'ra.member_id, e.event_name'
     );
    	$sql = $db->sql_build_query('SELECT', $sql_array);
     $result = $db->sql_query($sql);

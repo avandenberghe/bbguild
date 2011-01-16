@@ -86,7 +86,7 @@ if (isset($_GET[URI_ITEM]) )
 		        RAIDS_TABLE 		=> 'r', 
 		        CLASS_TABLE			=> 'c', 
 		        MEMBER_LIST_TABLE 	=> 'l', 
-     			ITEMS_TABLE 		=> 'i', 
+     			RAID_ITEMS_TABLE 		=> 'i', 
 	    	),
 	 
 	    'WHERE'     =>  " e.event_id = r.event_id

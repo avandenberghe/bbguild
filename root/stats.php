@@ -290,7 +290,7 @@ $sql_array = array (
 	'FROM' => array (
 		EVENTS_TABLE => 'e', 
 		RAIDS_TABLE => 'r', 
-		ITEMS_TABLE => 'i', 
+		RAID_ITEMS_TABLE => 'i', 
 		), 
 	'WHERE' => ' e.event_id = r.event_id 
 			  AND i.raid_id = r.raid_id

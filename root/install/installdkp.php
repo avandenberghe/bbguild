@@ -323,9 +323,8 @@ $versions = array(
 				  'adjustment_group_key' => array('VCHAR', ''),
                 ),
                 'PRIMARY_KEY'    => 'adjustment_id',
-                'KEYS'         => array('member_id'    => array('INDEX', array('member_id', 'adjustment_dkpid')),
-            ),
-          ),
+                'KEYS'         => array('member_id'    => array('INDEX', array('member_id', 'adjustment_dkpid'))),
+          )),
 
          array($table_prefix . 'bbdkp_raids', array(
 				'COLUMNS'        	=> array(
@@ -337,8 +336,7 @@ $versions = array(
 					'raid_updated_by' 	=> array('VCHAR_UNI:255', ''),
 					),
 				'PRIMARY_KEY'  => array('raid_id'),
-				'KEYS'         => array('event_id'    => array('INDEX', 'event_id'),
-                ),
+				'KEYS'         => array('event_id'    => array('INDEX', 'event_id')),
             )),
               
 		  array($table_prefix . 'bbdkp_raid_detail', array(

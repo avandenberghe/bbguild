@@ -212,7 +212,7 @@ class acp_dkp_item extends bbDkp_Admin
 			//get groupkey and base info from item
 			$sql_array = array(
 			    'SELECT'    => 'i.item_name, i.member_id, i.raid_id, i.item_value, i.item_date, i.item_gameid, i.item_group_key  ',
-			    'FROM'    	=> array(ITEMS_TABLE => 'i'),
+			    'FROM'    	=> array(RAID_ITEMS_TABLE => 'i'),
 			    'WHERE'     =>  'i.item_id = ' . (int) $item_id
 			);
 			$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -236,7 +236,7 @@ class acp_dkp_item extends bbDkp_Admin
 			$buyers = array ();
 			$sql_array = array(
 			    'SELECT'    => 'i.member_id, l.member_name, i.item_group_key  ',
-			    'FROM'    	=> array(ITEMS_TABLE => 'i', 
+			    'FROM'    	=> array(RAID_ITEMS_TABLE => 'i', 
 									 MEMBER_LIST_TABLE => 'l', 
 									  ),
 			    'WHERE'     =>  "i.member_id = l.member_id and i.item_group_key = '" . (string) $this->item ['item_group_key'] . "'"  
@@ -319,7 +319,7 @@ class acp_dkp_item extends bbDkp_Admin
 		$format = '%0' . $floatlen . '.2f';
 		
 		$sql = 'SELECT i.item_id, i.item_value, i.item_name, i.item_gameid FROM ' . 
-			ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
+			RAID_ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
 	        where i.raid_id=r.raid_id and r.event_id=e.event_id and e.event_dkpid = ' . $dkpid . ' 
 			ORDER BY item_name, item_date DESC';
 			
@@ -723,7 +723,7 @@ class acp_dkp_item extends bbDkp_Admin
 	    				'item_added_by' 	=> (string) $user->data ['username'] 
 	    				);
 			}
-			$db->sql_multi_insert(ITEMS_TABLE, $query);
+			$db->sql_multi_insert(RAID_ITEMS_TABLE, $query);
 		}
 		else 
 		{
@@ -786,10 +786,10 @@ class acp_dkp_item extends bbDkp_Admin
 		{
 				$sql_array = array(
 				    'SELECT'    => 'i2.* ',
-				    'FROM'    	=> array(ITEMS_TABLE => 'i2'),
+				    'FROM'    	=> array(RAID_ITEMS_TABLE => 'i2'),
 				    'LEFT_JOIN' => array(
 						array(
-							'FROM'	=> array(ITEMS_TABLE => 'i1'),
+							'FROM'	=> array(RAID_ITEMS_TABLE => 'i1'),
 							'ON'	=> ' i1.item_group_key = i2.item_group_key '
 						)), 					    		
 				    'WHERE'     =>  'i1.item_id= '. $item_id,
@@ -927,10 +927,10 @@ class acp_dkp_item extends bbDkp_Admin
 		//
 		$sql_array = array(
 		    'SELECT'    => 'i2.* ',
-		    'FROM'    	=> array(ITEMS_TABLE => 'i2'),
+		    'FROM'    	=> array(RAID_ITEMS_TABLE => 'i2'),
 		    'LEFT_JOIN' => array(
 				array(
-					'FROM'	=> array(ITEMS_TABLE => 'i1'),
+					'FROM'	=> array(RAID_ITEMS_TABLE => 'i1'),
 					'ON'	=> ' i1.item_group_key = i2.item_group_key '
 				)), 					    		
 		    'WHERE'     =>  'i1.item_id= '. $item_id,

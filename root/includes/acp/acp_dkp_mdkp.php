@@ -752,7 +752,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 						
 						/* 2) calculate $member_from item cost by dkp pool to transfer to new dkp account */
 						$sql = 'SELECT sum(i.item_value) as itemvalue, e.event_dkpid FROM ' . 
-							ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
+							RAID_ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
 		        			where e.event_id=r.event_id
 		        			and r.raid_id=i.raid_id 
 		        			and i.member_id = ' .  $member_from . ' 

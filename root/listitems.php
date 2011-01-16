@@ -150,7 +150,7 @@ switch ($mode)
 $sql_array['FROM'] = array( 	
 	EVENTS_TABLE 		=> 'e', 
     RAIDS_TABLE 		=> 'r', 
-	ITEMS_TABLE 		=> 'i', 
+	RAID_ITEMS_TABLE 		=> 'i', 
 );
 $sql_array['WHERE'] = ' e.event_id = r.event_id AND r.raid_id = i.raid_id '; 
 if ($query_by_pool)
@@ -195,7 +195,7 @@ switch ($mode)
 				EVENTS_TABLE => 'e', 
 				RAIDS_TABLE => 'r', 
 				MEMBER_LIST_TABLE => 'l', 
-				ITEMS_TABLE => 'i', 
+				RAID_ITEMS_TABLE => 'i', 
 				), 
 			'WHERE' => ' i.raid_id = r.raid_id
 						AND l.member_id = i.member_id
@@ -218,7 +218,7 @@ switch ($mode)
     		'FROM' => array (
 				EVENTS_TABLE => 'e', 
 				RAIDS_TABLE => 'r', 
-				ITEMS_TABLE => 'i', 
+				RAID_ITEMS_TABLE => 'i', 
 			    CLASS_TABLE	=> 'c', 
 				MEMBER_DKP_TABLE => 'm', 
 				MEMBER_LIST_TABLE => 'l'), 

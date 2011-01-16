@@ -244,7 +244,7 @@ if ( isset($_GET[URI_RAID])  )
     		 m.member_class_id, c.class_id, m.member_name, m.member_id ', 
 	    'FROM'      => array(
 			MEMBER_LIST_TABLE	=> 'm', 
-			ITEMS_TABLE			=> 'i', 	        
+			RAID_ITEMS_TABLE			=> 'i', 	        
 			CLASS_TABLE 		=> 'c'	         
 	    	),
 	    'WHERE'		=> ' i.member_id = m.member_id

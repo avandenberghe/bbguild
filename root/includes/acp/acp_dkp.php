@@ -191,7 +191,7 @@ class acp_dkp extends bbDkp_Admin
                 $days = ((time() - $config['bbdkp_eqdkp_start']) / 86400);
                 $raids_per_day = sprintf("%.2f", ($total_raids / $days));
                 
-                $sql6 = 'SELECT count(*) as item_count FROM ' . ITEMS_TABLE;
+                $sql6 = 'SELECT count(*) as item_count FROM ' . RAID_ITEMS_TABLE;
                 $result6 = $db->sql_query($sql6);
                 $total_items = (int) $db->sql_fetchfield('item_count');
                 $db->sql_freeresult($result6);
