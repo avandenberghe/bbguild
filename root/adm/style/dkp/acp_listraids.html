@@ -27,20 +27,28 @@
 <table cellspacing="1">
 <thead>
   <tr>
-    <th align="left" width="70" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
-    <th align="left" width="35%"><a href="{U_LIST_RAIDS}&amp;o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
-    <th align="left" width="65%"><a href="{U_LIST_RAIDS}&amp;o={O_NOTE}&amp;start={START}">{L_NOTE}</a></th>
-    <th align="left" width="60" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_VALUE}&amp;start={START}">{L_VALUE}</a></th>
+    <th align="left" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <th align="left" width="50"><a href="{U_LIST_RAIDS}&amp;o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
+    <th align="left" width="30"><a href="{U_LIST_RAIDS}&amp;o={O_NOTE}&amp;start={START}">{L_NOTE}</a></th>
+    <th align="left" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_RAIDVALUE}&amp;start={START}">{L_RAIDVALUE}</a></th>
+    <th align="left" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_TIMEVALUE}&amp;start={START}">{L_TIMEVALUE}</a></th>
+    <th align="left" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_ZSVALUE}&amp;start={START}">{L_ZSVALUE}</a></th>
+    <th align="left" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_DECAYVALUE}&amp;start={START}">{L_DECAY}</a></th>
+    <th align="left" width="40" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_TOTALVALUE}&amp;start={START}">{L_TOTAL}</a></th>
     <th align="center" width="5">{L_ACTION}</th>
   </tr>
   </thead>
 <tbody>
   <!-- BEGIN raids_row -->
   <!-- IF raids_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td width="70" nowrap="nowrap">{raids_row.DATE}</td>
-    <td width="35%"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
-    <td width="65%">{raids_row.NOTE}</td>
-    <td width="60" nowrap="nowrap" class="positive">{raids_row.VALUE}</td>
+    <td width="30" nowrap="nowrap">{raids_row.DATE}</td>
+    <td width="50"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
+    <td width="30">{raids_row.NOTE}</td>
+    <td width="30" nowrap="nowrap" class="positive">{raids_row.RAIDVALUE}</td>
+    <td width="30" nowrap="nowrap" class="positive">{raids_row.TIMEVALUE}</td>
+    <td width="30" nowrap="nowrap" class="positive">{raids_row.ZSVALUE}</td>
+    <td width="30" nowrap="nowrap" class="negative">{raids_row.DECAYVALUE}</td>
+    <td width="30" nowrap="nowrap" class="positive">{raids_row.TOTAL}</td>
     <td width="5" nowrap="nowrap">
 		<a href="{raids_row.U_VIEW_RAID}">{ICON_EDIT}</a>
 	</td>
@@ -48,7 +56,7 @@
   </tr>
   <!-- END raids_row -->
   <tr>
-    <th colspan="5" class="footer">{LISTRAIDS_FOOTCOUNT}</th>
+    <th colspan="9" class="footer">{LISTRAIDS_FOOTCOUNT}</th>
   </tr>
   </tbody>
 </table>

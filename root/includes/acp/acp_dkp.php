@@ -523,10 +523,15 @@ class acp_dkp extends bbDkp_Admin
 
 					//raids                    
                     set_config('bbdkp_user_rlimit', request_var('bbdkp_user_rlimit', 0), true);
+                    //epgp
                     set_config('bbdkp_raiddecaypct', request_var('raiddecaypct', 0), true);
                     set_config('bbdkp_decayfrequency', request_var('decayfreq', 0), true);
                     set_config('bbdkp_decayfreqtype', request_var('decayfreqtype', 0), true);
-                    set_config('bbdkp_dkphour', request_var('dkphour', 0), true);
+                    //time
+                    set_config('bbdkp_dkptimeunit', request_var('dkptimeunit', 0.00), true);
+                    set_config('bbdkp_timeunit', request_var('timeunit', 0.00), true);
+                    set_config('bbdkp_standardduration', request_var('standardduration', 0.00), true);
+                    //zerosum
                     set_config('bbdkp_zerosum', request_var('zerosum', 0), true);
                     set_config('bbdkp_bankerid', request_var('zerosumbanker', 0), true);
 
@@ -645,10 +650,15 @@ class acp_dkp extends bbDkp_Admin
                 		'ITEMDECAYPCT'		=> $config['bbdkp_itemdecaypct'] ,
 
                 		'USER_RLIMIT' 		=> $config['bbdkp_user_rlimit'] , 
-         				'RAIDDECAYPCT' 	 	=> $config['bbdkp_raiddecaypct'] ,
+         				//epgp
+                		'RAIDDECAYPCT' 	 	=> $config['bbdkp_raiddecaypct'] ,
         				'DECAYFREQ'			=> $config['bbdkp_decayfrequency'] ,
 						'S_FREQTYPE_OPTIONS' =>	$s_freqtype_options, 
-						'DKPHOUR'			=> $config['bbdkp_dkphour'] , 
+						//time dkp
+                		'DKPTIMEUNIT'		=> $config['bbdkp_dkptimeunit'] ,
+		                'TIMEUNIT'			=> $config['bbdkp_timeunit'] ,
+		                'STANDARDDURATION'	=> $config['bbdkp_standardduration'] ,
+                 		//zs
          				'F_ZEROSUM'			=> $config['bbdkp_zerosum'], 
                 		'S_BANKER_OPTIONS'	=> $s_bankerlist_options, 
                 ));

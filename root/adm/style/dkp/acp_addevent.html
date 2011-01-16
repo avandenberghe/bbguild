@@ -87,14 +87,23 @@ function check_form()
 	</dl>
 </fieldset>
 
-<p class="quick">
+
 {S_FORM_TOKEN}
     <!-- IF S_ADD -->
-    <input type="submit" name="add" value="{L_ADD_EVENT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+    <input type="submit" name="add" value="{L_ADD_EVENT}" class="button1" /> 
+    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    </fieldset>
     <!-- ELSE -->
-    <input type="submit" name="update" value="{L_UPDATE_EVENT}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_EVENT}" class="button1" />
+    <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+    	<input type="submit" name="newraid" value="{L_ADD_RAID}" class="button1" />
+    </fieldset>
+    <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+    <input type="submit" name="update" value="{L_UPDATE_EVENT}" class="button1" />
+    <input type="submit"  name="delete" value="{L_DELETE_EVENT}" class="button1" />
+    </fieldset>
     <!-- ENDIF -->
-</p>
+
 
 </form>
 

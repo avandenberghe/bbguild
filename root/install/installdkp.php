@@ -310,7 +310,7 @@ $versions = array(
                 ),
            ),
 
-            array($table_prefix . 'bbdkp_adjustments', array(
+        array($table_prefix . 'bbdkp_adjustments', array(
               'COLUMNS'        => array(
                   'adjustment_id'        => array('UINT', NULL, 'auto_increment'),
 				  'member_id'        	 => array('UINT', 0),
@@ -554,15 +554,21 @@ $versions = array(
 
 			//raids
 			array('bbdkp_user_rlimit', '20', true),
+			
+			//epgp
 			array('bbdkp_raiddecaypct', 0, true),	
 			array('bbdkp_decayfrequency', 0, true),
 			array('bbdkp_decayfreqtype', 0, true),
-			array('bbdkp_dkphour', '0.00', true),
+			//time
+			array('bbdkp_dkptimeunit', 0.00, true),
+			array('bbdkp_timeunit', 0.00, true),
+			array('bbdkp_standardduration', 0.00, true),
+			//zerosum
 			array('bbdkp_zerosum', 0, true),
 			array('bbdkp_bankerid', 0, true),
+
+            // portal settings
 	
-	        // portal settings
-	        
 	        // number of news
 	        array('bbdkp_n_news', 5, true),   
 	        // news forum id

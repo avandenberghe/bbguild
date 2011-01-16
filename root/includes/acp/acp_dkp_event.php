@@ -71,7 +71,7 @@ class acp_dkp_event extends bbDkp_Admin
                         // we have a GET
                         $update = true;
                        
-                        $sql = 'SELECT b.dkpsys_name, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename 
+                        $sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename 
                                 FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b 
                                 WHERE a.event_id = '" . $this->url_id . "'
                                 AND b.dkpsys_id = a.event_dkpid  ";
@@ -85,7 +85,8 @@ class acp_dkp_event extends bbDkp_Admin
                         else 
                         {
                             $this->event = array(
-                                'event_dkpsys_name'  => $row['dkpsys_name'],
+                            	'event_dkpsys_name'  => $row['dkpsys_name'],
+                                'dkpsys_id'  		 => $row['dkpsys_id'],
                                 'event_name'  	     => $row['event_name'],
 	                            'event_color'  	     => $row['event_color'],
 	                            'event_imagename'  	 => $row['event_imagename'],
@@ -120,14 +121,20 @@ class acp_dkp_event extends bbDkp_Admin
                    
                     $add     	= (isset($_POST['add'])) ? true : false;
                     $submit     = (isset($_POST['update'])) ? true : false;
-                    $delete     = (isset($_POST['delete'])) ? true : false;   
+                    $delete     = (isset($_POST['delete'])) ? true : false; 
+                    $addraid	= (isset($_POST['newraid'])) ? true : false;   
    
-                    if ( $add || $submit || $delete )
+                    if ( $add || $submit || $delete || $addraid)
                     {
                     	if (!check_form_key('acp_dkp_event'))
 						{
 							trigger_error('FORM_INVALID');
 						}
+        			}
+        			
+        			if ($addraid)
+        			{  
+        				meta_refresh(0, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid&amp;".URI_DKPSYS . '=' . $this->event['dkpsys_id'] . '&amp;' . URI_EVENT . '=' . $this->event['event_id'] ));
         			}
 		
                     if ($add)

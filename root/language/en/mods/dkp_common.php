@@ -189,6 +189,7 @@ $lang = array_merge($lang, array(
 'CHARACTER_EXPLAIN' => 'Choose another Charactername and press submit.',
 'CHARACTERS_UPDATED' => 'The Charactername %s was assigned to your account. ',
 'NO_CHARACTERS' => 'No characters to add to your Account. Please add some characters in the ACP.',
+'DECAY' => 'Decay',
 'DROPS' => 'Drops',
 'EVENT' => 'Event',
 'EVENTNAME' => 'Event Name',
@@ -232,7 +233,7 @@ $lang = array_merge($lang, array(
 'RAID' => 'Raid',
 'RAIDS' => 'Raids',
 'RAID_ID' => 'Raid ID',
-
+'RAIDVALUE' => 'Raid Bonus',
 'RANK_DISTRIBUTION' => 'Rank Distribution',
 'RECORDED_RAID_HISTORY' => 'Recorded Raid History for %s',
 'RECORDED_DROP_HISTORY' => 'Recorded Purchase History for %s',
@@ -242,6 +243,7 @@ $lang = array_merge($lang, array(
 
 'SUMMARY_DATES' => 'Raid Summary: %s to %s',
 'TIME' => 'Time',
+'TIMEVALUE' => 'Timebonus',
 'TOTAL' => 'Total',
 'TOTAL_EARNED' => 'Total Earned',
 'TOTAL_ITEMS' => 'Total Items',
@@ -257,6 +259,7 @@ $lang = array_merge($lang, array(
 'VIEW' => 'View',
 'VIEW_ACTION' => 'View Action',
 'VIEW_LOGS' => 'View Logs',
+'ZSVALUE' => 'Zerosum',
 
 // Page Foot Counts
 

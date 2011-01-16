@@ -161,15 +161,6 @@ function fnRemoveMember()
 	</dd>
 	</dl>		
 	
-	
-	<dl>
-		<dt><label>{L_VALUE}:</label>({L_ADD_RAID_VALUE_NOTE})</dt>
-		
-		<dd>
-			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />{FV_VALUE}
-		</dd>
-	</dl>
-		
 	<dl>
 		<dt><label>{L_DATE}:</label></dt>
 		<dd>
@@ -180,18 +171,37 @@ function fnRemoveMember()
 	   </dd>
 	</dl>
 	<dl>
-		<dt><label>{L_TIME}:</label></dt>
+		<dt><label>{L_RAIDSTART}:</label></dt>
 		<dd>
-			<select name="h">{S_RAIDDATE_H_OPTIONS}</select>
-			<select name="mi">{S_RAIDDATE_MI_OPTIONS}</select> 
-			<select name="s">{S_RAIDDATE_S_OPTIONS}</select>
+			<select name="sh">{S_RAIDSTART_H_OPTIONS}</select>
+			<select name="smi">{S_RAIDSTART_MI_OPTIONS}</select> 
+			<select name="ss">{S_RAIDSTART_S_OPTIONS}</select>
 		</dd>
 	</dl>
+	<dl>
+		<dt><label>{L_RAIDEND}:</label></dt>
+		<dd>
+			<select name="eh">{S_RAIDEND_H_OPTIONS}</select>
+			<select name="emi">{S_RAIDEND_MI_OPTIONS}</select> 
+			<select name="es">{S_RAIDEND_S_OPTIONS}</select>
+		</dd>
+	</dl>
+		
 	<dl>
 
 		<dt><label>{L_NOTE}:</label></dt>
 		<dd><textarea name="raid_note" cols="40" rows="5" wrap="soft">{RAID_NOTE}</textarea></dd>
 	</dl>
+	
+	<dl>
+		<dt><label>{L_RAIDVALUE}:</label>({L_ADD_RAID_VALUE_NOTE})</dt>
+		
+		<dd>
+			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />{FV_VALUE}
+		</dd>
+	</dl>
+		
+		
 </fieldset>
 </div>
 
@@ -233,24 +243,25 @@ function fnRemoveMember()
 </fieldset>
 </div>
 
-
-<div style="float: right; width: 40%;">
-
-<p class="quick">
-{S_FORM_TOKEN}
-<!-- IF S_ADD --> 
-    <input type="submit" name="add"	value="{L_ADD_RAID}" class="button1" /> 
-    <input type="reset" name="reset" value="{L_RESET}" class="button1" /> 
-<!-- ELSE --> 
-<input type="submit" name="update" value="{L_UPDATE_RAID}" class="button1" />
-<input type="submit" name="delete" value="{L_DELETE_RAID}"	class="button1" />
-<input type="submit" name="additem" value="{L_ADD_ITEM}" class="button1" />
-<!-- ENDIF -->
-</p>
-</div>
 </fieldset>
 
 </div>
+{S_FORM_TOKEN}
+<!-- IF S_ADD --> 
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+    <input type="submit" name="add"	value="{L_ADD_RAID}" class="button1" /> 
+    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+</fieldset> 
+<!-- ELSE --> 
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input type="submit" name="delete" value="{L_DELETE_RAID}"	class="button1" />
+</fieldset>
+	<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+	<input type="submit" name="update" value="{L_UPDATE_RAID}" class="button1" />
+	<input type="submit" name="additem" value="{L_ADD_ITEM}" class="button1" />
+</fieldset>
+<!-- ENDIF -->
+
 </form>
 
 
