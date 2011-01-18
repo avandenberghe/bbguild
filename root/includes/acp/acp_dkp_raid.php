@@ -31,34 +31,48 @@ class acp_dkp_raid extends bbDkp_Admin
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
-		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) 
-			. '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
-		$dkpsys_id=0;
-		$raid_id=0;
+		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
+
+		//do event test.
+		$sql = 'SELECT count(*) as eventcount FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
+			where a.dkpsys_id = b.event_dkpid ';
+		$result = $db->sql_query ( $sql );
+		$eventcount = $db->sql_fetchfield('eventcount');
+		$db->sql_freeresult( $result );
+		if($eventcount==0)
+		{
+			trigger_error ( $user->lang['ERROR_NOEVENTSDEFINED'], E_USER_WARNING );
+		}
 		
 		switch ($mode) 
 		{
 			case 'addraid' :
+				/* newpage */
+				$submit = (isset ( $_POST ['add'] )) ? true : false;
+				if($submit)
+				{
+					$this->addraid();
+				}
+				
+				$this->newraid();
+				$this->page_title = 'ACP_DKP_RAID_ADD';
+				$this->tpl_name = 'dkp/acp_' . $mode;
+				break;
+				
+			case 'editraid' :
 				if (isset ( $_GET [URI_RAID] ) ) 
 				{
-					/* editing a raid */
+					/* display edited raid */
 					$raid_id = request_var (URI_RAID, 0);
 					$this->displayraid($raid_id);
 				} 
 				elseif (isset ( $_POST['add']) || isset ($_POST['update']) || isset ($_POST ['delete']) || isset ($_POST ['additem']) ) 
 				{
-					/* commit update delete */
+					/* handle actions */
 					$raid_id = request_var ( 'hidden_id', 0 );
-					$submit = (isset ( $_POST ['add'] )) ? true : false;
 					$update = (isset ( $_POST ['update'] )) ? true : false;
 					$delete = (isset ( $_POST ['delete'] )) ? true : false;
 					$additem = (isset ( $_POST ['additem'] )) ? true : false;
-					
-					if($submit)
-					{
-						$this->addraid();
-					}
-					
 					if($update)
 					{
 						$this->updateraid($raid_id);
@@ -73,23 +87,17 @@ class acp_dkp_raid extends bbDkp_Admin
 					{
 						meta_refresh(0, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=additem&amp;' . URI_RAID .'=' . $raid_id));
 					}
-					
+
 					$this->displayraid($raid_id);
 	
-				} 
-				else 
-				{
-					/* newpage */
-					$this->displayraid(0);
 				}
-				
-				$this->page_title = 'ACP_ADDRAID';
+				$this->page_title = 'ACP_DKP_RAID_EDIT';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
 
 			case 'listraids' :
 				$this->listraids();
-				$this->page_title = 'ACP_LISTRAIDS';
+				$this->page_title = 'ACP_DKP_RAID_LIST';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;		
 		}
@@ -97,7 +105,674 @@ class acp_dkp_raid extends bbDkp_Admin
 	}
 	
 	/*
-	 * add raid
+	 * new raid
+	 */
+	private function newraid()
+	{
+		global $db, $user, $config, $template, $phpEx ;
+			
+		if (isset($_GET[URI_DKPSYS]) )
+		{
+			//user clicked on add raid from event editscreen
+			$dkpsys_id = request_var ( URI_DKPSYS, 0 );
+		}
+		
+		if (isset ( $_POST['dkpsys_id']) )
+		{
+			// getting dkp from pulldown
+			$dkpsys_id = request_var ( 'dkpsys_id', 0 );
+		}
+	
+		if($dkpsys_id==0)
+		{
+			//get default dkp pool
+			$sql1 = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default 
+	                 FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . " b 
+					 where a.dkpsys_id = b.event_dkpid and dkpsys_default = 'Y' ";
+			$result1 = $db->sql_query ($sql1);
+			// get the default dkp value (dkpsys_default = 'Y') from DB
+			while ( $row = $db->sql_fetchrow ( $result1 ) ) 
+			{
+				$dkpsys_id = $row['dkpsys_id'];
+			}
+		}
+		
+		if($dkpsys_id==0)
+		{ 	
+			// get first row
+			$sql1 = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
+                      FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
+					  where a.dkpsys_id = b.event_dkpid';
+			$result1 = $db->sql_query_limit ( $sql1, 1, 0 );
+			while ( $row = $db->sql_fetchrow ( $result1 ) ) 
+			{
+				$dkpsys_id = $row['dkpsys_id'];
+			}
+		}
+		$db->sql_freeresult( $result1 );
+		
+		//fill dkp dropdown
+		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
+				where a.dkpsys_id = b.event_dkpid ORDER BY dkpsys_name';
+		$result = $db->sql_query ( $sql );
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$template->assign_block_vars ( 'dkpsys_row', array (
+				'VALUE' 	=> $row['dkpsys_id'], 
+				'SELECTED' 	=> ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
+				'OPTION' 	=> (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) 
+			);
+		}
+		$db->sql_freeresult($result);
+		
+		/* event listbox */
+		// calculate number format
+		$max_value = 0.00;
+		$sql = 'SELECT max(event_value) AS max_value FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . $dkpsys_id; 
+		$result = $db->sql_query ($sql);
+		$max_value = (float) $db->sql_fetchfield('max_value', 0, $result);
+		$float = @explode ( '.', $max_value );
+		$format = '%0' . @strlen ( $float [0] ) . '.2f';
+		$db->sql_freeresult($result);
+		
+		$sql = ' SELECT  event_id, event_name, event_value 
+				 FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . $dkpsys_id . ' ORDER BY event_name';
+		$result = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$select_check = false;
+			if (isset ($_POST[URI_EVENT]))
+			{
+				$select_check = ( $row['event_id'] == request_var(URI_EVENT, 0)) ? true : false;
+			}
+			
+			$template->assign_block_vars ( 
+				'events_row', array (
+					'VALUE' => $row['event_id'], 
+					'SELECTED' => ($select_check) ? ' selected="selected"' : '', 
+					'OPTION' => $row['event_name'] . ' - (' . sprintf ( $format, $row['event_value'] ) . ')' 
+			));
+		}
+		$db->sql_freeresult($result);
+		
+		/* getting left memberlist only with rank not hidden */
+		$sql_array = array(
+    		'SELECT'    => 'm.member_id ,m.member_name',
+ 
+	    	'FROM'      => array(
+    		    MEMBER_LIST_TABLE 	  => 'm',
+        		MEMBER_RANKS_TABLE    => 'r', 
+    			),
+ 
+    		'WHERE'     =>  'm.member_guild_id = r.guild_id
+    	    				 AND m.member_rank_id = r.rank_id
+    	    				 AND r.rank_hide != 1', 
+    		'ORDER_BY' => 'm.member_name',
+		);
+		
+		$membercount = 0; 
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ( $sql );
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$membercount++;
+			$template->assign_block_vars ( 'members_row', array (
+				'VALUE' 	=> $row['member_id'], 
+				'OPTION' 	=> $row['member_name'] ) );
+		}
+		$db->sql_freeresult( $result );
+		
+		if ($membercount==0)
+		{
+			trigger_error ( $user->lang['ERROR_NOGUILDMEMBERSDEFINED'], E_USER_WARNING );
+		}
+		
+		// build presets for raiddate and hour pulldown
+		$now = getdate();
+		$s_raid_day_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 32; $i++)
+		{
+			$day = $now['mday'] ;
+			$selected = ($i == $day ) ? ' selected="selected"' : '';
+			$s_raid_day_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_month_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 13; $i++)
+		{
+			$month = $now['mon'] ;
+			$selected = ($i == $month ) ? ' selected="selected"' : '';
+			$s_raid_month_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_year_options = '<option value="0">--</option>';
+		for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+		{
+			$yr = $now['year'] ;
+			$selected = ($i == $yr ) ? ' selected="selected"' : '';
+			$s_raid_year_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+		
+		//start raid time
+		$s_raid_hh_options = '<option value="0">--</option>';
+		for ($i = 0; $i < 24; $i++)
+		{
+			$hh = $now['hours'] ;
+			$selected = ($i == $hh ) ? ' selected="selected"' : '';
+			$s_raid_hh_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_mi_options = '<option value="0">--</option>';
+		for ($i = 0; $i < 59; $i++)
+		{
+			$mi = $now['minutes'] ;
+			$selected = ($i == $mi ) ? ' selected="selected"' : '';
+			$s_raid_mi_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_s_options = '<option value="0">--</option>';
+		for ($i = 0; $i < 59; $i++)
+		{
+			$s = $now['seconds'] ;
+			$selected = ($i == $s ) ? ' selected="selected"' : '';
+			$s_raid_s_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+		
+		//end raid time
+		$hourduration = max(0, round( (float) $config['bbdkp_standardduration'],0));
+		$minutesduration = max(0, ((float) $config['bbdkp_standardduration'] - floor((float) $config['bbdkp_standardduration'])) * 60 );
+		$newtime = mktime(idate("H") + $hourduration, idate("i") + $minutesduration);
+		
+		$s_raidend_hh_options = '<option value="0">--</option>';
+		for ($i = 0; $i < 24; $i++)
+		{
+			$hh = idate('H', $newtime);
+			$selected = ($i == $hh ) ? ' selected="selected"' : '';
+			$s_raidend_hh_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+		
+		$s_raidend_mi_options = '<option value="0">--</option>';
+		for ($i = 0; $i < 59; $i++)
+		{
+			$mi = idate('i', $newtime);
+			$selected = ($i == $mi ) ? ' selected="selected"' : '';
+			$s_raidend_mi_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raidend_s_options = '<option value="0">--</option>';
+		for ($i = 0; $i < 59; $i++)
+		{
+			$s = $now['seconds'] ;
+			$selected = ($i == $s ) ? ' selected="selected"' : '';
+			$s_raidend_s_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+				
+		
+		add_form_key('acp_dkp_addraid');
+		
+		$template->assign_vars ( array (
+				'L_TITLE' 			=> $user->lang ['ACP_ADDRAID'], 
+				'L_EXPLAIN' 		=> $user->lang ['ACP_ADDRAID_EXPLAIN'], 
+				'F_ADD_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid" ), 
+				'U_ADD_EVENT' 		=> append_sid ( "index.$phpEx", "i=dkp_event&amp;mode=addevent" ), 
+
+				'S_RAIDDATE_DAY_OPTIONS'	=> $s_raid_day_options,
+				'S_RAIDDATE_MONTH_OPTIONS'	=> $s_raid_month_options,
+				'S_RAIDDATE_YEAR_OPTIONS'	=> $s_raid_year_options,
+				
+				//start
+				'S_RAIDSTART_H_OPTIONS'		=> $s_raid_hh_options,
+				'S_RAIDSTART_MI_OPTIONS'	=> $s_raid_mi_options,
+				'S_RAIDSTART_S_OPTIONS'		=> $s_raid_s_options,
+
+				//end
+				'S_RAIDEND_H_OPTIONS'		=> $s_raidend_hh_options,
+				'S_RAIDEND_MI_OPTIONS'		=> $s_raidend_mi_options,
+				'S_RAIDEND_S_OPTIONS'		=> $s_raidend_s_options,
+		
+				// Form values
+				'RAID_DKPSYSID' 	=> $dkpsys_id, 
+		
+              	'L_DATE' => $user->lang ['DATE'] . ' dd/mm/yyyy', 
+				'L_TIME' => $user->lang ['TIME'] . ' hh:mm:ss', 
+		
+				// Javascript messages
+				'MSG_ATTENDEES_EMPTY' => $user->lang ['FV_REQUIRED_ATTENDEES'], 
+				'MSG_NAME_EMPTY' 	  => $user->lang ['FV_REQUIRED_EVENT_NAME'], 
+				'MSG_GAME_NAME' 	  => $config ['bbdkp_default_game'], 
+		));
+		
+		
+	}
+	/*
+	 * displays a raid
+	 */
+	private function displayraid($raid_id)
+	{
+		global $db, $user, $config, $template, $phpEx ;
+		
+		//fill dropdown
+		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
+				where a.dkpsys_id = b.event_dkpid ORDER BY dkpsys_name';
+		$result = $db->sql_query ( $sql );
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$template->assign_block_vars ( 'dkpsys_row', array (
+				'VALUE' 	=> $row['dkpsys_id'], 
+				'SELECTED' 	=> ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
+				'OPTION' 	=> (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) 
+			);
+		}
+		$db->sql_freeresult($result);
+		
+		$raid_value = 0.00;
+		$attendeesdisplay = '';
+		if ($raid_id != 0) 
+		{
+			/*** prepare to display data for this raid  ***/
+			$sql_array = array (
+				'SELECT' => ' e.event_id, e.event_name, e.event_value, 
+							  r.raid_id, r.raid_start, r.raid_end, r.raid_note, 
+							  r.raid_value, r.raid_added_by, r.raid_updated_by ', 
+				'FROM' => array (
+					RAIDS_TABLE 		=> 'r' , 
+					EVENTS_TABLE 		=> 'e',
+							
+					), 
+				'WHERE' => " r.event_id = e.event_id and r.raid_id=" . ( int ) $raid_id, 
+			);
+			$sql = $db->sql_build_query('SELECT', $sql_array);
+			$result = $db->sql_query ($sql);
+			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			{
+				$this->raid = array (
+					'event_id' 			=> $row['event_id'], 
+					'event_name' 		=> $row['event_name'], 
+					'event_value' 		=> $row['event_value'],
+					'raid_date' 		=> $row['raid_date'], 
+					'raid_note' 		=> $row['raid_note'], 
+					'raid_value' 		=> $row['raid_value'], 
+					'raid_added_by' 	=> $row['raid_added_by'], 
+					'raid_updated_by' 	=> $row['raid_updated_by'] );
+			}
+			$db->sql_freeresult ($result);
+			
+			// display raid attendees
+			$attendees = array ();
+			$sql_array = array(
+	    		'SELECT'    => 'm.member_id ,m.member_name',
+		    	'FROM'      => array(
+	    		    MEMBER_LIST_TABLE 	  => 'm',
+	        		RAID_DETAIL_TABLE    => 'r', 
+	    			),
+	 
+	    		'WHERE'     =>  'm.member_id = r.member_id
+	    	    				 AND r.raid_id = ' . (int) $raid_id  , 
+	    		'ORDER_BY' => 'm.member_name',
+			);
+			$sql = $db->sql_build_query('SELECT', $sql_array);
+			$result = $db->sql_query ( $sql );
+			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			{
+				$template->assign_block_vars ( 'raid_attendees_row', array (
+					'VALUE' => $row['member_id'], 
+					'OPTION' => $row['member_name'] ) );
+			}
+			
+			$db->sql_freeresult( $result );
+			$preset_value = $this->raid ['event_value'];
+			$raid_value = $this->raid ['raid_value'];
+			$db->sql_freeresult( $result );
+			
+			$template->assign_vars ( array (
+			  'RAIDTITLE' 			=> sprintf($user->lang['RAIDDESCRIPTION'], $raid_id, $this->raid['event_name'], 
+									   $user->format_date($this->raid['raid_date'])), 
+			  'RAID_VALUE' 			=> $this->raid['raid_value'], 
+			  'RAID_NOTE' 			=> $this->raid['raid_note'], 
+			  'RAID_ID' 			=> $raid_id, 
+			  'S_ADD' => false ));
+	
+		}
+		else 
+		{
+			// no raid 
+			$template->assign_vars ( array (
+			 'RAIDTITLE' => sprintf($user->lang['NEWRAIDDESCRIPTION']), 
+		     'RAID_VALUE' 		=> $max_value, 
+			 'S_ADD' => true ));
+		}
+		
+		/* event listbox */
+		// calculate number format
+		$max_value = 0.00;
+		$sql = 'SELECT max(event_value) AS max_value FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . $dkpsys_id; 
+		$result = $db->sql_query ($sql);
+		$max_value = (float) $db->sql_fetchfield('max_value', 0, $result);
+		$float = @explode ( '.', $max_value );
+		$format = '%0' . @strlen ( $float [0] ) . '.2f';
+		$db->sql_freeresult($result);
+		
+		$sql = ' SELECT  event_id, event_name, event_value 
+				 FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . $dkpsys_id . ' ORDER BY event_name';
+		$result = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$select_check = false;
+			if (isset ( $this->raid )) 
+			{
+				$select_check = ( $row['event_id'] == $this->raid ['event_id']) ? true : false;
+			}
+			elseif (isset ($_POST[URI_EVENT]))
+			{
+				$select_check = ( $row['event_id'] == request_var(URI_EVENT, 0)) ? true : false;
+			}
+			else 
+			{
+				$select_check = false;
+			}
+			
+			$template->assign_block_vars ( 
+				'events_row', array (
+					'VALUE' => $row['event_id'], 
+					'SELECTED' => ($select_check) ? ' selected="selected"' : '', 
+					'OPTION' => $row['event_name'] . ' - (' . sprintf ( $format, $row['event_value'] ) . ')' 
+			));
+		}
+		$db->sql_freeresult($result);
+		
+		// build presets for raiddate and hour pulldown
+		$now = getdate();
+		$s_raid_day_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 32; $i++)
+		{
+			$day = isset($this->raid['raid_date']) ? date('j', $this->raid['raid_date']) : $now['mday'] ;
+			$selected = ($i == $day ) ? ' selected="selected"' : '';
+			$s_raid_day_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_month_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 13; $i++)
+		{
+			$month = isset($this->raid['raid_date']) ? date('n', $this->raid['raid_date']) : $now['mon'] ;
+			$selected = ($i == $month ) ? ' selected="selected"' : '';
+			$s_raid_month_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_year_options = '<option value="0">--</option>';
+		for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+		{
+			$yr = isset($this->raid['raid_date']) ?  date('Y',$this->raid['raid_date']) : $now['year'] ;
+			$selected = ($i == $yr ) ? ' selected="selected"' : '';
+			$s_raid_year_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+		
+		//start raid time
+		$s_raid_hh_options = '<option value="0"	>--</option>';
+		for ($i = 1; $i < 24; $i++)
+		{
+			$hh = isset($this->raid['raid_date']) ? date('H', $this->raid['raid_date']) : $now['hours'] ;
+			$selected = ($i == $hh ) ? ' selected="selected"' : '';
+			$s_raid_hh_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_mi_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 59; $i++)
+		{
+			$mi = isset($this->raid['raid_date']) ? date('i', $this->raid['raid_date']) : $now['minutes'] ;
+			$selected = ($i == $mi ) ? ' selected="selected"' : '';
+			$s_raid_mi_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raid_s_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 59; $i++)
+		{
+			$s = isset($this->raid['raid_date']) ?  date('s',$this->raid['raid_date']) : $now['seconds'] ;
+			$selected = ($i == $s ) ? ' selected="selected"' : '';
+			$s_raid_s_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+		
+		//end raid time
+		$s_raidend_hh_options = '<option value="0"	>--</option>';
+		for ($i = 1; $i < 24; $i++)
+		{
+			$hh = isset($this->raid['raid_date']) ? date('H', $this->raid['raid_date']) : $now['hours'] ;
+			$selected = ($i == $hh ) ? ' selected="selected"' : '';
+			$s_raidend_hh_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raidend_mi_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 59; $i++)
+		{
+			$mi = isset($this->raid['raid_date']) ? date('i', $this->raid['raid_date']) : $now['minutes'] ;
+			$selected = ($i == $mi ) ? ' selected="selected"' : '';
+			$s_raidend_mi_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raidend_s_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 59; $i++)
+		{
+			$s = isset($this->raid['raid_date']) ?  date('s',$this->raid['raid_date']) : $now['seconds'] ;
+			$selected = ($i == $s ) ? ' selected="selected"' : '';
+			$s_raidend_s_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+				
+		/* getting left memberlist only with rank not hidden */
+		$sql_array = array(
+    		'SELECT'    => 'm.member_id ,m.member_name',
+ 
+	    	'FROM'      => array(
+    		    MEMBER_LIST_TABLE 	  => 'm',
+        		MEMBER_RANKS_TABLE    => 'r', 
+    			),
+ 
+    		'WHERE'     =>  'm.member_guild_id = r.guild_id
+    	    				 AND m.member_rank_id = r.rank_id
+    	    				 AND r.rank_hide != 1', 
+    		'ORDER_BY' => 'm.member_name',
+		);
+		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ( $sql );
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$template->assign_block_vars ( 'members_row', array (
+				'VALUE' 	=> $row['member_id'], 
+				'OPTION' 	=> $row['member_name'] ) );
+		}
+		$db->sql_freeresult( $result );
+		
+		add_form_key('acp_dkp_addraid');
+		
+		$template->assign_vars ( array (
+				'L_TITLE' 			=> $user->lang ['ACP_ADDRAID'], 
+				'L_EXPLAIN' 		=> $user->lang ['ACP_ADDRAID_EXPLAIN'], 
+				'F_ADD_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid" ), 
+				'U_ADD_EVENT' 		=> append_sid ( "index.$phpEx", "i=dkp_event&amp;mode=addevent" ), 
+
+				'S_RAIDDATE_DAY_OPTIONS'	=> $s_raid_day_options,
+				'S_RAIDDATE_MONTH_OPTIONS'	=> $s_raid_month_options,
+				'S_RAIDDATE_YEAR_OPTIONS'	=> $s_raid_year_options,
+				
+				//start
+				'S_RAIDSTART_H_OPTIONS'		=> $s_raid_hh_options,
+				'S_RAIDSTART_MI_OPTIONS'	=> $s_raid_mi_options,
+				'S_RAIDSTART_S_OPTIONS'		=> $s_raid_s_options,
+
+				//end
+				'S_RAIDEND_H_OPTIONS'		=> $s_raidend_hh_options,
+				'S_RAIDEND_MI_OPTIONS'		=> $s_raidend_mi_options,
+				'S_RAIDEND_S_OPTIONS'		=> $s_raidend_s_options,
+		
+				// Form values
+				'RAID_DKPSYSID' 	=> $dkpsys_id, 
+		
+              	'L_DATE' => $user->lang ['DATE'] . ' dd/mm/yyyy', 
+				'L_TIME' => $user->lang ['TIME'] . ' hh:mm:ss', 
+		
+				// Javascript messages
+				'MSG_ATTENDEES_EMPTY' => $user->lang ['FV_REQUIRED_ATTENDEES'], 
+				'MSG_NAME_EMPTY' 	  => $user->lang ['FV_REQUIRED_EVENT_NAME'], 
+				'MSG_GAME_NAME' 	  => $config ['bbdkp_default_game'], 
+
+				) );
+				
+	}
+	 
+	/*
+	 * lists all raids
+	 */
+	private function listraids()
+	{
+		global $db, $user, $config, $template, $phpEx;
+		// add dkpsys button redirect
+		$showadd = (isset($_POST['raidadd'])) ? true : false;
+        if($showadd)
+        {
+			redirect(append_sid("index.$phpEx", "i=dkp_raid&amp;mode=addraid"));            		
+         	break;
+        }
+            	
+		$dkpsys_id = 1;
+		$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
+		if ($submit)
+		{
+			$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
+	                     FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
+					  where a.dkpsys_id = b.event_dkpid order by dkpsys_name ';
+			$result = $db->sql_query ( $sql );
+
+			// get dkp pool value from popup
+			$dkpsys_id = request_var ( 'dkpsys_id', 0 );
+			// fill popup and set selected to Post value
+			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			{
+				$template->assign_block_vars ( 'dkpsys_row', 
+					array (
+					'VALUE' => $row['dkpsys_id'], 
+					'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
+					'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
+				
+			}
+			$db->sql_freeresult( $result );
+		
+		} 
+		else 
+		{
+			$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
+                    FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
+				  where a.dkpsys_id = b.event_dkpid order by dkpsys_name ';
+			$result = $db->sql_query ($sql);		
+			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			{
+				if($row['dkpsys_default'] == "Y"  )
+				{
+					$dkpsys_id = $row['dkpsys_id'];
+				}
+				$template->assign_block_vars ( 'dkpsys_row', 
+					array (
+					'VALUE' => $row['dkpsys_id'], 
+					'SELECTED' => ($row['dkpsys_default'] == "Y") ? ' selected="selected"' : '', 
+					'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
+			}
+			$db->sql_freeresult( $result );
+		}
+		
+		/*** end DKPSYS drop-down ***/
+		
+		$sql_array = array (
+			'SELECT' => ' count(*) as raidcount', 
+			'FROM' => array (
+				RAIDS_TABLE 		=> 'r' , 
+				EVENTS_TABLE 		=> 'e',		
+				), 
+			'WHERE' => " r.event_id = e.event_id and e.event_dkpid = " . ( int ) $dkpsys_id, 
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query($sql);
+		$total_raids = (int) $db->sql_fetchfield('raidcount');
+		$db->sql_freeresult ($result);
+		
+		$start = request_var ( 'start', 0, false );
+		$sort_order = array (
+				0 => array ('raid_start desc', 'raid_start' ),
+				0 => array ('raid_end desc', 'raid_end' ),
+				1 => array ('event_name', 'event_name desc' ), 
+				2 => array ('raid_note', 'raid_note desc' ), 
+				3 => array ('raid_value desc', 'raid_value' ),
+				4 => array ('time_value desc', 'time_value' ),
+				5 => array ('zs_value desc', 'zs_value' ),
+				6 => array ('raiddecay desc', 'raiddecay' ),
+				7 => array ('total desc', 'total' ),
+				);
+		
+		$current_order = switch_order ( $sort_order );		
+		$sql_array = array (
+			'SELECT' => ' sum(ra.raid_value) as raid_value, sum(ra.time_bonus) as time_value, 
+						  sum(ra.zerosum_bonus) as zs_value, sum(ra.raid_decay) as raiddecay, 
+						  sum(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay) as total, 
+						  e.event_dkpid, e.event_name,  
+						  r.raid_id, r.raid_start, r.raid_note, 
+						  r.raid_added_by, r.raid_updated_by ', 
+			'FROM' => array (
+				RAID_DETAIL_TABLE	=> 'ra' ,
+				RAIDS_TABLE 		=> 'r' , 
+				EVENTS_TABLE 		=> 'e',		
+				), 
+			'WHERE' => "  ra.raid_id = r.raid_id and r.event_id = e.event_id and e.event_dkpid = " . ( int ) $dkpsys_id,
+			'GROUP_BY' => 'e.event_dkpid, e.event_name,  
+						  r.raid_id,  r.raid_start, r.raid_note, 
+						  r.raid_added_by, r.raid_updated_by',	
+			'ORDER_BY' => $current_order ['sql'], 
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+
+		$raids_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_rlimit'], $start );
+		if (! $raids_result) 
+		{
+			trigger_error ( $user->lang['ERROR_INVALID_RAID'], E_USER_WARNING );
+		}
+		
+		while ( $row = $db->sql_fetchrow ( $raids_result ) ) 
+		{
+			$template->assign_block_vars ( 'raids_row', array (
+				'DATE' => (! empty ( $row['raid_start'] )) ? date ( $config ['bbdkp_date_format'], $row['raid_start'] ) : '&nbsp;', 
+				'U_VIEW_RAID' => append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=addraid&amp;" . URI_RAID . "={$row['raid_id']}" ), 
+				'NAME' => $row['event_name'], 
+				'NOTE' => (! empty ( $row['raid_note'] )) ? $row['raid_note'] : '&nbsp;', 
+				'RAIDVALUE'  => $row['raid_value'], 
+				'TIMEVALUE'  => $row['time_value'],
+				'ZSVALUE' 	 => $row['zs_value'],
+				'DECAYVALUE' => $row['raiddecay'], 
+				'TOTAL' 	 => $row['total'] 
+				)
+			);
+		}
+		
+		$template->assign_vars ( array (
+			'L_TITLE' 			  => $user->lang ['ACP_LISTRAIDS'], 
+			'L_EXPLAIN' 		  => $user->lang ['ACP_LISTRAIDS_EXPLAIN'], 
+			'O_DATE' 			  => $current_order ['uri'] [0], 
+			'O_NAME' 			  => $current_order ['uri'] [1], 
+			'O_NOTE' 			  => $current_order ['uri'] [2], 
+			'O_RAIDVALUE' 		  => $current_order ['uri'] [3],
+			'O_TIMEVALUE' 		  => $current_order ['uri'] [4],
+			'O_ZSVALUE' 		  => $current_order ['uri'] [5],
+			'O_DECAYVALUE' 		  => $current_order ['uri'] [6],
+			'O_TOTALVALUE' 		  => $current_order ['uri'] [7], 
+			'U_LIST_RAIDS' 		  => append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ), 
+			'START' 			  => $start, 
+			'LISTRAIDS_FOOTCOUNT' => sprintf ( $user->lang ['LISTRAIDS_FOOTCOUNT'], $total_raids, $config ['bbdkp_user_rlimit'] ), 
+			'RAID_PAGINATION' 	  => generate_pagination ( append_sid 
+					( "index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;o=" . $current_order ['uri'] ['current']) , 
+					$total_raids, $config ['bbdkp_user_rlimit'], $start ) ) );
+		
+			
+				
+	}
+	
+
+	/*
+	 * add raid to database
 	 */
 	private function addraid()
 	{
@@ -122,12 +797,12 @@ class acp_dkp_raid extends bbDkp_Admin
 			{
 				if ($this->raid['raid_value'] == 0.00)
 				{
-					$this->raid['raid_value'] = max ( $row ['event_value'], 0.00 );
+					$this->raid['raid_value'] = max ( $row['event_value'], 0.00 );
 				}
-				$this->raid['event_dkpid'] = $row ['event_dkpid'];
-				$this->raid['event_name'] = $row ['event_name'];
+				$this->raid['event_dkpid'] = $row['event_dkpid'];
+				$this->raid['event_name'] = $row['event_name'];
 			}
-			$db->sql_freeresult ( $result );
+			$db->sql_freeresult( $result );
 			
 			/*
 			 * start transaction
@@ -258,15 +933,15 @@ class acp_dkp_raid extends bbDkp_Admin
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
 			$this->old_raid = array (
-				'event_id' 		=> (int) $row ['event_id'], 
-				'event_dkpid' 	=> (int) $row ['event_dkpid'],
-			 	'event_name' 	=> (string) $row ['event_name'],
-				'raid_value' 	=> (float) $row ['raid_value'], 
-				'raid_note' 	=> (string) $row ['raid_note'], 
-				'raid_date' 	=> (int) $row ['raid_date'], 
+				'event_id' 		=> (int) $row['event_id'], 
+				'event_dkpid' 	=> (int) $row['event_dkpid'],
+			 	'event_name' 	=> (string) $row['event_name'],
+				'raid_value' 	=> (float) $row['raid_value'], 
+				'raid_note' 	=> (string) $row['raid_note'], 
+				'raid_date' 	=> (int) $row['raid_date'], 
 			);
 		}
-		$db->sql_freeresult ( $result );
+		$db->sql_freeresult( $result );
 		
 		// get old attendee list
 		$this->old_raid ['raid_attendees'] = array();
@@ -279,7 +954,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		{
 			while ( $row = $db->sql_fetchrow ($result)) 
 			{
-				$this->old_raid ['raid_attendees'] [] = $row ['member_id'];
+				$this->old_raid ['raid_attendees'] [] = $row['member_id'];
 			}
 		}
 		else 
@@ -287,7 +962,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			// no attendees found, should never get here
 			trigger_error ( $user->lang['ERROR_RAID_NOATTENDEES'] . $this->link, E_USER_WARNING );
 		}
-		$db->sql_freeresult ( $result );
+		$db->sql_freeresult( $result );
 		
 		// get updated data		
 		$this->raid = array (
@@ -392,14 +1067,14 @@ class acp_dkp_raid extends bbDkp_Admin
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
 			$this->old_raid = array (
-				'event_id' 		=> $row ['event_id'],
-				'event_dkpid' 	=> $row ['event_dkpid'], 
-				'event_name' 	=> $row ['event_name'], 
-				'raid_date' 	=> $row ['raid_date'],  
-				'raid_value' 	=> (float) $row ['raid_value'], 
+				'event_id' 		=> $row['event_id'],
+				'event_dkpid' 	=> $row['event_dkpid'], 
+				'event_name' 	=> $row['event_name'], 
+				'raid_date' 	=> $row['raid_date'],  
+				'raid_value' 	=> (float) $row['raid_value'], 
 			);
 		}
-		$db->sql_freeresult ( $result );
+		$db->sql_freeresult( $result );
 
 		if (confirm_box ( true )) 
 		{
@@ -412,7 +1087,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			{
 				while ( $row = $db->sql_fetchrow ($result)) 
 				{
-					$this->old_raid ['raid_attendees'] [] = $row ['member_id'];
+					$this->old_raid ['raid_attendees'] [] = $row['member_id'];
 				}
 			}
 			else
@@ -493,463 +1168,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			confirm_box ( false, $user->lang ['CONFIRM_DELETE_RAID'], $s_hidden_fields );
 		}
 	
-	}
-	
-	/*
-	 * displays a raid
-	 */
-	private function displayraid($raid_id)
-	{
-		global $db, $user, $config, $template, $phpEx ;
-		
-		/* getting left memberlist only with rank not hidden */
-		$sql_array = array(
-    		'SELECT'    => 'm.member_id ,m.member_name',
- 
-	    	'FROM'      => array(
-    		    MEMBER_LIST_TABLE 	  => 'm',
-        		MEMBER_RANKS_TABLE    => 'r', 
-    			),
- 
-    		'WHERE'     =>  'm.member_guild_id = r.guild_id
-    	    				 AND m.member_rank_id = r.rank_id
-    	    				 AND r.rank_hide != 1', 
-    		'ORDER_BY' => 'm.member_name',
-		);
-		
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query ( $sql );
-		while ( $row = $db->sql_fetchrow ( $result ) ) 
-		{
-			$template->assign_block_vars ( 'members_row', array (
-				'VALUE' 	=> $row ['member_id'], 
-				'OPTION' 	=> $row ['member_name'] ) );
-		}
-		$db->sql_freeresult ( $result );
-		
-		$raid_value = 0.00;
-		$attendeesdisplay = '';
-		
-		/* getting dkp pulldown */
-		if (isset ( $_POST['dkpsys_id']) )
-		{
-			$dkpsys_id = request_var ( 'dkpsys_id', 0 );
-		}
-		elseif (isset($_GET[URI_DKPSYS]) )
-		{
-			//user clicked on add raid from event editscreen
-			$dkpsys_id = request_var ( URI_DKPSYS, 0 );
-		}
-		elseif ($raid_id == 0)
-		{
-			//get from db
-			$sql1 = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default 
-	                            FROM ' . DKPSYS_TABLE . '
-	                            WHERE dkpsys_default = "Y"
-	                            ORDER BY dkpsys_name';
-			$result1 = $db->sql_query ( $sql1 );
-			if ($result1) 
-			{
-				// get the default dkp value (dkpsys_default = 'Y') from DB
-				while ( $row = $db->sql_fetchrow ( $result1 ) ) 
-				{
-					$dkpsys_id = $row ['dkpsys_id'];
-				}
-			}
-			else 
-			{
-				// theres no default dkp pool so just take first row 
-				$sql1 = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
-	                         FROM ' . DKPSYS_TABLE;
-				$result1 = $db->sql_query_limit ( $sql1, 1, 0 );
-				while ( $row = $db->sql_fetchrow ( $result1 ) ) 
-				{
-					$dkpsys_id = $row ['dkpsys_id'];
-				}
-			}
-			$db->sql_freeresult ( $result1 );
-		}
-		elseif ($raid_id != 0)
-		{
-			// get pool from raid 
-			$sql1 = 'SELECT a.event_dkpid FROM ' . EVENTS_TABLE . ' a , ' . RAIDS_TABLE . ' b 
-				where a.event_id = b.event_id and b.raid_id = '. $raid_id ;
-			$result1 = $db->sql_query_limit ( $sql1, 1, 0 );
-			while ( $row = $db->sql_fetchrow ( $result1 ) ) 
-			{
-				$dkpsys_id = $row ['event_dkpid'];
-			}
-			$db->sql_freeresult ( $result1 );
-			
-		}
-
-		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE . ' ORDER BY dkpsys_name';
-		$result = $db->sql_query ( $sql );
-		while ( $row = $db->sql_fetchrow ( $result ) ) 
-		{
-			$template->assign_block_vars ( 'dkpsys_row', array (
-				'VALUE' 	=> $row ['dkpsys_id'], 
-				'SELECTED' 	=> ($row ['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
-				'OPTION' 	=> (! empty ( $row ['dkpsys_name'] )) ? $row ['dkpsys_name'] : '(None)' ) 
-			);
-		}
-		$db->sql_freeresult ( $result );
-		
-		/* get max value from event list */ 
-		$sql = 'SELECT max(event_value) as event_value FROM ' . EVENTS_TABLE . ' WHERE event_dkpid=' . $dkpsys_id;  
-		$result = $db->sql_query($sql);
-		$max_value = (float) $db->sql_fetchfield('event_value', 0, $result);
-		$db->sql_freeresult ( $result );
-
-		if ($raid_id != 0) 
-		{
-			/*** prepare to display data for this raid  ***/
-			$sql_array = array (
-				'SELECT' => ' e.event_id, e.event_name, e.event_value, 
-							  r.raid_id, r.raid_date, r.raid_note, 
-							  r.raid_value, r.raid_added_by, r.raid_updated_by ', 
-				'FROM' => array (
-					RAIDS_TABLE 		=> 'r' , 
-					EVENTS_TABLE 		=> 'e',		
-					), 
-				'WHERE' => " r.event_id = e.event_id and r.raid_id=" . ( int ) $raid_id, 
-			);
-			$sql = $db->sql_build_query('SELECT', $sql_array);
-			$result = $db->sql_query ($sql);
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$this->raid = array (
-					'event_id' 			=> $row ['event_id'], 
-					'event_name' 		=> $row ['event_name'], 
-					'event_value' 		=> $row ['event_value'],
-					'raid_date' 		=> $row ['raid_date'], 
-					'raid_note' 		=> $row ['raid_note'], 
-					'raid_value' 		=> $row ['raid_value'], 
-					'raid_added_by' 	=> $row ['raid_added_by'], 
-					'raid_updated_by' 	=> $row ['raid_updated_by'] );
-			}
-			$db->sql_freeresult ($result);
-			
-			// display raid attendees
-			$attendees = array ();
-			$sql_array = array(
-	    		'SELECT'    => 'm.member_id ,m.member_name',
-		    	'FROM'      => array(
-	    		    MEMBER_LIST_TABLE 	  => 'm',
-	        		RAID_DETAIL_TABLE    => 'r', 
-	    			),
-	 
-	    		'WHERE'     =>  'm.member_id = r.member_id
-	    	    				 AND r.raid_id = ' . (int) $raid_id  , 
-	    		'ORDER_BY' => 'm.member_name',
-			);
-			$sql = $db->sql_build_query('SELECT', $sql_array);
-			$result = $db->sql_query ( $sql );
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$template->assign_block_vars ( 'raid_attendees_row', array (
-					'VALUE' => $row ['member_id'], 
-					'OPTION' => $row ['member_name'] ) );
-			}
-			
-			$db->sql_freeresult ( $result );
-			$preset_value = $this->raid ['event_value'];
-			$raid_value = $this->raid ['raid_value'];
-			$db->sql_freeresult ( $result );
-			
-			$template->assign_vars ( array (
-			  'RAIDTITLE' 			=> sprintf($user->lang['RAIDDESCRIPTION'], $raid_id, $this->raid['event_name'], 
-									   $user->format_date($this->raid['raid_date'])), 
-			  'RAID_VALUE' 			=> $this->raid['raid_value'], 
-			  'RAID_NOTE' 			=> $this->raid['raid_note'], 
-			  'RAID_ID' 			=> $raid_id, 
-			  'S_ADD' => false ));
-	
-		}
-		else 
-		{
-			// no raid 
-			$template->assign_vars ( array (
-			 'RAIDTITLE' => sprintf($user->lang['NEWRAIDDESCRIPTION']), 
-		     'RAID_VALUE' 		=> $max_value, 
-			 'S_ADD' => true ));
-		}
-		
-		/* event listbox */
-		$max_value = 0.00;
-		$sql = 'SELECT max(event_value) AS max_value FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . $dkpsys_id; 
-		$result = $db->sql_query ($sql);
-		$max_value = (float) $db->sql_fetchfield('max_value', 0, $result);
-		$float = @explode ( '.', $max_value );
-		$format = '%0' . @strlen ( $float [0] ) . '.2f';
-		$db->sql_freeresult ( $result );
-		
-		$sql = ' SELECT  event_id, event_name, event_value 
-				 FROM ' . EVENTS_TABLE . 
-		    	' WHERE EVENT_DKPID = ' . $dkpsys_id . ' ORDER BY event_name';
-		$result = $db->sql_query ( $sql );
-		while ( $row = $db->sql_fetchrow ( $result ) ) 
-		{
-			$select_check = false;
-			if (isset ( $this->raid )) 
-			{
-				$select_check = ( $row ['event_id'] == $this->raid ['event_id']) ? true : false;
-			}
-			elseif (isset ($_GET[URI_EVENT]))
-			{
-				$select_check = ( $row ['event_id'] == request_var(URI_EVENT, 0)) ? true : false;
-			}
-			else 
-			{
-				$select_check = false;
-			}
-			
-			$template->assign_block_vars ( 
-				'events_row', array (
-					'VALUE' => $row ['event_id'], 
-					'SELECTED' => ($select_check) ? ' selected="selected"' : '', 
-					'OPTION' => $row ['event_name'] . ' - (' . sprintf ( $format, $row ['event_value'] ) . ')' 
-			));
-		}
-		$db->sql_freeresult ($result);
-		
-		// build presets for raiddate and hour pulldown
-		$now = getdate();
-		$s_raid_day_options = '<option value="0">--</option>';
-		for ($i = 1; $i < 32; $i++)
-		{
-			$day = isset($this->raid['raid_date']) ? date('j', $this->raid['raid_date']) : $now['mday'] ;
-			$selected = ($i == $day ) ? ' selected="selected"' : '';
-			$s_raid_day_options .= "<option value=\"$i\"$selected>$i</option>";
-		}
-
-		$s_raid_month_options = '<option value="0">--</option>';
-		for ($i = 1; $i < 13; $i++)
-		{
-			$month = isset($this->raid['raid_date']) ? date('n', $this->raid['raid_date']) : $now['mon'] ;
-			$selected = ($i == $month ) ? ' selected="selected"' : '';
-			$s_raid_month_options .= "<option value=\"$i\"$selected>$i</option>";
-		}
-
-		$s_raid_year_options = '<option value="0">--</option>';
-		for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
-		{
-			$yr = isset($this->raid['raid_date']) ?  date('Y',$this->raid['raid_date']) : $now['year'] ;
-			$selected = ($i == $yr ) ? ' selected="selected"' : '';
-			$s_raid_year_options .= "<option value=\"$i\"$selected>$i</option>";
-		}
-		
-		//start raid time
-		$s_raid_hh_options = '<option value="0"	>--</option>';
-		for ($i = 1; $i < 24; $i++)
-		{
-			$hh = isset($this->raid['raid_date']) ? date('H', $this->raid['raid_date']) : $now['hours'] ;
-			$selected = ($i == $hh ) ? ' selected="selected"' : '';
-			$s_raid_hh_options .= "<option value=\"$i\"$selected>$i</option>";
-		}
-
-		$s_raid_mi_options = '<option value="0">--</option>';
-		for ($i = 1; $i < 59; $i++)
-		{
-			$mi = isset($this->raid['raid_date']) ? date('i', $this->raid['raid_date']) : $now['minutes'] ;
-			$selected = ($i == $mi ) ? ' selected="selected"' : '';
-			$s_raid_mi_options .= "<option value=\"$i\"$selected>$i</option>";
-		}
-
-		$s_raid_s_options = '<option value="0">--</option>';
-		for ($i = 1; $i < 59; $i++)
-		{
-			$s = isset($this->raid['raid_date']) ?  date('s',$this->raid['raid_date']) : $now['seconds'] ;
-			$selected = ($i == $s ) ? ' selected="selected"' : '';
-			$s_raid_s_options .= "<option value=\"$i\"$selected>$i</option>";
-		}
-		//end raid time
-		
-		add_form_key('acp_dkp_addraid');
-		
-		$template->assign_vars ( array (
-				'L_TITLE' 			=> $user->lang ['ACP_ADDRAID'], 
-				'L_EXPLAIN' 		=> $user->lang ['ACP_ADDRAID_EXPLAIN'], 
-				'F_ADD_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid" ), 
-				'U_ADD_EVENT' 		=> append_sid ( "index.$phpEx", "i=dkp_event&amp;mode=addevent" ), 
-
-				'S_RAIDDATE_DAY_OPTIONS'	=> $s_raid_day_options,
-				'S_RAIDDATE_MONTH_OPTIONS'	=> $s_raid_month_options,
-				'S_RAIDDATE_YEAR_OPTIONS'	=> $s_raid_year_options,
-				
-				//start
-				'S_RAIDSTART_H_OPTIONS'		=> $s_raid_hh_options,
-				'S_RAIDSTART_MI_OPTIONS'	=> $s_raid_mi_options,
-				'S_RAIDSTART_S_OPTIONS'		=> $s_raid_s_options,
-
-				//end
-				'S_RAIDEND_H_OPTIONS'		=> $s_raidend_hh_options,
-				'S_RAIDEND_MI_OPTIONS'		=> $s_raidend_mi_options,
-				'S_RAIDEND_S_OPTIONS'		=> $s_raidend_s_options,
-		
-				// Form values
-				'RAID_DKPSYSID' 	=> $dkpsys_id, 
-		
-              	'L_DATE' => $user->lang ['DATE'] . ' dd/mm/yyyy', 
-				'L_TIME' => $user->lang ['TIME'] . ' hh:mm:ss', 
-		
-				// Javascript messages
-				'MSG_ATTENDEES_EMPTY' => $user->lang ['FV_REQUIRED_ATTENDEES'], 
-				'MSG_NAME_EMPTY' 	  => $user->lang ['FV_REQUIRED_EVENT_NAME'], 
-				'MSG_GAME_NAME' 	  => $config ['bbdkp_default_game'], 
-
-				) );
-	}
-	 
-	/*
-	 * lists all raids
-	 */
-	private function listraids()
-	{
-		global $db, $user, $config, $template, $phpEx;
-		
-		// add dkpsys button redirect
-		$showadd = (isset($_POST['raidadd'])) ? true : false;
-        if($showadd)
-        {
-			redirect(append_sid("index.$phpEx", "i=dkp_raid&amp;mode=addraid"));            		
-         	break;
-        }
-            	
-		$dkpsys_id = 1;
-		$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
-		if ($submit) 
-		{
-			$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
-			        FROM ' . DKPSYS_TABLE . ' ORDER BY dkpsys_name';
-			$result = $db->sql_query ( $sql );
-
-			// get dkp pool value from popup
-			$dkpsys_id = request_var ( 'dkpsys_id', 0 );
-			// fill popup and set selected to Post value
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$template->assign_block_vars ( 'dkpsys_row', 
-					array (
-					'VALUE' => $row ['dkpsys_id'], 
-					'SELECTED' => ($row ['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
-					'OPTION' => (! empty ( $row ['dkpsys_name'] )) ? $row ['dkpsys_name'] : '(None)' ) );
-				
-			}
-			$db->sql_freeresult ( $result );
-		
-		} 
-		else 
-		{
-			$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
-			        FROM ' . DKPSYS_TABLE . ' ORDER BY dkpsys_name';
-			$result = $db->sql_query ($sql);		
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				if($row ['dkpsys_default'] == "Y"  )
-				{
-					$dkpsys_id = $row ['dkpsys_id'];
-				}
-				$template->assign_block_vars ( 'dkpsys_row', 
-					array (
-					'VALUE' => $row ['dkpsys_id'], 
-					'SELECTED' => ($row ['dkpsys_default'] == "Y") ? ' selected="selected"' : '', 
-					'OPTION' => (! empty ( $row ['dkpsys_name'] )) ? $row ['dkpsys_name'] : '(None)' ) );
-			}
-			$db->sql_freeresult ( $result );
-		}
-		
-		/*** end DKPSYS drop-down ***/
-		
-		$sql_array = array (
-			'SELECT' => ' count(*) as raidcount', 
-			'FROM' => array (
-				RAIDS_TABLE 		=> 'r' , 
-				EVENTS_TABLE 		=> 'e',		
-				), 
-			'WHERE' => " r.event_id = e.event_id and e.event_dkpid = " . ( int ) $dkpsys_id, 
-		);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
-		$total_raids = (int) $db->sql_fetchfield('raidcount');
-		$db->sql_freeresult ($result);
-		
-		$start = request_var ( 'start', 0, false );
-		$sort_order = array (
-				0 => array ('raid_date desc', 'raid_date' ), 
-				1 => array ('event_name', 'event_name desc' ), 
-				2 => array ('raid_note', 'raid_note desc' ), 
-				3 => array ('raid_value desc', 'raid_value' ),
-				4 => array ('time_value desc', 'time_value' ),
-				5 => array ('zs_value desc', 'zs_value' ),
-				6 => array ('raiddecay desc', 'raiddecay' ),
-				7 => array ('total desc', 'total' ),
-				);
-		
-		$current_order = switch_order ( $sort_order );		
-		$sql_array = array (
-			'SELECT' => ' sum(ra.raid_value) as raid_value, sum(ra.time_bonus) as time_value, sum(ra.zerosum_bonus) as zs_value, sum(ra.raid_decay) as raiddecay, 
-						  sum(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay) as total, 
-						  e.event_dkpid, e.event_name,  
-						  r.raid_id, r.raid_date, r.raid_note, 
-						  r.raid_added_by, r.raid_updated_by ', 
-			'FROM' => array (
-				RAID_DETAIL_TABLE	=> 'ra' ,
-				RAIDS_TABLE 		=> 'r' , 
-				EVENTS_TABLE 		=> 'e',		
-				), 
-			'WHERE' => "  ra.raid_id = r.raid_id and r.event_id = e.event_id and e.event_dkpid = " . ( int ) $dkpsys_id,
-			'GROUP_BY' => 'e.event_dkpid, e.event_name,  
-						  r.raid_id, r.raid_date, r.raid_note, 
-						  r.raid_added_by, r.raid_updated_by',	
-			'ORDER_BY' => $current_order ['sql'], 
-		);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-
-		$raids_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_rlimit'], $start );
-		if (! $raids_result) 
-		{
-			trigger_error ( $user->lang['ERROR_INVALID_RAID'], E_USER_WARNING );
-		}
-		
-		while ( $row = $db->sql_fetchrow ( $raids_result ) ) 
-		{
-			$template->assign_block_vars ( 'raids_row', array (
-				'DATE' => (! empty ( $row ['raid_date'] )) ? 
-						date ( $config ['bbdkp_date_format'], $row ['raid_date'] ) : '&nbsp;', 
-				'U_VIEW_RAID' => append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=addraid&amp;" . URI_RAID . "={$row['raid_id']}" ), 
-				'NAME' => $row ['event_name'], 
-				'NOTE' => (! empty ( $row ['raid_note'] )) ? $row ['raid_note'] : '&nbsp;', 
-				'RAIDVALUE'  => $row ['raid_value'], 
-				'TIMEVALUE'  => $row ['time_value'],
-				'ZSVALUE' 	 => $row ['zs_value'],
-				'DECAYVALUE' => $row ['raiddecay'], 
-				'TOTAL' 	 => $row ['total'] 
-				)
-			);
-		}
-		
-		$template->assign_vars ( array (
-			'L_TITLE' 			  => $user->lang ['ACP_LISTRAIDS'], 
-			'L_EXPLAIN' 		  => $user->lang ['ACP_LISTRAIDS_EXPLAIN'], 
-			'O_DATE' 			  => $current_order ['uri'] [0], 
-			'O_NAME' 			  => $current_order ['uri'] [1], 
-			'O_NOTE' 			  => $current_order ['uri'] [2], 
-			'O_RAIDVALUE' 		  => $current_order ['uri'] [3],
-			'O_TIMEVALUE' 		  => $current_order ['uri'] [4],
-			'O_ZSVALUE' 		  => $current_order ['uri'] [5],
-			'O_DECAYVALUE' 		  => $current_order ['uri'] [6],
-			'O_TOTALVALUE' 		  => $current_order ['uri'] [7], 
-			'U_LIST_RAIDS' 		  => append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ), 
-			'START' 			  => $start, 
-			'LISTRAIDS_FOOTCOUNT' => sprintf ( $user->lang ['LISTRAIDS_FOOTCOUNT'], $total_raids, $config ['bbdkp_user_rlimit'] ), 
-			'RAID_PAGINATION' 	  => generate_pagination ( append_sid 
-					( "index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;o=" . $current_order ['uri'] ['current']) , 
-					$total_raids, $config ['bbdkp_user_rlimit'], $start ) ) );
-		
-			
-				
-	}
+	}	
 	
     /**
     * RAID_DETAIL_TABLE handler : Insert members into raid attendees table
@@ -1251,19 +1470,19 @@ class acp_dkp_raid extends bbDkp_Admin
 				unset ( $adj_reason );
 				
 				// Active -> Inactive
-				if (((float) $config ['bbdkp_inactive_point_adj'] != 0.00) && ($row ['member_status'] == 1) && ($row ['member_lastraid'] < $inactive_time))
+				if (((float) $config ['bbdkp_inactive_point_adj'] != 0.00) && ($row['member_status'] == 1) && ($row['member_lastraid'] < $inactive_time))
 				{
 					$adj_value = $config ['bbdkp_inactive_point_adj'];
 					$adj_reason = 'Inactive adjustment';
-					$inactive_members [] = $row ['member_id'];
-					$inactive_membernames [] = $row ['member_name'];
+					$inactive_members [] = $row['member_id'];
+					$inactive_membernames [] = $row['member_name'];
 				} // Inactive -> Active
-				elseif (( (float) $config ['bbdkp_active_point_adj'] != 0.00) && ($row ['member_status'] == 0) && ($row ['member_lastraid'] >= $inactive_time))
+				elseif (( (float) $config ['bbdkp_active_point_adj'] != 0.00) && ($row['member_status'] == 0) && ($row['member_lastraid'] >= $inactive_time))
 				{
 					$adj_value = $config ['bbdkp_active_point_adj'];
 					$adj_reason = 'Active adjustment';
-					$active_members [] = $row ['member_id'];
-					$active_membernames [] = $row ['member_name'];
+					$active_members [] = $row['member_id'];
+					$active_membernames [] = $row['member_name'];
 				}
 				
 				//
@@ -1359,29 +1578,23 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		$sql = 'SELECT item_id, member_id, item_value FROM ' . RAID_ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id;
 			$result = $db->sql_query ( $sql );
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			while ( $row = $db->sql_fetchrow( $result ) ) 
 			{
-				$item_value = (! empty ( $row ['item_value'] )) ? $row ['item_value'] : 0.00;
+				$item_value = (! empty ( $row['item_value'] )) ? $row['item_value'] : 0.00;
 				
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 	           		SET member_spent = member_spent - ' . $item_value . '
 			        WHERE member_dkpid = ' . $this->old_raid['event_dkpid'] . ' 
-	       	        AND member_id = ' . $row ['member_id'];
+	       	        AND member_id = ' . $row['member_id'];
 				$db->sql_query ( $sql );
 			}
-			$db->sql_freeresult ( $result );
+			$db->sql_freeresult( $result );
 						
 			//
 			// Delete associated items
 			//
 			$db->sql_query ( 'DELETE FROM ' . RAID_ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
-			
-		
 	}
-
-	
-	
-	
 
 }
 
