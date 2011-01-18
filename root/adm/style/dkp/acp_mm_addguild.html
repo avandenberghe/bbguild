@@ -54,18 +54,15 @@ function check_form()
 	<dd  align="left">
 	<input type="checkbox" name="showroster" value="1" {SHOW_ROSTER} /></dd>
    </dl>
-	
-	
 </fieldset>
-
-   <p class="quick">
-   {S_FORM_TOKEN}
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+ {S_FORM_TOKEN}
     <!-- IF S_ADD -->
     <input type="submit" name="add" value="{L_ADD_GUILD}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
     <input type="submit" name="update" value="{L_UPDATE_GUILD}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_GUILD}" class="button1" />
     <!-- ENDIF -->
-	</p>
+</fieldset>
 
 
 </form>

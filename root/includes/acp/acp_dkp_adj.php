@@ -292,9 +292,9 @@ class acp_dkp_adj extends bbDkp_Admin
 					{
 						$template->assign_block_vars ( 
 						'dkpsys_row', array (
-							'VALUE' => $row ['dkpsys_id'], 
-							'SELECTED' => ($row ['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
-							'OPTION' => (! empty ( $row ['dkpsys_name'] )) ?  $row ['dkpsys_name']  : '(None)' 
+							'VALUE' => $row['dkpsys_id'], 
+							'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
+							'OPTION' => (! empty ( $row['dkpsys_name'] )) ?  $row['dkpsys_name']  : '(None)' 
 							));
 					}
 					$db->sql_freeresult ( $rsdkpsys );
@@ -306,9 +306,9 @@ class acp_dkp_adj extends bbDkp_Admin
 					while ( $row = $db->sql_fetchrow ( $rsdkpsys ) ) 
 					{
 						$template->assign_block_vars ( 'dkpsys_row', array (
-						'VALUE' => $row ['dkpsys_id'], 
-						'SELECTED' => ($row ['dkpsys_default'] == "Y") ? ' selected="selected"' : '', 
-						'OPTION' => (! empty ( $row ['dkpsys_name'] )) ?  $row ['dkpsys_name']  : '(None)' ) );
+						'VALUE' => $row['dkpsys_id'], 
+						'SELECTED' => ($row['dkpsys_default'] == "Y") ? ' selected="selected"' : '', 
+						'OPTION' => (! empty ( $row['dkpsys_name'] )) ?  $row['dkpsys_name']  : '(None)' ) );
 						
 					}
 					
@@ -323,7 +323,7 @@ class acp_dkp_adj extends bbDkp_Admin
 						// get the default dkp value from DB
 						while ( $row = $db->sql_fetchrow ( $result1 ) ) 
 						{
-							$dkpsys_id = $row ['dkpsys_id'];
+							$dkpsys_id = $row['dkpsys_id'];
 						}
 					} else 
 					{
@@ -333,7 +333,7 @@ class acp_dkp_adj extends bbDkp_Admin
 						$result1 = $db->sql_query_limit ( $sql1, 1 );
 						while ( $row = $db->sql_fetchrow ( $result1 ) ) 
 						{
-							$dkpsys_id = $row ['dkpsys_id'];
+							$dkpsys_id = $row['dkpsys_id'];
 						}
 					}
 					$db->sql_freeresult ( $result1 );

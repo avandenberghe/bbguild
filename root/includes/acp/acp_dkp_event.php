@@ -124,7 +124,7 @@ class acp_dkp_event extends bbDkp_Admin
                     $delete     = (isset($_POST['delete'])) ? true : false; 
                     $addraid	= (isset($_POST['newraid'])) ? true : false;   
    
-                    if ( $add || $submit || $delete || $addraid)
+                    if ( $add || $submit || $addraid)
                     {
                     	if (!check_form_key('acp_dkp_event'))
 						{

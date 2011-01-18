@@ -279,7 +279,7 @@ class acp_dkp extends bbDkp_Admin
                                 
                             case 'L_ACTION_ITEM_ADDED':
                                 $logline = sprintf($user->lang['VLOG_ITEM_ADDED'], $row['username'], 
-                                            $this->getaction($row ['log_action'], 'L_NAME') , 
+                                            $this->getaction($row['log_action'], 'L_NAME') , 
                                             count(explode(', ',  $this->getaction($row['log_action'],'L_BUYERS'))), 
                                             $this->getaction($row['log_action'],'L_VALUE'));
                                 break;

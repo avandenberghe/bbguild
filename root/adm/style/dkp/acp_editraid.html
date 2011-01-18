@@ -1,5 +1,9 @@
 <!-- INCLUDE overall_header.html -->
+<!--
+		$Id$
+//-->
 <a name="maincontent"></a>
+
 <script type="text/javascript">
 
 //<![CDATA[
@@ -126,13 +130,15 @@ function fnRemoveMember()
 <form method="post" action="{F_ADD_RAID}" name="addraid" onsubmit="return check_form(this)">
 <div>
 
-<h1>{L_TITLE}</h1>
+<h1>{RAIDTITLE}</h1>
 <p>{L_EXPLAIN}</p>
 <fieldset>
-	<div style="float: left; width: 55%;">
+<div style="float: left; width: 55%;">
 <fieldset>
+
 <legend>{L_ADD_RAID_TITLE}</legend>
 
+<input type="hidden" name="hidden_id" value="{RAID_ID}" /> 
 	<dl><dt><label>{L_POOL}:</label></dt>
 	<dd>
 	
@@ -147,7 +153,7 @@ function fnRemoveMember()
 	<dl>
 		<dt><label>{L_EVENT}:</label> (<a href="{U_ADD_EVENT}">{L_ADD_EVENT}</a>)</dt>
     <dd>
-	    <select name="event_id" id="event_id" class="input" size="10" style="width: 100%; "  >
+	    <select name="event_id" id="event_id" class="input" size="10" style="width: 100%; " >
 			<!-- BEGIN events_row -->
 			<option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
 			<!-- END events_row -->
@@ -241,11 +247,22 @@ function fnRemoveMember()
 
 </div>
 {S_FORM_TOKEN}
+<!-- IF S_ADD --> 
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
     <input type="submit" name="add"	value="{L_ADD_RAID}" class="button1" /> 
     <input type="reset" name="reset" value="{L_RESET}" class="button1" />
 </fieldset> 
+<!-- ELSE --> 
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input type="submit" name="delete" value="{L_DELETE_RAID}"	class="button1" />
+</fieldset>
+	<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+	<input type="submit" name="update" value="{L_UPDATE_RAID}" class="button1" />
+	<input type="submit" name="additem" value="{L_ADD_ITEM}" class="button1" />
+</fieldset>
+<!-- ENDIF -->
 
 </form>
+
 
 <!-- INCLUDE dkp/overall_footer.html -->

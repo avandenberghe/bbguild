@@ -31,11 +31,10 @@ function check_form()
 
 <p>{L_EXPLAIN}</p>
 
-<div style="float: left; width: 48%;">
+<div style="float: left; width: 50%;">
 <fieldset>
 
 <legend>{L_ADD_IADJ_TITLE}</legend>
-
 <dl>
  <dt><label for="adj_dkpid">{L_POOL}:</label></dt>
 <dd>
@@ -46,50 +45,45 @@ function check_form()
 	</select>
  	</dd>
 </dl>
-
-
 <dl>
  <dt>{L_REASON}:</dt>
  <dd><input type="text" name="adjustment_reason" size="35" maxlength="255" value="{ADJUSTMENT_REASON}" class="input" /></dd>
 </dl>
-	
 <dl>
   <dt>{L_VALUE}:
   </dt><dd><input type="text" name="adjustment_value" size="7" maxlength="10" 
   value="{ADJUSTMENT_VALUE}" class="input" />{FV_ADJUSTMENT}</dd>
   <span class="small">({L_ADJUSTMENT_VALUE_NOTE})</span>
 </dl>
-
 <dl>
   <dt>{L_DATE}:</dt><dd><input type="text" name="mo" size="3" maxlength="2" value="{MO}" class="input" />/
   <input type="text" name="d" size="3" maxlength="2" value="{D}" class="input" />/
   <input type="text" name="y" size="5" maxlength="4" value="{Y}" class="input" />
   <br />{FV_MO}{FV_D}{FV_Y}</dd>
 </dl>
-   
 </fieldset>
 </div>
-
 <div style="float: right; width: 48%;"><fieldset>
 <legend>{L_MEMBERS}</legend>
   <dl>
     {FV_MEMBERS}<br /><br />{L_HOLD_CTRL_NOTE}
-      <select name="member_names[]" style="float: left; width: 48%;" multiple="multiple" class="input">
+      <select name="member_names[]" style="float: left; width: 50%;" multiple="multiple" class="input">
         <!-- BEGIN members_row -->
         <option value="{members_row.VALUE}"{members_row.SELECTED}>{members_row.OPTION}</option>
         <!-- END members_row -->
       </select> 
     </dl>
-</fieldset></div>  
-<div style="float: left; width: 100%;">
-  <p class="quick"> 
-  {S_FORM_TOKEN}
+</fieldset>
+</div>  
+<div style="clear:both; width: 100%;">
+   <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+  	{S_FORM_TOKEN}
     <!-- IF S_ADD -->
     <input type="submit" name="add" value="{L_ADD_ADJUSTMENT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
     <input type="submit" name="update" value="{L_UPDATE_ADJUSTMENT}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_ADJUSTMENT}" class="button1" />
     <!-- ENDIF -->
-</p>
+	</fieldset>
 </div>
 
 </form>

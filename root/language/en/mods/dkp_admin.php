@@ -235,7 +235,7 @@ $lang = array_merge($lang, array(
 'ACP_LISTIADJ_EXPLAIN' => 'List Individual Adjustments', 
 'ACP_ADDITEM_EXPLAIN' => 'Here you can add / change item information.',
 'ACP_LISTITEMS_EXPLAIN' => 'List of Purchased Items. you can filter by Dkp pool and raid. ',
-'ACP_ADDRAID_EXPLAIN' => 'Here you can add / change raid information.',
+'ACP_ADDRAID_EXPLAIN' => 'Here you can add a new raid.',
 'ACP_LISTRAIDS_EXPLAIN' => 'Here is a list of Raids per DKP pool. Clicking on the raidname brings you in Edit/delete-mode', 
 'ACP_DKP_LOGS_EXPLAIN' => 'This lists all the actions in bbDkp. You can sort by username, date, IP or action.',
 'ACP_MM_RANKS_EXPLAIN' => 'Here you can edit raid ranks and name prefix/suffix. (Put new rank on last line and press edit. to delete rank, clear the name of that rank). Rank 99 (the \'out\' rank) is not visible. These custom ranks can be overwritten by the in-game ranks through the armorylink plugin. ',
@@ -456,6 +456,8 @@ $lang = array_merge($lang, array(
 'FORM_ERROR'				=>  'Form validation Error : Check input <br />',  
 'ERROR_RAID_NOATTENDEES'    =>  'Error : old raid has no attendees. Cannot remove value of old raid attendees. STOP ', 
 'ERROR_NODKPACCOUNT'    	=>  'Error : no DKP accounts found to transfer ', 
+'ERROR_NOEVENTSDEFINED'    	=>  'Error : no Events defined. cannot add Raid ', 
+'ERROR_NOGUILDMEMBERSDEFINED'    	=>  'Error : no Guildmembers. cannot add Raid ', 
 
 // Submission Success Messages
 'ADMIN_ADD_ADJ_SUCCESS' => 'A %s adjustment of %.2f has been added to the database for your guild.',

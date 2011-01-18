@@ -842,7 +842,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                    'ZONE_DD' 			=> ($row['completedate'] == 0) ? ' ' : date('d', $row['completedate'])  ,
                     	'ZONE_MM' 			=> ($row['completedate'] == 0) ? ' ' : date('m', $row['completedate'])  ,
                     	'ZONE_YY' 			=> ($row['completedate'] == 0) ? ' ' : date('y', $row['completedate'])  ,
-                        'ZONE_URL'			=> sprintf($user->lang[strtoupper($config['bbdkp_default_game']).'_ZONEEURL'], $row ['webid']),         
+                        'ZONE_URL'			=> sprintf($user->lang[strtoupper($config['bbdkp_default_game']).'_ZONEEURL'], $row['webid']),         
 	                    'ZONE_SHOW'   		=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
                     	'ZONE_SHOW_PORTAL'  => ($row['showzoneportal'] == 1) ? ' checked="checked"' : '',
                     	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;edit=1&amp;id={$row['id']}")  ,

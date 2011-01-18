@@ -11,23 +11,16 @@
 <form method="post" action="{F_LISTIADJ}">
 <fieldset>
 <legend>Filter</legend>
-  <dl>
-    <dt><label for="dkpsys_id">{L_POOL}:</label></dt>
-  	<dd>
+    <label for="dkpsys_id">{L_POOL}:</label>
   	<select name="dkpsys_id" class="input"> 	
        <!-- BEGIN dkpsys_row -->
          <option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
        <!-- END dkpsys_row -->
-    </select>
-    </dd>
-  </dl>
-   <dl>
-    <dt><label for="member_name">{L_NAME}:</label></dt>
-    <dd><input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" /></dd>
-  </dl>
-  <dl>
-  <input type="submit" name="submit_options" value="GO" class="button1" />
-  </dl>
+    </select><label>&nbsp;&nbsp;{L_NAME}:</label>
+    <input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" />
+      <input type="submit" name="submit_options" value="{L_FILTER}" class="button1" />
+    </dl>
+  
 </fieldset>
 
 <!-- IF ADJUSTMENT_PAGINATION -->

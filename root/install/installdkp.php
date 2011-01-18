@@ -331,7 +331,8 @@ $versions = array(
 					'raid_id'			=> array('UINT', NULL, 'auto_increment'),
 					'event_id'			=> array('UINT', 0),
 					'raid_note'   		=> array('VCHAR_UNI:255', ''),
-					'raid_date'  		=> array('TIMESTAMP', 0) ,
+					'raid_start'  		=> array('TIMESTAMP', 0) ,
+         			'raid_end'  		=> array('TIMESTAMP', 0) ,
 					'raid_added_by' 	=> array('VCHAR_UNI:255', ''),
 					'raid_updated_by' 	=> array('VCHAR_UNI:255', ''),
 					),
@@ -680,7 +681,7 @@ $versions = array(
             // add manual raid modules
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_raid',
-            	 'modes'           => array('addraid', 'listraids'),
+            	 'modes'           => array('addraid', 'editraid', 'listraids'),
         		),
             ),            
             

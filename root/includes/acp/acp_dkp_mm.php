@@ -46,7 +46,7 @@ function main($id, $mode)
 			/***************************************/
 			case 'mm_addmember':
 					
-					$Addmemberlink = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember") . '"><h3>Return to Add Member screen</h3></a>'; 
+					$Addmemberlink = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Members screen</h3></a>'; 
 					$S_ADD = false;
 					
 					if ( (isset($_GET[URI_NAME])) && (strval($_GET[URI_NAME] != '')) )
@@ -819,9 +819,9 @@ function main($id, $mode)
 					{
 						$template->assign_block_vars ( 	'guild_row', 
 						array (
-							'VALUE' => $row ['id'], 
-							'SELECTED' => ($row ['id'] == $guild_id) ? ' selected="selected"' : '', 
-							'OPTION' => (! empty ( $row ['name'] )) ?  $row ['name']  : '(None)' ) );
+							'VALUE' => $row['id'], 
+							'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
+							'OPTION' => (! empty ( $row['name'] )) ?  $row['name']  : '(None)' ) );
 					}
 					$db->sql_freeresult ( $resultg );
 				
@@ -837,9 +837,9 @@ function main($id, $mode)
 					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
 					{
 						$template->assign_block_vars ( 'guild_row', array (
-    						'VALUE' => $row ['id'], 
-    						'SELECTED' => ($row ['id'] == $guild_id) ? ' selected="selected"' : '', 
-    						'OPTION' => $row ['name'] ));
+    						'VALUE' => $row['id'], 
+    						'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
+    						'OPTION' => $row['name'] ));
 					}
 				}
 				
@@ -1146,9 +1146,9 @@ function main($id, $mode)
                 	$template->assign_block_vars ( 
                 	'guild_row', 
                 	array (
-                	'VALUE' => $row ['id'], 
-                	'SELECTED' => ($row ['id'] == $guild_id) ? ' selected="selected"' : '', 
-                	'OPTION' => $row ['name'])); 
+                	'VALUE' => $row['id'], 
+                	'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
+                	'OPTION' => $row['name'])); 
                 }
                 $db->sql_freeresult ( $resultg );
                 

@@ -16,27 +16,26 @@ function check_form()
     return true;
 }
 //]]>
-
 </script>
 <a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
 
 <h1>{L_ACP_ADDFACTION}</h1>
 <p>{L_ACP_ADDFACTIONS_EXPLAIN}</p>
 <form id="acp_addfaction" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
-
 <input type="hidden" name="faction_id" value="{FACTION_ID}" />
 
 <fieldset>
+<legend>{L_ADD_IADJ_TITLE}</legend>
 	<dl>
 		<dt><label for="faction">{L_FACTION_NAME}:</label></dt>
 		<dd><input class="medium" type="text" id="factionname" name="factionname" value="{FACTION_NAME}" /></dd>
 	</dl>
-
 </fieldset>
-   <p class="quick">
+ <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
    {S_FORM_TOKEN}
-    <input type="submit" name="factionadd" value="{L_ACP_DKP_FACTION_ADD}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
-	</p>
+    <input type="submit" name="factionadd" value="{L_ACP_DKP_FACTION_ADD}" class="button1" />
+    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+	</fieldset>
 </form>
 
 <!-- INCLUDE dkp/overall_footer.html -->

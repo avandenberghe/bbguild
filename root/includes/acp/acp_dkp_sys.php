@@ -61,9 +61,9 @@ class acp_dkp_sys extends bbDkp_Admin
 					}
 					$db->sql_freeresult ( $result );
 					$this->dkpsys = array (
-						'dkpsys_id' => $row ['dkpsys_id'], 
-						'dkpsys_name' => $row ['dkpsys_name'], 
-						'dkpsys_status' => $row ['dkpsys_status'] 
+						'dkpsys_id' => $row['dkpsys_id'], 
+						'dkpsys_name' => $row['dkpsys_name'], 
+						'dkpsys_status' => $row['dkpsys_status'] 
 					 );
 				} 
 				else
@@ -141,8 +141,8 @@ class acp_dkp_sys extends bbDkp_Admin
 					while ( $row = $db->sql_fetchrow ( $result ) )
 					{
 						$this->old_dkpsys = array (
-							'dkpsys_name' => $row ['dkpsys_name'], 
-							'dkpsys_status' => $row ['dkpsys_status'] );
+							'dkpsys_name' => $row['dkpsys_name'], 
+							'dkpsys_status' => $row['dkpsys_status'] );
 					}
 					$db->sql_freeresult ( $result );
 					

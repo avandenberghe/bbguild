@@ -99,7 +99,7 @@ class acp_dkp_item extends bbDkp_Admin
 					$result = $db->sql_query ( $sql );
 					while ( $row = $db->sql_fetchrow ( $result ) ) 
 					{
-						$bbdkp_items [] = $row ['item_name'];
+						$bbdkp_items [] = $row['item_name'];
 					}
 					$db->sql_freeresult ( $result );
 					
@@ -149,7 +149,7 @@ class acp_dkp_item extends bbDkp_Admin
 					$result = $db->sql_query ( $sql );
 					while ( $row = $db->sql_fetchrow ( $result ) ) 
 					{
-						$bbdkp_item = $row ['item_name'];
+						$bbdkp_item = $row['item_name'];
 					}
 					$db->sql_freeresult ( $result );
 					$bbdkp_item = str_replace ( '<table class="borderless" width="100%" cellspacing="0" cellpadding="0">', " ", $bbdkp_item );
@@ -198,9 +198,9 @@ class acp_dkp_item extends bbDkp_Admin
 			$raidtitle = $row['event_name']; 
 			$raiddate = $user->format_date($row['raid_date']); 
 			$template->assign_block_vars ( 'raids_row', array (
-				'VALUE' 	=> $row ['raid_id'], 
-				'SELECTED' 	=> ($raid_id == $row ['raid_id']) ? ' selected="selected"' : '', 
-				'OPTION' 	=> date ( $config['bbdkp_date_format'], $row ['raid_date'] ) . ' - ' .  $row ['event_name'] . ' ' . $row ['raid_note'])  );
+				'VALUE' 	=> $row['raid_id'], 
+				'SELECTED' 	=> ($raid_id == $row['raid_id']) ? ' selected="selected"' : '', 
+				'OPTION' 	=> date ( $config['bbdkp_date_format'], $row['raid_date'] ) . ' - ' .  $row['event_name'] . ' ' . $row['raid_note'])  );
 		}
 		$db->sql_freeresult ( $result );
 
@@ -245,7 +245,7 @@ class acp_dkp_item extends bbDkp_Admin
 			$result = $db->sql_query ( $sql );
 			while ($row = $db->sql_fetchrow ( $result )) 
 			{
-				$buyers [] = $row ['member_id'];
+				$buyers [] = $row['member_id'];
 			}
 			
 			if (isset($_POST['member_id']))
@@ -289,17 +289,17 @@ class acp_dkp_item extends bbDkp_Admin
 			//left
 			$template->assign_block_vars ( 
 				'members_row', array (
-				'VALUE' => $row ['member_id'], 
-				'OPTION' => $row ['member_name'] ) );
+				'VALUE' => $row['member_id'], 
+				'OPTION' => $row['member_name'] ) );
 
 			//right
-			if (@in_array ( $row ['member_id'], $buyer_source )) 
+			if (@in_array ( $row['member_id'], $buyer_source )) 
 			{
 				// fill buyer block if it is in raidmember block
 				$template->assign_block_vars ( 
 				'buyers_row', array (
-				'VALUE' => $row ['member_id'], 
-				'OPTION' => $row ['member_name'] ) );
+				'VALUE' => $row['member_id'], 
+				'OPTION' => $row['member_name'] ) );
 			}
 		}
 		$db->sql_freeresult ( $result );
@@ -312,7 +312,7 @@ class acp_dkp_item extends bbDkp_Admin
 		$result = $db->sql_query ('SELECT max(item_value) AS max_value FROM ' . RAID_ITEMS_TABLE );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
-			$max_value = $row ['max_value'];
+			$max_value = $row['max_value'];
 		}
 		$float = @explode ( '.', $max_value );
 		$floatlen = @strlen ( $float [0] );
@@ -330,9 +330,9 @@ class acp_dkp_item extends bbDkp_Admin
 		{
 			
 				$template->assign_block_vars ( 'items_row', array (
-				'VALUE' 	=> $row ['item_id'], 
-				'SELECTED' 	=> (($row ['item_name'] == $item_name) || ($row ['item_name'] == $item_select_name)) ? ' selected="selected"' : '', 
-				'OPTION' 	=> $row ['item_name'] . ' (' . sprintf ( $format, $row ['item_value'] ) . ' dkp) ', 
+				'VALUE' 	=> $row['item_id'], 
+				'SELECTED' 	=> (($row['item_name'] == $item_name) || ($row['item_name'] == $item_select_name)) ? ' selected="selected"' : '', 
+				'OPTION' 	=> $row['item_name'] . ' (' . sprintf ( $format, $row['item_value'] ) . ' dkp) ', 
 				
 				) );						
 		}
@@ -438,7 +438,7 @@ class acp_dkp_item extends bbDkp_Admin
 				$result = $db->sql_query_limit ( $sql, 1 );
 				while ( $row = $db->sql_fetchrow ( $result ) ) 
 				{
-					$dkpid = $row ['dkpsys_id'];
+					$dkpid = $row['dkpsys_id'];
 				} 
 				$db->sql_freeresult ( $result );
 			}
@@ -448,9 +448,9 @@ class acp_dkp_item extends bbDkp_Admin
 			{
 				$template->assign_block_vars ( 'dkpsys_row', 
 					array (
-					'VALUE' => $row ['dkpsys_id'], 
-					'SELECTED' => ($row ['dkpsys_id'] == $dkpid) ? ' selected="selected"' : '', 
-					'OPTION' => (! empty ( $row ['dkpsys_name'] )) ? $row ['dkpsys_name'] : '(None)' ) );
+					'VALUE' => $row['dkpsys_id'], 
+					'SELECTED' => ($row['dkpsys_id'] == $dkpid) ? ' selected="selected"' : '', 
+					'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
 			}
 			$db->sql_freeresult ( $result );
 			
@@ -480,7 +480,7 @@ class acp_dkp_item extends bbDkp_Admin
 				$result = $db->sql_query_limit ( $sql, 1 );
 				while ( $row = $db->sql_fetchrow ( $result ) ) 
 				{
-					$raid_id = (int) $row ['raid_id'];
+					$raid_id = (int) $row['raid_id'];
 				}
 				$db->sql_freeresult ( $result );
 			}
@@ -490,9 +490,9 @@ class acp_dkp_item extends bbDkp_Admin
 			while ( $row = $db->sql_fetchrow ( $result ) )
 			{
 				$template->assign_block_vars ( 'raids_row', array (
-					'VALUE' => $row ['raid_id'], 
-					'SELECTED' => ($raid_id == $row ['raid_id']) ? ' selected="selected"' : '', 
-					'OPTION' => $user->format_date($row['raid_date']) . ' - ' .  $row ['event_name'] . ' ' . $row['raid_note'] ) );
+					'VALUE' => $row['raid_id'], 
+					'SELECTED' => ($raid_id == $row['raid_id']) ? ' selected="selected"' : '', 
+					'OPTION' => $user->format_date($row['raid_date']) . ' - ' .  $row['event_name'] . ' ' . $row['raid_note'] ) );
 			}
 			$db->sql_freeresult ( $result );
 			$sql1 = 'SELECT count(*) as countitems FROM ' . RAID_ITEMS_TABLE . ' where raid_id = ' .  $raid_id; 
@@ -640,7 +640,7 @@ class acp_dkp_item extends bbDkp_Admin
 		$row = $db->sql_fetchrow ($result); 
 		if($row)
 		{
-			$loottime = $row ['raid_date'];
+			$loottime = $row['raid_date'];
 		}
 	
 		//
@@ -804,15 +804,15 @@ class acp_dkp_item extends bbDkp_Admin
 		$result = $db->sql_query ( $sql );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
-			$item_ids [] 	= $row ['item_id'];
-			$old_buyers []  =   $row ['member_id'] ;
+			$item_ids [] 	= $row['item_id'];
+			$old_buyers []  =   $row['member_id'] ;
 			
 			$old_item = array (
-			'item_name' 	=>  (string) $row ['item_name'] , 
+			'item_name' 	=>  (string) $row['item_name'] , 
 			'item_buyers' 	=>  (array) $old_buyers, 
-			'raid_id' 		=>  (int) 	$row ['raid_id'] , 
-			'item_date' 	=>  (int) 	$row ['item_date'] , 
-			'item_value' 	=>  (float) $row ['item_value']  );
+			'raid_id' 		=>  (int) 	$row['raid_id'] , 
+			'item_date' 	=>  (int) 	$row['item_date'] , 
+			'item_value' 	=>  (float) $row['item_value']  );
 		}
 
 		$item_buyers = implode ( ', ', $old_item ['item_buyers'] );
@@ -940,15 +940,15 @@ class acp_dkp_item extends bbDkp_Admin
 		$result = $db->sql_query ( $sql );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
-			$item_ids 	[] = $row ['item_id'];
-			$old_buyers [] = $row ['member_id'];
+			$item_ids 	[] = $row['item_id'];
+			$old_buyers [] = $row['member_id'];
 			
 			$old_item = array (
-			'item_name' 	=>  (string) $row ['item_name'] , 
+			'item_name' 	=>  (string) $row['item_name'] , 
 			'item_buyers' 	=>  (array) $old_buyers, 
-			'raid_id' 		=>  (int) $row ['raid_id'] , 
-			'item_date' 	=>  (int) $row ['item_date'] , 
-			'item_value' 	=>  (float) $row ['item_value']  );
+			'raid_id' 		=>  (int) $row['raid_id'] , 
+			'item_date' 	=>  (int) $row['item_date'] , 
+			'item_value' 	=>  (float) $row['item_value']  );
 		}
 
 		$this->delete_old_item($dkpid, $item_ids, $old_item ['item_buyers'], $old_item) ; 
