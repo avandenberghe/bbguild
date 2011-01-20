@@ -3,6 +3,13 @@
 <script type="text/javascript">
 
 //<![CDATA[
+window.onload = start;
+
+function start()
+{
+	switch_event_val();
+	durationcalc();
+}
 
 function check_form()
 {
@@ -21,7 +28,59 @@ function check_form()
     }
     return true;
 }
-   
+
+/* gets value from event and puts it in raidvalue box */
+function switch_event_val()
+{
+  var patt= / - \(([0-9.]+)\)/;
+  var eventvalue  = document.addraid.event_id.options[document.addraid.event_id.selectedIndex].text.match(patt);
+  document.addraid.raid_value.value = eventvalue[eventvalue.length-1]; 
+}
+
+/* calculates time dkp bonus from raid duration and config settings */
+function durationcalc()
+{
+	var day = document.addraid.d.options[document.addraid.d.selectedIndex].text;
+	var month = document.addraid.mo.options[document.addraid.mo.selectedIndex].text;
+	var year = document.addraid.Y.options[document.addraid.Y.selectedIndex].text;
+	var starth = document.addraid.sh.options[document.addraid.sh.selectedIndex].text;
+	var startm = document.addraid.smi.options[document.addraid.smi.selectedIndex].text;
+	var starts = document.addraid.ss.options[document.addraid.ss.selectedIndex].text;
+	var raidbegin = new Date();
+	raidbegin.setDate(day);
+	raidbegin.setMonth(month);
+	raidbegin.setYear(year);
+	raidbegin.setHours(starth);
+	raidbegin.setMinutes(startm);
+	raidbegin.setSeconds(starts);
+	
+	var stoph = document.addraid.eh.options[document.addraid.eh.selectedIndex].text;
+	var stopm = document.addraid.emi.options[document.addraid.emi.selectedIndex].text;
+	var stops = document.addraid.es.options[document.addraid.es.selectedIndex].text;
+	var raidend = new Date();
+	raidend.setDate(day);
+	raidend.setMonth(month);
+	raidend.setYear(year);
+	if(stoph<starth)
+	{  /* past midnight*/
+		raidend.setDate(raidend.getDate() + 1);
+	}
+	raidend.setHours(stoph);
+	raidend.setMinutes(stopm);
+	raidend.setSeconds(stops);
+
+	var diff=raidend-raidbegin;
+	diff=diff/86400000*24;
+	diff=diff.toFixed(2);
+	document.addraid.raid_duration.value = diff;
+
+	var dkp_per_timeunit = document.addraid.dkptimeunit.value;
+	var unitminutes = document.addraid.timeunit.value;
+	var dkp_bonus = (dkp_per_timeunit * (diff*60) / unitminutes ).toFixed(2);
+	
+	document.addraid.time_bonus.value = dkp_bonus;
+}
+	
 function fnSearch( searchField, searchItem )
 {
     var searchBox = document.addraid.elements[searchField];
@@ -43,7 +102,6 @@ function fnSearch( searchField, searchItem )
 
 function fnAddMember()
 {
-	
     var form = document.addraid;
     var fromField = form.all_members;
     //destination
@@ -123,7 +181,7 @@ function fnRemoveMember()
 
 </script>
 
-<form method="post" action="{F_ADD_RAID}" name="addraid" onsubmit="return check_form(this)">
+<form method="post" action="{F_ADD_RAID}" name="addraid" onsubmit="return check_form(this)" onLoad="javascript:switch_event_val();">
 <div>
 
 <h1>{L_TITLE}</h1>
@@ -147,7 +205,7 @@ function fnRemoveMember()
 	<dl>
 		<dt><label>{L_EVENT}:</label> (<a href="{U_ADD_EVENT}">{L_ADD_EVENT}</a>)</dt>
     <dd>
-	    <select name="event_id" id="event_id" class="input" size="10" style="width: 100%; "  >
+	    <select name="event_id" id="event_id" class="input" size="10" style="width: 100%;" onChange="javascript:switch_event_val();" >
 			<!-- BEGIN events_row -->
 			<option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
 			<!-- END events_row -->
@@ -167,35 +225,47 @@ function fnRemoveMember()
 	<dl>
 		<dt><label>{L_RAIDSTART}:</label></dt>
 		<dd>
-			<select name="sh">{S_RAIDSTART_H_OPTIONS}</select>
-			<select name="smi">{S_RAIDSTART_MI_OPTIONS}</select> 
-			<select name="ss">{S_RAIDSTART_S_OPTIONS}</select>
+			<select name="sh" onChange="javascript:durationcalc();">{S_RAIDSTART_H_OPTIONS}</select>
+			<select name="smi" onChange="javascript:durationcalc();">{S_RAIDSTART_MI_OPTIONS}</select> 
+			<select name="ss" onChange="javascript:durationcalc();">{S_RAIDSTART_S_OPTIONS}</select>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{L_RAIDEND}:</label></dt>
 		<dd>
-			<select name="eh">{S_RAIDEND_H_OPTIONS}</select>
-			<select name="emi">{S_RAIDEND_MI_OPTIONS}</select> 
-			<select name="es">{S_RAIDEND_S_OPTIONS}</select>
+			<select name="eh" onChange="javascript:durationcalc();">{S_RAIDEND_H_OPTIONS}</select>
+			<select name="emi" onChange="javascript:durationcalc();">{S_RAIDEND_MI_OPTIONS}</select> 
+			<select name="es" onChange="javascript:durationcalc();">{S_RAIDEND_S_OPTIONS}</select>
 		</dd>
 	</dl>
-		
+	
 	<dl>
-
+		<dt><label>{L_RAIDDURATION}:</label>({L_RAIDDURATION_EXPLAIN})</dt>
+		<dd>
+			<input type="text" name="raid_duration" id="raid_duration" size="8" maxlength="7" value="{RAID_DURATION}" class="input" />
+		</dd>
+	</dl>
+	
+	<dl>
 		<dt><label>{L_NOTE}:</label></dt>
 		<dd><textarea name="raid_note" cols="40" rows="5" wrap="soft">{RAID_NOTE}</textarea></dd>
 	</dl>
 	
 	<dl>
 		<dt><label>{L_RAIDVALUE}:</label>({L_ADD_RAID_VALUE_NOTE})</dt>
-		
 		<dd>
-			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />{FV_VALUE}
+			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />
 		</dd>
 	</dl>
-		
-		
+	<input type="hidden" name="dkptimeunit" value="{DKPTIMEUNIT}" /> 
+	<input type="hidden" name="timeunit" value="{TIMEUNIT}" /> 
+	<dl>
+		<dt><label>{L_TIME_BONUS}:</label>{DKPPERTIME}</dt>
+		<dd>
+			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{TIME_BONUS}" class="input" />
+		</dd>
+	</dl>
+			
 </fieldset>
 </div>
 

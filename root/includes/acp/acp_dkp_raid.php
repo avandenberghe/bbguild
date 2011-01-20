@@ -31,7 +31,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
-		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
+		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) . 
+		'"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
 
 		//do event test.
 		$sql = 'SELECT count(*) as eventcount FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
@@ -152,8 +153,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		$db->sql_freeresult( $result1 );
 		
 		//fill dkp dropdown
-		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
-				where a.dkpsys_id = b.event_dkpid ORDER BY dkpsys_name';
+		$sql = 'SELECT dkpsys_id, dkpsys_name FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
+				where a.dkpsys_id = b.event_dkpid group by dkpsys_id, dkpsys_name ORDER BY dkpsys_name';
 		$result = $db->sql_query ( $sql );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
@@ -175,15 +176,16 @@ class acp_dkp_raid extends bbDkp_Admin
 		$format = '%0' . @strlen ( $float [0] ) . '.2f';
 		$db->sql_freeresult($result);
 		
-		$sql = ' SELECT  event_id, event_name, event_value 
-				 FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . $dkpsys_id . ' ORDER BY event_name';
+		$sql = ' SELECT event_id, event_name, event_value 
+		FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . $dkpsys_id . ' ORDER BY event_name';
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$select_check = false;
-			if (isset ($_POST[URI_EVENT]))
+			if (isset ($_GET[URI_EVENT]))
 			{
 				$select_check = ( $row['event_id'] == request_var(URI_EVENT, 0)) ? true : false;
+				$eventvalue = $row['event_value']; 
 			}
 			
 			$template->assign_block_vars ( 
@@ -193,6 +195,7 @@ class acp_dkp_raid extends bbDkp_Admin
 					'OPTION' => $row['event_name'] . ' - (' . sprintf ( $format, $row['event_value'] ) . ')' 
 			));
 		}
+		
 		$db->sql_freeresult($result);
 		
 		/* getting left memberlist only with rank not hidden */
@@ -224,6 +227,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		if ($membercount==0)
 		{
+			// if no members defined yet stop here
 			trigger_error ( $user->lang['ERROR_NOGUILDMEMBERSDEFINED'], E_USER_WARNING );
 		}
 		
@@ -315,7 +319,9 @@ class acp_dkp_raid extends bbDkp_Admin
 				'L_EXPLAIN' 		=> $user->lang ['ACP_ADDRAID_EXPLAIN'], 
 				'F_ADD_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid" ), 
 				'U_ADD_EVENT' 		=> append_sid ( "index.$phpEx", "i=dkp_event&amp;mode=addevent" ), 
+				'RAID_VALUE'		=> $eventvalue, 
 
+				//raiddate
 				'S_RAIDDATE_DAY_OPTIONS'	=> $s_raid_day_options,
 				'S_RAIDDATE_MONTH_OPTIONS'	=> $s_raid_month_options,
 				'S_RAIDDATE_YEAR_OPTIONS'	=> $s_raid_year_options,
@@ -329,9 +335,12 @@ class acp_dkp_raid extends bbDkp_Admin
 				'S_RAIDEND_H_OPTIONS'		=> $s_raidend_hh_options,
 				'S_RAIDEND_MI_OPTIONS'		=> $s_raidend_mi_options,
 				'S_RAIDEND_S_OPTIONS'		=> $s_raidend_s_options,
-		
+				'RAID_DURATION' 			=> $config['bbdkp_standardduration'],
+				'DKPTIMEUNIT'				=> $config['bbdkp_dkptimeunit'], 
+				'TIMEUNIT' 					=> $config['bbdkp_timeunit'],
+		 		'DKPPERTIME'				=> sprintf($user->lang['DKPPERTIME'], $config['bbdkp_dkptimeunit'], $config['bbdkp_timeunit'] ), 
 				// Form values
-				'RAID_DKPSYSID' 	=> $dkpsys_id, 
+				'RAID_DKPSYSID' 			=> $dkpsys_id, 
 		
               	'L_DATE' => $user->lang ['DATE'] . ' dd/mm/yyyy', 
 				'L_TIME' => $user->lang ['TIME'] . ' hh:mm:ss', 
@@ -341,9 +350,8 @@ class acp_dkp_raid extends bbDkp_Admin
 				'MSG_NAME_EMPTY' 	  => $user->lang ['FV_REQUIRED_EVENT_NAME'], 
 				'MSG_GAME_NAME' 	  => $config ['bbdkp_default_game'], 
 		));
-		
-		
 	}
+	
 	/*
 	 * displays a raid
 	 */
