@@ -789,11 +789,13 @@ class acp_dkp_raid extends bbDkp_Admin
 		{
 			// recall hidden vars
 			$this->raid = array(
-				'raid_note' 		=> utf8_normalize_nfc (request_var ( 'hidden_raid_note', ' ', true ) ), 
-				'raid_event'		=> utf8_normalize_nfc (request_var ( 'hidden_raid_name',	' ', true  ) ), 
+				'raid_note' 		=> utf8_normalize_nfc (request_var ( 'hidden_raid_note', ' ', true )), 
+				'raid_event'		=> utf8_normalize_nfc (request_var ( 'hidden_raid_name', ' ', true )), 
 				'raid_value' 		=> request_var ('hidden_raid_value', 0.00 ), 
-				'raid_date' 		=> request_var('hidden_raid_date', 0), 
-				'event_id' 			=> request_var('hidden_event_id', 0),
+				'raid_timebonus'	=> request_var ('hidden_raid_value', 0.00 ),
+				'raid_start' 		=> request_var ('hidden_startraid_date', 0), 
+				'raid_end'			=> request_var ('hidden_endraid_date', 0),
+				'event_id' 			=> request_var ('hidden_event_id', 0),
 				'raid_attendees' 	=> request_var ('hidden_raid_attendees', array ( 0 => 0 )), 
 			); 
 			
@@ -822,9 +824,9 @@ class acp_dkp_raid extends bbDkp_Admin
 			//
 			$query = $db->sql_build_array ( 'INSERT', array (
 					'event_id' 		=> (int) $this->raid['event_id'], 
-					'raid_date' 	=> (int) $this->raid['raid_date'], 
+					'raid_start' 	=> (int) $this->raid['raid_start'],
+					'raid_end' 		=> (int) $this->raid['raid_end'], 
 					'raid_note' 	=> (string) $this->raid['raid_note'], 
-					'raid_value' 	=> (float) $this->raid['raid_value'], 
 					'raid_added_by' => (string) $user->data['username'] ) 
 			);
 			
@@ -832,8 +834,8 @@ class acp_dkp_raid extends bbDkp_Admin
 			$this_raid_id = $db->sql_nextid();
 			// Attendee handling
 			
-			// Insert the attendees in the raid attendees table
-			$attendees = $this->add_attendees ( $this->raid ['raid_attendees'], $this_raid_id );
+			// Insert the raid detail
+			$raiddetail = $this->add_raiddetail ( $this->raid ['raid_attendees'],  $this->raid ['raid_value'],  $this->raid ['raid_timebonus'] , $this_raid_id );
 	
 			//
 			// pass the raidmembers array, raid value, and dkp pool.
@@ -889,13 +891,16 @@ class acp_dkp_raid extends bbDkp_Admin
 			
 			$s_hidden_fields = build_hidden_fields(array(
 					'hidden_raid_note' 			=> utf8_normalize_nfc ( request_var ( 'raid_note', ' ', true ) ), 
-					'hidden_raid_event'			=> utf8_normalize_nfc ( request_var ( 'event_name',	' ', true  ) ), 
-					'hidden_raid_value' 		=> request_var ( 'raid_value', 0.00 ), 
-					'hidden_raid_date' 			=> mktime(request_var('h', 0), request_var('mi', 0), request_var('s', 0), 
-					  					   			request_var('mo', 0), request_var('d', 0), request_var('Y', 0)), 
 					'hidden_event_id' 			=> $event_id,
+					'hidden_raid_event'			=> utf8_normalize_nfc ( request_var ( 'event_name',	' ', true  ) ), 
+					'hidden_raid_value' 		=> request_var ( 'raid_value', 0.00 ),
+					'hidden_raid_timebonus' 	=> request_var ( 'time_bonus', 0.00 ),
+					'hidden_startraid_date' 	=> mktime(request_var('sh', 0), request_var('smi', 0), request_var('ss', 0), 
+					  					   			request_var('mo', 0), request_var('d', 0), request_var('Y', 0)), 
+					'hidden_endraid_date' 		=> mktime(request_var('eh', 0), request_var('emi', 0), request_var('es', 0), 
+					  					   			request_var('emo', 0), request_var('ed', 0), request_var('eY', 0)), 
 					'hidden_raid_attendees' 	=> request_var ( 'raid_attendees', array ( 0 => 0 )), 
-					'add'    		=> true, 
+					'add'    					=> true, 
 			)
 			);
 			
@@ -988,7 +993,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		$db->sql_query ( 'DELETE FROM ' . RAID_DETAIL_TABLE . " WHERE raid_id = " . (int) $raid_id );
 		
 		// Insert the new attendees in attendee table
-		$this->add_attendees ( $this->raid['raid_attendees'], $raid_id );
+		$this->add_raiddetail ( $this->raid['raid_attendees'], $raid_id );
 
 		// decrease raidcount with one old raidparticipants, 
 		// decrease dkp from old raidparticipants
@@ -1179,11 +1184,13 @@ class acp_dkp_raid extends bbDkp_Admin
 	}	
 	
     /**
-    * RAID_DETAIL_TABLE handler : Insert members into raid attendees table
+    * raid_detail handler : Insert raid detail
     * @param $members_array array of member_id
+    * @param raid_value
+    * @param time_bonus
     * @param $raid_id
     */
-    private function add_attendees(&$members_array, $raid_id)
+    private function add_raiddetail($members_array, $raidvalue, $time_bonus, $raid_id)
     {
         if(sizeof($members_array) == 0)
     	{
@@ -1191,17 +1198,18 @@ class acp_dkp_raid extends bbDkp_Admin
     	}
     	
         global $db;
-        $attendees = array();
+        $raid_detail = array();
         foreach ( $members_array as $member_id )
         {
-            $attendees[] = array(
+            $raid_detail[] = array(
                 'raid_id'      => (int) $raid_id,
                 'member_id'   => (int) $member_id,
+	            'raid_value'   => (int) $raidvalue,
+	            'time_bonus'   => (int) $time_bonus,
 				);
         }
-        $db->sql_multi_insert(RAID_DETAIL_TABLE, $attendees);
-       
-        return $attendees;
+        $db->sql_multi_insert(RAID_DETAIL_TABLE, $raid_detail);
+        return $raid_detail;
     }
    
    
