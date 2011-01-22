@@ -111,7 +111,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	private function newraid()
 	{
 		global $db, $user, $config, $template, $phpEx ;
-			
+		$dkpsys_id=0; 
 		if (isset($_GET[URI_DKPSYS]) )
 		{
 			//user clicked on add raid from event editscreen
@@ -136,6 +136,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			{
 				$dkpsys_id = $row['dkpsys_id'];
 			}
+			$db->sql_freeresult( $result1 );
 		}
 		
 		if($dkpsys_id==0)
@@ -149,8 +150,8 @@ class acp_dkp_raid extends bbDkp_Admin
 			{
 				$dkpsys_id = $row['dkpsys_id'];
 			}
+			$db->sql_freeresult( $result1 );
 		}
-		$db->sql_freeresult( $result1 );
 		
 		//fill dkp dropdown
 		$sql = 'SELECT dkpsys_id, dkpsys_name FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
@@ -179,6 +180,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		$sql = ' SELECT event_id, event_name, event_value 
 		FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . $dkpsys_id . ' ORDER BY event_name';
 		$result = $db->sql_query($sql);
+		$eventvalue= 0;
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$select_check = false;
@@ -839,7 +841,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	
 			//
 			// pass the raidmembers array, raid value, and dkp pool.
-			$this->add_dkp ($this->raid ['raid_attendees'], $this->raid['raid_value'], $this->raid['event_dkpid'], $this->raid['raid_date'] );
+			$this->add_dkp ($this->raid ['raid_attendees'], $this->raid['raid_value'], $this->raid['event_dkpid'], $this->raid['raid_start'] );
 			
 			//commit
 			$db->sql_transaction('commit');
@@ -890,6 +892,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			// store raidinfo as hidden vars
 			
 			$s_hidden_fields = build_hidden_fields(array(
+					'event_id'					=> $event_id, 
 					'hidden_raid_note' 			=> utf8_normalize_nfc ( request_var ( 'raid_note', ' ', true ) ), 
 					'hidden_event_id' 			=> $event_id,
 					'hidden_raid_event'			=> utf8_normalize_nfc ( request_var ( 'event_name',	' ', true  ) ), 

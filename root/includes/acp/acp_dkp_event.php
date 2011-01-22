@@ -57,273 +57,271 @@ class acp_dkp_event extends bbDkp_Admin
         switch ($mode)
         {
             case 'addevent':
-                /* select data */
+              /* select data */
 	    			
-                    $update = false;
+              $update = false;
 
-                    if  (isset($_GET[URI_EVENT]) )
+              if  (isset($_GET[URI_EVENT]) )
+              {
+                  $this->url_id = request_var(URI_EVENT, '');
+              }
+             
+              if ( $this->url_id )   
+                {
+                  // we have a GET
+                  $update = true;
+                 
+                  $sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename 
+                          FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b 
+                          WHERE a.event_id = '" . $this->url_id . "'
+                          AND b.dkpsys_id = a.event_dkpid  ";
+                  $result = $db->sql_query($sql);
+                  $row = $db->sql_fetchrow($result); 
+                  $db->sql_freeresult($result);
+                  if (!$row)
+                  {
+                      trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED']);
+                  }
+                  else 
+                  {
+                      $this->event = array(
+                      	'event_dkpsys_name'  => $row['dkpsys_name'],
+                          'dkpsys_id'  		 => $row['dkpsys_id'],
+                          'event_name'  	     => $row['event_name'],
+                          'event_color'  	     => $row['event_color'],
+                          'event_imagename'  	 => $row['event_imagename'],
+                          'event_value' 	     => $row['event_value'],
+                          'event_id' 		     => $row['event_id']
+                      );
+                  }
+
+                  while ( $row2 = $db->sql_fetchrow($resultdkpsys) )
+                  {
+                      $template->assign_block_vars('event_dkpid_row', array(
+                      'VALUE' => $row2['dkpsys_id'],
+                      'SELECTED' => ( $row2['dkpsys_name'] == $row['dkpsys_name']  ) ? ' selected="selected"' : '',
+                      'OPTION'   => ( !empty($row2['dkpsys_name']) ) ? $row2['dkpsys_name'] : '(None)')
+                      );
+                  }
+                 
+              }
+              else
+              {
+                  // we dont have a GET so put default values
+                  while ($row2 = $db->sql_fetchrow($resultdkpsys) )
+                  {
+                      //dkpsys_default
+                      $template->assign_block_vars('event_dkpid_row', array(
+                       'VALUE' => $row2['dkpsys_id'],
+                       'SELECTED' => ( $row2['dkpsys_default'] == 'Y' ) ? ' selected="selected"' : '',
+                       'OPTION'   => ( !empty($row2['dkpsys_name']) ) ? $row2['dkpsys_name'] : '(None)')
+                      );
+                  }
+              }
+             
+              $add     	= (isset($_POST['add'])) ? true : false;
+              $submit     = (isset($_POST['update'])) ? true : false;
+              $delete     = (isset($_POST['delete'])) ? true : false; 
+              $addraid	= (isset($_POST['newraid'])) ? true : false;   
+
+              if ( $add || $submit || $addraid)
+              {
+	              	if (!check_form_key('acp_dkp_event'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+	  			}
+	  			
+	  			if ($addraid)
+	  			{  
+	  				meta_refresh(0, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid&amp;".URI_DKPSYS . '=' . $this->event['dkpsys_id'] . '&amp;' . URI_EVENT . '=' . $this->event['event_id'] ));
+	  			}
+	
+              if ($add)
+                 {
+                    $this_dkp_id = request_var('event_dkpid',0);
+                    
+                    $zone= utf8_normalize_nfc(request_var('zoneevent','', true));
+                    $event_name = utf8_normalize_nfc(request_var('event_name','', true));
+                    
+                    if ($zone != "--")
                     {
-                        $this->url_id = request_var(URI_EVENT, '');
+                       	$event_name= $zone;
                     }
-                   
-                    if ( $this->url_id )   
+                    
+                    if (strlen($event_name) < 3)
+                    {
+                         trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
+                    }
+                    
+                    $event_imagename = utf8_normalize_nfc(request_var('event_image','', true));
+                    $event_color = utf8_normalize_nfc(request_var('event_color','', true));
+                    $event_value= request_var('event_value', 0.0);
+
+                    // check existing
+                     $eventexistsrow = $db->sql_query("SELECT count(*) as evcount from " . EVENTS_TABLE . 
+                     " WHERE UPPER(event_name) = '" . strtoupper($db->sql_escape(utf8_normalize_nfc(request_var('event_name',' ', true))))  .  "' ;");
+                     $eventexistsrow = $db->sql_fetchrow($eventexistsrow);
+                     
+                     if($eventexistsrow['evcount'] !=0 )
+                     {
+                          trigger_error($user->lang['ERROR_RESERVED_EVENTNAME']   . $link, E_USER_WARNING);
+                     }
+                     
+                     $this_event_id = $db->sql_query("SELECT MAX(event_id) as id FROM " . EVENTS_TABLE . ";");
+                     $this_event_id = $db->sql_fetchrow($this_event_id);
+                     $this_event_id = $this_event_id['id'] + 1;
+                     $query = $db->sql_build_array('INSERT', array(   
+                             'event_dkpid'    => $this_dkp_id,   
+                             'event_id'       => $this_event_id,   
+                             'event_name'     => $event_name,  
+                             'event_imagename'    => $event_imagename,  
+                             'event_color'    => $event_color,   
+                             'event_value'    => $event_value,  
+                             'event_added_by' => $user->data['username'])   
+                         );       
+                                
+                     $db->sql_query('INSERT INTO ' . EVENTS_TABLE . $query);
+                        
+                     $log_action = array(
+                             'header'       => 'L_ACTION_EVENT_ADDED',
+                             'id'           => $this_event_id,
+                             'L_NAME'     => ($clean_event_name),
+                             'L_VALUE'    => $event_value,
+                             'L_ADDED_BY' => $user->data['username']);
+                         
+                     $this->log_insert(array(
+                             'log_type'   => $log_action['header'],
+                             'log_action' => $log_action)
+                         );
+                         $success_message = sprintf($user->lang['ADMIN_ADD_EVENT_SUCCESS'], request_var('event_value', 0.0), $clean_event_name);
+                         trigger_error($success_message . $link);
+                 }
+	                 
+	              if ($submit)
+	              {
+	                  $this->url_id = request_var('hidden_id',0);
+	
+	                  // get old event name, value from db
+	                  $sql = 'SELECT event_dkpid, event_name, event_value
+	                          FROM ' . EVENTS_TABLE . "
+	                          WHERE event_id='" . (int) $this->url_id . "'";
+	                 
+	                  $result = $db->sql_query($sql);
+	                  
+	                  // loop through object until sql_fetchrow returns false
+	                  while ( $row = $db->sql_fetchrow($result) )
+	                  {
+	                      $this->old_event = array(
+	                    	    'event_dkpid' => $row['event_dkpid'],
+	                          'event_name'  => $row['event_name'],
+	                          'event_value' => $row['event_value']
+	                      );
+	                  }
+	                  $db->sql_freeresult($result);           
+	
+	                  $dkpid = request_var('event_dkpid','');
+	                  $zone= utf8_normalize_nfc(request_var('zoneevent','', true));
+	                  $new_event_name = utf8_normalize_nfc(request_var('event_name','', true));
+	                  
+	                  if ($dkpid == '')
+	                  {
+	                  	trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
+	                  }
+	                  
+	                  if ($zone != "--")
+	                  {
+	                     	$new_event_name = $zone;
+	                  }
+	                  
+	                  if (strlen($new_event_name) < 3)
+	                  {
+	                       trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
+	                  }
+	                     
+	                  //
+	                  // Update the event
+	                  //
+	                  $query = $db->sql_build_array('UPDATE', array(
+	                      'event_dkpid' => $dkpid, 
+	                  	'event_name'  => $new_event_name,
+	                  	'event_imagename' => utf8_normalize_nfc(request_var('event_image','', true)),
+	                     	'event_color' => utf8_normalize_nfc(request_var('event_color','', true)),
+	                      'event_value' => request_var('event_value', 0.0))
+	                  );
+	                  
+	                  $sql = 'UPDATE ' . EVENTS_TABLE . ' SET ' . $query . " WHERE event_id='" . (int) $this->url_id . "'";
+	                  $db->sql_query($sql);
+	         
+	                  //
+	                  // Logging
+	                  //
+	                  $log_action = array(
+	                      'header'         => 'L_ACTION_EVENT_UPDATED',
+	                      'id'			 => request_var(URI_EVENT,0),
+	                      'L_NAME_BEFORE'  => $this->old_event['event_name'],
+	                      'L_VALUE_BEFORE' => $this->old_event['event_value'],
+	                      'L_NAME_AFTER'   => $new_event_name, 
+	                      'L_VALUE_AFTER'  => request_var('event_value', 0.0),
+	                      'L_UPDATED_BY'   => $user->data['username']);
+	                  
+	                  $this->log_insert(array(
+	                      'log_type'   => $log_action['header'],
+	                      'log_action' => $log_action)
+	                  );
+	                 
+	                  $success_message = sprintf($user->lang['ADMIN_UPDATE_EVENT_SUCCESS'], request_var('event_value', 0.0), $new_event_name);
+	                  trigger_error($success_message . $link);
+	                 
+	              }   
+	                     
+	
+                  if ($delete)
+                  {   
+
+                      if  (isset($_GET[URI_EVENT]))
                       {
-                        // we have a GET
-                        $update = true;
-                       
-                        $sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename 
-                                FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b 
-                                WHERE a.event_id = '" . $this->url_id . "'
-                                AND b.dkpsys_id = a.event_dkpid  ";
-                        $result = $db->sql_query($sql);
-                        $row = $db->sql_fetchrow($result); 
-                        $db->sql_freeresult($result);
-                        if (!$row)
-                        {
-                            trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED']);
-                        }
-                        else 
-                        {
-                            $this->event = array(
-                            	'event_dkpsys_name'  => $row['dkpsys_name'],
-                                'dkpsys_id'  		 => $row['dkpsys_id'],
-                                'event_name'  	     => $row['event_name'],
-	                            'event_color'  	     => $row['event_color'],
-	                            'event_imagename'  	 => $row['event_imagename'],
-                                'event_value' 	     => $row['event_value'],
-                                'event_id' 		     => $row['event_id']
-                            );
-                        }
+                          
+                          // give a warning that raids cant be without event
+                          if (confirm_box(true))
+                          {
+                             
+                              $sql = 'DELETE FROM ' . EVENTS_TABLE . '
+                                      WHERE event_id = ' . request_var(URI_EVENT,0) ;
+                              $db->sql_query($sql);   
 
-                        while ( $row2 = $db->sql_fetchrow($resultdkpsys) )
-                        {
-                            $template->assign_block_vars('event_dkpid_row', array(
-                            'VALUE' => $row2['dkpsys_id'],
-                            'SELECTED' => ( $row2['dkpsys_name'] == $row['dkpsys_name']  ) ? ' selected="selected"' : '',
-                            'OPTION'   => ( !empty($row2['dkpsys_name']) ) ? $row2['dkpsys_name'] : '(None)')
-                            );
-                        }
-                       
-                    }
-                    else
-                    {
-                        // we dont have a GET so put default values
-                        while ($row2 = $db->sql_fetchrow($resultdkpsys) )
-                        {
-                            //dkpsys_default
-                            $template->assign_block_vars('event_dkpid_row', array(
-	                            'VALUE' => $row2['dkpsys_id'],
-	                            'SELECTED' => ( $row2['dkpsys_default'] == 'Y' ) ? ' selected="selected"' : '',
-	                            'OPTION'   => ( !empty($row2['dkpsys_name']) ) ? $row2['dkpsys_name'] : '(None)')
-                            );
-                        }
-                    }
-                   
-                    $add     	= (isset($_POST['add'])) ? true : false;
-                    $submit     = (isset($_POST['update'])) ? true : false;
-                    $delete     = (isset($_POST['delete'])) ? true : false; 
-                    $addraid	= (isset($_POST['newraid'])) ? true : false;   
-   
-                    if ( $add || $submit || $addraid)
-                    {
-                    	if (!check_form_key('acp_dkp_event'))
-						{
-							trigger_error('FORM_INVALID');
-						}
-        			}
-        			
-        			if ($addraid)
-        			{  
-        				meta_refresh(0, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid&amp;".URI_DKPSYS . '=' . $this->event['dkpsys_id'] . '&amp;' . URI_EVENT . '=' . $this->event['event_id'] ));
-        			}
-		
-                    if ($add)
-                        {
-                           $this_dkp_id = request_var('event_dkpid',0);
-                           
-                           $zone= utf8_normalize_nfc(request_var('zoneevent','', true));
-                           $event_name = utf8_normalize_nfc(request_var('event_name','', true));
-                           
-                           if ($zone != "--")
-                           {
-                              	$event_name= $zone;
-                           }
-                           
-                           if (strlen($event_name) < 3)
-                           {
-                                trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
-                           }
-                           
-                           $event_imagename = utf8_normalize_nfc(request_var('event_image','', true));
-                           $event_color = utf8_normalize_nfc(request_var('event_color','', true));
-                           $event_value= request_var('event_value', 0.0);
+                              $clean_event_name = str_replace("'","", $this->event['event_name']);
+                     
+                              $log_action = array(
+                                  'header'    => 'L_ACTION_EVENT_DELETED',
+                                  'id'        => request_var(URI_EVENT,0),
+                                  'L_NAME'  => $clean_event_name,
+                                  'L_VALUE' =>  $this->event['event_value']);
+                              
+                              $this->log_insert(array(
+                                  'log_type'   => $log_action['header'],
+                                  'log_action' => $log_action)
+                                  );
+ 
+                              $success_message = sprintf($user->lang['ADMIN_DELETE_EVENT_SUCCESS'], $this->event['event_value'], $this->event['event_name']);
+                              trigger_error($success_message . adm_back_link($this->u_action));
+                          }
+                          else
+                          {
+                              $s_hidden_fields = build_hidden_fields(array(
+                                  'delete'    => true,
+                                  'event_id'    => request_var(URI_EVENT,0) ,
+                                  )
+                              );
+ 
+                              $template->assign_vars(array(
+                                  'S_HIDDEN_FIELDS'    => $s_hidden_fields)
+                              );
 
-                           // check existing
-                            $eventexistsrow = $db->sql_query("SELECT count(*) as evcount from " . EVENTS_TABLE . 
-                            " WHERE UPPER(event_name) = '" . strtoupper($db->sql_escape(utf8_normalize_nfc(request_var('event_name',' ', true))))  .  "' ;");
-                            $eventexistsrow = $db->sql_fetchrow($eventexistsrow);
-                            
-                            if($eventexistsrow['evcount'] !=0 )
-                            {
-                                 trigger_error($user->lang['ERROR_RESERVED_EVENTNAME']   . $link, E_USER_WARNING);
-                            }
-                            
-                            $this_event_id = $db->sql_query("SELECT MAX(event_id) as id FROM " . EVENTS_TABLE . ";");
-                            $this_event_id = $db->sql_fetchrow($this_event_id);
-                            $this_event_id = $this_event_id['id'] + 1;
-                            $query = $db->sql_build_array('INSERT', array(   
-                                    'event_dkpid'    => $this_dkp_id,   
-                                    'event_id'       => $this_event_id,   
-                                    'event_name'     => $event_name,  
-                                    'event_imagename'    => $event_imagename,  
-                                    'event_color'    => $event_color,   
-                                    'event_value'    => $event_value,  
-                                    'event_added_by' => $user->data['username'])   
-                                );       
-                                       
-                            $db->sql_query('INSERT INTO ' . EVENTS_TABLE . $query);
-                               
-                            $log_action = array(
-                                    'header'       => 'L_ACTION_EVENT_ADDED',
-                                    'id'           => $this_event_id,
-                                    'L_NAME'     => ($clean_event_name),
-                                    'L_VALUE'    => $event_value,
-                                    'L_ADDED_BY' => $user->data['username']);
-                                
-                            $this->log_insert(array(
-                                    'log_type'   => $log_action['header'],
-                                    'log_action' => $log_action)
-                                );
-                                $success_message = sprintf($user->lang['ADMIN_ADD_EVENT_SUCCESS'], request_var('event_value', 0.0), $clean_event_name);
-                                trigger_error($success_message . $link);
-                       
-                            
-                        }
-                       
-                    if ($submit)
-                    {
-                        $this->url_id = request_var('hidden_id',0);
-
-                        // get old event name, value from db
-                        $sql = 'SELECT event_dkpid, event_name, event_value
-                                FROM ' . EVENTS_TABLE . "
-                                WHERE event_id='" . (int) $this->url_id . "'";
-                       
-                        $result = $db->sql_query($sql);
-                        
-                        // loop through object until sql_fetchrow returns false
-                        while ( $row = $db->sql_fetchrow($result) )
-                        {
-                            $this->old_event = array(
-                          	    'event_dkpid' => $row['event_dkpid'],
-                                'event_name'  => $row['event_name'],
-                                'event_value' => $row['event_value']
-                            );
-                        }
-                        $db->sql_freeresult($result);           
-
-                        $dkpid = request_var('event_dkpid','');
-                        $zone= utf8_normalize_nfc(request_var('zoneevent','', true));
-                        $new_event_name = utf8_normalize_nfc(request_var('event_name','', true));
-                        
-                        if ($dkpid == '')
-                        {
-                        	trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
-                        }
-                        
-                        if ($zone != "--")
-                        {
-                           	$new_event_name = $zone;
-                        }
-                        
-                        if (strlen($new_event_name) < 3)
-                        {
-                             trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $link, E_USER_WARNING);
-                        }
-                           
-                        //
-                        // Update the event
-                        //
-                        $query = $db->sql_build_array('UPDATE', array(
-                            'event_dkpid' => $dkpid, 
-                        	'event_name'  => $new_event_name,
-                        	'event_imagename' => utf8_normalize_nfc(request_var('event_image','', true)),
-                           	'event_color' => utf8_normalize_nfc(request_var('event_color','', true)),
-                            'event_value' => request_var('event_value', 0.0))
-                        );
-                        
-                        $sql = 'UPDATE ' . EVENTS_TABLE . ' SET ' . $query . " WHERE event_id='" . (int) $this->url_id . "'";
-                        $db->sql_query($sql);
-               
-                        //
-                        // Logging
-                        //
-                        $log_action = array(
-                            'header'         => 'L_ACTION_EVENT_UPDATED',
-                            'id'			 => request_var(URI_EVENT,0),
-                            'L_NAME_BEFORE'  => $this->old_event['event_name'],
-                            'L_VALUE_BEFORE' => $this->old_event['event_value'],
-                            'L_NAME_AFTER'   => $new_event_name, 
-                            'L_VALUE_AFTER'  => request_var('event_value', 0.0),
-                            'L_UPDATED_BY'   => $user->data['username']);
-                        
-                        $this->log_insert(array(
-                            'log_type'   => $log_action['header'],
-                            'log_action' => $log_action)
-                        );
-                       
-                        $success_message = sprintf($user->lang['ADMIN_UPDATE_EVENT_SUCCESS'], request_var('event_value', 0.0), $new_event_name);
-                        trigger_error($success_message . $link);
-                       
-                    }   
-                           
-
-                        if ($delete)
-                        {   
-   
-                            if  (isset($_GET[URI_EVENT]))
-                            {
-                                
-                                // give a warning that raids cant be without event
-                                if (confirm_box(true))
-                                {
-                                   
-                                    $sql = 'DELETE FROM ' . EVENTS_TABLE . '
-                                            WHERE event_id = ' . request_var(URI_EVENT,0) ;
-                                    $db->sql_query($sql);   
-   
-                                    $clean_event_name = str_replace("'","", $this->event['event_name']);
-                           
-                                    $log_action = array(
-                                        'header'    => 'L_ACTION_EVENT_DELETED',
-                                        'id'        => request_var(URI_EVENT,0),
-                                        'L_NAME'  => $clean_event_name,
-                                        'L_VALUE' =>  $this->event['event_value']);
-                                    
-                                    $this->log_insert(array(
-                                        'log_type'   => $log_action['header'],
-                                        'log_action' => $log_action)
-                                        );
-       
-                                    $success_message = sprintf($user->lang['ADMIN_DELETE_EVENT_SUCCESS'], $this->event['event_value'], $this->event['event_name']);
-                                    trigger_error($success_message . adm_back_link($this->u_action));
-                                }
-                                else
-                                {
-                                    $s_hidden_fields = build_hidden_fields(array(
-                                        'delete'    => true,
-                                        'event_id'    => request_var(URI_EVENT,0) ,
-                                        )
-                                    );
-       
-                                    $template->assign_vars(array(
-                                        'S_HIDDEN_FIELDS'    => $s_hidden_fields)
-                                    );
-   
-                                    confirm_box(false, $user->lang['CONFIRM_DELETE_EVENT'], $s_hidden_fields);
-                                }
-                            }
-                        }   
+                              confirm_box(false, $user->lang['CONFIRM_DELETE_EVENT'], $s_hidden_fields);
+                          }
+                      }
+                  }   
 
                 if (isset($this->event))
                 {
@@ -358,7 +356,7 @@ class acp_dkp_event extends bbDkp_Admin
 					}
 					else
 					{
-						$select == ($row['name'] == $this->event_name ) ? ' selected="selected" ' : ' ';
+						$select = ($row['name'] == $this->event['event_name'] ) ? ' selected="selected" ' : ' ';
 						$s_zonelist_options .= '<option value="' . $row['name'] . '" ' . $select . ' > ' . $row['name'] . '</option>';
 					}
 					                    
