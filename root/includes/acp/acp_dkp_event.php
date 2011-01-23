@@ -186,7 +186,7 @@ class acp_dkp_event extends bbDkp_Admin
                      $log_action = array(
                              'header'       => 'L_ACTION_EVENT_ADDED',
                              'id'           => $this_event_id,
-                             'L_NAME'     => ($clean_event_name),
+                             'L_NAME'     => $event_name,
                              'L_VALUE'    => $event_value,
                              'L_ADDED_BY' => $user->data['username']);
                          
@@ -194,7 +194,7 @@ class acp_dkp_event extends bbDkp_Admin
                              'log_type'   => $log_action['header'],
                              'log_action' => $log_action)
                          );
-                         $success_message = sprintf($user->lang['ADMIN_ADD_EVENT_SUCCESS'], request_var('event_value', 0.0), $clean_event_name);
+                         $success_message = sprintf($user->lang['ADMIN_ADD_EVENT_SUCCESS'], request_var('event_value', 0.0), $event_name);
                          trigger_error($success_message . $link);
                  }
 	                 

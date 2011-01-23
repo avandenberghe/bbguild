@@ -132,28 +132,21 @@ function fnRemoveMember()
 
 <h1>{RAIDTITLE}</h1>
 <p>{L_EXPLAIN}</p>
-<fieldset>
+
 <div style="float: left; width: 55%;">
 <fieldset>
 
-<legend>{L_ADD_RAID_TITLE}</legend>
+<legend>{L_EDIT_RAID_TITLE}</legend>
 
 <input type="hidden" name="hidden_id" value="{RAID_ID}" /> 
 	<dl><dt><label>{L_POOL}:</label></dt>
-	<dd>
-	
-	<select name="dkpsys_id" class="input" onchange="javascript:form.submit();">
-		<!-- BEGIN dkpsys_row -->
-		<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
-		<!-- END dkpsys_row -->
-	</select>
-	</dd>
+	<dd><strong>{RAID_DKPPOOL}</strong></dd>
 	</dl>
 	
 	<dl>
-		<dt><label>{L_EVENT}:</label> (<a href="{U_ADD_EVENT}">{L_ADD_EVENT}</a>)</dt>
+		<dt><label>{L_EVENT}:</label></dt>
     <dd>
-	    <select name="event_id" id="event_id" class="input" size="10" style="width: 100%; " >
+	    <select name="event_id" id="event_id"" >
 			<!-- BEGIN events_row -->
 			<option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
 			<!-- END events_row -->
@@ -187,15 +180,9 @@ function fnRemoveMember()
 		</dd>
 	</dl>
 		
-	<dl>
 
-		<dt><label>{L_NOTE}:</label></dt>
-		<dd><textarea name="raid_note" cols="40" rows="5" wrap="soft">{RAID_NOTE}</textarea></dd>
-	</dl>
-	
 	<dl>
 		<dt><label>{L_RAIDVALUE}:</label>({L_ADD_RAID_VALUE_NOTE})</dt>
-		
 		<dd>
 			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />{FV_VALUE}
 		</dd>
@@ -205,45 +192,54 @@ function fnRemoveMember()
 </fieldset>
 </div>
 
+
 <div style="float: left; width: 45%;">
 <fieldset>
-
-<legend>{L_SEARCH}</legend>
-
-<span class="small">{L_HOLD_CTRL_NOTE}</span>
-<br/>
-<dl>
-	{L_SEARCH}:
-	<input type="text" name="memberSearch" size="35" maxlength="255" 
-	value="" class="input" onkeyup="fnSearch(this.name, 'all_members')" />
-</dl>
-<dl>
-	<select style="float: left; width: 47%;" name="all_members" size="20"
-		multiple="multiple" class="input">
-		<!-- BEGIN members_row -->
-		<option value="{members_row.VALUE}">{members_row.OPTION}</option>
-		<!-- END members_row -->
-	</select>
-
-	<select style="float: right; width: 47%;" name="raid_attendees[]"
-		size="20" multiple="multiple" class="input">
-		<!-- BEGIN raid_attendees_row -->
-		<option value="{raid_attendees_row.VALUE}" selected="selected">{raid_attendees_row.OPTION}</option>
-		<!-- END raid_attendees_row -->
-	</select>
-</dl>
-<dl>
-	<center>
-	<input type="button" name="button1" value="&lt;&lt;" accesskey="r" 
-	    onclick="return fnRemoveMember()" class="button1" /> 
-	<input type="button" name="button2" value="&gt;&gt;" accesskey="m"
-		onclick="return fnAddMember()" class="button1" />
-	</center>
-</dl>
+<legend>{L_NOTE}</legend>
+	<textarea name="raid_note" cols="60" rows="12" wrap="soft">{RAID_NOTE}</textarea>
 </fieldset>
 </div>
 
+
+<div style="clear: both; width: 100%;">
+<fieldset>
+<legend>{L_ATTENDEES}</legend>
+<table cellspacing="1">
+<thead>
+  <tr>
+    <th style="text-align:left;" width="30%"><a href="{U_LIST_RAIDS}&amp;o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
+    <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_RAIDVALUE}&amp;start={START}">{L_RAIDVALUE}</a></th>
+    <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_TIMEVALUE}&amp;start={START}">{L_TIMEVALUE}</a></th>
+    <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_ZSVALUE}&amp;start={START}">{L_ZSVALUE}</a></th>
+    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_DECAYVALUE}&amp;start={START}">{L_DECAY}</a></th>
+    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_TOTALVALUE}&amp;start={START}">{L_TOTAL}</a></th>
+    <th style="text-align:center;" width="5">{L_ACTION}</th>
+  </tr>
+  </thead>
+<tbody>
+  <!-- BEGIN raids_row -->
+  <!-- IF raids_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+    <td style="text-align:left;" width="30%"><a href="{raids_row.U_VIEW_MEMBER}">{raids_row.NAME}</a></td>
+    <td style="text-align:right;" width="15%" class="positive">{raids_row.RAIDVALUE}</td>
+    <td style="text-align:right;" width="15%" class="positive">{raids_row.TIMEVALUE}</td>
+    <td style="text-align:right;" width="15%" class="positive">{raids_row.ZSVALUE}</td>
+    <td style="text-align:right;" width="15%" class="negative">{raids_row.DECAYVALUE}</td>
+    <td style="text-align:right;" width="15%" class="positive">{raids_row.TOTAL}</td>
+    <td style="text-align:center;"  width="5" nowrap="nowrap">
+		<a href="{raids_row.U_VIEW_RAID}">{ICON_EDIT}&nbsp;{ICON_DELETE}</a>
+	</td>
+	
+  </tr>
+  <!-- END raids_row -->
+  <tr>
+    <th colspan="8" class="footer">{LISTRAIDS_FOOTCOUNT}</th>
+  </tr>
+  </tbody>
+</table>
+
+
 </fieldset>
+</div>
 
 </div>
 {S_FORM_TOKEN}

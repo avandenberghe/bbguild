@@ -42,6 +42,177 @@ function main($id, $mode)
 		switch ($mode)
 		{
 			/***************************************/
+			//
+			// List members
+            //
+			/***************************************/
+			case 'mm_listmembers':
+
+				// add member button redirect
+				$showadd = (isset($_POST['memberadd'])) ? true : false;
+				$submit = (isset ( $_POST ['member_guild_id'] ) ) ? true : false;
+				
+            	if($showadd)
+            	{
+					redirect(append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember"));            		
+            		break;
+            	}
+            	
+				/**************  Guild drop-down query ****************/
+				$sql = 'SELECT id, name, realm, region  
+                       FROM ' . GUILD_TABLE . ' 
+                       ORDER BY id desc';
+				$resultg = $db->sql_query ( $sql );
+				
+				/* check if page was posted back */
+				if ($submit) 
+				{
+				    // user selected dropdow - get guildid 
+					$guild_id = request_var ( 'member_guild_id', 0 );
+					
+					// fill popup and set selected to Post value
+					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
+					{
+						$template->assign_block_vars ( 	'guild_row', 
+						array (
+							'VALUE' => $row['id'], 
+							'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
+							'OPTION' => (! empty ( $row['name'] )) ?  $row['name']  : '(None)' ) );
+					}
+					$db->sql_freeresult ( $resultg );
+				
+				} 
+				else // default pageloading
+				{
+					$sql = 'SELECT max(id) as max FROM ' . GUILD_TABLE;                        
+					$result = $db->sql_query($sql);
+					$guild_id = $db->sql_fetchfield('max',0,$result);
+					$db->sql_freeresult($result);
+
+					// fill popup and set selected to default selection
+					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
+					{
+						$template->assign_block_vars ( 'guild_row', array (
+    						'VALUE' => $row['id'], 
+    						'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
+    						'OPTION' => $row['name'] ));
+					}
+				}
+				
+				$previous_data = '';
+				
+				$sort_order = array(
+					0 => array('member_name', 'member_name desc'),
+					1 => array('username', 'username desc'),
+					2 => array('member_level desc', 'member_level'),
+					3 => array('member_class', 'member_class desc'),
+					4 => array('rank_name', 'rank_name desc'),
+					5 => array('class_armor_type', 'class_armor_type desc'),
+					6 => array('member_joindate', 'member_joindate desc'),
+					7 => array('member_outdate', 'member_outdate desc'),
+					8 => array('member_comment', 'member_comment desc'),
+				);
+				
+				$current_order = switch_order($sort_order);
+				$sort_index = explode('.', $current_order['uri']['current']);
+				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
+				$show_all = (( isset($_GET['show'])) && request_var('show','') == 'all') ? true : false;
+				
+				$sql_array = array(
+				    'SELECT'    => 	'm.* , u.username, g.name, l.name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
+									 c.class_armor_type AS armor_type', 
+				 
+				    'FROM'      => array(
+				        MEMBER_LIST_TABLE 	=> 'm',
+				        MEMBER_RANKS_TABLE 	=> 'r',
+				        CLASS_TABLE  		=> 'c',
+				        BB_LANGUAGE			=> 'l', 
+				        GUILD_TABLE  		=> 'g',
+				    	),
+
+				    'LEFT_JOIN' => array(
+				        array(
+				            'FROM'  => array(USERS_TABLE => 'u'),
+				            'ON'    => 'u.user_id = m.phpbb_user_id '
+				        )
+				    ),
+				    
+				    'WHERE'     =>  " (m.member_rank_id = r.rank_id)
+				    				AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+									AND (m.member_guild_id = g.id)
+									AND (m.member_guild_id = r.guild_id)
+									AND (m.member_guild_id = " . $guild_id . ')
+									AND (m.member_class_id = c.class_id)', 
+				    	
+					'ORDER_BY'	=> $current_order['sql'],
+				    	
+				    );
+				    
+				$sql = $db->sql_build_query('SELECT', $sql_array);
+				
+				if ( !($members_result = $db->sql_query($sql)) )
+				{
+					trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
+				}
+				
+				$lines = 0;
+				$member_count = 0;
+				while ( $row = $db->sql_fetchrow($members_result) )
+				{
+					$phpbb_user_id = $row['phpbb_user_id']; 
+					++$member_count;
+					++$lines;
+					$template->assign_block_vars('members_row', array(
+						'ID'            => $row['member_id'],
+						'COUNT'         => $member_count,
+						'NAME'          => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
+						'USERNAME'      => $row['username'],
+						'RANK'          => $row['rank_name'],
+						'LEVEL'         => ( $row['member_level'] > 0 ) ? $row['member_level'] : '&nbsp;',
+						'ARMOR'         => ( !empty($row['armor_type']) ) ? $row['armor_type'] : '&nbsp;',
+						'CLASS'         => ( $row['member_class'] != 'NULL' ) ? $row['member_class'] : '&nbsp;',
+						'COMMENT'       => $row['member_comment'],
+						'JOINDATE'      => date($config['bbdkp_date_format'], $row['member_joindate']),
+						'OUTDATE'       => date($config['bbdkp_date_format'], $row['member_outdate']),  
+						'U_VIEW_USER' 	=> append_sid("index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"), 
+						'U_VIEW_MEMBER' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember") . '&amp;'. URI_NAME . '='.$row['member_name']
+						)
+					); 
+					
+					$previous_data = $row[$previous_source];
+				}
+				
+				$db->sql_freeresult ( $members_result );
+				
+				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
+				
+				$template->assign_vars(array(
+					'F_MEMBERS' => append_sid("index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember',
+					'F_MEMBERS_LIST' => append_sid("index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers',
+					'L_TITLE'		=> $user->lang['ACP_MM_LISTMEMBERS'],
+					'L_EXPLAIN'		=> $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'],
+					
+					'O_NAME' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
+					'O_USERNAME'	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
+					'O_LEVEL' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_CLASS' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_RANK' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_ARMOR' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_JOINDATE' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][6] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_OUTDATE' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'O_COMMENT' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][8] . "&amp;" . URI_GUILD . "=". $guild_id),
+					'U_LIST_MEMBERS' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;"), 		
+					'LISTMEMBERS_FOOTCOUNT' => $footcount_text
+					)
+				);			
+			
+				$this->page_title = 'ACP_MM_LISTMEMBERS';
+				$this->tpl_name = 'dkp/acp_'. $mode;
+				
+			break;
+			
+			
+			/***************************************/
 		    // add member 
 			/***************************************/
 			case 'mm_addmember':
@@ -391,7 +562,7 @@ function main($id, $mode)
 					}
 
 					$s_memberout_year_options = '<option value="0"' . (isset($this->member['member_outdate_mo']) ? ' selected="selected"' : '') . '>--</option>';
-					for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+					for ($i = $now['year'] - 10; $i <= $now['year'] + 10; $i++)
 					{
 						$yr = isset($this->member['member_outdate_y']) ? $this->member['member_outdate_y'] : $now['year'] ;
 						$selected = ($i == $yr) ? ' selected="selected"' : '';
@@ -427,7 +598,7 @@ function main($id, $mode)
 					$submit	 = (isset($_POST['add'])) ? true : false;
 					$update	 = (isset($_POST['update'])) ? true : false;
 					$delete	 = (isset($_POST['delete'])) ? true : false;	
-	                if ( $add || $submit || $delete)
+	                if ( $submit || $update || $delete)
 	                {
 	                   	if (!check_form_key('mm_addmember'))
 						{
@@ -782,179 +953,6 @@ function main($id, $mode)
 				$this->tpl_name = 'dkp/acp_'. $mode;
 				
 			break;
-			
-			/***************************************/
-			//
-			// List members
-            //
-			/***************************************/
-
-			case 'mm_listmembers':
-
-				// add member button redirect
-				$showadd = (isset($_POST['memberadd'])) ? true : false;
-				$submit = (isset ( $_POST ['member_guild_id'] ) ) ? true : false;
-				
-				
-            	if($showadd)
-            	{
-					redirect(append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember"));            		
-            		break;
-            	}
-            	
-				/**************  Guild drop-down query ****************/
-				$sql = 'SELECT id, name, realm, region  
-                       FROM ' . GUILD_TABLE . ' 
-                       ORDER BY id desc';
-				$resultg = $db->sql_query ( $sql );
-				
-				/* check if page was posted back */
-				if ($submit) 
-				{
-				    // user selected dropdow - get guildid 
-					$guild_id = request_var ( 'member_guild_id', 0 );
-					
-					// fill popup and set selected to Post value
-					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
-					{
-						$template->assign_block_vars ( 	'guild_row', 
-						array (
-							'VALUE' => $row['id'], 
-							'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
-							'OPTION' => (! empty ( $row['name'] )) ?  $row['name']  : '(None)' ) );
-					}
-					$db->sql_freeresult ( $resultg );
-				
-				} 
-				else // default pageloading
-				{
-					$sql = 'SELECT max(id) as max FROM ' . GUILD_TABLE;                        
-					$result = $db->sql_query($sql);
-					$guild_id = $db->sql_fetchfield('max',0,$result);
-					$db->sql_freeresult($result);
-
-					// fill popup and set selected to default selection
-					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
-					{
-						$template->assign_block_vars ( 'guild_row', array (
-    						'VALUE' => $row['id'], 
-    						'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
-    						'OPTION' => $row['name'] ));
-					}
-				}
-				
-				$previous_data = '';
-				
-				$sort_order = array(
-					0 => array('member_name', 'member_name desc'),
-					1 => array('username', 'username desc'),
-					2 => array('member_level desc', 'member_level'),
-					3 => array('member_class', 'member_class desc'),
-					4 => array('rank_name', 'rank_name desc'),
-					5 => array('class_armor_type', 'class_armor_type desc'),
-					6 => array('member_joindate', 'member_joindate desc'),
-					7 => array('member_outdate', 'member_outdate desc'),
-					8 => array('member_comment', 'member_comment desc'),
-				);
-				
-				$current_order = switch_order($sort_order);
-				$sort_index = explode('.', $current_order['uri']['current']);
-				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
-				$show_all = (( isset($_GET['show'])) && request_var('show','') == 'all') ? true : false;
-				
-				$sql_array = array(
-				    'SELECT'    => 	'm.* , u.username, g.name, l.name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
-									 c.class_armor_type AS armor_type', 
-				 
-				    'FROM'      => array(
-				        MEMBER_LIST_TABLE 	=> 'm',
-				        MEMBER_RANKS_TABLE 	=> 'r',
-				        CLASS_TABLE  		=> 'c',
-				        BB_LANGUAGE			=> 'l', 
-				        GUILD_TABLE  		=> 'g',
-				    	),
-
-				    'LEFT_JOIN' => array(
-				        array(
-				            'FROM'  => array(USERS_TABLE => 'u'),
-				            'ON'    => 'u.user_id = m.phpbb_user_id '
-				        )
-				    ),
-				    
-				    'WHERE'     =>  " (m.member_rank_id = r.rank_id)
-				    				AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
-									AND (m.member_guild_id = g.id)
-									AND (m.member_guild_id = r.guild_id)
-									AND (m.member_guild_id = " . $guild_id . ')
-									AND (m.member_class_id = c.class_id)', 
-				    	
-					'ORDER_BY'	=> $current_order['sql'],
-				    	
-				    );
-				    
-				$sql = $db->sql_build_query('SELECT', $sql_array);
-				
-				if ( !($members_result = $db->sql_query($sql)) )
-				{
-					trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
-				}
-				
-				$lines = 0;
-				$member_count = 0;
-				while ( $row = $db->sql_fetchrow($members_result) )
-				{
-					$phpbb_user_id = $row['phpbb_user_id']; 
-					++$member_count;
-					++$lines;
-					$template->assign_block_vars('members_row', array(
-						'ID'            => $row['member_id'],
-						'COUNT'         => $member_count,
-						'NAME'          => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
-						'USERNAME'      => $row['username'],
-						'RANK'          => $row['rank_name'],
-						'LEVEL'         => ( $row['member_level'] > 0 ) ? $row['member_level'] : '&nbsp;',
-						'ARMOR'         => ( !empty($row['armor_type']) ) ? $row['armor_type'] : '&nbsp;',
-						'CLASS'         => ( $row['member_class'] != 'NULL' ) ? $row['member_class'] : '&nbsp;',
-						'COMMENT'       => $row['member_comment'],
-						'JOINDATE'      => date($config['bbdkp_date_format'], $row['member_joindate']),
-						'OUTDATE'       => date($config['bbdkp_date_format'], $row['member_outdate']),  
-						'U_VIEW_USER' 	=> append_sid("index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"), 
-						'U_VIEW_MEMBER' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember") . '&amp;'. URI_NAME . '='.$row['member_name']
-						)
-					); 
-					
-					$previous_data = $row[$previous_source];
-				}
-				
-				$db->sql_freeresult ( $members_result );
-				
-				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
-				
-				$template->assign_vars(array(
-					'F_MEMBERS' => append_sid("index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember',
-					'F_MEMBERS_LIST' => append_sid("index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers',
-					'L_TITLE'		=> $user->lang['ACP_MM_LISTMEMBERS'],
-					'L_EXPLAIN'		=> $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'],
-					
-					'O_NAME' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
-					'O_USERNAME'	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
-					'O_LEVEL' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_CLASS' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_RANK' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_ARMOR' 		=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_JOINDATE' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][6] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_OUTDATE' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'O_COMMENT' 	=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][8] . "&amp;" . URI_GUILD . "=". $guild_id),
-					'U_LIST_MEMBERS' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;"), 		
-					'LISTMEMBERS_FOOTCOUNT' => $footcount_text
-					)
-				);			
-			
-				$this->page_title = 'ACP_MM_LISTMEMBERS';
-				$this->tpl_name = 'dkp/acp_'. $mode;
-				
-			break;
-
 			
 			/***************************************/
 			// ranks setup

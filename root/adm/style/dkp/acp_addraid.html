@@ -68,15 +68,30 @@ function durationcalc()
 	raidend.setHours(stoph);
 	raidend.setMinutes(stopm);
 	raidend.setSeconds(stops);
+	
+	document.addraid.ed.value = raidend.getDate;
+	document.addraid.emo.value = raidend.getMonth;
+	document.addraid.eY.value = raidend.getYear;
 
 	var diff=raidend-raidbegin;
-	diff=diff/86400000*24;
-	diff=diff.toFixed(2);
-	document.addraid.raid_duration.value = diff;
-
+	if(diff> 0)
+	{
+		diff=diff/86400000*24;
+		diff=diff.toFixed(2);		
+		document.addraid.raid_duration.value = diff;
+	}
+	else
+	{
+		document.addraid.raid_duration.value = 0;
+	}
+	
 	var dkp_per_timeunit = document.addraid.dkptimeunit.value;
 	var unitminutes = document.addraid.timeunit.value;
-	var dkp_bonus = (dkp_per_timeunit * (diff*60) / unitminutes ).toFixed(2);
+	var dkp_bonus = 0;
+	if(unitminutes > 0)
+	{
+		dkp_bonus = (dkp_per_timeunit * (diff*60) / unitminutes ).toFixed(2);
+	}
 	
 	document.addraid.time_bonus.value = dkp_bonus;
 }
@@ -222,6 +237,10 @@ function fnRemoveMember()
 			
 	   </dd>
 	</dl>
+	<input type="hidden" name="ed" value="" /> 
+	<input type="hidden" name="emo" value="" /> 
+	<input type="hidden" name="eY" value="" /> 
+	
 	<dl>
 		<dt><label>{L_RAIDSTART}:</label></dt>
 		<dd>
