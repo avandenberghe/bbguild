@@ -261,7 +261,7 @@ function fnRemoveMember()
 	<dl>
 		<dt><label>{L_RAIDDURATION}:</label>({L_RAIDDURATION_EXPLAIN})</dt>
 		<dd>
-			<input type="text" name="raid_duration" id="raid_duration" size="8" maxlength="7" value="{RAID_DURATION}" class="input" />
+			<input readonly="readonly" type="text" name="raid_duration" id="raid_duration" size="8" maxlength="7" value="{RAID_DURATION}" class="input"  style="border: none"/>
 		</dd>
 	</dl>
 	
@@ -279,7 +279,7 @@ function fnRemoveMember()
 	<input type="hidden" name="dkptimeunit" value="{DKPTIMEUNIT}" /> 
 	<input type="hidden" name="timeunit" value="{TIMEUNIT}" /> 
 	<dl>
-		<dt><label>{L_TIME_BONUS}:</label>{DKPPERTIME}</dt>
+		<dt><label>{L_TIME_BONUS}:</label>&nbsp;{L_TIME_BONUS_EXPLAIN}&nbsp;{DKPPERTIME}</dt>
 		<dd>
 			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{TIME_BONUS}" class="input" />
 		</dd>

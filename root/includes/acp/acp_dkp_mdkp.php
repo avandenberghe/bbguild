@@ -325,7 +325,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 			case 'mm_editmemberdkp':
 			    // invisible module
 					$S_ADD = false;
-					if (isset($_GET['member_id']) && isset($_GET[URI_DKPSYS]) )  
+					if (isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]) )  
 					{
 						$sql_array = array(
 					    'SELECT'    => '

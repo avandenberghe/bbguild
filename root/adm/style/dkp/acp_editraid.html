@@ -3,135 +3,88 @@
 		$Id$
 //-->
 <a name="maincontent"></a>
-
 <script type="text/javascript">
-
 //<![CDATA[
-
-function check_form()
+window.onload = start;
+function start()
 {
-	// checking length of raidmembername
-	if (document.addraid.elements["raid_attendees[]"].value.length < 1)
-    {
-        alert('{MSG_ATTENDEES_EMPTY}');
-        return false;
-    }
-    
-    // checking if there is an event selected	
-    if (document.addraid.elements["raid_name[]"].value.length < 1)
-    {
-        alert('{MSG_NAME_EMPTY}');
-        return false;
-    }
-    return true;
+	durationcalc();
 }
-   
-function fnSearch( searchField, searchItem )
+
+/* gets value from event and puts it in raidvalue box */
+function switch_event_val()
 {
-    var searchBox = document.addraid.elements[searchField];
-    var selectBox = document.addraid.elements[searchItem];
-   
-    var reSearch = new RegExp( searchBox.value, "i" );
-   
-    var len = selectBox.options.length;
-    for ( var i = 0; i < len; i++ )
-    {
-        if( reSearch.test( selectBox.options[i].value ) )
-        {
-            selectBox.options[i].selected = true;
-            break;
-        }
-    }
+  var patt= / - \(([0-9.]+)\)/;
+  var eventvalue  = document.editraid.event_id.options[document.editraid.event_id.selectedIndex].text.match(patt);
+  document.editraid.raid_value.value = eventvalue[eventvalue.length-1]; 
 }
 
 
-function fnAddMember()
+/* calculates time dkp bonus from raid duration and config settings */
+function durationcalc()
 {
+	var day = document.editraid.d.options[document.editraid.d.selectedIndex].text;
+	var month = document.editraid.mo.options[document.editraid.mo.selectedIndex].text;
+	var year = document.editraid.Y.options[document.editraid.Y.selectedIndex].text;
+	var starth = document.editraid.sh.options[document.editraid.sh.selectedIndex].text;
+	var startm = document.editraid.smi.options[document.editraid.smi.selectedIndex].text;
+	var starts = document.editraid.ss.options[document.editraid.ss.selectedIndex].text;
+	var raidbegin = new Date();
+	raidbegin.setDate(day);
+	raidbegin.setMonth(month);
+	raidbegin.setYear(year);
+	raidbegin.setHours(starth);
+	raidbegin.setMinutes(startm);
+	raidbegin.setSeconds(starts);
 	
-    var form = document.addraid;
-    var fromField = form.all_members;
-    //destination
-    var toField = form.elements["raid_attendees[]"];
+	var stoph = document.editraid.eh.options[document.editraid.eh.selectedIndex].text;
+	var stopm = document.editraid.emi.options[document.editraid.emi.selectedIndex].text;
+	var stops = document.editraid.es.options[document.editraid.es.selectedIndex].text;
+	var raidend = new Date();
+	raidend.setDate(day);
+	raidend.setMonth(month);
+	raidend.setYear(year);
+	if(stoph<starth)
+	{  /* past midnight*/
+		raidend.setDate(raidend.getDate() + 1);
+	}
+	raidend.setHours(stoph);
+	raidend.setMinutes(stopm);
+	raidend.setSeconds(stops);
+	
+	document.editraid.ed.value = raidend.getDate;
+	document.editraid.emo.value = raidend.getMonth;
+	document.editraid.eY.value = raidend.getYear;
 
-    var fromSize = fromField.options.length
-    var toSize = toField.options.length
-
-    var aSelected = new Array();
-
-    // Build an array of the selected members
-    for (var i = 0; i < fromSize; i++)
-    {
-        if ( fromField.options[i].selected == true )
-        {
-            aSelected[aSelected.length] = i;
-        }
-    }
-
-    var offset = 0;
-    for(var i = 0; i < aSelected.length; i++ )
-    {
-        var index = aSelected[i];
-
-        var memberValue = fromField.options[index].value;
-        var memberText = fromField.options[index].text;
-
-        // Remove the initial spacer member
-        if ( (toSize == 1) && (toField.options[0].value == "") )
-        {
-            toSize = 0;
-        }
-
-        // Loop through the destination list, don't add if it's a duplicate
-        for (var j = 0, exists = false; j < toSize; j++ )
-        {
-            // destination already exists
-            if ( toField.options[ j ].value == memberValue )
-            {
-                var exists = true;
-                offset++;
-            }
-        }
-
-        // destination doesnt exist, add them
-        if ( exists != true )
-        {
-            toField.options[toSize + i - offset] = new Option(memberText, memberValue);
-            toField.options[toSize + i - offset].selected = true;
-        }
-    }
-    
-    // done - clear the search box and focus it for the next entry
-    form.memberSearch.value = "";
-    form.memberSearch.focus();
-
-    //return false;
-}
-
-function fnRemoveMember()
-{
-  var form = document.addraid;
-  var toField = form.elements["raid_attendees[]"];
-  var toSize = toField.options.length;
-    
-  var i;
-  for (i = toField.length - 1; i>=0; i--) 
-  {
-  	if (toField.options[i].selected) 
-  	  {
-     	 toField.remove(i);
-  	  }
-  }
+	var diff=raidend-raidbegin;
+	if(diff> 0)
+	{
+		diff=diff/86400000*24;
+		diff=diff.toFixed(2);		
+		document.editraid.raid_duration.value = diff;
+	}
+	else
+	{
+		document.editraid.raid_duration.value = 0;
+	}
+	
+	var dkp_per_timeunit = document.editraid.dkptimeunit.value;
+	var unitminutes = document.editraid.timeunit.value;
+	var dkp_bonus = 0;
+	if(unitminutes > 0)
+	{
+		dkp_bonus = (dkp_per_timeunit * (diff*60) / unitminutes ).toFixed(2);
+	}
+	
+	document.editraid.time_bonus.value = dkp_bonus;
 }
 
 //]]>
-
 </script>
-
-<form method="post" action="{F_ADD_RAID}" name="addraid" onsubmit="return check_form(this)">
+<form method="post" action="{F_EDIT_RAID}" name="editraid" onsubmit="return check_form(this)">
 <div>
-
 <h1>{RAIDTITLE}</h1>
-<p>{L_EXPLAIN}</p>
+<p>{L_ACP_EDITRAID_EXPLAIN}</p>
 
 <div style="float: left; width: 55%;">
 <fieldset>
@@ -146,7 +99,7 @@ function fnRemoveMember()
 	<dl>
 		<dt><label>{L_EVENT}:</label></dt>
     <dd>
-	    <select name="event_id" id="event_id"" >
+	    <select name="event_id" id="event_id" onChange="javascript:switch_event_val();" >
 			<!-- BEGIN events_row -->
 			<option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
 			<!-- END events_row -->
@@ -160,34 +113,58 @@ function fnRemoveMember()
 		<select name="d">{S_RAIDDATE_DAY_OPTIONS}</select>
 		<select name="mo">{S_RAIDDATE_MONTH_OPTIONS}</select> 
 		<select name="Y">{S_RAIDDATE_YEAR_OPTIONS}</select>
-			
 	   </dd>
 	</dl>
-	<dl>
+		<input type="hidden" name="ed" value="" /> 
+		<input type="hidden" name="emo" value="" /> 
+		<input type="hidden" name="eY" value="" /> 
+			<dl>
 		<dt><label>{L_RAIDSTART}:</label></dt>
 		<dd>
-			<select name="sh">{S_RAIDSTART_H_OPTIONS}</select>
-			<select name="smi">{S_RAIDSTART_MI_OPTIONS}</select> 
-			<select name="ss">{S_RAIDSTART_S_OPTIONS}</select>
+			<select name="sh" onChange="javascript:durationcalc();">{S_RAIDSTART_H_OPTIONS}</select>
+			<select name="smi" onChange="javascript:durationcalc();">{S_RAIDSTART_MI_OPTIONS}</select> 
+			<select name="ss" onChange="javascript:durationcalc();">{S_RAIDSTART_S_OPTIONS}</select>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{L_RAIDEND}:</label></dt>
 		<dd>
-			<select name="eh">{S_RAIDEND_H_OPTIONS}</select>
-			<select name="emi">{S_RAIDEND_MI_OPTIONS}</select> 
-			<select name="es">{S_RAIDEND_S_OPTIONS}</select>
+			<select name="eh" onChange="javascript:durationcalc();">{S_RAIDEND_H_OPTIONS}</select>
+			<select name="emi" onChange="javascript:durationcalc();">{S_RAIDEND_MI_OPTIONS}</select> 
+			<select name="es" onChange="javascript:durationcalc();">{S_RAIDEND_S_OPTIONS}</select>
 		</dd>
 	</dl>
 		
-
+	<dl>
+		<dt><label>{L_RAIDDURATION}:</label>({L_RAIDDURATION_EXPLAIN})</dt>
+		<dd>
+			<input readonly="readonly" type="text" name="raid_duration" id="raid_duration" size="8" maxlength="7" value="{RAID_DURATION}" class="input" style="border: none" />
+		</dd>
+	</dl>
+	
 	<dl>
 		<dt><label>{L_RAIDVALUE}:</label>({L_ADD_RAID_VALUE_NOTE})</dt>
 		<dd>
 			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />{FV_VALUE}
 		</dd>
 	</dl>
-		
+
+	<input type="hidden" name="dkptimeunit" value="{DKPTIMEUNIT}" /> 
+	<input type="hidden" name="timeunit" value="{TIMEUNIT}" /> 
+	<dl>
+		<dt><label>{L_TIME_BONUS}:</label>&nbsp;{L_TIME_BONUS_EXPLAIN}&nbsp;{DKPPERTIME}</dt>
+		<dd>
+			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{TIME_BONUS}" class="input" />
+		</dd>
+	</dl>
+	 <dl>
+       <dt><label for="overridetime_bonus">{L_OVERRIDE}</label>{L_TIME_OVERRIDE}</dt>
+        <dd>
+        	<input type="checkbox" name="overridetime_bonus" value="1"/>
+        </dd>
+  	</dl>
+	
+	
 		
 </fieldset>
 </div>
@@ -207,56 +184,58 @@ function fnRemoveMember()
 <table cellspacing="1">
 <thead>
   <tr>
-    <th style="text-align:left;" width="30%"><a href="{U_LIST_RAIDS}&amp;o={O_NAME}&amp;start={START}">{L_NAME}</a></th>
-    <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_RAIDVALUE}&amp;start={START}">{L_RAIDVALUE}</a></th>
-    <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_TIMEVALUE}&amp;start={START}">{L_TIMEVALUE}</a></th>
-    <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_ZSVALUE}&amp;start={START}">{L_ZSVALUE}</a></th>
-    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_DECAYVALUE}&amp;start={START}">{L_DECAY}</a></th>
-    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_TOTALVALUE}&amp;start={START}">{L_TOTAL}</a></th>
+    <th style="text-align:left;" width="30%"><a href="{F_EDIT_RAID}&amp;o={O_NAME}&amp;">{L_NAME}</a></th>
+    <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
+    <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_TIMEVALUE}">{L_TIMEVALUE}</a></th>
+    <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_ZSVALUE}">{L_ZSVALUE}</a></th>
+    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_DECAYVALUE}">{L_DECAY}</a></th>
+    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_TOTALVALUE}">{L_TOTAL}</a></th>
     <th style="text-align:center;" width="5">{L_ACTION}</th>
   </tr>
   </thead>
 <tbody>
   <!-- BEGIN raids_row -->
   <!-- IF raids_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td style="text-align:left;" width="30%"><a href="{raids_row.U_VIEW_MEMBER}">{raids_row.NAME}</a></td>
+    <td style="text-align:left;" width="30%"><a href="{raids_row.U_VIEW_ATTENDEE}">{raids_row.NAME}</a></td>
     <td style="text-align:right;" width="15%" class="positive">{raids_row.RAIDVALUE}</td>
     <td style="text-align:right;" width="15%" class="positive">{raids_row.TIMEVALUE}</td>
     <td style="text-align:right;" width="15%" class="positive">{raids_row.ZSVALUE}</td>
     <td style="text-align:right;" width="15%" class="negative">{raids_row.DECAYVALUE}</td>
     <td style="text-align:right;" width="15%" class="positive">{raids_row.TOTAL}</td>
     <td style="text-align:center;"  width="5" nowrap="nowrap">
-		<a href="{raids_row.U_VIEW_RAID}">{ICON_EDIT}&nbsp;{ICON_DELETE}</a>
+		<a href="{raids_row.U_EDIT_ATTENDEE}">{ICON_EDIT}</a>&nbsp;
+		<a href="{raids_row.U_DELETE_ATTENDEE}">{ICON_DELETE}</a>
 	</td>
 	
   </tr>
   <!-- END raids_row -->
-  <tr>
-    <th colspan="8" class="footer">{LISTRAIDS_FOOTCOUNT}</th>
-  </tr>
   </tbody>
+<tfoot>
+  <tr>
+    <th class="footer">{LISTRAIDS_FOOTCOUNT}</th>
+    <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{RAID_VALUE}</th>
+    <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{TIMEVALUE}</th>
+    <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{ZSVALUE}</th>
+    <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{DECAYVALUE}</th>
+    <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{TOTAL}</th>
+    <th></th>
+  </tr>
+  </tfoot>
 </table>
-
 
 </fieldset>
 </div>
 
 </div>
 {S_FORM_TOKEN}
-<!-- IF S_ADD --> 
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-    <input type="submit" name="add"	value="{L_ADD_RAID}" class="button1" /> 
-    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
-</fieldset> 
-<!-- ELSE --> 
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
 	<input type="submit" name="delete" value="{L_DELETE_RAID}"	class="button1" />
 </fieldset>
 	<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
 	<input type="submit" name="update" value="{L_UPDATE_RAID}" class="button1" />
 	<input type="submit" name="additem" value="{L_ADD_ITEM}" class="button1" />
+	<input type="submit" name="addattendee" value="{L_ADD_ATTENDEE}" class="button1" />
 </fieldset>
-<!-- ENDIF -->
 
 </form>
 

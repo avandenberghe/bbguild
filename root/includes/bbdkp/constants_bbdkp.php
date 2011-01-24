@@ -24,7 +24,7 @@ define('URI_EVENT',      'eve');
 define('URI_ITEM',       'item'); 	 
 define('URI_LOG',        'log'); 	 
 define('URI_NAME',       'name'); 
-define('URI_NAMEID',     'memberid');	 
+define('URI_NAMEID',     'member_id');	 
 define('URI_NEWS',       'news'); 	 
 define('URI_ORDER',      'o'); 	 
 define('URI_PAGE',       'pag'); 	 

@@ -61,19 +61,16 @@ class acp_dkp_raid extends bbDkp_Admin
 				break;
 				
 			case 'editraid' :
-				if (isset ( $_GET [URI_RAID] ) ) 
-				{
-					/* display edited raid */
-					$raid_id = request_var (URI_RAID, 0);
-					$this->displayraid($raid_id);
-				} 
-				elseif (isset ( $_POST['add']) || isset ($_POST['update']) || isset ($_POST ['delete']) || isset ($_POST ['additem']) ) 
+			
+				if (isset ( $_POST['add']) || isset ($_POST['update']) || isset ($_POST ['delete']) 
+				|| isset ($_POST ['additem']) || isset ($_POST ['addattendee']) ) 
 				{
 					/* handle actions */
 					$raid_id = request_var ( 'hidden_id', 0 );
 					$update = (isset ( $_POST ['update'] )) ? true : false;
 					$delete = (isset ( $_POST ['delete'] )) ? true : false;
 					$additem = (isset ( $_POST ['additem'] )) ? true : false;
+					$addattendee = (isset ( $_POST ['addattendee'] )) ? true : false;
 					if($update)
 					{
 						$this->updateraid($raid_id);
@@ -88,14 +85,22 @@ class acp_dkp_raid extends bbDkp_Admin
 					{
 						meta_refresh(0, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=additem&amp;' . URI_RAID .'=' . $raid_id));
 					}
-
-					$this->displayraid($raid_id);
-	
+					
+					if($addattendee)
+					{
+						trigger_error("addattendee", E_USER_WARNING); 
+					}
 				}
+				
+				if (isset ( $_GET [URI_RAID] ) ) 
+				{
+					$raid_id = request_var (URI_RAID, 0);
+					$this->displayraid($raid_id);
+				} 
+				
 				$this->page_title = 'ACP_DKP_RAID_EDIT';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
-
 			case 'listraids' :
 				$this->listraids();
 				$this->page_title = 'ACP_DKP_RAID_LIST';
@@ -444,16 +449,24 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		
 		// get raid detail
-		
+		$sort_order = array (
+				0 => array ('member_name desc', 'member_name' ),
+				1 => array ('raid_value', 'raid_value desc' ), 
+				2 => array ('time_bonus', 'time_bonus desc' ), 
+				3 => array ('zerosum_bonus desc', 'zerosum_bonus' ),
+				4 => array ('raid_decay desc', 'raid_decay desc' ),
+				5 => array ('total desc', 'total' ),
+				);
+		$current_order = switch_order ( $sort_order );	
 		$sql_array = array(
-    		'SELECT'    => 'm.member_id ,m.member_name, r.raid_value, r.time_bonus, r.zerosum_bonus, r.raid_decay  ',
+    		'SELECT'    => 'm.member_id ,m.member_name, r.raid_value, r.time_bonus, r.zerosum_bonus, r.raid_decay, (r.raid_value + r.time_bonus + r.zerosum_bonus - r.raid_decay) as total  ',
 	    	'FROM'      => array(
     		    MEMBER_LIST_TABLE 	  => 'm',
         		RAID_DETAIL_TABLE    => 'r', 
     			),
  
     		'WHERE'     =>  'm.member_id = r.member_id and r.raid_id = ' . (int) $raid_id  , 
-    		'ORDER_BY' 	=> 'm.member_name',
+    		'ORDER_BY' 	=>  $current_order ['sql'],
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ( $sql );
@@ -469,26 +482,13 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 		$db->sql_freeresult( $result );
 		$raid['raid_detail'] = $raid_details;
-
-		$sort_order = array (
-				0 => array ('raid_start desc', 'raid_start' ),
-				0 => array ('raid_end desc', 'raid_end' ),
-				1 => array ('event_name', 'event_name desc' ), 
-				2 => array ('raid_note', 'raid_note desc' ), 
-				3 => array ('raid_value desc', 'raid_value' ),
-				4 => array ('time_value desc', 'time_value' ),
-				5 => array ('zs_value desc', 'zs_value' ),
-				6 => array ('raiddecay desc', 'raiddecay' ),
-				7 => array ('total desc', 'total' ),
-				);
-		$current_order = switch_order ( $sort_order );	
 		
 		$raid_value = 0.00;
 		$time_bonus = 0.00;
 		$zerosum_bonus = 0.00;
 		$raid_decay = 0.00;
 		$raid_total = 0.00;
-		
+		$countattendees = 0;
 		foreach($raid_details as $member_id => $raid_detail)
 		{
 			// fill attendees listbox 
@@ -497,7 +497,9 @@ class acp_dkp_raid extends bbDkp_Admin
 				'OPTION' => $raid_detail['member_name'] ) );
 			// fill attendees table
 			$template->assign_block_vars ('raids_row', array (
-				'U_VIEW_MEMBER' => append_sid ( "index.$phpEx?i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;" . URI_NAMEID . "={$member_id}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']), 
+				'U_VIEW_ATTENDEE' => append_sid ("index.$phpEx" , "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;" . URI_NAMEID . "={$member_id}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']), 
+				'U_EDIT_ATTENDEE' => append_sid ("index.$phpEx", "i=dkp_raid&amp;mode=editattendee&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
+				'U_DELETE_ATTENDEE' => append_sid ("index.$phpEx", "i=dkp_raid&amp;mode=deleteattendee&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
 				'NAME' 		 => $raid_detail['member_name'], 
 				'RAIDVALUE'  => $raid_detail['raid_value'], 
 				'TIMEVALUE'  => $raid_detail['time_bonus'],
@@ -511,6 +513,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			$zerosum_bonus += $raid_detail['zerosum_bonus'];
 			$raid_decay += $raid_detail['raid_decay'];
 			$raid_total = $raid_value + $time_bonus + $zerosum_bonus - $raid_decay;
+			$countattendees += 1;
 		}
 		
 		// build presets for raiddate and hour pulldown
@@ -549,7 +552,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 
 		$s_raid_mi_options = '<option value="0">--</option>';
-		for ($i = 1; $i < 59; $i++)
+		for ($i = 1; $i <= 59; $i++)
 		{
 			$mi = isset($raid['raid_start']) ? date('i', $raid['raid_start']) : $now['minutes'] ;
 			$selected = ($i == $mi ) ? ' selected="selected"' : '';
@@ -557,7 +560,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 
 		$s_raid_s_options = '<option value="0">--</option>';
-		for ($i = 1; $i < 59; $i++)
+		for ($i = 1; $i <= 59; $i++)
 		{
 			$s = isset($raid['raid_start']) ?  date('s',$raid['raid_start']) : $now['seconds'] ;
 			$selected = ($i == $s ) ? ' selected="selected"' : '';
@@ -574,7 +577,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 
 		$s_raidend_mi_options = '<option value="0">--</option>';
-		for ($i = 1; $i < 59; $i++)
+		for ($i = 1; $i <= 59; $i++)
 		{
 			$mi = isset($raid['raid_end']) ? date('i', $raid['raid_end']) : $now['minutes'] ;
 			$selected = ($i == $mi ) ? ' selected="selected"' : '';
@@ -582,7 +585,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 
 		$s_raidend_s_options = '<option value="0">--</option>';
-		for ($i = 1; $i < 59; $i++)
+		for ($i = 1; $i <= 59; $i++)
 		{
 			$s = isset($raid['raid_end']) ?  date('s',$raid['raid_end']) : $now['seconds'] ;
 			$selected = ($i == $s ) ? ' selected="selected"' : '';
@@ -619,9 +622,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		$template->assign_vars ( array (
 
 			'L_TITLE' 			=> $user->lang ['ACP_ADDRAID'], 
-			'L_EXPLAIN' 		=> $user->lang ['ACP_ADDRAID_EXPLAIN'], 
-			'F_ADD_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid" ), 
-			'U_ADD_EVENT' 		=> append_sid ( "index.$phpEx", "i=dkp_event&amp;mode=addevent" ), 
+			'F_EDIT_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
+			'F_ADDATTENDEE' 	=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addattendee&amp;". URI_RAID . "=" .$raid_id ),
 			'RAIDTITLE' 		=> sprintf($user->lang['RAIDDESCRIPTION'], $raid_id, $raid['event_name'], 
 							   $user->format_date($raid['raid_start'])), 
 			'RAID_VALUE' 		=> $raid_value, 
@@ -632,6 +634,10 @@ class acp_dkp_raid extends bbDkp_Admin
 			'RAID_NOTE' 		=> $raid['raid_note'], 
 			'RAID_ID' 			=> $raid_id, 
 			'RAID_DKPPOOL' 		=> $raid['dkpsys_name'], 
+			'DKPTIMEUNIT'				=> $config['bbdkp_dkptimeunit'], 
+			'TIMEUNIT' 					=> $config['bbdkp_timeunit'],
+	 		'DKPPERTIME'				=> sprintf($user->lang['DKPPERTIME'], $config['bbdkp_dkptimeunit'], $config['bbdkp_timeunit'] ), 
+							   
 							   
 			'S_RAIDDATE_DAY_OPTIONS'	=> $s_raid_day_options,
 			'S_RAIDDATE_MONTH_OPTIONS'	=> $s_raid_month_options,
@@ -647,6 +653,15 @@ class acp_dkp_raid extends bbDkp_Admin
 			'S_RAIDEND_MI_OPTIONS'		=> $s_raidend_mi_options,
 			'S_RAIDEND_S_OPTIONS'		=> $s_raidend_s_options,
 			
+			'O_NAME' 			  => $current_order ['uri'] [0], 
+			'O_RAIDVALUE' 		  => $current_order ['uri'] [1],
+			'O_TIMEVALUE' 		  => $current_order ['uri'] [2],
+			'O_ZSVALUE' 		  => $current_order ['uri'] [3],
+			'O_DECAYVALUE' 		  => $current_order ['uri'] [4],
+			'O_TOTALVALUE' 		  => $current_order ['uri'] [5], 
+
+			'LISTRAIDS_FOOTCOUNT' => sprintf ( $user->lang ['LISTATTENDEES_FOOTCOUNT'], $countattendees),
+
 			'L_DATE' => $user->lang ['DATE'] . ' dd/mm/yyyy', 
 			'L_TIME' => $user->lang ['TIME'] . ' hh:mm:ss', 
 			
@@ -654,7 +669,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			'MSG_ATTENDEES_EMPTY' => $user->lang ['FV_REQUIRED_ATTENDEES'], 
 			'MSG_NAME_EMPTY' 	  => $user->lang ['FV_REQUIRED_EVENT_NAME'], 
 			'MSG_GAME_NAME' 	  => $config ['bbdkp_default_game'], 
-
+							   
 				) );
 				
 	}
@@ -1291,16 +1306,16 @@ class acp_dkp_raid extends bbDkp_Admin
                   {
                      $sql  = 'UPDATE ' . MEMBER_DKP_TABLE . ' m
                      SET m.member_earned = m.member_earned + ' . (float) $raid['raid_value'] . ' + ' . (float) $raid['raid_timebonus'] . ' , 
-                     m.raid_value = m.raid_value + ' . (float) $raid['raid_value'] . ', 
+                     m.member_raid_value = m.member_raid_value + ' . (float) $raid['raid_value'] . ', 
                      m.member_time_bonus = m.member_time_bonus + ' . (float) $raid['raid_timebonus'] . ', ';
                      
-                     // Do update their lastraid if it's earlier than this raid's date
+                     // Do update their lastraid if it's earlier than this raid's starting time
                      if ( $row['member_lastraid'] < $raid['raid_start'] )
                      {
                         $sql .= 'm.member_lastraid = ' . $raid['raid_start'] . ', ';
                      }
                      
-                     // Do update their firstraid if it's later than this raid's date
+                     // Do update their firstraid if it's later than this raid's starting time
                      if ( $row['member_firstraid'] > $raid['raid_start'] )
                      {
                         $sql .= 'm.member_firstraid = ' . $raid['raid_start'] . ', ';
