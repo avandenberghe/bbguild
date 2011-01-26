@@ -221,6 +221,7 @@ $lang = array_merge($lang, array(
 'ACP_DKP_CONFIG' => 'bbDkp Config',
 'RETURN_DKPINDEX' => 'Return to DKP Index',
 'RETURN_LOG'  => 'Return to Log listing. ',
+'RETURN_RAID'  => 'Return to Raid. ',
 'ACP_DKP' => 'bbDKP Adminpanel',
 'ACP_ITEMSTATS' => 'Popup Configuration',
 'ACP_INDEXPAGE' => 'Portal Configuration', 
@@ -268,6 +269,7 @@ $lang = array_merge($lang, array(
 'USERNAME_EXPLAIN' => 'Choose the phpBB username that is associated with this Game membername. This overrides the user choice in the UCP. ', 
 'ACP_DKP_LOOTSYSTEMOPTIONS'	=> 'Lootsystem options, Raid Decay rate, Item Decay rate, Zerosum Bank account',
 'ACP_DKP_LOOTSYSTEMEXPLAIN'	=> 'A short guide to Loot systems',
+'EDIT_RAIDER_EXPLAIN' => 'Here you can edit a Raid attendees earned points',
 
 
 // Permission Messages
@@ -314,6 +316,7 @@ $lang = array_merge($lang, array(
 'CONFIRM_DELETE_RACE' => 'Are you sure you want to delete the race %s ?',
 'CONFIRM_DELETE_CLASS' => 'Are you sure you want to delete the class %s ?',
 'CONFIRM_CREATE_RAID' => 'Please confirm to create raid on %s.',
+'CONFIRM_DELETE_ATTENDEE' => 'Please confirm deletion of attendee %s on raid %s',
 
 // Log Actions
 'ACTION_DEFAULT_DKP_CHANGED' => 'Default DKP Pool changed', 
@@ -348,6 +351,7 @@ $lang = array_merge($lang, array(
 'ACTION_RAID_UPDATED' => 'Raid Updated',
 'ACTION_RT_CONFIG_UPDATED' => 'Raidtracker Config Updated', 
 
+
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Newest Admin Actions',
 'VLOG_DKPSYS_ADDED' => '%s added the dkp pool %s.',
@@ -378,6 +382,7 @@ $lang = array_merge($lang, array(
 'VLOG_RT_CONFIG_UPDATED'  => '%s updated Raidtracker settings',
 'VLOG_LOG_DELETED' => '%s deleted logid %s.',
 'VLOG_DEFAULT_DKP_CHANGED' => '%S changed Default DKP Pool',
+'VLOG_RAID_ATTENDEE_DELETED' => '%s deleted attendee %s from raid %s',
 
 // Before/After
 'ADJUSTMENT_AFTER' => 'Adjustment After',
@@ -519,7 +524,7 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_RACE_FAILED' =>  'Thr race could not be updated because %s is already in use', 
 'ADMIN_UPDATE_RACE_SUCCESS' => 'The race %s was updated successfully. ',
 'ADMIN_UPDATE_LOOTSYS_SUCCESS' => 'The Loot system is now set to %s . ',
-
+'ADMIN_RAID_ATTENDEE_DELETED_SUCCESS' => 'Attendee %s was deleted from raid %s',
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Active Point Adjustment',
@@ -648,6 +653,7 @@ So the loot would go to player 2 <br />',
 'ADD_MEMBER_TITLE' => 'Add a Guild Member',
 'ADD_MEMBER_TITLE' => 'Manage Guild Member Dkp',
 'ADD_RAID_TITLE' => 'Add a Raid',
+'ADD_RAIDER_TITLE' => 'Add a Raider',
 'ADMIN_INDEX_TITLE' => 'bbDkp Administration',
 'MANAGE_MEMBERS_TITLE' => 'Manage Guild Members',
 'VIEWLOGS_TITLE' => 'Log Viewer',
@@ -712,6 +718,7 @@ So the loot would go to player 2 <br />',
 // Misc
 'ADJUSTMENT_VALUE' => 'Adjustment Value',
 'ADJUSTMENT_VALUE_NOTE' => 'May be negative',
+'ATTENDEEADD_EXPLAIN' => 'Choose additional member to add to raid', 
 'CLASS_NAME' => 'Class Name',
 'CLASS_ID' => 'Class ID',
 'CLASS_ARMORY' => 'Armory level',
@@ -759,6 +766,7 @@ So the loot would go to player 2 <br />',
 'LIST_PREFIX' => 'List Prefix',
 'LIST_SUFFIX' => 'List Suffix',
 'LOGS' => 'Logs',
+'MEMBER' => 'Member',
 'MEMBERS' => 'Members',
 'MEMBER_RANK' => 'Member Rank',
 'POOL' => 'Dkp Pool',
@@ -766,6 +774,7 @@ So the loot would go to player 2 <br />',
 'PRCALC' => 'Priority Ratio Calculation', 
 'PRCALC_EXPLAIN' => 'Calculate the EP/GP ratio as (sum of Earned)/(Sum of Item Cost) ', 
 'RANKID' => 'Rank Id', 
+'RAIDERADD'	=> 'Raider', 
 'RAIDSTART' => 'Raid Start', 
 'RAIDEND' => 'Raid End', 
 'RAIDDURATION' => 'Raid Duration', 

@@ -3,6 +3,42 @@
 		$Id$
 //-->
 <a name="maincontent"></a>
+
+<!-- IF S_EDITRAIDER -->
+	<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
+
+	<h1>{L_ADD_RAIDER_TITLE}</h1>
+	<p>{L_ADD_RAIDER_EXPLAIN}</p>
+	<form method="post" action="{F_EDIT_RAID}" name="editraid" >
+	<fieldset>
+
+ 	 <dl>
+	    <dt><label for="attendee_id">{L_ATTENDEE}:</label></dt>
+	    <select name="attendee_id"> {S_MEMBERLIST_OPTIONS}</select> 
+	 </dl>
+	  <dl>
+	    <dt><label for="member_earned">{L_EARNED}:</label></dt>
+			<dd><input type="text" name="member_earned" size="20" maxlength="14" value="{MEMBER_EARNED}" class="input" /> 
+			/ {L_SHOULD_BE}: {CORRECT_MEMBER_EARNED}</dd>
+	  </dl> 
+	
+	  <dl>
+	    <dt><label>{L_CURRENT}:</label></dt>
+		<dd><span class="{C_MEMBER_CURRENT}"><strong>{MEMBER_CURRENT}</strong></span></dd>
+	  </dl>
+
+	<p class="submit-buttons">
+		<input class="button1" type="submit" id="addnew" name="addnew" value="{L_SUBMIT}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+		{S_FORM_TOKEN}
+	</p>
+	</fieldset>
+	</form>
+
+<!-- ELSE -->
+<!-- load the template for editing raid -->
+
+
 <script type="text/javascript">
 //<![CDATA[
 window.onload = start;
@@ -81,17 +117,20 @@ function durationcalc()
 
 //]]>
 </script>
-<form method="post" action="{F_EDIT_RAID}" name="editraid" onsubmit="return check_form(this)">
+
+<form method="post" action="{F_EDIT_RAID}" name="editraid">
 <div>
 <h1>{RAIDTITLE}</h1>
 <p>{L_ACP_EDITRAID_EXPLAIN}</p>
 
+<fieldset style="background-color: #F3F3F3;">
 <div style="float: left; width: 55%;">
 <fieldset>
 
 <legend>{L_EDIT_RAID_TITLE}</legend>
 
 <input type="hidden" name="hidden_id" value="{RAID_ID}" /> 
+<input type="hidden" name="hidden_dkpid" value="{EVENT_DKPID}" /> 
 	<dl><dt><label>{L_POOL}:</label></dt>
 	<dd><strong>{RAID_DKPPOOL}</strong></dd>
 	</dl>
@@ -145,7 +184,7 @@ function durationcalc()
 	<dl>
 		<dt><label>{L_RAIDVALUE}:</label>({L_ADD_RAID_VALUE_NOTE})</dt>
 		<dd>
-			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />{FV_VALUE}
+			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{INDIVIDUAL_RAID_VALUE}" class="input" />
 		</dd>
 	</dl>
 
@@ -164,17 +203,32 @@ function durationcalc()
         </dd>
   	</dl>
 	
-	
-		
 </fieldset>
 </div>
 
-
 <div style="float: left; width: 45%;">
+
 <fieldset>
 <legend>{L_NOTE}</legend>
 	<textarea name="raid_note" cols="60" rows="12" wrap="soft">{RAID_NOTE}</textarea>
 </fieldset>
+
+<!-- IF S_SHOWADDATTENDEE -->
+<fieldset>
+<legend>{L_ADD_RAIDER_TITLE}</legend>
+ 	 <dl>
+	    <dt><label for="attendee_id">{L_MEMBER}:</label>{L_ATTENDEEADD_EXPLAIN}</dt>
+	    <dd><select name="attendee_id">&nbsp;{S_MEMBERLIST_OPTIONS}</select></dd> 
+	 </dl>
+	 
+	 
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+	<input type="submit" name="addattendee" value="{L_ADD_ATTENDEE}" class="button1" />
+</fieldset>
+</fieldset>
+<!-- ENDIF -->
+
+
 </div>
 
 
@@ -226,18 +280,19 @@ function durationcalc()
 </fieldset>
 </div>
 
+</fieldset>
 </div>
 {S_FORM_TOKEN}
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
 	<input type="submit" name="delete" value="{L_DELETE_RAID}"	class="button1" />
 </fieldset>
-	<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
 	<input type="submit" name="update" value="{L_UPDATE_RAID}" class="button1" />
 	<input type="submit" name="additem" value="{L_ADD_ITEM}" class="button1" />
-	<input type="submit" name="addattendee" value="{L_ADD_ATTENDEE}" class="button1" />
 </fieldset>
 
-</form>
 
+</form>
+<!-- ENDIF -->
 
 <!-- INCLUDE dkp/overall_footer.html -->
