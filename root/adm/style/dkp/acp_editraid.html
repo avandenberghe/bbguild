@@ -123,8 +123,8 @@ function durationcalc()
 <h1>{RAIDTITLE}</h1>
 <p>{L_ACP_EDITRAID_EXPLAIN}</p>
 
-<fieldset style="background-color: #F3F3F3;">
-<div style="float: left; width: 55%;">
+
+<div style="float: left; width: 100%;">
 <fieldset>
 
 <legend>{L_EDIT_RAID_TITLE}</legend>
@@ -191,43 +191,21 @@ function durationcalc()
 	<input type="hidden" name="dkptimeunit" value="{DKPTIMEUNIT}" /> 
 	<input type="hidden" name="timeunit" value="{TIMEUNIT}" /> 
 	<dl>
-		<dt><label>{L_TIME_BONUS}:</label>&nbsp;{L_TIME_BONUS_EXPLAIN}&nbsp;{DKPPERTIME}</dt>
+		<dt><label>{L_TIME_BONUS}:</label>&nbsp;{L_TIME_BONUS_EXPLAIN}&nbsp;{DKPPERTIME}. </dt>
 		<dd>
-			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{TIME_BONUS}" class="input" />
+			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{TIME_BONUS}" class="input" /> &nbsp; <input type="checkbox" name="overridetime_bonus" value="1"/> {L_TIME_OVERRIDE}
 		</dd>
 	</dl>
-	 <dl>
-       <dt><label for="overridetime_bonus">{L_OVERRIDE}</label>{L_TIME_OVERRIDE}</dt>
-        <dd>
-        	<input type="checkbox" name="overridetime_bonus" value="1"/>
-        </dd>
-  	</dl>
+	
+	<dl>
+	<dt>{L_NOTE}</dt>
+	<dd>
+	<textarea name="raid_note" cols="60" rows="5" wrap="soft">{RAID_NOTE}</textarea>
+	</dd>
 	
 </fieldset>
-</div>
-
-<div style="float: left; width: 45%;">
-
-<fieldset>
-<legend>{L_NOTE}</legend>
-	<textarea name="raid_note" cols="60" rows="12" wrap="soft">{RAID_NOTE}</textarea>
-</fieldset>
-
-<!-- IF S_SHOWADDATTENDEE -->
-<fieldset>
-<legend>{L_ADD_RAIDER_TITLE}</legend>
- 	 <dl>
-	    <dt><label for="attendee_id">{L_MEMBER}:</label>{L_ATTENDEEADD_EXPLAIN}</dt>
-	    <dd><select name="attendee_id">&nbsp;{S_MEMBERLIST_OPTIONS}</select></dd> 
-	 </dl>
-	 
-	 
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-	<input type="submit" name="addattendee" value="{L_ADD_ATTENDEE}" class="button1" />
-</fieldset>
-</fieldset>
-<!-- ENDIF -->
-
+	
+	
 
 </div>
 
@@ -235,6 +213,20 @@ function durationcalc()
 <div style="clear: both; width: 100%;">
 <fieldset>
 <legend>{L_ATTENDEES}</legend>
+
+
+<!-- IF S_SHOWADDATTENDEE -->
+
+ 	 <dl>
+	    <dt><label for="attendee_id">{L_MEMBER}:</label>{L_ATTENDEEADD_EXPLAIN}</dt>
+	    <dd><select name="attendee_id">&nbsp;{S_MEMBERLIST_OPTIONS}</select> 
+		<input type="submit" name="addattendee" value="{L_ADD_ATTENDEE}" class="button1" /></dd>
+	 </dl>
+	 
+<!-- ENDIF -->
+
+
+
 <table cellspacing="1">
 <thead>
   <tr>
