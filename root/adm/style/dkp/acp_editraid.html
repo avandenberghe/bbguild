@@ -19,8 +19,11 @@ function updatesum() {
 	
  document.editraider.member_earned.value =
 	 (document.editraider.raid_value.value-0) +
-	 (document.editraider.time_bonus.value-0) +
-	 (document.editraider.zerosum_bonus.value-0);
+	 (document.editraider.time_bonus.value-0) 
+	 <!-- IF S_SHOWZS --> +
+	 (document.editraider.zerosum_bonus.value-0)
+	 <!-- ENDIF -->
+	 ;
 
 document.editraider.member_total.value =
 	 (document.editraider.member_earned.value-0) -
@@ -40,7 +43,9 @@ document.editraider.member_total.value =
 	
 	<input type="hidden" name="old_raid_value" value="{RAID_VALUE}" />
 	<input type="hidden" name="old_time_bonus" value="{TIMEVALUE}" />
+	<!-- IF S_SHOWZS -->
 	<input type="hidden" name="old_zerosum_bonus" value="{ZEROSUMSVALUE}" />
+	<!-- ENDIF -->
 	<input type="hidden" name="old_raid_decay" value="{DECAYVALUE}" />
 	
 	<fieldset>
@@ -60,10 +65,12 @@ document.editraider.member_total.value =
 				<dd>+&nbsp;<input type="text" name="time_bonus" id="time_bonus" size="20" maxlength="14" value="{TIMEVALUE}" class="input" onChange="javascript:updatesum()" /></dd>
 		 </dl> 
 	
+		<!-- IF S_SHOWZS -->
 		 <dl>
 		    <dt><label for="zerosum_bonus">{L_ZSVALUE}:</label></dt>
 				<dd>+&nbsp;<input type="text" name="zerosum_bonus" id="zerosum_bonus" size="20" maxlength="14" value="{ZEROSUMSVALUE}" class="input" onChange="javascript:updatesum()"/></dd>
 		 </dl> 
+		 <!-- ENDIF -->
 		 <hr />
 		 <dl>
 		    <dt><label for="member_earned">{L_EARNED}:</label></dt>
@@ -291,7 +298,9 @@ function durationcalc()
     <th style="text-align:left;" width="30%"><a href="{F_EDIT_RAID}&amp;o={O_NAME}&amp;">{L_NAME}</a></th>
     <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
     <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_TIMEVALUE}">{L_TIMEVALUE}</a></th>
+    <!-- IF S_SHOWZS -->
     <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_ZSVALUE}">{L_ZSVALUE}</a></th>
+    <!-- ENDIF -->
     <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_DECAYVALUE}">{L_DECAY}</a></th>
     <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_TOTALVALUE}">{L_TOTAL}</a></th>
     <th style="text-align:center;" width="5">{L_ACTION}</th>
@@ -303,7 +312,9 @@ function durationcalc()
     <td style="text-align:left;" width="30%"><a href="{raids_row.U_VIEW_ATTENDEE}">{raids_row.NAME}</a></td>
     <td style="text-align:right;" width="15%" class="positive">{raids_row.RAIDVALUE}</td>
     <td style="text-align:right;" width="15%" class="positive">{raids_row.TIMEVALUE}</td>
+    <!-- IF S_SHOWZS -->
     <td style="text-align:right;" width="15%" class="positive">{raids_row.ZSVALUE}</td>
+    <!-- ENDIF -->
     <td style="text-align:right;" width="15%" class="negative">{raids_row.DECAYVALUE}</td>
     <td style="text-align:right;" width="15%" class="positive">{raids_row.TOTAL}</td>
     <td style="text-align:center;"  width="5" nowrap="nowrap">
@@ -319,7 +330,9 @@ function durationcalc()
     <th class="footer">{LISTRAIDS_FOOTCOUNT}</th>
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{RAID_VALUE}</th>
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{TIMEVALUE}</th>
+    <!-- IF S_SHOWZS -->
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{ZSVALUE}</th>
+   <!-- ENDIF -->
     <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{DECAYVALUE}</th>
     <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{TOTAL}</th>
     <th></th>
