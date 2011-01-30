@@ -229,14 +229,14 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		/* getting left memberlist only with rank not hidden */
 		$sql_array = array(
-    		'SELECT'    => 'm.member_id ,m.member_name',
+    		'SELECT'    => 'm.member_id ,m.member_name ',
  
 	    	'FROM'      => array(
     		    MEMBER_LIST_TABLE 	  => 'm',
         		MEMBER_RANKS_TABLE    => 'r', 
     			),
  
-    		'WHERE'     =>  'm.member_guild_id = r.guild_id
+    		'WHERE'     =>  ' m.member_guild_id = r.guild_id
     	    				 AND m.member_rank_id = r.rank_id
     	    				 AND r.rank_hide != 1', 
     		'ORDER_BY' => 'm.member_name',
@@ -247,10 +247,12 @@ class acp_dkp_raid extends bbDkp_Admin
 		$result = $db->sql_query ( $sql );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
+			$class_colorcode = $row['member_id'] == '' ? '#123456' : $row['member_id']; 
 			$membercount++;
 			$template->assign_block_vars ( 'members_row', array (
 				'VALUE' 	=> $row['member_id'], 
-				'OPTION' 	=> $row['member_name'] ) );
+				'OPTION' 	=> $row['member_name'],
+			));
 		}
 		$db->sql_freeresult( $result );
 		
@@ -401,7 +403,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	 */
 	private function displayraid($raid_id)
 	{
-		global $db, $user, $config, $template, $phpEx ;
+		global $db, $user, $config, $template, $phpEx, $phpbb_root_path ;
 		
 		/*** get general raid info  ***/
 		$sql_array = array (
@@ -477,13 +479,18 @@ class acp_dkp_raid extends bbDkp_Admin
 				);
 		$current_order = switch_order ( $sort_order );	
 		$sql_array = array(
-    		'SELECT'    => 'm.member_id ,m.member_name, r.raid_value, r.time_bonus, r.zerosum_bonus, r.raid_decay, (r.raid_value + r.time_bonus + r.zerosum_bonus - r.raid_decay) as total  ',
+    		'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, r.raid_value, r.time_bonus, r.zerosum_bonus, r.raid_decay, (r.raid_value + r.time_bonus + r.zerosum_bonus - r.raid_decay) as total  ',
 	    	'FROM'      => array(
-    		    MEMBER_LIST_TABLE 	  => 'm',
-        		RAID_DETAIL_TABLE    => 'r', 
+    		    MEMBER_LIST_TABLE 	=> 'm',
+        		RAID_DETAIL_TABLE   => 'r',
+        		CLASS_TABLE 		=> 'c',
+				BB_LANGUAGE 		=> 'l', 
     			),
  
-    		'WHERE'     =>  'm.member_id = r.member_id and r.raid_id = ' . (int) $raid_id  , 
+    		'WHERE'     =>  " c.class_id = m.member_class_id AND c.class_id = l.attribute_id 
+							AND l.attribute='class' 
+							AND l.language= '" . $config['bbdkp_lang'] ."'  
+							AND m.member_id = r.member_id and r.raid_id = " . (int) $raid_id  , 
     		'ORDER_BY' 	=>  $current_order ['sql'],
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -492,6 +499,9 @@ class acp_dkp_raid extends bbDkp_Admin
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
 			$raid_details[$row['member_id']]['member_id'] = $row['member_id'];
+			$raid_details[$row['member_id']]['colorcode'] = $row['colorcode'];
+			$raid_details[$row['member_id']]['imagename'] = $row['imagename'];
+			$raid_details[$row['member_id']]['classname'] = $row['name'];
 			$raid_details[$row['member_id']]['member_name'] = $row['member_name'];
 			$raid_details[$row['member_id']]['raid_value'] = $row['raid_value'];
 			$raid_details[$row['member_id']]['time_bonus'] = $row['time_bonus'];
@@ -515,6 +525,10 @@ class acp_dkp_raid extends bbDkp_Admin
 				'U_EDIT_ATTENDEE' => append_sid ("index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
 				'U_DELETE_ATTENDEE' => append_sid ("index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
 				'NAME' 		 => $raid_detail['member_name'], 
+				'COLORCODE'  => ($raid_detail['colorcode'] == '') ? '#123456' : $raid_detail['colorcode'],
+                'CLASS_IMAGE' 	=> (strlen($raid_detail['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $raid_detail['imagename'] . ".png" : '',  
+				'S_CLASS_IMAGE_EXISTS' => (strlen($raid_detail['imagename']) > 1) ? true : false, 				
+				'CLASS_NAME' => $raid_detail['classname'],  
 				'RAIDVALUE'  => $raid_detail['raid_value'], 
 				'TIMEVALUE'  => $raid_detail['time_bonus'],
 				'ZSVALUE' 	 => $raid_detail['zerosum_bonus'],

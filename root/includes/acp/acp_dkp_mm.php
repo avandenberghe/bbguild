@@ -120,7 +120,7 @@ function main($id, $mode)
 				
 				$sql_array = array(
 				    'SELECT'    => 	'm.* , u.username, g.name, l.name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
-									 c.class_armor_type AS armor_type', 
+									 c.class_armor_type AS armor_type, c.colorcode , c.imagename', 
 				 
 				    'FROM'      => array(
 				        MEMBER_LIST_TABLE 	=> 'm',
@@ -170,6 +170,9 @@ function main($id, $mode)
 						'RANK'          => $row['rank_name'],
 						'LEVEL'         => ( $row['member_level'] > 0 ) ? $row['member_level'] : '&nbsp;',
 						'ARMOR'         => ( !empty($row['armor_type']) ) ? $row['armor_type'] : '&nbsp;',
+						'COLORCODE' 	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
+                  		'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
+						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 						
 						'CLASS'         => ( $row['member_class'] != 'NULL' ) ? $row['member_class'] : '&nbsp;',
 						'COMMENT'       => $row['member_comment'],
 						'JOINDATE'      => date($config['bbdkp_date_format'], $row['member_joindate']),

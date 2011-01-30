@@ -295,6 +295,7 @@ function durationcalc()
 <table cellspacing="1">
 <thead>
   <tr>
+    <th>{L_CLASS}</th>
     <th style="text-align:left;" width="30%"><a href="{F_EDIT_RAID}&amp;o={O_NAME}&amp;">{L_NAME}</a></th>
     <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
     <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_TIMEVALUE}">{L_TIMEVALUE}</a></th>
@@ -309,7 +310,8 @@ function durationcalc()
 <tbody>
   <!-- BEGIN raids_row -->
   <!-- IF raids_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td style="text-align:left;" width="30%"><a href="{raids_row.U_VIEW_ATTENDEE}">{raids_row.NAME}</a></td>
+    <td><!-- IF raids_row.S_CLASS_IMAGE_EXISTS --><img src="{raids_row.CLASS_IMAGE}" alt="{raids_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></td>
+    <td style="text-align:left;" width="30%"><strong><a style="color:{raids_row.COLORCODE}" href="{raids_row.U_VIEW_ATTENDEE}">{raids_row.NAME}</a></strong></td>
     <td style="text-align:right;" width="15%" class="positive">{raids_row.RAIDVALUE}</td>
     <td style="text-align:right;" width="15%" class="positive">{raids_row.TIMEVALUE}</td>
     <!-- IF S_SHOWZS -->
@@ -327,6 +329,7 @@ function durationcalc()
   </tbody>
 <tfoot>
   <tr>
+    <th></th>
     <th class="footer">{LISTRAIDS_FOOTCOUNT}</th>
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{RAID_VALUE}</th>
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{TIMEVALUE}</th>
