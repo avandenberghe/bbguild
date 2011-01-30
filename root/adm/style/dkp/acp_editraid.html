@@ -5,39 +5,92 @@
 <a name="maincontent"></a>
 
 <!-- IF S_EDITRAIDER -->
-	<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
+<!-- load the template for editing raider attendee -->
+<script type="text/javascript">
+//<![CDATA[
 
-	<h1>{L_ADD_RAIDER_TITLE}</h1>
-	<p>{L_ADD_RAIDER_EXPLAIN}</p>
-	<form method="post" action="{F_EDIT_RAID}" name="editraid" >
-	<fieldset>
+window.onload = start;
+function start()
+{
+	updatesum();
+}
 
- 	 <dl>
-	    <dt><label for="attendee_id">{L_ATTENDEE}:</label></dt>
-	    <select name="attendee_id"> {S_MEMBERLIST_OPTIONS}</select> 
-	 </dl>
-	  <dl>
-	    <dt><label for="member_earned">{L_EARNED}:</label></dt>
-			<dd><input type="text" name="member_earned" size="20" maxlength="14" value="{MEMBER_EARNED}" class="input" /> 
-			/ {L_SHOULD_BE}: {CORRECT_MEMBER_EARNED}</dd>
-	  </dl> 
+function updatesum() {
 	
-	  <dl>
-	    <dt><label>{L_CURRENT}:</label></dt>
-		<dd><span class="{C_MEMBER_CURRENT}"><strong>{MEMBER_CURRENT}</strong></span></dd>
-	  </dl>
+ document.editraider.member_earned.value =
+	 (document.editraider.raid_value.value-0) +
+	 (document.editraider.time_bonus.value-0) +
+	 (document.editraider.zerosum_bonus.value-0);
 
-	<p class="submit-buttons">
-		<input class="button1" type="submit" id="addnew" name="addnew" value="{L_SUBMIT}" />&nbsp;
-		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-		{S_FORM_TOKEN}
-	</p>
+document.editraider.member_total.value =
+	 (document.editraider.member_earned.value-0) -
+	 (document.editraider.raid_decay.value-0); 	 
+}
+//]]>
+</script>
+
+	<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
+	<h1>{L_EDIT_RAIDER_TITLE}</h1>
+	<p>{L_EDIT_RAIDER_EXPLAIN}</p>
+	
+	<form method="post" action="{F_EDIT_RAID}" name="editraider" >
+	<input type="hidden" name="hidden_raidid" value="{RAID_ID}" /> 
+	<input type="hidden" name="hidden_memberid" value="{MEMBERID}" /> 
+	<input type="hidden" name="hidden_dkpid" value="{EVENT_DKPID}" />
+	
+	<input type="hidden" name="old_raid_value" value="{RAID_VALUE}" />
+	<input type="hidden" name="old_time_bonus" value="{TIMEVALUE}" />
+	<input type="hidden" name="old_zerosum_bonus" value="{ZEROSUMSVALUE}" />
+	<input type="hidden" name="old_raid_decay" value="{DECAYVALUE}" />
+	
+	<fieldset>
+	 	 <dl>
+		    <dt><label for="attendee_id">{L_NAME}:</label></dt>
+		    <dd><strong>{MEMBERNAME}</strong></dd> 
+		 </dl>
+		  <hr />
+		 <dl>
+		    <dt><label for="raid_value">{L_RAIDVALUE}:</label></dt>
+		    	<!-- we set this value to readonly because we don't want a different raid value per raidattendee but if you need to be able to change it you can remove the readonly attribute -->
+				<dd>&nbsp;&nbsp;<input readonly="readonly"  type="text" name="raid_value" id="raid_value"  size="20" maxlength="14" value="{RAID_VALUE}" class="input" onChange="javascript:updatesum()" /></dd>
+		 </dl> 
+	
+		 <dl>
+		    <dt><label for="time_bonus">{L_TIMEVALUE}:</label></dt>
+				<dd>+&nbsp;<input type="text" name="time_bonus" id="time_bonus" size="20" maxlength="14" value="{TIMEVALUE}" class="input" onChange="javascript:updatesum()" /></dd>
+		 </dl> 
+	
+		 <dl>
+		    <dt><label for="zerosum_bonus">{L_ZSVALUE}:</label></dt>
+				<dd>+&nbsp;<input type="text" name="zerosum_bonus" id="zerosum_bonus" size="20" maxlength="14" value="{ZEROSUMSVALUE}" class="input" onChange="javascript:updatesum()"/></dd>
+		 </dl> 
+		 <hr />
+		 <dl>
+		    <dt><label for="member_earned">{L_EARNED}:</label></dt>
+				<dd>=&nbsp;<input readonly="readonly"  type="text" id="member_earned" name="member_earned" size="20" maxlength="14" value="{EARNED}" class="input" style="border: none" /></dd>
+		 </dl> 
+		 
+	
+		 <dl>
+		    <dt><label for="raid_decay">{L_DECAY}:</label></dt>
+				<dd>&nbsp;-&nbsp;<input type="text" name="raid_decay" size="20" maxlength="14" value="{DECAYVALUE}" class="input"  onChange="javascript:updatesum()"/></dd>
+		 </dl> 
+		 <hr />
+		  <dl>
+		    <dt><label>{L_TOTAL}:</label></dt>
+			<dd>=&nbsp;<input readonly="readonly"  type="text" id="member_total" name="member_total" size="20" maxlength="14" value="{TOTAL}" class="input" style="border: none" /></dd>
+		  </dl>
+	
+		<p class="submit-buttons">
+			<input class="button1" type="submit" id="editraider" name="editraider" value="{L_SUBMIT}" />&nbsp;
+			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
+			{S_FORM_TOKEN}
+		</p>
 	</fieldset>
 	</form>
 
 <!-- ELSE -->
 <!-- load the template for editing raid -->
-
 
 <script type="text/javascript">
 //<![CDATA[
@@ -117,12 +170,11 @@ function durationcalc()
 
 //]]>
 </script>
-
-<form method="post" action="{F_EDIT_RAID}" name="editraid">
 <div>
+<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
 <h1>{RAIDTITLE}</h1>
 <p>{L_ACP_EDITRAID_EXPLAIN}</p>
-
+<form method="post" action="{F_EDIT_RAID}" name="editraid">
 
 <div style="float: left; width: 100%;">
 <fieldset>
@@ -198,10 +250,16 @@ function durationcalc()
 	</dl>
 	
 	<dl>
-	<dt>{L_NOTE}</dt>
-	<dd>
-	<textarea name="raid_note" cols="60" rows="5" wrap="soft">{RAID_NOTE}</textarea>
-	</dd>
+	<strong>{L_NOTE}</strong>
+	<textarea style="width:100%;" name="raid_note" cols="60" rows="5" wrap="soft">{RAID_NOTE}</textarea>
+	</dl>
+	<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+		<dl>{ADDEDBY}<br />{UPDATEDBY}</dl>
+	</fieldset>
+	<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+		<input type="submit" name="update" value="{L_UPDATE_RAID}" class="button1" />
+	</fieldset>
+	
 	
 </fieldset>
 	
@@ -279,7 +337,6 @@ function durationcalc()
 	<input type="submit" name="delete" value="{L_DELETE_RAID}"	class="button1" />
 </fieldset>
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-	<input type="submit" name="update" value="{L_UPDATE_RAID}" class="button1" />
 	<input type="submit" name="additem" value="{L_ADD_ITEM}" class="button1" />
 </fieldset>
 
