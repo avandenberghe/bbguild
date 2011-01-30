@@ -465,6 +465,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		$db->sql_freeresult($result);
 		
 		
+		
 		// get raid detail
 		$sort_order = array (
 				0 => array ('member_name desc', 'member_name' ),
@@ -683,14 +684,17 @@ class acp_dkp_raid extends bbDkp_Admin
 			'L_DATE' => $user->lang ['DATE'] . ' dd/mm/yyyy', 
 			'L_TIME' => $user->lang ['TIME'] . ' hh:mm:ss', 
 			
-			'ADDEDBY'	 => sprintf ( $user->lang ['ADDED_BY'], $raid['raid_added_by']),
-		  	'UPDATEDBY' => ($raid['raid_updated_by'] != ' ') ? sprintf ( $user->lang ['UPDATED_BY'], $raid['raid_updated_by']) : '..',
+			'ADDEDBY'	 	=> sprintf ( $user->lang ['ADDED_BY'], $raid['raid_added_by']),
+		  	'UPDATEDBY' 	=> ($raid['raid_updated_by'] != ' ') ? sprintf ( $user->lang ['UPDATED_BY'], $raid['raid_updated_by']) : '..',
+
+			//switches
+			'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+			'S_ADDRAIDER'   => false,
 
 			// Javascript messages
 			'MSG_ATTENDEES_EMPTY' => $user->lang ['FV_REQUIRED_ATTENDEES'], 
-			'S_ADDRAIDER'   	  => false,
-							   		   
-				) );
+			
+			));
 				
 	}
 	
@@ -835,6 +839,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			'O_ZSVALUE' 		  => $current_order ['uri'] [5],
 			'O_DECAYVALUE' 		  => $current_order ['uri'] [6],
 			'O_TOTALVALUE' 		  => $current_order ['uri'] [7], 
+			'S_SHOWZS' 			  => ($config['bbdkp_zerosum'] == '1') ? true : false, 
 			'U_LIST_RAIDS' 		  => append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ), 
 			'START' 			  => $start, 
 			'LISTRAIDS_FOOTCOUNT' => sprintf ( $user->lang ['LISTRAIDS_FOOTCOUNT'], $total_raids, $config ['bbdkp_user_rlimit'] ), 
@@ -853,7 +858,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		if (confirm_box ( true )) 
 		{
 			// recall hidden vars
-			$this->raid = array(
+			$raid = array(
 				'raid_note' 		=> utf8_normalize_nfc (request_var ( 'hidden_raid_note', ' ', true )), 
 				'raid_event'		=> utf8_normalize_nfc (request_var ( 'hidden_raid_name', ' ', true )), 
 				'raid_value' 		=> request_var ('hidden_raid_value', 0.00 ), 
@@ -866,16 +871,16 @@ class acp_dkp_raid extends bbDkp_Admin
 			
 			// Get event info
 			$sql = "SELECT event_id, event_name, event_dkpid, event_value FROM " . EVENTS_TABLE . "  WHERE 
-	                event_id = " . $this->raid['event_id'];
+	                event_id = " . $raid['event_id'];
 			$result = $db->sql_query ( $sql );
 			while ( $row = $db->sql_fetchrow ($result) ) 
 			{
-				if ($this->raid['raid_value'] == 0.00)
+				if ($raid['raid_value'] == 0.00)
 				{
-					$this->raid['raid_value'] = max ( $row['event_value'], 0.00 );
+					$raid['raid_value'] = max ( $row['event_value'], 0.00 );
 				}
-				$this->raid['event_dkpid'] = $row['event_dkpid'];
-				$this->raid['event_name'] = $row['event_name'];
+				$raid['event_dkpid'] = $row['event_dkpid'];
+				$raid['event_name'] = $row['event_name'];
 			}
 			$db->sql_freeresult( $result );
 			
@@ -888,27 +893,26 @@ class acp_dkp_raid extends bbDkp_Admin
 			// raid id is auto-increment so it is increased automatically
 			//
 			$query = $db->sql_build_array ( 'INSERT', array (
-					'event_id' 		=> (int) $this->raid['event_id'], 
-					'raid_start' 	=> (int) $this->raid['raid_start'],
-					'raid_end' 		=> (int) $this->raid['raid_end'], 
-					'raid_note' 	=> (string) $this->raid['raid_note'], 
+					'event_id' 		=> (int) $raid['event_id'], 
+					'raid_start' 	=> (int) $raid['raid_start'],
+					'raid_end' 		=> (int) $raid['raid_end'], 
+					'raid_note' 	=> (string) $raid['raid_note'], 
 					'raid_added_by' => (string) $user->data['username'] ) 
 			);
 			
 			$db->sql_query ( "INSERT INTO " . RAIDS_TABLE . $query );
-			$this->raid ['raid_id'] = $db->sql_nextid();
+			$raid ['raid_id'] = $db->sql_nextid();
 			// Attendee handling
 			
 			// Insert the raid detail
-			$raiddetail = $this->add_raiddetail($this->raid);
+			$raiddetail = $this->add_raiddetail($raid);
 	
 			//
 			// pass the raidmembers array, raid value, and dkp pool.
-			foreach ( (array) $this->raid['raid_attendees'] as $member_id )
+			foreach ( (array) $raid['raid_attendees'] as $member_id )
 			{
-				$this->add_dkp ($this->raid['raid_value'], $this->raid['raid_timebonus'], $this->raid['raid_start'] , $this->raid['event_dkpid'] , $member_id);
+				$this->add_dkp ($raid['raid_value'], $raid['raid_timebonus'], $raid['raid_start'] , $raid['event_dkpid'] , $member_id);
 			}
-			  
 			
 			//commit
 			$db->sql_transaction('commit');
@@ -918,11 +922,11 @@ class acp_dkp_raid extends bbDkp_Admin
 			//
 			$log_action = array (
 				'header' => 'L_ACTION_RAID_ADDED', 
-				'id' 			=> $this->raid ['raid_id'], 
-				'L_EVENT' 		=> $this->raid['event_name'], 
-				'L_ATTENDEES' 	=> implode ( ', ', $this->raid ['raid_attendees'] ), 
-				'L_NOTE' 		=> $this->raid ['raid_note'], 
-				'L_VALUE' 		=> $this->raid['raid_value'], 
+				'id' 			=> $raid ['raid_id'], 
+				'L_EVENT' 		=> $raid['event_name'], 
+				'L_ATTENDEES' 	=> implode ( ', ', $raid ['raid_attendees'] ), 
+				'L_NOTE' 		=> $raid ['raid_note'], 
+				'L_VALUE' 		=> $raid['raid_value'], 
 				'L_ADDED_BY' 	=> $user->data ['username'] );
 			
 			$this->log_insert ( array (
@@ -930,7 +934,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				'log_action' 	=> $log_action ) );
 			
 			$success_message = sprintf ( $user->lang ['ADMIN_ADD_RAID_SUCCESS'], 
-				$user->format_date($this->time), $this->raid['event_name'] ) . '<br />';
+				$user->format_date($this->time), $raid['event_name'] ) . '<br />';
 				
 			//
 			// Update active / inactive player status if needed
@@ -938,7 +942,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			if ($config ['bbdkp_hide_inactive'] == 1) 
 			{
 				$success_message .= '<br /><br />' . $user->lang ['ADMIN_RAID_SUCCESS_HIDEINACTIVE'];
-				$success_message .= ' ' . (($this->update_player_status ( $this->raid['event_dkpid'] )) ? 
+				$success_message .= ' ' . (($this->update_player_status ( $raid['event_dkpid'] )) ? 
 					strtolower ( $user->lang ['DONE'] ) : strtolower ( $user->lang ['ERROR'] ));
 			}
 			
@@ -1116,7 +1120,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		if ($config ['bbdkp_hide_inactive'] == 1) 
 		{
 			$success_message .= '<br /><br />' . $user->lang ['ADMIN_RAID_SUCCESS_HIDEINACTIVE'];
-			$success_message .= ' ' . (($this->update_player_status ( $this->raid['event_dkpid'])) ? strtolower ( $user->lang ['DONE'] ) : 
+			$success_message .= ' ' . (($this->update_player_status ( $old_raid['event_dkpid'])) ? strtolower ( $user->lang ['DONE'] ) : 
 			strtolower ( $user->lang ['ERROR'] ));
 		}
 		
@@ -1635,6 +1639,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		return true;
 	}
+	
+	
 	/***
 	 * Set active or inactive based on last raid. only for current raids dkp pool
 	 * Update active inactive player status column member_status
@@ -1647,7 +1653,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	{
 		global $db, $user, $config;
 		
-		$inactive_time = mktime ( 0, 0, 0, date ( 'm' ), date ( 'd' ) - $config ['bbdkp_inactive_period'], date ( 'Y' ) );
+		$inactive_time = mktime (0, 0, 0, date ( 'm' ), date ( 'd' ) - $config ['bbdkp_inactive_period'], date ( 'Y' ) );
 		
 		$active_members = array ();
 		$inactive_members = array ();
@@ -1679,7 +1685,8 @@ class acp_dkp_raid extends bbDkp_Admin
 					$adj_reason = 'Inactive adjustment';
 					$inactive_members [] = $row['member_id'];
 					$inactive_membernames [] = $row['member_name'];
-				} // Inactive -> Active
+				} 
+				// Inactive -> Active
 				elseif (( (float) $config ['bbdkp_active_point_adj'] != 0.00) && ($row['member_status'] == 0) && ($row['member_lastraid'] >= $inactive_time))
 				{
 					$adj_value = $config ['bbdkp_active_point_adj'];
@@ -1706,21 +1713,17 @@ class acp_dkp_raid extends bbDkp_Admin
 					$db->sql_query ( 'INSERT INTO ' . ADJUSTMENTS_TABLE . $query );
 				}
 			}
+			$db->sql_freeresult( $result );
 			
 			// Update members to inactive and put dkp adjustment
 			if (sizeof ( $inactive_members ) > 0)
 			{
 				$adj_value = (float) $config ['bbdkp_inactive_point_adj'];
 				$adj_reason = 'Inactive adjustment';
-					
-				$sql_ary = array(
-				    'member_status'      => 0, 
-				    'member_adjustment'  => 'member_adjustment + ' . $adj_value,
-				);
-				 
+				
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-				    SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
-	                WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $inactive_members ) . ')';
+				    SET member_status = 0, member_adjustment = member_adjustment + ' . (string) $adj_value . ' 
+	                WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $inactive_members ) ;
 				$db->sql_query($sql);
 
 				$log_action = array (
@@ -1740,14 +1743,9 @@ class acp_dkp_raid extends bbDkp_Admin
 			{
 				$adj_value = (float) $config ['bbdkp_active_point_adj'];
 				
-				$sql_ary = array(
-				    'member_status'      => 1, 
-				    'member_adjustment'  => 'member_adjustment + ' . $adj_value,
-				);
-				 
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-				    SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
-	                WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $active_members ) . ')';
+				      SET member_status = 1, member_adjustment = member_adjustment + ' . (string) $adj_value . ' 
+	                WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $active_members );
 				$db->sql_query($sql);
 				
 				$log_action = array (
@@ -1798,6 +1796,8 @@ class acp_dkp_raid extends bbDkp_Admin
 			//
 			$db->sql_query ( 'DELETE FROM ' . RAID_ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
 	}
+	
+	
 
 }
 
