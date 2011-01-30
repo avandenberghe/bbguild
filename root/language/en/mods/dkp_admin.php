@@ -44,7 +44,7 @@ if (empty($lang) || !is_array($lang))
 // DKP
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.', 
-
+'BBDKPSCRIPTALERT' => 'bbDKP includes embedded Javascript. You are invited to use a javascript-enabled browser.', 
 //addnews
 'ADD_NEWS' => 'Add News',
 'ADDNEWS_TITLE' => 'Add a News Entry',
@@ -238,7 +238,7 @@ $lang = array_merge($lang, array(
 'ACP_LISTITEMS_EXPLAIN' => 'List of Purchased Items. you can filter by Dkp pool and raid. ',
 'ACP_ADDRAID_EXPLAIN' => 'Here you can add a new raid.',
 'ACP_EDITRAID_EXPLAIN' => 'Here you can edit your raid.',
-'ACP_LISTRAIDS_EXPLAIN' => 'Here is a list of Raids per DKP pool. Clicking on the raidname brings you in Edit/delete-mode', 
+'ACP_LISTRAIDS_EXPLAIN' => 'Here is a list of Raids per DKP pool. Clicking on the raidname brings you in Edit/delete-mode',
 'ACP_DKP_LOGS_EXPLAIN' => 'This lists all the actions in bbDkp. You can sort by username, date, IP or action.',
 'ACP_MM_RANKS_EXPLAIN' => 'Here you can edit raid ranks and name prefix/suffix. (Put new rank on last line and press edit. to delete rank, clear the name of that rank). Rank 99 (the \'out\' rank) is not visible. These custom ranks can be overwritten by the in-game ranks through the armorylink plugin. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Guild member list. Here you remove guild members. Attention this will also remove all the member\'s raid history in all Dkp pools! ',
@@ -269,7 +269,7 @@ $lang = array_merge($lang, array(
 'USERNAME_EXPLAIN' => 'Choose the phpBB username that is associated with this Game membername. This overrides the user choice in the UCP. ', 
 'ACP_DKP_LOOTSYSTEMOPTIONS'	=> 'Lootsystem options, Raid Decay rate, Item Decay rate, Zerosum Bank account',
 'ACP_DKP_LOOTSYSTEMEXPLAIN'	=> 'A short guide to Loot systems',
-'EDIT_RAIDER_EXPLAIN' => 'Here you can edit a Raid attendees earned points',
+'EDIT_RAIDER_EXPLAIN' => 'Here you can edit a Raiders earned points',
 
 
 // Permission Messages
@@ -660,6 +660,7 @@ So the loot would go to player 2 <br />',
 'EDITMEMBER_DKP_TITLE' => 'Edit Guildmember DKP', 
 'EDIT_RACE_TITLE' => 'Edit a Race', 
 'EDIT_RAID_TITLE' => 'Edit Raid data',
+'EDIT_RAIDER_TITLE' => 'Edit a Raider',
 'ADD_RACE_TITLE' => 'Race Parameters',
 'ADD_CLASS_TITLE' => 'Class parameters',
 
