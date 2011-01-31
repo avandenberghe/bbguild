@@ -73,6 +73,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				$editraider = (isset ( $_GET ['editraider'] ) ) ? true : false;
 				$updateraider = (isset ( $_POST ['editraider'] ) ) ? true : false;
 				$deleteraider = (isset ( $_GET ['deleteraider'] )) ? true : false;
+				$decayraid = (isset ( $_POST ['decayraid'] )) ?true : false;
 				$raid_id = request_var ( 'hidden_id', 0 );
 
 				/* handle actions */
@@ -111,6 +112,10 @@ class acp_dkp_raid extends bbDkp_Admin
 					$raid_id = request_var (URI_RAID, 0);
 					$attendee_id = request_var(URI_NAMEID, 0);
 					$this->deleteraider($raid_id, $attendee_id);
+				}
+				elseif($decayraid)
+				{
+					$this->decayraid($raid_id);
 				}
 				else
 				{
@@ -1809,6 +1814,100 @@ class acp_dkp_raid extends bbDkp_Admin
 			// Delete associated items
 			//
 			$db->sql_query ( 'DELETE FROM ' . RAID_ITEMS_TABLE . " WHERE raid_id= " . ( int ) $raid_id );
+	}
+	
+	/*
+	 * function to decay the raid
+	 * calling this function multiple time will not lead to cumulative 
+	 * decays, just the delta is applied.
+	 */
+	private function decayraid($raid_id)
+	{
+		global $config, $db;
+		
+		//loop raid detail, pass earned and timediff to decay function, update raid detail
+		
+		//get raidinfo
+		$sql_array = array (
+			'SELECT' => ' e.event_dkpid, r.raid_start, ra.member_id, (ra.raid_value + ra.time_bonus + ra.zerosum_bonus) as earned, ra.raid_decay ', 
+			'FROM' => array (
+				EVENTS_TABLE 		=> 'e',
+				RAIDS_TABLE 		=> 'r' ,
+				RAID_DETAIL_TABLE	=> 'ra' , 
+				), 
+			'WHERE' => " r.event_id = e.event_id and r.raid_id = ra.raid_id and r.raid_id=" . ( int ) $raid_id, 
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ($sql);
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$raidstart =  $row['raid_start']; 
+			$raid[$row['member_id']] = array (
+				'event_dkpid' 	=> $row['event_dkpid'],
+				'member_id' 	=> $row['member_id'], 
+				'earned' 		=> $row['earned'], 
+				'raid_decay' 	=> $row['raid_decay'], 
+				);
+		}
+		$db->sql_freeresult ($result);
+		
+		//get timediff
+		$now = getdate();
+		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $raidstart  ;
+		
+		foreach($raid as $member_id => $raiddetail)
+		{
+			$decay = $this->decay($raiddetail['earned'], $timediff); 
+			$db->sql_query ( 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = ' . $decay . " WHERE raid_id = " . ( int ) $raid_id . ' 
+			and member_id = ' . $raiddetail['member_id'] );
+		}
+		
+		return true;
+		
+		
+	}
+	
+	/*
+	 * calculates decay on epoch timedifference (seconds) and earned
+	 * we decay the sum of raid value, time bonus and zerosumpoints 
+	 *  
+	 */
+	private function decay($earned, $timediff )
+	{
+		global $config, $db;
+		
+		//$config['bbdkp_itemdecaypct']; 
+		// get decay rate in pct
+		$i = (float) $config['bbdkp_raiddecaypct']/100;
+		// get decay frequency
+		$freq = $config['bbdkp_decayfrequency'];
+		
+		//pick decay frequency type (0=days, 1=weeks, 2=months) and convert timediff to that
+		switch ($config['bbdkp_decayfreqtype'])
+		{
+			case 0:
+				//days
+				$t = (float) $timediff / 86400; 
+				break;
+			case 1:
+				//weeks
+				$t = (float) $timediff / (86400*7);
+				break;
+			case 2:
+				//months
+				$t = (float) $timediff / 86400*7*30.44;
+				break;	 
+		}
+		
+		// take the integer part of time and interval division base 10, 
+		// since we only decay after a set interval
+		$n = intval($t/$freq, 10); 
+		
+		//calculate rounded raid decay, defaults to rounds half up PHP_ROUND_HALF_UP, so 9.495 becomes 9.50
+		$decay = round($earned * (1 - pow(1-$i, $n)), 2); 
+		
+		return $decay;
+		
 	}
 	
 	
