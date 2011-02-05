@@ -43,7 +43,8 @@ class acp_dkp_item extends bbDkp_Admin
 				$submit = (isset ( $_POST ['add'] )) ? true : false;
 				$update = (isset ( $_POST ['update'] )) ? true : false;
 				$delete = (isset ( $_GET ['itemdelete'] ) || isset($_POST['delete']) ) ? true : false;
-		        if ( $add || $submit || $delete )
+				
+		        if ( $submit || $update || $delete )
                 {
                    	if (!check_form_key('additem'))
 					{
@@ -59,7 +60,6 @@ class acp_dkp_item extends bbDkp_Admin
 				$item_name = (isset ( $_POST ['item_name'] )) ? 
 					utf8_normalize_nfc(request_var('item_name','', true)) : 
 				    utf8_normalize_nfc(request_var( 'select_item_name', '', true));
-				
 				if ($submit) 
 				{
 					$this->additem( $item_buyers, $raid_id, $itemvalue, $item_name, $itemgameid); 
@@ -181,7 +181,7 @@ class acp_dkp_item extends bbDkp_Admin
 
 		//fetch raidinfo
 		$sql_array = array(
-			    'SELECT'    => 'r.raid_id, e.event_dkpid, e.event_name, r.raid_date, raid_note  ',
+			    'SELECT'    => 'r.raid_id, e.event_dkpid, e.event_name, r.raid_start, r.raid_note  ',
 			    'FROM'    	=> array(EVENTS_TABLE => 'e', 
 									 RAIDS_TABLE => 'r', 
 									  ),
@@ -196,11 +196,11 @@ class acp_dkp_item extends bbDkp_Admin
 		{
 			$dkpid = $row['event_dkpid']; 
 			$raidtitle = $row['event_name']; 
-			$raiddate = $user->format_date($row['raid_date']); 
+			$raiddate = $user->format_date($row['raid_start']); 
 			$template->assign_block_vars ( 'raids_row', array (
 				'VALUE' 	=> $row['raid_id'], 
 				'SELECTED' 	=> ($raid_id == $row['raid_id']) ? ' selected="selected"' : '', 
-				'OPTION' 	=> date ( $config['bbdkp_date_format'], $row['raid_date'] ) . ' - ' .  $row['event_name'] . ' ' . $row['raid_note'])  );
+				'OPTION' 	=> date ( $config['bbdkp_date_format'], $row['raid_start'] ) . ' - ' .  $row['event_name'] . ' ' . $row['raid_note'])  );
 		}
 		$db->sql_freeresult ( $result );
 
@@ -263,7 +263,7 @@ class acp_dkp_item extends bbDkp_Admin
 			//left selection member pane : select all members from the raid where this item dropped
 			$sql = 'SELECT a.member_id, l.member_name from ' . RAID_DETAIL_TABLE . ' a, ' . RAID_ITEMS_TABLE . ' b,  ' . MEMBER_LIST_TABLE . ' l 
 			where a.member_id = l.member_id  and a.raid_id = b.raid_id
-			and b.item_id = ' . (int) $item_id . ' ORDER BY a.member_name ';
+			and b.item_id = ' . (int) $item_id . ' ORDER BY l.member_name ';
 		
 		}
 		else 
@@ -303,7 +303,6 @@ class acp_dkp_item extends bbDkp_Admin
 			}
 		}
 		$db->sql_freeresult ( $result );
-
 		
 		/*************************
 		*  Build item drop-down
@@ -456,7 +455,7 @@ class acp_dkp_item extends bbDkp_Admin
 			
 			// select all raids that have items	for pool			
 			$sql_array = array(
-			    'SELECT'    => 'r.raid_id, e.event_name, r.raid_date, raid_note  ',
+			    'SELECT'    => 'r.raid_id, e.event_name, r.raid_start, raid_note  ',
 			    'FROM'    	=> array(DKPSYS_TABLE => 'd', 
 									 EVENTS_TABLE => 'e',
 	        						 RAIDS_TABLE => 'r'
@@ -464,7 +463,7 @@ class acp_dkp_item extends bbDkp_Admin
 			    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
 	    						and e.event_id = r.event_id 
 			    				and d.dkpsys_id = ' . $dkpid ,
-				'ORDER_BY'  =>  'r.raid_date DESC '
+				'ORDER_BY'  =>  'r.raid_start DESC '
 			);
 			$sql = $db->sql_build_query('SELECT', $sql_array);
 			
@@ -492,7 +491,7 @@ class acp_dkp_item extends bbDkp_Admin
 				$template->assign_block_vars ( 'raids_row', array (
 					'VALUE' => $row['raid_id'], 
 					'SELECTED' => ($raid_id == $row['raid_id']) ? ' selected="selected"' : '', 
-					'OPTION' => $user->format_date($row['raid_date']) . ' - ' .  $row['event_name'] . ' ' . $row['raid_note'] ) );
+					'OPTION' => $user->format_date($row['raid_start']) . ' - ' .  $row['event_name'] . ' ' . $row['raid_note'] ) );
 			}
 			$db->sql_freeresult ( $result );
 			$sql1 = 'SELECT count(*) as countitems FROM ' . RAID_ITEMS_TABLE . ' where raid_id = ' .  $raid_id; 
@@ -635,12 +634,12 @@ class acp_dkp_item extends bbDkp_Admin
 		
 		// Find out the item date based on the raid it's associated with
 		$loottime = 0;
-		$sql = 'SELECT raid_date FROM ' . RAIDS_TABLE . ' WHERE raid_id =' . (int) $raid_id;
+		$sql = 'SELECT raid_start FROM ' . RAIDS_TABLE . ' WHERE raid_id =' . (int) $raid_id;
 		$result = $db->sql_query ( $sql); 
 		$row = $db->sql_fetchrow ($result); 
 		if($row)
 		{
-			$loottime = $row['raid_date'];
+			$loottime = $row['raid_start'];
 		}
 	
 		//
@@ -692,7 +691,8 @@ class acp_dkp_item extends bbDkp_Admin
 		global $db, $user;
 		$query = array ();
 		
-		$sql = "select e.event_dkpid from " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r where r.raid_id = " . $raid_id . " and e.event_id = r.event_id"; 
+		$sql = "select e.event_dkpid from " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r 
+		where r.raid_id = " . $raid_id . " and e.event_id = r.event_id"; 
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('event_dkpid', false, $result);
 		$db->sql_freeresult ( $result);
