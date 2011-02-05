@@ -843,7 +843,6 @@ class acp_dkp_raid extends bbDkp_Admin
 				
 			}
 			$db->sql_freeresult( $result );
-		
 		} 
 		else 
 		{
@@ -1947,9 +1946,26 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		foreach($raid as $member_id => $raiddetail)
 		{
-			$decay = $this->decay($raiddetail['earned'], $timediff); 
+			$decay = $this->decay($raiddetail['earned'], $timediff, 1); 
 			$db->sql_query ( 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = ' . $decay . " WHERE raid_id = " . ( int ) $raid_id . ' 
 			and member_id = ' . $raiddetail['member_id'] );
+		}
+		
+		//loop raid items
+		$sql = 'select i.item_id, i.member_id, i.item_value, i.item_decay from ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id; 
+		$result = $db->sql_query ($sql);
+		while ( ($row = $db->sql_fetchrow ( $result )) ) 
+		{
+			$items[$row['item_id']] = array (
+				'item_value' 	=> $row['item_value'], 
+				);
+		}
+		$db->sql_freeresult ($result);
+		
+		foreach($items as $item_id => $item)
+		{
+			$decay = $this->decay($item['item_value'], $timediff, 2); 
+			$db->sql_query ( 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = ' . $decay . ' WHERE item_id = ' . $item_id );
 		}
 		
 		return true;
@@ -1960,19 +1976,38 @@ class acp_dkp_raid extends bbDkp_Admin
 	/*
 	 * calculates decay on epoch timedifference (seconds) and earned
 	 * we decay the sum of raid value, time bonus and zerosumpoints 
-	 *  
+	 * 
+	 * $value = the value to decay
+	 * $timediff = diff in seconds since raidstart
+	 * $mode = 1 for raid, 2 for items
+	 * 
 	 */
-	private function decay($earned, $timediff )
+	private function decay($value, $timediff, $mode)
 	{
 		global $config, $db;
-		
-		//$config['bbdkp_itemdecaypct']; 
-		// get decay rate in pct
-		$i = (float) $config['bbdkp_raiddecaypct']/100;
+		$i=0;
+		switch ($mode)
+		{
+			case 1:
+				// get raid decay rate in pct
+				$i = (float) $config['bbdkp_raiddecaypct']/100;
+				break;
+			case 2:
+				// get item decay rate in pct
+				$i = (float) $config['bbdkp_itemdecaypct']/100;
+				break;
+		}
+
 		// get decay frequency
-		$freq = $config['bbdkp_decayfrequency'];
+		$freq = $config['bbdkp_decayfrequency'];	
+		if ($freq==0)
+		{
+			//frequency can't be 0. throw error
+			trigger_error($user->lang['FV_FREQUENCY_NOTZERO'],E_USER_WARNING );	
+		}
 		
 		//pick decay frequency type (0=days, 1=weeks, 2=months) and convert timediff to that
+		$t=0;
 		switch ($config['bbdkp_decayfreqtype'])
 		{
 			case 0:
@@ -1994,7 +2029,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		$n = intval($t/$freq, 10); 
 		
 		//calculate rounded raid decay, defaults to rounds half up PHP_ROUND_HALF_UP, so 9.495 becomes 9.50
-		$decay = round($earned * (1 - pow(1-$i, $n)), 2); 
+		$decay = round($value * (1 - pow(1-$i, $n)), 2); 
 		
 		return $decay;
 		
