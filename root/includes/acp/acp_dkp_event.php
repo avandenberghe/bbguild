@@ -134,7 +134,7 @@ class acp_dkp_event extends bbDkp_Admin
 	  			
 	  			if ($addraid)
 	  			{  
-	  				meta_refresh(0, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid&amp;".URI_DKPSYS . '=' . $this->event['dkpsys_id'] . '&amp;' . URI_EVENT . '=' . $this->event['event_id'] ));
+	  				redirect(append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid&amp;".URI_DKPSYS . '=' . $this->event['dkpsys_id'] . '&amp;' . URI_EVENT . '=' . $this->event['event_id'] ));
 	  			}
 	
               if ($add)

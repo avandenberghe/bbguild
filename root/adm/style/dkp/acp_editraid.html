@@ -96,7 +96,7 @@ document.editraider.member_total.value =
 	</fieldset>
 	</form>
 
-<!-- ELSE -->
+<!-- ELSEIF S_EDITRAID -->
 <!-- load the template for editing raid -->
 
 <script type="text/javascript">
@@ -357,14 +357,6 @@ function durationcalc()
 <fieldset>
 <legend>{L_ITEMS}</legend>
 
-<!-- IF S_SHOWBUYER -->
- 	 <dl>
-	    <dt><label for="buyer_id">{L_MEMBER}:</label>{L_ITEMADD_EXPLAIN}</dt>
-	    <dd><select name="buyer_id">&nbsp;{S_BUYERLIST_OPTIONS}</select> 
-		<input type="submit" name="additem" value="{L_ADD_ITEM}" class="button1" /></dd>
-	 </dl>
-<!-- ENDIF -->
-
 <table cellspacing="1">
 <thead>
   <tr>
@@ -387,7 +379,7 @@ function durationcalc()
     <td style="text-align:right;" width="15%" class="negative">{items_row.DECAYVALUE}</td>
     <td style="text-align:right;" width="15%" class="positive">{items_row.TOTAL}</td>
     <td style="text-align:center;"  width="5" nowrap="nowrap">
-		<a href="{items_row.U_EDIT_ITEM}">{ICON_EDIT}</a>&nbsp;
+		<a href="{items_row.U_VIEW_ITEM}">{ICON_EDIT}</a>&nbsp;
 		<a href="{items_row.U_DELETE_ITEM}">{ICON_DELETE}</a>
 	</td>
 	

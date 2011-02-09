@@ -2,6 +2,7 @@
 <!--
 		$Id$
 //-->
+
 <script type="text/javascript">
 
 //<![CDATA[
@@ -153,6 +154,7 @@ function fnRemoveMember()
 //]]>
 
 </script>
+
 <style type="text/css" >
 
 fieldset dt {
@@ -173,6 +175,8 @@ fieldset dd {
 }
 
 </style>
+<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
+
 
 <form method="post" action="{F_ADD_ITEM}" name="additem">
 <input type="hidden" name="hidden_item_id" value="{ITEM_ID}" />
@@ -190,12 +194,12 @@ fieldset dd {
   {L_SEARCH_MEMBERS} : <input type="text" name="memberSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'all_members')" />	
 </dl>
 <dl>
-     <select style="float: left; width: 49%; background-color: #F3F3F3;" name="all_members" size="20" multiple="multiple" class="input">
+     <select style="float: left; width: 49%; name="all_members" size="20" multiple="multiple" class="input">
          <!-- BEGIN members_row -->
        <option value="{members_row.VALUE}">{members_row.OPTION}</option>
        <!-- END members_row -->
      </select>
-     <select style="float: right; width: 49%; background-color: #F3F3F3;" name="item_buyers[]" size="20" multiple="multiple" class="input">
+     <select style="float: right; width: 49%; name="item_buyers[]" size="20" multiple="multiple" class="input">
        <!-- BEGIN buyers_row -->
        <option value="{buyers_row.VALUE}" selected="selected">{buyers_row.OPTION}</option>
        <!-- END buyers_row -->
@@ -226,7 +230,7 @@ fieldset dd {
    	  &nbsp;
    	</dd>
    	<dd>
-	   	 <select name="select_item_name" style="width: 100%; background-color: #F3F3F3;" onchange="javascript:switch_item_val();" class="input">
+	   	 <select name="select_item_name" onchange="javascript:switch_item_val();" class="input">
 	      <option value=""></option>
 	      <!-- BEGIN items_row -->
 	      <option value="{items_row.VALUE}"{items_row.SELECTED}>{items_row.OPTION}</option>
@@ -235,16 +239,16 @@ fieldset dd {
    	</dd>
  </dl>
  
-    <b>- {L_OR} -</b>
+    <strong>- {L_OR} -</strong>
     <dl>
 	   	<dt><label>{L_ENTER_NEW}:</label></dt>
    		<dd><input type="text" name="item_name" size="30" maxlength="255" value="{ITEM_NAME}" class="input" />{FV_ITEM_NAME}</dd>
-   		<br />
+   	</dl>
+   	<dl>
 	   	<dt><label>{L_ENTER_NEW_GAMEITEMID}:</label></dt>
    		<dd><input type="text" name="item_gameid" size="15" maxlength="255" value="{ITEM_GAMEID}" class="input" /></dd>
    		
 	</dl>
-	<br />		
 	<dl>
     	<dt><label>{L_VALUE}:</label></dt>
     	<dd> <input type="text" name="item_value" size="10" maxlength="10" value="{ITEM_VALUE}" class="input" />{FV_ITEM_VALUE}</dd>
@@ -253,7 +257,7 @@ fieldset dd {
  </div>
  
 
- <div style="float: left; width: 100%;"> 
+<div style="float: left; width: 100%;"> 
      <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
      {S_FORM_TOKEN}
     <!-- IF S_ADD -->
@@ -266,8 +270,6 @@ fieldset dd {
    </fieldset>
 </div>
 </form>
-
-
 
 
 <!-- INCLUDE dkp/overall_footer.html -->

@@ -60,6 +60,7 @@ class acp_dkp_item extends bbDkp_Admin
 				$item_name = (isset ( $_POST ['item_name'] )) ? 
 					utf8_normalize_nfc(request_var('item_name','', true)) : 
 				    utf8_normalize_nfc(request_var( 'select_item_name', '', true));
+				
 				if ($submit) 
 				{
 					$this->additem( $item_buyers, $raid_id, $itemvalue, $item_name, $itemgameid); 

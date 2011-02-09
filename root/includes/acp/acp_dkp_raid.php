@@ -63,16 +63,16 @@ class acp_dkp_raid extends bbDkp_Admin
 				
 			case 'editraid' :
 			
-				$this->page_title = 'ACP_DKP_RAID_EDIT';
-				$this->tpl_name = 'dkp/acp_' . $mode;
+				
 				
 				$update = (isset ( $_POST ['update'] )) ? true : false;
 				$delete = (isset ( $_POST ['delete'] )) ? true : false;
-				$additem = (isset ( $_POST ['additem'] )) ? true : false;
 				$addraider = (isset ( $_POST ['addattendee'] )) ? true : false;
 				$editraider = (isset ( $_GET ['editraider'] ) ) ? true : false;
 				$updateraider = (isset ( $_POST ['editraider'] ) ) ? true : false;
 				$deleteraider = (isset ( $_GET ['deleteraider'] )) ? true : false;
+				$additem = (isset ( $_POST ['additem'] )) ? true : false;
+				$deleteitem = (isset ( $_GET ['deleteitem'] )) ? true : false;
 				$decayraid = (isset ( $_POST ['decayraid'] )) ?true : false;
 				$raid_id = request_var ( 'hidden_id', 0 );
 
@@ -83,22 +83,32 @@ class acp_dkp_raid extends bbDkp_Admin
 					$this->updateraid($raid_id);
 					$this->displayraid($raid_id);
 				}
+				
 				elseif($delete)
 				{
 					//delete the raid
 					$this->deleteraid($raid_id);
 				}
+				
 				elseif($additem)
 				{
 					//show form for adding items
-					meta_refresh(0, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=additem&amp;' . URI_RAID .'=' . $raid_id));
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=additem&amp;' . URI_RAID .'=' . $raid_id));
 				}
+		
+				elseif($deleteitem)
+				{
+					$item_id = request_var(URI_ITEM, 0); 
+					$this->deleteitem($item_id); 
+				}
+				
 				elseif($addraider)
 				{
 					//adds raider
 					$this->addraider($raid_id);
 					$this->displayraid($raid_id);
 				}
+				
 				elseif($editraider || $updateraider)
 				{
 					//show the form for editing a raider (get params from $get)
@@ -106,6 +116,7 @@ class acp_dkp_raid extends bbDkp_Admin
 					$raid_id = request_var (URI_RAID, 0);
 					$this->editraider($raid_id, $attendee_id);
 				}
+				
 				elseif($deleteraider)
 				{
 					//show the form for editing a raider (get params from $get)
@@ -113,17 +124,21 @@ class acp_dkp_raid extends bbDkp_Admin
 					$attendee_id = request_var(URI_NAMEID, 0);
 					$this->deleteraider($raid_id, $attendee_id);
 				}
+				
 				elseif($decayraid)
 				{
 					$this->decayraid($raid_id);
 					$this->displayraid($raid_id);
 				}
+				
 				else
 				{
 					// show edit form
 					$raid_id = request_var (URI_RAID, 0);
 					$this->displayraid($raid_id);
 				}
+				$this->page_title = 'ACP_DKP_RAID_EDIT';
+				$this->tpl_name = 'dkp/acp_' . $mode;
 				
 				break;
 				
@@ -716,7 +731,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			'ITEMNAME'      => $item_name, 
 			'U_VIEW_BUYER' 	=> (! empty ( $row ['member_name'] )) ? append_sid ("index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $row['member_id']) : '',
 			'U_VIEW_ITEM' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_ITEM . "={$row['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
-			'U_DELETE_ITEM' => append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=additem&amp;itemdelete=Y&amp;" . URI_ITEM . "={$row['item_id']}" ),
+			'U_DELETE_ITEM' => append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteitem=1&amp;" . URI_ITEM . "={$row['item_id']}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']  ),
 			'ITEMVALUE' 	=> $row['item_value'],
 			'DECAYVALUE' 	=> $row['item_decay'],
 			'TOTAL' 		=> $row['item_total'],
@@ -736,6 +751,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			'U_BACK'			=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ),
 			'S_SHOWADDATTENDEE'	=> ($s_memberlist_options == '') ? false: true, 
 			'S_MEMBERLIST_OPTIONS'  	=> $s_memberlist_options, 
+			'S_EDITRAID'		=> true, 
 			'L_TITLE' 			=> $user->lang ['ACP_ADDRAID'], 
 			'F_EDIT_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
 			'F_ADDATTENDEE' 	=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addattendee&amp;". URI_RAID . "=" .$raid_id ),
@@ -1854,6 +1870,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 				      SET member_status = 1, member_adjustment = member_adjustment + ' . (string) $adj_value . ' 
 	                WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $active_members );
+				
 				$db->sql_query($sql);
 				
 				$log_action = array (
@@ -1862,6 +1879,7 @@ class acp_dkp_raid extends bbDkp_Admin
 					'L_MEMBERS' 	=> implode ( ', ', $active_membernames ), 
 					'L_REASON' 		=> $user->lang['ACTIVE_POINT_ADJ'], 
 					'L_ADDED_BY' 	=> $user->data ['username'] );
+				
 				$this->log_insert ( array ('log_type' => $log_action ['header'], 'log_action' => $log_action ) );
 			}
 		}
@@ -2033,6 +2051,95 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		return $decay;
 		
+	}
+	
+	/**
+	 * Deletes item 
+	 */	
+	function deleteitem($item_id)
+	{
+		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
+		if($item_id==0)
+		{	
+			trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] , E_USER_WARNING);
+		}
+		$dkpid = request_var(URI_DKPSYS,0); 
+		
+		$sql = 'SELECT * FROM ' . RAID_ITEMS_TABLE . ' i, ' . MEMBER_LIST_TABLE . ' m WHERE i.member_id = m.member_id and i.item_id= ' . (int) $item_id;
+		$result = $db->sql_query ( $sql );
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$old_item = array (
+			'item_id' 		=>  (int) $item_id , 
+			'item_name' 	=>  (string) $row['item_name'] , 
+			'member_id' 	=>  (int) 	$row['member_id'] , 
+			'member_name' 	=>  (string) 	$row['member_name'] ,
+			'raid_id' 		=>  (int) 	$row['raid_id'], 
+			'item_date' 	=>  (int) 	$row['item_date'] , 
+			'item_value' 	=>  (float) $row['item_value'], 
+			'item_decay' 	=>  (float) $row['item_decay']  
+			);
+		}
+		$db->sql_freeresult ($result);
+		
+		if (confirm_box ( true )) 
+		{
+			
+			//retrieve info
+			$dkp = request_var('hidden_dkpid', 0);
+			$item_id =  request_var('hidden_item_id', 0);
+			
+			// delete items and decrease buyer spend
+			$db->sql_transaction('begin');
+		
+			// 1) Remove the item purchase from the items table
+			$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' WHERE ' . $db->sql_in_set('item_id', $old_item ['item_id']);
+			$db->sql_query ($sql);
+				
+			// decrease dkp spent value from buyer
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d
+					SET d.member_spent = d.member_spent - ' . $old_item ['item_value'] .  ' , 
+					    d.member_item_decay = d.member_item_decay - ' . $old_item ['item_decay'] .  ' , 
+					WHERE d.member_dkpid = ' . (int) $dkpid . ' 
+				  	AND ' . $db->sql_in_set('member_id', $old_item ['member_id']) ;
+			$db->sql_query ( $sql );
+			
+			// if zerosum was given then remove item value from earned value
+			
+			
+			$db->sql_transaction('commit');
+			
+			$log_action = array (
+				'header' 	=> 'L_ACTION_ITEM_DELETED',
+				'L_NAME' 	=> $old_item ['item_name'], 
+				'L_BUYER' 	=> $old_item ['member_name'],
+				'L_RAID_ID' => $old_item ['raid_id'], 
+				'L_VALUE' 	=> $old_item ['item_value'] );
+			
+			$this->log_insert ( array (
+				'log_type' 		=> $log_action ['header'], 
+				'log_action' 	=> $log_action ) );
+			
+			$success_message = sprintf ( $user->lang ['ADMIN_DELETE_ITEM_SUCCESS'], 
+			$old_item ['item_name'], $old_item ['member_name'], $old_item ['item_value'] );
+			
+			trigger_error ( $success_message . $this->link, E_USER_NOTICE );
+		
+		} 
+		else
+		{
+			$s_hidden_fields = build_hidden_fields ( array (
+				'deleteitem' 	  => true, 
+				'hidden_item_id'  => $item_id,
+				'hidden_dkpid'    => $dkpid, 
+				'hidden_old_item' => $old_item
+			));
+
+			$template->assign_vars ( array (
+				'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
+			confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $old_item ['item_name'], $old_item ['member_name']  ), $s_hidden_fields );
+		}
+				
 	}
 	
 	
