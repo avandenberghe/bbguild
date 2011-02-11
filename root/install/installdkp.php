@@ -54,7 +54,7 @@ if ($umil->module_exists('acp', false, 'DKP'))
 }
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.1.3';
+$mod_name = 'bbDKP 1.2';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -129,7 +129,7 @@ switch ($game)
 
 $versions = array(
 
-    '1.1.3'    => array(
+    '1.2'    => array(
     	// bbdkp tables (this uses the layout from develop/create_schema_files.php and from phpbb_db_tools)
         'table_add' => array(
             
@@ -689,15 +689,10 @@ $versions = array(
         		),
             ),            
             
-			/*
-             * add item management menu
-             */
-            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_ITEM'),
-            
-            // add raid pools
-            array('acp', 'ACP_DKP_ITEM', array(
+            // add items
+            array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_item',
-            	 'modes'           => array('additem', 'listitems', 'search', 'viewitem'),
+            	 'modes'           => array('listitems', 'edititem'),
         		),
             ),
             

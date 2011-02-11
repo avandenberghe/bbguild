@@ -62,8 +62,6 @@ class acp_dkp_raid extends bbDkp_Admin
 				break;
 				
 			case 'editraid' :
-			
-				
 				
 				$update = (isset ( $_POST ['update'] )) ? true : false;
 				$delete = (isset ( $_POST ['delete'] )) ? true : false;
@@ -843,7 +841,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		{
 			$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
 	                     FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
-					  where a.dkpsys_id = b.event_dkpid order by dkpsys_name ';
+					  where a.dkpsys_id = b.event_dkpid group by dkpsys_name ';
 			$result = $db->sql_query ( $sql );
 
 			// get dkp pool value from popup
@@ -864,7 +862,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		{
 			$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
                     FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
-				  where a.dkpsys_id = b.event_dkpid order by dkpsys_name ';
+				  where a.dkpsys_id = b.event_dkpid group by dkpsys_name ';
 			$result = $db->sql_query ($sql);		
 			while ( $row = $db->sql_fetchrow ( $result ) ) 
 			{

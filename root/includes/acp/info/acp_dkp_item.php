@@ -37,12 +37,10 @@ class acp_dkp_item_info
 		return array(
 			'filename'	=> 'acp_dkp_item',
 			'title'		=> 'ACP_DKP_ITEM',
-			'version'	=> '1.1.0',
+			'version'	=> '1.2',
 			'modes'		=> array(
-				'additem'			=> array('title' => 'ACP_DKP_ITEM_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM'), 'display' => false ),
-				'listitems'			=> array('title' => 'ACP_DKP_ITEM_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM') , 'display' => true ),
-				'search'			=> array('title' => 'ACP_DKP_ITEM_SEARCH', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM'), 'display' => false  ),
-				'viewitem'			=> array('title' => 'ACP_DKP_ITEM_VIEW', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_ITEM') , 'display' => false ),
+				'edititem'			=> array('title' => 'ACP_DKP_ITEM_EDIT', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => false ),
+				'listitems'			=> array('title' => 'ACP_DKP_ITEM_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS') , 'display' => true ),
 				),
 		);
 	}

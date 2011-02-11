@@ -7,7 +7,7 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.1.3]]></title>
+		<title lang="en"><![CDATA[bbDKP 1.2]]></title>
 		<description lang="en"><![CDATA[bbDKP is a PHPBB3-based DKP solution, evolved from EQDKP to help guilds in MMORPGs (Massive(ly) Multiplayer Online Role-playing Games) track guild members attendance, item purchases and other statistics. It updates and brings together the Dkp/game managment facilites of EQdkp, and integrates them with phpBB3's facilites. This means your users gain single sign on to dkp and phpbb, and you as an administrator or raidleader gain a clean interface, robust admin facilities and less integration headaches. 
 		Games supported : Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, Wow. 
 		Features : Multiple Dkp Pools and guilds, DKP Standings, Raids, Events, Item values, Item history, Raid Stats, Bossprogress, Roster, backup, import from eqdkp+. 
@@ -128,11 +128,11 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.1.3</mod-version>
+		<mod-version>1.2</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
-			<target-version>3.0.7-PL1</target-version>
+			<target-version>3.0.8</target-version>
 		</installation>
 		<link-group>
 			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2</link>
@@ -334,7 +334,7 @@ function pop_search()
 				<comment lang="fr"><![CDATA[inserer liens dans template]]></comment>
 				<comment lang="de"><![CDATA[inseriere Links im Template]]></comment>								
 				<find><![CDATA[<li class="icon-home"><a href="{U_INDEX}" accesskey="h">{L_INDEX}</a>]]></find>
-				<action type="before-add"><![CDATA[				<li class="icon-home"><a href="{U_PORTAL}">{L_PORTAL}</a></li>
+				<action type="before-add"><![CDATA[<li class="icon-home"><a href="{U_PORTAL}">{L_PORTAL}</a></li>
 				<li class="icon-faq"><a href="{U_DKP}">{L_DKPPAGE}</a><!-- BEGIN dkpnavlinks --> <strong>&#8249;</strong> <a href="{dkpnavlinks.U_DKPPAGE}">{dkpnavlinks.DKPPAGE}</a><!-- END dkpnavlinks --></li>
 				]]></action>
 			</edit>
@@ -349,7 +349,7 @@ Post-install instructions :
 Automod cannot handle it as it would lead to a timeout due to the size (24,9mb) ! 
 <file from="root/images/*.*" to="images/*.*" />   
 ------------------------------------------------------------------------------
-2) Run bbDKP 1.1.3 database installation or upgrade : install/installdkp.php 
+2) Run bbDKP 1.2 database installation or upgrade : install/installdkp.php 
 ------------------------------------------------------------------------------
 3) Finish 
 Finally rename the install folder. 

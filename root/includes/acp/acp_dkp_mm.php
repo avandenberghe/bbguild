@@ -930,8 +930,9 @@ function main($id, $mode)
 							'V_MEMBER_NAME'         => ( isset($_POST['add']) ) ? '' : isset($this->member) ? $this->member['member_name'] : '' ,
 							'MEMBER_ID'             => isset($this->member) ? $this->member['member_id'] : '',
 							'MEMBER_LEVEL'          => isset($this->member) ? $this->member['member_level'] : '',
-							'MALE_CHECKED'      	 => ($genderid == '0') ? ' checked="checked"' : '' , 
-                		    'FEMALE_CHECKED'    	 => ($genderid == '1') ? ' checked="checked"' : '' , 
+							'MALE_CHECKED'      	=> ($genderid == '0') ? ' checked="checked"' : '' , 
+                		    'FEMALE_CHECKED'    	=> ($genderid == '1') ? ' checked="checked"' : '' , 
+				        	'MEMBER_COMMENT'		=> isset($this->member) ? $this->member['member_comment'] : '',
 					
 							'S_JOINDATE_DAY_OPTIONS'	=> $s_memberjoin_day_options,
 							'S_JOINDATE_MONTH_OPTIONS'	=> $s_memberjoin_month_options,
