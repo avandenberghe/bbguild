@@ -471,6 +471,8 @@ $versions = array(
 			
 		 array($table_prefix . 'bbdkp_member_ranks', 
 			 array(
+			 
+			 	// standard member rank
 	       		array(
 	       			'guild_id'	=> 1,	
 					'rank_id'	=> 0,
@@ -480,7 +482,18 @@ $versions = array(
 					'rank_suffix'	=> '',
 				 ),
 				 
-				// dont hide the Out rank by default
+				 
+				// operating rank, undeletable rank
+	       		array(
+	       			'guild_id'	=> 1,	
+					'rank_id'	=> 90,
+					'rank_name'	=> 'Operating',
+					'rank_hide'	=> 1,
+					'rank_prefix'	=> '',
+					'rank_suffix'	=> '',
+				 ),
+				 
+				// Out rank : for unguilded, undeletable rank
 	       		array(
 	       			'guild_id'	=> 0,	
 					'rank_id'	=> 99,
@@ -489,11 +502,35 @@ $versions = array(
 					'rank_prefix'	=> '',
 					'rank_suffix'	=> '',
 				 ),
+				 
+				 				 
 				)
-			)
+			), 
+			
+		 // create the guildbank character
+		 array($table_prefix . 'bbdkp_memberlist', 
+			 array(
+	       		array(
+	       			'member_name' 		=> 'Guildbank', 
+					'member_status'		=> 1,
+					'member_level'		=> 1,
+					'member_race_id'	=> 0,
+					'member_class_id'	=> 0,
+					'member_rank_id'	=> 90,
+	       			'member_comment'	=> 'The guildbank toon',
+	       			'member_joindate'	=> time(),
+	       			'member_outdate'	=> '1893456000',
+	       			'member_guild_id'	=> 1,
+	       			'member_gender_id'	=> 1,
+	       			'phpbb_user_id'		=> $user->data['user_id'],
+				 ),
+			))
+						
+		
+			
 		),
 
-    	// two basic permissions
+    	// create two basic permissions
 	   'permission_add' => array(
             array('a_dkp', true),
             array('u_dkp', true) 
@@ -537,39 +574,40 @@ $versions = array(
 	        array('bbdkp_user_llimit', '20', true),
 	        
 	        //standings
-			array('bbdkp_hide_inactive', '0', true),
-			array('bbdkp_inactive_period', '14', true),
+			array('bbdkp_hide_inactive', '1', true),
+			array('bbdkp_inactive_period', '150', true),
 			array('bbdkp_list_p1', '30', true),
-			array('bbdkp_list_p2', '90', true),
-         	array('bbdkp_list_p3', '0', true),    
-			array('bbdkp_prcalculation', 0, true),	
+			array('bbdkp_list_p2', '60', true),
+         	array('bbdkp_list_p3', '90', true),    
 			
 			//events
 			array('bbdkp_user_elimit', '30', true),
 			
 			//adjustments
 			array('bbdkp_user_alimit', '30', true),
-			array('bbdkp_active_point_adj', '0.00', true),
-			array('bbdkp_inactive_point_adj', '0.00', true),
-			array('bbdkp_starting_dkp', '0.00', true), 
+			array('bbdkp_active_point_adj', '10.00', true),
+			array('bbdkp_inactive_point_adj', '-10.00', true),
+			array('bbdkp_starting_dkp', '15.00', true), 
 			
 			//items
 			array('bbdkp_user_ilimit', '20', true),
-			array('bbdkp_itemdecaypct', 0, true),			
+			array('bbdkp_itemdecaypct', 5, true),			
 
 			//raids
 			array('bbdkp_user_rlimit', '20', true),
 			
 			//epgp
-			array('bbdkp_raiddecaypct', 0, true),	
-			array('bbdkp_decayfrequency', 0, true),
-			array('bbdkp_decayfreqtype', 0, true),
+			array('bbdkp_prcalculation', 1, true),	
+			array('bbdkp_raiddecaypct', 5, true),	
+			array('bbdkp_decayfrequency', 1, true),
+			array('bbdkp_decayfreqtype', 1, true),
 			//time
-			array('bbdkp_dkptimeunit', 0.00, true),
-			array('bbdkp_timeunit', 0.00, true),
-			array('bbdkp_standardduration', 0.00, true),
+			array('bbdkp_dkptimeunit', 5, true),
+			array('bbdkp_timeunit', 30, true),
+			array('bbdkp_standardduration', 1, true),
+			
 			//zerosum
-			array('bbdkp_zerosum', 0, true),
+			array('bbdkp_zerosum', 1, true),
 			array('bbdkp_bankerid', 0, true),
 
             // portal settings
