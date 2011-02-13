@@ -369,8 +369,8 @@ $versions = array(
            			'item_group_key'  => array('VCHAR', ''),
            			'item_gameid' 	  => array('UINT', 0),
 					'item_value'      => array('DECIMAL:11', 0.00),
-          			'item_decay'      => array('DECIMAL:11', 0.00),
-            
+          			'item_decay'      => array('DECIMAL:11', 0.00), // decay of itemvalue
+          			'item_zs'      	  => array('BOOL', 0), // if this flag is set the itemvalue will be distributed over raid
                     ),
                     'PRIMARY_KEY'     => 'item_id',
                     'KEYS'         => array('raid_id'    => array('INDEX', 'raid_id')),					

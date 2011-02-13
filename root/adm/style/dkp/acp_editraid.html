@@ -364,6 +364,7 @@ function durationcalc()
     <th style="text-align:left;" width="30%"><a href="{F_EDIT_RAID}&amp;o={O_BUYER}&amp;">{L_NAME}</a></th>
     <th style="text-align:left;" width="25%"><a href="{F_EDIT_RAID}&amp;o={O_ITEMNAME}">{L_ITEM}</a></th>
     <th style="text-align:right;" width="15%" width="30" nowrap="nowrap">{L_ITEMVALUE}</th>
+    <th style="text-align:right;" width="5" width="30" nowrap="nowrap">zs</th>
     <th style="text-align:right;" width="15%" nowrap="nowrap">{L_ITEMDECAY}</th>
     <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_ITEMTOTAL}">{L_ITEMTOTAL}</a></th>
     <th style="text-align:center;" width="5">{L_ACTION}</th>
@@ -376,6 +377,7 @@ function durationcalc()
     <td style="text-align:left;" width="30%"><strong><a style="color:{items_row.COLORCODE}" href="{items_row.U_VIEW_ATTENDEE}">{items_row.BUYER}</a></strong></td>
     <td style="text-align:left;" width="25%"><a href="{items_row.U_VIEW_ITEM}">{items_row.ITEMNAME}</a></td>
     <td style="text-align:right;" width="15%" class="positive">{items_row.ITEMVALUE}</td>
+    <td style="text-align:right;" width="5" class="positive"> <input type="checkbox" READONLY DISABLED name="item[{items_row.ITEM_ID}]" value="1" {items_row.ITEM_ZS} />  </td>
     <td style="text-align:right;" width="15%" class="negative">{items_row.DECAYVALUE}</td>
     <td style="text-align:right;" width="15%" class="positive">{items_row.TOTAL}</td>
     <td style="text-align:center;"  width="5" nowrap="nowrap">
@@ -392,6 +394,7 @@ function durationcalc()
     <th class="footer">{ITEMSFOOTCOUNT}</th>
     <th></th>
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{ITEM_VALUE}</th>
+    <th></th>
     <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{ITEMDECAYVALUE}</th>
     <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{ITEMTOTAL}</th>
     <th></th>

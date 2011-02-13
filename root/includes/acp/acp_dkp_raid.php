@@ -91,7 +91,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				elseif($additem)
 				{
 					//show form for adding items
-					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=additem&amp;' . URI_RAID .'=' . $raid_id));
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=edititem&amp;' . URI_RAID .'=' . $raid_id));
 				}
 		
 				elseif($deleteitem)
@@ -686,7 +686,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				);
 		$icurrent_order = switch_order ($isort_order);
         $sql_array = array(
-	    'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, i.item_decay, i.item_value - i.item_decay as item_total',
+	    'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.item_zs, l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, i.item_decay, i.item_value - i.item_decay as item_total',
 	    'FROM'      => array(
 	        CLASS_TABLE 		=> 'c', 
 	        MEMBER_LIST_TABLE 	=> 'l', 
@@ -726,9 +726,11 @@ class acp_dkp_raid extends bbDkp_Admin
             'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
 			'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 				
 			'BUYER' 		=> (! empty ( $row ['member_name'] )) ? $row ['member_name'] : '&lt;<i>Not Found</i>&gt;', 
-			'ITEMNAME'      => $item_name, 
+			'ITEMNAME'      => $item_name,
+			'ITEM_ID'		=> $row['item_id'],
+			'ITEM_ZS'      	=> ($row['item_zs'] == 1) ? ' checked="checked"' : '',
 			'U_VIEW_BUYER' 	=> (! empty ( $row ['member_name'] )) ? append_sid ("index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $row['member_id']) : '',
-			'U_VIEW_ITEM' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_ITEM . "={$row['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
+			'U_VIEW_ITEM' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_ITEM . "={$row['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
 			'U_DELETE_ITEM' => append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteitem=1&amp;" . URI_ITEM . "={$row['item_id']}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']  ),
 			'ITEMVALUE' 	=> $row['item_value'],
 			'DECAYVALUE' 	=> $row['item_decay'],

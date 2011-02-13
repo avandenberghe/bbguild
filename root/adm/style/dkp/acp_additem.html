@@ -71,11 +71,11 @@ function fnSearch( searchField, searchItem )
     }
 }
 
-function fnAddMember()
+function fnAddBuyer()
 {
 	
     var form = document.additem;
-    var fromField = form.all_members;
+    var fromField = form.elements["raiders[]"];
     //destination
     var toField = form.elements["item_buyers[]"];
 
@@ -133,10 +133,10 @@ function fnAddMember()
 }
 
 
-function fnRemoveMember()
+function fnRemoveBuyer()
 {
   var form = document.additem;
-  var toField = form.elements["raid_attendees[]"];
+  var toField = form.elements["item_buyers[]"];
   var toSize = toField.options.length;
     
   var i;
@@ -177,8 +177,7 @@ fieldset dd {
 </style>
 <a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
 
-
-<form method="post" action="{F_ADD_ITEM}" name="additem">
+<form method="post" action="{F_ADD_ITEM}" id="additem"  name="additem" >
 <input type="hidden" name="hidden_item_id" value="{ITEM_ID}" />
 
 <a name="maincontent"></a>
@@ -194,12 +193,12 @@ fieldset dd {
   {L_SEARCH_MEMBERS} : <input type="text" name="memberSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'all_members')" />	
 </dl>
 <dl>
-     <select style="float: left; width: 49%; name="all_members" size="20" multiple="multiple" class="input">
-         <!-- BEGIN members_row -->
-       <option value="{members_row.VALUE}">{members_row.OPTION}</option>
-       <!-- END members_row -->
+     <select style="float: left; width: 49%;" name="raiders[]" id= "raiders[]" size="20" multiple="multiple" class="input">
+       <!-- BEGIN raiders_row -->
+       <option value="{raiders_row.VALUE}">{raiders_row.OPTION}</option>
+       <!-- END raiders_row -->
      </select>
-     <select style="float: right; width: 49%; name="item_buyers[]" size="20" multiple="multiple" class="input">
+     <select style="float: right; width: 49%;" name="item_buyers[]" id="item_buyers[]" size="20" multiple="multiple" class="input">
        <!-- BEGIN buyers_row -->
        <option value="{buyers_row.VALUE}" selected="selected">{buyers_row.OPTION}</option>
        <!-- END buyers_row -->
@@ -207,8 +206,8 @@ fieldset dd {
  </dl>
     <dl>
         <center>
-          <input type="button" name="button1" value="&lt;&lt;" accesskey="r" onclick="return fnRemoveMember()" class="button1" />
-          <input type="button" name="button2" value="&gt;&gt;" accesskey="m" onclick="return fnAddMember()" class="button1" />
+          <input type="button" name="button1" value="&lt;&lt;" accesskey="r" onclick="return fnRemoveBuyer()" class="button1" />
+          <input type="button" name="button2" value="&gt;&gt;" accesskey="m" onclick="return fnAddBuyer()" class="button1" />
 		</center>
 	</dl> 
      </fieldset>
@@ -227,7 +226,7 @@ fieldset dd {
    		<input type="text" name="itemSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'select_item_name'); switch_item_val();" />
    	</dd>
    	<dd>
-   	  &nbsp;
+<br />
    	</dd>
    	<dd>
 	   	 <select name="select_item_name" onchange="javascript:switch_item_val();" class="input">
@@ -245,14 +244,27 @@ fieldset dd {
    		<dd><input type="text" name="item_name" size="30" maxlength="255" value="{ITEM_NAME}" class="input" />{FV_ITEM_NAME}</dd>
    	</dl>
    	<dl>
-	   	<dt><label>{L_ENTER_NEW_GAMEITEMID}:</label></dt>
+	   	<dt><label>{L_ENTER_NEW_GAMEITEMID}:</label>{L_GAMEITEMID_EXPLAIN}</dt>
    		<dd><input type="text" name="item_gameid" size="15" maxlength="255" value="{ITEM_GAMEID}" class="input" /></dd>
    		
 	</dl>
 	<dl>
-    	<dt><label>{L_VALUE}:</label></dt>
+    	<dt><label>{L_ITEMVALUE}:</label></dt>
     	<dd> <input type="text" name="item_value" size="10" maxlength="10" value="{ITEM_VALUE}" class="input" />{FV_ITEM_VALUE}</dd>
 	 </dl>
+	 
+	 
+	 <!-- IF ! S_ADD -->
+	<dl>
+    	<dt><label>{L_ITEMDECAY}:</label></dt>
+    	<dd> <input type="text" name="item_decay" size="10" maxlength="10" value="{ITEM_DECAY}" class="input" /></dd>
+	 </dl>	 
+	<dl>
+    	<dt><label>{L_ZSVALUE}:</label>{L_ZS_CHECKED_EXPLAIN}</dt>
+    	<dd> <input type="checkbox" READONLY DISABLED name="item_zs" value="1" {ITEM_ZS} /></dd>
+	 </dl>
+	 <!-- ENDIF -->
+	 
  </fieldset>
  </div>
  
