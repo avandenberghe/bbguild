@@ -119,41 +119,36 @@ function switch_event_val()
 /* calculates time dkp bonus from raid duration and config settings */
 function durationcalc()
 {
-	var day = document.editraid.d.options[document.editraid.d.selectedIndex].text;
-	var month = document.editraid.mo.options[document.editraid.mo.selectedIndex].text;
-	var year = document.editraid.Y.options[document.editraid.Y.selectedIndex].text;
+	var startday = document.editraid.d.options[document.editraid.d.selectedIndex].text;
+	var startmonth = document.editraid.mo.options[document.editraid.mo.selectedIndex].text;
+	var startyear = document.editraid.Y.options[document.editraid.Y.selectedIndex].text;
 	var starth = document.editraid.sh.options[document.editraid.sh.selectedIndex].text;
 	var startm = document.editraid.smi.options[document.editraid.smi.selectedIndex].text;
 	var starts = document.editraid.ss.options[document.editraid.ss.selectedIndex].text;
 	var raidbegin = new Date();
-	raidbegin.setDate(day);
-	raidbegin.setMonth(month);
-	raidbegin.setYear(year);
+	raidbegin.setDate(startday);
+	raidbegin.setMonth(startmonth);
+	raidbegin.setYear(startyear);
 	raidbegin.setHours(starth);
 	raidbegin.setMinutes(startm);
 	raidbegin.setSeconds(starts);
 	
+	var stopday = document.editraid.ed.options[document.editraid.ed.selectedIndex].text;
+	var stopmonth = document.editraid.emo.options[document.editraid.emo.selectedIndex].text;
+	var stopyear = document.editraid.eY.options[document.editraid.eY.selectedIndex].text;
 	var stoph = document.editraid.eh.options[document.editraid.eh.selectedIndex].text;
 	var stopm = document.editraid.emi.options[document.editraid.emi.selectedIndex].text;
 	var stops = document.editraid.es.options[document.editraid.es.selectedIndex].text;
 	var raidend = new Date();
-	raidend.setDate(day);
-	raidend.setMonth(month);
-	raidend.setYear(year);
-	if(stoph<starth)
-	{  /* past midnight*/
-		raidend.setDate(raidend.getDate() + 1);
-	}
+	raidend.setDate(stopday);
+	raidend.setMonth(stopmonth);
+	raidend.setYear(stopyear);
 	raidend.setHours(stoph);
 	raidend.setMinutes(stopm);
 	raidend.setSeconds(stops);
-	
-	document.editraid.ed.value = raidend.getDate;
-	document.editraid.emo.value = raidend.getMonth;
-	document.editraid.eY.value = raidend.getYear;
 
 	var diff=raidend-raidbegin;
-	if(diff> 0)
+	if(diff > 0)
 	{
 		diff=diff/86400000*24;
 		diff=diff.toFixed(2);		
@@ -164,15 +159,24 @@ function durationcalc()
 		document.editraid.raid_duration.value = 0;
 	}
 	
+	return document.editraid.raid_duration.value;
+	
+}
+
+function update_timebonus()
+{
+	
+	var duration = durationcalc();
 	var dkp_per_timeunit = document.editraid.dkptimeunit.value;
 	var unitminutes = document.editraid.timeunit.value;
 	var dkp_bonus = 0;
 	if(unitminutes > 0)
 	{
-		dkp_bonus = (dkp_per_timeunit * (diff*60) / unitminutes ).toFixed(2);
+		dkp_bonus = (dkp_per_timeunit * (duration * 60) / unitminutes ).toFixed(2);
 	}
 	
 	document.editraid.time_bonus.value = dkp_bonus;
+
 }
 
 //]]>
@@ -208,32 +212,39 @@ function durationcalc()
 	</dl>		
 	
 	<dl>
-		<dt><label>{L_DATE}:</label></dt>
-		<dd>
-		<select name="d">{S_RAIDDATE_DAY_OPTIONS}</select>
-		<select name="mo">{S_RAIDDATE_MONTH_OPTIONS}</select> 
-		<select name="Y">{S_RAIDDATE_YEAR_OPTIONS}</select>
-	   </dd>
-	</dl>
-		<input type="hidden" name="ed" value="" /> 
-		<input type="hidden" name="emo" value="" /> 
-		<input type="hidden" name="eY" value="" /> 
-			<dl>
 		<dt><label>{L_RAIDSTART}:</label></dt>
 		<dd>
-			<select name="sh" onChange="javascript:durationcalc();">{S_RAIDSTART_H_OPTIONS}</select>
-			<select name="smi" onChange="javascript:durationcalc();">{S_RAIDSTART_MI_OPTIONS}</select> 
-			<select name="ss" onChange="javascript:durationcalc();">{S_RAIDSTART_S_OPTIONS}</select>
+			<select name="d" onChange="javascript:update_timebonus();">{S_RAIDSTARTDATE_DAY_OPTIONS}</select>
+			<select name="mo" onChange="javascript:update_timebonus();">{S_RAIDSTARTDATE_MONTH_OPTIONS}</select> 
+			<select name="Y" onChange="javascript:update_timebonus();">{S_RAIDSTARTDATE_YEAR_OPTIONS}</select>
+	   </dd>
+	   		<dd>
+			<select name="sh" onChange="javascript:update_timebonus();">{S_RAIDSTART_H_OPTIONS}</select>
+			<select name="smi" onChange="javascript:update_timebonus();">{S_RAIDSTART_MI_OPTIONS}</select> 
+			<select name="ss" onChange="javascript:update_timebonus();">{S_RAIDSTART_S_OPTIONS}</select>
 		</dd>
 	</dl>
+
 	<dl>
 		<dt><label>{L_RAIDEND}:</label></dt>
 		<dd>
-			<select name="eh" onChange="javascript:durationcalc();">{S_RAIDEND_H_OPTIONS}</select>
-			<select name="emi" onChange="javascript:durationcalc();">{S_RAIDEND_MI_OPTIONS}</select> 
-			<select name="es" onChange="javascript:durationcalc();">{S_RAIDEND_S_OPTIONS}</select>
+			<select name="ed" onChange="javascript:update_timebonus();">{S_RAIDENDDATE_DAY_OPTIONS}</select>
+			<select name="emo" onChange="javascript:update_timebonus();" >{S_RAIDENDDATE_MONTH_OPTIONS}</select> 
+			<select name="eY" onChange="javascript:update_timebonus();">{S_RAIDENDDATE_YEAR_OPTIONS}</select>
+	   </dd>
+	   	<dd>
+			<select name="eh" onChange="javascript:update_timebonus();">{S_RAIDEND_H_OPTIONS}</select>
+			<select name="emi" onChange="javascript:update_timebonus();">{S_RAIDEND_MI_OPTIONS}</select> 
+			<select name="es" onChange="javascript:update_timebonus();">{S_RAIDEND_S_OPTIONS}</select>
 		</dd>
 	</dl>
+	
+	<!--  
+		<input type="hidden" name="ed" value="" /> 
+		<input type="hidden" name="emo" value="" /> 
+		<input type="hidden" name="eY" value="" /> 
+	-->		
+
 		
 	<dl>
 		<dt><label>{L_RAIDDURATION}:</label>({L_RAIDDURATION_EXPLAIN})</dt>
@@ -254,7 +265,7 @@ function durationcalc()
 	<dl>
 		<dt><label>{L_TIME_BONUS}:</label>&nbsp;{L_TIME_BONUS_EXPLAIN}&nbsp;{DKPPERTIME}. </dt>
 		<dd>
-			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{TIME_BONUS}" class="input" /> &nbsp; <input type="checkbox" name="overridetime_bonus" value="1"/> {L_TIME_OVERRIDE}
+			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{TIMEVALUE}" class="input" /> &nbsp; <input type="checkbox" name="overridetime_bonus" value="1"/> {L_TIME_OVERRIDE}
 		</dd>
 	</dl>
 	

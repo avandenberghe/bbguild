@@ -26,7 +26,7 @@ class acp_dkp_item extends bbDkp_Admin
 {
 	var $u_action;
 	var $link;
-	function main($id, $mode) 
+	public function main($id, $mode) 
 	{
 		global $db, $user, $auth, $template;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
@@ -51,25 +51,14 @@ class acp_dkp_item extends bbDkp_Admin
 						trigger_error('FORM_INVALID');
 					}
        			}
-        			
-				//fetch $_GET from meta refresh in acp_dkp_raid or $_POST from postback
-				$item_buyers = request_var('item_buyers', array(0 => 0));
-				$raid_id 	 = request_var(URI_RAID, 0); 
-				$itemvalue 	 = request_var( 'item_value' , 0.0) ; 
-				$item_name = (isset ( $_POST ['item_name'] )) ? 
-					utf8_normalize_nfc(request_var('item_name','', true)) : 
-				    utf8_normalize_nfc(request_var( 'select_item_name', '', true));
-				// if user wants to manually edit the decay but this is uncommon...
-				$itemgameid  = request_var( 'item_gameid' , 0) ;
-			    $item_decay = request_var( 'item_decay' , 0.0);				 
 
-				if ($submit) 
+       			if ($submit) 
 				{
-					$this->additem($item_buyers, $raid_id, $itemvalue, $item_name, $itemgameid); 
+					$this->additem(); 
 				}
 				if ($update) 
 				{
-					$this->updateitem($item_buyers, $raid_id, $itemvalue, $item_name, $itemgameid, $item_decay);  
+					$this->updateitem();  
 				}
 				if ($delete) 
 				{
@@ -77,7 +66,7 @@ class acp_dkp_item extends bbDkp_Admin
 					$this->deleteitem(true);
 				}
 				
-				$this->displayloot($raid_id, $itemvalue, $item_buyers, $item_name, $itemgameid );
+				$this->displayloot();
 				$this->page_title = 'ACP_ADDITEM';
 				$this->tpl_name = 'dkp/acp_additem';
 				
@@ -180,9 +169,13 @@ class acp_dkp_item extends bbDkp_Admin
 	 * index.php?i=dkp_item&mode=additem&item=2
 	 * index.php?i=dkp_item&mode=additem&raid_id=1;
 	 */
-	function displayloot($raid_id, $itemvalue, $item_buyers, $item_name, $itemgameid )
+	private function displayloot()
 	{
 		global $db, $user, $config, $template, $phpEx;
+		
+		// fetch params from $_GET
+		$raid_id = request_var(URI_RAID, 0);
+		$item_id = request_var(URI_ITEM, 0);
 
 		//fetch raidinfo
 		$sql_array = array(
@@ -210,7 +203,6 @@ class acp_dkp_item extends bbDkp_Admin
 		$db->sql_freeresult ( $result );
 
 		// fetch item info
-		$item_id = request_var(URI_ITEM, 0); 
 		$buyer_source = ''; 
 		if($item_id != 0)
 		{	
@@ -289,7 +281,7 @@ class acp_dkp_item extends bbDkp_Admin
 			}
 		}
 		
-		// process sql for left select ion pane
+		// process sql for left select selection pane
 		$result = $db->sql_query ( $sql );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
@@ -348,14 +340,12 @@ class acp_dkp_item extends bbDkp_Admin
 		$form_key = 'additem';
 		add_form_key($form_key);
 					
-		
 		//constant template variables
 		$template->assign_vars ( array (
 		'U_BACK'			=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
 		'L_TITLE' 			=> $user->lang ['ACP_ADDITEM'], 
 		'L_EXPLAIN' 		=> $user->lang ['ACP_ADDITEM_EXPLAIN'],
 		'F_ADD_ITEM' 		=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_RAID . '=' . $raid_id ), 
-		'ITEM_ID'			=> $item_id, 
 		'ITEM_VALUE' 		=> isset($this->item['item_value']) ? $this->item['item_value'] : 0.00,
 		
 		// Language
@@ -372,6 +362,7 @@ class acp_dkp_item extends bbDkp_Admin
 		{
 			$template->assign_vars ( array (
 				'ITEMTITLE'		=> sprintf($user->lang['LOOTUPD'], $raidtitle, $raiddate  ) , 
+				'RAID_DATE'		=> $raiddate, 
 				'ITEM_ZS'		=> ($this->item['item_zs'] == 1) ? ' checked="checked"' : '',  
 				'ITEM_DECAY'	=> $this->item['item_decay'],
 				'ITEM_NAME' 	=> isset($this->item['item_name']) ? $this->item['item_name'] : '' , 
@@ -379,7 +370,7 @@ class acp_dkp_item extends bbDkp_Admin
 				'S_ADD' 		=> false, 
 				'ITEM_ID' 		=> $item_id, 
 				'ITEM_DKPID'	=> $dkpid,
-				'ITEM_RAIDID'	=> $dkpid,
+				'ITEM_RAIDID'	=> $raid_id,
 				
 			));
 		}
@@ -387,15 +378,15 @@ class acp_dkp_item extends bbDkp_Admin
 		{
 			$template->assign_vars ( array (
 				'ITEMTITLE'		=> sprintf($user->lang['LOOTADD'], $raidtitle, $raiddate  ) , 
-				'S_ADD' 		=> true
+				'S_ADD' 		=> true, 
+				'ITEM_RAIDID'	=> $raid_id,
+				'ITEM_DKPID'	=> $dkpid,
 			));			
 		}
 		
 		
 	}
 	
-	
-
 	/***
 	 * adding new items to a raid
 	 * adds an item to the database
@@ -403,21 +394,25 @@ class acp_dkp_item extends bbDkp_Admin
 	 * 
 	 * called from : acp item adding
 	 * 
-	 * @param $dkpid = the dkp pool
-	 * @param raidid = the raid to which we add the item
-	 * @param itemvalue (float) the item cost
-	 * @param item_buyers = array with buyers
-	 * @param itemname
-	 * 
 	 */
-	function additem($item_buyers, $raid_id, $itemvalue, $item_name, $itemgameid)
+	private function additem()
 	{
-		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
+		global $db, $user, $template, $phpEx, $phpbb_root_path;
 		$errors_exist = $this->error_check ();
 		if ($errors_exist) 
 		{
 			$this->fv->displayerror($this->fv->errors);
 		}
+		
+		$raid_id = request_var('hidden_raid_id', 0);
+		$item_buyers = request_var('item_buyers', array(0 => 0));
+		$itemvalue 	 = request_var( 'item_value' , 0.0) ; 
+		$item_name = (isset ( $_POST ['item_name'] )) ? 
+					utf8_normalize_nfc(request_var('item_name','', true)) : 
+				    utf8_normalize_nfc(request_var( 'select_item_name', '', true));
+
+		// if user wants to manually edit the decay but this is uncommon...
+		$itemgameid  = request_var( 'item_gameid' , 0) ;
 		
 		// Find out the item date based on the raid it's associated with
 		$loottime = 0;
@@ -435,7 +430,7 @@ class acp_dkp_item extends bbDkp_Admin
 		
 		//
 		// Add item to selected members
-		$this->add_new_item ($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid);
+		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid);
 		
 		//
 		// Logging
@@ -461,7 +456,8 @@ class acp_dkp_item extends bbDkp_Admin
 
 	/**
 	 * does the actual item-adding database operations
-	 * called from : item acp adding, updating
+	 * called from : item acp adding, updating item acp
+	 * closed box - no need for other params than passed
 	 * 
 	 * @param item_name
 	 * @param item_buyers = array with buyers
@@ -472,9 +468,9 @@ class acp_dkp_item extends bbDkp_Admin
 	 * @param $itemgameid : if this is zero we dont care
 	 * 
 	 */
-	function add_new_item($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid) 
+	private function add_new_item_db($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid) 
 	{
-
+		
 		global $db, $user, $config;
 		$query = array ();
 		
@@ -483,7 +479,8 @@ class acp_dkp_item extends bbDkp_Admin
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('event_dkpid', false, $result);
 		$db->sql_freeresult ( $result);
-		
+
+		// start transaction
 		$db->sql_transaction('begin');
 		
 		// increase dkp spent value for buyers 
@@ -556,10 +553,7 @@ class acp_dkp_item extends bbDkp_Admin
 						  	AND member_id = ' . $this_member_id; 
 					$db->sql_query ( $sql );					
 				}
-				
 			}
-			
-				
 		}
 		$db->sql_multi_insert(RAID_ITEMS_TABLE, $query);
 		
@@ -568,18 +562,15 @@ class acp_dkp_item extends bbDkp_Admin
 		return true;
 	}
 	
-	
 	/**
 	 * Deletes item 
-	 * 
-	 * @groupdelete : if true then all groupid items also deleted 
+	 * @groupdelete : if true then all groupid items also deleted
 	 *  
 	 */	
-	function deleteitem($groupdelete = false)
+	private function deleteitem($groupdelete = false)
 	{
 		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
 
-		
 		if (confirm_box ( true )) 
 		{
 			//retrieve info
@@ -590,69 +581,7 @@ class acp_dkp_item extends bbDkp_Admin
 		
 			foreach($old_items as $old_item)
 			{
-				// 1) Remove the item purchase from the items table
-				$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' WHERE item_id = ' . $old_item ['item_id'] ;
-				$db->sql_query ($sql);
-					
-				// decrease dkp spent value from buyer
-				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d
-						SET d.member_spent = d.member_spent - ' . $old_item ['item_value'] .  ' , 
-						    d.member_item_decay = d.member_item_decay - ' . $old_item ['item_decay'] .  '  
-						WHERE d.member_dkpid = ' . (int) $old_item ['dkpid']  . ' 
-					  	AND ' . $db->sql_in_set('member_id', $old_item ['member_id']) ;
-				$db->sql_query ( $sql );
-				
-				// if zerosum was given then remove item value from earned value
-				if ($old_item ['item_zs'] == true)
-				{
-					$sql = 'select member_id from ' . RAID_DETAIL_TABLE . ' where raid_id = ' . $old_item ['raid_id'] ; 
-					$result = $db->sql_query($sql);
-					$raiders = array();
-					while ( $row = $db->sql_fetchrow ($result))
-					{
-						$raiders[]= $row['member_id'];
-					} 
-					$db->sql_freeresult ( $result);
-					
-					$numraiders = count($raiders);
-					$distributed = round( $old_item ['item_value']/ max(1, $numraiders), 2);
-					
-					// decrease raid detail table
-					$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
-							SET zerosum_bonus = zerosum_bonus - ' . (float) $distributed . ' 
-							WHERE raid_id = ' . (int) $old_item ['raid_id'];
-					$db->sql_query ( $sql );
-					
-					// deallocate dkp itemvalue bought to all raiders
-					$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '  				
-							SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $distributed  .  ', 
-							member_earned = member_earned - ' . (float) $distributed  .  ' 
-							WHERE member_dkpid = ' . (int) $old_item ['dkpid']  . ' 
-						  	AND ' . $db->sql_in_set('member_id', $raiders) ;
-					$db->sql_query ( $sql );
-					
-					// handle the rest amount
-					$restvalue = $old_item ['item_value'] - ($numraiders * $distributed); 
-					
-					if ($restvalue !=0)
-					{
-						// deduct it from the buyer
-						$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
-								SET zerosum_bonus = zerosum_bonus - ' . (float) $restvalue  .  '   
-								WHERE raid_id = ' . (int) $old_item ['raid_id'] . '  
-							  	AND member_id = ' . $old_item ['member_id']; 
-						$db->sql_query ( $sql );					
-						
-						$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '  				
-								SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $restvalue  .  ', 
-								member_earned = member_earned - ' . (float) $restvalue  .  ' 
-								WHERE member_dkpid = ' . (int) $old_item ['dkpid']  . ' 
-							  	AND member_id = ' . $old_item ['member_id']; 
-						$db->sql_query ( $sql );		
-						
-					}
-				}
-				
+				$this->deleteitem_db($old_item);
 			}
 			
 			// commit on mysql only works with innodb, on myisam this is ignored due to lack of atomicity
@@ -717,11 +646,11 @@ class acp_dkp_item extends bbDkp_Admin
 				
 			}
 			
-			$item_buyers = '';
+			$item_buyers = '[';
 			while ( $row = $db->sql_fetchrow ( $result ) ) 
 			{
 				$old_item[$row['item_id']] = array (
-				'item_id' 		=>  (int) $item_id , 
+				'item_id' 		=>  (int) 	 $row['item_id'] , 
 				'dkpid'			=>  $dkp_id,
 				'item_name' 	=>  (string) $row['item_name'] , 
 				'member_id' 	=>  (int) 	 $row['member_id'] , 
@@ -734,10 +663,11 @@ class acp_dkp_item extends bbDkp_Admin
 				);
 				
 				//for confirm question
-				$item_buyers = $item_buyers . ', ' . $row['member_name']; 
+				$item_buyers = $item_buyers . ' ' . $row['member_name'] . ' '; 
 				$item_name = $row['member_name'];
 			}
 			$db->sql_freeresult ($result);
+			$item_buyers .= ']';
 			
 			$s_hidden_fields = build_hidden_fields ( array (
 				'deleteitem' 	  => true, 
@@ -750,25 +680,105 @@ class acp_dkp_item extends bbDkp_Admin
 		}
 				
 	}
+	
+	/*
+	 * deleteitem_db : does one item deletion in database - public scope because alse called from acp_raid
+     *  
+     * @param : $old_item 
+     *  
+     *  array structure required for @param : 
+	 *	'item_id' 		=>  (int) $item_id , 
+	 *	'dkpid'			=>  $dkp_id,
+	 *	'item_name' 	=>  (string) $row['item_name'] , 
+	 *	'member_id' 	=>  (int) 	 $row['member_id'] , 
+	 *	'member_name' 	=>  (string) $row['member_name'] ,
+	 *	'raid_id' 		=>  (int) 	 $row['raid_id'], 
+	 *	'item_date' 	=>  (int) 	 $row['item_date'] , 
+	 *	'item_value' 	=>  (float)  $row['item_value'], 
+	 *	'item_decay' 	=>  (float)  $row['item_decay'],
+	 *	'item_zs' 		=>  (bool)   $row['item_zs'],  
+	 * 
+	 */
+	public function deleteitem_db( $old_item )
+	{
+		global $db;
+		$db->sql_transaction('begin');
+		
+		// 1) Remove the item purchase from the items table
+		$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' WHERE item_id = ' . $old_item ['item_id'] ;
+		$db->sql_query ($sql);
+			
+		// decrease dkp spent value and decay from buyer
+		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d
+				SET d.member_spent = d.member_spent - ' . $old_item ['item_value'] .  ' , 
+				    d.member_item_decay = d.member_item_decay - ' . $old_item ['item_decay'] .  '  
+				WHERE d.member_dkpid = ' . (int) $old_item ['dkpid']  . ' 
+			  	AND ' . $db->sql_in_set('member_id', $old_item ['member_id']) ;
+		$db->sql_query ( $sql );
+		
+		// if zerosum was given then remove item value from earned value
+		if ($old_item ['item_zs'] == true)
+		{
+			$sql = 'select member_id from ' . RAID_DETAIL_TABLE . ' where raid_id = ' . $old_item ['raid_id'] ; 
+			$result = $db->sql_query($sql);
+			$raiders = array();
+			while ( $row = $db->sql_fetchrow ($result))
+			{
+				$raiders[]= $row['member_id'];
+			} 
+			$db->sql_freeresult ( $result);
+			
+			$numraiders = count($raiders);
+			$distributed = round( $old_item ['item_value']/ max(1, $numraiders), 2);
+			
+			// decrease raid detail table
+			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
+					SET zerosum_bonus = zerosum_bonus - ' . (float) $distributed . ' 
+					WHERE raid_id = ' . (int) $old_item ['raid_id'];
+			$db->sql_query ( $sql );
+			
+			// deallocate dkp itemvalue bought to all raiders
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '  				
+					SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $distributed  .  ', 
+					member_earned = member_earned - ' . (float) $distributed  .  ' 
+					WHERE member_dkpid = ' . (int) $old_item ['dkpid']  . ' 
+				  	AND ' . $db->sql_in_set('member_id', $raiders) ;
+			$db->sql_query ( $sql );
+			
+			// handle the rest amount
+			$restvalue = $old_item ['item_value'] - ($numraiders * $distributed); 
+			
+			if ($restvalue !=0)
+			{
+				// deduct it from the buyer
+				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
+						SET zerosum_bonus = zerosum_bonus - ' . (float) $restvalue  .  '   
+						WHERE raid_id = ' . (int) $old_item ['raid_id'] . '  
+					  	AND member_id = ' . $old_item ['member_id']; 
+				$db->sql_query ( $sql );					
+				
+				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '  				
+						SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $restvalue  .  ', 
+						member_earned = member_earned - ' . (float) $restvalue  .  ' 
+						WHERE member_dkpid = ' . (int) $old_item ['dkpid']  . ' 
+					  	AND member_id = ' . $old_item ['member_id']; 
+				$db->sql_query ( $sql );		
+				
+			}
+		}
+		
+		$db->sql_transaction('commit');
+		
+		return true;
+		
+	}
 
 
 	/***
 	 * updating item buyer 
 	 * 
-	 * 
-	 * @param dkpid, 
-	 * @param item_id
-	 * 
-	 * @param item_buyers, 
-	 * @param raid_id 
-	 * @param itemvalue  
-	 * @param itemname
-	 * @param itemgameid
-	 * @param decay
-	 * 
 	 */
-
-	function updateitem($item_buyers, $raid_id, $itemvalue, $item_name, $itemgameid, $decay)  
+	function updateitem()  
 	{
 		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
 		$errors_exist = $this->error_check ();
@@ -777,61 +787,76 @@ class acp_dkp_item extends bbDkp_Admin
 			$this->fv->displayerror($this->fv->errors);
 		}
 		
-		//constant
+		// get data
 		$item_id = request_var('hidden_item_id', 0);
 		$dkp_id = request_var('hidden_dkp_id', 0);
-		$raid_id = request_var('hidden_raid_id', 0);
-			
+		
 		$old_buyers = array ();
-		
-		//
-		// Build the item_ids, old_buyers and old_item arrays
 		$sql_array = array(
-		    'SELECT'    => 'i2.* ',
-		    'FROM'    	=> array(RAID_ITEMS_TABLE => 'i2'),
-		    'LEFT_JOIN' => array(
+			'SELECT' 	=> 'i2.* , m.member_name ',
+			'FROM' 		=> array(
+				RAID_ITEMS_TABLE => 'i2', 
+				MEMBER_LIST_TABLE => 'm'
+				),
+			'LEFT_JOIN' => array(
 				array(
-					'FROM'	=> array(RAID_ITEMS_TABLE => 'i1'),
-					'ON'	=> ' i1.item_group_key = i2.item_group_key '
-				)), 					    		
-		    'WHERE'     =>  'i1.item_id= '. $item_id,
-		);
+				'FROM' => array(RAID_ITEMS_TABLE => 'i1'),
+				'ON' => ' i1.item_group_key = i2.item_group_key '
+				)),
+			'WHERE' => 'i2.member_id = m.member_id and i1.item_id= '. $item_id,
+			);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-		
 		$result = $db->sql_query ( $sql );
+		
 		while ( $row = $db->sql_fetchrow ($result)) 
 		{
-			$item_ids 	[] = $row['item_id'];
-			$old_buyers [] = $row['member_id'];
-			
 			$old_item = array (
+			'item_id' 		=>  (int) 	 $row['item_id'] , 
+			'dkpid'			=>  $dkp_id,
 			'item_name' 	=>  (string) $row['item_name'] , 
-			'item_buyers' 	=>  (array) $old_buyers, 
-			'raid_id' 		=>  (int) $row['raid_id'] , 
-			'item_date' 	=>  (int) $row['item_date'] , 
-			'item_value' 	=>  (float) $row['item_value'],
-			'item_decay' 	=>  (float) $row['item_decay'],   
-			'item_zs'		=>  (int) $row['item_zs'], 
-			'item_added_by' =>  (string) $user->data ['username'], 			
+			'member_id' 	=>  (int) 	 $row['member_id'] , 
+			'member_name' 	=>  (string) $row['member_name'] ,
+			'raid_id' 		=>  (int) 	 $row['raid_id'], 
+			'item_date' 	=>  (int) 	 $row['item_date'] , 
+			'item_value' 	=>  (float)  $row['item_value'], 
+			'item_decay' 	=>  (float)  $row['item_decay'],
+			'item_zs' 		=>  (bool)   $row['item_zs'],  
 			);
+			
+			$this->deleteitem_db($old_item);
 		}
-		$this->delete_old_item($dkpid, $item_ids, $old_item ['item_buyers'], $old_item) ; 
+		$db->sql_freeresult ( $result );
 		
-		//generate hash 
-		$group_key = $this->gen_group_key ( $item_name, $old_item ['item_date'], $item_id + rand(10,100) );
+		$raid_id = request_var('hidden_raid_id', 0);
+		
+		$item_name = (isset ( $_POST ['item_name'] )) ? 
+					utf8_normalize_nfc(request_var('item_name','', true)) : 
+				    utf8_normalize_nfc(request_var( 'select_item_name', '', true));
+
+		$itemgameid  = request_var( 'item_gameid' , 0) ;
+
+		$itemvalue 	 = request_var( 'item_value' , 0.0) ; 
+		
+		// if user wants to manually edit item decay but this is uncommon...
+		$itemdecay  = request_var( 'item_decay' , 0.00) ;
+		
+		$item_buyers = request_var('item_buyers', array(0 => 0));
+		
+		$itemdate= request_var('hidden_raiddate', 0);
+		
+		//generate new hash
+		$group_key = $this->gen_group_key ( $item_name, $itemdate, $item_id + rand(10,100) );
 
 		//
-		// Add new item to selected members
-		//
-		$this->add_new_item ( $item_name, $item_buyers, $group_key, $itemvalue, $old_item ['raid_id'], $old_item ['item_date'], $itemgameid);
+		// Add new item to newly selected members
+		$this->add_new_item_db($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $itemdate, $itemgameid); 
 		
 		//
 		// Logging
-		//
+		// 
 		$log_action = array (
 		'header' => 		'L_ACTION_ITEM_UPDATED',
 		'L_NAME_BEFORE' 	=> $old_item ['item_name'],
-		'L_BUYERS_BEFORE' 	=> implode ( ', ', $old_item ['item_buyers'] ), 
 		'L_RAID_ID_BEFORE' 	=> $old_item ['raid_id'], 
 		'L_VALUE_BEFORE' 	=> $old_item ['item_value'], 
 		'L_NAME_AFTER' 		=> $item_name , 
@@ -846,19 +871,15 @@ class acp_dkp_item extends bbDkp_Admin
 		
 		//
 		// Success message
-		//
-		$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_ITEM_SUCCESS'], $old_item ['item_name'], 
-			(is_array($old_item ['item_buyers']) ? implode ( ', ', $old_item ['item_buyers']  ) : trim($old_item ['item_buyers'])) ,
-			$old_item ['item_value'] );
+		$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_ITEM_SUCCESS'], $item_name, 
+			(is_array($item_buyers) ? implode ( ', ',$item_buyers) : trim($item_buyers)  ) , $itemvalue );
 			
 		trigger_error ( $success_message . $this->link, E_USER_NOTICE );
 	}	
 	
 	
 	
-	
-	
-	function listitems()
+	private function listitems()
 	{
 		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
 				
@@ -1085,16 +1106,11 @@ class acp_dkp_item extends bbDkp_Admin
 
 	}
 	
-
-	
-	
-	
-	
 	
 	/*
 	 * checks items for errors
 	 */
-	function error_check() 
+	private function error_check() 
 	{
 		global $user;
 		
@@ -1133,7 +1149,7 @@ class acp_dkp_item extends bbDkp_Admin
      * there are 15 players in raid
      * so each raider gets 100/15 = earned bonus 6.67 
      * 
-     * called from _loot_add
+     * called from raidtracker _loot_add
      * 
      * @param $raiders : list of raiders
      * @param 
@@ -1142,7 +1158,7 @@ class acp_dkp_item extends bbDkp_Admin
      * returns the sql to update
      * 
      */
-    function zero_balance($itemvalue)
+    public function zero_balance($itemvalue)
     {
     	global $db;
     	

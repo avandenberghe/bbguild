@@ -179,6 +179,11 @@ fieldset dd {
 
 <form method="post" action="{F_ADD_ITEM}" id="additem"  name="additem" >
 <input type="hidden" name="hidden_item_id" value="{ITEM_ID}" />
+<input type="hidden" name="hidden_dkp_id" value="{ITEM_DKPID}" />
+<input type="hidden" name="hidden_raid_id" value="{ITEM_RAIDID}" />
+<input type="hidden" name="hidden_raiddate" value="{RAID_DATE}" />
+
+
 
 <a name="maincontent"></a>
 <h1>{ITEMTITLE}</h1>
@@ -277,7 +282,7 @@ fieldset dd {
     <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
     <input type="submit" name="update" value="{L_UPDATE_ITEM}" class="button1" />
-    <input type="submit"  name="delete" value="{L_DELETE_ITEM}" class="button1" />
+    <input type="submit"  name="deleteitem" value="{L_DELETE_ITEM}" class="button1" />
     <!-- ENDIF -->
    </fieldset>
 </div>

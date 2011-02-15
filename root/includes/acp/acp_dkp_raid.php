@@ -96,8 +96,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 				elseif($deleteitem)
 				{
-					$item_id = request_var(URI_ITEM, 0); 
-					$this->deleteitem($item_id); 
+					$this->deleteitem(); 
 				}
 				
 				elseif($addraider)
@@ -282,6 +281,8 @@ class acp_dkp_raid extends bbDkp_Admin
 		}
 		
 		// build presets for raiddate and hour pulldown
+		
+		//RAID START DATE
 		$now = getdate();
 		$s_raid_day_options = '<option value="0">--</option>';
 		for ($i = 1; $i < 32; $i++)
@@ -307,7 +308,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			$s_raid_year_options .= "<option value=\"$i\"$selected>$i</option>";
 		}
 		
-		//start raid time
+		//raid time
 		$s_raid_hh_options = '<option value="0">--</option>';
 		for ($i = 0; $i < 24; $i++)
 		{
@@ -332,10 +333,35 @@ class acp_dkp_raid extends bbDkp_Admin
 			$s_raid_s_options .= "<option value=\"$i\"$selected>$i</option>";
 		}
 		
+		// RAID END DATE
 		//end raid time
 		$hourduration = max(0, round( (float) $config['bbdkp_standardduration'],0));
 		$minutesduration = max(0, ((float) $config['bbdkp_standardduration'] - floor((float) $config['bbdkp_standardduration'])) * 60 );
 		$endtime = mktime(idate("H") + $hourduration, idate("i") + $minutesduration);
+				
+		$s_raidend_day_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 32; $i++)
+		{
+			$day = idate('d', $endtime);
+			$selected = ($i == $day ) ? ' selected="selected"' : '';
+			$s_raidend_day_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raidend_month_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 13; $i++)
+		{
+			$month = idate('m', $endtime);
+			$selected = ($i == $month ) ? ' selected="selected"' : '';
+			$s_raidend_month_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raidend_year_options = '<option value="0">--</option>';
+		for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+		{
+			$yr = idate('Y', $endtime);
+			$selected = ($i == $yr ) ? ' selected="selected"' : '';
+			$s_raidend_year_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
 		
 		$s_raidend_hh_options = '<option value="0">--</option>';
 		for ($i = 0; $i < 24; $i++)
@@ -385,20 +411,26 @@ class acp_dkp_raid extends bbDkp_Admin
 				'U_ADD_EVENT' 		=> append_sid ( "index.$phpEx", "i=dkp_event&amp;mode=addevent" ), 
 				'RAID_VALUE'		=> $eventvalue, 
 
-				//raiddate
+				//raiddate START
 				'S_RAIDDATE_DAY_OPTIONS'	=> $s_raid_day_options,
 				'S_RAIDDATE_MONTH_OPTIONS'	=> $s_raid_month_options,
 				'S_RAIDDATE_YEAR_OPTIONS'	=> $s_raid_year_options,
-				
+						
 				//start
 				'S_RAIDSTART_H_OPTIONS'		=> $s_raid_hh_options,
 				'S_RAIDSTART_MI_OPTIONS'	=> $s_raid_mi_options,
 				'S_RAIDSTART_S_OPTIONS'		=> $s_raid_s_options,
 
+				//raiddate END
+				'S_RAIDENDDATE_DAY_OPTIONS'	=> $s_raidend_day_options,
+				'S_RAIDENDDATE_MONTH_OPTIONS'	=> $s_raidend_month_options,
+				'S_RAIDENDDATE_YEAR_OPTIONS'	=> $s_raidend_year_options,
+
 				//end
 				'S_RAIDEND_H_OPTIONS'		=> $s_raidend_hh_options,
 				'S_RAIDEND_MI_OPTIONS'		=> $s_raidend_mi_options,
 				'S_RAIDEND_S_OPTIONS'		=> $s_raidend_s_options,
+
 				'RAID_DURATION' 			=> $config['bbdkp_standardduration'],
 				'DKPTIMEUNIT'				=> $config['bbdkp_dkptimeunit'], 
 				'TIMEUNIT' 					=> $config['bbdkp_timeunit'],
@@ -489,6 +521,8 @@ class acp_dkp_raid extends bbDkp_Admin
 	
 		// build presets for raiddate and hour pulldown
 		$now = getdate();
+		// raid start
+		
 		$s_raid_day_options = '<option value="0">--</option>';
 		for ($i = 1; $i < 32; $i++)
 		{
@@ -512,6 +546,32 @@ class acp_dkp_raid extends bbDkp_Admin
 			$selected = ($i == $yr ) ? ' selected="selected"' : '';
 			$s_raid_year_options .= "<option value=\"$i\"$selected>$i</option>";
 		}
+		
+		// raid end
+		$s_raidend_day_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 32; $i++)
+		{
+			$day = isset($raid['raid_end']) ? date('j', $raid['raid_end']) : $now['mday'] ;
+			$selected = ($i == $day ) ? ' selected="selected"' : '';
+			$s_raidend_day_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raidend_month_options = '<option value="0">--</option>';
+		for ($i = 1; $i < 13; $i++)
+		{
+			$month = isset($raid['raid_end']) ? date('n', $raid['raid_end']) : $now['mon'] ;
+			$selected = ($i == $month ) ? ' selected="selected"' : '';
+			$s_raidend_month_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+
+		$s_raidend_year_options = '<option value="0">--</option>';
+		for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+		{
+			$yr = isset($raid['raid_end']) ?  date('Y',$raid['raid_end']) : $now['year'] ;
+			$selected = ($i == $yr ) ? ' selected="selected"' : '';
+			$s_raidend_year_options .= "<option value=\"$i\"$selected>$i</option>";
+		}
+		
 		
 		//start raid time
 		$s_raid_hh_options = '<option value="0"	>--</option>';
@@ -563,7 +623,6 @@ class acp_dkp_raid extends bbDkp_Admin
 			$s_raidend_s_options .= "<option value=\"$i\"$selected>$i</option>";
 		}
 
-		
 		// get raid details
 		$sort_order = array (
 				0 => array ('member_name desc', 'member_name' ),
@@ -575,7 +634,8 @@ class acp_dkp_raid extends bbDkp_Admin
 				);
 		$current_order = switch_order ( $sort_order );	
 		$sql_array = array(
-    		'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, r.raid_value, r.time_bonus, r.zerosum_bonus, r.raid_decay, (r.raid_value + r.time_bonus + r.zerosum_bonus - r.raid_decay) as total  ',
+    		'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, r.raid_value, r.time_bonus, r.zerosum_bonus, 
+    						r.raid_decay, (r.raid_value + r.time_bonus + r.zerosum_bonus - r.raid_decay) as total  ',
 	    	'FROM'      => array(
     		    MEMBER_LIST_TABLE 	=> 'm',
         		RAID_DETAIL_TABLE   => 'r',
@@ -774,11 +834,17 @@ class acp_dkp_raid extends bbDkp_Admin
 			'ITEM_VALUE'		=> $item_value, 
 			'ITEMDECAYVALUE'	=> $item_decay,
 			'ITEMTOTAL'			=> $item_total,							  	 
-							   
-			'S_RAIDDATE_DAY_OPTIONS'	=> $s_raid_day_options,
-			'S_RAIDDATE_MONTH_OPTIONS'	=> $s_raid_month_options,
-			'S_RAIDDATE_YEAR_OPTIONS'	=> $s_raid_year_options,
-			
+
+			// raid start day
+			'S_RAIDSTARTDATE_DAY_OPTIONS'	=> $s_raid_day_options,
+			'S_RAIDSTARTDATE_MONTH_OPTIONS'	=> $s_raid_month_options,
+			'S_RAIDSTARTDATE_YEAR_OPTIONS'	=> $s_raid_year_options,
+
+			// raid start day
+			'S_RAIDENDDATE_DAY_OPTIONS'		=> $s_raidend_day_options,
+			'S_RAIDENDDATE_MONTH_OPTIONS'	=> $s_raidend_month_options,
+			'S_RAIDENDDATE_YEAR_OPTIONS'	=> $s_raidend_year_options,
+							  	 
 			//start
 			'S_RAIDSTART_H_OPTIONS'		=> $s_raid_hh_options,
 			'S_RAIDSTART_MI_OPTIONS'	=> $s_raid_mi_options,
@@ -1218,9 +1284,9 @@ class acp_dkp_raid extends bbDkp_Admin
 			}
 		}
 		
-		
 		$db->sql_transaction('commit');
 
+		$db->sql_freeresult($result);
 		//
 		// Logging
 		//
@@ -2054,61 +2120,27 @@ class acp_dkp_raid extends bbDkp_Admin
 	}
 	
 	/**
-	 * Deletes item 
+	 * Deletes item
+	 * called from raid acp item list (red button)
+	 *  
 	 */	
-	function deleteitem($item_id)
+	private function deleteitem()
 	{
-		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
-		if($item_id==0)
-		{	
-			trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] , E_USER_WARNING);
-		}
-		$dkpid = request_var(URI_DKPSYS,0); 
-		
-		$sql = 'SELECT * FROM ' . RAID_ITEMS_TABLE . ' i, ' . MEMBER_LIST_TABLE . ' m WHERE i.member_id = m.member_id and i.item_id= ' . (int) $item_id;
-		$result = $db->sql_query ( $sql );
-		while ( $row = $db->sql_fetchrow ( $result ) ) 
-		{
-			$old_item = array (
-			'item_id' 		=>  (int) $item_id , 
-			'item_name' 	=>  (string) $row['item_name'] , 
-			'member_id' 	=>  (int) 	$row['member_id'] , 
-			'member_name' 	=>  (string) 	$row['member_name'] ,
-			'raid_id' 		=>  (int) 	$row['raid_id'], 
-			'item_date' 	=>  (int) 	$row['item_date'] , 
-			'item_value' 	=>  (float) $row['item_value'], 
-			'item_decay' 	=>  (float) $row['item_decay']  
-			);
-		}
-		$db->sql_freeresult ($result);
+		global $db, $user, $template, $phpEx, $phpbb_root_path;
 		
 		if (confirm_box ( true )) 
 		{
-			
 			//retrieve info
-			$dkp = request_var('hidden_dkpid', 0);
-			$item_id =  request_var('hidden_item_id', 0);
-			
-			// delete items and decrease buyer spend
-			$db->sql_transaction('begin');
-		
-			// 1) Remove the item purchase from the items table
-			$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' WHERE ' . $db->sql_in_set('item_id', $old_item ['item_id']);
-			$db->sql_query ($sql);
-				
-			// decrease dkp spent value from buyer
-			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d
-					SET d.member_spent = d.member_spent - ' . $old_item ['item_value'] .  ' , 
-					    d.member_item_decay = d.member_item_decay - ' . $old_item ['item_decay'] .  ' , 
-					WHERE d.member_dkpid = ' . (int) $dkpid . ' 
-				  	AND ' . $db->sql_in_set('member_id', $old_item ['member_id']) ;
-			$db->sql_query ( $sql );
-			
-			// if zerosum was given then remove item value from earned value
-			
-			
-			$db->sql_transaction('commit');
-			
+			$old_item = request_var('hidden_old_item', array(''=>''));			
+
+			if ( !class_exists('acp_dkp_item')) 
+			{
+				require($phpbb_root_path . 'includes/acp/acp_dkp_item.' . $phpEx); 
+			}
+			$acp_dkp_item = new acp_dkp_item;
+
+			$acp_dkp_item->deleteitem_db($old_item); 
+									
 			$log_action = array (
 				'header' 	=> 'L_ACTION_ITEM_DELETED',
 				'L_NAME' 	=> $old_item ['item_name'], 
@@ -2128,10 +2160,35 @@ class acp_dkp_raid extends bbDkp_Admin
 		} 
 		else
 		{
+			$dkpid = request_var(URI_DKPSYS,0); 
+			$item_id = request_var(URI_ITEM, 0);
+			if($item_id==0)
+			{	
+				trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] , E_USER_WARNING);
+			}
+			
+			$sql = 'SELECT * FROM ' . RAID_ITEMS_TABLE . ' i, ' . MEMBER_LIST_TABLE . ' m WHERE 
+				i.member_id = m.member_id and i.item_id= ' . (int) $item_id;
+			$result = $db->sql_query ( $sql );
+			while ( $row = $db->sql_fetchrow ( $result ) ) 
+			{
+				$old_item = array (
+				'item_id' 		=>  (int) $item_id , 
+				'dkpid'			=>  $dkpid, 
+				'item_name' 	=>  (string) $row['item_name'] , 
+				'member_id' 	=>  (int) 	$row['member_id'] , 
+				'member_name' 	=>  (string)	$row['member_name'] ,
+				'raid_id' 		=>  (int) 	$row['raid_id'], 
+				'item_date' 	=>  (int) 	$row['item_date'] , 
+				'item_value' 	=>  (float) $row['item_value'], 
+				'item_decay' 	=>  (float) $row['item_decay'] , 
+				'item_zs' 		=>  (bool)   $row['item_zs'],
+				);
+			}
+			$db->sql_freeresult ($result);
+			
 			$s_hidden_fields = build_hidden_fields ( array (
 				'deleteitem' 	  => true, 
-				'hidden_item_id'  => $item_id,
-				'hidden_dkpid'    => $dkpid, 
 				'hidden_old_item' => $old_item
 			));
 
