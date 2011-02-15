@@ -1991,9 +1991,8 @@ class acp_dkp_raid extends bbDkp_Admin
 	}
 	
 	/*
-	 * function to decay the raid
-	 * calling this function multiple time will not lead to cumulative 
-	 * decays, just the delta is applied.
+	 * function to decay one specific raid
+	 * calling this function multiple time will not lead to cumulative decays, just the delta is applied.
 	 */
 	private function decayraid($raid_id)
 	{
@@ -2001,15 +2000,14 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		//loop raid detail, pass earned and timediff to decay function, update raid detail
 		
-		//get raidinfo
+		//get old raidinfo
 		$sql_array = array (
-			'SELECT' => ' e.event_dkpid, r.raid_start, ra.member_id, (ra.raid_value + ra.time_bonus + ra.zerosum_bonus) as earned, ra.raid_decay ', 
+			'SELECT' => ' r.raid_start, ra.member_id, (ra.raid_value + ra.time_bonus + ra.zerosum_bonus) as earned, ra.raid_decay ', 
 			'FROM' => array (
-				EVENTS_TABLE 		=> 'e',
 				RAIDS_TABLE 		=> 'r' ,
 				RAID_DETAIL_TABLE	=> 'ra' , 
 				), 
-			'WHERE' => " r.event_id = e.event_id and r.raid_id = ra.raid_id and r.raid_id=" . ( int ) $raid_id, 
+			'WHERE' => " r.raid_id = ra.raid_id and r.raid_id=" . ( int ) $raid_id, 
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ($sql);
@@ -2017,7 +2015,6 @@ class acp_dkp_raid extends bbDkp_Admin
 		{
 			$raidstart =  $row['raid_start']; 
 			$raid[$row['member_id']] = array (
-				'event_dkpid' 	=> $row['event_dkpid'],
 				'member_id' 	=> $row['member_id'], 
 				'earned' 		=> $row['earned'], 
 				'raid_decay' 	=> $row['raid_decay'], 
@@ -2028,30 +2025,54 @@ class acp_dkp_raid extends bbDkp_Admin
 		//get timediff
 		$now = getdate();
 		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $raidstart  ;
+		$dkpid = request_var('hidden_dkpid', 0);
 		
+		// loop raid detail
 		foreach($raid as $member_id => $raiddetail)
 		{
+			// get new decay : may be different per player due to it being calculated on earned
 			$decay = $this->decay($raiddetail['earned'], $timediff, 1); 
-			$db->sql_query ( 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = ' . $decay . " WHERE raid_id = " . ( int ) $raid_id . ' 
-			and member_id = ' . $raiddetail['member_id'] );
+			
+			// update raid detail to new decay value
+			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = ' . $decay . " WHERE raid_id = " . ( int ) $raid_id . ' 
+			and member_id = ' . $raiddetail['member_id'] ;
+			$db->sql_query ( $sql );
+			
+			// update dkp account, deduct old, add new decay
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_raid_decay = member_raid_decay - ' . $raiddetail['raid_decay'] . ' + ' . $decay . " 
+				WHERE member_id = " . ( int ) $member_id . ' 
+				and member_dkpid = ' . $dkpid ;
+			$db->sql_query ( $sql );
+			
 		}
 		
-		//loop raid items
+		//now loop raid items detail
 		$sql = 'select i.item_id, i.member_id, i.item_value, i.item_decay from ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id; 
 		$result = $db->sql_query ($sql);
 		$items= array();
 		while ( ($row = $db->sql_fetchrow ( $result )) ) 
 		{
 			$items[$row['item_id']] = array (
-				'item_value' 	=> $row['item_value'], 
+				'member_id'		=> $row['member_id'],
+				'item_value' 	=> $row['item_value'],
+			 	'item_decay' 	=> $row['item_decay'],
 				);
 		}
 		$db->sql_freeresult ($result);
 		
 		foreach($items as $item_id => $item)
 		{
-			$decay = $this->decay($item['item_value'], $timediff, 2); 
-			$db->sql_query ( 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = ' . $decay . ' WHERE item_id = ' . $item_id );
+			// get new itemdecay
+			$itemdecay = $this->decay($item['item_value'], $timediff, 2); 
+			
+			//  update item detail to new decay value
+			$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = ' . $itemdecay . ' WHERE item_id = ' . $item_id;
+			$db->sql_query ( $sql);
+			
+			// update dkp account, deduct old, add new decay
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_item_decay = member_item_decay - ' . $item['item_decay'] . ' + ' . $itemdecay . " 
+				WHERE member_id = " . ( int ) $item['member_id'] . ' and member_dkpid = ' . $dkpid ;
+			$db->sql_query ( $sql );
 		}
 		
 		return true;
@@ -2068,7 +2089,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	 * $mode = 1 for raid, 2 for items
 	 * 
 	 */
-	private function decay($value, $timediff, $mode)
+	public function decay($value, $timediff, $mode)
 	{
 		global $config, $db;
 		$i=0;

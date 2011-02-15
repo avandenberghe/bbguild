@@ -429,9 +429,22 @@ class acp_dkp_item extends bbDkp_Admin
 		// Generate random group key
 		$group_key = $this->gen_group_key ( $item_name, $loottime, $raid_id + rand(10,100) );
 		
+		// decay this item
+		$itemdecay= 0;
+		if ( !class_exists('acp_dkp_raid')) 
+		{
+			require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
+		}
+		$acp_dkp_raid = new acp_dkp_raid;
+		
+		//diff between now and the raidtime
+		$now = getdate();
+		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $loottime;
+		$itemdecay = $acp_dkp_raid->decay($itemvalue, $timediff, 2);
+		
 		//
 		// Add item to selected members
-		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid);
+		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid, $itemdecay);
 		
 		//
 		// Logging
@@ -469,10 +482,11 @@ class acp_dkp_item extends bbDkp_Admin
 	 * @param raidid = the raid to which we add the item
 	 * @param itemvalue (float) the item cost
 	 * @param raidid
+	 * @param item_decay = decay to be applied on item
 	 * @param $itemgameid : if this is zero we dont care
 	 * 
 	 */
-	private function add_new_item_db($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid) 
+	private function add_new_item_db($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid, $itemdecay) 
 	{
 		
 		global $db, $user, $config;
@@ -489,7 +503,8 @@ class acp_dkp_item extends bbDkp_Admin
 		
 		// increase dkp spent value for buyers 
 		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d 				
-				SET d.member_spent = d.member_spent + ' . (float) $itemvalue  .  ' 
+				SET d.member_spent = d.member_spent + ' . (float) $itemvalue  .  ' ,
+					d.member_item_decay = d.member_item_decay + ' . $itemdecay .  '  
 				WHERE d.member_dkpid = ' . (int) $dkpid  . ' 
 			  	AND ' . $db->sql_in_set('member_id', $item_buyers) ;
 		$db->sql_query ( $sql );
@@ -509,7 +524,8 @@ class acp_dkp_item extends bbDkp_Admin
 		$restvalue = $itemvalue - ($numraiders * $distributed); 
 		
 		// Add purchase(s) to items table
-		// note : itemid is generated with pk autoincrease
+		// note : itemid is generated with primary key autoincrease
+		// item decay is not redistributed to zerosum earnings, because that is depreciated using raid decay
 		foreach ( $item_buyers as $key => $this_member_id ) 
 		{
 			$query [] = array (
@@ -517,6 +533,7 @@ class acp_dkp_item extends bbDkp_Admin
    				'member_id' 		=> (int) $this_member_id, 
    				'raid_id' 			=> (int) $raid_id, 
    				'item_value' 		=> (float) $itemvalue, 
+				'item_decay' 		=> (float) $itemdecay,
    				'item_date' 		=> (int) $loottime, 
    				'item_group_key' 	=> (string) $group_key, 
 				'item_gameid' 		=> (int) $itemgameid,
@@ -589,6 +606,7 @@ class acp_dkp_item extends bbDkp_Admin
 			}
 			
 			// commit on mysql only works with innodb, on myisam this is ignored due to lack of atomicity
+			// oracle/postgre/mssql just work
 			$db->sql_transaction('commit');
 			
 			// log action
@@ -686,7 +704,7 @@ class acp_dkp_item extends bbDkp_Admin
 	}
 	
 	/*
-	 * deleteitem_db : does one item deletion in database - public scope because alse called from acp_raid
+	 * deleteitem_db : does one item deletion in database - public scope because also called from acp_raid
      *  
      * @param : $old_item 
      *  
@@ -782,7 +800,7 @@ class acp_dkp_item extends bbDkp_Admin
 	 * updating item buyer 
 	 * 
 	 */
-	function updateitem()  
+	private function updateitem()  
 	{
 		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
 		$errors_exist = $this->error_check ();
@@ -853,7 +871,7 @@ class acp_dkp_item extends bbDkp_Admin
 
 		//
 		// Add new item to newly selected members
-		$this->add_new_item_db($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $itemdate, $itemgameid); 
+		$this->add_new_item_db($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $itemdate, $itemgameid, $itemdecay); 
 		
 		//
 		// Logging
