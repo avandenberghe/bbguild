@@ -194,7 +194,8 @@ class acp_dkp_item extends bbDkp_Admin
 		{
 			$dkpid = $row['event_dkpid']; 
 			$raidtitle = $row['event_name']; 
-			$raiddate = $user->format_date($row['raid_start']); 
+			$raiddateformat = $user->format_date($row['raid_start']);
+			$raidstart = $row['raid_start']; 
 			$template->assign_block_vars ( 'raids_row', array (
 				'VALUE' 	=> $row['raid_id'], 
 				'SELECTED' 	=> ($raid_id == $row['raid_id']) ? ' selected="selected"' : '', 
@@ -361,8 +362,8 @@ class acp_dkp_item extends bbDkp_Admin
 		if($item_id)
 		{
 			$template->assign_vars ( array (
-				'ITEMTITLE'		=> sprintf($user->lang['LOOTUPD'], $raidtitle, $raiddate  ) , 
-				'RAID_DATE'		=> $raiddate, 
+				'ITEMTITLE'		=> sprintf($user->lang['LOOTUPD'], $raidtitle, $raiddateformat  ) , 
+				'RAID_DATE'		=> $raidstart, 
 				'ITEM_ZS'		=> ($this->item['item_zs'] == 1) ? ' checked="checked"' : '',  
 				'ITEM_DECAY'	=> $this->item['item_decay'],
 				'ITEM_NAME' 	=> isset($this->item['item_name']) ? $this->item['item_name'] : '' , 
@@ -451,6 +452,9 @@ class acp_dkp_item extends bbDkp_Admin
 		// Success message
 		//
 		$success_message = sprintf ( $user->lang ['ADMIN_ADD_ITEM_SUCCESS'], $item_name, implode ( ', ', $item_buyers  ), $itemvalue );
+		
+		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>';
+		
 		trigger_error ( $success_message . $this->link, E_USER_NOTICE );
 	}
 

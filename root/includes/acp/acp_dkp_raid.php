@@ -25,14 +25,14 @@ if (! defined('EMED_BBDKP'))
 
 class acp_dkp_raid extends bbDkp_Admin 
 {
-
+	var $link;
+	
 	public function main($id, $mode) 
 	{
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
-		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) . 
-		'"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
+		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
 
 		//do event test.
 		$sql = 'SELECT count(*) as eventcount FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
@@ -1280,7 +1280,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				
 				// update firstdate & lastdate
 				$this->update_raiddate($row['member_id'], $old_raid['event_dkpid']);
-				 
+				
 			}
 		}
 		
@@ -1313,7 +1313,8 @@ class acp_dkp_raid extends bbDkp_Admin
 			$success_message .= ' ' . (($this->update_player_status ( $old_raid['event_dkpid'])) ? strtolower ( $user->lang ['DONE'] ) : 
 			strtolower ( $user->lang ['ERROR'] ));
 		}
-		
+		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>';
+
 		trigger_error ( $success_message . $this->link, E_USER_NOTICE );
 		
 	}
@@ -2038,6 +2039,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		//loop raid items
 		$sql = 'select i.item_id, i.member_id, i.item_value, i.item_decay from ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id; 
 		$result = $db->sql_query ($sql);
+		$items= array();
 		while ( ($row = $db->sql_fetchrow ( $result )) ) 
 		{
 			$items[$row['item_id']] = array (
