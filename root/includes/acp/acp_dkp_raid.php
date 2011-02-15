@@ -25,7 +25,7 @@ if (! defined('EMED_BBDKP'))
 
 class acp_dkp_raid extends bbDkp_Admin 
 {
-	var $link;
+	private $link;
 	
 	public function main($id, $mode) 
 	{
@@ -903,51 +903,49 @@ class acp_dkp_raid extends bbDkp_Admin
          	break;
         }
             	
-		$dkpsys_id = 1;
+		/***  DKPSYS drop-down query ***/
+        $dkpsys_id = 0;
+		$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
+                     FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
+				  where a.dkpsys_id = b.event_dkpid group by dkpsys_name ';
+		$result = $db->sql_query ( $sql );
+		
 		$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
 		if ($submit)
 		{
-			$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
-	                     FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
-					  where a.dkpsys_id = b.event_dkpid group by dkpsys_name ';
-			$result = $db->sql_query ( $sql );
-
-			// get dkp pool value from popup
 			$dkpsys_id = request_var ( 'dkpsys_id', 0 );
-			// fill popup and set selected to Post value
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$template->assign_block_vars ( 'dkpsys_row', 
-					array (
-					'VALUE' => $row['dkpsys_id'], 
-					'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
-					'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
-				
-			}
-			$db->sql_freeresult( $result );
 		} 
 		else 
 		{
-			$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
-                    FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
-				  where a.dkpsys_id = b.event_dkpid group by dkpsys_name ';
-			$result = $db->sql_query ($sql);		
 			while ( $row = $db->sql_fetchrow ( $result ) ) 
 			{
 				if($row['dkpsys_default'] == "Y"  )
 				{
 					$dkpsys_id = $row['dkpsys_id'];
 				}
-				$template->assign_block_vars ( 'dkpsys_row', 
-					array (
-					'VALUE' => $row['dkpsys_id'], 
-					'SELECTED' => ($row['dkpsys_default'] == "Y") ? ' selected="selected"' : '', 
-					'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
 			}
-			$db->sql_freeresult( $result );
+			
+			if ($dkpsys_id == 0)
+			{
+				$result = $db->sql_query_limit ( $sql, 1 );
+				while ( $row = $db->sql_fetchrow ( $result ) ) 
+				{
+					$dkpsys_id = $row['dkpsys_id'];
+				}
+			}
 		}
 		
-		/*** end DKPSYS drop-down ***/
+		$result = $db->sql_query ( $sql );
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$template->assign_block_vars ( 'dkpsys_row', 
+				array (
+				'VALUE' => $row['dkpsys_id'], 
+				'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
+				'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
+		}
+		$db->sql_freeresult( $result );
+		/***  end drop-down query ***/
 		
 		$sql_array = array (
 			'SELECT' => ' count(*) as raidcount', 

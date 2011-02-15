@@ -24,8 +24,9 @@ if (! defined('EMED_BBDKP'))
 
 class acp_dkp_item extends bbDkp_Admin 
 {
-	var $u_action;
-	var $link;
+	public $u_action;
+	private $link;
+	
 	public function main($id, $mode) 
 	{
 		global $db, $user, $auth, $template;

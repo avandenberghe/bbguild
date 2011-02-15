@@ -45,54 +45,86 @@ class acp_dkp_mdkp extends bbDkp_Admin
 			case 'mm_listmemberdkp':
 				
 				/* initialise */
-				$dkpsys_id = null;
+				$dkpsys_id = 0;
 				
 				/***  sort  ***/
 				$sort_order = array(
-					0 => array('dkpsys_name', 'dkpsys_name desc'),	
-					1 => array('member_name', 'member_name desc'),
-					2 => array('member_earned desc', 'member_earned'),
-					3 => array('member_spent desc', 'member_spent'),
-					4 => array('member_adjustment desc', 'member_adjustment'),
-					5 => array('member_current desc', 'member_current'),
-					6 => array('member_lastraid desc', 'member_lastraid'),
-					7 => array('member_level desc', 'member_level'),
-					8 => array('member_class', 'member_class desc'),
-					9 => array('rank_name', 'rank_name desc'),
-					10 => array('class_armor_type', 'class_armor_type desc'),
-					11 => array('member_status', 'm.member_status desc')
+					0  => array('member_name', 'member_name desc'),
+					1  => array('member_earned desc', 'member_earned'),
+					2  => array('member_spent desc', 'member_spent'),
+					3  => array('member_adjustment desc', 'member_adjustment'),
+					4  => array('member_current desc', 'member_current'),
+					5  => array('member_lastraid desc', 'member_lastraid'),
+					6  => array('member_level desc', 'member_level'),
+					7  => array('member_class', 'member_class desc'),
+					8  => array('rank_name', 'rank_name desc'),
+					9  => array('class_armor_type', 'class_armor_type desc'),
+					10 => array('member_status', 'm.member_status desc')
 				);
 				$current_order = switch_order($sort_order);
-				
+
 				$member_count = 0;
 				$previous_data = '';
 				$sort_index = explode('.', $current_order['uri']['current']);
 				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 				
-				
 				/* check if page was posted back */
-				$submit_dkpsys = (isset($_POST['submit_dkpsys'])) ? true : false;
-				$submit_activate = (isset($_POST['submit_activate'])) ? true : false;
-				$getit =  (isset($_GET[URI_DKPSYS])) ? true : false;
+				$activate = (isset($_POST['submit_activate'])) ? true : false;
 				
 				/***  DKPSYS drop-down query ***/
-				$eq_dkpsys = array();
-				$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default  
-						FROM ' . DKPSYS_TABLE .' 
-						ORDER BY dkpsys_name';
-				$resultdkpsys = $db->sql_query($sql);
+				$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
+		                     FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
+						  where a.dkpsys_id = b.event_dkpid group by dkpsys_name ';
+				$result = $db->sql_query ( $sql );
+				$dkpsys_id == 0;
+				$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
+				if ($submit)
+				{
+					$dkpsys_id = request_var ( 'dkpsys_id', 0 );
+				} 
+				else 
+				{
+					while ( $row = $db->sql_fetchrow ( $result ) ) 
+					{
+						if($row['dkpsys_default'] == "Y"  )
+						{
+							$dkpsys_id = $row['dkpsys_id'];
+						}
+					}
+					
+					if ($dkpsys_id == 0)
+					{
+						$result = $db->sql_query_limit ( $sql, 1 );
+						while ( $row = $db->sql_fetchrow ( $result ) ) 
+						{
+							$dkpsys_id = $row['dkpsys_id'];
+						}
+					}
+				}
 				
-				if ($submit_activate)
+				$result = $db->sql_query ( $sql );
+				while ( $row = $db->sql_fetchrow ( $result ) ) 
+				{
+					$template->assign_block_vars ( 'dkpsys_row', 
+						array (
+						'VALUE' => $row['dkpsys_id'], 
+						'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
+						'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
+				}
+				$db->sql_freeresult( $result );
+				/***  end drop-down query ***/
+				
+				if ($activate)
 				{
 				    $dkpsys_id = request_var('dkpsys', 0);
 				    while ( $row = $db->sql_fetchrow($resultdkpsys) )
 					{
-					$template->assign_block_vars('dkpsys_row', array(
-						'VALUE' => $row['dkpsys_id'],
-						'SELECTED' => ( $row['dkpsys_id'] == $dkpsys_id ) ? ' selected="selected"' : '',
-						'OPTION'   => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '(None)')
-					);
-					$eq_dkpsys[] = null;	
+						$template->assign_block_vars('dkpsys_row', array(
+							'VALUE' => $row['dkpsys_id'],
+							'SELECTED' => ( $row['dkpsys_id'] == $dkpsys_id ) ? ' selected="selected"' : '',
+							'OPTION'   => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '(None)')
+						);
+						
 					}
 					$db->sql_freeresult($resultdkpsys);	
 					// process the activation change
@@ -114,99 +146,9 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					$db->sql_query($sql2);
 					
 					$db->sql_transaction('commit'); 
+				}
+				
 
-				}
-			
-				if ($submit_dkpsys)
-				{
-					// get dkp pool value from popup
-					$dkpsys_id = request_var('dkpsys_id', 0);
-					
-					// fill popup and set selected to Post value
-					while ( $row = $db->sql_fetchrow($resultdkpsys) )
-					{
-					$template->assign_block_vars('dkpsys_row', array(
-						'VALUE' => $row['dkpsys_id'],
-						'SELECTED' => ( $row['dkpsys_id'] == $dkpsys_id ) ? ' selected="selected"' : '',
-						'OPTION'   => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '(None)')
-					);
-					$eq_dkpsys[] = null;	
-					}
-					
-					$db->sql_freeresult($resultdkpsys);
-				
-				}
-				elseif ($getit)
-				{
-					// get dkp pool value from popup $_GET
-					$dkpsys_id = request_var(URI_DKPSYS, 0);
-					
-					// fill popup and set selected to Post value
-					while ( $row = $db->sql_fetchrow($resultdkpsys) )
-					{
-					$template->assign_block_vars('dkpsys_row', array(
-						'VALUE' => $row['dkpsys_id'],
-						'SELECTED' => ( $row['dkpsys_id'] == $dkpsys_id ) ? ' selected="selected"' : '',
-						'OPTION'   => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '(None)')
-					);
-					$eq_dkpsys[] = null;	
-					}
-					
-					$db->sql_freeresult($resultdkpsys);
-				
-				}
-				else 
-				// default pageloading 
-				{
-					// fill popup and set selected to default selection
-					while ( $row = $db->sql_fetchrow($resultdkpsys) )
-					{
-					$template->assign_block_vars('dkpsys_row', array(
-						'VALUE' => $row['dkpsys_id'],
-						'SELECTED' => ( $row['dkpsys_default'] == "Y" ) ? ' selected="selected"' : '',
-						'OPTION'   => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '(None)')
-					);
-					$eq_dkpsys[] = null;	
-					}
-
-					// get dkp pool value from table
-					
-					/***  DKPSYS table  ***/
-					$sql1 = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default  
-						FROM ' . DKPSYS_TABLE . " 
-						WHERE dkpsys_default = 'Y' 
-						ORDER BY dkpsys_name";
-					if ( !($result1 = $db->sql_query($sql1)) )
-					
-					{
-						// theres no default dkp pool so just take first row in table
-						$sql1 = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default  
-						FROM ' . DKPSYS_TABLE ;	
-						$result1 = $db->sql_query_limit($sql1, 1, 0);
-						while ( $row = $db->sql_fetchrow($result1) )
-						{
-							$dkpsys_id = $row['dkpsys_id'];
-						}						
-					}
-					else 
-					{
-						// get the default dkp value from DB 
-						while ( $row = $db->sql_fetchrow($result1) )
-						{
-							$dkpsys_id = $row['dkpsys_id'];		
-						}
-						
-					}
-					$db->sql_freeresult($result1);
-				}
-				
-				if ($dkpsys_id == null)
-				/* in case of null then choose 0 > no dkpsys created yet */
-				{
-					$dkpsys_id = 0;				
-				}
-					
-				
 				$sql_array = array(
 				    'SELECT'    => 'm.member_id,  
 									a.member_name, 
@@ -295,18 +237,17 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					'L_EXPLAIN'		=> $user->lang['ACP_MM_LISTMEMBERDKP_EXPLAIN'],
 					'BUTTON_NAME' => 'delete',
 					'BUTTON_VALUE' => $user->lang['DELETE_SELECTED_MEMBERS'],
-					'O_STATUS' => $current_order['uri'][11],
-					'O_DKPSYS' => $current_order['uri'][0],
-					'O_NAME' => $current_order['uri'][1],
-					'O_RANK' => $current_order['uri'][9],
-					'O_LEVEL' => $current_order['uri'][7],
-					'O_CLASS' => $current_order['uri'][8],
-					'O_ARMOR' => $current_order['uri'][10],
-					'O_EARNED' => $current_order['uri'][2],
-					'O_SPENT' => $current_order['uri'][3],
-					'O_ADJUSTMENT' => $current_order['uri'][4],
-					'O_CURRENT' => $current_order['uri'][5],
-					'O_LASTRAID' => $current_order['uri'][6],
+					'O_STATUS' => $current_order['uri'][10],
+					'O_NAME' => $current_order['uri'][0],
+					'O_RANK' => $current_order['uri'][8],
+					'O_LEVEL' => $current_order['uri'][6],
+					'O_CLASS' => $current_order['uri'][7],
+					'O_ARMOR' => $current_order['uri'][9],
+					'O_EARNED' => $current_order['uri'][1],
+					'O_SPENT' => $current_order['uri'][2],
+					'O_ADJUSTMENT' => $current_order['uri'][3],
+					'O_CURRENT' => $current_order['uri'][4],
+					'O_LASTRAID' => $current_order['uri'][5],
 					'U_LIST_MEMBERDKP' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;" . URI_DKPSYS . "=". $dkpsys_id . "&amp;mode=mm_listmemberdkp&amp;") .'&amp;mod=list&amp;',		
 					'S_NOTMM' => false,
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text, 
