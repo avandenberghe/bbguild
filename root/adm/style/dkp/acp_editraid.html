@@ -15,27 +15,31 @@ function start()
 	updatesum();
 }
 
-function updatesum() {
+function updatesum() 
+{
+	var earned = 0.00;
+	var total = 0.00;
 	
- document.editraider.member_earned.value =
-	 (document.editraider.raid_value.value-0) +
-	 (document.editraider.time_bonus.value-0) 
-	 <!-- IF S_SHOWZS --> +
-	 (document.editraider.zerosum_bonus.value-0)
+	var raid_value = parseFloat(document.editraider.raid_value.value.replace(",","."));
+	var time_bonus = parseFloat(document.editraider.time_bonus.value.replace(",","."));
+	var zerosum_bonus = 0.00;
+	 <!-- IF S_SHOWZS --> 
+	 zerosum_bonus = parseFloat(document.editraider.zerosum_bonus.value.replace(",",".")); 
 	 <!-- ENDIF -->
-	 ;
+	 
+	 earned = raid_value + time_bonus + zerosum_bonus; 
+	 document.editraider.member_earned.value = earned.toFixed(2);
+	 total = earned - (document.editraider.raid_decay.value-0);
 
-document.editraider.member_total.value =
-	 (document.editraider.member_earned.value-0) -
-	 (document.editraider.raid_decay.value-0); 	 
 }
 //]]>
 </script>
 
 	<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
-	<h1>{L_EDIT_RAIDER_TITLE}</h1>
+	<h1>{RAIDTITLE}</h1>
 	<p>{L_EDIT_RAIDER_EXPLAIN}</p>
 	
+
 	<form method="post" action="{F_EDIT_RAID}" name="editraider" >
 	<input type="hidden" name="hidden_raidid" value="{RAID_ID}" /> 
 	<input type="hidden" name="hidden_memberid" value="{MEMBERID}" /> 
@@ -88,13 +92,19 @@ document.editraider.member_total.value =
 			<dd>=&nbsp;<input readonly="readonly"  type="text" id="member_total" name="member_total" size="20" maxlength="14" value="{TOTAL}" class="input" style="border: none" /></dd>
 		  </dl>
 	
-		<p class="submit-buttons">
+		
+		<fieldset class="submit-buttons">
 			<input class="button1" type="submit" id="editraider" name="editraider" value="{L_SUBMIT}" />&nbsp;
 			<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
 			{S_FORM_TOKEN}
-		</p>
+		</fieldset>
 	</fieldset>
 	</form>
+	
+	
+	
+	
+	
 
 <!-- ELSEIF S_EDITRAID -->
 <!-- load the template for editing raid -->
@@ -239,13 +249,6 @@ function update_timebonus()
 		</dd>
 	</dl>
 	
-	<!--  
-		<input type="hidden" name="ed" value="" /> 
-		<input type="hidden" name="emo" value="" /> 
-		<input type="hidden" name="eY" value="" /> 
-	-->		
-
-		
 	<dl>
 		<dt><label>{L_RAIDDURATION}:</label>({L_RAIDDURATION_EXPLAIN})</dt>
 		<dd>
@@ -265,7 +268,7 @@ function update_timebonus()
 	<dl>
 		<dt><label>{L_TIME_BONUS}:</label>&nbsp;{L_TIME_BONUS_EXPLAIN}&nbsp;{DKPPERTIME}. </dt>
 		<dd>
-			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{TIMEVALUE}" class="input" /> &nbsp; <input type="checkbox" name="overridetime_bonus" value="1"/> {L_TIME_OVERRIDE}
+			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{INDIVIDUAL_TIMEVALUE}" class="input" /> &nbsp; <input type="checkbox" name="overridetime_bonus" value="1"/> {L_TIME_OVERRIDE}
 		</dd>
 	</dl>
 	

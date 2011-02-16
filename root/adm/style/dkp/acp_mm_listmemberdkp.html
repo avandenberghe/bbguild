@@ -7,24 +7,21 @@
 <h1>{L_TITLE}</h1>
 <p>{L_EXPLAIN}</p>
 
-<form method="post" action="{F_MEMBERDKP}" name="post">
+<form id="acp_dkp_memberlist" method="post" action="{F_MEMBERDKP}">
+
 <fieldset>
      <label for="dkpsys_id">{L_POOL}:</label>
-  	<select name="dkpsys_id" class="input">	
+  	<select name="dkpsys_id" class="input"  onchange="javascript:form.submit();">	
        <!-- BEGIN dkpsys_row -->
        <option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
        <!-- END dkpsys_row -->
     </select>
- 	<input type="submit" name="submit_dkpsys" value="GO" class="button1" />
  </fieldset>
-</form>
-<form method="post" action="{F_MEMBERDKP}" name="post">
 
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
     <th align="left" width="5%"><a href="{U_LIST_MEMBERDKP}o={O_STATUS}{URI_ADDON}">Active</a></th>
     <th align="left" width="5%" nowrap="nowrap">&nbsp;</th>
-    <th align="left" width="10%"><a href="{U_LIST_MEMBERDKP}o={O_DKPSYS}{URI_ADDON}">DkpPool</a></th>   
     <th align="left" width="15%"><a href="{U_LIST_MEMBERDKP}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
     <th align="left" width="10%"><a href="{U_LIST_MEMBERDKP}o={O_RANK}{URI_ADDON}">{L_RANK}</a></th>
     <th align="left" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_LEVEL}{URI_ADDON}">{L_LEVEL}</a></th>
@@ -44,7 +41,6 @@
   <!-- ENDIF -->
     <td width="5%" nowrap="nowrap" align="center"><input type="checkbox" name="activate_ids[]" value="{members_row.ID}" {members_row.STATUS} /></td>
     <td width="5%" nowrap="nowrap" align="right">{members_row.ID}</td>
-    <td width="10%" nowrap="nowrap">{members_row.DKPSYS_NAME}</td>
     <td width="15%" nowrap="nowrap"><b>{members_row.NAME}</b></td>
     <td width="10%" nowrap="nowrap">{members_row.RANK}</td>
     <td width="10%" nowrap="nowrap">{members_row.LEVEL}</td>
