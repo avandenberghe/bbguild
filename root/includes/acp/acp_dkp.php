@@ -534,7 +534,8 @@ class acp_dkp extends bbDkp_Admin
                     //zerosum
                     set_config('bbdkp_zerosum', request_var('zerosum', 0), true);
                     set_config('bbdkp_bankerid', request_var('zerosumbanker', 0), true);
-
+                    set_config('bbdkp_zerosumdistother', request_var('zerosumdistother', 0), true);
+                    
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
                 }
@@ -661,6 +662,7 @@ class acp_dkp extends bbDkp_Admin
                  		//zs
          				'F_ZEROSUM'			=> $config['bbdkp_zerosum'], 
                 		'S_BANKER_OPTIONS'	=> $s_bankerlist_options, 
+                		'F_ZEROSUM_DISTOTHER' => $config['bbdkp_zerosumdistother'],
                 ));
                 
                 $this->page_title = 'ACP_DKP_CONFIG';

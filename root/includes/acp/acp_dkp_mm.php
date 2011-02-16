@@ -38,7 +38,7 @@ function main($id, $mode)
 		$user->add_lang(array('mods/dkp_admin'));
 		$user->add_lang(array('mods/dkp_common'));
 
-		$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>Return to Index</h3></a>'; 
+		$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>'; 
 		switch ($mode)
 		{
 			/***************************************/
@@ -138,8 +138,10 @@ function main($id, $mode)
 				    ),
 				    
 				    'WHERE'     =>  " (m.member_rank_id = r.rank_id)
+				    				AND r.rank_hide = 0
 				    				AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
 									AND (m.member_guild_id = g.id)
+									
 									AND (m.member_guild_id = r.guild_id)
 									AND (m.member_guild_id = " . $guild_id . ')
 									AND (m.member_class_id = c.class_id)', 
@@ -390,11 +392,15 @@ function main($id, $mode)
 					// Rank drop-down -> for initial load
 					// reloading is done from ajax to prevent redraw
 					//
+					// this only shows the VISIBLE RANKS
+					// if you want to add someone to an unvisible rank make the rank visible first, 
+					// add him and then make rank invisible again.
+					//
                     if (isset($this->member['member_guild_id']))
                     {
                     	$sql = 'SELECT rank_id, rank_name
                         FROM ' . MEMBER_RANKS_TABLE . ' 
-                        WHERE guild_id =  '. $this->member['member_guild_id'] . ' ORDER BY rank_id';
+                        WHERE rank_hide = 0 and guild_id =  '. $this->member['member_guild_id'] . ' ORDER BY rank_id';
                         $result = $db->sql_query($sql);
                     	
                         while ( $row = $db->sql_fetchrow($result) )
@@ -411,7 +417,7 @@ function main($id, $mode)
                     	// no member is set, get the ranks from the highest numbered guild
                     	$sql = 'SELECT rank_id, rank_name
                         FROM ' . MEMBER_RANKS_TABLE . ' 
-                        where guild_id = ' . $noguild_id . ' ORDER BY rank_id desc';
+                        where rank_hide = 0 and guild_id = ' . $noguild_id . ' ORDER BY rank_id desc';
                         $result = $db->sql_query($sql);
                     	
                         while ( $row = $db->sql_fetchrow($result) )
@@ -964,16 +970,14 @@ function main($id, $mode)
 			
 			case 'mm_ranks':
 
-			   $guild_id = request_var ( 'guild_id', 0 );
-               if ($guild_id == 0)
-               {
-					$sql = 'SELECT max(id) as max FROM ' . GUILD_TABLE;                        
-					$result = $db->sql_query($sql);
-					$guild_id = $db->sql_fetchfield('max',0,$result);
-					$db->sql_freeresult($result);
-               }
-               
+				$sql = 'SELECT max(id) as idmax FROM ' . GUILD_TABLE;
+				$result = $db->sql_query($sql);
+				$maxguildid= (int) $db->sql_fetchfield('idmax');
+				$db->sql_freeresult($result);
+				
+			    $guild_id = request_var ( 'guild_id', $maxguildid );
 				$submit	 = (isset($_POST['update'])) ? true : false;
+				$deleterank = (isset($_GET['deleterank'])) ? true : false;
 				$add = (isset($_POST['add'])) ? true : false;
 		   
                 if ( $add || $submit)
@@ -986,18 +990,15 @@ function main($id, $mode)
         							
 				if ($submit)
 				{
+					// update
 				    $modrank = request_var('ranks', array( 0 => ''));
-				    
 					foreach ( $modrank as $rank_id => $rank_name )
 					{
-						// loop the RANKS_TABLE
-						
-				    	// get old values for rank to delete or update
+				    	// get old rank array
                         $sql = 'SELECT rank_name, rank_hide, rank_prefix, rank_suffix
-                                FROM ' . MEMBER_RANKS_TABLE . '  
-                                WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id; 
+								FROM ' . MEMBER_RANKS_TABLE . '  
+								WHERE rank_id = ' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id; 
                         $result = $db->sql_query($sql);
-                        // loop through object until sql_fetchrow returns false, fill object
                         while ( $row = $db->sql_fetchrow($result) )
                         {
                             $old_rank = array(
@@ -1009,92 +1010,120 @@ function main($id, $mode)
                         }
                         $db->sql_freeresult($result); 
                             
-						
-						if ( $rank_name == '' ) 
+                        // get new rank array 
+						$rank_prefix = utf8_normalize_nfc(request_var('prefix',  array((int) $rank_id => ''), true));
+						$rank_suffix = utf8_normalize_nfc(request_var('suffix',  array((int) $rank_id => ''), true));
+						$sql_ary =     array( 
+							'rank_name'   => $rank_name,
+							'rank_hide'   => ( isset($_POST['hide'][$rank_id]) ) ? 1 : 0, 
+							'rank_prefix' =>  $rank_prefix[$rank_id],
+							'rank_suffix' =>  $rank_suffix[$rank_id]
+						);
+
+						// compare old with new, 
+						if ($old_rank == $sql_ary )
 						{
-						    // rank deletion routine
-                            
-							// delete the rank that is blanked only if there are no users with the rank being deleted
-							$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . ' where member_rank_id = ' . $rank_id;
-							$result = $db->sql_query($sql);
-							$countm = $db->sql_fetchfield('countm');
-							
-							if ( $countm != 0)
-							{
-								 trigger_error('Cannot delete this rank. There are still members with this rank. ' . $link, E_USER_WARNING);
-							}
-							else
-							{
-								$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id=' . $rank_id . ' and guild_id = ' . $guild_id; 
-								$db->sql_query($sql);
-							}
-							
-							 // log the action
-                            $log_action = array(
-                                                'header'       => 'L_ACTION_RANK_DELETED',
-                                                'id'           => (int) $rank_id,
-                                                'L_NAME'     => $old_rank['rank_name'],
-                                                'L_ADDED_BY' => $user->data['username']);
-                                            
-                            $this->log_insert(array(
-                                    'log_type'   => $log_action['header'],
-                                    'log_action' => $log_action)
-                            );
-                    
+						    // no difference
 						}
 						else
 						{
-						    // update routine
-						    
-                          // get new values
-							$rank_prefix = ( isset($_POST['prefix'][$rank_id]) ) ? utf8_normalize_nfc(request_var('prefix',  array((int) $rank_id => ''), true)) : '';
-							$rank_suffix = ( isset($_POST['suffix'][$rank_id]) ) ? utf8_normalize_nfc(request_var('suffix',  array((int) $rank_id => ''), true)) : '';
-							
-							$sql_ary =     array( 
-								'rank_name'   => $rank_name,
-								'rank_hide'   => ( isset($_POST['hide'][$rank_id]) ) ? 1 : 0, 
-								'rank_prefix' =>  $rank_prefix[$rank_id],
-								'rank_suffix' =>  $rank_suffix[$rank_id]
-							);
-
-							// compare old with new, 
-							if ($old_rank == $sql_ary )
-							{
-							    // no difference
-							}
-							else
-							{
-							    // difference so update and log it
-							    
-							   $sql = 'UPDATE ' . MEMBER_RANKS_TABLE . '
- 							   SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
-					   	       WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id; 
-                           
-    							$db->sql_query($sql); 
+						    // difference so update and log it
+						   $sql = 'UPDATE ' . MEMBER_RANKS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
+					   	      WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id; 
+   						   $db->sql_query($sql); 
     							
-        						// log it
-        						$log_action = array(
-        							'header'               => 'L_ACTION_RANK_UPDATED' ,
-        							'L_NAME_BEFORE'      => $old_rank['rank_name'],
-        							'L_HIDE_BEFORE'      => $old_rank['rank_hide'],
-        							'L_PREFIX_BEFORE'    => $old_rank['rank_prefix'],
-        							'L_SUFFIX_BEFORE'    => $old_rank['rank_suffix'],
-        							'L_NAME_AFTER'       => $sql_ary['rank_name'],
-        							'L_HIDE_AFTER'       => $sql_ary['rank_hide'],
-        							'L_PREFIX_AFTER'     => $sql_ary['rank_prefix'],
-        							'L_SUFFIX_AFTER'     => $sql_ary['rank_suffix'],
-        						    'L_UPDATED_BY'       => $user->data['username']);
-        							
-        						$this->log_insert(array(
-        							'log_type'   => $log_action['header'],
-        							'log_action' => $log_action)
-        						);
-							}
+        					// log it
+        					$log_action = array(
+        						'header'               => 'L_ACTION_RANK_UPDATED' ,
+        						'L_NAME_BEFORE'      => $old_rank['rank_name'],
+        						'L_HIDE_BEFORE'      => $old_rank['rank_hide'],
+        						'L_PREFIX_BEFORE'    => $old_rank['rank_prefix'],
+        						'L_SUFFIX_BEFORE'    => $old_rank['rank_suffix'],
+        						'L_NAME_AFTER'       => $sql_ary['rank_name'],
+        						'L_HIDE_AFTER'       => $sql_ary['rank_hide'],
+        						'L_PREFIX_AFTER'     => $sql_ary['rank_prefix'],
+        						'L_SUFFIX_AFTER'     => $sql_ary['rank_suffix'],
+        					    'L_UPDATED_BY'       => $user->data['username']);
+        						
+        					$this->log_insert(array(
+        						'log_type'   => $log_action['header'],
+        						'log_action' => $log_action)
+        					);
 						}
+						
 					}
 					
 					$success_message = $user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
+					$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK'].'</h3></a>';
 					trigger_error($success_message . $link);
+				}
+				
+				if($deleterank)
+				{
+					if (confirm_box(true))
+					{
+						$guild_id = request_var('hidden_guild_id', 'x'); 
+						$rank_id = request_var('hidden_rank_id', 'x');
+						$guild_name = request_var('hidden_guild_name', 'x');
+						$old_rank_name = request_var('hidden_rank_name', 'x');
+						
+						// hardcoded exclusion of ranks 90/99
+						$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id != 90 and rank_id != 99 and rank_id=' . $rank_id . ' and guild_id = ' . $guild_id; 
+						$db->sql_query($sql);
+						
+						// log the action
+	                    $log_action = array(
+							'header'       => 'L_ACTION_RANK_DELETED',
+							'id'           => (int) $rank_id,
+							'L_NAME'     => $old_rank_name,
+							'L_ADDED_BY' => $user->data['username']);
+	                      $this->log_insert(array(
+							'log_type'   => $log_action['header'],
+							'log_action' => $log_action)
+                      );
+					
+					}
+					else
+					{
+						$rank_id = request_var('ranktodelete', 'x');
+						$guild_id = request_var('guild_id', 'x');
+
+						// delete the rank only if there are no members left 
+						$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . ' 
+							where member_rank_id = ' . $rank_id . ' and member_guild_id = ' . $guild_id;
+						$result = $db->sql_query($sql);
+						$countm = $db->sql_fetchfield('countm');
+						$db->sql_freeresult ( $result );
+						
+						
+						
+						if ( $countm != 0)
+						{
+							trigger_error($user->lang['ERROR_RANKMEMBERS'] . $link, E_USER_WARNING);
+						}
+						
+						$sql = "select a.rank_name, b.name  from " . MEMBER_RANKS_TABLE . ' a , ' . GUILD_TABLE . ' b  
+							where a.guild_id = b.id and a.rank_id = ' .  $rank_id . ' and b.id = ' . $guild_id; 
+						$result = $db->sql_query($sql);
+						while ( $row = $db->sql_fetchrow($result) )
+						{
+							$old_rank_name = $row['rank_name'];
+							$guild_name = $row['name'];
+						}
+						$db->sql_freeresult ( $result );
+	
+						
+						$s_hidden_fields = build_hidden_fields(array(
+							'deleterank'	=> true,
+							'hidden_rank_id'	=> $rank_id,
+							'hidden_guild_id'	=> $guild_id,
+							'hidden_guild_name'	=> $guild_name,
+							'hidden_rank_name'	=> $old_rank_name,
+							)
+						);
+						confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_RANKS'],$old_rank_name,$guild_name ), $s_hidden_fields);
+					}
+					
 				}
 				
 				
@@ -1125,7 +1154,7 @@ function main($id, $mode)
                      {
                          trigger_error( sprintf($user->lang('ERROR_RANK_EXISTS'),$nrankid,$guild_id ) . $link, E_USER_WARNING);
                      }
-                     
+                     $db->sql_freeresult ( $result );
                     
                     $nrank_hide = ( isset($_POST['nhide']) ) ? 1 : 0; 
                     $nprefix = utf8_normalize_nfc(request_var('nprefix', '', true));
@@ -1134,6 +1163,7 @@ function main($id, $mode)
                     $this->insertnewrank($nrankid,$nrank_name, $nrank_hide, $nprefix, $nsuffix ,  $guild_id); 
                     
                     // display success                    
+                    $link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK'].'</h3></a>';
                     $success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
 					trigger_error($success_message . $link);                       
                      
@@ -1141,23 +1171,22 @@ function main($id, $mode)
 			
 				// template filling 
 				
-				$sql = 'SELECT id, name FROM ' . GUILD_TABLE . ' where id > 0 ORDER BY id';
+				$sql = 'SELECT id, name FROM ' . GUILD_TABLE . ' ORDER BY id desc';
 				$resultg = $db->sql_query ( $sql );
                 while ( $row = $db->sql_fetchrow ( $resultg ) ) 
                 {
-                	$template->assign_block_vars ( 
-                	'guild_row', 
-                	array (
-                	'VALUE' => $row['id'], 
-                	'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
-                	'OPTION' => $row['name'])); 
+				   $template->assign_block_vars ( 'guild_row', 
+	               array (
+	               		'VALUE' => $row['id'], 
+	               		'SELECTED' => ($row['id'] ==  $guild_id) ? ' selected="selected"' : '', 
+	               		'OPTION' => $row['name'])
+		           ); 
                 }
                 $db->sql_freeresult ( $resultg );
                 
 				// rank 99 is the out-rank
 		        $sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . ' 
-		        WHERE rank_id != 99
-				AND guild_id = '. $guild_id . ' 
+		        WHERE guild_id = '. $guild_id . ' 
 		        ORDER BY rank_id, rank_hide  ASC ';
 
 		        $result = $db->sql_query($sql);
@@ -1171,8 +1200,10 @@ function main($id, $mode)
 		                'RANK_NAME'    => $row['rank_name'],
 		                'RANK_PREFIX'  => $prefix,
 		                'RANK_SUFFIX'  => $suffix,
-		                'HIDE_CHECKED' => ($row['rank_hide'] == 1 ) ? 'checked="checked"' : '')
-		            );
+		                'HIDE_CHECKED' => ($row['rank_hide'] == 1 ) ? 'checked="checked"' : '',   
+		            	'S_READONLY'   => ($row['rank_id'] == 90 || $row['rank_id'] == 99 ) ? true : false,
+		            	'U_DELETE_RANK' => append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks&amp;deleterank=1&amp;ranktodelete=" . $row['rank_id'] . "&amp;guild_id=" .  $guild_id  ) 
+		            ));
 		           
 		        }
 		        $db->sql_freeresult($result);

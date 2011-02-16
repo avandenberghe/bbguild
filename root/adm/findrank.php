@@ -12,11 +12,21 @@ $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
 
-$guildid = request_var('guild', 0);
+$guild_id = request_var('guild', 0);
 
-$sql = 'SELECT rank_id, rank_name  
-		FROM ' . MEMBER_RANKS_TABLE . ' WHERE
-		guild_id =  '. $guildid . ' ORDER BY rank_id';
+if ($guild_id == 0 )
+{
+	$sql = 'SELECT rank_id, rank_name  
+			FROM ' . MEMBER_RANKS_TABLE . ' WHERE 
+			guild_id = 0 ORDER BY rank_id desc';
+}
+else 
+{
+	$sql = 'SELECT rank_id, rank_name  
+			FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_hide = 0 and 
+			guild_id =  '. $guild_id . ' ORDER BY rank_id desc';
+}
+
 $result = $db->sql_query($sql);
 header('Content-type: text/xml');
 // preparing xml
