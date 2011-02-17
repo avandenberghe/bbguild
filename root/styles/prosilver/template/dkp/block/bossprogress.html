@@ -29,106 +29,8 @@ $(document).ready( function()
 		}
 	})
 	<!-- END zone -->});
-</script>	
-<style>
+</script>
 
-.bbtooltip {
-	 display: none;
-	 position:relative;
-	 margin:0px auto;
-	 min-width:200px;
-	 max-width:200px; 
-	 color:#fff;
-	 z-index:1;
-	 margin-left:10px; /* default, width of left corner */
-	 margin-bottom:0.5em; /* spacing under dialog */	
-	font-size: 11px;
-}
-
-.bbtooltip .bbinner,
-.bbtooltip .t,
-.bbtooltip .b,
-.bbtooltip .b div {
- background:transparent url({T_IMAGES_PATH}tooltip/tooltip.png) no-repeat top right;
-}
-	
-.bbtooltip .bbinner {
- position:relative;
- zoom:1;
-  _overflow-y:hidden;
- padding:0px 10px 0px 0px;
-}
-
-.bbtooltip .t {
- /* top+left vertical slice */
- position:absolute;
- left:0px;
- top:0px;
- width:10px; /* top slice width */
- margin-left:-10px;
- height:100%;
- background-position:top left;
-}
-
-.bbtooltip .b {
- /* bottom slice */
- position:relative;
- width:100%;
-}
-
-.bbtooltip .b,
-.bbtooltip .b div {
- height:30px; /* height of bottom cap/shade */
- font-size:1px;
-}
-
-.bbtooltip .b {
- background-position:bottom right;
-}
-
-/* bottom corner width */
-.bbtooltip .b div {
- position:absolute;
- width:10px; 
- margin-left:-10px;
- background-position:bottom left;
-}
-
-
-
-
-.bbtooltip .hd,
-.bbtooltip .bd,
-.bbtooltip .ft {
- position:relative;
-}
-
-.bbtooltip .wrapper {
- /* extra content protector - preventing vertical overflow (past background) */
- position:static;
- max-height:1000px;
- overflow:auto; 
-}
-
-.bbtooltip h1,
-.bbtooltip p {
- margin:0px; /* margins will blow out backgrounds, leaving whitespace. */
- padding:0.5em 0px 0.5em 0px;
-}
-
-.bbtooltip h1 {
- padding-bottom:0px;
-}
-
-a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active {
-	text-decoration: none; 
-	 color: #FFD100; /* tooltip boss link color */
-	white-space: nowrap;
-}
-
-
-
-</style>
  	<div class="panel">
     <div class="inner">
     <span class="corners-top"><span></span></span>    
@@ -141,7 +43,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
     <!-- BEGIN zone -->
  	<tr>
     <td align="center" class="{zone.CSSCLASS}">
-    <span>
+    <div>
     <a id="zone{zone.ZONEID}" ><strong>{zone.ZONENAME}</strong></a>
     <div class="bbtooltip">
     	 <!-- top/right PNG -->
@@ -160,7 +62,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
      <!-- bottom PNG -->
      <div class="b"><div></div></div> 
    </div>
-   </span>
+   </div>
    </td>
     <td align="center" class="{zone.CSSCLASS}"><span><strong>({zone.BOSSKILLS}/{zone.BOSSCOUNT})</strong></span></td>
     </tr>

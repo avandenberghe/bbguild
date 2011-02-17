@@ -6,43 +6,6 @@
 	$Id$
 		
 -->
-<style type="text/css">
-dl { 
-	margin: 0; 
-	padding: 0;     				
-}
-dd { 
-	position: relative;
-	display: block;     			
-	float: left;     
-	width: 800px; 
-	height: 120px; 
-	margin: 0 0 0px; 
-	background: url("images/bossprogress/rp/g_colorbar2.jpg"); 
-}
-* html dd { float: none; } 
-
-dd div { 
-  	position: relative; 
-	background: url("images/bossprogress/rp/g_colorbar.jpg"); 
-	height: 120px; 
-	width: 100%; 
-	text-align:right; 
-}
-dd div strong 
-{ 
-	position: absolute;
-	right: -5px; 
-	top: -2px; 
-	display: block; 
-	background: url("images/bossprogress/rp/g_marker.gif"); 
-	height: 24px; 
-	width: 9px; 
-	text-align: left;
-	text-indent: -9999px; 
-	overflow: hidden;
-}
-</style>
 
 <div class="forabg" >
    <span class="corners-top"><span></span></span>
@@ -93,25 +56,29 @@ dd div strong
 <!-- BEGIN zone -->
 <tbody>
 <tr class="bg1">
-	<td  colspan="4">
-		<dl>
+<td  colspan="4">
+<div class="progresspage">
+	<dl>
 		<dd style="text-align:center; background: url({zone.ZONEBACKIMG})">
 			<div style="width:{zone.ZONECOMPLETE}%; background: url({zone.ZONEPROGRESSIMG});">
 			</div>
-			</dd>
-		</dl>
-	</td>
+		</dd>
+	</dl>
+</div>
+</td>
 </tr>
 
 <!-- IF S_STYLE == 2 -->
 <tr>
 <td colspan="1" class="bg2" style="text-align:center;">
+<div class="progresspage">
 	<dl style="width:197px; height:20px">
 		<dd style="width:197px; height:20px">
 			<div style="width:{zone.ZONECOMPLETE}%; height:18px"><strong></strong> 
 			</div>
 		</dd>
 	</dl>
+</div>
 </td>
 <td colspan="2" class="bg2" style="text-align:center;">
 	<b>{zone.ZONENAME}</b> -- {zone.ZONESTATS}

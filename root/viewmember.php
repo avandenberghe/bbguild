@@ -413,7 +413,7 @@ if 	(isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]))
     {
         $template->assign_block_vars('event_row', array(
             'EVENT'        => $event,
-            'U_VIEW_EVENT' => append_sid("{$phpbb_root_path}viewevent.$phpEx", URI_EVENT . '=' . $event_ids[$event] . '&' . URI_DKPSYS . '=' . $dkp_pool) ,
+            'U_VIEW_EVENT' => append_sid("{$phpbb_root_path}viewevent.$phpEx", URI_EVENT . '=' . $event_ids[$event] . '&amp;' . URI_DKPSYS . '=' . $dkp_pool) ,
             'BAR'          => create_bar($data['percent'] . '%', $data['count'] . ' (' . $data['percent'] . '%)'))
         );
     }
