@@ -214,6 +214,15 @@
 <h3>{L_TIMEDKP}</h3>
 <p>{L_TIMEDKP_EXPLAIN}</p>
 
+<dl><dt>  
+     <label for="timebonus_activate">{L_TIMEDKP}:</label>
+     <br />
+     </dt>
+     <dd>
+     <input name="timebonus_activate" type="checkbox" id="timebonus_activate" value="1" <!-- IF F_TIMEBONUSACTIVATE == 1 --> checked="checked"<!-- ENDIF -->  />
+ 	</dd>
+</dl> 
+
 <dl>
 	<dt>   
 	<label for="dkptimeunit">{L_DKPTIMEUNIT}:</label>
@@ -250,11 +259,11 @@
 <p>{L_ZEROSUM_EXPLAIN}</p>
 
 <dl><dt>  
-     <label for="add_loot_dkp">{L_ZEROSUM}:</label>
-     <br />{L_ZEROSUM_EXPLAIN}
+     <label for="zerosum_activate">{L_ZEROSUM}:</label>
+     <br />
      </dt>
      <dd>
-     <input name="zerosum" type="checkbox" id="zerosum" value="1" <!-- IF F_ZEROSUM == 1 --> checked="checked"<!-- ENDIF -->  />
+     <input name="zerosum_activate" type="checkbox" id="zerosum" value="1" <!-- IF F_ZEROSUMACTIVATE == 1 --> checked="checked"<!-- ENDIF -->  />
  	</dd>
 </dl> 
 
@@ -282,6 +291,14 @@
 <h3>{L_DECAY}</h3>
 <p>{L_DECAY_EXPLAIN}</p>
 
+<dl><dt>  
+     <label for="decay_activate">{L_DECAY}:</label>
+     <br />
+     </dt>
+     <dd>
+     <input name="decay_activate" type="checkbox" id="decay_activate" value="1" <!-- IF F_DECAYACTIVATE == 1 --> checked="checked"<!-- ENDIF -->  />
+ 	</dd>
+</dl> 
 
 <dl>
 	<dt><label for="raiddecaypct">{L_DECAYPCTRAIDS}:</label> <br />
@@ -337,11 +354,11 @@
 
 <dl>
 	<dt>  
-     <label for="add_loot_dkp">{L_PRCALC}:</label>
-     <br />{L_PRCALC_EXPLAIN}
+     <label for="epgp_activate">{L_EPGP}:</label>
+     <br />
      </dt>
     <dd>
-    <input name="prcalc" type="checkbox" id="prcalc" value="1" <!-- IF F_PRCALC == 1 --> checked="checked"<!-- ENDIF --> />
+    <input name="epgp_activate" type="checkbox" id="epgp_activate" value="1" <!-- IF F_EPGPACTIVATE == 1 --> checked="checked"<!-- ENDIF --> />
 	 </dd>
 </dl> 
 	

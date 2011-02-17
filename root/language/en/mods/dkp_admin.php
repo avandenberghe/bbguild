@@ -595,7 +595,7 @@ The balance at the end is : earned 20+7=27, spent 20+7=27.',
 'ZEROSUMPLUS_ADVANTAGE' => ' <strong>Advantage</strong> :<br />  no point inflation if all players start at the same gearlevel. The bonus points are added to the system so as to offer an incentive to play, since a raid without loots will earn no points. ', 
 'ZEROSUMPLUS_DISADVANTAGE' => '   <strong>Disadvantage</strong> :<br /> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he\'s at a disequilibrium towards the other players.',
 
-'TIMEDKP' => 'Time based',
+'TIMEDKP' => 'Time Bonus',
 'TIMEDKP_EXPLAIN' => '<strong>Description: </strong>Lootsystem where players receive points per started Hour present in the raid or being available. Time is measured from when the raid starts to the end. 
 Points are spent on loot just like in bonus system. Bonus points may be awarded for other reasons aswell.',
 'TIMEDKP_EXAMPLE'=> '<strong>Example</strong> : 10 raiders, each present for 90 minutes.  <br />dkp/hour is 20 points, so this means that each raider gets 90/60 * 20 = 1,5 * 20 = 30 points <br />1 item dropped, for 20 points <br />
@@ -612,6 +612,7 @@ effortpoints player 2 : 342, EP/GP ratio 17.1<br />
 So the loot would go to player 2 <br />', 
 'EPGP_ADVANTAGE' => '<strong>Advantage</strong> : no inflation, no hoarding. ', 
 'EPGP_DISADVANTAGE' => '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ', 
+
 'EP'	=> 'EP',
 'GP'	=> 'GP',
 'ER'	=> 'ER%',
@@ -634,7 +635,7 @@ So the loot would go to player 2 <br />',
 'RGP_DEFINITION'  => '<strong>RGP</strong> = Real Gear points = Item Cost',
 'BGP'  => 'Base gp',
 'BGP_EXPLAIN'  => 'BGP = Base Gearpoint Value. will not be decayed.',
-'DECAY_GP'  => '<strong>GP After Decay</strong> = BGP + RGP - RGP * f',
+'DECAY_GP'  => '<strong>GP After Decay</strong> = BGP + RGP - RGP * l',
 
 'MENU_RAIDS' => 'Raids',
 'MENU_EVENTS' => 'Events',

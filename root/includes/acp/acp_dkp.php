@@ -506,7 +506,6 @@ class acp_dkp extends bbDkp_Admin
                     set_config('bbdkp_list_p1', request_var('list_p1', 0), true);
                     set_config('bbdkp_list_p2', request_var('list_p2', 0), true);
                     set_config('bbdkp_list_p3', request_var('list_p3', 0), true);
-                    set_config('bbdkp_epgp', request_var('prcalc', 0), true);
 
                     //events					
                     set_config('bbdkp_user_elimit', request_var('bbdkp_user_elimit', 0), true);
@@ -519,23 +518,29 @@ class acp_dkp extends bbDkp_Admin
                     
                     //items
                     set_config('bbdkp_user_ilimit', request_var('bbdkp_user_ilimit', 0), true);
-					set_config('bbdkp_itemdecaypct', request_var('itemdecaypct', 0), true);
 
 					//raids                    
                     set_config('bbdkp_user_rlimit', request_var('bbdkp_user_rlimit', 0), true);
                     
                     //epgp
+                    set_config('bbdkp_epgp', request_var('epgp_activate', 0), true);
+                    set_config('bbdkp_basegp', request_var('basegp', 0), true);
+
+                    //decay         
+                    set_config('bbdkp_decay', request_var('decay_activate', 0), true);           
+					set_config('bbdkp_itemdecaypct', request_var('itemdecaypct', 0), true);
                     set_config('bbdkp_raiddecaypct',   request_var('raiddecaypct', 0), true);
                     set_config('bbdkp_decayfrequency', request_var('decayfreq', 0), true);
                     set_config('bbdkp_decayfreqtype',  request_var('decayfreqtype', 0), true);
-                    set_config('bbdkp_basegp', request_var('basegp', 0), true);
-                    
+
                     //time
+                    set_config('bbdkp_timebased', request_var('timebonus_activate', 0.00), true);
                     set_config('bbdkp_dkptimeunit', request_var('dkptimeunit', 0.00), true);
                     set_config('bbdkp_timeunit', request_var('timeunit', 0.00), true);
                     set_config('bbdkp_standardduration', request_var('standardduration', 0.00), true);
+                    
                     //zerosum
-                    set_config('bbdkp_zerosum', request_var('zerosum', 0), true);
+                    set_config('bbdkp_zerosum', request_var('zerosum_activate', 0), true);
                     set_config('bbdkp_bankerid', request_var('zerosumbanker', 0), true);
                     set_config('bbdkp_zerosumdistother', request_var('zerosumdistother', 0), true);
                     
@@ -623,50 +628,54 @@ class acp_dkp extends bbDkp_Admin
     		    add_form_key('acp_dkp');
                 
                 $template->assign_vars(array(
-                		'S_LANG_OPTIONS'	=> $s_lang_options, 
-                		'SHOW3DARMORY'		=> $config['bbdkp_show_3darmory'], 
-                		'GUILDTAG' 			=> $config['bbdkp_guildtag'] , 
-                		'REALM' 			=> $config['bbdkp_default_realm'] , 
-                		'EQDKP_START_DD' 	=> date('d', $config['bbdkp_eqdkp_start']) , 
-                		'EQDKP_START_MM' 	=> date('m', $config['bbdkp_eqdkp_start']) , 
-                		'EQDKP_START_YY' 	=> date('Y', $config['bbdkp_eqdkp_start']) ,
-                		'DATE_FORMAT' 		=> $config['bbdkp_date_format'] , 
-                		'DKP_NAME' 			=> $config['bbdkp_dkp_name'] ,
-                		'DEFAULT_GAME' 		=> $installed_game ,
-                		'HIDE_INACTIVE_YES_CHECKED' => ($config['bbdkp_hide_inactive'] == '1') ? ' checked="checked"' : '' , 
-                		'HIDE_INACTIVE_NO_CHECKED' => ($config['bbdkp_hide_inactive'] == '0') ? ' checked="checked"' : '' , 
-                		'USER_ELIMIT' 		=> $config['bbdkp_user_elimit'] , 
-                		'USER_NLIMIT' 		=> $config['bbdkp_user_nlimit'] , 
-                		'INACTIVE_PERIOD' 	=> $config['bbdkp_inactive_period'] , 
-                		'LIST_P1' 			=> $config['bbdkp_list_p1'] , 
-                		'LIST_P2' 			=> $config['bbdkp_list_p2'] , 
-                        'LIST_P3' 			=> $config['bbdkp_list_p3'] ,
-                		'F_SHOWACHIEV'  	=> $config['bbdkp_show_achiev'], 
-                		'S_FREQTYPE_OPTIONS' => $s_freqtype_options,
-                		
-                		
-                		'USER_ALIMIT' 		=> $config['bbdkp_user_alimit'] , 
-                		'STARTING_DKP'		=>	$config['bbdkp_starting_dkp'],
-                		'INACTIVE_POINT' 	=> $config['bbdkp_inactive_point_adj'] ,
-                		'ACTIVE_POINT' 		=> $config['bbdkp_active_point_adj'] , 
-                		'USER_ILIMIT' 		=> $config['bbdkp_user_ilimit'] , 
-                		'USER_RLIMIT' 		=> $config['bbdkp_user_rlimit'] , 
+                	'S_LANG_OPTIONS'	=> $s_lang_options, 
+                	'SHOW3DARMORY'		=> $config['bbdkp_show_3darmory'], 
+                	'GUILDTAG' 			=> $config['bbdkp_guildtag'] , 
+                	'REALM' 			=> $config['bbdkp_default_realm'] , 
+                	'EQDKP_START_DD' 	=> date('d', $config['bbdkp_eqdkp_start']) , 
+                	'EQDKP_START_MM' 	=> date('m', $config['bbdkp_eqdkp_start']) , 
+                	'EQDKP_START_YY' 	=> date('Y', $config['bbdkp_eqdkp_start']) ,
+                	'DATE_FORMAT' 		=> $config['bbdkp_date_format'] , 
+                	'DKP_NAME' 			=> $config['bbdkp_dkp_name'] ,
+                	'DEFAULT_GAME' 		=> $installed_game ,
+                	'HIDE_INACTIVE_YES_CHECKED' => ($config['bbdkp_hide_inactive'] == '1') ? ' checked="checked"' : '' , 
+                	'HIDE_INACTIVE_NO_CHECKED' => ($config['bbdkp_hide_inactive'] == '0') ? ' checked="checked"' : '' , 
+                	'USER_ELIMIT' 		=> $config['bbdkp_user_elimit'] , 
+                	'USER_NLIMIT' 		=> $config['bbdkp_user_nlimit'] , 
+                	'INACTIVE_PERIOD' 	=> $config['bbdkp_inactive_period'] , 
+                	'LIST_P1' 			=> $config['bbdkp_list_p1'] , 
+                	'LIST_P2' 			=> $config['bbdkp_list_p2'] , 
+                    'LIST_P3' 			=> $config['bbdkp_list_p3'] ,
+                	'F_SHOWACHIEV'  	=> $config['bbdkp_show_achiev'], 
+                	'S_FREQTYPE_OPTIONS' => $s_freqtype_options,
+                	'USER_ALIMIT' 		=> $config['bbdkp_user_alimit'] , 
+                	'STARTING_DKP'		=>	$config['bbdkp_starting_dkp'],
+                	'INACTIVE_POINT' 	=> $config['bbdkp_inactive_point_adj'] ,
+                	'ACTIVE_POINT' 		=> $config['bbdkp_active_point_adj'] , 
+                	'USER_ILIMIT' 		=> $config['bbdkp_user_ilimit'] , 
+                	'USER_RLIMIT' 		=> $config['bbdkp_user_rlimit'] , 
 
-                		//epgp
-                		'F_PRCALC'			=> $config['bbdkp_epgp'],
-                		'BASEGP'			=> $config['bbdkp_basegp'] , 
-                		'ITEMDECAYPCT'		=> $config['bbdkp_itemdecaypct'] ,
-                		'RAIDDECAYPCT' 	 	=> $config['bbdkp_raiddecaypct'] ,
-        				'DECAYFREQ'			=> $config['bbdkp_decayfrequency'] ,
-						'S_FREQTYPE_OPTIONS' =>	$s_freqtype_options, 
-						//time dkp
-                		'DKPTIMEUNIT'		=> $config['bbdkp_dkptimeunit'] ,
-		                'TIMEUNIT'			=> $config['bbdkp_timeunit'] ,
-		                'STANDARDDURATION'	=> $config['bbdkp_standardduration'] ,
-                 		//zs
-         				'F_ZEROSUM'			=> $config['bbdkp_zerosum'], 
-                		'S_BANKER_OPTIONS'	=> $s_bankerlist_options, 
-                		'F_ZEROSUM_DISTOTHER' => $config['bbdkp_zerosumdistother'],
+                	//epgp
+                	'F_EPGPACTIVATE'	=> $config['bbdkp_epgp'],
+                	'BASEGP'			=> $config['bbdkp_basegp'] , 
+						
+                	//decay
+                	'F_DECAYACTIVATE'	=> $config['bbdkp_decay'] ,
+                	'ITEMDECAYPCT'		=> $config['bbdkp_itemdecaypct'] ,
+                	'RAIDDECAYPCT' 	 	=> $config['bbdkp_raiddecaypct'] ,
+        			'DECAYFREQ'			=> $config['bbdkp_decayfrequency'] ,
+					'S_FREQTYPE_OPTIONS' =>	$s_freqtype_options,
+                		 
+					//time dkp
+					'F_TIMEBONUSACTIVATE' => $config['bbdkp_timebased'] ,
+                	'DKPTIMEUNIT'		=> $config['bbdkp_dkptimeunit'] ,
+		            'TIMEUNIT'			=> $config['bbdkp_timeunit'] ,
+		            'STANDARDDURATION'	=> $config['bbdkp_standardduration'] ,
+
+                	//zs
+         			'F_ZEROSUMACTIVATE'	=> $config['bbdkp_zerosum'], 
+                	'S_BANKER_OPTIONS'	=> $s_bankerlist_options, 
+                	'F_ZEROSUM_DISTOTHER' => $config['bbdkp_zerosumdistother'],
                 ));
                 
                 $this->page_title = 'ACP_DKP_CONFIG';

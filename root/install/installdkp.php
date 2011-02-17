@@ -591,28 +591,33 @@ $versions = array(
 			
 			//items
 			array('bbdkp_user_ilimit', '20', true),
-			array('bbdkp_itemdecaypct', 5, true),			
 
 			//raids
 			array('bbdkp_user_rlimit', '20', true),
 			
 			//epgp
-			array('bbdkp_epgp', 1, true),	
+			array('bbdkp_epgp', 0, true),	
+			array('bbdkp_basegp', 100, true),
+			
+			//decay			
+			array('bbdkp_decay', 0, true),
 			array('bbdkp_raiddecaypct', 5, true),	
+			array('bbdkp_itemdecaypct', 5, true),			
 			array('bbdkp_decayfrequency', 1, true),
 			array('bbdkp_decayfreqtype', 1, true),
-			array('bbdkp_basegp', 100, true),
+
 			//time
+			array('bbdkp_timebased', 0, true),
 			array('bbdkp_dkptimeunit', 5, true),
 			array('bbdkp_timeunit', 30, true),
 			array('bbdkp_standardduration', 1, true),
+			
 			//zerosum
-			array('bbdkp_zerosum', 1, true),
+			array('bbdkp_zerosum', 0, true),
 			array('bbdkp_bankerid', 0, true),
 			array('bbdkp_zerosumdistother', 0, true),
 
             // portal settings
-	
 	        // number of news
 	        array('bbdkp_n_news', 5, true),   
 	        // news forum id
