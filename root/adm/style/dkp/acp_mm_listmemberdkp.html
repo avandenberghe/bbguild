@@ -20,44 +20,67 @@
 
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
-    <th align="left" width="5%"><a href="{U_LIST_MEMBERDKP}o={O_STATUS}{URI_ADDON}">Active</a></th>
-    <th align="left" width="5%" nowrap="nowrap">&nbsp;</th>
-    <th align="left" width="15%"><a href="{U_LIST_MEMBERDKP}o={O_NAME}{URI_ADDON}">{L_NAME}</a></th>
-    <th align="left" width="10%"><a href="{U_LIST_MEMBERDKP}o={O_RANK}{URI_ADDON}">{L_RANK}</a></th>
-    <th align="left" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_LEVEL}{URI_ADDON}">{L_LEVEL}</a></th>
-    <th align="left" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_CLASS}{URI_ADDON}">{L_CLASS}</a></th>
-    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_EARNED}{URI_ADDON}">{L_EARNED}</a></th>
-    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_SPENT}{URI_ADDON}">{L_SPENT}</a></th>
-    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ADJUSTMENT}{URI_ADDON}">{L_ADJUSTMENT}</a></th>
-    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_CURRENT}{URI_ADDON}">{L_CURRENT}</a></th>
-    <th align="left" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_LASTRAID}{URI_ADDON}">{L_LASTRAID}</a></th>
+    <th align="left" width="1%"><a href="{U_LIST_MEMBERDKP}o={O_STATUS}">Active</a></th>
+    <th align="left" width="1%" nowrap="nowrap">&nbsp;</th>
+    <th align="left" width="15%"><a href="{U_LIST_MEMBERDKP}o={O_NAME}">{L_NAME}</a></th>
+    <th align="left" width="5%"><a href="{U_LIST_MEMBERDKP}o={O_RANK}">{L_RANK}</a></th>
+    <th align="left" width="5%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_LEVEL}">{L_LEVEL}</a></th>
+    <th align="left" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_CLASS}">{L_CLASS}</a></th>
+    
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_TIMEBONUS}">{L_TIMEVALUE}</a></th>
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ZSBONUS}">{L_ZSVALUE}</a></th>
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_EARNED}">{L_EARNED}</a></th>
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_RDECAY}">{L_DECAY}</a></th>
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ADJUSTMENT}">{L_ADJUSTMENT}</a></th>
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_EP}">{L_EP}</a></th>
+
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_SPENT}">{L_SPENT}</a></th>
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_IDECAY}">{L_DECAY}</a></th>
+	<th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_GP}">{L_GP}</a></th>
+
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ER}">{L_ER}</a></th>
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_CURRENT}">{L_CURRENT}</a></th>
+    <th align="left" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_LASTRAID}">{L_LASTRAID}</a></th>
     <th align="center" width="5">{L_ACTION}</th>
   </tr>
   <!-- BEGIN members_row -->
   <!-- IF members_row.S_ROW_COUNT is even -->
-  <tr class="row2">
+  <tr class="row1">
   <!-- ELSE -->
   <tr class="row2">
   <!-- ENDIF -->
-    <td width="5%" nowrap="nowrap" align="center"><input type="checkbox" name="activate_ids[]" value="{members_row.ID}" {members_row.STATUS} /></td>
-    <td width="5%" nowrap="nowrap" align="right">{members_row.ID}</td>
-    <td width="15%" nowrap="nowrap"><b>{members_row.NAME}</b></td>
-    <td width="10%" nowrap="nowrap">{members_row.RANK}</td>
-    <td width="10%" nowrap="nowrap">{members_row.LEVEL}</td>
-    <td width="10%" nowrap="nowrap">{members_row.CLASS}</td>
-    <td width="10%"  align="right" nowrap="nowrap" class="positive">{members_row.EARNED}</td>
-    <td width="10%"  align="right" nowrap="nowrap" class="negative">{members_row.SPENT}</td>
-    <td width="10%"  align="right" nowrap="nowrap" class="{members_row.C_ADJUSTMENT}">{members_row.ADJUSTMENT}</td>
-    <td width="10%"  align="right" nowrap="nowrap" class="{members_row.C_CURRENT}">{members_row.CURRENT}</td>
-    <td width="10%" nowrap="nowrap" class="{members_row.C_LASTRAID}">{members_row.LASTRAID}</td>
- 	<td width="5" nowrap="nowrap">
+    <td width="1%" style="text-align:center;" nowrap="nowrap" align="center"><input type="checkbox" name="activate_ids[]" value="{members_row.ID}" {members_row.STATUS} /></td>
+    <td width="1%" style="text-align:center;" nowrap="nowrap" align="right">{members_row.ID}</td>
+    <td width="10%" style="text-align:center;" nowrap="nowrap"><strong><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></strong></td>
+    <td width="5%" style="text-align:center;" nowrap="nowrap">{members_row.RANK}</td>
+    <td width="5%" style="text-align:center;" nowrap="nowrap">{members_row.LEVEL}</td>
+    <td width="10%" style="text-align:left; nowrap="nowrap"><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;<span style="color:{members_row.COLORCODE}" >{members_row.CLASS}</span></td>
+    
+    <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.RAIDVAL}</td>
+    <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.TIMEBONUS}</td>
+    <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.ZEROSUM}</td>
+    
+    <td class="row2"  width="10%" style="text-align:right;" nowrap="nowrap" ><span class="positive"><strong>{members_row.EARNED}</strong></span></td>
+    <td width="10%" style="text-align:right;" nowrap="nowrap" class="negative">{members_row.RAIDDECAY}</td>
+    <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.ADJUSTMENT}</td>
+    <td class="row2" width="10%" style="text-align:right;" nowrap="nowrap"><span class="positive"><strong>{members_row.EP}</strong></span></td>
+    
+    <td width="10%" style="text-align:right;" nowrap="nowrap" class="negative">{members_row.SPENT}</td>
+    <td width="10%" style="text-align:right;" nowrap="nowrap" class="negative">{members_row.ITEMDECAY}</td>
+    <td class="row2" width="10%" style="text-align:right;" nowrap="nowrap"><span class="negative"><strong>{members_row.GP}</strong></span></td>
+    <td class="row2" width="10%" style="text-align:center;" nowrap="nowrap"><span><strong>{members_row.ER}</strong></td>
+    <td class="row2" width="10%" style="text-align:right;" nowrap="nowrap"><span class="positive"><strong>{members_row.CURRENT}</strong></td>
+
+    <td width="10%" nowrap="nowrap" >{members_row.LASTRAID}</td>
+ 	<td width="5" nowrap="nowrap" style="text-align:center;" >
 		<a href="{members_row.U_VIEW_MEMBER}">{ICON_EDIT}</a>
 	</td>
     
   </tr>
   <!-- END members_row -->
   <tr>
-    <th colspan="13" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+    <th colspan="20" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
   </tr>
 </table>
 	<input type="hidden" NAME="dkpsys" VALUE="{DKPSYS}" />

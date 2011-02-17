@@ -609,6 +609,7 @@ $versions = array(
 			//zerosum
 			array('bbdkp_zerosum', 1, true),
 			array('bbdkp_bankerid', 0, true),
+			array('bbdkp_zerosumdistother', 0, true),
 
             // portal settings
 	

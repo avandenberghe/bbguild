@@ -36,12 +36,12 @@
   </tr>
   <!-- BEGIN members_row -->
   <!-- IF members_row.S_ROW_COUNT is even -->
-  <tr class="row2">
+  <tr class="row1">
   <!-- ELSE -->
   <tr class="row2">
   <!-- ENDIF -->
     <td style="text-align:right;" width="35" nowrap="nowrap" align="right">{members_row.ID}</td>
-    <td style="text-align:left;" width="100" nowrap="nowrap"><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a></td>
+    <td class="row2" style="text-align:left;" width="100" nowrap="nowrap"><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a></td>
     <td style="text-align:left;" width="100" nowrap="nowrap"><a href="{members_row.U_VIEW_USER}">{members_row.USERNAME}</a></td>
     <td style="text-align:left;" width="40" nowrap="nowrap">{members_row.RANK}</td>
     <td style="text-align:center;" width="20" nowrap="nowrap">{members_row.LEVEL}</td>

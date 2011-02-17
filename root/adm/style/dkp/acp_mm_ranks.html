@@ -39,9 +39,10 @@
    </thead>
 	<tbody> 
   <!-- BEGIN ranks_row -->
-	  <!-- IF raids_row.S_ROW_COUNT is even -->
+	  <!-- IF ranks_row.S_ROW_COUNT is even -->
+	  <tr class="row1">
+	  <!-- ELSE -->
 	  <tr class="row2">
-	  <!-- ELSE --><tr class="row1">
 	  <!-- ENDIF -->
 	    <td>{ranks_row.RANK_ID}</td>
 	    <!-- IF ranks_row.S_READONLY == 1 -->

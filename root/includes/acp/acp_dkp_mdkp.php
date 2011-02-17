@@ -39,34 +39,13 @@ class acp_dkp_mdkp extends bbDkp_Admin
 		
 		switch ($mode)
 		{
-			/************************************
+			/*-----------------------
 				  LIST DKP
-			*************************************/
+			-------------------------*/
 			case 'mm_listmemberdkp':
 				
 				/* initialise */
 				$dkpsys_id = 0;
-				
-				/***  sort  ***/
-				$sort_order = array(
-					0  => array('member_name', 'member_name desc'),
-					1  => array('member_earned desc', 'member_earned'),
-					2  => array('member_spent desc', 'member_spent'),
-					3  => array('member_adjustment desc', 'member_adjustment'),
-					4  => array('member_current desc', 'member_current'),
-					5  => array('member_lastraid desc', 'member_lastraid'),
-					6  => array('member_level desc', 'member_level'),
-					7  => array('member_class', 'member_class desc'),
-					8  => array('rank_name', 'rank_name desc'),
-					9  => array('class_armor_type', 'class_armor_type desc'),
-					10 => array('member_status', 'm.member_status desc')
-				);
-				$current_order = switch_order($sort_order);
-
-				$member_count = 0;
-				$previous_data = '';
-				$sort_index = explode('.', $current_order['uri']['current']);
-				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 				
 				/* check if page was posted back */
 				$activate = (isset($_POST['submit_activate'])) ? true : false;
@@ -148,24 +127,64 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					$db->sql_transaction('commit'); 
 				}
 				
+				
+				/***  sort  ***/
+				$sort_order = array(
+					0 => array('member_status', 'm.member_status desc'),
+					1  => array('member_name', 'member_name desc'),
+					2  => array('rank_name', 'rank_name desc'),
+					3  => array('member_level desc', 'member_level'),
+					4  => array('member_class', 'member_class desc'),
+					5  => array('member_raid_value desc', 'member_raid_value'),
+					6  => array('member_time_bonus desc', 'member_time_bonus'),
+					7  => array('member_zerosum_bonus desc', 'member_zerosum_bonus'),
+					8  => array('member_earned desc', 'member_earned'),
+					9  => array('member_raid_decay desc', 'member_raid_decay'),
+					10  => array('member_adjustment desc', 'member_adjustment'),
+					11  => array('ep desc', 'ep'),
+					12  => array('member_spent desc', 'member_spent'),
+					13  => array('member_item_decay desc', 'member_item_decay'),
+					14  => array('gp desc', 'gp'),
+					15  => array('er desc', 'er'),
+					16  => array('member_current desc', 'member_current'),
+					17  => array('member_lastraid desc', 'member_lastraid'),
+				);
+				$current_order = switch_order($sort_order);
+
+				$member_count = 0;
+				$previous_data = '';
+				$sort_index = explode('.', $current_order['uri']['current']);
+				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 
 				$sql_array = array(
 				    'SELECT'    => 'm.member_id,  
 									a.member_name, 
 									a.member_level, 
-									(m.member_earned-m.member_spent+m.member_adjustment) AS member_current, 
-									m.member_dkpid, 
-									m.member_earned, 
-									m.member_spent,
-									m.member_status,    
+									m.member_dkpid,
+									
+									m.member_raid_value,
+									m.member_time_bonus,
+									m.member_zerosum_bonus, 
+									m.member_earned,
+									m.member_raid_decay, 
 									m.member_adjustment, 
+									(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep	,
+									m.member_spent,
+									m.member_item_decay,
+									(m.member_spent - m.member_item_decay ) AS gp,
+									(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
+									case when (m.member_spent - m.member_item_decay) = 0 then 1 
+									else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (m.member_spent - m.member_item_decay),2) end as er, 
+									m.member_status,    
 									m.member_lastraid,
 									s.dkpsys_name, 
 									l.name AS member_class, 
 									r.rank_name, 
 									r.rank_prefix, 
 									r.rank_suffix, 
-									c.class_armor_type AS armor_type',
+									c.colorcode , 
+									c.imagename',
+				
 				 
 				    'FROM'      => array(
 				        MEMBER_LIST_TABLE 	=> 'a',
@@ -205,20 +224,26 @@ class acp_dkp_mdkp extends bbDkp_Admin
 						'DKPID'         => $row['member_dkpid'],
 						'DKPSYS_S'      => $dkpsys_id ,
 						'DKPSYS_NAME'   => $row['dkpsys_name'],
-						
+						'CLASS'         => ( $row['member_class'] != 'NULL' ) ? $row['member_class'] : '&nbsp;',
+						'COLORCODE' 	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
+                  		'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
 						'NAME'          => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
+						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
 						'RANK'          => $row['rank_name'],
 						'LEVEL'         => ( $row['member_level'] > 0 ) ? $row['member_level'] : '&nbsp;',
-						'ARMOR'         => ( !empty($row['armor_type']) ) ? $row['armor_type'] : '&nbsp;',
-						'CLASS'         => ( $row['member_class'] != 'NULL' ) ? $row['member_class'] : '&nbsp;',
+						'RAIDVAL'       => $row['member_raid_value'],
+						'TIMEBONUS'     => $row['member_time_bonus'],
+						'ZEROSUM'       => $row['member_zerosum_bonus'],
 						'EARNED'        => $row['member_earned'],
-						'SPENT'         => $row['member_spent'],
+						'RAIDDECAY'		=> $row['member_raid_decay'], 
 						'ADJUSTMENT'    => $row['member_adjustment'],
+						'EP'    		=> $row['ep'],
+						'SPENT'         => $row['member_spent'],
+						'ITEMDECAY'     => $row['member_item_decay'],
+						'GP'     		=> $row['gp'],
+						'ER'     		=> $row['er'],
 						'CURRENT'       => $row['member_current'],
 						'LASTRAID'      => ( !empty($row['member_lastraid']) ) ? date($config['bbdkp_date_format'], $row['member_lastraid']) : '&nbsp;',
-						'C_ADJUSTMENT'  => $row['member_adjustment'],
-						'C_CURRENT'     => $row['member_current'],
-						'C_LASTRAID'    => 'neutral',
 						'U_VIEW_MEMBER' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp") . '&amp;member_id='.$row['member_id'].  '&amp;'. URI_DKPSYS . '='.$row['member_dkpid']
 						)
 					); 
@@ -228,27 +253,33 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				$db->sql_freeresult($members_result);
 				
 				/***  Labels  ***/
-				
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
 				
 				$template->assign_vars(array(
 					'F_MEMBERS' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp&amp;") . '&amp;mode=mm_editmemberdkp',
 					'L_TITLE'		=> $user->lang['ACP_DKP_LISTMEMBERDKP'],
 					'L_EXPLAIN'		=> $user->lang['ACP_MM_LISTMEMBERDKP_EXPLAIN'],
-					'BUTTON_NAME' => 'delete',
-					'BUTTON_VALUE' => $user->lang['DELETE_SELECTED_MEMBERS'],
-					'O_STATUS' => $current_order['uri'][10],
-					'O_NAME' => $current_order['uri'][0],
-					'O_RANK' => $current_order['uri'][8],
-					'O_LEVEL' => $current_order['uri'][6],
-					'O_CLASS' => $current_order['uri'][7],
-					'O_ARMOR' => $current_order['uri'][9],
-					'O_EARNED' => $current_order['uri'][1],
-					'O_SPENT' => $current_order['uri'][2],
-					'O_ADJUSTMENT' => $current_order['uri'][3],
-					'O_CURRENT' => $current_order['uri'][4],
-					'O_LASTRAID' => $current_order['uri'][5],
-					'U_LIST_MEMBERDKP' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;" . URI_DKPSYS . "=". $dkpsys_id . "&amp;mode=mm_listmemberdkp&amp;") .'&amp;mod=list&amp;',		
+					'BUTTON_NAME' 	=> 'delete',
+					'BUTTON_VALUE' 	=> $user->lang['DELETE_SELECTED_MEMBERS'],
+					'O_STATUS' 		=> $current_order['uri'][0],
+					'O_NAME' 		=> $current_order['uri'][1],
+					'O_RANK' 		=> $current_order['uri'][2],
+					'O_LEVEL' 		=> $current_order['uri'][3],
+					'O_CLASS' 		=> $current_order['uri'][4],
+					'O_RAIDVALUE' 	=> $current_order['uri'][5],
+					'O_TIMEBONUS' 	=> $current_order['uri'][6],
+					'O_ZSBONUS' 	=> $current_order['uri'][7],
+					'O_EARNED' 		=> $current_order['uri'][8],
+					'O_RDECAY' 		=> $current_order['uri'][9],
+					'O_ADJUSTMENT'  => $current_order['uri'][10],
+					'O_EP' 			=> $current_order['uri'][11],
+					'O_SPENT' 		=> $current_order['uri'][12],
+					'O_IDECAY' 		=> $current_order['uri'][13],
+					'O_GP' 			=> $current_order['uri'][14],
+					'O_ER' 			=> $current_order['uri'][15],
+					'O_CURRENT'		=> $current_order['uri'][16],
+					'O_LASTRAID' 	=> $current_order['uri'][17],
+					'U_LIST_MEMBERDKP' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;" . URI_DKPSYS . "=". $dkpsys_id . "&amp;mode=mm_listmemberdkp") .'&amp;mod=list&amp;',		
 					'S_NOTMM' => false,
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text, 
 		            'DKPSYS' => $dkpsys_id
@@ -265,399 +296,396 @@ class acp_dkp_mdkp extends bbDkp_Admin
 			*************************************/
 			case 'mm_editmemberdkp':
 			    // invisible module
-					$S_ADD = false;
-					if (isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS]) )  
-					{
-						$sql_array = array(
-					    'SELECT'    => '
-					    	a.*, 
-							(m.member_earned-m.member_spent+m.member_adjustment) AS member_current, 
-							m.member_id, 
-							m.member_dkpid, 
-							m.member_earned, 
-							m.member_spent,  
-							m.member_adjustment, 
-							m.member_lastraid,
-							r1.name AS member_race,
-							s.dkpsys_name, 
-							l.name AS member_class, 
-							r.rank_name, 
-							r.rank_prefix, 
-							r.rank_suffix, 
-							c.class_armor_type AS armor_type ,
-							c.colorcode, 
-							c.imagename ', 
-					 
-					    'FROM'      => array(
-					        MEMBER_LIST_TABLE 	=> 'a',
-					        MEMBER_DKP_TABLE    => 'm',
-					        MEMBER_RANKS_TABLE  => 'r',
-							CLASS_TABLE 		=> 'c', 
-							BB_LANGUAGE			=> 'l', 
-					        DKPSYS_TABLE    	=> 's',
-					    ),
-					    
-					     'LEFT_JOIN' => array(
-					        array(
-					            'FROM'  => array(BB_LANGUAGE => 'r1'),
-					            'ON'    => "r1.attribute_id = a.member_race_id AND r1.language= '" . 
-					        		$config['bbdkp_lang'] . "' AND r1.attribute = 'race'" 
-					            )
-					        ),
-					 
-					    'WHERE'     =>  " a.member_rank_id = r.rank_id 
-					    				AND a.member_guild_id = r.guild_id  
-										AND a.member_id = m.member_id 
-										AND a.member_class_id = c.class_id  
-										AND m.member_dkpid = s.dkpsys_id   
-										AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    
-										AND s.dkpsys_id = " . request_var(URI_DKPSYS, 0) . '   
-									    AND a.member_id = ' . request_var('member_id', 0),
-						);
-					 
-						$sql = $db->sql_build_query('SELECT', $sql_array);
-																		
-						$result = $db->sql_query($sql);
-						$row = $db->sql_fetchrow($result);
-						$db->sql_freeresult($result);
-						
-						$this->member = array(
-								'member_id'         => $row['member_id'],
-								'member_dkpid'		=> $row['member_dkpid'],  
-								'member_dkpname'	=> $row['dkpsys_name'],  
-								'member_name'       => $row['member_name'],
-								'member_earned'     => $row['member_earned'],  
-								'member_spent'      => $row['member_spent'],    
-								'member_adjustment' => $row['member_adjustment'],  
-								'member_current'    => $row['member_current'],  
-								'member_race_id'    => $row['member_race_id'], 
-								'member_race'       => $row['member_race'],
-								'member_class_id'   => $row['member_class_id'],
-								'member_class'      => $row['member_class'],
-								'member_level'      => $row['member_level'], 
-								'member_rank_id'    => $row['member_rank_id'],
-								'member_rank'		=> $row['rank_name'],
-								'imagename'			=> $row['imagename'],
-								'colorcode'			=> $row['colorcode'], 
-							);	
-					}
+
+				$member_id = request_var(URI_NAMEID, 'xx');
+				$dkp_id = request_var(URI_DKPSYS, 'xx');
 				
-					if ( !empty($this->member['member_name']) )  // ??
+				$update	 = (isset($_POST['update'])) ? true : false;
+				$delete	 = (isset($_POST['delete'])) ? true : false;	
+	            if ( $update || $delete )
+                {
+                  	if (!check_form_key('mm_editmemberdkp'))
 					{
-						// Get their correct earned/spent
+						trigger_error('FORM_INVALID');
+					}
+       			}
+        			
+				if ($update)
+				{
+					$member_id = request_var('hidden_id', 'xx');
+					$dkp_id = request_var('hidden_dkpid', 'xx');
+					
+					$sql_array = array(
+					    'SELECT'    => 'l.member_name, m.member_id, 
+					    				m.member_raid_value, m.member_time_bonus, m.member_zerosum_bonus, m.member_earned,
+					    				m.member_raid_decay, m.member_adjustment ,
+					    				m.member_spent, m.member_item_decay ', 
+					    'FROM'      => array(
+						        MEMBER_DKP_TABLE => 'm',
+						        MEMBER_LIST_TABLE => 'l',
+					    ),
+					    'WHERE'     =>  'm.member_id = l.member_id and m.member_id=' . $member_id . ' 
+					    				 and m.member_dkpid=' . $dkp_id,
+					);
+					
+					$sql = $db->sql_build_query('SELECT', $sql_array);
+					$result = $db->sql_query($sql);
+					while ( $row = $db->sql_fetchrow($result) )
+					{
+   						$this->old_member = array(
+   							'member_name'		=> $row['member_name'], 
+							'member_id'			=> $row['member_id'],
+							'member_earned'     => $row['member_earned'],
+							'member_spent'      => $row['member_spent'],
+							);
+					}
+					$db->sql_freeresult($result);
+					
+					$db->sql_transaction('begin'); 
+					$query = $db->sql_build_array('UPDATE', array(
+						'member_raid_value' 	=> request_var('raid_value',0.00),
+						'member_time_bonus'		=> request_var('time_value',0.00),
+						'member_zerosum_bonus' 	=> request_var('zerosum',0.00),
+						'member_earned'     	=> request_var('earned',0.00),
+						'member_raid_decay'    	=> request_var('rdecay',0.00),
+						'member_spent'      	=> request_var('spent', 0.00),
+						'member_item_decay'     => request_var('idecay', 0.00),
+					));
+					
+					$db->sql_query('UPDATE ' . MEMBER_DKP_TABLE . ' 
+							SET ' . $query . ' 
+					        WHERE member_id = ' . $this->old_member['member_id'] . '
+							AND member_dkpid= ' . (int) $dkp_id );
+					
+					$db->sql_transaction('commit'); 
+								
+					$log_action = array(
+						'header'              => 'ACTION_MEMBERDKP_UPDATED',
+						'L_NAME'     		  => $this->old_member['member_name'],
+						'L_EARNED_BEFORE'     => $this->old_member['member_earned'],
+						'L_SPENT_BEFORE'      => $this->old_member['member_spent'],
+						'L_EARNED_AFTER'      => request_var('member_earned',0.00),
+						'L_SPENT_AFTER'       => request_var('member_spent', 0.00),
+						'L_UPDATED_BY'        => $user->data['username']);
+						
+					$this->log_insert(array(
+						'log_type'   => $log_action['header'],
+						'log_action' => $log_action)
+					);
+					
+					$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBERDKP_SUCCESS'],  
+						 $this->old_member['member_name']  );
+						trigger_error($success_message . $link);
+				}
+				elseif ($delete)
+				{	
+					    
+					if (( (isset($_POST['hidden_id'])) and (isset($_POST['hidden_dkpid']))   ) == true) 
+					{
+						
+						$del_member = request_var('hidden_id', 0) ; 
+						$del_dkpid = request_var('hidden_dkpid', 0);
+						
+						// get data on dkp to be deleted
 						$sql_array = array(
-						    'SELECT'    => 'sum(r.raid_value) AS member_summa',
+						    'SELECT'    => 'm.member_name, d.member_id, d.member_earned, d.member_spent, d.member_adjustment',
 						    'FROM'      => array(
-						        EVENTS_TABLE => 'e',
-						        RAIDS_TABLE => 'r',
-						        RAID_DETAIL_TABLE    => 'ra'
+						        MEMBER_LIST_TABLE 	=> 'm',
+						        MEMBER_DKP_TABLE    => 'd'
 						    ),
-						    'WHERE'     =>  ' ra.raid_id = r.raid_id 
-						    	and e.event_id = r.event_id
-								AND ra.member_id=' . $this->member['member_id'] . '
-								AND e.event_dkpid=' . (int) $this->member['member_dkpid'],
+						 
+						    'WHERE'     =>  "m.member_id = ' . $del_member . '
+				       				AND d.member_dkpid = " . $del_dkpid . '
+				   					AND d.member_id = m.member_id' 
 						);
 						 
 						$sql = $db->sql_build_query('SELECT', $sql_array);
 						$result = $db->sql_query($sql);
 						while ( $row = $db->sql_fetchrow($result) )
 						{
-							$correct_earned = $row['member_summa'];
-						}
-						$db->sql_freeresult($sql);
-						
-						$sql_array = array(
-						    'SELECT'    => 'sum(item_value) AS member_summa',
-						    'FROM'      => array(
-							        DKPSYS_TABLE  => 'd',
-							        EVENTS_TABLE  => 'e',
-							        RAIDS_TABLE   => 'r',
-							        RAID_ITEMS_TABLE   => 'i'
-						    ),
-						    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
-					    				and e.event_id = r.event_id 
-					    				and r.raid_id = i.raid_id 
-										and i.member_id=' . $this->member['member_id'] . '
-										and e.event_dkpid=' . (int) $this->member['member_dkpid'],
-						);
-						
-						$sql = $db->sql_build_query('SELECT', $sql_array);
-						$result = $db->sql_query($sql);
-						while ( $row = $db->sql_fetchrow($result) )
-						{
-							$correct_spent = $row['member_summa'];
-						}
-						$db->sql_freeresult($sql);
-					}
-
-					$update	 = (isset($_POST['update'])) ? true : false;
-					$delete	 = (isset($_POST['delete'])) ? true : false;	
-		            if ( $update || $delete )
-                    {
-                    	if (!check_form_key('mm_editmemberdkp'))
-						{
-							trigger_error('FORM_INVALID');
-						}
-        			}
-        			
-					if ($update)
-					{
-					
-						$sql_array = array(
-						    'SELECT'    => 'm.member_id, m.member_earned, m.member_spent, m.member_adjustment',
-						    'FROM'      => array(
-							        MEMBER_DKP_TABLE => 'm',
-							        MEMBER_LIST_TABLE => 'l',
-						    ),
-						    'WHERE'     =>  'm.member_id = l.member_id and m.member_id=' . request_var('hidden_id', 0) . ' 
-						    				 and m.member_dkpid=' . request_var('hidden_dkpid', 0),
-						);
-						
-						$sql = $db->sql_build_query('SELECT', $sql_array);
-						$result = $db->sql_query($sql);
-						while ( $row = $db->sql_fetchrow($result) )
-						{
-    						$this->old_member = array(
-								'member_id'			=> $row['member_id'],
-								'member_earned'     => $row['member_earned'],
-								'member_spent'      => $row['member_spent'],
-								'member_adjustment' => $row['member_adjustment']);
+						$this->old_member = array(
+								'member_id'			=> $del_member,
+								'member_name'		=> $row['member_name'],
+								'member_earned'     => (float) $row['member_earned'],
+								'member_spent'      => (float) $row['member_spent'],
+								'member_adjustment' => (float) $row['member_adjustment']);
 						}
 						$db->sql_freeresult($result);
 						
-						$db->sql_transaction('begin'); 
-						$query = $db->sql_build_array('UPDATE', array(
-								'member_earned'     => request_var('member_earned',0.00),
-								'member_spent'      => request_var('member_spent', 0.00),
-								'member_adjustment' => request_var('member_adjustment', 0.00))
-						);
-						
-						$db->sql_query('UPDATE ' . MEMBER_DKP_TABLE . ' 
-										SET ' . $query . ' 
-						        WHERE member_id = ' . $this->old_member['member_id'] . '
-								AND member_dkpid= ' . (int) request_var('hidden_dkpid',0) );
-						
-						$db->sql_transaction('commit'); 
-									
-						$log_action = array(
-							'header'              => 'ACTION_MEMBERDKP_UPDATED',
-							'L_EARNED_BEFORE'     => $this->old_member['member_earned'],
-							'L_SPENT_BEFORE'      => $this->old_member['member_spent'],
-							'L_ADJUSTMENT_BEFORE' => $this->old_member['member_adjustment'],
-							'L_EARNED_AFTER'      => request_var('member_earned',0.00),
-							'L_SPENT_AFTER'       => request_var('member_spent', 0.00),
-							'L_ADJUSTMENT_AFTER'  => request_var('member_adjustment', 0.00),
-							'L_UPDATED_BY'        => $user->data['username']);
+						if (confirm_box(true))
+						{
+							// begin transaction
 							
-						$this->log_insert(array(
-							'log_type'   => $log_action['header'],
-							'log_action' => $log_action)
-						);
+							$db->sql_transaction('begin'); 
+							
+							$names = $del_member;
+							//remove member from attendees table but only if linked to raids in selected dkp pool
+							$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . '
+									WHERE member_id= ' . $del_member . ' 
+									AND raid_id IN( SELECT r.raid_id from ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE .' e 
+										where r.event_id = e.event_id and e.event_dkpid = ' . (int) $del_dkpid . ')';
+							$db->sql_query($sql);
 						
-						$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBERDKP_SUCCESS'],  
-							request_var('hidden_id', 0)   );
+							// delete player loot
+							/*
+							 *  not crossdb compatible but works in ansi sql
+							$sql = 'DELETE i  
+									FROM ' . RAID_ITEMS_TABLE . ' i 
+									INNER JOIN ' . RAIDS_TABLE . ' r 
+									ON r.raid_id = i.raid_id 
+									INNER JOIN ' . EVENTS_TABLE . ' e 
+									ON e.event_id = r.event_id and e.event_dkpid = ' .  $del_dkpid . ' 
+									WHERE i.member_id = ' . $del_member;
+							$db->sql_query($sql);
+							*/
+							$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' where member_id = ' . $del_member . ' and raid_id in ( 
+							select raid_id from ' . RAIDS_TABLE . ' r , ' . EVENTS_TABLE . ' e where r.event_id  = e.event_id and e.event_dkpid = ' . (int) $del_dkpid . ')'; 
+							$db->sql_query($sql);
+							
+							//delete player adjustments
+							$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . '
+									WHERE member_id =' . $del_member . '
+									AND adjustment_dkpid= ' .  $del_dkpid ;
+							$db->sql_query($sql);
+
+							//delete player dkp points
+							$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . 
+									$del_member . ' AND member_dkpid= ' .  $del_dkpid ;									
+							$db->sql_query($sql);
+							
+							//commit
+							$db->sql_transaction('commit');
+								
+							$log_action = array(
+								'header'         => 'ACTION_MEMBERDKP_DELETED', 
+								'L_NAME'       => $this->old_member['member_name'],
+								'L_EARNED'     => $this->old_member['member_earned'],
+								'L_SPENT'      => $this->old_member['member_spent'],
+								'L_ADJUSTMENT' => $this->old_member['member_adjustment']);
+							
+							$this->log_insert(array(
+								'log_type'   => $log_action['header'],
+								'log_action' => $log_action)
+							);
+						
+							$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERDKP_SUCCESS'], $del_member, $del_dkpid);
 							trigger_error($success_message . $link);
-						
-						
-						/******************/
-						$template->assign_vars(array(
-							'L_TITLE'		=> $user->lang['ACP_DKP_EDITMEMBERDKP'],
-							'L_EXPLAIN'		=> $user->lang['ACP_MM_EDITMEMBERDKP_EXPLAIN'],
-							'F_EDIT_MEMBER' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;"),
-							'MEMBER_NAME'           => $this->member['member_name'],
-				
-							'V_MEMBER_ID'         => ( isset($_POST['add']) ) ? '' : $this->member['member_id'],
-							'V_MEMBER_DKPID'        => ( isset($_POST['add']) ) ? '' : $this->member['member_dkpid'],
-				
-							'MEMBER_ID'             => $this->member['member_id'],
-							'MEMBER_EARNED'         => $this->member['member_earned'],
-							'MEMBER_SPENT'          => $this->member['member_spent'],
-							'MEMBER_ADJUSTMENT'     => $this->member['member_adjustment'],
-							'MEMBER_CURRENT'        => ( !empty($this->member['member_current']) ) ? $this->member['member_current'] : '0.00',
-							'MEMBER_LEVEL'          => $this->member['member_level'],
-							'MEMBER_DKPID'          => $this->member['member_dkpid'],
-							'MEMBER_DKPNAME'        => $this->member['member_dkpname'],
-							'MEMBER_RACE'           => $this->member['member_race'],
-							'MEMBER_CLASS'          => $this->member['member_class'],
-							'COLORCODE'          	=> $this->member['colorcode'],
-							'IMAGENAME'          	=> (strlen($this->member['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $this->member['imagename'] . ".png" : '', 
-							'MEMBER_RANK'           => $this->member['member_rank'],
-				
-							'CORRECT_MEMBER_EARNED' => ( !empty($correct_earned) ) ? $correct_earned : '0.00',
-							'CORRECT_MEMBER_SPENT'  => ( !empty($correct_spent) ) ? $correct_spent : '0.00',
-							'C_MEMBER_CURRENT'      => $this->member['member_current'],
-							'MSG_NAME_EMPTY' => $user->lang['FV_REQUIRED_NAME'],
-						
-							)
-						);
-				
-							$this->page_title = 'ACP_DKP_EDITMEMBERDKP';
-							$this->tpl_name = 'dkp/acp_'. $mode;
-
-					}	
-					
-					elseif ($delete)
-						{	
-						    
-							if (( (isset($_POST['hidden_id'])) and (isset($_POST['hidden_dkpid']))   ) == true) 
-							{
-								
-								$del_member = request_var('hidden_id', 0) ; 
-								$del_dkpid = request_var('hidden_dkpid', 0);
-								
-								// get data on dkp to be deleted
-								$sql_array = array(
-								    'SELECT'    => 'm.member_name, d.member_id, d.member_earned, d.member_spent, d.member_adjustment',
-								    'FROM'      => array(
-								        MEMBER_LIST_TABLE 	=> 'm',
-								        MEMBER_DKP_TABLE    => 'd'
-								    ),
-								 
-								    'WHERE'     =>  "m.member_id = ' . $del_member . '
-								       				AND d.member_dkpid = " . $del_dkpid . '
-								   					AND d.member_id = m.member_id' 
-									);
-								 
-								$sql = $db->sql_build_query('SELECT', $sql_array);
-								$result = $db->sql_query($sql);
-								while ( $row = $db->sql_fetchrow($result) )
-								{
-								$this->old_member = array(
-										'member_id'			=> $del_member,
-										'member_name'		=> $row['member_name'],
-										'member_earned'     => (float) $row['member_earned'],
-										'member_spent'      => (float) $row['member_spent'],
-										'member_adjustment' => (float) $row['member_adjustment']);
-								}
-								$db->sql_freeresult($result);
-								
-								if (confirm_box(true))
-								{
-									// begin transaction
-									
-									$db->sql_transaction('begin'); 
-									
-									$names = $del_member;
-									//remove member from attendees table but only if linked to raids in selected dkp pool
-									$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . '
-											WHERE member_id= ' . $del_member . ' 
-											AND raid_id IN( SELECT r.raid_id from ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE .' e 
-												where r.event_id = e.event_id and e.event_dkpid = ' . (int) $del_dkpid . ')';
-									$db->sql_query($sql);
-								
-									// delete player loot
-									/*
-									 *  not crossdb compatible but works in ansi sql
-									$sql = 'DELETE i  
-											FROM ' . RAID_ITEMS_TABLE . ' i 
-											INNER JOIN ' . RAIDS_TABLE . ' r 
-											ON r.raid_id = i.raid_id 
-											INNER JOIN ' . EVENTS_TABLE . ' e 
-											ON e.event_id = r.event_id and e.event_dkpid = ' .  $del_dkpid . ' 
-											WHERE i.member_id = ' . $del_member;
-									$db->sql_query($sql);
-									*/
-									$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' where member_id = ' . $del_member . ' and raid_id in ( 
-									select raid_id from ' . RAIDS_TABLE . ' r , ' . EVENTS_TABLE . ' e where r.event_id  = e.event_id and e.event_dkpid = ' . (int) $del_dkpid . ')'; 
-									$db->sql_query($sql);
-									
-									//delete player adjustments
-									$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . '
-											WHERE member_id =' . $del_member . '
-											AND adjustment_dkpid= ' .  $del_dkpid ;
-									$db->sql_query($sql);
-
-									//delete player dkp points
-									$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . 
-											$del_member . ' AND member_dkpid= ' .  $del_dkpid ;									
-									$db->sql_query($sql);
-									
-									//commit
-									$db->sql_transaction('commit');
-									
-									$log_action = array(
-										'header'         => 'ACTION_MEMBERDKP_DELETED', 
-										'L_NAME'       => $this->old_member['member_name'],
-										'L_EARNED'     => $this->old_member['member_earned'],
-										'L_SPENT'      => $this->old_member['member_spent'],
-										'L_ADJUSTMENT' => $this->old_member['member_adjustment']);
-									
-									$this->log_insert(array(
-										'log_type'   => $log_action['header'],
-										'log_action' => $log_action)
-									);
-								
-
-									$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERDKP_SUCCESS'], $del_member, $del_dkpid);
-									trigger_error($success_message . $link);
-								}
-								else
-								{
-									$s_hidden_fields = build_hidden_fields(
-									array(
-										'delete'	=> true,
-										'hidden_id'		=> $del_member,
-										'hidden_dkpid'	=> $del_dkpid, 
-										'old_member'	=> $this->old_member, 
-										)
-									);
-									confirm_box(false, $user->lang['CONFIRM_DELETE_MEMBERDKP'], $s_hidden_fields);
-									
-								}
-							}
-							else
-							{
-								$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERDKP_FAILED'], 'UNKNOWN', 'UNKNOWN');
-								trigger_error($success_message . $link, E_USER_WARNING);
-							}
-							
-							redirect(append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp&amp;"));	
-											
 						}
 						else
 						{
-							$form_key = 'mm_editmemberdkp';
-							add_form_key($form_key);
-		
-							/******** no post **********/
-							$template->assign_vars(array(
-								'L_TITLE'		=> $user->lang['ACP_DKP_EDITMEMBERDKP'],
-								'L_EXPLAIN'		=> $user->lang['ACP_MM_EDITMEMBERDKP_EXPLAIN'],
-								
-								'F_EDIT_MEMBER' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;"),
-								'MEMBER_NAME'           => $this->member['member_name'],
-					
-								'V_MEMBER_ID'         => ( isset($_POST['add']) ) ? '' : $this->member['member_id'],
-								'V_MEMBER_DKPID'         => ( isset($_POST['add']) ) ? '' : $this->member['member_dkpid'],
-					
-								'MEMBER_ID'             => $this->member['member_id'],
-								'MEMBER_EARNED'         => $this->member['member_earned'],
-								'MEMBER_SPENT'          => $this->member['member_spent'],
-								'MEMBER_ADJUSTMENT'     => $this->member['member_adjustment'],
-								'MEMBER_CURRENT'        => ( !empty($this->member['member_current']) ) ? $this->member['member_current'] : '0.00',
-								'MEMBER_LEVEL'          => $this->member['member_level'],
-								'MEMBER_DKPID'          => $this->member['member_dkpid'],
-								'MEMBER_DKPNAME'        => $this->member['member_dkpname'],
-								'MEMBER_RACE'           => $this->member['member_race'],
-								'MEMBER_CLASS'          => $this->member['member_class'],
-								'COLORCODE'          	=> $this->member['colorcode'],
-								'MEMBER_RANK'           => $this->member['member_rank'],
-								'IMAGENAME'          	=> (strlen($this->member['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $this->member['imagename'] . ".png" : '',   
-								'CORRECT_MEMBER_EARNED' => ( !empty($correct_earned) ) ? $correct_earned : '0.00',
-								'CORRECT_MEMBER_SPENT'  => ( !empty($correct_spent) ) ? $correct_spent : '0.00',
-								'C_MEMBER_CURRENT'      => $this->member['member_current'],
-								'L_ADD_MEMBER_TITLE'    => $user->lang['EDITMEMBER_DKP_TITLE'],
-								'MSG_NAME_EMPTY'        => $user->lang['FV_REQUIRED_NAME'],
+							$s_hidden_fields = build_hidden_fields(
+							array(
+							'delete'	=> true,
+							'hidden_id'		=> $del_member,
+								'hidden_dkpid'	=> $del_dkpid, 
+								'old_member'	=> $this->old_member, 
 								)
 							);
-							/***********************************/
-							$this->page_title = 'ACP_DKP_EDITMEMBERDKP';
-							$this->tpl_name = 'dkp/acp_'. $mode;
-				
+							confirm_box(false, $user->lang['CONFIRM_DELETE_MEMBERDKP'], $s_hidden_fields);
+							
 						}
+					}
+					else
+					{
+						$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERDKP_FAILED'], 'UNKNOWN', 'UNKNOWN');
+						trigger_error($success_message . $link, E_USER_WARNING);
+					}
+					
+					redirect(append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp&amp;"));	
+									
+				}					
+				
+				/* template filling */
+									
+				// Get their correct earned
+				$sql_array = array(
+				    'SELECT'    => 'sum(ra.raid_value) AS raid_value, sum(ra.time_bonus) AS time_bonus, 
+				    		sum(ra.zerosum_bonus) AS zerosum_bonus, sum(ra.raid_decay) AS raid_decay   ',
+				    'FROM'      => array(
+				        EVENTS_TABLE => 'e',
+				        RAIDS_TABLE => 'r',
+				        RAID_DETAIL_TABLE    => 'ra'
+				    ),
+				    'WHERE'     =>  ' ra.raid_id = r.raid_id 
+				    	and e.event_id = r.event_id
+						and ra.member_id=' . $member_id . '
+						and e.event_dkpid=' . (int) $dkp_id,
+				);
+				 
+				$sql = $db->sql_build_query('SELECT', $sql_array);
+				$result = $db->sql_query($sql);
+				while ( $row = $db->sql_fetchrow($result) )
+				{
+					$correct_raid_value = $row['raid_value'];
+					$correct_time_bonus = $row['time_bonus'];
+					$correct_zerosum_bonus = $row['zerosum_bonus'];
+					$correct_raid_decay = $row['raid_decay'];
+				}
+				$db->sql_freeresult($sql);
+					
+				// Get their correct spent
+				$sql_array = array(
+				    'SELECT'    => 'sum(i.item_value) AS item_value, sum(i.item_decay) AS item_decay  ',
+				    'FROM'      => array(
+					        EVENTS_TABLE  => 'e',
+					        RAIDS_TABLE   => 'r',
+					        RAID_ITEMS_TABLE   => 'i'
+				    ),
+				    'WHERE'     =>  'e.event_id = r.event_id 
+			    				and r.raid_id = i.raid_id 
+								and i.member_id=' . $member_id . '
+								and e.event_dkpid=' . (int) $dkp_id,
+				);
+				
+				$sql = $db->sql_build_query('SELECT', $sql_array);
+				$result = $db->sql_query($sql);
+				while ( $row = $db->sql_fetchrow($result) )
+				{
+					$correct_spent = $row['item_value'];
+					$correct_itemdecay = $row['item_decay'];
+				}
+				$db->sql_freeresult($sql);
+				
+				// get Actual dkp points from account
+				$sql_array = array(
+			    'SELECT'    => '
+			    	a.*, 
+					m.member_id, 
+					m.member_dkpid, 
+					m.member_raid_value,
+					m.member_time_bonus,
+					m.member_zerosum_bonus, 
+					m.member_earned,
+					m.member_raid_decay, 
+					m.member_adjustment, 
+					(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep	,
+					m.member_spent,
+					m.member_item_decay,
+					(m.member_spent - m.member_item_decay ) AS gp,
+					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
+					case when (m.member_spent - m.member_item_decay) = 0 then 1 
+					else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (m.member_spent - m.member_item_decay),2) end as er,
+					
+					m.member_lastraid,
+					r1.name AS member_race,
+					s.dkpsys_name, 
+					l.name AS member_class, 
+					r.rank_name, 
+					r.rank_prefix, 
+					r.rank_suffix, 
+					c.class_armor_type AS armor_type ,
+					c.colorcode, 
+					c.imagename ', 
+			 
+			    'FROM'      => array(
+			        MEMBER_LIST_TABLE 	=> 'a',
+			        MEMBER_DKP_TABLE    => 'm',
+			        MEMBER_RANKS_TABLE  => 'r',
+					CLASS_TABLE 		=> 'c', 
+					BB_LANGUAGE			=> 'l', 
+			        DKPSYS_TABLE    	=> 's',
+			    ),
+			    
+			     'LEFT_JOIN' => array(
+			        array(
+			            'FROM'  => array(BB_LANGUAGE => 'r1'),
+			            'ON'    => "r1.attribute_id = a.member_race_id AND r1.language= '" . 
+			        		$config['bbdkp_lang'] . "' AND r1.attribute = 'race'" 
+			            )
+			        ),
+			 
+			    'WHERE'     =>  " a.member_rank_id = r.rank_id 
+			    				AND a.member_guild_id = r.guild_id  
+								AND a.member_id = m.member_id 
+								AND a.member_class_id = c.class_id  
+								AND m.member_dkpid = s.dkpsys_id   
+								AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    
+								AND s.dkpsys_id = " . $dkp_id . '   
+							    AND a.member_id = ' . $member_id,
+				);
+			 
+				$sql = $db->sql_build_query('SELECT', $sql_array);
+																
+				$result = $db->sql_query($sql);
+				$row = $db->sql_fetchrow($result);
+				$db->sql_freeresult($result);
+					
+				// make object
+				$this->member = array(
+					'member_id'         => $row['member_id'],
+					'member_dkpid'		=> $row['member_dkpid'],  
+					'member_dkpname'	=> $row['dkpsys_name'],  
+					'member_name'       => $row['member_name'],
+					'member_raid_value'    => $row['member_raid_value'],
+					'member_time_bonus'    => $row['member_time_bonus'],
+					'member_zerosum_bonus' => $row['member_zerosum_bonus'],
+					'member_earned'        => $row['member_earned'],
+					'member_raid_decay'	   => $row['member_raid_decay'], 
+					'member_adjustment'    => $row['member_adjustment'],
+					'ep'    			   => $row['ep'],
+					'member_spent'         => $row['member_spent'],
+					'member_item_decay'    => $row['member_item_decay'],
+					'gp'     			   => $row['gp'],
+					'er'     			   => $row['er'],
+					'member_current'       => $row['member_current'],
+					'member_race_id'    => $row['member_race_id'], 
+					'member_race'       => $row['member_race'],
+					'member_class_id'   => $row['member_class_id'],
+					'member_class'      => $row['member_class'],
+					'member_level'      => $row['member_level'], 
+					'member_rank_id'    => $row['member_rank_id'],
+					'member_rank'		=> $row['rank_name'],
+					'imagename'			=> $row['imagename'],
+					'colorcode'			=> $row['colorcode'], 
+				);	
+						
+				/******************/
+				$form_key = 'mm_editmemberdkp';
+				add_form_key($form_key);
+						
+				$template->assign_vars(array(
+					'L_TITLE'		=> $user->lang['ACP_DKP_EDITMEMBERDKP'],
+					'L_EXPLAIN'		=> $user->lang['ACP_MM_EDITMEMBERDKP_EXPLAIN'],
+					'F_EDIT_MEMBER' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;"),
+					'MEMBER_NAME'           => $this->member['member_name'],
+					'V_MEMBER_ID'         => ( isset($_POST['add']) ) ? '' : $this->member['member_id'],
+					'V_MEMBER_DKPID'        => ( isset($_POST['add']) ) ? '' : $this->member['member_dkpid'],
+					'MEMBER_ID'            	=> $this->member['member_id'],
+				
+					'RAIDVAL'       		=> $this->member['member_raid_value'],
+					'TIMEBONUS'     		=> $this->member['member_time_bonus'],
+					'ZEROSUM'      		 	=> $this->member['member_zerosum_bonus'],
+					'EARNED'        		=> $this->member['member_earned'],
+					'RAIDDECAY'				=> $this->member['member_raid_decay'], 
+					'ADJUSTMENT'    		=> $this->member['member_adjustment'],
+					'EP'    				=> $this->member['ep'],
+					'SPENT'         		=> $this->member['member_spent'],
+					'ITEMDECAY'     		=> $this->member['member_item_decay'],
+					'GP'     				=> $this->member['gp'],
+					'ER'     				=> $this->member['er'],
+				
+					'MEMBER_EARNED'         => $this->member['member_earned'],
+					'MEMBER_SPENT'          => $this->member['member_spent'],
+					'MEMBER_ADJUSTMENT'     => $this->member['member_adjustment'],
+					'MEMBER_CURRENT'        => ( !empty($this->member['member_current']) ) ? $this->member['member_current'] : '0.00',
+					'MEMBER_LEVEL'          => $this->member['member_level'],
+					'MEMBER_DKPID'          => $this->member['member_dkpid'],
+					'MEMBER_DKPNAME'        => $this->member['member_dkpname'],
+					'MEMBER_RACE'           => $this->member['member_race'],
+					'MEMBER_CLASS'          => $this->member['member_class'],
+					'COLORCODE'          	=> $this->member['colorcode'],
+					'IMAGENAME'          	=> (strlen($this->member['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $this->member['imagename'] . ".png" : '', 
+					'MEMBER_RANK'           => $this->member['member_rank'],
+					'CORRECT_RAIDVAL'  => ( !empty($correct_raid_value) ) ? $correct_raid_value : '0.00',
+					'CORRECT_TIMEBONUS'  => ( !empty($correct_time_bonus) ) ? $correct_time_bonus : '0.00',
+					'CORRECT_ZEROSUM'  => ( !empty($correct_time_bonus) ) ? $correct_time_bonus : '0.00',
+					'CORRECT_RAIDDECAY' => ( !empty($correct_raid_decay) ) ? $correct_raid_decay : '0.00',
+					'CORRECT_MEMBER_SPENT'  => ( !empty($correct_spent) ) ? $correct_spent : '0.00',
+					'CORRECT_ITEMDECAY'  => ( !empty($correct_itemdecay) ) ? $correct_itemdecay : '0.00',
+				));
 			
-				
-				
+				$this->page_title = 'ACP_DKP_EDITMEMBERDKP';
+				$this->tpl_name = 'dkp/acp_'. $mode;
 			break;
 			
 			/***************************************/
