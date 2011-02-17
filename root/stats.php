@@ -233,7 +233,7 @@ while ( $row = $db->sql_fetchrow($members_result) )
     	'COLORCODE'				=> $colorcode,
     	'ID'            		=> $row['member_id'],
 	    'COUNT'         		=> ($row[$previous_source] == $previous_data) ? '&nbsp;' : $member_count,
-        'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']) . '"' ,    
+        'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),    
         'NAME' 					=> $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
         'FIRST_RAID' 			=> ( !empty($row['member_firstraid']) ) ? date($config['bbdkp_date_format'], $row['member_firstraid']) : '&nbsp;',
         'LAST_RAID' 			=> ( !empty($row['member_lastraid']) ) ? date($config['bbdkp_date_format'], $row['member_lastraid']) : '&nbsp;',
