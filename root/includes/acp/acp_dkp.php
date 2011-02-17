@@ -506,7 +506,7 @@ class acp_dkp extends bbDkp_Admin
                     set_config('bbdkp_list_p1', request_var('list_p1', 0), true);
                     set_config('bbdkp_list_p2', request_var('list_p2', 0), true);
                     set_config('bbdkp_list_p3', request_var('list_p3', 0), true);
-                    set_config('bbdkp_prcalculation', request_var('prcalc', 0), true);
+                    set_config('bbdkp_epgp', request_var('prcalc', 0), true);
 
                     //events					
                     set_config('bbdkp_user_elimit', request_var('bbdkp_user_elimit', 0), true);
@@ -523,10 +523,13 @@ class acp_dkp extends bbDkp_Admin
 
 					//raids                    
                     set_config('bbdkp_user_rlimit', request_var('bbdkp_user_rlimit', 0), true);
+                    
                     //epgp
-                    set_config('bbdkp_raiddecaypct', request_var('raiddecaypct', 0), true);
+                    set_config('bbdkp_raiddecaypct',   request_var('raiddecaypct', 0), true);
                     set_config('bbdkp_decayfrequency', request_var('decayfreq', 0), true);
-                    set_config('bbdkp_decayfreqtype', request_var('decayfreqtype', 0), true);
+                    set_config('bbdkp_decayfreqtype',  request_var('decayfreqtype', 0), true);
+                    set_config('bbdkp_basegp', request_var('basegp', 0), true);
+                    
                     //time
                     set_config('bbdkp_dkptimeunit', request_var('dkptimeunit', 0.00), true);
                     set_config('bbdkp_timeunit', request_var('timeunit', 0.00), true);
@@ -641,17 +644,18 @@ class acp_dkp extends bbDkp_Admin
                 		'F_SHOWACHIEV'  	=> $config['bbdkp_show_achiev'], 
                 		'S_FREQTYPE_OPTIONS' => $s_freqtype_options,
                 		
-                		'F_PRCALC'			=> $config['bbdkp_prcalculation'], 
+                		
                 		'USER_ALIMIT' 		=> $config['bbdkp_user_alimit'] , 
                 		'STARTING_DKP'		=>	$config['bbdkp_starting_dkp'],
                 		'INACTIVE_POINT' 	=> $config['bbdkp_inactive_point_adj'] ,
                 		'ACTIVE_POINT' 		=> $config['bbdkp_active_point_adj'] , 
-          				
                 		'USER_ILIMIT' 		=> $config['bbdkp_user_ilimit'] , 
-                		'ITEMDECAYPCT'		=> $config['bbdkp_itemdecaypct'] ,
-
                 		'USER_RLIMIT' 		=> $config['bbdkp_user_rlimit'] , 
-         				//epgp
+
+                		//epgp
+                		'F_PRCALC'			=> $config['bbdkp_epgp'],
+                		'BASEGP'			=> $config['bbdkp_basegp'] , 
+                		'ITEMDECAYPCT'		=> $config['bbdkp_itemdecaypct'] ,
                 		'RAIDDECAYPCT' 	 	=> $config['bbdkp_raiddecaypct'] ,
         				'DECAYFREQ'			=> $config['bbdkp_decayfrequency'] ,
 						'S_FREQTYPE_OPTIONS' =>	$s_freqtype_options, 

@@ -597,15 +597,15 @@ $versions = array(
 			array('bbdkp_user_rlimit', '20', true),
 			
 			//epgp
-			array('bbdkp_prcalculation', 1, true),	
+			array('bbdkp_epgp', 1, true),	
 			array('bbdkp_raiddecaypct', 5, true),	
 			array('bbdkp_decayfrequency', 1, true),
 			array('bbdkp_decayfreqtype', 1, true),
+			array('bbdkp_basegp', 100, true),
 			//time
 			array('bbdkp_dkptimeunit', 5, true),
 			array('bbdkp_timeunit', 30, true),
 			array('bbdkp_standardduration', 1, true),
-			
 			//zerosum
 			array('bbdkp_zerosum', 1, true),
 			array('bbdkp_bankerid', 0, true),

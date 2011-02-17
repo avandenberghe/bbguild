@@ -223,6 +223,7 @@ $lang = array_merge($lang, array(
 'RETURN_DKPINDEX' => 'Return to DKP Index',
 'RETURN_LOG'  => 'Return to Log listing. ',
 'RETURN_RAID'  => 'Return to Raid. ',
+'RETURN_RANK'  => 'Return to Rank List. ',
 'ACP_DKP' => 'bbDKP Adminpanel',
 'ACP_ITEMSTATS' => 'Popup Configuration',
 'ACP_INDEXPAGE' => 'Portal Configuration', 
@@ -241,8 +242,8 @@ $lang = array_merge($lang, array(
 'ACP_EDITRAID_EXPLAIN' => 'Here you can edit your raid.',
 'ACP_LISTRAIDS_EXPLAIN' => 'Here is a list of Raids per DKP pool. Clicking on the raidname brings you in Edit/delete-mode',
 'ACP_DKP_LOGS_EXPLAIN' => 'This lists all the actions in bbDkp. You can sort by username, date, IP or action.',
-'ACP_MM_RANKS_EXPLAIN' => 'Here you can edit raid ranks and name prefix/suffix. (Put new rank on last line and press edit. to delete rank, clear the name of that rank). Rank 99 (the \'out\' rank) is not visible. These custom ranks can be overwritten by the in-game ranks through the armorylink plugin. ',
-'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Guild member list. Here you remove guild members. Attention this will also remove all the member\'s raid history in all Dkp pools! ',
+'ACP_MM_RANKS_EXPLAIN' => 'Here you can add/edit/delete raid ranks and name prefix/suffix. Ranks can be overwritten by the in-game ranks through the armorylink plugin. Custom ranks (90 and 99) are read-only. ',
+'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Guild member list. Shows only visible ranks. You can add new guild members or update existing ones or remove them. (delete their their DKP account first). If you have the Armory plugin you can add new members in batch.',
 'ACP_MM_LISTGUILDS_EXPLAIN' => 'List of guilds. before you add members, you have to add a guild.', 
 'ACP_MM_ADDGUILD_EXPLAIN' => 'Here you can add, edit or delete a guild. ', 
 'ACP_MM_LISTMEMBERDKP_EXPLAIN' => 'Here you can view / change Member DKP. ',
@@ -318,6 +319,7 @@ $lang = array_merge($lang, array(
 'CONFIRM_DELETE_CLASS' => 'Are you sure you want to delete the class %s ?',
 'CONFIRM_CREATE_RAID' => 'Please confirm to create raid on %s.',
 'CONFIRM_DELETE_ATTENDEE' => 'Please confirm deletion of attendee %s on raid %s',
+'CONFIRM_DELETE_RANKS' => 'Please confirm deletion of rank "%s" from Guild "%s"',
 
 // Log Actions
 'ACTION_DEFAULT_DKP_CHANGED' => 'Default DKP Pool changed', 
@@ -465,6 +467,7 @@ $lang = array_merge($lang, array(
 'ERROR_NODKPACCOUNT'    	=>  'Error : no DKP accounts found to transfer ', 
 'ERROR_NOEVENTSDEFINED'    	=>  'Error : no Events defined. cannot add Raid ', 
 'ERROR_NOGUILDMEMBERSDEFINED'    	=>  'Error : no Guildmembers. cannot add Raid ', 
+'ERROR_RANKMEMBERS'	=> 'Cannot delete this rank. There are still members with this rank. ', 
 
 // Submission Success Messages
 'ADMIN_ADD_ADJ_SUCCESS' => 'A %s adjustment of %.2f has been added to the database for your guild.',
@@ -568,8 +571,8 @@ $lang = array_merge($lang, array(
 
 'LOOTSYSTEM' => 'lootsystem', 
 
-'STANDARDDKP' => 'Bonus DKP',
-'STANDARDDKP_EXPLAIN' => '<strong>Description: </strong> A lootsystem where players only receive DKP points as a result of being on time, or staying on bench, or killing a boss, or just plain participating. 
+'STANDARDDKP' => 'Standard DKP',
+'STANDARDDKP_EXPLAIN' => '<strong>Description: </strong>The default DKP system. Players only receive DKP points as a result of being on time, or staying on bench, or killing a boss, or just plain participating. 
 Points are spent on loot just like in zero sum, but there is no redistribution. ',
 'STANDARDDKP_EXAMPLE'=> '<strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points.  <br /> 
 players receive 5 points for slaying a dragon, 2 points for being on time or on attendance. 
@@ -601,7 +604,7 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 'TIMEDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.', 
 
 'EPGP' => 'EPGP Effort / Gearpoints', 
-'EPGP_EXPLAIN' => '<strong>Description: </strong>A Lootsystem where the loot is allocated to the person with the highest ep/gp ratio. Effort points are gained through diverse means, like attending, being on time. Standby could also get EP. Bonuse EP could be given when the boss was killed with skill. Effort Points also decay over time. Loot is then paid with Gear points.', 
+'EPGP_EXPLAIN' => '<strong>Description: </strong>A Lootsystem where the loot is allocated to the person with the highest Effort to Gear ratio. Effort points are Raid bonuses, Time points. and Adjustments. Gear points are the Item cost. EP and GP are both decayed.', 
 'EPGP_EXAMPLE' => '<strong>Example</strong> : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />  
 The item costs 20 Gearpoints<br />
 effortpoints player 1 : 202, EP/GP ratio 10.1<br />
@@ -609,6 +612,29 @@ effortpoints player 2 : 342, EP/GP ratio 17.1<br />
 So the loot would go to player 2 <br />', 
 'EPGP_ADVANTAGE' => '<strong>Advantage</strong> : no inflation, no hoarding. ', 
 'EPGP_DISADVANTAGE' => '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ', 
+'EP'	=> 'EP',
+'GP'	=> 'GP',
+'ER'	=> 'ER%',
+'DECAY_EXPLAIN'	=> 'Earned points and Item cost get depreciated over time. ', 
+'FORMULA' => 'Formula’s',
+'DECAY_N'	=> '<strong>Age of Raid in weeks</strong> = n',
+'DECAY_I'	=> '<strong>Raid Decay percentage</strong> = i', 
+'DECAY_D'	=> '<strong>Decay factor</strong> d = 1 - (1-i)^n ',
+'DECAY_R'	=> '<strong>Raid Value</strong> = r',
+'DECAY_K'	=> '<strong>Raid Decay</strong> k = r * d',
+
+'DECAY_L'	=> '<strong>Item Decay percentage</strong> = l',
+'DECAY_J'	=> '<strong>Item Value</strong> = j',
+'DECAY_F'	=> '<strong>Item Decay</strong> f = j * l',
+
+'EP_DEFINITION'  => '<strong>EP</strong> = Earned points = Raid Bonus + Time Bonuspoints + Zerosum points + Adjustments ',
+'DECAY_EP'  => '<strong>EP After Decay</strong> = EP - EP * d',
+
+'GP_DEFINITION'  => '<strong>GP</strong> = Base GP + Real GP',
+'RGP_DEFINITION'  => '<strong>RGP</strong> = Real Gear points = Item Cost',
+'BGP'  => 'Base gp',
+'BGP_EXPLAIN'  => 'BGP = Base Gearpoint Value. will not be decayed.',
+'DECAY_GP'  => '<strong>GP After Decay</strong> = BGP + RGP - RGP * f',
 
 'MENU_RAIDS' => 'Raids',
 'MENU_EVENTS' => 'Events',
@@ -787,7 +813,8 @@ So the loot would go to player 2 <br />',
 'RAIDEND' => 'Raid End', 
 'RAIDDURATION' => 'Raid Duration', 
 'RAIDDURATION_EXPLAIN' => 'in hours', 
-'RAIDDESCRIPTION' => 'Overview of Raid %s in %s on %s ', 
+'RAIDDESCRIPTION' => 'Overview of Raid %s in %s on %s ',
+'RAIDERDESCRIPTION' => 'Overview of Raider points for Raid on %s in %s on %s for %s', 
 'NEWRAIDDESCRIPTION' => 'Adding a new raid ', 
 'LOOTADD' => 'Add items to %s Raid on %s',
 'LOOTUPD' => 'Updating items to %s Raid on %s',
@@ -809,10 +836,10 @@ So the loot would go to player 2 <br />',
 'X_MEMBERS_S' => '%d member',
 'X_MEMBERS_P' => '%d members',
 'SELECT_1OFX_MEMBERS' => 'Select 1 of %d members...',
-'ZEROSUM' => 'Calculate Zero sum DKP',
-'ZEROSUM_EXPLAIN' => 'Zero Sum DKP : (Item cost/#attendees) will be distributed as Earned points to all attendees at the bosskill. (ex. 120 itemprice / 10 attendees = 12 DKP/attendee)',
 'ZEROSUMBANKER' => 'Zerosum banker account',
-'ZEROSUMBANKER_EXPLAIN' => 'Select the player to which any excess earnings over loot distribution will be posted in order to keep the balance to zero.',
+'ZEROSUMBANKER_EXPLAIN' => 'Select the player to which any Excess earnings over loot distribution will be posted in order to keep the balance to zero.',
+'ZEROSUM_DISTRIBUTEOTHER' => 'Bonus offset', 
+'ZEROSUM_DISTRIBUTEOTHER_EXPLAIN' => 'Check to offset Raid and Time bonuses to the Guildbank account.', 
 'ZS_CHECKED_EXPLAIN' => 'Checked if Zerosum was calculated', 
 'LANG_DE' 	=> 'Deutsch',
 'LANG_FR'	=> 'Français', 
@@ -820,7 +847,6 @@ So the loot would go to player 2 <br />',
 'FREQ0'    => 'Days', 
 'FREQ1'    => 'Weeks',
 'FREQ2'    => 'Months',
-
 
 // Admin Index
 'BBDKP_STARTED' => 'bbDkp Started',
@@ -848,7 +874,6 @@ So the loot would go to player 2 <br />',
 'ALERT_AJAX' => 'There was a problem while using XMLHTTP', 
 'ALERT_OLDBROWSER' => 'Browser does not support HTTP Request', 
 'JQUERY_MISSING'		=> 'jquery.js is not present. You must install jquery.js in adm/style/dkp for the colorwheel to work.', 
-
 
 //Boss progress
 'GENERAL' => 'General settings',
@@ -928,7 +953,6 @@ Imagename (filename without extension), if the zone is completed and the complet
 'RP_BOSSADDED' => 'boss %s was added successfully to zone %s.',   
 'BP_BOSSEDITED' => 'Boss %s changes were saved. ', 
 'BP_BPSAVED' => 'Bossprogress changes were saved. ',
-
 
 'AION_BASEURL' => 'http://db.aion.ign.com/npc/', 
 'EQ_BASEURL' => 'http://eqbeastiary.allakhazam.com/search.shtml?zone=', 

@@ -173,7 +173,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 									m.member_item_decay,
 									(m.member_spent - m.member_item_decay ) AS gp,
 									(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
-									case when (m.member_spent - m.member_item_decay) = 0 then 1 
+									case when (m.member_spent - m.member_item_decay) = 0 then (m.member_earned - m.member_raid_decay + m.member_adjustment)  
 									else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (m.member_spent - m.member_item_decay),2) end as er, 
 									m.member_status,    
 									m.member_lastraid,
@@ -279,6 +279,9 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					'O_ER' 			=> $current_order['uri'][15],
 					'O_CURRENT'		=> $current_order['uri'][16],
 					'O_LASTRAID' 	=> $current_order['uri'][17],
+					'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+					'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
+				 	'S_SHOWTIME' 	=> ($config['bbdkp_dkptimeunit'] == '1') ? true : false,
 					'U_LIST_MEMBERDKP' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;" . URI_DKPSYS . "=". $dkpsys_id . "&amp;mode=mm_listmemberdkp") .'&amp;mod=list&amp;',		
 					'S_NOTMM' => false,
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text, 
@@ -678,10 +681,11 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					'MEMBER_RANK'           => $this->member['member_rank'],
 					'CORRECT_RAIDVAL'  => ( !empty($correct_raid_value) ) ? $correct_raid_value : '0.00',
 					'CORRECT_TIMEBONUS'  => ( !empty($correct_time_bonus) ) ? $correct_time_bonus : '0.00',
-					'CORRECT_ZEROSUM'  => ( !empty($correct_time_bonus) ) ? $correct_time_bonus : '0.00',
+					'CORRECT_ZEROSUM'  => ( !empty($correct_zerosum_bonus) ) ? $correct_zerosum_bonus : '0.00',
 					'CORRECT_RAIDDECAY' => ( !empty($correct_raid_decay) ) ? $correct_raid_decay : '0.00',
 					'CORRECT_MEMBER_SPENT'  => ( !empty($correct_spent) ) ? $correct_spent : '0.00',
 					'CORRECT_ITEMDECAY'  => ( !empty($correct_itemdecay) ) ? $correct_itemdecay : '0.00',
+					
 				));
 			
 				$this->page_title = 'ACP_DKP_EDITMEMBERDKP';
