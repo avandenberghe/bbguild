@@ -1,11 +1,10 @@
 <?php
 /**
- * This acp class manages Manual Raids
  * 
- * @package bbDkp.acp
+ * @package bbDKP.acp
  * @author Ippehe, Sajaki
  * @version $Id$
- * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
+ * @copyright (c) 2009 bbDKP http://code.google.com/p/bbdkp/
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 
  */
@@ -23,10 +22,18 @@ if (! defined('EMED_BBDKP'))
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
+/**
+*  This acp class manages Manual Raids
+*
+* @package bbDKP.acp
+*/
 class acp_dkp_raid extends bbDkp_Admin 
 {
 	private $link;
 	
+	/**
+	 * main Raid function
+	 */
 	public function main($id, $mode) 
 	{
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
@@ -124,7 +131,8 @@ class acp_dkp_raid extends bbDkp_Admin
 				
 				elseif($decayraid)
 				{
-					$this->decayraid($raid_id);
+					$dkpid = request_var('hidden_dkpid', 0);
+					$this->decayraid($raid_id, $dkpid);
 					$this->displayraid($raid_id);
 				}
 				
@@ -150,8 +158,10 @@ class acp_dkp_raid extends bbDkp_Admin
 	
 	}
 	
-	/*
-	 * new raid
+	/** 
+	 * Makes a new raid
+	 * 
+	 * 
 	 */
 	private function newraid()
 	{
@@ -451,8 +461,10 @@ class acp_dkp_raid extends bbDkp_Admin
 		));
 	}
 	
-	/*
+	/**
 	 * displays a raid
+	 * 
+	 * @param int $raid_id the raid to display
 	 */
 	private function displayraid($raid_id)
 	{
@@ -903,8 +915,9 @@ class acp_dkp_raid extends bbDkp_Admin
 				
 	}
 	
-	/*
+	/**
 	 * lists all raids
+	 * 
 	 */
 	private function listraids()
 	{
@@ -1052,8 +1065,10 @@ class acp_dkp_raid extends bbDkp_Admin
 	}
 	
 
-	/*
-	 * add raid to database
+	/**
+	 * adds raid to database
+	 * 
+	 * 
 	 */
 	private function addraid()
 	{
@@ -1194,8 +1209,10 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 	}
 	
-	/*
+	/**
 	 * update a raid
+	 * 
+	 * @param int $raid_id the raid to update
 	 */
 	private function updateraid($raid_id)
 	{
@@ -1332,8 +1349,11 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 	}
 	
-	/*
+	/** 
+	 * 
 	 * delete a raid
+	 * 
+	 * @param int $raid_id
 	 */
 	private function deleteraid($raid_id)
 	{
@@ -1468,7 +1488,8 @@ class acp_dkp_raid extends bbDkp_Admin
     }
    
    
-	/*
+	/**
+	 * 
 	 * this function adds attendee 
 	 */ 
 	private function addraider($raid_id)
@@ -1526,7 +1547,8 @@ class acp_dkp_raid extends bbDkp_Admin
         }
     }
     
-    /*
+    /**
+     * 
      * updates dkp record
      */
     private function update_dkprecord($raid_value, $timebonus, $raidstart, $dkpid, $member_id)
@@ -1565,7 +1587,7 @@ class acp_dkp_raid extends bbDkp_Admin
        return true;
     }
     
-    /*
+    /**
      * adds dkp record
      */
     private function add_dkprecord($raid_value, $timebonus, $raidstart, $dkpid, $member_id)
@@ -1589,7 +1611,7 @@ class acp_dkp_raid extends bbDkp_Admin
     }
  
 
-	/*
+	/**
 	 * this function deletes 1 attendee from a raid 
 	 * 
 	 * if attendee had bought items that were distributed then the redistributed zerosum points are reversed aswell
@@ -1672,7 +1694,8 @@ class acp_dkp_raid extends bbDkp_Admin
 	}
 	
 	/**
-    * remove_dkp : removes raid value
+    * remove_dkp : removes raid value from dkp account
+    * called when deleting raid
     *
     * @param $members_array
     * @param $raid_value
@@ -1768,9 +1791,11 @@ class acp_dkp_raid extends bbDkp_Admin
     
   
     	
-	/*
+	/**
 	 * this function shows raider editform 
 	 * 
+	 * @param $raid_id the raid to edit
+	 * @param $attendee_id  the raider to edit
 	 */ 
 	private function editraider($raid_id, $attendee_id)
 	{
@@ -1868,13 +1893,13 @@ class acp_dkp_raid extends bbDkp_Admin
 	}
 	
 	
-	/***
+	/**
 	 * Set active or inactive based on last raid. only for current raids dkp pool
 	 * Update active inactive player status column member_status
 	 * active = 1 inactive = 0
-	 * @return bool
-	 * @param $dkpid int
-	 *
+     *
+	 * @param int $dkpid 
+	 * @return bool 
 	 */
 	private function update_player_status($dkpid)
 	{
@@ -2002,9 +2027,11 @@ class acp_dkp_raid extends bbDkp_Admin
 		return true;
 	}
 	
-	/*
+	/**
 	 * called when deleting a whole raid : removes all loot from raid and updates dkp account
 	 * 
+	 * @param int $raid_id the raid from which all loot will be removed.
+	 * @todo fix for zerosum
 	 */
 	private function remove_loot($raid_id)
 	{
@@ -2132,14 +2159,16 @@ class acp_dkp_raid extends bbDkp_Admin
 	}
 		
 	
-	/*
+	/**
 	 * function to decay one specific raid
 	 * calling this function multiple time will not lead to cumulative decays, just the delta is applied.
+	 * 
+	 * @param int $raid_id the raid id to decay
+	 * @param int $dkpid dkpid for adapting accounts
 	 */
-	private function decayraid($raid_id)
+	private function decayraid($raid_id, $dkpid)
 	{
 		global $config, $db;
-		
 		//loop raid detail, pass earned and timediff to decay function, update raid detail
 		
 		//get old raidinfo
@@ -2163,12 +2192,11 @@ class acp_dkp_raid extends bbDkp_Admin
 				);
 		}
 		$db->sql_freeresult ($result);
-		
+
 		//get timediff
 		$now = getdate();
 		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $raidstart  ;
-		$dkpid = request_var('hidden_dkpid', 0);
-		
+
 		// loop raid detail
 		foreach($raid as $member_id => $raiddetail)
 		{
@@ -2185,9 +2213,8 @@ class acp_dkp_raid extends bbDkp_Admin
 				WHERE member_id = " . ( int ) $member_id . ' 
 				and member_dkpid = ' . $dkpid ;
 			$db->sql_query ( $sql );
-			
 		}
-		
+
 		//now loop raid items detail
 		$sql = 'select i.item_id, i.member_id, i.item_value, i.item_decay from ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id; 
 		$result = $db->sql_query ($sql);
@@ -2222,13 +2249,13 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 	}
 	
-	/*
+	/**
 	 * calculates decay on epoch timedifference (seconds) and earned
 	 * we decay the sum of raid value, time bonus and zerosumpoints 
 	 * 
-	 * $value = the value to decay
-	 * $timediff = diff in seconds since raidstart
-	 * $mode = 1 for raid, 2 for items
+	 * @param int $value = the value to decay
+	 * @param int $timediff = diff in seconds since raidstart
+	 * @param int $mode = 1 for raid, 2 for items
 	 * 
 	 */
 	public function decay($value, $timediff, $mode)
@@ -2281,6 +2308,50 @@ class acp_dkp_raid extends bbDkp_Admin
 		$decay = round($value * (1 - pow(1-$i, $n)), 2); 
 		
 		return $decay;
+
+	}
+	
+	/**
+	 * Recalculates and updates decay
+	 * loops all raids - caution this may run a long time
+	 * 
+	 * @param $mode one for recalculating, 0 for setting decay to zero.
+	 */
+	public function sync_decay($mode)
+	{
+		global $db;
+		switch ($mode)
+		{
+			case 0:
+				// set all to 0
+				//  update item detail to new decay value
+				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = 0 ' ;
+				$db->sql_query ( $sql );
+				
+				// update dkp account, deduct old, add new decay
+				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_raid_decay = 0, member_item_decay = 0';
+				$db->sql_query ( $sql );
+				
+				$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = 0'; 
+				$db->sql_query ( $sql);
+				
+				break;
+				
+			case 1:
+				// synchronise
+				// loop all raids
+				$sql = 'select e.event_dkpid, r.raid_id from '. RAIDS_TABLE. ' r, ' . EVENTS_TABLE . ' e where e.event_id = r.event_id ' ;
+				$result = $db->sql_query ($sql);
+				while ( ($row = $db->sql_fetchrow ( $result )) ) 
+				{
+					$this->decayraid($row['r.raid_id'], $row['event_dkpid']);
+				}
+				$db->sql_freeresult ($result);
+				
+				break;
+			
+		}
+		return true;
 		
 	}
 	

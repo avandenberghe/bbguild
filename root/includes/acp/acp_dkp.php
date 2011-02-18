@@ -1,9 +1,7 @@
 <?php
 /**
- * This acp class manages setting configs, logging
  * 
  * @package bbDkp.acp
- * @author Ippehe, Sajaki
  * @version $Id$
  * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -23,110 +21,17 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang ( array ('mods/dkp_admin' ));
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
-
+/**
+ * This acp class manages setting configs, logging
+ * @author Ippehe, Sajaki
+ *
+ */
 class acp_dkp extends bbDkp_Admin
 {
-	/*
-	 * gets the verbose log entry
-	 */
-   function getaction($haystack,$tag)
-   {  
-        $found=''; 
-   		
-   		$array_temp = (array) simplexml_load_string($haystack);
-        foreach ($array_temp as $key => $value) 
-        {
-        	if ($key == $tag)
-        	{
- 	           $found = $value;
-        	}
-        }
-        return $found;
-   
-   }
-   
-   /*
-    * Replaces an language array key preceded by 'L_' with its value or if not found, with the key
-    * 
-    */
-    function lang_replace ($variable)
-    {
-        global $user;
-        preg_match("/L_(.+)/", $variable, $to_replace);
-        if ((isset($to_replace[1])) && (isset($user->lang[$to_replace[1]]))) 
-        {
-            $variable = str_replace('L_' . $to_replace[1], $user->lang[$to_replace[1]], $variable);
-        }
-        return $variable;
-    }
-                
     /**
-     * deletes marked bbDKP log entries
+     * main Settings function
+     * 
      */
-	function delete_log ($marked)
-    {
-    	global $db, $user, $phpEx;
-    	
-    	//if marked array isnt empty
-    	if (sizeof($marked) && is_array($marked))
-    	{
-		    if (confirm_box(true))
-			{
-				//they hit yes
-				$sql = 'DELETE FROM ' . LOGS_TABLE . ' WHERE 1=1 ';
-
-				$sql_in = array();
-				foreach ($marked as $mark)
-				{
-					$sql_in[] = $mark;
-				}
-				$sql .= ' AND ' . $db->sql_in_set('log_id', $sql_in);
-				$db->sql_query($sql);
-				
-				//ACTION_LOG_DELETED
-				$log_action = array(
-                	'header'  => 	'L_ACTION_LOG_DELETED',
-                	'L_ADDED_BY' => $user->data['username'],
-                  	'L_LOG_ID'   => implode(",", $sql_in), 
-					);
-                  
-                  $this->log_insert(
-                  array(
-                  	'log_type'   => $log_action['header'],
-                  	'log_action' => $log_action)
-                  );
-                unset($sql_in);     
-                            
-				//redirect to listing
-				$meta_info = append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs");
-				meta_refresh(3, $meta_info);
-	
-				$message =  '<a href="' . append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '">' .
-				$user->lang['RETURN_LOG'] . '</a><br />' . 
-					sprintf($user->lang['ADMIN_LOG_DELETE_SUCCESS'],implode($marked));
-				trigger_error($message, E_USER_WARNING);
-					 
-			}
-			else
-			{
-				// display confirmation 
-				confirm_box(false, $user->lang['CONFIRM_DELETE_BBDKPLOG'], build_hidden_fields(array(
-					'delmarked'	=> true,
-					'mark'		=> $marked))
-				);
-			}
-			
-			// they hit no
-			$message =  '<a href="' . append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '">' . $user->lang['RETURN_LOG'] .'</a><br />' . 
-				sprintf($user->lang['ADMIN_LOG_DELETE_FAIL'],implode($marked));
-			
-			trigger_error($message, E_USER_WARNING);
-			
-    	}
-			
-    }
-    
-    
     function main ($id, $mode)
     {
         global $db, $user, $auth, $template, $sid, $cache;
@@ -139,10 +44,8 @@ class acp_dkp extends bbDkp_Admin
         switch ($mode) 
         {
         	
-            /****
+            /**
              * MAINPAGE
-             * 
-             * 
              */
             case 'mainpage':
                 
@@ -461,37 +364,43 @@ class acp_dkp extends bbDkp_Admin
 			 * DKP CONFIG
 			 **************/
             case 'dkp_config':
-                
+            	
                 $games = array(
-                    'wow'        => "World of Warcraft" , 
-                    'lotro'      => "The Lord of the Rings Online" , 
-                    'eq'         => "EverQuest" , 
-                    'daoc'       => "Dark Age of Camelot" , 
-                    'vanguard' 	 => "Vanguard - Saga of Heroes" , 
-                    'eq2'        => "EverQuest II" , 
-                    'warhammer'  => "Warhammer Online" ,
-                    'aion'       => "Aion" , 
-                    'FFXI'       => "Final Fantasy XI");
-
-
+                    'wow'        => $user->lang['WOW'], 
+                    'lotro'      => $user->lang['LOTRO'], 
+                    'eq'         => $user->lang['EQ'], 
+                    'daoc'       => $user->lang['DAOC'], 
+                    'vanguard' 	 => $user->lang['VANGUARD'],
+                    'eq2'        => $user->lang['EQ2'],
+                    'warhammer'  => $user->lang['WARHAMMER'],
+                    'aion'       => $user->lang['AION'],
+                    'FFXI'       => $user->lang['FFXI']
+                );
                 
                 $submit = (isset($_POST['update'])) ? true : false;
-                
-                $day = request_var('bbdkp_start_dd', 0);
-                $month = request_var('bbdkp_start_mm', 0);
-                $year = request_var('bbdkp_start_yy', 0);
-                $bbdkp_start = mktime(0, 0, 0, $month, $day, $year);
-                
-                if ($submit) 
+                $timebonus_synchronise = (isset($_POST['timebonus_synchronise'])) ? true : false;
+                $zerosum_synchronise = (isset($_POST['zerosum_synchronise'])) ? true : false;
+                $decay_synchronise = (isset($_POST['decay_synchronise'])) ? true : false;
+
+                if ($submit || $timebonus_synchronise || $zerosum_synchronise )
                 {
                 	if (!check_form_key('acp_dkp'))
                 	{
                 		trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);	
                 	}
+        		}
+        		             	
+                if ($submit) 
+                {
                     set_config('bbdkp_guildtag', utf8_normalize_nfc(request_var('guildtag', '', true)), true);
                     set_config('bbdkp_default_realm', utf8_normalize_nfc(request_var('realm', '', true)), true);
                     set_config('bbdkp_default_region', utf8_normalize_nfc(request_var('region', '', true)), true);
                     set_config('bbdkp_dkp_name', request_var('dkp_name', ''), true);
+
+					$day = request_var('bbdkp_start_dd', 0);
+                	$month = request_var('bbdkp_start_mm', 0);
+                	$year = request_var('bbdkp_start_yy', 0);
+                	$bbdkp_start = mktime(0, 0, 0, $month, $day, $year);
                     set_config('bbdkp_eqdkp_start', $bbdkp_start, true);
                     set_config('bbdkp_user_nlimit', request_var('bbdkp_user_nlimit', 0), true);
                     set_config('bbdkp_roster_layout', request_var('rosterlayout', 0), true);
@@ -546,6 +455,43 @@ class acp_dkp extends bbDkp_Admin
                     
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
+                }
+                
+         		if ($timebonus_synchronise) 
+                {
+                }	
+         		
+                if ($timebonus_synchronise) 
+                {
+                	
+                }	
+                
+                if($decay_synchronise)
+                {
+                	
+                	if (confirm_box ( true )) 
+					{
+						// decay this item
+						if ( !class_exists('acp_dkp_raid')) 
+						{
+							require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
+						}
+						$acp_dkp_raid = new acp_dkp_raid;
+						$acp_dkp_raid->sync_decay($config['bbdkp_decay']);
+					}
+					else 
+					{
+									
+						$s_hidden_fields = build_hidden_fields ( array (
+							'deleteitem' 	  => true, 
+							'hidden_old_item' => $old_item
+						));
+			
+						$template->assign_vars ( array (
+							'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
+						confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $old_item ['item_name'], $old_item ['member_name']  ), $s_hidden_fields );
+					}
+					
                 }
                 
                 $languages = array(
@@ -624,7 +570,6 @@ class acp_dkp extends bbDkp_Admin
 					$s_bankerlist_options .= '<option value="' . $row['member_id'] . '" '.$selected.'> ' . $row['member_name'] . '</option>';  
 				}
 
-                
     		    add_form_key('acp_dkp');
                 
                 $template->assign_vars(array(
@@ -1118,5 +1063,107 @@ class acp_dkp extends bbDkp_Admin
 			
         }
     }
+    
+	/**
+	 * gets the verbose log entry
+	 */
+   function getaction($haystack,$tag)
+   {  
+        $found=''; 
+   		
+   		$array_temp = (array) simplexml_load_string($haystack);
+        foreach ($array_temp as $key => $value) 
+        {
+        	if ($key == $tag)
+        	{
+ 	           $found = $value;
+        	}
+        }
+        return $found;
+   
+   }
+   
+   /**
+    * Replaces an language array key preceded by 'L_' with its value or if not found, with the key
+    * 
+    */
+    function lang_replace ($variable)
+    {
+        global $user;
+        preg_match("/L_(.+)/", $variable, $to_replace);
+        if ((isset($to_replace[1])) && (isset($user->lang[$to_replace[1]]))) 
+        {
+            $variable = str_replace('L_' . $to_replace[1], $user->lang[$to_replace[1]], $variable);
+        }
+        return $variable;
+    }
+                
+    /**
+     * 
+     * deletes marked bbDKP log entries
+     */
+	function delete_log ($marked)
+    {
+    	global $db, $user, $phpEx;
+    	
+    	//if marked array isnt empty
+    	if (sizeof($marked) && is_array($marked))
+    	{
+		    if (confirm_box(true))
+			{
+				//they hit yes
+				$sql = 'DELETE FROM ' . LOGS_TABLE . ' WHERE 1=1 ';
+
+				$sql_in = array();
+				foreach ($marked as $mark)
+				{
+					$sql_in[] = $mark;
+				}
+				$sql .= ' AND ' . $db->sql_in_set('log_id', $sql_in);
+				$db->sql_query($sql);
+				
+				//ACTION_LOG_DELETED
+				$log_action = array(
+                	'header'  => 	'L_ACTION_LOG_DELETED',
+                	'L_ADDED_BY' => $user->data['username'],
+                  	'L_LOG_ID'   => implode(",", $sql_in), 
+					);
+                  
+                  $this->log_insert(
+                  array(
+                  	'log_type'   => $log_action['header'],
+                  	'log_action' => $log_action)
+                  );
+                unset($sql_in);     
+                            
+				//redirect to listing
+				$meta_info = append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs");
+				meta_refresh(3, $meta_info);
+	
+				$message =  '<a href="' . append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '">' .
+				$user->lang['RETURN_LOG'] . '</a><br />' . 
+					sprintf($user->lang['ADMIN_LOG_DELETE_SUCCESS'],implode($marked));
+				trigger_error($message, E_USER_WARNING);
+					 
+			}
+			else
+			{
+				// display confirmation 
+				confirm_box(false, $user->lang['CONFIRM_DELETE_BBDKPLOG'], build_hidden_fields(array(
+					'delmarked'	=> true,
+					'mark'		=> $marked))
+				);
+			}
+			
+			// they hit no
+			$message =  '<a href="' . append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '">' . $user->lang['RETURN_LOG'] .'</a><br />' . 
+				sprintf($user->lang['ADMIN_LOG_DELETE_FAIL'],implode($marked));
+			
+			trigger_error($message, E_USER_WARNING);
+			
+    	}
+			
+    }
+        
 }
 ?>

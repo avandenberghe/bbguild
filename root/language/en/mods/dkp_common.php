@@ -96,6 +96,17 @@ $lang = array_merge($lang, array(
 'LINK8' => 'http://www.vanguardmmorpg.com', 
 'LINK8T' => 'Vanguard', 
 
+//games supported
+'WOW'        => 'World of Warcraft' , 
+'LOTRO'      => 'The Lord of the Rings Online' , 
+'EQ'         => 'EverQuest' , 
+'DAOC'       => 'Dark Age of Camelot' , 
+'VANGUARD' 	 => 'Vanguard - Saga of Heroes' , 
+'EQ2'        => 'EverQuest II' , 
+'WARHAMMER'  => 'Warhammer Online' ,
+'AION'       => 'Aion' , 
+'FFXI'       => 'Final Fantasy XI', 
+
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status', 
 'RECRUIT_CLOSED' => 'Closed !', 
