@@ -223,6 +223,15 @@
  	</dd>
 </dl> 
 
+<dl><dt>  
+     <label for="timebonus_synchronise">{L_RESYNC_TIMEDKP}:</label><br />{L_RESYNC_TIMEDKP_EXPLAIN}
+     <br />
+     </dt>
+     <dd>
+		<input type="submit" name="timebonus_synchronise" value="{L_RUN}" class="button1" /> 	 
+ 	</dd>
+</dl> 
+
 <dl>
 	<dt>   
 	<label for="dkptimeunit">{L_DKPTIMEUNIT}:</label>
@@ -268,6 +277,16 @@
 </dl> 
 
 <dl><dt>  
+     <label for="zerosum_synchronise">{L_RESYNC_ZEROSUM}:</label><br />{L_RESYNC_ZEROSUM_EXPLAIN}
+     <br />
+     </dt>
+     <dd>
+		<input type="submit" name="zerosum_synchronise" value="{L_RUN}" class="button1" /> 	 
+ 	</dd>
+</dl> 
+
+
+<dl><dt>  
      <label for="add_loot_dkp">{L_ZEROSUM_DISTRIBUTEOTHER}:</label>
      <br />{L_ZEROSUM_DISTRIBUTEOTHER_EXPLAIN}
      </dt>
@@ -286,7 +305,6 @@
  	</dd>
 </dl> 
 
-
 <hr/>
 <h3>{L_DECAY}</h3>
 <p>{L_DECAY_EXPLAIN}</p>
@@ -297,6 +315,15 @@
      </dt>
      <dd>
      <input name="decay_activate" type="checkbox" id="decay_activate" value="1" <!-- IF F_DECAYACTIVATE == 1 --> checked="checked"<!-- ENDIF -->  />
+ 	</dd>
+</dl> 
+
+<dl><dt>  
+     <label for="decay_synchronise">{L_RESYNC_DECAY}:</label><br />{L_RESYNC_DECAY_EXPLAIN}
+     <br />
+     </dt>
+     <dd>
+		<input type="submit" name="decay_synchronise" value="{L_RUN}" class="button1" /> 	 
  	</dd>
 </dl> 
 
@@ -381,12 +408,7 @@
 </dd>
 </dl>
 
-
-
-
-
 </fieldset>
- 
 
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
 	{S_FORM_TOKEN}
@@ -397,4 +419,3 @@
 
 
 <!-- INCLUDE dkp/overall_footer.html -->
-

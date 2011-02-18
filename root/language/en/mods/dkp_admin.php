@@ -637,6 +637,18 @@ So the loot would go to player 2 <br />',
 'BGP_EXPLAIN'  => 'BGP = Base Gearpoint Value. will not be decayed.',
 'DECAY_GP'  => '<strong>GP After Decay</strong> = BGP + RGP - RGP * l',
 
+//resynchronisation
+'RESYNC_TIMEDKP'				=> 'Resynchronise Time Bonus',
+'RESYNC_TIMEDKP_EXPLAIN'		=> 'First sets to zero all existing time bonuses. If Time bonus flag is set, recalculates Time bonuses according to Start and end time of each raid.',
+'RESYNC_TIMEDKP_CONFIRM'		=> 'Are you sure you wish to resynchronise Time bonuses? This will affect all DKP balances.',
+'RESYNC_ZEROSUM'				=> 'Resynchronise Zero sum',
+'RESYNC_ZEROSUM_CONFIRM'		=> 'Are you sure you wish to resynchronise all zerosum values? This will affect all DKP balances. ',
+'RESYNC_ZEROSUM_EXPLAIN'		=> 'First sets to zero all existing zero sum bonuses. If zerosum flag is set, recalculates according to item values for each raid.',
+'RESYNC_DECAY'					=> 'Resynchronise decay values',
+'RESYNC_DECAY_CONFIRM'			=> 'Are you sure you wish to resynchronise Decay values? This will affect all EP end GP values. ',
+'RESYNC_DECAY_EXPLAIN'			=> 'First sets all raid and item decay to zero, then if Decay flag is set, recalculates Decay according to parameters.',
+
+
 'MENU_RAIDS' => 'Raids',
 'MENU_EVENTS' => 'Events',
 'MENU_ITEMHIST' => 'Item History',
