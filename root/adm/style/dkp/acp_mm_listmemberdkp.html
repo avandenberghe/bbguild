@@ -26,20 +26,29 @@
     <th align="left" width="5%"><a href="{U_LIST_MEMBERDKP}o={O_RANK}">{L_RANK}</a></th>
     <th align="left" width="5%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_LEVEL}">{L_LEVEL}</a></th>
     <th align="left" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_CLASS}">{L_CLASS}</a></th>
-    
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
+	<!-- IF S_SHOWTIME -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_TIMEBONUS}">{L_TIMEVALUE}</a></th>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWZS -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ZSBONUS}">{L_ZSVALUE}</a></th>
+    <!-- ENDIF -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_EARNED}">{L_EARNED}</a></th>
+    <!-- IF S_SHOWDECAY -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_RDECAY}">{L_DECAY}</a></th>
+    <!-- ENDIF -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ADJUSTMENT}">{L_ADJUSTMENT}</a></th>
+    <!-- IF S_SHOWEPGP -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_EP}">{L_EP}</a></th>
-
+	<!-- ENDIF -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_SPENT}">{L_SPENT}</a></th>
+    <!-- IF S_SHOWDECAY -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_IDECAY}">{L_DECAY}</a></th>
+	<!-- ENDIF -->
+	<!-- IF S_SHOWEPGP -->
 	<th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_GP}">{L_GP}</a></th>
-
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ER}">{L_ER}</a></th>
+	<!-- ENDIF -->    
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_CURRENT}">{L_CURRENT}</a></th>
     <th align="left" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_LASTRAID}">{L_LASTRAID}</a></th>
     <th align="center" width="5">{L_ACTION}</th>
@@ -56,20 +65,29 @@
     <td width="5%" style="text-align:center;" nowrap="nowrap">{members_row.RANK}</td>
     <td width="5%" style="text-align:center;" nowrap="nowrap">{members_row.LEVEL}</td>
     <td width="10%" style="text-align:left; nowrap="nowrap"><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;<span style="color:{members_row.COLORCODE}" >{members_row.CLASS}</span></td>
-    
     <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.RAIDVAL}</td>
+	<!-- IF S_SHOWTIME -->
     <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.TIMEBONUS}</td>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWZS -->
     <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.ZEROSUM}</td>
-    
+    <!-- ENDIF -->
     <td class="row2"  width="10%" style="text-align:right;" nowrap="nowrap" ><span class="positive"><strong>{members_row.EARNED}</strong></span></td>
+    <!-- IF S_SHOWDECAY -->
     <td width="10%" style="text-align:right;" nowrap="nowrap" class="negative">{members_row.RAIDDECAY}</td>
+    <!-- ENDIF -->
     <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.ADJUSTMENT}</td>
+    <!-- IF S_SHOWEPGP -->
     <td class="row2" width="10%" style="text-align:right;" nowrap="nowrap"><span class="positive"><strong>{members_row.EP}</strong></span></td>
-    
+     <!-- ENDIF -->
     <td width="10%" style="text-align:right;" nowrap="nowrap" class="negative">{members_row.SPENT}</td>
+    <!-- IF S_SHOWDECAY -->
     <td width="10%" style="text-align:right;" nowrap="nowrap" class="negative">{members_row.ITEMDECAY}</td>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWEPGP -->
     <td class="row2" width="10%" style="text-align:right;" nowrap="nowrap"><span class="negative"><strong>{members_row.GP}</strong></span></td>
     <td class="row2" width="10%" style="text-align:center;" nowrap="nowrap"><span><strong>{members_row.ER}</strong></td>
+    <!-- ENDIF -->
     <td class="row2" width="10%" style="text-align:right;" nowrap="nowrap"><span class="positive"><strong>{members_row.CURRENT}</strong></td>
 
     <td width="10%" nowrap="nowrap" >{members_row.LASTRAID}</td>
@@ -80,7 +98,20 @@
   </tr>
   <!-- END members_row -->
   <tr>
-    <th colspan="20" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+    <th colspan="7" class="footer">{LISTMEMBERS_FOOTCOUNT}</th>
+    <!-- IF S_SHOWTIME -->
+    <th colspan="1" class="footer"></th>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWZS -->
+    <th colspan="1" class="footer"></th>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY -->
+    <th colspan="2" class="footer"></th>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWEPGP -->
+    <th colspan="3" class="footer"></th>
+    <!-- ENDIF -->
+    <th colspan="6" class="footer"></th>
   </tr>
 </table>
 	<input type="hidden" NAME="dkpsys" VALUE="{DKPSYS}" />

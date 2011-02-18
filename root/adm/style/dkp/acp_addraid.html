@@ -37,7 +37,7 @@ function switch_event_val()
   document.addraid.raid_value.value = eventvalue[eventvalue.length-1]; 
 }
 
-/* calculates time dkp bonus from raid duration and config settings */
+/* calculates raid duration */
 function durationcalc()
 {
 	var startday = document.addraid.d.options[document.addraid.d.selectedIndex].text;
@@ -80,17 +80,25 @@ function durationcalc()
 		document.addraid.raid_duration.value = 0;
 	}
 	
+	return document.addraid.raid_duration.value;
+}
+<!-- IF S_SHOWTIME -->
+/* time dkp bonus from duration */ 
+function update_timebonus()
+{
+	var duration = durationcalc();
 	var dkp_per_timeunit = document.addraid.dkptimeunit.value;
 	var unitminutes = document.addraid.timeunit.value;
 	var dkp_bonus = 0;
 	if(unitminutes > 0)
 	{
-		dkp_bonus = (dkp_per_timeunit * (diff*60) / unitminutes ).toFixed(2);
+		dkp_bonus = (dkp_per_timeunit * (duration * 60) / unitminutes ).toFixed(2);
 	}
 	
 	document.addraid.time_bonus.value = dkp_bonus;
 }
-	
+<!-- ENDIF -->
+
 function fnSearch( searchField, searchItem )
 {
     var searchBox = document.addraid.elements[searchField];
@@ -226,27 +234,27 @@ function fnRemoveMember()
 	<dl>
 		<dt><label>{L_RAIDSTART}:</label></dt>
 		<dd>
-			<select name="d" onChange="javascript:durationcalc();">{S_RAIDDATE_DAY_OPTIONS}</select>
-			<select name="mo" onChange="javascript:durationcalc();">{S_RAIDDATE_MONTH_OPTIONS}</select> 
-			<select name="Y" onChange="javascript:durationcalc();">{S_RAIDDATE_YEAR_OPTIONS}</select>
+			<select name="d"  <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF -->>{S_RAIDDATE_DAY_OPTIONS}</select>
+			<select name="mo" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDDATE_MONTH_OPTIONS}</select> 
+			<select name="Y" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDDATE_YEAR_OPTIONS}</select>
 	   </dd>
 		<dd>
-			<select name="sh" onChange="javascript:durationcalc();">{S_RAIDSTART_H_OPTIONS}</select>
-			<select name="smi" onChange="javascript:durationcalc();">{S_RAIDSTART_MI_OPTIONS}</select> 
-			<select name="ss" onChange="javascript:durationcalc();">{S_RAIDSTART_S_OPTIONS}</select>
+			<select name="sh" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_H_OPTIONS}</select>
+			<select name="smi" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_MI_OPTIONS}</select> 
+			<select name="ss" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_S_OPTIONS}</select>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{L_RAIDEND}:</label></dt>
 		<dd>
-			<select name="ed" onChange="javascript:durationcalc();" >{S_RAIDENDDATE_DAY_OPTIONS}</select>
-			<select name="emo" onChange="javascript:durationcalc();" >{S_RAIDENDDATE_MONTH_OPTIONS}</select> 
-			<select name="eY" onChange="javascript:durationcalc();" >{S_RAIDENDDATE_YEAR_OPTIONS}</select>
+			<select name="ed" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();" <!-- ENDIF --> >{S_RAIDENDDATE_DAY_OPTIONS}</select>
+			<select name="emo" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();" <!-- ENDIF --> >{S_RAIDENDDATE_MONTH_OPTIONS}</select> 
+			<select name="eY" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ENDIF --> >{S_RAIDENDDATE_YEAR_OPTIONS}</select>
 		</dd>
 		<dd>
-			<select name="eh" onChange="javascript:durationcalc();">{S_RAIDEND_H_OPTIONS}</select>
-			<select name="emi" onChange="javascript:durationcalc();">{S_RAIDEND_MI_OPTIONS}</select> 
-			<select name="es" onChange="javascript:durationcalc();">{S_RAIDEND_S_OPTIONS}</select>
+			<select name="eh" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_H_OPTIONS}</select>
+			<select name="emi" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_MI_OPTIONS}</select> 
+			<select name="es" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_S_OPTIONS}</select>
 		</dd>
 	</dl>
 	
@@ -256,6 +264,9 @@ function fnRemoveMember()
 			<input readonly="readonly" type="text" name="raid_duration" id="raid_duration" size="8" maxlength="7" value="{RAID_DURATION}" class="input"  style="border: none"/>
 		</dd>
 	</dl>
+	
+	<!-- IF S_SHOWTIME -->
+	
 	<input type="hidden" name="dkptimeunit" value="{DKPTIMEUNIT}" /> 
 	<input type="hidden" name="timeunit" value="{TIMEUNIT}" /> 
 	<dl>
@@ -264,6 +275,7 @@ function fnRemoveMember()
 			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{TIME_BONUS}" class="input" />
 		</dd>
 	</dl>
+	<!-- ENDIF -->
 	
 	<dl>
 		<dt><label>{L_RAIDVALUE}:</label>({L_ADD_RAID_VALUE_NOTE})</dt>

@@ -104,7 +104,7 @@ function main($id, $mode)
 				$sort_order = array(
 					0 => array('member_name', 'member_name desc'),
 					1 => array('username', 'username desc'),
-					2 => array('member_level desc', 'member_level'),
+					2 => array('member_level', 'member_level desc'),
 					3 => array('member_class', 'member_class desc'),
 					4 => array('rank_name', 'rank_name desc'),
 					5 => array('class_armor_type', 'class_armor_type desc'),
@@ -119,7 +119,7 @@ function main($id, $mode)
 				$show_all = (( isset($_GET['show'])) && request_var('show','') == 'all') ? true : false;
 				
 				$sql_array = array(
-				    'SELECT'    => 	'm.* , u.username, g.name, l.name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
+				    'SELECT'    => 	'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
 									 c.class_armor_type AS armor_type, c.colorcode , c.imagename', 
 				 
 				    'FROM'      => array(
@@ -168,7 +168,7 @@ function main($id, $mode)
 						'ID'            => $row['member_id'],
 						'COUNT'         => $member_count,
 						'NAME'          => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
-						'USERNAME'      => $row['username'],
+						'USERNAME'      => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) ,
 						'RANK'          => $row['rank_name'],
 						'LEVEL'         => ( $row['member_level'] > 0 ) ? $row['member_level'] : '&nbsp;',
 						'ARMOR'         => ( !empty($row['armor_type']) ) ? $row['armor_type'] : '&nbsp;',

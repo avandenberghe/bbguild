@@ -392,7 +392,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	    $b = date('r', mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']));
 	    $e = date('r', $endtime);
 	    	
-		// express in minutes
+		// express difference in minutes
 		$timediff=round($timediff/60, 2) ;
 		$time_bonus = 0; 
 		//if we have a $config interval bigger than 0 minutes then calculate time bonus
@@ -438,6 +438,8 @@ class acp_dkp_raid extends bbDkp_Admin
 				// Form values
 				'RAID_DKPSYSID' 			=> $dkpsys_id, 
 				'TIME_BONUS'				=> $time_bonus, 
+
+			 	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 		
               	'L_DATE' => $user->lang ['DATE'] . ' dd/mm/yyyy', 
 				'L_TIME' => $user->lang ['TIME'] . ' hh:mm:ss', 
@@ -625,12 +627,12 @@ class acp_dkp_raid extends bbDkp_Admin
 
 		// get raid details
 		$sort_order = array (
-				0 => array ('member_name desc', 'member_name' ),
-				1 => array ('raid_value', 'raid_value desc' ), 
-				2 => array ('time_bonus', 'time_bonus desc' ), 
-				3 => array ('zerosum_bonus desc', 'zerosum_bonus' ),
-				4 => array ('raid_decay desc', 'raid_decay desc' ),
-				5 => array ('total desc', 'total' ),
+				0 => array ('member_name desc', 'member_name desc' ),
+				1 => array ('raid_value', 'raid_value desc desc' ), 
+				2 => array ('time_bonus', 'time_bonus desc desc' ), 
+				3 => array ('zerosum_bonus', 'zerosum_bonus desc' ),
+				4 => array ('raid_decay', 'raid_decay desc' ),
+				5 => array ('total desc', 'total desc' ),
 				);
 		
 		$current_order = switch_order ( $sort_order );	
@@ -743,11 +745,15 @@ class acp_dkp_raid extends bbDkp_Admin
 		$isort_order = array (
 				0 => array ('l.member_name', 'member_name desc' ), 
 				1 => array ('i.item_name', 'item_name desc' ), 
-				2 => array ('i.item_value desc', 'item_value' ),
+				2 => array ('i.item_value ', 'item_value desc' ),
 				);
-		$icurrent_order = switch_order ($isort_order);
+				
+		// here we pass a nondefault header id to the sort function to sort the right table
+		$icurrent_order = switch_order ($isort_order, 'ui');
         $sql_array = array(
-	    'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.item_zs, l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, i.item_decay, i.item_value - i.item_decay as item_total',
+	    'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.item_zs, 
+	    				l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, 
+	    				i.item_decay, i.item_value - i.item_decay as item_total',
 	    'FROM'      => array(
 	        CLASS_TABLE 		=> 'c', 
 	        MEMBER_LIST_TABLE 	=> 'l', 
@@ -762,6 +768,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		$item_value = 0.00;
 		$item_decay = 0.00;
 		$item_total = 0.00;
+
 		while ( $row = $db->sql_fetchrow ($result)) 
 		{
 		    if ($this->bbtips == true)
@@ -810,9 +817,6 @@ class acp_dkp_raid extends bbDkp_Admin
 		//fill template
 		$template->assign_vars ( array (
 			'U_BACK'			=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ),
-			'S_SHOWADDATTENDEE'	=> ($s_memberlist_options == '') ? false: true, 
-			'S_MEMBERLIST_OPTIONS'  	=> $s_memberlist_options, 
-			'S_EDITRAID'		=> true, 
 			'L_TITLE' 			=> $user->lang ['ACP_ADDRAID'], 
 			'F_EDIT_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
 			'F_ADDATTENDEE' 	=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addattendee&amp;". URI_RAID . "=" .$raid_id ),
@@ -836,8 +840,10 @@ class acp_dkp_raid extends bbDkp_Admin
 	 		'DKPPERTIME'		=> sprintf($user->lang['DKPPERTIME'], $config['bbdkp_dkptimeunit'], $config['bbdkp_timeunit'] ), 
 			'ITEM_VALUE'		=> $item_value, 
 			'ITEMDECAYVALUE'	=> $item_decay,
-			'ITEMTOTAL'			=> $item_total,							  	 
-
+			'ITEMTOTAL'			=> $item_total,
+							  	 							  	 
+			'S_MEMBERLIST_OPTIONS'  	=> $s_memberlist_options, 
+							  	 
 			// raid start day
 			'S_RAIDSTARTDATE_DAY_OPTIONS'	=> $s_raid_day_options,
 			'S_RAIDSTARTDATE_MONTH_OPTIONS'	=> $s_raid_month_options,
@@ -877,13 +883,18 @@ class acp_dkp_raid extends bbDkp_Admin
 			'L_DATE' => $user->lang ['DATE'] . ' dd/mm/yyyy', 
 			'L_TIME' => $user->lang ['TIME'] . ' hh:mm:ss', 
 			
-			'ADDEDBY'	 	=> sprintf ( $user->lang ['ADDED_BY'], $raid['raid_added_by']),
-		  	'UPDATEDBY' 	=> ($raid['raid_updated_by'] != ' ') ? sprintf ( $user->lang ['UPDATED_BY'], $raid['raid_updated_by']) : '..',
+			'ADDEDBY'	 		=> sprintf ( $user->lang ['ADDED_BY'], $raid['raid_added_by']),
+		  	'UPDATEDBY' 		=> ($raid['raid_updated_by'] != ' ') ? sprintf ( $user->lang ['UPDATED_BY'], $raid['raid_updated_by']) : '..',
 
 			//switches
-			'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
-			'S_ADDRAIDER'   => false,
-			'S_SHOWITEMPANE' => ($number_items > 0 ) ? true : false,				  
+			'S_SHOWADDATTENDEE'	=> ($s_memberlist_options == '') ? false: true, 
+			'S_EDITRAID'		=> true, 
+			'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+			'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
+			'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
+							  	 							  	 
+			'S_ADDRAIDER'   	=> false,
+			'S_SHOWITEMPANE' 	=> ($number_items > 0 ) ? true : false,				  
 			
 			// Javascript messages
 			'MSG_ATTENDEES_EMPTY' => $user->lang ['FV_REQUIRED_ATTENDEES'], 
@@ -1030,6 +1041,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			'O_ZSVALUE' 		  => $current_order ['uri'] [5],
 			'O_DECAYVALUE' 		  => $current_order ['uri'] [6],
 			'O_TOTALVALUE' 		  => $current_order ['uri'] [7], 
+			'S_SHOWTIME' 			=> ($config['bbdkp_timebased'] == '1') ? true : false,
 			'S_SHOWZS' 			  => ($config['bbdkp_zerosum'] == '1') ? true : false, 
 			'U_LIST_RAIDS' 		  => append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ), 
 			'START' 			  => $start, 
@@ -1049,6 +1061,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		if (confirm_box ( true )) 
 		{
 			// recall hidden vars
+			
 			$raid = array(
 				'raid_note' 		=> utf8_normalize_nfc (request_var ( 'hidden_raid_note', ' ', true )), 
 				'raid_event'		=> utf8_normalize_nfc (request_var ( 'hidden_raid_name', ' ', true )), 

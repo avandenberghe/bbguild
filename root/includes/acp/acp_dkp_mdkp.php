@@ -57,10 +57,12 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				$result = $db->sql_query ( $sql );
 				$dkpsys_id == 0;
 				$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
+				
 				if ($submit)
 				{
 					$dkpsys_id = request_var ( 'dkpsys_id', 0 );
-				} 
+				}
+				 
 				else 
 				{
 					while ( $row = $db->sql_fetchrow ( $result ) ) 
@@ -103,8 +105,8 @@ class acp_dkp_mdkp extends bbDkp_Admin
 							'SELECTED' => ( $row['dkpsys_id'] == $dkpsys_id ) ? ' selected="selected"' : '',
 							'OPTION'   => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '(None)')
 						);
-						
 					}
+					
 					$db->sql_freeresult($resultdkpsys);	
 					// process the activation change
 					
@@ -127,65 +129,15 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					$db->sql_transaction('commit'); 
 				}
 				
-				
-				/***  sort  ***/
-				$sort_order = array(
-					0 => array('member_status', 'm.member_status desc'),
-					1  => array('member_name', 'member_name desc'),
-					2  => array('rank_name', 'rank_name desc'),
-					3  => array('member_level desc', 'member_level'),
-					4  => array('member_class', 'member_class desc'),
-					5  => array('member_raid_value desc', 'member_raid_value'),
-					6  => array('member_time_bonus desc', 'member_time_bonus'),
-					7  => array('member_zerosum_bonus desc', 'member_zerosum_bonus'),
-					8  => array('member_earned desc', 'member_earned'),
-					9  => array('member_raid_decay desc', 'member_raid_decay'),
-					10  => array('member_adjustment desc', 'member_adjustment'),
-					11  => array('ep desc', 'ep'),
-					12  => array('member_spent desc', 'member_spent'),
-					13  => array('member_item_decay desc', 'member_item_decay'),
-					14  => array('gp desc', 'gp'),
-					15  => array('er desc', 'er'),
-					16  => array('member_current desc', 'member_current'),
-					17  => array('member_lastraid desc', 'member_lastraid'),
-				);
-				$current_order = switch_order($sort_order);
-
 				$member_count = 0;
-				$previous_data = '';
-				$sort_index = explode('.', $current_order['uri']['current']);
-				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 
 				$sql_array = array(
-				    'SELECT'    => 'm.member_id,  
-									a.member_name, 
-									a.member_level, 
-									m.member_dkpid,
-									
-									m.member_raid_value,
-									m.member_time_bonus,
-									m.member_zerosum_bonus, 
-									m.member_earned,
-									m.member_raid_decay, 
-									m.member_adjustment, 
-									(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep	,
-									m.member_spent,
-									m.member_item_decay,
-									(m.member_spent - m.member_item_decay ) AS gp,
-									(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
-									case when (m.member_spent - m.member_item_decay) = 0 then (m.member_earned - m.member_raid_decay + m.member_adjustment)  
-									else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (m.member_spent - m.member_item_decay),2) end as er, 
-									m.member_status,    
-									m.member_lastraid,
-									s.dkpsys_name, 
-									l.name AS member_class, 
-									r.rank_name, 
-									r.rank_prefix, 
-									r.rank_suffix, 
-									c.colorcode , 
-									c.imagename',
-				
-				 
+					'SELECT'	=> 'm.member_id,  a.member_name, a.member_level, m.member_dkpid, m.member_raid_value,
+					m.member_earned, m.member_adjustment, 
+					m.member_spent, 
+					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
+					m.member_status, m.member_lastraid,
+					s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename', 
 				    'FROM'      => array(
 				        MEMBER_LIST_TABLE 	=> 'a',
 				        MEMBER_DKP_TABLE 	=> 'm', 
@@ -202,10 +154,61 @@ class acp_dkp_mdkp extends bbDkp_Admin
 								AND (m.member_dkpid = s.dkpsys_id)   
 								AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    		
 								AND (s.dkpsys_id = " . (int) $dkpsys_id . ')' ,
-				
-					'ORDER_BY' => $current_order['sql'], 
 					);
- 
+					
+				/***  sort  ***/
+					
+				$previous_data = '';
+				$sort_order = array(
+					0 => array('member_status', 'm.member_status desc'),
+					1  => array('member_name', 'member_name desc'),
+					2  => array('rank_name', 'rank_name desc'),
+					3  => array('member_level desc', 'member_level'),
+					4  => array('member_class', 'member_class desc'),
+					5  => array('member_raid_value desc', 'member_raid_value'),
+					8  => array('member_earned', 'member_earned desc'),
+					10  => array('member_adjustment desc', 'member_adjustment'),
+					12  => array('member_spent desc', 'member_spent'),
+					16  => array('member_current desc', 'member_current'),
+					17  => array('member_lastraid desc', 'member_lastraid'),
+				);
+				
+				if($config['bbdkp_dkphour'] == 1)
+				{
+					$sql_array[ 'SELECT'] .= ', m.member_time_bonus';
+					$sort_order[6] = array('member_time_bonus desc', 'member_time_bonus');
+				}
+				
+				if($config['bbdkp_zerosum'] == 1)
+				{
+					$sql_array[ 'SELECT'] .= ', m.member_zerosum_bonus';
+					$sort_order[7] = array('member_zerosum_bonus desc', 'member_zerosum_bonus');
+				}
+
+				if($config['bbdkp_decay'] == 1)
+				{
+					$sql_array[ 'SELECT'] .= ', m.member_raid_decay, m.member_item_decay ';
+					$sort_order[9] = array('member_raid_decay desc', 'member_raid_decay');
+					$sort_order[13] = array('member_item_decay desc', 'member_item_decay');
+					
+				}
+				
+				if($config['bbdkp_epgp'] == 1)
+				{
+					$sql_array[ 'SELECT'] .= ', (m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep, (m.member_spent - m.member_item_decay ) AS gp, case when (m.member_spent - m.member_item_decay) = 0 then (m.member_earned - m.member_raid_decay + m.member_adjustment)  
+					else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as er, ' ;
+					$sort_order[11] = array('ep desc', 'ep');
+					$sort_order[14] = array('gp desc', 'gp');
+					$sort_order[15] = array('er desc', 'er');
+				}
+				
+				$current_order = switch_order($sort_order);
+				$previous_data = '';
+				$sort_index = explode('.', $current_order['uri']['current']);
+				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
+				
+				$sql_array['ORDER_BY'] = $current_order['sql']; 
+				
 				$sql = $db->sql_build_query('SELECT', $sql_array);
 				
 				if ( !($members_result = $db->sql_query($sql)) )
@@ -214,11 +217,14 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				}
 				$lines = 0;
 				
+				$members_row = array();
+				
 				while ( $row = $db->sql_fetchrow($members_result) )
 				{
 					++$member_count;
 					++$lines;
-					$template->assign_block_vars('members_row', array(
+					
+					$members_row = array(
 					    'STATUS'        => ($row['member_status']== 1) ? 'Checked ' : '',
 						'ID'            => $row['member_id'],
 						'DKPID'         => $row['member_dkpid'],
@@ -232,22 +238,45 @@ class acp_dkp_mdkp extends bbDkp_Admin
 						'RANK'          => $row['rank_name'],
 						'LEVEL'         => ( $row['member_level'] > 0 ) ? $row['member_level'] : '&nbsp;',
 						'RAIDVAL'       => $row['member_raid_value'],
-						'TIMEBONUS'     => $row['member_time_bonus'],
-						'ZEROSUM'       => $row['member_zerosum_bonus'],
 						'EARNED'        => $row['member_earned'],
-						'RAIDDECAY'		=> $row['member_raid_decay'], 
 						'ADJUSTMENT'    => $row['member_adjustment'],
-						'EP'    		=> $row['ep'],
 						'SPENT'         => $row['member_spent'],
-						'ITEMDECAY'     => $row['member_item_decay'],
-						'GP'     		=> $row['gp'],
-						'ER'     		=> $row['er'],
 						'CURRENT'       => $row['member_current'],
 						'LASTRAID'      => ( !empty($row['member_lastraid']) ) ? date($config['bbdkp_date_format'], $row['member_lastraid']) : '&nbsp;',
 						'U_VIEW_MEMBER' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp") . '&amp;member_id='.$row['member_id'].  '&amp;'. URI_DKPSYS . '='.$row['member_dkpid']
-						)
-					); 
+						);
 					
+					if($config['bbdkp_dkphour'] == 1)
+					{
+						$members_row[ 'TIMEBONUS'] = $row['member_time_bonus']; 
+						
+					}
+					
+					if($config['bbdkp_zerosum'] == 1)
+					{
+						$members_row['ZEROSUM'] = $row['member_zerosum_bonus']; 
+						
+					}
+					
+					if($config['bbdkp_decay'] == 1)
+					{
+						$members_row['RAIDDECAY'] = $row['member_raid_decay'];
+						$members_row['ITEMDECAY'] = $row['member_item_decay'];
+					}
+					
+					if($config['bbdkp_epgp'] == 1)
+					{
+						$members_row['EP'] = $row['ep'];
+						$members_row['GP'] = $row['gp'];
+						$members_row['ER'] = $row['er'];
+					}
+						
+					$template->assign_block_vars('members_row', $members_row);
+					
+					$previous_data = $row[$previous_source];
+					
+					// unset array 
+					unset($members_row);
 				}
 				
 				$db->sql_freeresult($members_result);
@@ -255,7 +284,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				/***  Labels  ***/
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
 				
-				$template->assign_vars(array(
+				$output = array(
 					'F_MEMBERS' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp&amp;") . '&amp;mode=mm_editmemberdkp',
 					'L_TITLE'		=> $user->lang['ACP_DKP_LISTMEMBERDKP'],
 					'L_EXPLAIN'		=> $user->lang['ACP_MM_LISTMEMBERDKP_EXPLAIN'],
@@ -267,27 +296,48 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					'O_LEVEL' 		=> $current_order['uri'][3],
 					'O_CLASS' 		=> $current_order['uri'][4],
 					'O_RAIDVALUE' 	=> $current_order['uri'][5],
-					'O_TIMEBONUS' 	=> $current_order['uri'][6],
-					'O_ZSBONUS' 	=> $current_order['uri'][7],
 					'O_EARNED' 		=> $current_order['uri'][8],
-					'O_RDECAY' 		=> $current_order['uri'][9],
 					'O_ADJUSTMENT'  => $current_order['uri'][10],
-					'O_EP' 			=> $current_order['uri'][11],
 					'O_SPENT' 		=> $current_order['uri'][12],
-					'O_IDECAY' 		=> $current_order['uri'][13],
-					'O_GP' 			=> $current_order['uri'][14],
-					'O_ER' 			=> $current_order['uri'][15],
 					'O_CURRENT'		=> $current_order['uri'][16],
 					'O_LASTRAID' 	=> $current_order['uri'][17],
 					'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+					'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
 					'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
 				 	'S_SHOWTIME' 	=> ($config['bbdkp_dkptimeunit'] == '1') ? true : false,
 					'U_LIST_MEMBERDKP' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;" . URI_DKPSYS . "=". $dkpsys_id . "&amp;mode=mm_listmemberdkp") .'&amp;mod=list&amp;',		
 					'S_NOTMM' => false,
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text, 
 		            'DKPSYS' => $dkpsys_id
-					)
-				);			
+					);
+					
+					if($config['bbdkp_dkphour'] == 1)
+					{
+						$output[ 'O_TIMEBONUS'] = $current_order['uri'][6]; 
+						
+					}
+					
+					if($config['bbdkp_zerosum'] == 1)
+					{
+						$output[ 'O_ZSBONUS'] = $current_order['uri'][7];  
+						
+					}
+					
+					if($config['bbdkp_decay'] == 1)
+					{
+						$output[ 'O_RDECAY'] = $current_order['uri'][9]; 
+						$output[ 'O_IDECAY'] = $current_order['uri'][13]; 
+					}
+					
+					if($config['bbdkp_epgp'] == 1)
+					{
+						$output[ 'O_EP'] = $current_order['uri'][11]; 
+						$output[ 'O_GP'] = $current_order['uri'][14]; 
+						$output[ 'O_ER'] = $current_order['uri'][15]; 
+					}
+					
+				$template->assign_vars($output);
+				
 							
 				$this->page_title = 'ACP_DKP_LISTMEMBERDKP';
 				$this->tpl_name = 'dkp/acp_'. $mode;
@@ -686,6 +736,11 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					'CORRECT_MEMBER_SPENT'  => ( !empty($correct_spent) ) ? $correct_spent : '0.00',
 					'CORRECT_ITEMDECAY'  => ( !empty($correct_itemdecay) ) ? $correct_itemdecay : '0.00',
 					
+					'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+					'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
+					'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
+				 	'S_SHOWTIME' 	=> ($config['bbdkp_dkptimeunit'] == '1') ? true : false,
+				
 				));
 			
 				$this->page_title = 'ACP_DKP_EDITMEMBERDKP';

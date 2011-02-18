@@ -172,7 +172,8 @@ function durationcalc()
 	return document.editraid.raid_duration.value;
 	
 }
-
+<!-- IF S_SHOWTIME -->
+/* time dkp bonus from duration */ 
 function update_timebonus()
 {
 	
@@ -188,7 +189,7 @@ function update_timebonus()
 	document.editraid.time_bonus.value = dkp_bonus;
 
 }
-
+<!-- ENDIF -->
 //]]>
 </script>
 <div>
@@ -224,28 +225,28 @@ function update_timebonus()
 	<dl>
 		<dt><label>{L_RAIDSTART}:</label></dt>
 		<dd>
-			<select name="d" onChange="javascript:update_timebonus();">{S_RAIDSTARTDATE_DAY_OPTIONS}</select>
-			<select name="mo" onChange="javascript:update_timebonus();">{S_RAIDSTARTDATE_MONTH_OPTIONS}</select> 
-			<select name="Y" onChange="javascript:update_timebonus();">{S_RAIDSTARTDATE_YEAR_OPTIONS}</select>
+			<select name="d" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF -->>{S_RAIDSTARTDATE_DAY_OPTIONS}</select>
+			<select name="mo" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF --> >{S_RAIDSTARTDATE_MONTH_OPTIONS}</select> 
+			<select name="Y" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF --> >{S_RAIDSTARTDATE_YEAR_OPTIONS}</select>
 	   </dd>
 	   		<dd>
-			<select name="sh" onChange="javascript:update_timebonus();">{S_RAIDSTART_H_OPTIONS}</select>
-			<select name="smi" onChange="javascript:update_timebonus();">{S_RAIDSTART_MI_OPTIONS}</select> 
-			<select name="ss" onChange="javascript:update_timebonus();">{S_RAIDSTART_S_OPTIONS}</select>
+			<select name="sh" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF --> >{S_RAIDSTART_H_OPTIONS}</select>
+			<select name="smi" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF --> >{S_RAIDSTART_MI_OPTIONS}</select> 
+			<select name="ss" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF -->  >{S_RAIDSTART_S_OPTIONS}</select>
 		</dd>
 	</dl>
 
 	<dl>
 		<dt><label>{L_RAIDEND}:</label></dt>
 		<dd>
-			<select name="ed" onChange="javascript:update_timebonus();">{S_RAIDENDDATE_DAY_OPTIONS}</select>
-			<select name="emo" onChange="javascript:update_timebonus();" >{S_RAIDENDDATE_MONTH_OPTIONS}</select> 
-			<select name="eY" onChange="javascript:update_timebonus();">{S_RAIDENDDATE_YEAR_OPTIONS}</select>
+			<select name="ed" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF --> >{S_RAIDENDDATE_DAY_OPTIONS}</select>
+			<select name="emo" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF -->  >{S_RAIDENDDATE_MONTH_OPTIONS}</select> 
+			<select name="eY" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF --> >{S_RAIDENDDATE_YEAR_OPTIONS}</select>
 	   </dd>
 	   	<dd>
-			<select name="eh" onChange="javascript:update_timebonus();">{S_RAIDEND_H_OPTIONS}</select>
-			<select name="emi" onChange="javascript:update_timebonus();">{S_RAIDEND_MI_OPTIONS}</select> 
-			<select name="es" onChange="javascript:update_timebonus();">{S_RAIDEND_S_OPTIONS}</select>
+			<select name="eh" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF --> >{S_RAIDEND_H_OPTIONS}</select>
+			<select name="emi" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF --> >{S_RAIDEND_MI_OPTIONS}</select> 
+			<select name="es" <!-- IF S_SHOWTIME --> onChange="javascript:update_timebonus();" <!-- ELSE --> onChange="javascript:durationcalc();"   <!-- ENDIF --> >{S_RAIDEND_S_OPTIONS}</select>
 		</dd>
 	</dl>
 	
@@ -262,7 +263,7 @@ function update_timebonus()
 			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{INDIVIDUAL_RAID_VALUE}" class="input" />
 		</dd>
 	</dl>
-
+	<!-- IF S_SHOWTIME -->
 	<input type="hidden" name="dkptimeunit" value="{DKPTIMEUNIT}" /> 
 	<input type="hidden" name="timeunit" value="{TIMEUNIT}" /> 
 	<dl>
@@ -271,7 +272,7 @@ function update_timebonus()
 			<input type="text" name="time_bonus" id="time_bonus" size="8" maxlength="7" value="{INDIVIDUAL_TIMEVALUE}" class="input" /> &nbsp; <input type="checkbox" name="overridetime_bonus" value="1"/> {L_TIME_OVERRIDE}
 		</dd>
 	</dl>
-	
+	<!-- ENDIF -->
 	<dl>
 	<strong>{L_NOTE}</strong>
 	<textarea style="width:100%;" name="raid_note" cols="60" rows="5" wrap="soft">{RAID_NOTE}</textarea>
@@ -315,11 +316,15 @@ function update_timebonus()
     <th>{L_CLASS}</th>
     <th style="text-align:left;" width="30%"><a href="{F_EDIT_RAID}&amp;o={O_NAME}&amp;">{L_NAME}</a></th>
     <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
+    <!-- IF S_SHOWTIME -->
     <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_TIMEVALUE}">{L_TIMEVALUE}</a></th>
+    <!-- ENDIF -->
     <!-- IF S_SHOWZS -->
     <th style="text-align:right;" width="15%" width="30" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_ZSVALUE}">{L_ZSVALUE}</a></th>
     <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY -->
     <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_DECAYVALUE}">{L_DECAY}</a></th>
+    <!-- ENDIF -->
     <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_TOTALVALUE}">{L_TOTAL}</a></th>
     <th style="text-align:center;" width="5">{L_ACTION}</th>
   </tr>
@@ -330,11 +335,15 @@ function update_timebonus()
     <td><!-- IF raids_row.S_CLASS_IMAGE_EXISTS --><img src="{raids_row.CLASS_IMAGE}" alt="{raids_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></td>
     <td style="text-align:left;" width="30%"><strong><a style="color:{raids_row.COLORCODE}" href="{raids_row.U_VIEW_ATTENDEE}">{raids_row.NAME}</a></strong></td>
     <td style="text-align:right;" width="15%" class="positive">{raids_row.RAIDVALUE}</td>
+    <!-- IF S_SHOWTIME -->
     <td style="text-align:right;" width="15%" class="positive">{raids_row.TIMEVALUE}</td>
+    <!-- ENDIF -->
     <!-- IF S_SHOWZS -->
     <td style="text-align:right;" width="15%" class="positive">{raids_row.ZSVALUE}</td>
     <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY -->
     <td style="text-align:right;" width="15%" class="negative">{raids_row.DECAYVALUE}</td>
+    <!-- ENDIF -->
     <td style="text-align:right;" width="15%" class="positive">{raids_row.TOTAL}</td>
     <td style="text-align:center;"  width="5" nowrap="nowrap">
 		<a href="{raids_row.U_EDIT_ATTENDEE}">{ICON_EDIT}</a>&nbsp;
@@ -349,11 +358,15 @@ function update_timebonus()
     <th></th>
     <th class="footer">{LISTRAIDS_FOOTCOUNT}</th>
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{RAID_VALUE}</th>
+    <!-- IF S_SHOWTIME -->
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{TIMEVALUE}</th>
+    <!-- ENDIF -->
     <!-- IF S_SHOWZS -->
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{ZSVALUE}</th>
-   <!-- ENDIF -->
+    <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY -->    
     <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{DECAYVALUE}</th>
+    <!-- ENDIF -->
     <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{TOTAL}</th>
     <th></th>
   </tr>
@@ -375,12 +388,16 @@ function update_timebonus()
 <thead>
   <tr>
     <th>{L_CLASS}</th>
-    <th style="text-align:left;" width="30%"><a href="{F_EDIT_RAID}&amp;o={O_BUYER}&amp;">{L_NAME}</a></th>
-    <th style="text-align:left;" width="25%"><a href="{F_EDIT_RAID}&amp;o={O_ITEMNAME}">{L_ITEM}</a></th>
+    <th style="text-align:left;" width="30%"><a href="{F_EDIT_RAID}&amp;ui={O_BUYER}&amp;">{L_NAME}</a></th>
+    <th style="text-align:left;" width="25%"><a href="{F_EDIT_RAID}&amp;ui={O_ITEMNAME}">{L_ITEM}</a></th>
     <th style="text-align:right;" width="15%" width="30" nowrap="nowrap">{L_ITEMVALUE}</th>
+    <!-- IF S_SHOWZS -->
     <th style="text-align:right;" width="5" width="30" nowrap="nowrap">zs</th>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY -->    
     <th style="text-align:right;" width="15%" nowrap="nowrap">{L_ITEMDECAY}</th>
-    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;o={O_ITEMTOTAL}">{L_ITEMTOTAL}</a></th>
+    <!-- ENDIF -->
+    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_EDIT_RAID}&amp;ui={O_ITEMTOTAL}">{L_ITEMTOTAL}</a></th>
     <th style="text-align:center;" width="5">{L_ACTION}</th>
   </tr>
   </thead>
@@ -391,14 +408,18 @@ function update_timebonus()
     <td style="text-align:left;" width="30%"><strong><a style="color:{items_row.COLORCODE}" href="{items_row.U_VIEW_ATTENDEE}">{items_row.BUYER}</a></strong></td>
     <td style="text-align:left;" width="25%"><a href="{items_row.U_VIEW_ITEM}">{items_row.ITEMNAME}</a></td>
     <td style="text-align:right;" width="15%" class="positive">{items_row.ITEMVALUE}</td>
+    <!-- IF S_SHOWZS -->
     <td style="text-align:right;" width="5" class="positive"> <input type="checkbox" READONLY DISABLED name="item[{items_row.ITEM_ID}]" value="1" {items_row.ITEM_ZS} />  </td>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY -->      
     <td style="text-align:right;" width="15%" class="negative">{items_row.DECAYVALUE}</td>
+    <!-- ENDIF -->
+    
     <td style="text-align:right;" width="15%" class="positive">{items_row.TOTAL}</td>
     <td style="text-align:center;"  width="5" nowrap="nowrap">
 		<a href="{items_row.U_VIEW_ITEM}">{ICON_EDIT}</a>&nbsp;
 		<a href="{items_row.U_DELETE_ITEM}">{ICON_DELETE}</a>
 	</td>
-	
   </tr>
   <!-- END items_row -->
   </tbody>
@@ -408,8 +429,12 @@ function update_timebonus()
     <th class="footer">{ITEMSFOOTCOUNT}</th>
     <th></th>
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{ITEM_VALUE}</th>
+    <!-- IF S_SHOWZS -->
     <th></th>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY --> 
     <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{ITEMDECAYVALUE}</th>
+    <!-- ENDIF -->
     <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{ITEMTOTAL}</th>
     <th></th>
   </tr>

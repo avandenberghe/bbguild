@@ -349,10 +349,11 @@ class acp_dkp_item extends bbDkp_Admin
 		'L_EXPLAIN' 		=> $user->lang ['ACP_ADDITEM_EXPLAIN'],
 		'F_ADD_ITEM' 		=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_RAID . '=' . $raid_id ), 
 		'ITEM_VALUE' 		=> isset($this->item['item_value']) ? $this->item['item_value'] : 0.00,
+		'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+		'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
 		
 		// Language
 		'MSG_NAME_EMPTY' 	=> $user->lang ['FV_REQUIRED_ITEM_NAME'],
-		'MSG_RAID_ID_EMPTY' => $user->lang ['FV_REQUIRED_RAIDID'], 
 		'MSG_VALUE_EMPTY' 	=> $user->lang ['FV_REQUIRED_VALUE'], 
 		'ITEM_VALUE_LENGTH' => ($floatlen + 3), // The first three digits plus '.00';
 
@@ -412,11 +413,9 @@ class acp_dkp_item extends bbDkp_Admin
 		$item_name = (isset ( $_POST ['item_name'] )) ? 
 					utf8_normalize_nfc(request_var('item_name','', true)) : 
 				    utf8_normalize_nfc(request_var( 'select_item_name', '', true));
-
-		// if user wants to manually edit the decay but this is uncommon...
 		$itemgameid  = request_var( 'item_gameid' , 0) ;
 		
-		// Find out the item date based on the raid it's associated with
+		// Find out the item date based on the raid it's associated with, used for the group key and decay calculation
 		$loottime = 0;
 		$sql = 'SELECT raid_start FROM ' . RAIDS_TABLE . ' WHERE raid_id =' . (int) $raid_id;
 		$result = $db->sql_query ( $sql); 
@@ -430,18 +429,20 @@ class acp_dkp_item extends bbDkp_Admin
 		// Generate random group key
 		$group_key = $this->gen_group_key ( $item_name, $loottime, $raid_id + rand(10,100) );
 		
-		// decay this item
 		$itemdecay= 0;
-		if ( !class_exists('acp_dkp_raid')) 
+		if ($config['bbdkp_decay'] == '1') 
 		{
-			require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
+			// decay this item
+			if ( !class_exists('acp_dkp_raid')) 
+			{
+				require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
+			}
+			$acp_dkp_raid = new acp_dkp_raid;
+			//diff between now and the raidtime
+			$now = getdate();
+			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $loottime;
+			$itemdecay = $acp_dkp_raid->decay($itemvalue, $timediff, 2);
 		}
-		$acp_dkp_raid = new acp_dkp_raid;
-		
-		//diff between now and the raidtime
-		$now = getdate();
-		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $loottime;
-		$itemdecay = $acp_dkp_raid->decay($itemvalue, $timediff, 2);
 		
 		//
 		// Add item to selected members
@@ -635,7 +636,7 @@ class acp_dkp_item extends bbDkp_Admin
 			$dkp_id = request_var('hidden_dkp_id', 0);
 			$raid_id = request_var('hidden_raid_id', 0);
 			
-			if($item_id==0)
+			if($item_id == 0)
 			{	
 				trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] , E_USER_WARNING);
 			}
