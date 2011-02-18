@@ -477,19 +477,22 @@ class acp_dkp extends bbDkp_Admin
 							require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
 						}
 						$acp_dkp_raid = new acp_dkp_raid;
-						$acp_dkp_raid->sync_decay($config['bbdkp_decay']);
+						$count = $acp_dkp_raid->sync_decay($config['bbdkp_decay']);
+						
+						trigger_error ( sprintf($user->lang ['RESYNC_DECAY_SUCCESS'], $count) . $link , E_USER_NOTICE );
 					}
 					else 
 					{
 									
 						$s_hidden_fields = build_hidden_fields ( array (
-							'deleteitem' 	  => true, 
-							'hidden_old_item' => $old_item
+							'decay_synchronise' 	  => true, 
 						));
 			
 						$template->assign_vars ( array (
 							'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
-						confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $old_item ['item_name'], $old_item ['member_name']  ), $s_hidden_fields );
+						
+						confirm_box ( false, sprintf($user->lang['RESYNC_DECAY_CONFIRM'] ), $s_hidden_fields );
+						
 					}
 					
                 }

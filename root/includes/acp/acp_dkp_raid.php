@@ -2334,7 +2334,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				
 				$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = 0'; 
 				$db->sql_query ( $sql);
-				
+				return true;
 				break;
 				
 			case 1:
@@ -2342,16 +2342,20 @@ class acp_dkp_raid extends bbDkp_Admin
 				// loop all raids
 				$sql = 'select e.event_dkpid, r.raid_id from '. RAIDS_TABLE. ' r, ' . EVENTS_TABLE . ' e where e.event_id = r.event_id ' ;
 				$result = $db->sql_query ($sql);
+				$countraids=0;
 				while ( ($row = $db->sql_fetchrow ( $result )) ) 
 				{
-					$this->decayraid($row['r.raid_id'], $row['event_dkpid']);
+					$this->decayraid($row['raid_id'], $row['event_dkpid']);
+					$countraids++;
 				}
 				$db->sql_freeresult ($result);
+				
+				return $countraids;
 				
 				break;
 			
 		}
-		return true;
+		
 		
 	}
 	

@@ -644,10 +644,11 @@ So the loot would go to player 2 <br />',
 'RESYNC_ZEROSUM'				=> 'Resynchronise Zero sum',
 'RESYNC_ZEROSUM_CONFIRM'		=> 'Are you sure you wish to resynchronise all zerosum values? This will affect all DKP balances. ',
 'RESYNC_ZEROSUM_EXPLAIN'		=> 'First sets to zero all existing zero sum bonuses. If zerosum flag is set, recalculates according to item values for each raid.',
+'RESYNC_ZEROSUM_SUCCESS'		=> 'Successfully distributed %s items to %s DKP accounts. ',
 'RESYNC_DECAY'					=> 'Resynchronise decay values',
 'RESYNC_DECAY_CONFIRM'			=> 'Are you sure you wish to resynchronise Decay values? This will affect all EP end GP values. ',
 'RESYNC_DECAY_EXPLAIN'			=> 'First sets all raid and item decay to zero, then if Decay flag is set, recalculates Decay according to parameters.',
-
+'RESYNC_DECAY_SUCCESS'			=> 'Successfully decayed %s raids',
 
 'MENU_RAIDS' => 'Raids',
 'MENU_EVENTS' => 'Events',
