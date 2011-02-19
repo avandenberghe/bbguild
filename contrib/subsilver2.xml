@@ -147,6 +147,8 @@ EQDkp (c) 2003 The EqDkp Project Team
      <action type="before-add"><![CDATA[
 <!-- INCLUDE dkp/dkpheader.html -->]]></action>
 </edit>
+
+</open>
 	
 <open src="/styles/subsilver2/template/breadcrumbs.html">
 <edit>
