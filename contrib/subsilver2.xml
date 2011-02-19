@@ -168,7 +168,7 @@ function pop_search()
     search.focus();
 }
 </script>
-<a onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><span style="color:#105289">BBdkp Credits</span></a>
+<a class="bbdkpcredits" onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">BBdkp Credits</a>
 <br />]]></action>
       </edit>
 </open>
