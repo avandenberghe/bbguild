@@ -281,6 +281,11 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				
 				$db->sql_freeresult($members_result);
 				
+				if ($member_count==0)
+				{
+					trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
+				}
+				
 				/***  Labels  ***/
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
 				

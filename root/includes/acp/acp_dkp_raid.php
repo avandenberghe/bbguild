@@ -1364,7 +1364,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			$old_raid = request_var('raid', array('' => ''));
 
 			// first remove cost of items and zerosum from this raid
-			$this->remove_loot($raid_id);
+			$this->remove_loot($old_raid);
 
 			// loop raid detail and update dkp accounts, decrease earned, raidcount
 			// then delete raid detail
@@ -2031,9 +2031,8 @@ class acp_dkp_raid extends bbDkp_Admin
 	 * called when deleting a whole raid : removes all loot from raid and updates dkp account
 	 * 
 	 * @param int $raid_id the raid from which all loot will be removed.
-	 * @todo fix for zerosum
 	 */
-	private function remove_loot($raid_id)
+	private function remove_loot($oldraid)
 	{
 		global $db, $user, $template, $phpEx, $phpbb_root_path;
 		
@@ -2047,17 +2046,15 @@ class acp_dkp_raid extends bbDkp_Admin
 				RAID_ITEMS_TABLE . ' i, ' . 
 				MEMBER_LIST_TABLE . ' m 
 				WHERE i.member_id = m.member_id 
-				and raid_id = ' . (int) $raid_id;
+				and raid_id = ' . (int) $oldraid['raid_id'];
 		$result = $db->sql_query ( $sql );
-		
-		$dkpid = request_var('hidden_dkpid',0); 
 		
 		// loop the items collection
 		while ( $row = $db->sql_fetchrow( $result ) ) 
 		{
 				$old_item = array (
-				'item_id' 		=>  (int) $row['item_name'] ,  
-				'dkpid'			=>  $dkpid, 
+				'item_id' 		=>  (int) $row['item_id'] ,  
+				'dkpid'			=>  $oldraid['event_dkpid'], 
 				'item_name' 	=>  (string) $row['item_name'] , 
 				'member_id' 	=>  (int) 	$row['member_id'] , 
 				'member_name' 	=>  (string) $row['member_name'] ,
