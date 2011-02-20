@@ -1,6 +1,5 @@
 <?php
 /**
-* This class manages member DKP
 * 
 * @package bbDkp.acp
 * @author sajaki9@gmail.com
@@ -24,6 +23,10 @@ if (! defined('EMED_BBDKP'))
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
+/**
+ * This class manages member DKP
+ * 
+ */
 class acp_dkp_mdkp extends bbDkp_Admin
 {
 	var $u_action;
@@ -52,8 +55,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				
 				/***  DKPSYS drop-down query ***/
 				$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
-		                     FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
-						  where a.dkpsys_id = b.event_dkpid group by dkpsys_name ';
+		                     FROM ' . DKPSYS_TABLE . '  group by dkpsys_name ';
 				$result = $db->sql_query ( $sql );
 				$dkpsys_id = 0;
 				$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
@@ -210,11 +212,12 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				$sql_array['ORDER_BY'] = $current_order['sql']; 
 				
 				$sql = $db->sql_build_query('SELECT', $sql_array);
+				$members_result = $db->sql_query($sql);
 				
-				if ( !($members_result = $db->sql_query($sql)) )
-				{
-					trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
-				}
+				//if ( !($members_result) )
+				//{
+				//	trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
+				//}
 				$lines = 0;
 				
 				$members_row = array();
@@ -281,10 +284,10 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				
 				$db->sql_freeresult($members_result);
 				
-				if ($member_count==0)
-				{
-					trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
-				}
+				//if ($member_count==0)
+				//{
+					//trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
+				//}
 				
 				/***  Labels  ***/
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);

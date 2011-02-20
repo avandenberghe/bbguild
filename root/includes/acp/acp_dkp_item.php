@@ -421,7 +421,7 @@ class acp_dkp_item extends bbDkp_Admin
 		$result = $db->sql_query ( $sql); 
 		$row = $db->sql_fetchrow ($result); 
 		if($row)
-		{
+			{
 			$loottime = $row['raid_start'];
 		}
 	
@@ -920,7 +920,7 @@ class acp_dkp_item extends bbDkp_Admin
 		/***  DKPSYS drop-down query ***/
         $dkpsys_id = 0;
         
-		// select all dkp pools that have items				
+        // select all dkp pools that have items				
 		$sql_array = array(
 	    'SELECT'    => 'd.dkpsys_id, d.dkpsys_name, d.dkpsys_default',
 	    'FROM'      => array(
@@ -941,9 +941,9 @@ class acp_dkp_item extends bbDkp_Admin
 		if ($submit)
 		{
 			$dkpsys_id = request_var ( 'dkpsys_id', 0 );
-			}
-			else
-			{
+		} 
+		else 
+		{ 
 			
 			while ( $row = $db->sql_fetchrow ($result)) 
 			{
@@ -962,17 +962,18 @@ class acp_dkp_item extends bbDkp_Admin
 				}
 			}
 		}
+		$hasitems = false;
 		
-			$result = $db->sql_query ( $sql );
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$template->assign_block_vars ( 'dkpsys_row', 
-					array (
-					'VALUE' => $row['dkpsys_id'], 
+		$result = $db->sql_query ( $sql );
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$template->assign_block_vars ( 'dkpsys_row', 
+				array (
+				'VALUE' => $row['dkpsys_id'], 
 				'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
-					'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
+				'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
 			$hasitems = true;
-			}
+		}
 		$db->sql_freeresult( $result );
 		/***  end drop-down query ***/
 		

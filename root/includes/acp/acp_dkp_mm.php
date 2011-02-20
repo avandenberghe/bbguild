@@ -1,11 +1,11 @@
 <?php
 /**
-* This class manages member general info
 * 
 * @package bbDkp.acp
-* @version $Id$
+* @author sajaki9@gmail.com
 * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+* @version $Id$
 * 
 */
 
@@ -21,16 +21,16 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang ( array ('mods/dkp_admin' ));
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
-
+/**
+ * This class manages member general info
+ * 
+ */
 class acp_dkp_mm extends bbDkp_Admin
 {
-	/***********************************/
-	// member management
-	/***********************************/
 	var $u_action;
 	var $member;
 	
-function main($id, $mode) 
+	public function main($id, $mode) 
 	{
 		global $db, $user, $auth, $template, $sid, $cache;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
@@ -223,14 +223,13 @@ function main($id, $mode)
 			case 'mm_addmember':
 					
 					$Addmemberlink = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Members screen</h3></a>'; 
-					$S_ADD = false;
 					
 					if ( (isset($_GET[URI_NAME])) && (strval($_GET[URI_NAME] != '')) )
 					{
-						//
+						// edit mode
 						// build member array if clicked on name in listing
 						//  
-						$S_ADD = true;
+						$S_ADD = false;
 
 						$sql_array = array(
 						    'SELECT'    => 'm.*, c1.name AS member_class, l1.name AS member_race, 
@@ -346,6 +345,10 @@ function main($id, $mode)
 
 						}
 							
+					}
+					else 
+					{
+						$S_ADD = true;
 					}
 					
 					//guild dropdown
@@ -607,7 +610,7 @@ function main($id, $mode)
 					$submit	 = (isset($_POST['add'])) ? true : false;
 					$update	 = (isset($_POST['update'])) ? true : false;
 					$delete	 = (isset($_POST['delete'])) ? true : false;	
-	                if ( $submit || $update || $delete)
+	                if ( $submit || $update)
 	                {
 	                   	if (!check_form_key('mm_addmember'))
 						{
@@ -669,8 +672,10 @@ function main($id, $mode)
                         $class_id = request_var('member_class_id', 0); 
                         
                         $member_comment = utf8_normalize_nfc(request_var('member_comment', '', true)); 
-                        $joindate = $this->time; 
-                        $leavedate = mktime(0, 0, 0, 12, 31, 2015); 
+                        
+                        $joindate 	= mktime(0,0,0,request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0)); 
+                        $leavedate = mktime(0,0,0,request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0)); 
+					  					   			
                         $gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
                         $achievpoints = 0; 
                         $url = '';
@@ -698,9 +703,7 @@ function main($id, $mode)
 					{
 
 						// old data array
-						$sql = 'SELECT *
-								FROM ' . MEMBER_LIST_TABLE . "
-								WHERE member_name='" . $db->sql_escape(utf8_normalize_nfc(request_var('hidden_name', '', true ))) . "'";
+						$sql = 'SELECT *  FROM ' . MEMBER_LIST_TABLE . 'WHERE member_id=' . request_var('hidden_member_id', 0);
 						$result = $db->sql_query($sql);
 						while ( $row = $db->sql_fetchrow($result) )
 						{
@@ -835,92 +838,68 @@ function main($id, $mode)
 					if ($delete)
 						{	
 							
-							if ( (isset($_POST['member_name']))  )
+							if (confirm_box(true))
 							{
-								$del_member= array();
-								$del_member = request_var('member_name',  array(0 => ''), true);
-								if (confirm_box(true))
+								
+								// recall hidden vars
+								
+								$del_member = request_var('hidden_member_id', 0);
+								$del_membername = utf8_normalize_nfc(request_var('hidden_member_name','',true));
+								$sql = 'SELECT * FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id= ' . (int) $del_member; 
+					
+								$result = $db->sql_query($sql);
+								while ( $row = $db->sql_fetchrow($result) )
 								{
-									if (count($del_member) > 1)
-									{
-										$names = implode(', ', $del_member);
-									}
-									else
-									{ 
-										$names = $del_member[0];
-									}
-									
-									for ($i = 0; $i < count($del_member); $i++)
-									{
-										
-										$sql = 'SELECT * FROM ' . MEMBER_LIST_TABLE . "
-											WHERE member_name='" . $db->sql_escape(utf8_normalize_nfc($del_member[$i])) . "'";
-							
-										$result = $db->sql_query($sql);
-										while ( $row = $db->sql_fetchrow($result) )
-										{
-										$this->old_member = array(
-											'member_name'       => $row['member_name'],
-											'member_id'			 => $row['member_id'],
-											'member_level'      => $row['member_level'],
-											'member_race_id'    => $row['member_race_id'],
-											'member_class_id'   => $row['member_class_id']);
-										}
-										$db->sql_freeresult($result);
-										
-										$log_action = array(
-										'header'         =>  sprintf( $user->lang['ACTION_MEMBER_DELETED'], $this->old_member['member_name']),  
-										'L_NAME'       => $this->old_member['member_name'],
-										'L_LEVEL'      => $this->old_member['member_level'],
-										'L_RACE'       => $this->old_member['member_race_id'],
-										'L_CLASS'      => $this->old_member['member_class_id']);
-
-										$this->log_insert(array(
-										'log_type'   => $log_action['header'],
-										'log_action' => $log_action)
-										);
-
-										$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . "
-												WHERE member_name='" . $db->sql_escape(utf8_normalize_nfc($del_member[$i])) . "'";
-										$db->sql_query($sql);
-							
-										$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . "
-												WHERE item_buyer='" . $db->sql_escape(utf8_normalize_nfc($del_member[$i])) . "'";
-										$db->sql_query($sql);
-
-										
-										$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . "
-												WHERE member_id ='" . $this->old_member['member_id'] . "'";
-										$db->sql_query($sql);
-										
-										
-										$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . "
-												WHERE member_id ='" . $this->old_member['member_id'] . "'";
-										$db->sql_query($sql);
-	
-										$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . "
-												WHERE member_name='" . $db->sql_escape(utf8_normalize_nfc($del_member[$i]) ) . "'";
-										$db->sql_query($sql);
-									}
-									$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $names);
-									trigger_error($success_message . $link);
+								$this->old_member = array(
+									'member_level'      => $row['member_level'],
+									'member_race_id'    => $row['member_race_id'],
+									'member_class_id'   => $row['member_class_id']);
 								}
-								else
-								{
-									$s_hidden_fields = build_hidden_fields(array(
-										'delete'	=> true,
-										'member_name'	=> $del_member,
-										)
-									);
-	
-									confirm_box(false, $user->lang['CONFIRM_DELETE_MEMBERS'], $s_hidden_fields);
-								}
+								$db->sql_freeresult($result);
+								
+								$log_action = array(
+								'header'         =>  sprintf( $user->lang['ACTION_MEMBER_DELETED'], $del_membername),  
+								'L_NAME'       => $del_membername,
+								'L_LEVEL'      => $this->old_member['member_level'],
+								'L_RACE'       => $this->old_member['member_race_id'],
+								'L_CLASS'      => $this->old_member['member_class_id']);
+
+								$this->log_insert(array(
+									'log_type'   => $log_action['header'],
+									'log_action' => $log_action)
+								);
+								
+								//@todo if zerosum then put excess points in guildbank
+								
+								$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' where member_id= ' . (int) $del_member;
+								$db->sql_query($sql);
+								$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' where member_id= ' . (int) $del_member; 
+								$db->sql_query($sql);
+								$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' where member_id= ' . (int) $del_member; 
+								$db->sql_query($sql);
+								$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE .' where member_id= ' . (int) $del_member; 
+								$db->sql_query($sql);
+								$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . ' where member_id= ' . (int) $del_member; 
+								$db->sql_query($sql);
+							
+								$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $del_membername);
+								trigger_error($success_message . $link);
 							}
 							else
 							{
-							    $success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_FAILED'], 'UNKNOWN');
-							    trigger_error($success_message . $link, E_USER_WARNING);
+								
+								$s_hidden_fields = build_hidden_fields(array(
+									'delete'			=> true,
+									'hidden_member_id'	=> request_var('hidden_member_id', 0),
+									'hidden_member_name' => utf8_normalize_nfc(request_var('hidden_member_name','',true)),
+									)
+								);
+
+								confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_MEMBER'], utf8_normalize_nfc(request_var('hidden_member_name','',true)) ) , $s_hidden_fields);
 							}
+							
+							$S_ADD = true;
+
 							
 						}	
 						
@@ -933,7 +912,6 @@ function main($id, $mode)
 							'F_ADD_MEMBER' 			=> append_sid("index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;"),
 				        	
 							'MEMBER_NAME'           => isset($this->member) ? $this->member['member_name'] : '',
-							'V_MEMBER_NAME'         => ( isset($_POST['add']) ) ? '' : isset($this->member) ? $this->member['member_name'] : '' ,
 							'MEMBER_ID'             => isset($this->member) ? $this->member['member_id'] : '',
 							'MEMBER_LEVEL'          => isset($this->member) ? $this->member['member_level'] : '',
 							'MALE_CHECKED'      	=> ($genderid == '0') ? ' checked="checked"' : '' , 
@@ -955,7 +933,7 @@ function main($id, $mode)
 				        	'LA_MSG_NAME_EMPTY'   => $user->lang['FV_REQUIRED_NAME'],
 				        	'UA_FINDRANK'		  => append_sid("findrank.$phpEx"),
 				        
-							'S_ADD' => !$S_ADD,
+							'S_ADD' => $S_ADD,
 							)
 				);
 			
@@ -1585,7 +1563,7 @@ function main($id, $mode)
 	 * @param int $member_id
 	 * @return string
 	 */
-	function get_member_name($member_id)
+	public function get_member_name($member_id)
     {
         global $db;
         
@@ -1616,7 +1594,7 @@ function main($id, $mode)
 	 * @param string $membername
 	 * @return int
 	 */
-	function get_member_id($membername)
+	public function get_member_id($membername)
     {
         global $db;
         
@@ -1647,7 +1625,7 @@ function main($id, $mode)
      * is also called from armory plugin
      * 
      */
-    function insertnewguild($guild_name,$realm_name,$region, $showroster, $aionlegionid = 0, $aionserverid = 0) 
+    public function insertnewguild($guild_name,$realm_name,$region, $showroster, $aionlegionid = 0, $aionserverid = 0) 
     {
         
         global $db, $user, $config;   	
@@ -1693,7 +1671,7 @@ function main($id, $mode)
      * 				boolean false to not delete when members exist
      * is also called from armory plugin
      */
-    function deleterank( $nrankid, $guild_id, $override)
+    public function deleterank( $nrankid, $guild_id, $override)
     {
         global $db, $user, $config;   	
         
@@ -1744,7 +1722,7 @@ function main($id, $mode)
      * is also called from armory plugin
      * 
      */
-    function insertnewrank($nrankid,$nrank_name, $nrank_hide, $nprefix, $nsuffix ,  $guild_id)
+    public function insertnewrank($nrankid,$nrank_name, $nrank_hide, $nprefix, $nsuffix ,  $guild_id)
     {
         global $db, $user, $config;   	
           
@@ -1784,7 +1762,7 @@ function main($id, $mode)
      * 
      * $phpbb_user_id is an optional value, set to zero when not given
      */
-    function insertnewmember($member_name, $member_status, $member_lvl, 
+    public function insertnewmember($member_name, $member_status, $member_lvl, 
     $race_id ,  $class_id, $rank_id, $member_comment, $joindate, $leavedate, 
     $guild_id, $gender, $achievpoints, $url, $phpbb_user_id = 0 )
     {
@@ -1877,7 +1855,7 @@ function main($id, $mode)
      * function for removing member from guild but leave him in the system. this is called from armory plugin
      *
      */
-    function removemember($member_name, $guild_id ) 
+    public function removemember($member_name, $guild_id ) 
     {
         global $db, $user, $config;   	
         
@@ -1938,7 +1916,7 @@ function main($id, $mode)
      * is also called from armory plugin for updating existing guildmembers
      * url is not updated
      */
-    function updatemember($member_name, 
+    public function updatemember($member_name, 
     $member_lvl, $race_id, $class_id, $rank_id, $member_comment, $guild_id, $gender, $achievpoints) 
     {
         global $db, $user, $config;   	
