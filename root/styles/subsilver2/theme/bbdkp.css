@@ -174,3 +174,98 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	color: #00EE00;
 }
 
+/**** portal tooltip css ****/
+
+a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active {
+	text-decoration: none; 
+	 color: #FFD100; /* tooltip boss link color */
+	white-space: nowrap;
+}
+
+.bbtooltip {
+	display: none;
+	 position:relative;
+	 margin:0px auto;
+	 min-width:200px;
+	 max-width:200px; 
+	 color:#FFFFDD;
+	 z-index:1;
+	 margin-left:10px; /* default, width of left corner */
+	 margin-bottom:0.5em; /* spacing under dialog */	
+	font-size: 11px;
+}
+
+.bbtooltip .bbinner,
+.bbtooltip .t,
+.bbtooltip .b,
+.bbtooltip .b div {
+ background-image: url("{T_THEME_PATH}/images/dkp/tooltip/tooltip.png");
+ background-color: transparant;
+ background-repeat: no-repeat;
+ background-position: right top;
+}
+	
+.bbtooltip .bbinner {
+ position:relative;
+ zoom:1;
+  _overflow-y:hidden;
+ padding:0px 10px 0px 0px;
+}
+
+.bbtooltip .t {
+ /* top+left vertical slice */
+ position:absolute;
+ left:0px;
+ top:0px;
+ width:10px; /* top slice width */
+ margin-left:-10px;
+ height:100%;
+ background-position:top left;
+}
+
+.bbtooltip .b {
+ /* bottom slice */
+ position:relative;
+ width:100%;
+}
+
+.bbtooltip .b,
+.bbtooltip .b div {
+ height:30px; /* height of bottom cap/shade */
+ font-size:1px;
+}
+
+.bbtooltip .b {
+ background-position:bottom right;
+}
+
+/* bottom corner width */
+.bbtooltip .b div {
+ position:absolute;
+ width:10px; 
+ margin-left:-10px;
+ background-position:bottom left;
+}
+
+.bbtooltip .hd,
+.bbtooltip .bd,
+.bbtooltip .ft {
+ position:relative;
+}
+
+.bbtooltip .wrapper {
+ /* extra content protector - preventing vertical overflow (past background) */
+ position:static;
+ max-height:1000px;
+ overflow:auto; 
+}
+
+.bbtooltip h1,
+.bbtooltip p {
+ margin:0px; /* margins will blow out backgrounds, leaving whitespace. */
+ padding:0.5em 0px 0.5em 0px;
+}
+
+.bbtooltip h1 {
+ padding-bottom:0px;
+}
