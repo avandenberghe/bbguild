@@ -908,13 +908,6 @@ class acp_dkp_item extends bbDkp_Admin
 		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
 				
 		// add member button redirect
-		$showadd = (isset($_POST['itemadd'])) ? true : false;
-	    if($showadd)
-	    {
-			redirect(append_sid("index.$phpEx", "i=dkp_item&amp;mode=additem"));            		
-	        break;
-	    }
-            	
 		if ($this->bbtips == true)
 		{
 			if ( !class_exists('bbtips')) 
@@ -924,6 +917,9 @@ class acp_dkp_item extends bbDkp_Admin
 			$bbtips = new bbtips;
 		}
 		
+		/***  DKPSYS drop-down query ***/
+        $dkpsys_id = 0;
+        
 		// select all dkp pools that have items				
 		$sql_array = array(
 	    'SELECT'    => 'd.dkpsys_id, d.dkpsys_name, d.dkpsys_default',
@@ -938,41 +934,50 @@ class acp_dkp_item extends bbDkp_Admin
 	    				and r.raid_id = i.raid_id',  
 	    'GROUP_BY'  => 'd.dkpsys_id', 
 		);
- 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ( $sql );
-		$row = $db->sql_fetchrow ($result);
 		
-		if($row)
+		$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
+		if ($submit)
 		{
-			$dkpid = 1; 
-			$submitdkp = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
-			if ($submitdkp) 
-			{
-				// get dkp pool value from popup
-				$dkpid = request_var ( 'dkpsys_id', 0 );
+			$dkpsys_id = request_var ( 'dkpsys_id', 0 );
 			}
 			else
 			{
-				// just select first row
+			
+			while ( $row = $db->sql_fetchrow ($result)) 
+			{
+				if($row['dkpsys_default'] == "Y"  )
+				{
+					$dkpsys_id = $row['dkpsys_id'];
+				}
+			}
+			
+			if ($dkpsys_id == 0)
+			{
 				$result = $db->sql_query_limit ( $sql, 1 );
 				while ( $row = $db->sql_fetchrow ( $result ) ) 
 				{
-					$dkpid = $row['dkpsys_id'];
-				} 
-				$db->sql_freeresult ( $result );
+					$dkpsys_id = $row['dkpsys_id'];
+				}
 			}
+		}
+		
 			$result = $db->sql_query ( $sql );
-			
 			while ( $row = $db->sql_fetchrow ( $result ) ) 
 			{
 				$template->assign_block_vars ( 'dkpsys_row', 
 					array (
 					'VALUE' => $row['dkpsys_id'], 
-					'SELECTED' => ($row['dkpsys_id'] == $dkpid) ? ' selected="selected"' : '', 
+				'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
 					'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
+			$hasitems = true;
 			}
-			$db->sql_freeresult ( $result );
+		$db->sql_freeresult( $result );
+		/***  end drop-down query ***/
+		
+		if($hasitems==true)
+		{
 			
 			// select all raids that have items	for pool			
 			$sql_array = array(
@@ -983,7 +988,7 @@ class acp_dkp_item extends bbDkp_Admin
 									 ),
 			    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
 	    						and e.event_id = r.event_id 
-			    				and d.dkpsys_id = ' . $dkpid ,
+			    				and d.dkpsys_id = ' . $dkpsys_id ,
 				'ORDER_BY'  =>  'r.raid_start DESC '
 			);
 			$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -992,7 +997,7 @@ class acp_dkp_item extends bbDkp_Admin
 			$raid_id = 0;
 			if ($submitraid)
 			{
-				$raid_id  = request_var(URI_RAID, 0);  
+				$raid_id  = request_var('raid_id', 0);  
 			}
 			else
 			{
@@ -1040,19 +1045,21 @@ class acp_dkp_item extends bbDkp_Admin
 			//prepare item list sql
 			$sql_array = array(
 		    'SELECT'    => 'd.dkpsys_name, e.event_dkpid, e.event_name, e.event_color, e.event_imagename, i.item_id, i.item_name, i.item_gameid, 
-		    				i.member_id, l.member_name, i.item_date, i.raid_id, i.item_value, e.event_name ',
+		    				i.member_id, l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, e.event_name ',
 		    'FROM'      => array(
 		        DKPSYS_TABLE   => 'd', 
 				EVENTS_TABLE   => 'e',
 		        RAIDS_TABLE    => 'r',
 		        MEMBER_LIST_TABLE => 'l', 
+		        CLASS_TABLE 		=> 'c', 
 		        RAID_ITEMS_TABLE    => 'i',
 		    ),
-		    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
+		    'WHERE'     =>  'c.class_id = l.member_class_id   
+		    				and d.dkpsys_id = e.event_dkpid 
 	    					and e.event_id = r.event_id 
 	    					and i.member_id = l.member_id 
 	    					and r.raid_id = i.raid_id 
-		     				and d.dkpsys_id = ' . $dkpid . ' 
+		     				and d.dkpsys_id = ' . $dkpsys_id . ' 
 		     				AND i.raid_id = ' .  $raid_id,  
 		    'ORDER_BY'  => $current_order ['sql'], 
 			);
@@ -1082,16 +1089,17 @@ class acp_dkp_item extends bbDkp_Admin
 				}
 	
 				$template->assign_block_vars ( 'items_row', array (
-				'DATE' 			=> (! empty ( $item ['item_date'] )) ? $user->format_date($item['item_date']) : '&nbsp;', 
+				'COLORCODE'  	=> ($item['colorcode'] == '') ? '#123456' : $item['colorcode'],
+            	'CLASS_IMAGE' 	=> (strlen($item['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $item['imagename'] . ".png" : '',  
+				'S_CLASS_IMAGE_EXISTS' => (strlen($item['imagename']) > 1) ? true : false, 				
+				'DATE' 			=> (! empty ( $item ['item_date'] )) ? $user->format_date($item['item_date'], $config['bbdkp_date_format']) : '&nbsp;', 
 				'BUYER' 		=> (! empty ( $item ['member_name'] )) ? $item ['member_name'] : '&lt;<i>Not Found</i>&gt;', 
 				'ITEMNAME'      => $item_name, 
-				'RAIDDKP' 		=> (! empty ( $item ['dkpsys_name'] )) ? $item ['dkpsys_name']  : '&lt;<i>Not Found</i>&gt;',
 				'RAID' 			=> (! empty ( $item ['event_name'] )) ?  $item ['event_name']  : '&lt;<i>Not Found</i>&gt;', 
 				'EVENTCOLOR'    => (! empty ( $item ['event_color'] )) ? $item ['event_color']  : '',
 				'U_VIEW_BUYER' 	=> (! empty ( $item ['member_name'] )) ? append_sid ( "index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;member_id={$item['member_id']}&amp;" . URI_DKPSYS . "={$item['event_dkpid']}") : '' ,
-				'U_VIEW_RAID' 	=> (! empty ( $item ['event_name'] )) ? append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid&amp;" . URI_DKPSYS . "={$item['event_dkpid']}&amp;" . URI_RAID . "={$raid_id}" ) : '', 
-				'U_VIEW_ITEM' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_ITEM . "={$item['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
-				'U_DELETE_ITEM' => append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=additem&amp;itemdelete=Y&amp;" . URI_ITEM . "={$item['item_id']}" ),
+				'U_VIEW_RAID' 	=> (! empty ( $item ['event_name'] )) ? append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;" . URI_DKPSYS . "={$item['event_dkpid']}&amp;" . URI_RAID . "={$raid_id}" ) : '', 
+				'U_VIEW_ITEM' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_ITEM . "={$item['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
 				'VALUE' 		=> $item ['item_value']));
 			}
 			
@@ -1107,7 +1115,6 @@ class acp_dkp_item extends bbDkp_Admin
 				'O_NAME' 		=> $current_order ['uri'][2], 
 				'O_RAID' 		=> $current_order ['uri'][3], 
 				'O_VALUE' 		=> $current_order ['uri'][4], 
-				'O_RAIDDKP' 	=> $current_order ['uri'][5], 
 				'U_LIST_ITEMS' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;start={$start}&amp;" . URI_RAID . '=' . $raid_id), 
 				'S_BBTIPS' 		=> $this->bbtips, 
 				'START' 		=> $start, 
