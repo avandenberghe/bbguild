@@ -468,6 +468,8 @@ $lang = array_merge($lang, array(
 'ERROR_NOEVENTSDEFINED'    	=>  'Error : no Events defined. cannot add Raid ', 
 'ERROR_NOGUILDMEMBERSDEFINED'    	=>  'Error : no Guildmembers. cannot add Raid ', 
 'ERROR_RANKMEMBERS'	=> 'Cannot delete this rank. There are still members with this rank. ', 
+'ERROR_NOSELECT'	=> 'Please select a From and a To-member.',
+'ERROR_NOADJUSTMENTS'	=> 'There are no Adjustments in the database.',
 
 // Submission Success Messages
 'ADMIN_ADD_ADJ_SUCCESS' => 'A %s adjustment of %.2f has been added to the database for your guild.',

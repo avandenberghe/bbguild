@@ -55,7 +55,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 		                     FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
 						  where a.dkpsys_id = b.event_dkpid group by dkpsys_name ';
 				$result = $db->sql_query ( $sql );
-				$dkpsys_id == 0;
+				$dkpsys_id = 0;
 				$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
 				
 				if ($submit)
