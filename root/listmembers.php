@@ -32,8 +32,8 @@ if (! defined ( "EMED_BBDKP" ))
 }
 
 $list_p1 = (isset ( $config ['bbdkp_list_p1'] ) == true) ? $config ['bbdkp_list_p1'] : 30;
-$list_p2 = (isset ( $config ['bbdkp_list_p2'] ) == true) ? $config ['bbdkp_list_p2'] : 90;
-
+$list_p2 = (isset ( $config ['bbdkp_list_p2'] ) == true) ? $config ['bbdkp_list_p2'] : 60;
+$list_p3 = (isset ( $config ['bbdkp_list_p3'] ) == true) ? $config ['bbdkp_list_p3'] : 90;
 /* begin dkpsys pulldown */
 
 // pulldown

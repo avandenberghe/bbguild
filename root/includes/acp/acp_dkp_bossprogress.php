@@ -38,13 +38,13 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	
 	function main($id, $mode) 
 	{
-	    global $db, $user, $template, $config, $phpEx, $cache, $phpbb_root_path;   
+	    global $db, $user, $template, $config, $phpEx, $phpbb_admin_path, $cache, $phpbb_root_path;   
         $user->add_lang(array('mods/dkp_admin'));   
 		
         switch ($mode)
 		{
 			case 'bossprogress':
-				$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress") . 
+				$link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress") . 
 					'"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
 				
 				$showadd = (isset($_POST['bpadd'])) ? true : false;
@@ -273,8 +273,8 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 	                    	'BOSS_MM' => ($row2['killdate'] == 0) ? ' ' : date('m', $row2['killdate'])  ,
 	                    	'BOSS_YY' => ($row2['killdate'] == 0) ? ' ' : date('Y', $row2['killdate'])  ,
 
-	                    	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;edit=1&amp;id={$row2['id']}")  ,
-	                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;delete=1&amp;id={$row2['id']}")  ,  
+	                    	'U_EDIT' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;edit=1&amp;id={$row2['id']}")  ,
+	                    	'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;delete=1&amp;id={$row2['id']}")  ,  
 							'S_ADD'   	=> true,
 	                    ));
 	                }
@@ -429,15 +429,15 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 		                    	'BOSS_MM' => ($row2['killdate'] == 0) ? ' ' : date('m', $row2['killdate'])  ,
 		                    	'BOSS_YY' => ($row2['killdate'] == 0) ? ' ' : date('Y', $row2['killdate'])  ,
 			                    'BOSS_SHOW'   	=> ($row2['showboss'] == 1) ? ' checked="checked"' : '',
-		                    	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;edit=1&amp;id={$row2['id']}")  ,
-		                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;delete=1&amp;id={$row2['id']}")  ,  
+		                    	'U_EDIT' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;edit=1&amp;id={$row2['id']}")  ,
+		                    	'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress&amp;delete=1&amp;id={$row2['id']}")  ,  
 		                    ));
 		                }
 		                $db->sql_freeresult($resultx);
 	                }
 	                $db->sql_freeresult($result);
 	                $arrvals = array (
-						'F_CONFIG' 			 => append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress"),
+						'F_CONFIG' 			 => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=bossprogress"),
 						'BP_HIDENONKIBOSS' 	 => ($config['bbdkp_bp_hidenonkilled'] == 1) ? ' checked="checked"' : '',
 					);
 					
@@ -453,7 +453,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 			case 'zoneprogress':
 					
 				// page layout
-				$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress") . 
+				$link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress") . 
 					'"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
 				$submitlist = (isset($_POST['bpsave'])) ? true : false;
 				$edit = (isset($_GET['edit'])) ? true : false;
@@ -805,7 +805,7 @@ class acp_dkp_bossprogress extends bbDkp_Admin
 				}
 				
 				$arrvals = array (
-					'F_CONFIG' 			 => append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress"),
+					'F_CONFIG' 			 => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress"),
 					'BP_HIDENEWZONE'	 => ($config['bbdkp_bp_hidenewzone'] == 1) ? ' checked="checked"' : '',
 					'BP_HIDENONKIBOSS' 	 => ($config['bbdkp_bp_hidenonkilled'] == 1) ? ' checked="checked"' : '',
 					'BP_SHOWSB' 		 => ($config['bbdkp_bp_zoneprogress'] == 1) ? ' checked="checked"' : '',
@@ -845,10 +845,10 @@ class acp_dkp_bossprogress extends bbDkp_Admin
                         'ZONE_URL'			=> sprintf($user->lang[strtoupper($config['bbdkp_default_game']).'_ZONEEURL'], $row['webid']),         
 	                    'ZONE_SHOW'   		=> ($row['showzone'] == 1) ? ' checked="checked"' : '',
                     	'ZONE_SHOW_PORTAL'  => ($row['showzoneportal'] == 1) ? ' checked="checked"' : '',
-                    	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;edit=1&amp;id={$row['id']}")  ,
-                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;delete=1&amp;id={$row['id']}")  ,  
-						'U_MOVE_UP'		=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;move_up=1&amp;id={$row['id']}"), 
-						'U_MOVE_DOWN'	=> append_sid("index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;move_down=1&amp;id={$row['id']}"), 
+                    	'U_EDIT' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;edit=1&amp;id={$row['id']}")  ,
+                    	'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;delete=1&amp;id={$row['id']}")  ,  
+						'U_MOVE_UP'		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;move_up=1&amp;id={$row['id']}"), 
+						'U_MOVE_DOWN'	=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress&amp;move_down=1&amp;id={$row['id']}"), 
                     
                     ));
                 }

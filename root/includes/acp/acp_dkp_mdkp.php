@@ -37,7 +37,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$user->add_lang(array('mods/dkp_admin'));
 		$user->add_lang(array('mods/dkp_common'));
-		$link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp") . '"><h3>'.
+		$link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp") . '"><h3>'.
 			$user->lang['RETURN_DKPINDEX'].'</h3></a>'; 
 		
 		switch ($mode)
@@ -246,7 +246,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 						'SPENT'         => $row['member_spent'],
 						'CURRENT'       => $row['member_current'],
 						'LASTRAID'      => ( !empty($row['member_lastraid']) ) ? date($config['bbdkp_date_format'], $row['member_lastraid']) : '&nbsp;',
-						'U_VIEW_MEMBER' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp") . '&amp;member_id='.$row['member_id'].  '&amp;'. URI_DKPSYS . '='.$row['member_dkpid']
+						'U_VIEW_MEMBER' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp") . '&amp;member_id='.$row['member_id'].  '&amp;'. URI_DKPSYS . '='.$row['member_dkpid']
 						);
 					
 					if($config['bbdkp_dkphour'] == 1)
@@ -293,7 +293,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
 				
 				$output = array(
-					'F_MEMBERS' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp&amp;") . '&amp;mode=mm_editmemberdkp',
+					'F_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp&amp;") . '&amp;mode=mm_editmemberdkp',
 					'L_TITLE'		=> $user->lang['ACP_DKP_LISTMEMBERDKP'],
 					'L_EXPLAIN'		=> $user->lang['ACP_MM_LISTMEMBERDKP_EXPLAIN'],
 					'BUTTON_NAME' 	=> 'delete',
@@ -313,7 +313,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
 					'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
 				 	'S_SHOWTIME' 	=> ($config['bbdkp_dkptimeunit'] == '1') ? true : false,
-					'U_LIST_MEMBERDKP' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;" . URI_DKPSYS . "=". $dkpsys_id . "&amp;mode=mm_listmemberdkp") .'&amp;mod=list&amp;',		
+					'U_LIST_MEMBERDKP' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;" . URI_DKPSYS . "=". $dkpsys_id . "&amp;mode=mm_listmemberdkp") .'&amp;mod=list&amp;',		
 					'S_NOTMM' => false,
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text, 
 		            'DKPSYS' => $dkpsys_id
@@ -552,7 +552,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 						trigger_error($success_message . $link, E_USER_WARNING);
 					}
 					
-					redirect(append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp&amp;"));	
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp&amp;"));	
 									
 				}					
 				
@@ -707,7 +707,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				$template->assign_vars(array(
 					'L_TITLE'		=> $user->lang['ACP_DKP_EDITMEMBERDKP'],
 					'L_EXPLAIN'		=> $user->lang['ACP_MM_EDITMEMBERDKP_EXPLAIN'],
-					'F_EDIT_MEMBER' => append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;"),
+					'F_EDIT_MEMBER' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;"),
 					'MEMBER_NAME'           => $this->member['member_name'],
 					'V_MEMBER_ID'         => ( isset($_POST['add']) ) ? '' : $this->member['member_id'],
 					'V_MEMBER_DKPID'        => ( isset($_POST['add']) ) ? '' : $this->member['member_dkpid'],
@@ -1076,7 +1076,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					'ERROR_MSG'					=> $user->lang['ERROR_NODKPACCOUNT'],
 					'L_EXPLAIN'					=> $user->lang['TRANSFER_MEMBER_HISTORY_DESCRIPTION'],
 					'S_SHOW'					=> $show,  
-					'F_TRANSFER' 				=> append_sid("index.$phpEx", "i=dkp_mdkp&amp;mode=mm_transfer"),
+					'F_TRANSFER' 				=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_transfer"),
 					'L_SELECT_1_OF_X_MEMBERS'   => sprintf($user->lang['SELECT_1OFX_MEMBERS'], $maara),
 					'L_SELECT_1_OF_Y_MEMBERS'   => sprintf($user->lang['SELECT_1OFX_MEMBERS'], $teller_to),
 					)

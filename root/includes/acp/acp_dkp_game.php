@@ -43,7 +43,7 @@ class acp_dkp_game extends bbDkp_Admin
         global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
         $user->add_lang(array('mods/dkp_admin'));   
         $user->add_lang(array('mods/dkp_common'));   
-        $link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames") . '"><h3>'. $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
+        $link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") . '"><h3>'. $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 
          /***  DKPSYS drop-down ***/
         $dkpsys_id = 1;
@@ -320,7 +320,7 @@ class acp_dkp_game extends bbDkp_Admin
             	
             	if($addfaction)
             	{
-					redirect(append_sid("index.$phpEx", "i=dkp_game&amp;mode=addfaction"));            		
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addfaction"));            		
             		break;
             	}
             	
@@ -688,7 +688,7 @@ class acp_dkp_game extends bbDkp_Admin
                         'ID' 			=> $row['f_index'],
                         'FACTIONID' 	=> $row['faction_id'],
                         'FACTIONNAME' 	=> $row['faction_name'], 
-                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;factiondelete=1&amp;id={$row['f_index']}"))  
+                    	'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;factiondelete=1&amp;id={$row['f_index']}"))  
                     );
                 }
                 $db->sql_freeresult($result);
@@ -712,12 +712,12 @@ class acp_dkp_game extends bbDkp_Admin
                 {
                 	$total_races++;
                     $template->assign_block_vars('race_row', array(
-                        'U_VIEW_RACE' =>  append_sid("index.$phpEx", "i=dkp_game&amp;mode=addrace&amp;r=". $row['race_id']),
+                        'U_VIEW_RACE' =>  append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addrace&amp;r=". $row['race_id']),
                         'RACEID' 	=> $row['race_id'],
                         'RACENAME' 		=> $row['race_name'],
                         'FACTIONNAME' 	=> $row['faction_name'], 
-                    	'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;racedelete=1&amp;id={$row['race_id']}"), 
-                    	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;raceedit=1&amp;id={$row['race_id']}"), 
+                    	'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;racedelete=1&amp;id={$row['race_id']}"), 
+                    	'U_EDIT' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;raceedit=1&amp;id={$row['race_id']}"), 
                     )  
                     );
                 }
@@ -750,7 +750,7 @@ class acp_dkp_game extends bbDkp_Admin
                 {
                 	 $total_classes++;
                     $template->assign_block_vars('class_row', array(
-                        'U_VIEW_CLASS' =>  append_sid("index.$phpEx", "i=dkp_game&amp;mode=addclass&amp;r=". $row['class_id']),
+                        'U_VIEW_CLASS' =>  append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addclass&amp;r=". $row['class_id']),
 						'C_INDEX' 		=> $row['c_index'],
                     	'CLASSID' 		=> $row['class_id'],
                         'CLASSNAME' 	=> $row['class_name'],
@@ -761,8 +761,8 @@ class acp_dkp_game extends bbDkp_Admin
                         'CLASSHIDE' 	=> $row['class_hide'], 	
                     	'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
                     	'CLASSIMAGE'	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',
-                        'U_DELETE' 		=> append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classdelete=1&amp;id={$row['class_id']}"), 
-                    	'U_EDIT' 		=> append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classedit=1&amp;id={$row['class_id']}"), 
+                        'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classdelete=1&amp;id={$row['class_id']}"), 
+                    	'U_EDIT' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classedit=1&amp;id={$row['class_id']}"), 
                     )
                     );
                 }
@@ -779,7 +779,7 @@ class acp_dkp_game extends bbDkp_Admin
 	                'O_CLASSARMOR'    => $current_order2['uri'][2], 
 	                'O_CLASSMIN'      => $current_order2['uri'][3], 
 	                'O_CLASSMAX'      => $current_order2['uri'][4], 
-                    'U_LIST_GAMES' 	  => append_sid("index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;"),  
+                    'U_LIST_GAMES' 	  => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;"),  
                    	'LISTFACTION_FOOTCOUNT' => sprintf($user->lang['LISTFACTION_FOOTCOUNT'], $total_factions),
                     'LISTRACE_FOOTCOUNT' => sprintf($user->lang['LISTRACE_FOOTCOUNT'], $total_races),
                 	'LISTCLASS_FOOTCOUNT' => sprintf($user->lang['LISTCLASS_FOOTCOUNT'], $total_classes),

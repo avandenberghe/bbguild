@@ -39,7 +39,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
-		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
+		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
 
 		//do event test.
 		$sql = 'SELECT count(*) as eventcount FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
@@ -414,11 +414,11 @@ class acp_dkp_raid extends bbDkp_Admin
 		add_form_key('acp_dkp_addraid');
 		
 		$template->assign_vars ( array (
-				'U_BACK'			=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ),
+				'U_BACK'			=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids" ),
 				'L_TITLE' 			=> $user->lang ['ACP_ADDRAID'], 
 				'L_EXPLAIN' 		=> $user->lang ['ACP_ADDRAID_EXPLAIN'], 
-				'F_ADD_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addraid" ), 
-				'U_ADD_EVENT' 		=> append_sid ( "index.$phpEx", "i=dkp_event&amp;mode=addevent" ), 
+				'F_ADD_RAID' 		=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid" ), 
+				'U_ADD_EVENT' 		=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=addevent" ), 
 				'RAID_VALUE'		=> $eventvalue, 
 
 				//raiddate START
@@ -468,7 +468,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	 */
 	private function displayraid($raid_id)
 	{
-		global $db, $user, $config, $template, $phpEx, $phpbb_root_path ;
+		global $db, $user, $config, $template, $phpbb_admin_path, $phpEx, $phpbb_root_path ;
 		
 		/*** get general raid info  ***/
 		$sql_array = array (
@@ -692,9 +692,9 @@ class acp_dkp_raid extends bbDkp_Admin
 		{
 			// fill attendees table
 			$template->assign_block_vars ('raids_row', array (
-				'U_VIEW_ATTENDEE' => append_sid ("index.$phpEx" , "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;" . URI_NAMEID . "={$member_id}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']), 
-				'U_EDIT_ATTENDEE' => append_sid ("index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
-				'U_DELETE_ATTENDEE' => append_sid ("index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
+				'U_VIEW_ATTENDEE' => append_sid ("{$phpbb_admin_path}index.$phpEx" , "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;" . URI_NAMEID . "={$member_id}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']), 
+				'U_EDIT_ATTENDEE' => append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
+				'U_DELETE_ATTENDEE' => append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
 				'NAME' 		 => $raid_detail['member_name'], 
 				'COLORCODE'  => ($raid_detail['colorcode'] == '') ? '#123456' : $raid_detail['colorcode'],
                 'CLASS_IMAGE' 	=> (strlen($raid_detail['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $raid_detail['imagename'] . ".png" : '',  
@@ -809,9 +809,9 @@ class acp_dkp_raid extends bbDkp_Admin
 			'ITEMNAME'      => $item_name,
 			'ITEM_ID'		=> $row['item_id'],
 			'ITEM_ZS'      	=> ($row['item_zs'] == 1) ? ' checked="checked"' : '',
-			'U_VIEW_BUYER' 	=> (! empty ( $row ['member_name'] )) ? append_sid ("index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $row['member_id']) : '',
-			'U_VIEW_ITEM' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_ITEM . "={$row['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
-			'U_DELETE_ITEM' => append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteitem=1&amp;" . URI_ITEM . "={$row['item_id']}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']  ),
+			'U_VIEW_BUYER' 	=> (! empty ( $row ['member_name'] )) ? append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $row['member_id']) : '',
+			'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_ITEM . "={$row['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
+			'U_DELETE_ITEM' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteitem=1&amp;" . URI_ITEM . "={$row['item_id']}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']  ),
 			'ITEMVALUE' 	=> $row['item_value'],
 			'DECAYVALUE' 	=> $row['item_decay'],
 			'TOTAL' 		=> $row['item_total'],
@@ -828,10 +828,10 @@ class acp_dkp_raid extends bbDkp_Admin
 		
 		//fill template
 		$template->assign_vars ( array (
-			'U_BACK'			=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ),
+			'U_BACK'			=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids" ),
 			'L_TITLE' 			=> $user->lang ['ACP_ADDRAID'], 
-			'F_EDIT_RAID' 		=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
-			'F_ADDATTENDEE' 	=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=addattendee&amp;". URI_RAID . "=" .$raid_id ),
+			'F_EDIT_RAID' 		=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
+			'F_ADDATTENDEE' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addattendee&amp;". URI_RAID . "=" .$raid_id ),
 			'RAIDTITLE' 		=> sprintf($user->lang['RAIDDESCRIPTION'], $raid_id, $raid['event_name'], 
 							  	 $user->format_date($raid['raid_start'])), 
 			'EVENT_VALUE'		=> $event_value, 
@@ -921,12 +921,12 @@ class acp_dkp_raid extends bbDkp_Admin
 	 */
 	private function listraids()
 	{
-		global $db, $user, $config, $template, $phpEx;
+		global $db, $user, $config, $template, $phpbb_admin_path, $phpEx;
 		// add dkpsys button redirect
 		$showadd = (isset($_POST['raidadd'])) ? true : false;
         if($showadd)
         {
-			redirect(append_sid("index.$phpEx", "i=dkp_raid&amp;mode=addraid"));            		
+			redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid"));            		
          	break;
         }
             	
@@ -1056,11 +1056,11 @@ class acp_dkp_raid extends bbDkp_Admin
 			'O_TOTALVALUE' 		  => $current_order ['uri'] [7], 
 			'S_SHOWTIME' 			=> ($config['bbdkp_timebased'] == '1') ? true : false,
 			'S_SHOWZS' 			  => ($config['bbdkp_zerosum'] == '1') ? true : false, 
-			'U_LIST_RAIDS' 		  => append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=listraids" ), 
+			'U_LIST_RAIDS' 		  => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids" ), 
 			'START' 			  => $start, 
 			'LISTRAIDS_FOOTCOUNT' => sprintf ( $user->lang ['LISTRAIDS_FOOTCOUNT'], $total_raids, $config ['bbdkp_user_rlimit'] ), 
 			'RAID_PAGINATION' 	  => generate_pagination ( append_sid 
-					( "index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;o=" . $current_order ['uri'] ['current']) , 
+					( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;o=" . $current_order ['uri'] ['current']) , 
 					$total_raids, $config ['bbdkp_user_rlimit'], $start ) ) );
 	}
 	
@@ -1076,7 +1076,6 @@ class acp_dkp_raid extends bbDkp_Admin
 		if (confirm_box ( true )) 
 		{
 			// recall hidden vars
-			
 			$raid = array(
 				'raid_note' 		=> utf8_normalize_nfc (request_var ( 'hidden_raid_note', ' ', true )), 
 				'raid_event'		=> utf8_normalize_nfc (request_var ( 'hidden_raid_name', ' ', true )), 
@@ -1098,6 +1097,7 @@ class acp_dkp_raid extends bbDkp_Admin
 				{
 					$raid['raid_value'] = max ( $row['event_value'], 0.00 );
 				}
+				
 				$raid['event_dkpid'] = $row['event_dkpid'];
 				$raid['event_name'] = $row['event_name'];
 			}
@@ -1343,7 +1343,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			$success_message .= ' ' . (($this->update_player_status ( $old_raid['event_dkpid'])) ? strtolower ( $user->lang ['DONE'] ) : 
 			strtolower ( $user->lang ['ERROR'] ));
 		}
-		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>';
+		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>';
 
 		trigger_error ( $success_message . $this->link, E_USER_NOTICE );
 		
@@ -1669,7 +1669,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			
 			$db->sql_transaction('commit');
 			
-			$link = '<br /><a href="' . append_sid ("index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>'; 
+			$link = '<br /><a href="' . append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>'; 
 			trigger_error( sprintf( $user->lang['ADMIN_RAID_ATTENDEE_DELETED_SUCCESS'],  utf8_normalize_nfc(request_var('attendeename', '', true)) , $raid_id) . $link, E_USER_WARNING);
 		}
 		else
@@ -1799,7 +1799,7 @@ class acp_dkp_raid extends bbDkp_Admin
 	 */ 
 	private function editraider($raid_id, $attendee_id)
 	{
-		global $db, $user, $config, $template, $phpEx;
+		global $db, $user, $config, $template, $phpbb_admin_path, $phpEx;
 		if (isset ( $_POST ['editraider'] ) )
 		{
 			// update his raid record
@@ -1874,7 +1874,7 @@ class acp_dkp_raid extends bbDkp_Admin
 		$db->sql_freeresult($result);
 		
 		$template->assign_vars ( array (
-			'U_BACK'			=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
+			'U_BACK'			=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
 			'EVENT_DKPID'		=> $event_dkpid, 
 			'MEMBERID'			=> $attendee_id,
 			'MEMBERNAME'		=> $member_name,
@@ -2041,7 +2041,7 @@ class acp_dkp_raid extends bbDkp_Admin
 			require($phpbb_root_path . 'includes/acp/acp_dkp_item.' . $phpEx); 
 		}
 		$acp_dkp_item = new acp_dkp_item;
-		
+
 		$sql = 'SELECT i.*, m.member_name FROM ' . 
 				RAID_ITEMS_TABLE . ' i, ' . 
 				MEMBER_LIST_TABLE . ' m 

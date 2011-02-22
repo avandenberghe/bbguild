@@ -35,7 +35,7 @@ class acp_dkp_news extends bbDkp_Admin
 		$user->add_lang(array('mods/dkp_admin'));
 		$user->add_lang(array('mods/dkp_common'));
 
-		$link = '<br /><a href="'. append_sid("index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>'; 
+		$link = '<br /><a href="'. append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>'; 
 
 		switch ($mode)
 		{
@@ -198,7 +198,7 @@ class acp_dkp_news extends bbDkp_Admin
             	
             	if($showadd)
             	{
-					redirect(append_sid("index.$phpEx", "i=dkp_news&amp;mode=addnews"));            		
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_news&amp;mode=addnews"));            		
             		break;
             	}
    	
@@ -233,7 +233,7 @@ class acp_dkp_news extends bbDkp_Admin
 					$template->assign_block_vars('news_row', array(
 						'DATE' => date($config['bbdkp_date_format'], $news['news_date']),
 						'USERNAME' => $news['username'],             
-						'U_VIEW_NEWS' => append_sid("index.$phpEx", "i=dkp_news&amp;mode=addnews&amp;". URI_NEWS . "={$news['news_id']}"),
+						'U_VIEW_NEWS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_news&amp;mode=addnews&amp;". URI_NEWS . "={$news['news_id']}"),
 						'HEADLINE' => $news['news_headline'])
 					);
 				}
@@ -242,10 +242,10 @@ class acp_dkp_news extends bbDkp_Admin
 					'O_DATE'     => $current_order['uri'][0],
 					'O_USERNAME' => $current_order['uri'][2],
 					'O_HEADLINE' => $current_order['uri'][1],
-					'U_LIST_NEWS' => append_sid("index.$phpEx", "i=dkp_news&amp;mode=listnews&amp;"),
+					'U_LIST_NEWS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_news&amp;mode=listnews&amp;"),
 					'START' => $start,
 					'LISTNEWS_FOOTCOUNT' => sprintf($user->lang['NEWS_FOOTCOUNT'], $total_news, $config['bbdkp_user_nlimit']),
-					'NEWS_PAGINATION' => generate_pagination(append_sid("index.$phpEx", "i=dkp_news&amp;mode=listnews&amp;").'&amp;o='.$current_order['uri']['current'], $total_news, $config['bbdkp_user_nlimit'], $start))
+					'NEWS_PAGINATION' => generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_news&amp;mode=listnews&amp;").'&amp;o='.$current_order['uri']['current'], $total_news, $config['bbdkp_user_nlimit'], $start))
 				);
 
 			

@@ -40,11 +40,11 @@ class acp_dkp_event extends bbDkp_Admin
 	*/
     function main($id, $mode)
     {
-        global $db, $user, $template, $cache;
+        global $db, $user, $template;
         global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
         $user->add_lang(array('mods/dkp_admin'));   
         $user->add_lang(array('mods/dkp_common'));   
-        $link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp_event&amp;mode=listevents") . '"><h3>'. $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
+        $link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=listevents") . '"><h3>'. $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 
          /***  DKPSYS drop-down ***/
         $dkpsys_id = 1;
@@ -407,7 +407,7 @@ class acp_dkp_event extends bbDkp_Admin
             	
             	if($showadd)
             	{
-					redirect(append_sid("index.$phpEx", "i=dkp_event&amp;mode=addevent"));            		
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=addevent"));            		
             		break;
             	}
             	
@@ -441,7 +441,7 @@ class acp_dkp_event extends bbDkp_Admin
                 while ( $event = $db->sql_fetchrow($events_result) )
                 {
                     $template->assign_block_vars('events_row', array(
-                        'U_VIEW_EVENT' =>  append_sid("index.$phpEx", "i=dkp_event&amp;mode=addevent&amp;" . URI_EVENT ."={$event['event_id']}"),
+                        'U_VIEW_EVENT' =>  append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=addevent&amp;" . URI_EVENT ."={$event['event_id']}"),
                         'DKPSYS_EVENT' => $event['dkpsys_name'],
                         'COLOR' => $event['event_color'],
                         'IMAGENAME' => $event['event_imagename'],
@@ -457,11 +457,11 @@ class acp_dkp_event extends bbDkp_Admin
                     'O_DKPSYS' => $current_order['uri'][0],
                     'O_NAME' => $current_order['uri'][1],
                     'O_VALUE' => $current_order['uri'][2],   
-                    'U_LIST_EVENTS' => append_sid("index.$phpEx", "i=dkp_event&amp;mode=listevents&amp;"),       
+                    'U_LIST_EVENTS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=listevents&amp;"),       
                     'START' => $start,
                 
                     'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events, $config['bbdkp_user_elimit']),
-                    'EVENT_PAGINATION' => generate_pagination(append_sid("index.$phpEx", "i=dkp_event&amp;mode=listevents&amp;" . URI_ORDER . '='.$current_order['uri']['current']), $total_events, $config['bbdkp_user_elimit'],$start))
+                    'EVENT_PAGINATION' => generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=listevents&amp;" . URI_ORDER . '='.$current_order['uri']['current']), $total_events, $config['bbdkp_user_elimit'],$start))
 
                 );
 

@@ -55,7 +55,7 @@ class acp_dkp_adj extends bbDkp_Admin
         }
 
 		$user->add_lang(array('mods/dkp_admin', 'mods/dkp_common'));
-        $link = '<br /><a href="'.append_sid("index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>'; 
+        $link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>'; 
 		
 		switch ($mode)
 		{
@@ -67,7 +67,7 @@ class acp_dkp_adj extends bbDkp_Admin
 				$showadd = (isset($_POST['addiadj'])) ? true : false;
 			    if($showadd)
 			    {
-					redirect(append_sid("index.$phpEx", "i=dkp_adj&amp;mode=addiadj"));            		
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj"));            		
 			        break;
 			    }
 			    
@@ -146,7 +146,7 @@ class acp_dkp_adj extends bbDkp_Admin
 				$db->sql_freeresult($result2);
 
 				$current_order = switch_order($sort_order);
-				$u_list_adjustments = append_sid("index.$phpEx", "i=dkp_adj&amp;mode=listiadj") . '&amp;' . URI_PAGE;
+				$u_list_adjustments = append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj") . '&amp;' . URI_PAGE;
 				$start = request_var('start', 0) ;
 					
 				$s_group_adj = false;
@@ -184,14 +184,14 @@ class acp_dkp_adj extends bbDkp_Admin
 				while ($adj = $db->sql_fetchrow($result))
 				{
 					$template->assign_block_vars('adjustments_row', array(
-						'U_ADD_ADJUSTMENT' =>  append_sid("index.$phpEx", "i=dkp_adj&amp;mode=addiadj") .'&amp;' . URI_ADJUSTMENT . '='.$adj['adjustment_id'] . '&amp;' . URI_DKPSYS . '='.$adj['adjustment_dkpid']  ,
+						'U_ADD_ADJUSTMENT' =>  append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj") .'&amp;' . URI_ADJUSTMENT . '='.$adj['adjustment_id'] . '&amp;' . URI_DKPSYS . '='.$adj['adjustment_dkpid']  ,
 						'DATE' => date($config['bbdkp_date_format'], $adj['adjustment_date']),
 						'DKPID' => $adj['adjustment_dkpid'],
 						'DKPPOOL' => $adj['dkpsys_name'],
 						'COLORCODE'  => ($adj['colorcode'] == '') ? '#123456' : $adj['colorcode'],
 		                'CLASS_IMAGE' 	=> (strlen($adj['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $adj['imagename'] . ".png" : '',  
 						'S_CLASS_IMAGE_EXISTS' => (strlen($adj['imagename']) > 1) ? true : false, 				
-						'U_VIEW_MEMBER' => ( isset($adj['member_name']) ) ? append_sid($phpbb_root_path.'viewmember.php', URI_NAMEID . '='.$adj['member_id'] . '&amp;' . URI_DKPSYS . '='.$adj['adjustment_dkpid'])  : '',
+						'U_VIEW_MEMBER' => ( isset($adj['member_name']) ) ? append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '='.$adj['member_id'] . '&amp;' . URI_DKPSYS . '='.$adj['adjustment_dkpid'])  : '',
 						'MEMBER' => ( isset($adj['member_name']) ) ? $adj['member_name'] : '',
 						'REASON' => ( isset($adj['adjustment_reason']) ) ? $adj['adjustment_reason']  : '',
 						'ADJUSTMENT' => $adj['adjustment_value'],
@@ -202,7 +202,7 @@ class acp_dkp_adj extends bbDkp_Admin
 				$db->sql_freeresult($result);
 				
 				$listadj_footcount = sprintf($user->lang['LISTADJ_FOOTCOUNT'], $total_adjustments, $config['bbdkp_user_alimit']);
-				$pagination = generate_pagination(append_sid("index.$phpEx", "i=dkp_adj&amp;mode=listiadj") .'&amp;' . URI_PAGE, $total_adjustments, $config['bbdkp_user_alimit'], $start);
+				$pagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj") .'&amp;' . URI_PAGE, $total_adjustments, $config['bbdkp_user_alimit'], $start);
 				
 				$template->assign_vars(array(
 					'L_TITLE'			 => $user->lang['ACP_LISTIADJ'],
@@ -555,7 +555,7 @@ class acp_dkp_adj extends bbDkp_Admin
 					'L_EXPLAIN'		=> $user->lang['ACP_ADDIADJ_EXPLAIN'],
 					
 					// Form vars
-					'F_ADD_ADJUSTMENT' => append_sid("index.$phpEx", "i=dkp_adj&amp;mode=addiadj"),
+					'F_ADD_ADJUSTMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj"),
 					'ADJUSTMENT_ID'    => $adjust_id,
 					'DKP_ID'			=> $dkpsys_id,
 					

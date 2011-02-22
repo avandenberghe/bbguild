@@ -39,7 +39,7 @@ class acp_dkp_sys extends bbDkp_Admin
 	{
 		global $db, $user, $auth, $template, $sid, $cache;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		$link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp&amp;mode=mainpage" ) . '"><h3>Return to Index</h3></a>';
+		$link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage" ) . '"><h3>Return to Index</h3></a>';
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		
 		switch ($mode)
@@ -206,7 +206,7 @@ class acp_dkp_sys extends bbDkp_Admin
 				$delete = (isset ( $_GET ['delete'] ) && isset ( $_GET [URI_DKPSYS] )) ? true : false;
 				if ($showadd)
 				{
-					redirect ( append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=adddkpsys" ) );
+					redirect ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=adddkpsys" ) );
 					break;
 				}
 				if ($delete)
@@ -288,8 +288,8 @@ class acp_dkp_sys extends bbDkp_Admin
 				{
 					$template->assign_block_vars ( 'dkpsys_row', 
 						array (
-							'U_VIEW_DKPSYS' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=adddkpsys&amp;" . URI_DKPSYS . "={$dkpsys['dkpsys_id']}" ), 
-							'U_DELETE_DKPSYS' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;delete=1&amp;" . URI_DKPSYS . "={$dkpsys['dkpsys_id']}" ), 
+							'U_VIEW_DKPSYS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=adddkpsys&amp;" . URI_DKPSYS . "={$dkpsys['dkpsys_id']}" ), 
+							'U_DELETE_DKPSYS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;delete=1&amp;" . URI_DKPSYS . "={$dkpsys['dkpsys_id']}" ), 
 							'NAME' => $dkpsys ['dkpsys_name'], 
 							'STATUS' => $dkpsys ['dkpsys_status'], 
 							'DEFAULT' => $dkpsys ['dkpsys_default'] ) );
@@ -334,10 +334,10 @@ class acp_dkp_sys extends bbDkp_Admin
 					'L_EXPLAIN' => $user->lang ['ACP_LISTDKPSYS_EXPLAIN'], 
 					'O_NAME' => $current_order ['uri'] [0], 
 					'O_STATUS' => $current_order ['uri'] [1], 
-					'U_LIST_DKPSYS' => append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;" ), 
+					'U_LIST_DKPSYS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;" ), 
 					'START' => $start, 
 					'LISTDKPSYS_FOOTCOUNT' => sprintf ( $user->lang ['LISTDKPSYS_FOOTCOUNT'], $total_dkpsys, $config ['bbdkp_user_elimit'] ), 
-					'DKPSYS_PAGINATION' => generate_pagination ( append_sid ( "index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;" ) . "&amp;o=" . 
+					'DKPSYS_PAGINATION' => generate_pagination ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;" ) . "&amp;o=" . 
 						$current_order ['uri'] ['current'], $total_dkpsys, $config ['bbdkp_user_elimit'], $start ) ) );
 				$this->page_title = 'ACP_LISTDKPSYS';
 				$this->tpl_name = 'dkp/acp_' . $mode;

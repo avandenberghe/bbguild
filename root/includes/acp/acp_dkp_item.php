@@ -34,7 +34,7 @@ class acp_dkp_item extends bbDkp_Admin
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
 		
-		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_item&mode=listitems" ) . '"><h3>'. $user->lang['RETURN_DKPINDEX'] .'</h3></a>';
+		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&mode=listitems" ) . '"><h3>'. $user->lang['RETURN_DKPINDEX'] .'</h3></a>';
 		
 		// Get item name from the appropriate field
 		switch ($mode) 
@@ -123,8 +123,8 @@ class acp_dkp_item extends bbDkp_Admin
 				}
 				
 				$template->assign_vars ( array (
-					'F_SEARCH_ITEM' => append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=search" ), 
-					'L_LINKKI' => append_sid ( "index.$phpEx", 'i=dkp_item&amp;mode=viewitem&amp;' ), 
+					'F_SEARCH_ITEM' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=search" ), 
+					'L_LINKKI' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=viewitem&amp;' ), 
 					'ONLOAD' => ' onload="javascript:document.post.query.focus()"', 
 					 
 				));
@@ -172,7 +172,7 @@ class acp_dkp_item extends bbDkp_Admin
 	 */
 	private function displayloot()
 	{
-		global $db, $user, $config, $template, $phpEx;
+		global $db, $user, $config, $template, $phpEx, $phpbb_admin_path;
 		
 		// fetch params from $_GET
 		$raid_id = request_var(URI_RAID, 0);
@@ -344,10 +344,10 @@ class acp_dkp_item extends bbDkp_Admin
 					
 		//constant template variables
 		$template->assign_vars ( array (
-		'U_BACK'			=> append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
+		'U_BACK'			=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
 		'L_TITLE' 			=> $user->lang ['ACP_ADDITEM'], 
 		'L_EXPLAIN' 		=> $user->lang ['ACP_ADDITEM_EXPLAIN'],
-		'F_ADD_ITEM' 		=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_RAID . '=' . $raid_id ), 
+		'F_ADD_ITEM' 		=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_RAID . '=' . $raid_id ), 
 		'ITEM_VALUE' 		=> isset($this->item['item_value']) ? $this->item['item_value'] : 0.00,
 		'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 		'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
@@ -468,7 +468,7 @@ class acp_dkp_item extends bbDkp_Admin
 		//
 		$success_message = sprintf ( $user->lang ['ADMIN_ADD_ITEM_SUCCESS'], $item_name, implode ( ', ', $item_buyers  ), $itemvalue );
 		
-		$this->link = '<br /><a href="' . append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>';
+		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>';
 		
 		trigger_error ( $success_message . $this->link, E_USER_NOTICE );
 	}
@@ -905,7 +905,7 @@ class acp_dkp_item extends bbDkp_Admin
 	
 	private function listitems()
 	{
-		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
+		global $db, $user, $config, $template, $phpEx,$phpbb_admin_path, $phpbb_root_path;
 				
 		// add member button redirect
 		if ($this->bbtips == true)
@@ -1040,7 +1040,7 @@ class acp_dkp_item extends bbDkp_Admin
 			$current_order = switch_order ($sort_order);
 			
 	       $pagination = generate_pagination ( 
-	       append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ) .
+	       append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ) .
 	        '&amp;o=' . $current_order ['uri'] ['current'], $total_items, $config['bbdkp_user_ilimit'], $start );
 			
 			//prepare item list sql
@@ -1098,9 +1098,9 @@ class acp_dkp_item extends bbDkp_Admin
 				'ITEMNAME'      => $item_name, 
 				'RAID' 			=> (! empty ( $item ['event_name'] )) ?  $item ['event_name']  : '&lt;<i>Not Found</i>&gt;', 
 				'EVENTCOLOR'    => (! empty ( $item ['event_color'] )) ? $item ['event_color']  : '',
-				'U_VIEW_BUYER' 	=> (! empty ( $item ['member_name'] )) ? append_sid ( "index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;member_id={$item['member_id']}&amp;" . URI_DKPSYS . "={$item['event_dkpid']}") : '' ,
-				'U_VIEW_RAID' 	=> (! empty ( $item ['event_name'] )) ? append_sid ( "index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;" . URI_DKPSYS . "={$item['event_dkpid']}&amp;" . URI_RAID . "={$raid_id}" ) : '', 
-				'U_VIEW_ITEM' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_ITEM . "={$item['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
+				'U_VIEW_BUYER' 	=> (! empty ( $item ['member_name'] )) ? append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;member_id={$item['member_id']}&amp;" . URI_DKPSYS . "={$item['event_dkpid']}") : '' ,
+				'U_VIEW_RAID' 	=> (! empty ( $item ['event_name'] )) ? append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;" . URI_DKPSYS . "={$item['event_dkpid']}&amp;" . URI_RAID . "={$raid_id}" ) : '', 
+				'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_ITEM . "={$item['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
 				'VALUE' 		=> $item ['item_value']));
 			}
 			
@@ -1108,7 +1108,7 @@ class acp_dkp_item extends bbDkp_Admin
 			
 			$template->assign_vars ( array (
 				'S_SHOW' 		=> true,
-				'F_LIST_ITEM' 	=>   append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
+				'F_LIST_ITEM' 	=>   append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
 				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
 				'L_EXPLAIN' 	=> $user->lang ['ACP_LISTITEMS_EXPLAIN'], 
 				'O_DATE' 		=> $current_order ['uri'][0], 
@@ -1116,7 +1116,7 @@ class acp_dkp_item extends bbDkp_Admin
 				'O_NAME' 		=> $current_order ['uri'][2], 
 				'O_RAID' 		=> $current_order ['uri'][3], 
 				'O_VALUE' 		=> $current_order ['uri'][4], 
-				'U_LIST_ITEMS' 	=> append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;start={$start}&amp;" . URI_RAID . '=' . $raid_id), 
+				'U_LIST_ITEMS' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;start={$start}&amp;" . URI_RAID . '=' . $raid_id), 
 				'S_BBTIPS' 		=> $this->bbtips, 
 				'START' 		=> $start, 
 				'LISTITEMS_FOOTCOUNT' => $listitems_footcount, 
@@ -1126,7 +1126,7 @@ class acp_dkp_item extends bbDkp_Admin
 		else 
 		{
 			$template->assign_vars ( array (
-				'F_LIST_ITEM' 	=>  append_sid ( "index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
+				'F_LIST_ITEM' 	=>  append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
 				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
 				'L_EXPLAIN' 	=> $user->lang ['ACP_LISTITEMS_EXPLAIN'], 
 				'S_SHOW' 		=> false,

@@ -39,7 +39,7 @@ class acp_dkp extends bbDkp_Admin
         
         $user->add_lang(array('mods/dkp_admin'));
         $user->add_lang(array('mods/dkp_common'));
-        $link = '<br /><a href="' . append_sid("index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
+        $link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
         
         switch ($mode) 
         {
@@ -269,7 +269,7 @@ class acp_dkp extends bbDkp_Admin
                         if (isset($logline)) 
                         {
                             $template->assign_block_vars('actions_row', array(
-                            	'U_VIEW_LOG' => append_sid("index.$phpEx", 'i=dkp&amp;mode=dkp_logs&amp;' . URI_LOG . '=' . $row['log_id'])  , 
+                            	'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp&amp;mode=dkp_logs&amp;' . URI_LOG . '=' . $row['log_id'])  , 
                             	'ACTION' => $logline));
                         }
                         unset($logline);
@@ -957,7 +957,7 @@ class acp_dkp extends bbDkp_Admin
                             $template->assign_block_vars('logs_row', array(
                             	'DATE'         => (! empty($log['log_date'])) ? date('d.m.y - H:i', $log['log_date']) : '&nbsp;' , 
                             	'TYPE'         => (! empty($log['log_type'])) ? $log['log_type'] : '&nbsp;' , 
-                            	'U_VIEW_LOG'   => append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '&amp;' . URI_LOG . '=' . $log['log_id'] , 
+                            	'U_VIEW_LOG'   => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '&amp;' . URI_LOG . '=' . $log['log_id'] , 
                             	'ID'           => $log['log_id'] ,
                             	'USER'         => $log['username'] , 
                             	'IP'	       => $log['log_ipaddress'] , 
@@ -979,11 +979,11 @@ class acp_dkp extends bbDkp_Admin
                         	'O_USER' 		=> $current_order['uri'][2] , 
                         	'O_IP'	 		=> $current_order['uri'][3] , 
                         	'O_RESULT' 		=> $current_order['uri'][4] , 
-                        	'U_LOGS' 		=> append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' , 
-                        	'U_LOGS_SEARCH' => append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;") . '&amp;' , 
+                        	'U_LOGS' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' , 
+                        	'U_LOGS_SEARCH' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;") . '&amp;' , 
                         	'CURRENT_ORDER' => $current_order['uri']['current'] , 'START' => $start , 
                         	'VIEWLOGS_FOOTCOUNT' => sprintf($user->lang['VIEWLOGS_FOOTCOUNT'], $total_logs, USER_LLIMIT) , 
-                        	'VIEWLOGS_PAGINATION' => generate_pagination(append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;o=' . $current_order['uri']['current'], $total_logs, USER_LLIMIT, $start))
+                        	'VIEWLOGS_PAGINATION' => generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;o=' . $current_order['uri']['current'], $total_logs, USER_LLIMIT, $start))
                         );
                         break;
                         
@@ -1140,10 +1140,10 @@ class acp_dkp extends bbDkp_Admin
                 unset($sql_in);     
                             
 				//redirect to listing
-				$meta_info = append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs");
+				$meta_info = append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs");
 				meta_refresh(3, $meta_info);
 	
-				$message =  '<a href="' . append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '">' .
+				$message =  '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '">' .
 				$user->lang['RETURN_LOG'] . '</a><br />' . 
 					sprintf($user->lang['ADMIN_LOG_DELETE_SUCCESS'],implode($marked));
 				trigger_error($message, E_USER_WARNING);
@@ -1159,7 +1159,7 @@ class acp_dkp extends bbDkp_Admin
 			}
 			
 			// they hit no
-			$message =  '<a href="' . append_sid("index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '">' . $user->lang['RETURN_LOG'] .'</a><br />' . 
+			$message =  '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '">' . $user->lang['RETURN_LOG'] .'</a><br />' . 
 				sprintf($user->lang['ADMIN_LOG_DELETE_FAIL'],implode($marked));
 			
 			trigger_error($message, E_USER_WARNING);
