@@ -2,7 +2,7 @@
 /**
 * eqdkp help functions
 * 
-* @package bbDkp.includes
+* @package bbDKP.includes
 * @version $Id$
 * @copyright (c) 2009 bbDKP 
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -321,7 +321,7 @@ function percentage_raidcount($query_by_pool, $dkpsys_id, $days, $member_id)
 	    	r.event_id = e.event_id
 	    	AND ra.raid_id = r.raid_id
             AND ra.member_id =' . $member_id . '
-            AND r.raid_date BETWEEN ' . $start_date . ' AND ' . $end_date,
+            AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date,
     );
 	
 	if ($query_by_pool == true)
@@ -333,7 +333,7 @@ function percentage_raidcount($query_by_pool, $dkpsys_id, $days, $member_id)
 	
     $result = $db->sql_query($sql);
     $individual_raid_count = (int) $db->sql_fetchfield('raidcount',0,$result);
-    $db->sql_freeresult($result1);
+    $db->sql_freeresult($result);
 
     // total raid count for this pool or globally
 	$raid_count = 0;
@@ -344,7 +344,7 @@ function percentage_raidcount($query_by_pool, $dkpsys_id, $days, $member_id)
 			RAIDS_TABLE 			=> 'r'	         
 	    	),
 	    'WHERE'		=> 'r.event_id = e.event_id
-            AND r.raid_date BETWEEN ' . $start_date . ' AND ' . $end_date,
+            AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date,
     );
 	
 	if ($query_by_pool == true)
@@ -352,9 +352,9 @@ function percentage_raidcount($query_by_pool, $dkpsys_id, $days, $member_id)
 		$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkpsys_id; 
 	}
 	$sql = $db->sql_build_query('SELECT', $sql_array);
-	$result1 = $db->sql_query($sql);
-	$raid_count = (int) $db->sql_fetchfield('raidcount',0,$result1);
-	$db->sql_freeresult($result1);
+	$result = $db->sql_query($sql);
+	$raid_count = (int) $db->sql_fetchfield('raidcount',0,$result);
+	$db->sql_freeresult($result);
 
     // calculate ratio 
     $percent_of_raids = ($raid_count > 0 ) ?  round(($individual_raid_count / $raid_count) * 100,2) : 0;
@@ -390,12 +390,12 @@ function memberraid_count($dkpsys_id, $days, $member_id, $all)
 	    	AND ra.raid_id = r.raid_id
             AND ra.member_id =' . $member_id . '
             AND e.event_dkpid = ' . $dkpsys_id . ' 
-            AND r.raid_date BETWEEN ' . $start_date . ' AND ' . $end_date,
+            AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date,
     );
 	
 	if ($all == false)
 	{
-		$sql_array['WHERE'] .= ' AND (r.raid_date BETWEEN ' . $start_date . ' AND ' . $end_date . ')'; 
+		$sql_array['WHERE'] .= ' AND (r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date . ')'; 
 	}
 	$sql = $db->sql_build_query('SELECT', $sql_array);
     
@@ -430,12 +430,12 @@ function poolraid_count($dkp_pool, $days, $all )
 			RAIDS_TABLE 			=> 'r'	         
 	    	),
 	    'WHERE'		=> 'r.event_id = e.event_id
-            AND r.raid_date BETWEEN ' . $start_date . ' AND ' . $end_date,
+            AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date,
     );
 	
 	if ($all == false)
 	{
-		$sql_array['WHERE'] .= ' AND (raid_date BETWEEN ' . $start_date . ' AND ' . $end_date . ')'; 
+		$sql_array['WHERE'] .= ' AND (raid_start BETWEEN ' . $start_date . ' AND ' . $end_date . ')'; 
 	}
 	$sql = $db->sql_build_query('SELECT', $sql_array);
 	

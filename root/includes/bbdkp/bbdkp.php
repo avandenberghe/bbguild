@@ -2,7 +2,7 @@
 /**
 * bbdkp base admin classes
 * 
-* @package bbDkp.includes
+* @package bbDKP.includes
 * @version $Id$
 * @copyright (c) 2009 bbDKP 
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -25,7 +25,7 @@ global $phpbb_root_path;
 * Extended by admin page classes only
 * 
 */
-class bbDkp_Admin
+class bbDKP_Admin
 {
     // General vars
     var $url_id       = 0;                // ID from _GET 
@@ -33,11 +33,11 @@ class bbDkp_Admin
     var $time         = 0;                // Current time   
     var $bbtips		  = false; 
     
-function bbDkp_Admin()
+function bbDKP_Admin()
 {
     if(!defined("EMED_BBDKP"))
     {
-        trigger_error('bbDkp is currently disabled.', E_USER_WARNING); 
+        trigger_error('bbDKP is currently disabled.', E_USER_WARNING); 
     }
     
     global $config, $user; 

@@ -2,7 +2,7 @@
 /**
 * Constants defined for bbdkp
 * 
-* @package bbDkp.includes
+* @package bbDKP.includes
 * @version $Id$
 * @copyright (c) 2009 bbDKP 
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
