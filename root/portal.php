@@ -2,7 +2,7 @@
 /**
  * Indexpage for bbdkp
  * 
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author ippehe <ippe.he@gmail.com>
@@ -20,7 +20,7 @@ include($phpbb_root_path . 'common.' . $phpEx);
 
 if(!defined("EMED_BBDKP"))
 {
-    trigger_error('bbDkp is currently disabled.', E_USER_WARNING); 
+    trigger_error('bbDKP is currently disabled.', E_USER_WARNING); 
 }
 
 

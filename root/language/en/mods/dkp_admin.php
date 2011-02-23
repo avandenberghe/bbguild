@@ -2,7 +2,7 @@
 /**
  * bbdkp admin language file [English]
  * @author Sajaki@bbdkp.com
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
@@ -220,7 +220,7 @@ $lang = array_merge($lang, array(
 'ACP_SEARCH_ITEM' => 'Item Search',
 'ACP_VIEW_ITEM' => 'Item View (hide me)',
 'ACP_DKP_ARMORY' => 'Armory Config',
-'ACP_DKP_CONFIG' => 'bbDkp Config',
+'ACP_DKP_CONFIG' => 'bbDKP Config',
 'RETURN_DKPINDEX' => 'Return to DKP Index',
 'RETURN_LOG'  => 'Return to Log listing. ',
 'RETURN_RAID'  => 'Return to Raid. ',
@@ -242,7 +242,7 @@ $lang = array_merge($lang, array(
 'ACP_ADDRAID_EXPLAIN' => 'Here you can add a new raid.',
 'ACP_EDITRAID_EXPLAIN' => 'Here you can edit your raid.',
 'ACP_LISTRAIDS_EXPLAIN' => 'Here is a list of Raids per DKP pool. Clicking on the raidname brings you in Edit/delete-mode',
-'ACP_DKP_LOGS_EXPLAIN' => 'This lists all the actions in bbDkp. You can sort by username, date, IP or action.',
+'ACP_DKP_LOGS_EXPLAIN' => 'This lists all the actions in bbDKP. You can sort by username, date, IP or action.',
 'ACP_MM_RANKS_EXPLAIN' => 'Here you can add/edit/delete raid ranks and name prefix/suffix. Ranks can be overwritten by the in-game ranks through the armorylink plugin. Custom ranks (90 and 99) are read-only. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Guild member list. Shows only visible ranks. You can add new guild members or update existing ones or remove them. (delete their their DKP account first). If you have the Armory plugin you can add new members in batch.',
 'ACP_MM_LISTGUILDS_EXPLAIN' => 'List of guilds. before you add members, you have to add a guild.', 
@@ -250,10 +250,10 @@ $lang = array_merge($lang, array(
 'ACP_MM_LISTMEMBERDKP_EXPLAIN' => 'Here you can view / change Member DKP. ',
 'ACP_MM_ADDMEMBER_EXPLAIN' => 'Here you can add / change guild members information. ',
 'ACP_MM_EDITMEMBERDKP_EXPLAIN' => 'Here you can edit / delete guild members dkp. ',
-'ACP_DKP_CONFIG_EXPLAIN' => 'Here you can change Global bbDkp settings.',
+'ACP_DKP_CONFIG_EXPLAIN' => 'Here you can change Global bbDKP settings.',
 'ACP_DKP_ARMORY_EXPLAIN' => 'Here you can download data from Armory and hide ranks in roster.',
 'ACP_ITEMSTATS_EXPLAIN' => 'Here you can change the Item, Itemicon Popup settings',
-'ACP_INDEXPAGE_EXPLAIN' => 'bbDkp Portal Settings, Block on/off switches, Block configuration can be changed here',
+'ACP_INDEXPAGE_EXPLAIN' => 'bbDKP Portal Settings, Block on/off switches, Block configuration can be changed here',
 'TRANSFER_MEMBER_HISTORY_DESCRIPTION' => 'This transfers all of a member\'s history (raids, items, adjustments) to another member.',
 'ACP_LISTRACE_EXPLAIN' => 'Here you can edit the game races. Please mind that for WoW the race id has to match those of the Blizzard Armory. ', 
 'ACP_LISTCLASS_EXPLAIN' => 'Here you can edit the game classes. Please mind that for WoW the Class id has to match those of the Blizzard Armory. ', 
@@ -291,9 +291,9 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_RAID_ADD' => 'You do not have permission to add raids.',
 'NOAUTH_A_RAID_UPD' => 'You do not have permission to update raids.',
 'NOAUTH_A_RAID_DEL' => 'You do not have permission to delete raids.',
-'NOAUTH_A_CONFIG_MAN' => 'You do not have permission to manage bbDkp configuration settings.',
+'NOAUTH_A_CONFIG_MAN' => 'You do not have permission to manage bbDKP configuration settings.',
 'NOAUTH_A_MEMBERS_MAN' => 'You do not have permission to manage guild members.',
-'NOAUTH_A_LOGS_VIEW' => 'You do not have permission to view bbDkp logs.',
+'NOAUTH_A_LOGS_VIEW' => 'You do not have permission to view bbDKP logs.',
 
 // Manage Members Menu (yes, MMM)
 'ADD_MEMBER' 	=> 'Add New Member',
@@ -698,7 +698,7 @@ So the loot would go to player 2 <br />',
 'ADD_MEMBER_TITLE' => 'Manage Guild Member Dkp',
 'ADD_RAID_TITLE' => 'Add a Raid',
 'ADD_RAIDER_TITLE' => 'Add a Raider',
-'ADMIN_INDEX_TITLE' => 'bbDkp Administration',
+'ADMIN_INDEX_TITLE' => 'bbDKP Administration',
 'MANAGE_MEMBERS_TITLE' => 'Manage Guild Members',
 'VIEWLOGS_TITLE' => 'Log Viewer',
 'EDITMEMBER_DKP_TITLE' => 'Edit Guildmember DKP', 
@@ -866,7 +866,7 @@ So the loot would go to player 2 <br />',
 'FREQ2'    => 'Months',
 
 // Admin Index
-'BBDKP_STARTED' => 'bbDkp Started',
+'BBDKP_STARTED' => 'bbDKP Started',
 'IP_ADDRESS' => 'IP Address',
 'ITEMS_PER_DAY' => 'Items per Day',
 'LAST_UPDATE' => 'Last Update',

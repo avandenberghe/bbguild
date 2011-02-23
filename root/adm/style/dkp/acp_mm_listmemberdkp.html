@@ -34,14 +34,18 @@
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ZSBONUS}">{L_ZSVALUE}</a></th>
     <!-- ENDIF -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_EARNED}">{L_EARNED}</a></th>
+    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ADJUSTMENT}">{L_ADJUSTMENT}</a></th>
     <!-- IF S_SHOWDECAY -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_RDECAY}">{L_DECAY}</a></th>
     <!-- ENDIF -->
-    <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_ADJUSTMENT}">{L_ADJUSTMENT}</a></th>
+
+
     <!-- IF S_SHOWEPGP -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_EP}">{L_EP}</a></th>
 	<!-- ENDIF -->
+
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_SPENT}">{L_SPENT}</a></th>
+
     <!-- IF S_SHOWDECAY -->
     <th align="right" width="10%" nowrap="nowrap"><a href="{U_LIST_MEMBERDKP}o={O_IDECAY}">{L_DECAY}</a></th>
 	<!-- ENDIF -->
@@ -73,10 +77,10 @@
     <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.ZEROSUM}</td>
     <!-- ENDIF -->
     <td class="row2"  width="10%" style="text-align:right;" nowrap="nowrap" ><span class="positive"><strong>{members_row.EARNED}</strong></span></td>
+    <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.ADJUSTMENT}</td>
     <!-- IF S_SHOWDECAY -->
     <td width="10%" style="text-align:right;" nowrap="nowrap" class="negative">{members_row.RAIDDECAY}</td>
     <!-- ENDIF -->
-    <td width="10%" style="text-align:right;" nowrap="nowrap" class="positive">{members_row.ADJUSTMENT}</td>
     <!-- IF S_SHOWEPGP -->
     <td class="row2" width="10%" style="text-align:right;" nowrap="nowrap"><span class="positive"><strong>{members_row.EP}</strong></span></td>
      <!-- ENDIF -->

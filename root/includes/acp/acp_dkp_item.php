@@ -2,7 +2,7 @@
 /***
 * This class manages Items 
 *
-* @package bbDkp.acp
+* @package bbDKP.acp
 * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * 
@@ -22,7 +22,7 @@ if (! defined('EMED_BBDKP'))
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
-class acp_dkp_item extends bbDkp_Admin 
+class acp_dkp_item extends bbDKP_Admin 
 {
 	public $u_action;
 	private $link;

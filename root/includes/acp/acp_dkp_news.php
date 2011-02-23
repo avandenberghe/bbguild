@@ -2,7 +2,7 @@
 /**
 * This class manages the news page
 * 
-* @package bbDkp.acp
+* @package bbDKP.acp
 * @author Ippehe, Sajaki
 * @version $Id$
 * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
@@ -24,7 +24,7 @@ if (! defined('EMED_BBDKP'))
 }
 
 
-class acp_dkp_news extends bbDkp_Admin
+class acp_dkp_news extends bbDKP_Admin
 {
 	var $u_action;
 	function main($id, $mode) 

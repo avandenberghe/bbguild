@@ -2,16 +2,16 @@
 /**
 * This class manages Bossprogress 
 *  
-* @package bbDkp.acp
+* @package bbDKP.acp
 * @author Sajaki@bbdkp.com 
 * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * $Id$
 * 
-* Powered by bbdkp © 2009 The bbDkp Project Team
+* Powered by bbdkp © 2009 The bbDKP Project Team
 * If you use this software and find it to be useful, we ask that you
 * retain the copyright notice below.  While not required for free use,
-* it will help build interest in the bbDkp project.
+* it will help build interest in the bbDKP project.
 * 
 * Thanks for sz3 for the original Bossprogress.
 * Thanks to ippeh for bbDKP integration
@@ -32,7 +32,7 @@ if (! defined('EMED_BBDKP'))
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
-class acp_dkp_bossprogress extends bbDkp_Admin
+class acp_dkp_bossprogress extends bbDKP_Admin
 {
 	var $u_action;
 	

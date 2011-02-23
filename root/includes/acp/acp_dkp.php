@@ -1,7 +1,7 @@
 <?php
 /**
  * 
- * @package bbDkp.acp
+ * @package bbDKP.acp
  * @version $Id$
  * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -26,7 +26,7 @@ if (! defined('EMED_BBDKP'))
  * @author Ippehe, Sajaki
  *
  */
-class acp_dkp extends bbDkp_Admin
+class acp_dkp extends bbDKP_Admin
 {
     /**
      * main Settings function

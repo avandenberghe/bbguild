@@ -1,7 +1,7 @@
 <?php
 /**
 * 
-* @package bbDkp.acp
+* @package bbDKP.acp
 * @author sajaki9@gmail.com
 * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -25,7 +25,7 @@ if (! defined('EMED_BBDKP'))
  * This class manages member general info
  * 
  */
-class acp_dkp_mm extends bbDkp_Admin
+class acp_dkp_mm extends bbDKP_Admin
 {
 	var $u_action;
 	var $member;

@@ -2,8 +2,8 @@
 /**
  * bbdkp about popup
  * 
- * @package bbDkp
- * @copyright (c) 2009 bbDkp <http://code.google.com/p/bbdkp/>
+ * @package bbDKP
+ * @copyright (c) 2009 bbDKP <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author ippeh
  * @version $Id$

@@ -2,7 +2,7 @@
 /**
  * View individual raid
  * 
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$ 
@@ -262,8 +262,8 @@ if ( isset($_GET[URI_RAID])  )
 
     $items_re = 0;
     
-	$bbDkp_Admin = new bbDkp_Admin;
-	if ($bbDkp_Admin->bbtips == true)
+	$bbDKP_Admin = new bbDKP_Admin;
+	if ($bbDKP_Admin->bbtips == true)
 	{
 		if ( !class_exists('bbtips')) 
 		{
@@ -274,7 +274,7 @@ if ( isset($_GET[URI_RAID])  )
 		
     while ( $item = $db->sql_fetchrow($items_result) )
     {
-		if ($bbDkp_Admin->bbtips == true)
+		if ($bbDKP_Admin->bbtips == true)
 		{
 			if ($item['item_gameid'] > 0 )
 			{

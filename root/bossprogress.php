@@ -1,8 +1,8 @@
 <?php
 /**
- * Bossprogress bbDkp
+ * Bossprogress bbDKP
  * 
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author sz3

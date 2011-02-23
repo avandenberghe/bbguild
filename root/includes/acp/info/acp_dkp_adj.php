@@ -2,12 +2,12 @@
 /**
 * This class manages guildmembers dkp adjustments
 * 
-* Powered by bbdkp © 2009 The bbDkp Project Team
+* Powered by bbdkp © 2009 The bbDKP Project Team
 * If you use this software and find it to be useful, we ask that you
 * retain the copyright notice below.  While not required for free use,
-* it will help build interest in the bbDkp project.
+* it will help build interest in the bbDKP project.
 * 
-* @package bbDkp.acp
+* @package bbDKP.acp
 * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * @version $Id$

@@ -2,7 +2,7 @@
 /**
 * This acp class manages DKP pools
 * 
-* @package bbDkp.acp
+* @package bbDKP.acp
 * @author Sajaki
 * @version $Id$
 * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/

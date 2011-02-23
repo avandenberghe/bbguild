@@ -50,29 +50,29 @@
 	<ul class="topiclist">
 	<li class="header">
 	<table width="100%" >
-		<colgroup span="12" valign= "middle">
+		<colgroup span="13" valign= "middle">
 		<col width="3%"></col>
 		<col width="3%"></col>
-        <col width="20%"></col>
-        <col width="5%"></col>
-		<col width="6%"></col>
-		<col width="6%"></col>
-		<col width="8%"></col>
-		<col width="6%"></col>
-		<col width="6%"></col>
-		<col width="6%"></col>
-		<col width="6%"></col>
-		<col width="6%"></col>
+        <col width="3%"></col>
+		<col width="3%"></col>
+		<col width="10%"></col>
+		<col width="9.75%"></col>
+		<col width="9.75%"></col>
+		<col width="9.75%"></col>
+		<col width="9.75%"></col>
+		<col width="9.75%"></col>
+		<col width="9.75%"></col>
+		<col width="9.75%"></col>
+		<col width="9.75	%"></col>
 		</colgroup>
 
   <tr>
     <th></th>
     <th></th>
-    <th><a href="{O_NAME}">{L_NAME}</a></th>
-    <th><a href="{O_POOL}">{L_POOL}</a></th>
-    <th style="text-align: center;"><a href="{O_RANK}">{L_RANK}</a></th>
-    <th style="text-align: center;"><a href="{O_LEVEL}">{L_LEVEL}</a></th>
     <th style="text-align: center;"><a href="{O_CLASS}">{L_CLASS}</a></th>
+    <th style="text-align: center;"><a href="{O_LEVEL}">{L_LEVEL}</a></th>
+    <th style="text-align: left;"><a href="{O_NAME}">{L_NAME}</a></th>
+    <th style="text-align: center;"><a href="{O_RANK}">{L_RANK}</a></th>
     <th style="text-align: right;"><a href="{O_EARNED}">{L_EARNED}</a></th>
     <th style="text-align: right;"><a href="{O_SPENT}">{L_SPENT}</a></th>
     <th style="text-align: right;"><a href="{O_ADJUSTMENT}">{L_ADJUSTMENT}</a></th>
@@ -99,16 +99,17 @@
 				<colgroup span="12">
 				<col width="3%"></col>
 				<col width="3%"></col>
-				<col width="20%"></col>
-				<col width="5%"></col>
-				<col width="6%"></col>
-				<col width="6%"></col>
-				<col width="8%"></col>
-				<col width="6%"></col>
-				<col width="6%"></col>
-				<col width="6%"></col>
-				<col width="6%"></col>
-				<col width="6%"></col>
+				<col width="3%"></col>
+				<col width="3%"></col>
+				<col width="10%"></col>
+				<col width="9.75%"></col>
+				<col width="9.75%"></col>
+				<col width="9.75%"></col>
+				<col width="9.75%"></col>
+				<col width="9.75%"></col>
+				<col width="9.75%"></col>
+				<col width="9.75%"></col>
+				<col width="9.75%"></col>
 				</colgroup>
 
 
@@ -120,11 +121,10 @@
   <!-- ENDIF -->
     <td><input type="checkbox" name="compare_ids[]" value="{members_row.ID}" /></td>
     <td>{members_row.COUNT}</td>
-    <td><a style="color:{members_row.COLORCODE}" href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a></td>
-    <td style="text-align: center;">{members_row.MEMBER_DKPPOOL}</td>
-    <td style="text-align: center;"><!-- IF members_row.RANK_HIDE == '1' --><em><!-- ENDIF --><a href="{members_row.RANK_SEARCH}">{members_row.RANK_NAME}</a><!-- IF members_row.RANK_HIDE == '1' --></em><!-- ENDIF --></td>
+    <td style="white-space: nowrap;"><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;</span></td>
     <td style="text-align: center;">{members_row.LEVEL}</td>
-    <td style="white-space: nowrap;"><span class="{members_row.CSSCLASS}">{members_row.CLASS}</span></td>
+    <td><a style="color:{members_row.COLORCODE}" href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a></td>
+    <td style="text-align: center;"><!-- IF members_row.RANK_HIDE == '1' --><em><!-- ENDIF --><a href="{members_row.RANK_SEARCH}">{members_row.RANK_NAME}</a><!-- IF members_row.RANK_HIDE == '1' --></em><!-- ENDIF --></td>
     <td style="font-size :8pt; color: green; text-align: right;">{members_row.EARNED}</td>
     <td style="font-size :8pt; color: red; text-align: right;" >{members_row.SPENT}</td>
 	<td style="font-size :8pt; color: {members_row.DKPCOLOUR1}; text-align: right;">{members_row.ADJUSTMENT}</td>

@@ -2,7 +2,7 @@
 /**
  * Views detail of an event
  * 
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$  
@@ -172,8 +172,8 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
     
     $result = $db->sql_query_limit($sql, $config['bbdkp_user_ilimit'], $start);
     
-	$bbDkp_Admin = new bbDkp_Admin;
-	if ($bbDkp_Admin->bbtips == true)
+	$bbDKP_Admin = new bbDKP_Admin;
+	if ($bbDKP_Admin->bbtips == true)
 	{
 		if ( !class_exists('bbtips')) 
 		{
@@ -184,7 +184,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 
     while ( $row = $db->sql_fetchrow($result) )
     {
-		if ($bbDkp_Admin->bbtips == true)
+		if ($bbDKP_Admin->bbtips == true)
 		{
 			$item_name = '<b>' . $bbtips->parse('[itemdkp]' . $row['item_name']  . '[/itemdkp]') . '</b>'; 
 		}

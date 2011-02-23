@@ -2,7 +2,7 @@
 /**
  * This acp class manages DKP pools and Loot systems
  * 
- * @package bbDkp.acp
+ * @package bbDKP.acp
  * @author Sajaki
  * @version $Id$
  * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
@@ -23,7 +23,7 @@ if (! defined ( 'EMED_BBDKP' ))
 	trigger_error ( $user->lang ['BBDKPDISABLED'], E_USER_WARNING );
 }
 
-class acp_dkp_sys extends bbDkp_Admin
+class acp_dkp_sys extends bbDKP_Admin
 {
 	var $u_action;
 	

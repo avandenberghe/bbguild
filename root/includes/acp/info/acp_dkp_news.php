@@ -2,7 +2,7 @@
 /**
 * This class manages the news page
 * 
-* @package bbDkp.acp
+* @package bbDKP.acp
 * @author Ippehe, Sajaki
 * @version $Id$
 * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/

@@ -2,7 +2,7 @@
 /**
  * Views detail of an item
  * 
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
@@ -66,8 +66,8 @@ if (isset($_GET[URI_ITEM]) )
 		trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'], E_USER_WARNING );
     }
 	
-	$bbDkp_Admin = new bbDkp_Admin;
-	if ($bbDkp_Admin->bbtips == true)
+	$bbDKP_Admin = new bbDKP_Admin;
+	if ($bbDKP_Admin->bbtips == true)
 	{
 		if ( !class_exists('bbtips')) 
 		{
@@ -105,7 +105,7 @@ if (isset($_GET[URI_ITEM]) )
     }
 	$title = $user->lang['ITEM'] . ' : '. $item_name;
 	
-    if ($bbDkp_Admin->bbtips == true)
+    if ($bbDKP_Admin->bbtips == true)
 	{
 		if ($item_gameid > 0 )
 		{

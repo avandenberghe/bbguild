@@ -1,7 +1,7 @@
 <?php
 /**
 * 
-* @package bbDkp.acp
+* @package bbDKP.acp
 * @author sajaki9@gmail.com
 * @version $Id$
 * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
@@ -27,7 +27,7 @@ if (! defined('EMED_BBDKP'))
  * This class manages member DKP
  * 
  */
-class acp_dkp_mdkp extends bbDkp_Admin
+class acp_dkp_mdkp extends bbDKP_Admin
 {
 	var $u_action;
 
@@ -134,9 +134,8 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				$member_count = 0;
 
 				$sql_array = array(
-					'SELECT'	=> 'm.member_id,  a.member_name, a.member_level, m.member_dkpid, m.member_raid_value,
-					m.member_earned, m.member_adjustment, 
-					m.member_spent, 
+					'SELECT'	=> 'm.member_id,  a.member_name, a.member_level, m.member_dkpid, 
+					m.member_raid_value, m.member_earned, m.member_adjustment, m.member_spent, 
 					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
 					m.member_status, m.member_lastraid,
 					s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename', 
@@ -175,7 +174,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 					17  => array('member_lastraid desc', 'member_lastraid'),
 				);
 				
-				if($config['bbdkp_dkphour'] == 1)
+				if($config['bbdkp_timebased'] == 1)
 				{
 					$sql_array[ 'SELECT'] .= ', m.member_time_bonus';
 					$sort_order[6] = array('member_time_bonus desc', 'member_time_bonus');
@@ -198,7 +197,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 				if($config['bbdkp_epgp'] == 1)
 				{
 					$sql_array[ 'SELECT'] .= ', (m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep, (m.member_spent - m.member_item_decay ) AS gp, case when (m.member_spent - m.member_item_decay) = 0 then (m.member_earned - m.member_raid_decay + m.member_adjustment)  
-					else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as er, ' ;
+					else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as er ' ;
 					$sort_order[11] = array('ep desc', 'ep');
 					$sort_order[14] = array('gp desc', 'gp');
 					$sort_order[15] = array('er desc', 'er');
@@ -249,7 +248,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 						'U_VIEW_MEMBER' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp") . '&amp;member_id='.$row['member_id'].  '&amp;'. URI_DKPSYS . '='.$row['member_dkpid']
 						);
 					
-					if($config['bbdkp_dkphour'] == 1)
+					if($config['bbdkp_timebased'] == 1)
 					{
 						$members_row[ 'TIMEBONUS'] = $row['member_time_bonus']; 
 						
@@ -319,7 +318,7 @@ class acp_dkp_mdkp extends bbDkp_Admin
 		            'DKPSYS' => $dkpsys_id
 					);
 					
-					if($config['bbdkp_dkphour'] == 1)
+					if($config['bbdkp_timebased'] == 1)
 					{
 						$output[ 'O_TIMEBONUS'] = $current_order['uri'][6]; 
 						
