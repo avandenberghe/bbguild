@@ -608,13 +608,12 @@ foreach ( $memberarray as $key => $member )
 		'RAIDS_P2_DAYS' => $member ['attendanceP2'], 
 		'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}viewmember.$phpEx", 
 			'&amp;' . URI_NAMEID . '=' . $member ['member_id'] . 
-			'&amp;' . URI_DKPSYS . '=' . $member ['member_dkpid']) 
-		);
+			'&amp;' . URI_DKPSYS . '=' . $member ['member_dkpid']), 
+	);
 		
 		if($config['bbdkp_timebased'] == 1)
 		{
 			$templatearray['TIMEBONUS'] = $member ['member_time_bonus'];
-			
 		}
 		if($config['bbdkp_zerosum'] == 1)
 		{
@@ -704,7 +703,12 @@ $template->assign_vars ( array ('F_MEMBERS' => append_sid ( "{$phpbb_root_path}l
 	 
 	'RAIDS_P1_DAYS' => sprintf ( $user->lang ['RAIDS_X_DAYS'], $list_p1 ), 
 	'RAIDS_P2_DAYS' => sprintf ( $user->lang ['RAIDS_X_DAYS'], $list_p2 ), 
-	'S_SHOWLEAD' => $s_showlb, 
+	'S_SHOWLEAD' => $s_showlb,
+	'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+	'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
+	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
+ 	'S_SHOWTIME' 	=> ($config['bbdkp_dkptimeunit'] == '1') ? true : false,
+
 	
 	'FOOTCOUNT' => (isset ( $_POST ['compare'] )) ? 
 		sprintf ( $footcount_text, sizeof (request_var ( 'compare_ids', array ('' => 0 )))) : 
