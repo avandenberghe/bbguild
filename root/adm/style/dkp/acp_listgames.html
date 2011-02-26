@@ -56,9 +56,11 @@
 <thead>
   <tr>
     <th align="left" width="10%"><a href="{U_LIST_GAMES}&amp;o={O_RACEID}&amp;">{L_RACEID}</a></th>
-    <th align="left" width="50%"><a href="{U_LIST_GAMES}&amp;o={O_RACENAME}&amp;">{L_RACE}</a></th>
-    <th align="left" width="40%"><a href="{U_LIST_GAMES}&amp;o={O_FACTIONNAME}&amp;">{L_FACTION}</a></th>
-  	<th align="center" width="10%">{L_ACTION}</th>
+    <th align="left" width="40%"><a href="{U_LIST_GAMES}&amp;o={O_RACENAME}&amp;">{L_RACE}</a></th>
+    <th align="left" width="15%">{L_MALE}</th>
+    <th align="left" width="15%">{L_FEMALE}</th>
+    <th align="left" width="15%"><a href="{U_LIST_GAMES}&amp;o={O_FACTIONNAME}&amp;">{L_FACTION}</a></th>
+  	<th align="center" width="5%">{L_ACTION}</th>
   </tr>
 </thead>
 <tbody>
@@ -69,8 +71,10 @@
   <tr class="row2">
   <!-- ENDIF -->
     <td width="10%">{race_row.RACEID}</td>
-    <td width="50%"><a href="{race_row.U_EDIT}">{race_row.RACENAME}</a></td>
-    <td width="40%">{race_row.FACTIONNAME}</td>
+    <td width="40%"><a href="{race_row.U_EDIT}">{race_row.RACENAME}</a></td>
+    <td width="15%"><!-- IF race_row.S_RACE_IMAGE_M_EXISTS -->  <img src="{race_row.RACE_IMAGE_M}" alt="{race_row.RACE_IMAGE_M}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
+    <td width="15%"><!-- IF race_row.S_RACE_IMAGE_F_EXISTS -->  <img src="{race_row.RACE_IMAGE_F}" alt="{race_row.RACE_IMAGE_F}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
+    <td width="15%">{race_row.FACTIONNAME}</td>
 	<td align="center" width="10%" nowrap="nowrap">
 	<a href="{race_row.U_DELETE}">{ICON_DELETE}</a>
 	<a href="{race_row.U_EDIT}">{ICON_EDIT}</a>
@@ -78,7 +82,7 @@
   </tr>
   <!-- END race_row -->
   <tr>
-    <th colspan="4" class="footer">{LISTRACE_FOOTCOUNT}</th>
+    <th colspan="6" class="footer">{LISTRACE_FOOTCOUNT}</th>
   </tr>
   </tbody>
 </table>
@@ -115,7 +119,7 @@
   <!-- ENDIF -->
     <td width="10%">{class_row.CLASSID}</td>
     <td width="30%"><strong><a style="color:{class_row.COLORCODE}" href="{class_row.U_EDIT}">{class_row.CLASSNAME}</a></strong></td>
-    <td width="10%"><!-- IF class_row.S_CLASS_IMAGE_EXISTS -->  <img src="{class_row.CLASSIMAGE}" alt="{class_row.CLASSNAME}" />  <!-- ELSE -->no image<!-- ENDIF --> </td>
+    <td width="10%"><!-- IF class_row.S_CLASS_IMAGE_EXISTS -->  <img src="{class_row.CLASSIMAGE}" alt="{class_row.CLASSNAME}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
     <td width="30%">{class_row.CLASSARMOR}</td>
     <td width="5%">{class_row.CLASSMIN}</td>
     <td width="5%">{class_row.CLASSMAX}</td>

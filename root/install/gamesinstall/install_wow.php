@@ -52,19 +52,19 @@ function install_wow()
 	// races
 	$db->sql_query ('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
 	$sql_ary = array ();
-	$sql_ary [] = array ('race_id' => 0, 'race_faction_id' => 0 ); //Unknown
-	$sql_ary [] = array ('race_id' => 1, 'race_faction_id' => 1 ); //Human
-	$sql_ary [] = array ('race_id' => 2, 'race_faction_id' => 2 ); //Orc
-	$sql_ary [] = array ('race_id' => 3, 'race_faction_id' => 1 ); //Dwarf
-	$sql_ary [] = array ('race_id' => 4, 'race_faction_id' => 1 ) ; //Night Elf
-	$sql_ary [] = array ('race_id' => 5, 'race_faction_id' => 2 ); //Undead
-	$sql_ary [] = array ('race_id' => 6, 'race_faction_id' => 2 ); //Tauren
-	$sql_ary [] = array ('race_id' => 7, 'race_faction_id' => 1 ); //Gnome
-	$sql_ary [] = array ('race_id' => 8, 'race_faction_id' => 2 ); //Troll
-	$sql_ary [] = array ('race_id' => 9, 'race_faction_id' => 2 ); //Goblin
-	$sql_ary [] = array ('race_id' => 10, 'race_faction_id' => 2 ); //Blood Elf
-	$sql_ary [] = array ('race_id' => 11, 'race_faction_id' => 1 ); //Draenei
-	$sql_ary [] = array ('race_id' => 22, 'race_faction_id' => 1 ); //Worgen
+	$sql_ary [] = array ('race_id' => 0, 'race_faction_id' => 0,  ); //Unknown
+	$sql_ary [] = array ('race_id' => 1, 'race_faction_id' => 1, 'image_female_small' => 'wow_human_female_small',  'image_male_small' => 'wow_human_male_small',  ); //Human
+	$sql_ary [] = array ('race_id' => 2, 'race_faction_id' => 2 , 'image_female_small' => 'wow_orc_female_small',  'image_male_small' => 'wow_orc_male_small', ); //Orc
+	$sql_ary [] = array ('race_id' => 3, 'race_faction_id' => 1 , 'image_female_small' => 'wow_dwarf_female_small',  'image_male_small' => 'wow_dwarf_male_small', ); //Dwarf
+	$sql_ary [] = array ('race_id' => 4, 'race_faction_id' => 1 , 'image_female_small' => 'wow_nightelf_female_small',  'image_male_small' => 'wow_nightelf_male_small', ) ; //Night Elf
+	$sql_ary [] = array ('race_id' => 5, 'race_faction_id' => 2 , 'image_female_small' => 'wow_scourge_female_small',  'image_male_small' => 'wow_scourge_male_small', ); //Undead
+	$sql_ary [] = array ('race_id' => 6, 'race_faction_id' => 2 , 'image_female_small' => 'wow_tauren_female_small',  'image_male_small' => 'wow_tauren_male_small', ); //Tauren
+	$sql_ary [] = array ('race_id' => 7, 'race_faction_id' => 1 , 'image_female_small' => 'wow_gnome_female_small',  'image_male_small' => 'wow_gnome_male_small', ); //Gnome
+	$sql_ary [] = array ('race_id' => 8, 'race_faction_id' => 2 , 'image_female_small' => 'wow_troll_female_small',  'image_male_small' => 'wow_troll_male_small', ); //Troll
+	$sql_ary [] = array ('race_id' => 9, 'race_faction_id' => 2 , 'image_female_small' => 'wow_goblin_female_small',  'image_male_small' => 'wow_goblin_male_small', ); //Goblin
+	$sql_ary [] = array ('race_id' => 10, 'race_faction_id' => 2 , 'image_female_small' => 'wow_bloodelf_female_small',  'image_male_small' => 'wow_bloodelf_male_small', ); //Blood Elf
+	$sql_ary [] = array ('race_id' => 11, 'race_faction_id' => 1 , 'image_female_small' => 'wow_draenei_female_small',  'image_male_small' => 'wow_draenei_male_small', ); //Draenei
+	$sql_ary [] = array ('race_id' => 22, 'race_faction_id' => 1 , 'image_female_small' => 'wow_worgen_female_small',  'image_male_small' => 'wow_worgen_male_small', ); //Worgen
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 	
 

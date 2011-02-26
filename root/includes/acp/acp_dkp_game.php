@@ -115,6 +115,8 @@ class acp_dkp_game extends bbDKP_Admin
 				$id = request_var('race_id', 0);
 				$racename = utf8_normalize_nfc(request_var('racename', '', true));
 				$factionid = request_var('faction', 0 );
+				$race_imagename_m = utf8_normalize_nfc(request_var('image_male_small', '', true));
+				$race_imagename_f = utf8_normalize_nfc(request_var('image_female_small', '', true));
 				
 				if($raceadd)
 				{
@@ -129,6 +131,8 @@ class acp_dkp_game extends bbDKP_Admin
 					$data = array( 
 						'race_id'				=> (int) $id,
 						'race_faction_id'		=> (int) $factionid,
+						'image_male_small'		=> (string) $race_imagename_m,
+						'image_female_small'	=> (string) $race_imagename_f,
 						'race_hide'				=> 0,
 					);
 					
@@ -157,6 +161,8 @@ class acp_dkp_game extends bbDKP_Admin
 					// update the race to db
 					$data = array( 
 						'race_faction_id'		=> (int) $factionid,
+						'image_male_small'		=> (string) $race_imagename_m,
+						'image_female_small'	=> (string) $race_imagename_f,					
 					);
 					
 					$db->sql_transaction('begin');
@@ -167,7 +173,7 @@ class acp_dkp_game extends bbDKP_Admin
 
 					$names = array(
 						'name'		=> (string) $racename,
-						'name_short'=> (string) $racename,	
+						'name_short'=> (string) $racename,
 					);
 					
 					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $id . 
@@ -378,7 +384,7 @@ class acp_dkp_game extends bbDKP_Admin
 	            		$id = request_var('id', 0); 
 	            		//edit					
 						$sql_array = array(
-					    'SELECT'    => 	'  r.race_id, l.name as race_name, r.race_faction_id ', 
+					    'SELECT'    => 	'  r.race_id, l.name as race_name, r.race_faction_id,  r.image_female_small, r.image_male_small ', 
 					    'FROM'      => array(
 								RACE_TABLE 		=> 'r',
 								BB_LANGUAGE 	=> 'l',
@@ -393,6 +399,9 @@ class acp_dkp_game extends bbDKP_Admin
 					    $result = $db->sql_query($sql);	
 						$factionid = $db->sql_fetchfield('race_faction_id', 0 ,$result );	
 						$race_name = $db->sql_fetchfield('race_name', 0 ,$result );	
+						$race_imagename_m = $db->sql_fetchfield('image_male_small', 0 ,$result );
+						$race_imagename_f = $db->sql_fetchfield('image_female_small', 0 ,$result );
+						
 						$db->sql_freeresult($result);
 	            		
 	            		// faction dropdown
@@ -420,6 +429,12 @@ class acp_dkp_game extends bbDKP_Admin
 			                    'RACE_ID' 				=> $id  ,
 			                    'RACE_NAME' 		    => $race_name  ,
 								'S_FACTIONLIST_OPTIONS'	=> $s_faction_options, 
+	                    		'S_RACE_IMAGE_M_EXISTS'	=> (strlen($race_imagename_m) > 1) ? true : false,
+	                    		'RACE_IMAGENAME_M' 	 	=> $race_imagename_m, 
+	                    		'RACE_IMAGE_M' 		 	=> (strlen($race_imagename_m) > 1) ? $phpbb_root_path . "images/race_images/" . $race_imagename_m . ".png" : '',
+	                    		'S_RACE_IMAGE_F_EXISTS'	=> (strlen($race_imagename_f) > 1) ? true : false, 
+	                    		'RACE_IMAGENAME_F' 	 	=> $race_imagename_f, 
+	                    		'RACE_IMAGE_F' 		 	=> (strlen($race_imagename_f) > 1) ? $phpbb_root_path . "images/race_images/" . $race_imagename_f . ".png" : '',  	                    
 								'S_ADD'   				=> FALSE,
 	                    		'U_ACTION'				=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addrace'),  
 	                    		'MSG_NAME_EMPTY'   		=> $user->lang['FV_REQUIRED_NAME'],
@@ -427,7 +442,7 @@ class acp_dkp_game extends bbDKP_Admin
 		                ));
             		}
             		else 
-            		{	// add
+            		{	// build add form
 						$sql_array = array(
 						    'SELECT'    => 	' f.faction_name, f.faction_id ', 
 						    'FROM'      => array(
@@ -696,7 +711,7 @@ class acp_dkp_game extends bbDKP_Admin
                 // list the races
 				$total_races = 0;
                 $sql_array = array(
-				    'SELECT'    => 	' r.race_id, l.name as race_name, r.race_faction_id, r.race_hide, f.faction_name  ', 
+				    'SELECT'    => 	' r.race_id, l.name as race_name, r.race_faction_id, r.race_hide, f.faction_name , r.image_female_small, r.image_male_small ', 
 				    'FROM'      => array(
 				        RACE_TABLE 		=> 'r',
 				        FACTION_TABLE	=> 'f',
@@ -716,6 +731,10 @@ class acp_dkp_game extends bbDKP_Admin
                         'RACEID' 	=> $row['race_id'],
                         'RACENAME' 		=> $row['race_name'],
                         'FACTIONNAME' 	=> $row['faction_name'], 
+                    	'RACE_IMAGE_M' 	=> (strlen($row['image_male_small']) > 1) ? $phpbb_root_path . "images/race_images/" . $row['image_male_small'] . ".png" : '',
+                    	'RACE_IMAGE_F' 	=> (strlen($row['image_female_small']) > 1) ? $phpbb_root_path . "images/race_images/" . $row['image_female_small'] . ".png" : '',
+                    	'S_RACE_IMAGE_M_EXISTS' => (strlen($row['image_male_small']) > 1) ? true : false, 
+                    	'S_RACE_IMAGE_F_EXISTS' => (strlen($row['image_female_small']) > 1) ? true : false, 
                     	'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;racedelete=1&amp;id={$row['race_id']}"), 
                     	'U_EDIT' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;raceedit=1&amp;id={$row['race_id']}"), 
                     )  

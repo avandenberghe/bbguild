@@ -212,6 +212,7 @@ $sql_array = array(
        				r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix, 
        				l1.name AS member_class, c.class_id, 
        				c.colorcode, c.class_armor_type AS armor_type, c.imagename, 
+       				l.member_gender_id, a.image_female_small, a.image_male_small, 
 					c.class_min_level AS min_level,
 					c.class_max_level AS max_level', 
  
@@ -220,6 +221,7 @@ $sql_array = array(
         DKPSYS_TABLE 		=> 'd',
         MEMBER_LIST_TABLE 	=> 'l',
         MEMBER_RANKS_TABLE  => 'r',
+        RACE_TABLE  		=> 'a',
         CLASS_TABLE    		=> 'c',
         BB_LANGUAGE			=> 'l1', 
     	),
@@ -227,6 +229,7 @@ $sql_array = array(
     'WHERE'     =>  "(m.member_id = l.member_id)  
     		AND l1.attribute_id =  c.class_id AND l1.language= '" . $config['bbdkp_lang'] . "' AND l1.attribute = 'class' 
 			AND (c.class_id = l.member_class_id) 
+			AND (l.member_race_id =  a.race_id)
 			AND (r.rank_id = l.member_rank_id) 
 			AND (m.member_dkpid = d.dkpsys_id) 
 			AND (l.member_guild_id = r.guild_id) " ,
@@ -311,6 +314,7 @@ while ( $row = $db->sql_fetchrow ( $members_result ) )
 		//hide inactive rank
 		$member_display = ($row ['rank_hide'] == '1') ? false : true;
 	}
+	$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
 	
 	//finally add to member array
 	if ($member_display)
@@ -331,6 +335,9 @@ while ( $row = $db->sql_fetchrow ( $members_result ) )
 		$memberarray [$member_count] ['colorcode'] = $row ['colorcode'];
 		$memberarray [$member_count] ['class_image'] = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '';
 		$memberarray [$member_count] ['class_image_exists'] = (strlen($row['imagename']) > 1) ? true : false; 
+		$memberarray [$member_count] ['race_image'] = (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '';
+		$memberarray [$member_count] ['race_image_exists'] = (strlen($race_image) > 1) ? true : false; 		
+		
 		$memberarray [$member_count] ['armor_type'] = $row ['armor_type'];
 		$memberarray [$member_count] ['member_raid_value'] = $row ['member_raid_value'];
 		if($config['bbdkp_timebased'] == 1)
@@ -369,7 +376,7 @@ while ( $row = $db->sql_fetchrow ( $members_result ) )
 }
 $db->sql_freeresult ( $members_result );
 
-// Obtain a list of columns
+// Obtain a list of columns for sorting
 if (count ($memberarray))
 {
 	 foreach ($memberarray as $key => $member)
@@ -443,10 +450,10 @@ if (count ($memberarray))
 		case - 4 : //class
 			array_multisort ( $member_class, SORT_DESC, $member_level, SORT_DESC, $member_name, SORT_DESC, $memberarray );
 			break;
-		case 5 : //type
+		case 5 : //armor
 			array_multisort ( $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 5 : //type
+		case - 5 : //armor
 			array_multisort ( $member_name, SORT_DESC, $memberarray );
 			break;
 			
@@ -471,94 +478,87 @@ if (count ($memberarray))
 			array_multisort ( $member_zerosum_bonus , SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 
-		case 9 : //member_zerosum_bonus
-			array_multisort ( $member_zerosum_bonus, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-			break;
-		case - 9 : //member_zerosum_bonus
-			array_multisort ( $member_zerosum_bonus , SORT_ASC, $member_name, SORT_DESC, $memberarray );
-			break;			
-
-		case 10 : //earned
+		case 9 : //earned
 			array_multisort ( $member_earned, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 10 : //earned
+		case - 9 : //earned
 			array_multisort ( $member_earned, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 			
-		case 11 : //adjustment
+		case 10 : //adjustment
 			array_multisort ( $member_adjustment, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 11 : //adjustment
+		case - 10 : //adjustment
 			array_multisort ( $member_adjustment, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 			
-		case 12 : //ep decay
+		case 11 : //ep decay
 			array_multisort ( $member_raid_decay, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 12 : //ep decay
+		case - 11 : //ep decay
 			array_multisort ( $member_raid_decay, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;			
 			
-		case 13 : //ep 
+		case 12 : //ep 
 			array_multisort ( $ep, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 13 : //ep 
+		case - 12 : //ep 
 			array_multisort ( $ep, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 			
-		case 14 : //spent
+		case 13 : //spent
 			array_multisort ( $member_spent, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 14 : //spent
+		case - 13 : //spent
 			array_multisort ( $member_spent, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 			
-		case 15 : //item_decay 
+		case 14 : //item_decay 
 			array_multisort ( $member_item_decay, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 15 : //item_decay 
+		case - 14 : //item_decay 
 			array_multisort ( $member_item_decay, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 			
-		case 16 : // gp
+		case 15 : // gp
 			array_multisort ( $gp, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 16 : // gp 
+		case - 15 : // gp 
 			array_multisort ( $gp, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 			
-		case 17 : // er
+		case 16 : // Pr
 			array_multisort ( $er, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 17 : // er 
+		case - 16 : // Pr 
 			array_multisort ( $er, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;			
 			
-		case 18 : //current
+		case 17 : //current
 			array_multisort ( $member_current, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 18 : //current
+		case - 17 : //current
 			array_multisort ( $member_current, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 			
-		case 19 : //lastraid
+		case 18 : //lastraid
 			array_multisort ( $member_lastraid, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 19 : //lastraid
+		case - 18 : //lastraid
 			array_multisort ( $member_lastraid, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 
-		case 20 : //raidattendance P1
+		case 19 : //raidattendance P1
 			array_multisort ( $attendanceP1, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 20 : //raidattendance P1
+		case - 19 : //raidattendance P1
 			array_multisort ( $attendanceP1, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 			
-		case 21 : //raidattendance P2
+		case 20 : //raidattendance P2
 			array_multisort ( $attendanceP2, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
-		case - 21 : //raidattendance P2
+		case - 20 : //raidattendance P2
 			array_multisort ( $attendanceP2, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;
 	}
@@ -567,7 +567,7 @@ if (count ($memberarray))
 $show_all = ((isset ( $_GET ['show'] )) && (request_var ( 'show', '' ) == 'all')) ? true : false;
 
 
-// dump to template
+// loop member array and dump to template
 foreach ( $memberarray as $key => $member )
 {
 	
@@ -583,6 +583,8 @@ foreach ( $memberarray as $key => $member )
 		'COLORCODE' 	=> $member ['colorcode'], 
 		'CLASS_IMAGE' 	=> $member['class_image'],
 		'S_CLASS_IMAGE_EXISTS' =>  $member['class_image_exists'],
+		'RACE_IMAGE' 	=> $member['race_image'],
+		'S_RACE_IMAGE_EXISTS' =>  $member['race_image_exists'],
 		'DKPCOLOUR1' 	=> ($member ['member_adjustment'] >= 0) ? 'green' : 'red', 
 		'DKPCOLOUR2' 	=> ($row ['member_current'] >= 0) ? 'green' : 'red', 
 		'ID' 			=> $member ['member_id'], 
@@ -648,7 +650,7 @@ $uri_addon .= (isset ( $_GET ['show'] )) ? '&amp;show=' . request_var ( 'show', 
 
 /* sorting links */
 $sortlink = array ();
-for($i = 1; $i <= 12; $i ++)
+for($i = 1; $i <= 20; $i ++)
 {
 	if (isset ( $sortorder ) && $sortorder == $i)
 	{
@@ -693,14 +695,14 @@ $template->assign_vars ( array ('F_MEMBERS' => append_sid ( "{$phpbb_root_path}l
 	'O_LEVEL' => $sortlink [3], 
 	'O_CLASS' => $sortlink [4], 
 	'O_ARMOR' => $sortlink [5], 
-	'O_EARNED' => $sortlink [6], 
-	'O_SPENT' => $sortlink [7], 
-	'O_ADJUSTMENT' => $sortlink [8], 
-	'O_CURRENT' => $sortlink [9], 
-	'O_LASTRAID' => $sortlink [10], 
-	'O_RAIDS_P1_DAYS' => $sortlink [11], 
-	'O_RAIDS_P2_DAYS' => $sortlink [12], 
-	 
+	'O_MEMBER_RAID_VALUE' => $sortlink [6], 
+	'O_EARNED' => $sortlink [9],
+	'O_ADJUSTMENT' => $sortlink [10], 
+	'O_SPENT' => $sortlink [13],
+	'O_CURRENT' => $sortlink [17],
+	'O_LASTRAID' => $sortlink [18], 
+	'O_RAIDS_P1_DAYS' => $sortlink [19], 
+	'O_RAIDS_P2_DAYS' => $sortlink [20], 
 	'RAIDS_P1_DAYS' => sprintf ( $user->lang ['RAIDS_X_DAYS'], $list_p1 ), 
 	'RAIDS_P2_DAYS' => sprintf ( $user->lang ['RAIDS_X_DAYS'], $list_p2 ), 
 	'S_SHOWLEAD' => $s_showlb,
@@ -713,8 +715,34 @@ $template->assign_vars ( array ('F_MEMBERS' => append_sid ( "{$phpbb_root_path}l
 	'FOOTCOUNT' => (isset ( $_POST ['compare'] )) ? 
 		sprintf ( $footcount_text, sizeof (request_var ( 'compare_ids', array ('' => 0 )))) : 
 		$footcount_text )
-
  );
+
+ 
+if($config['bbdkp_timebased'] == 1) {
+	$template->assign_var('O_DKP_HOUR', $sortlink [7]);
+	
+}
+
+if($config['bbdkp_zerosum'] == 1)
+{
+	$template->assign_var('O_ZEROSUM_BONUS', $sortlink [8]);
+}
+if($config['bbdkp_decay'] == 1)
+{
+	$template->assign_vars ( array (
+	'O_EPDECAY' => $sortlink [11],
+	'O_ITEMDECAY' => $sortlink [14]
+	));
+}
+if($config['bbdkp_epgp'] == 1)
+{
+	$template->assign_vars ( array (
+	'O_EP' => $sortlink [12],
+	'O_GP' => $sortlink [15],
+	'O_PR' => $sortlink [16],
+	));
+	
+}
 
 // Output page
 page_header ( $user->lang ['LISTMEMBERS_TITLE'] );
@@ -722,12 +750,14 @@ $template->set_filenames ( array ('body' => 'dkp/listmembers.html' ) );
 page_footer ();
 
 // end 
-
+/**
+ * this function builds a grid with PR or earned (after dacay)
+ */
 function leaderboard($dkpsys_id, $query_by_pool)
 {
 	// get needed global vars
 	global $db, $template, $config;
-	global $phpbb_root_path, $phpEx;
+	global $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
     $sql_array = array(
 	    'SELECT'    => 	' c.class_id, l.name as class_name, c.imagename, c.colorcode ', 
@@ -739,7 +769,6 @@ function leaderboard($dkpsys_id, $query_by_pool)
 		'ORDER_BY'	=> 'l.name ',
     );
 	$sql = $db->sql_build_query('SELECT', $sql_array);
-	
 	
 	$result = $db->sql_query ( $sql );
 	$classes = array ();
@@ -764,6 +793,7 @@ function leaderboard($dkpsys_id, $query_by_pool)
 		        MEMBER_DKP_TABLE 	=> 'm',
 		        MEMBER_LIST_TABLE 	=> 'l',
 		        MEMBER_RANKS_TABLE  => 'r',
+		        
 		    	),
 		 
 		    'WHERE'     =>  ' (m.member_id = l.member_id) 
@@ -772,6 +802,12 @@ function leaderboard($dkpsys_id, $query_by_pool)
 				        AND (r.guild_id = l.member_guild_id)
 				        AND rank_hide = 0'
 		);
+		
+		if($config['bbdkp_epgp'] == 1)
+		{
+			$sql_array[ 'SELECT'] .= ', case when (m.member_spent - m.member_item_decay) = 0 then (m.member_earned - m.member_raid_decay + m.member_adjustment)  
+				else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr ' ;
+		}
 		
 		if ($query_by_pool)
 		{
@@ -789,17 +825,24 @@ function leaderboard($dkpsys_id, $query_by_pool)
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		
 		$result2 = $db->sql_query ( $sql );
+		
 		while ( $dkprow = $db->sql_fetchrow ( $result2 ) )
 		{
-			
 			//dkp data per class
-			$template->assign_block_vars ( 'class.dkp_row', array (
+			$dkprowarray= array (
 				'NAME' => $dkprow ['rank_prefix'] . (($dkprow ['member_status'] == '0') ? '<em>' . $dkprow ['member_name'] . '</em>' : $dkprow ['member_name']) . $dkprow ['rank_suffix'], 
 				'CURRENT' => $dkprow ['member_current'], //point color
 				'DKPCOLOUR' => ($dkprow ['member_current'] >= 0) ? 'style="font-size :8pt; color: green; text-align: right;"' : 'style="font-size :8pt; color: red; text-align: right;"', 
 				'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}viewmember.$phpEx", '&amp;' . 
 						URI_NAMEID . '=' . $dkprow ['member_id'] . '&amp;' . 
-						URI_DKPSYS . '=' . $dkprow['member_dkpid'] ) ) );
+						URI_DKPSYS . '=' . $dkprow['member_dkpid'] ) );
+				
+			if($config['bbdkp_epgp'] == 1)
+			{
+				$dkprowarray[ 'PR'] = $dkprow ['pr'] ;
+			}
+				
+			$template->assign_block_vars ( 'class.dkp_row', $dkprowarray );
 		}
 		$db->sql_freeresult ( $result2 );
 	}

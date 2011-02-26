@@ -52,8 +52,8 @@ function check_form()
 	</dl>
 	<dl>
 		<dt><label for="race_id">{L_RACEID}:</label><br />{L_RACEID_EXPLAIN}</dt>
-		
-		<dd><br />
+	<dd>
+	<br />
 		<!-- IF S_ADD -->
 		<input class="medium" type="text" id="race_id" name="race_id" value="{RACE_ID}" />
 		<!-- ELSE -->
@@ -61,6 +61,24 @@ function check_form()
 		<!-- ENDIF -->
 		</dd>
 	</dl>
+	
+	
+	<dl>
+		<dt><label for="image">{L_RACE_IMAGE}:</label><br/>{L_RACE_IMAGE_EXPLAIN}</dt>
+		<dd>
+			<table style="border-color:#FFFFFF">
+			<tr>
+			<td>{L_MALE}&nbsp;</td>
+			<td><input class="medium" type="text" id="image_male_small" name="image_male_small" value="{RACE_IMAGENAME_M}" />
+			<!-- IF S_RACE_IMAGE_M_EXISTS --><img src="{RACE_IMAGE_M}" alt="{RACE_IMAGE_M}" />  <!-- ENDIF --></td></tr>
+			<tr>
+			<td>{L_FEMALE}&nbsp;</td>
+			<td><input class="medium" type="text" id="image_female_small" name="image_female_small" value="{RACE_IMAGENAME_F}" />
+			<!-- IF S_RACE_IMAGE_F_EXISTS --><img src="{RACE_IMAGE_F}" alt="{RACE_IMAGE_F}" />  <!-- ENDIF --></td></tr>
+			</table>
+		</dd>
+	</dl>
+
 
 </fieldset>
 

@@ -50,8 +50,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				/* initialise */
 				$dkpsys_id = 0;
 				
-				/* check if page was posted back */
-				$activate = (isset($_POST['submit_activate'])) ? true : false;
+
 				
 				/***  DKPSYS drop-down query ***/
 				$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
@@ -97,21 +96,10 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				$db->sql_freeresult( $result );
 				/***  end drop-down query ***/
 				
+				/* check if page was posted back */
+				$activate = (isset($_POST['submit_activate'])) ? true : false;
 				if ($activate)
 				{
-				    $dkpsys_id = request_var('dkpsys', 0);
-				    while ( $row = $db->sql_fetchrow($resultdkpsys) )
-					{
-						$template->assign_block_vars('dkpsys_row', array(
-							'VALUE' => $row['dkpsys_id'],
-							'SELECTED' => ( $row['dkpsys_id'] == $dkpsys_id ) ? ' selected="selected"' : '',
-							'OPTION'   => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '(None)')
-						);
-					}
-					
-					$db->sql_freeresult($resultdkpsys);	
-					// process the activation change
-					
 					$active_members = request_var('activate_ids', array(0) ); 
 
                     $db->sql_transaction('begin'); 

@@ -165,7 +165,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	 */
 	private function newraid()
 	{
-		global $db, $user, $config, $template, $phpEx ;
+		global $db, $user, $config, $template, $phpbb_admin_path, $phpEx ;
 		$dkpsys_id=0; 
 		if (isset($_GET[URI_DKPSYS]) )
 		{
@@ -649,10 +649,12 @@ class acp_dkp_raid extends bbDKP_Admin
 		
 		$current_order = switch_order ( $sort_order );	
 		$sql_array = array(
-    		'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, r.raid_value, r.time_bonus, r.zerosum_bonus, 
+    		'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, m.member_gender_id, a.image_female_small, a.image_male_small, 
+    						r.raid_value, r.time_bonus, r.zerosum_bonus, 
     						r.raid_decay, (r.raid_value + r.time_bonus + r.zerosum_bonus - r.raid_decay) as total  ',
 	    	'FROM'      => array(
     		    MEMBER_LIST_TABLE 	=> 'm',
+    		    RACE_TABLE  		=> 'a',
         		RAID_DETAIL_TABLE   => 'r',
         		CLASS_TABLE 		=> 'c',
 				BB_LANGUAGE 		=> 'l', 
@@ -660,6 +662,7 @@ class acp_dkp_raid extends bbDKP_Admin
  
     		'WHERE'     =>  " c.class_id = m.member_class_id AND c.class_id = l.attribute_id 
 							AND l.attribute='class' 
+							AND m.member_race_id =  a.race_id 
 							AND l.language= '" . $config['bbdkp_lang'] ."'  
 							AND m.member_id = r.member_id and r.raid_id = " . (int) $raid_id  , 
     		'ORDER_BY' 	=>  $current_order ['sql'],
@@ -669,10 +672,13 @@ class acp_dkp_raid extends bbDKP_Admin
 		$raid_details = array ();
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
+			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+					
 			$raid_details[$row['member_id']]['member_id'] = $row['member_id'];
 			$raid_details[$row['member_id']]['colorcode'] = $row['colorcode'];
 			$raid_details[$row['member_id']]['imagename'] = $row['imagename'];
 			$raid_details[$row['member_id']]['classname'] = $row['name'];
+			$raid_details[$row['member_id']]['raceimage'] = $race_image;
 			$raid_details[$row['member_id']]['member_name'] = $row['member_name'];
 			$raid_details[$row['member_id']]['raid_value'] = $row['raid_value'];
 			$raid_details[$row['member_id']]['time_bonus'] = $row['time_bonus'];
@@ -698,7 +704,9 @@ class acp_dkp_raid extends bbDKP_Admin
 				'NAME' 		 => $raid_detail['member_name'], 
 				'COLORCODE'  => ($raid_detail['colorcode'] == '') ? '#123456' : $raid_detail['colorcode'],
                 'CLASS_IMAGE' 	=> (strlen($raid_detail['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $raid_detail['imagename'] . ".png" : '',  
-				'S_CLASS_IMAGE_EXISTS' => (strlen($raid_detail['imagename']) > 1) ? true : false, 				
+				'S_CLASS_IMAGE_EXISTS' => (strlen($raid_detail['imagename']) > 1) ? true : false,
+               	'RACE_IMAGE' 	=> (strlen($raid_detail['raceimage']) > 1) ? $phpbb_root_path . "images/race_images/" . $raid_detail['raceimage'] . ".png" : '',  
+				'S_RACE_IMAGE_EXISTS' => (strlen($raid_detail['raceimage']) > 1) ? true : false, 			 				
 				'CLASS_NAME' => $raid_detail['classname'],  
 				'RAIDVALUE'  => $raid_detail['raid_value'], 
 				'TIMEVALUE'  => $raid_detail['time_bonus'],
@@ -764,14 +772,17 @@ class acp_dkp_raid extends bbDKP_Admin
 		$icurrent_order = switch_order ($isort_order, 'ui');
         $sql_array = array(
 	    'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.item_zs, 
-	    				l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, 
+	    				l.member_name, c.colorcode, c.imagename, l.member_gender_id, 
+	    				a.image_female_small, a.image_male_small, i.item_date, i.raid_id, i.item_value, 
 	    				i.item_decay, i.item_value - i.item_decay as item_total',
 	    'FROM'      => array(
 	        CLASS_TABLE 		=> 'c', 
+	        RACE_TABLE  		=> 'a',
 	        MEMBER_LIST_TABLE 	=> 'l', 
 	        RAID_ITEMS_TABLE    => 'i',
 	    ),
-	    'WHERE'     =>  'c.class_id = l.member_class_id and l.member_id = i.member_id and i.raid_id = ' .  $raid_id,  
+	    'WHERE'     =>  'c.class_id = l.member_class_id AND l.member_race_id =  a.race_id 
+	    				and l.member_id = i.member_id and i.raid_id = ' . $raid_id,  
 	    'ORDER_BY'  => $icurrent_order ['sql'], 
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -799,12 +810,16 @@ class acp_dkp_raid extends bbDKP_Admin
 			{
 				$item_name = $row['item_name'];
 			}
+			
+			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
 
 			$template->assign_block_vars ( 'items_row', array (
 			'DATE' 			=> (! empty ( $row ['item_date'] )) ? $user->format_date($row['item_date']) : '&nbsp;', 
 			'COLORCODE'  	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
             'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
 			'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 				
+            'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
+			'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 			 				
 			'BUYER' 		=> (! empty ( $row ['member_name'] )) ? $row ['member_name'] : '&lt;<i>Not Found</i>&gt;', 
 			'ITEMNAME'      => $item_name,
 			'ITEM_ID'		=> $row['item_id'],
@@ -1216,7 +1231,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	 */
 	private function updateraid($raid_id)
 	{
-		global $db, $user, $config, $template, $phpEx;
+		global $db, $user, $config, $template,$phpbb_admin_path, $phpEx;
 		if(!check_form_key('acp_dkp_addraid'))
 		{
 			trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);	
@@ -1620,7 +1635,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	 */ 
 	private function deleteraider($raid_id, $attendee_id)
 	{
-		global $db, $user, $config, $template, $phpEx;
+		global $db, $user, $config, $template, $phpbb_admin_path, $phpEx;
 		 
 		if (confirm_box(true))
 		{
@@ -1922,7 +1937,8 @@ class acp_dkp_raid extends bbDKP_Admin
 					), 
 				'WHERE' => ' a.member_id = b.member_id AND a.member_dkpid =' . $dkpid 
 			);
-			
+			$adj_value = 0.00;
+			$adj_reason = '';
 			$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 			$result = $db->sql_query ( $sql );
 			while ( $row = $db->sql_fetchrow ( $result ) )
@@ -2179,6 +2195,8 @@ class acp_dkp_raid extends bbDKP_Admin
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ($sql);
+		$raidstart = 0;
+		$raid = array();
 		while ( ($row = $db->sql_fetchrow ( $result )) ) 
 		{
 			$raidstart =  $row['raid_start']; 

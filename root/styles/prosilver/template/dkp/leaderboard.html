@@ -39,7 +39,11 @@
 <a style="color:{class.COLORCODE}" href="{class.dkp_row.U_VIEW_MEMBER}"><strong>{class.dkp_row.NAME}</strong></a>
 </td>
 <td>
-<span {class.dkp_row.DKPCOLOUR} > {class.dkp_row.CURRENT}</span>
+<span {class.dkp_row.DKPCOLOUR} >
+ <!-- IF S_SHOWEPGP -->
+ {class.dkp_row.CURRENT}
+ <!-- ENDIF -->
+ </span>
 </td>
 </tr>
 <!-- END dkp_row -->

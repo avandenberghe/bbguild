@@ -272,6 +272,11 @@ $lang = array_merge($lang, array(
 'VIEW_LOGS' => 'View Logs',
 'ZSVALUE' => 'Zerosum',
 
+//lootsystems
+'EP'	=> 'EP',
+'GP'	=> 'GP',
+'ER'	=> 'PR',
+
 // Page Foot Counts
 
 'LISTEVENTS_FOOTCOUNT' => '... found %d events / %d per page',

@@ -110,6 +110,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					6 => array('member_joindate', 'member_joindate desc'),
 					7 => array('member_outdate', 'member_outdate desc'),
 					8 => array('member_comment', 'member_comment desc'),
+					9 => array('member_race', 'member_race desc'),
 				);
 				
 				$current_order = switch_order($sort_order);
@@ -119,12 +120,13 @@ class acp_dkp_mm extends bbDKP_Admin
 				
 				$sql_array = array(
 				    'SELECT'    => 	'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
-									 c.class_armor_type AS armor_type, c.colorcode , c.imagename', 
+									 c.class_armor_type AS armor_type, c.colorcode , c.imagename, m.member_gender_id, a.image_female_small, a.image_male_small', 
 				 
 				    'FROM'      => array(
 				        MEMBER_LIST_TABLE 	=> 'm',
 				        MEMBER_RANKS_TABLE 	=> 'r',
 				        CLASS_TABLE  		=> 'c',
+				        RACE_TABLE  		=> 'a',
 				        BB_LANGUAGE			=> 'l', 
 				        GUILD_TABLE  		=> 'g',
 				    	),
@@ -140,7 +142,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				    				AND r.rank_hide = 0
 				    				AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
 									AND (m.member_guild_id = g.id)
-									
+									AND m.member_race_id =  a.race_id 
 									AND (m.member_guild_id = r.guild_id)
 									AND (m.member_guild_id = " . $guild_id . ')
 									AND (m.member_class_id = c.class_id)', 
@@ -156,11 +158,14 @@ class acp_dkp_mm extends bbDKP_Admin
 					trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
 				}
 				
+				$gender_id = 0;
 				$lines = 0;
 				$member_count = 0;
 				while ( $row = $db->sql_fetchrow($members_result) )
 				{
-					$phpbb_user_id = $row['phpbb_user_id']; 
+					$phpbb_user_id = (int) $row['phpbb_user_id'];
+					$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+					
 					++$member_count;
 					++$lines;
 					$template->assign_block_vars('members_row', array(
@@ -173,7 +178,9 @@ class acp_dkp_mm extends bbDKP_Admin
 						'ARMOR'         => ( !empty($row['armor_type']) ) ? $row['armor_type'] : '&nbsp;',
 						'COLORCODE' 	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
                   		'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
-						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 						
+						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
+                  		'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
+						'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 
 						'CLASS'         => ( $row['member_class'] != 'NULL' ) ? $row['member_class'] : '&nbsp;',
 						'COMMENT'       => $row['member_comment'],
 						'JOINDATE'      => date($config['bbdkp_date_format'], $row['member_joindate']),
@@ -501,7 +508,7 @@ class acp_dkp_mm extends bbDKP_Admin
 						
 					}
 
-					if ( (isset($_GET[URI_NAME])) && (strval($_GET[URI_NAME] != '')) )
+					if ( (isset($_GET[URI_NAMEID])) && (strval($_GET[URI_NAMEID] != '0') ))
 					{
 						// edit mode
 						// build member array if clicked on name in listing
@@ -531,7 +538,7 @@ class acp_dkp_mm extends bbDKP_Admin
 							AND l1.attribute_id = r.race_id AND l1.language= '" . $config['bbdkp_lang'] . "' AND l1.attribute = 'race'
 							AND c.class_id = m.member_class_id 
 							AND m.member_guild_id = g.id 
-							AND member_name='" . trim($db->sql_escape(utf8_normalize_nfc(request_var(URI_NAME,'', true)))) . "'" ,
+							AND member_id=" . request_var(URI_NAMEID,0) ,
 							
 						);
 
@@ -581,7 +588,7 @@ class acp_dkp_mm extends bbDKP_Admin
 								),
 
 								'WHERE'		=> " m.member_guild_id = g.id 
-								AND member_name='" . trim($db->sql_escape(utf8_normalize_nfc(request_var(URI_NAME,'', true)))) . "'" ,
+								AND member_id=" . request_var(URI_NAMEID,0) ,
 							);
 							
 							$sql = $db->sql_build_query('SELECT', $sql_array);

@@ -400,7 +400,7 @@ class acp_dkp_item extends bbDKP_Admin
 	 */
 	private function additem()
 	{
-		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
+		global $db, $user, $config, $template, $phpEx, $phpbb_admin_path, $phpbb_root_path;
 		$errors_exist = $this->error_check ();
 		if ($errors_exist) 
 		{
