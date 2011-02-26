@@ -207,7 +207,7 @@ $sql_array = array(
     'SELECT'    => 	'd.dkpsys_name, 
     				m.member_dkpid, m.member_id, m.member_status, m.member_lastraid, 
     				m.member_raid_value, m.member_earned, m.member_adjustment, m.member_spent, 
-					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
+					(m.member_earned + m.member_adjustment - m.member_spent) AS member_current,
    					l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
        				r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix, 
        				l1.name AS member_class, c.class_id, 
@@ -709,7 +709,7 @@ $template->assign_vars ( array ('F_MEMBERS' => append_sid ( "{$phpbb_root_path}l
 	'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 	'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
 	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
- 	'S_SHOWTIME' 	=> ($config['bbdkp_dkptimeunit'] == '1') ? true : false,
+ 	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 
 	
 	'FOOTCOUNT' => (isset ( $_POST ['compare'] )) ? 

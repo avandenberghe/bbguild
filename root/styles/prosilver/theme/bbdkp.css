@@ -308,3 +308,12 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 	text-indent: -9999px; 
 	overflow: hidden;
 }
+
+/* bbdkp 
+------------*/
+.positive {
+	color: #00BB55;
+}
+.negative {
+	color: #FF3344;
+}

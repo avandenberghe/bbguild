@@ -199,6 +199,8 @@ $versions = array(
                         'race_id'			=> array('USINT', 0),
                         'race_faction_id'	=> array('USINT', 0),
                         'race_hide'			=> array('BOOL', 0),
+						'image_female_small'	=> array('VCHAR:255', 0),
+						'image_male_small'	=> array('VCHAR:255', 0),
                     ),
                     'PRIMARY_KEY'    => 'race_id',
                 ),
@@ -568,8 +570,6 @@ $versions = array(
 	        array('bbdkp_show_achiev', '0', true),
 			// guildfaction : limit the possible races to be available to users to those available in the guild's chosen faction
 			array('bbdkp_guild_faction', '1', true),
-	        //show 3darmory in viewmember
-	        array('bbdkp_show_3darmory', 1, true),
 	        //guildmemberlist paging
 	        array('bbdkp_user_llimit', '20', true),
 	        

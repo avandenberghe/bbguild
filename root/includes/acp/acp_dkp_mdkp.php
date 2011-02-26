@@ -299,7 +299,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 					'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
 					'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
-				 	'S_SHOWTIME' 	=> ($config['bbdkp_dkptimeunit'] == '1') ? true : false,
+				 	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 					'U_LIST_MEMBERDKP' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;" . URI_DKPSYS . "=". $dkpsys_id . "&amp;mode=mm_listmemberdkp") .'&amp;mod=list&amp;',		
 					'S_NOTMM' => false,
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text, 
@@ -734,7 +734,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 					'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
 					'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
-				 	'S_SHOWTIME' 	=> ($config['bbdkp_dkptimeunit'] == '1') ? true : false,
+				 	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 				
 				));
 			
