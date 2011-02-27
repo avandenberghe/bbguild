@@ -52,15 +52,17 @@ $sql_array = array(
 		m.member_time_bonus,
 		m.member_zerosum_bonus, 
 		m.member_earned,
-		m.member_raid_decay, 
 		m.member_adjustment, 
-		(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep	,
 		m.member_spent,
-		m.member_item_decay,
-		(m.member_spent - m.member_item_decay ) AS gp,
 		(m.member_earned + m.member_adjustment - m.member_spent) AS member_current,
-		case when (m.member_spent - m.member_item_decay) = 0 then 1 
-		else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (m.member_spent - m.member_item_decay),2) end as er,
+		(m.member_earned + m.member_adjustment) AS ep	,
+		m.member_raid_decay, 
+		(m.member_earned + m.member_adjustment - m.member_raid_decay) AS ep_net	,
+		m.member_spent AS gp,
+		m.member_item_decay,
+		m.member_spent - m.member_item_decay as gp_net, 
+		case when (m.member_spent - m.member_item_decay) = 0 then (m.member_earned - m.member_raid_decay + m.member_adjustment)  
+		else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr,
 		m.member_lastraid,
 		r1.name AS member_race,
 		s.dkpsys_name, 
@@ -129,14 +131,17 @@ $member = array(
 	'member_time_bonus'    => $row['member_time_bonus'],
 	'member_zerosum_bonus' => $row['member_zerosum_bonus'],
 	'member_earned'        => $row['member_earned'],
-	'member_raid_decay'	   => $row['member_raid_decay'], 
 	'member_adjustment'    => $row['member_adjustment'],
-	'ep'    			   => $row['ep'],
-	'member_spent'         => $row['member_spent'],
-	'member_item_decay'    => $row['member_item_decay'],
-	'gp'     			   => $row['gp'],
-	'er'     			   => $row['er'],
 	'member_current'       => $row['member_current'],
+	'ep'    			   => $row['ep'],
+	'member_raid_decay'	   => $row['member_raid_decay'], 
+	'ep_net'    		   => $row['ep_net'],
+	'member_spent'         => $row['member_spent'],
+	'bgp'				   => $config['bbdkp_basegp'], 
+	'gp'     			   => $row['gp'],
+	'member_item_decay'    => $row['member_item_decay'],
+	'gp_net'     		   => $row['gp_net'],
+	'pr'     			   => $row['pr'],
 	'member_race_id'    => $row['member_race_id'], 
 	'member_race'       => $row['member_race'],
 	'member_class_id'   => $row['member_class_id'],
@@ -160,22 +165,28 @@ $template->assign_vars(array(
 	'TIMEBONUS'     => $member['member_time_bonus'],
 	'ZEROSUM'      	=> $member['member_zerosum_bonus'],
 	'EARNED'        => $member['member_earned'],
+	'EP'    		=> $member['ep'],
+
 	'RAIDDECAY'		=> $member['member_raid_decay'],
-	'NETEARNED'		=> (float) $member['member_earned'] - $member['member_raid_decay'],
+	'EPNET'			=> (float) $member['ep_net'],
 
 	'ADJUSTMENT'    => $member['member_adjustment'],
-	'EP'    		=> $member['ep'],
+	'C_ADJUSTMENT'  => ($member['member_adjustment'] > 0) ? 'positive' : 'negative', 
+
 	'SPENT'         => $member['member_spent'],
 	'ITEMDECAY'     => $member['member_item_decay'],
-	'NETITEM'     	=> $member['member_spent'] - $member['member_item_decay'],
+	'GP'     		=> $member['gp'] + $member['bgp'],
+	'BGP'     		=> $member['bgp'],
+	'GPNET'     	=> $member['gp_net'] + $member['bgp'],
 
 	'CURRENT'       => $member['member_current'],
 	'C_CURRENT'       => ($member['member_current'] > 0) ? 'positive' : 'negative',
-	'NETCURRENT'    => $member['member_current'] - $member['member_raid_decay'] + $member['member_item_decay'],
-	'C_NETCURRENT'      => (($member['member_current'] - $member['member_raid_decay'] + $member['member_item_decay']) > 0) ? 'positive' : 'negative',
-	'GP'     		=> $member['gp'],
-	'ER'     		=> $member['er'],
+	'PR'     		=> $member['pr'],
 
+	'TOTAL_DECAY'	=> $member['member_raid_decay'] -$member['member_item_decay'],
+
+	'NETCURRENT'    => $member['ep_net'] - $member['gp_net'],
+	'C_NETCURRENT'      => (($member['member_current'] - $member['member_raid_decay'] + $member['member_item_decay']) > 0) ? 'positive' : 'negative',
 	
 	'MEMBER_LEVEL'    => $member['member_level'],
 	'MEMBER_DKPID'    => $dkp_id,
@@ -195,7 +206,9 @@ $template->assign_vars(array(
 	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
  	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 	
-	'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $dkp_id)
+	'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $dkp_id), 
+	'POINTNAME'		=> $config['bbdkp_dkp_name'],
+
 ));
 
 // Output page

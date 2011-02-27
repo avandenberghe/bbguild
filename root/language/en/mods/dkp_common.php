@@ -200,6 +200,7 @@ $lang = array_merge($lang, array(
 'CHARACTER_EXPLAIN' => 'Choose another Charactername and press submit.',
 'CHARACTERS_UPDATED' => 'The Charactername %s was assigned to your account. ',
 'NO_CHARACTERS' => 'No characters to add to your Account. Please add some characters in the ACP.',
+'RAIDDECAY' => 'Raid Decay',
 'DECAY' => 'Decay',
 'DROPS' => 'Drops',
 'EVENT' => 'Event',
@@ -274,8 +275,10 @@ $lang = array_merge($lang, array(
 
 //lootsystems
 'EP'	=> 'EP',
+'EPNET'	=> 'EP net',
 'GP'	=> 'GP',
-'ER'	=> 'PR',
+'GPNET'	=> 'GP net',
+'PR'	=> 'PR',
 
 // Page Foot Counts
 
