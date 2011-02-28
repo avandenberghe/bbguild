@@ -180,6 +180,312 @@
 
 <!-- *******  attendance *************** -->
 
+<div class="post">
+<div class="navbar">
+<div class="inner">
+<span class="corners-top"><span></span></span>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <tr>
+
+    <td style="width:20%; white-space:nowrap; text-align:center;" class="rowbg2"><strong>{RAIDS_X1_DAYS}</strong>: {C_RAIDS_X1_DAYS}%</td>
+    <td style="width:20%; white-space:nowrap; text-align:center;" class="rowbg1"><strong>{RAIDS_X2_DAYS}</strong>: {C_RAIDS_X2_DAYS}%</td>
+    <td style="width:20%; white-space:nowrap; text-align:center;" class="rowbg2"><strong>{RAIDS_X3_DAYS}</strong>: {C_RAIDS_X3_DAYS}%</td>
+    <td style="width:40%; white-space:nowrap; text-align:center;" class="rowbg1"><strong>{RAIDS_LIFETIME}</strong>: {C_RAIDS_LIFETIME}%</td>
+
+</table>
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
+</div>
+
+<!-- ******* Attended Raids *************** -->
+
+
+<!-- **************************** Raids ******************************** -->
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header"><h4 style = "color:#dfc065">{L_RAID_ATTENDANCE_HISTORY}</h4>
+	
+
+ <table width="100%">
+
+				<colgroup span="5"> 
+				<col width="8%"></col>
+				<col width="35%"></col>
+				<col width="35%"></col>
+				<col width="10%"></col>
+				<col width="10%"></col>
+				</colgroup>
+		  
+
+   <tr style="color: white">
+    <th>{L_DATE}</th>
+    <th>{L_NAME}</th>
+    <th>{L_NOTE}</th>
+    <th>{L_EARNED}</th>
+    <th>{L_CURRENT}</th>
+  </tr>
+
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="post">
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+
+
+				<colgroup span="5">
+				<col width="8%"></col>
+				<col width="35%"></col>
+				<col width="35%"></col>
+				<col width="10%"></col>
+				<col width="10%"></col>
+				</colgroup>
+
+
+  <!-- BEGIN raids_row -->
+    <tr class="bg1">
+    <td>{raids_row.DATE}</td>
+    <td>{raids_row.NAME}</td>
+    <td>{raids_row.NOTE}</td>
+    <td>{raids_row.EARNED}</td>
+    <td>{raids_row.CURRENT_EARNED}</td>
+  </tr>
+  <!-- END raids_row -->
+  
+  </table>
+</div>
+  
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	
+<table width="100%">
+		<colgroup span="1">
+			<col width="100%"></col>
+		</colgroup> 
+<tr>
+<th style="text-align: center; white-space: nowrap; color:white;">{RAID_FOOTCOUNT}</th>
+</tr>
+
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<!-- IF RAID_PAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> 
+		<span>{RAID_PAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
+
+
+
+<!-- IF ITEMS -->
+<!-- **************************** Items ******************************** -->
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header"><h4 style = "color:#dfc065">{L_ITEM_PURCHASE_HISTORY}</h4>
+
+ <table width="100%">
+	<colgroup span="5"> 
+		<col width="8%"></col>
+		<col width="35%"></col>
+		<col width="35%"></col>
+		<col width="10%"></col>
+		<col width="10%"></col>
+	</colgroup>
+		  
+   <tr style="color: white">
+    <th>{L_DATE}</th>
+    <th>{L_NAME}</th>
+    <th>{L_RAID}</th>
+    <th>{L_SPENT}</th>
+    <th>{L_CURRENT}</th>
+  </tr>
+  
+  </table>
+  </li>
+  </ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="post">
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+				<colgroup span="5">
+				<col width="8%"></col>
+				<col width="35%"></col>
+				<col width="35%"></col>
+				<col width="10%"></col>
+				<col width="10%"></col>
+				</colgroup>
+
+  <!-- BEGIN items_row -->
+  <tr class="row bg1">  
+    <td>{items_row.DATE}</td>
+    <td><a href="{items_row.U_VIEW_ITEM}">{items_row.NAME}</a></td>
+    <td><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
+    <td>{items_row.SPENT}</td>
+    <td>{items_row.CURRENT_SPENT}</td>
+  </tr>
+
+  <!-- END items_row -->
+ </table>
+</div>
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	
+<table width="100%">
+		<colgroup span="1">
+			<col width="100%"></col>
+		</colgroup> 
+<tr>
+<th align="center" nowrap="nowrap"><font color="white">{ITEM_FOOTCOUNT}</th>
+</tr>
+
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+  <!-- ENDIF -->
+<!-- IF ITEM_PAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{ITEM_PAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
+
+
+
+<!-- **************************** Adjustments ******************************** -->
+
+<!-- IF S_COMP -->
+<!-- IF ADJUSTMENT -->
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header"><h4 style = "color:#dfc065">{L_INDIVIDUAL_ADJUSTMENT_HISTORY}</h4>
+	
+<table width="100%">
+	<colgroup span="3"> 
+		<col width="5%"></col>
+		<col width="45%"></col>
+		<col width="45%"></col>
+	</colgroup>
+  <tr>
+    <th><font color="white">{L_DATE}</font></th>
+    <th><font color="white">{L_REASON}</font></th>
+    <th><font color="white">{L_ADJUSTMENT}</font></th>
+  </tr>
+  </table>
+  </li>
+  </ul>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="post">
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+		<colgroup span="3"> 
+		<col width="5%"></col>
+		<col width="45%"></col>
+		<col width="45%"></col>
+		</colgroup>
+  <!-- BEGIN adjustments_row -->
+  <tr class="row bg1">   
+	    <td>{adjustments_row.DATE}</td>
+	    <td>{adjustments_row.REASON}</td>
+	    <td>{adjustments_row.INDIVIDUAL_ADJUSTMENT}</td>
+  </tr>
+  <!-- END adjustments_row -->
+  
+	</table>
+</div>
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	
+<table width="100%">
+		<colgroup span="1">
+		<col width="100%"></col>
+		</colgroup> 
+<tr>
+<th style="text-align: center; white-space: nowrap; color:white;">{ADJUSTMENT_FOOTCOUNT}</th>
+</tr>
+
+</table>
+<span class="corners-bottom"><span></span></span>
+</div>
+<!-- ENDIF -->
+<!-- ELSE -->
+<!-- ENDIF -->
+
+<!-- **************************** Attendance ******************************** -->
+
+  
+ <div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header"><h4 style = "color:#dfc065">{L_ATTENDANCE_BY_EVENT}</h4>
+ <table width="100%">
+	<colgroup span="1"> 
+		<col width="100%"></col>
+	</colgroup>
+  <tr>
+     <th style="text-align: center; white-space: nowrap; color:white"  colspan="2"></th>
+  </tr>
+  </table>
+<span class="corners-bottom"><span></span></span>
+</div> 
+
+<div class="post">
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+	<colgroup span="2"> 
+		<col width="15%"></col>
+		<col width="65%"></col>
+	</colgroup>
+  <!-- BEGIN event_row -->
+  <tr>
+    <td style="width: 200; white-space: nowrap;" class="row bg2" ><a href="{event_row.U_VIEW_EVENT}" class="small">{event_row.EVENT}</a></td>
+    <td style="width: 900;" class="row bg1">{event_row.BAR}</td>
+  </tr>
+  <!-- END event_row -->
+</table>
+</div>
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+<table width="100%">
+	<colgroup span="1">
+		<col width="100%"></col>
+	</colgroup> 
+<tr>
+<th style="text-align: center; white-space: nowrap; color:white;">{L_EVENTS_FOOTCOUNT}</th>
+</tr>
+
+</table>
+</li>
+</ul>
+<span class="corners-bottom"><span></span></span>
+</div>
 
 
 <!-- INCLUDE overall_footer.html -->

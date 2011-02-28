@@ -58,8 +58,9 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 $db->sql_freeresult ( $result );
 
 $dkpsys_id = 0;
-if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [URI_DKPSYS] ) )
+if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
 {
+	//from pulldown
 	if (isset( $_POST ['pool']) )
 	{
 		$pulldownval = request_var('pool',  $user->lang['ALL']);
@@ -69,14 +70,7 @@ if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [UR
 			$dkpsys_id = intval($pulldownval); 	
 		}
 	}
-	
-	if (isset( $_POST ['getdksysid']) )
-	{
-		$query_by_pool = true;
-		$dkpsys_id = request_var('getdksysid', 0); 
-		
-	}
-	
+	//from uri
 	if (isset ( $_GET [URI_DKPSYS] ))
 	{
 		$query_by_pool = true;

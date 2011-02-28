@@ -38,7 +38,6 @@
 
 <span class="corners-bottom"><span></span></span>
 </div>
-</form>
 
 <!-- IF S_SHOWLEAD -->
 <!-- INCLUDE dkp/leaderboard.html -->
@@ -76,7 +75,7 @@
     <!-- IF S_SHOWEPGP -->
     <th style="text-align: right;"><a href="{O_EP}">{L_EP}</a></th>
     <th style="text-align: right;"><a href="{O_GP}">{L_GP}</a></th>
-    <th style="text-align: right;"><a href="{O_PR}">{L_ER}</a></th>
+    <th style="text-align: right;"><a href="{O_PR}">{L_EP}</a></th>
     <th style="text-align: right;"><a href="{O_CURRENT}">{L_CURRENT}</a></th>
     <!-- ELSE -->
     <th style="text-align: right;"><a href="{O_EARNED}">{L_EARNED}</a></th>
@@ -178,13 +177,13 @@
 
 <p>
 <input type="hidden" name="getdksysname" value="{F_DKPSYS_NAME}" />
-<input type="hidden" name="getdksysid" value="{F_DKPSYS_ID}" />
 
 </p>
+
 	<table width="100%" border="0" cellspacing="0" cellpadding="0">
 	<tr>
   		<td style="text-align: center;">
-  		<input type="submit" name="compare" value="{L_COMPARE_MEMBERS}" class="liteoption" />
+  		<input class="button2" type="submit" name="compare" id="compare" value="{L_COMPARE_MEMBERS}"  />
 		</td>
 	</tr>
 	</table>
