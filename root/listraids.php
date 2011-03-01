@@ -52,7 +52,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 }
 $db->sql_freeresult ( $result );
 
-$dkpsys_id = 0; 
+$dkp_id = 0; 
 if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [URI_DKPSYS] ) )
 {
 	if (isset( $_POST ['pool']) )
@@ -61,25 +61,25 @@ if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [UR
 		if(is_numeric($pulldownval))
 		{
 			$query_by_pool = true;
-			$dkpsys_id = intval($pulldownval); 	
+			$dkp_id = intval($pulldownval); 	
 		}
 	}
 	if (isset( $_POST ['getdksysid']) )
 	{
 		$query_by_pool = true;
-		$dkpsys_id = request_var('getdksysid', 0); 
+		$dkp_id = request_var('getdksysid', 0); 
 		
 	}
 	if (isset ( $_GET [URI_DKPSYS] ))
 	{
 		$query_by_pool = true;
-		$dkpsys_id = request_var(URI_DKPSYS, 0); 
+		$dkp_id = request_var(URI_DKPSYS, 0); 
 	}
 }
 else 
 {
 	$query_by_pool = true;
-	$dkpsys_id = $defaultpool; 
+	$dkp_id = $defaultpool; 
 }
 
 
@@ -89,7 +89,7 @@ foreach ( $dkpvalues as $key => $value )
 	{
 		$template->assign_block_vars ( 'pool_row', array (
 			'VALUE' => $value, 
-			'SELECTED' => ($value == $dkpsys_id && $value != '--------') ? ' selected="selected"' : '',
+			'SELECTED' => ($value == $dkp_id && $value != '--------') ? ' selected="selected"' : '',
 			'DISABLED' => ($value == '--------' ) ? ' disabled="disabled"' : '',  
 			'OPTION' => $value, 
 		));
@@ -98,7 +98,7 @@ foreach ( $dkpvalues as $key => $value )
 	{
 		$template->assign_block_vars ( 'pool_row', array (
 			'VALUE' => $value['id'], 
-			'SELECTED' => ($dkpsys_id == $value['id']) ? ' selected="selected"' : '', 
+			'SELECTED' => ($dkp_id == $value['id']) ? ' selected="selected"' : '', 
 			'OPTION' => $value['text'], 
 		));
 		
@@ -106,7 +106,7 @@ foreach ( $dkpvalues as $key => $value )
 }
 
 
-$query_by_pool = ($dkpsys_id != 0) ? true : false;
+$query_by_pool = ($dkp_id != 0) ? true : false;
 /**** end dkpsys pulldown  ****/	 
 	 
 $start = request_var('start', 0);   
@@ -117,7 +117,7 @@ $total_raids=0;
 // get sort order 
 $sort_order = array
 (
-    0 => array('raid_date desc', 'raid_date'),
+    0 => array('raid_start desc', 'raid_start'),
     1 => array('dkpsys_name', 'dkpsys_name desc'),
     2 => array('raid_name', 'raid_name desc'),
     3 => array('raid_note', 'raid_note desc'),
@@ -137,7 +137,7 @@ $sql_array = array(
 
 if ($query_by_pool == true)
 {
-	$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkpsys_id; 
+	$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkp_id; 
 }
 $sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query($sql);
@@ -150,7 +150,7 @@ $raidlines = $config['bbdkp_user_rlimit'] ;
 if ($query_by_pool)
 {
     $pagination = generate_pagination( append_sid("{$phpbb_root_path}listraids.$phpEx" , URI_DKPSYS . '=' . 
-    $dkpsys_id . '&amp;o='.  $current_order['uri']['current'] ), $total_raids, $config['bbdkp_user_rlimit'], $start, true);
+    $dkp_id . '&amp;o='.  $current_order['uri']['current'] ), $total_raids, $config['bbdkp_user_rlimit'], $start, true);
      
 }
 else 
@@ -160,20 +160,27 @@ else
 }
 
 $sql_array = array(
-    'SELECT'    => 	'b.dkpsys_name, b.dkpsys_id, r.raid_id, e.event_name, r.raid_date, r.raid_note, r.raid_value  ', 
-    'FROM'      => array(
+	'SELECT'	=>	' b.dkpsys_name, b.dkpsys_id, r.raid_id, e.event_name, r.raid_start, r.raid_note, 
+					  sum(ra.raid_value+ ra.time_bonus+ ra.zerosum_bonus - ra.raid_decay) as earned_result, count(*) as raidlines ', 
+	'FROM'		=> array(
         DKPSYS_TABLE 			=> 'b',
-		EVENTS_TABLE			=> 'e', 	        
-		RAIDS_TABLE 			=> 'r'	         
-    	),
-    'WHERE'		=> 'e.event_dkpid = b.dkpsys_id
-    	AND r.event_id = e.event_id ' , 
+		EVENTS_TABLE			=> 'e',				
+		RAIDS_TABLE				=> 'r',
+		RAID_DETAIL_TABLE		=> 'ra', 
+		),
+	'WHERE'		=> ' 
+		e.event_dkpid = b.dkpsys_id
+		AND r.event_id = e.event_id
+		AND ra.raid_id = r.raid_id
+		AND e.event_dkpid = ' . $dkp_id, 
     'ORDER_BY'	=>  $current_order['sql'], 
-   );
+	);
+	
+$sql = $db->sql_build_query('SELECT', $sql_array);
 
 if ($query_by_pool == true)
 {
-	$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkpsys_id; 
+	$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkp_id; 
 }
 $sql = $db->sql_build_query('SELECT', $sql_array);
 
@@ -188,12 +195,12 @@ if ( !$raids_result)
 while ( $row = $db->sql_fetchrow($raids_result) )
 {
     $template->assign_block_vars('raids_row', array(
-        'DATE' => ( !empty($row['raid_date']) ) ? date($config['bbdkp_date_format'], $row['raid_date']) : '&nbsp;',
+        'DATE' => ( !empty($row['raid_date']) ) ? date($config['bbdkp_date_format'], $row['raid_start']) : '&nbsp;',
         'U_VIEW_RAID' => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '='.$row['raid_id']),
 		'POOL' => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '&lt;<i>Not Found</i>&gt;',
     	'NAME' => ( !empty($row['event_name']) ) ? $row['event_name'] : '&lt;<i>Not Found</i>&gt;',
     	'NOTE' => ( !empty($row['raid_note']) ) ? $row['raid_note'] : '&nbsp;',
-        'VALUE' => $row['raid_value'])
+        'VALUE' => $row['earned_result'])
     );
 }
 
@@ -202,7 +209,7 @@ for ($i=0; $i<=4; $i++)
 {
     if ($query_by_pool)
     {
-        $sortlink[$i] = append_sid($phpbb_root_path . 'listraids.'.$phpEx, 'o=' . $current_order['uri'][$i] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . $dkpsys_id ); 
+        $sortlink[$i] = append_sid($phpbb_root_path . 'listraids.'.$phpEx, 'o=' . $current_order['uri'][$i] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . $dkp_id ); 
     }
     else 
     {
