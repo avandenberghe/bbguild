@@ -571,9 +571,7 @@ $lang = array_merge($lang, array(
 'DESCRIPTION' => 'lootsystem',
 'EXAMPLE' => 'lootsystem',
 'ADVANTAGE' => 'lootsystem',
-
 'LOOTSYSTEM' => 'lootsystem', 
-
 'STANDARDDKP' => 'Standard DKP',
 'STANDARDDKP_EXPLAIN' => '<strong>Description: </strong>The default DKP system. Players only receive DKP points as a result of being on time, or staying on bench, or killing a boss, or just plain participating. 
 Points are spent on loot just like in zero sum, but there is no redistribution. ',
@@ -624,7 +622,6 @@ So the loot would go to player 2 <br />',
 'DECAY_D'	=> '<strong>Decay factor</strong> d = 1 - (1-i)^n ',
 'DECAY_R'	=> '<strong>Raid Value</strong> = r',
 'DECAY_K'	=> '<strong>Raid Decay</strong> k = r * d',
-
 'DECAY_L'	=> '<strong>Item Decay percentage</strong> = l',
 'DECAY_J'	=> '<strong>Item Value</strong> = j',
 'DECAY_F'	=> '<strong>Item Decay</strong> f = j * l',

@@ -22,6 +22,7 @@ $user->session_begin();
 $auth->acl($user->data);
 $user->setup('viewforum');
 $user->add_lang(array('mods/dkp_common','mods/dkp_admin'));
+
 if (!$auth->acl_get('u_dkp'))
 {
 	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
@@ -32,13 +33,89 @@ if (! defined ( "EMED_BBDKP" ))
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
-if	(!isset($_GET[URI_NAMEID]) && isset($_GET[URI_DKPSYS])) 
+$member_id = request_var(URI_NAMEID, 0);
+
+// pulldown
+$query_by_pool = false;
+$defaultpool = 99; 
+
+$dkpvalues[0] = $user->lang['ALL']; 
+$dkpvalues[1] = '--------'; 
+
+$sql_array = array(
+	'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default', 
+	'FROM'		=> array( 
+				DKPSYS_TABLE => 'a', 
+				MEMBER_DKP_TABLE => 'd',
+				), 
+	'WHERE'  => ' a.dkpsys_id = d.member_dkpid 
+				and d.member_id =  ' . $member_id
+); 
+$sql = $db->sql_build_query('SELECT', $sql_array);
+$result = $db->sql_query ( $sql );
+$index = 3;
+while ( $row = $db->sql_fetchrow ( $result ) )
 {
-	 trigger_error($user->lang['ERROR_MEMBERNOTFOUND']);
+	$dkpvalues[$index]['id'] = $row ['dkpsys_id']; 
+	$dkpvalues[$index]['text'] = $row ['dkpsys_name']; 
+	if (strtoupper ( $row ['dkpsys_default'] ) == 'Y')
+	{
+		$defaultpool = $row ['dkpsys_id'];
+	}
+	$index +=1;
+}
+$db->sql_freeresult ( $result );
+
+$dkp_id = 0;
+if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
+{
+	//from pulldown
+	if (isset( $_POST ['pool']) )
+	{
+		$pulldownval = request_var('pool',  $user->lang['ALL']);
+		if(is_numeric($pulldownval))
+		{
+			$query_by_pool = true;
+			$dkp_id = intval($pulldownval); 	
+		}
+	}
+	elseif (isset ( $_GET [URI_DKPSYS] ))
+	{
+		$query_by_pool = true;
+		$dkp_id = request_var(URI_DKPSYS, 0); 
+	}
+}
+else 
+{
+	$query_by_pool = true;
+	$dkp_id = $defaultpool; 
 }
 
-$member_id = request_var(URI_NAMEID, 0);
-$dkp_id = request_var(URI_DKPSYS, 0);
+foreach ( $dkpvalues as $key => $value )
+{
+	if(!is_array($value))
+	{
+		$template->assign_block_vars ( 'pool_row', array (
+			'VALUE' => $value, 
+			'SELECTED' => ($value == $dkp_id && $value != '--------') ? ' selected="selected"' : '',
+			'DISABLED' => ($value == '--------' ) ? ' disabled="disabled"' : '',  
+			'OPTION' => $value, 
+		));
+	}
+	else 
+	{
+		$template->assign_block_vars ( 'pool_row', array (
+			'VALUE' => $value['id'], 
+			'SELECTED' => ($dkp_id == $value['id']) ? ' selected="selected"' : '', 
+			'OPTION' => $value['text'], 
+		));
+		
+	}
+}
+
+$query_by_pool = ($dkp_id != 0) ? true : false;
+/**** end dkpsys pulldown  ****/
+
 
 /*****************************
 /***   make member array
@@ -113,7 +190,6 @@ if ( !($result = $db->sql_query($sql)) )
 	trigger_error($user->lang['ERROR_MEMBERNOTFOUND']);
 }
 
-// Make sure they provided a valid member
 if ( !$row = $db->sql_fetchrow($result) )
 {
 	trigger_error($user->lang['ERROR_MEMBERNOTFOUND']);
@@ -255,21 +331,24 @@ $template->assign_vars(array(
 *****************************/
 if (!isset($_GET['rstart']))  
 {
-	$current_earned = $member['member_earned'];
+	$current_earned = $member['member_earned'] - $member['member_raid_decay'];
 	$rstart=0; 
 }
 else
 {
 	$rstart = request_var('rstart',0) ;
-	$current_earned = $member['member_earned'];
+	
+	//totals
+	$current_earned = $member['member_earned'] - $member['member_raid_decay'];
 	$sql_array = array(
-	'SELECT'	=>	' sum(r.raid_value) as earned_result, count(*) as raidlines ', 
+	'SELECT'	=>	' sum(ra.raid_value+ ra.time_bonus+ ra.zerosum_bonus - ra.raid_decay) as earned_result, count(*) as raidlines ', 
 	'FROM'		=> array(
 		EVENTS_TABLE			=> 'e',				
 		RAIDS_TABLE				=> 'r',
-		RAID_DETAIL_TABLE	=> 'ra', 
+		RAID_DETAIL_TABLE		=> 'ra', 
 		),
-	'WHERE'		=> ' r.event_id = e.event_id
+	'WHERE'		=> ' 
+		r.event_id = e.event_id
 		AND ra.raid_id = r.raid_id
 		AND l.member_id = ra.member_id
 		AND (ra.member_id=' . $member_id .')
@@ -288,7 +367,9 @@ else
 // raid lines
 $raidlines = $config['bbdkp_user_rlimit'] ;
 $sql_array = array(
-	'SELECT'	=>	'r.raid_id, e.event_name, e.event_dkpid, r.raid_start, r.raid_note, ra.raid_value ', 
+	'SELECT'	=>	'r.raid_id, e.event_name, e.event_dkpid, r.raid_start, r.raid_note, 
+	ra.raid_value, ra.raid_decay, ra.time_bonus, ra.zerosum_bonus, 
+   (ra.raid_value + ra.time_bonus + ra.zerosum_bonus - ra.raid_decay) as netearned ', 
 	'FROM'		=> array(
 		EVENTS_TABLE			=> 'e',				
 		RAIDS_TABLE				=> 'r',
@@ -296,6 +377,7 @@ $sql_array = array(
 		),
 
 	'WHERE'		=>	' ra.raid_id = r.raid_id
+		 AND e.event_id = r.event_id
 		 AND ra.member_id=' . $member_id . '
 		 AND e.event_dkpid=' . (int) $dkp_id, 
 	'ORDER_BY'	=> 'r.raid_start DESC',
@@ -314,17 +396,18 @@ while ( $raid = $db->sql_fetchrow($raids_result) )
 		'U_VIEW_RAID'	 => append_sid("{$phpbb_root_path}viewraid.$phpEx" , URI_RAID . '='.$raid['raid_id']),
 		'NAME'			 => $raid['event_name'],
 		'NOTE'			 => ( !empty($raid['raid_note']) ) ? $raid['raid_note'] : '&nbsp;',
-		'EARNED'		 => $raid['raid_value'],
+		'RAIDVAL'		 => $raid['raid_value'],
+		'TIMEBONUS'		 => $raid['time_bonus'],
+		'ZSBONUS'		 => $raid['zerosum_bonus'],
+		'RAIDDECAY'		 => $raid['raid_decay'],
+		'EARNED'		 => $raid['netearned'],
 		'CURRENT_EARNED' => sprintf("%.2f", $current_earned))
 	);
-	$current_earned -= $raid['raid_value'];
+	$current_earned -= $raid['netearned'];
 }
 
 // get number of attended raids
 $db->sql_freeresult($raids_result);
-
-
-
 
 $total_attended_raids = memberraid_count($dkp_id, 0, $member_id, true); 
 

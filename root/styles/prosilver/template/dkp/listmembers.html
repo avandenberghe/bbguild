@@ -10,16 +10,17 @@
 <div class="forabg" >
 <span class="corners-top"><span></span></span>
 
-<table width="30%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
+<table width="100%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
 	<colgroup span="12" valign= "middle">
-	<col width="50%"></col>
+	<col width="20%"></col>
+	<col width="45%"></col>
 	<col width="25%"></col>
 	<col width="25%"></col>
 	</colgroup>
 
 <tr>
 <td><h2 style="color:#dfc065">{L_LISTMEMBERS_TITLE}</h2> </td>
-  <td style="color:#FFFFDD; text-align:left; width:56 white-space:nowrap;" >{L_POOL}:
+<td style="color:#FFFFDD; text-align:right; width:56 white-space:nowrap;" >{L_POOL}:
       <select name="pool" class="input" onchange="javascript:form.submit();">
         <!-- BEGIN pool_row -->
         <option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
@@ -33,6 +34,7 @@
         <!-- END filter_row -->
       </select>
  </td>
+ <td></td>
 </tr>
 </table>
 
@@ -49,12 +51,13 @@
 	<ul class="topiclist">
 	<li class="header">
 	<table width="100%" >
-		<colgroup span="13" valign= "middle">
+		<!-- IF ! S_QUERYBYPOOL --><colgroup span="14"><!-- ELSE --><colgroup span="13"><!-- ENDIF -->
 		<col width="3%"></col>
 		<col width="3%"></col>
 		<col width="3%"></col>
 		<col width="3%"></col>
 		<col width="10%"></col>
+		  <!-- IF ! S_QUERYBYPOOL --><col></col><!-- ENDIF -->
 		<col width="6%"></col>
 		<col width="9.3%"></col>
 		<col width="9.3%"></col>
@@ -72,10 +75,11 @@
     <th style="text-align: center;"><a href="{O_LEVEL}">{L_LEVEL}</a></th>
     <th style="text-align: left;"><a href="{O_NAME}">{L_NAME}</a></th>
     <th style="text-align: center;"><a href="{O_RANK}">{L_RANK}</a></th>
+    <!-- IF ! S_QUERYBYPOOL --><td style="text-align: center;"><a href="{O_RANK}">{L_POOL}</a></td><!-- ENDIF -->
     <!-- IF S_SHOWEPGP -->
     <th style="text-align: right;"><a href="{O_EP}">{L_EP}</a></th>
     <th style="text-align: right;"><a href="{O_GP}">{L_GP}</a></th>
-    <th style="text-align: right;"><a href="{O_PR}">{L_EP}</a></th>
+    <th style="text-align: right;"><a href="{O_PR}">{L_PR}</a></th>
     <th style="text-align: right;"><a href="{O_CURRENT}">{L_CURRENT}</a></th>
     <!-- ELSE -->
     <th style="text-align: right;"><a href="{O_EARNED}">{L_EARNED}</a></th>
@@ -102,12 +106,14 @@
 
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
 
-				<colgroup span="13">
+			  <!-- IF ! S_QUERYBYPOOL --><colgroup span="14"><!-- ELSE --><colgroup span="13"><!-- ENDIF -->
+
 				<col width="3%"></col>
 				<col width="3%"></col>
 				<col width="3%"></col>
 				<col width="3%"></col>
 				<col width="10%"></col>
+				  <!-- IF ! S_QUERYBYPOOL --><col></col><!-- ENDIF -->
 				<col width="6%"></col>
 				<col width="9.3%"></col>
 				<col width="9.3%"></col>
@@ -129,8 +135,9 @@
     <td>{members_row.COUNT}</td>
     <td style="white-space: nowrap;"><!-- IF members_row.S_RACE_IMAGE_EXISTS --><img src="{members_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE --><!-- ENDIF --><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;</span></td>
     <td style="text-align: center;">{members_row.LEVEL}</td>
-    <td><a style="color:{members_row.COLORCODE}" href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a></td>
+    <td><a style="white-space: nowrap; color:{members_row.COLORCODE}" href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a> </td>
     <td style="text-align: center;"><!-- IF members_row.RANK_HIDE == '1' --><em><!-- ENDIF --><a href="{members_row.RANK_SEARCH}">{members_row.RANK_NAME}</a><!-- IF members_row.RANK_HIDE == '1' --></em><!-- ENDIF --></td>
+     <!-- IF ! S_QUERYBYPOOL --><td style="text-align: center;">&nbsp;({members_row.DKPNAME})</td><!-- ENDIF -->
      <!-- IF S_SHOWEPGP -->
     <td style="font-size :8pt; color: green; text-align: right;">{members_row.EP}</td>
     <td style="font-size :8pt; color: red; text-align: right;" >{members_row.GP}</td>

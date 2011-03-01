@@ -656,7 +656,6 @@ class acp_dkp_mdkp extends bbDKP_Admin
 																
 				$result = $db->sql_query($sql);
 				$row = $db->sql_fetchrow($result);
-				$db->sql_freeresult($result);
 					
 				// make object
 				$this->member = array(
@@ -686,7 +685,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'imagename'			=> $row['imagename'],
 					'colorcode'			=> $row['colorcode'], 
 				);	
-						
+				$db->sql_freeresult($result);						
 				/******************/
 				$form_key = 'mm_editmemberdkp';
 				add_form_key($form_key);

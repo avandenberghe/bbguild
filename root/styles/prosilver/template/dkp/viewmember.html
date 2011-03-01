@@ -6,21 +6,48 @@
 		$Id$
 //-->
 <div class="forabg" >
-
+  <form method="post" action="{F_MEMBERS}">
 <span class="corners-top"><span></span></span>
 <ul class="topiclist">
 <li class="header">
 
-<h1 style = "color:#dfc065"> {GUILD}: <span style="color:{COLORCODE}"><strong>{NAME}</strong></span>
+
+<table width="100%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
+
+<colgroup span="3" valign= "middle">
+	<col width="20%"></col>
+	<col width="70%"></col>
+	<col width="5%"></col>
+</colgroup>
+
+<tr>
+<td style="color:#FFFFDD; text-align:left; white-space:nowrap;" >
+<h4 style = "color:#dfc065"> {GUILD}: <span style="color:{COLORCODE}"><strong>{NAME}</strong></span>
 <!-- IF S_RACE_IMAGE_EXISTS --><img src="{RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE --><!-- ENDIF -->
-<!-- IF S_CLASS_IMAGE_EXISTS --><img src="{CLASS_IMAGE}" alt="{CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;</span> </h1>
-<h4 style = "color:#dfc065"> {L_POOL}: {MEMBER_DKPNAME}  </h4>
+<!-- IF S_CLASS_IMAGE_EXISTS --><img src="{CLASS_IMAGE}" alt="{CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;</span> </h4>
+</td>     
+
+<td style="color:#FFFFDD; text-align:left; white-space:nowrap;">
+<h4 style= "color:#dfc065"> {L_POOL}: {MEMBER_DKPNAME} 
+<select name="pool" class="input" onchange="javascript:form.submit();">
+
+        <!-- BEGIN pool_row -->
+        <option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
+        <!-- END pool_row -->
+      </select>
+
+      
+      </h4>
+  </td> 
+<td>&nbsp;&nbsp;</td>
+</tr> 
+</table>
+
 
 </li>
 </ul>
 <span class="corners-bottom"><span></span></span>
 </div>
-
 
 <!-- IF ! S_SHOWEPGP -->
 <!--  non epgp classic dkp overview  -->
@@ -208,25 +235,18 @@
    <span class="corners-top"><span></span></span>
 	<ul class="topiclist">
 	<li class="header"><h4 style = "color:#dfc065">{L_RAID_ATTENDANCE_HISTORY}</h4>
-	
 
  <table width="100%">
-
-				<colgroup span="5"> 
-				<col width="8%"></col>
-				<col width="35%"></col>
-				<col width="35%"></col>
-				<col width="10%"></col>
-				<col width="10%"></col>
-				</colgroup>
-		  
-
    <tr style="color: white">
-    <th>{L_DATE}</th>
-    <th>{L_NAME}</th>
-    <th>{L_NOTE}</th>
-    <th>{L_EARNED}</th>
-    <th>{L_CURRENT}</th>
+    <th style="text-align:left; width:10px;">{L_DATE}</th>
+    <th style="text-align:left; width:20%;">{L_NAME}</th>
+    <th style="text-align:left; width:20%;" >{L_NOTE}</th>
+   <!-- IF S_SHOWTIME || S_SHOWZS --><th style="text-align:right;">{L_RAIDVALUE}</th><!-- ENDIF -->
+   <!-- IF S_SHOWTIME --><th style="text-align:right;">{L_TIMEVALUE}</th><!-- ENDIF -->
+   <!-- IF S_SHOWZS --> <th style="text-align:right;">{L_ZSVALUE}</th><!-- ENDIF -->
+   <!-- IF S_SHOWDECAY --> <th style="text-align:right;">{L_RAIDDECAY}</th><!-- ENDIF -->
+    <th style="text-align:right;"><!-- IF S_EPGP -->{L_EARNED}<!-- ELSE -->{L_EP}<!-- ENDIF --></th>
+    <th style="text-align:right;">{L_CURRENT}</th>
   </tr>
 
 </table>
@@ -237,24 +257,17 @@
 
 <div class="post">
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
-
-
-				<colgroup span="5">
-				<col width="8%"></col>
-				<col width="35%"></col>
-				<col width="35%"></col>
-				<col width="10%"></col>
-				<col width="10%"></col>
-				</colgroup>
-
-
   <!-- BEGIN raids_row -->
     <tr class="bg1">
-    <td>{raids_row.DATE}</td>
-    <td>{raids_row.NAME}</td>
-    <td>{raids_row.NOTE}</td>
-    <td>{raids_row.EARNED}</td>
-    <td>{raids_row.CURRENT_EARNED}</td>
+    <td style="width:10%;" >{raids_row.DATE}</td>
+    <td style="width:20%;">{raids_row.NAME}</td>
+    <td style="text-align:left; white-space:nowrap; width:20%;" >{raids_row.NOTE}</td>
+    <!-- IF S_SHOWTIME || S_SHOWZS --><td style="text-align:right;">{raids_row.RAIDVAL}</td><!-- ENDIF -->
+    <!-- IF S_SHOWTIME --><td style="text-align:right;">{raids_row.TIMEBONUS}</td><!-- ENDIF -->
+    <!-- IF S_SHOWZS --><td style="text-align:right;">{raids_row.ZSBONUS}</td><!-- ENDIF -->
+    <!-- IF S_SHOWDECAY --><td style="text-align:right;"><span class="negative">{raids_row.RAIDDECAY}</span></td><!-- ENDIF -->
+    <td style="text-align:right;" >{raids_row.EARNED}</td>
+    <td style="text-align:right;" >{raids_row.CURRENT_EARNED}</td>
   </tr>
   <!-- END raids_row -->
   
@@ -487,5 +500,5 @@
 <span class="corners-bottom"><span></span></span>
 </div>
 
-
+  </form>
 <!-- INCLUDE overall_footer.html -->

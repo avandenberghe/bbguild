@@ -246,6 +246,7 @@ $lang = array_merge($lang, array(
 'RAIDS' => 'Raids',
 'RAID_ID' => 'Raid ID',
 'RAIDVALUE' => 'Raid Value',
+'RAIDBONUS' => 'Raid Bonus',
 'RANK_DISTRIBUTION' => 'Rank Distribution',
 'RECORDED_RAID_HISTORY' => 'Recorded Raid History for %s',
 'RECORDED_DROP_HISTORY' => 'Recorded Purchase History for %s',

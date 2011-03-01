@@ -42,7 +42,16 @@ $defaultpool = 99;
 
 $dkpvalues[0] = $user->lang['ALL']; 
 $dkpvalues[1] = '--------'; 
-$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE;
+$sql_array = array(
+	'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default', 
+	'FROM'		=> array( 
+				DKPSYS_TABLE => 'a', 
+				MEMBER_DKP_TABLE => 'd',
+				), 
+	'WHERE'  => ' a.dkpsys_id = d.member_dkpid', 
+	'GROUP_BY'  => 'a.dkpsys_id'
+); 
+$sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query ( $sql );
 $index = 3;
 while ( $row = $db->sql_fetchrow ( $result ) )
@@ -198,10 +207,12 @@ foreach ( $filtervalues as $fid => $fname )
 /* table select */
 
 $sql_array = array(
-    'SELECT'    => 	'd.dkpsys_name, 
-    				m.member_dkpid, m.member_id, m.member_status, m.member_lastraid, 
-    				m.member_raid_value, m.member_earned, m.member_adjustment, m.member_spent, 
-					(m.member_earned + m.member_adjustment - m.member_spent) AS member_current,
+    'SELECT'    => 	'm.member_dkpid, d.dkpsys_name, m.member_id, m.member_status, m.member_lastraid, 
+    				sum(m.member_raid_value) as member_raid_value, 
+    				sum(m.member_earned) as member_earned, 
+    				sum(m.member_adjustment) as member_adjustment, 
+    				sum(m.member_spent) as member_spent, 
+					sum(m.member_earned + m.member_adjustment - m.member_spent) AS member_current,
    					l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
        				r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix, 
        				l1.name AS member_class, c.class_id, 
@@ -227,28 +238,36 @@ $sql_array = array(
 			AND (r.rank_id = l.member_rank_id) 
 			AND (m.member_dkpid = d.dkpsys_id) 
 			AND (l.member_guild_id = r.guild_id) " ,
+    'GROUP_BY' => 'm.member_dkpid, d.dkpsys_name, m.member_id, m.member_status, m.member_lastraid, 
+   				l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
+       			r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix, 
+       			l1.name, c.class_id, 
+       			c.colorcode, c.class_armor_type , c.imagename, 
+       			l.member_gender_id, a.image_female_small, a.image_male_small, 
+				c.class_min_level ,
+				c.class_max_level ', 
 );
 
 if($config['bbdkp_timebased'] == 1)
 {
-	$sql_array[ 'SELECT'] .= ', m.member_time_bonus';
+	$sql_array[ 'SELECT'] .= ', sum(m.member_time_bonus) as member_time_bonus ';
 }
 
 if($config['bbdkp_zerosum'] == 1)
 {
-	$sql_array[ 'SELECT'] .= ', m.member_zerosum_bonus';
+	$sql_array[ 'SELECT'] .= ', sum(m.member_zerosum_bonus) as member_zerosum_bonus';
 }
 
 if($config['bbdkp_decay'] == 1)
 {
-	$sql_array[ 'SELECT'] .= ', m.member_raid_decay, m.member_item_decay ';
+	$sql_array[ 'SELECT'] .= ', sum(m.member_raid_decay) as member_raid_decay, sum(m.member_item_decay) as member_item_decay ';
 }
 
 if($config['bbdkp_epgp'] == 1)
 {
-	$sql_array[ 'SELECT'] .= ', (m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep, (m.member_spent - m.member_item_decay ) AS gp, 
-	case when (m.member_spent - m.member_item_decay) = 0 then (m.member_earned - m.member_raid_decay + m.member_adjustment)  
-	else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as er ' ;
+	$sql_array[ 'SELECT'] .= ', sum(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep, sum(m.member_spent - m.member_item_decay ) AS gp, 
+	case when sum(m.member_spent - m.member_item_decay) = 0 then sum(m.member_earned - m.member_raid_decay + m.member_adjustment)  
+	else round(sum(m.member_earned - m.member_raid_decay + m.member_adjustment) / sum(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as er ' ;
 }
 
 if  (isset($_POST['compare']) && isset($_POST['compare_ids']))
@@ -261,6 +280,7 @@ if ($query_by_pool)
 {
 	$sql_array['WHERE'] .= ' AND m.member_dkpid = ' . $dkpsys_id . ' ';
 }
+
 
 if (isset ( $_GET ['rank'] ))
 {
@@ -277,7 +297,19 @@ if ($query_by_armor == 1)
 	$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $filter ) . "'";
 }
 
-$sql = $db->sql_build_query('SELECT', $sql_array);
+// default sorting
+if($config['bbdkp_epgp'] == 1)
+{
+	$sql_array[ 'ORDER_BY'] = 'case when sum(m.member_spent - m.member_item_decay) = 0 then sum(m.member_earned - m.member_raid_decay + m.member_adjustment)  
+	else round(sum(m.member_earned - m.member_raid_decay + m.member_adjustment) / sum(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end desc ' ;
+}
+else 
+{
+	$sql_array[ 'ORDER_BY'] = 'sum(m.member_earned + m.member_adjustment - m.member_spent) desc, l.member_name asc ' ;
+}
+
+
+$sql = $db->sql_build_query('SELECT_DISTINCT', $sql_array);
 
 if (! ($members_result = $db->sql_query ( $sql )))
 {
@@ -315,8 +347,8 @@ while ( $row = $db->sql_fetchrow ( $members_result ) )
 	{
 		++$member_count;
 		$memberarray [$member_count] ['class_id'] = $row ['class_id'];
+		$memberarray [$member_count] ['dkpsys_name'] = $row ['dkpsys_name']; 
 		$memberarray [$member_count] ['member_id'] = $row ['member_id'];
-		$memberarray [$member_count] ['dkpsys_name'] = $row ['dkpsys_name'];
 		$memberarray [$member_count] ['count'] = $member_count;
 		$memberarray [$member_count] ['member_name'] = $row ['member_name'];
 		$memberarray [$member_count] ['member_status'] = $row ['member_status'];
@@ -375,7 +407,7 @@ if (count ($memberarray))
 {
 	 foreach ($memberarray as $key => $member)
 	{
-		$member_name [$key] = $member ['member_name'];  
+		$member_name [$key] = $member ['member_name'];
 		$rank_name [$key] = $member ['rank_name'];  
 		$member_level [$key] = $member ['member_level']; 
 		$member_class [$key] = $member ['member_class']; 
@@ -574,7 +606,8 @@ foreach ( $memberarray as $key => $member )
 	$u_rank_search .= ($filter != 'All') ? '&amp;filter=' . $filter : '';
 	
 	$templatearray = array (
-		'COLORCODE' 	=> $member ['colorcode'], 
+		'COLORCODE' 	=> $member ['colorcode'],
+		'DKPNAME'		=> $member ['dkpsys_name'],  
 		'CLASS_IMAGE' 	=> $member['class_image'],
 		'S_CLASS_IMAGE_EXISTS' =>  $member['class_image_exists'],
 		'RACE_IMAGE' 	=> $member['race_image'],
@@ -582,7 +615,6 @@ foreach ( $memberarray as $key => $member )
 		'DKPCOLOUR1' 	=> ($member ['member_adjustment'] >= 0) ? 'green' : 'red', 
 		'DKPCOLOUR2' 	=> ($row ['member_current'] >= 0) ? 'green' : 'red', 
 		'ID' 			=> $member ['member_id'], 
-		'MEMBER_DKPPOOL' => $member ['dkpsys_name'], 
 		'COUNT' 		=> $member ['count'], 
 		'NAME' 			=> $member ['rank_prefix'] . (($member ['member_status'] == '0') ? 
 			'<em>' . $member ['member_name'] . '</em>' : 
@@ -680,8 +712,8 @@ else
 	$footcount_text = sprintf ( $user->lang ['LISTMEMBERS_FOOTCOUNT'], $member_count );
 }
 
-$template->assign_vars ( array ('F_MEMBERS' => append_sid ( "{$phpbb_root_path}listmembers.$phpEx" ), 
-
+$template->assign_vars ( array (
+	'F_MEMBERS' => append_sid ( "{$phpbb_root_path}listmembers.$phpEx" ), 
 	'F_DKPSYS_NAME' => (isset ( $dkpsysname ) == true) ? $dkpsysname : 'All', 
 	'F_DKPSYS_ID' => (isset ( $dkpsys_id ) == true) ? $dkpsys_id : 0, 
 	'O_NAME' => $sortlink [1], 
@@ -704,8 +736,7 @@ $template->assign_vars ( array ('F_MEMBERS' => append_sid ( "{$phpbb_root_path}l
 	'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
 	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
  	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
-
-	
+	'S_QUERYBYPOOL' => $query_by_pool, 
 	'FOOTCOUNT' => (isset ( $_POST ['compare'] )) ? 
 		sprintf ( $footcount_text, sizeof (request_var ( 'compare_ids', array ('' => 0 )))) : 
 		$footcount_text )
