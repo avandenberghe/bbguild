@@ -185,7 +185,7 @@ $versions = array(
             			'dps'				=> array('USINT', 0),
             			'tank'				=> array('USINT', 0),
             			'heal'				=> array('USINT', 0),
-						'imagename'			=> array('VCHAR:255', 0),
+						'imagename'			=> array('VCHAR:255', ''),
                 		'colorcode'			=> array('VCHAR:10', ''),
             
                     ),
@@ -199,8 +199,8 @@ $versions = array(
                         'race_id'			=> array('USINT', 0),
                         'race_faction_id'	=> array('USINT', 0),
                         'race_hide'			=> array('BOOL', 0),
-						'image_female_small'	=> array('VCHAR:255', 0),
-						'image_male_small'	=> array('VCHAR:255', 0),
+						'image_female_small'	=> array('VCHAR:255', ''),
+						'image_male_small'	=> array('VCHAR:255', ''),
                     ),
                     'PRIMARY_KEY'    => 'race_id',
                 ),
@@ -254,7 +254,7 @@ $versions = array(
             			'member_guild_id'  => array('USINT', 0),
             			'member_gender_id' => array('USINT', 0),
             			'member_achiev'    => array('UINT', 0),
-            			'member_armory_url' => array('VCHAR:255', 0),
+            			'member_armory_url' => array('VCHAR:255', ''),
             			'phpbb_user_id' 	=> array('UINT', 0),
             
                     ),
