@@ -37,7 +37,17 @@ $defaultpool = 99;
 
 $dkpvalues[0] = $user->lang['ALL']; 
 $dkpvalues[1] = '--------'; 
-$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE;
+$sql_array = array(
+	'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default', 
+	'FROM'		=> array( 
+				DKPSYS_TABLE => 'a', 
+				EVENTS_TABLE => 'e',
+				RAIDS_TABLE => 'r',
+				), 
+	'WHERE'  => ' a.dkpsys_id = e.event_dkpid and e.event_id=r.event_id', 
+	'GROUP_BY'  => 'a.dkpsys_id'
+); 
+$sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query ( $sql );
 $index = 3;
 while ( $row = $db->sql_fetchrow ( $result ) )
@@ -53,7 +63,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 $db->sql_freeresult ( $result );
 
 $dkp_id = 0; 
-if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [URI_DKPSYS] ) )
+if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
 {
 	if (isset( $_POST ['pool']) )
 	{
@@ -64,13 +74,7 @@ if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [UR
 			$dkp_id = intval($pulldownval); 	
 		}
 	}
-	if (isset( $_POST ['getdksysid']) )
-	{
-		$query_by_pool = true;
-		$dkp_id = request_var('getdksysid', 0); 
-		
-	}
-	if (isset ( $_GET [URI_DKPSYS] ))
+	elseif (isset ( $_GET [URI_DKPSYS] ))
 	{
 		$query_by_pool = true;
 		$dkp_id = request_var(URI_DKPSYS, 0); 
@@ -119,7 +123,7 @@ $sort_order = array
 (
     0 => array('raid_start desc', 'raid_start'),
     1 => array('dkpsys_name', 'dkpsys_name desc'),
-    2 => array('raid_name', 'raid_name desc'),
+    2 => array('event_name', 'event_name desc'),
     3 => array('raid_note', 'raid_note desc'),
     4 => array('raid_value desc', 'raid_value')
 );
@@ -173,7 +177,8 @@ $sql_array = array(
 		AND r.event_id = e.event_id
 		AND ra.raid_id = r.raid_id
 		AND e.event_dkpid = ' . $dkp_id, 
-    'ORDER_BY'	=>  $current_order['sql'], 
+    'ORDER_BY'	=>  $current_order['sql'],
+	
 	);
 	
 $sql = $db->sql_build_query('SELECT', $sql_array);
@@ -195,7 +200,7 @@ if ( !$raids_result)
 while ( $row = $db->sql_fetchrow($raids_result) )
 {
     $template->assign_block_vars('raids_row', array(
-        'DATE' => ( !empty($row['raid_date']) ) ? date($config['bbdkp_date_format'], $row['raid_start']) : '&nbsp;',
+        'DATE' => ( !empty($row['raid_start']) ) ? date($config['bbdkp_date_format'], $row['raid_start']) : '&nbsp;',
         'U_VIEW_RAID' => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '='.$row['raid_id']),
 		'POOL' => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '&lt;<i>Not Found</i>&gt;',
     	'NAME' => ( !empty($row['event_name']) ) ? $row['event_name'] : '&lt;<i>Not Found</i>&gt;',

@@ -6,12 +6,9 @@
 		$Id$
 //-->
 <form method="post" action="{U_LIST_RAIDS}">
-<p><input type="hidden" name="{URI_SESSION}" value="{V_SID}" /></p>
 
 <div class="forabg" >
 <span class="corners-top"><span></span></span>
-<ul class="topiclist">
-<li class="header">
 <table width="30%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
 <colgroup  span="3">
 <col width="30%"></col>
@@ -19,7 +16,7 @@
 <col width="60%"></col>
 </colgroup>
 <tr>
-<th><h4 style ="color:#dfc065;">Raids</h4></th>
+<th><h1 style ="color:#dfc065;">{L_RAIDS}</h1></th>
 <th></th>
 <th style="color:white; text-align:left; width:56 white-space:nowrap;">{L_POOL}:
       <select name="pool" class="input" onchange="javascript:form.submit();">
@@ -30,18 +27,15 @@
  </th>
 </tr>
 </table>
-</li>
-</ul>
 <span class="corners-bottom"><span></span></span>
 </div>
 </form> 
 
 
-<div class="forabg" >
-   <span class="corners-top"><span></span></span>
-	<ul class="topiclist">
-	<li class="header">
- <table width="100%">
+<div class="forumbg forumbg-table">
+<div class="inner">
+<span class="corners-top"><span></span></span>
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
 <colgroup span="5">
 			<col width="10%"></col>
 			<col width="10%"></col>
@@ -49,68 +43,36 @@
 			<col width="29%"></col>
 			<col width="20%"></col>
 </colgroup>
+<thead>
 <tr>
+    <th style="text-align:center; width:10%;"><a href="{O_DATE}">{L_DATE}</a></th> 
+    <th style="text-align:center; width:10%;"><a href="{O_POOL}">{L_POOL}</a></th>
+    <th style="text-align:left; width:20%;" ><a href="{O_NAME}">{L_NAME}</a></th>
+    <th style="text-align:left; width:29%;"><a href="{O_NOTE}">{L_NOTE}</a></th>
+    <th style="text-align:right; width:20%;"><a href="{O_VALUE}">{L_VALUE}</a></th>
 </tr>
-<tr>
-    <th style="text-align:center;"><a href="{O_DATE}">{L_DATE}</a></th> 
-    <th style="text-align:center;"><a href="{O_POOL}">{L_POOL}</a></th>
-    <th style="text-align:left;"><a href="{O_NAME}">{L_NAME}</a></th>
-    <th style="text-align:left;"><a href="{O_NOTE}">{L_NOTE}</a></th>
-    <th style="text-align:right;"><a href="{O_VALUE}">{L_VALUE}</a></th>
-</tr>
-</table>
-</li>
-</ul>
-
-<span class="corners-bottom"><span></span></span>
-</div>
-
-<div class="post">
-<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
-		<colgroup span="5">
-			<col width="10%"></col>
-			<col width="10%"></col>
-			<col width="20%"></col>
-			<col width="29%"></col>
-			<col width="20%"></col>
-		</colgroup>
-  
-  <!-- BEGIN raids_row -->
- 	<tr class="row bg1">
- 	
+</thead>
+<!-- BEGIN raids_row -->
+<tr class="<!-- IF raids.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
     <td style="text-align:center;">{raids_row.DATE}</td> 
     <td style="text-align:center;">{raids_row.POOL}</td>
     <td style="text-align:left;"><a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
     <td style="text-align:left;">{raids_row.NOTE}</td>
     <td style="text-align:right;">{raids_row.VALUE}</td>
-  	</tr>
-  <!-- END raids_row -->
-
-</table>
-</div>
-
-<div class="forabg" >
-   <span class="corners-top"><span></span></span>
-	<ul class="topiclist">
-	<li class="header">
-	
-<table width="100%">
-	<colgroup span="1">
-	<col width="100%"></col>
-	</colgroup>
-<tr>
-<td  style ="color:white; text-align:center">{LISTRAIDS_FOOTCOUNT}</td>
 </tr>
-
+  <!-- END raids_row -->
+<tfoot>
+<tr>
+	<th  style="text-align: center; white-space: nowrap; color:white;">{LISTRAIDS_FOOTCOUNT}</th>
+</tr>
+</tfoot>
 </table>
-</li>
+</div>
+</div>
+<hr />
+  
+<ul class="linklist">
+ <li class="rightside pagination">{LISTRAIDS_FOOTCOUNT} &bull; <!-- IF RAID_PAGINATION --><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{RAID_PAGINATION}</span><!-- ELSE -->{PAGE_NUMBER}<!-- ENDIF --></li>
 </ul>
-<span class="corners-bottom"><span></span></span>
-</div>
 
-<!-- IF RAID_PAGINATION -->  
-<div class="pagination">
- <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{RAID_PAGINATION}<br /><br /></span>
-</div>
-<!-- ENDIF -->
 <!-- INCLUDE overall_footer.html -->
