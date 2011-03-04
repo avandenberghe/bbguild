@@ -200,7 +200,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 .bbtooltip .b,
 .bbtooltip .b div {
  background-image: url("{T_THEME_PATH}/images/dkp/tooltip/tooltip.png");
- background-color: transparant;
+ background-color: transparent;
  background-repeat: no-repeat;
  background-position: right top;
 }
