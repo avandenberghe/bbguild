@@ -37,7 +37,9 @@
     <!-- IF S_SHOWZS -->
     <th align="left" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_ZSVALUE}&amp;start={START}">{L_ZSVALUE}</a></th>
     <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY -->
     <th style="text-align:center;" width="30" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_DECAYVALUE}&amp;start={START}">{L_DECAY}</a></th>
+    <!-- ENDIF -->
     <th style="text-align:center;" width="40" nowrap="nowrap"><a href="{U_LIST_RAIDS}&amp;o={O_TOTALVALUE}&amp;start={START}">{L_TOTAL}</a></th>
     <th style="text-align:center;"  width="5">{L_ACTION}</th>
   </tr>
@@ -55,7 +57,9 @@
     <!-- IF S_SHOWZS -->
     <td style="text-align:center;" width="30" nowrap="nowrap" class="positive">{raids_row.ZSVALUE}</td>
     <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY -->
     <td style="text-align:center;" width="30" nowrap="nowrap" class="negative">{raids_row.DECAYVALUE}</td>
+    <!-- ENDIF -->
     <td style="text-align:center;" width="30" nowrap="nowrap" class="positive">{raids_row.TOTAL}</td>
     <td style="text-align:center;"  width="5" nowrap="nowrap">
 		<a href="{raids_row.U_VIEW_RAID}">{ICON_EDIT}</a>
@@ -70,7 +74,7 @@
   <th class="footer"></th>
   <!-- IF S_SHOWTIME --> <th class="footer"></th> <!-- ENDIF -->
   <!-- IF S_SHOWZS --> <th class="footer"></th> <!-- ENDIF -->
-  <th class="footer"></th>
+  <!-- IF S_SHOWDECAY --> <th class="footer"></th> <!-- ENDIF -->
   <th class="footer"></th>
   <th class="footer"></th>
 

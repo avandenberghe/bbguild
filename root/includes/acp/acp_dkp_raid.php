@@ -1069,8 +1069,9 @@ class acp_dkp_raid extends bbDKP_Admin
 			'O_ZSVALUE' 		  => $current_order ['uri'] [5],
 			'O_DECAYVALUE' 		  => $current_order ['uri'] [6],
 			'O_TOTALVALUE' 		  => $current_order ['uri'] [7], 
-			'S_SHOWTIME' 			=> ($config['bbdkp_timebased'] == '1') ? true : false,
+			'S_SHOWTIME' 		  => ($config['bbdkp_timebased'] == '1') ? true : false,
 			'S_SHOWZS' 			  => ($config['bbdkp_zerosum'] == '1') ? true : false, 
+			'S_SHOWDECAY' 		  => ($config['bbdkp_decay'] == '1') ? true : false,
 			'U_LIST_RAIDS' 		  => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids" ), 
 			'START' 			  => $start, 
 			'LISTRAIDS_FOOTCOUNT' => sprintf ( $user->lang ['LISTRAIDS_FOOTCOUNT'], $total_raids, $config ['bbdkp_user_rlimit'] ), 
@@ -2374,7 +2375,16 @@ class acp_dkp_raid extends bbDKP_Admin
 		
 	}
 	
-	
+	/**
+	 * 
+	 * Recalculates time bonus points
+	 * loops all raids, recalculates time bonus based on start/end times of each raid
+	 * @param $mode one for recalculating, 0 for setting zerosum to zero.
+	 */
+	public function sync_timebonus($mode)
+	{
+		
+	}	
 
 }
 

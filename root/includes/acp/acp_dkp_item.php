@@ -546,7 +546,7 @@ class acp_dkp_item extends bbDKP_Admin
 			//if zerosum flag is set then distribute item value over raiders
 			if($config['bbdkp_zerosum'] == 1)
 			{
-				// also increase raid detail table
+				// increase raid detail table
 				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
 						SET zerosum_bonus = zerosum_bonus + ' . (float) $distributed . ' 
 						WHERE raid_id = ' . (int) $raid_id;
@@ -1205,7 +1205,186 @@ class acp_dkp_item extends bbDKP_Admin
     	return $sql; 
     }
     
-    
+	
+	/**
+	 * 
+	 * Recalculates zero sum points
+	 * -- loops all raids, may run a while
+	 * @param $mode one for recalculating, 0 for setting zerosum to zero.
+	 */
+	public function sync_zerosum($mode)
+	{
+		global $user, $db;
+		switch ($mode)
+		{
+			case 0:
+				// set all to 0
+				//  update raid detail table to 0
+				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET zerosum_bonus = 0 ' ;
+				$db->sql_query ( $sql );
+				
+				// update dkp account
+				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_zerosum_bonus = 0, member_earned = member_raid_value + member_time_bonus';
+				$db->sql_query ( $sql );
+				
+				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_DELETED']) . $this->link , E_USER_NOTICE );
+				
+				return true;
+				break;
+				
+			case 1:
+				// set all to 0
+				//  update raid detail table to 0
+				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET zerosum_bonus = 0 ' ;
+				$db->sql_query ( $sql );
+				
+				// update dkp account
+				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_zerosum_bonus = 0, member_earned = member_raid_value + member_time_bonus';
+				$db->sql_query ( $sql );
+				
+				
+				// loop raids having items
+				$sql = 'select e.event_dkpid, r.raid_id from '. 
+					RAIDS_TABLE. ' r, ' . 
+					EVENTS_TABLE . ' e, ' . 
+					RAID_ITEMS_TABLE . ' i 
+					where e.event_id = r.event_id 
+					and r.raid_id = i.raid_id 
+					group by e.event_dkpid, r.raid_id' ;
+				$result = $db->sql_query ($sql);
+				$countraids=0;
+				$raids = array();
+				while ( ($row = $db->sql_fetchrow ( $result )) ) 
+				{
+					$raids[$row['raid_id']]['dkpid']=$row['event_dkpid'];
+					$countraids++;
+				}
+				$db->sql_freeresult ( $result);
+				
+				foreach($raids as $raid_id => $raid)
+				{
+					$numraiders = 0;
+					$sql = 'select member_id from ' . RAID_DETAIL_TABLE . ' where raid_id = ' . $raid_id; 
+					$result = $db->sql_query($sql);
+					$raiders = array();
+					while ( $row = $db->sql_fetchrow ($result))
+					{
+						$raids[$raid_id]['raiders'][]= $row['member_id'];
+						$numraiders++;
+					} 
+					$raids[$raid_id]['numraiders'] = $numraiders; 					
+		
+					$db->sql_freeresult ( $result);
+					
+					$sql = 'select member_id, item_value, item_id from ' . RAID_ITEMS_TABLE . ' where raid_id = ' . $raid_id;
+					$result = $db->sql_query($sql);
+					$buyers = array();
+					$numbuyers=0;
+					while ( $row = $db->sql_fetchrow ($result))
+					{
+						$raids[$raid_id]['item'][$row['item_id']]['buyer'] = $row['member_id'];
+						$raids[$raid_id]['item'][$row['item_id']]['item_value'] = $row['item_value'];
+						
+						$distributed = round($row['item_value'] / max(1, $numraiders), 2);
+						$raids[$raid_id]['item'][$row['item_id']]['distributed_value']= $distributed;
+						
+						// rest of division
+						$restvalue = $row['item_value'] - ($numraiders * $distributed);
+						$raids[$raid_id]['item'][$row['item_id']]['rest_value'] = $restvalue;
+						
+						$numbuyers++;
+						
+					}
+					
+					$db->sql_freeresult ( $result);
+					
+					$raids[$raid_id]['numbuyers'] = $numbuyers; 					
+				}
+				
+				//now process the raid array with following structure
+				/*
+				 * "$raids[1]"	Array [5]	
+						dkpid	(string:1) 1	
+						raiders	Array [4]	
+							0	(string:1) 2	
+							1	(string:1) 3	
+							2	(string:1) 4	
+							3	(string:1) 5	
+						numraiders	(int) 4	
+						item	Array [2]	
+							1	Array [4]	
+								buyer	(string:1) 5	
+								item_value	(string:5) 15.00	
+								distributed_value	(double) 3.75	
+								rest_value	(double) 0	
+							2	Array [4]	
+								buyer	(string:1) 4	
+								item_value	(string:5) 15.00	
+								distributed_value	(double) 3.75	
+								rest_value	(double) 0	
+						numbuyers	(int) 2	
+				 */
+				
+				$itemcount = 0;
+				$accountupdates=0;
+				foreach($raids as $raid_id => $raid)
+				{
+					$accountupdates += $raid['numraiders'];
+					
+					$items = $raid['item'];
+					foreach($items as $item_id => $item)
+					{
+						// distribute this item value as income to all raiders
+						$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
+								SET zerosum_bonus = zerosum_bonus + ' . (float) $item['distributed_value'] . ' 
+								WHERE raid_id = ' . (int) $raid_id;
+						$db->sql_query ( $sql );
+						$itemcount ++;
+						
+						// update their dkp account aswell
+						$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '  				
+								SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $item['distributed_value']  .  ', 
+								member_earned = member_earned + ' . (float) $item['distributed_value']  .  ' 
+								WHERE member_dkpid = ' . (int) $raid['dkpid']  . ' 
+							  	AND ' . $db->sql_in_set('member_id', $raid['raiders']   ) ;
+						$db->sql_query ( $sql );
+						
+						
+						// give rest value to the buyer in raiddetail
+						if($item['rest_value']!=0 )
+						{
+							$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
+									SET zerosum_bonus = zerosum_bonus + ' . (float) $item['rest_value']  .  '   
+									WHERE raid_id = ' . (int) $raid_id . '  
+								  	AND member_id = ' . $item['buyer']; 
+							$db->sql_query ( $sql );					
+							
+							$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '  				
+									SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $item['rest_value']  .  ', 
+									member_earned = member_earned + ' . (float) $item['rest_value']  .  ' 
+									WHERE member_dkpid = ' . (int) $raid['dkpid']  . ' 
+								  	AND member_id = ' .  $item['buyer']; 
+							$db->sql_query ( $sql );					
+						}
+						
+					}
+				}
+				
+				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_SUCCESS'], $itemcount, $accountupdates ) . $this->link , E_USER_NOTICE );
+				
+				
+				return $countraids;
+				
+				break;
+			
+		}		
+		
+	}
+	
+	private function distribute_zerosum()
+	{
+		
+	}
 	
 
 } // end class

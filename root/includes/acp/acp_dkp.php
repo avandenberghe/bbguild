@@ -378,20 +378,13 @@ class acp_dkp extends bbDKP_Admin
                 );
                 
                 $submit = (isset($_POST['update'])) ? true : false;
-                $timebonus_synchronise = (isset($_POST['timebonus_synchronise'])) ? true : false;
-                $zerosum_synchronise = (isset($_POST['zerosum_synchronise'])) ? true : false;
-                $decay_synchronise = (isset($_POST['decay_synchronise'])) ? true : false;
 
-                if ($submit || $timebonus_synchronise || $zerosum_synchronise )
+                if ($submit) 
                 {
                 	if (!check_form_key('acp_dkp'))
                 	{
                 		trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);	
                 	}
-        		}
-        		             	
-                if ($submit) 
-                {
                     set_config('bbdkp_guildtag', utf8_normalize_nfc(request_var('guildtag', '', true)), true);
                     set_config('bbdkp_default_realm', utf8_normalize_nfc(request_var('realm', '', true)), true);
                     set_config('bbdkp_default_region', utf8_normalize_nfc(request_var('region', '', true)), true);
@@ -456,12 +449,67 @@ class acp_dkp extends bbDKP_Admin
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
                 }
                 
-         		if ($timebonus_synchronise) 
+                $timebonus_synchronise = (isset($_POST['timebonus_synchronise'])) ? true : false;
+                $zerosum_synchronise = (isset($_POST['zerosum_synchronise'])) ? true : false;
+                $decay_synchronise = (isset($_POST['decay_synchronise'])) ? true : false;
+                
+				// recalculate zerosum
+         		if ($zerosum_synchronise) 
                 {
+                	if (confirm_box ( true )) 
+					{
+						if ( !class_exists('acp_dkp_raid')) 
+						{
+							require($phpbb_root_path . 'includes/acp/acp_dkp_item.' . $phpEx); 
+						}
+						$acp_dkp_item = new acp_dkp_item;
+						$count = $acp_dkp_item->sync_zerosum($config['bbdkp_zerosum']);
+						
+					}
+					else 
+					{
+									
+						$s_hidden_fields = build_hidden_fields ( array (
+							'zerosum_synchronise' 	  => true, 
+						));
+			
+						$template->assign_vars ( array (
+							'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
+						
+						confirm_box ( false, sprintf($user->lang['RESYNC_ZEROSUM_CONFIRM'] ), $s_hidden_fields );
+						
+					}
+                		
                 }	
          		
+				// recalculate time bonuses
                 if ($timebonus_synchronise) 
                 {
+                	if (confirm_box ( true )) 
+					{
+						if ( !class_exists('acp_dkp_raid')) 
+						{
+							require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
+						}
+						$acp_dkp_raid = new acp_dkp_raid;
+						$count = $acp_dkp_raid->sync_timebonus($config['bbdkp_timebased']);
+						
+						trigger_error ( sprintf($user->lang ['RESYNC_TIMEDKP_SUCCESS'], $count) . $link , E_USER_NOTICE );
+					}
+					else 
+					{
+									
+						$s_hidden_fields = build_hidden_fields ( array (
+							'timebonus_synchronise' 	  => true, 
+						));
+			
+						$template->assign_vars ( array (
+							'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
+						
+						confirm_box ( false, sprintf($user->lang['RESYNC_TIMEDKP_CONFIRM'] ), $s_hidden_fields );
+						
+					}
+                		
                 	
                 }	
                 
