@@ -47,15 +47,43 @@ class acp_dkp_mm extends bbDKP_Admin
 			/***************************************/
 			case 'mm_listmembers':
 
+				// show other guild
+				$submit = (isset ( $_POST ['member_guild_id'] ) ) ? true : false;
+				// set activation flag
+				$activate = (isset ( $_POST ['deactivate'] ) ) ? true : false;
 				// add member button redirect
 				$showadd = (isset( $_POST['memberadd'])) ? true : false;
-				$submit = (isset ( $_POST ['member_guild_id'] ) ) ? true : false;
 				
             	if($showadd)
             	{
 					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember"));            		
             		break;
             	}
+            	
+				if ($activate)
+				{
+					if (!check_form_key('mm_listmembers'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+					$activate_members = request_var('activate_id', array(0) ); 
+
+                    $db->sql_transaction('begin'); 
+                    
+                    $sql1 = 'UPDATE ' . MEMBER_LIST_TABLE . "
+                        SET member_status = '1' 
+                        WHERE " . $db->sql_in_set('member_id', $activate_members, false, true);
+					$db->sql_query($sql1);
+                    
+					$sql2 = 'UPDATE ' . MEMBER_LIST_TABLE . "
+                        SET member_status = '0' 
+                        WHERE  " . $db->sql_in_set('member_id', $activate_members, true, true);
+					$db->sql_query($sql2);
+					
+					$db->sql_transaction('commit'); 
+				}
+            	
+            	
             	
 				/**************  Guild drop-down query ****************/
 				$sql = 'SELECT id, name, realm, region  
@@ -119,7 +147,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				$show_all = (( isset($_GET['show'])) && request_var('show','') == 'all') ? true : false;
 				
 				$sql_array = array(
-				    'SELECT'    => 	'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as member_class, r.rank_name, r.rank_prefix, r.rank_suffix,
+				    'SELECT'    => 	'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as member_class, r.rank_id, r.rank_name, r.rank_prefix, r.rank_suffix,
 									 c.class_armor_type AS armor_type, c.colorcode , c.imagename, m.member_gender_id, a.image_female_small, a.image_male_small', 
 				 
 				    'FROM'      => array(
@@ -139,7 +167,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				    ),
 				    
 				    'WHERE'     =>  " (m.member_rank_id = r.rank_id)
-				    				AND r.rank_hide = 0
+				    				
 				    				AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
 									AND (m.member_guild_id = g.id)
 									AND m.member_race_id =  a.race_id 
@@ -169,6 +197,8 @@ class acp_dkp_mm extends bbDKP_Admin
 					++$member_count;
 					++$lines;
 					$template->assign_block_vars('members_row', array(
+						'S_READONLY'   => ($row['rank_id'] == 90 || $row['rank_id'] == 99 ) ? true : false,
+						'STATUS'        => ($row['member_status']== 1) ? 'Checked ' : '',
 						'ID'            => $row['member_id'],
 						'COUNT'         => $member_count,
 						'NAME'          => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
@@ -197,6 +227,9 @@ class acp_dkp_mm extends bbDKP_Admin
 				$db->sql_freeresult ( $members_result );
 				
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
+				
+				$form_key = 'mm_listmembers';
+				add_form_key($form_key);
 				
 				$template->assign_vars(array(
 					'F_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember',
@@ -1242,6 +1275,8 @@ class acp_dkp_mm extends bbDKP_Admin
 					$previous_data = $row[$previous_source];
 				}
 				
+				$form_key = 'mm_listguilds';
+				add_form_key($form_key);
 				
 				$template->assign_vars(array(
 					'F_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addguild',

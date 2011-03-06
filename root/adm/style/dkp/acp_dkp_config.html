@@ -217,16 +217,8 @@
      <br />
      </dt>
      <dd>
-     <input name="timebonus_activate" type="checkbox" id="timebonus_activate" value="1" <!-- IF F_TIMEBONUSACTIVATE == 1 --> checked="checked"<!-- ENDIF -->  />
- 	</dd>
-</dl> 
-
-<dl><dt>  
-     <label for="timebonus_synchronise">{L_RESYNC_TIMEDKP}:</label><br />{L_RESYNC_TIMEDKP_EXPLAIN}
-     <br />
-     </dt>
-     <dd>
-		<input type="submit" name="timebonus_synchronise" value="{L_RUN}" class="button1" /> 	 
+     <input type="radio" name="timebonus_activate" value="1"<!-- IF F_TIMEBONUSACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
+     <input type="radio" name="timebonus_activate" value="0"<!-- IF F_TIMEBONUSACTIVATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
  	</dd>
 </dl> 
 
@@ -266,11 +258,12 @@
 <p>{L_ZEROSUM_EXPLAIN}</p>
 
 <dl><dt>  
-     <label for="zerosum_activate">{L_ZEROSUM}:</label>
+     <label for="zerosum_activate">{L_ZEROSUM}:</label><br />{L_ZEROSUM_ONOFF_EXPLAIN}
      <br />
      </dt>
      <dd>
-     <input name="zerosum_activate" type="checkbox" id="zerosum" value="1" <!-- IF F_ZEROSUMACTIVATE == 1 --> checked="checked"<!-- ENDIF -->  />
+     <input type="radio" name="zerosum_activate" value="1"<!-- IF F_ZEROSUMACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
+     <input type="radio" name="zerosum_activate" value="0"<!-- IF F_ZEROSUMACTIVATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
  	</dd>
 </dl> 
 
@@ -312,7 +305,8 @@
      <br />
      </dt>
      <dd>
-     <input name="decay_activate" type="checkbox" id="decay_activate" value="1" <!-- IF F_DECAYACTIVATE == 1 --> checked="checked"<!-- ENDIF -->  />
+     <input type="radio" name="decay_activate" value="1"<!-- IF F_DECAYACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
+     <input type="radio" name="decay_activate" value="0"<!-- IF F_DECAYACTIVATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
  	</dd>
 </dl> 
 
@@ -379,11 +373,12 @@
 
 <dl>
 	<dt>  
-     <label for="epgp_activate">{L_EPGP}:</label>
+     <label for="epgp_activate">{L_EPGP}:</label><br />{L_EPGP_ONOFF_EXPLAIN}
      <br />
      </dt>
     <dd>
-    <input name="epgp_activate" type="checkbox" id="epgp_activate" value="1" <!-- IF F_EPGPACTIVATE == 1 --> checked="checked"<!-- ENDIF --> />
+     <input type="radio" name="epgp_activate" value="1"<!-- IF F_EPGPACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
+     <input type="radio" name="epgp_activate" value="0"<!-- IF F_EPGPACTIVATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}    
 	 </dd>
 </dl> 
 	

@@ -582,6 +582,7 @@ players receive 5 points for slaying a dragon, 2 points for being on time or on 
 'STANDARDDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.', 
 
 'ZEROSUM' => 'Zero Sum DKP', 
+'ZEROSUM_ONOFF_EXPLAIN' => 'Can not be combined with EPGP', 
 'ZEROSUM_EXPLAIN' => '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. The raid members will thusly gain dkp points when someone received an item. this ensures that there is no inflation, or point hoarding. <br/>',
 'ZEROSUM_EXAMPLE' => ' <strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br/> The balance at the end is : earned 20, spent 20.', 
 'ZEROSUM_ADVANTAGE' => ' <strong>Advantage</strong> : no point inflation if all players start at the same gearlevel.', 
@@ -604,7 +605,8 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 'TIMEDKP_ADVANTAGE' => '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',  
 'TIMEDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.', 
 
-'EPGP' => 'EPGP Effort / Gearpoints', 
+'EPGP' => 'EPGP Effort / Gearpoints',
+'EPGP_ONOFF_EXPLAIN' => 'Can not be combined with Zerosum',  
 'EPGP_EXPLAIN' => '<strong>Description: </strong>A Lootsystem where the loot is allocated to the person with the highest Effort to Gear ratio. Effort points are Raid bonuses, Time points. and Adjustments. Gear points are the Item cost. EP and GP are both decayed.', 
 'EPGP_EXAMPLE' => '<strong>Example</strong> : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />  
 The item costs 20 Gearpoints<br />
@@ -636,10 +638,6 @@ So the loot would go to player 2 <br />',
 'DECAY_GP'  => '<strong>GP After Decay</strong> = BGP + RGP - RGP * l',
 
 //resynchronisation
-'RESYNC_TIMEDKP'				=> 'Resynchronise Time Bonus',
-'RESYNC_TIMEDKP_EXPLAIN'		=> 'First sets to zero all existing time bonuses. If Time bonus flag is set, recalculates Time bonuses according to Start and end time of each raid.',
-'RESYNC_TIMEDKP_CONFIRM'		=> 'Are you sure you wish to resynchronise Time bonuses? This will affect all DKP balances.',
-'RESYNC_TIMEDKP_SUCCESS'		=> 'Successfully recalculated time bonuses on %s Raids. ',
 'RESYNC_ZEROSUM'				=> 'Resynchronise Zero sum',
 'RESYNC_ZEROSUM_CONFIRM'		=> 'Are you sure you wish to resynchronise all zerosum values? This will affect all DKP balances. ',
 'RESYNC_ZEROSUM_EXPLAIN'		=> 'First sets to zero all existing zero sum bonuses. If zerosum flag is set, recalculates according to item values for each raid.',
@@ -763,6 +761,7 @@ So the loot would go to player 2 <br />',
 'ADJUSTMENT_VALUE' => 'Adjustment Value',
 'ADJUSTMENT_VALUE_NOTE' => 'May be negative',
 'ATTENDEEADD_EXPLAIN' => 'Choose additional member to add to raid', 
+'CHANGE_STATUS' => 'Change Status', 
 'CLASS_NAME' => 'Class Name',
 'CLASS_ID' => 'Class ID',
 'CLASS_ARMORY' => 'Armory level',

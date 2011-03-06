@@ -2375,17 +2375,6 @@ class acp_dkp_raid extends bbDKP_Admin
 		
 	}
 	
-	/**
-	 * 
-	 * Recalculates time bonus points
-	 * loops all raids, recalculates time bonus based on start/end times of each raid
-	 * @param $mode one for recalculating, 0 for setting zerosum to zero.
-	 */
-	public function sync_timebonus($mode)
-	{
-		
-	}	
-
 }
 
 ?>

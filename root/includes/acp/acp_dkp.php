@@ -422,10 +422,6 @@ class acp_dkp extends bbDKP_Admin
 
 					//raids                    
                     set_config('bbdkp_user_rlimit', request_var('bbdkp_user_rlimit', 0), true);
-                    
-                    //epgp
-                    set_config('bbdkp_epgp', request_var('epgp_activate', 0), true);
-                    set_config('bbdkp_basegp', request_var('basegp', 0), true);
 
                     //decay         
                     set_config('bbdkp_decay', request_var('decay_activate', 0), true);           
@@ -441,15 +437,44 @@ class acp_dkp extends bbDKP_Admin
                     set_config('bbdkp_standardduration', request_var('standardduration', 0.00), true);
                     
                     //zerosum
-                    set_config('bbdkp_zerosum', request_var('zerosum_activate', 0), true);
+                    if( request_var('zerosum_activate', 0) == 0)
+                    {
+	                    set_config('bbdkp_zerosum', 0 , true);
+                    }
+                    if( request_var('zerosum_activate', 0) == 1)
+                    {
+                    	set_config('bbdkp_zerosum', 1 , true);
+						//epgp and zerosum are mutually exclusive
+						if($config['bbdkp_epgp'] == 1) 
+						{
+							set_config('bbdkp_epgp', 0 , true);
+						}
+                    }
+                    
                     set_config('bbdkp_bankerid', request_var('zerosumbanker', 0), true);
                     set_config('bbdkp_zerosumdistother', request_var('zerosumdistother', 0), true);
+                    
+                    //epgp
+                    if( request_var('epgp_activate', 0) == 0)
+                    {
+	                    set_config('bbdkp_epgp', 0 , true);
+                    }
+                    if( request_var('epgp_activate', 0) == 1)
+                    {
+	                    set_config('bbdkp_epgp', 1 , true);
+						//epgp and zerosum are mutually exclusive
+	                    if($config['bbdkp_zerosum'] == 1) 
+						{
+							set_config('bbdkp_zerosum', 0 , true);
+						}
+                    }
+                    set_config('bbdkp_basegp', request_var('basegp', 0), true);
+                    
                     
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
                 }
                 
-                $timebonus_synchronise = (isset($_POST['timebonus_synchronise'])) ? true : false;
                 $zerosum_synchronise = (isset($_POST['zerosum_synchronise'])) ? true : false;
                 $decay_synchronise = (isset($_POST['decay_synchronise'])) ? true : false;
                 
@@ -481,37 +506,7 @@ class acp_dkp extends bbDKP_Admin
 					}
                 		
                 }	
-         		
-				// recalculate time bonuses
-                if ($timebonus_synchronise) 
-                {
-                	if (confirm_box ( true )) 
-					{
-						if ( !class_exists('acp_dkp_raid')) 
-						{
-							require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
-						}
-						$acp_dkp_raid = new acp_dkp_raid;
-						$count = $acp_dkp_raid->sync_timebonus($config['bbdkp_timebased']);
-						
-						trigger_error ( sprintf($user->lang ['RESYNC_TIMEDKP_SUCCESS'], $count) . $link , E_USER_NOTICE );
-					}
-					else 
-					{
-									
-						$s_hidden_fields = build_hidden_fields ( array (
-							'timebonus_synchronise' 	  => true, 
-						));
-			
-						$template->assign_vars ( array (
-							'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
-						
-						confirm_box ( false, sprintf($user->lang['RESYNC_TIMEDKP_CONFIRM'] ), $s_hidden_fields );
-						
-					}
-                		
-                	
-                }	
+	
                 
                 if($decay_synchronise)
                 {
