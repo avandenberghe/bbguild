@@ -41,13 +41,21 @@ $current_order = switch_order($sort_order);
 $total_events= 0;
 $start = request_var('start', 0);
 
-/*** get dkp pools ***/
-$sql = 'SELECT dkpsys_id, dkpsys_name FROM ' . DKPSYS_TABLE . ' ORDER BY dkpsys_name';
-if ( !($dkppool_result = $db->sql_query($sql)) )
-{
-   $user->add_lang(array('mods/dkp_admin'));
-   trigger_error ( $user->lang['ERROR_INVALID_DKPSYSTEM_PROVIDED'] , E_USER_WARNING ); 
-}
+/*** get dkp pools having events with raids ***/
+$sql_array = array (
+	'SELECT' => ' dkpsys_id, dkpsys_name ', 
+	'FROM' => array (
+		DKPSYS_TABLE		=> 'd',
+		EVENTS_TABLE 		=> 'e',		
+		RAIDS_TABLE 		=> 'r' , 
+		), 
+	'WHERE' => 'd.dkpsys_id = e.event_dkpid 
+				and r.event_id = e.event_id ',
+	'ORDER_BY' => 'dkpsys_name'
+);
+$sql = $db->sql_build_query('SELECT', $sql_array);
+$dkppool_result = $db->sql_query($sql); 
+$total_events = 0;
 while ( $pool = $db->sql_fetchrow($dkppool_result) )
 {
 	$template->assign_block_vars(
@@ -58,31 +66,38 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
 
 	/*** get events ***/
 	$sql = 'SELECT event_dkpid, event_id, event_name, event_value
-	        FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . (int) $pool['dkpsys_id'] ;
+	        FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . (int) $pool['dkpsys_id'];
 	
-	if ( !($events_result = $db->sql_query_limit($sql, $config['bbdkp_user_elimit'], $start)))
+	$sql_array = array (
+		'SELECT' => ' e.event_dkpid, e.event_id, e.event_name, e.event_value, count(r.raid_id) as raidcount, max(raid_start) as newest, min(raid_start) as oldest ', 
+		'FROM' => array (
+			EVENTS_TABLE 		=> 'e',		
+			RAIDS_TABLE 		=> 'r', 
+			), 
+		'WHERE' => 'e.event_dkpid = ' . (int) $pool['dkpsys_id'] . 
+					' and r.event_id = e.event_id ',
+		'ORDER_BY' => 'e.event_name'
+	);
+	$sql = $db->sql_build_query('SELECT', $sql_array);	
+	
+	$events_result = $db->sql_query_limit($sql, $config['bbdkp_user_elimit'], $start);
+	while ( $event = $db->sql_fetchrow($events_result))
 	{
-		$user->add_lang(array('mods/dkp_admin'));
-	    trigger_error($user->lang['ERROR_EMPTY_EVENTNAME']);
-	}
-	while ( $event = $db->sql_fetchrow($events_result) )
-	{
+		$total_events ++;
 	    $template->assign_block_vars(
 	    	'dkpsys_row.events_row', array(
 	        	'U_VIEW_EVENT' =>  append_sid("{$phpbb_root_path}viewevent.$phpEx", '&amp;' . URI_EVENT . '='.$event['event_id'] . '&amp;'.URI_DKPSYS.'='.$event['event_dkpid']) ,
-	        	'NAME' => $event['event_name'],
-	        	'VALUE' => $event['event_value'])
+	        	'NAME' 		=> $event['event_name'],
+	        	'VALUE' 	=> $event['event_value'], 
+	        	'RAIDCOUNT' => $event['raidcount'],
+	        	'OLDEST' 	=> date("d-m-y", $event['oldest'])  ,
+	    		'NEWEST' 	=> date("d-m-y", $event['newest']))
 	    );
-	}
-	$db->sql_freeresult($events_result);	
 
+	}
+	$db->sql_freeresult($events_result);
 }
 $db->sql_freeresult($dkppool_result);
-
-$sql2 = 'SELECT count(*) as eventcount FROM ' . EVENTS_TABLE;
-$result = $db->sql_query($sql2);
-$total_events  = (int) $db->sql_fetchfield('eventcount', 0,$result);
-$db->sql_freeresult($result);
 
 $navlinks_array = array(
 array(
@@ -97,8 +112,6 @@ foreach( $navlinks_array as $name )
 	'U_DKPPAGE' => $name['U_DKPPAGE'],
 	));
 }
-
-
 
 $template->assign_vars(array(
     'O_NAME' => $current_order['uri'][0],

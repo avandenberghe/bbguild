@@ -25,27 +25,37 @@
 <span class="corners-bottom"><span></span></span>
 </div>
 
-<div class="post">
+<div class="panel">
+<div class="inner">
+<span class="corners-top"><span></span></span>
 <table  class="table1" width="100%" border="0" cellspacing="0" cellpadding="5">
-<colgroup span="2">
-<col width="80%"></col>
-<col width="20%"></col>
+<colgroup span="5">
+<col width="60%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="10%"></col>
 </colgroup>
 
 <!-- BEGIN dkpsys_row -->
 <tr class="row bg2">
-  <td><h4>{dkpsys_row.NAME}</h4></td><td></td>
+  <td><h4>{dkpsys_row.NAME}</h4></td><td></td><td></td><td></td><td></td>
 </tr>
 <!-- BEGIN events_row -->
 <tr>
   <tr class="row bg1">
     <td align="left"><a href="{dkpsys_row.events_row.U_VIEW_EVENT}">{dkpsys_row.events_row.NAME}</a></td>
+    <td align="right">{dkpsys_row.events_row.RAIDCOUNT}</td>
+    <td align="right">{dkpsys_row.events_row.OLDEST}</td>
+    <td align="right">{dkpsys_row.events_row.NEWEST}</td>
     <td align="right">{dkpsys_row.events_row.VALUE}</td>
   </tr>
 </tr>
 <!-- END events_row -->
 <!-- END dkpsys_row -->
 </table>
+<span class="corners-bottom"><span></span></span>
+</div>
 </div>
 
 <div class="forabg" >

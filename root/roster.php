@@ -78,7 +78,8 @@ switch ($layout)
 		            'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
 		      )),
 		                      
-            'WHERE'     => " g.id = m.member_guild_id 
+            'WHERE'     => " g.id = m.member_guild_id
+            				 AND m.status_id = '1'
             				 AND c.class_id = m.member_class_id 
             				 AND e.race_id = m.member_race_id 
             				 AND r.guild_id = m.member_guild_id  
