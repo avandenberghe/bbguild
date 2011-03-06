@@ -79,8 +79,7 @@ if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
 			$dkpsys_id = intval($pulldownval); 	
 		}
 	}
-	//from uri
-	if (isset ( $_GET [URI_DKPSYS] ))
+	elseif (isset ( $_GET [URI_DKPSYS] ))
 	{
 		$query_by_pool = true;
 		$dkpsys_id = request_var(URI_DKPSYS, 0); 
@@ -92,7 +91,7 @@ else
 	$dkpsys_id = $defaultpool; 
 }
 
-foreach ( $dkpvalues as $key => $value )
+foreach ($dkpvalues as $key => $value)
 {
 	if(!is_array($value))
 	{
@@ -118,24 +117,23 @@ $query_by_pool = ($dkpsys_id != 0) ? true : false;
 /**** end dkpsys pulldown  ****/
 
 /***** begin armor-class pulldown ****/
-$filtervalues [] = $user->lang['ALL']; 
-$filtervalues [] = '--------';
+$filtervalues ['all'] = $user->lang['ALL']; 
+$filtervalues ['separator1'] = '--------';
 
 // generic armor list
 $sql = 'SELECT class_armor_type FROM ' . CLASS_TABLE . ' GROUP BY class_armor_type';
 $result = $db->sql_query ( $sql );
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
-	$filtervalues [] = $user->lang[$row ['class_armor_type']];
-	$armor_type [] = $user->lang[$row ['class_armor_type']];
+	$filtervalues [$row ['class_armor_type']] = $user->lang[$row ['class_armor_type']];
+	$armor_type [$row ['class_armor_type']] = $user->lang[$row ['class_armor_type']];
 }
 $db->sql_freeresult ( $result );
-$filtervalues [] = '--------';
-
+$filtervalues ['separator2'] = '--------';
 
 // get classlist
    $sql_array = array(
-    'SELECT'    => 	' l.name as class_name, c.class_min_level, c.class_max_level, c.imagename ', 
+    'SELECT'    => 	' c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.imagename ', 
     'FROM'      => array(
         CLASS_TABLE 	=> 'c',
         BB_LANGUAGE		=> 'l', 
@@ -150,11 +148,10 @@ $result = $db->sql_query ( $sql );
 
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
-	$filtervalues [] = $row ['class_name'];
-	$classname [] = $row ['class_name'];
+	$filtervalues ['class_' . $row ['class_id']] = $row ['class_name'];
+	$classname ['class_' . $row ['class_id']] = $row ['class_name'];
 }
 $db->sql_freeresult ( $result );
-
 
 $query_by_armor = 0;
 $query_by_class = 0;
@@ -163,20 +160,20 @@ if ($submitfilter)
 {
 	$filter = request_var ( 'filter', '' );
 	
-	if ($filter == "All")
+	if ($filter == "all")
 	{
 		// select all
 		$query_by_armor = 0;
 		$query_by_class = 0;
 	} 
-		elseif (in_array ( $filter, $armor_type ))
+	elseif (array_key_exists ( $filter, $armor_type ))
 	{
 		// looking for an armor type
 		$filter = preg_replace ( '/ Armor/', '', $filter );
 		$query_by_armor = 1;
 		$query_by_class = 0;
 	} 
-		elseif (in_array ( $filter, $classname ))
+	elseif (array_key_exists ( $filter, $classname ))
 	{
 		// looking for a class
 		$query_by_class = 1;
@@ -188,15 +185,15 @@ if ($submitfilter)
 	// select all
 	$query_by_armor = 0;
 	$query_by_class = 0;
-	$filter = 'All';
+	$filter = 'all';
 }
 
 // dump filtervalues to dropdown template
 foreach ( $filtervalues as $fid => $fname )
 {
 	$template->assign_block_vars ( 'filter_row', array (
-		'VALUE' => $fname, 
-		'SELECTED' => ($fname == $filter && $fname !=  '--------' ) ? ' selected="selected"' : '',
+		'VALUE' => $fid, 
+		'SELECTED' => ($fid == $filter && $fname !=  '--------' ) ? ' selected="selected"' : '',
 		'DISABLED' => ($fname == '--------' ) ? ' disabled="disabled"' : '', 
 		'OPTION' => (! empty ( $fname )) ? $fname : '(All)' ) );
 }
@@ -289,7 +286,7 @@ if (isset ( $_GET ['rank'] ))
 
 if ($query_by_class == 1)
 {
-	$sql_array['WHERE'] .= " AND l1.name =  '" . $db->sql_escape ( $filter ) . "' ";
+	$sql_array['WHERE'] .= " AND class_id =  '" . $db->sql_escape ( substr($filter, 6) ) . "' ";
 }
 
 if ($query_by_armor == 1)
@@ -665,7 +662,6 @@ foreach ( $memberarray as $key => $member )
 		
 }
 
-
 $s_showlb = true;
 leaderboard ( $dkpsys_id, $query_by_pool );
 
@@ -712,8 +708,25 @@ else
 	$footcount_text = sprintf ( $user->lang ['LISTMEMBERS_FOOTCOUNT'], $member_count );
 }
 
+$arg='';
+if ($query_by_pool)
+{
+    $arg = '&amp;' . URI_DKPSYS. '=' . $dkpsys_id;
+}
+
+if(	$query_by_armor or $query_by_class)
+{
+	$arg .= '&amp;filter=' . $filter; 
+}
+else 
+{
+	$arg .= '&amp;filter=all';
+}
+
+$u_listmembers = append_sid ( "{$phpbb_root_path}listmembers.$phpEx", $arg );
+
 $template->assign_vars ( array (
-	'F_MEMBERS' => append_sid ( "{$phpbb_root_path}listmembers.$phpEx" ), 
+	'F_MEMBERS' => $u_listmembers, 
 	'F_DKPSYS_NAME' => (isset ( $dkpsysname ) == true) ? $dkpsysname : 'All', 
 	'F_DKPSYS_ID' => (isset ( $dkpsys_id ) == true) ? $dkpsys_id : 0, 
 	'O_NAME' => $sortlink [1], 

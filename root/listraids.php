@@ -114,7 +114,6 @@ $query_by_pool = ($dkp_id != 0) ? true : false;
 /**** end dkpsys pulldown  ****/	 
 	 
 $start = request_var('start', 0);   
-$u_list_raids =  append_sid("{$phpbb_root_path}listraids.$phpEx");
 
 $total_raids=0;
 
@@ -153,59 +152,68 @@ $raidlines = $config['bbdkp_user_rlimit'] ;
 
 if ($query_by_pool)
 {
-    $pagination = generate_pagination( append_sid("{$phpbb_root_path}listraids.$phpEx" , URI_DKPSYS . '=' . 
-    $dkp_id . '&amp;o='.  $current_order['uri']['current'] ), $total_raids, $config['bbdkp_user_rlimit'], $start, true);
-     
+    $pagination = generate_pagination( append_sid("{$phpbb_root_path}listraids.$phpEx" , URI_DKPSYS . '=' . $dkp_id . 
+    '&amp;o='.  $current_order['uri']['current'] ), $total_raids, $config['bbdkp_user_rlimit'], $start, true);
+    
+    $u_list_raids =  append_sid("{$phpbb_root_path}listraids.$phpEx", '&amp;'. URI_DKPSYS . '='. $dkp_id);
 }
 else 
 {
     $pagination = generate_pagination( append_sid("{$phpbb_root_path}listraids.$phpEx" , URI_DKPSYS .  '=All&amp;o='.  
     $current_order['uri']['current'] ), $total_raids, $config['bbdkp_user_rlimit'], $start, true);
+    
+    $u_list_raids =  append_sid("{$phpbb_root_path}listraids.$phpEx");
 }
 
-$sql_array = array(
-	'SELECT'	=>	' b.dkpsys_name, b.dkpsys_id, r.raid_id, e.event_name, r.raid_start, r.raid_note, 
-					  sum(ra.raid_value+ ra.time_bonus+ ra.zerosum_bonus - ra.raid_decay) as earned_result, count(*) as raidlines ', 
-	'FROM'		=> array(
-        DKPSYS_TABLE 			=> 'b',
-		EVENTS_TABLE			=> 'e',				
-		RAIDS_TABLE				=> 'r',
-		RAID_DETAIL_TABLE		=> 'ra', 
-		),
-	'WHERE'		=> ' 
-		e.event_dkpid = b.dkpsys_id
-		AND r.event_id = e.event_id
-		AND ra.raid_id = r.raid_id
-		AND e.event_dkpid = ' . $dkp_id, 
-    'ORDER_BY'	=>  $current_order['sql'],
+$sql_array = array (
+		'SELECT' => ' sum(ra.raid_value) as raid_value, sum(ra.time_bonus) as time_value, 
+					  sum(ra.zerosum_bonus) as zs_value, sum(ra.raid_decay) as raiddecay, 
+					  sum(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay) as total,
+					  count(ra.member_id) as attendees,  
+					  e.event_dkpid, e.event_id, e.event_name,  
+					  r.raid_id, r.raid_start, r.raid_note, 
+					  r.raid_added_by, r.raid_updated_by ', 
+		'FROM' => array (
+			RAID_DETAIL_TABLE	=> 'ra' ,
+			RAIDS_TABLE 		=> 'r' , 
+			EVENTS_TABLE 		=> 'e',		
+			), 
+		'WHERE' => ' ra.raid_id = r.raid_id and r.event_id = e.event_id ',
+		'GROUP_BY' => 'e.event_dkpid, e.event_name,  
+					  r.raid_id,  r.raid_start, r.raid_note, 
+					  r.raid_added_by, r.raid_updated_by',	
+		'ORDER_BY' => $current_order ['sql'], 
+);
 	
-	);
-	
-$sql = $db->sql_build_query('SELECT', $sql_array);
-
 if ($query_by_pool == true)
 {
 	$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkp_id; 
 }
-$sql = $db->sql_build_query('SELECT', $sql_array);
 
+$sql = $db->sql_build_query('SELECT', $sql_array);
 $raids_result = $db->sql_query_limit($sql, $raidlines , $start);
-	 
 if ( !$raids_result)
 {
    trigger_error ( $user->lang['ERROR_INVALID_RAID'] , E_USER_WARNING );
-    
 }
 
 while ( $row = $db->sql_fetchrow($raids_result) )
 {
     $template->assign_block_vars('raids_row', array(
         'DATE' => ( !empty($row['raid_start']) ) ? date($config['bbdkp_date_format'], $row['raid_start']) : '&nbsp;',
-        'U_VIEW_RAID' => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '='.$row['raid_id']),
+        'U_VIEW_RAID'  => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '='.$row['raid_id']),
+    	'U_VIEW_EVENT' => append_sid("{$phpbb_root_path}viewevent.$phpEx" , URI_EVENT . '='.  $row['event_id'] . '&amp;' . URI_DKPSYS . '=' . $row['event_dkpid']),
 		'POOL' => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '&lt;<i>Not Found</i>&gt;',
     	'NAME' => ( !empty($row['event_name']) ) ? $row['event_name'] : '&lt;<i>Not Found</i>&gt;',
     	'NOTE' => ( !empty($row['raid_note']) ) ? $row['raid_note'] : '&nbsp;',
-        'VALUE' => $row['earned_result'])
+    	
+    	'ATTENDEES' 	=> $row['attendees'],
+        'RAIDVALUE' 	=> $row['raid_value'],
+        'TIMEVALUE' 	=> $row['time_value'],
+	    'ZSVALUE' 		=> $row['zs_value'],
+	    'RAIDDECAY' 	=> $row['raiddecay'],
+	    'TOTAL' 		=> $row['total'],
+        )
     );
 }
 
@@ -229,7 +237,10 @@ $template->assign_block_vars('dkpnavlinks', array(
 
 
 $template->assign_vars(array(
-
+    'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+	'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
+	'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
+    
     'O_DATE'  => $sortlink[0],
     'O_POOL'  => $sortlink[1],
     'O_NAME'  => $sortlink[2],

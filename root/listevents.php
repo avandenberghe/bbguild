@@ -9,7 +9,6 @@
  * 
  */
 
-
 /**
 * @ignore
 */
@@ -21,7 +20,7 @@ include($phpbb_root_path . 'common.' . $phpEx);
 // Start session management
 $user->session_begin();
 $auth->acl($user->data);
-$user->setup('viewforum');
+$user->setup();
 $user->add_lang(array('mods/dkp_common'));
 if (!$auth->acl_get('u_dkp'))
 {

@@ -46,6 +46,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 	$result = $db->sql_query($sql);
 	while ( $row = $db->sql_fetchrow($result))
 	{
+		$eventname =  $row['event_name'];
 		$template->assign_vars(array(
         	'EVENTNAME' => $row['event_name'],
         	'VALUE' 	=> $row['event_value'], 
@@ -128,7 +129,6 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
      *  calculate the average event attendance and droprate 
      *  
      **/  
-    
     // Find the item drops for each raid
     $sql = 'SELECT raid_id, count(item_id) AS count 
             FROM ' . RAID_ITEMS_TABLE . ' 
@@ -288,7 +288,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
     ),
 
     array(
-	     'DKPPAGE' => $user->lang['MENU_VIEWEVENT'],
+	     'DKPPAGE' => $eventname,
 	     'U_DKPPAGE' => $selfurl ,
     ),
     );
@@ -302,7 +302,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
     }
         
 	// Output page
-	page_header($user->lang['MENU_VIEWEVENT']);
+	page_header($user->lang['MENU_VIEWEVENT'] . ' ' . $eventname);
 	
 	$template->set_filenames(array(
 		'body' => 'dkp/viewevent.html')
