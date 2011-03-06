@@ -229,7 +229,9 @@ $lang = array_merge($lang, array(
 'MEMBERS' => 'Members',
 'MEMBERS_PRESENT_AT' => 'Members Present at %s on %s',
 'MISCELLANEOUS' => 'Miscellaneous',
+'NEWEST' => 'Newest raid',
 'NOTE' => 'Note',
+'OLDEST' => 'Oldest raid',
 'OPTIONS' => 'Options',
 'OUTDATE' => 'Guild leave date',
 'PERCENT' => 'Percent',
@@ -243,6 +245,7 @@ $lang = array_merge($lang, array(
 'RACE' => 'Race',
 'RACEID' => 'Race ID',
 'RAID' => 'Raid',
+'RAIDCOUNT' => 'Raidcount',
 'RAIDS' => 'Raids',
 'RAID_ID' => 'Raid ID',
 'RAIDVALUE' => 'Raid Value',
@@ -283,7 +286,7 @@ $lang = array_merge($lang, array(
 
 // Page Foot Counts
 
-'LISTEVENTS_FOOTCOUNT' => '... found %d events / %d per page',
+'LISTEVENTS_FOOTCOUNT' => '... found %d events',
 'LISTIADJ_FOOTCOUNT' => '... found %d individual adjustment(s) / %d per page',
 'LISTITEMS_FOOTCOUNT' => '... found %d unique items / %d per page',
 'LISTNEWS_FOOTCOUNT' => '... found %d News Items',

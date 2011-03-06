@@ -51,6 +51,7 @@ $sql_array = array (
 		), 
 	'WHERE' => 'd.dkpsys_id = e.event_dkpid 
 				and r.event_id = e.event_id ',
+	'GROUP_BY' => 'dkpsys_name', 
 	'ORDER_BY' => 'dkpsys_name'
 );
 $sql = $db->sql_build_query('SELECT', $sql_array);
@@ -65,7 +66,7 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
     ));
 
 	/*** get events ***/
-	$sql = 'SELECT event_dkpid, event_id, event_name, event_value
+	$sql = 'SELECT event_dkpid, event_id, event_name, event_value,  a.event_color, a.event_imagename
 	        FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . (int) $pool['dkpsys_id'];
 	
 	$sql_array = array (
@@ -87,11 +88,13 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
 	    $template->assign_block_vars(
 	    	'dkpsys_row.events_row', array(
 	        	'U_VIEW_EVENT' =>  append_sid("{$phpbb_root_path}viewevent.$phpEx", '&amp;' . URI_EVENT . '='.$event['event_id'] . '&amp;'.URI_DKPSYS.'='.$event['event_dkpid']) ,
-	        	'NAME' 		=> $event['event_name'],
-	        	'VALUE' 	=> $event['event_value'], 
-	        	'RAIDCOUNT' => $event['raidcount'],
-	        	'OLDEST' 	=> date("d-m-y", $event['oldest'])  ,
-	    		'NEWEST' 	=> date("d-m-y", $event['newest']))
+	        	'NAME' 			=> $event['event_name'],
+	        	'VALUE' 		=> $event['event_value'], 
+				'EVENTCOLOR'  	=> $row['event_color'],
+                'EVENTIMAGE'  	=> $row['event_imagename'],	    
+	        	'RAIDCOUNT' 	=> $event['raidcount'],
+	        	'OLDEST' 		=> date("d-m-y", $event['oldest'])  ,
+	    		'NEWEST' 		=> date("d-m-y", $event['newest']))
 	    );
 
 	}
@@ -118,7 +121,7 @@ $template->assign_vars(array(
     'O_VALUE' => $current_order['uri'][1],
     'U_LIST_EVENTS' => append_sid("{$phpbb_root_path}listevents.$phpEx"), 
     'START' => $start,
-    'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events, $config['bbdkp_user_elimit']),
+    'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events),
     'EVENT_PAGINATION' => generate_pagination( append_sid("{$phpbb_root_path}listevents.$phpEx", '&amp;o='.$current_order['uri']['current']),
              $total_events, $config['bbdkp_user_elimit'], $start))
 );
