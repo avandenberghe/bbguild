@@ -54,7 +54,7 @@
     <td style="width:15%; white-space:nowrap; text-align:center;" class="bg2"><strong>{L_TIME_BONUS}</strong>: <span class="positive">{TIMEBONUS}</span></td>
     <!-- ENDIF -->
     <!-- IF S_SHOWZS -->
-    <td style="width:15%; white-space:nowrap; text-align:center;" class="bg2"><strong>{L_ZEROSUM}</strong>: <span class="negative">{ZEROSUM}</span></td>
+    <td style="width:15%; white-space:nowrap; text-align:center;" class="bg2"><strong>{L_ZEROSUM}</strong>: <span class="positive">{ZEROSUM}</span></td>
     <!-- ENDIF -->
     <!-- IF S_SHOWDECAY -->
     <td style="width:18%; white-space:nowrap; text-align:center;" class="bg1"><h4><strong>{L_RAIDDECAY}</strong>: <span class="negative">{RAIDDECAY}</span></h4></td>
@@ -219,7 +219,7 @@
     <th style="text-align:left; width:20%;">{L_NAME}</th>
     <th style="text-align:left; width:20%;" >{L_NOTE}</th>
    <!-- IF S_SHOWTIME || S_SHOWZS --><th class="name" style="text-align:right;">{L_RAIDVALUE}</th><!-- ENDIF -->
-   <!-- IF S_SHOWTIME --><th class="name" style="text-align:right;">{L_TIMEVALUE}</th><!-- ENDIF -->
+   <!-- IF S_SHOWTIME --><th class="name" style="text-align:right;">{L_TIME_BONUS}</th><!-- ENDIF -->
    <!-- IF S_SHOWZS --> <th class="name" style="text-align:right;">{L_ZSVALUE}</th><!-- ENDIF -->
    <!-- IF S_SHOWDECAY --> <th class="name" style="text-align:right;">{L_RAIDDECAY}</th><!-- ENDIF -->
     <th style="text-align:right;"><!-- IF S_EPGP -->{L_EP}<!-- ELSE -->{L_EARNED}<!-- ENDIF --></th>

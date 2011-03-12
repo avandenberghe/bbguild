@@ -309,11 +309,16 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 	overflow: hidden;
 }
 
-/* bbdkp 
-------------*/
 .positive {
 	color: #00BB55;
 }
 .negative {
 	color: #FF3344;
 }
+
+/* bar graph */
+.bargraph {
+	 background-color: #9900AA;
+}
+
+

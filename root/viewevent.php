@@ -50,7 +50,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 		$template->assign_vars(array(
         	'EVENTNAME' => $row['event_name'],
         	'VALUE' 	=> $row['event_value'], 
-			'RECORDED_RAID_HISTORY' => sprintf($user->lang['RECORDED_RAID_HISTORY'], $event['event_name']),
+			'RECORDED_RAID_HISTORY' => sprintf($user->lang['RECORDED_RAID_HISTORY'], $eventname),
 	    ));
 
 	}
@@ -272,7 +272,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 		'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
 		'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
     
-        'L_RECORDED_DROP_HISTORY' => sprintf($user->lang['RECORDED_DROP_HISTORY'], $event['event_name']),
+        'L_RECORDED_DROP_HISTORY' => sprintf($user->lang['RECORDED_DROP_HISTORY'], $eventname),
         'ITEM_FOOTCOUNT'      => sprintf($user->lang['VIEWITEM_FOOTCOUNT'], $total_drop_count, $total_drop_count),
         'START' 		=> $start,
     	'ITEM_PAGINATION' => $itempagination

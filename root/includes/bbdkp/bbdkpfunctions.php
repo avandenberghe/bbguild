@@ -247,7 +247,7 @@ function sanitize_tags($data)
 * @param $class Background class for bar
 * @return string Bar HTML
 */
-function create_bar($width, $show_text = '', $class = 'row2')
+function create_bar($width, $show_text = '', $color = '#AA0033')
 {
     $bar = '';
     
@@ -263,11 +263,11 @@ function create_bar($width, $show_text = '', $class = 'row2')
     if ( $width > 0 )
     {
         $bar = '<table width="' . $width . '" border="0" cellpadding="0" cellspacing="0">';
-        $bar .= '<tr><td width="100%" align="center" class="' . $class . '" nowrap="nowrap">';
+        $bar .= '<tr><td style="text-align:left; background-color:' . $color .'; width: 100%; white-space: nowrap"  >';
     
         if ( $show_text != '' )
         {
-            $bar .= '<span class="small">' . $show_text . '</span>';
+            $bar .= '<span style="color:#EEEEEE"; class="small">' . $show_text . '</span>';
         }
     
         $bar .= '</td></tr></table>';

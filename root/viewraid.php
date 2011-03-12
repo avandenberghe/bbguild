@@ -35,7 +35,8 @@ if ( !isset($_GET[URI_RAID])  )
 {
 	trigger_error ($user->lang['MNOTFOUND']);
 }
-	
+$raid_id = request_var(URI_RAID,0); 
+
 /********************************
  * page info
  ********************************/	
@@ -61,7 +62,6 @@ foreach($navlinks_array as $name)
 /********************************
  * Right Raid information block
  ********************************/ 
-$raid_id = request_var(URI_RAID,0); 
 
 /*** get general raid info  ***/
 $sql_array = array (
@@ -122,7 +122,7 @@ $seconds = intval( ($raid['raid_end'] - $raid['raid_start']) % 60);
 $duration .= str_pad($seconds, 2, "0", STR_PAD_LEFT);
 
 $raid_id = (int) $raid['raid_id']; 
-$title =  sprintf($user->lang['MEMBERS_PRESENT_AT'], $raid['event_name'], date('F j, Y', $raid['raid_start']));
+$title =  sprintf($user->lang['RAID_ON'], $raid['event_name'], date('F j, Y', $raid['raid_start']));
 
 $template->assign_vars(array(
 	'L_RAID_ON' 		  => sprintf($user->lang['RAID_ON'], $raid['event_name'], date('F j, Y', $raid['raid_start'])),
@@ -132,11 +132,30 @@ $template->assign_vars(array(
 	'RAID_ADDED_BY'		  => sprintf($user->lang['ADDED_BY'], 	(!empty($raid['raid_added_by']) ) ? $raid['raid_added_by'] : 'N/A'),
 	'RAID_UPDATED_BY'	  => ($raid['raid_updated_by'] != ' ') ? sprintf ( $user->lang ['UPDATED_BY'], $raid['raid_updated_by']) : ' ',  
 	'RAID_NOTE'			  => ( !empty($raid['raid_note']) ) ? $raid['raid_note'] : '&nbsp;',
+	'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+	'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
+	'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
+	'S_SHOWEPGP' 		=> ($config['bbdkp_epgp'] == '1') ? true : false,
+	'F_RAID'			=> append_sid("{$phpbb_root_path}viewraid.$phpEx" , URI_RAID . '=' . request_var(URI_RAID, 0))
 ));
 
-// get raid details
+
+
+/**********************************************
+ * point listing
+ **********************************************/ 
+
+$sort_order = array (
+		0 => array ('member_name desc', 'member_name desc' ),
+		1 => array ('raid_value', 'raid_value desc' ), 
+		2 => array ('time_bonus', 'time_bonus desc' ), 
+		3 => array ('zerosum_bonus', 'zerosum_bonus desc' ),
+		4 => array ('raid_decay', 'raid_decay desc' ),
+		5 => array ('total desc', 'total desc' ),
+);
+$current_order = switch_order ($sort_order);	
 $sql_array = array(
-	'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name,
+	'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, c.class_id, 
 					m.member_gender_id, a.image_female_small, a.image_male_small, 
 					r.raid_value, r.time_bonus, r.zerosum_bonus, 
 					r.raid_decay, (r.raid_value + r.time_bonus + r.zerosum_bonus - r.raid_decay) as total  ',
@@ -160,282 +179,255 @@ $result = $db->sql_query ( $sql );
 $raid_details = array ();
 while ( $row = $db->sql_fetchrow ( $result ) ) 
 {
-	$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
-					
-	$raid_details[$row['member_id']]['member_id'] = $row['member_id'];
-	$raid_details[$row['member_id']]['colorcode'] = $row['colorcode'];
-	$raid_details[$row['member_id']]['imagename'] = $row['imagename'];
-	$raid_details[$row['member_id']]['classname'] = $row['name'];
-	$raid_details[$row['member_id']]['raceimage'] = $race_image;
-	$raid_details[$row['member_id']]['member_name'] = $row['member_name'];
-	$raid_details[$row['member_id']]['raid_value'] = $row['raid_value'];
-	$raid_details[$row['member_id']]['time_bonus'] = $row['time_bonus'];
-	$raid_details[$row['member_id']]['zerosum_bonus'] = $row['zerosum_bonus'];
-	$raid_details[$row['member_id']]['raid_decay'] = $row['raid_decay'];
+	$raid_details[] = array(
+		'member_id' => $row['member_id'],
+		'colorcode' => $row['colorcode'],
+		'imagename' => $row['imagename'],
+		'classname' => $row['name'],
+		'class_id' 	=> $row['class_id'],
+		'raceimage' => (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']),
+		'member_name' => $row['member_name'],
+		'raid_value' => $row['raid_value'],
+		'time_bonus' => $row['time_bonus'],
+		'zerosum_bonus' => $row['zerosum_bonus'],
+		'raid_decay' => $row['raid_decay'],
+	);
 }
 $db->sql_freeresult( $result );
 $raid['raid_detail'] = $raid_details;
+
+$raid_value = 0.00;
+$time_bonus = 0.00;
+$zerosum_bonus = 0.00;
+$raid_decay = 0.00;
+$raid_total = 0.00;
+$countattendees = 0;
+
 		
-/********************************
- * Attendees block
- ********************************/ 
-
-$raiders = array();
-$sql = 'SELECT a.member_id from ' . RAID_DETAIL_TABLE . ' a , ' . MEMBER_LIST_TABLE . ' l 
-	where a.member_id = l.member_id and a.raid_id = ' .	 $raid_id . ' ORDER BY l.member_name ';		
-$result = $db->sql_query($sql);
-while ( $arow = $db->sql_fetchrow($result) )
+foreach($raid_details as  $raid_detail)
 {
-	$raiders[] = $arow['member_id'];
-}
-$db->sql_freeresult($result);
-
-// Get class info
-$class_count = null;   
-$eq_classes = array();
-$total_attendees = count($raiders);
-
-$sql = 'SELECT a.class_id, c1.name, a.colorcode, a.imagename from ' . CLASS_TABLE . ' a, '	. BB_LANGUAGE . " c1 
-   WHERE a.class_id != 0 
-   AND c1.attribute_id = a.class_id 
-   AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'";
-	
-$result = $db->sql_query($sql);
-	while ( $row = $db->sql_fetchrow($result) )
-	{
-		$class_name[$row['class_id']] = $row['name'];
-		$class_id[$row['name']] = $row['class_id'];
-		$colorcode[$row['class_id']] = $row['colorcode'];
-		$imagename[$row['class_id']] = $row['imagename'];
-		$class_count[$row['name']]=null;
-		$eq_classes[$row['name']]=null;
-	}
-	$db->sql_freeresult($result);
-
-	// Get attendee ranks
-	$raidersinfo = array();
-	$sql = 'SELECT m.member_id, m.member_name, m.member_class_id, c1.name as member_classname, r.rank_prefix, r.rank_suffix, c.colorcode  
-			FROM ( ' . CLASS_TABLE . ' c, ' . BB_LANGUAGE . ' c1, ' . MEMBER_LIST_TABLE . ' m  
-			LEFT JOIN ' . MEMBER_RANKS_TABLE . " r
-			ON m.member_rank_id = r.rank_id )
-			WHERE m.member_class_id = c.class_id 
-			AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'  
-			AND " . $db->sql_in_set('m.member_id', $raiders, false, true); 
-	
-	$result = $db->sql_query($sql);
-	while ( $row = $db->sql_fetchrow($result) )
-	{
-		$raidersinfo[$row['member_id']] = array(
-			'prefix'			 => (( !empty($row['rank_prefix']) ) ? $row['rank_prefix'] : ''),
-			'member_name'		 => $row['member_name'],
-			'suffix'			 => (( !empty($row['rank_suffix']) ) ? $row['rank_suffix'] : ''),
-			'member_classname'	 => $row['member_classname'], 
-			'member_class_id'	=>	$row['member_class_id']
-		);
-	}
-	$db->sql_freeresult($result);
-
-	if ( @sizeof($raiders) > 0 )
-	{
-		$rows = ceil(count($raiders) / 8);
-		for ( $i = 0; $i < $rows; $i++ )
-		{
-			// First loop: iterate through the rows
-			$block_vars = array();
-			for ( $j = 0; $j < 8; $j++ )
-			{
-				// Second loop: iterate through the columns
-				$offset = ($i + ($rows * $j));
-				$attendee = ( isset($raiders[$offset]) ) ? $raiders[$offset] : '';
-				
-				$prefix = ( isset($raidersinfo[$attendee]) ) ? $raidersinfo[$attendee]['prefix'] : '';
-				$name = ( isset($raidersinfo[$attendee]) ) ? $raidersinfo[$attendee]['member_name'] : '';
-				$suffix = ( isset($raidersinfo[$attendee]) ) ? $raidersinfo[$attendee]['suffix'] : '';
-				$linkcolor = ( isset($raidersinfo[$attendee]) ) ?  $colorcode[ $raidersinfo[$attendee]['member_class_id']] : '';
-				
-				// then "add" an array to $block_vars that contains the column definitions,
-				// then assign the block vars.
-				// Prevents one column from being assigned and the rest of the columns for
-				// that row being blank
-				if ( $attendee != '' )
-				{
-					$block_vars += array(
-					  'COLUMN'.$j.'_NAME' => '<strong><a style="color: '. $linkcolor.';" href="' . append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $attendee . '&' . URI_DKPSYS . '=' . $dkpid) . '">' . $html_prefix . $name . $html_suffix . '</a></strong>'
-					);
-				}
-				else
-				{
-					$block_vars += array(
-						'COLUMN'.$j.'_NAME' => ''
-					);
-				}
-
-				// Are we showing this column?
-				$s_column = 's_column'.$j;
-				${$s_column} = true;
-				
-		  
-			}
-			$template->assign_block_vars('attendees_row', $block_vars);
-		}
-		$column_width = floor(100 / 8);
-	}
-	
-	$template->assign_vars(array(
-		'S_COLUMN0' => ( isset($s_column0) ) ? true : false,
-		'S_COLUMN1' => ( isset($s_column1) ) ? true : false,
-		'S_COLUMN2' => ( isset($s_column2) ) ? true : false,
-		'S_COLUMN3' => ( isset($s_column3) ) ? true : false,
-		'S_COLUMN4' => ( isset($s_column4) ) ? true : false,
-		'S_COLUMN5' => ( isset($s_column5) ) ? true : false,
-		'S_COLUMN6' => ( isset($s_column6) ) ? true : false,
-		'S_COLUMN7' => ( isset($s_column7) ) ? true : false,
-		'S_COLUMN8' => ( isset($s_column8) ) ? true : false,
-		'S_COLUMN9' => ( isset($s_column9) ) ? true : false,
-		'COLUMN_WIDTH' => ( isset($column_width) ) ? $column_width : 0,
-		'COLSPAN'	   => 8,
-		'ATTENDEES_FOOTCOUNT' => sprintf($user->lang['VIEWRAID_ATTENDEES_FOOTCOUNT'], sizeof($raiders)),
+	// fill attendees table
+	$template->assign_block_vars ('raids_row', array (
+		'U_VIEW_ATTENDEE' => append_sid ("{$phpbb_root_path}viewmember.$phpEx" , URI_NAMEID . "={$raid_detail['member_id']}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']), 
+		'NAME' 		 => $raid_detail['member_name'], 
+		'COLORCODE'  => ($raid_detail['colorcode'] == '') ? '#123456' : $raid_detail['colorcode'],
+        'CLASS_IMAGE' 	=> (strlen($raid_detail['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $raid_detail['imagename'] . ".png" : '',  
+		'S_CLASS_IMAGE_EXISTS' => (strlen($raid_detail['imagename']) > 1) ? true : false,
+       	'RACE_IMAGE' 	=> (strlen($raid_detail['raceimage']) > 1) ? $phpbb_root_path . "images/race_images/" . $raid_detail['raceimage'] . ".png" : '',  
+		'S_RACE_IMAGE_EXISTS' => (strlen($raid_detail['raceimage']) > 1) ? true : false, 			 				
+		'CLASS_NAME' => $raid_detail['classname'],  
+		'RAIDVALUE'  => $raid_detail['raid_value'], 
+		'TIMEVALUE'  => $raid_detail['time_bonus'],
+		'ZSVALUE' 	 => $raid_detail['zerosum_bonus'],
+		'DECAYVALUE' => $raid_detail['raid_decay'], 
+		'TOTAL' 	 => $raid_detail['raid_value'] + $raid_detail['time_bonus']  + $raid_detail['zerosum_bonus'] - $raid_detail['raid_decay'], 
 		)
 	);
+	$raid_value += $raid_detail['raid_value'];
+	$time_bonus += $raid_detail['time_bonus'];
+	$zerosum_bonus += $raid_detail['zerosum_bonus'];
+	$raid_decay += $raid_detail['raid_decay'];
 	
-	
-	/*********************************
-	*	Drops block
-	**********************************/
+	$countattendees += 1;
+}
+$raid_total = $raid_value + $time_bonus + $zerosum_bonus - $raid_decay;
 
-	$startdrops = request_var('start',0);
-
-	$sql = 'SELECT count(*) as itemscount	 
-			FROM  ' . RAID_ITEMS_TABLE . '	
-			WHERE raid_id='. $raid_id ;
-	
-	$total_result = $db->sql_query($sql);
-	$total_items = $db->sql_fetchfield('itemscount');
-	
-	$db->sql_freeresult($total_result);
-
-	$droppagination = generate_pagination( append_sid("{$phpbb_root_path}viewraid.$phpEx" , 
-	URI_RAID . '=' . request_var(URI_RAID, 0)) , $total_items, $config['bbdkp_user_ilimit'], $startdrops);
-
-	$sql_array = array(
-		'SELECT'	=>	' i.item_id, i.item_name, i.item_value, item_gameid,
-			 m.member_class_id, c.class_id, m.member_name, m.member_id ', 
-		'FROM'		=> array(
-			MEMBER_LIST_TABLE	=> 'm', 
-			RAID_ITEMS_TABLE			=> 'i',				
-			CLASS_TABLE			=> 'c'			 
-			),
-		'WHERE'		=> ' i.member_id = m.member_id
-			AND m.member_class_id = c.class_id
-			AND i.raid_id = ' . $raid_id,
-		'ORDER_BY' => 'm.member_name, i.item_name ASC  '
-	);
-	$sql = $db->sql_build_query('SELECT', $sql_array);
-	$items_result = $db->sql_query_limit($sql, $config['bbdkp_user_ilimit']	 , $startdrops);
-   
-	if ( !$items_result )
+// count blocks
+$blocksize = 7;
+$x = ceil(count($raid_details) / $blocksize);
+//loop blocks
+for ( $i = 0; $i < $x; $i++ )
+{
+	$block_vars = array();
+	//loop columns
+	for ( $j = 0; $j < $blocksize; $j++ )
 	{
-		trigger_error ($user->lang['MNOTFOUND']);
-	}
-
-	$items_re = 0;
-	
-	$bbDKP_Admin = new bbDKP_Admin;
-	if ($bbDKP_Admin->bbtips == true)
-	{
-		if ( !class_exists('bbtips')) 
+		$offset = $i + $x * $j;
+		$attendee = ( isset($raid_details[$offset]) ) ? $raid_details[$offset] : '';
+		if ( $attendee != '' )
 		{
-			require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx); 
-		}
-		$bbtips = new bbtips;		
-	}
-		
-	while ( $item = $db->sql_fetchrow($items_result) )
-	{
-		if ($bbDKP_Admin->bbtips == true)
-		{
-			if ($item['item_gameid'] > 0 )
-			{
-				$item_name = '<strong>' . $bbtips->parse('[itemdkp]' . $item['item_gameid']	 . '[/itemdkp]') . '</strong>' ; 
-			}
-			else 
-			{
-				$item_name = '<strong>' . $bbtips->parse ( '[itemdkp]' . $item ['item_name'] . '[/itemdkp]' . '</strong>'  );
-			}
-			
+			$block_vars += array(
+			  'COLUMN'.$j.'_NAME' => '<strong><a style="color: '. $raid_details[$offset]['colorcode'].';" href="' . append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . 
+			$raid_details[$offset]['member_id'] . '&' . URI_DKPSYS . '=' . $dkpid) . '">' . $raid_details[$offset]['member_name'] . '</a></strong>'
+			);
 		}
 		else
 		{
-			$item_name = '<strong>' . $item['item_name'] . '</strong>';
+			$block_vars += array(
+				'COLUMN'.$j.'_NAME' => ''
+			);
 		}
-		
-		$items_re++;
-			   
-		$template->assign_block_vars('items_row', array(
-			'CLASSCOLORCODE'	=> $colorcode[$item['member_class_id']], 
-			'BUYER'				=> $item['member_name'],
-			'U_VIEW_BUYER'		=> append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $item['member_id'] . '&' . URI_DKPSYS . '=' . $dkpid) ,
-			'NAME'				=> $item_name, 
-			'U_VIEW_ITEM'		=> append_sid("{$phpbb_root_path}viewitem.$phpEx",	URI_ITEM . '='.$item['item_id']),
-			'VALUE'				=> $item['item_value'])
-		);
+		// Are we showing this column?
+		$s_column = 's_column'.$j;
+		${$s_column} = true;
 	}
-	
-	if ($items_re == 0)
-	{
-		$s_comp = false;
-	}
-	
-	$template->assign_vars(array(
-		'S_COMP' => ( isset($s_comp) ) ? false : true,
-		'ITEM_FOOTCOUNT'	  => sprintf($user->lang['VIEWRAID_DROPS_FOOTCOUNT'], $items_re),
-		'START'			=> $startdrops,					  
-		'ITEM_PAGINATION' => $droppagination
-		)
-	);
-	
-	/*****************************
-	*	class block
-	******************************/
-	
-	// Get each attendee's class
-	$sql = 'SELECT m.member_name, m.member_class_id, c1.name as class_name 
-			FROM ' . MEMBER_LIST_TABLE . ' m, ' . CLASS_TABLE . ' c, '.	 BB_LANGUAGE . " c1 
-			WHERE (m.member_class_id = c.class_id)	
-			AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'  
-			AND " . $db->sql_in_set('m.member_id', $raiders, false, true);
-	$result = $db->sql_query($sql);
-	
-	while ( $row = $db->sql_fetchrow($result) )
-	{
-	  $member_name = $row['member_name'];
-	  $member_class = $row['class_name'];
-		
-		if ( $member_name != '' )
-		{
-			$html_prefix = ( isset($raidersinfo[$member_name]) ) ? $raidersinfo[$member_name]['prefix'] : '';
-			$html_suffix = ( isset($raidersinfo[$member_name]) ) ? $raidersinfo[$member_name]['suffix'] : '';
-			$eq_classes[ $row['class_name'] ] .= " " . $html_prefix . $member_name . $html_suffix .",";
-						
-			$class_count[ $row['class_name'] ]++;		   
-		}
-	}
-	$db->sql_freeresult($result);
-	unset($raidersinfo);
-	
-	// Now find out how many of each class there are
-	foreach ( $eq_classes as $class => $members )
-	{
-		$percentage =  ( $total_attendees > 0 ) ? round(($class_count[$class] / $total_attendees) * 100) : 0;
-		$template->assign_block_vars('class_row', array(
-			'CLASS'			=> $class,
-			'CLASSIMAGE'	=> $imagename[$class_id[$class]], 
-			'CLASSCOLOR'	=> $colorcode[$class_id[$class]], 
-			'BAR'			=> create_bar(($class_count[ $class ] * 10), $class_count[$class] . ' (' . $percentage . '%)'),
-			'ATTENDEES' => '<span style="color: ' . $colorcode[$class_id[$class]] . '"><strong>' . $members . '</strong></span>' )		  );
-	}
-	unset($eq_classes);
+	$template->assign_block_vars('attendees_row', $block_vars);
+}
+$column_width = floor(100 / $blocksize);
 
+$template->assign_vars(array(
+	// attendees			
+	'O_NAME' 		=> $current_order ['uri'] [0], 
+	'O_RAIDVALUE' 	=> $current_order ['uri'] [1],
+	'O_TIMEVALUE' 	=> $current_order ['uri'] [2],
+	'O_ZSVALUE' 	=> $current_order ['uri'] [3],
+	'O_DECAYVALUE' 	=> $current_order ['uri'] [4],
+	'O_TOTALVALUE' 	=> $current_order ['uri'] [5], 
+	'RAIDVALUE'		=> $raid_value, 
+	'TIMEVALUE'		=> $time_bonus, 
+	'ZSVALUE'		=> $zerosum_bonus, 
+	'RAIDDECAY'		=> $raid_decay, 
+	'TOTAL'			=> $raid_total, 
+	'S_COLUMN0' => ( isset($s_column0) ) ? true : false,
+	'S_COLUMN1' => ( isset($s_column1) ) ? true : false,
+	'S_COLUMN2' => ( isset($s_column2) ) ? true : false,
+	'S_COLUMN3' => ( isset($s_column3) ) ? true : false,
+	'S_COLUMN4' => ( isset($s_column4) ) ? true : false,
+	'S_COLUMN5' => ( isset($s_column5) ) ? true : false,
+	'S_COLUMN6' => ( isset($s_column6) ) ? true : false,
+	'S_COLUMN7' => ( isset($s_column7) ) ? true : false,
+	'S_COLUMN8' => ( isset($s_column8) ) ? true : false,
+	'S_COLUMN9' => ( isset($s_column9) ) ? true : false,
+	'COLUMN_WIDTH' => ( isset($column_width) ) ? $column_width : 0,
+	'COLSPAN'	   => $blocksize,
+	'ATTENDEES_FOOTCOUNT' => sprintf($user->lang['VIEWRAID_ATTENDEES_FOOTCOUNT'], $countattendees),
+));
+
+/*********************************
+*	Drops block
+**********************************/
+//if bbtips plugin exists load it 
+$bbDKP_Admin = new bbDKP_Admin;
+if ($bbDKP_Admin->bbtips == true)
+{
+	if ( !class_exists('bbtips')) 
+	{
+		require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx); 
+	}
+	$bbtips = new bbtips;
+}
+		
+//prepare item list sql
+$isort_order = array (
+	0 => array ('l.member_name', 'member_name desc' ), 
+	1 => array ('i.item_name', 'item_name desc' ), 
+	2 => array ('i.item_value ', 'item_value desc' ),
+);
+				
+$icurrent_order = switch_order ($isort_order, 'ui');
+		
+// item selection
+$sql_array = array(
+    'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.item_zs, 
+   				l.member_name, c.colorcode, c.imagename, l.member_gender_id, 
+   				a.image_female_small, a.image_male_small, i.item_date, i.raid_id, i.item_value, 
+   				i.item_decay, i.item_value - i.item_decay as item_total',
+    'FROM'      => array(
+        CLASS_TABLE 		=> 'c', 
+        RACE_TABLE  		=> 'a',
+        MEMBER_LIST_TABLE 	=> 'l', 
+        RAID_ITEMS_TABLE    => 'i',
+    ),
+    'WHERE'     =>  'c.class_id = l.member_class_id AND l.member_race_id =  a.race_id 
+    				and l.member_id = i.member_id and i.raid_id = ' . $raid_id,  
+    'ORDER_BY'  => $icurrent_order ['sql'], 
+);
+
+$sql = $db->sql_build_query('SELECT', $sql_array);
+$result = $db->sql_query ( $sql );
+$number_items = 0;
+$item_value = 0.00;
+$item_decay = 0.00;
+$item_total = 0.00;
+
+while ( $row = $db->sql_fetchrow ($result)) 
+{
+    if ($bbDKP_Admin->bbtips == true)
+	{
+		if ($row['item_gameid'] > 0 )
+		{
+			$item_name = $bbtips->parse('[itemdkp]' . $row['item_gameid']  . '[/itemdkp]'); 
+		}
+		else 
+		{
+			$item_name = $bbtips->parse('[itemdkp]' . $row['item_name']  . '[/itemdkp]');
+		}
+	}
+	else
+	{
+		$item_name = $row['item_name'];
+	}
+		
+$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+
+$template->assign_block_vars ( 'items_row', array (
+	'DATE' 			=> (! empty ( $row ['item_date'] )) ? $user->format_date($row['item_date']) : '&nbsp;', 
+	'COLORCODE'  	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
+    'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
+	'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 				
+	'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
+	'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 			 				
+	'BUYER' 		=> (! empty ( $row ['member_name'] )) ? $row ['member_name'] : '&lt;<i>Not Found</i>&gt;', 
+	'ITEMNAME'      => $item_name,
+	'ITEM_ID'		=> $row['item_id'],
+	'ITEM_ZS'      	=> ($row['item_zs'] == 1) ? ' checked="checked"' : '',
+	'U_VIEW_BUYER' => append_sid ("{$phpbb_root_path}viewmember.$phpEx" , URI_NAMEID . "={$row['member_id']}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']),
+	'ITEMVALUE' 	=> $row['item_value'],
+	'DECAYVALUE' 	=> $row['item_decay'],
+	'TOTAL' 		=> $row['item_total'],
+	));
+
+	$number_items++; 
+	$item_value += $row['item_value'];
+	$item_decay += $row['item_decay'];
+	$item_total += $row['item_total'];
+}		
+
+
+$template->assign_vars(array(
+	'S_SHOWITEMPANE' 	=> ($number_items > 0 ) ? true : false,		
+	'ITEM_VALUE'	 	 => $item_value,
+	'ITEMDECAYVALUE'	 => $item_decay,
+	'ITEMTOTAL'			 => $item_total,
+	'RAIDNET'			 => $raid_total - $item_total,
+	'ITEM_FOOTCOUNT'	 => sprintf($user->lang['VIEWRAID_DROPS_FOOTCOUNT'], $number_items ),
+));
+
+/*****************************
+*	class block
+******************************/
+$classes = array();
+$sql = 'SELECT a.class_id, c1.name, a.colorcode, a.imagename from ' . CLASS_TABLE . ' a, '	. BB_LANGUAGE . " c1 
+   WHERE a.class_id != 0  AND c1.attribute_id = a.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'";
+$result = $db->sql_query($sql);
+while ( $row = $db->sql_fetchrow($result) )
+{
+	$classes[$row['class_id']]['classname'] = $row['name'];
+	$classes[$row['class_id']]['colorcode'] = $row['colorcode'];
+	$classes[$row['class_id']]['imagename'] = $row['imagename'];
+	$classes[$row['class_id']]['group'] = '';
+	$classes[$row['class_id']]['count'] = 0;
+}
+$db->sql_freeresult($result);
+	
+foreach($raid_details as $attendee)
+{
+	$classes[$attendee['class_id']]['group'] .= $attendee['member_name'];
+	$classes[$attendee['class_id']]['count'] += 1;
+}
+	
+foreach ( $classes as $id => $class )
+{
+	$percentage =  ( $countattendees > 0 ) ? round(($class['count'] / $countattendees) * 100) : 0;
+	$template->assign_block_vars('class_row', array(
+		'CLASS'			=> $class['classname'],
+		'CLASSIMAGE'	=> $class['imagename'],
+		'CLASSCOLOR'	=> $class['colorcode'],
+		'BAR'			=> create_bar((   $class['count'] * 10), $class['count'] . ' (' . $percentage . '%)', $class['colorcode']  ),
+		'ATTENDEES' => '<span style="color: ' . $class['colorcode']  . '"><strong>' . $class['group'] . '</strong></span>' )		  );
+}
+unset($raid_details);
+unset($classes);
 
 // Output page
 page_header($title);

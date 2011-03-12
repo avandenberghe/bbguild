@@ -65,11 +65,8 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
     ));
 
 	/*** get events ***/
-	$sql = 'SELECT event_dkpid, event_id, event_name, event_value,  a.event_color, a.event_imagename
-	        FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . (int) $pool['dkpsys_id'];
-	
 	$sql_array = array (
-		'SELECT' => ' e.event_dkpid, e.event_id, e.event_name, e.event_value, count(r.raid_id) as raidcount, max(raid_start) as newest, min(raid_start) as oldest ', 
+		'SELECT' => ' e.event_dkpid, e.event_id, e.event_name, e.event_value,  e.event_color, e.event_imagename, count(r.raid_id) as raidcount, max(raid_start) as newest, min(raid_start) as oldest ', 
 		'FROM' => array (
 			EVENTS_TABLE 		=> 'e',		
 			RAIDS_TABLE 		=> 'r', 
@@ -89,8 +86,8 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
 	        	'U_VIEW_EVENT' =>  append_sid("{$phpbb_root_path}viewevent.$phpEx", '&amp;' . URI_EVENT . '='.$event['event_id'] . '&amp;'.URI_DKPSYS.'='.$event['event_dkpid']) ,
 	        	'NAME' 			=> $event['event_name'],
 	        	'VALUE' 		=> $event['event_value'], 
-				'EVENTCOLOR'  	=> $row['event_color'],
-                'EVENTIMAGE'  	=> $row['event_imagename'],	    
+				'EVENTCOLOR'  	=> $event['event_color'],
+                'EVENTIMAGE'  	=> $event['event_imagename'],	    
 	        	'RAIDCOUNT' 	=> $event['raidcount'],
 	        	'OLDEST' 		=> date("d-m-y", $event['oldest'])  ,
 	    		'NEWEST' 		=> date("d-m-y", $event['newest']))

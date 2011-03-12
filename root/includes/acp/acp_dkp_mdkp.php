@@ -729,6 +729,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'CORRECT_RAIDDECAY' => ( !empty($correct_raid_decay) ) ? $correct_raid_decay : '0.00',
 					'CORRECT_MEMBER_SPENT'  => ( !empty($correct_spent) ) ? $correct_spent : '0.00',
 					'CORRECT_ITEMDECAY'  => ( !empty($correct_itemdecay) ) ? $correct_itemdecay : '0.00',
+					'CORRECT_EARNED'  => $correct_raid_value + $correct_time_bonus + $correct_zerosum_bonus, 
 					
 					'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 					'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,

@@ -52,7 +52,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			trigger_error ( $user->lang['ERROR_NOEVENTSDEFINED'], E_USER_WARNING );
 		}
 		
-		switch ($mode) 
+		switch ($mode)
 		{
 			case 'addraid' :
 				/* newpage */
@@ -640,8 +640,8 @@ class acp_dkp_raid extends bbDKP_Admin
 		// get raid details
 		$sort_order = array (
 				0 => array ('member_name desc', 'member_name desc' ),
-				1 => array ('raid_value', 'raid_value desc desc' ), 
-				2 => array ('time_bonus', 'time_bonus desc desc' ), 
+				1 => array ('raid_value', 'raid_value desc' ), 
+				2 => array ('time_bonus', 'time_bonus desc' ), 
 				3 => array ('zerosum_bonus', 'zerosum_bonus desc' ),
 				4 => array ('raid_decay', 'raid_decay desc' ),
 				5 => array ('total desc', 'total desc' ),
@@ -770,6 +770,8 @@ class acp_dkp_raid extends bbDKP_Admin
 				
 		// here we pass a nondefault header id to the sort function to sort the right table
 		$icurrent_order = switch_order ($isort_order, 'ui');
+		
+		// item selection
         $sql_array = array(
 	    'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.item_zs, 
 	    				l.member_name, c.colorcode, c.imagename, l.member_gender_id, 
