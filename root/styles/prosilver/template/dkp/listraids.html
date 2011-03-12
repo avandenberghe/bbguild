@@ -9,16 +9,17 @@
 
 <div class="forabg" >
 <span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+
 <table width="30%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
-<colgroup  span="3">
-<col width="30%"></col>
-<col width="10%"></col>
+<colgroup  span="2">
 <col width="60%"></col>
+<col width="40%"></col>
 </colgroup>
 <tr>
 <th><h1 style ="color:#dfc065;">{L_RAIDS}</h1></th>
-<th></th>
-<th style="color:white; text-align:left; width:56 white-space:nowrap;">{L_POOL}:
+<th style="color:white; text-align:left; width:56; white-space:nowrap;">{L_POOL}:
       <select name="pool" class="input" onchange="javascript:form.submit();">
         <!-- BEGIN pool_row -->
         <option value="{pool_row.VALUE}" {pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
@@ -27,6 +28,8 @@
  </th>
 </tr>
 </table>
+</li>
+</ul>
 <span class="corners-bottom"><span></span></span>
 </div>
 </form> 
