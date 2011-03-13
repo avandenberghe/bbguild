@@ -388,7 +388,7 @@ class acp_dkp extends bbDKP_Admin
                     set_config('bbdkp_guildtag', utf8_normalize_nfc(request_var('guildtag', '', true)), true);
                     set_config('bbdkp_default_realm', utf8_normalize_nfc(request_var('realm', '', true)), true);
                     set_config('bbdkp_default_region', utf8_normalize_nfc(request_var('region', '', true)), true);
-                    set_config('bbdkp_dkp_name', request_var('dkp_name', ''), true);
+                    set_config('bbdkp_dkp_name', utf8_normalize_nfc(request_var('dkp_name', '', true)), true);
 
 					$day = request_var('bbdkp_start_dd', 0);
                 	$month = request_var('bbdkp_start_mm', 0);
@@ -441,35 +441,35 @@ class acp_dkp extends bbDKP_Admin
                     {
 	                    set_config('bbdkp_zerosum', 0 , true);
                     }
-                    if( request_var('zerosum_activate', 0) == 1)
+                    
+                    if( request_var('zerosum_activate', 0) == 1  && request_var('epgp_activate', 0) == 1)
                     {
                     	set_config('bbdkp_zerosum', 1 , true);
-						//epgp and zerosum are mutually exclusive
-						if($config['bbdkp_epgp'] == 1) 
-						{
-							set_config('bbdkp_epgp', 0 , true);
-						}
+						//epgp and zerosum are mutually exclusive, zerosum will prevail if selected
+						set_config('bbdkp_epgp', 0 , true);
                     }
+                    
+                    if( request_var('zerosum_activate', 0) == 0  && request_var('epgp_activate', 0) == 1)
+                    {
+						set_config('bbdkp_zerosum', 0 , true);
+	                    set_config('bbdkp_epgp', 1 , true);
+                    } 
+                    
+                    if( request_var('zerosum_activate', 0) == 1  && request_var('epgp_activate', 0) == 0)
+                    {
+						set_config('bbdkp_zerosum', 1 , true);
+	                    set_config('bbdkp_epgp', 0 , true);
+                    } 
+                    
+                    if( request_var('zerosum_activate', 0) == 0  && request_var('epgp_activate', 0) == 0)
+                    {
+						set_config('bbdkp_zerosum', 0 , true);
+	                    set_config('bbdkp_epgp', 0 , true);
+                    } 
                     
                     set_config('bbdkp_bankerid', request_var('zerosumbanker', 0), true);
                     set_config('bbdkp_zerosumdistother', request_var('zerosumdistother', 0), true);
-                    
-                    //epgp
-                    if( request_var('epgp_activate', 0) == 0)
-                    {
-	                    set_config('bbdkp_epgp', 0 , true);
-                    }
-                    if( request_var('epgp_activate', 0) == 1)
-                    {
-	                    set_config('bbdkp_epgp', 1 , true);
-						//epgp and zerosum are mutually exclusive
-	                    if($config['bbdkp_zerosum'] == 1) 
-						{
-							set_config('bbdkp_zerosum', 0 , true);
-						}
-                    }
                     set_config('bbdkp_basegp', request_var('basegp', 0), true);
-                    
                     
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);

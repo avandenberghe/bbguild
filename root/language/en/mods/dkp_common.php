@@ -183,6 +183,7 @@ $lang = array_merge($lang, array(
 'PLATE' => 'Heavy / Plate', 
 
 'CLASSID' => 'Class ID',
+'CLASS_FACTOR' => 'Class Factor',
 'CLASSARMOR' => 'Class Armor',
 'CLASSIMAGE' => 'Image',
 'CLASSMIN' => 'Min level',

@@ -40,7 +40,17 @@ $defaultpool = 99;
 
 $dkpvalues[0] = $user->lang['ALL']; 
 $dkpvalues[1] = '--------'; 
-$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE;
+// find only pools with dkp records
+$sql_array = array(
+	'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default', 
+	'FROM'		=> array( 
+				DKPSYS_TABLE => 'a', 
+				MEMBER_DKP_TABLE => 'd',
+				), 
+	'WHERE'  => ' a.dkpsys_id = d.member_dkpid', 
+	'GROUP_BY'  => 'a.dkpsys_id'
+); 
+$sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query ( $sql );
 $index = 3;
 while ( $row = $db->sql_fetchrow ( $result ) )
@@ -55,7 +65,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 }
 $db->sql_freeresult ( $result );
 
-$dkpsys_id = 0; 
+$dkp_id = 0; 
 if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [URI_DKPSYS] ) )
 {
 	if (isset( $_POST ['pool']) )
@@ -64,25 +74,19 @@ if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [UR
 		if(is_numeric($pulldownval))
 		{
 			$query_by_pool = true;
-			$dkpsys_id = intval($pulldownval); 	
+			$dkp_id = intval($pulldownval); 	
 		}
 	}
-	if (isset( $_POST ['getdksysid']) )
+	elseif (isset ( $_GET [URI_DKPSYS] ))
 	{
 		$query_by_pool = true;
-		$dkpsys_id = request_var('getdksysid', 0); 
-		
-	}
-	if (isset ( $_GET [URI_DKPSYS] ))
-	{
-		$query_by_pool = true;
-		$dkpsys_id = request_var(URI_DKPSYS, 0); 
+		$dkp_id = request_var(URI_DKPSYS, 0); 
 	}
 }
 else 
 {
 	$query_by_pool = true;
-	$dkpsys_id = $defaultpool; 
+	$dkp_id = $defaultpool; 
 }
 
 foreach ( $dkpvalues as $key => $value )
@@ -91,7 +95,7 @@ foreach ( $dkpvalues as $key => $value )
 	{
 		$template->assign_block_vars ( 'pool_row', array (
 			'VALUE' => $value, 
-			'SELECTED' => ($value == $dkpsys_id && $value != '--------') ? ' selected="selected"' : '',
+			'SELECTED' => ($value == $dkp_id && $value != '--------') ? ' selected="selected"' : '',
 			'DISABLED' => ($value == '--------' ) ? ' disabled="disabled"' : '',  
 			'OPTION' => $value, 
 		));
@@ -100,7 +104,7 @@ foreach ( $dkpvalues as $key => $value )
 	{
 		$template->assign_block_vars ( 'pool_row', array (
 			'VALUE' => $value['id'], 
-			'SELECTED' => ($dkpsys_id == $value['id']) ? ' selected="selected"' : '', 
+			'SELECTED' => ($dkp_id == $value['id']) ? ' selected="selected"' : '', 
 			'OPTION' => $value['text'], 
 		));
 		
@@ -108,7 +112,7 @@ foreach ( $dkpvalues as $key => $value )
 }
 
 
-$query_by_pool = ($dkpsys_id != 0) ? true : false;
+$query_by_pool = ($dkp_id != 0) ? true : false;
 /**** end dkpsys pulldown  ****/
 
 
@@ -134,10 +138,12 @@ $sort_index = explode('.', $current_order['uri']['current']);
 $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 $previous_data = '';
 
+
+// get raidcount
 $sql = 'SELECT count(*) as raidcount FROM ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE . ' e where r.event_id = e.event_id ';
 if ($query_by_pool)
 {
-    $sql .= ' AND event_dkpid = '. $dkpsys_id; 
+    $sql .= ' AND event_dkpid = '. $dkp_id; 
 }
 $result = $db->sql_query($sql);
 $total_raids = (int) $db->sql_fetchfield('raidcount',0,$result);   
@@ -186,7 +192,7 @@ $sql_array = array(
 
 if ($query_by_pool)
 {
-	$sql_array['WHERE'] .= ' AND m.member_dkpid = ' . $dkpsys_id . ' ';
+	$sql_array['WHERE'] .= ' AND m.member_dkpid = ' . $dkp_id . ' ';
 }
 
 if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
@@ -267,24 +273,26 @@ else
     $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($members_result));
 }
 
-// Class Statistics
-// Class Summary
-// Classes array - if an element is false, that class has gotten no
-// loot and won't show up from the SQL query
-// Otherwise it contains an array with the SQL data
+
+
+/************************
+ *  
+ *  Class Statistics 
+ *  
+ **********/
+
 $classes = array();
 
-// Find the total members existing with a dkp record
+// Find total # members with a dkp record
 $sql = 'SELECT count(member_id) AS members FROM ' . MEMBER_DKP_TABLE ;
 if ($query_by_pool)
-   {
-	    $sql .= ' where member_dkpid = '. $dkpsys_id . ' ';
-   }
-
+{
+    $sql .= ' where member_dkpid = '. $dkp_id . ' ';
+}
 $result = $db->sql_query($sql);
 $total_members = (int) $db->sql_fetchfield('members');
 
-// Find the total priced items
+// Find total # drops 
 $sql_array = array (
 	'SELECT' => ' count(item_id) AS items ', 
 	'FROM' => array (
@@ -297,104 +305,34 @@ $sql_array = array (
 			  AND item_value != 0', 
 	'GROUP_BY' => 'i.item_name', 
 );
-		
 if ($query_by_pool)
 {
-  $sql_array['WHERE'] .= ' and event_dkpid = '. $dkpsys_id . ' ';
+  $sql_array['WHERE'] .= ' and event_dkpid = '. $dkp_id . ' ';
 }
 $sql = $db->sql_build_query ( 'SELECT', $sql_array );
 $result = $db->sql_query($sql);
 $total_drops = (int) $db->sql_fetchfield('items');
 $db->sql_freeresult($result);
-	
-// Find out how many members of each class exist
-$class_counts = array();
-$sql = 'SELECT l.member_class_id, count(m.member_id) AS class_count	
-        FROM ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_LIST_TABLE . ' l , ' . CLASS_TABLE .' c
-        where m.member_id=l.member_id and l.member_class_id = c.class_id';
-if ($query_by_pool)
-   {
-	    $sql .= ' and m.member_dkpid = '. $dkpsys_id . ' ';
-   }
-$sql .= ' GROUP BY l.member_class_id';
-$result = $db->sql_query($sql);
-while ( $row = $db->sql_fetchrow($result) )
-{
-	$class_counts[ $row['member_class_id'] ] = $row['class_count'];
-}
-$db->sql_freeresult($result);
 
-// Query finds all items purchased by each class; will not find items that are unpriced
+// get #classcount, #drops per class
 $sql_array = array(
-    'SELECT'    => 	'c1.name as class_name, c.class_id, count(i.item_id) AS class_drops', 
+    'SELECT'    => 	'c1.name as class_name,  c.class_id , c.colorcode, 
+    	c.imagename, count(m.member_id) AS class_count, count(i.item_id) as itemcount ', 
     'FROM'      => array(
-
-        EVENTS_TABLE 		=> 'e',
-        RAIDS_TABLE 		=> 'r',
-        RAID_ITEMS_TABLE 		=> 'i',
+       MEMBER_DKP_TABLE => 'm',
         CLASS_TABLE 		=> 'c',
         MEMBER_DKP_TABLE 	=> 'm',
         MEMBER_LIST_TABLE  	=> 'l',
         BB_LANGUAGE			=> 'c1'
     	),
-    'WHERE'     =>  "
-    	e.event_dkpid = m.member_dkpid 
-    	AND e.event_id = r.event_id
-    	AND i.raid_id = r.raid_id
-    	AND l.member_id = i.member_id 
-        AND l.member_class_id = c.class_id
-        AND l.member_id = m.member_id
-        AND (i.item_value != 0.00) 
-    	AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
-    	
-    'GROUP_BY' => ' c1.name, c.class_id ',	
-    'ORDER_BY' => $current_order['sql'], 
     
-);
-if ($query_by_pool)
-   {
-	    $sql_array['WHERE'] .= ' AND m.member_dkpid = '. $dkpsys_id . ' ';
-   }
-$sql = $db->sql_build_query('SELECT', $sql_array);
-
-
-$result = $db->sql_query($sql);
-
-$classes = array();
-
-while ( $row = $db->sql_fetchrow($result) )
-{
-
-    $class = $row['class_name'];
-    $class_id = $row['class_id'];
-    $class_drops = $row['class_drops'];
-
-    $class_drop_pct = ( $total_drops > 0 ) ? round(($class_drops / $total_drops) * 100) : 0;
-    $class_members = ( isset($class_counts[$class_id]) ) ? $class_counts[$class_id] : 0;
-    $class_factor = ( $class_members > 0 ) ? round(($class_drops / $class_members) * 100) : 0;
-
-    $classes[$class] = array(
-         'drops' => $class_drops,
-         'drop_pct' => $class_drop_pct,
-         'class_count' => $class_members,
-         'class_pct' => ( $total_members > 0 ) ? round(($class_members / $total_members) * 100) : 0,
-         'factor' => $class_factor);
-
-}
-
-$db->sql_freeresult($result);
-
-$class_counts = array();
-
-$sql_array = array(
-    'SELECT'    => 	'c1.name as class_name, count(m.member_id) AS class_count, c.class_id , c.colorcode, c.imagename ', 
-    'FROM'      => array(
-        RAID_ITEMS_TABLE 		=> 'i',
-        CLASS_TABLE 		=> 'c',
-        MEMBER_DKP_TABLE 	=> 'm',
-        MEMBER_LIST_TABLE  	=> 'l',
-        BB_LANGUAGE			=> 'c1'
-    	),
+    'LEFT_JOIN' => array(
+        array(
+            'FROM'  => array(RAID_ITEMS_TABLE => 'i'),
+            'ON'    => 'm.member_id=i.member_id'
+        )
+    ),
+    
     'WHERE'     =>  "m.member_id = l.member_id 
         AND l.member_class_id = c.class_id 
     	AND c1.attribute_id = c.class_id 
@@ -407,61 +345,58 @@ $sql_array = array(
 
 if ($query_by_pool)
 {
-     $sql_array['WHERE'] .= ' AND m.member_dkpid = '. $dkpsys_id . ' ';
+     $sql_array['WHERE'] .= ' AND m.member_dkpid = '. $dkp_id . ' ';
 }
 $sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query($sql);
 
-while ( $row = $db->sql_fetchrow($result) )
+while ($row = $db->sql_fetchrow($result) )
 {
-    $class 		 = $row['class_name'];
+	// get class count and pct
 	$class_count = $row['class_count'];
-   
-    if( (empty($class)) || ($class == 'NULL') )
-    {
-        continue;
-    }
+	$classpct = (float) ($total_members > 0) ? ($row['class_count'] / $total_members) * 100  : 0;
+	
+	// get drops per class and pct
+    $class_drop_pct = ( $total_drops > 0 ) ? round(( (int) $row['itemcount'] / $total_drops) * 100) : 0;
 
-    // if this isn't an array, define blank values
-    if ( !is_array($classes[$class]) )
-    {
-        $v = array(
-            'drops' 		=> 0,
-            'drop_pct' 		=> 0,
-            'class_count' 	=> $class_count,
-            'class_pct' 	=> ( $total_members > 0 ) ? round(($class_count / $total_members) * 100) : 0,
-            'factor' 		=> 0
-        );
-    }
-    else
-    {
-        $v = $classes[$class];
-    }
+    // class factor is the absolute ratio of #classdrops to #classcount
+    // so it's the average droprate per class 
+    $class_factor = ( $row['class_count'] > 0 ) ? round(( (int) $row['itemcount'] / $row['class_count'])) : 0;
     
-    
-    $loot_factor = ( $v['class_pct'] > 0 ) ? round((($v['drop_pct'] / $v['class_pct']) - 1) * 100) : '0';
-    
+    //the loot factor is the ratio of class drops pct to class pct. 
+    // this should be close to 100, meaning  that this class gets an even amount of loot.
+    // if loot factor is > 100 then this class gets above proportional loot
+	// if loot factor is < 100 then this class gets below proportional loot
+    // positive interval is [60% to 140%], anything outside that is a serious inbalance.
+    $loot_factor = ( $classpct > 0 ) ? round( ( ( $class_drop_pct / $classpct) ) * 100) : '0';
+
     if ($query_by_pool)
     {
-        $lmlink =  append_sid("{$phpbb_root_path}listmembers.$phpEx" , 'filter=' . $class . '&amp;' . URI_DKPSYS .'=' . $dkpsys_id); 
+        $lmlink =  append_sid("{$phpbb_root_path}listmembers.$phpEx" , 'filter=class_' . $row['class_id'] . '&amp;' . URI_DKPSYS .'=' . $dkp_id); 
     }
     else 
     {
-        $lmlink =  append_sid("{$phpbb_root_path}listmembers.$phpEx" , 'filter=' . $class);
+        $lmlink =  append_sid("{$phpbb_root_path}listmembers.$phpEx" , 'filter=class_' . $row['class_id']);
     }
     
     $template->assign_block_vars('class_row', array(
+    	'U_LIST_MEMBERS' 	=> $lmlink ,
+		'COLORCODE'  	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
+    	'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
+		'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 		
+        'CLASS_NAME'	=> $row['class_name'],
 
-        'U_LIST_MEMBERS' 	=> $lmlink ,
-        'CLASSCOLOR' 		=> $row['colorcode'],
-        'CLASSIMAGE' 		=> $row['imagename'],        
-        'CLASS' 			=> $class,
-        'LOOT_COUNT' 		=> $v['drops'],
-        'LOOT_PCT' 			=> sprintf("%d%%", $v['drop_pct']),
-        'CLASS_COUNT' 		=> $v['class_count'],
-        'CLASS_PCT' 		=> sprintf("%d%%", $v['class_pct']),
-        'LOOT_FACTOR' 		=> sprintf("%d%%", $loot_factor),
-        'C_LOOT_FACTOR' 	=> $loot_factor
+        'CLASS_COUNT' 		=> (int) $class_count,
+        'CLASS_PCT' 		=> sprintf("%s %%", $classpct ),
+    	
+        'LOOT_COUNT' 		=> (int) $row['itemcount'],
+    	'CLASS_DROP_PCT'	=> sprintf("%s %%", $class_drop_pct  ),
+    
+    	'CLASS_FACTOR'		=> sprintf("%s", $class_factor),
+    
+    	'LOOT_FACTOR'		=> sprintf("%s %%", $loot_factor),
+    	'C_LOOT_FACTOR'		=> ($loot_factor < 	60 || $loot_factor > 140 ) ? 'negative' : 'positive', 
+    
 		)
     );
 }
@@ -472,7 +407,7 @@ for ($i=0; $i<=12; $i++)
 {
     if ($query_by_pool)
     {
-        $sortlink[$i] = append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][$i] . '&amp;' . URI_DKPSYS . '=' . $dkpsys_id ); 
+        $sortlink[$i] = append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][$i] . '&amp;' . URI_DKPSYS . '=' . $dkp_id ); 
     }
     else 
     {
@@ -515,7 +450,12 @@ $template->assign_vars(array(
 
 	'U_STATS' => append_sid("{$phpbb_root_path}stats.$phpEx"),
     'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
-    'STATS_FOOTCOUNT' => $footcount_text
+    'STATS_FOOTCOUNT' => $footcount_text,
+	'TOTAL_MEMBERS' 	=> $total_members, 
+	'TOTAL_DROPS' 		=> $total_drops, 
+	
+
+
     )
 );
 
