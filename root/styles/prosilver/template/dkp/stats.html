@@ -47,8 +47,8 @@
 <tr>
 	<th style=" width:40%; font-size :10pt; text-align: center;  color:white" colspan=6>{L_RAIDS}</th>
 	<th style=" width:20%; font-size :10pt; text-align: center; color:#77FF77" colspan=3>{L_EARNED}</th>
-	<th style=" width:20%; font-size :10pt; text-align: center; color:#FF8888" colspan=3>{L_SPENT}</th>
-	<th style=" width:20%; font-size :10pt; text-align: center; color:white" colspan=3>{L_PCT_EARNED_LOST_TO}</th>
+	<th style=" width:20%; font-size :10pt; text-align: center; color:#FF8888" colspan=2>{L_SPENT}</th>
+	<th style=" width:20%; font-size :10pt; text-align: center; color:white" colspan=3>{L_CURRENT}</th>
 </tr>
 <tr>	  
 	<th style=" width:2%;">	
@@ -56,16 +56,19 @@
     <th style=" width:6%; text-align:center;" ><a href="{O_FIRSTRAID}">{L_FIRST}</a></th>
     <th style=" width:6%; text-align:center;" ><a href="{O_LASTRAID}">{L_LAST}</a></th>
     <th style=" width:4%; text-align:center;" ><a href="{O_RAIDCOUNT}">{L_ATTENDED}</a></th>
+    
     <th style=" width:4%; text-align:right;" ><a href="{O_EARNED}">{L_TOTAL}</a></th>
+    
     <th style=" width:8%; text-align:right;" ><a href="{O_EARNED_PER_DAY}">{L_PER_DAY}</a></th>
     <th style=" width:8%; text-align:right;" ><a href="{O_EARNED_PER_RAID}">{L_PER_RAID}</a></th>
     <th style=" width:8%; text-align:right;" ><a href="{O_SPENT}">{L_TOTAL}</a></th>
+    
     <th style=" width:8%; text-align:right;" ><a href="{O_SPENT_PER_DAY}">{L_PER_DAY}</a></th>
     <th style=" width:7%; text-align:right;" ><a href="{O_SPENT_PER_RAID}">{L_PER_RAID}</a></th>
-    <th style=" width:7%; text-align:right;"  ><a href="{O_LOST_TO_ADJUSTMENT}">{L_ADJUSTMENT}</a></th>
+    
     <th style=" width:6%; text-align:right;" ><a href="{O_LOST_TO_SPENT}">{L_SPENT}</a></th>
-    <th style=" width:4%; text-align:right;" ><a href="{O_CURRENT}">{L_CURRENT}</a></th>
-    <th style=" width:4%; text-align:right;" ></th>
+    <th style=" width:6%; text-align:center;" ><a href="{O_PR}">{L_PR}</a></th>
+    <th style=" width:6%; text-align:center;" ><a href="{O_CURRENT}">{L_CURRENT}</a></th>
 </tr>
 </thead>
 <tbody>
@@ -81,15 +84,14 @@
     <td style="font-size :8pt; text-align: right;">{stats_row.LAST_RAID}</td>
     <td style="font-size :8pt; text-align: right;">{stats_row.ATTENDED_COUNT}</td>
     <td style="font-size :8pt; text-align: right;">{stats_row.ATTENDED_PERCENT}%</td>
-    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EARNED_TOTAL}</td>
-    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EARNED_PER_DAY}</td>
-    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EARNED_PER_RAID}</td>
-    <td style="font-size :8pt; color: red; text-align: right;"> {stats_row.SPENT_TOTAL}</td>
-    <td style="font-size :8pt; color: red; text-align: right;">{stats_row.SPENT_PER_DAY}</td>
-    <td style="font-size :8pt; color: red; text-align: right;">{stats_row.SPENT_PER_RAID}</td>
-    <td style="font-size :8pt; text-align: right;" >{stats_row.LOST_TO_ADJUSTMENT}%</td>
-    <td style="font-size :8pt; text-align: right;">{stats_row.LOST_TO_SPENT}%</td>
-    <td {stats_row.DKPCOLOUR} >{stats_row.CURRENT}</td>
+    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EP_PER_DAY}</td>
+    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EP_PER_RAID}</td>
+    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EP_TOTAL}</td>
+    <td style="font-size :8pt; color: red; text-align: right;">{stats_row.GP_PER_DAY}</td>
+    <td style="font-size :8pt; color: red; text-align: right;">{stats_row.GP_PER_RAID}</td>
+    <td style="font-size :8pt; color: red; text-align: right;"> {stats_row.GP_TOTAL}</td>
+    <td style="font-size :8pt; text-align: center;"><strong>{stats_row.PR}</strong></td>
+    <td style="font-size :8pt; text-align: right;"><span class="stats_row.C_CURRENT}"><strong>{stats_row.CURRENT}</strong></span></td>
   </tr>
 <!-- END stats_row -->
 </tbody>
@@ -136,8 +138,10 @@
 	  <td style="width:7.5%; " align="center" >{class_row.CLASS_COUNT}</td>
 	  <td style="width:7.5%; " align="center" >{class_row.LOOT_COUNT}</td>
 	  <td style="width:7.5%; " align="center" >{class_row.CLASS_FACTOR}</td>
-	  <td style="width:7.5%; " align="center" >{class_row.CLASS_PCT}</td>
-	  <td style="width:7.5%; " align="center" >{class_row.CLASS_DROP_PCT}</td>
+	  
+	  
+	  <td style="width:7.5%; " align="left" >{class_row.CLASS_BAR}</td>
+	  <td style="width:7.5%; " align="left" >{class_row.CLASS_DROP_PCT}</td>
 	  <td style="width:7.5%; " align="center" ><span class= "{class_row.C_LOOT_FACTOR}">{class_row.LOOT_FACTOR}</span></td>
   </tr>
   
@@ -151,7 +155,7 @@
 <th style="color:white; font-size :9pt; text-align: center;">{TOTAL_MEMBERS}</th>
 <th style="color:white; font-size :9pt; text-align: center;">{TOTAL_DROPS}</th>
 <th style="color:white; font-size :9pt; text-align: center;"></th>
-<th style="color:white; font-size :9pt; text-align: center;">100%</th>
+<th style="color:white; font-size :9pt; text-align: center;"></th>
 <th style="color:white; font-size :9pt; text-align: center;"></th>
 <th style="color:white; font-size :9pt; text-align: center;"></th>
 

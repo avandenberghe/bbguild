@@ -118,19 +118,18 @@ $query_by_pool = ($dkp_id != 0) ? true : false;
 
 /**** column sorting *****/
 $sort_order = array(
-     0 => array('member_name', 'member_name desc'),
-     1 => array('member_firstraid', 'member_firstraid desc'),
-     2 => array('member_lastraid', 'member_lastraid desc'),
-     3 => array('member_raidcount desc', 'member_raidcount'),
-     4 => array('member_earned desc', 'member_earned'),
-     5 => array('earned_per_day desc', 'earned_per_day'),
-     6 => array('earned_per_raid desc', 'earned_per_raid'),
-     7 => array('member_spent desc', 'member_spent'),
-     8 => array('spent_per_day desc', 'spent_per_day'),
-     9 => array('spent_per_raid desc', 'spent_per_raid'),
-    10 => array('lost_to_adjustment desc', 'lost_to_adjustment'),
-    11 => array('lost_to_spent desc', 'lost_to_spent'),
-    12 => array('member_current desc', 'member_current')
+     0 => array('member_raidcount desc', 'member_raidcount asc'),
+     1 => array('member_name asc', 'member_name desc'),
+     2 => array('member_firstraid asc', 'member_firstraid desc'),
+     3 => array('member_lastraid asc', 'member_lastraid desc'),
+     4 => array('ep desc', 'ep'),
+     5 => array('ep_per_day desc', 'ep_per_day'),
+     6 => array('ep_per_raid desc', 'ep_per_raid'),
+     7 => array('gp desc', 'gp'),
+     8 => array('gp_per_day desc', 'gp_per_day'),
+     9 => array('gp_per_raid desc', 'gp_per_raid'),
+    10 => array('pr desc', 'pr'),
+    11 => array('member_current desc', 'member_current')
 );
 
 $current_order = switch_order($sort_order);
@@ -153,41 +152,46 @@ $show_all = ( (isset($_GET['show'])) && (request_var('show', '') == "all") ) ? t
 
 
 $sql_array = array(
-    'SELECT'    => 	'l.member_name,	l.member_class_id, r.rank_prefix, r.rank_suffix, 
+    'SELECT'    => 	'l.member_name,	l.member_class_id,
 		c1.name as classr_name, c.colorcode, 
 		m.member_id, 
 		m.member_dkpid, 
-		m.member_earned, 
-		m.member_spent, 
-		m.member_adjustment,
-        (m.member_earned-m.member_spent+m.member_adjustment) AS member_current,
         m.member_firstraid, 
         m.member_lastraid, 
         m.member_raidcount,
-        ((m.member_spent/m.member_earned)*100) AS lost_to_spent,
-        ((m.member_adjustment-(m.member_adjustment*2))/m.member_earned)*100 AS lost_to_adjustment,
-        (m.member_earned / ((('.time().' - m.member_firstraid)+86400) / 86400) ) AS earned_per_day,
-        (('.time().' - member_firstraid) / 86400) AS zero_check,
-        m.member_spent   / ((('.time().' - m.member_firstraid)+86400) / 86400) AS spent_per_day,
-        m.member_earned/m.member_raidcount AS earned_per_raid,
-        m.member_spent/m.member_raidcount AS spent_per_raid', 
- 
+		
+        m.member_earned - m.member_raid_decay + m.member_adjustment AS ep,
+        (m.member_earned - m.member_raid_decay + m.member_adjustment) / m.member_raidcount AS ep_per_raid,
+        (m.member_earned - m.member_raid_decay + m.member_adjustment) / ((('.time().' - m.member_firstraid)+86400) / 86400)  AS ep_per_day,
+
+        m.member_spent - m.member_item_decay + ( ' . max(0, $config['bbdkp_basegp']) . ') AS gp, 
+        ( m.member_spent - m.member_item_decay + ( ' . max(0, $config['bbdkp_basegp']) . ') )  /m.member_raidcount AS gp_per_raid, 
+        ( m.member_spent - m.member_item_decay + ( ' . max(0, $config['bbdkp_basegp']) . ') )   / ((('.time().' - m.member_firstraid)+86400) / 86400) AS gp_per_day,
+        
+        (m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
+
+        case when m.member_spent - m.member_item_decay <= 0 
+		then m.member_earned - m.member_raid_decay + m.member_adjustment  
+		else round( (m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay) ,2) end as pr , 
+        
+        (('.time().' - member_firstraid) / 86400) AS zero_check 
+        
+         ',
+
     'FROM'      => array(
         CLASS_TABLE 		=> 'c',
         MEMBER_DKP_TABLE 	=> 'm',
         MEMBER_LIST_TABLE 	=> 'l',
-        MEMBER_RANKS_TABLE  => 'r',
         BB_LANGUAGE			=> 'c1'
     	),
  
     'WHERE'     =>  "l.member_id=m.member_id 
-        AND l.member_guild_id = r.guild_id 
-        AND l.member_rank_id = r.rank_id
         AND l.member_class_id = c.class_id 
     	AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
     	
     	
-    'ORDER_BY' => $current_order['sql'], 
+    'ORDER_BY' => $current_order['sql'],
+	
 );
 
 if ($query_by_pool)
@@ -222,8 +226,7 @@ while ( $row = $db->sql_fetchrow($members_result) )
     $row['spent_per_day'] = ( ( (!empty($row['spent_per_day']) ) && ($row['zero_check'] > '0.01') )) ? $row['spent_per_day'] : '0.00';
     $row['spent_per_raid'] = (!empty($row['spent_per_raid'])) ? $row['spent_per_raid'] : '0';
     
-    $row['lost_to_adjustment'] = (!empty($row['lost_to_adjustment'])) ? $row['lost_to_adjustment'] : '0.00';
-    $row['lost_to_spent'] = (!empty($row['lost_to_spent'])) ? $row['lost_to_spent'] : '0.00';
+    $row['er'] = (!empty($row['er'])) ? $row['er'] : '0.00';
 	  
     // Find out how many days it's been since their first raid
     $days_since_start = 0;
@@ -232,31 +235,27 @@ while ( $row = $db->sql_fetchrow($members_result) )
     // Find the percentage of raids they've been on
     $attended_percent = ( $total_raids > 0 ) ? round(($row['member_raidcount'] / $total_raids) * 100) : 0;
 
-    $cssdkpcolour2 = ($row['member_current'] >= 0)? 'style="font-size :8pt; color: green; text-align: right;"' : 'style="font-size :8pt; color: red; text-align: right;"' ;
-    
-
     $template->assign_block_vars('stats_row', array(
     	'COLORCODE'				=> $colorcode,
     	'ID'            		=> $row['member_id'],
 	    'COUNT'         		=> ($row[$previous_source] == $previous_data) ? '&nbsp;' : $member_count,
         'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),    
-        'NAME' 					=> $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
+        'NAME' 					=> $row['member_name'],
         'FIRST_RAID' 			=> ( !empty($row['member_firstraid']) ) ? date($config['bbdkp_date_format'], $row['member_firstraid']) : '&nbsp;',
         'LAST_RAID' 			=> ( !empty($row['member_lastraid']) ) ? date($config['bbdkp_date_format'], $row['member_lastraid']) : '&nbsp;',
         'ATTENDED_COUNT' 		=> $row['member_raidcount'],
         'C_ATTENDED_PERCENT' 	=> $attended_percent, true,
         'ATTENDED_PERCENT' 		=> $attended_percent,
-        'EARNED_TOTAL' 			=> $row['member_earned'],
-        'EARNED_PER_DAY' 		=> sprintf("%.2f", $row['earned_per_day']),
-        'EARNED_PER_RAID' 		=> sprintf("%.2f", $row['earned_per_raid']),
-        'SPENT_TOTAL' 			=> $row['member_spent'],
-        'SPENT_PER_DAY' 		=> sprintf("%.2f", $row['spent_per_day']),
-        'SPENT_PER_RAID' 		=> sprintf("%.2f", $row['spent_per_raid']),
-        'LOST_TO_ADJUSTMENT'	=> sprintf("%.2f", $row['lost_to_adjustment']),
-        'LOST_TO_SPENT' 		=> sprintf("%.2f", $row['lost_to_spent']),
+        'EP_TOTAL' 				=> $row['ep'],
+        'EP_PER_DAY' 			=> sprintf("%.2f", $row['ep_per_day']),
+        'EP_PER_RAID' 			=> sprintf("%.2f", $row['ep_per_raid']),
+        'GP_TOTAL' 				=> $row['gp'],
+        'GP_PER_DAY' 			=> sprintf("%.2f", $row['gp_per_day']),
+        'GP_PER_RAID' 			=> sprintf("%.2f", $row['gp_per_raid']),
+        'PR'			 		=> sprintf("%.2f", $row['pr']),
         'C_CURRENT' 			=> $row['member_current'],
         'CURRENT' 				=> $row['member_current'], 
-        'DKPCOLOUR'				=> $cssdkpcolour2
+        'C_CURRENT'				=> ($row['member_current'] > 0 ? 'positive' : 'negative'), 
     )
     );
 
@@ -388,7 +387,8 @@ while ($row = $db->sql_fetchrow($result) )
 
         'CLASS_COUNT' 		=> (int) $class_count,
         'CLASS_PCT' 		=> sprintf("%s %%", $classpct ),
-    	
+    	'CLASS_BAR'			=> create_bar( ($classpct) .'%', $class_count . ' (' . $classpct . '%)', $row['colorcode']  ),	
+    
         'LOOT_COUNT' 		=> (int) $row['itemcount'],
     	'CLASS_DROP_PCT'	=> sprintf("%s %%", $class_drop_pct  ),
     
@@ -396,26 +396,13 @@ while ($row = $db->sql_fetchrow($result) )
     
     	'LOOT_FACTOR'		=> sprintf("%s %%", $loot_factor),
     	'C_LOOT_FACTOR'		=> ($loot_factor < 	60 || $loot_factor > 140 ) ? 'negative' : 'positive', 
+    	
     
 		)
     );
 }
 
 
-$sortlink = array();
-for ($i=0; $i<=12; $i++)
-{
-    if ($query_by_pool)
-    {
-        $sortlink[$i] = append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][$i] . '&amp;' . URI_DKPSYS . '=' . $dkp_id ); 
-    }
-    else 
-    {
-        $sortlink[$i] = append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][$i] . '&amp;' . URI_DKPSYS . '=All'  ); 
-    }
-}
-
-    
 $navlinks_array = array(
 array(
  'DKPPAGE' => $user->lang['MENU_STATS'],
@@ -434,27 +421,24 @@ $template->assign_vars(array(
 
 	'F_STATS' => append_sid("{$phpbb_root_path}stats.$phpEx"),
 
-    'O_NAME'       => $sortlink[0] ,
-    'O_FIRSTRAID' => $sortlink[1] ,
-	'O_LASTRAID' =>  $sortlink[2],
-    'O_RAIDCOUNT' =>  $sortlink[3] ,
-    'O_EARNED' => $sortlink[4] ,
-    'O_EARNED_PER_DAY' => $sortlink[5] , 
-    'O_EARNED_PER_RAID' => $sortlink[6] , 
-    'O_SPENT' => $sortlink[7] , 
-    'O_SPENT_PER_DAY' => $sortlink[8] , 
-    'O_SPENT_PER_RAID' => $sortlink[9] , 
-    'O_LOST_TO_ADJUSTMENT' => $sortlink[10] , 
-    'O_LOST_TO_SPENT' => $sortlink[11] , 
-    'O_CURRENT' => $sortlink[12] , 
+    'O_NAME'       => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][0] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')), 
+    'O_FIRSTRAID' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+	'O_LASTRAID' =>  append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][2] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')),
+    'O_RAIDCOUNT' =>  append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][3] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+    'O_EARNED' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][4] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+    'O_EARNED_PER_DAY' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][5] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_EARNED_PER_RAID' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][6] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_SPENT' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][7] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_SPENT_PER_DAY' =>append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][8] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_SPENT_PER_RAID' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][9] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_PR' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][10] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_CURRENT' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][11] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
 
 	'U_STATS' => append_sid("{$phpbb_root_path}stats.$phpEx"),
     'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
     'STATS_FOOTCOUNT' => $footcount_text,
 	'TOTAL_MEMBERS' 	=> $total_members, 
 	'TOTAL_DROPS' 		=> $total_drops, 
-	
-
 
     )
 );

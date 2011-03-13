@@ -202,7 +202,7 @@ switch ($mode)
 	case 'values' :
 		$sql_array = array (
 			'SELECT' => '
-				e.event_dkpid, e.event_name, 
+				e.event_dkpid, e.event_name,  e.event_color, 
 				i.item_id, i.item_name, i.member_id, i.item_gameid, i.item_date, 
 				i.raid_id, min(i.item_value) AS item_value,  i.item_decay, i.item_value - i.item_decay as item_total, item_zs  ', 
 			'FROM' => array (
@@ -219,7 +219,7 @@ switch ($mode)
 	case 'history' :
 		$sql_array = array (
 			'SELECT' => '
-				 e.event_dkpid, e.event_name,  
+				 e.event_dkpid, e.event_name, e.event_color,   
 				 i.raid_id, i.item_value, i.item_gameid, i.item_id, i.item_name, i.item_date, i.member_id, 
 				 i.item_decay, i.item_value - i.item_decay as item_total, item_zs,
 				 l.member_name, c.colorcode, c.imagename, c.class_id, l.member_gender_id, a.image_female_small, a.image_male_small ', 
@@ -293,13 +293,14 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 			'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}viewitem.$phpEx", URI_ITEM . '=' . $item ['item_id'] ), 
 			'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>Not Found</i>&gt;', 
 			'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item ['raid_id'] ), 
+			'EVENTCOLOR' => ( !empty($item['event_color']) ) ? $item['event_color'] : '#123456',
 			
 			'ITEM_ZS'      	=> ($item['item_zs'] == 1) ? ' checked="checked"' : '',
-			'ITEMVALUE' 	=> $item['item_value'],
-			'DECAYVALUE' 	=> $item['item_decay'],
-			'TOTAL' 		=> $item['item_total'],
+			'ITEMVALUE' 	=> sprintf("%.2f", $item['item_value'])   ,
+			'DECAYVALUE' 	=> sprintf("%.2f", $item['item_decay']),
+			'TOTAL' 		=> sprintf("%.2f", $item['item_total']),
 			'BUYER' 		=> $item ['member_name'], 
-
+		
 			'U_VIEW_BUYER' 	=> append_sid ( "{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $item ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $item ['event_dkpid'] ), 
 			'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
 			'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
@@ -317,12 +318,13 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 			'ITEMNAME' 		=> $valuename, 
 			'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}viewitem.$phpEx", URI_ITEM . '=' . $item ['item_id'] ), 
 			'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>Not Found</i>&gt;', 
+			'EVENTCOLOR' => ( !empty($item['event_color']) ) ? $item['event_color'] : '#123456',
 			'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item ['raid_id'] ), 
 			
 			'ITEM_ZS'      	=> ($item['item_zs'] == 1) ? ' checked="checked"' : '',
-			'ITEMVALUE' 	=> $item['item_value'],
-			'DECAYVALUE' 	=> $item['item_decay'],
-			'TOTAL' 		=> $item['item_total'],
+			'ITEMVALUE' 	=> sprintf("%.2f", $item['item_value'])   ,
+			'DECAYVALUE' 	=> sprintf("%.2f", $item['item_decay']),
+			'TOTAL' 		=> sprintf("%.2f", $item['item_total']),
 		));	
 		
 	}
@@ -359,9 +361,10 @@ $template->assign_vars ( array (
 	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 	'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
 	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
-	'TOTAL_ITEMVALUE' => $item_value,
-	'TOTAL_ITEMDECAY' => $item_decay,
-	'TOTAL_ITEMTOTAL' => $item_total,
+	'TOTAL_ITEMVALUE' 	=> sprintf("%.2f",$item_value)   ,
+	'TOTAL_ITEMDECAY' 	=> sprintf("%.2f", $item_decay),
+	'TOTAL_ITEMTOTAL' 	=> sprintf("%.2f", $item_total),
+
 	'LISTITEMS_FOOTCOUNT' => $listitems_footcount, 
 	'ITEM_PAGINATION' => $pagination ) 
 );

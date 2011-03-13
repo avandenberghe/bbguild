@@ -264,7 +264,7 @@ if($config['bbdkp_epgp'] == 1)
 {
 	$sql_array[ 'SELECT'] .= ', sum(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep, sum(m.member_spent - m.member_item_decay ) AS gp, 
 	case when sum(m.member_spent - m.member_item_decay) = 0 then sum(m.member_earned - m.member_raid_decay + m.member_adjustment)  
-	else round(sum(m.member_earned - m.member_raid_decay + m.member_adjustment) / sum(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as er ' ;
+	else round(sum(m.member_earned - m.member_raid_decay + m.member_adjustment) / sum(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr ' ;
 }
 
 if  (isset($_POST['compare']) && isset($_POST['compare_ids']))
@@ -388,7 +388,7 @@ while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{
 			$memberarray [$member_count] ['ep'] = $row ['ep'];
 			$memberarray [$member_count] ['gp'] = $row ['gp'];
-			$memberarray [$member_count] ['er'] = $row ['er'];
+			$memberarray [$member_count] ['pr'] = $row ['pr'];
 		}
 		
 		$memberarray [$member_count] ['member_lastraid'] = $row ['member_lastraid'];
@@ -434,7 +434,7 @@ if (count ($memberarray))
 		{
 			$ep[$key]['ep'] = $member['ep']; 
 			$gp[$key]['gp'] = $member['gp']; 
-			$er[$key]['er'] = $member['er']; 
+			$er[$key]['pr'] = $member['pr']; 
 		}
 		
 		$member_spent [$key] = $member ['member_spent']; //*
@@ -551,10 +551,10 @@ if (count ($memberarray))
 			break;
 			
 		case 16 : // Pr
-			array_multisort ( $er, SORT_DESC, $member_name, SORT_ASC, $memberarray );
+			array_multisort ( $pr, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 			break;
 		case - 16 : // Pr 
-			array_multisort ( $er, SORT_ASC, $member_name, SORT_DESC, $memberarray );
+			array_multisort ( $pr, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 			break;			
 			
 		case 17 : //current
@@ -655,7 +655,7 @@ foreach ( $memberarray as $key => $member )
 		{
 			$templatearray['EP'] = $member ['ep'];
 			$templatearray['GP'] = $member ['gp'];
-			$templatearray['ER'] = $member ['er'];
+			$templatearray['PR'] = $member ['pr'];
 		}
 		
 		$template->assign_block_vars ( 'members_row', $templatearray);

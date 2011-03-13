@@ -170,7 +170,7 @@ $sql_array = array (
 					  sum(ra.zerosum_bonus) as zs_value, sum(ra.raid_decay) as raiddecay, 
 					  sum(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay) as total,
 					  count(ra.member_id) as attendees,  
-					  e.event_dkpid, e.event_id, e.event_name,  
+					  e.event_dkpid, e.event_id, e.event_name, e.event_color, 
 					  r.raid_id, r.raid_start, r.raid_note, 
 					  r.raid_added_by, r.raid_updated_by ', 
 		'FROM' => array (
@@ -205,6 +205,7 @@ while ( $row = $db->sql_fetchrow($raids_result) )
     	'U_VIEW_EVENT' => append_sid("{$phpbb_root_path}viewevent.$phpEx" , URI_EVENT . '='.  $row['event_id'] . '&amp;' . URI_DKPSYS . '=' . $row['event_dkpid']),
 		'POOL' => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '&lt;<i>Not Found</i>&gt;',
     	'NAME' => ( !empty($row['event_name']) ) ? $row['event_name'] : '&lt;<i>Not Found</i>&gt;',
+    	'EVENTCOLOR' => ( !empty($row['event_color']) ) ? $row['event_color'] : '#123456',
     	'NOTE' => ( !empty($row['raid_note']) ) ? $row['raid_note'] : '&nbsp;',
     	
     	'ATTENDEES' 	=> $row['attendees'],
