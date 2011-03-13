@@ -47,7 +47,7 @@ $defaultpool = 99;
 
 $dkpvalues [0] = $user->lang ['ALL'];
 $dkpvalues [1] = '--------';
-// select only those dkp pools where there are item drops
+// select dkp pools with drops
 $sql_array = array(
 	'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default', 
 	'FROM'		=> array( 
@@ -128,24 +128,14 @@ $query_by_pool = ($dkp_id != 0) ? true : false;
  **/
 $mode = request_var ( 'page', 'values' );
 
-$sort_order = array (
-	0 => array ('item_date desc', 'item_date' ), 
-	1 => array ('item_buyer', 'item_buyer desc' ), 
-	2 => array ('item_name', 'item_name desc' ), 
-	3 => array ('event_name', 'event_name desc' ), 
-	4 => array ('item_value desc', 'item_value' ) );
-$current_order = switch_order ($sort_order);
-
 $sql_array = array();
 switch ($mode)
 {
 	case 'values' :
-		$u_list_items = append_sid ( "{$phpbb_root_path}listitems.$phpEx" );
 		$sql_array['SELECT'] = ' COUNT(DISTINCT item_name) as itemcount ' ;
 		$s_history = false;
 		break;
 	case 'history' :
-		$u_list_items = append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=history' );
 		$sql_array['SELECT'] = ' COUNT(*) as itemcount ' ;
 		$s_history = true;
 		break;
@@ -167,16 +157,32 @@ $total_items = $db->sql_fetchfield ( 'itemcount', 1, $result);
 $db->sql_freeresult ($result);
 
 $start = request_var ( 'start', 0 );
-
 switch ($mode)
 {
 	case 'values' :
+		$u_list_items = append_sid ( "{$phpbb_root_path}listitems.$phpEx" );
 		$listitems_footcount = sprintf ( $user->lang ['LISTITEMS_FOOTCOUNT'], $total_items, $config ['bbdkp_user_ilimit'] );
 		break;
 	case 'history' :
+		$u_list_items = append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=history' );
 		$listitems_footcount = sprintf ( $user->lang ['LISTPURCHASED_FOOTCOUNT'], $total_items, $config ['bbdkp_user_ilimit'] );
 		break;
 }
+
+$sort_order = array (
+	0 => array ('item_date desc', 'item_date asc' ), 
+	1 => array ('item_name asc', 'item_name desc' ), 
+	2 => array ('event_name asc', 'event_name desc' ), 
+	3 => array ('item_value desc', 'item_value asc' ) );
+
+if ($mode == 'history')
+{
+	$sort_order[4] = array ('member_name asc', 'member_name desc' ); 	
+}
+
+$current_order = switch_order ($sort_order);
+
+
 
 if ($query_by_pool)
 {
@@ -198,7 +204,7 @@ switch ($mode)
 			'SELECT' => '
 				e.event_dkpid, e.event_name, 
 				i.item_id, i.item_name, i.member_id, i.item_gameid, i.item_date, 
-				i.raid_id, min(i.item_value) AS item_value,  i.item_decay, i.item_value - i.item_decay as item_total  ', 
+				i.raid_id, min(i.item_value) AS item_value,  i.item_decay, i.item_value - i.item_decay as item_total, item_zs  ', 
 			'FROM' => array (
 				EVENTS_TABLE => 'e', 
 				RAIDS_TABLE => 'r', 
@@ -215,8 +221,8 @@ switch ($mode)
 			'SELECT' => '
 				 e.event_dkpid, e.event_name,  
 				 i.raid_id, i.item_value, i.item_gameid, i.item_id, i.item_name, i.item_date, i.member_id, 
-				 i.item_decay, i.item_value - i.item_decay as item_total, 
-				 l.member_name, c.colorcode, c.imagename, c.class_id, a.image_female_small, a.image_male_small ', 
+				 i.item_decay, i.item_value - i.item_decay as item_total, item_zs,
+				 l.member_name, c.colorcode, c.imagename, c.class_id, l.member_gender_id, a.image_female_small, a.image_male_small ', 
     		'FROM' => array (
 				EVENTS_TABLE => 'e', 
 				RAIDS_TABLE => 'r', 
@@ -243,8 +249,7 @@ if ($query_by_pool)
 $sql = $db->sql_build_query ( 'SELECT', $sql_array );
 $items_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_ilimit'], $start );
 
-// Regardless of which listitem page they're on, we're essentially 
-// outputting the same stuff. Purchase History just has a buyer column.
+
 if (! $items_result)
 {
 	$user->add_lang ( array ('mods/dkp_admin' ) );
@@ -280,7 +285,7 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 
 	if ($mode == 'history')
 	{
-		$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+		$race_image = (string) (($item['member_gender_id']==0) ? $item['image_male_small'] : $item['image_female_small']);
 		
 		$template->assign_block_vars ( 'items_row', array (
 			'DATE' 			=> (! empty ( $item ['item_date'] )) ? date ( 'd.m.y', $item ['item_date'] ) : '&nbsp;', 
@@ -289,17 +294,20 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 			'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>Not Found</i>&gt;', 
 			'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item ['raid_id'] ), 
 			
-			'ITEM_ZS'      	=> ($row['item_zs'] == 1) ? ' checked="checked"' : '',
-			'ITEMVALUE' 	=> $row['item_value'],
-			'DECAYVALUE' 	=> $row['item_decay'],
-			'TOTAL' 		=> $row['item_total'],
+			'ITEM_ZS'      	=> ($item['item_zs'] == 1) ? ' checked="checked"' : '',
+			'ITEMVALUE' 	=> $item['item_value'],
+			'DECAYVALUE' 	=> $item['item_decay'],
+			'TOTAL' 		=> $item['item_total'],
 			'BUYER' 		=> $item ['member_name'], 
-			'CLASSCOLOR' 	=> $item['colorcode'], 
-			'CLASSIMAGE' 	=> $item['imagename'],          
-			'CSSCLASS' 		=> $config ['bbdkp_default_game'] . 'class' . $item ['class_id'],
+
 			'U_VIEW_BUYER' 	=> append_sid ( "{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $item ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $item ['event_dkpid'] ), 
 			'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
-			'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 		
+			'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
+		    
+			'CSSCLASS' 		=> $config ['bbdkp_default_game'] . 'class' . $item ['class_id'],
+			'CLASSCOLOR' 	=> $item['colorcode'], 
+			'CLASS_IMAGE' 	=> (strlen($item['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $item['imagename'] . ".png" : '',  
+			'S_CLASS_IMAGE_EXISTS' => (strlen($item['imagename']) > 1) ? true : false, 				
 		));	
 	}
 	else 
@@ -311,35 +319,21 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 			'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>Not Found</i>&gt;', 
 			'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item ['raid_id'] ), 
 			
-			'ITEM_ZS'      	=> ($row['item_zs'] == 1) ? ' checked="checked"' : '',
-			'ITEMVALUE' 	=> $row['item_value'],
-			'DECAYVALUE' 	=> $row['item_decay'],
-			'TOTAL' 		=> $row['item_total'],
+			'ITEM_ZS'      	=> ($item['item_zs'] == 1) ? ' checked="checked"' : '',
+			'ITEMVALUE' 	=> $item['item_value'],
+			'DECAYVALUE' 	=> $item['item_decay'],
+			'TOTAL' 		=> $item['item_total'],
 		));	
 		
 	}
 		
 	$number_items++; 
-	$item_value += $row['item_value'];
-	$item_decay += $row['item_decay'];
-	$item_total += $row['item_total'];		
+	$item_value += $item['item_value'];
+	$item_decay += $item['item_decay'];
+	$item_total += $item['item_total'];		
 
 }
 $db->sql_freeresult ( $items_result );
-
-$sortlink = array ();
-for($i = 0; $i <= 4; $i ++)
-{
-	if ($query_by_pool)
-	{
-		$sortlink [$i] = append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode .
-		 '&amp;o=' . $current_order ['uri'] [$i] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . $dkp_id );
-	} else
-	{
-		$sortlink [$i] = append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode .
-		 '&amp;o=' . $current_order ['uri'] [$i] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=All' );
-	}
-}
 
 // breadcrumbs menu                                      
 $navlinks_array = array (
@@ -356,15 +350,29 @@ foreach ( $navlinks_array as $name )
 
 $template->assign_vars ( array (
 	'F_LISTITEM' => $u_list_items, 
-	'O_DATE' => $sortlink [0], 
-	'O_BUYER' => $sortlink [1], 
-	'O_NAME' => $sortlink [2], 
-	'O_RAID' => $sortlink [3], 
-	'O_VALUE' => $sortlink [4], 
+	'O_DATE' => append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode . '&amp;o=' . $current_order ['uri'] [0] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ), 
+	'O_NAME' => append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode . '&amp;o=' . $current_order ['uri'] [3] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ),  
+	'O_RAID' => append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode . '&amp;o=' . $current_order ['uri'] [1] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ),
+	'O_VALUE' => append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode . '&amp;o=' . $current_order ['uri'] [2] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ), 
 	'S_HISTORY' => $s_history, 
+	'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
+	'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
+	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
+	'TOTAL_ITEMVALUE' => $item_value,
+	'TOTAL_ITEMDECAY' => $item_decay,
+	'TOTAL_ITEMTOTAL' => $item_total,
 	'LISTITEMS_FOOTCOUNT' => $listitems_footcount, 
 	'ITEM_PAGINATION' => $pagination ) 
 );
+
+if ($mode == 'history')
+{
+	$template->assign_vars ( array (
+	'O_BUYER' => append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode . '&amp;o=' . $current_order ['uri'] [4] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ))
+);
+	
+}
 
 $title = ($mode == 'history') ? $user->lang ['MENU_ITEMHIST'] : $user->lang ['MENU_ITEMVAL'];
 

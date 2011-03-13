@@ -370,7 +370,7 @@ $sql_array = array(
 	'SELECT'	=>	'r.raid_id, e.event_name, e.event_dkpid, r.raid_start, r.raid_note, 
 	ra.raid_value, ra.raid_decay, ra.time_bonus, ra.zerosum_bonus, 
    (ra.raid_value + ra.time_bonus + ra.zerosum_bonus - ra.raid_decay) as netearned ', 
-	'FROM'		=> array(
+	'FROM'	=> array(
 		EVENTS_TABLE			=> 'e',				
 		RAIDS_TABLE				=> 'r',
 		RAID_DETAIL_TABLE	=> 'ra',
@@ -410,8 +410,6 @@ while ( $raid = $db->sql_fetchrow($raids_result) )
 $db->sql_freeresult($raids_result);
 
 $total_attended_raids = memberraid_count($dkp_id, 0, $member_id, true); 
-
-
 
 /**********************************
 /***   Item purchase history  *****

@@ -362,9 +362,11 @@ $race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small']
 
 $template->assign_block_vars ( 'items_row', array (
 	'DATE' 			=> (! empty ( $row ['item_date'] )) ? $user->format_date($row['item_date']) : '&nbsp;', 
+
 	'COLORCODE'  	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
     'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
 	'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 				
+
 	'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
 	'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 			 				
 	'BUYER' 		=> (! empty ( $row ['member_name'] )) ? $row ['member_name'] : '&lt;<i>Not Found</i>&gt;', 

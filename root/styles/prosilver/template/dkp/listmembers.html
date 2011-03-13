@@ -90,17 +90,17 @@
 	    <td style="text-align: center;"><!-- IF members_row.RANK_HIDE == '1' --><em><!-- ENDIF --><a href="{members_row.RANK_SEARCH}">{members_row.RANK_NAME}</a><!-- IF members_row.RANK_HIDE == '1' --></em><!-- ENDIF --></td>
 	     <!-- IF ! S_QUERYBYPOOL --><td style="text-align: center;">&nbsp;({members_row.DKPNAME})</td><!-- ENDIF -->
 	     <!-- IF S_SHOWEPGP -->
-	    <td style="font-size :8pt; color: green; text-align: right;">{members_row.EP}</td>
-	    <td style="font-size :8pt; color: red; text-align: right;" >{members_row.GP}</td>
-		<td style="font-size :8pt; color: {members_row.DKPCOLOUR1}; text-align: right;">{members_row.ER}</td>
-	    <td style="font-size :8pt; color: {members_row.DKPCOLOUR2}; text-align: right;">{members_row.CURRENT}</td>   
+	    <td style="text-align: right;"><span class="positive">{members_row.EP}</span></td>
+	    <td style="text-align: right;" ><span class="negative">{members_row.GP}</span></td>
+		<td style="color: {members_row.DKPCOLOUR1}; text-align: right;">{members_row.ER}</td>
+	    <td style="color: {members_row.DKPCOLOUR2}; text-align: right;">{members_row.CURRENT}</td>   
 	     <!-- ELSE -->
-	    <td style="font-size :8pt; color: green; text-align: right;">{members_row.EARNED}</td>
-	    <td style="font-size :8pt; color: red; text-align: right;" >{members_row.SPENT}</td>
-		<td style="font-size :8pt; color: {members_row.DKPCOLOUR1}; text-align: right;">{members_row.ADJUSTMENT}</td>
-	    <td style="font-size :8pt; color: {members_row.DKPCOLOUR2}; text-align: right;">{members_row.CURRENT}</td>   
+	    <td style="text-align: right;"><span class="positive">{members_row.EARNED}</span></td>
+	    <td style="text-align: right;" ><span class="negative">{members_row.SPENT}</span></td>
+		<td style="color: {members_row.DKPCOLOUR1}; text-align: right;">{members_row.ADJUSTMENT}</td>
+	    <td style="color: {members_row.DKPCOLOUR2}; text-align: right;">{members_row.CURRENT}</td>   
 	     <!-- ENDIF -->        
-	    <td style="font-size :8pt; text-align: right;">{members_row.LASTRAID}</td>
+	    <td style="text-align: right;">{members_row.LASTRAID}</td>
 	    <td style="text-align: right;">{members_row.RAIDS_P1_DAYS}%</td>
 	    <td style="text-align: right;">{members_row.RAIDS_P2_DAYS}%</td>
 	    <td><input type="checkbox" name="compare_ids[]" value="{members_row.ID}" /></td>

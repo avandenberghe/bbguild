@@ -230,7 +230,7 @@
   <!-- BEGIN raids_row -->
     <tr class="bg1">
     <td style="width:10%;" >{raids_row.DATE}</td>
-    <td style="width:20%;">{raids_row.NAME}</td>
+    <td style="width:20%;"><img src="adm/images/glyphs/view.gif" width="16" height="16" alt="View" />&nbsp;<a href="{raids_row.U_VIEW_RAID}">{raids_row.NAME}</a></td>
     <td style="text-align:left; white-space:nowrap; width:20%;" >{raids_row.NOTE}</td>
     <!-- IF S_SHOWTIME || S_SHOWZS --><td style="text-align:right;">{raids_row.RAIDVAL}</td><!-- ENDIF -->
     <!-- IF S_SHOWTIME --><td style="text-align:right;">{raids_row.TIMEBONUS}</td><!-- ENDIF -->
