@@ -434,7 +434,7 @@ if (count ($memberarray))
 		{
 			$ep[$key]['ep'] = $member['ep']; 
 			$gp[$key]['gp'] = $member['gp']; 
-			$er[$key]['pr'] = $member['pr']; 
+			$pr[$key]['pr'] = $member['pr']; 
 		}
 		
 		$member_spent [$key] = $member ['member_spent']; //*
