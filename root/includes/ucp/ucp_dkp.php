@@ -74,19 +74,20 @@ class ucp_dkp
 					$show = false;
 					
 					//if there are no chars at all, show a message and do not show add button
-					$sql = 'select count(*) as mcount from ' . MEMBER_LIST_TABLE .' ';
+					$sql = 'select count(*) as mcount from ' . MEMBER_LIST_TABLE .' where member_rank_id != 90  ';
 					$result = $db->sql_query($sql, 0);
 					$mcount = (int) $db->sql_fetchfield('mcount');
 					if ( $mcount > 0)
 					{
 						$show = true;
 					}
-					$db->sql_freeresult ($dkp_result);
+					$db->sql_freeresult ($result);
 					
 					// build popup for adding new chars to user account, get only those that are not assigned yet.
 					// do not show if all accounts are assigned
 					// if someone picks a guildmember that does not belong to them then the guild admin can override it in acp
-					$sql = 'select member_id, member_name from ' . MEMBER_LIST_TABLE .' where phpbb_user_id = 0 order by member_name asc';
+					$sql = 'select member_id, member_name from ' . MEMBER_LIST_TABLE .' where 
+						phpbb_user_id = 0 and member_rank_id != 90 order by member_name asc';
 					$result = $db->sql_query($sql, 0);
 					$s_guildmembers = ' '; 
 					while ( $row = $db->sql_fetchrow($result) )
@@ -108,17 +109,22 @@ class ucp_dkp
 					
 					// make a listing of my own characters with dkp for each pool
 					$sql_array = array(
-					    'SELECT'    => 	'm.member_id, m.member_name, m.member_level, u.username, g.name as guildname, l.name as member_class , c.imagename, c.colorcode  ', 
+					    'SELECT'    => 	'm.member_id, m.member_name, m.member_level, u.username, g.name as guildname,
+					    				 m.member_gender_id, a.image_female_small, a.image_male_small, 
+					    				 l.name as member_class , c.imagename, c.colorcode  ', 
 					    'FROM'      => array(
 					        MEMBER_LIST_TABLE 	=> 'm',
 					        CLASS_TABLE  		=> 'c',
+					        RACE_TABLE  		=> 'a',
 					        BB_LANGUAGE			=> 'l', 
 					        GUILD_TABLE  		=> 'g',
 					        USERS_TABLE 		=> 'u', 
 					    	),
 					 
 					    'WHERE'     =>  "  l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
-										  AND (m.member_guild_id = g.id) AND (m.member_class_id = c.class_id) 
+										  AND (m.member_guild_id = g.id) 
+										  AND (m.member_class_id = c.class_id)
+										  AND m.member_race_id =  a.race_id  
 										  AND u.user_id = m.phpbb_user_id and u.user_id = " . $user->data['user_id']  ,
 						'ORDER_BY'	=> " m.member_name ",
 					    );
@@ -133,26 +139,37 @@ class ucp_dkp
 					while ( $row = $db->sql_fetchrow($members_result) )
 					{
 						++$member_count;
+						$raceimage = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
 						$template->assign_block_vars('members_row', array(
 							'COUNT'         => $member_count,
 							'NAME'          => $row['member_name'],
 							'LEVEL'         => $row['member_level'],
 							'CLASS'         => $row['member_class'],
 							'GUILD'         => $row['guildname'],
-							'CLASSIMGPATH'	=> (strlen($row['imagename']) > 1) ? $row['imagename'] . ".png" : '',
-							'COLORCODE' 	=> $row['colorcode']
+							'COLORCODE'  	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
+					        'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
+							'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
+					       	'RACE_IMAGE' 	=> (strlen($raceimage) > 1) ? $phpbb_root_path . "images/race_images/" . $raceimage . ".png" : '',  
+							'S_RACE_IMAGE_EXISTS' => (strlen($raceimage) > 1) ? true : false, 			 				
+						
 							)
 						); 
 						
 						$sql_array2 = array(
-						    'SELECT'    => ' d.dkpsys_id, d.dkpsys_name, sum(b.member_earned) as earned, 
-						    				 sum(b.member_spent) as spent, sum(b.member_adjustment) as adjustment, 
-	    									 sum(b.member_earned-b.member_spent+b.member_adjustment) AS current ', 
+						    'SELECT'    => ' d.dkpsys_id, d.dkpsys_name, 
+							m.member_earned - m.member_raid_decay + m.member_adjustment AS ep,
+						    m.member_spent - m.member_item_decay + ( ' . max(0, $config['bbdkp_basegp']) . ') AS gp, 
+        					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay - ( ' . max(0, $config['bbdkp_basegp']) . ') ) AS member_current,
+
+        					sum(case when m.member_spent - m.member_item_decay <= 0 
+							then m.member_earned - m.member_raid_decay + m.member_adjustment  
+							else round( (m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay) ,2) end) as pr  
+							', 
 						    'FROM'      => array(
-							        MEMBER_DKP_TABLE 	=> 'b', 
+							        MEMBER_DKP_TABLE 	=> 'm', 
 							        DKPSYS_TABLE 		=> 'd',
 						    	),
-						    'WHERE'     => " b.member_dkpid = d.dkpsys_id and b.member_id = " . $row['member_id'],
+						    'WHERE'     => " m.member_dkpid = d.dkpsys_id and m.member_id = " . $row['member_id'],
 							'GROUP_BY'  => " d.dkpsys_name " , 
 							'ORDER_BY'	=> " d.dkpsys_name ",
 						    );
@@ -164,16 +181,19 @@ class ucp_dkp
 							$template->assign_block_vars('members_row.dkp_row', array(
 								'DKPSYS'        => $row2['dkpsys_name'],
 								'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id'] ), 
-								'EARNED'       => $row2['earned'],
-								'SPENT'        => $row2['spent'],
-								'ADJUSTMENT'   => $row2['adjustment'],
-								'CURRENT'      => $row2['current'],
+								'EARNED'       => $row2['ep'],
+								'SPENT'        => $row2['gp'],
+								'PR'           => $row2['pr'],
+								'CURRENT'      => $row2['member_current'],
 								)
 							); 
 						}
     					$db->sql_freeresult ($dkp_result);	
 							
 					}
+					$template->assign_vars(array(
+						'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
+					));
 					
 					$db->sql_freeresult ($members_result);
 
