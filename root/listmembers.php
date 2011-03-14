@@ -609,8 +609,8 @@ foreach ( $memberarray as $key => $member )
 		'S_CLASS_IMAGE_EXISTS' =>  $member['class_image_exists'],
 		'RACE_IMAGE' 	=> $member['race_image'],
 		'S_RACE_IMAGE_EXISTS' =>  $member['race_image_exists'],
-		'DKPCOLOUR1' 	=> ($member ['member_adjustment'] >= 0) ? 'green' : 'red', 
-		'DKPCOLOUR2' 	=> ($row ['member_current'] >= 0) ? 'green' : 'red', 
+		'DKPCOLOUR1' 	=> ($member ['member_adjustment'] >= 0) ? 'positive' : 'negative', 
+		'DKPCOLOUR2' 	=> ($row ['member_current'] >= 0) ? 'positive' : 'negative', 
 		'ID' 			=> $member ['member_id'], 
 		'COUNT' 		=> $member ['count'], 
 		'NAME' 			=> $member ['rank_prefix'] . (($member ['member_status'] == '0') ? 

@@ -131,7 +131,7 @@ $sql_array = array(
 		m.member_earned,
 		m.member_adjustment, 
 		m.member_spent,
-		(m.member_earned + m.member_adjustment - m.member_spent) AS member_current,
+		(m.member_earned + m.member_adjustment - m.member_spent - ( ' . max(0, $config['bbdkp_basegp']) . ')  ) AS member_current,
 		(m.member_earned + m.member_adjustment) AS ep	,
 		m.member_raid_decay, 
 		(m.member_earned + m.member_adjustment - m.member_raid_decay) AS ep_net	,
@@ -198,14 +198,14 @@ $db->sql_freeresult($result);
 
 // make object
 $member = array(
-	'guildname'         => $row['guildname'],
-	'region'			=> $row['region'],  
-	'realm'				=> $row['realm'],  
-	'member_id'         => $row['member_id'],
-	'member_dkpname'	=> $row['dkpsys_name'],  
-	'member_name'       => $row['member_name'],
-	'member_firstraid'  => $row['member_firstraid'],
-	'member_lastraid'  	=> $row['member_lastraid'],
+	'guildname'            => $row['guildname'],
+	'region'			   => $row['region'],  
+	'realm'				   => $row['realm'],  
+	'member_id'            => $row['member_id'],
+	'member_dkpname'	   => $row['dkpsys_name'],  
+	'member_name'          => $row['member_name'],
+	'member_firstraid'     => $row['member_firstraid'],
+	'member_lastraid'  	   => $row['member_lastraid'],
 	'member_raid_value'    => $row['member_raid_value'],
 	'member_time_bonus'    => $row['member_time_bonus'],
 	'member_zerosum_bonus' => $row['member_zerosum_bonus'],
@@ -263,9 +263,11 @@ $template->assign_vars(array(
 	'PR'     		=> $member['pr'],
 
 	'TOTAL_DECAY'	=> $member['member_raid_decay'] -$member['member_item_decay'],
+	'C_TOTAL_DECAY'	=> ($member['member_raid_decay'] -$member['member_item_decay']) > 0 ? 'negative' : 'positive' ,
 
-	'NETCURRENT'    => $member['ep_net'] - $member['gp_net'],
-	'C_NETCURRENT'      => (($member['member_current'] - $member['member_raid_decay'] + $member['member_item_decay']) > 0) ? 'positive' : 'negative',
+
+	'NETCURRENT'    => $member['ep_net'] - $member['gp_net'] - max(0, $config['bbdkp_basegp']) ,
+	'C_NETCURRENT'      => (($member['member_current'] - $member['member_raid_decay'] + $member['member_item_decay'] - max(0, $config['bbdkp_basegp']) ) > 0   )  ? 'positive' : 'negative',
 	
 	'MEMBER_LEVEL'    => $member['member_level'],
 	'MEMBER_DKPID'    => $dkp_id,

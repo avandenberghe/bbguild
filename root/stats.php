@@ -168,7 +168,7 @@ $sql_array = array(
         ( m.member_spent - m.member_item_decay + ( ' . max(0, $config['bbdkp_basegp']) . ') )  /m.member_raidcount AS gp_per_raid, 
         ( m.member_spent - m.member_item_decay + ( ' . max(0, $config['bbdkp_basegp']) . ') )   / ((('.time().' - m.member_firstraid)+86400) / 86400) AS gp_per_day,
         
-        (m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
+        (m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay - ( ' . max(0, $config['bbdkp_basegp']) . ') ) AS member_current,
 
         case when m.member_spent - m.member_item_decay <= 0 
 		then m.member_earned - m.member_raid_decay + m.member_adjustment  
@@ -274,11 +274,11 @@ else
 
 
 
-/************************
+/***********************
  *  
  *  Class Statistics 
  *  
- **********/
+ **********************/
 
 $classes = array();
 

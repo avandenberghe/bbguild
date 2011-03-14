@@ -42,16 +42,15 @@
 <div class="forumbg forumbg-table">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-<table class="table1" width="100%" border="0" cellspacing="1" cellpadding="0">
+<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>
-	<th style=" width:40%; font-size :10pt; text-align: center;  color:white" colspan=6>{L_RAIDS}</th>
+	<th style=" width:40%; font-size :10pt; text-align: center;  color:white" colspan=5>{L_RAIDS}</th>
 	<th style=" width:20%; font-size :10pt; text-align: center; color:#77FF77" colspan=3>{L_EARNED}</th>
 	<th style=" width:20%; font-size :10pt; text-align: center; color:#FF8888" colspan=2>{L_SPENT}</th>
 	<th style=" width:20%; font-size :10pt; text-align: center; color:white" colspan=3>{L_CURRENT}</th>
 </tr>
 <tr>	  
-	<th style=" width:2%;">	
     <th style=" width:8%;"><a href="{O_NAME}">{L_NAME}</a></th>
     <th style=" width:6%; text-align:center;" ><a href="{O_FIRSTRAID}">{L_FIRST}</a></th>
     <th style=" width:6%; text-align:center;" ><a href="{O_LASTRAID}">{L_LAST}</a></th>
@@ -78,7 +77,6 @@
     <!-- ELSE -->
     <tr class= "bg2">
     <!-- ENDIF -->
-	<td></td>
     <td><a style="color:{stats_row.COLORCODE}" href="{stats_row.U_VIEW_MEMBER}"><strong>{stats_row.NAME}</strong></a></td>
     <td style="font-size :8pt; text-align: right;">{stats_row.FIRST_RAID}</td>
     <td style="font-size :8pt; text-align: right;">{stats_row.LAST_RAID}</td>
@@ -91,7 +89,7 @@
     <td style="font-size :8pt; color: red; text-align: right;">{stats_row.GP_PER_RAID}</td>
     <td style="font-size :8pt; color: red; text-align: right;"> {stats_row.GP_TOTAL}</td>
     <td style="font-size :8pt; text-align: center;"><strong>{stats_row.PR}</strong></td>
-    <td style="font-size :8pt; text-align: right;"><span class="stats_row.C_CURRENT}"><strong>{stats_row.CURRENT}</strong></span></td>
+    <td style="font-size :8pt; text-align: right;"><span class="{stats_row.C_CURRENT}"><strong>{stats_row.CURRENT}</strong></span></td>
   </tr>
 <!-- END stats_row -->
 </tbody>
