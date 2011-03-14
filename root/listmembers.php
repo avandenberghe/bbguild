@@ -207,9 +207,9 @@ $sql_array = array(
     'SELECT'    => 	'm.member_dkpid, d.dkpsys_name, m.member_id, m.member_status, m.member_lastraid, 
     				sum(m.member_raid_value) as member_raid_value, 
     				sum(m.member_earned) as member_earned, 
-    				sum(m.member_adjustment) as member_adjustment, 
+    				sum(m.member_adjustment) - ( ' . max(0, $config['bbdkp_basegp']) . ')  as member_adjustment, 
     				sum(m.member_spent) as member_spent, 
-					sum(m.member_earned + m.member_adjustment - m.member_spent) AS member_current,
+					sum(m.member_earned + m.member_adjustment - m.member_spent - ( ' . max(0, $config['bbdkp_basegp']) . ') ) AS member_current,
    					l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
        				r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix, 
        				l1.name AS member_class, c.class_id, 
@@ -824,7 +824,7 @@ function leaderboard($dkpsys_id, $query_by_pool)
 		
 		$sql_array = array(
 		    'SELECT'    => 	'm.member_dkpid , m.member_id, m.member_status, 
-    						(m.member_earned-m.member_spent+m.member_adjustment) AS member_current, l.member_name,
+    						(m.member_earned-m.member_spent+m.member_adjustment - ( ' . max(0, $config['bbdkp_basegp']) . ') ) AS member_current, l.member_name,
         					r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix ', 
 		 
 		    'FROM'      => array(
@@ -869,8 +869,8 @@ function leaderboard($dkpsys_id, $query_by_pool)
 			//dkp data per class
 			$dkprowarray= array (
 				'NAME' => $dkprow ['rank_prefix'] . (($dkprow ['member_status'] == '0') ? '<em>' . $dkprow ['member_name'] . '</em>' : $dkprow ['member_name']) . $dkprow ['rank_suffix'], 
-				'CURRENT' => $dkprow ['member_current'], //point color
-				'DKPCOLOUR' => ($dkprow ['member_current'] >= 0) ? 'style="font-size :8pt; color: green; text-align: right;"' : 'style="font-size :8pt; color: red; text-align: right;"', 
+				'CURRENT' => $dkprow ['member_current'], 
+				'DKPCOLOUR' => ($dkprow ['member_current'] >= 0) ? 'positive' : 'negative', 
 				'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}viewmember.$phpEx", '&amp;' . 
 						URI_NAMEID . '=' . $dkprow ['member_id'] . '&amp;' . 
 						URI_DKPSYS . '=' . $dkprow['member_dkpid'] ) );
