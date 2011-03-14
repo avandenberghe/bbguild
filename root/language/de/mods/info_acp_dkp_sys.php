@@ -29,7 +29,7 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_POOL_LIST'		=> 'DKP Pools',
 	'ACP_DKP_LOOTSYSTEM'	=> 'Loot Systeme',
 	'ACP_DKP_LOOTSYSTEM_EXPLAIN'	=> 'Hier kannst du das Itemsystem einstellen.',
-	'ACP_DKP_LOOTSYSTEMOPTIONS'	=> 'Loot Einstellungen'
+	'ACP_DKP_LOOTSYSTEMOPTIONS'	=> 'Loot Einstellungen',
 	'ACP_DKP_LOOTSYSTEMEXPLAIN'	=> 'Eine kurze übersicht von Lootsysteme',
 
 ));
