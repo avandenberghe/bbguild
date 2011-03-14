@@ -117,7 +117,7 @@ $template->assign_vars(array(
     'O_VALUE' => $current_order['uri'][1],
     'U_LIST_EVENTS' => append_sid("{$phpbb_root_path}listevents.$phpEx"), 
     'START' => $start,
-    'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events),
+    'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events , $config['bbdkp_user_elimit']),
     'EVENT_PAGINATION' => generate_pagination( append_sid("{$phpbb_root_path}listevents.$phpEx", '&amp;o='.$current_order['uri']['current']),
              $total_events, $config['bbdkp_user_elimit'], $start))
 );

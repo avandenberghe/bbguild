@@ -37,9 +37,9 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
-	'RAID_ON'	=> 'Raid vom %s in %s',
+	'RAID_ON'	=> 'Raid von %s in %s',
 	'NEWEST'	=> 'Neuester Raid',
-	'OLDEST'	=> 'Eltester Raid',
+	'OLDEST'	=> 'Ältester Raid',
 	'RAIDSTART'	=> 'Raid Start',
 	'RAIDEND'	=> 'Raid Ende',
 	'RAIDDURATION'	=> 'Dauer',
