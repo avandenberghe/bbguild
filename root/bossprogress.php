@@ -104,7 +104,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 			'killdate' => $row2 ['killdate'],
 		    'counter' => $row2['counter'], 
 			'killed' => $row2 ['killed'], 
-			'url' => $user->lang[strtoupper($config['bbdkp_default_game']).'_BASEURL'] . $row2 ['webid']
+			'url' => sprintf($user->lang[strtoupper($config['bbdkp_default_game']).'_BASEURL'], $row2 ['webid']),
 		 ); 
 		 
 		 if ($row2 ['killed'] == 1)
