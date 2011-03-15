@@ -7,9 +7,8 @@
  * @version $Id$
  * 
  */
-
-define('IN_INSTALL', true);
 define('UMIL_AUTO', true);
+define('IN_PHPBB', true);
 define('IN_INSTALL', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : '../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
@@ -42,7 +41,7 @@ if (!file_exists($phpbb_root_path . 'install/updatedkp.' . $phpEx))
 }
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.1.3';
+$mod_name = 'bbDKP 1.2 Updater';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -81,7 +80,7 @@ $logo_img = 'install/logo.jpg';
 */
 
 /*
- * bbDKP TABLE PREFIX
+ * old bbDKP table prefix
  */
 $bbdkp_table_prefix = "bbeqdkp_";
 
@@ -96,31 +95,31 @@ $game = request_var('game', '');
 switch ($game)
 {
 		case 'aion':
-			include($phpbb_root_path .'install/gamesupd/install_aion.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/update_aion.' . $phpEx);
 			break;
     	case 'daoc':
-			include($phpbb_root_path .'install/gamesupd/install_daoc.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/update_daoc.' . $phpEx);
 			break; 
 		case 'eq':
-			include($phpbb_root_path .'install/gamesupd/install_eq.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/update_eq.' . $phpEx);
 			break; 
 		case 'eq2':
-			include($phpbb_root_path .'install/gamesupd/install_eq2.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/update_eq2.' . $phpEx);
 			break; 
 		case 'FFXI':
-			include($phpbb_root_path .'install/gamesupd/install_ffxi.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/update_ffxi.' . $phpEx);
 			break; 
 		case 'lotro':
-			include($phpbb_root_path .'install/gamesupd/install_lotro.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/update_lotro.' . $phpEx);
 			break;
 		case 'vanguard':
-			include($phpbb_root_path .'install/gamesupd/install_vanguard.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/update_vanguard.' . $phpEx);
 			break; 
 		case 'warhammer':
-			include($phpbb_root_path .'install/gamesupd/install_warhammer.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/update_warhammer.' . $phpEx);
 			break; 
 		case 'wow':				    
-			include($phpbb_root_path .'install/gamesupd/install_wow.' . $phpEx);
+			include($phpbb_root_path .'install/gamesupd/update_wow.' . $phpEx);
 			break;
 		default :
 			break; 
@@ -253,9 +252,9 @@ $versions = array(
             
             array($bbdkp_table_prefix . 'items', array(
                     'COLUMNS'        => array(
-                        'item_id'         => array('UINT', NULL, 'auto_increment'),
-                        'item_dkpid'      => array('USINT', 0),
-                        'item_name'       => array('VCHAR_UNI:255', ''),
+                       'item_dkpid'       => array('USINT', 0),
+                       'item_id'          => array('UINT', NULL, 'auto_increment'),
+                       'item_name'        => array('VCHAR_UNI:255', ''),
 						'item_buyer'      => array('VCHAR_UNI:255', ''),
 						'raid_id'         => array('UINT', 0),
 						'item_value'      => array('DECIMAL:11', 0.00),
@@ -466,7 +465,7 @@ $versions = array(
 					'rank_suffix'	=> '',
 				 ),
 				 
-				// dont hide the Out rank by default
+				// dont show the Out rank by default
 	       		array(
 	       			'guild_id'	=> 0,	
 					'rank_id'	=> 99,
@@ -628,7 +627,8 @@ $versions = array(
              */
             array('acp', 'ACP_CAT_DKP', 'ACP_DKP_ITEM'),
             
-            // add raid pools
+            // item modules
+            // @todo search and viewitem
             array('acp', 'ACP_DKP_ITEM', array(
            		 'module_basename' => 'dkp_item',
             	 'modes'           => array('additem', 'listitems', 'search', 'viewitem'),
@@ -865,9 +865,9 @@ $versions = array(
           	
             
 
-          // adding image, class color code column to class table
-          // the class css will dissapear since all is now dynamic
-         'table_column_add' => array(
+        // adding image, class color code column to class table
+        // the class css will dissapear since all is now dynamic
+        'table_column_add' => array(
             	array($bbdkp_table_prefix .'classes', 'imagename',  array('VCHAR:255', 0)),
             	array($bbdkp_table_prefix .'classes', 'colorcode',  array('VCHAR:10', '')),
             ),
@@ -917,82 +917,100 @@ $versions = array(
 	     
 		),
 
-		'1.1.3'    => array(
+		'1.2'    => array(
 		
-		  	'config_add' => array(
-			        //Lootsystem in use
-		        	array('bbdkp_lootsystem', 0, true),
-	    	),
-	     					
-	    	//remove this
-	    	'table_remove' => array($bbdkp_table_prefix . 'roles'), 
-		
-            // new event_id column added to raid table
-            // memberid added to items table
-            'table_column_add' => array(
-	            array($bbdkp_table_prefix . 'raids' , 'event_id', array('UINT', 0)),
-	            array($bbdkp_table_prefix . 'items' , 'member_id', array('UINT', 0)),
-	            ),            
-            ),
-
-            //  removing obsolete indexes
-	    	'table_index_remove' => array(
-            	array($bbdkp_table_prefix . 'classes', 'class_id', 'class_id'),
-            	array($bbdkp_table_prefix . 'items', 'item_dkpid' ), 
-            	array($bbdkp_table_prefix . 'items', 'item_dkpid' ), 
-	    	), 
-	    	            
-	    	// should be unique
-	    	'table_index_add' => array(
-				array($bbdkp_table_prefix .'items', 'raid_id' ),
-				array($bbdkp_table_prefix . 'classes', 'class_id', 'class_id'),
-				array($bbdkp_table_prefix .'raids', 'event_id' ),
-				
-	    	), 
-
-	    	// removing obsolete columns
-	    	'table_column_remove' => array(
-            	array($bbdkp_table_prefix .'items', 'item_dkpid' ), 
-            	array($bbdkp_table_prefix .'items', 'item_buyer' ), 
-            	array($bbdkp_table_prefix .'classes', 'class_name'),
-            ),
-            
-			// module adding
-         	'module_add' => array(
-			 	array('acp', 'ACP_DKP_RAIDS', array(
-	          		 'module_basename' => 'dkp_sys',
-	            	 'modes'           => array('lootsystem', 'lootsystem_options', 'lootsystem_explain' ))
-	            	 ),
-				
-	            // Add the UCP category in which you link bbDKP memberids to your phpbb account
-				array('ucp', 0, 'UCP_DKP'),
-	         	
-				// Add one UCP module to the new category
-				array('ucp', 'UCP_DKP', array(
-						'module_basename'   => 'dkp',
-						'module_langname'   => 'UCP_DKP_CHARACTERS',
-						'module_mode'       => 'characters',
-						'module_auth'       => '',
-					),
-				),	         
-		        
-			),
-	         
-	         // adding event color & image
-         	'table_column_add' => array(
-            	array($bbdkp_table_prefix .'events', 'event_imagename',  array('VCHAR:255', '')),
-            	array($bbdkp_table_prefix .'events', 'event_color',  array('VCHAR:10', '')),  
-            	array($bbdkp_table_prefix .'memberlist', 'phpbb_user_id',  array('INT', 0)),  
-            ),
-                     
 			'custom' => array( 
 				'gameupdate', 
 				'tablerename', 
-				'bbdkp_caches'
+				'bbdkp_caches',
+				'tableupdates_12'
 			),
+			
+			//parameters
+        // add new parameters
+        'config_add' => array(
+			// starting dkp for new users, moved from raidtracker
+			array('bbdkp_starting_dkp', '15.00', true), 
+			//epgp
+			array('bbdkp_epgp', 0, true),	
+			array('bbdkp_basegp', 100, true),
+			//decay			
+			array('bbdkp_decay', 0, true),
+			array('bbdkp_raiddecaypct', 5, true),	
+			array('bbdkp_itemdecaypct', 5, true),			
+			array('bbdkp_decayfrequency', 1, true),
+			array('bbdkp_decayfreqtype', 1, true),
+			//time
+			array('bbdkp_timebased', 0, true),
+			array('bbdkp_dkptimeunit', 5, true),
+			array('bbdkp_timeunit', 30, true),
+			array('bbdkp_standardduration', 1, true),
+			
+			//zerosum
+			array('bbdkp_zerosum', 0, true),
+			array('bbdkp_bankerid', 0, true),
+			array('bbdkp_zerosumdistother', 0, true),
+	        ),
 		
-		),
+	     'table_row_insert'	=> array(
+			
+		 array($table_prefix . 'bbdkp_member_ranks', 
+			 array(
+				// operating rank, undeletable rank, made for guildbank
+	       		array(
+	       			'guild_id'	=> 1,	
+					'rank_id'	=> 90,
+					'rank_name'	=> 'Operating',
+					'rank_hide'	=>  0,
+					'rank_prefix'	=> '',
+					'rank_suffix'	=> '',
+				 ),
+				 
+				)
+			), 
+			
+		 // create the guildbank character
+		 array($table_prefix . 'bbdkp_memberlist', 
+			 array(
+	       		array(
+	       			'member_name' 		=> 'Guildbank', 
+					'member_status'		=> 1,
+					'member_level'		=> 1,
+					'member_race_id'	=> 0,
+					'member_class_id'	=> 0,
+					'member_rank_id'	=> 90,
+	       			'member_comment'	=> 'The guildbank toon',
+	       			'member_joindate'	=> time(),
+	       			'member_outdate'	=> '1893456000',
+	       			'member_guild_id'	=> 1,
+	       			'member_gender_id'	=> 1,
+	       			'phpbb_user_id'		=> $user->data['user_id'],
+				 ),
+			))
+		),    
+	        
+
+		// new modules 
+        'module_add' => array(
 		
+            // add new editraid module
+            array('acp', 'ACP_DKP_RAIDS', array(
+           		 'module_basename' => 'dkp_raid',
+            	 'modes'           => array('editraid'),
+        		),
+            ),   
+				
+            // Add the UCP category in which you link bbDKP memberids to your phpbb account
+			array('ucp', 0, 'UCP_DKP'),
+	         	
+			// Add one UCP module to the new category
+			array('ucp', 'UCP_DKP', array(
+					'module_basename'   => 'dkp',
+					'module_langname'   => 'UCP_DKP_CHARACTERS',
+					'module_mode'       => 'characters',
+					'module_auth'       => '',
+			),),	         
+		  )),
 		
 );
 
@@ -1496,7 +1514,7 @@ function gameupdate($action, $version)
 
 					break;
 				
-				case '1.1.3':	
+				case '1.2':	
 					$game = request_var('game', '');
 					switch ($game)
 					{
@@ -1630,7 +1648,7 @@ function tablerename($action, $version)
 		
 			switch ($version)
 			{
-				case '1.1.3':
+				case '1.2':
 					// renaming tables
 					if ($umil->table_exists($bbdkp_table_prefix . 'adjustments'))
 					{
@@ -1861,10 +1879,252 @@ function tablerename($action, $version)
 					'result' => 'SUCCESS');
 			break;
 	}
-		
+	
 	 
 }
 
+/****
+ * table update script for 1.2
+ * not tested on nonmysql db
+ */
+function tableupdates_12($action, $version)
+{
+	
+	global $user, $umil, $config, $db, $table_prefix, $umil, $bbdkp_table_prefix; 
+	switch ($action)
+	{
+		case 'install' :
+		case 'update' :
+			/**
+			 * adjustments table, new key
+			 */ 
+			$umil->table_index_add($table_prefix . 'bbdkp_adjustments', 'member_id', array('member_id', 'adjustment_dkpid'));
+			
+			/**
+			 * class table
+			 */ 
+			// make new unique (no umil syntax)
+			$sql= "CREATE UNIQUE INDEX class_id ON " . $table_prefix . 'bbdkp_classes' . " (class_id) ";
+			$db->sql_query($sql);
+			
+			/**
+			 * dkpsystem table
+			 */ 			
+			// make new unique (no umil syntax)
+			$sql= "CREATE UNIQUE INDEX dkpsys_name ON " . $table_prefix . 'bbdkp_dkpsystem' . " (dkpsys_name) ";
+			$db->sql_query($sql);
+						
+			/**
+			 * events table
+			 */ 
+			// adding event color & image
+         	$umil->table_column_add(array(
+            	array($table_prefix .'bbdkp_events', 'event_imagename',  array('VCHAR:255', '')),
+            	array($table_prefix .'bbdkp_events', 'event_color',  array('VCHAR:8', '')),  
+            ));
+            
+            /**
+             * lootsystem table
+             */
+			//remove this table, we moved everything to the $config array
+            $umil->table_remove($bbdkp_table_prefix . 'lootsystem');
+
+            /**
+			 * language table
+			 */
+			// remove old unique (no umil syntax)
+			$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX unq_mtch";
+			$db->sql_query($sql);
+			// make new unique (no umil syntax)
+			$sql= "CREATE UNIQUE INDEX attribute_id ON " . $table_prefix . 'bbdkp_language' . " (attribute_id, language, attribute) ";
+			$db->sql_query($sql);
+			            
+			/**
+			 * Member DKP table
+			 */ 
+			// adding raid value, time bonus, zero sum bonus, amortisation columns
+         	$umil->table_column_add(array(
+            	array($table_prefix .'bbdkp_memberdkp', 'member_raid_value',  array('DECIMAL:11', 0)),
+            	array($table_prefix .'bbdkp_memberdkp', 'member_time_bonus', array('DECIMAL:11', 0)),
+            	array($table_prefix .'bbdkp_memberdkp', 'member_zerosum_bonus', array('DECIMAL:11', 0)),
+            	array($table_prefix .'bbdkp_memberdkp', 'member_raid_decay', array('DECIMAL:11', 0)),
+            	array($table_prefix .'bbdkp_memberdkp', 'member_item_decay', array('DECIMAL:11', 0)), 
+            ));            
+            
+            // transfer all previously earned to raidvalue bonus
+			$sql = "UPDATE " . $table_prefix ."bbdkp_memberdkp SET member_raid_value = member_earned";
+			$db->sql_query($sql);            
+
+			/**
+			 * members table
+			 */ 
+			// add the phpbb userid for the raidplanner - ucp account integration
+         	$umil->table_column_add(array(
+            	array($table_prefix .'bbdkp_memberlist', 'phpbb_user_id',  array('UINT', 0)),  
+            ));
+			
+			/**
+			 * race table
+			 */ 
+			// add event color & image
+         	$umil->table_column_add(array(
+            	array($table_prefix .'bbdkp_races', 'image_female_small',  array('VCHAR:255', '')),
+            	array($table_prefix .'bbdkp_races', 'image_male_small',  array('VCHAR:255', '')),  
+            ));
+
+			/**
+			 * Raid Detail table
+			 */
+			// attendee table renamed to phpbb_bbdkp_raid_detail
+			$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_raid_attendees TO ' . $table_prefix . 'bbdkp_raid_detail ';
+			$db->sql_query($sql);
+            
+			// add 3 new columns to raiddetail table
+			$umil->table_column_add(array(
+			    array($table_prefix .'bbdkp_raid_detail', 'raid_value', array('DECIMAL:11', 0.00)),
+			    array($table_prefix .'bbdkp_raid_detail', 'time_bonus', array('DECIMAL:11', 0.00)),
+			    array($table_prefix .'bbdkp_raid_detail', 'zerosum_bonus', array('DECIMAL:11', 0.00)),
+			    array($table_prefix .'bbdkp_raid_detail', 'raid_decay', array('DECIMAL:11', 0.00)),
+			));            
+            
+			// remove member_name from raiddetail table
+            $umil->table_column_remove(array(
+            	array($table_prefix .'bbdkp_raid_detail', 'member_name' ), 
+            ));
+            
+			// update the raid detail table, get raid value from header raid table
+			$sql = "UPDATE " . $table_prefix ."bbdkp_raid_detail rd 
+					INNER JOIN " . $table_prefix ."bbdkp_raids r
+					ON rd.raid_id =  r.raid_id
+					SET rd.raid_value = r.raid_value";
+			$db->sql_query($sql);
+            
+			/**
+			 * Raid Items table
+			 */
+			// items table renamed to phpbb_bbdkp_raid_items
+			$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_items TO ' . $table_prefix . 'bbdkp_raid_items ';
+			$db->sql_query($sql);
+			
+			// remove item_dkpid from items table
+            $umil->table_column_remove(array(
+            	array($table_prefix .'bbdkp_raid_items', 'item_dkpid' ), 
+            ));
+            
+			// add 3 new columns to items table
+			$umil->table_column_add(array(
+			    array($table_prefix .'bbdkp_raid_items', 'member_id', array('UINT', 0)),
+			    array($table_prefix .'bbdkp_raid_items', 'item_decay', array('DECIMAL:11', 0.00)),
+			    array($table_prefix .'bbdkp_raid_items', 'item_zs', array('BOOL', 0)),
+			));
+			
+			 // update the items table to have member_id
+			 // alternative syntax
+			 // $sql = "UPDATE " . $table_prefix ."bbdkp_raid_items ri 
+			 // SET member_id = (SELECT member_id FROM " . $table_prefix ."bbdkp_memberlist l WHERE l.member_name =  ri.item_buyer)";
+			$sql = "UPDATE " . $table_prefix ."bbdkp_raid_items ri 
+					INNER JOIN " . $table_prefix ."bbdkp_memberlist l
+					ON l.member_name =  ri.item_buyer
+					SET ri.member_id = l.member_id" ;
+			$db->sql_query($sql);
+			
+			// what if there are orphan items with no matching member in the member list ?
+			$sql = "SELECT count(*) as nomatch FROM " . $table_prefix ."bbdkp_raid_items where member_id = 0";
+			$result = $db->sql_query ( $sql );
+          	$nomatch = (int) $db->sql_fetchfield('nomatch');
+          	$db->sql_freeresult ( $result );
+          	if($nomatch> 0)
+          	{
+          		//trigger_error('orphan loot found !');
+          		// burn it!  
+				$sql = "DELETE FROM " . $table_prefix ."bbdkp_raid_items where member_id = 0"; 
+				$db->sql_query($sql);
+          	}
+			
+			// now remove column from items table
+            $umil->table_column_remove(array(
+            	array($table_prefix .'bbdkp_raid_items', 'item_buyer' ), 
+            ));
+			
+			//make new index on raid_items table
+			$sql= "CREATE INDEX raid_id ON " . $table_prefix . 'bbdkp_raid_items' . " (raid_id) ";
+			$db->sql_query($sql);	
+			
+			/**
+			 * Raid table
+			 */
+            //add new columns
+			$umil->table_column_add(array(
+			    array($table_prefix .'raids', 'raid_end', array('TIMESTAMP', 0)),
+			    array($table_prefix .'raids', 'event_id', array('UINT', 0)),
+			    ));   
+			
+			// add foreign nonunique key event_id 
+			$umil->table_index_add($table_prefix .'raids', 'event_id', 'event_id');			    
+			
+			// populate the event_id, we have to match raid_name to event_name oO !
+			$sql = "UPDATE " . $table_prefix ."bbdkp_raids r 
+					INNER JOIN " . $table_prefix ."bbdkp_events e
+					ON r.raid_name =  e.event_name
+					SET r.event_id = e.event_id" ;
+			$db->sql_query($sql);
+			
+			// any unlinked raids found ? make a new event and link them to that.. 
+			$sql = "SELECT raid_dkpid, count(*) as unlinked from " . $table_prefix ."bbdkp_raids WHERE event_id = 0 GROUP BY raid_dkpid";
+	        $result = $db->sql_query($sql);
+	        while ( $row = $db->sql_fetchrow($result) )
+	        {
+	            $nomatch = (int) $row['unlinked'];
+	            $dkpid = (int) $row['raid_dkpid'];
+	            if ($nomatch > 0)
+	          	{
+	          		//make new event
+	          		 $query = $db->sql_build_array('INSERT', array(   
+	                'event_dkpid'   =>  $dkpid,   
+	                'event_name'    =>  'Unknown Event update 1.2',   
+	                'event_color'	=>  '#FF77FF',  
+	                'event_value'   =>   0, 
+	                'event_added_by' =>  $user->data['username'], 
+	                ));
+					$db->sql_query('INSERT INTO ' . $table_prefix . 'bbdkp_events ' . $query);
+					// get new eventid
+					$event_id = $db->sql_nextid();
+	          		// set all unmatched raids to this eventid
+		            $sql='UPDATE ' . $table_prefix ."bbdkp_raids SET event_id=" . $event_id . " WHERE raid_dkpid = " . $dkpid;
+	          		$db->sql_query($sql);
+	          	
+	          	} 
+	        }
+	        $db->sql_freeresult($result);
+	        
+	        // rename raid_date to raid_start
+			$sql = "ALTER TABLE " . $table_prefix ."bbdkp_raids CHANGE raid_date raid_start int(11) unsigned NOT NULL DEFAULT '0'";
+	        $db->sql_query($sql);
+	        
+	        // assume each raid lasted two hours (3600*2)
+	        $sql='UPDATE ' . $table_prefix ."bbdkp_raids SET raid_end = raid_start + 7200 ";
+          	$db->sql_query($sql);
+	        
+			// now get rid of obsolete columns - and keys
+            $umil->table_column_remove(array(
+            	array($table_prefix .'bbdkp_raids', 'raid_dkpid' ),
+            	array($table_prefix .'bbdkp_raids', 'raid_value' ),
+            	array($table_prefix .'bbdkp_raids', 'raid_name' ), 
+            ));
+			
+			/**
+             * transactions table
+             */
+			//remove this table 
+            $umil->table_remove($bbdkp_table_prefix . 'transactions');
+
+            // end
+            
+			break;
+	}
+	
+		
+}
 
 
 

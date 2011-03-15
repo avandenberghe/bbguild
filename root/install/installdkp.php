@@ -54,7 +54,7 @@ if ($umil->module_exists('acp', false, 'DKP'))
 }
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.2';
+$mod_name = 'bbDKP 1.2 Clean Installer';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -712,7 +712,7 @@ $versions = array(
              */
             array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS'),
             
-            // add raid pools - lootsystem
+            // add raid pools 
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_sys',
             	 'modes'           => array('adddkpsys', 'listdkpsys' ),
@@ -733,10 +733,10 @@ $versions = array(
         		),
             ),            
             
-            // add items
+            // add item modules
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_item',
-            	 'modes'           => array('listitems', 'edititem'),
+            	 'modes'           => array('listitems', 'edititem', 'search', 'viewitem'),
         		),
             ),
             

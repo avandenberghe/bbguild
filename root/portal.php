@@ -20,10 +20,15 @@ include($phpbb_root_path . 'common.' . $phpEx);
 
 if(!defined("EMED_BBDKP"))
 {
-    trigger_error('bbDKP is currently disabled.', E_USER_WARNING); 
+    trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING); 
+    
 }
-
-
+if (!isset($config['bbdkp_default_game']))
+{
+	// THE CONFIGS AND DATABASE TABLES AREN'T INSTALLED, EXIT
+    trigger_error('GENERAL_ERROR', E_USER_WARNING); 
+    
+}
 // Start session management
 $user->session_begin();
 $auth->acl($user->data);
