@@ -887,7 +887,7 @@ $versions = array(
           array('acp', 'ACP_DKP_MEMBER', array(
            		 'module_basename' => 'dkp_game',
             	 'modes'           => array('listgames', 'addfaction', 'addrace', 'addclass'),
-        		)),        
+        		)),
          ),
                      
             
@@ -913,9 +913,9 @@ $versions = array(
 		
 			'custom' => array( 
 				'tablerename', 
+				'tableupdates_12', 
 				'gameupdate', 
-				'bbdkp_caches',
-				'tableupdates_12'
+				'bbdkp_caches'
 			),
 			
 			//parameters
@@ -991,7 +991,7 @@ $versions = array(
             	 'modes'           => array('editraid'),
         		),
             ),   
-				
+            
             // add item modules
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_item',
@@ -1535,7 +1535,7 @@ function gameupdate($action, $version)
 							$sql_ary [] = array ('class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_Mage_small');   
 							$sql_ary [] = array ('class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_Priest_small');  
 							$sql_ary [] = array ('class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_Death_Knight_small'); 
-							$db->sql_multi_insert ( $bbdkp_table_prefix . 'classes', $sql_ary );
+							$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
 							
 							
 							$db->sql_query ( 'DELETE FROM ' . $table_prefix . "bbdkp_language where attribute = 'class'" );
@@ -1613,7 +1613,7 @@ function gameupdate($action, $version)
 							$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
 							$db->sql_multi_insert ($table_prefix . 'bbdkp_language', $sql_ary);
 							unset ( $sql_ary );
-						break;
+							break;
 					}
 					
 
@@ -1939,8 +1939,12 @@ function tableupdates_12($action, $version)
 				$umil->module_remove('acp','ACP_DKP_ITEM','ACP_DKP_ITEM_VIEW');
 			}
 			
-			$umil->module_remove('acp', 'ACP_BOARD_CONFIGURATION', 'ACP_BOARD_SETTINGS');
-					
+			if($umil->module_exists('acp', 0,'ACP_DKP_ITEM'))
+			{
+				$umil->module_remove('acp',0 ,'ACP_DKP_ITEM');
+			}
+
+			
 			/**
 			 * adjustments table, new key
 			 */ 
@@ -2006,7 +2010,7 @@ function tableupdates_12($action, $version)
 			/**
 			 * race table
 			 */ 
-			// add event color & image
+			// add image
          	$umil->table_column_add(array(
             	array($table_prefix .'bbdkp_races', 'image_female_small',  array('VCHAR:255', '')),
             	array($table_prefix .'bbdkp_races', 'image_male_small',  array('VCHAR:255', '')),  
