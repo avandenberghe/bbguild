@@ -912,8 +912,8 @@ $versions = array(
 		'1.2'    => array(
 		
 			'custom' => array( 
-				'gameupdate', 
 				'tablerename', 
+				'gameupdate', 
 				'bbdkp_caches',
 				'tableupdates_12'
 			),
@@ -992,6 +992,13 @@ $versions = array(
         		),
             ),   
 				
+            // add item modules
+            array('acp', 'ACP_DKP_RAIDS', array(
+           		 'module_basename' => 'dkp_item',
+            	 'modes'           => array('listitems', 'edititem', 'search', 'viewitem'),
+        		),
+            ),
+
             // Add the UCP category in which you link bbDKP memberids to your phpbb account
 			array('ucp', 0, 'UCP_DKP'),
 	         	
@@ -1511,11 +1518,11 @@ function gameupdate($action, $version)
 					switch ($game)
 					{
 						case 'wow':
-							$sql = 'UPDATE  ' . $bbdkp_table_prefix . "bb_language  SET attribute_id = '10' where attribute='race' and attribute_id='9'" ;
+							$sql = 'UPDATE  ' . $table_prefix . "bbdkp_language  SET attribute_id = '10' where attribute='race' and attribute_id='9'" ;
 							$db->sql_query($sql);
 							
 							//reinsert classes with correct color
-							$db->sql_query ( 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'classes' );
+							$db->sql_query ( 'TRUNCATE TABLE ' . $table_prefix . 'bbdkp_classes' );
 							$sql_ary = array ();
 							$sql_ary [] = array ('class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#999', 'imagename' => 'wow_Unknown_small');   
 							$sql_ary [] = array ('class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_Warrior_small');   
@@ -1531,7 +1538,7 @@ function gameupdate($action, $version)
 							$db->sql_multi_insert ( $bbdkp_table_prefix . 'classes', $sql_ary );
 							
 							
-							$db->sql_query ( 'DELETE FROM ' . $bbdkp_table_prefix . "bb_language where attribute = 'class'" );
+							$db->sql_query ( 'DELETE FROM ' . $table_prefix . "bbdkp_language where attribute = 'class'" );
 							unset ( $sql_ary );
 							// reinsert class language table to correct id
 							// classes in en
@@ -1573,8 +1580,39 @@ function gameupdate($action, $version)
 							$sql_ary[] = array( 'id' => 680 , 'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Priester' ,  'name_short' =>  'Priester' );
 							$sql_ary[] = array( 'id' => 681 , 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Todesritter' ,  'name_short' =>  'Todesritter' );
 							
-							$db->sql_multi_insert ( $bbdkp_table_prefix . 'bb_language', $sql_ary );
+							$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+							unset ( $sql_ary );
 							
+							// 2 new races
+							$db->sql_query ('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
+							$sql_ary = array ();
+							$sql_ary [] = array ('race_id' => 0, 'race_faction_id' => 0, 'image_female_small' => ' ',  'image_male_small' => ' '  ); //Unknown
+							$sql_ary [] = array ('race_id' => 1, 'race_faction_id' => 1, 'image_female_small' => 'wow_human_female_small',  'image_male_small' => 'wow_human_male_small'  ); //Human
+							$sql_ary [] = array ('race_id' => 2, 'race_faction_id' => 2 , 'image_female_small' => 'wow_orc_female_small',  'image_male_small' => 'wow_orc_male_small' ); //Orc
+							$sql_ary [] = array ('race_id' => 3, 'race_faction_id' => 1 , 'image_female_small' => 'wow_dwarf_female_small',  'image_male_small' => 'wow_dwarf_male_small' ); //Dwarf
+							$sql_ary [] = array ('race_id' => 4, 'race_faction_id' => 1 , 'image_female_small' => 'wow_nightelf_female_small',  'image_male_small' => 'wow_nightelf_male_small' ) ; //Night Elf
+							$sql_ary [] = array ('race_id' => 5, 'race_faction_id' => 2 , 'image_female_small' => 'wow_scourge_female_small',  'image_male_small' => 'wow_scourge_male_small' ); //Undead
+							$sql_ary [] = array ('race_id' => 6, 'race_faction_id' => 2 , 'image_female_small' => 'wow_tauren_female_small',  'image_male_small' => 'wow_tauren_male_small' ); //Tauren
+							$sql_ary [] = array ('race_id' => 7, 'race_faction_id' => 1 , 'image_female_small' => 'wow_gnome_female_small',  'image_male_small' => 'wow_gnome_male_small' ); //Gnome
+							$sql_ary [] = array ('race_id' => 8, 'race_faction_id' => 2 , 'image_female_small' => 'wow_troll_female_small',  'image_male_small' => 'wow_troll_male_small' ); //Troll
+							$sql_ary [] = array ('race_id' => 9, 'race_faction_id' => 2 , 'image_female_small' => 'wow_goblin_female_small',  'image_male_small' => 'wow_goblin_male_small' ); //Goblin
+							$sql_ary [] = array ('race_id' => 10, 'race_faction_id' => 2 , 'image_female_small' => 'wow_bloodelf_female_small',  'image_male_small' => 'wow_bloodelf_male_small' ); //Blood Elf
+							$sql_ary [] = array ('race_id' => 11, 'race_faction_id' => 1 , 'image_female_small' => 'wow_draenei_female_small',  'image_male_small' => 'wow_draenei_male_small' ); //Draenei
+							$sql_ary [] = array ('race_id' => 22, 'race_faction_id' => 1 , 'image_female_small' => 'wow_worgen_female_small',  'image_male_small' => 'wow_worgen_male_small' ); //Worgen
+							$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
+							unset ( $sql_ary );
+							// races in en
+							$sql_ary = array ();
+							$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
+							$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
+							//classes in fr
+							$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
+							$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
+							//classes in de	
+							$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
+							$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
+							$db->sql_multi_insert ($table_prefix . 'bbdkp_language', $sql_ary);
+							unset ( $sql_ary );
 						break;
 					}
 					
@@ -1880,6 +1918,29 @@ function tableupdates_12($action, $version)
 	{
 		case 'install' :
 		case 'update' :
+			// remove this module
+			if($umil->module_exists('acp', 'ACP_DKP_ITEM','ACP_DKP_ITEMADD'))
+			{
+				$umil->module_remove('acp','ACP_DKP_ITEM','ACP_DKP_ITEMADD');
+			}
+			
+			if($umil->module_exists('acp', 'ACP_DKP_ITEM','ACP_DKP_ITEM_LIST'))
+			{
+				$umil->module_remove('acp','ACP_DKP_ITEM','ACP_DKP_ITEM_LIST');
+			}
+			
+			if($umil->module_exists('acp', 'ACP_DKP_ITEM','ACP_DKP_ITEM_SEARCH'))
+			{
+				$umil->module_remove('acp','ACP_DKP_ITEM','ACP_DKP_ITEM_SEARCH');
+			}
+
+			if($umil->module_exists('acp', 'ACP_DKP_ITEM','ACP_DKP_ITEM_VIEW'))
+			{
+				$umil->module_remove('acp','ACP_DKP_ITEM','ACP_DKP_ITEM_VIEW');
+			}
+			
+			$umil->module_remove('acp', 'ACP_BOARD_CONFIGURATION', 'ACP_BOARD_SETTINGS');
+					
 			/**
 			 * adjustments table, new key
 			 */ 
