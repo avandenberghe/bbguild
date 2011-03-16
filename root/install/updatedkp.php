@@ -760,22 +760,16 @@ $versions = array(
         	
         	//Hide zones with no boss kills
         	array('bbdkp_bp_hidenewzone', 0, true),
-        	
         	//Hide never killed bosses?
         	array('bbdkp_bp_hidenonkilled', 0, true),
-        	
         	//header image style : sepia, photo, blue
 	        array('bbdkp_bp_zonephoto', 0, true),
-	        
 	        //show zoneprogressionbar
 	        array('bbdkp_bp_zoneprogress', 1, true),
-	        
 	        //bp style : 2 row, 3 row, simple, photo
 	        array('bbdkp_bp_zonestyle', 0, true),
-	        
 	        //default dkp language
 	        array('bbdkp_lang', 'en', true),
-	        
 	        //show 3darmory in viewmember
 	        array('bbdkp_show_3darmory', 1, true),
 	     ),
@@ -863,8 +857,6 @@ $versions = array(
 	            
           	),
           	
-            
-
         // adding image, class color code column to class table
         // the class css will dissapear since all is now dynamic
         'table_column_add' => array(
@@ -1662,7 +1654,7 @@ function tablerename($action, $version)
 					}
 					if ($umil->table_exists($bbdkp_table_prefix . 'items'))
 					{
-						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'items TO ' . $table_prefix . 'bbdkp_items ';
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'items TO ' . $table_prefix . 'bbdkp_raid_items ';
 						$db->sql_query($sql);
 					}
 					if ($umil->table_exists($bbdkp_table_prefix . 'logs'))
@@ -1702,7 +1694,7 @@ function tablerename($action, $version)
 					}			
 					if ($umil->table_exists($bbdkp_table_prefix . 'raid_attendees'))
 					{
-						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'raid_attendees TO ' . $table_prefix . 'bbdkp_raid_attendees ';
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'raid_attendees TO ' . $table_prefix . 'bbdkp_raid_detail ';
 						$db->sql_query($sql);
 					}			
 					if ($umil->table_exists($bbdkp_table_prefix . 'raids'))
@@ -1739,16 +1731,19 @@ function tablerename($action, $version)
 					{
 						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'memberguild TO ' . $table_prefix . 'bbdkp_memberguild ';
 						$db->sql_query($sql);
-					}												
+					}
+					if ($umil->table_exists($bbdkp_table_prefix . 'roles'))
+					{
+						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'roles TO ' . $table_prefix . 'bbdkp_roles ';
+						$db->sql_query($sql);
+					}													
 					if ($umil->table_exists($bbdkp_table_prefix . 'lootsystem'))
 					{
-						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'lootsystem TO ' . $table_prefix . 'bbdkp_lootsystem ';
-						$db->sql_query($sql);
+						 $umil->table_remove($bbdkp_table_prefix . 'lootsystem');
 					}												
 					if ($umil->table_exists($bbdkp_table_prefix . 'transactions'))
 					{
-						$sql = 'RENAME TABLE ' . $bbdkp_table_prefix . 'transactions TO ' . $table_prefix . 'bbdkp_transactions ';
-						$db->sql_query($sql);
+            			$umil->table_remove($bbdkp_table_prefix . 'transactions');
 					}	
 					if ($umil->table_exists($bbdkp_table_prefix . 'bb_language'))
 					{
@@ -1756,10 +1751,7 @@ function tablerename($action, $version)
 						$db->sql_query($sql);
 					}
 					
-					
-					return array(
-					'command' => 'UMIL_RENAMETABLESNEW', 
-					'result' => 'SUCCESS');
+					return array('command' => 'UMIL_RENAMETABLESNEW', 'result' => 'SUCCESS');
 					
 					break;
 			}
@@ -1778,9 +1770,9 @@ function tablerename($action, $version)
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_events TO ' . $bbdkp_table_prefix . 'events';
 						$db->sql_query($sql);
 					}
-					if ($umil->table_exists( $table_prefix . 'bbdkp_items'))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_raid_items'))
 					{
-						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_items TO ' . $bbdkp_table_prefix . 'items';
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_raid_items TO ' . $bbdkp_table_prefix . 'items';
 						$db->sql_query($sql);
 					}
 					if ($umil->table_exists( $table_prefix . 'bbdkp_logs'))
@@ -1818,9 +1810,9 @@ function tablerename($action, $version)
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_news TO ' . $bbdkp_table_prefix . 'news ';
 						$db->sql_query($sql);
 					}					
-					if ($umil->table_exists( $table_prefix . 'bbdkp_raid_attendees'))
+					if ($umil->table_exists( $table_prefix . 'bbdkp_raid_detail'))
 					{
-						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_raid_attendees TO ' . $bbdkp_table_prefix . 'raid_attendees ';
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_raid_detail TO ' . $bbdkp_table_prefix . 'raid_attendees ';
 						$db->sql_query($sql);
 					}					
 					if ($umil->table_exists( $table_prefix . 'bbdkp_raids'))
@@ -1857,26 +1849,20 @@ function tablerename($action, $version)
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_memberguild TO ' . $bbdkp_table_prefix . 'memberguild ';
 						$db->sql_query($sql);
-					}		
-					if ($umil->table_exists( $table_prefix . 'bbdkp_lootsystem'))
+					}
+					if ($umil->table_exists( $table_prefix . 'bbdkp_roles'))
 					{
-						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_lootsystem TO ' . $bbdkp_table_prefix . 'lootsystem ';
+						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_roles TO ' . $bbdkp_table_prefix . 'roles ';
 						$db->sql_query($sql);
 					}
-					if ($umil->table_exists( $table_prefix . 'bbdkp_transactions'))
-					{
-						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_transactions TO ' . $bbdkp_table_prefix . 'transactions ';
-						$db->sql_query($sql);
-					}
+										
 					if ($umil->table_exists( $table_prefix . 'bbdkp_language'))
 					{
 						$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_language TO ' . $bbdkp_table_prefix . 'bb_language ';
 						$db->sql_query($sql);
 					}						
 					
-					return array(
-					'command' => 'UMIL_RENAMETABLESOLD', 
-					'result' => 'SUCCESS');
+					return array('command' => 'UMIL_RENAMETABLESOLD', 'result' => 'SUCCESS');
 			break;
 	}
 	
@@ -1884,8 +1870,7 @@ function tablerename($action, $version)
 }
 
 /****
- * table update script for 1.2
- * not tested on nonmysql db
+ * table update script for 1.2 --not tested on nonmysql db
  */
 function tableupdates_12($action, $version)
 {
@@ -1923,12 +1908,6 @@ function tableupdates_12($action, $version)
             	array($table_prefix .'bbdkp_events', 'event_color',  array('VCHAR:8', '')),  
             ));
             
-            /**
-             * lootsystem table
-             */
-			//remove this table, we moved everything to the $config array
-            $umil->table_remove($bbdkp_table_prefix . 'lootsystem');
-
             /**
 			 * language table
 			 */
@@ -1975,10 +1954,6 @@ function tableupdates_12($action, $version)
 			/**
 			 * Raid Detail table
 			 */
-			// attendee table renamed to phpbb_bbdkp_raid_detail
-			$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_raid_attendees TO ' . $table_prefix . 'bbdkp_raid_detail ';
-			$db->sql_query($sql);
-            
 			// add 3 new columns to raiddetail table
 			$umil->table_column_add(array(
 			    array($table_prefix .'bbdkp_raid_detail', 'raid_value', array('DECIMAL:11', 0.00)),
@@ -2002,10 +1977,6 @@ function tableupdates_12($action, $version)
 			/**
 			 * Raid Items table
 			 */
-			// items table renamed to phpbb_bbdkp_raid_items
-			$sql = 'RENAME TABLE ' . $table_prefix . 'bbdkp_items TO ' . $table_prefix . 'bbdkp_raid_items ';
-			$db->sql_query($sql);
-			
 			// remove item_dkpid from items table
             $umil->table_column_remove(array(
             	array($table_prefix .'bbdkp_raid_items', 'item_dkpid' ), 
@@ -2055,12 +2026,12 @@ function tableupdates_12($action, $version)
 			 */
             //add new columns
 			$umil->table_column_add(array(
-			    array($table_prefix .'raids', 'raid_end', array('TIMESTAMP', 0)),
-			    array($table_prefix .'raids', 'event_id', array('UINT', 0)),
+			    array($table_prefix .'bbdkp_raids', 'raid_end', array('TIMESTAMP', 0)),
+			    array($table_prefix .'bbdkp_raids', 'event_id', array('UINT', 0)),
 			    ));   
 			
 			// add foreign nonunique key event_id 
-			$umil->table_index_add($table_prefix .'raids', 'event_id', 'event_id');			    
+			$umil->table_index_add($table_prefix .'bbdkp_raids', 'event_id', 'event_id');			    
 			
 			// populate the event_id, we have to match raid_name to event_name oO !
 			$sql = "UPDATE " . $table_prefix ."bbdkp_raids r 
@@ -2111,17 +2082,13 @@ function tableupdates_12($action, $version)
             	array($table_prefix .'bbdkp_raids', 'raid_value' ),
             	array($table_prefix .'bbdkp_raids', 'raid_name' ), 
             ));
-			
-			/**
-             * transactions table
-             */
-			//remove this table 
-            $umil->table_remove($bbdkp_table_prefix . 'transactions');
 
             // end
             
 			break;
 	}
+	
+	return array('command' => $user->lang['UMIL_UPDATE120'],  'result' => 'SUCCESS');
 	
 		
 }
