@@ -46,19 +46,36 @@
 		
 		<div class="content">
 
-1.1.3 xx-12-2010<br />
+1.2 17-03-2010<br />
 <br />
-<change>[NEW] Loot system ACP</change><br />
+<change>[NEW] redone table style in front pages</change><br />
+<change>[NEW] Delete button in Listmember ACP</change><br />
+<change>[NEW] css for positive and negative amounts</change><br />
+<change>[NEW] new icons in bossprogress page</change><br />
+<change>[NEW] front pages, acp pages all adapted to take new join rules and loot systems</change><br />
+<change>[NEW] new $config values added for loot systems, settings added to main ACP epgp and zerosum cannot be combined. added synchronisation buttons.</change><br />
+<change>[NEW] Loot systems Time bonus, Zerosum, EPGP, Item and Raid Decay</change><br />
+<change>[NEW] Edit Raid ACP</change><br />
+<change>[NEW] listmembers page now updates url correctlywhen selecting values from pulldown</change><br />
+<change>[NEW] added switch in member acp to show/hide members on roster</change><br />
+<change>[NEW] image added to race table and ACP, and also in all front and backend pages</change><br />
+<change>[NEW] memberid, itemdecay, zerosum columns added to raid_items table</change><br />
+<change>[NEW] item_dkpid, item_buyer removed from raid_items table</change><br />
+<change>[NEW] raidvalue, timebonus, zerosumbonus, raiddecay columns added to raiddetail table</change><br />
+<change>[NEW] raidvalue, timebonus, zerosumbonus, raiddecay, itemdecay columns added to member dkp table</change><br />
+<change>[NEW] membername column removed from raiddetail table (ex attendees). member_id is enough.</change><br />
 <change>[NEW] Cataclysm changes added in wow installer</change><br />
-<change>[CHG] Classid is now the foreign key for the language table. this to ensure consistency with Blizzard id changes.</change><br />
-<change>[NEW] New events can now be set up using the data from the Bossprogress Zone, enlarged the event table.</change><br />
+<change>[CHG] Classid is now the foreign key for the language table.</change><br />
+<change>[CHG] event_id added to Raid table as foreign key to events table, and raid_end </change><br />
+<change>[CHG] raid_dkpid, raid_value and raid_name removed from raid table. that info is now located in detail.</change><br />
+<change>[CHG] image and color added to event table and acp.</change><br />
+<change>[NEW] New events can now be set up using the data from the Bossprogress Zone</change><br />
 <change>[NEW] added field in member table and member ACP to link guildmember to phpbb account. overrides ucp</change><br />
-<change>[NEW] character profiler ucp</change><br />
+<change>[NEW] character profiler ucp so you can sign up to raidplanner</change><br />
 <change>[CHG] portal.php no longer hides navbar</change><br />
 <change>[CHG] the installer will now run installdkp.php for any new install; all previous release changes were moved  to updatedkp.php</change><br />
 <change>[CHG] tabe prefix changed to default phpbb_ for MOD DB validation</change><br />
 <change>[CHG] simplified bossprogress and zone panel</change><br />
-<change>[FIX] bugtracker #87, editing time of a raid (id in html)</change><br />
 <change>[FIX] bugtracker #83, now the guild is pre selected as default </change><br />
 <change>[FIX] bugtracker #82, now can rename zones </change><br />
 <br />
@@ -225,7 +242,7 @@ not released<br />
 [CHANGED] new Roster template per class<br /> 
 [CHANGED] new About.php<br /> 
 [CHANGED] moved logic in /includesdkp/komptab.class.php to about.php, since this is pure html.<br /> 
-[CHANGED] moved html part of about.php to /styles/<stylename>/template/dkp.about.html because of code clarity<br /> 
+[CHANGED] moved html part of about.php to /styles/stylename/template/dkp.about.html because of code clarity<br /> 
 [CHANGED] dropped bbeqdkp_config table and moved values to phpbb_config. the /includes/cache.php doen‚Äôt have to be patched anymore.<br /> 
 [ADDED] new file /includes/bbdkp/constants_bbdkp for storing all constants. this is cleaner than having to patch it all in common.php<br /> 
 [CHANGED] changed all root pathes to $phpbb_root_path = (defined(‚ÄôPHPBB_ROOT_PATH‚Äô)) ? PHPBB_ROOT_PATH : ‚Äò./‚Äô;<br /> 

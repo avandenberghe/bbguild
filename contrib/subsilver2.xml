@@ -8,40 +8,9 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
   <header>
     <license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-    <title lang="en">bbDkp 1.1.2.2 - subsilver2 style</title>
+    <title lang="en">bbDkp 1.2 - subsilver2 style</title>
     <description lang="en">
-    <![CDATA[
-bbDKP for phpBB3 brings together the DKP management facilites of EQdkp and 
-integrates them fully with phpBB3's facilities.  This means your users gain single 
-sign on to dkp, and you gain a clean interface, robust admin facilities and less headaches. 
-Games supported : Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, Wow. 
-Features : Multiple Dkp Pools, Multiple Guilds, Standings, Raids, Events, Item values, Item history, Raid Stats, Bossprogress, Roster, backup, import from Eqdkp.
-Available Plugins : 
-•	Armory Import (Wow & Aion), 
-•	bbTips (Wow), 
-•	Ct_Raidtracker (wow), 
-•	Recruitment (Wow).  
-
-As of the current release, it does not (yet) make coffee ;)
-
-Minimum Requirements : 
-phpBB3 v3.0.x, PHP 5.1.0 and Libxml 2.6.0 (simplexml usage) 
-Mysql 4.1 (subqueries & utf-8) or Oracle, MSSQL, Postgresql
-Curl (connectivity) 
-Disclaimer : bbdkp is in release candidate stage but not yet final. 
-Please Backup your phpbb3 installation and database before beginning. 
-Further development requests, support questions are welcome at http://www.bbdkp.com
-
-Copyright
-Powered by bbDkp (c) 2009 The bbDkp Project Team
-If you use this software and find it to be useful, we ask that you retain the copyright notice in overall_footer.html. It will help build interest in the bbDkp project, and is required for obtaining support.
-http://code.google.com/p/bbdkp/
-bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
-bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli 
-bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
-EQDkp (c) 2003 The EqDkp Project Team
-
- ]]>
+    <![CDATA[subsilver2]]>
 </description>
 
 <author-notes lang="en"><![CDATA[Press Install to let Automod copy the files and do the core edits, then browse to install/index.php and run the UMIL table installer. then delete the install folder.
@@ -119,12 +88,12 @@ EQDkp (c) 2003 The EqDkp Project Team
     
     </author-group>
 
-<mod-version>1.1.2.2</mod-version>
+<mod-version>1.2</mod-version>
 
 <installation>
       <level>intermediate</level>
       <time>1200</time>
-	<target-version>3.0.7-PL1</target-version>
+	<target-version>3.0.8</target-version>
 </installation>
 
 <link-group>
@@ -152,7 +121,7 @@ EQDkp (c) 2003 The EqDkp Project Team
 	
 <open src="/styles/subsilver2/template/breadcrumbs.html">
 <edit>
-	<comment lang="en">insert bbDkp links</comment>
+	<comment lang="en">insert bbdkp links</comment>
 	<find><![CDATA[<p class="breadcrumbs"><a href="{U_INDEX}">{L_INDEX}</a>]]></find>
 	<action type="replace-with"><![CDATA[<p class="breadcrumbs"><a href="{U_PORTAL}">{L_PORTAL}</a>&nbsp;&#187;&nbsp;<a href="{U_DKP}">{L_DKP}</a>&nbsp;&#187;&nbsp;<a href="{U_INDEX}">{L_INDEX}</a>]]></action>
 </edit>

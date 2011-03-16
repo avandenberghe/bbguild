@@ -186,6 +186,9 @@ $lang = array_merge($lang, array(
 'UMIL_OLD_RESTORE_NOT' => 'No bbdkp (%s) installation found to restore.', 
 'UMIL_OLD_UNINSTALL_SUCCESS' => 'bbdkp (%s) uninstalled. ',
 'UMIL_109_ILLEGALVERSION' => '1.0.9 beta found, you need to upgrade to 1.0.9rc1 and from there you can upgrade to 1.1.2', 
+'UMIL_RENAMETABLESNEW' => 'Renaming of tables from custom ‘bbeqdkp_‘ prefix to ‘phpbb_‘ prefix', 
+'UMIL_RENAMETABLESOLD' => 'Renaming of tables from ‘phpbb_‘ prefix TO custom ‘bbeqdkp_‘ prefix ', 
+'UMIL_UPDATE120' => 'Updated tables 1.1.2.2 to 1.2', 
 
 // ACP titles
 'BBDKP_WELCOME' => 'Welcome to bbDKP',

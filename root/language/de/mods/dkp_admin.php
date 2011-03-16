@@ -271,6 +271,9 @@ $lang = array_merge($lang, array(
 	'UMIL_OLD_RESTORE_NOT'	=> 'Keine bbDKP (%s) Installation ist gefunden worden zum wiederherstellen.',
 	'UMIL_OLD_UNINSTALL_SUCCESS'	=> 'bbDKP (%s) wurde gelöscht. ',
 	'UMIL_109_ILLEGALVERSION'	=> '1.0.9 beta wurden gefunden, du musst upgraden zu 1.0.9rc1 und ab dann kannst du upgraden nach 1.1.2',
+	'UMIL_UPDATE120' => 'tabellen aktualisiert von 1.1.2.2 auf 1.2', 
+	'UMIL_RENAMETABLESNEW' => 'tabellen aktualisiert von präfix bbeqdkp_ zu phpbb_',
+	'UMIL_RENAMETABLESOLD' => 'tabellen aktualisiert von präfix phpbb_ zu bbeqdkp_  ', 
 	'BBDKP_WELCOME'	=> 'Wilkommen bei bbDKP',
 	'ACP_DKP_MAINPAGE'	=> 'DKP Übersicht',
 	'ACP_DKP_BBSTATS'	=> 'Admin-Übersicht',
@@ -881,8 +884,8 @@ Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />G
 	'FFXI_ZONEEURL'	=> 'http://ffxi.allakhazam.com/db/areas.html?farea=%s',
 	'WARHAMMER_BASEURL'	=> 'NOT AVAILABLE',
 	'WARHAMMER_ZONEEURL'	=> 'NOT AVAILABLE',
-	'WOW_BASEURL'	=> 'http://de.wowhead.com/?npc=%s',
-	'WOW_ZONEEURL'	=> 'http://de.wowhead.com/?zone=%s',
+	'WOW_BASEURL'	=> 'http://de.wowhead.com/npc=%s',
+	'WOW_ZONEEURL'	=> 'http://de.wowhead.com/zone=%s',
 ));
 
 ?>
