@@ -668,7 +668,7 @@ class acp_dkp_adj extends bbDKP_Admin
 	* add a new dkp adjustment
 	* 
 	*/ 
-    private function add_new_adjustment($dkpid, $member_id, $group_key, $adjval, $adjreason)
+    public function add_new_adjustment($dkpid, $member_id, $group_key, $adjval, $adjreason)
     {
          global $user, $db;
 

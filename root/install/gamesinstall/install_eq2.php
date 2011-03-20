@@ -24,30 +24,30 @@ function install_eq2()
     $db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_classes');
     $sql_ary = array();
 	$sql_ary[] = array('class_id' => 0, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Unknown_small' ); 
-	$sql_ary[] = array('class_id' => 1, 'class_armor_type' => 'MAIL' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Assassin_small'  ); 
-	$sql_ary[] = array('class_id' => 2, 'class_armor_type' => 'PLATE' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Berserker_small'  ); 
-	$sql_ary[] = array('class_id' => 3, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Bruiser_small'  ); 
-	$sql_ary[] = array('class_id' => 4, 'class_armor_type' => 'MAIL' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Brigand_small'  ); 
-	$sql_ary[] = array('class_id' => 5, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Coercer_small'  ); 
-	$sql_ary[] = array('class_id' => 6, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Conjuror_small'  ); 
-	$sql_ary[] = array('class_id' => 7, 'class_armor_type' => 'MAIL' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Defiler_small'  ); 
-	$sql_ary[] = array('class_id' => 8, 'class_armor_type' => 'MAIL' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Dirge_small'  ); 
-	$sql_ary[] = array('class_id' => 9, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Fury_small'  ); 
-	$sql_ary[] = array('class_id' => 10, 'class_armor_type' => 'PLATE' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Guardian_small'  ); 
-	$sql_ary[] = array('class_id' => 11, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Illusionist_small'  ); 
-	$sql_ary[] = array('class_id' => 12, 'class_armor_type' => 'PLATE' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Inquisitor_small'  ); 
-	$sql_ary[] = array('class_id' => 13, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Monk_small'  ); 
-	$sql_ary[] = array('class_id' => 14, 'class_armor_type' => 'MAIL' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Mystic_small'  ); 
-	$sql_ary[] = array('class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Necromancer_small'  ); 
-	$sql_ary[] = array('class_id' => 16, 'class_armor_type' => 'PLATE' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Paladin_small'  ); 
-	$sql_ary[] = array('class_id' => 17, 'class_armor_type' => 'MAIL' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Ranger_small'  ); 
-	$sql_ary[] = array('class_id' => 18, 'class_armor_type' => 'PLATE' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Shadowknight_small'  ); 
-	$sql_ary[] = array('class_id' => 19, 'class_armor_type' => 'MAIL' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Swashbuckler_small'  ); 
-	$sql_ary[] = array('class_id' => 20, 'class_armor_type' => 'PLATE' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Templar_small'  ); 
-	$sql_ary[] = array('class_id' => 21, 'class_armor_type' => 'MAIL' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Troubador_small'  ); 
-	$sql_ary[] = array('class_id' => 22, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Warlock_small'  ); 
-	$sql_ary[] = array('class_id' => 23, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Warden_small'  ); 
-	$sql_ary[] = array('class_id' => 24, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 20 , 'class_max_level'  => 99, 'imagename' => 'eq2_Wizard_small'  ); 
+	$sql_ary[] = array('class_id' => 1, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Assassin_small'  ); 
+	$sql_ary[] = array('class_id' => 2, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Berserker_small'  ); 
+	$sql_ary[] = array('class_id' => 3, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Bruiser_small'  ); 
+	$sql_ary[] = array('class_id' => 4, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Brigand_small'  ); 
+	$sql_ary[] = array('class_id' => 5, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Coercer_small'  ); 
+	$sql_ary[] = array('class_id' => 6, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Conjuror_small'  ); 
+	$sql_ary[] = array('class_id' => 7, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Defiler_small'  ); 
+	$sql_ary[] = array('class_id' => 8, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Dirge_small'  ); 
+	$sql_ary[] = array('class_id' => 9, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Fury_small'  ); 
+	$sql_ary[] = array('class_id' => 10, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Guardian_small'  ); 
+	$sql_ary[] = array('class_id' => 11, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Illusionist_small'  ); 
+	$sql_ary[] = array('class_id' => 12, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Inquisitor_small'  ); 
+	$sql_ary[] = array('class_id' => 13, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Monk_small'  ); 
+	$sql_ary[] = array('class_id' => 14, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Mystic_small'  ); 
+	$sql_ary[] = array('class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Necromancer_small'  ); 
+	$sql_ary[] = array('class_id' => 16, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Paladin_small'  ); 
+	$sql_ary[] = array('class_id' => 17, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Ranger_small'  ); 
+	$sql_ary[] = array('class_id' => 18, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Shadowknight_small'  ); 
+	$sql_ary[] = array('class_id' => 19, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Swashbuckler_small'  ); 
+	$sql_ary[] = array('class_id' => 20, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Templar_small'  ); 
+	$sql_ary[] = array('class_id' => 21, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Troubador_small'  ); 
+	$sql_ary[] = array('class_id' => 22, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Warlock_small'  ); 
+	$sql_ary[] = array('class_id' => 23, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Warden_small'  ); 
+	$sql_ary[] = array('class_id' => 24, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 99, 'imagename' => 'eq2_Wizard_small'  ); 
 	$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
   	
     // class roles
@@ -95,9 +95,12 @@ function install_eq2()
     $sql_ary[] = array('race_id' => 18, 'race_faction_id' => 3 ); //Grelok
     $sql_ary[] = array('race_id' => 19, 'race_faction_id' => 1 ); //Arasai
     $sql_ary[] = array('race_id' => 20, 'race_faction_id' => 3 ); //Sarnak
+    $sql_ary[] = array ('race_id' => 21, 'race_faction_id' => 3); //Freeblood    
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
     unset ($sql_ary);
-
+	global $db, $table_prefix, $umil, $user;
+	
+	
     // dkp system  
     $db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_dkpsystem');
 	$sql_ary = array();
@@ -639,6 +642,11 @@ function install_eq2()
 	$sql_ary[] = array( 'id' => 363 , 'attribute_id' => 18, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Grelok' ,  'name_short' =>  'Froglok' );
 	$sql_ary[] = array( 'id' => 364 , 'attribute_id' => 19, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Arasai' ,  'name_short' =>  'Arasai' );
 	$sql_ary[] = array( 'id' => 365 , 'attribute_id' => 20, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Sarnak' ,  'name_short' =>  'Sarnak' );
+
+	// new races release 1.2
+	$sql_ary[] = array( 'id' => 400 , 'attribute_id' => 21, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Freeblood' ,  'name_short' =>  'Freeblood' );
+	$sql_ary[] = array( 'id' => 401 , 'attribute_id' => 21, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Freeblood' ,  'name_short' =>  'Freeblood' );
+	$sql_ary[] = array( 'id' => 402 , 'attribute_id' => 21, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Freeblood' ,  'name_short' =>  'Freeblood' );
 			
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );

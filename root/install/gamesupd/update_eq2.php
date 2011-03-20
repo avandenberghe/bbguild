@@ -1112,9 +1112,27 @@ function install_eq2_bb2($bbdkp_table_prefix)
 }
 
 
+/*
+ * release 1.2 -- updates for eq2
+ * 
+ */
+function install_eq2_bb3()
+{
+	global $db, $table_prefix, $umil, $user;
+	
+	// new race (Freeblood)
+	$sql_ary = array ();
+    $sql_ary [] = array ('race_id' => 21, 'race_faction_id' => 3 , 'image_female_small' => '',  'image_male_small' => '' ); //Freeblood
+	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 
+	unset ( $sql_ary );
+	$sql_ary[] = array( 'id' => 400 , 'attribute_id' => 21, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Freeblood' ,  'name_short' =>  'Freeblood' );
+	$sql_ary[] = array( 'id' => 401 , 'attribute_id' => 21, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Freeblood' ,  'name_short' =>  'Freeblood' );
+	$sql_ary[] = array( 'id' => 402 , 'attribute_id' => 21, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Freeblood' ,  'name_short' =>  'Freeblood' );
+	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 
-
-
+	$sql = 'UPDATE  ' . $table_prefix . "bbdkp_classes  SET class_min_level = '1' " ;
+	$db->sql_query($sql);
+}
 
 ?>
