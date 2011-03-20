@@ -20,7 +20,7 @@ Veuillez faire un backup de votre installation phpBB3 avant de commencer.
 				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
 				<email><![CDATA[sajaki9@gmail.com]]></email>
 				<contributions-group>
-					<contributions status="current" from="2008-04-04" position="développeur"/>
+					<contributions status="current" from="2008-04-04" position="Developer"/>
 				</contributions-group>
 			</author>
 			</author-group>
