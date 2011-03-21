@@ -188,10 +188,10 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 	
 	<action-group>
 		<delete>
-			<file name="images/bossprogress/0.gif"/>
-			<file name="images/bossprogress/1.gif"/>
-			<file name="images/bossprogress/rp/0.gif"/>
-			<file name="images/bossprogress/rp/1.gif"/>
+			<file name="root/images/bossprogress/0.gif"/>
+			<file name="root/images/bossprogress/1.gif"/>
+			<file name="root/images/bossprogress/rp/0.gif"/>
+			<file name="root/images/bossprogress/rp/1.gif"/>
 		</delete>
 		<copy>
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
@@ -235,7 +235,7 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 				<comment lang="de"><![CDATA[modifizierung javascript im footer ]]></comment>			
 				<find><![CDATA[    search = window.open('about.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')]]></find>
 				<inline-edit>
-					<inline-find><![CDATA[about>]]></inline-find>
+					<inline-find><![CDATA[about]]></inline-find>
 					<inline-action type="after-add"><![CDATA[bbdkp]]></inline-action>
 				</inline-edit>
 			</edit>
@@ -245,9 +245,9 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 				<comment lang="de"><![CDATA[modifizierung about link ]]></comment>			
 				<find><![CDATA[<a onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><font color="#105289">BBdkp Credits</font></a>]]></find>
 				<inline-edit>
-					<inline-find><![CDATA[onclick>]]></inline-find>
+					<inline-find><![CDATA[onclick]]></inline-find>
 					<inline-action type="before-add"><![CDATA[class="bbdkpcredits" ]]></inline-action>
-					<inline-find><![CDATA[<font color="#105289">BBdkp Credits</font>>]]></inline-find>
+					<inline-find><![CDATA[<font color="#105289">BBdkp Credits</font>]]></inline-find>
 					<inline-action type="replace-with"><![CDATA[BBdkp Credits]]></inline-action>
 				</inline-edit>
 			</edit>			
