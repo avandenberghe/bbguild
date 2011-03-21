@@ -354,8 +354,8 @@ function pop_search()
 			</edit>
 		</open>
 		<php-installer><![CDATA[install/installdkp.php]]></php-installer>
-		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /contrib/readme/install.html
-What has changed ? see here : /contrib/readme/changelog.html
+		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /docs/install.html
+What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
 
@@ -363,7 +363,7 @@ Post-install instructions :
 Automod cannot handle it as it would lead to a timeout due to the size (24,9mb) ! 
 <file from="root/images/*.*" to="images/*.*" />   
 ------------------------------------------------------------------------------
-2) Run bbDKP 1.2 database installation or upgrade : install/installdkp.php 
+2) Run bbDKP 1.2 database installation : install/installdkp.php 
 ------------------------------------------------------------------------------
 3) Finish 
 Finally rename the install folder. 
@@ -371,8 +371,8 @@ Finally rename the install folder.
 Note : Should you need to deactivate bbDKP you can open config.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
 
 		Enjoy ;)]]></diy-instructions>
-<diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /contrib/readme/install.html
-Liste des changements : /contrib/readme/changelog.html
+<diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /docs/install.html
+Liste des changements : /docs/changelog.html
 
 Résumé des étapes de post-installation
 
@@ -389,8 +389,8 @@ Rennomer le repertoire /install pour réactiver le forum.
 Note : Il est possible de désactiver le MOD en ouvrant config.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
 
 Success ;)	]]></diy-instructions>		
-<diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /contrib/readme/install.html
-Liste der änderungen : /contrib/readme/changelog.html
+<diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
+Liste der änderungen : /docs/changelog.html
 
 1) Kopiere diese Dateien zum Verzeichnis /images 
 Aus Berücksichtigung der Grösse der Verzeichnisse (±24,9mb), kann Automod dies nicht kopieren wegen Auszeit. 
