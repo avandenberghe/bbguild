@@ -31,7 +31,7 @@
 		</installation>
 		<link-group>
 			<link type="parent" lang="en" href="../../../install.xml">Installation 1.2</link>
-			<link type="parent" lang="fr" href="../../../install.xml">Manuel installation 1.2<</link>
+			<link type="parent" lang="fr" href="../../../install.xml">Manuel installation 1.2</link>
 			<link type="parent" lang="de" href="../../../install.xml">Installations-Anleitung 1.2</link>					
 
 			<link type="parent" lang="en" href="../update.xml">update 1.1.2.2 to 1.2</link>
