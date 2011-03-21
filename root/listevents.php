@@ -66,14 +66,16 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
 
 	/*** get events ***/
 	$sql_array = array (
-		'SELECT' => ' e.event_dkpid, e.event_id, e.event_name, e.event_value,  e.event_color, e.event_imagename, count(r.raid_id) as raidcount, max(raid_start) as newest, min(raid_start) as oldest ', 
+		'SELECT' => ' e.event_dkpid, e.event_id, e.event_name, e.event_value,  e.event_color, 
+		e.event_imagename, count(r.raid_id) as raidcount, max(raid_start) as newest, min(raid_start) as oldest ', 
 		'FROM' => array (
 			EVENTS_TABLE 		=> 'e',		
 			RAIDS_TABLE 		=> 'r', 
 			), 
 		'WHERE' => 'e.event_dkpid = ' . (int) $pool['dkpsys_id'] . 
 					' and r.event_id = e.event_id ',
-		'ORDER_BY' => 'e.event_name'
+		'ORDER_BY' => 'e.event_name', 
+		'GROUP_BY' => 'e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_color, e.event_imagename', 
 	);
 	$sql = $db->sql_build_query('SELECT', $sql_array);	
 	
