@@ -7,7 +7,7 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.2]]></title>
+		<title lang="en"><![CDATA[bbDKP]]></title>
 		<description lang="en"><![CDATA[bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
 It integrates these Game, Guild and DKP management facilites into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules.
@@ -166,15 +166,15 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 			<link type="template" href="contrib/subsilver2.xml" lang="fr">subsilver2</link>
 			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2</link>
 
-			<link type="language" lang="en" href="contrib/fr.xml">French</link>
-			<link type="language" lang="fr" href="contrib/fr.xml">Français</link>
-			<link type="language" lang="de" href="contrib/fr.xml">Franzözisch</link>
+			<link type="language" lang="en" href="contrib/fr_12.xml">French</link>
+			<link type="language" lang="fr" href="contrib/fr_12.xml">Français</link>
+			<link type="language" lang="de" href="contrib/fr_12.xml">Franzözisch</link>
 
-			<link type="language" lang="en" href="contrib/de.xml">German</link>
-			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
-			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>	
+			<link type="language" lang="en" href="contrib/de_12.xml">German</link>
+			<link type="language" lang="fr" href="contrib/de_12.xml">Allemand</link>
+			<link type="language" lang="de" href="contrib/de_12.xml">Deutsch</link>	
 			
-			<link type="contrib" lang="en" href="contrib/update_1122_to_12/update.xml">Update from v1.1.2.2 to v1.2</link>
+			<link type="contrib" lang="en" href="contrib/update_1122_to_12.xml">Update from v1.1.2.2 to v1.2</link>
 
 		</link-group>
 	</header>

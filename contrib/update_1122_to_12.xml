@@ -6,78 +6,17 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[Update bbDKP 1.1.2.2 to 1.2]]></title>
-		<description lang="en"><![CDATA[bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
-It integrates these Game, Guild and DKP management facilites into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
-Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules.
-The framework supports multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION. 
-There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Raidplanner (under development)
+		<title lang="en"><![CDATA[bbDKP]]></title>
+<description lang="en"><![CDATA[Update script 1.1.2.2 to 1.2]]></description>
+<description lang="de"><![CDATA[Aktualisierung 1.1.2.2 bis 1.2]]></description>
 
-Further development requests, support questions are welcome at http://www.bbdkp.com. As of the current release, it does not (yet) make coffee ;)
-
-Languages included:
-» Englisch (en)
-» French (fr)
-» Deutsch (de)
-
-Copyright
-Powered by bbDKP (c) 2011 The bbDKP Project Team
-We ask that you retain the copyright notice in overall_footer.html in any Styles you use. It will help build interest in the bbDKP project, and is required for obtaining support.
-http://code.google.com/p/bbdkp/
-bbDKP (c) 2011 Sajaki, Blazeflack
-bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
-bbDKP (c) 2008 Sajaki, Malfate, Kapli 
-bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
-EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<description lang="fr"><![CDATA[bbDKP est une système DKP pour votre forum PHPBB3, developpee depuis EQDKP. Il est multi-pool, supporte le systeme DKP Standard, points par temps passé, Somme Zéro et EPGP.  Il aide les guildes à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer et World of Warcraft. 
-Liste non exhaustive des fonctionnalités : Multiples groupes DKP et guildes, Tribune des points DKP, Raids, Evènements, Valeurs des Objets, Historique des Objets, Statistique des Raids, Page d’avancée des Boss, Armurerie, module PCA avec Backup, Import de EQDKP+. 
-Les Plugins : Importation depuis l’armurerie de Blizzard et Aion, bbTips (Wow), Raidtracker (wow), Formulaire de Recrutement, Planner (en developpement)
-Pour de plus amples détails, veuillez consulter le changelog. Demandes de développement, questions de support sont les bienvenues à http://www.bbdkp.com. 
-
-Langues inclues :
-» Français (fr)
-» Englisch (en)
-» Deutsch (de)
-
-Copyright
-Powered by bbDKP (c) 2011 The bbDKP Project Team
-Veuillez montrer le la notice de copyright dans overall_footer.html dans les Styles que vous utilisez. Ceci aide à soutenir l’intérêt dans le projèt bbDKP et c’est requis afin d’obtenir du support.
-http://code.google.com/p/bbdkp/
-bbDKP (c) 2011 Sajaki, Blazeflack
-bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
-bbDKP (c) 2008 Sajaki, Malfate, Kapli 
-bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
-EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<description lang="de"><![CDATA[bbDKP ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Est ein multi-pool DKP System, und bietet Standard DKP, Zeitpunkteverwaltung, Nullpunkteverwaltung, und EPGP. Es ermöglicht die Gildenmitgliederverwaltung, die Raidteilnahme in Raids, die Verwaltung der Gegenstandsankäufe, verwaltung von DKP Konten, Bossvorgang, und GildenStatistiken. Sie erreichen damit ein einziges Angriffspunkt zum DKP und zum forum, mit eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP unterstützt jetzt Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer und World of Warcraft. 
-Nicht vollständige Funktionalitätenliste : Support für Vielfache DKP Gruppen (Pools), Vielfache Gilden, Ein Übersicht der DKP Punkte pro Spieler, Raidsliste, Ereignisliste, Gegenstandswerte, Historiken, Raidstatistiken, Bossvorgang, Gildenarsenalseite, ACP Modulen, Backupfunktionen, Import von EQDKP und EQDKP+. 
-Vorhandene Plugins : Importation von Mitglieder von das Blizzard oder Aion Arsenal, bbTips (tooltips), Raidtracker (wow), Rekrutierungsformular.  
-Für weitere Entwicklungsanfragen und Support heissen wir Sie wilkommen auf unsere internetseite http://www.bbdkp.com. 
-
-Enthaltenen Sprachdateien:
-» Englisch (en)
-» Deutsch (de)
-» Français (fr)
-
-Copyright
-Powered by bbDKP (c) 2011 The bbDKP Project Team
-Bitte zeige den copyright link in overall_footer.html in den Stylen die gebraucht werden. Es hilft dabei, Interesse in bbDKP zu verbreiten und ist erforderlich falls du Support bekommen willst.
-http://code.google.com/p/bbdkp/
-bbDKP (c) 2011 Sajaki, Blazeflack
-bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
-bbDKP (c) 2008 Sajaki, Malfate, Kapli 
-bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
-EQDkp (c) 2003 The EqDkp Project Team]]></description>
-
-<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5.2 with Libxml 2.6.0 (simplexml usage), Curl 
-Please Backup your phpbb3 installation and database before beginning. ]]>
+<author-notes lang="en"><![CDATA[Please Backup your phpbb3 installation and database before beginning. ]]>
 </author-notes>
 
-<author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, PHP 5.2 avec Libxml 2.6.0 (simplexml), Curl 
-Veuillez faire une sauvegarde avant de commencer. ]]>
+<author-notes lang="fr"><![CDATA[Veuillez faire une sauvegarde avant de commencer. ]]>
 </author-notes>
 
-<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5.2 mit Libxml 2.6.0 (simplexml), Curl 
-Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. ]]>
+<author-notes lang="de"><![CDATA[Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. ]]>
 </author-notes>
 
 <author-group>
@@ -87,8 +26,7 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
 				<email><![CDATA[sajaki9@gmail.com]]></email>
 				<contributions-group>
-					<contributions status="current" from="2009-01-01" position="Project leader"/>
-					<contributions status="past" from="2008-04-04" to="2009-01-01" position="Developer"/>
+					<contributions status="current" from="2008-04-04" position="Developer"/>
 				</contributions-group>
 			</author>
 			<author>
@@ -168,31 +106,21 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 		</installation>
 		
 		<link-group>
-			<link type="template" href="contrib/subsilver2.xml" lang="en">Update manual subsilver2 Style</link>
-			<link type="template" href="contrib/subsilver2.xml" lang="fr">Manuel de mise à jour des fichiers Subsilver2</link>
-			<link type="template" href="contrib/subsilver2.xml" lang="de">Update-Anleitung für das Subsilver2 Style</link>
+			<link type="language" href="fr_update_1122_to_12.xml" lang="en">Update manuel french language files</link>
+			<link type="language" href="fr_update_1122_to_12.xml" lang="fr">Manuel de mise à jour des fichiers de langue française</link>
+			<link type="language" href="fr_update_1122_to_12.xml" lang="de">Update-Anleitung für das französische Sprachpaket</link>
 
-			<link type="language" href="contrib/fr.xml" lang="en">Update manuel french language files</link>
-			<link type="language" href="contrib/fr.xml" lang="fr">Manuel de mise à jour des fichiers de langue française</link>
-			<link type="language" href="contrib/fr.xml" lang="de">Update-Anleitung für das französische Sprachpaket</link>
-
-			<link type="language" href="contrib/de.xml" lang="en">Update manuel German language files</link>
-			<link type="language" href="contrib/de.xml" lang="fr">Manuel de mise à jour des fichiers de langue allemande</link>
-			<link type="language" href="contrib/de.xml" lang="de">Update-Anleitung für das Deutsche Sprachpaket</link>
+			<link type="language" href="de_update_1122_to_12.xml" lang="en">Update manuel German language files</link>
+			<link type="language" href="de_update_1122_to_12.xml" lang="fr">Manuel de mise à jour des fichiers de langue allemande</link>
+			<link type="language" href="de_update_1122_to_12.xml" lang="de">Update-Anleitung für das Deutsche Sprachpaket</link>
 			
-			<link type="parent" lang="de" href="../../install.xml">Frisch-Installations-Anleitung</link>
-			<link type="parent" lang="en" href="../../install.xml">Clean-Installation Manual</link>
-			<link type="parent" lang="de" href="../../install.xml">Manuel de première installation</link>
+			<link type="parent" lang="de" href="../install.xml">Frisch-Installations-Anleitung</link>
+			<link type="parent" lang="en" href="../install.xml">Clean-Installation Manual</link>
+			<link type="parent" lang="de" href="../install.xml">Manuel de première installation</link>
 		</link-group>
 	</header>
 	
 	<action-group>
-		<delete>
-			<file name="root/images/bossprogress/0.gif"/>
-			<file name="root/images/bossprogress/1.gif"/>
-			<file name="root/images/bossprogress/rp/0.gif"/>
-			<file name="root/images/bossprogress/rp/1.gif"/>
-		</delete>
 		<copy>
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
 			<file from="root/bossprogress.php" to="bossprogress.php"/>
