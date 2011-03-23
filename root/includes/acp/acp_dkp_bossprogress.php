@@ -138,6 +138,7 @@ class acp_dkp_bossprogress extends bbDKP_Admin
 
 					if ($edit)
 					{
+						// edit the boss
 						$sql = 'UPDATE ' . BOSSBASE . ' set ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = ' . $boss_id;
 						$db->sql_query($sql);	
 
@@ -150,6 +151,12 @@ class acp_dkp_bossprogress extends bbDKP_Admin
 							" AND attribute='boss'  AND language= '" . $config['bbdkp_lang'] ."'";
 						$db->sql_query($sql);							
 						
+						// if the boss is marked as not killed, unmark the zone as completed
+						if( $boss_completed == 0 )
+						{
+							$sql = 'UPDATE ' . ZONEBASE . ' set completed = 0  WHERE id = ' . $boss_zone;	
+							$db->sql_query($sql);	
+						}
 						
 						trigger_error( sprintf( $user->lang['BP_BOSSEDITED'], $bossname, $boss_zone) . $link, E_USER_NOTICE);									
 					}
@@ -173,6 +180,13 @@ class acp_dkp_bossprogress extends bbDKP_Admin
 						
 						$sql = 'INSERT INTO ' . BB_LANGUAGE . ' ' . $db->sql_build_array('INSERT', $names);
 						$db->sql_query($sql);							
+						
+						// if the new boss is marked as not killed, unmark the zone as completed
+						if( $boss_completed == 0 )
+						{
+							$sql = 'UPDATE ' . ZONEBASE . ' set completed = 0  WHERE id = ' . $boss_zone;	
+							$db->sql_query($sql);	
+						}
 						
 						trigger_error( sprintf( $user->lang['RP_BOSSADDED'], $bossname, $boss_zone) . $link, E_USER_NOTICE);
 					}
@@ -296,7 +310,6 @@ class acp_dkp_bossprogress extends bbDKP_Admin
 						$db->sql_query($sql);
 						
 						trigger_error($user->lang['RP_BOSSDEL'] . $link, E_USER_NOTICE);
-							
 					}
 					else
 					{
@@ -341,7 +354,18 @@ class acp_dkp_bossprogress extends bbDKP_Admin
 						
 						$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $key . 
 							" AND attribute='boss'  AND language= '" . $config['bbdkp_lang'] ."'";
-						$db->sql_query($sql);							
+						$db->sql_query($sql);	
+
+						// again if the boss is marked as not killed, unmark its zone as completed
+						if( ! isset ($_POST ['bosskilled'][$key])  )
+						{
+							$sql = 'UPDATE ' . ZONEBASE . ' z , ' . BOSSBASE . ' b 
+									SET z.completed = 0 
+									WHERE z.id=b.zoneid 
+									AND b.id = ' . $key;	
+							$db->sql_query($sql);	
+						}
+						
 					}
 					trigger_error( sprintf($user->lang['BP_BPSAVED'] ) . $link, E_USER_NOTICE);
 					
@@ -587,6 +611,7 @@ class acp_dkp_bossprogress extends bbDKP_Admin
 					// if this screen was the result of a $get, we will have an id 
 					if($edit)
 					{
+						// update the zone
 						$id = request_var('id', 0);
 						$sql = 'UPDATE ' . ZONEBASE . ' set ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = ' . $id;
 						$db->sql_query($sql);		
@@ -602,10 +627,18 @@ class acp_dkp_bossprogress extends bbDKP_Admin
 								WHERE attribute_id = ' . $id . " 
 								AND attribute='zone'  
 								AND language= '" . $config['bbdkp_lang'] ."'";
-						
 						$db->sql_query($sql);	
+						
+						// if the zone is marked complete, also mark all bosses as killed
+						if($zone_completed == 1 )
+						{
+							$sql = 'UPDATE ' . BOSSBASE . ' set killed = 1  WHERE zoneid = ' . $id;	
+							$db->sql_query($sql);	
+						}
+						
+						
 					}
-					// or else it is a new submit
+					// or else it is a new zone
 					else 
 					{
 						$sql = 'INSERT INTO ' . ZONEBASE . ' ' . $db->sql_build_array('INSERT', $data) ;
@@ -754,6 +787,14 @@ class acp_dkp_bossprogress extends bbDKP_Admin
 						// And doing an update query 
 						$sql = 'UPDATE ' . ZONEBASE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE id = '. $key;
 						$db->sql_query($sql);
+						
+						// also, if the zone is marked complete, also mark all bosses as killed
+						if(isset ( $_POST ['zonecompleted'][$key] ))
+						{
+							$sql = 'UPDATE ' . BOSSBASE . ' set killed = 1  WHERE zoneid = ' . $key;	
+							$db->sql_query($sql);	
+						}
+						
 					}
 					trigger_error($user->lang['BP_BPSAVED'] . $link, E_USER_NOTICE);
 					
