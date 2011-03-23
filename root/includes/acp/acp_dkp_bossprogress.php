@@ -733,10 +733,10 @@ class acp_dkp_bossprogress extends bbDKP_Admin
 				elseif ($submitlist)
 				{
 					// global config
-				  	set_config ('bbdkp_bp_hidenewzone',  ( isset($_POST['hidenewzone']) ) ? 1 : 0);
 				  	set_config ('bbdkp_bp_zonephoto',  request_var('headertype', 0), 0); 				  	
-				  	set_config ('bbdkp_bp_zoneprogress', ( isset($_POST['showzone']) ) ? 1 : 0);
-				  	set_config ('bbdkp_bp_zonestyle',  request_var('style', 0));
+				  	set_config ('bbdkp_bp_zonestyle',  request_var('zonestyle', 0));
+				  	set_config ('bbdkp_bp_zoneprogress', ( isset($_POST['zoneprogress']) ) ? 1 : 0);
+				  	set_config ('bbdkp_bp_hidenewzone',  ( isset($_POST['hidenewzone']) ) ? 1 : 0);
 				  	set_config ('bbdkp_bp_blockshowprogressbar',  request_var('blockprogressbar', 0));
 					
 				  	$sequence = request_var('zonesequence', array( 0 => ''));
@@ -806,13 +806,13 @@ class acp_dkp_bossprogress extends bbDKP_Admin
 				
 				$arrvals = array (
 					'F_CONFIG' 			 => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_bossprogress&amp;mode=zoneprogress"),
-					'BP_HIDENEWZONE'	 => ($config['bbdkp_bp_hidenewzone'] == 1) ? ' checked="checked"' : '',
-					'BP_HIDENONKIBOSS' 	 => ($config['bbdkp_bp_hidenonkilled'] == 1) ? ' checked="checked"' : '',
-					'BP_SHOWSB' 		 => ($config['bbdkp_bp_zoneprogress'] == 1) ? ' checked="checked"' : '',
-					'HEADER_SEL_SEPIA'   => ($config['bbdkp_bp_zonephoto'] == 0 ) ? ' selected="selected"' : '',
-					'HEADER_SEL_BLUE'    => ($config['bbdkp_bp_zonephoto'] == 1 ) ? ' selected="selected"' : '',
-					'HEADER_SEL_NONE'    => ($config['bbdkp_bp_zonephoto'] == 2 ) ? ' selected="selected"' : '',
-					'BP__BLOCKSHOWPROGRESSBAR' => ($config['bbdkp_bp_blockshowprogressbar'] == 1) ? ' checked="checked"' : '',
+					'BP_HIDENEWZONE'	 => ($config['bbdkp_bp_hidenewzone'] == 1) ? 'checked="checked"' : '',
+					'BP_HIDENONKIBOSS' 	 => ($config['bbdkp_bp_hidenonkilled'] == 1) ? 'checked="checked"' : '',
+					'BP_SHOWSB' 		 => ($config['bbdkp_bp_zoneprogress'] == 1) ? 'checked="checked"' : '',
+					'HEADER_SEL_SEPIA'   => ($config['bbdkp_bp_zonephoto'] == 0 ) ? 'selected="selected"' : '',
+					'HEADER_SEL_BLUE'    => ($config['bbdkp_bp_zonephoto'] == 1 ) ? 'selected="selected"' : '',
+					'HEADER_SEL_NONE'    => ($config['bbdkp_bp_zonephoto'] == 2 ) ? 'selected="selected"' : '',
+					'BP_BLOCKSHOWPROGRESSBAR' => ($config['bbdkp_bp_blockshowprogressbar'] == 1) ? ' checked="checked"' : '',
 				);
 				$template->assign_vars($arrvals);
 				

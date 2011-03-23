@@ -70,7 +70,7 @@
 <h1>{L_RP_ZONE}</h1>
 <p>{L_RP_ZONE_EXPLAIN}</p>
 
-<form method="post" action="{F_CONFIG}" name="post">
+<form method="post" action="{F_CONFIG}" name="acp_zoneprogress_list">
 <table border="0" width="100%" cellspacing="1" cellpadding="2">
 	<tr>
 		<th align="center" colspan="2">{L_GENERAL}</th>
@@ -85,7 +85,7 @@
 	</tr>
 	<tr>
 		<td class="row2">{L_BPSTYLE}</td>
-		<td class="row1"><select name="style" class="input">
+		<td class="row1"><select name="zonestyle" class="input">
 			<!-- BEGIN style_row -->
 			<option value="{style_row.VALUE}"{style_row.SELECTED}>{style_row.OPTION}</option>
 			<!-- END style_row -->
@@ -94,19 +94,16 @@
 
 	<tr>
 		<td width="70%" class="row2">{L_SHOWZONEPROGRESS}</td>
-		<td width="30%" class="row1"><input type="checkbox"
-			name="showzone" value="1" {BP_SHOWSB} /></td>
+		<td width="30%" class="row1"><input type="checkbox"	name="zoneprogress" value="1" {BP_SHOWSB} /></td>
 	</tr>
 	<tr>
-		<td width="30%" class="row2">{L_HIDENEWZONE}</td>
-		<td width="70%" class="row1"><input type="checkbox"
-			name="hidenewzone" value="1" {BP_HIDENEWZONE} /></td>
+		<td width="70%" class="row2">{L_HIDENEWZONE}</td>
+		<td width="30%" class="row1"><input type="checkbox"	name="hidenewzone" value="1" {BP_HIDENEWZONE} /></td>
 	</tr>
 	
 	<tr>
-		<td width="30%" class="row2">{L_BLOCKSHOWPROGRESSBAR}</td>
-		<td width="70%" class="row1"><input type="checkbox"
-			name="blockprogressbar" value="1" {BP__BLOCKSHOWPROGRESSBAR} /></td>
+		<td width="70%" class="row2">{L_BLOCKSHOWPROGRESSBAR}</td>
+		<td width="30%" class="row1"><input type="checkbox"	name="blockprogressbar" value="1" {BP_BLOCKSHOWPROGRESSBAR} /></td>
 	</tr>
 	
 	
@@ -119,9 +116,20 @@
 		<tr>
 			<th align="left" width="40" style="white-space: nowrap;">{L_ZONE_NAME}</th>
 			<th align="left" width="30" style="text-align: center">{L_ZONE_WEBLINK}</th>
-			<th align="center" width="20" style="text-align: center">{L_ZONE_COMPLETED}</th>
-			<th align="center" width="20" style="white-space: nowrap; text-align: center;">{L_SHOW_ZONE}</th>
-			<th align="center" width="20"  style="white-space: normal; text-align: center;">{L_SHOW_ZONE_PORTAL}</th>
+			<th align="center" width="20" style="text-align: center">{L_ZONE_COMPLETED}<br />
+				<span class="small"><a href="#" onclick="marklist('acp_zoneprogress_list', 'zonecompleted', true); return false;">{L_MARK_ALL}</a> <br /> 
+				<a href="#" onclick="marklist('acp_zoneprogress_list', 'zonecompleted', false); return false;">{L_UNMARK_ALL}</a></span>
+			</th>
+			<th align="center" width="20" style="white-space: nowrap; text-align: center;">{L_SHOW_ZONE}
+			<br />
+				<span class="small"><a href="#" onclick="marklist('acp_zoneprogress_list', 'showzone', true); return false;">{L_MARK_ALL}</a> <br /> 
+				<a href="#" onclick="marklist('acp_zoneprogress_list', 'showzone', false); return false;">{L_UNMARK_ALL}</a></span>
+			</th>
+			<th align="center" width="20"  style="white-space: normal; text-align: center;">{L_SHOW_ZONE_PORTAL}
+			<br />
+				<span class="small"><a href="#" onclick="marklist('acp_zoneprogress_list', 'showzoneportal', true); return false;">{L_MARK_ALL}</a> <br /> 
+				<a href="#" onclick="marklist('acp_zoneprogress_list', 'showzoneportal', false); return false;">{L_UNMARK_ALL}</a></span>
+			</th>
 			<th align="center" width="10" style="text-align: center">{L_ZONE_SEQUENCE}</th>
 			<th align="center" width="10" style="text-align: center">{L_OPTIONS}</th>
 		</tr>

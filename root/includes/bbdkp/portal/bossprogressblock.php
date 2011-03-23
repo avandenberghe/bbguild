@@ -44,22 +44,46 @@ if (! defined ( 'IN_PHPBB' ))
 $bpshow = false;
 $user->add_lang ( array ('mods/dkp_admin' ) );
 
-$sql_array = array(
-   'SELECT'    => 	' z.id as zoneid, 
-   					  l.name as zonename, 
-   					  l.name_short as zonename_short, 
-   					  z.completed ',
-   'FROM'      => array(
-		ZONEBASE 		=> 'z',
-		BB_LANGUAGE 	=> 'l',
-			),
-	'WHERE'		=> " z.id = l.attribute_id 
-		AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."'
-		AND z.showzoneportal = 1  
-		AND game= '" . $config['bbdkp_default_game'] . "'",
-	'ORDER_BY'	=> 'z.sequence desc, z.id desc ',
-   );
-				    
+if ($config['bbdkp_bp_hidenewzone'] == 1)
+{
+	// hide zones with no bosses killed
+	$sql_array = array(
+	   'SELECT'    => 	' z.id as zoneid, 
+	   					  l.name as zonename, 
+	   					  l.name_short as zonename_short, 
+	   					  z.completed ',
+	   'FROM'      => array(
+			ZONEBASE 		=> 'z',
+			BB_LANGUAGE 	=> 'l',
+			BOSSBASE		=> 'b', 
+				),
+		'WHERE'		=> " z.id = l.attribute_id 
+			AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."'
+			AND z.showzoneportal = 1  
+			AND z.game= '" . $config['bbdkp_default_game'] . "'
+			AND b.zoneid = z.id and b.killed = 1",
+		'ORDER_BY'	=> 'z.sequence desc, z.id desc ',
+	   );
+}
+else 
+{
+	$sql_array = array(
+	   'SELECT'    => 	' z.id as zoneid, 
+	   					  l.name as zonename, 
+	   					  l.name_short as zonename_short, 
+	   					  z.completed ',
+	   'FROM'      => array(
+			ZONEBASE 		=> 'z',
+			BB_LANGUAGE 	=> 'l',
+				),
+		'WHERE'		=> " z.id = l.attribute_id 
+			AND l.attribute='zone' AND l.language= '" . $config['bbdkp_lang'] ."'
+			AND z.showzoneportal = 1  
+			AND game= '" . $config['bbdkp_default_game'] . "'",
+		'ORDER_BY'	=> 'z.sequence desc, z.id desc ',
+	   );
+}
+
 $sql = $db->sql_build_query ( 'SELECT', $sql_array );
 $result = $db->sql_query ( $sql );
 $i = 0;
@@ -86,7 +110,6 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 		'ORDER_BY'	=> 'b.zoneid, b.id ASC ',
 	    );	
 	    
-	
 	// skip new bosses?
 	if ($config['bbdkp_bp_hidenonkilled'] == 1 )
 	{
@@ -171,6 +194,7 @@ foreach($zones as $key => $zone)
 }
 
 $template->assign_vars ( array (
+		'S_SHOWPROGRESSBAR' => ($config['bbdkp_bp_blockshowprogressbar']==1 ? true:false) , 
 		'GAME' => $config ['bbdkp_default_game'], 
 		'S_BPSHOW' => $bpshow ));
 

@@ -14,20 +14,22 @@ $(document).ready( function()
 {
 	<!-- BEGIN zone -->  
 	$("#zone{zone.ZONEID}").tooltip({ position: "top center", effect: 'fade', opacity: 0.95});  
-	$("#progressbar{zone.ZONEID}").progressBar(
-	{	showText : false,
-		width  : 100,
-		height : 10,
-		boxImage : '{T_IMAGES_PATH}progressbar/progressbar.gif',	// boxImage : image around the progress bar
-		barImage :
-		{
-			5:  '{T_IMAGES_PATH}progressbar/progressbg_black.gif',
-			20:  '{T_IMAGES_PATH}progressbar/progressbg_red.gif',
-			40:  '{T_IMAGES_PATH}progressbar/progressbg_orange.gif',
-			60:  '{T_IMAGES_PATH}progressbar/progressbg_yellow.gif',
-			100: '{T_IMAGES_PATH}progressbar/progressbg_green.gif'
-		}
-	})
+	<!-- IF S_SHOWPROGRESSBAR -->
+		$("#progressbar{zone.ZONEID}").progressBar(
+		{	showText : false,
+			width  : 100,
+			height : 10,
+			boxImage : '{T_IMAGES_PATH}progressbar/progressbar.gif',	// boxImage : image around the progress bar
+			barImage :
+			{
+				5:  '{T_IMAGES_PATH}progressbar/progressbg_black.gif',
+				20:  '{T_IMAGES_PATH}progressbar/progressbg_red.gif',
+				40:  '{T_IMAGES_PATH}progressbar/progressbg_orange.gif',
+				60:  '{T_IMAGES_PATH}progressbar/progressbg_yellow.gif',
+				100: '{T_IMAGES_PATH}progressbar/progressbg_green.gif'
+			}
+		}) 
+	<!-- ENDIF -->
 	<!-- END zone -->});
 </script>
 
@@ -54,7 +56,7 @@ $(document).ready( function()
 				<br />
 				<h4>{zone.ZONENAME}</h4>
 				<!-- BEGIN boss -->
-			    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="{T_IMAGES_PATH}/bossprogress/rp/{zone.boss.KILLED}.gif" alt="{zone.boss.KILLED}" /><br />
+			    <a class="bossprogress" href="{zone.boss.BOSSURL}" >{zone.boss.BOSSNAME}</a>&nbsp;<img src="{T_IMAGES_PATH}/bossprogress/rp/{zone.boss.KILLED}.png" alt="{zone.boss.KILLED}" /><br />
 			    <!-- END boss -->
 			    <br />
 	    </div>
@@ -67,8 +69,7 @@ $(document).ready( function()
     <td align="center" class="{zone.CSSCLASS}"><span><strong>({zone.BOSSKILLS}/{zone.BOSSCOUNT})</strong></span></td>
     </tr>
     
-    <!-- IF S_BPSHOW == 1 -->
-    
+    <!-- IF S_SHOWPROGRESSBAR -->
     <tr>
     <td align="center" colspan="2">
 	      <span id="progressbar{zone.ZONEID}" class="progressbar">{zone.COMPLETED}</span>

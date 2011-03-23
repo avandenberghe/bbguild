@@ -83,9 +83,17 @@
 			<th align="left" width="15" nowrap="nowrap">{L_BOSS_NAME_SHORT}</th>
 			<th align="left" width="10" nowrap="nowrap">{L_BOSS_IMAGENAME}</th>
 			<th align="left" width="10" nowrap="nowrap">{L_BOSS_WEBID}</th>
-			<th align="center" width="5">{L_BOSS_COMPLETED}</th>
+			<th align="center" width="5">{L_BOSS_COMPLETED}<br />
+				<span class="small"><a href="#" onclick="marklist('acp_bossprogress_edit', 'bosskilled', true); return false;">{L_MARK_ALL}</a> <br /> 
+				<a href="#" onclick="marklist('acp_bossprogress_edit', 'bosskilled', false); return false;">{L_UNMARK_ALL}</a></span>
+				
+			</th>
 			<th align="left" width="10" >{L_BOSS_COMPLETEDATE}</th>
-			<th align="center" width="2%" nowrap="nowrap">{L_BOSS_SHOW}</th>
+			<th align="center" width="2%" nowrap="nowrap">{L_BOSS_SHOW}
+			<br />
+				<span class="small"><a href="#" onclick="marklist('acp_bossprogress_edit', 'bossshow', true); return false;">{L_MARK_ALL}</a> <br /> 
+				<a href="#" onclick="marklist('acp_bossprogress_edit', 'bossshow', false); return false;">{L_UNMARK_ALL}</a></span>
+			</th>
 			<th align="center" width="3%">{L_OPTIONS}</th>
 		</tr>
 	</thead>
