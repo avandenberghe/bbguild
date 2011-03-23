@@ -44,14 +44,7 @@ if (!file_exists($phpbb_root_path . 'install/installdkp.' . $phpEx))
     trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
 }
 
-// check for dkp acp
-include($phpbb_root_path . 'umil/umil.' . $phpEx);
-$umil = new umil; 
-if ($umil->module_exists('acp', false, 'DKP'))
-{
-     //bbDKP seems already installed, redirect to older umil updater
-     redirect($phpbb_root_path . '/install/updatedkp.'. $phpEx); 
-}
+check_oldbbdkp();
 
 // The name of the mod to be displayed during installation.
 $mod_name = 'bbDKP 1.2 Clean Installer';
@@ -983,6 +976,37 @@ function gameinstall($action, $version)
 					
 }
 
+/***
+ * checks if there is an older install, if found, redirects 
+ */
+function check_oldbbdkp()
+{
+	global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx;
+
+	//check for a DKP module
+	$umil = new umil; 
+	if ($umil->module_exists('acp', false, 'DKP'))
+	{
+	     //bbDKP seems already installed, redirect to older umil updater
+	     redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx)); 
+	}
+
+	//check for old table
+	$old_bbdkp_table_prefix = "bbeqdkp_";
+	if($umil->table_exists($old_bbdkp_table_prefix . 'events'))
+	{
+		//old table found, redirect
+		 redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx));
+	}
+	
+	// finally check old config		
+	if($umil->config_exists('bbdkp_guildtag'))
+    {
+		//old table found, redirect
+		redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx));    
+    }   
+	
+}
 
 
 ?>
