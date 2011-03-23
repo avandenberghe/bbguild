@@ -41,8 +41,8 @@ if ($config['bbdkp_recruitment'] == 1)
 	        CLASS_TABLE 	=> 'c',
 	        BB_LANGUAGE		=> 'l', 
 	    	),
-	    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.c_index AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
-		'ORDER_BY'	=> ' c.class_id ',
+	    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id  AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+		'ORDER_BY'	=> ' l.name ',
 	    );
 	    
 	$sql = $db->sql_build_query('SELECT', $sql_array);    
