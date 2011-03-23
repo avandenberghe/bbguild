@@ -120,13 +120,13 @@ switch ($layout)
             		switch ($row['region'])
                 		{
                 		    case 'EU': 
-                		        $site='http://eu.wowarmory.com';
+                		        $site='http://eu.battle.net/wow/en/character';
                 		        break;
                 		    case 'US': 
-                		        $site='http://www.wowarmory.com';
+                		        $site='http://us.battle.net/wow/en/character/';
                 		        break;
                 		}
-                	$memberarmoryurl = $site . '/character-sheet.xml?r=' . $row['realm'] . '&amp;n=' .  $row['member_name'];
+                	$memberarmoryurl = $site . $row['realm'] . '/' .  $row['member_name'];
                    break;
     		    case 'aion': 
                     // individual portraits
@@ -260,14 +260,14 @@ switch ($layout)
                 		
                 		switch ($row['region'])
                 		{
-                		    case 'EU': 
-                		        $site='http://eu.wowarmory.com';
+ 							case 'EU': 
+                		        $site='http://eu.battle.net/wow/en/character';
                 		        break;
-                		     case 'US': 
-                		        $site='http://www.wowarmory.com';
+                		    case 'US': 
+                		        $site='http://us.battle.net/wow/en/character/';
                 		        break;
                 		}
-                		$memberarmoryurl = $site . '/character-sheet.xml?r=' . $row['realm'] . '&amp;n=' .  $row['member_name'];
+                		$memberarmoryurl = $site . $row['realm'] . '/' .  $row['member_name'];
                        break;
     		        case 'aion': 
 		                $cssclass = '';
