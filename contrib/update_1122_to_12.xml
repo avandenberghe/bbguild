@@ -204,8 +204,7 @@
 		                <comment lang="de"><![CDATA[Zufügung css im admin header]]></comment>
 		                <find><![CDATA[	<link rel="stylesheet" href="style/dkp/farbtastic.css" type="text/css" />]]></find>
 		                <action type="after-add"><![CDATA[
-<link rel="stylesheet" href="style/dkp/bbdkp.css" type="text/css" />
-]]></action>
+		                <link rel="stylesheet" href="style/dkp/bbdkp.css" type="text/css" />]]></action>
 		        </edit>
 		</open>
 		
@@ -214,8 +213,20 @@
 				<comment lang="en"><![CDATA[remove portal navbar exclusion]]></comment>
 				<comment lang="fr"><![CDATA[supppression exception navbar dans portail ]]></comment>
 				<comment lang="de"><![CDATA[Entfernung navbar Ausnahme im Portal]]></comment>								
-				<find><![CDATA[<div class="navbar">]]></find>
-				<action type="before-add"><![CDATA[<!-- IF not S_PORTAL -->]]></action>
+				<find><![CDATA[<!-- IF not S_PORTAL -->]]></find>
+				<remove><![CDATA[<!-- IF not S_PORTAL -->]]></remove>
+			</edit>
+			<edit>
+				<comment lang="en"><![CDATA[remove close portal navbar exclusion]]></comment>
+				<comment lang="fr"><![CDATA[supppression endif]]></comment>
+				<comment lang="de"><![CDATA[Entfernung endif]]></comment>				
+				<find><![CDATA[<!-- ENDIF -->
+	</div>
+
+	<a name="start_here"></a>]]></find>
+				<action type="replace-with"><![CDATA[</div>
+
+	<a name="start_here"></a>]]></action>
 			</edit>
 
 		</open>

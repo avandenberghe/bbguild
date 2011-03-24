@@ -982,9 +982,9 @@ function gameinstall($action, $version)
 function check_oldbbdkp()
 {
 	global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx;
-
+	include($phpbb_root_path . 'umil/umil.' . $phpEx);
+	$umil=new umil;
 	//check for a DKP module
-	$umil = new umil; 
 	if ($umil->module_exists('acp', false, 'DKP'))
 	{
 	     //bbDKP seems already installed, redirect to older umil updater
