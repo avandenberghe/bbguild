@@ -26,7 +26,7 @@
 			<div class="inner"><span class="corners-top"><span></span></span>
 
 			<div id="doc-description">
-			<a>	<img src="bbdkp.png" alt="" /></a>
+			<a>	<img src="logo.png" alt="" /></a>
 				<h1>bbDkp Install</h1>
 				<p style="display: none;"><a href="#start_here">Skip</a></p>
 			</div>
@@ -46,27 +46,27 @@
 		<div class="inner"><span class="corners-top"><span></span></span></div>
 		
 		<div class="content">
-<b>bbDKP for phpBB3</b> brings together the DKP management facilites of EQdkp and 
-integrates them fully with phpBB3's facilities.  This means your users gain single 
-sign on to dkp, and you gain a clean interface, robust admin facilities and less headaches. <br />
-<b>Games supported</b> : Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, Wow. <br />
-<b>Features</b> : Multiple Dkp Pools, Multiple Guilds, Standings, Raids, Events, Item values, Item history, Raid Stats, Bossprogress, Roster, backup, import from Eqdkp.<br />
+<p>bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. </p><p>It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. </p><p>It integrates Game, Guild and DKP management functions into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches.</p>
+<p>Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION. </p>
+<p>There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Raidplanner (under development). </p>
+
+<p>Further development requests, support questions are welcome at http://www.bbdkp.com. As of the current release, it does not (yet) make coffee ;)</p>
+
+<p>Languages included: Englisch (en), French (fr), Deutsch (de)</p>
 
 <b>Available Plugins : </b>
 <ul type="circle">
-<li>Armory Import (Wow &amp; Aion) </li>
-<li>bbTips (Wow) </li>
-<li>Ct_Raidtracker (wow)</li> 
-<li>Recruitment (Wow)  </li>
+<li>Armory Import 1.0.3 (Wow &amp; Aion) </li>
+<li>bbTips (Wow) 0.4.0</li>
+<li>Raidtracker 0.3.0</li> 
+<li>Recruitment 1.2.7</li>
+<li>Raidplanner 0.1.0</li>
 </ul>
 
 </div>
-		
-		
 		<div class="back2top"><a href="#wrap" class="top">Back to Top</a></div>
 		<div class="inner"><span class="corners-bottom"><span></span></span></div>
-		
-	</div>	
+</div>	
 	
 <h1>Requirements</h1>
 	<hr />
@@ -77,7 +77,7 @@ sign on to dkp, and you gain a clean interface, robust admin facilities and less
 		<div class="content">
 			<ol>
 			<li>phpbb3.0.5 or higher</li>
-			<li>PHP 5.1.0 and Libxml 2.6.0 (simplexml usage) </li>
+			<li>PHP 5.2 -> 5.3.x / Libxml 2.6.0 (simplexml usage)</li>
 			<li>Curl (preferred) or url_fopen or fsockopen should be available on your server.</li>
 			<li>ftp and founder admin access on your phpbb installation. </li>
 			</ol>
@@ -96,66 +96,48 @@ sign on to dkp, and you gain a clean interface, robust admin facilities and less
 
 	<div class="paragraph">
 		<div class="inner"><span class="corners-top"><span></span></span></div>
+		<p>Adding bbDKP to phpBB3 is easy. you need to do the edits in your core phpbb files, copy bDKP and your modded files to your server, and then run the database installer. </p>
 		
+		<h2>Step-by-step Guide</h2>
 		<div class="content">
-			<h2>New 1.1.2 install guide</h2>
+			<h2>New installation using Automod</h2>
 			<ol>
-			<li>Unzip the bbdkp zip file into /store/mods/</li>
-			<li>Launch automod, choose the install link. this will copy all the files, perform the necessary edits. </li>
-			<li> Copy these folders to the images folder : this is not done by Automod because it can't handle it due to the size <br />
-			   from="root/images/class_images/*.*" to="images/class_images/*.*"<br />
+			<li>Unzip the bbdkp zip file</li>
+			<li>Upload it to your Site, into /store/mods/ </li>
+			<li>Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits. </li>
+			<li> You need to copy the content of root/images folder to your Images folder manually : this is not done by Automod because it can't handle it due to the folder size (it's about 25 mb) <br />
 			   from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" <br />
+			   from="root/images/class_images/*.*" to="images/class_images/*.*"<br />
+			   from="root/images/progressbar/*.*" to="images/progressbar/*.*"<br />	
+			   from="root/images/race_images/*.*" to="images/race_images/*.*"<br />			   		   			   
+			   from="root/images/recruitblock_images/*.*" to="images/recruitblock_images/*.*"<br />
+			   from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" <br />
 			   from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" <br />
-			   from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"<br /> </li>
+			   from="root/images/tooltip/*.*" to="images/tooltip/*.*"<br /> </li>
 			   
-			<li>Then surf to /install, and you will see the umil installation page.  This will install the acp modules, database tables, and clear the caches (template, theme, imagesets)</li>
+			<li>Then surf to /install/installdkp.php, and you will see the umil installation page.  This will install the acp modules, database tables, and clear the caches (template, theme, imagesets)</li>
 			</ol>
    
-            <h2>Upgrading from 1.1.1 to 1.1.2</h2>
-			<ol>
-            <li>There are two file packages : a full MODX package and a changed files MODX package. both are Automod Compatible</li>
-			<li>After having updated the files, surf to /install, and you will see the Umil updater. It will give you the option to Upgrade the Db from 1.1.1, updating the acp modules, database tables, and clear the caches (template, theme, imagesets)</li>
-			</ol>
+            <h2>Upgrading to 1.2 from 1.1.2.2</h2>
 			
-            <h2>Upgrading from 1.1.0 to 1.1.2</h2>
-			<ol>
-            <li>Using Automod, do an uninstall of 1.1.0 This will undo all the changes to the php and html files, leaving the bbdkp database tables. </li>
-            <li>Unzip the bbdkp 1.1.2 zip file into /store/mods/</li>
-			<li>Launch automod, choose the install link. this will copy all the files, perform the necessary edits. .  </li>
-			<li> Copy these folders to the images folder : this is not done by Automod because it can't handle it due to the size <br />
-			   from="root/images/class_images/*.*" to="images/class_images/*.*"<br />
-			   from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" <br />
-			   from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" <br />
-			   from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"<br /> </li>
-			<li>Then surf to /install, and you will see the Umil installer. It will give you the option to Upgrade the Db from 1.1.0, updating the acp modules, database tables, and clear the caches (template, theme, imagesets)</li>
-			</ol>
+			<ul>
+				<li>If you want to upgrade manually, you just need to follow follow the instructions in contrib/update_1122_to_12.xml :</li>
+				<ul>
+				<li>first you copy all files to your webserver, replacing any old files. (Tip : it is better to just delete and replace)</li>
+				<li>then you apply the (few) changes to the core phpbb files</li>
+				<li>then you run the DB updater (/install/updatedkp.php)</li>
+				</ul>
+				
+				<li>If you want to update Using Automod, we prepared a separate download with a changed files MODX package. Refer to the instructions in that download.</li>
+			</ul>
+			</li>
 			
-			<h2>Upgrading from 1.0.8 (any) or 1.0.9rc1 to 1.1.2</h2>
+			<h2>Upgrading from 1.0.8-1.1 to 1.2</h2>
 			<ol>
-			<li>Note : if you have 1.09 beta you need to update your database to 1.0.9rc1 before doing an upgrade to 1.1.2</li>
-            <li>Using Automod, do an uninstall of 1.09rc1. This will undo all the changes to the php and html files, leaving the bbdkp database tables. be sure to check that your phpbb files are clean.</li>
-			<li>Unzip the bbdkp 1.1.0 into /store/mods/</li>
-			<li>Launch automod, choose the install link. this will copy all the files, perform the necessary edits.   </li>
-			<li> Copy these folders to the images folder : this is not done by Automod because it can't handle it due to the size <br />
-			   from="root/images/class_images/*.*" to="images/class_images/*.*"<br />
-			   from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" <br />
-			   from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" <br />
-			   from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"<br /> </li>
-  			
-  			<li>Then surf to /install, and you will see the Umil installer. It will give you the option to Upgrade the Db from 1.0.9rc1, updating the acp modules, database tables, and clear the caches (template, theme, imagesets)</li>
+			<li>Completely remove all old files and all old Edits from your phpbb installation.</li>
+			<li>Follow the Clean install instructions</li>
 			</ol>
             			
-			<h2>EQDKP conversion for Wow and EQ1/EQ2 (is not included, separate download)</h2>
-			You can import your existing EqDkp tables into bbDkp. for this,
-			<ol>
-			<li>Clean-install the bbdkp Mod on a phpbb3 forum as described above.</li>
-			<ul>
-			<li>for importing EqDkp 1.3.2, launch /install/import_eqdkp132.php </li>
-			<li>for importing EqDkp 1.4.0, launch /install/import_eqdkp40.php </li>
-			<li>for importing EqDkp Plus, launch /install/import_eqdkpplus.php </li>
-			</ul>
-			</ol>
-						
 			<h2>Quick Deactivation</h2>
 			<ol>
 			<li>should you wish to Deactivate this Mod quickly you can open config.php</li>
@@ -165,7 +147,6 @@ sign on to dkp, and you gain a clean interface, robust admin facilities and less
 			<code>//@define('EMED_BBDKP', true);</code>
 			</ol>
 		</div>
-		
 		
 		<div class="back2top"><a href="#wrap" class="top">Back to Top</a></div>
 		<div class="inner"><span class="corners-bottom"><span></span></span></div>
@@ -218,7 +199,7 @@ sign on to dkp, and you gain a clean interface, robust admin facilities and less
 			 
 			<h2>Donation</h2>
 			<p>
-			bbDkp is freeware, but you can support our development efforts by making a contribution. <br/>
+			bbDkp is freeware, but to ensure continued Development, you can support us by making a contribution. <br/>
 			 
 			 <form action="https://www.paypal.com/cgi-bin/webscr" method="post">
 <input type="hidden" name="cmd" value="_s-xclick">

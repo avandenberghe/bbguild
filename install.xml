@@ -243,8 +243,8 @@ if(@defined("EMED_BBDKP"))
 		<open src="config.php">
 			<edit>
 				<comment lang="en"><![CDATA[Adding bbdkp kill switch ]]></comment>
-				<comment lang="fr"><![CDATA[Ajout d'un interrupteur ]]></comment>
-				<comment lang="de"><![CDATA[Zufügung eines Ein-Aus Schalters ]]></comment>
+				<comment lang="fr"><![CDATA[Ajout interrupteur]]></comment>
+				<comment lang="de"><![CDATA[Zufügung Ein-Aus Schalter ]]></comment>
 				<find><![CDATA[?>]]></find>
 				<action type="before-add"><![CDATA[@define('EMED_BBDKP', true);
         ]]></action>
