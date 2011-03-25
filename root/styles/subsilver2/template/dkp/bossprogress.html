@@ -1,57 +1,22 @@
 <!-- INCLUDE overall_header.html -->
 <!-- INCLUDE dkp/dkpmenu.html -->
 <!--
-		Integrated by bbDKP
-		http://code.google.com/p/bbdkp/
-		$Id$
-//-->
-<style type="text/css">
-dl { 
-	margin: 0; 
-	padding: 0;     				
-}
-dd { 
-	position: relative; /* IE is dumb */
-	display: block;     			
-	float: left;     
-	width: 800px; 
-	height: 120px; 
-	margin: 0 0 0px; 
-	background: url("images/bossprogress/rp/g_colorbar2.jpg"); 
-}
-* html dd { float: none; } 
+	Bossprogress Subsilver2
+	Integrated by bbDKP
+	http://code.google.com/p/bbdkp/
+	$Id$
+-->
 
-dd div { 
-  	position: relative; 
-	background: url("images/bossprogress/rp/g_colorbar.jpg"); 
-	height: 120px; 
-	width: 100%; 
-	text-align:right; 
-}
-dd div strong 
-{ 
-	position: absolute;
-	right: -5px; 
-	top: -2px; 
-	display: block; 
-	background: url("images/bossprogress/rp/g_marker.gif"); 
-	height: 24px; 
-	width: 9px; 
-	text-align: left;
-	text-indent: -9999px; 
-	overflow: hidden;
-}
-</style>
-
-<table width="100%" class="tablebg" cellpadding="0" cellspacing="1" >
-   <tr>
-      <th class="row1"><h2><font color="#dfc065">Boss progress</font></h2></th>
-   </tr>
+<table width="100%" class="tablebg" border="0" cellspacing="0" cellpadding="2" style="border-bottom: none">
+<tr>
+<th>
+   <h1 style ="text-align:left; color:#dfc065">{L_BOSSPROGRESS}</h1>
+</th>
+</tr>
 </table>
-
+<br />
 <div style="text-align:center">
-
-<table style="width:800px; border:0; margin-left:auto;margin-right:auto" >
+<table  class="tablebg" style="width:800px; margin-left:auto;margin-right:auto;" border="0" cellspacing="0"  >
 
 <!-- IF S_STYLE == 0 -->
 <colgroup  span="4">
@@ -80,34 +45,39 @@ dd div strong
 <!-- BEGIN zone -->
 <tbody>
 <tr class="row1">
-	<td  colspan="4">
-		<dl>
+<td  colspan="4">
+<div class="progresspage">
+	<dl>
 		<dd style="text-align:center; background: url({zone.ZONEBACKIMG})">
 			<div style="width:{zone.ZONECOMPLETE}%; background: url({zone.ZONEPROGRESSIMG});">
 			</div>
-			</dd>
-		</dl>
-	</td>
+		</dd>
+	</dl>
+</div>
+
+</td>
 </tr>
 
 <!-- IF S_STYLE == 2 -->
 <tr>
 <td colspan="1" class="row2" style="text-align:center;">
+<div class="progresspage">
 	<dl style="width:197px; height:20px">
 		<dd style="width:197px; height:20px">
 			<div style="width:{zone.ZONECOMPLETE}%; height:18px"><strong></strong> 
 			</div>
 		</dd>
 	</dl>
+</div>
 </td>
 <td colspan="2" class="row2" style="text-align:center;">
-	<b>{zone.ZONENAME}</b> -- {zone.ZONESTATS}
+	<strong>{zone.ZONENAME}</strong> -- {zone.ZONESTATS}
 </td>
 </tr>
 <!-- ELSE -->
 <tr>
 	<td style="text-align:center" colspan="4" class="row2">
-	<span><b>{zone.ZONENAME}</b> -- {zone.ZONESTATS}</span></td>
+	<span><strong>{zone.ZONENAME}</strong> -- {zone.ZONESTATS}</span></td>
 </tr>
 <!-- ENDIF -->
 
@@ -120,6 +90,7 @@ dd div strong
 ************************
 -->
 
+
 <!-- BEGIN boss -->
 <!-- IF boss.S_ROW_COUNT is even -->
 <tr class="row1" >
@@ -127,11 +98,11 @@ dd div strong
 		<a href="{boss.BOSSLINK}"><img src="{zone.boss.BOSSIMG}" height="70" width="70" alt="{zone.boss.BOSSIMGALT}" /></a>
 	</td>
 	<td style="text-align:left">
-		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a><br />
-		<!-- IF zone.boss.BOSSCOUNT > 0 -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="15" height="15" alt="check" /><br />
+		<h4><a href="{boss.BOSSLINK}"><strong>{boss.BOSSNAME}</strong></a></h4>
+		<!-- IF zone.boss.BOSSCOUNT > 0 -->		
+		<img src="{T_IMAGES_PATH}bossprogress/rp/1.png" alt="" /><br />
 		<!-- ELSE -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif" width="15" height="15" alt="check" />
+		<img src="{T_IMAGES_PATH}bossprogress/rp/0.png" alt="" />
 		<!-- ENDIF -->
 		{zone.boss.FIRSTKILL}<br />
 		{zone.boss.LASTKILL}<br />
@@ -142,18 +113,18 @@ dd div strong
 	<!-- ENDIF -->
 <!-- ELSE -->
 	<td style="text-align:right">
+		<h4><a href="{boss.BOSSLINK}"><strong>{boss.BOSSNAME}</strong></a></h4>	
 		<!-- IF zone.boss.BOSSCOUNT > 0 -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="15" height="15" alt="check" /><br />
+		<img src="{T_IMAGES_PATH}bossprogress/rp/1.png" alt="" /><br />
 		<!-- ELSE -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif" width="15" height="15" alt="check" />
+		<img src="{T_IMAGES_PATH}bossprogress/rp/0.png" alt="" />
 		<!-- ENDIF -->
-		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a><br />	
 		{zone.boss.FIRSTKILL}<br />
 		{zone.boss.LASTKILL}<br />
 		{zone.boss.BOSSCOUNTSTR}<br />
 	</td>
 	<td style="text-align:center">
-		<a href="{boss.BOSSLINK}"><img src="{zone.boss.BOSSIMG}" height="70" width="70" alt="{zone.boss.BOSSIMGALT}" /></a> 
+		<a href="{boss.BOSSLINK}"><img src="{zone.boss.BOSSIMG}" height="70" width="70" alt="{zone.boss.BOSSIMGALT}" /></a>
 	</td>
 	</tr>
 <!-- ENDIF -->
@@ -162,17 +133,15 @@ dd div strong
 <!-- ENDIF -->
 
 <!-- IF S_STYLE == 1 -->
-
 <!--  
 ************************
   raidprogress simple 
 ************************
 -->
 
-
 <!-- BEGIN boss -->
 <tr class="row1" >
-	<td style="text-align:left"> Name: <a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a></td>
+	<td style="text-align:left"> Name: <a href="{boss.BOSSLINK}"><strong>{boss.BOSSNAME}</strong></a></td>
 	<td> {zone.boss.FIRSTKILL} </td>
 	<td> {zone.boss.LASTKILL} </td>
 	<td> {zone.boss.BOSSCOUNTSTR} </td>
@@ -195,11 +164,12 @@ dd div strong
 <!-- ENDIF -->
 	<td style="text-align:left">
 	<!-- IF zone.boss.BOSSCOUNT > 0 -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/1.gif" width="20" height="15" alt="check" />
-		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME} : {zone.boss.BOSSCOUNTSTR}</b></a>				
+		<img src="{T_IMAGES_PATH}bossprogress/rp/1.png" alt="" />
+		<a href="{boss.BOSSLINK}"><strong>{boss.BOSSNAME} : {zone.boss.BOSSCOUNTSTR}</strong></a>				
+		{boss.LASTKILL}
 	<!-- ELSE -->
-		<img src="{T_IMAGES_PATH}bossprogress/rp/0.gif"  width="20" height="15" alt="check" />	
-		<a href="{boss.BOSSLINK}"><b>{boss.BOSSNAME}</b></a>	
+		<img src="{T_IMAGES_PATH}bossprogress/rp/0.png"  alt="" />
+		<a href="{boss.BOSSLINK}"><strong>{boss.BOSSNAME}</strong></a>	
 	<!-- ENDIF -->	
 	</td>
 <!-- IF boss.S_ROW_COUNT % 3 == 0 -->
@@ -220,5 +190,7 @@ dd div strong
 <!-- END zone -->
 </table>
 </div>
+
+
 
 <!-- INCLUDE overall_footer.html -->

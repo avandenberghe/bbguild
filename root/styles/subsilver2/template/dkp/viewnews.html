@@ -6,19 +6,21 @@
 		$Id$
 //-->
 
-<table width="100%" class="tablebg" cellpadding="0" cellspacing="1" >
+<table class="tablebg" width="100%" class="tablebg" cellpadding="0" cellspacing="1" >
 <tr>
-      <th class="row1"><h2><font color="#dfc065">{L_NEWS}</font></h2></th>
+      <th style="text-align:left; white-space:nowrap;"><h1><font color="#dfc065">{L_NEWS}</font></h1></th>
 </tr>
 </table>
 <br />
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
-
+<table class="tablebg" width="100%" border="0" cellspacing="1" cellpadding="2">
+<thead>
 <!-- BEGIN date_row -->
 <tr>
   <th align="left">{date_row.DATE}</th>
 </tr>
 <!-- BEGIN news_row -->
+</thead>
+<tbody>
 <tr>
 
 <!-- IF date_row.news_row.S_ROW_COUNT is even -->
@@ -33,9 +35,12 @@
 </tr>
 <!-- END news_row -->
 <!-- END date_row -->
+</tbody>
+<tfoot>
 <tr>
    <th class="footer">&nbsp;</th>
 </tr>
+</tfoot>
 </table>
 
 <table width="100%" border="0" cellspacing="1" cellpadding="2" class="borderless">

@@ -23,7 +23,7 @@
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td style="width:15%; white-space:nowrap; text-align:center;" class="bg1"><strong>{L_RAIDVALUE}</strong>: <span class="positive">{RAIDVALUE}</span></td>
 
@@ -39,7 +39,7 @@
     <strong>{L_RAIDDECAY}</strong>: <span class="negative">{RAIDDECAY}</span>
     <!-- ENDIF -->
     </td>
-
+	<td class="bg1"></td>
     <!-- IF S_SHOWEPGP -->
     <td style="width:18%; white-space:nowrap; text-align:center;" class="bg2"><h4><strong>Net {L_EARNED} {L_EP}</strong>: <span class="positive">{TOTAL}</span></h4></td>
     <!-- ELSE -->
@@ -49,7 +49,7 @@
 </tr>
 <tr>
     <td style="width:18%; white-space:nowrap; text-align:center;" class="bg1"><strong>{L_SPENT}</strong>: <span class="negative">{ITEM_VALUE}</span></td>
-    <td></td>
+    <td class="bg1"></td>
     <td style="width:18%; white-space:nowrap; text-align:center;" class="bg1"><!-- IF S_SHOWDECAY --><strong>{L_ITEMDECAY}</strong>: <span class="positive">{ITEMDECAYVALUE}</span><!-- ENDIF --></td>
 	
 	<td style="width:18%; white-space:nowrap; text-align:center;" class="bg2">
@@ -62,9 +62,9 @@
 </tr>
 
 <tr>
-    <td></td>
-    <td></td>
-    <td></td>
+    <td class="bg1"></td>
+    <td class="bg1"></td>
+    <td class="bg1"></td>
 	<td style="width:18%; white-space:nowrap; text-align:center;" class="bg2">
     <h4><strong>{L_TOTAL}</strong>: <span class="negative">{RAIDNET}</span></h4>
 	</td>
@@ -83,7 +83,7 @@
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
 	<td class="bg1" width="33%"><h4>{L_RAIDSTART}: <strong>{RAIDSTART}</strong></h4></td>
 	<td class="bg1" width="33%"><h4>{L_RAIDEND}: <strong>{RAIDEND}</strong></h4></td>
@@ -96,8 +96,8 @@
   </tr>
 <tr>
 	<td class="bg1" width="33%">{RAID_UPDATED_BY}</td>
-	<td></td>
-	<td></td>
+	<td class="bg1></td>
+	<td class="bg1></td>
   </tr>
 
 
@@ -128,7 +128,7 @@
 <div class="inner">
 <span class="corners-top"><span></span></span>
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
-  </tr>
+ 
   <!-- BEGIN attendees_row -->
   <tr>
     <!-- IF S_COLUMN0 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
@@ -259,10 +259,10 @@
 <tfoot>
   <tr  style="color:white;">
     <th class="footer" colspan="2" >{ITEM_FOOTCOUNT}</th>
-    <th></th>
+    <th class="footer"></th>
     <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{ITEM_VALUE}</th>
     <!-- IF S_SHOWZS -->
-    <th></th>
+    <th class="footer"></th>
     <!-- ENDIF -->
     <!-- IF S_SHOWDECAY --> 
     <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{ITEMDECAYVALUE}</th>

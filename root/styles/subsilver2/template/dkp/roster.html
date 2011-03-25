@@ -1,18 +1,22 @@
 <!-- INCLUDE overall_header.html -->
 <!-- INCLUDE dkp/dkpmenu.html -->
 <!--
+		subsilver2
 		Integrated by bbDKP
 		http://code.google.com/p/bbdkp/
 		$Id: roster.html 516 2009-05-21 15:54:55Z Sajaki9 $
 //-->
 
-
 <table width="100%" class="tablebg" border="0" cellspacing="1" cellpadding="2">
   <tr>
-  	<th style="text-align: center" ><h4>{GUILDNAME} {L_GUILDROSTER} </h4></th>
+  	<th style="text-align: left; white-space: nowrap;" ><h1 style ="color:#dfc065;">{GUILDNAME} {L_GUILDROSTER} </h1></th>
   </tr>
-  <tr>
-    <th align="center">
+</table>
+<br/>
+<table width="100%" class="tablebg" border="0" cellspacing="1" cellpadding="2">
+  
+  <tr class="cat">
+    <td align="center">
     <a href="{U_LIST_MEMBERS0}">{L_NAME}</a> - 
 	<!-- IF S_RSTYLE == 0 -->
     	<a href="{U_LIST_MEMBERS1}">{L_CLASS}</a> -
@@ -22,17 +26,14 @@
    	<!-- IF S_SHOWACH == 1 -->
 - <a href="{U_LIST_MEMBERS4}">{L_ACHIEV}</a> 
 	<!-- ENDIF -->  
-    </th>
+    </td>
   </tr>
 </table>
 
-
-
 <div class="post">
 
-
 <!-- IF S_RSTYLE == 0 -->
-<table style="width: 100%"  border="0" cellspacing="0" cellpadding="0">
+<table class="tablebg" style="width: 100%"  border="0" cellspacing="0" cellpadding="0">
 
 <colgroup span="12">
 	<col width="8.3%"></col>
@@ -50,13 +51,13 @@
 <tbody>
 <!-- BEGIN members_row -->
    <!-- IF members_row.S_ROW_COUNT % 6 == 0 -->
-    <tr class="bg1">
+    <tr class="row2">
   <!-- ENDIF -->
- 	<td style="width:150; text-align:center" class="bg2" >
+ 	<td style="width:150; text-align:center" class="row2" >
 	<a href="{members_row.ARMORY}" >
 	<img src="{class.members_row.PORTRAIT}" alt="image" width="64" height="64"></img></a></td>
   	
-  	<td "width:150; text-align:center" class="bg2" >
+  	<td "width:150; text-align:center" class="row2" >
   
 	<strong><a style="color: {members_row.COLORCODE};" href="{members_row.ARMORY}" >{members_row.NAME}</a></strong><br/>
 	<p>{members_row.GNOTE}<br/>
@@ -102,7 +103,7 @@
 
 <table  style="width: 100%" border="0" cellspacing="0" cellpadding="0">
   
-  <colgroup span="10">
+ <colgroup span="10">
 	<col width="10%"></col>
 	<col width="10%"></col>
 	<col width="10%"></col>
@@ -114,13 +115,13 @@
 	<col width="10%"></col>
 	<col width="10%"></col>
 </colgroup>
-  
+ <tbody> 
   <!-- BEGIN members_row -->
   
   <!-- IF members_row.S_ROW_COUNT % 5 == 0 -->
-  <tr class="bg1">
+  <tr class="row2">
   <!-- ENDIF -->
- 	<td class="row1" style="text-align:center; width:100;" class="bg1" >
+ 	<td class="row1" style="text-align:center; width:100;" class="row2" >
 	<a href="{class.members_row.ARMORY}">
 	<img src="{class.members_row.PORTRAIT}" alt="pic" width="64" height="64"></img></a></td>
   	<td style="text-align:left; width:100" class="row1" >
@@ -156,6 +157,7 @@
 
  
   <!-- END members_row -->
+ </tbody>
 </table>
  <br />
 <!-- END class -->
@@ -163,16 +165,12 @@
 <!-- ENDIF --> 
 
 </div>
-<div class="forabg" >
-   <span class="corners-top"><span></span></span>
 
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
-    <th style="color: white; text-align:center">{LISTMEMBERS_FOOTCOUNT}</th>
+    <th style="color: white; text-align:left">{LISTMEMBERS_FOOTCOUNT}</th>
   </tr>
 </table>
-<span class="corners-bottom"><span></span></span>
-</div>
 
 
 <!-- INCLUDE overall_footer.html -->

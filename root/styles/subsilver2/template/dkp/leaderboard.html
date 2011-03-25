@@ -5,7 +5,7 @@
 //-->
 <div>
 
-<table style="width: 100%" border="0" cellspacing="1" cellpadding="0">
+<table class="tablebg" style="width: 100%" border="0" cellspacing="0" cellpadding="2">
 <colgroup span="5">
 	<col width="20%"></col>
 	<col width="20%"></col>
@@ -36,7 +36,14 @@
 <a style="color:{class.COLORCODE}" href="{class.dkp_row.U_VIEW_MEMBER}"><strong>{class.dkp_row.NAME}</strong></a>
 </td>
 <td>
-<span {class.dkp_row.DKPCOLOUR} > {class.dkp_row.CURRENT}</span>
+<strong><span class="{class.dkp_row.DKPCOLOUR}" >
+ <!-- IF S_SHOWEPGP -->
+ {class.dkp_row.PR}
+ <!-- ELSE -->
+ {class.dkp_row.CURRENT}
+ <!-- ENDIF -->
+ </span>
+ </strong>
 </td>
 </tr>
 <!-- END dkp_row -->

@@ -6,47 +6,16 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
  * 
-
- MOD Title: Raid Progress Block (uses bossprogress) a bbdkp addon.
- MOD Version: 0.5
- MOD Author: Sajaki, Teksonic (admin@pinnaclewow.com)
- MOD Description: A raid progress block for the bbdkp system, 
- utilizing the bossprogress addon to automatically
- track raid progress and display it in a quick convient block 
- on your main site page.    
-
- Author Notes: 
- Live demo at http://www.pinnaclewow.com/test.php
- Much respect to the BBDKP group and all the loyal community.
- Original idea for this mod by: Ordon
-
- MOD History:
-* 2010-10-15 ver 0.6 
-    bbDKP 1.1.2.2
-	tooltip bottom border fixed, progressbar added
-* 2010-08-30 ver 0.5 
-   - completely recoded for bbdkp 1.1.2
-* 2010-01-03 ver 0.4
-  - moved to block plugin 
-* 2009-01-09 ver 0.3 Sajaki
-  - rewritten to phpbb codingstyle, moved bp_block.php to menu.php
-  - now works independently of bosspogress style (2/3 columns)
-*  2008-04-17 ver 0.2 Teksonic
-  - Code clean up in bp_block.php
-*  2008-03-20 ver 0.1 Teksonic 
-  - first revision
 */
-
 if (! defined ( 'IN_PHPBB' ))
 {
 	exit ();
 }
 $bpshow = false;
 $user->add_lang ( array ('mods/dkp_admin' ) );
-
 if ($config['bbdkp_bp_hidenewzone'] == 1)
 {
-	// hide zones with no bosses killed
+	// inner join to hide zones with no bosses killed
 	$sql_array = array(
 	   'SELECT'    => 	' z.id as zoneid, 
 	   					  l.name as zonename, 
@@ -62,6 +31,7 @@ if ($config['bbdkp_bp_hidenewzone'] == 1)
 			AND z.showzoneportal = 1  
 			AND z.game= '" . $config['bbdkp_default_game'] . "'
 			AND b.zoneid = z.id and b.killed = 1",
+		'GROUP_BY'	=> 'z.id, l.name, l.name_short, z.completed',
 		'ORDER_BY'	=> 'z.sequence desc, z.id desc ',
 	   );
 }
@@ -128,7 +98,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 			'bossname' 		 => $row2 ['bossname'], 
 			'bossname_short' => $row2 ['bossname_short'], 
 			'killed'  		 => $row2 ['killed'], 
-			'url' 			 => $user->lang[strtoupper($config['bbdkp_default_game']).'_BASEURL'] . $row2 ['webid']
+			'url' 			 => sprintf($user->lang[strtoupper($config['bbdkp_default_game']).'_BASEURL'], $row2 ['webid'])
 		 ); 
 		 if ($row2 ['killed'] == 1)
 		 {
