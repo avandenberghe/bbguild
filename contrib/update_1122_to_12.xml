@@ -106,13 +106,17 @@
 		</installation>
 		
 		<link-group>
-			<link type="language" href="fr_update_1122_to_12.xml" lang="en">Update manuel french language files</link>
-			<link type="language" href="fr_update_1122_to_12.xml" lang="fr">Manuel de mise à jour des fichiers de langue française</link>
-			<link type="language" href="fr_update_1122_to_12.xml" lang="de">Update-Anleitung für das französische Sprachpaket</link>
+			<link type="template" href="update_1122_to_12_subsilver2.xml" lang="en">subsilver2 Update</link>
+			<link type="template" href="update_1122_to_12_subsilver2.xml" lang="fr">Mise à jour Subsilver2</link>
+			<link type="template" href="update_1122_to_12_subsilver2.xml" lang="en">Aktualisierung Subsilver2</link>
+			
+			<link type="language" href="update_1122_to_12_fr.xml" lang="en">Update manuel french language files</link>
+			<link type="language" href="update_1122_to_12_fr.xml" lang="fr">Manuel de mise à jour des fichiers de langue française</link>
+			<link type="language" href="update_1122_to_12_fr.xml" lang="de">Update-Anleitung für das französische Sprachpaket</link>
 
-			<link type="language" href="de_update_1122_to_12.xml" lang="en">Update manuel German language files</link>
-			<link type="language" href="de_update_1122_to_12.xml" lang="fr">Manuel de mise à jour des fichiers de langue allemande</link>
-			<link type="language" href="de_update_1122_to_12.xml" lang="de">Update-Anleitung für das Deutsche Sprachpaket</link>
+			<link type="language" href="update_1122_to_12_de.xml" lang="en">Update manuel German language files</link>
+			<link type="language" href="update_1122_to_12_de.xml" lang="fr">Manuel de mise à jour des fichiers de langue allemande</link>
+			<link type="language" href="update_1122_to_12_de.xml" lang="de">Update-Anleitung für das Deutsche Sprachpaket</link>
 			
 			<link type="parent" lang="de" href="../install.xml">Frisch-Installations-Anleitung</link>
 			<link type="parent" lang="en" href="../install.xml">Clean-Installation Manual</link>
@@ -231,8 +235,8 @@
 
 		</open>
 		<php-installer><![CDATA[install/updatedkp.php]]></php-installer>
-		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /contrib/readme/install.html
-What has changed ? see here : /contrib/readme/changelog.html
+		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /docs/install.html
+What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
 
@@ -248,8 +252,8 @@ Finally rename the install folder.
 Note : Should you need to deactivate bbDKP you can open config.php change  "@define('EMED_BBDKP', true);"  to  "//@define('EMED_BBDKP', true);"
 
 		Enjoy ;)]]></diy-instructions>
-<diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /contrib/readme/install.html
-Liste des changements : /contrib/readme/changelog.html
+<diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /docs/install.html
+Liste des changements : /docs/changelog.html
 
 Résumé des étapes de post-installation
 
@@ -266,11 +270,11 @@ Rennomer le repertoire /install pour réactiver le forum.
 Note : Il est possible de désactiver le MOD en ouvrant config.php et en changeant  "@define('EMED_BBDKP', true);"  à  "//@define('EMED_BBDKP', true);"  
 
 Success ;)	]]></diy-instructions>		
-<diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /contrib/readme/install.html
-Liste der änderungen : /contrib/readme/changelog.html
+<diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
+Liste der änderungen : /docs/changelog.html
 
 1) Kopiere das Bosprogress ordner Verzeichnis /images 
-Wegen die Grösse des Bossprogress Verzeichnisses (±21bb), kann Automod es nicht kopieren, es geht im Auszeit.
+Wegen die Grösse des Bossprogress Verzeichnisses (±25bb), kann Automod es nicht kopieren, es geht im Auszeit.
 <file from="root/images/bossprogress/*.*" to="images//bossprogress/*.*" />      
 ------------------------------------------------------------------------------
 2) Datenbank aktualisierung : install/updatedkp.php 

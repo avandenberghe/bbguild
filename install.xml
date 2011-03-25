@@ -166,17 +166,18 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 			<link type="template" href="contrib/subsilver2.xml" lang="fr">subsilver2</link>
 			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2</link>
 
-			<link type="language" lang="en" href="contrib/fr_12.xml">French</link>
-			<link type="language" lang="fr" href="contrib/fr_12.xml">Français</link>
-			<link type="language" lang="de" href="contrib/fr_12.xml">Franzözisch</link>
+			<link type="language" lang="en" href="contrib/fr.xml">French</link>
+			<link type="language" lang="fr" href="contrib/fr.xml">Français</link>
+			<link type="language" lang="de" href="contrib/fr.xml">Franzözisch</link>
 
-			<link type="language" lang="en" href="contrib/de_12.xml">German</link>
-			<link type="language" lang="fr" href="contrib/de_12.xml">Allemand</link>
-			<link type="language" lang="de" href="contrib/de_12.xml">Deutsch</link>	
+			<link type="language" lang="en" href="contrib/de.xml">German</link>
+			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
+			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>	
 			
 			<link type="contrib" lang="en" href="contrib/update_1122_to_12.xml">Update from v1.1.2.2 to v1.2</link>
-
-		</link-group>
+			<link type="contrib" lang="fr" href="contrib/update_1122_to_12.xml">Mise à jour de v1.1.2.2 à v1.2</link>
+			<link type="contrib" lang="de" href="contrib/update_1122_to_12.xml">Aktualisierung vin v1.1.2.2 bis v1.2</link>
+			</link-group>
 	</header>
 	<action-group>
 		<copy>
