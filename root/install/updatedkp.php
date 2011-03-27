@@ -41,7 +41,7 @@ if (!file_exists($phpbb_root_path . 'install/updatedkp.' . $phpEx))
 }
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.2 Updater';
+$mod_name = 'bbDKP 1.2.1 Update';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -1019,7 +1019,6 @@ $versions = array(
 			array('bbdkp_bp_hidenewzone'), 
 			array('bbdkp_bp_hidenonkilled'), 
 			array('bbdkp_bp_zonephoto'), 
-			array('bbdkp_bp_hidenewzone'), 
 			array('bbdkp_bp_zoneprogress'), 
 			array('bbdkp_bp_zonestyle'), 
 			),

@@ -47,7 +47,7 @@ if (!file_exists($phpbb_root_path . 'install/installdkp.' . $phpEx))
 check_oldbbdkp();
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.2 Clean Installer';
+$mod_name = 'bbDKP 1.2.1';
 
 /*
 * The name of the config variable which will hold the currently installed version

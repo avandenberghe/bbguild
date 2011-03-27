@@ -66,10 +66,10 @@ function install_wow()
 	$sql_ary [] = array ('race_id' => 11, 'race_faction_id' => 1 , 'image_female_small' => 'wow_draenei_female_small',  'image_male_small' => 'wow_draenei_male_small' ); //Draenei
 	$sql_ary [] = array ('race_id' => 22, 'race_faction_id' => 1 , 'image_female_small' => 'wow_worgen_female_small',  'image_male_small' => 'wow_worgen_male_small' ); //Worgen
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
+	unset ( $sql_ary );
 	
 
 	// dkp system
-	unset ( $sql_ary );
 	$db->sql_query ( 'TRUNCATE TABLE ' . $table_prefix . 'bbdkp_dkpsystem' );
 	$sql_ary = array ();
 	$sql_ary [] = array ('dkpsys_id' => 1, 'dkpsys_name' => 'Classic', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
@@ -79,8 +79,10 @@ function install_wow()
 	$sql_ary [] = array ('dkpsys_id' => 5, 'dkpsys_name' => 'CATA10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'Y' );
 	$sql_ary [] = array ('dkpsys_id' => 6, 'dkpsys_name' => 'CATA25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
+	unset ( $sql_ary );
 
 	// classes in en
+	$sql_ary = array ();
 	$sql_ary[] = array( 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array( 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
 	$sql_ary[] = array( 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Rogue' ,  'name_short' =>  'Rogue' );

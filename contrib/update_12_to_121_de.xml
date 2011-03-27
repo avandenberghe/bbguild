@@ -7,7 +7,7 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="de"><![CDATA[bbDKP]]></title>
+		<title lang="de"><![CDATA[bbDKP 1.2 to 1.2.1 de]]></title>
 		<description lang="de"><![CDATA[Update Deutsche Sprachdateien für bbDKP]]></description>
 		<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5 mit Libxml 2.6.0 (simplexml), Curl 
 		Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. ]]>

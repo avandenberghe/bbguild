@@ -63,7 +63,6 @@ function install_aion()
     $sql_ary = array();
     $sql_ary[] = array('race_id' => 1, 'race_faction_id' => 1 );
     $sql_ary[] = array('race_id' => 2, 'race_faction_id' => 2 );
-    
     // balaur race is non playable but we add them anyway
     $sql_ary[] = array('race_id' => 3, 'race_faction_id' => 3 );
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);

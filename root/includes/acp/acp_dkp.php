@@ -616,7 +616,7 @@ class acp_dkp extends bbDKP_Admin
 				}
 
     		    add_form_key('acp_dkp');
-                
+    		    
                 $template->assign_vars(array(
                 	'S_LANG_OPTIONS'	=> $s_lang_options, 
                 	'GUILDTAG' 			=> $config['bbdkp_guildtag'] , 
@@ -685,13 +685,17 @@ class acp_dkp extends bbDKP_Admin
                 		trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);	
                 	}
                 	
+					if (isset($config['bbdkp_bp_version']))
+	    		    {
+	                    set_config('bbdkp_portal_bossprogress', request_var('show_bosspblock', 0), true);
+	    		    }
+    		    
                     set_config('bbdkp_news_forumid', request_var('news_id', 0), true);
                     set_config('bbdkp_recruit_forumid', request_var('rec_id', 0), true);
                     set_config('bbdkp_n_news', request_var('n_news', 0), true);
                     set_config('bbdkp_n_items',  request_var('n_items', 0), true);
                     set_config('bbdkp_recruitment',  request_var('bbdkp_recruitment', 0), true);
                     set_config('bbdkp_portal_loot', request_var('show_lootblock', 0), true);
-                    set_config('bbdkp_portal_bossprogress', request_var('show_bosspblock', 0), true);
                     set_config('bbdkp_portal_recruitment', request_var('show_recrblock', 0), true);
                     set_config('bbdkp_portal_links', request_var('show_linkblock', 0), true);
                     set_config('bbdkp_portal_menu', request_var('show_menublock', 0), true);	
@@ -769,8 +773,7 @@ class acp_dkp extends bbDKP_Admin
 					4 => "bullet_purple.png" , 
                  ); 
 
-                 // get recruitment statuses from class table
-
+                // get recruitment statuses from class table
                 $sql_array = array(
 				    'SELECT'    => 	' c.class_id, l.name as class_name,
 				    				  c.imagename, c.dps, c.tank, c.heal ', 
@@ -821,7 +824,19 @@ class acp_dkp extends bbDKP_Admin
                 }
                 
                 add_form_key('acp_dkp_portal');
-                
+	  		   if (isset($config['bbdkp_bp_version']))
+	    	   {
+	    	   	   $template->assign_vars(array(
+	    	   	   	'S_BP_SHOW' => true, 
+                    'SHOW_BOSS_YES_CHECKED' => ($config['bbdkp_portal_bossprogress'] == '1') ? ' checked="checked"' : '' , 
+                	'SHOW_BOSS_NO_CHECKED' => ($config['bbdkp_portal_bossprogress'] == '0') ? ' checked="checked"' : '' , 
+	    	   	   ));
+	    		}
+	    		else 
+	    		{
+	    	   	   $template->assign_var('S_BP_SHOW' ,true);
+	    		}
+	    		    
                 $template->assign_vars(array(
                     'N_NEWS' => $n_news , 
                     'SHOW_REC_YES_CHECKED' => ($config['bbdkp_portal_recruitment'] == '1') ? ' checked="checked"' : '' , 
@@ -831,16 +846,12 @@ class acp_dkp extends bbDKP_Admin
                 	'SHOW_LOOT_NO_CHECKED' => ($config['bbdkp_portal_loot'] == '0') ? ' checked="checked"' : '' , 
                 	'N_ITEMS' => $n_items, 
 
-                    'SHOW_BOSS_YES_CHECKED' => ($config['bbdkp_portal_bossprogress'] == '1') ? ' checked="checked"' : '' , 
-                	'SHOW_BOSS_NO_CHECKED' => ($config['bbdkp_portal_bossprogress'] == '0') ? ' checked="checked"' : '' , 
-                	
                     'SHOW_LINK_YES_CHECKED' => ($config['bbdkp_portal_links'] == '1') ? ' checked="checked"' : '' , 
                 	'SHOW_LINK_NO_CHECKED' => ($config['bbdkp_portal_links'] == '0') ? ' checked="checked"' : '' , 
                 
                	    'SHOW_MENU_YES_CHECKED' => ($config['bbdkp_portal_menu'] == '1') ? ' checked="checked"' : '' , 
                 	'SHOW_MENU_NO_CHECKED' => ($config['bbdkp_portal_menu'] == '0') ? ' checked="checked"' : '' , 
                 ));
-                
                 
                 $this->page_title = $user->lang['ACP_INDEXPAGE'];
                 $this->tpl_name = 'dkp/acp_' . $mode;
