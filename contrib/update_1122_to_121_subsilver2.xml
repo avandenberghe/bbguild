@@ -6,7 +6,7 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
   <header>
     <license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-    <title lang="en">bbDkp 1.2 - subsilver2 style updater</title>
+    <title lang="en">bbDkp 1.2.1 - subsilver2 style updater</title>
     <title lang="fr">mise à jour style subsilver2</title>
     <title lang="de">Aktualisierung bbDkp 1.2 - subsilver2 style</title>
     <description lang="en"><![CDATA[subsilver2]]></description>
@@ -32,7 +32,6 @@
        <username>Malfate / Medraut</username>
        <homepage>http://www.bbdkp.com</homepage>
        <contributions-group>
-	        <contributions status="current" from="2009-09-01" position="Developer"/>
        		<contributions status="past" from="2007-12-27" to="2009-01-01" position="Former Leader, bbDKP Supporter"/>
        </contributions-group>	
     </author>
@@ -42,7 +41,7 @@
 		<email>morten.boegeskov@gmail.com</email>
 		<homepage>http://www.bbdkp.com</homepage>
 		<contributions-group>
-			<contributions status="current" from="2009-05-01" position="Developer"/>
+			<contributions status="past" from="2009-05-01" to="2009-09-01"  position="Developer"/>
 		</contributions-group>
 	</author>
 	<author>
@@ -68,14 +67,6 @@
       </contributions-group>
 	</author>
     <author>
-      <username>sz3</username>
-	  <realname>sz3</realname>
-	  <homepage>http://www.eqdkp.com</homepage>
-      <contributions-group>
-      		<contributions status="past" position="original EQDKP BossProgress v3.0.3 by sz3" />
-      </contributions-group>	
-	</author>	
-    <author>
 	  <realname>Tsigo</realname>
 	  <username>Tsigo</username>
 	  <homepage>http://www.eqdkp.com</homepage>
@@ -86,7 +77,7 @@
     
     </author-group>
 
-<mod-version>1.2</mod-version>
+<mod-version>1.2.1</mod-version>
 <installation>
       <level>easy</level>
       <time>600</time>
@@ -97,9 +88,9 @@
 	<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2</link>
 	<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2</link>	
 			
-	<link type="parent" lang="en" href="update_1122_to_12.xml">Update Manual</link>
-	<link type="parent" lang="fr" href="update_1122_to_12.xml">Manual de mise à jour</link>
-	<link type="parent" lang="de" href="update_1122_to_12.xml">Aktualisierung</link>
+	<link type="parent" lang="en" href="update_1122_to_121.xml">Update Manual</link>
+	<link type="parent" lang="fr" href="update_1122_to_121.xml">Manual de mise à jour</link>
+	<link type="parent" lang="de" href="update_1122_to_121.xml">Aktualisierung</link>
 </link-group>
   </header>
   <action-group>

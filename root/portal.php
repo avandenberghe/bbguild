@@ -64,9 +64,11 @@ if ($config['bbdkp_portal_bossprogress'])
 	include($phpbb_root_path . 'includes/bbdkp/portal/bossprogressblock.' . $phpEx);
 }
 
-if ($config['bbdkp_portal_recruitment'])
-{
-	include($phpbb_root_path . 'includes/bbdkp/portal/recruitmentblock.' . $phpEx);
+if isset($config['bbdkp_portal_recruitment'])
+	if ($config['bbdkp_portal_recruitment'])
+	{
+		include($phpbb_root_path . 'includes/bbdkp/portal/recruitmentblock.' . $phpEx);
+	}
 }
 
 if ($config['bbdkp_portal_links'])

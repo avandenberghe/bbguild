@@ -1010,6 +1010,37 @@ $versions = array(
 					'module_auth'       => '',
 			),),	         
 		  )),
+		  
+	'1.2.1'    => array(		  
+	
+		'config_remove' => array(
+			array('bbdkp_portal_bossprogress'), 
+			array('bbdkp_bp_blockshowprogressbar'), 
+			array('bbdkp_bp_hidenewzone'), 
+			array('bbdkp_bp_hidenonkilled'), 
+			array('bbdkp_bp_zonephoto'), 
+			array('bbdkp_bp_hidenewzone'), 
+			array('bbdkp_bp_zoneprogress'), 
+			array('bbdkp_bp_zonestyle'), 
+			),
+		
+		'table_remove' => array(
+			$table_prefix . 'bbdkp_zonetable', 
+			$table_prefix . 'bbdkp_bosstable',  
+			),
+			
+		'module_remove' => array(
+			array('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_BOSSPROGRESS'),
+			array('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_ZONEPROGRESS'),
+			array('acp', 'ACP_CAT_DKP', 'ACP_DKP_BOSS'),
+			), 
+		
+		'custom' => array( 
+				'tableupdates_121', 
+				'bbdkp_caches'
+			),	
+		
+	),
 		
 );
 
@@ -2069,6 +2100,20 @@ function tableupdates_12($action, $version)
 }
 
 
-
+/****
+ * table update script for 1.2.1 
+ */
+function tableupdates_121($action, $version)
+{
+	
+	global $user, $umil, $config, $db, $table_prefix, $umil, $bbdkp_table_prefix; 
+	switch ($action)
+	{
+		case 'install' :
+		case 'update' :
+			$sql = "DELETE from " . $table_prefix ."bbdkp_language WHERE attribute in ('boss', 'zone') ";
+	        $db->sql_query($sql);
+	}
+}
 
 ?>

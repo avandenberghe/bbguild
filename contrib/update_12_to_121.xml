@@ -90,8 +90,8 @@
 		
 		<mod-version>1.2.1</mod-version>
 		<installation>
-			<level>advanced</level>
-			<time>1200</time>
+			<level>easy</level>
+			<time>600</time>
 			<target-version>3.0.8</target-version>
 		</installation>
 		
@@ -116,188 +116,46 @@
 	
 	<action-group>
 		<delete>
-
 			<file name="bossprogress.php"/>
 			<file name="adm/style/dkp/acp_zoneprogress.html"/>
 			<file name="adm/style/dkp/acp_bossprogress.html"/>
-			<file name="images/bossprogress/*.*"/>
+			<file name="images/bossprogress"/>
 			<file name="root/includes/acp/acp_dkp_bossprogress.php"/>
 			<file name="root/includes/acp/info/acp_dkp_bossprogress.php"/>			
 			<file name="root/includes/bbdkp/portal/bossprogressblock.php"/>
-			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
-			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
-			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
-			<file from="root/includes/bbdkp/portal/*.*" to="includes/bbdkp/portal/*.*"/>
-			<file from="root/install/*.*" to="install/*.*"/>
-			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>
-			<file from="root/styles/prosilver/theme/*.*" to="styles/prosilver/theme/*.*"/>
-			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
-			<file from="root/umil/*.*" to="umil/*.*"/>
+			<file name="root/language/en/mods/info_acp_dkp_bossprogress.php"/>
+			<file name="root/styles/prosilver/template/dkp/block/bossprogress.html" />
+			<file name="root/styles/prosilver/template/bossprogress.html" />
 		</delete>
 		
-		
 		<copy>
-			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
-			<file from="root/bossprogress.php" to="bossprogress.php"/>
-			<file from="root/listevents.php" to="listevents.php"/>
-			<file from="root/listitems.php" to="listitems.php"/>
-			<file from="root/listmembers.php" to="listmembers.php"/>
-			<file from="root/listraids.php" to="listraids.php"/>
 			<file from="root/portal.php" to="portal.php"/>
-			<file from="root/roster.php" to="roster.php"/>
-			<file from="root/stats.php" to="stats.php"/>
-			<file from="root/viewmember.php" to="viewmember.php"/>
-			<file from="root/viewevent.php" to="viewevent.php"/>
-			<file from="root/viewitem.php" to="viewitem.php"/>
-			<file from="root/viewnews.php" to="viewnews.php"/>
-			<file from="root/viewraid.php" to="viewraid.php"/>
-			<file from="root/adm/findrank.php" to="adm/findrank.php"/>
-			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
-			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
-			<file from="root/images_upl/*.*" to="images/*.*"/>
-			<file from="root/images/race_images/*.*" to="images/race_images/*.*" />
-			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
-			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
-			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
-			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
-			<file from="root/includes/bbdkp/portal/*.*" to="includes/bbdkp/portal/*.*"/>
-			<file from="root/install/*.*" to="install/*.*"/>
-			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>
-			<file from="root/styles/prosilver/theme/*.*" to="styles/prosilver/theme/*.*"/>
-			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
+			<file from="root/styles/prosilver/template/dkp/dkpmenu.html" to="styles/prosilver/template/dkp/dkpmenu.html"/>
+			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
 		
-		
-		<open src="/styles/prosilver/template/overall_footer.html">
-			<edit>
-				<comment lang="en"><![CDATA[modifying about javascript  ]]></comment>
-				<comment lang="fr"><![CDATA[modifier javascript dans footer ]]></comment>
-				<comment lang="de"><![CDATA[modifizierung javascript im footer ]]></comment>			
-				<find><![CDATA[    search = window.open('about.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')]]></find>
-				<inline-edit>
-					<inline-find><![CDATA[about]]></inline-find>
-					<inline-action type="after-add"><![CDATA[bbdkp]]></inline-action>
-				</inline-edit>
-			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[modifying about link ]]></comment>
-				<comment lang="fr"><![CDATA[modifier lien dans footer ]]></comment>
-				<comment lang="de"><![CDATA[modifizierung about link ]]></comment>			
-				<find><![CDATA[<a onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';"><font color="#105289">BBdkp Credits</font></a>]]></find>
-				<inline-edit>
-					<inline-find><![CDATA[onclick]]></inline-find>
-					<inline-action type="before-add"><![CDATA[class="bbdkpcredits" ]]></inline-action>
-					<inline-find><![CDATA[<font color="#105289">BBdkp Credits</font>]]></inline-find>
-					<inline-action type="replace-with"><![CDATA[BBdkp Credits]]></inline-action>
-				</inline-edit>
-			</edit>			
-		</open>
-		<open src="includes/acp/acp_database.php">
-			<edit>
-				<comment lang="en"><![CDATA[removing special database prefix]]></comment>
-				<comment lang="fr"><![CDATA[enlever le préfix special pour le backup ]]></comment>
-				<comment lang="de"><![CDATA[entfernen Dateipräfix zum backup ]]></comment>
-				<find><![CDATA[        global $bbdkp_table_prefixx;]]></find>
-				<remove><![CDATA[        global $bbdkp_table_prefixx;]]></remove>
-			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[removing condition ]]></comment>
-				<comment lang="fr"><![CDATA[supprimer condition ]]></comment>
-				<comment lang="de"><![CDATA[entfernen Kondition ]]></comment>
-				<find><![CDATA[if (strlen($table_prefix) === 0 || stripos($table_name, $table_prefix) === 0 || stripos($table_name, $bbdkp_table_prefixx) === 0)]]></find>
-				<action type="replace-with"><![CDATA[if (strlen($table_prefix) === 0 || stripos($table_name, $table_prefix) === 0)]]></action>
-			</edit>
-		</open>
-		
-		<open src="adm/style/overall_header.html">
-		        <edit>
-		                <comment lang="en"><![CDATA[adding new css to admin header]]></comment>
-		                <comment lang="fr"><![CDATA[ajout de nouveau css au header admin ]]></comment>
-		                <comment lang="de"><![CDATA[Zufügung css im admin header]]></comment>
-		                <find><![CDATA[	<link rel="stylesheet" href="style/dkp/farbtastic.css" type="text/css" />]]></find>
-		                <action type="after-add"><![CDATA[
-		                <link rel="stylesheet" href="style/dkp/bbdkp.css" type="text/css" />]]></action>
-		        </edit>
-		</open>
-		
-		<open src="styles/prosilver/template/overall_header.html">
-			<edit>
-				<comment lang="en"><![CDATA[remove portal navbar exclusion]]></comment>
-				<comment lang="fr"><![CDATA[supppression exception navbar dans portail ]]></comment>
-				<comment lang="de"><![CDATA[Entfernung navbar Ausnahme im Portal]]></comment>								
-				<find><![CDATA[<!-- IF not S_PORTAL -->]]></find>
-				<remove><![CDATA[<!-- IF not S_PORTAL -->]]></remove>
-			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[remove close portal navbar exclusion]]></comment>
-				<comment lang="fr"><![CDATA[supppression endif]]></comment>
-				<comment lang="de"><![CDATA[Entfernung endif]]></comment>				
-				<find><![CDATA[<!-- ENDIF -->
-	</div>
-
-	<a name="start_here"></a>]]></find>
-				<action type="replace-with"><![CDATA[</div>
-
-	<a name="start_here"></a>]]></action>
-			</edit>
-
 		</open>
 		<php-installer><![CDATA[install/updatedkp.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /docs/install.html
 What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
-
-1) copy the bossprogress image folder to /images manually. 
-Automod cannot handle it as it would lead to a timeout due to the size (21mb) ! 
-<file from="root/images/bossprogress/*.*" to="images//bossprogress/*.*" />
-------------------------------------------------------------------------------
-2) Run bbDKP 1.2 database update : install/updatedkp.php 
-------------------------------------------------------------------------------
-3) Finish 
-Finally rename the install folder. 
-------------------------------------------------------------------------------
-Note : Should you need to deactivate bbDKP you can open config.php change  "@define('EMED_BBDKP', true);"  to  "//@define('EMED_BBDKP', true);"
-
+1) Run bbDKP 1.2.1 database update : install/updatedkp.php 
+2) delete the install folder. 
 		Enjoy ;)]]></diy-instructions>
-<diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /docs/install.html
+<diy-instructions lang="fr"><![CDATA[le guide de mise à jour : /docs/install.html
 Liste des changements : /docs/changelog.html
 
-Résumé des étapes de post-installation
-
-1) Copier le repertoire bossprogress vers le repertoire /images  
-En raison de la taille de ce répertoires (±21mb), Automod ne sait pas le copier, cela causerait un 'timeout'. 
-<file from="root/images/bossprogress/*.*" to="images//bossprogress/*.*" />   
-------------------------------------------------------------------------------
-2) lancer la mise à jour : install/updatedkp.php 
-------------------------------------------------------------------------------
-3) Fin
-Rennomer le repertoire /install pour réactiver le forum.
-------------------------------------------------------------------------------
-
-Note : Il est possible de désactiver le MOD en ouvrant config.php et en changeant  "@define('EMED_BBDKP', true);"  à  "//@define('EMED_BBDKP', true);"  
-
-Success ;)	]]></diy-instructions>		
+1) lancer la mise à jour : install/updatedkp.php 
+2) Supprimer le repertoire /install pour réactiver le forum.
+]]></diy-instructions>		
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) Kopiere das Bosprogress ordner Verzeichnis /images 
-Wegen die Grösse des Bossprogress Verzeichnisses (±25bb), kann Automod es nicht kopieren, es geht im Auszeit.
-<file from="root/images/bossprogress/*.*" to="images//bossprogress/*.*" />      
-------------------------------------------------------------------------------
-2) Datenbank aktualisierung : install/updatedkp.php 
-------------------------------------------------------------------------------
-3) Ende
-lösche, verschiebe oder benenne das Installations-Verzeichnis „install" damit das Forum wieder zugänglich wird.
-------------------------------------------------------------------------------
+1) Datenbank aktualisierung : install/updatedkp.php 
+2) lösche das Installations-Verzeichnis „install"
 
-Notiz : Du kannst bbDKP jederzeit deaktivieren: öffne config.php und  ändere "@define('EMED_BBDKP', true);" zu "//@define('EMED_BBDKP', true);"  
-
-Viel Spaß ;)	]]></diy-instructions>		
+]]></diy-instructions>		
 	</action-group>
 </mod>

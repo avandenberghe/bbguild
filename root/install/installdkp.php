@@ -75,7 +75,7 @@ $options = array(
 * $phpbb_root_path will get prepended to the path specified
 * Image height should be 50px to prevent cut-off or stretching.
 */
-$logo_img = 'install/logo.jpg'; 
+$logo_img = 'install/logo.png'; 
 /*
   $user, $config, $db, $table_prefix, $umil, $bbdkp_table_prefix; 
 * The array of versions and actions within each.
@@ -122,7 +122,7 @@ switch ($game)
 
 $versions = array(
 
-    '1.2'    => array(
+    '1.2.1'    => array(
     	// bbdkp tables (this uses the layout from develop/create_schema_files.php and from phpbb_db_tools)
         'table_add' => array(
             
@@ -372,43 +372,7 @@ $versions = array(
                  ),
             ),
 
-            
-		  array($table_prefix . 'bbdkp_zonetable', array(
-	              'COLUMNS'            => array(
-	                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
-	        		  'imagename'      => array('VCHAR_UNI:255', ''),
-					  'game'           => array('VCHAR:10', ''),
-					  'tier'           => array('VCHAR:30', ''),
-					  'completed'      => array('BOOL', 0),
-					  'completedate'   => array('TIMESTAMP', 0), 
-					  'webid'          => array('VCHAR:255', ''),
-	        		  'showzone'	   => array('BOOL', 0),
-	        		  'showzoneportal' => array('BOOL', 0), 
-	        		  'sequence'	   => array('UINT', 0),
-	                ),
-	                'PRIMARY_KEY'      => 'id',
-	            )),
-		          
-          array($table_prefix . 'bbdkp_bosstable', array(
-	              'COLUMNS'            => array(
-	                  'id'     	       => array('UINT', NULL, 'auto_increment'), 
-	        		  'imagename'      => array('VCHAR_UNI:255', ''),
-	                  'game'           => array('VCHAR:10', ''),
-					  'zoneid'         => array('UINT', 0), 
-					  'type'           => array('VCHAR:10', ''),
-					  'webid'          => array('VCHAR:255', ''),
-					  'killed'         => array('BOOL', 0),
-					  'killdate'   	   => array('TIMESTAMP', 0), 
-					  'counter'        => array('UINT', 0),
-	            	  'showboss'	   => array('BOOL', 0), 
-	          	),
-	                'PRIMARY_KEY'      => 'id',
-	          		'KEYS'            => array('zoneid'    => array('INDEX', 'zoneid')),
-	            )),        
-		          
-
-	            
-	      array($table_prefix . 'bbdkp_logs', array(
+          array($table_prefix . 'bbdkp_logs', array(
                     'COLUMNS'           => array(
                        'log_id'        => array('UINT', NULL, 'auto_increment'),
                        'log_date'      => array('TIMESTAMP', 0),
@@ -623,8 +587,6 @@ $versions = array(
 	        array('bbdkp_recruitment', 0, true ), 
 			// show loot block          
 	        array('bbdkp_portal_loot', 1, true ), 
-			// show bossprogress block
-	        array('bbdkp_portal_bossprogress', 1, true ), 
 			// show recruitment block          
 	        array('bbdkp_portal_recruitment', 1, true ), 
 			// show link block          
@@ -633,21 +595,7 @@ $versions = array(
 	        array('bbdkp_portal_showedits', 1, true ),
 	        // showing or hiding portal
 	        array('bbdkp_portal_menu', 1, true),
-	        array('bbdkp_bp_blockshowprogressbar', 1, true),
 	         
-        	//bossprogress settings
-        	
-        	//Hide zones with no boss kills
-        	array('bbdkp_bp_hidenewzone', 0, true),
-        	//Hide never killed bosses?
-        	array('bbdkp_bp_hidenonkilled', 0, true),
-        	//header image style : sepia, photo, blue
-	        array('bbdkp_bp_zonephoto', 0, true),
-	        //show zoneprogressionbar
-	        array('bbdkp_bp_zoneprogress', 1, true),
-	        //bp style : 2 row, 3 row, simple, photo
-	        array('bbdkp_bp_zonestyle', 0, true),
-
 	        ),
           
         // add the bbdkp modules to ACP using the info files, 
@@ -753,16 +701,6 @@ $versions = array(
         		),
             ),        
             
-            /*
-             * bossprogress menu
-             */  
-            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_BOSS'),
-            array('acp', 'ACP_DKP_BOSS', array(
-          		 'module_basename' => 'dkp_bossprogress',
-            	 'modes'           => array('bossprogress', 'zoneprogress' ),
-         		)),
-         		
-         		
 			// Add the UCP module in which you link bbDKP memberids to your phpbb account
 			array('ucp', 0, 'UCP_DKP'),
          	
@@ -789,43 +727,6 @@ $versions = array(
 
 // Include the UMIF Auto file and everything else will be handled automatically.
 include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
-
-/***************************************
- *
- * adds config value with dkp module Id
- */
-function acplink($action, $version)
-{
-    global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx;
-	switch ($action)
-	{
-		// lookup first node module id 
-		case 'install' :
-		case 'update' :
-		  $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'ACP_CAT_DKP'";
-          $result = $db->sql_query($sql);
-          $modid = (int) $db->sql_fetchfield('module_id'); 
-          if ($umil->config_exists('bbdkp_module_id'))
-          {
-              $umil->config_update('bbdkp_module_id', $modid, false);
-          }
-          else 
-          {
-              $umil->config_add('bbdkp_module_id', $modid, false);
-          }
-          $db->sql_freeresult($result);
-          return array('command' => 'UMIL_INSERT_DKPLINK', 'result' => 'SUCCESS');
-	      break;
-		case 'uninstall' :
-    	    if ($umil->config_exists('bbdkp_module_id'))
-            {
-                  $umil->config_remove('bbdkp_module_id');
-            }
-			return array('command' => 'UMIL_REMOVE_DKPLINK', 'result' => 'SUCCESS');
-		  break; 		  
-	}
-}
-
 
 /****************************
  *  
@@ -859,8 +760,6 @@ function gameoptions($selected_value, $key)
 
 	return $pass_char_options;
 }
-
-
 
 /**************************************
  *  
@@ -923,54 +822,43 @@ function gameinstall($action, $version)
 			{
 				case 'aion':
 					install_aion();
-					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 					return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
 					break;
 				case 'daoc':
 					install_daoc();
-					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
 					break;
 				case 'eq':
 					install_eq();
-					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
 					break;
 				case 'eq2':
 					install_eq2();
-					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
 					break;
 				case 'FFXI':
 					install_ffxi();
-					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
 					break;
 				case 'lotro':
 					install_lotro();
-					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
 					break;
 				case 'vanguard':
 					install_vanguard();
-					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 		     		return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
 					break;
 				case 'wow':
 					install_wow();
-					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 					return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
 					break;
 				case 'warhammer':
 					install_warhammer();
-					$db->sql_query ( 'update ' . $table_prefix . 'bbdkp_zonetable  set sequence = id '  );
 					return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
 					break;
 				default :
 					break;
 			}
-			
-			 
 			break;
 	}
 					

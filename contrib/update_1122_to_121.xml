@@ -7,8 +7,8 @@
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
 		<title lang="en"><![CDATA[bbDKP]]></title>
-<description lang="en"><![CDATA[Update script 1.1.2.2 to 1.2]]></description>
-<description lang="de"><![CDATA[Aktualisierung 1.1.2.2 bis 1.2]]></description>
+<description lang="en"><![CDATA[Update script 1.1.2.2 to 1.2.1]]></description>
+<description lang="de"><![CDATA[Aktualisierung 1.1.2.2 bis 1.2.1]]></description>
 
 <author-notes lang="en"><![CDATA[Please Backup your phpbb3 installation and database before beginning. ]]>
 </author-notes>
@@ -44,7 +44,6 @@
 				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
 				<email><![CDATA[cs.krushin@gmail.com]]></email>
 				<contributions-group>
-					<contributions status="current" from="2009-09-01" position="Developer"/>
 					<contributions status="past" from="2007-12-27" to="2009-01-01" position="Former Leader, bbDKP Supporter"/>
 				</contributions-group>
 			</author>
@@ -97,7 +96,7 @@
 			</author>
 		</author-group>
 		
-		<mod-version>1.2</mod-version>
+		<mod-version>1.2.1</mod-version>
 		
 		<installation>
 			<level>advanced</level>
@@ -106,17 +105,17 @@
 		</installation>
 		
 		<link-group>
-			<link type="template" href="update_1122_to_12_subsilver2.xml" lang="en">subsilver2 Update</link>
-			<link type="template" href="update_1122_to_12_subsilver2.xml" lang="fr">Mise à jour Subsilver2</link>
-			<link type="template" href="update_1122_to_12_subsilver2.xml" lang="en">Aktualisierung Subsilver2</link>
+			<link type="template" href="update_1122_to_121_subsilver2.xml" lang="en">subsilver2 Update</link>
+			<link type="template" href="update_1122_to_121_subsilver2.xml" lang="fr">Mise à jour Subsilver2</link>
+			<link type="template" href="update_1122_to_121_subsilver2.xml" lang="en">Aktualisierung Subsilver2</link>
 			
-			<link type="language" href="update_1122_to_12_fr.xml" lang="en">Update manuel french language files</link>
-			<link type="language" href="update_1122_to_12_fr.xml" lang="fr">Manuel de mise à jour des fichiers de langue française</link>
-			<link type="language" href="update_1122_to_12_fr.xml" lang="de">Update-Anleitung für das französische Sprachpaket</link>
+			<link type="language" href="update_1122_to_121_fr.xml" lang="en">Update manuel french language files</link>
+			<link type="language" href="update_1122_to_121_fr.xml" lang="fr">Manuel de mise à jour des fichiers de langue française</link>
+			<link type="language" href="update_1122_to_121_fr.xml" lang="de">Update-Anleitung für das französische Sprachpaket</link>
 
-			<link type="language" href="update_1122_to_12_de.xml" lang="en">Update manuel German language files</link>
-			<link type="language" href="update_1122_to_12_de.xml" lang="fr">Manuel de mise à jour des fichiers de langue allemande</link>
-			<link type="language" href="update_1122_to_12_de.xml" lang="de">Update-Anleitung für das Deutsche Sprachpaket</link>
+			<link type="language" href="update_1122_to_121_de.xml" lang="en">Update manuel German language files</link>
+			<link type="language" href="update_1122_to_121_de.xml" lang="fr">Manuel de mise à jour des fichiers de langue allemande</link>
+			<link type="language" href="update_1122_to_121_de.xml" lang="de">Update-Anleitung für das Deutsche Sprachpaket</link>
 			
 			<link type="parent" lang="de" href="../install.xml">Frisch-Installations-Anleitung</link>
 			<link type="parent" lang="en" href="../install.xml">Clean-Installation Manual</link>
@@ -125,9 +124,21 @@
 	</header>
 	
 	<action-group>
+		<delete>
+			<file name="bossprogress.php"/>
+			<file name="adm/style/dkp/acp_zoneprogress.html"/>
+			<file name="adm/style/dkp/acp_bossprogress.html"/>
+			<file name="images/bossprogress"/>
+			<file name="root/includes/acp/acp_dkp_bossprogress.php"/>
+			<file name="root/includes/acp/info/acp_dkp_bossprogress.php"/>			
+			<file name="root/includes/bbdkp/portal/bossprogressblock.php"/>
+			<file name="root/language/en/mods/info_acp_dkp_bossprogress.php"/>
+			<file name="root/styles/prosilver/template/dkp/block/bossprogress.html" />
+			<file name="root/styles/prosilver/template/bossprogress.html" />
+		</delete>
+	
 		<copy>
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
-			<file from="root/bossprogress.php" to="bossprogress.php"/>
 			<file from="root/listevents.php" to="listevents.php"/>
 			<file from="root/listitems.php" to="listitems.php"/>
 			<file from="root/listmembers.php" to="listmembers.php"/>
@@ -240,15 +251,9 @@ What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
 
-1) copy the bossprogress image folder to /images manually. 
-Automod cannot handle it as it would lead to a timeout due to the size (21mb) ! 
-<file from="root/images/bossprogress/*.*" to="images//bossprogress/*.*" />
-------------------------------------------------------------------------------
-2) Run bbDKP 1.2 database update : install/updatedkp.php 
-------------------------------------------------------------------------------
-3) Finish 
-Finally rename the install folder. 
-------------------------------------------------------------------------------
+1) Run bbDKP 1.2 database update : install/updatedkp.php 
+2) Rename the install folder. 
+
 Note : Should you need to deactivate bbDKP you can open config.php change  "@define('EMED_BBDKP', true);"  to  "//@define('EMED_BBDKP', true);"
 
 		Enjoy ;)]]></diy-instructions>
@@ -257,15 +262,8 @@ Liste des changements : /docs/changelog.html
 
 Résumé des étapes de post-installation
 
-1) Copier le repertoire bossprogress vers le repertoire /images  
-En raison de la taille de ce répertoires (±21mb), Automod ne sait pas le copier, cela causerait un 'timeout'. 
-<file from="root/images/bossprogress/*.*" to="images//bossprogress/*.*" />   
-------------------------------------------------------------------------------
-2) lancer la mise à jour : install/updatedkp.php 
-------------------------------------------------------------------------------
-3) Fin
-Rennomer le repertoire /install pour réactiver le forum.
-------------------------------------------------------------------------------
+1) lancer la mise à jour : install/updatedkp.php 
+2) Supprime le repertoire /install pour réactiver le forum.
 
 Note : Il est possible de désactiver le MOD en ouvrant config.php et en changeant  "@define('EMED_BBDKP', true);"  à  "//@define('EMED_BBDKP', true);"  
 
@@ -273,15 +271,8 @@ Success ;)	]]></diy-instructions>
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) Kopiere das Bosprogress ordner Verzeichnis /images 
-Wegen die Grösse des Bossprogress Verzeichnisses (±25bb), kann Automod es nicht kopieren, es geht im Auszeit.
-<file from="root/images/bossprogress/*.*" to="images//bossprogress/*.*" />      
-------------------------------------------------------------------------------
-2) Datenbank aktualisierung : install/updatedkp.php 
-------------------------------------------------------------------------------
-3) Ende
-lösche, verschiebe oder benenne das Installations-Verzeichnis „install" damit das Forum wieder zugänglich wird.
-------------------------------------------------------------------------------
+1) Datenbank aktualisierung : install/updatedkp.php 
+2) Lösche das Installations-Verzeichnis „install" damit das Forum wieder zugänglich wird.
 
 Notiz : Du kannst bbDKP jederzeit deaktivieren: öffne config.php und  ändere "@define('EMED_BBDKP', true);" zu "//@define('EMED_BBDKP', true);"  
 
