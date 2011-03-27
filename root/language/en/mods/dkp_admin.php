@@ -759,6 +759,7 @@ So the loot would go to player 2 <br />',
 'UPDATE_RAID' => 'Update Raid',
 'UPDATE_RACE' => 'Update Race', 
 'UPDATE_CLASS' => 'Update Class', 
+'CHANGE_ACTIVATION' => 'Change Activation', 
 
 // Misc
 'ADJUSTMENT_VALUE' => 'Adjustment Value',

@@ -612,7 +612,9 @@ $lang = array_merge($lang, array(
 	'STANDARDDKP'	=> '<strong>Bonus DKP</strong>',
 	'STANDARDDKP_EXPLAIN'	=> '<strong>Description: </strong> A lootsystem where players only receive DKP points as a result of being on time, or staying on bench, or killing a boss, or just plain participating.  Points are spent on loot just like in zero sum, but there is no redistribution. ',
 	'STANDARDDKP_EXAMPLE'	=> '<strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points.  <br /> 
+
 players receive 5 points for slaying a dragon, 2 points for being on time or on attendance. 
+
  <br />net result for whole raid : earned : (5+2) * 10 = 70 <br /> spent : 20 <br /> difference= 50',
 	'STANDARDDKP_ADVANTAGE'	=> '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
 	'STANDARDDKP_DISADVANTAGE'	=> '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.',
@@ -621,27 +623,36 @@ players receive 5 points for slaying a dragon, 2 points for being on time or on 
 	'ZEROSUM_EXAMPLE'	=> ' <strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br/> The balance at the end is : earned 20, spent 20.',
 	'ZEROSUM_ADVANTAGE'	=> ' <strong>Advantage</strong> : no point inflation if all players start at the same gearlevel.',
 	'ZEROSUM_DISADVANTAGE'	=> '<strong>Disadvantage</strong> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points untill he\'s at a disequilibrium towards the other players. 
+
 Not much incentive to join a raid if it is a difficult progress raid and wipes are expected and no loot likely will drop. ',
 	'ZEROSUMPLUS'	=> '<strong>Zero Sum DKP + Bonus</strong>',
 	'ZEROSUMPLUS_EXPLAIN'	=> '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. <br /> Any bonus points earned are offset to a dummy account.<br /> The raid members will gain dkp points when someone received an item, plus a bonus. this ensures that there is no inflation, or point hoarding. <br />',
 	'ZEROSUMPLUS_EXAMPLE'	=> ' <strong>example</strong>: there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. 
+
 <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br /> on top of that, players receive 5 points for a bosskill, 2 points for being on time or on attendance. these extra points are offset with the zerosum dummy account. 
+
 The balance at the end is : earned 20+7=27, spent 20+7=27.',
 	'ZEROSUMPLUS_ADVANTAGE'	=> ' <strong>Advantage</strong> :<br />  no point inflation if all players start at the same gearlevel. The bonus points are added to the system so as to offer an incentive to play, since a raid without loots will earn no points. ',
 	'ZEROSUMPLUS_DISADVANTAGE'	=> '   <strong>Disadvantage</strong> :<br /> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he\'s at a disequilibrium towards the other players.',
 	'TIMEDKP'	=> '<strong>Time based</strong>',
 	'TIMEDKP_EXPLAIN'	=> '<strong>Description: </strong>Lootsystem where players receive points per started Hour present in the raid or being available. Time is measured from when the raid starts to the end. 
+
 Points are spent on loot just like in bonus system. Bonus points may be awarded for other reasons aswell.',
 	'TIMEDKP_EXAMPLE'	=> '<strong>Example</strong> : 10 raiders, each present for 90 minutes.  <br />dkp/hour is 20 points, so this means that each raider gets 90/60 * 20 = 1,5 * 20 = 30 points <br />1 item dropped, for 20 points <br />
+
 net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20 <br />difference = 280',
 	'TIMEDKP_ADVANTAGE'	=> '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
 	'TIMEDKP_DISADVANTAGE'	=> '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.',
 	'EPGP'	=> '<strong>EPGP Effort / Gearpoints</strong>',
 	'EPGP_EXPLAIN'	=> '<strong>Description: </strong>A Lootsystem where the loot is allocated to the person with the highest ep/gp ratio. Effort points are gained through diverse means, like attending, being on time. Standby could also get EP. Bonuse EP could be given when the boss was killed with skill. Effort Points also decay over time. Loot is then paid with Gear points.',
 	'EPGP_EXAMPLE'	=> '<strong>Example</strong> : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />  
+
 The item costs 20 Gearpoints<br />
+
 effortpoints player 1 : 202, EP/GP ratio 10.1<br />
+
 effortpoints player 2 : 342, EP/GP ratio 17.1<br /> 
+
 So the loot would go to player 2 <br />',
 	'EPGP_ADVANTAGE'	=> '<strong>Advantage</strong> : no inflation, no hoarding. ',
 	'EPGP_DISADVANTAGE'	=> '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ',
@@ -735,6 +746,7 @@ So the loot would go to player 2 <br />',
 	'UPDATE_RAID'	=> 'Mise à jour Raid',
 	'UPDATE_RACE'	=> 'mise à jour Race',
 	'UPDATE_CLASS'	=> 'mise à jour Classe',
+	'CHANGE_ACTIVATION' => 'Change Activation', 
 	'ADJUSTMENT_VALUE'	=> 'Valeur d’Ajustement',
 	'ADJUSTMENT_VALUE_NOTE'	=> 'Peut-être négatif',
 	'CLASS_NAME'	=> 'Nom de la classe',
@@ -823,7 +835,9 @@ So the loot would go to player 2 <br />',
 	'SHOWZONES'	=> 'Montrer Zones',
 	'RP_ZONE'	=> 'Configuration de Zone',
 	'RP_ZONE_EXPLAIN'	=> 'Ici vous pouvez configurer les Zones, avec leur photo, style d’affichage, si une zone est affichée avec une barre d’avancement, si des zones non visitées seront montrées. <br /> 
+
 Dans la liste, vous pouvez saisir le nom de la zone, le nom de l’image, l’id sur le web. 
+
 En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus d’informations<br />Pour supprimer, Appuyez la croix rouge. ceci supprime aussi les boss liés. <br />Pour ajouter une zone, cliquez le bouton Ajouter en bas.  ',
 	'RP_ZONE_ADD_EXPLAIN'	=> 'Ceci vous permet d’ajouter une zone.',
 	'RP_ZONEDEL'	=> 'Zone Supprimée',

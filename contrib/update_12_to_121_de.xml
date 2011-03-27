@@ -7,8 +7,8 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="de"><![CDATA[bbDKP]]></title>
-		<description lang="de"><![CDATA[Deutsche Sprachdateien für bbDKP]]></description>
+		<title lang="de"><![CDATA[bbDKP 1.2 to 1.2.1 de]]></title>
+		<description lang="de"><![CDATA[Update Deutsche Sprachdateien für bbDKP]]></description>
 		<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5 mit Libxml 2.6.0 (simplexml), Curl 
 		Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. ]]>
 		</author-notes>
@@ -25,15 +25,19 @@
 		</author-group>
 		<mod-version>1.2.1</mod-version>
 		<installation>
-			<level>easy</level>
+			<level>advanced</level>
 			<time>600</time>
 			<target-version>3.0.8</target-version>
 		</installation>
 		<link-group>
-			<link type="parent" lang="en" href="../install.xml">Installation manual</link>
-			<link type="parent" lang="fr" href="../install.xml">Manuel d’installation</link>
-			<link type="parent" lang="de" href="../install.xml">Installationshinweise</link>					
-		</link-group>
+			<link type="parent" lang="en" href="../install.xml">Installation 1.2.1</link>
+			<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2.1</link>
+			<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2.1</link>					
+
+			<link type="parent" lang="en" href="update_12_to_121.xml">update 1.2 to 1.2.1</link>
+			<link type="parent" lang="fr" href="update_12_to_121.xml">Mise à jour 1.2 à 1.2.1</link>
+			<link type="parent" lang="de" href="update_12_to_121.xml">Aktualisierung 1.2 bis 1.2.1</link>	
+	</link-group>
 	</header>
 	<action-group>
 		<copy>
