@@ -834,7 +834,7 @@ class acp_dkp extends bbDKP_Admin
 	    		}
 	    		else 
 	    		{
-	    	   	   $template->assign_var('S_BP_SHOW' ,true);
+	    	   	   $template->assign_var('S_BP_SHOW' ,false);
 	    		}
 	    		    
                 $template->assign_vars(array(
