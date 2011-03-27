@@ -59,16 +59,16 @@ if ($config['bbdkp_portal_loot'])
 	include($phpbb_root_path . 'includes/bbdkp/portal/lootblock.' . $phpEx);
 }
 
-if ($config['bbdkp_portal_bossprogress'])
+if ($config['bbdkp_portal_recruitment'])
 {
-	include($phpbb_root_path . 'includes/bbdkp/portal/bossprogressblock.' . $phpEx);
+		include($phpbb_root_path . 'includes/bbdkp/portal/recruitmentblock.' . $phpEx);
 }
 
 if (isset($config['bbdkp_bp_version']))
 {
-	if ($config['bbdkp_portal_recruitment'])
+	if ($config['bbdkp_portal_bossprogress'])
 	{
-		include($phpbb_root_path . 'includes/bbdkp/portal/recruitmentblock.' . $phpEx);
+		include($phpbb_root_path . 'includes/bbdkp/portal/bossprogressblock.' . $phpEx);
 	}
 }
 
