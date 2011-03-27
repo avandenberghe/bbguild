@@ -439,9 +439,9 @@ class acp_dkp_event extends bbDKP_Admin
 				$db->sql_freeresult($result);
 			 
 				$start = request_var('start',0);
-				$sql = 'SELECT b.dkpsys_name, a.event_name, a.event_value, a.event_id , a.event_color, a.event_imagename 
+				$sql = 'SELECT b.dkpsys_name, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename 
 						FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . ' b 
-						WHEREb.dkpsys_id = a.event_dkpid 
+						WHERE b.dkpsys_id = a.event_dkpid 
 						ORDER BY '. $current_order['sql']; 
 			 
 				if ( !($events_result = $db->sql_query_limit($sql,	$config['bbdkp_user_elimit'], $start)	 ) )
