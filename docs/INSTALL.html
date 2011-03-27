@@ -27,7 +27,7 @@
 
 			<div id="doc-description">
 			<a>	<img src="logo.png" alt="" /></a>
-				<h1>bbDkp Install</h1>
+				<h1>bbDKP Install</h1>
 				<p style="display: none;"><a href="#start_here">Skip</a></p>
 			</div>
 
@@ -47,8 +47,8 @@
 		
 		<div class="content">
 <p>bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. </p><p>It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. </p><p>It integrates Game, Guild and DKP management functions into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches.</p>
-<p>Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION. </p>
-<p>There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Raidplanner (under development). </p>
+<p>Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, ACP and UCP modules. multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION. </p>
+<p>There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Raidplanner, Bossprogress (under development). </p>
 
 <p>Further development requests, support questions are welcome at http://www.bbdkp.com. As of the current release, it does not (yet) make coffee ;)</p>
 
@@ -61,6 +61,7 @@
 <li>Raidtracker 0.3.0</li> 
 <li>Recruitment 1.2.7</li>
 <li>Raidplanner 0.1.0</li>
+<li>Bossprogress 0.1.0</li>
 </ul>
 
 </div>
@@ -105,23 +106,28 @@
 			<li>Unzip the bbdkp zip file</li>
 			<li>Upload it to your Site, into /store/mods/ </li>
 			<li>Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits. </li>
-			<li> You need to copy the content of root/images folder to your Images folder manually : this is not done by Automod because it can't handle it due to the folder size (it's about 25 mb) <br />
-			   from="root/images/bossprogress/*.*" to="images/bossprogress/*.*" <br />
-			   from="root/images/class_images/*.*" to="images/class_images/*.*"<br />
-			   from="root/images/progressbar/*.*" to="images/progressbar/*.*"<br />	
-			   from="root/images/race_images/*.*" to="images/race_images/*.*"<br />			   		   			   
-			   from="root/images/recruitblock_images/*.*" to="images/recruitblock_images/*.*"<br />
-			   from="root/images/roster_classes/*.*" to="images/roster_classes/*.*" <br />
-			   from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*" <br />
-			   from="root/images/tooltip/*.*" to="images/tooltip/*.*"<br /> </li>
-			   
-			<li>Then surf to /install/installdkp.php, and you will see the umil installation page.  This will install the acp modules, database tables, and clear the caches (template, theme, imagesets)</li>
+			<li>Then click on the link given to /install/installdkp.php, and you will see the umil installation page. This will install/update the acp modules, database tables, and clear the caches (template, theme, imagesets)</li>
 			</ol>
    
-            <h2>Upgrading to 1.2 from 1.1.2.2</h2>
-			
-			<ul><li>Before upgrading bbDKP, you need to uninstall all plugins. 
+            <h2>Upgrading to 1.2.1 from 1.2</h2>
+				<li>If you want to upgrade manually, you just need to follow the instructions in contrib/update_12_to_121.xml :
+					<ul>
+						<li>first you copy all files to your webserver, replacing any old files. (Tip : it is better to just delete and replace)</li>
+						<li>then you apply the (few) changes to the core phpbb files</li>
+						<li>then you run the DB updater (/install/installdkp.php)</li>
+					</ul>
 				</li>
+
+				<li>Using Automod
+					<ul>
+						<li>Uninstall bbDKP by clicking "Uninstall" in Automod, then follow the instructions for a New install.</li>
+					</ul>
+				</li>
+			</ul>
+
+            <h2>Upgrading to 1.2.1 from 1.1.2.2</h2>
+			
+			<ul><li>Before upgrading bbDKP, you need to uninstall all plugins. </li>
 				<li>If you want to upgrade manually, you just need to follow the instructions in contrib/update_1122_to_12.xml :
 					<ul>
 						<li>first you copy all files to your webserver, replacing any old files. (Tip : it is better to just delete and replace)</li>
@@ -136,10 +142,7 @@
 						<li>If you want to *update* Using Automod, we prepared a separate download with a changed files MODX package. Refer to the instructions in that download.</li>
 					</ul>
 				</li>
-				
-				
 			</ul>
-			</li>
 			
 			<h2>Upgrading from 1.0.8-1.1 to 1.2</h2>
 			<ol>

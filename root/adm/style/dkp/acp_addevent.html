@@ -55,12 +55,12 @@ function check_form()
 		<dt><label for="event_name">{L_EVENT_NAME}:</label><br/>{L_EVENT_NAME_EXPLAIN}</dt>
 		<dd><input class="medium" type="text" id="event_name" name="event_name" value="{EVENT_NAME}" /></dd>
 	</dl>
-	
+	<!-- IF S_BP_SHOW -->
 	<dl>
 		<dt><label for="zoneevent">{L_IMPORTBOSSZONE}:</label><br /><span>{L_IMPORTBOSSZONE_EXPLAIN}</span></dt>
 		<dd><select id="zoneevent" name="zoneevent">{S_ZONEEVENT_OPTIONS}</select> &nbsp;{ZONE_EVENT} </dd>
 	</dl>
-	
+	<!-- ENDIF -->
 	<dl>
 		<dt><label for="event_color">{L_EVENT_COLOR}:</label><br/>{L_EVENT_COLOR_EXPLAIN}</dt>
 		<dd>

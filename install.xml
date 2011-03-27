@@ -10,9 +10,9 @@
 		<title lang="en"><![CDATA[bbDKP]]></title>
 		<description lang="en"><![CDATA[bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
 It integrates these Game, Guild and DKP management facilites into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
-Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules.
+Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, ACP and UCP modules.
 The framework supports multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION. 
-There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Raidplanner (under development)
+There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Bossprogress, Raidplanner (under development)
 
 Further development requests, support questions are welcome at http://www.bbdkp.com. As of the current release, it does not (yet) make coffee ;)
 
@@ -32,7 +32,7 @@ bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
 <description lang="fr"><![CDATA[bbDKP est une système DKP pour votre forum PHPBB3, developpee depuis EQDKP. Il est multi-pool, supporte le systeme DKP Standard, points par temps passé, Somme Zéro et EPGP.  Il aide les guildes à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer et World of Warcraft. 
 Liste non exhaustive des fonctionnalités : Multiples groupes DKP et guildes, Tribune des points DKP, Raids, Evènements, Valeurs des Objets, Historique des Objets, Statistique des Raids, Page d’avancée des Boss, Armurerie, module PCA avec Backup, Import de EQDKP+. 
-Les Plugins : Importation depuis l’armurerie de Blizzard et Aion, bbTips (Wow), Raidtracker (wow), Formulaire de Recrutement, Planner (en developpement)
+Les Plugins : Importation depuis l’armurerie de Blizzard et Aion, bbTips (Wow), Raidtracker (wow), Bossprogress, Formulaire de Recrutement, Planner (en developpement)
 Pour de plus amples détails, veuillez consulter le changelog. Demandes de développement, questions de support sont les bienvenues à http://www.bbdkp.com. 
 
 Langues inclues :
@@ -49,9 +49,9 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<description lang="de"><![CDATA[bbDKP ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Est ein multi-pool DKP System, und bietet Standard DKP, Zeitpunkteverwaltung, Nullpunkteverwaltung, und EPGP. Es ermöglicht die Gildenmitgliederverwaltung, die Raidteilnahme in Raids, die Verwaltung der Gegenstandsankäufe, verwaltung von DKP Konten, Bossvorgang, und GildenStatistiken. Sie erreichen damit ein einziges Angriffspunkt zum DKP und zum forum, mit eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP unterstützt jetzt Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer und World of Warcraft. 
-Nicht vollständige Funktionalitätenliste : Support für Vielfache DKP Gruppen (Pools), Vielfache Gilden, Ein Übersicht der DKP Punkte pro Spieler, Raidsliste, Ereignisliste, Gegenstandswerte, Historiken, Raidstatistiken, Bossvorgang, Gildenarsenalseite, ACP Modulen, Backupfunktionen, Import von EQDKP und EQDKP+. 
-Vorhandene Plugins : Importation von Mitglieder von das Blizzard oder Aion Arsenal, bbTips (tooltips), Raidtracker (wow), Rekrutierungsformular.  
+<description lang="de"><![CDATA[bbDKP ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Est ein multi-pool DKP System, und bietet Standard DKP, Zeitpunkteverwaltung, Nullpunkteverwaltung, und EPGP. Es ermöglicht die Gildenmitgliederverwaltung, die Raidteilnahme in Raids, die Verwaltung der Gegenstandsankäufe, verwaltung von DKP Konten, und GildenStatistiken. Sie erreichen damit ein einziges Angriffspunkt zum DKP und zum forum, mit eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP unterstützt jetzt Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer und World of Warcraft. 
+Nicht vollständige Funktionalitätenliste : Support für Vielfache DKP Gruppen (Pools), Vielfache Gilden, Ein Übersicht der DKP Punkte pro Spieler, Raidsliste, Ereignisliste, Gegenstandswerte, Historiken, Raidstatistiken, Gildenarsenalseite, ACP Modulen, Backupfunktionen, Import von EQDKP und EQDKP+. 
+Vorhandene Plugins : Importation von Mitglieder von das Blizzard oder Aion Arsenal, Bossvorgang, bbTips (tooltips), Raidtracker (wow), Rekrutierungsformular.  
 Für weitere Entwicklungsanfragen und Support heissen wir Sie wilkommen auf unsere internetseite http://www.bbdkp.com. 
 
 Enthaltenen Sprachdateien:
@@ -155,7 +155,7 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2</mod-version>
+		<mod-version>1.2.1</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
@@ -174,15 +174,18 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
 			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>	
 			
-			<link type="contrib" lang="en" href="contrib/update_1122_to_12.xml">Update from v1.1.2.2 to v1.2</link>
-			<link type="contrib" lang="fr" href="contrib/update_1122_to_12.xml">Mise à jour de v1.1.2.2 à v1.2</link>
-			<link type="contrib" lang="de" href="contrib/update_1122_to_12.xml">Aktualisierung vin v1.1.2.2 bis v1.2</link>
+			<link type="contrib" lang="en" href="contrib/update_1122_to_121.xml">Update from v1.1.2.2 to v1.2.1</link>
+			<link type="contrib" lang="fr" href="contrib/update_1122_to_121.xml">Mise à jour de v1.1.2.2 à v1.2.1</link>
+			<link type="contrib" lang="de" href="contrib/update_1122_to_121.xml">Aktualisierung von v1.1.2.2 bis v1.2.1</link>
+
+			<link type="contrib" lang="en" href="contrib/update_12_to_121.xml">Update from v1.2 to v1.2.1</link>
+			<link type="contrib" lang="fr" href="contrib/update_12_to_121.xml">Mise à jour de v1.2 à v1.2.1</link>
+			<link type="contrib" lang="de" href="contrib/update_12_to_121.xml">Aktualisierung von v1.2 bis v1.2.1</link>
 			</link-group>
 	</header>
 	<action-group>
 		<copy>
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
-			<file from="root/bossprogress.php" to="bossprogress.php"/>
 			<file from="root/listevents.php" to="listevents.php"/>
 			<file from="root/listitems.php" to="listitems.php"/>
 			<file from="root/listmembers.php" to="listmembers.php"/>
@@ -198,7 +201,7 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 			<file from="root/adm/findrank.php" to="adm/findrank.php"/>
 			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
-			<file from="root/images_upl/*.*" to="images/*.*"/>
+			<file from="root/images/*.*" to="images/*.*"/>
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
 			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
@@ -360,32 +363,19 @@ What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
 
-1) copy the image folders to /images manually. 
-Automod cannot handle it as it would lead to a timeout due to the size (24,9mb) ! 
-<file from="root/images/*.*" to="images/*.*" />   
-------------------------------------------------------------------------------
-2) Run bbDKP 1.2 database installation : install/installdkp.php 
-------------------------------------------------------------------------------
-3) Finish 
-Finally rename the install folder. 
-------------------------------------------------------------------------------
+1) Run bbDKP 1.2.1 database installation : install/installdkp.php 
+2) Rename the install folder. 
+
 Note : Should you need to deactivate bbDKP you can open config.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
 
-		Enjoy ;)]]></diy-instructions>
+Enjoy ;)]]></diy-instructions>
 <diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /docs/install.html
 Liste des changements : /docs/changelog.html
 
 Résumé des étapes de post-installation
 
-1) Copier ces fichiers vers le repertoire /images  
-En raison de la taille de ce répertoires (±24,9mb), Automod ne sait pas les copier, cela causerait un 'timeout'. 
-<file from="root/images/*.*" to="images/*.*" />   
-------------------------------------------------------------------------------
-2) lancer l’installateur ou m.a.j, demarrez install/installdkp.php
-------------------------------------------------------------------------------
-3) Fin
-Rennomer le repertoire /install pour réactiver le forum.
-------------------------------------------------------------------------------
+1) lance l’installateur ou m.a.j 1.2.1  : install/installdkp.php
+2) Renomme ou supprime le repertoire /install pour réactiver le forum.
 
 Note : Il est possible de désactiver le MOD en ouvrant config.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
 
@@ -393,17 +383,10 @@ Success ;)	]]></diy-instructions>
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) Kopiere diese Dateien zum Verzeichnis /images 
-Aus Berücksichtigung der Grösse der Verzeichnisse (±24,9mb), kann Automod dies nicht kopieren wegen Auszeit. 
-<file from="root/images/*.*" to="images/*.*" />   
-------------------------------------------------------------------------------
-2) Datenbank Installation order aktualisierung : install/installdkp.php 
-------------------------------------------------------------------------------
-3) Ende
-lösche, verschiebe oder benenne das Installations-Verzeichnis „install" damit das Forum wieder zugänglich wird.
-------------------------------------------------------------------------------
+1) 1.2.1 Datenbank Installation order aktualisierung : install/installdkp.php 
+2) lösche oder umbenenne das Installations-Verzeichnis „install" 
 
-Notiz : Es ist möglich bbDKP zu deaktivieren wenn Sie config.php öffnen und @define('EMED_BBDKP', true);  ändern nach  //@define('EMED_BBDKP', true);  
+Notiz : Sie können bbDKP deaktivieren indem sie config.php öffnen und @define('EMED_BBDKP', true); ändern nach  //@define('EMED_BBDKP', true);  
 
 Viel Spaß ;)	]]></diy-instructions>		
 	</action-group>

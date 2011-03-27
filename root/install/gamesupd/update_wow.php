@@ -22,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
  *
  * @param string $bbdkp_table_prefix
  */
-function install_wow($bbdkp_table_prefix)
+function install_wow()
 {
 	global $db, $table_prefix, $umil, $user;
 	
