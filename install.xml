@@ -182,7 +182,6 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 	<action-group>
 		<copy>
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
-			<file from="root/bossprogress.php" to="bossprogress.php"/>
 			<file from="root/listevents.php" to="listevents.php"/>
 			<file from="root/listitems.php" to="listitems.php"/>
 			<file from="root/listmembers.php" to="listmembers.php"/>
@@ -198,7 +197,7 @@ Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. 
 			<file from="root/adm/findrank.php" to="adm/findrank.php"/>
 			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
-			<file from="root/images_upl/*.*" to="images/*.*"/>
+			<file from="root/images/*.*" to="images/*.*"/>
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
 			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
@@ -360,32 +359,19 @@ What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
 
-1) copy the image folders to /images manually. 
-Automod cannot handle it as it would lead to a timeout due to the size (24,9mb) ! 
-<file from="root/images/*.*" to="images/*.*" />   
-------------------------------------------------------------------------------
-2) Run bbDKP 1.2 database installation : install/installdkp.php 
-------------------------------------------------------------------------------
-3) Finish 
-Finally rename the install folder. 
-------------------------------------------------------------------------------
+1) Run bbDKP 1.2 database installation : install/installdkp.php 
+2) Rename the install folder. 
+
 Note : Should you need to deactivate bbDKP you can open config.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
 
-		Enjoy ;)]]></diy-instructions>
+Enjoy ;)]]></diy-instructions>
 <diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /docs/install.html
 Liste des changements : /docs/changelog.html
 
 Résumé des étapes de post-installation
 
-1) Copier ces fichiers vers le repertoire /images  
-En raison de la taille de ce répertoires (±24,9mb), Automod ne sait pas les copier, cela causerait un 'timeout'. 
-<file from="root/images/*.*" to="images/*.*" />   
-------------------------------------------------------------------------------
-2) lancer l’installateur ou m.a.j, demarrez install/installdkp.php
-------------------------------------------------------------------------------
-3) Fin
-Rennomer le repertoire /install pour réactiver le forum.
-------------------------------------------------------------------------------
+1) lance l’installateur ou m.a.j : install/installdkp.php
+2) Renomme ou supprime le repertoire /install pour réactiver le forum.
 
 Note : Il est possible de désactiver le MOD en ouvrant config.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
 
@@ -393,17 +379,10 @@ Success ;)	]]></diy-instructions>
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) Kopiere diese Dateien zum Verzeichnis /images 
-Aus Berücksichtigung der Grösse der Verzeichnisse (±24,9mb), kann Automod dies nicht kopieren wegen Auszeit. 
-<file from="root/images/*.*" to="images/*.*" />   
-------------------------------------------------------------------------------
-2) Datenbank Installation order aktualisierung : install/installdkp.php 
-------------------------------------------------------------------------------
-3) Ende
-lösche, verschiebe oder benenne das Installations-Verzeichnis „install" damit das Forum wieder zugänglich wird.
-------------------------------------------------------------------------------
+1) Datenbank Installation order aktualisierung : install/installdkp.php 
+2) lösche oder umbenenne das Installations-Verzeichnis „install" 
 
-Notiz : Es ist möglich bbDKP zu deaktivieren wenn Sie config.php öffnen und @define('EMED_BBDKP', true);  ändern nach  //@define('EMED_BBDKP', true);  
+Notiz : Sie können bbDKP deaktivieren indem sie config.php öffnen und @define('EMED_BBDKP', true); ändern nach  //@define('EMED_BBDKP', true);  
 
 Viel Spaß ;)	]]></diy-instructions>		
 	</action-group>
