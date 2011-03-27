@@ -728,6 +728,42 @@ $versions = array(
 // Include the UMIF Auto file and everything else will be handled automatically.
 include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
 
+/***************************************
+ *
+ * adds config value with dkp module Id
+ */
+function acplink($action, $version)
+{
+    global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx;
+	switch ($action)
+	{
+		// lookup first node module id 
+		case 'install' :
+		case 'update' :
+		  $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'ACP_CAT_DKP'";
+          $result = $db->sql_query($sql);
+          $modid = (int) $db->sql_fetchfield('module_id'); 
+          if ($umil->config_exists('bbdkp_module_id'))
+          {
+              $umil->config_update('bbdkp_module_id', $modid, false);
+          }
+          else 
+          {
+              $umil->config_add('bbdkp_module_id', $modid, false);
+          }
+          $db->sql_freeresult($result);
+          return array('command' => 'UMIL_INSERT_DKPLINK', 'result' => 'SUCCESS');
+	      break;
+		case 'uninstall' :
+    	    if ($umil->config_exists('bbdkp_module_id'))
+            {
+                  $umil->config_remove('bbdkp_module_id');
+            }
+			return array('command' => 'UMIL_REMOVE_DKPLINK', 'result' => 'SUCCESS');
+		  break; 		  
+	}
+}
+
 /****************************
  *  
  * global function for rendering pulldown menu
