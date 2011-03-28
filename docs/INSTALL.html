@@ -97,62 +97,82 @@
 
 	<div class="paragraph">
 		<div class="inner"><span class="corners-top"><span></span></span></div>
-		<p>Adding bbDKP to phpBB3 is easy. you need to do the edits in your core phpbb files, copy bDKP and your modded files to your server, and then run the database installer. </p>
+		<p>Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. </p>
 		
 		<h2>Step-by-step Guide</h2>
+		<strong>Note : Before upgrading bbDKP, you need to backup your forum.</strong>
+		
 		<div class="content">
-			<h2>New installation using Automod</h2>
-			<ol>
-			<li>Unzip the bbdkp zip file</li>
-			<li>Upload it to your Site, into /store/mods/ </li>
-			<li>Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits. </li>
-			<li>Then click on the link given to /install/installdkp.php, and you will see the umil installation page. This will install/update the acp modules, database tables, and clear the caches (template, theme, imagesets)</li>
-			</ol>
+			<h2>New 1.2.1 installation </h2>
+			<ul>
+				<li><strong>using Automod</strong>
+				<ol>
+					<li>Unzip the bbdkp zip file</li>
+					<li>Upload it to your webserver, into /store/mods/ </li>
+					<li>Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits. </li>
+					<li>Then click on the blue link given, this will redirect you to /install/installdkp.php, 
+					<li>and you will see the umil installation page. This will install 1.2.1. and clear the caches (template, theme, imagesets)</li>
+				</ol>
+				</li>
+				<li><strong>Manually</strong>
+					<ol>
+						
+						<li>open the MODX file : <a href="../install.xml">install.xml</a></li>
+						<li>First you copy all mod files to your webserver like they laid out in the Modx file.</li>
+						<li>Then manually apply the changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
+						<li>Then launch the DB updater (/install/installdkp.php)</li>
+						<li>Now you see the Umil installation page. This will install 1.2.1. and clear the caches (template, theme, imagesets)</li>
+					</ol>
+
+				</li>
+			</ul>
    
-            <h2>Upgrading to 1.2.1 from 1.2</h2>
-				<li>If you want to upgrade manually, you just need to follow the instructions in contrib/update_12_to_121.xml :
-					<ul>
-						<li>first you copy all files to your webserver, replacing any old files. (Tip : it is better to just delete and replace)</li>
-						<li>then you apply the (few) changes to the core phpbb files</li>
-						<li>then you run the DB updater (/install/installdkp.php)</li>
-					</ul>
-				</li>
-
-				<li>Using Automod
-					<ul>
-						<li>Uninstall bbDKP by clicking "Uninstall" in Automod, then follow the instructions for a New install.</li>
-					</ul>
-				</li>
-			</ul>
-
-            <h2>Upgrading to 1.2.1 from 1.1.2.2</h2>
-			
-			<ul><li>Before upgrading bbDKP, you need to uninstall all plugins. </li>
-				<li>If you want to upgrade manually, you just need to follow the instructions in contrib/update_1122_to_12.xml :
-					<ul>
-						<li>first you copy all files to your webserver, replacing any old files. (Tip : it is better to just delete and replace)</li>
-						<li>then you apply the (few) changes to the core phpbb files</li>
-						<li>then you run the DB updater (/install/installdkp.php)</li>
-					</ul>
-				</li>
-
-				<li>Using Automod
-					<ul>
-						<li>(Recommended) Uninstall bbDKP by clicking "Uninstall" in Automod, then follow the instructions for a New install.</li>
-						<li>If you want to *update* Using Automod, we prepared a separate download with a changed files MODX package. Refer to the instructions in that download.</li>
-					</ul>
-				</li>
-			</ul>
-			
-			<h2>Upgrading from 1.0.8-1.1 to 1.2</h2>
+            <h2>Upgrading from 1.0.8-1.1 to 1.2.1</h2>
+			<strong>Note : Before upgrading bbDKP, you need to uninstall all plugins.</strong>
 			<ol>
-			<li>Completely remove all old files and all old bbDKP edits from your phpbb installation.</li>
-			<li>Follow the Clean install instructions</li>
+				<li>Completely remove all old files and all old bbDKP edits from your phpbb installation.</li>
+				<li>Follow the Clean install instructions 1 to 3</li>
+				<li>Then click on the blue link given, this will now redirect you to /install/updatedkp.php,</li>
+				<li>Now you see the Umil updater. This will update your database tables from your older version to 1.2.1. and clear the caches (template, theme, and imagesets)</li>
 			</ol>
-            			
+			
+			<h2>Upgrading from 1.1.2.2 to 1.2.1</h2>
+			
+			<strong>Note : Before upgrading bbDKP, you need to uninstall all plugins.</strong>
+			<ul>
+				<li><strong>Upgrading Manually</strong>
+					<ol>
+						<li>If you want to upgrade manually, you just need to follow the diff instructions in <a href="../contrib/update_1122_to_121.xml">contrib/update_1122_to_121.xml</a></li>
+						<li>first you copy all files to your webserver, replacing any old files. (Tip : it is better to just delete and replace)</li>
+						<li>then you manually apply the (few) changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
+						<li>then launch the DB updater (/install/updatedkp.php)</li>
+						<li>Now you see the Umil updater. This will update your database tables from 1.1.2.2 to 1.2.1. and clear the caches (template, theme, and imagesets)</li>
+					</ol>
+				</li>
+
+				<li><strong>Automod Uninstall-Reinstall procedure (recommended)</strong>
+					<ol>
+						<li>Go in Automod, then click Uninstall bbDKP</li>
+						<li>Then follow the Clean install instructions 1 to 3</li>
+						<li>Then click on the blue link given, this will now redirect you to /install/updatedkp.php,</li>
+						<li>Now you see the Umil updater. This will update your database tables from 1.1.2.2 to 1.2.1. and clear the caches (template, theme, and imagesets)</li>
+					</ol>
+				</li>
+
+				<li><strong>Automod Update</strong>
+					<ol>
+						<li>If you want to *update* Using Automod, we may upon request prepare a separate download with a changed files MODX package.</li>
+						<li>Then click on the blue link given, this will redirect you to /install/updatedkp.php,</li>
+						<li>Now you see the Umil updater. This will update your database tables from 1.1.2.2 to 1.2.1. and clear the caches (template, theme, and imagesets)</li>
+					</ol>
+				</li>
+				
+				<li><em>Note : upgrading from 1.2 to 1.2.1 follows the same procedure : <a href="../contrib/update_12_to_121.xml">contrib/update_12_to_121.xml</a></em> </li>
+			</ul>
+			
 			<h2>Quick Deactivation</h2>
 			<ol>
-			<li>should you wish to Deactivate this Mod quickly you can open config.php</li>
+			<li>should you wish to Deactivate this Mod quickly you can open config.php and comment out the trigger</li>
 			change 
 			<code>@define('EMED_BBDKP', true);</code> 
 			to 
@@ -173,7 +193,7 @@
 		
 		<div class="content">
 			<ol>
-			<li><a href="http://www.bbdkp.com/viewforum.php?f=54">Installation support</a></li>
+			<li><a href="http://www.bbdkp.com/viewforum.php?f=56">1.2 Installation support</a></li>
 			<li><a href="http://www.bbdkp.com/viewforum.php?f=8">Plugin support</a></li>
 			<li><a href="http://www.bbdkp.com/tracker.php">Bug reports</a></li>
 			<li>IRC channel : visit #bbdkp on Freenode. <a href="http://webchat.freenode.net">webchat</a><br/> </li>
@@ -187,9 +207,6 @@
 		
 	</div>	
 
-
-
-
 <h1>Copyright and disclaimer</h1>
 	<hr />
 
@@ -202,9 +219,9 @@
 			
 			 Powered by bbDkp (c) 2009 The bbDkp Project Team <a href="http://www.bbdkp.com/">bbDkp</a><br/>
 			 If you use this software and find it to be useful, we ask that you retain the copyright notice below. 
-			 While not required for free use, it will help build interest in the bbDkp project and is required for obtaining support.
+			 While not required for free use, it will help build interest in the bbDkp project and is required for obtaining support.<br/><br/>
 
-			 bbdkp SVN : <a href="http://code.google.com/p/bbdkp/">http://code.google.com/p/bbdkp/</a><br/>
+			 bbdkp Repository : <a href="https://www.github.com/bbdkp/">https://www.github.com/bbdkp/</a><br/>
 			 bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar<br/>
 			 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN<br/>
 			 EQDkp (c) 2003 The EqDkp Project Team 

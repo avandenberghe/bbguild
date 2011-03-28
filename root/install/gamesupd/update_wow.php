@@ -2374,8 +2374,6 @@ function install_wow_bb2($bbdkp_table_prefix)
 	}
 }
 
-
-
 /*
  * release 1.2
  * new boss progress data for WoW
@@ -2403,52 +2401,6 @@ function install_wow_bb3()
 	$sql_ary [] = array ('class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_Death_Knight_small'); 
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
 							
-							
-	$db->sql_query ( 'DELETE FROM ' . $table_prefix . "bbdkp_language where attribute = 'class'" );
-	unset ( $sql_ary );
-	// reinsert class language table to correct id
-	// classes in en
-	$sql_ary[] = array( 'id' => 627 , 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
-	$sql_ary[] = array( 'id' => 628 , 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
-	$sql_ary[] = array( 'id' => 629 , 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Rogue' ,  'name_short' =>  'Rogue' );
-	$sql_ary[] = array( 'id' => 630 , 'attribute_id' => 3, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Hunter' ,  'name_short' =>  'Hunter' );
-	$sql_ary[] = array( 'id' => 631 , 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
-	$sql_ary[] = array( 'id' => 632 , 'attribute_id' => 7, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Shaman' ,  'name_short' =>  'Shaman' );
-	$sql_ary[] = array( 'id' => 633 , 'attribute_id' => 11, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Druid' ,  'name_short' =>  'Druid' );
-	$sql_ary[] = array( 'id' => 634 , 'attribute_id' => 9, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warlock' ,  'name_short' =>  'Warlock' );
-	$sql_ary[] = array( 'id' => 635 , 'attribute_id' => 8, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Mage' ,  'name_short' =>  'Mage' );
-	$sql_ary[] = array( 'id' => 636 , 'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Priest' ,  'name_short' =>  'Priest' );
-	$sql_ary[] = array( 'id' => 637 , 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Death Knight' ,  'name_short' =>  'Death Knight' );
-						
-	//classes in fr
-	$sql_ary[] = array( 'id' => 638 , 'attribute_id' => 0, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
-	$sql_ary[] = array( 'id' => 639 , 'attribute_id' => 1, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
-	$sql_ary[] = array( 'id' => 640 , 'attribute_id' => 4, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Voleur' ,  'name_short' =>  'Voleur' );
-	$sql_ary[] = array( 'id' => 641 , 'attribute_id' => 3, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chasseur' ,  'name_short' =>  'Chasseur' );
-	$sql_ary[] = array( 'id' => 642 , 'attribute_id' => 2, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
-	$sql_ary[] = array( 'id' => 643 , 'attribute_id' => 7, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chaman' ,  'name_short' =>  'Chaman' );
-	$sql_ary[] = array( 'id' => 644 , 'attribute_id' => 11, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Druide' ,  'name_short' =>  'Druide' );
-	$sql_ary[] = array( 'id' => 645 , 'attribute_id' => 9, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Démoniste' ,  'name_short' =>  'Démoniste' );
-	$sql_ary[] = array( 'id' => 646 , 'attribute_id' => 8, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Mage' ,  'name_short' =>  'Mage' );
-	$sql_ary[] = array( 'id' => 647 , 'attribute_id' => 5, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Prêtre' ,  'name_short' =>  'Prêtre' );
-	$sql_ary[] = array( 'id' => 648 , 'attribute_id' => 6, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chevalier de la Mort' ,  'name_short' =>  'Chevalier de la Mort' );
-							
-	//classes in de	
-	$sql_ary[] = array( 'id' => 671 , 'attribute_id' => 0, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unbekannt' ,  'name_short' =>  'Unbekannt' );
-	$sql_ary[] = array( 'id' => 672 , 'attribute_id' => 1, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Krieger' ,  'name_short' =>  'Krieger' );
-	$sql_ary[] = array( 'id' => 673 , 'attribute_id' => 4, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Schurke' ,  'name_short' =>  'Schurke' );
-	$sql_ary[] = array( 'id' => 674 , 'attribute_id' => 3, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Jäger' ,  'name_short' =>  'Jäger' );
-	$sql_ary[] = array( 'id' => 675 , 'attribute_id' => 2, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
-	$sql_ary[] = array( 'id' => 676 , 'attribute_id' => 7, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Schamane' ,  'name_short' =>  'Schamane' );
-	$sql_ary[] = array( 'id' => 677 , 'attribute_id' => 11, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Druide' ,  'name_short' =>  'Druide' );
-	$sql_ary[] = array( 'id' => 678 , 'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Hexenmeister' ,  'name_short' =>  'Hexenmeister' );
-	$sql_ary[] = array( 'id' => 679 , 'attribute_id' => 8, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Magier' ,  'name_short' =>  'Magier' );
-	$sql_ary[] = array( 'id' => 680 , 'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Priester' ,  'name_short' =>  'Priester' );
-	$sql_ary[] = array( 'id' => 681 , 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Todesritter' ,  'name_short' =>  'Todesritter' );
-							
-	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
-	unset ( $sql_ary );
-							
 	// 2 new races
 	$db->sql_query ('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
 	$sql_ary = array ();
@@ -2468,13 +2420,12 @@ function install_wow_bb3()
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 	unset ( $sql_ary );
 		
-	//cataclysm language additions
-
-
+	// set old zones to no-show
 	$sql = 'UPDATE  ' . $table_prefix . "bbdkp_zonetable  SET showzoneportal = '0', showzone =  '0' " ;
 	$db->sql_query($sql);
 	
 	//cataclysm zones
+	unset ( $sql_ary );
 	$sql_ary = array ();
 	$sql_ary[] = array( 'id' => 40 , 'imagename' =>  'bd_10' , 'game' =>  'wow' ,  'tier' =>  'T11' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '5094' ,  'showzone' =>  1, 'showzoneportal' =>  1);
 	$sql_ary[] = array( 'id' => 41 , 'imagename' =>  'bd_25' , 'game' =>  'wow' ,  'tier' =>  'T11' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '5094' ,  'showzone' =>  1, 'showzoneportal' =>  1);
@@ -2484,10 +2435,11 @@ function install_wow_bb3()
 	$sql_ary[] = array( 'id' => 45 , 'imagename' =>  'tfw_25' , 'game' =>  'wow' ,  'tier' =>  'T11' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '5638' ,  'showzone' =>  1, 'showzoneportal' =>  1);
 	$db->sql_multi_insert ($table_prefix . 'bbdkp_zonetable', $sql_ary );
 
+	// set old bosses to no-show
 	$sql = 'UPDATE  ' . $table_prefix . "bbdkp_bosstable  SET showboss = '0' " ;
 	$db->sql_query($sql);
 		
-	//cataclysm bosses
+	//cataclysm bosses. id is foreign key for language attribute_id
 	unset ( $sql_ary );
 	$sql_ary = array ();
 	$sql_ary[] = array('id' => 275 ,  'imagename' =>  'magmaw_10' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '41570' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
@@ -2542,196 +2494,240 @@ function install_wow_bb3()
 	$sql_ary[] = array('id' => 324 ,  'imagename' =>  'alakir_25_hc' , 'game' =>  'wow' , 'zoneid' =>  45 , 'type' =>  'npc'  , 'webid' =>  '46753' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_bosstable', $sql_ary );
 
-	//bosses and zones in en
-	unset ( $sql_ary );
-	$sql_ary = array ();
-	$sql_ary[] = array( 'id' => 1006 , 'attribute_id' => 40, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (10)' ,  'name_short' =>  'BD (10)' );
-	$sql_ary[] = array( 'id' => 1007 , 'attribute_id' => 41, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (25)' ,  'name_short' =>  'BD (25)' );
-	$sql_ary[] = array( 'id' => 1008 , 'attribute_id' => 42, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (10)' ,  'name_short' =>  'BoT (10)' );
-	$sql_ary[] = array( 'id' => 1009 , 'attribute_id' => 43, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (25)' ,  'name_short' =>  'BoT (25)' );
-	$sql_ary[] = array( 'id' => 1010 , 'attribute_id' => 44, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (10)' ,  'name_short' =>  'TotFW (10)' );
-	$sql_ary[] = array( 'id' => 1011 , 'attribute_id' => 45, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (25)' ,  'name_short' =>  'TotFW (25)' );
-	$sql_ary[] = array( 'id' => 1012 , 'attribute_id' => 275, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10)' ,  'name_short' =>  'Magmaw (10)' );
-	$sql_ary[] = array( 'id' => 1013 , 'attribute_id' => 276, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10HM)' ,  'name_short' =>  'Magmaw (10HM)' );
-	$sql_ary[] = array( 'id' => 1014 , 'attribute_id' => 277, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25)' ,  'name_short' =>  'Magmaw (25)' );
-	$sql_ary[] = array( 'id' => 1015 , 'attribute_id' => 278, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25HM)' ,  'name_short' =>  'Magmaw (25HM)' );
-	$sql_ary[] = array( 'id' => 1016 , 'attribute_id' => 279, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10)' ,  'name_short' =>  'Omnotron Defense System (10)' );
-	$sql_ary[] = array( 'id' => 1017 , 'attribute_id' => 280, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10HM)' ,  'name_short' =>  'Omnotron Defense System (10HM)' );
-	$sql_ary[] = array( 'id' => 1018 , 'attribute_id' => 281, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25)' ,  'name_short' =>  'Omnotron Defense System (25)' );
-	$sql_ary[] = array( 'id' => 1019 , 'attribute_id' => 282, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25HM)' ,  'name_short' =>  'Omnotron Defense System (25HM)' );
-	$sql_ary[] = array( 'id' => 1020 , 'attribute_id' => 283, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10)' ,  'name_short' =>  'Maloriak (10)' );
-	$sql_ary[] = array( 'id' => 1021 , 'attribute_id' => 284, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10HM)' ,  'name_short' =>  'Maloriak (10HM)' );
-	$sql_ary[] = array( 'id' => 1022 , 'attribute_id' => 285, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25)' ,  'name_short' =>  'Maloriak (25)' );
-	$sql_ary[] = array( 'id' => 1023 , 'attribute_id' => 286, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25HM)' ,  'name_short' =>  'Maloriak (25HM)' );
-	$sql_ary[] = array( 'id' => 1024 , 'attribute_id' => 287, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10)' ,  'name_short' =>  'Atramedes (10)' );
-	$sql_ary[] = array( 'id' => 1025 , 'attribute_id' => 288, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10HM)' ,  'name_short' =>  'Atramedes (10HM)' );
-	$sql_ary[] = array( 'id' => 1026 , 'attribute_id' => 289, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25)' ,  'name_short' =>  'Atramedes (25)' );
-	$sql_ary[] = array( 'id' => 1027 , 'attribute_id' => 290, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25HM)' ,  'name_short' =>  'Atramedes (25HM)' );
-	$sql_ary[] = array( 'id' => 1028 , 'attribute_id' => 291, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10)' ,  'name_short' =>  'Chimaeron (10)' );
-	$sql_ary[] = array( 'id' => 1029 , 'attribute_id' => 292, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10HM)' ,  'name_short' =>  'Chimaeron (10HM)' );
-	$sql_ary[] = array( 'id' => 1030 , 'attribute_id' => 293, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25)' ,  'name_short' =>  'Chimaeron (25)' );
-	$sql_ary[] = array( 'id' => 1031 , 'attribute_id' => 294, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25HM)' ,  'name_short' =>  'Chimaeron (25HM)' );
-	$sql_ary[] = array( 'id' => 1032 , 'attribute_id' => 295, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10)' ,  'name_short' =>  'Nefarian (10)' );
-	$sql_ary[] = array( 'id' => 1033 , 'attribute_id' => 296, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10HM)' ,  'name_short' =>  'Nefarian (10HM)' );
-	$sql_ary[] = array( 'id' => 1034 , 'attribute_id' => 297, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25)' ,  'name_short' =>  'Nefarian (25)' );
-	$sql_ary[] = array( 'id' => 1035 , 'attribute_id' => 298, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25HM)' ,  'name_short' =>  'Nefarian (25HM)' );
-	$sql_ary[] = array( 'id' => 1036 , 'attribute_id' => 299, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10)' ,  'name_short' =>  'Halfus Wyrmbreaker (10)' );
-	$sql_ary[] = array( 'id' => 1037 , 'attribute_id' => 300, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (10HM)' );
-	$sql_ary[] = array( 'id' => 1038 , 'attribute_id' => 301, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25)' ,  'name_short' =>  'Halfus Wyrmbreaker (25)' );
-	$sql_ary[] = array( 'id' => 1039 , 'attribute_id' => 302, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (25HM)' );
-	$sql_ary[] = array( 'id' => 1040 , 'attribute_id' => 303, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10)' ,  'name_short' =>  'Valiona & Theralion (10)' );
-	$sql_ary[] = array( 'id' => 1041 , 'attribute_id' => 304, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10HM)' ,  'name_short' =>  'Valiona & Theralion (10HM)' );
-	$sql_ary[] = array( 'id' => 1042 , 'attribute_id' => 305, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25)' ,  'name_short' =>  'Valiona & Theralion (25)' );
-	$sql_ary[] = array( 'id' => 1043 , 'attribute_id' => 306, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25HM)' ,  'name_short' =>  'Valiona & Theralion (25HM)' );
-	$sql_ary[] = array( 'id' => 1044 , 'attribute_id' => 307, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10)' ,  'name_short' =>  'Twilight Ascendant Council (10)' );
-	$sql_ary[] = array( 'id' => 1045 , 'attribute_id' => 308, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10HM)' ,  'name_short' =>  'Twilight Ascendant Council (10HM)' );
-	$sql_ary[] = array( 'id' => 1046 , 'attribute_id' => 309, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25)' ,  'name_short' =>  'Twilight Ascendant Council (25)' );
-	$sql_ary[] = array( 'id' => 1047 , 'attribute_id' => 310, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25HM)' ,  'name_short' =>  'Twilight Ascendant Council (25HM)' );
-	$sql_ary[] = array( 'id' => 1048 , 'attribute_id' => 311, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10)' ,  'name_short' =>  'Cho\'gall (10)' );
-	$sql_ary[] = array( 'id' => 1049 , 'attribute_id' => 312, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10HM)' ,  'name_short' =>  'Cho\'gall (10HM)' );
-	$sql_ary[] = array( 'id' => 1050 , 'attribute_id' => 313, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25)' ,  'name_short' =>  'Cho\'gall (25)' );
-	$sql_ary[] = array( 'id' => 1051 , 'attribute_id' => 314, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25HM)' ,  'name_short' =>  'Cho\'gall (25HM)' );
-	$sql_ary[] = array( 'id' => 1052 , 'attribute_id' => 315, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (10HM)' ,  'name_short' =>  'Sinestra (10HM)' );
-	$sql_ary[] = array( 'id' => 1053 , 'attribute_id' => 316, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (25HM)' ,  'name_short' =>  'Sinestra (25HM)' );
-	$sql_ary[] = array( 'id' => 1054 , 'attribute_id' => 317, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10)' ,  'name_short' =>  'Conclave of Wind (10)' );
-	$sql_ary[] = array( 'id' => 1055 , 'attribute_id' => 318, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10HM)' ,  'name_short' =>  'Conclave of Wind (10HM)' );
-	$sql_ary[] = array( 'id' => 1056 , 'attribute_id' => 319, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25)' ,  'name_short' =>  'Conclave of Wind (25)' );
-	$sql_ary[] = array( 'id' => 1057 , 'attribute_id' => 320, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25HM)' ,  'name_short' =>  'Conclave of Wind (25HM)' );
-	$sql_ary[] = array( 'id' => 1058 , 'attribute_id' => 321, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10)' ,  'name_short' =>  'Al\'akir (10)' );
-	$sql_ary[] = array( 'id' => 1059 , 'attribute_id' => 322, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10HM)' ,  'name_short' =>  'Al\'akir (10HM)' );
-	$sql_ary[] = array( 'id' => 1060 , 'attribute_id' => 323, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25)' ,  'name_short' =>  'Al\'akir (25)' );
-	$sql_ary[] = array( 'id' => 1061 , 'attribute_id' => 324, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25HM)' ,  'name_short' =>  'Al\'akir (25HM)' );
-	//bosses and zones in fr
-	$sql_ary[] = array( 'id' => 1062 , 'attribute_id' => 40, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (10)' ,  'name_short' =>  'BD (10)' );
-	$sql_ary[] = array( 'id' => 1063 , 'attribute_id' => 41, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (25)' ,  'name_short' =>  'BD (25)' );
-	$sql_ary[] = array( 'id' => 1064 , 'attribute_id' => 42, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (10)' ,  'name_short' =>  'BoT (10)' );
-	$sql_ary[] = array( 'id' => 1065 , 'attribute_id' => 43, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (25)' ,  'name_short' =>  'BoT (25)' );
-	$sql_ary[] = array( 'id' => 1066 , 'attribute_id' => 44, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (10)' ,  'name_short' =>  'TotFW (10)' );
-	$sql_ary[] = array( 'id' => 1067 , 'attribute_id' => 45, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (25)' ,  'name_short' =>  'TotFW (25)' );
-	$sql_ary[] = array( 'id' => 1068 , 'attribute_id' => 275, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10)' ,  'name_short' =>  'Magmaw (10)' );
-	$sql_ary[] = array( 'id' => 1069 , 'attribute_id' => 276, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10HM)' ,  'name_short' =>  'Magmaw (10HM)' );
-	$sql_ary[] = array( 'id' => 1070 , 'attribute_id' => 277, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25)' ,  'name_short' =>  'Magmaw (25)' );
-	$sql_ary[] = array( 'id' => 1071 , 'attribute_id' => 278, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25HM)' ,  'name_short' =>  'Magmaw (25HM)' );
-	$sql_ary[] = array( 'id' => 1072 , 'attribute_id' => 279, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10)' ,  'name_short' =>  'Omnotron Defense System (10)' );
-	$sql_ary[] = array( 'id' => 1073 , 'attribute_id' => 280, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10HM)' ,  'name_short' =>  'Omnotron Defense System (10HM)' );
-	$sql_ary[] = array( 'id' => 1074 , 'attribute_id' => 281, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25)' ,  'name_short' =>  'Omnotron Defense System (25)' );
-	$sql_ary[] = array( 'id' => 1075 , 'attribute_id' => 282, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25HM)' ,  'name_short' =>  'Omnotron Defense System (25HM)' );
-	$sql_ary[] = array( 'id' => 1076 , 'attribute_id' => 283, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10)' ,  'name_short' =>  'Maloriak (10)' );
-	$sql_ary[] = array( 'id' => 1077 , 'attribute_id' => 284, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10HM)' ,  'name_short' =>  'Maloriak (10HM)' );
-	$sql_ary[] = array( 'id' => 1078 , 'attribute_id' => 285, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25)' ,  'name_short' =>  'Maloriak (25)' );
-	$sql_ary[] = array( 'id' => 1079 , 'attribute_id' => 286, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25HM)' ,  'name_short' =>  'Maloriak (25HM)' );
-	$sql_ary[] = array( 'id' => 1080 , 'attribute_id' => 287, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10)' ,  'name_short' =>  'Atramedes (10)' );
-	$sql_ary[] = array( 'id' => 1081 , 'attribute_id' => 288, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10HM)' ,  'name_short' =>  'Atramedes (10HM)' );
-	$sql_ary[] = array( 'id' => 1082 , 'attribute_id' => 289, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25)' ,  'name_short' =>  'Atramedes (25)' );
-	$sql_ary[] = array( 'id' => 1083 , 'attribute_id' => 290, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25HM)' ,  'name_short' =>  'Atramedes (25HM)' );
-	$sql_ary[] = array( 'id' => 1084 , 'attribute_id' => 291, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10)' ,  'name_short' =>  'Chimaeron (10)' );
-	$sql_ary[] = array( 'id' => 1085 , 'attribute_id' => 292, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10HM)' ,  'name_short' =>  'Chimaeron (10HM)' );
-	$sql_ary[] = array( 'id' => 1086 , 'attribute_id' => 293, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25)' ,  'name_short' =>  'Chimaeron (25)' );
-	$sql_ary[] = array( 'id' => 1087 , 'attribute_id' => 294, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25HM)' ,  'name_short' =>  'Chimaeron (25HM)' );
-	$sql_ary[] = array( 'id' => 1088 , 'attribute_id' => 295, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10)' ,  'name_short' =>  'Nefarian (10)' );
-	$sql_ary[] = array( 'id' => 1089 , 'attribute_id' => 296, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10HM)' ,  'name_short' =>  'Nefarian (10HM)' );
-	$sql_ary[] = array( 'id' => 1090 , 'attribute_id' => 297, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25)' ,  'name_short' =>  'Nefarian (25)' );
-	$sql_ary[] = array( 'id' => 1091 , 'attribute_id' => 298, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25HM)' ,  'name_short' =>  'Nefarian (25HM)' );
-	$sql_ary[] = array( 'id' => 1092 , 'attribute_id' => 299, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10)' ,  'name_short' =>  'Halfus Wyrmbreaker (10)' );
-	$sql_ary[] = array( 'id' => 1093 , 'attribute_id' => 300, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (10HM)' );
-	$sql_ary[] = array( 'id' => 1094 , 'attribute_id' => 301, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25)' ,  'name_short' =>  'Halfus Wyrmbreaker (25)' );
-	$sql_ary[] = array( 'id' => 1095 , 'attribute_id' => 302, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (25HM)' );
-	$sql_ary[] = array( 'id' => 1096 , 'attribute_id' => 303, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10)' ,  'name_short' =>  'Valiona & Theralion (10)' );
-	$sql_ary[] = array( 'id' => 1097 , 'attribute_id' => 304, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10HM)' ,  'name_short' =>  'Valiona & Theralion (10HM)' );
-	$sql_ary[] = array( 'id' => 1098 , 'attribute_id' => 305, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25)' ,  'name_short' =>  'Valiona & Theralion (25)' );
-	$sql_ary[] = array( 'id' => 1099 , 'attribute_id' => 306, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25HM)' ,  'name_short' =>  'Valiona & Theralion (25HM)' );
-	$sql_ary[] = array( 'id' => 1100 , 'attribute_id' => 307, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10)' ,  'name_short' =>  'Twilight Ascendant Council (10)' );
-	$sql_ary[] = array( 'id' => 1101 , 'attribute_id' => 308, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10HM)' ,  'name_short' =>  'Twilight Ascendant Council (10HM)' );
-	$sql_ary[] = array( 'id' => 1102 , 'attribute_id' => 309, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25)' ,  'name_short' =>  'Twilight Ascendant Council (25)' );
-	$sql_ary[] = array( 'id' => 1103 , 'attribute_id' => 310, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25HM)' ,  'name_short' =>  'Twilight Ascendant Council (25HM)' );
-	$sql_ary[] = array( 'id' => 1104 , 'attribute_id' => 311, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10)' ,  'name_short' =>  'Cho\'gall (10)' );
-	$sql_ary[] = array( 'id' => 1105 , 'attribute_id' => 312, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10HM)' ,  'name_short' =>  'Cho\'gall (10HM)' );
-	$sql_ary[] = array( 'id' => 1106 , 'attribute_id' => 313, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25)' ,  'name_short' =>  'Cho\'gall (25)' );
-	$sql_ary[] = array( 'id' => 1107 , 'attribute_id' => 314, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25HM)' ,  'name_short' =>  'Cho\'gall (25HM)' );
-	$sql_ary[] = array( 'id' => 1108 , 'attribute_id' => 315, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (10HM)' ,  'name_short' =>  'Sinestra (10HM)' );
-	$sql_ary[] = array( 'id' => 1109 , 'attribute_id' => 316, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (25HM)' ,  'name_short' =>  'Sinestra (25HM)' );
-	$sql_ary[] = array( 'id' => 1110 , 'attribute_id' => 317, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10)' ,  'name_short' =>  'Conclave of Wind (10)' );
-	$sql_ary[] = array( 'id' => 1111 , 'attribute_id' => 318, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10HM)' ,  'name_short' =>  'Conclave of Wind (10HM)' );
-	$sql_ary[] = array( 'id' => 1112 , 'attribute_id' => 319, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25)' ,  'name_short' =>  'Conclave of Wind (25)' );
-	$sql_ary[] = array( 'id' => 1113 , 'attribute_id' => 320, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25HM)' ,  'name_short' =>  'Conclave of Wind (25HM)' );
-	$sql_ary[] = array( 'id' => 1114 , 'attribute_id' => 321, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10)' ,  'name_short' =>  'Al\'akir (10)' );
-	$sql_ary[] = array( 'id' => 1115 , 'attribute_id' => 322, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10HM)' ,  'name_short' =>  'Al\'akir (10HM)' );
-	$sql_ary[] = array( 'id' => 1116 , 'attribute_id' => 323, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25)' ,  'name_short' =>  'Al\'akir (25)' );
-	$sql_ary[] = array( 'id' => 1117 , 'attribute_id' => 324, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25HM)' ,  'name_short' =>  'Al\'akir (25HM)' );
-	//bosses and zones in de
-	$sql_ary[] = array( 'id' => 1118 , 'attribute_id' => 40, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (10)' ,  'name_short' =>  'BD (10)' );
-	$sql_ary[] = array( 'id' => 1119 , 'attribute_id' => 41, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (25)' ,  'name_short' =>  'BD (25)' );
-	$sql_ary[] = array( 'id' => 1120 , 'attribute_id' => 42, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (10)' ,  'name_short' =>  'BoT (10)' );
-	$sql_ary[] = array( 'id' => 1121 , 'attribute_id' => 43, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (25)' ,  'name_short' =>  'BoT (25)' );
-	$sql_ary[] = array( 'id' => 1122 , 'attribute_id' => 44, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (10)' ,  'name_short' =>  'TotFW (10)' );
-	$sql_ary[] = array( 'id' => 1123 , 'attribute_id' => 45, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (25)' ,  'name_short' =>  'TotFW (25)' );
-	$sql_ary[] = array( 'id' => 1124 , 'attribute_id' => 275, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10)' ,  'name_short' =>  'Magmaw (10)' );
-	$sql_ary[] = array( 'id' => 1125 , 'attribute_id' => 276, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10HM)' ,  'name_short' =>  'Magmaw (10HM)' );
-	$sql_ary[] = array( 'id' => 1126 , 'attribute_id' => 277, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25)' ,  'name_short' =>  'Magmaw (25)' );
-	$sql_ary[] = array( 'id' => 1127 , 'attribute_id' => 278, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25HM)' ,  'name_short' =>  'Magmaw (25HM)' );
-	$sql_ary[] = array( 'id' => 1128 , 'attribute_id' => 279, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10)' ,  'name_short' =>  'Omnotron Defense System (10)' );
-	$sql_ary[] = array( 'id' => 1129 , 'attribute_id' => 280, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10HM)' ,  'name_short' =>  'Omnotron Defense System (10HM)' );
-	$sql_ary[] = array( 'id' => 1130 , 'attribute_id' => 281, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25)' ,  'name_short' =>  'Omnotron Defense System (25)' );
-	$sql_ary[] = array( 'id' => 1131 , 'attribute_id' => 282, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25HM)' ,  'name_short' =>  'Omnotron Defense System (25HM)' );
-	$sql_ary[] = array( 'id' => 1132 , 'attribute_id' => 283, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10)' ,  'name_short' =>  'Maloriak (10)' );
-	$sql_ary[] = array( 'id' => 1133 , 'attribute_id' => 284, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10HM)' ,  'name_short' =>  'Maloriak (10HM)' );
-	$sql_ary[] = array( 'id' => 1134 , 'attribute_id' => 285, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25)' ,  'name_short' =>  'Maloriak (25)' );
-	$sql_ary[] = array( 'id' => 1135 , 'attribute_id' => 286, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25HM)' ,  'name_short' =>  'Maloriak (25HM)' );
-	$sql_ary[] = array( 'id' => 1136 , 'attribute_id' => 287, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10)' ,  'name_short' =>  'Atramedes (10)' );
-	$sql_ary[] = array( 'id' => 1137 , 'attribute_id' => 288, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10HM)' ,  'name_short' =>  'Atramedes (10HM)' );
-	$sql_ary[] = array( 'id' => 1138 , 'attribute_id' => 289, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25)' ,  'name_short' =>  'Atramedes (25)' );
-	$sql_ary[] = array( 'id' => 1139 , 'attribute_id' => 290, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25HM)' ,  'name_short' =>  'Atramedes (25HM)' );
-	$sql_ary[] = array( 'id' => 1140 , 'attribute_id' => 291, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10)' ,  'name_short' =>  'Chimaeron (10)' );
-	$sql_ary[] = array( 'id' => 1141 , 'attribute_id' => 292, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10HM)' ,  'name_short' =>  'Chimaeron (10HM)' );
-	$sql_ary[] = array( 'id' => 1142 , 'attribute_id' => 293, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25)' ,  'name_short' =>  'Chimaeron (25)' );
-	$sql_ary[] = array( 'id' => 1143 , 'attribute_id' => 294, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25HM)' ,  'name_short' =>  'Chimaeron (25HM)' );
-	$sql_ary[] = array( 'id' => 1144 , 'attribute_id' => 295, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10)' ,  'name_short' =>  'Nefarian (10)' );
-	$sql_ary[] = array( 'id' => 1145 , 'attribute_id' => 296, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10HM)' ,  'name_short' =>  'Nefarian (10HM)' );
-	$sql_ary[] = array( 'id' => 1146 , 'attribute_id' => 297, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25)' ,  'name_short' =>  'Nefarian (25)' );
-	$sql_ary[] = array( 'id' => 1147 , 'attribute_id' => 298, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25HM)' ,  'name_short' =>  'Nefarian (25HM)' );
-	$sql_ary[] = array( 'id' => 1148 , 'attribute_id' => 299, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10)' ,  'name_short' =>  'Halfus Wyrmbreaker (10)' );
-	$sql_ary[] = array( 'id' => 1149 , 'attribute_id' => 300, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (10HM)' );
-	$sql_ary[] = array( 'id' => 1150 , 'attribute_id' => 301, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25)' ,  'name_short' =>  'Halfus Wyrmbreaker (25)' );
-	$sql_ary[] = array( 'id' => 1151 , 'attribute_id' => 302, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (25HM)' );
-	$sql_ary[] = array( 'id' => 1152 , 'attribute_id' => 303, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10)' ,  'name_short' =>  'Valiona & Theralion (10)' );
-	$sql_ary[] = array( 'id' => 1153 , 'attribute_id' => 304, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10HM)' ,  'name_short' =>  'Valiona & Theralion (10HM)' );
-	$sql_ary[] = array( 'id' => 1154 , 'attribute_id' => 305, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25)' ,  'name_short' =>  'Valiona & Theralion (25)' );
-	$sql_ary[] = array( 'id' => 1155 , 'attribute_id' => 306, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25HM)' ,  'name_short' =>  'Valiona & Theralion (25HM)' );
-	$sql_ary[] = array( 'id' => 1156 , 'attribute_id' => 307, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10)' ,  'name_short' =>  'Twilight Ascendant Council (10)' );
-	$sql_ary[] = array( 'id' => 1157 , 'attribute_id' => 308, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10HM)' ,  'name_short' =>  'Twilight Ascendant Council (10HM)' );
-	$sql_ary[] = array( 'id' => 1158 , 'attribute_id' => 309, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25)' ,  'name_short' =>  'Twilight Ascendant Council (25)' );
-	$sql_ary[] = array( 'id' => 1159 , 'attribute_id' => 310, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25HM)' ,  'name_short' =>  'Twilight Ascendant Council (25HM)' );
-	$sql_ary[] = array( 'id' => 1160 , 'attribute_id' => 311, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10)' ,  'name_short' =>  'Cho\'gall (10)' );
-	$sql_ary[] = array( 'id' => 1161 , 'attribute_id' => 312, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10HM)' ,  'name_short' =>  'Cho\'gall (10HM)' );
-	$sql_ary[] = array( 'id' => 1162 , 'attribute_id' => 313, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25)' ,  'name_short' =>  'Cho\'gall (25)' );
-	$sql_ary[] = array( 'id' => 1163 , 'attribute_id' => 314, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25HM)' ,  'name_short' =>  'Cho\'gall (25HM)' );
-	$sql_ary[] = array( 'id' => 1164 , 'attribute_id' => 315, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (10HM)' ,  'name_short' =>  'Sinestra (10HM)' );
-	$sql_ary[] = array( 'id' => 1165 , 'attribute_id' => 316, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (25HM)' ,  'name_short' =>  'Sinestra (25HM)' );
-	$sql_ary[] = array( 'id' => 1166 , 'attribute_id' => 317, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10)' ,  'name_short' =>  'Conclave of Wind (10)' );
-	$sql_ary[] = array( 'id' => 1167 , 'attribute_id' => 318, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10HM)' ,  'name_short' =>  'Conclave of Wind (10HM)' );
-	$sql_ary[] = array( 'id' => 1168 , 'attribute_id' => 319, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25)' ,  'name_short' =>  'Conclave of Wind (25)' );
-	$sql_ary[] = array( 'id' => 1169 , 'attribute_id' => 320, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25HM)' ,  'name_short' =>  'Conclave of Wind (25HM)' );
-	$sql_ary[] = array( 'id' => 1170 , 'attribute_id' => 321, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10)' ,  'name_short' =>  'Al\'akir (10)' );
-	$sql_ary[] = array( 'id' => 1171 , 'attribute_id' => 322, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10HM)' ,  'name_short' =>  'Al\'akir (10HM)' );
-	$sql_ary[] = array( 'id' => 1172 , 'attribute_id' => 323, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25)' ,  'name_short' =>  'Al\'akir (25)' );
-	$sql_ary[] = array( 'id' => 1173 , 'attribute_id' => 324, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25HM)' ,  'name_short' =>  'Al\'akir (25HM)' );
-	$db->sql_multi_insert ($table_prefix . 'bbdkp_language', $sql_ary);
+							
+	$db->sql_query ( 'DELETE FROM ' . $table_prefix . "bbdkp_language where attribute = 'class'" );
 	unset ( $sql_ary );
 	
 	$sql = 'UPDATE  ' . $table_prefix . "bbdkp_language  SET attribute_id = '10' where attribute='race' and attribute_id='9'" ;
 	$db->sql_query($sql);
 	
-	$sql_ary = array ();
-	$sql_ary[] = array( 'id' => 1174,  'attribute_id' => 9, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
-	$sql_ary[] = array( 'id' => 1175, 'attribute_id' => 22, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
+	// just in case someone fiddled with the id autincrement, we reset it.
+	$db->sql_query ( 'ALTER TABLE  ' . $table_prefix . "bbdkp_language AUTO_INCREMENT = 1 " );
+
+	// reinsert class language table to correct attribute_id
+	// classes in en
+	unset ( $sql_ary );	
+	$sql_ary[] = array( 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+	$sql_ary[] = array( 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
+	$sql_ary[] = array( 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Rogue' ,  'name_short' =>  'Rogue' );
+	$sql_ary[] = array( 'attribute_id' => 3, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Hunter' ,  'name_short' =>  'Hunter' );
+	$sql_ary[] = array( 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
+	$sql_ary[] = array( 'attribute_id' => 7, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Shaman' ,  'name_short' =>  'Shaman' );
+	$sql_ary[] = array( 'attribute_id' => 11, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Druid' ,  'name_short' =>  'Druid' );
+	$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warlock' ,  'name_short' =>  'Warlock' );
+	$sql_ary[] = array( 'attribute_id' => 8, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Mage' ,  'name_short' =>  'Mage' );
+	$sql_ary[] = array( 'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Priest' ,  'name_short' =>  'Priest' );
+	$sql_ary[] = array( 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Death Knight' ,  'name_short' =>  'Death Knight' );
+						
+	//classes in fr
+	$sql_ary[] = array(  'attribute_id' => 0, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+	$sql_ary[] = array(  'attribute_id' => 1, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
+	$sql_ary[] = array(  'attribute_id' => 4, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Voleur' ,  'name_short' =>  'Voleur' );
+	$sql_ary[] = array(  'attribute_id' => 3, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chasseur' ,  'name_short' =>  'Chasseur' );
+	$sql_ary[] = array(  'attribute_id' => 2, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
+	$sql_ary[] = array(  'attribute_id' => 7, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chaman' ,  'name_short' =>  'Chaman' );
+	$sql_ary[] = array(  'attribute_id' => 11, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Druide' ,  'name_short' =>  'Druide' );
+	$sql_ary[] = array(  'attribute_id' => 9, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Démoniste' ,  'name_short' =>  'Démoniste' );
+	$sql_ary[] = array(  'attribute_id' => 8, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Mage' ,  'name_short' =>  'Mage' );
+	$sql_ary[] = array(  'attribute_id' => 5, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Prêtre' ,  'name_short' =>  'Prêtre' );
+	$sql_ary[] = array(  'attribute_id' => 6, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chevalier de la Mort' ,  'name_short' =>  'Chevalier de la Mort' );
+							
+	//classes in de	
+	$sql_ary[] = array(  'attribute_id' => 0, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unbekannt' ,  'name_short' =>  'Unbekannt' );
+	$sql_ary[] = array(  'attribute_id' => 1, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Krieger' ,  'name_short' =>  'Krieger' );
+	$sql_ary[] = array(  'attribute_id' => 4, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Schurke' ,  'name_short' =>  'Schurke' );
+	$sql_ary[] = array(  'attribute_id' => 3, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Jäger' ,  'name_short' =>  'Jäger' );
+	$sql_ary[] = array(  'attribute_id' => 2, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
+	$sql_ary[] = array(  'attribute_id' => 7, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Schamane' ,  'name_short' =>  'Schamane' );
+	$sql_ary[] = array(  'attribute_id' => 11, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Druide' ,  'name_short' =>  'Druide' );
+	$sql_ary[] = array(  'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Hexenmeister' ,  'name_short' =>  'Hexenmeister' );
+	$sql_ary[] = array(  'attribute_id' => 8, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Magier' ,  'name_short' =>  'Magier' );
+	$sql_ary[] = array(  'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Priester' ,  'name_short' =>  'Priester' );
+	$sql_ary[] = array(  'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Todesritter' ,  'name_short' =>  'Todesritter' );
+
+	$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
+	$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
 
 	//classes in fr
-	$sql_ary[] = array( 'id' => 1176, 'attribute_id' => 9, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
-	$sql_ary[] = array( 'id' => 1177, 'attribute_id' => 22, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
+	$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
+	$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
 
 	//classes in de	
-	$sql_ary[] = array( 'id' => 1178,  'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
-	$sql_ary[] = array( 'id' => 1179,  'attribute_id' => 22, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
+	$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
+	$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
+	
+	// new bosses - zones
+	$sql_ary[] = array( 'attribute_id' => 40, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (10)' ,  'name_short' =>  'BD (10)' );
+	$sql_ary[] = array( 'attribute_id' => 41, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (25)' ,  'name_short' =>  'BD (25)' );
+	$sql_ary[] = array( 'attribute_id' => 42, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (10)' ,  'name_short' =>  'BoT (10)' );
+	$sql_ary[] = array( 'attribute_id' => 43, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (25)' ,  'name_short' =>  'BoT (25)' );
+	$sql_ary[] = array( 'attribute_id' => 44, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (10)' ,  'name_short' =>  'TotFW (10)' );
+	$sql_ary[] = array( 'attribute_id' => 45, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (25)' ,  'name_short' =>  'TotFW (25)' );
+	$sql_ary[] = array( 'attribute_id' => 275, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10)' ,  'name_short' =>  'Magmaw (10)' );
+	$sql_ary[] = array( 'attribute_id' => 276, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10HM)' ,  'name_short' =>  'Magmaw (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 277, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25)' ,  'name_short' =>  'Magmaw (25)' );
+	$sql_ary[] = array( 'attribute_id' => 278, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25HM)' ,  'name_short' =>  'Magmaw (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 279, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10)' ,  'name_short' =>  'Omnotron Defense System (10)' );
+	$sql_ary[] = array( 'attribute_id' => 280, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10HM)' ,  'name_short' =>  'Omnotron Defense System (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 281, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25)' ,  'name_short' =>  'Omnotron Defense System (25)' );
+	$sql_ary[] = array( 'attribute_id' => 282, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25HM)' ,  'name_short' =>  'Omnotron Defense System (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 283, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10)' ,  'name_short' =>  'Maloriak (10)' );
+	$sql_ary[] = array( 'attribute_id' => 284, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10HM)' ,  'name_short' =>  'Maloriak (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 285, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25)' ,  'name_short' =>  'Maloriak (25)' );
+	$sql_ary[] = array( 'attribute_id' => 286, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25HM)' ,  'name_short' =>  'Maloriak (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 287, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10)' ,  'name_short' =>  'Atramedes (10)' );
+	$sql_ary[] = array( 'attribute_id' => 288, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10HM)' ,  'name_short' =>  'Atramedes (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 289, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25)' ,  'name_short' =>  'Atramedes (25)' );
+	$sql_ary[] = array( 'attribute_id' => 290, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25HM)' ,  'name_short' =>  'Atramedes (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 291, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10)' ,  'name_short' =>  'Chimaeron (10)' );
+	$sql_ary[] = array( 'attribute_id' => 292, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10HM)' ,  'name_short' =>  'Chimaeron (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 293, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25)' ,  'name_short' =>  'Chimaeron (25)' );
+	$sql_ary[] = array( 'attribute_id' => 294, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25HM)' ,  'name_short' =>  'Chimaeron (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 295, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10)' ,  'name_short' =>  'Nefarian (10)' );
+	$sql_ary[] = array( 'attribute_id' => 296, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10HM)' ,  'name_short' =>  'Nefarian (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 297, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25)' ,  'name_short' =>  'Nefarian (25)' );
+	$sql_ary[] = array( 'attribute_id' => 298, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25HM)' ,  'name_short' =>  'Nefarian (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 299, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10)' ,  'name_short' =>  'Halfus Wyrmbreaker (10)' );
+	$sql_ary[] = array( 'attribute_id' => 300, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 301, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25)' ,  'name_short' =>  'Halfus Wyrmbreaker (25)' );
+	$sql_ary[] = array( 'attribute_id' => 302, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 303, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10)' ,  'name_short' =>  'Valiona & Theralion (10)' );
+	$sql_ary[] = array( 'attribute_id' => 304, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10HM)' ,  'name_short' =>  'Valiona & Theralion (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 305, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25)' ,  'name_short' =>  'Valiona & Theralion (25)' );
+	$sql_ary[] = array( 'attribute_id' => 306, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25HM)' ,  'name_short' =>  'Valiona & Theralion (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 307, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10)' ,  'name_short' =>  'Twilight Ascendant Council (10)' );
+	$sql_ary[] = array( 'attribute_id' => 308, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10HM)' ,  'name_short' =>  'Twilight Ascendant Council (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 309, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25)' ,  'name_short' =>  'Twilight Ascendant Council (25)' );
+	$sql_ary[] = array( 'attribute_id' => 310, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25HM)' ,  'name_short' =>  'Twilight Ascendant Council (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 311, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10)' ,  'name_short' =>  'Cho\'gall (10)' );
+	$sql_ary[] = array( 'attribute_id' => 312, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10HM)' ,  'name_short' =>  'Cho\'gall (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 313, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25)' ,  'name_short' =>  'Cho\'gall (25)' );
+	$sql_ary[] = array( 'attribute_id' => 314, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25HM)' ,  'name_short' =>  'Cho\'gall (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 315, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (10HM)' ,  'name_short' =>  'Sinestra (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 316, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (25HM)' ,  'name_short' =>  'Sinestra (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 317, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10)' ,  'name_short' =>  'Conclave of Wind (10)' );
+	$sql_ary[] = array( 'attribute_id' => 318, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10HM)' ,  'name_short' =>  'Conclave of Wind (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 319, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25)' ,  'name_short' =>  'Conclave of Wind (25)' );
+	$sql_ary[] = array( 'attribute_id' => 320, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25HM)' ,  'name_short' =>  'Conclave of Wind (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 321, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10)' ,  'name_short' =>  'Al\'akir (10)' );
+	$sql_ary[] = array( 'attribute_id' => 322, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10HM)' ,  'name_short' =>  'Al\'akir (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 323, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25)' ,  'name_short' =>  'Al\'akir (25)' );
+	$sql_ary[] = array( 'attribute_id' => 324, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25HM)' ,  'name_short' =>  'Al\'akir (25HM)' );
+	//bosses and zones in fr
+	$sql_ary[] = array( 'attribute_id' => 40, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (10)' ,  'name_short' =>  'BD (10)' );
+	$sql_ary[] = array( 'attribute_id' => 41, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (25)' ,  'name_short' =>  'BD (25)' );
+	$sql_ary[] = array( 'attribute_id' => 42, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (10)' ,  'name_short' =>  'BoT (10)' );
+	$sql_ary[] = array( 'attribute_id' => 43, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (25)' ,  'name_short' =>  'BoT (25)' );
+	$sql_ary[] = array( 'attribute_id' => 44, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (10)' ,  'name_short' =>  'TotFW (10)' );
+	$sql_ary[] = array( 'attribute_id' => 45, 'language' =>  'fr' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (25)' ,  'name_short' =>  'TotFW (25)' );
+	$sql_ary[] = array( 'attribute_id' => 275, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10)' ,  'name_short' =>  'Magmaw (10)' );
+	$sql_ary[] = array( 'attribute_id' => 276, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10HM)' ,  'name_short' =>  'Magmaw (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 277, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25)' ,  'name_short' =>  'Magmaw (25)' );
+	$sql_ary[] = array( 'attribute_id' => 278, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25HM)' ,  'name_short' =>  'Magmaw (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 279, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10)' ,  'name_short' =>  'Omnotron Defense System (10)' );
+	$sql_ary[] = array( 'attribute_id' => 280, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10HM)' ,  'name_short' =>  'Omnotron Defense System (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 281, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25)' ,  'name_short' =>  'Omnotron Defense System (25)' );
+	$sql_ary[] = array( 'attribute_id' => 282, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25HM)' ,  'name_short' =>  'Omnotron Defense System (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 283, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10)' ,  'name_short' =>  'Maloriak (10)' );
+	$sql_ary[] = array( 'attribute_id' => 284, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10HM)' ,  'name_short' =>  'Maloriak (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 285, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25)' ,  'name_short' =>  'Maloriak (25)' );
+	$sql_ary[] = array( 'attribute_id' => 286, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25HM)' ,  'name_short' =>  'Maloriak (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 287, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10)' ,  'name_short' =>  'Atramedes (10)' );
+	$sql_ary[] = array( 'attribute_id' => 288, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10HM)' ,  'name_short' =>  'Atramedes (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 289, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25)' ,  'name_short' =>  'Atramedes (25)' );
+	$sql_ary[] = array( 'attribute_id' => 290, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25HM)' ,  'name_short' =>  'Atramedes (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 291, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10)' ,  'name_short' =>  'Chimaeron (10)' );
+	$sql_ary[] = array( 'attribute_id' => 292, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10HM)' ,  'name_short' =>  'Chimaeron (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 293, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25)' ,  'name_short' =>  'Chimaeron (25)' );
+	$sql_ary[] = array( 'attribute_id' => 294, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25HM)' ,  'name_short' =>  'Chimaeron (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 295, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10)' ,  'name_short' =>  'Nefarian (10)' );
+	$sql_ary[] = array( 'attribute_id' => 296, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10HM)' ,  'name_short' =>  'Nefarian (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 297, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25)' ,  'name_short' =>  'Nefarian (25)' );
+	$sql_ary[] = array( 'attribute_id' => 298, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25HM)' ,  'name_short' =>  'Nefarian (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 299, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10)' ,  'name_short' =>  'Halfus Wyrmbreaker (10)' );
+	$sql_ary[] = array( 'attribute_id' => 300, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 301, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25)' ,  'name_short' =>  'Halfus Wyrmbreaker (25)' );
+	$sql_ary[] = array( 'attribute_id' => 302, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 303, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10)' ,  'name_short' =>  'Valiona & Theralion (10)' );
+	$sql_ary[] = array( 'attribute_id' => 304, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10HM)' ,  'name_short' =>  'Valiona & Theralion (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 305, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25)' ,  'name_short' =>  'Valiona & Theralion (25)' );
+	$sql_ary[] = array( 'attribute_id' => 306, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25HM)' ,  'name_short' =>  'Valiona & Theralion (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 307, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10)' ,  'name_short' =>  'Twilight Ascendant Council (10)' );
+	$sql_ary[] = array( 'attribute_id' => 308, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10HM)' ,  'name_short' =>  'Twilight Ascendant Council (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 309, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25)' ,  'name_short' =>  'Twilight Ascendant Council (25)' );
+	$sql_ary[] = array( 'attribute_id' => 310, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25HM)' ,  'name_short' =>  'Twilight Ascendant Council (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 311, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10)' ,  'name_short' =>  'Cho\'gall (10)' );
+	$sql_ary[] = array( 'attribute_id' => 312, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10HM)' ,  'name_short' =>  'Cho\'gall (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 313, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25)' ,  'name_short' =>  'Cho\'gall (25)' );
+	$sql_ary[] = array( 'attribute_id' => 314, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25HM)' ,  'name_short' =>  'Cho\'gall (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 315, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (10HM)' ,  'name_short' =>  'Sinestra (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 316, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (25HM)' ,  'name_short' =>  'Sinestra (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 317, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10)' ,  'name_short' =>  'Conclave of Wind (10)' );
+	$sql_ary[] = array( 'attribute_id' => 318, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10HM)' ,  'name_short' =>  'Conclave of Wind (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 319, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25)' ,  'name_short' =>  'Conclave of Wind (25)' );
+	$sql_ary[] = array( 'attribute_id' => 320, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25HM)' ,  'name_short' =>  'Conclave of Wind (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 321, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10)' ,  'name_short' =>  'Al\'akir (10)' );
+	$sql_ary[] = array( 'attribute_id' => 322, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10HM)' ,  'name_short' =>  'Al\'akir (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 323, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25)' ,  'name_short' =>  'Al\'akir (25)' );
+	$sql_ary[] = array( 'attribute_id' => 324, 'language' =>  'fr' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25HM)' ,  'name_short' =>  'Al\'akir (25HM)' );
+	//bosses and zones in de
+	$sql_ary[] = array( 'attribute_id' => 40, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (10)' ,  'name_short' =>  'BD (10)' );
+	$sql_ary[] = array( 'attribute_id' => 41, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (25)' ,  'name_short' =>  'BD (25)' );
+	$sql_ary[] = array( 'attribute_id' => 42, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (10)' ,  'name_short' =>  'BoT (10)' );
+	$sql_ary[] = array( 'attribute_id' => 43, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (25)' ,  'name_short' =>  'BoT (25)' );
+	$sql_ary[] = array( 'attribute_id' => 44, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (10)' ,  'name_short' =>  'TotFW (10)' );
+	$sql_ary[] = array( 'attribute_id' => 45, 'language' =>  'de' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (25)' ,  'name_short' =>  'TotFW (25)' );
+	$sql_ary[] = array( 'attribute_id' => 275, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10)' ,  'name_short' =>  'Magmaw (10)' );
+	$sql_ary[] = array( 'attribute_id' => 276, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10HM)' ,  'name_short' =>  'Magmaw (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 277, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25)' ,  'name_short' =>  'Magmaw (25)' );
+	$sql_ary[] = array( 'attribute_id' => 278, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25HM)' ,  'name_short' =>  'Magmaw (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 279, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10)' ,  'name_short' =>  'Omnotron Defense System (10)' );
+	$sql_ary[] = array( 'attribute_id' => 280, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (10HM)' ,  'name_short' =>  'Omnotron Defense System (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 281, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25)' ,  'name_short' =>  'Omnotron Defense System (25)' );
+	$sql_ary[] = array( 'attribute_id' => 282, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Omnotron Defense System (25HM)' ,  'name_short' =>  'Omnotron Defense System (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 283, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10)' ,  'name_short' =>  'Maloriak (10)' );
+	$sql_ary[] = array( 'attribute_id' => 284, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (10HM)' ,  'name_short' =>  'Maloriak (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 285, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25)' ,  'name_short' =>  'Maloriak (25)' );
+	$sql_ary[] = array( 'attribute_id' => 286, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Maloriak (25HM)' ,  'name_short' =>  'Maloriak (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 287, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10)' ,  'name_short' =>  'Atramedes (10)' );
+	$sql_ary[] = array( 'attribute_id' => 288, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (10HM)' ,  'name_short' =>  'Atramedes (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 289, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25)' ,  'name_short' =>  'Atramedes (25)' );
+	$sql_ary[] = array( 'attribute_id' => 290, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Atramedes (25HM)' ,  'name_short' =>  'Atramedes (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 291, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10)' ,  'name_short' =>  'Chimaeron (10)' );
+	$sql_ary[] = array( 'attribute_id' => 292, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (10HM)' ,  'name_short' =>  'Chimaeron (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 293, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25)' ,  'name_short' =>  'Chimaeron (25)' );
+	$sql_ary[] = array( 'attribute_id' => 294, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Chimaeron (25HM)' ,  'name_short' =>  'Chimaeron (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 295, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10)' ,  'name_short' =>  'Nefarian (10)' );
+	$sql_ary[] = array( 'attribute_id' => 296, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (10HM)' ,  'name_short' =>  'Nefarian (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 297, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25)' ,  'name_short' =>  'Nefarian (25)' );
+	$sql_ary[] = array( 'attribute_id' => 298, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Nefarian (25HM)' ,  'name_short' =>  'Nefarian (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 299, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10)' ,  'name_short' =>  'Halfus Wyrmbreaker (10)' );
+	$sql_ary[] = array( 'attribute_id' => 300, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (10HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 301, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25)' ,  'name_short' =>  'Halfus Wyrmbreaker (25)' );
+	$sql_ary[] = array( 'attribute_id' => 302, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Halfus Wyrmbreaker (25HM)' ,  'name_short' =>  'Halfus Wyrmbreaker (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 303, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10)' ,  'name_short' =>  'Valiona & Theralion (10)' );
+	$sql_ary[] = array( 'attribute_id' => 304, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (10HM)' ,  'name_short' =>  'Valiona & Theralion (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 305, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25)' ,  'name_short' =>  'Valiona & Theralion (25)' );
+	$sql_ary[] = array( 'attribute_id' => 306, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Valiona & Theralion (25HM)' ,  'name_short' =>  'Valiona & Theralion (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 307, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10)' ,  'name_short' =>  'Twilight Ascendant Council (10)' );
+	$sql_ary[] = array( 'attribute_id' => 308, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (10HM)' ,  'name_short' =>  'Twilight Ascendant Council (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 309, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25)' ,  'name_short' =>  'Twilight Ascendant Council (25)' );
+	$sql_ary[] = array( 'attribute_id' => 310, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Twilight Ascendant Council (25HM)' ,  'name_short' =>  'Twilight Ascendant Council (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 311, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10)' ,  'name_short' =>  'Cho\'gall (10)' );
+	$sql_ary[] = array( 'attribute_id' => 312, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (10HM)' ,  'name_short' =>  'Cho\'gall (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 313, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25)' ,  'name_short' =>  'Cho\'gall (25)' );
+	$sql_ary[] = array( 'attribute_id' => 314, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Cho\'gall (25HM)' ,  'name_short' =>  'Cho\'gall (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 315, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (10HM)' ,  'name_short' =>  'Sinestra (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 316, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Sinestra (25HM)' ,  'name_short' =>  'Sinestra (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 317, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10)' ,  'name_short' =>  'Conclave of Wind (10)' );
+	$sql_ary[] = array( 'attribute_id' => 318, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (10HM)' ,  'name_short' =>  'Conclave of Wind (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 319, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25)' ,  'name_short' =>  'Conclave of Wind (25)' );
+	$sql_ary[] = array( 'attribute_id' => 320, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Conclave of Wind (25HM)' ,  'name_short' =>  'Conclave of Wind (25HM)' );
+	$sql_ary[] = array( 'attribute_id' => 321, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10)' ,  'name_short' =>  'Al\'akir (10)' );
+	$sql_ary[] = array( 'attribute_id' => 322, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (10HM)' ,  'name_short' =>  'Al\'akir (10HM)' );
+	$sql_ary[] = array( 'attribute_id' => 323, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25)' ,  'name_short' =>  'Al\'akir (25)' );
+	$sql_ary[] = array( 'attribute_id' => 324, 'language' =>  'de' , 'attribute' =>  'boss' , 'name' =>  'Al\'akir (25HM)' ,  'name_short' =>  'Al\'akir (25HM)' );
+	
 	$db->sql_multi_insert ($table_prefix . 'bbdkp_language', $sql_ary);
 	unset ( $sql_ary );
 	

@@ -10,13 +10,13 @@
 <description lang="en"><![CDATA[Update script 1.2 to 1.2.1]]></description>
 <description lang="de"><![CDATA[Aktualisierung 1.2 bis 1.2.1]]></description>
 
-<author-notes lang="en"><![CDATA[Please Backup your phpbb3 installation and database before beginning. ]]>
+<author-notes lang="en"><![CDATA[Please read docs\INSTALL.html before beginning ]]>
 </author-notes>
 
-<author-notes lang="fr"><![CDATA[Veuillez faire une sauvegarde avant de commencer. ]]>
+<author-notes lang="fr"><![CDATA[Veuillez lire docs\INSTALL.html avant de commencer. ]]>
 </author-notes>
 
-<author-notes lang="de"><![CDATA[Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. ]]>
+<author-notes lang="de"><![CDATA[Bitte lesen sie docs\INSTALL.html bevor. ]]>
 </author-notes>
 
 <author-group>
