@@ -901,20 +901,35 @@ function gameinstall($action, $version)
 }
 
 /***
- * checks if there is an older install, if found, redirects 
+ * checks if there is an older install, if found, redirects to legacy updater
  */
 function check_oldbbdkp()
 {
 	global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx;
+	
 	include($phpbb_root_path . 'umil/umil.' . $phpEx);
 	$umil=new umil;
-	//check for a DKP module
+	//check for old DKP module (1.08)
 	if ($umil->module_exists('acp', false, 'DKP'))
 	{
 	     //bbDKP seems already installed, redirect to older umil updater
 	     redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx)); 
 	}
-
+	
+	//check for a newer DKP module (1.1.x)
+	if ($umil->module_exists('acp', false, 'ACP_CAT_DKP'))
+	{
+	     //bbDKP seems already installed, redirect to older umil updater
+	     redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx)); 
+	}
+	
+	//check for new table
+	if($umil->table_exists($table_prefix . 'bbdkp_events'))
+	{
+		//old table found, redirect
+		 redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx));
+	}
+	
 	//check for old table
 	$old_bbdkp_table_prefix = "bbeqdkp_";
 	if($umil->table_exists($old_bbdkp_table_prefix . 'events'))
@@ -922,7 +937,7 @@ function check_oldbbdkp()
 		//old table found, redirect
 		 redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx));
 	}
-	
+		
 	// finally check old config		
 	if($umil->config_exists('bbdkp_guildtag'))
     {

@@ -69,7 +69,7 @@ $options = array(
 * $phpbb_root_path will get prepended to the path specified
 * Image height should be 50px to prevent cut-off or stretching.
 */
-$logo_img = 'install/logo.jpg';
+$logo_img = 'install/logo.png';
 
 /*
 * The array of versions and actions within each.
@@ -1843,7 +1843,6 @@ function tablerename($action, $version)
 					return array('command' => 'UMIL_RENAMETABLESOLD', 'result' => 'SUCCESS');
 			break;
 	}
-	
 	 
 }
 
@@ -1884,7 +1883,6 @@ function tableupdates_12($action, $version)
 				$umil->module_remove('acp',0 ,'ACP_DKP_ITEM');
 			}
 
-			
 			/**
 			 * adjustments table, new key
 			 */ 
@@ -2112,6 +2110,9 @@ function tableupdates_121($action, $version)
 		case 'update' :
 			$sql = "DELETE from " . $table_prefix ."bbdkp_language WHERE attribute in ('boss', 'zone') ";
 	        $db->sql_query($sql);
+			// we reset autincrement just in case
+			$db->sql_query ( 'ALTER TABLE  ' . $table_prefix . "bbdkp_language AUTO_INCREMENT = 1 " );
+		        
 	}
 }
 
