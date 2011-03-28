@@ -7,7 +7,9 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP]]></title>
+		<title lang="en"><![CDATA[bbDKP 1.2.1]]></title>
+		<title lang="de"><![CDATA[bbDKP 1.2.1]]></title>
+		<title lang="fr"><![CDATA[bbDKP 1.2.1]]></title>
 		<description lang="en"><![CDATA[bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
 It integrates these Game, Guild and DKP management facilites into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, ACP and UCP modules.
@@ -69,13 +71,13 @@ bbDKP (c) 2008 Sajaki, Malfate, Kapli
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
 <author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5.2 with Libxml 2.6.0 (simplexml usage), Curl 
-Please Backup your phpbb3 installation and database before beginning. ]]>
+Please read docs\INSTALL.html before beginning ]]>
 </author-notes>
 <author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, PHP 5.2 avec Libxml 2.6.0 (simplexml), Curl 
-Veuillez faire une sauvegarde avant de commencer. ]]>
+Veuillez lire docs\INSTALL.html avant de commencer ]]>
 </author-notes>
 <author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5.2 mit Libxml 2.6.0 (simplexml), Curl 
-Bitte machen Sie einen vollständigen Backup bevor Sie diesen Mod installieren. ]]>
+Bitte lesen sie docs\INSTALL.html bevor. ]]>
 </author-notes>
 <author-group>
 			<author>
