@@ -389,8 +389,8 @@ function memberraid_count($dkpsys_id, $days, $member_id, $all)
 	    	r.event_id = e.event_id
 	    	AND ra.raid_id = r.raid_id
             AND ra.member_id =' . $member_id . '
-            AND e.event_dkpid = ' . $dkpsys_id . ' 
-            AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date,
+            AND e.event_dkpid = ' . $dkpsys_id  
+          
     );
 	
 	if ($all == false)
@@ -429,8 +429,7 @@ function poolraid_count($dkp_pool, $days, $all )
 			EVENTS_TABLE			=> 'e', 	        
 			RAIDS_TABLE 			=> 'r'	         
 	    	),
-	    'WHERE'		=> 'r.event_id = e.event_id
-            AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date,
+	    'WHERE'		=> 'r.event_id = e.event_id and e.event_dkpid = ' . $dkp_pool 
     );
 	
 	if ($all == false)
