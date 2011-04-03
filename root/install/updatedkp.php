@@ -925,7 +925,7 @@ $versions = array(
 			array('bbdkp_starting_dkp', '15.00', true), 
 			//epgp
 			array('bbdkp_epgp', 0, true),	
-			array('bbdkp_basegp', 100, true),
+			array('bbdkp_basegp', 0, true),
 			//decay			
 			array('bbdkp_decay', 0, true),
 			array('bbdkp_raiddecaypct', 5, true),	

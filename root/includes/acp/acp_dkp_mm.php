@@ -1373,7 +1373,7 @@ class acp_dkp_mm extends bbDKP_Admin
                 $add        = (isset($_POST['add'])) ? true : false;
                 $submit     = (isset($_POST['update'])) ? true : false;
                 $delete     = (isset($_POST['delete'])) ? true : false;   
-		        if ( $add || $submit || $delete )
+		        if ( $add || $submit)
                 {
                   	if (!check_form_key('addguild'))
 					{
