@@ -64,11 +64,13 @@ if ($config['bbdkp_portal_recruitment'])
 		include($phpbb_root_path . 'includes/bbdkp/portal/recruitmentblock.' . $phpEx);
 }
 
+$template->assign_var('S_BPSHOW', false);
 if (isset($config['bbdkp_bp_version']))
 {
 	if ($config['bbdkp_portal_bossprogress'])
 	{
 		include($phpbb_root_path . 'includes/bbdkp/portal/bossprogressblock.' . $phpEx);
+		$template->assign_var('S_BPSHOW', true);
 	}
 }
 
