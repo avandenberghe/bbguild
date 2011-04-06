@@ -544,7 +544,7 @@ class acp_dkp_item extends bbDKP_Admin
    				);
     				
 			//if zerosum flag is set then distribute item value over raiders
-			if($config['bbdkp_zerosum'] == 1)
+			if($config['bbdkp_zerosum'] == 1 && $config['bbdkp_bankerid'] != $this_member_id && $config['bbdkp_bankerid'] != 0 )
 			{
 				// increase raid detail table
 				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
