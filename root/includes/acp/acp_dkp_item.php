@@ -1224,7 +1224,7 @@ class acp_dkp_item extends bbDKP_Admin
 	 */
 	public function sync_zerosum($mode)
 	{
-		global $user, $db;
+		global $user, $db, $config;
 		switch ($mode)
 		{
 			case 0:

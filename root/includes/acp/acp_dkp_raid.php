@@ -1633,7 +1633,6 @@ class acp_dkp_raid extends bbDKP_Admin
 	/**
 	 * this function deletes 1 attendee from a raid 
 	 * 
-	 * if attendee had bought items that were distributed then the redistributed zerosum points are reversed aswell
 	 * dkp account is then updated
 	 * 
 	 */ 
@@ -1728,7 +1727,7 @@ class acp_dkp_raid extends bbDKP_Admin
     */
     private function remove_dkp($member_id, $oraid_value, $otime_bonus, $ozerozum, $dkpid, $odecay)
     {
-        global $db, $user;
+        global $db, $config;
 		$sql = 'SELECT member_raidcount, member_raid_value, member_time_bonus, member_zerosum_bonus, member_earned, member_raid_decay   
 		FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' AND  member_dkpid = ' . $dkpid;  
 		$result = $db->sql_query($sql);
@@ -1746,6 +1745,14 @@ class acp_dkp_raid extends bbDKP_Admin
 		$raid_value = $xraid_value - $oraid_value;
 		$time_bonus = $xtime_bonus - $otime_bonus;
 		$zerosum = $xzerosum - $ozerozum;
+		
+		// give the deleted zero sum amounts back to the guildbank
+		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET  
+			member_zerosum_bonus = member_zerosum_bonus  + ' . $ozerozum . ", 
+			member_earned = member_earned + ' . $ozerozum . ' 
+			where member_dkpid = " . (int) $dkpid . ' 
+			and member_id =  ' . $config['bbdkp_bankerid'] );
+        
 		$earned = $xearned - $oraid_value - $otime_bonus - $ozerozum; 
 		$decay = $xdecay - $odecay;
 		$newraidcount = max(0, $member_raidcount - 1);
@@ -1762,7 +1769,6 @@ class acp_dkp_raid extends bbDKP_Admin
 		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . " 
 			WHERE member_dkpid = " . (int) $dkpid . ' and member_id =  ' . $member_id  );
         $db->sql_freeresult($result);
-         
     }
   
     
@@ -1793,7 +1799,8 @@ class acp_dkp_raid extends bbDKP_Admin
 		
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query ( $sql );
-		$battledate = array();
+		$member_firstraid = 0;
+		$member_lastraid = 0;
 		while ( $row = $db->sql_fetchrow ($result)) 
 		{
 			$member_firstraid = $row['member_firstraid'];
@@ -2060,7 +2067,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	 */
 	private function remove_loot($oldraid)
 	{
-		global $db, $user, $template, $phpEx, $phpbb_root_path;
+		global $db, $phpEx, $phpbb_root_path;
 		
 		if ( !class_exists('acp_dkp_item')) 
 		{
