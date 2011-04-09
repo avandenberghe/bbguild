@@ -919,7 +919,7 @@ class acp_dkp extends bbDKP_Admin
                     case 'list':
                         
                         /*deleting logs */
-                        $deletemark = (!empty($_POST['delmarked'])) ? true : false;
+                        $deletemark = (isset($_POST['delmarked'])) ? true : false;
 						$marked		= request_var('mark', array(0));
 						if($deletemark)
 						{

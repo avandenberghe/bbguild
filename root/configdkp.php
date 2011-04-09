@@ -4,6 +4,14 @@
  * bbDKP 1.2.2 configuration file
 */ 
 
+/**
+* @ignore
+*/
+if (!defined('IN_PHPBB'))
+{
+	exit;
+}
+
 // you can switch off bbDKP by disabling this line
 @define('EMED_BBDKP', true);
 ?>

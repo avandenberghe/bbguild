@@ -96,9 +96,9 @@
 	<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2.2</link>
 	<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2.2</link>	
 			
-	<link type="parent" lang="en" href="update_12_to_122.xml">Update Manual</link>
-	<link type="parent" lang="fr" href="update_12_to_122.xml">Manual de mise à jour</link>
-	<link type="parent" lang="de" href="update_12_to_122.xml">Aktualisierung</link>
+	<link type="parent" lang="en" href="install_12_to_122.xml">Update Manual</link>
+	<link type="parent" lang="fr" href="install_12_to_122.xml">Manual de mise à jour</link>
+	<link type="parent" lang="de" href="install_12_to_122.xml">Aktualisierung</link>
 </link-group>
   </header>
   <action-group>
