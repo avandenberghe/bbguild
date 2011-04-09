@@ -111,7 +111,10 @@
 <edit>
 	<comment lang="en">insert bbdkp links</comment>
 	<find><![CDATA[<p class="breadcrumbs"><a href="{U_INDEX}">{L_INDEX}</a>]]></find>
-	<action type="replace-with"><![CDATA[<p class="breadcrumbs"><a href="{U_PORTAL}">{L_PORTAL}</a>&nbsp;&#187;&nbsp;<a href="{U_DKP}">{L_DKP}</a>&nbsp;&#187;&nbsp;<a href="{U_INDEX}">{L_INDEX}</a>]]></action>
+	<inline-edit>
+		<inline-find><![CDATA[<p class="breadcrumbs">]]></inline-find>
+		<inline-action type="after-add"><![CDATA[<a href="{U_PORTAL}">{L_PORTAL}</a>&nbsp;&#187;&nbsp;<a href="{U_DKP}">{L_DKP}</a>&nbsp;&#187;&nbsp;]]></inline-action>
+	</inline-edit>	
 </edit>
 
 </open>

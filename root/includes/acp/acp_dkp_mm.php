@@ -284,7 +284,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					// check if membername exists
 					$sql = 'SELECT count(*) as memberexists 
 							FROM ' . MEMBER_LIST_TABLE . "	
-							WHERE member_name= '" . $db->sql_escape($member_name) . "'"; 
+							WHERE ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "')"; 
 					$result = $db->sql_query($sql);
 					$countm = $db->sql_fetchfield('memberexists');
 					$db->sql_freeresult($result);
@@ -386,7 +386,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					$sql = 'SELECT count(*) as memberexists 
 							FROM ' . MEMBER_LIST_TABLE . '	
 							WHERE member_id <> ' . $member_id . " 
-							AND member_name= '" . $db->sql_escape($member_name) . "'"; 
+							AND ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "')"; 
 					$result = $db->sql_query($sql);
 					$countm = $db->sql_fetchfield('memberexists');
 					$db->sql_freeresult($result);
