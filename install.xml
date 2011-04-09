@@ -7,9 +7,9 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.2.2]]></title>
-		<title lang="de"><![CDATA[bbDKP 1.2.2]]></title>
-		<title lang="fr"><![CDATA[bbDKP 1.2.2]]></title>
+		<title lang="en"><![CDATA[bbDKP]]></title>
+		<title lang="de"><![CDATA[bbDKP]]></title>
+		<title lang="fr"><![CDATA[bbDKP]]></title>
 		<description lang="en"><![CDATA[bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
 It integrates these Game, Guild and DKP management facilites into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, ACP and UCP modules.
@@ -19,7 +19,7 @@ There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Bo
 Further development requests, support questions are welcome at http://www.bbdkp.com. As of the current release, it does not (yet) make coffee ;)
 
 Languages included:
-» Englisch (en)
+» English (en)
 » French (fr)
 » Deutsch (de)
 
@@ -39,7 +39,7 @@ Pour de plus amples détails, veuillez consulter le changelog. Demandes de déve
 
 Langues inclues :
 » Français (fr)
-» Englisch (en)
+» English (en)
 » Deutsch (de)
 
 Copyright
@@ -57,7 +57,7 @@ Vorhandene Plugins : Importation von Mitglieder von das Blizzard oder Aion Arsen
 Für weitere Entwicklungsanfragen und Support heissen wir Sie wilkommen auf unsere internetseite http://www.bbdkp.com. 
 
 Enthaltenen Sprachdateien:
-» Englisch (en)
+» English (en)
 » Deutsch (de)
 » Français (fr)
 
