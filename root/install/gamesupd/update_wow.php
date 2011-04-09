@@ -2400,9 +2400,12 @@ function install_wow_bb3()
 	$sql_ary [] = array ('class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_Priest_small');  
 	$sql_ary [] = array ('class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_Death_Knight_small'); 
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
+		
+	
 							
 	// 2 new races
 	$db->sql_query ('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
+	unset ( $sql_ary );
 	$sql_ary = array ();
 	$sql_ary [] = array ('race_id' => 0, 'race_faction_id' => 0, 'image_female_small' => ' ',  'image_male_small' => ' '  ); //Unknown
 	$sql_ary [] = array ('race_id' => 1, 'race_faction_id' => 1, 'image_female_small' => 'wow_human_female_small',  'image_male_small' => 'wow_human_male_small'  ); //Human
@@ -2418,13 +2421,15 @@ function install_wow_bb3()
 	$sql_ary [] = array ('race_id' => 11, 'race_faction_id' => 1 , 'image_female_small' => 'wow_draenei_female_small',  'image_male_small' => 'wow_draenei_male_small' ); //Draenei
 	$sql_ary [] = array ('race_id' => 22, 'race_faction_id' => 1 , 'image_female_small' => 'wow_worgen_female_small',  'image_male_small' => 'wow_worgen_male_small' ); //Worgen
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
-	unset ( $sql_ary );
+	
 		
 	// set old zones to no-show
 	$sql = 'UPDATE  ' . $table_prefix . "bbdkp_zonetable  SET showzoneportal = '0', showzone =  '0' " ;
 	$db->sql_query($sql);
 	
-	//cataclysm zones
+	//add cataclysm zones
+	$sql = 'delete from ' . $table_prefix . "bbdkp_zonetable where id >= 40 and game = 'wow' "  ;
+	$db->sql_query($sql);
 	unset ( $sql_ary );
 	$sql_ary = array ();
 	$sql_ary[] = array( 'id' => 40 , 'imagename' =>  'bd_10' , 'game' =>  'wow' ,  'tier' =>  'T11' ,  'completed' =>  '0' ,  'completedate' =>  '0' ,  'webid' =>  '5094' ,  'showzone' =>  1, 'showzoneportal' =>  1);
@@ -2440,6 +2445,10 @@ function install_wow_bb3()
 	$db->sql_query($sql);
 		
 	//cataclysm bosses. id is foreign key for language attribute_id
+		
+	$sql = 'delete from ' . $table_prefix . "bbdkp_bosstable where id >= 275 and game = 'wow' " ;
+	$db->sql_query($sql);
+	
 	unset ( $sql_ary );
 	$sql_ary = array ();
 	$sql_ary[] = array('id' => 275 ,  'imagename' =>  'magmaw_10' , 'game' =>  'wow' , 'zoneid' =>  40 , 'type' =>  'npc'  , 'webid' =>  '41570' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
@@ -2494,19 +2503,18 @@ function install_wow_bb3()
 	$sql_ary[] = array('id' => 324 ,  'imagename' =>  'alakir_25_hc' , 'game' =>  'wow' , 'zoneid' =>  45 , 'type' =>  'npc'  , 'webid' =>  '46753' , 'killed' =>  '0' , 'killdate' =>  '0' , 'counter' =>  '0' , 'showboss' =>  1     );
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_bosstable', $sql_ary );
 
-							
+	//language file - classes					
 	$db->sql_query ( 'DELETE FROM ' . $table_prefix . "bbdkp_language where attribute = 'class'" );
 	unset ( $sql_ary );
-	
-	$sql = 'UPDATE  ' . $table_prefix . "bbdkp_language  SET attribute_id = '10' where attribute='race' and attribute_id='9'" ;
-	$db->sql_query($sql);
 	
 	// just in case someone fiddled with the id autincrement, we reset it.
 	$db->sql_query ( 'ALTER TABLE  ' . $table_prefix . "bbdkp_language AUTO_INCREMENT = 1 " );
 
 	// reinsert class language table to correct attribute_id
 	// classes in en
-	unset ( $sql_ary );	
+	unset ( $sql_ary );
+	$sql_ary = array ();
+	
 	$sql_ary[] = array( 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array( 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
 	$sql_ary[] = array( 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Rogue' ,  'name_short' =>  'Rogue' );
@@ -2545,16 +2553,67 @@ function install_wow_bb3()
 	$sql_ary[] = array(  'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Priester' ,  'name_short' =>  'Priester' );
 	$sql_ary[] = array(  'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Todesritter' ,  'name_short' =>  'Todesritter' );
 
-	$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
-	$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
+	
+	$db->sql_multi_insert ($table_prefix . 'bbdkp_language', $sql_ary);
+	unset ( $sql_ary );	
 
-	//classes in fr
-	$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
-	$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
+	//races
+	$db->sql_query ( 'DELETE FROM ' . $table_prefix . "bbdkp_language where attribute = 'race'" );
+	unset ( $sql_ary );
+	
+	//races in en
+	$sql_ary[] = array( 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+	$sql_ary[] = array( 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Human' ,  'name_short' =>  'Human' );
+	$sql_ary[] = array( 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Orc' ,  'name_short' =>  'Orc' );
+	$sql_ary[] = array( 'attribute_id' => 3, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Dwarf' ,  'name_short' =>  'Dwarf' );
+	$sql_ary[] = array( 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Night Elf' ,  'name_short' =>  'Night Elf' );
+	$sql_ary[] = array( 'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Undead' ,  'name_short' =>  'Undead' );
+	$sql_ary[] = array( 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Tauren' ,  'name_short' =>  'Tauren' );
+	$sql_ary[] = array( 'attribute_id' => 7, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Gnome' ,  'name_short' =>  'Gnome' );
+	$sql_ary[] = array( 'attribute_id' => 8, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Troll' ,  'name_short' =>  'Troll' );
+	$sql_ary[] = array( 'attribute_id' => 10, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Blood Elf' ,  'name_short' =>  'Blood Elf' );
+	$sql_ary[] = array( 'attribute_id' => 11, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Draenei' ,  'name_short' =>  'Draenei' );
+	$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'Goblin' );
+	$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
+		
+	// races in fr
+	$sql_ary[] = array( 'attribute_id' => 0, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+	$sql_ary[] = array( 'attribute_id' => 1, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Humain' ,  'name_short' =>  'Humain' );
+	$sql_ary[] = array( 'attribute_id' => 2, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Orc' ,  'name_short' =>  'Orc' );
+	$sql_ary[] = array( 'attribute_id' => 3, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Nain' ,  'name_short' =>  'Nain' );
+	$sql_ary[] = array( 'attribute_id' => 4, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Elfe de la Nuit' ,  'name_short' =>  'Elfe de la Nuit' );
+	$sql_ary[] = array( 'attribute_id' => 5, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Mort-Vivant' ,  'name_short' =>  'Mort-Vivant' );
+	$sql_ary[] = array( 'attribute_id' => 6, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Tauren' ,  'name_short' =>  'Tauren' );
+	$sql_ary[] = array( 'attribute_id' => 7, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Gnome' ,  'name_short' =>  'Gnome' );
+	$sql_ary[] = array( 'attribute_id' => 8, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Troll' ,  'name_short' =>  'Troll' );
+	$sql_ary[] = array( 'attribute_id' => 10, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Elfe de Sang' ,  'name_short' =>  'Elfe de Sang' );
+	$sql_ary[] = array( 'attribute_id' => 11, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Draeneï' ,  'name_short' =>  'Draeneï' );
+	$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'Goblin' );
+	$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
+			
+	//races in de
+	$sql_ary[] = array( 'attribute_id' => 0, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+	$sql_ary[] = array( 'attribute_id' => 1, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Mensch' ,  'name_short' =>  'Mensch' );
+	$sql_ary[] = array( 'attribute_id' => 2, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Orc' ,  'name_short' =>  'Orc' );
+	$sql_ary[] = array( 'attribute_id' => 3, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Zwerg' ,  'name_short' =>  'Zwerg' );
+	$sql_ary[] = array( 'attribute_id' => 4, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Nachtelf' ,  'name_short' =>  'Nachtelf' );
+	$sql_ary[] = array( 'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Untoter' ,  'name_short' =>  'Untoter' );
+	$sql_ary[] = array( 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Tauren' ,  'name_short' =>  'Tauren' );
+	$sql_ary[] = array( 'attribute_id' => 7, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Gnome' ,  'name_short' =>  'Gnome' );
+	$sql_ary[] = array( 'attribute_id' => 8, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Troll' ,  'name_short' =>  'Troll' );
+	$sql_ary[] = array( 'attribute_id' => 10, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Blutelf' ,  'name_short' =>  'Blutelf' );
+	$sql_ary[] = array( 'attribute_id' => 11, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Draenei' ,  'name_short' =>  'Draenei' );
+	$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'Goblin' );
+	$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
+	
+	$db->sql_multi_insert ($table_prefix . 'bbdkp_language', $sql_ary);
+	unset ( $sql_ary );	
 
-	//classes in de	
-	$sql_ary[] = array( 'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'goblin' );
-	$sql_ary[] = array( 'attribute_id' => 22, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'worgen' );
+	
+	//zones
+	$db->sql_query ( 'DELETE FROM ' . $table_prefix . "bbdkp_language where attribute = 'zone' and attribute_id >= 40 " );
+	unset ( $sql_ary );
+
 	
 	// new bosses - zones
 	$sql_ary[] = array( 'attribute_id' => 40, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Blackwing Descent (10)' ,  'name_short' =>  'BD (10)' );
@@ -2563,6 +2622,14 @@ function install_wow_bb3()
 	$sql_ary[] = array( 'attribute_id' => 43, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'The Bastion of Twilight (25)' ,  'name_short' =>  'BoT (25)' );
 	$sql_ary[] = array( 'attribute_id' => 44, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (10)' ,  'name_short' =>  'TotFW (10)' );
 	$sql_ary[] = array( 'attribute_id' => 45, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Throne of the Four Winds (25)' ,  'name_short' =>  'TotFW (25)' );
+	
+	$db->sql_multi_insert ($table_prefix . 'bbdkp_language', $sql_ary);
+	unset ( $sql_ary );	
+	
+	//bosses
+	$db->sql_query ( 'DELETE FROM ' . $table_prefix . "bbdkp_language where attribute = 'boss' and attribute_id >= 275 " );
+	unset ( $sql_ary );
+	
 	$sql_ary[] = array( 'attribute_id' => 275, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10)' ,  'name_short' =>  'Magmaw (10)' );
 	$sql_ary[] = array( 'attribute_id' => 276, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (10HM)' ,  'name_short' =>  'Magmaw (10HM)' );
 	$sql_ary[] = array( 'attribute_id' => 277, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Magmaw (25)' ,  'name_short' =>  'Magmaw (25)' );

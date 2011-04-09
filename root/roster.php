@@ -79,7 +79,6 @@ switch ($layout)
 		      )),
 		                      
             'WHERE'     => " g.id = m.member_guild_id
-            				 AND m.status_id = '1'
             				 AND c.class_id = m.member_class_id 
             				 AND e.race_id = m.member_race_id 
             				 AND r.guild_id = m.member_guild_id  

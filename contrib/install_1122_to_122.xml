@@ -6,9 +6,10 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP]]></title>
-<description lang="en"><![CDATA[Update script 1.1.2.2 to 1.2.1]]></description>
-<description lang="de"><![CDATA[Aktualisierung 1.1.2.2 bis 1.2.1]]></description>
+		<title lang="en"><![CDATA[bbDKP 1.1.2.2 to 1.2.2]]></title>
+<description lang="en"><![CDATA[Update script 1.1.2.2 to 1.2.2]]></description>
+<description lang="de"><![CDATA[Aktualisierung 1.1.2.2 bis 1.2.2]]></description>
+<description lang="fr"><![CDATA[Mise à jour 1.1.2.2 vers 1.2.2]]></description>
 
 <author-notes lang="en"><![CDATA[Please read docs\INSTALL.html before beginning ]]>
 </author-notes>
@@ -96,7 +97,7 @@
 			</author>
 		</author-group>
 		
-		<mod-version>1.2.1</mod-version>
+		<mod-version>1.2.2</mod-version>
 		
 		<installation>
 			<level>advanced</level>
@@ -105,21 +106,21 @@
 		</installation>
 		
 		<link-group>
-			<link type="template" href="update_1122_to_121_subsilver2.xml" lang="en">subsilver2 Update</link>
-			<link type="template" href="update_1122_to_121_subsilver2.xml" lang="fr">Mise à jour Subsilver2</link>
-			<link type="template" href="update_1122_to_121_subsilver2.xml" lang="en">Aktualisierung Subsilver2</link>
+			<link type="template" href="install_1122_to_122_subsilver2.xml" lang="en">subsilver2 Update</link>
+			<link type="template" href="install_1122_to_122_subsilver2.xml" lang="fr">Mise à jour Subsilver2</link>
+			<link type="template" href="install_1122_to_122_subsilver2.xml" lang="de">Aktualisierung Subsilver2</link>
 			
-			<link type="language" href="update_1122_to_121_fr.xml" lang="en">Update manuel french language files</link>
-			<link type="language" href="update_1122_to_121_fr.xml" lang="fr">Manuel de mise à jour des fichiers de langue française</link>
-			<link type="language" href="update_1122_to_121_fr.xml" lang="de">Update-Anleitung für das französische Sprachpaket</link>
+			<link type="language" href="install_1122_to_122_fr.xml" lang="en">Update manuel french language files</link>
+			<link type="language" href="install_1122_to_122_fr.xml" lang="fr">Manuel de mise à jour des fichiers de langue française</link>
+			<link type="language" href="install_1122_to_122_fr.xml" lang="de">Update-Anleitung für das französische Sprachpaket</link>
 
-			<link type="language" href="update_1122_to_121_de.xml" lang="en">Update manuel German language files</link>
-			<link type="language" href="update_1122_to_121_de.xml" lang="fr">Manuel de mise à jour des fichiers de langue allemande</link>
-			<link type="language" href="update_1122_to_121_de.xml" lang="de">Update-Anleitung für das Deutsche Sprachpaket</link>
+			<link type="language" href="install_1122_to_122_de.xml" lang="en">Update manuel German language files</link>
+			<link type="language" href="install_1122_to_122_de.xml" lang="fr">Manuel de mise à jour des fichiers de langue allemande</link>
+			<link type="language" href="install_1122_to_122_de.xml" lang="de">Update-Anleitung für das Deutsche Sprachpaket</link>
 			
 			<link type="parent" lang="de" href="../install.xml">Frisch-Installations-Anleitung</link>
 			<link type="parent" lang="en" href="../install.xml">Clean-Installation Manual</link>
-			<link type="parent" lang="de" href="../install.xml">Manuel de première installation</link>
+			<link type="parent" lang="fr" href="../install.xml">Manuel de première installation</link>
 		</link-group>
 	</header>
 	
@@ -138,6 +139,7 @@
 		</delete>
 	
 		<copy>
+			<file from="root/configdkp.php" to="configdkp.php"/>
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
 			<file from="root/listevents.php" to="listevents.php"/>
 			<file from="root/listitems.php" to="listitems.php"/>
@@ -170,6 +172,43 @@
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
 		
+		<open src="config.php">
+			<edit>
+				<comment lang="en"><![CDATA[remove bbdkp kill switch ]]></comment>
+				<comment lang="fr"><![CDATA[supprime interrupteur]]></comment>
+				<comment lang="de"><![CDATA[entfernen Schalter ]]></comment>
+				<find><![CDATA[@define('EMED_BBDKP', true);
+        ]]></find>
+				<remove><![CDATA[@define('EMED_BBDKP', true);
+        ]]></remove>
+        	</edit>
+		</open>
+		
+		<open src="common.php">
+			<edit>
+				<comment lang="en"><![CDATA[change preloader]]></comment>
+				<comment lang="fr"><![CDATA[change code de chargement]]></comment>
+				<comment lang="de"><![CDATA[entfernen startkode ]]></comment>
+				<find><![CDATA[// bbDdp
+if(@defined("EMED_BBDKP")) 
+{
+	require($phpbb_root_path .  'includes/bbdkp/constants_bbdkp.' . $phpEx);
+	require($phpbb_root_path .  'includes/bbdkp/bbdkpfunctions.'  . $phpEx);
+	require($phpbb_root_path .  'includes/bbdkp/bbdkp.' . $phpEx); 
+}]]></find>
+				<action type="replace-with"><![CDATA[// bbDKP
+if (file_exists($phpbb_root_path . 'configdkp.' . $phpEx))
+{
+	require($phpbb_root_path . 'configdkp.' . $phpEx);
+}
+if(@defined("EMED_BBDKP")) 
+{
+	require($phpbb_root_path .  'includes/bbdkp/constants_bbdkp.' . $phpEx);
+	require($phpbb_root_path .  'includes/bbdkp/bbdkpfunctions.'  . $phpEx);
+	require($phpbb_root_path .  'includes/bbdkp/bbdkp.' . $phpEx); 
+}]]></action>
+        	</edit>
+		</open>		
 		
 		<open src="/styles/prosilver/template/overall_footer.html">
 			<edit>
@@ -251,10 +290,10 @@ What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
 
-1) Run bbDKP 1.2 database update : install/updatedkp.php 
+1) Run bbDKP 1.2.2 database update : install/updatedkp.php 
 2) Rename the install folder. 
 
-Note : Should you need to deactivate bbDKP you can open config.php change  "@define('EMED_BBDKP', true);"  to  "//@define('EMED_BBDKP', true);"
+Note : Should you need to deactivate bbDKP you can open configdkp.php change  "@define('EMED_BBDKP', true);"  to  "//@define('EMED_BBDKP', true);"
 
 		Enjoy ;)]]></diy-instructions>
 <diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /docs/install.html
@@ -265,7 +304,7 @@ Résumé des étapes de post-installation
 1) lancer la mise à jour : install/updatedkp.php 
 2) Supprime le repertoire /install pour réactiver le forum.
 
-Note : Il est possible de désactiver le MOD en ouvrant config.php et en changeant  "@define('EMED_BBDKP', true);"  à  "//@define('EMED_BBDKP', true);"  
+Note : Il est possible de désactiver le MOD en ouvrant configdkp.php et en changeant  "@define('EMED_BBDKP', true);"  à  "//@define('EMED_BBDKP', true);"  
 
 Success ;)	]]></diy-instructions>		
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
@@ -274,7 +313,7 @@ Liste der änderungen : /docs/changelog.html
 1) Datenbank aktualisierung : install/updatedkp.php 
 2) Lösche das Installations-Verzeichnis „install" damit das Forum wieder zugänglich wird.
 
-Notiz : Du kannst bbDKP jederzeit deaktivieren: öffne config.php und  ändere "@define('EMED_BBDKP', true);" zu "//@define('EMED_BBDKP', true);"  
+Notiz : Du kannst bbDKP jederzeit deaktivieren: öffne configdkp.php und  ändere "@define('EMED_BBDKP', true);" zu "//@define('EMED_BBDKP', true);"  
 
 Viel Spaß ;)	]]></diy-instructions>		
 	</action-group>

@@ -7,9 +7,9 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.2.1]]></title>
-		<title lang="de"><![CDATA[bbDKP 1.2.1]]></title>
-		<title lang="fr"><![CDATA[bbDKP 1.2.1]]></title>
+		<title lang="en"><![CDATA[bbDKP 1.2.2]]></title>
+		<title lang="de"><![CDATA[bbDKP 1.2.2]]></title>
+		<title lang="fr"><![CDATA[bbDKP 1.2.2]]></title>
 		<description lang="en"><![CDATA[bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
 It integrates these Game, Guild and DKP management facilites into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, ACP and UCP modules.
@@ -157,7 +157,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2.1</mod-version>
+		<mod-version>1.2.2</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
@@ -166,7 +166,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 		<link-group>
 			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2</link>
 			<link type="template" href="contrib/subsilver2.xml" lang="fr">subsilver2</link>
-			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2</link>
+			<link type="template" href="contrib/subsilver2.xml" lang="de">subsilver2</link>
 
 			<link type="language" lang="en" href="contrib/fr.xml">French</link>
 			<link type="language" lang="fr" href="contrib/fr.xml">Français</link>
@@ -176,13 +176,18 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
 			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>	
 			
-			<link type="contrib" lang="en" href="contrib/update_1122_to_121.xml">Update from v1.1.2.2 to v1.2.1</link>
-			<link type="contrib" lang="fr" href="contrib/update_1122_to_121.xml">Mise à jour de v1.1.2.2 à v1.2.1</link>
-			<link type="contrib" lang="de" href="contrib/update_1122_to_121.xml">Aktualisierung von v1.1.2.2 bis v1.2.1</link>
+			<link type="contrib" lang="en" href="contrib/install_1122_to_122.xml">Update from v1.1.2.2 to v1.2.2</link>
+			<link type="contrib" lang="fr" href="contrib/install_1122_to_122.xml">Mise à jour de v1.1.2.2 à v1.2.2</link>
+			<link type="contrib" lang="de" href="contrib/install_1122_to_122.xml">Aktualisierung von v1.1.2.2 bis v1.2.2</link>
 
-			<link type="contrib" lang="en" href="contrib/update_12_to_121.xml">Update from v1.2 to v1.2.1</link>
-			<link type="contrib" lang="fr" href="contrib/update_12_to_121.xml">Mise à jour de v1.2 à v1.2.1</link>
-			<link type="contrib" lang="de" href="contrib/update_12_to_121.xml">Aktualisierung von v1.2 bis v1.2.1</link>
+			<link type="contrib" lang="en" href="contrib/install_12_to_122.xml">Update from v1.2 to v1.2.2</link>
+			<link type="contrib" lang="fr" href="contrib/install_12_to_122.xml">Mise à jour de v1.2 à v1.2.2</link>
+			<link type="contrib" lang="de" href="contrib/install_12_to_122.xml">Aktualisierung von v1.2 bis v1.2.2</link>
+			
+			<link type="contrib" lang="en" href="contrib/install_121_to_122.xml">Update from v1.2.1 to v1.2.2</link>
+			<link type="contrib" lang="fr" href="contrib/install_121_to_122.xml">Mise à jour de v1.2.1 à v1.2.2</link>
+			<link type="contrib" lang="de" href="contrib/install_121_to_122.xml">Aktualisierung von v1.2.1 bis v1.2.2</link>
+						
 			</link-group>
 	</header>
 	<action-group>
@@ -195,6 +200,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/portal.php" to="portal.php"/>
 			<file from="root/roster.php" to="roster.php"/>
 			<file from="root/stats.php" to="stats.php"/>
+			<file from="root/configdkp.php" to="configdkp.php"/>
 			<file from="root/viewmember.php" to="viewmember.php"/>
 			<file from="root/viewevent.php" to="viewevent.php"/>
 			<file from="root/viewitem.php" to="viewitem.php"/>
@@ -237,23 +243,17 @@ Deny from All
 				<comment lang="fr"><![CDATA[Ajout des fichiers requis pour inclusion dans common.php]]></comment>
 				<comment lang="de"><![CDATA[Zufügung bbDKP Dateien im common.php]]></comment>
 				<find><![CDATA[require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);]]></find>
-				<action type="after-add"><![CDATA[// bbDdp
+				<action type="after-add"><![CDATA[// bbDKP
+if (file_exists($phpbb_root_path . 'configdkp.' . $phpEx))
+{
+	require($phpbb_root_path . 'configdkp.' . $phpEx);
+}
 if(@defined("EMED_BBDKP")) 
 {
 	require($phpbb_root_path .  'includes/bbdkp/constants_bbdkp.' . $phpEx);
 	require($phpbb_root_path .  'includes/bbdkp/bbdkpfunctions.'  . $phpEx);
 	require($phpbb_root_path .  'includes/bbdkp/bbdkp.' . $phpEx); 
 }]]></action>
-			</edit>
-		</open>
-		<open src="config.php">
-			<edit>
-				<comment lang="en"><![CDATA[Adding bbdkp kill switch ]]></comment>
-				<comment lang="fr"><![CDATA[Ajout interrupteur]]></comment>
-				<comment lang="de"><![CDATA[Zufügung Ein-Aus Schalter ]]></comment>
-				<find><![CDATA[?>]]></find>
-				<action type="before-add"><![CDATA[@define('EMED_BBDKP', true);
-        ]]></action>
 			</edit>
 		</open>
 		<open src="/styles/prosilver/template/overall_footer.html">
@@ -365,10 +365,10 @@ What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
 
-1) Run bbDKP 1.2.1 database installation : install/installdkp.php 
+1) Run bbDKP 1.2.2 database installation : install/installdkp.php 
 2) Rename the install folder. 
 
-Note : Should you need to deactivate bbDKP you can open config.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
+Note : Should you need to deactivate bbDKP you can open configdkp.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
 
 Enjoy ;)]]></diy-instructions>
 <diy-instructions lang="fr"><![CDATA[le guide d’installation et mise à jour : /docs/install.html
@@ -376,19 +376,19 @@ Liste des changements : /docs/changelog.html
 
 Résumé des étapes de post-installation
 
-1) lance l’installateur ou m.a.j 1.2.1  : install/installdkp.php
+1) lance l’installateur ou m.a.j 1.2.2  : install/installdkp.php
 2) Renomme ou supprime le repertoire /install pour réactiver le forum.
 
-Note : Il est possible de désactiver le MOD en ouvrant config.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
+Note : Il est possible de désactiver le MOD en ouvrant configdkp.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
 
 Success ;)	]]></diy-instructions>		
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) 1.2.1 Datenbank Installation order aktualisierung : install/installdkp.php 
+1) 1.2.2 Datenbank Installation order aktualisierung : install/installdkp.php 
 2) lösche oder umbenenne das Installations-Verzeichnis „install" 
 
-Notiz : Sie können bbDKP deaktivieren indem sie config.php öffnen und @define('EMED_BBDKP', true); ändern nach  //@define('EMED_BBDKP', true);  
+Notiz : Sie können bbDKP deaktivieren indem sie configdkp.php öffnen und @define('EMED_BBDKP', true); ändern nach  //@define('EMED_BBDKP', true);  
 
 Viel Spaß ;)	]]></diy-instructions>		
 	</action-group>

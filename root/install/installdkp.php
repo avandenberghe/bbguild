@@ -47,7 +47,7 @@ if (!file_exists($phpbb_root_path . 'install/installdkp.' . $phpEx))
 check_oldbbdkp();
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.2.1';
+$mod_name = 'bbDKP 1.2.2';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -122,7 +122,7 @@ switch ($game)
 
 $versions = array(
 
-    '1.2.1'    => array(
+    '1.2.2'    => array(
     	// bbdkp tables (this uses the layout from develop/create_schema_files.php and from phpbb_db_tools)
         'table_add' => array(
             
@@ -909,6 +909,13 @@ function check_oldbbdkp()
 	
 	include($phpbb_root_path . 'umil/umil.' . $phpEx);
 	$umil=new umil;
+	// check config		
+	if($umil->config_exists('bbdkp_version'))
+    {
+		//old table found, redirect
+		redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx));    
+    }   	
+	
 	//check for old DKP module (1.08)
 	if ($umil->module_exists('acp', false, 'DKP'))
 	{

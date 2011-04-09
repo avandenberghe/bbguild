@@ -6,9 +6,9 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
   <header>
     <license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-    <title lang="en">bbDkp 1.2.1 - subsilver2 style updater</title>
+    <title lang="en">bbDKP 1.2.2 - subsilver2 style updater</title>
     <title lang="fr">mise à jour style subsilver2</title>
-    <title lang="de">Aktualisierung bbDkp 1.2 - subsilver2 style</title>
+    <title lang="de">Aktualisierung bbDKP 1.2.2 - subsilver2 style</title>
     <description lang="en"><![CDATA[subsilver2]]></description>
     <description lang="fr"><![CDATA[subsilver2]]></description>
     <description lang="de"><![CDATA[subsilver2]]></description>
@@ -77,20 +77,20 @@
     
     </author-group>
 
-<mod-version>1.2.1</mod-version>
+<mod-version>1.2.2</mod-version>
 <installation>
       <level>easy</level>
       <time>600</time>
 	<target-version>3.0.8</target-version>
 </installation>
 <link-group>
-	<link type="parent" lang="en" href="../install.xml">Installation 1.2</link>
-	<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2</link>
-	<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2</link>	
+	<link type="parent" lang="en" href="../install.xml">Installation 1.2.2</link>
+	<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2.2</link>
+	<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2.2</link>	
 			
-	<link type="parent" lang="en" href="update_1122_to_121.xml">Update Manual</link>
-	<link type="parent" lang="fr" href="update_1122_to_121.xml">Manual de mise à jour</link>
-	<link type="parent" lang="de" href="update_1122_to_121.xml">Aktualisierung</link>
+	<link type="parent" lang="en" href="install_1122_to_122.xml">Update Manual</link>
+	<link type="parent" lang="fr" href="install_1122_to_122.xml">Manual de mise à jour</link>
+	<link type="parent" lang="de" href="install_1122_to_122.xml">Aktualisierung</link>
 </link-group>
   </header>
   <action-group>
@@ -114,6 +114,6 @@
 	</open>
 <diy-instructions lang="en">See general install.xml file</diy-instructions>
 <diy-instructions lang="fr">Voir instructions générales</diy-instructions>
-<diy-instructions lang="en">Siehe allgemeine Anleitung</diy-instructions>
+<diy-instructions lang="de">Siehe allgemeine Anleitung</diy-instructions>
 </action-group>
 </mod>

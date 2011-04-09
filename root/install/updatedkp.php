@@ -1035,10 +1035,18 @@ $versions = array(
 			), 
 		
 		'custom' => array( 
-				'tableupdates_121', 
+				'gameupdate', 
 				'bbdkp_caches'
 			),	
 		
+	),
+	
+	
+	'1.2.2' => array(
+		'custom' => array( 
+				'gameupdate', 
+				'bbdkp_caches'
+			),	
 	),
 		
 );
@@ -1558,42 +1566,24 @@ function gameupdate($action, $version)
 					
 
 					break;
+				case '1.2.1':
+					break;
+									
+				case '1.2.2':
+					// rerun 1.2 update in case someone modded it manually
+					$game = request_var('game', '');
+					switch ($game)
+					{
+						case 'wow':
+							install_wow_bb3();
+					}
+					break;
 				
 			}
 			break;
 			
 		case 'uninstall' :
 			
-			// Run this when uninstalling
-			if ($umil->table_exists($bbdkp_table_prefix . 'classes'))
-			{
-				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'classes ';
-				$db->sql_query($sql);
-			}
-			
-			if ($umil->table_exists($bbdkp_table_prefix . 'races'))
-			{
-				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'races ';
-				$db->sql_query($sql);
-			}
-			
-			if ($umil->table_exists($bbdkp_table_prefix . 'factions'))
-			{
-				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'factions ';
-				$db->sql_query($sql);
-			}
-			
-			if ($umil->table_exists($bbdkp_table_prefix . 'classes'))
-			{
-				$sql = 'TRUNCATE TABLE ' . $bbdkp_table_prefix . 'classes ';
-				$db->sql_query($sql);
-			}
-			
-			if($umil->module_exists('acp', 'ACP_DKP_BOSS', 'ACP_DKP_BOSS_CONFIG'))
-			{
-				$umil->module_remove('acp','ACP_DKP_BOSS','ACP_DKP_BOSS_CONFIG');
-			}
-				
 			return array(
 					'command' => 'UMIL_REMOVE_GAME_ROW', 
 					'result' => 'SUCCESS');
@@ -2092,28 +2082,7 @@ function tableupdates_12($action, $version)
 	}
 	
 	return array('command' => $user->lang['UMIL_UPDATE120'],  'result' => 'SUCCESS');
-	
 		
-}
-
-
-/****
- * table update script for 1.2.1 
- */
-function tableupdates_121($action, $version)
-{
-	
-	global $user, $umil, $config, $db, $table_prefix, $umil, $bbdkp_table_prefix; 
-	switch ($action)
-	{
-		case 'install' :
-		case 'update' :
-			$sql = "DELETE from " . $table_prefix ."bbdkp_language WHERE attribute in ('boss', 'zone') ";
-	        $db->sql_query($sql);
-			// we reset autincrement just in case
-			$db->sql_query ( 'ALTER TABLE  ' . $table_prefix . "bbdkp_language AUTO_INCREMENT = 1 " );
-		        
-	}
 }
 
 ?>
