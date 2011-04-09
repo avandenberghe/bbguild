@@ -737,6 +737,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		'WHERE'		=> ' l.member_guild_id = r.guild_id
 			 AND l.member_rank_id = r.rank_id
 			 AND r.rank_hide != 1
+			 AND l.member_id != ' . $config['bbdkp_bankerid']  . ' 
 			 AND NOT EXISTS ( SELECT NULL FROM ' . RAID_DETAIL_TABLE . ' ra WHERE l.member_id = ra.member_id and ra.raid_id = ' . $raid_id . ' ) and l.member_status = 1 ' ,
 			'ORDER_BY'	=> 'member_name asc ',
 	    );
@@ -1639,6 +1640,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	private function deleteraider($raid_id, $attendee_id)
 	{
 		global $db, $user, $config, $template, $phpbb_admin_path, $phpEx;
+		$link = '<br /><a href="' . append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>';
 		 
 		if (confirm_box(true))
 		{
@@ -1677,21 +1679,26 @@ class acp_dkp_raid extends bbDKP_Admin
 			// delete from raiddetail
 			$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' WHERE raid_id= ' . $raid_id . ' and member_id = ' . $member_id ;  
 			$db->sql_query($sql);
-			
-			// remove items
-			
-			
 
 			// update last & firstdates			
 			$this->update_raiddate($member_id, $dkpid);
 			
 			$db->sql_transaction('commit');
 			
-			$link = '<br /><a href="' . append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>'; 
 			trigger_error( sprintf( $user->lang['ADMIN_RAID_ATTENDEE_DELETED_SUCCESS'],  utf8_normalize_nfc(request_var('attendeename', '', true)) , $raid_id) . $link, E_USER_WARNING);
 		}
 		else
 		{
+			//check if player got loot, if true refuse deletion 
+			$sql = 'SELECT count(*) as countitems FROM ' . RAID_ITEMS_TABLE . ' where member_id = ' . $attendee_id . ' and raid_id = ' .  $raid_id; 
+			$result = $db->sql_query($sql);
+			$countitems = (int) $db->sql_fetchfield('countitems');
+			$db->sql_freeresult($result);
+			if ($countitems > 0)
+			{
+				trigger_error( sprintf( $user->lang['ADMIN_RAID_ATTENDEE_DELETED_FAILED'],  utf8_normalize_nfc(request_var('attendeename', '', true)) , $raid_id) . $link, E_USER_WARNING);				
+			}
+			
 			// select vars to be passed to confirm box
 			$sql = 'SELECT member_name from ' . MEMBER_LIST_TABLE . ' where member_id = ' . $attendee_id; 
 			$result = $db->sql_query($sql);
@@ -2145,6 +2152,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			$sql = 'SELECT * FROM ' . RAID_ITEMS_TABLE . ' i, ' . MEMBER_LIST_TABLE . ' m WHERE 
 				i.member_id = m.member_id and i.item_id= ' . (int) $item_id;
 			$result = $db->sql_query ( $sql );
+			$old_item = array();
 			while ( $row = $db->sql_fetchrow ( $result ) ) 
 			{
 				$old_item = array (

@@ -29,8 +29,8 @@ class acp_dkp_item extends bbDKP_Admin
 	
 	public function main($id, $mode) 
 	{
-		global $db, $user, $auth, $template;
-		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
+		global $db, $user, $template;
+		global $phpbb_admin_path, $phpEx;
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
 		
@@ -400,7 +400,7 @@ class acp_dkp_item extends bbDKP_Admin
 	 */
 	private function additem()
 	{
-		global $db, $user, $config, $template, $phpEx, $phpbb_admin_path, $phpbb_root_path;
+		global $db, $user, $config, $phpEx, $phpbb_admin_path, $phpbb_root_path;
 		$errors_exist = $this->error_check ();
 		if ($errors_exist) 
 		{
@@ -513,10 +513,16 @@ class acp_dkp_item extends bbDKP_Admin
 		
 		$sql = 'select member_id from ' . RAID_DETAIL_TABLE . ' where raid_id = ' . $raid_id; 
 		$result = $db->sql_query($sql);
+		unset($raiders);
 		$raiders = array();
 		while ( $row = $db->sql_fetchrow ($result))
 		{
-			$raiders[]= $row['member_id'];
+			// don't add the guildbank to the list of raiders
+			if ($row['member_id'] != $config['bbdkp_bankerid'])
+			{
+				$raiders[]= $row['member_id'];	
+			}
+			
 		} 
 		$db->sql_freeresult ( $result);
 		
@@ -543,13 +549,13 @@ class acp_dkp_item extends bbDKP_Admin
    				'item_added_by' 	=> (string) $user->data ['username'] 
    				);
     				
-			//if zerosum flag is set then distribute item value over raiders
-			if($config['bbdkp_zerosum'] == 1 && $config['bbdkp_bankerid'] != $this_member_id && $config['bbdkp_bankerid'] != 0 )
+			//if zerosum flag is set and if the bank is not set to the looter then distribute item value over raiders
+			if($config['bbdkp_zerosum'] == 1 && $config['bbdkp_bankerid'] != $this_member_id )
 			{
 				// increase raid detail table
 				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
 						SET zerosum_bonus = zerosum_bonus + ' . (float) $distributed . ' 
-						WHERE raid_id = ' . (int) $raid_id;
+						WHERE raid_id = ' . (int) $raid_id . ' AND ' . $db->sql_in_set('member_id', $raiders);
 				$db->sql_query ( $sql );
 				
 				// allocate dkp itemvalue bought to all raiders
@@ -560,20 +566,21 @@ class acp_dkp_item extends bbDKP_Admin
 					  	AND ' . $db->sql_in_set('member_id', $raiders) ;
 				$db->sql_query ( $sql );
 				
-				// give rest value to buyer in raiddetail
+				// give rest value to buyer or guildbank
 				if($restvalue!=0 )
 				{
+					
 					$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
 							SET zerosum_bonus = zerosum_bonus + ' . (float) $restvalue  .  '   
 							WHERE raid_id = ' . (int) $raid_id . '  
-						  	AND member_id = ' . $this_member_id; 
+						  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $this_member_id); 
 					$db->sql_query ( $sql );					
 					
 					$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '  				
 							SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $restvalue  .  ', 
 							member_earned = member_earned + ' . (float) $restvalue  .  ' 
 							WHERE member_dkpid = ' . (int) $dkpid  . ' 
-						  	AND member_id = ' . $this_member_id; 
+						  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $this_member_id); 
 					$db->sql_query ( $sql );					
 				}
 			}
@@ -592,7 +599,7 @@ class acp_dkp_item extends bbDKP_Admin
 	 */	
 	private function deleteitem($groupdelete = false)
 	{
-		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
+		global $db, $user, $config, $template;
 
 		if (confirm_box ( true )) 
 		{
@@ -634,7 +641,6 @@ class acp_dkp_item extends bbDKP_Admin
 			
 			$item_id = request_var('hidden_item_id', 0);
 			$dkp_id = request_var('hidden_dkp_id', 0);
-			$raid_id = request_var('hidden_raid_id', 0);
 			
 			if($item_id == 0)
 			{	
@@ -725,7 +731,7 @@ class acp_dkp_item extends bbDKP_Admin
 	 */
 	public function deleteitem_db( $old_item )
 	{
-		global $db;
+		global $config, $db;
 		$db->sql_transaction('begin');
 		
 		// 1) Remove the item purchase from the items table
@@ -745,10 +751,14 @@ class acp_dkp_item extends bbDKP_Admin
 		{
 			$sql = 'select member_id from ' . RAID_DETAIL_TABLE . ' where raid_id = ' . $old_item ['raid_id'] ; 
 			$result = $db->sql_query($sql);
+			unset($raiders);
 			$raiders = array();
 			while ( $row = $db->sql_fetchrow ($result))
 			{
-				$raiders[]= $row['member_id'];
+				if ($row['member_id'] != $config['bbdkp_bankerid'])
+				{
+					$raiders[]= $row['member_id'];	
+				}
 			} 
 			$db->sql_freeresult ( $result);
 			
@@ -758,7 +768,7 @@ class acp_dkp_item extends bbDKP_Admin
 			// decrease raid detail table
 			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
 					SET zerosum_bonus = zerosum_bonus - ' . (float) $distributed . ' 
-					WHERE raid_id = ' . (int) $old_item ['raid_id'];
+					WHERE raid_id = ' . (int) $old_item ['raid_id'] . ' AND ' . $db->sql_in_set('member_id', $raiders);
 			$db->sql_query ( $sql );
 			
 			// deallocate dkp itemvalue bought to all raiders
@@ -778,14 +788,14 @@ class acp_dkp_item extends bbDKP_Admin
 				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
 						SET zerosum_bonus = zerosum_bonus - ' . (float) $restvalue  .  '   
 						WHERE raid_id = ' . (int) $old_item ['raid_id'] . '  
-					  	AND member_id = ' . $old_item ['member_id']; 
+					  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $old_item ['member_id']); 
 				$db->sql_query ( $sql );					
 				
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '  				
 						SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $restvalue  .  ', 
 						member_earned = member_earned - ' . (float) $restvalue  .  ' 
 						WHERE member_dkpid = ' . (int) $old_item ['dkpid']  . ' 
-					  	AND member_id = ' . $old_item ['member_id']; 
+					  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $old_item ['member_id']); 
 				$db->sql_query ( $sql );		
 				
 			}
@@ -804,7 +814,7 @@ class acp_dkp_item extends bbDKP_Admin
 	 */
 	private function updateitem()  
 	{
-		global $db, $user, $config, $template, $phpEx, $phpbb_root_path;
+		global $db, $user;
 		$errors_exist = $this->error_check ();
 		if ($errors_exist) 
 		{
@@ -1233,7 +1243,8 @@ class acp_dkp_item extends bbDKP_Admin
 				break;
 				
 			case 1:
-				// set all to 0
+				// redistribute
+				
 				//  update raid detail table to 0
 				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET zerosum_bonus = 0 ' ;
 				$db->sql_query ( $sql );
@@ -1266,10 +1277,12 @@ class acp_dkp_item extends bbDKP_Admin
 					$numraiders = 0;
 					$sql = 'select member_id from ' . RAID_DETAIL_TABLE . ' where raid_id = ' . $raid_id; 
 					$result = $db->sql_query($sql);
-					$raiders = array();
 					while ( $row = $db->sql_fetchrow ($result))
 					{
-						$raids[$raid_id]['raiders'][]= $row['member_id'];
+						if ($row['member_id'] != $config['bbdkp_bankerid'])
+						{
+							$raids[$raid_id]['raiders'][]= $row['member_id'];
+						}
 						$numraiders++;
 					} 
 					$raids[$raid_id]['numraiders'] = $numraiders; 					
@@ -1278,7 +1291,6 @@ class acp_dkp_item extends bbDKP_Admin
 					
 					$sql = 'select member_id, item_value, item_id from ' . RAID_ITEMS_TABLE . ' where raid_id = ' . $raid_id;
 					$result = $db->sql_query($sql);
-					$buyers = array();
 					$numbuyers=0;
 					while ( $row = $db->sql_fetchrow ($result))
 					{
@@ -1297,7 +1309,6 @@ class acp_dkp_item extends bbDKP_Admin
 					}
 					
 					$db->sql_freeresult ( $result);
-					
 					$raids[$raid_id]['numbuyers'] = $numbuyers; 					
 				}
 				
@@ -1337,7 +1348,7 @@ class acp_dkp_item extends bbDKP_Admin
 						// distribute this item value as income to all raiders
 						$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
 								SET zerosum_bonus = zerosum_bonus + ' . (float) $item['distributed_value'] . ' 
-								WHERE raid_id = ' . (int) $raid_id;
+								WHERE raid_id = ' . (int) $raid_id . ' AND ' . $db->sql_in_set('member_id', $raid['raiders']);
 						$db->sql_query ( $sql );
 						$itemcount ++;
 						
@@ -1350,20 +1361,20 @@ class acp_dkp_item extends bbDKP_Admin
 						$db->sql_query ( $sql );
 						
 						
-						// give rest value to the buyer in raiddetail
+						// give rest value to the buyer in raiddetail or to the guild bank
 						if($item['rest_value']!=0 )
 						{
 							$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '  				
 									SET zerosum_bonus = zerosum_bonus + ' . (float) $item['rest_value']  .  '   
 									WHERE raid_id = ' . (int) $raid_id . '  
-								  	AND member_id = ' . $item['buyer']; 
+								  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $item['buyer'])  ; 
 							$db->sql_query ( $sql );					
 							
 							$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '  				
 									SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $item['rest_value']  .  ', 
 									member_earned = member_earned + ' . (float) $item['rest_value']  .  ' 
 									WHERE member_dkpid = ' . (int) $raid['dkpid']  . ' 
-								  	AND member_id = ' .  $item['buyer']; 
+								  	AND member_id = ' .  ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $item['buyer']); 
 							$db->sql_query ( $sql );					
 						}
 						
