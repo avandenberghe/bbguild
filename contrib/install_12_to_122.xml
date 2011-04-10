@@ -130,11 +130,14 @@
 		
 		<copy>
 			<file from="root/portal.php" to="portal.php"/>
+			<file from="root/roster.php" to="roster.php"/>					
 			<file from="root/configdkp.php" to="configdkp.php"/>
 			<file from="root/adm/dkp/acp_editraid.html" to="adm/dkp/acp_editraid.html"/>
 			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>
+			<file from="root/includes/acp/acp_dkp.php" to="includes/acp/acp_dkp.php"/>				
 			<file from="root/includes/acp/acp_dkp_mm.php" to="includes/acp/acp_dkp_mm.php"/>
 			<file from="root/includes/acp/acp_dkp_item.php" to="includes/acp/acp_dkp_item.php"/>
+			<file from="root/includes/acp/acp_dkp_raid.php" to="includes/acp/acp_dkp_raid.php"/>			
 			<file from="root/includes/bbdkp/bbdkpfunctions.php" to="includes/bbdkp/bbdkpfunctions.php"/>
 			<file from="root/styles/prosilver/template/dkp/dkpmenu.html" to="styles/prosilver/template/dkp/dkpmenu.html"/>
 			<file from="root/styles/prosilver/template/dkp/leaderboard.html" to="styles/prosilver/template/dkp/leaderboard.html"/>
