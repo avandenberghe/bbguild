@@ -1781,8 +1781,10 @@ class acp_dkp_mm extends bbDKP_Admin
      * function for inserting a new member
      * you have to perform argument and ifexist validations before you call this function!
      * is also called from armory plugin
+     * phpbb_user_id is an optional value, set to zero when not given
      * 
-     * $phpbb_user_id is an optional value, set to zero when not given
+     * @returns the new memberid or false
+     * 
      */
     public function insertnewmember($member_name, $member_status, $member_lvl, 
     $race_id ,  $class_id, $rank_id, $member_comment, $joindate, $leavedate, 
@@ -1814,7 +1816,9 @@ class acp_dkp_mm extends bbDKP_Admin
 		    $result = $db->sql_query($sql);
 			$member_lvl = (int) $db->sql_fetchfield('maxlevel', 1, $result); 
 		}
-
+		
+		$member_id = 0;
+		
 		$query = $db->sql_build_array('INSERT', array(
 			'member_id'             => NULL,
 			'member_name'           => ucwords($member_name),
@@ -1832,7 +1836,7 @@ class acp_dkp_mm extends bbDKP_Admin
 		    'member_armory_url'     => $url, 
 			'phpbb_user_id'			=> (int) $phpbb_user_id
 			)
-		); 
+		);
 		
 		$log_action = array(
 		'header'         => 'L_ACTION_MEMBER_ADDED',
@@ -1842,32 +1846,16 @@ class acp_dkp_mm extends bbDKP_Admin
 		'L_CLASS'      => $class_id,
 		'L_ADDED_BY'   => $user->data['username']);
 		
-		
-		try 
-		{
-		    $db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
-            
-		}
-		catch (Exception $e)
-		{
-		    
-		    $this->log_insert(array(
-			'log_type'   => $log_action['header'],
-			'log_action' => $log_action,
-		    'log_result'    => 'L_FAILURE')
-		    );
-		
-		    trigger( 'Caught exception: ',  $e->getMessage(), "\n" , E_USER_WARNING); 
-		    
-		    return false;
-		}
+
+		$db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
+		$member_id = $db->sql_nextid();
 		
 	    $this->log_insert(array(
 		'log_type'   => $log_action['header'],
 		'log_action' => $log_action)
 	    );
 	    
-	    return true;
+	    return $member_id;
 	    
     }
     
