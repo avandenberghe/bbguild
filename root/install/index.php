@@ -39,7 +39,7 @@ if (!file_exists($phpbb_root_path . 'umil/umil_auto.' . $phpEx))
     trigger_error('Please download the latest UMIL (Unified MOD Install Library) from: <a href="http://www.phpbb.com/mods/umil/">phpBB.com/mods/umil</a>', E_USER_ERROR);
 }
 
-if (!file_exists($phpbb_root_path . 'install/installdkp.' . $phpEx))
+if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
 {
     trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
 }
@@ -901,56 +901,27 @@ function gameinstall($action, $version)
 }
 
 /***
- * checks if there is an older install, if found, redirects to legacy updater
+ * checks if there is an older install
  */
 function check_oldbbdkp()
 {
-	global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx;
+	global $db, $table_prefix, $umil, $config, $phpbb_root_path, $phpEx;
 	
 	include($phpbb_root_path . 'umil/umil.' . $phpEx);
 	$umil=new umil;
+	
 	// check config		
 	if($umil->config_exists('bbdkp_version'))
     {
-		//old table found, redirect
-		redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx));    
-    }   	
-	
-	//check for old DKP module (1.08)
-	if ($umil->module_exists('acp', false, 'DKP'))
-	{
-	     //bbDKP seems already installed, redirect to older umil updater
-	     redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx)); 
-	}
-	
-	//check for a newer DKP module (1.1.x)
-	if ($umil->module_exists('acp', false, 'ACP_CAT_DKP'))
-	{
-	     //bbDKP seems already installed, redirect to older umil updater
-	     redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx)); 
-	}
-	
-	//check for new table
-	if($umil->table_exists($table_prefix . 'bbdkp_events'))
-	{
-		//old table found, redirect
-		 redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx));
-	}
-	
-	//check for old table
-	$old_bbdkp_table_prefix = "bbeqdkp_";
-	if($umil->table_exists($old_bbdkp_table_prefix . 'events'))
-	{
-		//old table found, redirect
-		 redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx));
-	}
+		if(version_compare($config['bbdkp_version'], '1.2.2') == -1 )
+		{
+			//stop here, the version is less than 1.2.2
+			redirect(append_sid($phpbb_root_path . '/olddkpupdate/index.'. $phpEx)); 
+			
+		}
 		
-	// finally check old config		
-	if($umil->config_exists('bbdkp_guildtag'))
-    {
-		//old table found, redirect
-		redirect(append_sid($phpbb_root_path . '/install/updatedkp.'. $phpEx));    
-    }   
+    }   	
+
 	
 }
 

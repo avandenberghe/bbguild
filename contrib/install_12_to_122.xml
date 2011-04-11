@@ -188,19 +188,19 @@ if(@defined("EMED_BBDKP"))
 What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
-1) Run bbDKP 1.2.2 database update : install/updatedkp.php 
+1) Run bbDKP 1.2.2 database update : install/index.php 
 2) delete the install folder. 
 		Enjoy ;)]]></diy-instructions>
 <diy-instructions lang="fr"><![CDATA[le guide de mise à jour : /docs/install.html
 Liste des changements : /docs/changelog.html
 
-1) lancer la mise à jour : install/updatedkp.php 
+1) lancer la mise à jour : install/index.php 
 2) Supprimer le repertoire /install pour réactiver le forum.
 ]]></diy-instructions>		
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) Datenbank aktualisierung : install/updatedkp.php 
+1) Datenbank aktualisierung : install/index.php 
 2) lösche das Installations-Verzeichnis „install"
 
 ]]></diy-instructions>		

@@ -290,7 +290,7 @@ What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
 
-1) Run bbDKP 1.2.2 database update : install/updatedkp.php 
+1) Run bbDKP 1.2.2 database update : install/index.php 
 2) Rename the install folder. 
 
 Note : Should you need to deactivate bbDKP you can open configdkp.php change  "@define('EMED_BBDKP', true);"  to  "//@define('EMED_BBDKP', true);"
@@ -301,7 +301,7 @@ Liste des changements : /docs/changelog.html
 
 Résumé des étapes de post-installation
 
-1) lancer la mise à jour : install/updatedkp.php 
+1) lancer la mise à jour : install/index.php 
 2) Supprime le repertoire /install pour réactiver le forum.
 
 Note : Il est possible de désactiver le MOD en ouvrant configdkp.php et en changeant  "@define('EMED_BBDKP', true);"  à  "//@define('EMED_BBDKP', true);"  
@@ -310,7 +310,7 @@ Success ;)	]]></diy-instructions>
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) Datenbank aktualisierung : install/updatedkp.php 
+1) Datenbank aktualisierung : install/index.php 
 2) Lösche das Installations-Verzeichnis „install" damit das Forum wieder zugänglich wird.
 
 Notiz : Du kannst bbDKP jederzeit deaktivieren: öffne configdkp.php und  ändere "@define('EMED_BBDKP', true);" zu "//@define('EMED_BBDKP', true);"  
