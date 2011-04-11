@@ -1043,6 +1043,7 @@ $versions = array(
 	
 	
 	'1.2.2' => array(
+		// no db changes
 		'custom' => array( 
 				'gameupdate', 
 				'bbdkp_caches'
@@ -1398,7 +1399,6 @@ function gameupdate($action, $version)
 				case '1.1.2' : 
 					$game = request_var('game', '');
 					
-					
 					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_NEWS_ADD' " );
 					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_GUILD_ADD' " );
 					$db->sql_query( " update " . MODULES_TABLE . " set module_display = '0' where module_langname = 'ACP_DKP_MEMBER_ADD' " );
@@ -1561,7 +1561,6 @@ function gameupdate($action, $version)
 						case 'eq2':
 							install_eq2_bb3();
 							break;
-							
 					}
 					
 
@@ -1570,13 +1569,6 @@ function gameupdate($action, $version)
 					break;
 									
 				case '1.2.2':
-					// rerun 1.2 update in case someone modded it manually
-					$game = request_var('game', '');
-					switch ($game)
-					{
-						case 'wow':
-							install_wow_bb3();
-					}
 					break;
 				
 			}
