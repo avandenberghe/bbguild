@@ -156,8 +156,8 @@
 			<file from="root/adm/findrank.php" to="adm/findrank.php"/>
 			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
-			<file from="root/images_upl/*.*" to="images/*.*"/>
-			<file from="root/images/race_images/*.*" to="images/race_images/*.*" />
+			<file from="root/images/*.*" to="images/*.*"/>
+			<file from="root/olddkpupdate/*.*" to="olddkpupdate/*.*"/>			
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
 			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>

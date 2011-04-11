@@ -133,6 +133,7 @@
 			<file from="root/roster.php" to="roster.php"/>					
 			<file from="root/configdkp.php" to="configdkp.php"/>
 			<file from="root/adm/dkp/acp_editraid.html" to="adm/dkp/acp_editraid.html"/>
+			<file from="root/olddkpupdate/*.*" to="olddkpupdate/*.*"/>			
 			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>
 			<file from="root/includes/acp/acp_dkp.php" to="includes/acp/acp_dkp.php"/>				
 			<file from="root/includes/acp/acp_dkp_mm.php" to="includes/acp/acp_dkp_mm.php"/>
