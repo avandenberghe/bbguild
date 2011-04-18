@@ -216,6 +216,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/includes/bbdkp/portal/*.*" to="includes/bbdkp/portal/*.*"/>
 			<file from="root/install/*.*" to="install/*.*"/>
+			<file from="root/olddkpupdate/*.*" to="olddkpupdate/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
 			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
 			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>

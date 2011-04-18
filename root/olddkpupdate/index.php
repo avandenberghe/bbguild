@@ -41,7 +41,7 @@ if (!file_exists($phpbb_root_path . 'olddkpupdate/index.' . $phpEx))
 }
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.2.2 Update';
+$mod_name = 'bbDKP 1.2.2';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -95,31 +95,31 @@ $game = request_var('game', '');
 switch ($game)
 {
 		case 'aion':
-			include($phpbb_root_path .'install/gamesupd/update_aion.' . $phpEx);
+			include($phpbb_root_path .'olddkpupdate/gamesupd/update_aion.' . $phpEx);
 			break;
     	case 'daoc':
-			include($phpbb_root_path .'install/gamesupd/update_daoc.' . $phpEx);
+			include($phpbb_root_path .'olddkpupdate/gamesupd/update_daoc.' . $phpEx);
 			break; 
 		case 'eq':
-			include($phpbb_root_path .'install/gamesupd/update_eq.' . $phpEx);
+			include($phpbb_root_path .'olddkpupdate/gamesupd/update_eq.' . $phpEx);
 			break; 
 		case 'eq2':
-			include($phpbb_root_path .'install/gamesupd/update_eq2.' . $phpEx);
+			include($phpbb_root_path .'olddkpupdate/gamesupd/update_eq2.' . $phpEx);
 			break; 
 		case 'FFXI':
-			include($phpbb_root_path .'install/gamesupd/update_ffxi.' . $phpEx);
+			include($phpbb_root_path .'olddkpupdate/gamesupd/update_ffxi.' . $phpEx);
 			break; 
 		case 'lotro':
-			include($phpbb_root_path .'install/gamesupd/update_lotro.' . $phpEx);
+			include($phpbb_root_path .'olddkpupdate/gamesupd/update_lotro.' . $phpEx);
 			break;
 		case 'vanguard':
-			include($phpbb_root_path .'install/gamesupd/update_vanguard.' . $phpEx);
+			include($phpbb_root_path .'olddkpupdate/gamesupd/update_vanguard.' . $phpEx);
 			break; 
 		case 'warhammer':
-			include($phpbb_root_path .'install/gamesupd/update_warhammer.' . $phpEx);
+			include($phpbb_root_path .'olddkpupdate/gamesupd/update_warhammer.' . $phpEx);
 			break; 
 		case 'wow':				    
-			include($phpbb_root_path .'install/gamesupd/update_wow.' . $phpEx);
+			include($phpbb_root_path .'olddkpupdate/gamesupd/update_wow.' . $phpEx);
 			break;
 		default :
 			break; 
