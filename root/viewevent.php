@@ -41,27 +41,28 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
      *  get event info 
      *  
      **/  
-    $sql = 'SELECT event_dkpid, event_id, event_name, event_value
+    $sql = 'SELECT event_dkpid, event_id, event_name, event_value, event_imagename   
 	        FROM ' . EVENTS_TABLE . ' where event_id = ' . $eventid;
 	$result = $db->sql_query($sql);
 	while ( $row = $db->sql_fetchrow($result))
 	{
 		$eventname =  $row['event_name'];
 		$template->assign_vars(array(
-        	'EVENTNAME' => $row['event_name'],
-        	'VALUE' 	=> $row['event_value'], 
+        	'EVENTNAME' 	 => $row['event_name'],
+        	'VALUE' 		 => $row['event_value'], 
+			'IMAGEPATH' 			=> $phpbb_root_path . "images/event_images/" . $row['event_imagename'] . ".png", 
+            'S_EVENT_IMAGE_EXISTS' 	=> (strlen($row['event_imagename']) > 1) ? true : false, 
 			'RECORDED_RAID_HISTORY' => sprintf($user->lang['RECORDED_RAID_HISTORY'], $eventname),
 	    ));
 
 	}
 	$db->sql_freeresult($result);
-    
+  
     /***
      *  
      *  list the raids 
      *  
      **/  
-	
    $sort_order = array(
         0 => array('raid_start desc', 'raid_start'),
         1 => array('raid_note', 'raid_note desc'),

@@ -31,7 +31,7 @@ if (! defined ( "EMED_BBDKP" ))
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
-if ( !isset($_GET[URI_RAID])  )
+if ( !isset($_GET[URI_RAID]) )
 {
 	trigger_error ($user->lang['MNOTFOUND']);
 }
@@ -65,7 +65,7 @@ foreach($navlinks_array as $name)
 
 /*** get general raid info  ***/
 $sql_array = array (
-	'SELECT' => ' d.dkpsys_name, e.event_dkpid, e.event_id, e.event_name, e.event_value, 
+	'SELECT' => ' d.dkpsys_name, e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_imagename, 
 				  r.raid_id, r.raid_start, r.raid_end, r.raid_note, 
 				  r.raid_added_by, r.raid_updated_by ', 
 	'FROM' => array (
@@ -86,6 +86,7 @@ while ( $row = $db->sql_fetchrow ( $result ) )
 		'event_id' 			=> $row['event_id'], 
 		'event_name' 		=> $row['event_name'], 
 		'event_value' 		=> $row['event_value'],
+		'event_imagename' 	=> $row['event_imagename'],
 		'raid_start' 		=> $row['raid_start'],
 		'raid_end' 			=> $row['raid_end'], 
 		'raid_note' 		=> $row['raid_note'], 
@@ -132,6 +133,8 @@ $template->assign_vars(array(
 	'RAID_ADDED_BY'		  => sprintf($user->lang['ADDED_BY'], 	(!empty($raid['raid_added_by']) ) ? $raid['raid_added_by'] : 'N/A'),
 	'RAID_UPDATED_BY'	  => ($raid['raid_updated_by'] != ' ') ? sprintf ( $user->lang ['UPDATED_BY'], $raid['raid_updated_by']) : ' ',  
 	'RAID_NOTE'			  => ( !empty($raid['raid_note']) ) ? $raid['raid_note'] : '&nbsp;',
+	'IMAGEPATH' 			=> $phpbb_root_path . "images/event_images/" . $raid['event_imagename'] . ".png", 
+    'S_EVENT_IMAGE_EXISTS' 	=> (strlen($raid['event_imagename']) > 1) ? true : false, 
 	'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 	'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
 	'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
