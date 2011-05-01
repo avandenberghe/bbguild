@@ -174,39 +174,32 @@ function install_wow()
 function install_wow2()
 {
 	global $db, $table_prefix;
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_naxx' where event_name like 'Naxx%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='os' where event_name like 'Obsidian%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_os' where event_name like 'Obsidian%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='voa' where event_name like '%Archavon%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_voa' where event_name like '%Archavon%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='eoe' where event_name like '%Eternity%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_eoe' where event_name like '%Eternity%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='uld' where event_name like 'Ulduar%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_uld' where event_name like 'Ulduar%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='toc' where event_name like 'Trial%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_toc' where event_name like 'Trial%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_icc' where event_name like 'Icecrown%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_rub' where event_name like 'Ruby%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_ony' where event_name like 'Onyxia%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_bot' where event_name like 'Bastion%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_bwd' where event_name like 'Black%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_bar' where event_name like '%Barad%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_tfr' where event_name like 'Throne%' ";  
 	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
-	$db->sql_query($sql);
-	
-	
-	
 	
 }
 ?>
