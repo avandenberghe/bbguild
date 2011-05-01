@@ -76,6 +76,7 @@ $lang = array_merge($lang, array(
 'MENU_VIEWITEM' => 'View Item',
 'MENU_VIEWRAID' => 'View Raid',
 'MENU_VIEWEVENT' => 'View Event',
+'MENU_PLANNER' => 'Planner',
 
 //links
 'MENU_LINKS' => 'Weblinks',

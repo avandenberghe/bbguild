@@ -169,4 +169,44 @@ function install_wow()
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 }
+
+
+function install_wow2()
+{
+	global $db, $table_prefix;
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='os' where event_name like 'Obsidian%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='voa' where event_name like '%Archavon%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='eoe' where event_name like '%Eternity%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='uld' where event_name like 'Ulduar%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='toc' where event_name like 'Trial%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$db->sql_query($sql);
+	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='naxx' where event_name like 'Naxx%' ";  
+	$db->sql_query($sql);
+	
+	
+	
+	
+}
 ?>

@@ -189,6 +189,7 @@ $lang = array_merge($lang, array(
 'UMIL_RENAMETABLESNEW' => 'Renaming of tables from custom ‘bbeqdkp_‘ prefix to ‘phpbb_‘ prefix', 
 'UMIL_RENAMETABLESOLD' => 'Renaming of tables from ‘phpbb_‘ prefix TO custom ‘bbeqdkp_‘ prefix ', 
 'UMIL_UPDATE120' => 'Updated tables 1.1.2.2 to 1.2', 
+'UMIL_122MINIMUM' => 'Old version. 1.2.2 is required for updating to 1.2.3', 
 
 // ACP titles
 'BBDKP_WELCOME' => 'Welcome to bbDKP',
@@ -474,6 +475,7 @@ $lang = array_merge($lang, array(
 'ERROR_RANKMEMBERS'	=> 'Cannot delete this rank. There are still members with this rank. ', 
 'ERROR_NOSELECT'	=> 'Please select a From and a To-member.',
 'ERROR_NOADJUSTMENTS'	=> 'There are no Adjustments in the database.',
+'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',
 
 // Submission Success Messages
 'ADMIN_ADD_ADJ_SUCCESS' => 'A %s adjustment of %.2f has been added to the database for your guild.',
@@ -535,6 +537,7 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_RACE_SUCCESS' => 'The race %s was updated successfully. ',
 'ADMIN_UPDATE_LOOTSYS_SUCCESS' => 'The Loot system is now set to %s . ',
 'ADMIN_RAID_ATTENDEE_DELETED_SUCCESS' => 'Attendee %s was deleted from raid %s',
+
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Active Point Adjustment',
@@ -801,7 +804,7 @@ So the loot would go to player 2 <br />',
 'EVENT_COLOR' => 'Event color', 
 'EVENT_COLOR_EXPLAIN' => 'Planner events will show with this color in the Planner.',
 'EVENT_IMAGE' => 'Event Image',
-'EVENT_IMAGE_EXPLAIN' => 'This image will show in the Planner for this Event.',
+'EVENT_IMAGE_EXPLAIN' => 'event imagename, without extension. png file should exist in /images/event_images',
 'GAMEITEMID_EXPLAIN' => 'Game Item id (WoW)', 
 'STATUS' => 'Status', 
 'FACTION_NAME' => 'Faction Name',
@@ -832,7 +835,7 @@ So the loot would go to player 2 <br />',
 'LOOTUPD' => 'Updating items to %s Raid on %s',
 'OVERRIDE' => 'Override', 
 'RACE_IMAGE' => 'Race imagename small',
-'RACE_IMAGE_EXPLAIN' => 'color png imagename, without extension. file should exist in /images/race_images',
+'RACE_IMAGE_EXPLAIN' => 'race imagename, without extension. png file should exist in /images/race_images',
 'RESULTS' => '%d Results (%s)',
 'SEARCH' => 'Search',
 'SEARCH_MEMBERS' => 'Search Members', 

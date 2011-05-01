@@ -393,6 +393,9 @@ class acp_dkp_event extends bbDKP_Admin
 						'EVENT_COLOR'		=> isset($this->event['event_color']) ? (($this->event['event_color'] == '') ? '#123456' : $this->event['event_color']) : '#123456',
 						'EVENT_IMAGENAME'	=> isset($this->event['event_imagename']) ? $this->event['event_imagename']: '' ,
 					 
+						'IMAGEPATH' 			=> $phpbb_root_path . "images/event_images/" . $this->event['event_imagename'] . ".png", 
+                    	'S_EVENT_IMAGE_EXISTS' 	=> (strlen($this->event['event_imagename']) > 1) ? true : false, 
+				
 						// Language
 						'L_DKP_VALUE'		=> sprintf($user->lang['DKP_VALUE'], $config['bbdkp_dkp_name']),
 					 
@@ -455,6 +458,9 @@ class acp_dkp_event extends bbDKP_Admin
 						'U_VIEW_EVENT' =>append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=addevent&amp;" . URI_EVENT ."={$event['event_id']}"),
 						'DKPSYS_EVENT' => $event['dkpsys_name'],
 						'COLOR' => $event['event_color'],
+						'IMAGEPATH' 	=> $phpbb_root_path . "images/event_images/" . $event['event_imagename'] . ".png", 
+                    	'S_EVENT_IMAGE_EXISTS' => (strlen($event['event_imagename']) > 1) ? true : false, 
+					
 						'IMAGENAME' => $event['event_imagename'],
 						'NAME' => $event['event_name'],
 						'VALUE' => $event['event_value'])

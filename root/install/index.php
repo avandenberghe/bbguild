@@ -47,7 +47,7 @@ if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
 check_oldbbdkp();
 
 // The name of the mod to be displayed during installation.
-$mod_name = 'bbDKP 1.2.2';
+$mod_name = 'bbDKP 1.2.3';
 
 /*
 * The name of the config variable which will hold the currently installed version
@@ -714,12 +714,22 @@ $versions = array(
 			),
 				
 
-          ),        
+          ),
             
         'custom' => array( 
             'gameinstall',
             'acplink', 
        ), 
+    ),
+    
+    '1.2.3' => array(
+    
+		// small update in events table    
+        'custom' => array( 
+            'gameinstall',
+       ),     	
+    
+    
     ),
     
 		
@@ -854,48 +864,63 @@ function gameinstall($action, $version)
 	{
 		case 'install' :
 		case 'update' :
-			switch ($game)
+			switch ($version)
 			{
-				case 'aion':
-					install_aion();
-					return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
+				case '1.2.2':
+					switch ($game)
+					{
+						case 'aion':
+							install_aion();
+							return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
+							break;
+						case 'daoc':
+							install_daoc();
+				     		return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
+							break;
+						case 'eq':
+							install_eq();
+				     		return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
+							break;
+						case 'eq2':
+							install_eq2();
+				     		return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
+							break;
+						case 'FFXI':
+							install_ffxi();
+				     		return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
+							break;
+						case 'lotro':
+							install_lotro();
+				     		return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
+							break;
+						case 'vanguard':
+							install_vanguard();
+				     		return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
+							break;
+						case 'wow':
+							install_wow();
+							return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
+							break;
+						case 'warhammer':
+							install_warhammer();
+							return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
+							break;
+						default :
+							break;
+					}
 					break;
-				case 'daoc':
-					install_daoc();
-		     		return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
-					break;
-				case 'eq':
-					install_eq();
-		     		return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
-					break;
-				case 'eq2':
-					install_eq2();
-		     		return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
-					break;
-				case 'FFXI':
-					install_ffxi();
-		     		return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
-					break;
-				case 'lotro':
-					install_lotro();
-		     		return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
-					break;
-				case 'vanguard':
-					install_vanguard();
-		     		return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
-					break;
-				case 'wow':
-					install_wow();
-					return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
-					break;
-				case 'warhammer':
-					install_warhammer();
-					return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
-					break;
-				default :
-					break;
+				case '1.2.3':
+					switch ($game)
+					{
+						case 'wow':
+							install_wow2();
+							return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
+							break;
+					}
+					break; 
 			}
 			break;
+		
 	}
 					
 }
@@ -916,7 +941,8 @@ function check_oldbbdkp()
 		if(version_compare($config['bbdkp_version'], '1.2.2') == -1 )
 		{
 			//stop here, the version is less than 1.2.2
-			redirect(append_sid($phpbb_root_path . '/olddkpupdate/index.'. $phpEx)); 
+			//redirect(append_sid($phpbb_root_path . '/olddkpupdate/index.'. $phpEx));
+			trigger_error( $user->lang['ERROR_MINIMUM122'], E_USER_WARNING);  
 			
 		}
 		

@@ -78,8 +78,11 @@ function check_form()
 		</dd>
 	</dl>
 	<dl>
-		<dt><label for="event_name">{L_EVENT_IMAGE}:</label><br/>{L_EVENT_IMAGE_EXPLAIN}</dt>
-		<dd><input class="medium" type="text" id="event_image" name="event_image" value="{EVENT_IMAGE}" /></dd>
+		<dt><label for="event_image">{L_EVENT_IMAGE}:</label><br/>{L_EVENT_IMAGE_EXPLAIN}</dt>
+		<dd><input class="medium" type="text" id="event_image" name="event_image" value="{EVENT_IMAGENAME}" />
+		<!-- IF S_EVENT_IMAGE_EXISTS -->   <img src="{IMAGEPATH}" alt="{EVENT_NAME}" />  <!-- ENDIF -->
+		
+		</dd>
 	</dl>
 	<dl>
 		<dt><label for="event_value">{L_EVENT_VALUE}:</label><br/>{L_EVENT_VALUE_EXPLAIN}</dt>

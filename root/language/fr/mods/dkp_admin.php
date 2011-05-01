@@ -272,6 +272,7 @@ $lang = array_merge($lang, array(
 	'UMIL_OLD_UNINSTALL_SUCCESS'	=> 'bbdkp (%s) Désinstallé. ',
 	'UMIL_109_ILLEGALVERSION'	=> 'trouvé 1.0.9 beta, vous devez vous mettre à jour à 1.0.9rc1 et depuis 1.09rc1 vous pourrez monter à la version 1.1.2',
 	'UMIL_UPDATE120' => 'tables actualisés de 1.1.2.2 à 1.2', 
+	'UMIL_122MINIMUM' => 'Old version. 1.2.2 is required for updating to 1.2.3', 
 	'UMIL_RENAMETABLESNEW' => 'Tables renommés de prefixe bbeqdkp_ à phpbb_',
 	'UMIL_RENAMETABLESOLD' => 'Tables renommés de prefixe phpbb_ à bbeqdkp_ ',
 	'BBDKP_WELCOME'	=> 'Bienvenue sur bbDKP',
