@@ -6,13 +6,13 @@
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
     <td style=" text-align:left; white-space: nowrap;">
-     <h1 style ="color:#dfc065;">{EVENTNAME}</h1>
+      <h1 style ="color:#dfc065;"><!-- IF S_EVENT_IMAGE_EXISTS --><img src="{IMAGEPATH}" alt="{EVENTNAME}" /><!-- ENDIF --> {EVENTNAME}</h1>
     </td>
   </tr>
 </table>
 <span class="corners-bottom"><span></span></span>
 </div>
-<!-- IF S_EVENT_IMAGE_EXISTS --><img src="{IMAGEPATH}" alt="{EVENTNAME}" /><!-- ENDIF -->
+
 
 <h3 style ="color:#dfc065;">{RECORDED_RAID_HISTORY}</h3>
 <div class="panel">
