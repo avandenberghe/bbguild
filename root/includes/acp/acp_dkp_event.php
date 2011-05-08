@@ -393,8 +393,8 @@ class acp_dkp_event extends bbDKP_Admin
 						'EVENT_COLOR'		=> isset($this->event['event_color']) ? (($this->event['event_color'] == '') ? '#123456' : $this->event['event_color']) : '#123456',
 						'EVENT_IMAGENAME'	=> isset($this->event['event_imagename']) ? $this->event['event_imagename']: '' ,
 					 
-						'IMAGEPATH' 			=> $phpbb_root_path . "images/event_images/" . $this->event['event_imagename'] . ".png", 
-                    	'S_EVENT_IMAGE_EXISTS' 	=> (strlen($this->event['event_imagename']) > 1) ? true : false, 
+						'IMAGEPATH' 			=> isset($this->event['event_imagename']) ?  $phpbb_root_path . "images/event_images/" . $this->event['event_imagename'] . ".png" : '' ,   
+                    	'S_EVENT_IMAGE_EXISTS' 	=> isset($this->event['event_imagename']) ? ((strlen($this->event['event_imagename']) > 1) ? true : false) : false ,       
 				
 						// Language
 						'L_DKP_VALUE'		=> sprintf($user->lang['DKP_VALUE'], $config['bbdkp_dkp_name']),
