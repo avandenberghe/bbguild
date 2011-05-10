@@ -66,8 +66,19 @@ $language_file = 'mods/dkp_admin';
 $options = array(
 		'guildtag'	=> array('lang' => 'UMIL_GUILD', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
         'realm'	    => array('lang' => 'REALM_NAME', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
-		'region'   => array('lang' => 'REGION', 'type' => 'checkbox', 'function' => 'regionoptions', 'explain' => true),
-	    'game'     => array('lang' => 'UMIL_CHOOSE', 'type' => 'select', 'function' => 'gameoptions', 'explain' => true),
+		'region'   => array('lang' => 'REGION', 'type' => 'select', 'function' => 'regionoptions', 'explain' => true),
+
+		'aion'   => array('lang' => 'AION', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+		'daoc'   => array('lang' => 'DAOC', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+		'eq'   => array('lang' => 'EVERQUEST', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+		'eq2'   => array('lang' => 'EVERQUEST2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+		'FFXI'   => array('lang' => 'FFXI', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+		'lotro'   => array('lang' => 'LOTRO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+		'rift'   => array('lang' => 'RIFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+		'vanguard'   => array('lang' => 'VANGUARD', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+		'warhammer'   => array('lang' => 'WARHAMMER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+		'wow'     => array('lang' => 'WOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+
 );
 
 /*
@@ -85,46 +96,18 @@ $logo_img = 'install/logo.png';
 * The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
 */
 
-// include required sub installers
-$game = request_var('game', '');
-switch ($game)
-{
-		case 'aion':
-			include($phpbb_root_path .'install/gamesinstall/install_aion.' . $phpEx);
-			break;
-    	case 'daoc':
-			include($phpbb_root_path .'install/gamesinstall/install_daoc.' . $phpEx);
-			break; 
-		case 'eq':
-			include($phpbb_root_path .'install/gamesinstall/install_eq.' . $phpEx);
-			break; 
-		case 'eq2':
-			include($phpbb_root_path .'install/gamesinstall/install_eq2.' . $phpEx);
-			break; 
-		case 'FFXI':
-			include($phpbb_root_path .'install/gamesinstall/install_ffxi.' . $phpEx);
-			break; 
-		case 'lotro':
-			include($phpbb_root_path .'install/gamesinstall/install_lotro.' . $phpEx);
-			break;
-		case 'vanguard':
-			include($phpbb_root_path .'install/gamesinstall/install_vanguard.' . $phpEx);
-			break; 
-		case 'warhammer':
-			include($phpbb_root_path .'install/gamesinstall/install_warhammer.' . $phpEx);
-			break; 
-		case 'wow':				    
-			include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
-			break;
-		case 'rift':				    
-			include($phpbb_root_path .'install/gamesinstall/install_rift.' . $phpEx);
-			break;
-		default :
-			break; 
-}
+include($phpbb_root_path .'install/gamesinstall/install_aion.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_daoc.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_eq.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_eq2.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_ffxi.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_lotro.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_vanguard.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_warhammer.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_rift.' . $phpEx);
 
 $versions = array(
-
     '1.2.2'    => array(
     	// bbdkp tables (this uses the layout from develop/create_schema_files.php and from phpbb_db_tools)
         'table_add' => array(
@@ -428,7 +411,6 @@ $versions = array(
                       'region' => (isset($_POST['region']) ? request_var('region', ' ') : 'EU'), 
                   	  'roster' => 1 ),
                   )
-              
            ),
 			
 		 array($table_prefix . 'bbdkp_member_ranks', 
@@ -464,8 +446,6 @@ $versions = array(
 					'rank_prefix'	=> '',
 					'rank_suffix'	=> '',
 				 ),
-				 
-				 				 
 				)
 			), 
 			
@@ -720,22 +700,39 @@ $versions = array(
           ),
             
         'custom' => array( 
-            'gameinstall',
             'acplink', 
        ), 
     ),
     
     '1.2.3' => array(
     
-		// small update in events table    
-        'custom' => array( 
+	'table_add' => array(
+	        
+		array($table_prefix . 'bbdkp_games', array(
+			'COLUMNS'		=> array(
+	              'game_id'		=> array('VCHAR', ''),
+	              'installed'	=> array('BOOL', 0),	  		  		  
+	                ),
+	                'PRIMARY_KEY'    => 'game_id',
+	            ),
+		)), 
+	
+		'table_column_add' => array(
+			array($table_prefix . 'bbdkp_classes', 'game_id' , array('VCHAR', '')),
+			array($table_prefix . 'bbdkp_races', 'game_id' , array('VCHAR', '')),
+			array($table_prefix . 'bbdkp_factions', 'game_id' , array('VCHAR', '')),
+			array($table_prefix . 'bbdkp_language', 'game_id' , array('VCHAR', '')),
+		),
+            
+        /*
+         * 'custom' => array( 
             'gameinstall',
-       ),     	
-    
-    
-    ),
-    
+      )
+      	*/
+      
 		
+		),
+      
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
@@ -775,39 +772,6 @@ function acplink($action, $version)
 			return array('command' => 'UMIL_REMOVE_DKPLINK', 'result' => 'SUCCESS');
 		  break; 		  
 	}
-}
-
-/****************************
- *  
- * global function for rendering pulldown menu
- * 
- */
-function gameoptions($selected_value, $key)
-{
-	global $user;
-
-    /* game pulldown menu rendering */
-    $gametypes = array(
-        'aion'			=> "Aion: Tower of Eternity",
-    	'daoc'     		=> "Dark Age of Camelot",
-    	'eq'     		=> "EverQuest",
-    	'eq2'     		=> "EverQuest II",
-    	'FFXI'     		=> "Final Fantasy XI",
-    	'lotro'     	=> "The Lord of the Rings Online",
-    	'vanguard'		=> "Vanguard - Saga of Heroes",
-    	'warhammer'     => "Warhammer Online", 
-    	'wow'     		=> "World of Warcraft", 
-    	'rift'     		=> "Rift",     	 
-    );
-    $default = 'wow'; 
-	$pass_char_options = '';
-	foreach ($gametypes as $key => $game)
-	{
-		$selected = ($selected_value == $default) ? ' selected="selected"' : '';
-		$pass_char_options .= '<option value="' . $key . '"' . $selected . '>' . $game . '</option>';
-	}
-
-	return $pass_char_options;
 }
 
 /**************************************
