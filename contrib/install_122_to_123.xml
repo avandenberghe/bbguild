@@ -6,15 +6,15 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.2.1 to 1.2.2]]></title>
-<description lang="en"><![CDATA[Update script 1.2.1 to 1.2.2]]></description>
-<description lang="fr"><![CDATA[mise à jour 1.2.1 vers 1.2.2]]></description>
-<description lang="de"><![CDATA[Aktualisierung 1.2.1 bis 1.2.2]]></description>
-<author-notes lang="en"><![CDATA[Please read docs\INSTALL.html before beginning ]]>
+		<title lang="en"><![CDATA[bbDKP 1.2.2 to 1.2.3]]></title>
+<description lang="en"><![CDATA[Update script 1.2.3 to 1.2.3]]></description>
+<description lang="fr"><![CDATA[mise à jour 1.2.2 vers 1.2.3]]></description>
+<description lang="de"><![CDATA[Aktualisierung 1.2.2 bis 1.2.3]]></description>
+<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.2! Please read docs\INSTALL.html before beginning ]]>
 </author-notes>
-<author-notes lang="fr"><![CDATA[Veuillez lire docs\INSTALL.html avant de commencer. ]]>
+<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.2! Veuillez lire docs\INSTALL.html avant de commencer. ]]>
 </author-notes>
-<author-notes lang="de"><![CDATA[Bitte lesen sie docs\INSTALL.html bevor. ]]>
+<author-notes lang="de"><![CDATA[benötigt bbdkp 1.2.2! Bitte lesen sie docs\INSTALL.html bevor. ]]>
 </author-notes>
 <author-group>
 			<author>
@@ -85,7 +85,7 @@
 			</author>
 		</author-group>
 		
-		<mod-version>1.2.2</mod-version>
+		<mod-version>1.2.3</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>600</time>
@@ -93,9 +93,9 @@
 		</installation>
 		
 		<link-group>
-			<link type="template" href="install_121_to_122_subsilver2.xml" lang="en">subsilver2 Update</link>
-			<link type="template" href="install_121_to_122_subsilver2.xml" lang="fr">Mise à jour Subsilver2</link>
-			<link type="template" href="install_121_to_122_subsilver2.xml" lang="de">Aktualisierung Subsilver2</link>
+			<link type="template" href="install_122_to_123_subsilver2.xml" lang="en">subsilver2 Update</link>
+			<link type="template" href="install_122_to_123_subsilver2.xml" lang="fr">Mise à jour Subsilver2</link>
+			<link type="template" href="install_122_to_123_subsilver2.xml" lang="de">Aktualisierung Subsilver2</link>
 			
 			<link type="parent" lang="de" href="../install.xml">Frisch-Installations-Anleitung</link>
 			<link type="parent" lang="en" href="../install.xml">Clean-Installation Manual</link>
@@ -166,7 +166,7 @@ if(@defined("EMED_BBDKP"))
 What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
-1) Run bbDKP 1.2.2 database update : install/index.php 
+1) Run bbDKP 1.2.3 database update : install/index.php 
 2) delete the install folder. 
 		Enjoy ;)]]></diy-instructions>
 <diy-instructions lang="fr"><![CDATA[le guide de mise à jour : /docs/install.html

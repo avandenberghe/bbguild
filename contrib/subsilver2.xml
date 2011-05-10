@@ -8,7 +8,7 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
   <header>
     <license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-    <title lang="en">bbDkp 1.2.2 - subsilver2 style</title>
+    <title lang="en">bbDkp 1.2.3 - subsilver2 style</title>
     <description lang="en">
     <![CDATA[subsilver2]]>
 </description>
@@ -76,7 +76,7 @@
 	</author>	
     </author-group>
 
-<mod-version>1.2.2</mod-version>
+<mod-version>1.2.3</mod-version>
 
 <installation>
       <level>easy</level>

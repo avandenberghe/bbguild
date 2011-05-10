@@ -66,7 +66,7 @@ $language_file = 'mods/dkp_admin';
 $options = array(
 		'guildtag'	=> array('lang' => 'UMIL_GUILD', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
         'realm'	    => array('lang' => 'REALM_NAME', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
-		'region'   => array('lang' => 'REGION', 'type' => 'select', 'function' => 'regionoptions', 'explain' => true),
+		'region'   => array('lang' => 'REGION', 'type' => 'checkbox', 'function' => 'regionoptions', 'explain' => true),
 	    'game'     => array('lang' => 'UMIL_CHOOSE', 'type' => 'select', 'function' => 'gameoptions', 'explain' => true),
 );
 
@@ -115,6 +115,9 @@ switch ($game)
 			break; 
 		case 'wow':				    
 			include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
+			break;
+		case 'rift':				    
+			include($phpbb_root_path .'install/gamesinstall/install_rift.' . $phpEx);
 			break;
 		default :
 			break; 
@@ -794,7 +797,7 @@ function gameoptions($selected_value, $key)
     	'vanguard'		=> "Vanguard - Saga of Heroes",
     	'warhammer'     => "Warhammer Online", 
     	'wow'     		=> "World of Warcraft", 
-    	 
+    	'rift'     		=> "Rift",     	 
     );
     $default = 'wow'; 
 	$pass_char_options = '';
@@ -915,6 +918,14 @@ function gameinstall($action, $version)
 						case 'wow':
 							install_wow2();
 							return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
+							break;
+						case 'aion':
+							install_wow2();
+							return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
+							break;
+						case 'rift':
+							install_wow2();
+							return array('command' => 'UMIL_INSERT_RIFTDATA', 'result' => 'SUCCESS');
 							break;
 					}
 					break; 

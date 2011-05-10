@@ -13,7 +13,7 @@
 		<description lang="en"><![CDATA[bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
 It integrates these Game, Guild and DKP management facilites into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, ACP and UCP modules.
-The framework supports multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION. 
+The framework supports multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION and Rift
 There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Bossprogress, Raidplanner (under development)
 
 Further development requests, support questions are welcome at http://www.bbdkp.com. As of the current release, it does not (yet) make coffee ;)
@@ -32,7 +32,7 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<description lang="fr"><![CDATA[bbDKP est une système DKP pour votre forum PHPBB3, developpee depuis EQDKP. Il est multi-pool, supporte le systeme DKP Standard, points par temps passé, Somme Zéro et EPGP.  Il aide les guildes à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer et World of Warcraft. 
+<description lang="fr"><![CDATA[bbDKP est une système DKP pour votre forum PHPBB3, developpee depuis EQDKP. Il est multi-pool, supporte le systeme DKP Standard, points par temps passé, Somme Zéro et EPGP.  Il aide les guildes à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft et Rift.  
 Liste non exhaustive des fonctionnalités : Multiples groupes DKP et guildes, Tribune des points DKP, Raids, Evènements, Valeurs des Objets, Historique des Objets, Statistique des Raids, Page d’avancée des Boss, Armurerie, module PCA avec Backup, Import de EQDKP+. 
 Les Plugins : Importation depuis l’armurerie de Blizzard et Aion, bbTips (Wow), Raidtracker (wow), Bossprogress, Formulaire de Recrutement, Planner (en developpement)
 Pour de plus amples détails, veuillez consulter le changelog. Demandes de développement, questions de support sont les bienvenues à http://www.bbdkp.com. 
@@ -51,7 +51,7 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<description lang="de"><![CDATA[bbDKP ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Est ein multi-pool DKP System, und bietet Standard DKP, Zeitpunkteverwaltung, Nullpunkteverwaltung, und EPGP. Es ermöglicht die Gildenmitgliederverwaltung, die Raidteilnahme in Raids, die Verwaltung der Gegenstandsankäufe, verwaltung von DKP Konten, und GildenStatistiken. Sie erreichen damit ein einziges Angriffspunkt zum DKP und zum forum, mit eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP unterstützt jetzt Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer und World of Warcraft. 
+<description lang="de"><![CDATA[bbDKP ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Est ein multi-pool DKP System, und bietet Standard DKP, Zeitpunkteverwaltung, Nullpunkteverwaltung, und EPGP. Es ermöglicht die Gildenmitgliederverwaltung, die Raidteilnahme in Raids, die Verwaltung der Gegenstandsankäufe, verwaltung von DKP Konten, und GildenStatistiken. Sie erreichen damit ein einziges Angriffspunkt zum DKP und zum forum, mit eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP unterstützt jetzt Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft und Rift. 
 Nicht vollständige Funktionalitätenliste : Support für Vielfache DKP Gruppen (Pools), Vielfache Gilden, Ein Übersicht der DKP Punkte pro Spieler, Raidsliste, Ereignisliste, Gegenstandswerte, Historiken, Raidstatistiken, Gildenarsenalseite, ACP Modulen, Backupfunktionen, Import von EQDKP und EQDKP+. 
 Vorhandene Plugins : Importation von Mitglieder von das Blizzard oder Aion Arsenal, Bossvorgang, bbTips (tooltips), Raidtracker (wow), Rekrutierungsformular.  
 Für weitere Entwicklungsanfragen und Support heissen wir Sie wilkommen auf unsere internetseite http://www.bbdkp.com. 
@@ -157,7 +157,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2.2</mod-version>
+		<mod-version>1.2.3</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
@@ -176,17 +176,9 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
 			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>	
 			
-			<link type="contrib" lang="en" href="contrib/install_1122_to_122.xml">Update from v1.1.2.2 to v1.2.2</link>
-			<link type="contrib" lang="fr" href="contrib/install_1122_to_122.xml">Mise à jour de v1.1.2.2 à v1.2.2</link>
-			<link type="contrib" lang="de" href="contrib/install_1122_to_122.xml">Aktualisierung von v1.1.2.2 bis v1.2.2</link>
-
-			<link type="contrib" lang="en" href="contrib/install_12_to_122.xml">Update from v1.2 to v1.2.2</link>
-			<link type="contrib" lang="fr" href="contrib/install_12_to_122.xml">Mise à jour de v1.2 à v1.2.2</link>
-			<link type="contrib" lang="de" href="contrib/install_12_to_122.xml">Aktualisierung von v1.2 bis v1.2.2</link>
-			
-			<link type="contrib" lang="en" href="contrib/install_121_to_122.xml">Update from v1.2.1 to v1.2.2</link>
-			<link type="contrib" lang="fr" href="contrib/install_121_to_122.xml">Mise à jour de v1.2.1 à v1.2.2</link>
-			<link type="contrib" lang="de" href="contrib/install_121_to_122.xml">Aktualisierung von v1.2.1 bis v1.2.2</link>
+			<link type="contrib" lang="en" href="contrib/install_122_to_123.xml">Update from v1.2.2 to v1.2.3</link>
+			<link type="contrib" lang="fr" href="contrib/install_122_to_123.xml">Mise à jour de v1.2.2 à v1.2.3</link>
+			<link type="contrib" lang="de" href="contrib/install_122_to_123.xml">Aktualisierung von v1.2.2 bis v1.2.3</link>
 						
 			</link-group>
 	</header>
@@ -216,7 +208,6 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/includes/bbdkp/portal/*.*" to="includes/bbdkp/portal/*.*"/>
 			<file from="root/install/*.*" to="install/*.*"/>
-			<file from="root/olddkpupdate/*.*" to="olddkpupdate/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
 			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
 			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>
@@ -366,7 +357,7 @@ What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
 
-1) Run bbDKP 1.2.2 database installation : install/index.php 
+1) Run bbDKP 1.2.3 database installation : install/index.php 
 2) Rename the install folder. 
 
 Note : Should you need to deactivate bbDKP you can open configdkp.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
@@ -377,7 +368,7 @@ Liste des changements : /docs/changelog.html
 
 Résumé des étapes de post-installation
 
-1) lance l’installateur ou m.a.j 1.2.2  : install/index.php
+1) lance l’installateur ou m.a.j 1.2.3  : install/index.php
 2) Renomme ou supprime le repertoire /install pour réactiver le forum.
 
 Note : Il est possible de désactiver le MOD en ouvrant configdkp.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
@@ -386,7 +377,7 @@ Success ;)	]]></diy-instructions>
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) 1.2.2 Datenbank Installation order aktualisierung : install/index.php 
+1) 1.2.3 Datenbank Installation order aktualisierung : install/index.php 
 2) lösche oder umbenenne das Installations-Verzeichnis „install" 
 
 Notiz : Sie können bbDKP deaktivieren indem sie configdkp.php öffnen und @define('EMED_BBDKP', true); ändern nach  //@define('EMED_BBDKP', true);  

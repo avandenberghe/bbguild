@@ -6,9 +6,9 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
   <header>
     <license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-    <title lang="en">bbDKP 1.2.2 - subsilver2 style updater</title>
-    <title lang="fr">mise à jour style subsilver2</title>
-    <title lang="de">Aktualisierung bbDKP 1.2.2 - subsilver2 style</title>
+    <title lang="en">bbDkp 1.2.3 - subsilver2 style updater</title>
+    <title lang="fr">mise à jour style subsilver2 à 1.2.3</title>
+    <title lang="de">Aktualisierung bbDkp 1.2.3 - subsilver2 style</title>
     <description lang="en"><![CDATA[subsilver2]]></description>
     <description lang="fr"><![CDATA[subsilver2]]></description>
     <description lang="de"><![CDATA[subsilver2]]></description>
@@ -41,7 +41,7 @@
 		<email>morten.boegeskov@gmail.com</email>
 		<homepage>http://www.bbdkp.com</homepage>
 		<contributions-group>
-			<contributions status="past" from="2009-05-01" to="2009-09-01"  position="Developer"/>
+			<contributions status="past" from="2009-05-01" to="2009-07-10" position="Developer"/>
 		</contributions-group>
 	</author>
 	<author>
@@ -67,6 +67,14 @@
       </contributions-group>
 	</author>
     <author>
+      <username>sz3</username>
+	  <realname>sz3</realname>
+	  <homepage>http://www.eqdkp.com</homepage>
+      <contributions-group>
+      		<contributions status="past" position="original EQDKP BossProgress v3.0.3 by sz3" />
+      </contributions-group>	
+	</author>	
+    <author>
 	  <realname>Tsigo</realname>
 	  <username>Tsigo</username>
 	  <homepage>http://www.eqdkp.com</homepage>
@@ -77,41 +85,26 @@
     
     </author-group>
 
-<mod-version>1.2.2</mod-version>
+<mod-version>1.2.3</mod-version>
 <installation>
       <level>easy</level>
       <time>600</time>
 	<target-version>3.0.8</target-version>
 </installation>
 <link-group>
-	<link type="parent" lang="en" href="../install.xml">Installation 1.2.2</link>
-	<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2.2</link>
-	<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2.2</link>	
+	<link type="parent" lang="en" href="../install.xml">Installation 1.2.3</link>
+	<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2.3</link>
+	<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2.3</link>	
 			
-	<link type="parent" lang="en" href="install_1122_to_122.xml">Update Manual</link>
-	<link type="parent" lang="fr" href="install_1122_to_122.xml">Manual de mise à jour</link>
-	<link type="parent" lang="de" href="install_1122_to_122.xml">Aktualisierung</link>
+	<link type="parent" lang="en" href="install_122_to_123.xml">Update Manual</link>
+	<link type="parent" lang="fr" href="install_122_to_123.xml">Manual de mise à jour</link>
+	<link type="parent" lang="de" href="install_122_to_123.xml">Aktualisierung</link>
 </link-group>
   </header>
   <action-group>
     <copy>
-     <file from="root/styles/subsilver2/template/dkp/*.*" to="styles/subsilver2/template/dkp/*.*"/>
-     <file from="root/styles/subsilver2/template/dkp/block/*.*" to="styles/subsilver2/template/dkp/block/*.*"/>     
-     <file from="root/styles/subsilver2/theme/*.*" to="styles/subsilver2/theme/*.*"/>
-     <file from="root/styles/subsilver2/theme/images/dkp/*.*" to="styles/subsilver2/theme/images/dkp/*.*"/>    
+	 <file from="root/styles/subsilver2/template/dkp/leaderboard.html" to="styles/subsilver2/template/dkp/leaderboard.html"/>     
     </copy>
-    <open src="/styles/prosilver/template/overall_footer.html">
-		<edit>
-			<comment lang="en"><![CDATA[modifying about javascript  ]]></comment>
-			<comment lang="fr"><![CDATA[modifier javascript dans footer ]]></comment>
-			<comment lang="de"><![CDATA[modifizierung javascript im footer ]]></comment>			
-			<find><![CDATA[search = window.open('about.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')]]></find>
-			<inline-edit>
-				<inline-find><![CDATA[about]]></inline-find>
-				<inline-action type="after-add"><![CDATA[bbdkp]]></inline-action>
-			</inline-edit>
-		</edit>
-	</open>
 <diy-instructions lang="en">See general install.xml file</diy-instructions>
 <diy-instructions lang="fr">Voir instructions générales</diy-instructions>
 <diy-instructions lang="de">Siehe allgemeine Anleitung</diy-instructions>
