@@ -1,3 +1,4 @@
+
 <?php
 /**
  * @package bbDkp-installer
@@ -63,21 +64,52 @@ $language_file = 'mods/dkp_admin';
 /*
 * Run Options 
 */
+$gameinstall[$config['aion']]=false;
+$gameinstall[$config['daoc']]=false;
+$gameinstall[$config['eq']]=false;
+$gameinstall[$config['eq2']]=false;
+$gameinstall[$config['FFXI']]=false;
+$gameinstall[$config['lotro']]=false;
+$gameinstall[$config['rift']]=false;
+$gameinstall[$config['vanguard']]=false;
+$gameinstall[$config['wow']]=false;
+$gameinstall[$config['warhammer']]=false;
+
+if (isset($config['bbdkp_default_game'])) 
+{
+	$gameinstall[$config['bbdkp_default_game']]=true;
+}
+else 
+{
+	// new install or user did install 123
+	if($umil->table_exists($table_prefix . 'bbdkp_games'))
+	{
+		//check
+		$sql = 'select game_id, installed from ' . $table_prefix . 'bbdkp_games';
+		$result = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$gameinstall[$row['game_id']]= ( $row['installed'] == 1) ? true:false;
+		}
+		$db->sql_freeresult($result);
+		
+	}
+}
 $options = array(
 		'guildtag'	=> array('lang' => 'UMIL_GUILD', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
         'realm'	    => array('lang' => 'REALM_NAME', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
 		'region'   => array('lang' => 'REGION', 'type' => 'select', 'function' => 'regionoptions', 'explain' => true),
 
-		'aion'   => array('lang' => 'AION', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-		'daoc'   => array('lang' => 'DAOC', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-		'eq'   => array('lang' => 'EVERQUEST', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-		'eq2'   => array('lang' => 'EVERQUEST2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-		'FFXI'   => array('lang' => 'FFXI', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-		'lotro'   => array('lang' => 'LOTRO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-		'rift'   => array('lang' => 'RIFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-		'vanguard'   => array('lang' => 'VANGUARD', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-		'warhammer'   => array('lang' => 'WARHAMMER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
-		'wow'     => array('lang' => 'WOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => true),
+		'aion'   => array('lang' => 'AION', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['aion'] == 1) ? true:false) ),
+		'daoc'   => array('lang' => 'DAOC', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['daoc'] == 1) ? true:false)),
+		'eq'   => array('lang' => 'EVERQUEST', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq'] == 1) ? true:false)),
+		'eq2'   => array('lang' => 'EVERQUEST2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq2'] == 1) ? true:false)),
+		'FFXI'   => array('lang' => 'FFXI', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['FFXI'] == 1) ? true:false)),
+		'lotro'   => array('lang' => 'LOTRO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lotro'] == 1) ? true:false)),
+		'rift'   => array('lang' => 'RIFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['rift'] == 1) ? true:false)),
+		'vanguard'   => array('lang' => 'VANGUARD', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['vanguard'] == 1) ? true:false)),
+		'warhammer'   => array('lang' => 'WARHAMMER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['warhammer'] == 1) ? true:false)),
+		'wow'     => array('lang' => 'WOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['wow'] == 1) ? true:false)),
 
 );
 
@@ -706,29 +738,30 @@ $versions = array(
     
     '1.2.3' => array(
     
-	'table_add' => array(
-	        
-		array($table_prefix . 'bbdkp_games', array(
+		'table_add' => array(
+			array($table_prefix . 'bbdkp_games', array(
 			'COLUMNS'		=> array(
-	              'game_id'		=> array('VCHAR', ''),
-	              'installed'	=> array('BOOL', 0),	  		  		  
-	                ),
-	                'PRIMARY_KEY'    => 'game_id',
-	            ),
-		)), 
+		              'game_id'		=> array('VCHAR', ''),
+		              'installed'	=> array('BOOL', 0),	  		  		  
+		                ),
+		                'PRIMARY_KEY'    => 'game_id',
+		            ),
+				)), 
 	
+		//add new columns
 		'table_column_add' => array(
 			array($table_prefix . 'bbdkp_classes', 'game_id' , array('VCHAR', '')),
 			array($table_prefix . 'bbdkp_races', 'game_id' , array('VCHAR', '')),
 			array($table_prefix . 'bbdkp_factions', 'game_id' , array('VCHAR', '')),
 			array($table_prefix . 'bbdkp_language', 'game_id' , array('VCHAR', '')),
 		),
-            
-        /*
-         * 'custom' => array( 
-            'gameinstall',
-      )
-      	*/
+
+         'custom' => array(
+			// add col to indexes 
+            'tableupdates123',
+			'gameinstall'
+      	)
+      	
       
 		
 		),
@@ -737,6 +770,55 @@ $versions = array(
 
 // Include the UMIF Auto file and everything else will be handled automatically.
 include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
+
+/*
+ * 
+ */
+function tableupdates123($action, $version)
+{
+	global $user, $umil, $config, $db, $table_prefix; 
+	switch ($action)
+	{
+		case 'install' :
+		case 'update' :
+		// class table
+
+		// remove old unique index on class table
+		$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
+		$db->sql_query($sql);
+		// make new unique composite
+		$sql= "CREATE UNIQUE INDEX classes ON " . $table_prefix . 'bbdkp_classes' . " (game_id, class_id) ";
+		$db->sql_query($sql);
+		
+		// race table
+		$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_races' . " DROP PRIMARY KEY";
+		$db->sql_query($sql);
+		// make new pk 
+		$sql= "ALTER TABLE " . $table_prefix . 'bbdkp_races' . "  ADD PRIMARY KEY (game_id, race_id)";
+		$db->sql_query($sql);
+		
+		// faction table
+		$sql= "CREATE UNIQUE INDEX factions ON " . $table_prefix . 'bbdkp_factions' . " (game_id, faction_id)";
+		$db->sql_query($sql);		
+
+		// language table
+		$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX attribute_id ";
+		$db->sql_query($sql);		
+		// make new unique key
+		$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
+		
+		//now get the user game choice
+		$gameid = array();
+		if(request_var('item', 0) == 1)
+		{
+			 insert_bbcodes($action, $version, 'item', 'Item tooltip: example [item gems="40133" enchant="3825"]50468[/item]');
+		}
+		
+				
+	}
+			
+	
+}
 
 /***************************************
  *
