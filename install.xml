@@ -11,7 +11,7 @@
 		<title lang="de"><![CDATA[bbDKP]]></title>
 		<title lang="fr"><![CDATA[bbDKP]]></title>
 		<description lang="en"><![CDATA[bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
-It integrates these Game, Guild and DKP management facilites into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
+It integrates Game, Guild and DKP management facilites into your phpBB3 Forum. Your users have single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, ACP and UCP modules.
 The framework supports multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION and Rift
 There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Bossprogress, Raidplanner (under development)
