@@ -1,4 +1,3 @@
-
 <?php
 /**
  * @package bbDkp-installer
@@ -64,16 +63,16 @@ $language_file = 'mods/dkp_admin';
 /*
 * Run Options 
 */
-$gameinstall[$config['aion']]=false;
-$gameinstall[$config['daoc']]=false;
-$gameinstall[$config['eq']]=false;
-$gameinstall[$config['eq2']]=false;
-$gameinstall[$config['FFXI']]=false;
-$gameinstall[$config['lotro']]=false;
-$gameinstall[$config['rift']]=false;
-$gameinstall[$config['vanguard']]=false;
-$gameinstall[$config['wow']]=false;
-$gameinstall[$config['warhammer']]=false;
+$gameinstall['aion']=false;
+$gameinstall['daoc']=false;
+$gameinstall['eq']=false;
+$gameinstall['eq2']=false;
+$gameinstall['FFXI']=false;
+$gameinstall['lotro']=false;
+$gameinstall['rift']=false;
+$gameinstall['vanguard']=false;
+$gameinstall['wow']=false;
+$gameinstall['warhammer']=false;
 $choice=false;
 if (isset($config['bbdkp_default_game'])) 
 {
@@ -99,9 +98,9 @@ else
 	}
 }
 
-if(!$choice)
+if($choice==false)
 {
-	//trigger_error( $user->lang['UMIL_NOGAMECHOSEN'], E_USER_WARNING );
+	trigger_error( $user->lang['UMIL_NOGAMECHOSEN'], E_USER_WARNING );
 }
 
 $options = array(
@@ -109,16 +108,16 @@ $options = array(
         'realm'	    => array('lang' => 'REALM_NAME', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
 		'region'   => array('lang' => 'REGION', 'type' => 'select', 'function' => 'regionoptions', 'explain' => true),
 
-		'aion'   => array('lang' => 'AION', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['aion'] == 1) ? true:false) ),
-		'daoc'   => array('lang' => 'DAOC', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['daoc'] == 1) ? true:false)),
-		'eq'   => array('lang' => 'EVERQUEST', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq'] == 1) ? true:false)),
-		'eq2'   => array('lang' => 'EVERQUEST2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq2'] == 1) ? true:false)),
-		'FFXI'   => array('lang' => 'FFXI', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['FFXI'] == 1) ? true:false)),
-		'lotro'   => array('lang' => 'LOTRO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lotro'] == 1) ? true:false)),
-		'rift'   => array('lang' => 'RIFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['rift'] == 1) ? true:false)),
-		'vanguard'   => array('lang' => 'VANGUARD', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['vanguard'] == 1) ? true:false)),
-		'warhammer'   => array('lang' => 'WARHAMMER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['warhammer'] == 1) ? true:false)),
-		'wow'     => array('lang' => 'WOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['wow'] == 1) ? true:false)),
+		'aion'   => array('lang' => 'AION', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['aion']) ? true:false) ),
+		'daoc'   => array('lang' => 'DAOC', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['daoc']) ? true:false)),
+		'eq'   => array('lang' => 'EVERQUEST', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq']) ? true:false)),
+		'eq2'   => array('lang' => 'EVERQUEST2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq2']) ? true:false)),
+		'FFXI'   => array('lang' => 'FFXI', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['FFXI']) ? true:false)),
+		'lotro'   => array('lang' => 'LOTRO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lotro']) ? true:false)),
+		'rift'   => array('lang' => 'RIFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['rift']) ? true:false)),
+		'vanguard'   => array('lang' => 'VANGUARD', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['vanguard'] ) ? true:false)),
+		'warhammer'   => array('lang' => 'WARHAMMER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['warhammer'] ) ? true:false)),
+		'wow'     => array('lang' => 'WOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['wow'] ) ? true:false)),
 
 );
 
@@ -768,6 +767,7 @@ $versions = array(
          'custom' => array(
 			// add col to indexes 
             'tableupdates123',
+			// purge and reinstall chosen gametables according to latest specs
 			'gameinstall'
       	)
       	
@@ -779,6 +779,91 @@ $versions = array(
 
 // Include the UMIF Auto file and everything else will be handled automatically.
 include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
+
+
+/******************************
+ * 
+ *  gametable installer
+ *  at each bbdkp verionupdate this function is updated for latest specs. 
+ * 
+ * 
+ */
+function gameinstall($action, $version)
+{
+	global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx; 
+	switch ($action)
+	{
+		case 'install' :
+		case 'update' :
+			switch ($version)
+			{
+				case '1.2.3':
+				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_classes');
+				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_factions');
+				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_roles');
+				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
+				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_dkpsystem');
+				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_language');
+				
+		        // dkp system
+		        // if there is no dkp system then insert a default one otherwise don't touch it.
+			    $result = $db->sql_query('select count(*) as num_dkp from ' . $table_prefix . 'bbdkp_dkpsystem');
+				$total_dkps = (int) $db->sql_fetchfield('num_dkp');
+				$db->sql_freeresult($result);
+				if($total_dkps == 0)
+				{
+				    $sql_ary = array();
+					$sql_ary[] = array('dkpsys_id' => '1' , 'dkpsys_name' => 'Default DKP Pool' , 'dkpsys_status' => 'Y', 'dkpsys_addedby' =>  'admin' , 'dkpsys_default' =>  'Y' ) ;
+					$db->sql_multi_insert( $table_prefix . 'bbdkp_dkpsystem', $sql_ary);
+					unset ( $sql_ary );
+				}
+			    
+			    // now insert core gamedata
+				if(request_var('aion', 0) == 1)
+				{
+					 install_aion($action, $version);
+				}
+				if(request_var('daoc', 0) == 1)
+				{
+					 install_daoc($action, $version);
+				}
+				if(request_var('eq', 0) == 1)
+				{
+					 install_eq($action, $version);
+				}
+				if(request_var('eq2', 0) == 1)
+				{
+					 install_eq2($action, $version);
+				}
+				if(request_var('FFXI', 0) == 1)
+				{
+					install_ffxi($action, $version);
+				}
+				if(request_var('lotro', 0) == 1)
+				{
+					 install_lotro($action, $version);
+				}
+				if(request_var('rift', 0) == 1)
+				{
+					 install_rift($action, $version);
+				}
+				if(request_var('vanguard', 0) == 1)
+				{
+					 install_vanguard($action, $version);
+				}
+				if(request_var('warhammer', 0) == 1)
+				{
+					 install_warhammer($action, $version);
+				}
+				if(request_var('wow', 0) == 1)
+				{
+					 install_wow($action, $version);
+				}
+			}
+			break;
+	}
+					
+}
 
 /*
  * 
@@ -815,17 +900,11 @@ function tableupdates123($action, $version)
 		$db->sql_query($sql);		
 		// make new unique key
 		$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
-		
-		//now get the user game choice
-		$gameid = array();
-		if(request_var('aion', 0) == 1)
-		{
-			 insert_bbcodes($action, $version);
-		}
-		
+		$db->sql_query($sql);
 				
-	}
+	}	
 			
+	return array('command' => 'UMIL_UPD123', 'result' => 'SUCCESS');
 	
 }
 
@@ -907,88 +986,6 @@ function bbdkp_caches($action, $version)
     $umil->cache_purge('auth');
     
     return 'UMIL_CACHECLEARED';
-}
-
-/******************************
- * 
- *  gametable update calls 
- * 
- */
-function gameinstall($action, $version)
-{
-	global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx; 
-	$game = request_var('game', '');
-	switch ($action)
-	{
-		case 'install' :
-		case 'update' :
-			switch ($version)
-			{
-				case '1.2.2':
-					switch ($game)
-					{
-						case 'aion':
-							install_aion();
-							return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
-							break;
-						case 'daoc':
-							install_daoc();
-				     		return array('command' => 'UMIL_INSERT_DAOCDATA', 'result' => 'SUCCESS');
-							break;
-						case 'eq':
-							install_eq();
-				     		return array('command' => 'UMIL_INSERT_EQDATA', 'result' => 'SUCCESS');
-							break;
-						case 'eq2':
-							install_eq2();
-				     		return array('command' => 'UMIL_INSERT_EQ2DATA', 'result' => 'SUCCESS');
-							break;
-						case 'FFXI':
-							install_ffxi();
-				     		return array('command' => 'UMIL_INSERT_FFXIDATA', 'result' => 'SUCCESS');
-							break;
-						case 'lotro':
-							install_lotro();
-				     		return array('command' => 'UMIL_INSERT_LOTRODATA', 'result' => 'SUCCESS');
-							break;
-						case 'vanguard':
-							install_vanguard();
-				     		return array('command' => 'UMIL_INSERT_VANGUARDDATA', 'result' => 'SUCCESS');
-							break;
-						case 'wow':
-							install_wow();
-							return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
-							break;
-						case 'warhammer':
-							install_warhammer();
-							return array('command' => 'UMIL_INSERT_WARDATA', 'result' => 'SUCCESS');
-							break;
-						default :
-							break;
-					}
-					break;
-				case '1.2.3':
-					switch ($game)
-					{
-						case 'wow':
-							install_wow2();
-							return array('command' => 'UMIL_INSERT_WOWDATA', 'result' => 'SUCCESS');
-							break;
-						case 'aion':
-							install_wow2();
-							return array('command' => 'UMIL_INSERT_AIONDATA', 'result' => 'SUCCESS');
-							break;
-						case 'rift':
-							install_wow2();
-							return array('command' => 'UMIL_INSERT_RIFTDATA', 'result' => 'SUCCESS');
-							break;
-					}
-					break; 
-			}
-			break;
-		
-	}
-					
 }
 
 /***
