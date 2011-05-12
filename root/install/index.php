@@ -74,10 +74,10 @@ $gameinstall[$config['rift']]=false;
 $gameinstall[$config['vanguard']]=false;
 $gameinstall[$config['wow']]=false;
 $gameinstall[$config['warhammer']]=false;
-
+$choice=false;
 if (isset($config['bbdkp_default_game'])) 
 {
-	$gameinstall[$config['bbdkp_default_game']]=true;
+	$gameinstall[$config['bbdkp_default_game']] = $choice = true;
 }
 else 
 {
@@ -89,12 +89,21 @@ else
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$gameinstall[$row['game_id']]= ( $row['installed'] == 1) ? true:false;
+			if($row['installed'] == 1)
+			{
+				$gameinstall[$row['game_id']] = $choice = true;
+			}
 		}
 		$db->sql_freeresult($result);
 		
 	}
 }
+
+if(!$choice)
+{
+	//trigger_error( $user->lang['UMIL_NOGAMECHOSEN'], E_USER_WARNING );
+}
+
 $options = array(
 		'guildtag'	=> array('lang' => 'UMIL_GUILD', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
         'realm'	    => array('lang' => 'REALM_NAME', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
@@ -809,9 +818,9 @@ function tableupdates123($action, $version)
 		
 		//now get the user game choice
 		$gameid = array();
-		if(request_var('item', 0) == 1)
+		if(request_var('aion', 0) == 1)
 		{
-			 insert_bbcodes($action, $version, 'item', 'Item tooltip: example [item gems="40133" enchant="3825"]50468[/item]');
+			 insert_bbcodes($action, $version);
 		}
 		
 				

@@ -190,6 +190,7 @@ $lang = array_merge($lang, array(
 'UMIL_RENAMETABLESOLD' => 'Renaming of tables from ‘phpbb_‘ prefix TO custom ‘bbeqdkp_‘ prefix ', 
 'UMIL_UPDATE120' => 'Updated tables 1.1.2.2 to 1.2', 
 'UMIL_122MINIMUM' => 'Old version. 1.2.2 is required for updating to 1.2.3', 
+'UMIL_NOGAMECHOSEN' => 'Plase choose a game before installing.', 
 
 // ACP titles
 'BBDKP_WELCOME' => 'Welcome to bbDKP',
