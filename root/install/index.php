@@ -44,6 +44,7 @@ if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
     trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
 }
 
+//check old version. if not then trigger error
 check_oldbbdkp();
 
 // The name of the mod to be displayed during installation.
@@ -61,7 +62,7 @@ $version_config_name = 'bbdkp_version';
 $language_file = 'mods/dkp_admin';
 
 /*
-* Run Options 
+* Setting the checkboxes at runtime 
 */
 $gameinstall['aion']=false;
 $gameinstall['daoc']=false;
@@ -73,34 +74,55 @@ $gameinstall['rift']=false;
 $gameinstall['vanguard']=false;
 $gameinstall['wow']=false;
 $gameinstall['warhammer']=false;
+$gameinstall['swtor']=false;
 $choice=false;
 if (isset($config['bbdkp_default_game'])) 
 {
 	$gameinstall[$config['bbdkp_default_game']] = $choice = true;
 }
-else 
+elseif (isset($config['bbdkp_games_aion']))
 {
-	// new install or user did install 123
-	if($umil->table_exists($table_prefix . 'bbdkp_games'))
-	{
-		//check
-		$sql = 'select game_id, installed from ' . $table_prefix . 'bbdkp_games';
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			if($row['installed'] == 1)
-			{
-				$gameinstall[$row['game_id']] = $choice = true;
-			}
-		}
-		$db->sql_freeresult($result);
-		
-	}
+	$gameinstall['aion'] = $config['bbdkp_games_aion'];
 }
-
-if($choice==false)
+elseif (isset($config['bbdkp_games_daoc']))
 {
-	trigger_error( $user->lang['UMIL_NOGAMECHOSEN'], E_USER_WARNING );
+	$gameinstall['daoc'] =  $config['bbdkp_games_daoc'];
+}
+elseif (isset($config['bbdkp_games_eq']))
+{
+	$gameinstall['eq'] =  $config['bbdkp_games_eq'];
+}
+elseif (isset($config['bbdkp_games_eq2']))
+{
+	$gameinstall['eq2'] = $config['bbdkp_games_eq2'];
+}
+elseif (isset($config['bbdkp_games_FFXI']))
+{
+	$gameinstall['FFXI'] = $config['bbdkp_games_FFXI'];
+}
+elseif (isset($config['bbdkp_games_lotro']))
+{
+	$gameinstall['lotro'] = $config['bbdkp_games_lotro'];
+}
+elseif (isset($config['bbdkp_games_rift']))
+{
+	$gameinstall['rift'] = $config['bbdkp_games_rift'];
+}
+elseif (isset($config['bbdkp_games_vanguard']))
+{
+	$gameinstall['vanguard'] = $config['bbdkp_games_vanguard'];
+}
+elseif (isset($config['bbdkp_games_wow']))
+{
+	$gameinstall['wow'] = $config['bbdkp_games_wow'];
+}
+elseif (isset($config['bbdkp_games_warhammer']))
+{
+	$gameinstall['warhammer'] = $config['bbdkp_games_warhammer'];
+}
+elseif (isset($config['bbdkp_games_swtor']))
+{
+	$gameinstall['swtor'] = $config['bbdkp_games_swtor'];
 }
 
 $options = array(
@@ -118,8 +140,23 @@ $options = array(
 		'vanguard'   => array('lang' => 'VANGUARD', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['vanguard'] ) ? true:false)),
 		'warhammer'   => array('lang' => 'WARHAMMER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['warhammer'] ) ? true:false)),
 		'wow'     => array('lang' => 'WOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['wow'] ) ? true:false)),
-
+		'swtor'     => array('lang' => 'SWTOR', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['swtor'] ) ? true:false)),
 );
+
+/*
+ * including the gamefiles
+ */
+include($phpbb_root_path .'install/gamesinstall/install_aion.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_daoc.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_eq.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_eq2.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_ffxi.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_lotro.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_vanguard.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_warhammer.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_rift.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_swtor.' . $phpEx);
 
 /*
 * Optionally we may specify our own logo image to show in the upper corner instead of the default logo.
@@ -135,21 +172,9 @@ $logo_img = 'install/logo.png';
 * You must use correct version numbering.  Unless you know exactly what you can use, only use X.X.X (replacing X with an integer).
 * The version numbering must otherwise be compatible with the version_compare function - http://php.net/manual/en/function.version-compare.php
 */
-
-include($phpbb_root_path .'install/gamesinstall/install_aion.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_daoc.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_eq.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_eq2.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_ffxi.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_lotro.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_vanguard.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_warhammer.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_rift.' . $phpEx);
-
 $versions = array(
     '1.2.2'    => array(
-    	// bbdkp tables (this uses the layout from develop/create_schema_files.php and from phpbb_db_tools)
+    	// install base bbdkp tables (this uses the layout from develop/create_schema_files.php and from phpbb_db_tools)
         'table_add' => array(
             
 		  array($table_prefix . 'bbdkp_news', array(
@@ -746,6 +771,21 @@ $versions = array(
     
     '1.2.3' => array(
     
+	  // add new parameters
+        'config_add' => array(
+			array('bbdkp_games_aion', 0, true),
+			array('bbdkp_games_daoc', 0, true),
+			array('bbdkp_games_eq', 0, true),
+			array('bbdkp_games_eq2', 0, true),
+			array('bbdkp_games_FFXI', 0, true),
+			array('bbdkp_games_lotro', 0, true),
+			array('bbdkp_games_rift', 0, true),
+			array('bbdkp_games_vanguard', 0, true),
+			array('bbdkp_games_wow', 0, true),
+			array('bbdkp_games_warhammer', 0, true),
+			array('bbdkp_games_swtor', 0, true),
+	      ),
+	        
 		'table_add' => array(
 			array($table_prefix . 'bbdkp_games', array(
 			'COLUMNS'		=> array(
@@ -793,72 +833,220 @@ function gameinstall($action, $version)
 	global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx; 
 	switch ($action)
 	{
+		
 		case 'install' :
 		case 'update' :
 			switch ($version)
 			{
 				case '1.2.3':
-				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_classes');
+				/*$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_classes');
 				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_factions');
 				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_roles');
 				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
 				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_dkpsystem');
 				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_language');
+				*/
 				
 		        // dkp system
-		        // if there is no dkp system then insert a default one otherwise don't touch it.
+		        // if there is no dkp system then insert a default one
 			    $result = $db->sql_query('select count(*) as num_dkp from ' . $table_prefix . 'bbdkp_dkpsystem');
 				$total_dkps = (int) $db->sql_fetchfield('num_dkp');
 				$db->sql_freeresult($result);
 				if($total_dkps == 0)
 				{
 				    $sql_ary = array();
-					$sql_ary[] = array('dkpsys_id' => '1' , 'dkpsys_name' => 'Default DKP Pool' , 'dkpsys_status' => 'Y', 'dkpsys_addedby' =>  'admin' , 'dkpsys_default' =>  'Y' ) ;
-					$db->sql_multi_insert( $table_prefix . 'bbdkp_dkpsystem', $sql_ary);
-					unset ( $sql_ary );
+					$data = array('dkpsys_id' => '1' , 'dkpsys_name' => 'Default DKP Pool' , 'dkpsys_status' => 'Y', 'dkpsys_addedby' =>  'admin' , 'dkpsys_default' =>  'Y' ) ;
+					$sql= 'insert into ' . $table_prefix . 'bbdkp_dkpsystem' .  $db->sql_build_array('INSERT', $data);
+					$db->sql_query($sql);
+					$dkpsys_id = $db->sql_nextid();
+					unset ($data);
+					
 				}
-			    
+				
+		        // event
+		        // if there is no event then insert a default one 
+			    $result = $db->sql_query('select count(*) as num_events from ' . $table_prefix . 'bbdkp_events');
+				$total_events = (int) $db->sql_fetchfield('num_events');
+				$db->sql_freeresult($result);
+				if($total_events == 0)
+				{
+				    $sql_ary = array();
+					$data = array('event_dkpid' => $dkpsys_id , 'event_name' => 'Defeult event', 'event_color' => '#000000', 'event_value' => 10 ) ;
+					$sql= 'insert into ' . $table_prefix . 'bbdkp_events' .  $db->sql_build_array('INSERT', $data);
+					$db->sql_query($sql);					
+				}
+				
 			    // now insert core gamedata
+				$i=0;
+				
 				if(request_var('aion', 0) == 1)
 				{
-					 install_aion($action, $version);
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'aion') 
+						{	
+							install_aion($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_aion($action, $version); $i++;
+					}
 				}
+
 				if(request_var('daoc', 0) == 1)
 				{
-					 install_daoc($action, $version);
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'daoc') 
+						{	
+							install_daoc($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_daoc($action, $version); $i++;
+					}
 				}
+				
+				
 				if(request_var('eq', 0) == 1)
 				{
-					 install_eq($action, $version);
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'eq') 
+						{	
+							install_eq($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_eq($action, $version); $i++;
+					}
 				}
+				
 				if(request_var('eq2', 0) == 1)
 				{
-					 install_eq2($action, $version);
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'eq2') 
+						{	
+							install_eq2($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_eq2($action, $version); $i++;
+					}
 				}
+
 				if(request_var('FFXI', 0) == 1)
 				{
-					install_ffxi($action, $version);
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'FFXI') 
+						{	
+							install_ffxi($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_ffxi($action, $version); $i++;
+					}
 				}
+				
 				if(request_var('lotro', 0) == 1)
 				{
-					 install_lotro($action, $version);
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'lotro') 
+						{	
+							install_lotro($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_lotro($action, $version); $i++;
+					}
 				}
+
 				if(request_var('rift', 0) == 1)
 				{
-					 install_rift($action, $version);
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'rift') 
+						{	
+							install_rift($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_rift($action, $version); $i++;
+					}
 				}
+				
 				if(request_var('vanguard', 0) == 1)
 				{
-					 install_vanguard($action, $version);
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'vanguard') 
+						{	
+							install_vanguard($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_vanguard($action, $version); $i++;
+					}
 				}
+				
 				if(request_var('warhammer', 0) == 1)
 				{
-					 install_warhammer($action, $version);
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'warhammer') 
+						{	
+							install_warhammer($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_warhammer($action, $version); $i++;
+					}
 				}
+				
+				
 				if(request_var('wow', 0) == 1)
 				{
-					 install_wow($action, $version);
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'wow') 
+						{	
+							install_wow($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_wow($action, $version); $i++;
+					}
 				}
+				
+				if(request_var('swtor', 0) == 1)
+				{
+					if (isset($config['bbdkp_default_game'])) 
+					{	
+						if ($config['bbdkp_default_game'] != 'swtor') 
+						{	
+							install_swtor($action, $version); $i++;
+						}
+					}
+					else
+					{
+						install_swtor($action, $version); $i++;
+					}
+				}
+				
+				
 			}
 			break;
 	}
