@@ -76,6 +76,7 @@ function install_rift()
     // races (No races, only factions, dummy value)
     $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'rift'");  
     $sql_ary = array();
+    $sql_ary[] = array('game_id' => 'rift','race_id' => 0, 'race_faction_id' => 1 );
     $sql_ary[] = array('game_id' => 'rift','race_id' => 1, 'race_faction_id' => 1 );
     $sql_ary[] = array('game_id' => 'rift','race_id' => 2, 'race_faction_id' => 1 );
     $sql_ary[] = array('game_id' => 'rift','race_id' => 3, 'race_faction_id' => 1 );
@@ -125,6 +126,7 @@ function install_rift()
 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 31, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Dominator' ,  'name_short' =>  'Dominator' );
 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 32, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Chloromancer' ,  'name_short' =>  'Chloromancer' );
 
+	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Dwarves' ,  'name_short' =>  'Dwarves' );
 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'High Elves' , 'name_short' =>  'High Elves' );
 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 3, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Mathosian' ,  'name_short' =>  'Mathosian' );

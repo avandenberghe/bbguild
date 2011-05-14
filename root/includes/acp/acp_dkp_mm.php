@@ -66,7 +66,8 @@ class acp_dkp_mm extends bbDKP_Admin
 					{
 						trigger_error('FORM_INVALID');
 					}
-					$activate_members = request_var('activate_id', array(0) ); 
+					
+					$activate_members = request_var('activate_id', array(0)); 
 
                     $db->sql_transaction('begin'); 
                     
@@ -154,6 +155,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				        MEMBER_LIST_TABLE 	=> 'm',
 				        MEMBER_RANKS_TABLE 	=> 'r',
 				        CLASS_TABLE  		=> 'c',
+				        
 				        RACE_TABLE  		=> 'a',
 				        BB_LANGUAGE			=> 'l', 
 				        GUILD_TABLE  		=> 'g',
@@ -167,12 +169,14 @@ class acp_dkp_mm extends bbDKP_Admin
 				    ),
 				    
 				    'WHERE'     =>  " (m.member_rank_id = r.rank_id)
-				    				
-				    				AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+				    				and m.game_id = l.game_id 
+				    				AND l.attribute_id = c.class_id and l.game_id = c.game_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
 									AND (m.member_guild_id = g.id)
-									AND m.member_race_id =  a.race_id 
 									AND (m.member_guild_id = r.guild_id)
 									AND (m.member_guild_id = " . $guild_id . ')
+									AND m.game_id =  a.game_id
+									AND m.game_id =  c.game_id
+									AND m.member_race_id =  a.race_id
 									AND (m.member_class_id = c.class_id)', 
 				    	
 					'ORDER_BY'	=> $current_order['sql'],

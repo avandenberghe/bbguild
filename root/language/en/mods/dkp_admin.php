@@ -191,6 +191,9 @@ $lang = array_merge($lang, array(
 'UMIL_UPDATE120' => 'Updated tables 1.1.2.2 to 1.2', 
 'UMIL_122MINIMUM' => 'Old version. 1.2.2 is required for updating to 1.2.3', 
 'UMIL_NOGAMECHOSEN' => 'Plase choose a game before installing.', 
+'UMIL_UPD123' => 'Updated tables to v1.2.3', 
+'UMIL_GAME123' => 'Game data installed for %s', 
+'UMIL_GAMEUNINST123' => 'Game data uninstalled', 
 
 // ACP titles
 'BBDKP_WELCOME' => 'Welcome to bbDKP',
@@ -545,7 +548,6 @@ $lang = array_merge($lang, array(
 'ACTIVE_POINT_ADJ_NOTE' => 'Point Adjustment to make on a member when they become active.',
 'ADJUSTMENTS_PER_PAGE' => 'Adjustments per Page',
 'ADMIN' => 'Admin',
-'DEFAULT_GAME' => 'Default Game',
 'DEFAULT_LANGUAGE' => 'Default DKP Language',
 'DEFAULT_LANGUAGE_EXPLAIN' => 'Default language for bossprogress, classnames, racenames',
 'DEFAULT_PAGE' => 'Default Index Page',
@@ -553,7 +555,7 @@ $lang = array_merge($lang, array(
 'DEFAULT_REALM'    => 'Default Realm',
 'DEFAULT_PERMISSIONS' => 'Default Permissions',
 'DOWNLOAD'		   => 'Download',
-'DEFAULT_GAME' => 'Installed game',
+'DEFAULT_GAME' => 'Installed games',
 'EVENTS_PER_PAGE' => 'Events per Page',
 'GENERAL_SETTINGS' => 'General Settings',
 'GUILDTAG' => 'Guildtag / Alliance Name',

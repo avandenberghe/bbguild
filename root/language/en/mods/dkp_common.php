@@ -106,7 +106,9 @@ $lang = array_merge($lang, array(
 'EQ2'        => 'EverQuest II' , 
 'WARHAMMER'  => 'Warhammer Online' ,
 'AION'       => 'Aion' , 
-'FFXI'       => 'Final Fantasy XI', 
+'FFXI'       => 'Final Fantasy XI',
+'RIFT'       => 'Rift',
+'SWTOR'       => 'Starwars : The old Republic', 
 
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status', 
@@ -177,10 +179,14 @@ $lang = array_merge($lang, array(
 
 'ARMOR' => 'Armor',
 'TYPE' => 'Armor',
+
 // TYPES of armor are static across games, no need to put it in DB
 'CLOTH' => 'Very light / Cloth', 
+'ROBE' => 'Robes', 
 'LEATHER' => 'Light / Leather', 
+'AUGMENTED' => 'Augmented Suit', 
 'MAIL' =>  'Medium / Chain Mail', 
+'HEAVY' => 'Heavy Armor', 
 'PLATE' => 'Heavy / Plate', 
 
 'CLASSID' => 'Class ID',

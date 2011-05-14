@@ -132,8 +132,8 @@ $options = array(
 
 		'aion'   => array('lang' => 'AION', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['aion']) ? true:false) ),
 		'daoc'   => array('lang' => 'DAOC', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['daoc']) ? true:false)),
-		'eq'   => array('lang' => 'EVERQUEST', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq']) ? true:false)),
-		'eq2'   => array('lang' => 'EVERQUEST2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq2']) ? true:false)),
+		'eq'   => array('lang' => 'EQ', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq']) ? true:false)),
+		'eq2'   => array('lang' => 'EQ2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq2']) ? true:false)),
 		'FFXI'   => array('lang' => 'FFXI', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['FFXI']) ? true:false)),
 		'lotro'   => array('lang' => 'LOTRO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lotro']) ? true:false)),
 		'rift'   => array('lang' => 'RIFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['rift']) ? true:false)),
@@ -770,8 +770,8 @@ $versions = array(
     ),
     
     '1.2.3' => array(
-    
-	  // add new parameters
+	  // add new game install configs
+	  // 1 is installed, 0 is not
         'config_add' => array(
 			array('bbdkp_games_aion', 0, true),
 			array('bbdkp_games_daoc', 0, true),
@@ -786,34 +786,23 @@ $versions = array(
 			array('bbdkp_games_swtor', 0, true),
 	      ),
 	        
-		'table_add' => array(
-			array($table_prefix . 'bbdkp_games', array(
-			'COLUMNS'		=> array(
-		              'game_id'		=> array('VCHAR', ''),
-		              'installed'	=> array('BOOL', 0),	  		  		  
-		                ),
-		                'PRIMARY_KEY'    => 'game_id',
-		            ),
-				)), 
-	
-		//add new columns
+		//add new columns, then add keys and new pk in custom function
 		'table_column_add' => array(
 			array($table_prefix . 'bbdkp_classes', 'game_id' , array('VCHAR', '')),
 			array($table_prefix . 'bbdkp_classes', 'class_faction_id' , array('UINT', 0)),
 			array($table_prefix . 'bbdkp_races', 'game_id' , array('VCHAR', '')),
 			array($table_prefix . 'bbdkp_factions', 'game_id' , array('VCHAR', '')),
 			array($table_prefix . 'bbdkp_language', 'game_id' , array('VCHAR', '')),
+			array($table_prefix . 'bbdkp_memberlist', 'game_id' , array('VCHAR', '')),
 		),
 
          'custom' => array(
-			// add col to indexes 
+			// add columns to new indexes 
             'tableupdates123',
 			// purge and reinstall chosen gametables according to latest specs
 			'gameinstall'
       	)
       	
-      
-		
 		),
       
 );
@@ -831,7 +820,7 @@ include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
  */
 function gameinstall($action, $version)
 {
-	global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx; 
+	global $db, $table_prefix, $umil, $user, $phpbb_root_path, $phpEx; 
 	switch ($action)
 	{
 		
@@ -870,8 +859,13 @@ function gameinstall($action, $version)
 				}
 				
 			    // now insert core gamedata
-			    // if the game is already installed then don't overwrite userdata 
-				$i=0;
+			   
+			    // if flag is set then
+			    //   if the game is already installed in 1.2.2 then don't overwrite userdata otherwise do
+			    //   else install game
+			    //   set $config 
+
+				$installed_games = array();
 				
 				if(request_var('aion', 0) == 1)
 				{
@@ -879,13 +873,23 @@ function gameinstall($action, $version)
 					{	
 						if ($config['bbdkp_default_game'] != 'aion') 
 						{	
-							install_aion($action, $version); $i++;
+							install_aion($action, $version); 
+						}
+						else 
+						{
+							// update existing static tables
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_classes' . " set game_id = 'aion' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_races' . " set game_id = 'aion' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_factions' . " set game_id = 'aion' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_language' . " set game_id = 'aion' where game_id is null";
 						}
 					}
 					else
 					{
-						install_aion($action, $version); $i++;
+						install_aion($action, $version); 
 					}
+					$umil->config_update('bbdkp_games_aion', 1, true);
+					$installed_games[] = 'aion';
 				}
 
 				if(request_var('daoc', 0) == 1)
@@ -894,13 +898,25 @@ function gameinstall($action, $version)
 					{	
 						if ($config['bbdkp_default_game'] != 'daoc') 
 						{	
-							install_daoc($action, $version); $i++;
+							install_daoc($action, $version); 
 						}
+						else 
+						{
+							// update existing static tables
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_classes' . " set game_id = 'daoc' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_races' . " set game_id = 'daoc' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_factions' . " set game_id = 'daoc' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_language' . " set game_id = 'daoc' where game_id is null";
+						}
+						
 					}
 					else
 					{
-						install_daoc($action, $version); $i++;
+						install_daoc($action, $version); 
 					}
+					$umil->config_update('bbdkp_games_daoc', 1, true);
+					$installed_games[] = 'daoc';
+					
 				}
 				
 				
@@ -910,13 +926,23 @@ function gameinstall($action, $version)
 					{	
 						if ($config['bbdkp_default_game'] != 'eq') 
 						{	
-							install_eq($action, $version); $i++;
+							install_eq($action, $version); 
+						}
+						else 
+						{
+							// update existing static tables
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_classes' . " set game_id = 'eq' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_races' . " set game_id = 'eq' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_factions' . " set game_id = 'eq' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_language' . " set game_id = 'eq' where game_id is null";
 						}
 					}
 					else
 					{
-						install_eq($action, $version); $i++;
+						install_eq($action, $version); 
 					}
+					$umil->config_update('bbdkp_games_eq', 1, true);
+					$installed_games[] = 'eq';
 				}
 				
 				if(request_var('eq2', 0) == 1)
@@ -925,13 +951,23 @@ function gameinstall($action, $version)
 					{	
 						if ($config['bbdkp_default_game'] != 'eq2') 
 						{	
-							install_eq2($action, $version); $i++;
+							install_eq2($action, $version); 
 						}
+						else 
+						{
+							// update existing static tables
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_classes' . " set game_id = 'eq2' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_races' . " set game_id = 'eq2' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_factions' . " set game_id = 'eq2' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_language' . " set game_id = 'eq2' where game_id is null";
+						}						
 					}
 					else
 					{
-						install_eq2($action, $version); $i++;
+						install_eq2($action, $version); 
 					}
+					$umil->config_update('bbdkp_games_eq2', 1, true);
+					$installed_games[] = 'eq2';
 				}
 
 				if(request_var('FFXI', 0) == 1)
@@ -940,13 +976,23 @@ function gameinstall($action, $version)
 					{	
 						if ($config['bbdkp_default_game'] != 'FFXI') 
 						{	
-							install_ffxi($action, $version); $i++;
+							install_ffxi($action, $version); 
 						}
+						else 
+						{
+							// update existing static tables
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_classes' . " set game_id = 'FFXI' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_races' . " set game_id = 'FFXI' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_factions' . " set game_id = 'FFXI' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_language' . " set game_id = 'FFXI' where game_id is null";
+						}									
 					}
 					else
 					{
-						install_ffxi($action, $version); $i++;
+						install_ffxi($action, $version); 
 					}
+					$umil->config_update('bbdkp_games_FFXI', 1, true);
+					$installed_games[] = 'FFXI';
 				}
 				
 				if(request_var('lotro', 0) == 1)
@@ -955,28 +1001,31 @@ function gameinstall($action, $version)
 					{	
 						if ($config['bbdkp_default_game'] != 'lotro') 
 						{	
-							install_lotro($action, $version); $i++;
+							install_lotro($action, $version); 
 						}
+						else 
+						{
+							// update existing static tables
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_classes' . " set game_id = 'lotro' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_races' . " set game_id = 'lotro' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_factions' . " set game_id = 'lotro' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_language' . " set game_id = 'lotro' where game_id is null";
+						}								
 					}
 					else
 					{
-						install_lotro($action, $version); $i++;
+						install_lotro($action, $version); 
 					}
+					$umil->config_update('bbdkp_games_lotro', 1, true);
+					$installed_games[] = 'lotro';					
 				}
 
 				if(request_var('rift', 0) == 1)
 				{
-					if (isset($config['bbdkp_default_game'])) 
-					{	
-						if ($config['bbdkp_default_game'] != 'rift') 
-						{	
-							install_rift($action, $version); $i++;
-						}
-					}
-					else
-					{
-						install_rift($action, $version); $i++;
-					}
+					// new game
+					install_rift($action, $version); 
+					$umil->config_update('bbdkp_games_rift', 1, true);
+					$installed_games[] = 'rift';
 				}
 				
 				if(request_var('vanguard', 0) == 1)
@@ -985,13 +1034,23 @@ function gameinstall($action, $version)
 					{	
 						if ($config['bbdkp_default_game'] != 'vanguard') 
 						{	
-							install_vanguard($action, $version); $i++;
+							install_vanguard($action, $version); ;
 						}
+						else 
+						{
+							// update existing static tables
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_classes' . " set game_id = 'vanguard' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_races' . " set game_id = 'vanguard' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_factions' . " set game_id = 'vanguard' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_language' . " set game_id = 'vanguard' where game_id is null";
+						}							
 					}
 					else
 					{
-						install_vanguard($action, $version); $i++;
+						install_vanguard($action, $version); 
 					}
+					$umil->config_update('bbdkp_games_vanguard', 1, true);
+					$installed_games[] = 'vanguard';
 				}
 				
 				if(request_var('warhammer', 0) == 1)
@@ -1000,13 +1059,23 @@ function gameinstall($action, $version)
 					{	
 						if ($config['bbdkp_default_game'] != 'warhammer') 
 						{	
-							install_warhammer($action, $version); $i++;
+							install_warhammer($action, $version); 
 						}
+						else 
+						{
+							// update existing static tables
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_classes' . " set game_id = 'warhammer' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_races' . " set game_id = 'warhammer' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_factions' . " set game_id = 'warhammer' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_language' . " set game_id = 'warhammer' where game_id is null";
+						}								
 					}
 					else
 					{
-						install_warhammer($action, $version); $i++;
+						install_warhammer($action, $version); 
 					}
+					$umil->config_update('bbdkp_games_warhammer', 1, true);
+					$installed_games[] = 'vanguard';
 				}
 				
 				
@@ -1016,33 +1085,62 @@ function gameinstall($action, $version)
 					{	
 						if ($config['bbdkp_default_game'] != 'wow') 
 						{	
-							install_wow($action, $version); $i++;
+							install_wow($action, $version);
 						}
+						else 
+						{
+							// update existing static tables
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_classes' . " set game_id = 'wow' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_races' . " set game_id = 'wow' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_factions' . " set game_id = 'wow' where game_id is null";
+							$sql = "UPDATE " . $table_prefix . 'bbdkp_language' . " set game_id = 'wow' where game_id is null";
+						}								
 					}
 					else
 					{
-						install_wow($action, $version); $i++;
+						install_wow($action, $version); 
 					}
+					$umil->config_update('bbdkp_games_wow', 1, true);
+					$installed_games[] = 'wow';
 				}
 				
 				if(request_var('swtor', 0) == 1)
 				{
-					if (isset($config['bbdkp_default_game'])) 
-					{	
-						if ($config['bbdkp_default_game'] != 'swtor') 
-						{	
-							install_swtor($action, $version); $i++;
-						}
-					}
-					else
-					{
-						install_swtor($action, $version); $i++;
-					}
+					// New game
+					install_swtor($action, $version); 
+					$umil->config_update('bbdkp_games_swtor', 1, true);
+					$installed_games[] = 'swtor';
 				}
 				
+				// handle the members
+				if (isset($config['bbdkp_default_game'])) 
+				{
+					// update the existing member table to the old default_game
+					$sql = "UPDATE " . $table_prefix . 'bbdkp_memberlist' . " set game_id = '" . $config['bbdkp_default_game'] . "'";
+					$db->sql_query($sql);
+				}
+				else
+				{
+	                foreach($installed_games as $gameid)
+	                {
+	                	// update the guildbank (only installed member thus far) with the first installed gameid
+						$sql = "UPDATE " . $table_prefix . 'bbdkp_memberlist' . " set game_id = '" . $gameid . "' where member_rank_id = '90' ";
+						$db->sql_query($sql);
+						// now break we dont need to run this more than once.
+						break;
+	                }
+				}
+
+			     // remove the old config, is obsolete now.
+			    $umil->config_remove('bbdkp_default_game');
+			    
+			    // report what we did to umil
+				return array('command' => sprintf($user->lang['UMIL_GAME123'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 				
 			}
 			break;
+			case 'uninstall' :
+				return array('command' => 'UMIL_GAMEUNINST123', 'result' => 'SUCCESS');
 	}
 					
 }
@@ -1086,7 +1184,7 @@ function tableupdates123($action, $version)
 				// make new unique key
 				$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
 				$db->sql_query($sql);
-						
+				
 			}
 			break;
 	
@@ -1094,15 +1192,16 @@ function tableupdates123($action, $version)
 			switch ($version)
 			{
 				case '1.2.3':
-					// truncate table data before removing new columns 
+					// truncate table data before removing new columns on uninstall or else we get an index error.
 					$db->sql_query('TRUNCATE TABLE ' . $table_prefix . "bbdkp_classes ");
 					$db->sql_query('TRUNCATE TABLE ' . $table_prefix . "bbdkp_races  ");
 					$db->sql_query('TRUNCATE TABLE ' . $table_prefix . "bbdkp_factions ");
 					$db->sql_query('TRUNCATE TABLE ' . $table_prefix . "bbdkp_language ");
+					break;
 			}
-			
-		return array('command' => 'UMIL_UPD123', 'result' => 'SUCCESS');
+			break;
 	}
+	return array('command' => 'UMIL_UPD123', 'result' => 'SUCCESS');
 	
 }
 
