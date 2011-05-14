@@ -21,7 +21,7 @@ function install_eq()
 {
     global  $db, $table_prefix, $umil, $user;
     
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_classes where game_id = 'eq'" );
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'eq'" );
     $sql_ary = array();
     
     // Everquest classes
@@ -46,7 +46,7 @@ function install_eq()
     $db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
     
    	// Everquest factions
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_factions where game_id = 'eq'" );
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'eq'" );
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'eq', 'faction_id' => 1, 'faction_name' => 'Good' );
     $sql_ary[] = array('game_id' => 'eq', 'faction_id' => 2, 'faction_name' => 'Evil' );
@@ -55,7 +55,7 @@ function install_eq()
     unset ($sql_ary); 
     
     // Everquest races
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_races  where game_id = 'eq'");
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'eq'");
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'eq', 'race_id' => 0, 'race_faction_id' => 2 ); //Unknown
     $sql_ary[] = array('game_id' => 'eq', 'race_id' => 1, 'race_faction_id' => 3 ); //Gnome
@@ -78,7 +78,7 @@ function install_eq()
     unset ($sql_ary); 
 
     
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_language  where game_id = 'eq' and attribute_id in ('class', 'race) ");
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'eq' and (attribute_id='class' or attribute_id = 'race')");
 	$sql_ary = array ();
 	$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Dummy Zone' ,  'name_short' =>  'Dummy Zone' );
 	$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Dummy Boss' ,  'name_short' =>  'Dummy Boss' );

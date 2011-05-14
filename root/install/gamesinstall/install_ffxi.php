@@ -24,7 +24,7 @@ function install_ffxi()
     
     // class : 
     
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_classes where game_id = 'FFXI'" );    
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'FFXI'" );    
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'FFXI','class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 75, 'imagename' => 'ffxi_Unknown_small' );
     $sql_ary[] = array('game_id' => 'FFXI','class_id' => 1, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 75, 'imagename' => 'ffxi_Warrior_small' );
@@ -51,7 +51,7 @@ function install_ffxi()
    	unset ($sql_ary); 
    	
    	// factions
-   	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_factions where game_id = 'FFXI'" );
+   	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'FFXI'" );
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'FFXI','faction_id' => 1, 'faction_name' => 'Bastok' );
     $sql_ary[] = array('game_id' => 'FFXI','faction_id' => 2, 'faction_name' => 'San d\'Oria' );
@@ -61,7 +61,7 @@ function install_ffxi()
     unset ($sql_ary); 
     
     // races
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_races  where game_id = 'FFXI'");  
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'FFXI'");  
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'FFXI','race_id' => 1, 'race_faction_id' => 3 ); //Unknown
     $sql_ary[] = array('game_id' => 'FFXI','race_id' => 2, 'race_faction_id' => 1 ); //Galka
@@ -72,7 +72,7 @@ function install_ffxi()
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 
     // Language table
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_language  where game_id = 'FFXI' and attribute_id in ('class', 'race) ");
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'FFXI' and (attribute_id='class' or attribute_id = 'race')");
     unset ($sql_ary); 
 	$sql_ary = array();
 	$sql_ary[] = array('game_id' => 'FFXI','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );

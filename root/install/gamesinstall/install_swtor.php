@@ -21,50 +21,77 @@ function install_swtor()
 {
 	global $db, $table_prefix, $umil, $user;
 	// classes
-	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_classes where game_id = 'swtor'" ); 
+	
+	// uses class_faction_id
+	// note subclasses not done
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'swtor'" ); 
 	$sql_ary = array ();
-	$sql_ary [] = array ('game_id' => 'swtor', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#999', 'imagename' => 'swtor_Unknown_small');   
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#C79C6E', 'imagename' => 'swtor_Warrior_small');   
-	$sql_ary [] = array ('game_id' => 'swtor', 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85, 'colorcode' =>  '#FFF569',  'imagename' => 'swtor_Rogue_small');    
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#ABD473',  'imagename' => 'swtor_Hunter_small');    
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'swtor_Paladin_small'); 
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#0070DE',  'imagename' => 'swtor_Shaman_small'); 
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'swtor_Druid_small');  
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#9482C9',  'imagename' => 'swtor_Warlock_small'); 
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#69CCF0',  'imagename' => 'swtor_Mage_small');   
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'swtor_Priest_small');  
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 , 'colorcode' =>  '#C41F3B',  'imagename' => 'swtor_Death_Knight_small'); 
+	$sql_ary [] = array ('game_id' => 'swtor', 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#999', 'imagename' => 'swtor_Unknown_small');   
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 1, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#66CCFF', 'imagename' => 'swtor_trooper_small');   
+	$sql_ary [] = array ('game_id' => 'swtor', 'class_id' => 2, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 50, 'colorcode' =>  '#AFDCEC',  'imagename' => 'swtor_smuggler_small');    
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 3, 'class_faction_id' => 2, 'class_armor_type' => 'AUGMENTED', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#437C17',  'imagename' => 'swtor_jediknight_small');    
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 4, 'class_faction_id' => 2, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 50 ,  'colorcode' =>  '#663333',  'imagename' => 'swtor_jedicon_small'); 
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 5, 'class_faction_id' => 3, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#CC0033',  'imagename' => 'swtor_bohunter_small'); 
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 6, 'class_faction_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#FF6600',  'imagename' => 'swtor_sithwar_small');  
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 7, 'class_faction_id' => 3, 'class_armor_type' => 'AUGMENTED', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#996699',  'imagename' => 'swtor_impagent_small'); 
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 8, 'class_faction_id' => 4, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#660033',  'imagename' => 'swtor_sithinq_small');   
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
 	unset ( $sql_ary ); 
 
 	// factions
-	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_factions where game_id = 'swtor'" );
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'swtor'" );
 	$sql_ary = array();
-	$sql_ary [] = array ('game_id' => 'swtor','faction_id' => 1, 'faction_name' => 'Alliance' );
-	$sql_ary [] = array ('game_id' => 'swtor','faction_id' => 2, 'faction_name' => 'Horde' );
+	$sql_ary [] = array ('game_id' => 'swtor','faction_id' => 1, 'faction_name' => 'Galactic Republic' );
+	$sql_ary [] = array ('game_id' => 'swtor','faction_id' => 2, 'faction_name' => 'Jedi Order' );
+	$sql_ary [] = array ('game_id' => 'swtor','faction_id' => 3, 'faction_name' => 'Sith Empire' );
+	$sql_ary [] = array ('game_id' => 'swtor','faction_id' => 4, 'faction_name' => 'Sith Lords' );
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_factions', $sql_ary );
 	unset ( $sql_ary );
 	
-	// races
-	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_races  where game_id = 'swtor'");
+	// species source : http://starwars.wikia.com/wiki/Star_Wars:_The_Old_Republic
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'swtor'");
 	$sql_ary = array ();
 	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 0, 'race_faction_id' => 0, 'image_female_small' => ' ',  'image_male_small' => ' '  ); //Unknown
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 1, 'race_faction_id' => 1, 'image_female_small' => 'swtor_human_female_small',  'image_male_small' => 'swtor_human_male_small'  ); //Human
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 2, 'race_faction_id' => 2 , 'image_female_small' => 'swtor_orc_female_small',  'image_male_small' => 'swtor_orc_male_small' ); //Orc
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 3, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_dwarf_female_small',  'image_male_small' => 'swtor_dwarf_male_small' ); //Dwarf
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 4, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_nightelf_female_small',  'image_male_small' => 'swtor_nightelf_male_small' ) ; //Night Elf
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 5, 'race_faction_id' => 2 , 'image_female_small' => 'swtor_scourge_female_small',  'image_male_small' => 'swtor_scourge_male_small' ); //Undead
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 6, 'race_faction_id' => 2 , 'image_female_small' => 'swtor_tauren_female_small',  'image_male_small' => 'swtor_tauren_male_small' ); //Tauren
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 7, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_gnome_female_small',  'image_male_small' => 'swtor_gnome_male_small' ); //Gnome
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 8, 'race_faction_id' => 2 , 'image_female_small' => 'swtor_troll_female_small',  'image_male_small' => 'swtor_troll_male_small' ); //Troll
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 9, 'race_faction_id' => 2 , 'image_female_small' => 'swtor_goblin_female_small',  'image_male_small' => 'swtor_goblin_male_small' ); //Goblin
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 10, 'race_faction_id' => 2 , 'image_female_small' => 'swtor_bloodelf_female_small',  'image_male_small' => 'swtor_bloodelf_male_small' ); //Blood Elf
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 11, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_draenei_female_small',  'image_male_small' => 'swtor_draenei_male_small' ); //Draenei
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 22, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_worgen_female_small',  'image_male_small' => 'swtor_worgen_male_small' ); //Worgen
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 1, 'race_faction_id' => 0 , 'image_female_small' => 'swtor_miraluka_female_small',  'image_male_small' => 'swtor_miraluka_male_small' ); //Miraluka 
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 2, 'race_faction_id' => 0 , 'image_female_small' => 'swtor_twilek_female_small',  'image_male_small' => 'swtor_twilek_male_small' ); //Twilek
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 3, 'race_faction_id' => 0  , 'image_female_small' => 'swtor_zabrak_female_small',  'image_male_small' => 'swtor_zabrak_male_small' ); //Zabrak
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 4, 'race_faction_id' => 0 , 'image_female_small' => 'swtor_miralian_female_small',  'image_male_small' => 'swtor_miralian_male_small' ) ; //Miralian
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 5, 'race_faction_id' => 0 , 'image_female_small' => 'swtor_human_female_small',  'image_male_small' => 'swtor_human_male_small' ); //human 
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 6, 'race_faction_id' => 0, 'image_female_small' => 'swtor_chiss_female_small',  'image_male_small' => 'swtor_chiss_male_small'  ); //Chiss
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 7, 'race_faction_id' => 0, 'image_female_small' => 'swtor_rattataki_female_small',  'image_male_small' => 'swtor_rattataki_male_small' ); //Rattataki
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 8, 'race_faction_id' => 0, 'image_female_small' => 'swtor_redsith_female_small',  'image_male_small' => 'swtor_redsith_male_small' ); //Red Siths
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 	unset ( $sql_ary );
 	
-	// dkp system
+	// Dictionary
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'swtor' and attribute_id in('class','race') ");
+	$sql_ary = array ();
+	// 
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Trooper' ,  'name_short' =>  'Trooper' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Smuggler' ,  'name_short' =>  'Smuggler' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 3, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Jedi Knight' ,  'name_short' =>  'Jedi' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Jedi Consular' ,  'name_short' =>  'Consul' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Sith Inquisitor' ,  'name_short' =>  'Inquisitor' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Sith Warrior' ,  'name_short' =>  'Warrior' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 7, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Bounty Hunter' ,  'name_short' =>  'Hunter' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 8, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Imperial Agent' ,  'name_short' =>  'Agent' );
+				
+	// species
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 0, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 1, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Miraluka' ,  'name_short' =>  'Miraluka' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 2, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Twilek' ,  'name_short' =>  'Twilek' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 3, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Zabrak' ,  'name_short' =>  'Zabrak' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 4, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Miralian' ,  'name_short' =>  'Miralian' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 5, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Human' ,  'name_short' =>  'Human' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 6, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Chiss' ,  'name_short' =>  'Chiss' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 7, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Rattataki' ,  'name_short' =>  'Rattataki' );
+	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 8, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Red Siths' ,  'name_short' =>  'Red Siths' );
+	
+	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+	unset ( $sql_ary );
+	
+	// dkp pool
 	// if we only have the default dkp system installed then add some more 
 	$result = $db->sql_query('select count(*) as num_dkp from ' . $table_prefix . 'bbdkp_dkpsystem');
 	$total_dkps = (int) $db->sql_fetchfield('num_dkp');
@@ -72,138 +99,30 @@ function install_swtor()
 	if($total_dkps == 1)
 	{
 		$sql_ary = array ();
-		$sql_ary [] = array ('dkpsys_name' => 'WLK10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'WLK25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'CATA10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'CATA25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'Early Game', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'Mid Game', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'End Game', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
 		unset ( $sql_ary );
 	}
-
-	// classes
-	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_language  where game_id = 'swtor' and attribute_id in ('class', 'race) ");
 	
-	$sql_ary = array ();
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Rogue' ,  'name_short' =>  'Rogue' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 3, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Hunter' ,  'name_short' =>  'Hunter' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 7, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Shaman' ,  'name_short' =>  'Shaman' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 11, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Druid' ,  'name_short' =>  'Druid' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 9, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warlock' ,  'name_short' =>  'Warlock' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 8, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Mage' ,  'name_short' =>  'Mage' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Priest' ,  'name_short' =>  'Priest' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Death Knight' ,  'name_short' =>  'Death Knight' );
-	
-	//classes in fr
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 0, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 1, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 4, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Voleur' ,  'name_short' =>  'Voleur' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 3, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chasseur' ,  'name_short' =>  'Chasseur' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 2, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 7, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chaman' ,  'name_short' =>  'Chaman' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 11, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Druide' ,  'name_short' =>  'Druide' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 9, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Démoniste' ,  'name_short' =>  'Démoniste' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 8, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Mage' ,  'name_short' =>  'Mage' );
-	$sql_ary[] = array('game_id' => 'swtor','attribute_id' => 5, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Prêtre' ,  'name_short' =>  'Prêtre' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 6, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chevalier de la Mort' ,  'name_short' =>  'Chevalier de la Mort' );
-	
-	//classes in de	
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 0, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unbekannt' ,  'name_short' =>  'Unbekannt' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 1, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Krieger' ,  'name_short' =>  'Krieger' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 4, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Schurke' ,  'name_short' =>  'Schurke' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 3, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Jäger' ,  'name_short' =>  'Jäger' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 2, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Paladin' ,  'name_short' =>  'Paladin' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 7, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Schamane' ,  'name_short' =>  'Schamane' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 11, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Druide' ,  'name_short' =>  'Druide' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Hexenmeister' ,  'name_short' =>  'Hexenmeister' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 8, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Magier' ,  'name_short' =>  'Magier' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Priester' ,  'name_short' =>  'Priester' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Todesritter' ,  'name_short' =>  'Todesritter' );
-				
-	//races in en
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 0, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 1, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Human' ,  'name_short' =>  'Human' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 2, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Orc' ,  'name_short' =>  'Orc' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 3, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Dwarf' ,  'name_short' =>  'Dwarf' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 4, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Night Elf' ,  'name_short' =>  'Night Elf' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 5, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Undead' ,  'name_short' =>  'Undead' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 6, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Tauren' ,  'name_short' =>  'Tauren' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 7, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Gnome' ,  'name_short' =>  'Gnome' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 8, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Troll' ,  'name_short' =>  'Troll' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 10, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Blood Elf' ,  'name_short' =>  'Blood Elf' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 11, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Draenei' ,  'name_short' =>  'Draenei' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 9, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'Goblin' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 22, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
+    // events
+    // if there are no swtor events set up then insert some sample events 
+    $result = $db->sql_query('select count(*) as num_events from ' . $table_prefix . "bbdkp_events where event_imagename like 'swtor%' ");
+	$total_events = (int) $db->sql_fetchfield('num_events');
+	$db->sql_freeresult($result);
+	if($total_events < 2)
+	{
+	    $sql_ary = array();
+		$sql_ary [] = array('event_dkpid' => 0 , 'event_name' => 'The Esseles', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => 'swtor_es'  ) ;
+		$sql_ary [] = array('event_dkpid' => 0 , 'event_name' => 'Black Talon', 'event_color' => '#C6DEFF', 'event_value' => 5 , 'event_imagename' => 'swtor_blt') ;
+		$sql_ary [] = array('event_dkpid' => 1 , 'event_name' => 'Taral V', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => 'swtor_tar' ) ;
+		$sql_ary [] = array('event_dkpid' => 1 , 'event_name' => 'Boarding party', 'event_color' => '#6D7B8D', 'event_value' => 20, 'event_imagename' => 'swtor_bop' ) ;
+		$sql_ary [] = array('event_dkpid' => 2 , 'event_name' => 'Directive 7', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => 'swtor_d7' ) ;
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
 		
-	// races in fr
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 0, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 1, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Humain' ,  'name_short' =>  'Humain' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 2, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Orc' ,  'name_short' =>  'Orc' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 3, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Nain' ,  'name_short' =>  'Nain' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 4, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Elfe de la Nuit' ,  'name_short' =>  'Elfe de la Nuit' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 5, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Mort-Vivant' ,  'name_short' =>  'Mort-Vivant' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 6, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Tauren' ,  'name_short' =>  'Tauren' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 7, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Gnome' ,  'name_short' =>  'Gnome' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 8, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Troll' ,  'name_short' =>  'Troll' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 10, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Elfe de Sang' ,  'name_short' =>  'Elfe de Sang' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 11, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Draeneï' ,  'name_short' =>  'Draeneï' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 9, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'Goblin' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 22, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
-			
-	//races in de
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 0, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 1, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Mensch' ,  'name_short' =>  'Mensch' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 2, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Orc' ,  'name_short' =>  'Orc' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 3, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Zwerg' ,  'name_short' =>  'Zwerg' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 4, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Nachtelf' ,  'name_short' =>  'Nachtelf' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 5, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Untoter' ,  'name_short' =>  'Untoter' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 6, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Tauren' ,  'name_short' =>  'Tauren' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 7, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Gnome' ,  'name_short' =>  'Gnome' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 8, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Troll' ,  'name_short' =>  'Troll' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 10, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Blutelf' ,  'name_short' =>  'Blutelf' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 11, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Draenei' ,  'name_short' =>  'Draenei' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'Goblin' );
-	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 22, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
-
-	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
-	unset ( $sql_ary );
-
+	}
 	
-	// insert events if table is empty
-	
-	//@todo
-	
-	
-	// set imagenames for swtor
-	global $db, $table_prefix;
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_naxx' where event_name like 'Naxx%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_os' where event_name like 'Obsidian%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_voa' where event_name like '%Archavon%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_eoe' where event_name like '%Eternity%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_uld' where event_name like 'Ulduar%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_toc' where event_name like 'Trial%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_icc' where event_name like 'Icecrown%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_rub' where event_name like 'Ruby%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_ony' where event_name like 'Onyxia%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_bot' where event_name like 'Bastion%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_bwd' where event_name like 'Black%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_bar' where event_name like '%Barad%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='swtor_tfr' where event_name like 'Throne%' ";  
-	$db->sql_query($sql);
 	
 }
 ?>

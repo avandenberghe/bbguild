@@ -799,6 +799,7 @@ $versions = array(
 		//add new columns
 		'table_column_add' => array(
 			array($table_prefix . 'bbdkp_classes', 'game_id' , array('VCHAR', '')),
+			array($table_prefix . 'bbdkp_classes', 'class_faction_id' , array('UINT', 0)),
 			array($table_prefix . 'bbdkp_races', 'game_id' , array('VCHAR', '')),
 			array($table_prefix . 'bbdkp_factions', 'game_id' , array('VCHAR', '')),
 			array($table_prefix . 'bbdkp_language', 'game_id' , array('VCHAR', '')),
@@ -839,14 +840,6 @@ function gameinstall($action, $version)
 			switch ($version)
 			{
 				case '1.2.3':
-				/*$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_classes');
-				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_factions');
-				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_roles');
-				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_races');
-				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_dkpsystem');
-				$db->sql_query('TRUNCATE TABLE ' . $table_prefix . 'bbdkp_language');
-				*/
-				
 		        // dkp system
 		        // if there is no dkp system then insert a default one
 			    $result = $db->sql_query('select count(*) as num_dkp from ' . $table_prefix . 'bbdkp_dkpsystem');
@@ -871,12 +864,13 @@ function gameinstall($action, $version)
 				if($total_events == 0)
 				{
 				    $sql_ary = array();
-					$data = array('event_dkpid' => $dkpsys_id , 'event_name' => 'Defeult event', 'event_color' => '#000000', 'event_value' => 10 ) ;
+					$data = array('event_dkpid' => $dkpsys_id , 'event_name' => 'Default event', 'event_color' => '#000000', 'event_value' => 10 ) ;
 					$sql= 'insert into ' . $table_prefix . 'bbdkp_events' .  $db->sql_build_array('INSERT', $data);
 					$db->sql_query($sql);					
 				}
 				
 			    // now insert core gamedata
+			    // if the game is already installed then don't overwrite userdata 
 				$i=0;
 				
 				if(request_var('aion', 0) == 1)
@@ -1061,38 +1055,54 @@ function tableupdates123($action, $version)
 	global $user, $umil, $config, $db, $table_prefix; 
 	switch ($action)
 	{
+				
 		case 'install' :
 		case 'update' :
-		// class table
-
-		// remove old unique index on class table
-		$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
-		$db->sql_query($sql);
-		// make new unique composite
-		$sql= "CREATE UNIQUE INDEX classes ON " . $table_prefix . 'bbdkp_classes' . " (game_id, class_id) ";
-		$db->sql_query($sql);
+			switch ($version)
+				{
+					case '1.2.3':
 		
-		// race table
-		$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_races' . " DROP PRIMARY KEY";
-		$db->sql_query($sql);
-		// make new pk 
-		$sql= "ALTER TABLE " . $table_prefix . 'bbdkp_races' . "  ADD PRIMARY KEY (game_id, race_id)";
-		$db->sql_query($sql);
-		
-		// faction table
-		$sql= "CREATE UNIQUE INDEX factions ON " . $table_prefix . 'bbdkp_factions' . " (game_id, faction_id)";
-		$db->sql_query($sql);		
-
-		// language table
-		$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX attribute_id ";
-		$db->sql_query($sql);		
-		// make new unique key
-		$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
-		$db->sql_query($sql);
+				// remove old unique index on class table
+				$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
+				$db->sql_query($sql);
+				// make new unique composite
+				$sql= "CREATE UNIQUE INDEX classes ON " . $table_prefix . 'bbdkp_classes' . " (game_id, class_id) ";
+				$db->sql_query($sql);
 				
-	}	
+				// race table
+				$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_races' . " DROP PRIMARY KEY";
+				$db->sql_query($sql);
+				// make new pk 
+				$sql= "ALTER TABLE " . $table_prefix . 'bbdkp_races' . "  ADD PRIMARY KEY (game_id, race_id)";
+				$db->sql_query($sql);
+				
+				// faction table
+				$sql= "CREATE UNIQUE INDEX factions ON " . $table_prefix . 'bbdkp_factions' . " (game_id, faction_id)";
+				$db->sql_query($sql);		
+		
+				// language table
+				$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX attribute_id ";
+				$db->sql_query($sql);		
+				// make new unique key
+				$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
+				$db->sql_query($sql);
+						
+			}
+			break;
+	
+		case 'uninstall' :
+			switch ($version)
+			{
+				case '1.2.3':
+					// truncate table data before removing new columns 
+					$db->sql_query('TRUNCATE TABLE ' . $table_prefix . "bbdkp_classes ");
+					$db->sql_query('TRUNCATE TABLE ' . $table_prefix . "bbdkp_races  ");
+					$db->sql_query('TRUNCATE TABLE ' . $table_prefix . "bbdkp_factions ");
+					$db->sql_query('TRUNCATE TABLE ' . $table_prefix . "bbdkp_language ");
+			}
 			
-	return array('command' => 'UMIL_UPD123', 'result' => 'SUCCESS');
+		return array('command' => 'UMIL_UPD123', 'result' => 'SUCCESS');
+	}
 	
 }
 

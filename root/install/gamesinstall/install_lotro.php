@@ -21,7 +21,7 @@ function install_lotro()
 {
     global  $db, $table_prefix, $umil, $user;
     
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_classes where game_id = 'lotro'" );    
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'lotro'" );    
     $sql_ary = array();
 
     // class : 
@@ -39,7 +39,7 @@ function install_lotro()
  	unset ($sql_ary); 
  
    	// factions
-   	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_factions where game_id = 'lotro'" );	
+   	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'lotro'" );	
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'lotro','faction_id' => 1, 'faction_name' => 'Normal' );
     $sql_ary[] = array('game_id' => 'lotro','faction_id' => 2, 'faction_name' => 'MonsterPlay' );
@@ -47,7 +47,7 @@ function install_lotro()
     unset ($sql_ary); 
 
       // races
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_races  where game_id = 'lotro'");  
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'lotro'");  
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'lotro','race_id' => 1, 'race_faction_id' => 1 ); //Man
     $sql_ary[] = array('game_id' => 'lotro','race_id' => 2, 'race_faction_id' => 1 ); //Hobbit
@@ -56,7 +56,7 @@ function install_lotro()
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
     unset ($sql_ary); 
     
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_language  where game_id = 'lotro' and attribute_id in ('class', 'race) ");
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'lotro' and (attribute_id='class' or attribute_id = 'race')");
     $sql_ary = array();
 	$sql_ary[] = array( 'game_id' => 'lotro','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array( 'game_id' => 'lotro','attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Burglar' ,  'name_short' =>  'Burglar' );

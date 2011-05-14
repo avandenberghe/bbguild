@@ -22,7 +22,7 @@ function install_vanguard()
     global  $db, $table_prefix, $umil, $user;
     
     // class : 
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_classes where game_id = 'vanguard'" ); 
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'vanguard'" ); 
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'vanguard','class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'vanguard_Unknown_small');
     $sql_ary[] = array('game_id' => 'vanguard','class_id' => 1, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'vanguard_Bard_small' );
@@ -44,7 +44,7 @@ function install_vanguard()
    	unset ($sql_ary); 
     
    	// factions
-   	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_factions where game_id = 'vanguard'" );	
+   	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'vanguard'" );	
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'vanguard','faction_id' => 1, 'faction_name' => 'Thestra' );
     $sql_ary[] = array('game_id' => 'vanguard','faction_id' => 2, 'faction_name' => 'Kojan' );
@@ -53,7 +53,7 @@ function install_vanguard()
     unset ($sql_ary); 
     
     // races
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_races  where game_id = 'vanguard'");  
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'vanguard'");  
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'vanguard','race_id' => 1, 'race_faction_id' => 1 ); //Thestran Human
     $sql_ary[] = array('game_id' => 'vanguard','race_id' => 2, 'race_faction_id' => 1 ); //Dwarf
@@ -77,7 +77,7 @@ function install_vanguard()
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
     unset ( $sql_ary );
 
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_language  where game_id = 'vanguard' and attribute_id in ('class', 'race) ");
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'vanguard' and (attribute_id='class' or attribute_id = 'race')");
 	$sql_ary = array();
 	$sql_ary[] = array( 'game_id' => 'vanguard','attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array( 'game_id' => 'vanguard','attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Bard' ,  'name_short' =>  'Bard' );

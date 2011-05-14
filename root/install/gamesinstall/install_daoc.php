@@ -20,7 +20,7 @@ function install_daoc()
     global $db, $table_prefix, $umil, $user;
 
     $sql_ary = array();
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_classes where game_id = 'daoc'" );    
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'daoc'" );    
     // class general
     $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 1, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Unknown_small' );
     // class Albion   
@@ -76,7 +76,7 @@ function install_daoc()
    	unset ($sql_ary); 
     
    	// factions
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_factions where game_id = 'daoc'" );	
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'daoc'" );	
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'daoc', 'faction_id' => 1, 'faction_name' => 'Albion' );
     $sql_ary[] = array('game_id' => 'daoc', 'faction_id' => 2, 'faction_name' => 'Hibernian' );
@@ -86,7 +86,7 @@ function install_daoc()
     unset ($sql_ary); 
 
     // races
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_races  where game_id = 'daoc'");  
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'daoc'");  
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'daoc',  'race_id' => 1,  'race_faction_id' => 1 );
     $sql_ary[] = array('game_id' => 'daoc', 'race_id' => 2,  'race_faction_id' => 1 );
@@ -112,7 +112,7 @@ function install_daoc()
     unset ($sql_ary); 
 
     //language strings 
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_language  where game_id = 'daoc' and attribute_id in ('class', 'race) ");	   
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'daoc' and (attribute_id='class' or attribute_id = 'race')");	   
 	$sql_ary = array();	
 	$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Armsman' ,  'name_short' =>  'Armsman' );

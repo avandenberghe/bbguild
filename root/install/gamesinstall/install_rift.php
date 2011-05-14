@@ -19,7 +19,7 @@ function install_rift()
 {
     global $db, $table_prefix, $umil, $user;
     
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_classes where game_id = 'rift'" );   
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'rift'" );   
     $sql_ary = array();
     
     // class general
@@ -65,7 +65,7 @@ function install_rift()
    	unset ($sql_ary); 
    	
    	// factions
-   	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_factions where game_id = 'rift'" );	    
+   	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'rift'" );	    
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'rift','faction_id' => 1, 'faction_name' => 'Guardians' );
     $sql_ary[] = array('game_id' => 'rift','faction_id' => 2, 'faction_name' => 'Defiant' );
@@ -74,7 +74,7 @@ function install_rift()
     unset ($sql_ary); 
     
     // races (No races, only factions, dummy value)
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_races  where game_id = 'rift'");  
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'rift'");  
     $sql_ary = array();
     $sql_ary[] = array('game_id' => 'rift','race_id' => 1, 'race_faction_id' => 1 );
     $sql_ary[] = array('game_id' => 'rift','race_id' => 2, 'race_faction_id' => 1 );
@@ -85,7 +85,7 @@ function install_rift()
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 	unset ($sql_ary);	
 
-    $db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_language  where game_id = 'rift' and attribute_id in ('class', 'race) ");
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'rift' and (attribute_id='class' or attribute_id = 'race')");
     $sql_ary = array();
 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	

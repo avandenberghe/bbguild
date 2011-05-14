@@ -25,7 +25,7 @@ function install_wow()
 	global $db, $table_prefix, $umil, $user;
 	// classes
 	// note class 10 does not exist
-	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_classes where game_id = 'wow'" ); 
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'wow'" ); 
 	$sql_ary = array ();
 	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#999', 'imagename' => 'wow_Unknown_small');   
 	$sql_ary [] = array ('game_id' => 'wow','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_Warrior_small');   
@@ -42,7 +42,7 @@ function install_wow()
 	unset ( $sql_ary ); 
 
 	// factions
-	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_factions where game_id = 'wow'" );
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'wow'" );
 	$sql_ary = array();
 	$sql_ary [] = array ('game_id' => 'wow','faction_id' => 1, 'faction_name' => 'Alliance' );
 	$sql_ary [] = array ('game_id' => 'wow','faction_id' => 2, 'faction_name' => 'Horde' );
@@ -50,7 +50,7 @@ function install_wow()
 	unset ( $sql_ary );
 	
 	// races
-	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_races  where game_id = 'wow'");
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'wow'");
 	$sql_ary = array ();
 	$sql_ary [] = array ('game_id' => 'wow','race_id' => 0, 'race_faction_id' => 0, 'image_female_small' => ' ',  'image_male_small' => ' '  ); //Unknown
 	$sql_ary [] = array ('game_id' => 'wow','race_id' => 1, 'race_faction_id' => 1, 'image_female_small' => 'wow_human_female_small',  'image_male_small' => 'wow_human_male_small'  ); //Human
@@ -85,7 +85,7 @@ function install_wow()
 	}
 
 	// classes
-	$db->sql_query('DELETE FROM TABLE ' . $table_prefix . "bbdkp_language  where game_id = 'wow' and attribute_id in ('class', 'race) ");
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'wow' and (attribute_id='class' or attribute_id = 'race')");
 	
 	$sql_ary = array ();
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );

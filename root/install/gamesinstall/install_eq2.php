@@ -51,7 +51,7 @@ function install_eq2()
 	$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
     
    	// Everquest factions
-    $db->sql_query('TRUNCATE TABLE ' . $table_prefix . "bbdkp_factions' where game_id = 'eq2'"  );
+    $db->sql_query('DELETE from ' . $table_prefix . "bbdkp_factions' where game_id = 'eq2'"  );
     $sql_ary = array();
     $sql_ary[] = array('faction_id' => 1, 'faction_name' => 'Good' );
     $sql_ary[] = array('faction_id' => 2, 'faction_name' => 'Evil' );
@@ -88,7 +88,7 @@ function install_eq2()
     unset ($sql_ary);
 	global $db, $table_prefix, $umil, $user;
 	
-	$db->sql_query('DELETE FROM  ' . $table_prefix . "bbdkp_language' where game_id = 'eq2' and attribute_id in ('class', 'race) "  ); 
+	$db->sql_query('DELETE FROM  ' . $table_prefix . "bbdkp_language' where game_id = 'eq2' and (attribute_id='class' or attribute_id = 'race')"  ); 
 	$sql_ary = array();
 	$sql_ary[] = array( 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array( 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Assassin' ,  'name_short' =>  'Assassin' );
