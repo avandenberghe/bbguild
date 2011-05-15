@@ -200,11 +200,36 @@ foreach ( $filtervalues as $fid => $fname )
 
 /***** end armor - class pulldown ****/
 
+/*
+ * list installed games
+ */
+$games = array(
+    'wow'        => $user->lang['WOW'], 
+    'lotro'      => $user->lang['LOTRO'], 
+    'eq'         => $user->lang['EQ'], 
+    'daoc'       => $user->lang['DAOC'], 
+    'vanguard' 	 => $user->lang['VANGUARD'],
+    'eq2'        => $user->lang['EQ2'],
+    'warhammer'  => $user->lang['WARHAMMER'],
+    'aion'       => $user->lang['AION'],
+    'FFXI'       => $user->lang['FFXI'],
+	'rift'       => $user->lang['RIFT'],
+	'swtor'      => $user->lang['SWTOR']
+);
+              
+$installed_games = array();
+foreach($games as $gameid => $gamename)
+{
+	if ($config['bbdkp_games_' . $gameid] == 1)
+	{
+		$installed_games[] = $gamename; 
+	} 
+}
 
 /* table select */
 
 $sql_array = array(
-    'SELECT'    => 	'm.member_dkpid, d.dkpsys_name, m.member_id, m.member_status, m.member_lastraid, 
+    'SELECT'    => 	'l.game_id, m.member_dkpid, d.dkpsys_name, m.member_id, m.member_status, m.member_lastraid, 
     				sum(m.member_raid_value) as member_raid_value, 
     				sum(m.member_earned) as member_earned, 
     				sum(m.member_adjustment) - ( ' . max(0, $config['bbdkp_basegp']) . ')  as member_adjustment, 
@@ -229,9 +254,9 @@ $sql_array = array(
     	),
  
     'WHERE'     =>  "(m.member_id = l.member_id)  
-    		AND l1.attribute_id =  c.class_id AND l1.language= '" . $config['bbdkp_lang'] . "' AND l1.attribute = 'class' 
-			AND (c.class_id = l.member_class_id) 
-			AND (l.member_race_id =  a.race_id)
+    		AND l1.attribute_id =  c.class_id AND l1.language= '" . $config['bbdkp_lang'] . "' AND l1.attribute = 'class' and c.game_id = l1.game_id 
+			AND (c.class_id = l.member_class_id and c.game_id=l.game_id) 
+			AND (l.member_race_id =  a.race_id and a.game_id=l.game_id)
 			AND (r.rank_id = l.member_rank_id) 
 			AND (m.member_dkpid = d.dkpsys_id) 
 			AND (l.member_guild_id = r.guild_id) " ,
@@ -662,7 +687,7 @@ foreach ( $memberarray as $key => $member )
 		
 }
 
-$s_showlb = true;
+
 leaderboard ( $dkpsys_id, $query_by_pool );
 
 // Added to the end of the sort links
@@ -744,7 +769,6 @@ $template->assign_vars ( array (
 	'O_RAIDS_P2_DAYS' => $sortlink [20], 
 	'RAIDS_P1_DAYS' => sprintf ( $user->lang ['RAIDS_X_DAYS'], $list_p1 ), 
 	'RAIDS_P2_DAYS' => sprintf ( $user->lang ['RAIDS_X_DAYS'], $list_p2 ), 
-	'S_SHOWLEAD' => $s_showlb,
 	'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 	'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
 	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
@@ -788,32 +812,38 @@ $template->set_filenames ( array ('body' => 'dkp/listmembers.html' ) );
 page_footer ();
 
 // end 
+
 /**
- * this function builds a grid with PR or earned (after dacay)
+ * this function builds a grid with PR or earned (after decay)
  */
 function leaderboard($dkpsys_id, $query_by_pool)
 {
-	// get needed global vars
+	// get all classes that have dkp members
 	global $db, $template, $config;
 	global $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
     $sql_array = array(
 	    'SELECT'    => 	' c.class_id, l.name as class_name, c.imagename, c.colorcode ', 
 	    'FROM'      => array(
-	        CLASS_TABLE 	=> 'c',
-	        BB_LANGUAGE		=> 'l', 
+	        CLASS_TABLE 		=> 'c',
+	        BB_LANGUAGE			=> 'l',
+	        MEMBER_LIST_TABLE	=> 'li',
+	        MEMBER_DKP_TABLE 	=> 'm',
 	    	),
-	    'WHERE'		=> "class_id != 0 AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+	    'WHERE'		=> "class_id != 0 AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . 
+	    				"' AND l.attribute = 'class' and c.game_id = l.game_id and 
+	    				m.member_id = li.member_id and li.member_class_id = c.class_id and li.game_id = c.class_id ",   				    	
 		'ORDER_BY'	=> 'l.name ',
     );
 	$sql = $db->sql_build_query('SELECT', $sql_array);
 	
-	$result = $db->sql_query ( $sql );
+	$result = $db->sql_query ($sql);
 	$classes = array ();
-	
+	$class=0;
 	while ( $row = $db->sql_fetchrow ( $result ) )
 	{
-		$cssclass = $config ['bbdkp_default_game'] . 'class' . $row ['class_id'];
+		$class++;
+		$cssclass = $row ['game_id'] . 'class' . $row ['class_id'];
 		$template->assign_block_vars ( 'class', 
 			array (
 				'CLASSNAME' 	=> $row ['class_name'], 
@@ -883,7 +913,19 @@ function leaderboard($dkpsys_id, $query_by_pool)
 			$template->assign_block_vars ( 'class.dkp_row', $dkprowarray );
 		}
 		$db->sql_freeresult ( $result2 );
+		
+		$template->assign_vars ( array (
+			'S_SHOWLEAD' => true, 
+		));	
 	}
+	
+	if($class==0)
+	{
+		$template->assign_vars ( array (
+			'S_SHOWLEAD' => false,
+		));
+	}
+	
 }
 
 ?>

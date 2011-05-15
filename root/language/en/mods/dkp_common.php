@@ -159,7 +159,7 @@ $lang = array_merge($lang, array(
 'VIEWITEM_TITLE' => 'Viewing Purchase History for %s',
 'VIEWMEMBER_TITLE' => 'History for %s',
 'VIEWRAID_TITLE' => 'Raid Summary',
-
+'NODKPACCOUNTS'	=> 'No DKP accounts found', 
 // Various
 'ACCOUNT' => 'Account',
 'ACTION' => 'Action',

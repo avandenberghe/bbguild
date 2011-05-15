@@ -457,7 +457,6 @@ class acp_dkp_raid extends bbDKP_Admin
 				// Javascript messages
 				'MSG_ATTENDEES_EMPTY' => $user->lang ['FV_REQUIRED_ATTENDEES'], 
 				'MSG_NAME_EMPTY' 	  => $user->lang ['FV_REQUIRED_EVENT_NAME'], 
-				'MSG_GAME_NAME' 	  => $config ['bbdkp_default_game'], 
 		));
 	}
 	

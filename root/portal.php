@@ -23,7 +23,7 @@ if(!defined("EMED_BBDKP"))
     trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING); 
     
 }
-if (!isset($config['bbdkp_default_game']))
+if (!isset($config['bbdkp_version']))
 {
 	// THE CONFIGS AND DATABASE TABLES AREN'T INSTALLED, EXIT
     trigger_error('GENERAL_ERROR', E_USER_WARNING); 
