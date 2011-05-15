@@ -138,7 +138,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					5 => array('member_joindate', 'member_joindate desc'),
 					6 => array('member_outdate', 'member_outdate desc'),
 					7 => array('member_comment', 'member_comment desc'),
-					8 => array('member_race', 'member_race desc'),
+						8 => array('member_race', 'member_race desc'),
 				);
 				
 				$current_order = switch_order($sort_order);

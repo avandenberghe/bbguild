@@ -139,9 +139,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				    'WHERE'     =>  "(a.member_rank_id = r.rank_id)
 				    			AND (a.member_guild_id = r.guild_id)   
 								AND (a.member_id = m.member_id) 
-								AND (a.member_class_id = c.class_id)  
+								AND (a.member_class_id = c.class_id and a.game_id = c.game_id)  
 								AND (m.member_dkpid = s.dkpsys_id)   
-								AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    		
+								AND l.attribute_id = c.class_id  and l.game_id = c.game_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    		
 								AND (s.dkpsys_id = " . (int) $dkpsys_id . ')' ,
 					);
 					
@@ -638,16 +638,17 @@ class acp_dkp_mdkp extends bbDKP_Admin
 			        array(
 			            'FROM'  => array(BB_LANGUAGE => 'r1'),
 			            'ON'    => "r1.attribute_id = a.member_race_id AND r1.language= '" . 
-			        		$config['bbdkp_lang'] . "' AND r1.attribute = 'race'" 
+			        		$config['bbdkp_lang'] . "' AND r1.attribute = 'race' and r1.game_id = a.game_id" 
 			            )
 			        ),
 			 
 			    'WHERE'     =>  " a.member_rank_id = r.rank_id 
 			    				AND a.member_guild_id = r.guild_id  
 								AND a.member_id = m.member_id 
+								AND a.game_id = c.game_id 
 								AND a.member_class_id = c.class_id  
 								AND m.member_dkpid = s.dkpsys_id   
-								AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    
+								AND l.game_id = c.game_id and l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    
 								AND s.dkpsys_id = " . $dkp_id . '   
 							    AND a.member_id = ' . $member_id,
 				);
