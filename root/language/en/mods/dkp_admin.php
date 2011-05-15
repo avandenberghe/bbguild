@@ -281,6 +281,7 @@ $lang = array_merge($lang, array(
 'ACP_DKP_LOOTSYSTEMOPTIONS'	=> 'Lootsystem options, Raid Decay rate, Item Decay rate, Zerosum Bank account',
 'ACP_DKP_LOOTSYSTEMEXPLAIN'	=> 'A short guide to Loot systems',
 'EDIT_RAIDER_EXPLAIN' => 'Here you can edit a Raiders earned points',
+'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Note : Game cannot be changed once it is set.',
 
 
 // Permission Messages
@@ -558,6 +559,7 @@ $lang = array_merge($lang, array(
 'DEFAULT_GAME' => 'Installed games',
 'EVENTS_PER_PAGE' => 'Events per Page',
 'GAME'	=> 'Game', 
+ 
 'GENERAL_SETTINGS' => 'General Settings',
 'GUILDTAG' => 'Guildtag / Alliance Name',
 'GUILDTAG_NOTE' => 'Used in the title of nearly every page',

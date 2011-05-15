@@ -147,7 +147,8 @@ class acp_dkp_mm extends bbDKP_Admin
 				$show_all = (( isset($_GET['show'])) && request_var('show','') == 'all') ? true : false;
 				
 				$sql_array = array(
-				    'SELECT'    => 	'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as member_class, r.rank_id, r.rank_name, r.rank_prefix, r.rank_suffix,
+				    'SELECT'    => 	'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as member_class, r.rank_id, 
+				    				r.rank_name, r.rank_prefix, r.rank_suffix,
 									 c.colorcode , c.imagename, m.member_gender_id, a.image_female_small, a.image_male_small', 
 				 
 				    'FROM'      => array(
@@ -217,7 +218,7 @@ class acp_dkp_mm extends bbDKP_Admin
 						'CLASS'         => ( $row['member_class'] != 'NULL' ) ? $row['member_class'] : '&nbsp;',
 						'COMMENT'       => $row['member_comment'],
 						'JOINDATE'      => date($config['bbdkp_date_format'], $row['member_joindate']),
-						'OUTDATE'       => date($config['bbdkp_date_format'], $row['member_outdate']),  
+						'OUTDATE'       => ($row['member_outdate'] == 0) ? '' : date($config['bbdkp_date_format'], $row['member_outdate']),  
 						'U_VIEW_USER' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"), 
 						'U_VIEW_MEMBER' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_mm&amp;mode=mm_addmember&amp;'. URI_NAMEID . '='.$row['member_id']) ,
 						'U_DELETE_MEMBER' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_mm&amp;mode=mm_addmember&amp;delete=1&amp;'. URI_NAMEID . '='.$row['member_id']),
@@ -429,9 +430,16 @@ class acp_dkp_mm extends bbDKP_Admin
 					{
 						$level = $maxlevel;	 
 					}
-
-					$outdate_upd= mktime(12,0,0, request_var('member_outdate_mo', 0)  , request_var('member_outdate_d', 0) , request_var('member_outdate_y', 0) );
-					$joindate_upd= mktime(12,0,0, request_var('member_joindate_mo', 0)	, request_var('member_joindate_d', 0) , request_var('member_joindate_y', 0) );
+					
+					$joindate= mktime(0,0,0, request_var('member_joindate_mo', 0)	, request_var('member_joindate_d', 0) , request_var('member_joindate_y', 0) );
+					
+					$leavedate = 0;
+					if(request_var('member_outdate_mo', 0) + request_var('member_outdate_d', 0) != 0)
+					{
+						$leavedate = mktime(0,0,0,request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0)); 
+					}
+					
+					
 					$phpbb_user_id = request_var('phpbb_user_id', 0);
 					 
 					// update the data including the phpbb userid
@@ -444,8 +452,8 @@ class acp_dkp_mm extends bbDKP_Admin
 						'member_gender_id'	=> $gender,
 						'member_comment'	=> utf8_normalize_nfc(request_var('member_comment','',true)),  
 						'member_guild_id'	=> request_var('member_guild_id',0),
-						'member_outdate'	=> $outdate_upd, 
-						'member_joindate'	=> $joindate_upd, 
+						'member_outdate'	=> $leavedate, 
+						'member_joindate'	=> $joindate, 
 						'phpbb_user_id'		=> $phpbb_user_id, 
 						'game_id'			=> request_var('game_id', ''),
 					)						

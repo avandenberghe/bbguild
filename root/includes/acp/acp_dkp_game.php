@@ -54,27 +54,41 @@ class acp_dkp_game extends bbDKP_Admin
         
         $form_key = 'acp_dkp_game';
 		add_form_key($form_key);
-				
+
+		$games = array(
+           'wow'        => $user->lang['WOW'], 
+           'lotro'      => $user->lang['LOTRO'], 
+           'eq'         => $user->lang['EQ'], 
+           'daoc'       => $user->lang['DAOC'], 
+           'vanguard' 	=> $user->lang['VANGUARD'],
+           'eq2'        => $user->lang['EQ2'],
+           'warhammer'  => $user->lang['WARHAMMER'],
+           'aion'       => $user->lang['AION'],
+           'FFXI'       => $user->lang['FFXI'],
+      	   'rift'       => $user->lang['RIFT'],
+      	   'swtor'      => $user->lang['SWTOR']
+       );
+                
         switch ($mode)
         {
             case 'addfaction':
 				$addnew = (isset($_POST['factionadd'])) ? true : false;
-
+				
 				if ($addnew)
 				{
                    	if (!check_form_key('acp_dkp_game'))
 					{
 						trigger_error('FORM_INVALID');
 					}
-					
-					$sql = 'select max(faction_id) as max from ' . FACTION_TABLE; 
+ 					$game_id = request_var('game_id', '');
+					$sql = 'select max(faction_id) as max from ' . FACTION_TABLE . " where game_id = '" . $game_id; 
 					$result = $db->sql_query($sql);	
 					$factionid = (int) $db->sql_fetchfield('max', 0 ,$result );	
 					$db->sql_freeresult($result);
 					
-					
 					$factionname = utf8_normalize_nfc(request_var('factionname', '', true));
 					$data = array( 
+						'game_id'			=> $game_id, 
 						'faction_name'		=> (string) $factionname,
 						'faction_id'		=> (int) $factionid + 1,
 						'faction_hide'		=> 0,
@@ -90,6 +104,27 @@ class acp_dkp_game extends bbDKP_Admin
 					trigger_error( sprintf( $user->lang['ADMIN_ADD_FACTION_SUCCESS'], $factionname) . $link, E_USER_NOTICE);
 						
 				}
+				
+       			// Game dropdown
+				// list installed games
+				
+
+                $installed_games = array();
+                foreach($games as $gameid => $gamename)
+                {
+                	//add value to dropdown when the game config value is 1
+                	if ($config['bbdkp_games_' . $gameid] == 1)
+                	{
+                		
+                		$template->assign_block_vars('game_row', array(
+						'VALUE' => $gameid,
+						'SELECTED' => '',
+						'OPTION'   => $gamename, 
+						));
+						
+                		$installed_games[] = $gameid; 
+                	} 
+                }
 
 				// send parameters to template
                    $template->assign_vars( array(
@@ -111,7 +146,8 @@ class acp_dkp_game extends bbDKP_Admin
 						trigger_error('FORM_INVALID');
 					}
        			}
-       			
+
+       			$game_id = request_var('game_id', '');
 				$id = request_var('race_id', 0);
 				$racename = utf8_normalize_nfc(request_var('racename', '', true));
 				$factionid = request_var('faction', 0 );
@@ -121,14 +157,16 @@ class acp_dkp_game extends bbDKP_Admin
 				if($raceadd)
 				{
 					// add the race	 to db
-					$sql = 'select count(*) as count from ' . RACE_TABLE . ' where race_id  = ' . $id; 
+					$sql = 'select count(*) as count from ' . RACE_TABLE . ' where race_id  = ' . $id . " and game_id = '" . $game_id . "'"; 
 					$result = $db->sql_query($sql);	
 					if( (int) $db->sql_fetchfield('count', 0 ,$result ) > 0 )
 					{
+						//uh oh that race exists
 						 trigger_error( sprintf( $user->lang['ADMIN_ADD_RACE_FAILED'], $id) . $link, E_USER_WARNING);	
 					}
 					$db->sql_freeresult($result);
 					$data = array( 
+						'game_id'				=> (string) $game_id,
 						'race_id'				=> (int) $id,
 						'race_faction_id'		=> (int) $factionid,
 						'image_male_small'		=> (string) $race_imagename_m,
@@ -142,6 +180,7 @@ class acp_dkp_game extends bbDKP_Admin
 						
 					$names = array(
 						'attribute_id'	=>  $id,
+						'game_id'		=>  $game_id,
 						'language'		=>  $config['bbdkp_lang'],
 						'attribute'		=>  'race', 
 						'name'			=> (string) $racename,
@@ -159,16 +198,17 @@ class acp_dkp_game extends bbDKP_Admin
 				if ($raceupdate)
 				{
 					// update the race to db
+					// note you cannot change the game to which a race belongs 
+					
 					$data = array( 
-						'race_faction_id'		=> (int) $factionid,
+						'race_faction_id'		=> (int) 	$factionid,
 						'image_male_small'		=> (string) $race_imagename_m,
 						'image_female_small'	=> (string) $race_imagename_f,					
 					);
 					
 					$db->sql_transaction('begin');
-					
 					$sql = 'UPDATE ' . RACE_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) .  '  
-						    WHERE race_id = ' . $id ;
+						    WHERE race_id = ' . $id . " and game_id = '" . $game_id . "'";
 					$db->sql_query($sql);	
 
 					$names = array(
@@ -177,7 +217,7 @@ class acp_dkp_game extends bbDKP_Admin
 					);
 					
 					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $id . 
-						" AND attribute='race'  AND language= '" . $config['bbdkp_lang'] ."'";
+						" AND attribute='race'  AND language= '" . $config['bbdkp_lang'] ."' and game_id =   '" . $game_id . "'";
 					$db->sql_query($sql);	
 					
 					$db->sql_transaction('commit');
@@ -203,6 +243,7 @@ class acp_dkp_game extends bbDKP_Admin
        			}
        			
 				//user pressed add or update in list
+        	    $game_id = request_var('game_id', '');
 				$classname = utf8_normalize_nfc(request_var('class_name', '', true));
 				$class_id = request_var('class_id', 0);
 				$min = request_var('class_level_min', 0); 
@@ -214,16 +255,17 @@ class acp_dkp_game extends bbDKP_Admin
 				if($classadd)
 				{
 					// add the class to db
-					$sql = 'select count(*) as count from ' . CLASS_TABLE . ' where class_id  = ' . $class_id; 
+					$sql = 'select count(*) as count from ' . CLASS_TABLE . ' where class_id  = ' . $class_id . " and game_id = '" . $game_id . "'"; 
 					$result = $db->sql_query($sql);	
 					if( (int) $db->sql_fetchfield('count', 0 ,$result ) > 0 )
 					{
-						 trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_FAILED'], $class_id) . $link, E_USER_WARNING);	
+						trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_FAILED'], $class_id) . $link, E_USER_WARNING);	
 					}
 					$db->sql_freeresult($result);
 					
 					$data = array( 
 						'class_id'				=> (int) $class_id,
+						'game_id'				=> (string) $game_id,
 						'class_min_level'		=> (int) $min,
 						'class_max_level'		=> (int) $max,
 						'class_armor_type'		=> (string) $armorytype,
@@ -240,6 +282,7 @@ class acp_dkp_game extends bbDKP_Admin
 					$id = $db->sql_nextid();
 					 
 					$names = array(
+						'game_id'		=> (string) $game_id,
 						'attribute_id'	=>  $class_id,
 						'language'		=>  $config['bbdkp_lang'],
 						'attribute'		=>  'class', 
@@ -259,7 +302,6 @@ class acp_dkp_game extends bbDKP_Admin
 				if ($classupdate)
 				{
 					// update class in db
-
 					// get unique key !!
 					$class_id0 = request_var('class_id0', 0); 
 					//get pk
@@ -268,10 +310,12 @@ class acp_dkp_game extends bbDKP_Admin
 					$class_id = request_var('class_id', 0); 
 					
 					// check for unique classid exception : if this class id exists already 
-					$sql = 'select count(*) as count from ' . CLASS_TABLE . ' where c_index != ' . $c_index . " and class_id = '" . $db->sql_escape($class_id0)  . "'"; 
+					$sql = 'select count(*) as count from ' . CLASS_TABLE . ' where c_index != ' . $c_index . " and 
+							class_id = '" . $db->sql_escape($class_id0)  . "' and game_id = '" . $game_id . "'"; 
 					$result = $db->sql_query($sql);	
 					if( (int) $db->sql_fetchfield('count', 0 ,$result ) > 0 )
-					{	// nubcake earned !
+					{	
+						// ouch!
 						 trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_FAILED'], $class_id0) . $link, E_USER_WARNING);	
 					}
 					$db->sql_freeresult($result);
@@ -288,7 +332,7 @@ class acp_dkp_game extends bbDKP_Admin
 					);
 					$db->sql_transaction('begin');
 					$sql = 'UPDATE ' . CLASS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) .  '  
-						    WHERE c_index = ' . $c_index ;
+						    WHERE c_index = ' . $c_index;
 					$db->sql_query($sql);		
 
 					// now update the language table!
@@ -299,7 +343,7 @@ class acp_dkp_game extends bbDKP_Admin
 					);
 					
 					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $class_id0 . 
-						" AND attribute='class'  AND language= '" . $config['bbdkp_lang'] ."'";
+						" AND attribute='class'  AND language= '" . $config['bbdkp_lang'] . "' and game_id = '" . $game_id . "'"; 
 					$db->sql_query($sql);	
 					
 					$db->sql_transaction('commit');
@@ -370,7 +414,6 @@ class acp_dkp_game extends bbDKP_Admin
 					}
 					else 
 					{
-						//no really ?
 						trigger_error(sprintf($user->lang['ADMIN_DELETE_FACTION_FAILED'], $id) . $link, E_USER_WARNING);
 					}
             		
@@ -379,30 +422,50 @@ class acp_dkp_game extends bbDKP_Admin
             	// user pressed race add / edit, load acp_addrace	
             	if($raceedit || $addrace)
             	{
+            		
+            		// Game dropdown
             		if(isset ($_GET['id']))
             		{
 	            		$id = request_var('id', 0); 
-	            		//edit					
-						$sql_array = array(
-					    'SELECT'    => 	'  r.race_id, l.name as race_name, r.race_faction_id,  r.image_female_small, r.image_male_small ', 
+	            		$game_id =request_var('game_id', ''); 
+	            		//edit race		
+	            		$sql_array = array(
+					    'SELECT'    => 	' r.game_id, r.race_id, l.name as race_name, r.race_faction_id,  r.image_female_small, r.image_male_small ', 
 					    'FROM'      => array(
 								RACE_TABLE 		=> 'r',
 								BB_LANGUAGE 	=> 'l',
 									),
-						'WHERE'		=> " r.race_id = l.attribute_id 
+						'WHERE'		=>  "   r.game_id = l.game_id 
+										AND r.race_id = l.attribute_id 
 										AND l.attribute='race' 
 										AND l.language= '" . $config['bbdkp_lang'] ."'
+										AND l.game_id = '". $game_id ."'
 										AND r.race_id = " . $id ,
 					    );
-						
+					    
 					    $sql = $db->sql_build_query('SELECT', $sql_array);
 					    $result = $db->sql_query($sql);	
 						$factionid = $db->sql_fetchfield('race_faction_id', 0 ,$result );	
 						$race_name = $db->sql_fetchfield('race_name', 0 ,$result );	
 						$race_imagename_m = $db->sql_fetchfield('image_male_small', 0 ,$result );
 						$race_imagename_f = $db->sql_fetchfield('image_female_small', 0 ,$result );
-						
 						$db->sql_freeresult($result);
+						
+						// list installed games
+		                $installed_games = array();
+		                foreach($games as $id => $gamename)
+		                {
+		                	//add value to dropdown when the game config value is 1
+		                	if ($config['bbdkp_games_' . $id] == 1)
+		                	{
+		                		$template->assign_block_vars('game_row', array(
+								'VALUE' => $id,
+								'SELECTED' => ($game_id == $id) ? ' selected="selected"' : '',
+								'OPTION'   => $gamename, 
+								));
+		                		$installed_games[] = $id; 
+		                	} 
+		                }
 	            		
 	            		// faction dropdown
 						$sql_array = array(
@@ -410,6 +473,7 @@ class acp_dkp_game extends bbDKP_Admin
 					    'FROM'      => array(
 								FACTION_TABLE 	=> 'f',
 									),
+						'WHERE'		=>  " f.game_id = '" .  $game_id . "'", 
 						'ORDER_BY'	=> 'faction_id asc ',
 					    );
 					    
@@ -425,24 +489,40 @@ class acp_dkp_game extends bbDKP_Admin
 	                    
 	                    // send parameters to template
 	                    $template->assign_vars( array(
-			                    
-			                    'RACE_ID' 				=> $id  ,
-			                    'RACE_NAME' 		    => $race_name  ,
-								'S_FACTIONLIST_OPTIONS'	=> $s_faction_options, 
-	                    		'S_RACE_IMAGE_M_EXISTS'	=> (strlen($race_imagename_m) > 1) ? true : false,
-	                    		'RACE_IMAGENAME_M' 	 	=> $race_imagename_m, 
-	                    		'RACE_IMAGE_M' 		 	=> (strlen($race_imagename_m) > 1) ? $phpbb_root_path . "images/race_images/" . $race_imagename_m . ".png" : '',
-	                    		'S_RACE_IMAGE_F_EXISTS'	=> (strlen($race_imagename_f) > 1) ? true : false, 
-	                    		'RACE_IMAGENAME_F' 	 	=> $race_imagename_f, 
-	                    		'RACE_IMAGE_F' 		 	=> (strlen($race_imagename_f) > 1) ? $phpbb_root_path . "images/race_images/" . $race_imagename_f . ".png" : '',  	                    
-								'S_ADD'   				=> FALSE,
-	                    		'U_ACTION'				=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addrace'),  
-	                    		'MSG_NAME_EMPTY'   		=> $user->lang['FV_REQUIRED_NAME'],
-	                    		
+		                    'RACE_ID' 				=> $id  ,
+		                    'RACE_NAME' 		    => $race_name  ,
+							'S_FACTIONLIST_OPTIONS'	=> $s_faction_options, 
+                    		'S_RACE_IMAGE_M_EXISTS'	=> (strlen($race_imagename_m) > 1) ? true : false,
+                    		'RACE_IMAGENAME_M' 	 	=> $race_imagename_m, 
+                    		'RACE_IMAGE_M' 		 	=> (strlen($race_imagename_m) > 1) ? $phpbb_root_path . "images/race_images/" . $race_imagename_m . ".png" : '',
+                    		'S_RACE_IMAGE_F_EXISTS'	=> (strlen($race_imagename_f) > 1) ? true : false, 
+                    		'RACE_IMAGENAME_F' 	 	=> $race_imagename_f, 
+                    		'RACE_IMAGE_F' 		 	=> (strlen($race_imagename_f) > 1) ? $phpbb_root_path . "images/race_images/" . $race_imagename_f . ".png" : '',  	                    
+							'S_ADD'   				=> FALSE,
+                    		'U_ACTION'				=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addrace'),  
+                    		'MSG_NAME_EMPTY'   		=> $user->lang['FV_REQUIRED_NAME'],
 		                ));
             		}
             		else 
-            		{	// build add form
+            		{	
+            			
+		                // build add form
+						// list installed games
+		                $installed_games = array();
+		                foreach($games as $gameid => $gamename)
+		                {
+		                	//add value to dropdown when the game config value is 1
+		                	if ($config['bbdkp_games_' . $gameid] == 1)
+		                	{
+		                		$template->assign_block_vars('game_row', array(
+								'VALUE' => $gameid,
+								'SELECTED' => '',
+								'OPTION'   => $gamename, 
+								));
+		                		$installed_games[] = $gameid; 
+		                	} 
+		                }
+		                
 						$sql_array = array(
 						    'SELECT'    => 	' f.faction_name, f.faction_id ', 
 						    'FROM'      => array(
@@ -466,6 +546,12 @@ class acp_dkp_game extends bbDKP_Admin
 		                ));
             		}
             		
+            		$template->assign_vars( array(
+						'LA_ALERT_AJAX'		  => $user->lang['ALERT_AJAX'],
+						'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
+						'UA_FINDFACTION'      => append_sid("findfaction.$phpEx"),
+	                ));
+            		
 					$this->page_title = 'ACP_LISTGAME';
                 	$this->tpl_name = 'dkp/acp_addrace';
             		break;
@@ -475,14 +561,19 @@ class acp_dkp_game extends bbDKP_Admin
             	if ($racedelete)
             	{
             		$id = request_var('id', 0); 
+            		$game_id =request_var('game_id', '');
                 	$sql_array = array(
 					    'SELECT'    => 	' count(*) as racecount  ', 
 					    'FROM'      => array(
 					        MEMBER_LIST_TABLE 	=> 'm',
 					        RACE_TABLE			=> 'r',
 					    	),
-					    'WHERE' => 'm.member_race_id = r.race_id and r.race_id =  ' . $id
+					    'WHERE' => 'm.member_race_id = r.race_id 
+					    			and r.race_id =  ' . $id . " 
+					    			and r.game_id = m.game_id 
+					    			and r.game_id = '" . $game_id . "'", 
 				    );        
+				    
 				    $sql = $db->sql_build_query('SELECT', $sql_array);    		
             		$result = $db->sql_query($sql);	
 					$racecount = (int) $db->sql_fetchfield('racecount', 0 ,$result );	
@@ -494,10 +585,14 @@ class acp_dkp_game extends bbDKP_Admin
 						{
 							$db->sql_transaction('begin');
 							
-							$sql = 'DELETE FROM ' . RACE_TABLE . ' WHERE race_id =' . $id;  
+							$sql = 'DELETE FROM ' . RACE_TABLE . ' WHERE race_id =' . $id . " and game_id = '" . $game_id . "'"; 
 							$db->sql_query($sql);
 							
-							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'race' and attribute_id= " . $id;  
+							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' 
+									and attribute = 'race' 
+									and attribute_id= " . $id . " 
+									and game_id = '" . $game_id . "'";
+							  
 							$db->sql_query($sql);
 							
 							$db->sql_transaction('commit');
@@ -530,15 +625,19 @@ class acp_dkp_game extends bbDKP_Admin
             		// Load template for adding/editing
 					$armortype = array(
 						'CLOTH' 	=> $user->lang['CLOTH'], 
+						'ROBE'		=> $user->lang['ROBE'],
 						'LEATHER'   => $user->lang['LEATHER'], 
+						'AUGMENTED'		=> $user->lang['AUGMENTED'],
 						'MAIL' 		=> $user->lang['MAIL'], 
+						'HEAVY'		=> $user->lang['HEAVY'],
 						'PLATE'		=> $user->lang['PLATE'], 
 					);
-					
+
 					if( isset($_GET['id']))
             		{
             			//edit this class_id
 	            		$id = request_var('id', 0); 
+	            		$game_id =request_var('game_id', '');
 						
 						$sql_array = array(
 					    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename, c.colorcode ', 
@@ -548,9 +647,12 @@ class acp_dkp_game extends bbDKP_Admin
 									),
 						'WHERE'		=> " c.class_id = l.attribute_id 
 										AND l.attribute='class' 
+										AND l.game_id = '". $game_id ."'
+										AND c.game_id = l.game_id
 										AND l.language= '" . $config['bbdkp_lang'] ."'
 										AND c.class_id = " . $id ,
-					    );						
+					    );			
+					    			
 					    $sql = $db->sql_build_query('SELECT', $sql_array);    		
 						$result = $db->sql_query($sql);	
 						$c_index  =  $db->sql_fetchfield('c_index', 0 ,$result );
@@ -561,20 +663,35 @@ class acp_dkp_game extends bbDKP_Admin
 						$class_armor_type = (string) $db->sql_fetchfield('class_armor_type', 0 ,$result );	
 						$class_imagename = (string) $db->sql_fetchfield('imagename', 0 ,$result );	
 						$class_colorcode = (string) $db->sql_fetchfield('colorcode', 0 ,$result );
-						
 						$db->sql_freeresult($result);
 
+            			// list installed games
+		                $installed_games = array();
+		                foreach($games as $id => $gamename)
+		                {
+		                	//add value to dropdown when the game config value is 1
+		                	if ($config['bbdkp_games_' . $id] == 1)
+		                	{
+		                		$template->assign_block_vars('game_row', array(
+								'VALUE' => $id,
+								'SELECTED' => ($game_id == $id) ? ' selected="selected"' : '',
+								'OPTION'   => $gamename, 
+								));
+		                		$installed_games[] = $id; 
+		                	} 
+		                }
+		                
+		                //list armor types
 						$s_armor_options = ''; 
 						foreach ( $armortype as $armor => $armorname )
 						{
-							//
 				        	$selected = ($armor == $class_armor_type) ? ' selected="selected"' : '';
 							$s_armor_options .= '<option value="' . $armor . '" '.$selected.'> ' . $armorname . '</option>';                    
 						}
 						
 						// send parameters to template
 	                    $template->assign_vars( array(
-	                    		'C_INDEX' 				 => $c_index, 
+	                    		'C_INDEX' 			 => $c_index, 
 			                    'CLASS_ID' 			 => $class_id  ,
 			                    'CLASS_NAME' 		 => $class_name  ,
 								'CLASS_MIN' 		 => $class_min_level  ,
@@ -588,17 +705,30 @@ class acp_dkp_game extends bbDKP_Admin
 	                    		'U_ACTION'			 => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addclass'),
 	                    		'MSG_NAME_EMPTY'   	 => $user->lang['FV_REQUIRED_NAME'],
 		                ));
-            			
-						
 
             		}
             		else 
             		{
+            			$installed_games = array();
+		                foreach($games as $gameid => $gamename)
+		                {
+		                	//add value to dropdown when the game config value is 1
+		                	if ($config['bbdkp_games_' . $gameid] == 1)
+		                	{
+		                		$template->assign_block_vars('game_row', array(
+								'VALUE' => $gameid,
+								'SELECTED' => '',
+								'OPTION'   => $gamename, 
+								));
+		                		$installed_games[] = $gameid; 
+		                	} 
+		                }
+		                
             			// new class
             			$s_armor_options = '';
            		        foreach ( $armortype as $armor => $armorname )
 						{
-							$s_armor_options .= '<option value="' . $armor . '" > ' . $armorname . '</option>';                    
+							$s_armor_options .= '<option value="' . $armor . '" > ' . $armorname . '</option>';                 
 						}
             			// send parameters to template
 	                    $template->assign_vars( array(
@@ -621,15 +751,17 @@ class acp_dkp_game extends bbDKP_Admin
             	{
             		//unique key
             		$class_id = request_var('id', 0); 
+            		$game_id =request_var('game_id', '');
             		
-            		// see if there are mambers in this class
+            		// see if there are members in this class
                 	$sql_array = array(
 					    'SELECT'    => 	' c.class_id, count(*) as classcount  ', 
 					    'FROM'      => array(
 					        MEMBER_LIST_TABLE 	=> 'm',
 					        CLASS_TABLE			=> 'c',
 					    	),
-					    'WHERE' => 'm.member_class_id = c.class_id and c.class_id =  ' . $class_id
+					    'WHERE' => "m.game_id = c.game_id and  m.game_id = '". $game_id."' 
+					    	and m.member_class_id = c.class_id and c.class_id =  " . $class_id,
 				    );
 				    
 				    $sql = $db->sql_build_query('SELECT', $sql_array);    		
@@ -644,10 +776,11 @@ class acp_dkp_game extends bbDKP_Admin
 						{
 							$db->sql_transaction('begin');
 							
-							$sql = 'DELETE FROM ' . CLASS_TABLE . ' WHERE class_id  = ' . $class_id;  
+							$sql = 'DELETE FROM ' . CLASS_TABLE . ' WHERE class_id  = ' . $class_id . " and game_id = '" . $game_id . "'";  
 							$db->sql_query($sql);
 							
-							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'class' and attribute_id= " . $class_id;  
+							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'class' 
+									and attribute_id= " . $class_id . " and game_id = '" . $game_id . "'";
 							$db->sql_query($sql);
 							
 							$db->sql_transaction('commit');
@@ -677,22 +810,15 @@ class acp_dkp_game extends bbDKP_Admin
             	/********************
             	 * template filling
             	 *******************/
-                $sort_order = array(
-                    0 => array('race_id', 'race_id desc'),
-                    1 => array('race_name', 'race_name desc'),
-                    2 => array('faction_name desc', 'faction_name, race_name desc')
-                );
-                
-  
-                $current_order = switch_order($sort_order);
                 
                 // list the factions
 				$total_factions = 0;
                 $sql_array = array(
-				    'SELECT'    => 	'f_index, f.faction_id, f.faction_name  ', 
+				    'SELECT'    => 	'game_id, f_index, f.faction_id, f.faction_name  ', 
 				    'FROM'      => array(
 				        FACTION_TABLE	=> 'f',
 				    	),
+				    'ORDER_BY'	=> 'game_id, faction_id'
 				    );
 				$sql = $db->sql_build_query('SELECT', $sql_array);
 				$result = $db->sql_query($sql);			   
@@ -701,6 +827,7 @@ class acp_dkp_game extends bbDKP_Admin
                 	$total_factions++;
                     $template->assign_block_vars('faction_row', array(
                         'ID' 			=> $row['f_index'],
+                    	'FACTIONGAME' 	=> $row['game_id'],
                         'FACTIONID' 	=> $row['faction_id'],
                         'FACTIONNAME' 	=> $row['faction_name'], 
                     	'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;factiondelete=1&amp;id={$row['f_index']}"))  
@@ -709,16 +836,24 @@ class acp_dkp_game extends bbDKP_Admin
                 $db->sql_freeresult($result);
 
                 // list the races
-				$total_races = 0;
+
+                $sort_order = array(
+                    0 => array('game_id asc, race_id asc', 'game_id desc, race_id asc'),
+                    1 => array('race_id', 'race_id desc'),
+                    2 => array('race_name', 'race_name desc'),
+                    3 => array('faction_name desc', 'faction_name, race_name desc')
+                );
+				 $current_order = switch_order($sort_order);
+                $total_races = 0;
                 $sql_array = array(
-				    'SELECT'    => 	' r.race_id, l.name as race_name, r.race_faction_id, r.race_hide, f.faction_name , r.image_female_small, r.image_male_small ', 
+				    'SELECT'    => 	' r.game_id, r.race_id, l.name as race_name, r.race_faction_id, r.race_hide, f.faction_name , r.image_female_small, r.image_male_small ', 
 				    'FROM'      => array(
 				        RACE_TABLE 		=> 'r',
 				        FACTION_TABLE	=> 'f',
 				        BB_LANGUAGE		=> 'l', 
 				    	),
-				    'WHERE'		=> "r.race_faction_id = f.faction_id
-				    				AND l.attribute_id = r.race_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'race' ",   
+				    'WHERE'		=> " r.race_faction_id = f.faction_id  AND f.game_id = r.game_id
+				    				AND l.attribute_id = r.race_id AND l.game_id = r.game_id and l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'race' ",   
 					'ORDER_BY'	=> $current_order['sql'],
 				    );
 				$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -728,38 +863,41 @@ class acp_dkp_game extends bbDKP_Admin
                 	$total_races++;
                     $template->assign_block_vars('race_row', array(
                         'U_VIEW_RACE' =>  append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addrace&amp;r=". $row['race_id']),
-                        'RACEID' 	=> $row['race_id'],
+                        'GAME' 			=> $user->lang[ strtoupper($row['game_id'])],
+                        'RACEID' 		=> $row['race_id'],
                         'RACENAME' 		=> $row['race_name'],
                         'FACTIONNAME' 	=> $row['faction_name'], 
                     	'RACE_IMAGE_M' 	=> (strlen($row['image_male_small']) > 1) ? $phpbb_root_path . "images/race_images/" . $row['image_male_small'] . ".png" : '',
                     	'RACE_IMAGE_F' 	=> (strlen($row['image_female_small']) > 1) ? $phpbb_root_path . "images/race_images/" . $row['image_female_small'] . ".png" : '',
                     	'S_RACE_IMAGE_M_EXISTS' => (strlen($row['image_male_small']) > 1) ? true : false, 
                     	'S_RACE_IMAGE_F_EXISTS' => (strlen($row['image_female_small']) > 1) ? true : false, 
-                    	'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;racedelete=1&amp;id={$row['race_id']}"), 
-                    	'U_EDIT' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;raceedit=1&amp;id={$row['race_id']}"), 
+                    	'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;racedelete=1&amp;id={$row['race_id']}&amp;game_id={$row['game_id']}"), 
+                    	'U_EDIT' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;raceedit=1&amp;id={$row['race_id']}&amp;game_id={$row['game_id']}"), 
                     )  
                     );
                 }
                 $db->sql_freeresult($result);
                 
                 // list the classes
+                
                 $sort_order2 = array(
-                    0 => array('class_id', 'class_id desc'),
-                    1 => array('class_name', 'class_name desc'),
-                    2 => array('class_armor_type', 'class_armor_type, class_id desc'),
-                    3 => array('class_min_level', 'class_min_level, class_id desc'),
-                    4 => array('class_max_level', 'class_max_level, class_id desc'),
+                  	0 => array('game_id asc, class_id asc', 'game_id desc, class_id asc'),
+                    1 => array('class_id', 'class_id desc'),
+                    2 => array('class_name', 'class_name desc'),
+                    3 => array('class_armor_type', 'class_armor_type, class_id desc'),
+                    4 => array('class_min_level', 'class_min_level, class_id desc'),
+                    5 => array('class_max_level', 'class_max_level, class_id desc'),
                 );
                 $current_order2 = switch_order($sort_order2, "o1");
                 
                 $total_classes = 0;
                 $sql_array = array(
-				    'SELECT'    => 	'c.c_index, c.class_id, l.name as class_name, c.class_hide, c.class_min_level, class_max_level, c.class_armor_type , c.imagename, c.colorcode ', 
+				    'SELECT'    => 	'c.game_id, c.c_index, c.class_id, l.name as class_name, c.class_hide, c.class_min_level, class_max_level, c.class_armor_type , c.imagename, c.colorcode ', 
 				    'FROM'      => array(
 				        CLASS_TABLE 	=> 'c',
 				        BB_LANGUAGE		=> 'l', 
 				    	),
-				    'WHERE'		=> " l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+				    'WHERE'		=> " l.game_id = c.game_id AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
 					'ORDER_BY'	=> $current_order2['sql'],
 				    );
 				    
@@ -769,7 +907,8 @@ class acp_dkp_game extends bbDKP_Admin
                 {
                 	 $total_classes++;
                     $template->assign_block_vars('class_row', array(
-                        'U_VIEW_CLASS' =>  append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addclass&amp;r=". $row['class_id']),
+                        'U_VIEW_CLASS' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addclass&amp;r=". $row['class_id']),
+						'GAME' 			=> $user->lang[ strtoupper($row['game_id'])],
 						'C_INDEX' 		=> $row['c_index'],
                     	'CLASSID' 		=> $row['class_id'],
                         'CLASSNAME' 	=> $row['class_name'],
@@ -780,8 +919,8 @@ class acp_dkp_game extends bbDKP_Admin
                         'CLASSHIDE' 	=> $row['class_hide'], 	
                     	'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
                     	'CLASSIMAGE'	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',
-                        'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classdelete=1&amp;id={$row['class_id']}"), 
-                    	'U_EDIT' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classedit=1&amp;id={$row['class_id']}"), 
+                        'U_DELETE' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classdelete=1&amp;id={$row['class_id']}&amp;game_id={$row['game_id']}"), 
+                    	'U_EDIT' 		=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classedit=1&amp;id={$row['class_id']}&amp;game_id={$row['game_id']}"), 
                     )
                     );
                 }
@@ -790,14 +929,18 @@ class acp_dkp_game extends bbDKP_Admin
                 $template->assign_vars(array(
                     'L_TITLE'         => $user->lang['ACP_LISTGAME'],
                     'L_EXPLAIN'       => $user->lang['ACP_LISTGAME_EXPLAIN'],
-                    'O_RACEID' 		  => $current_order['uri'][0],
-                    'O_RACENAME' 	  => $current_order['uri'][1],
-                    'O_FACTIONNAME'   => $current_order['uri'][2], 
-	                'O_CLASSID'   	  => $current_order2['uri'][0], 
-	                'O_CLASSNAME'     => $current_order2['uri'][1], 
-	                'O_CLASSARMOR'    => $current_order2['uri'][2], 
-	                'O_CLASSMIN'      => $current_order2['uri'][3], 
-	                'O_CLASSMAX'      => $current_order2['uri'][4], 
+                    'O_RACEGAMEID'    => $current_order['uri'][0],
+                    'O_RACEID' 		  => $current_order['uri'][1],
+                    'O_RACENAME' 	  => $current_order['uri'][2],
+                    'O_FACTIONNAME'   => $current_order['uri'][3], 
+                
+	                'O_CLASSGAMEID'   => $current_order2['uri'][0],
+	                'O_CLASSID'   	  => $current_order2['uri'][1], 
+	                'O_CLASSNAME'     => $current_order2['uri'][2], 
+	                'O_CLASSARMOR'    => $current_order2['uri'][3], 
+	                'O_CLASSMIN'      => $current_order2['uri'][4], 
+	                'O_CLASSMAX'      => $current_order2['uri'][5],
+                 
                     'U_LIST_GAMES' 	  => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;"),  
                    	'LISTFACTION_FOOTCOUNT' => sprintf($user->lang['LISTFACTION_FOOTCOUNT'], $total_factions),
                     'LISTRACE_FOOTCOUNT' => sprintf($user->lang['LISTRACE_FOOTCOUNT'], $total_races),
