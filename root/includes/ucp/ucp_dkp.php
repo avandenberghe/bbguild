@@ -121,10 +121,10 @@ class ucp_dkp
 					        USERS_TABLE 		=> 'u', 
 					    	),
 					 
-					    'WHERE'     =>  "  l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+					    'WHERE'     =>  "  l.game_id = c.game_id and l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
 										  AND (m.member_guild_id = g.id) 
-										  AND (m.member_class_id = c.class_id)
-										  AND m.member_race_id =  a.race_id  
+										  AND (m.member_class_id = c.class_id and m.game_id = c.game_id)
+										  AND m.member_race_id =  a.race_id  and m.game_id = a.game_id
 										  AND u.user_id = m.phpbb_user_id and u.user_id = " . $user->data['user_id']  ,
 						'ORDER_BY'	=> " m.member_name ",
 					    );

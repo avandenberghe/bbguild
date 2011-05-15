@@ -186,8 +186,8 @@ $sql_array = array(
     	),
  
     'WHERE'     =>  "l.member_id=m.member_id 
-        AND l.member_class_id = c.class_id 
-    	AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
+        AND l.member_class_id = c.class_id and l.game_id = c.game_id 
+    	AND c1.game_id=c.game_id and c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'" ,
     	
     	
     'ORDER_BY' => $current_order['sql'],
@@ -333,10 +333,10 @@ $sql_array = array(
     ),
     
     'WHERE'     =>  "m.member_id = l.member_id 
-        AND l.member_class_id = c.class_id 
+        AND l.member_class_id = c.class_id and l.game_id = c.game_id
     	AND c1.attribute_id = c.class_id 
     	AND c1.language= '" . $config['bbdkp_lang'] . "' 
-    	AND c1.attribute = 'class'" ,
+    	AND c1.attribute = 'class' and c1.game_id = c.game_id " ,
     	
     'GROUP_BY' => ' c1.name, c.class_id ',	
      
