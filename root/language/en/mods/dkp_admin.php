@@ -557,6 +557,7 @@ $lang = array_merge($lang, array(
 'DOWNLOAD'		   => 'Download',
 'DEFAULT_GAME' => 'Installed games',
 'EVENTS_PER_PAGE' => 'Events per Page',
+'GAME'	=> 'Game', 
 'GENERAL_SETTINGS' => 'General Settings',
 'GUILDTAG' => 'Guildtag / Alliance Name',
 'GUILDTAG_NOTE' => 'Used in the title of nearly every page',

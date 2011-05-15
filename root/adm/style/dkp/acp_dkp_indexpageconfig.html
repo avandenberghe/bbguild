@@ -90,7 +90,9 @@ fieldset dt {
 
  <!-- BEGIN recruitment -->
   <dl>
-    <dt><label>{recruitment.CLASSID}) {recruitment.CLASS} :</label></dt>
+    <dt><label>{recruitment.CLASSID}) {recruitment.CLASS} :</label>
+   		 <!-- IF recruitment.S_CLASS_IMAGE_EXISTS --> <img src="{recruitment.CLASS_IMAGE}" alt=" " /><!-- ENDIF -->
+    </dt>
 
     <dd>
     <img src="{T_IMAGES_PATH}icons/{recruitment.TANKCOLOR}" alt="tank" />
