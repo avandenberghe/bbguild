@@ -159,8 +159,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	}
 	
 	/** 
-	 * Makes a new raid
-	 * 
+	 * display new raid creation screen
 	 * 
 	 */
 	private function newraid()
@@ -479,7 +478,7 @@ class acp_dkp_raid extends bbDKP_Admin
 				RAIDS_TABLE 		=> 'r' , 
 				EVENTS_TABLE 		=> 'e',
 				), 
-			'WHERE' => " d.dkpsys_id = e.event_dkpid and r.event_id = e.event_id and r.raid_id=" . ( int ) $raid_id, 
+			'WHERE' => " d.dkpsys_id = e.event_dkpid and r.event_id = e.event_id and r.raid_id=" . (int) $raid_id, 
 		);
 		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -659,9 +658,9 @@ class acp_dkp_raid extends bbDKP_Admin
 				BB_LANGUAGE 		=> 'l', 
     			),
  
-    		'WHERE'     =>  " c.class_id = m.member_class_id AND c.class_id = l.attribute_id 
-							AND l.attribute='class' 
-							AND m.member_race_id =  a.race_id 
+    		'WHERE'     =>  " c.class_id = m.member_class_id and c.game_id = m.game_id
+    						AND c.class_id = l.attribute_id and l.game_id = c.game_id AND l.attribute='class' 
+							AND m.member_race_id =  a.race_id and m.game_id = a.game_id
 							AND l.language= '" . $config['bbdkp_lang'] ."'  
 							AND m.member_id = r.member_id and r.raid_id = " . (int) $raid_id  , 
     		'ORDER_BY' 	=>  $current_order ['sql'],
