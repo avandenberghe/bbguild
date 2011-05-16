@@ -199,6 +199,8 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/viewnews.php" to="viewnews.php"/>
 			<file from="root/viewraid.php" to="viewraid.php"/>
 			<file from="root/adm/findrank.php" to="adm/findrank.php"/>
+			<file from="root/adm/findclassrace.php" to="adm/findclassrace.php"/>
+			<file from="root/adm/findfaction.php" to="adm/findfaction.php"/>
 			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
 			<file from="root/images/*.*" to="images/*.*"/>

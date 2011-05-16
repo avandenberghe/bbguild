@@ -328,7 +328,7 @@ class acp_dkp_mm extends bbDKP_Admin
 						$member_lvl = $maxlevel;  
 					}
 					
-					$game_id = request_var('game_id', 0); 
+					$game_id = request_var('game_id', ''); 
 					$race_id = request_var('member_race_id', 0); 
 					$class_id = request_var('member_class_id', 0); 
 					$member_comment = utf8_normalize_nfc(request_var('member_comment', '', true)); 
