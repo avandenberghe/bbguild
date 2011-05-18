@@ -782,8 +782,9 @@ class acp_dkp_raid extends bbDKP_Admin
 	        MEMBER_LIST_TABLE 	=> 'l', 
 	        RAID_ITEMS_TABLE    => 'i',
 	    ),
-	    'WHERE'     =>  'c.class_id = l.member_class_id AND l.member_race_id =  a.race_id 
-	    				and l.member_id = i.member_id and i.raid_id = ' . $raid_id,  
+	    'WHERE'     =>  'c.game_id = l.game_id and c.class_id = l.member_class_id 
+	    				 AND l.member_race_id =  a.race_id and a.game_id = l.game_id  
+	    				 and l.member_id = i.member_id and i.raid_id = ' . $raid_id,  
 	    'ORDER_BY'  => $icurrent_order ['sql'], 
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
