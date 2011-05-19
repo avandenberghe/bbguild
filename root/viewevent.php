@@ -194,7 +194,10 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 	        MEMBER_LIST_TABLE 	=> 'l', 
 	        RAID_ITEMS_TABLE    => 'i',
 	    ),
-	    'WHERE'     =>  'c.class_id = l.member_class_id AND l.member_race_id =  a.race_id 
+	    'WHERE'     =>  'c.class_id = l.member_class_id
+	    				AND c.game_id = l.game_id  
+	    				AND l.member_race_id =  a.race_id
+	    				AND a.game_id = l.game_id   
 	    				and l.member_id = i.member_id AND ' . $db->sql_in_set('raid_id', $raid_ids),  
 	);
 	$sql = $db->sql_build_query('SELECT', $sql_array);

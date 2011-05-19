@@ -170,9 +170,9 @@ $sql_array = array(
 				BB_LANGUAGE 		=> 'l', 
     			),
  
-	'WHERE'     =>  " c.class_id = m.member_class_id AND c.class_id = l.attribute_id 
-			AND l.attribute='class' 
-			AND m.member_race_id =  a.race_id 
+	'WHERE'     =>  " c.game_id = m.game_id AND c.class_id = m.member_class_id 
+			AND c.class_id = l.attribute_id and c.game_id = l.game_id AND l.attribute='class' 
+			AND m.member_race_id =  a.race_id and m.game_id = a.game_id 
 			AND l.language= '" . $config['bbdkp_lang'] ."'  
 			AND m.member_id = r.member_id and r.raid_id = " . (int) $raid_id  , 
 	'ORDER_BY' 	=>  $current_order ['sql'],
@@ -331,7 +331,8 @@ $sql_array = array(
         MEMBER_LIST_TABLE 	=> 'l', 
         RAID_ITEMS_TABLE    => 'i',
     ),
-    'WHERE'     =>  'c.class_id = l.member_class_id AND l.member_race_id =  a.race_id 
+    'WHERE'     =>  'c.game_id = l.game_id  and c.class_id = l.member_class_id 
+    				and l.member_race_id =  a.race_id and a.game_id = l.game_id
     				and l.member_id = i.member_id and i.raid_id = ' . $raid_id,  
     'ORDER_BY'  => $icurrent_order ['sql'], 
 );
