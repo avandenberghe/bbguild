@@ -1747,9 +1747,9 @@ class acp_dkp_raid extends bbDKP_Admin
 		
 		// give the deleted zero sum amounts back to the guildbank
 		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET  
-			member_zerosum_bonus = member_zerosum_bonus  + ' . $ozerozum . ", 
+			member_zerosum_bonus = member_zerosum_bonus  + ' . $ozerozum . ', 
 			member_earned = member_earned + ' . $ozerozum . ' 
-			where member_dkpid = " . (int) $dkpid . ' 
+			where member_dkpid = ' . (int) $dkpid . ' 
 			and member_id =  ' . $config['bbdkp_bankerid'] );
         
 		$earned = $xearned - $oraid_value - $otime_bonus - $ozerozum; 
@@ -1765,8 +1765,8 @@ class acp_dkp_raid extends bbDKP_Admin
 		'member_raid_decay'		=> $decay,
         ));
           
-		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . " 
-			WHERE member_dkpid = " . (int) $dkpid . ' and member_id =  ' . $member_id  );
+		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . ' 
+			WHERE member_dkpid = ' . (int) $dkpid . ' and member_id =  ' . $member_id  );
         $db->sql_freeresult($result);
     }
   

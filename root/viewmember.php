@@ -668,7 +668,7 @@ switch ( $current_order['sql'] )
 	case 'event_name desc':
 		krsort($raid_counts);
 		break;
-	// Sort by value (keeping relational keys in-tact)
+	// Sort by value (keeping relational keys intact)
 	case 'raid_count':
 		asort($raid_counts);
 		break;

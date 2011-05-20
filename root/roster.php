@@ -53,6 +53,32 @@ $genderid = array(
 1   => $user->lang['FEMALE'],
 );
 
+/*
+ * list installed games
+ */
+$games = array(
+    'wow'        => $user->lang['WOW'], 
+    'lotro'      => $user->lang['LOTRO'], 
+    'eq'         => $user->lang['EQ'], 
+    'daoc'       => $user->lang['DAOC'], 
+    'vanguard' 	 => $user->lang['VANGUARD'],
+    'eq2'        => $user->lang['EQ2'],
+    'warhammer'  => $user->lang['WARHAMMER'],
+    'aion'       => $user->lang['AION'],
+    'FFXI'       => $user->lang['FFXI'],
+	'rift'       => $user->lang['RIFT'],
+	'swtor'      => $user->lang['SWTOR']
+);
+              
+$installed_games = array();
+foreach($games as $gameid => $gamename)
+{
+	if ($config['bbdkp_games_' . $gameid] == 1)
+	{
+		$installed_games[$gameid] = $gamename; 
+	} 
+}
+
 switch ($layout)
 {
         //default layout 
@@ -75,15 +101,17 @@ switch ($layout)
 		     'LEFT_JOIN' => array(
 		        array(
 		            'FROM'  => array(BB_LANGUAGE => 'c1'),
-		            'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'"  
+		            'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'  and c1.game_id = c.game_id "  
 		      )),
 		                      
             'WHERE'     => " g.id = m.member_guild_id
-            				 AND c.class_id = m.member_class_id 
-            				 AND e.race_id = m.member_race_id 
+            				 AND c.class_id = m.member_class_id
+            				 AND c.game_id = m.game_id 
+            				 AND e.race_id = m.member_race_id
+            				 AND e.game_id = m.game_id 
             				 AND r.guild_id = m.member_guild_id  
             				 AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
-            				 AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "' AND e1.attribute = 'race'
+            				 AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "' AND e1.attribute = 'race' and e1.game_id = e.game_id
             				 ",
             'ORDER_BY'  => $current_order['sql']
         );
@@ -169,6 +197,7 @@ switch ($layout)
                 MEMBER_RANKS_TABLE   =>  'r',
                 ),
             'WHERE'     => " c.class_id = m.member_class_id 
+            				 AND c.game_id = m.member_class_id 
             				 AND r.guild_id = m.member_guild_id 
             				 AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
             				 AND c1.attribute_id =  c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class' ", 
@@ -191,9 +220,9 @@ switch ($layout)
 			$classcolor = $class['colorcode']; 
 			
             $template->assign_block_vars('class', array(	
-            		'CLASSNAME'     => $class['name'], 
-            		'CLASSIMG'		=> $classimgurl,
-            		'COLORCODE'		=> $classcolor,
+          		'CLASSNAME'     => $class['name'], 
+          		'CLASSIMG'		=> $classimgurl,
+          		'COLORCODE'		=> $classcolor,
             ));
             $classmembers=1;
             

@@ -92,6 +92,7 @@ if (isset($_GET[URI_ITEM]) )
 	    'WHERE'     =>  " e.event_id = r.event_id
     					AND r.raid_id = i.raid_id 
 	    				AND l.member_class_id = c.class_id 
+	    				AND l.game_id = c.game_id 
 	    				AND i.member_id = l.member_id
 				        AND i.item_name='". $db->sql_escape($item_name) . "'",
 	    'ORDER_BY'	=> $current_order['sql'], 

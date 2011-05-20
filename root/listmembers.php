@@ -20,11 +20,17 @@ global $config;
 $user->session_begin ();
 $auth->acl ( $user->data );
 $user->add_lang ( array ('mods/dkp_common' ) );
+// Exclude Bots
+if ($user->data['is_bot'])
+{
+	redirect(append_sid("{$phpbb_root_path}index.$phpEx"));
+}
 // if not authorised redirect to portal
 if (!$auth->acl_get('u_dkp'))
 {
-	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
+	trigger_error('NOT_AUTHORISED');
 }
+
 $user->setup ();
 if (! defined ( "EMED_BBDKP" ))
 {
@@ -133,14 +139,14 @@ $filtervalues ['separator2'] = '--------';
 
 // get classlist
    $sql_array = array(
-    'SELECT'    => 	' c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.imagename ', 
+    'SELECT'    => 	'  c.game_id, c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.imagename ', 
     'FROM'      => array(
         CLASS_TABLE 	=> 'c',
         BB_LANGUAGE		=> 'l', 
     	),
-    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id 
+    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id and c.game_id = l.game_id
      AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
-	'ORDER_BY'	=> ' c.class_id ',
+	'ORDER_BY'	=> 'l.game_id, c.class_id ',
     );
     
 $sql = $db->sql_build_query('SELECT', $sql_array);   
@@ -148,8 +154,8 @@ $result = $db->sql_query ( $sql );
 
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
-	$filtervalues ['class_' . $row ['class_id']] = $row ['class_name'];
-	$classname ['class_' . $row ['class_id']] = $row ['class_name'];
+	$filtervalues [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
+	$classname [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
 }
 $db->sql_freeresult ( $result );
 
@@ -222,7 +228,7 @@ foreach($games as $gameid => $gamename)
 {
 	if ($config['bbdkp_games_' . $gameid] == 1)
 	{
-		$installed_games[] = $gamename; 
+		$installed_games[$gameid] = $gamename; 
 	} 
 }
 
@@ -311,7 +317,20 @@ if (isset ( $_GET ['rank'] ))
 
 if ($query_by_class == 1)
 {
-	$sql_array['WHERE'] .= " AND class_id =  '" . $db->sql_escape ( substr($filter, 6) ) . "' ";
+	//wow_class_8 = Mage
+	//lotro_class_5=Hunter
+	foreach($installed_games as $k=>$gamename)
+	{
+		//x is for avoiding output zero which may be outcome of false
+		if (strpos('x'.$filter,$k) > 0)
+		{
+		  $class_id = substr($filter, strlen($k)+7);
+		  $sql_array['WHERE'] .= " AND c.class_id =  '" . $db->sql_escape ( $class_id ) . "' ";
+		  $sql_array['WHERE'] .= " AND c.game_id =  '" . $db->sql_escape ( $k ) . "' ";
+		  break 1;  	
+		}
+	}
+	 
 }
 
 if ($query_by_armor == 1)
@@ -823,7 +842,7 @@ function leaderboard($dkpsys_id, $query_by_pool)
 	global $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
     $sql_array = array(
-	    'SELECT'    => 	' c.class_id, l.name as class_name, c.imagename, c.colorcode ', 
+	    'SELECT'    => 	' c.game_id, c.class_id, l.name as class_name, c.imagename, c.colorcode ', 
 	    'FROM'      => array(
 	        CLASS_TABLE 		=> 'c',
 	        BB_LANGUAGE			=> 'l',
@@ -832,7 +851,7 @@ function leaderboard($dkpsys_id, $query_by_pool)
 	    	),
 	    'WHERE'		=> "class_id != 0 AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . 
 	    				"' AND l.attribute = 'class' and c.game_id = l.game_id and 
-	    				m.member_id = li.member_id and li.member_class_id = c.class_id and li.game_id = c.class_id ",   				    	
+	    				m.member_id = li.member_id and li.member_class_id = c.class_id and li.game_id = c.game_id ",   				    	
 		'ORDER_BY'	=> 'l.name ',
     );
 	$sql = $db->sql_build_query('SELECT', $sql_array);

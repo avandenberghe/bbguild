@@ -235,7 +235,9 @@ switch ($mode)
 					AND r.raid_id = i.raid_id
     				AND i.member_id = l.member_id
            			AND l.member_class_id = c.class_id
-           			AND l.member_race_id =  a.race_id ', 
+           			AND l.member_race_id =  a.race_id 
+           			AND l.game_id = a.game_id
+           			AND l.game_id = c.game_id', 
            	'ORDER_BY' => $current_order ['sql']);
 		
 		break;
@@ -304,8 +306,7 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 			'U_VIEW_BUYER' 	=> append_sid ( "{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $item ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $item ['event_dkpid'] ), 
 			'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
 			'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
-		    
-			'CSSCLASS' 		=> $config ['bbdkp_default_game'] . 'class' . $item ['class_id'],
+
 			'CLASSCOLOR' 	=> $item['colorcode'], 
 			'CLASS_IMAGE' 	=> (strlen($item['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $item['imagename'] . ".png" : '',  
 			'S_CLASS_IMAGE_EXISTS' => (strlen($item['imagename']) > 1) ? true : false, 				

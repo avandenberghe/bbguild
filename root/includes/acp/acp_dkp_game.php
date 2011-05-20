@@ -81,7 +81,7 @@ class acp_dkp_game extends bbDKP_Admin
 						trigger_error('FORM_INVALID');
 					}
  					$game_id = request_var('game_id', '');
-					$sql = 'select max(faction_id) as max from ' . FACTION_TABLE . " where game_id = '" . $game_id; 
+					$sql = 'SELECT max(faction_id) AS max FROM ' . FACTION_TABLE . " where game_id = '" . $game_id; 
 					$result = $db->sql_query($sql);	
 					$factionid = (int) $db->sql_fetchfield('max', 0 ,$result );	
 					$db->sql_freeresult($result);
@@ -157,7 +157,7 @@ class acp_dkp_game extends bbDKP_Admin
 				if($raceadd)
 				{
 					// add the race	 to db
-					$sql = 'select count(*) as count from ' . RACE_TABLE . ' where race_id  = ' . $id . " and game_id = '" . $game_id . "'"; 
+					$sql = 'SELECT count(*) AS count FROM ' . RACE_TABLE . ' WHERE race_id  = ' . $id . " and game_id = '" . $game_id . "'"; 
 					$result = $db->sql_query($sql);	
 					if( (int) $db->sql_fetchfield('count', 0 ,$result ) > 0 )
 					{
@@ -208,7 +208,7 @@ class acp_dkp_game extends bbDKP_Admin
 					
 					$db->sql_transaction('begin');
 					$sql = 'UPDATE ' . RACE_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) .  '  
-						    WHERE race_id = ' . $id . " and game_id = '" . $game_id . "'";
+						    WHERE race_id = ' . $id . " AND game_id = '" . $game_id . "'";
 					$db->sql_query($sql);	
 
 					$names = array(
@@ -216,8 +216,8 @@ class acp_dkp_game extends bbDKP_Admin
 						'name_short'=> (string) $racename,
 					);
 					
-					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $id . 
-						" AND attribute='race'  AND language= '" . $config['bbdkp_lang'] ."' and game_id =   '" . $game_id . "'";
+					$sql = 'UPDATE ' . BB_LANGUAGE . ' SET ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $id . 
+						" AND attribute='race'  AND language= '" . $config['bbdkp_lang'] ."' AND game_id =   '" . $game_id . "'";
 					$db->sql_query($sql);	
 					
 					$db->sql_transaction('commit');
@@ -255,7 +255,7 @@ class acp_dkp_game extends bbDKP_Admin
 				if($classadd)
 				{
 					// add the class to db
-					$sql = 'select count(*) as count from ' . CLASS_TABLE . ' where class_id  = ' . $class_id . " and game_id = '" . $game_id . "'"; 
+					$sql = 'SELECT count(*) AS count FROM ' . CLASS_TABLE . ' WHERE class_id  = ' . $class_id . " AND game_id = '" . $game_id . "'"; 
 					$result = $db->sql_query($sql);	
 					if( (int) $db->sql_fetchfield('count', 0 ,$result ) > 0 )
 					{
@@ -310,8 +310,8 @@ class acp_dkp_game extends bbDKP_Admin
 					$class_id = request_var('class_id', 0); 
 					
 					// check for unique classid exception : if this class id exists already 
-					$sql = 'select count(*) as count from ' . CLASS_TABLE . ' where c_index != ' . $c_index . " and 
-							class_id = '" . $db->sql_escape($class_id0)  . "' and game_id = '" . $game_id . "'"; 
+					$sql = 'SELECT count(*) AS count FROM ' . CLASS_TABLE . ' WHERE c_index != ' . $c_index . " AND 
+							class_id = '" . $db->sql_escape($class_id0)  . "' AND game_id = '" . $game_id . "'"; 
 					$result = $db->sql_query($sql);	
 					if( (int) $db->sql_fetchfield('count', 0 ,$result ) > 0 )
 					{	
@@ -342,8 +342,8 @@ class acp_dkp_game extends bbDKP_Admin
 						'name_short'		=> (string) $classname,	
 					);
 					
-					$sql = 'UPDATE ' . BB_LANGUAGE . ' set ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $class_id0 . 
-						" AND attribute='class'  AND language= '" . $config['bbdkp_lang'] . "' and game_id = '" . $game_id . "'"; 
+					$sql = 'UPDATE ' . BB_LANGUAGE . ' SET ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $class_id0 . 
+						" AND attribute='class'  AND language= '" . $config['bbdkp_lang'] . "' AND game_id = '" . $game_id . "'"; 
 					$db->sql_query($sql);	
 					
 					$db->sql_transaction('commit');
@@ -379,12 +379,12 @@ class acp_dkp_game extends bbDKP_Admin
             	{
             		$id = request_var('id', 0); 
                 	$sql_array = array(
-					    'SELECT'    => 	' count(*) as factioncount  ', 
+					    'SELECT'    => 	' count(*) AS factioncount  ', 
 					    'FROM'      => array(
 					        RACE_TABLE 		=> 'r',
 					        FACTION_TABLE	=> 'f',
 					    	),
-					    'WHERE' => 'r.race_faction_id = f.faction_id and f.f_index =  ' . $id
+					    'WHERE' => 'r.race_faction_id = f.faction_id AND f.f_index =  ' . $id
 				    );        
 				    $sql = $db->sql_build_query('SELECT', $sql_array);    		
             		$result = $db->sql_query($sql);	
@@ -430,7 +430,7 @@ class acp_dkp_game extends bbDKP_Admin
 	            		$game_id =request_var('game_id', ''); 
 	            		//edit race		
 	            		$sql_array = array(
-					    'SELECT'    => 	' r.game_id, r.race_id, l.name as race_name, r.race_faction_id,  r.image_female_small, r.image_male_small ', 
+					    'SELECT'    => 	' r.game_id, r.race_id, l.name AS race_name, r.race_faction_id,  r.image_female_small, r.image_male_small ', 
 					    'FROM'      => array(
 								RACE_TABLE 		=> 'r',
 								BB_LANGUAGE 	=> 'l',
@@ -474,7 +474,7 @@ class acp_dkp_game extends bbDKP_Admin
 								FACTION_TABLE 	=> 'f',
 									),
 						'WHERE'		=>  " f.game_id = '" .  $game_id . "'", 
-						'ORDER_BY'	=> 'faction_id asc ',
+						'ORDER_BY'	=> 'faction_id ASC ',
 					    );
 					    
 						$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -585,13 +585,13 @@ class acp_dkp_game extends bbDKP_Admin
 						{
 							$db->sql_transaction('begin');
 							
-							$sql = 'DELETE FROM ' . RACE_TABLE . ' WHERE race_id =' . $id . " and game_id = '" . $game_id . "'"; 
+							$sql = 'DELETE FROM ' . RACE_TABLE . ' WHERE race_id =' . $id . " AND game_id = '" . $game_id . "'"; 
 							$db->sql_query($sql);
 							
 							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' 
-									and attribute = 'race' 
-									and attribute_id= " . $id . " 
-									and game_id = '" . $game_id . "'";
+									AND attribute = 'race' 
+									AND attribute_id= " . $id . " 
+									AND game_id = '" . $game_id . "'";
 							  
 							$db->sql_query($sql);
 							
@@ -640,7 +640,7 @@ class acp_dkp_game extends bbDKP_Admin
 	            		$game_id =request_var('game_id', '');
 						
 						$sql_array = array(
-					    'SELECT'    => 	' c.c_index, c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename, c.colorcode ', 
+					    'SELECT'    => 	' c.c_index, c.class_id, l.name AS class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename, c.colorcode ', 
 					    'FROM'      => array(
 								CLASS_TABLE 	=> 'c',
 								BB_LANGUAGE 	=> 'l',
@@ -760,8 +760,8 @@ class acp_dkp_game extends bbDKP_Admin
 					        MEMBER_LIST_TABLE 	=> 'm',
 					        CLASS_TABLE			=> 'c',
 					    	),
-					    'WHERE' => "m.game_id = c.game_id and  m.game_id = '". $game_id."' 
-					    	and m.member_class_id = c.class_id and c.class_id =  " . $class_id,
+					    'WHERE' => "m.game_id = c.game_id AND m.game_id = '". $game_id."' 
+					    	and m.member_class_id = c.class_id AND c.class_id =  " . $class_id,
 				    );
 				    
 				    $sql = $db->sql_build_query('SELECT', $sql_array);    		
@@ -779,7 +779,7 @@ class acp_dkp_game extends bbDKP_Admin
 							$sql = 'DELETE FROM ' . CLASS_TABLE . ' WHERE class_id  = ' . $class_id . " and game_id = '" . $game_id . "'";  
 							$db->sql_query($sql);
 							
-							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' and attribute = 'class' 
+							$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config['bbdkp_lang'] . "' AND attribute = 'class' 
 									and attribute_id= " . $class_id . " and game_id = '" . $game_id . "'";
 							$db->sql_query($sql);
 							
@@ -836,7 +836,6 @@ class acp_dkp_game extends bbDKP_Admin
                 $db->sql_freeresult($result);
 
                 // list the races
-
                 $sort_order = array(
                     0 => array('game_id asc, race_id asc', 'game_id desc, race_id asc'),
                     1 => array('race_id', 'race_id desc'),
@@ -879,7 +878,6 @@ class acp_dkp_game extends bbDKP_Admin
                 $db->sql_freeresult($result);
                 
                 // list the classes
-                
                 $sort_order2 = array(
                   	0 => array('game_id asc, class_id asc', 'game_id desc, class_id asc'),
                     1 => array('class_id', 'class_id desc'),
