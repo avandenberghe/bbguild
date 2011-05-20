@@ -176,21 +176,6 @@ $versions = array(
     '1.2.2'    => array(
     	// install base bbdkp tables (this uses the layout from develop/create_schema_files.php and from phpbb_db_tools)
         'table_add' => array(
-            
-		  array($table_prefix . 'bbdkp_news', array(
-                    'COLUMNS'				=> array(
-                        'news_id'			=> array('UINT', NULL, 'auto_increment'),
-                        'news_headline'		=> array('VCHAR_UNI', ''),
-                        'news_message'		=> array('TEXT_UNI', ''),
-                        'news_date'			=> array('TIMESTAMP', 0),
-                        'user_id'			=> array('UINT', 0),
-                        'bbcode_bitfield'	=> array('VCHAR:20', ''),
-                        'bbcode_uid'		=> array('VCHAR:8', ''),
-                        'bbcode_options'	=> array('VCHAR:8', ''),	  		  		  
-                    ),
-                    'PRIMARY_KEY'    => 'news_id',
-                ),
-            ),
 
             array($table_prefix . 'bbdkp_language', array(
 	              'COLUMNS'            => array(
@@ -785,7 +770,9 @@ $versions = array(
 			array('bbdkp_games_warhammer', 0, true),
 			array('bbdkp_games_swtor', 0, true),
 	      ),
-	        
+	    
+	    'table_remove' => array($table_prefix . 'bbdkp_news'),
+	    
 		//add new columns, then add keys and new pk in custom function
 		'table_column_add' => array(
 			array($table_prefix . 'bbdkp_classes', 'game_id' , array('VCHAR', '')),
