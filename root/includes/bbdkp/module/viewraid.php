@@ -10,25 +10,11 @@
  */
 
 /**
-* @ignore
-*/
-define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-include($phpbb_root_path . 'common.' . $phpEx);
-
-// Start session management
-$user->session_begin();
-$auth->acl($user->data);
-$user->setup('viewforum');
-$user->add_lang(array('mods/dkp_common'));
-if (!$auth->acl_get('u_dkp'))
+ * @ignore
+ */
+if (!defined('IN_PHPBB'))
 {
-	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
-}
-if (! defined ( "EMED_BBDKP" ))
-{
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
+   exit;
 }
 
 if ( !isset($_GET[URI_RAID]) )
@@ -43,11 +29,11 @@ $raid_id = request_var(URI_RAID,0);
 $navlinks_array = array(
 	array(
 	 'DKPPAGE'		=> $user->lang['MENU_RAIDS'],
-	 'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}listraids.$phpEx"),
+	 'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listraids'),
 	),
 	array(
 	 'DKPPAGE'		=> $user->lang['MENU_VIEWRAID'],
-	 'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $raid_id),
+	 'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listraids&amp;' . URI_RAID . '=' . $raid_id),
 	),
 );
 
@@ -139,10 +125,8 @@ $template->assign_vars(array(
 	'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
 	'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
 	'S_SHOWEPGP' 		=> ($config['bbdkp_epgp'] == '1') ? true : false,
-	'F_RAID'			=> append_sid("{$phpbb_root_path}viewraid.$phpEx" , URI_RAID . '=' . request_var(URI_RAID, 0))
+	'F_RAID'			=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=listraids&amp;'. URI_RAID . '=' . request_var(URI_RAID, 0))
 ));
-
-
 
 /**********************************************
  * point listing
@@ -211,7 +195,7 @@ foreach($raid_details as  $raid_detail)
 {
 	// fill attendees table
 	$template->assign_block_vars ('raids_row', array (
-		'U_VIEW_ATTENDEE' => append_sid ("{$phpbb_root_path}viewmember.$phpEx" , URI_NAMEID . "={$raid_detail['member_id']}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']), 
+		'U_VIEW_ATTENDEE' => append_sid ("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' . URI_NAMEID . "={$raid_detail['member_id']}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']), 
 		'NAME' 		 => $raid_detail['member_name'], 
 		'COLORCODE'  => ($raid_detail['colorcode'] == '') ? '#123456' : $raid_detail['colorcode'],
         'CLASS_IMAGE' 	=> (strlen($raid_detail['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $raid_detail['imagename'] . ".png" : '',  
@@ -250,7 +234,7 @@ for ( $i = 0; $i < $x; $i++ )
 		if ( $attendee != '' )
 		{
 			$block_vars += array(
-			  'COLUMN'.$j.'_NAME' => '<strong><a style="color: '. $raid_details[$offset]['colorcode'].';" href="' . append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . 
+			  'COLUMN'.$j.'_NAME' => '<strong><a style="color: '. $raid_details[$offset]['colorcode'].';" href="' . append_sid("{$phpbb_root_path}dkp.$phpEx", "page=viewmember&amp;" . URI_NAMEID . '=' . 
 			$raid_details[$offset]['member_id'] . '&' . URI_DKPSYS . '=' . $dkpid) . '">' . $raid_details[$offset]['member_name'] . '</a></strong>'
 			);
 		}
@@ -299,17 +283,7 @@ $template->assign_vars(array(
 /*********************************
 *	Drops block
 **********************************/
-//if bbtips plugin exists load it 
-$bbDKP_Admin = new bbDKP_Admin;
-if ($bbDKP_Admin->bbtips == true)
-{
-	if ( !class_exists('bbtips')) 
-	{
-		require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx); 
-	}
-	$bbtips = new bbtips;
-}
-		
+
 //prepare item list sql
 $isort_order = array (
 	0 => array ('l.member_name', 'member_name desc' ), 
@@ -377,7 +351,7 @@ $template->assign_block_vars ( 'items_row', array (
 	'ITEMNAME'      => $item_name,
 	'ITEM_ID'		=> $row['item_id'],
 	'ITEM_ZS'      	=> ($row['item_zs'] == 1) ? ' checked="checked"' : '',
-	'U_VIEW_BUYER' => append_sid ("{$phpbb_root_path}viewmember.$phpEx" , URI_NAMEID . "={$row['member_id']}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']),
+	'U_VIEW_BUYER' => append_sid ("{$phpbb_root_path}dkp.$phpEx" , "page=viewmember&amp;" . URI_NAMEID . "={$row['member_id']}&amp;" . URI_DKPSYS. "=" . $raid['event_dkpid']),
 	'ITEMVALUE' 	=> $row['item_value'],
 	'DECAYVALUE' 	=> $row['item_decay'],
 	'TOTAL' 		=> $row['item_total'],
@@ -396,7 +370,8 @@ $template->assign_vars(array(
 	'ITEMDECAYVALUE'	 => $item_decay,
 	'ITEMTOTAL'			 => $item_total,
 	'RAIDNET'			 => $raid_total - $item_total,
-	'ITEM_FOOTCOUNT'	 => sprintf($user->lang['VIEWRAID_DROPS_FOOTCOUNT'], $number_items ),
+	'ITEM_FOOTCOUNT'	 => sprintf($user->lang['VIEWRAID_DROPS_FOOTCOUNT'], $number_items) ,
+	'S_DISPLAY_VIEWRAIDS' => true,
 ));
 
 /*****************************
@@ -437,11 +412,5 @@ unset($classes);
 
 // Output page
 page_header($title);
-
-$template->set_filenames(array(
-	'body' => 'dkp/viewraid.html')
-);
-
-page_footer();
 
 ?>

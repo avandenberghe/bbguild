@@ -7,30 +7,14 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
  * 
- * @todo : ---> add embedded item description  <----
- * 
  */
 
 /**
-* @ignore
-*/
-define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-include($phpbb_root_path . 'common.' . $phpEx);
-
-// Start session management
-$user->session_begin();
-$auth->acl($user->data);
-$user->setup('viewforum');
-$user->add_lang(array('mods/dkp_common'));
-if (!$auth->acl_get('u_dkp'))
+ * @ignore
+ */
+if (!defined('IN_PHPBB'))
 {
-	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
-}
-if (! defined ( "EMED_BBDKP" ))
-{
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
+   exit;
 }
 
 if (isset($_GET[URI_ITEM]) )
@@ -65,16 +49,6 @@ if (isset($_GET[URI_ITEM]) )
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'], E_USER_WARNING );
     }
-	
-	$bbDKP_Admin = new bbDKP_Admin;
-	if ($bbDKP_Admin->bbtips == true)
-	{
-		if ( !class_exists('bbtips')) 
-		{
-			require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx); 
-		}
-		$bbtips = new bbtips;
-	}
 	 
 	//get info on all buyers of this item
      $sql_array = array(
@@ -131,8 +105,8 @@ if (isset($_GET[URI_ITEM]) )
             'CLASSCOLOR' => ( !empty($item['member_name']) ) ? $item['colorcode'] : '',
             'CLASSIMAGE' => ( !empty($item['member_name']) ) ? $item['imagename'] : '',            
             'BUYER' => ( !empty($item['member_name']) ) ? $item['member_name'] : '&nbsp;',
-            'U_VIEW_BUYER' => append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_NAMEID . '='.$item['member_id']. '&amp;' . URI_DKPSYS . '=' . $item['event_dkpid']) ,
-            'U_VIEW_RAID' => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '='.$item['raid_id']) ,
+            'U_VIEW_BUYER' => append_sid("{$phpbb_root_path}dkp.$phpEx" , "page=viewmember&amp;" . URI_NAMEID . '='.$item['member_id']. '&amp;' . URI_DKPSYS . '=' . $item['event_dkpid']) ,
+            'U_VIEW_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;' . URI_RAID . '='.$item['raid_id']) ,
             'RAID' => ( !empty($item['event_name']) ) ? $item['event_name'] : '&lt;<i>Not Found</i>&gt;',
             'VALUE' => $item['item_value'])
         );
@@ -143,12 +117,12 @@ if (isset($_GET[URI_ITEM]) )
     $navlinks_array = array(
     array(
      'DKPPAGE' => $user->lang['MENU_ITEMVAL'],
-     'U_DKPPAGE' => append_sid("{$phpbb_root_path}listitems.$phpEx"),
+     'U_DKPPAGE' => append_sid("{$phpbb_root_path}dkp.$phpEx", "page=listitems"),
     ),
 
     array(
      'DKPPAGE' => $user->lang['MENU_VIEWITEM'],
-     'U_DKPPAGE' => append_sid("{$phpbb_root_path}viewitem.$phpEx" , URI_ITEM . '='. $item_id),
+     'U_DKPPAGE' => append_sid("{$phpbb_root_path}dkp.$phpEx" , "page=viewitem&amp;" . URI_ITEM . '='. $item_id),
     ),
     );
 
@@ -162,26 +136,21 @@ if (isset($_GET[URI_ITEM]) )
     
     $template->assign_vars(array(
 		'L_PURCHASE_HISTORY_FOR' => sprintf($user->lang['PURCHASE_HISTORY_FOR'], '<strong>' . $item_name. '</strong>'),
-        'O_DATE' 				=> $current_order['uri'][0],
+        'O_DATE' 				 => $current_order['uri'][0],
         'O_BUYER'				 => $current_order['uri'][1],
-        'O_VALUE'			 	=> $current_order['uri'][2],
-        'U_VIEW_ITEM' 			=> append_sid("{$phpbb_root_path}viewitem.$phpEx" , URI_ITEM . '='. $item_id) ,
-        'VIEWITEM_FOOTCOUNT' => sprintf($user->lang['VIEWITEM_FOOTCOUNT'], $total_items)
+        'O_VALUE'			 	 => $current_order['uri'][2],
+        'U_VIEW_ITEM' 			 => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewitem&amp;' . URI_ITEM . '='. $item_id) ,
+        'VIEWITEM_FOOTCOUNT' 	 => sprintf($user->lang['VIEWITEM_FOOTCOUNT'], $total_items), 
+		'S_DISPLAY_VIEWITEM' 	 => true,
         )
     );
 
-// Output page
-page_header($title);
+	// Output page
+	page_header($title);
 
-$template->set_filenames(array(
-	'body' => 'dkp/viewitem.html')
-);
-
-page_footer();
 }
 else
 {
-   		$user->add_lang ( array ('mods/dkp_admin' ) );
-		trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'], E_USER_WARNING );
+	trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'], E_USER_WARNING );
 }
 ?>

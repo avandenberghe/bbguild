@@ -9,30 +9,14 @@
  * 
  */
  
+
 /**
-* @ignore
-*/
-define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-include($phpbb_root_path . 'common.' . $phpEx);
-
-// Start session management
-$user->session_begin();
-$auth->acl($user->data);
-$user->setup('viewforum');
-$user->add_lang(array('mods/dkp_common','mods/dkp_admin'));
-
-if (!$auth->acl_get('u_dkp'))
+ * @ignore
+ */
+if (!defined('IN_PHPBB'))
 {
-	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
+   exit;
 }
-
-if (! defined ( "EMED_BBDKP" ))
-{
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
-}
-
 $member_id = request_var(URI_NAMEID, 0);
 
 // pulldown
@@ -287,7 +271,7 @@ $template->assign_vars(array(
 	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
  	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 	
-	'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $dkp_id), 
+	'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $dkp_id), 
 	'POINTNAME'		=> $config['bbdkp_dkp_name'],
 
 ));
@@ -391,11 +375,12 @@ if (!$raids_result = $db->sql_query_limit($sql, $raidlines, $rstart))
 {
    trigger_error ($user->lang['MNOTFOUND']);
 }
-while ( $raid = $db->sql_fetchrow($raids_result) )
+
+while ( $raid = $db->sql_fetchrow($raids_result))
 {
 	$template->assign_block_vars('raids_row', array(
 		'DATE'			 => ( !empty($raid['raid_start']) ) ? date($config['bbdkp_date_format'], $raid['raid_start']) : '&nbsp;',
-		'U_VIEW_RAID'	 => append_sid("{$phpbb_root_path}viewraid.$phpEx" , URI_RAID . '='.$raid['raid_id']),
+		'U_VIEW_RAID'	 => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewraid&amp;' . URI_RAID . '='.$raid['raid_id']),
 		'NAME'			 => $raid['event_name'],
 		'NOTE'			 => ( !empty($raid['raid_note']) ) ? $raid['raid_note'] : '&nbsp;',
 		'RAIDVAL'		 => $raid['raid_value'],
@@ -481,16 +466,6 @@ if ( !$items_result)
 	trigger_error ($user->lang['MNOTFOUND']);
 }
 
-$bbDKP_Admin = new bbDKP_Admin;
-if ($bbDKP_Admin->bbtips == true)
-{
-	if ( !class_exists('bbtips')) 
-	{
-		require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx); 
-	}
-	$bbtips = new bbtips;
-}
-
 while ( $item = $db->sql_fetchrow($items_result) )
 {
 	if ($bbDKP_Admin->bbtips == true)
@@ -512,8 +487,8 @@ while ( $item = $db->sql_fetchrow($items_result) )
 	
 	$template->assign_block_vars('items_row', array(
 		'DATE'			=> ( !empty($item['item_date']) ) ? date($config['bbdkp_date_format'], $item['item_date']) : '&nbsp;',
-		'U_VIEW_ITEM'	=> append_sid("{$phpbb_root_path}viewitem.$phpEx", URI_ITEM . '=' . $item['item_id']),
-		'U_VIEW_RAID'	=> append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item['raid_id']),
+		'U_VIEW_ITEM'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewitem&amp;' . URI_ITEM . '=' . $item['item_id']),
+		'U_VIEW_RAID'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;' . URI_RAID . '=' . $item['raid_id']),
 		'NAME'			=> $item_name, 
 		'RAID'			=> ( !empty($item['event_name']) ) ? $item['event_name'] : '&lt;<i>Not Found</i>&gt;',
 		'SPENT'			=> $item['item_value'],
@@ -541,10 +516,10 @@ $result6 = $db->sql_query($sql6);
 $total_purchased_items = $db->sql_fetchfield('itemcount');
 $db->sql_freeresult($result6);	
 	
-$raidpag  = generate_pagination2(append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart='.$istart), 
+$raidpag  = generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart='.$istart), 
 $total_attended_raids, $raidlines, $rstart, 1, 'rstart');
 	 
-$itpag =   generate_pagination2(append_sid("{$phpbb_root_path}viewmember.$phpEx" ,URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id.  '&amp;rstart='.$rstart),
+$itpag =   generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx" ,'page=viewmember&amp;'.  URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id.  '&amp;rstart='.$rstart),
 $total_purchased_items,	 $itemlines, $istart, 1 ,'istart');
 
 $template->assign_vars(array(
@@ -588,8 +563,7 @@ while ( $adjustment = $db->sql_fetchrow($adjustments_result) )
 }
 
    $template->assign_vars(array(
-   
-	'ADJUSTMENT_FOOTCOUNT' => sprintf($user->lang['VIEWMEMBER_ADJUSTMENT_FOOTCOUNT'], $adjust),
+   	'ADJUSTMENT_FOOTCOUNT' => sprintf($user->lang['VIEWMEMBER_ADJUSTMENT_FOOTCOUNT'], $adjust),
 	'HASADJUSTMENT'			=> ( is_null($adjust) ) ? false : true,
 
 ));
@@ -682,7 +656,7 @@ foreach ( $raid_counts as $event => $data )
 {
 	$template->assign_block_vars('event_row', array(
 		'EVENT'		   => $event,
-		'U_VIEW_EVENT' => append_sid("{$phpbb_root_path}viewevent.$phpEx", URI_EVENT . '=' . $event_ids[$event] . '&amp;' . URI_DKPSYS . '=' . $dkp_id) ,
+		'U_VIEW_EVENT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewevent&amp;' . URI_EVENT . '=' . $event_ids[$event] . '&amp;' . URI_DKPSYS . '=' . $dkp_id) ,
 		'BAR'		   => create_bar($data['percent'] . '%', $data['count'] . ' (' . $data['percent'] . '%)'))
 	);
 }
@@ -690,12 +664,12 @@ foreach ( $raid_counts as $event => $data )
 $navlinks_array = array(
 array(
  'DKPPAGE' => $user->lang['MENU_STANDINGS'],
- 'U_DKPPAGE' => append_sid("{$phpbb_root_path}listmembers.$phpEx"),
+ 'U_DKPPAGE' => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=standings'),
 ),
 
 array(
  'DKPPAGE' => sprintf($user->lang['MENU_VIEWMEMBER'], $member['member_name']) ,
- 'U_DKPPAGE' => append_sid("{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $dkp_id . '&amp;'), 
+ 'U_DKPPAGE' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $dkp_id . '&amp;'), 
 ),
 );
 
@@ -712,18 +686,13 @@ $template->assign_vars(array(
 	'O_EVENT'	=> $current_order['uri'][0],
 	'O_PERCENT' => $current_order['uri'][1],
 	'S_COMP' => ( isset($s_comp) ) ? false : true,
+	'S_DISPLAY_VIEWMEMBER' => true,
 	
 ));
  unset($raid_counts, $event_ids);
 $db->sql_freeresult($adjustments_result);
 
-
-
 // Output page
 page_header($user->lang['MEMBER']);
-$template->set_filenames(array(
-	'body' => 'dkp/viewmember.html')
-);
-page_footer();
 
 ?>

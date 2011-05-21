@@ -92,7 +92,8 @@
   <action-group>
     <copy>
      <file from="root/styles/subsilver2/template/dkp/*.*" to="styles/subsilver2/template/dkp/*.*"/>
-     <file from="root/styles/subsilver2/template/dkp/block/*.*" to="styles/subsilver2/template/dkp/block/*.*"/>     
+     <file from="root/styles/subsilver2/template/dkp/block/*.*" to="styles/subsilver2/template/dkp/block/*.*"/> 
+     <file from="root/styles/subsilver2/template/dkp/module/*.*" to="styles/subsilver2/template/dkp/module/*.*"/>      
      <file from="root/styles/subsilver2/theme/*.*" to="styles/subsilver2/theme/*.*"/>
      <file from="root/styles/subsilver2/theme/images/dkp/*.*" to="styles/subsilver2/theme/images/dkp/*.*"/>    
     </copy>

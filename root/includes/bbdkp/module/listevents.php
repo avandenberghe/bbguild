@@ -10,37 +10,22 @@
  */
 
 /**
-* @ignore
-*/
-define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-include($phpbb_root_path . 'common.' . $phpEx);
-
-// Start session management
-$user->session_begin();
-$auth->acl($user->data);
-$user->setup();
-$user->add_lang(array('mods/dkp_common'));
-if (!$auth->acl_get('u_dkp'))
+ * @ignore
+ */
+if (!defined('IN_PHPBB'))
 {
-	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
+   exit;
 }
-if (! defined ( "EMED_BBDKP" ))
-{
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
-}
-
-$sort_order = 
-array(
+$sort_order = array(
     0 => array('event_name', 'event_dkpid, event_name desc'),
     1 => array('event_value desc', 'event_dkpid, event_value desc')
 );
+
 $current_order = switch_order($sort_order);
 $total_events= 0;
 $start = request_var('start', 0);
 
-/*** get dkp pools having events with raids ***/
+/*** get dkp pools with events with raids ***/
 $sql_array = array (
 	'SELECT' => ' dkpsys_id, dkpsys_name ', 
 	'FROM' => array (
@@ -85,7 +70,7 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
 		$total_events ++;
 	    $template->assign_block_vars(
 	    	'dkpsys_row.events_row', array(
-	        	'U_VIEW_EVENT' =>  append_sid("{$phpbb_root_path}viewevent.$phpEx", '&amp;' . URI_EVENT . '='.$event['event_id'] . '&amp;'.URI_DKPSYS.'='.$event['event_dkpid']) ,
+	        	'U_VIEW_EVENT' =>  append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewevent&amp;' . URI_EVENT . '='.$event['event_id'] . '&amp;'.URI_DKPSYS.'='.$event['event_dkpid']) ,
 	        	'NAME' 			=> $event['event_name'],
 	        	'VALUE' 		=> $event['event_value'], 
 				'EVENTCOLOR'  	=> $event['event_color'],
@@ -117,21 +102,17 @@ foreach( $navlinks_array as $name )
 $template->assign_vars(array(
     'O_NAME' => $current_order['uri'][0],
     'O_VALUE' => $current_order['uri'][1],
-    'U_LIST_EVENTS' => append_sid("{$phpbb_root_path}listevents.$phpEx"), 
+    'U_LIST_EVENTS' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listevents'), 
     'START' => $start,
     'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events , $config['bbdkp_user_elimit']),
-    'EVENT_PAGINATION' => generate_pagination( append_sid("{$phpbb_root_path}listevents.$phpEx", '&amp;o='.$current_order['uri']['current']),
-             $total_events, $config['bbdkp_user_elimit'], $start))
-);
+    'EVENT_PAGINATION' => generate_pagination( append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listevents&amp;o='.$current_order['uri']['current']),
+             $total_events, $config['bbdkp_user_elimit'], $start),
+	'S_DISPLAY_LISTEVENTS' => true,             
+));
 
 $title = $user->lang['EVENTS'];
 
 // Output page
 page_header($title);
 
-$template->set_filenames(array(
-	'body' => 'dkp/listevents.html')
-);
-
-page_footer();
 ?>

@@ -12,29 +12,9 @@
 /**
  * @ignore
  */
-define ( 'IN_PHPBB', true );
-$phpbb_root_path = (defined ( 'PHPBB_ROOT_PATH' )) ? PHPBB_ROOT_PATH : './';
-$phpEx = substr ( strrchr ( __FILE__, '.' ), 1 );
-include ($phpbb_root_path . 'common.' . $phpEx);
-global $config;
-$user->session_begin ();
-$auth->acl ( $user->data );
-$user->add_lang ( array ('mods/dkp_common' ) );
-// Exclude Bots
-if ($user->data['is_bot'])
+if (!defined('IN_PHPBB'))
 {
-	redirect(append_sid("{$phpbb_root_path}index.$phpEx"));
-}
-// if not authorised redirect to portal
-if (!$auth->acl_get('u_dkp'))
-{
-	trigger_error('NOT_AUTHORISED');
-}
-
-$user->setup ();
-if (! defined ( "EMED_BBDKP" ))
-{
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
+   exit;
 }
 
 $list_p1 = (isset ( $config ['bbdkp_list_p1'] ) == true) ? $config ['bbdkp_list_p1'] : 30;
@@ -57,6 +37,7 @@ $sql_array = array(
 	'WHERE'  => ' a.dkpsys_id = d.member_dkpid', 
 	'GROUP_BY'  => 'a.dkpsys_id'
 ); 
+
 $sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query ( $sql );
 $index = 3;
@@ -638,7 +619,7 @@ $show_all = ((isset ( $_GET ['show'] )) && (request_var ( 'show', '' ) == 'all')
 foreach ( $memberarray as $key => $member )
 {
 	
-	$u_rank_search = append_sid ( "{$phpbb_root_path}listmembers.$phpEx" . '?rank=' . urlencode ( $member ['rank_name'] ) );
+	$u_rank_search = append_sid ( "{$phpbb_root_path}dkp.$phpEx" . '&amp;page=standings&amp;rank=' . urlencode ( $member ['rank_name'] ) );
 	
 	// append inactive switch
 	$u_rank_search .= (($config ['bbdkp_hide_inactive'] == 1) && (! $show_all)) ? '&amp;show=' : '&amp;show=all';
@@ -675,7 +656,8 @@ foreach ( $memberarray as $key => $member )
 			'&nbsp;', 
 		'RAIDS_P1_DAYS' => $member ['attendanceP1'], 
 		'RAIDS_P2_DAYS' => $member ['attendanceP2'], 
-		'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}viewmember.$phpEx", 
+		'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx",
+			'&amp;page=viewmember' .  
 			'&amp;' . URI_NAMEID . '=' . $member ['member_id'] . 
 			'&amp;' . URI_DKPSYS . '=' . $member ['member_dkpid']), 
 	);
@@ -729,11 +711,11 @@ for($i = 1; $i <= 20; $i ++)
 	{
 		if ($query_by_pool)
 		{
-			$sortlink [$i] = append_sid ( "{$phpbb_root_path}listmembers.$phpEx", URI_ORDER. '=' . $j . $uri_addon . '&amp;' . URI_DKPSYS . '=' . $dkpsys_id );
+			$sortlink [$i] = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;' . URI_ORDER. '=' . $j . $uri_addon . '&amp;' . URI_DKPSYS . '=' . $dkpsys_id );
 		} 
 		else
 		{
-			$sortlink [$i] = append_sid ( "{$phpbb_root_path}listmembers.$phpEx", URI_ORDER. '=' . $j . $uri_addon . '&amp;' . URI_DKPSYS . '=All' );
+			$sortlink [$i] = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;' . URI_ORDER. '=' . $j . $uri_addon . '&amp;' . URI_DKPSYS . '=All' );
 		}
 	}
 
@@ -742,7 +724,8 @@ for($i = 1; $i <= 20; $i ++)
 // footcount link
 if (($config ['bbdkp_hide_inactive'] == 1) && (! $show_all))
 {
-	$flink = '<a href="' . append_sid ( "{$phpbb_root_path}listmembers.$phpEx", 
+	$flink = '<a href="' . append_sid ( "{$phpbb_root_path}dkp.$phpEx", 
+		'page=standings' .	
 		'&amp;' . URI_ORDER . '=' . $j . '&amp;show=all' . 
 		'&amp;' . URI_DKPSYS . '=' . $dkpsys_id ) . '" class="rowfoot">';
 	$footcount_text = sprintf ( $user->lang ['LISTMEMBERS_ACTIVE_FOOTCOUNT'], $member_count, $flink );
@@ -767,7 +750,7 @@ else
 	$arg .= '&amp;filter=all';
 }
 
-$u_listmembers = append_sid ( "{$phpbb_root_path}listmembers.$phpEx", $arg );
+$u_listmembers = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;' . $arg );
 
 $template->assign_vars ( array (
 	'F_MEMBERS' => $u_listmembers, 
@@ -793,10 +776,11 @@ $template->assign_vars ( array (
 	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
  	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 	'S_QUERYBYPOOL' => $query_by_pool, 
+	'S_DISPLAY_STANDINGS' => true,
 	'FOOTCOUNT' => (isset ( $_POST ['compare'] )) ? 
 		sprintf ( $footcount_text, sizeof (request_var ( 'compare_ids', array ('' => 0 )))) : 
-		$footcount_text )
- );
+		$footcount_text, 
+));
 
  
 if($config['bbdkp_timebased'] == 1) {
@@ -827,8 +811,6 @@ if($config['bbdkp_epgp'] == 1)
 
 // Output page
 page_header ( $user->lang ['LISTMEMBERS_TITLE'] );
-$template->set_filenames ( array ('body' => 'dkp/listmembers.html' ) );
-page_footer ();
 
 // end 
 
@@ -920,7 +902,8 @@ function leaderboard($dkpsys_id, $query_by_pool)
 				'NAME' => $dkprow ['rank_prefix'] . (($dkprow ['member_status'] == '0') ? '<em>' . $dkprow ['member_name'] . '</em>' : $dkprow ['member_name']) . $dkprow ['rank_suffix'], 
 				'CURRENT' => $dkprow ['member_current'], 
 				'DKPCOLOUR' => ($dkprow ['member_current'] >= 0) ? 'positive' : 'negative', 
-				'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}viewmember.$phpEx", '&amp;' . 
+				'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", '&amp;' . 
+						'page=viewmember'. 
 						URI_NAMEID . '=' . $dkprow ['member_id'] . '&amp;' . 
 						URI_DKPSYS . '=' . $dkprow['member_dkpid'] ) );
 				

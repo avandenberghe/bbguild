@@ -9,26 +9,13 @@
  * 
  */
 
-/**
-* @ignore
-*/
-define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-include($phpbb_root_path . 'common.' . $phpEx);
 
-// Start session management
-$user->session_begin();
-$auth->acl($user->data);
-$user->setup('viewforum');
-$user->add_lang(array('mods/dkp_common'));
-if (!$auth->acl_get('u_dkp'))
+/**
+ * @ignore
+ */
+if (!defined('IN_PHPBB'))
 {
-	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
-}
-if (! defined ( "EMED_BBDKP" ))
-{
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
+   exit;
 }
 
 if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
@@ -153,7 +140,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
           $attendees_count = ( isset($raid['numattendees']) ) ? $raid['numattendees'] : 0;
           
           $template->assign_block_vars('raids_row', array(
-            'U_VIEW_RAID' => append_sid("{$phpbb_root_path}viewraid.$phpEx" , URI_RAID . '='.$raid['raid_id']),
+            'U_VIEW_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewraid&amp;'. URI_RAID . '='.$raid['raid_id']),
             'DATE'        => date($config['bbdkp_date_format'], $raid['raid_start']), 
             'ATTENDEES'   => $attendees_count,
             'DROPS'       => $drop_count,
@@ -203,16 +190,6 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 	$sql = $db->sql_build_query('SELECT', $sql_array);
 	
     $result = $db->sql_query_limit($sql, $config['bbdkp_user_ilimit'], $start);
-    
-	$bbDKP_Admin = new bbDKP_Admin;
-	if ($bbDKP_Admin->bbtips == true)
-	{
-		if ( !class_exists('bbtips')) 
-		{
-			require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx); 
-		}
-		$bbtips = new bbtips;
-	}
 
 	$number_items = 0;
 	$item_value = 0.00;
@@ -232,7 +209,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 		$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
         $template->assign_block_vars('items_row', array(
           'DATE'          => date($config['bbdkp_date_format'], $row['item_date']),
-          'U_VIEW_RAID'   => append_sid("{$phpbb_root_path}viewraid.$phpEx" , URI_RAID . '=' . $row['raid_id']) ,
+          'U_VIEW_RAID'   => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewraid&amp;' . URI_RAID . '=' . $row['raid_id']) ,
 		  
           'COLORCODE'  	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
           'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
@@ -241,9 +218,9 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 		  'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 			 				
 		  'BUYER' 		=> (! empty ( $row ['member_name'] )) ? $row ['member_name'] : '&lt;<i>Not Found</i>&gt;', 
         
-          'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '='. $dkpid) ,
+          'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' . URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '='. $dkpid) ,
           'ITEMNAME'      => $item_name, 
-          'U_VIEW_ITEM'   => append_sid("{$phpbb_root_path}viewitem.$phpEx" , URI_ITEM . '=' . $row['item_id']) ,
+          'U_VIEW_ITEM'   => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewitem&amp;' . URI_ITEM . '=' . $row['item_id']) ,
           'ITEM_ZS'      	=> ($row['item_zs'] == 1) ? ' checked="checked"' : '',
 		  'ITEMVALUE' 	=> $row['item_value'],
 		  'DECAYVALUE' 	=> $row['item_decay'],
@@ -256,7 +233,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 		$item_total += $row['item_total'];
     }
        
-    $selfurl = append_sid("{$phpbb_root_path}viewevent.$phpEx" , URI_EVENT . '='.  $eventid . '&amp;' . URI_DKPSYS . '='. $dkpid ) ;
+    $selfurl = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewevent&amp;' . URI_EVENT . '='.  $eventid . '&amp;' . URI_DKPSYS . '='. $dkpid ) ;
     $itempagination = generate_pagination($selfurl, $total_drop_count, $config['bbdkp_user_ilimit'], $start, true);
     
     $template->assign_vars(array(
@@ -279,7 +256,8 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
         'L_RECORDED_DROP_HISTORY' => sprintf($user->lang['RECORDED_DROP_HISTORY'], $eventname),
         'ITEM_FOOTCOUNT'      => sprintf($user->lang['VIEWITEM_FOOTCOUNT'], $total_drop_count, $total_drop_count),
         'START' 		=> $start,
-    	'ITEM_PAGINATION' => $itempagination
+    	'ITEM_PAGINATION' => $itempagination,
+    	'S_DISPLAY_VIEWEVENT' => true, 
     
     )
     );
@@ -288,7 +266,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
     $navlinks_array = array(
     array(
 	     'DKPPAGE' => $user->lang['MENU_EVENTS'],
-	     'U_DKPPAGE' => append_sid("{$phpbb_root_path}listevents.$phpEx"),
+	     'U_DKPPAGE' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listevents'),
     ),
 
     array(
@@ -307,16 +285,9 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
         
 	// Output page
 	page_header($user->lang['MENU_VIEWEVENT'] . ' ' . $eventname);
-	
-	$template->set_filenames(array(
-		'body' => 'dkp/viewevent.html')
-	);
-	
-	page_footer();
 }
 else
 {
-	$user->add_lang(array('mods/dkp_admin'));
     trigger_error($user->lang['ERROR_EMPTY_EVENTNAME']);
 }
 ?>

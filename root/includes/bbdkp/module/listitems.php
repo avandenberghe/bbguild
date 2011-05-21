@@ -8,39 +8,13 @@
  * @version $Id$
  * 
  */
-
 /**
  * @ignore
  */
-define ( 'IN_PHPBB', true );
-$phpbb_root_path = (defined ( 'PHPBB_ROOT_PATH' )) ? PHPBB_ROOT_PATH : './';
-$phpEx = substr ( strrchr ( __FILE__, '.' ), 1 );
-include ($phpbb_root_path . 'common.' . $phpEx);
-
-// Start session management
-$user->session_begin ();
-$auth->acl ( $user->data );
-$user->setup ();
-$user->add_lang ( array ('mods/dkp_common' ) );
-if (!$auth->acl_get('u_dkp'))
+if (!defined('IN_PHPBB'))
 {
-	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
+   exit;
 }
-if (! defined ( "EMED_BBDKP" ))
-{
-	trigger_error ( $user->lang ['BBDKPDISABLED'], E_USER_WARNING );
-}
-
-$bbDKP_Admin = new bbDKP_Admin();
-if ($bbDKP_Admin->bbtips == true)
-{
-	if (! class_exists ( 'bbtips' ))
-	{
-		require ($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx);
-	}
-	$bbtips = new bbtips ( );
-}
-
 /**** begin dkpsys pulldown  ****/
 $query_by_pool = false;
 $defaultpool = 99;
@@ -126,7 +100,7 @@ $query_by_pool = ($dkp_id != 0) ? true : false;
  * Item Value listing  (item values)
  *
  **/
-$mode = request_var ( 'page', 'values' );
+$mode = request_var ( 'mode', 'values' );
 
 $sql_array = array();
 switch ($mode)
@@ -160,11 +134,11 @@ $start = request_var ( 'start', 0 );
 switch ($mode)
 {
 	case 'values' :
-		$u_list_items = append_sid ( "{$phpbb_root_path}listitems.$phpEx" );
+		$u_list_items = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=listitems' );
 		$listitems_footcount = sprintf ( $user->lang ['LISTITEMS_FOOTCOUNT'], $total_items, $config ['bbdkp_user_ilimit'] );
 		break;
 	case 'history' :
-		$u_list_items = append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=history' );
+		$u_list_items = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=listitems&amp;mode=history' );
 		$listitems_footcount = sprintf ( $user->lang ['LISTPURCHASED_FOOTCOUNT'], $total_items, $config ['bbdkp_user_ilimit'] );
 		break;
 }
@@ -181,8 +155,6 @@ if ($mode == 'history')
 }
 
 $current_order = switch_order ($sort_order);
-
-
 
 if ($query_by_pool)
 {
@@ -292,9 +264,9 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 		$template->assign_block_vars ( 'items_row', array (
 			'DATE' 			=> (! empty ( $item ['item_date'] )) ? date ( 'd.m.y', $item ['item_date'] ) : '&nbsp;', 
 			'ITEMNAME' 		=> $valuename, 
-			'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}viewitem.$phpEx", URI_ITEM . '=' . $item ['item_id'] ), 
+			'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewitem&amp;" . URI_ITEM . '=' . $item ['item_id'] ), 
 			'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>Not Found</i>&gt;', 
-			'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item ['raid_id'] ), 
+			'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewitem&amp;" . URI_RAID . '=' . $item ['raid_id'] ), 
 			'EVENTCOLOR' => ( !empty($item['event_color']) ) ? $item['event_color'] : '#123456',
 			
 			'ITEM_ZS'      	=> ($item['item_zs'] == 1) ? ' checked="checked"' : '',
@@ -303,7 +275,7 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 			'TOTAL' 		=> sprintf("%.2f", $item['item_total']),
 			'BUYER' 		=> $item ['member_name'], 
 		
-			'U_VIEW_BUYER' 	=> append_sid ( "{$phpbb_root_path}viewmember.$phpEx", URI_NAMEID . '=' . $item ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $item ['event_dkpid'] ), 
+			'U_VIEW_BUYER' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewmember&amp;" . URI_NAMEID . '=' . $item ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $item ['event_dkpid'] ), 
 			'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
 			'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
 
@@ -317,10 +289,10 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 		$template->assign_block_vars ( 'items_row', array (
 			'DATE' 			=> (! empty ( $item ['item_date'] )) ? date ( 'd.m.y', $item ['item_date'] ) : '&nbsp;', 
 			'ITEMNAME' 		=> $valuename, 
-			'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}viewitem.$phpEx", URI_ITEM . '=' . $item ['item_id'] ), 
+			'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewitem&amp;" .  URI_ITEM . '=' . $item ['item_id'] ), 
 			'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>Not Found</i>&gt;', 
 			'EVENTCOLOR' => ( !empty($item['event_color']) ) ? $item['event_color'] : '#123456',
-			'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '=' . $item ['raid_id'] ), 
+			'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewraid&amp;" . URI_RAID . '=' . $item ['raid_id'] ), 
 			
 			'ITEM_ZS'      	=> ($item['item_zs'] == 1) ? ' checked="checked"' : '',
 			'ITEMVALUE' 	=> sprintf("%.2f", $item['item_value'])   ,
@@ -329,7 +301,6 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 		));	
 		
 	}
-		
 	$number_items++; 
 	$item_value += $item['item_value'];
 	$item_decay += $item['item_decay'];
@@ -353,10 +324,10 @@ foreach ( $navlinks_array as $name )
 
 $template->assign_vars ( array (
 	'F_LISTITEM' => $u_list_items, 
-	'O_DATE' => append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode . '&amp;o=' . $current_order ['uri'] [0] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ), 
-	'O_NAME' => append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode . '&amp;o=' . $current_order ['uri'] [3] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ),  
-	'O_RAID' => append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode . '&amp;o=' . $current_order ['uri'] [1] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ),
-	'O_VALUE' => append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode . '&amp;o=' . $current_order ['uri'] [2] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ), 
+	'O_DATE' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=listitems&amp;mode=' . $mode . '&amp;o=' . $current_order ['uri'] [0] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ), 
+	'O_NAME' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=listitems&amp;mode=' . $mode . '&amp;o=' . $current_order ['uri'] [3] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ),  
+	'O_RAID' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=listitems&amp;mode=' . $mode . '&amp;o=' . $current_order ['uri'] [1] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ),
+	'O_VALUE' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=listitems&amp;mode=' . $mode . '&amp;o=' . $current_order ['uri'] [2] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ), 
 	'S_HISTORY' => $s_history, 
 	'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
@@ -367,13 +338,14 @@ $template->assign_vars ( array (
 	'TOTAL_ITEMTOTAL' 	=> sprintf("%.2f", $item_total),
 
 	'LISTITEMS_FOOTCOUNT' => $listitems_footcount, 
-	'ITEM_PAGINATION' => $pagination ) 
-);
+	'ITEM_PAGINATION' => $pagination ,
+	'S_DISPLAY_LISTITEMS' => true,
+));
 
 if ($mode == 'history')
 {
 	$template->assign_vars ( array (
-	'O_BUYER' => append_sid ( "{$phpbb_root_path}listitems.$phpEx", 'page=' . $mode . '&amp;o=' . $current_order ['uri'] [4] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ))
+	'O_BUYER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=listitems&amp;mode=' . $mode . '&amp;o=' . $current_order ['uri'] [4] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All') ))
 );
 	
 }
@@ -382,6 +354,4 @@ $title = ($mode == 'history') ? $user->lang ['MENU_ITEMHIST'] : $user->lang ['ME
 
 // Output page
 page_header ( $title );
-$template->set_filenames ( array ('body' => 'dkp/listitems.html' ) );
-page_footer ();
 ?>

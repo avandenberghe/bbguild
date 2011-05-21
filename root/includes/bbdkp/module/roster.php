@@ -27,7 +27,7 @@ $user->setup('viewforum');
 $user->add_lang ( array ('mods/dkp_common' ));
 if (!$auth->acl_get('u_dkp'))
 {
-	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
+	trigger_error('NOT_AUTHORISED');
 }
 if (! defined('EMED_BBDKP')) 
 {

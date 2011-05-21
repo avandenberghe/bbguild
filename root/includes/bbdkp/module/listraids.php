@@ -8,33 +8,16 @@
  * @version $Id$
  * 
  */
-
 /**
-* @ignore
-*/
-define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-include($phpbb_root_path . 'common.' . $phpEx);
-
-// Start session management
-$user->session_begin();
-$auth->acl($user->data);
-$user->add_lang(array('mods/dkp_common'));
-if (!$auth->acl_get('u_dkp'))
+ * @ignore
+ */
+if (!defined('IN_PHPBB'))
 {
-	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
+   exit;
 }
-if (! defined ( "EMED_BBDKP" ))
-{
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
-}
-$user->setup();
-
 /**** begin dkpsys pulldown  ****/	
 $query_by_pool = false;
 $defaultpool = 99; 
-
 $dkpvalues[0] = $user->lang['ALL']; 
 $dkpvalues[1] = '--------'; 
 $sql_array = array(
@@ -109,7 +92,6 @@ foreach ( $dkpvalues as $key => $value )
 	}
 }
 
-
 $query_by_pool = ($dkp_id != 0) ? true : false;
 /**** end dkpsys pulldown  ****/	 
 	 
@@ -152,17 +134,17 @@ $raidlines = $config['bbdkp_user_rlimit'] ;
 
 if ($query_by_pool)
 {
-    $pagination = generate_pagination( append_sid("{$phpbb_root_path}listraids.$phpEx" , URI_DKPSYS . '=' . $dkp_id . 
+    $pagination = generate_pagination( append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=listraids&amp;' . URI_DKPSYS . '=' . $dkp_id . 
     '&amp;o='.  $current_order['uri']['current'] ), $total_raids, $config['bbdkp_user_rlimit'], $start, true);
     
-    $u_list_raids =  append_sid("{$phpbb_root_path}listraids.$phpEx", '&amp;'. URI_DKPSYS . '='. $dkp_id);
+    $u_list_raids =  append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=listraids&amp;' . URI_DKPSYS . '='. $dkp_id);
 }
 else 
 {
-    $pagination = generate_pagination( append_sid("{$phpbb_root_path}listraids.$phpEx" , URI_DKPSYS .  '=All&amp;o='.  
+    $pagination = generate_pagination( append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=listraids&amp;' . URI_DKPSYS .  '=All&amp;o='.  
     $current_order['uri']['current'] ), $total_raids, $config['bbdkp_user_rlimit'], $start, true);
     
-    $u_list_raids =  append_sid("{$phpbb_root_path}listraids.$phpEx");
+    $u_list_raids =  append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=listraids&amp;');
 }
 
 $sql_array = array (
@@ -201,8 +183,8 @@ while ( $row = $db->sql_fetchrow($raids_result) )
 {
     $template->assign_block_vars('raids_row', array(
         'DATE' => ( !empty($row['raid_start']) ) ? date($config['bbdkp_date_format'], $row['raid_start']) : '&nbsp;',
-        'U_VIEW_RAID'  => append_sid("{$phpbb_root_path}viewraid.$phpEx", URI_RAID . '='.$row['raid_id']),
-    	'U_VIEW_EVENT' => append_sid("{$phpbb_root_path}viewevent.$phpEx" , URI_EVENT . '='.  $row['event_id'] . '&amp;' . URI_DKPSYS . '=' . $row['event_dkpid']),
+        'U_VIEW_RAID'  => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;' . URI_RAID . '='.$row['raid_id']),
+    	'U_VIEW_EVENT' => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewevent&amp;' . URI_EVENT . '='.  $row['event_id'] . '&amp;' . URI_DKPSYS . '=' . $row['event_dkpid']),
 		'POOL' => ( !empty($row['dkpsys_name']) ) ? $row['dkpsys_name'] : '&lt;<i>Not Found</i>&gt;',
     	'NAME' => ( !empty($row['event_name']) ) ? $row['event_name'] : '&lt;<i>Not Found</i>&gt;',
     	'EVENTCOLOR' => ( !empty($row['event_color']) ) ? $row['event_color'] : '#123456',
@@ -223,11 +205,11 @@ for ($i=0; $i<=4; $i++)
 {
     if ($query_by_pool)
     {
-        $sortlink[$i] = append_sid($phpbb_root_path . 'listraids.'.$phpEx, 'o=' . $current_order['uri'][$i] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . $dkp_id ); 
+        $sortlink[$i] = append_sid($phpbb_root_path . 'dkp.'.$phpEx, 'page=listraids&amp;o=' . $current_order['uri'][$i] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . $dkp_id ); 
     }
     else 
     {
-        $sortlink[$i] = append_sid($phpbb_root_path . 'listraids.'.$phpEx, 'o=' . $current_order['uri'][$i] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=All'  ); 
+        $sortlink[$i] = append_sid($phpbb_root_path  . 'dkp.'.$phpEx, 'page=listraids&amp;o=' . $current_order['uri'][$i] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=All'  ); 
     }
 }
 
@@ -252,17 +234,11 @@ $template->assign_vars(array(
     'LISTRAIDS_FOOTCOUNT' => sprintf($user->lang['LISTRAIDS_FOOTCOUNT'], $total_raids, $config['bbdkp_user_rlimit']),
 
     'START' => $start,
-    'RAID_PAGINATION' => $pagination
-    )
-);
+    'RAID_PAGINATION' => $pagination, 
+	'S_DISPLAY_RAIDS' => true
+));
 
 // Output page
 page_header($user->lang['RAIDS']);
-
-$template->set_filenames(array(
-	'body' => 'dkp/listraids.html')
-);
-
-page_footer();
 
 ?>

@@ -1,10 +1,3 @@
-<!-- INCLUDE overall_header.html -->
-<!-- INCLUDE dkp/dkpmenu.html -->
-<!--
-		Integrated by bbDKP
-		http://code.google.com/p/bbdkp/
-		$Id$
-//-->
 <form method="post" action="{F_LISTITEM}">
 
 <div class="forabg" >
@@ -54,9 +47,9 @@
 <thead>
   <tr style="color:white;">
   	<th style="text-align:left; width:3%"><img src="adm/images/glyphs/view.gif" width="16" height="16" alt="View" /></th>
-    <th style="text-align:left; width:5%" ><a href="{O_DATE}">{L_DATE}</th>
+    <th style="text-align:left; width:5%" ><a href="{O_DATE}">{L_DATE}</a></th>
      <!-- IF S_HISTORY -->
-    <th style="text-align:left; width:7%" nowrap="nowrap">{L_CLASS}</th>
+    <th style="text-align:left; width:7%; white-space: nowrap;" >{L_CLASS}</th>
     <th style="text-align:left; width:15%"><a href="{O_BUYER}&amp;">{L_NAME}</a></th>
     <th style="text-align:left; width:25%"><a href="{O_ITEMNAME}">{L_ITEM}</a></th>
     <th style="text-align:left; width:10%">{L_RAID}</th> 
@@ -65,16 +58,16 @@
     <th style="text-align:left; width:20%"><a href="{O_ITEMNAME}">{L_ITEM}</a></th>
     <th style="text-align:left; width:15%">{L_RAID}</th> 
     <!-- ENDIF -->    
-     <th style="text-align:right; width:7%" nowrap="nowrap">{L_ITEMVALUE}</th>
+     <th style="text-align:right; width:7%; white-space: nowrap;">{L_ITEMVALUE}</th>
     <!-- IF S_SHOWDECAY -->    
-    <th style="text-align:right; width:7%" nowrap="nowrap">{L_ITEMDECAY}</th>
+    <th style="text-align:right; width:7%; white-space: nowrap;">{L_ITEMDECAY}</th>
     <!-- ENDIF -->
-    <th style="text-align:right; width:7%" nowrap="nowrap"><a href="{O_ITEMTOTAL}">{L_ITEMTOTAL}</a></th>
+    <th style="text-align:right; width:7%; white-space: nowrap;"><a href="{O_ITEMTOTAL}">{L_ITEMTOTAL}</a></th>
   </tr>
   </thead>
-<tbody>
+  <tbody>
   <!-- BEGIN items_row -->
-  <!-- IF items_row.S_ROW_COUNT is even --><tr class="bg1"><!-- ELSE --><tr class="bg2"><!-- ENDIF -->
+  <tr <!-- IF items_row.S_ROW_COUNT is even -->class="bg1"><!-- ELSE -->class="bg2"<!-- ENDIF -->>
     <td style="text-align:left; width:3%;"><a href="{items_row.U_VIEW_ITEM}"></a><img src="adm/images/glyphs/view.gif" width="16" height="16" alt="View" /></td>
 	<td style="text-align:left; width:5%;"><a href="{raids_row.U_VIEW_RAID}">{items_row.DATE}</a></td>
     
@@ -137,4 +130,3 @@
 </div>
 <!-- ENDIF -->
 
-<!-- INCLUDE overall_footer.html -->

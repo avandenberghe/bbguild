@@ -8,32 +8,14 @@
  * @version $Id$
  * 
  */
-
 /**
-* @ignore
-*/
-define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
-$phpEx = substr(strrchr(__FILE__, '.'), 1);    
-include($phpbb_root_path . 'common.' . $phpEx);
-
-// Start session management
-$user->session_begin();
-$auth->acl($user->data);
-$user->setup('viewforum');
-$user->add_lang(array('mods/dkp_common'));
-if (!$auth->acl_get('u_dkp'))
+ * @ignore
+ */
+if (!defined('IN_PHPBB'))
 {
-	redirect(append_sid("{$phpbb_root_path}portal.$phpEx"));
+   exit;
 }
-
-if (! defined ( "EMED_BBDKP" ))
-{
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
-}
-
 /* begin dkpsys pulldown */
-
 // pulldown
 $query_by_pool = false;
 $defaultpool = 99; 
@@ -111,7 +93,6 @@ foreach ( $dkpvalues as $key => $value )
 	}
 }
 
-
 $query_by_pool = ($dkp_id != 0) ? true : false;
 /**** end dkpsys pulldown  ****/
 
@@ -137,7 +118,6 @@ $sort_index = explode('.', $current_order['uri']['current']);
 $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 $previous_data = '';
 
-
 // get raidcount
 $sql = 'SELECT count(*) as raidcount FROM ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE . ' e where r.event_id = e.event_id ';
 if ($query_by_pool)
@@ -149,7 +129,6 @@ $total_raids = (int) $db->sql_fetchfield('raidcount',0,$result);
 $db->sql_freeresult ( $result );
 
 $show_all = ( (isset($_GET['show'])) && (request_var('show', '') == "all") ) ? true : false;
-
 
 $sql_array = array(
     'SELECT'    => 	'l.member_name,	l.member_class_id,
@@ -239,7 +218,7 @@ while ( $row = $db->sql_fetchrow($members_result) )
     	'COLORCODE'				=> $colorcode,
     	'ID'            		=> $row['member_id'],
 	    'COUNT'         		=> ($row[$previous_source] == $previous_data) ? '&nbsp;' : $member_count,
-        'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}viewmember.$phpEx" , URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),    
+        'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),    
         'NAME' 					=> $row['member_name'],
         'FIRST_RAID' 			=> ( !empty($row['member_firstraid']) ) ? date($config['bbdkp_date_format'], $row['member_firstraid']) : '&nbsp;',
         'LAST_RAID' 			=> ( !empty($row['member_lastraid']) ) ? date($config['bbdkp_date_format'], $row['member_lastraid']) : '&nbsp;',
@@ -265,7 +244,7 @@ while ( $row = $db->sql_fetchrow($members_result) )
 if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 {
     $footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($members_result),
-    '<a href="' . append_sid("{$phpbb_root_path}stats.$phpEx" , 'o='.$current_order['uri']['current']. '&amp;show=all' ) . '" class="rowfoot">');
+    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o='.$current_order['uri']['current']. '&amp;show=all' ) . '" class="rowfoot">');
 }
 else
 {
@@ -371,11 +350,11 @@ while ($row = $db->sql_fetchrow($result) )
 
     if ($query_by_pool)
     {
-        $lmlink =  append_sid("{$phpbb_root_path}listmembers.$phpEx" , 'filter=class_' . $row['class_id'] . '&amp;' . URI_DKPSYS .'=' . $dkp_id); 
+        $lmlink =  append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=standings&amp;filter=class_' . $row['class_id'] . '&amp;' . URI_DKPSYS .'=' . $dkp_id); 
     }
     else 
     {
-        $lmlink =  append_sid("{$phpbb_root_path}listmembers.$phpEx" , 'filter=class_' . $row['class_id']);
+        $lmlink =  append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=standings&amp;filter=class_' . $row['class_id']);
     }
     
     $template->assign_block_vars('class_row', array(
@@ -396,7 +375,6 @@ while ($row = $db->sql_fetchrow($result) )
     
     	'LOOT_FACTOR'		=> sprintf("%s %%", $loot_factor),
     	'C_LOOT_FACTOR'		=> ($loot_factor < 	60 || $loot_factor > 140 ) ? 'negative' : 'positive', 
-    	
     
 		)
     );
@@ -419,24 +397,25 @@ foreach( $navlinks_array as $name )
     
 $template->assign_vars(array(
 
+   	'S_DISPLAY_STATS'		=> true,
 	'F_STATS' => append_sid("{$phpbb_root_path}stats.$phpEx"),
 
-    'O_NAME'       => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][0] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')), 
-    'O_FIRSTRAID' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-	'O_LASTRAID' =>  append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][2] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')),
-    'O_RAIDCOUNT' =>  append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][3] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-    'O_EARNED' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][4] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-    'O_EARNED_PER_DAY' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][5] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_EARNED_PER_RAID' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][6] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_SPENT' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][7] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_SPENT_PER_DAY' =>append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][8] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_SPENT_PER_RAID' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][9] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_PR' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][10] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_CURRENT' => append_sid("{$phpbb_root_path}stats.$phpEx", 'o=' . $current_order['uri'][11] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_NAME'       => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][0] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')), 
+    'O_FIRSTRAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+	'O_LASTRAID' =>  append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][2] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')),
+    'O_RAIDCOUNT' =>  append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][3] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+    'O_EARNED' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][4] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+    'O_EARNED_PER_DAY' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][5] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_EARNED_PER_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][6] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_SPENT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][7] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_SPENT_PER_DAY' =>append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][8] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_SPENT_PER_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][9] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_PR' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][10] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_CURRENT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][11] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
 
-	'U_STATS' => append_sid("{$phpbb_root_path}stats.$phpEx"),
+	'U_STATS' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats'),
     'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
-    'STATS_FOOTCOUNT' => $footcount_text,
+    'STATS_FOOTCOUNT' 	=> $footcount_text,
 	'TOTAL_MEMBERS' 	=> $total_members, 
 	'TOTAL_DROPS' 		=> $total_drops, 
 
@@ -447,11 +426,5 @@ $title = $user->lang['MENU_STATS'];
 
 // Output page
 page_header($title);
-
-$template->set_filenames(array(
-	'body' => 'dkp/stats.html')
-);
-
-page_footer();
 
 ?>
