@@ -186,6 +186,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 		<copy>
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
 			<file from="root/portal.php" to="portal.php"/>
+			<file from="root/dkp.php" to="dkp.php"/>
 			<file from="root/configdkp.php" to="configdkp.php"/>
 			<file from="root/adm/findrank.php" to="adm/findrank.php"/>
 			<file from="root/adm/findclassrace.php" to="adm/findclassrace.php"/>
@@ -200,7 +201,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/includes/bbdkp/portal/*.*" to="includes/bbdkp/portal/*.*"/>
 			<file from="root/includes/bbdkp/module/listevents.php" to="includes/bbdkp/module/listevents.php"/>
 			<file from="root/includes/bbdkp/module/listitems.php" to="includes/bbdkp/module/listitems.php"/>
-			<file from="root/includes/bbdkp/module/listmembers.php" to="includes/bbdkp/module/listmembers.php"/>
+			<file from="root/includes/bbdkp/module/standings.php" to="includes/bbdkp/module/standings.php"/>
 			<file from="root/includes/bbdkp/module/listraids.php" to="includes/bbdkp/module/listraids.php"/>
 			<file from="root/includes/bbdkp/module/roster.php" to="includes/bbdkp/module/roster.php"/>
 			<file from="root/includes/bbdkp/module/stats.php" to="includes/bbdkp/module/stats.php"/>
@@ -208,7 +209,6 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/includes/bbdkp/module/viewevent.php" to="includes/bbdkp/module/viewevent.php"/>
 			<file from="root/includes/bbdkp/module/viewitem.php" to="includes/bbdkp/module/viewitem.php"/>
 			<file from="root/includes/bbdkp/module/viewraid.php" to="includes/bbdkp/module/viewraid.php"/>
-			
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
 			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>

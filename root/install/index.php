@@ -1172,7 +1172,7 @@ function tableupdates123($action, $version)
 					$db->sql_query($sql);
 			}
 			break;
-		case 'update'
+		case 'update':
 				switch ($version)
 				{
 					case '1.2.3':
