@@ -620,7 +620,7 @@ class acp_dkp extends bbDKP_Admin
 				}
 				
 				$s_bankerlist_options = ''; 
-				$sql = 'select member_id, member_name from ' . MEMBER_LIST_TABLE . " where member_status = '1'"; 
+				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . " WHERE member_status = '1'"; 
 				$result = $db->sql_query ($sql);
 				while ($row = $db->sql_fetchrow ($result))
 				{

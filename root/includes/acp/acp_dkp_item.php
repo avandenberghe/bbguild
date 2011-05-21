@@ -494,8 +494,8 @@ class acp_dkp_item extends bbDKP_Admin
 		global $db, $user, $config;
 		$query = array ();
 		
-		$sql = "select e.event_dkpid from " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r 
-		where r.raid_id = " . $raid_id . " and e.event_id = r.event_id"; 
+		$sql = "SELECT e.event_dkpid FROM " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r 
+		where r.raid_id = " . $raid_id . " AND e.event_id = r.event_id"; 
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('event_dkpid', false, $result);
 		$db->sql_freeresult ( $result);
@@ -511,7 +511,7 @@ class acp_dkp_item extends bbDKP_Admin
 			  	AND ' . $db->sql_in_set('member_id', $item_buyers) ;
 		$db->sql_query ( $sql );
 		
-		$sql = 'select member_id from ' . RAID_DETAIL_TABLE . ' where raid_id = ' . $raid_id; 
+		$sql = 'SELECT member_id FROM ' . RAID_DETAIL_TABLE . ' WHERE raid_id = ' . $raid_id; 
 		$result = $db->sql_query($sql);
 		unset($raiders);
 		$raiders = array();
@@ -749,7 +749,7 @@ class acp_dkp_item extends bbDKP_Admin
 		// if zerosum was given then remove item value from earned value
 		if ($old_item ['item_zs'] == true)
 		{
-			$sql = 'select member_id from ' . RAID_DETAIL_TABLE . ' where raid_id = ' . $old_item ['raid_id'] ; 
+			$sql = 'SELECT member_id FROM ' . RAID_DETAIL_TABLE . ' WHERE raid_id = ' . $old_item ['raid_id'] ; 
 			$result = $db->sql_query($sql);
 			unset($raiders);
 			$raiders = array();
@@ -1255,13 +1255,13 @@ class acp_dkp_item extends bbDKP_Admin
 				
 				
 				// loop raids having items
-				$sql = 'select e.event_dkpid, r.raid_id from '. 
+				$sql = 'SELECT e.event_dkpid, r.raid_id FROM '. 
 					RAIDS_TABLE. ' r, ' . 
 					EVENTS_TABLE . ' e, ' . 
 					RAID_ITEMS_TABLE . ' i 
-					where e.event_id = r.event_id 
-					and r.raid_id = i.raid_id 
-					group by e.event_dkpid, r.raid_id' ;
+					WHERE e.event_id = r.event_id 
+					AND r.raid_id = i.raid_id 
+					GROUP BY e.event_dkpid, r.raid_id' ;
 				$result = $db->sql_query ($sql);
 				$countraids=0;
 				$raids = array();
@@ -1275,7 +1275,7 @@ class acp_dkp_item extends bbDKP_Admin
 				foreach($raids as $raid_id => $raid)
 				{
 					$numraiders = 0;
-					$sql = 'select member_id from ' . RAID_DETAIL_TABLE . ' where raid_id = ' . $raid_id; 
+					$sql = 'SELECT member_id FROM ' . RAID_DETAIL_TABLE . ' WHERE raid_id = ' . $raid_id; 
 					$result = $db->sql_query($sql);
 					while ( $row = $db->sql_fetchrow ($result))
 					{
@@ -1289,7 +1289,7 @@ class acp_dkp_item extends bbDKP_Admin
 		
 					$db->sql_freeresult ( $result);
 					
-					$sql = 'select member_id, item_value, item_id from ' . RAID_ITEMS_TABLE . ' where raid_id = ' . $raid_id;
+					$sql = 'SELECT member_id, item_value, item_id FROM ' . RAID_ITEMS_TABLE . ' WHERE raid_id = ' . $raid_id;
 					$result = $db->sql_query($sql);
 					$numbuyers=0;
 					while ( $row = $db->sql_fetchrow ($result))
@@ -1391,12 +1391,6 @@ class acp_dkp_item extends bbDKP_Admin
 		}		
 		
 	}
-	
-	private function distribute_zerosum()
-	{
-		
-	}
-	
 
 } // end class
 

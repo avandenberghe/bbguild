@@ -74,7 +74,7 @@ class ucp_dkp
 					$show = false;
 					
 					//if there are no chars at all, show a message and do not show add button
-					$sql = 'select count(*) as mcount from ' . MEMBER_LIST_TABLE .' where member_rank_id != 90  ';
+					$sql = 'SELECT count(*) AS mcount FROM ' . MEMBER_LIST_TABLE .' WHERE member_rank_id != 90  ';
 					$result = $db->sql_query($sql, 0);
 					$mcount = (int) $db->sql_fetchfield('mcount');
 					if ( $mcount > 0)
@@ -86,7 +86,7 @@ class ucp_dkp
 					// build popup for adding new chars to user account, get only those that are not assigned yet.
 					// do not show if all accounts are assigned
 					// if someone picks a guildmember that does not belong to them then the guild admin can override it in acp
-					$sql = 'select member_id, member_name from ' . MEMBER_LIST_TABLE .' where 
+					$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE .' WHERE 
 						phpbb_user_id = 0 and member_rank_id != 90 order by member_name asc';
 					$result = $db->sql_query($sql, 0);
 					$s_guildmembers = ' '; 

@@ -927,7 +927,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						}
 						/* 5) transfer old attendee name to new member */
 						// if $member_from participated in a raid the $member_to did too, delete the entry. (unique key) 
-						$sql = 'select raid_id from ' . RAID_DETAIL_TABLE . ' where member_id = '. $member_to; 
+						$sql = 'SELECT raid_id FROM ' . RAID_DETAIL_TABLE . ' WHERE member_id = '. $member_to; 
 						$result = $db->sql_query($sql, 0);
 						while ( $row = $db->sql_fetchrow($result) )
 						{
@@ -991,12 +991,12 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						}
 					
 						// prepare some logging information 
-						$sql = 'select member_name from ' . MEMBER_LIST_TABLE . ' where member_id =  ' . $member_from; 
+						$sql = 'SELECT member_name FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id =  ' . $member_from; 
 						$result = $db->sql_query($sql, 0);
 						$member_from_name = (string) $db->sql_fetchfield('member_name');
 						$db->sql_freeresult($result);
 						
-						$sql = 'select member_name from ' . MEMBER_LIST_TABLE . ' where member_id =  ' . $member_to; 
+						$sql = 'SELECT member_name FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id =  ' . $member_to; 
 						$result = $db->sql_query($sql, 0);
 						$member_to_name = (string) $db->sql_fetchfield('member_name');						
 						$db->sql_freeresult($result);

@@ -66,7 +66,7 @@ $lang = array_merge($lang, array(
 
 // Form Validation Errors
 'FV_FORMVALIDATION' => 'Form validation Error',
-'FV_ALPHA_ATTENDEES' => 'Characters\' names in EverQuest contain only alphabetic characters.',
+'FV_ALPHA_ATTENDEES' => 'Characters‘ names in EverQuest contain only alphabetic characters.',
 'FV_DIFFERENCE_TRANSFER' => 'A history transfer must be made between two different people.',
 'FV_NUMBER' => 'Must be a number.',
 'FV_NUMBER_ADJUSTMENT' => 'The adjustment value field must be a number.',
@@ -152,11 +152,11 @@ $lang = array_merge($lang, array(
 
 // installer
 'IMPORT_EQDKP132' => 'Import EQDKP 1.3.2 data Into bbdkp 1.1.1', 
-'IMPORT_EQDKP132_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with \'EQDKP\', and only dynamic data will be imported, not static data like class definitions etc. ', 
+'IMPORT_EQDKP132_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ', 
 'IMPORT_EQDKP140' => 'Import EQDKP 1.4.0 data Into bbdkp 1.1.1', 
-'IMPORT_EQDKP140_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with \'EQDKP\', and only dynamic data will be imported, not static data like class definitions etc. ', 
+'IMPORT_EQDKP140_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ', 
 'IMPORT_EQDKPPLUS' => 'Import EQDKP-PLUS data Into bbdkp 1.1.1', 
-'IMPORT_EQDKPPLUS_CONFIRM' => 'Are you ready to import ? Your EQDKP-PLUS tables need to begin with \'EQDKP\', and only dynamic data will be imported, not static data like class definitions etc. ', 
+'IMPORT_EQDKPPLUS_CONFIRM' => 'Are you ready to import ? Your EQDKP-PLUS tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ', 
 'UMIL_INSERT_COMMON_ROW' => 'Insert common bbdkp data for index/ranks/Bprogress', 
 'UMIL_REMOVE_COMMON_ROW' => 'Remove common bbdkp data for index/ranks/Bprogress',
 'UMIL_INSERT_GAME_ROW' => 'Insert game data',
@@ -262,7 +262,7 @@ $lang = array_merge($lang, array(
 'ACP_DKP_ARMORY_EXPLAIN' => 'Here you can download data from Armory and hide ranks in roster.',
 'ACP_ITEMSTATS_EXPLAIN' => 'Here you can change the Item, Itemicon Popup settings',
 'ACP_INDEXPAGE_EXPLAIN' => 'bbDKP Portal Settings, Block on/off switches, Block configuration can be changed here',
-'TRANSFER_MEMBER_HISTORY_DESCRIPTION' => 'This transfers all of a member\'s history (raids, items, adjustments) to another member.',
+'TRANSFER_MEMBER_HISTORY_DESCRIPTION' => 'This transfers all of a member’s history (raids, items, adjustments) to another member.',
 'ACP_LISTRACE_EXPLAIN' => 'Here you can edit the game races. Please mind that for WoW the race id has to match those of the Blizzard Armory. ', 
 'ACP_LISTCLASS_EXPLAIN' => 'Here you can edit the game classes. Please mind that for WoW the Class id has to match those of the Blizzard Armory. ', 
 'ACP_LISTFACTIONS_EXPLAIN' => 'Here you can edit the game Factions. ', 
@@ -373,7 +373,7 @@ $lang = array_merge($lang, array(
 'VLOG_EVENT_ADDED' => '%s added the event %s worth %.2f points.',
 'VLOG_EVENT_UPDATED' => '%s updated the event %s.',
 'VLOG_EVENT_DELETED' => '%s deleted the event %s.',
-'VLOG_HISTORY_TRANSFER' => '%s transferred %s\'s history to %s.',
+'VLOG_HISTORY_TRANSFER' => '%s transferred %s\’s history to %s.',
 'VLOG_INDIVADJ_ADDED' => '%s added an individual adjustment of %.2f to %d member(s).',
 'VLOG_INDIVADJ_UPDATED' => '%s updated an individual adjustment of %.2f to %s.',
 'VLOG_INDIVADJ_DELETED' => '%s deleted an individual adjustment of %.2f to %s.',
@@ -505,7 +505,7 @@ $lang = array_merge($lang, array(
 'ADMIN_DELETE_MEMBERS_FAILED' => 'ERROR : %s, including all of his/her history, could not be deleted.',
 'ADMIN_DELETE_NEWS_SUCCESS' => 'The news entry has been deleted from the database for your guild.',
 'ADMIN_DELETE_RAID_SUCCESS' => 'The raid and any items associated with it have been deleted from the database for your guild.',
-'ADMIN_TRANSFER_HISTORY_SUCCESS' => 'All of %s\'s history has been transferred to %s and %s has been deleted from the database for your guild.',
+'ADMIN_TRANSFER_HISTORY_SUCCESS' => 'All of %s’s history has been transferred to %s and %s has been deleted from the database for your guild.',
 'ADMIN_UPDATE_ADJ_SUCCESS' => 'The %s adjustment of %.2f has been updated in the database for your guild.',
 'ADMIN_UPDATE_DKPSYS_SUCCESS' => 'The name,status of DKP pool %s was changed to : %s, %s',
 'ADMIN_UPDATE_GUILD_SUCCESS' => 'the guild with id %d has been updated in your database.',
@@ -567,7 +567,7 @@ $lang = array_merge($lang, array(
 'GUILD_NAME'	=> 'Guild name',
 'REALM_NAME'	=> 'Realm name',
 'HIDE_INACTIVE' => 'Hide Inactive Members',
-'HIDE_INACTIVE_NOTE' => 'Hide members that haven\'t attended a raid in [inactive period] days?',
+'HIDE_INACTIVE_NOTE' => 'Hide members that haven’t attended a raid in [inactive period] days?',
 'INACTIVE_PERIOD' => 'Inactive Period',
 'INACTIVE_PERIOD_NOTE' => 'Number of days a member can miss a raid and still be considered active',
 'INACTIVE_POINT_ADJ' => 'Inactive Point Adjustment',
@@ -576,7 +576,7 @@ $lang = array_merge($lang, array(
 'LATESTVERSION'	   => 'Latest bbDKP version : ', 
 'VERSION_UPDATE' => 'Version Update',
 'VERSION_NOTONLINE' => 'bbDKP callback failed, cannot look up latest version.',
-'WHO_ONLINE' => 'Who\'s Online',
+'WHO_ONLINE' => 'Who’s Online',
 'LISTMEMBERS_PER_PAGE' => 'Dkp Guildmembers per Page',
 
 // LOOTSYSTEM
@@ -591,14 +591,14 @@ Points are spent on loot just like in zero sum, but there is no redistribution. 
 players receive 5 points for slaying a dragon, 2 points for being on time or on attendance. 
  <br />net result for whole raid : earned : (5+2) * 10 = 70 <br /> spent : 20 <br /> difference= 50', 
 'STANDARDDKP_ADVANTAGE' => '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',  
-'STANDARDDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.', 
+'STANDARDDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there’s a disequilibrium towards the other players.', 
 
 'ZEROSUM' => 'Zero Sum DKP', 
 'ZEROSUM_ONOFF_EXPLAIN' => 'Can not be combined with EPGP', 
 'ZEROSUM_EXPLAIN' => '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. The raid members will thusly gain dkp points when someone received an item. this ensures that there is no inflation, or point hoarding. <br/>',
 'ZEROSUM_EXAMPLE' => ' <strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br/> The balance at the end is : earned 20, spent 20.', 
 'ZEROSUM_ADVANTAGE' => ' <strong>Advantage</strong> : no point inflation if all players start at the same gearlevel.', 
-'ZEROSUM_DISADVANTAGE' => '<strong>Disadvantage</strong> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points untill he\'s at a disequilibrium towards the other players. 
+'ZEROSUM_DISADVANTAGE' => '<strong>Disadvantage</strong> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points untill he’s at a disequilibrium towards the other players. 
 Not much incentive to join a raid if it is a difficult progress raid and wipes are expected and no loot likely will drop. ',
 
 'ZEROSUMPLUS' => 'Zero Sum DKP + Bonus', 
@@ -607,7 +607,7 @@ Not much incentive to join a raid if it is a difficult progress raid and wipes a
 <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br /> on top of that, players receive 5 points for a bosskill, 2 points for being on time or on attendance. these extra points are offset with the zerosum dummy account. 
 The balance at the end is : earned 20+7=27, spent 20+7=27.', 
 'ZEROSUMPLUS_ADVANTAGE' => ' <strong>Advantage</strong> :<br />  no point inflation if all players start at the same gearlevel. The bonus points are added to the system so as to offer an incentive to play, since a raid without loots will earn no points. ', 
-'ZEROSUMPLUS_DISADVANTAGE' => '   <strong>Disadvantage</strong> :<br /> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he\'s at a disequilibrium towards the other players.',
+'ZEROSUMPLUS_DISADVANTAGE' => '   <strong>Disadvantage</strong> :<br /> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he’s at a disequilibrium towards the other players.',
 
 'TIMEDKP' => 'Time Bonus',
 'TIMEDKP_EXPLAIN' => '<strong>Description: </strong>Lootsystem where players receive points per started Hour present in the raid or being available. Time is measured from when the raid starts to the end. 
@@ -615,7 +615,7 @@ Points are spent on loot just like in bonus system. Bonus points may be awarded 
 'TIMEDKP_EXAMPLE'=> '<strong>Example</strong> : 10 raiders, each present for 90 minutes.  <br />dkp/hour is 20 points, so this means that each raider gets 90/60 * 20 = 1,5 * 20 = 30 points <br />1 item dropped, for 20 points <br />
 net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20 <br />difference = 280', 
 'TIMEDKP_ADVANTAGE' => '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',  
-'TIMEDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there\'s a disequilibrium towards the other players.', 
+'TIMEDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there’s a disequilibrium towards the other players.', 
 
 'EPGP' => 'EPGP Effort / Gearpoints',
 'EPGP_ONOFF_EXPLAIN' => 'Can not be combined with Zerosum',  

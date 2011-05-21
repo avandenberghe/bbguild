@@ -1753,7 +1753,7 @@ class acp_dkp_mm extends bbDKP_Admin
         if (!$override)
         {
             // check if rank is used  
-            $sql = 'select count(*) as rankcount from '. MEMBER_LIST_TABLE . ' WHERE 
+            $sql = 'SELECT count(*) as rankcount FROM '. MEMBER_LIST_TABLE . ' WHERE 
             		 member_rank_id   = ' . (int) $nrankid . ' and
             		 member_guild_id =  '. (int) $guild_id; 
             $result = $db->sql_query($sql);

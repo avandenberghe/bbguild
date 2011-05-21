@@ -1215,7 +1215,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			)
 			);
 			
-			$sql='select event_name from ' . EVENTS_TABLE . ' where event_id = ' . $event_id; 
+			$sql='SELECT event_name FROM ' . EVENTS_TABLE . ' WHERE event_id = ' . $event_id; 
 			$result = $db->sql_query($sql);
 			$eventname = (string) $db->sql_fetchfield('event_name');
 			$db->sql_freeresult($result);
@@ -2248,7 +2248,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		}
 
 		//now loop raid items detail
-		$sql = 'select i.item_id, i.member_id, i.item_value, i.item_decay from ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id; 
+		$sql = 'SELECT i.item_id, i.member_id, i.item_value, i.item_decay FROM ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id; 
 		$result = $db->sql_query ($sql);
 		$items= array();
 		while ( ($row = $db->sql_fetchrow ( $result )) ) 
@@ -2372,7 +2372,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			case 1:
 				// synchronise
 				// loop all raids
-				$sql = 'select e.event_dkpid, r.raid_id from '. RAIDS_TABLE. ' r, ' . EVENTS_TABLE . ' e where e.event_id = r.event_id ' ;
+				$sql = 'SELECT e.event_dkpid, r.raid_id FROM '. RAIDS_TABLE. ' r, ' . EVENTS_TABLE . ' e WHERE e.event_id = r.event_id ' ;
 				$result = $db->sql_query ($sql);
 				$countraids=0;
 				while ( ($row = $db->sql_fetchrow ( $result )) ) 
