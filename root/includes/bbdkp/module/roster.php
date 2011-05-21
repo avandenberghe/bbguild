@@ -13,27 +13,13 @@
  */
 
 /**
-* @ignore
-*/
-define('IN_PHPBB', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-include($phpbb_root_path . 'common.' . $phpEx); 
+ * @ignore
+ */
+if (!defined('IN_PHPBB'))
+{
+   exit;
+}
 
-// Start session management
-$user->session_begin();
-$auth->acl($user->data); 
-$user->setup('viewforum');
-$user->add_lang ( array ('mods/dkp_common' ));
-if (!$auth->acl_get('u_dkp'))
-{
-	trigger_error('NOT_AUTHORISED');
-}
-if (! defined('EMED_BBDKP')) 
-{
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
-}
-global $config; 
 $layout = $config['bbdkp_roster_layout'];
 $show_achiev = $config['bbdkp_show_achiev'];
 
@@ -354,22 +340,12 @@ $template->assign_vars(array(
     'U_LIST_MEMBERS4'	=> append_sid("{$phpbb_root_path}roster.$phpEx", '&amp;'. URI_ORDER. '='. $current_order['uri'][4]),
     'S_RSTYLE'		    => $layout , 
     'S_SHOWACH'			=> $show_achiev, 
+	'S_DISPLAY_ROSTER' => true,
     'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . $totalmembers,
 ));
 
 $header = $user->lang['GUILDROSTER'];
 page_header($header);
-
-switch ($config['bbdkp_default_game'])
-{
-	      case 'wow':
-	          $template->set_filenames(array('body' => 'dkp/roster.html'));
-	          break;
-	      default:
-	          $template->set_filenames(array('body' => 'dkp/roster.html'));
-	          break;
-}
-page_footer();
 
 function removeFromEnd($string, $stringToRemove) 
 {

@@ -39,29 +39,29 @@ $user->add_lang(array('mods/dkp_common'));
 
 /* fixed bocks */
 
-include($phpbb_root_path . 'includes/bbdkp/portal/newsblock.' . $phpEx);
+include($phpbb_root_path . 'includes/bbdkp/block/newsblock.' . $phpEx);
 
 /* show loginbox or usermenu */
 if ($user->data['is_registered'])
 {
-	include($phpbb_root_path .'includes/bbdkp/portal/userblock.' . $phpEx);
+	include($phpbb_root_path .'includes/bbdkp/block/userblock.' . $phpEx);
 }
 else
 {
-	include($phpbb_root_path . 'includes/bbdkp/portal/loginblock.' . $phpEx);
+	include($phpbb_root_path . 'includes/bbdkp/block/loginblock.' . $phpEx);
 }
 
-include($phpbb_root_path . 'includes/bbdkp/portal/whoisonline.' . $phpEx);
+include($phpbb_root_path . 'includes/bbdkp/block/whoisonline.' . $phpEx);
 
 // variable blocks
 if ($config['bbdkp_portal_loot'])
 {
-	include($phpbb_root_path . 'includes/bbdkp/portal/lootblock.' . $phpEx);
+	include($phpbb_root_path . 'includes/bbdkp/block/lootblock.' . $phpEx);
 }
 
 if ($config['bbdkp_portal_recruitment'])
 {
-		include($phpbb_root_path . 'includes/bbdkp/portal/recruitmentblock.' . $phpEx);
+		include($phpbb_root_path . 'includes/bbdkp/block/recruitmentblock.' . $phpEx);
 }
 
 $template->assign_var('S_BPSHOW', false);
@@ -69,19 +69,19 @@ if (isset($config['bbdkp_bp_version']))
 {
 	if ($config['bbdkp_portal_bossprogress'])
 	{
-		include($phpbb_root_path . 'includes/bbdkp/portal/bossprogressblock.' . $phpEx);
+		include($phpbb_root_path . 'includes/bbdkp/block/bossprogressblock.' . $phpEx);
 		$template->assign_var('S_BPSHOW', true);
 	}
 }
 
 if ($config['bbdkp_portal_links'])
 {
-	include($phpbb_root_path . 'includes/bbdkp/portal/linksblock.' . $phpEx);
+	include($phpbb_root_path . 'includes/bbdkp/block/linksblock.' . $phpEx);
 }
 
 if ($config['bbdkp_portal_menu'])
 {
-	include($phpbb_root_path . 'includes/bbdkp/portal/mainmenublock.' . $phpEx);
+	include($phpbb_root_path . 'includes/bbdkp/block/mainmenublock.' . $phpEx);
 }
 
 /***** end blocks ********/
