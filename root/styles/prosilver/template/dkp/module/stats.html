@@ -38,10 +38,10 @@
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>
-	<th style=" width:40%; font-size :10pt; text-align: center;  color:white" colspan=5>{L_RAIDS}</th>
-	<th style=" width:20%; font-size :10pt; text-align: center; color:#77FF77" colspan=3>{L_EARNED}</th>
-	<th style=" width:20%; font-size :10pt; text-align: center; color:#FF8888" colspan=2>{L_SPENT}</th>
-	<th style=" width:20%; font-size :10pt; text-align: center; color:white" colspan=3>{L_CURRENT}</th>
+	<th style=" width:40%; font-size :10pt; text-align: center;  color:white" colspan="5">{L_RAIDS}</th>
+	<th style=" width:20%; font-size :10pt; text-align: center; color:#77FF77" colspan="3">{L_EARNED}</th>
+	<th style=" width:20%; font-size :10pt; text-align: center; color:#FF8888" colspan="2">{L_SPENT}</th>
+	<th style=" width:20%; font-size :10pt; text-align: center; color:white" colspan="3">{L_CURRENT}</th>
 </tr>
 <tr>	  
     <th style=" width:8%;"><a href="{O_NAME}">{L_NAME}</a></th>
@@ -63,6 +63,11 @@
     <th style=" width:6%; text-align:center;" ><a href="{O_CURRENT}">{L_CURRENT}</a></th>
 </tr>
 </thead>
+<tfoot>
+<tr>
+<th align="left" style="color:white; font-weight:bold;" colspan="15">{STATS_FOOTCOUNT}</th>
+</tr>
+</tfoot>
 <tbody>
 <!-- BEGIN stats_row -->
     <!-- IF stats_row.S_ROW_COUNT is odd -->
@@ -86,11 +91,7 @@
   </tr>
 <!-- END stats_row -->
 </tbody>
-<tfoot>
-<tr>
-<th align="left" style="color:white; font-weight:bold;" colspan=15>{STATS_FOOTCOUNT}</hd>
-</tr>
-</tfoot>
+
 </table>
 
 <span class="corners-bottom"><span></span></span>
@@ -116,6 +117,18 @@
 
 </tr>
 </thead>
+<tfoot>
+
+<tr>
+<th style="color:white; font-size :9pt; text-align: left;"></th>
+<th style="color:white; font-size :9pt; text-align: center;">{TOTAL_MEMBERS}</th>
+<th style="color:white; font-size :9pt; text-align: center;">{TOTAL_DROPS}</th>
+<th style="color:white; font-size :9pt; text-align: center;"></th>
+<th style="color:white; font-size :9pt; text-align: center;"></th>
+<th style="color:white; font-size :9pt; text-align: center;"></th>
+<th style="color:white; font-size :9pt; text-align: center;"></th>
+</tr>
+</tfoot>
 <tbody>
 <!-- BEGIN class_row -->  
    <!-- IF class_row.S_ROW_COUNT is even -->
@@ -125,7 +138,7 @@
    <!-- ENDIF -->
 	  
 	  <td style="width:20%; white-space: nowrap;"><!-- IF class_row.S_CLASS_IMAGE_EXISTS --><img src="{class_row.CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
-	  &nbsp;<a style="white-space: nowrap; color:{class_row.COLORCODE}" href="{class_row.U_LIST_MEMBERS}"><strong>{class_row.CLASS_NAME}</strong></a>   </span></td>
+	  &nbsp;<a style="white-space: nowrap; color:{class_row.COLORCODE}" href="{class_row.U_LIST_MEMBERS}"><strong>{class_row.CLASS_NAME}</strong></a> </td>
 	  <td style="width:7.5%; " align="center" >{class_row.CLASS_COUNT}</td>
 	  <td style="width:7.5%; " align="center" >{class_row.LOOT_COUNT}</td>
 	  <td style="width:7.5%; " align="center" >{class_row.CLASS_FACTOR}</td>
@@ -138,21 +151,6 @@
   
 <!-- END class_row -->
 </tbody>
-
-<tfoot>
-
-<tr>
-<th style="color:white; font-size :9pt; text-align: left;"></th>
-<th style="color:white; font-size :9pt; text-align: center;">{TOTAL_MEMBERS}</th>
-<th style="color:white; font-size :9pt; text-align: center;">{TOTAL_DROPS}</th>
-<th style="color:white; font-size :9pt; text-align: center;"></th>
-<th style="color:white; font-size :9pt; text-align: center;"></th>
-<th style="color:white; font-size :9pt; text-align: center;"></th>
-<th style="color:white; font-size :9pt; text-align: center;"></th>
-
-</tr>
-
-</tfoot>
 </table>
 
 <span class="corners-bottom"><span></span></span>
