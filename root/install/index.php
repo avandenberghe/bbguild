@@ -771,8 +771,6 @@ $versions = array(
 			array('bbdkp_games_swtor', 0, true),
 	      ),
 	    
-	    'table_remove' => array($table_prefix . 'bbdkp_news'),
-	    
 		//add new columns, then add keys and new pk in custom function
 		'table_column_add' => array(
 			array($table_prefix . 'bbdkp_classes', 'game_id' , array('VCHAR', '')),
@@ -1142,39 +1140,73 @@ function tableupdates123($action, $version)
 	{
 				
 		case 'install' :
-		case 'update' :
 			switch ($version)
 				{
 					case '1.2.3':
+					// remove old unique index on class table
+					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
+					$db->sql_query($sql);
+
+					// make new unique composite
+					$sql= "CREATE UNIQUE INDEX classes ON " . $table_prefix . 'bbdkp_classes' . " (game_id, class_id) ";
+					$db->sql_query($sql);
+				
+					// race table
+					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_races' . " DROP PRIMARY KEY";
+					$db->sql_query($sql);
+
+					// make new pk 
+					$sql= "ALTER TABLE " . $table_prefix . 'bbdkp_races' . "  ADD PRIMARY KEY (game_id, race_id)";
+					$db->sql_query($sql);
+				
+					// faction table
+					$sql= "CREATE UNIQUE INDEX factions ON " . $table_prefix . 'bbdkp_factions' . " (game_id, faction_id)";
+					$db->sql_query($sql);		
 		
-				// remove old unique index on class table
-				$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
-				$db->sql_query($sql);
-				// make new unique composite
-				$sql= "CREATE UNIQUE INDEX classes ON " . $table_prefix . 'bbdkp_classes' . " (game_id, class_id) ";
-				$db->sql_query($sql);
-				
-				// race table
-				$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_races' . " DROP PRIMARY KEY";
-				$db->sql_query($sql);
-				// make new pk 
-				$sql= "ALTER TABLE " . $table_prefix . 'bbdkp_races' . "  ADD PRIMARY KEY (game_id, race_id)";
-				$db->sql_query($sql);
-				
-				// faction table
-				$sql= "CREATE UNIQUE INDEX factions ON " . $table_prefix . 'bbdkp_factions' . " (game_id, faction_id)";
-				$db->sql_query($sql);		
-		
-				// language table
-				$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX attribute_id ";
-				$db->sql_query($sql);		
-				// make new unique key
-				$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
-				$db->sql_query($sql);
-				
+					// language table
+					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX attribute_id ";
+					$db->sql_query($sql);		
+
+					// make new unique key
+					$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
+					$db->sql_query($sql);
 			}
 			break;
-	
+		case 'update'
+				switch ($version)
+				{
+					case '1.2.3':
+				    $umil->table_remove($table_prefix . 'bbdkp_news');
+			    
+					// remove old unique index on class table
+					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
+					$db->sql_query($sql);
+
+					// make new unique composite
+					$sql= "CREATE UNIQUE INDEX classes ON " . $table_prefix . 'bbdkp_classes' . " (game_id, class_id) ";
+					$db->sql_query($sql);
+				
+					// race table
+					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_races' . " DROP PRIMARY KEY";
+					$db->sql_query($sql);
+
+					// make new pk 
+					$sql= "ALTER TABLE " . $table_prefix . 'bbdkp_races' . "  ADD PRIMARY KEY (game_id, race_id)";
+					$db->sql_query($sql);
+				
+					// faction table
+					$sql= "CREATE UNIQUE INDEX factions ON " . $table_prefix . 'bbdkp_factions' . " (game_id, faction_id)";
+					$db->sql_query($sql);		
+		
+					// language table
+					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX attribute_id ";
+					$db->sql_query($sql);		
+
+					// make new unique key
+					$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
+					$db->sql_query($sql);
+			}
+			break;
 		case 'uninstall' :
 			switch ($version)
 			{
