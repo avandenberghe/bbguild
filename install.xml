@@ -198,7 +198,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
-			<file from="root/includes/bbdkp/portal/*.*" to="includes/bbdkp/portal/*.*"/>
+			<file from="root/includes/bbdkp/block/*.*" to="includes/bbdkp/block/*.*"/>
 			<file from="root/includes/bbdkp/module/news.php" to="includes/bbdkp/module/news.php"/>
 			<file from="root/includes/bbdkp/module/listevents.php" to="includes/bbdkp/module/listevents.php"/>
 			<file from="root/includes/bbdkp/module/listitems.php" to="includes/bbdkp/module/listitems.php"/>
