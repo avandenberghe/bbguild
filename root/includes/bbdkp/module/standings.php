@@ -619,7 +619,7 @@ $show_all = ((isset ( $_GET ['show'] )) && (request_var ( 'show', '' ) == 'all')
 foreach ( $memberarray as $key => $member )
 {
 	
-	$u_rank_search = append_sid ( "{$phpbb_root_path}dkp.$phpEx" . '&amp;page=standings&amp;rank=' . urlencode ( $member ['rank_name'] ) );
+	$u_rank_search = append_sid ( "{$phpbb_root_path}dkp.$phpEx" , 'page=standings&amp;rank=' . urlencode ( $member ['rank_name'] ) );
 	
 	// append inactive switch
 	$u_rank_search .= (($config ['bbdkp_hide_inactive'] == 1) && (! $show_all)) ? '&amp;show=' : '&amp;show=all';
@@ -657,7 +657,7 @@ foreach ( $memberarray as $key => $member )
 		'RAIDS_P1_DAYS' => $member ['attendanceP1'], 
 		'RAIDS_P2_DAYS' => $member ['attendanceP2'], 
 		'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx",
-			'&amp;page=viewmember' .  
+			'page=viewmember' .  
 			'&amp;' . URI_NAMEID . '=' . $member ['member_id'] . 
 			'&amp;' . URI_DKPSYS . '=' . $member ['member_dkpid']), 
 	);
@@ -902,8 +902,7 @@ function leaderboard($dkpsys_id, $query_by_pool)
 				'NAME' => $dkprow ['rank_prefix'] . (($dkprow ['member_status'] == '0') ? '<em>' . $dkprow ['member_name'] . '</em>' : $dkprow ['member_name']) . $dkprow ['rank_suffix'], 
 				'CURRENT' => $dkprow ['member_current'], 
 				'DKPCOLOUR' => ($dkprow ['member_current'] >= 0) ? 'positive' : 'negative', 
-				'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", '&amp;' . 
-						'page=viewmember'. 
+				'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;'. 
 						URI_NAMEID . '=' . $dkprow ['member_id'] . '&amp;' . 
 						URI_DKPSYS . '=' . $dkprow['member_dkpid'] ) );
 				
