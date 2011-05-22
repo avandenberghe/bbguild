@@ -1,10 +1,9 @@
 <script type="text/javascript">
 <!--
 	var form_name = 'postform';
-	var text_name = 'message';
-	var load_draft = false;
-	var upload = false;
-
+	var text_name = 'news_message';
+	var headline_name = 'news_headline';
+	
 	// Define the bbCode tags
 	var bbcode = new Array();
 	var bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=]','[/list]','[img]','[/img]','[url]','[/url]','[flash=]', '[/flash]','[size=]','[/size]'<!-- BEGIN custom_tags -->, {custom_tags.BBCODE_NAME}<!-- END custom_tags -->);
@@ -33,17 +32,16 @@
 
 	function checkForm()
 	{
-		if (document.getElementById(text_name).value.length < 2 && load_draft == false)
+		if (document.getElementById(text_name).value.length < 2)
 		{
-			if (!upload)
-			{
-				alert('{LA_EMPTY_MESSAGE}');
-				return false;
-			}
-			upload = false;
-			return true;
+			alert('{LA_EMPTY_MESSAGE}');
+			return false;
 		}
-
+		if (document.getElementById(headline_name).value.length < 2)
+		{
+			alert('{LA_EMPTY_MESSAGE}');
+			return false;
+		}
 		return true;
 		
 	}
@@ -51,7 +49,7 @@
 </script>
 <script type="text/javascript" src="{T_TEMPLATE_PATH}/editor.js"></script>
 
-<form method="post" action="{F_NEWS}">
+<form id="postform" name="postform" method="post" action="{F_NEWS}" onsubmit="return checkForm(this);">
 
 <div class="forabg" >
 <span class="corners-top"><span></span></span>
@@ -62,13 +60,6 @@
 </ul>
 <span class="corners-bottom"><span></span></span>
 </div>
-
-<!-- IF NEWS_PAGINATION -->  
-<div class="pagination">
-		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
-		<span>{NEWS_PAGINATION}<br /><br /></span>
-</div>
-<!-- ENDIF -->
  
 <!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
  
@@ -82,7 +73,7 @@
 <fieldset class="fields1">
   	<dl style="clear: left;">
 		<dt><label for="news_headline">{L_SUBJECT}:</label></dt>
-		<dd><input type="text" name="news_headline" id="news_headline" size="50" maxlength="100" tabindex="2" value="{SUBJECT}" class="inputbox autowidth" /></dd>
+		<dd><input type="text" name="news_headline" id="news_headline" size="50" maxlength="100" tabindex="2" value="{HEADLINE}" class="inputbox autowidth" /></dd>
 	</dl>
 </fieldset>
 
@@ -173,7 +164,7 @@
 	<!-- ENDIF -->
 </div>
 <div id="message-box">
-	<textarea name="message" id="message" rows="10" cols="60" tabindex="3" onselect="storeCaret(this);" 
+	<textarea name="news_message" id="news_message" rows="10" cols="60" tabindex="3" onselect="storeCaret(this);" 
 	onclick="storeCaret(this);" onkeyup="storeCaret(this);" class="inputbox">{MESSAGE}</textarea>
 </div>
 </div>
@@ -181,7 +172,7 @@
 <fieldset class="submit-buttons">
 	{S_HIDDEN_FIELDS}
 	{S_FORM_TOKEN}
-	<input type="submit" accesskey="s" tabindex="6" name="post" value="{L_SUBMIT}" class="button1 default-submit-action" />&nbsp;
+	<input type="submit" accesskey="s" tabindex="6" name="post" value="{L_SUBMIT}"  class="button1 default-submit-action" />&nbsp;
 </fieldset>
 		
 <span class="corners-bottom"><span></span></span>
@@ -190,28 +181,47 @@
 
 <!-- ELSE -->
 
-<div class="postbody" style="width: 100%">
-		
+
+<!-- IF NEWS_PAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{NEWS_PAGINATION}<br /><br /> {COUNTNEWS}</span>
+</div>
+<!-- ENDIF -->
+
+<div class="topic-actions">
 	<div class="buttons">
 		<div class="post-icon" title="{L_POST_TOPIC}">
 		<a href="{U_POST_NEW_TOPIC}"><span></span>{L_POST_TOPIC}</a></div>
 	</div>
-	<!-- IF U_DELETE or U_EDIT -->
-	<ul class="profile-icons">
-		<!-- IF U_EDIT -->
-		<li class="edit-icon"><a href="{U_EDIT}" title="{L_EDIT_POST}"><span>{L_EDIT_POST}</span></a></li>
+	
+</div>	
+
+<!-- BEGIN news_row -->
+<div id=p{news_row.ID} class="post <!-- IF news_row.S_ROW_COUNT is odd -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+<div class="inner">
+<span class="corners-top"><span></span></span>  
+
+<div class="postbody" style="width: 100%">
+     <!-- IF news_row.U_DELETE or news_row.U_EDIT -->
+	 <ul class="profile-icons">
+		<!-- IF news_row.U_EDIT -->
+		<li class="edit-icon"><a href="{news_row.U_EDIT}" title="{L_EDIT_POST}"><span>{L_EDIT_POST}</span></a></li>
 		<!-- ENDIF -->
-		<!-- IF U_DELETE -->
-		<li class="delete-icon"><a href="{U_DELETE}"
+		<!-- IF news_row.U_DELETE -->
+		<li class="delete-icon"><a href="{news_row.U_DELETE}"
 			title="{L_DELETE_POST}"><span>{L_DELETE_POST}</span></a></li>
 		<!-- ENDIF -->
-	</ul>
-	<!-- ENDIF -->
-<div class="content">
-
-{MESSAGE}
+	 </ul>
+	 <!-- ENDIF -->
+	<h3 class="first">{news_row.HEADLINE}</h3>
+	<p class="author">{L_POST_BY_AUTHOR} {news_row.AUTHOR} <strong></strong> &raquo; {news_row.DATE}, {news_row.TIME}</p>
+	<div class="content">{news_row.MESSAGE}</div>
+</div>
+<span class="corners-bottom"><span></span></span>
 </div>
 </div>
+<!-- END news_row -->
 
 <!-- ENDIF -->
 

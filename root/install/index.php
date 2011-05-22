@@ -676,7 +676,7 @@ $versions = array(
             // add memberlist-add-ranks-roster
             array('acp', 'ACP_DKP_MEMBER', array(
            		 'module_basename' => 'dkp_mm',
-            	 'modes'           => array('mm_addguild', 'mm_listguilds', 'mm_addmember', 'mm_listmembers', 'mm_ranks'),
+            	 'modes'           => array('mm_listguilds', 'mm_addguild', 'mm_ranks', 'mm_listmembers', 'mm_addmember'),
         		),
             ),          
             
