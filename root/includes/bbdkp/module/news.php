@@ -259,6 +259,19 @@ else
 	}
 	$db->sql_freeresult ( $result );
 	
+	// show the buttons ?
+	$can_delete = false ;
+	$can_add = false ;
+	$can_edit = false ;
+	
+	if ($auth->acl_get('a_dkp'))
+	{
+		$can_delete = true ;
+		$can_add = true ;
+		$can_edit = true ;
+	}
+	
+	
 	$template->assign_vars ( array (
 		'NEWS_PAGINATION' => generate_pagination ( append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=news'), $total_news, $config ['bbdkp_user_nlimit'], $start ),  
 		'COUNTNEWS'					=> $total_news,
@@ -287,7 +300,9 @@ foreach ( $navlinks_array as $name )
 $template->assign_vars(array(
 	'S_ADD' 					=> ! $update, 
 	'S_UPDATE' 					=> $update, 
-	'S_DELETE_ALLOWED'			=> true,
+	'S_DELETE_ALLOWED'			=> $can_delete,
+	'S_ADD_ALLOWED'				=> $can_add,
+	'S_EDIT_ALLOWED'			=> $can_edit,
 	'S_DISPLAY_NEWS' 			=> true
 )
 );
