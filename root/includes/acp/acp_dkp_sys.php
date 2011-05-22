@@ -53,7 +53,7 @@ class acp_dkp_sys extends bbDKP_Admin
 					$update = true;
 					$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_status
 								FROM ' . DKPSYS_TABLE . '
-								WHERE dkpsys_id = ' . $this->url_id;
+								WHERE dkpsys_id = ' . (int) $this->url_id;
 					$result = $db->sql_query ( $sql );
 					if (! $row = $db->sql_fetchrow ( $result ))
 					{
@@ -135,8 +135,7 @@ class acp_dkp_sys extends bbDKP_Admin
 					
 					// get the old name, status 
 					$sql = 'SELECT dkpsys_name, dkpsys_status
-							FROM ' . DKPSYS_TABLE . "
-							WHERE dkpsys_id='" . $this->url_id . "'";
+							FROM ' . DKPSYS_TABLE . ' WHERE dkpsys_id=' . (int) $this->url_id;
 					$result = $db->sql_query ( $sql );
 					while ( $row = $db->sql_fetchrow ( $result ) )
 					{
@@ -154,7 +153,7 @@ class acp_dkp_sys extends bbDKP_Admin
 							array (
 								'dkpsys_name' => $this->dkpsys ['dkpsys_name'], 
 								'dkpsys_status' => $this->dkpsys ['dkpsys_status'] ) );
-					$sql = 'UPDATE ' . DKPSYS_TABLE . ' SET ' . $query . " WHERE dkpsys_id='" . $this->url_id . "'";
+					$sql = 'UPDATE ' . DKPSYS_TABLE . ' SET ' . $query . ' WHERE dkpsys_id=' . (int) $this->url_id;
 					$db->sql_query ( $sql );
 					
 					// Logging, put old & new
@@ -217,21 +216,19 @@ class acp_dkp_sys extends bbDKP_Admin
 						$this->dkpsys = array (
 							'dkpsys_name' => utf8_normalize_nfc ( request_var ( 'dkpsys_name', ' ', true ) ), 
 							'dkpsys_status' => request_var ( 'dkpsys_status', 'N' ) );
-						$sql = 'SELECT * FROM ' . RAIDS_TABLE . " WHERE 
-								raid_dkpid = '" . ( int ) $this->url_id . "'";
+						$sql = 'SELECT * FROM ' . RAIDS_TABLE . ' a, ' . EVENTS_TABLE . ' b WHERE b.event_id = a.event_id and b.event_dkpid = ' . (int) $this->url_id;
+						
+						// check for existing events, raids
 						$result = $db->sql_query ( $sql );
 						if ($row = $db->sql_fetchrow ( $result ))
 						{
-							// there is a fk raid_dkpid 'on delete restrict' on dkpsys_id
-							// so you cant delete a dkpsys when theres still child raid records
 							trigger_error ( $user->lang ['FV_RAIDEXIST'], E_USER_WARNING );
-						
 						} 
 						else
 						{
 							// no events found ?
-							$sql = 'SELECT * FROM ' . EVENTS_TABLE . "
-									WHERE event_dkpid = '" . ( int ) $this->url_id . "'";
+							$sql = 'SELECT * FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . (int) $this->url_id;
+
 							$result = $db->sql_query ( $sql );
 							if ($row = $db->sql_fetchrow ( $result ))
 							{
@@ -241,8 +238,7 @@ class acp_dkp_sys extends bbDKP_Admin
 							} 
 							else
 							{
-								$sql = 'DELETE FROM ' . DKPSYS_TABLE . "
-										WHERE dkpsys_id = '" . $this->url_id . "'";
+								$sql = 'DELETE FROM ' . DKPSYS_TABLE . ' WHERE dkpsys_id = ' . (int) $this->url_id;
 								$db->sql_query ( $sql );
 								$log_action = array (
 									'header' => 'L_ACTION_DKPSYS_DELETED', 
@@ -276,9 +272,7 @@ class acp_dkp_sys extends bbDKP_Admin
 				$db->sql_freeresult ( $result1 );
 				$total_dkpsys = count ( $rows1 );
 				$start = request_var ( 'start', 0 );
-				$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_status , dkpsys_default 
-						FROM ' . DKPSYS_TABLE . '
-						ORDER BY ' . $current_order ['sql'];
+				$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_status , dkpsys_default FROM ' . DKPSYS_TABLE . ' ORDER BY ' . $current_order ['sql'];
 				$dkpsys_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_elimit'], $start );
 				if (! $dkpsys_result)
 				{
