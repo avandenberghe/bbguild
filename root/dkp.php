@@ -22,12 +22,14 @@ if (! defined ( "EMED_BBDKP" ))
 {
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
+
 if (!$auth->acl_get('u_dkp'))
 {
 	trigger_error('NOT_AUTHORISED');
 }
 
 $template->assign_vars(array(
+	'U_NEWS'  			=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=news'),
 	'U_LISTMEMBERS'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=standings'),
 	'U_LISTITEMS'     	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listitems'),  
 	'U_LISTITEMHIST'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listitems&amp;mode=history'),
@@ -59,6 +61,10 @@ if ($bbDKP_Admin->bbtips == true)
 // load modules
 switch ($page)
 {
+	case 'news':
+		page_header($user->lang['MENU_NEWS']);
+		include($phpbb_root_path . 'includes/bbdkp/module/news.' . $phpEx);
+		break;
 	case 'standings':
 		page_header($user->lang['MENU_STANDINGS']);
 		include($phpbb_root_path . 'includes/bbdkp/module/standings.' . $phpEx);

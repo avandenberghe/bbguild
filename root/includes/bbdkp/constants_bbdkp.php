@@ -33,6 +33,7 @@ define('URI_GUILD',       'guild');
 define('USER_LLIMIT', 40);  // LOG LIMIT
 
 // TABLE DEFINITIONS
+define('NEWS_TABLE',        	   $table_prefix . 'bbdkp_news'); 
 define('ADJUSTMENTS_TABLE',        $table_prefix . 'bbdkp_adjustments'); 	 
 define('EVENTS_TABLE',             $table_prefix . 'bbdkp_events'); 	 
 define('RAID_ITEMS_TABLE',         $table_prefix . 'bbdkp_raid_items'); 	 

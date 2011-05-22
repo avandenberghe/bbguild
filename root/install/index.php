@@ -177,6 +177,21 @@ $versions = array(
     	// install base bbdkp tables (this uses the layout from develop/create_schema_files.php and from phpbb_db_tools)
         'table_add' => array(
 
+			array($table_prefix . 'bbdkp_news', array(
+                    'COLUMNS'				=> array(
+                        'news_id'			=> array('UINT', NULL, 'auto_increment'),
+                        'news_headline'		=> array('VCHAR_UNI', ''),
+                        'news_message'		=> array('TEXT_UNI', ''),
+                        'news_date'			=> array('TIMESTAMP', 0),
+                        'user_id'			=> array('UINT', 0),
+                        'bbcode_bitfield'	=> array('VCHAR:20', ''),
+                        'bbcode_uid'		=> array('VCHAR:8', ''),
+                        'bbcode_options'	=> array('VCHAR:8', ''),	  		  		  
+                    ),
+                    'PRIMARY_KEY'    => 'news_id',
+                ),
+            ),
+            
             array($table_prefix . 'bbdkp_language', array(
 	              'COLUMNS'            => array(
 	          		  'id'     	       => array('UINT', NULL, 'auto_increment'), 
@@ -653,17 +668,6 @@ $versions = array(
             ),
 
             /*
-             * add news
-             */
-            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_NEWS'),
-            array('acp', 'ACP_DKP_NEWS', array(
-           		 'module_basename' => 'dkp_news',
-            	 'modes'           => array('addnews', 'listnews'),
-        		),
-
-            ),
-            
-             /*
              * add member management menu
              * note added the roster here
              */
@@ -1143,7 +1147,7 @@ function tableupdates123($action, $version)
 			switch ($version)
 				{
 					case '1.2.3':
-					// remove old unique index on class table
+					// remove unique index on class table
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
 					$db->sql_query($sql);
 
@@ -1205,6 +1209,14 @@ function tableupdates123($action, $version)
 					// make new unique key
 					$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
 					$db->sql_query($sql);
+					
+					/* remove old news module from 1.2.2 */
+					if($umil->module_exists('acp', 'ACP_CAT_DKP','ACP_DKP_NEWS'))
+					{
+						$umil->module_remove('acp','ACP_CAT_DKP','ACP_DKP_NEWS');
+					}
+					
+					
 			}
 			break;
 		case 'uninstall' :
