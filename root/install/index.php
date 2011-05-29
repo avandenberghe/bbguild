@@ -1219,10 +1219,21 @@ function tableupdates123($action, $version)
 					$db->sql_query($sql);
 					
 					/* remove old news module from 1.2.2 */
+					if($umil->module_exists('acp', 'ACP_DKP_NEWS','ACP_DKP_NEWS_ADD'))
+					{
+						$umil->module_remove('acp','ACP_DKP_NEWS','ACP_DKP_NEWS_ADD');
+					}
+					
+					if($umil->module_exists('acp', 'ACP_DKP_NEWS','ACP_DKP_NEWS_LIST'))
+					{
+						$umil->module_remove('acp','ACP_DKP_NEWS','ACP_DKP_NEWS_LIST');
+					}
+					
 					if($umil->module_exists('acp', 'ACP_CAT_DKP','ACP_DKP_NEWS'))
 					{
 						$umil->module_remove('acp','ACP_CAT_DKP','ACP_DKP_NEWS');
 					}
+					
 					
 					
 			}
