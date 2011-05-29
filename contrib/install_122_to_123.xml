@@ -10,12 +10,9 @@
 <description lang="en"><![CDATA[Update script 1.2.3 to 1.2.3]]></description>
 <description lang="fr"><![CDATA[mise à jour 1.2.2 vers 1.2.3]]></description>
 <description lang="de"><![CDATA[Aktualisierung 1.2.2 bis 1.2.3]]></description>
-<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.2! Please read docs\INSTALL.html before beginning ]]>
-</author-notes>
-<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.2! Veuillez lire docs\INSTALL.html avant de commencer. ]]>
-</author-notes>
-<author-notes lang="de"><![CDATA[benötigt bbdkp 1.2.2! Bitte lesen sie docs\INSTALL.html bevor. ]]>
-</author-notes>
+		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.2! Please read docs\INSTALL.html before beginning]]></author-notes>
+		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.2! Veuillez lire docs\INSTALL.html avant de commencer.]]></author-notes>
+		<author-notes lang="de"><![CDATA[benötigt bbdkp 1.2.2! Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 <author-group>
 			<author>
 				<realname><![CDATA[Andy Vandenberghe]]></realname>
@@ -50,7 +47,7 @@
 				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
 				<email><![CDATA[morten.boegeskov@gmail.com]]></email>
 				<contributions-group>
-					<contributions status="past" from="2009-05-01"  to="2009-09-04" position="Developer"/>
+					<contributions status="past" from="2009-05-01" to="2009-09-04" position="Developer"/>
 				</contributions-group>
 			</author>
 			<author>
@@ -75,35 +72,47 @@
 					<contributions status="past" from="2007-12-24" to="2008-10-01" position="bbDKP Project Founder, Previous Developer"/>
 				</contributions-group>
 			</author>
-			<author>
-				<realname><![CDATA[Tsigo]]></realname>
-				<username><![CDATA[Tsigo]]></username>
-				<homepage><![CDATA[http://www.eqdkp.com]]></homepage>
-				<contributions-group>
-					<contributions status="past" position="original developer of EQDKP, on which this PHPBB MOD was inspired."/>
-				</contributions-group>
-			</author>
 		</author-group>
-		
 		<mod-version>1.2.3</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>600</time>
 			<target-version>3.0.8</target-version>
 		</installation>
-		
 		<link-group>
 			<link type="template" href="install_122_to_123_subsilver2.xml" lang="en">subsilver2 Update</link>
 			<link type="template" href="install_122_to_123_subsilver2.xml" lang="fr">Mise à jour Subsilver2</link>
 			<link type="template" href="install_122_to_123_subsilver2.xml" lang="de">Aktualisierung Subsilver2</link>
-			
-			<link type="parent" lang="de" href="../install.xml">Frisch-Installations-Anleitung</link>
-			<link type="parent" lang="en" href="../install.xml">Clean-Installation Manual</link>
-			<link type="parent" lang="fr" href="../install.xml">Manuel de première installation</link>
+			<link type="parent" href="../install.xml" lang="de">Frisch-Installations-Anleitung</link>
+			<link type="parent" href="../install.xml" lang="en">Clean-Installation Manual</link>
+			<link type="parent" href="../install.xml" lang="fr">Manuel de première installation</link>
 		</link-group>
 	</header>
-	
 	<action-group>
+		<copy>
+			<file from="root/dkp.php" to="dkp.php"/>
+			<file from="root/portal.php" to="portal.php"/>
+			<file from="root/install/*.*" to="install/*.*"/>
+			<file from="root/adm/findclassrace.php" to="adm/findclassrace.php"/>
+			<file from="root/adm/findfaction.php" to="adm/findfaction.php"/>
+			<file from="root/adm/mods/bbdkp_check_version.php" to="adm/mods/bbdkp_check_version"/>
+			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
+			<file from="root/images/class_images/*.*" to="images/class_images/*.*"/>
+			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>
+			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>
+			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
+			<file from="root/includes/bbdkp/bbdkpfunctions.php" to="includes/bbdkp/bbdkpfunctions.php"/>
+			<file from="root/includes/bbdkp/bbdkp.php" to="includes/bbdkp/bbdkp.php"/>
+			<file from="root/includes/bbdkp/block/*.*" to="includes/bbdkp/block/*.*"/>
+			<file from="root/includes/bbdkp/module/*.*" to="includes/bbdkp/module/*.*"/>
+			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>
+			<file from="root/includes/language/en/mods/*.*" to="includes/language/en/mods/*.*"/>
+			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
+			<file from="root/styles/prosilver/template/dkp/dkpmain.html" to="styles/prosilver/template/dkp/dkpmain.html"/>
+			<file from="root/styles/prosilver/template/dkp/module/*.*" to="styles/prosilver/template/dkp/module/*.*"/>
+			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>
+			<file from="root/umil/*.*" to="umil/*.*"/>
+		</copy>
 		<delete>
 			<file name="listevents.php"/>
 			<file name="listitems.php"/>
@@ -133,37 +142,7 @@
 			<file name="root/styles/prosilver/template/dkp/viewmember.html"/>
 			<file name="root/styles/prosilver/template/dkp/viewnews.html"/>
 			<file name="root/styles/prosilver/template/dkp/viewraid.html"/>
-			
 		</delete>
-		
-		<copy>
-			<file from="root/dkp.php" to="dkp.php"/>
-			<file from="root/portal.php" to="portal.php"/>
-			<file from="root/install/*.*" to="install/*.*"/>
-			<file from="root/adm/findclassrace.php" to="adm/findclassrace.php"/>
-			<file from="root/adm/findfaction.php" to="adm/findfaction.php"/>
-			<file from="root/adm/mods/bbdkp_check_version.php" to="adm/mods/bbdkp_check_version"/>
-			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
-			<file from="root/images/class_images/rift*.*" to="images/class_images/rift*.*"/>
-			<file from="root/images/class_images/swtor*.*" to="images/class_images/swtor*.*"/>
-			<file from="root/images/race_images/rift*.*" to="images/race_images/rift*.*"/>
-			<file from="root/images/roster_classes/rift*.*" to="images/roster_classes/rift*.*"/>
-			<file from="root/images/roster_classes/swtor*.*" to="images/roster_classes/swtor*.*"/>
-			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
-			<file from="root/includes/bbdkp/bbdkpfunctions.php" to="includes/bbdkp/bbdkpfunctions.php"/>
-			<file from="root/includes/bbdkp/bbdkp.php" to="includes/bbdkp/bbdkp.php"/>
-			<file from="root/includes/bbdkp/constants_bbdkp.php" to="includes/bbdkp/constants_bbdkp.php"/>
-			<file from="root/includes/bbdkp/block/*.*" to="includes/bbdkp/block/*.*"/>
-			<file from="root/includes/bbdkp/module/*.*" to="includes/bbdkp/module/*.*"/>
-			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>
-			<file from="root/includes/language/*.*" to="includes/language/*.*"/>
-			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
-			<file from="root/styles/prosilver/template/dkp/dkpmain.html" to="styles/prosilver/template/dkp/dkpmain.html"/>
-			<file from="root/styles/prosilver/template/dkp/module/*.*" to="styles/prosilver/template/dkp/module/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>			
-			<file from="root/umil/*.*" to="umil/*.*"/>
-		</copy>
-
 		<php-installer><![CDATA[install/index.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /docs/install.html
 What has changed ? see here : /docs/changelog.html
@@ -176,14 +155,11 @@ Post-install instructions :
 Liste des changements : /docs/changelog.html
 
 1) lancer la mise à jour : install/index.php 
-2) Supprimer le repertoire /install pour réactiver le forum.
-]]></diy-instructions>		
+2) Supprimer le repertoire /install pour réactiver le forum.]]></diy-instructions>
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
 1) Datenbank aktualisierung : install/index.php 
-2) lösche das Installations-Verzeichnis „install"
-
-]]></diy-instructions>		
+2) lösche das Installations-Verzeichnis „install"]]></diy-instructions>
 	</action-group>
 </mod>
