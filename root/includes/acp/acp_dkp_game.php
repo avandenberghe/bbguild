@@ -208,7 +208,7 @@ class acp_dkp_game extends bbDKP_Admin
 					
 					$db->sql_transaction('begin');
 					$sql = 'UPDATE ' . RACE_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) .  '  
-						    WHERE race_id = ' . $id . " AND game_id = '" . $game_id . "'";
+						    WHERE race_id = ' . (int) $id . " AND game_id = '" . $db->sql_escape($game_id) . "'";
 					$db->sql_query($sql);	
 
 					$names = array(
@@ -217,7 +217,7 @@ class acp_dkp_game extends bbDKP_Admin
 					);
 					
 					$sql = 'UPDATE ' . BB_LANGUAGE . ' SET ' . $db->sql_build_array('UPDATE', $names) . ' WHERE attribute_id = ' . $id . 
-						" AND attribute='race'  AND language= '" . $config['bbdkp_lang'] ."' AND game_id =   '" . $game_id . "'";
+						" AND attribute='race'  AND language= '" . $config['bbdkp_lang'] ."' AND game_id =   '" . $db->sql_escape($game_id) . "'";
 					$db->sql_query($sql);	
 					
 					$db->sql_transaction('commit');
@@ -453,17 +453,17 @@ class acp_dkp_game extends bbDKP_Admin
 						
 						// list installed games
 		                $installed_games = array();
-		                foreach($games as $id => $gamename)
+		                foreach($games as $gid => $gamename)
 		                {
 		                	//add value to dropdown when the game config value is 1
-		                	if ($config['bbdkp_games_' . $id] == 1)
+		                	if ($config['bbdkp_games_' . $gid] == 1)
 		                	{
 		                		$template->assign_block_vars('game_row', array(
-								'VALUE' => $id,
-								'SELECTED' => ($game_id == $id) ? ' selected="selected"' : '',
+								'VALUE' => $gid,
+								'SELECTED' => ($game_id == $gid) ? ' selected="selected"' : '',
 								'OPTION'   => $gamename, 
 								));
-		                		$installed_games[] = $id; 
+		                		$installed_games[] = $gid; 
 		                	} 
 		                }
 	            		
@@ -647,7 +647,7 @@ class acp_dkp_game extends bbDKP_Admin
 									),
 						'WHERE'		=> " c.class_id = l.attribute_id 
 										AND l.attribute='class' 
-										AND l.game_id = '". $game_id ."'
+										AND l.game_id = '". $db->sql_escape($game_id) ."'
 										AND c.game_id = l.game_id
 										AND l.language= '" . $config['bbdkp_lang'] ."'
 										AND c.class_id = " . $id ,

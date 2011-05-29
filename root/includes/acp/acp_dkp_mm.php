@@ -556,13 +556,13 @@ class acp_dkp_mm extends bbDKP_Admin
 					$db->sql_freeresult($result);
 					// setting up the links
 					$memberportraiturl=' ';
-					if ($row['game_id'] == 'wow' || $row['game_id']=='aion')
+					if ($this->old_member['game_id'] == 'wow' || $this->old_member['game_id']=='aion')
 					{
 						$memberportraiturl = $this->generate_portraitlink( $this->old_member['game_id'],  
 							$this->old_member['member_race_id'], $this->old_member['member_class_id'], $this->old_member['member_gender_id'], $this->old_member['member_level'] ); 
 					}
 					$memberarmoryurl = ' ';
-					if ($row['game_id'] == 'wow')
+					if ($this->old_member['game_id'] == 'wow')
 					{
 						$memberarmoryurl = $this->generate_armorylink( $this->old_member['game_id'],  $this->old_member['region'], $this->old_member['realm'], $this->old_member['member_name']);
 					}
@@ -728,7 +728,7 @@ class acp_dkp_mm extends bbDKP_Admin
 								'member_guild_realm'	=> $row['realm'],  
 								'member_guild_region'	=> $row['region'],
 								'member_armory_url'		=> $row['member_armory_url'],  
-								'member_portrait_url'	=> $row['member_portrait_url'], 
+								'member_portrait_url'	=> $phpbb_root_path . $row['member_portrait_url'], 
 								'phpbb_user_id'			=> $row['phpbb_user_id'],
 							
 								'game_id'				=> $row['game_id'], 
@@ -1737,13 +1737,11 @@ class acp_dkp_mm extends bbDKP_Admin
 	 */
 	private function generate_portraitlink ($game_id, $race_id, $class_id, $gender_id, $level)
 	{
-		global $phpbb_root_path;
-		
 		$memberportraiturl = '';
 		
 		if($game_id =='aion')
 		{
-			$memberportraiturl =  $phpbb_root_path . 'images/roster_portraits/aion/' . $race_id . '_' . $gender_id . '.jpg';
+			$memberportraiturl =  'images/roster_portraits/aion/' . $race_id . '_' . $gender_id . '.jpg';
 		}
 		elseif($game_id =='wow')
 		{
@@ -1764,7 +1762,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				// level 85 is not yet iconified
 				$maxlvlid ="wow-80";
 		   }
-       	   $memberportraiturl =  $phpbb_root_path .'images/roster_portraits/'. $maxlvlid .'/' . $gender_id . '-' . $race_id . '-' . $class_id . '.gif';
+       	   $memberportraiturl =  'images/roster_portraits/'. $maxlvlid .'/' . $gender_id . '-' . $race_id . '-' . $class_id . '.gif';
 		}
 		return $memberportraiturl;
 	}
