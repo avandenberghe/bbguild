@@ -267,7 +267,7 @@ class acp_dkp_mm extends bbDKP_Admin
 			case 'mm_addmember':
 					
 				$Addmemberlink = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Members screen</h3></a>'; 
-				
+				$member_id = 0;
 				$submit	 = (isset($_POST['add'])) ? true : false;
 				$update	 = (isset($_POST['update'])) ? true : false;
 				$generate_armorylink = (isset($_POST['generate_armorylink'])) ? true : false; 
@@ -334,7 +334,10 @@ class acp_dkp_mm extends bbDKP_Admin
 					$game_id = request_var('game_id', ''); 
 					$race_id = request_var('member_race_id', 0); 
 					$class_id = request_var('member_class_id', 0); 
+					$gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
+					
 					$member_comment = utf8_normalize_nfc(request_var('member_comment', '', true)); 
+					
 					
 					$joindate	= mktime(0,0,0,request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0)); 
 
@@ -345,16 +348,48 @@ class acp_dkp_mm extends bbDKP_Admin
 						$leavedate = mktime(0,0,0,request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0)); 
 					}
 												
-					$gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
 					$achievpoints = 0; 
 					
 					$url = utf8_normalize_nfc(request_var('member_armorylink', '', true));  ;
 					
 					$phpbb_user_id = request_var('phpbb_user_id', 0); 
 					
-					if ($this->insertnewmember($member_name, $member_status, $member_lvl, $race_id, $class_id,
-						$rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url, $game_id, $phpbb_user_id))
+					$member_id = $this->insertnewmember($member_name, $member_status, $member_lvl, $race_id, $class_id,
+						$rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url, $game_id, $phpbb_user_id);
+						
+					if ($member_id > 0) 
 					{
+						//record added. now update some stats
+						
+						$memberportraiturl=' ';
+						if ($game_id == 'wow' || $game_id=='aion')
+						{
+							$memberportraiturl = $this->generate_portraitlink( $game_id, $race_id, $class_id, $gender, $member_lvl); 
+						}
+						$memberarmoryurl = ' ';
+						
+						if ($game_id == 'wow')
+						{
+							$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $guild_id; 
+							$result = $db->sql_query($sql);
+							while ( $row = $db->sql_fetchrow($result) )
+							{
+								$realm = $row['realm'];
+								$region = $row['region'];
+							}
+							$db->sql_freeresult($result);
+							$memberarmoryurl = $this->generate_armorylink( $game_id, $region, $realm, $member_name);
+						}
+						
+						$data = array(
+					    'member_armory_url'     => $memberarmoryurl,
+					    'member_portrait_url'   => $memberportraiturl,
+						);
+						
+						$sql = 'UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE member_id=' . (int) $member_id;
+						$db->sql_query($sql);
+					
+					
 						$success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($member_name));
 						trigger_error($success_message . $Addmemberlink, E_USER_NOTICE);
 					}
@@ -366,8 +401,12 @@ class acp_dkp_mm extends bbDKP_Admin
 						
 				}	
 
-				//get member_id
-				$member_id =  request_var('hidden_member_id', 0); 
+				//get member_id if not created
+				if($member_id == 0)
+				{
+					$member_id =  request_var('hidden_member_id', 0); 
+				}
+				
 				if($member_id == 0)
 				{
 					$member_id =  request_var(URI_NAMEID, 0);
@@ -495,7 +534,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					}	
 					
 					
-				// make armory link for existing members (only for aion/wow)
+				// make armory link for existing members (only for wow)
 				if($generate_armorylink)
 				{
 					
@@ -516,54 +555,16 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 					$db->sql_freeresult($result);
 					// setting up the links
-					
-					switch ($this->old_member['game_id'])
+					$memberportraiturl=' ';
+					if ($row['game_id'] == 'wow' || $row['game_id']=='aion')
 					{
-						case 'wow':
-						   if($this->old_member['member_level'] <= "59")
-						   {
-								$maxlvlid ="wow-default";
-						   }
-						   elseif($this->old_member['member_level'] <= 69)
-						   {
-								$maxlvlid ="wow";
-						   }
-						   elseif($this->old_member['member_level'] <= 79)
-						   {
-								$maxlvlid ="wow-70";
-						   }
-						   else
-						   {
-								// level 85 is not yet iconified
-								$maxlvlid ="wow-80";
-						   }
-							
-				       	   $memberportraiturl =  $phpbb_root_path .'images/roster_portraits/'. $maxlvlid .'/' . $this->old_member['member_gender_id'] . '-' . 
-				       	   $this->old_member['member_race_id'] . '-' . $this->old_member['member_class_id'] . '.gif';
-				        		
-				        	switch ($this->old_member['region'])
-				        	{
-								case 'EU': 
-				        	        $site='http://eu.battle.net/wow/en/character/';
-				        	        break;
-				        	    case 'US': 
-				        	        $site='http://us.battle.net/wow/en/character/';
-				        	        break;
-				        	}
-				        	$memberarmoryurl = $site . $this->old_member['realm'] . '/' .  $this->old_member['member_name'] . '/simple' ;
-				        	
-							
-							
-							break;
-				             
-				      	 case 'aion': 
-					       	$memberportraiturl =  $phpbb_root_path . 'images/roster_portraits/aion/' . $this->old_member['member_race_id'] . '_' . $this->old_member['member_gender_id'] . '.jpg';
-					        $memberarmoryurl = $this->old_member['member_armory_url']; 
-				               break;     		        
-				            default:
-				               $memberportraiturl='';
-				               $memberarmoryurl= '';
-				               break;
+						$memberportraiturl = $this->generate_portraitlink( $this->old_member['game_id'],  
+							$this->old_member['member_race_id'], $this->old_member['member_class_id'], $this->old_member['member_gender_id'], $this->old_member['member_level'] ); 
+					}
+					$memberarmoryurl = ' ';
+					if ($row['game_id'] == 'wow')
+					{
+						$memberarmoryurl = $this->generate_armorylink( $this->old_member['game_id'],  $this->old_member['region'], $this->old_member['realm'], $this->old_member['member_name']);
 					}
 					
 		        	$data = array(
@@ -655,7 +656,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					 * fill template 
 					 */
 					
-					if (isset($member_id))
+					if ($member_id > 0)
 					{
 						// edit mode
 						// build member array if clicked on name in listing
@@ -1077,10 +1078,11 @@ class acp_dkp_mm extends bbDKP_Admin
 						'FEMALE_CHECKED'		=> ($genderid == '1') ? ' checked="checked"' : '' , 
 						'MEMBER_COMMENT'		=> isset($this->member) ? $this->member['member_comment'] : '',
 					
-						'S_HAS_ARMORY'			=>  isset($this->member) ? ($this->member['game_id'] == 'wow' || $this->member['game_id'] == 'aion'  ? true : false) : false, 
+						'S_CAN_HAVE_ARMORY'		=>  isset($this->member) ? ($this->member['game_id'] == 'wow' || $this->member['game_id'] == 'aion'  ? true : false) : false, 
 						'MEMBER_URL'			=>  isset($this->member) ? $this->member['member_armory_url'] : '',
 						'MEMBER_PORTRAIT'		=>  isset($this->member) ? $this->member['member_portrait_url'] : '',
 						'S_MEMBER_PORTRAIT_EXISTS'  => (strlen( $this->member['member_portrait_url'] ) > 1) ? true : false,	
+						'S_CAN_GENERATE_ARMORY'		=>  isset($this->member) ? ($this->member['game_id'] == 'wow' ? true : false) : false,
 					
 						'COLORCODE' 			=> ($this->member['colorcode'] == '') ? '#123456' : $this->member['colorcode'],
                   		'CLASS_IMAGE' 			=> $this->member['class_image'],  
@@ -1729,6 +1731,61 @@ class acp_dkp_mm extends bbDKP_Admin
 		}
 	}
 	
+	
+	/*
+	 * generates a standard portrait image url for wow /aion based on characterdata
+	 */
+	private function generate_portraitlink ($game_id, $race_id, $class_id, $gender_id, $level)
+	{
+		global $phpbb_root_path;
+		
+		$memberportraiturl = '';
+		
+		if($game_id =='aion')
+		{
+			$memberportraiturl =  $phpbb_root_path . 'images/roster_portraits/aion/' . $race_id . '_' . $gender_id . '.jpg';
+		}
+		elseif($game_id =='wow')
+		{
+		   if($level <= "59")
+		   {
+				$maxlvlid ="wow-default";
+		   }
+		   elseif($level <= 69)
+		   {
+				$maxlvlid ="wow";
+		   }
+		   elseif($level <= 79)
+		   {
+				$maxlvlid ="wow-70";
+		   }
+		   else
+		   {
+				// level 85 is not yet iconified
+				$maxlvlid ="wow-80";
+		   }
+       	   $memberportraiturl =  $phpbb_root_path .'images/roster_portraits/'. $maxlvlid .'/' . $gender_id . '-' . $race_id . '-' . $class_id . '.gif';
+		}
+		return $memberportraiturl;
+	}
+	
+	
+	/*
+	 * generates armory link (only wow)
+	 */
+	private function generate_armorylink($game_id, $region, $realm, $name)
+	{
+	    switch ($region)
+       	{
+			case 'EU': 
+       	        $site='http://eu.battle.net/wow/en/character/';
+       	        break;
+       	    case 'US': 
+       	        $site='http://us.battle.net/wow/en/character/';
+       	        break;
+       	}
+       	return $site . $realm . '/' .  $name . '/simple' ;
+	}
 	
 	 /**
 	 * get membername given an id

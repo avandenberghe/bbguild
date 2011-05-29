@@ -251,7 +251,7 @@ function classracestateChanged()
    </dd>
  </dl>
   
-  <!-- IF S_HAS_ARMORY -->
+  <!-- IF S_CAN_HAVE_ARMORY -->
   <dl>
     <dt><label>{L_ARMORY_URL}:</label></dt>
     <dd>
@@ -262,12 +262,15 @@ function classracestateChanged()
 		</a>
 		<input type="text" name="member_armorylink" size="80%" maxlength="300" value="{MEMBER_URL}" class="input" />
 		<br/>
+		<!-- IF S_CAN_GENERATE_ARMORY -->
 		<input type="submit" name="generate_armorylink" value="{L_GENERATE_ARMORY_URL}" class="button2" />
+		<!-- ENDIF -->
 		</dd>
 		
    </dd>
   </dl>
  <!-- ENDIF -->
+ 
     <dl>
     <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
     
