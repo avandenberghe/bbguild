@@ -821,6 +821,7 @@ function gameinstall($action, $version)
 				case '1.2.3':
 		        // dkp system
 		        // if there is no dkp system then insert a default one
+		        $dkpsys_id = 0;
 			    $result = $db->sql_query('select count(*) as num_dkp from ' . $table_prefix . 'bbdkp_dkpsystem');
 				$total_dkps = (int) $db->sql_fetchfield('num_dkp');
 				$db->sql_freeresult($result);
@@ -833,6 +834,12 @@ function gameinstall($action, $version)
 					$dkpsys_id = $db->sql_nextid();
 					unset ($data);
 					
+				}
+				else
+				{
+					$result = $db->sql_query('select max(dkpsys_id) as dkpsys_id from ' . $table_prefix . 'bbdkp_dkpsystem');
+					$dkpsys_id = (int) $db->sql_fetchfield('dkpsys_id');
+					$db->sql_freeresult($result);
 				}
 				
 		        // event
