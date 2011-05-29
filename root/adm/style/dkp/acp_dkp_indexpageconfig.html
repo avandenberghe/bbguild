@@ -31,7 +31,6 @@ fieldset dt {
 
 <form method="post" action="{F_ADD_CONFIG}" name="post">
 
-
 <fieldset>
 <legend>{L_NEWSBLOCKSETTING}</legend>
 <br />
@@ -76,7 +75,7 @@ fieldset dt {
   </dl> 
 
   <dl>
-    <dt><label>Recruitment Status :</label></dt>
+    <dt><label>{L_RECSTATUS}</label></dt>
     <dd>
     <select name="bbdkp_recruitment" class="input" id="bbdkp_recruitment">
        <!-- BEGIN recruitment_status_row -->
@@ -90,7 +89,9 @@ fieldset dt {
 
  <!-- BEGIN recruitment -->
   <dl>
-    <dt><label>{recruitment.CLASSID}) {recruitment.CLASS} :</label></dt>
+    <dt><label>{recruitment.CLASSID}) {recruitment.CLASS} :</label>
+   		 <!-- IF recruitment.S_CLASS_IMAGE_EXISTS --> <img src="{recruitment.CLASS_IMAGE}" alt=" " /><!-- ENDIF -->
+    </dt>
 
     <dd>
     <img src="{T_IMAGES_PATH}icons/{recruitment.TANKCOLOR}" alt="tank" />

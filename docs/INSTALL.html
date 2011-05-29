@@ -57,15 +57,15 @@
 <b>Available Mods/Plugins : </b>
 <ul type="circle">
 <li>bbTips (Wow) 0.4.0 (Mod)</li>
-<li>Raidtracker 0.3.0 (Plugin)</li> 
-<li>Bossprogress 0.1.0 (Plugin)</li>
+<li>Raidtracker 0.3.2 (Plugin)</li> 
+<li>Bossprogress 0.1.1 (Plugin)</li>
+<li>Raidplanner 0.2.0 (Mod)</li>
 </ul>
 
 <b>Mods/Plugins under development : </b>
 <ul type="circle">
-<li>Armory Import 1.0.3 Wow &amp; Aion (Plugin)</li>
-<li>Raidplanner 0.1.0 (Mod)</li>
-<li>Recruitment 1.2.7 (Mod)</li>
+<li>Armory Import 2.0 Wow &amp; Aion (Plugin)</li>
+<li>Recruitment 2.0 (Mod)</li>
 </ul>
 
 </div>
@@ -101,13 +101,14 @@
 
 	<div class="paragraph">
 		<div class="inner"><span class="corners-top"><span></span></span></div>
+
 		<p>Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. </p>
 		
 		<h2>Step-by-step Guide</h2>
 		<strong>Note : Before installing/upgrading bbDKP, you need to backup your forum.</strong>
 		
 		<div class="content">
-			<h2>New 1.2.2 installation </h2>
+			<h2>New 1.2.3 installation </h2>
 			<ul>
 				<li><strong>using Automod</strong>
 				<ol>
@@ -115,94 +116,50 @@
 					<li>Upload it to your webserver, into /store/mods/ </li>
 					<li>Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits. </li>
 					<li>Then click on the blue link given, this will redirect you to /install/index.php, 
-					<li>and you will see the umil installation page. This will install 1.2.2. and clear the caches (template, theme, imagesets)</li>
+					<li>and you will see the umil installation page. 
+						<ul>
+						<li>Enter your guildname</li>
+						<li>Choose the realm of your guild</li>
+						<li>Choose the games you wish to have installed.</li>
+						<li>Click submit. This will install 1.2.3. and clear the caches (template, theme, imagesets)</li>
+						</ul>
+					</li>
 				</ol>
 				</li>
 				<li><strong>Manually</strong>
 					<ol>
-						
 						<li>open the MODX file : <a href="../install.xml">install.xml</a></li>
-						<li>First you copy all mod files to your webserver like they laid out in the Modx file.</li>
-						<li>Then manually apply the changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
-						<li>Then launch the DB updater (/install/index.php)</li>
-						<li>Now you see the Umil installation page. This will install 1.2.2. and clear the caches (template, theme, imagesets)</li>
+						<li>Copy all mod files to your webserver like they laid out in the Modx file.</li>	
+						<li>Apply the changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
+						<li>Upload your modded files.</li>					
+						<li>Then launch the DB Installer (/install/index.php)</li>
+						<li>Now you see the Umil installation page. Click Submit. </il>
+						<ul>
+						<li>Enter your guildname</li>
+						<li>Choose the realm of your guild</li>
+						<li>Choose the games you wish to have installed.</li>
+						<li>Click submit. This will install 1.2.3. and clear the caches (template, theme, imagesets)</li>
+						</ul>
 					</ol>
 
 				</li>
 			</ul>
    
-            <h2>Upgrading from 1.0.8-1.1 to 1.2.2</h2>
-			
+			<h2>Upgrading from 1.2.2 to 1.2.3</h2>
+					<p><em>If you have an earlier version, first update to 1.2.2.</em></p>
+			just follow the diff instructions in <a href="../contrib/install_122_to_123.xml">contrib/install_122_to_123.xml</a>
 			<ol>
-				<li>Completely remove all old files and all old bbDKP edits from your phpbb installation.</li>
-				<li>Follow the Clean install instructions 1 to 3</li>
-				<li>Then click on the blue link given, this will launch install/index.php but then redirect you to /olddkpupdate/index.php,</li>
-				<li>Now you see the Umil updater. This will update your database tables from your older version to 1.2.2. and clear the caches (template, theme, and imagesets)</li>
+				<li>copy the new files to your webserver, replacing any old files. </li>
+				<li>apply the (few) changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
+				<li>launch the DB updater (/install/index.php)</li>
+				<li>Now you see the Umil updater. 
+				<ul>
+					<li>Enter your guildname</li>
+					<li>Choose the realm of your guild</li>
+					<li>Check the games you wish to have installed/updated. (deselecting a game you already have will have no effect on your data)</li>
+					<li>Click submit. This will update to 1.2.3. and clear the caches (template, theme, imagesets)</li>
+				</ul>
 			</ol>
-			
-			<h2>Upgrading from 1.1.2.2 to 1.2.2</h2>
-			<strong>Note : Before upgrading bbDKP from 1.1, you need to uninstall all plugins.</strong>
-			<ul>
-				<li><strong>Upgrading Manually</strong>
-					<ol>
-						<li>If you want to upgrade manually, you just need to follow the diff instructions in <a href="../contrib/install_1122_to_122.xml">contrib/install_1122_to_122.xml</a></li>
-						<li>first you copy all files to your webserver, replacing any old files. (Tip : it is better to just delete and replace)</li>
-						<li>then you manually apply the (few) changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
-						<li>then launch the DB updater (/olddkpupdate/index.php)</li>
-						<li>Now you see the Umil updater. This will update your database tables from 1.1.2.2 to 1.2.2 and clear the caches (template, theme, and imagesets)</li>
-					</ol>
-				</li>
-
-				<li><strong>Automod Uninstall-Reinstall procedure (recommended)</strong>
-					<ol>
-						<li>Go in Automod, then click Uninstall bbDKP</li>
-						<li>Then follow the Clean install instructions 1 to 3</li>
-						<li>Then click on the blue link given, this will now redirect you to /olddkpupdate/index.php,</li>
-						<li>Now you see the Umil updater. This will update your database tables from 1.1.2.2 to 1.2.2 and clear the caches (template, theme, and imagesets)</li>
-					</ol>
-				</li>
-
-				<li><strong>Automod Update</strong>
-					<ol>
-						<li>If you want to *update* Using Automod, we may upon request prepare a separate download with a changed files MODX package.</li>
-						<li>Then click on the blue link given, this will redirect you to /olddkpupdate/index.php,</li>
-						<li>Now you see the Umil updater. This will update your database tables from 1.1.2.2 to 1.2.2 and clear the caches (template, theme, and imagesets)</li>
-					</ol>
-				</li>
-				
-				<li><em>Note : upgrading from 1.2 to 1.2.2 follows the same procedure : <a href="../contrib/install_12_to_122.xml">contrib/install_12_to_122.xml</a></em> </li>
-				<li><em>Note : upgrading from 1.2.1 to 1.2.2 follows the same procedure : <a href="../contrib/install_121_to_122.xml">contrib/install_121_to_122.xml</a></em> </li>
-			</ul>
-
-			<h2>Upgrading from 1.2.1.x to 1.2.2</h2>
-			
-			<ul>
-				<li><strong>Upgrading Manually</strong>
-					<ol>
-						<li>If you want to upgrade manually, you just need to follow the diff instructions in <a href="../contrib/install_121_to_122.xml">contrib/install_121_to_122.xml</a></li>
-						<li>first you copy the new files to your webserver, replacing any old files. also delete the old files as ezxplained in the file above. </li>
-						<li>then you manually apply the (few) changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
-						<li>then launch the DB updater (/olddkpupdate/index.php)</li>
-						<li>Now you see the Umil updater. This will update your database tables from 1.1.2.2 to 1.2.2 and clear the caches (template, theme, and imagesets)</li>
-					</ol>
-				</li>
-
-				<li><strong>Automod Uninstall-Reinstall procedure</strong>
-					<ul>
-						<li><strong>Note : Before uninstalling/reinstalling bbDKP, you need to uninstall all plugins first. (Raidtracker, bbTips and Bossprogress)</strong></li>
-					</ul>
-					<ol>
-						<li>Go in Automod, then click Uninstall bbDKP 1.2.1</li>
-						<li>Then follow the Clean install instructions 1 to 3</li>
-						<li>Then click on the blue link given, this will now redirect you to /olddkpupdate/index.php,</li>
-						<li>Now you see the Umil updater. This will update your database tables from 1.1.2.2 to 1.2.2 and clear the caches (template, theme, and imagesets)</li>
-					</ol>
-				</li>
-				
-				<li><em>Note : upgrading from 1.2 to 1.2.2 follows the same procedure : <a href="../contrib/install_12_to_122.xml">contrib/install_12_to_122.xml</a></em> </li>
-				
-			</ul>
-
 			<h2>Quick Deactivation</h2>
 			<ol>
 			<li>should you wish to Deactivate this Mod quickly you can open configdkp.php and comment out the trigger</li>

@@ -1,0 +1,85 @@
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+<table width="100%">
+  <tr>
+    <td style="color:white; text-align:center">{L_PURCHASE_HISTORY_FOR}</td>
+  </tr>
+</table>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<div class="forabg" >
+   <span class="corners-top"><span></span></span>
+	<ul class="topiclist">
+	<li class="header">
+	
+<table width="100%">
+	<colgroup span="5">
+		<col width="10"></col>
+		<col width="19%"></col>
+		<col width="30%"></col>
+		<col width="40%"></col>
+		<col width="10%"></col>
+	</colgroup>
+		  
+<tr>
+<td>&nbsp;
+</td>
+<td><a href="{U_VIEW_ITEM}o={O_DATE}">{L_DATE}</a></td>
+<td><a href="{U_VIEW_ITEM}o={O_BUYER}">{L_BUYER}</a></td>
+<td><a href="{U_VIEW_ITEM}o={O_DATE}">{L_RAID}</a></td>
+<td><a href="{U_VIEW_ITEM}o={O_VALUE}">{L_VALUE}</a></td>
+</tr>
+
+</table>
+<span class="corners-bottom"><span></span></span>
+</div>
+
+
+<div class="post">
+
+<table width="100%">
+	<colgroup span="4">
+		<col width="20%"></col>
+		<col width="30%"></col>
+		<col width="40%"></col>
+		<col width="10%"></col>
+	</colgroup>
+  <!-- BEGIN items_row -->
+  <!-- IF items_row.S_ROW_COUNT is even -->
+  
+  <tr style="width:900;" class="bg1">
+  <!-- ELSE -->
+  <tr style="width:900;" class="bg2">
+  <!-- ENDIF -->   
+
+    <td>{items_row.DATE}</td>
+    <td>
+    <span><img src="{ROOT_PATH}images/class_images/{items_row.CLASSIMAGE}.png" alt="class" width="20" height="20"></img>&nbsp;
+    <strong><a style="color:{items_row.CLASSCOLOR}" href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></strong></td>
+    <td><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
+    <td>{items_row.VALUE}</td>
+  </tr>
+  <!-- END items_row -->
+</table>
+</div>
+
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+	
+<table width="100%">
+	<colgroup span="1">
+	<col width="100%"></col>
+	</colgroup>
+<tr>
+<td style="text-align:center white-space:nowrap; color:white;">{VIEWITEM_FOOTCOUNT}</td>
+</tr>
+
+</table>
+</ul>
+</li>
+<span class="corners-bottom"><span></span></span>
+</div>
+

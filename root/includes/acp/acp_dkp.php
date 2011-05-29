@@ -365,17 +365,6 @@ class acp_dkp extends bbDKP_Admin
 			 **************/
             case 'dkp_config':
             	
-                $games = array(
-                    'wow'        => $user->lang['WOW'], 
-                    'lotro'      => $user->lang['LOTRO'], 
-                    'eq'         => $user->lang['EQ'], 
-                    'daoc'       => $user->lang['DAOC'], 
-                    'vanguard' 	 => $user->lang['VANGUARD'],
-                    'eq2'        => $user->lang['EQ2'],
-                    'warhammer'  => $user->lang['WARHAMMER'],
-                    'aion'       => $user->lang['AION'],
-                    'FFXI'       => $user->lang['FFXI']
-                );
                 
                 $submit = (isset($_POST['update'])) ? true : false;
 
@@ -563,8 +552,32 @@ class acp_dkp extends bbDKP_Admin
                 			'SELECTED' => ($config['bbdkp_hide_inactive'] == 0) ? ' selected="selected"' : '' , 
                 			'OPTION' => "NO"));
                 
+
+                // list installed games
+                $games = array(
+                    'wow'        => $user->lang['WOW'], 
+                    'lotro'      => $user->lang['LOTRO'], 
+                    'eq'         => $user->lang['EQ'], 
+                    'daoc'       => $user->lang['DAOC'], 
+                    'vanguard' 	 => $user->lang['VANGUARD'],
+                    'eq2'        => $user->lang['EQ2'],
+                    'warhammer'  => $user->lang['WARHAMMER'],
+                    'aion'       => $user->lang['AION'],
+                    'FFXI'       => $user->lang['FFXI'],
+                	'rift'       => $user->lang['RIFT'],
+                	'swtor'      => $user->lang['SWTOR']
+                );
+                
+                $installed_games = array();
+                foreach($games as $gameid => $gamename)
+                {
+                	if ($config['bbdkp_games_' . $gameid] == 1)
+                	{
+                		$installed_games[] = $gamename; 
+                	} 
+                }
+
                 // Default Region
-                $installed_game = $games[$config['bbdkp_default_game']];
                 $regions = array(
                 	'EU'     			=> $user->lang['REGIONEU'], 
                 	'US'     			=> $user->lang['REGIONUS'],  
@@ -607,7 +620,7 @@ class acp_dkp extends bbDKP_Admin
 				}
 				
 				$s_bankerlist_options = ''; 
-				$sql = 'select member_id, member_name from ' . MEMBER_LIST_TABLE . " where member_status = '1'"; 
+				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . " WHERE member_status = '1'"; 
 				$result = $db->sql_query ($sql);
 				while ($row = $db->sql_fetchrow ($result))
 				{
@@ -626,7 +639,7 @@ class acp_dkp extends bbDKP_Admin
                 	'EQDKP_START_YY' 	=> date('Y', $config['bbdkp_eqdkp_start']) ,
                 	'DATE_FORMAT' 		=> $config['bbdkp_date_format'] , 
                 	'DKP_NAME' 			=> $config['bbdkp_dkp_name'] ,
-                	'DEFAULT_GAME' 		=> $installed_game ,
+                	'DEFAULT_GAME' 		=> implode(", ", $installed_games),
                 	'HIDE_INACTIVE_YES_CHECKED' => ($config['bbdkp_hide_inactive'] == '1') ? ' checked="checked"' : '' , 
                 	'HIDE_INACTIVE_NO_CHECKED' => ($config['bbdkp_hide_inactive'] == '0') ? ' checked="checked"' : '' , 
                 	'USER_ELIMIT' 		=> $config['bbdkp_user_elimit'] , 
@@ -747,7 +760,6 @@ class acp_dkp extends bbDKP_Admin
                 
                 // recruitment statuses               
                 $recstatus = array(0 => "Closed" ,1 => "Open");
-                            
                 foreach ($recstatus as $d_value => $d_name) 
                 {
                     $template->assign_block_vars('recruitment_status_row', array(
@@ -775,14 +787,16 @@ class acp_dkp extends bbDKP_Admin
 
                 // get recruitment statuses from class table
                 $sql_array = array(
-				    'SELECT'    => 	' c.class_id, l.name as class_name,
+				    'SELECT'    => 	' c.game_id, c.class_id, l.name as class_name, c.colorcode, 
 				    				  c.imagename, c.dps, c.tank, c.heal ', 
 				    'FROM'      => array(
 				        CLASS_TABLE 	=> 'c',
 				        BB_LANGUAGE		=> 'l', 
 				    	),
-				    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
-					'ORDER_BY'	=> ' c.class_id ',
+				    'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id 
+				    				and c.game_id = l.game_id 
+				    				and l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+					'ORDER_BY'	=> ' c.game_id, c.class_id ',
 				    );
 				    
 				$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -790,15 +804,18 @@ class acp_dkp extends bbDKP_Admin
                 $result = $db->sql_query($sql);
                 while ($row = $db->sql_fetchrow($result)) 
                 {
-                    
                     $class[$row['class_id']] =$row['class_name'] ; 
+
                     //class constants                    
                      $template->assign_block_vars('recruitment', array(
-                        'CLASSID' => $row['class_id'],
-                        'CLASS' => $row['class_name'],                     
+                        'GAME' 		=> $row['game_id'],
+                     	'CLASSID' 	=> $row['class_id'],
+                        'CLASS' 	=> $row['class_name'],
+						'CLASS_IMAGE' 		 => (strlen($row['imagename'] ) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
+						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename'] ) > 1) ? true : false,                                          
                         'TANKCOLOR' => $classreccolor[$row['tank']] ,
                         'HEALCOLOR' => $classreccolor[$row['heal']] ,
-                        'DPSCOLOR' =>  $classreccolor[$row['dps']],
+                        'DPSCOLOR'  =>  $classreccolor[$row['dps']],
 					    ));
 					    
 					    foreach ($classrecstatus as $prio => $description) 

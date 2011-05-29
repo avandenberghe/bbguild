@@ -139,9 +139,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				    'WHERE'     =>  "(a.member_rank_id = r.rank_id)
 				    			AND (a.member_guild_id = r.guild_id)   
 								AND (a.member_id = m.member_id) 
-								AND (a.member_class_id = c.class_id)  
+								AND (a.member_class_id = c.class_id and a.game_id = c.game_id)  
 								AND (m.member_dkpid = s.dkpsys_id)   
-								AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    		
+								AND l.attribute_id = c.class_id  and l.game_id = c.game_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    		
 								AND (s.dkpsys_id = " . (int) $dkpsys_id . ')' ,
 					);
 					
@@ -638,16 +638,17 @@ class acp_dkp_mdkp extends bbDKP_Admin
 			        array(
 			            'FROM'  => array(BB_LANGUAGE => 'r1'),
 			            'ON'    => "r1.attribute_id = a.member_race_id AND r1.language= '" . 
-			        		$config['bbdkp_lang'] . "' AND r1.attribute = 'race'" 
+			        		$config['bbdkp_lang'] . "' AND r1.attribute = 'race' and r1.game_id = a.game_id" 
 			            )
 			        ),
 			 
 			    'WHERE'     =>  " a.member_rank_id = r.rank_id 
 			    				AND a.member_guild_id = r.guild_id  
 								AND a.member_id = m.member_id 
+								AND a.game_id = c.game_id 
 								AND a.member_class_id = c.class_id  
 								AND m.member_dkpid = s.dkpsys_id   
-								AND l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    
+								AND l.game_id = c.game_id and l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    
 								AND s.dkpsys_id = " . $dkp_id . '   
 							    AND a.member_id = ' . $member_id,
 				);
@@ -926,7 +927,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						}
 						/* 5) transfer old attendee name to new member */
 						// if $member_from participated in a raid the $member_to did too, delete the entry. (unique key) 
-						$sql = 'select raid_id from ' . RAID_DETAIL_TABLE . ' where member_id = '. $member_to; 
+						$sql = 'SELECT raid_id FROM ' . RAID_DETAIL_TABLE . ' WHERE member_id = '. $member_to; 
 						$result = $db->sql_query($sql, 0);
 						while ( $row = $db->sql_fetchrow($result) )
 						{
@@ -990,12 +991,12 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						}
 					
 						// prepare some logging information 
-						$sql = 'select member_name from ' . MEMBER_LIST_TABLE . ' where member_id =  ' . $member_from; 
+						$sql = 'SELECT member_name FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id =  ' . $member_from; 
 						$result = $db->sql_query($sql, 0);
 						$member_from_name = (string) $db->sql_fetchfield('member_name');
 						$db->sql_freeresult($result);
 						
-						$sql = 'select member_name from ' . MEMBER_LIST_TABLE . ' where member_id =  ' . $member_to; 
+						$sql = 'SELECT member_name FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id =  ' . $member_to; 
 						$result = $db->sql_query($sql, 0);
 						$member_to_name = (string) $db->sql_fetchfield('member_name');						
 						$db->sql_freeresult($result);

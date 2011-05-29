@@ -1,0 +1,125 @@
+<form method="post" action="{F_STATS}">
+<table class="tablebg" width="100%" border="0" cellspacing="0" cellpadding="2" style="border-bottom: none">
+<colgroup span="2">
+<col width="10%"></col>
+<col width="10%"></col>
+<col width="90%"></col>
+</colgroup>
+<tr>
+<th><h1 style="color:#dfc065">{L_MENU_STATS}</h1>	</th>
+<th></th>
+<th style="color:white; text-align:left; width:56 white-space:nowrap;">{L_POOL}:
+      <select name="pool" class="input" onchange="javascript:form.submit();">
+        <!-- BEGIN pool_row -->
+        <option value="{pool_row.VALUE}" {pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
+        <!-- END pool_row -->
+      </select>
+  </th>
+</tr>
+</table>
+</form> 
+<br />
+<!--  Member statistics -->
+<table class="tablebg" width="100%" border="0" cellspacing="0" cellpadding="0">
+<thead>
+<tr>
+	<th style=" width:40%; font-size :10pt; text-align: center;  color:white" colspan=5>{L_RAIDS}</th>
+	<th style=" width:20%; font-size :10pt; text-align: center; color:#77FF77" colspan=3>{L_EARNED}</th>
+	<th style=" width:20%; font-size :10pt; text-align: center; color:#FF8888" colspan=2>{L_SPENT}</th>
+	<th style=" width:20%; font-size :10pt; text-align: center; color:white" colspan=3>{L_CURRENT}</th>
+</tr>
+<tr>	  
+    <th style=" width:8%;"><a href="{O_NAME}">{L_NAME}</a></th>
+    <th style=" width:6%; text-align:center;" ><a href="{O_FIRSTRAID}">{L_FIRST}</a></th>
+    <th style=" width:6%; text-align:center;" ><a href="{O_LASTRAID}">{L_LAST}</a></th>
+    <th style=" width:4%; text-align:center;" ><a href="{O_RAIDCOUNT}">{L_ATTENDED}</a></th>
+    <th style=" width:4%; text-align:right;" ><a href="{O_EARNED}">{L_TOTAL}</a></th>
+    <th style=" width:8%; text-align:right;" ><a href="{O_EARNED_PER_DAY}">{L_PER_DAY}</a></th>
+    <th style=" width:8%; text-align:right;" ><a href="{O_EARNED_PER_RAID}">{L_PER_RAID}</a></th>
+    <th style=" width:8%; text-align:right;" ><a href="{O_SPENT}">{L_TOTAL}</a></th>
+    <th style=" width:8%; text-align:right;" ><a href="{O_SPENT_PER_DAY}">{L_PER_DAY}</a></th>
+    <th style=" width:7%; text-align:right;" ><a href="{O_SPENT_PER_RAID}">{L_PER_RAID}</a></th>
+    <th style=" width:6%; text-align:right;" ><a href="{O_LOST_TO_SPENT}">{L_SPENT}</a></th>
+    <th style=" width:6%; text-align:center;" ><a href="{O_PR}">{L_PR}</a></th>
+    <th style=" width:6%; text-align:center;" ><a href="{O_CURRENT}">{L_CURRENT}</a></th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN stats_row -->
+    <!-- IF stats_row.S_ROW_COUNT is odd -->
+    <tr class= "row1">
+    <!-- ELSE -->
+    <tr class= "row2">
+    <!-- ENDIF -->
+    <td><a style="color:{stats_row.COLORCODE}" href="{stats_row.U_VIEW_MEMBER}"><strong>{stats_row.NAME}</strong></a></td>
+    <td style="font-size :8pt; text-align: right;">{stats_row.FIRST_RAID}</td>
+    <td style="font-size :8pt; text-align: right;">{stats_row.LAST_RAID}</td>
+    <td style="font-size :8pt; text-align: right;">{stats_row.ATTENDED_COUNT}</td>
+    <td style="font-size :8pt; text-align: right;">{stats_row.ATTENDED_PERCENT}%</td>
+    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EP_PER_DAY}</td>
+    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EP_PER_RAID}</td>
+    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EP_TOTAL}</td>
+    <td style="font-size :8pt; color: red; text-align: right;">{stats_row.GP_PER_DAY}</td>
+    <td style="font-size :8pt; color: red; text-align: right;">{stats_row.GP_PER_RAID}</td>
+    <td style="font-size :8pt; color: red; text-align: right;"> {stats_row.GP_TOTAL}</td>
+    <td style="font-size :8pt; text-align: center;"><strong>{stats_row.PR}</strong></td>
+    <td style="font-size :8pt; text-align: right;"><span class="{stats_row.C_CURRENT}"><strong>{stats_row.CURRENT}</strong></span></td>
+  </tr>
+<!-- END stats_row -->
+</tbody>
+<tfoot>
+<tr>
+	<th align="left" style="color:white; font-weight:bold;" colspan=15>{STATS_FOOTCOUNT}</hd>
+</tr>
+</tfoot>
+</table>
+
+<br />
+
+<!--  Class statistics -->
+<table class="tablebg" width="100%" border="0" cellspacing="1" cellpadding="0">
+<thead>
+<tr>
+	<td class="cat" colspan="0"><h2>{L_CLASS}</h2></td>
+</tr>
+<tr>
+	<th style="color:white; font-size :9pt; text-align: left;">{L_CLASS}</th>
+	<th style="color:white; font-size :9pt; text-align: center;"># {L_MEMBERS}</th>
+	<th style="color:white; font-size :9pt; text-align: center;"># {L_LOOTS}</th>
+	<th style="color:white; font-size :9pt; text-align: center;"># {L_CLASS_FACTOR}</th>
+	<th style="color:white; font-size :9pt; text-align: center;">% {L_MEMBERS}</th>
+	<th style="color:white; font-size :9pt; text-align: center;">% {L_LOOTS}</th>
+	<th style="color:white; font-size :9pt; text-align: center;">% {L_LOOT_FACTOR}</th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN class_row -->  
+   <!-- IF class_row.S_ROW_COUNT is even -->
+   <tr class="row1">
+   <!-- ELSE -->
+   <tr class="row2">
+   <!-- ENDIF -->
+	  <td style="width:20%; white-space: nowrap;"><!-- IF class_row.S_CLASS_IMAGE_EXISTS --><img src="{class_row.CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
+	  &nbsp;<a style="white-space: nowrap; color:{class_row.COLORCODE}" href="{class_row.U_LIST_MEMBERS}"><strong>{class_row.CLASS_NAME}</strong></a>   </span></td>
+	  <td style="width:7.5%; " align="center" >{class_row.CLASS_COUNT}</td>
+	  <td style="width:7.5%; " align="center" >{class_row.LOOT_COUNT}</td>
+	  <td style="width:7.5%; " align="center" >{class_row.CLASS_FACTOR}</td>
+	  <td style="width:7.5%; " align="left" >{class_row.CLASS_BAR}</td>
+	  <td style="width:7.5%; " align="left" >{class_row.CLASS_DROP_PCT}</td>
+	  <td style="width:7.5%; " align="center" ><span class= "{class_row.C_LOOT_FACTOR}">{class_row.LOOT_FACTOR}</span></td>
+  </tr>
+<!-- END class_row -->
+</tbody>
+<tfoot>
+<tr>
+	<th style="color:white; font-size :9pt; text-align: left;"></th>
+	<th style="color:white; font-size :9pt; text-align: center;">{TOTAL_MEMBERS}</th>
+	<th style="color:white; font-size :9pt; text-align: center;">{TOTAL_DROPS}</th>
+	<th style="color:white; font-size :9pt; text-align: center;"></th>
+	<th style="color:white; font-size :9pt; text-align: center;"></th>
+	<th style="color:white; font-size :9pt; text-align: center;"></th>
+	<th style="color:white; font-size :9pt; text-align: center;"></th>
+</tr>
+</tfoot>
+</table>
+<br />

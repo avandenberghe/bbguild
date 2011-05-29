@@ -23,6 +23,86 @@ function check_form()
     
     return true;
 }
+
+
+
+/*  make a XMLHTTP Request object */
+function GetXmlHttpObject() 
+{ 
+	var xmlhttp=false;	
+	
+	try
+	{ 
+		//  IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}
+	catch(e)	
+	{	// activex code for IE6, IE5
+		try
+		{			
+			xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		catch(e)
+		{
+			try
+			{
+				xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+			}
+			catch(e1)
+			{
+				xmlhttp=false;
+			}
+		}
+	}
+	return xmlhttp;
+}
+
+/* ajax function to find faction array based on game */ 
+function Getfaction(game_id)
+{
+   xmlhttp = GetXmlHttpObject();
+   if (xmlhttp == null)
+   {
+	   alert("{LA_ALERT_OLDBROWSER}");
+	   return;  
+   }
+    var strURL="{UA_FINDFACTION}&game_id="+game_id;
+    xmlhttp.onreadystatechange=stateChanged;
+    xmlhttp.open("GET", strURL, true);
+    // send to server
+    xmlhttp.send(null);
+}
+
+
+/* called from Getfaction when state changed */
+function stateChanged()
+{
+	if (xmlhttp.readyState==4) //request complete
+	{
+		if (xmlhttp.status == 200)
+		{
+			//receive xml
+			xmlDoc=xmlhttp.responseXML;
+			var factionlist = xmlDoc.getElementsByTagName('factionlist')[0];
+			var factions = factionlist.getElementsByTagName("faction")
+			//now modify html : first remove old select options
+			var rsel = document.getElementById('faction'); 
+			rsel.options.length = 0; 
+			for (var i = 0; i < factions.length; i++)
+			{
+				var faction = factions[i]; 
+				var factionid = faction.getElementsByTagName("faction_id")[0].firstChild.nodeValue;
+				var factionname = faction.getElementsByTagName("faction_name")[0].firstChild.nodeValue;
+			    // add the options
+			    rsel.options[i] = new Option(factionname,factionid, true, false); 
+			}
+		}
+		else 
+		{
+   	   		alert("xx {LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+	 	}
+	}
+}
 //]]>
 
 </script>
@@ -40,6 +120,17 @@ function check_form()
     <!-- ELSE -->
 <legend>{L_EDIT_RACE_TITLE}</legend>    
         <!-- ENDIF -->
+    
+    <dl>
+	    <dt><label for="game_id">{L_GAME}:</label><br /> {L_GAME_CLASSRACEUPDATE_EXPLAIN}</dt>
+	  		<dd>
+	  		<select name="game_id" class="input" onChange="return Getfaction(this.value)">
+	       <!-- BEGIN game_row -->
+	       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
+	        <!-- END game_row -->
+	      </select></dd>
+	 </dl>
+	 
 	<dl>
 		<dt><label for="faction">{L_FACTION}:</label></dt>
 		<dd>
@@ -64,7 +155,7 @@ function check_form()
 	
 	
 	<dl>
-		<dt><label for="image">{L_RACE_IMAGE}:</label><br/>{L_RACE_IMAGE_EXPLAIN}</dt>
+		<dt><label>{L_RACE_IMAGE}:</label><br/>{L_RACE_IMAGE_EXPLAIN}</dt>
 		<dd>
 			<table style="border-color:#FFFFFF">
 			<tr>

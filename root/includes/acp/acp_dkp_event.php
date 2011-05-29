@@ -326,6 +326,8 @@ class acp_dkp_event extends bbDKP_Admin
 						}
 					}
 				}	
+				
+				/* if bossprogress is installed */
 				if (isset($config['bbdkp_bp_version']))
 				{
 					if (isset($this->event))
@@ -336,7 +338,29 @@ class acp_dkp_event extends bbDKP_Admin
 					{
 						$s_zonelist_options = '<option value="--" selected="selected">--</option>';
 					}
-	
+				    $games = array(
+	                    'wow'        => $user->lang['WOW'], 
+	                    'lotro'      => $user->lang['LOTRO'], 
+	                    'eq'         => $user->lang['EQ'], 
+	                    'daoc'       => $user->lang['DAOC'], 
+	                    'vanguard' 	 => $user->lang['VANGUARD'],
+	                    'eq2'        => $user->lang['EQ2'],
+	                    'warhammer'  => $user->lang['WARHAMMER'],
+	                    'aion'       => $user->lang['AION'],
+	                    'FFXI'       => $user->lang['FFXI'],
+	                	'rift'       => $user->lang['RIFT'],
+	                	'swtor'      => $user->lang['SWTOR']
+	                );
+	                $installed_games = array();
+	                foreach($games as $gameid => $gamename)
+	                {
+	                	//add value to dropdown when the game config value is 1
+	                	if ($config['bbdkp_games_' . $gameid] == 1)
+	                	{
+	                		$installed_games[] = $gameid; 
+	                	} 
+	                }
+	                
 					// list of zones
 					$sql_array = array(
 					'SELECT'	=>	' z.id, l.name ', 
@@ -346,8 +370,9 @@ class acp_dkp_event extends bbDKP_Admin
 								),
 					'WHERE'		=> " z.id = l.attribute_id 
 									AND l.attribute='zone' 
+									AND l.game_id = z.game_id 
 									AND l.language= '" . $config['bbdkp_lang'] ."' 
-									AND game= '" . $config['bbdkp_default_game'] . "'",
+									AND " . $db->sql_in_set('l.game_id', $installed_games), 
 					'ORDER_BY'	=> 'sequence desc, id desc ',
 					);
 					
