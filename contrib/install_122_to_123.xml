@@ -106,7 +106,7 @@
 			<file from="root/includes/bbdkp/block/*.*" to="includes/bbdkp/block/*.*"/>
 			<file from="root/includes/bbdkp/module/*.*" to="includes/bbdkp/module/*.*"/>
 			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>
-			<file from="root/includes/language/en/mods/*.*" to="includes/language/en/mods/*.*"/>
+			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
 			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
 			<file from="root/styles/prosilver/template/dkp/dkpmain.html" to="styles/prosilver/template/dkp/dkpmain.html"/>
 			<file from="root/styles/prosilver/template/dkp/module/*.*" to="styles/prosilver/template/dkp/module/*.*"/>
@@ -125,20 +125,20 @@
 			<file name="viewmember.php"/>
 			<file name="viewnews.php"/>
 			<file name="viewraid.php"/>
-			<file name="root/adm/style/dkp/acp_addnews.html"/>
-			<file name="root/adm/style/dkp/list_addnews.html"/>
-			<file name="root/includes/acp/acp_dkp_news.php"/>
-			<file name="root/includes/acp/info/acp_dkp_news.php"/>
-			<file name="root/includes/bbdkp/*.*"/>
-			<file name="root/includes/bbdkp"/>
-			<file name="root/styles/prosilver/template/dkp/dkpmenu.html"/>
-			<file name="root/styles/prosilver/template/dkp/leaderboard.html"/>
-			<file name="root/styles/prosilver/template/dkp/listevents.html"/>
-			<file name="root/styles/prosilver/template/dkp/listitems.html"/>
-			<file name="root/styles/prosilver/template/dkp/listmembers.html"/>
-			<file name="root/styles/prosilver/template/dkp/listraids.html"/>
-			<file name="root/styles/prosilver/template/dkp/roster.html"/>
-			<file name="root/styles/prosilver/template/dkp/viewevent.html"/>
+			<file name="adm/style/dkp/acp_addnews.html"/>
+			<file name="adm/style/dkp/list_addnews.html"/>
+			<file name="includes/acp/acp_dkp_news.php"/>
+			<file name="includes/acp/info/acp_dkp_news.php"/>
+			<file name="includes/bbdkp/*.*"/>
+			<file name="includes/bbdkp"/>
+			<file name="styles/prosilver/template/dkp/dkpmenu.html"/>
+			<file name="styles/prosilver/template/dkp/leaderboard.html"/>
+			<file name="styles/prosilver/template/dkp/listevents.html"/>
+			<file name="styles/prosilver/template/dkp/listitems.html"/>
+			<file name="styles/prosilver/template/dkp/listmembers.html"/>
+			<file name="styles/prosilver/template/dkp/listraids.html"/>
+			<file name="styles/prosilver/template/dkp/roster.html"/>
+			<file name="styles/prosilver/template/dkp/viewevent.html"/>
 			<file name="root/styles/prosilver/template/dkp/viewmember.html"/>
 			<file name="root/styles/prosilver/template/dkp/viewnews.html"/>
 			<file name="root/styles/prosilver/template/dkp/viewraid.html"/>
