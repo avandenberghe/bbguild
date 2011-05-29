@@ -10,7 +10,7 @@ function check_form()
 {
     if (document.post.member_name.value.length < 2)
     {
-        alert('{MSG_NAME_EMPTY}');
+        alert('{LA_MSG_NAME_EMPTY}');
         return false;
     }
     return true;
@@ -251,6 +251,23 @@ function classracestateChanged()
    </dd>
  </dl>
   
+  <!-- IF S_HAS_ARMORY -->
+  <dl>
+    <dt><label>{L_ARMORY_URL}:</label></dt>
+    <dd>
+		<dd><a href="{MEMBER_URL}" alt="{MEMBER_NAME}" />
+		<!-- IF S_MEMBER_PORTRAIT_EXISTS -->
+		<img src="{MEMBER_PORTRAIT}" alt="image" width="64" height="64"></img>
+		<!-- ENDIF -->
+		</a>
+		<input type="text" name="member_armorylink" size="80%" maxlength="300" value="{MEMBER_URL}" class="input" />
+		<br/>
+		<input type="submit" name="generate_armorylink" value="{L_GENERATE_ARMORY_URL}" class="button2" />
+		</dd>
+		
+   </dd>
+  </dl>
+ <!-- ENDIF -->
     <dl>
     <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
     

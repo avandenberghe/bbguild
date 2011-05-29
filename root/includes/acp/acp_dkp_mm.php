@@ -29,6 +29,7 @@ class acp_dkp_mm extends bbDKP_Admin
 {
 	var $u_action;
 	var $member;
+	var $old_member;
 	
 	public function main($id, $mode) 
 	{
@@ -269,15 +270,17 @@ class acp_dkp_mm extends bbDKP_Admin
 				
 				$submit	 = (isset($_POST['add'])) ? true : false;
 				$update	 = (isset($_POST['update'])) ? true : false;
+				$generate_armorylink = (isset($_POST['generate_armorylink'])) ? true : false; 
 				$delete	 = (isset($_GET['delete'])) ? true : false;	
-				if ( $submit || $update)
+				
+				if ( $submit || $update || $generate_armorylink)
 				{
 					if (!check_form_key('mm_addmember'))
 					{
 						trigger_error('FORM_INVALID');
 					}
 				}
-
+				
 				//
 				// add guildmember handler 
 				if ($submit)
@@ -344,7 +347,8 @@ class acp_dkp_mm extends bbDKP_Admin
 												
 					$gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
 					$achievpoints = 0; 
-					$url = '';
+					
+					$url = utf8_normalize_nfc(request_var('member_armorylink', '', true));  ;
 					
 					$phpbb_user_id = request_var('phpbb_user_id', 0); 
 					
@@ -362,13 +366,19 @@ class acp_dkp_mm extends bbDKP_Admin
 						
 				}	
 
+				//get member_id
+				$member_id =  request_var('hidden_member_id', 0); 
+				if($member_id == 0)
+				{
+					$member_id =  request_var(URI_NAMEID, 0);
+				}
+				
 				//
 				// update guild member handler 
 				//
 				if ($update)
 				{
 
-					$member_id =  request_var('hidden_member_id', 0); 
 					// old data array
 					$sql = 'SELECT *  FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id=' . $member_id;
 					$result = $db->sql_query($sql);
@@ -483,6 +493,87 @@ class acp_dkp_mm extends bbDKP_Admin
 					trigger_error($success_message . $link);
 					
 					}	
+					
+					
+				// make armory link for existing members (only for aion/wow)
+				if($generate_armorylink)
+				{
+					
+					$sql = 'SELECT *  FROM ' . MEMBER_LIST_TABLE . ' m, ' . GUILD_TABLE . ' g WHERE g.id = m.member_guild_id AND member_id=' . (int) $member_id;
+					$result = $db->sql_query($sql);
+					while ( $row = $db->sql_fetchrow($result) )
+					{
+						$this->old_member = array(
+							'member_name'		=> $row['member_name'],
+							'member_level'		=> $row['member_level'],
+							'game_id'			=> $row['game_id'],
+							'member_gender_id'	=> $row['member_gender_id'],
+							'member_class_id'	=> $row['member_class_id'],
+							'member_race_id'	=> $row['member_race_id'],
+							'region'			=> $row['region'], 
+							'realm'				=> $row['realm'],
+							);
+					}
+					$db->sql_freeresult($result);
+					// setting up the links
+					
+					switch ($this->old_member['game_id'])
+					{
+						case 'wow':
+						   if($this->old_member['member_level'] <= "59")
+						   {
+								$maxlvlid ="wow-default";
+						   }
+						   elseif($this->old_member['member_level'] <= 69)
+						   {
+								$maxlvlid ="wow";
+						   }
+						   elseif($this->old_member['member_level'] <= 79)
+						   {
+								$maxlvlid ="wow-70";
+						   }
+						   else
+						   {
+								// level 85 is not yet iconified
+								$maxlvlid ="wow-80";
+						   }
+							
+				       	   $memberportraiturl =  $phpbb_root_path .'images/roster_portraits/'. $maxlvlid .'/' . $this->old_member['member_gender_id'] . '-' . 
+				       	   $this->old_member['member_race_id'] . '-' . $this->old_member['member_class_id'] . '.gif';
+				        		
+				        	switch ($this->old_member['region'])
+				        	{
+								case 'EU': 
+				        	        $site='http://eu.battle.net/wow/en/character/';
+				        	        break;
+				        	    case 'US': 
+				        	        $site='http://us.battle.net/wow/en/character/';
+				        	        break;
+				        	}
+				        	$memberarmoryurl = $site . $this->old_member['realm'] . '/' .  $this->old_member['member_name'] . '/simple' ;
+				        	
+							
+							
+							break;
+				             
+				      	 case 'aion': 
+					       	$memberportraiturl =  $phpbb_root_path . 'images/roster_portraits/aion/' . $this->old_member['member_race_id'] . '_' . $this->old_member['member_gender_id'] . '.jpg';
+					        $memberarmoryurl = $this->old_member['member_armory_url']; 
+				               break;     		        
+				            default:
+				               $memberportraiturl='';
+				               $memberarmoryurl= '';
+				               break;
+					}
+					
+		        	$data = array(
+					    'member_armory_url'     => $memberarmoryurl,
+					    'member_portrait_url'   => $memberportraiturl,
+					);
+					$sql = 'UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE member_id=' . (int) $member_id;
+					$db->sql_query($sql);
+					
+				}
 
 				//
 				// delete guildmember handler 
@@ -494,8 +585,9 @@ class acp_dkp_mm extends bbDKP_Admin
 						if (confirm_box(true))
 						{
 							// recall hidden vars
-							$del_member = request_var('hidden_member_id', 0);
-							$del_membername = utf8_normalize_nfc(request_var('hidden_member_name','',true));
+							$del_member = request_var('del_member_id', 0);
+							$del_membername = utf8_normalize_nfc(request_var('del_member_name','',true));
+							
 							$sql = 'SELECT * FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id= ' . (int) $del_member; 
 				
 							$result = $db->sql_query($sql);
@@ -540,22 +632,22 @@ class acp_dkp_mm extends bbDKP_Admin
 						else
 						{
 							
-							$s_hidden_fields = build_hidden_fields(array(
-								'delete'			=> true,
-								'hidden_member_id'	=> request_var('member_id', 0),
-								)
-							);
-							
-						    $sql = "SELECT member_name FROM " . MEMBER_LIST_TABLE . ' where member_id = ' . request_var('member_id', 0);
+						    $sql = "SELECT member_name FROM " . MEMBER_LIST_TABLE . ' where member_id = ' . $member_id ;
 						    $result = $db->sql_query($sql);
 							$member_name = $db->sql_fetchfield('member_name', 1, $result); 
 							$db->sql_freeresult($result);
+
+							$s_hidden_fields = build_hidden_fields(array(
+								'delete'				=> true,
+								'del_member_id'			=> $member_id,
+								'del_member_name'		=> $member_name,
+								)
+							);
 
 							confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_MEMBER'], $member_name) , $s_hidden_fields);
 						}
 						
 						$S_ADD = true;
-
 						
 					}
 
@@ -563,7 +655,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					 * fill template 
 					 */
 					
-					if ( (isset($_GET[URI_NAMEID])) && (strval($_GET[URI_NAMEID] != '0') ))
+					if (isset($member_id))
 					{
 						// edit mode
 						// build member array if clicked on name in listing
@@ -597,7 +689,7 @@ class acp_dkp_mm extends bbDKP_Admin
 							AND m.game_id = r.game_id
 							AND m.member_race_id = r.race_id 
 							AND m.member_guild_id = g.id 
-							AND member_id=" . request_var(URI_NAMEID,0) ,
+							AND member_id = " . (int) $member_id ,
 							
 						);
 
@@ -633,8 +725,11 @@ class acp_dkp_mm extends bbDKP_Admin
 								'member_guild_name'		=> $row['guild_name'],	
 								'member_guild_id'		=> $row['guild_id'], 
 								'member_guild_realm'	=> $row['realm'],  
-								'member_guild_region'	=> $row['region'], 
+								'member_guild_region'	=> $row['region'],
+								'member_armory_url'		=> $row['member_armory_url'],  
+								'member_portrait_url'	=> $row['member_portrait_url'], 
 								'phpbb_user_id'			=> $row['phpbb_user_id'],
+							
 								'game_id'				=> $row['game_id'], 
 								'colorcode'				=> $row['colorcode'], 
 								'race_image' 			=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '', 
@@ -869,7 +964,6 @@ class acp_dkp_mm extends bbDKP_Admin
 							 $option = ( !empty($row['class_name']) ) ? $row['class_name'] . " 
 							 Level ". $row['class_min_level'] . "+" : '(None)';
 						}
-				
 						
 						if (isset ($this->member))
 						{
@@ -885,7 +979,6 @@ class acp_dkp_mm extends bbDKP_Admin
 							'VALUE' => $row['class_id'],
 							'SELECTED' => '',
 							'OPTION'   => $option ));
-						
 						}
 						
 					}
@@ -983,7 +1076,12 @@ class acp_dkp_mm extends bbDKP_Admin
 						'MALE_CHECKED'			=> ($genderid == '0') ? ' checked="checked"' : '' , 
 						'FEMALE_CHECKED'		=> ($genderid == '1') ? ' checked="checked"' : '' , 
 						'MEMBER_COMMENT'		=> isset($this->member) ? $this->member['member_comment'] : '',
-
+					
+						'S_HAS_ARMORY'			=>  isset($this->member) ? ($this->member['game_id'] == 'wow' || $this->member['game_id'] == 'aion'  ? true : false) : false, 
+						'MEMBER_URL'			=>  isset($this->member) ? $this->member['member_armory_url'] : '',
+						'MEMBER_PORTRAIT'		=>  isset($this->member) ? $this->member['member_portrait_url'] : '',
+						'S_MEMBER_PORTRAIT_EXISTS'  => (strlen( $this->member['member_portrait_url'] ) > 1) ? true : false,	
+					
 						'COLORCODE' 			=> ($this->member['colorcode'] == '') ? '#123456' : $this->member['colorcode'],
                   		'CLASS_IMAGE' 			=> $this->member['class_image'],  
 						'S_CLASS_IMAGE_EXISTS'  => (strlen( $this->member['class_image'] ) > 1) ? true : false, 
