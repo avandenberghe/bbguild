@@ -783,6 +783,7 @@ $versions = array(
 			array($table_prefix . 'bbdkp_factions', 'game_id' , array('VCHAR', '')),
 			array($table_prefix . 'bbdkp_language', 'game_id' , array('VCHAR', '')),
 			array($table_prefix . 'bbdkp_memberlist', 'game_id' , array('VCHAR', '')),
+			array($table_prefix . 'bbdkp_memberlist', 'member_portrait_url' , array('VCHAR', '')),
 		),
 
          'custom' => array(

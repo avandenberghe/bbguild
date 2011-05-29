@@ -37,18 +37,6 @@ $games = array(
 	'swtor'      => $user->lang['SWTOR']
 );
 
-
-$mode = $config['bbdkp_roster_layout'];
-
-
-$genderid = array(
-0   => $user->lang['MALE'], 
-1   => $user->lang['FEMALE'],
-);
-
-$game_id = request_var('displaygame', '');
-
-
 $installed_games = array();
 foreach($games as $id => $gamename)
 {
@@ -59,35 +47,56 @@ foreach($games as $id => $gamename)
 	
 }
 
+$game_id = request_var('displaygame', '');
+
+// dump gamelist to template
+foreach ($installed_games as $id => $gamename)
+{
+	$template->assign_block_vars ( 'game_row', array (
+		'VALUE' => $id, 
+		'SELECTED' => ($id == $game_id) ? ' selected="selected"' : '',
+		'OPTION' => $gamename));
+}
+
+$template->assign_vars(array(
+    'GUILDNAME'			=>  $config['bbdkp_guildtag'],
+	'S_MULTIGAME'		=> (sizeof($installed_games) > 1) ? true:false, 
+	'S_DISPLAY_ROSTER' => true,
+	'F_ROSTER'			=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=roster' ), 
+));
+
 if (array_key_exists ( $game_id , $installed_games))
 {
 	//show chosen game
-	displayroster($game_id, $mode);
+	displayroster($game_id);
 }
 else 
 {
 	//show first game
 	foreach($installed_games as $id => $gamename)
 	{
-		displayroster($id, $mode);
+		displayroster($id);
 		break 1;	
 	}
 }
 
-
-function displayroster($game_id, $mode)
+/*
+ * Displays the roster
+ */
+function displayroster($game_id)
 {
+
 	global $phpbb_root_path, $phpEx, $config, $template, $db, $user;
 	$totalmembers = 0; 
 	
+	$mode = $config['bbdkp_roster_layout'];
 	$current_order = array();
 
-	//by class or by listing
-	// class mode only for wow or aion...
-	if($mode == '1' && ($game_id=='wow' || $game_id =='aion') )
+	//by class
+	if($mode == '1')
 	{
 		 //class
-	 	 $result = get_classes();
+	 	 $result = get_classes($game_id);
 		 $classes = array();
          while ( $row = $db->sql_fetchrow($result) )
          {
@@ -113,17 +122,23 @@ function displayroster($game_id, $mode)
             
             while ( $row = $db->sql_fetchrow($result))
             {
-    
-                
-        		$template->assign_block_vars('class.members_row', array(
+				$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+
+            	$template->assign_block_vars('class.members_row', array(
+        			'COLORCODE'		=> $row['colorcode'],
         			'CLASS'			=> $row['class_name'],
         			'NAME'			=> $row['member_name'],
         			'RACE'			=> $row['race_name'],
         			'GNOTE'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
              		'LVL'			=> $row['member_level'],
         		    'ARMORY'		=> $row['member_armory_url'],  
-        			'PORTRAIT'		=> $memberportraiturl,		
+        			'PORTRAIT'		=> $phpbb_root_path. $row['member_portrait_url'],		
         		    'ACHIEVPTS'		=> $row['member_achiev'], 
+					'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
+					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
+					'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
+					'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 
+            	
         		));
         		$totalmembers++;
         		$classmembers++;
@@ -140,10 +155,6 @@ function displayroster($game_id, $mode)
 		//listing format
 		
 		$result = get_listingresult($game_id, 'listing', $current_order);
-		
-		
-		
-		
 	
 	}
 	
@@ -167,15 +178,14 @@ function displayroster($game_id, $mode)
 	
 	// add template constants
 	$template->assign_vars(array(
-	    'GUILDNAME'			=>  $config['bbdkp_guildtag'],
 	    'U_LIST_MEMBERS0'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][0]),
 	    'U_LIST_MEMBERS1'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][1]),
 	    'U_LIST_MEMBERS2'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][2]),
 	    'U_LIST_MEMBERS3'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][3]),
 	    'U_LIST_MEMBERS4'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][4]),
-	    'S_RSTYLE'		    => $mode , 
+	    'S_RSTYLE'		    => $mode,
+		'S_GAME'		    => $game_id, 
 	    'S_SHOWACH'			=> $show_achiev, 
-		'S_DISPLAY_ROSTER' => true,
 	    'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . $totalmembers,
 	));
 	
@@ -241,10 +251,9 @@ function get_listingresult($game_id, $mode, &$current_order, $classid=0)
 
 	$sql_array = array();
 	$sql_array['SELECT'] =  'm.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name, 
-           				 m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url,
-           				 r.rank_prefix , r.rank_name, r.rank_suffix,  
-           				 g.name, g.realm, g.region, 
-           				 c1.name as class_name, c.colorcode '; 
+           				 m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url, m.member_portrait_url, 
+           				 r.rank_prefix , r.rank_name, r.rank_suffix, e.image_female_small, e.image_male_small,
+           				 g.name, g.realm, g.region, c1.name as class_name, c.colorcode, c.imagename  '; 
 	
 	 $sql_array['FROM'] = array(
                MEMBER_LIST_TABLE    =>  'm',
@@ -296,7 +305,7 @@ function get_listingresult($game_id, $mode, &$current_order, $classid=0)
 /*
  * gets class array
  */
-function get_classes()
+function get_classes($game_id)
 {
 	global $db, $config; 
 	$sql_array = array(
@@ -312,6 +321,7 @@ function get_classes()
        				 AND r.guild_id = m.member_guild_id 
        				 AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
        				 AND c1.attribute_id =  c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class' 
+       				 AND (c.game_id = '" . $game_id . "')  
        				 AND c1.game_id=c.game_id
        				 
        				  ", 
