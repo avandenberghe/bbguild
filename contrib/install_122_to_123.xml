@@ -104,62 +104,65 @@
 	</header>
 	
 	<action-group>
+		<delete>
+			<file name="listevents.php"/>
+			<file name="listitems.php"/>
+			<file name="listmembers.php"/>
+			<file name="listraids.php"/>
+			<file name="roster.php"/>
+			<file name="stats"/>
+			<file name="viewevent.php"/>
+			<file name="viewitem.php"/>
+			<file name="viewmember.php"/>
+			<file name="viewnews.php"/>
+			<file name="viewraid.php"/>
+			<file name="root/adm/style/dkp/acp_addnews.html"/>
+			<file name="root/adm/style/dkp/list_addnews.html"/>
+			<file name="root/includes/acp/acp_dkp_news.php"/>
+			<file name="root/includes/acp/info/acp_dkp_news.php"/>
+			<file name="root/includes/bbdkp/*.*"/>
+			<file name="root/includes/bbdkp"/>
+			<file name="root/styles/prosilver/template/dkp/dkpmenu.html"/>
+			<file name="root/styles/prosilver/template/dkp/leaderboard.html"/>
+			<file name="root/styles/prosilver/template/dkp/listevents.html"/>
+			<file name="root/styles/prosilver/template/dkp/listitems.html"/>
+			<file name="root/styles/prosilver/template/dkp/listmembers.html"/>
+			<file name="root/styles/prosilver/template/dkp/listraids.html"/>
+			<file name="root/styles/prosilver/template/dkp/roster.html"/>
+			<file name="root/styles/prosilver/template/dkp/viewevent.html"/>
+			<file name="root/styles/prosilver/template/dkp/viewmember.html"/>
+			<file name="root/styles/prosilver/template/dkp/viewnews.html"/>
+			<file name="root/styles/prosilver/template/dkp/viewraid.html"/>
+			
+		</delete>
+		
 		<copy>
-			<file from="root/configdkp.php" to="configdkp.php"/>
+			<file from="root/dkp.php" to="dkp.php"/>
 			<file from="root/portal.php" to="portal.php"/>
-			<file from="root/roster.php" to="roster.php"/>			
-			<file from="root/olddkpupdate/*.*" to="olddkpupdate/*.*"/>			
-			<file from="root/adm/dkp/acp_editraid.html" to="adm/dkp/acp_editraid.html"/>
-			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>
-			<file from="root/includes/acp/acp_dkp.php" to="includes/acp/acp_dkp.php"/>
-			<file from="root/includes/acp/acp_dkp_item.php" to="includes/acp/acp_dkp_item.php"/>			
-			<file from="root/includes/acp/acp_dkp_mm.php" to="includes/acp/acp_dkp_mm.php"/>
-			<file from="root/includes/acp/acp_dkp_raid.php" to="includes/acp/acp_dkp_raid.php"/>
+			<file from="root/install/*.*" to="install/*.*"/>
+			<file from="root/adm/findclassrace.php" to="adm/findclassrace.php"/>
+			<file from="root/adm/findfaction.php" to="adm/findfaction.php"/>
+			<file from="root/adm/mods/bbdkp_check_version.php" to="adm/mods/bbdkp_check_version"/>
+			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
+			<file from="root/images/class_images/rift*.*" to="images/class_images/rift*.*"/>
+			<file from="root/images/class_images/swtor*.*" to="images/class_images/swtor*.*"/>
+			<file from="root/images/race_images/rift*.*" to="images/race_images/rift*.*"/>
+			<file from="root/images/roster_classes/rift*.*" to="images/roster_classes/rift*.*"/>
+			<file from="root/images/roster_classes/swtor*.*" to="images/roster_classes/swtor*.*"/>
+			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
 			<file from="root/includes/bbdkp/bbdkpfunctions.php" to="includes/bbdkp/bbdkpfunctions.php"/>
+			<file from="root/includes/bbdkp/bbdkp.php" to="includes/bbdkp/bbdkp.php"/>
+			<file from="root/includes/bbdkp/constants_bbdkp.php" to="includes/bbdkp/constants_bbdkp.php"/>
+			<file from="root/includes/bbdkp/block/*.*" to="includes/bbdkp/block/*.*"/>
+			<file from="root/includes/bbdkp/module/*.*" to="includes/bbdkp/module/*.*"/>
+			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>
+			<file from="root/includes/language/*.*" to="includes/language/*.*"/>
 			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
-			<file from="root/styles/prosilver/template/dkp/dkpmenu.html" to="styles/prosilver/template/dkp/dkpmenu.html"/>			
-			<file from="root/styles/prosilver/template/dkp/leaderboard.html" to="styles/prosilver/template/dkp/leaderboard.html"/>
-			<file from="root/styles/prosilver/template/dkp/news_body.html" to="styles/prosilver/template/dkp/news_body.html"/>
+			<file from="root/styles/prosilver/template/dkp/dkpmain.html" to="styles/prosilver/template/dkp/dkpmain.html"/>
+			<file from="root/styles/prosilver/template/dkp/module/*.*" to="styles/prosilver/template/dkp/module/*.*"/>
+			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>			
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
-
-	<open src="config.php">
-			<edit>
-				<comment lang="en"><![CDATA[remove bbdkp kill switch ]]></comment>
-				<comment lang="fr"><![CDATA[supprime interrupteur]]></comment>
-				<comment lang="de"><![CDATA[entfernen Schalter ]]></comment>
-				<find><![CDATA[@define('EMED_BBDKP', true);
-        ]]></find>
-				<remove><![CDATA[@define('EMED_BBDKP', true);
-        ]]></remove>
-        	</edit>
-		</open>
-		
-		<open src="common.php">
-			<edit>
-				<comment lang="en"><![CDATA[change preloader]]></comment>
-				<comment lang="fr"><![CDATA[change code de chargement]]></comment>
-				<comment lang="de"><![CDATA[entfernen startkode ]]></comment>
-				<find><![CDATA[// bbDdp
-if(@defined("EMED_BBDKP")) 
-{
-	require($phpbb_root_path .  'includes/bbdkp/constants_bbdkp.' . $phpEx);
-	require($phpbb_root_path .  'includes/bbdkp/bbdkpfunctions.'  . $phpEx);
-	require($phpbb_root_path .  'includes/bbdkp/bbdkp.' . $phpEx); 
-}]]></find>
-				<action type="replace-with"><![CDATA[// bbDKP
-if (file_exists($phpbb_root_path . 'configdkp.' . $phpEx))
-{
-	require($phpbb_root_path . 'configdkp.' . $phpEx);
-}
-if(@defined("EMED_BBDKP")) 
-{
-	require($phpbb_root_path .  'includes/bbdkp/constants_bbdkp.' . $phpEx);
-	require($phpbb_root_path .  'includes/bbdkp/bbdkpfunctions.'  . $phpEx);
-	require($phpbb_root_path .  'includes/bbdkp/bbdkp.' . $phpEx); 
-}]]></action>
-        	</edit>
-		</open>	
 
 		<php-installer><![CDATA[install/index.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /docs/install.html
