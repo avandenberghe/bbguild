@@ -132,6 +132,7 @@ function displayroster($game_id)
         			'GNOTE'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
              		'LVL'			=> $row['member_level'],
         		    'ARMORY'		=> $row['member_armory_url'],  
+            		'PHPBBUID'		=> get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),
         			'PORTRAIT'		=> $phpbb_root_path. $row['member_portrait_url'],		
         		    'ACHIEVPTS'		=> $row['member_achiev'], 
 					'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
@@ -155,6 +156,28 @@ function displayroster($game_id)
 		//listing format
 		
 		$result = get_listingresult($game_id, 'listing', $current_order);
+		 while ( $row = $db->sql_fetchrow($result))
+            {
+				$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+
+            	$template->assign_block_vars('members_row', array(
+        			'COLORCODE'		=> $row['colorcode'],
+        			'CLASS'			=> $row['class_name'],
+        			'NAME'			=> $row['member_name'],
+        			'RACE'			=> $row['race_name'],
+        			'GNOTE'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
+             		'LVL'			=> $row['member_level'],
+        		    'ARMORY'		=> $row['member_armory_url'],  
+            		'PHPBBUID'		=> get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),  
+        			'PORTRAIT'		=> $phpbb_root_path. $row['member_portrait_url'],		
+        		    'ACHIEVPTS'		=> $row['member_achiev'], 
+					'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
+					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
+					'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
+					'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 
+            	));
+            }
+            	
 	
 	}
 	
@@ -176,13 +199,20 @@ function displayroster($game_id)
 	}
 	$show_achiev = $config['bbdkp_show_achiev'];
 	
+	if (isset($current_order) && sizeof ($current_order) > 0)
+	{
+		$template->assign_vars(array(
+			'U_LIST_MEMBERS0'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][0]),
+		    'U_LIST_MEMBERS1'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][1]),
+		    'U_LIST_MEMBERS2'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][2]),
+		    'U_LIST_MEMBERS3'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][3]),
+		    'U_LIST_MEMBERS4'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][4]),
+		));
+		
+	}
+	
 	// add template constants
 	$template->assign_vars(array(
-	    'U_LIST_MEMBERS0'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][0]),
-	    'U_LIST_MEMBERS1'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][1]),
-	    'U_LIST_MEMBERS2'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][2]),
-	    'U_LIST_MEMBERS3'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][3]),
-	    'U_LIST_MEMBERS4'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][4]),
 	    'S_RSTYLE'		    => $mode,
 		'S_GAME'		    => $game_id, 
 	    'S_SHOWACH'			=> $show_achiev, 
@@ -243,6 +273,13 @@ function removeFromEnd($string, $stringToRemove)
     return $out;
 }
 
+function get_phpbbuid($userid)
+{
+
+	
+}
+
+
 function get_listingresult($game_id, $mode, &$current_order, $classid=0)
 {
 	global $db, $config; 
@@ -253,7 +290,7 @@ function get_listingresult($game_id, $mode, &$current_order, $classid=0)
 	$sql_array['SELECT'] =  'm.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name, 
            				 m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url, m.member_portrait_url, 
            				 r.rank_prefix , r.rank_name, r.rank_suffix, e.image_female_small, e.image_male_small,
-           				 g.name, g.realm, g.region, c1.name as class_name, c.colorcode, c.imagename  '; 
+           				 g.name, g.realm, g.region, c1.name as class_name, c.colorcode, c.imagename, m.phpbb_user_id, u.username, u.user_colour  '; 
 	
 	 $sql_array['FROM'] = array(
                MEMBER_LIST_TABLE    =>  'm',
@@ -263,7 +300,10 @@ function get_listingresult($game_id, $mode, &$current_order, $classid=0)
                RACE_TABLE           =>  'e',
                BB_LANGUAGE			 =>  'e1');
 
-        $sql_array['LEFT_JOIN'] = array(       
+        $sql_array['LEFT_JOIN'] = array(    
+        	 array(
+				 'FROM'  => array(USERS_TABLE => 'u'),
+				   'ON'    => 'u.user_id = m.phpbb_user_id '), 
 	        array(
 	            'FROM'  => array(BB_LANGUAGE => 'c1'),
 	            'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'  and c1.game_id = c.game_id "  
@@ -276,7 +316,7 @@ function get_listingresult($game_id, $mode, &$current_order, $classid=0)
            				 AND g.id = m.member_guild_id
            				 AND r.guild_id = m.member_guild_id  
            				 AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
-           				 AND m.game_id = " . (int) $game_id . "
+           				 AND m.game_id = '" . $db->sql_escape($game_id) . "'
            				 AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "' AND e1.attribute = 'race' and e1.game_id = e.game_id";
 	
 	$sort_order = array(
@@ -321,7 +361,7 @@ function get_classes($game_id)
        				 AND r.guild_id = m.member_guild_id 
        				 AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
        				 AND c1.attribute_id =  c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class' 
-       				 AND (c.game_id = '" . $game_id . "')  
+       				 AND (c.game_id = '" . $db->sql_escape($game_id) . "')  
        				 AND c1.game_id=c.game_id
        				 
        				  ", 
