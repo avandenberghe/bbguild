@@ -835,6 +835,7 @@ function leaderboard($dkpsys_id, $query_by_pool)
 	    				"' AND l.attribute = 'class' and c.game_id = l.game_id and 
 	    				m.member_id = li.member_id and li.member_class_id = c.class_id and li.game_id = c.game_id ",   				    	
 		'ORDER_BY'	=> 'l.name ',
+	    'GROUP_BY'	=> 'c.game_id, c.class_id, l.name, c.imagename, c.colorcode ',
     );
 	$sql = $db->sql_build_query('SELECT', $sql_array);
 	
@@ -844,7 +845,6 @@ function leaderboard($dkpsys_id, $query_by_pool)
 	while ( $row = $db->sql_fetchrow ( $result ) )
 	{
 		$class++;
-		$cssclass = $row ['game_id'] . 'class' . $row ['class_id'];
 		$template->assign_block_vars ( 'class', 
 			array (
 				'CLASSNAME' 	=> $row ['class_name'], 
@@ -865,11 +865,12 @@ function leaderboard($dkpsys_id, $query_by_pool)
 		        
 		    	),
 		 
-		    'WHERE'     =>  ' (m.member_id = l.member_id) 
-				        AND ( l.member_class_id = ' . $db->sql_escape ( $row ['class_id'] ) . ' )  
+		    'WHERE'     =>  " (m.member_id = l.member_id) 
+				        AND ( l.member_class_id = " . (int) $row ['class_id']  . " )
+				        AND ( l.game_id = '" . $db->sql_escape ( $row ['game_id'] ) . "' )  
 				        AND (r.rank_id = l.member_rank_id) 
 				        AND (r.guild_id = l.member_guild_id)
-				        AND rank_hide = 0'
+				        AND rank_hide = 0"
 		);
 		
 		if($config['bbdkp_epgp'] == 1)
