@@ -338,7 +338,6 @@ class acp_dkp_mm extends bbDKP_Admin
 					
 					$member_comment = utf8_normalize_nfc(request_var('member_comment', '', true)); 
 					
-					
 					$joindate	= mktime(0,0,0,request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0)); 
 
 					//is there leavedate?
@@ -350,46 +349,27 @@ class acp_dkp_mm extends bbDKP_Admin
 												
 					$achievpoints = 0; 
 					
-					$url = utf8_normalize_nfc(request_var('member_armorylink', '', true));  ;
+					$url = utf8_normalize_nfc(request_var('member_armorylink', '', true));  
 					
 					$phpbb_user_id = request_var('phpbb_user_id', 0); 
+
+					$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $guild_id; 
+					$result = $db->sql_query($sql);
 					
+					$realm = ''; $region='';
+					
+					while ( $row = $db->sql_fetchrow($result) )
+					{
+						$realm = $row['realm'];
+						$region = $row['region'];
+					}
+							
 					$member_id = $this->insertnewmember($member_name, $member_status, $member_lvl, $race_id, $class_id,
-						$rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url, $game_id, $phpbb_user_id);
+						$rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url, $realm, $game_id, $phpbb_user_id);
 						
 					if ($member_id > 0) 
 					{
 						//record added. now update some stats
-						
-						$memberportraiturl=' ';
-						if ($game_id == 'wow' || $game_id=='aion')
-						{
-							$memberportraiturl = $this->generate_portraitlink( $game_id, $race_id, $class_id, $gender, $member_lvl); 
-						}
-						$memberarmoryurl = ' ';
-						
-						if ($game_id == 'wow')
-						{
-							$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $guild_id; 
-							$result = $db->sql_query($sql);
-							while ( $row = $db->sql_fetchrow($result) )
-							{
-								$realm = $row['realm'];
-								$region = $row['region'];
-							}
-							$db->sql_freeresult($result);
-							$memberarmoryurl = $this->generate_armorylink( $game_id, $region, $realm, $member_name);
-						}
-						
-						$data = array(
-					    'member_armory_url'     => $memberarmoryurl,
-					    'member_portrait_url'   => $memberportraiturl,
-						);
-						
-						$sql = 'UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE member_id=' . (int) $member_id;
-						$db->sql_query($sql);
-					
-					
 						$success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($member_name));
 						trigger_error($success_message . $Addmemberlink, E_USER_NOTICE);
 					}
@@ -1773,6 +1753,7 @@ class acp_dkp_mm extends bbDKP_Admin
 	 */
 	private function generate_armorylink($game_id, $region, $realm, $name)
 	{
+		$site= '';
 	    switch ($region)
        	{
 			case 'EU': 
@@ -1781,8 +1762,10 @@ class acp_dkp_mm extends bbDKP_Admin
        	    case 'US': 
        	        $site='http://us.battle.net/wow/en/character/';
        	        break;
+       	     default:
+       	     	$site='http://eu.battle.net/wow/en/character/';
        	}
-       	return $site . $realm . '/' .  $name . '/simple' ;
+       	return $site . urlencode($realm) . '/' .  urlencode($name) . '/simple' ;
 	}
 	
 	 /**
@@ -1986,30 +1969,38 @@ class acp_dkp_mm extends bbDKP_Admin
     /***
      * function for inserting a new member
      * you have to perform argument and ifexist validations before you call this function!
-     * is also called from armory plugin
-     * phpbb_user_id is an optional value, set to zero when not given
+     * is also called from Raidtracker and Armory plugin. 
+     * $memberarmoryurl, game_id, phpbb_user_id are optional
      * 
      * @returns the new memberid or false
      * 
      */
+    
     public function insertnewmember($member_name, $member_status, $member_lvl, 
     $race_id ,  $class_id, $rank_id, $member_comment, $joindate, $leavedate, 
-    $guild_id, $gender, $achievpoints, $url, $game_id, $phpbb_user_id = 0 )
+    $guild_id, $gender, $achievpoints, $memberarmoryurl = ' ', $realm ='', $game_id = 'wow', $phpbb_user_id = 0 )
     {
         global $db, $user, $config;   	
         
-		// Check for existing member name
+        if ($member_status != 1 || $member_status !=0)
+        {
+        	$member_status = 1;
+        }
+
+        // Check for existing member name
 		$sql = "SELECT member_id 
 				FROM " . MEMBER_LIST_TABLE ." 
 				WHERE member_name = '". $db->sql_escape($member_name) ."'";
 		$result = $db->sql_query($sql);
 
+    	$member_id = 0;
 		while ($row = $db->sql_fetchrow($result) )
 		{
 			$member_id = $row['member_id'];
 		}
 		
-		if ( isset($member_id) && $member_id > 0 )
+		// already created ?
+		if ( $member_id > 0 )
 		{
 		    return false;
 		}
@@ -2018,17 +2009,37 @@ class acp_dkp_mm extends bbDKP_Admin
 		if ($member_lvl == 0)
 		{
 		    // get maxlevel
-		    $sql = "SELECT max(class_max_level) as maxlevel FROM " . CLASS_TABLE;
+		    $sql = "SELECT max(class_max_level) as maxlevel FROM " . CLASS_TABLE . " where game_id = '" . $game_id ."'";
 		    $result = $db->sql_query($sql);
 			$member_lvl = (int) $db->sql_fetchfield('maxlevel', 1, $result); 
 		}
 		
-		$member_id = 0;
+	    $memberportraiturl = ' ';
+		if ($game_id =='wow' || $game_id =='aion' )
+		{
+			$memberportraiturl = $this->generate_portraitlink( $game_id, $race_id, $class_id, $gender, $member_lvl ); 
+		}
+							
+		if ($realm == '')
+		{
+			$realm = $config['bbdkp_default_realm']; 			
+		}
 		
+		if ($game_id == 'wow' & $memberarmoryurl == ' ' )
+		{
+			if( $config['bbdkp_default_region'] == '')
+			{
+				// if region is not set then put EU...
+				set_config('bbdkp_default_region', 'EU', true);
+			}
+			$memberarmoryurl = $this->generate_armorylink( $game_id, $config['bbdkp_default_region'] , $realm , $member_name );
+		}
+					
+
 		$query = $db->sql_build_array('INSERT', array(
 			'member_id'             => NULL,
 			'member_name'           => ucwords($member_name),
-			'member_status'         => 1,
+			'member_status'         => $member_status,
 			'member_level'          => $member_lvl,
 			'member_race_id'        => $race_id,
 			'member_class_id'       => $class_id,
@@ -2039,9 +2050,11 @@ class acp_dkp_mm extends bbDKP_Admin
 			'member_guild_id'       => $guild_id,
 		    'member_gender_id'	    => $gender,
 			'member_achiev'	        => $achievpoints, 
-		    'member_armory_url'     => (string) $url, 
+		    'member_armory_url'     => (string) $memberarmoryurl, 
 			'phpbb_user_id'			=> (int) $phpbb_user_id, 
-			'game_id'				=> (string) $game_id
+			'game_id'				=> (string) $game_id, 
+			'member_portrait_url'	=> (string) $memberportraiturl
+			
 			)
 		);
 		
