@@ -39,8 +39,9 @@ class acp_dkp_sys extends bbDKP_Admin
 	{
 		global $db, $user, $auth, $template, $sid, $cache;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		$link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage" ) . '"><h3>Return to Index</h3></a>';
 		$user->add_lang ( array ('mods/dkp_admin' ) );
+		
+		$link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys" ) . '"><h3>'. $user->lang['RETURN_DKPPOOLINDEX'].'</h3></a>';
 		
 		switch ($mode)
 		{
@@ -48,7 +49,7 @@ class acp_dkp_sys extends bbDKP_Admin
 				$update = false;
 				if ((isset ( $_GET [URI_DKPSYS] )))
 				{
-					// GET
+					// GET existing 
 					$this->url_id = request_var ( URI_DKPSYS, 0 );
 					$update = true;
 					$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_status
@@ -116,7 +117,7 @@ class acp_dkp_sys extends bbDKP_Admin
 							'log_action' => $log_action ) );
 						
 						$success_message = sprintf ( $user->lang ['ADMIN_ADD_DKPSYS_SUCCESS'], $this->dkpsys ['dkpsys_name'] );
-						trigger_error ( $success_message . adm_back_link ( $this->u_action ));
+						trigger_error ( $success_message . $link );
 					} 
 					else
 					{
@@ -146,8 +147,6 @@ class acp_dkp_sys extends bbDKP_Admin
 					$db->sql_freeresult ( $result );
 					
 					// Update the dkp sysname, status 
-					// since only the dkpid is stored in raid tables no 
-					// need to update dkpname in raid table (like events)
 					$query = $db->sql_build_array ( 
 							'UPDATE', 
 							array (
@@ -170,8 +169,9 @@ class acp_dkp_sys extends bbDKP_Admin
 						array (
 							'log_type' => $log_action ['header'], 
 							'log_action' => $log_action ) );
+					
 					$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_DKPSYS_SUCCESS'], $this->url_id, $this->dkpsys ['dkpsys_name'], $this->dkpsys ['dkpsys_status'] );
-					trigger_error ( $success_message . adm_back_link ( $this->u_action ) );
+					trigger_error ( $success_message . $link );
 				
 				}
 				
@@ -249,7 +249,7 @@ class acp_dkp_sys extends bbDKP_Admin
 									'log_type' => $log_action ['header'], 
 									'log_action' => $log_action ));
 								$success_message = sprintf ($user->lang ['ADMIN_DELETE_DKPSYS_SUCCESS'], $this->dkpsys ['dkpsys_name'] );
-								trigger_error ($success_message . adm_back_link ( $this->u_action ));
+								trigger_error ($success_message . $link );
 							}
 						}
 					} 
@@ -320,7 +320,7 @@ class acp_dkp_sys extends bbDKP_Admin
 						'DKPSYSDEFAULT' => request_var ( 'defaultsys', '' ) );
 					$this->log_insert ( array ('log_type' => $log_action ['header'], 'log_action' => $log_action ) );
 					$success_message = sprintf ( $user->lang ['ADMIN_DEFAULTPOOL_SUCCESS'], request_var ( 'defaultsys', '' ) );
-					trigger_error ( $success_message . adm_back_link ( $this->u_action ) );
+					trigger_error ( $success_message . $link) ;
 				}
 				
 				$template->assign_vars ( array (
