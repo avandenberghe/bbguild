@@ -124,11 +124,18 @@ $filtervalues ['separator2'] = '--------';
     'FROM'      => array(
         CLASS_TABLE 	=> 'c',
         BB_LANGUAGE		=> 'l', 
+        MEMBER_LIST_TABLE	=> 'i', 
+        MEMBER_DKP_TABLE	=> 'd', 
     	),
     'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id and c.game_id = l.game_id
-     AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",   				    	
+     AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' 
+     AND i.member_class_id = c.class_id and i.game_id = c.game_id 
+     AND d.member_id = i.member_id ",   				    	
+	'GROUP_BY'	=> 'c.game_id, c.class_id, l.name, c.class_min_level, c.class_max_level, c.imagename',
 	'ORDER_BY'	=> 'l.game_id, c.class_id ',
     );
+    
+    
     
 $sql = $db->sql_build_query('SELECT', $sql_array);   
 $result = $db->sql_query ( $sql );
@@ -417,8 +424,8 @@ while ( $row = $db->sql_fetchrow ( $members_result ) )
 		}
 		
 		$memberarray [$member_count] ['member_lastraid'] = $row ['member_lastraid'];
-		$memberarray [$member_count] ['attendanceP1'] = percentage_raidcount ( true, $row ['member_dkpid'], $list_p1, $row ['member_id'] );
-		$memberarray [$member_count] ['attendanceP2'] = percentage_raidcount ( true,  $row ['member_dkpid'], $list_p2, $row ['member_id'] );
+		$memberarray [$member_count] ['attendanceP1'] = raidcount ( true, $row ['member_dkpid'], $list_p1, $row ['member_id'],2,false );
+		$memberarray [$member_count] ['attendanceP2'] = raidcount ( true,  $row ['member_dkpid'], $list_p3, $row ['member_id'],2,true );
 		$memberarray [$member_count] ['member_dkpid'] = $row ['member_dkpid'];
 	}
 }
@@ -703,7 +710,8 @@ for($i = 1; $i <= 20; $i ++)
 	if (isset ( $sortorder ) && $sortorder == $i)
 	{
 		$j = - $i;
-	} else
+	} 
+	else
 	{
 		$j = $i;
 	}
