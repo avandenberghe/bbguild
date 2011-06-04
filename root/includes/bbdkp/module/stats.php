@@ -381,9 +381,9 @@ include($phpbb_root_path . 'includes/bbdkp/pchart/class/pScatter.class.' . $phpE
  $myPicture->drawSplineChart();
  $myPicture->drawPlotChart();
  
-// $MyData->drawAll();
+ //$MyData->drawAll();
  
-/* Write the chart legend */
+  /* Write the chart legend */
  $myPicture->drawLegend(570,215,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
  
  /* Render the picture */
@@ -529,7 +529,7 @@ FROM
 			{
 			   $sql .= " AND d.member_status='1'";
 			}
-			$sql .= "AND l.member_id = rd.member_id
+			$sql .= " AND l.member_id = rd.member_id
 			AND l.member_joindate < r.raid_start
 			GROUP BY
 				l.member_name,
@@ -565,22 +565,35 @@ FROM
 			{
 			   $sql .= " AND d.member_status='1'";
 			}
-			$sql .= "AND l.member_id = rd.member_id
+			$sql .= " AND l.member_id = rd.member_id
 			AND l.member_joindate < r.raid_start
 		GROUP BY
 			l.member_name,
 			rd.member_id
 	) e inner join " . MEMBER_LIST_TABLE . " l on  e.member_id = l.member_id 
-		inner join " . CLASS_TABLE . " c on c.class_id = l.member_class_id 
+		inner join " . CLASS_TABLE . " c on c.class_id = l.member_class_id and c.game_id = l.game_id
 GROUP BY
-	e.member_id
+	c.game_id, c.colorcode,  c.imagename, 
+	e.event_dkpid,
+	e.member_name,
+	e.member_id,
+	e.member_firstraid,
+	e.member_lastraid
 ORDER BY
+	sum(CASE e.days WHEN '30' THEN e.attendance END ) desc, 
+	sum(CASE e.days WHEN '60' THEN e.attendance END ) desc,
+	sum(CASE e.days WHEN '90' THEN e.attendance END ) desc,
 	e.member_id
 ";
 
 $result = $db->sql_query($sql);
 while ( $row = $db->sql_fetchrow($result) )
 {
+	$membername_g[] = $row['member_name'];
+	$attlife__g[] = $row['attendancelife'];
+	$att90__g[] = $row['attendancelife'];
+	$att30__g[] = $row['attendancelife'];
+	
 	
     $template->assign_block_vars('attendance_row', array(
         'NAME' 					=> $row['member_name'],
@@ -588,27 +601,31 @@ while ( $row = $db->sql_fetchrow($result) )
     	'COLORCODE'				=> $row['colorcode'],
     	'ID'            		=> $row['member_id'],
         'FIRSTRAID' 			=> $row['member_firstraid'],
-	    'ATTENDED_COUNT' 		=> $row['member_lastraid'],
+	    'LASTRAID' 				=> $row['member_lastraid'],
     	'GRCTLIFE' 				=> $row['gloraidcountlife'],
 	    'IRCTLIFE' 				=> $row['iraidcountlife'],
-	    'ATTLIFE' 				=> $row['attendancelife'],
+	    'ATTLIFE' 				=> sprintf("%.2f%%", $row['attendancelife']),
     	'GRCT90' 				=> $row['gloraidcount90'],
 	    'IRCT90' 				=> $row['iraidcount90'],
-	    'ATT90' 				=> $row['attendance90'],
+	    'ATT90' 				=> sprintf("%.2f%%", $row['attendance90']),
     	'GRCT60' 				=> $row['gloraidcount60'],
 	    'IRCT60' 				=> $row['iraidcount60'],
-	    'ATT60' 				=> $row['attendance60'],
+	    'ATT60' 				=> sprintf("%.2f%%", $row['attendance60']),
     	'GRCT30' 				=> $row['gloraidcount30'],
 	    'IRCT30' 				=> $row['iraidcount30'],
-	    'ATT30' 				=> $row['attendance30'],
+	    'ATT30' 				=> sprintf("%.2f%%", $row['attendance30']),   
     )
     );
 
  //   $previous_data = $row[$previous_source];
-
 }
 			
-			
+$template->assign_vars(array(
+	'RAIDS_X1_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p3']),
+	'RAIDS_X2_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p2']),
+	'RAIDS_X3_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p1']),
+));
+
  unset($myPicture);
  unset($MyData); 
  // Create the pData object
