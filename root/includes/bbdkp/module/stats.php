@@ -101,21 +101,22 @@ if ($query_by_pool)
 }
 
 $u_stats = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=stats' . $arg );
+
 /**** end dkpsys pulldown  ****/
 $time = time();
 
 /**** column sorting *****/
 $sort_order = array(
-     0 => array('member_raidcount desc', 'member_raidcount asc'),
-     1 => array('member_name asc', 'member_name desc'),
-     2 => array('ep desc', 'ep'),
-     3 => array('ep_per_day desc', 'ep_per_day'),
-     4 => array('ep_per_raid desc', 'ep_per_raid'),
-     5 => array('gp desc', 'gp'),
-     6 => array('gp_per_day desc', 'gp_per_day'),
-     7 => array('gp_per_raid desc', 'gp_per_raid'),
-     8 => array('pr desc', 'pr'),
-     9 => array('member_current desc', 'member_current'), 
+     0 => array('pr desc', 'pr'),
+     1 => array('member_current desc', 'member_current'), 
+     2 => array('member_raidcount desc', 'member_raidcount asc'),
+     3 => array('member_name asc', 'member_name desc'),
+     4 => array('ep desc', 'ep'),
+     5 => array('ep_per_day desc', 'ep_per_day'),
+     6 => array('ep_per_raid desc', 'ep_per_raid'),
+     7 => array('gp desc', 'gp'),
+     8 => array('gp_per_day desc', 'gp_per_day'),
+     9 => array('gp_per_raid desc', 'gp_per_raid'),
      10 => array('member_raidcount desc', 'member_raidcount'), 
      11 => array('itemcount desc', 'itemcount')
 );
@@ -124,7 +125,6 @@ $current_order = switch_order($sort_order);
 $sort_index = explode('.', $current_order['uri']['current']);
 $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 $previous_data = '';
-
 
 // Find total # drops 
 $sql_array = array (
@@ -231,6 +231,7 @@ $raid_count=  0;
 while ( $row = $db->sql_fetchrow($members_result) )
 {
 	$member_count++;
+	
 	$raid_count += $row['member_raidcount']; 
     $row['earned_per_day'] = ( ( (!empty($row['earned_per_day']) ) && ( $row['zero_check'] > 0.01) )) ? $row['earned_per_day'] : '0.00';
     $row['earned_per_raid'] = (!empty($row['earned_per_raid'])) ? $row['earned_per_raid'] : '0.00';
@@ -239,6 +240,9 @@ while ( $row = $db->sql_fetchrow($members_result) )
     $row['er'] = (!empty($row['er'])) ? $row['er'] : '0.00';
 	$membername_g[]= $row['member_name'];
 	$member_drop_pct = (float) ( $total_drops > 0 ) ? round( ( (int) $row['itemcount'] / $total_drops) * 100, 1 ) : 0;
+	$member_drop_pct_g[]=$member_drop_pct; 
+	$_member_pr_g[] = $row['pr'];
+	$_member_current_g[] = $row['member_current'];
     $template->assign_block_vars('stats_row', array(
         'NAME' 					=> $row['member_name'],
         'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),    
@@ -248,6 +252,7 @@ while ( $row = $db->sql_fetchrow($members_result) )
         'ATTENDED_COUNT' 		=> $row['member_raidcount'],
     	'ITEM_COUNT' 			=> $row['itemcount'],
     	'MEMBER_DROP_PCT'		=> sprintf("%s %%", $member_drop_pct),
+        
         'EP_TOTAL' 				=> $row['ep'],
         'EP_PER_DAY' 			=> sprintf("%.2f", $row['ep_per_day']),
         'EP_PER_RAID' 			=> sprintf("%.2f", $row['ep_per_raid']),
@@ -275,19 +280,18 @@ else
 
 $db->sql_freeresult($members_result);
 
-
 /* send information to template */
 $template->assign_vars(array(
-    'O_NAME'       => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][0] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')), 
-    'O_RAIDCOUNT' =>  append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-    'O_EARNED' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][2] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-    'O_EARNED_PER_DAY' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][3] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_EARNED_PER_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][4] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_SPENT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][5] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_SPENT_PER_DAY' =>append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][6] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_SPENT_PER_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][7] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_PR' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][8] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
-    'O_CURRENT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][9] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_PR' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][0] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_CURRENT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_NAME'       => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][2] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')), 
+    'O_RAIDCOUNT' =>  append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][3] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+    'O_EARNED' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][4] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+    'O_EARNED_PER_DAY' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][5] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_EARNED_PER_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][6] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_SPENT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][7] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_SPENT_PER_DAY' =>append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][8] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
+    'O_SPENT_PER_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][9] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
     'O_RAIDCOUNT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][10] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
     'O_ITEMCOUNT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][11] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
     'STATS_FOOTCOUNT' 	=> $footcount_text,
@@ -296,6 +300,319 @@ $template->assign_vars(array(
     )
 );
 
+// pChart library inclusions
+include($phpbb_root_path . 'includes/bbdkp/pchart/class/pData.class.' . $phpEx);
+include($phpbb_root_path . 'includes/bbdkp/pchart/class/pDraw.class.' . $phpEx);
+include($phpbb_root_path . 'includes/bbdkp/pchart/class/pImage.class.' . $phpEx);
+include($phpbb_root_path . 'includes/bbdkp/pchart/class/pScatter.class.' . $phpEx);
+
+/* chart generation */
+
+/* CAT:Bar Chart */
+
+ /* Create and populate the pData object */
+ $MyData = new pData();  
+
+ /* for each member, add point array */
+  if($config['bbdkp_epgp'] == 1)
+ {
+	 $MyData->addPoints($_member_pr_g,"Priority");
+     $MyData->setAxisName(0,"Priority");
+ }
+ else
+ {
+	 $MyData->addPoints($_member_current_g,"DKP");
+	 $MyData->setAxisName(0,"DKP");
+	 
+ }
+	
+ $MyData->addPoints(  $membername_g ,"Members");
+ $MyData->setSerieDescription("Members","Member");
+ $MyData->setAbscissa("Members"); 
+ $MyData->setAbscissaName("Members");
+ $MyData->setAxisDisplay(0,AXIS_FORMAT_METRIC,1); 
+  
+ $pallette = $phpbb_root_path . "includes/bbdkp/pchart/palettes";
+ $MyData->loadPalette("$pallette/blind.color", TRUE);
+ 
+/* Create the pChart object */
+ $myPicture = new pImage(440,500,$MyData);
+ 
+ /* make a background gradient */
+ $myPicture->drawGradientArea(0,0,440,500,DIRECTION_VERTICAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>100));
+ $myPicture->drawGradientArea(0,0,440,500,DIRECTION_HORIZONTAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>20));
+ 
+ // set the fonts
+ $fonttitle = $phpbb_root_path . "includes/bbdkp/pchart/fonts/Forgotte.ttf";
+ $myPicture->setFontProperties(array(
+ 	"FontName" => $fonttitle,
+ 	"FontSize" =>15));
+ // draw the title
+ //$myPicture->drawText(20,34,"Class participation vs. Class droprate",array("FontSize"=>20));
+
+ /* Define the chart font */ 
+ $chartfont = $phpbb_root_path . "includes/bbdkp/pchart/fonts/pf_arma_five.ttf"; 
+ $myPicture->setFontProperties(array(
+  	"FontName"=> $chartfont ,
+  	"FontSize"=> 6));
+
+/* Draw the scale  */
+ $myPicture->setGraphArea(100,30,420,480);
+ $myPicture->drawScale(array("CycleBackground"=>TRUE,"DrawSubTicks"=>TRUE,"GridR"=>0,"GridG"=>0,"GridB"=>0,"GridAlpha"=>10,"Pos"=>SCALE_POS_TOPBOTTOM)); // 
+ 
+ /* Turn on shadow computing */ 
+ $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
+
+ /* Draw the chart */
+ $settings = array(
+ 	"Gradient"=>TRUE,
+ 	"DisplayPos"=>LABEL_POS_INSIDE,
+ 	"DisplayValues"=>TRUE,
+ 	"DisplayR"=>255,
+ 	"DisplayG"=>255,
+ 	"DisplayB"=>255,
+ 	"DisplayShadow"=>TRUE,
+ 	"Surrounding"=>5);
+ //$myPicture->drawBarChart($settings);
+
+  /* Draw the line and plot chart */
+ //$MyData->setSerieDrawable("Members",TRUE);
+ //$MyData->setSerieDrawable("DKP",FALSE);
+ $myPicture->drawSplineChart();
+ $myPicture->drawPlotChart();
+ 
+// $MyData->drawAll();
+ 
+/* Write the chart legend */
+ $myPicture->drawLegend(570,215,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+ 
+ /* Render the picture */
+ $imagepath0= $phpbb_root_path . "images/pchart/vchart". gen_rand_string_friendly(8) . ".png";
+ $myPicture->render($imagepath0);
+ unset($myPicture);
+ unset($MyData); 
+
+/* send information to template */
+$template->assign_vars(array(
+	'CHART0'   => $imagepath0,
+    )
+);
+
+
+/** Attendance ****/
+
+/* get overall raidcount for 4 intervals */
+
+$rcall = get_overallraidcount($query_by_pool, 0, $time, $dkp_id);
+$rc90 = get_overallraidcount($query_by_pool, (int) $config['bbdkp_list_p3'], $time, $dkp_id);
+$rc60 = get_overallraidcount($query_by_pool, (int) $config['bbdkp_list_p2'], $time, $dkp_id);
+$rc30 = get_overallraidcount($query_by_pool, (int) $config['bbdkp_list_p1'], $time, $dkp_id);
+
+$sql = "SELECT
+	c.game_id, c.colorcode,  c.imagename, 
+	e.event_dkpid,
+	e.member_name,
+	e.member_id,
+	e.member_firstraid,
+	e.member_lastraid,
+	sum(CASE e.days WHEN 'lifetime' THEN e.gloraidcount END) AS gloraidcountlife,
+	sum(CASE e.days WHEN 'lifetime' THEN e.iraidcount END ) AS iraidcountlife,
+	sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) AS attendancelife,
+	sum(CASE e.days WHEN '90' THEN e.gloraidcount END ) AS gloraidcount90,
+	sum(CASE e.days WHEN '90' THEN e.iraidcount END ) AS iraidcount90,
+	sum(CASE e.days WHEN '90' THEN e.attendance END) AS attendance90,
+	sum(CASE e.days WHEN '60' THEN e.gloraidcount END ) AS gloraidcount60,
+	sum(CASE e.days WHEN '60' THEN e.iraidcount END) AS iraidcount60,
+	sum(CASE e.days WHEN '60' THEN e.attendance END ) AS attendance60,
+	sum(CASE e.days WHEN '30' THEN e.gloraidcount END ) AS gloraidcount30,
+	sum(CASE e.days WHEN '30' THEN e.iraidcount END ) AS iraidcount30,
+	sum(CASE e.days WHEN '30' THEN e.attendance END ) AS attendance30
+FROM
+	(
+			SELECT
+				d.member_lastraid,
+				d.member_firstraid,
+				ev.event_dkpid,
+				l.member_name,
+				rd.member_id,
+				'lifetime' AS days,
+				count(rd.member_id) AS iraidcount,
+				". (string) $rcall . " AS gloraidcount,
+				round(count(rd.member_id) / " . (string) $rcall . " * 100,2) AS attendance
+			FROM
+				" . MEMBER_LIST_TABLE . " l,
+				" . MEMBER_DKP_TABLE ." d,
+				" . RAID_DETAIL_TABLE . " rd,
+				" . EVENTS_TABLE . " ev,
+				" . RAIDS_TABLE . " r
+			WHERE rd.member_id = d.member_id
+			AND ev.event_dkpid = d.member_dkpid";
+			if ($query_by_pool)
+			{
+				$sql .= " AND d.member_dkpid = " . $dkp_id; 
+			}
+			if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+			{
+			   $sql .= " AND d.member_status='1'";
+			}
+			$sql .= "			
+			AND ev.event_id = r.event_id
+			AND r.raid_id = rd.raid_id
+			AND l.member_id = rd.member_id
+			AND l.member_joindate < r.raid_start
+			GROUP BY
+				l.member_name,
+				rd.member_id
+		UNION ALL
+			SELECT
+				d.member_lastraid,
+				d.member_firstraid,
+				ev.event_dkpid,
+				l.member_name,
+				rd.member_id,
+				'". (int) $config['bbdkp_list_p3'] ."' AS days,
+				count(rd.member_id) AS iraidcount,
+				". (string) $rc90 . " AS gloraidcount,
+				round(count(rd.member_id)/ ". (string) $rc90 . " * 100,2) AS attendance
+				FROM
+					" . MEMBER_LIST_TABLE . " l,
+					" . MEMBER_DKP_TABLE ." d,
+					" . RAID_DETAIL_TABLE . " rd,
+					" . EVENTS_TABLE . " ev,
+					" . RAIDS_TABLE . " r 
+				WHERE
+					rd.member_id = d.member_id
+				AND ev.event_dkpid = d.member_dkpid ";
+				if ($query_by_pool)
+				{
+					$sql .= " AND d.member_dkpid = " . $dkp_id; 
+				}				
+				$sql .= " AND ev.event_id = r.event_id
+				AND r.raid_id = rd.raid_id
+				AND(  " . $time . " - r.raid_start )/(3600 * 24) < ". (int) $config['bbdkp_list_p3'];
+				if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+				{
+				   $sql .= " AND d.member_status='1'";
+				}
+				$sql .= "
+				AND l.member_id = rd.member_id
+				AND l.member_joindate < r.raid_start
+				GROUP BY l.member_name, rd.member_id
+		UNION ALL
+			SELECT
+				d.member_lastraid,
+				d.member_firstraid,
+				ev.event_dkpid,
+				l.member_name,
+				rd.member_id,
+				'". (int) $config['bbdkp_list_p2'] ."' AS days,
+				count(rd.member_id) AS iraidcount,
+				". (string) $rc60 . " AS gloraidcount,
+				round( count(rd.member_id)/ ". (string) $rc60 . " * 100, 2 ) AS attendance
+			FROM
+				" . MEMBER_LIST_TABLE . " l,
+				" . MEMBER_DKP_TABLE ." d,
+				" . RAID_DETAIL_TABLE . " rd,
+				" . EVENTS_TABLE . " ev,
+				" . RAIDS_TABLE . " r				
+			WHERE
+				rd.member_id = d.member_id
+			AND ev.event_dkpid = d.member_dkpid"; 
+			if ($query_by_pool)
+			{
+				$sql .= " AND d.member_dkpid = " . $dkp_id; 
+			}				
+			$sql .= " AND ev.event_id = r.event_id
+			AND r.raid_id = rd.raid_id
+			AND(  " . $time . " - r.raid_start)/(3600 * 24) < ". (int) $config['bbdkp_list_p2'];
+			if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+			{
+			   $sql .= " AND d.member_status='1'";
+			}
+			$sql .= "AND l.member_id = rd.member_id
+			AND l.member_joindate < r.raid_start
+			GROUP BY
+				l.member_name,
+				rd.member_id
+		UNION ALL
+			SELECT
+				d.member_lastraid,
+				d.member_firstraid,
+				ev.event_dkpid,
+				l.member_name,
+				rd.member_id,
+				'". (int) $config['bbdkp_list_p1'] ."' AS days,
+				count(rd.member_id) AS iraidcount,
+				'". (string) $rc30 . "' AS gloraidcount,
+				round(count(rd.member_id)/ ". (string) $rc30 . " * 100,2) AS attendance
+			FROM
+				" . MEMBER_LIST_TABLE . " l,
+				" . MEMBER_DKP_TABLE ." d,
+				" . RAID_DETAIL_TABLE . " rd,
+				" . EVENTS_TABLE . " ev,
+				" . RAIDS_TABLE . " r 				
+			WHERE
+				rd.member_id = d.member_id
+			AND ev.event_dkpid = d.member_dkpid"; 
+			if ($query_by_pool)
+			{
+				$sql .= " AND d.member_dkpid = " . $dkp_id; 
+			}				
+			$sql .= " AND ev.event_id = r.event_id
+			AND r.raid_id = rd.raid_id
+			AND( " . $time . " - r.raid_start)/(3600 * 24) < ". (int) $config['bbdkp_list_p1']; 
+			if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+			{
+			   $sql .= " AND d.member_status='1'";
+			}
+			$sql .= "AND l.member_id = rd.member_id
+			AND l.member_joindate < r.raid_start
+		GROUP BY
+			l.member_name,
+			rd.member_id
+	) e inner join " . MEMBER_LIST_TABLE . " l on  e.member_id = l.member_id 
+		inner join " . CLASS_TABLE . " c on c.class_id = l.member_class_id 
+GROUP BY
+	e.member_id
+ORDER BY
+	e.member_id
+";
+
+$result = $db->sql_query($sql);
+while ( $row = $db->sql_fetchrow($result) )
+{
+	
+    $template->assign_block_vars('attendance_row', array(
+        'NAME' 					=> $row['member_name'],
+        'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $row['event_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),    
+    	'COLORCODE'				=> $row['colorcode'],
+    	'ID'            		=> $row['member_id'],
+        'FIRSTRAID' 			=> $row['member_firstraid'],
+	    'ATTENDED_COUNT' 		=> $row['member_lastraid'],
+    	'GRCTLIFE' 				=> $row['gloraidcountlife'],
+	    'IRCTLIFE' 				=> $row['iraidcountlife'],
+	    'ATTLIFE' 				=> $row['attendancelife'],
+    	'GRCT90' 				=> $row['gloraidcount90'],
+	    'IRCT90' 				=> $row['iraidcount90'],
+	    'ATT90' 				=> $row['attendance90'],
+    	'GRCT60' 				=> $row['gloraidcount60'],
+	    'IRCT60' 				=> $row['iraidcount60'],
+	    'ATT60' 				=> $row['attendance60'],
+    	'GRCT30' 				=> $row['gloraidcount30'],
+	    'IRCT30' 				=> $row['iraidcount30'],
+	    'ATT30' 				=> $row['attendance30'],
+    )
+    );
+
+ //   $previous_data = $row[$previous_source];
+
+}
+			
+			
+ unset($myPicture);
+ unset($MyData); 
+ // Create the pData object
+ $myData = new pData();  
 
  
 /***********************
@@ -428,11 +745,11 @@ while ($row = $db->sql_fetchrow($result) )
  $MyData->loadPalette("$pallette/blind.color", TRUE);
 
 /* Create the pChart object */
- $myPicture = new pImage(500,400,$MyData);
+ $myPicture = new pImage(440,500,$MyData);
  
  /* make a background gradient */
- $myPicture->drawGradientArea(0,0,500,400,DIRECTION_VERTICAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>100));
- $myPicture->drawGradientArea(0,0,500,400,DIRECTION_HORIZONTAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>20));
+ $myPicture->drawGradientArea(0,0,440,500,DIRECTION_VERTICAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>100));
+ $myPicture->drawGradientArea(0,0,440,500,DIRECTION_HORIZONTAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>20));
  
  // set the fonts
  $fonttitle = $phpbb_root_path . "includes/bbdkp/pchart/fonts/Forgotte.ttf";
@@ -449,7 +766,7 @@ while ($row = $db->sql_fetchrow($result) )
   	"FontSize"=> 6));
 
 /* Draw the scale  */
- $myPicture->setGraphArea(50,30,500,350);
+ $myPicture->setGraphArea(50,30,420,490);
  $myPicture->drawScale(array("CycleBackground"=>TRUE,"DrawSubTicks"=>TRUE,"GridR"=>0,"GridG"=>0,"GridB"=>0,"GridAlpha"=>10));
 
  /* Turn on shadow computing */ 
@@ -512,4 +829,35 @@ $title = $user->lang['MENU_STATS'];
 // Output page
 page_header($title);
 
+/**
+ * gets overall raid count in interval of N days before today
+ *
+ * @param int $interval
+ * @param int $time
+ * 
+ */
+function get_overallraidcount($query_by_pool, $interval, $time, $dkp_id)
+{
+	global $db;
+	$sql = " SELECT count(raid_id) AS rc 
+			 FROM " . RAIDS_TABLE . " r , ". EVENTS_TABLE . " e 
+			 WHERE e.event_id = r.event_id ";
+	if ($query_by_pool)
+	{
+	    $sql .= " AND e.event_dkpid = ". (int) $dkp_id;
+	}
+	
+	if ($interval > 0)
+	{
+		 $sql .= " AND ( " . (int) $time . " - r.raid_start) / (3600 * 24) < ". (int) $interval;
+	}
+
+	$result = $db->sql_query($sql);
+	$rc = (int) $db->sql_fetchfield('rc');
+
+	$db->sql_freeresult($result);
+	
+	return $rc;
+
+}
 ?>
