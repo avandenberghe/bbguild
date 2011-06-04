@@ -399,6 +399,221 @@ $template->assign_vars(array(
 );
 
 
+
+
+ 
+/***********************
+ *  
+ *  Class Statistics 
+ *  
+ **********************/
+
+$classes = array();
+
+// Find total # members with a dkp record
+$sql = 'SELECT count(member_id) AS members FROM ' . MEMBER_DKP_TABLE ;
+if ($query_by_pool)
+{
+    $sql .= ' where member_dkpid = '. $dkp_id . ' ';
+}
+
+if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+{
+   $sql .= " AND member_status='1'";
+}
+
+$result = $db->sql_query($sql);
+$total_members = (int) $db->sql_fetchfield('members');
+
+
+// get #classcount, #drops per class
+
+$sql = "select 
+c1.name as class_name, c.class_id, c.game_id, c.colorcode,  c.imagename, 
+count(c.class_id) as class_count, sum(case when x.itemcount is null then 0 else x.itemcount end) as itemcount
+from ((" . MEMBER_DKP_TABLE . " d left join 
+(
+SELECT i.member_id, count(i.item_id) as itemcount
+FROM 
+((" . EVENTS_TABLE ." e inner join ". RAIDS_TABLE ." r on e.event_id=r.event_id)
+inner join " . RAID_ITEMS_TABLE . " i on  r.raid_id = i.raid_id )
+WHERE e.event_dkpid = 3 
+GROUP BY i.member_id
+) x
+on d.member_id = x.member_id)
+INNER JOIN " . MEMBER_LIST_TABLE . " l on l.member_id = d.member_id
+INNER JOIN " . CLASS_TABLE ." c on l.member_class_id = c.class_id and l.game_id = c.game_id)
+INNER JOIN " . BB_LANGUAGE . " c1 ON c.game_id = c1.game_id AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class' 
+";
+
+if ($query_by_pool)
+{
+     $sql .= ' WHERE d.member_dkpid = '. $dkp_id . ' ';
+}
+
+if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+{
+   $sql .= " AND d.member_status='1'";
+}
+
+
+$sql .= " GROUP BY c.game_id,  c.colorcode,  c.imagename, c.class_id , c1.name ";
+
+$result = $db->sql_query($sql);
+
+$class_drop_pct_cum = 0;
+$classname_g = array();
+$class_drop_pct_g = array();
+$classpct_g = array();
+
+while ($row = $db->sql_fetchrow($result) )
+{
+	$classname_g[] = $row['class_name'];
+	// get class count and pct
+	$class_count = $row['class_count'];
+	$classpct = (float) ($total_members > 0) ? round(($row['class_count'] / $total_members) * 100,1)  : 0;
+	$classpct_g[] = $classpct;
+	
+	// get drops per class and pct
+	$loot_drops = (int) $row['itemcount'];
+    $class_drop_pct = (float) ( $total_drops > 0 ) ? round( ( (int) $row['itemcount'] / $total_drops) * 100, 1 ) : 0;
+    $class_drop_pct_g[] = $class_drop_pct;
+	$class_drop_pct_cum +=  $class_drop_pct;
+			
+	$lootoverrun =  ($class_drop_pct - $classpct); 
+
+	if ($query_by_pool)
+    {
+        $lmlink =  append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=standings&amp;filter='. $row['game_id'].'_class_' . $row['class_id'] . '&amp;' . URI_DKPSYS .'=' . $dkp_id); 
+    }
+    else 
+    {
+        $lmlink =  append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=standings&amp;filter='. $row['game_id'] .'_class_' . $row['class_id']);
+    }
+    
+      //$total_drops += (int) $row['itemcount'];
+       $template->assign_block_vars('class_row', array(
+    	'U_LIST_MEMBERS' 	=> $lmlink ,
+		'COLORCODE'  		=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
+    	'CLASS_IMAGE' 		=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
+		'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 		
+        'CLASS_NAME'		=> $row['class_name'],
+		
+        'CLASS_COUNT' 		=> (int) $class_count,
+        'CLASS_PCT' 		=> sprintf("%s %%", $classpct ),
+    
+        'LOOT_COUNT' 		=> $loot_drops,
+    	'CLASS_DROP_PCT'	=> sprintf("%s %%", $class_drop_pct  ),
+    
+    	'C_LOOT_FACTOR'		=> ($lootoverrun < 	0) ? 'negative' : 'positive', 
+       	'LOOTOVERRUN'		=> sprintf("%s %%", $lootoverrun), 
+		)
+    );
+}
+
+/* chart generation */
+
+/* CAT:Bar Chart */
+ unset($myPicture);
+ unset($MyData); 
+ /* Create the pData object
+ 
+ /* Create and populate the pData object */
+ $MyData = new pData();  
+
+ /* for each class, add point array */
+ 
+ $MyData->addPoints($classpct_g,"Class%");
+ $MyData->addPoints( $class_drop_pct_g,"Drop%");
+ $MyData->setAxisName(0,"%");
+ 
+ $MyData->addPoints(  $classname_g ,"Classes");
+ $MyData->setSerieDescription("Classes","Class");
+ $MyData->setAbscissa("Classes"); 
+ 
+ $pallette = $phpbb_root_path . "includes/bbdkp/pchart/palettes";
+ $MyData->loadPalette("$pallette/blind.color", TRUE);
+
+/* Create the pChart object */
+ $myPicture = new pImage(440,500,$MyData);
+ 
+ /* make a background gradient */
+ $myPicture->drawGradientArea(0,0,440,500,DIRECTION_VERTICAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>100));
+ $myPicture->drawGradientArea(0,0,440,500,DIRECTION_HORIZONTAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>20));
+ 
+ // set the fonts
+ $fonttitle = $phpbb_root_path . "includes/bbdkp/pchart/fonts/Forgotte.ttf";
+ $myPicture->setFontProperties(array(
+ 	"FontName" => $fonttitle,
+ 	"FontSize" =>15));
+ // draw the title
+ //$myPicture->drawText(20,34,"Class participation vs. Class droprate",array("FontSize"=>20));
+
+ /* Define the chart font */ 
+ $chartfont = $phpbb_root_path . "includes/bbdkp/pchart/fonts/pf_arma_five.ttf"; 
+ $myPicture->setFontProperties(array(
+  	"FontName"=> $chartfont ,
+  	"FontSize"=> 6));
+
+/* Draw the scale  */
+ $myPicture->setGraphArea(50,30,420,490);
+ $myPicture->drawScale(array("CycleBackground"=>TRUE,"DrawSubTicks"=>TRUE,"GridR"=>0,"GridG"=>0,"GridB"=>0,"GridAlpha"=>10));
+
+ /* Turn on shadow computing */ 
+ $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
+
+ /* Draw the chart */
+ $settings = array(
+ 	"Gradient"=>TRUE,
+ 	"DisplayPos"=>LABEL_POS_INSIDE,
+ 	"DisplayValues"=>TRUE,
+ 	"DisplayR"=>255,
+ 	"DisplayG"=>255,
+ 	"DisplayB"=>255,
+ 	"DisplayShadow"=>TRUE,
+ 	"Surrounding"=>5);
+ $myPicture->drawBarChart($settings);
+
+ /* Write the chart legend */
+ $myPicture->drawLegend(100,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+ 
+ /* Render the picture */
+ $imagepath= $phpbb_root_path . "images/pchart/barchart". gen_rand_string_friendly(8) . ".png";
+ $myPicture->render($imagepath);
+ unset($myPicture);
+ unset($MyData); 
+
+$navlinks_array = array(
+array(
+ 'DKPPAGE' => $user->lang['MENU_STATS'],
+ 'U_DKPPAGE' => append_sid("{$phpbb_root_path}stats.$phpEx"),
+)); 
+
+foreach( $navlinks_array as $name )
+{
+	 $template->assign_block_vars('dkpnavlinks', array(
+	 'DKPPAGE' => $name['DKPPAGE'],
+	 'U_DKPPAGE' => $name['U_DKPPAGE'],
+	 ));
+}
+
+
+/* send information to template */
+$template->assign_vars(array(
+	'CHART1'   => $imagepath,
+   	'S_DISPLAY_STATS'		=> true,
+	'F_STATS' => $u_stats,
+
+	'U_STATS' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats'),
+    'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
+	'TOTAL_MEMBERS' 	=> $total_members, 
+	'TOTAL_DROPS' 		=> $total_drops, 
+	'CLASSPCTCUMUL'		=> round($class_drop_pct_cum), 
+
+    )
+);
+
+
 /** Attendance ****/
 
 /* get overall raidcount for 4 intervals */
@@ -591,9 +806,9 @@ while ( $row = $db->sql_fetchrow($result) )
 {
 	$membername_g[] = $row['member_name'];
 	$attlife__g[] = $row['attendancelife'];
-	$att90__g[] = $row['attendancelife'];
-	$att30__g[] = $row['attendancelife'];
-	
+	$att90__g[] = $row['attendance90'];
+	$att60__g[] = $row['attendance60'];
+	$att30__g[] = $row['attendance30'];
 	
     $template->assign_block_vars('attendance_row', array(
         'NAME' 					=> $row['member_name'],
@@ -626,156 +841,33 @@ $template->assign_vars(array(
 	'RAIDS_X3_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p1']),
 ));
 
- unset($myPicture);
- unset($MyData); 
- // Create the pData object
- $myData = new pData();  
-
- 
-/***********************
- *  
- *  Class Statistics 
- *  
- **********************/
-
-$classes = array();
-
-// Find total # members with a dkp record
-$sql = 'SELECT count(member_id) AS members FROM ' . MEMBER_DKP_TABLE ;
-if ($query_by_pool)
-{
-    $sql .= ' where member_dkpid = '. $dkp_id . ' ';
-}
-
-if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
-{
-   $sql .= " AND member_status='1'";
-}
-
-$result = $db->sql_query($sql);
-$total_members = (int) $db->sql_fetchfield('members');
-
-
-// get #classcount, #drops per class
-
-$sql = "select 
-c1.name as class_name, c.class_id, c.game_id, c.colorcode,  c.imagename, 
-count(c.class_id) as class_count, sum(case when x.itemcount is null then 0 else x.itemcount end) as itemcount
-from ((" . MEMBER_DKP_TABLE . " d left join 
-(
-SELECT i.member_id, count(i.item_id) as itemcount
-FROM 
-((" . EVENTS_TABLE ." e inner join ". RAIDS_TABLE ." r on e.event_id=r.event_id)
-inner join " . RAID_ITEMS_TABLE . " i on  r.raid_id = i.raid_id )
-WHERE e.event_dkpid = 3 
-GROUP BY i.member_id
-) x
-on d.member_id = x.member_id)
-INNER JOIN " . MEMBER_LIST_TABLE . " l on l.member_id = d.member_id
-INNER JOIN " . CLASS_TABLE ." c on l.member_class_id = c.class_id and l.game_id = c.game_id)
-INNER JOIN " . BB_LANGUAGE . " c1 ON c.game_id = c1.game_id AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class' 
-";
-
-if ($query_by_pool)
-{
-     $sql .= ' WHERE d.member_dkpid = '. $dkp_id . ' ';
-}
-
-if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
-{
-   $sql .= " AND d.member_status='1'";
-}
-
-
-$sql .= " GROUP BY c.game_id,  c.colorcode,  c.imagename, c.class_id , c1.name ";
-
-$result = $db->sql_query($sql);
-
-$class_drop_pct_cum = 0;
-$classname_g = array();
-$class_drop_pct_g = array();
-$classpct_g = array();
-
-while ($row = $db->sql_fetchrow($result) )
-{
-	$classname_g[] = $row['class_name'];
-	// get class count and pct
-	$class_count = $row['class_count'];
-	$classpct = (float) ($total_members > 0) ? round(($row['class_count'] / $total_members) * 100,1)  : 0;
-	$classpct_g[] = $classpct;
-	
-	// get drops per class and pct
-	$loot_drops = (int) $row['itemcount'];
-    $class_drop_pct = (float) ( $total_drops > 0 ) ? round( ( (int) $row['itemcount'] / $total_drops) * 100, 1 ) : 0;
-    $class_drop_pct_g[] = $class_drop_pct;
-	$class_drop_pct_cum +=  $class_drop_pct;
-			
-	$lootoverrun =  ($class_drop_pct - $classpct); 
-
-	if ($query_by_pool)
-    {
-        $lmlink =  append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=standings&amp;filter='. $row['game_id'].'_class_' . $row['class_id'] . '&amp;' . URI_DKPSYS .'=' . $dkp_id); 
-    }
-    else 
-    {
-        $lmlink =  append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=standings&amp;filter='. $row['game_id'] .'_class_' . $row['class_id']);
-    }
-    
-      //$total_drops += (int) $row['itemcount'];
-       $template->assign_block_vars('class_row', array(
-    	'U_LIST_MEMBERS' 	=> $lmlink ,
-		'COLORCODE'  		=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
-    	'CLASS_IMAGE' 		=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
-		'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 		
-        'CLASS_NAME'		=> $row['class_name'],
-		
-        'CLASS_COUNT' 		=> (int) $class_count,
-        'CLASS_PCT' 		=> sprintf("%s %%", $classpct ),
-    
-        'LOOT_COUNT' 		=> $loot_drops,
-    	'CLASS_DROP_PCT'	=> sprintf("%s %%", $class_drop_pct  ),
-    
-    	'C_LOOT_FACTOR'		=> ($lootoverrun < 	0) ? 'negative' : 'positive', 
-       	'LOOTOVERRUN'		=> sprintf("%s %%", $lootoverrun), 
-		)
-    );
-}
-
-/* chart generation */
-
-/* CAT:Bar Chart */
 
  /* Create and populate the pData object */
  $MyData = new pData();  
 
- /* for each class, add point array */
+ $MyData->addPoints($attlife__g,$user->lang['ATTENDANCE_LIFETIME']);
+ $MyData->addPoints($att90__g, sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p3']));
+ $MyData->addPoints($att60__g, sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p2']));
+ $MyData->addPoints($att30__g, sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p1']));
+ $MyData->setAxisName(0,$user->lang['RAID_ATTENDANCE_HISTORY']);
+ $MyData->addPoints(  $membername_g ,"Members");
  
- $MyData->addPoints($classpct_g,"Class%");
- $MyData->addPoints( $class_drop_pct_g,"Drop%");
- $MyData->setAxisName(0,"%");
+ $MyData->setSerieDescription("Members","Member");
  
- $MyData->addPoints(  $classname_g ,"Classes");
- $MyData->setSerieDescription("Classes","Class");
- $MyData->setAbscissa("Classes"); 
- 
+ $MyData->setAbscissa("Members"); 
+ $MyData->setAbscissaName("Members");
+ $MyData->setAxisDisplay(0,AXIS_FORMAT_METRIC,1); 
+  
  $pallette = $phpbb_root_path . "includes/bbdkp/pchart/palettes";
- $MyData->loadPalette("$pallette/blind.color", TRUE);
-
+ $MyData->loadPalette("$pallette/light.color", TRUE);
+ 
 /* Create the pChart object */
- $myPicture = new pImage(440,500,$MyData);
+ $myPicture = new pImage(420,500,$MyData);
  
  /* make a background gradient */
- $myPicture->drawGradientArea(0,0,440,500,DIRECTION_VERTICAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>100));
- $myPicture->drawGradientArea(0,0,440,500,DIRECTION_HORIZONTAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>20));
+ $myPicture->drawGradientArea(0,0,420,500,DIRECTION_VERTICAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>100));
+ $myPicture->drawGradientArea(0,0,420,500,DIRECTION_HORIZONTAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>20));
  
- // set the fonts
- $fonttitle = $phpbb_root_path . "includes/bbdkp/pchart/fonts/Forgotte.ttf";
- $myPicture->setFontProperties(array(
- 	"FontName" => $fonttitle,
- 	"FontSize" =>15));
- // draw the title
- //$myPicture->drawText(20,34,"Class participation vs. Class droprate",array("FontSize"=>20));
-
  /* Define the chart font */ 
  $chartfont = $phpbb_root_path . "includes/bbdkp/pchart/fonts/pf_arma_five.ttf"; 
  $myPicture->setFontProperties(array(
@@ -783,60 +875,28 @@ while ($row = $db->sql_fetchrow($result) )
   	"FontSize"=> 6));
 
 /* Draw the scale  */
- $myPicture->setGraphArea(50,30,420,490);
- $myPicture->drawScale(array("CycleBackground"=>TRUE,"DrawSubTicks"=>TRUE,"GridR"=>0,"GridG"=>0,"GridB"=>0,"GridAlpha"=>10));
-
+ $myPicture->setGraphArea(100,30,400,480);
+ $myPicture->drawScale(array("CycleBackground"=>TRUE,"DrawSubTicks"=>TRUE,"GridR"=>0,"GridG"=>0,"GridB"=>0,"GridAlpha"=>10,"Pos"=>SCALE_POS_TOPBOTTOM)); // 
+ 
  /* Turn on shadow computing */ 
  $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
 
- /* Draw the chart */
- $settings = array(
- 	"Gradient"=>TRUE,
- 	"DisplayPos"=>LABEL_POS_INSIDE,
- 	"DisplayValues"=>TRUE,
- 	"DisplayR"=>255,
- 	"DisplayG"=>255,
- 	"DisplayB"=>255,
- 	"DisplayShadow"=>TRUE,
- 	"Surrounding"=>5);
- $myPicture->drawBarChart($settings);
-
- /* Write the chart legend */
- $myPicture->drawLegend(100,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
+  /* Draw the line and plot chart */
+ $myPicture->drawSplineChart();
+ $myPicture->drawPlotChart();
+ 
+  /* Write the chart legend */
+ $myPicture->drawLegend(570,215,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
  
  /* Render the picture */
- $imagepath= $phpbb_root_path . "images/pchart/barchart". gen_rand_string_friendly(8) . ".png";
- $myPicture->render($imagepath);
+ $imagepath0= $phpbb_root_path . "images/pchart/vchart". gen_rand_string_friendly(8) . ".png";
+ $myPicture->render($imagepath0);
  unset($myPicture);
  unset($MyData); 
 
-$navlinks_array = array(
-array(
- 'DKPPAGE' => $user->lang['MENU_STATS'],
- 'U_DKPPAGE' => append_sid("{$phpbb_root_path}stats.$phpEx"),
-)); 
-
-foreach( $navlinks_array as $name )
-{
-	 $template->assign_block_vars('dkpnavlinks', array(
-	 'DKPPAGE' => $name['DKPPAGE'],
-	 'U_DKPPAGE' => $name['U_DKPPAGE'],
-	 ));
-}
-
-
 /* send information to template */
 $template->assign_vars(array(
-	'CHART1'   => $imagepath,
-   	'S_DISPLAY_STATS'		=> true,
-	'F_STATS' => $u_stats,
-
-	'U_STATS' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats'),
-    'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
-	'TOTAL_MEMBERS' 	=> $total_members, 
-	'TOTAL_DROPS' 		=> $total_drops, 
-	'CLASSPCTCUMUL'		=> round($class_drop_pct_cum), 
-
+	'CHART2'   => $imagepath0,
     )
 );
 
