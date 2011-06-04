@@ -190,23 +190,28 @@
 
 
 <hr />
-<!--  Class statistics -->
 
+
+<!--  Attendance statistics -->
 <h3>{L_RAID_ATTENDANCE_HISTORY}</h3>
 
-<div class="forumbg forumbg-table" style="width:70%; float:left;">
+<div class="panel">
+<div class="inner">
+<span class="corners-top"><span></span></span>
+
+<div class="forumbg forumbg-table" style="width:50%; float:left;">
 <div class="inner">
 <span class="corners-top"><span></span></span>
 
 
-<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+<table class="table1" width="60%" border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>	  
-    <th COLSPAN="3" style=" width:10%;"><a href="{O_NAME}">{L_NAME}</a></th>
-    <th COLSPAN="3" style=" width:10%;"><a href="{O_NAME}">{L_ATTENDANCE_LIFETIME}</a></th>
-    <th COLSPAN="3" style=" width:10%;">{RAIDS_X1_DAYS}</th>
-    <th COLSPAN="3" style=" width:10%;">{RAIDS_X2_DAYS}</th>
-    <th COLSPAN="3" style=" width:10%;">{RAIDS_X3_DAYS}</th>
+    <th COLSPAN="3" style=" width:8%;"><a href="{O_NAME}">{L_NAME}</a></th>
+    <th COLSPAN="3" style=" width:23%;"><a href="{O_NAME}">{L_ATTENDANCE_LIFETIME}</a></th>
+    <th COLSPAN="3" style=" width:23%;">{RAIDS_X1_DAYS}</th>
+    <th COLSPAN="3" style=" width:23%;">{RAIDS_X2_DAYS}</th>
+    <th COLSPAN="3" style=" width:23%;">{RAIDS_X3_DAYS}</th>
 </tr>
 </thead>
 <tfoot>
@@ -246,6 +251,19 @@
 </tbody>
 
 </table>
+
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
+
+<div class="panel" style="width:25%; float:left;">
+<div class="inner">
+<span class="corners-top"><span></span></span>
+<img src="{CHART2}" align="middle" alt="The Guru" border="2" />
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
+
 
 <span class="corners-bottom"><span></span></span>
 </div>

@@ -267,7 +267,7 @@ function create_bar($width, $show_text = '', $color = '#AA0033')
     
         if ( $show_text != '' )
         {
-            $bar .= '<span style="color:#EEEEEE;" class="small">' . $show_text . '</span>';
+            $bar .= '<span style="color:#EEEEEE"; class="small">' . $show_text . '</span>';
         }
     
         $bar .= '</td></tr></table>';
@@ -275,6 +275,7 @@ function create_bar($width, $show_text = '', $color = '#AA0033')
     
     return $bar;
 }
+
 
 
 /******
@@ -288,27 +289,56 @@ function create_bar($width, $show_text = '', $color = '#AA0033')
  * used by listmembers.php and viewmember.php
  * 
  */
-function raidcount($query_by_pool, $dkpsys_id, $days, $member_id, $mode, $all=false)
+function raidcount($query_by_pool, $dkpsys_id, $days, $member_id=0, $mode=1, $all = false)
 {
-    global $db;
-	
 	$start_date = mktime(0, 0, 0, date('m'), date('d')-$days, date('Y')); 
-	
-	// get member joindate
- 	$sql = 'SELECT member_joindate  FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id = ' . $member_id; 
-	$result = $db->sql_query($sql);
-	$joindate = $db->sql_fetchfield('member_joindate',0,$result);
-	$db->sql_freeresult($result);
-	
 	// member joined in the last $days ?
-	if ($joindate > $start_date)
+	
+	$joindate = _get_joindate($member_id); 
+	if ($all==true || $joindate > $start_date)
 	{
 		// then count from join date
-		$start_date = $joindate; 
+		$start_date = $joindate;	
 	}
-	// get member raidcount
-	$individual_raid_count = 0;
 	
+	$end_date = time();
+	
+    switch ($mode)
+    {
+    	case 0:
+			// get member raidcount
+    		return _memberraidcount($member_id, $start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
+    		break;
+    	
+    	case 1:
+    		// get total pool raidcount
+    		return _totalraidcount($start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
+    		break;
+
+    	case 2:
+			$memberraidcount = _memberraidcount($member_id, $start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
+			$raid_count = _totalraidcount($start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
+    		$percent_of_raids = ($raid_count > 0 ) ?  round(($memberraidcount / $raid_count) * 100,2) : 0;
+    		return (float) $percent_of_raids; 
+    		break;
+    }
+    
+}
+
+/**
+ * calculate raid count for the whole pool starting from joindate or startdate
+ * no caching
+ * 
+ * @param int $member_id
+ * @param int $start_date
+ * @param int $end_date
+ * @param bool $query_by_pool
+ * @param bool $all
+ * @return int
+ */
+function _memberraidcount($member_id, $start_date, $end_date, $query_by_pool, $dkpsys_id, $all)
+{
+	global $db;
 	$sql_array = array(
 	    'SELECT'    => 	' COUNT(*) as raidcount  ', 
 	    'FROM'      => array(
@@ -324,11 +354,10 @@ function raidcount($query_by_pool, $dkpsys_id, $days, $member_id, $mode, $all=fa
 
     if ($all==true)
     {
-    	$sql_array['WHERE'] .= ' AND r.raid_start >= ' . $joindate; 
+    	$sql_array['WHERE'] .= ' AND r.raid_start >= ' . $start_date; 
     }
     else 
     {
-	    $end_date = time(); 
     	$sql_array['WHERE'] .= ' AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date; 
     }
 	
@@ -338,13 +367,27 @@ function raidcount($query_by_pool, $dkpsys_id, $days, $member_id, $mode, $all=fa
 	}
 	$sql = $db->sql_build_query('SELECT', $sql_array);
 	
-	
     $result = $db->sql_query($sql);
     $individual_raid_count = (int) $db->sql_fetchfield('raidcount',0,$result);
     $db->sql_freeresult($result);
 
-    // total raid count for this pool or globally
-	$raid_count = 0;
+    return $individual_raid_count; 
+}
+
+/**
+ * calculate total raidcount for pool starting from joindate
+ * no caching
+ *
+ * @param int $start_date
+ * @param int $end_date
+ * @param boolean $query_by_pool
+ * @param boolean $all
+ * @return int
+ */
+function _totalraidcount($start_date, $end_date, $query_by_pool, $dkpsys_id, $all)
+{
+	global $db;
+	
 	$sql_array = array(
 	    'SELECT'    => 	' COUNT(*) as raidcount  ', 
 	    'FROM'      => array(
@@ -354,13 +397,12 @@ function raidcount($query_by_pool, $dkpsys_id, $days, $member_id, $mode, $all=fa
 	    'WHERE'		=> 'r.event_id = e.event_id ',
     );
     
-    if ($all==true)
+    if ($all == true)
     {
-    	$sql_array['WHERE'] .= ' AND r.raid_start >= ' . $joindate; 
+    	$sql_array['WHERE'] .= ' AND r.raid_start >= ' . $start_date; 
     }
     else 
     {
-	    $end_date = time(); 
     	$sql_array['WHERE'] .= ' AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date; 
     }
     
@@ -374,25 +416,29 @@ function raidcount($query_by_pool, $dkpsys_id, $days, $member_id, $mode, $all=fa
 	$result = $db->sql_query($sql);
 	$raid_count = (int) $db->sql_fetchfield('raidcount',0,$result);
 	$db->sql_freeresult($result);
-
-    // calculate ratio 
-    $percent_of_raids = ($raid_count > 0 ) ?  round(($individual_raid_count / $raid_count) * 100,2) : 0;
-   
-    
-    switch ($mode)
-    {
-    	case 0:
-    		return $individual_raid_count;
-    		break;
-    	case 1:
-    		return $raid_count;
-    		break;
-    	case 2:
-    		 return (float) $percent_of_raids; 
-    		break;
-    }
-    
+	return $raid_count;
+		    		
 }
+/**
+ * Enter joindate for guildmember (query is cached for 1 week !)
+ *
+ * @param unknown_type $member_id
+ * @return unknown
+ * 
+ */
+function _get_joindate($member_id)
+{
+	// get member joindate
+ 	global $db;
+	$sql = 'SELECT member_joindate  FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id = ' . $member_id; 
+	$result = $db->sql_query($sql,3600);
+	$joindate = $db->sql_fetchfield('member_joindate',0,$result);
+	$db->sql_freeresult($result);
+	return $joindate;
+	
+}
+
+
 
 
 ?>
