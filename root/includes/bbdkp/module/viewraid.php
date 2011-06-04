@@ -378,22 +378,37 @@ $template->assign_vars(array(
 *	class block
 ******************************/
 $classes = array();
-$sql = 'SELECT a.class_id, c1.name, a.colorcode, a.imagename from ' . CLASS_TABLE . ' a, '	. BB_LANGUAGE . " c1 
-   WHERE a.class_id != 0  AND c1.attribute_id = a.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'";
+
+// item selection
+$sql_array = array(
+    'SELECT'    => ' c.class_id, c1.name, c.colorcode, c.imagename ',
+    'FROM'      => array(
+        CLASS_TABLE 		=> 'c', 
+        MEMBER_LIST_TABLE 	=> 'l', 
+        BB_LANGUAGE    		=> 'c1',
+    ),
+    'WHERE'     =>  "c.game_id = l.game_id  and c.class_id = l.member_class_id  
+    				AND c1.attribute_id = l.member_class_id and c1.game_id = l.game_id
+    				AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'",
+    'GROUP_BY'  => 'c.class_id',
+    'ORDER_BY' => 'c1.name'
+);
+
+$sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query($sql);
 while ( $row = $db->sql_fetchrow($result) )
 {
 	$classes[$row['class_id']]['classname'] = $row['name'];
 	$classes[$row['class_id']]['colorcode'] = $row['colorcode'];
 	$classes[$row['class_id']]['imagename'] = $row['imagename'];
-	$classes[$row['class_id']]['group'] = '';
+	$classes[$row['class_id']]['group'] = ' ';
 	$classes[$row['class_id']]['count'] = 0;
 }
 $db->sql_freeresult($result);
 	
 foreach($raid_details as $attendee)
 {
-	$classes[$attendee['class_id']]['group'] .= $attendee['member_name'];
+	$classes[$attendee['class_id']]['group'] .= $attendee['member_name'] . ' ';
 	$classes[$attendee['class_id']]['count'] += 1;
 }
 	
