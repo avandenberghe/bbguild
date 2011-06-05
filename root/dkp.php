@@ -98,7 +98,13 @@ switch ($page)
 		break;		
 	case 'roster':
 		include($phpbb_root_path . 'includes/bbdkp/module/roster.' . $phpEx);
-		break;		
+		break;	
+	case 'planner':
+		include($phpbb_root_path . 'includes/bbdkp/raidplanner/planner.' . $phpEx);
+		break;	
+	case 'planneradd':
+		include($phpbb_root_path . 'includes/bbdkp/raidplanner/planneradd.' . $phpEx);
+		break;			
 }
 
 $template->set_filenames(array(
