@@ -12,10 +12,11 @@
 /**
  * @ignore
  */
-if (! defined ( 'IN_PHPBB' ))
+if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
-	exit ();
+	exit;
 }
+
 $user->add_lang(array('posting'));
 include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 include_once($phpbb_root_path.'includes/functions_content.' . $phpEx);

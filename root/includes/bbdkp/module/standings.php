@@ -12,10 +12,11 @@
 /**
  * @ignore
  */
-if (!defined('IN_PHPBB'))
+if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
-   exit;
+	exit;
 }
+
 
 $list_p1 = (isset ( $config ['bbdkp_list_p1'] ) == true) ? $config ['bbdkp_list_p1'] : 30;
 $list_p2 = (isset ( $config ['bbdkp_list_p2'] ) == true) ? $config ['bbdkp_list_p2'] : 60;

@@ -12,10 +12,11 @@
 /**
  * @ignore
  */
-if (!defined('IN_PHPBB'))
+if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
-   exit;
+	exit;
 }
+
 $sort_order = array(
     0 => array('event_name', 'event_dkpid, event_name desc'),
     1 => array('event_value desc', 'event_dkpid, event_value desc')

@@ -12,10 +12,11 @@
 /**
  * @ignore
  */
-if (!defined('IN_PHPBB'))
+if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
-   exit;
+	exit;
 }
+
 
 if ( !isset($_GET[URI_RAID]) )
 {
