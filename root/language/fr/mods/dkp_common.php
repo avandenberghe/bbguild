@@ -6,7 +6,7 @@
 * @package language
 * @version $Id: $
 * @copyright (c) 2011 phpBB Group
-* @author 2011-03-14 - Maël Soucaze
+* @author 2011-06-05 - Maël Soucaze
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -34,9 +34,18 @@ if (empty($lang) || !is_array($lang))
 //
 // You do not need this where single placeholders are used, e.g. 'Message %d' is fine
 // equally where a string contains only two placeholders which are used to wrap text
-// in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine 
+// in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
+	'MENU_PLANNER'	=> 'Calendrier',
+	'RIFT'	=> 'Rift',
+	'SWTOR'	=> 'Starwars : Vieille République',
+	'ATTENDANCE_LIFETIME'	=> 'Participation globale',
+	'NODKPACCOUNTS'	=> 'Pas de comptes DKP trouvés',
+	'ROBE'	=> 'Robes',
+	'AUGMENTED'	=> 'Costume augmenté',
+	'HEAVY'	=> 'Armure Lourde ',
+	'LOOTDIST_CLASS'	=> 'Distribution par classe du butin.',
 	'WOW'	=> 'World of Warcraft',
 	'LOTRO'	=> 'The Lord of the Rings Online',
 	'EQ'	=> 'EverQuest',

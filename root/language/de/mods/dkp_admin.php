@@ -6,7 +6,7 @@
 * @package language
 * @version $Id: $
 * @copyright (c) 2011 phpBB Group
-* @author 2011-03-14 - phpBB.de
+* @author 2011-06-05 - phpBB.de
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -37,6 +37,16 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
+	'UMIL_NOGAMECHOSEN'	=> 'Bitte wähle ein Spiel.',
+	'UMIL_UPD123'	=> 'Dateien aktualisiert zu v1.2.3',
+	'UMIL_GAME123'	=> 'Spieldaten für %s installiert.',
+	'UMIL_GAMEUNINST123'	=> 'Spieldaten entfernt.',
+	'RETURN_DKPPOOLINDEX'	=> 'Zurück zur Poolliste',
+	'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Spiel nicht änderbar.',
+	'ADMIN_RAID_ATTENDEE_DELETED_FAILED'	=> 'Teilnehmer %s konnte nicht from raid %s herausgenommen worden.',
+	'GAME'	=> 'Spiel',
+	'ARMORY_URL'	=> 'Armory Link',
+	'GENERATE_ARMORY_URL'	=> 'Lege Hyperlink zum Armory an.',
 	'BBDKPSCRIPTALERT'	=> 'bbDKP enthält Javascript. Bitte aktivieren Sie javascript in ihren Browser.',
 	'FV_FREQUENCY_NOTZERO'	=> 'Die Entwertungs-Frekwenz kann nicht null sein.',
 	'ACP_MM_EDITMEMBER'	=> 'Bearbeite Mitglied',
@@ -57,7 +67,7 @@ $lang = array_merge($lang, array(
 	'ERROR_NOGUILDMEMBERSDEFINED'	=> 'Achtung : keine Gildenmitglieder, kann kein Raid zufügen.',
 	'ERROR_RANKMEMBERS'	=> 'Achtung : Kann Rang nicht löschen denn es gibt noch immer Mitglieder mit diesen Rang.',
 	'ERROR_NOSELECT'	=> 'Bitte wähle ein Von- und ein Zu-Mitglied',
-	'ERROR_NOADJUSTMENTS'	=> 'Keine Ajustierungen gefunden.',
+	'ERROR_NOADJUSTMENTS'	=> 'Keine Adjustierungen gefunden.',
 	'ADMIN_RAID_ATTENDEE_DELETED_SUCCESS'	=> 'Teilnehmer %s wurden vom Raid %s gelöscht',
 	'ZEROSUM_ONOFF_EXPLAIN'	=> 'Kann nicht aktiviert werden zusammen mit EPGP.',
 	'EPGP_ONOFF_EXPLAIN'	=> 'Kann nicht aktiviert werden zusammen mit Nullsumme.',
@@ -271,10 +281,10 @@ $lang = array_merge($lang, array(
 	'UMIL_OLD_RESTORE_NOT'	=> 'Keine bbDKP (%s) Installation ist gefunden worden zum wiederherstellen.',
 	'UMIL_OLD_UNINSTALL_SUCCESS'	=> 'bbDKP (%s) wurde gelöscht. ',
 	'UMIL_109_ILLEGALVERSION'	=> '1.0.9 beta wurden gefunden, du musst upgraden zu 1.0.9rc1 und ab dann kannst du upgraden nach 1.1.2',
-	'UMIL_UPDATE120' => 'tabellen aktualisiert von 1.1.2.2 auf 1.2', 
-	'UMIL_122MINIMUM' => 'Old version. 1.2.2 is required for updating to 1.2.3', 
-	'UMIL_RENAMETABLESNEW' => 'tabellen aktualisiert von präfix bbeqdkp_ zu phpbb_',
-	'UMIL_RENAMETABLESOLD' => 'tabellen aktualisiert von präfix phpbb_ zu bbeqdkp_  ', 
+	'UMIL_UPDATE120'	=> 'tabellen aktualisiert von 1.1.2.2 auf 1.2',
+	'UMIL_122MINIMUM'	=> 'Old version. 1.2.2 is required for updating to 1.2.3',
+	'UMIL_RENAMETABLESNEW'	=> 'tabellen aktualisiert von präfix bbeqdkp_ zu phpbb_',
+	'UMIL_RENAMETABLESOLD'	=> 'tabellen aktualisiert von präfix phpbb_ zu bbeqdkp_  ',
 	'BBDKP_WELCOME'	=> 'Wilkommen bei bbDKP',
 	'ACP_DKP_MAINPAGE'	=> 'DKP Übersicht',
 	'ACP_DKP_BBSTATS'	=> 'Admin-Übersicht',
@@ -747,7 +757,7 @@ So the loot would go to player 2 <br />',
 	'UPDATE_RAID'	=> 'Bearbeite Raid',
 	'UPDATE_RACE'	=> 'Bearbeite Rasse',
 	'UPDATE_CLASS'	=> 'Bearbeite Klasse',
-	'CHANGE_ACTIVATION' => 'Aktivierung', 
+	'CHANGE_ACTIVATION'	=> 'Aktivierung',
 	'ADJUSTMENT_VALUE'	=> 'Punkte Anpassung',
 	'ADJUSTMENT_VALUE_NOTE'	=> 'darf negativ sein',
 	'CLASS_NAME'	=> 'Klassenname',
@@ -760,7 +770,7 @@ So the loot would go to player 2 <br />',
 	'CONTACT'	=> 'Kontakt',
 	'CREATE'	=> 'Schaffe',
 	'DATE_FORMAT'	=> ' Datumsformat in Anzeigeliste',
-	'DEFAULT_DKP_POOL' => 'Standard DKP Pool', 
+	'DEFAULT_DKP_POOL'	=> 'Standard DKP Pool',
 	'DONE'	=> 'Fertig',
 	'HOLD_CTRL_NOTE'	=> 'Drücke CTRL(PC) oder CMD(Mac) zur Mehrfachauswahl<br />',
 	'DKP_STATUS'	=> 'DKP Pool Status (Y oder N)',
