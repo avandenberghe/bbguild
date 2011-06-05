@@ -80,6 +80,11 @@ if ($submit)
 	}
 }
 
+// show the buttons ?
+$can_delete = false ;
+$can_add = false ;
+$can_edit = false ;
+	
 // go to edit or newpost mode
 if ($mode == 'edit' || $mode == 'newpost')
 {
