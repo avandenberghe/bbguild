@@ -17,7 +17,6 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 	exit;
 }
 
-
 $list_p1 = (isset ( $config ['bbdkp_list_p1'] ) == true) ? $config ['bbdkp_list_p1'] : 30;
 $list_p2 = (isset ( $config ['bbdkp_list_p2'] ) == true) ? $config ['bbdkp_list_p2'] : 60;
 $list_p3 = (isset ( $config ['bbdkp_list_p3'] ) == true) ? $config ['bbdkp_list_p3'] : 90;
@@ -39,10 +38,9 @@ $sql_array = array(
 	'GROUP_BY'  => 'a.dkpsys_id'
 ); 
 
-// cache query
 $sql = $db->sql_build_query('SELECT', $sql_array);
-// query gets cached for a week
-$result = $db->sql_query ($sql,604000);
+
+$result = $db->sql_query ($sql);
 $index = 3;
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
