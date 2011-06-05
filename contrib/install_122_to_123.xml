@@ -97,6 +97,7 @@
 			<file from="root/adm/findfaction.php" to="adm/findfaction.php"/>
 			<file from="root/adm/mods/bbdkp_check_version.php" to="adm/mods/bbdkp_check_version"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
+			<file from="root/images/pchart/cache/*.*" to="images/pchart/cache/*.*"/>
 			<file from="root/images/class_images/*.*" to="images/class_images/*.*"/>
 			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>
 			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>

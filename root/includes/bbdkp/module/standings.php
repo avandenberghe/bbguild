@@ -773,7 +773,8 @@ $template->assign_vars ( array (
 ));
 
  
-if($config['bbdkp_timebased'] == 1) {
+if($config['bbdkp_timebased'] == 1) 
+{
 	$template->assign_var('O_DKP_HOUR', $sortlink [7]);
 	
 }
@@ -806,6 +807,10 @@ page_header ( $user->lang ['LISTMEMBERS_TITLE'] );
 
 /**
  * this function builds a grid with PR or earned (after decay)
+ *
+ * @param int $dkpsys_id
+ * @param bool $query_by_pool
+ * @param bool $show_all
  */
 function leaderboard($dkpsys_id, $query_by_pool, $show_all)
 {

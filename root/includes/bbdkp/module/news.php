@@ -23,8 +23,6 @@ include_once($phpbb_root_path.'includes/functions_content.' . $phpEx);
 $mode = request_var('mode', '');
 $submit = (isset ( $_POST ['post'] )) ? true : false;
 
-//date_default_timezone_set('UTC');
-
 $time = time() + $user->timezone + $user->dst - date('Z');
 $update = false;
 
