@@ -37,28 +37,15 @@
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>
-	<th style=" width:10%; font-size :10pt; text-align: center;  color:white" colspan="1">{L_RAIDS}</th>
-<!-- 	<th style=" width:20%; font-size :10pt; text-align: center; color:#77FF77" colspan="3">{L_EARNED}</th>
-	<th style=" width:20%; font-size :10pt; text-align: center; color:#FF8888" colspan="3">{L_SPENT}</th>
--->
-	<th style=" width:20%; font-size :10pt; text-align: center; color:white" colspan="5">{L_CURRENT}</th>
+	<th style=" width:8%; font-size :10pt; text-align: center;  color:white" colspan="1">{L_RAIDS}</th>
+	<th style=" width:92%; font-size :10pt; text-align: center; color:white" colspan="5">{L_CURRENT}</th>
 </tr>
 <tr>	  
-    <th style=" width:10%;"><a href="{O_NAME}">{L_NAME}</a></th>
-<!--     
-    <th style=" width:7%; text-align:right;" ><a href="{O_EARNED}">{L_TOTAL}</a></th>
-    <th style=" width:6%; text-align:right;" ><a href="{O_EARNED_PER_DAY}">{L_PER_DAY}</a></th>
-    <th style=" width:6%; text-align:right;" ><a href="{O_EARNED_PER_RAID}">{L_PER_RAID}</a></th>
-    
-    <th style=" width:7%; text-align:right;" ><a href="{O_SPENT}">{L_TOTAL}</a></th>
-    <th style=" width:6%; text-align:right;" ><a href="{O_SPENT_PER_DAY}">{L_PER_DAY}</a></th>
-    <th style=" width:6%; text-align:right;" ><a href="{O_SPENT_PER_RAID}">{L_PER_RAID}</a></th>
--->    
-    <th style=" width:6%; text-align:center;" ><a href="{O_PR}">{L_PR}</a></th>
-    <th style=" width:6%; text-align:center;" ><a href="{O_CURRENT}">{L_CURRENT}</a></th>
-    
-    <th style=" width:6%; text-align:center;" ><a href="{O_RAIDCOUNT}">{L_RAIDCOUNT}</a></th>
-    <th colspan="2" style=" width:10%; text-align:center;" ><a href="{O_ITEMCOUNT}">{L_LOOTS}</a></th>
+    <th style=" width:8%;"><a href="{O_NAME}">{L_NAME}</a></th>
+    <th style=" width:20%; text-align:center;" ><a href="{O_PR}">{L_PR}</a></th>
+    <th style=" width:20%; text-align:center;" ><a href="{O_CURRENT}">{L_CURRENT}</a></th>
+    <th style=" width:20%; text-align:center;" ><a href="{O_RAIDCOUNT}">{L_RAIDCOUNT}</a></th>
+    <th colspan="2" style=" width:20%; text-align:center;" ><a href="{O_ITEMCOUNT}">{L_LOOTS}</a></th>
 </tr>
 </thead>
 <tfoot>
@@ -76,18 +63,8 @@
     <tr class= "bg2">
     <!-- ENDIF -->
     <td><a style="color:{stats_row.COLORCODE}" href="{stats_row.U_VIEW_MEMBER}"><strong>{stats_row.NAME}</strong></a></td>
- <!--     <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EP_PER_DAY}</td>
-    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EP_PER_RAID}</td>
-    <td style="font-size :8pt; color: green; text-align: right;">{stats_row.EP_TOTAL}</td>
-    
-    <td style="font-size :8pt; color: red; text-align: right;">{stats_row.GP_PER_DAY}</td>
-    <td style="font-size :8pt; color: red; text-align: right;">{stats_row.GP_PER_RAID}</td>
-    <td style="font-size :8pt; color: red; text-align: right;"> {stats_row.GP_TOTAL}</td>
- -->
-    
     <td style="font-size :8pt; text-align: right;"><strong>{stats_row.PR}</strong></td>
     <td style="font-size :8pt; text-align: right;"><span class="{stats_row.C_CURRENT}"><strong>{stats_row.CURRENT}</strong></span></td>
-    
     <td style="font-size :8pt; text-align: center;">{stats_row.ATTENDED_COUNT}</td>
     <td style="font-size :8pt; text-align: center;">{stats_row.ITEM_COUNT}</td>
 	<td style="font-size :8pt; text-align: center;">{stats_row.MEMBER_DROP_PCT}</td>    
@@ -96,13 +73,11 @@
   </tr>
 <!-- END stats_row -->
 </tbody>
-
 </table>
 
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
-
 
 <div class="panel" style="width:45%; float:left;">
 <div class="inner">
@@ -112,8 +87,10 @@
 </div>
 </div>
 
-
+<div style="clear:both;"></div>
+<br />
 <hr />
+<br />
 <!--  Class statistics -->
 
 <h3>{L_LOOTDIST_CLASS}</h3>
@@ -133,7 +110,7 @@
 <th colspan="2" style="color:white; font-size :9pt; text-align: center;"># {L_MEMBERS}</th>
 
 <th style="color:white; font-size :9pt; text-align: center;"># {L_LOOTS}</th>
-<th style="color:white; font-size :9pt; text-align: center; text-align: center;"">% {L_LOOTS}</th>
+<th style="color:white; font-size :9pt; text-align: center; text-align: center;">% {L_LOOTS}</th>
 <th style="color:white; font-size :9pt; text-align: center;"></th>
 
 </tr>
@@ -145,7 +122,7 @@
 <th colspan="2" style="color:white; font-size :9pt; text-align: center;">{TOTAL_MEMBERS}</th>
 
 <th style="color:white; font-size :9pt; text-align: center;">{TOTAL_DROPS}</th>
-<th style="color:white; font-size :9pt; text-align: center; text-align: center;""></th>
+<th style="color:white; font-size :9pt; text-align: center; text-align: center;"></th>
 <th style="color:white; font-size :9pt; text-align: center;">{CLASSPCTCUMUL}</th>
 
 </tr>
@@ -157,7 +134,7 @@
    <!-- ELSE -->
    <tr class="bg2">
    <!-- ENDIF -->
-	  <td style="width:20%; white-space: nowrap;"><!-- IF class_row.S_CLASS_IMAGE_EXISTS --><img src="{class_row.CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
+	  <td style="width:20%; white-space: nowrap;"><!-- IF class_row.S_CLASS_IMAGE_EXISTS --><img src="{class_row.CLASS_IMAGE}" alt="abc" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
 	  &nbsp;<a style="white-space: nowrap; color:{class_row.COLORCODE}" href="{class_row.U_LIST_MEMBERS}"><strong>{class_row.CLASS_NAME}</strong></a> </td>
 	  <td style="width:7.5%; text-align:center;">{class_row.CLASS_COUNT}</td>
 	  <td style="width:7.5%; text-align:center;">{class_row.CLASS_PCT}</td>
@@ -188,9 +165,10 @@
 </div>
 </div>
 
-
+<div style="clear:both;"></div>
+<br />
 <hr />
-
+<br />
 
 <!--  Attendance statistics -->
 <h3>{L_RAID_ATTENDANCE_HISTORY}</h3>
@@ -204,14 +182,14 @@
 <span class="corners-top"><span></span></span>
 
 
-<table class="table1" width="60%" border="0" cellspacing="0" cellpadding="0">
+<table class="table1" width="90%" border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>	  
-    <th COLSPAN="3" style=" width:8%;"><a href="{O_NAME}">{L_NAME}</a></th>
-    <th COLSPAN="3" style=" width:23%;"><a href="{O_NAME}">{L_ATTENDANCE_LIFETIME}</a></th>
-    <th COLSPAN="3" style=" width:23%;">{RAIDS_X1_DAYS}</th>
-    <th COLSPAN="3" style=" width:23%;">{RAIDS_X2_DAYS}</th>
-    <th COLSPAN="3" style=" width:23%;">{RAIDS_X3_DAYS}</th>
+    <th colspan="3" style=" width:8%;"><a href="{O_NAME}">{L_NAME}</a></th>
+    <th colspan="3" style=" width:23%;"><a href="{O_NAME}">{L_ATTENDANCE_LIFETIME}</a></th>
+    <th colspan="3" style=" width:23%;">{RAIDS_X1_DAYS}</th>
+    <th colspan="3" style=" width:23%;">{RAIDS_X2_DAYS}</th>
+    <th colspan="3" style=" width:23%;">{RAIDS_X3_DAYS}</th>
 </tr>
 </thead>
 <tfoot>
@@ -256,7 +234,7 @@
 </div>
 </div>
 
-<div class="panel" style="width:25%; float:left;">
+<div class="panel" style="width:45%; float:left;">
 <div class="inner">
 <span class="corners-top"><span></span></span>
 <img src="{CHART2}" align="middle" alt="The Guru" border="2" />
