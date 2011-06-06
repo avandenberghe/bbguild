@@ -40,7 +40,18 @@
 
 <fieldset>
 <legend>{L_ADD_CLASS_TITLE}</legend>
-	<dl>
+    
+    <dl>
+	    <dt><label>{L_GAME}:</label><br />{L_GAME_CLASSRACEUPDATE_EXPLAIN}</dt>
+	  		<dd>
+	  		<select name="game_id" class="input" onChange="return Getfaction(this.value)">
+	       <!-- BEGIN game_row -->
+	       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
+	        <!-- END game_row -->
+	      </select></dd>
+	 </dl>
+	 
+	 <dl>
 		<dt><label for="class_name">{L_CLASS_NAME}:</label></dt>
 		<dd><input class="medium" type="text" id="class_name" name="class_name" value="{CLASS_NAME}" /></dd>
 	</dl>
@@ -51,7 +62,7 @@
 	</dl>
 
 	<dl>
-		<dt><label for="class_id">{L_CLASS_LEVEL}:</label><br/></dt>
+		<dt><label>{L_CLASS_LEVEL}:</label><br/></dt>
 		<dd>
 			<input class="small" type="text" id="class_level_min" name="class_level_min" value="{CLASS_MIN}" />
 			<input class="small" type="text" id="class_level_max" name="class_level_max" value="{CLASS_MAX}" />

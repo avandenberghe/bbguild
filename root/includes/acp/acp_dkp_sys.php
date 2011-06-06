@@ -39,8 +39,9 @@ class acp_dkp_sys extends bbDKP_Admin
 	{
 		global $db, $user, $auth, $template, $sid, $cache;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		$link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage" ) . '"><h3>Return to Index</h3></a>';
 		$user->add_lang ( array ('mods/dkp_admin' ) );
+		
+		$link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys" ) . '"><h3>'. $user->lang['RETURN_DKPPOOLINDEX'].'</h3></a>';
 		
 		switch ($mode)
 		{
@@ -48,12 +49,12 @@ class acp_dkp_sys extends bbDKP_Admin
 				$update = false;
 				if ((isset ( $_GET [URI_DKPSYS] )))
 				{
-					// GET
+					// GET existing 
 					$this->url_id = request_var ( URI_DKPSYS, 0 );
 					$update = true;
 					$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_status
 								FROM ' . DKPSYS_TABLE . '
-								WHERE dkpsys_id = ' . $this->url_id;
+								WHERE dkpsys_id = ' . (int) $this->url_id;
 					$result = $db->sql_query ( $sql );
 					if (! $row = $db->sql_fetchrow ( $result ))
 					{
@@ -116,7 +117,7 @@ class acp_dkp_sys extends bbDKP_Admin
 							'log_action' => $log_action ) );
 						
 						$success_message = sprintf ( $user->lang ['ADMIN_ADD_DKPSYS_SUCCESS'], $this->dkpsys ['dkpsys_name'] );
-						trigger_error ( $success_message . adm_back_link ( $this->u_action ));
+						trigger_error ( $success_message . $link );
 					} 
 					else
 					{
@@ -135,8 +136,7 @@ class acp_dkp_sys extends bbDKP_Admin
 					
 					// get the old name, status 
 					$sql = 'SELECT dkpsys_name, dkpsys_status
-							FROM ' . DKPSYS_TABLE . "
-							WHERE dkpsys_id='" . $this->url_id . "'";
+							FROM ' . DKPSYS_TABLE . ' WHERE dkpsys_id=' . (int) $this->url_id;
 					$result = $db->sql_query ( $sql );
 					while ( $row = $db->sql_fetchrow ( $result ) )
 					{
@@ -147,14 +147,12 @@ class acp_dkp_sys extends bbDKP_Admin
 					$db->sql_freeresult ( $result );
 					
 					// Update the dkp sysname, status 
-					// since only the dkpid is stored in raid tables no 
-					// need to update dkpname in raid table (like events)
 					$query = $db->sql_build_array ( 
 							'UPDATE', 
 							array (
 								'dkpsys_name' => $this->dkpsys ['dkpsys_name'], 
 								'dkpsys_status' => $this->dkpsys ['dkpsys_status'] ) );
-					$sql = 'UPDATE ' . DKPSYS_TABLE . ' SET ' . $query . " WHERE dkpsys_id='" . $this->url_id . "'";
+					$sql = 'UPDATE ' . DKPSYS_TABLE . ' SET ' . $query . ' WHERE dkpsys_id=' . (int) $this->url_id;
 					$db->sql_query ( $sql );
 					
 					// Logging, put old & new
@@ -171,8 +169,9 @@ class acp_dkp_sys extends bbDKP_Admin
 						array (
 							'log_type' => $log_action ['header'], 
 							'log_action' => $log_action ) );
+					
 					$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_DKPSYS_SUCCESS'], $this->url_id, $this->dkpsys ['dkpsys_name'], $this->dkpsys ['dkpsys_status'] );
-					trigger_error ( $success_message . adm_back_link ( $this->u_action ) );
+					trigger_error ( $success_message . $link );
 				
 				}
 				
@@ -217,21 +216,19 @@ class acp_dkp_sys extends bbDKP_Admin
 						$this->dkpsys = array (
 							'dkpsys_name' => utf8_normalize_nfc ( request_var ( 'dkpsys_name', ' ', true ) ), 
 							'dkpsys_status' => request_var ( 'dkpsys_status', 'N' ) );
-						$sql = 'SELECT * FROM ' . RAIDS_TABLE . " WHERE 
-								raid_dkpid = '" . ( int ) $this->url_id . "'";
+						$sql = 'SELECT * FROM ' . RAIDS_TABLE . ' a, ' . EVENTS_TABLE . ' b WHERE b.event_id = a.event_id and b.event_dkpid = ' . (int) $this->url_id;
+						
+						// check for existing events, raids
 						$result = $db->sql_query ( $sql );
 						if ($row = $db->sql_fetchrow ( $result ))
 						{
-							// there is a fk raid_dkpid 'on delete restrict' on dkpsys_id
-							// so you cant delete a dkpsys when theres still child raid records
 							trigger_error ( $user->lang ['FV_RAIDEXIST'], E_USER_WARNING );
-						
 						} 
 						else
 						{
 							// no events found ?
-							$sql = 'SELECT * FROM ' . EVENTS_TABLE . "
-									WHERE event_dkpid = '" . ( int ) $this->url_id . "'";
+							$sql = 'SELECT * FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . (int) $this->url_id;
+
 							$result = $db->sql_query ( $sql );
 							if ($row = $db->sql_fetchrow ( $result ))
 							{
@@ -241,8 +238,7 @@ class acp_dkp_sys extends bbDKP_Admin
 							} 
 							else
 							{
-								$sql = 'DELETE FROM ' . DKPSYS_TABLE . "
-										WHERE dkpsys_id = '" . $this->url_id . "'";
+								$sql = 'DELETE FROM ' . DKPSYS_TABLE . ' WHERE dkpsys_id = ' . (int) $this->url_id;
 								$db->sql_query ( $sql );
 								$log_action = array (
 									'header' => 'L_ACTION_DKPSYS_DELETED', 
@@ -253,7 +249,7 @@ class acp_dkp_sys extends bbDKP_Admin
 									'log_type' => $log_action ['header'], 
 									'log_action' => $log_action ));
 								$success_message = sprintf ($user->lang ['ADMIN_DELETE_DKPSYS_SUCCESS'], $this->dkpsys ['dkpsys_name'] );
-								trigger_error ($success_message . adm_back_link ( $this->u_action ));
+								trigger_error ($success_message . $link );
 							}
 						}
 					} 
@@ -276,9 +272,7 @@ class acp_dkp_sys extends bbDKP_Admin
 				$db->sql_freeresult ( $result1 );
 				$total_dkpsys = count ( $rows1 );
 				$start = request_var ( 'start', 0 );
-				$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_status , dkpsys_default 
-						FROM ' . DKPSYS_TABLE . '
-						ORDER BY ' . $current_order ['sql'];
+				$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_status , dkpsys_default FROM ' . DKPSYS_TABLE . ' ORDER BY ' . $current_order ['sql'];
 				$dkpsys_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_elimit'], $start );
 				if (! $dkpsys_result)
 				{
@@ -326,7 +320,7 @@ class acp_dkp_sys extends bbDKP_Admin
 						'DKPSYSDEFAULT' => request_var ( 'defaultsys', '' ) );
 					$this->log_insert ( array ('log_type' => $log_action ['header'], 'log_action' => $log_action ) );
 					$success_message = sprintf ( $user->lang ['ADMIN_DEFAULTPOOL_SUCCESS'], request_var ( 'defaultsys', '' ) );
-					trigger_error ( $success_message . adm_back_link ( $this->u_action ) );
+					trigger_error ( $success_message . $link) ;
 				}
 				
 				$template->assign_vars ( array (

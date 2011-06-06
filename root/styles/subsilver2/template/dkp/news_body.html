@@ -1,49 +1,50 @@
 <!-- INCLUDE overall_header.html -->
-<table class="portalbody" cellpadding="0" cellspacing="0" border="0" width="100%">
-<tbody>
-<tr>	
+<div>
 
-<td valign="top" class="portalleft">
-<br style="clear:both" />
-</td>
-
-<td valign="top" class="portalcenter">
-<br style="clear:both" />
-<!-- INCLUDE dkp/block/news.html -->
-
-<!-- INCLUDE dkp/block/whoisonlineblock.html -->
-
-</td>
-
-<td valign="top" class="portalright">
-<br style="clear:both" />
-<!-- IF not S_USER_LOGGED_IN -->
-<!-- INCLUDE dkp/block/loginblock.html -->
-<!-- ENDIF -->
-
-<!-- IF S_USER_LOGGED_IN -->
-<!-- INCLUDE dkp/block/userblock.html -->
-<!-- ENDIF -->
-
-<!-- IF S_DISPLAY_LOOT -->
-<!-- INCLUDE dkp/block/lastloot.html -->
-<!-- ENDIF -->
-
-<!-- IF S_DISPLAY_RECRUIT -->
-<!-- INCLUDE dkp/block/recruitment.html -->
-<!-- ENDIF -->
+<div style="float: left; width: 17%; margin-right:0.5%">
 
 <!-- IF S_DISPLAY_MAINMENU -->
 <!-- INCLUDE dkp/block/mainmenu.html -->
 <!-- ENDIF -->
 
-<!-- IF S_DISPLAY_LINKS -->
-<!-- INCLUDE dkp/block/links.html -->		
+</div>
+
+<div  style="float: left; width: 64%; margin-right:0.5%">
+
+<!-- INCLUDE dkp/block/news.html -->
+
+<!-- INCLUDE dkp/block/whoisonlineblock.html -->
+</div>
+
+<div style="float: left; width: 18%">
+
+<!-- IF not S_USER_LOGGED_IN -->
+<!-- INCLUDE dkp/block/loginblock.html -->
+<br/>
 <!-- ENDIF -->
 
-</td>
+<!-- IF S_USER_LOGGED_IN -->
+<!-- INCLUDE dkp/block/userblock.html -->
+<br/>
+<!-- ENDIF -->
 
-</tr>
-</tbody>
-</table>
+<!-- IF S_DISPLAY_LOOT -->
+<!-- INCLUDE dkp/block/lastloot.html -->
+<br/>
+<!-- ENDIF -->
+
+<!-- IF S_DISPLAY_RECRUIT -->
+<!-- INCLUDE dkp/block/recruitment.html -->
+<br/>
+<!-- ENDIF -->
+
+<!-- IF S_DISPLAY_LINKS -->
+<!-- INCLUDE dkp/block/links.html -->		
+<br/>
+<!-- ENDIF -->
+
+</div>
+
+</div>
+
 <!-- INCLUDE overall_footer.html -->

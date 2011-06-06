@@ -159,8 +159,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	}
 	
 	/** 
-	 * Makes a new raid
-	 * 
+	 * display new raid creation screen
 	 * 
 	 */
 	private function newraid()
@@ -457,7 +456,6 @@ class acp_dkp_raid extends bbDKP_Admin
 				// Javascript messages
 				'MSG_ATTENDEES_EMPTY' => $user->lang ['FV_REQUIRED_ATTENDEES'], 
 				'MSG_NAME_EMPTY' 	  => $user->lang ['FV_REQUIRED_EVENT_NAME'], 
-				'MSG_GAME_NAME' 	  => $config ['bbdkp_default_game'], 
 		));
 	}
 	
@@ -480,7 +478,7 @@ class acp_dkp_raid extends bbDKP_Admin
 				RAIDS_TABLE 		=> 'r' , 
 				EVENTS_TABLE 		=> 'e',
 				), 
-			'WHERE' => " d.dkpsys_id = e.event_dkpid and r.event_id = e.event_id and r.raid_id=" . ( int ) $raid_id, 
+			'WHERE' => " d.dkpsys_id = e.event_dkpid and r.event_id = e.event_id and r.raid_id=" . (int) $raid_id, 
 		);
 		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -660,9 +658,9 @@ class acp_dkp_raid extends bbDKP_Admin
 				BB_LANGUAGE 		=> 'l', 
     			),
  
-    		'WHERE'     =>  " c.class_id = m.member_class_id AND c.class_id = l.attribute_id 
-							AND l.attribute='class' 
-							AND m.member_race_id =  a.race_id 
+    		'WHERE'     =>  " c.class_id = m.member_class_id and c.game_id = m.game_id
+    						AND c.class_id = l.attribute_id and l.game_id = c.game_id AND l.attribute='class' 
+							AND m.member_race_id =  a.race_id and m.game_id = a.game_id
 							AND l.language= '" . $config['bbdkp_lang'] ."'  
 							AND m.member_id = r.member_id and r.raid_id = " . (int) $raid_id  , 
     		'ORDER_BY' 	=>  $current_order ['sql'],
@@ -784,8 +782,9 @@ class acp_dkp_raid extends bbDKP_Admin
 	        MEMBER_LIST_TABLE 	=> 'l', 
 	        RAID_ITEMS_TABLE    => 'i',
 	    ),
-	    'WHERE'     =>  'c.class_id = l.member_class_id AND l.member_race_id =  a.race_id 
-	    				and l.member_id = i.member_id and i.raid_id = ' . $raid_id,  
+	    'WHERE'     =>  'c.game_id = l.game_id and c.class_id = l.member_class_id 
+	    				 AND l.member_race_id =  a.race_id and a.game_id = l.game_id  
+	    				 and l.member_id = i.member_id and i.raid_id = ' . $raid_id,  
 	    'ORDER_BY'  => $icurrent_order ['sql'], 
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -1216,7 +1215,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			)
 			);
 			
-			$sql='select event_name from ' . EVENTS_TABLE . ' where event_id = ' . $event_id; 
+			$sql='SELECT event_name FROM ' . EVENTS_TABLE . ' WHERE event_id = ' . $event_id; 
 			$result = $db->sql_query($sql);
 			$eventname = (string) $db->sql_fetchfield('event_name');
 			$db->sql_freeresult($result);
@@ -1748,9 +1747,9 @@ class acp_dkp_raid extends bbDKP_Admin
 		
 		// give the deleted zero sum amounts back to the guildbank
 		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET  
-			member_zerosum_bonus = member_zerosum_bonus  + ' . $ozerozum . ", 
+			member_zerosum_bonus = member_zerosum_bonus  + ' . $ozerozum . ', 
 			member_earned = member_earned + ' . $ozerozum . ' 
-			where member_dkpid = " . (int) $dkpid . ' 
+			where member_dkpid = ' . (int) $dkpid . ' 
 			and member_id =  ' . $config['bbdkp_bankerid'] );
         
 		$earned = $xearned - $oraid_value - $otime_bonus - $ozerozum; 
@@ -1766,8 +1765,8 @@ class acp_dkp_raid extends bbDKP_Admin
 		'member_raid_decay'		=> $decay,
         ));
           
-		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . " 
-			WHERE member_dkpid = " . (int) $dkpid . ' and member_id =  ' . $member_id  );
+		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . ' 
+			WHERE member_dkpid = ' . (int) $dkpid . ' and member_id =  ' . $member_id  );
         $db->sql_freeresult($result);
     }
   
@@ -2249,7 +2248,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		}
 
 		//now loop raid items detail
-		$sql = 'select i.item_id, i.member_id, i.item_value, i.item_decay from ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id; 
+		$sql = 'SELECT i.item_id, i.member_id, i.item_value, i.item_decay FROM ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id; 
 		$result = $db->sql_query ($sql);
 		$items= array();
 		while ( ($row = $db->sql_fetchrow ( $result )) ) 
@@ -2373,7 +2372,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			case 1:
 				// synchronise
 				// loop all raids
-				$sql = 'select e.event_dkpid, r.raid_id from '. RAIDS_TABLE. ' r, ' . EVENTS_TABLE . ' e where e.event_id = r.event_id ' ;
+				$sql = 'SELECT e.event_dkpid, r.raid_id FROM '. RAIDS_TABLE. ' r, ' . EVENTS_TABLE . ' e WHERE e.event_id = r.event_id ' ;
 				$result = $db->sql_query ($sql);
 				$countraids=0;
 				while ( ($row = $db->sql_fetchrow ( $result )) ) 

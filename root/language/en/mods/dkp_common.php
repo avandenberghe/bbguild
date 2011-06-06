@@ -76,6 +76,7 @@ $lang = array_merge($lang, array(
 'MENU_VIEWITEM' => 'View Item',
 'MENU_VIEWRAID' => 'View Raid',
 'MENU_VIEWEVENT' => 'View Event',
+'MENU_PLANNER' => 'Planner',
 
 //links
 'MENU_LINKS' => 'Weblinks',
@@ -105,7 +106,9 @@ $lang = array_merge($lang, array(
 'EQ2'        => 'EverQuest II' , 
 'WARHAMMER'  => 'Warhammer Online' ,
 'AION'       => 'Aion' , 
-'FFXI'       => 'Final Fantasy XI', 
+'FFXI'       => 'Final Fantasy XI',
+'RIFT'       => 'Rift',
+'SWTOR'       => 'Starwars : The old Republic', 
 
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status', 
@@ -138,6 +141,7 @@ $lang = array_merge($lang, array(
 'POOL' => 'Dkp Pool',
 'RAID_ATTENDANCE_HISTORY' => 'Raid Attendance History',
 'RAIDS_LIFETIME' => 'Lifetime (%s - %s)',
+'ATTENDANCE_LIFETIME' => 'Lifetime Attendance',
 'RAIDS_X_DAYS' => 'Last %d Days',
 'SPENT' => 'Spent',
 'COMPARE_MEMBERS' => 'Compare Members',
@@ -156,7 +160,7 @@ $lang = array_merge($lang, array(
 'VIEWITEM_TITLE' => 'Viewing Purchase History for %s',
 'VIEWMEMBER_TITLE' => 'History for %s',
 'VIEWRAID_TITLE' => 'Raid Summary',
-
+'NODKPACCOUNTS'	=> 'No DKP accounts found', 
 // Various
 'ACCOUNT' => 'Account',
 'ACTION' => 'Action',
@@ -176,10 +180,14 @@ $lang = array_merge($lang, array(
 
 'ARMOR' => 'Armor',
 'TYPE' => 'Armor',
+
 // TYPES of armor are static across games, no need to put it in DB
 'CLOTH' => 'Very light / Cloth', 
+'ROBE' => 'Robes', 
 'LEATHER' => 'Light / Leather', 
+'AUGMENTED' => 'Augmented Suit', 
 'MAIL' =>  'Medium / Chain Mail', 
+'HEAVY' => 'Heavy Armor', 
 'PLATE' => 'Heavy / Plate', 
 
 'CLASSID' => 'Class ID',
@@ -228,6 +236,7 @@ $lang = array_merge($lang, array(
 'LOG_DATE_TIME' => 'Date/Time of this Log',
 'LOOT_FACTOR' => 'Loot Factor',
 'LOOTS' => 'Loots',
+'LOOTDIST_CLASS' => 'Loot distribution per Class', 
 'MANAGE' => 'Manage',
 'MEMBER' => 'Member',
 'MEMBERS' => 'Members',
@@ -290,7 +299,7 @@ $lang = array_merge($lang, array(
 'EPNET'	=> 'EP net',
 'GP'	=> 'GP',
 'GPNET'	=> 'GP net',
-'PR'	=> 'PR',
+'PR'	=> 'Priority',
 
 // Page Foot Counts
 

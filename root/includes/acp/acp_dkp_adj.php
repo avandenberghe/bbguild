@@ -165,6 +165,7 @@ class acp_dkp_adj extends bbDKP_Admin
 			    	  ),
 			 
 			    'WHERE'     =>  ' c.class_id = l.member_class_id  and b.dkpsys_id = a.adjustment_dkpid 
+			    		AND l.game_id=c.game_id 
 						AND a.adjustment_dkpid 	= ' . (int) $dkpsys_id . '  
 						AND a.member_id=l.member_id
 						AND a.member_id IS NOT NULL ',

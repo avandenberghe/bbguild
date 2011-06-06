@@ -37,7 +37,7 @@ function bbDKP_Admin()
 {
     if(!defined("EMED_BBDKP"))
     {
-        trigger_error('bbDKP is currently disabled.', E_USER_WARNING); 
+        trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
     }
     
     global $config, $user; 
