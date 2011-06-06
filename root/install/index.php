@@ -821,6 +821,7 @@ function gameinstall($action, $version)
 				case '1.2.3':
 		        // dkp system
 		        // if there is no dkp system then insert a default one
+		        $dkpsys_id = 0;
 			    $result = $db->sql_query('select count(*) as num_dkp from ' . $table_prefix . 'bbdkp_dkpsystem');
 				$total_dkps = (int) $db->sql_fetchfield('num_dkp');
 				$db->sql_freeresult($result);
@@ -833,6 +834,12 @@ function gameinstall($action, $version)
 					$dkpsys_id = $db->sql_nextid();
 					unset ($data);
 					
+				}
+				else
+				{
+					$result = $db->sql_query('select max(dkpsys_id) as dkpsys_id from ' . $table_prefix . 'bbdkp_dkpsystem');
+					$dkpsys_id = (int) $db->sql_fetchfield('dkpsys_id');
+					$db->sql_freeresult($result);
 				}
 				
 		        // event
@@ -1212,10 +1219,21 @@ function tableupdates123($action, $version)
 					$db->sql_query($sql);
 					
 					/* remove old news module from 1.2.2 */
+					if($umil->module_exists('acp', 'ACP_DKP_NEWS','ACP_DKP_NEWS_ADD'))
+					{
+						$umil->module_remove('acp','ACP_DKP_NEWS','ACP_DKP_NEWS_ADD');
+					}
+					
+					if($umil->module_exists('acp', 'ACP_DKP_NEWS','ACP_DKP_NEWS_LIST'))
+					{
+						$umil->module_remove('acp','ACP_DKP_NEWS','ACP_DKP_NEWS_LIST');
+					}
+					
 					if($umil->module_exists('acp', 'ACP_CAT_DKP','ACP_DKP_NEWS'))
 					{
 						$umil->module_remove('acp','ACP_CAT_DKP','ACP_DKP_NEWS');
 					}
+					
 					
 					
 			}

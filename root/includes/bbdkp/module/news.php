@@ -12,18 +12,17 @@
 /**
  * @ignore
  */
-if (! defined ( 'IN_PHPBB' ))
+if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
-	exit ();
+	exit;
 }
+
 $user->add_lang(array('posting'));
 include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 include_once($phpbb_root_path.'includes/functions_content.' . $phpEx);
 
 $mode = request_var('mode', '');
 $submit = (isset ( $_POST ['post'] )) ? true : false;
-
-//date_default_timezone_set('UTC');
 
 $time = time() + $user->timezone + $user->dst - date('Z');
 $update = false;
@@ -80,6 +79,11 @@ if ($submit)
 	}
 }
 
+// show the buttons ?
+$can_delete = false ;
+$can_add = false ;
+$can_edit = false ;
+	
 // go to edit or newpost mode
 if ($mode == 'edit' || $mode == 'newpost')
 {

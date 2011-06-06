@@ -6,7 +6,7 @@
 * @package language
 * @version $Id: $
 * @copyright (c) 2011 phpBB Group
-* @author 2011-03-14 - Maël Soucaze
+* @author 2011-06-05 - Maël Soucaze
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *
 */
@@ -37,6 +37,16 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
+	'UMIL_NOGAMECHOSEN'	=> 'Veuillez choisir un jeu avant d\'installer.',
+	'UMIL_UPD123'	=> 'Tables mises à jour pour v1.2.3',
+	'UMIL_GAME123'	=> 'Jeu %s installé',
+	'UMIL_GAMEUNINST123'	=> 'Jeux désinstallés.',
+	'RETURN_DKPPOOLINDEX'	=> 'Retournez au listing.',
+	'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Note : Jeu ne peut pas être changé une fois qu’il est mis.',
+	'ADMIN_RAID_ATTENDEE_DELETED_FAILED'	=> 'Participant %s ne pouvat pas être supprimé du raid %s.',
+	'GAME'	=> 'Jeu',
+	'ARMORY_URL'	=> 'Lien vers Armurerie.',
+	'GENERATE_ARMORY_URL'	=> 'Générez un lien vers l’armurerie.',
 	'BBDKPSCRIPTALERT'	=> 'bbDKP contient du Javascript. Veuillez svp activer le javascript dans votre browser.',
 	'FV_FREQUENCY_NOTZERO'	=> 'La fréquence d‘amortissement ne peut être zéro',
 	'ACP_MM_EDITMEMBER'	=> 'Edition Membre',
@@ -271,10 +281,10 @@ $lang = array_merge($lang, array(
 	'UMIL_OLD_RESTORE_NOT'	=> 'Pas trouvé d’installation bbdkp (%s) à restaurer.',
 	'UMIL_OLD_UNINSTALL_SUCCESS'	=> 'bbdkp (%s) Désinstallé. ',
 	'UMIL_109_ILLEGALVERSION'	=> 'trouvé 1.0.9 beta, vous devez vous mettre à jour à 1.0.9rc1 et depuis 1.09rc1 vous pourrez monter à la version 1.1.2',
-	'UMIL_UPDATE120' => 'tables actualisés de 1.1.2.2 à 1.2', 
-	'UMIL_122MINIMUM' => 'Old version. 1.2.2 is required for updating to 1.2.3', 
-	'UMIL_RENAMETABLESNEW' => 'Tables renommés de prefixe bbeqdkp_ à phpbb_',
-	'UMIL_RENAMETABLESOLD' => 'Tables renommés de prefixe phpbb_ à bbeqdkp_ ',
+	'UMIL_UPDATE120'	=> 'tables actualisés de 1.1.2.2 à 1.2',
+	'UMIL_122MINIMUM'	=> 'Old version. 1.2.2 is required for updating to 1.2.3',
+	'UMIL_RENAMETABLESNEW'	=> 'Tables renommés de prefixe bbeqdkp_ à phpbb_',
+	'UMIL_RENAMETABLESOLD'	=> 'Tables renommés de prefixe phpbb_ à bbeqdkp_ ',
 	'BBDKP_WELCOME'	=> 'Bienvenue sur bbDKP',
 	'ACP_DKP_MAINPAGE'	=> 'Indexe d’administration',
 	'ACP_DKP_BBSTATS'	=> 'Administration',
@@ -747,7 +757,7 @@ So the loot would go to player 2 <br />',
 	'UPDATE_RAID'	=> 'Mise à jour Raid',
 	'UPDATE_RACE'	=> 'mise à jour Race',
 	'UPDATE_CLASS'	=> 'mise à jour Classe',
-	'CHANGE_ACTIVATION' => 'Change Activation', 
+	'CHANGE_ACTIVATION'	=> 'Change Activation',
 	'ADJUSTMENT_VALUE'	=> 'Valeur d’Ajustement',
 	'ADJUSTMENT_VALUE_NOTE'	=> 'Peut-être négatif',
 	'CLASS_NAME'	=> 'Nom de la classe',
@@ -763,6 +773,7 @@ So the loot would go to player 2 <br />',
 	'DONE'	=> 'Terminé',
 	'HOLD_CTRL_NOTE'	=> 'Appuyez CTRL(PC) ou CMD(Mac) pour séléction multiple<br />',
 	'DKP_STATUS'	=> 'Status de Groupe DKP (Y ou N)',
+	'DEFAULT_DKP_POOL'	=> 'Pool DKP Standard',
 	'EVENT_NAME'	=> 'Nom d’Evènement',
 	'EVENT_NAME_EXPLAIN'	=> 'Les Raids et Evenements sur Calendrier porteront ce nom',
 	'EVENT_VALUE'	=> 'Valeur d’Evènement',

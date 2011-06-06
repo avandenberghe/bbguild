@@ -103,8 +103,25 @@
   </header>
   <action-group>
     <copy>
-	 <file from="root/styles/subsilver2/template/dkp/leaderboard.html" to="styles/subsilver2/template/dkp/leaderboard.html"/>     
+			<file from="root/styles/subsilver2/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
+			<file from="root/styles/subsilver2/template/dkp/dkpmain.html" to="styles/prosilver/template/dkp/dkpmain.html"/>
+			<file from="root/styles/subsilver2/template/dkp/module/*.*" to="styles/prosilver/template/dkp/module/*.*"/>
+			<file from="root/styles/subsilver2/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>  
     </copy>
+ 		<delete>
+			<file name="root/styles/subsilver2/template/dkp/dkpmenu.html"/>
+			<file name="root/styles/subsilver2/template/dkp/leaderboard.html"/>
+			<file name="root/styles/subsilver2/template/dkp/listevents.html"/>
+			<file name="root/styles/subsilver2/template/dkp/listitems.html"/>
+			<file name="root/styles/subsilver2/template/dkp/listmembers.html"/>
+			<file name="root/styles/subsilver2/template/dkp/listraids.html"/>
+			<file name="root/styles/subsilver2/template/dkp/roster.html"/>
+			<file name="root/styles/subsilver2/template/dkp/viewevent.html"/>
+			<file name="root/styles/subsilver2/template/dkp/viewmember.html"/>
+			<file name="root/styles/subsilver2/template/dkp/viewnews.html"/>
+			<file name="root/styles/subsilver2/template/dkp/viewraid.html"/>
+		</delete>
+    
 <diy-instructions lang="en">See general install.xml file</diy-instructions>
 <diy-instructions lang="fr">Voir instructions générales</diy-instructions>
 <diy-instructions lang="de">Siehe allgemeine Anleitung</diy-instructions>

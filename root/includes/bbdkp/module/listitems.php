@@ -11,10 +11,11 @@
 /**
  * @ignore
  */
-if (!defined('IN_PHPBB'))
+if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
-   exit;
+	exit;
 }
+
 /**** begin dkpsys pulldown  ****/
 $query_by_pool = false;
 $defaultpool = 99;
@@ -158,14 +159,12 @@ $current_order = switch_order ($sort_order);
 
 if ($query_by_pool)
 {
-	$pagination = generate_pagination ( append_sid ( "{$phpbb_root_path}listitems.$phpEx", 
-	'page=' . $mode . '&amp;' . URI_DKPSYS . '=' . $dkp_id . '&amp;o=' . $current_order ['uri'] ['current'] ), 
+	$pagination = generate_pagination ( $u_list_items . '&amp;' . URI_DKPSYS . '=' . $dkp_id . '&amp;o=' . $current_order ['uri'] ['current'] , 
 	$total_items, $config ['bbdkp_user_ilimit'], $start, true );
 } 
 else
 {
-	$pagination = generate_pagination ( append_sid ( "{$phpbb_root_path}listitems.$phpEx", 
-	'page=' . $mode . '&amp;' . URI_DKPSYS . '=All&amp;o=' . $current_order ['uri'] ['current'] ), 
+	$pagination = generate_pagination ( $u_list_items . '&amp;' . URI_DKPSYS . '=All&amp;o=' . $current_order ['uri'] ['current'] , 
 	$total_items, $config ['bbdkp_user_ilimit'], $start, true );
 }
 
@@ -265,7 +264,7 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 			'DATE' 			=> (! empty ( $item ['item_date'] )) ? date ( 'd.m.y', $item ['item_date'] ) : '&nbsp;', 
 			'ITEMNAME' 		=> $valuename, 
 			'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewitem&amp;" . URI_ITEM . '=' . $item ['item_id'] ), 
-			'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>Not Found</i>&gt;', 
+			'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>'. $user->lang['NOT_AVAILABLE'] .'</i>&gt;', 
 			'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewitem&amp;" . URI_RAID . '=' . $item ['raid_id'] ), 
 			'EVENTCOLOR' => ( !empty($item['event_color']) ) ? $item['event_color'] : '#123456',
 			

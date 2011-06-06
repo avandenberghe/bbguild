@@ -13,10 +13,11 @@
 /**
  * @ignore
  */
-if (!defined('IN_PHPBB'))
+if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
-   exit;
+	exit;
 }
+
 $member_id = request_var(URI_NAMEID, 0);
 
 // pulldown
@@ -281,15 +282,16 @@ $range1 = $config['bbdkp_list_p1'];
 $range2 = $config['bbdkp_list_p2']; 
 $range3 = $config['bbdkp_list_p3']; 	
 
-$mc1 = memberraid_count($dkp_id, $range1, $member_id, false);
-$mc2 = memberraid_count($dkp_id, $range2, $member_id, false);
-$mc3 = memberraid_count($dkp_id, $range3, $member_id, false);
-$mclife = memberraid_count($dkp_id, 0, $member_id, true);
 
-$pc1	= poolraid_count($dkp_id, $range1, false);
-$pc2	= poolraid_count($dkp_id, $range2, false);
-$pc3	= poolraid_count($dkp_id, $range3, false);
-$pclife = poolraid_count($dkp_id, 0, true);
+$mc1 = raidcount(true, $dkp_id, $range1, $member_id, 0, false);
+$mc2 = raidcount(true, $dkp_id, $range2, $member_id, 0, false);
+$mc3 = raidcount(true, $dkp_id, $range3, $member_id, 0, false);
+$mclife = raidcount(true, $dkp_id, 0, $member_id, 0, true);
+
+$pc1	= raidcount(true, $dkp_id, $range1, $member_id, 1, false);
+$pc2	= raidcount(true, $dkp_id, $range2, $member_id, 1, false);
+$pc3	= raidcount(true, $dkp_id, $range3, $member_id, 1, false);
+$pclife = raidcount(true, $dkp_id, 0, $member_id, 1, true);
 	
 $pct1 =	 ( $pc1 > 0 ) ? round(($mc1 / $pc1) * 100, 1) : 0;
 $pct2 =	 ( $pc2 > 0 ) ? round(($mc2 / $pc2) * 100, 1) : 0;
@@ -396,7 +398,7 @@ while ( $raid = $db->sql_fetchrow($raids_result))
 // get number of attended raids
 $db->sql_freeresult($raids_result);
 
-$total_attended_raids = memberraid_count($dkp_id, 0, $member_id, true); 
+$total_attended_raids = raidcount(true,$dkp_id,0,$member_id, 0,true);
 
 /**********************************
 /***   Item purchase history  *****
@@ -657,7 +659,8 @@ foreach ( $raid_counts as $event => $data )
 	$template->assign_block_vars('event_row', array(
 		'EVENT'		   => $event,
 		'U_VIEW_EVENT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewevent&amp;' . URI_EVENT . '=' . $event_ids[$event] . '&amp;' . URI_DKPSYS . '=' . $dkp_id) ,
-		'BAR'		   => create_bar($data['percent'] . '%', $data['count'] . ' (' . $data['percent'] . '%)'))
+		//'BAR'		   => create_bar($data['percent'] . '%', $data['count'] . ' (' . $data['percent'] . '%)')
+		)
 	);
 }
 

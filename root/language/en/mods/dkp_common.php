@@ -141,6 +141,7 @@ $lang = array_merge($lang, array(
 'POOL' => 'Dkp Pool',
 'RAID_ATTENDANCE_HISTORY' => 'Raid Attendance History',
 'RAIDS_LIFETIME' => 'Lifetime (%s - %s)',
+'ATTENDANCE_LIFETIME' => 'Lifetime Attendance',
 'RAIDS_X_DAYS' => 'Last %d Days',
 'SPENT' => 'Spent',
 'COMPARE_MEMBERS' => 'Compare Members',
@@ -235,6 +236,7 @@ $lang = array_merge($lang, array(
 'LOG_DATE_TIME' => 'Date/Time of this Log',
 'LOOT_FACTOR' => 'Loot Factor',
 'LOOTS' => 'Loots',
+'LOOTDIST_CLASS' => 'Loot distribution per Class', 
 'MANAGE' => 'Manage',
 'MEMBER' => 'Member',
 'MEMBERS' => 'Members',
@@ -297,7 +299,7 @@ $lang = array_merge($lang, array(
 'EPNET'	=> 'EP net',
 'GP'	=> 'GP',
 'GPNET'	=> 'GP net',
-'PR'	=> 'PR',
+'PR'	=> 'Priority',
 
 // Page Foot Counts
 
