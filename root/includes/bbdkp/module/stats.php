@@ -105,7 +105,7 @@ if ($query_by_pool)
 $u_stats = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=stats' . $arg );
 
 /**** end dkpsys pulldown  ****/
-$time = time();
+$time = time() + $user->timezone + $user->dst;
 
 /***********************
  *  
@@ -348,20 +348,20 @@ if ($member_count> 0)
 
 	 /* Create the cache object */
 	 $cachefolder = $phpbb_root_path . "images/pchart/cache";
-	 $myCache = new pCache(array("CacheFolder" => $cachefolder));
+	 //$myCache = new pCache(array("CacheFolder" => $cachefolder));
 	 
 	 /* Compute the hash linked to the chart data */
-	 $ChartHash = $myCache->getHash($MyData);
+	 //$ChartHash = $myCache->getHash($MyData);
  	
 	 $imagepath0= $phpbb_root_path . "images/pchart/vchart.png";
 	// Test if we got this hash in our cache already
-	if ( $myCache->isInCache($ChartHash))
-	{
+	//if ( $myCache->isInCache($ChartHash))
+	//{
 	  // If we have it, get the picture from the cache!
-	  $myCache->saveFromCache($ChartHash, $imagepath0);
-	}
-	else
-	{
+	  //$myCache->saveFromCache($ChartHash, $imagepath0);
+	//}
+	//else
+	//{
 	 	// render it ! 		 
 		 
 		/* Create the pChart object */
@@ -371,14 +371,6 @@ if ($member_count> 0)
 		 $myPicture->drawGradientArea(0,0,440,500,DIRECTION_VERTICAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>100));
 		 $myPicture->drawGradientArea(0,0,440,500,DIRECTION_HORIZONTAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>20));
 		 
-		 // set the fonts
-		 $fonttitle = $phpbb_root_path . "includes/bbdkp/pchart/fonts/Forgotte.ttf";
-		 $myPicture->setFontProperties(array(
-		 	"FontName" => $fonttitle,
-		 	"FontSize" =>15));
-		 // draw the title
-		 //$myPicture->drawText(20,34,"Class participation vs. Class droprate",array("FontSize"=>20));
-		
 		 /* Define the chart font */ 
 		 $chartfont = $phpbb_root_path . "includes/bbdkp/pchart/fonts/pf_arma_five.ttf"; 
 		 $myPicture->setFontProperties(array(
@@ -416,13 +408,13 @@ if ($member_count> 0)
 		 $myPicture->drawLegend(570,215,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 		 
 		 /* Push the rendered picture to the cache */
-  		 $myCache->writeToCache($ChartHash,$myPicture);
+  		 //$myCache->writeToCache($ChartHash,$myPicture);
 
 		 /* Render the picture */
 		 $myPicture->render($imagepath0);
 		 unset($myPicture);
 		 unset($MyData); 
-	}
+	//}
 	
 	/* send information to template */
 	$template->assign_vars(array(
@@ -568,21 +560,21 @@ if ($classcount > 0)
 	 $MyData->loadPalette("$pallette/blind.color", TRUE);
 	
 	 // Create the cache object
-	 $cachefolder = $phpbb_root_path . "images/pchart/cache";
-	 $myCache = new pCache(array("CacheFolder" => $cachefolder));
+	 //$cachefolder = $phpbb_root_path . "images/pchart/cache";
+	 //$myCache = new pCache(array("CacheFolder" => $cachefolder));
 	 
 	 /* Compute the hash linked to the chart data */
-	 $ChartHash = $myCache->getHash($MyData);
+	 //$ChartHash = $myCache->getHash($MyData);
 	 $imagepath= $phpbb_root_path . "images/pchart/classchart.png";
 	 
 	 // Test if we got this hash in our cache already
-	 if ( $myCache->isInCache($ChartHash))
-	 {
+	 ///if ( $myCache->isInCache($ChartHash))
+	 //{
 	  	// If we have it, get the picture from the cache!
-	    $myCache->saveFromCache($ChartHash, $imagepath);
-	 }
-	 else
-	 {
+	   // $myCache->saveFromCache($ChartHash, $imagepath);
+	 //}
+	 //else
+	 //{
 		 // Create the pChart object
 		 $myPicture = new pImage(440,500,$MyData);
 		 
@@ -627,14 +619,14 @@ if ($classcount > 0)
 		 $myPicture->drawLegend(100,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
 		 
 		 /* Push the rendered picture to the cache */
-  		 $myCache->writeToCache($ChartHash,$myPicture);
+  		 //$myCache->writeToCache($ChartHash,$myPicture);
   		 		 
 		 /* Render the picture */
 		 $myPicture->render($imagepath);
 		 unset($myPicture);
 		 unset($MyData); 
 			
-	 }
+	 //}
 
 	/* send information to template */
 	$template->assign_vars(array(
@@ -911,7 +903,7 @@ if($attendance > 0)
 	 if ( $myCache->isInCache($ChartHash))
 	 {
 	    // If we have it, it is old query so get the picture from the cache!
-	    $myCache->saveFromCache($ChartHash, $imagepath0);
+	    $myCache->saveFromCache($ChartHash, $imagepath);
 	 }
 	 else
 	 {
