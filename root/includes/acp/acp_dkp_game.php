@@ -81,7 +81,7 @@ class acp_dkp_game extends bbDKP_Admin
 						trigger_error('FORM_INVALID');
 					}
  					$game_id = request_var('game_id', '');
-					$sql = 'SELECT max(faction_id) AS max FROM ' . FACTION_TABLE . " where game_id = '" . $game_id; 
+					$sql = 'SELECT max(faction_id) AS max FROM ' . FACTION_TABLE . " where game_id = '" . $game_id . "'"; 
 					$result = $db->sql_query($sql);	
 					$factionid = (int) $db->sql_fetchfield('max', 0 ,$result );	
 					$db->sql_freeresult($result);
@@ -100,7 +100,7 @@ class acp_dkp_game extends bbDKP_Admin
 					$db->sql_query($sql);			
 									
 					$db->sql_transaction('commit');
-					
+					$cache->destroy('sql', FACTION_TABLE);
 					trigger_error( sprintf( $user->lang['ADMIN_ADD_FACTION_SUCCESS'], $factionname) . $link, E_USER_NOTICE);
 						
 				}
@@ -191,7 +191,8 @@ class acp_dkp_game extends bbDKP_Admin
 					$db->sql_query($sql);		
 									
 					$db->sql_transaction('commit');
-					
+					$cache->destroy('sql', BB_LANGUAGE);
+					$cache->destroy('sql', RACE_TABLE);	
 					trigger_error( sprintf( $user->lang['ADMIN_ADD_RACE_SUCCESS'], $racename) . $link, E_USER_NOTICE);
 				}
 				
@@ -221,7 +222,8 @@ class acp_dkp_game extends bbDKP_Admin
 					$db->sql_query($sql);	
 					
 					$db->sql_transaction('commit');
-						
+					$cache->destroy('sql', BB_LANGUAGE);
+					$cache->destroy('sql', RACE_TABLE);	
 					trigger_error( sprintf( $user->lang['ADMIN_UPDATE_RACE_SUCCESS'], $racename) . $link, E_USER_NOTICE);
 					
 				}
@@ -294,7 +296,9 @@ class acp_dkp_game extends bbDKP_Admin
 					$db->sql_query($sql);			
 
 					$db->sql_transaction('commit');
-					
+					$cache->destroy('sql', BB_LANGUAGE);
+					$cache->destroy('sql', CLASS_TABLE);
+						
 					trigger_error( sprintf( $user->lang['ADMIN_ADD_CLASS_SUCCESS'], $classname) . $link, E_USER_NOTICE);
 					
 				}
@@ -347,7 +351,8 @@ class acp_dkp_game extends bbDKP_Admin
 					$db->sql_query($sql);	
 					
 					$db->sql_transaction('commit');
-						
+					$cache->destroy('sql', BB_LANGUAGE);
+					$cache->destroy('sql', CLASS_TABLE);
 					trigger_error( sprintf( $user->lang['ADMIN_UPDATE_CLASS_SUCCESS'], $classname) . $link, E_USER_NOTICE);
 					
 				}
@@ -397,6 +402,7 @@ class acp_dkp_game extends bbDKP_Admin
 						{
 							$sql = 'DELETE FROM ' . FACTION_TABLE . ' WHERE f_index =' . $id;  
 							$db->sql_query($sql);
+							$cache->destroy('sql', FACTION_TABLE);
 							
 							trigger_error(sprintf($user->lang['ADMIN_DELETE_FACTION_SUCCESS'], $id) . $link, E_USER_WARNING);
 						}
@@ -784,7 +790,8 @@ class acp_dkp_game extends bbDKP_Admin
 							$db->sql_query($sql);
 							
 							$db->sql_transaction('commit');
-							
+							$cache->destroy('sql', CLASS_TABLE);
+							$cache->destroy('sql', BB_LANGUAGE);
 							trigger_error(sprintf($user->lang['ADMIN_DELETE_CLASS_SUCCESS'], $class_id) . $link, E_USER_WARNING);
 						}
 						else
