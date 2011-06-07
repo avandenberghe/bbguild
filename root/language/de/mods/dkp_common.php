@@ -67,6 +67,7 @@ $lang = array_merge($lang, array(
 	'PORTAL'	=> 'Portal',
 	'RECENTLOOT'	=> 'Letzter Loot',
 	'REMEMBERME'	=> 'Login merken',
+	'NOUCPACCESS' => 'Du kannst keine Charaktere einstellen.', 
 	'INFORUM'	=> 'in',
 	'DKP'	=> 'DKP',
 	'NEWS'	=> 'Nachrichten',
