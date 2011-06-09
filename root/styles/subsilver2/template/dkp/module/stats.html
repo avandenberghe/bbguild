@@ -25,23 +25,22 @@
 <div style="width:50%; float:left;">
 <table class="tablebg" width="90%" border="0" cellspacing="0" cellpadding="0">
 <thead>
-<tr>
-	<th style=" width:8%; font-size :10pt; text-align: center;  color:white" colspan="1">{L_RAIDS}</th>
-	<th style=" width:92%; font-size :10pt; text-align: center; color:white" colspan="5">{L_CURRENT}</th>
-</tr>
 <tr>	  
-    <th style=" width:8%;"><a href="{O_NAME}">{L_NAME}</a></th>
+    <th style=" width:20%;"><a href="{O_NAME}">{L_NAME}</a></th>
+    <!-- IF S_SHOWEPGP -->
     <th style=" width:20%; text-align:center;" ><a href="{O_PR}">{L_PR}</a></th>
+    <!-- ELSE -->
     <th style=" width:20%; text-align:center;" ><a href="{O_CURRENT}">{L_CURRENT}</a></th>
+	<!-- ENDIF -->    
     <th style=" width:20%; text-align:center;" ><a href="{O_RAIDCOUNT}">{L_RAIDCOUNT}</a></th>
-    <th colspan="2" style=" width:20%; text-align:center;" ><a href="{O_ITEMCOUNT}">{L_LOOTS}</a></th>
+    <th colspan="2" style=" width:40%; text-align:center;" ><a href="{O_ITEMCOUNT}">{L_LOOTS}</a></th>
 </tr>
 </thead>
 <tfoot>
 <tr>
-<th align="left" style="color:white; font-weight:bold;" colspan="3">{STATS_FOOTCOUNT}</th>
-<th align="left" style="color:white; font-weight:bold; width:6%; ">{TOTAL_RAIDS}</th>
-<th align="left" style="color:white; font-weight:bold; width:10%; " colspan="2">{TOTAL_DROPS}</th>
+<th align="left" style="color:white; font-weight:bold; width:40%;" colspan="3">{STATS_FOOTCOUNT}</th>
+<th align="left" style="color:white; font-weight:bold; width:20%;">{TOTAL_RAIDS}</th>
+<th align="left" style="color:white; font-weight:bold; width:40%;" colspan="2">{TOTAL_DROPS}</th>
 </tr>
 </tfoot>
 <tbody>
@@ -52,15 +51,21 @@
     <tr class= "row2">
     <!-- ENDIF -->
     <td><a style="color:{stats_row.COLORCODE}" href="{stats_row.U_VIEW_MEMBER}"><strong>{stats_row.NAME}</strong></a></td>
-    <td style="font-size :8pt; text-align: right;"><strong>{stats_row.PR}</strong></td>
-    <td style="font-size :8pt; text-align: right;"><span class="{stats_row.C_CURRENT}"><strong>{stats_row.CURRENT}</strong></span></td>
+    <!-- IF S_SHOWEPGP -->
+    <td style="font-size :8pt; text-align: center;"><strong>{stats_row.PR}</strong></td>
+    <!-- ELSE -->
+    <td style="font-size :8pt; text-align: center;"><span class="{stats_row.C_CURRENT}"><strong>{stats_row.CURRENT}</strong></span></td>
+    <!-- ENDIF -->  
     <td style="font-size :8pt; text-align: center;">{stats_row.ATTENDED_COUNT}</td>
     <td style="font-size :8pt; text-align: center;">{stats_row.ITEM_COUNT}</td>
 	<td style="font-size :8pt; text-align: center;">{stats_row.MEMBER_DROP_PCT}</td>    
+    
+    
   </tr>
 <!-- END stats_row -->
 </tbody>
 </table>
+
 </div>
 
 <div style="width:45%; float:left;">

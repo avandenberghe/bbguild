@@ -170,35 +170,30 @@ $db->sql_freeresult ( $result );
 
 $show_all = ( (isset($_GET['show'])) && (request_var('show', '') == "all") ) ? true : false;
 
-/*
-  loot distribution per member and class
-*/
-$sql = "
-SELECT d.member_dkpid, l.member_id, l.member_name, c.class_id, c.game_id, c.colorcode,  c.imagename, 
+/* loot distribution per member and class */
+
+$sql = "SELECT d.member_dkpid, l.member_id, l.member_name, c.class_id, c.game_id, c.colorcode,  c.imagename, 
 sum(d.member_raidcount) as member_raidcount, 
 sum(CASE WHEN x.itemcount IS NULL THEN 0 ELSE x.itemcount END) as itemcount, 
 sum(d.member_earned - d.member_raid_decay + d.member_adjustment) AS ep,
 (d.member_earned - d.member_raid_decay + d.member_adjustment) / d.member_raidcount AS ep_per_raid,
 (d.member_earned - d.member_raid_decay + d.member_adjustment) / (((" . $time . " - d.member_firstraid)+86400) / 86400)  AS ep_per_day,
-
-d.member_spent - d.member_item_decay + ( " . max(0, $config['bbdkp_basegp']) . ") AS gp, 
+  d.member_spent - d.member_item_decay + ( " . max(0, $config['bbdkp_basegp']) . ") AS gp, 
 ( d.member_spent - d.member_item_decay + ( " . max(0, $config['bbdkp_basegp']) . ") )  / d.member_raidcount AS gp_per_raid, 
-( d.member_spent - d.member_item_decay + ( " . max(0, $config['bbdkp_basegp']) . ") )   / ((( " . $time ."  - d.member_firstraid)+86400) / 86400) AS gp_per_day,
-
+( d.member_spent - d.member_item_decay + ( " . max(0, $config['bbdkp_basegp']) . ") )  / ((( " . $time ."  - d.member_firstraid)+86400) / 86400) AS gp_per_day,
 (d.member_earned - d.member_raid_decay + d.member_adjustment - d.member_spent + d.member_item_decay - ( " . max(0, $config['bbdkp_basegp']) . ") ) AS member_current,
-
 CASE WHEN d.member_spent - d.member_item_decay <= 0 
-THEN d.member_earned - d.member_raid_decay + d.member_adjustment  
-ELSE round( (d.member_earned - d.member_raid_decay + d.member_adjustment) / (" . max(0, $config['bbdkp_basegp']) ." + d.member_spent - d.member_item_decay) ,2) 
+THEN ROUND((d.member_earned - d.member_raid_decay + d.member_adjustment) / " . max(0, $config['bbdkp_basegp']) . " , 2)
+ELSE ROUND((d.member_earned - d.member_raid_decay + d.member_adjustment) / (" . max(0, $config['bbdkp_basegp']) ." + d.member_spent - d.member_item_decay) ,2) 
 END AS pr , 
+((" . $time . " - member_firstraid) / 86400) AS zero_check  ";
 
- ((".$time." - member_firstraid) / 86400) AS zero_check   
- 
-FROM (". MEMBER_DKP_TABLE ." d LEFT JOIN (
+$sql .= " FROM (". MEMBER_DKP_TABLE ." d LEFT JOIN (
 SELECT i.member_id, count(i.item_id) AS itemcount
 FROM 
 ((". EVENTS_TABLE." e INNER JOIN " . RAIDS_TABLE ." r ON e.event_id=r.event_id)
-INNER JOIN ". RAID_ITEMS_TABLE ." i ON  r.raid_id = i.raid_id ) "; 
+INNER JOIN ". RAID_ITEMS_TABLE . " i ON  r.raid_id = i.raid_id ) ";
+ 
 if ($query_by_pool)
 {
 	$sql .= " WHERE e.event_dkpid  = " . $dkp_id; 
@@ -305,6 +300,7 @@ $template->assign_vars(array(
     'STATS_FOOTCOUNT' 	=> $footcount_text,
 	'TOTAL_RAIDS' 	=> $raid_count,
 	'TOTAL_DROPS' 	=> $total_drops,
+	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
     )
 );
 
@@ -408,10 +404,10 @@ if ($member_count> 0)
 $classes = array();
 
 // Find total # members with a dkp record
-$sql = 'SELECT count(member_id) AS members FROM ' . MEMBER_DKP_TABLE ;
+$sql = 'SELECT count(member_id) AS members FROM ' . MEMBER_DKP_TABLE . ' where 1 = 1 ' ;
 if ($query_by_pool)
 {
-    $sql .= ' where member_dkpid = '. $dkp_id . ' ';
+    $sql .= ' AND member_dkpid = '. $dkp_id . ' ';
 }
 
 if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
