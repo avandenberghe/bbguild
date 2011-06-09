@@ -34,6 +34,7 @@ $lang['permission_type']['bbdkp_'] = 'bbDKP Permissions';
 $lang = array_merge($lang, array(
 	'acl_a_dkp'		=> array('lang' => 'bbDKP - can access bbDKP ACP', 'cat' => 'bbdkp'),
 	'acl_u_dkp'		=> array('lang' => 'bbDKP - can see DKP pages', 'cat' => 'bbdkp'),
+	'acl_u_dkpucp'	=> array('lang' => 'bbDKP - can claim characters in UCP', 'cat' => 'bbdkp'),
 ));
 
 ?>
