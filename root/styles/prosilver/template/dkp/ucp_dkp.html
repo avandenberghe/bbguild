@@ -18,8 +18,7 @@
 	</dt>
 	<dd>
 	
-	
-	<div class="forumbg forumbg-table">
+	<div class="panel">
 	<div class="inner">
 	<span class="corners-top"><span></span></span>
 
@@ -34,7 +33,7 @@
 			<!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;</span>
 			</th>
 			
-			<th width="20%" nowrap="nowrap" style="text-align:center; color:white;"><strong> {L_LEVEL} {members_row.LEVEL}</strong></th>
+			<th width="20%" nowrap="nowrap" style="text-align:center;"><strong> {L_LEVEL} {members_row.LEVEL}</strong></th>
 			<!-- IF S_SHOWEPGP --> 
 				<th></th>
 			<!-- ENDIF -->	
@@ -70,8 +69,7 @@
 
 	<p><br /></p>
 	</dd>
-	<!-- ELSE -->
-	<p class="error">{L_NO_CHARACTERS}</p><p><br /></p>
+
 	<!-- ENDIF -->
 </dl>
 <!-- IF S_SHOW_BUTTONS -->

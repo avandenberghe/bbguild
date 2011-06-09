@@ -28,8 +28,14 @@ class ucp_dkp
 		
 		// Attach the language file
 		$user->add_lang('mods/dkp_common');
+		
 		if ($submit)
 		{
+			if (!$auth->acl_get('u_dkpucp'))
+			{
+				trigger_error('NOUCPACCESS');
+			}
+		
 			// user pressed submit
 			// Verify the form key is unchanged
 			if (!check_form_key('digests'))
@@ -69,33 +75,42 @@ class ucp_dkp
 			{
 				// this mode is shown to users in order to select the character with which they will raid
 				case 'characters':
-					
 					$show_buttons = false;
-					$show = false;
-					
-					//if there are no chars at all, show a message and do not show add button
-					$sql = 'SELECT count(*) AS mcount FROM ' . MEMBER_LIST_TABLE .' WHERE member_rank_id != 90  ';
-					$result = $db->sql_query($sql, 0);
-					$mcount = (int) $db->sql_fetchfield('mcount');
-					if ( $mcount > 0)
-					{
-						$show = true;
-					}
-					$db->sql_freeresult ($result);
-					
-					// build popup for adding new chars to user account, get only those that are not assigned yet.
-					// do not show if all accounts are assigned
-					// if someone picks a guildmember that does not belong to them then the guild admin can override it in acp
-					$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE .' WHERE 
-						phpbb_user_id = 0 and member_rank_id != 90 order by member_name asc';
-					$result = $db->sql_query($sql, 0);
+					$show = true;
 					$s_guildmembers = ' '; 
-					while ( $row = $db->sql_fetchrow($result) )
-                    {
-						$s_guildmembers .= '<option value="' . $row['member_id'] .'">' . $row['member_name'] . '</option>';
-                    	$show_buttons = true;
-                    }
-					
+					//if user has no access to claiming chars, don't show the add button.
+					if(!$auth->acl_get('u_dkpucp'))
+					{
+						$show_buttons = false;
+					}
+					else 
+					{
+						//if there are no chars at all, show a message and do not show add button
+						$sql = 'SELECT count(*) AS mcount FROM ' . MEMBER_LIST_TABLE .' WHERE member_rank_id != 90  ';
+						$result = $db->sql_query($sql, 0);
+						$mcount = (int) $db->sql_fetchfield('mcount');
+						if ( $mcount = 0)
+						{
+							$show = false;
+						}
+						else 
+						{
+							// build popup for adding new chars to user account, get only those that are not assigned yet.
+							// do not show if all accounts are assigned
+							// if someone picks a guildmember that does not belong to them then the guild admin can override it in acp
+							$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE .' WHERE 
+								phpbb_user_id = 0 and member_rank_id != 90 order by member_name asc';
+							$result = $db->sql_query($sql, 0);
+							
+							while ( $row = $db->sql_fetchrow($result) )
+		                    {
+								$s_guildmembers .= '<option value="' . $row['member_id'] .'">' . $row['member_name'] . '</option>';
+		                    	$show_buttons = true;
+		                    }
+						}
+						$db->sql_freeresult ($result);
+					}
+										
 					// These template variables are used on all the pages
 					$template->assign_vars(array(
 						'S_DKPMEMBER_OPTIONS'	=> $s_guildmembers,
@@ -193,6 +208,7 @@ class ucp_dkp
 					}
 					$template->assign_vars(array(
 						'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
+						
 					));
 					
 					$db->sql_freeresult ($members_result);

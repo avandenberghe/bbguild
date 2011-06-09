@@ -786,12 +786,25 @@ $versions = array(
 			array($table_prefix . 'bbdkp_memberlist', 'member_portrait_url' , array('VCHAR', '')),
 		),
 
-         'custom' => array(
+    	// create new ucp permission
+	   'permission_add' => array(
+            array('u_dkpucp', true) 
+      	),
+      
+        // Assign new ucp permission
+        'permission_set' => array(
+            array('ROLE_ADMIN_FULL', 		'u_dkpucp'),
+            array('ROLE_USER_STANDARD', 	'u_dkpucp'),
+        ),
+		
+		'custom' => array(
 			// add columns to new indexes 
             'tableupdates123',
 			// purge and reinstall chosen gametables according to latest specs
 			'gameinstall'
       	)
+      	
+      	
       	
 		),
       

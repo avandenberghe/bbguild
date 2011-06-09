@@ -123,8 +123,8 @@ $sql_array = array(
 		m.member_spent AS gp,
 		m.member_item_decay,
 		m.member_spent - m.member_item_decay as gp_net, 
-		case when (m.member_spent - m.member_item_decay) = 0 then (m.member_earned - m.member_raid_decay + m.member_adjustment)  
-		else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr,
+		CASE WHEN (m.member_spent - m.member_item_decay) = 0 THEN ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment) / ' . max(0, $config['bbdkp_basegp']) .', 2) 
+		ELSE ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr,
 		m.member_firstraid,
 		m.member_lastraid,
 		r1.name AS member_race,
