@@ -138,7 +138,7 @@ $sql_array = array(
    
 $sql = $db->sql_build_query('SELECT', $sql_array);   
 $result = $db->sql_query ( $sql,604000);
-
+$classarray = array();
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
 	$classarray[] = $row;
