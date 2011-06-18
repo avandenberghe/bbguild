@@ -1237,7 +1237,6 @@ function tableupdates123($action, $version)
 				switch ($version)
 				{
 					case '1.2.3':
-				    $umil->table_remove($table_prefix . 'bbdkp_news');
 			    
 					// remove old unique index on class table
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
