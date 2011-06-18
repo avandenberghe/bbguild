@@ -302,9 +302,9 @@ if($config['bbdkp_decay'] == 1)
 
 if($config['bbdkp_epgp'] == 1)
 {
-	$sql_array[ 'SELECT'] .= ', sum(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep, sum(m.member_spent - m.member_item_decay ) AS gp, 
-	CASE WHEN SUM(m.member_spent - m.member_item_decay) = 0 THEN ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment) / ' . max(0, $config['bbdkp_basegp']) .', 2) 
-	ELSE ROUND(SUM(m.member_earned - m.member_raid_decay + m.member_adjustment) / SUM(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) END AS pr ' ;
+	$sql_array[ 'SELECT'] .= ", sum(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep,  sum(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . " ) AS gp, 
+	CASE WHEN SUM(m.member_spent - m.member_item_decay) = 0 THEN ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment) / " . max(0, $config['bbdkp_basegp']) . ", 2) 
+	ELSE ROUND(SUM(m.member_earned - m.member_raid_decay + m.member_adjustment) / SUM(" . max(0, $config['bbdkp_basegp']) . " + m.member_spent - m.member_item_decay),2) END AS pr " ;
 }
 
 //check if inactive members will be shown
