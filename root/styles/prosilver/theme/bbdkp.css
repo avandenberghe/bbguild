@@ -182,17 +182,21 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 	white-space: nowrap;
 }
 
+
+/**** portal tooltip css ****/
+/* http://www.webmonkey.com/2010/02/make_css_rounded_corners  */
+
 .bbtooltip {
 	display: none;
-	 position:relative;
-	 margin:0px auto;
-	 min-width:200px;
-	 max-width:200px; 
-	 color:#FFFFDD;
-	 z-index:1;
-	 margin-left:10px; /* default, width of left corner */
-	 margin-bottom:0.5em; /* spacing under dialog */	
-	font-size: 11px;
+	position:relative;
+	margin:0px auto;
+	font-size: 10px;
+	min-width:200px;
+	max-width:400px; 
+	color:#FFFFDD;
+	z-index:1;
+	margin-left:12px; /* default, width of left corner */
+	margin-bottom:0.5em; /* spacing under dialog */	
 }
 
 .bbtooltip .bbinner,
@@ -203,13 +207,14 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
  background-color: transparent;
  background-repeat: no-repeat;
  background-position: right top;
+ 
 }
 	
 .bbtooltip .bbinner {
  position:relative;
  zoom:1;
   _overflow-y:hidden;
- padding:0px 10px 0px 0px;
+ padding:0px 12px 0px 0px;
 }
 
 .bbtooltip .t {
@@ -217,8 +222,8 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
  position:absolute;
  left:0px;
  top:0px;
- width:10px; /* top slice width */
- margin-left:-10px;
+ width:12px; /* top slice width */
+ margin-left:-12px;
  height:100%;
  background-position:top left;
 }
@@ -242,8 +247,8 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 /* bottom corner width */
 .bbtooltip .b div {
  position:absolute;
- width:10px; 
- margin-left:-10px;
+ width:12px; 
+ margin-left:-12px;
  background-position:bottom left;
 }
 
@@ -270,7 +275,14 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
  padding-bottom:0px;
 }
 
-
+.bbtooltip textarea {
+	width:200px !important;
+	min-width:200px !important;
+	max-width:200px !important;
+	height:100px !important;
+	min-height:100px !important;
+	max-height:100px !important;
+}
 /* bossprogress.php css */
 
 .progresspage dl { 
@@ -319,6 +331,44 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 /* bar graph */
 .bargraph {
 	 background-color: #9900AA;
+}
+
+span.corners-inner-top, span.corners-inner-bottom, span.corners-inner-top span, span.corners-inner-bottom span {
+	font-size: 1px;
+	line-height: 1px;
+	display: block;
+	height: 5px;
+	background-repeat: no-repeat;
+}
+
+span.corners-inner-top {
+	background-image: url('none');
+	background-position: 0 0;
+	margin: 0 -5px;
+}
+
+span.corners-inner-top span {
+	background-image: url('none');
+	background-position: 100% 0;
+}
+
+span.corners-inner-bottom {
+	background-image: url('none');
+	background-position: 0 100%;
+	margin: 0 -5px;
+	clear: both; 
+}
+
+span.corners-inner-bottom span {
+	background-image: url('none');
+	background-position: 100% 100%;
+}
+
+span.corners-inner-top, span.corners-inner-bottom { 
+	background-image: url('{T_THEME_PATH}/images/corners_left.png'); 
+}
+span.corners-inner-top span, span.corners-inner-bottom span { 
+	background-image: url('{T_THEME_PATH}/images/corners_right.png'); 
 }
 
 

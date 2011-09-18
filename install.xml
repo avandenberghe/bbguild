@@ -157,17 +157,13 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2.3</mod-version>
+		<mod-version>1.2.4</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
-			<target-version>3.0.8</target-version>
+			<target-version>3.0.9</target-version>
 		</installation>
 		<link-group>
-			<link type="template" href="contrib/subsilver2.xml" lang="en">subsilver2</link>
-			<link type="template" href="contrib/subsilver2.xml" lang="fr">subsilver2</link>
-			<link type="template" href="contrib/subsilver2.xml" lang="de">subsilver2</link>
-
 			<link type="language" lang="en" href="contrib/fr.xml">French</link>
 			<link type="language" lang="fr" href="contrib/fr.xml">Français</link>
 			<link type="language" lang="de" href="contrib/fr.xml">Franzözisch</link>
@@ -176,10 +172,14 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
 			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>	
 			
-			<link type="contrib" lang="en" href="contrib/install_122_to_123.xml">Update from v1.2.2 to v1.2.3</link>
-			<link type="contrib" lang="fr" href="contrib/install_122_to_123.xml">Mise à jour de v1.2.2 à v1.2.3</link>
-			<link type="contrib" lang="de" href="contrib/install_122_to_123.xml">Aktualisierung von v1.2.2 bis v1.2.3</link>
-						
+			<link type="contrib" lang="en" href="contrib/install_123_to_124.xml">Update from v1.2.3 to v1.2.4</link>
+			<link type="contrib" lang="fr" href="contrib/install_123_to_124.xml">Mise à jour de v1.2.3 à v1.2.4</link>
+			<link type="contrib" lang="de" href="contrib/install_123_to_124.xml">Aktualisierung von v1.2.3 bis v1.2.4</link>
+			
+			<link type="contrib" lang="en" href="contrib/install_122_to_124.xml">Update from v1.2.2 to v1.2.4</link>
+			<link type="contrib" lang="fr" href="contrib/install_122_to_124.xml">Mise à jour de v1.2.2 à v1.2.4</link>
+			<link type="contrib" lang="de" href="contrib/install_122_to_124.xml">Aktualisierung von v1.2.2 bis v1.2.4</link>
+			
 			</link-group>
 	</header>
 	<action-group>
@@ -258,18 +258,18 @@ if(@defined("EMED_BBDKP"))
 				<comment lang="en"><![CDATA[Adding bbdkp credits link in overall_footer ]]></comment>
 				<comment lang="fr"><![CDATA[Ajout lien les crédits dans overall_footer ]]></comment>
 				<comment lang="de"><![CDATA[Zufügung Credits link in overall_footer ]]></comment>			
-				<find><![CDATA[2000, 2002, 2005, 2007 phpBB Group]]></find>
-				<action type="after-add"><![CDATA[<br />
+				<find><![CDATA[		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></find>
+				<action type="replace-with"><![CDATA[<br />
 <script type="text/javascript">
 function pop_search()
 {
-    search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')
+    search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70');
     search.focus();
 }
 </script>
-<a class="bbdkpcredits" onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">BBdkp Credits</a>
-<br />]]></action>
-			</edit>
+<a class="bbdkpcredits" onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">powered by bbDKP</a><br />
+		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></action>
+</edit>
 		</open>
 		<open src="/styles/prosilver/theme/stylesheet.css">
 			<edit>
@@ -329,13 +329,6 @@ function pop_search()
 		
 		<open src="styles/prosilver/template/overall_header.html">
 			<edit>
-				<comment lang="en"><![CDATA[install bbDKP header - All in one file]]></comment>
-				<comment lang="fr"><![CDATA[installation du fichier header - tous en un]]></comment>
-				<comment lang="de"><![CDATA[Installation Headerdatei - Alles in einem]]></comment>
-				<find><![CDATA[</head>]]></find>
-				<action type="before-add"><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></action>
-			</edit>
-			<edit>
 				<comment lang="en"><![CDATA[insert links in template]]></comment>
 				<comment lang="fr"><![CDATA[inserer liens dans template]]></comment>
 				<comment lang="de"><![CDATA[inseriere Links im Template]]></comment>								
@@ -351,7 +344,7 @@ What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
 
-1) Run bbDKP 1.2.3 database installation : install/index.php 
+1) Run bbDKP 1.2.4 database installation : install/index.php 
 2) Rename the install folder. 
 
 Note : Should you need to deactivate bbDKP you can open configdkp.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
@@ -362,7 +355,7 @@ Liste des changements : /docs/changelog.html
 
 Résumé des étapes de post-installation
 
-1) lance l’installateur ou m.a.j 1.2.3  : install/index.php
+1) lance l’installateur ou m.a.j 1.2.4  : install/index.php
 2) Renomme ou supprime le repertoire /install pour réactiver le forum.
 
 Note : Il est possible de désactiver le MOD en ouvrant configdkp.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
@@ -371,7 +364,7 @@ Success ;)	]]></diy-instructions>
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) 1.2.3 Datenbank Installation order aktualisierung : install/index.php 
+1) 1.2.4 Datenbank Installation order aktualisierung : install/index.php 
 2) lösche oder umbenenne das Installations-Verzeichnis „install" 
 
 Notiz : Sie können bbDKP deaktivieren indem sie configdkp.php öffnen und @define('EMED_BBDKP', true); ändern nach  //@define('EMED_BBDKP', true);  
