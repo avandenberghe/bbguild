@@ -220,10 +220,10 @@ $sql .= " GROUP BY c.game_id,  c.colorcode,  c.imagename, c.class_id, l.member_i
 
 $sql .= " ORDER BY " . $current_order['sql'];
 
-if ( !($members_result = $db->sql_query($sql)) )
-{
-    trigger_error ($user->lang['MNOTFOUND']);
-}
+$startd = request_var ( 'startdkp', 0 );
+$members_result = $db->sql_query_limit ( $sql, 20, $startd );
+$totalcount = $db->sql_affectedrows($members_result);
+$dkppagination = generate_pagination2($u_stats . '&amp;o=' . $current_order ['uri'] ['current'] , $totalcount, 15, $startd, true, 'startdkp'  );
 
 $member_count = 0;
 
@@ -231,6 +231,9 @@ $memberraidcount_g = array();
 $memberattendancepct_g = array();
 $membername_g = array();
 $raid_count=  0;
+
+
+
 while ( $row = $db->sql_fetchrow($members_result) )
 {
 	$member_count++;
@@ -246,12 +249,15 @@ while ( $row = $db->sql_fetchrow($members_result) )
 	$member_drop_pct_g[]=$member_drop_pct; 
 	$_member_pr_g[] = $row['pr'];
 	$_member_current_g[] = $row['member_current'];
+	
     $template->assign_block_vars('stats_row', array(
+    	
+    	'TOTALCOUNT'			=> $totalcount, 
         'NAME' 					=> $row['member_name'],
         'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),    
     	'COLORCODE'				=> $row['colorcode'],
     	'ID'            		=> $row['member_id'],
-	    'COUNT'         		=> ($row[$previous_source] == $previous_data) ? '&nbsp;' : $member_count,
+	    'COUNT'         		=> $member_count,
         'ATTENDED_COUNT' 		=> $row['member_raidcount'],
     	'ITEM_COUNT' 			=> $row['itemcount'],
     	'MEMBER_DROP_PCT'		=> sprintf("%s %%", $member_drop_pct),
@@ -263,7 +269,7 @@ while ( $row = $db->sql_fetchrow($members_result) )
         'GP_PER_DAY' 			=> sprintf("%.2f", $row['gp_per_day']),
         'GP_PER_RAID' 			=> sprintf("%.2f", $row['gp_per_raid']),
         'PR'			 		=> sprintf("%.2f", $row['pr']),
-        'CURRENT' 				=> $row['member_current'], 
+        'CURRENT' 				=> intval($row['member_current']), 
         'C_CURRENT'				=> ($row['member_current'] > 0 ? 'positive' : 'negative'), 
     )
     );
@@ -285,6 +291,7 @@ $db->sql_freeresult($members_result);
 
 /* send information to template */
 $template->assign_vars(array(
+	'DKPPAGINATION' 		=> $dkppagination ,
     'O_PR' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][0] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
     'O_CURRENT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) , 
     'O_NAME'       => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o=' . $current_order['uri'][2] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')), 
@@ -304,100 +311,10 @@ $template->assign_vars(array(
     )
 );
 
-if ($member_count> 0)
-{
-	// pChart library inclusions
-	include($phpbb_root_path . 'includes/bbdkp/pchart/class/pData.class.' . $phpEx);
-	include($phpbb_root_path . 'includes/bbdkp/pchart/class/pDraw.class.' . $phpEx);
-	include($phpbb_root_path . 'includes/bbdkp/pchart/class/pImage.class.' . $phpEx);
-	include($phpbb_root_path . 'includes/bbdkp/pchart/class/pScatter.class.' . $phpEx);
-	include($phpbb_root_path . 'includes/bbdkp/pchart/class/pCache.class.' . $phpEx);
-	
-	/* chart generation */
-	
-	 /* Create and populate the pData object */
-	 $MyData = new pData();  
-	
-	 /* for each member, add point array */
-	  if($config['bbdkp_epgp'] == 1)
-	 {
-		 $MyData->addPoints($_member_pr_g,"Priority");
-	     $MyData->setAxisName(0,"Priority");
-	 }
-	 else
-	 {
-		 $MyData->addPoints($_member_current_g,"DKP");
-		 $MyData->setAxisName(0,"DKP");
-		 
-	 }
-		
-	 $MyData->addPoints(  $membername_g ,"Members");
-	 $MyData->setSerieDescription("Members","Member");
-	 $MyData->setAbscissa("Members"); 
-	 $MyData->setAbscissaName("Members");
-	 $MyData->setAxisDisplay(0,AXIS_FORMAT_METRIC,1); 
-	 
-	 $pallette = $phpbb_root_path . "includes/bbdkp/pchart/palettes";
-	 $MyData->loadPalette("$pallette/navy.color", TRUE);
-
-	 $imagepath0= $phpbb_root_path . "images/pchart/vchart.png";
- 	// render it ! 		 
-	 
-	/* Create the pChart object */
-	 $myPicture = new pImage(440,500,$MyData);
-	 
-	 /* make a background gradient */
-	 $myPicture->drawGradientArea(0,0,440,500,DIRECTION_VERTICAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>100));
-	 $myPicture->drawGradientArea(0,0,440,500,DIRECTION_HORIZONTAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>20));
-	 
-	 /* Define the chart font */ 
-	 $chartfont = $phpbb_root_path . "includes/bbdkp/pchart/fonts/pf_arma_five.ttf"; 
-	 $myPicture->setFontProperties(array(
-	  	"FontName"=> $chartfont ,
-	  	"FontSize"=> 6));
-	
-	/* Draw the scale  */
-	 $myPicture->setGraphArea(100,30,420,480);
-	 $myPicture->drawScale(array("CycleBackground"=>TRUE,"DrawSubTicks"=>TRUE,"GridR"=>0,"GridG"=>0,"GridB"=>0,"GridAlpha"=>10,"Pos"=>SCALE_POS_TOPBOTTOM)); // 
-	 
-	 /* Turn on shadow computing */ 
-	 $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
-	
-	 /* Draw the chart */
-	 $settings = array(
-	 	"Gradient"=>TRUE,
-	 	"DisplayPos"=>LABEL_POS_INSIDE,
-	 	"DisplayValues"=>TRUE,
-	 	"DisplayR"=>255,
-	 	"DisplayG"=>255,
-	 	"DisplayB"=>255,
-	 	"DisplayShadow"=>TRUE,
-	 	"Surrounding"=>5);
-	 //$myPicture->drawBarChart($settings);
-	
-	  /* Draw the line and plot chart */
-	 $myPicture->drawSplineChart();
-	 $myPicture->drawPlotChart();
-	 
-	  /* Write the chart legend */
-	 $myPicture->drawLegend(570,215,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
-	 
-	 /* Render the picture */
-	 $myPicture->render($imagepath0);
-	 unset($myPicture);
-	 unset($MyData); 
-	
-	/* send information to template */
-	$template->assign_vars(array(
-		'CHART0'   => $imagepath0,
-	    )
-	);
-		
-}
 
 /***********************
  *  
- *  Class Statistics 
+ *  Class Drop Statistics 
  *  
  **********************/
 
@@ -429,9 +346,14 @@ from ((" . MEMBER_DKP_TABLE . " d left join
 SELECT i.member_id, count(i.item_id) as itemcount
 FROM 
 ((" . EVENTS_TABLE ." e inner join ". RAIDS_TABLE ." r on e.event_id=r.event_id)
-inner join " . RAID_ITEMS_TABLE . " i on  r.raid_id = i.raid_id )
-WHERE e.event_dkpid = 3 
-GROUP BY i.member_id
+inner join " . RAID_ITEMS_TABLE . " i on  r.raid_id = i.raid_id ) ";
+
+if ($query_by_pool)
+{
+     $sql .= ' WHERE e.event_dkpid = '. $dkp_id . ' ';
+}
+
+$sql .= " GROUP BY i.member_id
 ) x
 on d.member_id = x.member_id)
 INNER JOIN " . MEMBER_LIST_TABLE . " l on l.member_id = d.member_id
@@ -493,10 +415,12 @@ while ($row = $db->sql_fetchrow($result) )
         'CLASS_NAME'		=> $row['class_name'],
 		
         'CLASS_COUNT' 		=> (int) $class_count,
-        'CLASS_PCT' 		=> sprintf("%s %%", $classpct ),
+		'CLASS_PCT' 		=> $classpct,
+        'CLASS_PCT_STR' 	=> sprintf("%s %%", $classpct ),
     
         'LOOT_COUNT' 		=> $loot_drops,
-    	'CLASS_DROP_PCT'	=> sprintf("%s %%", $class_drop_pct  ),
+       	'CLASS_DROP_PCT'	=> $class_drop_pct,
+    	'CLASS_DROP_PCT_STR' => sprintf("%s %%", $class_drop_pct  ),
     
     	'C_LOOT_FACTOR'		=> ($lootoverrun < 	0) ? 'negative' : 'positive', 
        	'LOOTOVERRUN'		=> sprintf("%s %%", $lootoverrun), 
@@ -504,86 +428,6 @@ while ($row = $db->sql_fetchrow($result) )
     );
 }
 
-if ($classcount > 0)
-{
-	/* chart generation */
-	
-	/* CAT:Bar Chart */
-	 unset($myPicture);
-	 unset($MyData); 
-	 /* Create the pData object
-	 
-	 /* Create and populate the pData object */
-	 $MyData = new pData();  
-	
-	 /* for each class, add point array */
-	 $MyData->addPoints($classpct_g,"Class%");
-	 $MyData->addPoints( $class_drop_pct_g,"Drop%");
-	 $MyData->setAxisName(0,"%");
-	 
-	 $MyData->addPoints(  $classname_g ,"Classes");
-	 $MyData->setSerieDescription("Classes","Class");
-	 $MyData->setAbscissa("Classes"); 
-	 
-	 $pallette = $phpbb_root_path . "includes/bbdkp/pchart/palettes";
-	 $MyData->loadPalette("$pallette/blind.color", TRUE);
-	
-	 $imagepath= $phpbb_root_path . "images/pchart/classchart.png";
-	 // Create the pChart object
-	 $myPicture = new pImage(440,500,$MyData);
-	 
-	 // make a background gradient 
-	 $myPicture->drawGradientArea(0,0,440,500,DIRECTION_VERTICAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>100));
-	 $myPicture->drawGradientArea(0,0,440,500,DIRECTION_HORIZONTAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>20));
-	 
-	 // set the fonts
-	 $fonttitle = $phpbb_root_path . "includes/bbdkp/pchart/fonts/Forgotte.ttf";
-	 $myPicture->setFontProperties(array(
-	 	"FontName" => $fonttitle,
-	 	"FontSize" =>15));
-	 // draw the title
-	 //$myPicture->drawText(20,34,"Class participation vs. Class droprate",array("FontSize"=>20));
-	
-	 /* Define the chart font */ 
-	 $chartfont = $phpbb_root_path . "includes/bbdkp/pchart/fonts/pf_arma_five.ttf"; 
-	 $myPicture->setFontProperties(array(
-	  	"FontName"=> $chartfont ,
-	  	"FontSize"=> 6));
-	
-	/* Draw the scale  */
-	 $myPicture->setGraphArea(50,30,420,490);
-	 $myPicture->drawScale(array("CycleBackground"=>TRUE,"DrawSubTicks"=>TRUE,"GridR"=>0,"GridG"=>0,"GridB"=>0,"GridAlpha"=>10));
-	
-	 /* Turn on shadow computing */ 
-	 $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
-	
-	 /* Draw the chart */
-	 $settings = array(
-	 	"Gradient"=>TRUE,
-	 	"DisplayPos"=>LABEL_POS_INSIDE,
-	 	"DisplayValues"=>TRUE,
-	 	"DisplayR"=>255,
-	 	"DisplayG"=>255,
-	 	"DisplayB"=>255,
-	 	"DisplayShadow"=>TRUE,
-	 	"Surrounding"=>5);
-	 $myPicture->drawBarChart($settings);
-		
-	 /* Write the chart legend */
-	 $myPicture->drawLegend(100,12,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
- 		 		 
-	 /* Render the picture */
-	 $myPicture->render($imagepath);
-	 unset($myPicture);
-	 unset($MyData); 
-
-	/* send information to template */
-	$template->assign_vars(array(
-		'CHART1'   => $imagepath,
-	    )
-	);
-		
-}
 
 /***********************
  *  
@@ -598,6 +442,8 @@ $rc90 = get_overallraidcount($query_by_pool, (int) $config['bbdkp_list_p3'], $ti
 $rc60 = get_overallraidcount($query_by_pool, (int) $config['bbdkp_list_p2'], $time, $dkp_id);
 $rc30 = get_overallraidcount($query_by_pool, (int) $config['bbdkp_list_p1'], $time, $dkp_id);
 
+
+/** attendance SQL */
 $sql = "SELECT
 	c.game_id, c.colorcode,  c.imagename, 
 	e.event_dkpid,
@@ -775,9 +621,9 @@ ORDER BY
 	sum(CASE e.days WHEN '90' THEN e.attendance END ) desc,
 	e.member_id
 ";
-
-$result = $db->sql_query($sql);
-
+$startatt = request_var ( 'startatt', 0 );
+$result = $db->sql_query_limit ( $sql, 20, $startatt );
+$attpagination = generate_pagination2($u_stats . '&amp;o=' . $current_order ['uri'] ['current'] , $total_members, 15, $startatt, true, 'startatt'  );
 $attendance=0;
 while ( $row = $db->sql_fetchrow($result) )
 {
@@ -797,16 +643,20 @@ while ( $row = $db->sql_fetchrow($result) )
 	    'LASTRAID' 				=> $row['member_lastraid'],
     	'GRCTLIFE' 				=> $row['gloraidcountlife'],
 	    'IRCTLIFE' 				=> $row['iraidcountlife'],
-	    'ATTLIFE' 				=> sprintf("%.2f%%", $row['attendancelife']),
+	    'ATTLIFESTR' 			=> sprintf("%.2f%%", $row['attendancelife']),
+    	'ATTLIFE' 				=> sprintf("%.2f", $row['attendancelife']),
     	'GRCT90' 				=> $row['gloraidcount90'],
 	    'IRCT90' 				=> $row['iraidcount90'],
-	    'ATT90' 				=> sprintf("%.2f%%", $row['attendance90']),
+	    'ATT90STR' 				=> sprintf("%.2f%%", $row['attendance90']),
+    	'ATT90' 				=> sprintf("%.2f", $row['attendance90']),
     	'GRCT60' 				=> $row['gloraidcount60'],
 	    'IRCT60' 				=> $row['iraidcount60'],
-	    'ATT60' 				=> sprintf("%.2f%%", $row['attendance60']),
+	    'ATT60STR' 				=> sprintf("%.2f%%", $row['attendance60']),
+    	'ATT60' 				=> sprintf("%.2f", $row['attendance60']),
     	'GRCT30' 				=> $row['gloraidcount30'],
 	    'IRCT30' 				=> $row['iraidcount30'],
-	    'ATT30' 				=> sprintf("%.2f%%", $row['attendance30']),   
+	    'ATT30STR' 				=> sprintf("%.2f%%", $row['attendance30']),
+    	'ATT30' 				=> sprintf("%.2f", $row['attendance30']), 
     )
     );
 
@@ -820,80 +670,18 @@ if($attendance > 0)
 		'RAIDS_X3_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p1']),
 	));
 	
-	 /* Create and populate the pData object */
-	 $MyData = new pData();  
-	
-	 $MyData->addPoints($attlife__g,$user->lang['ATTENDANCE_LIFETIME']);
-	 $MyData->addPoints($att90__g, sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p3']));
-	 $MyData->addPoints($att60__g, sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p2']));
-	 $MyData->addPoints($att30__g, sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p1']));
-	 $MyData->setAxisName(0,$user->lang['RAID_ATTENDANCE_HISTORY']);
-	 $MyData->addPoints(  $membername_g ,"Members");
-	 
-	 $MyData->setSerieDescription("Members","Member");
-	 
-	 $MyData->setAbscissa("Members"); 
-	 $MyData->setAbscissaName("Members");
-	 $MyData->setAxisDisplay(0,AXIS_FORMAT_METRIC,1); 
-	  
-	 $pallette = $phpbb_root_path . "includes/bbdkp/pchart/palettes";
-	 $MyData->loadPalette("$pallette/navy.color", TRUE);
-	 
-	 $imagepath= $phpbb_root_path . "images/pchart/attendancechart.png";
-	 /* Create the pChart object */
-	 $myPicture = new pImage(420,500,$MyData);
-	 
-	 /* make a background gradient */
-	 $myPicture->drawGradientArea(0,0,420,500,DIRECTION_VERTICAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>100));
-	 $myPicture->drawGradientArea(0,0,420,500,DIRECTION_HORIZONTAL,array("StartR"=>240,"StartG"=>240,"StartB"=>240,"EndR"=>180,"EndG"=>180,"EndB"=>180,"Alpha"=>20));
-	 
-	 /* Define the chart font */ 
-	 $chartfont = $phpbb_root_path . "includes/bbdkp/pchart/fonts/pf_arma_five.ttf"; 
-	 $myPicture->setFontProperties(array(
-	  	"FontName"=> $chartfont ,
-	  	"FontSize"=> 6));
-	
-	/* Draw the scale  */
-	 $myPicture->setGraphArea(100,30,400,480);
-	 $myPicture->drawScale(array("CycleBackground"=>TRUE,"DrawSubTicks"=>TRUE,"GridR"=>0,"GridG"=>0,"GridB"=>0,"GridAlpha"=>10,"Pos"=>SCALE_POS_TOPBOTTOM)); // 
-	 
-	 /* Turn on shadow computing */ 
-	 $myPicture->setShadow(TRUE,array("X"=>1,"Y"=>1,"R"=>0,"G"=>0,"B"=>0,"Alpha"=>10));
-	 
- 		 		
-	  /* Draw the line and plot chart */
-	 $myPicture->drawSplineChart();
-	 $myPicture->drawPlotChart();
-	 
-	  /* Write the chart legend */
-	 $myPicture->drawLegend(570,215,array("Style"=>LEGEND_NOBORDER,"Mode"=>LEGEND_HORIZONTAL));
- 	
-	 /* Render the picture */
-	 
-	 $myPicture->render($imagepath0);
-	 unset($myPicture);
-	 unset($MyData); 
-		
-	 
-	/* send information to template */
-	$template->assign_vars(array(
-		'CHART2'   => $imagepath,
-	    )
-	);
-	
 }
 
 /* send information to template */
 $template->assign_vars(array(
-   	'S_DISPLAY_STATS'		=> true,
+	'ATTPAGINATION' 	=> $attpagination ,
+	'S_DISPLAY_STATS'		=> true,
 	'F_STATS' => $u_stats,
-
 	'U_STATS' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats'),
     'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
 	'TOTAL_MEMBERS' 	=> $total_members, 
 	'TOTAL_DROPS' 		=> $total_drops, 
 	'CLASSPCTCUMUL'		=> round($class_drop_pct_cum), 
-
     )
 );
 
