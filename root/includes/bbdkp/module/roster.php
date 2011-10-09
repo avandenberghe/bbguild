@@ -134,7 +134,7 @@ function displayroster($game_id)
              		'LVL'			=> $row['member_level'],
         		    'ARMORY'		=> $row['member_armory_url'],  
             		'PHPBBUID'		=> get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),
-        			'PORTRAIT'		=> $phpbb_root_path. $row['member_portrait_url'],		
+        			'PORTRAIT'		=> getportrait($game_id, $row), 	
         		    'ACHIEVPTS'		=> $row['member_achiev'], 
 					'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
 					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
@@ -170,7 +170,7 @@ function displayroster($game_id)
              		'LVL'			=> $row['member_level'],
         		    'ARMORY'		=> $row['member_armory_url'],  
             		'PHPBBUID'		=> get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),  
-        			'PORTRAIT'		=> $phpbb_root_path. $row['member_portrait_url'],		
+        			'PORTRAIT'		=> getportrait($game_id, $row), 		
         		    'ACHIEVPTS'		=> $row['member_achiev'], 
 					'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
 					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
@@ -225,13 +225,20 @@ function displayroster($game_id)
 }
 
 
-function getlinks($gameid, $row)
+function getportrait($game_id, $row)
 {
+	global $phpbb_root_path;
 
 	// setting up the links
 	switch ($game_id)
     {
     	case 'wow':
+    	 if ( $row['member_portrait_url'] != '')
+    	 {
+    	 	$memberportraiturl =  $row['member_portrait_url'];		 
+    	 }
+    	 else 
+    	 {
 		   if($row['member_level'] <= "59")
 		   {
 				$maxlvlid ="wow-default";
@@ -251,6 +258,7 @@ function getlinks($gameid, $row)
 		   }
        	   $memberportraiturl =  $phpbb_root_path .'images/roster_portraits/'. $maxlvlid .'/' . $row['member_gender_id'] . '-' . 
        	    $row['member_race_id'] . '-' . $row['member_class_id'] . '.gif';
+    	 }
                break;
       	 case 'aion': 
 	       $memberportraiturl =  $phpbb_root_path . 'images/roster_portraits/aion/' . $row['member_race_id'] . '_' . $row['member_gender_id'] . '.jpg';
@@ -259,8 +267,7 @@ function getlinks($gameid, $row)
            $memberportraiturl='';
 	           break;
         }
-                	
-	
+        return $memberportraiturl;
 	
 }
 
@@ -317,6 +324,7 @@ function get_listingresult($game_id, $mode, &$current_order, $classid=0)
            				 AND g.id = m.member_guild_id
            				 AND r.guild_id = m.member_guild_id  
            				 AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
+           				 AND m.member_rank_id != 99
            				 AND m.game_id = '" . $db->sql_escape($game_id) . "'
            				 AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "' AND e1.attribute = 'race' and e1.game_id = e.game_id";
 	

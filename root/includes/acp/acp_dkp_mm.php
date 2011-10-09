@@ -1974,7 +1974,7 @@ class acp_dkp_mm extends bbDKP_Admin
     
     public function insertnewmember($member_name, $member_status, $member_lvl, 
     $race_id ,  $class_id, $rank_id, $member_comment, $joindate, $leavedate, 
-    $guild_id, $gender, $achievpoints, $memberarmoryurl = ' ', $realm ='', $game_id = 'wow', $phpbb_user_id = 0 )
+    $guild_id, $gender, $achievpoints, $memberarmoryurl = ' ', $memberportraiturl=' ',  $realm ='', $game_id = 'wow', $phpbb_user_id = 0 )
     {
         global $db, $user, $config;   	
         
@@ -2010,17 +2010,10 @@ class acp_dkp_mm extends bbDKP_Admin
 			$member_lvl = (int) $db->sql_fetchfield('maxlevel', 1, $result); 
 		}
 		
-	    $memberportraiturl = ' ';
-		if ($game_id =='wow' || $game_id =='aion' )
-		{
-			$memberportraiturl = $this->generate_portraitlink( $game_id, $race_id, $class_id, $gender, $member_lvl ); 
-		}
-							
-		if ($realm == '')
-		{
-			$realm = $config['bbdkp_default_realm']; 			
-		}
-		
+	    if( ($game_id == 'wow' || $game_id =='aion') && $memberportraiturl == ' ')
+	    {
+				$memberportraiturl = $this->generate_portraitlink( $game_id, $race_id, $class_id, $gender, $member_lvl ); 
+	    }
 		if ($game_id == 'wow' & $memberarmoryurl == ' ' )
 		{
 			if( $config['bbdkp_default_region'] == '')
@@ -2030,7 +2023,11 @@ class acp_dkp_mm extends bbDKP_Admin
 			}
 			$memberarmoryurl = $this->generate_armorylink( $game_id, $config['bbdkp_default_region'] , $realm , $member_name );
 		}
-					
+		
+		if ($realm == '')
+		{
+			$realm = $config['bbdkp_default_realm']; 			
+		}
 
 		$query = $db->sql_build_array('INSERT', array(
 			'member_id'             => NULL,
@@ -2143,7 +2140,9 @@ class acp_dkp_mm extends bbDKP_Admin
      * url is not updated
      */
     public function updatemember($member_name, 
-    $member_lvl, $race_id, $class_id, $rank_id, $member_comment, $guild_id, $gender, $achievpoints) 
+    	$member_lvl, $race_id, $class_id, $rank_id, $member_comment, $guild_id, 
+    	$gender, $achievpoints, $memberarmoryurl= ' ',
+    	$memberportraiturl=' ', $game_id = 'wow') 
     {
         global $db, $user, $config;   	
         
@@ -2159,12 +2158,14 @@ class acp_dkp_mm extends bbDKP_Admin
 		{
 			$member_id = $row['member_id'];
             $this->old_member = array(
-                'member_level'      => $row['member_level'],
-                'member_race_id'    => $row['member_race_id'],
-                'member_rank_id'    => $row['member_rank_id'],
-                'member_class_id'   => $row['member_class_id'],
-                'member_gender_id'	 => $row['member_gender_id'],	   
-                'member_achiev'	 => $row['member_achiev'],	       
+                'member_level'      	=> $row['member_level'],
+                'member_race_id'    	=> $row['member_race_id'],
+                'member_rank_id'    	=> $row['member_rank_id'],
+                'member_class_id'   	=> $row['member_class_id'],
+                'member_gender_id'	 	=> $row['member_gender_id'],	   
+                'member_achiev'	 		=> $row['member_achiev'],	  
+            	'member_armory_url'		=> $row['member_armory_url'],	   
+            	'member_portrait_url'	=> $row['member_portrait_url'],	   
             );
 		}
 		$db->sql_freeresult($result);
@@ -2184,13 +2185,31 @@ class acp_dkp_mm extends bbDKP_Admin
 			$member_lvl = (int) $db->sql_fetchfield('maxlevel', 1, $result); 
 		}
 		
+   	    if( ($game_id == 'wow' || $game_id =='aion') && $memberportraiturl == ' ')
+	    {
+			$memberportraiturl = $this->generate_portraitlink( $game_id, $race_id, $class_id, $gender, $member_lvl ); 
+	    }
+	    
+		if ($game_id == 'wow' & $memberarmoryurl == ' ' )
+		{
+			if( $config['bbdkp_default_region'] == '')
+			{
+				// if region is not set then put EU...
+				set_config('bbdkp_default_region', 'EU', true);
+			}
+			$realm = $config['bbdkp_default_realm']; 
+			$memberarmoryurl = $this->generate_armorylink( $game_id, $config['bbdkp_default_region'] , $realm , $member_name );
+		}
+		
 		$sql_arr = 	array(
 			'member_level'          => $member_lvl,
 			'member_race_id'        => $race_id,
 			'member_rank_id'        => $rank_id,
 			'member_class_id'       => $class_id,
-		    'member_gender_id'	     => $gender,
-			'member_achiev'	         => $achievpoints
+		    'member_gender_id'	    => $gender,
+			'member_achiev'	        => $achievpoints, 
+			'member_armory_url'		=> $memberarmoryurl, 
+			'member_portrait_url'	=> $memberportraiturl,
 		); 
 		
 		if ($sql_arr != $this->old_member)
