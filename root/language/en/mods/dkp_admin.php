@@ -236,7 +236,7 @@ $lang = array_merge($lang, array(
 'RETURN_RANK'  => 'Return to Rank List. ',
 'ACP_DKP' => 'bbDKP Adminpanel',
 'ACP_ITEMSTATS' => 'Popup Configuration',
-'ACP_INDEXPAGE' => 'Portal Configuration', 
+'ACP_INDEXPAGE' => 'Portal Configuration',
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Adminpanel Index',
@@ -682,6 +682,8 @@ So the loot would go to player 2 <br />',
 'REGIONUS'	=> 'US region',
 'SITE_NAME' => 'Site Name',
 'SITE_DESCRIPTION' => 'Site Description',
+'SYNCDKP'	=> 'Synchronise DKP Pools',
+'SYNC'	=> 'Synchronise',
 'YOURVERSION'	   => 'Your bbDKP Version :', 
 
 // roster
@@ -707,6 +709,7 @@ So the loot would go to player 2 <br />',
 'ADD_RAID_TITLE' => 'Add a Raid',
 'ADD_RAIDER_TITLE' => 'Add a Raider',
 'ADMIN_INDEX_TITLE' => 'bbDKP Administration',
+'DEFAULTDKP'	=> 'Confirm default Pool',
 'MANAGE_MEMBERS_TITLE' => 'Manage Guild Members',
 'VIEWLOGS_TITLE' => 'Log Viewer',
 'EDITMEMBER_DKP_TITLE' => 'Edit Guildmember DKP', 

@@ -203,6 +203,7 @@ class acp_dkp_sys extends bbDKP_Admin
 				// add dkpsys button redirect
 				$showadd = (isset ( $_POST ['dkpsysadd'] )) ? true : false;
 				$delete = (isset ( $_GET ['delete'] ) && isset ( $_GET [URI_DKPSYS] )) ? true : false;
+				
 				if ($showadd)
 				{
 					redirect ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=adddkpsys" ) );
@@ -321,6 +322,12 @@ class acp_dkp_sys extends bbDKP_Admin
 					$this->log_insert ( array ('log_type' => $log_action ['header'], 'log_action' => $log_action ) );
 					$success_message = sprintf ( $user->lang ['ADMIN_DEFAULTPOOL_SUCCESS'], request_var ( 'defaultsys', '' ) );
 					trigger_error ( $success_message . $link) ;
+				}
+				
+				$submit = (isset ( $_POST ['syncdkp'] )) ? true : false;
+				if($submit)
+				{
+					$this->syncdkpsys();
 				}
 				
 				$template->assign_vars ( array (

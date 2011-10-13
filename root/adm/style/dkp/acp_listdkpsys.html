@@ -13,13 +13,25 @@
 <fieldset><legend>{L_DEFAULT_DKP_POOL}</legend>
 	<dl>
 	<dt>
+			{L_DEFAULTDKP}
+	</dt>
+	<dd>
 		<select name="defaultsys" class="input" id="defaultsys">
 	      <!-- BEGIN dkpsysdef_row -->
 	         <option value="{dkpsysdef_row.VALUE}"{dkpsysdef_row.SELECTED}>{dkpsysdef_row.OPTION}</option>
 	      <!-- END dkpsysdef_row -->
 		</select>
-		<INPUT type="submit" name="upddkpsysdef" value="Confirm default Pool" class="button1" >
+		<INPUT type="submit" name="upddkpsysdef" value="{L_DEFAULTDKP}" class="button1" >
+	</dd>
+</dl>
+<dl>	
+	<dt>
+		{L_SYNCDKP}
 	</dt>
+	<dd>
+		<INPUT type="submit" name="syncdkp" value="{L_SYNC}" class="button1" >
+	</dd>
+	
 </dl>
 </fieldset>
 
