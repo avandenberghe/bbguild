@@ -543,7 +543,7 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_RACE_SUCCESS' => 'The race %s was updated successfully. ',
 'ADMIN_UPDATE_LOOTSYS_SUCCESS' => 'The Loot system is now set to %s . ',
 'ADMIN_RAID_ATTENDEE_DELETED_SUCCESS' => 'Attendee %s was deleted from raid %s',
-
+'ADMIN_DKPPOOLSYNC_SUCCESS' => '%s DKP accounts were synchronised.',
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Active Point Adjustment',
