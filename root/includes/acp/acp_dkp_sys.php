@@ -323,13 +323,7 @@ class acp_dkp_sys extends bbDKP_Admin
 					$success_message = sprintf ( $user->lang ['ADMIN_DEFAULTPOOL_SUCCESS'], request_var ( 'defaultsys', '' ) );
 					trigger_error ( $success_message . $link) ;
 				}
-				
-				$submit = (isset ( $_POST ['syncdkp'] )) ? true : false;
-				if($submit)
-				{
-					$this->syncdkpsys();
-				}
-				
+	
 				$template->assign_vars ( array (
 					'L_TITLE' => $user->lang ['ACP_LISTDKPSYS'], 
 					'L_EXPLAIN' => $user->lang ['ACP_LISTDKPSYS_EXPLAIN'], 
@@ -346,11 +340,47 @@ class acp_dkp_sys extends bbDKP_Admin
 		}
 	}
 	
+	
+	/**
+	 * resynchronises the DKP points table with the adjustments, raids, items.
+	 * very unusually you need to run this. 
+	 *
+	 */
 	public function syncdkpsys()
 	{
 		global $user, $db, $phpbb_admin_path, $phpEx, $config;
-		
 		$link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys" ) . '"><h3>'. $user->lang['RETURN_DKPPOOLINDEX'].'</h3></a>';
+		
+		/* start transaction */
+		$db->sql_transaction('begin');
+		
+		/* reinintialise the dkp points table */
+		$sql = "DELETE from " . MEMBER_DKP_TABLE;
+		$db->sql_query ($sql);
+
+		/* select adjustments */
+		$sql = "SELECT adjustment_dkpid, member_id, SUM(adjustment_value) AS adjustment_value
+			FROM " . ADJUSTMENTS_TABLE . ' 
+			GROUP BY adjustment_dkpid, member_id 
+			ORDER BY adjustment_dkpid, member_id';
+		$result = $db->sql_query ($sql);
+		while ($row = $db->sql_fetchrow ( $result))
+		{
+
+			$query = $db->sql_build_array('INSERT', array(
+		    'member_dkpid'     	   => $row['adjustment_dkpid'],
+            'member_id'           =>  $row['member_id'],
+         	'member_earned'       =>  0.00,
+            'member_spent'        =>  0.00,
+        	'member_adjustment'   =>  $row['adjustment_value'],
+        	'member_status'       =>  1,
+            'member_firstraid'    =>  0,
+        	'member_lastraid'     =>  0,
+        	'member_raidcount'    =>  0 )
+	        );
+    	    $db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
+		}
+		$db->sql_freeresult ( $result);
 		
 		/* select raids */
 		$sql = 'SELECT e.event_dkpid, d.member_id FROM '. 
@@ -547,6 +577,9 @@ class acp_dkp_sys extends bbDKP_Admin
 			// case count=0 is not possible
 		}
 		$db->sql_freeresult ( $result0);
+		
+		$db->sql_transaction('commit');
+		
 		$message = sprintf($user->lang['ADMIN_DKPPOOLSYNC_SUCCESS'] , $dkpcorr  + $dkpspentcorr);
 		trigger_error ( $message . $this->link , E_USER_NOTICE );
 				

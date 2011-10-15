@@ -466,6 +466,35 @@ class acp_dkp extends bbDKP_Admin
                 
                 $zerosum_synchronise = (isset($_POST['zerosum_synchronise'])) ? true : false;
                 $decay_synchronise = (isset($_POST['decay_synchronise'])) ? true : false;
+                $dkp_synchronise = (isset($_POST['syncdkp'])) ? true : false;
+                
+                // resynchronise DKP
+                if($dkp_synchronise)
+                {
+                	if (confirm_box ( true )) 
+					{
+						if ( !class_exists('acp_dkp_sys')) 
+						{
+							require($phpbb_root_path . 'includes/acp/acp_dkp_sys.' . $phpEx); 
+						}
+						$acp_dkp_sys = new acp_dkp_sys;
+						$acp_dkp_sys->syncdkpsys();
+						
+					}
+					else 
+					{
+									
+						$s_hidden_fields = build_hidden_fields ( array (
+							'syncdkp' 	  => true, 
+						));
+			
+						$template->assign_vars ( array (
+							'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
+						confirm_box ( false, sprintf($user->lang['RESYNC_DKP_CONFIRM'] ), $s_hidden_fields );
+						
+					}
+                	
+                }
                 
 				// recalculate zerosum
          		if ($zerosum_synchronise) 

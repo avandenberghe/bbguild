@@ -283,7 +283,7 @@ $lang = array_merge($lang, array(
 'ACP_DKP_LOOTSYSTEMEXPLAIN'	=> 'A short guide to Loot systems',
 'EDIT_RAIDER_EXPLAIN' => 'Here you can edit a Raiders earned points',
 'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Note : Game cannot be changed once it is set.',
-
+'SYNCDKP_EXPLAIN'	=> 'Truncates the member DKP Table, rebuilds the values from the source Raid, Raid detail, Items, Adjustments table. Use only when necessary.',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -660,6 +660,7 @@ So the loot would go to player 2 <br />',
 'RESYNC_DECAY_CONFIRM'			=> 'Are you sure you wish to resynchronise Decay values? This will affect all EP end GP values. ',
 'RESYNC_DECAY_EXPLAIN'			=> 'First sets all raid and item decay to zero, then if Decay flag is set, recalculates Decay according to parameters.',
 'RESYNC_DECAY_SUCCESS'			=> 'Successfully decayed %s raids',
+'RESYNC_DKP_CONFIRM'			=> 'Are you SURE you wish to resynchronise DKP values ? ',
 
 'MENU_RAIDS' => 'Raids',
 'MENU_EVENTS' => 'Events',
@@ -669,6 +670,7 @@ So the loot would go to player 2 <br />',
 'MENU_GENERAL' => 'General Settings',
 'MENU_STANDINGS' => 'Standings',
 'MENU_ROSTER'	=> 'Roster',
+'MENU_DKP'	=> 'DKP Settings',
 
 'NONE' => 'None',
 'PARSETAGS' => 'Guildtags to Parse',
