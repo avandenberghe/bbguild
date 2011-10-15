@@ -74,22 +74,22 @@ class acp_dkp_adj extends bbDKP_Admin
 				/**  DKPSYS drop-down query ***/
 			    // only show pools with adjustments 							
 				$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
-		          FROM ' . DKPSYS_TABLE . ' a, ' . ADJUSTMENTS_TABLE . ' j where a.dkpsys_id = j.adjustment_dkpid group by dkpsys_name ';
+		          FROM ' . DKPSYS_TABLE . ' a, ' . ADJUSTMENTS_TABLE . ' j 
+		          WHERE a.dkpsys_id = j.adjustment_dkpid 
+		          GROUP BY dkpsys_name';
+				
 				$result = $db->sql_query ( $sql );
 				$dkpsys_id = 0;
 				$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
-				$hasrows =false;
+				
 				if ($submit)
 				{
 					$dkpsys_id = request_var ( 'dkpsys_id', 0 );
 				}
-				 
 				else 
 				{
-					while ( $row = $db->sql_fetchrow ( $result ) ) 
+					while ($row = $db->sql_fetchrow ($result)) 
 					{
-						$hasrows =true;
-						
 						if($row['dkpsys_default'] == "Y"  )
 						{
 							$dkpsys_id = $row['dkpsys_id'];
@@ -105,6 +105,8 @@ class acp_dkp_adj extends bbDKP_Admin
 						}
 					}
 				}
+				$db->sql_freeresult( $result );
+
 				
 				$result = $db->sql_query ( $sql );
 				while ( $row = $db->sql_fetchrow ( $result ) ) 
@@ -134,6 +136,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					FROM ' . ADJUSTMENTS_TABLE . ' 
 					WHERE member_id IS NOT NULL 
 					and adjustment_dkpid 	= ' . (int) $dkpsys_id;
+
 				$member_filter = utf8_normalize_nfc(request_var('member_name', '', true)); 
 				if ($member_filter != '')
 				{
@@ -182,10 +185,11 @@ class acp_dkp_adj extends bbDKP_Admin
 				}
 				
 				$sql = $db->sql_build_query('SELECT', $sql_array);
-				
+				$hasrows = false;
 				$result = $db->sql_query_limit($sql, $config['bbdkp_user_alimit'], $start, 0);
 				while ($adj = $db->sql_fetchrow($result))
 				{
+					$hasrows = true;
 					$template->assign_block_vars('adjustments_row', array(
 						'U_ADD_ADJUSTMENT' =>  append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj") .'&amp;' . URI_ADJUSTMENT . '='.$adj['adjustment_id'] . '&amp;' . URI_DKPSYS . '='.$adj['adjustment_dkpid']  ,
 						'DATE' => date($config['bbdkp_date_format'], $adj['adjustment_date']),
@@ -439,10 +443,11 @@ class acp_dkp_adj extends bbDKP_Admin
 					//
 					// Add the new adjustment to selected members
 					//
+					$newdkpsys_id  =  request_var('adj_dkpid', 0);
 					foreach ( $member_names as $member_name )
 					{
 						$member_id = $class_members->get_member_id($member_name);
-						$this->add_new_adjustment($dkpsys_id, $member_id, $group_key, $adjval, $adjreason );
+						$this->add_new_adjustment($newdkpsys_id, $member_id, $group_key, $adjval, $adjreason );
 					}
 					
 					//
@@ -484,8 +489,6 @@ class acp_dkp_adj extends bbDKP_Admin
                         // get form vars
 					    $adjust_id  =  request_var('xhidden_id', 0) ;
     					$dkpsys_id  =  request_var('xhidden_dkpid', 0);
-    					
-    					
     					
     					$this->remove_old_adjustment($adjust_id, $dkpsys_id);
     					//
