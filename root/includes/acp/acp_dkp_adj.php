@@ -289,7 +289,7 @@ class acp_dkp_adj extends bbDKP_Admin
                        {
                            $template->assign_block_vars('adj_dkpid_row', array(
                                'VALUE' => $row2['dkpsys_id'],
-                               'SELECTED' => ( $row2['dkpsys_name'] == $row['adjustment_dkpid']  ) ? ' selected="selected"' : '',
+                               'SELECTED' => ( $row2['dkpsys_id'] == $row['adjustment_dkpid']  ) ? ' selected="selected"' : '',
                                'OPTION'   => ( !empty($row2['dkpsys_name']) ) ? $row2['dkpsys_name'] : '(None)')
                            );
                        }
