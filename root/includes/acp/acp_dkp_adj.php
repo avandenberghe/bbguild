@@ -185,11 +185,19 @@ class acp_dkp_adj extends bbDKP_Admin
 				}
 				
 				$sql = $db->sql_build_query('SELECT', $sql_array);
+				$count = 0;
+				$result = $db->sql_query($sql);
 				$hasrows = false;
-				$result = $db->sql_query_limit($sql, $config['bbdkp_user_alimit'], $start, 0);
 				while ($adj = $db->sql_fetchrow($result))
 				{
 					$hasrows = true;
+					$count = $count +1;
+				}
+				$db->sql_freeresult($result);
+
+				$result = $db->sql_query_limit($sql, $config['bbdkp_user_alimit'], $start, 0);
+				while ($adj = $db->sql_fetchrow($result))
+				{
 					$template->assign_block_vars('adjustments_row', array(
 						'U_ADD_ADJUSTMENT' =>  append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj") .'&amp;' . URI_ADJUSTMENT . '='.$adj['adjustment_id'] . '&amp;' . URI_DKPSYS . '='.$adj['adjustment_dkpid']  ,
 						'DATE' => date($config['bbdkp_date_format'], $adj['adjustment_date']),
