@@ -1143,7 +1143,7 @@ class acp_dkp extends bbDKP_Admin
    {  
         $found=''; 
    		
-   		$array_temp = (array) simplexml_load_string($haystack);
+   		$array_temp = (array) @simplexml_load_string($haystack);
         foreach ($array_temp as $key => $value) 
         {
         	if ($key == $tag)
