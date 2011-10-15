@@ -80,7 +80,7 @@ class acp_dkp_adj extends bbDKP_Admin
 				
 				$result = $db->sql_query ( $sql );
 				$dkpsys_id = 0;
-				$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
+				$submit = (isset ( $_POST ['dkpsys_id']) || isset ( $_GET ['dkpsys_id']) ) ? true : false;
 				
 				if ($submit)
 				{
@@ -209,7 +209,9 @@ class acp_dkp_adj extends bbDKP_Admin
 				$db->sql_freeresult($result);
 				
 				$listadj_footcount = sprintf($user->lang['LISTADJ_FOOTCOUNT'], $total_adjustments, $config['bbdkp_user_alimit']);
-				$pagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj") .'&amp;' . URI_PAGE, $total_adjustments, $config['bbdkp_user_alimit'], $start);
+				$pagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", 
+						"i=dkp_adj&amp;mode=listiadj&amp;dkpsys_id=". $dkpsys_id) .'&amp;' . 
+						URI_PAGE, $total_adjustments, $config['bbdkp_user_alimit'], $start);
 				
 				$template->assign_vars(array(
 					'L_TITLE'			 => $user->lang['ACP_LISTIADJ'],
