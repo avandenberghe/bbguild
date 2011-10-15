@@ -954,7 +954,7 @@ class acp_dkp_raid extends bbDKP_Admin
 				  where a.dkpsys_id = b.event_dkpid group by dkpsys_name ';
 		$result = $db->sql_query ( $sql );
 		
-		$submit = (isset ( $_POST ['dkpsys_id'] )) ? true : false;
+		$submit = (isset ( $_POST ['dkpsys_id'] ) || isset ( $_GET ['dkpsys_id'] ) ) ? true : false;
 		if ($submit)
 		{
 			$dkpsys_id = request_var ( 'dkpsys_id', 0 );
@@ -1078,7 +1078,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			'START' 			  => $start, 
 			'LISTRAIDS_FOOTCOUNT' => sprintf ( $user->lang ['LISTRAIDS_FOOTCOUNT'], $total_raids, $config ['bbdkp_user_rlimit'] ), 
 			'RAID_PAGINATION' 	  => generate_pagination ( append_sid 
-					( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;o=" . $current_order ['uri'] ['current']) , 
+					( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;dkpsys_id=". $dkpsys_id ."&amp;o=" . $current_order ['uri'] ['current']) , 
 					$total_raids, $config ['bbdkp_user_rlimit'], $start ) ) );
 	}
 	
