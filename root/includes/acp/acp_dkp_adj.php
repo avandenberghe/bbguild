@@ -164,10 +164,12 @@ class acp_dkp_adj extends bbDKP_Admin
 				        CLASS_TABLE 		=> 'c',
 			    	  ),
 			 
-			    'WHERE'     =>  ' c.class_id = l.member_class_id  and b.dkpsys_id = a.adjustment_dkpid 
-			    		AND l.game_id=c.game_id 
+			    'WHERE'     =>  ' 
+			    		b.dkpsys_id = a.adjustment_dkpid 
+			    		AND c.class_id = l.member_class_id  
+			    		AND l.game_id= c.game_id 
 						AND a.adjustment_dkpid 	= ' . (int) $dkpsys_id . '  
-						AND a.member_id=l.member_id
+						AND a.member_id = l.member_id
 						AND a.member_id IS NOT NULL ',
 			    	  
 			   	'ORDER_BY' => $current_order['sql'], 
@@ -176,7 +178,7 @@ class acp_dkp_adj extends bbDKP_Admin
 				
 				if ($member_filter != '')
 				{
-				  $sql_array['WHERE'] .= ' AND c.member_name ' . $db->sql_like_expression($db->any_char . $member_filter . $db->any_char) ; 
+				  $sql_array['WHERE'] .= ' AND l.member_name ' . $db->sql_like_expression($db->any_char . $member_filter . $db->any_char) ; 
 				}
 				
 				$sql = $db->sql_build_query('SELECT', $sql_array);
