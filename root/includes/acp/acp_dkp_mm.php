@@ -2165,7 +2165,9 @@ class acp_dkp_mm extends bbDKP_Admin
                 'member_gender_id'	 	=> $row['member_gender_id'],	   
                 'member_achiev'	 		=> $row['member_achiev'],	  
             	'member_armory_url'		=> $row['member_armory_url'],	   
-            	'member_portrait_url'	=> $row['member_portrait_url'],	   
+            	'member_portrait_url'	=> $row['member_portrait_url'],
+            	'member_joindate'		=> $row['member_joindate'],
+            	'member_outdate'		=> $row['member_outdate'],   
             );
 		}
 		$db->sql_freeresult($result);
@@ -2200,6 +2202,30 @@ class acp_dkp_mm extends bbDKP_Admin
 			$realm = $config['bbdkp_default_realm']; 
 			$memberarmoryurl = $this->generate_armorylink( $game_id, $config['bbdkp_default_region'] , $realm , $member_name );
 		}
+
+		// Get first and last raiding dates
+		$sql = "SELECT b.member_id, MIN(a.raid_start) as startdate , MAX(a.raid_start) as enddate
+			FROM " . RAIDS_TABLE ." a INNER JOIN " . RAID_DETAIL_TABLE ." b on a.raid_id = b.raid_id 
+			WHERE  b.member_id = " . $member_id ." group by b.member_id ";
+		$result = $db->sql_query($sql);
+		$startraiddate = (int) $db->sql_fetchfield('startdate', 0, $result);
+		$endraiddate = (int) $db->sql_fetchfield('enddate', 0, $result); 
+		$db->sql_freeresult($result);
+		
+		if($this->old_member['member_joindate'] > $startraiddate || $this->old_member['member_joindate'] == 0)
+		{
+			$joindate = $startraiddate;
+		}
+		else
+		{
+			$joindate = $this->old_member['member_joindate'] ;
+		}
+		
+		$leavedate = $this->old_member['member_outdate'] ;
+		if($this->old_member['member_outdate'] < $endraiddate ||  $this->old_member['member_outdate'] > time() )
+		{
+			$leavedate = mktime ( 0, 0, 0, 12, 31, 2030 );
+		}
 		
 		$sql_arr = 	array(
 			'member_level'          => $member_lvl,
@@ -2210,6 +2236,8 @@ class acp_dkp_mm extends bbDKP_Admin
 			'member_achiev'	        => $achievpoints, 
 			'member_armory_url'		=> $memberarmoryurl, 
 			'member_portrait_url'	=> $memberportraiturl,
+           	'member_joindate'		=> $joindate,
+           	'member_outdate'		=> $leavedate,   		
 		); 
 		
 		if ($sql_arr != $this->old_member)
