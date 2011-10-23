@@ -1,14 +1,12 @@
 <?php
 /**
- * @package bbDkp-installer
+ * @package bbDKP 1.2.5
  * @author sajaki9@gmail.com
  * @copyright (c) 2009 bbDkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
  * 
- * bbDKP clean install script
- * if previous install found then redirect to updater
- * 
+ * FOR UPDATES FROM PRIOR TO 1.2.2 UPDATE TO 1.2.2c FIRST
  * 
  */
 define('UMIL_AUTO', true);
@@ -803,17 +801,15 @@ $versions = array(
             'tableupdates123',
 			// purge and reinstall chosen gametables according to latest specs
 			'gameinstall'
-      	)
-      	
-      	
-      	
-		),
+      	)),
 		
 		'1.2.4' => array(
 			// no db changes except in php/html/js 
-		)
-		,
-		
+		),
+				
+		'1.2.5' => array(
+			// new ucp 
+		),
 		
       
 );
