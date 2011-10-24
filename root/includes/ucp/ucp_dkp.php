@@ -153,7 +153,7 @@ class ucp_dkp
 	 */
 	private function fill_addmember($member_id)
 	{
-		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpEx;
+		global $db, $user, $template, $config;
 		$s_hidden_fields = '';
 		
 		// Attach the language file
@@ -446,7 +446,98 @@ class ucp_dkp
 	 */
 	private function add_member()
 	{
-		trigger_error('to implement');
+		global $db, $user, $phpbb_root_path, $phpEx;
+		
+		// get member name
+		$member_name = utf8_normalize_nfc(request_var('member_name', '',true));
+		// check if membername exists
+		$sql = 'SELECT count(*) as memberexists 
+				FROM ' . MEMBER_LIST_TABLE . "	
+				WHERE ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "')"; 
+		$result = $db->sql_query($sql);
+		$countm = $db->sql_fetchfield('memberexists');
+		$db->sql_freeresult($result);
+		if ($countm != 0)
+		{
+			 trigger_error($user->lang['ERROR_MEMBEREXIST'], E_USER_WARNING);
+		}
+		
+		// set member active
+		$member_status = 1; 
+		$guild_id = request_var('member_guild_id', 0);
+		
+		// get rank					  
+		$rank_id = request_var('member_rank_id',99);
+		
+		// check if rank exists
+		$sql = 'SELECT count(*) as rankccount 
+				FROM ' . MEMBER_RANKS_TABLE . '
+				WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id; 
+		$result = $db->sql_query($sql);
+		$countm = $db->sql_fetchfield('rankccount');
+		$db->sql_freeresult($result);
+		if ( $countm == 0)
+		{
+			 trigger_error($user->lang['ERROR_INCORRECTRANK'], E_USER_WARNING);
+		}
+		
+		$member_lvl = request_var('member_level', 0);
+		// check level
+		$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE; 
+		$result = $db->sql_query($sql);
+		$maxlevel = $db->sql_fetchfield('maxlevel');
+		$db->sql_freeresult($result);
+		if ( $member_lvl > $maxlevel)
+		{
+			$member_lvl = $maxlevel;  
+		}
+		
+		$game_id = request_var('game_id', ''); 
+		$race_id = request_var('member_race_id', 0); 
+		$class_id = request_var('member_class_id', 0); 
+		$gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
+		
+		$member_comment = utf8_normalize_nfc(request_var('member_comment', '', true)); 
+		
+		$joindate	= mktime(0,0,0,request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0)); 
+	
+		//is there leavedate?
+		$achievpoints = 0; 
+		$url = utf8_normalize_nfc(request_var('member_armorylink', '', true));  
+		
+		$phpbb_user_id = request_var('phpbb_user_id', 0); 
+		$leavedate = mktime ( 0, 0, 0, 12, 31, 2030 );
+		$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $guild_id; 
+		$result = $db->sql_query($sql);
+		$realm = ''; $region='';
+		
+		while ( $row = $db->sql_fetchrow($result) )
+		{
+			$realm = $row['realm'];
+			$region = $row['region'];
+		}
+				
+		if (! class_exists ( 'acp_dkp_mm' ))
+		{
+			include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
+		}
+		$acp_dkp_mm = new acp_dkp_mm ( );
+		
+		$member_id = $acp_dkp_mm->insertnewmember($member_name, $member_status, $member_lvl, $race_id, $class_id,
+			$rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url, $realm, $game_id, $phpbb_user_id);
+		
+		if ($member_id > 0) 
+		{
+			// record added. 
+			$success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($member_name));
+			trigger_error($success_message, E_USER_NOTICE);
+		}
+		else 
+		{
+			$failure_message = sprintf($user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($member_name), $member_id);
+			 trigger_error($failure_message, E_USER_WARNING);
+		}
+		
 	}
 	
 	/**
