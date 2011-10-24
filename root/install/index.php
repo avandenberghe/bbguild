@@ -809,6 +809,23 @@ $versions = array(
 				
 		'1.2.5' => array(
 			// new ucp 
+				
+	    	// create permission for adding character
+		   'permission_add' => array(
+	            array('u_dkp_charadd', true) 
+	      	),
+	      	
+	     // add new ucp mode 
+		'module_add' => array(
+			array('ucp', 'UCP_DKP', array(
+					'module_basename'   => 'dkp',
+					'module_langname'   => 'UCP_DKP_CHARACTER_ADD',
+					'module_mode'       => 'characteradd',
+					'module_auth'       => '',
+				),
+			)),
+      
+      	
 		),
 		
       

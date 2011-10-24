@@ -1,0 +1,52 @@
+<!-- INCLUDE ucp_header.html -->
+<h2>{DKPCHAR_TITLE}</h2>
+
+<form id="characters" method="post" action="{U_ACTION}">
+<div class="panel">
+<div class="inner"><span class="corners-top"><span></span></span>
+<h3>{DKPCHAR_TITLE}</h3>
+<fieldset><!-- IF ERROR -->
+<p class="error">{ERROR}</p>
+<!-- ENDIF -->
+</fieldset>
+<dl>
+	
+	<dt><label for="dkpmember">{L_CHARACTER}</label>
+	</dt>
+	<dd>
+		
+		<div class="panel">
+		<div class="inner">
+		<span class="corners-top"><span></span></span>
+	
+		
+		<span class="corners-bottom"><span></span></span>
+		</div>
+		</div>
+	
+	</dd>
+
+</dl>
+
+<hr />
+<fieldset class="submit-buttons">
+<dl>
+	<dt><label for="dkpmember"></label>{L_CHARACTER_EXPLAIN}</dt>
+	<dd><select id="dkpmember" name="dkpmember">
+		{S_DKPMEMBER_OPTIONS}
+	</select></dd>
+</dl>
+
+<input class="button2"
+	type="reset" id="reset" name="reset" value="{L_RESET}" />&nbsp; <input
+	class="button1" type="submit" id="submit" name="submit"
+	value="{L_SUBMIT}" /> {S_FORM_TOKEN}
+</fieldset>
+
+
+<span class="corners-bottom"><span></span></span></div>
+</div>
+</form>
+
+
+<!-- INCLUDE ucp_footer.html -->

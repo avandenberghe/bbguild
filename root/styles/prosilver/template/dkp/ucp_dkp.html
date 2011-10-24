@@ -5,7 +5,7 @@
 <form id="characters" method="post" action="{U_ACTION}">
 <div class="panel">
 <div class="inner"><span class="corners-top"><span></span></span>
-<h3>{DKPCHAR_TITLE}</h3>
+<h3>{L_UCP_DKP_CHARACTER_LIST}</h3>
 <fieldset><!-- IF ERROR -->
 <p class="error">{ERROR}</p>
 <!-- ENDIF -->
@@ -14,7 +14,7 @@
 <!-- IF S_SHOW -->
 <dl>
 	<!-- IF  .members_row -->
-	<dt><label for="dkpmember">{L_CHARACTER}</label>
+	<dt>
 	</dt>
 	<dd>
 	
@@ -59,7 +59,6 @@
 		<!-- END dkp_row -->
 		<!-- END members_row -->
 
-
 		</tbody>
 	</table>
 	
@@ -69,11 +68,12 @@
 
 	<p><br /></p>
 	</dd>
+	<hr />
 
 	<!-- ENDIF -->
 </dl>
 <!-- IF S_SHOW_BUTTONS -->
-<hr />
+
 <fieldset class="submit-buttons">
 <dl>
 	<dt><label for="dkpmember"></label>{L_CHARACTER_EXPLAIN}</dt>
