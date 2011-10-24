@@ -16,8 +16,7 @@
  * 
  */
 define('IN_PHPBB', true);
-define('ADMIN_START', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../';
+$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../../../../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
 $game_id = request_var('game_id', '');
@@ -33,7 +32,7 @@ $sql_array = array(
 					AND l.attribute='race' 
 					AND l.game_id = r.game_id 
 					AND l.language= '" . $config['bbdkp_lang'] ."'",
-	'ORDER_BY'	=> 'l.name',			
+	'ORDER_BY'	=> 'l.name',
 	);
 $sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query($sql);

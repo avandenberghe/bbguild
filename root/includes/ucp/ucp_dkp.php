@@ -22,7 +22,7 @@ class ucp_dkp
 					
 	function main($id, $mode)
 	{
-		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpEx;
+		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$s_hidden_fields = '';
 		
 		// Attach the language file
@@ -116,10 +116,15 @@ class ucp_dkp
 				$update	 = (isset($_POST['update'])) ? true : false;
 				if ( $submit || $update)
 				{
-					if (!check_form_key('mm_addmember'))
+					if (!check_form_key('characteradd'))
 					{
 						trigger_error('FORM_INVALID');
 					}
+					else
+					{
+						$this->add_member();
+					}
+					
 				}
 				
 				//get member_id if selected from pulldown
@@ -128,6 +133,12 @@ class ucp_dkp
 				//template fill
 				$this->fill_addmember($member_id);
 				
+				$template->assign_vars(array(
+					// javascript
+					'LA_ALERT_AJAX'		  => $user->lang['ALERT_AJAX'],
+					'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
+					'LA_MSG_NAME_EMPTY'	  => $user->lang['FV_REQUIRED_NAME'],
+				));
 				$this->tpl_name 	= 'dkp/ucp_dkp_charadd';
 				break;
 						
@@ -142,7 +153,6 @@ class ucp_dkp
 	 */
 	private function fill_addmember($member_id)
 	{
-		
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpEx;
 		$s_hidden_fields = '';
 		
@@ -424,19 +434,21 @@ class ucp_dkp
 			'S_JOINDATE_MONTH_OPTIONS'	=> $s_memberjoin_month_options,
 			'S_JOINDATE_YEAR_OPTIONS'	=> $s_memberjoin_year_options,
 
-			// javascript
-			'LA_ALERT_AJAX'		  => $user->lang['ALERT_AJAX'],
-			'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
-			'LA_MSG_NAME_EMPTY'	  => $user->lang['FV_REQUIRED_NAME'],
-			'UA_FINDRANK'		  => append_sid("findrank.$phpEx"),
-			'UA_FINDCLASSRACE'    => append_sid("findclassrace.$phpEx"),
-		
 			'S_ADD' => $S_ADD,
 		));
 		
 		
 	}
 
+	/**
+	 * gets user input, adds member
+	 *
+	 */
+	private function add_member()
+	{
+		trigger_error('to implement');
+	}
+	
 	/**
 	 * lists all my characters
 	 *
