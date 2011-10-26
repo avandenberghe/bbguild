@@ -505,7 +505,7 @@ class ucp_dkp
 		$achievpoints = 0; 
 		$url = utf8_normalize_nfc(request_var('member_armorylink', '', true));  
 		
-		$phpbb_user_id = request_var('phpbb_user_id', 0); 
+		$phpbb_user_id = $user->data['user_id']; 
 		$leavedate = mktime ( 0, 0, 0, 12, 31, 2030 );
 		$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $guild_id; 
 		$result = $db->sql_query($sql);
@@ -522,9 +522,9 @@ class ucp_dkp
 			include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
 		}
 		$acp_dkp_mm = new acp_dkp_mm ( );
-		
+			
 		$member_id = $acp_dkp_mm->insertnewmember($member_name, $member_status, $member_lvl, $race_id, $class_id,
-			$rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url, $realm, $game_id, $phpbb_user_id);
+			$rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url, ' ', $realm, $game_id, $phpbb_user_id);
 		
 		if ($member_id > 0) 
 		{
