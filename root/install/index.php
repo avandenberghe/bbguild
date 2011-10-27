@@ -825,9 +825,12 @@ $versions = array(
 				),
 			)),
       
+        // add new parameters
+        'config_add' => array(
+			array('bbdkp_maxchars', (2, true),
+			),      
       	
 		),
-		
       
 );
 

@@ -901,6 +901,8 @@ So the loot would go to player 2 <br />',
 'ATTENDANCEDAYS' => 'Attendance days (for Standings)',
 'STATISTICS' => 'Statistics',
 'TOTALS' => 'Totals',
+'MAX_NUMBER_CHARS_EXPLAIN' => 'Maximum number of characters that members are allowed to add or claim.', 
+'MAX_NUMBER_CHARS' => 'Maximum #characters',
 
 //js alerts
 'ALERT_AJAX' => 'There was a problem while using XMLHTTP', 

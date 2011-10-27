@@ -555,7 +555,7 @@ class acp_dkp_game extends bbDKP_Admin
             		$template->assign_vars( array(
 						'LA_ALERT_AJAX'		  => $user->lang['ALERT_AJAX'],
 						'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
-						'UA_FINDFACTION'      => append_sid("findfaction.$phpEx"),
+						'UA_FINDFACTION'      => append_sid($phpbb_admin_path . "style/dkp/findfaction.$phpEx"),
 	                ));
             		
 					$this->page_title = 'ACP_LISTGAME';

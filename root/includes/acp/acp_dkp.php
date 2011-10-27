@@ -389,6 +389,7 @@ class acp_dkp extends bbDKP_Admin
                     set_config('bbdkp_show_achiev', request_var('showachievement', 0), true);
                     set_config('bbdkp_date_format', request_var('date_format', ''), true);
                     set_config('bbdkp_lang', request_var('language', 'en'), true);
+                    set_config('bbdkp_maxchars', request_var('maxchars', 2), true);
                     
                     //standings
                     set_config('bbdkp_hide_inactive', (isset($_POST['hide_inactive'])) ? request_var('hide_inactive', '') : '0', true);
@@ -685,7 +686,8 @@ class acp_dkp extends bbDKP_Admin
                 	'ACTIVE_POINT' 		=> $config['bbdkp_active_point_adj'] , 
                 	'USER_ILIMIT' 		=> $config['bbdkp_user_ilimit'] , 
                 	'USER_RLIMIT' 		=> $config['bbdkp_user_rlimit'] , 
-
+					'MAXCHARS'			=> $config['bbdkp_maxchars'] ,
+                
                 	//epgp
                 	'F_EPGPACTIVATE'	=> $config['bbdkp_epgp'],
                 	'BASEGP'			=> $config['bbdkp_basegp'] , 

@@ -8,14 +8,14 @@
 <p>{L_EXPLAIN}</p>
 
 <form method="post" action="{F_MEMBERS_LIST}">
-<fieldset>
+
 <label for="member_guild_id">{L_GUILD}:</label>
-  		<select name="member_guild_id" class="input" onchange="javascript:form.submit();" >
+<select name="member_guild_id" class="input" onchange="javascript:form.submit();" >
        	<!-- BEGIN guild_row -->
        <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
         <!-- END guild_row -->
-      </select>
- </fieldset>
+</select>
+
 </form>
 
 <form id="memberlist" method="post" action="{F_MEMBERS_LIST}">
