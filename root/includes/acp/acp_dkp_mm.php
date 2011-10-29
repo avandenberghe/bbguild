@@ -2162,6 +2162,7 @@ class acp_dkp_mm extends bbDKP_Admin
 		{
 			$member_id = $row['member_id'];
             $this->old_member = array(
+                'game_id' 		     	=> $row['game_id'],
                 'member_level'      	=> $row['member_level'],
                 'member_race_id'    	=> $row['member_race_id'],
                 'member_rank_id'    	=> $row['member_rank_id'],
@@ -2238,6 +2239,7 @@ class acp_dkp_mm extends bbDKP_Admin
 		}
 		
 		$sql_arr = 	array(
+			'game_id'          		=> $game_id,
 			'member_level'          => $member_lvl,
 			'member_race_id'        => $race_id,
 			'member_rank_id'        => $rank_id,

@@ -336,7 +336,7 @@ class ucp_dkp
         	{
         		$template->assign_block_vars('game_row', array(
 				'VALUE' => $gameid,
-				'SELECTED' => ( (isset($member['game_id']) ? $member['game_id'] : 0) == $gameid ) ? ' selected="selected"' : '',
+				'SELECTED' => ( (isset($member['game_id']) ? $member['game_id'] : '') == $gameid ) ? ' selected="selected"' : '',
 				'OPTION'   => $gamename, 
 				));
          		$installed_games[] = $gameid; 
@@ -686,7 +686,7 @@ class ucp_dkp
 		}
 		$acp_dkp_mm = new acp_dkp_mm ( );
 			
-		if (@$acp_dkp_mm->updatemember($member_name, $member_status, $member_lvl, $race_id, $class_id, 
+		if ($acp_dkp_mm->updatemember($member_name, $member_status, $member_lvl, $race_id, $class_id, 
 			$rank_id, $member_comment, $guild_id, $gender, 0, ' ' ,' ' , $game_id))
 		{
 			// record updated. 
