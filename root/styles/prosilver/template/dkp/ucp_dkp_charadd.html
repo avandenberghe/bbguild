@@ -86,26 +86,6 @@
     <input type="radio" name="gender"  value="1"{FEMALE_CHECKED} /> {L_FEMALE}
    </dd>
  </dl>
-  
-  <!-- IF S_CAN_HAVE_ARMORY -->
-  <dl>
-    <dt><label>{L_ARMORY_URL}:</label></dt>
-    <dd>
-		<dd><a href="{MEMBER_URL}" alt="{MEMBER_NAME}" />
-		<!-- IF S_MEMBER_PORTRAIT_EXISTS -->
-		<img src="{MEMBER_PORTRAIT}" alt="image" width="64" height="64"></img>
-		<!-- ENDIF -->
-		</a>
-		<input type="text" name="member_armorylink" size="80%" maxlength="300" value="{MEMBER_URL}" class="input" />
-		<br/>
-		<!-- IF S_CAN_GENERATE_ARMORY -->
-		<input type="submit" name="generate_armorylink" value="{L_GENERATE_ARMORY_URL}" class="button2" />
-		<!-- ENDIF -->
-		</dd>
-		
-   </dd>
-  </dl>
- <!-- ENDIF -->
  
     <dl>
     <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
@@ -127,7 +107,7 @@
 	</p>
 
 
-<input type="hidden" name="hidden_member_name" value="{MEMBER_NAME}" />
+<input type="hidden" name="hidden_member_id" value="{MEMBER_ID}" />
 {S_FORM_TOKEN}
 <dl>
 	<dt><label for="dkpmember"></label>{L_CHARACTER_EXPLAIN}</dt>
