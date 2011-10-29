@@ -314,7 +314,7 @@ class ucp_dkp
         	{
         		$template->assign_block_vars('game_row', array(
 				'VALUE' => $gameid,
-				'SELECTED' => ( $member['game_id'] == $gameid ) ? ' selected="selected"' : '',
+				'SELECTED' => ( (isset($member['game_id']) ? $member['game_id'] : 0) == $gameid ) ? ' selected="selected"' : '',
 				'OPTION'   => $gamename, 
 				));
          		$installed_games[] = $gameid; 
@@ -436,7 +436,7 @@ class ucp_dkp
 		{
 			$month = isset($member['member_joindate_mo']) ? $member['member_joindate_mo'] : $now['mon'] ;
 			$selected = ($i == $month ) ? ' selected="selected"' : '';
-			$s_memberjoin_month_options .= "<option value=\"$i\"$selected>$i</option>";
+			$s_memberjoin_month_options .= " <option value=\"$i\"$selected>$i</option>";
 		}
 
 		$s_memberjoin_year_options = '<option value="0">--</option>';
@@ -452,6 +452,7 @@ class ucp_dkp
 		add_form_key($form_key);
 
 		$template->assign_vars(array(
+			'STATUS'				=> $member_id > 0 ? (($member['member_status'] == 1) ? 'Checked ' : '' ): 'Checked ',
 			'MEMBER_NAME'			=> $member_id > 0 ? $member['member_name'] : '',
 			'MEMBER_ID'				=> $member_id > 0 ? $member['member_id'] : '',
 			'MEMBER_LEVEL'			=> $member_id > 0 ? $member['member_level'] : '',
@@ -518,7 +519,8 @@ class ucp_dkp
 		}
 		
 		// set member active
-		$member_status = 1; 
+		$member_status = request_var('activated', 0) > 0 ? 1 : 0;
+		 
 		$guild_id = request_var('member_guild_id', 0);
 		
 		// get rank					  
@@ -626,6 +628,7 @@ class ucp_dkp
 			 trigger_error($user->lang['ERROR_MEMBEREXIST'], E_USER_WARNING);
 		}
 		
+		$member_status = request_var('activated', 0) > 0 ? 1 : 0;
 		$guild_id = request_var('member_guild_id', 0);
 		$rank_id = request_var('member_rank_id',99);
 		$sql = 'SELECT count(*) as rankccount 
@@ -661,7 +664,8 @@ class ucp_dkp
 		}
 		$acp_dkp_mm = new acp_dkp_mm ( );
 			
-		if ($acp_dkp_mm->updatemember($member_name,$member_lvl,$race_id,$class_id,$rank_id,$member_comment,$guild_id, $gender, 0, ' ' ,' ' ,$game_id))
+		if (@$acp_dkp_mm->updatemember($member_name, $member_status, $member_lvl, $race_id, $class_id, 
+			$rank_id, $member_comment, $guild_id, $gender, 0, ' ' ,' ' , $game_id))
 		{
 			// record updated. 
 			$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], ucwords($member_name));

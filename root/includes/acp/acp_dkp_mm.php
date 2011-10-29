@@ -293,7 +293,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 					
 					// set member active
-					$member_status = 1; 
+					$member_status = request_var('activated', 0) > 0 ? 1 : 0;
 					
 					$guild_id = request_var('member_guild_id', 0);
 					
@@ -460,13 +460,15 @@ class acp_dkp_mm extends bbDKP_Admin
 					{
 						$leavedate = mktime(0,0,0,request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0)); 
 					}
-					
+					// set member active
+					$member_status = request_var('activated', 0) > 0 ? 1 : 0 ;
 					
 					$phpbb_user_id = request_var('phpbb_user_id', 0);
 					 
 					// update the data including the phpbb userid
 					$query = $db->sql_build_array('UPDATE', array(
 						'member_name'		=> $member_name,
+						'member_status'		=> $member_status, 
 						'member_level'		=> $level, 
 						'member_race_id'	=> request_var('member_race_id',0),
 						'member_class_id'	=> request_var('member_class_id',0),
@@ -703,7 +705,7 @@ class acp_dkp_mm extends bbDKP_Admin
 							'member_armory_url'		=> $row['member_armory_url'],  
 							'member_portrait_url'	=> $phpbb_root_path . $row['member_portrait_url'], 
 							'phpbb_user_id'			=> $row['phpbb_user_id'],
-						
+							'member_status'			=> $row['member_status'], 
 							'game_id'				=> $row['game_id'], 
 							'colorcode'				=> $row['colorcode'], 
 							'race_image' 			=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '', 
@@ -1047,7 +1049,8 @@ class acp_dkp_mm extends bbDKP_Admin
 					'L_TITLE'				=> $user->lang['ACP_MM_ADDMEMBER'],
 					'L_EXPLAIN'				=> $user->lang['ACP_MM_ADDMEMBER_EXPLAIN'],
 					'F_ADD_MEMBER'			=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;"),
-					
+					'STATUS'				=> isset($this->member) ? (($this->member['member_status'] == 1) ? 'Checked ' : '' ): 'Checked ',
+				
 					'MEMBER_NAME'			=> isset($this->member) ? $this->member['member_name'] : '',
 					'MEMBER_ID'				=> isset($this->member) ? $this->member['member_id'] : '',
 					'MEMBER_LEVEL'			=> isset($this->member) ? $this->member['member_level'] : '',
@@ -2140,7 +2143,7 @@ class acp_dkp_mm extends bbDKP_Admin
      * is also called from armory plugin for updating existing guildmembers
      * url is not updated
      */
-    public function updatemember($member_name, 
+    public function updatemember($member_name, $member_status,  
     	$member_lvl, $race_id, $class_id, $rank_id, $member_comment, $guild_id, 
     	$gender, $achievpoints, $memberarmoryurl= ' ',
     	$memberportraiturl=' ', $game_id = 'wow') 
@@ -2168,7 +2171,8 @@ class acp_dkp_mm extends bbDKP_Admin
             	'member_armory_url'		=> $row['member_armory_url'],	   
             	'member_portrait_url'	=> $row['member_portrait_url'],
             	'member_joindate'		=> $row['member_joindate'],
-            	'member_outdate'		=> $row['member_outdate'],   
+            	'member_outdate'		=> $row['member_outdate'],
+            	'member_status'			=> $row['member_status'],   
             );
 		}
 		$db->sql_freeresult($result);
@@ -2204,6 +2208,11 @@ class acp_dkp_mm extends bbDKP_Admin
 			$memberarmoryurl = $this->generate_armorylink( $game_id, $config['bbdkp_default_region'] , $realm , $member_name );
 		}
 
+		if($achievpoints == 0)
+		{
+			 $achievpoints = $this->old_member['member_achiev'];
+		}
+		
 		// Get first and last raiding dates
 		$sql = "SELECT b.member_id, MIN(a.raid_start) as startdate , MAX(a.raid_start) as enddate
 			FROM " . RAIDS_TABLE ." a INNER JOIN " . RAID_DETAIL_TABLE ." b on a.raid_id = b.raid_id 
@@ -2238,7 +2247,8 @@ class acp_dkp_mm extends bbDKP_Admin
 			'member_armory_url'		=> $memberarmoryurl, 
 			'member_portrait_url'	=> $memberportraiturl,
            	'member_joindate'		=> $joindate,
-           	'member_outdate'		=> $leavedate,   		
+           	'member_outdate'		=> $leavedate, 
+			'member_status'			=> $member_status,   		
 		); 
 		
 		if ($sql_arr != $this->old_member)
