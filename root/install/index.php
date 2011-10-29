@@ -546,7 +546,7 @@ $versions = array(
         'permission_set' => array(
             array('ROLE_ADMIN_FULL', 		'a_dkp'),
             array('ROLE_ADMIN_FULL', 		'u_dkp'),
-            array('ROLE_USER_STANDARD', 	'u_dkp'),
+            array('ROLE_USER_FULL', 		'u_dkp'),
         ),
         
         // add new parameters
@@ -787,6 +787,7 @@ $versions = array(
 
     	// create new ucp permission
 	   'permission_add' => array(
+			// can claim character
             array('u_dkpucp', true) 
       	),
       
@@ -808,28 +809,42 @@ $versions = array(
 		),
 				
 		'1.2.5' => array(
-			// new ucp 
-				
-	    	// create permission for adding character
+	    	// create permission for adding, updating or deleting character
 		   'permission_add' => array(
-	            array('u_dkp_charadd', true) 
+	            array('u_dkp_charadd', true) ,
+	            array('u_dkp_chardelete', true), 
+	            array('u_dkp_charupdate', true),
+	            
 	      	),
-	      	
-	     // add new ucp mode 
-		'module_add' => array(
-			array('ucp', 'UCP_DKP', array(
-					'module_basename'   => 'dkp',
-					'module_langname'   => 'UCP_DKP_CHARACTER_ADD',
-					'module_mode'       => 'characteradd',
-					'module_auth'       => '',
-				),
-			)),
       
-        // add new parameters
-        'config_add' => array(
-			array('bbdkp_maxchars', 2, true),
+	        // Reassign default permissions
+           'permission_set' => array(
+	            array('ROLE_USER_STANDARD', 'u_dkp_charadd'),
+	            array('ROLE_USER_STANDARD', 'u_dkp_chardelete'),
+	            array('ROLE_USER_STANDARD', 'u_dkp_charupdate'),
+	            array('ROLE_USER_STANDARD', 'u_dkpucp'),
+	            array('ROLE_USER_STANDARD', 'u_dkp'),
+	            array('ROLE_USER_FULL', 'u_dkp_charadd'),
+	            array('ROLE_USER_FULL', 'u_dkp_chardelete'),
+	            array('ROLE_USER_FULL', 'u_dkp_charupdate'),
+	            array('ROLE_USER_FULL', 'u_dkpucp'),
+            ),
+
+		     // add new ucp mode 
+			'module_add' => array(
+				array('ucp', 'UCP_DKP', array(
+						'module_basename'   => 'dkp',
+						'module_langname'   => 'UCP_DKP_CHARACTER_ADD',
+						'module_mode'       => 'characteradd',
+						'module_auth'       => '',
+					),
+			)),
+	      
+	        // add new parameters
+	        'config_add' => array(
+				array('bbdkp_maxchars', 2, true),
 			),      
-      	
+        
 		),
       
 );

@@ -162,6 +162,9 @@ $lang = array_merge($lang, array(
 'VIEWRAID_TITLE' => 'Raid Summary',
 'NODKPACCOUNTS'	=> 'No DKP accounts found', 
 'NOUCPACCESS' => 'You are not authorised to claim characters', 
+'NOUCPADDCHARS' => 'You are not authorised to add characters', 
+'NOUCPUPDCHARS' => 'You are not authorised to update your characters', 
+'NOUCPDELCHARS' => 'You are not authorised to delete your characters',
 
 // Various
 'ACCOUNT' => 'Account',

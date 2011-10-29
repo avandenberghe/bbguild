@@ -122,6 +122,11 @@ class ucp_dkp
 				{
 					if($delete)
 					{
+						// check if user can delete character
+						if(!$auth->acl_get('u_dkp_chardelete') )
+						{
+							trigger_error($user->lang['NOUCPDELCHARS']);
+						}
 						$this->delete_member($member_id);
 					}
 					
@@ -140,6 +145,14 @@ class ucp_dkp
 						{
 							trigger_error('FORM_INVALID');
 						}
+
+						// check if user can update character
+						if(!$auth->acl_get('u_dkp_charupdate') )
+						{
+							trigger_error($user->lang['NOUCPUPDCHARS']);
+						}
+						
+			
 						$this->update_member($member_id);
 					}
 					
@@ -169,16 +182,20 @@ class ucp_dkp
 	 */
 	private function fill_addmember($member_id)
 	{
-		global $db, $user, $template, $config;
+		global $db, $auth, $user, $template, $config;
 		
 		// Attach the language file
 		$user->add_lang('mods/dkp_common');
 		$user->add_lang(array('mods/dkp_admin'));
 
 		if($member_id == 0)
-		{
-			// add mode
-			$S_ADD = true;
+		{	
+			// check if user can add character
+			if(!$auth->acl_get('u_dkp_charadd') )
+			{
+				trigger_error($user->lang['NOUCPADDCHARS']);
+			}
+			
 			// check if user exceeded allowed character count
 			$sql = 'SELECT count(*) as charcount
 					FROM ' . MEMBER_LIST_TABLE . '	
@@ -192,8 +209,9 @@ class ucp_dkp
 					'S_SHOW' => false,	
 				 	'MAX_CHARS_EXCEEDED' => sprintf($user->lang['MAX_CHARS_EXCEEDED'],$config['bbdkp_maxchars']),
 				));
-				 
 			}
+			// add mode
+			$S_ADD = true;
 		}
 		else
 		{
