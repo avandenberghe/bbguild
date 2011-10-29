@@ -244,6 +244,7 @@ $lang = array_merge($lang, array(
 'MEMBERS' => 'Members',
 'NO_DATA' => 'No Data', 	
 'RAID_ON' => 'Raid on %s on %s',
+'MAX_CHARS_EXCEEDED' => 'Sorry, you can only have %s Characters bound to your phpBB account.', 
 'MISCELLANEOUS' => 'Miscellaneous',
 'NEWEST' => 'Newest raid',
 'NOTE' => 'Note',
