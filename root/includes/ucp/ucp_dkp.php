@@ -120,25 +120,29 @@ class ucp_dkp
 				$delete	 = (isset($_POST['delete'])) ? true : false;
 				if ( $submit || $update || $delete )
 				{
-					if (!check_form_key('characteradd'))
+					if($delete)
 					{
-						trigger_error('FORM_INVALID');
+						$this->delete_member($member_id);
 					}
 					
 					if($submit)
 					{
+						if (!check_form_key('characteradd'))
+						{
+							trigger_error('FORM_INVALID');
+						}
 						$this->add_member();
 					}
 					
 					if($update)
 					{
+						if (!check_form_key('characteradd'))
+						{
+							trigger_error('FORM_INVALID');
+						}
 						$this->update_member($member_id);
 					}
 					
-					if($delete)
-					{
-						$this->delete_member($member_id);
-					}
 					
 				}
 				
@@ -684,9 +688,62 @@ class ucp_dkp
 	 * deletes member
 	 *
 	 */
-	private function delete_member()
+	private function delete_member($member_id)
 	{
+		global $user, $db, $config, $phpbb_root_path, $phpEx;
 		
+		if (confirm_box(true))
+		{
+			// recall hidden vars
+			$del_member = request_var('del_member_id', 0);
+			$del_membername = utf8_normalize_nfc(request_var('del_member_name','',true));
+			$log_action = array(
+				'header'	=>	 sprintf( $user->lang['ACTION_MEMBER_DELETED'], $del_membername),  
+				'L_NAME'	=> $del_membername
+			);
+	
+			if (! class_exists ( 'acp_dkp' ))
+			{
+				include ($phpbb_root_path . 'includes/acp/acp_dkp.' . $phpEx);
+			}
+			$acp_dkp = new acp_dkp ( );
+		
+			$acp_dkp->log_insert(array(
+				'log_type'	 => $log_action['header'],
+				'log_action' => $log_action)
+			);
+
+			$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' where member_id= ' . (int) $del_member;
+			$db->sql_query($sql);
+			$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' where member_id= ' . (int) $del_member; 
+			$db->sql_query($sql);
+			$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' where member_id= ' . (int) $del_member; 
+			$db->sql_query($sql);
+			$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE .' where member_id= ' . (int) $del_member; 
+			$db->sql_query($sql);
+			$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . ' where member_id= ' . (int) $del_member; 
+			$db->sql_query($sql);
+		
+			$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $del_membername);
+			trigger_error($success_message);
+		}
+		else
+		{
+			
+		    $sql = "SELECT member_name FROM " . MEMBER_LIST_TABLE . ' where member_id = ' . $member_id ;
+		    $result = $db->sql_query($sql);
+			$member_name = $db->sql_fetchfield('member_name', 1, $result); 
+			$db->sql_freeresult($result);
+
+			$s_hidden_fields = build_hidden_fields(array(
+				'delete'				=> true,
+				'del_member_id'			=> $member_id,
+				'del_member_name'		=> $member_name,
+				)
+			);
+
+			confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_MEMBER'], $member_name) , $s_hidden_fields);
+		}
 	}
 	
 	
