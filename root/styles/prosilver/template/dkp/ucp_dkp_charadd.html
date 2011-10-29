@@ -11,6 +11,7 @@
 <!-- IF ERROR --><p class="error">{ERROR}</p>
 <!-- ELSE -->
 
+<!-- IF S_SHOW -->
 <br />
 
   <dl>
@@ -141,7 +142,9 @@
 	</dd>
 </dl>
 
-
+<!-- ELSE --> 
+	<p class="error">{MAX_CHARS_EXCEEDED} </p><p><br /><br /></p>
+<!-- ENDIF --> 
 
 <!-- ENDIF -->
 

@@ -154,7 +154,6 @@ class ucp_dkp
 	private function fill_addmember($member_id)
 	{
 		global $db, $user, $template, $config;
-		$s_hidden_fields = '';
 		
 		// Attach the language file
 		$user->add_lang('mods/dkp_common');
@@ -164,6 +163,25 @@ class ucp_dkp
 		{
 			// add mode
 			$S_ADD = true;
+			// check if user exceeded allowed character count
+			$sql = 'SELECT count(*) as charcount
+					FROM ' . MEMBER_LIST_TABLE . '	
+					WHERE phpbb_user_id = ' .  (int) $user->data['user_id'];
+			$result = $db->sql_query($sql);
+			$countc = $db->sql_fetchfield('charcount');
+			$db->sql_freeresult($result);
+			if ($countc >= $config['bbdkp_maxchars'])
+			{
+				 $template->assign_vars(array(
+					'S_SHOW' => false,
+				 	'MAX_CHARS_EXCEEDED' => sprintf($user->lang['MAX_CHARS_EXCEEDED'],$config['bbdkp_maxchars']),
+				));
+				 
+			}
+		}
+		else
+		{
+			//edit mode			
 		}
 		
 		//guild dropdown
@@ -446,10 +464,23 @@ class ucp_dkp
 	 */
 	private function add_member()
 	{
-		global $db, $user, $phpbb_root_path, $phpEx;
+		global $db, $config, $user, $phpbb_root_path, $phpEx;
+		
+		// check again if user exceeded allowed character count
+		$sql = 'SELECT count(*) as charcount
+				FROM ' . MEMBER_LIST_TABLE . '	
+				WHERE phpbb_user_id = ' .  (int) $user->data['user_id'];
+		$result = $db->sql_query($sql);
+		$countc = $db->sql_fetchfield('charcount');
+		$db->sql_freeresult($result);
+		if ($countc >= $config['bbdkp_maxchars'])
+		{
+			 trigger_error(sprintf($user->lang['MAX_CHARS_EXCEEDED'],$config['bbdkp_maxchars']) , E_USER_WARNING);
+		}
 		
 		// get member name
 		$member_name = utf8_normalize_nfc(request_var('member_name', '',true));
+		
 		// check if membername exists
 		$sql = 'SELECT count(*) as memberexists 
 				FROM ' . MEMBER_LIST_TABLE . "	

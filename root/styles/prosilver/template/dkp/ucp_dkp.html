@@ -12,20 +12,15 @@
 </fieldset>
 
 <!-- IF S_SHOW -->
-<dl>
-
 	<!-- IF  .members_row -->
-	<dt>
-	</dt>
-	<dd>
 	
 	<div class="panel">
 	<div class="inner">
-	<span class="corners-top"><span></span></span>
+	<span class="corners-inner-top"><span></span></span>
 
+	<!-- BEGIN members_row -->
 	<table  class="table1" width="100%" border="0" cellspacing="0" cellpadding="2">
 		<thead>		
-		<!-- BEGIN members_row -->
 		<tr>
 			<th width="15%" nowrap="nowrap" style="text-align:center;"><strong>{members_row.COUNT}</strong></th>
 			<th width="20%" nowrap="nowrap" style="text-align:center;" ><strong><h4><span style="color:{members_row.COLORCODE}">{members_row.NAME}</span></h4></strong></th>
@@ -58,21 +53,21 @@
 			<!-- ENDIF -->
 		</tr>
 		<!-- END dkp_row -->
-		<!-- END members_row -->
 
 		</tbody>
 	</table>
+	<!-- END members_row -->
 	
-	<span class="corners-bottom"><span></span></span>
+	<span class="corners-inner-bottom"><span></span></span>
 	</div>
 	</div>
 
 	<p><br /></p>
-	</dd>
+
 	<hr />
 
 	<!-- ENDIF -->
-</dl>
+
 <!-- IF S_SHOW_BUTTONS -->
 
 <fieldset class="submit-buttons">
