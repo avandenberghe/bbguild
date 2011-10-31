@@ -819,8 +819,9 @@ class acp_dkp_mm extends bbDKP_Admin
 					'FROM'		=> array(
 						USERS_TABLE		=> 'u',
 						),
-					// exclude bots and guests
-					'WHERE'		=> " u.group_id != 6 and u.group_id != 1 ",					 
+					// exclude bots and guests, order by name -- ticket  129
+					'WHERE'		=> " u.group_id != 6 and u.group_id != 1 ",
+					'ORDER_BY'	=> " u.username ASC",						 
 					);
 				$sql = $db->sql_build_query('SELECT', $sql_array);					
 				$result = $db->sql_query($sql);
