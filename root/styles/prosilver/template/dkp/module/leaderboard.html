@@ -1,5 +1,6 @@
 <!-- IF S_SHOWLEAD -->
 <div class="panel" >
+<div class="inner">
 <span class="corners-top"><span></span></span>
 
 <table class="tablebg" style="width: 100%" border="0" cellspacing="4" cellpadding="0">
@@ -29,7 +30,7 @@
 <tbody>
 
 <!-- BEGIN dkp_row -->
-<tr >
+<tr class="bg1">
 <td>
 <a style="color:{class.COLORCODE}" href="{class.dkp_row.U_VIEW_MEMBER}"><strong>{class.dkp_row.NAME}</strong></a>
 </td>
@@ -51,7 +52,6 @@
 </div>
 
 </td>
-
   <!-- IF class.S_ROW_COUNT % 5 == 0 -->
    	  <!-- IF class.S_LAST_ROW -->
     	<td colspan="5"></td> </tr>
@@ -71,12 +71,10 @@
     <!-- ELSEIF class.S_ROW_COUNT % 5 == 4 -->
          <td></td></tr>
   	<!-- ENDIF -->  
-
 <!-- END class -->
 
 </table>
-
 <span class="corners-bottom"><span></span></span>
-
+</div>
 </div>
 <!-- ENDIF -->
