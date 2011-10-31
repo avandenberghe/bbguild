@@ -34,7 +34,8 @@ class acp_dkp_item extends bbDKP_Admin
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
 		
-		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&mode=listitems" ) . '"><h3>'. $user->lang['RETURN_DKPINDEX'] .'</h3></a>';
+		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&mode=listitems" ) . 
+			'"><h3>'. $user->lang['RETURN_DKPINDEX'] .'</h3></a>';
 		
 		// Get item name from the appropriate field
 		switch ($mode) 
@@ -223,7 +224,7 @@ class acp_dkp_item extends bbDKP_Admin
 
 			$db->sql_freeresult ( $result );
 			$this->item = array (
-				'select_item_name' 	=> utf8_normalize_nfc(request_var('select_item_name', ''),true) ,  
+				'select_item_id' 	=> utf8_normalize_nfc(request_var('select_item_id', ''),true) ,  
 				'item_name' 		=> $row['item_name'],
 			    'item_gameid' 		=> $row['item_gameid'],
 				'raid_id' 			=> $row['raid_id'], 
@@ -320,12 +321,14 @@ class acp_dkp_item extends bbDKP_Admin
 		
 		$sql = 'SELECT i.item_id, i.item_value, i.item_name, i.item_gameid FROM ' . 
 			RAID_ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
-	        where i.raid_id=r.raid_id and r.event_id=e.event_id and e.event_dkpid = ' . $dkpid . ' 
+	        WHERE i.raid_id=r.raid_id AND r.event_id=e.event_id AND e.event_dkpid = ' . $dkpid . ' 
+	        GROUP BY item_name, item_date 
+	        HAVING length(item_name) > 0
 			ORDER BY item_name, item_date DESC';
 			
 		$result = $db->sql_query ( $sql );
 		$item_name = utf8_normalize_nfc(request_var('item_name','', true)); 
-		$item_select_name = utf8_normalize_nfc(request_var( 'select_item_name', '', true));
+		$item_select_name = utf8_normalize_nfc(request_var( 'select_item_id', '', true));
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
 			
@@ -410,10 +413,13 @@ class acp_dkp_item extends bbDKP_Admin
 		$raid_id = request_var('hidden_raid_id', 0);
 		$item_buyers = request_var('item_buyers', array(0 => 0));
 		$itemvalue 	 = request_var( 'item_value' , 0.0) ; 
-		$item_name = (isset ( $_POST ['item_name'] )) ? 
-					utf8_normalize_nfc(request_var('item_name','', true)) : 
-				    utf8_normalize_nfc(request_var( 'select_item_name', '', true));
-		$itemgameid  = request_var( 'item_gameid' , 0) ;
+		
+		$item_name = utf8_normalize_nfc(request_var('item_name','', true));
+		$item_name_db = utf8_normalize_nfc(request_var('item_name_db','', true));
+		$item_name = (strlen($item_name) > 0) ? $item_name : $item_name_db;
+		
+		$select_item_id = request_var('select_item_id',0);
+		$itemgameid  = request_var( 'item_gameid' , 0); 
 		
 		// Find out the item date based on the raid it's associated with, used for the group key and decay calculation
 		$loottime = 0;
@@ -421,7 +427,7 @@ class acp_dkp_item extends bbDKP_Admin
 		$result = $db->sql_query ( $sql); 
 		$row = $db->sql_fetchrow ($result); 
 		if($row)
-			{
+		{
 			$loottime = $row['raid_start'];
 		}
 	
@@ -865,7 +871,7 @@ class acp_dkp_item extends bbDKP_Admin
 		
 		$item_name = (isset ( $_POST ['item_name'] )) ? 
 					utf8_normalize_nfc(request_var('item_name','', true)) : 
-				    utf8_normalize_nfc(request_var( 'select_item_name', '', true));
+				    utf8_normalize_nfc(request_var( 'select_item_id', '', true));
 
 		$itemgameid  = request_var( 'item_gameid' , 0) ;
 
@@ -1174,9 +1180,9 @@ class acp_dkp_item extends bbDKP_Admin
 			$this->item ['item_name'] = utf8_normalize_nfc(request_var('item_name', ' ', true));
 		} 
 		
-		elseif ( isset($_POST ['select_item_name'])) 
+		elseif ( isset($_POST ['select_item_id'])) 
 		{
-			$this->item ['item_name'] = utf8_normalize_nfc(request_var('select_item_name', ' ', true));
+			$this->item ['item_name'] = utf8_normalize_nfc(request_var('select_item_id', ' ', true));
 		} 
 		else 
 		{
