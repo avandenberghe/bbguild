@@ -333,7 +333,7 @@ class acp_dkp_sys extends bbDKP_Admin
 					'START' => $start, 
 					'LISTDKPSYS_FOOTCOUNT' => sprintf ( $user->lang ['LISTDKPSYS_FOOTCOUNT'], $total_dkpsys, $config ['bbdkp_user_elimit'] ), 
 					'DKPSYS_PAGINATION' => generate_pagination ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;" ) . "&amp;o=" . 
-						$current_order ['uri'] ['current'], $total_dkpsys, $config ['bbdkp_user_elimit'], $start ) ) );
+						$current_order ['uri'] ['current'], $total_dkpsys, $config ['bbdkp_user_elimit'], $start )), true );
 				$this->page_title = 'ACP_LISTDKPSYS';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;

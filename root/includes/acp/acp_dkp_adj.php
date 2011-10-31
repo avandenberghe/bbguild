@@ -219,7 +219,7 @@ class acp_dkp_adj extends bbDKP_Admin
 				$listadj_footcount = sprintf($user->lang['LISTADJ_FOOTCOUNT'], $total_adjustments, $config['bbdkp_user_alimit']);
 				$pagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", 
 						"i=dkp_adj&amp;mode=listiadj&amp;dkpsys_id=". $dkpsys_id) .'&amp;' . 
-						URI_PAGE, $total_adjustments, $config['bbdkp_user_alimit'], $start);
+						URI_PAGE, $total_adjustments, $config['bbdkp_user_alimit'], $start, true);
 				
 				$template->assign_vars(array(
 					'L_TITLE'			 => $user->lang['ACP_LISTIADJ'],

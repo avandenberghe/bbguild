@@ -155,12 +155,11 @@ function displayroster($game_id)
 	else
 	{
 		//listing format
-		
 		$result = get_listingresult($game_id, 'listing', $current_order);
 		 while ( $row = $db->sql_fetchrow($result))
             {
 				$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
-
+				$totalmembers++;
             	$template->assign_block_vars('members_row', array(
         			'COLORCODE'		=> $row['colorcode'],
         			'CLASS'			=> $row['class_name'],
@@ -177,6 +176,7 @@ function displayroster($game_id)
 					'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
 					'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 
             	));
+            	
             }
             	
 	

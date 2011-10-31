@@ -502,7 +502,7 @@ class acp_dkp_event extends bbDKP_Admin
 					'U_LIST_EVENTS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=listevents&amp;"),		
 					'START'			=> $start,
 					'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events, $config['bbdkp_user_elimit']),
-					'EVENT_PAGINATION'	=> generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=listevents&amp;" . URI_ORDER . '='.$current_order['uri']['current']), $total_events, $config['bbdkp_user_elimit'],$start))
+					'EVENT_PAGINATION'	=> generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=listevents&amp;" . URI_ORDER . '='.$current_order['uri']['current']), $total_events, $config['bbdkp_user_elimit'],$start, true))
 
 				);
 

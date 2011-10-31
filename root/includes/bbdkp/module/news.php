@@ -275,7 +275,7 @@ else
 	
 	
 	$template->assign_vars ( array (
-		'NEWS_PAGINATION' => generate_pagination ( append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=news'), $total_news, $config ['bbdkp_user_nlimit'], $start ),  
+		'NEWS_PAGINATION' => generate_pagination ( append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=news'), $total_news, $config ['bbdkp_user_nlimit'], $start, true ),  
 		'COUNTNEWS'					=> $total_news,
 		'U_POST_NEW_TOPIC'			=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=news&amp;mode=newpost'),
 	));
