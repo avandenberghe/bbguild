@@ -48,14 +48,21 @@ class ucp_dkp
 					$sql_ary = array(
 						'phpbb_user_id'	=> $user->data['user_id'], 
 					);
+					$member_id = (int) request_var('dkpmember', 0);
 					$sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
 						SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
-						WHERE member_id = ' . (int) request_var('dkpmember', 0);
+						WHERE member_id = ' . $member_id;
 					$db->sql_query($sql);
+					
+					$sql = 'select member_name from ' . MEMBER_LIST_TABLE . ' 
+					WHERE member_id = ' . $member_id;
+					$result = $db->sql_query($sql, 0);
+					$member_name = $db->sql_fetchfield('member_name');
+					$db->sql_freeresult ($result);
 					
 					// Generate confirmation page. It will redirect back to the calling page
 					meta_refresh(3, $this->u_action);
-					$message = $user->lang['CHARACTERS_UPDATED'] . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
+					$message = sprintf($user->lang['CHARACTERS_UPDATED'], $member_name) . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
 					trigger_error($message);
 				}
 				
@@ -68,7 +75,7 @@ class ucp_dkp
 					$show_buttons = false;
 				}
 				
-				//if there are no chars at all, show a message and do not show add button
+				//if there are no chars at all, do not show add button
 				$sql = 'SELECT count(*) AS mcount FROM ' . MEMBER_LIST_TABLE .' WHERE member_rank_id < 90  ';
 				$result = $db->sql_query($sql, 0);
 				$mcount = (int) $db->sql_fetchfield('mcount');
@@ -84,8 +91,9 @@ class ucp_dkp
 					// build popup for adding new chars to my phpbb account, get only those that are not assigned yet.
 					// do not show if all accounts are assigned
 					// if someone picks a guildmember that does not belong to them then the guild admin can override it in acp
-					$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE .' WHERE 
-						phpbb_user_id = 0 and member_rank_id != 90 order by member_name asc';
+					$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE .' 
+						WHERE phpbb_user_id = 0 and member_rank_id < 90 
+						ORDER BY member_name asc';
 					$result = $db->sql_query($sql, 0);
 					
 					while ( $row = $db->sql_fetchrow($result) )
@@ -187,7 +195,7 @@ class ucp_dkp
 		// Attach the language file
 		$user->add_lang('mods/dkp_common');
 		$user->add_lang(array('mods/dkp_admin'));
-
+		$show=true;
 		if($member_id == 0)
 		{	
 			// check if user can add character
@@ -203,11 +211,12 @@ class ucp_dkp
 			$result = $db->sql_query($sql);
 			$countc = $db->sql_fetchfield('charcount');
 			$db->sql_freeresult($result);
+			
 			if ($countc >= $config['bbdkp_maxchars'])
 			{
+				 $show=false;
 				 $template->assign_vars(array(
-					'S_SHOW' => false,	
-				 	'MAX_CHARS_EXCEEDED' => sprintf($user->lang['MAX_CHARS_EXCEEDED'],$config['bbdkp_maxchars']),
+			 	'MAX_CHARS_EXCEEDED' => sprintf($user->lang['MAX_CHARS_EXCEEDED'],$config['bbdkp_maxchars']),
 				));
 			}
 			// add mode
@@ -498,7 +507,7 @@ class ucp_dkp
 			'S_JOINDATE_DAY_OPTIONS'	=> $s_memberjoin_day_options,
 			'S_JOINDATE_MONTH_OPTIONS'	=> $s_memberjoin_month_options,
 			'S_JOINDATE_YEAR_OPTIONS'	=> $s_memberjoin_year_options,
-			'S_SHOW' => true,
+			'S_SHOW' => $show,
 			'S_ADD' => $S_ADD,
 		));
 		
