@@ -36,7 +36,15 @@
 </select> <br />
 <br />
 
-<table cellspacing="1" style="width: 60%">
+<div class="pagination" style="width: 80%;">
+ 
+<!-- IF RAID_PAGINATION -->
+<div class="pagination">
+	<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{RAID_PAGINATION}</span>
+</div>
+<!-- ENDIF -->
+
+<table cellspacing="1" style="width: 100%">
 	<thead>
 		<tr>
 			<th align="text-align:left;" width="15%" nowrap="nowrap">{L_DATE}</th>
@@ -54,7 +62,7 @@
 			<!-- ENDIF -->
 			<td style="text-align:left;" width="15%" nowrap="nowrap">{raids_row.DATE}</td>
 			<td style="text-align:left;" width="15%" nowrap="nowrap">{raids_row.ID}</td>
-			<td style="text-align:left;" width="30%"><span><a style="color:{raids_row.EVENTCOLOR};"href="{raids_row.U_VIEW_RAID}">{raids_row.RAIDNAME}</a></span></td>
+			<td style="text-align:left;" width="30%"><a style="color:{raids_row.EVENTCOLOR};"href="{raids_row.U_VIEW_RAID}">{raids_row.RAIDNAME}</a></td>
 			<td style="text-align:left;" width="40%"><span>{raids_row.RAIDNOTE}</span></td>
 			</td>
 		</tr>
@@ -63,6 +71,7 @@
 </table>
 
 <br />
+</div>
 
 <table cellspacing="1" style="width: 80%">
 	<thead>

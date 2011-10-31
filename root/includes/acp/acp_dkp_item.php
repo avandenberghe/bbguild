@@ -995,6 +995,28 @@ class acp_dkp_item extends bbDKP_Admin
 		
 		if($hasitems==true)
 		{
+			//get raidcount with items
+			$sql_array = array (
+			'SELECT' => ' count(*) as raidcount', 
+			    'FROM'    	=> array(DKPSYS_TABLE => 'd', 
+									 EVENTS_TABLE => 'e',
+	        						 RAIDS_TABLE => 'r'
+									 ),
+			    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
+	    						and e.event_id = r.event_id 
+			    				and d.dkpsys_id = ' . $dkpsys_id ,
+			);
+			$sql = $db->sql_build_query('SELECT', $sql_array);
+			$result = $db->sql_query($sql);
+			$total_raids = (int) $db->sql_fetchfield('raidcount');
+			$db->sql_freeresult ($result);
+			
+			$start = request_var ('start', 0, false );
+			$sort_order = array (
+				0 => array ('raid_id desc', 'raid_id' ),
+				1 => array ('event_name desc', 'event_name' ),
+			);
+			$current_order = switch_order ( $sort_order );
 			
 			// select all raids that have items	for pool			
 			$sql_array = array(
@@ -1007,10 +1029,10 @@ class acp_dkp_item extends bbDKP_Admin
 			    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
 	    						and e.event_id = r.event_id 
 			    				and d.dkpsys_id = ' . $dkpsys_id ,
-				'ORDER_BY'  =>  'r.raid_start DESC '
+				'ORDER_BY'  =>  $current_order ['sql']
 			);
 			$sql = $db->sql_build_query('SELECT', $sql_array);
-			
+							
 			$submitraid = (isset ( $_POST ['raid_id']) || isset ( $_GET ['raid_id']) ) ? true : false;
 			$raid_id = 0;
 			if ($submitraid)
@@ -1019,17 +1041,17 @@ class acp_dkp_item extends bbDKP_Admin
 			}
 			else
 			{
-				//get 1st raid
-				$result = $db->sql_query_limit ( $sql, 1 );
-				while ( $row = $db->sql_fetchrow ($result)) 
+				//get 1st raid from this window
+				$result = $db->sql_query_limit ( $sql, 1, $start );
+				while ($row = $db->sql_fetchrow ($result)) 
 				{
 					$raid_id = (int) $row['raid_id'];
 				}
-				$db->sql_freeresult ( $result );
+				$db->sql_freeresult ($result);
 			}
 			
-			// populate raid selectbox
-			$result = $db->sql_query ($sql);
+			// populate raid master grid
+			$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_rlimit'], $start );
 			while ( $row = $db->sql_fetchrow ( $result ) )
 			{
 				$template->assign_block_vars ( 'raids_row', array (
@@ -1039,12 +1061,16 @@ class acp_dkp_item extends bbDKP_Admin
 					'DATE' 	=> $user->format_date($row['raid_start']), 
 					'RAIDNAME' => $row['event_name'],
 					'RAIDNOTE' => $row['raid_note'],
-					'ONCLICK' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" . URI_DKPSYS . "={$row['event_dkpid']}&amp;" . URI_RAID . "={$row['raid_id']}" ),
+					'ONCLICK' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" . URI_DKPSYS . "={$dkpsys_id}&amp;" . URI_RAID . "={$row['raid_id']}" ),
 				));
 			}
 			$db->sql_freeresult ( $result );
+			
+			$raidpgination = generate_pagination (append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" . URI_DKPSYS . "=". $dkpsys_id ."&amp;o=" . $current_order ['uri'] ['current']) ,
+			$total_raids, $config ['bbdkp_user_rlimit'], $start, true );
+			
+			// detail grid for items
 			$sql1 = 'SELECT count(*) as countitems FROM ' . RAID_ITEMS_TABLE . ' where raid_id = ' .  $raid_id; 
-	
 			$result1 = $db->sql_query ( $sql1 );
 			$total_items = (int) $db->sql_fetchfield('countitems', false,$result1 );
 			$db->sql_freeresult ( $result1 );
@@ -1060,10 +1086,6 @@ class acp_dkp_item extends bbDKP_Admin
 				5 => array ('d.dkpsys_name desc', 'dkpsys_name' )
 				);
 			$current_order = switch_order ($sort_order);
-			
-	       $pagination = generate_pagination ( 
-	       append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" ) .
-	        '&amp;o=' . $current_order ['uri'] ['current'], $total_items, $config['bbdkp_user_ilimit'], $start );
 			
 			//prepare item list sql
 			$sql_array = array(
@@ -1141,7 +1163,7 @@ class acp_dkp_item extends bbDKP_Admin
 				'S_BBTIPS' 		=> $this->bbtips, 
 				'START' 		=> $start, 
 				'LISTITEMS_FOOTCOUNT' => $listitems_footcount, 
-				'ITEM_PAGINATION' => $pagination 
+				'RAID_PAGINATION'	=> $raidpgination
 			));
 		}
 		else 
@@ -1151,7 +1173,6 @@ class acp_dkp_item extends bbDKP_Admin
 				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
 				'L_EXPLAIN' 	=> $user->lang ['ACP_LISTITEMS_EXPLAIN'], 
 				'S_SHOW' 		=> false,
-				
 				'S_BBTIPS' 		=> $this->bbtips, 
 			));			
 		}
@@ -1393,7 +1414,6 @@ class acp_dkp_item extends bbDKP_Admin
 				}
 				
 				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_SUCCESS'], $itemcount, $accountupdates ) . $this->link , E_USER_NOTICE );
-				
 				
 				return $countraids;
 				

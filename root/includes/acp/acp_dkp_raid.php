@@ -1079,7 +1079,8 @@ class acp_dkp_raid extends bbDKP_Admin
 			'LISTRAIDS_FOOTCOUNT' => sprintf ( $user->lang ['LISTRAIDS_FOOTCOUNT'], $total_raids, $config ['bbdkp_user_rlimit'] ), 
 			'RAID_PAGINATION' 	  => generate_pagination ( append_sid 
 					( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;dkpsys_id=". $dkpsys_id ."&amp;o=" . $current_order ['uri'] ['current']) , 
-					$total_raids, $config ['bbdkp_user_rlimit'], $start ) ) );
+					$total_raids, $config ['bbdkp_user_rlimit'], $start, true ) 
+			));
 	}
 	
 
