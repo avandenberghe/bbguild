@@ -869,9 +869,9 @@ class acp_dkp_item extends bbDKP_Admin
 		
 		$raid_id = request_var('hidden_raid_id', 0);
 		
-		$item_name = (isset ( $_POST ['item_name'] )) ? 
-					utf8_normalize_nfc(request_var('item_name','', true)) : 
-				    utf8_normalize_nfc(request_var( 'select_item_id', '', true));
+		$item_name = utf8_normalize_nfc(request_var('item_name','', true));
+		$item_name_db = utf8_normalize_nfc(request_var('item_name_db','', true));
+		$item_name = (strlen($item_name) > 0) ? $item_name : $item_name_db;
 
 		$itemgameid  = request_var( 'item_gameid' , 0) ;
 
@@ -998,7 +998,8 @@ class acp_dkp_item extends bbDKP_Admin
 			
 			// select all raids that have items	for pool			
 			$sql_array = array(
-			    'SELECT'    => 'r.raid_id, e.event_name, r.raid_start, raid_note  ',
+			    'SELECT'    => 'r.raid_id, e.event_name, e.event_color, e.event_imagename, e.event_dkpid, 
+			    				r.raid_start, raid_note  ',
 			    'FROM'    	=> array(DKPSYS_TABLE => 'd', 
 									 EVENTS_TABLE => 'e',
 	        						 RAIDS_TABLE => 'r'
@@ -1020,7 +1021,7 @@ class acp_dkp_item extends bbDKP_Admin
 			{
 				//get 1st raid
 				$result = $db->sql_query_limit ( $sql, 1 );
-				while ( $row = $db->sql_fetchrow ( $result ) ) 
+				while ( $row = $db->sql_fetchrow ($result)) 
 				{
 					$raid_id = (int) $row['raid_id'];
 				}
@@ -1032,9 +1033,14 @@ class acp_dkp_item extends bbDKP_Admin
 			while ( $row = $db->sql_fetchrow ( $result ) )
 			{
 				$template->assign_block_vars ( 'raids_row', array (
-					'VALUE' => $row['raid_id'], 
-					'SELECTED' => ($raid_id == $row['raid_id']) ? ' selected="selected"' : '', 
-					'OPTION' => $user->format_date($row['raid_start']) . ' - ' .  $row['event_name'] . ' ' . $row['raid_note'] ) );
+					'EVENTCOLOR'    => (! empty ( $row ['event_color'] )) ? $row ['event_color']  : '',
+					'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;" . URI_DKPSYS . "={$row['event_dkpid']}&amp;" . URI_RAID . "={$row['raid_id']}" ), 
+					'ID' 	=> $row['raid_id'],
+					'DATE' 	=> $user->format_date($row['raid_start']), 
+					'RAIDNAME' => $row['event_name'],
+					'RAIDNOTE' => $row['raid_note'],
+					'ONCLICK' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" . URI_DKPSYS . "={$row['event_dkpid']}&amp;" . URI_RAID . "={$row['raid_id']}" ),
+				));
 			}
 			$db->sql_freeresult ( $result );
 			$sql1 = 'SELECT count(*) as countitems FROM ' . RAID_ITEMS_TABLE . ' where raid_id = ' .  $raid_id; 
@@ -1061,7 +1067,7 @@ class acp_dkp_item extends bbDKP_Admin
 			
 			//prepare item list sql
 			$sql_array = array(
-		    'SELECT'    => 'd.dkpsys_name, e.event_dkpid, e.event_name, e.event_color, e.event_imagename, i.item_id, i.item_name, i.item_gameid, 
+		    'SELECT'    => 'd.dkpsys_name, i.item_id, i.item_name, i.item_gameid, e.event_dkpid, 
 		    				i.member_id, l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, e.event_name ',
 		    'FROM'      => array(
 		        DKPSYS_TABLE   => 'd', 
@@ -1114,9 +1120,7 @@ class acp_dkp_item extends bbDKP_Admin
 				'BUYER' 		=> (! empty ( $item ['member_name'] )) ? $item ['member_name'] : '&lt;<i>Not Found</i>&gt;', 
 				'ITEMNAME'      => $item_name, 
 				'RAID' 			=> (! empty ( $item ['event_name'] )) ?  $item ['event_name']  : '&lt;<i>Not Found</i>&gt;', 
-				'EVENTCOLOR'    => (! empty ( $item ['event_color'] )) ? $item ['event_color']  : '',
 				'U_VIEW_BUYER' 	=> (! empty ( $item ['member_name'] )) ? append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;member_id={$item['member_id']}&amp;" . URI_DKPSYS . "={$item['event_dkpid']}") : '' ,
-				'U_VIEW_RAID' 	=> (! empty ( $item ['event_name'] )) ? append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;" . URI_DKPSYS . "={$item['event_dkpid']}&amp;" . URI_RAID . "={$raid_id}" ) : '', 
 				'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_ITEM . "={$item['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
 				'VALUE' 		=> $item ['item_value']));
 			}
