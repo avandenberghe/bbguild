@@ -74,7 +74,7 @@
  <legend>{L_MENU_NEWS}</legend>
  
   <dl>
-    <dt><label for="user_nlimit">{L_NEWS_PER_PAGE}:</label></dt>
+    <dt><label for="bbdkp_user_nlimit">{L_NEWS_PER_PAGE}:</label></dt>
     <dd><input type="text" name="bbdkp_user_nlimit" id="bbdkp_user_nlimit" size="20" maxlength="30" value="{USER_NLIMIT}" class="input" />{FV_DEFAULT_NLIMIT}</dd>
   </dl>
 
@@ -84,6 +84,12 @@
 
 <fieldset>
  <legend>{L_MEMBERS}</legend>
+ 
+ <dl>
+    <dt><label for="bbdkp_user_llimit">{L_LISTMEMBERS_PER_PAGE}:</label></dt>
+    <dd><input type="text" name="bbdkp_user_llimit" id="bbdkp_user_llimit" size="20" maxlength="30" value="{USER_LLIMIT}" class="input" />{FV_DEFAULT_LLIMIT}</dd>
+ </dl>
+   
 <dl>
     <dt><label for="maxchars">{L_MAX_NUMBER_CHARS}:</label><br /><span>{L_MAX_NUMBER_CHARS_EXPLAIN}</span></dt>
     <dd><input type="text" name="maxchars" id="maxchars" size="5" maxlength="2" value="{MAXCHARS}" class="input" /></dd>

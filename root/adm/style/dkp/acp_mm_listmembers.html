@@ -19,7 +19,11 @@
 </form>
 
 <form id="memberlist" method="post" action="{F_MEMBERS_LIST}">
-
+<!-- IF MEMBER_PAGINATION -->
+<div class="pagination">
+	<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{MEMBER_PAGINATION}</span>
+</div>
+<!-- ENDIF -->
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
 	<thead>
   <tr>
@@ -70,7 +74,6 @@
   </tr>
   </tfoot>
 </table>
-
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
     {S_FORM_TOKEN}
 	<input class="button2" type="submit" name="deactivate" value="{L_CHANGE_STATUS}" />
@@ -80,9 +83,6 @@
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
 	<input class="button2" name="memberadd" type="submit" value="{L_ADD}" />
 </fieldset>
-
-
 </form>
-
 
 <!-- INCLUDE dkp/overall_footer.html -->

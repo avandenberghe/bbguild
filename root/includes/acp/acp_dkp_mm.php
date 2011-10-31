@@ -27,9 +27,9 @@ if (! defined('EMED_BBDKP'))
  */
 class acp_dkp_mm extends bbDKP_Admin
 {
-	var $u_action;
-	var $member;
-	var $old_member;
+	public $u_action;
+	public $member;
+	public $old_member;
 	
 	public function main($id, $mode) 
 	{
@@ -128,6 +128,41 @@ class acp_dkp_mm extends bbDKP_Admin
 				
 				$previous_data = '';
 				
+				//get total members
+
+				$sql_array = array(
+				    'SELECT'    => 	'count(*) as membercount ' , 
+				    'FROM'      => array(
+				        MEMBER_LIST_TABLE 	=> 'm',
+				        MEMBER_RANKS_TABLE 	=> 'r',
+				        CLASS_TABLE  		=> 'c',
+				        RACE_TABLE  		=> 'a',
+				        BB_LANGUAGE			=> 'l', 
+				        GUILD_TABLE  		=> 'g',
+				    	),
+				    'LEFT_JOIN' => array(
+				        array(
+				            'FROM'  => array(USERS_TABLE => 'u'),
+				            'ON'    => 'u.user_id = m.phpbb_user_id '
+				        )
+				    ),
+				    'WHERE'     =>  " (m.member_rank_id = r.rank_id)
+				    				and m.game_id = l.game_id 
+				    				AND l.attribute_id = c.class_id and l.game_id = c.game_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+									AND (m.member_guild_id = g.id)
+									AND (m.member_guild_id = r.guild_id)
+									AND (m.member_guild_id = " . $guild_id . ')
+									AND m.game_id =  a.game_id
+									AND m.game_id =  c.game_id
+									AND m.member_race_id =  a.race_id
+									AND (m.member_class_id = c.class_id)', 
+				   );
+				$sql = $db->sql_build_query('SELECT', $sql_array);
+				$result = $db->sql_query($sql);
+				$total_members = (int) $db->sql_fetchfield('membercount');
+				$db->sql_freeresult ($result);
+			
+				$start = request_var ('start', 0, false );
 				$sort_order = array(
 					0 => array('member_name', 'member_name desc'),
 					1 => array('username', 'username desc'),
@@ -138,7 +173,6 @@ class acp_dkp_mm extends bbDKP_Admin
 					6 => array('member_outdate', 'member_outdate desc'),
 					7 => array('member_race', 'member_race desc'),
 				);
-				
 				$current_order = switch_order($sort_order);
 				$sort_index = explode('.', $current_order['uri']['current']);
 				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
@@ -182,13 +216,13 @@ class acp_dkp_mm extends bbDKP_Admin
 				    );
 				    
 				$sql = $db->sql_build_query('SELECT', $sql_array);
+				$members_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $start );
 				
-				if ( !($members_result = $db->sql_query($sql)) )
+				if ( !($members_result) )
 				{
 					trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
 				}
 				
-				$gender_id = 0;
 				$lines = 0;
 				$member_count = 0;
 				while ( $row = $db->sql_fetchrow($members_result) )
@@ -228,6 +262,9 @@ class acp_dkp_mm extends bbDKP_Admin
 				
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
 				
+				$memberpagination = generate_pagination (append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order ['uri'] ['current']) ,
+				$total_members, $config ['bbdkp_user_llimit'], $start, true);
+				
 				$form_key = 'mm_listmembers';
 				add_form_key($form_key);
 				
@@ -244,7 +281,8 @@ class acp_dkp_mm extends bbDKP_Admin
 					'O_JOINDATE' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=". $guild_id),
 					'O_OUTDATE' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][6] . "&amp;" . URI_GUILD . "=". $guild_id),
 					'U_LIST_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;"), 		
-					'LISTMEMBERS_FOOTCOUNT' => $footcount_text
+					'LISTMEMBERS_FOOTCOUNT' => $footcount_text,
+					'MEMBER_PAGINATION'	=> $memberpagination,
 					)
 				);			
 			

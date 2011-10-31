@@ -578,7 +578,7 @@ $lang = array_merge($lang, array(
 'VERSION_UPDATE' => 'Version Update',
 'VERSION_NOTONLINE' => 'bbDKP callback failed, cannot look up latest version.',
 'WHO_ONLINE' => 'Who’s Online',
-'LISTMEMBERS_PER_PAGE' => 'Dkp Guildmembers per Page',
+'LISTMEMBERS_PER_PAGE' => 'Members per Page',
 
 // LOOTSYSTEM
 'DESCRIPTION' => 'lootsystem',

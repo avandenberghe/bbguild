@@ -397,6 +397,7 @@ class acp_dkp extends bbDKP_Admin
                     set_config('bbdkp_list_p1', request_var('list_p1', 0), true);
                     set_config('bbdkp_list_p2', request_var('list_p2', 0), true);
                     set_config('bbdkp_list_p3', request_var('list_p3', 0), true);
+					set_config('bbdkp_user_llimit', request_var('bbdkp_user_llimit', 0), true);
 
                     //events					
                     set_config('bbdkp_user_elimit', request_var('bbdkp_user_elimit', 0), true);
@@ -687,6 +688,7 @@ class acp_dkp extends bbDKP_Admin
                 	'USER_ILIMIT' 		=> $config['bbdkp_user_ilimit'] , 
                 	'USER_RLIMIT' 		=> $config['bbdkp_user_rlimit'] , 
 					'MAXCHARS'			=> $config['bbdkp_maxchars'] ,
+                	'USER_LLIMIT' 		=> $config['bbdkp_user_llimit'] ,
                 
                 	//epgp
                 	'F_EPGPACTIVATE'	=> $config['bbdkp_epgp'],
