@@ -912,6 +912,18 @@ Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />G
 	'WARHAMMER_ZONEEURL'	=> 'NOT AVAILABLE',
 	'WOW_BASEURL'	=> 'http://de.wowhead.com/npc=%s',
 	'WOW_ZONEEURL'	=> 'http://de.wowhead.com/zone=%s',
+	'SYNCDKP_EXPLAIN'	=> 'Ledigt und füllt die Punktetabelle aufgrund der Basistabellen Raid, Raiddetail, Objekte und Ajustierung. Nur zu gebrauchen wenn nötig oder wenn gefragd vom bbDKP Support.',
+	'ADMIN_DUPLICATE_RAID_SUCCESS'	=> 'Dieser Raid wurde dupliziert (ohne evtl. Beute)',
+	'ADMIN_DKPPOOLSYNC_SUCCESS' => '%s DKP Konten wurden erfolgreich synchronisiert.',
+	'RESYNC_DKP_CONFIRM'			=> 'Bist du dir SICHER dass du die DKP Konten synchronisieren möchtest ?',
+	'MENU_DKP'	=> 'DKP Einstellungen',
+	'SYNCDKP'	=> 'Synchronisiere DKP Pools',
+	'SYNC'		=> 'Synchronisieren',
+	'DEFAULTDKP'	=> 'Bestätige Standard Pool',
+	'DUPLICATE_RAID' => 'Raid Duplizieren', 
+	'DUPLICATED'	=> 'Dupliziert', 
+	'MAX_NUMBER_CHARS_EXPLAIN'	=> 'Höchstzahl der Charaktere die Spieler an ihrem phpBB Konto ankoppeln können', 
+	'MAX_NUMBER_CHARS' => 'Höchstzahl #Charactere',
 ));
 
 ?>

@@ -395,6 +395,11 @@ Même si elle n’est pas requise pour l’usage gratuit, elle aide à soutenir 
 	'DONA_NAME'	=> 'Name',
 	'ADDITIONS'	=> 'Code Additions',
 	'CONTRIB'	=> 'Contributions',
+	'NOUCPACCESS' => 'Vous ne pouvez pas lier des caractères à votre compte forum.', 
+	'NOUCPADDCHARS' => 'Vous ne pouvez pas ajouter vos caractères', 
+	'NOUCPUPDCHARS' => 'Vous ne pouvez pas mettre à jour vos caractères', 
+	'NOUCPDELCHARS' => 'Vous ne pouvez pas supprimer vos caractères',	
+	'MAX_CHARS_EXCEEDED' => 'Vous ne pouvez avoir que %s charactères liés à votre compte forum', 
 ));
 
 ?>

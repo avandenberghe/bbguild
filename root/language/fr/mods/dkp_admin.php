@@ -912,6 +912,18 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 	'WARHAMMER_ZONEEURL'	=> 'NOT AVAILABLE',
 	'WOW_BASEURL'	=> 'http://fr.wowhead.com/?npc=%s',
 	'WOW_ZONEEURL'	=> 'http://fr.wowhead.com/?zone=%s',
+	'SYNCDKP_EXPLAIN'	=> 'Vide et reconstruit la table des points DKP sur base des tables de base des raids, detail des raids, Objets, Adjustements. A utiliser uniquement en cas de necessité ou si demandé par le support de bbDKP.',
+	'ADMIN_DUPLICATE_RAID_SUCCESS' => 'Le %s raid sur %s a été dupliqué.',
+	'ADMIN_DKPPOOLSYNC_SUCCESS' =>  '%s comptes DKP ont été synchronisés.',
+	'RESYNC_DKP_CONFIRM' => 'Etes-vous certain de vouloir synchroniser les comptes DKP ?' ,
+	'MENU_DKP'	=> 'Paramètres DKP',
+	'SYNCDKP'	=> 'Synchronisation des Groupes DKP',
+	'SYNC'		=> 	'Synchronise',
+	'DEFAULTDKP'	=> 'Confirme Groupe DKP par défaut',
+	'DUPLICATE_RAID' => 'Dupliquer Assaut', 
+	'DUPLICATED' => 'Dupliqué', 
+	'MAX_NUMBER_CHARS_EXPLAIN' => 'Nombre maximal de caractères qu‘un joueur peut lier à son compte phpBB.',
+	'MAX_NUMBER_CHARS' => 'Nombre maximal' ,
 ));
 
 ?>

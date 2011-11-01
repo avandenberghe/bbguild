@@ -391,6 +391,12 @@ $lang = array_merge($lang, array(
 	'DONA_NAME'	=> 'Name',
 	'ADDITIONS'	=> 'Code Hilfen',
 	'CONTRIB'	=> 'Mitwirkungen',
+	'NOUCPACCESS' => 'Du kannst keine Charaktere an dein phpBB konto ankuppeln.', 
+	'NOUCPADDCHARS' => 'Du kannst keine Charaktere zufügen', 
+	'NOUCPUPDCHARS' => 'Du kannst keine Charaktere bearbeiten.', 
+	'NOUCPDELCHARS' => 'Du kannst keine Charaktere löschen',	
+	'MAX_CHARS_EXCEEDED' => 'Du kannst höchstens %s charactere an dein Forumkonto kuppeln.', 
+	
 ));
 
 ?>

@@ -32,12 +32,12 @@ $lang['permission_type']['bbdkp_'] = 'bbDKP Permissions';
 
 // bbDKP Permissions
 $lang = array_merge($lang, array(
-	'acl_a_dkp'		=> array('lang' => 'bbDKP - can access bbDKP ACP', 'cat' => 'bbdkp'),
-	'acl_u_dkp'		=> array('lang' => 'bbDKP - can see DKP pages', 'cat' => 'bbdkp'),
-	'acl_u_dkpucp'	=> array('lang' => 'bbDKP - can claim characters in UCP', 'cat' => 'bbdkp'),
-	'acl_u_dkp_charadd'	=> array('lang' => 'bbDKP - can add own characters in UCP', 'cat' => 'bbdkp'),
-	'acl_u_dkp_charupdate'	=> array('lang' => 'bbDKP - can update own characters in UCP', 'cat' => 'bbdkp'),
-	'acl_u_dkp_chardelete'	=> array('lang' => 'bbDKP - can delete own characters in UCP', 'cat' => 'bbdkp'),
+	'acl_a_dkp'		=> array('lang' => 'Can access bbDKP ACP', 'cat' => 'bbdkp'),
+	'acl_u_dkp'		=> array('lang' => 'Can see DKP pages', 'cat' => 'bbdkp'),
+	'acl_u_dkpucp'	=> array('lang' => 'Can claim characters in UCP', 'cat' => 'bbdkp'),
+	'acl_u_dkp_charadd'	=> array('lang' => 'Can add own characters in UCP', 'cat' => 'bbdkp'),
+	'acl_u_dkp_charupdate'	=> array('lang' => 'Can update own characters in UCP', 'cat' => 'bbdkp'),
+	'acl_u_dkp_chardelete'	=> array('lang' => 'Can delete own characters in UCP', 'cat' => 'bbdkp'),
 ));
 
 ?>
