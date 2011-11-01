@@ -176,9 +176,9 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<link type="contrib" lang="fr" href="contrib/install_124_to_125.xml">Mise à jour de v1.2.4 à v1.2.5</link>
 			<link type="contrib" lang="de" href="contrib/install_124_to_125.xml">Aktualisierung von v1.2.4 bis v1.2.5</link>
 			
-			<link type="contrib" lang="en" href="contrib/install_123_to_124.xml">Update from v1.2.3 to v1.2.5</link>
-			<link type="contrib" lang="fr" href="contrib/install_123_to_124.xml">Mise à jour de v1.2.3 à v1.2.5</link>
-			<link type="contrib" lang="de" href="contrib/install_123_to_124.xml">Aktualisierung von v1.2.3 bis v1.2.5</link>
+			<link type="contrib" lang="en" href="contrib/install_123_to_125.xml">Update from v1.2.3 to v1.2.5</link>
+			<link type="contrib" lang="fr" href="contrib/install_123_to_125.xml">Mise à jour de v1.2.3 à v1.2.5</link>
+			<link type="contrib" lang="de" href="contrib/install_123_to_125.xml">Aktualisierung von v1.2.3 bis v1.2.5</link>
 			
 			<link type="contrib" lang="en" href="contrib/install_122_to_125.xml">Update from v1.2.2 to v1.2.5</link>
 			<link type="contrib" lang="fr" href="contrib/install_122_to_125.xml">Mise à jour de v1.2.2 à v1.2.5</link>
@@ -192,9 +192,6 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/portal.php" to="portal.php"/>
 			<file from="root/dkp.php" to="dkp.php"/>
 			<file from="root/configdkp.php" to="configdkp.php"/>
-			<file from="root/adm/findrank.php" to="adm/findrank.php"/>
-			<file from="root/adm/findclassrace.php" to="adm/findclassrace.php"/>
-			<file from="root/adm/findfaction.php" to="adm/findfaction.php"/>
 			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
 			<file from="root/images/*.*" to="images/*.*"/>
