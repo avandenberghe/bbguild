@@ -201,17 +201,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/includes/bbdkp/block/*.*" to="includes/bbdkp/block/*.*"/>
-			<file from="root/includes/bbdkp/module/news.php" to="includes/bbdkp/module/news.php"/>
-			<file from="root/includes/bbdkp/module/listevents.php" to="includes/bbdkp/module/listevents.php"/>
-			<file from="root/includes/bbdkp/module/listitems.php" to="includes/bbdkp/module/listitems.php"/>
-			<file from="root/includes/bbdkp/module/standings.php" to="includes/bbdkp/module/standings.php"/>
-			<file from="root/includes/bbdkp/module/listraids.php" to="includes/bbdkp/module/listraids.php"/>
-			<file from="root/includes/bbdkp/module/roster.php" to="includes/bbdkp/module/roster.php"/>
-			<file from="root/includes/bbdkp/module/stats.php" to="includes/bbdkp/module/stats.php"/>
-			<file from="root/includes/bbdkp/module/viewmember.php" to="includes/bbdkp/module/viewmember.php"/>
-			<file from="root/includes/bbdkp/module/viewevent.php" to="includes/bbdkp/module/viewevent.php"/>
-			<file from="root/includes/bbdkp/module/viewitem.php" to="includes/bbdkp/module/viewitem.php"/>
-			<file from="root/includes/bbdkp/module/viewraid.php" to="includes/bbdkp/module/viewraid.php"/>
+			<file from="root/includes/bbdkp/module/*.*" to="includes/bbdkp/module/*.*"/>
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
 			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
@@ -231,7 +221,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 Order Allow,Deny
 Deny from All
 </Files>]]></find>
-				<action type="after-add"><![CDATA[DirectoryIndex portal.php index.php index.html index.htm]]></action>
+				<action type="after-add"><![CDATA[DirectoryIndex portal.php index.html index.htm]]></action>
 			</edit>
 		</open>
 		
@@ -329,6 +319,13 @@ function pop_search()
 		</open>
 		
 		<open src="styles/prosilver/template/overall_header.html">
+			<edit>
+				<comment lang="en"><![CDATA[install bbDKP header - All in one file]]></comment>
+				<comment lang="fr"><![CDATA[installation du fichier header - tous en un]]></comment>
+				<comment lang="de"><![CDATA[Installation Headerdatei - Alles in einem]]></comment>
+				<find><![CDATA[</head>]]></find>
+				<action type="before-add"><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></action>
+			</edit>
 			<edit>
 				<comment lang="en"><![CDATA[insert links in template]]></comment>
 				<comment lang="fr"><![CDATA[inserer liens dans template]]></comment>
