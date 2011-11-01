@@ -130,7 +130,7 @@ function displayroster($game_id)
         			'CLASS'			=> $row['class_name'],
         			'NAME'			=> $row['member_name'],
         			'RACE'			=> $row['race_name'],
-        			'GNOTE'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
+        			'RANK'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
              		'LVL'			=> $row['member_level'],
         		    'ARMORY'		=> $row['member_armory_url'],  
             		'PHPBBUID'		=> get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),
@@ -165,7 +165,7 @@ function displayroster($game_id)
         			'CLASS'			=> $row['class_name'],
         			'NAME'			=> $row['member_name'],
         			'RACE'			=> $row['race_name'],
-        			'GNOTE'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
+        			'RANK'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
              		'LVL'			=> $row['member_level'],
         		    'ARMORY'		=> $row['member_armory_url'],  
             		'PHPBBUID'		=> get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),  
@@ -235,6 +235,7 @@ function getportrait($game_id, $row)
     	case 'wow':
     	 if ( $row['member_portrait_url'] != '')
     	 {
+    	 	//get battle.NET icon
     	 	$memberportraiturl =  $row['member_portrait_url'];		 
     	 }
     	 else 
@@ -281,18 +282,10 @@ function removeFromEnd($string, $stringToRemove)
     return $out;
 }
 
-function get_phpbbuid($userid)
-{
-
-	
-}
-
 
 function get_listingresult($game_id, $mode, &$current_order, $classid=0)
 {
 	global $db, $config; 
-	
-	$totalmembers = 0;
 
 	$sql_array = array();
 	$sql_array['SELECT'] =  'm.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name, 
