@@ -41,6 +41,7 @@ $lang = array_merge($lang, array(
 	'RIFT'	=> 'Rift',
 	'SWTOR'	=> 'Starwars : The old Republic',
 	'ATTENDANCE_LIFETIME'	=> 'Alle',
+	'ATTENDANCE'	=> 'Teilnahme',	
 	'NODKPACCOUNTS'	=> 'Keine DKP Konten gefunden',
 	'ROBE'	=> 'Kleid',
 	'AUGMENTED'	=> 'Anzug',
