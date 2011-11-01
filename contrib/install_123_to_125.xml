@@ -88,57 +88,34 @@
 	<action-group>
 		<delete>
 			<!-- delete unneeded files -->
-			<file name="includes/bbdkp/pchart"/>
-			<file name="styles/prosilver/template/dkp/jquery-1.4.4.min.js"/>			
+			<file name="includes/bbdkp/pchart"/>		
+			<file name="root/images/pchart"/>
 		</delete>
 		<copy>
-			<!-- changed and new files only -->
-			<file from="root/adm/style/dkp/acp_mm_listmemberdkp.html" to="adm/style/dkp/acp_mm_listmemberdkp.html"/>
+			<!-- copy all 1.2.5 files -->
+			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
+			<file from="root/portal.php" to="portal.php"/>
 			<file from="root/dkp.php" to="dkp.php"/>
-			<file from="root/images/event_images/*.*" to="images/event_images/*.*"/>
-			<file from="root/includes/bbdkp/block/recruitmentblock.php" to="includes/bbdkp/block/recruitmentblock.php"/>
-			<file from="root/includes/bbdkp/module/news.php" to="includes/bbdkp/module/news.php"/>
-			<file from="root/includes/bbdkp/module/standings.php" to="includes/bbdkp/module/standings.php"/>
-			<file from="root/includes/bbdkp/module/stats.php" to="includes/bbdkp/module/stats.php"/>			
-			<file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>
+			<file from="root/configdkp.php" to="configdkp.php"/>
+			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
+			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
+			<file from="root/images/*.*" to="images/*.*"/>
+			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
+			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
+			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
+			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
+			<file from="root/includes/bbdkp/block/*.*" to="includes/bbdkp/block/*.*"/>
+			<file from="root/includes/bbdkp/module/*.*" to="includes/bbdkp/module/*.*"/>
 			<file from="root/install/*.*" to="install/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/jquery-1.6.2.min.js" to="styles/prosilver/template/dkp/jquery-1.6.2.min.js"/>
-			<file from="root/styles/prosilver/template/dkp/jquery.tools.min.js" to="styles/prosilver/template/dkp/jquery.tools.min.js"/>
-			<file from="root/styles/prosilver/template/dkp/flot/*.*" to="styles/prosilver/template/dkp/flot/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/ucp_dkp.html" to="styles/prosilver/template/dkp/ucp_dkp.html"/>			
-			<file from="root/styles/prosilver/template/dkp/module/listitems.html" to="styles/prosilver/template/dkp/module/listitems.html"/>
-			<file from="root/styles/prosilver/template/dkp/module/stats.html" to="styles/prosilver/template/dkp/module/stats.html"/>			
-			<file from="root/styles/prosilver/template/dkp/ucp_dkp.html" to="styles/prosilver/template/dkp/ucp_dkp.html"/>			
-			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
+			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
+			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
+			<file from="root/styles/prosilver/template/dkp/module/*.*" to="styles/prosilver/template/dkp/module/*.*"/>			
+			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>
+			<file from="root/styles/prosilver/theme/*.*" to="styles/prosilver/theme/*.*"/>
+			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
-		<open src="styles/prosilver/template/overall_header.html">
-			<edit>
-				<comment lang="en"><![CDATA[move header edit to dkpheader see http://bit.ly/ovx91i]]></comment>
-				<comment lang="fr"><![CDATA[suppression edition entête see http://bit.ly/ovx91i]]></comment>
-				<comment lang="de"><![CDATA[Löschung overall_header link see http://bit.ly/ovx91i]]></comment>
-				<remove><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></remove>
-			</edit>
-		</open>
-		<open src="styles/prosilver/template/dkp/dkpmain.html">
-			<edit>
-				<comment lang="en"><![CDATA[move header edit to dkpheader see http://bit.ly/ovx91i]]></comment>
-				<comment lang="fr"><![CDATA[suppression edition entête see http://bit.ly/ovx91i]]></comment>
-				<comment lang="de"><![CDATA[Löschung overall_header link see http://bit.ly/ovx91i]]></comment>
-				<find><![CDATA[<!-- INCLUDE overall_header.html -->]]></find>
-				<action type="after-add"><![CDATA[
-<!-- INCLUDE dkp/dkpheader.html -->]]></action>
-			</edit>
-		</open>
-		<open src="styles/prosilver/template/dkp/dkpheader.html">
-			<edit>
-				<comment lang="en"><![CDATA[update jquery]]></comment>
-				<comment lang="fr"><![CDATA[update jquery]]></comment>
-				<comment lang="de"><![CDATA[update jquery]]></comment>
-				<find><![CDATA[src="{T_TEMPLATE_PATH}/dkp/jquery-1.4.4.min.js"></script>]]></find>
-				<action type="replace-with"><![CDATA[src="{T_TEMPLATE_PATH}/dkp/jquery-1.6.2.min.js"></script>]]></action>
-			</edit>
-		</open>
+		
 		<open src="styles/prosilver/template/overall_footer.html">
 			<edit>
 			<find><![CDATA[search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')]]></find>
@@ -157,18 +134,18 @@
 What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
-1) Run bbDKP 1.2.5 database update : install/index.php 
+1) Run bbDKP 1.2.3->1.2.5 database update : install/index.php 
 2) delete the install folder. 
 		Enjoy ;)]]></diy-instructions>
 		<diy-instructions lang="fr"><![CDATA[le guide de mise à jour : /docs/install.html
 Liste des changements : /docs/changelog.html
 
-1) lancer la mise à jour : install/index.php 
+1) lancer la mise à jour 1.2.3->1.2.5 : install/index.php 
 2) Supprimer le repertoire /install pour réactiver le forum.]]></diy-instructions>
 		<diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) Datenbank aktualisierung : install/index.php 
+1) Datenbank aktualisierung 1.2.3->1.2.5 : install/index.php 
 2) lösche das Installations-Verzeichnis „install"]]></diy-instructions>
 	</action-group>
 </mod>

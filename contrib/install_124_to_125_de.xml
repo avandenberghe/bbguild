@@ -34,9 +34,9 @@
 			<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2.5</link>
 			<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2.5</link>					
 
-			<link type="parent" lang="en" href="install_124_to_125.xml">update 1.2.3 to 1.2.5</link>
-			<link type="parent" lang="fr" href="install_124_to_125.xml">Mise à jour 1.2.3 à 1.2.5</link>
-			<link type="parent" lang="de" href="install_124_to_125.xml">Aktualisierung 1.2.3 bis 1.2.5</link>	
+			<link type="parent" lang="en" href="install_124_to_125.xml">update 1.2.4 to 1.2.5</link>
+			<link type="parent" lang="fr" href="install_124_to_125.xml">Mise à jour 1.2.4 à 1.2.5</link>
+			<link type="parent" lang="de" href="install_124_to_125.xml">Aktualisierung 1.2.4 bis 1.2.5</link>	
 	</link-group>
 	</header>
 	<action-group>
