@@ -442,6 +442,15 @@ $rc90 = get_overallraidcount($query_by_pool, (int) $config['bbdkp_list_p3'], $ti
 $rc60 = get_overallraidcount($query_by_pool, (int) $config['bbdkp_list_p2'], $time, $dkp_id);
 $rc30 = get_overallraidcount($query_by_pool, (int) $config['bbdkp_list_p1'], $time, $dkp_id);
 
+$att_sort_order = array (
+		0 => array ("sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) desc", "sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) asc" ),
+		1 => array ("sum(CASE e.days WHEN '30' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '30' THEN e.attendance END ) asc" ),
+		2 => array ("sum(CASE e.days WHEN '60' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '60' THEN e.attendance END ) asc" ),
+		3 => array ("sum(CASE e.days WHEN '90' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '90' THEN e.attendance END ) asc" ),
+		4 => array ("e.member_id desc", "e.member_id asc" ),		
+	);
+	
+$att_current_order = switch_order ( $att_sort_order );		
 
 /** attendance SQL */
 $sql = "SELECT
@@ -615,13 +624,9 @@ GROUP BY
 	e.member_id,
 	e.member_firstraid,
 	e.member_lastraid
-ORDER BY
-	sum(CASE e.days WHEN '30' THEN e.attendance END ) desc, 
-	sum(CASE e.days WHEN '60' THEN e.attendance END ) desc,
-	sum(CASE e.days WHEN '90' THEN e.attendance END ) desc,
-	e.member_id
-";
-			
+ORDER BY " . $att_current_order ['sql'];
+
+$attendance = 0;
 $result = $db->sql_query($sql);
 while ( $row = $db->sql_fetchrow($result))
 {
@@ -630,7 +635,9 @@ while ( $row = $db->sql_fetchrow($result))
 
 $startatt = request_var ( 'startatt', 0 );
 $result = $db->sql_query_limit ( $sql, 20, $startatt );
-$attpagination = generate_pagination2($u_stats . '&amp;o=' . $current_order ['uri'] ['current'] , $attendance, 15, $startatt, true, 'startatt'  );
+$attpagination = generate_pagination2($u_stats . '&amp;o=' . $current_order ['uri'] ['current'] , 
+$attendance, 15, $startatt, true, 'startatt'  );
+
 $attendance=0;
 while ( $row = $db->sql_fetchrow($result) )
 {
@@ -642,7 +649,7 @@ while ( $row = $db->sql_fetchrow($result) )
 	
     $template->assign_block_vars('attendance_row', array(
         'NAME' 					=> $row['member_name'],
-        'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $row['event_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),    
+        'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $dkp_id . '&amp;' . URI_NAMEID . '='.$row['member_id']),    
     	'COLORCODE'				=> $row['colorcode'],
     	'ID'            		=> $row['member_id'],
         'FIRSTRAID' 			=> $row['member_firstraid'],
@@ -665,25 +672,21 @@ while ( $row = $db->sql_fetchrow($result) )
     	'ATT30' 				=> sprintf("%.2f", $row['attendance30']), 
     )
     );
-
-}
-			
-if($attendance > 0)
-{
-	$template->assign_vars(array(
-		'RAIDS_X1_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p3']),
-		'RAIDS_X2_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p2']),
-		'RAIDS_X3_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p1']),
-	));
-	
 }
 
 /* send information to template */
 $template->assign_vars(array(
+	'RAIDS_X1_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p3']),
+	'RAIDS_X2_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p2']),
+	'RAIDS_X3_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p1']),
+	'O_LIF' 		  => $att_current_order ['uri'] [0], 
+	'O_90' 			  => $att_current_order ['uri'] [1], 
+	'O_60' 			  => $att_current_order ['uri'] [2], 
+	'O_30' 			  => $att_current_order ['uri'] [3], 
+	'O_MEMBER' 		  => $att_current_order ['uri'] [4],
 	'ATTPAGINATION' 	=> $attpagination ,
 	'S_DISPLAY_STATS'		=> true,
-	'F_STATS' => $u_stats,
-	'U_STATS' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats'),
+	'U_STATS' => $u_stats . '&amp;startatt='. $startatt,
     'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
 	'TOTAL_MEMBERS' 	=> $attendance, 
 	'TOTAL_DROPS' 		=> $total_drops, 
