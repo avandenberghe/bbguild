@@ -886,7 +886,8 @@ class acp_dkp_mm extends bbDKP_Admin
                     'aion'       => $user->lang['AION'],
                     'FFXI'       => $user->lang['FFXI'],
                 	'rift'       => $user->lang['RIFT'],
-                	'swtor'      => $user->lang['SWTOR']
+                	'swtor'      => $user->lang['SWTOR'], 
+	               	'lineage2'   => $user->lang['LINEAGE2'],
                 );
                 $installed_games = array();
                 foreach($games as $gameid => $gamename)
@@ -2051,7 +2052,7 @@ class acp_dkp_mm extends bbDKP_Admin
 		    $result = $db->sql_query($sql);
 			$member_lvl = (int) $db->sql_fetchfield('maxlevel', 1, $result); 
 		}
-		
+
 	    if( ($game_id == 'wow' || $game_id =='aion') && $memberportraiturl == ' ')
 	    {
 				$memberportraiturl = $this->generate_portraitlink( $game_id, $race_id, $class_id, $gender, $member_lvl ); 

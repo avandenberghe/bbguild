@@ -73,6 +73,8 @@ $gameinstall['vanguard']=false;
 $gameinstall['wow']=false;
 $gameinstall['warhammer']=false;
 $gameinstall['swtor']=false;
+$gameinstall['lineage2']=false;
+
 $choice=false;
 if (isset($config['bbdkp_default_game'])) 
 {
@@ -123,12 +125,16 @@ if (isset($config['bbdkp_games_swtor']))
 {
 	$gameinstall['swtor'] = $config['bbdkp_games_swtor'];
 }
+if (isset($config['bbdkp_games_lineage2']))
+{
+	$gameinstall['lineage2'] = $config['bbdkp_games_lineage2'];
+}
 
 $options = array(
 		'guildtag'	=> array('lang' => 'UMIL_GUILD', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
         'realm'	    => array('lang' => 'REALM_NAME', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
 		'region'   => array('lang' => 'REGION', 'type' => 'select', 'function' => 'regionoptions', 'explain' => true),
-
+		
 		'aion'   => array('lang' => 'AION', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['aion']) ? true:false) ),
 		'daoc'   => array('lang' => 'DAOC', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['daoc']) ? true:false)),
 		'eq'   => array('lang' => 'EQ', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq']) ? true:false)),
@@ -140,6 +146,7 @@ $options = array(
 		'warhammer'   => array('lang' => 'WARHAMMER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['warhammer'] ) ? true:false)),
 		'wow'     => array('lang' => 'WOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['wow'] ) ? true:false)),
 		'swtor'     => array('lang' => 'SWTOR', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['swtor'] ) ? true:false)),
+		'lineage2'     => array('lang' => 'LINEAGE2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lineage2'] ) ? true:false)),
 );
 
 /*
@@ -156,6 +163,7 @@ include($phpbb_root_path .'install/gamesinstall/install_warhammer.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_rift.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_swtor.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_lineage2.' . $phpEx);
 
 /*
 * Optionally we may specify our own logo image to show in the upper corner instead of the default logo.
@@ -809,6 +817,7 @@ $versions = array(
 		),
 				
 		'1.2.5' => array(
+	      
 	    	// create permission for adding, updating or deleting character
 		   'permission_add' => array(
 	            array('u_dkp_charadd', true) ,
@@ -840,10 +849,16 @@ $versions = array(
 					),
 			)),
 	      
-	        // add new parameters
+			// add new parameter for lineage2 and max characters
 	        'config_add' => array(
 				array('bbdkp_maxchars', 2, true),
-			),      
+				array('bbdkp_games_lineage2', 0, true),
+			),   
+			
+			'custom' => array(
+				// purge and reinstall chosen gametables according to latest specs
+				'gameinstall'
+    	  		),
         
 		),
       
@@ -863,11 +878,12 @@ include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
 function gameinstall($action, $version)
 {
 	global $db, $table_prefix, $umil, $user, $config, $phpbb_root_path, $phpEx; 
+	$installed_games = array();
+	
 	switch ($action)
 	{
-		
 		case 'install' :
-		case 'update' :
+		 case 'update' :
 			switch ($version)
 			{
 				case '1.2.3':
@@ -913,8 +929,6 @@ function gameinstall($action, $version)
 			    //   if the game is already installed in 1.2.2 then don't overwrite userdata otherwise do
 			    //   else install game
 			    //   set $config 
-
-				$installed_games = array();
 				
 				if(request_var('aion', 0) == 1)
 				{
@@ -1221,11 +1235,23 @@ function gameinstall($action, $version)
 			    
 			    // report what we did to umil
 				return array('command' => sprintf($user->lang['UMIL_GAME123'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
+				break;
 				
+			case '1.2.5':
+				// new game 		
+				if(request_var('lineage2', 0) == 1)
+		        {
+	          			install_lineage2($action, $version); 
+	         			$umil->config_update('bbdkp_games_lineage2', 1, true);
+	         			$installed_games[] = 'lineage2';          			
+	       		}
+	  			// report what we did to umil
+				return array('command' => sprintf($user->lang['UMIL_GAME125'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
+				break;
 			}
 			break;
-			case 'uninstall' :
-				return array('command' => 'UMIL_GAMEUNINST123', 'result' => 'SUCCESS');
+		case 'uninstall' :
+			return array('command' => 'UMIL_GAMEUNINST123', 'result' => 'SUCCESS');
 	}
 					
 }

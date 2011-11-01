@@ -193,6 +193,7 @@ $lang = array_merge($lang, array(
 'UMIL_NOGAMECHOSEN' => 'Plase choose a game before installing.', 
 'UMIL_UPD123' => 'Updated tables to v1.2.3', 
 'UMIL_GAME123' => 'Game data installed for %s', 
+'UMIL_GAME125' => 'Game data installed for %s', 
 'UMIL_GAMEUNINST123' => 'Game data uninstalled', 
 
 // ACP titles

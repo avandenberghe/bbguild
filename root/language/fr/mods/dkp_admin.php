@@ -40,6 +40,7 @@ $lang = array_merge($lang, array(
 	'UMIL_NOGAMECHOSEN'	=> 'Veuillez choisir un jeu avant d\'installer.',
 	'UMIL_UPD123'	=> 'Tables mises à jour pour v1.2.3',
 	'UMIL_GAME123'	=> 'Jeu %s installé',
+	'UMIL_GAME125'	=> 'Jeu %s installé',	
 	'UMIL_GAMEUNINST123'	=> 'Jeux désinstallés.',
 	'RETURN_DKPPOOLINDEX'	=> 'Retournez au listing.',
 	'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Note : Jeu ne peut pas être changé une fois qu’il est mis.',

@@ -397,7 +397,7 @@ $lang = array_merge($lang, array(
 	'NOUCPUPDCHARS' => 'Du kannst keine Charaktere bearbeiten.', 
 	'NOUCPDELCHARS' => 'Du kannst keine Charaktere löschen',	
 	'MAX_CHARS_EXCEEDED' => 'Du kannst höchstens %s charactere an dein Forumkonto kuppeln.', 
-	
+	'LINEAGE2'       => 'Lineage 2', 
 ));
 
 ?>

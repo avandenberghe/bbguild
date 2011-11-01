@@ -40,6 +40,7 @@ $lang = array_merge($lang, array(
 	'UMIL_NOGAMECHOSEN'	=> 'Bitte wähle ein Spiel.',
 	'UMIL_UPD123'	=> 'Dateien aktualisiert zu v1.2.3',
 	'UMIL_GAME123'	=> 'Spieldaten für %s installiert.',
+	'UMIL_GAME125'	=> 'Spieldaten für %s installiert.',
 	'UMIL_GAMEUNINST123'	=> 'Spieldaten entfernt.',
 	'RETURN_DKPPOOLINDEX'	=> 'Zurück zur Poolliste',
 	'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Spiel nicht änderbar.',
