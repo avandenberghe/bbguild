@@ -10,3 +10,11 @@
 .highlight {
     background-color: #FFFFDD;
 }
+
+.ro {
+	background-color: #FFFFFF;
+}
+
+.ro:hover {
+	background-color: #EEEEEE;
+}

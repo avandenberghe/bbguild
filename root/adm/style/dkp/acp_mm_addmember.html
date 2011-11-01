@@ -195,10 +195,16 @@ function classracestateChanged()
     <dd><input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" /></dd>
   </dl>
    
-  <dl>
+ <dl>
+ <dt><label for="activated">{L_ACTIVE}:</label></dt>
+ <dd><input type="checkbox" class="radio" name="activated" value="{MEMBER_ID}" {STATUS} /></dd>
+ </dl>
+
+ <dl>
     <dt><label for="member_level">{L_LEVEL}:</label></dt>
 		<dd><input type="text" name="member_level" size="20" maxlength="2" value="{MEMBER_LEVEL}" class="input" /></dd>
-  </dl> 
+ </dl> 
+
  
 <dl>
 <dt><label for="member_guild_id">{L_GUILD}:</label></dt>

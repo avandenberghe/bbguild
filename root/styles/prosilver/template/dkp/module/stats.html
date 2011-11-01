@@ -47,7 +47,7 @@ div.tickLabel {
 
 </style>
 
-<form method="post" action="{F_STATS}">
+<form method="post" action="{U_STATS}">
 
 <div class="forabg" >
 <span class="corners-top"><span></span></span>
@@ -452,11 +452,11 @@ $(function () {
 <table id="choiceContainer" class="table1" width="90%" border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>	  
-    <th colspan="4" style=" width:8%;"><a href="{O_NAME}">{L_NAME}</a></th>
-    <th colspan="3" style=" width:23%;"><a href="{O_NAME}">{L_ATTENDANCE_LIFETIME}</a></th>
-    <th colspan="3" style=" width:23%;">{RAIDS_X1_DAYS}</th>
-    <th colspan="3" style=" width:23%;">{RAIDS_X2_DAYS}</th>
-    <th colspan="3" style=" width:23%;">{RAIDS_X3_DAYS}</th>
+    <th colspan="4" style=" width:8%;"><a href="{U_STATS}&amp;o={O_MEMBER}">{L_NAME}</a></th>
+    <th colspan="3" style=" width:23%;"><a href="{U_STATS}&amp;o={O_LIF}">{L_ATTENDANCE_LIFETIME}</a></th>
+    <th colspan="3" style=" width:23%;"><a href="{U_STATS}&amp;o={O_90}">{RAIDS_X1_DAYS}</a></th>
+    <th colspan="3" style=" width:23%;"><a href="{U_STATS}&amp;o={O_60}">{RAIDS_X2_DAYS}</a></th>
+    <th colspan="3" style=" width:23%;"><a href="{U_STATS}&amp;o={O_30}">{RAIDS_X3_DAYS}</a></th>
 </tr>
 </thead>
 <tfoot>

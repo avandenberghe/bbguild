@@ -1,6 +1,6 @@
 <?php
 /**
- * bbdkp ucp language file 
+ * bbdkp ucp language file french
  * 
  * @package bbDkp
  * @copyright 2010 bbdkp <https://www.github.com/bbDKP>
@@ -27,7 +27,8 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
     'UCP_DKP_CHARACTERS'	=> 'Charactères',
 	'UCP_DKP'				=> 'bbDKP',  
-
+	'UCP_DKP_CHARACTER_LIST'	=> 'Mes Charactères',
+	'UCP_DKP_CHARACTER_ADD'		=> 'Ajouter Charactère',
 ));
 
 ?>

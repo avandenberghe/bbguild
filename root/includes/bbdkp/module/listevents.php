@@ -111,7 +111,7 @@ $template->assign_vars(array(
     'START' => $start,
     'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events , $config['bbdkp_user_elimit']),
     'EVENT_PAGINATION' => generate_pagination( append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listevents&amp;o='.$current_order['uri']['current']),
-             $total_events, $config['bbdkp_user_elimit'], $start),
+             $total_events, $config['bbdkp_user_elimit'], $start, true),
 	'S_DISPLAY_LISTEVENTS' => true,             
 ));
 
