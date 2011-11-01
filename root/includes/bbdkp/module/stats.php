@@ -621,13 +621,19 @@ ORDER BY
 	sum(CASE e.days WHEN '90' THEN e.attendance END ) desc,
 	e.member_id
 ";
+			
+$result = $db->sql_query($sql);
+while ( $row = $db->sql_fetchrow($result))
+{
+	$attendance++;	
+}
+
 $startatt = request_var ( 'startatt', 0 );
 $result = $db->sql_query_limit ( $sql, 20, $startatt );
-$attpagination = generate_pagination2($u_stats . '&amp;o=' . $current_order ['uri'] ['current'] , $total_members, 15, $startatt, true, 'startatt'  );
+$attpagination = generate_pagination2($u_stats . '&amp;o=' . $current_order ['uri'] ['current'] , $attendance, 15, $startatt, true, 'startatt'  );
 $attendance=0;
 while ( $row = $db->sql_fetchrow($result) )
 {
-	$attendance++;	
 	$membername_g[] = $row['member_name'];
 	$attlife__g[] = $row['attendancelife'];
 	$att90__g[] = $row['attendance90'];
@@ -679,7 +685,7 @@ $template->assign_vars(array(
 	'F_STATS' => $u_stats,
 	'U_STATS' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats'),
     'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
-	'TOTAL_MEMBERS' 	=> $total_members, 
+	'TOTAL_MEMBERS' 	=> $attendance, 
 	'TOTAL_DROPS' 		=> $total_drops, 
 	'CLASSPCTCUMUL'		=> round($class_drop_pct_cum), 
     )
