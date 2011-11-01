@@ -17,7 +17,7 @@ if (!defined('IN_PHPBB'))
 // var initialisations
 include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
-
+define('LOAD_REIMG', true); 
 // Container for user details, only process once
 $post_list = $attachments = $attach_list = $rowset = $update_count = $post_edit_list = array();
 $has_attachments = $display_notice = false;
@@ -26,9 +26,10 @@ $has_attachments = $display_notice = false;
 $user->add_lang(array('viewtopic', 'mods/dkp_common'));
 
 // forum to get news from
-$forum_id = $config['bbdkp_news_forumid'];
+$forum_id = isset($config['bbdkp_news_forumid']) ? $config['bbdkp_news_forumid'] : 2;
 // total newsitems to retrieve from forum
-$n_news = $config['bbdkp_n_news'];
+$n_news = isset($config['bbdkp_n_news']) ? $config['bbdkp_n_news'] : 5;
+
 // retrieve news from this page (generated from pagination function and retrieved from $_GET)
 $start = request_var('start', 0); 
 $bbcode_bitfield = $force_encoding = '';
@@ -181,8 +182,8 @@ while ( $news = $db->sql_fetchrow($result) )
     }
     $db->sql_freeresult($result2);
     
-	$template->assign_block_vars('date_row.news_row', array( 
-		
+	$template->assign_block_vars('news_row', array( 
+		'DATE' => date('F j, Y', $news['topic_time']),
 		'HEADLINE' 	=> censor_text($news['topic_title']), 
 		'AUTHOR' 	=> get_username_string('full', $news['topic_poster'], $news['topic_first_poster_name'], $news['topic_first_poster_colour']), 
 		'LINK'		=> append_sid("{$phpbb_root_path}viewtopic.$phpEx", 'f=' . $news['forum_id'] . '&amp;t=' . $news['topic_id']), 
@@ -204,7 +205,7 @@ while ( $news = $db->sql_fetchrow($result) )
 	{
 		foreach ($attachments[$row['post_id']] as $attachment)
 		{
-			$template->assign_block_vars('date_row.news_row.attachment', array(
+			$template->assign_block_vars('news_row.attachment', array(
 				'DISPLAY_ATTACHMENT'	=> $attachment)
 			);
 		}
