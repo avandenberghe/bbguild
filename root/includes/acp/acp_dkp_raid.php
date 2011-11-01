@@ -1099,7 +1099,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	{
 		global $db, $user, $config;
 		$sql_array = array (
-			'SELECT' => '  e.event_name, r.event_id, r.raid_note, r.raid_start, r.raid_end, r.raid_added_by, r.raid_updated_by', 
+			'SELECT' => '  e.event_dkpid, e.event_name, r.event_id, r.raid_note, r.raid_start, r.raid_end, r.raid_added_by, r.raid_updated_by', 
 			'FROM' => array (
 				RAIDS_TABLE 		=> 'r' , 
 				EVENTS_TABLE 		=> 'e',		
@@ -1113,6 +1113,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		{
 			$raid = array (
 				'event_id' 			=> $row['event_id'],
+				'event_dkpid' 		=> $row['event_dkpid'],
 				'event_name'		=> $row['event_name'],
 				'raid_note' 		=> $user->lang['DUPLICATED'] . ': ' . $row['raid_note'], 
 				'raid_start' 		=> $row['raid_start'],
@@ -1175,6 +1176,8 @@ class acp_dkp_raid extends bbDKP_Admin
 		            'time_bonus'   => (float) $raid_detail['time_bonus'],
 	            	'raid_decay'   => (float) $raid_detail['raid_decay']
 					);
+
+				$this->add_dkp ($raid_detail['raid_value'], $raid_detail['time_bonus'], $raid['raid_start'] , $raid['event_dkpid'] , $raid_detail['member_id']);
 	        }
 	        $db->sql_multi_insert(RAID_DETAIL_TABLE, $line);
     	}
