@@ -31,6 +31,7 @@ class acp_dkp_raid extends bbDKP_Admin
 {
 	private $link;
 	
+	
 	/**
 	 * main Raid function
 	 */
@@ -148,8 +149,11 @@ class acp_dkp_raid extends bbDKP_Admin
 				break;
 				
 			case 'listraids' :
-				
-				// list all raids
+				$raid_id = request_var (URI_RAID, 0);
+				if($raid_id != 0)
+				{
+					$this->duplicate_raid($raid_id);	
+				}
 				$this->listraids();
 				$this->page_title = 'ACP_DKP_RAID_LIST';
 				$this->tpl_name = 'dkp/acp_' . $mode;
@@ -1048,14 +1052,15 @@ class acp_dkp_raid extends bbDKP_Admin
 		{
 			$template->assign_block_vars ( 'raids_row', array (
 				'DATE' => (! empty ( $row['raid_start'] )) ? date ( $config ['bbdkp_date_format'], $row['raid_start'] ) : '&nbsp;', 
-				'U_VIEW_RAID' => append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=editraid&amp;" . URI_RAID . "={$row['raid_id']}" ), 
 				'NAME' => $row['event_name'], 
 				'NOTE' => (! empty ( $row['raid_note'] )) ? $row['raid_note'] : '&nbsp;', 
 				'RAIDVALUE'  => $row['raid_value'], 
 				'TIMEVALUE'  => $row['time_value'],
 				'ZSVALUE' 	 => $row['zs_value'],
 				'DECAYVALUE' => $row['raiddecay'], 
-				'TOTAL' 	 => $row['total'] 
+				'TOTAL' 	 => $row['total'], 
+				'U_VIEW_RAID' => append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=editraid&amp;" . URI_RAID . "={$row['raid_id']}" ), 
+				'U_COPY_RAID' => append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=listraids&amp;" . URI_RAID . "={$row['raid_id']}" ),
 				)
 			);
 		}
@@ -1079,11 +1084,111 @@ class acp_dkp_raid extends bbDKP_Admin
 			'LISTRAIDS_FOOTCOUNT' => sprintf ( $user->lang ['LISTRAIDS_FOOTCOUNT'], $total_raids, $config ['bbdkp_user_rlimit'] ), 
 			'RAID_PAGINATION' 	  => generate_pagination ( append_sid 
 					( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;dkpsys_id=". $dkpsys_id ."&amp;o=" . $current_order ['uri'] ['current']) , 
-					$total_raids, $config ['bbdkp_user_rlimit'], $start, true ) 
+					$total_raids, $config ['bbdkp_user_rlimit'], $start, true ), 
+			'ICON_RCOPY'		  => '<img src="' . $phpbb_admin_path . 'images/icon_copy.png" alt="' . $user->lang['DUPLICATE_RAID'] . '" title="' . $user->lang['DUPLICATE_RAID'] . '" />',
 			));
+			
 	}
 	
+	/**
+	 * duplicates a passed raid without its attached loot.   
+	 *
+	 * @param int $raid_id
+	 */
+	private function duplicate_raid($raid_id)
+	{
+		global $db, $user, $config;
+		$sql_array = array (
+			'SELECT' => '  e.event_name, r.event_id, r.raid_note, r.raid_start, r.raid_end, r.raid_added_by, r.raid_updated_by', 
+			'FROM' => array (
+				RAIDS_TABLE 		=> 'r' , 
+				EVENTS_TABLE 		=> 'e',		
+			), 
+			'WHERE' => " e.event_id = r.event_id AND r.raid_id=" . (int) $raid_id, 
+		);
+		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ($sql);
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$raid = array (
+				'event_id' 			=> $row['event_id'],
+				'event_name'		=> $row['event_name'],
+				'raid_note' 		=> $user->lang['DUPLICATED'] . ': ' . $row['raid_note'], 
+				'raid_start' 		=> $row['raid_start'],
+				'raid_end' 			=> $row['raid_end'], 
+				'raid_added_by' 	=> $row['raid_added_by'], 
+				'raid_updated_by' 	=> $row['raid_updated_by']);
+		}
+		$db->sql_freeresult ($result);
+		
+		$sql_array = array (
+			'SELECT' => ' ra.member_id, ra.raid_value, ra.time_bonus, ra.raid_decay', 
+			'FROM' => array (
+				RAID_DETAIL_TABLE 	=> 'ra' ,
+				), 
+			'WHERE' => " ra.raid_id = " . (int) $raid_id, 
+		);
+		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ($sql);
+		$raid_details= array();
+		while ( $row = $db->sql_fetchrow ( $result ) ) 
+		{
+			$raid_details[] = array (
+				'member_id' 		=> (int)  $row['member_id'], 
+				'raid_value' 		=> (float) $row['raid_value'],
+				'time_bonus' 		=> (float) $row['time_bonus'], 
+				'raid_decay' 		=> (float) $row['raid_decay']);
+		}
+		$db->sql_freeresult ($result);
+		
+		/*
+		 * start inserting raid
+		 */
+		$db->sql_transaction('begin');
+		//
+		// Insert the raid
+		// raid id is auto-increment so it is increased automatically
+		//
+		$query = $db->sql_build_array ( 'INSERT', array (
+				'event_id' 		=> (int) $raid['event_id'], 
+				'raid_note' 	=> (string) $raid['raid_note'], 
+				'raid_start' 	=> (int) $raid['raid_start'],
+				'raid_end' 		=> (int) $raid['raid_end'], 
+				'raid_added_by' => (string) $user->data['username']) 
+		);
+			
+		$db->sql_query ( "INSERT INTO " . RAIDS_TABLE . $query );
+		$raid ['raid_id'] = $db->sql_nextid();
 
+		// insert the attendees
+		if(sizeof($raid_details) > 0)
+    	{
+	    	$line = array();
+	        foreach ( $raid_details as $raid_detail )
+	        {
+	            $line[] = array(
+	                'raid_id'      => (int)   $raid['raid_id'],
+	                'member_id'    => (int)   $raid_detail['member_id'],
+		            'raid_value'   => (float) $raid_detail['raid_value'],
+		            'time_bonus'   => (float) $raid_detail['time_bonus'],
+	            	'raid_decay'   => (float) $raid_detail['raid_decay']
+					);
+	        }
+	        $db->sql_multi_insert(RAID_DETAIL_TABLE, $line);
+    	}
+    	
+    	$db->sql_transaction('commit');
+    	
+    	
+    	meta_refresh(1, $this->u_action);
+    	
+    	$success_message = sprintf ( $user->lang ['ADMIN_DUPLICATE_RAID_SUCCESS'], 
+		$user->format_date($this->time), $raid['event_name'] ) . '<br />';
+		trigger_error($success_message);
+	}
+	
 	/**
 	 * adds raid to database
 	 * 
@@ -1171,6 +1276,9 @@ class acp_dkp_raid extends bbDKP_Admin
 				'log_type' 		=> $log_action ['header'], 
 				'log_action' 	=> $log_action ) );
 			
+			//
+			// Success message
+			//
 			$success_message = sprintf ( $user->lang ['ADMIN_ADD_RAID_SUCCESS'], 
 				$user->format_date($this->time), $raid['event_name'] ) . '<br />';
 				
@@ -1183,10 +1291,10 @@ class acp_dkp_raid extends bbDKP_Admin
 				$success_message .= ' ' . (($this->update_player_status ( $raid['event_dkpid'] )) ? 
 					strtolower ( $user->lang ['DONE'] ) : strtolower ( $user->lang ['ERROR'] ));
 			}
-			
-			//
-			// Success message
-			//
+
+			//show message and redirect to raid after 3 seconds
+			$link = append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=editraid&amp;" . URI_RAID . "={$raid ['raid_id']}" );
+	    	meta_refresh(1, $link);
 			trigger_error ( $success_message . $this->link, E_USER_NOTICE );
 				
 		}
@@ -1364,6 +1472,8 @@ class acp_dkp_raid extends bbDKP_Admin
 		}
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>';
 
+		$link = append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=editraid&amp;" . URI_RAID . "={$raid_id}" );
+	   	meta_refresh(1, $link);
 		trigger_error ( $success_message . $this->link, E_USER_NOTICE );
 		
 	}
