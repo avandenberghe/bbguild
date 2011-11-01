@@ -27,6 +27,8 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
     'UCP_DKP_CHARACTERS'	=> 'Charactere',
 	'UCP_DKP'				=> 'bbDKP',  
+	'UCP_DKP_CHARACTER_LIST'	=> 'Meine Charactere',
+	'UCP_DKP_CHARACTER_ADD'		=> 'Character zufügen',	
 
 ));
 

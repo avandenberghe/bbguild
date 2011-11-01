@@ -1,14 +1,12 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
-## BRANCH v125
-
-1.2.4 is the current bbDKP release.
+## BRANCH v124
 
 Changelog : 
-[DEL] Subsilver2 removed from package. We don't support Table based design anymore. 
-[NEW] jquery plot library in Statistics page, replaces pstat
-[CHG] dkpheader is now included in dkpmain.html so no overall_header edit necessary
-[NEW] default event icon added, wow event icons reduced to 64px (other event icons available as separate download)
-[UPD] jquery updated to 1.6.2, jquery tools updated to 1.2.6-dev. This should solve This is needed for Raidplanner. A final jqt version is not available yet
+* [DEL] Subsilver2 removed from package. We don't support Table based design anymore. 
+* [NEW] jquery plot library in Statistics page, replaces pstat
+* [CHG] dkpheader is now included in dkpmain.html so no overall_header edit necessary
+* [NEW] default event icon added, wow event icons reduced to 64px (other event icons available as separate download)
+* [UPD] jquery updated to 1.6.2, jquery tools updated to 1.2.6-dev. This should solve This is needed for Raidplanner. A final jqt version is not available yet
 
 ## ABOUT
 
@@ -27,7 +25,7 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Raidplanner (under development).
 
 ## CURRENT RELEASE
-v. 1.2.3-PL3
+v. 1.2.4
 
 ## COMMUNITY
 

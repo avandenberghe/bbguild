@@ -389,6 +389,7 @@ class acp_dkp extends bbDKP_Admin
                     set_config('bbdkp_show_achiev', request_var('showachievement', 0), true);
                     set_config('bbdkp_date_format', request_var('date_format', ''), true);
                     set_config('bbdkp_lang', request_var('language', 'en'), true);
+                    set_config('bbdkp_maxchars', request_var('maxchars', 2), true);
                     
                     //standings
                     set_config('bbdkp_hide_inactive', (isset($_POST['hide_inactive'])) ? request_var('hide_inactive', '') : '0', true);
@@ -396,6 +397,7 @@ class acp_dkp extends bbDKP_Admin
                     set_config('bbdkp_list_p1', request_var('list_p1', 0), true);
                     set_config('bbdkp_list_p2', request_var('list_p2', 0), true);
                     set_config('bbdkp_list_p3', request_var('list_p3', 0), true);
+					set_config('bbdkp_user_llimit', request_var('bbdkp_user_llimit', 0), true);
 
                     //events					
                     set_config('bbdkp_user_elimit', request_var('bbdkp_user_elimit', 0), true);
@@ -466,6 +468,35 @@ class acp_dkp extends bbDKP_Admin
                 
                 $zerosum_synchronise = (isset($_POST['zerosum_synchronise'])) ? true : false;
                 $decay_synchronise = (isset($_POST['decay_synchronise'])) ? true : false;
+                $dkp_synchronise = (isset($_POST['syncdkp'])) ? true : false;
+                
+                // resynchronise DKP
+                if($dkp_synchronise)
+                {
+                	if (confirm_box ( true )) 
+					{
+						if ( !class_exists('acp_dkp_sys')) 
+						{
+							require($phpbb_root_path . 'includes/acp/acp_dkp_sys.' . $phpEx); 
+						}
+						$acp_dkp_sys = new acp_dkp_sys;
+						$acp_dkp_sys->syncdkpsys();
+						
+					}
+					else 
+					{
+									
+						$s_hidden_fields = build_hidden_fields ( array (
+							'syncdkp' 	  => true, 
+						));
+			
+						$template->assign_vars ( array (
+							'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
+						confirm_box ( false, sprintf($user->lang['RESYNC_DKP_CONFIRM'] ), $s_hidden_fields );
+						
+					}
+                	
+                }
                 
 				// recalculate zerosum
          		if ($zerosum_synchronise) 
@@ -565,7 +596,8 @@ class acp_dkp extends bbDKP_Admin
                     'aion'       => $user->lang['AION'],
                     'FFXI'       => $user->lang['FFXI'],
                 	'rift'       => $user->lang['RIFT'],
-                	'swtor'      => $user->lang['SWTOR']
+                	'swtor'      => $user->lang['SWTOR'], 
+               	  	'lineage2'   => $user->lang['LINEAGE2']
                 );
                 
                 $installed_games = array();
@@ -620,7 +652,7 @@ class acp_dkp extends bbDKP_Admin
 				}
 				
 				$s_bankerlist_options = ''; 
-				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . " WHERE member_status = '1'"; 
+				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . " WHERE member_status = '1' order by member_name asc"; 
 				$result = $db->sql_query ($sql);
 				while ($row = $db->sql_fetchrow ($result))
 				{
@@ -656,7 +688,9 @@ class acp_dkp extends bbDKP_Admin
                 	'ACTIVE_POINT' 		=> $config['bbdkp_active_point_adj'] , 
                 	'USER_ILIMIT' 		=> $config['bbdkp_user_ilimit'] , 
                 	'USER_RLIMIT' 		=> $config['bbdkp_user_rlimit'] , 
-
+					'MAXCHARS'			=> $config['bbdkp_maxchars'] ,
+                	'USER_LLIMIT' 		=> $config['bbdkp_user_llimit'] ,
+                
                 	//epgp
                 	'F_EPGPACTIVATE'	=> $config['bbdkp_epgp'],
                 	'BASEGP'			=> $config['bbdkp_basegp'] , 
@@ -1143,7 +1177,7 @@ class acp_dkp extends bbDKP_Admin
    {  
         $found=''; 
    		
-   		$array_temp = (array) simplexml_load_string($haystack);
+   		$array_temp = (array) @simplexml_load_string($haystack);
         foreach ($array_temp as $key => $value) 
         {
         	if ($key == $tag)

@@ -109,6 +109,7 @@ $lang = array_merge($lang, array(
 'FFXI'       => 'Final Fantasy XI',
 'RIFT'       => 'Rift',
 'SWTOR'       => 'Starwars : The old Republic', 
+'LINEAGE2'       => 'Lineage 2', 
 
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status', 
@@ -162,6 +163,9 @@ $lang = array_merge($lang, array(
 'VIEWRAID_TITLE' => 'Raid Summary',
 'NODKPACCOUNTS'	=> 'No DKP accounts found', 
 'NOUCPACCESS' => 'You are not authorised to claim characters', 
+'NOUCPADDCHARS' => 'You are not authorised to add characters', 
+'NOUCPUPDCHARS' => 'You are not authorised to update your characters', 
+'NOUCPDELCHARS' => 'You are not authorised to delete your characters',
 
 // Various
 'ACCOUNT' => 'Account',
@@ -210,7 +214,7 @@ $lang = array_merge($lang, array(
 'CHARACTER' => 'Here is a list of all your Characters. ',
 'CHARACTER_EXPLAIN' => 'Choose another Charactername and press submit.',
 'CHARACTERS_UPDATED' => 'The Charactername %s was assigned to your account. ',
-'NO_CHARACTERS' => 'No characters to add to your Account. Please add some characters in the ACP.',
+'NO_CHARACTERS' => 'No characters found to bind to your Account. Please add some characters in the ACP.',
 'RAIDDECAY' => 'Raid Decay',
 'DECAY' => 'Decay',
 'DROPS' => 'Drops',
@@ -244,6 +248,7 @@ $lang = array_merge($lang, array(
 'MEMBERS' => 'Members',
 'NO_DATA' => 'No Data', 	
 'RAID_ON' => 'Raid on %s on %s',
+'MAX_CHARS_EXCEEDED' => 'Sorry, you can only have %s Characters bound to your phpBB account.', 
 'MISCELLANEOUS' => 'Miscellaneous',
 'NEWEST' => 'Newest raid',
 'NOTE' => 'Note',
@@ -445,7 +450,7 @@ bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'AUTHOR'=> 		'Author',
 'MAINT'=> 		'Maintainer', 
 
-'DONATORS' => 'Unexpectedgreg, Bisa, Sniperpaladin, McTurk, Mizpah, Kapli, Hroar', 
+'DONATORS' => 'Unexpectedgreg, Bisa, Sniperpaladin, McTurk, Mizpah, Kapli, Hroar, Chrome', 
 
 'DONATION' => 'Donation',
 'DONA_NAME' => 'Name',

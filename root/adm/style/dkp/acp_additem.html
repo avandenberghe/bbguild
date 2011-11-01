@@ -9,7 +9,7 @@
 
 function check_form()
 {
-    if ((document.additem.select_item_name.value.length < 2) && (document.additem.item_name.value.length < 2))
+    if ((document.additem.select_item_id.value.length < 2) && (document.additem.item_name.value.length < 2))
     {
         alert('{MSG_NAME_EMPTY}');
         return false;
@@ -25,21 +25,30 @@ function check_form()
 
 function switch_item_val()
 {
-  document.additem.item_name.value  = document.additem.select_item_name.options[document.additem.select_item_name.selectedIndex].value.replace(/[\.0-9]/g, "");
-  document.additem.item_gameid.value  = document.additem.select_item_name.options[document.additem.select_item_name.selectedIndex].value.replace(/[^\.0-9]/g, "");
-  document.additem.item_value.value = document.additem.select_item_name.options[document.additem.select_item_name.selectedIndex].text.replace(/[^\.0-9]/g, "");
+  document.additem.item_name.value  = document.additem.select_item_id.options[document.additem.select_item_id.selectedIndex].value.replace(/[\.0-9]/g, "");
+  document.additem.item_gameid.value  = document.additem.select_item_id.options[document.additem.select_item_id.selectedIndex].value.replace(/[^\.0-9]/g, "");
+  document.additem.item_value.value = document.additem.select_item_id.options[document.additem.select_item_id.selectedIndex].text.replace(/[^\.0-9]/g, "");
+  var selecttext = document.additem.select_item_id.options[document.additem.select_item_id.selectedIndex].text;
+  var out = splitPath(selecttext); 
+  document.additem.item_name_db.value = out;
 }
 
-function pop_search()
-{   
-    search = window.open('index.php{SID}&i=dkp_item&mode=search','search','resizable=no,toolbar=no,status=no,height=335,width=775,screenX=50,screenY=25,left=200,top=300')
-    search.focus();
+function splitPath(str) {
+    var rawParts = str.split(" ("), parts = [];
+    for (var i = 0, len = rawParts.length, part; i < len; ++i) 
+    {
+        part = "";
+        while (rawParts[i].slice(-1) == "\\") {
+            part += rawParts[i++].slice(0, -1) + "/";
+        }
+        parts.push(part + rawParts[i]);
+    }
+     return parts[0];
 }
 
 function fnSearch( searchField, searchItem )
 {
     thisForm = document.additem;
-    
     searchBox = thisForm.elements[searchField];
     selectBox = thisForm.elements[searchItem];
     
@@ -188,7 +197,7 @@ fieldset dd {
  <span class="small">{L_HOLD_CTRL_NOTE}</span>
 
 <dl>  
-  {L_SEARCH_MEMBERS} : <input type="text" name="memberSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'all_members')" />	
+  {L_SEARCH_MEMBERS} : <input type="text" name="memberSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'raiders[]')" />	
 </dl>
 <dl>
      <select style="float: left; width: 49%;" name="raiders[]" id= "raiders[]" size="20" multiple="multiple" class="input">
@@ -216,18 +225,19 @@ fieldset dd {
  <fieldset> 
  <legend>{L_ITEM} </legend>
     
- <span class="small">(<a href="javascript:pop_search();">{L_SEARCH}</a>)</span><br />
  <dl>   
    <dt><label>{L_SEARCH_EXISTING}:</label>
    </dt>
    	<dd>
-   		<input type="text" name="itemSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'select_item_name'); switch_item_val();" />
+   		<input type="text" name="itemSearch" size="30" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'select_item_id'); switch_item_val();" />
    	</dd>
+
    	<dd>
-<br />
    	</dd>
+	<br />
+
    	<dd>
-	   	 <select name="select_item_name" onchange="javascript:switch_item_val();" class="input">
+	   	 <select name="select_item_id" onchange="javascript:switch_item_val();" class="input">
 	      <option value=""></option>
 	      <!-- BEGIN items_row -->
 	      <option value="{items_row.VALUE}"{items_row.SELECTED}>{items_row.OPTION}</option>
@@ -236,11 +246,23 @@ fieldset dd {
    	</dd>
  </dl>
  
-    <strong>- {L_OR} -</strong>
+   - {L_OR} -
+    
     <dl>
 	   	<dt><label>{L_ENTER_NEW}:</label></dt>
    		<dd><input type="text" name="item_name" size="30" maxlength="255" value="{ITEM_NAME}" class="input" />{FV_ITEM_NAME}</dd>
    	</dl>
+   	
+   	<hr />
+
+   	<dl>
+	   	<dt><label>{L_NAME}:</label></dt>
+   		<dd><input type="text" name="item_name_db" size="30" maxlength="255" value="{ITEM_GAMEID}" class="input ro" readonly="readonly" /></dd>
+   		
+	</dl>
+	<dl>
+
+
    	<dl>
 	   	<dt><label>{L_ENTER_NEW_GAMEITEMID}:</label>{L_GAMEITEMID_EXPLAIN}</dt>
    		<dd><input type="text" name="item_gameid" size="15" maxlength="255" value="{ITEM_GAMEID}" class="input" /></dd>
@@ -251,7 +273,7 @@ fieldset dd {
     	<dd> <input type="text" name="item_value" size="10" maxlength="10" value="{ITEM_VALUE}" class="input" />{FV_ITEM_VALUE}</dd>
 	 </dl>
 	 
-	 
+
 	 
 	<!-- IF S_SHOWDECAY -->
 	 <dl>

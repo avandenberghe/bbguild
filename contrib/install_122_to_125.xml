@@ -6,13 +6,13 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.2.2 to 1.2.4]]></title>
-		<description lang="en"><![CDATA[Update script 1.2.2 to 1.2.4]]></description>
-		<description lang="fr"><![CDATA[mise à jour 1.2.2 vers 1.2.4]]></description>
-		<description lang="de"><![CDATA[Aktualisierung 1.2.2 bis 1.2.4]]></description>
-		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.4, Please read docs/INSTALL.html before beginning]]></author-notes>
-		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.4, Veuillez lire docs/INSTALL.html avant de commencer.]]></author-notes>
-		<author-notes lang="de"><![CDATA[benötigt bbdkp 1.2.4, Bitte lesen sie docs/INSTALL.html bevor.]]></author-notes>
+		<title lang="en"><![CDATA[bbDKP 1.2.2c to 1.2.5]]></title>
+		<description lang="en"><![CDATA[Update script 1.2.2c to 1.2.5]]></description>
+		<description lang="fr"><![CDATA[mise à jour 1.2.2c vers 1.2.5]]></description>
+		<description lang="de"><![CDATA[Aktualisierung 1.2.2c bis 1.2.5]]></description>
+		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.5, Please read docs/INSTALL.html before beginning]]></author-notes>
+		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.5, Veuillez lire docs/INSTALL.html avant de commencer.]]></author-notes>
+		<author-notes lang="de"><![CDATA[benötigt bbdkp 1.2.5, Bitte lesen sie docs/INSTALL.html bevor.]]></author-notes>
 		<author-group>
 			<author>
 				<realname><![CDATA[Andy Vandenberghe]]></realname>
@@ -73,7 +73,7 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2.4</mod-version>
+		<mod-version>1.2.5</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>600</time>
@@ -121,36 +121,33 @@
 			<file name="styles/prosilver/template/dkp/viewmember.html"/>
 			<file name="styles/prosilver/template/dkp/viewnews.html"/>
 			<file name="styles/prosilver/template/dkp/viewraid.html"/>
-			<!-- delete unneeded files 1.2.4 -->
+			<!-- delete unneeded files 1.2.5 -->
 			<file name="includes/bbdkp/pchart"/>
+			<file name="root/images/pchart/"/>
 			<file name="styles/prosilver/template/dkp/jquery-1.4.4.min.js"/>				
 		</delete>
 		<copy>
-			<file from="root/adm/findclassrace.php" to="adm/findclassrace.php"/>
-			<file from="root/adm/findfaction.php" to="adm/findfaction.php"/>
-			<file from="root/adm/mods/bbdkp_check_version.php" to="adm/mods/bbdkp_check_version.php"/>
-			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
+			<!-- copy all 1.2.5 files -->
+			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
+			<file from="root/portal.php" to="portal.php"/>
 			<file from="root/dkp.php" to="dkp.php"/>
-			<file from="root/images/class_images/*.*" to="images/class_images/*.*"/>
-			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>
-			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>
+			<file from="root/configdkp.php" to="configdkp.php"/>
+			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
+			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
+			<file from="root/images/*.*" to="images/*.*"/>
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
-			<file from="root/includes/bbdkp/bbdkpfunctions.php" to="includes/bbdkp/bbdkpfunctions.php"/>
-			<file from="root/includes/bbdkp/bbdkp.php" to="includes/bbdkp/bbdkp.php"/>
+			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
+			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
+			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/includes/bbdkp/block/*.*" to="includes/bbdkp/block/*.*"/>
 			<file from="root/includes/bbdkp/module/*.*" to="includes/bbdkp/module/*.*"/>
-			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>
-			<file from="root/includes/ucp/info/*.*" to="includes/ucp/info/*.*"/>
-			<file from="root/portal.php" to="portal.php"/>
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/jquery-1.6.2.min.js" to="styles/prosilver/template/dkp/jquery-1.6.2.min.js"/>
-			<file from="root/styles/prosilver/template/dkp/jquery.tools.min.js" to="styles/prosilver/template/dkp/jquery.tools.min.js"/>
-			<file from="root/styles/prosilver/template/dkp/flot/*.*" to="styles/prosilver/template/dkp/flot/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/ucp_dkp.html" to="styles/prosilver/template/dkp/ucp_dkp.html"/>			
-			<file from="root/styles/prosilver/template/dkp/module/*.*" to="styles/prosilver/template/dkp/module/*.*"/>
+			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
+			<file from="root/styles/prosilver/template/dkp/module/*.*" to="styles/prosilver/template/dkp/module/*.*"/>			
 			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>
-			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
+			<file from="root/styles/prosilver/theme/*.*" to="styles/prosilver/theme/*.*"/>
+			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
 		<open src="includes/functions.php">
@@ -180,24 +177,6 @@
 			]]></action>
 			</edit>
 		</open>
-		<open src="styles/prosilver/template/overall_header.html">
-			<edit>
-				<comment lang="en"><![CDATA[move header edit to dkpheader see http://bit.ly/ovx91i]]></comment>
-				<comment lang="fr"><![CDATA[suppression edition entête see http://bit.ly/ovx91i]]></comment>
-				<comment lang="de"><![CDATA[Löschung overall_header link see http://bit.ly/ovx91i]]></comment>
-				<remove><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></remove>
-			</edit>
-		</open>		
-		<open src="styles/prosilver/template/dkp/dkpmain.html">
-			<edit>
-				<comment lang="en"><![CDATA[move header edit to dkpheader see http://bit.ly/ovx91i]]></comment>
-				<comment lang="fr"><![CDATA[suppression edition entête see http://bit.ly/ovx91i]]></comment>
-				<comment lang="de"><![CDATA[Löschung overall_header link see http://bit.ly/ovx91i]]></comment>
-				<find><![CDATA[<!-- INCLUDE overall_header.html -->]]></find>
-				<action type="after-add"><![CDATA[
-<!-- INCLUDE dkp/dkpheader.html -->]]></action>
-			</edit>
-		</open>		
 		<open src="styles/prosilver/template/dkp/dkpheader.html">
 			<edit>
 				<comment lang="en"><![CDATA[update jquery]]></comment>
@@ -225,18 +204,18 @@
 What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
-1) Run bbDKP 1.2.4 database update : install/index.php 
+1) Run bbDKP 1.2.2 > 1.2.5 database update : install/index.php 
 2) delete the install folder. 
 		Enjoy ;)]]></diy-instructions>
 <diy-instructions lang="fr"><![CDATA[le guide de mise à jour : /docs/install.html
 Liste des changements : /docs/changelog.html
 
-1) lancer la mise à jour : install/index.php 
+1) lancer la mise à jour 1.2.2 > 1.2.5 : install/index.php 
 2) Supprimer le repertoire /install pour réactiver le forum.]]></diy-instructions>
 <diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) Datenbank aktualisierung : install/index.php 
+1) Datenbank aktualisierung 1.2.2 > 1.2.5 : install/index.php 
 2) lösche das Installations-Verzeichnis „install"]]></diy-instructions>
 	</action-group>
 </mod>

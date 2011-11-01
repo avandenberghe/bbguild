@@ -74,14 +74,29 @@
  <legend>{L_MENU_NEWS}</legend>
  
   <dl>
-    <dt><label for="user_nlimit">{L_NEWS_PER_PAGE}:</label></dt>
+    <dt><label for="bbdkp_user_nlimit">{L_NEWS_PER_PAGE}:</label></dt>
     <dd><input type="text" name="bbdkp_user_nlimit" id="bbdkp_user_nlimit" size="20" maxlength="30" value="{USER_NLIMIT}" class="input" />{FV_DEFAULT_NLIMIT}</dd>
   </dl>
 
 
  </fieldset>
  
-  
+
+<fieldset>
+ <legend>{L_MEMBERS}</legend>
+ 
+ <dl>
+    <dt><label for="bbdkp_user_llimit">{L_LISTMEMBERS_PER_PAGE}:</label></dt>
+    <dd><input type="text" name="bbdkp_user_llimit" id="bbdkp_user_llimit" size="20" maxlength="30" value="{USER_LLIMIT}" class="input" />{FV_DEFAULT_LLIMIT}</dd>
+ </dl>
+   
+<dl>
+    <dt><label for="maxchars">{L_MAX_NUMBER_CHARS}:</label><br /><span>{L_MAX_NUMBER_CHARS_EXPLAIN}</span></dt>
+    <dd><input type="text" name="maxchars" id="maxchars" size="5" maxlength="2" value="{MAXCHARS}" class="input" /></dd>
+ </dl>
+</fieldset>
+
+
  <fieldset>
  <legend>{L_MENU_ROSTER}</legend>
  <dl>
@@ -194,19 +209,33 @@
  
  <fieldset>
  <legend>{L_MENU_RAIDS}</legend>
-   
+ 
  <dl>
     <dt><label for="user_rlimit">{L_RAIDS_PER_PAGE}:</label></dt>
     <dd><input type="text" name="bbdkp_user_rlimit" id="bbdkp_user_rlimit" size="20" maxlength="30" value="{USER_RLIMIT}" class="input" />{FV_DEFAULT_RLIMIT}</dd>
   </dl>
 
-<hr/>
+</fieldset>
 
+
+ <fieldset>
+ <legend>{L_MENU_DKP}</legend>
+ 
+<dl>	
+	<dt>
+		{L_SYNCDKP} <br/>
+		{L_SYNCDKP_EXPLAIN}
+	</dt>
+	<dd>
+		<INPUT type="submit" name="syncdkp" value="{L_SYNC}" class="button1" >
+	</dd>
+</dl>
+
+<hr/>
 
 <h3>{L_STANDARDDKP}</h3>
 <p>{L_STANDARDDKP_EXPLAIN}</p>
 
-  
 <hr/>
 
 <h3>{L_TIMEDKP}</h3>

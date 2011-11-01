@@ -203,6 +203,7 @@ class acp_dkp_sys extends bbDKP_Admin
 				// add dkpsys button redirect
 				$showadd = (isset ( $_POST ['dkpsysadd'] )) ? true : false;
 				$delete = (isset ( $_GET ['delete'] ) && isset ( $_GET [URI_DKPSYS] )) ? true : false;
+				
 				if ($showadd)
 				{
 					redirect ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=adddkpsys" ) );
@@ -322,7 +323,7 @@ class acp_dkp_sys extends bbDKP_Admin
 					$success_message = sprintf ( $user->lang ['ADMIN_DEFAULTPOOL_SUCCESS'], request_var ( 'defaultsys', '' ) );
 					trigger_error ( $success_message . $link) ;
 				}
-				
+	
 				$template->assign_vars ( array (
 					'L_TITLE' => $user->lang ['ACP_LISTDKPSYS'], 
 					'L_EXPLAIN' => $user->lang ['ACP_LISTDKPSYS_EXPLAIN'], 
@@ -332,14 +333,256 @@ class acp_dkp_sys extends bbDKP_Admin
 					'START' => $start, 
 					'LISTDKPSYS_FOOTCOUNT' => sprintf ( $user->lang ['LISTDKPSYS_FOOTCOUNT'], $total_dkpsys, $config ['bbdkp_user_elimit'] ), 
 					'DKPSYS_PAGINATION' => generate_pagination ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;" ) . "&amp;o=" . 
-						$current_order ['uri'] ['current'], $total_dkpsys, $config ['bbdkp_user_elimit'], $start ) ) );
+						$current_order ['uri'] ['current'], $total_dkpsys, $config ['bbdkp_user_elimit'], $start )), true );
 				$this->page_title = 'ACP_LISTDKPSYS';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
-			
-		
-		
 		}
+	}
+	
+	
+	/**
+	 * resynchronises the DKP points table with the adjustments, raids, items.
+	 * very unusually you need to run this. 
+	 *
+	 */
+	public function syncdkpsys()
+	{
+		global $user, $db, $phpbb_admin_path, $phpEx, $config;
+		$link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys" ) . '"><h3>'. $user->lang['RETURN_DKPPOOLINDEX'].'</h3></a>';
+		
+		/* start transaction */
+		$db->sql_transaction('begin');
+		
+		/* reinintialise the dkp points table */
+		$sql = "DELETE from " . MEMBER_DKP_TABLE;
+		$db->sql_query ($sql);
+
+		/* select adjustments */
+		$sql = "SELECT adjustment_dkpid, member_id, SUM(adjustment_value) AS adjustment_value
+			FROM " . ADJUSTMENTS_TABLE . ' 
+			GROUP BY adjustment_dkpid, member_id 
+			ORDER BY adjustment_dkpid, member_id';
+		$result = $db->sql_query ($sql);
+		while ($row = $db->sql_fetchrow ( $result))
+		{
+
+			$query = $db->sql_build_array('INSERT', array(
+		    'member_dkpid'     	   => $row['adjustment_dkpid'],
+            'member_id'           =>  $row['member_id'],
+         	'member_earned'       =>  0.00,
+            'member_spent'        =>  0.00,
+        	'member_adjustment'   =>  $row['adjustment_value'],
+        	'member_status'       =>  1,
+            'member_firstraid'    =>  0,
+        	'member_lastraid'     =>  0,
+        	'member_raidcount'    =>  0 )
+	        );
+    	    $db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
+		}
+		$db->sql_freeresult ( $result);
+		
+		/* select raids */
+		$sql = 'SELECT e.event_dkpid, d.member_id FROM '. 
+			EVENTS_TABLE . ' e 
+			INNER JOIN ' . RAIDS_TABLE. ' r ON e.event_id = r.event_id	 	
+			INNER JOIN ' . RAID_DETAIL_TABLE . ' d ON r.raid_id = d.raid_id
+			GROUP BY e.event_dkpid, d.member_id';
+		
+		$dkpcorr = 0;
+		$dkpadded = 0;
+		$dkpspentcorr = 0;
+			
+		$result0 = $db->sql_query ($sql);
+		while ($row = $db->sql_fetchrow ( $result0 ))
+		{
+			$member_id = $row['member_id'];
+			$event_dkpid = $row['event_dkpid'];
+
+			/* select raid values */
+			$sql = 'SELECT 
+				MIN(r.raid_start) as first_raid,
+				MAX(r.raid_start) as last_raid, 
+				COUNT(d.raid_id) as raidcount,
+				SUM(d.raid_value) as raid_value, 
+				SUM(d.time_bonus) as time_bonus, 
+				SUM(d.raid_decay) as raid_decay, 
+				SUM(d.zerosum_bonus) as zerosum_bonus
+				FROM '. EVENTS_TABLE . ' e 
+				INNER JOIN ' . RAIDS_TABLE. ' r ON e.event_id = r.event_id	 	
+				INNER JOIN ' . RAID_DETAIL_TABLE . ' d ON r.raid_id = d.raid_id
+				WHERE d.member_id = ' . $member_id . ' 
+				AND	e.event_dkpid = ' . $event_dkpid;
+			$result = $db->sql_query ($sql);
+			while ( ($rowd = $db->sql_fetchrow ( $result )) ) 
+			{
+				$first_raid = $rowd['first_raid'];
+				$last_raid = $rowd['last_raid'];
+				$raidcount= $rowd['raidcount'];
+				$raid_value = $rowd['raid_value'];
+				$time_bonus = $rowd['time_bonus'];
+				$raid_decay= $rowd['raid_decay'];
+				$zerosum_bonus = $rowd['zerosum_bonus'];
+			}
+			$db->sql_freeresult ( $result);
+			
+			$sql =  'SELECT count(*) as count FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' 
+			AND	member_dkpid = ' . $event_dkpid; 
+			$result = $db->sql_query ($sql);
+			$count = $db->sql_fetchfield('count', 0, $result);
+			$db->sql_freeresult ( $result);
+			if($count ==1)
+			{
+				$sql =  'SELECT * FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' 
+				AND	member_dkpid = ' . $event_dkpid; 
+				$result = $db->sql_query ($sql);
+				while ( ($rowe = $db->sql_fetchrow ( $result )) ) 
+				{
+					$first_raid_accounted = $rowe['member_firstraid'];
+					$last_raid_accounted = $rowe['member_lastraid'];
+					$raidcount_accounted= $rowe['member_raidcount'];
+					$raid_value_accounted = $rowe['member_raid_value'];
+					$time_bonus_accounted = $rowe['member_time_bonus'];
+					$raid_decay_accounted= $rowe['member_raid_decay'];
+					$zerosum_bonus_accounted = $rowe['member_zerosum_bonus'];
+					$earned_accounted = $rowe['member_earned'];
+				}
+				$db->sql_freeresult ( $result);
+			
+				if(( $first_raid != $first_raid_accounted) ||
+				($last_raid != $last_raid_accounted) ||
+				($raidcount != $raidcount_accounted) ||
+				($raid_value != $raid_value_accounted) ||
+				($time_bonus != $time_bonus_accounted) ||
+				($raid_decay != $raid_decay_accounted) ||
+				($zerosum_bonus != $zerosum_bonus_accounted))
+				{
+					$dkpcorr +=1;
+					
+					$data = array(
+				    'member_firstraid'      => $first_raid,
+				    'member_lastraid'       => $last_raid,
+				    'member_raidcount'      => $raidcount,
+				    'member_raid_value'     => $raid_value,
+				    'member_time_bonus'     => $time_bonus,
+				    'member_raid_decay'     => $raid_decay,
+					'member_zerosum_bonus'	=> $zerosum_bonus, 
+				    'member_earned'     	=> $raid_value+$time_bonus+$zerosum_bonus-$raid_decay,					
+					);
+					
+					$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' 
+					SET ' . $db->sql_build_array('UPDATE', $data) . 
+					' WHERE member_id = ' . $member_id . ' 
+					AND	member_dkpid = ' . $event_dkpid; 
+					$db->sql_query ($sql);
+					
+				}
+			}
+			else
+			{
+				//delete and reinsert
+				$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' 
+				AND	member_dkpid = ' . $event_dkpid;
+				$db->sql_query ($sql);
+				
+				$data = array(
+				'member_dkpid'      	=> $event_dkpid,
+				'member_id'      		=> $member_id,
+				'member_status'      	=> 1,
+				'member_firstraid'      => $first_raid,
+			    'member_lastraid'       => $last_raid,
+			    'member_raidcount'      => $raidcount,
+			    'member_raid_value'     => $raid_value,
+			    'member_time_bonus'     => $time_bonus,
+			    'member_raid_decay'     => $raid_decay,
+				'member_zerosum_bonus'	=> $zerosum_bonus, 
+			    'member_earned'     	=> $raid_value+$time_bonus+$zerosum_bonus-$raid_decay,
+				);
+				$dkpadded +=1;
+				
+				$sql = 'INSERT INTO ' . MEMBER_DKP_TABLE . $db->sql_build_array('INSERT', $data);
+				$db->sql_query ($sql);
+		
+			}
+		}
+		$db->sql_freeresult ( $result0);	
+			
+		/* select loot */
+		$sql = 'SELECT e.event_dkpid, i.member_id FROM '. 
+				EVENTS_TABLE . ' e 
+				INNER JOIN ' . RAIDS_TABLE. ' r ON e.event_id = r.event_id 
+				INNER JOIN ' . RAID_ITEMS_TABLE . ' i ON r.raid_id = i.raid_id 
+				GROUP BY e.event_dkpid, i.member_id' ;
+		
+		$result0 = $db->sql_query ($sql);
+
+		while ($row = $db->sql_fetchrow ( $result0 ))
+		{
+			$member_id = $row['member_id'];
+			$event_dkpid = $row['event_dkpid'];
+			$item_value = 0;
+			$item_decay =0;
+			/* select lootvalues */
+			$sql = 'SELECT 
+				SUM(i.item_value) as item_value, 
+				SUM(i.item_decay) as item_decay 
+				FROM '. EVENTS_TABLE . ' e 
+				INNER JOIN ' . RAIDS_TABLE. ' r ON e.event_id = r.event_id	 	
+				INNER JOIN ' . RAID_ITEMS_TABLE . ' i ON i.raid_id = r.raid_id
+				WHERE i.member_id = ' . $member_id . ' 
+				AND	e.event_dkpid = ' . $event_dkpid;
+			$result = $db->sql_query ($sql);
+			while ( ($rowd = $db->sql_fetchrow ( $result )) ) 
+			{
+				$item_value = $rowd['item_value'];
+				$item_decay= $rowd['item_decay'];
+			}
+			$db->sql_freeresult ( $result);
+			
+			$sql =  'SELECT count(*) as count FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' 
+			AND	member_dkpid = ' . $event_dkpid; 
+			$result = $db->sql_query ($sql);
+			$count = $db->sql_fetchfield('count', 0, $result);
+			$db->sql_freeresult ( $result);
+			if($count == 1 )
+			{
+				$sql =  'SELECT * FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' 
+				AND	member_dkpid = ' . $event_dkpid; 
+				$result = $db->sql_query ($sql);
+				while ( ($rowe = $db->sql_fetchrow ( $result )) ) 
+				{
+					$item_value_accounted = $rowe['member_spent'];
+					$item_decay_accounted = $rowe['member_item_decay'];
+				}
+				$db->sql_freeresult ( $result);
+				if(( $item_value  != $item_value_accounted) ||
+				($item_decay  != $item_decay_accounted))
+				{
+					$dkpspentcorr += 1;
+					/* account exists */
+					$data = array(
+				    'member_spent'     		=> $item_value,					
+				    'member_item_decay'     => $item_decay,
+					);
+					
+					$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' 
+					SET ' . $db->sql_build_array('UPDATE', $data) . 
+					' WHERE member_id = ' . $member_id . ' 
+					AND	member_dkpid = ' . $event_dkpid; 
+					$db->sql_query ($sql);
+						
+					
+				}
+			}
+			// case count=0 is not possible
+		}
+		$db->sql_freeresult ( $result0);
+		
+		$db->sql_transaction('commit');
+		
+		$message = sprintf($user->lang['ADMIN_DKPPOOLSYNC_SUCCESS'] , $dkpcorr  + $dkpspentcorr);
+		trigger_error ( $message . $this->link , E_USER_NOTICE );
+				
 	}
 
 }

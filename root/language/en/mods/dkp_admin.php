@@ -193,6 +193,7 @@ $lang = array_merge($lang, array(
 'UMIL_NOGAMECHOSEN' => 'Plase choose a game before installing.', 
 'UMIL_UPD123' => 'Updated tables to v1.2.3', 
 'UMIL_GAME123' => 'Game data installed for %s', 
+'UMIL_GAME125' => 'Game data installed for %s', 
 'UMIL_GAMEUNINST123' => 'Game data uninstalled', 
 
 // ACP titles
@@ -236,7 +237,7 @@ $lang = array_merge($lang, array(
 'RETURN_RANK'  => 'Return to Rank List. ',
 'ACP_DKP' => 'bbDKP Adminpanel',
 'ACP_ITEMSTATS' => 'Popup Configuration',
-'ACP_INDEXPAGE' => 'Portal Configuration', 
+'ACP_INDEXPAGE' => 'Portal Configuration',
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Adminpanel Index',
@@ -250,7 +251,7 @@ $lang = array_merge($lang, array(
 'ACP_LISTITEMS_EXPLAIN' => 'List of Purchased Items. you can filter by Dkp pool and raid. ',
 'ACP_ADDRAID_EXPLAIN' => 'Here you can add a new raid.',
 'ACP_EDITRAID_EXPLAIN' => 'Here you can edit your raid.',
-'ACP_LISTRAIDS_EXPLAIN' => 'Here is a list of Raids per DKP pool. Clicking on the raidname brings you in Edit/delete-mode',
+'ACP_LISTRAIDS_EXPLAIN' => 'Here is a list of Raids per DKP pool. Clicking on the raidname or the green wheel brings you in Edit/delete-mode. The Duplicate button creates a copy of the selected raid without the loot.',
 'ACP_DKP_LOGS_EXPLAIN' => 'This lists all the actions in bbDKP. You can sort by username, date, IP or action.',
 'ACP_MM_RANKS_EXPLAIN' => 'Here you can add/edit/delete raid ranks and name prefix/suffix. Ranks can be overwritten by the in-game ranks through the armorylink plugin. Custom ranks (90 and 99) are read-only. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Guild member list. Shows only visible ranks. You can add new guild members or update existing ones or remove them. (delete their their DKP account first). If you have the Armory plugin you can add new members in batch.',
@@ -283,7 +284,7 @@ $lang = array_merge($lang, array(
 'ACP_DKP_LOOTSYSTEMEXPLAIN'	=> 'A short guide to Loot systems',
 'EDIT_RAIDER_EXPLAIN' => 'Here you can edit a Raiders earned points',
 'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Note : Game cannot be changed once it is set.',
-
+'SYNCDKP_EXPLAIN'	=> 'Truncates the member DKP Table, rebuilds the values from the source Raid, Raid detail, Items, Adjustments table. Use only when necessary.',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -506,6 +507,7 @@ $lang = array_merge($lang, array(
 'ADMIN_DELETE_MEMBERS_FAILED' => 'ERROR : %s, including all of his/her history, could not be deleted.',
 'ADMIN_DELETE_NEWS_SUCCESS' => 'The news entry has been deleted from the database for your guild.',
 'ADMIN_DELETE_RAID_SUCCESS' => 'The raid and any items associated with it have been deleted from the database for your guild.',
+'ADMIN_DUPLICATE_RAID_SUCCESS' => 'The %s raid on %s was duplicated.',
 'ADMIN_TRANSFER_HISTORY_SUCCESS' => 'All of %s’s history has been transferred to %s and %s has been deleted from the database for your guild.',
 'ADMIN_UPDATE_ADJ_SUCCESS' => 'The %s adjustment of %.2f has been updated in the database for your guild.',
 'ADMIN_UPDATE_DKPSYS_SUCCESS' => 'The name,status of DKP pool %s was changed to : %s, %s',
@@ -513,8 +515,8 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_EVENT_SUCCESS' => 'The value preset of %s for a event on %s has been updated in the database for your guild.',
 'ADMIN_UPDATE_IADJ_SUCCESS' => 'The individual %s adjustment of %.2f for %s has been updated in the database for your guild.',
 'ADMIN_UPDATE_ITEM_SUCCESS' => 'The item purchase entry for %s, purchased by %s for %.2f has been updated in the database for your guild.',
-'ADMIN_UPDATE_MEMBER_SUCCESS' => 'membership settings for %s have been updated.',
-'ADMIN_UPDATE_MEMBER_FAIL' => 'This membername %s already exists for another member in the database, cannot update.', 
+'ADMIN_UPDATE_MEMBER_SUCCESS' => 'Character settings for %s have been updated.',
+'ADMIN_UPDATE_MEMBER_FAIL' => 'Cannot update Character name %s.', 
 'ADMIN_UPDATE_MEMBERDKP_SUCCESS' => 'Dkp for %s has been updated.',
 'ADMIN_UPDATE_NEWS_SUCCESS' => 'The news entry has been updated in the database for your guild.',
 'ADMIN_UPDATE_RAID_SUCCESS' => 'The %d/%d/%d raid on %s has been updated in the database for your guild.',
@@ -543,7 +545,7 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_RACE_SUCCESS' => 'The race %s was updated successfully. ',
 'ADMIN_UPDATE_LOOTSYS_SUCCESS' => 'The Loot system is now set to %s . ',
 'ADMIN_RAID_ATTENDEE_DELETED_SUCCESS' => 'Attendee %s was deleted from raid %s',
-
+'ADMIN_DKPPOOLSYNC_SUCCESS' => '%s DKP accounts were synchronised.',
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Active Point Adjustment',
@@ -578,7 +580,7 @@ $lang = array_merge($lang, array(
 'VERSION_UPDATE' => 'Version Update',
 'VERSION_NOTONLINE' => 'bbDKP callback failed, cannot look up latest version.',
 'WHO_ONLINE' => 'Who’s Online',
-'LISTMEMBERS_PER_PAGE' => 'Dkp Guildmembers per Page',
+'LISTMEMBERS_PER_PAGE' => 'Members per Page',
 
 // LOOTSYSTEM
 'DESCRIPTION' => 'lootsystem',
@@ -660,6 +662,7 @@ So the loot would go to player 2 <br />',
 'RESYNC_DECAY_CONFIRM'			=> 'Are you sure you wish to resynchronise Decay values? This will affect all EP end GP values. ',
 'RESYNC_DECAY_EXPLAIN'			=> 'First sets all raid and item decay to zero, then if Decay flag is set, recalculates Decay according to parameters.',
 'RESYNC_DECAY_SUCCESS'			=> 'Successfully decayed %s raids',
+'RESYNC_DKP_CONFIRM'			=> 'Are you SURE you wish to resynchronise DKP values ? ',
 
 'MENU_RAIDS' => 'Raids',
 'MENU_EVENTS' => 'Events',
@@ -669,6 +672,7 @@ So the loot would go to player 2 <br />',
 'MENU_GENERAL' => 'General Settings',
 'MENU_STANDINGS' => 'Standings',
 'MENU_ROSTER'	=> 'Roster',
+'MENU_DKP'	=> 'DKP Settings',
 
 'NONE' => 'None',
 'PARSETAGS' => 'Guildtags to Parse',
@@ -682,6 +686,8 @@ So the loot would go to player 2 <br />',
 'REGIONUS'	=> 'US region',
 'SITE_NAME' => 'Site Name',
 'SITE_DESCRIPTION' => 'Site Description',
+'SYNCDKP'	=> 'Synchronise DKP Pools',
+'SYNC'	=> 'Synchronise',
 'YOURVERSION'	   => 'Your bbDKP Version :', 
 
 // roster
@@ -707,6 +713,7 @@ So the loot would go to player 2 <br />',
 'ADD_RAID_TITLE' => 'Add a Raid',
 'ADD_RAIDER_TITLE' => 'Add a Raider',
 'ADMIN_INDEX_TITLE' => 'bbDKP Administration',
+'DEFAULTDKP'	=> 'Confirm default Pool',
 'MANAGE_MEMBERS_TITLE' => 'Manage Guild Members',
 'VIEWLOGS_TITLE' => 'Log Viewer',
 'EDITMEMBER_DKP_TITLE' => 'Edit Guildmember DKP', 
@@ -754,7 +761,8 @@ So the loot would go to player 2 <br />',
 'DELETE_MEMBER_DKP' => 'Delete Member dkp',
 'DELETE_RAID' => 'Delete Raid',
 'DELETE_SELECTED_MEMBERS' => 'Delete Selected Member(s)',
-'DELETE_SELECTED_GUILDS' => 'Delete Selected Guild(s)', 
+'DELETE_SELECTED_GUILDS' => 'Delete Selected Guild(s)',
+'DUPLICATE_RAID' => 'Duplicate Raid', 
 'EDIT_GUILD' => 'Edit Guild',
 'SEARCH_EXISTING' => 'Search Existing',
 'SELECT' => 'Select',
@@ -798,6 +806,7 @@ So the loot would go to player 2 <br />',
 'DEFAULT_DKP_POOL' => 'Default DKP Pool', 
 'DKPPERTIME' => '%s DKP per %s minutes.', 
 'DONE' => 'Done',
+'DUPLICATED'	=> 'Duplicated', 
 'HOLD_CTRL_NOTE' => 'Hold CTRL(PC) or CMD(Mac) to select multiple<br />',
 'DKP_STATUS' => 'DKP pool status (Y or N)',
 'DKPTIMEUNIT' => 'DKP earned per unit of time', 
@@ -896,6 +905,8 @@ So the loot would go to player 2 <br />',
 'ATTENDANCEDAYS' => 'Attendance days (for Standings)',
 'STATISTICS' => 'Statistics',
 'TOTALS' => 'Totals',
+'MAX_NUMBER_CHARS_EXPLAIN' => 'Maximum number of characters that members are allowed to add or claim.', 
+'MAX_NUMBER_CHARS' => 'Maximum #characters',
 
 //js alerts
 'ALERT_AJAX' => 'There was a problem while using XMLHTTP', 
