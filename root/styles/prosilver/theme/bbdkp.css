@@ -23,27 +23,6 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	white-space: nowrap;
 }
 
-/*  Index page
---------------------*/ 
-.portalbody table {
-	width: 100%;
-}
-
-.portalbody td.portalleft {
-	padding-right: 1px;
-	width: 0%;
-}
-
-.portalbody td.portalcenter {
-	padding: 2px;
-	width: 80%;
-}
-
-.portalbody td.portalright {
-	padding-left: 1px;
-	width: 20%;
-}
-
 /* mainmenu.html  */
 .portalmenu ul 
 {
@@ -53,7 +32,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 }
 
 .portalmenu a:hover {
-	background-color: #F9F9F9;
+	/*background-color: #F9F9F9;*/
 	color: #D31141;
 }
 
