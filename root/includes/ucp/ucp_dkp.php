@@ -695,8 +695,8 @@ class ucp_dkp
 		}
 		$acp_dkp_mm = new acp_dkp_mm ( );
 			
-		if ($acp_dkp_mm->updatemember($member_name, $member_status, $member_lvl, $race_id, $class_id, 
-			$rank_id, $member_comment, $guild_id, $gender, 0, ' ' ,' ' , $game_id))
+		if ($acp_dkp_mm->updatemember($member_name, $member_lvl, $race_id, $class_id, 
+			$rank_id, $member_comment, $guild_id, $gender, 0, ' ' ,' ' , $game_id, $member_status))
 		{
 			// record updated. 
 			$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], ucwords($member_name));
