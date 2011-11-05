@@ -2182,10 +2182,9 @@ class acp_dkp_mm extends bbDKP_Admin
      * is also called from armory plugin for updating existing guildmembers
      * url is not updated
      */
-    public function updatemember($member_name, $member_status,  
-    	$member_lvl, $race_id, $class_id, $rank_id, $member_comment, $guild_id, 
+    public function updatemember($member_name, $member_lvl, $race_id, $class_id, $rank_id, $member_comment, $guild_id, 
     	$gender, $achievpoints, $memberarmoryurl= ' ',
-    	$memberportraiturl=' ', $game_id = 'wow') 
+    	$memberportraiturl=' ', $game_id = 'wow', $member_status = 1) 
     {
         global $db, $user, $config;   	
         
