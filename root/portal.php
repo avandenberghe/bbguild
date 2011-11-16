@@ -3,7 +3,7 @@
  * Indexpage for bbdkp
  * 
  * @package bbDKP
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2011 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author ippehe <ippe.he@gmail.com>
  * @version $Id$
@@ -34,11 +34,9 @@ $user->session_begin();
 $auth->acl($user->data);
 $user->setup('viewforum');
 $user->add_lang(array('mods/dkp_common'));
-
 /***** blocks ************/
 
-/* fixed bocks */
-
+/* fixed bocks -- always displayed */
 include($phpbb_root_path . 'includes/bbdkp/block/newsblock.' . $phpEx);
 
 /* show loginbox or usermenu */
@@ -53,7 +51,17 @@ else
 
 include($phpbb_root_path . 'includes/bbdkp/block/whoisonline.' . $phpEx);
 
-// variable blocks
+// variable blocks - these depend on acp
+if ($config['bbdkp_portal_welcomemsg'])
+{
+		include($phpbb_root_path . 'includes/bbdkp/block/recruitmentblock.' . $phpEx);
+}
+
+if ($config['bbdkp_portal_menu'])
+{
+	include($phpbb_root_path . 'includes/bbdkp/block/mainmenublock.' . $phpEx);
+}
+
 if ($config['bbdkp_portal_loot'])
 {
 	include($phpbb_root_path . 'includes/bbdkp/block/lootblock.' . $phpEx);
@@ -61,7 +69,7 @@ if ($config['bbdkp_portal_loot'])
 
 if ($config['bbdkp_portal_recruitment'])
 {
-		include($phpbb_root_path . 'includes/bbdkp/block/recruitmentblock.' . $phpEx);
+		include($phpbb_root_path . 'includes/bbdkp/block/welcomeblock.' . $phpEx);
 }
 
 $template->assign_var('S_BPSHOW', false);
@@ -79,10 +87,6 @@ if ($config['bbdkp_portal_links'])
 	include($phpbb_root_path . 'includes/bbdkp/block/linksblock.' . $phpEx);
 }
 
-if ($config['bbdkp_portal_menu'])
-{
-	include($phpbb_root_path . 'includes/bbdkp/block/mainmenublock.' . $phpEx);
-}
 
 /***** end blocks ********/
 

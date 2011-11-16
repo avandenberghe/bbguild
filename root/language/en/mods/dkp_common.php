@@ -58,6 +58,7 @@ $lang = array_merge($lang, array(
 'NEWS_PER_PAGE' => 'News Entries per Page',
 'ERROR_INVALID_NEWS_PROVIDED' => 'A valid news id was not provided.',
 'BOSSPROGRESS' => 'Bossprogress', 	
+'WELCOME'	=> 'Welcome', 
 
 // Main Menu
 'MENU' => 'Menu', 

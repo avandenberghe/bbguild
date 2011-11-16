@@ -32,6 +32,25 @@ fieldset dt {
 <form method="post" action="{F_ADD_CONFIG}" name="post">
 
 <fieldset>
+<legend>{L_WELCOMEBLOCKSETTING}</legend>
+	<dl>
+	<dt>    
+	  <label for="show_welcomeblock">{L_SHOWWELCOME}:</label>
+	  <dd>
+	  		<input type="radio" name="show_welcomeblock" value="1"{SHOW_WELCOME_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
+	  		<input type="radio" name="show_welcomeblock" value="0"{SHOW_WELCOME_NO_CHECKED} /> {L_NO}
+   		</dd>
+   </dl> 
+	
+	<dl>
+		<dt><label>{L_WELCOMEBLOCK}:</label><br />{L_WELCOMEBLOCK_EXPLAIN}</dt>
+		<dd>
+		<textarea name="welcome_message" rows="10" cols="60" style=" font-size: 100%; width: 99%" class="input">{WELCOME_MESSAGE}</textarea>
+		</dd>
+	</dl>
+</fieldset>
+
+<fieldset>
 <legend>{L_NEWSBLOCKSETTING}</legend>
 <br />
  <dl>
@@ -51,6 +70,34 @@ fieldset dt {
     <dd><input type="text" name="n_news" id="n_news" size="20" maxlength="30" value="{N_NEWS}" class="input" /></dd>
   </dl>
  
+</fieldset>
+
+
+<fieldset>
+<legend>{L_MENUBLOCKSETTING}</legend>
+
+  <dl>
+    <dt><label for="show_menublock">{L_SHOWMENUBLOCK}</label><br /></dt>
+    <dd>
+    <input type="radio" name="show_menublock" value="1"{SHOW_MENU_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_menublock" value="0"{SHOW_MENU_NO_CHECKED} /> {L_NO}
+   </dd>
+ </dl>
+</fieldset>
+
+<fieldset>
+<legend>{L_LOOTBLOCKSETTING}</legend>
+
+ <dl>
+    <dt><label for="show_lootblock">{L_SHOWLOOTBLOCK}</label><br /></dt>
+    <dd>
+    <input type="radio" name="show_lootblock" value="1"{SHOW_LOOT_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_lootblock" value="0"{SHOW_LOOT_NO_CHECKED} /> {L_NO}
+   </dd>
+ </dl>
+ 
+    <dl>
+    <dt><label for="n_items">{L_NUMBITEMS}</label></dt>
+    <dd><input type="text" name="n_items" id="n_items" size="20" maxlength="30" value="{N_ITEMS}" class="input" /></dd>
+  </dl>
 </fieldset>
 
 <fieldset>
@@ -121,21 +168,7 @@ fieldset dt {
 </fieldset>
 
 
-<fieldset>
-<legend>{L_LOOTBLOCKSETTING}</legend>
 
- <dl>
-    <dt><label for="show_lootblock">{L_SHOWLOOTBLOCK}</label><br /></dt>
-    <dd>
-    <input type="radio" name="show_lootblock" value="1"{SHOW_LOOT_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_lootblock" value="0"{SHOW_LOOT_NO_CHECKED} /> {L_NO}
-   </dd>
- </dl>
- 
-    <dl>
-    <dt><label for="n_items">{L_NUMBITEMS}</label></dt>
-    <dd><input type="text" name="n_items" id="n_items" size="20" maxlength="30" value="{N_ITEMS}" class="input" /></dd>
-  </dl>
-</fieldset>
 
 <!-- IF S_BP_SHOW -->
 <fieldset>
@@ -163,16 +196,6 @@ fieldset dt {
 </fieldset>
 
 
-<fieldset>
-<legend>{L_MENUBLOCKSETTING}</legend>
-
-  <dl>
-    <dt><label for="show_menublock">{L_SHOWMENUBLOCK}</label><br /></dt>
-    <dd>
-    <input type="radio" name="show_menublock" value="1"{SHOW_MENU_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_menublock" value="0"{SHOW_MENU_NO_CHECKED} /> {L_NO}
-   </dd>
- </dl>
-</fieldset>
 
 
 
