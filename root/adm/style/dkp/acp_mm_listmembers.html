@@ -27,16 +27,22 @@
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
 	<thead>
   <tr>
-    
-    <th style="text-align:left;"  width="35" nowrap="nowrap">{L_ID}</th>
-    <th style="text-align:left;"  width="100"><a href="{O_NAME}">{L_NAME}</a></th>
-    <th style="text-align:left;"  width="40" nowrap="nowrap"><a href="{O_CLASS}">{L_RACE}/{L_CLASS}</a></th>
-    <th style="text-align:left;"  width="20" nowrap="nowrap"><a href="{O_LEVEL}">{L_LEVEL}</a></th>
-    <th style="text-align:left;"  width="50"><a href="{O_PHPBBNAME}">{L_USERNAME}</a></th>
-    <th style="text-align:left;"  width="40"><a href="{O_RANK}">{L_RANK}</a></th>
-    <th style="text-align:left;"  width="30"><a href="{O_JOINDATE}">{L_JOINDATE}</a></th>
-    <th style="text-align:left;"  width="30"><a href="{O_OUTDATE}">{L_OUTDATE}</a></th>
-  	<th style="text-align:center;"  width="5">{L_ACTION}</th>
+    <th style="text-align:center;"  width="6%" nowrap="nowrap">{L_ACTIVE}<br /> 
+    <span class="small"><a href="#" onclick="marklist('memberlist', 'activate_id', true); return false;">{L_MARK_ALL}</a> <br /> 
+    <a href="#" onclick="marklist('memberlist', 'activate_id', false); return false;">{L_UNMARK_ALL}</a></span>
+    </th>
+    <th style="text-align:left;"  width="20%"><a href="{O_NAME}">{L_NAME}</a></th>
+    <th style="text-align:left;"  width="15%" nowrap="nowrap"><a href="{O_CLASS}">{L_RACE}/{L_CLASS}</a></th>
+    <th style="text-align:left;"  width="5%" nowrap="nowrap"><a href="{O_LEVEL}">{L_LEVEL}</a></th>
+    <th style="text-align:left;"  width="10%"><a href="{O_PHPBBNAME}">{L_USERNAME}</a></th>
+    <th style="text-align:left;"  width="10%"><a href="{O_RANK}">{L_RANK}</a></th>
+    <th style="text-align:left;"  width="10%"><a href="{O_JOINDATE}">{L_JOINDATE}</a></th>
+    <th style="text-align:left;"  width="10%"><a href="{O_OUTDATE}">{L_OUTDATE}</a></th>
+  	<th style="text-align:center;"  width="6%">{L_ACTION}
+  	<span class="small"><a href="#" onclick="marklist('memberlist', 'delete_id', true); return false;">{L_MARK_ALL}</a> <br /> 
+	<a href="#" onclick="marklist('memberlist', 'delete_id', false); return false;">{L_UNMARK_ALL}</a></span>
+  	
+  	</th>
   </tr>
   </thead>
   <tbody>
@@ -50,18 +56,18 @@
   <!-- IF members_row.S_READONLY  == 1 -->
   <tr class="highlight">
   <!-- ENDIF -->
-  
-    <td style="text-align:right;" width="35" nowrap="nowrap" align="right">{members_row.ID} <input type="checkbox" class="radio" name="activate_id[]" value="{members_row.ID}" {members_row.STATUS} /></td>
-    <td class="row2" style="text-align:left;" width="100" nowrap="nowrap"><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a></td>
-    <td style="text-align:left;" width="40" nowrap="nowrap"><!-- IF members_row.S_RACE_IMAGE_EXISTS --><img src="{members_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;<span style="color:{members_row.COLORCODE}" >{members_row.CLASS}</span></td>
-    <td style="text-align:center;" width="20" nowrap="nowrap">{members_row.LEVEL}</td>
-    <td style="text-align:left;" width="50" nowrap="nowrap"><a href="{members_row.U_VIEW_USER}">{members_row.USERNAME}</a></td>
-    <td style="text-align:left;" width="40" nowrap="nowrap">{members_row.RANK}</td>
-    <td style="text-align:left;" width="30" nowrap="nowrap">{members_row.JOINDATE}</td>
-    <td style="text-align:left;" width="30" nowrap="nowrap">{members_row.OUTDATE}</td>
-	<td style="text-align:center;" width="5" nowrap="nowrap">
+    <td style="text-align:center;" width="6%" nowrap="nowrap" align="right">{members_row.ID} <input type="checkbox" class="radio" name="activate_id[]" value="{members_row.ID}" {members_row.STATUS} /></td>
+    <td class="row2" style="text-align:left;" width="20%" nowrap="nowrap"><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a></td>
+    <td style="text-align:left;" width="15%" nowrap="nowrap"><!-- IF members_row.S_RACE_IMAGE_EXISTS --><img src="{members_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;<span style="color:{members_row.COLORCODE}" >{members_row.CLASS}</span></td>
+    <td style="text-align:center;" width="5%" nowrap="nowrap">{members_row.LEVEL}</td>
+    <td style="text-align:left;" width="10%" nowrap="nowrap"><a href="{members_row.U_VIEW_USER}">{members_row.USERNAME}</a></td>
+    <td style="text-align:left;" width="10%" nowrap="nowrap">{members_row.RANK}</td>
+    <td style="text-align:left;" width="10%" nowrap="nowrap">{members_row.JOINDATE}</td>
+    <td style="text-align:left;" width="10%" nowrap="nowrap">{members_row.OUTDATE}</td>
+	<td style="text-align:center;" width="10%" nowrap="nowrap">
 		<a href="{members_row.U_VIEW_MEMBER}">{ICON_EDIT} 
 		<!-- IF members_row.S_READONLY == 0 --> <a href="{members_row.U_DELETE_MEMBER}">{ICON_DELETE}</a> <!-- ENDIF -->
+    	<input type="checkbox" class="radio" name="delete_id[{members_row.ID}]" value="1" {members_row.DELETED} />		
 	</td>
 
 
@@ -77,7 +83,7 @@
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
     {S_FORM_TOKEN}
 	<input class="button2" type="submit" name="deactivate" value="{L_CHANGE_STATUS}" />
-	<span class="small"><a href="#" onclick="marklist('memberlist', 'activate_id', true); return false;">{L_MARK_ALL}</a> &bull; <a href="#" onclick="marklist('memberlist', 'activate_id', false); return false;">{L_UNMARK_ALL}</a></span>
+	<input class="button2" type="submit" name="delete" value="{L_DELETE_MEMBER}" />
 	<br /><br />
 </fieldset>
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
