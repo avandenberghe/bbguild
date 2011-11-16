@@ -30,15 +30,16 @@ class acp_dkp_mm extends bbDKP_Admin
 	public $u_action;
 	public $member;
 	public $old_member;
+	public $link = ' ';
 	
 	public function main($id, $mode) 
 	{
-		global $db, $user, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
+		global $user, $template, $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		
 		$user->add_lang(array('mods/dkp_admin'));
 		$user->add_lang(array('mods/dkp_common'));
 
-		$link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>'; 
+		$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>'; 
 		switch ($mode)
 		{
 			/***************************************/
@@ -47,11 +48,7 @@ class acp_dkp_mm extends bbDKP_Admin
             //
 			/***************************************/
 			case 'mm_listmembers':
-
-				// show other guild
-				$submit = (isset ( $_POST ['member_guild_id'] ) ) ? true : false;
-				// set activation flag
-				$activate = (isset ( $_POST ['deactivate'] ) ) ? true : false;
+				
 				// add member button redirect
 				$showadd = (isset( $_POST['memberadd'])) ? true : false;
 				
@@ -61,6 +58,9 @@ class acp_dkp_mm extends bbDKP_Admin
             		break;
             	}
             	
+            	// set activation flag
+				$activate = (isset ( $_POST ['deactivate'] ) ) ? true : false;
+				
 				if ($activate)
 				{
 					if (!check_form_key('mm_listmembers'))
@@ -84,12 +84,25 @@ class acp_dkp_mm extends bbDKP_Admin
 					
 					$db->sql_transaction('commit'); 
 				}
+				
+				// batch delete
+				$del_batch = (isset ( $_POST ['delete'] ) ) ? true : false;
+				if ($del_batch)
+				{
+					$members_tbdel = request_var('delete_id', array(0)); 
+					$this->member_batch_delete($members_tbdel);
+					unset($members_tbdel);
+					
+				}
             	
 				/**************  Guild drop-down query ****************/
 				$sql = 'SELECT id, name, realm, region  
                        FROM ' . GUILD_TABLE . ' 
                        ORDER BY id desc';
 				$resultg = $db->sql_query ( $sql );
+				
+				// show other guild
+				$submit = (isset ( $_POST ['member_guild_id'] ) ) ? true : false;
 				
 				/* check if page was posted back */
 				if ($submit) 
@@ -124,12 +137,13 @@ class acp_dkp_mm extends bbDKP_Admin
     						'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
     						'OPTION' => $row['name'] ));
 					}
+					$db->sql_freeresult ( $resultg );
 				}
 				
 				$previous_data = '';
 				
 				//get total members
-
+				
 				$sql_array = array(
 				    'SELECT'    => 	'count(*) as membercount ' , 
 				    'FROM'      => array(
@@ -302,7 +316,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				$submit	 = (isset($_POST['add'])) ? true : false;
 				$update	 = (isset($_POST['update'])) ? true : false;
 				$generate_armorylink = (isset($_POST['generate_armorylink'])) ? true : false; 
-				$delete	 = (isset($_GET['delete'])) ? true : false;	
+				$delete	 = (isset($_GET['delete']) || isset($_POST['delete']) ) ? true : false;	
 				
 				if ( $submit || $update || $generate_armorylink)
 				{
@@ -542,7 +556,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					);
 					
 					$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], $member_name);
-					trigger_error($success_message . $link);
+					trigger_error($success_message . $this->link);
 					
 				}	
 					
@@ -629,19 +643,19 @@ class acp_dkp_mm extends bbDKP_Admin
 						
 						//@todo if zerosum then put excess points in guildbank
 						
-						$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' where member_id= ' . (int) $del_member;
+						$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' where member_id = ' . (int) $del_member;
 						$db->sql_query($sql);
-						$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' where member_id= ' . (int) $del_member; 
+						$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' where member_id = ' . (int) $del_member; 
 						$db->sql_query($sql);
-						$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' where member_id= ' . (int) $del_member; 
+						$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' where member_id = ' . (int) $del_member; 
 						$db->sql_query($sql);
-						$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE .' where member_id= ' . (int) $del_member; 
+						$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE .' where member_id = ' . (int) $del_member; 
 						$db->sql_query($sql);
-						$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . ' where member_id= ' . (int) $del_member; 
+						$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . ' where member_id = ' . (int) $del_member; 
 						$db->sql_query($sql);
 					
 						$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $this->old_member['member_name']);
-						trigger_error($success_message . $link);
+						trigger_error($success_message . $this->link);
 					}
 					else
 					{
@@ -1225,8 +1239,8 @@ class acp_dkp_mm extends bbDKP_Admin
 				}
 				
 				$success_message = $user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
-				$link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK'].'</h3></a>';
-				trigger_error($success_message . $link);
+				$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK'].'</h3></a>';
+				trigger_error($success_message . $this->link);
 			}
 			
 			if($deleterank)
@@ -1270,7 +1284,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					
 					if ( $countm != 0)
 					{
-						trigger_error($user->lang['ERROR_RANKMEMBERS'] . $link, E_USER_WARNING);
+						trigger_error($user->lang['ERROR_RANKMEMBERS'] . $this->link, E_USER_WARNING);
 					}
 					
 					$sql = "select a.rank_name, b.name  from " . MEMBER_RANKS_TABLE . ' a , ' . GUILD_TABLE . ' b  
@@ -1323,7 +1337,7 @@ class acp_dkp_mm extends bbDKP_Admin
                     $result = $db->sql_query($sql);
                     if ( (int) $db->sql_fetchfield('rankcount', false, $result) == 1)
                     {
-                        trigger_error( sprintf($user->lang('ERROR_RANK_EXISTS'),$nrankid,$guild_id ) . $link, E_USER_WARNING);
+                        trigger_error( sprintf($user->lang('ERROR_RANK_EXISTS'),$nrankid,$guild_id ) . $this->link, E_USER_WARNING);
                     }
                     $db->sql_freeresult ( $result );
                    
@@ -1334,9 +1348,9 @@ class acp_dkp_mm extends bbDKP_Admin
                    $this->insertnewrank($nrankid,$nrank_name, $nrank_hide, $nprefix, $nsuffix ,  $guild_id); 
                    
                    // display success                    
-                   $link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK'].'</h3></a>';
+                   $this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK'].'</h3></a>';
                    $success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
-				trigger_error($success_message . $link);                       
+				trigger_error($success_message . $this->link);                       
                     
 			}
 		
@@ -1563,7 +1577,7 @@ class acp_dkp_mm extends bbDKP_Admin
                       
                       if ($guild_name == null || $realm_name == null)
                       {
-                           trigger_error($user->lang['ERROR_GUILDEMPTY'] . $link, E_USER_WARNING);
+                           trigger_error($user->lang['ERROR_GUILDEMPTY'] . $this->link, E_USER_WARNING);
                       }   
                       else
                       {
@@ -1574,7 +1588,7 @@ class acp_dkp_mm extends bbDKP_Admin
                            $grow = $db->sql_fetchrow($result);
                            if($grow['evcount'] !=0 )
                            {
-                                trigger_error($user->lang['ERROR_GUILDTAKEN'] . $link, E_USER_WARNING);
+                                trigger_error($user->lang['ERROR_GUILDTAKEN'] . $this->link, E_USER_WARNING);
                            }
                            
                            // we always add guilds with an id greater then zero. this way, the guild with id=zero is the "guildless" guild
@@ -1586,12 +1600,12 @@ class acp_dkp_mm extends bbDKP_Admin
                            if ($this->insertnewguild($guild_name,$realm_name,$region,$showroster ) > 0) 
                            {
                                $success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'],  $guild_name);
-                               trigger_error($success_message . $link, E_USER_NOTICE);
+                               trigger_error($success_message . $this->link, E_USER_NOTICE);
                            }
                            else 
                            {
                                $success_message = sprintf($user->lang['ADMIN_ADD_GUILD_FAIL'],  $guild_name);
-                                trigger_error($success_message . $link, E_USER_WARNING);
+                                trigger_error($success_message . $this->link, E_USER_WARNING);
                            }
                       }
                        
@@ -1656,7 +1670,7 @@ class acp_dkp_mm extends bbDKP_Admin
                        $db->sql_query($sql);
               
                        $success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
-                       trigger_error($success_message . $link);
+                       trigger_error($success_message . $this->link);
                       
                    }   
 
@@ -1746,9 +1760,102 @@ class acp_dkp_mm extends bbDKP_Admin
 		$this->page_title = 'ACP_DKP_MAINPAGE';
 		$this->tpl_name = 'dkp/acp_mainpage';
 		$success_message = 'Error';
-		trigger_error($success_message . $link, E_USER_WARNING);
+		trigger_error($success_message . $this->link, E_USER_WARNING);
 			
 		}
+	}
+	
+	
+	/**
+	 * function to batch delete members, called from listing
+	 *
+	 * @param array $members_to_delete
+	 */
+	public function member_batch_delete($members_to_delete)
+	{
+		global $db, $user;
+		
+		if(!is_array($members_to_delete))
+		{
+			return;
+		}
+		
+		if(sizeof($members_to_delete) == 0)
+		{
+			return;
+		}
+		
+		if (confirm_box(true))
+		{
+			// recall hidden vars
+			$members_to_delete 	= request_var ('delete_id', array ( 0 => 0 )); 
+			$member_names = utf8_normalize_nfc (request_var ( 'members', array ( 0 => ' ' ) , true ));
+				
+			$sql = 'SELECT * FROM ' . MEMBER_LIST_TABLE . ' WHERE ' . $db->sql_in_set('member_id', array_keys($members_to_delete));
+			$result = $db->sql_query($sql);
+			while ( $row = $db->sql_fetchrow($result) )
+			{
+				$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' where member_id = ' . (int) $row['member_id'];
+				$db->sql_query($sql);
+				$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' where member_id = ' . (int) $row['member_id']; 
+				$db->sql_query($sql);
+				$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' where member_id = ' . (int) $row['member_id']; 
+				$db->sql_query($sql);
+				$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE .' where member_id = ' . (int) $row['member_id']; 
+				$db->sql_query($sql);
+				$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . ' where member_id = ' . (int) $row['member_id']; 
+				$db->sql_query($sql);
+				//@todo if zerosum then put excess points in guildbank
+			
+				$this->old_member= array(
+					'member_name'		=> $row['member_name'],
+					'member_level'		=> $row['member_level'],
+					'member_race_id'	=> $row['member_race_id'],
+					'member_class_id'	=> $row['member_class_id']);
+
+				$log_action = array(
+					'header'	   => sprintf( $user->lang['ACTION_MEMBER_DELETED'], $row['member_name']),  
+					'L_NAME'	   => $this->old_member['member_name'],
+					'L_LEVEL'	   => $this->old_member['member_level'],
+					'L_RACE'	   => $this->old_member['member_race_id'],
+					'L_CLASS'	   => $this->old_member['member_class_id']);
+
+				$this->log_insert(array(
+						'log_type'	 => $log_action['header'],
+						'log_action' => $log_action)
+					);
+			}
+			$db->sql_freeresult($result);
+			
+			$str_members = implode($member_names, ',');
+			
+			$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $str_members);
+			trigger_error($success_message . $this->link, E_USER_NOTICE);
+			
+		}
+		else
+		{
+		    $sql = "SELECT member_name, member_id FROM " . MEMBER_LIST_TABLE . " WHERE " . $db->sql_in_set('member_id', array_keys($members_to_delete));
+		    $result = $db->sql_query($sql);
+			while ($row = $db->sql_fetchrow($result))
+			{
+				$member_names[] = $row['member_name'];
+			}
+			
+			$db->sql_freeresult($result);
+			
+			$s_hidden_fields = build_hidden_fields(array(
+				'delete'				=> true,
+				'delete_id'				=> $members_to_delete,
+				'members'				=> $member_names
+				)
+			);
+
+			$str_members = implode($member_names, ',');
+			
+			confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_MEMBER'], $str_members) , $s_hidden_fields);
+		}
+		
 	}
 	
 	
