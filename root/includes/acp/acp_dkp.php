@@ -165,9 +165,11 @@ class acp_dkp extends bbDKP_Admin
                                 break;
                                 
                             case 'L_ACTION_INDIVADJ_ADDED':
+                            	$memberlist = $this->getaction($row['log_action'],'L_MEMBERS');
                                 $logline = sprintf($user->lang['VLOG_INDIVADJ_ADDED'], $row['username'], 
                                             $this->getaction($row['log_action'],'L_ADJUSTMENT')  , 
-                                            count(explode(', ', $this->getaction($row['log_action'],'L_MEMBERS')  )));
+                                            count(explode(', ', $this->getaction($row['log_action'],'L_MEMBERS')) 
+                                            )) . ' (' . $memberlist . ')';
                                 break;
                             case 'L_ACTION_INDIVADJ_UPDATED':
                                 $logline = sprintf($user->lang['VLOG_INDIVADJ_UPDATED'], $row['username'], 
@@ -203,7 +205,7 @@ class acp_dkp extends bbDKP_Admin
                                 break;
                             case 'L_ACTION_MEMBER_UPDATED':
                                 $logline = sprintf($user->lang['VLOG_MEMBER_UPDATED'], $row['username'], 
-                                            $this->getaction($row['log_action'],'L_NAME_BEFORE'));
+                                            $this->getaction($row['log_action'],'L_NAME'));
                                 break;
                                                             
                             case 'L_ACTION_MEMBER_DELETED':

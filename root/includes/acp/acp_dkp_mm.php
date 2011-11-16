@@ -1755,7 +1755,7 @@ class acp_dkp_mm extends bbDKP_Admin
 	/*
 	 * generates a standard portrait image url for wow /aion based on characterdata
 	 */
-	private function generate_portraitlink ($game_id, $race_id, $class_id, $gender_id, $level)
+	public function generate_portraitlink ($game_id, $race_id, $class_id, $gender_id, $level)
 	{
 		$memberportraiturl = '';
 		
@@ -1791,7 +1791,7 @@ class acp_dkp_mm extends bbDKP_Admin
 	/*
 	 * generates armory link (only wow)
 	 */
-	private function generate_armorylink($game_id, $region, $realm, $name)
+	public function generate_armorylink($game_id, $region, $realm, $name)
 	{
 		$site= '';
 	    switch ($region)

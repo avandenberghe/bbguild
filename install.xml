@@ -243,34 +243,6 @@ if(@defined("EMED_BBDKP"))
 }]]></action>
 			</edit>
 		</open>
-		<open src="/styles/prosilver/template/overall_footer.html">
-			<edit>
-				<comment lang="en"><![CDATA[Adding bbdkp credits link in overall_footer ]]></comment>
-				<comment lang="fr"><![CDATA[Ajout lien les crédits dans overall_footer ]]></comment>
-				<comment lang="de"><![CDATA[Zufügung Credits link in overall_footer ]]></comment>			
-				<find><![CDATA[		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></find>
-				<action type="replace-with"><![CDATA[<br />
-<script type="text/javascript">
-function pop_search()
-{
-    search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70');
-    search.focus();
-}
-</script>
-<a class="bbdkpcredits" onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">powered by bbDKP</a><br />
-		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></action>
-</edit>
-		</open>
-		<open src="/styles/prosilver/theme/stylesheet.css">
-			<edit>
-				<comment lang="en"><![CDATA[bbdkp css]]></comment>
-				<comment lang="fr"><![CDATA[bbdkp css]]></comment>
-				<comment lang="de"><![CDATA[bbdkp css]]></comment>								
-				<find><![CDATA[@import url("colours.css");]]></find>
-				<action type="after-add"><![CDATA[@import url("bbdkp.css");
-]]></action>
-			</edit>
-		</open>
 		<open src="includes/functions.php">
 			<edit>
 				<comment lang="en"><![CDATA[ preloading dkp language files in functions.php]]></comment>
@@ -316,7 +288,6 @@ function pop_search()
 		                ]]></action>
 		        </edit>
 		</open>
-		
 		<open src="styles/prosilver/template/overall_header.html">
 			<edit>
 				<comment lang="en"><![CDATA[install bbDKP header - All in one file]]></comment>
@@ -333,6 +304,34 @@ function pop_search()
 				<action type="before-add"><![CDATA[<li class="icon-home"><a href="{U_PORTAL}">{L_PORTAL}</a></li>
 				<li class="icon-faq"><a href="{U_DKP}">{L_DKPPAGE}</a><!-- BEGIN dkpnavlinks --> <strong>&#8249;</strong> <a href="{dkpnavlinks.U_DKPPAGE}">{dkpnavlinks.DKPPAGE}</a><!-- END dkpnavlinks --></li>
 				]]></action>
+			</edit>
+		</open>
+		<open src="/styles/prosilver/template/overall_footer.html">
+			<edit>
+				<comment lang="en"><![CDATA[Adding bbdkp credits link in overall_footer ]]></comment>
+				<comment lang="fr"><![CDATA[Ajout lien les crédits dans overall_footer ]]></comment>
+				<comment lang="de"><![CDATA[Zufügung Credits link in overall_footer ]]></comment>			
+				<find><![CDATA[		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></find>
+				<action type="replace-with"><![CDATA[<br />
+<script type="text/javascript">
+function pop_search()
+{
+    search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70');
+    search.focus();
+}
+</script>
+<a class="bbdkpcredits" onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">powered by bbDKP</a><br />
+		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></action>
+</edit>
+		</open>
+		<open src="/styles/prosilver/theme/stylesheet.css">
+			<edit>
+				<comment lang="en"><![CDATA[bbdkp css]]></comment>
+				<comment lang="fr"><![CDATA[bbdkp css]]></comment>
+				<comment lang="de"><![CDATA[bbdkp css]]></comment>								
+				<find><![CDATA[@import url("colours.css");]]></find>
+				<action type="after-add"><![CDATA[@import url("bbdkp.css");
+]]></action>
 			</edit>
 		</open>
 		<php-installer><![CDATA[install/index.php]]></php-installer>
