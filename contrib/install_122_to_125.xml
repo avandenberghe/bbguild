@@ -177,6 +177,14 @@
 			]]></action>
 			</edit>
 		</open>
+		<open src="includes/bbdkp/constants_bbdkp.php">
+			<edit>
+				<comment lang="en"><![CDATA[put dkpheader back in overall_header]]></comment>
+				<find><![CDATA[define('ZONEBASE',                    $table_prefix . 'bbdkp_zonetable');]]></find>
+				<action type="replace-with"><![CDATA[define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable');
+define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');	]]></action>
+			</edit>
+		</open>		
 		<open src="styles/prosilver/template/dkp/dkpheader.html">
 			<edit>
 				<comment lang="en"><![CDATA[update jquery]]></comment>

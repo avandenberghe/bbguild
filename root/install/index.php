@@ -20,6 +20,7 @@ include($phpbb_root_path . 'common.' . $phpEx);
 $user->session_begin();
 $auth->acl($user->data);
 $user->setup();
+$user->add_lang ( array ('mods/dkp_admin'));
 
 // We only allow a founder install this MOD
 if ($user->data['user_type'] != USER_FOUNDER)
@@ -164,6 +165,12 @@ include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_rift.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_swtor.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_lineage2.' . $phpEx);
+
+
+/*
+ * insert welcome message
+ */	
+$welcome_message = encode_message($user->lang['WELCOME_DEFAULT']);
 
 /*
 * Optionally we may specify our own logo image to show in the upper corner instead of the default logo.
@@ -817,7 +824,38 @@ $versions = array(
 		),
 				
 		'1.2.5' => array(
-	      
+			// lots of db changes ! 
+			
+			// welcome message table
+		   'table_add' => array(
+			   array(
+             	$table_prefix . 'bbdkp_welcomemsg' , array(
+                   	'COLUMNS'        => array(
+                       'welcome_id'    		=> array('INT:8', NULL, 'auto_increment'),
+                       'welcome_title' 		=> array('VCHAR_UNI', ''),
+                       'welcome_msg'   		=> array('TEXT_UNI', ''),
+             		   'welcome_timestamp' 	=> array('TIMESTAMP', 0),
+					   'bbcode_bitfield' 	=> array('VCHAR:255', ''),
+					   'bbcode_uid' 		=> array('VCHAR:8', ''),
+             		   'user_id'     		=> array('INT:8', 0),
+             		   'bbcode_options'		=> array('UINT', 7),
+                   ),
+                   'PRIMARY_KEY'    => 'welcome_id')),
+			),
+			
+		   'table_row_insert'	=> array(
+			array( $table_prefix . 'bbdkp_welcomemsg',
+           		array(
+                  array(
+                  	'welcome_title' => 'Welcome to our guild', 
+                  	'welcome_timestamp' => (int) time(),
+                  	'welcome_msg' => $welcome_message['text'],
+                  	'bbcode_uid' => $welcome_message['uid'],
+                  	'bbcode_bitfield' => $welcome_message['bitfield'],
+                  	'user_id' => $user->data['user_id'] ),          
+          		 )),
+			),
+			
 	    	// create permission for adding, updating or deleting character
 		   'permission_add' => array(
 	            array('u_dkp_charadd', true) ,
@@ -849,8 +887,9 @@ $versions = array(
 					),
 			)),
 	      
-			// add new parameter for lineage2 and max characters
+			// add new parameter for welcome msg, lineage2 and max characters
 	        'config_add' => array(
+		        array('bbdkp_portal_welcomemsg', 1, true),
 				array('bbdkp_maxchars', 2, true),
 				array('bbdkp_games_lineage2', 0, true),
 			),   
@@ -866,6 +905,23 @@ $versions = array(
 
 // Include the UMIF Auto file and everything else will be handled automatically.
 include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
+
+/**
+ * encode welcome text
+ *
+ * @param string $text
+ * @return array
+ */
+function encode_message($text)
+{
+	$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+	$allow_bbcode = $allow_urls = $allow_smilies = true;
+	generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+	$welcome_message['text']=$text;
+	$welcome_message['uid']=$uid;
+	$welcome_message['bitfield']=$bitfield;
+	return $welcome_message;
+}
 
 
 /******************************

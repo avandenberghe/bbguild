@@ -748,6 +748,8 @@ class acp_dkp extends bbDKP_Admin
                     set_config('bbdkp_portal_recruitment', request_var('show_recrblock', 0), true);
                     set_config('bbdkp_portal_links', request_var('show_linkblock', 0), true);
                     set_config('bbdkp_portal_menu', request_var('show_menublock', 0), true);	
+					set_config('bbdkp_portal_welcomemsg', request_var('show_welcomeblock', 0), true);
+					$cache->destroy('config');
                     
                     $sql = "SELECT class_id FROM " . CLASS_TABLE . " where class_id > 0 order by class_id ";
                     $result = $db->sql_query($sql);
@@ -760,6 +762,19 @@ class acp_dkp extends bbDKP_Admin
                         $sql = 'UPDATE ' . CLASS_TABLE . ' SET dps = ' . request_var('D' . $row['class_id'], 0) . ' where class_id = ' . $row['class_id'];
                         $db->sql_query($sql);
                     }
+                    
+                    $welcometext = utf8_normalize_nfc(request_var('welcome_message', '', true));
+					$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
+					$allow_bbcode = $allow_urls = $allow_smilies = true;
+					generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+
+					$sql = 'UPDATE ' . WELCOME_MSG_TABLE . " SET 
+							welcome_msg = '" . (string) $db->sql_escape($welcometext) . "' , 
+							welcome_timestamp = ".  (int) time() ." , 
+							bbcode_bitfield = 	'".  (string) $bitfield ."' , 
+							bbcode_uid = 		'".  (string) $uid ."'  
+							WHERE welcome_id = 1";
+					$db->sql_query($sql);
                     trigger_error($user->lang['ADMIN_PORTAL_SETTINGS_SAVED'] . $link, E_USER_NOTICE);
                 }
 
@@ -790,7 +805,19 @@ class acp_dkp extends bbDKP_Admin
                     'OPTION' => $d_name));
                 }
 
-                // number of news and items to show on front page
+                // get welcome msg
+				$sql = 'SELECT welcome_msg, bbcode_bitfield, bbcode_uid FROM ' . WELCOME_MSG_TABLE;
+				$db->sql_query($sql);
+				$result = $db->sql_query($sql);
+				while ( $row = $db->sql_fetchrow($result) )
+				{
+					$welcometext = $row['welcome_msg'];
+					$bitfield = $row['bbcode_bitfield'];
+					$uid = $row['bbcode_uid'];
+				}
+				$textarr = generate_text_for_edit($welcometext, $uid, $bitfield, 7);
+				
+				// number of news and items to show on front page
                 $n_news = $config['bbdkp_n_news']; 
                 $n_items = $config['bbdkp_n_items'];  
                 
@@ -891,7 +918,12 @@ class acp_dkp extends bbDKP_Admin
 	    		}
 	    		    
                 $template->assign_vars(array(
+                	'WELCOME_MESSAGE' 		=> $textarr['text'],
                     'N_NEWS' => $n_news , 
+                
+                	'SHOW_WELCOME_YES_CHECKED'	=> ($config ['bbdkp_portal_welcomemsg'] == '1') ? 'checked="checked"' : '',
+                	'SHOW_WELCOME_NO_CHECKED'	=> ($config ['bbdkp_portal_welcomemsg'] == '0') ? 'checked="checked"' : '',
+                
                     'SHOW_REC_YES_CHECKED' => ($config['bbdkp_portal_recruitment'] == '1') ? ' checked="checked"' : '' , 
                 	'SHOW_REC_NO_CHECKED' => ($config['bbdkp_portal_recruitment'] == '0') ? ' checked="checked"' : '' , 
 

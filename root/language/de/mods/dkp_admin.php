@@ -925,6 +925,11 @@ Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />G
 	'DUPLICATED'	=> 'Dupliziert', 
 	'MAX_NUMBER_CHARS_EXPLAIN'	=> 'Höchstzahl der Charaktere die Spieler an ihrem phpBB Konto ankoppeln können', 
 	'MAX_NUMBER_CHARS' => 'Höchstzahl #Charactere',
+	'WELCOME_DEFAULT'        => '[b]Wilkommen in unsere Gilde[/b]!', 
+	'SHOWWELCOME'		=> 'Einleitungs Block',
+	'WELCOMEBLOCK'		=> 'Tekst',
+	'WELCOMEBLOCK_EXPLAIN'	=> 'Bitte füllen sie den Tekst hier ein. BBcodes werden akzeptiert.',
+	'WELCOMEBLOCKSETTING'	=> 'Einleitungsblock Einstellungen',
 ));
 
 ?>

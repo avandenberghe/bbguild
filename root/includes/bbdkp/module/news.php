@@ -44,7 +44,7 @@ if ($submit)
 		//new message
 		$sql_ary = array (
 			'news_headline' => utf8_normalize_nfc ( request_var ( 'news_headline', '', true ) ), 
-			'news_message' => $text, 
+			'news_message' => (string) $db->sql_escape($text), 
 			'news_date' => $time, 
 			'bbcode_uid' => (string) $uid, 
 			'bbcode_bitfield' => (string) $bitfield, 

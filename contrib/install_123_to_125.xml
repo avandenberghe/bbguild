@@ -121,6 +121,14 @@
 			<find><![CDATA[search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')]]></find>
 			<action type="after-add"><![CDATA[;]]></action>
 			</edit>
+		<open src="includes/bbdkp/constants_bbdkp.php">
+			<edit>
+				<comment lang="en"><![CDATA[put dkpheader back in overall_header]]></comment>
+				<find><![CDATA[define('ZONEBASE',                    $table_prefix . 'bbdkp_zonetable');]]></find>
+				<action type="replace-with"><![CDATA[define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable');
+define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');	]]></action>
+			</edit>
+		</open>			
 			<edit>
 				<find><![CDATA[<a class="bbdkpcredits" onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">BBdkp Credits</a>]]></find>			
 				 <inline-edit>

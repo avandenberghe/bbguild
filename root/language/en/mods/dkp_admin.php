@@ -133,6 +133,11 @@ $lang = array_merge($lang, array(
 'MENUBLOCKSETTING' => 'Menu block Settings',
 'SHOWMENUBLOCK' => 'Show Menu block',
 'BLOCKSHOWPROGRESSBAR' => 'Show Zone progressbar in Portal block', 
+'WELCOME_DEFAULT'		=> '[b]Welcome to our Guild[/b]! Please change your welcome message in the ACP.', 
+'SHOWWELCOME'	=> 'Show Welcome Block',
+'WELCOMEBLOCK'	=> 'Welcome Block Text',
+'WELCOMEBLOCKSETTING'	=> 'Welcome Block Settings',
+'WELCOMEBLOCK_EXPLAIN'	=> 'Please enter your Portal Welcome block contents here. BBcodes are supported.',
 
 'RANK_INSERTED' => 'Rank inserted : %s. ', 
 'TOTAL_RANKS_INSERTED' => 'Total ranks inserted : %s. ', 

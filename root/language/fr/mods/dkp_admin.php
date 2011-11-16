@@ -925,6 +925,12 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 	'DUPLICATED' => 'Dupliqué', 
 	'MAX_NUMBER_CHARS_EXPLAIN' => 'Nombre maximal de caractères qu‘un joueur peut lier à son compte phpBB.',
 	'MAX_NUMBER_CHARS' => 'Nombre maximal' ,
+	'WELCOME_DEFAULT'        => '[b]Bienvenu(e) dans notre Guilde[/b]!', 
+	'SHOWWELCOME'	=> 'Montrer Block Acceuil',
+	'WELCOMEBLOCK'	=> 'Texte du bloc Acceuil',
+	'WELCOMEBLOCK_EXPLAIN'	=> 'Veuillez remplir le texte dans cette zone. les BBcodes sont supportés.',
+	'WELCOMEBLOCKSETTING'	=> 'Règlages Bloc d’acceuil',
+	
 ));
 
 ?>
