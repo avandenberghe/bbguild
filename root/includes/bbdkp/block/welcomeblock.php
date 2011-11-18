@@ -13,8 +13,6 @@ if (!defined('IN_PHPBB'))
    exit;
 }
 $user->add_lang(array('posting'));
-include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
-
 $sql = 'SELECT welcome_msg, bbcode_uid, bbcode_bitfield, bbcode_options FROM ' . WELCOME_MSG_TABLE;
 $db->sql_query($sql);
 $result = $db->sql_query($sql);
