@@ -15,6 +15,11 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
+if (!function_exists('get_user_avatar')) 
+{
+	include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+}
+
 if ($user->data['is_registered'])
 {
 	// new posts since last visit
