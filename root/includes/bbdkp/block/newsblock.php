@@ -14,8 +14,11 @@ if (!defined('IN_PHPBB'))
    exit;
 }
 
-// var initialisations
-include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+if (!function_exists('generate_text_for_display')) 
+{
+	include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
+}
+
 include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
 define('LOAD_REIMG', true); 
 // Container for user details, only process once
