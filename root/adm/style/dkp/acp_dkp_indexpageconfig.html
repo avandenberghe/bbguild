@@ -57,11 +57,8 @@ fieldset dt {
     <dt><label>{L_NEWSFORUM}</label></dt>
     <dd>
     <select name="news_id" class="input" id="news_id">
-       <!-- BEGIN news_id -->
-      <option value="{news_id.VALUE}"{news_id.SELECTED}>{news_id.OPTION}</option>
-      <!-- END news_id -->
+    	{FORUM_NEWS_OPTIONS}
      </select>
-     
      <dd>
   </dl> 
  
@@ -114,9 +111,7 @@ fieldset dt {
     <dt><label>{L_RECFORUM}</label></dt>
     <dd>
     <select name="rec_id" class="input" id="rec_id">
-       <!-- BEGIN rec_id -->
-      <option value="{rec_id.VALUE}"{rec_id.SELECTED}>{rec_id.OPTION}</option>
-      <!-- END rec_id -->
+		{FORUM_RECRUIT_OPTIONS}
      </select>
      <dd>
   </dl> 

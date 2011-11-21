@@ -778,33 +778,6 @@ class acp_dkp extends bbDKP_Admin
                     trigger_error($user->lang['ADMIN_PORTAL_SETTINGS_SAVED'] . $link, E_USER_NOTICE);
                 }
 
-                // get forum config
-                $news_forumid = $config['bbdkp_news_forumid'];
-                $recruit_forumid  = $config['bbdkp_recruit_forumid'];
-                
-                // get list of forums
-                $sql = "SELECT * FROM " . FORUMS_TABLE . "";
-                $result = $db->sql_query($sql);
-                while ($row = $db->sql_fetchrow($result)) 
-                {
-                    $forum_ids[$row['forum_name']] = $row['forum_id'];
-                }
-                
-                // loop forum list for match, add to template
-                foreach ($forum_ids as $d_name => $d_value) 
-                {
-                    $template->assign_block_vars('news_id', array('VALUE' => $d_value , 
-                    	'SELECTED' => ($d_value == $news_forumid) ? ' selected="selected"' : '' , 
-                    	'OPTION' => $d_name));
-                }
-                      
-                foreach ($forum_ids as $d_name => $d_value) 
-                {
-                    $template->assign_block_vars('rec_id', array('VALUE' => $d_value , 
-                    'SELECTED' => ($d_value == $recruit_forumid) ? ' selected="selected"' : '' , 
-                    'OPTION' => $d_name));
-                }
-
                 // get welcome msg
 				$sql = 'SELECT welcome_msg, bbcode_bitfield, bbcode_uid FROM ' . WELCOME_MSG_TABLE;
 				$db->sql_query($sql);
@@ -920,6 +893,9 @@ class acp_dkp extends bbDKP_Admin
                 $template->assign_vars(array(
                 	'WELCOME_MESSAGE' 		=> $textarr['text'],
                     'N_NEWS' => $n_news , 
+                
+	                'FORUM_NEWS_OPTIONS' 	=> make_forum_select($config['bbdkp_news_forumid'],false, false, true),
+	                'FORUM_RECRUIT_OPTIONS' 	=> make_forum_select($config['bbdkp_recruit_forumid'],false, false, true),
                 
                 	'SHOW_WELCOME_YES_CHECKED'	=> ($config ['bbdkp_portal_welcomemsg'] == '1') ? 'checked="checked"' : '',
                 	'SHOW_WELCOME_NO_CHECKED'	=> ($config ['bbdkp_portal_welcomemsg'] == '0') ? 'checked="checked"' : '',
