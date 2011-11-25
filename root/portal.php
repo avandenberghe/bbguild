@@ -54,7 +54,7 @@ include($phpbb_root_path . 'includes/bbdkp/block/whoisonline.' . $phpEx);
 // variable blocks - these depend on acp
 if ($config['bbdkp_portal_welcomemsg'])
 {
-		include($phpbb_root_path . 'includes/bbdkp/block/recruitmentblock.' . $phpEx);
+	include($phpbb_root_path . 'includes/bbdkp/block/welcomeblock.' . $phpEx);
 }
 
 if ($config['bbdkp_portal_menu'])
@@ -69,7 +69,7 @@ if ($config['bbdkp_portal_loot'])
 
 if ($config['bbdkp_portal_recruitment'])
 {
-		include($phpbb_root_path . 'includes/bbdkp/block/welcomeblock.' . $phpEx);
+	include($phpbb_root_path . 'includes/bbdkp/block/recruitmentblock.' . $phpEx);
 }
 
 $template->assign_var('S_BPSHOW', false);
