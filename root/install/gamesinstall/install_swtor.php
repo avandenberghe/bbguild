@@ -51,16 +51,25 @@ function install_swtor()
 	// species source : http://starwars.wikia.com/wiki/Star_Wars:_The_Old_Republic
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'swtor'");
 	$sql_ary = array ();
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 0, 'race_faction_id' => 0, 'image_female_small' => ' ',  'image_male_small' => ' '  ); //Unknown
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 1, 'race_faction_id' => 0 , 'image_female_small' => 'swtor_miraluka_female_small',  'image_male_small' => 'swtor_miraluka_male_small' ); //Miraluka 
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 2, 'race_faction_id' => 0 , 'image_female_small' => 'swtor_twilek_female_small',  'image_male_small' => 'swtor_twilek_male_small' ); //Twilek
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 3, 'race_faction_id' => 0  , 'image_female_small' => 'swtor_zabrak_female_small',  'image_male_small' => 'swtor_zabrak_male_small' ); //Zabrak
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 4, 'race_faction_id' => 0 , 'image_female_small' => 'swtor_miralian_female_small',  'image_male_small' => 'swtor_miralian_male_small' ) ; //Miralian
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 5, 'race_faction_id' => 0 , 'image_female_small' => 'swtor_human_female_small',  'image_male_small' => 'swtor_human_male_small' ); //human 
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 6, 'race_faction_id' => 0, 'image_female_small' => 'swtor_chiss_female_small',  'image_male_small' => 'swtor_chiss_male_small'  ); //Chiss
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 7, 'race_faction_id' => 0, 'image_female_small' => 'swtor_rattataki_female_small',  'image_male_small' => 'swtor_rattataki_male_small' ); //Rattataki
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 8, 'race_faction_id' => 0, 'image_female_small' => 'swtor_redsith_female_small',  'image_male_small' => 'swtor_redsith_male_small' ); //Red Siths
-	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
+	//Unknown
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 0, 'race_faction_id' => 1, 'image_female_small' => ' ',  'image_male_small' => ' '  ); 
+	//Miraluka
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 1, 'race_faction_id' => 2 , 'image_female_small' => 'swtor_miraluka_female_small',  'image_male_small' => 'swtor_miraluka_male_small' );  
+	//Twilek
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 2, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_twilek_female_small',  'image_male_small' => 'swtor_twilek_male_small' ); 
+	// zabrak also sith
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 3, 'race_faction_id' => 2  , 'image_female_small' => 'swtor_zabrak_female_small',  'image_male_small' => 'swtor_zabrak_male_small' ); 
+	//Miralian
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 4, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_miralian_female_small',  'image_male_small' => 'swtor_miralian_male_small' ) ; 
+	// human galactic or sith
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 5, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_human_female_small',  'image_male_small' => 'swtor_human_male_small' );  
+	//Chiss
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 6, 'race_faction_id' => 3, 'image_female_small' => 'swtor_chiss_female_small',  'image_male_small' => 'swtor_chiss_male_small'  ); 
+	//Rattataki
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 7, 'race_faction_id' => 3, 'image_female_small' => 'swtor_rattataki_female_small',  'image_male_small' => 'swtor_rattataki_male_small' ); 
+	//Red Siths - pureblood
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 8, 'race_faction_id' => 3, 'image_female_small' => 'swtor_redsith_female_small',  'image_male_small' => 'swtor_redsith_male_small' );
+	$db->sql_multi_insert ($table_prefix . 'bbdkp_races', $sql_ary);
 	unset ( $sql_ary );
 	
 	// Dictionary
@@ -102,6 +111,7 @@ function install_swtor()
 		$sql_ary [] = array ('dkpsys_name' => 'Early Game', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 		$sql_ary [] = array ('dkpsys_name' => 'Mid Game', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 		$sql_ary [] = array ('dkpsys_name' => 'End Game', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'PVP War Zones', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
 		unset ( $sql_ary );
 	}
@@ -116,9 +126,13 @@ function install_swtor()
 	    $sql_ary = array();
 		$sql_ary [] = array('event_dkpid' => 0 , 'event_name' => 'The Esseles', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => 'swtor_es'  ) ;
 		$sql_ary [] = array('event_dkpid' => 0 , 'event_name' => 'Black Talon', 'event_color' => '#C6DEFF', 'event_value' => 5 , 'event_imagename' => 'swtor_blt') ;
-		$sql_ary [] = array('event_dkpid' => 1 , 'event_name' => 'Taral V', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => 'swtor_tar' ) ;
-		$sql_ary [] = array('event_dkpid' => 1 , 'event_name' => 'Boarding party', 'event_color' => '#6D7B8D', 'event_value' => 20, 'event_imagename' => 'swtor_bop' ) ;
-		$sql_ary [] = array('event_dkpid' => 2 , 'event_name' => 'Directive 7', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => 'swtor_d7' ) ;
+		$sql_ary [] = array('event_dkpid' => 1 , 'event_name' => 'Hammer Station', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => 'swtor_hs' );
+		$sql_ary [] = array('event_dkpid' => 1 , 'event_name' => 'Taral V', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => 'swtor_tar' );
+		$sql_ary [] = array('event_dkpid' => 2 , 'event_name' => 'Boarding party', 'event_color' => '#6D7B8D', 'event_value' => 20, 'event_imagename' => 'swtor_bop' );
+		$sql_ary [] = array('event_dkpid' => 2 , 'event_name' => 'Directive 7', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => 'swtor_d7' );
+		$sql_ary [] = array('event_dkpid' => 3 , 'event_name' => 'Voidstar', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => 'swtor_void' );
+		$sql_ary [] = array('event_dkpid' => 3 , 'event_name' => 'Huttball', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => 'swtor_hutt' );
+		$sql_ary [] = array('event_dkpid' => 3 , 'event_name' => 'Alderaan', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => 'swtor_ald' );
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
 		
 	}
