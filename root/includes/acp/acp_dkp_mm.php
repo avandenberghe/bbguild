@@ -1176,7 +1176,7 @@ class acp_dkp_mm extends bbDKP_Admin
 			if ($submit)
 			{
 				// update
-			    $modrank = request_var('ranks', array( 0 => ''));
+			    $modrank = utf8_normalize_nfc(request_var('ranks', array( 0 => ''), true));
 				foreach ( $modrank as $rank_id => $rank_name )
 				{
 			    	// get old rank array
@@ -1331,8 +1331,8 @@ class acp_dkp_mm extends bbDKP_Admin
 			     $nrankid = request_var('nrankid', 0);
                    $sql = 'SELECT count(*) as rankcount FROM ' . MEMBER_RANKS_TABLE . ' 
                    	WHERE rank_id != 99 
-                   	AND rank_id = ' . $nrankid . ' 
-                   	AND guild_id = '. $guild_id . ' 
+                   	AND rank_id = ' . (int) $nrankid . ' 
+                   	AND guild_id = '. (int) $guild_id . ' 
                    	ORDER BY rank_id, rank_hide ASC ';
                     $result = $db->sql_query($sql);
                     if ( (int) $db->sql_fetchfield('rankcount', false, $result) == 1)
