@@ -766,7 +766,7 @@ class acp_dkp extends bbDKP_Admin
                     $welcometext = utf8_normalize_nfc(request_var('welcome_message', '', true));
 					$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
 					$allow_bbcode = $allow_urls = $allow_smilies = true;
-					generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+					generate_text_for_storage($welcometext, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
 
 					$sql = 'UPDATE ' . WELCOME_MSG_TABLE . " SET 
 							welcome_msg = '" . (string) $db->sql_escape($welcometext) . "' , 
