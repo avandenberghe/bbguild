@@ -65,7 +65,7 @@
     <td style="text-align:left;" width="10%" nowrap="nowrap">{members_row.JOINDATE}</td>
     <td style="text-align:left;" width="10%" nowrap="nowrap">{members_row.OUTDATE}</td>
 	<td style="text-align:center;" width="10%" nowrap="nowrap">
-		<a href="{members_row.U_VIEW_MEMBER}">{ICON_EDIT} 
+		<a href="{members_row.U_VIEW_MEMBER}">{ICON_EDIT}</a>
 		<!-- IF members_row.S_READONLY == 0 --> <a href="{members_row.U_DELETE_MEMBER}">{ICON_DELETE}</a> <!-- ENDIF -->
     	<input type="checkbox" class="radio" name="delete_id[{members_row.ID}]" value="1" {members_row.DELETED} />		
 	</td>
