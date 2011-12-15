@@ -36,7 +36,9 @@ $games = array(
     'FFXI'       => $user->lang['FFXI'],
 	'rift'       => $user->lang['RIFT'],
 	'swtor'      => $user->lang['SWTOR'],
-	'lineage2'      => $user->lang['LINEAGE2']
+	'lineage2'      => $user->lang['LINEAGE2'],
+	//'eve'      => $user->lang['EVE'],
+	//'gw2'		 =>$user->lang['GW2']	
 );
 
 $installed_games = array();
@@ -175,7 +177,7 @@ function displayroster($game_id)
 					'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
 					'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
 					'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
-					'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 
+					'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
             	));
             	
             }
@@ -204,11 +206,12 @@ function displayroster($game_id)
 	if (isset($current_order) && sizeof ($current_order) > 0)
 	{
 		$template->assign_vars(array(
-			'U_LIST_MEMBERS0'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][0]),
-		    'U_LIST_MEMBERS1'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][1]),
-		    'U_LIST_MEMBERS2'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][2]),
-		    'U_LIST_MEMBERS3'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][3]),
-		    'U_LIST_MEMBERS4'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][4]),
+			'U_LIST_MEMBERS0'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][0]."&amp;displaygame=".$game_id),
+		    'U_LIST_MEMBERS1'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][1]."&amp;displaygame=".$game_id),
+		    'U_LIST_MEMBERS2'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][2]."&amp;displaygame=".$game_id),
+		    'U_LIST_MEMBERS3'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][3]."&amp;displaygame=".$game_id),
+		    'U_LIST_MEMBERS4'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][4]."&amp;displaygame=".$game_id),
+            'U_LIST_MEMBERS5'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $current_order['uri'][5]."&amp;displaygame=".$game_id),
 		));
 		
 	}
@@ -328,7 +331,8 @@ function get_listingresult($game_id, $mode, &$current_order, $classid=0)
 	    1 => array('m.member_class_id', 'm.member_class_id desc'),
 	    2 => array('m.member_rank_id', 'm.member_rank_id desc'),
 	    3 => array('m.member_level', 'm.member_level  desc'),
-	    4 => array('m.member_achiev', 'm.member_achiev  desc')
+	    4 => array('m.member_achiev', 'm.member_achiev  desc'),
+        5 => array('m.member_race_id', 'm.member_race_id  desc')
 	);
 	
 	$current_order = switch_order($sort_order);

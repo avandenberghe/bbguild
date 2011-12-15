@@ -109,12 +109,13 @@ class acp_dkp_mm extends bbDKP_Admin
 				{
 				    // user selected dropdow - get guildid 
 					$guild_id = request_var ( 'member_guild_id', 0 );
-					
-					// fill popup and set selected to Post value
+
+                    // fill popup and set selected to Post value
 					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
 					{
-						$template->assign_block_vars ( 	'guild_row', 
-						array (
+					   //echo $row["id"]. " - ".$guild_id."<br/>";
+			         	$template->assign_block_vars ( 	'guild_row', 	
+                        array (
 							'VALUE' => $row['id'], 
 							'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
 							'OPTION' => (! empty ( $row['name'] )) ?  $row['name']  : '(None)' ) );
@@ -124,14 +125,16 @@ class acp_dkp_mm extends bbDKP_Admin
 				} 
 				else // default pageloading
 				{
-					$sql = 'SELECT max(id) as max FROM ' . GUILD_TABLE;                        
-					$result = $db->sql_query($sql);
-					$guild_id = $db->sql_fetchfield('max',0,$result);
-					$db->sql_freeresult($result);
+					//$sql = 'SELECT max(id) as max FROM ' . GUILD_TABLE;                        
+					//$result = $db->sql_query($sql);
+					//$guild_id = $db->sql_fetchfield('max',0,$result);
+					//$db->sql_freeresult($result);
+                    $guild_id = request_var ( 'member_guild_id', 5 );
 
 					// fill popup and set selected to default selection
 					while ( $row = $db->sql_fetchrow ( $resultg ) ) 
 					{
+					  // echo $row["id"]. " - ".$guild_id."<br/>";
 						$template->assign_block_vars ( 'guild_row', array (
     						'VALUE' => $row['id'], 
     						'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '', 
@@ -276,7 +279,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
 				
-				$memberpagination = generate_pagination (append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order ['uri'] ['current']) ,
+				$memberpagination = generate_pagination (append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order ['uri'] ['current']."&amp;member_guild_id=".$guild_id) ,
 				$total_members, $config ['bbdkp_user_llimit'], $start, true);
 				
 				$form_key = 'mm_listmembers';
@@ -444,7 +447,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				{
 
 					// old data array
-					$sql = 'SELECT *  FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id=' . $member_id;
+					$sql = 'SELECT *  FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id=' . $member_id ." and game_id='".$game_id."'";
 					$result = $db->sql_query($sql);
 					while ( $row = $db->sql_fetchrow($result) )
 					{
@@ -469,7 +472,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					$sql = 'SELECT count(*) as memberexists 
 							FROM ' . MEMBER_LIST_TABLE . '	
 							WHERE member_id <> ' . $member_id . " 
-							AND ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "')"; 
+							AND ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "') "." and game_id='".$game_id."'"; 
 					$result = $db->sql_query($sql);
 					$countm = $db->sql_fetchfield('memberexists');
 					$db->sql_freeresult($result);
@@ -902,6 +905,8 @@ class acp_dkp_mm extends bbDKP_Admin
                 	'rift'       => $user->lang['RIFT'],
                 	'swtor'      => $user->lang['SWTOR'], 
 	               	'lineage2'   => $user->lang['LINEAGE2'],
+                    'eve'   => $user->lang['EVE'],
+                    'gw2'   => $user->lang['GW2']
                 );
                 $installed_games = array();
                 foreach($games as $gameid => $gamename)
@@ -1176,7 +1181,7 @@ class acp_dkp_mm extends bbDKP_Admin
 			if ($submit)
 			{
 				// update
-			    $modrank = request_var('ranks', array( 0 => ''));
+			    $modrank = utf8_normalize_nfc(request_var('ranks', array( 0 => ''), true));
 				foreach ( $modrank as $rank_id => $rank_name )
 				{
 			    	// get old rank array
@@ -1331,8 +1336,8 @@ class acp_dkp_mm extends bbDKP_Admin
 			     $nrankid = request_var('nrankid', 0);
                    $sql = 'SELECT count(*) as rankcount FROM ' . MEMBER_RANKS_TABLE . ' 
                    	WHERE rank_id != 99 
-                   	AND rank_id = ' . $nrankid . ' 
-                   	AND guild_id = '. $guild_id . ' 
+                   	AND rank_id = ' . (int) $nrankid . ' 
+                   	AND guild_id = '. (int) $guild_id . ' 
                    	ORDER BY rank_id, rank_hide ASC ';
                     $result = $db->sql_query($sql);
                     if ( (int) $db->sql_fetchfield('rankcount', false, $result) == 1)
@@ -2126,17 +2131,22 @@ class acp_dkp_mm extends bbDKP_Admin
     $race_id ,  $class_id, $rank_id, $member_comment, $joindate, $leavedate, 
     $guild_id, $gender, $achievpoints, $memberarmoryurl = ' ', $memberportraiturl=' ',  $realm ='', $game_id = 'wow', $phpbb_user_id = 0 )
     {
+		error_log($game_id);
+		error_log($member_name);
+		error_log($member_status);
         global $db, $user, $config;   	
-        
-        if ($member_status != 1 || $member_status !=0)
+        //echo $game_id;
+        //exit;
+        /*if ($member_status != 1 || $member_status !=0)
         {
         	$member_status = 1;
-        }
+        }*/
 
         // Check for existing member name
 		$sql = "SELECT member_id 
 				FROM " . MEMBER_LIST_TABLE ." 
-				WHERE member_name = '". $db->sql_escape($member_name) ."'";
+				WHERE member_name = '". $db->sql_escape($member_name) ."' and game_id='".$game_id."'";
+		error_log(__FILE__." :: query find user: ".sql);
 		$result = $db->sql_query($sql);
 
     	$member_id = 0;
@@ -2154,18 +2164,23 @@ class acp_dkp_mm extends bbDKP_Admin
 		// check level and set to maxlevel if null
 		if ($member_lvl == 0)
 		{
+			error_log(__FILE__." :: Gestione Max Level");
 		    // get maxlevel
 		    $sql = "SELECT max(class_max_level) as maxlevel FROM " . CLASS_TABLE . " where game_id = '" . $game_id ."'";
+			error_log(__FILE__." :: Query: ".$sql);
 		    $result = $db->sql_query($sql);
 			$member_lvl = (int) $db->sql_fetchfield('maxlevel', 1, $result); 
 		}
 
 	    if( ($game_id == 'wow' || $game_id =='aion') && $memberportraiturl == ' ')
 	    {
+				error_log(__FILE__." :: WOW e Aion Portrait");
 				$memberportraiturl = $this->generate_portraitlink( $game_id, $race_id, $class_id, $gender, $member_lvl ); 
 	    }
+		
 		if ($game_id == 'wow' & $memberarmoryurl == ' ' )
 		{
+			error_log(__FILE__." :: WOW Armory");
 			if( $config['bbdkp_default_region'] == '')
 			{
 				// if region is not set then put EU...
@@ -2209,15 +2224,17 @@ class acp_dkp_mm extends bbDKP_Admin
 		'L_CLASS'      => $class_id,
 		'L_ADDED_BY'   => $user->data['username']);
 		
-
+        //echo $query;
+        //exit;
 		$db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
+		error_log(__FILE__." :: query insert: ".'INSERT INTO ' . MEMBER_LIST_TABLE . $query);
 		$member_id = $db->sql_nextid();
 		
 	    $this->log_insert(array(
 		'log_type'   => $log_action['header'],
 		'log_action' => $log_action)
 	    );
-	    
+	    error_log(__FILE__." :: Member ID: ".$member_id);
 	    return $member_id;
 	    
     }
@@ -2298,8 +2315,10 @@ class acp_dkp_mm extends bbDKP_Admin
 		// find id for existing member name
 		$sql = "SELECT * 
 				FROM " . MEMBER_LIST_TABLE ." 
-				WHERE member_name = '". $db->sql_escape($member_name) ."' and member_guild_id = " . (int) $guild_id ;
-		$result = $db->sql_query($sql);
+				WHERE member_name = '". $db->sql_escape($member_name) ."' and member_guild_id = " . (int) $guild_id." and game_id='".$game_id."'" ;
+		//echo $sql;
+        //exit;
+        $result = $db->sql_query($sql);
 
 		// get old data
 		$member_id = 0;
@@ -2403,14 +2422,14 @@ class acp_dkp_mm extends bbDKP_Admin
 		    // we have changes, so update 
 	        $sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
             SET ' . $db->sql_build_array('UPDATE', $sql_arr) . '
-            WHERE member_id = ' . (int) $member_id .  ' and member_guild_id = ' . (int) $guild_id;
+            WHERE member_id = ' . (int) $member_id .  ' and member_guild_id = ' . (int) $guild_id." and game_id='".$game_id."'";
 
 	        $db->sql_query($sql);
 
 	        // update the comment - its not included in array comparison because it always changes.
 	        $sql = 'UPDATE ' . MEMBER_LIST_TABLE . "
             SET member_comment  = '" . $db->sql_escape($member_comment) . "'
-            WHERE member_id = " . (int) $member_id .  ' and member_guild_id = ' . (int) $guild_id;
+            WHERE member_id = " . (int) $member_id .  ' and member_guild_id = ' . (int) $guild_id." and game_id='".$game_id."'";
 	        
 	        $db->sql_query($sql);
 	        
