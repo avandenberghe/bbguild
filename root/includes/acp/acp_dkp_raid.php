@@ -1085,7 +1085,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			'RAID_PAGINATION' 	  => generate_pagination ( append_sid 
 					( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;dkpsys_id=". $dkpsys_id ."&amp;o=" . $current_order ['uri'] ['current']) , 
 					$total_raids, $config ['bbdkp_user_rlimit'], $start, true ), 
-			'ICON_RCOPY'		  => '<img src="' . $phpbb_admin_path . 'images/file_new.gif" alt="' . $user->lang['DUPLICATE_RAID'] . '" title="' . $user->lang['DUPLICATE_RAID'] . '" />',
+			'ICON_RCOPY'		  => '<img src="' . $phpbb_admin_path . 'images/file_new.gif" alt="' . $user->lang['ERROR_DUPLICATE_RAID'] . '" title="' . $user->lang['ERROR_DUPLICATE_RAID'] . '" />',
 			));
 			
 	}
