@@ -3,9 +3,8 @@
  * bbdkp common language file
  * 
  * @package bbDKP
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
  * 
  */
 
@@ -44,7 +43,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.', 
-
+'FOOTERBBDKP' => 'powered by bbDKP', 
 //---- Portal blocks ----- 
 'PORTAL'	=> 'Portal', 
 'RECENTLOOT' => 'Recent Loot', 
@@ -415,7 +414,7 @@ $lang = array_merge($lang, array(
 'AUTHNAME' => 'Ippeh', 
 'WEBNAME' =>'Website', 
 'SVNNAME' => 'Repository',
-'SVNURL' => 'http://code.google.com/p/bbdkp/',
+'SVNURL' => 'https://github.com/bbDKP',
 'WEBURL' => 'http://www.bbdkp.com',
 'AUTHWEB' => 'http://www.explodinglabrats.com/',
 'DONATIONCOMMENT' => 'bbDKP is freeware, but you can support our development efforts by making a contribution.',

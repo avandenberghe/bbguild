@@ -2,9 +2,9 @@
 /**
  * @package bbDKP 1.2.5
  * @author sajaki9@gmail.com
- * @copyright (c) 2009 bbDkp <http://code.google.com/p/bbdkp/>
+ * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
+
  * 
  * FOR UPDATES FROM PRIOR TO 1.2.2 UPDATE TO 1.2.2c FIRST
  * 
@@ -902,7 +902,14 @@ $versions = array(
 		),
 		
 		'1.2.6' => array(
-			// no db changes except in php/html/js 
+         // add dkp points menu
+		'module_add' => array(
+            array('acp', 'ACP_DKP_MAINPAGE', array(
+           		 'module_basename' => 'dkp_point',
+            	 'modes'           => array('pointconfig') ,
+        		),
+
+            )),
 		),		
       
 );
@@ -1290,9 +1297,6 @@ function gameinstall($action, $version)
 	                }
 				}
 
-			     // remove the old config, is obsolete now.
-			    $umil->config_remove('bbdkp_default_game');
-			    
 			    // report what we did to umil
 				return array('command' => sprintf($user->lang['UMIL_GAME123'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 				break;
