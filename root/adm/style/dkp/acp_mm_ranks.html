@@ -6,12 +6,12 @@
 
 <p>{L_ACP_MM_RANKS_EXPLAIN}</p>
 
-<form method="post" action="{F_EDIT_RANKS}" name="post">
+<form method="post" action="{F_EDIT_RANKS}" id="mm_ranks">
 
 <fieldset>
 	
      <label for="guild_id">{L_GUILD}:</label>
-  	<select name="guild_id" class="input" onchange="javascript:form.submit();" > 	
+  	<select id="guild_id" name="guild_id" class="input" onchange="javascript:form.submit();" > 	
        <!-- BEGIN guild_row -->
          <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
        <!-- END guild_row -->
@@ -48,7 +48,7 @@
 	    <td align="center"><input readonly="readonly" disabled="disabled" type="checkbox" name="hide[{ranks_row.RANK_ID}]" value="1"{ranks_row.HIDE_CHECKED} /></td>
 	    <td><input readonly="readonly" type="text" disabled="disabled" name="prefix[{ranks_row.RANK_ID}]" size="25" maxlength="40" value="{ranks_row.RANK_PREFIX}" class="input" /></td>
 	    <td><input readonly="readonly" type="text" disabled="disabled" name="suffix[{ranks_row.RANK_ID}]" size="25" maxlength="40" value="{ranks_row.RANK_SUFFIX}" class="input" /></td>
-	    <td style="text-align:center;"  width="5" nowrap="nowrap">
+	    <td style="text-align:center; width:5 white-space: nowrap;">
 		</td>
 
 	    <!-- ELSE -->
@@ -56,7 +56,7 @@
 	    <td align="center"><input type="checkbox" name="hide[{ranks_row.RANK_ID}]" value="1"{ranks_row.HIDE_CHECKED} /></td>
 	    <td><input type="text" name="prefix[{ranks_row.RANK_ID}]" size="25" maxlength="40" value="{ranks_row.RANK_PREFIX}" class="input" /></td>
 	    <td><input type="text" name="suffix[{ranks_row.RANK_ID}]" size="25" maxlength="40" value="{ranks_row.RANK_SUFFIX}" class="input" /></td>
-	    <td style="text-align:center;"  width="5" nowrap="nowrap">
+	    <td style="text-align:center; width:5; white-space: nowrap;">
 			<a href="{ranks_row.U_DELETE_RANK}">{ICON_DELETE}</a>
 		</td>
 	    

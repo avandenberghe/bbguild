@@ -6,14 +6,15 @@
 <p>{L_EXPLAIN}</p>
 
 <form method="post" action="{F_GUILD}" id="listguilds">
+<fieldset class="tabulated">
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <thead>
   <tr>
     <th style="text-align: left; width:5%">&nbsp;</th>
-    <th style="text-align: left; width:40%; white-space: nowrap"><a href="{U_LIST_GUILD}&amp;o={O_NAME}">{L_GUILD_NAME}</a></th>
+    <th style="text-align: left; width:30%; white-space: nowrap"><a href="{U_LIST_GUILD}&amp;o={O_NAME}">{L_GUILD_NAME}</a></th>
     <th style="text-align: left; width:20%; white-space: nowrap"><a href="{U_LIST_GUILD}&amp;o={O_REALM}">{L_REALM_NAME}</a></th>
     <th style="text-align: left; width:10%;"><a href="{U_LIST_GUILD}&amp;o={O_REGION}">{L_REGION}</a></th>
-    <th style="text-align: left; width:10%;"><a href="{U_LIST_GUILD}&amp;o={O_ROSTER}">{L_SHOWONROSTER}</a></th>
+    <th style="text-align: left; width:15%;"><a href="{U_LIST_GUILD}&amp;o={O_ROSTER}">{L_SHOWONROSTER}</a></th>
     <th style="text-align: center; width:5%;">{L_ACTION}</th>
   </tr>
   </thead>
@@ -25,7 +26,7 @@
   <tbody>
   <!-- BEGIN guild_row -->
   <!-- IF guild_row.S_ROW_COUNT is even -->
-  <tr class="row2">
+  <tr class="row1">
   <!-- ELSE -->
   <tr class="row2">
   <!-- ENDIF -->
@@ -42,6 +43,7 @@
 
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
 	<input class="button2" name="guildadd" type="submit" value="{L_ADD}" />
+</fieldset>
 </fieldset>
 </form>
 <!-- INCLUDE dkp/overall_footer.html -->

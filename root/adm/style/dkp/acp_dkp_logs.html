@@ -5,7 +5,7 @@
 <p>{L_EXPLAIN}</p>
 
 <form id="list" method="post" action="{U_ACTION}">
-
+<fieldset class="tabulated">
 <!-- IF S_LIST -->
 
 <!-- IF VIEWLOGS_PAGINATION -->
@@ -98,6 +98,6 @@
 	<input class="button2" type="submit" name="delmarked" value="{L_DELETE_MARKED}" /><br />
 	<p class="small"><a href="#" onclick="marklist('list', 'mark', true); return false;">{L_MARK_ALL}</a> &bull; <a href="#" onclick="marklist('list', 'mark', false); return false;">{L_UNMARK_ALL}</a></p>
 </fieldset>
-
+</fieldset>
 </form>
 <!-- INCLUDE dkp/overall_footer.html -->
