@@ -5,10 +5,10 @@
 <h1>{L_POINT_SETTINGS}</h1>
 <p>{L_ACP_DKP_POINTCONFIG_EXPLAIN}</p>
 
-<form method="post" action="{F_ADD_CONFIG}" name="post" >
+<form method="post" action="{F_ADD_CONFIG}" id="pointconfig" >
 
 <fieldset>
- <legend>{L_MENU_DKP}</legend>
+<legend>{L_MENU_DKP}</legend>
  
 <dl>	
 	<dt>
@@ -16,7 +16,7 @@
 		{L_SYNCDKP_EXPLAIN}
 	</dt>
 	<dd>
-		<INPUT type="submit" name="syncdkp" value="{L_SYNC}" class="button1" >
+		<input type="submit" name="syncdkp" value="{L_SYNC}" class="button1" />
 	</dd>
 </dl>
 
@@ -31,7 +31,7 @@
 <p>{L_TIMEDKP_EXPLAIN}</p>
 
 <dl><dt>  
-     <label for="timebonus_activate">{L_TIMEDKP}:</label>
+     <label>{L_TIMEDKP}:</label>
      <br />
      </dt>
      <dd>
@@ -76,7 +76,7 @@
 <p>{L_ZEROSUM_EXPLAIN}</p>
 
 <dl><dt>  
-     <label for="zerosum_activate">{L_ZEROSUM}:</label><br />{L_ZEROSUM_ONOFF_EXPLAIN}
+     <label>{L_ZEROSUM}:</label><br />{L_ZEROSUM_ONOFF_EXPLAIN}
      <br />
      </dt>
      <dd>
@@ -90,13 +90,13 @@
      <br />
      </dt>
      <dd>
-		<input type="submit" name="zerosum_synchronise" value="{L_RUN}" class="button1" /> 	 
+		<input type="submit" name="zerosum_synchronise" id="zerosum_synchronise" value="{L_RUN}" class="button1" /> 	 
  	</dd>
 </dl> 
 
 
 <dl><dt>  
-     <label for="add_loot_dkp">{L_ZEROSUM_DISTRIBUTEOTHER}:</label>
+     <label for="zerosumdistother">{L_ZEROSUM_DISTRIBUTEOTHER}:</label>
      <br />{L_ZEROSUM_DISTRIBUTEOTHER_EXPLAIN}
      </dt>
      <dd>
@@ -105,7 +105,7 @@
 </dl> 
 
 <dl><dt>  
-     <label for="add_loot_dkp">{L_ZEROSUMBANKER}:</label>
+     <label for="zerosumbanker">{L_ZEROSUMBANKER}:</label>
      <br />{L_ZEROSUMBANKER_EXPLAIN}
      </dt>
      <dd>
@@ -123,7 +123,7 @@
      <br />
      </dt>
      <dd>
-     <input type="radio" name="decay_activate" value="1"<!-- IF F_DECAYACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
+     <input type="radio" name="decay_activate" id="decay_activate"  value="1"<!-- IF F_DECAYACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
      <input type="radio" name="decay_activate" value="0"<!-- IF F_DECAYACTIVATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
  	</dd>
 </dl> 
@@ -133,28 +133,28 @@
      <br />
      </dt>
      <dd>
-		<input type="submit" name="decay_synchronise" value="{L_RUN}" class="button1" /> 	 
+		<input type="submit" name="decay_synchronise" id="decay_synchronise" value="{L_RUN}" class="button1" /> 	 
  	</dd>
 </dl> 
 
 <dl>
 	<dt><label for="raiddecaypct">{L_DECAYPCTRAIDS}:</label> <br />
 	{L_DECAYPCTRAIDS_EXPLAIN}</dt>
-	<dd><input type="text" name="raiddecaypct" size="5" maxlength="5" value="{RAIDDECAYPCT}" class="input" /></dd>
+	<dd><input type="text" name="raiddecaypct" id="raiddecaypct" size="5" maxlength="5" value="{RAIDDECAYPCT}" class="input" /></dd>
 </dl>
 
 
 <dl>
 	<dt><label for="itemdecaypct">{L_DECAYPCTITEM}:</label> <br />
 	{L_DECAYPCTITEM_EXPLAIN}</dt>
-	<dd><input type="text" name="itemdecaypct" size="5" maxlength="5" value="{ITEMDECAYPCT}" class="input" /></dd>
+	<dd><input type="text" name="itemdecaypct" id="itemdecaypct" size="5" maxlength="5" value="{ITEMDECAYPCT}" class="input" /></dd>
 </dl>
 
 
 <dl>
 	<dt><label for="decayfreq">{L_DECAYFREQ}:</label> <br />
 	{L_DECAYFREQ_EXPLAIN}</dt>
-	<dd><input type="text" name="decayfreq" size="5" maxlength="5" value="{DECAYFREQ}" class="input" /></dd>
+	<dd><input type="text" name="decayfreq" id="decayfreq" size="5" maxlength="5" value="{DECAYFREQ}" class="input" /></dd>
 </dl>
 
 <dl>
@@ -195,7 +195,7 @@
      <br />
      </dt>
     <dd>
-     <input type="radio" name="epgp_activate" value="1"<!-- IF F_EPGPACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
+     <input type="radio" name="epgp_activate" id="epgp_activate"  value="1"<!-- IF F_EPGPACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
      <input type="radio" name="epgp_activate" value="0"<!-- IF F_EPGPACTIVATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}    
 	 </dd>
 </dl> 
@@ -203,7 +203,7 @@
 <dl>
 	<dt><label for="basegp">{L_BGP}:</label> <br />
 	{L_BGP_EXPLAIN}</dt>
-	<dd><input type="text" name="basegp" size="5" maxlength="5" value="{BASEGP}" class="input" /></dd>
+	<dd><input type="text" name="basegp" id="basegp"  size="5" maxlength="5" value="{BASEGP}" class="input" /></dd>
 </dl>
 
 <dl>

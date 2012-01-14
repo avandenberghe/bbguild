@@ -243,6 +243,7 @@ $lang = array_merge($lang, array(
 'ACP_DKP' => 'bbDKP Adminpanel',
 'ACP_ITEMSTATS' => 'Popup Configuration',
 'ACP_INDEXPAGE' => 'Portal Configuration',
+'POINT_SETTINGS' => 'Point Settings', 
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Adminpanel Index',
@@ -290,6 +291,7 @@ $lang = array_merge($lang, array(
 'EDIT_RAIDER_EXPLAIN' => 'Here you can edit a Raiders earned points',
 'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Note : Game cannot be changed once it is set.',
 'SYNCDKP_EXPLAIN'	=> 'Truncates the member DKP Table, rebuilds the values from the source Raid, Raid detail, Items, Adjustments table. Use only when necessary.',
+'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Here you can configure the Points system for your Guild.',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',

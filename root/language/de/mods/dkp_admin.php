@@ -930,6 +930,8 @@ Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />G
 	'WELCOMEBLOCK'		=> 'Tekst',
 	'WELCOMEBLOCK_EXPLAIN'	=> 'Bitte füllen sie den Tekst hier ein. BBcodes werden akzeptiert.',
 	'WELCOMEBLOCKSETTING'	=> 'Einleitungsblock Einstellungen',
+	'POINT_SETTINGS' => 'Punkte System.',
+	'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Hier kannst du das gewünschte Punktesystem einstellen',
 ));
 
 ?>

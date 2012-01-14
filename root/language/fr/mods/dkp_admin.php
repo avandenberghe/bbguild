@@ -930,6 +930,8 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 	'WELCOMEBLOCK'	=> 'Texte du bloc Acceuil',
 	'WELCOMEBLOCK_EXPLAIN'	=> 'Veuillez remplir le texte dans cette zone. les BBcodes sont supportés.',
 	'WELCOMEBLOCKSETTING'	=> 'Règlages Bloc d’acceuil',
+	'POINT_SETTINGS' => 'Système de Points.',
+	'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Ici vous pouvez régler le système d’allocation de points.',
 	
 ));
 
