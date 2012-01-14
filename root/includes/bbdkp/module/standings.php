@@ -3,9 +3,8 @@
  * list of Members per Dkp pool
  * 
  * @package bbDKP
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
  * 
  */
 

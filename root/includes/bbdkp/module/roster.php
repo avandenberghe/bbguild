@@ -5,7 +5,6 @@
  * @package bbDKP
  * @copyright 2011 bbdkp http://www.bbdkp.com
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
  *
  * more data can be presented in the roster with the armory plugin 
  * 

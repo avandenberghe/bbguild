@@ -1,7 +1,4 @@
 <!-- INCLUDE overall_header.html -->
-<!--
-		$Id$
-//-->   
 
 <a name="maincontent"></a>
 
@@ -117,13 +114,6 @@
  </dl>
 </fieldset>
 
-<!-- 
- <fieldset>
- <legend>{L_MENU_VIEWMEMBER}</legend>
-
-
-</fieldset>
- -->
  
  <fieldset>
  <legend>{L_MENU_STANDINGS}</legend>
@@ -148,8 +138,6 @@
     <input type="text" name="list_p3" id="list_p3" size="20" maxlength="30" value="{LIST_P3}" class="input" />{FV_DEFAULT_P3}
     </dd>
   </dl>
-
-  
 
 </fieldset>
 
@@ -206,229 +194,13 @@
   
 </fieldset>
  
- 
- <fieldset>
+  <fieldset>
  <legend>{L_MENU_RAIDS}</legend>
  
  <dl>
     <dt><label for="user_rlimit">{L_RAIDS_PER_PAGE}:</label></dt>
     <dd><input type="text" name="bbdkp_user_rlimit" id="bbdkp_user_rlimit" size="20" maxlength="30" value="{USER_RLIMIT}" class="input" />{FV_DEFAULT_RLIMIT}</dd>
   </dl>
-
-</fieldset>
-
-
- <fieldset>
- <legend>{L_MENU_DKP}</legend>
- 
-<dl>	
-	<dt>
-		{L_SYNCDKP} <br/>
-		{L_SYNCDKP_EXPLAIN}
-	</dt>
-	<dd>
-		<INPUT type="submit" name="syncdkp" value="{L_SYNC}" class="button1" >
-	</dd>
-</dl>
-
-<hr/>
-
-<h3>{L_STANDARDDKP}</h3>
-<p>{L_STANDARDDKP_EXPLAIN}</p>
-
-<hr/>
-
-<h3>{L_TIMEDKP}</h3>
-<p>{L_TIMEDKP_EXPLAIN}</p>
-
-<dl><dt>  
-     <label for="timebonus_activate">{L_TIMEDKP}:</label>
-     <br />
-     </dt>
-     <dd>
-     <input type="radio" name="timebonus_activate" value="1"<!-- IF F_TIMEBONUSACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
-     <input type="radio" name="timebonus_activate" value="0"<!-- IF F_TIMEBONUSACTIVATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
- 	</dd>
-</dl> 
-
-<dl>
-	<dt>   
-	<label for="dkptimeunit">{L_DKPTIMEUNIT}:</label>
-    <br />{L_DKPTIMEUNIT_EXPLAIN}
-	</dt><dd>
-  <input type="text" name="dkptimeunit" id="dkptimeunit" size="10" maxlength="10" value="{DKPTIMEUNIT}" class="input" />
-  </dd>
-  <dd></dd>
-</dl> 
-
-<dl>
-	<dt>   
-	<label for="timeunit">{L_TIMEUNIT}:</label>
-    <br />{L_TIMEUNIT_EXPLAIN}
-	</dt><dd>
-  <input type="text" name="timeunit" id="timeunit" size="10" maxlength="10" value="{TIMEUNIT}" class="input" />
-  </dd>
-  <dd></dd>
-</dl> 
-
-<dl>
-	<dt>   
-	<label for="standardduration">{L_STANDARDDURATION}:</label>
-    <br />{L_STANDARDDURATION_EXPLAIN}
-	</dt><dd>
-  <input type="text" name="standardduration" id="standardduration" size="10" maxlength="10" value="{STANDARDDURATION}" class="input" />
-  </dd>
-  <dd></dd>
-</dl> 
-
-<hr/>
-
-<h3>{L_ZEROSUM}</h3>
-<p>{L_ZEROSUM_EXPLAIN}</p>
-
-<dl><dt>  
-     <label for="zerosum_activate">{L_ZEROSUM}:</label><br />{L_ZEROSUM_ONOFF_EXPLAIN}
-     <br />
-     </dt>
-     <dd>
-     <input type="radio" name="zerosum_activate" value="1"<!-- IF F_ZEROSUMACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
-     <input type="radio" name="zerosum_activate" value="0"<!-- IF F_ZEROSUMACTIVATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
- 	</dd>
-</dl> 
-
-<dl><dt>  
-     <label for="zerosum_synchronise">{L_RESYNC_ZEROSUM}:</label><br />{L_RESYNC_ZEROSUM_EXPLAIN}
-     <br />
-     </dt>
-     <dd>
-		<input type="submit" name="zerosum_synchronise" value="{L_RUN}" class="button1" /> 	 
- 	</dd>
-</dl> 
-
-
-<dl><dt>  
-     <label for="add_loot_dkp">{L_ZEROSUM_DISTRIBUTEOTHER}:</label>
-     <br />{L_ZEROSUM_DISTRIBUTEOTHER_EXPLAIN}
-     </dt>
-     <dd>
-     <input name="zerosumdistother" type="checkbox" id="zerosumdistother" value="1" <!-- IF F_ZEROSUM_DISTOTHER == 1 --> checked="checked"<!-- ENDIF -->  />
- 	</dd>
-</dl> 
-
-<dl><dt>  
-     <label for="add_loot_dkp">{L_ZEROSUMBANKER}:</label>
-     <br />{L_ZEROSUMBANKER_EXPLAIN}
-     </dt>
-     <dd>
-     
- 	<select id="zerosumbanker" name="zerosumbanker">{S_BANKER_OPTIONS}</select>
- 	</dd>
-</dl> 
-
-<hr/>
-<h3>{L_DECAY}</h3>
-<p>{L_DECAY_EXPLAIN}</p>
-
-<dl><dt>  
-     <label for="decay_activate">{L_DECAY}:</label>
-     <br />
-     </dt>
-     <dd>
-     <input type="radio" name="decay_activate" value="1"<!-- IF F_DECAYACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
-     <input type="radio" name="decay_activate" value="0"<!-- IF F_DECAYACTIVATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
- 	</dd>
-</dl> 
-
-<dl><dt>  
-     <label for="decay_synchronise">{L_RESYNC_DECAY}:</label><br />{L_RESYNC_DECAY_EXPLAIN}
-     <br />
-     </dt>
-     <dd>
-		<input type="submit" name="decay_synchronise" value="{L_RUN}" class="button1" /> 	 
- 	</dd>
-</dl> 
-
-<dl>
-	<dt><label for="raiddecaypct">{L_DECAYPCTRAIDS}:</label> <br />
-	{L_DECAYPCTRAIDS_EXPLAIN}</dt>
-	<dd><input type="text" name="raiddecaypct" size="5" maxlength="5" value="{RAIDDECAYPCT}" class="input" /></dd>
-</dl>
-
-
-<dl>
-	<dt><label for="itemdecaypct">{L_DECAYPCTITEM}:</label> <br />
-	{L_DECAYPCTITEM_EXPLAIN}</dt>
-	<dd><input type="text" name="itemdecaypct" size="5" maxlength="5" value="{ITEMDECAYPCT}" class="input" /></dd>
-</dl>
-
-
-<dl>
-	<dt><label for="decayfreq">{L_DECAYFREQ}:</label> <br />
-	{L_DECAYFREQ_EXPLAIN}</dt>
-	<dd><input type="text" name="decayfreq" size="5" maxlength="5" value="{DECAYFREQ}" class="input" /></dd>
-</dl>
-
-<dl>
-	<dt><label for="decayfreqtype">{L_DECAYFREQTYPE}:</label> <br />
-	{L_DECAYFREQTYPE_EXPLAIN}</dt>
-	<dd>
-	<select id="decayfreqtype" name="decayfreqtype">{S_FREQTYPE_OPTIONS}</select>
-	</dd>
-</dl>
-
-<dl>
-<dt>
-<label>{L_FORMULA}</label>
-</dt>
-<dd>
-{L_DECAY_N}	<br/>
-{L_DECAY_I}	<br/> 
-{L_DECAY_D}	<br/>
-{L_DECAY_R}	<br/>
-{L_DECAY_K}	<br/>
-<br/>
-{L_DECAY_L} <br/>	
-{L_DECAY_J}	<br/>
-{L_DECAY_F}<br/>
-
-</dd>
-</dl>
-
-
-<hr/>
-
-<h3>{L_EPGP}</h3>
-<p>{L_EPGP_EXPLAIN}</p>
-
-<dl>
-	<dt>  
-     <label for="epgp_activate">{L_EPGP}:</label><br />{L_EPGP_ONOFF_EXPLAIN}
-     <br />
-     </dt>
-    <dd>
-     <input type="radio" name="epgp_activate" value="1"<!-- IF F_EPGPACTIVATE == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
-     <input type="radio" name="epgp_activate" value="0"<!-- IF F_EPGPACTIVATE == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}    
-	 </dd>
-</dl> 
-	
-<dl>
-	<dt><label for="basegp">{L_BGP}:</label> <br />
-	{L_BGP_EXPLAIN}</dt>
-	<dd><input type="text" name="basegp" size="5" maxlength="5" value="{BASEGP}" class="input" /></dd>
-</dl>
-
-<dl>
-<dt>
-<label>{L_FORMULA}</label>
-</dt>
-<dd>
-{L_EP_DEFINITION}<br/>
-{L_DECAY_EP}  <br/>
-{L_GP_DEFINITION} <br/>
-{L_RGP_DEFINITION} <br />
-{L_DECAY_GP}<br/>
-</dd>
-</dl>
 
 </fieldset>
 

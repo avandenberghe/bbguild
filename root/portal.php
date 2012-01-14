@@ -3,10 +3,10 @@
  * Indexpage for bbdkp
  * 
  * @package bbDKP
- * @copyright 2011 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2011 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author ippehe <ippe.he@gmail.com>
- * @version $Id$
+
  * 
  */
 
