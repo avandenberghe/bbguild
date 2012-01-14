@@ -9,7 +9,7 @@
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
 		<title lang="en"><![CDATA[bbDKP]]></title>
 		<description lang="fr"><![CDATA[Fichiers Français pour bbDKP]]></description>
-		<author-notes lang="fr"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5 with Libxml 2.6.0 (simplexml usage), Curl 
+		<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5 with Libxml 2.6.0 (simplexml usage), Curl 
 Veuillez faire un backup de votre installation phpBB3 avant de commencer.
 ]]>
 </author-notes>
@@ -31,8 +31,13 @@ Veuillez faire un backup de votre installation phpBB3 avant de commencer.
 			<target-version>3.0.9</target-version>
 		</installation>
 		<link-group>
-			<link type="parent" lang="en" href="../install.xml">Installation manual</link>
-			<link type="parent" lang="fr" href="../install.xml">Manuel d’installation</link>
+			<link type="parent" lang="en" href="../install.xml">Installation 1.2.6</link>
+			<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2.6</link>
+			<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2.6</link>				
+
+			<link type="parent" lang="en" href="install_123_to_125.xml">update 1.2.3 to 1.2.6</link>
+			<link type="parent" lang="fr" href="install_123_to_125.xml">Mise à jour 1.2.3 à 1.2.6</link>
+			<link type="parent" lang="de" href="install_123_to_125.xml">Aktualisierung 1.2.3 bis 1.2.6</link>
 		</link-group>
 	</header>
 	<action-group>
