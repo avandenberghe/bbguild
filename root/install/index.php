@@ -900,6 +900,10 @@ $versions = array(
     	  		),
         
 		),
+		
+		'1.2.6' => array(
+			// no db changes except in php/html/js 
+		),		
       
 );
 
