@@ -201,6 +201,7 @@ $lang = array_merge($lang, array(
 	'FV_REQUIRED_MEMBERS'	=> 'Mindestens ein Mitglied muss ausgewählt sein.',
 	'FV_REQUIRED_DKPSYS_NAME'	=> 'Das DKP Pool feld ist notwendig',
 	'FV_REQUIRED_NAME'	=> 'Das Namensfeld ist notwendig.',
+	'FV_REQUIRED_ID' => 'Das id Feld ist notwendig.',
 	'FV_REQUIRED_PASSWORD'	=> 'Das Passwort-Feld ist notwendig.',
 	'FV_REQUIRED_RAIDID'	=> 'Ein Raid muss ausgewählt sein.',
 	'FV_REQUIRED_USER'	=> 'Das Benutzernamen-Feld ist notwendig.',

@@ -81,7 +81,7 @@ class acp_dkp_game extends bbDKP_Admin
 					{
 						trigger_error('FORM_INVALID');
 					}
- 					$game_id = request_var('game_id', '');
+ 					$game_id = request_var('game_id', request_var('hidden_game_id', ''));
 					$sql = 'SELECT max(faction_id) AS max FROM ' . FACTION_TABLE . " where game_id = '" . $game_id . "'"; 
 					$result = $db->sql_query($sql);	
 					$factionid = (int) $db->sql_fetchfield('max', 0 ,$result );	
@@ -122,14 +122,16 @@ class acp_dkp_game extends bbDKP_Admin
 						'SELECTED' => '',
 						'OPTION'   => $gamename, 
 						));
-						
+						$hidden_game_id = $gameid;
                 		$installed_games[] = $gameid; 
                 	} 
                 }
 
 				// send parameters to template
                    $template->assign_vars( array(
-                   	 'U_ACTION'		=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addfaction'),  
+                   	 'GAME_ID'			=> $hidden_game_id, 
+                   	 'U_ACTION'			=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addfaction'),  
+                   	 'MSG_NAME_EMPTY'   => $user->lang['FV_REQUIRED_NAME'],
                 ));		
 				
                 $this->page_title = 'ACP_LISTGAME';
@@ -711,6 +713,7 @@ class acp_dkp_game extends bbDKP_Admin
 								'S_ADD'   			 => FALSE,
 	                    		'U_ACTION'			 => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addclass'),
 	                    		'MSG_NAME_EMPTY'   	 => $user->lang['FV_REQUIRED_NAME'],
+	                    		'MSG_ID_EMPTY'   	 => $user->lang['FV_REQUIRED_ID'],
 		                ));
 
             		}
@@ -743,6 +746,7 @@ class acp_dkp_game extends bbDKP_Admin
 								'S_ADD'   				=> TRUE,
 	                    		'U_ACTION'				=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addclass'),
 	                    		'MSG_NAME_EMPTY'   		=> $user->lang['FV_REQUIRED_NAME'],
+	                    		'MSG_ID_EMPTY'   	 	=> $user->lang['FV_REQUIRED_ID'],
 		                ));
 		                
             		}

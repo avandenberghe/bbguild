@@ -332,7 +332,7 @@ class acp_dkp extends bbDKP_Admin
 	                    $template->assign_vars(array(
 	        				'S_UP_TO_DATE' => false , 
 	                       'BBDKPVERSION' => $user->lang['YOURVERSION']  . $installed_version ,
-	                    	'UPDATEINSTR' => $user->lang['LATESTVERSION'] . $latest_version . ', <a href=' . $user->lang['WEBURL'] . ">" . 
+	                    	'UPDATEINSTR' => $user->lang['LATESTVERSION'] . $latest_version . ', <a href="' . $user->lang['WEBURL'] . '">' . 
 	                    		$user->lang['DOWNLOAD'] . '</a>'
 	                    ));
 	 

@@ -104,6 +104,7 @@ $lang = array_merge($lang, array(
 'FV_REQUIRED_STATUS' => 'The status field is required.',
 'FV_REQUIRED_MESSAGE' => 'The message field is required.',
 'FV_REQUIRED_NAME' => 'The name field is required.',
+'FV_REQUIRED_ID' => 'The id field is required.',
 'FV_REQUIRED_STATUS' => 'The status field is required.',
 'FV_REQUIRED_HEADLINE' => 'The headline field is required.',
 'FV_DKPSTATUSYN' => 'Dkpsystem status must either be Y (Active) or N (Inactive)', 

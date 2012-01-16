@@ -73,7 +73,7 @@ function stateChanged()
 		if (xmlhttp.status == 200)
 		{
 			//remove select options
-			var rsel = document.getElementById('rankselect'); 
+			var rsel = document.getElementById('member_rank_id'); 
 			rsel.options.length = 0; 
 			
 			//receive xml
@@ -132,7 +132,7 @@ function classracestateChanged()
 			var classes = classlist.getElementsByTagName("class");
 			
 			//now modify html : first remove old select options
-			var rsel = document.getElementById('raceselect'); 
+			var rsel = document.getElementById('member_race_id'); 
 			rsel.options.length = 0; 
 
 			
@@ -145,7 +145,7 @@ function classracestateChanged()
 			    rsel.options[i] = new Option(racename,raceid, true, false); 
 			}
 			
-			var csel = document.getElementById('classselect'); 
+			var csel = document.getElementById('member_class_id'); 
 			csel.options.length = 0; 
 
 			
@@ -183,7 +183,7 @@ function classracestateChanged()
 
 <p>{L_EXPLAIN}</p>
 
-<form method="post" action="{F_ADD_MEMBER}" name="post" onsubmit="return check_form(this)" >
+<form method="post" action="{F_ADD_MEMBER}" id="mm_addmember" onsubmit="return check_form(this)" >
 
 <fieldset>
 <legend>{L_ACP_MM_ADDMEMBER}</legend>
@@ -197,19 +197,19 @@ function classracestateChanged()
    
  <dl>
  <dt><label for="activated">{L_ACTIVE}:</label></dt>
- <dd><input type="checkbox" class="radio" name="activated" value="{MEMBER_ID}" {STATUS} /></dd>
+ <dd><input type="checkbox" class="radio" name="activated" id="activated"  value="{MEMBER_ID}" {STATUS} /></dd>
  </dl>
 
  <dl>
     <dt><label for="member_level">{L_LEVEL}:</label></dt>
-		<dd><input type="text" name="member_level" size="20" maxlength="2" value="{MEMBER_LEVEL}" class="input" /></dd>
+		<dd><input type="text" name="member_level" id="member_level" size="20" maxlength="2" value="{MEMBER_LEVEL}" class="input" /></dd>
  </dl> 
 
  
 <dl>
 <dt><label for="member_guild_id">{L_GUILD}:</label></dt>
 <dd>
-	<select name="member_guild_id" class="input" onchange="return GetRank(this.value)">
+	<select name="member_guild_id" id="member_guild_id" class="input" onchange="return GetRank(this.value)">
 	   <!-- BEGIN guild_row -->
     <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
        <!-- END guild_row -->
@@ -220,7 +220,7 @@ function classracestateChanged()
 <dl>
   <dt><label for="member_rank_id">{L_MEMBER_RANK}:</label></dt>
 <dd>
-<select id="rankselect" name="member_rank_id" class="input">
+<select id="member_rank_id" name="member_rank_id" class="input">
 	   <!-- BEGIN rank_row -->
     <option value="{rank_row.VALUE}"{rank_row.SELECTED}>{rank_row.OPTION}</option>
        <!-- END rank_row -->
@@ -232,7 +232,7 @@ function classracestateChanged()
   <dl>
     <dt><label for="game_id">{L_GAME}:</label></dt>
   		<dd>
-  		<select name="game_id" class="input" onchange="return GetClassRace(this.value)">
+  		<select id="game_id" name="game_id" class="input" onchange="return GetClassRace(this.value)">
        <!-- BEGIN game_row -->
        <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
         <!-- END game_row -->
@@ -241,7 +241,7 @@ function classracestateChanged()
  
   <dl>
     <dt><label for="member_race_id">{L_RACE}:</label></dt>
-  		<dd><select id="raceselect" name="member_race_id" class="input">
+  		<dd><select id="member_race_id" name="member_race_id" class="input">
        <!-- BEGIN race_row -->
        <option value="{race_row.VALUE}"{race_row.SELECTED}>{race_row.OPTION}</option>
         <!-- END race_row -->
@@ -253,7 +253,7 @@ function classracestateChanged()
   <dl>
     <dt><label for="member_class_id">{L_CLASS}:</label></dt>
 		<dd>
-		  <select id="classselect" name="member_class_id" class="input">
+		  <select id="member_class_id" name="member_class_id" class="input">
         <!-- BEGIN class_row -->
         <option value="{class_row.VALUE}"{class_row.SELECTED}>{class_row.OPTION}</option>
         <!-- END class_row -->
@@ -264,8 +264,8 @@ function classracestateChanged()
   <dl>
     <dt><label for="gender">{L_GENDER}:</label></dt>
     <dd>
-    <input type="radio" name="gender"  value="0"{MALE_CHECKED} /> {L_MALE}&nbsp;&nbsp;
-    <input type="radio" name="gender"  value="1"{FEMALE_CHECKED} /> {L_FEMALE}
+    <input type="radio" id="gender" name="gender"  value="0" {MALE_CHECKED} /> {L_MALE}&nbsp;&nbsp;
+    <input type="radio" name="gender"  value="1" {FEMALE_CHECKED} /> {L_FEMALE}
    </dd>
  </dl>
   
@@ -312,7 +312,7 @@ function classracestateChanged()
   
     <dl>
     <dt><label for="member_comment">{L_COMMENT}:</label></dt>
-	<dd><textarea name="member_comment" rows="15" cols="30" style="width: 100%" class="input">{MEMBER_COMMENT}</textarea></dd>
+	<dd><textarea name="member_comment" id="member_comment" rows="15" cols="30" style="width: 100%" class="input">{MEMBER_COMMENT}</textarea></dd>
 
   </dl> 
 

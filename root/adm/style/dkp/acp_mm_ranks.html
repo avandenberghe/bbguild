@@ -45,7 +45,7 @@
 	    <!-- IF ranks_row.S_READONLY == 1 -->
 
 	    <td><input type="text" readonly="readonly" disabled="disabled" name="ranks[{ranks_row.RANK_ID}]" size="30" maxlength="50" value="{ranks_row.RANK_NAME}" class="input" /></td>
-	    <td align="center"><input readonly="readonly" disabled="disabled" type="checkbox" name="hide[{ranks_row.RANK_ID}]" value="1"{ranks_row.HIDE_CHECKED} /></td>
+	    <td align="center"><input readonly="readonly" disabled="disabled" type="checkbox" name="hide[{ranks_row.RANK_ID}]" value="1" {ranks_row.HIDE_CHECKED} /></td>
 	    <td><input readonly="readonly" type="text" disabled="disabled" name="prefix[{ranks_row.RANK_ID}]" size="25" maxlength="40" value="{ranks_row.RANK_PREFIX}" class="input" /></td>
 	    <td><input readonly="readonly" type="text" disabled="disabled" name="suffix[{ranks_row.RANK_ID}]" size="25" maxlength="40" value="{ranks_row.RANK_SUFFIX}" class="input" /></td>
 	    <td style="text-align:center; width:5 white-space: nowrap;">
@@ -53,7 +53,7 @@
 
 	    <!-- ELSE -->
 	      <td><input type="text" name="ranks[{ranks_row.RANK_ID}]" size="30" maxlength="50" value="{ranks_row.RANK_NAME}" class="input" /></td>
-	    <td align="center"><input type="checkbox" name="hide[{ranks_row.RANK_ID}]" value="1"{ranks_row.HIDE_CHECKED} /></td>
+	    <td align="center"><input type="checkbox" name="hide[{ranks_row.RANK_ID}]" value="1" {ranks_row.HIDE_CHECKED} /></td>
 	    <td><input type="text" name="prefix[{ranks_row.RANK_ID}]" size="25" maxlength="40" value="{ranks_row.RANK_PREFIX}" class="input" /></td>
 	    <td><input type="text" name="suffix[{ranks_row.RANK_ID}]" size="25" maxlength="40" value="{ranks_row.RANK_SUFFIX}" class="input" /></td>
 	    <td style="text-align:center; width:5; white-space: nowrap;">
