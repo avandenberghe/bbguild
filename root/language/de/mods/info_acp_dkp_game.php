@@ -1,11 +1,12 @@
 <?php
 /**
- * bbdkp acp language file for Game, Race and Class (German)
+ * bbdkp acp language file for Game, Race and Class (German-Informal)
  * 
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
+ * @translation unknown author
  * 
  */
 

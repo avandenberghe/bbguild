@@ -1,11 +1,12 @@
 <?php
 /**
- * bbdkp ucp language file 
+ * bbdkp ucp language file (German-Informal)
  * 
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2010 bbdkp <https://www.github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
+ * @translation various unknown authors, killerpommes
  * 
  */
 
@@ -26,9 +27,9 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
     'UCP_DKP_CHARACTERS'	=> 'Charactere',
-	'UCP_DKP'				=> 'bbDKP',  
-	'UCP_DKP_CHARACTER_LIST'	=> 'Meine Charactere',
-	'UCP_DKP_CHARACTER_ADD'		=> 'Character zufügen',	
+	'UCP_DKP'				=> 'bbDKP Benutzermenü',  
+	'UCP_DKP_CHARACTER_LIST'	=> 'Meine Charaktere',
+	'UCP_DKP_CHARACTER_ADD'		=> 'Charakter hinzufügen',
 
 ));
 
