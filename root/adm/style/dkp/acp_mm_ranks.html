@@ -17,7 +17,7 @@
        <!-- END guild_row -->
     </select>
  </fieldset>
-
+<!-- IF .ranks_row -->
 <div>
 <fieldset>
 <legend>{L_EDIT_RANKS}</legend>
@@ -67,12 +67,18 @@
 	  </tbody>
 </table>
 
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-     <input type="submit" name="update" value="{L_EDIT_RANKS}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+     <input type="submit" name="update" value="{L_EDIT_RANKS}" class="button1" /> 
 </fieldset>
+
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+     <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+</fieldset>
+
+
 </fieldset>
 </div>
-
+<!-- ENDIF -->
 <div>
 
 
@@ -101,10 +107,16 @@
 
 </table>
   
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+  {S_FORM_TOKEN}
+     <input type="submit" name="add" value="{L_ADD_RANKS}" class="button1" />
+</fieldset>
+
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
   {S_FORM_TOKEN}
-     <input type="submit" name="add" value="{L_ADD_RANKS}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+     <input type="reset" name="reset" value="{L_RESET}" class="button1" />
 </fieldset>
+
  
 </fieldset>
  

@@ -923,7 +923,7 @@ class acp_dkp_game extends bbDKP_Admin
                     	'CLASSID' 		=> $row['class_id'],
                         'CLASSNAME' 	=> $row['class_name'],
                     	'COLORCODE' 	=> $row['colorcode'],
-                    	'CLASSARMOR' 	=> $user->lang[$row['class_armor_type']], 	
+                    	'CLASSARMOR' 	=> (isset($user->lang[$row['class_armor_type']]) ? $user->lang[$row['class_armor_type']] : ' '), 	
                     	'CLASSMIN' 		=> $row['class_min_level'], 	
                     	'CLASSMAX' 		=> $row['class_max_level'], 	
                         'CLASSHIDE' 	=> $row['class_hide'], 	
