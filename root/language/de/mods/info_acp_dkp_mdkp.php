@@ -1,11 +1,12 @@
 <?php
-/**
- * bbdkp acp language file for mainmenu - German
+/** 
+ * bbdkp acp language file for mainmenu (German-Informal)
  * 
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
+ * @translation various unknown authors, killerpommes
  * 
  */
 
@@ -25,10 +26,10 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-  	'ACP_DKP_MDKP'	        	=> 'Kontoverwaltung', 
-    'ACP_DKP_EDITMEMBERDKP'		=> 'DKP Konto verwalten',
-	'ACP_DKP_LISTMEMBERDKP'		=> 'DKP Kontoliste',  
-	'ACP_DKP_MEMBER_TRF'		=> 'DKP Konto Transfer',
+  	'ACP_DKP_MDKP'	        	=> 'Mitglied DKP Verwaltung', 
+    'ACP_DKP_EDITMEMBERDKP'		=> 'Bearbeite Mitglied DKP',
+	'ACP_DKP_LISTMEMBERDKP'		=> 'Mitglied DKP',  
+	'ACP_DKP_MEMBER_TRF'		=> 'DKP Transfer',
 ));
 
 ?>

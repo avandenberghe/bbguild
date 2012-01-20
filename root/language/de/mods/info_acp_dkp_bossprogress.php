@@ -1,11 +1,12 @@
 <?php
-/**
+/** 
  * bbdkp acp language file for mainmenu
  * 
  * @package bbDkp
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
+ * @translation various unknown authors, killerpommes
  * 
  */
 
@@ -25,7 +26,7 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-	'ACP_DKP_BOSS'					=> 'Bossvorgang',  
+	'ACP_DKP_BOSS'					=> 'Bossfortschritt',  
 	'ACP_DKP_BOSS_BOSSPROGRESS'		=> 'Bosse verwalten',
 	'ACP_DKP_BOSS_ZONEPROGRESS'		=> 'Gebiete verwalten',
 ));

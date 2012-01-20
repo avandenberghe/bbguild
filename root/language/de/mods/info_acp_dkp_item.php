@@ -1,11 +1,12 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu - German
+ * bbdkp acp language file for mainmenu (German-Informal)
  * 
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
+ * @translation various unknown authors, killerpommes
  * 
  */
 
@@ -26,10 +27,10 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
 	'ACP_DKP_ITEM'	=> 'Gegenstandsverwaltung',  
-	'ACP_DKP_ITEM_ADD'		=> 'Gegenstand zufügen',
+	'ACP_DKP_ITEM_ADD'		=> 'Gegenstand hinzufügen',
 	'ACP_DKP_ITEM_LIST'		=> 'Gegenstände',
 	'ACP_DKP_ITEM_SEARCH'	=> 'Gegenstandssuche',
-	'ACP_DKP_ITEM_VIEW'		=> 'Gegenstand Anschauen',
+	'ACP_DKP_ITEM_VIEW'		=> 'Gegenstand zeigen',
 ));
 
 ?>
