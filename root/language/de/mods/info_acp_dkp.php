@@ -28,7 +28,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
     'ACP_CAT_DKP'			=> 'bbDKP',
 	'ACP_DKP_MAINPAGE'		=> 'Allgemeine Einstellungen',  
-	'ACP_DKP_PANEL'		    => 'Adminmenü',  
+	'ACP_DKP_PANEL'		    => 'AdminmenÃ¼',  
 	'ACP_DKP_CONFIG'		=> 'Haupteinstellungen',
 	'ACP_DKP_INDEX'			=> 'Portaleinstellungen',
 	'ACP_DKP_LOGS'			=> 'Zeige Protokoll',

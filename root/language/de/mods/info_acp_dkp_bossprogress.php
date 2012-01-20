@@ -1,5 +1,5 @@
 <?php
-/**
+/** 
  * bbdkp acp language file for mainmenu
  * 
  * @package bbDkp

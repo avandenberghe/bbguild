@@ -1,4 +1,4 @@
-hinzugefügt<?php
+<?php
 /**
  * bbdkp admin language file (German-Informal)
  * @author Sajaki@bbdkp.com
@@ -43,8 +43,8 @@ $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP ist momentan nicht verfügbar.',
 'BBDKPSCRIPTALERT' => 'bbDKP enthält Javascript. Bitte aktivieren Sie javascript in ihren Browser.',
 //addnews
-'ADD_NEWS' => 'News zufügen',
-'ADDNEWS_TITLE' => 'Newsbeitrag zufügen',
+'ADD_NEWS' => 'News hinzufügen',
+'ADDNEWS_TITLE' => 'Newsbeitrag hinzufügen',
 'DELETE_NEWS' => 'Newsbeitrag löschen',
 'HEADLINE' => 'Kopfzeile',
 'MESSAGE_BODY' => 'Nachrichtentext',
@@ -199,18 +199,18 @@ $lang = array_merge($lang, array(
 'UMIL_GAMEUNINST123' => 'Spieldaten entfernt.',
 
 // ACP titles
-'BBDKP_WELCOME' => 'Wilkommen bei bbDKP',
+'BBDKP_WELCOME' => 'Willkommen bei bbDKP',
 'ACP_DKP_MAINPAGE' => 'DKP Übersicht',
 'ACP_DKP_BBSTATS' => 'Admin-Übersicht',
-'ACP_ADDEVENT' => 'Ereignis zufügen',
+'ACP_ADDEVENT' => 'Ereignis hinzufügen',
 'ACP_LISTEVENTS' => 'Ereignisliste',
-'ACP_ADDDKPSYS' => 'DKP Pool zufügen',
+'ACP_ADDDKPSYS' => 'DKP Pool hinzufügen',
 'ACP_LISTDKPSYS' => 'DKP Pool Übersicht',
-'ACP_ADDIADJ' => 'Anpassung zufügen',
+'ACP_ADDIADJ' => 'Anpassung hinzufügen',
 'ACP_LISTIADJ' => 'Anpassungen',
-'ACP_ADDITEM' => 'Gegenstand zufügen',
+'ACP_ADDITEM' => 'Gegenstand hinzufügen',
 'ACP_LISTITEMS' => 'Gegenstände',
-'ACP_ADDRAID' => 'Raid zufügen',
+'ACP_ADDRAID' => 'Raid hinzufügen',
 'ACP_LISTRAIDS' => 'Raidübersicht',
 'ACP_ADDGAME' => 'Spiel hinzufügen',
 'ACP_LISTGAME' => 'Spiele',
@@ -223,7 +223,7 @@ $lang = array_merge($lang, array(
 'ACP_MM_ADDMEMBER' => 'Mitglied hinzufügen',
 'ACP_MM_EDITMEMBER'  => 'Mitglied bearbeiten',
 'ACP_MM_LISTMEMBERS' => 'Mitgliederliste',
-'ACP_MM_ADDGUILD' => 'Gilde zufügen',
+'ACP_MM_ADDGUILD' => 'Gilde hinzufügen',
 'ACP_MM_LISTGUILDS' => 'Gildenliste',
 'ACP_MM_RANKS' => 'Mitgliederrangen',
 'ACP_MM_TRANSFER' => 'Übertrag',
@@ -255,7 +255,7 @@ $lang = array_merge($lang, array(
 'ACP_EDITRAID_EXPLAIN'  => 'Hier kannst du deinen Raid bearbeiten.',
 'ACP_LISTRAIDS_EXPLAIN' => 'Hier ist die Raid Liste pro DKP Pool. Wenn du den Raidnamen anklickst, bringt dich in Verwaltungsmodus',
 'ACP_DKP_LOGS_EXPLAIN'  => 'Hier werden alle Aktionen von bbDKP aufgelistet. Du kannst nach Benutzername, Datum, IP oder Aktion.',
-'ACP_MM_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenranken und Präfix/Suffixe einstellen. (Zum zufügen, die letzte Zeile eintippen und bestätigen. Zum löschen, entferne den Namen und bestätige). Rang 99 (den \'out\' Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch den Arsenal-Plugin. ',
+'ACP_MM_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenranken und Präfix/Suffixe einstellen. (Zum hinzufügen, die letzte Zeile eintippen und bestätigen. Zum löschen, entferne den Namen und bestätige). Rang 99 (den \'out\' Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch den Arsenal-Plugin. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Gildenmitgliederliste. Hier kannst du Mitglieder verwalten oder löschen. ACHTUNG: löschung bedeutet dass die ganze Mitgliedraidgeschichte in allen DKP Pools vernichtet wird! ',
 'ACP_MM_LISTGUILDS_EXPLAIN' => 'Gildenliste. Bevor du Mitglieder einfügen kannst, musst du eine Gilde hinzufügen.',
 'ACP_MM_ADDGUILD_EXPLAIN' => 'Hier kannst du Gilden löschen oder hinzufügen.',
@@ -312,7 +312,7 @@ $lang = array_merge($lang, array(
 'ADD_MEMBER' => 'füge Mitglied zu',
 'LIST_EDIT_DEL_MEMBER' => 'Mitglieder Auflisten, bearbeiten oder löschen',
 'EDIT_RANKS' => 'Gildenränge bearbeiten',
-'ADD_RANKS' => 'Gildenränge zufügen',
+'ADD_RANKS' => 'Gildenränge hinzufügen',
 'TRANSFER_HISTORY' => 'Mitglied verschieben',
 
 
@@ -479,8 +479,8 @@ $lang = array_merge($lang, array(
 'FORM_ERROR' => 'Einführungsfehler : bitte eingaben kontrollieren <br />',
 'ERROR_RAID_NOATTENDEES' => 'Fehler: Alter Angriff hat keine Teilnehmer. Gewinnwerte der alten Teilnehmer können nicht gelöscht werden. ',
 'ERROR_NODKPACCOUNT' => 'Achtung : keine DKP konten gefunden zur Überweisung',
-'ERROR_NOEVENTSDEFINED' => 'Achtung : keine Events definiert. Kann kein Raid zufügen. ',
-'ERROR_NOGUILDMEMBERSDEFINED' => 'Achtung : keine Gildenmitglieder, kann kein Raid zufügen.',
+'ERROR_NOEVENTSDEFINED' => 'Achtung : keine Events definiert. Kann kein Raid hinzufügen. ',
+'ERROR_NOGUILDMEMBERSDEFINED' => 'Achtung : keine Gildenmitglieder, kann kein Raid hinzufügen.',
 'ERROR_RANKMEMBERS' => 'Achtung : Kann Rang nicht löschen denn es gibt noch immer Mitglieder mit diesen Rang.',
 'ERROR_NOSELECT' => 'Bitte wähle ein VON und ein ZU Mitgliedsname',
 'ERROR_NOADJUSTMENTS' => 'Keine Anpassungen gefunden.',
@@ -599,7 +599,7 @@ Der Spieler bekommt 5 Punkte da er einen Drachen besiegt hat, 2 Punkte weil er p
 
 'ZEROSUM' => 'Nullsummen DKP', 
 'ZEROSUM_ONOFF_EXPLAIN' => 'Kann nicht kombiniert werden mit EPGP', 
-'ZEROSUM_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo alle ausgegebenen Punkte auf den Raid umverteilt werden, so das am Ende der, die Summe der bekommenen und ausgegebenen Punkte gleich sind. Die Raid Mitglieder werden folglich DKP Punkte bekommen wenn jemand ein Item bekommt. Dies sorgt dafür das es keine inflation oder Punkte horten gibt <br/>',
+'ZEROSUM_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo alle ausgegebenen Punkte auf den Raid umverteilt werden, so das am Ende die Summe der bekommenen und ausgegebenen Punkte gleich sind. Die Raid Mitglieder werden folglich DKP Punkte bekommen wenn jemand ein Item bekommt. Dies sorgt dafür das es keine inflation oder Punkte horten gibt <br/>',
 'ZEROSUM_EXAMPLE' => ' <strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 1. Es kostet 20 Punkte.  <br/>  Spieler 1 bezahlt 20 Punkte, bekommt 20/10 = 2 Punkte. Spieler 2 bis 10 bekommt jeder 20/10 =2 Punkte.  <br/> Das Gleichgewicht am Ende ist: bekommen 20 Punkte, ausgegeben 20 Punkte.',
 'ZEROSUM_ADVANTAGE' => ' <strong>Vorteile</strong> : Keine Punkte inflation, wenn alle Spieler auf dem gleichen Ausrüstungslevel sind.', 
 'ZEROSUM_DISADVANTAGE' => '<strong>Nachteile</strong> horten. Wenn ein gut ausgerüsteter Spieler der Gilde beitritt wird er nichts ausgeben und so seine Punkte horten, bis er bei einem Ungleichgewicht gegenüber den anderen Spielern ist. 
@@ -623,7 +623,7 @@ netto Ergebnis für den ganzen Raid: <br />bekommen : 30 *10 = 300 Punkte <br />
 
 'EPGP' => 'EPGP Anstrengung / Ausrüstungspunkte',
 'EPGP_ONOFF_EXPLAIN' => 'Kann nicht mit Nullsummen kombiniert werden',  
-'EPGP_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo die Beute dem zugesprochen wird der das höchste Anstrengung zu Ausrüstung Verhältnis zugesprochen. Anstrengungspunkte sind Raid Boni, Zeit Punkten und Anpassungen. Ausrüstungspunkte sind Gegenstandskosten. EP und GP verfallen beide.', 
+'EPGP_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo die Beute dem zugesprochen wird der das höchste Anstrengung zu Ausrüstung Verhältnis hat. Anstrengungspunkte sind Raid Boni, Zeit Punkten und Anpassungen. Ausrüstungspunkte sind Gegenstandskosten. EP und GP verfallen beide.', 
 'EPGP_EXAMPLE' => '<strong>Beispiel</strong> : 10 Spieler Raid, Gegenstand x gefallen für 20 Ausrüstungspunkte. Spieler 1 & 2 bieten<br />  
 Der Gegenstand kostet 20 Ausrüstungsüunkte<br />
 Anstrengungspunkte Spieler 1 : 202, EP/GP Verhältnis 10.1<br />
@@ -656,7 +656,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 //resynchronisation
 'RESYNC_ZEROSUM' => 'Resynchronisiere Nullsummen verteilung',
 'RESYNC_ZEROSUM_CONFIRM' => 'Bitte bestätige dass alle Nullsummenwerte synchronisiert werden sollen? Dies wird alle DKP Konten berühren. ',
-'RESYNC_ZEROSUM_EXPLAIN' => 'Setzt erstens alle Nullsummenboni auf Null, und wenn Nullsummenkalkulierung aktiviert is, berechnet Boni für jeden Raid erneu.',
+'RESYNC_ZEROSUM_EXPLAIN' => 'Setzt erstens alle Nullsummenboni auf Null, und wenn Nullsummenkalkulierung aktiviert is, berechnet Boni für jeden Raid erneut.',
 'RESYNC_ZEROSUM_SUCCESS' => 'Erfolgreich %s item werte distribuiert und %s DKP konten neuberechnet.',
 'RESYNC_ZEROSUM_DELETED' => 'Erfolgreich alle Nullsummenboni auf null gesetzt.',
 'RESYNC_DECAY' => 'Resynchronisiere Entwertungen.',
@@ -712,7 +712,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'ADD_MEMBER_TITLE' => 'Füge Mitglied zu',
 'ADD_MEMBER_TITLE'  => 'Verwalte Gilden Mitglied Dkp',
 'ADD_RAID_TITLE' => 'Füge Raid zu',
-'ADD_RAIDER_TITLE' => 'Raid Teilnehmer zufügen',
+'ADD_RAIDER_TITLE' => 'Raid Teilnehmer hinzufügen',
 'ADMIN_INDEX_TITLE' => 'bbDKP Administrationsbereich',
 'DEFAULTDKP' => 'Bestätige Standart Pool',
 'MANAGE_MEMBERS_TITLE' => 'Verwalte Gildenmitglieder',
@@ -751,7 +751,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'ADD_RAID' => 'füge Raid zu',
 'ADD_RACE' => 'füge Spielrasse zu',
 'ADD_CLASS' => 'füge Spielklasse zu',
-'ADD_ATTENDEE' => 'Teilnehmer zufügen',
+'ADD_ATTENDEE' => 'Teilnehmer hinzufügen',
 'DECAY_RAID' => 'Raid entwerten',
 'DELETE_ADJUSTMENT' => 'lösche Punkteanpassung',
 'DELETE_EVENT' => 'lösche Ereignis',
@@ -850,7 +850,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'RAIDDURATION_EXPLAIN' => 'In Stunden',
 'RAIDDESCRIPTION' => 'Übersicht Raid %s in %s dd %s ',
 'RAIDERDESCRIPTION' => 'Raidpunkte überblick für Raid auf %s in %s -  %s für %s',
-'NEWRAIDDESCRIPTION' => 'Raid zufügen',
+'NEWRAIDDESCRIPTION' => 'Raid hinzufügen',
 'LOOTADD' => 'füge Gegenstand %s zu den Raid auf %s',
 'LOOTUPD' => 'Aktualisierung Gegenstände %s Raid auf %s',
 'OVERRIDE' => 'Überschreiben',
@@ -939,7 +939,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'RP_ZONE_EXPLAIN' => 'Hier kannst du Gebietsbilder verwalten, oder ob Gebietsbilder mit Vorgangsanzeige aufgeführt werden und die Art wie, 
 oder ob Gebiete ohne Siege angezeigt werden (übersteuert "schau an" Spalte).<br />In die Liste kann geändert werden : Gebietsnamen, Kurzname, 
 Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />Gebiete können gelöscht werden, aber dies löscht auch die Bosse des Gebietes.<br />Zur Verwaltung, clicke den grünen Ring. zur Gebietszufügung, clicke den ’Hinzufügen’ Knopf. ',
-'RP_ZONE_ADD_EXPLAIN' => 'Hier kannst du ein Gebiet zufügen',
+'RP_ZONE_ADD_EXPLAIN' => 'Hier kannst du ein Gebiet hinzufügen',
 'RP_ZONEDEL' => 'Gebiet wurde gelöscht',
 
 'ZONE_NAME' => 'Gebietsname',
@@ -967,7 +967,7 @@ Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />G
 
 'RP_BOSS' => 'Boss Verwaltung',
 'RP_BOSS_EXPLAIN' => 'Hier kannst du Bossbilder verwalten, oder ob nie getötete Bosse versteckt bleiben.<br />In die Liste, kann geändert werde : Bossnamen, Kurznamen,   Bildernamen (müssen Unik sein), und ob den Boss besiegt worden ist und wenn. ',
-'RP_BOSS_ADD_EXPLAIN' => 'Hier kannst du einen Boss zufügen oder aktualisieren.',
+'RP_BOSS_ADD_EXPLAIN' => 'Hier kannst du einen Boss hinzufügen oder aktualisieren.',
 'RP_BOSSDEL' => 'Boss ist gelöscht worden',
 
 'BOSS_NAME'  => 'Bossname', 
