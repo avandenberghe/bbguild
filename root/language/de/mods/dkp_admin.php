@@ -906,7 +906,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'ATTENDANCEDAYS' => 'Teilnehmer Tagen (für Anzeigetafel)',
 'STATISTICS' => 'Statistiken',
 'TOTALS' => 'Totale',
-'MAX_NUMBER_CHARS_EXPLAIN'  => 'Maximale Anzahl von Charakere die Mitglieder hinzufügen oder claim dürfen.', 
+'MAX_NUMBER_CHARS_EXPLAIN'  => 'Maximale Anzahl von Charakere die Mitglieder hinzufügen oder angeben dürfen.', 
 'MAX_NUMBER_CHARS'  => 'Maximale #characters',
 
 //js alerts
