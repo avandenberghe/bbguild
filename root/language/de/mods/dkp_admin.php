@@ -1,4 +1,4 @@
-<?php
+hinzugefügt<?php
 /**
  * bbdkp admin language file (German-Informal)
  * @author Sajaki@bbdkp.com
@@ -139,7 +139,7 @@ $lang = array_merge($lang, array(
 'RANK_INSERTED' => 'Neuer Rang eingefügt : %s. ',
 'TOTAL_RANKS_INSERTED' => 'Anzahl der eingefügten Rangs : %s. ',
 'MEMBER_INSERTED' => 'Mitglied hinzugefügt: %s. ',
-'TOTAL_MEMBERS_INSERTED' => 'Gesamtanzahl hinzugefügte Mitglieder : %s. ',
+'TOTAL_MEMBERS_INSERTED' => 'Gesamtanzahl hinzugefügter Mitglieder : %s. ',
 'MEMBERDKP_INSERTED' => 'DKP Zeile hinzugefügt für %s : %.2f Gewonnen, %.2f Ausgegeben, %.2f Ajustiert',
 'TOTAL_DKP_INSERTED' => 'Summe aller hinzugefügten DKP Gewinnbeträge : %s. ',
 'ADJUSTMENTS_INSERTED' => 'DKP Anpassung hinzugefügt %s, : %.2f ',
