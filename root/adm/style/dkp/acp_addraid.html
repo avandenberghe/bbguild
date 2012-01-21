@@ -14,14 +14,14 @@ function start()
 function check_form()
 {
 	// checking length of raidmembername
-	if (document.elements["raid_attendees[]"].value.length < 1)
+	if (document.getElementById("raid_attendees").value.length < 1)
     {
         alert('{MSG_ATTENDEES_EMPTY}');
         return false;
     }
     
     // checking if there is an event selected	
-    if (document.elements["raid_name[]"].value.length < 1)
+    if (document.getElementById("event_id").selectedIndex < 1 )
     {
         alert('{MSG_NAME_EMPTY}');
         return false;
@@ -33,39 +33,57 @@ function check_form()
 function switch_event_val()
 {
   var patt= / - \(([0-9.]+)\)/;
-  var eventvalue  = document.getElementById('event_id').options[document.getElementById('event_id').selectedIndex].text.match(patt);
-  document.getElementById('raid_value').value = eventvalue[eventvalue.length-1]; 
+  if (document.getElementById("event_id").selectedIndex > 0 )
+  {
+	  var eventvalue  = document.getElementById('event_id').options[document.getElementById('event_id').selectedIndex].text.match(patt);
+	  document.getElementById('raid_value').value = eventvalue[eventvalue.length-1]; 
+  }
 }
+<!-- IF S_SHOWTIME -->
+/* time dkp bonus from duration */ 
+function update_timebonus()
+{
+	var duration = durationcalc();
+	var dkp_per_timeunit = document.getElementById("dkptimeunit").value;
+	var unitminutes = document.getElementById("timeunit").value;  
+	var dkp_bonus = 0;
+	if(unitminutes > 0)
+	{
+		dkp_bonus = (dkp_per_timeunit * (duration * 60) / unitminutes ).toFixed(2);
+	}
+	document.getElementById("time_bonus").value = dkp_bonus;
+}
+<!-- ENDIF -->
 
 /* calculates raid duration */
 function durationcalc()
 {
 	var raidbegin = new Date();
-	var startday = document.getElementsByName("d").options[document.getElementsByName("d").selectedIndex].text;
+	var startday = document.getElementById("d").options[document.getElementById("d").selectedIndex].text;
 	raidbegin.setDate(startday);
-	var startmonth = document.getElementsByName("mo").options[document.getElementsByName("mo").selectedIndex].text;
+	var startmonth = document.getElementById("mo").options[document.getElementById("mo").selectedIndex].text;
 	raidbegin.setMonth(startmonth);
-	var startyear = document.getElementsByName("Y").options[document.getElementsByName("Y").selectedIndex].text;
+	var startyear = document.getElementById("Y").options[document.getElementById("Y").selectedIndex].text;
 	raidbegin.setYear(startyear);
-	var starth = document.getElementsByName("sh").options[document.getElementsByName("sh").selectedIndex].text;
+	var starth = document.getElementById("sh").options[document.getElementById("sh").selectedIndex].text;
 	raidbegin.setHours(starth);
-	var startm = document.getElementsByName("smi").options[document.getElementsByName("smi").selectedIndex].text;
+	var startm = document.getElementById("smi").options[document.getElementById("smi").selectedIndex].text;
 	raidbegin.setMinutes(startm);
-	var starts = document.getElementsByName("ss").options[document.getElementsByName("ss").selectedIndex].text;
+	var starts = document.getElementById("ss").options[document.getElementById("ss").selectedIndex].text;
 	raidbegin.setSeconds(starts);
 	
 	var raidend = new Date();
-	var stopday = document.getElementsByName("ed").options[document.getElementsByName("ed").selectedIndex].text;
+	var stopday = document.getElementById("ed").options[document.getElementById("ed").selectedIndex].text;
 	raidend.setDate(stopday);
-	var stopmonth = document.getElementsByName("emo").options[document.getElementsByName("emo").selectedIndex].text;
+	var stopmonth = document.getElementById("emo").options[document.getElementById("emo").selectedIndex].text;
 	raidend.setMonth(stopmonth);
-	var stopyear = document.getElementsByName("eY").options[document.getElementsByName("eY").selectedIndex].text;
+	var stopyear = document.getElementById("eY").options[document.getElementById("eY").selectedIndex].text;
 	raidend.setYear(stopyear);
-	var stoph = document.getElementsByName("eh").options[document.getElementsByName("eh").selectedIndex].text;
+	var stoph = document.getElementById("eh").options[document.getElementById("eh").selectedIndex].text;
 	raidend.setHours(stoph);
-	var stopm = document.getElementsByName("emi").options[document.getElementsByName("emi").selectedIndex].text;
+	var stopm = document.getElementById("emi").options[document.getElementById("emi").selectedIndex].text;
 	raidend.setMinutes(stopm);
-	var stops = document.getElementsByName("es").options[document.getElementsByName("es").selectedIndex].text;
+	var stops = document.getElementById("es").options[document.getElementById("es").selectedIndex].text;
 	raidend.setSeconds(stops);
 
 	var diff=raidend-raidbegin;
@@ -73,46 +91,36 @@ function durationcalc()
 	{
 		diff=diff/86400000*24;
 		diff=diff.toFixed(2);		
-		document.getElementsByName("raid_duration").value = diff;
+		document.getElementById("raid_duration").value = diff;
 	}
 	else
 	{
-		document.getElementsByName("raid_duration").value = 0;
+		document.getElementById("raid_duration").value = 0;
 	}
 	
-	return document.getElementsByName("raid_duration").value;
+	return document.getElementById("raid_duration").value;
 }
-<!-- IF S_SHOWTIME -->
-/* time dkp bonus from duration */ 
-function update_timebonus()
-{
-	var duration = durationcalc();
-	var dkp_per_timeunit = document.dkptimeunit.value;
-	var unitminutes = document.timeunit.value;
-	var dkp_bonus = 0;
-	if(unitminutes > 0)
-	{
-		dkp_bonus = (dkp_per_timeunit * (duration * 60) / unitminutes ).toFixed(2);
-	}
-	
-	document.time_bonus.value = dkp_bonus;
-}
-<!-- ENDIF -->
 
-function fnSearch( searchField, searchItem )
+
+function fnSearch(event)
 {
-    var searchBox = document.elements[searchField];
-    var selectBox = document.elements[searchItem];
    
+    var searchBox = document.getElementById("memberSearch");  
     var reSearch = new RegExp( searchBox.value, "i" );
-   
+    
+    var selectBox = document.getElementById("all_members");
     var len = selectBox.options.length;
+    
     for ( var i = 0; i < len; i++ )
     {
-        if( reSearch.test( selectBox.options[i].value ) )
+        if( reSearch.test( selectBox.options[i].text ) )
         {
             selectBox.options[i].selected = true;
             break;
+        }
+        else
+        {
+            selectBox.options[i].selected = false;
         }
     }
 }
@@ -121,8 +129,8 @@ function fnSearch( searchField, searchItem )
 function fnAddMember()
 {
     
-    var fromField = document.all_members;
-    var toField = document.elements["raid_attendees[]"];
+    var fromField = document.getElementById("all_members");
+    var toField = document.getElementById("raid_attendees");
 
     var fromSize = fromField.options.length
     var toSize = toField.options.length
@@ -172,16 +180,16 @@ function fnAddMember()
     }
     
     // done - clear the search box and focus it for the next entry
-    document.memberSearch.value = "";
-    document.memberSearch.focus();
+    document.getElementById('memberSearch').value = "";
+    document.getElementById('memberSearch').focus();
 
     //return false;
 }
 
 function fnRemoveMember()
 {
-  var form = document;
-  var toField = form.elements["raid_attendees[]"];
+  
+  var toField = document.getElementById("raid_attendees");
   var toSize = toField.options.length;
     
   var i;
@@ -203,14 +211,13 @@ function fnRemoveMember()
 
 <h1>{L_TITLE}</h1>
 <p>{L_EXPLAIN}</p>
-<fieldset>
+
 <div style="float: left; width: 55%;">
 <fieldset>
 <legend>{L_ADD_RAID_TITLE}</legend>
 
 	<dl><dt><label>{L_POOL}:</label></dt>
 	<dd>
-	
 	<select name="dkpsys_id" class="input" onchange="javascript:form.submit();">
 		<!-- BEGIN dkpsys_row -->
 		<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
@@ -233,27 +240,27 @@ function fnRemoveMember()
 	<dl>
 		<dt><label>{L_RAIDSTART}:</label></dt>
 		<dd>
-			<select name="d"  <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();"   <!-- ENDIF -->>{S_RAIDDATE_DAY_OPTIONS}</select>
-			<select name="mo" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDDATE_MONTH_OPTIONS}</select> 
-			<select name="Y" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDDATE_YEAR_OPTIONS}</select>
+			<select id="d" name="d"  <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();"   <!-- ENDIF -->>{S_RAIDDATE_DAY_OPTIONS}</select>
+			<select id="mo" name="mo" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDDATE_MONTH_OPTIONS}</select> 
+			<select id="Y" name="Y" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDDATE_YEAR_OPTIONS}</select>
 	   </dd>
 		<dd>
-			<select name="sh" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_H_OPTIONS}</select>
-			<select name="smi" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_MI_OPTIONS}</select> 
-			<select name="ss" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_S_OPTIONS}</select>
+			<select id="sh" name="sh" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_H_OPTIONS}</select>
+			<select id="smi" name="smi" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_MI_OPTIONS}</select> 
+			<select id="ss" name="ss" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_S_OPTIONS}</select>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{L_RAIDEND}:</label></dt>
 		<dd>
-			<select name="ed" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF --> >{S_RAIDENDDATE_DAY_OPTIONS}</select>
-			<select name="emo" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF --> >{S_RAIDENDDATE_MONTH_OPTIONS}</select> 
-			<select name="eY" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ENDIF --> >{S_RAIDENDDATE_YEAR_OPTIONS}</select>
+			<select id="ed" name="ed" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF --> >{S_RAIDENDDATE_DAY_OPTIONS}</select>
+			<select id="emo" name="emo" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF --> >{S_RAIDENDDATE_MONTH_OPTIONS}</select> 
+			<select id="eY" name="eY" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ENDIF --> >{S_RAIDENDDATE_YEAR_OPTIONS}</select>
 		</dd>
 		<dd>
-			<select name="eh" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_H_OPTIONS}</select>
-			<select name="emi" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_MI_OPTIONS}</select> 
-			<select name="es" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_S_OPTIONS}</select>
+			<select id="eh" name="eh" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_H_OPTIONS}</select>
+			<select id="emi" name="emi" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_MI_OPTIONS}</select> 
+			<select id="es" name="es" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_S_OPTIONS}</select>
 		</dd>
 	</dl>
 	
@@ -266,8 +273,8 @@ function fnRemoveMember()
 	
 	<!-- IF S_SHOWTIME -->
 	
-	<input type="hidden" name="dkptimeunit" value="{DKPTIMEUNIT}" /> 
-	<input type="hidden" name="timeunit" value="{TIMEUNIT}" /> 
+	<input type="hidden" id="dkptimeunit" name="dkptimeunit" value="{DKPTIMEUNIT}" /> 
+	<input type="hidden" id="timeunit" name="timeunit" value="{TIMEUNIT}" /> 
 	<dl>
 		<dt><label>{L_TIME_BONUS}:</label>&nbsp;{L_TIME_BONUS_EXPLAIN}&nbsp;{DKPPERTIME}</dt>
 		<dd>
@@ -284,55 +291,46 @@ function fnRemoveMember()
 	</dl>
 	<dl>
 		<dt><label>{L_NOTE}:</label></dt>
-		<dd><textarea name="raid_note" cols="40" rows="5" wrap="soft">{RAID_NOTE}</textarea></dd>
+		<dd><textarea name="raid_note" id="raid_note" cols="40" rows="5">{RAID_NOTE}</textarea></dd>
 	</dl>
 			
 </fieldset>
 </div>
 
+
 <div style="float: left; width: 45%;">
 <fieldset>
 
 <legend>{L_SEARCH}</legend>
+	<div style="text-align:center">
+	<span>{L_SEARCH}: <input type="text" name="memberSearch" id="memberSearch"  size="35" maxlength="255" value="" onkeyup="fnSearch(event);" /></span>
+	<br/>
+	<span class="small">{L_HOLD_CTRL_NOTE}</span>
+	<br />
 
-<span class="small">{L_HOLD_CTRL_NOTE}</span>
-<br/>
-<dl>
-	{L_SEARCH}:
-	<input type="text" name="memberSearch" size="35" maxlength="255" 
-	value="" class="input" onkeyup="fnSearch(this.name, 'all_members')" />
-</dl>
-<dl>
-	<select style="float: left; width: 47%;" name="all_members" size="20"
-		multiple="multiple" class="input">
+	<select style="float: left; width: 47%;" id="all_members" name="all_members" size="20" multiple="multiple" class="input">
 		<!-- BEGIN members_row -->
-		<option value="{members_row.VALUE}">{members_row.OPTION}</span></option>
+		<option value="{members_row.VALUE}">{members_row.OPTION}</option>
 		<!-- END members_row -->
 	</select>
 
-	<select style="float: right; width: 47%;" name="raid_attendees[]"
-		size="20" multiple="multiple" class="input">
+	<select style="float: right; width: 47%;" name="raid_attendees[]" id="raid_attendees" size="20" multiple="multiple" class="input">
 		<!-- BEGIN raid_attendees_row -->
 		<option value="{raid_attendees_row.VALUE}" selected="selected">{raid_attendees_row.OPTION}</option>
 		<!-- END raid_attendees_row -->
 	</select>
-</dl>
-<dl>
-	<center>
-	<input type="button" name="button1" value="&lt;&lt;" accesskey="r" 
-	    onclick="return fnRemoveMember()" class="button1" /> 
-	<input type="button" name="button2" value="&gt;&gt;" accesskey="m"
-		onclick="return fnAddMember()" class="button1" />
-	</center>
-</dl>
+	
+	<br />
+	<input type="button" name="button1" value="&lt;&lt;" accesskey="r"  onclick="return fnRemoveMember()" class="button1" /> 
+	<input type="button" name="button2" value="&gt;&gt;" accesskey="m" onclick="return fnAddMember()" class="button1" />
+	</div>
 </fieldset>
 </div>
 
-</fieldset>
 
 </div>
-{S_FORM_TOKEN}
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+	{S_FORM_TOKEN}
     <input type="submit" name="add"	value="{L_ADD_RAID}" class="button1" /> 
     <input type="reset" name="reset" value="{L_RESET}" class="button1" />
 </fieldset> 
