@@ -1,18 +1,17 @@
 <!-- INCLUDE overall_header.html -->
-
+<a name="maincontent"></a>
 <script type="text/javascript">
-
 //<![CDATA[
 
 function check_form()
 {
-    if ((document.additem.select_item_id.value.length < 2) && (document.additem.item_name.value.length < 2))
+    if ((document.getElementById("select_item_id").value.length < 2) && (document.getElementById('item_name').value.length < 2))
     {
         alert('{MSG_NAME_EMPTY}');
         return false;
     }
     
-    if (document.additem.item_value.value.length < 1)
+    if (document.getElementById('item_value').value.length < 1)
     {
         alert('{MSG_VALUE_EMPTY}');
         return false;
@@ -22,12 +21,12 @@ function check_form()
 
 function switch_item_val()
 {
-  document.additem.item_name.value  = document.additem.select_item_id.options[document.additem.select_item_id.selectedIndex].value.replace(/[\.0-9]/g, "");
-  document.additem.item_gameid.value  = document.additem.select_item_id.options[document.additem.select_item_id.selectedIndex].value.replace(/[^\.0-9]/g, "");
-  document.additem.item_value.value = document.additem.select_item_id.options[document.additem.select_item_id.selectedIndex].text.replace(/[^\.0-9]/g, "");
-  var selecttext = document.additem.select_item_id.options[document.additem.select_item_id.selectedIndex].text;
+  var selecttext = document.getElementById('select_item_id').options[document.getElementById('select_item_id').selectedIndex].text;
   var out = splitPath(selecttext); 
-  document.additem.item_name_db.value = out;
+  document.getElementById('item_name').value = out;
+  //numeric content
+  document.getElementById('item_value').value = document.getElementById('select_item_id').options[document.getElementById('select_item_id').selectedIndex].text.replace(/[^\.0-9]/g, "");
+
 }
 
 function splitPath(str) {
@@ -43,42 +42,59 @@ function splitPath(str) {
      return parts[0];
 }
 
-function fnSearch( searchField, searchItem )
+function fnSearchmembers(event)
 {
-    thisForm = document.additem;
-    searchBox = thisForm.elements[searchField];
-    selectBox = thisForm.elements[searchItem];
+   
+    var searchBox = document.getElementById("memberSearch");  
+    var reSearch = new RegExp( searchBox.value, "i" );
     
-    // Don't select anybody if the search box is blank
-    if ( searchBox.value == "" )
-    {
-        return;
-    }
+    var selectBox = document.getElementById("raiders");
+    var len = selectBox.options.length;
     
-    reSearch = new RegExp( searchBox.value, "i" );
-    
-    len = selectBox.options.length;
     for ( var i = 0; i < len; i++ )
     {
-        selectBox.options[i].selected = false;
-        
-        if ( reSearch.test(selectBox.options[i].text) )
+        if( reSearch.test( selectBox.options[i].text ) )
         {
             selectBox.options[i].selected = true;
             break;
         }
+        else
+        {
+            selectBox.options[i].selected = false;
+        }
     }
 }
 
+function fnSearchItems(event)
+{
+   
+    var searchBox = document.getElementById("itemSearch");  
+    var reSearch = new RegExp( searchBox.value, "i" );
+    
+    var selectBox = document.getElementById("select_item_id");
+    var len = selectBox.options.length;
+    
+    for ( var i = 0; i < len; i++ )
+    {
+        if( reSearch.test( selectBox.options[i].text ) )
+        {
+            selectBox.options[i].selected = true;
+            break;
+        }
+        else
+        {
+            selectBox.options[i].selected = false;
+        }
+    }
+}
+
+
 function fnAddBuyer()
 {
-	
-    var form = document.additem;
-    var fromField = form.elements["raiders[]"];
-    //destination
-    var toField = form.elements["item_buyers[]"];
-
+	var fromField = document.getElementById("raiders");
     var fromSize = fromField.options.length
+
+    var toField = document.getElementById("item_buyers");
     var toSize = toField.options.length
 
     var aSelected = new Array();
@@ -125,10 +141,8 @@ function fnAddBuyer()
             toField.options[toSize + i - offset].selected = true;
         }
     }
-    
-    /* We're done - clear the search box and focus it for the next entry */
-    form.memberSearch.value = "";
-    form.memberSearch.focus();
+    document.getElementById('memberSearch').value = "";
+    document.getElementById('memberSearch').focus();
 }
 
 
@@ -151,137 +165,91 @@ function fnRemoveBuyer()
 
 
 //]]>
-
 </script>
 
-<style type="text/css" >
-
-fieldset dt {
-	width: 34%;
-	text-align: left;
-	border: none;
-	border-right: 1px solid #CCCCCC;
-	padding-top: 3px;
-}
-
-fieldset dd {
-	margin: 0 0 0 34%;
-	padding: 0 0 0 5px;
-	border: none;
-	border-left: 1px solid #CCCCCC;
-	vertical-align: top;
-	font-size: 1.00em;
-}
-
-</style>
 <a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
 
-<form method="post" action="{F_ADD_ITEM}" id="additem"  name="additem" >
-<input type="hidden" name="hidden_item_id" value="{ITEM_ID}" />
-<input type="hidden" name="hidden_dkp_id" value="{ITEM_DKPID}" />
-<input type="hidden" name="hidden_raid_id" value="{ITEM_RAIDID}" />
-<input type="hidden" name="hidden_raiddate" value="{RAID_DATE}" />
+<form method="post" action="{F_ADD_ITEM}" id="additem" >
 
-
-
-<a name="maincontent"></a>
 <h1>{ITEMTITLE}</h1>
 <p>{L_EXPLAIN}</p>
  
 <div style="float: right; width: 50%;">
 <fieldset>
 <legend>{FV_ITEM_BUYERS}{L_BUYERS}:</legend>
- <span class="small">{L_HOLD_CTRL_NOTE}</span>
+<div style="text-align:center">
+	<span>{L_SEARCH}: <input type="text" name="memberSearch" id="memberSearch"  size="35" maxlength="255" value="" onkeyup="fnSearchmembers(event);" /></span>
+	<br/>
+	<span class="small">{L_HOLD_CTRL_NOTE}</span>
+	<br />
 
-<dl>  
-  {L_SEARCH_MEMBERS} : <input type="text" name="memberSearch" size="35" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'raiders[]')" />	
-</dl>
-<dl>
-     <select style="float: left; width: 49%;" name="raiders[]" id= "raiders[]" size="20" multiple="multiple" class="input">
-       <!-- BEGIN raiders_row -->
-       <option value="{raiders_row.VALUE}">{raiders_row.OPTION}</option>
-       <!-- END raiders_row -->
-     </select>
-     <select style="float: right; width: 49%;" name="item_buyers[]" id="item_buyers[]" size="20" multiple="multiple" class="input">
-       <!-- BEGIN buyers_row -->
-       <option value="{buyers_row.VALUE}" selected="selected">{buyers_row.OPTION}</option>
-       <!-- END buyers_row -->
-     </select>
- </dl>
-    <dl>
-        <center>
-          <input type="button" name="button1" value="&lt;&lt;" accesskey="r" onclick="return fnRemoveBuyer()" class="button1" />
-          <input type="button" name="button2" value="&gt;&gt;" accesskey="m" onclick="return fnAddBuyer()" class="button1" />
-		</center>
-	</dl> 
-     </fieldset>
+	<select style="float: left; width: 49%;" name="raiders[]" id= "raiders" size="20" multiple="multiple" class="input">
+		<!-- BEGIN raiders_row -->
+		<option value="{raiders_row.VALUE}">{raiders_row.OPTION}</option>
+		<!-- END raiders_row -->
+	</select>
+	
+	<select style="float: right; width: 49%;" name="item_buyers[]" id="item_buyers" size="20" multiple="multiple" class="input">
+		<!-- BEGIN buyers_row -->
+		<option value="{buyers_row.VALUE}" selected="selected">{buyers_row.OPTION}</option>
+		<!-- END buyers_row -->
+	</select>
+	
+	<input type="button" name="button1" value="&lt;&lt;" accesskey="r" onclick="return fnRemoveBuyer()" class="button1" />
+	<input type="button" name="button2" value="&gt;&gt;" accesskey="m" onclick="return fnAddBuyer()" class="button1" />
+</div>
+</fieldset>
 </div>
     
     
-<div style="float: left; width: 49%;"> 
+<div style="float: left; width: 50%;"> 
  <fieldset> 
  <legend>{L_ITEM} </legend>
     
+	<!-- IF .items_row -->
  <dl>   
-   <dt><label>{L_SEARCH_EXISTING}:</label>
+   <dt>
+   	<label>{L_SEARCH_EXISTING}:</label>
    </dt>
+   <dd>
+   		<input type="text" name="itemSearch" id="itemSearch" size="30" maxlength="255" value="" class="input" onkeyup="fnSearchItems(event); switch_item_val();" />
+   </dd>
    	<dd>
-   		<input type="text" name="itemSearch" size="30" maxlength="255" value="" class="input" onkeyup="fnSearch(this.name, 'select_item_id'); switch_item_val();" />
-   	</dd>
-
-   	<dd>
-   	</dd>
-	<br />
-
-   	<dd>
-	   	 <select name="select_item_id" onchange="javascript:switch_item_val();" class="input">
+	   	 <select id="select_item_id" onchange="javascript:switch_item_val();" class="input">
 	      <option value=""></option>
 	      <!-- BEGIN items_row -->
 	      <option value="{items_row.VALUE}"{items_row.SELECTED}>{items_row.OPTION}</option>
 	      <!-- END items_row -->
 	    </select>
    	</dd>
- </dl>
- 
+ 	</dl>
    - {L_OR} -
-    
+  	<!-- ENDIF -->
     <dl>
 	   	<dt><label>{L_ENTER_NEW}:</label></dt>
-   		<dd><input type="text" name="item_name" size="30" maxlength="255" value="{ITEM_NAME}" class="input" />{FV_ITEM_NAME}</dd>
+   		<dd><input type="text" id="item_name" name="item_name" size="30" maxlength="255" value="{ITEM_NAME}" class="input" />{FV_ITEM_NAME}</dd>
    	</dl>
    	
-   	<hr />
-
-   	<dl>
-	   	<dt><label>{L_NAME}:</label></dt>
-   		<dd><input type="text" name="item_name_db" size="30" maxlength="255" value="{ITEM_GAMEID}" class="input ro" readonly="readonly" /></dd>
-   		
-	</dl>
-	<dl>
-
-
    	<dl>
 	   	<dt><label>{L_ENTER_NEW_GAMEITEMID}:</label>{L_GAMEITEMID_EXPLAIN}</dt>
-   		<dd><input type="text" name="item_gameid" size="15" maxlength="255" value="{ITEM_GAMEID}" class="input" /></dd>
+   		<dd><input type="text" name="item_gameid" id="item_gameid"  size="15" maxlength="255" value="{ITEM_GAMEID}" class="input" /></dd>
    		
 	</dl>
 	<dl>
     	<dt><label>{L_ITEMVALUE}:</label></dt>
-    	<dd> <input type="text" name="item_value" size="10" maxlength="10" value="{ITEM_VALUE}" class="input" />{FV_ITEM_VALUE}</dd>
+    	<dd> <input type="text" name="item_value" id="item_value" size="10" maxlength="10" value="{ITEM_VALUE}" class="input" />{FV_ITEM_VALUE}</dd>
 	 </dl>
-	 
-
 	 
 	<!-- IF S_SHOWDECAY -->
 	 <dl>
     	<dt><label>{L_ITEMDECAY}:</label></dt>
-    	<dd> <input type="text" name="item_decay" size="10" maxlength="10" value="{ITEM_DECAY}" class="input" /></dd>
+    	<dd> <input type="text" name="item_decay" id="item_decay" size="10" maxlength="10" value="{ITEM_DECAY}" class="input" /></dd>
 	 </dl>	 
 	 <!-- ENDIF -->
 	<!-- IF S_SHOWZS -->
 	 <dl>
         <dt><label>{L_ZSVALUE}:</label>{L_ZS_CHECKED_EXPLAIN}</dt>
-    	<dd> <input type="checkbox" READONLY DISABLED name="item_zs" value="1" {ITEM_ZS} /></dd>
+    	<dd> <input type="checkbox" READONLY DISABLED name="item_zs" id="item_zs" value="1" {ITEM_ZS} /></dd>
 	 </dl>
 	 <!-- ENDIF -->
 		 
@@ -291,13 +259,17 @@ fieldset dd {
 
 <div style="float: left; width: 100%;"> 
      <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+	<input type="hidden" name="hidden_item_id" id="hidden_item_id" value="{ITEM_ID}" />
+	<input type="hidden" name="hidden_dkp_id" id="hidden_dkp_id" value="{ITEM_DKPID}" />
+	<input type="hidden" name="hidden_raid_id" id="hidden_raid_id" value="{ITEM_RAIDID}" />
+	<input type="hidden" name="hidden_raiddate" id="hidden_raiddate" value="{RAID_DATE}" />
      {S_FORM_TOKEN}
     <!-- IF S_ADD -->
-    <input type="submit" name="add" value="{L_ADD_ITEM}" class="button1" /> 
-    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    <input type="submit" name="add" id="add" value="{L_ADD_ITEM}" class="button1" /> 
+    <input type="reset" name="reset" id="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
-    <input type="submit" name="update" value="{L_UPDATE_ITEM}" class="button1" />
-    <input type="submit"  name="deleteitem" value="{L_DELETE_ITEM}" class="button1" />
+    <input type="submit" name="update"  id="update"  value="{L_UPDATE_ITEM}" class="button1" />
+    <input type="submit"  name="deleteitem" id="deleteitem" value="{L_DELETE_ITEM}" class="button1" />
     <!-- ENDIF -->
    </fieldset>
 </div>

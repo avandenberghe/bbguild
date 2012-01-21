@@ -191,11 +191,10 @@ function fnAddMember()
         }
     }
     
-    // done - clear the search box and focus it for the next entry
+    /* done - clear the search box and focus it for the next entry */
     document.getElementById('memberSearch').value = "";
     document.getElementById('memberSearch').focus();
 
-    //return false;
 }
 
 function fnRemoveMember()
@@ -315,6 +314,7 @@ function fnRemoveMember()
 
 <legend>{L_SEARCH}</legend>
 	<div style="text-align:center">
+	
 	<span>{L_SEARCH}: <input type="text" name="memberSearch" id="memberSearch"  size="35" maxlength="255" value="" onkeyup="fnSearch(event);" /></span>
 	<br/>
 	<span class="small">{L_HOLD_CTRL_NOTE}</span>
