@@ -21,7 +21,7 @@ function check_form()
     }
     
     // checking if there is an event selected	
-    if (document.getElementById("event_id").selectedIndex < 1 )
+    if (document.getElementById("event_id").selectedIndex < 0 )
     {
         alert('{MSG_NAME_EMPTY}');
         return false;
@@ -60,30 +60,42 @@ function durationcalc()
 {
 	var raidbegin = new Date();
 	var startday = document.getElementById("d").options[document.getElementById("d").selectedIndex].text;
+	startday= startday.replace("--", "1");
 	raidbegin.setDate(startday);
 	var startmonth = document.getElementById("mo").options[document.getElementById("mo").selectedIndex].text;
+	startmonth= startmonth.replace("--", "1");
 	raidbegin.setMonth(startmonth);
 	var startyear = document.getElementById("Y").options[document.getElementById("Y").selectedIndex].text;
+	startyear= startyear.replace("--", "1");
 	raidbegin.setYear(startyear);
 	var starth = document.getElementById("sh").options[document.getElementById("sh").selectedIndex].text;
+	starth= starth.replace("--", "0");
 	raidbegin.setHours(starth);
 	var startm = document.getElementById("smi").options[document.getElementById("smi").selectedIndex].text;
+	startm= startm.replace("--", "0");
 	raidbegin.setMinutes(startm);
 	var starts = document.getElementById("ss").options[document.getElementById("ss").selectedIndex].text;
+	starts= starts.replace("--", "0");
 	raidbegin.setSeconds(starts);
 	
 	var raidend = new Date();
 	var stopday = document.getElementById("ed").options[document.getElementById("ed").selectedIndex].text;
+	stopday= stopday.replace("--", "1");
 	raidend.setDate(stopday);
 	var stopmonth = document.getElementById("emo").options[document.getElementById("emo").selectedIndex].text;
+	stopmonth= stopmonth.replace("--", "1");
 	raidend.setMonth(stopmonth);
 	var stopyear = document.getElementById("eY").options[document.getElementById("eY").selectedIndex].text;
+	stopyear= stopyear.replace("--", "1");
 	raidend.setYear(stopyear);
 	var stoph = document.getElementById("eh").options[document.getElementById("eh").selectedIndex].text;
+	stoph= stoph.replace("--", "0");
 	raidend.setHours(stoph);
 	var stopm = document.getElementById("emi").options[document.getElementById("emi").selectedIndex].text;
+	stopm= stopm.replace("--", "0");
 	raidend.setMinutes(stopm);
 	var stops = document.getElementById("es").options[document.getElementById("es").selectedIndex].text;
+	stops= stops.replace("--", "0");
 	raidend.setSeconds(stops);
 
 	var diff=raidend-raidbegin;
@@ -273,7 +285,7 @@ function fnRemoveMember()
 	
 	<!-- IF S_SHOWTIME -->
 	
-	<input type="hidden" id="dkptimeunit" name="dkptimeunit" value="{DKPTIMEUNIT}" /> 
+	<input type="hidden" name="dkptimeunit" id="dkptimeunit" value="{DKPTIMEUNIT}" /> 
 	<input type="hidden" id="timeunit" name="timeunit" value="{TIMEUNIT}" /> 
 	<dl>
 		<dt><label>{L_TIME_BONUS}:</label>&nbsp;{L_TIME_BONUS_EXPLAIN}&nbsp;{DKPPERTIME}</dt>
