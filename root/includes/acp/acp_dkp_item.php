@@ -81,60 +81,6 @@ class acp_dkp_item extends bbDKP_Admin
 				
 				break;
 			
-			case 'search' :
-				$items_array = array ();
-				
-				if (isset( $_POST ['query'] )) 
-				{
-				    $bbdkp_items = array (); 
-					//
-					// Get item names from our standard items table
-					//
-					$sql = 'SELECT item_name FROM ' . RAID_ITEMS_TABLE . ' WHERE item_name ' . 
-			 		$db->sql_like_expression($db->any_char . $db->sql_escape(utf8_normalize_nfc(request_var('query', ' ', true))) . $db->any_char) . ' ORDER BY item_name';
-					$result = $db->sql_query ( $sql );
-					while ( $row = $db->sql_fetchrow ( $result ) ) 
-					{
-						$bbdkp_items [] = $row['item_name'];
-					}
-					$db->sql_freeresult ( $result );
-					
-					// Build the drop-down
-					$items_array = array_unique ( $bbdkp_items );
-					sort ( $items_array );
-					reset ( $items_array );
-					$itemrow = 0;
-					foreach ( $items_array as $item_name ) 
-					{
-						++$itemrow;
-						$template->assign_block_vars ( 'items_row', array (
-						'VALUE' =>  $item_name, 
-						'OPTION' =>  $item_name  ) );
-					}
-					
-					if ($itemrow != 0) 
-					{
-						// add results to select box
-						$template->assign_vars ( 
-						array (
-							'S_RESULT' => true, 
-							'L_RESULTS' => sprintf ( $user->lang ['RESULTS'], sizeof ($items_array), utf8_normalize_nfc(request_var('query', ' ', true))  ), 
-						));
-					}
-				}
-				
-				$template->assign_vars ( array (
-					'F_SEARCH_ITEM' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=search" ), 
-					'L_LINKKI' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=viewitem&amp;' ), 
-					'ONLOAD' => ' onload="javascript:document.post.query.focus()"', 
-					 
-				));
-					
-				$this->page_title = 'ACP_SEARCH_ITEM';
-				$this->tpl_name = 'dkp/acp_' . $mode;
-				
-				break;
-			
 			case 'viewitem' :
 				if (isset($_GET['item'])) 
 				{
@@ -306,43 +252,6 @@ class acp_dkp_item extends bbDKP_Admin
 		}
 		$db->sql_freeresult ( $result );
 		
-		/*************************
-		*  Build item selectbox
-		****************************/
-		/*$max_value = 0;
-		$result = $db->sql_query ('SELECT max(item_value) AS max_value FROM ' . RAID_ITEMS_TABLE );
-		while ( $row = $db->sql_fetchrow ( $result ) ) 
-		{
-			$max_value = $row['max_value'];
-		}
-		$float = @explode ( '.', $max_value );
-		$floatlen = @strlen ( $float [0] );
-		$format = '%0' . $floatlen . '.2f';
-		
-		$sql = 'SELECT i.item_id, i.item_value, i.item_name, i.item_gameid FROM ' . 
-			RAID_ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
-	        WHERE i.raid_id=r.raid_id AND r.event_id=e.event_id AND e.event_dkpid = ' . $dkpid . ' 
-	        GROUP BY item_name, item_date 
-	        HAVING length(item_name) > 0
-			ORDER BY item_name, item_date DESC';
-			
-		$result = $db->sql_query ( $sql );
-		$item_name = utf8_normalize_nfc(request_var('item_name','', true)); 
-		$item_select_name = utf8_normalize_nfc(request_var( 'select_item_id', '', true));
-		while ( $row = $db->sql_fetchrow ( $result ) ) 
-		{
-			
-				$template->assign_block_vars ( 'items_row', array (
-				'VALUE' 	=> $row['item_id'], 
-				'SELECTED' 	=> (($row['item_name'] == $item_name) || ($row['item_name'] == $item_select_name)) ? ' selected="selected"' : '', 
-				'OPTION' 	=> $row['item_name'] . ' (' . sprintf ( $format, $row['item_value'] ) . ' dkp) ', 
-				
-				) );						
-		}
-		
-		$db->sql_freeresult ( $result );
-		*/
-			
 		$form_key = 'additem';
 		add_form_key($form_key);
 					
@@ -359,7 +268,6 @@ class acp_dkp_item extends bbDKP_Admin
 		// Language
 		'MSG_NAME_EMPTY' 	=> $user->lang ['FV_REQUIRED_ITEM_NAME'],
 		'MSG_VALUE_EMPTY' 	=> $user->lang ['FV_REQUIRED_VALUE'], 
-		/*'ITEM_VALUE_LENGTH' => ($floatlen + 3), // The first three digits plus '.00';*/
 
 		'LA_ALERT_AJAX'		  => $user->lang['ALERT_AJAX'],
 		'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
@@ -1062,7 +970,7 @@ class acp_dkp_item extends bbDKP_Admin
 			{
 				$template->assign_block_vars ( 'raids_row', array (
 					'EVENTCOLOR'    => (! empty ( $row ['event_color'] )) ? $row ['event_color']  : '',
-					'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;" . URI_DKPSYS . "={$row['event_dkpid']}&amp;" . URI_RAID . "={$row['raid_id']}" ), 
+					'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "={$row['raid_id']}" ), 
 					'ID' 	=> $row['raid_id'],
 					'DATE' 	=> $user->format_date($row['raid_start']), 
 					'RAIDNAME' => $row['event_name'],
@@ -1156,6 +1064,7 @@ class acp_dkp_item extends bbDKP_Admin
 			$db->sql_freeresult ( $items_result );
 			
 			$template->assign_vars ( array (
+				'ICON_VIEWLOOT'	=> '<img src="' . $phpbb_admin_path . 'images/glyphs/view.gif" alt="' . $user->lang['ITEMS'] . '" title="' . $user->lang['ITEMS'] . '" />',
 				'S_SHOW' 		=> true,
 				'F_LIST_ITEM' 	=>   append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
 				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
