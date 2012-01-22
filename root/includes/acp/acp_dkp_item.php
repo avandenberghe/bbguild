@@ -832,7 +832,10 @@ class acp_dkp_item extends bbDKP_Admin
 	}	
 	
 	
-	
+	/**
+	 * list items for a pool. master-detail form
+	 *
+	 */
 	private function listitems()
 	{
 		global $db, $user, $config, $template, $phpEx,$phpbb_admin_path, $phpbb_root_path;
@@ -932,7 +935,7 @@ class acp_dkp_item extends bbDKP_Admin
 			);
 			$current_order = switch_order ( $sort_order );
 			
-			// select all raids that have items	for pool			
+			// select all raids for pool			
 			$sql_array = array(
 			    'SELECT'    => 'r.raid_id, e.event_name, e.event_color, e.event_imagename, e.event_dkpid, 
 			    				r.raid_start, raid_note  ',
@@ -977,6 +980,12 @@ class acp_dkp_item extends bbDKP_Admin
 					'RAIDNOTE' => $row['raid_note'],
 					'ONCLICK' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" . URI_DKPSYS . "={$dkpsys_id}&amp;" . URI_RAID . "={$row['raid_id']}" ),
 				));
+
+				if($raid_id == $row['raid_id'])
+				{
+					$raid_name =  $row['event_name'];
+					$raid_date =  $user->format_date($row['raid_start']);
+				}
 			}
 			$db->sql_freeresult ( $result );
 			
@@ -1058,12 +1067,16 @@ class acp_dkp_item extends bbDKP_Admin
 				'RAID' 			=> (! empty ( $item ['event_name'] )) ?  $item ['event_name']  : '&lt;<i>Not Found</i>&gt;', 
 				'U_VIEW_BUYER' 	=> (! empty ( $item ['member_name'] )) ? append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;member_id={$item['member_id']}&amp;" . URI_DKPSYS . "={$item['event_dkpid']}") : '' ,
 				'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_ITEM . "={$item['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
-				'VALUE' 		=> $item ['item_value']));
+				'VALUE' 		=> $item ['item_value'],
+				
+				));
 			}
 			
 			$db->sql_freeresult ( $items_result );
 			
 			$template->assign_vars ( array (
+				'RAID_NAME'		=> $raid_name,
+				'RAID_DATE'		=> $raid_date,
 				'ICON_VIEWLOOT'	=> '<img src="' . $phpbb_admin_path . 'images/glyphs/view.gif" alt="' . $user->lang['ITEMS'] . '" title="' . $user->lang['ITEMS'] . '" />',
 				'S_SHOW' 		=> true,
 				'F_LIST_ITEM' 	=>   append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
