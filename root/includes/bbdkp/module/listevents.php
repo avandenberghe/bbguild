@@ -3,9 +3,8 @@
  * List all Events
  * 
  * @package bbDKP
- * @copyright (c) 2009 bbDKP <http://code.google.com/p/bbdkp/>
+ * @copyright (c) 2009 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
  * 
  */
 

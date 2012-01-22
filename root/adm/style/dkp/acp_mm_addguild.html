@@ -1,12 +1,9 @@
 <!-- INCLUDE overall_header.html -->
-<!--
-		$Id: acp_bossprogress.html 402 2009-04-26 23:15:04Z Sajaki9 $
-//-->
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 //<![CDATA[ 
 function check_form()
 {
-    if (document.post.guild_name.value.length < 2)
+    if (document.getElementById('guild_name').value.length < 2)
     {
         alert('{LA_FV_REQUIRED_NAME}');
         return false;
@@ -21,8 +18,7 @@ function check_form()
 <h1>{L_TITLE}</h1>
 <p>{L_EXPLAIN}</p>
 
-<form method="post" action="{F_ADD_GUILD}" name="post" onsubmit="return check_form(this)">
-<input type="hidden" name="{URI_GUILD}" value="{GUILD_ID}" />
+<form method="post" action="{F_ADD_GUILD}" onsubmit="return check_form(this)" id="addguild">
 
 <fieldset>
 <legend>{L_ADD_GUILD_TITLE}</legend>
@@ -40,7 +36,7 @@ function check_form()
     <dt>
         <label for="region_id">{L_REGION}:</label></dt>
        <dd>
-      <select name="region_id" class="input">
+      <select id="region_id" name="region_id" class="input">
         <!-- BEGIN region_row -->
         <option value="{region_row.VALUE}"{region_row.SELECTED}>{region_row.OPTION}</option>
         <!-- END region_row -->
@@ -51,11 +47,12 @@ function check_form()
     <dl>
      <dt><label for="showroster">{L_SHOWONROSTER}:</label></dt>
        
-	<dd  align="left">
-	<input type="checkbox" name="showroster" value="1" {SHOW_ROSTER} /></dd>
+	<dd style="text-align: left">
+	<input type="checkbox" id="showroster" name="showroster" value="1" {SHOW_ROSTER} /></dd>
    </dl>
 </fieldset>
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+<input type="hidden" name="{URI_GUILD}" value="{GUILD_ID}" />
  {S_FORM_TOKEN}
     <!-- IF S_ADD -->
     <input type="submit" name="add" value="{L_ADD_GUILD}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
@@ -63,7 +60,6 @@ function check_form()
     <input type="submit" name="update" value="{L_UPDATE_GUILD}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_GUILD}" class="button1" />
     <!-- ENDIF -->
 </fieldset>
-
 
 </form>
 

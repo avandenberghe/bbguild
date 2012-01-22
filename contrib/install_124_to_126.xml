@@ -6,13 +6,13 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.2.2c to 1.2.5]]></title>
-		<description lang="en"><![CDATA[Update script 1.2.2c to 1.2.5]]></description>
-		<description lang="fr"><![CDATA[mise à jour 1.2.2c vers 1.2.5]]></description>
-		<description lang="de"><![CDATA[Aktualisierung 1.2.2c bis 1.2.5]]></description>
-		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.5, Please read docs/INSTALL.html before beginning]]></author-notes>
-		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.5, Veuillez lire docs/INSTALL.html avant de commencer.]]></author-notes>
-		<author-notes lang="de"><![CDATA[benötigt bbdkp 1.2.5, Bitte lesen sie docs/INSTALL.html bevor.]]></author-notes>
+		<title lang="en"><![CDATA[bbDKP 1.2.4 to 1.2.6]]></title>
+		<description lang="en"><![CDATA[Update script 1.2.4 to 1.2.6]]></description>
+		<description lang="fr"><![CDATA[mise à jour 1.2.4 vers 1.2.6]]></description>
+		<description lang="de"><![CDATA[Aktualisierung 1.2.4 bis 1.2.6]]></description>
+		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.4, Please read docs/INSTALL.html before beginning]]></author-notes>
+		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.4, Veuillez lire docs/INSTALL.html avant de commencer.]]></author-notes>
+		<author-notes lang="de"><![CDATA[benötigt bbdkp 1.2.4, Bitte lesen sie docs/INSTALL.html bevor.]]></author-notes>
 		<author-group>
 			<author>
 				<realname><![CDATA[Andy Vandenberghe]]></realname>
@@ -73,7 +73,7 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2.5</mod-version>
+		<mod-version>1.2.6</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>600</time>
@@ -87,47 +87,13 @@
 	</header>
 	<action-group>
 		<delete>
-			<file name="listevents.php"/>
-			<file name="listitems.php"/>
-			<file name="listmembers.php"/>
-			<file name="listraids.php"/>
-			<file name="roster.php"/>
-			<file name="stats.php"/>
-			<file name="viewevent.php"/>
-			<file name="viewitem.php"/>
-			<file name="viewmember.php"/>
-			<file name="viewnews.php"/>
-			<file name="viewraid.php"/>
-			<file name="adm/style/dkp/acp_addnews.html"/>
-			<file name="adm/style/dkp/acp_listnews.html"/>
-			<file name="includes/acp/acp_dkp_news.php"/>
-			<file name="includes/acp/info/acp_dkp_news.php"/>
-			<file name="includes/bbdkp/portal/whoisonline.php"/>
-			<file name="includes/bbdkp/portal/userblock.php"/>
-			<file name="includes/bbdkp/portal/recruitmentblock.php"/>
-			<file name="includes/bbdkp/portal/newsblock.php"/>
-			<file name="includes/bbdkp/portal/mainmenublock.php"/>
-			<file name="includes/bbdkp/portal/lootblock.php"/>
-			<file name="includes/bbdkp/portal/loginblock.php"/>
-			<file name="includes/bbdkp/portal/linksblock.php"/>
-			<file name="styles/prosilver/template/dkp/dkpmenu.html"/>
-			<file name="styles/prosilver/template/dkp/leaderboard.html"/>
-			<file name="styles/prosilver/template/dkp/listevents.html"/>
-			<file name="styles/prosilver/template/dkp/listitems.html"/>
-			<file name="styles/prosilver/template/dkp/listmembers.html"/>
-			<file name="styles/prosilver/template/dkp/listraids.html"/>
-			<file name="styles/prosilver/template/dkp/roster.html"/>
-			<file name="styles/prosilver/template/dkp/viewevent.html"/>
-			<file name="styles/prosilver/template/dkp/viewmember.html"/>
-			<file name="styles/prosilver/template/dkp/viewnews.html"/>
-			<file name="styles/prosilver/template/dkp/viewraid.html"/>
-			<!-- delete unneeded files 1.2.5 -->
+			<!-- delete unneeded files -->
 			<file name="includes/bbdkp/pchart"/>
+			<file name="styles/prosilver/template/dkp/jquery-1.4.4.min.js"/>			
 			<file name="root/images/pchart/"/>
-			<file name="styles/prosilver/template/dkp/jquery-1.4.4.min.js"/>				
 		</delete>
 		<copy>
-			<!-- copy all 1.2.5 files -->
+			<!-- replace all files -->
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
 			<file from="root/portal.php" to="portal.php"/>
 			<file from="root/dkp.php" to="dkp.php"/>
@@ -150,31 +116,17 @@
 			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
-		<open src="includes/functions.php">
+		<open src="styles/prosilver/template/overall_header.html">
 			<edit>
-				<comment lang="en"><![CDATA[updating links. we're removing most links because they are now defined in dkp.php]]></comment>
-				<comment lang="fr"><![CDATA[supprimer liens dans functions.php, ils se trouvent mtn dans dkp.php]]></comment>
-				<comment lang="de"><![CDATA[entferne links in functions.php, jetzt in dkp.php]]></comment>
-				<find><![CDATA[		'U_PORTAL'		=> append_sid("{$phpbb_root_path}portal.$phpEx"),
-		'U_DKP'			=> append_sid("{$phpbb_root_path}listmembers.$phpEx"),
-		'L_DKPPAGE'		=> $user->lang['DKP'],
-		'U_DKP_ACP'		=> ($auth->acl_get('a_') && !empty($user->data['is_registered'])) ? append_sid("{$phpbb_root_path}adm/index.$phpEx", 'i=' . (isset($config['bbdkp_module_id']) ? $config['bbdkp_module_id'] : 194) ,true,$user->session_id ) :'',  
-		'U_LISTITEMS'     => append_sid("{$phpbb_root_path}listitems.$phpEx"),  
-		'U_LISTITEMHIST'  => append_sid("{$phpbb_root_path}listitems.$phpEx?&amp;page=history"),
-		'U_LISTMEMBERS'   => append_sid("{$phpbb_root_path}listmembers.$phpEx"),
-		'U_LISTEVENTS'    => append_sid("{$phpbb_root_path}listevents.$phpEx"),
-		'U_LISTRAIDS'     => append_sid("{$phpbb_root_path}listraids.$phpEx"),
-		'U_VIEWITEM'      => append_sid("{$phpbb_root_path}viewitem.$phpEx"),
-		'U_BP'            => append_sid("{$phpbb_root_path}bossprogress.$phpEx"),
-		'U_ROSTER'        => append_sid("{$phpbb_root_path}roster.$phpEx"),
-		'U_ABOUT'         => append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
-		'U_STATS'         => append_sid("{$phpbb_root_path}stats.$phpEx"),
-		'U_VIEWNEWS'      => append_sid("{$phpbb_root_path}viewnews.$phpEx"),]]></find>
-			<action type="replace-with"><![CDATA[		'U_PORTAL'		=> append_sid("{$phpbb_root_path}portal.$phpEx"),
-		'U_DKP'			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=standings'),
-		'L_DKPPAGE'		=> $user->lang['DKP'],
-		'U_ABOUT'         => append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
-			]]></action>
+				<comment lang="en"><![CDATA[put dkpheader back in overall_header]]></comment>
+				<find><![CDATA[</head>]]></find>
+				<action type="before-add"><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></action>
+			</edit>
+		</open>
+		<open src="styles/prosilver/template/dkp/dkpmain.html">
+			<edit>
+				<comment lang="en"><![CDATA[put dkpheader back in overall_header]]></comment>
+				<remove><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></remove>
 			</edit>
 		</open>
 		<open src="includes/bbdkp/constants_bbdkp.php">
@@ -184,7 +136,7 @@
 				<action type="replace-with"><![CDATA[define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable');
 define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');	]]></action>
 			</edit>
-		</open>		
+		</open>
 		<open src="styles/prosilver/template/dkp/dkpheader.html">
 			<edit>
 				<comment lang="en"><![CDATA[update jquery]]></comment>
@@ -194,36 +146,23 @@ define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');	]]></act
 				<action type="replace-with"><![CDATA[src="{T_TEMPLATE_PATH}/dkp/jquery-1.6.2.min.js"></script>]]></action>
 			</edit>
 		</open>
-		<open src="styles/prosilver/template/overall_footer.html">
-			<edit>
-			<find><![CDATA[search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')]]></find>
-			<action type="after-add"><![CDATA[;]]></action>
-			</edit>
-			<edit>
-				<find><![CDATA[<a class="bbdkpcredits" onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">BBdkp Credits</a>]]></find>			
-				 <inline-edit>
-				<inline-find><![CDATA[BBdkp Credits]]></inline-find>
-				<inline-action type="replace-with"><![CDATA[powered by bbDKP]]></inline-action>
-				 </inline-edit>
-			</edit>			
-		</open>
 		<php-installer><![CDATA[install/index.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /docs/install.html
 What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
-1) Run bbDKP 1.2.2 > 1.2.5 database update : install/index.php 
+1) Run bbDKP 1.2.6 database update : install/index.php 
 2) delete the install folder. 
 		Enjoy ;)]]></diy-instructions>
-<diy-instructions lang="fr"><![CDATA[le guide de mise à jour : /docs/install.html
+		<diy-instructions lang="fr"><![CDATA[le guide de mise à jour : /docs/install.html
 Liste des changements : /docs/changelog.html
 
-1) lancer la mise à jour 1.2.2 > 1.2.5 : install/index.php 
+1) lancer la mise à jour : install/index.php 
 2) Supprimer le repertoire /install pour réactiver le forum.]]></diy-instructions>
-<diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
+		<diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) Datenbank aktualisierung 1.2.2 > 1.2.5 : install/index.php 
+1) Datenbank aktualisierung : install/index.php 
 2) lösche das Installations-Verzeichnis „install"]]></diy-instructions>
 	</action-group>
 </mod>

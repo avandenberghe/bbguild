@@ -3,7 +3,7 @@
 * 
 * @package bbDKP.acp
 * @author sajaki9@gmail.com
-* @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
+* @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * @version $Id$
 * 
@@ -248,7 +248,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					++$lines;
 					$template->assign_block_vars('members_row', array(
 						'S_READONLY'   => ($row['rank_id'] == 90 || $row['rank_id'] == 99 ) ? true : false,
-						'STATUS'        => ($row['member_status']== 1) ? 'Checked ' : '',
+						'STATUS'        => ($row['member_status']== 1) ? 'checked="checked" ' : '',
 						'ID'            => $row['member_id'],
 						'COUNT'         => $member_count,
 						'NAME'          => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
@@ -1103,7 +1103,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					'L_TITLE'				=> $user->lang['ACP_MM_ADDMEMBER'],
 					'L_EXPLAIN'				=> $user->lang['ACP_MM_ADDMEMBER_EXPLAIN'],
 					'F_ADD_MEMBER'			=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;"),
-					'STATUS'				=> isset($this->member) ? (($this->member['member_status'] == 1) ? 'Checked ' : '' ): 'Checked ',
+					'STATUS'				=> isset($this->member) ? (($this->member['member_status'] == 1) ? 'checked="checked" ' : '' ): 'checked="checked" ',
 				
 					'MEMBER_NAME'			=> isset($this->member) ? $this->member['member_name'] : '',
 					'MEMBER_ID'				=> isset($this->member) ? $this->member['member_id'] : '',
@@ -1176,7 +1176,7 @@ class acp_dkp_mm extends bbDKP_Admin
 			if ($submit)
 			{
 				// update
-			    $modrank = request_var('ranks', array( 0 => ''));
+			    $modrank = utf8_normalize_nfc(request_var('ranks', array( 0 => ''), true));
 				foreach ( $modrank as $rank_id => $rank_name )
 				{
 			    	// get old rank array
@@ -1331,8 +1331,8 @@ class acp_dkp_mm extends bbDKP_Admin
 			     $nrankid = request_var('nrankid', 0);
                    $sql = 'SELECT count(*) as rankcount FROM ' . MEMBER_RANKS_TABLE . ' 
                    	WHERE rank_id != 99 
-                   	AND rank_id = ' . $nrankid . ' 
-                   	AND guild_id = '. $guild_id . ' 
+                   	AND rank_id = ' . (int) $nrankid . ' 
+                   	AND guild_id = '. (int) $guild_id . ' 
                    	ORDER BY rank_id, rank_hide ASC ';
                     $result = $db->sql_query($sql);
                     if ( (int) $db->sql_fetchfield('rankcount', false, $result) == 1)
@@ -1731,26 +1731,24 @@ class acp_dkp_mm extends bbDKP_Admin
                $template->assign_vars(array(
                
                        // Form values                       
-                     	'GUILD_ID'  => $this->url_id,
-               		'GUILD_NAME'         => isset($this->guild['guild_name']) ? $this->guild['guild_name']: '' ,
-                       'REALM'              => isset($this->guild['guild_realm']) ? $this->guild['guild_realm']: '' ,
-                       'REGION'             => isset($this->guild['guild_region']) ? $this->guild['guild_region']: '' ,
-					'SHOW_ROSTER'        => isset($this->guild['guild_showroster']) ? (($this->guild['guild_showroster'] == 1 ) ? 'checked="checked"' : '' ): '' ,                
+					   'GUILD_ID'  			=> $this->url_id,
+					   'GUILD_NAME'         => isset($this->guild['guild_name']) ? $this->guild['guild_name']: '' ,
+					   'REALM'              => isset($this->guild['guild_realm']) ? $this->guild['guild_realm']: '' ,
+					   'REGION'             => isset($this->guild['guild_region']) ? $this->guild['guild_region']: '' ,
+					   'SHOW_ROSTER'        => isset($this->guild['guild_showroster']) ? (($this->guild['guild_showroster'] == 1 ) ? 'checked="checked"' : '' ): '' ,                
                           
                        // Language
                        'L_TITLE'             => $user->lang['ACP_MM_ADDGUILD'],
                        'L_EXPLAIN'           => $user->lang['ACP_MM_ADDGUILD_EXPLAIN'],
-               		'L_ADD_GUILD_TITLE'   => ( !$this->url_id ) ? $user->lang['ADD_GUILD'] : $user->lang['EDIT_GUILD'],
+               		   'L_ADD_GUILD_TITLE'   => ( !$this->url_id ) ? $user->lang['ADD_GUILD'] : $user->lang['EDIT_GUILD'],
                       
                        // Javascript messages
                        'MSG_NAME_EMPTY'  => $user->lang['FV_REQUIRED_NAME'],
-                      
-                    
                        'S_ADD' => ( !$this->url_id ) ? true : false
                        )
                    );
                   
-               $this->page_title = 'ACP_ADDGUILD';
+               $this->page_title =  $user->lang['ACP_MM_ADDGUILD'];
                $this->tpl_name = 'dkp/acp_'. $mode;
               
            break;

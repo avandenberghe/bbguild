@@ -23,20 +23,20 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2.5</mod-version>
+		<mod-version>1.2.6</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
 			<target-version>3.0.9</target-version>
 		</installation>
 		<link-group>
-			<link type="parent" lang="en" href="../install.xml">Installation 1.2.5</link>
-			<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2.5</link>
-			<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2.5</link>					
+			<link type="parent" lang="en" href="../install.xml">Installation 1.2.6</link>
+			<link type="parent" lang="fr" href="../install.xml">Manuel installation 1.2.6</link>
+			<link type="parent" lang="de" href="../install.xml">Installations-Anleitung 1.2.6</link>					
 
-			<link type="parent" lang="en" href="install_124_to_125.xml">update 1.2.4 to 1.2.5</link>
-			<link type="parent" lang="fr" href="install_124_to_125.xml">Mise à jour 1.2.4 à 1.2.5</link>
-			<link type="parent" lang="de" href="install_124_to_125.xml">Aktualisierung 1.2.4 bis 1.2.5</link>	
+			<link type="parent" lang="en" href="install_124_to_125.xml">update 1.2.5 to 1.2.6</link>
+			<link type="parent" lang="fr" href="install_124_to_125.xml">Mise à jour 1.2.5 à 1.2.6</link>
+			<link type="parent" lang="de" href="install_124_to_125.xml">Aktualisierung 1.2.5 bis 1.2.6</link>	
 	</link-group>
 	</header>
 	<action-group>

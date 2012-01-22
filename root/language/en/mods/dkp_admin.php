@@ -104,6 +104,7 @@ $lang = array_merge($lang, array(
 'FV_REQUIRED_STATUS' => 'The status field is required.',
 'FV_REQUIRED_MESSAGE' => 'The message field is required.',
 'FV_REQUIRED_NAME' => 'The name field is required.',
+'FV_REQUIRED_ID' => 'The id field is required.',
 'FV_REQUIRED_STATUS' => 'The status field is required.',
 'FV_REQUIRED_HEADLINE' => 'The headline field is required.',
 'FV_DKPSTATUSYN' => 'Dkpsystem status must either be Y (Active) or N (Inactive)', 
@@ -243,6 +244,7 @@ $lang = array_merge($lang, array(
 'ACP_DKP' => 'bbDKP Adminpanel',
 'ACP_ITEMSTATS' => 'Popup Configuration',
 'ACP_INDEXPAGE' => 'Portal Configuration',
+'POINT_SETTINGS' => 'Point Settings', 
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Adminpanel Index',
@@ -290,6 +292,7 @@ $lang = array_merge($lang, array(
 'EDIT_RAIDER_EXPLAIN' => 'Here you can edit a Raiders earned points',
 'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Note : Game cannot be changed once it is set.',
 'SYNCDKP_EXPLAIN'	=> 'Truncates the member DKP Table, rebuilds the values from the source Raid, Raid detail, Items, Adjustments table. Use only when necessary.',
+'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Here you can configure the Points system for your Guild.',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -888,6 +891,7 @@ So the loot would go to player 2 <br />',
 'FREQ0'    => 'Days', 
 'FREQ1'    => 'Weeks',
 'FREQ2'    => 'Months',
+'NOLOOT'	=> 'No Loot found', 
 
 // Admin Index
 'BBDKP_STARTED' => 'bbDKP Started',

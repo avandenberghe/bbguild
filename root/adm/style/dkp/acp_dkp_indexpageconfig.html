@@ -1,44 +1,21 @@
 <!-- INCLUDE overall_header.html -->
-<!--
-		$Id$
-//-->    
-<style type="text/css">
-fieldset dd {
-	margin: 0 0 0 25%;
-	padding: 0 0 0 5px;
-	border: none;
-	border-left: 1px solid #CCCCCC;
-	vertical-align: top;
-	font-size: 1.00em;
-}
-
-fieldset dt {
-	width: 25%;
-	text-align: left;
-	border: none;
-	border-right: 1px solid #CCCCCC;
-	padding-top: 3px;
-}
-
-</style>
-
-
 <a name="maincontent"></a>
 
 <h1>{L_ACP_INDEXPAGE}</h1>
 
 <p>{L_ACP_INDEXPAGE_EXPLAIN}</p>
 
-<form method="post" action="{F_ADD_CONFIG}" name="post">
+<form method="post" action="{F_ADD_CONFIG}" id="indexpageconfig">
 
 <fieldset>
 <legend>{L_WELCOMEBLOCKSETTING}</legend>
 	<dl>
 	<dt>    
-	  <label for="show_welcomeblock">{L_SHOWWELCOME}:</label>
+	  <label>{L_SHOWWELCOME}:</label>
+	  </dt>
 	  <dd>
-	  		<input type="radio" name="show_welcomeblock" value="1"{SHOW_WELCOME_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
-	  		<input type="radio" name="show_welcomeblock" value="0"{SHOW_WELCOME_NO_CHECKED} /> {L_NO}
+	  		<input type="radio" name="show_welcomeblock" value="1" {SHOW_WELCOME_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
+	  		<input type="radio" name="show_welcomeblock" value="0" {SHOW_WELCOME_NO_CHECKED} /> {L_NO}
    		</dd>
    </dl> 
 	
@@ -59,7 +36,7 @@ fieldset dt {
     <select name="news_id" class="input" id="news_id">
     	{FORUM_NEWS_OPTIONS}
      </select>
-     <dd>
+     </dd>
   </dl> 
  
  <dl>
@@ -76,7 +53,7 @@ fieldset dt {
   <dl>
     <dt><label for="show_menublock">{L_SHOWMENUBLOCK}</label><br /></dt>
     <dd>
-    <input type="radio" name="show_menublock" value="1"{SHOW_MENU_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_menublock" value="0"{SHOW_MENU_NO_CHECKED} /> {L_NO}
+    <input type="radio" name="show_menublock" id="show_menublock" value="1"{SHOW_MENU_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_menublock" value="0"{SHOW_MENU_NO_CHECKED} /> {L_NO}
    </dd>
  </dl>
 </fieldset>
@@ -87,7 +64,7 @@ fieldset dt {
  <dl>
     <dt><label for="show_lootblock">{L_SHOWLOOTBLOCK}</label><br /></dt>
     <dd>
-    <input type="radio" name="show_lootblock" value="1"{SHOW_LOOT_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_lootblock" value="0"{SHOW_LOOT_NO_CHECKED} /> {L_NO}
+    <input type="radio" name="show_lootblock" id="show_lootblock" value="1"{SHOW_LOOT_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_lootblock" value="0"{SHOW_LOOT_NO_CHECKED} /> {L_NO}
    </dd>
  </dl>
  
@@ -101,41 +78,39 @@ fieldset dt {
 <legend>{L_RECBLOCK}</legend>
 
  <dl>
-    <dt><label for="show_recrblock">{L_SHOWRECBLOCK}</label><br /></dt>
-    <dd>
-    <input type="radio" name="show_recrblock" value="1"{SHOW_REC_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_recrblock" value="0"{SHOW_REC_NO_CHECKED} /> {L_NO}
+    <dt style="width: 35%;"><label for="show_recrblock">{L_SHOWRECBLOCK}</label><br /></dt>
+    <dd style="margin: 0 0 0 35%; padding: 0 0 0 5px;">
+    <input type="radio" name="show_recrblock" id="show_recrblock" value="1"{SHOW_REC_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_recrblock" value="0"{SHOW_REC_NO_CHECKED} /> {L_NO}
    </dd>
  </dl>
  
  <dl>
-    <dt><label>{L_RECFORUM}</label></dt>
-    <dd>
+    <dt style="width: 35%;"><label>{L_RECFORUM}</label></dt>
+    <dd style="margin: 0 0 0 35%; padding: 0 0 0 5px;">
     <select name="rec_id" class="input" id="rec_id">
 		{FORUM_RECRUIT_OPTIONS}
      </select>
-     <dd>
+     </dd>
   </dl> 
 
   <dl>
-    <dt><label>{L_RECSTATUS}</label></dt>
-    <dd>
+    <dt style="width: 35%;"><label>{L_RECSTATUS}</label></dt>
+    <dd style="margin: 0 0 0 35%; padding: 0 0 0 5px;">
     <select name="bbdkp_recruitment" class="input" id="bbdkp_recruitment">
        <!-- BEGIN recruitment_status_row -->
       <option value="{recruitment_status_row.VALUE}"{recruitment_status_row.SELECTED}>{recruitment_status_row.OPTION}</option>
       <!-- END recruitment_status_row -->
      </select>
-     
-     <dd>
+     </dd>
   </dl> 
-
 
  <!-- BEGIN recruitment -->
   <dl>
-    <dt><label>{recruitment.CLASSID}) {recruitment.CLASS} :</label>
+    <dt style="width: 35%;"><label>{recruitment.CLASSID}) {recruitment.CLASS} :</label>
    		 <!-- IF recruitment.S_CLASS_IMAGE_EXISTS --> <img src="{recruitment.CLASS_IMAGE}" alt=" " /><!-- ENDIF -->
     </dt>
 
-    <dd>
+    <dd style="margin: 0 0 0 35%; padding: 0 0 0 5px;">
     <img src="{T_IMAGES_PATH}icons/{recruitment.TANKCOLOR}" alt="tank" />
     <select name="T{recruitment.CLASSID}" class="input" id="T{recruitment.CLASSID}">
       <!-- BEGIN tankstatus_row -->
@@ -163,8 +138,6 @@ fieldset dt {
 </fieldset>
 
 
-
-
 <!-- IF S_BP_SHOW -->
 <fieldset>
 <legend>{L_BOSSBLOCKSETTING}</legend>
@@ -172,7 +145,7 @@ fieldset dt {
  <dl>
     <dt><label for="show_bosspblock">{L_SHOWBOSSBLOCK}</label><br />{L_SHOWBOSSBLOCKNOTE}</dt>
     <dd>
-    <input type="radio" name="show_bosspblock" value="1"{SHOW_BOSS_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_bosspblock" value="0"{SHOW_BOSS_NO_CHECKED} /> {L_NO}
+    <input type="radio" name="show_bosspblock"  id="show_bosspblock"  value="1"{SHOW_BOSS_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_bosspblock" value="0"{SHOW_BOSS_NO_CHECKED} /> {L_NO}
    </dd>
  </dl>
  
@@ -185,16 +158,14 @@ fieldset dt {
   <dl>
     <dt><label for="show_linkblock">{L_SHOWLINKBLOCK}</label><br /></dt>
     <dd>
-    <input type="radio" name="show_linkblock" value="1"{SHOW_LINK_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_linkblock" value="0"{SHOW_LINK_NO_CHECKED} /> {L_NO}
+    <input type="radio" name="show_linkblock"  id="show_linkblock" value="1"{SHOW_LINK_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;<input type="radio" name="show_linkblock" value="0"{SHOW_LINK_NO_CHECKED} /> {L_NO}
    </dd>
  </dl>
 </fieldset>
 
 
 
-
-
-  <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
 	  {S_FORM_TOKEN}
 	  <input type="submit" name="update" value="{L_SUBMIT}" class="button1" /> 
 	  <input type="reset" name="reset" value="{L_RESET}" class="button1" />

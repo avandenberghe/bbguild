@@ -4,8 +4,8 @@
  * 
  * @package bbDKP.acp
  * @author Sajaki
- * @version $Id$
- * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
+
+ * @copyright (c) 2009 bbdkp https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 
  */
@@ -26,7 +26,7 @@ if (! defined ( 'EMED_BBDKP' ))
 class acp_dkp_sys extends bbDKP_Admin
 {
 	var $u_action;
-	
+	var $link;
 	function error_check()
 	{
 		// we want the dkp name to be filled. 

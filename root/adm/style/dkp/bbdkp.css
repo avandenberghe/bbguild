@@ -18,3 +18,19 @@
 .ro:hover {
 	background-color: #EEEEEE;
 }
+
+div.search-box input {
+    background-image: url("icon_search.gif");
+    background-position: left 1px;
+    background-repeat: no-repeat;
+    color:#0F4987;
+    padding-left: 17px;
+    text-align: right;
+    white-space: nowrap;
+    margin: 0;
+    line-height: 1;
+	background-color: #FFFDDD;
+    height: 18px;
+    size:35;
+    maxlength:255;
+}

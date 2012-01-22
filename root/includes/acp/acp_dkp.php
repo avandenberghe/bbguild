@@ -2,8 +2,8 @@
 /**
  * 
  * @package bbDKP.acp
- * @version $Id$
- * @copyright (c) 2009 bbdkp http://code.google.com/p/bbdkp/
+
+ * @copyright (c) 2009 bbdkp https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 
  */
@@ -332,7 +332,7 @@ class acp_dkp extends bbDKP_Admin
 	                    $template->assign_vars(array(
 	        				'S_UP_TO_DATE' => false , 
 	                       'BBDKPVERSION' => $user->lang['YOURVERSION']  . $installed_version ,
-	                    	'UPDATEINSTR' => $user->lang['LATESTVERSION'] . $latest_version . ', <a href=' . $user->lang['WEBURL'] . ">" . 
+	                    	'UPDATEINSTR' => $user->lang['LATESTVERSION'] . $latest_version . ', <a href="' . $user->lang['WEBURL'] . '">' . 
 	                    		$user->lang['DOWNLOAD'] . '</a>'
 	                    ));
 	 
@@ -415,151 +415,11 @@ class acp_dkp extends bbDKP_Admin
 
 					//raids                    
                     set_config('bbdkp_user_rlimit', request_var('bbdkp_user_rlimit', 0), true);
-
-                    //decay         
-                    set_config('bbdkp_decay', request_var('decay_activate', 0), true);           
-					set_config('bbdkp_itemdecaypct', request_var('itemdecaypct', 0), true);
-                    set_config('bbdkp_raiddecaypct',   request_var('raiddecaypct', 0), true);
-                    set_config('bbdkp_decayfrequency', request_var('decayfreq', 0), true);
-                    set_config('bbdkp_decayfreqtype',  request_var('decayfreqtype', 0), true);
-
-                    //time
-                    set_config('bbdkp_timebased', request_var('timebonus_activate', 0.00), true);
-                    set_config('bbdkp_dkptimeunit', request_var('dkptimeunit', 0.00), true);
-                    set_config('bbdkp_timeunit', request_var('timeunit', 0.00), true);
-                    set_config('bbdkp_standardduration', request_var('standardduration', 0.00), true);
-                    
-                    //zerosum
-                    if( request_var('zerosum_activate', 0) == 0)
-                    {
-	                    set_config('bbdkp_zerosum', 0 , true);
-                    }
-                    
-                    if( request_var('zerosum_activate', 0) == 1  && request_var('epgp_activate', 0) == 1)
-                    {
-                    	set_config('bbdkp_zerosum', 1 , true);
-						//epgp and zerosum are mutually exclusive, zerosum will prevail if selected
-						set_config('bbdkp_epgp', 0 , true);
-                    }
-                    
-                    if( request_var('zerosum_activate', 0) == 0  && request_var('epgp_activate', 0) == 1)
-                    {
-						set_config('bbdkp_zerosum', 0 , true);
-	                    set_config('bbdkp_epgp', 1 , true);
-                    } 
-                    
-                    if( request_var('zerosum_activate', 0) == 1  && request_var('epgp_activate', 0) == 0)
-                    {
-						set_config('bbdkp_zerosum', 1 , true);
-	                    set_config('bbdkp_epgp', 0 , true);
-                    } 
-                    
-                    if( request_var('zerosum_activate', 0) == 0  && request_var('epgp_activate', 0) == 0)
-                    {
-						set_config('bbdkp_zerosum', 0 , true);
-	                    set_config('bbdkp_epgp', 0 , true);
-                    } 
-                    
-                    set_config('bbdkp_bankerid', request_var('zerosumbanker', 0), true);
-                    set_config('bbdkp_zerosumdistother', request_var('zerosumdistother', 0), true);
-                    set_config('bbdkp_basegp', request_var('basegp', 0), true);
                     
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
                 }
                 
-                $zerosum_synchronise = (isset($_POST['zerosum_synchronise'])) ? true : false;
-                $decay_synchronise = (isset($_POST['decay_synchronise'])) ? true : false;
-                $dkp_synchronise = (isset($_POST['syncdkp'])) ? true : false;
-                
-                // resynchronise DKP
-                if($dkp_synchronise)
-                {
-                	if (confirm_box ( true )) 
-					{
-						if ( !class_exists('acp_dkp_sys')) 
-						{
-							require($phpbb_root_path . 'includes/acp/acp_dkp_sys.' . $phpEx); 
-						}
-						$acp_dkp_sys = new acp_dkp_sys;
-						$acp_dkp_sys->syncdkpsys();
-						
-					}
-					else 
-					{
-									
-						$s_hidden_fields = build_hidden_fields ( array (
-							'syncdkp' 	  => true, 
-						));
-			
-						$template->assign_vars ( array (
-							'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
-						confirm_box ( false, sprintf($user->lang['RESYNC_DKP_CONFIRM'] ), $s_hidden_fields );
-						
-					}
-                	
-                }
-                
-				// recalculate zerosum
-         		if ($zerosum_synchronise) 
-                {
-                	if (confirm_box ( true )) 
-					{
-						if ( !class_exists('acp_dkp_raid')) 
-						{
-							require($phpbb_root_path . 'includes/acp/acp_dkp_item.' . $phpEx); 
-						}
-						$acp_dkp_item = new acp_dkp_item;
-						$count = $acp_dkp_item->sync_zerosum($config['bbdkp_zerosum']);
-						
-					}
-					else 
-					{
-									
-						$s_hidden_fields = build_hidden_fields ( array (
-							'zerosum_synchronise' 	  => true, 
-						));
-			
-						$template->assign_vars ( array (
-							'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
-						
-						confirm_box ( false, sprintf($user->lang['RESYNC_ZEROSUM_CONFIRM'] ), $s_hidden_fields );
-						
-					}
-                		
-                }	
-	
-                
-                if($decay_synchronise)
-                {
-                	
-                	if (confirm_box ( true )) 
-					{
-						// decay this item
-						if ( !class_exists('acp_dkp_raid')) 
-						{
-							require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
-						}
-						$acp_dkp_raid = new acp_dkp_raid;
-						$count = $acp_dkp_raid->sync_decay($config['bbdkp_decay']);
-						
-						trigger_error ( sprintf($user->lang ['RESYNC_DECAY_SUCCESS'], $count) . $link , E_USER_NOTICE );
-					}
-					else 
-					{
-									
-						$s_hidden_fields = build_hidden_fields ( array (
-							'decay_synchronise' 	  => true, 
-						));
-			
-						$template->assign_vars ( array (
-							'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
-						
-						confirm_box ( false, sprintf($user->lang['RESYNC_DECAY_CONFIRM'] ), $s_hidden_fields );
-						
-					}
-					
-                }
                 
                 $languages = array(
                 	'de'	=> $user->lang['LANG_DE'], 
@@ -639,29 +499,6 @@ class acp_dkp extends bbDKP_Admin
     			    	'OPTION' =>   $lname  ));  
     		    }
     		    
-    		    
-    		    $freqtypes = array(
-                	0	=> $user->lang['FREQ0'], 
-                	1 	=> $user->lang['FREQ1'], 
-                	2	=> $user->lang['FREQ2']
-                );
-         		
-                $s_freqtype_options = '';
-                foreach ( $freqtypes as $key => $type )
-				{
-                   	$selected = ($config['bbdkp_decayfreqtype'] == $key) ? ' selected="selected"' : '';
-					$s_freqtype_options .= '<option value="' . $key . '" '.$selected.'> ' . $type . '</option>';  					     
-				}
-				
-				$s_bankerlist_options = ''; 
-				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . " WHERE member_status = '1' order by member_name asc"; 
-				$result = $db->sql_query ($sql);
-				while ($row = $db->sql_fetchrow ($result))
-				{
-				 	$selected = ($config['bbdkp_bankerid'] == $row['member_id']) ? ' selected="selected"' : '';
-					$s_bankerlist_options .= '<option value="' . $row['member_id'] . '" '.$selected.'> ' . $row['member_name'] . '</option>';  
-				}
-
     		    add_form_key('acp_dkp');
     		    
                 $template->assign_vars(array(
@@ -683,7 +520,6 @@ class acp_dkp extends bbDKP_Admin
                 	'LIST_P2' 			=> $config['bbdkp_list_p2'] , 
                     'LIST_P3' 			=> $config['bbdkp_list_p3'] ,
                 	'F_SHOWACHIEV'  	=> $config['bbdkp_show_achiev'], 
-                	'S_FREQTYPE_OPTIONS' => $s_freqtype_options,
                 	'USER_ALIMIT' 		=> $config['bbdkp_user_alimit'] , 
                 	'STARTING_DKP'		=>	$config['bbdkp_starting_dkp'],
                 	'INACTIVE_POINT' 	=> $config['bbdkp_inactive_point_adj'] ,
@@ -692,28 +528,6 @@ class acp_dkp extends bbDKP_Admin
                 	'USER_RLIMIT' 		=> $config['bbdkp_user_rlimit'] , 
 					'MAXCHARS'			=> $config['bbdkp_maxchars'] ,
                 	'USER_LLIMIT' 		=> $config['bbdkp_user_llimit'] ,
-                
-                	//epgp
-                	'F_EPGPACTIVATE'	=> $config['bbdkp_epgp'],
-                	'BASEGP'			=> $config['bbdkp_basegp'] , 
-						
-                	//decay
-                	'F_DECAYACTIVATE'	=> $config['bbdkp_decay'] ,
-                	'ITEMDECAYPCT'		=> $config['bbdkp_itemdecaypct'] ,
-                	'RAIDDECAYPCT' 	 	=> $config['bbdkp_raiddecaypct'] ,
-        			'DECAYFREQ'			=> $config['bbdkp_decayfrequency'] ,
-					'S_FREQTYPE_OPTIONS' =>	$s_freqtype_options,
-                		 
-					//time dkp
-					'F_TIMEBONUSACTIVATE' => $config['bbdkp_timebased'] ,
-                	'DKPTIMEUNIT'		=> $config['bbdkp_dkptimeunit'] ,
-		            'TIMEUNIT'			=> $config['bbdkp_timeunit'] ,
-		            'STANDARDDURATION'	=> $config['bbdkp_standardduration'] ,
-
-                	//zs
-         			'F_ZEROSUMACTIVATE'	=> $config['bbdkp_zerosum'], 
-                	'S_BANKER_OPTIONS'	=> $s_bankerlist_options, 
-                	'F_ZEROSUM_DISTOTHER' => $config['bbdkp_zerosumdistother'],
                 ));
                 
                 $this->page_title = 'ACP_DKP_CONFIG';
@@ -766,7 +580,7 @@ class acp_dkp extends bbDKP_Admin
                     $welcometext = utf8_normalize_nfc(request_var('welcome_message', '', true));
 					$uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
 					$allow_bbcode = $allow_urls = $allow_smilies = true;
-					generate_text_for_storage($text, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+					generate_text_for_storage($welcometext, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
 
 					$sql = 'UPDATE ' . WELCOME_MSG_TABLE . " SET 
 							welcome_msg = '" . (string) $db->sql_escape($welcometext) . "' , 

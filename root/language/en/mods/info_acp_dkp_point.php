@@ -3,9 +3,8 @@
  * bbdkp acp language file for mainmenu
  * 
  * @package bbDKP
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id: info_acp_dkp_apply.php 1280 2010-05-25 11:09:16Z Sajaki9 $
  * 
  */
 
@@ -25,7 +24,7 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-	'ACP_DKP_APPLY'		=> 'Apply Settings',
+	'ACP_DKP_POINT_CONFIG'		=> 'Point Settings',
 ));
 
 ?>

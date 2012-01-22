@@ -4,7 +4,6 @@
  * @package bbDkp.acp
  * @copyright (c) 2011 https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
  * 
  * will return an xml like this 
  * <?xml version="1.0" encoding="UTF-8"?>

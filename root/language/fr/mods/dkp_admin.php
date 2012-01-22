@@ -201,6 +201,7 @@ $lang = array_merge($lang, array(
 	'FV_REQUIRED_MEMBERS'	=> 'Au moins un membre doit être sélectionné.',
 	'FV_REQUIRED_DKPSYS_NAME'	=> 'Le nom du Groupe Dkp est requis.',
 	'FV_REQUIRED_NAME'	=> 'le nom est requis.',
+	'FV_REQUIRED_ID' => 'l’id est requis.',
 	'FV_REQUIRED_PASSWORD'	=> 'le mot de passe est requis.',
 	'FV_REQUIRED_RAIDID'	=> 'Un raid doit être sélectionné.',
 	'FV_REQUIRED_USER'	=> 'le nom d’utilisateur est requis.',
@@ -930,7 +931,10 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 	'WELCOMEBLOCK'	=> 'Texte du bloc Acceuil',
 	'WELCOMEBLOCK_EXPLAIN'	=> 'Veuillez remplir le texte dans cette zone. les BBcodes sont supportés.',
 	'WELCOMEBLOCKSETTING'	=> 'Règlages Bloc d’acceuil',
-	
+	'POINT_SETTINGS' => 'Système de Points.',
+	'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Ici vous pouvez régler le système d’allocation de points.',
+	'NOLOOT'	=> 'Pas de butin trouvé', 
+
 ));
 
 ?>

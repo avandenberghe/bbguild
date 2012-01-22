@@ -1,9 +1,5 @@
 <!-- INCLUDE overall_header.html -->
 
-<!--
-	$Id$
-//-->
-
 <script  type="text/javascript">
 //<![CDATA[
  $(document).ready(function() {
@@ -14,17 +10,17 @@
 
  function check_form()
 {
-    if (document.post.class_name.value.length < 2)
-    {
+	 if (document.getElementById('class_name').value.length < 2)
+     {
         alert('{MSG_NAME_EMPTY}');
         return false;
-    }
-    if (document.post.class_name.value.length < 2)
-    {
-        alert('{MSG_NAME_EMPTY}');
+     }
+	 if (document.getElementById('class_id').value.length < 2)
+     {
+        alert('{MSG_ID_EMPTY}');
         return false;
-    }
-    return true;
+     }
+     return true;
 }
 //]]>
 </script>
@@ -35,6 +31,7 @@
 <p>{L_ACP_ADDCLASS_EXPLAIN}</p>
 
 <form id="acp_addclass" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
+<div>
 <input type="hidden" name="class_id0" value="{CLASS_ID}" />
 <input type="hidden" name="c_index" value="{C_INDEX}" />
 
@@ -44,7 +41,7 @@
     <dl>
 	    <dt><label>{L_GAME}:</label><br />{L_GAME_CLASSRACEUPDATE_EXPLAIN}</dt>
 	  		<dd>
-	  		<select name="game_id" class="input" onChange="return Getfaction(this.value)">
+	  		<select name="game_id" class="input" onchange="return Getfaction(this.value)">
 	       <!-- BEGIN game_row -->
 	       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
 	        <!-- END game_row -->
@@ -87,11 +84,11 @@
 		<dd>
 			<table style=" border-width: 0px;"> 
 			<tr>
-				<td >
+				<td>
 				<span id="nojquery" style="color: red; font-size: 1.4em">{L_JQUERY_MISSING}</span>
 				  <span id="picker"></span>
 		       	</td>
-	       		<td><p>
+	       		<td>
 				<span class="form-item"><input type="text" id="classcolor" name="classcolor" value="{COLORCODE}" /></span>
 	    	 	</td>
 		     </tr>
@@ -99,10 +96,8 @@
 		</dd>
 	</dl>
 </fieldset>
-
-
    
-   <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
    {S_FORM_TOKEN}
     <!-- IF S_ADD -->
     <input type="submit" name="add" value="{L_ADD_CLASS}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
@@ -110,7 +105,7 @@
     <input type="submit" name="update" value="{L_UPDATE_CLASS}" class="button1" /> 
     <!-- ENDIF -->
 	</fieldset>
-
+</div>
 </form>
 
 <!-- INCLUDE dkp/overall_footer.html -->

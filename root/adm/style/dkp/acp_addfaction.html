@@ -1,14 +1,10 @@
 <!-- INCLUDE overall_header.html -->
 
-<!--
-	$Id$
-//-->
-
 <script  type="text/javascript">
 //<![CDATA[
 function check_form()
 {
-    if (document.post.factionname.value.length < 2)
+    if (document.getElementById('factionname').value.length < 2)
     {
         alert('{MSG_NAME_EMPTY}');
         return false;
@@ -17,21 +13,22 @@ function check_form()
 }
 //]]>
 </script>
-<a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
 
 <h1>{L_ACP_ADDFACTION}</h1>
 <p>{L_ACP_ADDFACTIONS_EXPLAIN}</p>
 <form id="acp_addfaction" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
-<input type="hidden" name="faction_id" value="{FACTION_ID}" />
+<div>
+
+<input type="hidden" name="hidden_game_id" value="{GAME_ID}" />
 
 <fieldset>
 	  <dl>
 	    <dt><label for="game_id">{L_GAME}:</label></dt>
 	  		<dd>
-	  		<select name="game_id" class="input">
+	  		<select id="game_id" class="input">
 	       <!-- BEGIN game_row -->
 	       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
-	        <!-- END game_row -->
+	       <!-- END game_row -->
 	      </select></dd>
 	 </dl>
 	<dl>
@@ -44,6 +41,8 @@ function check_form()
     <input type="submit" name="factionadd" value="{L_ACP_DKP_FACTION_ADD}" class="button1" />
     <input type="reset" name="reset" value="{L_RESET}" class="button1" />
 	</fieldset>
+
+</div>
 </form>
 
 <!-- INCLUDE dkp/overall_footer.html -->
