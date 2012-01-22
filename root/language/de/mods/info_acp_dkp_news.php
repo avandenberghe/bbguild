@@ -1,11 +1,12 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu - German
+ * bbdkp acp language file for mainmenu (German-Informal)
  * 
- * @package bbDkp
+ * @package bbDKP
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
+ * @translation various unknown authors, killerpommes
  * 
  */
 
@@ -25,11 +26,11 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-    'ACP_DKP_NEWS'				=> 'Nachrichten Verwalten',
-	'ACP_ADD_NEWS_EXPLAIN' 		=> 'Hier kannst du Gildennachrichten zufügen o. löschen.',
-	'ACP_DKP_NEWS_ADD'			=> 'Nachricht zufügen',  
+    'ACP_DKP_NEWS'				=> 'Nachrichtenverwaltung',
+	'ACP_ADD_NEWS_EXPLAIN' 		=> 'Hier kannst du Gildennachrichten hinzufügen und löschen.',
+	'ACP_DKP_NEWS_ADD'			=> 'Nachricht hinzufügen',  
 	'ACP_DKP_NEWS_LIST'			=> 'Nachrichten',
-	'ACP_DKP_NEWS_LIST_EXPLAIN'	=> 'Hier kannst du Gildennachrichten zufügen oder löschen.',
+	'ACP_DKP_NEWS_LIST_EXPLAIN'	=> 'Liste der Gildennachrichten ',
 ));
 
 ?>
