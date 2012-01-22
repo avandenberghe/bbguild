@@ -891,6 +891,7 @@ So the loot would go to player 2 <br />',
 'FREQ0'    => 'Days', 
 'FREQ1'    => 'Weeks',
 'FREQ2'    => 'Months',
+'NOLOOT'	=> 'No Loot found', 
 
 // Admin Index
 'BBDKP_STARTED' => 'bbDKP Started',

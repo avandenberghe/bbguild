@@ -72,6 +72,7 @@
 <fieldset>
 <legend>{L_ITEMS}</legend>
 
+<!-- IF .items_row -->
 <table cellspacing="1" style="width: 100%">
 	<thead>
 		<tr>
@@ -101,7 +102,9 @@
 		</tr>
 	</tbody>
 </table>
-
+<!-- ELSE -->
+<p>{L_NOLOOT}</p>
+<!-- ENDIF -->
 </fieldset>
 
 </div>

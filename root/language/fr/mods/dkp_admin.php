@@ -933,7 +933,8 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 	'WELCOMEBLOCKSETTING'	=> 'Règlages Bloc d’acceuil',
 	'POINT_SETTINGS' => 'Système de Points.',
 	'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Ici vous pouvez régler le système d’allocation de points.',
-	
+	'NOLOOT'	=> 'Pas de butin trouvé', 
+
 ));
 
 ?>

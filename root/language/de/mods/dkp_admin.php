@@ -933,6 +933,7 @@ Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />G
 	'WELCOMEBLOCKSETTING'	=> 'Einleitungsblock Einstellungen',
 	'POINT_SETTINGS' => 'Punkte System.',
 	'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Hier kannst du das gewünschte Punktesystem einstellen',
+	'NOLOOT' => 'Keine Beute gefunden', 
 ));
 
 ?>
