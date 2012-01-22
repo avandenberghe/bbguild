@@ -235,7 +235,7 @@ function GetXmlHttpObject()
 <div style="text-align:center">
 	
 	<div class="search-box">
-   	<input type="text" name="memberSearch" id="memberSearch" value="Search…"; onblur="if(this.value=='')this.value='Search…';" onclick="if(this.value=='Search…') this.value='';" onkeyup="fnSearchmembers(event);" />
+   	<input type="text" name="memberSearch" id="memberSearch" value="{L_SEARCH_MINI}" onblur="if(this.value=='')this.value='Search…';" onclick="if(this.value=='Search…') this.value='';" onkeyup="fnSearchmembers(event);" />
     </div>
 	    
 	<br />
@@ -264,12 +264,11 @@ function GetXmlHttpObject()
  <fieldset> 
  <legend>{L_ITEM} </legend>
     
- <dl>   
-
 	<div class="search-box">
-   	<input type="text" name="itemSearch" id="itemSearch" value="Search…"; onblur="if(this.value=='')this.value='Search…';" onclick="if(this.value=='Search…') this.value='';" onkeyup="fnSearchItems(event); switch_item_val();" />
+   	<input type="text" name="itemSearch" id="itemSearch" value="{L_SEARCH_MINI}" onblur="if(this.value=='')this.value='Search…';" onclick="if(this.value=='Search…') this.value='';" onkeyup="fnSearchItems(event); switch_item_val();" />
     </div>
     <br />
+ 	
     <div style="width:50%">
  	<select id="select_item_id" name="select_item_id[]" onchange="javascript:switch_item_val();" size="10" style="width: 100%" class="input">
       <!-- BEGIN items_row -->
