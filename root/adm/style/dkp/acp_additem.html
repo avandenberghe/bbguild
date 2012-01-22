@@ -19,29 +19,6 @@ function check_form()
     return true;
 }
 
-function switch_item_val()
-{
-  var selecttext = document.getElementById('select_item_id').options[document.getElementById('select_item_id').selectedIndex].text;
-  var out = splitPath(selecttext); 
-  document.getElementById('item_name').value = out;
-  //numeric content
-  document.getElementById('item_value').value = document.getElementById('select_item_id').options[document.getElementById('select_item_id').selectedIndex].text.replace(/[^\.0-9]/g, "");
-
-}
-
-function splitPath(str) {
-    var rawParts = str.split(" ("), parts = [];
-    for (var i = 0, len = rawParts.length, part; i < len; ++i) 
-    {
-        part = "";
-        while (rawParts[i].slice(-1) == "\\") {
-            part += rawParts[i++].slice(0, -1) + "/";
-        }
-        parts.push(part + rawParts[i]);
-    }
-     return parts[0];
-}
-
 function fnSearchmembers(event)
 {
    
@@ -65,28 +42,6 @@ function fnSearchmembers(event)
     }
 }
 
-function fnSearchItems(event)
-{
-   
-    var searchBox = document.getElementById("itemSearch");  
-    var reSearch = new RegExp( searchBox.value, "i" );
-    
-    var selectBox = document.getElementById("select_item_id");
-    var len = selectBox.options.length;
-    
-    for ( var i = 0; i < len; i++ )
-    {
-        if( reSearch.test( selectBox.options[i].text ) )
-        {
-            selectBox.options[i].selected = true;
-            break;
-        }
-        else
-        {
-            selectBox.options[i].selected = false;
-        }
-    }
-}
 
 
 function fnAddBuyer()
@@ -162,7 +117,107 @@ function fnRemoveBuyer()
   }
 }
 
+/* add function to string object to trim leading and training spaces. */ 
+String.prototype.trim = function () {
+	return this.replace(/^\s*|\s*$/,"");
+}
 
+function switch_item_val()
+{
+  var selecttext = document.getElementById('select_item_id').options[document.getElementById('select_item_id').selectedIndex].text;
+  document.getElementById('item_name').value = selecttext.split('/')[0].trim();
+  document.getElementById('item_gameid').value = selecttext.split('/')[1].trim();
+  document.getElementById('item_value').value = selecttext.split('/')[2].trim();
+
+}
+
+function fnSearchItems(event)
+{
+    var searchBox = document.getElementById("itemSearch");  
+	GetItems(searchBox.value);
+}
+
+/* ajax function to find item */ 
+var xmlhttp; 
+function GetItems(itemname)
+{
+   xmlhttp = GetXmlHttpObject();
+   if (xmlhttp == null)
+   {
+	   alert("{LA_ALERT_OLDBROWSER}");
+	   return;  
+   }
+    var strURL="{UA_FINDITEMS}&itemSearch="+itemname;
+    xmlhttp.onreadystatechange=stateChanged;
+    xmlhttp.open("GET", strURL, true);
+    // send to server
+    xmlhttp.send(null);
+}
+
+
+/* called from GetItems when state changed */
+function stateChanged()
+{
+	if (xmlhttp.readyState==4) //request complete
+	{
+		if (xmlhttp.status == 200)
+		{
+			//remove select options
+			var itemsel = document.getElementById('select_item_id'); 
+			itemsel.options.length = 0; 
+			
+			//receive xml
+			var xmlDoc=xmlhttp.responseXML;
+			
+			var root = xmlDoc.getElementsByTagName('itemlist')[0];
+			var items = root.getElementsByTagName("item")
+			for (var i = 0; i < items.length; i++)
+			{
+				var item = items[i]; 
+				var itemname = item.getElementsByTagName("item_name")[0].firstChild.nodeValue;
+				var item_gameid = item.getElementsByTagName("item_gameid")[0].firstChild.nodeValue;
+				var item_value = item.getElementsByTagName("item_value")[0].firstChild.nodeValue;
+			    // add the options
+				itemsel.options[i] = new Option(itemname + " / " + item_gameid + " / " + item_value ,itemname, true, false); 
+			}
+		}
+		else 
+		{
+   	   		alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+	 	}
+	}
+}
+
+/*  make a XMLHTTP Request object */
+function GetXmlHttpObject() 
+{ 
+	var xmlhttp=false;	
+	
+	try
+	{ 
+		//  IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}
+	catch(e)	
+	{	// legacy activex code for IE6, IE5
+		try
+		{			
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		catch(e)
+		{
+			try
+			{
+				xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+			}
+			catch(e1)
+			{
+				xmlhttp=false;
+			}
+		}
+	}
+	return xmlhttp;
+}
 
 //]]>
 </script>
@@ -178,11 +233,14 @@ function fnRemoveBuyer()
 <fieldset>
 <legend>{FV_ITEM_BUYERS}{L_BUYERS}:</legend>
 <div style="text-align:center">
-	<span>{L_SEARCH}: <input type="text" name="memberSearch" id="memberSearch"  size="35" maxlength="255" value="" onkeyup="fnSearchmembers(event);" /></span>
-	<br/>
-	<span class="small">{L_HOLD_CTRL_NOTE}</span>
+	
+	<div class="search-box">
+   	<input type="text" name="memberSearch" id="memberSearch" value="Search…"; onblur="if(this.value=='')this.value='Search…';" onclick="if(this.value=='Search…') this.value='';" onkeyup="fnSearchmembers(event);" />
+    </div>
+	    
 	<br />
-
+	<span class="small">{L_HOLD_CTRL_NOTE}</span>
+	
 	<select style="float: left; width: 49%;" name="raiders[]" id= "raiders" size="20" multiple="multiple" class="input">
 		<!-- BEGIN raiders_row -->
 		<option value="{raiders_row.VALUE}">{raiders_row.OPTION}</option>
@@ -206,25 +264,21 @@ function fnRemoveBuyer()
  <fieldset> 
  <legend>{L_ITEM} </legend>
     
-	<!-- IF .items_row -->
  <dl>   
-   <dt>
-   	<label>{L_SEARCH_EXISTING}:</label>
-   </dt>
-   <dd>
-   		<input type="text" name="itemSearch" id="itemSearch" size="30" maxlength="255" value="" class="input" onkeyup="fnSearchItems(event); switch_item_val();" />
-   </dd>
-   	<dd>
-	   	 <select id="select_item_id" onchange="javascript:switch_item_val();" class="input">
-	      <option value=""></option>
-	      <!-- BEGIN items_row -->
-	      <option value="{items_row.VALUE}"{items_row.SELECTED}>{items_row.OPTION}</option>
-	      <!-- END items_row -->
-	    </select>
-   	</dd>
- 	</dl>
-   - {L_OR} -
-  	<!-- ENDIF -->
+
+	<div class="search-box">
+   	<input type="text" name="itemSearch" id="itemSearch" value="Search…"; onblur="if(this.value=='')this.value='Search…';" onclick="if(this.value=='Search…') this.value='';" onkeyup="fnSearchItems(event); switch_item_val();" />
+    </div>
+    <br />
+    <div style="width:50%">
+ 	<select id="select_item_id" name="select_item_id[]" onchange="javascript:switch_item_val();" size="10" style="width: 100%" class="input">
+      <!-- BEGIN items_row -->
+      <option value="{items_row.VALUE}"{items_row.SELECTED}>{items_row.OPTION}</option>
+      <!-- END items_row -->
+    </select>
+   </div>
+   <br />
+   <hr />
     <dl>
 	   	<dt><label>{L_ENTER_NEW}:</label></dt>
    		<dd><input type="text" id="item_name" name="item_name" size="30" maxlength="255" value="{ITEM_NAME}" class="input" />{FV_ITEM_NAME}</dd>
@@ -255,7 +309,7 @@ function fnRemoveBuyer()
 		 
  </fieldset>
  </div>
- 
+
 
 <div style="float: left; width: 100%;"> 
      <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">

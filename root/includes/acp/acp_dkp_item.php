@@ -307,9 +307,9 @@ class acp_dkp_item extends bbDKP_Admin
 		$db->sql_freeresult ( $result );
 		
 		/*************************
-		*  Build item drop-down
+		*  Build item selectbox
 		****************************/
-		$max_value = 0;
+		/*$max_value = 0;
 		$result = $db->sql_query ('SELECT max(item_value) AS max_value FROM ' . RAID_ITEMS_TABLE );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
@@ -341,7 +341,8 @@ class acp_dkp_item extends bbDKP_Admin
 		}
 		
 		$db->sql_freeresult ( $result );
-				
+		*/
+			
 		$form_key = 'additem';
 		add_form_key($form_key);
 					
@@ -358,8 +359,13 @@ class acp_dkp_item extends bbDKP_Admin
 		// Language
 		'MSG_NAME_EMPTY' 	=> $user->lang ['FV_REQUIRED_ITEM_NAME'],
 		'MSG_VALUE_EMPTY' 	=> $user->lang ['FV_REQUIRED_VALUE'], 
-		'ITEM_VALUE_LENGTH' => ($floatlen + 3), // The first three digits plus '.00';
+		/*'ITEM_VALUE_LENGTH' => ($floatlen + 3), // The first three digits plus '.00';*/
 
+		'LA_ALERT_AJAX'		  => $user->lang['ALERT_AJAX'],
+		'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
+		'LA_MSG_NAME_EMPTY'	  => $user->lang['FV_REQUIRED_NAME'],
+		'UA_FINDITEMS'		  => append_sid($phpbb_admin_path . "style/dkp/finditem.$phpEx"),
+		'ADMPATH' 			  => $phpbb_admin_path
 		)
 		
 		);
