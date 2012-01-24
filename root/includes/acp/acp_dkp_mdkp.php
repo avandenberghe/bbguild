@@ -215,7 +215,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					++$lines;
 					
 					$members_row = array(
-					    'STATUS'        => ($row['member_status']== 1) ? 'Checked ' : '',
+					    'STATUS'        => ($row['member_status']== 1) ? 'checked="checked" ' : '',
 						'ID'            => $row['member_id'],
 						'DKPID'         => $row['member_dkpid'],
 						'DKPSYS_S'      => $dkpsys_id ,
