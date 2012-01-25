@@ -22,7 +22,6 @@
     <th style="text-align:left; width:15%"><a href="{U_LIST_MEMBERDKP}o={O_NAME}">{L_NAME}</a></th>
     <th style="text-align:left; width:5%"><a href="{U_LIST_MEMBERDKP}o={O_RANK}">{L_RANK}</a></th>
     <th style="text-align:left; width:5%; white-space: nowrap"><a href="{U_LIST_MEMBERDKP}o={O_LEVEL}">{L_LEVEL}</a></th>
-    <th style="text-align:left; width:10%; white-space: nowrap"><a href="{U_LIST_MEMBERDKP}o={O_CLASS}">{L_CLASS}</a></th>
     <th style="text-align:right width:10%; white-space: nowrap"><a href="{U_LIST_MEMBERDKP}o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
 	<!-- IF S_SHOWTIME -->
     <th style="text-align:right width:10%; white-space: nowrap"><a href="{U_LIST_MEMBERDKP}o={O_TIMEBONUS}">{L_TIMEDKP}</a></th>
@@ -62,10 +61,9 @@
   <!-- ENDIF -->
     <td style="text-align:center; white-space: nowrap"><input type="checkbox" name="activate_ids[]" value="{members_row.ID}" {members_row.STATUS} /></td>
     <td style="text-align:center; white-space: nowrap">{members_row.ID}</td>
-    <td style="text-align:center; white-space: nowrap"><strong><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}">{members_row.NAME}</a></strong></td>
+    <td style="text-align:left; white-space: nowrap"><strong><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" />&nbsp;<!-- ENDIF -->{members_row.NAME}</a></strong></td>
     <td style="text-align:center; white-space: nowrap">{members_row.RANK}</td>
     <td style="text-align:center; white-space: nowrap">{members_row.LEVEL}</td>
-    <td style="text-align:left; white-space: nowrap"><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;<span style="color:{members_row.COLORCODE}" >{members_row.CLASS}</span></td>
     <td style="text-align:right; white-space: nowrap" class="positive">{members_row.RAIDVAL}</td>
 	<!-- IF S_SHOWTIME -->
     <td style="text-align:right; white-space: nowrap" class="positive">{members_row.TIMEBONUS}</td>

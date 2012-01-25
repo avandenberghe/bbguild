@@ -1,7 +1,4 @@
 <!-- INCLUDE overall_header.html -->
-<!--
-		$Id$
-//-->
 
 <a name="maincontent"></a>
 <h1>{L_BBDKP_WELCOME}</h1>
@@ -83,10 +80,10 @@
 
   <!-- BEGIN actions_row -->
   <!-- IF actions_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td align="center" width="16" nowrap="nowrap"><a href="{actions_row.U_VIEW_LOG}">
+    <td  style="text-align: center; width:16; white-space: nowrap"><a href="{actions_row.U_VIEW_LOG}">
     	<img src="{ROOT_PATH}images/glyphs/view.gif" width="16" height="16" alt="View" /></a>
     	</td>
-    <td width="100%">{actions_row.ACTION}</td>
+    <td>{actions_row.ACTION}</td>
   </tr>
   <!-- END actions_row -->
 </table>
