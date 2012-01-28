@@ -118,8 +118,8 @@ $sql = 'SELECT class_armor_type FROM ' . CLASS_TABLE . ' GROUP BY class_armor_ty
 $result = $db->sql_query ( $sql,604000 );
 while ( $row = $db->sql_fetchrow ( $result ) )
 {
-	$filtervalues [$row ['class_armor_type']] = $user->lang[$row ['class_armor_type']];
-	$armor_type [$row ['class_armor_type']] = $user->lang[$row ['class_armor_type']];
+	$filtervalues [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
+	$armor_type [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
 }
 $db->sql_freeresult ( $result );
 $filtervalues ['separator2'] = '--------';
