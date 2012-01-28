@@ -10,24 +10,21 @@
 <span class="corners-top"><span></span></span>
 <ul class="topiclist">
 <li class="header">
-<table width="30%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
-<colgroup  span="2">
-<col width="10%"></col>
-<col width="10%"></col>
-<col width="90%"></col>
-</colgroup>
-<tr>
-<td><h1 style="color:#dfc065">{L_MENU_STATS}</h1>	</td>
-<td></td>
-<td style="color:white; text-align:left; width:56 white-space:nowrap;">{L_POOL}:
+
+<div style="float: left; width:50%; white-space:nowrap;">
+<h1 style="color:#dfc065">{L_MENU_STATS}</h1>	
+</div>
+<div style="float: left; width:50%; white-space:nowrap;">
+<div style="color:white; text-align:left; white-space:nowrap;">
+<br/>
+{L_POOL}:
       <select id="pool" name="pool" class="input" onchange="javascript:form.submit();">
         <!-- BEGIN pool_row -->
         <option value="{pool_row.VALUE}" {pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
         <!-- END pool_row -->
       </select>
-  </td>
-</tr>
-</table>
+</div>
+</div>
 </li>
 </ul>
 <span class="corners-bottom"><span></span></span>

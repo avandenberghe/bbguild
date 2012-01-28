@@ -235,7 +235,7 @@ for ( $i = 0; $i < $x; $i++ )
 		{
 			$block_vars += array(
 			  'COLUMN'.$j.'_NAME' => '<strong><a style="color: '. $raid_details[$offset]['colorcode'].';" href="' . append_sid("{$phpbb_root_path}dkp.$phpEx", "page=viewmember&amp;" . URI_NAMEID . '=' . 
-			$raid_details[$offset]['member_id'] . '&' . URI_DKPSYS . '=' . $dkpid) . '">' . $raid_details[$offset]['member_name'] . '</a></strong>'
+			$raid_details[$offset]['member_id'] . '&amp;' . URI_DKPSYS . '=' . $dkpid) . '">' . $raid_details[$offset]['member_name'] . '</a></strong>'
 			);
 		}
 		else

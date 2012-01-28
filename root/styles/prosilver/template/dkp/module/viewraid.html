@@ -1,10 +1,11 @@
 <div class="forabg" >
 <span class="corners-top"><span></span></span>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td nowrap="nowrap"><h1 style = "color:#dfc065"><!-- IF S_EVENT_IMAGE_EXISTS --><img src="{IMAGEPATH}" alt="{EVENTNAME}" /><!-- ENDIF --> {L_RAID_ON}</h1></td>
-  </tr>
-</table>
+<ul class="topiclist">
+<li class="header">
+
+<h1 style = "color:#dfc065"><!-- IF S_EVENT_IMAGE_EXISTS --><img src="{IMAGEPATH}" alt="{EVENTNAME}" /><!-- ENDIF --> {L_RAID_ON}</h1>
+</li>
+</ul>
 <span class="corners-bottom"><span></span></span>
 </div>
 
@@ -16,7 +17,7 @@
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td style="width:15%; white-space:nowrap; text-align:center;" class="bg1"><strong>{L_RAIDVALUE}</strong>: <span class="positive">{RAIDVALUE}</span></td>
 
@@ -42,9 +43,21 @@
 </tr>
 <tr>
     <td style="width:18%; white-space:nowrap; text-align:center;" class="bg1"><strong>{L_SPENT}</strong>: <span class="negative">{ITEM_VALUE}</span></td>
-    <td class="bg1"></td>
-    <td style="width:18%; white-space:nowrap; text-align:center;" class="bg1"><!-- IF S_SHOWDECAY --><strong>{L_ITEMDECAY}</strong>: <span class="positive">{ITEMDECAYVALUE}</span><!-- ENDIF --></td>
+    
+    <!-- IF S_SHOWTIME -->
+    <td style="width:15%; white-space:nowrap; text-align:center;" class="bg1"></td>
+    <!-- ENDIF -->
+    
+    <td style="width:15%; white-space:nowrap; text-align:center;" class="bg1">
+    <!-- IF S_SHOWZS -->
+        
+	<!-- ENDIF -->
+	<!-- IF S_SHOWDECAY -->	        
+   		<strong>{L_ITEMDECAY}</strong>: <span class="positive">{ITEMDECAYVALUE}</span>
+	<!-- ENDIF -->
+	</td>
 	
+		
 	<td style="width:18%; white-space:nowrap; text-align:center;" class="bg2">
 	<!-- IF S_EPGP -->
 	<h4><strong>{L_SPENT} </strong>: <span class="negative">{ITEMTOTAL}</span></h4>
@@ -76,21 +89,21 @@
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0">
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
   <tr>
-	<td class="bg1" width="33%"><h4>{L_RAIDSTART}: <strong>{RAIDSTART}</strong></h4></td>
-	<td class="bg1" width="33%"><h4>{L_RAIDEND}: <strong>{RAIDEND}</strong></h4></td>
-	<td class="bg1" width="33%"><h4>{L_RAIDDURATION}: <strong>{DURATION}</strong></h4></td>
+	<td class="bg1" style="width:33%"><h4>{L_RAIDSTART}: <strong>{RAIDSTART}</strong></h4></td>
+	<td class="bg1" style="width:33%"><h4>{L_RAIDEND}: <strong>{RAIDEND}</strong></h4></td>
+	<td class="bg1" style="width:33%"><h4>{L_RAIDDURATION}: <strong>{DURATION}</strong></h4></td>
 </tr>
 <tr>
-	<td class="bg1" width="33%">{RAID_ADDED_BY}</td>
+	<td class="bg1" style="width:33%">{RAID_ADDED_BY}</td>
 	<td></td>
 	<td></td>
   </tr>
 <tr>
-	<td class="bg1" width="33%">{RAID_UPDATED_BY}</td>
-	<td class="bg1></td>
-	<td class="bg1></td>
+	<td class="bg1" style="width:33%">{RAID_UPDATED_BY}</td>
+	<td class="bg1"></td>
+	<td class="bg1"></td>
   </tr>
 
 
@@ -124,16 +137,16 @@
  
   <!-- BEGIN attendees_row -->
   <tr>
-    <!-- IF S_COLUMN0 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN1 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg1">{attendees_row.COLUMN1_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN2 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN2_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN3 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg1">{attendees_row.COLUMN3_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN4 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN4_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN5 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg1">{attendees_row.COLUMN5_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN6 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN6_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN7 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg1">{attendees_row.COLUMN7_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN8 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg2">{attendees_row.COLUMN8_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN9 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="row bg1">{attendees_row.COLUMN9_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN0 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg2">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN1 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg1">{attendees_row.COLUMN1_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN2 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg2">{attendees_row.COLUMN2_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN3 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg1">{attendees_row.COLUMN3_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN4 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg2">{attendees_row.COLUMN4_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN5 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg1">{attendees_row.COLUMN5_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN6 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg2">{attendees_row.COLUMN6_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN7 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg1">{attendees_row.COLUMN7_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN8 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg2">{attendees_row.COLUMN8_NAME}</td><!-- ENDIF -->
+    <!-- IF S_COLUMN9 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg1">{attendees_row.COLUMN9_NAME}</td><!-- ENDIF -->
   </tr>
   <!-- END attendees_row -->
 
@@ -149,58 +162,59 @@
 <table class="table1" cellspacing="1">
 <thead>
   <tr>
-    <th style="text-align:left; " nowrap="nowrap" width="7%" >{L_RACE}/{L_CLASS}</th>
-    <th style="text-align:left;" width="25%"><a href="{F_RAID}&amp;o={O_NAME}&amp;">{L_NAME}</a></th>
-    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_RAID}&amp;o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
+    <th style="text-align:left; white-space: nowrap; width:7%" >{L_RACE}/{L_CLASS}</th>
+    <th style="text-align:left; width:25%"><a href="{F_RAID}&amp;o={O_NAME}&amp;">{L_NAME}</a></th>
+    <th style="text-align:right; white-space: nowrap; width:15%"><a href="{F_RAID}&amp;o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
     <!-- IF S_SHOWTIME -->
-    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_RAID}&amp;o={O_TIMEVALUE}">{L_TIME_BONUS}</a></th>
+    <th style="text-align:right; white-space: nowrap; width:15%"><a href="{F_RAID}&amp;o={O_TIMEVALUE}">{L_TIME_BONUS}</a></th>
     <!-- ENDIF -->
     <!-- IF S_SHOWZS -->
-    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_RAID}&amp;o={O_ZSVALUE}">{L_ZSVALUE}</a></th>
+    <th style="text-align:right; white-space: nowrap; width:15%"> <a href="{F_RAID}&amp;o={O_ZSVALUE}">{L_ZSVALUE}</a></th>
     <!-- ENDIF -->
     <!-- IF S_SHOWDECAY -->
-    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_RAID}&amp;o={O_DECAYVALUE}">{L_DECAY}</a></th>
+    <th style="text-align:right; white-space: nowrap; width:15%" ><a href="{F_RAID}&amp;o={O_DECAYVALUE}">{L_DECAY}</a></th>
     <!-- ENDIF -->
-    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_RAID}&amp;o={O_TOTALVALUE}">{L_TOTAL}</a></th>
+    <th style="text-align:right; white-space: nowrap; width:15%" ><a href="{F_RAID}&amp;o={O_TOTALVALUE}">{L_TOTAL}</a></th>
     
   </tr>
   </thead>
-<tbody>
-  <!-- BEGIN raids_row -->
-  <!-- IF raids_row.S_ROW_COUNT is even --><tr class="bg1"><!-- ELSE --><tr class="bg2"><!-- ENDIF -->
-    <td  style="text-align:left;" width="7%" ><!-- IF raids_row.S_RACE_IMAGE_EXISTS --><img src="{raids_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF raids_row.S_CLASS_IMAGE_EXISTS --><img src="{raids_row.CLASS_IMAGE}" alt="{raids_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></td>
-    <td style="text-align:left;" width="25%"><strong><a style="color:{raids_row.COLORCODE}" href="{raids_row.U_VIEW_ATTENDEE}">{raids_row.NAME}</a></strong></td>
-    <td style="text-align:right;" width="15%" class="positive">{raids_row.RAIDVALUE}</td>
-    <!-- IF S_SHOWTIME -->
-    <td style="text-align:right;" width="15%" class="positive">{raids_row.TIMEVALUE}</td>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWZS -->
-    <td style="text-align:right;" width="15%" class="positive">{raids_row.ZSVALUE}</td>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWDECAY -->
-    <td style="text-align:right;" width="15%" class="negative">{raids_row.DECAYVALUE}</td>
-    <!-- ENDIF -->
-    <td style="text-align:right;" width="15%" class="positive">{raids_row.TOTAL}</td>
-  </tr>
-  <!-- END raids_row -->
-  </tbody>
 <tfoot>
   <tr style="color:white;">
     <th></th>
     <th class="footer">{LISTRAIDS_FOOTCOUNT}</th>
-    <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{RAIDVALUE}</th>
+    <th class="footer" style="text-align:right; white-space: nowrap; width:15%"> ={RAIDVALUE}</th>
     <!-- IF S_SHOWTIME -->
-    <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{TIMEVALUE}</th>
+    <th class="footer" style="text-align:right; white-space: nowrap; width:15%">{TIMEVALUE}</th>
     <!-- ENDIF -->
     <!-- IF S_SHOWZS -->
-    <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{ZSVALUE}</th>
+    <th class="footer" style="text-align:right; white-space: nowrap; width:15%">{ZSVALUE}</th>
     <!-- ENDIF -->
     <!-- IF S_SHOWDECAY -->    
-    <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{RAIDDECAY}</th>
+    <th class="footer" style="text-align:right; white-space: nowrap; width:15%">{RAIDDECAY}</th>
     <!-- ENDIF -->
-    <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{TOTAL}</th>
+    <th class="footer" style="text-align:right; white-space: nowrap; width:15%">{TOTAL}</th>
   </tr>
-  </tfoot>
+  </tfoot>  
+<tbody>
+  <!-- BEGIN raids_row -->
+  <!-- IF raids_row.S_ROW_COUNT is even --><tr class="bg1"><!-- ELSE --><tr class="bg2"><!-- ENDIF -->
+    <td  style="text-align:left;" ><!-- IF raids_row.S_RACE_IMAGE_EXISTS --><img src="{raids_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF raids_row.S_CLASS_IMAGE_EXISTS --><img src="{raids_row.CLASS_IMAGE}" alt="{raids_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></td>
+    <td style="text-align:left;"><strong><a style="color:{raids_row.COLORCODE}" href="{raids_row.U_VIEW_ATTENDEE}">{raids_row.NAME}</a></strong></td>
+    <td style="text-align:right;" class="positive">{raids_row.RAIDVALUE}</td>
+    <!-- IF S_SHOWTIME -->
+    <td style="text-align:right;" class="positive">{raids_row.TIMEVALUE}</td>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWZS -->
+    <td style="text-align:right;" class="positive">{raids_row.ZSVALUE}</td>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY -->
+    <td style="text-align:right;" class="negative">{raids_row.DECAYVALUE}</td>
+    <!-- ENDIF -->
+    <td style="text-align:right;" class="positive">{raids_row.TOTAL}</td>
+  </tr>
+  <!-- END raids_row -->
+  </tbody>
+
 </table>
   
 <span class="corners-inner-bottom"><span></span></span>
@@ -219,50 +233,51 @@
 <table class="table1"  cellspacing="1">
 <thead>
   <tr>
-    <th style="text-align:left;" width="7%" nowrap="nowrap">{L_CLASS}</th>
-    <th style="text-align:left;" width="25%"><a href="{F_RAID}&amp;ui={O_BUYER}&amp;">{L_NAME}</a></th>
-    <th style="text-align:left;" width="25%"><a href="{F_RAID}&amp;ui={O_ITEMNAME}">{L_ITEM}</a></th>
-    <th style="text-align:right;" width="15%" width="30" nowrap="nowrap">{L_ITEMVALUE}</th>
+    <th style="text-align:left; width:7%; white-space: nowrap;">{L_CLASS}</th>
+    <th style="text-align:left; width:25%; white-space: nowrap;"><a href="{F_RAID}&amp;ui={O_BUYER}&amp;">{L_NAME}</a></th>
+    <th style="text-align:left; width:25%; white-space: nowrap;"><a href="{F_RAID}&amp;ui={O_ITEMNAME}">{L_ITEM}</a></th>
+    <th style="text-align:right; width:15%; white-space: nowrap;">{L_ITEMVALUE}</th>
     <!-- IF S_SHOWZS -->
-    <th style="text-align:right;" width="5" width="30" nowrap="nowrap">zs</th>
+    <th style="text-align:right; width:5%; white-space: nowrap;">zs</th>
     <!-- ENDIF -->
     <!-- IF S_SHOWDECAY -->    
-    <th style="text-align:right;" width="15%" nowrap="nowrap">{L_ITEMDECAY}</th>
+    <th style="text-align:right; width:15%; white-space: nowrap;">{L_ITEMDECAY}</th>
     <!-- ENDIF -->
-    <th style="text-align:right;" width="15%" nowrap="nowrap"><a href="{F_RAID}&amp;ui={O_ITEMTOTAL}">{L_ITEMTOTAL}</a></th>
+    <th style="text-align:right; width:15%; white-space: nowrap;"><a href="{F_RAID}&amp;ui={O_ITEMTOTAL}">{L_ITEMTOTAL}</a></th>
   </tr>
   </thead>
-<tbody>
-  <!-- BEGIN items_row -->
-  <!-- IF items_row.S_ROW_COUNT is even --><tr class="bg1"><!-- ELSE --><tr class="bg2"><!-- ENDIF -->
-    <td  style="text-align:left;" width="7%" nowrap="nowrap"><!-- IF items_row.S_RACE_IMAGE_EXISTS --><img src="{items_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF items_row.S_CLASS_IMAGE_EXISTS --><img src="{items_row.CLASS_IMAGE}" alt="{items_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></td>
-    <td style="text-align:left;" width="25%"><strong><a style="color:{items_row.COLORCODE}" href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></strong></td>
-    <td style="text-align:left;" width="25%"><a href="{items_row.U_VIEW_ITEM}">{items_row.ITEMNAME}</a></td>
-    <td style="text-align:right;" width="15%" class="positive">{items_row.ITEMVALUE}</td>
-    <!-- IF S_SHOWZS -->
-    <td style="text-align:right;" width="5" class="positive"> <input type="checkbox" READONLY DISABLED name="item[{items_row.ITEM_ID}]" value="1" {items_row.ITEM_ZS} />  </td>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWDECAY -->      
-    <td style="text-align:right;" width="15%" class="negative">{items_row.DECAYVALUE}</td>
-    <!-- ENDIF -->
-    <td style="text-align:right;" width="15%" class="positive">{items_row.TOTAL}</td>
-  </tr>
-  <!-- END items_row -->
-  </tbody>
 <tfoot>
   <tr  style="color:white;">
     <th class="footer" colspan="2" >{ITEM_FOOTCOUNT}</th>
     <th class="footer"></th>
-    <th class="footer" style="text-align:right;" width="15%" width="30" nowrap="nowrap">{ITEM_VALUE}</th>
+    <th class="footer" style="text-align:right;">{ITEM_VALUE}</th>
     <!-- IF S_SHOWZS -->
     <th class="footer"></th>
     <!-- ENDIF -->
     <!-- IF S_SHOWDECAY --> 
-    <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{ITEMDECAYVALUE}</th>
+    <th class="footer" style="text-align:right; white-space: nowrap;">{ITEMDECAYVALUE}</th>
     <!-- ENDIF -->
-    <th class="footer" style="text-align:right;" width="15%" nowrap="nowrap">{ITEMTOTAL}</th>
+    <th class="footer" style="text-align:right; white-space: nowrap;" >{ITEMTOTAL}</th>
   </tr>
   </tfoot>
+  <tbody>
+  <!-- BEGIN items_row -->
+  <!-- IF items_row.S_ROW_COUNT is even --><tr class="bg1"><!-- ELSE --><tr class="bg2"><!-- ENDIF -->
+    <td  style="text-align:left;" ><!-- IF items_row.S_RACE_IMAGE_EXISTS --><img src="{items_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF items_row.S_CLASS_IMAGE_EXISTS --><img src="{items_row.CLASS_IMAGE}" alt="{items_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></td>
+    <td style="text-align:left;"><strong><a style="color:{items_row.COLORCODE}" href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></strong></td>
+    <td style="text-align:left;"><a href="{items_row.U_VIEW_ITEM}">{items_row.ITEMNAME}</a></td>
+    <td style="text-align:right;" class="positive">{items_row.ITEMVALUE}</td>
+    <!-- IF S_SHOWZS -->
+    <td style="text-align:right;" class="positive"> <input type="checkbox" READONLY DISABLED name="item[{items_row.ITEM_ID}]" value="1" {items_row.ITEM_ZS} />  </td>
+    <!-- ENDIF -->
+    <!-- IF S_SHOWDECAY -->      
+    <td style="text-align:right;" class="negative">{items_row.DECAYVALUE}</td>
+    <!-- ENDIF -->
+    <td style="text-align:right;" class="positive">{items_row.TOTAL}</td>
+  </tr>
+  <!-- END items_row -->
+  </tbody>
+
 </table>
 <span class="corners-inner-bottom"><span></span></span>
 </div>
@@ -288,13 +303,13 @@
 <tbody>
   <!-- BEGIN class_row -->
   <tr>
-    <td style="text-align:left;  width: 20%; white-space: nowrap" class="bg2"><strong> 
+    <td style="text-align:left;  width: 20%; white-space: nowrap" class="bg2">
     <span style="color:{class_row.CLASSCOLOR}">
-    <img src="{ROOT_PATH}images/class_images/{class_row.CLASSIMAGE}.png" alt="class" width="20" height="20"></img>&nbsp;
+    <img src="{ROOT_PATH}images/class_images/{class_row.CLASSIMAGE}.png" alt="class" width="20" height="20" />&nbsp;
     <strong>{class_row.CLASS}</strong>
     </span>
     </td>
-    <td style="text-align:left;  width: 40%; white-space: nowrap" class="bg2"><span class="small">{class_row.ATTENDEES}</span></td>
+    <td style="text-align:left;  width: 40%; white-space: nowrap" class="bg2">{class_row.ATTENDEES}</td>
     <td style="text-align:left;  width: 40%; white-space: nowrap" class="bg1">{class_row.BAR}</td>
   </tr>
    <!-- END class_row -->

@@ -267,7 +267,7 @@ function create_bar($width, $show_text = '', $color = '#AA0033')
     
         if ( $show_text != '' )
         {
-            $bar .= '<span style="color:#EEEEEE"; class="small">' . $show_text . '</span>';
+            $bar .= '<span style="color:#EEEEEE" class="small">' . $show_text . '</span>';
         }
     
         $bar .= '</td></tr></table>';

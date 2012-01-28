@@ -1,12 +1,12 @@
 <div class="forabg" >
-   <span class="corners-top"><span></span></span>
-
-<table width="100%" border="0" cellspacing="1" cellpadding="2">
-  <tr>
-  	<th style="text-align: center" ><h4>{GUILDNAME} {L_GUILDROSTER} </h4></th>
-  </tr>
-  <tr>
-    <th align="center">
+<span class="corners-top"><span></span></span>
+<ul class="topiclist">
+<li class="header">
+<div style="float: left; width:10%">
+<h1 style="color:#dfc065; white-space:nowrap;">{L_GUILDROSTER}</h1>
+</div>
+<div style="text-align: center; float: left; width:90%">
+<h4>{GUILDNAME} </h4>
     <a href="{U_LIST_MEMBERS0}">{L_NAME}</a> - 
 	<!-- IF S_RSTYLE == 0 -->
     	<a href="{U_LIST_MEMBERS1}">{L_CLASS}</a> -
@@ -18,18 +18,20 @@
 	<!-- ENDIF -->
 	<!-- IF S_MULTIGAME -->
 	<form method="post" action="{F_ROSTER}">
+	<div>
 	 <select name="displaygame" class="input" onchange="javascript:form.submit();">
         <!-- BEGIN game_row -->
         <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
         <!-- END game_row -->
       </select>
+      </div>
+      </form>
      <!-- ENDIF -->
-    </th>
-  </tr>
-</table>
+</div>
+</li>
+</ul>
 <span class="corners-bottom"><span></span></span>
 </div>
-
 
 <!-- 
 **************

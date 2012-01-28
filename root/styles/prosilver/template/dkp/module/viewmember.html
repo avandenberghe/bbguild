@@ -2,34 +2,27 @@
 
 <div class="forabg" >
 <span class="corners-top"><span></span></span>
-<table width="100%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
+<ul class="topiclist">
+<li class="header">
 
-<colgroup span="3" valign= "middle">
-	<col width="20%"></col>
-	<col width="70%"></col>
-	<col width="5%"></col>
-</colgroup>
-
-<tr>
-<td style="color:#FFFFDD; text-align:left; white-space:nowrap;" >
-<h1 style = "color:#dfc065"><span style="color:{COLORCODE}"><strong>{NAME}</strong></span>
-<!-- IF S_RACE_IMAGE_EXISTS --><img src="{RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE --><!-- ENDIF -->
-<!-- IF S_CLASS_IMAGE_EXISTS --><img src="{CLASS_IMAGE}" alt="{CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;</h1>
-</td>     
-
-<td style="color:#FFFFDD; text-align:left; white-space:nowrap;">
-<h4 style= "color:#dfc065"> {L_POOL}: {MEMBER_DKPNAME} 
+<div style="float: left; width:50%; white-space:nowrap;">
+	<h1 style = "color:#dfc065"><span style="color:{COLORCODE}"><strong>{NAME}</strong></span>
+	<!-- IF S_RACE_IMAGE_EXISTS --><img src="{RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE --><!-- ENDIF -->
+	<!-- IF S_CLASS_IMAGE_EXISTS --><img src="{CLASS_IMAGE}" alt="{CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;</h1>
+</div>
+<div style="color:white; text-align:left; float:left; width:50%; white-space:nowrap;">
+<br/>
+{L_POOL}:
 <select name="pool" class="input" onchange="javascript:form.submit();">
 
         <!-- BEGIN pool_row -->
         <option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
         <!-- END pool_row -->
-      </select>
-      </h4>
-  </td> 
-<td>&nbsp;&nbsp;</td>
-</tr> 
-</table>
+</select>
+
+</div>
+</li>
+</ul>
 <span class="corners-bottom"><span></span></span>
 </div>
 
@@ -194,9 +187,7 @@
 
 <!-- ******* Attended Raids *************** -->
 
-
-<!-- **************************** Raids ******************************** -->
-
+<!-- IF .raids_row -->
 <h3>{L_RAID_ATTENDANCE_HISTORY}</h3>
 
 <div class="forumbg forumbg-table">
@@ -237,7 +228,6 @@
   </tr>
   <!-- END raids_row -->
   </tbody>
-
   </table>
   
 <span class="corners-bottom"><span></span></span>
@@ -250,9 +240,11 @@
 		<span>{RAID_PAGINATION}<br /><br /></span>
 </div>
 <!-- ENDIF -->
+<!-- ENDIF -->
 
-<!-- IF ITEMS -->
-<!-- **************************** Items ******************************** -->
+
+<!-- IF .items_row -->
+
 <h3>{L_ITEM_PURCHASE_HISTORY}</h3>
 
 <div class="forumbg forumbg-table">
@@ -297,14 +289,10 @@
 		<span>{ITEM_PAGINATION}<br /><br /></span>
 </div>
 <!-- ENDIF -->
-
 <!-- ENDIF -->
 
+<!-- IF .adjustments_row -->
 
-<!-- **************************** Adjustments ******************************** -->
-
-<!-- IF S_COMP -->
-<!-- IF ADJUSTMENT -->
 <h3>{L_INDIVIDUAL_ADJUSTMENT_HISTORY}</h3>
 <div class="forumbg forumbg-table">
 <div class="inner">
@@ -337,10 +325,9 @@
 </div>
 </div>
 <!-- ENDIF -->
-<!-- ENDIF -->
 
-<!-- **************************** Attendance ******************************** -->
 
+<!-- IF .event_row -->
 <h3>{L_ATTENDANCE_BY_EVENT}</h3>
 <div class="forumbg forumbg-table">
 <div class="inner">
@@ -363,8 +350,8 @@
 <tbody>
   <!-- BEGIN event_row -->
   <tr>
-    <td style="width: 200; white-space: nowrap;" class="row bg2" ><a href="{event_row.U_VIEW_EVENT}" class="small">{event_row.EVENT}</a></td>
-    <td style="width: 900;" class="row bg1">{event_row.BAR}</td>
+    <td style="width: 20%; white-space: nowrap;" class="row bg2" ><a href="{event_row.U_VIEW_EVENT}" class="small">{event_row.EVENT}</a></td>
+    <td style="width: 80%;" class="row bg1">{event_row.BAR}</td>
   </tr>
   <!-- END event_row -->
 </tbody>
@@ -373,5 +360,6 @@
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
+<!-- ENDIF -->
 
 </form>

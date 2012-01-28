@@ -5,27 +5,24 @@
 <ul class="topiclist">
 <li class="header">
 
-<table width="30%" border="0" cellspacing="1" cellpadding="2" style="border-bottom: none">
-<colgroup  span="2">
-<col width="60%"></col>
-<col width="40%"></col>
-</colgroup>
-<tr>
+<div style="float: left; width:50%">
 <!-- IF S_HISTORY -->
-<th><h1 style="color:#dfc065; white-space:nowrap;">{L_MENU_ITEMHIST}</h1></th>
+<h1 style="color:#dfc065; white-space:nowrap;">{L_MENU_ITEMHIST}</h1>
  <!-- ELSE -->
-<th><h1 style="color:#dfc065; white-space:nowrap;">{L_MENU_ITEMVAL}</h1></th>
- <!-- ENDIF -->
-<th style="color:white; text-align:left; width:56;  white-space:nowrap;">{L_POOL}:
-      <select name="pool" class="input" onchange="javascript:form.submit();">
+<h1 style="color:#dfc065; white-space:nowrap;">{L_MENU_ITEMVAL}</h1>
+<!-- ENDIF -->
+</div>
+<div style="float: left; width:50%">
+<br/>
+<div style="color:white; text-align:left; white-space:nowrap;">{L_POOL}:
+      <select id="pool" name="pool" class="input" onchange="javascript:form.submit();">
         <!-- BEGIN pool_row -->
         <option value="{pool_row.VALUE}" {pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
         <!-- END pool_row -->
       </select>
-</th>
+</div>
+</div>
 
-</tr>
-</table>
 </li>
 </ul>
 <span class="corners-bottom"><span></span></span>
