@@ -92,7 +92,8 @@ class acp_dkp_point extends bbDKP_Admin
                     
                     set_config('bbdkp_bankerid', request_var('zerosumbanker', 0), true);
                     set_config('bbdkp_zerosumdistother', request_var('zerosumdistother', 0), true);
-                    set_config('bbdkp_basegp', request_var('basegp', 0), true);
+                    set_config('bbdkp_basegp', request_var('basegp', 0.0), true);
+                    set_config('bbdkp_minep', request_var('minep', 0.0), true);
                     
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
@@ -221,6 +222,7 @@ class acp_dkp_point extends bbDKP_Admin
                 	//epgp
                 	'F_EPGPACTIVATE'	=> $config['bbdkp_epgp'],
                 	'BASEGP'			=> $config['bbdkp_basegp'] , 
+                	'MINEP'				=> $config['bbdkp_minep'] , 
 						
                 	//decay
                 	'F_DECAYACTIVATE'	=> $config['bbdkp_decay'] ,

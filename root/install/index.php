@@ -910,7 +910,12 @@ $versions = array(
         		),
 
             )),
-		),		
+        'config_add' => array(
+	        array('bbdkp_minep', 100.0, true),
+		),   
+			
+            
+	),		
       
 );
 

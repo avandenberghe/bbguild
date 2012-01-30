@@ -652,7 +652,9 @@ So the loot would go to player 2 <br />',
 'DECAY_F'	=> '<strong>Item Decay</strong> f = j * l',
 
 'EP_DEFINITION'  => '<strong>EP</strong> = Earned points = Raid Bonus + Time Bonuspoints + Zerosum points + Adjustments ',
-'DECAY_EP'  => '<strong>EP After Decay</strong> = EP - EP * d',
+'DECAY_EP'  => '<strong>EP After Decay</strong> = EP_eff - EP_eff * d',
+'MEP'  => 'Minimum ep',
+'MEP_EXPLAIN'  => 'MEP = EP treshhold Value. Effective PR is 0 until EP_min is reached.',
 
 'GP_DEFINITION'  => '<strong>GP</strong> = Base GP + Real GP',
 'RGP_DEFINITION'  => '<strong>RGP</strong> = Real Gear points = Item Cost',
