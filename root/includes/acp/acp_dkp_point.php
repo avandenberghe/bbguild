@@ -94,6 +94,8 @@ class acp_dkp_point extends bbDKP_Admin
                     set_config('bbdkp_zerosumdistother', request_var('zerosumdistother', 0), true);
                     set_config('bbdkp_basegp', request_var('basegp', 0.0), true);
                     set_config('bbdkp_minep', request_var('minep', 0.0), true);
+                    set_config('bbdkp_decaycron', request_var('decay_scheduler', 0), true);
+                    
                     
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
@@ -230,6 +232,7 @@ class acp_dkp_point extends bbDKP_Admin
                 	'RAIDDECAYPCT' 	 	=> $config['bbdkp_raiddecaypct'] ,
         			'DECAYFREQ'			=> $config['bbdkp_decayfrequency'] ,
 					'S_FREQTYPE_OPTIONS' =>	$s_freqtype_options,
+                	'F_DECAYSCHEDULER'	=> $config['bbdkp_decaycron'],
                 		 
 					//time dkp
 					'F_TIMEBONUSACTIVATE' => $config['bbdkp_timebased'] ,

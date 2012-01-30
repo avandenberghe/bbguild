@@ -910,12 +910,14 @@ $versions = array(
         		),
 
             )),
+            
         'config_add' => array(
 	        array('bbdkp_minep', 100.0, true),
-		),   
-			
-            
-	),		
+	        array('bbdkp_decaycron', 1, true),
+	        array('bbdkp_lastcron', 0, true),
+	        array('bbdkp_crontime', 23, true),
+			),   
+		),		
       
 );
 
