@@ -264,7 +264,21 @@ class acp_dkp extends bbDKP_Admin
                             case 'L_ACTION_RT_CONFIG_UPDATED':
                                 $logline = sprintf($user->lang['VLOG_RT_CONFIG_UPDATED'], $row['username']);
                                 break;
-
+                            
+                           case 'L_ACTION_DECAYSYNC':
+                           		$ucolour = $this->getaction($row['log_action'],'L_USERCOLOUR');
+                           		$origin = $this->getaction($row['log_action'],'L_ORIGIN');
+                           		$profilelink= get_username_string('full', $row['log_userid'], $row['username'], $ucolour);
+                                $logline = sprintf($user->lang['VLOG_DECAYSYNC'], $profilelink, 
+                                	$this->getaction($row['log_action'],'L_RAIDS')) . ' ' . $origin ;
+                                break;
+                                
+                           case 'L_ACTION_DECAYOFF':
+                           		$ucolour = $this->getaction($row['log_action'],'L_USERCOLOUR');
+                           		$origin = $this->getaction($row['log_action'],'L_ORIGIN');
+                           		$profilelink= get_username_string('full', $row['log_userid'], $row['username'], $ucolour);
+                           		$logline = sprintf($user->lang['VLOG_DECAYOFF'], $profilelink) . ' ' . $origin ;
+                                break;
                         }
                         unset($log_action);
                         // Show the log if we have a valid line for it
@@ -773,6 +787,8 @@ class acp_dkp extends bbDKP_Admin
                 	'L_ACTION_RAID_UPDATED' => $user->lang['ACTION_RAID_UPDATED'] ,
                 	'L_ACTION_RAID_DELETED' => $user->lang['ACTION_RAID_DELETED'] , 
                 	'L_ACTION_CTRT_CONFIG_UPDATED' => $user->lang['ACTION_RT_CONFIG_UPDATED'],  
+	                'L_ACTION_DECAYOFF' => $user->lang['ACTION_DECAYOFF'],  
+	                'L_ACTION_DECAYSYNC' => $user->lang['ACTION_DECAYSYNC'],  
                 	); 
 
                 $log_id = (isset($_GET[URI_LOG])) ? request_var(URI_LOG, 0) : false;

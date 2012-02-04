@@ -313,7 +313,7 @@ if(@defined("EMED_BBDKP"))
 			require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
 		}
 		$acp_dkp_raid = new acp_dkp_raid;
-		$acp_dkp_raid->sync_decay($config['bbdkp_decay']);
+		$acp_dkp_raid->sync_decay($config['bbdkp_decay'], 'cron');
 		set_config('bbdkp_lastcron', time(), true);
 		break;]]></action>
 		</edit>

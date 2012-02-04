@@ -373,7 +373,8 @@ $lang = array_merge($lang, array(
 'ACTION_RAID_DELETED' => 'Raid Deleted',
 'ACTION_RAID_UPDATED' => 'Raid Updated',
 'ACTION_RT_CONFIG_UPDATED' => 'Raidtracker Config Updated', 
-
+'ACTION_DECAYOFF' => 'Decay set to zero', 
+'ACTION_DECAYSYNC' => 'Decay recalculated',
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Newest Admin Actions',
@@ -406,6 +407,8 @@ $lang = array_merge($lang, array(
 'VLOG_LOG_DELETED' => '%s deleted logid %s.',
 'VLOG_DEFAULT_DKP_CHANGED' => '%S changed Default DKP Pool',
 'VLOG_RAID_ATTENDEE_DELETED' => '%s deleted attendee %s from raid %s',
+'VLOG_DECAYOFF' => '%s has set point decay to zero', 
+'VLOG_DECAYSYNC' => '%s has recalculated point Decay for %s raids',
 
 // Before/After
 'ADJUSTMENT_AFTER' => 'Adjustment After',
@@ -659,7 +662,7 @@ So the loot would go to player 2 <br />',
 'DECAYFREQTYPE' => 'Decay frequency type',  
 'DECAY_SCHEDULE' => 'Automatic Decay Job',
 'DECAY_SCHEDULE_EXPLAIN' => 'Enable to trigger a decay run every 23 hours if forum is visited.',
-
+'DECAYCRON' => 'triggered by cronjob', 
 
 'EP_DEFINITION'  => '<strong>EP</strong> = Earned points = Raid Bonus + Time Bonuspoints + Zerosum points + Adjustments ',
 'DECAY_EP'  => '<strong>EP After Decay</strong> = EP_eff * d',

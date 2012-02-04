@@ -2461,15 +2461,15 @@ class acp_dkp_raid extends bbDKP_Admin
 	 * Recalculates and updates decay
 	 * loops all raids - caution this may run a long time
 	 * 
-	 * @param $mode one for recalculating, 0 for setting decay to zero.
+	 * @param $mode 1 for recalculating, 0 for setting decay to zero.
 	 */
-	public function sync_decay($mode)
+	public function sync_decay($mode, $origin= '')
 	{
-		global $db;
+		global $user, $db;
 		switch ($mode)
 		{
 			case 0:
-				// set all to 0
+				//  Decay = OFF : set all decay to 0
 				//  update item detail to new decay value
 				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = 0 ' ;
 				$db->sql_query ( $sql );
@@ -2480,11 +2480,26 @@ class acp_dkp_raid extends bbDKP_Admin
 				
 				$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = 0'; 
 				$db->sql_query ( $sql);
+				if ($origin=='cron')
+				{
+					$origin = $user->lang['DECAYCRON'];
+				}
+				$log_action = array (
+					'header' 		=> 'L_ACTION_DECAYOFF',
+					'L_USER' 		=>  $user->data['user_id'],
+					'L_USERCOLOUR' 	=>  $user->data['user_colour'], 
+					'L_ORIGIN' 		=>  $origin
+					);
+				
+				$this->log_insert ( array (
+				'log_type' 		=> $log_action ['header'], 
+				'log_action' 	=> $log_action ) );
+				
 				return true;
 				break;
 				
 			case 1:
-				// synchronise
+				// Decay is ON : synchronise
 				// loop all raids
 				$sql = 'SELECT e.event_dkpid, r.raid_id FROM '. RAIDS_TABLE. ' r, ' . EVENTS_TABLE . ' e WHERE e.event_id = r.event_id ' ;
 				$result = $db->sql_query ($sql);
@@ -2495,6 +2510,23 @@ class acp_dkp_raid extends bbDKP_Admin
 					$countraids++;
 				}
 				$db->sql_freeresult ($result);
+				
+				if ($origin == 'cron')
+				{
+					$origin = $user->lang['DECAYCRON'];
+				}
+				
+				$log_action = array (
+				'header' 	=> 'L_ACTION_DECAYSYNC',
+				'L_USER' 	=>  $user->data['user_id'],
+				'L_USERCOLOUR' 	=>  $user->data['user_colour'], 
+				'L_RAIDS' 	=> $countraids,
+				'L_ORIGIN' 		=>  $origin 
+				);
+			
+				$this->log_insert ( array (
+				'log_type' 		=> $log_action ['header'], 
+				'log_action' 	=> $log_action ) );
 				
 				return $countraids;
 				
