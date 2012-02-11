@@ -96,7 +96,6 @@ class acp_dkp_point extends bbDKP_Admin
                     set_config('bbdkp_minep', request_var('minep', 0.0), true);
                     set_config('bbdkp_decaycron', request_var('decay_scheduler', 0), true);
                     
-                    
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
                 }
@@ -244,6 +243,8 @@ class acp_dkp_point extends bbDKP_Admin
          			'F_ZEROSUMACTIVATE'	=> $config['bbdkp_zerosum'], 
                 	'S_BANKER_OPTIONS'	=> $s_bankerlist_options, 
                 	'F_ZEROSUM_DISTOTHER' => $config['bbdkp_zerosumdistother'],
+                	'DECAYIMGEXAMPLE' 	=> $phpbb_root_path . "adm/style/dkp/decayexample.png", 
+                
                 ));
                 
                 $this->page_title = 'ACP_DKP_POINT_CONFIG';

@@ -642,8 +642,9 @@ So the loot would go to player 2 <br />',
 'EPGP_ADVANTAGE' => '<strong>Advantage</strong> : no inflation, no hoarding. ', 
 'EPGP_DISADVANTAGE' => '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ', 
 
-
-'DECAY_EXPLAIN'	=> 'Earned points and Item cost get depreciated over time. ', 
+'DECAY_EXPLAIN'	=> 'Earned points and Item cost get depreciated over time. Can be used with standard dkp, time dkp, epgp. ', 
+'DECAY_EXAMPLE'	=> 'Decay example',
+ 
 'FORMULA' => 'Formula’s',
 'DECAY_N'	=> '<strong>Age of Raid in weeks</strong> = n',
 'DECAY_I'	=> '<strong>Raid Decay percentage</strong> = i', 
