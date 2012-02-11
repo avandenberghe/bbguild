@@ -279,6 +279,22 @@ class acp_dkp extends bbDKP_Admin
                            		$profilelink= get_username_string('full', $row['log_userid'], $row['username'], $ucolour);
                            		$logline = sprintf($user->lang['VLOG_DECAYOFF'], $profilelink) . ' ' . $origin ;
                                 break;
+
+                           case 'L_ACTION_ZSYNC':
+                           		$ucolour = $this->getaction($row['log_action'],'L_USERCOLOUR');
+                           		$origin = $this->getaction($row['log_action'],'L_ORIGIN');
+                           		$profilelink= get_username_string('full', $row['log_userid'], $row['username'], $ucolour);
+                                $logline = sprintf($user->lang['VLOG_ZSYNC'], $profilelink, 
+                                	$this->getaction($row['log_action'],'L_RAIDS')) . ' ' . $origin ;
+                                break;
+                                
+                           case 'L_ACTION_DKPSYNC':
+                           		$ucolour = $this->getaction($row['log_action'],'L_USERCOLOUR');
+                           		$origin = $this->getaction($row['log_action'],'L_ORIGIN');
+                           		$profilelink= get_username_string('full', $row['log_userid'], $row['username'], $ucolour);
+                           		$logline = sprintf($user->lang['VLOG_DKPSYNC'], $profilelink) . ' ' . $origin ;
+                                break;
+                                                                
                         }
                         unset($log_action);
                         // Show the log if we have a valid line for it
@@ -788,7 +804,9 @@ class acp_dkp extends bbDKP_Admin
                 	'L_ACTION_RAID_DELETED' => $user->lang['ACTION_RAID_DELETED'] , 
                 	'L_ACTION_CTRT_CONFIG_UPDATED' => $user->lang['ACTION_RT_CONFIG_UPDATED'],  
 	                'L_ACTION_DECAYOFF' => $user->lang['ACTION_DECAYOFF'],  
-	                'L_ACTION_DECAYSYNC' => $user->lang['ACTION_DECAYSYNC'],  
+	                'L_ACTION_DECAYSYNC' => $user->lang['ACTION_DECAYSYNC'], 
+	                'L_ACTION_ZSYNC' => $user->lang['ACTION_ZSYNC'],  
+	                'L_ACTION_DKPSYNC' => $user->lang['ACTION_DKPSYNC'],                   
                 	); 
 
                 $log_id = (isset($_GET[URI_LOG])) ? request_var(URI_LOG, 0) : false;

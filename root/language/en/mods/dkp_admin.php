@@ -375,6 +375,8 @@ $lang = array_merge($lang, array(
 'ACTION_RT_CONFIG_UPDATED' => 'Raidtracker Config Updated', 
 'ACTION_DECAYOFF' => 'Decay set to zero', 
 'ACTION_DECAYSYNC' => 'Decay recalculated',
+'ACTION_ZSYNC' => 'Zerosum recalculated', 
+'ACTION_DKPSYNC' => 'DKP recalculated',  
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Newest Admin Actions',
@@ -409,6 +411,8 @@ $lang = array_merge($lang, array(
 'VLOG_RAID_ATTENDEE_DELETED' => '%s deleted attendee %s from raid %s',
 'VLOG_DECAYOFF' => '%s has set point decay to zero', 
 'VLOG_DECAYSYNC' => '%s has recalculated point Decay for %s raids',
+'VLOG_ZSYNC' => '%s has recalculated zerosum points ', 
+'VLOG_DKPSYNC' => '%s has recalculated DKP',  
 
 // Before/After
 'ADJUSTMENT_AFTER' => 'Adjustment After',
@@ -642,8 +646,9 @@ So the loot would go to player 2 <br />',
 'EPGP_ADVANTAGE' => '<strong>Advantage</strong> : no inflation, no hoarding. ', 
 'EPGP_DISADVANTAGE' => '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ', 
 
-
-'DECAY_EXPLAIN'	=> 'Earned points and Item cost get depreciated over time. ', 
+'DECAY_EXPLAIN'	=> 'Earned points and Item cost get depreciated over time. Can be used with standard dkp, time dkp, epgp. ', 
+'DECAY_EXAMPLE'	=> 'Decay example',
+ 
 'FORMULA' => 'Formula’s',
 'DECAY_N'	=> '<strong>Age of Raid in weeks</strong> = n',
 'DECAY_I'	=> '<strong>Raid Decay percentage</strong> = i', 
