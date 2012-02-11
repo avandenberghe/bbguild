@@ -1197,6 +1197,16 @@ class acp_dkp_item extends bbDKP_Admin
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_zerosum_bonus = 0, member_earned = member_raid_value + member_time_bonus';
 				$db->sql_query ( $sql );
 				
+				$log_action = array (
+					'header' 		=> 'L_ACTION_ZSYNC',
+					'L_USER' 		=>  $user->data['user_id'],
+					'L_USERCOLOUR' 	=>  $user->data['user_colour'], 
+					
+					);
+				$this->log_insert ( array (
+				'log_type' 		=> $log_action ['header'], 
+				'log_action' 	=> $log_action ) );
+				
 				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_DELETED']) . $this->link , E_USER_NOTICE );
 				
 				return true;
@@ -1340,6 +1350,15 @@ class acp_dkp_item extends bbDKP_Admin
 						
 					}
 				}
+				
+				$log_action = array (
+					'header' 		=> 'L_ACTION_ZSYNC',
+					'L_USER' 		=>  $user->data['user_id'],
+					'L_USERCOLOUR' 	=>  $user->data['user_colour'], 
+					);
+				$this->log_insert ( array (
+				'log_type' 		=> $log_action ['header'], 
+				'log_action' 	=> $log_action ) );
 				
 				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_SUCCESS'], $itemcount, $accountupdates ) . $this->link , E_USER_NOTICE );
 				

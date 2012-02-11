@@ -375,6 +375,8 @@ $lang = array_merge($lang, array(
 'ACTION_RT_CONFIG_UPDATED' => 'Raidtracker Config Updated', 
 'ACTION_DECAYOFF' => 'Decay set to zero', 
 'ACTION_DECAYSYNC' => 'Decay recalculated',
+'ACTION_ZSYNC' => 'Zerosum recalculated', 
+'ACTION_DKPSYNC' => 'DKP recalculated',  
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Newest Admin Actions',
@@ -409,6 +411,8 @@ $lang = array_merge($lang, array(
 'VLOG_RAID_ATTENDEE_DELETED' => '%s deleted attendee %s from raid %s',
 'VLOG_DECAYOFF' => '%s has set point decay to zero', 
 'VLOG_DECAYSYNC' => '%s has recalculated point Decay for %s raids',
+'VLOG_ZSYNC' => '%s has recalculated zerosum points ', 
+'VLOG_DKPSYNC' => '%s has recalculated DKP',  
 
 // Before/After
 'ADJUSTMENT_AFTER' => 'Adjustment After',
