@@ -52,6 +52,7 @@ class acp_dkp_point extends bbDKP_Admin
                     set_config('bbdkp_raiddecaypct',   request_var('raiddecaypct', 0), true);
                     set_config('bbdkp_decayfrequency', request_var('decayfreq', 0), true);
                     set_config('bbdkp_decayfreqtype',  request_var('decayfreqtype', 0), true);
+                    set_config('bbdkp_adjdecaypct',  request_var('adjdecaypct', 0), true);
 
                     //time
                     set_config('bbdkp_timebased', request_var('timebonus_activate', 0.00), true);
@@ -95,7 +96,6 @@ class acp_dkp_point extends bbDKP_Admin
                     set_config('bbdkp_basegp', request_var('basegp', 0.0), true);
                     set_config('bbdkp_minep', request_var('minep', 0.0), true);
                     set_config('bbdkp_decaycron', request_var('decay_scheduler', 0), true);
-                    
                     
                     $cache->destroy('config');
                     trigger_error('Settings saved.' . $link, E_USER_NOTICE);
@@ -176,7 +176,10 @@ class acp_dkp_point extends bbDKP_Admin
 						$acp_dkp_raid = new acp_dkp_raid;
 						$count = $acp_dkp_raid->sync_decay($config['bbdkp_decay']);
 						
-						trigger_error ( sprintf($user->lang ['RESYNC_DECAY_SUCCESS'], $count) . $link , E_USER_NOTICE );
+						$acp_dkp_adj = new acp_dkp_adj;
+						$count1 = $acp_dkp_adj->sync_adjdecay($config['bbdkp_decay']);
+						
+						trigger_error ( sprintf($user->lang ['RESYNC_DECAY_SUCCESS'], $count + $count1) . $link , E_USER_NOTICE );
 					}
 					else 
 					{
@@ -230,6 +233,8 @@ class acp_dkp_point extends bbDKP_Admin
                 	'F_DECAYACTIVATE'	=> $config['bbdkp_decay'] ,
                 	'ITEMDECAYPCT'		=> $config['bbdkp_itemdecaypct'] ,
                 	'RAIDDECAYPCT' 	 	=> $config['bbdkp_raiddecaypct'] ,
+                	'ADJDECAYPCT' 	 	=> $config['bbdkp_adjdecaypct'] ,
+                
         			'DECAYFREQ'			=> $config['bbdkp_decayfrequency'] ,
 					'S_FREQTYPE_OPTIONS' =>	$s_freqtype_options,
                 	'F_DECAYSCHEDULER'	=> $config['bbdkp_decaycron'],
@@ -244,6 +249,8 @@ class acp_dkp_point extends bbDKP_Admin
          			'F_ZEROSUMACTIVATE'	=> $config['bbdkp_zerosum'], 
                 	'S_BANKER_OPTIONS'	=> $s_bankerlist_options, 
                 	'F_ZEROSUM_DISTOTHER' => $config['bbdkp_zerosumdistother'],
+                	'DECAYIMGEXAMPLE' 	=> $phpbb_root_path . "adm/style/dkp/decayexample.png", 
+                
                 ));
                 
                 $this->page_title = 'ACP_DKP_POINT_CONFIG';

@@ -773,6 +773,112 @@ class acp_dkp_adj extends bbDKP_Admin
     }
     
     
+   	/**
+	 * Recalculates and updates adjustment decay
+	 * @param $mode 1 for recalculating, 0 for setting decay to zero.
+	 */
+	public function sync_adjdecay($mode, $origin= '')
+	{
+		global $user, $db;
+		switch ($mode)
+		{
+			case 0:
+				//  Decay = OFF : set all decay to 0
+				//  update item detail to new decay value
+				$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET adj_decay = 0 ' ;
+				$db->sql_query ( $sql );
+				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET adj_decay = 0 ' ;
+				$db->sql_query ( $sql );
+				
+				if ($origin=='cron')
+				{
+					$origin = $user->lang['DECAYCRON'];
+				}
+				
+				return true;
+				break;
+				
+			case 1:
+				// Decay is ON : synchronise
+				// loop all ajustments
+				$sql = 'SELECT e.adjustment_dkpid, adjustment_id, member_id , adjustment_date ' ;
+				$result = $db->sql_query ($sql);
+				$countadj=0;
+				while (($row = $db->sql_fetchrow ( $result )) ) 
+				{
+					$this->decayadj($row['adjustment_id'], $row['adjustment_dkpid'], $row['member_id'], $row['adjustment_date'],$row['adjustment_value'], $row['adj_decay']  );
+					$countadj++;
+				}
+				$db->sql_freeresult ($result);
+				
+				return $countadj;
+				break;
+			
+		}
+		
+		
+	}
+	
+	/**
+	 * function to decay one specific adjustment
+	 * @param int adj_id the adjustment id to decay
+	 * @param int $dkpid dkpid for adapting accounts
+	 */
+	private function decayadj($adj_id, $dkpid, $member_id, $adjdate, $value , $olddecay)
+	{
+		global $config, $db;
+		//loop raid detail, pass earned and timediff to decay function, update raid detail
+		$now = getdate();
+		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $adjdate  ;
+		$i = (float) $config['bbdkp_adjdecaypct']/100;
+		
+		// get decay frequency
+		$freq = $config['bbdkp_decayfrequency'];	
+		if ($freq==0)
+		{
+			//frequency can't be 0. throw error
+			trigger_error($user->lang['FV_FREQUENCY_NOTZERO'],E_USER_WARNING );	
+		}
+		//pick decay frequency type (0=days, 1=weeks, 2=months) and convert timediff to that
+		$t=0;
+		switch ($config['bbdkp_decayfreqtype'])
+		{
+			case 0:
+				//days
+				$t = (float) $timediff / 86400; 
+				break;
+			case 1:
+				//weeks
+				$t = (float) $timediff / (86400*7);
+				break;
+			case 2:
+				//months
+				$t = (float) $timediff / 86400*7*30.44;
+				break;	 
+		}
+		
+		// take the integer part of time and interval division base 10, 
+		// since we only decay after a set interval
+		$n = intval($t/$freq, 10); 
+		
+		//calculate rounded adjustment decay, defaults to rounds half up PHP_ROUND_HALF_UP, so 9.495 becomes 9.50
+		$decay = round($value * (1 - pow(1-$i, $n)), 2); 
+		
+		// update adj detail to new decay value
+		$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET adj_decay = ' . $decay . " WHERE adjustment_id = " . ( int ) $adj_id;
+		$db->sql_query ( $sql );
+		
+		// update dkp account, deduct old, add new decay
+		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET adj_decay = adj_decay - ' . $olddecay . ' + ' . $decay . " 
+			WHERE member_id = " . ( int ) $member_id . ' 
+			and member_dkpid = ' . $dkpid ;
+		$db->sql_query ( $sql );
+
+		return true;
+		
+		
+	}    
+    
 }
 
 ?>

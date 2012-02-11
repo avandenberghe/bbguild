@@ -580,6 +580,17 @@ class acp_dkp_sys extends bbDKP_Admin
 		
 		$db->sql_transaction('commit');
 		
+		$log_action = array (
+			'header' 	=> 'L_ACTION_DKPSYNC',
+			'L_USER' 		=>  $user->data['user_id'],
+			'L_USERCOLOUR' 	=>  $user->data['user_colour'], 
+			'L_LOG_1'		=>  $dkpcorr,
+			'L_LOG_2'		=>  $dkpspentcorr,	
+			);
+		$this->log_insert ( array (
+		'log_type' 		=> $log_action ['header'], 
+		'log_action' 	=> $log_action ) );
+		
 		$message = sprintf($user->lang['ADMIN_DKPPOOLSYNC_SUCCESS'] , $dkpcorr  + $dkpspentcorr);
 		trigger_error ( $message . $this->link , E_USER_NOTICE );
 				
