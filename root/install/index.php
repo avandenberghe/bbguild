@@ -430,7 +430,7 @@ $versions = array(
            			'item_gameid' 	  => array('UINT', 0),
 					'item_value'      => array('DECIMAL:11', 0.00),
           			'item_decay'      => array('DECIMAL:11', 0.00), // decay of itemvalue
-          			'item_zs'      	  => array('BOOL', 0), // if this flag is set the itemvalue will be distributed over raid
+          			'item_zs'      	  => array('BOOL', 0), 		// if this flag is set the itemvalue will be distributed over raid
                     ),
                     'PRIMARY_KEY'     => 'item_id',
                     'KEYS'         => array('raid_id'    => array('INDEX', 'raid_id')),					
@@ -902,6 +902,13 @@ $versions = array(
 		),
 		
 		'1.2.6' => array(
+		
+		// add decay on adjustments
+		'table_column_add' => array(
+			array($table_prefix . 'bbdkp_adjustments', 'adj_decay' , array('DECIMAL:11', 0.00)),  
+			array($table_prefix . 'bbdkp_memberdkp',   'adj_decay' , array('DECIMAL:11', 0.00)),
+			),  
+			
          // add dkp points menu
 		'module_add' => array(
             array('acp', 'ACP_DKP_MAINPAGE', array(
@@ -916,6 +923,9 @@ $versions = array(
 	        array('bbdkp_decaycron', 1, true),
 	        array('bbdkp_lastcron', 0, true),
 	        array('bbdkp_crontime', 23, true),
+	        array('bbdkp_crontime', 23, true),
+	        array('bbdkp_adjdecaypct', 5, true),
+	        
 			),   
 		),		
       
