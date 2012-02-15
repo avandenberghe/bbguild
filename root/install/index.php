@@ -923,7 +923,6 @@ $versions = array(
 	        array('bbdkp_decaycron', 1, true),
 	        array('bbdkp_lastcron', 0, true),
 	        array('bbdkp_crontime', 23, true),
-	        array('bbdkp_crontime', 23, true),
 	        array('bbdkp_adjdecaypct', 5, true),
 	        
 			),   
