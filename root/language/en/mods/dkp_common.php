@@ -294,6 +294,7 @@ $lang = array_merge($lang, array(
 'TIME' => 'Time',
 'TIME_BONUS' => 'Time bonus',
 'TOTAL' => 'Total',
+'TIMEVALUE' => 'Time Value',
 'TOTAL_EARNED' => 'Total Earned',
 'TOTAL_ITEMS' => 'Total Items',
 'TOTAL_RAIDS' => 'Total Raids',
