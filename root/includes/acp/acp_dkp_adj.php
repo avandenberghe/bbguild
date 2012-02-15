@@ -283,7 +283,9 @@ class acp_dkp_adj extends bbDKP_Admin
 								a.adjustment_reason, 
 								a.member_id, 
 								m.member_name,
-								a.adjustment_group_key',
+								a.adjustment_group_key, 
+								a.no_decay
+								',
 					 
 					    'FROM'      => array(
 					        ADJUSTMENTS_TABLE 	 => 'a',
@@ -315,6 +317,7 @@ class acp_dkp_adj extends bbDKP_Admin
 						
 						$this->time = $row['adjustment_date'];
 						$this->adjustment = array(
+							'no_decay'			=> $row['no_decay'],  
 							'adjustment_value'  => $row['adjustment_value'],
 							'adjustment_reason' => $row['adjustment_reason']
 						);
@@ -586,6 +589,8 @@ class acp_dkp_adj extends bbDKP_Admin
 					'H'                 => date('h', $this->time),
 					'MI'                => date('i', $this->time),
 					'S'                 => date('s', $this->time),
+					'NO_DECAY_NO_CHECKED'	=> ($this->adjustment['no_decay'] == 0) ? ' checked="checked"' : '' ,
+					'NO_DECAY_YES_CHECKED'	=> ($this->adjustment['no_decay'] == 1) ? ' checked="checked"' : '' ,
 					
 					// Form validation
 					'FV_MEMBERS'    => $this->fv->generate_error('member_names'),
