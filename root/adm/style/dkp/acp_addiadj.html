@@ -36,23 +36,37 @@ function check_form()
  	</dd>
 </dl>
 <dl>
- <dt>{L_REASON}:</dt>
- <dd><input type="text" name="adjustment_reason" size="35" maxlength="255" value="{ADJUSTMENT_REASON}" class="input" /></dd>
+ <dt><label for="adjustment_reason">{L_REASON}:</label></dt>
+ <dd><input type="text" name="adjustment_reason" id="adjustment_reason"  size="35" maxlength="255" value="{ADJUSTMENT_REASON}" class="input" /></dd>
 </dl>
+
 <dl>
-  <dt>{L_VALUE} <span class="small">({L_ADJUSTMENT_VALUE_NOTE})</span>:
+  <dt><label for="adjustment_value">{L_VALUE}</label><span class="small">({L_ADJUSTMENT_VALUE_NOTE})</span>:
   </dt>
-  <dd><input type="text" name="adjustment_value" size="7" maxlength="10" 
+  <dd><input type="text" id="adjustment_value" name="adjustment_value" size="7" maxlength="10" 
   	value="{ADJUSTMENT_VALUE}" class="input" />{FV_ADJUSTMENT}
   </dd>
 </dl>
+
 <dl>
-  <dt>{L_DATE}:</dt><dd><input type="text" name="mo" size="3" maxlength="2" value="{MO}" class="input" />/
+  <dt><label for="mo">{L_DATE}:</label></dt><dd><input type="text" id="mo" name="mo" size="3" maxlength="2" value="{MO}" class="input" />/
   <input type="text" name="d" size="3" maxlength="2" value="{D}" class="input" />/
   <input type="text" name="y" size="5" maxlength="4" value="{Y}" class="input" />
   <br />{FV_MO}{FV_D}{FV_Y}</dd>
 </dl>
+
+  <dl>
+    <dt><label for="adj_decayable">{L_NO_DECAY_ADJ}</label><br /></dt>
+    <dd>
+    <input type="radio" id="adj_decayable" name="adj_decayable" value="1"{NO_DECAY_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
+    <input type="radio" name="adj_decayable" value="0"{NO_DECAY_NO_CHECKED} /> {L_NO}
+   </dd>
+ </dl>
+  
+
 </fieldset>
+
+
 </div>
 <div style="float: right; width: 48%;"><fieldset>
 <legend>{L_MEMBERS}</legend>
@@ -64,6 +78,8 @@ function check_form()
       </select> 
     
 </fieldset>
+
+
 </div>  
 <div style="clear:both; width: 100%;">
    <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">

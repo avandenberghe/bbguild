@@ -670,6 +670,7 @@ So the loot would go to player 2 <br />',
 'DECAY_SCHEDULE' => 'Automatic Decay Job',
 'DECAY_SCHEDULE_EXPLAIN' => 'Enable to trigger a decay run every 23 hours if forum is visited.',
 'DECAYCRON' => 'triggered by cronjob', 
+'NO_DECAY_ADJ'	=> 'Adjustment decayable ?',
 
 'EP_DEFINITION'  => '<strong>EP</strong> = Earned points = Raid Bonus + Time Bonuspoints + Zerosum points + Adjustments ',
 'DECAY_EP'  => '<strong>EP After Decay</strong> = EP_eff * d',
