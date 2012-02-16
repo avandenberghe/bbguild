@@ -156,7 +156,7 @@ class acp_dkp_adj extends bbDKP_Admin
 				
 				$sql_array = array(
 			    'SELECT'    => 'a.adjustment_dkpid, a.adjustment_reason, 
-			    				b.dkpsys_name, a.adjustment_id, 
+			    				b.dkpsys_name, a.adjustment_id, a.adj_decay, a.decay_time, 
 			    				a.adjustment_value, a.member_id, l.member_name,  
 			    				a.adjustment_date, a.adjustment_added_by, c.colorcode, c.imagename ',
 			 
@@ -210,6 +210,9 @@ class acp_dkp_adj extends bbDKP_Admin
 						'MEMBER' => ( isset($adj['member_name']) ) ? $adj['member_name'] : '',
 						'REASON' => ( isset($adj['adjustment_reason']) ) ? $adj['adjustment_reason']  : '',
 						'ADJUSTMENT' => $adj['adjustment_value'],
+						'ADJ_DECAY' => $adj['adj_decay'],
+						'ADJUSTMENT_NET' => $adj['adjustment_value'] - $adj['adj_decay'],
+						'DECAY_TIME' => $adj['decay_time'],
 						'C_ADJUSTMENT' => ($adj['adjustment_value'] > 0 ? "positive" : "negative"),
 						'ADDED_BY' => ( isset($adj['adjustment_added_by']) ) ? $adj['adjustment_added_by'] : '')
 					);
@@ -280,7 +283,9 @@ class acp_dkp_adj extends bbDKP_Admin
 								a.adjustment_reason, 
 								a.member_id, 
 								m.member_name,
-								a.adjustment_group_key',
+								a.adjustment_group_key, 
+								a.no_decay
+								',
 					 
 					    'FROM'      => array(
 					        ADJUSTMENTS_TABLE 	 => 'a',
@@ -306,12 +311,13 @@ class acp_dkp_adj extends bbDKP_Admin
                            $template->assign_block_vars('adj_dkpid_row', array(
                                'VALUE' => $row2['dkpsys_id'],
                                'SELECTED' => ( $row2['dkpsys_id'] == $row['adjustment_dkpid']  ) ? ' selected="selected"' : '',
-                               'OPTION'   => ( !empty($row2['dkpsys_name']) ) ? $row2['dkpsys_name'] : '(None)')
+                               'OPTION'   => ( !empty($row2['dkpsys_name']) ) ? $row2['dkpsys_name'] : '(None)') 
                            );
                        }
 						
 						$this->time = $row['adjustment_date'];
 						$this->adjustment = array(
+							'no_decay'			=> $row['no_decay'],  
 							'adjustment_value'  => $row['adjustment_value'],
 							'adjustment_reason' => $row['adjustment_reason']
 						);
@@ -574,8 +580,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					'F_ADD_ADJUSTMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj"),
 					'ADJUSTMENT_ID'    => $adjust_id,
 					'DKP_ID'			=> $dkpsys_id,
-					
-					// Form values
+										// Form values
 					'ADJUSTMENT_VALUE'  => $this->adjustment['adjustment_value'],
 					'ADJUSTMENT_REASON' => $this->adjustment['adjustment_reason'],
 					'MO'                => date('m', $this->time),
@@ -584,6 +589,8 @@ class acp_dkp_adj extends bbDKP_Admin
 					'H'                 => date('h', $this->time),
 					'MI'                => date('i', $this->time),
 					'S'                 => date('s', $this->time),
+					'NO_DECAY_NO_CHECKED'	=> ($this->adjustment['no_decay'] == 0) ? ' checked="checked"' : '' ,
+					'NO_DECAY_YES_CHECKED'	=> ($this->adjustment['no_decay'] == 1) ? ' checked="checked"' : '' ,
 					
 					// Form validation
 					'FV_MEMBERS'    => $this->fv->generate_error('member_names'),
@@ -801,7 +808,7 @@ class acp_dkp_adj extends bbDKP_Admin
 			case 1:
 				// Decay is ON : synchronise
 				// loop all ajustments
-				$sql = 'SELECT e.adjustment_dkpid, adjustment_id, member_id , adjustment_date ' ;
+				$sql = 'SELECT adjustment_dkpid, adjustment_id, member_id , adjustment_date, adjustment_value, adj_decay FROM ' . ADJUSTMENTS_TABLE;
 				$result = $db->sql_query ($sql);
 				$countadj=0;
 				while (($row = $db->sql_fetchrow ( $result )) ) 
@@ -853,7 +860,7 @@ class acp_dkp_adj extends bbDKP_Admin
 				break;
 			case 2:
 				//months
-				$t = (float) $timediff / 86400*7*30.44;
+				$t = (float) $timediff / (86400*30.44);
 				break;	 
 		}
 		
@@ -865,7 +872,7 @@ class acp_dkp_adj extends bbDKP_Admin
 		$decay = round($value * (1 - pow(1-$i, $n)), 2); 
 		
 		// update adj detail to new decay value
-		$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET adj_decay = ' . $decay . " WHERE adjustment_id = " . ( int ) $adj_id;
+		$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET adj_decay = ' . $decay . ", decay_time = " . $n . " WHERE adjustment_id = " . ( int ) $adj_id;
 		$db->sql_query ( $sql );
 		
 		// update dkp account, deduct old, add new decay

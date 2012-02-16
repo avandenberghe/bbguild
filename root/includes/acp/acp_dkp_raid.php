@@ -2350,7 +2350,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			$decay = $this->decay($raiddetail['earned'], $timediff, 1); 
 			
 			// update raid detail to new decay value
-			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = ' . $decay . " WHERE raid_id = " . ( int ) $raid_id . ' 
+			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = ' . $decay[0] . ', decay_time = ' . $decay[1] . ' WHERE raid_id = ' . ( int ) $raid_id . ' 
 			and member_id = ' . $raiddetail['member_id'] ;
 			$db->sql_query ( $sql );
 			
@@ -2381,7 +2381,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			$itemdecay = $this->decay($item['item_value'], $timediff, 2); 
 			
 			//  update item detail to new decay value
-			$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = ' . $itemdecay . ' WHERE item_id = ' . $item_id;
+			$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = ' . $itemdecay[0] . ', decay_time = ' . $itemdecay[1] . ' WHERE item_id = ' . $item_id;
 			$db->sql_query ( $sql);
 			
 			// update dkp account, deduct old, add new decay
@@ -2442,7 +2442,7 @@ class acp_dkp_raid extends bbDKP_Admin
 				break;
 			case 2:
 				//months
-				$t = (float) $timediff / 86400*7*30.44;
+				$t = (float) $timediff / (86400*30.44);
 				break;	 
 		}
 		
@@ -2453,7 +2453,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		//calculate rounded raid decay, defaults to rounds half up PHP_ROUND_HALF_UP, so 9.495 becomes 9.50
 		$decay = round($value * (1 - pow(1-$i, $n)), 2); 
 		
-		return $decay;
+		return array($decay, $n) ;
 
 	}
 	
