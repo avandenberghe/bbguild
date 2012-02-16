@@ -905,8 +905,12 @@ $versions = array(
 		
 		// add decay on adjustments
 		'table_column_add' => array(
-			array($table_prefix . 'bbdkp_adjustments', 'adj_decay' , array('DECIMAL:11', 0.00)),  
+			array($table_prefix . 'bbdkp_adjustments', 'adj_decay' , array('DECIMAL:11', 0.00)),
+			array($table_prefix . 'bbdkp_adjustments', 'no_decay' , array('BOOL', 0)),
 			array($table_prefix . 'bbdkp_memberdkp',   'adj_decay' , array('DECIMAL:11', 0.00)),
+			array($table_prefix . 'bbdkp_adjustments', 'decay_time' , array('DECIMAL:11', 0.00)),
+			array($table_prefix . 'bbdkp_raid_items',  'decay_time' , array('DECIMAL:11', 0.00)),  
+			array($table_prefix . 'bbdkp_raid_detail', 'decay_time' , array('DECIMAL:11', 0.00)),
 			),  
 			
          // add dkp points menu
@@ -922,7 +926,6 @@ $versions = array(
 	        array('bbdkp_minep', 100.0, true),
 	        array('bbdkp_decaycron', 1, true),
 	        array('bbdkp_lastcron', 0, true),
-	        array('bbdkp_crontime', 23, true),
 	        array('bbdkp_crontime', 23, true),
 	        array('bbdkp_adjdecaypct', 5, true),
 	        

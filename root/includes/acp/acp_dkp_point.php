@@ -175,7 +175,11 @@ class acp_dkp_point extends bbDKP_Admin
 						}
 						$acp_dkp_raid = new acp_dkp_raid;
 						$count = $acp_dkp_raid->sync_decay($config['bbdkp_decay']);
-						
+
+						if ( !class_exists('acp_dkp_adj')) 
+						{
+							require($phpbb_root_path . 'includes/acp/acp_dkp_adj.' . $phpEx); 
+						}
 						$acp_dkp_adj = new acp_dkp_adj;
 						$count1 = $acp_dkp_adj->sync_adjdecay($config['bbdkp_decay']);
 						

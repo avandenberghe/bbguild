@@ -35,8 +35,12 @@
     <th style="text-align:left; width:400"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_REASON}&amp;start={START}">{L_REASON}</a></th>
     <th style="text-align:left; width:90; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADDED_BY}&amp;start={START}">{L_ADDED_BY}</a></th>
     <th style="text-align:right; width:90; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADJUSTMENT}&amp;start={START}">{L_ADJUSTMENT}</a></th>
+    <th style="text-align:right; width:90; white-space: nowrap">{L_DECAY}</th>
+    <th style="text-align:right; width:90; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADJUSTMENT}&amp;start={START}">{L_ADJUSTMENT_NET}</a></th>
+    <th style="text-align:right; width:90; white-space: nowrap">{L_TIME}</th>
     <th style="text-align:center; width:5">{L_ACTION}</th>
   </tr>
+  
   <!-- BEGIN adjustments_row -->
   <!-- IF menu_row.S_ROW_COUNT is even --><tr class="row1">
   <!-- ELSE -->
@@ -48,13 +52,16 @@
     <td style="text-align:left;">{adjustments_row.REASON}</td>
     <td style="text-align:left;" class="{adjustments_row.ADDED_BY}">{adjustments_row.ADDED_BY}</td>
     <td style="text-align:right;" class="{adjustments_row.C_ADJUSTMENT}">{adjustments_row.ADJUSTMENT}</td>
+    <td style="text-align:right;">{adjustments_row.ADJ_DECAY}</td>
+    <td style="text-align:right;">{adjustments_row.ADJUSTMENT_NET}</td>
+    <td style="text-align:right;">{adjustments_row.DECAY_TIME}</td>
     <td style="text-align:center;">
 		<a href="{adjustments_row.U_ADD_ADJUSTMENT}">{ICON_EDIT}</a>
 	</td>
   </tr>
   <!-- END adjustments_row --> 
   <tr>
-    <th colspan="8" class="footer">{LISTADJ_FOOTCOUNT}</th>
+    <th colspan="11" class="footer">{LISTADJ_FOOTCOUNT}</th>
   </tr>
 </table>
 
