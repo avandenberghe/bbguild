@@ -266,7 +266,7 @@ class acp_dkp_adj extends bbDKP_Admin
                 $resultdkpsys = $db->sql_query($sql);
 
                $this->adjustment = array(
-               		'can_decay' 			=> request_var('adj_decayable', 1),
+               		'can_decay' 		=> request_var('adj_decayable', 1),
 					'adjustment_value'  => request_var('adjustment_value', 0.00),
 					'adjustment_reason' => utf8_normalize_nfc(request_var('adjustment_reason', ' ', true)) ,
 					'member_names'      => utf8_normalize_nfc(request_var('member_names', array(0 => ' '), true))
@@ -445,6 +445,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					$adjval = request_var('adjustment_value', 0.0); 
 					$adjreason = utf8_normalize_nfc(request_var('adjustment_reason', '', true)); 
 					$member_names = utf8_normalize_nfc(request_var('member_names', array(0 => ' ')));
+					$candecay = request_var('adj_decayable', 1);
 					
 					// remove old adjustment
 					$this->remove_old_adjustment($adjust_id, $dkpsys_id);
@@ -464,7 +465,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					foreach ( $member_names as $member_name )
 					{
 						$member_id = $class_members->get_member_id($member_name);
-						$this->add_new_adjustment($newdkpsys_id, $member_id, $group_key, $adjval, $adjreason );
+						$this->add_new_adjustment($newdkpsys_id, $member_id, $group_key, $adjval, $adjreason , $candecay);
 					}
 					
 					//
@@ -590,8 +591,8 @@ class acp_dkp_adj extends bbDKP_Admin
 					'H'                 => date('h', $this->time),
 					'MI'                => date('i', $this->time),
 					'S'                 => date('s', $this->time),
-					'can_decay_NO_CHECKED'	=> ($this->adjustment['can_decay'] == 0) ? ' checked="checked"' : '' ,
-					'can_decay_YES_CHECKED'	=> ($this->adjustment['can_decay'] == 1) ? ' checked="checked"' : '' ,
+					'CAN_DECAY_NO_CHECKED'	=> ($this->adjustment['can_decay'] == 0) ? ' checked="checked"' : '' ,
+					'CAN_DECAY_YES_CHECKED'	=> ($this->adjustment['can_decay'] == 1) ? ' checked="checked"' : '' ,
 					
 					// Form validation
 					'FV_MEMBERS'    => $this->fv->generate_error('member_names'),
