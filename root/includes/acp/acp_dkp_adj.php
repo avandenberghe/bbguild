@@ -156,7 +156,7 @@ class acp_dkp_adj extends bbDKP_Admin
 				
 				$sql_array = array(
 			    'SELECT'    => 'a.adjustment_dkpid, a.adjustment_reason, 
-			    				b.dkpsys_name, a.adjustment_id, a.adj_decay, a.decay_time, 
+			    				b.dkpsys_name, a.adjustment_id, a.adj_decay, a.decay_time, a.can_decay, 
 			    				a.adjustment_value, a.member_id, l.member_name,  
 			    				a.adjustment_date, a.adjustment_added_by, c.colorcode, c.imagename ',
 			 
@@ -211,6 +211,7 @@ class acp_dkp_adj extends bbDKP_Admin
 						'REASON' => ( isset($adj['adjustment_reason']) ) ? $adj['adjustment_reason']  : '',
 						'ADJUSTMENT' => $adj['adjustment_value'],
 						'ADJ_DECAY' => $adj['adj_decay'],
+						'can_decay' => $adj['can_decay'], 
 						'ADJUSTMENT_NET' => $adj['adjustment_value'] - $adj['adj_decay'],
 						'DECAY_TIME' => $adj['decay_time'],
 						'C_ADJUSTMENT' => ($adj['adjustment_value'] > 0 ? "positive" : "negative"),
@@ -265,6 +266,7 @@ class acp_dkp_adj extends bbDKP_Admin
                 $resultdkpsys = $db->sql_query($sql);
 
                $this->adjustment = array(
+               		'can_decay' 		=> request_var('adj_decayable', 1),
 					'adjustment_value'  => request_var('adjustment_value', 0.00),
 					'adjustment_reason' => utf8_normalize_nfc(request_var('adjustment_reason', ' ', true)) ,
 					'member_names'      => utf8_normalize_nfc(request_var('member_names', array(0 => ' '), true))
@@ -284,8 +286,7 @@ class acp_dkp_adj extends bbDKP_Admin
 								a.member_id, 
 								m.member_name,
 								a.adjustment_group_key, 
-								a.no_decay
-								',
+								a.can_decay',
 					 
 					    'FROM'      => array(
 					        ADJUSTMENTS_TABLE 	 => 'a',
@@ -317,7 +318,7 @@ class acp_dkp_adj extends bbDKP_Admin
 						
 						$this->time = $row['adjustment_date'];
 						$this->adjustment = array(
-							'no_decay'			=> $row['no_decay'],  
+							'can_decay'			=> $row['can_decay'],  
 							'adjustment_value'  => $row['adjustment_value'],
 							'adjustment_reason' => $row['adjustment_reason']
 						);
@@ -388,7 +389,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					$adjval = request_var('adjustment_value', 0.0);
 					$adjreason = utf8_normalize_nfc(request_var('adjustment_reason', '', true));  
                     $member_names =  request_var('member_names', array(0 => ' '), true); 					
-					
+					$candecay = request_var('adj_decayable', 1);
 					//
 					// get value from Pulldown !
 					//
@@ -403,7 +404,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					foreach ( $member_names as $member_name )
 					{
 						$member_id = $class_members->get_member_id(  utf8_normalize_nfc($member_name) );
-						$this->add_new_adjustment($dkpsys_id, $member_id, $group_key, $adjval, $adjreason );
+						$this->add_new_adjustment($dkpsys_id, $member_id, $group_key, $adjval, $adjreason,$candecay );
 					}
 					
 					//
@@ -444,6 +445,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					$adjval = request_var('adjustment_value', 0.0); 
 					$adjreason = utf8_normalize_nfc(request_var('adjustment_reason', '', true)); 
 					$member_names = utf8_normalize_nfc(request_var('member_names', array(0 => ' ')));
+					$candecay = request_var('adj_decayable', 1);
 					
 					// remove old adjustment
 					$this->remove_old_adjustment($adjust_id, $dkpsys_id);
@@ -463,7 +465,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					foreach ( $member_names as $member_name )
 					{
 						$member_id = $class_members->get_member_id($member_name);
-						$this->add_new_adjustment($newdkpsys_id, $member_id, $group_key, $adjval, $adjreason );
+						$this->add_new_adjustment($newdkpsys_id, $member_id, $group_key, $adjval, $adjreason , $candecay);
 					}
 					
 					//
@@ -589,8 +591,8 @@ class acp_dkp_adj extends bbDKP_Admin
 					'H'                 => date('h', $this->time),
 					'MI'                => date('i', $this->time),
 					'S'                 => date('s', $this->time),
-					'NO_DECAY_NO_CHECKED'	=> ($this->adjustment['no_decay'] == 0) ? ' checked="checked"' : '' ,
-					'NO_DECAY_YES_CHECKED'	=> ($this->adjustment['no_decay'] == 1) ? ' checked="checked"' : '' ,
+					'CAN_DECAY_NO_CHECKED'	=> ($this->adjustment['can_decay'] == 0) ? ' checked="checked"' : '' ,
+					'CAN_DECAY_YES_CHECKED'	=> ($this->adjustment['can_decay'] == 1) ? ' checked="checked"' : '' ,
 					
 					// Form validation
 					'FV_MEMBERS'    => $this->fv->generate_error('member_names'),
@@ -691,7 +693,7 @@ class acp_dkp_adj extends bbDKP_Admin
 	* add a new dkp adjustment
 	* 
 	*/ 
-    public function add_new_adjustment($dkpid, $member_id, $group_key, $adjval, $adjreason)
+    public function add_new_adjustment($dkpid, $member_id, $group_key, $adjval, $adjreason, $candecay)
     {
          global $user, $db;
 
@@ -751,6 +753,7 @@ class acp_dkp_adj extends bbDKP_Admin
             'member_id'            => $member_id,
             'adjustment_reason'    => $adjreason,
             'adjustment_group_key' => $group_key,
+        	'can_decay' 			=> $candecay,
             'adjustment_added_by'  => $user->data['username'])
         );
         $db->sql_query('INSERT INTO ' . ADJUSTMENTS_TABLE . $query);

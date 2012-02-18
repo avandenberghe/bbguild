@@ -906,7 +906,7 @@ $versions = array(
 		// add decay on adjustments
 		'table_column_add' => array(
 			array($table_prefix . 'bbdkp_adjustments', 'adj_decay' , array('DECIMAL:11', 0.00)),
-			array($table_prefix . 'bbdkp_adjustments', 'no_decay' , array('BOOL', 0)),
+			array($table_prefix . 'bbdkp_adjustments', 'can_decay' , array('BOOL', 0)),
 			array($table_prefix . 'bbdkp_memberdkp',   'adj_decay' , array('DECIMAL:11', 0.00)),
 			array($table_prefix . 'bbdkp_adjustments', 'decay_time' , array('DECIMAL:11', 0.00)),
 			array($table_prefix . 'bbdkp_raid_items',  'decay_time' , array('DECIMAL:11', 0.00)),  
