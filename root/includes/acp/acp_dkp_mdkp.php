@@ -184,11 +184,15 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				
 				if($config['bbdkp_epgp'] == 1)
 				{
-					$sql_array[ 'SELECT'] .= ', (m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep, (m.member_spent - m.member_item_decay ) AS gp, case when (m.member_spent - m.member_item_decay) = 0 then (m.member_earned - m.member_raid_decay + m.member_adjustment)  
-					else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as er ' ;
+					$sql_array[ 'SELECT'] .= ', 
+					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep, 
+					(m.member_spent - m.member_item_decay  + ' . max(0, $config['bbdkp_basegp']) .' ) AS gp, 
+					CASE when (m.member_spent - m.member_item_decay + ' . max(0, $config['bbdkp_basegp']) .' ) = 0 then 1  
+					ELSE round((m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) / 
+								(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr ' ;
 					$sort_order[11] = array('ep desc', 'ep');
 					$sort_order[14] = array('gp desc', 'gp');
-					$sort_order[15] = array('er desc', 'er');
+					$sort_order[15] = array('pr desc', 'pr');
 				}
 				
 				$current_order = switch_order($sort_order);
@@ -258,7 +262,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					{
 						$members_row['EP'] = $row['ep'];
 						$members_row['GP'] = $row['gp'];
-						$members_row['ER'] = $row['er'];
+						$members_row['PR'] = $row['pr'];
 					}
 						
 					$template->assign_block_vars('members_row', $members_row);
@@ -328,7 +332,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					{
 						$output[ 'O_EP'] = $current_order['uri'][11]; 
 						$output[ 'O_GP'] = $current_order['uri'][14]; 
-						$output[ 'O_ER'] = $current_order['uri'][15]; 
+						$output[ 'O_PR'] = $current_order['uri'][15]; 
 					}
 					
 				$template->assign_vars($output);
@@ -606,14 +610,15 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					m.member_earned,
 					m.member_raid_decay, 
 					m.member_adjustment, 
-					(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep	,
+					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep	,
 					m.member_spent,
 					m.member_item_decay,
-					(m.member_spent - m.member_item_decay ) AS gp,
-					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
-					case when (m.member_spent - m.member_item_decay) = 0 then 1 
-					else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (m.member_spent - m.member_item_decay),2) end as er,
-					
+					(m.member_spent - m.member_item_decay  + ' . max(0, $config['bbdkp_basegp']) .' ) AS gp,
+					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay - m.adj_decay ) AS member_current,
+					case when (m.member_spent - m.member_item_decay + ' . max(0, $config['bbdkp_basegp']) .' ) = 0 then 1 
+					else round( (m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) 
+								/ ( ' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr,
+					m.adj_decay, 
 					m.member_lastraid,
 					r1.name AS member_race,
 					s.dkpsys_name, 
@@ -674,7 +679,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'member_spent'         => $row['member_spent'],
 					'member_item_decay'    => $row['member_item_decay'],
 					'gp'     			   => $row['gp'],
-					'er'     			   => $row['er'],
+					'pr'     			   => $row['pr'],
+					'adj_decay'			   => $row['adj_decay'], 
 					'member_current'       => $row['member_current'],
 					'member_race_id'    => $row['member_race_id'], 
 					'member_race'       => $row['member_race'],
@@ -706,11 +712,13 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'EARNED'        		=> $this->member['member_earned'],
 					'RAIDDECAY'				=> $this->member['member_raid_decay'], 
 					'ADJUSTMENT'    		=> $this->member['member_adjustment'],
+					'RAIDDECAY'				=> $this->member['member_raid_decay'],
+					'ADJDECAY'				=> $this->member['adj_decay'],
 					'EP'    				=> $this->member['ep'],
 					'SPENT'         		=> $this->member['member_spent'],
 					'ITEMDECAY'     		=> $this->member['member_item_decay'],
 					'GP'     				=> $this->member['gp'],
-					'ER'     				=> $this->member['er'],
+					'PR'     				=> $this->member['pr'],
 				
 					'MEMBER_EARNED'         => $this->member['member_earned'],
 					'MEMBER_SPENT'          => $this->member['member_spent'],

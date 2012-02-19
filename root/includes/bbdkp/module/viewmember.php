@@ -115,15 +115,17 @@ $sql_array = array(
 		m.member_earned,
 		m.member_adjustment, 
 		m.member_spent,
-		(m.member_earned + m.member_adjustment - m.member_spent - ( ' . max(0, $config['bbdkp_basegp']) . ')  ) AS member_current,
-		(m.member_earned + m.member_adjustment) AS ep	,
-		m.member_raid_decay, 
-		(m.member_earned + m.member_adjustment - m.member_raid_decay) AS ep_net	,
-		m.member_spent AS gp,
 		m.member_item_decay,
+		m.member_raid_decay, 
+		m.adj_decay, 
+		(m.member_earned + m.member_adjustment - m.member_spent ) AS member_current,
+		(m.member_earned + m.member_adjustment) AS ep	,
+		(m.member_earned + m.member_adjustment - m.member_raid_decay - m.adj_decay) AS ep_net	,
+		(m.member_spent + ' . max(0, $config['bbdkp_basegp']) . ') AS gp,
 		m.member_spent - m.member_item_decay as gp_net, 
-		CASE WHEN (m.member_spent - m.member_item_decay) = 0 THEN ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment) / ' . max(0, $config['bbdkp_basegp']) .', 2) 
-		ELSE ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr,
+		CASE WHEN (m.member_spent - m.member_item_decay + ' . max(0, $config['bbdkp_basegp']) . ' ) = 0 
+		THEN 1 
+		ELSE ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr,
 		m.member_firstraid,
 		m.member_lastraid,
 		r1.name AS member_race,
@@ -195,6 +197,7 @@ $member = array(
 	'member_zerosum_bonus' => $row['member_zerosum_bonus'],
 	'member_earned'        => $row['member_earned'],
 	'member_adjustment'    => $row['member_adjustment'],
+	'adj_decay'			   => $row['adj_decay'],			
 	'member_current'       => $row['member_current'],
 	'ep'    			   => $row['ep'],
 	'member_raid_decay'	   => $row['member_raid_decay'], 
@@ -232,13 +235,12 @@ $template->assign_vars(array(
 
 	'RAIDDECAY'		=> $member['member_raid_decay'],
 	'EPNET'			=> (float) $member['ep_net'],
-
 	'ADJUSTMENT'    => $member['member_adjustment'],
 	'C_ADJUSTMENT'  => ($member['member_adjustment'] > 0) ? 'positive' : 'negative', 
-
+	
 	'SPENT'         => $member['member_spent'],
 	'ITEMDECAY'     => $member['member_item_decay'],
-	'GP'     		=> $member['gp'] + $member['bgp'],
+	'GP'     		=> $member['gp'],
 	'BGP'     		=> $member['bgp'],
 	'GPNET'     	=> $member['gp_net'] + $member['bgp'],
 
@@ -246,8 +248,9 @@ $template->assign_vars(array(
 	'C_CURRENT'       => ($member['member_current'] > 0) ? 'positive' : 'negative',
 	'PR'     		=> $member['pr'],
 
-	'TOTAL_DECAY'	=> $member['member_raid_decay'] -$member['member_item_decay'],
-	'C_TOTAL_DECAY'	=> ($member['member_raid_decay'] -$member['member_item_decay']) > 0 ? 'negative' : 'positive' ,
+	'ADJDECAY'		=> $member['adj_decay'], 
+	'TOTAL_DECAY'	=> $member['member_raid_decay'] - $member['member_item_decay'] + $member['adj_decay'],
+	'C_TOTAL_DECAY'	=> ($member['member_raid_decay'] -$member['member_item_decay'] + $member['adj_decay']) > 0 ? 'negative' : 'positive' ,
 
 
 	'NETCURRENT'    => $member['ep_net'] - $member['gp_net'] - max(0, $config['bbdkp_basegp']) ,
@@ -539,7 +542,7 @@ $template->assign_vars(array(
 /***************************************
  **** Individual Adjustment History	  **
  ***************************************/
-$sql = 'SELECT adjustment_value, adjustment_date, adjustment_reason
+$sql = 'SELECT adjustment_value, adjustment_date, adjustment_reason, adj_decay 
 		FROM ' . ADJUSTMENTS_TABLE . '	
 		WHERE member_id = ' . $member_id . ' 
 		AND	 adjustment_dkpid = ' . (int) $dkp_id . ' 
@@ -558,6 +561,8 @@ while ( $adjustment = $db->sql_fetchrow($adjustments_result) )
 	$template->assign_block_vars('adjustments_row', array(
 		'DATE'					  => ( !empty($adjustment['adjustment_date']) ) ? date($config['bbdkp_date_format'], $adjustment['adjustment_date']) : '&nbsp;',
 		'REASON'				  => ( !empty($adjustment['adjustment_reason']) ) ? $adjustment['adjustment_reason'] : '&nbsp;',
+		'ADJDECAY' 				  => $adjustment['adj_decay'],
+		'NETDECAY' 				  => $adjustment['adjustment_value'] - $adjustment['adj_decay'],
 		'C_INDIVIDUAL_ADJUSTMENT' => $adjustment['adjustment_value'],
 		'INDIVIDUAL_ADJUSTMENT'	  => $adjustment['adjustment_value'])
 	);
