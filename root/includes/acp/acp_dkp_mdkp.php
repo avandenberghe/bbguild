@@ -123,8 +123,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 
 				$sql_array = array(
 					'SELECT'	=> 'm.member_id,  a.member_name, a.member_level, m.member_dkpid, 
-					m.member_raid_value, m.member_earned, m.member_adjustment, m.member_spent, 
-					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
+					m.member_raid_value, m.member_earned, m.member_adjustment, m.member_spent,  
+					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay - adj_decay) AS member_current,
 					m.member_status, m.member_lastraid,
 					s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename', 
 				    'FROM'      => array(
@@ -176,9 +176,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 
 				if($config['bbdkp_decay'] == 1)
 				{
-					$sql_array[ 'SELECT'] .= ', m.member_raid_decay, m.member_item_decay ';
-					$sort_order[9] = array('member_raid_decay desc', 'member_raid_decay');
-					$sort_order[13] = array('member_item_decay desc', 'member_item_decay');
+					$sql_array[ 'SELECT'] .= ', m.member_raid_decay , m.adj_decay, m.member_item_decay ';
+					$sort_order[9] = array('(m.member_raid_decay +  m.adj_decay) desc', ' (m.member_raid_decay +  m.adj_decay) ');
+					$sort_order[13] = array('m.member_item_decay desc', 'member_item_decay');
 					
 				}
 				
@@ -250,7 +250,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					
 					if($config['bbdkp_decay'] == 1)
 					{
-						$members_row['RAIDDECAY'] = $row['member_raid_decay'];
+						$members_row['RAIDDECAY'] = $row['member_raid_decay'] + $row['adj_decay'];
 						$members_row['ITEMDECAY'] = $row['member_item_decay'];
 					}
 					

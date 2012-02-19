@@ -130,8 +130,6 @@ class acp_dkp_adj extends bbDKP_Admin
 					5 => array('adjustment_value desc', 'adjustment_value'),
 					6 => array('adjustment_added_by', 'adjustment_added_by desc')
 				);
-				
-				
 				$sql2 = 'SELECT count(*) as total_adjustments 
 					FROM ' . ADJUSTMENTS_TABLE . ' 
 					WHERE member_id IS NOT NULL 
