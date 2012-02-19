@@ -251,9 +251,9 @@ $sql_array = array(
     'SELECT'    => 	'l.game_id, m.member_dkpid, d.dkpsys_name, m.member_id, m.member_status, m.member_lastraid, 
     				sum(m.member_raid_value) as member_raid_value, 
     				sum(m.member_earned) as member_earned, 
-    				sum(m.member_adjustment) - ( ' . max(0, $config['bbdkp_basegp']) . ')  as member_adjustment, 
+    				sum(m.member_adjustment - adj_decay) as member_adjustment,
     				sum(m.member_spent) as member_spent, 
-					sum(m.member_earned + m.member_adjustment - m.member_spent - ( ' . max(0, $config['bbdkp_basegp']) . ') ) AS member_current,
+					sum(m.member_earned + m.member_adjustment - m.member_spent - adj_decay ) AS member_current,
    					l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
        				r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix, 
        				l1.name AS member_class, c.class_id, 
@@ -303,14 +303,20 @@ if($config['bbdkp_zerosum'] == 1)
 
 if($config['bbdkp_decay'] == 1)
 {
-	$sql_array[ 'SELECT'] .= ', sum(m.member_raid_decay) as member_raid_decay, sum(m.member_item_decay) as member_item_decay ';
+	$sql_array[ 'SELECT'] .= ', 
+		sum(m.member_raid_decay) as member_raid_decay, 
+		sum(m.member_item_decay) as member_item_decay ';
 }
 
 if($config['bbdkp_epgp'] == 1)
 {
-	$sql_array[ 'SELECT'] .= ", sum(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep,  sum(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . " ) AS gp, 
-	CASE WHEN SUM(m.member_spent - m.member_item_decay) = 0 THEN ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment) / " . max(0, $config['bbdkp_basegp']) . ", 2) 
-	ELSE ROUND(SUM(m.member_earned - m.member_raid_decay + m.member_adjustment) / SUM(" . max(0, $config['bbdkp_basegp']) . " + m.member_spent - m.member_item_decay),2) END AS pr " ;
+	$sql_array[ 'SELECT'] .= ", 
+		sum(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep,  
+		sum(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . " ) AS gp, 
+	CASE  WHEN SUM(m.member_spent - m.member_item_decay  + " . max(0, $config['bbdkp_basegp']) . " ) = 0 
+	THEN  1 
+	ELSE  ROUND(SUM(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) / 
+		  SUM(" . max(0, $config['bbdkp_basegp']) . " + m.member_spent - m.member_item_decay),2) END AS pr " ;
 }
 
 //check if inactive members will be shown
@@ -363,12 +369,14 @@ if ($query_by_armor == 1)
 // default sorting
 if($config['bbdkp_epgp'] == 1)
 {
-	$sql_array[ 'ORDER_BY'] = 'case when sum(m.member_spent - m.member_item_decay) = 0 then sum(m.member_earned - m.member_raid_decay + m.member_adjustment)  
-	else round(sum(m.member_earned - m.member_raid_decay + m.member_adjustment) / sum(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end desc ' ;
+	$sql_array[ 'ORDER_BY'] = "CASE WHEN SUM(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . "  ) = 0 
+	THEN 1
+	ELSE ROUND(SUM(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) / 
+	SUM(" . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) END DESC ' ;
 }
 else 
 {
-	$sql_array[ 'ORDER_BY'] = 'sum(m.member_earned + m.member_adjustment - m.member_spent) desc, l.member_name asc ' ;
+	$sql_array[ 'ORDER_BY'] = 'sum(m.member_earned + m.member_adjustment - m.member_spent - m.adj_decay) desc, l.member_name asc ' ;
 }
 
 
@@ -421,6 +429,7 @@ while ( $row = $db->sql_fetchrow ( $members_result ) )
 	$memberarray [$member_count] ['member_earned'] = $row ['member_earned'];
 	
 	$memberarray [$member_count] ['member_adjustment'] = $row ['member_adjustment'];
+	
 	if($config['bbdkp_decay'] == 1)
 	{
 		$memberarray [$member_count] ['member_raid_decay'] = $row ['member_raid_decay'];

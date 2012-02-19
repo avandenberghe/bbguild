@@ -672,6 +672,7 @@ So the loot would go to player 2 <br />',
 'DECAYCRON' => 'triggered by cronjob', 
 'NO_DECAY_ADJ'	=> 'Adjustment decayable ?',
 
+'PR' => 'Priority ratio', 
 'EP_DEFINITION'  => '<strong>EP</strong> = Earned points = Raid Bonus + Time Bonuspoints + Zerosum points + Adjustments ',
 'DECAY_EP'  => '<strong>EP After Decay</strong> = EP_eff * d',
 'MEP'  => 'Minimum ep',
