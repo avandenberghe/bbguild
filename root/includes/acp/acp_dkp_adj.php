@@ -130,6 +130,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					5 => array('adjustment_value desc', 'adjustment_value'),
 					6 => array('adjustment_added_by', 'adjustment_added_by desc')
 				);
+					
 				$sql2 = 'SELECT count(*) as total_adjustments 
 					FROM ' . ADJUSTMENTS_TABLE . ' 
 					WHERE member_id IS NOT NULL 
@@ -667,7 +668,8 @@ class acp_dkp_adj extends bbDKP_Admin
                 'adjustment_date'   => $row['adjustment_date'],
                 'member_ids'      	=> $old_memberids,
 				'member_names'		=> $old_membernames,            
-                'adjustment_reason' => $row['adjustment_reason']
+                'adjustment_reason' => $row['adjustment_reason'],
+            	'adj_decay' 		=> $row['adj_decay'],
             );
         }
         
@@ -675,12 +677,13 @@ class acp_dkp_adj extends bbDKP_Admin
         // Remove the adjustment value from adjustments table
         //
         $sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . '
-        		WHERE adjustment_dkpid=' . $dkpsys_id . '  and ' .
+        		WHERE adjustment_dkpid = ' . $dkpsys_id . '  and ' .
         		$db->sql_in_set('adjustment_id', $adjustment_ids, false, true);
         $db->sql_query($sql);
         
         $sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-                SET member_adjustment = member_adjustment - ' . (float) $this->old_adjustment['adjustment_value'] . '
+                SET member_adjustment = member_adjustment - ' . (float) $this->old_adjustment['adjustment_value'] . ',
+                adj_decay = adj_decay - ' . (float) $this->old_adjustment['adj_decay'] . '   
                 WHERE  member_dkpid = ' . $dkpsys_id . ' AND ' .
         		$db->sql_in_set('member_id', $this->old_adjustment['member_ids'], false, true);
 
@@ -809,7 +812,7 @@ class acp_dkp_adj extends bbDKP_Admin
 			case 1:
 				// Decay is ON : synchronise
 				// loop all ajustments
-				$sql = 'SELECT adjustment_dkpid, adjustment_id, member_id , adjustment_date, adjustment_value, adj_decay FROM ' . ADJUSTMENTS_TABLE;
+				$sql = 'SELECT adjustment_dkpid, adjustment_id, member_id , adjustment_date, adjustment_value, adj_decay FROM ' . ADJUSTMENTS_TABLE . ' WHERE can_decay = 1';
 				$result = $db->sql_query ($sql);
 				$countadj=0;
 				while (($row = $db->sql_fetchrow ( $result )) ) 
@@ -835,7 +838,7 @@ class acp_dkp_adj extends bbDKP_Admin
 	private function decayadj($adj_id, $dkpid, $member_id, $adjdate, $value , $olddecay)
 	{
 		global $config, $db;
-		//loop raid detail, pass earned and timediff to decay function, update raid detail
+		
 		$now = getdate();
 		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $adjdate  ;
 		$i = (float) $config['bbdkp_adjdecaypct']/100;
