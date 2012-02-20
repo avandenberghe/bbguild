@@ -78,8 +78,8 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
 				'EVENTCOLOR'  	=> $event['event_color'],
                 'EVENTIMAGE'  	=> $event['event_imagename'],	    
 	        	'RAIDCOUNT' 	=> $event['raidcount'],
-	        	'OLDEST' 		=> date("d-m-y", $event['oldest'])  ,
-	    		'NEWEST' 		=> date("d-m-y", $event['newest']))
+	        	'OLDEST' 		=> date($config['bbdkp_date_format'], $event['oldest'])  ,
+	    		'NEWEST' 		=> date($config['bbdkp_date_format'], $event['newest']))
 	    );
 
 	}
