@@ -342,7 +342,7 @@ else
 		AND ra.raid_id = r.raid_id
 		AND l.member_id = ra.member_id
 		AND (ra.member_id=' . $member_id .')
-		AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date . ' 
+		AND r.raid_start BETWEEN ' . $start_date . ' 'AND' ' . $end_date . ' 
 		AND e.event_dkpid = ' . $dkp_id, 
 	);
 	
