@@ -93,17 +93,20 @@
 			<file name="root/images/pchart/"/>
 		</delete>
 		<copy>
-			<!-- replace all files -->
+			<!-- replace changed files -->
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
 			<file from="root/portal.php" to="portal.php"/>
-			<file from="root/dkp.php" to="dkp.php"/>
-			<file from="root/configdkp.php" to="configdkp.php"/>
-			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
+			<file from="root/adm/findclassrace.php" to="adm/images/findclassrace.php"/>
+			<file from="root/adm/findaction.php" to="adm/images/findaction.php"/>
+			<file from="root/adm/findrank.php" to="adm/images/findrank.php"/>			
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
-			<file from="root/images/*.*" to="images/*.*"/>
+			<file from="root/images/class_images/*.*" to="images/class_images/*.*"/>
+			<file from="root/images/event_images/*.*" to="images/event_images/*.*"/>	
+			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>				
+			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>				
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
-			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
+			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/includes/bbdkp/block/*.*" to="includes/bbdkp/block/*.*"/>
 			<file from="root/includes/bbdkp/module/*.*" to="includes/bbdkp/module/*.*"/>
@@ -116,34 +119,81 @@
 			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
+		<open src="includes/functions.php">
+			<edit>
+				<comment lang="en"><![CDATA[new language link in functions]]></comment>
+				<find><![CDATA[		'L_DKPPAGE'		=> $user->lang['DKP'],
+]]></find>
+				<action type="after-add"><![CDATA[		'L_BBDKP'		=> $user->lang['FOOTERBBDKP'],
+]]></action>
+			</edit>
+			<edit>
+				<comment lang="en"><![CDATA[adding cronjobs in footer function]]></comment>
+				<comment lang="en"><![CDATA[ajouter cronjobs dans la fonction footer]]></comment>
+				<comment lang="en"><![CDATA[zufügen Cronjobs in die footer Funktion]]></comment>
+				<find><![CDATA[			$cron_type = 'tidy_sessions';
+		}]]></find>
+				<action type="after-add"><![CDATA[			// bbDKP cron job
+		else if ($time_now - $config['bbdkp_crontime']*3600 > $config['bbdkp_lastcron'])
+		{
+			$cron_type = 'pointdecay';
+		}
+]]></action>
+			</edit>
+			
+		</open>
+
+		<open src="cron.php">
+			<edit>
+				<comment lang="en"><![CDATA[adding cronjobs]]></comment>
+				<comment lang="fr"><![CDATA[ajouter cronjobs]]></comment>
+				<comment lang="de"><![CDATA[zufügen cronjobs]]></comment>								
+				<find><![CDATA[						auto_prune($row['forum_id'], 'viewed', $row['forum_flags'], $row['prune_viewed'], $row['prune_freq']);
+			}
+		}
+
+		break;
+]]></find>
+		<action type="after-add"><![CDATA[	case 'pointdecay':
+	
+		if ($config['bbdkp_decaycron'] == 1 && (time() - $config['bbdkp_crontime'] * 3600 <= $config['bbdkp_lastcron']))
+		{
+			break;
+		}
+
+		if ( !class_exists('acp_dkp_raid')) 
+		{
+			require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
+		}
+		$acp_dkp_raid = new acp_dkp_raid;
+		$acp_dkp_raid->sync_decay($config['bbdkp_decay']);
+		set_config('bbdkp_lastcron', time(), true);
+		break;]]></action>
+		</edit>
+		</open>	
+
+		<open src="/styles/prosilver/template/overall_footer.html">
+			<edit>
+				<comment lang="en"><![CDATA[updating footer]]></comment>
+				<comment lang="fr"><![CDATA[mise à jour overall_footer]]></comment>
+				<comment lang="de"><![CDATA[änderung in overall_footer]]></comment>			
+				<find><![CDATA[function pop_search()]]></find>
+				<action type="replace-with"><![CDATA[function pop_aboutbbdkp()]]></action>
+			</edit>
+			<edit>
+				<comment lang="en"><![CDATA[updating footer]]></comment>
+				<comment lang="fr"><![CDATA[mise à jour overall_footer]]></comment>
+				<comment lang="de"><![CDATA[änderung in overall_footer]]></comment>			
+				<find><![CDATA[<a class="bbdkpcredits" onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">powered by bbDKP</a><br />]]></find>
+				<action type="replace-with"><![CDATA[<a class="bbdkpcredits" onclick="javascript:pop_aboutbbdkp();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">{L_BBDKP}</a><br />]]></action>
+			</edit>
+		</open>
+		
 		<open src="styles/prosilver/template/overall_header.html">
 			<edit>
 				<comment lang="en"><![CDATA[put dkpheader back in overall_header]]></comment>
 				<find><![CDATA[</head>]]></find>
 				<action type="before-add"><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></action>
-			</edit>
-		</open>
-		<open src="styles/prosilver/template/dkp/dkpmain.html">
-			<edit>
-				<comment lang="en"><![CDATA[put dkpheader back in overall_header]]></comment>
-				<remove><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></remove>
-			</edit>
-		</open>
-		<open src="includes/bbdkp/constants_bbdkp.php">
-			<edit>
-				<comment lang="en"><![CDATA[put dkpheader back in overall_header]]></comment>
-				<find><![CDATA[define('ZONEBASE',                    $table_prefix . 'bbdkp_zonetable');]]></find>
-				<action type="replace-with"><![CDATA[define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable');
-define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');	]]></action>
-			</edit>
-		</open>
-		<open src="styles/prosilver/template/dkp/dkpheader.html">
-			<edit>
-				<comment lang="en"><![CDATA[update jquery]]></comment>
-				<comment lang="fr"><![CDATA[update jquery]]></comment>
-				<comment lang="de"><![CDATA[update jquery]]></comment>
-				<find><![CDATA[src="{T_TEMPLATE_PATH}/dkp/jquery-1.4.4.min.js"></script>]]></find>
-				<action type="replace-with"><![CDATA[src="{T_TEMPLATE_PATH}/dkp/jquery-1.6.2.min.js"></script>]]></action>
 			</edit>
 		</open>
 		<php-installer><![CDATA[install/index.php]]></php-installer>
