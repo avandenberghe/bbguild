@@ -94,8 +94,6 @@
 			<!-- replace/add modified/new files -->
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
 			<file from="root/portal.php" to="portal.php"/>
-			<file from="root/dkp.php" to="dkp.php"/>
-			<file from="root/configdkp.php" to="configdkp.php"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
 			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
