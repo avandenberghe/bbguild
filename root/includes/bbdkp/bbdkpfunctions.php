@@ -101,59 +101,6 @@ function generate_pagination2($base_url, $num_items, $per_page, $start_item, $ad
 	return $page_string;
 }
 
-/**
-* Returns the appropriate CSS class to use based on
-* a number's range
-*
-* @param $item The number
-* @param $percentage Treat the number like a percentage?
-* @return mixed CSS Class / false
-*/
-function color_item($item, $percentage = false)
-{
-    if ( !is_numeric($item) )
-    {
-        return false;
-    }
-
-    if ( !$percentage )
-    {
-        if ( $item < 0 )
-        {
-            $class = 'negative';
-        }
-        elseif ( $item > 0)
-        {
-            $class = 'positive';
-        }
-        else
-        {
-            $class = 'neutral';
-        }
-    }
-    elseif ( $percentage )
-    {
-        if ( ($item >= 0) && ($item <= 34) )
-        {
-            $class = 'negative';
-        }
-        elseif ( ($item >= 35) && ($item <= 66) )
-        {
-            $class = 'neutral';
-        }
-        elseif ( ($item >= 67) && ($item <= 100) )
-        {
-            $class = 'positive';
-        }
-        else
-        {
-            $class = 'neutral';
-        }
-    }
-
-    return $class;
-}
-
 /*
 * Switches the sorting order of a supplied array, prerserving key values
 * The array is in the format [number][0/1] (0 = the default, 1 = the opposite)
@@ -198,46 +145,6 @@ function switch_order($sort_order, $arg = URI_ORDER)
 
     return $current_order;
 }
-
-/*****
-* makes a hash of a filename
-*
-****/
-function hash_filename($filename)
-{
-    if ( isset($filename) && $filename != "" )
-    {
-		$hash = md5_file($filename);
-    }
-    return($hash);
-}
-
-function stripmultslashes($string)
-{
-    $string = preg_replace("#(\\\){1,}(\"|\&quot;)#", '"', $string);
-    $string = preg_replace("#(\\\){1,}(\'|\&\#039)#", "'", $string);
-    
-    return $string;
-}
-
-function sanitize_tags($data)
-{
-    if ( is_array($data) )
-    {
-        foreach ( $data as $k => $v )
-        {
-            $data[$k] = sanitize_tags($v);
-        }
-    }
-    else
-    {
-        $data = str_replace('<', '&lt;', $data);
-        $data = str_replace('>', '&gt;', $data);
-    }
-
-    return $data;
-}
-
 
 /**
 * Create a bar graph
