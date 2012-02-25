@@ -182,6 +182,7 @@
 				<find><![CDATA[function pop_search()]]></find>
 				<action type="replace-with"><![CDATA[function pop_aboutbbdkp()]]></action>
 			</edit>
+			<edit>
 			<find><![CDATA[search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')]]></find>
 			<action type="after-add"><![CDATA[;]]></action>
 			</edit>
