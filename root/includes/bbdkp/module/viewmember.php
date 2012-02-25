@@ -340,9 +340,7 @@ else
 	'WHERE'		=> ' 
 		r.event_id = e.event_id
 		AND ra.raid_id = r.raid_id
-		AND l.member_id = ra.member_id
-		AND (ra.member_id=' . $member_id .')
-		AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date . ' 
+		AND ra.member_id=' . $member_id .'
 		AND e.event_dkpid = ' . $dkp_id, 
 	);
 	
@@ -351,7 +349,7 @@ else
 	$current_earned = (int) $db->sql_fetchfield('earned_result');
 	$raidlines = (int) $db->sql_fetchfield('raidlines');
 	
-	$db->sql_freeresult($earned_result);
+	$db->sql_freeresult($result);
 }
 
 // raid lines
@@ -520,10 +518,10 @@ $result6 = $db->sql_query($sql6);
 $total_purchased_items = $db->sql_fetchfield('itemcount');
 $db->sql_freeresult($result6);	
 	
-$raidpag  = generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart='.$istart), 
+$raidpag  = generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart=' .$istart . '&amp;rstart='.$rstart ), 
 $total_attended_raids, $raidlines, $rstart, 1, 'rstart');
 	 
-$itpag =   generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx" ,'page=viewmember&amp;'.  URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id.  '&amp;rstart='.$rstart),
+$itpag =   generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx" ,'page=viewmember&amp;'.  URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart='. $istart .'&amp;rstart='.$rstart ),
 $total_purchased_items,	 $itemlines, $istart, 1 ,'istart');
 
 $template->assign_vars(array(
