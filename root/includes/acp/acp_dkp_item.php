@@ -895,7 +895,7 @@ class acp_dkp_item extends bbDKP_Admin
 				}
 			}
 		}
-		$hasitems = false;
+		$poolhasitems = false;
 		
 		$result = $db->sql_query ( $sql );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
@@ -905,12 +905,12 @@ class acp_dkp_item extends bbDKP_Admin
 				'VALUE' => $row['dkpsys_id'], 
 				'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
 				'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
-			$hasitems = true;
+			$poolhasitems = true;
 		}
 		$db->sql_freeresult( $result );
 		/***  end drop-down query ***/
 		
-		if($hasitems==true)
+		if($poolhasitems==true)
 		{
 			//get raidcount with items
 			$sql_array = array (
@@ -927,6 +927,7 @@ class acp_dkp_item extends bbDKP_Admin
 			$result = $db->sql_query($sql);
 			$total_raids = (int) $db->sql_fetchfield('raidcount');
 			$db->sql_freeresult ($result);
+			//$total_raids == 7
 			
 			$start = request_var ('start', 0, false );
 			$sort_order = array (
@@ -978,7 +979,7 @@ class acp_dkp_item extends bbDKP_Admin
 					'DATE' 	=> $user->format_date($row['raid_start']), 
 					'RAIDNAME' => $row['event_name'],
 					'RAIDNOTE' => $row['raid_note'],
-					'ONCLICK' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" . URI_DKPSYS . "={$dkpsys_id}&amp;" . URI_RAID . "={$row['raid_id']}" ),
+					'ONCLICK' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" . URI_DKPSYS . "={$dkpsys_id}&amp;" . URI_RAID . "={$row['raid_id']}&amp;start=" .$start ),
 				));
 
 				if($raid_id == $row['raid_id'])
@@ -1075,8 +1076,8 @@ class acp_dkp_item extends bbDKP_Admin
 			$db->sql_freeresult ( $items_result );
 			
 			$template->assign_vars ( array (
-				'RAID_NAME'		=> $raid_name,
-				'RAID_DATE'		=> $raid_date,
+				//'RAID_NAME'		=> $raid_name,
+				//'RAID_DATE'		=> $raid_date,
 				'ICON_VIEWLOOT'	=> '<img src="' . $phpbb_admin_path . 'images/glyphs/view.gif" alt="' . $user->lang['ITEMS'] . '" title="' . $user->lang['ITEMS'] . '" />',
 				'S_SHOW' 		=> true,
 				'F_LIST_ITEM' 	=>   append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
