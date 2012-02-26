@@ -319,7 +319,7 @@ $template->assign_vars(array(
 /****************************
 /*	 Get Attended Raids	*
 *****************************/
-$current_earned=0;
+
 if (!isset($_GET['rstart']))  
 {
 	$rstart=0; 
@@ -329,8 +329,6 @@ else
 	$rstart = request_var('rstart',0) ;
 }
 
-// raid lines
-$raidlines = $config['bbdkp_user_rlimit'] ;
 $sql_array = array(
 	'SELECT'	=>	'r.raid_id, e.event_name, e.event_dkpid, r.raid_start, r.raid_note, 
 	ra.raid_value, ra.raid_decay, ra.time_bonus, ra.zerosum_bonus, 
@@ -352,18 +350,17 @@ $sql_array = array(
 $sql = $db->sql_build_query('SELECT', $sql_array);
 
 //calculate first window 
+$current_earned=0;
 if($rstart > 0)
 {
-	if (!$raids_result = $db->sql_query_limit($sql, $rstart - 1 , 1))
+	if (!$raids_result = $db->sql_query_limit($sql, $rstart , 0))
 	{
 	   trigger_error ($user->lang['MNOTFOUND']);
 	}
 	$current_earned = $member['member_earned'] + $member['member_time_bonus'] + $member['member_zerosum_bonus'] - $member['member_raid_decay'];
-	$a=0;
 	while ( $raid = $db->sql_fetchrow($raids_result))
 	{
 		$current_earned = $current_earned - $raid['netearned'];
-		$a+=1;
 	}
 }
 else 
@@ -371,6 +368,7 @@ else
 	$current_earned = $member['member_earned'] + $member['member_time_bonus'] + $member['member_zerosum_bonus'] - $member['member_raid_decay'];
 }
 
+$raidlines = $config['bbdkp_user_rlimit'] ;
 // calculate second window
 if (!$raids_result = $db->sql_query_limit($sql, $raidlines, $rstart))
 {
@@ -402,50 +400,18 @@ $total_attended_raids = raidcount(true,$dkp_id,0,$member_id, 0,true);
 /**********************************
 /***   Item purchase history  *****
 ***********************************/
-$itemlines = $config['bbdkp_user_ilimit'] ;
- 
+
 if (!isset($_GET['istart']))
 {
-	$current_spent = $member['member_spent'];
+	
 	$istart=0; 
 }
 else
 {
 	$istart = request_var('istart', 0);
-	$current_spent = $member['member_spent'];
-	
-	$sql_array = array(
-	'SELECT'	=>	'i.item_value ', 
-	'FROM'		=> array(
-		EVENTS_TABLE		=> 'e',
-		RAIDS_TABLE			=> 'r',
-		RAID_ITEMS_TABLE			=> 'i',				
-	),
-
-	'WHERE'		=>	" e.event_id = r.event_id
-		 AND e.event_dkpid=" . (int) $dkp_id . '	 
-		 AND r.raid_id = i.raid_id
-		 AND i.member_id  = ' . $member_id, 
-
-	'ORDER_BY'	=> 'i.item_date DESC',
-	  );
-		  
-	$sql = $db->sql_build_query('SELECT', $sql_array);
-	$spent_result = $db->sql_query_limit($sql, $itemlines, $istart);
-	if ( !$spent_result	 )
-	{
-	   trigger_error("Error in database");
-	}
-	
-	while ( $cs_row = $db->sql_fetchrow($spent_result) )
-	{
-		$current_spent -= $cs_row['item_value'];
-	}
-	$db->sql_freeresult($spent_result);
 }
 
-// inner join the raids and items table
- $sql_array = array(
+$sql_array = array(
 	'SELECT'	=>	'i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_gameid, e.event_name ', 
 	'FROM'		=> array(
 		EVENTS_TABLE	=> 'e',
@@ -457,10 +423,31 @@ else
 		  AND e.event_dkpid=' .	 (int) $dkp_id . ' 
 		  AND r.raid_id = i.raid_id		 
 		  AND i.member_id = ' . $member_id, 
-	'ORDER_BY'	=> 'i.item_date DESC',
+	'ORDER_BY'	=> 'i.raid_id DESC, i.item_date DESC',
 	  );
-		  
 $sql = $db->sql_build_query('SELECT', $sql_array);
+
+//calculate first window 
+$current_spent = 0;
+if($istart > 0)
+{
+	if (!$items_result = $db->sql_query_limit($sql, $istart , 0))
+	{
+	   trigger_error ($user->lang['MNOTFOUND']);
+	}
+	$current_spent = $member['member_spent'];
+	
+	while ( $item = $db->sql_fetchrow($items_result))
+	{
+		$current_spent = $current_spent - $item['item_value'];
+	}
+}
+else 
+{
+	$current_spent = $member['member_spent'];
+}
+
+$itemlines = $config['bbdkp_user_ilimit'];
 $items_result = $db->sql_query_limit($sql, $itemlines, $istart);
 if ( !$items_result)
 {
@@ -532,9 +519,6 @@ $template->assign_vars(array(
 	'ITEM_FOOTCOUNT'	  => sprintf($user->lang['VIEWMEMBER_ITEM_FOOTCOUNT'], $total_purchased_items, $itemlines),
 	'ITEMS'				  => ( is_null($total_purchased_items) ) ? false : true,
 ));
-
-
-
 
 /***************************************
  **** Individual Adjustment History	  **
