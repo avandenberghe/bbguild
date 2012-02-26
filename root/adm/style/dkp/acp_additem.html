@@ -82,7 +82,7 @@ function fnAddBuyer()
         for (var j = 0, exists = false; j < toSize; j++ )
         {
             // destination already exists
-            if ( toField.options[ j ].text == memberValue )
+            if ( toField.options[ j ].text == memberText )
             {
                 var exists = true;
                 offset++;
@@ -103,8 +103,7 @@ function fnAddBuyer()
 
 function fnRemoveBuyer()
 {
-  var form = document.additem;
-  var toField = form.elements["item_buyers[]"];
+  var toField = document.getElementById("item_buyers");
   var toSize = toField.options.length;
     
   var i;
