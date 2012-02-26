@@ -114,16 +114,21 @@ function stateChanged()
 <legend>{L_ADD_RACE_TITLE}</legend>
     <!-- ELSE -->
 <legend>{L_EDIT_RACE_TITLE}</legend>    
-        <!-- ENDIF -->
+    <!-- ENDIF -->
     
     <dl>
 	    <dt><label for="game_id">{L_GAME}:</label><br /> {L_GAME_CLASSRACEUPDATE_EXPLAIN}</dt>
 	  		<dd>
+	  		<!-- IF S_ADD -->
 	  		<select id="game_id" class="input" onchange="return Getfaction(this.value)">
 	       <!-- BEGIN game_row -->
 	       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
 	        <!-- END game_row -->
-	      </select></dd>
+	      </select>
+	      <!-- ELSE -->
+	      	{GAME_ID}
+	      <!-- ENDIF -->
+	      </dd>
 	 </dl>
 	 
 	<dl>
@@ -170,6 +175,7 @@ function stateChanged()
 
    <p class="quick">
    {S_FORM_TOKEN}
+   <input type="hidden" name="hidden_game_id" value="{GAME_ID}" />
     <!-- IF S_ADD -->
     <input type="submit" name="add" value="{L_ADD_RACE}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
