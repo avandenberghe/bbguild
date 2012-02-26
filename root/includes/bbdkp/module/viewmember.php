@@ -319,37 +319,14 @@ $template->assign_vars(array(
 /****************************
 /*	 Get Attended Raids	*
 *****************************/
+$current_earned=0;
 if (!isset($_GET['rstart']))  
 {
-	$current_earned = $member['member_earned'] - $member['member_raid_decay'];
 	$rstart=0; 
 }
 else
 {
 	$rstart = request_var('rstart',0) ;
-	
-	//totals
-	$current_earned = $member['member_earned'] - $member['member_raid_decay'];
-	$sql_array = array(
-	'SELECT'	=>	' sum(ra.raid_value+ ra.time_bonus+ ra.zerosum_bonus - ra.raid_decay) as earned_result, count(*) as raidlines ', 
-	'FROM'		=> array(
-		EVENTS_TABLE			=> 'e',				
-		RAIDS_TABLE				=> 'r',
-		RAID_DETAIL_TABLE		=> 'ra', 
-		),
-	'WHERE'		=> ' 
-		r.event_id = e.event_id
-		AND ra.raid_id = r.raid_id
-		AND ra.member_id=' . $member_id .'
-		AND e.event_dkpid = ' . $dkp_id, 
-	);
-	
-	$sql = $db->sql_build_query('SELECT', $sql_array);
-	$result = $db->sql_query($sql);
-	$current_earned = (int) $db->sql_fetchfield('earned_result');
-	$raidlines = (int) $db->sql_fetchfield('raidlines');
-	
-	$db->sql_freeresult($result);
 }
 
 // raid lines
@@ -364,7 +341,8 @@ $sql_array = array(
 		RAID_DETAIL_TABLE	=> 'ra',
 		),
 
-	'WHERE'		=>	' ra.raid_id = r.raid_id
+	'WHERE'		=>	'
+	     ra.raid_id = r.raid_id
 		 AND e.event_id = r.event_id
 		 AND ra.member_id=' . $member_id . '
 		 AND e.event_dkpid=' . (int) $dkp_id, 
@@ -373,6 +351,27 @@ $sql_array = array(
 		  
 $sql = $db->sql_build_query('SELECT', $sql_array);
 
+//calculate first window 
+if($rstart > 0)
+{
+	if (!$raids_result = $db->sql_query_limit($sql, $rstart - 1 , 1))
+	{
+	   trigger_error ($user->lang['MNOTFOUND']);
+	}
+	$current_earned = $member['member_earned'] + $member['member_time_bonus'] + $member['member_zerosum_bonus'] - $member['member_raid_decay'];
+	$a=0;
+	while ( $raid = $db->sql_fetchrow($raids_result))
+	{
+		$current_earned = $current_earned - $raid['netearned'];
+		$a+=1;
+	}
+}
+else 
+{
+	$current_earned = $member['member_earned'] + $member['member_time_bonus'] + $member['member_zerosum_bonus'] - $member['member_raid_decay'];
+}
+
+// calculate second window
 if (!$raids_result = $db->sql_query_limit($sql, $raidlines, $rstart))
 {
    trigger_error ($user->lang['MNOTFOUND']);
