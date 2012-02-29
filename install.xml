@@ -198,19 +198,46 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/configdkp.php" to="configdkp.php"/>
 			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
-			<file from="root/images/*.*" to="images/*.*"/>
-			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
-			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
-			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
+			<file from="root/images/class_images/*.*" to="images/class_images/*.*"/>
+			<file from="root/images/event_images/*.*" to="images/event_images/*.*"/>
+			<file from="root/images/icons/*.*" to="images/icons/*.*"/>
+			<file from="root/images/progressbar/*.*" to="images/progressbar/*.*"/>
+			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>			
+			<file from="root/images/recruitblock_images/*.*" to="images/recruitblock_images/*.*"/>	
+			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>	
+			<file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*"/>	
+			<file from="root/images/tooltip/*.*" to="images/tooltip/*.*"/>	
+			
+			<file from="root/includes/acp/acp_dkp_adj.php" to="includes/acp/acp_dkp_adj.php"/>
+			<file from="root/includes/acp/acp_dkp_event.php" to="includes/acp/acp_dkp_event.php"/>
+			<file from="root/includes/acp/acp_dkp_game.php" to="includes/acp/acp_dkp_game.php"/>
+			<file from="root/includes/acp/acp_dkp_item.php" to="includes/acp/acp_dkp_item.php"/>
+			<file from="root/includes/acp/acp_dkp_mdkp.php" to="includes/acp/acp_dkp_mdkp.php"/>
+			<file from="root/includes/acp/acp_dkp_mm.php" to="includes/acp/acp_dkp_mm.php"/>
+			<file from="root/includes/acp/acp_dkp_point.php" to="includes/acp/acp_dkp_point.php"/>
+			<file from="root/includes/acp/acp_dkp_raid.php" to="includes/acp/acp_dkp_raid.php"/>
+			<file from="root/includes/acp/acp_dkp_sys.php" to="includes/acp/acp_dkp_sys.php"/>	
+			<file from="root/includes/acp/acp_dkp.php" to="includes/acp/acp_dkp.php"/>				
+			
+			<file from="root/includes/acp/info/acp_dkp_adj.php" to="includes/acp/info/acp_dkp_adj.php"/>
+			<file from="root/includes/acp/info/acp_dkp_event.php" to="includes/acp/info/acp_dkp_event.php"/>
+			<file from="root/includes/acp/info/acp_dkp_game.php" to="includes/acp/info/acp_dkp_game.php"/>
+			<file from="root/includes/acp/info/acp_dkp_item.php" to="includes/acp/info/acp_dkp_item.php"/>
+			<file from="root/includes/acp/info/acp_dkp_mdkp.php" to="includes/acp/info/acp_dkp_mdkp.php"/>
+			<file from="root/includes/acp/info/acp_dkp_mm.php" to="includes/acp/info/acp_dkp_mm.php"/>
+			<file from="root/includes/acp/info/acp_dkp_point.php" to="includes/acp/info/acp_dkp_point.php"/>
+			<file from="root/includes/acp/info/acp_dkp_raid.php" to="includes/acp/info/acp_dkp_raid.php"/>
+			<file from="root/includes/acp/info/acp_dkp_sys.php" to="includes/acp/info/acp_dkp_sys.php"/>	
+			<file from="root/includes/acp/info/acp_dkp.php" to="includes/acp/info/acp_dkp.php"/>		
+			
+			<file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>
+			<file from="root/includes/ucp/info/ucp_dkp.php" to="includes/ucp/info/ucp_dkp.php"/>			
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
-			<file from="root/includes/bbdkp/block/*.*" to="includes/bbdkp/block/*.*"/>
-			<file from="root/includes/bbdkp/module/*.*" to="includes/bbdkp/module/*.*"/>
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
 			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/module/*.*" to="styles/prosilver/template/dkp/module/*.*"/>			
-			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>
-			<file from="root/styles/prosilver/theme/*.*" to="styles/prosilver/theme/*.*"/>
+			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
+			<file from="root/styles/prosilver/theme/jquery-ui-1.8.4.custom.css" to="styles/prosilver/theme/jquery-ui-1.8.4.custom.css"/>
 			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
