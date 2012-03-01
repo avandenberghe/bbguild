@@ -443,11 +443,13 @@ $rc30 = get_overallraidcount($query_by_pool, (int) $config['bbdkp_list_p1'], $ti
 
 $att_sort_order = array (
 		0 => array ("sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) desc", "sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) asc" ),
-		1 => array ("sum(CASE e.days WHEN '30' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '30' THEN e.attendance END ) asc" ),
+		1 => array ("sum(CASE e.days WHEN '90' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '90' THEN e.attendance END ) asc" ),
 		2 => array ("sum(CASE e.days WHEN '60' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '60' THEN e.attendance END ) asc" ),
-		3 => array ("sum(CASE e.days WHEN '90' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '90' THEN e.attendance END ) asc" ),
-		4 => array ("e.member_id desc", "e.member_id asc" ),		
+		3 => array ("sum(CASE e.days WHEN '30' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '30' THEN e.attendance END ) asc" ),
+		4 => array ("e.member_name asc", "e.member_name desc" ),		
+		
 	);
+
 	
 $att_current_order = switch_order ( $att_sort_order );		
 
