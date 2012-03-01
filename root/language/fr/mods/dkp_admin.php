@@ -1,15 +1,12 @@
 <?php
 /**
-*
-* mods_dkp_admin.php [French]
-*
-* @package language
-* @version $Id: $
-* @copyright (c) 2011 phpBB Group
-* @author 2011-06-05 - Maël Soucaze
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
-*/
+ * bbdkp admin language file [French]
+ * @author Sajaki@bbdkp.com
+ * @package bbDKP
+ * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * 
+ */
 
 /**
 * DO NOT CHANGE
@@ -19,6 +16,9 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
+/**
+* DO NOT CHANGE
+*/
 if (empty($lang) || !is_array($lang))
 {
 	$lang = array();
@@ -35,125 +35,15 @@ if (empty($lang) || !is_array($lang))
 // You do not need this where single placeholders are used, e.g. 'Message %d' is fine
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
+//
+// Some characters you may want to copy&paste:
+// ‚Äô ¬ª ‚Äú ‚Äù ‚Ä¶
+//
 
 $lang = array_merge($lang, array(
-	'UMIL_NOGAMECHOSEN'	=> 'Veuillez choisir un jeu avant d\'installer.',
-	'UMIL_UPD123'	=> 'Tables mises à jour pour v1.2.3',
-	'UMIL_GAME123'	=> 'Jeu %s installé',
-	'UMIL_GAME125'	=> 'Jeu %s installé',	
-	'UMIL_GAMEUNINST123'	=> 'Jeux désinstallés.',
-	'RETURN_DKPPOOLINDEX'	=> 'Retournez au listing.',
-	'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Note : Jeu ne peut pas être changé une fois qu’il est mis.',
-	'ADMIN_RAID_ATTENDEE_DELETED_FAILED'	=> 'Participant %s ne pouvat pas être supprimé du raid %s.',
-	'GAME'	=> 'Jeu',
-	'ARMORY_URL'	=> 'Lien vers Armurerie.',
-	'GENERATE_ARMORY_URL'	=> 'Générez un lien vers l’armurerie.',
-	'BBDKPSCRIPTALERT'	=> 'bbDKP contient du Javascript. Veuillez svp activer le javascript dans votre browser.',
-	'FV_FREQUENCY_NOTZERO'	=> 'La fréquence d‘amortissement ne peut être zéro',
-	'ACP_MM_EDITMEMBER'	=> 'Edition Membre',
-	'RETURN_RAID'	=> 'Retournez au Raid',
-	'RETURN_RANK'	=> 'Retourner à la liste des Grades',
-	'ACP_EDITRAID_EXPLAIN'	=> 'Ici vous pouvez éditer un Raid',
-	'ACP_DKP_LOOTSYSTEMOPTIONS'	=> 'Options de Sytème de distribution de butin, pourcentage d‘amortissement des points gagnés, pct d‘amortissement de points de butin, contre-compte de Somme zero',
-	'ACP_DKP_LOOTSYSTEMEXPLAIN'	=> 'Guide sur les systemes de distribution de butin.',
-	'EDIT_RAIDER_EXPLAIN'	=> 'Ici vous pouvez éditer les points du joueur.',
-	'CONFIRM_DELETE_MEMBER'	=> 'ëtes-vous sûr de vouloir supprimer le membre %s ?',
-	'CONFIRM_TRANSFER_MEMBERDKP'	=> 'ëtes-vous sûr de vouloir transferer compte dkp du membre %s vers %s ? ',
-	'CONFIRM_CREATE_RAID'	=> 'Veuillez confirmer la creation du raid sur %s.',
-	'CONFIRM_DELETE_ATTENDEE'	=> 'Veuillez confirmer la suppression du participant %s du raid %s',
-	'CONFIRM_DELETE_RANKS'	=> 'Veuillez confirmer la suppression du Grade "%s" de la Guilde "%s"',
-	'VLOG_RAID_ATTENDEE_DELETED'	=> '%s a supprimé le joueur %s du raid %s',
-	'ERROR_NODKPACCOUNT'	=> 'Erreur : pas de comptes DKP à transferer',
-	'ERROR_NOEVENTSDEFINED'	=> 'Erreur : Pas d‘évènements definies, ajout Raid impossible',
-	'ERROR_NOGUILDMEMBERSDEFINED'	=> 'Erreur : Pas de Membres de Guilde, ajout Raid impossible',
-	'ERROR_RANKMEMBERS'	=> 'Erreur : Suppression Grade impossible, il existe toujours de membres ayant ce grade.',
-	'ERROR_NOSELECT'	=> 'Veuillez sélectionner un membre source et un membre destination.',
-	'ERROR_NOADJUSTMENTS'	=> 'Il n‘y a pas d‘ajustements dans la base de données.',
-	'ADMIN_RAID_ATTENDEE_DELETED_SUCCESS'	=> 'le joueur %s est supprimé du raid %s',
-	'ZEROSUM_ONOFF_EXPLAIN'	=> 'Ne peut pas être combiné avec EPGP',
-	'EPGP_ONOFF_EXPLAIN'	=> 'Ne peut pas pas être combiné avec Calcul de somme zero.',
-	'DECAY_EXPLAIN'	=> 'Les Points gagés et côuts de butin sont amorties dans le temps.',
-	'FORMULA'	=> 'Formules',
-	'DECAY_N'	=> '<strong>Durée de Raid en semaines<strong> = n',
-	'DECAY_I'	=> '<strong>pct d‘amortissement</strong> = i',
-	'DECAY_D'	=> '<strong>formule d‘amortissement</strong> d = 1 - (1-i)^n ',
-	'DECAY_R'	=> '<strong>Valeur du Raid</strong> = r',
-	'DECAY_K'	=> '<strong>Amortissement du Raid</strong> k = r * d',
-	'DECAY_L'	=> '<strong>pct d‘amortissement de butin</strong> = l',
-	'DECAY_J'	=> '<strong>Valeur de butin</strong> = j',
-	'DECAY_F'	=> '<strong>amortissement de butin</strong> f = j * l',
-	'EP_DEFINITION'	=> '<strong>EP</strong> = Points gagnés = Raid Bonus + Bonus de temps + Bonus sommation zero + Ajustments ',
-	'DECAY_EP'	=> '<strong>EP après Amortissement</strong> = EP - EP * d',
-	'GP_DEFINITION'	=> '<strong>GP</strong> = GP base + GP Réel',
-	'RGP_DEFINITION'	=> '<strong>RGP</strong> = Points GP Réels = Côut de butin',
-	'BGP'	=> 'GP de Base',
-	'BGP_EXPLAIN'	=> 'BGP = Points GP de base, ne sont pas amorties.',
-	'DECAY_GP'	=> '<strong>GP après amortissement</strong> = BGP + RGP - RGP * l',
-	'RESYNC_ZEROSUM'	=> 'Synchronisation des sommes zéro',
-	'RESYNC_ZEROSUM_CONFIRM'	=> 'Ëtes-vous sûr de vouloir recalculer tous les sommations à zéro? Ceci affectera tous les comptes DKP.',
-	'RESYNC_ZEROSUM_EXPLAIN'	=> 'Mettra d‘abord à zéro tous les bonus zero existant. Puis, si le flag Sommation zero est mis, redistribue les valeurs de butin dans chaque Raid.',
-	'RESYNC_ZEROSUM_SUCCESS'	=> 'Redistribution réussie de %s pièces de butin et mise à jour de %s comptes DKP.',
-	'RESYNC_ZEROSUM_DELETED'	=> 'Redistribution réussie des valeurs de butin.',
-	'RESYNC_DECAY'	=> 'Synchronisation des amortissements',
-	'RESYNC_DECAY_CONFIRM'	=> 'Etes-vous sür de resynchroniser les amortissements ? Ceci affectera tous les comptes DKP et les points EP/GP/PR',
-	'RESYNC_DECAY_EXPLAIN'	=> 'Mettra d‘abord à zéro tous les amortissements, et puis si le flag est mis, recalcule l‘amortissement selon les paramètres.',
-	'RESYNC_DECAY_SUCCESS'	=> 'Amortissement réussi de %s Raids',
-	'ADD_RAIDER_TITLE'	=> 'Ajouter un Joueur',
-	'EDIT_RAID_TITLE'	=> 'Editer un Raid',
-	'EDIT_RAIDER_TITLE'	=> 'Editer un Joueur',
-	'LISTATTENDEES_FOOTCOUNT'	=> '... trouvé %d joueurs(s)',
-	'RAIDITEMS_FOOTCOUNT'	=> '... trouvé %d butins gagnés',
-	'ADD_ATTENDEE'	=> 'ajout de participant',
-	'DECAY_RAID'	=> 'Amortissement de Raid',
-	'ATTENDEEADD_EXPLAIN'	=> 'Choisis un participant additionel au Raid',
-	'CHANGE_STATUS'	=> 'Changer le Status',
-	'DECAYPCTRAIDS'	=> 'pct d‘amortissment (%)',
-	'DECAYPCTRAIDS_EXPLAIN'	=> 'Les points gagnés déprecient par ce pourcentage par periode.',
-	'DECAYPCTITEM'	=> 'taux d‘amortissment de points de butin (%)',
-	'DECAYPCTITEM_EXPLAIN'	=> 'Le côut de butin sera amorti par ce pct par intervalle.',
-	'DECAYFREQ'	=> 'Frequence d‘amortissement',
-	'DECAYFREQ_EXPLAIN'	=> 'Amortissement va passer n fois',
-	'DECAYFREQTYPE'	=> 'type de frequence',
-	'DECAYFREQTYPE_EXPLAIN'	=> 'Choisis jours, semaines ou mois.',
-	'DKPPERTIME'	=> '%s DKP tous les %s minutes.',
-	'DKPTIMEUNIT'	=> 'DKP gagné par intervalle de temps',
-	'DKPTIMEUNIT_EXPLAIN'	=> 'assignera x DKP comme gagné pour chaque intervalle ou le joueur était présent dans le Raid. Utilisé par Raidtracker et l‘ecran de saisie manuelle de Raid',
-	'TIMEUNIT'	=> 'Intervalle de temps',
-	'TIMEUNIT_EXPLAIN'	=> 'Durée en minutes du temps d‘intervalle de Bonus Temps DKP.  Utilisé par Raidtracker et l‘ecran de saisie manuelle de Raid',
-	'STANDARDDURATION'	=> 'Durée moyenne d‘un Raid',
-	'STANDARDDURATION_EXPLAIN'	=> 'Temps moyen de Raid en heures. Ceci est utilisé pour calculer la fin du raid initial dans l‘ecran de saisie manuelle de Raid',
-	'GAMEITEMID_EXPLAIN'	=> 'Id Wowhead (WoW)',
-	'IMPORTBOSSZONE'	=> 'Importer la zone de bossprogress',
-	'IMPORTBOSSZONE_EXPLAIN'	=> 'Choisir une Zone de Boss, ceci passe outre le nom d‘évènement',
-	'MEMBER'	=> 'Membre',
-	'NO_IMAGE'	=> 'Pas d‘image',
-	'PRCALC'	=> 'Calcul de Ratio de priorité',
-	'PRCALC_EXPLAIN'	=> 'Calcule le ratio EP/GP comme (somme Gagné)/(Somme côut de butin) ',
-	'RAIDERADD'	=> 'Joueur',
-	'RAIDDURATION_EXPLAIN'	=> 'en heures',
-	'RAIDERDESCRIPTION'	=> 'Apercu des points du joueur pour Raid sur %s en %s le %s pour %s',
-	'OVERRIDE'	=> 'Outrepasser',
-	'RACE_IMAGE'	=> 'Nom d‘image petit Race',
-	'RACE_IMAGE_EXPLAIN'	=> 'Nom de fichier couleur png sans extension, fichier doit exister en /images/race_images',
-	'SEARCH_MEMBERS'	=> 'Recherchez les membres',
-	'STARTING_DKP'	=> 'Points de départ.',
-	'STARTING_DKP_EXPLAIN'	=> 'A la creation d‘un compte DKP, si ceci est &gt; 0, il est créé un ajustement au membre comme points de départ.',
-	'START_RAID_DKP_EXPLAIN'	=> 'Bonus de Raid de départ',
-	'TIME_BONUS'	=> 'Bonus de Temps',
-	'TIME_BONUS_EXPLAIN'	=> 'calculated on Raid start-end time. ',
-	'TIME_OVERRIDE'	=> 'Cochez pour outrepasser les bonus de temps individuels venant de Raidtracker.',
-	'ZEROSUMBANKER'	=> 'Compte decalage somme zéro',
-	'ZEROSUMBANKER_EXPLAIN'	=> 'Selectionnez le compte DKP vers lequel les bonus Temps et Raid sont décalés afin de garder le solde à zéro.',
-	'ZEROSUM_DISTRIBUTEOTHER'	=> 'Décalage des bonus',
-	'ZEROSUM_DISTRIBUTEOTHER_EXPLAIN'	=> 'Cochez pour décaler les bonus temps et raids vers le compte DKP de la Guilde.',
-	'ZS_CHECKED_EXPLAIN'	=> 'Coché si Somme zero est calculé',
-	'LANG_DE'	=> 'Deutsch',
-	'LANG_FR'	=> 'Français',
-	'LANG_EN'	=> 'English',
-	'FREQ0'	=> 'Days',
-	'FREQ1'	=> 'Weeks',
-	'FREQ2'	=> 'Months',
+// DKP
 	'BBDKPDISABLED'	=> 'bbDKP est temporairement désactivé.',
+	'BBDKPSCRIPTALERT'	=> 'bbDKP contient du Javascript. Veuillez svp activer le javascript dans votre browser.',
 	'ADD_NEWS'	=> 'Ajouter Nouvelles',
 	'ADDNEWS_TITLE'	=> 'Ajouter un article',
 	'DELETE_NEWS'	=> 'Supprimer un article',
@@ -161,6 +51,8 @@ $lang = array_merge($lang, array(
 	'MESSAGE_BODY'	=> 'Article',
 	'UPDATE_NEWS'	=> 'Mise à jour d’un qrticle',
 	'UPDATE_DATE_TO'	=> 'M.a.j. date à<br />%s?',
+
+//JAVASCRIPT
 	'B_HELP'	=> 'Texte en gras: [b]text[/b]',
 	'I_HELP'	=> 'Texte italique: [i]text[/i]',
 	'U_HELP'	=> 'Texte sousligné: [u]text[/u]',
@@ -169,6 +61,8 @@ $lang = array_merge($lang, array(
 	'P_HELP'	=> 'Image inseré: [img]http://image_url[/img]',
 	'W_HELP'	=> 'Inserer un lien: [url]http://url[/url] or [url=http://url]URL text[/url]',
 	'ITEM_HELP'	=> 'lien Wowhead : [item]text[/item]',
+		
+	// Form Validation Errors
 	'FV_FORMVALIDATION'	=> 'Erreur de validation',
 	'FV_ALPHA_ATTENDEES'	=> 'Les noms en EverQuest ne contiennent que les caractères alphabétiques.',
 	'FV_DIFFERENCE_TRANSFER'	=> 'Un transfert d’historique doit se faire entre 2 personnes différentes.',
@@ -212,6 +106,9 @@ $lang = array_merge($lang, array(
 	'FV_DKPSTATUSYN'	=> 'Le status du groupe DKP doit être Y (Actif) ou N (Inactif)',
 	'FV_RAIDEXIST'	=> 'Suppression du groupe DKP impossible, il reste des raids.',
 	'FV_EVENTEXIST'	=> 'Suppression de l’évènement impossible, il reste des raids',
+	'FV_FREQUENCY_NOTZERO' => 'La fréquence d‘amortissement ne peut être zero', 
+	
+	// Portal config
 	'NEWSBLOCKSETTING'	=> 'Rubrique Actualités',
 	'NEWSFORUM'	=> 'Forum des actualités :',
 	'NEWSNUMBER'	=> 'Nombre de messages récents à publier :',
@@ -233,7 +130,13 @@ $lang = array_merge($lang, array(
 	'MENUBLOCKSETTING'	=> 'Bloc de menus',
 	'SHOWMENUBLOCK'	=> 'Montrer bloc de menus',
 	'BLOCKSHOWPROGRESSBAR'	=> 'Montrer barre de progression dans Portail',
-	'RANK_INSERTED'	=> 'Grade inseré : %s. ',
+	'WELCOME_DEFAULT'        => '[b]Bienvenu(e) dans notre Guilde[/b]!', 
+	'SHOWWELCOME'	=> 'Montrer Block Acceuil',
+	'WELCOMEBLOCK'	=> 'Texte du bloc Acceuil',
+	'WELCOMEBLOCKSETTING'	=> 'Règlages Bloc d’acceuil',
+	'WELCOMEBLOCK_EXPLAIN'	=> 'Veuillez remplir le texte dans cette zone. les BBcodes sont supportés.',
+
+	'RANK_INSERTED'	=> 'Grade inseré : %s. ',	
 	'TOTAL_RANKS_INSERTED'	=> 'Nombre de grades inserés : %s. ',
 	'MEMBER_INSERTED'	=> 'Membre Inseré : %s. ',
 	'TOTAL_MEMBERS_INSERTED'	=> 'Nombre total de members inserés : %s. ',
@@ -248,6 +151,8 @@ $lang = array_merge($lang, array(
 	'RAIDS_INSERTED'	=> 'Raid inseré : %s, (note de Raid : %s. ) ',
 	'TOTAL_RAIDS_INSERTED'	=> 'Nombre total des Raids inserés : %s. ',
 	'TOTAL_RAIDATTENDEES_INSERTED'	=> 'Nombre total d’invités au Raid : %s.',
+
+	// installer
 	'IMPORT_EQDKP132'	=> 'Importation de données EQDKP 1.3.2 en bbdkp 1.1.2',
 	'IMPORT_EQDKP132_CONFIRM'	=> 'Êtes-vous prêt à importer ? Vos tables EQDKP doivent commencer avec ’EQDKP’, et nous importons seulement les données dynamiques, hormis les informations statiques comme des noms des classes. Il est conseillé de lancer une mise à jour avec le plugin bbDKP "Armurerie"',
 	'IMPORT_EQDKP140'	=> 'Importation de données EQDKP 1.4.0 en bbdkp 1.1.2',
@@ -283,10 +188,17 @@ $lang = array_merge($lang, array(
 	'UMIL_OLD_RESTORE_NOT'	=> 'Pas trouvé d’installation bbdkp (%s) à restaurer.',
 	'UMIL_OLD_UNINSTALL_SUCCESS'	=> 'bbdkp (%s) Désinstallé. ',
 	'UMIL_109_ILLEGALVERSION'	=> 'trouvé 1.0.9 beta, vous devez vous mettre à jour à 1.0.9rc1 et depuis 1.09rc1 vous pourrez monter à la version 1.1.2',
-	'UMIL_UPDATE120'	=> 'tables actualisés de 1.1.2.2 à 1.2',
-	'UMIL_122MINIMUM'	=> 'Old version. 1.2.2 is required for updating to 1.2.3',
 	'UMIL_RENAMETABLESNEW'	=> 'Tables renommés de prefixe bbeqdkp_ à phpbb_',
 	'UMIL_RENAMETABLESOLD'	=> 'Tables renommés de prefixe phpbb_ à bbeqdkp_ ',
+	'UMIL_UPDATE120'	=> 'tables actualisés de 1.1.2.2 à 1.2',
+	'UMIL_122MINIMUM'	=> 'Old version. 1.2.2 is required for updating to 1.2.3',
+	'UMIL_NOGAMECHOSEN'	=> 'Veuillez choisir un jeu avant d\'installer.',
+	'UMIL_UPD123'	=> 'Tables mises à jour pour v1.2.3',
+	'UMIL_GAME123'	=> 'Jeu %s installé',
+	'UMIL_GAME125'	=> 'Jeu %s installé',	
+	'UMIL_GAMEUNINST123'	=> 'Jeux désinstallés.',
+
+	// ACP titles
 	'BBDKP_WELCOME'	=> 'Bienvenue sur bbDKP',
 	'ACP_DKP_MAINPAGE'	=> 'Indexe d’administration',
 	'ACP_DKP_BBSTATS'	=> 'Administration',
@@ -309,6 +221,7 @@ $lang = array_merge($lang, array(
 	'ACP_ADDFACTION'	=> 'Ajouter Faction',
 	'ACP_LISTFACTION'	=> 'Liste des Factions',
 	'ACP_MM_ADDMEMBER'	=> 'Ajouter un Membre',
+	'ACP_MM_EDITMEMBER'	=> 'Edition Membre',	
 	'ACP_MM_LISTMEMBERS'	=> 'Liste des Membres',
 	'ACP_MM_ADDGUILD'	=> 'Ajouter une Guilde',
 	'ACP_MM_LISTGUILDS'	=> 'Liste des Guildes',
@@ -320,10 +233,16 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_ARMORY'	=> 'Réglage de l’Armurerie',
 	'ACP_DKP_CONFIG'	=> 'Réglage bbDKP',
 	'RETURN_DKPINDEX'	=> 'Retourne à l’indexe BBDKP',
+	'RETURN_DKPPOOLINDEX'	=> 'Retournez au listing.',	
 	'RETURN_LOG'	=> 'Returne au losting des logs. ',
+	'RETURN_RAID'	=> 'Retournez au Raid',
+	'RETURN_RANK'	=> 'Retourner à la liste des Grades',	
 	'ACP_DKP'	=> 'Panneau de réglage bbDKP',
 	'ACP_ITEMSTATS'	=> 'Réglage des Pop-ups Itemstats',
 	'ACP_INDEXPAGE'	=> 'Réglage du Portail',
+	'POINT_SETTINGS' => 'Système de Points.',	
+	
+// Explains	
 	'ACP_DKP_MAINPAGE_EXPLAIN'	=> 'Panneau de réglage',
 	'ACP_ADDDKPSYS_EXPLAIN'	=> 'Ici vous pouvez ajouter ou changer le nom/statut d’un groupe DKP. Avant d’ajouter des évènements vous devez enregistrer un groupe DKP. ',
 	'ACP_LISTDKPSYS_EXPLAIN'	=> 'Lister les groupes DKP; un groupe DKP combine une série d’Evènements, Raids et objets. De cette façon, vous pouvez gérer des tiers DKP séparément. ',
@@ -334,6 +253,7 @@ $lang = array_merge($lang, array(
 	'ACP_ADDITEM_EXPLAIN'	=> 'Vous pouvez ajouter ou modifier des Objets',
 	'ACP_LISTITEMS_EXPLAIN'	=> 'Liste des Objets achetées. Vous pouvez filtrer sur Groupe DKP et raid. ',
 	'ACP_ADDRAID_EXPLAIN'	=> 'Ici vous pouvez ajouter, modifier ou Supprimer un Raid',
+	'ACP_EDITRAID_EXPLAIN'	=> 'Ici vous pouvez éditer un Raid',
 	'ACP_LISTRAIDS_EXPLAIN'	=> 'Liste des Raids par Groupe DKP. Cliquer sur un nom de Raid vous amène dans le mode Edition/Suppression',
 	'ACP_DKP_LOGS_EXPLAIN'	=> 'Ceci liste toutes les actions dans bbDKP. vous pouvez trier par nom de membre, date, IP ou action.',
 	'ACP_MM_RANKS_EXPLAIN'	=> 'Ici vous pouvez éditer les noms des grades et leur suffixe/préfixe. (Pour ajouter, entrer un grade sur la dernière ligne. Pour supprimer, effacez le nom du grade et appuyez le bouton). le grade 99 (Grade ’out’) n’est pas visible. Ces grades (hormis le 99) peuvent être écrasés par le plugin Armurerie. ',
@@ -362,6 +282,16 @@ $lang = array_merge($lang, array(
 	'ACP_LISTGAME_EXPLAIN'	=> 'Maintainance des Paramètres du Jeu',
 	'CLASS_COLOR_EXPLAIN'	=> 'Choisis la couleur des étiquettes de la classe',
 	'USERNAME_EXPLAIN'	=> 'Choisis le nom d‘utilisateur phpBB associé avec ce membre. ',
+	'ACP_DKP_LOOTSYSTEMOPTIONS'	=> 'Options de Sytème de distribution de butin, pourcentage d‘amortissement des points gagnés, pct d‘amortissement de points de butin, contre-compte de Somme zero',
+	'ACP_DKP_LOOTSYSTEMEXPLAIN'	=> 'Guide sur les systemes de distribution de butin.',
+	'EDIT_RAIDER_EXPLAIN'	=> 'Ici vous pouvez éditer les points du joueur.',
+	'GAME_CLASSRACEUPDATE_EXPLAIN'	=> 'Note : Jeu ne peut pas être changé une fois qu’il est mis.',
+	'SYNCDKP'	=> 'Synchronisation des Groupes DKP',
+	'SYNC'		=> 	'Synchronise',
+	'SYNCDKP_EXPLAIN'	=> 'Vide et reconstruit la table des points DKP sur base des tables de base des raids, detail des raids, Objets, Adjustements. A utiliser uniquement en cas de necessité ou si demandé par le support de bbDKP.',
+	'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Ici vous pouvez régler le système d’allocation de points.',	
+	
+	// Permission Messages	
 	'NOAUTH_A_EVENT_ADD'	=> 'Vous n’avez pas la permission d’ajouter des évènements.',
 	'NOAUTH_A_EVENT_UPD'	=> 'Vous n’avez pas la permission de mettre à jour des évènements.',
 	'NOAUTH_A_EVENT_DEL'	=> 'Vous n’avez pas la permission de supprimer des évènements.',
@@ -380,17 +310,23 @@ $lang = array_merge($lang, array(
 	'NOAUTH_A_CONFIG_MAN'	=> 'Vous n’avez pas la permission de configurer bbDKP.',
 	'NOAUTH_A_MEMBERS_MAN'	=> 'Vous n’avez pas la permission de configurer des membres',
 	'NOAUTH_A_LOGS_VIEW'	=> 'Vous n’avez pas la permission de consulter les logs',
+	
+	// Manage Members Menu (yes, MMM)	
 	'ADD_MEMBER'	=> 'Ajouter Membre',
 	'LIST_EDIT_DEL_MEMBER'	=> 'Lister, Editer ou supprimer des Membres',
 	'EDIT_RANKS'	=> 'Editer les Grades',
 	'ADD_RANKS'	=> 'Ajouter les Grades',
 	'TRANSFER_HISTORY'	=> 'Transfert d’ Historique',
+
+	// Delete Confirmation Texts	
 	'CONFIRM_DELETE_EVENT'	=> 'êtes-vous sûr de vouloir supprimer cet évènement?',
 	'CONFIRM_DELETE_GUILD'	=> 'êtes-vous sûr de vouloir supprimer cette Guilde?',
 	'CONFIRM_DELETE_DKPSYS'	=> 'êtes-vous sûr de vouloir supprimer ce groupe Dkp ? ',
 	'CONFIRM_DELETE_IADJ'	=> 'êtes-vous sûr de vouloir supprimer cet ajustement ?',
 	'CONFIRM_DELETE_ITEM'	=> 'êtes-vous sûr de vouloir supprimer l’objet "%s" du joueur %s ?',
 	'CONFIRM_DELETE_MEMBERS'	=> 'êtes-vous sûr de vouloir supprimer les membres suivants ?',
+	'CONFIRM_DELETE_MEMBER'	=> 'ëtes-vous sûr de vouloir supprimer le membre %s ?',
+	'CONFIRM_TRANSFER_MEMBERDKP'	=> 'ëtes-vous sûr de vouloir transferer compte dkp du membre %s vers %s ?',
 	'CONFIRM_DELETE_MEMBERDKP'	=> 'êtes-vous sûr de vouloir supprimer les comptes DKP suivants ? ',
 	'CONFIRM_DELETE_NEWS'	=> 'êtes-vous sûr de vouloir supprimer cette actualité ?',
 	'CONFIRM_DELETE_RAID'	=> 'êtes-vous sûr de vouloir supprimer ce raid?',
@@ -398,6 +334,11 @@ $lang = array_merge($lang, array(
 	'CONFIRM_DELETE_FACTION'	=> 'êtes-vous sûr de vouloir supprimer la faction  %s ?',
 	'CONFIRM_DELETE_RACE'	=> 'êtes-vous sûr de vouloir supprimer la race %s ?',
 	'CONFIRM_DELETE_CLASS'	=> 'êtes-vous sûr de vouloir supprimer la classe %s ?',
+	'CONFIRM_CREATE_RAID'	=> 'Veuillez confirmer la creation du raid sur %s.',
+	'CONFIRM_DELETE_ATTENDEE'	=> 'Veuillez confirmer la suppression du participant %s du raid %s',
+	'CONFIRM_DELETE_RANKS'	=> 'Veuillez confirmer la suppression du Grade "%s" de la Guilde "%s"',
+	
+	// Log Actions
 	'ACTION_DEFAULT_DKP_CHANGED'	=> 'le groupe DKP par défaut est changé',
 	'ACTION_DKPSYS_ADDED'	=> 'le groupe DKP a été ajouté',
 	'ACTION_DKPSYS_DELETED'	=> 'le groupe DKP a été supprimé',
@@ -429,6 +370,12 @@ $lang = array_merge($lang, array(
 	'ACTION_RAID_DELETED'	=> 'Raid Supprimé',
 	'ACTION_RAID_UPDATED'	=> 'Raid mis à jour',
 	'ACTION_RT_CONFIG_UPDATED'	=> 'Réglages Raidtracker mises à jour',
+	'ACTION_DECAYOFF' => 'Amortissement mis à zero', 
+	'ACTION_DECAYSYNC' => 'Amortissement recalculé',
+	'ACTION_ZSYNC' => 'Sommezero recalculé', 
+	'ACTION_DKPSYNC' => 'DKP recalculé',  	
+	
+	// Verbose log entry lines	
 	'NEW_ACTIONS'	=> 'Nouvelles actions d’administrateur',
 	'VLOG_DKPSYS_ADDED'	=> '%s a ajouté le groupe DKP %s.',
 	'VLOG_DKPSYS_UPDATED'	=> '%s a mis à jour le groupe DKP %s.',
@@ -458,6 +405,13 @@ $lang = array_merge($lang, array(
 	'VLOG_RT_CONFIG_UPDATED'	=> '%s a mis à jour les paramètres RaidTracker',
 	'VLOG_LOG_DELETED'	=> '%s a supprimé le log id %s.',
 	'VLOG_DEFAULT_DKP_CHANGED'	=> '%S a changé le groupe DKP par défaut. ',
+	'VLOG_RAID_ATTENDEE_DELETED'	=> '%s a supprimé le joueur %s du raid %s',
+	'VLOG_DECAYOFF' => '%s a mis l‘alortissement à zero', 
+	'VLOG_DECAYSYNC' => '%s a recalculé les amortissements pour %s raids',
+	'VLOG_ZSYNC' => '%s a recalculé la somme zero', 
+	'VLOG_DKPSYNC' => '%s a recalculé DKP',  
+	
+	// Before/After	
 	'ADJUSTMENT_AFTER'	=> 'Ajustment Après',
 	'ADJUSTMENT_BEFORE'	=> 'Ajustment avant',
 	'ATTENDEES_AFTER'	=> 'Participants après',
@@ -496,8 +450,12 @@ $lang = array_merge($lang, array(
 	'SPENT_BEFORE'	=> 'Dépense avant',
 	'VALUE_AFTER'	=> 'Valeur après',
 	'VALUE_BEFORE'	=> 'Valeur avant',
+	
+	//log	
 	'SUCCESS'	=> 'Succès',
 	'FAILED'	=> 'Echec',
+	
+	// Errors
 	'ERROR'	=> 'Erreur',
 	'ERROR_INVALID_ITEM_PROVIDED'	=> 'id d’objet invalide.',
 	'ERROR_INVALID_NAME_PROVIDED'	=> 'Nom de membre invalide.',
@@ -529,6 +487,15 @@ $lang = array_merge($lang, array(
 	'ERROR_NOITEMS'	=> 'Il n’y a pas d’objets loot dans la base de données.',
 	'FORM_ERROR'	=> 'Erreur de validation : Controlez votre saisie <br />',
 	'ERROR_RAID_NOATTENDEES'	=> 'Erreur : ancien Raid n’a pas de participants. Suppression des valeurs DKP impossible. STOP ',
+	'ERROR_NODKPACCOUNT'	=> 'Erreur : pas de comptes DKP à transferer',
+	'ERROR_NOEVENTSDEFINED'	=> 'Erreur : Pas d‘évènements definies, ajout Raid impossible',
+	'ERROR_NOGUILDMEMBERSDEFINED'	=> 'Erreur : Pas de Membres de Guilde, ajout Raid impossible',
+	'ERROR_RANKMEMBERS'	=> 'Erreur : Suppression Grade impossible, il existe toujours de membres ayant ce grade.',
+	'ERROR_NOSELECT'	=> 'Veuillez sélectionner un membre source et un membre destination.',
+	'ERROR_NOADJUSTMENTS'	=> 'Il n‘y a pas d‘ajustements dans la base de données.',
+
+	// Submission Success Messages
+	'ADMIN_RAID_ATTENDEE_DELETED_FAILED'	=> 'Participant %s ne pouvat pas être supprimé du raid %s.',
 	'ADMIN_ADD_ADJ_SUCCESS'	=> 'Un ajustment %s de %.2f a été ajouté dans la base de données de votre guilde.',
 	'ADMIN_ADD_DKPSYS_SUCCESS'	=> 'Un nouveau groupe DKP est ajouté à la base de dennées de votre guilde.',
 	'ADMIN_ADD_EVENT_SUCCESS'	=> 'Une valeur préétablie de %s pour un raid sur %s a été ajouté à la base de données de votre guilde.',
@@ -537,6 +504,8 @@ $lang = array_merge($lang, array(
 	'ADMIN_ADD_MEMBER_SUCCESS'	=> '%s a été ajouté comme membre à la base de données de votre guilde.',
 	'ADMIN_ADD_MEMBER_FAIL'	=> 'Ajout de membre %s a échu. Membre existe déjà sous ID %d. Veuillez verifier votre base de données.',
 	'ADMIN_ADD_GUILD_SUCCESS'	=> 'le Guilde %s a été ajouteé à votre base de données. ',
+	'ADMIN_DUPLICATE_RAID_SUCCESS' => 'Le %s raid sur %s a été dupliqué.',
+	'ADMIN_DKPPOOLSYNC_SUCCESS' =>  '%s comptes DKP ont été synchronisés.',	
 	'ADMIN_ADD_NEWS_SUCCESS'	=> 'Une actualité suivante a été ajouté à la base de données de votre guilde.',
 	'ADMIN_ADD_RAID_SUCCESS'	=> 'Le raid %s sur %s est ajouté à votre base de données.',
 	'ADMIN_DELETE_ADJ_SUCCESS'	=> 'Suppression de l’ajustement %s de %.2f terminée avec succès.',
@@ -587,6 +556,9 @@ $lang = array_merge($lang, array(
 	'ADMIN_UPDATE_RACE_FAILED'	=> 'la classe n’a pu être mise à jour car le id %s est déjà utilisé. ',
 	'ADMIN_UPDATE_RACE_SUCCESS'	=> 'La race %s a été mise à jour avec succès',
 	'ADMIN_UPDATE_LOOTSYS_SUCCESS'	=> 'The Loot system is now set to %s . ',
+	'ADMIN_RAID_ATTENDEE_DELETED_SUCCESS'	=> 'le joueur %s est supprimé du raid %s',	
+	
+	 // Configuration
 	'ACTIVE_POINT_ADJ'	=> 'Ajustement pour réactivation',
 	'ACTIVE_POINT_ADJ_NOTE'	=> 'Ajustement DKP à faire quand un membre redevient actif.',
 	'ADJUSTMENTS_PER_PAGE'	=> 'Ajustements par Page',
@@ -600,6 +572,8 @@ $lang = array_merge($lang, array(
 	'DEFAULT_PERMISSIONS'	=> 'Permissions par défaut',
 	'DOWNLOAD'	=> 'Téléchargement',
 	'EVENTS_PER_PAGE'	=> 'Evènements par Page',
+ 	'GAME'	=> 'Jeu',
+
 	'GENERAL_SETTINGS'	=> 'Réglages générals',
 	'GUILDTAG'	=> 'Titre de Guilde',
 	'GUILDTAG_NOTE'	=> 'Utilisée dans les titres des pages DKP',
@@ -618,6 +592,8 @@ $lang = array_merge($lang, array(
 	'VERSION_NOTONLINE'	=> 'Appel de contrôle de verion bbDKP a échoué. erreur de connection. ',
 	'WHO_ONLINE'	=> 'Qui est en ligne ?',
 	'LISTMEMBERS_PER_PAGE'	=> 'Nombre de membres par page',
+ 	
+	// LOOTSYSTEM	
 	'DESCRIPTION'	=> 'lootsystem',
 	'EXAMPLE'	=> 'lootsystem',
 	'ADVANTAGE'	=> 'lootsystem',
@@ -632,6 +608,7 @@ players receive 5 points for slaying a dragon, 2 points for being on time or on 
 	'STANDARDDKP_ADVANTAGE'	=> '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
 	'STANDARDDKP_DISADVANTAGE'	=> '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there‘s a disequilibrium towards the other players.',
 	'ZEROSUM'	=> '<strong>Zero Sum DKP</strong>',
+	'ZEROSUM_ONOFF_EXPLAIN'	=> 'Ne peut pas être combiné avec EPGP',	
 	'ZEROSUM_EXPLAIN'	=> '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. The raid members will thusly gain dkp points when someone received an item. this ensures that there is no inflation, or point hoarding. <br/>',
 	'ZEROSUM_EXAMPLE'	=> ' <strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br/> The balance at the end is : earned 20, spent 20.',
 	'ZEROSUM_ADVANTAGE'	=> ' <strong>Advantage</strong> : no point inflation if all players start at the same gearlevel.',
@@ -656,19 +633,64 @@ Points are spent on loot just like in bonus system. Bonus points may be awarded 
 net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20 <br />difference = 280',
 	'TIMEDKP_ADVANTAGE'	=> '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
 	'TIMEDKP_DISADVANTAGE'	=> '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there‘s a disequilibrium towards the other players.',
+	
 	'EPGP'	=> '<strong>EPGP Effort / Gearpoints</strong>',
+	'EPGP_ONOFF_EXPLAIN'	=> 'Ne peut pas pas être combiné avec Calcul de somme zero.',	
 	'EPGP_EXPLAIN'	=> '<strong>Description: </strong>A Lootsystem where the loot is allocated to the person with the highest ep/gp ratio. Effort points are gained through diverse means, like attending, being on time. Standby could also get EP. Bonuse EP could be given when the boss was killed with skill. Effort Points also decay over time. Loot is then paid with Gear points.',
-	'EPGP_EXAMPLE'	=> '<strong>Example</strong> : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />  
-
-The item costs 20 Gearpoints<br />
-
-effortpoints player 1 : 202, EP/GP ratio 10.1<br />
-
-effortpoints player 2 : 342, EP/GP ratio 17.1<br /> 
-
-So the loot would go to player 2 <br />',
+	'EPGP_EXAMPLE'	=> '<strong>Example</strong> : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />  The item costs 20 Gearpoints<br /> effortpoints player 1 : 202, EP/GP ratio 10.1<br /> effortpoints player 2 : 342, EP/GP ratio 17.1<br /> So the loot would go to player 2 <br />',
 	'EPGP_ADVANTAGE'	=> '<strong>Advantage</strong> : no inflation, no hoarding. ',
 	'EPGP_DISADVANTAGE'	=> '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ',
+	'DECAY_EXPLAIN'	=> 'Les Points gagés et côuts de butin sont amorties dans le temps.',	
+	'DECAY_EXAMPLE'	=> 'exemple d‘amortissement',
+
+	'FORMULA'	=> 'Formules',
+	'DECAY_N'	=> '<strong>Durée de Raid en semaines<strong> = n',
+	'DECAY_I'	=> '<strong>pct d‘amortissement</strong> = i',
+	'DECAY_D'	=> '<strong>formule d‘amortissement</strong> d = 1 - (1-i)^n ',
+	'DECAY_R'	=> '<strong>Valeur du Raid</strong> = r',
+	'DECAY_K'	=> '<strong>Amortissement du Raid</strong> k = r * d',
+	'DECAY_L'	=> '<strong>pct d‘amortissement de butin</strong> = l',
+	'DECAY_J'	=> '<strong>Valeur de butin</strong> = j',
+	'DECAY_F'	=> '<strong>amortissement de butin</strong> f = j * l',
+
+	'DECAYPCTRAIDS'	=> 'pct d‘amortissment (%)',
+	'DECAYPCTRAIDS_EXPLAIN'	=> 'Les points gagnés déprecient par ce pourcentage par periode.',
+	'DECAYPCTITEM'	=> 'taux d‘amortissment de points de butin (%)',
+	'DECAYPCTITEM_EXPLAIN'	=> 'Le côut de butin sera amorti par ce pct par intervalle.',
+	'DECAYFREQ'	=> 'Frequence d‘amortissement',
+	'DECAYFREQ_EXPLAIN'	=> 'Amortissement va passer n fois',
+	'DECAYFREQTYPE'	=> 'type de frequence',
+	'DECAYFREQTYPE_EXPLAIN'	=> 'Choisis jours, semaines ou mois.',
+	'DECAY_SCHEDULE' => 'Amortissement programmé',
+	'DECAY_SCHEDULE_EXPLAIN' => 'Activez pour demarrer un amortissement chaque 23 heures si forum est visité.',
+	'DECAYCRON' => 'activé par cron', 
+	'NO_DECAY_ADJ'	=> 'Ajustment amortissable ?',
+	
+	'PR' => 'ratio de Priorité', 
+	'EP_DEFINITION'	=> '<strong>EP</strong> = Points gagnés = Raid Bonus + Bonus de temps + Bonus sommation zero + Ajustments ',
+	'DECAY_EP'	=> '<strong>EP après Amortissement</strong> = EP - EP * d',
+	'MEP'  => 'EP Minimum',
+	'MEP_EXPLAIN'  => 'MEP = niveau EP minimum. PR effectif est 0 jusqu‘à ce que EP_min est atteint.',
+	'MEP_DEFINITION'  => '<strong>EP_eff</strong> = max( 0, (EP - MEP))',
+	'GP_DEFINITION'	=> '<strong>GP</strong> = GP base + GP Réel',
+	'RGP_DEFINITION'	=> '<strong>RGP</strong> = Points GP Réels = Côut de butin',
+	'BGP'	=> 'GP de Base',
+	'BGP_EXPLAIN'	=> 'BGP = Points GP de base, ne sont pas amorties.',
+	'DECAY_GP'	=> '<strong>GP après amortissement</strong> = BGP + RGP - RGP * l',
+
+	//resynchronisation
+	'RESYNC_ZEROSUM'	=> 'Synchronisation des sommes zéro',
+	'RESYNC_ZEROSUM_CONFIRM'	=> 'Ëtes-vous sûr de vouloir recalculer tous les sommations à zéro? Ceci affectera tous les comptes DKP.',
+	'RESYNC_ZEROSUM_EXPLAIN'	=> 'Mettra d‘abord à zéro tous les bonus zero existant. Puis, si le flag Sommation zero est mis, redistribue les valeurs de butin dans chaque Raid.',
+	'RESYNC_ZEROSUM_SUCCESS'	=> 'Redistribution réussie de %s pièces de butin et mise à jour de %s comptes DKP.',
+	'RESYNC_ZEROSUM_DELETED'	=> 'Redistribution réussie des valeurs de butin.',
+	'RESYNC_DECAY'	=> 'Synchronisation des amortissements',
+	'RESYNC_DECAY_CONFIRM'	=> 'Etes-vous sür de resynchroniser les amortissements ? Ceci affectera tous les comptes DKP et les points EP/GP/PR',
+	'RESYNC_DECAY_EXPLAIN'	=> 'Mettra d‘abord à zéro tous les amortissements, et puis si le flag est mis, recalcule l‘amortissement selon les paramètres.',
+	'RESYNC_DECAY_SUCCESS'	=> 'Amortissement réussi de %s Raids',
+	'RESYNC_DKP_CONFIRM' => 'Etes-vous certain de vouloir synchroniser les comptes DKP ?' ,	
+	
+	// menus
 	'MENU_RAIDS'	=> 'Raids',
 	'MENU_EVENTS'	=> 'Evènements',
 	'MENU_ITEMHIST'	=> 'Histoire d’achats',
@@ -677,6 +699,8 @@ So the loot would go to player 2 <br />',
 	'MENU_GENERAL'	=> 'Réglages générals',
 	'MENU_STANDINGS'	=> 'Tableau DKP',
 	'MENU_ROSTER'	=> 'Tableau des membres',
+	'MENU_DKP'	=> 'Paramètres DKP',
+	
 	'NONE'	=> 'Simple',
 	'PARSETAGS'	=> 'tag guilde à parser',
 	'PARSETAGS_NOTE'	=> '.',
@@ -690,12 +714,16 @@ So the loot would go to player 2 <br />',
 	'SITE_NAME'	=> 'Nom de site',
 	'SITE_DESCRIPTION'	=> 'Description du site',
 	'YOURVERSION'	=> 'Votre version bbDKP :',
+	
+	// roster	
 	'ARM_LAYOUT'	=> 'Style du Tableau des membres',
 	'ARM_LAYOUTDO'	=> 'Choisis le style',
 	'ARM_SHOWACH'	=> 'Montrer les points des Haut Faits ?',
 	'ARM_STAND'	=> 'Standard',
 	'ARM_CLASS'	=> 'Classe',
 	'SHOWONROSTER'	=> 'Montrer sur le Tableau des membres',
+
+	 // titles
 	'ADD_ITEM_RAIDID_NOTE'	=> 'Montrer que les raids à moins de deux semaines/ %s Voir tous</a>',
 	'ADD_ITEM_RAIDID_SHOWALL_NOTE'	=> 'Tous les raids / %s Montrer que les récentes</a>',
 	'ADD_RAID_VALUE_NOTE'	=> ' si cette zone est à blanc, la valeur préfigée de l\\évènement est utilisée comme Bonus pour le Raid',
@@ -707,18 +735,23 @@ So the loot would go to player 2 <br />',
 	'ADD_IADJ_TITLE'	=> 'Ajouter un Ajustement',
 	'ADD_ITEM_TITLE'	=> 'Ajouter un achat d’objet',
 	'ADD_MEMBER_TITLE'	=> 'Modifier les Points DKP',
-	'ADD_RAID_TITLE'	=> 'Ajouter un Raid',
+	'EDIT_RAID_TITLE'	=> 'Editer un Raid',	
+	'ADD_RAIDER_TITLE'	=> 'Ajouter un Joueur',
 	'ADMIN_INDEX_TITLE'	=> 'Administration de bbDKP',
+	'DEFAULTDKP'	=> 'Confirme Groupe DKP par défaut',	
 	'MANAGE_MEMBERS_TITLE'	=> 'Modifier les Membres',
 	'VIEWLOGS_TITLE'	=> 'Voir les Logs',
 	'EDITMEMBER_DKP_TITLE'	=> 'Editer un compte DKP',
 	'EDIT_RACE_TITLE'	=> 'Editer une Race',
 	'ADD_RACE_TITLE'	=> 'Paramètres de la Race',
 	'ADD_CLASS_TITLE'	=> 'Paramètres de la classe',
+	
+	// Page Foot Counts
 	'LISTMEMBERS_FOOTCOUNT'	=> '... trouvé %d membres',
 	'LISTUSERS_FOOTCOUNT'	=> '... trouvé %d membres(s) / %d par page',
 	'LISTEVENTS_FOOTCOUNT'	=> '... trouvé %d events / %d par page',
 	'LISTRAIDS_FOOTCOUNT'	=> '... trouvé %d raid(s) / %d par page',
+	'LISTATTENDEES_FOOTCOUNT'	=> '... trouvé %d joueurs(s)',
 	'MANAGE_MEMBERS_FOOTCOUNT'	=> '... trouvé %d membre(s)',
 	'VIEWLOGS_FOOTCOUNT'	=> '... trouvé %d log(s) / %d par page',
 	'GUILD_FOOTCOUNT'	=> '... trouvé %d guilde(s)',
@@ -728,6 +761,9 @@ So the loot would go to player 2 <br />',
 	'LISTRACE_FOOTCOUNT'	=> '... trouvé %d races',
 	'LISTCLASS_FOOTCOUNT'	=> '... trouvé %d classes',
 	'LISTFACTION_FOOTCOUNT'	=> '... trouvé	%d Factions',
+	'RAIDITEMS_FOOTCOUNT'	=> '... trouvé %d butins gagnés',	
+	
+	// Submit Buttons
 	'ADD_ADJUSTMENT'	=> 'Ajouter un Ajustement',
 	'ADD_EVENT'	=> 'Ajouter Evènement',
 	'ADD_DKPSYS'	=> 'Ajouter groupe DKP',
@@ -736,6 +772,9 @@ So the loot would go to player 2 <br />',
 	'ADD_RAID'	=> 'Ajouter Raid',
 	'ADD_RACE'	=> 'Ajouter Race',
 	'ADD_CLASS'	=> 'Ajouter Classe',
+
+	'ADD_ATTENDEE'	=> 'ajout de participant',
+	'DECAY_RAID'	=> 'Amortissement de Raid',
 	'DELETE_ADJUSTMENT'	=> 'Supprimer Ajustment',
 	'DELETE_EVENT'	=> 'Supprimer Evènement',
 	'DELETE_DKPSYS'	=> 'Supprimer groupe DKP',
@@ -746,7 +785,8 @@ So the loot would go to player 2 <br />',
 	'DELETE_RAID'	=> 'Supprimer Raid',
 	'DELETE_SELECTED_MEMBERS'	=> 'Supprimer Membre séléctionné',
 	'DELETE_SELECTED_GUILDS'	=> 'Supprimer Guilde selectionnée',
-	'EDIT_GUILD'	=> 'Editer Guilde',
+	'DUPLICATE_RAID' => 'Dupliquer Assaut', 
+		'EDIT_GUILD'	=> 'Editer Guilde',
 	'SEARCH_EXISTING'	=> 'Recherce dans existant',
 	'SELECT'	=> 'Sélectionner',
 	'UPDATE_ADJUSTMENT'	=> 'Mise à jour Adjustment',
@@ -760,8 +800,14 @@ So the loot would go to player 2 <br />',
 	'UPDATE_RACE'	=> 'mise à jour Race',
 	'UPDATE_CLASS'	=> 'mise à jour Classe',
 	'CHANGE_ACTIVATION'	=> 'Change Activation',
+	
+	// Misc
 	'ADJUSTMENT_VALUE'	=> 'Valeur d’Ajustement',
 	'ADJUSTMENT_VALUE_NOTE'	=> 'Peut-être négatif',
+	'ADJUSTMENT_NET' => 'Ajustment Net',	
+	'ARMORY_URL'	=> 'Lien vers Armurerie.',
+	'ATTENDEEADD_EXPLAIN'	=> 'Choisis un participant additionel au Raid',
+	'CHANGE_STATUS'	=> 'Changer le Status',
 	'CLASS_NAME'	=> 'Nom de la classe',
 	'CLASS_ID'	=> 'ID de la classe',
 	'CLASS_ARMORY'	=> 'Type d’Armurerie',
@@ -772,10 +818,20 @@ So the loot would go to player 2 <br />',
 	'CONTACT'	=> 'Contact',
 	'CREATE'	=> 'Créér',
 	'DATE_FORMAT'	=> 'Format de date dans listes',
+	'DEFAULT_DKP_POOL'	=> 'Pool DKP Standard',
+	
+	'DKPPERTIME'	=> '%s DKP tous les %s minutes.',
 	'DONE'	=> 'Terminé',
+	'DUPLICATED' => 'Dupliqué', 
 	'HOLD_CTRL_NOTE'	=> 'Appuyez CTRL(PC) ou CMD(Mac) pour séléction multiple<br />',
 	'DKP_STATUS'	=> 'Status de Groupe DKP (Y ou N)',
-	'DEFAULT_DKP_POOL'	=> 'Pool DKP Standard',
+	'DKPTIMEUNIT'	=> 'DKP gagné par intervalle de temps',
+	'DKPTIMEUNIT_EXPLAIN'	=> 'assignera x DKP comme gagné pour chaque intervalle ou le joueur était présent dans le Raid. Utilisé par Raidtracker et l‘ecran de saisie manuelle de Raid',
+	'GENERATE_ARMORY_URL'	=> 'Générez un lien vers l’armurerie.',
+	'TIMEUNIT'	=> 'Intervalle de temps',
+	'TIMEUNIT_EXPLAIN'	=> 'Durée en minutes du temps d‘intervalle de Bonus Temps DKP.  Utilisé par Raidtracker et l‘ecran de saisie manuelle de Raid',
+	'STANDARDDURATION'	=> 'Durée moyenne d‘un Raid',
+	'STANDARDDURATION_EXPLAIN'	=> 'Temps moyen de Raid en heures. Ceci est utilisé pour calculer la fin du raid initial dans l‘ecran de saisie manuelle de Raid',
 	'EVENT_NAME'	=> 'Nom d’Evènement',
 	'EVENT_NAME_EXPLAIN'	=> 'Les Raids et Evenements sur Calendrier porteront ce nom',
 	'EVENT_VALUE'	=> 'Valeur d’Evènement',
@@ -784,39 +840,76 @@ So the loot would go to player 2 <br />',
 	'EVENT_COLOR_EXPLAIN'	=> 'Les Evènements sous ce nom se présenteront sous cette couleur dans le Calendrier.',
 	'EVENT_IMAGE'	=> 'Image de l‘évènement',
 	'EVENT_IMAGE_EXPLAIN'	=> 'L‘évènement portera cet image dans le Calendrier.',
+	'GAMEITEMID_EXPLAIN'	=> 'Id Wowhead (WoW)',
 	'STATUS'	=> 'Statut',
 	'FACTION_NAME'	=> 'Nom de la Faction',
 	'HIDE'	=> 'Cachez ?',
 	'ID'	=> 'Id',
 	'INSTALL'	=> 'Installer',
+	'IMPORTBOSSZONE'	=> 'Importer la zone de bossprogress',
+	'IMPORTBOSSZONE_EXPLAIN'	=> 'Choisir une Zone de Boss, ceci passe outre le nom d‘évènement',
 	'ITEM_SEARCH'	=> 'Recherch d’objet',
 	'LIST_PREFIX'	=> 'Préfix de Liste',
 	'LIST_SUFFIX'	=> 'Suffix de Liste',
 	'LOGS'	=> 'Logs',
+	'MEMBER'	=> 'Membre',	
 	'MEMBERS'	=> 'Membres',
 	'MEMBER_RANK'	=> 'Grade Membre',
+	'NO_IMAGE'	=> 'Pas d‘image',
 	'POOL'	=> 'Groupe DKP',
 	'POOLID'	=> 'DKP id',
+	'PRCALC'	=> 'Calcul de Ratio de priorité',
+	'PRCALC_EXPLAIN'	=> 'Calcule le ratio EP/GP comme (somme Gagné)/(Somme côut de butin) ',
 	'RANKID'	=> 'ID grade',
+	'RAIDERADD'	=> 'Joueur',
+	'RAIDDURATION_EXPLAIN'	=> 'en heures',
+	'RAIDERDESCRIPTION'	=> 'Apercu des points du joueur pour Raid sur %s en %s le %s pour %s',
 	'RAIDDESCRIPTION'	=> 'Récapitulatif du Raid %s en %s sur %s ',
 	'NEWRAIDDESCRIPTION'	=> 'Ajouter un nouveau raid',
 	'LOOTADD'	=> 'Add items to %s Raid on %s',
 	'LOOTUPD'	=> 'Updating items to %s Raid on %s',
+	'OVERRIDE'	=> 'Outrepasser',
+	'RACE_IMAGE'	=> 'Nom d‘image petit Race',
+	'RACE_IMAGE_EXPLAIN'	=> 'Nom de fichier couleur png sans extension, fichier doit exister en /images/race_images',
 	'RESULTS'	=> '%d Résultats (%s)',
 	'SEARCH'	=> 'Rachercher',
+	'SEARCH_MEMBERS'	=> 'Recherchez les membres',
 	'SHOW3DARMORY'	=> 'Montre le Caractère WoW en 3D',
 	'SHOULD_BE'	=> 'Doit être',
+	'STARTING_DKP'	=> 'Points de départ.',
+	'STARTING_DKP_EXPLAIN'	=> 'A la creation d‘un compte DKP, si ceci est &gt; 0, il est créé un ajustement au membre comme points de départ.',
+	'START_RAID_DKP_EXPLAIN'	=> 'Bonus de Raid de départ',
+	'TIME_BONUS'	=> 'Bonus de Temps',
+	'TIME_BONUS_EXPLAIN'	=> 'calculated on Raid start-end time. ',
+	'TIME_OVERRIDE'	=> 'Cochez pour outrepasser les bonus de temps individuels venant de Raidtracker.',
 	'TITLE'	=> 'Titre',
 	'UNINSTALL'	=> 'Désinstaller',
 	'VERSION'	=> 'Version',
 	'X_MEMBERS_S'	=> '%d membre',
 	'X_MEMBERS_P'	=> '%d membres',
 	'SELECT_1OFX_MEMBERS'	=> 'Selectionner 1 de %d membres...',
+	
+	'ZEROSUMBANKER'	=> 'Compte decalage somme zéro',
+	'ZEROSUMBANKER_EXPLAIN'	=> 'Selectionnez le compte DKP vers lequel les bonus Temps et Raid sont décalés afin de garder le solde à zéro.',
+	'ZEROSUM_DISTRIBUTEOTHER'	=> 'Décalage des bonus',
+	'ZEROSUM_DISTRIBUTEOTHER_EXPLAIN'	=> 'Cochez pour décaler les bonus temps et raids vers le compte DKP de la Guilde.',
+	'ZS_CHECKED_EXPLAIN'	=> 'Coché si Somme zero est calculé',
+	'LANG_DE'	=> 'Deutsch',
+	'LANG_FR'	=> 'Français',
+	'LANG_EN'	=> 'English',
+	'FREQ0'	=> 'Days',
+	'FREQ1'	=> 'Weeks',
+	'FREQ2'	=> 'Months',
+	'NOLOOT'	=> 'Pas de butin trouvé', 
+	
+	
+	// Admin Index
 	'BBDKP_STARTED'	=> 'Date début bbDKP',
 	'IP_ADDRESS'	=> 'Adresse IP',
 	'ITEMS_PER_DAY'	=> 'Objets par Jour',
 	'LAST_UPDATE'	=> 'Dernière mise à jour',
 	'LOCATION'	=> 'Location',
+
 	'NUMBER_OF_ITEMS'	=> 'Nombre d’objets',
 	'NUMBER_OF_LOGS'	=> 'Nombre de Logs',
 	'NUMBER_OF_MEMBERS'	=> 'Nombre de Membres (Actifs / Inactifs)',
@@ -830,29 +923,36 @@ So the loot would go to player 2 <br />',
 	'ATTENDANCEDAYS'	=> 'Jours de Participation',
 	'STATISTICS'	=> 'Statistiques',
 	'TOTALS'	=> 'Totals',
+	'MAX_NUMBER_CHARS_EXPLAIN' => 'Nombre maximal de caractères qu‘un joueur peut lier à son compte phpBB.',
+	'MAX_NUMBER_CHARS' => 'Nombre maximal' ,
+	
+	//js alerts	
 	'ALERT_AJAX'	=> 'Probelem lors du lancement XMLHTTP',
 	'ALERT_OLDBROWSER'	=> 'Votre browser est incompatible',
 	'JQUERY_MISSING'	=> 'jquery.js n’est pas présent. Vous devez installer jquery.js dans adm/style/dkp pour le cercle de couleurs à apparaitre.',
+
+	//Boss progress
 	'GENERAL'	=> 'Paramètres générals',
+	
 	'HEADERTYPE'	=> 'Type de la barre d’avancement ?',
 	'OLDPHOTO'	=> 'Photo Sepia',
 	'BLUE'	=> 'Photo Bleue',
+	'NONE' => 'Pas de barre de progrès',	
+	
 	'BPSTYLE'	=> 'Style: ',
 	'BP_STYLE_BP'	=> 'Progrès par défaut',
 	'BP_STYLE_BPS'	=> 'Progrès simple',
 	'BP_STYLE_RP2R'	=> 'Progrès sur 2 lignes',
 	'BP_STYLE_RP3R'	=> 'Progrès sur 3 lignes',
+	
 	'SHOWZONEPROGRESS'	=> 'Afficher barre d’avancement ?',
 	'HIDENEWZONE'	=> 'Ne pas montrer une zone non visitée?',
 	'HIDENEWBOSS'	=> 'Ne pas montrer des Boss non vaincus ?',
 	'SHOWZONE'	=> 'Montrer: ',
 	'SHOWZONES'	=> 'Montrer Zones',
 	'RP_ZONE'	=> 'Configuration de Zone',
-	'RP_ZONE_EXPLAIN'	=> 'Ici vous pouvez configurer les Zones, avec leur photo, style d’affichage, si une zone est affichée avec une barre d’avancement, si des zones non visitées seront montrées. <br /> 
+	'RP_ZONE_EXPLAIN'	=> 'Ici vous pouvez configurer les Zones, avec leur photo, style d’affichage, si une zone est affichée avec une barre d’avancement, si des zones non visitées seront montrées. <br /> Dans la liste, vous pouvez saisir le nom de la zone, le nom de l’image, l’id sur le web. En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus d’informations<br />Pour supprimer, Appuyez la croix rouge. ceci supprime aussi les boss liés. <br />Pour ajouter une zone, cliquez le bouton Ajouter en bas.  ',
 
-Dans la liste, vous pouvez saisir le nom de la zone, le nom de l’image, l’id sur le web. 
-
-En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus d’informations<br />Pour supprimer, Appuyez la croix rouge. ceci supprime aussi les boss liés. <br />Pour ajouter une zone, cliquez le bouton Ajouter en bas.  ',
 	'RP_ZONE_ADD_EXPLAIN'	=> 'Ceci vous permet d’ajouter une zone.',
 	'RP_ZONEDEL'	=> 'Zone Supprimée',
 	'ZONE_NAME'	=> 'Nom de Zone',
@@ -877,6 +977,7 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 	'RP_ZONEDELETCONFIRM'	=> 'Veuillez confirmer la suppression de cette zone %s. Ceci supprimme aussi les Boss rattaches à cette zone.',
 	'RP_ZONEADDED'	=> 'Zone %s ajoutée avec succès',
 	'RP_ZONEUPDATED'	=> 'Zone %s mise à jour avec succès. ',
+
 	'RP_BOSS'	=> 'Configuration des Boss',
 	'RP_BOSS_EXPLAIN'	=> 'Ici vous pouvez configurer le images des Boss, si il a été vaincu, et la date date de la victoire;',
 	'RP_BOSS_ADD_EXPLAIN'	=> 'Ici vous pouvez editer l’mage du boss, et en ajouter ou supprimer.',
@@ -901,6 +1002,7 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 	'RP_BOSSADDED'	=> 'boss %s a été ajouté avec succès à la zone %s.',
 	'BP_BOSSEDITED'	=> 'Changements sur Boss %s sont sauvegardé.',
 	'BP_BPSAVED'	=> 'Les Réglages sur la module Progrès de Boss sont sauvegardés.',
+
 	'AION_BASEURL'	=> 'http://db.aion.ign.com/npc/',
 	'EQ_BASEURL'	=> 'http://eqbeastiary.allakhazam.com/search.shtml?zone=',
 	'EQ2_BASEURL'	=> 'http://eq2.wikia.com/wiki/index.php/',
@@ -914,27 +1016,24 @@ En cliquant sur la roue verte, vous pouvez visualiser les images et mettre plus 
 	'WARHAMMER_ZONEEURL'	=> 'NOT AVAILABLE',
 	'WOW_BASEURL'	=> 'http://fr.wowhead.com/?npc=%s',
 	'WOW_ZONEEURL'	=> 'http://fr.wowhead.com/?zone=%s',
-	'SYNCDKP_EXPLAIN'	=> 'Vide et reconstruit la table des points DKP sur base des tables de base des raids, detail des raids, Objets, Adjustements. A utiliser uniquement en cas de necessité ou si demandé par le support de bbDKP.',
-	'ADMIN_DUPLICATE_RAID_SUCCESS' => 'Le %s raid sur %s a été dupliqué.',
-	'ADMIN_DKPPOOLSYNC_SUCCESS' =>  '%s comptes DKP ont été synchronisés.',
-	'RESYNC_DKP_CONFIRM' => 'Etes-vous certain de vouloir synchroniser les comptes DKP ?' ,
-	'MENU_DKP'	=> 'Paramètres DKP',
-	'SYNCDKP'	=> 'Synchronisation des Groupes DKP',
-	'SYNC'		=> 	'Synchronise',
-	'DEFAULTDKP'	=> 'Confirme Groupe DKP par défaut',
-	'DUPLICATE_RAID' => 'Dupliquer Assaut', 
-	'DUPLICATED' => 'Dupliqué', 
-	'MAX_NUMBER_CHARS_EXPLAIN' => 'Nombre maximal de caractères qu‘un joueur peut lier à son compte phpBB.',
-	'MAX_NUMBER_CHARS' => 'Nombre maximal' ,
-	'WELCOME_DEFAULT'        => '[b]Bienvenu(e) dans notre Guilde[/b]!', 
-	'SHOWWELCOME'	=> 'Montrer Block Acceuil',
-	'WELCOMEBLOCK'	=> 'Texte du bloc Acceuil',
-	'WELCOMEBLOCK_EXPLAIN'	=> 'Veuillez remplir le texte dans cette zone. les BBcodes sont supportés.',
-	'WELCOMEBLOCKSETTING'	=> 'Règlages Bloc d’acceuil',
-	'POINT_SETTINGS' => 'Système de Points.',
-	'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Ici vous pouvez régler le système d’allocation de points.',
-	'NOLOOT'	=> 'Pas de butin trouvé', 
-
+	'SWTOR_BASEURL' => 'http://www.torhead.com/npc=%s',
+	'SWTOR_ZONEEURL' => 'http://www.torhead.com/zone=%s',
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 ));
 
 ?>
