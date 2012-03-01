@@ -92,6 +92,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						'VALUE' => $row['dkpsys_id'], 
 						'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
 						'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
+					$dkpsys_name[$row['dkpsys_id']] = $row['dkpsys_name']; 
 				}
 				$db->sql_freeresult( $result );
 				/***  end drop-down query ***/
@@ -305,9 +306,10 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
 				 	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 					'U_LIST_MEMBERDKP' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;" . URI_DKPSYS . "=". $dkpsys_id . "&amp;mode=mm_listmemberdkp") .'&amp;mod=list&amp;',		
-					'S_NOTMM' => false,
+					'S_NOTMM'		=> false,
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text, 
-		            'DKPSYS' => $dkpsys_id
+		            'DKPSYS' 		=> $dkpsys_id, 
+					'DKPSYSNAME' 	=> $dkpsys_name[$dkpsys_id],
 					);
 					
 					if($config['bbdkp_timebased'] == 1)

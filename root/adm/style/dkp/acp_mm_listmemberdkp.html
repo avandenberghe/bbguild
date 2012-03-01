@@ -1,7 +1,7 @@
 <!-- INCLUDE overall_header.html -->
 
 <a name="maincontent"></a>
-<h1>{L_TITLE}</h1>
+<h1>{L_TITLE} {DKPSYSNAME}</h1>
 <p>{L_EXPLAIN}</p>
 
 <form id="acp_dkp_memberlist" method="post" action="{F_MEMBERDKP}">
@@ -13,8 +13,9 @@
        <option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
        <!-- END dkpsys_row -->
     </select>
- </fieldset>
+</fieldset>
 
+<!-- IF .members_row -->
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
     <th style="text-align:left; width:1%"><a href="{U_LIST_MEMBERDKP}o={O_STATUS}">{L_ACTIVE}</a></th>
@@ -120,6 +121,12 @@
 </fieldset>
 
 <br />
+<!-- ELSE -->
+<div class="errorbox">
+<p>{L_ERROR_POOLNOPOINTS} {DKPSYSNAME}</p>
+</div>
+
+<!-- ENDIF -->
 </div>
 </form>
 <!-- INCLUDE dkp/overall_footer.html -->

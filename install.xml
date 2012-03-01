@@ -322,13 +322,13 @@ if(@defined("EMED_BBDKP"))
 				<comment lang="en"><![CDATA[adding cronjobs]]></comment>
 				<comment lang="fr"><![CDATA[ajouter cronjobs]]></comment>
 				<comment lang="de"><![CDATA[zufügen cronjobs]]></comment>								
-				<find><![CDATA[						auto_prune($row['forum_id'], 'viewed', $row['forum_flags'], $row['prune_viewed'], $row['prune_freq']);
-			}
-		}
+				<find><![CDATA[	break;
 
-		break;
+	case 'prune_forum':
 ]]></find>
-		<action type="after-add"><![CDATA[	case 'pointdecay':
+		<action type="replace-with"><![CDATA[	break;
+
+	case 'pointdecay':
 	
 		if ($config['bbdkp_decaycron'] == 1 && (time() - $config['bbdkp_crontime'] * 3600 <= $config['bbdkp_lastcron']))
 		{
@@ -342,7 +342,10 @@ if(@defined("EMED_BBDKP"))
 		$acp_dkp_raid = new acp_dkp_raid;
 		$acp_dkp_raid->sync_decay($config['bbdkp_decay'], 'cron');
 		set_config('bbdkp_lastcron', time(), true);
-		break;]]></action>
+		break;
+		
+	case 'prune_forum':
+]]></action>
 		</edit>
 		</open>	
 		
