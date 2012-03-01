@@ -37,7 +37,10 @@ if (empty($lang) || !is_array($lang))
 // You do not need this where single placeholders are used, e.g. 'Message %d' is fine
 // equally where a string contains only two placeholders which are used to wrap text
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
-
+//
+// Some characters you may want to copy&paste:
+// ‚Äô ¬ª ‚Äú ‚Äù ‚Ä¶
+//
 // DKP
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP ist momentan nicht verfügbar.',
@@ -63,7 +66,7 @@ $lang = array_merge($lang, array(
 
 // Form Validation Errors
 'FV_FORMVALIDATION' => 'Form validation Error',
-'FV_ALPHA_ATTENDEES' => 'Char\' Namen in EverQuest beinhalten nur alphabetische Zeichen.',
+'FV_ALPHA_ATTENDEES' => 'Charakternamen in EverQuest beinhalten nur alphabetische Zeichen.',
 'FV_DIFFERENCE_TRANSFER' => 'Ein Historientransfer geht nur zwischen zwei unterschiedlichen Leuten.',
 'FV_NUMBER' => 'Muss eine Zahl sein.',
 'FV_NUMBER_ADJUSTMENT' => 'Das Korrekturwert-Feld muss eine Zahl sein.',
@@ -101,6 +104,7 @@ $lang = array_merge($lang, array(
 'FV_REQUIRED_STATUS' => 'Das Statusfeld ist notwendig.',
 'FV_REQUIRED_MESSAGE' => 'Das Nachrichtenfeld ist notwendig.',
 'FV_REQUIRED_NAME'  => 'Das Namensfeld ist notwendig.',
+'FV_REQUIRED_ID' => 'Das ID field ist notwendig.',
 'FV_REQUIRED_STATUS'  => 'Das Statusfeld ist notwendig.',
 'FV_REQUIRED_HEADLINE' => 'Das Kopfzeilenfeld ist notwendig.',
 'FV_DKPSTATUSYN' => 'DKP Pool muss entweder Y (Aktiv) oder N (Inaktiv) sein.',
@@ -116,9 +120,9 @@ $lang = array_merge($lang, array(
 'SHOWRECBLOCK' => 'Diesen Block auf dem Portal anzeigen.',
 'RECFORUM' => 'Rekrutierungs Forum :',
 'RECSTATUS' => 'Rekrutierungs Stand :',
-'TANK' => 'Schutz',
-'DPS' => 'Schaden',
-'HEAL' => 'Heilung',
+'TANK' 	=> 'Schutz',
+'DPS' 	=> 'Schaden',
+'HEAL' 	=> 'Heilung',
 'LOOTBLOCKSETTING' => 'Einstellungen für das Item block',
 'SHOWLOOTBLOCK' => 'Item Block Anzeigen:',
 'NUMBITEMS' => 'Anzahl der Items :',
@@ -240,6 +244,7 @@ $lang = array_merge($lang, array(
 'ACP_DKP' => 'bbDKP Einstellungsbereich',
 'ACP_ITEMSTATS' => 'Tooltip Einstellungen',
 'ACP_INDEXPAGE' => 'Portal Einstellungen',
+'POINT_SETTINGS' => 'Point Settings', 
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Adminpanel Index',
@@ -287,6 +292,7 @@ $lang = array_merge($lang, array(
 'EDIT_RAIDER_EXPLAIN' => 'Hier kannst du die Raider Kontos verwalten.',
 'GAME_CLASSRACEUPDATE_EXPLAIN' => 'Spiel nicht änderbar.',
 'SYNCDKP_EXPLAIN' => 'Leert die Benutzer DKP Tabelle, schreibt die Werte von den Quell-Raids neu, Raid Details, Gegenstände, Anpassungen Tabelle. Nutze dies nur wenn es notwendig ist.',
+'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Hier kannst du das Punktesystem verwalten.',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'Du hast keine Berechtigung Ereignisse zuzufügen.',
@@ -309,11 +315,11 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_LOGS_VIEW' => 'Du hast keine Berechtigung Protokolle zu sehen.',
 
 // Manage Members Menu (yes, MMM)
-'ADD_MEMBER' => 'füge Mitglied zu',
-'LIST_EDIT_DEL_MEMBER' => 'Mitglieder Auflisten, bearbeiten oder löschen',
-'EDIT_RANKS' => 'Gildenränge bearbeiten',
-'ADD_RANKS' => 'Gildenränge hinzufügen',
-'TRANSFER_HISTORY' => 'Mitglied verschieben',
+'ADD_MEMBER' 	=> 'füge Mitglied zu',
+'LIST_EDIT_DEL_MEMBER' 	=> 'Mitglieder Auflisten, bearbeiten oder löschen',
+'EDIT_RANKS' 	=> 'Gildenränge bearbeiten',
+'ADD_RANKS' 	=> 'Gildenränge hinzufügen',
+'TRANSFER_HISTORY' 	=> 'Mitglied verschieben',
 
 
 // Delete Confirmation Texts
@@ -367,6 +373,10 @@ $lang = array_merge($lang, array(
 'ACTION_RAID_DELETED' => 'Angriff erfolgreich gelöscht',
 'ACTION_RAID_UPDATED' => 'Angriff aktualisiert',
 'ACTION_RT_CONFIG_UPDATED' => 'Raidtracker Einstellungen aktualisiert',
+'ACTION_DECAYOFF' => 'Verfall wurde gelöscht.', 
+'ACTION_DECAYSYNC' => 'Verfall nachkalkuliert',
+'ACTION_ZSYNC' => 'Nullsummendkp wurde nachkalkuliert', 
+'ACTION_DKPSYNC' => 'DKP wurde nachkalkuliert',  
 
 
 // Verbose log entry lines
@@ -400,6 +410,10 @@ $lang = array_merge($lang, array(
 'VLOG_LOG_DELETED' => '%s hat das Protokoll %s gelöscht.',
 'VLOG_DEFAULT_DKP_CHANGED' => '%s hat den Standardpool geändert',
 'VLOG_RAID_ATTENDEE_DELETED' => '%s hat Teilnehmer %s gelöscht vom Raid %s',
+'VLOG_DECAYOFF' => '%s hat Punkteverfall abgestellt', 
+'VLOG_DECAYSYNC' => '%s hat Punkteverfall neu berechnet für %s Raids',
+'VLOG_ZSYNC' => '%s hat NullsummenDKP neu berechnet', 
+'VLOG_DKPSYNC' => '%s hat DKP neu berechnet',  
 
 // Before/After
 'ADJUSTMENT_AFTER' => 'Punkteanpassung danach',
@@ -509,6 +523,7 @@ $lang = array_merge($lang, array(
 'ADMIN_DELETE_MEMBERS_FAILED' => 'Fehler : das Mitglied %skönnte nicht gelöscht werden.',
 'ADMIN_DELETE_NEWS_SUCCESS' => 'Diese Nachricht wurde erfolgreich gelöscht.',
 'ADMIN_DELETE_RAID_SUCCESS' => 'Dieser Angriff und alle damit verbundenen Gegenstände wurden erfolgreich gelöscht. Etwaige DKP Punkte wurden damit auch geändert.',
+'ADMIN_DUPLICATE_RAID_SUCCESS' => 'Den %s Angriff auf %s wurde dupliziert.',
 'ADMIN_TRANSFER_HISTORY_SUCCESS' => 'Die gesamte Geschichte von Mitglied %s wurde verschoben nach Mitglied %s und das Mitglied %s wurde gelöscht.',
 'ADMIN_UPDATE_ADJ_SUCCESS' => 'Die Punkteanpassung %s för %.2f wurde aktualisiert.',
 'ADMIN_UPDATE_DKPSYS_SUCCESS' => 'Den Namen und Status des DKP Pools %s wurde geändert nach : %s, %s',
@@ -631,9 +646,9 @@ Anstrengungspunkte Spieler 2 : 342, EP/GP Verhältnis 17.1<br />
 Also würde die Beute an Spieler 2 gehen <br />', 
 'EPGP_ADVANTAGE' => '<strong>Vorteile</strong> : keine inflation, kein horten. ', 
 'EPGP_DISADVANTAGE' => '<strong>Nachteile</strong>: Schwer zu verwalten weil man EP Strategien und Ausrüstungspreise festsetzen muss. ', 
-
-
 'DECAY_EXPLAIN' => 'Gewinn und Verlustpunkte werden Entwertet. ',
+'DECAY_EXAMPLE'	=> 'Verfallvorbild',
+
 'FORMULA' => 'Formeln',
 'DECAY_N' => '<strong>Raid Dauer in Wochen</strong> = n',
 'DECAY_I' => '<strong>Raid Entwertungs Prozentsatz</strong> = i',
@@ -644,12 +659,29 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'DECAY_J' => '<strong>Item Wert</strong> = j',
 'DECAY_F' => '<strong>Item Entwertung</strong> f = j * l',
 
+'DECAYPCTRAIDS' => 'Raid Entwertungsprozentsatz(%)', 
+'DECAYPCTRAIDS_EXPLAIN' => 'Der Raidwert wird abgeschrieben mit diesen prozentsatz', 
+'DECAYPCTITEM' => 'Item/Gearpoint Entwertungssatz (%)',  
+'DECAYPCTITEM_EXPLAIN' => 'Der Itemcost wird entwertet mit diesen prozentsatz.', 
+'DECAYPCTADJ_EXPLAIN' => 'Die Ajustierungen werden entwertet mit diesen prozentsatz.',
+'DECAYFREQ' => 'Entwertungsfrekwenz.',  
+'DECAYFREQ_EXPLAIN' => 'Entwertung ist geplant jede n Tage, Wochen oder Monate nach jeden Raid. ', 
+'DECAYFREQTYPE' => 'Entwertungsfrequenztyp',  
+'DECAYFREQTYPE_EXPLAIN' => 'Wähle Tagen, Wochen oder Monate',
+'DECAY_SCHEDULE' => 'Vorprogrammierte Entwertung',
+'DECAY_SCHEDULE_EXPLAIN' => 'betätigt ein cronjob der eine automatische Entwertung startet jede 23 Stunden insofern das Forum besucht wird.',
+'DECAYCRON' => 'betätigt durch cronjob', 
+'NO_DECAY_ADJ'	=> 'Ajustierungen entwertbar ?',
+
+'PR' => 'PR Prioritätswert', 
 'EP_DEFINITION' => '<strong>EP</strong> = Gewinn = Raid Bonus + Zeitbonus + Nullsumme + Ajustierung ',
 'DECAY_EP' => '<strong>EP Nach Entwertung</strong> = EP - EP * d',
-
+'MEP'  => 'Minimum EP',
+'MEP_EXPLAIN'  => 'MEP = minimum EP Wert. Effektiver PR bleibt 0 bis EP_min erreicht ist.',
+'MEP_DEFINITION'  => '<strong>EP_eff</strong> = max( 0, (EP - MEP))',
 'GP_DEFINITION' => '<strong>GP</strong> = Basis GP + Realer GP',
 'RGP_DEFINITION' => '<strong>RGP</strong> = Reale Gearpoints = Itempunkte',
-'BGP' => 'Basis gp',
+'BGP' => 'Basis GP',
 'BGP_EXPLAIN' => 'BGP = Basis Gearpoint Wert, wird nicht entwertet.',
 'DECAY_GP' => '<strong>GP nach Entwertung</strong> = BGP + RGP - RGP * l',
 
@@ -783,7 +815,8 @@ Also würde die Beute an Spieler 2 gehen <br />',
 // Misc
 'ADJUSTMENT_VALUE' => 'Punkte Anpassung',
 'ADJUSTMENT_VALUE_NOTE' => 'darf negativ sein',
-'ARMORY_URL'  => 'Armory Link', 
+'ADJUSTMENT_NET' => 'Ajustierungsbetrag',
+'ARMORY_URL'  => 'Armory Link',
 'ATTENDEEADD_EXPLAIN' => 'Wähle ein zusätchlicher Raidteilnehmer',
 'CHANGE_STATUS' => 'Ändere Status',
 'CLASS_NAME' => 'Klassenname',
@@ -796,14 +829,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'CONTACT' => 'Kontakt',
 'CREATE' => 'Schaffe',
 'DATE_FORMAT' => ' Datumsformat in Anzeigeliste',
-'DECAYPCTRAIDS' => 'Raid Entwertung (%)',
-'DECAYPCTRAIDS_EXPLAIN' => 'Die Raid gewinnpunkte werden mit diesen Prozentsatz abgeschrieben pro Intervall. ',
-'DECAYPCTITEM' => 'Item/Gearpoint Entwertungsprozentsatz (%)',
-'DECAYPCTITEM_EXPLAIN' => 'Die Itempunkte werden mit diesen Prozentsatz abgeschrieben pro Intervall. ',
-'DECAYFREQ' => 'Entwertungsfrekwenz',
-'DECAYFREQ_EXPLAIN' => 'Entwertung passiert jedes intervall.',
-'DECAYFREQTYPE' => 'Entwertungs frekwenztyp',
-'DECAYFREQTYPE_EXPLAIN' => 'Wähle Tagen, Wochen oder Monate',
+
 'DEFAULT_DKP_POOL' => 'Standard DKP Pool',
 'DKPPERTIME' => '%s DKP pro %s Minuten.',
 'DONE' => 'Fertig',
@@ -885,6 +911,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'FREQ0' => 'Tage',
 'FREQ1' => 'Wochen',
 'FREQ2' => 'Monate',
+'NOLOOT'	=> 'Keine Beute', 
 
 // Admin Index
 'BBDKP_STARTED' => 'bbDKP wurde gestarted',
@@ -911,9 +938,9 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'MAX_NUMBER_CHARS'  => 'Maximale #characters',
 
 //js alerts
-'ALERT_AJAX' => 'Es ist ein Problem aufgetreten beim Versuch XMLHTTP Ajax zu nutzen.',
-'ALERT_OLDBROWSER' => 'Ihr Browser ist veraltet.',
-'JQUERY_MISSING' => 'jquery.js fehlt. Diese Datei muss sich im ordner adm/style/dkp befinden damit der Farbenzirkel angezeigt wird.',
+'ALERT_AJAX' 		=> 'Es ist ein Problem aufgetreten beim Versuch XMLHTTP Ajax zu nutzen.',
+'ALERT_OLDBROWSER'  => 'Ihr Browser ist veraltet.',
+'JQUERY_MISSING' 	=> 'jquery.js fehlt. Diese Datei muss sich im ordner adm/style/dkp befinden damit der Farbenzirkel angezeigt wird.',
 
 //Boss progress
 'GENERAL' => 'Allgemeine Einstellungen',
@@ -1005,6 +1032,8 @@ Bildname (ohne dateityp), und ob das Gebiet Komplett besiegt worden ist. <br />G
 'WARHAMMER_ZONEEURL'  => 'NOT AVAILABLE',
 'WOW_BASEURL' => 'http://de.wowhead.com/npc=%s',
 'WOW_ZONEEURL' => 'http://de.wowhead.com/zone=%s',
+'SWTOR_BASEURL' => 'http://de.torhead.com/npc=%s',
+'SWTOR_ZONEEURL' => 'http://de.torhead.com/zone=%s',
 
 ));
 
