@@ -279,8 +279,8 @@ $lang = array_merge($lang, array(
 'ACP_ADDCLASS_EXPLAIN' => 'Here you can add/edit the game Classes.  Please mind that for WoW the race id has to match those of the Blizzard Armory.', 
 'ACP_ADDFACTIONS_EXPLAIN' => 'Here you can add/edit the Factions', 
 'ACP_ADDRACE_EXPLAIN' => 'Here you can add/edit the Races.', 
-'RACEID_EXPLAIN' =>'Note. the ID is unique. for Wow, it should match the raceId XML Armory tag. ',
-'RACE_EXPLAIN' =>'Race name',
+'RACEID_EXPLAIN' =>	'Note. the ID is unique. for Wow, it should match the raceId XML Armory tag. ',
+'RACE_EXPLAIN' =>	'Race name',
 'CLASS_ID_EXPLAIN' => 'Note. the ID is unique. for Wow, it should match the ClassId XML Armory tag.',
 'CLASS_ARMORY_EXPLAIN' => 'Max gearlevel for this class',
 'CLASS_IMAGE_EXPLAIN' => 'color png imagename, without extension. file should exist in /images/class_images',
@@ -497,9 +497,9 @@ $lang = array_merge($lang, array(
 'ERROR_RANKMEMBERS'	=> 'Cannot delete this rank. There are still members with this rank. ', 
 'ERROR_NOSELECT'	=> 'Please select a From and a To-member.',
 'ERROR_NOADJUSTMENTS'	=> 'There are no Adjustments in the database.',
-'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',
 
 // Submission Success Messages
+'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',
 'ADMIN_ADD_ADJ_SUCCESS' => 'A %s adjustment of %.2f has been added to the database for your guild.',
 'ADMIN_ADD_DKPSYS_SUCCESS' => 'A new dkp system %s has been added to the database for your guild.',
 'ADMIN_ADD_EVENT_SUCCESS' => 'A value preset of %s for a raid on %s has been added to the database for your guild.',
@@ -645,11 +645,10 @@ effortpoints player 2 : 342, EP/GP ratio 17.1<br />
 So the loot would go to player 2 <br />', 
 'EPGP_ADVANTAGE' => '<strong>Advantage</strong> : no inflation, no hoarding. ', 
 'EPGP_DISADVANTAGE' => '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ', 
-
 'DECAY_EXPLAIN'	=> 'Earned points and Item cost get depreciated over time. Can be used with standard dkp, time dkp, epgp. ', 
 'DECAY_EXAMPLE'	=> 'Decay example',
  
-'FORMULA' => 'Formula’s',
+'FORMULA' 	=> 'Formula’s',
 'DECAY_N'	=> '<strong>Age of Raid in weeks</strong> = n',
 'DECAY_I'	=> '<strong>Raid Decay percentage</strong> = i', 
 'DECAY_D'	=> '<strong>Decay factor</strong> d = 1 - (1-i)^n ',
@@ -658,6 +657,7 @@ So the loot would go to player 2 <br />',
 'DECAY_L'	=> '<strong>Item Decay percentage</strong> = l',
 'DECAY_J'	=> '<strong>Item Value</strong> = j',
 'DECAY_F'	=> '<strong>Item Decay</strong> f = j * l',
+
 'DECAYPCTRAIDS' => 'Raid decay rate (%)', 
 'DECAYPCTRAIDS_EXPLAIN' => 'The Raid earned value depreciates by this percentage per set period.', 
 'DECAYPCTITEM' => 'Item/Gearpoint decay rate (%)',  
@@ -678,7 +678,6 @@ So the loot would go to player 2 <br />',
 'MEP'  => 'Minimum ep',
 'MEP_EXPLAIN'  => 'MEP = minimum EP threshold Value. Effective PR is 0 until EP_min is reached.',
 'MEP_DEFINITION'  => '<strong>EP_eff</strong> = max( 0, (EP - MEP))',
-
 'GP_DEFINITION'  => '<strong>GP</strong> = Base GP + Real GP',
 'RGP_DEFINITION'  => '<strong>RGP</strong> = Real Gear points = Item Cost',
 'BGP'  => 'Base gp',
@@ -731,6 +730,7 @@ So the loot would go to player 2 <br />',
 'ARM_CLASS' => 'Class',
 'SHOWONROSTER'	=> 'Show on Roster',  
 
+	 // titles
 'ADD_ITEM_RAIDID_NOTE' => 'Only raids less than two weeks old are shown / %sshow all</a>',
 'ADD_ITEM_RAIDID_SHOWALL_NOTE' => 'All raids are shown / %s show some</a>',
 'ADD_RAID_VALUE_NOTE' => 'for a one-time bonus; preset value for the event selected is used if left blank',
@@ -783,6 +783,7 @@ So the loot would go to player 2 <br />',
 'ADD_RAID' => 'Add Raid',
 'ADD_RACE' => 'Add Race', 
 'ADD_CLASS' => 'Add Class', 
+
 'ADD_ATTENDEE' => 'Add Attendee', 
 'DECAY_RAID' => 'Decay Raid',
 'DELETE_ADJUSTMENT' => 'Delete Adjustment',
@@ -829,7 +830,7 @@ So the loot would go to player 2 <br />',
 'CONTACT' => 'Contact',
 'CREATE' => 'Create',
 'DATE_FORMAT' => 'Date Format in lists',
- 
+
 'DEFAULT_DKP_POOL' => 'Default DKP Pool', 
 'DKPPERTIME' => '%s DKP per %s minutes.', 
 'DONE' => 'Done',
@@ -882,6 +883,7 @@ So the loot would go to player 2 <br />',
 'OVERRIDE' => 'Override', 
 'RACE_IMAGE' => 'Race imagename small',
 'RACE_IMAGE_EXPLAIN' => 'race imagename, without extension. png file should exist in /images/race_images',
+
 'RESULTS' => '%d Results (%s)',
 'SEARCH' => 'Search',
 'SEARCH_MEMBERS' => 'Search Members', 
@@ -899,6 +901,7 @@ So the loot would go to player 2 <br />',
 'X_MEMBERS_S' => '%d member',
 'X_MEMBERS_P' => '%d members',
 'SELECT_1OFX_MEMBERS' => 'Select 1 of %d members...',
+
 'ZEROSUMBANKER' => 'Zerosum banker account',
 'ZEROSUMBANKER_EXPLAIN' => 'Select the player to which any Excess earnings over loot distribution will be posted in order to keep the balance to zero.',
 'ZEROSUM_DISTRIBUTEOTHER' => 'Bonus offset', 
@@ -1033,7 +1036,8 @@ Imagename (filename without extension), if the zone is completed and the complet
 'WARHAMMER_ZONEEURL' => 'NOT AVAILABLE',
 'WOW_BASEURL' => 'http://www.wowhead.com/?npc=%s',
 'WOW_ZONEEURL' => 'http://www.wowhead.com/?zone=%s',
-
+'SWTOR_BASEURL' => 'http://www.torhead.com/npc=%s',
+'SWTOR_ZONEEURL' => 'http://www.torhead.com/zone=%s',
 ));
 
 ?>
