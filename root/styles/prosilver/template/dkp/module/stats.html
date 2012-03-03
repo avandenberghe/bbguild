@@ -44,6 +44,13 @@
 <div class="inner">
 <span class="corners-inner-top"><span></span></span>
 
+<!-- IF DKPPAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{DKPPAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
+
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>	  
@@ -402,7 +409,7 @@ jQuery(function () {
 
 <!-- IF .attendance_row -->
 
-<div class="forabg" style="width:45%; float:left;">
+<div class="forabg" style="width:55%; float:left;">
 <div class="inner">
 <span class="corners-inner-top"><span></span></span>
 
@@ -468,12 +475,12 @@ jQuery(function () {
 </div>
 </div>
 
-<div class="panel" style="width:50%; float:left;">
+<div class="panel" style="width:40%; float:left;">
 <div class="inner">
 <span class="corners-top"><span></span></span>
 
 <div id="legend3" style="width:30%; float:left"></div>
-<div id="attendanceplot" style="width:50%; float;left"  class="graph"></div>
+<div id="attendanceplot" style="width:45%; float;left"  class="graph"></div>
 
 <script type="text/javascript">
 //<![CDATA[
