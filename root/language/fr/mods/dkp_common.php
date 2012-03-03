@@ -410,6 +410,11 @@ Même si elle n’est pas requise pour l’usage gratuit, elle aide à soutenir 
 	'MAX_CHARS_EXCEEDED' => 'Vous ne pouvez avoir que %s charactères liés à votre compte forum', 
 	'LINEAGE2'       => 'Lineage 2', 
 	'WELCOME'		=> 'Bienvenu', 
+	'FOOTERBBDKP'	=> 'Powered by bbDKP', 
+	'ADJDECAY'		=> 'Amortissement ajustements', 
+	'NETADJUSTMENT' => 'Ajustement Net', 
+	'TIMEVALUE'		=> 'Points par temps', 
+	
 ));
 
 ?>
