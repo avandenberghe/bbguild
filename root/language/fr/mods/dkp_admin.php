@@ -653,10 +653,12 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'DECAY_J'	=> '<strong>Valeur de butin</strong> = j',
 	'DECAY_F'	=> '<strong>amortissement de butin</strong> f = j * l',
 
-	'DECAYPCTRAIDS'	=> 'pct d‘amortissment (%)',
-	'DECAYPCTRAIDS_EXPLAIN'	=> 'Les points gagnés déprecient par ce pourcentage par periode.',
-	'DECAYPCTITEM'	=> 'taux d‘amortissment de points de butin (%)',
-	'DECAYPCTITEM_EXPLAIN'	=> 'Le côut de butin sera amorti par ce pct par intervalle.',
+	'DECAYPCTRAIDS'	=> 'taux d‘amortissment pour raids (%)',
+	'DECAYPCTRAIDS_EXPLAIN'	=> 'Les raids seront amortis par ce % par periode.',
+	'DECAYPCTITEM'	=> 'taux d‘amortissment pour points de butin (%)',
+	'DECAYPCTADJ' 	=>  'taux d‘amortissment poir ajustements (%)',
+	'DECAYPCTADJ_EXPLAIN' => 'Les ajustements seront amortis par ce % par intervalle.',
+	'DECAYPCTITEM_EXPLAIN'	=> 'Le côut de butin sera amorti par ce % par intervalle.',
 	'DECAYFREQ'	=> 'Frequence d‘amortissement',
 	'DECAYFREQ_EXPLAIN'	=> 'Amortissement va passer n fois',
 	'DECAYFREQTYPE'	=> 'type de frequence',
@@ -745,6 +747,8 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'EDIT_RACE_TITLE'	=> 'Editer une Race',
 	'ADD_RACE_TITLE'	=> 'Paramètres de la Race',
 	'ADD_CLASS_TITLE'	=> 'Paramètres de la classe',
+	'ADD_RAID_TITLE'	=> 'Ajouter un Raid',	
+	'EDIT_RAIDER_TITLE' => 'Editer un Raider', 
 	
 	// Page Foot Counts
 	'LISTMEMBERS_FOOTCOUNT'	=> '... trouvé %d membres',

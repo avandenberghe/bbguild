@@ -59,7 +59,7 @@ $lang = array_merge($lang, array(
 	'ERROR_INVALID_NEWS_PROVIDED'	=> 'Ungültige Nachricht.',
 	'BOSSPROGRESS'	=> 'Instanz-Fortschritt',
 	'WELCOME'	=> 'Willkommen', 
-
+	'FOOTERBBDKP'	=> 'Powered by bbDKP', 
 // Main Menu
 	'MENU'	=> 'Menü',
 	'MENU_ADMIN_PANEL'	=> 'Administration',
@@ -387,6 +387,7 @@ $lang = array_merge($lang, array(
 	'LIST_ITEMS'	=> 'Gegenstände zeigen',
 	'LIST_MEMBERS'	=> 'Mitglieder zeigen',
 	'LIST_RAIDS'	=> 'Raids zeigen',
+	'ATTENDANCE'	=> 'Teilnahme', 
 	'MALE'	=> 'männlich',
 	'MAY_BE_NEGATIVE_NOTE'	=> 'darf negativ sein',
 	'NOT_AVAILABLE'	=> 'Nicht vorhanden',
