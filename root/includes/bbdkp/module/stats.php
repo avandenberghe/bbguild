@@ -97,13 +97,22 @@ function dkppulldown()
 		}
 		elseif (isset ( $_GET [URI_DKPSYS] ))
 		{
-			$query_by_pool = true;
-			$dkp_id = request_var(URI_DKPSYS, 0); 
+			$pulldownval = request_var(URI_DKPSYS,  $user->lang['ALL']);
+			if(is_numeric($pulldownval))
+			{
+				$query_by_pool = true;
+				$dkp_id = request_var(URI_DKPSYS, 0);
+			}
+			else
+			{
+				$query_by_pool = false;
+				$dkp_id = $defaultpool;
+			}
 		}
 	}
 	else 
 	{
-		$query_by_pool = true;
+		$query_by_pool = false;
 		$dkp_id = $defaultpool; 
 	}
 	
@@ -113,7 +122,7 @@ function dkppulldown()
 		{
 			$template->assign_block_vars ( 'pool_row', array (
 				'VALUE' => $value, 
-				'SELECTED' => ($value == $dkp_id && $value != '--------') ? ' selected="selected"' : '',
+				'SELECTED' => (!$query_by_pool && $value != '--------') ? ' selected="selected"' : '',
 				'DISABLED' => ($value == '--------' ) ? ' disabled="disabled"' : '',  
 				'OPTION' => $value, 
 			));
@@ -122,7 +131,7 @@ function dkppulldown()
 		{
 			$template->assign_block_vars ( 'pool_row', array (
 				'VALUE' => $value['id'], 
-				'SELECTED' => ($dkp_id == $value['id']) ? ' selected="selected"' : '', 
+				'SELECTED' => ($dkp_id == $value['id'] && $query_by_pool) ? ' selected="selected"' : '', 
 				'OPTION' => $value['text'], 
 			));
 			
@@ -724,11 +733,6 @@ function attendance_statistics($dkp_id, $time)
 	$attendance=0;
 	while ( $row = $db->sql_fetchrow($result) )
 	{
-		
-		$attlife__g[] = $row['attendancelife'];
-		$att90__g[] = $row['attendance90'];
-		$att60__g[] = $row['attendance60'];
-		$att30__g[] = $row['attendance30'];
 		
 	    $template->assign_block_vars('attendance_row', array(
 	        'NAME' 					=> $row['member_name'],
