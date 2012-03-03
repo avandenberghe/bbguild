@@ -40,7 +40,7 @@ function bbDKP_Admin()
         trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
     }
     
-    global $config, $user; 
+    global $phpbb_root_path, $phpEx, $config, $user; 
     
     $boardtime = array(); 
     $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
@@ -49,7 +49,8 @@ function bbDKP_Admin()
     
     if (isset($config['bbdkp_plugin_bbtips_version']))
     {	
-    	if($config['bbdkp_plugin_bbtips_version'] >= '0.3.1')
+    	//check if config value and parser file exist.
+    	if($config['bbdkp_plugin_bbtips_version'] >= '0.3.1' && file_exists($phpbb_root_path. 'includes/bbdkp/bbtips/parse.' . $phpEx))
     	{
     		$this->bbtips = true;
     	}
