@@ -26,15 +26,15 @@
 </div>
 </form> 
 
-<!-- IF RAID_PAGINATION -->  
-<ul class="linklist">
- <li class="rightside pagination">&bull; <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{RAID_PAGINATION}</span></li>
-</ul>
-<!-- ENDIF -->
 
 <div class="forumbg forumbg-table">
 <div class="inner">
 <span class="corners-top"><span></span></span>
+<!-- IF RAID_PAGINATION -->  
+<ul class="linklist">
+ <li class="rightside pagination"><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> <span>{RAID_PAGINATION}</span></li>
+</ul>
+<!-- ENDIF -->
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>
@@ -87,12 +87,12 @@
   <!-- END raids_row -->
 
 </table>
+<!-- IF RAID_PAGINATION -->  
+<ul class="linklist">
+ <li class="rightside pagination"><a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a><span>{RAID_PAGINATION}</span></li>
+</ul>
+<!-- ENDIF -->
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
 <hr />
-<!-- IF RAID_PAGINATION -->  
-<ul class="linklist">
- <li class="rightside pagination">&bull;<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; <span>{RAID_PAGINATION}</span></li>
-</ul>
-<!-- ENDIF -->
