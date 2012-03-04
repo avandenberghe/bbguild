@@ -7,6 +7,9 @@
 </div>
 <div style="text-align: center; float: left; width:90%">
 <h4>{GUILDNAME} </h4>
+
+
+<!-- IF S_RSTYLE == 1 -->
     <a href="{U_LIST_MEMBERS0}">{L_NAME}</a> - 
 	<!-- IF S_RSTYLE == 0 -->
     	<a href="{U_LIST_MEMBERS1}">{L_CLASS}</a> -
@@ -16,6 +19,8 @@
    	<!-- IF S_SHOWACH == 1 -->
 - <a href="{U_LIST_MEMBERS4}">{L_ACHIEV}</a> 
 	<!-- ENDIF -->
+	<!-- ENDIF -->
+
 	<!-- IF S_MULTIGAME -->
 	<form method="post" action="{F_ROSTER}">
 	<div>
@@ -43,7 +48,12 @@ list layout
 <div class="forumbg forumbg-table">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-
+<!-- IF ROSTERPAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{ROSTERPAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
 <table class="table1" width="95%" border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>
@@ -53,9 +63,12 @@ list layout
  	<th style="text-align: left;width: 15%"><a href="{O_RACE}">{L_RACE}</a></th>
  	<th style="text-align: left;width: 15%"><a href="{O_CLASS}">{L_CLASS}</a></th>
  	<th style="text-align: left;width: 15%"><a href="{O_PHPBB}">{L_MEMBER}</a></th>
+ 	<!-- IF S_SHOWACH == 1 -->
+ 	<th style="text-align: left;width: 15%"><a href="{O_ACHI}">{L_ACHIEV}</a></th>
+ 	<!-- ENDIF -->
  	<!-- IF S_GAME == wow || S_GAME == aion -->  
  	<th style="text-align: left;">{L_ARMORY_URL}</th>
- 	 <!-- ENDIF --> 
+ 	<!-- ENDIF --> 
 </tr>
 </thead>
 
@@ -72,6 +85,9 @@ list layout
     	<span style="white-space: nowrap; color:{members_row.COLORCODE}"><strong>{members_row.CLASS}</strong></span>
     	</td>
     	<td style="text-align:left;">{members_row.PHPBBUID}</td>
+    	<!-- IF S_SHOWACH == 1 -->
+ 		<td style="text-align: left;width: 15%">{members_row.ACHIEVPTS}</td>
+ 		<!-- ENDIF -->
 	    <!-- IF S_GAME == wow || S_GAME == aion -->
 	    <td style="text-align:left;"><a href="{members_row.ARMORY}"><img src="adm/images/glyphs/view.gif"  alt="View" /></a></td>
 	    <!-- ENDIF -->
@@ -84,6 +100,12 @@ list layout
 </tr>
 </tfoot>
 </table>
+<!-- IF ROSTERPAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{ROSTERPAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>

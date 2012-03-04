@@ -79,7 +79,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 	$sql = $db->sql_build_query('SELECT', $sql_array);
     $result = $db->sql_query($sql);
     $raid_count=0;
-    while ( $row = $db->sql_fetchrow($result) )
+    while ($row = $db->sql_fetchrow($result))
 	{
 		$raid_count++;
 	}
