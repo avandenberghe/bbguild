@@ -406,22 +406,26 @@ class acp_dkp extends bbDKP_Admin
                 	{
                 		trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);	
                 	}
+
+                	//general
                     set_config('bbdkp_guildtag', utf8_normalize_nfc(request_var('guildtag', '', true)), true);
                     set_config('bbdkp_default_realm', utf8_normalize_nfc(request_var('realm', '', true)), true);
                     set_config('bbdkp_default_region', utf8_normalize_nfc(request_var('region', '', true)), true);
                     set_config('bbdkp_dkp_name', utf8_normalize_nfc(request_var('dkp_name', '', true)), true);
-
 					$day = request_var('bbdkp_start_dd', 0);
                 	$month = request_var('bbdkp_start_mm', 0);
                 	$year = request_var('bbdkp_start_yy', 0);
                 	$bbdkp_start = mktime(0, 0, 0, $month, $day, $year);
                     set_config('bbdkp_eqdkp_start', $bbdkp_start, true);
                     set_config('bbdkp_user_nlimit', request_var('bbdkp_user_nlimit', 0), true);
-                    set_config('bbdkp_roster_layout', request_var('rosterlayout', 0), true);
-                    set_config('bbdkp_show_achiev', request_var('showachievement', 0), true);
                     set_config('bbdkp_date_format', request_var('date_format', ''), true);
                     set_config('bbdkp_lang', request_var('language', 'en'), true);
                     set_config('bbdkp_maxchars', request_var('maxchars', 2), true);
+                    
+                    //roster
+                    set_config('bbdkp_minrosterlvl', request_var('bbdkp_minrosterlvl', 0), true);
+                    set_config('bbdkp_roster_layout', request_var('rosterlayout', 0), true);
+                    set_config('bbdkp_show_achiev', request_var('showachievement', 0), true);
                     
                     //standings
                     set_config('bbdkp_hide_inactive', (isset($_POST['hide_inactive'])) ? request_var('hide_inactive', '') : '0', true);
@@ -558,6 +562,8 @@ class acp_dkp extends bbDKP_Admin
                 	'USER_RLIMIT' 		=> $config['bbdkp_user_rlimit'] , 
 					'MAXCHARS'			=> $config['bbdkp_maxchars'] ,
                 	'USER_LLIMIT' 		=> $config['bbdkp_user_llimit'] ,
+        			'MINLEVEL'			=> $config['bbdkp_minrosterlvl'] ,
+                
                 ));
                 
                 $this->page_title = 'ACP_DKP_CONFIG';
