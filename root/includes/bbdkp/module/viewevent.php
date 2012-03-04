@@ -21,10 +21,11 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 {
     $eventid = request_var(URI_EVENT, 0); 
     $dkpid = request_var(URI_DKPSYS, 0); 
+    $selfurl = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewevent&amp;' . URI_EVENT . '='.  $eventid . '&amp;' . URI_DKPSYS . '='. $dkpid ) ;
     
     /***
      *  
-     *  get event info 
+     *  get event info
      *  
      **/  
     $sql = 'SELECT event_dkpid, event_id, event_name, event_value, event_imagename   
@@ -77,7 +78,15 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 	
 	$sql = $db->sql_build_query('SELECT', $sql_array);
     $result = $db->sql_query($sql);
-    
+    $raid_count=0;
+    while ( $row = $db->sql_fetchrow($result) )
+	{
+		$raid_count++;
+	}
+	$startr = request_var ( 'startr', 0 );
+	
+	// get requested window
+	$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_rlimit'], $startr );
     while ( $row = $db->sql_fetchrow($result) )
     {
         $raids[$row['raid_id']] = array(
@@ -90,7 +99,6 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 	        'zs_value' 		=> $row['zs_value'],
 	        'raiddecay' 	=> $row['raiddecay'],
 	        'total' 		=> $row['total'],
-        
         );
         
         $raid_ids[] = $row['raid_id'];
@@ -103,19 +111,15 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
             WHERE ' . $db->sql_in_set('raid_id', $raid_ids) . ' 
             GROUP BY raid_id';
     $result = $db->sql_query($sql);
-    
+
     while ( $row = $db->sql_fetchrow($result) )
     {
         $raids[$row['raid_id']]['numattendees'] = $row['count'];
     }
     $db->sql_freeresult($result);
     
-    
-    /***
-     *  
-     *  calculate the average event attendance and droprate 
-     *  
-     **/  
+ 
+    //calculate the average event attendance and droprate 
     // Find the item drops for each raid
     $sql = 'SELECT raid_id, count(item_id) AS count 
             FROM ' . RAID_ITEMS_TABLE . ' 
@@ -160,8 +164,10 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
     // Prevent div by 0
     $average_attendees = ( $total_raid_count > 0 ) ? round($total_attendees_count / $total_raid_count, 2) : 0;
     $average_drops     = ( $total_drop_count > 0 ) ? round($total_drop_count / $total_raid_count,2 )      : 0;
-    
-    /***
+
+    $raidpagination = generate_pagination2($selfurl . '&amp;o1=' . $current_order ['uri'] ['current'] , $raid_count, $config ['bbdkp_user_rlimit'], $startr, true, 'startr'  );
+	
+	/***
      *  
      *  list the dropped items 
      *  
@@ -232,10 +238,10 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 		$item_total += $row['item_total'];
     }
        
-    $selfurl = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewevent&amp;' . URI_EVENT . '='.  $eventid . '&amp;' . URI_DKPSYS . '='. $dkpid ) ;
     $itempagination = generate_pagination($selfurl, $total_drop_count, $config['bbdkp_user_ilimit'], $start, true);
     
     $template->assign_vars(array(
+		'RAIDPAGINATION' 		=> $raidpagination ,    
         'O_DATE'  => $current_order['uri'][0],
         'O_NOTE'  => $current_order['uri'][1],
         'O_VALUE' => $current_order['uri'][2],
