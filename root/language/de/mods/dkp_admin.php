@@ -731,6 +731,8 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'ARM_STAND' => 'Standard', 
 'ARM_CLASS' => 'Klasse',
 'SHOWONROSTER' => 'Auf der Anzeigetafel anschauen',
+'MINLEVELROSTER' => 'Minimum niveau', 
+'MINLEVELROSTER_EXPLAIN' => 'If Mitgliedsniveau < diesen Wert dann keine Anzeige', 
 
 'ADD_ITEM_RAIDID_NOTE' => 'Nur Raids innerhalb zwei wochen werden angedeutet / %s Alle andeuten</a>',
 'ADD_ITEM_RAIDID_SHOWALL_NOTE' => 'Alle Raids / %s Nur die letzten</a>',
