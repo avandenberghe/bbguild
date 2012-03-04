@@ -112,7 +112,8 @@ function dkppulldown()
 	}
 	else 
 	{
-		$query_by_pool = false;
+		// if no parameters passed to this page then show default pool
+		$query_by_pool = true;
 		$dkp_id = $defaultpool; 
 	}
 	
