@@ -35,7 +35,7 @@ $games = array(
     'FFXI'       => $user->lang['FFXI'],
 	'rift'       => $user->lang['RIFT'],
 	'swtor'      => $user->lang['SWTOR'],
-	'lineage2'      => $user->lang['LINEAGE2']
+	'lineage2'   => $user->lang['LINEAGE2']
 );
 
 $installed_games = array();
@@ -344,9 +344,11 @@ function get_listingresult($game_id, $mode, &$current_order, $classid=0)
      return $result;
 }
 
-
-/*
+/**
  * gets class array
+ *
+ * @param unknown_type $game_id
+ * @return unknown
  */
 function get_classes($game_id)
 {

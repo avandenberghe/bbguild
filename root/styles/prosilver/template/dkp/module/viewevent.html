@@ -11,7 +11,7 @@
 <span class="corners-bottom"><span></span></span>
 </div>
 
-<h3 style ="color:#dfc065;">{RECORDED_RAID_HISTORY}</h3>
+<h2>{RECORDED_RAID_HISTORY}</h2>
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
@@ -31,6 +31,12 @@
 <div class="inner">
 <span class="corners-top"><span></span></span>
 
+<!-- IF RAIDPAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{RAIDPAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0"> 
 <thead>
 <tr>
@@ -83,16 +89,26 @@
 </tbody>
 
 </table>
-        
+<!-- IF RAIDPAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{RAIDPAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->      
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
   
-<h3 style ="color:#dfc065;">{L_RECORDED_DROP_HISTORY}</h3>
+<h2>{L_RECORDED_DROP_HISTORY}</h2>
 <div class="forumbg forumbg-table">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-
+<!-- IF ITEM_PAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{ITEM_PAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
 <table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0"> 
 <thead>
 <tr valign="middle">
@@ -134,13 +150,12 @@
 </tbody>
 
 </table>
-<span class="corners-bottom"><span></span></span>
-</div>
-</div>
-
 <!-- IF ITEM_PAGINATION -->  
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{ITEM_PAGINATION}<br /><br /></span>
 </div>
 <!-- ENDIF -->
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
