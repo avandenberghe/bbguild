@@ -724,6 +724,8 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'ARM_STAND'	=> 'Standard',
 	'ARM_CLASS'	=> 'Classe',
 	'SHOWONROSTER'	=> 'Montrer sur le Tableau des membres',
+	'MINLEVELROSTER' => 'Niveau minimum', 
+	'MINLEVELROSTER_EXPLAIN' => 'Si member < cette valeur alors pas listé', 
 
 	 // titles
 	'ADD_ITEM_RAIDID_NOTE'	=> 'Montrer que les raids à moins de deux semaines/ %s Voir tous</a>',

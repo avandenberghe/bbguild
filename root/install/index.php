@@ -928,6 +928,7 @@ $versions = array(
 	        array('bbdkp_lastcron', 0, true),
 	        array('bbdkp_crontime', 23, true),
 	        array('bbdkp_adjdecaypct', 5, true),
+	        array('bbdkp_minrosterlvl', 50, true),
 	        
 			),   
 		),		

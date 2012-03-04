@@ -368,9 +368,11 @@ function get_listingresult($game_id, $mode, &$current_order, $classid=0, $start=
            				 AND r.guild_id = m.member_guild_id  
            				 AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
            				 AND m.member_status = 1
+           				 AND m.member_level > ".  intval($config['bbdkp_minrosterlvl']) . " 
            				 AND m.member_rank_id != 99
            				 AND m.game_id = '" . $db->sql_escape($game_id) . "'
-           				 AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "' AND e1.attribute = 'race' and e1.game_id = e.game_id";
+           				 AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "' 
+           				 AND e1.attribute = 'race' and e1.game_id = e.game_id";
 	
 	$sort_order = array(
 	    0 => array('m.member_name', 'm.member_name desc'),
