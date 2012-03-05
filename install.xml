@@ -308,12 +308,14 @@ if(@defined("EMED_BBDKP"))
 				<comment lang="en"><![CDATA[zufügen Cronjobs in die footer Funktion]]></comment>
 				<find><![CDATA[			$cron_type = 'tidy_sessions';
 		}]]></find>
-				<action type="after-add"><![CDATA[			// bbDKP cron job
-		else if ($time_now - $config['bbdkp_crontime']*3600 > $config['bbdkp_lastcron'])
+				<action type="after-add"><![CDATA[		// bbDKP cron job
+		else if (array_key_exists ('bbdkp_crontime', $config))
 		{
-			$cron_type = 'pointdecay';
-		}
-]]></action>
+			if ($time_now - $config['bbdkp_crontime']*3600 > $config['bbdkp_lastcron'])
+			{
+				$cron_type = 'pointdecay';
+			}
+		}]]></action>
 			</edit>
 		</open>
 		
