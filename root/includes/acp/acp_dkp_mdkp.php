@@ -761,14 +761,61 @@ class acp_dkp_mdkp extends bbDKP_Admin
 			
 			case 'mm_transfer':
 				$submit	 = (isset($_POST['transfer'])) ? true : false;
+				$submitdkp	= (isset($_POST['dkpsys_id']) || isset($_GET['dkpsys_id']) ) ? true : false;
+
 				
-				if ($submit)
+				/***  DKPSYS drop-down query ***/
+				$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
+		                     FROM ' . DKPSYS_TABLE . '  group by dkpsys_name ';
+				$result = $db->sql_query ( $sql );
+				$dkpsys_id = 0;
+
+				if ($submitdkp)
+				{
+					$dkpsys_id = request_var ( 'dkpsys_id', 0 );
+				} 
+				else 
+				{
+					while ( $row = $db->sql_fetchrow ( $result ) ) 
+					{
+						if($row['dkpsys_default'] == "Y"  )
+						{
+							$dkpsys_id = $row['dkpsys_id'];
+						}
+					}
+					
+					if ($dkpsys_id == 0)
+					{
+						$result = $db->sql_query_limit ( $sql, 1 );
+						while ( $row = $db->sql_fetchrow ( $result ) ) 
+						{
+							$dkpsys_id = $row['dkpsys_id'];
+						}
+					}
+				}
+				
+				$result = $db->sql_query ( $sql );
+				while ( $row = $db->sql_fetchrow ( $result ) ) 
+				{
+					$template->assign_block_vars ( 'dkpsys_row', 
+						array (
+						'VALUE' => $row['dkpsys_id'], 
+						'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
+						'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
+					$dkpsys_name[$row['dkpsys_id']] = $row['dkpsys_name']; 
+				}
+				$db->sql_freeresult( $result );
+				/***  end drop-down query ***/
+				
+				
+				if ($submit && $submitdkp==false)
 				{
 	        		if (confirm_box(true))
 					{
 						//fetch hidden variables
 						$member_from = request_var('hidden_idfrom', 0);
 						$member_to = request_var('hidden_idto', 0);
+						$dkpsys_id = request_var('hidden_dkpid', 0);
 						
 						//declare transfer array
 						$transfer = array();
@@ -779,7 +826,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 							sum(adj_decay) as adj_decay,
 							adjustment_dkpid FROM ' . 
 							ADJUSTMENTS_TABLE . ' 
-							where member_id = ' .  $member_from . ' 
+							where member_id = ' .  $member_from . '
+							AND adjustment_dkpid = ' . $dkpsys_id . ' 
 							GROUP BY adjustment_dkpid';
 						$result = $db->sql_query($sql, 0);
 						while ( $row = $db->sql_fetchrow($result) )
@@ -796,6 +844,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 							e.event_dkpid FROM ' . 
 							RAID_ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
 		        			where e.event_id=r.event_id
+		        			and e.event_dkpid = ' . $dkpsys_id . '
 		        			and r.raid_id=i.raid_id 
 		        			and i.member_id = ' .  $member_from . ' 
 							GROUP BY e.event_dkpid';
@@ -821,20 +870,21 @@ class acp_dkp_mdkp extends bbDKP_Admin
 							FROM ' . RAID_DETAIL_TABLE . ' ra,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
 		        			WHERE e.event_id = r.event_id
 		        			AND r.raid_id = ra.raid_id 
+		        			and e.event_dkpid = ' . $dkpsys_id . '
 		        			AND ra.member_id = ' .  $member_from . ' 
 		        			AND r.raid_id not in( select raid_id from ' . RAID_DETAIL_TABLE . ' where member_id = '. $member_to . ')
 							GROUP BY e.event_dkpid';
 						$result = $db->sql_query($sql, 0);
 						while ( $row = $db->sql_fetchrow($result) )
 						{
-							$transfer[$row['event_dkpid']]['raidvalue'] = (float) $row['raidvalue'] ;
-							$transfer[$row['event_dkpid']]['time_bonus'] = (float) $row['time_bonus'] ;
-							$transfer[$row['event_dkpid']]['zerosum_bonus'] = (float) $row['zerosum_bonus'] ;
-							$transfer[$row['event_dkpid']]['raid_decay'] = (float) $row['raid_decay'] ;
+							$transfer[$dkpsys_id]['raidvalue'] = (float) $row['raidvalue'] ;
+							$transfer[$dkpsys_id]['time_bonus'] = (float) $row['time_bonus'] ;
+							$transfer[$dkpsys_id]['zerosum_bonus'] = (float) $row['zerosum_bonus'] ;
+							$transfer[$dkpsys_id]['raid_decay'] = (float) $row['raid_decay'] ;
 							
-							$transfer[$row['event_dkpid']]['maxraiddate'] = (int) $row['maxraiddate'] ;
-							$transfer[$row['event_dkpid']]['minraiddate'] = (int) $row['minraiddate'] ;
-							$transfer[$row['event_dkpid']]['raidcount'] = (int) $row['raidcount'] ;
+							$transfer[$dkpsys_id]['maxraiddate'] = (int) $row['maxraiddate'] ;
+							$transfer[$dkpsys_id]['minraiddate'] = (int) $row['minraiddate'] ;
+							$transfer[$dkpsys_id]['raidcount'] = (int) $row['raidcount'] ;
 						}
 						$db->sql_freeresult($result);
 
@@ -947,6 +997,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 		       							WHERE member_id = '. (int) $member_from  . ' and member_dkpid = ' . $dkpid;
 		       					$db->sql_query($sql);
 						}
+						// @todo $dkpsys_id
 						/* 5) transfer old attendee name to new member */
 						// if $member_from participated in a raid the $member_to did too, delete the entry. (unique key) 
 						$sql = 'SELECT raid_id FROM ' . RAID_DETAIL_TABLE . ' WHERE member_id = '. $member_to; 
@@ -999,7 +1050,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					}
 					else 
 					{
-						// check if user trues to transfer from one to the same 
+						// check if user tries to transfer from one to the same 
 						$member_from = request_var('transfer_from', 0);
 						$member_to = request_var('transfer_to', 0);
 						if ($member_from == $member_to)
@@ -1029,6 +1080,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 								'hidden_name_to'	=> $member_to_name,
 								'hidden_idfrom'		=> $member_from,
 								'hidden_idto'		=> $member_to, 
+								'hidden_dkpid'		=> $dkpsys_id
 								)
 							);
 						confirm_box(false, sprintf($user->lang['CONFIRM_TRANSFER_MEMBERDKP'], $member_from_name, $member_to_name ), $s_hidden_fields);
@@ -1045,7 +1097,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				$member_to = request_var('transfer_to', 0);
 						 
 				$sql = 'SELECT m.member_id, l.member_name FROM ' . MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m 
-						where m.member_id = l.member_id GROUP BY m.member_id ORDER BY l.member_name';
+						WHERE m.member_id = l.member_id 
+						AND m.member_dkpid = ' . $dkpsys_id . '
+						GROUP BY m.member_id ORDER BY l.member_name';
 				$resultfrom = $db->sql_query($sql);
 				$maara = 0;
 				while ( $row = $db->sql_fetchrow($resultfrom) )
@@ -1059,9 +1113,14 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					
 				}
 				$db->sql_freeresult($resultfrom);
+				
 				// to member table 
 				$sql = 'SELECT m.member_id, l.member_name FROM ' . MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_RANKS_TABLE . ' k   
-						where l.member_rank_id = k.rank_id and k.rank_hide != 1 and m.member_id = l.member_id GROUP BY m.member_id  ORDER BY l.member_name';
+						WHERE l.member_rank_id = k.rank_id 
+						AND k.rank_hide != 1 
+						AND m.member_id = l.member_id 
+						AND m.member_dkpid = ' . $dkpsys_id . '
+						GROUP BY m.member_id  ORDER BY l.member_name';
 				$resultto = $db->sql_query($sql);
 				$teller_to = 0;
 				while ( $row = $db->sql_fetchrow($resultto) )
@@ -1087,6 +1146,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'L_EXPLAIN'					=> $user->lang['TRANSFER_MEMBER_HISTORY_DESCRIPTION'],
 					'S_SHOW'					=> $show,  
 					'F_TRANSFER' 				=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_transfer"),
+					'F_DKP' 					=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_transfer&ampi=setdkp"),
 					'L_SELECT_1_OF_X_MEMBERS'   => sprintf($user->lang['SELECT_1OFX_MEMBERS'], $maara),
 					'L_SELECT_1_OF_Y_MEMBERS'   => sprintf($user->lang['SELECT_1OFX_MEMBERS'], $teller_to),
 					)
