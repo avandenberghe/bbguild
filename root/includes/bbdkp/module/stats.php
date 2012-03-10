@@ -546,10 +546,10 @@ class statistics
 		/* get overall raidcount for 4 intervals */
 		global $db, $template, $phpEx, $phpbb_root_path, $config, $user;
 		
-		$rcall = $this->get_overallraidcount($this->query_by_pool, 0, $time, $this->dkp_id);
-		$rc90 = $this->get_overallraidcount($this->query_by_pool, (int) $config['bbdkp_list_p3'], $time, $this->dkp_id);
-		$rc60 = $this->get_overallraidcount($this->query_by_pool, (int) $config['bbdkp_list_p2'], $time, $this->dkp_id);
-		$rc30 = $this->get_overallraidcount($this->query_by_pool, (int) $config['bbdkp_list_p1'], $time, $this->dkp_id);
+		$rcall = $this->get_overallraidcount(0, $time);
+		$rc90 = $this->get_overallraidcount((int) $config['bbdkp_list_p3'], $time);
+		$rc60 = $this->get_overallraidcount((int) $config['bbdkp_list_p2'], $time);
+		$rc30 = $this->get_overallraidcount((int) $config['bbdkp_list_p1'], $time);
 		
 		$att_sort_order = array (
 				0 => array ("sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) desc", "sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) asc" ),
