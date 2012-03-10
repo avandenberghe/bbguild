@@ -943,16 +943,16 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						{
 							$raid_id[] = $row['raid_id'];
 						}
-						$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . '  
-								WHERE member_id='. $member_from . '
-								AND ' . $db->sql_in_set('raid_id', $raid_id, false, true);  
-								
-						$db->sql_query($sql);
-						
-						// 6) now update the remaining raids where old member participated (the last 'not in' condition is not necessary)
-						$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET member_id ='. $member_to . ' 
-								WHERE member_id='. $member_from . '
-								AND ' . $db->sql_in_set('raid_id', $raid_id, true, true);
+
+						if(count($raid_id)> 0)
+						{
+
+							// 6) now update the remaining raids where old member participated
+							$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET member_id ='. $member_to . ' 
+									WHERE member_id='. $member_from . '
+									AND ' . $db->sql_in_set('raid_id', $raid_id, true, true);
+							$db->sql_query($sql);
+						}
 						
 						/* 7) transfer items to new owner */
 						$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET member_id ='. $member_to . ' WHERE member_id='. $member_from;
