@@ -773,8 +773,11 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						//declare transfer array
 						$transfer = array();
 
-						/* 1) collect and transfer adjustments to new owner */
-						$sql = 'SELECT sum(adjustment_value) as adjustments, adjustment_dkpid FROM ' . 
+						/* 1) collect adjustments to transfer */
+						$sql = 'SELECT 
+							sum(adjustment_value) as adjustments, 
+							sum(adj_decay) as adj_decay,
+							adjustment_dkpid FROM ' . 
 							ADJUSTMENTS_TABLE . ' 
 							where member_id = ' .  $member_from . ' 
 							GROUP BY adjustment_dkpid';
@@ -782,11 +785,15 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						while ( $row = $db->sql_fetchrow($result) )
 						{
 							$transfer[$row['adjustment_dkpid']]['adjustments'] = (float) $row['adjustments'] ;
+							$transfer[$row['adjustment_dkpid']]['adj_decay'] = (float) $row['adj_decay'] ;
 						}
 						$db->sql_freeresult($result);
 						
-						/* 2) calculate $member_from item cost by dkp pool to transfer to new dkp account */
-						$sql = 'SELECT sum(i.item_value) as itemvalue, e.event_dkpid FROM ' . 
+						/* 2) collect item cost, decay and zspoints to transfer  */
+						$sql = 'SELECT sum(i.item_value) as itemvalue,
+							sum(i.item_decay) as item_decay,
+							sum(i.item_zs) as item_zs, 
+							e.event_dkpid FROM ' . 
 							RAID_ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
 		        			where e.event_id=r.event_id
 		        			and r.raid_id=i.raid_id 
@@ -796,6 +803,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						while ( $row = $db->sql_fetchrow($result) )
 						{
 							$transfer[$row['event_dkpid']]['itemcost'] = (float) $row['itemvalue'] ;
+							$transfer[$row['event_dkpid']]['item_decay'] = (float) $row['item_decay'] ;
+							$transfer[$row['event_dkpid']]['item_zs'] = (float) $row['item_zs'] ;
 						}
 						$db->sql_freeresult($result);
 					
@@ -847,10 +856,10 @@ class acp_dkp_mdkp extends bbDKP_Admin
 		                        {
 		                        	// get old data
 		                        	$sql = 'SELECT member_raid_value, member_time_bonus, member_zerosum_bonus, member_earned, member_raid_decay, 
-		                        	member_spent, member_item_decay, member_adjustment, member_firstraid, member_lastraid, member_raidcount  
+		                        	member_spent, member_item_decay, member_adjustment, member_firstraid, member_lastraid, member_raidcount , adj_decay 
 		                        	FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . (int) $member_to  . ' and member_dkpid = ' . $dkpid;
 		    						$result = $db->sql_query($sql,0);
-		    						while ( $row = $db->sql_fetchrow($result) )
+		    						while ( $row = $db->sql_fetchrow($result))
 		    						{
 		    							$oldmember_raid_value = (float) $row['member_raid_value'];
 		    							$oldmember_time_bonus  = (float) $row['member_time_bonus'];
@@ -858,6 +867,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 		    							$oldmember_earned = (float) $row['member_earned'];
 		    							$oldmember_raid_decay = (float) $row['member_raid_decay'];
 										$oldmember_adjustment = (float) $row['member_adjustment'];
+										$oldmember_adj_decay  = (float) $row['adj_decay'];
 					 					$oldmember_spent	  = (float) $row['member_spent'];
 					 					$oldmember_item_decay = (float) $row['member_item_decay'];
 			                    		$oldmember_firstraid  = (int) $row['member_firstraid'];
@@ -892,9 +902,10 @@ class acp_dkp_mdkp extends bbDKP_Admin
 		                        		'member_zerosum_bonus'	=> $oldmember_zerosum_bonus + (isset( $data['member_zerosum_bonus']) ? $data['member_zerosum_bonus'] : 0.00) ,
 	    			                    'member_earned'	    	=> $oldmember_earned + (isset( $data['member_raid_value']   ) ? $data['member_raid_value'] : 0.00) + (isset( $data['member_time_bonus']) ? $data['member_time_bonus'] : 0.00) +  (isset( $data['member_zerosum_bonus']) ? $data['member_zerosum_bonus'] : 0.00) ,  
 	    								'member_raid_decay'		=> $oldmember_raid_decay + (isset( $data['raid_decay']) ? $data['raid_decay'] : 0.00) ,
-	    			                    'member_adjustment'		=> $oldmember_adjustment + (isset( $data['adjustments']) ? $data['adjustments'] : 0.00), 
-	    					 			'member_spent'		    => $oldmember_spent + (isset( $data['itemcost']) ? $data['itemcost'] : 0.00), 
-										'member_item_decay'	    => $oldmember_item_decay + (isset( $data['member_item_decay']) ? $data['member_item_decay'] : 0.00),
+	    			                    'member_adjustment'		=> $oldmember_adjustment + (isset( $data['adjustments']) ? $data['adjustments'] : 0.00),
+		                        		'adj_decay'				=> $oldmember_adj_decay + (isset( $data['adj_decay']) ? $data['adj_decay'] : 0.00), 
+	    					 			'member_spent'		    => $oldmember_spent + (isset( $data['itemcost']) ? $data['itemcost'] : 0.00) + (isset( $data['item_zs']) ? $data['item_zs'] : 0.00), 
+										'member_item_decay'	    => $oldmember_item_decay + (isset( $data['item_decay']) ? $data['item_decay'] : 0.00),
 	    			                    'member_firstraid'	    => $newfirstraid, 
 	    			                    'member_lastraid'	    => $newlastraid, 
 	    			                    'member_raidcount'		=> $oldmember_raidcount + (isset( $data['raidcount']) ? $data['raidcount'] : 0))  
@@ -918,8 +929,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 	    			                    'member_earned'	    	=> (isset( $data['member_raid_value']   ) ? $data['member_raid_value'] : 0.00) + (isset( $data['member_time_bonus']) ? $data['member_time_bonus'] : 0.00) +  (isset( $data['member_zerosum_bonus']) ? $data['member_zerosum_bonus'] : 0.00) ,  
 	    								'member_raid_decay'		=> (isset( $data['raid_decay']) ? $data['raid_decay'] : 0.00) ,
 	    			                    'member_adjustment'		=> (isset( $data['adjustments']) ? $data['adjustments'] : 0.00), 
-	    					 			'member_spent'		    => (isset( $data['itemcost']) ? $data['itemcost'] : 0.00), 
-										'member_item_decay'	    => (isset( $data['member_item_decay']) ? $data['member_item_decay'] : 0.00),
+		                        		'adj_decay'				=> (isset( $data['adj_decay']) ? $data['adj_decay'] : 0.00), 
+	    					 			'member_spent'		    => (isset( $data['itemcost']) ? $data['itemcost'] : 0.00) + (isset( $data['item_zs']) ? $data['item_zs'] : 0.00),  
+										'member_item_decay'	    => (isset( $data['item_decay']) ? $data['item_decay'] : 0.00),
 
 		                        		'member_status'	    	=> 1,
 	    			                    'member_firstraid'	    => (isset( $data['minraiddate']) ? $data['minraiddate'] : 0), 
