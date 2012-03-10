@@ -493,6 +493,7 @@ $lang = array_merge($lang, array(
 	'ERROR_RANKMEMBERS'	=> 'Erreur : Suppression Grade impossible, il existe toujours de membres ayant ce grade.',
 	'ERROR_NOSELECT'	=> 'Veuillez sélectionner un membre source et un membre destination.',
 	'ERROR_NOADJUSTMENTS'	=> 'Il n‘y a pas d‘ajustements dans la base de données.',
+	'ERROR_POOLNOPOINTS'  => 'Pas de points trouvés en ', 
 
 	// Submission Success Messages
 	'ADMIN_RAID_ATTENDEE_DELETED_FAILED'	=> 'Participant %s ne pouvat pas être supprimé du raid %s.',

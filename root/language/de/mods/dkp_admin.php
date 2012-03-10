@@ -499,7 +499,8 @@ $lang = array_merge($lang, array(
 'ERROR_NOSELECT' => 'Bitte wähle ein VON und ein ZU Mitgliedsname',
 'ERROR_NOADJUSTMENTS' => 'Keine Anpassungen gefunden.',
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Teilnehmer %s konnte nicht vom Raid %s herausgenommen worden.',
-
+'ERROR_POOLNOPOINTS'  => 'Keine Punkte gefunden in ', 
+	
 // Submission Success Messages
 'ADMIN_ADD_ADJ_SUCCESS' => 'Die %s Punkteanpassung von %.2f wurde erfolgreich hinzugefügt.',
 'ADMIN_ADD_DKPSYS_SUCCESS' => 'Den neuen DKP Pool %s wurde erfolgreich hinzugefügt.',

@@ -497,6 +497,7 @@ $lang = array_merge($lang, array(
 'ERROR_RANKMEMBERS'	=> 'Cannot delete this rank. There are still members with this rank. ', 
 'ERROR_NOSELECT'	=> 'Please select a From and a To-member.',
 'ERROR_NOADJUSTMENTS'	=> 'There are no Adjustments in the database.',
+'ERROR_POOLNOPOINTS'  => 'No points found in ', 
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',
