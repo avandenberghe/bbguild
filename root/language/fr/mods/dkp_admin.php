@@ -374,6 +374,7 @@ $lang = array_merge($lang, array(
 	'ACTION_DECAYSYNC' => 'Amortissement recalculé',
 	'ACTION_ZSYNC' => 'Sommezero recalculé', 
 	'ACTION_DKPSYNC' => 'DKP recalculé',  	
+	'ACTION_DEFAULT_DKP_CHANGED' => 'Pool par défault mis à jour', 
 	
 	// Verbose log entry lines	
 	'NEW_ACTIONS'	=> 'Nouvelles actions d’administrateur',
@@ -410,7 +411,11 @@ $lang = array_merge($lang, array(
 	'VLOG_DECAYSYNC' => '%s a recalculé les amortissements pour %s raids',
 	'VLOG_ZSYNC' => '%s a recalculé la somme zero', 
 	'VLOG_DKPSYNC' => '%s a recalculé DKP',  
-	
+	'VLOG_DEFAULT_DKP_CHANGED' => '%s a changé le pool DKP par défaut à %s',
+	'VLOG_GUILD_ADDED' => '%s a ajouté la guilde %s',
+	'VLOG_MEMBERDKP_UPDATED' => '%s a changé les points de  %s : recu: %.2f -> %.2f, depenses: %.2f -> %.2f',
+	'VLOG_MEMBERDKP_DELETED' => '%s a supprimé le compte DKP de %s !', 
+
 	// Before/After	
 	'ADJUSTMENT_AFTER'	=> 'Ajustment Après',
 	'ADJUSTMENT_BEFORE'	=> 'Ajustment avant',

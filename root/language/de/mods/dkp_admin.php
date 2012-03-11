@@ -377,7 +377,7 @@ $lang = array_merge($lang, array(
 'ACTION_DECAYSYNC' => 'Verfall nachkalkuliert',
 'ACTION_ZSYNC' => 'Nullsummendkp wurde nachkalkuliert', 
 'ACTION_DKPSYNC' => 'DKP wurde nachkalkuliert',  
-
+'ACTION_DEFAULT_DKP_CHANGED' => 'Standard DKP wurde geändert', 
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Neueste Vorgänge von bbDKP-Administratoren',
@@ -414,6 +414,10 @@ $lang = array_merge($lang, array(
 'VLOG_DECAYSYNC' => '%s hat Punkteverfall neu berechnet für %s Raids',
 'VLOG_ZSYNC' => '%s hat NullsummenDKP neu berechnet', 
 'VLOG_DKPSYNC' => '%s hat DKP neu berechnet',  
+'VLOG_DEFAULT_DKP_CHANGED' => '%s hat Standard Pool geändert auf %s',
+'VLOG_GUILD_ADDED' => '%s hat Gilde %s zugefügt',
+'VLOG_MEMBERDKP_UPDATED' => '%s hat die DKP punkte von %s geändert : gerntet: %.2f -> %.2f, ausgegeben: %.2f -> %.2f',
+'VLOG_MEMBERDKP_DELETED' => '%s hat das DKP Konto von %s gelöscht !', 
 
 // Before/After
 'ADJUSTMENT_AFTER' => 'Punkteanpassung danach',

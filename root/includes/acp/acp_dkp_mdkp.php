@@ -387,10 +387,13 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					while ( $row = $db->sql_fetchrow($result) )
 					{
    						$this->old_member = array(
-   							'member_name'		=> $row['member_name'], 
-							'member_id'			=> $row['member_id'],
-							'member_earned'     => $row['member_earned'],
-							'member_spent'      => $row['member_spent'],
+   							'member_name'			=> $row['member_name'], 
+							'member_id'				=> $row['member_id'],
+							'member_earned'     	=> $row['member_earned'],
+							'member_raid_value'     => $row['member_raid_value'],
+   							'member_time_bonus'     => $row['member_time_bonus'],
+   							'member_zerosum_bonus'  => $row['member_zerosum_bonus'],
+   							'member_spent'      	=> $row['member_spent'],
 							);
 					}
 					$db->sql_freeresult($result);
@@ -414,13 +417,14 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					$db->sql_transaction('commit'); 
 								
 					$log_action = array(
-						'header'              => 'ACTION_MEMBERDKP_UPDATED',
+						'header'              => 'L_ACTION_MEMBERDKP_UPDATED',
+						'L_USER' 				=>  $user->data['user_id'],
+						'L_USERCOLOUR' 			=>  $user->data['user_colour'],							
 						'L_NAME'     		  => $this->old_member['member_name'],
 						'L_EARNED_BEFORE'     => $this->old_member['member_earned'],
 						'L_SPENT_BEFORE'      => $this->old_member['member_spent'],
-						'L_EARNED_AFTER'      => request_var('member_earned',0.00),
-						'L_SPENT_AFTER'       => request_var('member_spent', 0.00),
-						'L_UPDATED_BY'        => $user->data['username']);
+						'L_EARNED_AFTER'      => request_var('earned',0.00),
+						'L_SPENT_AFTER'       => request_var('spent', 0.00));
 						
 					$this->log_insert(array(
 						'log_type'   => $log_action['header'],

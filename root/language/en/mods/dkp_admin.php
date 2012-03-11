@@ -377,6 +377,7 @@ $lang = array_merge($lang, array(
 'ACTION_DECAYSYNC' => 'Decay recalculated',
 'ACTION_ZSYNC' => 'Zerosum recalculated', 
 'ACTION_DKPSYNC' => 'DKP recalculated',  
+'ACTION_DEFAULT_DKP_CHANGED' => 'Default DKP changed', 
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Newest Admin Actions',
@@ -413,6 +414,10 @@ $lang = array_merge($lang, array(
 'VLOG_DECAYSYNC' => '%s has recalculated point Decay for %s raids',
 'VLOG_ZSYNC' => '%s has recalculated zerosum points ', 
 'VLOG_DKPSYNC' => '%s has recalculated DKP',  
+'VLOG_DEFAULT_DKP_CHANGED' => '%s changed Default DKP to %s',
+'VLOG_GUILD_ADDED' => '%s added guild %s',
+'VLOG_MEMBERDKP_UPDATED' => '%s updated the dkp points of %s : earned: %.2f -> %.2f, spent: %.2f -> %.2f',
+'VLOG_MEMBERDKP_DELETED' => '%s deleted the dkp points of %s !', 
 
 // Before/After
 'ADJUSTMENT_AFTER' => 'Adjustment After',
