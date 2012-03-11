@@ -15,6 +15,7 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
+
 $query_by_pool = '';
 $query_by_armor = '';
 $query_by_class = '';
@@ -69,7 +70,7 @@ foreach($games as $gameid => $gamename)
 
 $show_all = ((isset ( $_GET ['show'] )) && (request_var ( 'show', '' ) == 'all')) ? true : false;
 
-$memberarray = get_standings($dkpsys_id, $installed_games, $startd);
+$memberarray = get_standings($dkpsys_id, $installed_games, $startd, $show_all);
 
 // Obtain a list of columns for sorting the array
 if (count ($memberarray))
@@ -358,6 +359,7 @@ for($i = 1; $i <= 20; $i ++)
 
 }
 // calculate pagination
+$sortorder = request_var ( URI_ORDER, 0 );
 $dkppagination = generate_pagination2($u_listmembers . '&amp;o=' . $sortorder , 
 $allmember_count , $config ['bbdkp_user_llimit'], $startd, true, 'startdkp'  );
 
@@ -721,7 +723,7 @@ function armor()
  * @param int $startd
  * @return array $memberarray
  */
-function get_standings($dkpsys_id, $installed_games, $startd)
+function get_standings($dkpsys_id, $installed_games, $startd, $show_all)
 {
 	
 	global $config, $user, $db, $template, $query_by_pool, $phpbb_root_path;

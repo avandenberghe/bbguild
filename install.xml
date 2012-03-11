@@ -308,12 +308,14 @@ if(@defined("EMED_BBDKP"))
 				<comment lang="en"><![CDATA[zufügen Cronjobs in die footer Funktion]]></comment>
 				<find><![CDATA[			$cron_type = 'tidy_sessions';
 		}]]></find>
-				<action type="after-add"><![CDATA[			// bbDKP cron job
-		else if ($time_now - $config['bbdkp_crontime']*3600 > $config['bbdkp_lastcron'])
+				<action type="after-add"><![CDATA[		// bbDKP cron job
+		else if (array_key_exists ('bbdkp_crontime', $config))
 		{
-			$cron_type = 'pointdecay';
-		}
-]]></action>
+			if ($time_now - $config['bbdkp_crontime']*3600 > $config['bbdkp_lastcron'])
+			{
+				$cron_type = 'pointdecay';
+			}
+		}]]></action>
 			</edit>
 		</open>
 		
@@ -349,6 +351,101 @@ if(@defined("EMED_BBDKP"))
 		</edit>
 		</open>	
 		
+		<open src="viewtopic.php">
+			<edit>
+				<find><![CDATA['S_VIEWTOPIC'			=> true,]]></find>
+				<action type="after-add"><![CDATA[	// BBDKP
+	'S_BBDKP_TOPIC'       => true,
+	// BBDKP END]]></action>
+			</edit>
+
+			<edit>
+			<find><![CDATA[			'SELECT'	=> 'u.*, z.friend, z.foe, p.*',]]></find>
+				<action type="replace-with"><![CDATA[	'SELECT'	=> 'u.*, z.friend, z.foe, p.*, 
+		bm.member_id, bm.member_level, bm.member_name, bm.member_gender_id, bl.name as class_name, bc.colorcode, bc.imagename, bl1.name as race_name,  br.image_female_small, br.image_male_small ',  
+]]></action>
+			</edit>
+			
+			<edit>
+			<find><![CDATA[						'ON'	=> 'z.user_id = ' . $user->data['user_id'] . ' AND z.zebra_id = p.poster_id']]></find>
+				<action type="after-add"><![CDATA[		), 
+		array(
+			'FROM'	=> array(MEMBER_LIST_TABLE => 'bm'),
+			'ON'	=> 'p.poster_id = bm.phpbb_user_id'
+			), 
+		array(
+			'FROM'  => array(CLASS_TABLE => 'bc'),
+			'ON'    => "bc.class_id = bm.member_class_id AND bc.game_id = bm.game_id "
+			),
+			
+		array(
+			'FROM'  => array(RACE_TABLE => 'br'),
+			'ON'    => "br.race_id = bm.member_race_id AND br.game_id = bm.game_id "
+			),
+
+		array(
+			'FROM'  => array(BB_LANGUAGE => 'bl'),
+			'ON'    => "bl.attribute_id = bc.class_id AND bl.language= '" . $config['bbdkp_lang'] . "' AND bl.attribute = 'class'  and bl.game_id = bc.game_id "
+			), 
+						
+		array(
+			'FROM'  => array(BB_LANGUAGE => 'bl1'),
+			'ON'    => "bl1.attribute_id = br.race_id AND bl1.language= '" . $config['bbdkp_lang'] . "' AND bl1.attribute = 'race'  and bl1.game_id = br.game_id "
+]]></action>
+			</edit>
+
+			<edit>
+			<find><![CDATA['warnings'			=> 0,]]></find>
+				<action type="after-add"><![CDATA[				// BBDKP START
+				'bbmemberid'		=> ''
+				'bbmembername'		=> '',
+				'bbcolorcode'		=> '', 
+				'bbrace'			=> '',
+				'bbraceimg'			=> '',
+				'bbclass'			=> '',
+				'bbclassimg'		=> '',
+				'bblevel'			=> '', 
+				// BBDKP END]]></action>
+			</edit>
+			
+			<edit>
+				<find><![CDATA[			$id_cache[] = $poster_id;]]></find>
+				<action type="after-add"><![CDATA[				// BBDKP START
+			$bbdkp_race_image = (string) (($row['member_gender_id']== 0) ? $row['image_male_small'] : $row['image_female_small']);
+			$bbdkp_race_image = (strlen($bbdkp_race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $bbdkp_race_image . ".png" : '';
+			$bbdkp_class_image = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '';
+				// BBDKP END]]></action>
+			</edit>
+
+			<edit>
+				<find><![CDATA['posts'			=> $row['user_posts'],]]></find>
+				<action type="after-add"><![CDATA[				// BBDKP START
+				'bbmemberid'		=> $row['member_id'],
+				'bbmembername'		=> $row['member_name'],
+				'bbcolorcode'		=> $row['colorcode'], 
+				'bbrace'			=> $row['race_name'],
+				'bbraceimg'			=> $bbdkp_race_image,
+				'bbclass'			=> $row['class_name'],
+				'bbclassimg'		=> $bbdkp_class_image,
+				'bblevel'			=> $row['member_level'], 
+				// BBDKP END]]></action>
+			</edit>
+			
+			<edit>
+				<find><![CDATA['U_EMAIL'		=> $user_cache[$poster_id]['email'],]]></find>
+				<action type="after-add"><![CDATA[		// BBDKP START
+		'BBMEMBERNAME'	=> $user_cache[$poster_id]['bbmembername'],
+		'BBCOLORCODE'	=> $user_cache[$poster_id]['bbcolorcode'],
+		'BBRACE'		=> $user_cache[$poster_id]['bbrace'],
+		'BBRACEIMG'		=> $user_cache[$poster_id]['bbraceimg'],
+		'BBCLASS'		=> $user_cache[$poster_id]['bbclass'],
+		'BBCLASSIMG'	=> $user_cache[$poster_id]['bbclassimg'],
+		'BBLEVEL'		=> $user_cache[$poster_id]['bblevel'],
+		'U_VIEW_BBMEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=viewmember' . '&amp;' . URI_NAMEID . '=' .  $user_cache[$poster_id]['bbmemberid'] ), 
+				// BBDKP END]]></action>
+			</edit>
+		</open>
+		
 		<open src="adm/style/overall_header.html">
 		        <edit>
 		                <comment lang="en"><![CDATA[adding jquery scripts to admin header]]></comment>
@@ -365,6 +462,33 @@ if(@defined("EMED_BBDKP"))
 		                ]]></action>
 		        </edit>
 		</open>
+		
+		<open src="styles/prosilver/template/viewtopic_body.html">
+			<edit>
+				<find><![CDATA[			</dd>
+		<!-- ENDIF -->
+		<!-- ENDIF -->
+]]></find>
+				<action type="after-add"><![CDATA[		
+		<!-- BBDKP START -->
+		<dd>&nbsp;</dd>
+		<dd>&nbsp;</dd>
+		<!-- IF postrow.BBMEMBERNAME -->
+		<dd>
+		    <ul style="list-style: none;">
+				<li><a href="{postrow.U_VIEW_BBMEMBER}"><span style="white-space: nowrap; color:{postrow.BBCOLORCODE}">{postrow.BBMEMBERNAME}</span> </a> 
+				<strong><!-- IF postrow.BBLEVEL -->{postrow.BBLEVEL}<!-- ENDIF --></strong>
+				<!-- IF postrow.BBRACEIMG --><img src="{postrow.BBRACEIMG}" alt="{members_row.RACE}" /> <!-- ENDIF -->
+				<!-- IF postrow.BBCLASSIMG --><img src="{postrow.BBCLASSIMG}" alt="{members_row.CLASS}" /> <!-- ENDIF -->
+				</li>
+		     </ul>
+  	    </dd>
+		<!-- ENDIF -->
+		<!-- BBDKP END -->
+]]></action>
+			</edit>
+		</open>		
+		
 		<open src="styles/prosilver/template/overall_header.html">
 			<edit>
 				<comment lang="en"><![CDATA[install bbDKP header - All in one file]]></comment>

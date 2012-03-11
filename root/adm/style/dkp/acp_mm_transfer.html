@@ -4,6 +4,19 @@
 <h1>{L_TITLE}</h1>
 <p>{L_EXPLAIN}</p>
 
+<form method="post" action="{F_DKP}" id="mm_transferdkp">
+
+<fieldset>
+     <label for="dkpsys_id">{L_POOL}:</label>
+  	<select id="dkpsys_id" name="dkpsys_id" class="input"  onchange="javascript:form.submit();">	
+       <!-- BEGIN dkpsys_row -->
+       <option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
+       <!-- END dkpsys_row -->
+    </select>
+</fieldset>
+
+</form>
+
 <!-- IF S_SHOW -->
 <form method="post" action="{F_TRANSFER}" id="mm_transfer">
 
