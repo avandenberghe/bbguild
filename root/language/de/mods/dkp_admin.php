@@ -158,11 +158,11 @@ $lang = array_merge($lang, array(
 
 // installer
 'IMPORT_EQDKP132' => 'Lese EQDKP 1.3.2 Daten in bbDKP 1.1.2 ein',
-'IMPORT_EQDKP132_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP Tabellennamen sollen beginnen mit \'EQDKP\', nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
+'IMPORT_EQDKP132_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP Tabellennamen sollen beginnen mit ‘EQDKP‘, nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
 'IMPORT_EQDKP140' => 'Lese EQDKP 1.4.0 Daten in bbdkp 1.1.2 ein',
-'IMPORT_EQDKP140_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP Tabellennamen sollen beginnen mit \'EQDKP\', nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
+'IMPORT_EQDKP140_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP Tabellennamen sollen beginnen mit ‘EQDKP‘, nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
 'IMPORT_EQDKPPLUS' => 'Lese EQDKP-PLUS Daten in bbDKP 1.1.2 ein',
-'IMPORT_EQDKPPLUS_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP+ Tabellennamen sollen beginnen mit \'EQDKP\', nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
+'IMPORT_EQDKPPLUS_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP+ Tabellennamen sollen beginnen mit ‘EQDKP‘, nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
 'UMIL_INSERT_COMMON_ROW' => 'Lese gemeinschaftliche bbDKP Daten ein für Menü,Mitgliedsrang,Monstervorgang',
 'UMIL_REMOVE_COMMON_ROW' => 'Entferne gemeinschaftliche bbDKP Daten für Menü,Mitgliedsrang,Monstervorgang',
 'UMIL_INSERT_GAME_ROW' => 'Füge Spieldaten ein',
@@ -260,7 +260,7 @@ $lang = array_merge($lang, array(
 'ACP_EDITRAID_EXPLAIN'  => 'Hier kannst du deinen Raid bearbeiten.',
 'ACP_LISTRAIDS_EXPLAIN' => 'Hier ist die Raid Liste pro DKP Pool. Wenn du den Raidnamen anklickst, bringt dich in Verwaltungsmodus',
 'ACP_DKP_LOGS_EXPLAIN'  => 'Hier werden alle Aktionen von bbDKP aufgelistet. Du kannst nach Benutzername, Datum, IP oder Aktion.',
-'ACP_MM_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenranken und Präfix/Suffixe einstellen. (Zum hinzufügen, die letzte Zeile eintippen und bestätigen. Zum löschen, entferne den Namen und bestätige). Rang 99 (den \'out\' Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch den Arsenal-Plugin. ',
+'ACP_MM_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenranken und Präfix/Suffixe einstellen. (Zum hinzufügen, die letzte Zeile eintippen und bestätigen. Zum löschen, entferne den Namen und bestätige). Rang 99 (den ‘out‘ Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch den Arsenal-Plugin. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Gildenmitgliederliste. Hier kannst du Mitglieder verwalten oder löschen. ACHTUNG: löschung bedeutet dass die ganze Mitgliedraidgeschichte in allen DKP Pools vernichtet wird! ',
 'ACP_MM_LISTGUILDS_EXPLAIN' => 'Gildenliste. Bevor du Mitglieder einfügen kannst, musst du eine Gilde hinzufügen.',
 'ACP_MM_ADDGUILD_EXPLAIN' => 'Hier kannst du Gilden löschen oder hinzufügen.',
