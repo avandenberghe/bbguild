@@ -2004,11 +2004,13 @@ class acp_dkp_mm extends bbDKP_Admin
         $db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
            
         $log_action = array(
-                'header'       => 'L_ACTION_GUILD_ADDED',
-                'id'           => $this_guild_id,
-                'L_NAME'     => $guild_name,
-                'L_REALM'    => $realm_name,
-                'L_ADDED_BY' => $user->data['username']);
+                'header'     	=> 'L_ACTION_GUILD_ADDED',
+                'id'         	=> $this_guild_id,
+        		'L_USER' 		=> $user->data['user_id'],
+        		'L_USERCOLOUR' 	=> $user->data['user_colour'],        		
+                'L_NAME'     	=> $guild_name,
+                'L_REALM'    	=> $realm_name,
+                'L_ADDED_BY' 	=> $user->data['username']);
             
         $this->log_insert(array(
                 'log_type'   => $log_action['header'],

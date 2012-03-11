@@ -294,7 +294,34 @@ class acp_dkp extends bbDKP_Admin
                            		$profilelink= get_username_string('full', $row['log_userid'], $row['username'], $ucolour);
                            		$logline = sprintf($user->lang['VLOG_DKPSYNC'], $profilelink) . ' ' . $origin ;
                                 break;
-                                                                
+                           
+                           case 'L_ACTION_DEFAULT_DKP_CHANGED':
+                              	$ucolour = $this->getaction($row['log_action'],'L_USERCOLOUR');
+                               	$origin = $this->getaction($row['log_action'],'DKPSYSDEFAULT');
+                               	$profilelink= get_username_string('full', $row['log_userid'], $row['username'], $ucolour);
+                               	$logline = sprintf($user->lang['VLOG_DEFAULT_DKP_CHANGED'], $profilelink, $origin);
+                               	break;
+
+                            case 'L_ACTION_GUILD_ADDED':
+                         		$ucolour = $this->getaction($row['log_action'],'L_USERCOLOUR');
+                               	$guildname = $this->getaction($row['log_action'],'L_NAME');
+                               	$guildrealm = $this->getaction($row['log_action'],'L_REALM');
+                               	$profilelink= get_username_string('full', $row['log_userid'], $row['username'], $ucolour);
+                               	$logline = sprintf($user->lang['VLOG_GUILD_ADDED'], $profilelink, $guildrealm . '-' . $guildname);
+                               	break;
+                               	
+                            case 'L_ACTION_MEMBERDKP_UPDATED':
+                         		$ucolour = $this->getaction($row['log_action'],'L_USERCOLOUR');
+                               	$profilelink= get_username_string('full', $row['log_userid'], $row['username'], $ucolour);
+                               	$member = $this->getaction($row['log_action'],'L_NAME');
+                               	$earnedbefore = $this->getaction($row['log_action'],'L_EARNED_BEFORE');
+                               	$earnedafter = $this->getaction($row['log_action'],'L_EARNED_AFTER');
+                               	$spentbefore = $this->getaction($row['log_action'],'L_SPENT_BEFORE');
+                               	$spentafter = $this->getaction($row['log_action'],'L_SPENT_AFTER');
+                               	$logline = sprintf($user->lang['VLOG_MEMBERDKP_UPDATED'], $profilelink, $member, $earnedbefore, $earnedafter, $spentbefore, $spentafter );
+                               	break;
+                               	                               	
+                               		                               	
                         }
                         unset($log_action);
                         // Show the log if we have a valid line for it
@@ -779,26 +806,22 @@ class acp_dkp extends bbDKP_Admin
                 $this->tpl_name = 'dkp/acp_' . $mode;
                 
                 $valid_action_types = array(
-                	'L_ACTION_DEFAULT_DKP_CHANGED' => $user->lang['ACTION_DEFAULT_DKP_CHANGED'],  
                 	'L_ACTION_DKPSYS_ADDED' => $user->lang['ACTION_DKPSYS_ADDED'] ,
                 	'L_ACTION_DKPSYS_UPDATED' => $user->lang['ACTION_DKPSYS_UPDATED'] ,
                 	'L_ACTION_DKPSYS_DELETED' => $user->lang['ACTION_DKPSYS_DELETED'] ,
                 	'L_ACTION_EVENT_ADDED' => $user->lang['ACTION_EVENT_ADDED'] ,
                 	'L_ACTION_EVENT_UPDATED' => $user->lang['ACTION_EVENT_UPDATED'] ,
                 	'L_ACTION_EVENT_DELETED' => $user->lang['ACTION_EVENT_DELETED'] ,
-                    'L_ACTION_GUILD_ADDED' => $user->lang['ACTION_GUILD_ADDED'] ,
+                	'L_ACTION_HISTORY_TRANSFER' => $user->lang['ACTION_HISTORY_TRANSFER'] ,
                 	'L_ACTION_INDIVADJ_ADDED' => $user->lang['ACTION_INDIVADJ_ADDED'] ,
                 	'L_ACTION_INDIVADJ_UPDATED' => $user->lang['ACTION_INDIVADJ_UPDATED'] ,
                 	'L_ACTION_INDIVADJ_DELETED' => $user->lang['ACTION_INDIVADJ_DELETED'] ,
                 	'L_ACTION_ITEM_ADDED' => $user->lang['ACTION_ITEM_ADDED'] ,
                 	'L_ACTION_ITEM_UPDATED' => $user->lang['ACTION_ITEM_UPDATED'] ,
                 	'L_ACTION_ITEM_DELETED' => $user->lang['ACTION_ITEM_DELETED'] ,
-                	'L_ACTION_LOG_DELETED' => $user->lang['ACTION_LOG_DELETED'],
                 	'L_ACTION_MEMBER_ADDED' => $user->lang['ACTION_MEMBER_ADDED'] ,
                 	'L_ACTION_MEMBER_UPDATED' => $user->lang['ACTION_MEMBER_UPDATED'] ,
                 	'L_ACTION_MEMBER_DELETED' => $user->lang['ACTION_MEMBER_DELETED'] ,
-                	'L_ACTION_MEMBERDKP_UPDATED' => $user->lang['ACTION_MEMBERDKP_UPDATED'] ,
-                	'L_ACTION_MEMBERDKP_DELETED' => $user->lang['ACTION_MEMBERDKP_DELETED'] ,
                 	'L_ACTION_RANK_ADDED' => $user->lang['ACTION_RANK_ADDED'] ,
                 	'L_ACTION_RANK_UPDATED' => $user->lang['ACTION_RANK_UPDATED'] ,
                 	'L_ACTION_RANK_DELETED' => $user->lang['ACTION_RANK_DELETED'] ,
@@ -808,12 +831,18 @@ class acp_dkp extends bbDKP_Admin
                 	'L_ACTION_RAID_ADDED' => $user->lang['ACTION_RAID_ADDED'] ,
                 	'L_ACTION_RAID_UPDATED' => $user->lang['ACTION_RAID_UPDATED'] ,
                 	'L_ACTION_RAID_DELETED' => $user->lang['ACTION_RAID_DELETED'] , 
-                	'L_ACTION_CTRT_CONFIG_UPDATED' => $user->lang['ACTION_RT_CONFIG_UPDATED'],  
-	                'L_ACTION_DECAYOFF' => $user->lang['ACTION_DECAYOFF'],  
+                	'L_ACTION_LOG_DELETED' => $user->lang['ACTION_LOG_DELETED'],
+                	'L_ACTION_RT_CONFIG_UPDATED' => $user->lang['ACTION_RT_CONFIG_UPDATED'],  
 	                'L_ACTION_DECAYSYNC' => $user->lang['ACTION_DECAYSYNC'], 
+	                'L_ACTION_DECAYOFF' => $user->lang['ACTION_DECAYOFF'],  
 	                'L_ACTION_ZSYNC' => $user->lang['ACTION_ZSYNC'],  
 	                'L_ACTION_DKPSYNC' => $user->lang['ACTION_DKPSYNC'],                   
+                	'L_ACTION_DEFAULT_DKP_CHANGED' => $user->lang['ACTION_DEFAULT_DKP_CHANGED'],  
+                    'L_ACTION_GUILD_ADDED' => $user->lang['ACTION_GUILD_ADDED'] ,
+                	'L_ACTION_MEMBERDKP_UPDATED' => $user->lang['ACTION_MEMBERDKP_UPDATED'] ,
+                	'L_ACTION_MEMBERDKP_DELETED' => $user->lang['ACTION_MEMBERDKP_DELETED'] ,
                 	); 
+
 
                 $log_id = (isset($_GET[URI_LOG])) ? request_var(URI_LOG, 0) : false;
                 
@@ -1037,7 +1066,7 @@ class acp_dkp extends bbDKP_Admin
 	/**
 	 * gets the verbose log entry
 	 */
-   function getaction($haystack,$tag)
+   private function getaction($haystack,$tag)
    {  
         $found=''; 
    		
@@ -1057,7 +1086,7 @@ class acp_dkp extends bbDKP_Admin
     * Replaces an language array key preceded by 'L_' with its value or if not found, with the key
     * 
     */
-    function lang_replace ($variable)
+    private function lang_replace ($variable)
     {
         global $user;
         preg_match("/L_(.+)/", $variable, $to_replace);
@@ -1072,7 +1101,7 @@ class acp_dkp extends bbDKP_Admin
      * 
      * deletes marked bbDKP log entries
      */
-	function delete_log ($marked)
+	private function delete_log ($marked)
     {
     	global $db, $user, $phpEx;
     	
