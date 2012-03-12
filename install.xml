@@ -353,7 +353,7 @@ if(@defined("EMED_BBDKP"))
 		
 		<open src="viewtopic.php">
 			<edit>
-				<find><![CDATA['S_VIEWTOPIC'			=> true,]]></find>
+				<find><![CDATA[	'S_VIEWTOPIC'			=> true,]]></find>
 				<action type="after-add"><![CDATA[	// BBDKP
 	'S_BBDKP_TOPIC'       => true,
 	// BBDKP END]]></action>
@@ -455,6 +455,7 @@ $db->sql_rowseek(0, $result);
 function get_bbchar($bbresult)
 {
 	global $phpbb_root_path, $db;
+	$bbchar= array();
 	while ($row = $db->sql_fetchrow($bbresult))
 	{
 		$poster_id = (int) $row['poster_id'];
@@ -511,17 +512,18 @@ function get_bbchar($bbresult)
 		<!-- BBDKP START -->
 		<dd>&nbsp;</dd>
 		<dd>&nbsp;</dd>
-		<!-- IF postrow.BBMEMBERNAME -->
 		<dd>
-		    <ul style="list-style: none;">
-				<li><a href="{postrow.U_VIEW_BBMEMBER}"><span style="white-space: nowrap; color:{postrow.BBCOLORCODE}">{postrow.BBMEMBERNAME}</span> </a> 
-				<strong><!-- IF postrow.BBLEVEL -->{postrow.BBLEVEL}<!-- ENDIF --></strong>
-				<!-- IF postrow.BBRACEIMG --><img src="{postrow.BBRACEIMG}" alt="{members_row.RACE}" /> <!-- ENDIF -->
-				<!-- IF postrow.BBCLASSIMG --><img src="{postrow.BBCLASSIMG}" alt="{members_row.CLASS}" /> <!-- ENDIF -->
+			<!-- BEGIN bbchar -->
+			<ul style="list-style: none;">
+				<li>
+				<!-- IF postrow.bbchar.BBRACEIMG --><img src="{postrow.bbchar.BBRACEIMG}" alt="{postrow.bbchar.RACE}" /> <!-- ENDIF -->
+				<!-- IF postrow.bbchar.BBCLASSIMG --><img src="{postrow.bbchar.BBCLASSIMG}" alt="{postrow.bbchar.CLASS}" /> <!-- ENDIF -->
+				<a href="{postrow.bbchar.U_VIEW_BBMEMBER}"><span style="white-space: nowrap; color:{postrow.bbchar.BBCOLORCODE}">{postrow.bbchar.BBMEMBERNAME}</span> </a> 
+				<strong><!-- IF postrow.bbchar.BBLEVEL -->{postrow.bbchar.BBLEVEL}<!-- ENDIF --></strong>
 				</li>
-		     </ul>
-  	    </dd>
-		<!-- ENDIF -->
+			</ul>
+			<!-- END bbchar -->
+		</dd>
 		<!-- BBDKP END -->
 ]]></action>
 			</edit>
