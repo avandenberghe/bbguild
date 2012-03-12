@@ -260,7 +260,7 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 		$race_image = (string) (($item['member_gender_id']==0) ? $item['image_male_small'] : $item['image_female_small']);
 		
 		$template->assign_block_vars ( 'items_row', array (
-			'DATE' 			=> (! empty ( $item ['item_date'] )) ? date ( 'd.m.y', $item ['item_date'] ) : '&nbsp;', 
+			'DATE' 			=> (! empty ( $item ['item_date'] )) ? date($config['bbdkp_date_format'], $item ['item_date'] ) : '&nbsp;', 
 			'ITEMNAME' 		=> $valuename, 
 			'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewitem&amp;" . URI_ITEM . '=' . $item ['item_id'] ), 
 			'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>'. $user->lang['NOT_AVAILABLE'] .'</i>&gt;', 
@@ -285,7 +285,7 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 	else 
 	{
 		$template->assign_block_vars ( 'items_row', array (
-			'DATE' 			=> (! empty ( $item ['item_date'] )) ? date ( 'd.m.y', $item ['item_date'] ) : '&nbsp;', 
+			'DATE' 			=> (! empty ( $item ['item_date'] )) ? date($config['bbdkp_date_format'], $item ['item_date'] ) : '&nbsp;', 
 			'ITEMNAME' 		=> $valuename, 
 			'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewitem&amp;" .  URI_ITEM . '=' . $item ['item_id'] ), 
 			'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>Not Found</i>&gt;', 
