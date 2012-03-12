@@ -11,7 +11,7 @@
 <meta name="copyright" content="2009 bbdkp" />
 <meta name="keywords" content="" />
 <meta name="description" content="bbdkp Installation information" />
-<title>bbDKP &bull; 1.2.5 Guide</title>
+<title>bbDKP &bull; 1.2.6 Guide</title>
 
 <link href="stylesheet.css" rel="stylesheet" type="text/css" media="screen, projection" />
 
@@ -27,7 +27,7 @@
 
 			<div id="doc-description">
 			<a>	<img src="logo.png" alt="" /></a>
-				<h1>bbDKP 1.2.5 Install</h1>
+				<h1>bbDKP 1.2.6 Install</h1>
 				<p style="display: none;"><a href="#start_here">Skip</a></p>
 			</div>
 
@@ -51,7 +51,7 @@
 <p>There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Raidplanner, Bossprogress (under development). </p>
 
 <p>Further development requests, support questions are welcome at <a href="http://www.bbdkp.com">http://www.bbdkp.com</a> or in the the <a href="http://www.phpbb.com/community/viewtopic.php?f=70&t=1487295&p=13027056">phpbb Development topic</a>.</p>
-<p>There is also an IRC channel at #bbdkp@irc.freenode.net and a wiki (<a href="http://wiki.bbdkp.com">http://wiki.bbdkp.com</a>)</p>
+<p>There is also an IRC channel at #bbdkp@irc.freenode.net.</p>
 
 As of the current release, it does not (yet) make coffee ;)</p>
 
@@ -85,7 +85,7 @@ As of the current release, it does not (yet) make coffee ;)</p>
 		
 		<div class="content">
 			<ol>
-			<li>phpbb3.0.9</li>
+			<li>phpbb3.0.10</li>
 			<li>If you use Mysql then version 5 is required because group functions are used in the order by statement in standings.php</li>			
 			<li>PHP 5.2 -> 5.3.x / Libxml 2.6.0 (simplexml usage)</li>
 			<li>Curl (preferred) or url_fopen or fsockopen should be available on your server.</li>
@@ -110,12 +110,12 @@ As of the current release, it does not (yet) make coffee ;)</p>
 		<strong>Note : Before installing/upgrading bbDKP, you need to backup your forum.</strong>
 		
 		<div class="content">
-			<h2>New 1.2.5 installation </h2>
+			<h2>New 1.2.6 installation </h2>
 			<ul>
 				<li><strong>using Automod</strong>
 				<ol>
-					<li>Make sure you have the latest patched Automod from Github : https://github.com/Sajaki/automod/zipball/master</li>
-					<li>Unzip the bbdkp zip file</li>
+					<li>Make sure you have the latest patched Automod from <a href="https://github.com/Sajaki/automod/zipball/master">Github</a>.</li>
+					<li>Unzip the bbdkp zip file.</li>
 					<li>Upload it to your webserver, into /store/mods/ </li>
 					<li>Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits. </li>
 					<li><strong><em>Make sure your (prosilver based) custom style is updated aswell.</em></strong></li>					
@@ -125,7 +125,7 @@ As of the current release, it does not (yet) make coffee ;)</p>
 						<li>Enter your guildname</li>
 						<li>Choose the realm of your guild</li>
 						<li>Choose the games you wish to have installed.</li>
-						<li>Click submit. This will install 1.2.5 and clear the caches (template, theme, imagesets)</li>
+						<li>Click submit. This will install 1.2.6 and clear the caches (template, theme, imagesets)</li>
 						</ul>
 					</li>
 				</ol>
@@ -143,23 +143,24 @@ As of the current release, it does not (yet) make coffee ;)</p>
 						<li>Enter your guildname</li>
 						<li>Choose the realm of your guild</li>
 						<li>Choose the games you wish to have installed.</li>
-						<li>Click submit. This will install 1.2.5 and clear the caches (template, theme, imagesets)</li>
+						<li>Click submit. This will install 1.2.6 and clear the caches (template, theme, imagesets)</li>
 						</ul>
 					</ol>
 
 				</li>
 			</ul>
-			<h2>Upgrading from 1.2.2, 1.2.3, 1.2.4 to 1.2.5</h2>
+			<h2>Upgrading from 1.2.2, 1.2.3, 1.2.4, 1.2.5-PL3 to 1.2.6</h2>
 			<strong><em>If you have an earlier version, first update to 1.2.2c</em></strong><br />
 			
 
 			<ol>
 				<li>follow the Diff instructions corresponding to your current version : <br />
-				<a href="../contrib/install_122_to_125.xml">contrib/install_122_to_125.xml</a><br />
-				<a href="../contrib/install_123_to_125.xml">contrib/install_123_to_125.xml</a><br />	
-				<a href="../contrib/install_124_to_125.xml">contrib/install_124_to_125.xml</a><br /></li>
+				<a href="../contrib/install_122_to_126.xml">contrib/install_122_to_126.xml</a><br />
+				<a href="../contrib/install_123_to_126.xml">contrib/install_123_to_126.xml</a><br />	
+				<a href="../contrib/install_124_to_126.xml">contrib/install_124_to_126.xml</a><br />
+				<a href="../contrib/install_125PL3_to_126.xml">contrib/install_125PL3_to_126.xml</a><br /></li>
 				<li>copy the new files to your webserver, replacing any old files. </li>
-				<li>apply the (few) changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
+				<li>apply the changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
 				<li><em>Make sure your (prosilver based) custom style is updated aswell.</em></li>				
 				<li>launch the DB updater (/install/index.php)</li>
 				<li>Now you see the Umil updater.
@@ -167,7 +168,7 @@ As of the current release, it does not (yet) make coffee ;)</p>
 					<li>Enter your guildname</li>
 					<li>Choose the realm of your guild</li>
 					<li>Check the games you wish to have installed/updated. (deselecting a game you already have will have no effect on your data)</li>
-					<li>Click submit. This will update to 1.2.5 and clear the caches (template, theme, imagesets)</li>
+					<li>Click submit. This will update to 1.2.6 and clear the caches (template, theme, imagesets)</li>
 				</ul>
 			</ol>
 			
@@ -214,6 +215,57 @@ As of the current release, it does not (yet) make coffee ;)</p>
 		<div class="inner"><span class="corners-top"><span></span></span></div>
 		
 		<div class="content">
+1.2.6 12-03-2012<br />
+<br />
+<ul>		
+<strong>general</strong>
+<li>[UPD] jquery updated, comatibility mode added for use with mootools, uses "jquery" instead of "$" ...</li>
+<li>[UPD] wow class images have a better icon</li>
+<li>[FIX] News module now inserts line breaks proplery (not as /n/n)</li>
+<li>[FIX] updated file headers for Github move</li>
+<li>[FIX] pagination fixed in viewmember. cumulated earnings/items now paginating correctly</li>
+<li>[FIX] roster listing redesign, pagination, sorting and minimum level added</li>
+<li>[FIX] standing pagination added</li>
+<li>[FIX] removed hardcoded language in bbdkp credits footer</li>
+<li>[FIX] German language fixes (@killerpommes)</li>
+<li>[FIX] frontpages XHTML 1.1 compliant.</li>
+<li>[FIX] inline css in stats.html moved to bbdkp.css</li>
+<li>[FIX] statistics page attendance array sorting headers corrected</li>
+<li>[UPD] Updated standings and viewmember for new adjustment decay</li>
+<li>[UPD] swtor installer script now uses races for specialisation.</li>
+<li>[UPD] new icons for LINEAGE2 (@sh1ny)</li>
+<li>[UPD] DKP character info in in viewtopic.</li>
+<li>[NEW] Removed any remaining hardcoded strings</li>
+<li>[NEW] Membernames now unique by combination with guildname/realmname.</li>
+</ul>
+<ul>
+<strong>Portal</strong>
+<li>[UPD] Links block updated</li>
+<li>[FIX] functions_display inclusion bug fixed</li>
+</ul>
+<ul>
+<strong>ACP</strong>
+<li>[FIX] Added game id to html form in race acp. this fixes a few reported problems</li>
+<li>[NEW] Added the ability to have the date format be set by the ACP (@TheGadgetGuy Aerwin)</li>
+<li>[FIX] w3c fix : if no data in item, raid, member listing then don't show table.</li>
+<li>[FIX] raid duplication icon changed</li>
+<li>[FIX] item acp reprogrammed from scratch, using master detail view, with new ajax item searcher</li>
+<li>[FIX] javascript changes, now references id instead of element name</li>
+<li>[FIX] ranks support special characters (#152)</li>
+<li>[FIX] news & recruitment forum selector in indexpage config now works</li>
+<li>[FIX] welcomeblock on/off switch now no longer targets recruitment block</li>
+<li>[FIX] welcomeblock parses bbcodes</li>
+<li>[NEW] DKP logging now shows phpbb membername</li>
+<li>[NEW] Adjustment Decay with on/off switch per adjustment</li>
+<li>[NEW] bbDKP cron job scheduler to automate decay calculation</li>
+<li>[NEW] Minimum EP added</li>
+<li>[FIX] ACP XHTML 1.1 compliant.</li>
+<li>[NEW] Mass member delete added</li>
+<li>[FIX] member delete button to the right</li>
+<li>[NEW] Welcome block setting in ACP</li>
+
+</ul>
+<br />
 
 1.2.5 20-11-2011<br />
 <br />
