@@ -198,9 +198,11 @@ $lang = array_merge($lang, array(
 'UMIL_122MINIMUM' => 'Alte Version. 1.2.2 wird benötigt vom auf 1.2.3 umzudaten',
 'UMIL_NOGAMECHOSEN' => 'Bitte wähle ein Spiel.',
 'UMIL_UPD123' => 'Dateien aktualisiert zu v1.2.3',
-'UMIL_GAME123' => 'Spieldaten für %s installiert.',
-'UMIL_GAME125'  => 'Spieldaten für %s installiert.', 
+'UMIL_GAME123' => 'Spieldaten für %s installiert  Version 1.2.3.',
+'UMIL_GAME125'  => 'Spieldaten für %s installiert  Version 1.2.5.', 
+'UMIL_GAME126'  => 'Spieldaten für %s installiert Version 1.2.6.', 
 'UMIL_GAMEUNINST123' => 'Spieldaten entfernt.',
+'UMIL_UPDTABLES' =>  'Tabellen %s für Version %s', 
 
 // ACP titles
 'BBDKP_WELCOME' => 'Willkommen bei bbDKP',
