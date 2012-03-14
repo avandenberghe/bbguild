@@ -38,8 +38,6 @@ class acp_dkp_mm extends bbDKP_Admin
 		
 		$user->add_lang(array('mods/dkp_admin'));
 		$user->add_lang(array('mods/dkp_common'));
-
-		$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>'; 
 		switch ($mode)
 		{
 			/***************************************/
@@ -48,7 +46,7 @@ class acp_dkp_mm extends bbDKP_Admin
             //
 			/***************************************/
 			case 'mm_listmembers':
-				
+				$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
 				// add member button redirect
 				$showadd = (isset( $_POST['memberadd'])) ? true : false;
 				
@@ -310,8 +308,7 @@ class acp_dkp_mm extends bbDKP_Admin
 		    // add member 
 			/***************************************/
 			case 'mm_addmember':
-					
-				$Addmemberlink = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Members screen</h3></a>'; 
+				$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Members screen</h3></a>';
 				$member_id = 0;
 				$submit	 = (isset($_POST['add'])) ? true : false;
 				$update	 = (isset($_POST['update'])) ? true : false;
@@ -341,7 +338,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					$db->sql_freeresult($result);
 					if ($countm != 0)
 					{
-						 trigger_error($user->lang['ERROR_MEMBEREXIST'] . $Addmemberlink, E_USER_WARNING);
+						 trigger_error($user->lang['ERROR_MEMBEREXIST'] . $this->link, E_USER_WARNING);
 					}
 					
 					// set member active
@@ -1154,7 +1151,8 @@ class acp_dkp_mm extends bbDKP_Admin
 		/***************************************/
 		
 		case 'mm_ranks':
-
+			$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>Return to Ranks screen</h3></a>';
+			
 			$sql = 'SELECT max(id) as idmax FROM ' . GUILD_TABLE;
 			$result = $db->sql_query($sql);
 			$maxguildid= (int) $db->sql_fetchfield('idmax');
@@ -1412,7 +1410,7 @@ class acp_dkp_mm extends bbDKP_Admin
 		/***************************************/
 
 		case 'mm_listguilds':
-	   		
+			$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>Return to Guildlist screen</h3></a>';
 			$showadd = (isset($_POST['guildadd'])) ? true : false;
            	
            	if($showadd)
@@ -1489,180 +1487,162 @@ class acp_dkp_mm extends bbDKP_Admin
 		 * ************ Add Guild ************
 		 *************************************/
 		case 'mm_addguild':
-		    
-               /* select data */
-               $update = false;
+			$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>Return to Guildlist screen</h3></a>';
+			/* select data */
+			$update = false;
 
-               if  (isset($_GET[URI_GUILD]) )
-               {
-                   $this->url_id = request_var(URI_GUILD, 0 );
-               }
+			if  (isset($_GET[URI_GUILD]) )
+			{
+				$this->url_id = request_var(URI_GUILD, 0 );
+			}
                
-               $regionlist = array( 
-                         	'US'=> 'US', 
-						'EU'=> 'EU',
-                       );
+			$regionlist = array( 
+				'US'=> 'US', 
+				'EU'=> 'EU',
+			);
               
-               if ( $this->url_id != 0 )   
-                 {
-                   // we have a GET
-                   $update = true;
-                  
-                   $sql = 'SELECT id, name, realm, region, roster
-                           FROM ' . GUILD_TABLE . '  
-                           WHERE id = ' . $this->url_id ; 
-                   $result = $db->sql_query($sql);
-                   $row = $db->sql_fetchrow($result); 
-                   $db->sql_freeresult($result);
+			if ( $this->url_id != 0 )   
+			{
+				// we have a GET
+				$update = true;
+				$sql = 'SELECT id, name, realm, region, roster
+					FROM ' . GUILD_TABLE . '  
+					WHERE id = ' . $this->url_id ; 
+				$result = $db->sql_query($sql);
+				$row = $db->sql_fetchrow($result); 
+				$db->sql_freeresult($result);
 
-                   if (!$row)
-                   {
-                       trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
-                   }
-                   else 
-                   {
-                       
-                       // load guild object
-                       $this->guild = array(
-                           'guild_id'	        => $row['id'],
-                           'guild_name'	    => $row['name'],
-                           'guild_realm'	    => $row['realm'],
-                           'guild_region'	    => $row['region'],
-                        	'guild_showroster'	    => $row['roster']
-                       );
-                       
-
-                   	foreach ( $regionlist as $key => $value)
-			        {
-					    $template->assign_block_vars('region_row', array(
-   							'VALUE'    => $value,
-    						'SELECTED' => ( $this->guild['guild_region'] == $key ) ? ' selected="selected"' : '',
-	    					'OPTION'   => ( !empty($key) ) ? $key : '(None)')
-				    );
-			        }
-			
-                   }
-                 }
-                 else 
-                 {
-                     // NEW PAGE                          
-                     foreach ( $regionlist as $key => $value)
-			        {
-					    $template->assign_block_vars('region_row', array(
-   							'VALUE'    => $value,
-    						'SELECTED' =>  '',
-	    					'OPTION'   => ( !empty($key) ) ? $key : '(None)')
-				        );
-			        }
-			        
-                     
-                 }
-               $add        = (isset($_POST['add'])) ? true : false;
-               $submit     = (isset($_POST['update'])) ? true : false;
-               $delete     = (isset($_POST['delete'])) ? true : false;   
-	        if ( $add || $submit)
-               {
-                 	if (!check_form_key('addguild'))
+				if (!$row)
+				{
+					trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
+				}
+				else 
+				{
+					// load guild object
+					$this->guild = array(
+						'guild_id'	        => $row['id'],
+						'guild_name'	    => $row['name'],
+						'guild_realm'	    => $row['realm'],
+						'guild_region'	    => $row['region'],
+						'guild_showroster'	=> $row['roster']
+					);
+					
+					foreach ( $regionlist as $key => $value)
+					{
+						$template->assign_block_vars('region_row', array(
+							'VALUE'    => $value,
+							'SELECTED' => ( $this->guild['guild_region'] == $key ) ? ' selected="selected"' : '',
+							'OPTION'   => ( !empty($key) ) ? $key : '(None)')
+						);
+					}
+				}
+			}
+			else 
+			{
+			// NEW PAGE                          
+				foreach ( $regionlist as $key => $value)
+				{
+					$template->assign_block_vars('region_row', array(
+						'VALUE'    => $value,
+						'SELECTED' =>  '',
+						'OPTION'   => ( !empty($key) ) ? $key : '(None)')
+					);
+				}
+			}
+			$add = (isset($_POST['add'])) ? true : false;
+			$submit = (isset($_POST['update'])) ? true : false;
+			$delete = (isset($_POST['delete'])) ? true : false;   
+			if ( $add || $submit)
+			{
+				if (!check_form_key('addguild'))
 				{
 					trigger_error('FORM_INVALID');
 				}
-      			}
-       			
-               if ($add)
-                   {
-                      $guild_name = utf8_normalize_nfc(request_var('guild_name','', true));
-                      $realm_name = utf8_normalize_nfc(request_var('realm','', true));
-                      $region= request_var('region_id', '');
-                      $showroster= request_var('showroster', 0);
+      		}
+			if ($add)
+			{
+				$guild_name = utf8_normalize_nfc(request_var('guild_name','', true));
+				$realm_name = utf8_normalize_nfc(request_var('realm','', true));
+				$region= request_var('region_id', '');
+				$showroster= request_var('showroster', 0);
+				if ($guild_name == null || $realm_name == null)
+				{
+					trigger_error($user->lang['ERROR_GUILDEMPTY'] . $this->link, E_USER_WARNING);
+				}   
+				else
+				{
+					// check existing
+					$result = $db->sql_query("SELECT count(*) as evcount from " . GUILD_TABLE . 
+					" WHERE UPPER(name) = '" . strtoupper($db->sql_escape($guild_name))  .  "'");
+					$grow = $db->sql_fetchrow($result);
+					if($grow['evcount'] !=0 )
+					{
+						trigger_error($user->lang['ERROR_GUILDTAKEN'] . $this->link, E_USER_WARNING);
+					}
+					// we always add guilds with an id greater then zero. this way, the guild with id=zero is the "guildless" guild
+					// the zero guild is added by default in a new install. 
+					// do not delete the zero record in the guild table or you will see that guildless members 
+					// become invisible in the roster and in the memberlist or in any list member selection that makes 
+					// an inner join with the guild table. 
+					if ($this->insertnewguild($guild_name,$realm_name,$region,$showroster ) > 0) 
+					{
+						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'],  $guild_name);
+						trigger_error($success_message . $this->link, E_USER_NOTICE);
+					}
+					else 
+					{
+						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_FAIL'],  $guild_name);
+						trigger_error($success_message . $this->link, E_USER_WARNING);
+					}
+				}
+			}
                       
-                      if ($guild_name == null || $realm_name == null)
-                      {
-                           trigger_error($user->lang['ERROR_GUILDEMPTY'] . $this->link, E_USER_WARNING);
-                      }   
-                      else
-                      {
-                           // check existing
-                           $result = $db->sql_query("SELECT count(*) as evcount from " . GUILD_TABLE . 
-                           " WHERE UPPER(name) = '" . strtoupper($db->sql_escape($guild_name))  .  "'");
-                           
-                           $grow = $db->sql_fetchrow($result);
-                           if($grow['evcount'] !=0 )
-                           {
-                                trigger_error($user->lang['ERROR_GUILDTAKEN'] . $this->link, E_USER_WARNING);
-                           }
-                           
-                           // we always add guilds with an id greater then zero. this way, the guild with id=zero is the "guildless" guild
-                           // the zero guild is added by default in a new install. 
-                           // do not delete the zero record in the guild table or you will see that guildless members 
-                           // become invisible in the roster and in the memberlist or in any list member selection that makes 
-                           // an inner join with the guild table. 
-                           
-                           if ($this->insertnewguild($guild_name,$realm_name,$region,$showroster ) > 0) 
-                           {
-                               $success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'],  $guild_name);
-                               trigger_error($success_message . $this->link, E_USER_NOTICE);
-                           }
-                           else 
-                           {
-                               $success_message = sprintf($user->lang['ADMIN_ADD_GUILD_FAIL'],  $guild_name);
-                                trigger_error($success_message . $this->link, E_USER_WARNING);
-                           }
-                      }
-                       
-                   }
-                      
-                   if ($submit)
-                   {
-                       // Update
-                       
-                       // get the guild id from the url parameter (via GET)
-                       if (isset($_GET[URI_GUILD]))
-                       {
-                           $this->url_id = request_var(URI_GUILD,0);
-                       }
-                       else 
-                       {
-                            trigger_error($user->lang['error_invalid_guild_provided'], E_USER_WARNING);
-                       }
+			if ($submit)
+			{
+				// get the guild id from the url parameter (via GET)
+				if (isset($_GET[URI_GUILD]))
+				{
+					$this->url_id = request_var(URI_GUILD,0);
+				}
+				else 
+				{
+					trigger_error($user->lang['error_invalid_guild_provided'], E_USER_WARNING);
+				}
 
-                       // get old value
-                       $sql = 'SELECT id, name, realm, region, roster 
-                               FROM ' . GUILD_TABLE . '  
-                               WHERE id = ' . (int) $this->url_id ; 
-                       $result = $db->sql_query($sql);
-                       
-                       // if we have a wrong id then error, this should not happen. 
-                       if (!$row)
-                       {
-                           trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
-                       }
-                      
-                       // loop through object until sql_fetchrow returns false, fill object
-                       while ( $row = $db->sql_fetchrow($result) )
-                       {
-                           $this->old_guild = array(
-                               'guild_id'	        => $row['id'],
-                               'guild_name'	    => $row['name'],
-                               'guild_realm'	    => $row['realm'],
-                               'guild_region'	    => $row['region'], 
-                               'guild_showroster'	=> $row['roster']
-                           
-                           );
-                       }
-                       $db->sql_freeresult($result);           
-                       
-                       $new_guild_name = utf8_normalize_nfc(request_var('guild_name', ' ', true));
-                       $new_realm_name = utf8_normalize_nfc(request_var('realm', ' ', true));
-                       $new_region_name = request_var('region_id', ' ');
-                       $new_showroster = request_var('showroster', 0);
-                       
-                       //
-                       // Update the guild
-                       //
-                       $query = $db->sql_build_array('UPDATE', array(
-                           'name'	  => $new_guild_name,
-                           'realm'   => $new_realm_name, 
-                           'region'  => $new_region_name,
+				// get old value
+				$sql = 'SELECT id, name, realm, region, roster 
+					FROM ' . GUILD_TABLE . '  
+					WHERE id = ' . (int) $this->url_id ; 
+				$result = $db->sql_query($sql);
+				// if we have a wrong id then error, this should not happen. 
+				if (!$row)
+				{
+					trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
+				}
+				// loop through object until sql_fetchrow returns false, fill object
+				while ( $row = $db->sql_fetchrow($result) )
+				{
+					$this->old_guild = array(
+						'guild_id'	        => $row['id'],
+						'guild_name'	    => $row['name'],
+						'guild_realm'	    => $row['realm'],
+						'guild_region'	    => $row['region'], 
+						'guild_showroster'	=> $row['roster']
+					);
+				}
+				$db->sql_freeresult($result);           
+				
+				$new_guild_name = utf8_normalize_nfc(request_var('guild_name', ' ', true));
+				$new_realm_name = utf8_normalize_nfc(request_var('realm', ' ', true));
+				$new_region_name = request_var('region_id', ' ');
+				$new_showroster = request_var('showroster', 0);
+
+				// Update the guild
+				//
+					$query = $db->sql_build_array('UPDATE', array(
+						'name'	  => $new_guild_name,
+						'realm'   => $new_realm_name, 
+						'region'  => $new_region_name,
    						'roster'  => $new_showroster,                        
                        
                            ));
