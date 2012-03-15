@@ -1,4 +1,4 @@
-<?php
+ <?php
 /**
 * 
 * @package bbDKP.acp
@@ -1573,7 +1573,8 @@ class acp_dkp_mm extends bbDKP_Admin
 				{
 					// check existing
 					$result = $db->sql_query("SELECT count(*) as evcount from " . GUILD_TABLE . 
-					" WHERE UPPER(name) = '" . strtoupper($db->sql_escape($guild_name))  .  "'");
+					" WHERE UPPER(name) = '" . strtoupper($db->sql_escape($guild_name))  .  "'
+					  AND realm = '" . $db->sql_escape($realm_name) . "'");
 					$grow = $db->sql_fetchrow($result);
 					if($grow['evcount'] !=0 )
 					{
