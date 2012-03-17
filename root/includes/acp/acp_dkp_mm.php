@@ -291,12 +291,15 @@ class acp_dkp_mm extends bbDKP_Admin
 				// add guildmember handler 
 				if ($submit)
 				{
-					// get member name
+					// get member name and guild
 					$member_name = utf8_normalize_nfc(request_var('member_name', '', true));
+					$guild_id = request_var('member_guild_id', 0);
+					
 					// check if membername exists
 					$sql = 'SELECT count(*) as memberexists 
 							FROM ' . MEMBER_LIST_TABLE . "	
-							WHERE ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "')";
+							WHERE ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "') 
+							AND member_guild_id = " . $guild_id;
 					$result = $db->sql_query($sql);
 					$countm = $db->sql_fetchfield('memberexists');
 					$db->sql_freeresult($result);
@@ -304,9 +307,9 @@ class acp_dkp_mm extends bbDKP_Admin
 					{
 						trigger_error($user->lang['ERROR_MEMBEREXIST'] . $this->link, E_USER_WARNING);
 					}
+					
 					// set member active
 					$member_status = request_var('activated', 0) > 0 ? 1 : 0;
-					$guild_id = request_var('member_guild_id', 0);
 					// get rank					  
 					$rank_id = request_var('member_rank_id', 99);
 					// check if rank exists
