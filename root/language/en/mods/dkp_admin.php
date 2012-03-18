@@ -198,9 +198,11 @@ $lang = array_merge($lang, array(
 'UMIL_122MINIMUM' => 'Old version. 1.2.2 is required for updating to 1.2.3', 
 'UMIL_NOGAMECHOSEN' => 'Plase choose a game before installing.', 
 'UMIL_UPD123' => 'Updated tables to v1.2.3', 
-'UMIL_GAME123' => 'Game data installed for %s', 
-'UMIL_GAME125' => 'Game data installed for %s', 
+'UMIL_GAME123' => 'Game data 1.2.3 installed for %s', 
+'UMIL_GAME125' => 'Game data 1.2.5 installed for %s', 
+'UMIL_GAME126' => 'Game data 1.2.6 installed for %s',
 'UMIL_GAMEUNINST123' => 'Game data uninstalled', 
+'UMIL_UPDTABLES' =>  'Tables %s for version %s', 
 
 // ACP titles
 'BBDKP_WELCOME' => 'Welcome to bbDKP',
@@ -241,6 +243,8 @@ $lang = array_merge($lang, array(
 'RETURN_LOG'  => 'Return to Log listing. ',
 'RETURN_RAID'  => 'Return to Raid. ',
 'RETURN_RANK'  => 'Return to Rank List. ',
+'RETURN_MEMBERLIST'  => 'Return to Member List. ',
+'RETURN_GUILDLIST'  => 'Return to Guild List. ',
 'ACP_DKP' => 'bbDKP Adminpanel',
 'ACP_ITEMSTATS' => 'Popup Configuration',
 'ACP_INDEXPAGE' => 'Portal Configuration',
@@ -377,6 +381,7 @@ $lang = array_merge($lang, array(
 'ACTION_DECAYSYNC' => 'Decay recalculated',
 'ACTION_ZSYNC' => 'Zerosum recalculated', 
 'ACTION_DKPSYNC' => 'DKP recalculated',  
+'ACTION_DEFAULT_DKP_CHANGED' => 'Default DKP changed', 
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Newest Admin Actions',
@@ -386,7 +391,7 @@ $lang = array_merge($lang, array(
 'VLOG_EVENT_ADDED' => '%s added the event %s worth %.2f points.',
 'VLOG_EVENT_UPDATED' => '%s updated the event %s.',
 'VLOG_EVENT_DELETED' => '%s deleted the event %s.',
-'VLOG_HISTORY_TRANSFER' => '%s transferred %s\’s history to %s.',
+'VLOG_HISTORY_TRANSFER' => '%s transferred %s‘s history to %s.',
 'VLOG_INDIVADJ_ADDED' => '%s added an individual adjustment of %.2f to %d member(s).',
 'VLOG_INDIVADJ_UPDATED' => '%s updated an individual adjustment of %.2f to %s.',
 'VLOG_INDIVADJ_DELETED' => '%s deleted an individual adjustment of %.2f to %s.',
@@ -413,6 +418,10 @@ $lang = array_merge($lang, array(
 'VLOG_DECAYSYNC' => '%s has recalculated point Decay for %s raids',
 'VLOG_ZSYNC' => '%s has recalculated zerosum points ', 
 'VLOG_DKPSYNC' => '%s has recalculated DKP',  
+'VLOG_DEFAULT_DKP_CHANGED' => '%s changed Default DKP to %s',
+'VLOG_GUILD_ADDED' => '%s added guild %s',
+'VLOG_MEMBERDKP_UPDATED' => '%s updated the dkp points of %s : earned: %.2f -> %.2f, spent: %.2f -> %.2f',
+'VLOG_MEMBERDKP_DELETED' => '%s deleted the dkp points of %s !', 
 
 // Before/After
 'ADJUSTMENT_AFTER' => 'Adjustment After',
@@ -497,6 +506,7 @@ $lang = array_merge($lang, array(
 'ERROR_RANKMEMBERS'	=> 'Cannot delete this rank. There are still members with this rank. ', 
 'ERROR_NOSELECT'	=> 'Please select a From and a To-member.',
 'ERROR_NOADJUSTMENTS'	=> 'There are no Adjustments in the database.',
+'ERROR_POOLNOPOINTS'  => 'No points found in ', 
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',
@@ -523,7 +533,7 @@ $lang = array_merge($lang, array(
 'ADMIN_DELETE_NEWS_SUCCESS' => 'The news entry has been deleted from the database for your guild.',
 'ADMIN_DELETE_RAID_SUCCESS' => 'The raid and any items associated with it have been deleted from the database for your guild.',
 'ADMIN_DUPLICATE_RAID_SUCCESS' => 'The %s raid on %s was duplicated.',
-'ADMIN_TRANSFER_HISTORY_SUCCESS' => 'All of %s’s history has been transferred to %s and %s has been deleted from the database for your guild.',
+'ADMIN_TRANSFER_HISTORY_SUCCESS' => 'All of %s’s points, items, history was transferred to %s and %s dkp account for pool %s was set to zero.',
 'ADMIN_UPDATE_ADJ_SUCCESS' => 'The %s adjustment of %.2f has been updated in the database for your guild.',
 'ADMIN_UPDATE_DKPSYS_SUCCESS' => 'The name,status of DKP pool %s was changed to : %s, %s',
 'ADMIN_UPDATE_GUILD_SUCCESS' => 'the guild with id %d has been updated in your database.',
@@ -729,6 +739,8 @@ So the loot would go to player 2 <br />',
 'ARM_STAND' => 'Standard', 
 'ARM_CLASS' => 'Class',
 'SHOWONROSTER'	=> 'Show on Roster',  
+'MINLEVELROSTER' => 'Minimum level', 
+'MINLEVELROSTER_EXPLAIN' => 'If member level < this value then no roster display', 
 
 	 // titles
 'ADD_ITEM_RAIDID_NOTE' => 'Only raids less than two weeks old are shown / %sshow all</a>',

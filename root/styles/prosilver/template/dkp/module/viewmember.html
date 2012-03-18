@@ -202,12 +202,17 @@
 <!-- ******* Attended Raids *************** -->
 
 <!-- IF .raids_row -->
-<h3>{L_RAID_ATTENDANCE_HISTORY}</h3>
+<h2>{L_RAID_ATTENDANCE_HISTORY}</h2>
 
 <div class="forumbg forumbg-table">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-
+<!-- IF RAID_PAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> 
+		<span>{RAID_PAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
 <table class="table1" cellspacing="1">
   <thead>
    <tr>
@@ -244,27 +249,33 @@
   </tbody>
   </table>
   
-<span class="corners-bottom"><span></span></span>
-</div>
-</div>
-
 <!-- IF RAID_PAGINATION -->  
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> 
 		<span>{RAID_PAGINATION}<br /><br /></span>
 </div>
 <!-- ENDIF -->
+
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
+
 <!-- ENDIF -->
 
 
 <!-- IF .items_row -->
 
-<h3>{L_ITEM_PURCHASE_HISTORY}</h3>
+<h2>{L_ITEM_PURCHASE_HISTORY}</h2>
 
 <div class="forumbg forumbg-table">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-
+<!-- IF ITEM_PAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{ITEM_PAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
 <table class="table1" width="100%" border="0" cellspacing="1" cellpadding="0">
 <thead>
    <tr>
@@ -294,20 +305,20 @@
 
 </table>
 
-<span class="corners-bottom"><span></span></span>
-</div>
-</div>
 <!-- IF ITEM_PAGINATION -->  
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{ITEM_PAGINATION}<br /><br /></span>
 </div>
 <!-- ENDIF -->
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
 <!-- ENDIF -->
 
 <!-- IF .adjustments_row -->
 
-<h3>{L_INDIVIDUAL_ADJUSTMENT_HISTORY}</h3>
+<h2>{L_INDIVIDUAL_ADJUSTMENT_HISTORY}</h2>
 <div class="forumbg forumbg-table">
 <div class="inner">
 <span class="corners-top"><span></span></span>
@@ -349,7 +360,7 @@
 <!-- ENDIF -->
 
 <!-- IF .event_row -->
-<h3>{L_ATTENDANCE_BY_EVENT}</h3>
+<h2>{L_ATTENDANCE_BY_EVENT}</h2>
 <div class="forumbg forumbg-table">
 <div class="inner">
 <span class="corners-top"><span></span></span>

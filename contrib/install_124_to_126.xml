@@ -77,7 +77,7 @@
 		<installation>
 			<level>easy</level>
 			<time>600</time>
-			<target-version>3.0.9</target-version>
+			<target-version>3.0.10</target-version>
 		</installation>
 		<link-group>
 			<link type="parent" href="../install.xml" lang="de">Frisch-Installations-Anleitung</link>
@@ -170,6 +170,168 @@
 		set_config('bbdkp_lastcron', time(), true);
 		break;]]></action>
 		</edit>
+		</open>	
+
+		<open src="viewtopic.php">
+			<edit>
+				<find><![CDATA[	'S_VIEWTOPIC'			=> true,]]></find>
+				<action type="after-add"><![CDATA[	// BBDKP
+	'S_BBDKP_TOPIC'       => true,
+	// BBDKP END]]></action>
+			</edit>
+
+			<edit>
+			<find><![CDATA[			'SELECT'	=> 'u.*, z.friend, z.foe, p.*',]]></find>
+				<action type="replace-with"><![CDATA[	'SELECT'	=> 'u.*, z.friend, z.foe, p.*, 
+		bm.member_id, bm.member_level, bm.member_name, bm.member_gender_id, bl.name as class_name, bc.colorcode, bc.imagename, bl1.name as race_name,  br.image_female_small, br.image_male_small ',  
+]]></action>
+			</edit>
+			
+			<edit>
+			<find><![CDATA[						'ON'	=> 'z.user_id = ' . $user->data['user_id'] . ' AND z.zebra_id = p.poster_id']]></find>
+				<action type="after-add"><![CDATA[		), 
+		array(
+			'FROM'	=> array(MEMBER_LIST_TABLE => 'bm'),
+			'ON'	=> 'p.poster_id = bm.phpbb_user_id AND bm.member_rank_id !=90'
+			), 
+		array(
+			'FROM'  => array(CLASS_TABLE => 'bc'),
+			'ON'    => "bc.class_id = bm.member_class_id AND bc.game_id = bm.game_id "
+			),
+			
+		array(
+			'FROM'  => array(RACE_TABLE => 'br'),
+			'ON'    => "br.race_id = bm.member_race_id AND br.game_id = bm.game_id "
+			),
+
+		array(
+			'FROM'  => array(BB_LANGUAGE => 'bl'),
+			'ON'    => "bl.attribute_id = bc.class_id AND bl.language= '" . $config['bbdkp_lang'] . "' AND bl.attribute = 'class'  and bl.game_id = bc.game_id "
+			), 
+						
+		array(
+			'FROM'  => array(BB_LANGUAGE => 'bl1'),
+			'ON'    => "bl1.attribute_id = br.race_id AND bl1.language= '" . $config['bbdkp_lang'] . "' AND bl1.attribute = 'race'  and bl1.game_id = br.game_id "
+]]></action>
+			</edit>
+
+
+
+			<edit>
+			<find><![CDATA[$now = phpbb_gmgetdate(time() + $user->timezone + $user->dst);]]></find>
+				<action type="after-add"><![CDATA[//BBDKP
+$bbchar = get_bbchar($result);
+$db->sql_rowseek(0, $result);
+//BBDKP]]></action>
+			</edit>
+
+
+			<edit>
+			<find><![CDATA[				'warnings'			=> 0,]]></find>
+				<action type="after-add"><![CDATA[				// BBDKP START
+				'bbchar'			=> '',
+				// BBDKP END]]></action>
+			</edit>
+			
+			<edit>
+			<find><![CDATA[				'posts'			=> $row['user_posts'],]]></find>
+				<action type="after-add"><![CDATA[				// BBDKP START
+				'bbchar'		=> $bbchar[$poster_id],
+				// BBDKP END]]></action>
+			</edit>
+			
+			<edit>
+				<find><![CDATA[	$template->assign_block_vars('postrow', $postrow);]]></find>
+				<action type="after-add"><![CDATA[
+	// BBDKP START
+	if (!empty($user_cache[$poster_id]['bbchar']))
+	{
+		foreach ($user_cache[$poster_id]['bbchar'] as $memberid => $memberdata)
+		{
+			$template->assign_block_vars('postrow.bbchar', array(
+				'BBMEMBERNAME'	=> $memberdata['bbmembername'],
+				'BBCOLORCODE'	=> $memberdata['bbcolorcode'],
+				'BBRACE'		=> $memberdata['bbrace'],
+				'BBRACEIMG'		=> $memberdata['bbraceimg'],
+				'BBCLASS'		=> $memberdata['bbclass'],
+				'BBCLASSIMG'	=> $memberdata['bbclassimg'],
+				'BBLEVEL'		=> $memberdata['bblevel'],
+				'U_VIEW_BBMEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=viewmember' . '&amp;' . URI_NAMEID . '=' .  $memberid ),
+		
+			));
+		}
+	}
+	// BBDKP END
+]]></action>
+			</edit>
+
+			<edit>
+				<find><![CDATA[page_footer();]]></find>
+				<action type="after-add"><![CDATA[/**
+ * retrieves bbDKP character info from sql result.
+ * 
+ * @param object $result
+ * @return array $bbchar
+ */
+function get_bbchar($bbresult)
+{
+	global $phpbb_root_path, $db;
+	$bbchar= array();
+	while ($row = $db->sql_fetchrow($bbresult))
+	{
+		$poster_id = (int) $row['poster_id'];
+		
+		if ($poster_id != ANONYMOUS)
+		{
+			$bb_race_image = (string) (($row['member_gender_id']== 0) ? $row['image_male_small'] : $row['image_female_small']);
+			$bb_race_image = (strlen($bb_race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $bb_race_image . ".png" : '';
+			$bb_class_image = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '';
+		
+			$bbchar[$poster_id][$row['member_id']]['bbmemberid'] = $row['member_id'];
+			$bbchar[$poster_id][$row['member_id']]['bbmembername'] = $row['member_name'];
+			$bbchar[$poster_id][$row['member_id']]['bbcolorcode'] = $row['colorcode'];
+			$bbchar[$poster_id][$row['member_id']]['bbrace'] = $row['race_name'];
+			$bbchar[$poster_id][$row['member_id']]['bbraceimg'] = $bb_race_image;
+			$bbchar[$poster_id][$row['member_id']]['bbclass'] = $row['class_name'];
+			$bbchar[$poster_id][$row['member_id']]['bbclassimg'] = $bb_class_image;
+			$bbchar[$poster_id][$row['member_id']]['bblevel'] = $row['member_level'];
+		
+		}
+		
+	}
+	//do not free result just yet
+	return $bbchar;
+	
+}]]></action>
+			</edit>
+		</open>
+
+
+		<open src="styles/prosilver/template/viewtopic_body.html">
+			<edit>
+				<find><![CDATA[			</dd>
+		<!-- ENDIF -->
+		<!-- ENDIF -->
+]]></find>
+				<action type="after-add"><![CDATA[		
+		<!-- BBDKP START -->
+		<dd>&nbsp;</dd>
+		<dd>&nbsp;</dd>
+		<dd>
+			<!-- BEGIN bbchar -->
+			<ul style="list-style: none;">
+				<li>
+				<!-- IF postrow.bbchar.BBRACEIMG --><img src="{postrow.bbchar.BBRACEIMG}" alt="{postrow.bbchar.RACE}" /> <!-- ENDIF -->
+				<!-- IF postrow.bbchar.BBCLASSIMG --><img src="{postrow.bbchar.BBCLASSIMG}" alt="{postrow.bbchar.CLASS}" /> <!-- ENDIF -->
+				<a href="{postrow.bbchar.U_VIEW_BBMEMBER}"><span style="white-space: nowrap; color:{postrow.bbchar.BBCOLORCODE}">{postrow.bbchar.BBMEMBERNAME}</span> </a> 
+				<strong><!-- IF postrow.bbchar.BBLEVEL -->{postrow.bbchar.BBLEVEL}<!-- ENDIF --></strong>
+				</li>
+			</ul>
+			<!-- END bbchar -->
+		</dd>
+		<!-- BBDKP END -->
+]]></action>
+			</edit>
 		</open>	
 
 		<open src="/styles/prosilver/template/overall_footer.html">

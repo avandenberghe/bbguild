@@ -192,11 +192,13 @@ $lang = array_merge($lang, array(
 	'UMIL_RENAMETABLESOLD'	=> 'Tables renommés de prefixe phpbb_ à bbeqdkp_ ',
 	'UMIL_UPDATE120'	=> 'tables actualisés de 1.1.2.2 à 1.2',
 	'UMIL_122MINIMUM'	=> 'Old version. 1.2.2 is required for updating to 1.2.3',
-	'UMIL_NOGAMECHOSEN'	=> 'Veuillez choisir un jeu avant d\'installer.',
+	'UMIL_NOGAMECHOSEN'	=> 'Veuillez choisir un jeu avant d‘installer.',
 	'UMIL_UPD123'	=> 'Tables mises à jour pour v1.2.3',
-	'UMIL_GAME123'	=> 'Jeu %s installé',
-	'UMIL_GAME125'	=> 'Jeu %s installé',	
+	'UMIL_GAME123'	=> 'Jeu %s installé version 1.2.3',
+	'UMIL_GAME125'	=> 'Jeu %s installé version 1.2.5',	
+	'UMIL_GAME126'	=> 'Jeu %s installé version 1.2.6',		
 	'UMIL_GAMEUNINST123'	=> 'Jeux désinstallés.',
+	'UMIL_UPDTABLES' =>  'Tables %s pour version %s', 
 
 	// ACP titles
 	'BBDKP_WELCOME'	=> 'Bienvenue sur bbDKP',
@@ -374,6 +376,7 @@ $lang = array_merge($lang, array(
 	'ACTION_DECAYSYNC' => 'Amortissement recalculé',
 	'ACTION_ZSYNC' => 'Sommezero recalculé', 
 	'ACTION_DKPSYNC' => 'DKP recalculé',  	
+	'ACTION_DEFAULT_DKP_CHANGED' => 'Pool par défault mis à jour', 
 	
 	// Verbose log entry lines	
 	'NEW_ACTIONS'	=> 'Nouvelles actions d’administrateur',
@@ -410,7 +413,11 @@ $lang = array_merge($lang, array(
 	'VLOG_DECAYSYNC' => '%s a recalculé les amortissements pour %s raids',
 	'VLOG_ZSYNC' => '%s a recalculé la somme zero', 
 	'VLOG_DKPSYNC' => '%s a recalculé DKP',  
-	
+	'VLOG_DEFAULT_DKP_CHANGED' => '%s a changé le pool DKP par défaut à %s',
+	'VLOG_GUILD_ADDED' => '%s a ajouté la guilde %s',
+	'VLOG_MEMBERDKP_UPDATED' => '%s a changé les points de  %s : recu: %.2f -> %.2f, depenses: %.2f -> %.2f',
+	'VLOG_MEMBERDKP_DELETED' => '%s a supprimé le compte DKP de %s !', 
+
 	// Before/After	
 	'ADJUSTMENT_AFTER'	=> 'Ajustment Après',
 	'ADJUSTMENT_BEFORE'	=> 'Ajustment avant',
@@ -493,6 +500,7 @@ $lang = array_merge($lang, array(
 	'ERROR_RANKMEMBERS'	=> 'Erreur : Suppression Grade impossible, il existe toujours de membres ayant ce grade.',
 	'ERROR_NOSELECT'	=> 'Veuillez sélectionner un membre source et un membre destination.',
 	'ERROR_NOADJUSTMENTS'	=> 'Il n‘y a pas d‘ajustements dans la base de données.',
+	'ERROR_POOLNOPOINTS'  => 'Pas de points trouvés en ', 
 
 	// Submission Success Messages
 	'ADMIN_RAID_ATTENDEE_DELETED_FAILED'	=> 'Participant %s ne pouvat pas être supprimé du raid %s.',
@@ -520,7 +528,7 @@ $lang = array_merge($lang, array(
 	'ADMIN_DELETE_MEMBERS_FAILED'	=> 'Erreur : le membre %s n’a pas pu être supprimé. ',
 	'ADMIN_DELETE_NEWS_SUCCESS'	=> 'Cette actualité a été supprimée.',
 	'ADMIN_DELETE_RAID_SUCCESS'	=> 'Ce Raid et tous les objets y associés ont été supprimés. ',
-	'ADMIN_TRANSFER_HISTORY_SUCCESS'	=> 'L’historique de %s a été transferée vers %s et %s a été supprimé.',
+	'ADMIN_TRANSFER_HISTORY_SUCCESS'	=> 'L’historique de %s a été transferée vers %s dans pool %s et %s a été mis à zero.',
 	'ADMIN_UPDATE_ADJ_SUCCESS'	=> 'L’ajustement %s de %.2f a été mis à jour.',
 	'ADMIN_UPDATE_DKPSYS_SUCCESS'	=> 'Le nom et Statut du groupe DKP %s a été changé à : %s, %s',
 	'ADMIN_UPDATE_GUILD_SUCCESS'	=> 'La guilde avec ID  %d a été mise à jour.',
@@ -724,11 +732,13 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'ARM_STAND'	=> 'Standard',
 	'ARM_CLASS'	=> 'Classe',
 	'SHOWONROSTER'	=> 'Montrer sur le Tableau des membres',
+	'MINLEVELROSTER' => 'Niveau minimum', 
+	'MINLEVELROSTER_EXPLAIN' => 'Si member < cette valeur alors pas listé', 
 
 	 // titles
 	'ADD_ITEM_RAIDID_NOTE'	=> 'Montrer que les raids à moins de deux semaines/ %s Voir tous</a>',
 	'ADD_ITEM_RAIDID_SHOWALL_NOTE'	=> 'Tous les raids / %s Montrer que les récentes</a>',
-	'ADD_RAID_VALUE_NOTE'	=> ' si cette zone est à blanc, la valeur préfigée de l\\évènement est utilisée comme Bonus pour le Raid',
+	'ADD_RAID_VALUE_NOTE'	=> ' si cette zone est à blanc, la valeur préfigée de l‘évènement est utilisée comme Bonus pour le Raid',
 	'ADD_ITEMS_FROM_RAID'	=> 'Ajouter des objets de ce Raid',
 	'ADDADJ_TITLE'	=> 'Ajouter un ajustement Groupe',
 	'ADD_EVENT_TITLE'	=> 'Ajouter un Evènement',
@@ -759,7 +769,7 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'MANAGE_MEMBERS_FOOTCOUNT'	=> '... trouvé %d membre(s)',
 	'VIEWLOGS_FOOTCOUNT'	=> '... trouvé %d log(s) / %d par page',
 	'GUILD_FOOTCOUNT'	=> '... trouvé %d guilde(s)',
-	'NEWS_FOOTCOUNT'	=> '... trouvé %d titres d\\actualité(s)',
+	'NEWS_FOOTCOUNT'	=> '... trouvé %d titres d‘actualité(s)',
 	'LISTADJ_FOOTCOUNT'	=> '... trouvé %d ajustment(s) / %d per page',
 	'LISTDKPSYS_FOOTCOUNT'	=> '... trouvé %d groupes dkp / %d per page',
 	'LISTRACE_FOOTCOUNT'	=> '... trouvé %d races',
@@ -1022,22 +1032,8 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'WOW_ZONEEURL'	=> 'http://fr.wowhead.com/?zone=%s',
 	'SWTOR_BASEURL' => 'http://www.torhead.com/npc=%s',
 	'SWTOR_ZONEEURL' => 'http://www.torhead.com/zone=%s',
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	'RETURN_MEMBERLIST'  => 'Return to Member List. ',
+	'RETURN_GUILDLIST'  => 'Return to Guild List. ',
 ));
 
 ?>

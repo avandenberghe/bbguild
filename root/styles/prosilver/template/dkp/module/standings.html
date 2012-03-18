@@ -5,7 +5,7 @@
 <li class="header">
 
 <div style="float: left; width:10%; white-space:nowrap;">
-<h2 style="color:#dfc065">{L_LISTMEMBERS_TITLE}</h2>
+<h1 style="color:#dfc065">{L_LISTMEMBERS_TITLE}</h1>
 </div>
 <div style="float: left; width:40%">
 <br/>
@@ -37,6 +37,14 @@
 <div class="forumbg forumbg-table">
 <div class="inner">
    <span class="corners-top"><span></span></span>
+   
+<!-- IF DKPPAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{DKPPAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
+   
 	<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
 	<thead>
 	  <tr>
@@ -98,6 +106,13 @@
 	  <!-- END members_row -->	
 	</tbody>
 </table>
+
+<!-- IF DKPPAGINATION -->  
+<div class="pagination">
+		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
+		<span>{DKPPAGINATION}<br /><br /></span>
+</div>
+<!-- ENDIF -->
 
 <span class="corners-bottom"><span></span></span>
 </div>

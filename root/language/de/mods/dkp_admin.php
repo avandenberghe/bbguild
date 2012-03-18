@@ -158,11 +158,11 @@ $lang = array_merge($lang, array(
 
 // installer
 'IMPORT_EQDKP132' => 'Lese EQDKP 1.3.2 Daten in bbDKP 1.1.2 ein',
-'IMPORT_EQDKP132_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP Tabellennamen sollen beginnen mit \'EQDKP\', nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
+'IMPORT_EQDKP132_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP Tabellennamen sollen beginnen mit ‘EQDKP‘, nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
 'IMPORT_EQDKP140' => 'Lese EQDKP 1.4.0 Daten in bbdkp 1.1.2 ein',
-'IMPORT_EQDKP140_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP Tabellennamen sollen beginnen mit \'EQDKP\', nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
+'IMPORT_EQDKP140_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP Tabellennamen sollen beginnen mit ‘EQDKP‘, nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
 'IMPORT_EQDKPPLUS' => 'Lese EQDKP-PLUS Daten in bbDKP 1.1.2 ein',
-'IMPORT_EQDKPPLUS_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP+ Tabellennamen sollen beginnen mit \'EQDKP\', nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
+'IMPORT_EQDKPPLUS_CONFIRM' => 'Bist du bereit die Daten einzulesen ? die EQDKP+ Tabellennamen sollen beginnen mit ‘EQDKP‘, nur Variabele Daten werden importiert, nicht die Statischen Daten wie Klassen usw.',
 'UMIL_INSERT_COMMON_ROW' => 'Lese gemeinschaftliche bbDKP Daten ein für Menü,Mitgliedsrang,Monstervorgang',
 'UMIL_REMOVE_COMMON_ROW' => 'Entferne gemeinschaftliche bbDKP Daten für Menü,Mitgliedsrang,Monstervorgang',
 'UMIL_INSERT_GAME_ROW' => 'Füge Spieldaten ein',
@@ -198,9 +198,11 @@ $lang = array_merge($lang, array(
 'UMIL_122MINIMUM' => 'Alte Version. 1.2.2 wird benötigt vom auf 1.2.3 umzudaten',
 'UMIL_NOGAMECHOSEN' => 'Bitte wähle ein Spiel.',
 'UMIL_UPD123' => 'Dateien aktualisiert zu v1.2.3',
-'UMIL_GAME123' => 'Spieldaten für %s installiert.',
-'UMIL_GAME125'  => 'Spieldaten für %s installiert.', 
+'UMIL_GAME123' => 'Spieldaten für %s installiert  Version 1.2.3.',
+'UMIL_GAME125'  => 'Spieldaten für %s installiert  Version 1.2.5.', 
+'UMIL_GAME126'  => 'Spieldaten für %s installiert Version 1.2.6.', 
 'UMIL_GAMEUNINST123' => 'Spieldaten entfernt.',
+'UMIL_UPDTABLES' =>  'Tabellen %s für Version %s', 
 
 // ACP titles
 'BBDKP_WELCOME' => 'Willkommen bei bbDKP',
@@ -241,6 +243,8 @@ $lang = array_merge($lang, array(
 'RETURN_LOG' => 'Zurück zur Protokollliste.',
 'RETURN_RAID'   => 'Zurück zum Raid. ',
 'RETURN_RANK'   => 'Zurück zur Rangliste. ',
+'RETURN_MEMBERLIST'  => 'Zurück zur Mitgliedsliste. ',
+'RETURN_GUILDLIST'  => 'Zurück zur Gildenliste. ',
 'ACP_DKP' => 'bbDKP Einstellungsbereich',
 'ACP_ITEMSTATS' => 'Tooltip Einstellungen',
 'ACP_INDEXPAGE' => 'Portal Einstellungen',
@@ -260,7 +264,7 @@ $lang = array_merge($lang, array(
 'ACP_EDITRAID_EXPLAIN'  => 'Hier kannst du deinen Raid bearbeiten.',
 'ACP_LISTRAIDS_EXPLAIN' => 'Hier ist die Raid Liste pro DKP Pool. Wenn du den Raidnamen anklickst, bringt dich in Verwaltungsmodus',
 'ACP_DKP_LOGS_EXPLAIN'  => 'Hier werden alle Aktionen von bbDKP aufgelistet. Du kannst nach Benutzername, Datum, IP oder Aktion.',
-'ACP_MM_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenranken und Präfix/Suffixe einstellen. (Zum hinzufügen, die letzte Zeile eintippen und bestätigen. Zum löschen, entferne den Namen und bestätige). Rang 99 (den \'out\' Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch den Arsenal-Plugin. ',
+'ACP_MM_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenranken und Präfix/Suffixe einstellen. (Zum hinzufügen, die letzte Zeile eintippen und bestätigen. Zum löschen, entferne den Namen und bestätige). Rang 99 (den ‘out‘ Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch den Arsenal-Plugin. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Gildenmitgliederliste. Hier kannst du Mitglieder verwalten oder löschen. ACHTUNG: löschung bedeutet dass die ganze Mitgliedraidgeschichte in allen DKP Pools vernichtet wird! ',
 'ACP_MM_LISTGUILDS_EXPLAIN' => 'Gildenliste. Bevor du Mitglieder einfügen kannst, musst du eine Gilde hinzufügen.',
 'ACP_MM_ADDGUILD_EXPLAIN' => 'Hier kannst du Gilden löschen oder hinzufügen.',
@@ -377,7 +381,7 @@ $lang = array_merge($lang, array(
 'ACTION_DECAYSYNC' => 'Verfall nachkalkuliert',
 'ACTION_ZSYNC' => 'Nullsummendkp wurde nachkalkuliert', 
 'ACTION_DKPSYNC' => 'DKP wurde nachkalkuliert',  
-
+'ACTION_DEFAULT_DKP_CHANGED' => 'Standard DKP wurde geändert', 
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Neueste Vorgänge von bbDKP-Administratoren',
@@ -414,6 +418,10 @@ $lang = array_merge($lang, array(
 'VLOG_DECAYSYNC' => '%s hat Punkteverfall neu berechnet für %s Raids',
 'VLOG_ZSYNC' => '%s hat NullsummenDKP neu berechnet', 
 'VLOG_DKPSYNC' => '%s hat DKP neu berechnet',  
+'VLOG_DEFAULT_DKP_CHANGED' => '%s hat Standard Pool geändert auf %s',
+'VLOG_GUILD_ADDED' => '%s hat Gilde %s zugefügt',
+'VLOG_MEMBERDKP_UPDATED' => '%s hat die DKP punkte von %s geändert : gerntet: %.2f -> %.2f, ausgegeben: %.2f -> %.2f',
+'VLOG_MEMBERDKP_DELETED' => '%s hat das DKP Konto von %s gelöscht !', 
 
 // Before/After
 'ADJUSTMENT_AFTER' => 'Punkteanpassung danach',
@@ -499,7 +507,8 @@ $lang = array_merge($lang, array(
 'ERROR_NOSELECT' => 'Bitte wähle ein VON und ein ZU Mitgliedsname',
 'ERROR_NOADJUSTMENTS' => 'Keine Anpassungen gefunden.',
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Teilnehmer %s konnte nicht vom Raid %s herausgenommen worden.',
-
+'ERROR_POOLNOPOINTS'  => 'Keine Punkte gefunden in ', 
+	
 // Submission Success Messages
 'ADMIN_ADD_ADJ_SUCCESS' => 'Die %s Punkteanpassung von %.2f wurde erfolgreich hinzugefügt.',
 'ADMIN_ADD_DKPSYS_SUCCESS' => 'Den neuen DKP Pool %s wurde erfolgreich hinzugefügt.',
@@ -524,7 +533,7 @@ $lang = array_merge($lang, array(
 'ADMIN_DELETE_NEWS_SUCCESS' => 'Diese Nachricht wurde erfolgreich gelöscht.',
 'ADMIN_DELETE_RAID_SUCCESS' => 'Dieser Angriff und alle damit verbundenen Gegenstände wurden erfolgreich gelöscht. Etwaige DKP Punkte wurden damit auch geändert.',
 'ADMIN_DUPLICATE_RAID_SUCCESS' => 'Den %s Angriff auf %s wurde dupliziert.',
-'ADMIN_TRANSFER_HISTORY_SUCCESS' => 'Die gesamte Geschichte von Mitglied %s wurde verschoben nach Mitglied %s und das Mitglied %s wurde gelöscht.',
+'ADMIN_TRANSFER_HISTORY_SUCCESS' => 'Die gesamte Geschichte von Mitglied %s wurde verschoben nach Mitglied %s für %s und das konto des Mitglied %s wurde auf null gesetzt.',
 'ADMIN_UPDATE_ADJ_SUCCESS' => 'Die Punkteanpassung %s för %.2f wurde aktualisiert.',
 'ADMIN_UPDATE_DKPSYS_SUCCESS' => 'Den Namen und Status des DKP Pools %s wurde geändert nach : %s, %s',
 'ADMIN_UPDATE_GUILD_SUCCESS' => 'Die Gilde mit id %d wurde aktualisiert.',
@@ -731,6 +740,8 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'ARM_STAND' => 'Standard', 
 'ARM_CLASS' => 'Klasse',
 'SHOWONROSTER' => 'Auf der Anzeigetafel anschauen',
+'MINLEVELROSTER' => 'Minimum niveau', 
+'MINLEVELROSTER_EXPLAIN' => 'If Mitgliedsniveau < diesen Wert dann keine Anzeige', 
 
 'ADD_ITEM_RAIDID_NOTE' => 'Nur Raids innerhalb zwei wochen werden angedeutet / %s Alle andeuten</a>',
 'ADD_ITEM_RAIDID_SHOWALL_NOTE' => 'Alle Raids / %s Nur die letzten</a>',

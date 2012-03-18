@@ -335,7 +335,8 @@ class ucp_dkp
 			'aion'       => $user->lang['AION'],
 			'FFXI'       => $user->lang['FFXI'],
 			'rift'       => $user->lang['RIFT'],
-			'swtor'      => $user->lang['SWTOR']
+			'swtor'      => $user->lang['SWTOR'],
+			'lineage2'   => $user->lang['LINEAGE2']
          );
         $installed_games = array();
         foreach($games as $gameid => $gamename)
