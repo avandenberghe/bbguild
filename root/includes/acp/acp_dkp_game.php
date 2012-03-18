@@ -150,7 +150,7 @@ class acp_dkp_game extends bbDKP_Admin
 					}
        			}
 
-       			$game_id = request_var('game_id', '');
+       			$game_id = request_var('game_id', request_var('hidden_game_id', ''));
 				$id = request_var('race_id', 0);
 				$racename = utf8_normalize_nfc(request_var('racename', '', true));
 				$factionid = request_var('faction', 0 );
@@ -498,6 +498,7 @@ class acp_dkp_game extends bbDKP_Admin
 	                    
 	                    // send parameters to template
 	                    $template->assign_vars( array(
+	                    	'GAME_ID'				=> $game_id, 
 		                    'RACE_ID' 				=> $id  ,
 		                    'RACE_NAME' 		    => $race_name  ,
 							'S_FACTIONLIST_OPTIONS'	=> $s_faction_options, 
@@ -700,6 +701,7 @@ class acp_dkp_game extends bbDKP_Admin
 						
 						// send parameters to template
 	                    $template->assign_vars( array(
+	                    		'GAME_ID'			=> $game_id, 
 	                    		'C_INDEX' 			 => $c_index, 
 			                    'CLASS_ID' 			 => $class_id  ,
 			                    'CLASS_NAME' 		 => $class_name  ,

@@ -30,6 +30,7 @@
 <h3>{L_TIMEDKP}</h3>
 <p>{L_TIMEDKP_EXPLAIN}</p>
 
+<p>{L_TIMEDKP_EXAMPLE}</p>
 <dl><dt>  
      <label>{L_TIMEDKP}:</label>
      <br />
@@ -74,7 +75,7 @@
 
 <h3>{L_ZEROSUM}</h3>
 <p>{L_ZEROSUM_EXPLAIN}</p>
-
+<p>{L_ZEROSUM_EXAMPLE}</p>
 <dl><dt>  
      <label>{L_ZEROSUM}:</label><br />{L_ZEROSUM_ONOFF_EXPLAIN}
      <br />
@@ -150,20 +151,30 @@
 	<dd><input type="text" name="itemdecaypct" id="itemdecaypct" size="5" maxlength="5" value="{ITEMDECAYPCT}" class="input" /></dd>
 </dl>
 
+<dl>
+	<dt><label for="adjdecaypct">{L_DECAYPCTADJ}:</label> <br />
+	{L_DECAYPCTADJ_EXPLAIN}</dt>
+	<dd><input type="text" name="adjdecaypct" id="adjdecaypct" size="5" maxlength="5" value="{ADJDECAYPCT}" class="input" /></dd>
+</dl>
+
 
 <dl>
 	<dt><label for="decayfreq">{L_DECAYFREQ}:</label> <br />
 	{L_DECAYFREQ_EXPLAIN}</dt>
-	<dd><input type="text" name="decayfreq" id="decayfreq" size="5" maxlength="5" value="{DECAYFREQ}" class="input" /></dd>
-</dl>
-
-<dl>
-	<dt><label for="decayfreqtype">{L_DECAYFREQTYPE}:</label> <br />
-	{L_DECAYFREQTYPE_EXPLAIN}</dt>
-	<dd>
+	<dd><input type="text" name="decayfreq" id="decayfreq" size="5" maxlength="5" value="{DECAYFREQ}" class="input" />
 	<select id="decayfreqtype" name="decayfreqtype">{S_FREQTYPE_OPTIONS}</select>
 	</dd>
 </dl>
+
+<dl><dt>  
+     <label for="decay_scheduler">{L_DECAY_SCHEDULE}</label>
+     <br />{L_DECAY_SCHEDULE_EXPLAIN}
+     </dt>
+     <dd>
+     <input type="radio" name="decay_scheduler" id="decay_scheduler"  value="1"<!-- IF F_DECAYSCHEDULER == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
+     <input type="radio" name="decay_scheduler" value="0"<!-- IF F_DECAYSCHEDULER == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
+ 	</dd>
+</dl> 
 
 <dl>
 <dt>
@@ -180,6 +191,15 @@
 {L_DECAY_J}	<br/>
 {L_DECAY_F}<br/>
 
+</dd>
+</dl>
+
+<dl>
+<dt>
+<label>{L_DECAY_EXAMPLE}</label>
+</dt>
+<dd>
+<div style="border:thin"><img src="{DECAYIMGEXAMPLE}" alt="decay"/></div>
 </dd>
 </dl>
 
@@ -201,6 +221,11 @@
 </dl> 
 	
 <dl>
+	<dt><label for="minep">{L_MEP}:</label> <br />
+	{L_MEP_EXPLAIN}</dt>
+	<dd><input type="text" name="minep" id="minep"  size="5" maxlength="5" value="{MINEP}" class="input" /></dd>
+</dl>
+<dl>
 	<dt><label for="basegp">{L_BGP}:</label> <br />
 	{L_BGP_EXPLAIN}</dt>
 	<dd><input type="text" name="basegp" id="basegp"  size="5" maxlength="5" value="{BASEGP}" class="input" /></dd>
@@ -212,7 +237,9 @@
 </dt>
 <dd>
 {L_EP_DEFINITION}<br/>
-{L_DECAY_EP}  <br/>
+{L_MEP_DEFINITION}<br/>
+{L_DECAY_EP}  
+<br/><br/>
 {L_GP_DEFINITION} <br/>
 {L_RGP_DEFINITION} <br />
 {L_DECAY_GP}<br/>

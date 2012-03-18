@@ -430,7 +430,7 @@ $versions = array(
            			'item_gameid' 	  => array('UINT', 0),
 					'item_value'      => array('DECIMAL:11', 0.00),
           			'item_decay'      => array('DECIMAL:11', 0.00), // decay of itemvalue
-          			'item_zs'      	  => array('BOOL', 0), // if this flag is set the itemvalue will be distributed over raid
+          			'item_zs'      	  => array('BOOL', 0), 		// if this flag is set the itemvalue will be distributed over raid
                     ),
                     'PRIMARY_KEY'     => 'item_id',
                     'KEYS'         => array('raid_id'    => array('INDEX', 'raid_id')),					
@@ -814,7 +814,7 @@ $versions = array(
 		
 		'custom' => array(
 			// add columns to new indexes 
-            'tableupdates123',
+            'tableupdates',
 			// purge and reinstall chosen gametables according to latest specs
 			'gameinstall'
       	)),
@@ -902,6 +902,17 @@ $versions = array(
 		),
 		
 		'1.2.6' => array(
+		
+		// add decay on adjustments
+		'table_column_add' => array(
+			array($table_prefix . 'bbdkp_adjustments', 'adj_decay' , array('DECIMAL:11', 0.00)),
+			array($table_prefix . 'bbdkp_adjustments', 'can_decay' , array('BOOL', 0)),
+			array($table_prefix . 'bbdkp_memberdkp',   'adj_decay' , array('DECIMAL:11', 0.00)),
+			array($table_prefix . 'bbdkp_adjustments', 'decay_time' , array('DECIMAL:11', 0.00)),
+			array($table_prefix . 'bbdkp_raid_items',  'decay_time' , array('DECIMAL:11', 0.00)),  
+			array($table_prefix . 'bbdkp_raid_detail', 'decay_time' , array('DECIMAL:11', 0.00)),
+			),  
+			
          // add dkp points menu
 		'module_add' => array(
             array('acp', 'ACP_DKP_MAINPAGE', array(
@@ -910,6 +921,27 @@ $versions = array(
         		),
 
             )),
+            
+        // add new variables 
+        'config_add' => array(
+	        array('bbdkp_minep', 100.0, true),
+	        array('bbdkp_decaycron', 1, true),
+	        array('bbdkp_lastcron', 0, true),
+	        array('bbdkp_crontime', 23, true),
+	        array('bbdkp_adjdecaypct', 5, true),
+	        array('bbdkp_minrosterlvl', 50, true),
+	        array('bbdkp_portal_rtno', 5, true),
+	        array('bbdkp_portal_rtlen', 15, true),
+	        array('bbdkp_portal_rtshow', 1, true),
+			),   
+
+		'custom' => array(
+			// do some table updates
+			'tableupdates',
+			'gameinstall',  
+			'bbdkp_caches'
+			),
+				
 		),		
       
 );
@@ -1312,6 +1344,11 @@ function gameinstall($action, $version)
 	  			// report what we did to umil
 				return array('command' => sprintf($user->lang['UMIL_GAME125'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 				break;
+			case '1.2.6':
+				// set roster to table leayout by default
+				$umil->config_update('bbdkp_roster_layout', 1, true);
+				return array('command' => sprintf($user->lang['UMIL_GAME126'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
+				break;
 			}
 			break;
 		case 'uninstall' :
@@ -1323,7 +1360,7 @@ function gameinstall($action, $version)
 /*
  * 
  */
-function tableupdates123($action, $version)
+function tableupdates($action, $version)
 {
 	global $user, $umil, $config, $db, $table_prefix; 
 	switch ($action)
@@ -1333,40 +1370,58 @@ function tableupdates123($action, $version)
 			switch ($version)
 				{
 					case '1.2.3':
-					// remove unique index on class table
-					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
-					$db->sql_query($sql);
+						// remove unique index on class table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
+						$db->sql_query($sql);
+	
+						// make new unique composite
+						$sql= "CREATE UNIQUE INDEX classes ON " . $table_prefix . 'bbdkp_classes' . " (game_id, class_id) ";
+						$db->sql_query($sql);
+					
+						// race table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_races' . " DROP PRIMARY KEY";
+						$db->sql_query($sql);
+	
+						// make new pk 
+						$sql= "ALTER TABLE " . $table_prefix . 'bbdkp_races' . "  ADD PRIMARY KEY (game_id, race_id)";
+						$db->sql_query($sql);
+					
+						// faction table
+						$sql= "CREATE UNIQUE INDEX factions ON " . $table_prefix . 'bbdkp_factions' . " (game_id, faction_id)";
+						$db->sql_query($sql);		
+			
+						// language table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX attribute_id ";
+						$db->sql_query($sql);		
+	
+						// make new unique key
+						$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
+						$db->sql_query($sql);
+						break;
+					
+					case '1.2.6':
+						// remove unique index on guild table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberguild' . " DROP INDEX gname";
+						$db->sql_query($sql);
+						
+						// make new unique composite
+						$sql= "CREATE UNIQUE INDEX guildindex ON " . $table_prefix . 'bbdkp_memberguild' . " (name, realm) ";
+						$db->sql_query($sql);
 
-					// make new unique composite
-					$sql= "CREATE UNIQUE INDEX classes ON " . $table_prefix . 'bbdkp_classes' . " (game_id, class_id) ";
-					$db->sql_query($sql);
-				
-					// race table
-					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_races' . " DROP PRIMARY KEY";
-					$db->sql_query($sql);
-
-					// make new pk 
-					$sql= "ALTER TABLE " . $table_prefix . 'bbdkp_races' . "  ADD PRIMARY KEY (game_id, race_id)";
-					$db->sql_query($sql);
-				
-					// faction table
-					$sql= "CREATE UNIQUE INDEX factions ON " . $table_prefix . 'bbdkp_factions' . " (game_id, faction_id)";
-					$db->sql_query($sql);		
-		
-					// language table
-					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX attribute_id ";
-					$db->sql_query($sql);		
-
-					// make new unique key
-					$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
-					$db->sql_query($sql);
+						// remove unique index on member table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
+						$db->sql_query($sql);
+						
+						// make new unique composite
+						$sql= "CREATE UNIQUE INDEX memberindex ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
+						$db->sql_query($sql);
+						break;					
 			}
 			break;
 		case 'update':
 				switch ($version)
 				{
 					case '1.2.3':
-			    
 					// remove old unique index on class table
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
 					$db->sql_query($sql);
@@ -1410,7 +1465,26 @@ function tableupdates123($action, $version)
 					{
 						$umil->module_remove('acp','ACP_CAT_DKP','ACP_DKP_NEWS');
 					}
+						break;
 					
+					case '1.2.6':
+						// remove unique index on guild table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberguild' . " DROP INDEX gname";
+						$db->sql_query($sql);
+						
+						// make new unique composite
+						$sql= "CREATE UNIQUE INDEX guildindex ON " . $table_prefix . 'bbdkp_memberguild' . " (name, realm) ";
+						$db->sql_query($sql);
+
+						// remove unique index on member table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
+						$db->sql_query($sql);
+						
+						// make new unique composite
+						$sql= "CREATE UNIQUE INDEX memberindex ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
+						$db->sql_query($sql);
+						
+						break;
 					
 					
 			}
@@ -1428,7 +1502,7 @@ function tableupdates123($action, $version)
 			}
 			break;
 	}
-	return array('command' => 'UMIL_UPD123', 'result' => 'SUCCESS');
+	return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
 	
 }
 

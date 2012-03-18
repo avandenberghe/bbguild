@@ -30,19 +30,19 @@
 	<thead>
   <tr>
     <th style="text-align:center; width:6%; white-space: nowrap;">{L_ACTIVE}<br /> 
-    <span class="small"><a href="#" onclick="marklist('memberlist', 'activate_id', true); return false;">{L_MARK_ALL}</a> <br /> 
-    <a href="#" onclick="marklist('memberlist', 'activate_id', false); return false;">{L_UNMARK_ALL}</a></span>
+    <span class="small"><a href="#" onclick="marklist('mm_listmembers', 'activate_id', true); return false;">{L_MARK_ALL}</a> <br /> 
+    <a href="#" onclick="marklist('mm_listmembers', 'activate_id', false); return false;">{L_UNMARK_ALL}</a></span>
     </th>
     <th style="text-align:left; width:20%"><a href="{O_NAME}">{L_NAME}</a></th>
     <th style="text-align:left; width:15%; white-space: nowrap;"><a href="{O_CLASS}">{L_RACE}/{L_CLASS}</a></th>
     <th style="text-align:left; width:5%; white-space: nowrap;"><a href="{O_LEVEL}">{L_LEVEL}</a></th>
-    <th style="text-align:left; width:10%"><a href="{O_PHPBBNAME}">{L_USERNAME}</a></th>
+    <th style="text-align:left; width:10%"><a href="{O_USERNAME}">{L_USERNAME}</a></th>
     <th style="text-align:left; width:10%"><a href="{O_RANK}">{L_RANK}</a></th>
     <th style="text-align:left; width:10%"><a href="{O_JOINDATE}">{L_JOINDATE}</a></th>
     <th style="text-align:left; width:10%"><a href="{O_OUTDATE}">{L_OUTDATE}</a></th>
   	<th style="text-align:center; width:6%">{L_ACTION}
-  	<span class="small"><a href="#" onclick="marklist('memberlist', 'delete_id', true); return false;">{L_MARK_ALL}</a> <br /> 
-	<a href="#" onclick="marklist('memberlist', 'delete_id', false); return false;">{L_UNMARK_ALL}</a></span>
+  	<span class="small"><a href="#" onclick="marklist('mm_listmembers', 'delete_id', true); return false;">{L_MARK_ALL}</a> <br /> 
+	<a href="#" onclick="marklist('mm_listmembers', 'delete_id', false); return false;">{L_UNMARK_ALL}</a></span>
   	
   	</th>
   </tr>
@@ -63,7 +63,7 @@
   <!-- IF members_row.S_READONLY  == 1 -->
   <tr class="highlight">
   <!-- ENDIF -->
-    <td style="text-align:center;" align="right">{members_row.ID} <input type="checkbox" class="radio" name="activate_id[]" value="{members_row.ID}" {members_row.STATUS} /></td>
+    <td style="text-align:center;" align="right">{members_row.ID} <input type="checkbox" class="radio" name="activate_id[{members_row.ID}]" value="{members_row.ID}" {members_row.STATUS} /></td>
     <td class="row2" style="text-align:left;" ><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a></td>
     <td style="text-align:left;" ><!-- IF members_row.S_RACE_IMAGE_EXISTS --><img src="{members_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;<span style="color:{members_row.COLORCODE}" >{members_row.CLASS}</span></td>
     <td style="text-align:center;" >{members_row.LEVEL}</td>
@@ -84,6 +84,10 @@
 
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
     {S_FORM_TOKEN}
+  	<!-- BEGIN members_row -->
+  	<input type="hidden" name="hidden_member[{members_row.ID}]" value="{members_row.ID}" />
+  	<input type="hidden" name="start" value="{START}" />
+  	<!-- END members_row -->
 	<input class="button2" type="submit" name="deactivate" value="{L_CHANGE_STATUS}" />
 	<input class="button2" name="memberadd" type="submit" value="{L_ADD}" />
 	<br /><br />

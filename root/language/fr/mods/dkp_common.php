@@ -37,6 +37,7 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
+
 	'MENU_PLANNER'	=> 'Calendrier',
 	'RIFT'	=> 'Rift',
 	'SWTOR'	=> 'Starwars : Vieille République',
@@ -410,6 +411,23 @@ Même si elle n’est pas requise pour l’usage gratuit, elle aide à soutenir 
 	'MAX_CHARS_EXCEEDED' => 'Vous ne pouvez avoir que %s charactères liés à votre compte forum', 
 	'LINEAGE2'       => 'Lineage 2', 
 	'WELCOME'		=> 'Bienvenu', 
+	'FOOTERBBDKP'	=> 'Powered by bbDKP', 
+	'ADJDECAY'		=> 'Amortissement ajustements', 
+	'NETADJUSTMENT' => 'Ajustement Net', 
+	'TIMEVALUE'		=> 'Points par temps', 
+	'LOW' => 'Bas',  	
+	'CLOSED'	=> 'Fermé',	
+	'HIGH'	=> 'Urgent',		
+	'MEDIUM'	=> 'Moyen',	
+	'NA'	=> 'P/A',	
+	'OPEN'	=> 'Ouvert',	
+	'RECENT_LENGTH' 	=> 'n° de caractères affichés',
+	'NUMTOPICS'					=> 'n° de sujets affichés',
+	'SHOW_RT_BLOCK'				=> 'Montrer Sujets récents sur Portail',
+	'RECENT_TOPICS_SETTING'		=> 'Paramètres Sujets récents',
+	'RECENT_TOPICS'				=> 'Sujets récents',	
+	'NO_RECENT_TOPICS'			=> 'Pas de Sujets récents',
+	'POSTED_BY_ON'				=> 'par %1$s le %2$s',	
 ));
 
 ?>

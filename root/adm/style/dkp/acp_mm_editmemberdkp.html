@@ -5,7 +5,7 @@
 
 <p>{L_EXPLAIN}</p>
 
-<form method="post" action="{F_EDIT_MEMBER}" name="editmemberdkp">
+<form method="post" action="{F_EDIT_MEMBER}" id="editmemberdkp">
 
 <div>
 <input type="hidden" name="hidden_id" value="{V_MEMBER_ID}" />
@@ -15,51 +15,51 @@
 <legend>{L_ADD_MEMBER_TITLE}</legend>
   <dl>
     <dt>{L_POOL}</dt>
-    <dd><label for="member_dkpname"><strong>{MEMBER_DKPNAME}</strong></label></dd>
+    <dd><label><strong>{MEMBER_DKPNAME}</strong></label></dd>
   </dl>
   
   <dl>
-    <dt><label for="member_name">{L_NAME}</strong>:</label>	</dt>
-    <dd><label for="member_name"><strong>{MEMBER_NAME}</strong></label></dd>
+    <dt><label><strong>{L_NAME}</strong>:</label>	</dt>
+    <dd><label><strong>{MEMBER_NAME}</strong></label></dd>
   </dl>
   
   <dl>
-    <dt><label for="member_level">{L_LEVEL}:</label></dt>
-    <dd><label for="member_level"><strong>{MEMBER_LEVEL}</strong></label></dd>
+    <dt><label>{L_LEVEL}:</label></dt>
+    <dd><label><strong>{MEMBER_LEVEL}</strong></label></dd>
   </dl>
   
   <dl>
-    <dt><label for="member_race_id">{L_RACE}:</label></dt>
-    <dd><label for="member_race_id"><strong>{MEMBER_RACE}</strong></label></dd>
+    <dt><label>{L_RACE}:</label></dt>
+    <dd><label><strong>{MEMBER_RACE}</strong></label></dd>
  </dl>
    
   <dl>
-    <dt><label for="member_class_id">{L_CLASS}:</label></dt>
-    <dd><label for="member_class_id"><strong><img src="{IMAGENAME}" alt="" />&nbsp;<span style="color:{COLORCODE}">{MEMBER_CLASS}</span></strong></label></dd>
+    <dt><label>{L_CLASS}:</label></dt>
+    <dd><label><strong><img src="{IMAGENAME}" alt="" />&nbsp;<span style="color:{COLORCODE}">{MEMBER_CLASS}</span></strong></label></dd>
   </dl> 
 
   <dl>
-    <dt><label for="member_rank_id">{L_MEMBER_RANK}:</label></dt>
-    <dd><label for="member_rank_id"><em>{MEMBER_RANK}</em></label></dd>
+    <dt><label>{L_MEMBER_RANK}:</label></dt>
+    <dd><label><em>{MEMBER_RANK}</em></label></dd>
   </dl> 
 <hr/>
   
   <dl>
     <dt><label for="raid_value">{L_RAIDVALUE}:</label></dt>
-		<dd><input type="text" name="raid_value" size="20" maxlength="14" value="{RAIDVAL}" class="input" /> 
+		<dd><input type="text" id="raid_value" name="raid_value" size="20" maxlength="14" value="{RAIDVAL}" class="input" /> 
 		/ {L_SHOULD_BE}: <span class="positive">{CORRECT_RAIDVAL}</span></dd>
   </dl> 
   <!-- IF S_SHOWTIME -->
     <dl>
-    <dt><label for="time_value">{L_TIMEVALUE}:</label></dt>
-		<dd><input type="text" name="time_value" size="20" maxlength="14" value="{TIMEBONUS}" class="input" /> 
+    <dt><label for="time_value">{L_TIMEDKP}:</label></dt>
+		<dd><input type="text" id="time_value" name="time_value" size="20" maxlength="14" value="{TIMEBONUS}" class="input" /> 
 		/ {L_SHOULD_BE}: <span class="positive">{CORRECT_TIMEBONUS}</span></dd>
   </dl> 
   <!-- ENDIF -->
    <!-- IF S_SHOWZS -->
     <dl>
     <dt><label for="zerosum">{L_ZSVALUE}:</label></dt>
-		<dd><input type="text" name="zerosum" size="20" maxlength="14" value="{ZEROSUM}" class="input" /> 
+		<dd><input type="text" id="zerosum" name="zerosum" size="20" maxlength="14" value="{ZEROSUM}" class="input" /> 
 		/ {L_SHOULD_BE}: <span class="positive">{CORRECT_ZEROSUM}</span></dd>
   </dl> 
   <!-- ENDIF -->
@@ -67,37 +67,37 @@
     
     <dl>
     <dt><label for="earned">{L_EARNED}:</label></dt>
-		<dd><input type="text" name="earned" size="20" maxlength="14" value="{EARNED}" class="input" /> 
+		<dd><input type="text" name="earned"  id="earned" size="20" maxlength="14" value="{EARNED}" class="input" /> 
 		/ {L_SHOULD_BE}: <span class="positive">{CORRECT_EARNED}</span></dd>
   </dl> 
    <!-- IF S_SHOWDECAY -->    
     <dl>
     <dt><label for="rdecay">{L_DECAY}:</label></dt>
-		<dd><input type="text" name="rdecay" size="20" maxlength="14" value="{RAIDDECAY}" class="input" /> 
+		<dd><input type="text" id="rdecay" name="rdecay" size="20" maxlength="14" value="{RAIDDECAY}" class="input" /> 
 		/ {L_SHOULD_BE}: <span class="negative">{CORRECT_RAIDDECAY}</span></dd>
   </dl> 
   <!-- ENDIF -->  
   <dl>
-    <dt><label for="adjustment">{L_ADJUSTMENT}:</label></dt>
+    <dt><label>{L_ADJUSTMENT}:</label></dt>
 	<dd>{ADJUSTMENT}</dd>
   </dl> 
     <hr/>
   <!-- IF S_SHOWEPGP -->    
   <dl>
-    <dt><label for="ep">{L_EP}:</label></dt>
+    <dt><label>{L_EP}:</label></dt>
 	<dd><span class="positive"><strong>{EP}</strong></span></dd>
   </dl>
   <hr/>
   <!-- ENDIF -->  
   <dl>
     <dt><label for="spent">{L_SPENT}:</label></dt>
-	<dd><input type="text" name="spent" size="20" maxlength="14" value="{SPENT}" class="input" /> 
+	<dd><input type="text" id="spent" name="spent" size="20" maxlength="14" value="{SPENT}" class="input" /> 
 	/ {L_SHOULD_BE}:  <span class="negative">{CORRECT_MEMBER_SPENT}</span></dd>
   </dl> 
   <!-- IF S_SHOWDECAY -->
   <dl>
     <dt><label for="idecay">{L_DECAY}:</label></dt>
-	<dd><input type="text" name="idecay" size="20" maxlength="14" value="{ITEMDECAY}" class="input" /> 
+	<dd><input type="text" id="idecay" name="idecay" size="20" maxlength="14" value="{ITEMDECAY}" class="input" /> 
 	/ {L_SHOULD_BE}: <span class="positive"><strong>{CORRECT_ITEMDECAY}</span></dd>
   </dl> 
   <!-- ENDIF -->      
@@ -136,6 +136,4 @@
 </div>
 </form>
 
-
 <!-- INCLUDE dkp/overall_footer.html -->
-

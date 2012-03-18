@@ -350,4 +350,45 @@ span.corners-inner-top span, span.corners-inner-bottom span {
 	background-image: url('{T_THEME_PATH}/images/corners_right.png'); 
 }
 
+/** flot statistics **/
+
+/* css for flot */
+.valueLabels {
+	font-size:70%;
+	color:black;
+}
+
+div.valueLabelLight {
+	opacity:0.5;
+	background-color: white;
+	border:none;
+	position:absolute;
+}
+
+div.valueLabel {
+	position:absolute;
+	border:none;
+}
+
+div.tickLabel { 
+	padding-left:20px !important;
+	font-size: 11px !important;
+    font-style: italic !important;
+    /*font-weight: bold !important;*/
+    font-family: sans-serif !important;
+    font-variant: small-caps !important;
+}
+.tooltip-with-bg{
+ 	position:relative;
+ 	text-align : center;
+	background-color: #000;
+	margin:0px auto;
+	min-width:100px;
+	max-width:100px; 
+	color:#FFFFDD;
+	z-index:1;
+	margin-left:10px; /* default, width of left corner */
+	margin-bottom:0.5em; /* spacing under dialog */	
+	font-size: 11px;
+}
 

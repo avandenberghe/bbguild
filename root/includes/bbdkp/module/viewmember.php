@@ -115,15 +115,17 @@ $sql_array = array(
 		m.member_earned,
 		m.member_adjustment, 
 		m.member_spent,
-		(m.member_earned + m.member_adjustment - m.member_spent - ( ' . max(0, $config['bbdkp_basegp']) . ')  ) AS member_current,
-		(m.member_earned + m.member_adjustment) AS ep	,
-		m.member_raid_decay, 
-		(m.member_earned + m.member_adjustment - m.member_raid_decay) AS ep_net	,
-		m.member_spent AS gp,
 		m.member_item_decay,
+		m.member_raid_decay, 
+		m.adj_decay, 
+		(m.member_earned + m.member_adjustment - m.member_spent ) AS member_current,
+		(m.member_earned + m.member_adjustment) AS ep	,
+		(m.member_earned + m.member_adjustment - m.member_raid_decay - m.adj_decay) AS ep_net	,
+		(m.member_spent + ' . max(0, $config['bbdkp_basegp']) . ') AS gp,
 		m.member_spent - m.member_item_decay as gp_net, 
-		CASE WHEN (m.member_spent - m.member_item_decay) = 0 THEN ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment) / ' . max(0, $config['bbdkp_basegp']) .', 2) 
-		ELSE ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr,
+		CASE WHEN (m.member_spent - m.member_item_decay + ' . max(0, $config['bbdkp_basegp']) . ' ) = 0 
+		THEN 1 
+		ELSE ROUND((m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr,
 		m.member_firstraid,
 		m.member_lastraid,
 		r1.name AS member_race,
@@ -195,6 +197,7 @@ $member = array(
 	'member_zerosum_bonus' => $row['member_zerosum_bonus'],
 	'member_earned'        => $row['member_earned'],
 	'member_adjustment'    => $row['member_adjustment'],
+	'adj_decay'			   => $row['adj_decay'],			
 	'member_current'       => $row['member_current'],
 	'ep'    			   => $row['ep'],
 	'member_raid_decay'	   => $row['member_raid_decay'], 
@@ -232,13 +235,12 @@ $template->assign_vars(array(
 
 	'RAIDDECAY'		=> $member['member_raid_decay'],
 	'EPNET'			=> (float) $member['ep_net'],
-
 	'ADJUSTMENT'    => $member['member_adjustment'],
 	'C_ADJUSTMENT'  => ($member['member_adjustment'] > 0) ? 'positive' : 'negative', 
-
+	
 	'SPENT'         => $member['member_spent'],
 	'ITEMDECAY'     => $member['member_item_decay'],
-	'GP'     		=> $member['gp'] + $member['bgp'],
+	'GP'     		=> $member['gp'],
 	'BGP'     		=> $member['bgp'],
 	'GPNET'     	=> $member['gp_net'] + $member['bgp'],
 
@@ -246,8 +248,9 @@ $template->assign_vars(array(
 	'C_CURRENT'       => ($member['member_current'] > 0) ? 'positive' : 'negative',
 	'PR'     		=> $member['pr'],
 
-	'TOTAL_DECAY'	=> $member['member_raid_decay'] -$member['member_item_decay'],
-	'C_TOTAL_DECAY'	=> ($member['member_raid_decay'] -$member['member_item_decay']) > 0 ? 'negative' : 'positive' ,
+	'ADJDECAY'		=> $member['adj_decay'], 
+	'TOTAL_DECAY'	=> $member['member_raid_decay'] - $member['member_item_decay'] + $member['adj_decay'],
+	'C_TOTAL_DECAY'	=> ($member['member_raid_decay'] -$member['member_item_decay'] + $member['adj_decay']) > 0 ? 'negative' : 'positive' ,
 
 
 	'NETCURRENT'    => $member['ep_net'] - $member['gp_net'] - max(0, $config['bbdkp_basegp']) ,
@@ -316,43 +319,16 @@ $template->assign_vars(array(
 /****************************
 /*	 Get Attended Raids	*
 *****************************/
+
 if (!isset($_GET['rstart']))  
 {
-	$current_earned = $member['member_earned'] - $member['member_raid_decay'];
 	$rstart=0; 
 }
 else
 {
 	$rstart = request_var('rstart',0) ;
-	
-	//totals
-	$current_earned = $member['member_earned'] - $member['member_raid_decay'];
-	$sql_array = array(
-	'SELECT'	=>	' sum(ra.raid_value+ ra.time_bonus+ ra.zerosum_bonus - ra.raid_decay) as earned_result, count(*) as raidlines ', 
-	'FROM'		=> array(
-		EVENTS_TABLE			=> 'e',				
-		RAIDS_TABLE				=> 'r',
-		RAID_DETAIL_TABLE		=> 'ra', 
-		),
-	'WHERE'		=> ' 
-		r.event_id = e.event_id
-		AND ra.raid_id = r.raid_id
-		AND l.member_id = ra.member_id
-		AND (ra.member_id=' . $member_id .')
-		AND r.raid_start BETWEEN ' . $start_date . ' AND ' . $end_date . ' 
-		AND e.event_dkpid = ' . $dkp_id, 
-	);
-	
-	$sql = $db->sql_build_query('SELECT', $sql_array);
-	$result = $db->sql_query($sql);
-	$current_earned = (int) $db->sql_fetchfield('earned_result');
-	$raidlines = (int) $db->sql_fetchfield('raidlines');
-	
-	$db->sql_freeresult($earned_result);
 }
 
-// raid lines
-$raidlines = $config['bbdkp_user_rlimit'] ;
 $sql_array = array(
 	'SELECT'	=>	'r.raid_id, e.event_name, e.event_dkpid, r.raid_start, r.raid_note, 
 	ra.raid_value, ra.raid_decay, ra.time_bonus, ra.zerosum_bonus, 
@@ -363,7 +339,8 @@ $sql_array = array(
 		RAID_DETAIL_TABLE	=> 'ra',
 		),
 
-	'WHERE'		=>	' ra.raid_id = r.raid_id
+	'WHERE'		=>	'
+	     ra.raid_id = r.raid_id
 		 AND e.event_id = r.event_id
 		 AND ra.member_id=' . $member_id . '
 		 AND e.event_dkpid=' . (int) $dkp_id, 
@@ -372,6 +349,27 @@ $sql_array = array(
 		  
 $sql = $db->sql_build_query('SELECT', $sql_array);
 
+//calculate first window 
+$current_earned=0;
+if($rstart > 0)
+{
+	if (!$raids_result = $db->sql_query_limit($sql, $rstart , 0))
+	{
+	   trigger_error ($user->lang['MNOTFOUND']);
+	}
+	$current_earned = $member['member_earned'] + $member['member_time_bonus'] + $member['member_zerosum_bonus'] - $member['member_raid_decay'];
+	while ( $raid = $db->sql_fetchrow($raids_result))
+	{
+		$current_earned = $current_earned - $raid['netearned'];
+	}
+}
+else 
+{
+	$current_earned = $member['member_earned'] + $member['member_time_bonus'] + $member['member_zerosum_bonus'] - $member['member_raid_decay'];
+}
+
+$raidlines = $config['bbdkp_user_rlimit'] ;
+// calculate second window
 if (!$raids_result = $db->sql_query_limit($sql, $raidlines, $rstart))
 {
    trigger_error ($user->lang['MNOTFOUND']);
@@ -402,50 +400,18 @@ $total_attended_raids = raidcount(true,$dkp_id,0,$member_id, 0,true);
 /**********************************
 /***   Item purchase history  *****
 ***********************************/
-$itemlines = $config['bbdkp_user_ilimit'] ;
- 
+
 if (!isset($_GET['istart']))
 {
-	$current_spent = $member['member_spent'];
+	
 	$istart=0; 
 }
 else
 {
 	$istart = request_var('istart', 0);
-	$current_spent = $member['member_spent'];
-	
-	$sql_array = array(
-	'SELECT'	=>	'i.item_value ', 
-	'FROM'		=> array(
-		EVENTS_TABLE		=> 'e',
-		RAIDS_TABLE			=> 'r',
-		RAID_ITEMS_TABLE			=> 'i',				
-	),
-
-	'WHERE'		=>	" e.event_id = r.event_id
-		 AND e.event_dkpid=" . (int) $dkp_id . '	 
-		 AND r.raid_id = i.raid_id
-		 AND i.member_id  = ' . $member_id, 
-
-	'ORDER_BY'	=> 'i.item_date DESC',
-	  );
-		  
-	$sql = $db->sql_build_query('SELECT', $sql_array);
-	$spent_result = $db->sql_query_limit($sql, $itemlines, $istart);
-	if ( !$spent_result	 )
-	{
-	   trigger_error("Error in database");
-	}
-	
-	while ( $cs_row = $db->sql_fetchrow($spent_result) )
-	{
-		$current_spent -= $cs_row['item_value'];
-	}
-	$db->sql_freeresult($spent_result);
 }
 
-// inner join the raids and items table
- $sql_array = array(
+$sql_array = array(
 	'SELECT'	=>	'i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_gameid, e.event_name ', 
 	'FROM'		=> array(
 		EVENTS_TABLE	=> 'e',
@@ -457,10 +423,31 @@ else
 		  AND e.event_dkpid=' .	 (int) $dkp_id . ' 
 		  AND r.raid_id = i.raid_id		 
 		  AND i.member_id = ' . $member_id, 
-	'ORDER_BY'	=> 'i.item_date DESC',
+	'ORDER_BY'	=> 'i.raid_id DESC, i.item_date DESC',
 	  );
-		  
 $sql = $db->sql_build_query('SELECT', $sql_array);
+
+//calculate first window 
+$current_spent = 0;
+if($istart > 0)
+{
+	if (!$items_result = $db->sql_query_limit($sql, $istart , 0))
+	{
+	   trigger_error ($user->lang['MNOTFOUND']);
+	}
+	$current_spent = $member['member_spent'];
+	
+	while ( $item = $db->sql_fetchrow($items_result))
+	{
+		$current_spent = $current_spent - $item['item_value'];
+	}
+}
+else 
+{
+	$current_spent = $member['member_spent'];
+}
+
+$itemlines = $config['bbdkp_user_ilimit'];
 $items_result = $db->sql_query_limit($sql, $itemlines, $istart);
 if ( !$items_result)
 {
@@ -517,10 +504,10 @@ $result6 = $db->sql_query($sql6);
 $total_purchased_items = $db->sql_fetchfield('itemcount');
 $db->sql_freeresult($result6);	
 	
-$raidpag  = generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart='.$istart), 
+$raidpag  = generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart=' .$istart), 
 $total_attended_raids, $raidlines, $rstart, 1, 'rstart');
 	 
-$itpag =   generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx" ,'page=viewmember&amp;'.  URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id.  '&amp;rstart='.$rstart),
+$itpag =   generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx" ,'page=viewmember&amp;'.  URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;rstart='.$rstart ),
 $total_purchased_items,	 $itemlines, $istart, 1 ,'istart');
 
 $template->assign_vars(array(
@@ -533,13 +520,10 @@ $template->assign_vars(array(
 	'ITEMS'				  => ( is_null($total_purchased_items) ) ? false : true,
 ));
 
-
-
-
 /***************************************
  **** Individual Adjustment History	  **
  ***************************************/
-$sql = 'SELECT adjustment_value, adjustment_date, adjustment_reason
+$sql = 'SELECT adjustment_value, adjustment_date, adjustment_reason, adj_decay 
 		FROM ' . ADJUSTMENTS_TABLE . '	
 		WHERE member_id = ' . $member_id . ' 
 		AND	 adjustment_dkpid = ' . (int) $dkp_id . ' 
@@ -558,6 +542,8 @@ while ( $adjustment = $db->sql_fetchrow($adjustments_result) )
 	$template->assign_block_vars('adjustments_row', array(
 		'DATE'					  => ( !empty($adjustment['adjustment_date']) ) ? date($config['bbdkp_date_format'], $adjustment['adjustment_date']) : '&nbsp;',
 		'REASON'				  => ( !empty($adjustment['adjustment_reason']) ) ? $adjustment['adjustment_reason'] : '&nbsp;',
+		'ADJDECAY' 				  => $adjustment['adj_decay'],
+		'NETDECAY' 				  => $adjustment['adjustment_value'] - $adjustment['adj_decay'],
 		'C_INDIVIDUAL_ADJUSTMENT' => $adjustment['adjustment_value'],
 		'INDIVIDUAL_ADJUSTMENT'	  => $adjustment['adjustment_value'])
 	);

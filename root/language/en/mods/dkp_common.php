@@ -44,6 +44,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.', 
 'FOOTERBBDKP' => 'powered by bbDKP', 
+
 //---- Portal blocks ----- 
 'PORTAL'	=> 'Portal', 
 'RECENTLOOT' => 'Recent Loot', 
@@ -58,25 +59,13 @@ $lang = array_merge($lang, array(
 'ERROR_INVALID_NEWS_PROVIDED' => 'A valid news id was not provided.',
 'BOSSPROGRESS' => 'Bossprogress', 	
 'WELCOME'	=> 'Welcome', 
-
-// Main Menu
-'MENU' => 'Menu', 
-'MENU_ADMIN_PANEL' => 'Administration Panel',
-'MENU_BOSS' => 'Bossprogress',
-'MENU_EVENTS' => 'Events',
-'MENU_ITEMVAL' => 'Item Values',
-'MENU_ITEMHIST' => 'Item History',
-'MENU_NEWS' => 'News',
-'MENU_RAIDS' => 'Raids',
-'MENU_ROSTER'	=> 'Roster',
-'MENU_STATS' => 'Statistics',
-'MENU_SUMMARY' => 'Summary',
-'MENU_STANDINGS' => 'Standings',
-'MENU_VIEWMEMBER' => 'View Member',
-'MENU_VIEWITEM' => 'View Item',
-'MENU_VIEWRAID' => 'View Raid',
-'MENU_VIEWEVENT' => 'View Event',
-'MENU_PLANNER' => 'Planner',
+'RECENT_LENGTH' 	=> 'Number of chars retrieved',
+'NUMTOPICS'					=> 'Number of topics retrieved',
+'SHOW_RT_BLOCK'				=> 'Show Recent Topics',
+'RECENT_TOPICS_SETTING'		=> 'Recent Topics Settings',
+'RECENT_TOPICS'				=> 'Recent Topics',	
+'NO_RECENT_TOPICS'			=> 'No recent topics',
+'POSTED_BY_ON'				=> 'by %1$s on %2$s',
 
 //links
 'MENU_LINKS' => 'Weblinks',
@@ -105,6 +94,24 @@ $lang = array_merge($lang, array(
 'LINK12' => 'http://www.worldofwarcraft.com', 
 'LINK12T' => 'World of Warcraft', 
 
+// Main Menu
+'MENU' => 'Menu', 
+'MENU_ADMIN_PANEL' => 'Administration Panel',
+'MENU_BOSS' => 'Bossprogress',
+'MENU_EVENTS' => 'Events',
+'MENU_ITEMVAL' => 'Item Values',
+'MENU_ITEMHIST' => 'Item History',
+'MENU_NEWS' => 'News',
+'MENU_RAIDS' => 'Raids',
+'MENU_ROSTER'	=> 'Roster',
+'MENU_STATS' => 'Statistics',
+'MENU_SUMMARY' => 'Summary',
+'MENU_STANDINGS' => 'Standings',
+'MENU_VIEWMEMBER' => 'View Member',
+'MENU_VIEWITEM' => 'View Item',
+'MENU_VIEWRAID' => 'View Raid',
+'MENU_VIEWEVENT' => 'View Event',
+'MENU_PLANNER' => 'Planner',
 
 //games supported
 'WOW'        => 'World of Warcraft' , 
@@ -117,8 +124,8 @@ $lang = array_merge($lang, array(
 'AION'       => 'Aion' , 
 'FFXI'       => 'Final Fantasy XI',
 'RIFT'       => 'Rift',
-'SWTOR'       => 'Starwars : The old Republic', 
-'LINEAGE2'       => 'Lineage 2', 
+'SWTOR'      => 'Starwars : The old Republic', 
+'LINEAGE2'   => 'Lineage 2', 
 
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status', 
@@ -129,7 +136,6 @@ $lang = array_merge($lang, array(
 'RECRUIT_MESSAGE' => 'We are currently looking for new members for the following classes:',
 
 //ROSTER
-
 'GUILDROSTER' => 'Guild Roster',
 'RANK' 		  => 'Rank',
 'CLASS' 	  => 'Class',
@@ -214,7 +220,7 @@ $lang = array_merge($lang, array(
 'CLASS_DISTRIBUTION' => 'Class Distribution',
 'CLASS_SUMMARY' => 'Class Summary: %s to %s',
 'CONFIGURATION' => 'Configuration',
-
+'CLOSED' => 'Closed', 
 'DATE' => 'Date',
 'DELETE' => 'Delete',
 'DELETE_CONFIRMATION' => 'Delete Confirmation',
@@ -225,6 +231,7 @@ $lang = array_merge($lang, array(
 'CHARACTERS_UPDATED' => 'The Charactername %s was assigned to your account. ',
 'NO_CHARACTERS' => 'No characters found to bind to your Account. Please add some characters in the ACP.',
 'RAIDDECAY' => 'Raid Decay',
+'ADJDECAY' => 'Adjustment decay', 
 'DECAY' => 'Decay',
 'DROPS' => 'Drops',
 'EVENT' => 'Event',
@@ -235,6 +242,7 @@ $lang = array_merge($lang, array(
 'FIRST' => 'First',
 'GROUP_ADJ' => 'Group Adj.',
 'GROUP_ADJUSTMENTS' => 'Group Adjustments',
+'HIGH'	=> 'High', 
 'INDIVIDUAL_ADJUSTMENTS' => 'Individual Adjustments',
 'INDIVIDUAL_ADJUSTMENT_HISTORY' => 'Individual Adjustment History',
 'INDIV_ADJ' => 'Indiv. Adj.',
@@ -251,10 +259,14 @@ $lang = array_merge($lang, array(
 'LOG_DATE_TIME' => 'Date/Time of this Log',
 'LOOT_FACTOR' => 'Loot Factor',
 'LOOTS' => 'Loots',
-'LOOTDIST_CLASS' => 'Loot distribution per Class', 
+'LOOTDIST_CLASS' => 'Loot distribution per Class',
+'LOW' => 'Low',  
 'MANAGE' => 'Manage',
+'MEDIUM' => 'Medium',
 'MEMBER' => 'Member',
 'MEMBERS' => 'Members',
+'NA' => 'N/A', 
+'NETADJUSTMENT' => 'Net Adjustment', 
 'NO_DATA' => 'No Data', 	
 'RAID_ON' => 'Raid on %s on %s',
 'MAX_CHARS_EXCEEDED' => 'Sorry, you can only have %s Characters bound to your phpBB account.', 
@@ -262,6 +274,7 @@ $lang = array_merge($lang, array(
 'NEWEST' => 'Newest raid',
 'NOTE' => 'Note',
 'OLDEST' => 'Oldest raid',
+'OPEN' => 'Open',
 'OPTIONS' => 'Options',
 'OUTDATE' => 'Guild leave date',
 'PERCENT' => 'Percent',
@@ -294,6 +307,7 @@ $lang = array_merge($lang, array(
 'TIME' => 'Time',
 'TIME_BONUS' => 'Time bonus',
 'TOTAL' => 'Total',
+'TIMEVALUE' => 'Time Value',
 'TOTAL_EARNED' => 'Total Earned',
 'TOTAL_ITEMS' => 'Total Items',
 'TOTAL_RAIDS' => 'Total Raids',
@@ -459,7 +473,7 @@ bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'AUTHOR'=> 		'Author',
 'MAINT'=> 		'Maintainer', 
 
-'DONATORS' => 'Unexpectedgreg, Bisa, Sniperpaladin, McTurk, Mizpah, Kapli, Hroar, Chrome', 
+'DONATORS' => 'Unexpectedgreg, Bisa, Sniperpaladin, McTurk, Mizpah, Kapli, Hroar, Chrome, haqzore', 
 
 'DONATION' => 'Donation',
 'DONA_NAME' => 'Name',

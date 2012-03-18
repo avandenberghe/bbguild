@@ -92,6 +92,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						'VALUE' => $row['dkpsys_id'], 
 						'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
 						'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
+					$dkpsys_name[$row['dkpsys_id']] = $row['dkpsys_name']; 
 				}
 				$db->sql_freeresult( $result );
 				/***  end drop-down query ***/
@@ -123,8 +124,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 
 				$sql_array = array(
 					'SELECT'	=> 'm.member_id,  a.member_name, a.member_level, m.member_dkpid, 
-					m.member_raid_value, m.member_earned, m.member_adjustment, m.member_spent, 
-					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
+					m.member_raid_value, m.member_earned, m.member_adjustment, m.member_spent,  
+					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay - adj_decay) AS member_current,
 					m.member_status, m.member_lastraid,
 					s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename', 
 				    'FROM'      => array(
@@ -176,19 +177,23 @@ class acp_dkp_mdkp extends bbDKP_Admin
 
 				if($config['bbdkp_decay'] == 1)
 				{
-					$sql_array[ 'SELECT'] .= ', m.member_raid_decay, m.member_item_decay ';
-					$sort_order[9] = array('member_raid_decay desc', 'member_raid_decay');
-					$sort_order[13] = array('member_item_decay desc', 'member_item_decay');
+					$sql_array[ 'SELECT'] .= ', m.member_raid_decay , m.adj_decay, m.member_item_decay ';
+					$sort_order[9] = array('(m.member_raid_decay +  m.adj_decay) desc', ' (m.member_raid_decay +  m.adj_decay) ');
+					$sort_order[13] = array('m.member_item_decay desc', 'member_item_decay');
 					
 				}
 				
 				if($config['bbdkp_epgp'] == 1)
 				{
-					$sql_array[ 'SELECT'] .= ', (m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep, (m.member_spent - m.member_item_decay ) AS gp, case when (m.member_spent - m.member_item_decay) = 0 then (m.member_earned - m.member_raid_decay + m.member_adjustment)  
-					else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as er ' ;
+					$sql_array[ 'SELECT'] .= ', 
+					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep, 
+					(m.member_spent - m.member_item_decay  + ' . max(0, $config['bbdkp_basegp']) .' ) AS gp, 
+					CASE when (m.member_spent - m.member_item_decay + ' . max(0, $config['bbdkp_basegp']) .' ) = 0 then 1  
+					ELSE round((m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) / 
+								(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr ' ;
 					$sort_order[11] = array('ep desc', 'ep');
 					$sort_order[14] = array('gp desc', 'gp');
-					$sort_order[15] = array('er desc', 'er');
+					$sort_order[15] = array('pr desc', 'pr');
 				}
 				
 				$current_order = switch_order($sort_order);
@@ -215,7 +220,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					++$lines;
 					
 					$members_row = array(
-					    'STATUS'        => ($row['member_status']== 1) ? 'Checked ' : '',
+					    'STATUS'        => ($row['member_status']== 1) ? 'checked="checked" ' : '',
 						'ID'            => $row['member_id'],
 						'DKPID'         => $row['member_dkpid'],
 						'DKPSYS_S'      => $dkpsys_id ,
@@ -250,7 +255,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					
 					if($config['bbdkp_decay'] == 1)
 					{
-						$members_row['RAIDDECAY'] = $row['member_raid_decay'];
+						$members_row['RAIDDECAY'] = $row['member_raid_decay'] + $row['adj_decay'];
 						$members_row['ITEMDECAY'] = $row['member_item_decay'];
 					}
 					
@@ -258,7 +263,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					{
 						$members_row['EP'] = $row['ep'];
 						$members_row['GP'] = $row['gp'];
-						$members_row['ER'] = $row['er'];
+						$members_row['PR'] = $row['pr'];
 					}
 						
 					$template->assign_block_vars('members_row', $members_row);
@@ -301,9 +306,10 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
 				 	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 					'U_LIST_MEMBERDKP' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;" . URI_DKPSYS . "=". $dkpsys_id . "&amp;mode=mm_listmemberdkp") .'&amp;mod=list&amp;',		
-					'S_NOTMM' => false,
+					'S_NOTMM'		=> false,
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text, 
-		            'DKPSYS' => $dkpsys_id
+		            'DKPSYS' 		=> $dkpsys_id, 
+					'DKPSYSNAME' 	=> $dkpsys_name[$dkpsys_id],
 					);
 					
 					if($config['bbdkp_timebased'] == 1)
@@ -328,7 +334,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					{
 						$output[ 'O_EP'] = $current_order['uri'][11]; 
 						$output[ 'O_GP'] = $current_order['uri'][14]; 
-						$output[ 'O_ER'] = $current_order['uri'][15]; 
+						$output[ 'O_PR'] = $current_order['uri'][15]; 
 					}
 					
 				$template->assign_vars($output);
@@ -381,10 +387,13 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					while ( $row = $db->sql_fetchrow($result) )
 					{
    						$this->old_member = array(
-   							'member_name'		=> $row['member_name'], 
-							'member_id'			=> $row['member_id'],
-							'member_earned'     => $row['member_earned'],
-							'member_spent'      => $row['member_spent'],
+   							'member_name'			=> $row['member_name'], 
+							'member_id'				=> $row['member_id'],
+							'member_earned'     	=> $row['member_earned'],
+							'member_raid_value'     => $row['member_raid_value'],
+   							'member_time_bonus'     => $row['member_time_bonus'],
+   							'member_zerosum_bonus'  => $row['member_zerosum_bonus'],
+   							'member_spent'      	=> $row['member_spent'],
 							);
 					}
 					$db->sql_freeresult($result);
@@ -408,13 +417,14 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					$db->sql_transaction('commit'); 
 								
 					$log_action = array(
-						'header'              => 'ACTION_MEMBERDKP_UPDATED',
+						'header'              => 'L_ACTION_MEMBERDKP_UPDATED',
+						'L_USER' 				=>  $user->data['user_id'],
+						'L_USERCOLOUR' 			=>  $user->data['user_colour'],							
 						'L_NAME'     		  => $this->old_member['member_name'],
 						'L_EARNED_BEFORE'     => $this->old_member['member_earned'],
 						'L_SPENT_BEFORE'      => $this->old_member['member_spent'],
-						'L_EARNED_AFTER'      => request_var('member_earned',0.00),
-						'L_SPENT_AFTER'       => request_var('member_spent', 0.00),
-						'L_UPDATED_BY'        => $user->data['username']);
+						'L_EARNED_AFTER'      => request_var('earned',0.00),
+						'L_SPENT_AFTER'       => request_var('spent', 0.00));
 						
 					$this->log_insert(array(
 						'log_type'   => $log_action['header'],
@@ -606,14 +616,15 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					m.member_earned,
 					m.member_raid_decay, 
 					m.member_adjustment, 
-					(m.member_earned - m.member_raid_decay + m.member_adjustment) AS ep	,
+					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep	,
 					m.member_spent,
 					m.member_item_decay,
-					(m.member_spent - m.member_item_decay ) AS gp,
-					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay ) AS member_current,
-					case when (m.member_spent - m.member_item_decay) = 0 then 1 
-					else round((m.member_earned - m.member_raid_decay + m.member_adjustment) / (m.member_spent - m.member_item_decay),2) end as er,
-					
+					(m.member_spent - m.member_item_decay  + ' . max(0, $config['bbdkp_basegp']) .' ) AS gp,
+					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay - m.adj_decay ) AS member_current,
+					case when (m.member_spent - m.member_item_decay + ' . max(0, $config['bbdkp_basegp']) .' ) = 0 then 1 
+					else round( (m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) 
+								/ ( ' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr,
+					m.adj_decay, 
 					m.member_lastraid,
 					r1.name AS member_race,
 					s.dkpsys_name, 
@@ -674,7 +685,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'member_spent'         => $row['member_spent'],
 					'member_item_decay'    => $row['member_item_decay'],
 					'gp'     			   => $row['gp'],
-					'er'     			   => $row['er'],
+					'pr'     			   => $row['pr'],
+					'adj_decay'			   => $row['adj_decay'], 
 					'member_current'       => $row['member_current'],
 					'member_race_id'    => $row['member_race_id'], 
 					'member_race'       => $row['member_race'],
@@ -706,11 +718,13 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'EARNED'        		=> $this->member['member_earned'],
 					'RAIDDECAY'				=> $this->member['member_raid_decay'], 
 					'ADJUSTMENT'    		=> $this->member['member_adjustment'],
+					'RAIDDECAY'				=> $this->member['member_raid_decay'],
+					'ADJDECAY'				=> $this->member['adj_decay'],
 					'EP'    				=> $this->member['ep'],
 					'SPENT'         		=> $this->member['member_spent'],
 					'ITEMDECAY'     		=> $this->member['member_item_decay'],
 					'GP'     				=> $this->member['gp'],
-					'ER'     				=> $this->member['er'],
+					'PR'     				=> $this->member['pr'],
 				
 					'MEMBER_EARNED'         => $this->member['member_earned'],
 					'MEMBER_SPENT'          => $this->member['member_spent'],
@@ -745,47 +759,105 @@ class acp_dkp_mdkp extends bbDKP_Admin
 			
 			/***************************************/
 			// member dkp transfer
-			// this transfers dkp from one member to another.
-			// the old account will still exist
+			// this transfers dkp account from one member account to another member account.
+			// the old member account will still exist
 			/***************************************/
 			
 			case 'mm_transfer':
 				$submit	 = (isset($_POST['transfer'])) ? true : false;
+				$submitdkp	= (isset($_POST['dkpsys_id']) || isset($_GET['dkpsys_id']) ) ? true : false;
+
 				
-				if ($submit)
+				/***  DKPSYS drop-down query ***/
+				$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
+		                     FROM ' . DKPSYS_TABLE . '  group by dkpsys_name ';
+				$result = $db->sql_query ( $sql );
+				$dkpsys_id = 0;
+
+				if ($submitdkp)
+				{
+					$dkpsys_id = request_var ( 'dkpsys_id', 0 );
+				} 
+				else 
+				{
+					while ( $row = $db->sql_fetchrow ( $result ) ) 
+					{
+						if($row['dkpsys_default'] == "Y"  )
+						{
+							$dkpsys_id = $row['dkpsys_id'];
+						}
+					}
+					
+					if ($dkpsys_id == 0)
+					{
+						$result = $db->sql_query_limit ( $sql, 1 );
+						while ( $row = $db->sql_fetchrow ( $result ) ) 
+						{
+							$dkpsys_id = $row['dkpsys_id'];
+						}
+					}
+				}
+				
+				$result = $db->sql_query ( $sql );
+				while ( $row = $db->sql_fetchrow ( $result ) ) 
+				{
+					$template->assign_block_vars ( 'dkpsys_row', 
+						array (
+						'VALUE' => $row['dkpsys_id'], 
+						'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '', 
+						'OPTION' => (! empty ( $row['dkpsys_name'] )) ? $row['dkpsys_name'] : '(None)' ) );
+					$dkpsys_name[$row['dkpsys_id']] = $row['dkpsys_name']; 
+				}
+				$db->sql_freeresult( $result );
+				/***  end drop-down query ***/
+				
+				
+				if ($submit && $submitdkp==false)
 				{
 	        		if (confirm_box(true))
 					{
 						//fetch hidden variables
 						$member_from = request_var('hidden_idfrom', 0);
 						$member_to = request_var('hidden_idto', 0);
+						$dkpsys_id = request_var('hidden_dkpid', 0);
 						
 						//declare transfer array
 						$transfer = array();
 
-						/* 1) collect and transfer adjustments to new owner */
-						$sql = 'SELECT sum(adjustment_value) as adjustments, adjustment_dkpid FROM ' . 
+						/* 1) collect adjustments to transfer */
+						$sql = 'SELECT 
+							sum(adjustment_value) as adjustments, 
+							sum(adj_decay) as adj_decay,
+							adjustment_dkpid FROM ' . 
 							ADJUSTMENTS_TABLE . ' 
-							where member_id = ' .  $member_from . ' 
+							where member_id = ' .  $member_from . '
+							AND adjustment_dkpid = ' . $dkpsys_id . ' 
 							GROUP BY adjustment_dkpid';
 						$result = $db->sql_query($sql, 0);
 						while ( $row = $db->sql_fetchrow($result) )
 						{
-							$transfer[$row['adjustment_dkpid']]['adjustments'] = (float) $row['adjustments'] ;
+							$transfer['adjustments'] = (float) $row['adjustments'] ;
+							$transfer['adj_decay'] = (float) $row['adj_decay'] ;
 						}
 						$db->sql_freeresult($result);
 						
-						/* 2) calculate $member_from item cost by dkp pool to transfer to new dkp account */
-						$sql = 'SELECT sum(i.item_value) as itemvalue, e.event_dkpid FROM ' . 
+						/* 2) collect item cost, decay and zspoints to transfer  */
+						$sql = 'SELECT sum(i.item_value) as itemvalue,
+							sum(i.item_decay) as item_decay,
+							sum(i.item_zs) as item_zs, 
+							e.event_dkpid FROM ' . 
 							RAID_ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
 		        			where e.event_id=r.event_id
+		        			and e.event_dkpid = ' . $dkpsys_id . '
 		        			and r.raid_id=i.raid_id 
 		        			and i.member_id = ' .  $member_from . ' 
 							GROUP BY e.event_dkpid';
 						$result = $db->sql_query($sql, 0);
 						while ( $row = $db->sql_fetchrow($result) )
 						{
-							$transfer[$row['event_dkpid']]['itemcost'] = (float) $row['itemvalue'] ;
+							$transfer['itemcost'] = (float) $row['itemvalue'] ;
+							$transfer['item_decay'] = (float) $row['item_decay'] ;
+							$transfer['item_zs'] = (float) $row['item_zs'] ;
 						}
 						$db->sql_freeresult($result);
 					
@@ -802,20 +874,22 @@ class acp_dkp_mdkp extends bbDKP_Admin
 							FROM ' . RAID_DETAIL_TABLE . ' ra,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
 		        			WHERE e.event_id = r.event_id
 		        			AND r.raid_id = ra.raid_id 
+		        			and e.event_dkpid = ' . $dkpsys_id . '
 		        			AND ra.member_id = ' .  $member_from . ' 
 		        			AND r.raid_id not in( select raid_id from ' . RAID_DETAIL_TABLE . ' where member_id = '. $member_to . ')
 							GROUP BY e.event_dkpid';
 						$result = $db->sql_query($sql, 0);
+						
 						while ( $row = $db->sql_fetchrow($result) )
 						{
-							$transfer[$row['event_dkpid']]['raidvalue'] = (float) $row['raidvalue'] ;
-							$transfer[$row['event_dkpid']]['time_bonus'] = (float) $row['time_bonus'] ;
-							$transfer[$row['event_dkpid']]['zerosum_bonus'] = (float) $row['zerosum_bonus'] ;
-							$transfer[$row['event_dkpid']]['raid_decay'] = (float) $row['raid_decay'] ;
+							$transfer['raidvalue'] = (float) $row['raidvalue'] ;
+							$transfer['time_bonus'] = (float) $row['time_bonus'] ;
+							$transfer['zerosum_bonus'] = (float) $row['zerosum_bonus'] ;
+							$transfer['raid_decay'] = (float) $row['raid_decay'] ;
 							
-							$transfer[$row['event_dkpid']]['maxraiddate'] = (int) $row['maxraiddate'] ;
-							$transfer[$row['event_dkpid']]['minraiddate'] = (int) $row['minraiddate'] ;
-							$transfer[$row['event_dkpid']]['raidcount'] = (int) $row['raidcount'] ;
+							$transfer['maxraiddate'] = (int) $row['maxraiddate'] ;
+							$transfer['minraiddate'] = (int) $row['minraiddate'] ;
+							$transfer['raidcount'] = (int) $row['raidcount'] ;
 						}
 						$db->sql_freeresult($result);
 
@@ -823,133 +897,174 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						$db->sql_transaction('begin'); 
 						
 						/* 4) now update dkp table */
-						// loop the transfer array
-						foreach ($transfer as $dkpid => $data) 
-						{ 
-								// check if pool exists for $member_to
-							    $sql = 'SELECT count(*) as memberpoolcount FROM ' . MEMBER_DKP_TABLE . ' 
-		                        WHERE member_id = '  . $member_to . ' and member_dkpid = ' .  $dkpid ; 
-		                        $result = $db->sql_query($sql, 0);
-		                        $total_rowto = (int) $db->sql_fetchfield('memberpoolcount');
-		                        $db->sql_freeresult($result);
-							    
-		                        if ($total_rowto == 1)
-		                        {
-		                        	// get old data
-		                        	$sql = 'SELECT member_raid_value, member_time_bonus, member_zerosum_bonus, member_earned, member_raid_decay, 
-		                        	member_spent, member_item_decay, member_adjustment, member_firstraid, member_lastraid, member_raidcount  
-		                        	FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . (int) $member_to  . ' and member_dkpid = ' . $dkpid;
-		    						$result = $db->sql_query($sql,0);
-		    						while ( $row = $db->sql_fetchrow($result) )
-		    						{
-		    							$oldmember_raid_value = (float) $row['member_raid_value'];
-		    							$oldmember_time_bonus  = (float) $row['member_time_bonus'];
-		    							$oldmember_zerosum_bonus = (float) $row['member_zerosum_bonus'];
-		    							$oldmember_earned = (float) $row['member_earned'];
-		    							$oldmember_raid_decay = (float) $row['member_raid_decay'];
-										$oldmember_adjustment = (float) $row['member_adjustment'];
-					 					$oldmember_spent	  = (float) $row['member_spent'];
-					 					$oldmember_item_decay = (float) $row['member_item_decay'];
-			                    		$oldmember_firstraid  = (int) $row['member_firstraid'];
-			                    		$oldmember_lastraid	  = (int) $row['member_lastraid'];
-			                    		$oldmember_raidcount  = (int) $row['member_raidcount'];
-			                    		
-			                    		if(isset($data['minraiddate']))
-			                    		{
-			                    			$newfirstraid = ( $oldmember_firstraid <= $data['minraiddate'] ) ? $oldmember_firstraid : $data['minraiddate'];
-			                    		}
-			                    		else
-			                    		{
-			                    			$newfirstraid = $oldmember_firstraid; 	
-			                    		}
-			                    		
-			                    		if(isset($data['maxraiddate']))
-			                    		{
-			                    			$newlastraid = ( $oldmember_lastraid <= $data['maxraiddate'] ) ? $oldmember_lastraid : $data['maxraiddate'];
-			                    		}
-			                    		else
-			                    		{
-			                    			$newlastraid = $oldmember_lastraid; 	
-			                    		}
+
+						// check if pool record exists in dkp table for $member_to
+					    $sql = 'SELECT count(*) as memberpoolcount FROM ' . MEMBER_DKP_TABLE . ' 
+                        WHERE member_id = '  . $member_to . ' and member_dkpid = ' .  $dkpsys_id ; 
+                        $result = $db->sql_query($sql, 0);
+                        $total_rowto = (int) $db->sql_fetchfield('memberpoolcount');
+                        $db->sql_freeresult($result);
+					    
+                        if ($total_rowto == 1)
+                        {
+                        	// exists so update row
+                        	$sql = 'SELECT member_raid_value, member_time_bonus, member_zerosum_bonus, member_earned, member_raid_decay, 
+                        	member_spent, member_item_decay, member_adjustment, member_firstraid, member_lastraid, member_raidcount , adj_decay 
+                        	FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . (int) $member_to  . ' and member_dkpid = ' . $dkpsys_id;
+    						$result = $db->sql_query($sql,0);
+    						while ( $row = $db->sql_fetchrow($result))
+    						{
+    							$oldmember_raid_value = (float) $row['member_raid_value'];
+    							$oldmember_time_bonus  = (float) $row['member_time_bonus'];
+    							$oldmember_zerosum_bonus = (float) $row['member_zerosum_bonus'];
+    							$oldmember_earned = (float) $row['member_earned'];
+    							$oldmember_raid_decay = (float) $row['member_raid_decay'];
+								$oldmember_adjustment = (float) $row['member_adjustment'];
+								$oldmember_adj_decay  = (float) $row['adj_decay'];
+			 					$oldmember_spent	  = (float) $row['member_spent'];
+			 					$oldmember_item_decay = (float) $row['member_item_decay'];
+	                    		$oldmember_firstraid  = (int) $row['member_firstraid'];
+	                    		$oldmember_lastraid	  = (int) $row['member_lastraid'];
+	                    		$oldmember_raidcount  = (int) $row['member_raidcount'];
+	                    		
+	                    		if(isset($transfer['minraiddate']))
+	                    		{
+	                    			$newfirstraid = ( $oldmember_firstraid <= $transfer['minraiddate'] ) ? $oldmember_firstraid : $transfer['minraiddate'];
+	                    		}
+	                    		else
+	                    		{
+	                    			$newfirstraid = $oldmember_firstraid; 	
+	                    		}
+	                    		
+	                    		if(isset($transfer['maxraiddate']))
+	                    		{
+	                    			$newlastraid = ( $oldmember_lastraid <= $transfer['maxraiddate'] ) ? $oldmember_lastraid : $transfer['maxraiddate'];
+	                    		}
+	                    		else
+	                    		{
+	                    			$newlastraid = $oldmember_lastraid; 	
+	                    		}
     						    		
-		    						}
-		    						$db->sql_freeresult($result);
+    						}
+    						$db->sql_freeresult($result);
 		    						
-		    						//build update query
-		                        	$query = $db->sql_build_array('UPDATE', array(
-		                        		'member_raid_value'	    => $oldmember_raid_value + (isset( $data['member_raid_value']) ? $data['member_raid_value'] : 0.00) ,
-		                        		'member_time_bonus'	    => $oldmember_time_bonus + (isset( $data['member_time_bonus']) ? $data['member_time_bonus'] : 0.00) ,
-		                        		'member_zerosum_bonus'	=> $oldmember_zerosum_bonus + (isset( $data['member_zerosum_bonus']) ? $data['member_zerosum_bonus'] : 0.00) ,
-	    			                    'member_earned'	    	=> $oldmember_earned + (isset( $data['member_raid_value']   ) ? $data['member_raid_value'] : 0.00) + (isset( $data['member_time_bonus']) ? $data['member_time_bonus'] : 0.00) +  (isset( $data['member_zerosum_bonus']) ? $data['member_zerosum_bonus'] : 0.00) ,  
-	    								'member_raid_decay'		=> $oldmember_raid_decay + (isset( $data['raid_decay']) ? $data['raid_decay'] : 0.00) ,
-	    			                    'member_adjustment'		=> $oldmember_adjustment + (isset( $data['adjustments']) ? $data['adjustments'] : 0.00), 
-	    					 			'member_spent'		    => $oldmember_spent + (isset( $data['itemcost']) ? $data['itemcost'] : 0.00), 
-										'member_item_decay'	    => $oldmember_item_decay + (isset( $data['member_item_decay']) ? $data['member_item_decay'] : 0.00),
-	    			                    'member_firstraid'	    => $newfirstraid, 
-	    			                    'member_lastraid'	    => $newlastraid, 
-	    			                    'member_raidcount'		=> $oldmember_raidcount + (isset( $data['raidcount']) ? $data['raidcount'] : 0))  
-    			                    ); 
+    						//build update query
+                        	$query = $db->sql_build_array('UPDATE', array(
+                        		'member_raid_value'	    => $oldmember_raid_value + (isset( $transfer['member_raid_value']) ? $transfer['member_raid_value'] : 0.00) ,
+                        		'member_time_bonus'	    => $oldmember_time_bonus + (isset( $transfer['member_time_bonus']) ? $transfer['member_time_bonus'] : 0.00) ,
+                        		'member_zerosum_bonus'	=> $oldmember_zerosum_bonus + (isset( $transfer['member_zerosum_bonus']) ? $transfer['member_zerosum_bonus'] : 0.00) ,
+   			                    'member_earned'	    	=> $oldmember_earned + (isset( $transfer['member_raid_value']   ) ? $transfer['member_raid_value'] : 0.00) +
+                        				  (isset( $transfer['member_time_bonus']) ? $transfer['member_time_bonus'] : 0.00) +  
+                        				  (isset( $transfer['member_zerosum_bonus']) ? $transfer['member_zerosum_bonus'] : 0.00) ,  
+   								'member_raid_decay'		=> $oldmember_raid_decay + (isset( $transfer['raid_decay']) ? $transfer['raid_decay'] : 0.00) ,
+   			                    'member_adjustment'		=> $oldmember_adjustment + (isset( $transfer['adjustments']) ? $transfer['adjustments'] : 0.00),
+                        		'adj_decay'				=> $oldmember_adj_decay + (isset( $transfer['adj_decay']) ? $transfer['adj_decay'] : 0.00), 
+   					 			'member_spent'		    => $oldmember_spent + (isset( $transfer['itemcost']) ? $transfer['itemcost'] : 0.00) + (isset( $transfer['item_zs']) ? $transfer['item_zs'] : 0.00), 
+								'member_item_decay'	    => $oldmember_item_decay + (isset( $transfer['item_decay']) ? $transfer['item_decay'] : 0.00),
+   			                    'member_firstraid'	    => $newfirstraid, 
+   			                    'member_lastraid'	    => $newlastraid, 
+   			                    'member_raidcount'		=> $oldmember_raidcount + (isset( $transfer['raidcount']) ? $transfer['raidcount'] : 0))  
+		                    ); 
     			                    
-           			                $sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . ' WHERE member_id = ' . $member_to . ' and member_dkpid = ' .  $dkpid ; 
-           			                $db->sql_query($sql); 
+							$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . ' WHERE member_id = ' . $member_to . ' and member_dkpid = ' .  $dkpsys_id ; 
+							$db->sql_query($sql); 
 		                        	
-		                        }
-		                        // the only other case possible : insert a new record 
-		                        elseif  ($total_rowto == 0)
-		                        {
-		                        	//insert
-		                        	$query = $db->sql_build_array('INSERT', array(
-	    			                    'member_dkpid'		    => $dkpid,
-	    			                    'member_id'		   		=> $member_to,
-		                        	
-		                        		'member_raid_value'	    => (isset( $data['member_raid_value']) ? $data['member_raid_value'] : 0.00) ,
-		                        		'member_time_bonus'	    => (isset( $data['member_time_bonus']) ? $data['member_time_bonus'] : 0.00) ,
-		                        		'member_zerosum_bonus'	=> (isset( $data['member_zerosum_bonus']) ? $data['member_zerosum_bonus'] : 0.00) ,
-	    			                    'member_earned'	    	=> (isset( $data['member_raid_value']   ) ? $data['member_raid_value'] : 0.00) + (isset( $data['member_time_bonus']) ? $data['member_time_bonus'] : 0.00) +  (isset( $data['member_zerosum_bonus']) ? $data['member_zerosum_bonus'] : 0.00) ,  
-	    								'member_raid_decay'		=> (isset( $data['raid_decay']) ? $data['raid_decay'] : 0.00) ,
-	    			                    'member_adjustment'		=> (isset( $data['adjustments']) ? $data['adjustments'] : 0.00), 
-	    					 			'member_spent'		    => (isset( $data['itemcost']) ? $data['itemcost'] : 0.00), 
-										'member_item_decay'	    => (isset( $data['member_item_decay']) ? $data['member_item_decay'] : 0.00),
-
-		                        		'member_status'	    	=> 1,
-	    			                    'member_firstraid'	    => (isset( $data['minraiddate']) ? $data['minraiddate'] : 0), 
-	    			                    'member_lastraid'	    => (isset( $data['maxraiddate']) ? $data['maxraiddate'] : 0), 
-	    			                    'member_raidcount'		=> (isset( $data['raidcount']) ? $data['raidcount'] : 0))  
-    			                    ); 
-    			                    $sql = 'INSERT INTO ' . MEMBER_DKP_TABLE . $query; 
-           			                $db->sql_query($sql);
-		                        }
-
-		                        // finally delete the member_from account
-		       					$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . '
-		       							WHERE member_id = '. (int) $member_from  . ' and member_dkpid = ' . $dkpid;
-		       					$db->sql_query($sql);
 						}
+                        elseif  ($total_rowto == 0)
+                        {
+                        	//insert
+                        	$query = $db->sql_build_array('INSERT', array(
+   			                    'member_dkpid'		    => $dkpsys_id,
+   			                    'member_id'		   		=> $member_to,
+                        		'member_raid_value'	    => (isset( $transfer['member_raid_value']) ? $transfer['member_raid_value'] : 0.00) ,
+                        		'member_time_bonus'	    => (isset( $transfer['member_time_bonus']) ? $transfer['member_time_bonus'] : 0.00) ,
+                        		'member_zerosum_bonus'	=> (isset( $transfer['member_zerosum_bonus']) ? $transfer['member_zerosum_bonus'] : 0.00) ,
+   			                    'member_earned'	    	=> (isset( $transfer['member_raid_value']   ) ? $transfer['member_raid_value'] : 0.00) +
+                        				 (isset( $transfer['member_time_bonus']) ? $transfer['member_time_bonus'] : 0.00) + 
+                        				 (isset( $transfer['member_zerosum_bonus']) ? $transfer['member_zerosum_bonus'] : 0.00) ,  
+   								'member_raid_decay'		=> (isset( $transfer['raid_decay']) ? $transfer['raid_decay'] : 0.00) ,
+   			                    'member_adjustment'		=> (isset( $transfer['adjustments']) ? $transfer['adjustments'] : 0.00), 
+                        		'adj_decay'				=> (isset( $transfer['adj_decay']) ? $transfer['adj_decay'] : 0.00), 
+   					 			'member_spent'		    => (isset( $transfer['itemcost']) ? $transfer['itemcost'] : 0.00) + (isset( $transfer['item_zs']) ? $transfer['item_zs'] : 0.00),  
+								'member_item_decay'	    => (isset( $transfer['item_decay']) ? $transfer['item_decay'] : 0.00),
+                        		'member_status'	    	=> 1,
+   			                    'member_firstraid'	    => (isset( $transfer['minraiddate']) ? $transfer['minraiddate'] : 0), 
+   			                    'member_lastraid'	    => (isset( $transfer['maxraiddate']) ? $transfer['maxraiddate'] : 0), 
+   			                    'member_raidcount'		=> (isset( $transfer['raidcount']) ? $transfer['raidcount'] : 0))  
+                        	); 
+    			            $sql = 'INSERT INTO ' . MEMBER_DKP_TABLE . $query; 
+           			        $db->sql_query($sql);
+		                 }
+
+   						// set old member account to 0
+                       	$query = $db->sql_build_array('UPDATE', array(
+                       		'member_raid_value'	    => 0.00,
+                       		'member_time_bonus'	    => 0.00,
+                       		'member_zerosum_bonus'	=> 0.00,
+		                    'member_earned'	    	=> 0.00,  
+ 							'member_raid_decay'		=> 0.00,
+ 		                    'member_adjustment'		=> 0.00,
+                      		'adj_decay'				=> 0.00, 
+   				 			'member_spent'		    => 0.00, 
+							'member_item_decay'	    => 0.00,
+   		                    'member_firstraid'	    => '0', 
+   		                    'member_lastraid'	    => '0', 
+   		                    'member_raidcount'		=> 0  
+		                   )); 
+    		                    
+						$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . ' WHERE member_id = ' . $member_from . ' and member_dkpid = ' .  $dkpsys_id ; 
+						$db->sql_query($sql); 
+		                 
+						/*	
+						// delete old account
+       					$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . '
+       							WHERE member_id = '. (int) $member_from  . ' and member_dkpid = ' . $dkpsys_id;
+       					$db->sql_query($sql);
+						*/
+						
 						/* 5) transfer old attendee name to new member */
 						// if $member_from participated in a raid the $member_to did too, delete the entry. (unique key) 
-						$sql = 'SELECT raid_id FROM ' . RAID_DETAIL_TABLE . ' WHERE member_id = '. $member_to; 
+       					$sql_array = array(
+       							'SELECT'    => 'r.raid_id',
+       							'FROM'      => array(
+       									RAID_DETAIL_TABLE  => 'rd',
+       									RAIDS_TABLE        => 'r',
+       									EVENTS_TABLE        => 'e',
+       							),
+       							'WHERE'     => 'e.event_dkpid = ' . $dkpsys_id . '
+       											AND e.event_id = r.event_id 
+       											AND r.raid_id = rd.raid_id 
+       											AND rd.member_id = ' . $member_to,
+       							'ORDER_BY'  => 'raid_id'
+       					);
 						$result = $db->sql_query($sql, 0);
+						$raid_ids= array();
 						while ( $row = $db->sql_fetchrow($result) )
 						{
-							$raid_id[] = $row['raid_id'];
+							$raid_ids[] = $row['raid_id'];
 						}
-						$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . '  
-								WHERE member_id='. $member_from . '
-								AND ' . $db->sql_in_set('raid_id', $raid_id, false, true);  
-								
-						$db->sql_query($sql);
-						
-						// 6) now update the remaining raids where old member participated (the last 'not in' condition is not necessary)
-						$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET member_id ='. $member_to . ' 
-								WHERE member_id='. $member_from . '
-								AND ' . $db->sql_in_set('raid_id', $raid_id, true, true);
-						
-						/* 7) transfer items to new owner */
-						$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET member_id ='. $member_to . ' WHERE member_id='. $member_from;
-						$db->sql_query($sql);
+
+						if(count($raid_ids) > 0)
+						{
+							// 6) delete from these raids all member b if they also participated (otherwise you get unique key violation)
+							$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' WHERE member_id ='. $member_to . ' 
+								AND ' . $db->sql_in_set('raid_id', $raid_ids, true, true);
+							$db->sql_query($sql);
+
+							// 7) now update the memberid to b
+							$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET member_id ='. $member_to . ' WHERE member_id='. $member_from . '
+									AND ' . $db->sql_in_set('raid_id', $raid_ids, true, true);
+							$db->sql_query($sql);
+							
+							/* 8) transfer items to new owner */
+							$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET member_id ='. $member_to . ' WHERE member_id='. $member_from . ' 
+								AND ' . $db->sql_in_set('raid_id', $raid_ids, true, true);
+							$db->sql_query($sql);
+						}
                         
-                        // 8) update the adjustments table
-						$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET member_id='. $member_to . ' WHERE member_id= '. $member_from ;
+                        // 9) update the adjustments table for this dkpid
+						$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET member_id='. $member_to . ' WHERE member_id= '. $member_from . '
+								AND adjustment_dkpid = ' . $dkpsys_id;
 						$db->sql_query($sql);
 				
 						//commit 
@@ -971,13 +1086,15 @@ class acp_dkp_mdkp extends bbDKP_Admin
 							'log_action' => $log_action)
 						);
 					
-						$success_message = sprintf($user->lang['ADMIN_TRANSFER_HISTORY_SUCCESS'], $member_from_name, $member_to_name, $member_from_name);
+						$success_message = sprintf($user->lang['ADMIN_TRANSFER_HISTORY_SUCCESS'], $member_from_name, $member_to_name, $member_from_name, $dkpsys_id);
 						trigger_error($success_message . $link);
 					
 					}
 					else 
 					{
-						// check if user trues to transfer from one to the same 
+						// collect data 
+						
+						// first check if user tries to transfer from one to the same 
 						$member_from = request_var('transfer_from', 0);
 						$member_to = request_var('transfer_to', 0);
 						if ($member_from == $member_to)
@@ -1007,6 +1124,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 								'hidden_name_to'	=> $member_to_name,
 								'hidden_idfrom'		=> $member_from,
 								'hidden_idto'		=> $member_to, 
+								'hidden_dkpid'		=> $dkpsys_id
 								)
 							);
 						confirm_box(false, sprintf($user->lang['CONFIRM_TRANSFER_MEMBERDKP'], $member_from_name, $member_to_name ), $s_hidden_fields);
@@ -1023,7 +1141,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				$member_to = request_var('transfer_to', 0);
 						 
 				$sql = 'SELECT m.member_id, l.member_name FROM ' . MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m 
-						where m.member_id = l.member_id GROUP BY m.member_id ORDER BY l.member_name';
+						WHERE m.member_id = l.member_id 
+						AND m.member_dkpid = ' . $dkpsys_id . '
+						GROUP BY m.member_id ORDER BY l.member_name';
 				$resultfrom = $db->sql_query($sql);
 				$maara = 0;
 				while ( $row = $db->sql_fetchrow($resultfrom) )
@@ -1037,9 +1157,14 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					
 				}
 				$db->sql_freeresult($resultfrom);
+				
 				// to member table 
 				$sql = 'SELECT m.member_id, l.member_name FROM ' . MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_RANKS_TABLE . ' k   
-						where l.member_rank_id = k.rank_id and k.rank_hide != 1 and m.member_id = l.member_id GROUP BY m.member_id  ORDER BY l.member_name';
+						WHERE l.member_rank_id = k.rank_id 
+						AND k.rank_hide != 1 
+						AND m.member_id = l.member_id 
+						AND m.member_dkpid = ' . $dkpsys_id . '
+						GROUP BY m.member_id  ORDER BY l.member_name';
 				$resultto = $db->sql_query($sql);
 				$teller_to = 0;
 				while ( $row = $db->sql_fetchrow($resultto) )
@@ -1065,6 +1190,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'L_EXPLAIN'					=> $user->lang['TRANSFER_MEMBER_HISTORY_DESCRIPTION'],
 					'S_SHOW'					=> $show,  
 					'F_TRANSFER' 				=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_transfer"),
+					'F_DKP' 					=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_transfer&ampi=setdkp"),
 					'L_SELECT_1_OF_X_MEMBERS'   => sprintf($user->lang['SELECT_1OFX_MEMBERS'], $maara),
 					'L_SELECT_1_OF_Y_MEMBERS'   => sprintf($user->lang['SELECT_1OFX_MEMBERS'], $teller_to),
 					)

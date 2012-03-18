@@ -313,13 +313,20 @@ class acp_dkp_sys extends bbDKP_Admin
 				{
 					$sql = 'UPDATE ' . DKPSYS_TABLE . " SET dkpsys_default='N'";
 					$db->sql_query ( $sql );
+					
 					$sql = 'UPDATE ' . DKPSYS_TABLE . " SET dkpsys_default='Y' 
 						WHERE dkpsys_name = '" . $db->sql_escape ( request_var ( 'defaultsys', '' ) ) . "'";
 					$db->sql_query ( $sql );
+					
 					$log_action = array (
-						'header' => 'L_ACTION_DEFAULT_DKP_CHANGED', 
+						'header' 		=> 'L_ACTION_DEFAULT_DKP_CHANGED', 
+						'L_USER' 		=>  $user->data['user_id'],
+						'L_USERCOLOUR' 	=>  $user->data['user_colour'],							
 						'DKPSYSDEFAULT' => request_var ( 'defaultsys', '' ) );
-					$this->log_insert ( array ('log_type' => $log_action ['header'], 'log_action' => $log_action ) );
+					
+					$this->log_insert ( array (
+						'log_type' => $log_action ['header'], 
+						'log_action' => $log_action ));
 					$success_message = sprintf ( $user->lang ['ADMIN_DEFAULTPOOL_SUCCESS'], request_var ( 'defaultsys', '' ) );
 					trigger_error ( $success_message . $link) ;
 				}
@@ -579,6 +586,17 @@ class acp_dkp_sys extends bbDKP_Admin
 		$db->sql_freeresult ( $result0);
 		
 		$db->sql_transaction('commit');
+		
+		$log_action = array (
+			'header' 	=> 'L_ACTION_DKPSYNC',
+			'L_USER' 		=>  $user->data['user_id'],
+			'L_USERCOLOUR' 	=>  $user->data['user_colour'], 
+			'L_LOG_1'		=>  $dkpcorr,
+			'L_LOG_2'		=>  $dkpspentcorr,	
+			);
+		$this->log_insert ( array (
+		'log_type' 		=> $log_action ['header'], 
+		'log_action' 	=> $log_action ) );
 		
 		$message = sprintf($user->lang['ADMIN_DKPPOOLSYNC_SUCCESS'] , $dkpcorr  + $dkpspentcorr);
 		trigger_error ( $message . $this->link , E_USER_NOTICE );
