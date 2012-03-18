@@ -20,6 +20,7 @@ if (!function_exists('generate_text_for_display'))
 
 include($phpbb_root_path . 'includes/bbcode.' . $phpEx);
 define('LOAD_REIMG', true); 
+define('REIMG_POST_ROW', 'news_row.MESSAGE');
 // Container for user details, only process once
 $post_list = $attachments = $attach_list = $rowset = $update_count = $post_edit_list = array();
 $has_attachments = $display_notice = false;
@@ -78,7 +79,9 @@ while ( $news = $db->sql_fetchrow($result) )
     {
      	
 		$topic = $row['post_text'];
-		$bbcode_options   = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) + (($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) + (($row['enable_magic_url']) ? OPTION_FLAG_LINKS : 0);
+		$bbcode_options   = (($row['enable_bbcode']) ? OPTION_FLAG_BBCODE : 0) + 
+							(($row['enable_smilies']) ? OPTION_FLAG_SMILIES : 0) + 
+							(($row['enable_magic_url']) ? OPTION_FLAG_LINKS : 0);
 		$message      = generate_text_for_display($row['post_text'], $row['bbcode_uid'], $row['bbcode_bitfield'], $bbcode_options);
         $message      = smiley_text($message);
         
