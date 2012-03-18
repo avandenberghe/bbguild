@@ -29,8 +29,7 @@ foreach($can_read_forum as $key => $forum)
 unset($can_read_forum);
 $fetchtopics = array();
 
-//$fetchtopics = fetch_topics($forums_auth_ary, $config['bbdkp_num_recent'], $config['bbdkp_recent_len']);
-$fetchtopics = fetch_topics($forums_auth_ary, 10, 100);
+$fetchtopics = fetch_topics($forums_auth_ary, $config['bbdkp_portal_rtno'], $config['bbdkp_portal_rtlen']);
 
 if(!empty($fetchtopics))
 {
@@ -54,6 +53,13 @@ else
 		)
 	);
 }
+
+	$template->assign_vars(array(		
+		'S_DISPLAY_RT' => true, 
+		)
+	);
+
+
 
 
 /**

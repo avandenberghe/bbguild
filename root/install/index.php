@@ -922,6 +922,7 @@ $versions = array(
 
             )),
             
+        // add new variables 
         'config_add' => array(
 	        array('bbdkp_minep', 100.0, true),
 	        array('bbdkp_decaycron', 1, true),
@@ -929,7 +930,9 @@ $versions = array(
 	        array('bbdkp_crontime', 23, true),
 	        array('bbdkp_adjdecaypct', 5, true),
 	        array('bbdkp_minrosterlvl', 50, true),
-	        
+	        array('bbdkp_portal_rtno', 5, true),
+	        array('bbdkp_portal_rtlen', 15, true),
+	        array('bbdkp_portal_rtshow', 1, true),
 			),   
 
 		'custom' => array(
