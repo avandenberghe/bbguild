@@ -44,6 +44,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.', 
 'FOOTERBBDKP' => 'powered by bbDKP', 
+
 //---- Portal blocks ----- 
 'PORTAL'	=> 'Portal', 
 'RECENTLOOT' => 'Recent Loot', 
@@ -58,25 +59,13 @@ $lang = array_merge($lang, array(
 'ERROR_INVALID_NEWS_PROVIDED' => 'A valid news id was not provided.',
 'BOSSPROGRESS' => 'Bossprogress', 	
 'WELCOME'	=> 'Welcome', 
-
-// Main Menu
-'MENU' => 'Menu', 
-'MENU_ADMIN_PANEL' => 'Administration Panel',
-'MENU_BOSS' => 'Bossprogress',
-'MENU_EVENTS' => 'Events',
-'MENU_ITEMVAL' => 'Item Values',
-'MENU_ITEMHIST' => 'Item History',
-'MENU_NEWS' => 'News',
-'MENU_RAIDS' => 'Raids',
-'MENU_ROSTER'	=> 'Roster',
-'MENU_STATS' => 'Statistics',
-'MENU_SUMMARY' => 'Summary',
-'MENU_STANDINGS' => 'Standings',
-'MENU_VIEWMEMBER' => 'View Member',
-'MENU_VIEWITEM' => 'View Item',
-'MENU_VIEWRAID' => 'View Raid',
-'MENU_VIEWEVENT' => 'View Event',
-'MENU_PLANNER' => 'Planner',
+'RECENT_LENGTH' 	=> 'Number of chars retrieved',
+'NUMTOPICS'					=> 'Number of topics retrieved',
+'SHOW_RT_BLOCK'				=> 'Show Recent Topics',
+'RECENT_TOPICS_SETTING'		=> 'Recent Topics Settings',
+'RECENT_TOPICS'				=> 'Recent Topics',	
+'NO_RECENT_TOPICS'			=> 'No recent topics',
+'POSTED_BY_ON'				=> 'by %1$s on %2$s',
 
 //links
 'MENU_LINKS' => 'Weblinks',
@@ -105,6 +94,24 @@ $lang = array_merge($lang, array(
 'LINK12' => 'http://www.worldofwarcraft.com', 
 'LINK12T' => 'World of Warcraft', 
 
+// Main Menu
+'MENU' => 'Menu', 
+'MENU_ADMIN_PANEL' => 'Administration Panel',
+'MENU_BOSS' => 'Bossprogress',
+'MENU_EVENTS' => 'Events',
+'MENU_ITEMVAL' => 'Item Values',
+'MENU_ITEMHIST' => 'Item History',
+'MENU_NEWS' => 'News',
+'MENU_RAIDS' => 'Raids',
+'MENU_ROSTER'	=> 'Roster',
+'MENU_STATS' => 'Statistics',
+'MENU_SUMMARY' => 'Summary',
+'MENU_STANDINGS' => 'Standings',
+'MENU_VIEWMEMBER' => 'View Member',
+'MENU_VIEWITEM' => 'View Item',
+'MENU_VIEWRAID' => 'View Raid',
+'MENU_VIEWEVENT' => 'View Event',
+'MENU_PLANNER' => 'Planner',
 
 //games supported
 'WOW'        => 'World of Warcraft' , 
@@ -117,8 +124,8 @@ $lang = array_merge($lang, array(
 'AION'       => 'Aion' , 
 'FFXI'       => 'Final Fantasy XI',
 'RIFT'       => 'Rift',
-'SWTOR'       => 'Starwars : The old Republic', 
-'LINEAGE2'       => 'Lineage 2', 
+'SWTOR'      => 'Starwars : The old Republic', 
+'LINEAGE2'   => 'Lineage 2', 
 
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status', 
@@ -129,7 +136,6 @@ $lang = array_merge($lang, array(
 'RECRUIT_MESSAGE' => 'We are currently looking for new members for the following classes:',
 
 //ROSTER
-
 'GUILDROSTER' => 'Guild Roster',
 'RANK' 		  => 'Rank',
 'CLASS' 	  => 'Class',
