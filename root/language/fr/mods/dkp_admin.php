@@ -1032,22 +1032,8 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'WOW_ZONEEURL'	=> 'http://fr.wowhead.com/?zone=%s',
 	'SWTOR_BASEURL' => 'http://www.torhead.com/npc=%s',
 	'SWTOR_ZONEEURL' => 'http://www.torhead.com/zone=%s',
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
+	'RETURN_MEMBERLIST'  => 'Return to Member List. ',
+	'RETURN_GUILDLIST'  => 'Return to Guild List. ',
 ));
 
 ?>

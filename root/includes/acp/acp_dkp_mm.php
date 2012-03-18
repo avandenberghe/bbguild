@@ -274,7 +274,7 @@ class acp_dkp_mm extends bbDKP_Admin
 			// add member 
 			/***************************************/
 			case 'mm_addmember':
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Members screen</h3></a>';
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 				$member_id = 0;
 				$submit = (isset($_POST['add'])) ? true : false;
 				$update = (isset($_POST['update'])) ? true : false;
@@ -402,21 +402,26 @@ class acp_dkp_mm extends bbDKP_Admin
 							'phpbb_user_id' => $row['phpbb_user_id']);
 					}
 					$db->sql_freeresult($result);
-					$old_member_name = $this->old_member['member_name'];
 					$gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
+					
+					// if user chooses other name then check if it already exists. if so refuse update
+					// namechange to existing membername is not allowed 
 					$member_name = utf8_normalize_nfc(request_var('member_name', '', true));
-					// check if new membername exists
-					$sql = 'SELECT count(*) as memberexists 
-							FROM ' . MEMBER_LIST_TABLE . '	
-							WHERE member_id <> ' . $member_id . " 
-							AND ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "')";
-					$result = $db->sql_query($sql);
-					$countm = $db->sql_fetchfield('memberexists');
-					$db->sql_freeresult($result);
-					if ($countm != 0)
+					if($member_name != $this->old_member['member_name'])
 					{
-						trigger_error(sprintf($user->lang['ADMIN_UPDATE_MEMBER_FAIL'], ucwords($member_name)) . $this->link, E_USER_WARNING);
+						$sql = 'SELECT count(*) as memberexists 
+								FROM ' . MEMBER_LIST_TABLE . '	
+								WHERE member_id <> ' . $member_id . " 
+								AND ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "')";
+						$result = $db->sql_query($sql);
+						$countm = $db->sql_fetchfield('memberexists');
+						$db->sql_freeresult($result);
+						if ($countm != 0)
+						{
+							trigger_error(sprintf($user->lang['ADMIN_UPDATE_MEMBER_FAIL'], ucwords($member_name)) . $this->link, E_USER_WARNING);
+						}
 					}
+					
 					// get rank					  
 					$rank_id = request_var('member_rank_id', 99);
 					// check if rank exists
@@ -430,6 +435,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					{
 						trigger_error($user->lang['ERROR_INCORRECTRANK'] . $this->link, E_USER_WARNING);
 					}
+					
 					// check level
 					$level = request_var('member_level', 0);
 					$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE;
@@ -440,15 +446,18 @@ class acp_dkp_mm extends bbDKP_Admin
 					{
 						$level = $maxlevel;
 					}
+					
 					$joindate = mktime(0, 0, 0, request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
 					$leavedate = 0;
 					if (request_var('member_outdate_mo', 0) + request_var('member_outdate_d', 0) != 0)
 					{
 						$leavedate = mktime(0, 0, 0, request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0));
 					}
+					
 					// set member active
 					$member_status = request_var('activated', 0) > 0 ? 1 : 0;
 					$phpbb_user_id = request_var('phpbb_user_id', 0);
+					
 					// update the data including the phpbb userid
 					$query = $db->sql_build_array('UPDATE', array(
 						'member_name' => $member_name , 
@@ -464,7 +473,9 @@ class acp_dkp_mm extends bbDKP_Admin
 						'member_joindate' => $joindate , 
 						'phpbb_user_id' => $phpbb_user_id , 
 						'game_id' => request_var('game_id', '')));
+					
 					$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . ' WHERE member_id= ' . $member_id);
+
 					// log it
 					$log_action = array(
 						'header' => 'L_ACTION_MEMBER_UPDATED' , 
@@ -483,6 +494,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], $member_name);
 					trigger_error($success_message . $this->link);
 				}
+				
 				// make armory link for existing members (only for wow)
 				if ($generate_armorylink)
 				{
@@ -501,23 +513,32 @@ class acp_dkp_mm extends bbDKP_Admin
 							'realm' => $row['realm']);
 					}
 					$db->sql_freeresult($result);
+					
 					// setting up the links
 					$memberportraiturl = ' ';
+					
 					if ($this->old_member['game_id'] == 'wow' || $this->old_member['game_id'] == 'aion')
 					{
 						$memberportraiturl = $this->generate_portraitlink($this->old_member['game_id'], $this->old_member['member_race_id'], $this->old_member['member_class_id'], $this->old_member['member_gender_id'], $this->old_member['member_level']);
 					}
 					$memberarmoryurl = ' ';
+					
 					if ($this->old_member['game_id'] == 'wow')
 					{
-						$memberarmoryurl = $this->generate_armorylink($this->old_member['game_id'], $this->old_member['region'], $this->old_member['realm'], $this->old_member['member_name']);
+						$memberarmoryurl = $this->generate_armorylink(
+							$this->old_member['game_id'], 
+							$this->old_member['region'], 
+							$this->old_member['realm'], 
+							$this->old_member['member_name']);
 					}
+					
 					$data = array(
 						'member_armory_url' => $memberarmoryurl , 
 						'member_portrait_url' => $memberportraiturl);
 					$sql = 'UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $data) . ' WHERE member_id=' . (int) $member_id;
 					$db->sql_query($sql);
 				}
+				
 				//
 				// delete guildmember handler 
 				// deletes Everything!
@@ -549,6 +570,7 @@ class acp_dkp_mm extends bbDKP_Admin
 						$this->log_insert(array(
 							'log_type' => $log_action['header'] , 
 							'log_action' => $log_action));
+						
 						//@todo if zerosum then put excess points in guildbank
 						$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' where member_id = ' . (int) $del_member;
 						$db->sql_query($sql);
@@ -577,6 +599,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 					$S_ADD = true;
 				}
+				
 				/*
 				 * fill template 
 				 */
@@ -658,6 +681,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					// add mode
 					$S_ADD = true;
 				}
+				
 				//guild dropdown
 				$sql = 'SELECT a.id, a.name, a.realm, a.region 
 				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b 
@@ -692,6 +716,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 				}
 				$db->sql_freeresult($result);
+				
 				// Rank drop-down -> for initial load
 				// reloading is done from ajax to prevent redraw
 				//
@@ -732,6 +757,7 @@ class acp_dkp_mm extends bbDKP_Admin
 							'OPTION' => (! empty($row['rank_name'])) ? $row['rank_name'] : '(None)'));
 					}
 				}
+				
 				// phpbb User dropdown
 				$phpbb_user_id = isset($this->member['phpbb_user_id']) ? $this->member['phpbb_user_id'] : 0;
 				$sql_array = array(
@@ -749,6 +775,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					$selected = ($row['user_id'] == $phpbb_user_id) ? ' selected="selected"' : '';
 					$s_phpbb_user .= '<option value="' . $row['user_id'] . '"' . $selected . '>' . $row['username'] . '</option>';
 				}
+				
 				// Game dropdown
 				// list installed games
 				$games = array(
@@ -764,6 +791,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					'rift' => $user->lang['RIFT'] , 
 					'swtor' => $user->lang['SWTOR'] , 
 					'lineage2' => $user->lang['LINEAGE2']);
+				
 				$installed_games = array();
 				foreach ($games as $gameid => $gamename)
 				{
@@ -777,6 +805,8 @@ class acp_dkp_mm extends bbDKP_Admin
 						$installed_games[] = $gameid;
 					}
 				}
+				
+				
 				//
 				// Race dropdown
 				// reloading is done from ajax to prevent redraw
@@ -814,6 +844,8 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 				}
 				$db->sql_freeresult($result);
+				
+				
 				//
 				// Class dropdown
 				// reloading is done from ajax to prevent redraw
@@ -855,8 +887,11 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 				}
 				$db->sql_freeresult($result);
+				
 				// set the genderdefault to male if a new form is opened, otherwise take rowdata.
 				$genderid = isset($this->member) ? $this->member['member_gender_id'] : '0';
+				
+				
 				// build presets for joindate pulldowns
 				$now = getdate();
 				$s_memberjoin_day_options = '<option value="0"	>--</option>';
@@ -923,6 +958,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 					$s_memberout_year_options .= "<option value=\"$i\"$selected>$i</option>";
 				}
+				
 				unset($now);
 				$form_key = 'mm_addmember';
 				add_form_key($form_key);
@@ -969,7 +1005,8 @@ class acp_dkp_mm extends bbDKP_Admin
 			// ranks setup
 			/***************************************/
 			case 'mm_ranks':
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>Return to Ranks screen</h3></a>';
+				
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK']. '</h3></a>';
 				$sql = 'SELECT max(id) as idmax FROM ' . GUILD_TABLE;
 				$result = $db->sql_query($sql);
 				$maxguildid = (int) $db->sql_fetchfield('idmax');
@@ -978,6 +1015,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				$submit = (isset($_POST['update'])) ? true : false;
 				$deleterank = (isset($_GET['deleterank'])) ? true : false;
 				$add = (isset($_POST['add'])) ? true : false;
+				
 				if ($add || $submit)
 				{
 					if (! check_form_key('mm_ranks'))
@@ -1044,8 +1082,7 @@ class acp_dkp_mm extends bbDKP_Admin
 								'log_action' => $log_action));
 						}
 					}
-					$success_message = $user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
-					$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>' . $user->lang['RETURN_RANK'] . '</h3></a>';
+					$success_message = $user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];				
 					trigger_error($success_message . $this->link);
 				}
 				if ($deleterank)
@@ -1131,11 +1168,12 @@ class acp_dkp_mm extends bbDKP_Admin
 					$nprefix = utf8_normalize_nfc(request_var('nprefix', '', true));
 					$nsuffix = utf8_normalize_nfc(request_var('nsuffix', '', true));
 					$this->insertnewrank($nrankid, $nrank_name, $nrank_hide, $nprefix, $nsuffix, $guild_id);
+
 					// display success                    
-					$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>' . $user->lang['RETURN_RANK'] . '</h3></a>';
 					$success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
 					trigger_error($success_message . $this->link);
 				}
+				
 				// template filling 
 				$sql = 'SELECT id, name FROM ' . GUILD_TABLE . ' ORDER BY id desc';
 				$resultg = $db->sql_query($sql);
@@ -1147,10 +1185,12 @@ class acp_dkp_mm extends bbDKP_Admin
 						'OPTION' => $row['name']));
 				}
 				$db->sql_freeresult($resultg);
+				
 				// rank 99 is the out-rank
 				$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . ' 
-	        WHERE guild_id = ' . $guild_id . ' 
-	        ORDER BY rank_id, rank_hide  ASC ';
+	        		WHERE guild_id = ' . $guild_id . ' 
+	        		ORDER BY rank_id, rank_hide  ASC ';
+				
 				$result = $db->sql_query($sql);
 				while ($row = $db->sql_fetchrow($result))
 				{
@@ -1180,8 +1220,9 @@ class acp_dkp_mm extends bbDKP_Admin
 			// List Guilds
 			/***************************************/
 			case 'mm_listguilds':
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>Return to Guildlist screen</h3></a>';
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 				$showadd = (isset($_POST['guildadd'])) ? true : false;
+				
 				if ($showadd)
 				{
 					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild"));
@@ -1193,6 +1234,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					2 => array('realm desc' , 'realm desc') , 
 					3 => array('region' , 'region desc') , 
 					4 => array('roster' , 'roster desc'));
+
 				$current_order = switch_order($sort_order);
 				$guild_count = 0;
 				$previous_data = '';
@@ -1219,6 +1261,7 @@ class acp_dkp_mm extends bbDKP_Admin
 						'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild&amp;" . URI_GUILD . '=' . $row['id'])));
 					$previous_data = $row[$previous_source];
 				}
+				
 				$form_key = 'mm_listguilds';
 				add_form_key($form_key);
 				$template->assign_vars(array(
@@ -1236,20 +1279,23 @@ class acp_dkp_mm extends bbDKP_Admin
 				$this->page_title = 'ACP_MM_LISTGUILDS';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
+			
 			/*************************************
 			 * ************ Add Guild ************
 			 *************************************/
 			case 'mm_addguild':
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>Return to Guildlist screen</h3></a>';
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 				/* select data */
 				$update = false;
 				if (isset($_GET[URI_GUILD]))
 				{
 					$this->url_id = request_var(URI_GUILD, 0);
 				}
+				
 				$regionlist = array(
 					'US' => 'US' , 
 					'EU' => 'EU');
+				
 				if ($this->url_id != 0)
 				{
 					// we have a GET
@@ -1293,6 +1339,7 @@ class acp_dkp_mm extends bbDKP_Admin
 							'OPTION' => (! empty($key)) ? $key : '(None)'));
 					}
 				}
+				
 				$add = (isset($_POST['add'])) ? true : false;
 				$submit = (isset($_POST['update'])) ? true : false;
 				$delete = (isset($_POST['delete'])) ? true : false;
@@ -1315,8 +1362,10 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 					else
 					{
-						// check existing
-						$result = $db->sql_query("SELECT count(*) as evcount from " . GUILD_TABLE . " WHERE UPPER(name) = '" . strtoupper($db->sql_escape($guild_name)) . "'");
+						// check existing guild-realmname
+						$result = $db->sql_query("SELECT count(*) as evcount from " . GUILD_TABLE . " 
+							WHERE UPPER(name) = '" . strtoupper($db->sql_escape($guild_name)) . "'
+							AND UPPER(realm) = '" . strtoupper($db->sql_escape($realm_name)) . "'");
 						$grow = $db->sql_fetchrow($result);
 						if ($grow['evcount'] != 0)
 						{
@@ -1339,6 +1388,8 @@ class acp_dkp_mm extends bbDKP_Admin
 						}
 					}
 				}
+				
+				//updating
 				if ($submit)
 				{
 					// get the guild id from the url parameter (via GET)
@@ -1360,6 +1411,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					{
 						trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
 					}
+					
 					// loop through object until sql_fetchrow returns false, fill object
 					while ($row = $db->sql_fetchrow($result))
 					{
@@ -1370,13 +1422,28 @@ class acp_dkp_mm extends bbDKP_Admin
 							'guild_region' => $row['region'] , 
 							'guild_showroster' => $row['roster']);
 					}
+					
 					$db->sql_freeresult($result);
 					$new_guild_name = utf8_normalize_nfc(request_var('guild_name', ' ', true));
 					$new_realm_name = utf8_normalize_nfc(request_var('realm', ' ', true));
 					$new_region_name = request_var('region_id', ' ');
 					$new_showroster = request_var('showroster', 0);
-					// Update the guild
-					//
+
+					// check if already exists 
+					if($new_guild_name != $this->old_guild['guild_name'] || $new_realm_name != $this->old_guild['guild_realm'])
+					{
+						// check existing guild-realmname
+						$result = $db->sql_query("SELECT count(*) as evcount from " . GUILD_TABLE . " 
+							WHERE UPPER(name) = '" . strtoupper($db->sql_escape($new_guild_name)) . "'
+							AND UPPER(realm) = '" . strtoupper($db->sql_escape($new_realm_name)) . "'");
+						$grow = $db->sql_fetchrow($result);
+						if ($grow['evcount'] != 0)
+						{
+							//throw error
+							trigger_error($user->lang['ERROR_GUILDTAKEN'] . $this->link, E_USER_WARNING);
+						}
+					}
+					
 					$query = $db->sql_build_array('UPDATE', array(
 						'name' => $new_guild_name , 
 						'realm' => $new_realm_name , 
@@ -1384,9 +1451,11 @@ class acp_dkp_mm extends bbDKP_Admin
 						'roster' => $new_showroster));
 					$sql = 'UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id=' . (int) $this->url_id;
 					$db->sql_query($sql);
+					
 					$success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
 					trigger_error($success_message . $this->link);
 				}
+				
 				if ($delete)
 				{
 					if (isset($_GET[URI_GUILD]))
@@ -1399,6 +1468,7 @@ class acp_dkp_mm extends bbDKP_Admin
 							{
 								trigger_error($user->lang['ERROR_GUILDIDRESERVED'], E_USER_WARNING);
 							}
+
 							// check if guild has members
 							$sql = 'SELECT COUNT(*) as mcount FROM  ' . MEMBER_LIST_TABLE . '
                                        WHERE member_guild_id = ' . $guildid;
@@ -1407,6 +1477,7 @@ class acp_dkp_mm extends bbDKP_Admin
 							{
 								trigger_error($user->lang['ERROR_GUILDHASMEMBERS'], E_USER_WARNING);
 							}
+							
 							$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . '
                                        WHERE guild_id = ' . $guildid;
 							$db->sql_query($sql);
@@ -1446,6 +1517,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				$this->page_title = $user->lang['ACP_MM_ADDGUILD'];
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
+				
 			default:
 				$this->page_title = 'ACP_DKP_MAINPAGE';
 				$this->tpl_name = 'dkp/acp_mainpage';
@@ -1462,14 +1534,17 @@ class acp_dkp_mm extends bbDKP_Admin
 	public function member_batch_delete ($members_to_delete)
 	{
 		global $db, $user;
+		
 		if (! is_array($members_to_delete))
 		{
 			return;
 		}
+		
 		if (sizeof($members_to_delete) == 0)
 		{
 			return;
 		}
+		
 		if (confirm_box(true))
 		{
 			// recall hidden vars
@@ -1579,6 +1654,7 @@ class acp_dkp_mm extends bbDKP_Admin
 			default:
 				$site = 'http://eu.battle.net/wow/en/character/';
 		}
+		$realm = str_replace(' ', '-', $realm);
 		return $site . urlencode($realm) . '/' . urlencode($name) . '/simple';
 	}
 
@@ -1765,14 +1841,15 @@ class acp_dkp_mm extends bbDKP_Admin
 	$member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $memberarmoryurl = ' ', $memberportraiturl = ' ', $realm = '', $game_id = 'wow', $phpbb_user_id = 0)
 	{
 		global $db, $user, $config;
-		if ($member_status != 1 || $member_status != 0)
+		if ($member_status != 1)
 		{
 			$member_status = 1;
 		}
 		// Check for existing member name
 		$sql = "SELECT member_id 
 				FROM " . MEMBER_LIST_TABLE . " 
-				WHERE member_name = '" . $db->sql_escape($member_name) . "'";
+				WHERE member_name = '" . $db->sql_escape($member_name) . "'
+				AND member_guild_id = " . $guild_id;
 		$result = $db->sql_query($sql);
 		$member_id = 0;
 		while ($row = $db->sql_fetchrow($result))

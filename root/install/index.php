@@ -934,7 +934,8 @@ $versions = array(
 
 		'custom' => array(
 			// do some table updates
-			'tableupdates', 
+			'tableupdates',
+			'gameinstall',  
 			'bbdkp_caches'
 			),
 				
