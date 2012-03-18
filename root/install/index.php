@@ -934,7 +934,8 @@ $versions = array(
 
 		'custom' => array(
 			// do some table updates
-			'tableupdates', 
+			'tableupdates',
+			'gameinstall',  
 			'bbdkp_caches'
 			),
 				
@@ -1366,34 +1367,52 @@ function tableupdates($action, $version)
 			switch ($version)
 				{
 					case '1.2.3':
-					// remove unique index on class table
-					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
-					$db->sql_query($sql);
+						// remove unique index on class table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_classes' . " DROP INDEX class_id";
+						$db->sql_query($sql);
+	
+						// make new unique composite
+						$sql= "CREATE UNIQUE INDEX classes ON " . $table_prefix . 'bbdkp_classes' . " (game_id, class_id) ";
+						$db->sql_query($sql);
+					
+						// race table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_races' . " DROP PRIMARY KEY";
+						$db->sql_query($sql);
+	
+						// make new pk 
+						$sql= "ALTER TABLE " . $table_prefix . 'bbdkp_races' . "  ADD PRIMARY KEY (game_id, race_id)";
+						$db->sql_query($sql);
+					
+						// faction table
+						$sql= "CREATE UNIQUE INDEX factions ON " . $table_prefix . 'bbdkp_factions' . " (game_id, faction_id)";
+						$db->sql_query($sql);		
+			
+						// language table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX attribute_id ";
+						$db->sql_query($sql);		
+	
+						// make new unique key
+						$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
+						$db->sql_query($sql);
+						break;
+					
+					case '1.2.6':
+						// remove unique index on guild table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberguild' . " DROP INDEX gname";
+						$db->sql_query($sql);
+						
+						// make new unique composite
+						$sql= "CREATE UNIQUE INDEX guildindex ON " . $table_prefix . 'bbdkp_memberguild' . " (name, realm) ";
+						$db->sql_query($sql);
 
-					// make new unique composite
-					$sql= "CREATE UNIQUE INDEX classes ON " . $table_prefix . 'bbdkp_classes' . " (game_id, class_id) ";
-					$db->sql_query($sql);
-				
-					// race table
-					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_races' . " DROP PRIMARY KEY";
-					$db->sql_query($sql);
-
-					// make new pk 
-					$sql= "ALTER TABLE " . $table_prefix . 'bbdkp_races' . "  ADD PRIMARY KEY (game_id, race_id)";
-					$db->sql_query($sql);
-				
-					// faction table
-					$sql= "CREATE UNIQUE INDEX factions ON " . $table_prefix . 'bbdkp_factions' . " (game_id, faction_id)";
-					$db->sql_query($sql);		
-		
-					// language table
-					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_language' . " DROP INDEX attribute_id ";
-					$db->sql_query($sql);		
-
-					// make new unique key
-					$sql= "CREATE UNIQUE INDEX languages ON " . $table_prefix . 'bbdkp_language' . " (game_id, attribute_id, language, attribute) ";
-					$db->sql_query($sql);
-					break;
+						// remove unique index on member table
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
+						$db->sql_query($sql);
+						
+						// make new unique composite
+						$sql= "CREATE UNIQUE INDEX memberindex ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
+						$db->sql_query($sql);
+						break;					
 			}
 			break;
 		case 'update':
@@ -1447,7 +1466,7 @@ function tableupdates($action, $version)
 					
 					case '1.2.6':
 						// remove unique index on guild table
-						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberguild' . " DROP INDEX name";
+						$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberguild' . " DROP INDEX gname";
 						$db->sql_query($sql);
 						
 						// make new unique composite
