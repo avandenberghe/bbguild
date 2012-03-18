@@ -112,54 +112,77 @@ class roster
 	{
 		global $phpbb_root_path, $phpEx, $config, $template, $user;
 		//class
-		$this->get_classes();
-	    foreach($this->classes as $row )
-		{
-			$classes[$row['class_id']]['name'] 		= $row['class_name'];
-			$classes[$row['class_id']]['imagename'] = $row['imagename'];
-			$classes[$row['class_id']]['colorcode'] = $row['colorcode'];
-		}
-
-		foreach ($classes as  $classid => $class )
-		{
-			$classimgurl =  $phpbb_root_path . "images/roster_classes/" . $this->removeFromEnd($class['imagename'], '_small') .'.png'; 
-			$classcolor = $class['colorcode']; 
-	         
-			$template->assign_block_vars('class', array(	
-	       		'CLASSNAME'     => $class['name'], 
-	       		'CLASSIMG'		=> $classimgurl,
-	       		'COLORCODE'		=> $classcolor,
-	         ));
-	        $classmembers=1;
-	        
-	        foreach ( $this->dataset as $row)
-	        {
-	        	if($row['member_class_id'] == $classid)
-	        	{
-				    $race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
 		
-		         	$template->assign_block_vars('class.members_row', array(
-		     			'COLORCODE'		=> $row['colorcode'],
-		     			'CLASS'			=> $row['class_name'],
-		     			'NAME'			=> $row['member_name'],
-		     			'RACE'			=> $row['race_name'],
-		     			'RANK'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
-		          		'LVL'			=> $row['member_level'],
-		     		    'ARMORY'		=> $row['member_armory_url'],  
-		         		'PHPBBUID'		=> get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),
-		     			'PORTRAIT'		=> $this->getportrait($row), 	
-		     		    'ACHIEVPTS'		=> $row['member_achiev'], 
-						'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
-						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
-						'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
-						'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 
-		     		));
-		     		$classmembers++;
-	        	}
-	         }
-	      }
+		$this->get_classes();
+	    if(count($this->classes) > 0)
+	    {
+			foreach($this->classes as $row )
+			{
+				$classes[$row['class_id']]['name'] 		= $row['class_name'];
+				$classes[$row['class_id']]['imagename'] = $row['imagename'];
+				$classes[$row['class_id']]['colorcode'] = $row['colorcode'];
+			}
 	
-		$rosterpagination = generate_pagination2($this->selfurl . '&amp;o=' . $this->current_order ['uri'] ['current'] , $this->member_count, $config ['bbdkp_user_llimit'], $this->start, true, 'start'  );
+			foreach ($classes as  $classid => $class )
+			{
+				$classimgurl =  $phpbb_root_path . "images/roster_classes/" . $this->removeFromEnd($class['imagename'], '_small') .'.png'; 
+				$classcolor = $class['colorcode']; 
+		         
+				$template->assign_block_vars('class', array(	
+		       		'CLASSNAME'     => $class['name'], 
+		       		'CLASSIMG'		=> $classimgurl,
+		       		'COLORCODE'		=> $classcolor,
+		         ));
+		        $classmembers=1;
+		        
+		        foreach ( $this->dataset as $row)
+		        {
+		        	if($row['member_class_id'] == $classid)
+		        	{
+					    $race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+			
+			         	$template->assign_block_vars('class.members_row', array(
+			     			'COLORCODE'		=> $row['colorcode'],
+			     			'CLASS'			=> $row['class_name'],
+			     			'NAME'			=> $row['member_name'],
+			     			'RACE'			=> $row['race_name'],
+			     			'RANK'			=> $row['rank_prefix'] . $row['rank_name'] . $row['rank_suffix'] ,
+			          		'LVL'			=> $row['member_level'],
+			     		    'ARMORY'		=> $row['member_armory_url'],  
+			         		'PHPBBUID'		=> get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),
+			     			'PORTRAIT'		=> $this->getportrait($row), 	
+			     		    'ACHIEVPTS'		=> $row['member_achiev'], 
+							'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
+							'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false, 
+							'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
+							'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false, 
+			     		));
+			     		$classmembers++;
+		        	}
+		         }
+		      }
+		
+			$rosterpagination = generate_pagination2($this->selfurl . '&amp;o=' . $this->current_order ['uri'] ['current'] , $this->member_count, $config ['bbdkp_user_llimit'], $this->start, true, 'start'  );
+	    
+			if (isset($this->current_order) && sizeof ($this->current_order) > 0)
+			{
+				$template->assign_vars(array(
+					'ROSTERPAGINATION' 		=> $rosterpagination ,  			
+					'U_LIST_MEMBERS0'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $this->current_order['uri'][0]),
+				    'U_LIST_MEMBERS1'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $this->current_order['uri'][1]),
+				    'U_LIST_MEMBERS2'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $this->current_order['uri'][2]),
+				    'U_LIST_MEMBERS3'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $this->current_order['uri'][3]),
+				    'U_LIST_MEMBERS4'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $this->current_order['uri'][4]),
+				));
+				
+			}
+
+			// add template constants
+			$template->assign_vars(array(
+			    'S_SHOWACH'			=> $config['bbdkp_show_achiev'], 
+			    'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . $this->member_count,
+			));
+	    }
 				
 		// add navigationlinks
 		$navlinks_array = array(
@@ -175,27 +198,11 @@ class roster
 			'U_DKPPAGE' => $name['U_DKPPAGE'],
 			));
 		}
-		
-		if (isset($this->current_order) && sizeof ($this->current_order) > 0)
-		{
-			$template->assign_vars(array(
-				'ROSTERPAGINATION' 		=> $rosterpagination ,  			
-				'U_LIST_MEMBERS0'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $this->current_order['uri'][0]),
-			    'U_LIST_MEMBERS1'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $this->current_order['uri'][1]),
-			    'U_LIST_MEMBERS2'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $this->current_order['uri'][2]),
-			    'U_LIST_MEMBERS3'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $this->current_order['uri'][3]),
-			    'U_LIST_MEMBERS4'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $this->current_order['uri'][4]),
-			));
-			
-		}
-		
-		// add template constants
+
 		$template->assign_vars(array(
 		    'S_RSTYLE'		    => '1',
-		    'S_SHOWACH'			=> $config['bbdkp_show_achiev'], 
-		    'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . $this->member_count,
 		));
-		
+			
 		$header = $user->lang['GUILDROSTER'];
 		page_header($header);
 	}
