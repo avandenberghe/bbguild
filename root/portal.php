@@ -38,6 +38,7 @@ $user->add_lang(array('mods/dkp_common'));
 
 /* fixed bocks -- always displayed */
 include($phpbb_root_path . 'includes/bbdkp/block/newsblock.' . $phpEx);
+include($phpbb_root_path . 'includes/bbdkp/block/recentblock.' . $phpEx);
 
 /* show loginbox or usermenu */
 if ($user->data['is_registered'])
