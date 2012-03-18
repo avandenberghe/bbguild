@@ -60,6 +60,14 @@ $lang = array_merge($lang, array(
 	'BOSSPROGRESS'	=> 'Instanz-Fortschritt',
 	'WELCOME'	=> 'Willkommen', 
 	'FOOTERBBDKP'	=> 'Powered by bbDKP', 
+	'RECENT_LENGTH' 	=> 'Anzahl angezeigte Buchstaben',
+	'NUMTOPICS'					=> 'Anzahl angezeigte Beiträge',
+	'SHOW_RT_BLOCK'				=> 'neue Beiträge anzeigen',
+	'RECENT_TOPICS_SETTING'		=> 'Einstellungen neue Beiträge',
+	'RECENT_TOPICS'				=> 'Neue Beiträge',	
+	'NO_RECENT_TOPICS'			=> 'Keine neue Beiträge',
+	'POSTED_BY_ON'				=> '%2$s von %1$s',	
+	
 // Main Menu
 	'MENU'	=> 'Menü',
 	'MENU_ADMIN_PANEL'	=> 'Administration',

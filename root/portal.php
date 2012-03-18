@@ -39,6 +39,11 @@ $user->add_lang(array('mods/dkp_common'));
 /* fixed bocks -- always displayed */
 include($phpbb_root_path . 'includes/bbdkp/block/newsblock.' . $phpEx);
 
+if ($config['bbdkp_portal_rtshow'] == 1 )
+{
+	include($phpbb_root_path . 'includes/bbdkp/block/recentblock.' . $phpEx);
+}
+
 /* show loginbox or usermenu */
 if ($user->data['is_registered'])
 {
@@ -52,22 +57,22 @@ else
 include($phpbb_root_path . 'includes/bbdkp/block/whoisonline.' . $phpEx);
 
 // variable blocks - these depend on acp
-if ($config['bbdkp_portal_welcomemsg'])
+if ($config['bbdkp_portal_welcomemsg'] == 1)
 {
 	include($phpbb_root_path . 'includes/bbdkp/block/welcomeblock.' . $phpEx);
 }
 
-if ($config['bbdkp_portal_menu'])
+if ($config['bbdkp_portal_menu'] == 1)
 {
 	include($phpbb_root_path . 'includes/bbdkp/block/mainmenublock.' . $phpEx);
 }
 
-if ($config['bbdkp_portal_loot'])
+if ($config['bbdkp_portal_loot'] == 1 )
 {
 	include($phpbb_root_path . 'includes/bbdkp/block/lootblock.' . $phpEx);
 }
 
-if ($config['bbdkp_portal_recruitment'])
+if ($config['bbdkp_portal_recruitment'] == 1)
 {
 	include($phpbb_root_path . 'includes/bbdkp/block/recruitmentblock.' . $phpEx);
 }
@@ -75,14 +80,14 @@ if ($config['bbdkp_portal_recruitment'])
 $template->assign_var('S_BPSHOW', false);
 if (isset($config['bbdkp_bp_version']))
 {
-	if ($config['bbdkp_portal_bossprogress'])
+	if ($config['bbdkp_portal_bossprogress'] == 1)
 	{
 		include($phpbb_root_path . 'includes/bbdkp/block/bossprogressblock.' . $phpEx);
 		$template->assign_var('S_BPSHOW', true);
 	}
 }
 
-if ($config['bbdkp_portal_links'])
+if ($config['bbdkp_portal_links'] == 1)
 {
 	include($phpbb_root_path . 'includes/bbdkp/block/linksblock.' . $phpEx);
 }

@@ -253,7 +253,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 Order Allow,Deny
 Deny from All
 </Files>]]></find>
-				<action type="after-add"><![CDATA[DirectoryIndex portal.php index.html index.htm]]></action>
+				<action type="after-add"><![CDATA[DirectoryIndex portal.php index.php index.html index.htm]]></action>
 			</edit>
 		</open>
 		

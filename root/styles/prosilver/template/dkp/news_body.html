@@ -1,22 +1,7 @@
 <!-- INCLUDE overall_header.html -->
 <div>
 
-<div style="float: left; width: 0%;">
-
-</div>
-
-<div  style="float: left; width: 78%;">
-<!-- IF S_DISPLAY_WELCOME -->
-<!-- INCLUDE dkp/block/welcomeblock.html -->
-<!-- ENDIF -->
-
-<!-- INCLUDE dkp/block/news.html -->
-
-<!-- INCLUDE dkp/block/whoisonlineblock.html -->
-</div>
-
-<div style="float: right; width: 21%">
-
+<div style="float: left; width: 14%;  margin:0.5%">
 <!-- IF not S_USER_LOGGED_IN -->
 <!-- INCLUDE dkp/block/loginblock.html -->
 <br/>
@@ -27,10 +12,27 @@
 <br/>
 <!-- ENDIF -->
 
-
 <!-- IF S_DISPLAY_MAINMENU -->
 <!-- INCLUDE dkp/block/mainmenu.html -->
 <!-- ENDIF -->
+
+<!-- IF S_DISPLAY_RT -->
+<!-- INCLUDE dkp/block/recent.html -->
+<!-- ENDIF -->
+</div>
+
+<div  style="float: left; width: 63%; margin:0.5%">
+<!-- IF S_DISPLAY_WELCOME -->
+<!-- INCLUDE dkp/block/welcomeblock.html -->
+<!-- ENDIF -->
+
+<!-- INCLUDE dkp/block/news.html -->
+
+<!-- INCLUDE dkp/block/whoisonlineblock.html -->
+</div>
+
+<div style="float: right; width: 20%; margin:0.5%">
+
 
 <!-- IF S_DISPLAY_LOOT -->
 <!-- INCLUDE dkp/block/lastloot.html -->
