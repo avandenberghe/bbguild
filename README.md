@@ -16,7 +16,7 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Raidplanner (under development).
 
 ## CURRENT RELEASE
-v. 1.2.5
+v. 1.2.6
 
 ## COMMUNITY
 
