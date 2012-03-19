@@ -1405,7 +1405,7 @@ function tableupdates($action, $version)
 						$db->sql_query($sql);
 						
 						// make new unique composite
-						$sql= "CREATE UNIQUE INDEX guildindex ON " . $table_prefix . 'bbdkp_memberguild' . " (name, realm) ";
+						$sql= "CREATE UNIQUE INDEX guildindex ON " . $table_prefix . 'bbdkp_memberguild' . " (name, id) ";
 						$db->sql_query($sql);
 
 						// remove unique index on member table
@@ -1473,7 +1473,7 @@ function tableupdates($action, $version)
 						$db->sql_query($sql);
 						
 						// make new unique composite
-						$sql= "CREATE UNIQUE INDEX guildindex ON " . $table_prefix . 'bbdkp_memberguild' . " (name, realm) ";
+						$sql= "CREATE UNIQUE INDEX guildindex ON " . $table_prefix . 'bbdkp_memberguild' . " (name, id) ";
 						$db->sql_query($sql);
 
 						// remove unique index on member table
