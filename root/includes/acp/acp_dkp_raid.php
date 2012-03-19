@@ -2355,7 +2355,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			$db->sql_query ( $sql );
 			
 			// update dkp account, deduct old, add new decay
-			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_raid_decay = member_raid_decay - ' . $raiddetail['raid_decay'] . ' + ' . $decay . " 
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_raid_decay = member_raid_decay - ' . $raiddetail['raid_decay'] . ' + ' . $decay[0] . " 
 				WHERE member_id = " . ( int ) $member_id . ' 
 				and member_dkpid = ' . $dkpid ;
 			$db->sql_query ( $sql );
@@ -2385,7 +2385,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			$db->sql_query ( $sql);
 			
 			// update dkp account, deduct old, add new decay
-			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_item_decay = member_item_decay - ' . $item['item_decay'] . ' + ' . $itemdecay . " 
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_item_decay = member_item_decay - ' . $item['item_decay'] . ' + ' . $itemdecay[0] . " 
 				WHERE member_id = " . ( int ) $item['member_id'] . ' and member_dkpid = ' . $dkpid ;
 			$db->sql_query ( $sql );
 		}
