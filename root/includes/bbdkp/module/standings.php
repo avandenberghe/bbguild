@@ -56,7 +56,8 @@ $games = array(
     'FFXI'       => $user->lang['FFXI'],
 	'rift'       => $user->lang['RIFT'],
 	'swtor'      => $user->lang['SWTOR'], 
-	'lineage2'      => $user->lang['LINEAGE2']	
+	'lineage2'      => $user->lang['LINEAGE2'],
+	'tera'       => $user->lang['TERA']
 );
               
 $installed_games = array();

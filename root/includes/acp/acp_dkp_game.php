@@ -68,6 +68,7 @@ class acp_dkp_game extends bbDKP_Admin
       	   'rift'       => $user->lang['RIFT'],
       	   'swtor'      => $user->lang['SWTOR'],
       	   'lineage2'   => $user->lang['LINEAGE2'],      	   
+      	   'tera'	=> $user->lang['TERA'],
        );
                 
         switch ($mode)

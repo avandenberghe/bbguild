@@ -75,6 +75,7 @@ $gameinstall['wow']=false;
 $gameinstall['warhammer']=false;
 $gameinstall['swtor']=false;
 $gameinstall['lineage2']=false;
+$gameinstall['tera']=false;
 
 $choice=false;
 if (isset($config['bbdkp_default_game'])) 
@@ -130,6 +131,10 @@ if (isset($config['bbdkp_games_lineage2']))
 {
 	$gameinstall['lineage2'] = $config['bbdkp_games_lineage2'];
 }
+if (isset($config['bbdkp_games_tera']))
+{
+	$gameinstall['tera'] = $config['bbdkp_games_tera'];
+}
 
 $options = array(
 		'guildtag'	=> array('lang' => 'UMIL_GUILD', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
@@ -148,6 +153,7 @@ $options = array(
 		'wow'     => array('lang' => 'WOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['wow'] ) ? true:false)),
 		'swtor'     => array('lang' => 'SWTOR', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['swtor'] ) ? true:false)),
 		'lineage2'     => array('lang' => 'LINEAGE2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lineage2'] ) ? true:false)),
+		'tera'     => array('lang' => 'TERA', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['tera'] ) ? true:false)),
 );
 
 /*
@@ -165,6 +171,7 @@ include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_rift.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_swtor.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_lineage2.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_tera.' . $phpEx);
 
 
 /*
@@ -1345,6 +1352,13 @@ function gameinstall($action, $version)
 				return array('command' => sprintf($user->lang['UMIL_GAME125'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 				break;
 			case '1.2.6':
+				// new game 		
+				if(request_var('tera', 0) == 1)
+		        	{
+	          			install_tera($action, $version); 
+	         			$umil->config_update('bbdkp_games_tera', 1, true);
+	         			$installed_games[] = 'tera';          			
+	       			}
 				// set roster to table leayout by default
 				$umil->config_update('bbdkp_roster_layout', 1, true);
 				return array('command' => sprintf($user->lang['UMIL_GAME126'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
