@@ -349,7 +349,7 @@ class acp_dkp_item extends bbDKP_Admin
 		// Generate random group key
 		$group_key = $this->gen_group_key ( $item_name, $loottime, $raid_id + rand(10,100) );
 		
-		$itemdecay= 0;
+		$itemdecay = array();
 		if ($config['bbdkp_decay'] == '1') 
 		{
 			// decay this item
@@ -361,12 +361,12 @@ class acp_dkp_item extends bbDKP_Admin
 			//diff between now and the raidtime
 			$now = getdate();
 			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $loottime;
-			$itemdecay = $acp_dkp_raid->decay($itemvalue, $timediff, 2);
+			$decayarray = $acp_dkp_raid->decay($itemvalue, $timediff, 2);
 		}
 		
 		//
 		// Add item to selected members
-		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid, $itemdecay);
+		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid, $decayarray[0]);
 		
 		//
 		// Logging
