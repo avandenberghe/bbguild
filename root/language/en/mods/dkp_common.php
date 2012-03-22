@@ -126,6 +126,7 @@ $lang = array_merge($lang, array(
 'RIFT'       => 'Rift',
 'SWTOR'      => 'Starwars : The old Republic', 
 'LINEAGE2'   => 'Lineage 2', 
+'TERA'       => 'TERA',
 
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status', 
