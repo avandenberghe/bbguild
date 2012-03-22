@@ -125,7 +125,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				$sql_array = array(
 					'SELECT'	=> 'm.member_id,  a.member_name, a.member_level, m.member_dkpid, 
 					m.member_raid_value, m.member_earned, m.member_adjustment, m.member_spent,  
-					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay - adj_decay) AS member_current,
+					(m.member_earned + m.member_adjustment - m.member_spent + m.member_item_decay - adj_decay) AS member_current,
 					m.member_status, m.member_lastraid,
 					s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename', 
 				    'FROM'      => array(
@@ -142,7 +142,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 								AND (a.member_id = m.member_id) 
 								AND (a.member_class_id = c.class_id and a.game_id = c.game_id)  
 								AND (m.member_dkpid = s.dkpsys_id)   
-								AND l.attribute_id = c.class_id  and l.game_id = c.game_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    		
+								AND l.attribute_id = c.class_id  
+								AND l.game_id = c.game_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'    		
 								AND (s.dkpsys_id = " . (int) $dkpsys_id . ')' ,
 					);
 					
@@ -186,11 +187,11 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				if($config['bbdkp_epgp'] == 1)
 				{
 					$sql_array[ 'SELECT'] .= ', 
-					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep, 
+					(m.member_earned + m.member_adjustment - m.adj_decay) AS ep, 
 					(m.member_spent - m.member_item_decay  + ' . max(0, $config['bbdkp_basegp']) .' ) AS gp, 
 					CASE when (m.member_spent - m.member_item_decay + ' . max(0, $config['bbdkp_basegp']) .' ) = 0 then 1  
-					ELSE round((m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) / 
-								(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr ' ;
+					ELSE round((m.member_earned + m.member_adjustment - m.adj_decay) / 
+					(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr ' ;
 					$sort_order[11] = array('ep desc', 'ep');
 					$sort_order[14] = array('gp desc', 'gp');
 					$sort_order[15] = array('pr desc', 'pr');
@@ -206,10 +207,6 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				$sql = $db->sql_build_query('SELECT', $sql_array);
 				$members_result = $db->sql_query($sql);
 				
-				//if ( !($members_result) )
-				//{
-				//	trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
-				//}
 				$lines = 0;
 				
 				$members_row = array();
@@ -275,12 +272,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				}
 				
 				$db->sql_freeresult($members_result);
-				
-				//if ($member_count==0)
-				//{
-					//trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
-				//}
-				
+
 				/***  Labels  ***/
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
 				
@@ -371,7 +363,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					
 					$sql_array = array(
 					    'SELECT'    => 'l.member_name, m.member_id, 
-					    				m.member_raid_value, m.member_time_bonus, m.member_zerosum_bonus, m.member_earned,
+					    				m.member_raid_value, m.member_time_bonus, m.member_zerosum_bonus, 
+					    				m.member_earned,
 					    				m.member_raid_decay, m.member_adjustment ,
 					    				m.member_spent, m.member_item_decay ', 
 					    'FROM'      => array(
@@ -616,13 +609,13 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					m.member_earned,
 					m.member_raid_decay, 
 					m.member_adjustment, 
-					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep	,
+					(m.member_earned + m.member_adjustment - m.adj_decay) AS ep	,
 					m.member_spent,
 					m.member_item_decay,
 					(m.member_spent - m.member_item_decay  + ' . max(0, $config['bbdkp_basegp']) .' ) AS gp,
-					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay - m.adj_decay ) AS member_current,
+					(m.member_earned + m.member_adjustment - m.member_spent + m.member_item_decay - m.adj_decay ) AS member_current,
 					case when (m.member_spent - m.member_item_decay + ' . max(0, $config['bbdkp_basegp']) .' ) = 0 then 1 
-					else round( (m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) 
+					else round( (m.member_earned + m.member_adjustment - m.adj_decay) 
 								/ ( ' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) end as pr,
 					m.adj_decay, 
 					m.member_lastraid,
@@ -744,7 +737,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'CORRECT_RAIDDECAY' => ( !empty($correct_raid_decay) ) ? $correct_raid_decay : '0.00',
 					'CORRECT_MEMBER_SPENT'  => ( !empty($correct_spent) ) ? $correct_spent : '0.00',
 					'CORRECT_ITEMDECAY'  => ( !empty($correct_itemdecay) ) ? $correct_itemdecay : '0.00',
-					'CORRECT_EARNED'  => $correct_raid_value + $correct_time_bonus + $correct_zerosum_bonus, 
+					'CORRECT_EARNED'  => $correct_raid_value + $correct_time_bonus + $correct_zerosum_bonus-$correct_raid_decay, 
 					
 					'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 					'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
