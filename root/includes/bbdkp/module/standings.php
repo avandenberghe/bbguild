@@ -110,10 +110,10 @@ if (count ($memberarray))
 			$pr[$key]['pr'] = $member['pr']; 
 		}
 		
-		$member_spent [$key] = $member ['member_spent']; //*
-		$member_current [$key] = $member ['member_current'];  //*
-		$member_lastraid [$key] = $member ['member_lastraid']; //*
-		$attendanceP1 [$key] = $member ['attendanceP1']; //*
+		$member_spent [$key] = $member ['member_spent'];
+		$member_current [$key] = $member ['member_current']; 
+		$member_lastraid [$key] = $member ['member_lastraid']; 
+		$attendanceP1 [$key] = $member ['attendanceP1']; 
 	}
 	
 	
@@ -793,11 +793,11 @@ function get_standings($dkpsys_id, $installed_games, $startd, $show_all)
 	if($config['bbdkp_epgp'] == 1)
 	{
 		$sql_array[ 'SELECT'] .= ", 
-			sum(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep,  
+			sum(m.member_earned + m.member_adjustment - m.adj_decay) AS ep,  
 			sum(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . " ) AS gp, 
 		CASE  WHEN SUM(m.member_spent - m.member_item_decay  + " . max(0, $config['bbdkp_basegp']) . " ) = 0 
 		THEN  1 
-		ELSE  ROUND(SUM(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) / 
+		ELSE  ROUND(SUM(m.member_earned + m.member_adjustment - m.adj_decay) / 
 			  SUM(" . max(0, $config['bbdkp_basegp']) . " + m.member_spent - m.member_item_decay),2) END AS pr " ;
 	}
 	
@@ -853,7 +853,7 @@ function get_standings($dkpsys_id, $installed_games, $startd, $show_all)
 	{
 		$sql_array[ 'ORDER_BY'] = "CASE WHEN SUM(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . "  ) = 0 
 		THEN 1
-		ELSE ROUND(SUM(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) / 
+		ELSE ROUND(SUM(m.member_earned + m.member_adjustment - m.adj_decay) / 
 		SUM(" . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) END DESC ' ;
 	}
 	else 
