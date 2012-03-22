@@ -1382,7 +1382,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		
 		// get updated data		
 		$raid = array (
-			'event_id' 	 => request_var ( 'event_id', 0 ), 
+			'event_id' 	 => request_var ( 'event_id', $old_raid['event_id'] ), 
 			'raid_value' => request_var ( 'raid_value', 0.00 ),
 			'time_bonus' => request_var ( 'time_bonus', 0.00 ),  
 			'raid_note'  => utf8_normalize_nfc ( request_var ( 'raid_note', ' ', true ) ), 
