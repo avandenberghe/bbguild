@@ -15,16 +15,38 @@ define('IN_INSTALL', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : '../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
-
+require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
 // Start session management
 $user->session_begin();
 $auth->acl($user->data);
 $user->setup();
 $user->add_lang ( array ('mods/dkp_admin'));
 
+$error= array();
+// check if php is older than 5.2
 if (version_compare(PHP_VERSION, '5.2.0') < 0)
 {
-	trigger_error('You are running an unsupported PHP version. Please upgrade to PHP 5.2.0 or higher before trying to install bbDKP' , E_USER_ERROR);
+	$error[] = 'You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.2.0 or higher before trying to install bbDKP. ';
+}
+
+// check for mysql 4
+$available_dbms = get_available_dbms($dbms);
+foreach($available_dbms as $dbms)
+{
+	switch($dbms['DRIVER'])
+	{
+		case 'mysql':
+			$dbversion = mysql_get_server_info($db->db_connect_id);
+			if (version_compare($dbversion, '5.0.0', '<'))
+			{
+				$error[] = "You are running an unsupported Mysql version ($dbversion) . Please upgrade to Mysql 5.0 or higher before trying to install bbDKP. ";
+			}
+			break;
+	}
+}
+if(count($error) > 0)
+{
+	trigger_error(implode($error,"<br /> "), E_USER_WARNING);
 }
 
 // We only allow a founder install this MOD
