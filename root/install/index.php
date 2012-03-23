@@ -23,13 +23,13 @@ $user->setup();
 $user->add_lang ( array ('mods/dkp_admin'));
 
 $error= array();
-// check if php is older than 5.2
-if (version_compare(PHP_VERSION, '5.2.0') < 0)
+// anything lower than php 5.1 not supported (we use simplexml xpath)
+if (version_compare(PHP_VERSION, '5.1.0') < 0)
 {
-	$error[] = 'You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.2.0 or higher before trying to install bbDKP. ';
+	$error[] = 'You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.1.2 or higher before trying to install bbDKP. ';
 }
 
-// check for mysql 4
+// check for mysql 4. use of subqueries only after 4.1
 $available_dbms = get_available_dbms($dbms);
 foreach($available_dbms as $dbms)
 {
@@ -37,9 +37,9 @@ foreach($available_dbms as $dbms)
 	{
 		case 'mysql':
 			$dbversion = mysql_get_server_info($db->db_connect_id);
-			if (version_compare($dbversion, '5.0.0', '<'))
+			if (version_compare($dbversion, '4.1.0', '<'))
 			{
-				$error[] = "You are running an unsupported Mysql version ($dbversion) . Please upgrade to Mysql 5.0 or higher before trying to install bbDKP. ";
+				$error[] = "You are running an unsupported Mysql version ($dbversion) . Please upgrade to Mysql 4.1 or higher before trying to install bbDKP. ";
 			}
 			break;
 	}
