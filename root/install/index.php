@@ -22,6 +22,11 @@ $auth->acl($user->data);
 $user->setup();
 $user->add_lang ( array ('mods/dkp_admin'));
 
+if (version_compare(PHP_VERSION, '5.2.0') < 0)
+{
+	trigger_error('You are running an unsupported PHP version. Please upgrade to PHP 5.2.0 or higher before trying to install bbDKP' , E_USER_ERROR);
+}
+
 // We only allow a founder install this MOD
 if ($user->data['user_type'] != USER_FOUNDER)
 {
