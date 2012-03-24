@@ -349,7 +349,10 @@ class acp_dkp_item extends bbDKP_Admin
 		// Generate random group key
 		$group_key = $this->gen_group_key ( $item_name, $loottime, $raid_id + rand(10,100) );
 		
-		$itemdecay = array();
+		$decayarray = array();
+		$decayarray[0] = 0;
+		$decayarray[1] = 0;
+		
 		if ($config['bbdkp_decay'] == '1') 
 		{
 			// decay this item
@@ -426,7 +429,7 @@ class acp_dkp_item extends bbDKP_Admin
 		// increase dkp spent value for buyers 
 		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d 				
 				SET d.member_spent = d.member_spent + ' . (float) $itemvalue  .  ' ,
-					d.member_item_decay = d.member_item_decay + ' . $itemdecay .  '  
+					d.member_item_decay = d.member_item_decay + ' . (float) $itemdecay .  '  
 				WHERE d.member_dkpid = ' . (int) $dkpid  . ' 
 			  	AND ' . $db->sql_in_set('member_id', $item_buyers) ;
 		$db->sql_query ( $sql );
