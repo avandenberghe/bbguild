@@ -1,13 +1,10 @@
 <?php
 /**
- * @package bbDKP 1.2.5
+ * @package bbDKP 
+ * @version 1.2.6-PL2S 2/03/2012
  * @author sajaki9@gmail.com
  * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-
- * 
- * FOR UPDATES FROM PRIOR TO 1.2.2 UPDATE TO 1.2.2c FIRST
- * 
  */
 define('UMIL_AUTO', true);
 define('IN_PHPBB', true);
@@ -22,6 +19,7 @@ $auth->acl($user->data);
 $user->setup();
 $user->add_lang ( array ('mods/dkp_admin'));
 
+
 $error= array();
 // anything lower than php 5.1 not supported (we use simplexml xpath)
 if (version_compare(PHP_VERSION, '5.1.0') < 0)
@@ -30,10 +28,10 @@ if (version_compare(PHP_VERSION, '5.1.0') < 0)
 }
 
 // check for mysql 4. use of subqueries only after 4.1
-$available_dbms = get_available_dbms($dbms);
-foreach($available_dbms as $dbms)
+$alldbms = get_available_dbms($dbms);
+foreach($alldbms as $thisdmbs)
 {
-	switch($dbms['DRIVER'])
+	switch($thisdmbs['DRIVER'])
 	{
 		case 'mysql':
 			$dbversion = mysql_get_server_info($db->db_connect_id);
@@ -44,6 +42,9 @@ foreach($available_dbms as $dbms)
 			break;
 	}
 }
+unset ($alldbms);
+unset ($thisdmbs);
+
 if(count($error) > 0)
 {
 	trigger_error(implode($error,"<br /> "), E_USER_WARNING);
