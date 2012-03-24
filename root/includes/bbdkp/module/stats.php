@@ -747,6 +747,16 @@ class statistics
 		$attpagination = generate_pagination2($this->u_stats . '&amp;o=' . $att_current_order ['uri'] ['current'] , 
 		$attendance, $config ['bbdkp_user_llimit'], $startatt, true, 'startatt'  );
 		
+		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$this->show_all) )
+		{
+		    $footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($result),
+		    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o='.$att_current_order['uri']['current']. '&amp;show=all' ) . '" class="rowfoot">');
+		}
+		else
+		{
+		    $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($result));
+		}		
+		
 		$attendance=0;
 		while ( $row = $db->sql_fetchrow($result) )
 		{
@@ -793,6 +803,7 @@ class statistics
 			'U_STATS' => $this->u_stats . '&amp;startatt='. $startatt,
 		    'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
 			'TOTAL_MEMBERS' 	=> $attendance, 
+		    'ATTEND_FOOTCOUNT' 	=> $footcount_text,			
 		    )
 		);
 			
