@@ -265,8 +265,6 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						
 					$template->assign_block_vars('members_row', $members_row);
 					
-					//$previous_data = $row[$previous_source];
-					
 					// unset array 
 					unset($members_row);
 				}
