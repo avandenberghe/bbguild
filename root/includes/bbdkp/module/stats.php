@@ -387,7 +387,7 @@ class statistics
 			'DKPPAGINATION' 		=> $dkppagination ,
 		    'O_PR' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][0] . '&amp;' . URI_DKPSYS . '=' . ($this->query_by_pool ? $this->dkp_id : 'All')) , 
 		    'O_CURRENT' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($this->query_by_pool ? $this->dkp_id : 'All')) , 
-		    'O_NAME'       => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;1o=' . $current_order['uri'][2] . '&amp;' . URI_DKPSYS . '=' . ($this->query_by_pool ? $this->dkp_id : 'All')), 
+		    'O_NAME'       => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][3] . '&amp;' . URI_DKPSYS . '=' . ($this->query_by_pool ? $this->dkp_id : 'All')), 
 		    'O_EARNED' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][4] . '&amp;' . URI_DKPSYS . '=' . ($this->query_by_pool ? $this->dkp_id : 'All')) ,
 		    'O_EARNED_PER_DAY' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][5] . '&amp;' . URI_DKPSYS . '=' . ($this->query_by_pool ? $this->dkp_id : 'All')) , 
 		    'O_EARNED_PER_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][6] . '&amp;' . URI_DKPSYS . '=' . ($this->query_by_pool ? $this->dkp_id : 'All')) , 
