@@ -168,7 +168,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2.6-PL2</mod-version>
+		<mod-version>1.2.6-PL3</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
@@ -183,25 +183,25 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
 			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>	
 			
-			<link type="contrib" lang="en" href="contrib/install_126PL1_to_126PL2.xml">Update from v1.2.6PL1 to v1.2.6-PL2</link>
-			<link type="contrib" lang="fr" href="contrib/install_126PL1_to_126PL2.xml">Mise à jour de v1.2.6PL1 à v1.2.6-PL2</link>
-			<link type="contrib" lang="de" href="contrib/install_126PL1_to_126PL2.xml">Aktualisierung von v1.2.6PL1 bis v1.2.6-PL2</link>
+			<link type="contrib" lang="en" href="contrib/install_126PL1_to_126PL3.xml">Update from v1.2.6PL1 to v1.2.6-PL3</link>
+			<link type="contrib" lang="fr" href="contrib/install_126PL1_to_126PL3.xml">Mise à jour de v1.2.6PL1 à v1.2.6-PL3</link>
+			<link type="contrib" lang="de" href="contrib/install_126PL1_to_126PL3.xml">Aktualisierung von v1.2.6PL1 bis v1.2.6-PL3</link>
 
-			<link type="contrib" lang="en" href="contrib/install_125PL3_to_126.xml">Update from v1.2.5PL3 to v1.2.6-PL2</link>
-			<link type="contrib" lang="fr" href="contrib/install_125PL3_to_126.xml">Mise à jour de v1.2.5PL3 à v1.2.6-PL2</link>
-			<link type="contrib" lang="de" href="contrib/install_125PL3_to_126.xml">Aktualisierung von v1.2.5PL3 bis v1.2.6-PL2</link>
+			<link type="contrib" lang="en" href="contrib/install_125PL3_to_126.xml">Update from v1.2.5PL3 to v1.2.6-PL3</link>
+			<link type="contrib" lang="fr" href="contrib/install_125PL3_to_126.xml">Mise à jour de v1.2.5PL3 à v1.2.6-PL3</link>
+			<link type="contrib" lang="de" href="contrib/install_125PL3_to_126.xml">Aktualisierung von v1.2.5PL3 bis v1.2.6-PL3</link>
 
-			<link type="contrib" lang="en" href="contrib/install_124_to_126.xml">Update from v1.2.4 to v1.2.6-PL2</link>
-			<link type="contrib" lang="fr" href="contrib/install_124_to_126.xml">Mise à jour de v1.2.4 à v1.2.6-PL2</link>
-			<link type="contrib" lang="de" href="contrib/install_124_to_126.xml">Aktualisierung von v1.2.4 bis v1.2.6-PL2</link>
+			<link type="contrib" lang="en" href="contrib/install_124_to_126.xml">Update from v1.2.4 to v1.2.6-PL3</link>
+			<link type="contrib" lang="fr" href="contrib/install_124_to_126.xml">Mise à jour de v1.2.4 à v1.2.6-PL3</link>
+			<link type="contrib" lang="de" href="contrib/install_124_to_126.xml">Aktualisierung von v1.2.4 bis v1.2.6-PL3</link>
 			
-			<link type="contrib" lang="en" href="contrib/install_123_to_126.xml">Update from v1.2.3 to v1.2.6-PL2</link>
-			<link type="contrib" lang="fr" href="contrib/install_123_to_126.xml">Mise à jour de v1.2.3 à v1.2.6-PL2</link>
-			<link type="contrib" lang="de" href="contrib/install_123_to_126.xml">Aktualisierung von v1.2.3 bis v1.2.6-PL2</link>
+			<link type="contrib" lang="en" href="contrib/install_123_to_126.xml">Update from v1.2.3 to v1.2.6-PL3</link>
+			<link type="contrib" lang="fr" href="contrib/install_123_to_126.xml">Mise à jour de v1.2.3 à v1.2.6-PL3</link>
+			<link type="contrib" lang="de" href="contrib/install_123_to_126.xml">Aktualisierung von v1.2.3 bis v1.2.6-PL3</link>
 			
-			<link type="contrib" lang="en" href="contrib/install_122_to_126.xml">Update from v1.2.2 to v1.2.6-PL2</link>
-			<link type="contrib" lang="fr" href="contrib/install_122_to_126.xml">Mise à jour de v1.2.2 à v1.2.6-PL2</link>
-			<link type="contrib" lang="de" href="contrib/install_122_to_126.xml">Aktualisierung von v1.2.2 bis v1.2.6-PL2</link>
+			<link type="contrib" lang="en" href="contrib/install_122_to_126.xml">Update from v1.2.2 to v1.2.6-PL3</link>
+			<link type="contrib" lang="fr" href="contrib/install_122_to_126.xml">Mise à jour de v1.2.2 à v1.2.6-PL3</link>
+			<link type="contrib" lang="de" href="contrib/install_122_to_126.xml">Aktualisierung von v1.2.2 bis v1.2.6-PL3</link>
 			
 			<link type="text" lang="en" href="docs/install.html">Read me</link>
 			<link type="text" lang="fr" href="docs/install.html">Lisez moi</link>
