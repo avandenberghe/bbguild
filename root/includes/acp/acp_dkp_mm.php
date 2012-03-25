@@ -95,8 +95,9 @@ class acp_dkp_mm extends bbDKP_Admin
                        FROM ' . GUILD_TABLE . ' 
                        ORDER BY id desc';
 				$resultg = $db->sql_query($sql);
+
 				// show other guild
-				$submit = (isset($_POST['member_guild_id'])) ? true : false;
+				$submit = (isset ( $_POST ['member_guild_id'] ) || isset ( $_GET ['member_guild_id'] ) ) ? true : false;
 				/* check if page was posted back */
 				if ($submit)
 				{
@@ -246,11 +247,12 @@ class acp_dkp_mm extends bbDKP_Admin
 				
 				$db->sql_freeresult($members_result);
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
-				$memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current']), $total_members, $config['bbdkp_user_llimit'], $start, true);
+				$memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] . "&amp;member_guild_id=".$guild_id), $total_members, $config['bbdkp_user_llimit'], $start, true);
 				$form_key = 'mm_listmembers';
 				add_form_key($form_key);
 				
 				$template->assign_vars(array(
+					'GUILDID' => $guild_id, 
 					'START' => $start, 
 					'F_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember' , 
 					'F_MEMBERS_LIST' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers' , 
@@ -2039,7 +2041,7 @@ class acp_dkp_mm extends bbDKP_Admin
 		$startraiddate = (int) $db->sql_fetchfield('startdate', 0, $result);
 		$endraiddate = (int) $db->sql_fetchfield('enddate', 0, $result);
 		$db->sql_freeresult($result);
-		if ($this->old_member['member_joindate'] > $startraiddate || $this->old_member['member_joindate'] == 0)
+		if ($startraiddate != 0 && ($this->old_member['member_joindate'] == 0 || $this->old_member['member_joindate'] > $startraiddate))
 		{
 			$joindate = $startraiddate;
 		}
