@@ -30,7 +30,7 @@ if (! defined('EMED_BBDKP'))
 class acp_dkp_raid extends bbDKP_Admin 
 {
 	private $link;
-	
+	public $u_action;
 	
 	/**
 	 * main Raid function
@@ -1079,7 +1079,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			'S_SHOWTIME' 		  => ($config['bbdkp_timebased'] == '1') ? true : false,
 			'S_SHOWZS' 			  => ($config['bbdkp_zerosum'] == '1') ? true : false, 
 			'S_SHOWDECAY' 		  => ($config['bbdkp_decay'] == '1') ? true : false,
-			'U_LIST_RAIDS' 		  => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids" ), 
+			'U_LIST_RAIDS' 		  => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;dkpsys_id=". $dkpsys_id ), 
 			'START' 			  => $start, 
 			'LISTRAIDS_FOOTCOUNT' => sprintf ( $user->lang ['LISTRAIDS_FOOTCOUNT'], $total_raids, $config ['bbdkp_user_rlimit'] ), 
 			'RAID_PAGINATION' 	  => generate_pagination ( append_sid 
@@ -1097,7 +1097,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	 */
 	private function duplicate_raid($raid_id)
 	{
-		global $db, $user, $config;
+		global $db, $user, $config, $phpbb_admin_path, $phpEx;
 		$sql_array = array (
 			'SELECT' => '  e.event_dkpid, e.event_name, r.event_id, r.raid_note, r.raid_start, r.raid_end, r.raid_added_by, r.raid_updated_by', 
 			'FROM' => array (
@@ -1111,6 +1111,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		$result = $db->sql_query ($sql);
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
+			$dkpsys_id = $row['event_dkpid'];
 			$raid = array (
 				'event_id' 			=> $row['event_id'],
 				'event_dkpid' 		=> $row['event_dkpid'],
@@ -1183,10 +1184,8 @@ class acp_dkp_raid extends bbDKP_Admin
     	}
     	
     	$db->sql_transaction('commit');
-    	
-    	
-    	meta_refresh(1, $this->u_action);
-    	
+    	meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;dkpsys_id=". $dkpsys_id ));
+
     	$success_message = sprintf ( $user->lang ['ADMIN_DUPLICATE_RAID_SUCCESS'], 
 		$user->format_date($this->time), $raid['event_name'] ) . '<br />';
 		trigger_error($success_message);
