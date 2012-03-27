@@ -549,6 +549,7 @@ class acp_dkp_game extends bbDKP_Admin
 		                }
 			            $db->sql_freeresult($result);
 			            $template->assign_vars( array(
+							'GAME_ID'				=> $installed_games[0], 			            
 							'S_FACTIONLIST_OPTIONS'	=> $s_faction_options, 
 							'S_ADD'   				=> TRUE,
 			            	'U_ACTION'				=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addrace'),
