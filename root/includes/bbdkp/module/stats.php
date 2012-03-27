@@ -378,6 +378,8 @@ class statistics
 		else
 		{
 		    $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($members_result));
+		    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o1='.$current_order['uri']['current']) . '" class="rowfoot">');
+		    
 		}
 		
 		$db->sql_freeresult($members_result);
@@ -755,6 +757,8 @@ class statistics
 		else
 		{
 		    $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($result));
+		    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o='.$current_order['uri']['current']) . '" class="rowfoot">');
+		    
 		}		
 		
 		$attendance=0;
