@@ -835,13 +835,13 @@ class ucp_dkp
 			
 			$sql_array2 = array(
 			    'SELECT'    => ' d.dkpsys_id, d.dkpsys_name, 
-				m.member_earned - m.member_raid_decay + m.member_adjustment AS ep,
+				m.member_earned + m.member_adjustment AS ep,
 			    m.member_spent - m.member_item_decay + ( ' . max(0, $config['bbdkp_basegp']) . ') AS gp, 
-     					(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent + m.member_item_decay - ( ' . max(0, $config['bbdkp_basegp']) . ') ) AS member_current,
+     					(m.member_earned + m.member_adjustment - m.member_spent + m.member_item_decay - ( ' . max(0, $config['bbdkp_basegp']) . ') ) AS member_current,
 
      					sum(case when m.member_spent - m.member_item_decay <= 0 
-				then m.member_earned - m.member_raid_decay + m.member_adjustment  
-				else round( (m.member_earned - m.member_raid_decay + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay) ,2) end) as pr  
+				then m.member_earned + m.member_adjustment  
+				else round( (m.member_earned + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay) ,2) end) as pr  
 				', 
 			    'FROM'      => array(
 				        MEMBER_DKP_TABLE 	=> 'm', 
