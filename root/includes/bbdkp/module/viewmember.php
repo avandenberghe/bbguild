@@ -253,8 +253,8 @@ $template->assign_vars(array(
 	'C_TOTAL_DECAY'	=> ($member['member_raid_decay'] -$member['member_item_decay'] + $member['adj_decay']) > 0 ? 'negative' : 'positive' ,
 
 
-	'NETCURRENT'    => $member['ep_net'] - $member['gp_net'] - max(0, $config['bbdkp_basegp']) ,
-	'C_NETCURRENT'      => (($member['member_current'] + $member['member_item_decay'] - max(0, $config['bbdkp_basegp']) ) > 0   )  ? 'positive' : 'negative',
+	'NETCURRENT'    => $member['ep_net'] - $member['gp_net'] - max(0, $config['bbdkp_basegp']) - ( $member['member_raid_decay'] - $member['member_item_decay'] + $member['adj_decay']) ,
+	'C_NETCURRENT'      => (($member['member_current'] + $member['member_item_decay'] - max(0, $config['bbdkp_basegp']) - ( $member['member_raid_decay'] - $member['member_item_decay'] + $member['adj_decay'])) > 0   )  ? 'positive' : 'negative',
 	
 	'MEMBER_LEVEL'    => $member['member_level'],
 	'MEMBER_DKPID'    => $dkp_id,
