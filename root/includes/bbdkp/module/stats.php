@@ -423,7 +423,6 @@ class statistics
 	protected function class_statistics()
 	{
 		global $db, $config, $template, $phpEx, $phpbb_root_path;
-		$classes = array();
 		
 		// Find total # members with a dkp record
 		$sql = 'SELECT count(member_id) AS members FROM ' . MEMBER_DKP_TABLE . ' where 1 = 1 ' ;
@@ -753,8 +752,8 @@ class statistics
 
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$this->show_all) )
 		{
-		    $footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($members_result),
-		    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o='.$current_order['uri']['current']. '&amp;show=all' ) . '" class="rowfoot">');
+		    $footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($result),
+		    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o='.$att_current_order['uri']['current']. '&amp;show=all' ) . '" class="rowfoot">');
 		    
 			$attpagination = generate_pagination2($this->u_stats . '&amp;o=' . $att_current_order ['uri'] ['current'] , 
 			$attendance, $config ['bbdkp_user_llimit'], $startatt, true, 'startatt'  );
@@ -763,7 +762,7 @@ class statistics
 		
 		else
 		{
-		    $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($members_result));
+		    $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($result));
 		    
 			$attpagination = generate_pagination2($this->u_stats . '&amp;o=' . $att_current_order ['uri'] ['current']. '&amp;show=all' , 
 			$attendance, $config ['bbdkp_user_llimit'], $startatt, true, 'startatt'  );
