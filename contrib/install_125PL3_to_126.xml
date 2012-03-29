@@ -104,8 +104,6 @@
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
 			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/module/*.*" to="styles/prosilver/template/dkp/module/*.*"/>			
-			<file from="root/styles/prosilver/template/dkp/block/*.*" to="styles/prosilver/template/dkp/block/*.*"/>
 			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
