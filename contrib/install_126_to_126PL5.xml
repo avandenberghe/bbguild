@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="modx.prosilver.en.xsl"?>
+<!--NOTICE: Please open this file in your web browser. If presented with a security warning, you may safely tell it to allow the blocked content.-->
+<!--For security purposes, please check: http://www.phpbb.com/mods/ for the latest version of this MOD.\nAlthough MODs are checked before being allowed in the MODs Database there is no guarantee that there are no security problems within the MOD.\nNo support will be given for MODs not found within the MODs Database which can be found at http://www.phpbb.com/mods/-->
+<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
+	<header>
+		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
+		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
+		<title lang="en"><![CDATA[bbDKP 1.2.6, 1.2.6-PL1,2,3,4 to 1.2.6-PL5]]></title>
+		<description lang="en"><![CDATA[Update script 1.2.6, 1.2.6-PL1 to 1.2.6-PL5]]></description>
+		<description lang="fr"><![CDATA[mise à jour 1.2.6, 1.2.6-PL1 vers 1.2.6-PL5]]></description>
+		<description lang="de"><![CDATA[Aktualisierung 1.2.6-PL1 bis 1.2.6-PL5]]></description>
+		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.6,PL1,2,3,4 Replace the files listed below]]></author-notes>
+		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.6,PL1,2,3,4 Remplacez les fichiers listés en bas]]></author-notes>
+		<author-notes lang="de"><![CDATA[Benötigt bbdkp 1.2.6,PL1,2,3,4 ertsetze die hierunder erwähnte Dateien]]></author-notes>
+		<author-group>
+			<author>
+				<realname><![CDATA[Andy Vandenberghe]]></realname>
+				<username><![CDATA[Sajaki]]></username>
+				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
+				<email><![CDATA[sajaki9@gmail.com]]></email>
+				<contributions-group>
+					<contributions status="current" from="2008-04-04" position="Developer"/>
+				</contributions-group>
+			</author>
+			<author>
+				<realname><![CDATA[Steffen]]></realname>
+				<username><![CDATA[Blazeflack]]></username>
+				<homepage><![CDATA[http://aegis.dk]]></homepage>
+				<email><![CDATA[blazeflack@gmail.com]]></email>
+				<contributions-group>
+					<contributions status="current" from="2010-06-01" position="Supporter"/>
+				</contributions-group>
+			</author>
+			<author>
+				<realname><![CDATA[TheGadgetGuy]]></realname>
+				<username><![CDATA[aerwin]]></username>				
+				<homepage><![CDATA[]]></homepage>				
+				<contributions-group>
+					<contributions status="current" from="2012-01-01" position="Contributor"/>
+				</contributions-group>
+			</author>			
+			<author>
+				<realname><![CDATA[Sh1ny]]></realname>
+				<username><![CDATA[Sh1ny]]></username>				
+				<homepage><![CDATA[]]></homepage>								
+				<contributions-group>
+					<contributions status="current" from="2012-01-01" position="Contributor"/>
+				</contributions-group>
+			</author>				
+		</author-group>
+		<mod-version>1.2.6-PL5</mod-version>
+		<installation>
+			<level>easy</level>
+			<time>600</time>
+			<target-version>3.0.10</target-version>
+		</installation>
+		<link-group>
+			<link type="parent" href="../install.xml" lang="de">Frisch-Installations-Anleitung</link>
+			<link type="parent" href="../install.xml" lang="en">Clean-Installation Manual</link>
+			<link type="parent" href="../install.xml" lang="fr">Manuel de première installation</link>
+		</link-group>
+	</header>
+	<action-group>
+		<copy>
+			<file from="root/adm/style/dkp/acp_mm_editmemberdkp.html" to="adm/style/dkp/acp_mm_editmemberdkp.html"/>
+			<file from="root/adm/style/dkp/acp_editraid.html" to="adm/style/dkp/acp_editraid.html"/>			
+			<file from="root/adm/style/dkp/acp_mm_listmemberdkp.html" to="adm/style/dkp/acp_mm_listmemberdkp.html"/>
+			<file from="root/install/gamesinstall/install_swtor.php" to="install/gamesinstall/install_swtor.php"/>			
+			<file from="root/includes/acp/acp_dkp_item.php" to="includes/acp/acp_dkp_item.php"/>
+			<file from="root/includes/acp/acp_dkp_game.php" to="includes/acp/acp_dkp_game.php"/>			
+			<file from="root/includes/acp/acp_dkp_mdkp.php" to="includes/acp/acp_dkp_mdkp.php"/>
+			<file from="root/includes/acp/acp_dkp_mm.php" to="includes/acp/acp_dkp_mm.php"/>			
+			<file from="root/includes/acp/acp_dkp_raid.php" to="includes/acp/acp_dkp_raid.php"/>
+			<file from="root/includes/bbdkp/module/stats.php" to="includes/bbdkp/module/stats.php"/>
+			<file from="root/includes/bbdkp/module/standings.php" to="includes/bbdkp/module/standings.php"/>
+			<file from="root/includes/bbdkp/module/viewmember.php" to="includes/bbdkp/module/viewmember.php"/>
+			<file from="root/includes/bbdkp/module/viewraid.php" to="includes/bbdkp/module/viewraid.php"/>			
+			<file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>			
+			<file from="root/language/en/mods/dkp_common.php" to="includes/language/en/mods/dkp_common.php"/>			
+			<file from="root/styles/prosilver/template/dkp/module/stats.html" to="styles/prosilver/template/dkp/module/stats.html"/>
+			<file from="root/styles/prosilver/template/dkp/module/viewmember.html" to="styles/prosilver/template/dkp/module/viewmember.html"/>
+			<file from="root/styles/prosilver/template/dkp/module/viewraid.html" to="styles/prosilver/template/dkp/module/viewraid.html"/>			
+		</copy>
+		<diy-instructions lang="en"><![CDATA[Afterwards, purge template cache]]></diy-instructions>
+		<diy-instructions lang="fr"><![CDATA[ensuite, purgez la cache]]></diy-instructions>
+		<diy-instructions lang="de"><![CDATA[danach Cache leeren]]></diy-instructions>
+	</action-group>
+</mod>
