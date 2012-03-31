@@ -852,7 +852,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			'U_BACK'			=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids" ),
 			'L_TITLE' 			=> $user->lang ['ACP_ADDRAID'], 
 			'F_EDIT_RAID' 		=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
-			'F_ADDATTENDEE' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addattendee&amp;". URI_RAID . "=" .$raid_id ),
+			'F_ADDATTENDEE' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
 			'RAIDTITLE' 		=> sprintf($user->lang['RAIDDESCRIPTION'], $raid_id, $raid['event_name'], 
 							  	 $user->format_date($raid['raid_start'])), 
 			'EVENT_VALUE'		=> $event_value, 
@@ -1272,11 +1272,11 @@ class acp_dkp_raid extends bbDKP_Admin
 				'L_ATTENDEES' 	=> implode ( ', ', $raid ['raid_attendees'] ), 
 				'L_NOTE' 		=> $raid ['raid_note'], 
 				'L_VALUE' 		=> $raid['raid_value'], 
-				'L_ADDED_BY' 	=> $user->data ['username'] );
+				'L_ADDED_BY' 	=> $user->data ['username']);
 			
-			$this->log_insert ( array (
+			$this->log_insert (array(
 				'log_type' 		=> $log_action ['header'], 
-				'log_action' 	=> $log_action ) );
+				'log_action' 	=> $log_action ));
 			
 			//
 			// Success message
@@ -1625,6 +1625,10 @@ class acp_dkp_raid extends bbDKP_Admin
 	 */ 
 	private function addraider($raid_id)
 	{
+		if(!check_form_key('acp_dkp_addraid'))
+		{
+			trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);	
+		}
 		global $db; 
         $raid_value = request_var('raid_value', 0.00); 
         $time_bonus = request_var('time_bonus', 0.00); 

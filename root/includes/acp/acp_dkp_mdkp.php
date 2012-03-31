@@ -1025,9 +1025,10 @@ class acp_dkp_mdkp extends bbDKP_Admin
        							'WHERE'     => 'e.event_dkpid = ' . $dkpsys_id . '
        											AND e.event_id = r.event_id 
        											AND r.raid_id = rd.raid_id 
-       											AND rd.member_id = ' . $member_to,
+       											AND rd.member_id = ' . $member_from,
        							'ORDER_BY'  => 'raid_id'
        					);
+       					$sql = $db->sql_build_query('SELECT', $sql_array);
 						$result = $db->sql_query($sql, 0);
 						$raid_ids= array();
 						while ( $row = $db->sql_fetchrow($result) )
@@ -1060,6 +1061,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				
 						//commit 
 						$db->sql_transaction('commit');
+						
+						//log the action
 						
 						//pick up this info from the hidden variables
 						$member_from_name = utf8_normalize_nfc(request_var('hidden_name_from', '', true));
