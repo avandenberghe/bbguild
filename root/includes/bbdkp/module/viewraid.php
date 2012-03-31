@@ -125,7 +125,7 @@ $template->assign_vars(array(
 	'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
 	'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
 	'S_SHOWEPGP' 		=> ($config['bbdkp_epgp'] == '1') ? true : false,
-	'F_RAID'			=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=listraids&amp;'. URI_RAID . '=' . request_var(URI_RAID, 0))
+	'F_RAID'			=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewraid&amp;'. URI_RAID . '=' . request_var(URI_RAID, 0))
 ));
 
 /**********************************************
@@ -133,12 +133,12 @@ $template->assign_vars(array(
  **********************************************/ 
 
 $sort_order = array (
-		0 => array ('member_name desc', 'member_name desc' ),
-		1 => array ('raid_value', 'raid_value desc' ), 
-		2 => array ('time_bonus', 'time_bonus desc' ), 
-		3 => array ('zerosum_bonus', 'zerosum_bonus desc' ),
-		4 => array ('raid_decay', 'raid_decay desc' ),
-		5 => array ('total desc', 'total desc' ),
+		0 => array ('member_name asc', 'member_name desc' ),
+		1 => array ('raid_value asc', 'raid_value desc' ), 
+		2 => array ('time_bonus asc', 'time_bonus desc' ), 
+		3 => array ('zerosum_bonus asc', 'zerosum_bonus desc' ),
+		4 => array ('raid_decay asc', 'raid_decay desc' ),
+		5 => array ('total asc', 'total desc' ),
 );
 $current_order = switch_order ($sort_order);	
 $sql_array = array(
