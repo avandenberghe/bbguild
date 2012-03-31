@@ -183,29 +183,38 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
 			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>	
 			
-			<link type="contrib" lang="en" href="contrib/install_126_to_126PL4.xml">Update from v1.2.6PL1 to v1.2.6-PL4</link>
-			<link type="contrib" lang="fr" href="contrib/install_126_to_126PL4.xml">Mise à jour de v1.2.6PL1 à v1.2.6-PL4</link>
-			<link type="contrib" lang="de" href="contrib/install_126_to_126PL4.xml">Aktualisierung von v1.2.6PL1 bis v1.2.6-PL4</link>
+
+			<link type="contrib" lang="en" href="contrib/install_126PL4_to_126PL5.xml">Update from v1.2.6PL4 to v1.2.6-PL5</link>
+			<link type="contrib" lang="fr" href="contrib/install_126PL4_to_126PL5.xml">Mise à jour de v1.2.6PL4 à v1.2.6-PL5</link>
+			<link type="contrib" lang="de" href="contrib/install_126PL4_to_126PL5.xml">Aktualisierung von v1.2.6PL4 bis v1.2.6-PL5</link>
 
 			<link type="contrib" lang="en" href="contrib/install_126PL3_to_126PL4.xml">Update from v1.2.6PL3 to v1.2.6-PL4</link>
 			<link type="contrib" lang="fr" href="contrib/install_126PL3_to_126PL4.xml">Mise à jour de v1.2.6PL3 à v1.2.6-PL4</link>
 			<link type="contrib" lang="de" href="contrib/install_126PL3_to_126PL4.xml">Aktualisierung von v1.2.6PL3 bis v1.2.6-PL4</link>
 
-			<link type="contrib" lang="en" href="contrib/install_125PL3_to_126.xml">Update from v1.2.5PL3 to v1.2.6-PL4</link>
-			<link type="contrib" lang="fr" href="contrib/install_125PL3_to_126.xml">Mise à jour de v1.2.5PL3 à v1.2.6-PL4</link>
-			<link type="contrib" lang="de" href="contrib/install_125PL3_to_126.xml">Aktualisierung von v1.2.5PL3 bis v1.2.6-PL4</link>
+			<link type="contrib" lang="en" href="contrib/install_126_to_126PL5.xml">Update from v1.2.6PL1 to v1.2.6-PL5</link>
+			<link type="contrib" lang="fr" href="contrib/install_126_to_126PL5.xml">Mise à jour de v1.2.6PL1 à v1.2.6-PL5</link>
+			<link type="contrib" lang="de" href="contrib/install_126_to_126PL5.xml">Aktualisierung von v1.2.6PL1 bis v1.2.6-PL5</link>
 
-			<link type="contrib" lang="en" href="contrib/install_124_to_126.xml">Update from v1.2.4 to v1.2.6-PL4</link>
-			<link type="contrib" lang="fr" href="contrib/install_124_to_126.xml">Mise à jour de v1.2.4 à v1.2.6-PL4</link>
-			<link type="contrib" lang="de" href="contrib/install_124_to_126.xml">Aktualisierung von v1.2.4 bis v1.2.6-PL4</link>
+			<link type="contrib" lang="en" href="contrib/install_126_to_126PL4.xml">Update from v1.2.6PL1 to v1.2.6-PL4</link>
+			<link type="contrib" lang="fr" href="contrib/install_126_to_126PL4.xml">Mise à jour de v1.2.6PL1 à v1.2.6-PL4</link>
+			<link type="contrib" lang="de" href="contrib/install_126_to_126PL4.xml">Aktualisierung von v1.2.6PL1 bis v1.2.6-PL4</link>
+
+			<link type="contrib" lang="en" href="contrib/install_125PL3_to_126PL5.xml">Update from v1.2.5PL3 to v1.2.6-PL5</link>
+			<link type="contrib" lang="fr" href="contrib/install_125PL3_to_126PL5.xml">Mise à jour de v1.2.5PL3 à v1.2.6-PL5</link>
+			<link type="contrib" lang="de" href="contrib/install_125PL3_to_126PL5.xml">Aktualisierung von v1.2.5PL3 bis v1.2.6-PL5</link>
+
+			<link type="contrib" lang="en" href="contrib/install_124_to_126PL5.xml">Update from v1.2.4 to v1.2.6-PL5</link>
+			<link type="contrib" lang="fr" href="contrib/install_124_to_126PL5.xml">Mise à jour de v1.2.4 à v1.2.6-PL5</link>
+			<link type="contrib" lang="de" href="contrib/install_124_to_126PL5.xml">Aktualisierung von v1.2.4 bis v1.2.6-PL5</link>
 			
-			<link type="contrib" lang="en" href="contrib/install_123_to_126.xml">Update from v1.2.3 to v1.2.6-PL4</link>
-			<link type="contrib" lang="fr" href="contrib/install_123_to_126.xml">Mise à jour de v1.2.3 à v1.2.6-PL4</link>
-			<link type="contrib" lang="de" href="contrib/install_123_to_126.xml">Aktualisierung von v1.2.3 bis v1.2.6-PL4</link>
+			<link type="contrib" lang="en" href="contrib/install_123_to_126PL5.xml">Update from v1.2.3 to v1.2.6-PL5</link>
+			<link type="contrib" lang="fr" href="contrib/install_123_to_126PL5.xml">Mise à jour de v1.2.3 à v1.2.6-PL5</link>
+			<link type="contrib" lang="de" href="contrib/install_123_to_126PL5.xml">Aktualisierung von v1.2.3 bis v1.2.6-PL5</link>
 			
-			<link type="contrib" lang="en" href="contrib/install_122_to_126.xml">Update from v1.2.2 to v1.2.6-PL4</link>
-			<link type="contrib" lang="fr" href="contrib/install_122_to_126.xml">Mise à jour de v1.2.2 à v1.2.6-PL4</link>
-			<link type="contrib" lang="de" href="contrib/install_122_to_126.xml">Aktualisierung von v1.2.2 bis v1.2.6-PL4</link>
+			<link type="contrib" lang="en" href="contrib/install_122_to_126PL5.xml">Update from v1.2.2 to v1.2.6-PL5</link>
+			<link type="contrib" lang="fr" href="contrib/install_122_to_126PL5.xml">Mise à jour de v1.2.2 à v1.2.6-PL5</link>
+			<link type="contrib" lang="de" href="contrib/install_122_to_126PL5.xml">Aktualisierung von v1.2.2 bis v1.2.6-PL5</link>
 			
 			<link type="text" lang="en" href="docs/INSTALL.html">Read me</link>
 			<link type="text" lang="fr" href="docs/INSTALL.html">Lisez moi</link>
