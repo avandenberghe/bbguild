@@ -577,7 +577,7 @@ class acp_dkp_adj extends bbDKP_Admin
 	 * add a new dkp adjustment
 	 * 
 	 */
-	public function add_new_adjustment ($dkpid, $member_id, $group_key, $adjval, $adjreason, $candecay)
+	public function add_new_adjustment ($dkpid, $member_id, $group_key, $adjval, $adjreason, $candecay = 0)
 	{
 		global $user, $db;
 		// no global scope
@@ -621,6 +621,7 @@ class acp_dkp_adj extends bbDKP_Admin
 				'member_raidcount' => 0));
 			$db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
 		}
+		
 		//
 		// Add the adjustment to the database
 		//
@@ -638,7 +639,7 @@ class acp_dkp_adj extends bbDKP_Admin
 
 	/** 
 	 * validationfunction for adjustment values : required and numeric, date is in range
-	 * @access public 
+	 * @access private 
 	 */
 	private function error_check_i ()
 	{

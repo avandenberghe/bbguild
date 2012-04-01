@@ -6,13 +6,13 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.2.3 to 1.2.6]]></title>
-		<description lang="en"><![CDATA[Update script 1.2.3 to 1.2.6]]></description>
-		<description lang="fr"><![CDATA[mise à jour 1.2.3 vers 1.2.6]]></description>
-		<description lang="de"><![CDATA[Aktualisierung 1.2.3 bis 1.2.6]]></description>
-		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.3-PL4, Please read docs/INSTALL.html before beginning]]></author-notes>
-		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.3-PL4, Veuillez lire docs/INSTALL.html avant de commencer.]]></author-notes>
-		<author-notes lang="de"><![CDATA[benötigt bbdkp 1.2.3-PL4, Bitte lesen sie docs/INSTALL.html bevor.]]></author-notes>
+		<title lang="en"><![CDATA[bbDKP 1.2.5 to 1.2.6-PL5]]></title>
+		<description lang="en"><![CDATA[Update script 1.2.5 to 1.2.6-PL5]]></description>
+		<description lang="fr"><![CDATA[mise à jour 1.2.5 vers 1.2.6-PL5]]></description>
+		<description lang="de"><![CDATA[Aktualisierung 1.2.5 bis 1.2.6-PL5]]></description>
+		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.5, Please read docs/INSTALL.html before beginning]]></author-notes>
+		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.5, Veuillez lire docs/INSTALL.html avant de commencer.]]></author-notes>
+		<author-notes lang="de"><![CDATA[benötigt bbdkp 1.2.5, Bitte lesen sie docs/INSTALL.html bevor.]]></author-notes>
 		<author-group>
 			<author>
 				<realname><![CDATA[Andy Vandenberghe]]></realname>
@@ -73,7 +73,7 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2.6-PL4</mod-version>
+		<mod-version>1.2.6-PL5</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>600</time>
@@ -87,35 +87,23 @@
 	</header>
 	<action-group>
 		<delete>
-			<!-- delete unneeded files -->
-			<file name="includes/bbdkp/pchart"/>		
-			<file name="root/images/pchart"/>
+			<!-- delete old files -->
+			<file name="styles/prosilver/template/dkp/jquery-1.6.2.min.js"/>			
 		</delete>
 		<copy>
-			<!-- copy all 1.2.6 files -->
+			<!-- replace/add modified/new files -->
 			<file from="root/aboutbbdkp.php" to="aboutbbdkp.php"/>
 			<file from="root/portal.php" to="portal.php"/>
-			<file from="root/dkp.php" to="dkp.php"/>
-			<file from="root/configdkp.php" to="configdkp.php"/>
-			<file from="root/adm/findclassrace.php" to="adm/images/findclassrace.php"/>
-			<file from="root/adm/findaction.php" to="adm/images/findaction.php"/>
-			<file from="root/adm/findrank.php" to="adm/images/findrank.php"/>					
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
-			<file from="root/images/class_images/*.*" to="images/class_images/*.*"/>
-			<file from="root/images/event_images/*.*" to="images/event_images/*.*"/>	
-			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>				
-			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>				
 			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
-			<file from="root/includes/acp/info/*.*" to="includes/acp/info/*.*"/>
-			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
+			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
 			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
-			<file from="root/styles/prosilver/theme/*.*" to="styles/prosilver/theme/*.*"/>
+			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
-
 		<open src="includes/functions.php">
 			<edit>
 				<comment lang="en"><![CDATA[new language link in functions]]></comment>
@@ -330,7 +318,7 @@ function get_bbchar($bbresult)
 ]]></action>
 			</edit>
 		</open>	
-
+		
 		<open src="/styles/prosilver/template/overall_footer.html">
 			<edit>
 				<comment lang="en"><![CDATA[updating footer]]></comment>
@@ -340,32 +328,31 @@ function get_bbchar($bbresult)
 				<action type="replace-with"><![CDATA[function pop_aboutbbdkp()]]></action>
 			</edit>
 			<edit>
-			<find><![CDATA[search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70')]]></find>
-			<action type="after-add"><![CDATA[;]]></action>
-			</edit>
-			<edit>	
-				<find><![CDATA[<a class="bbdkpcredits" onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">BBdkp Credits</a>]]></find>
+				<comment lang="en"><![CDATA[updating footer]]></comment>
+				<comment lang="fr"><![CDATA[mise à jour overall_footer]]></comment>
+				<comment lang="de"><![CDATA[änderung in overall_footer]]></comment>			
+				<find><![CDATA[<a class="bbdkpcredits" onclick="javascript:pop_search();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">powered by bbDKP</a><br />]]></find>
 				<action type="replace-with"><![CDATA[<a class="bbdkpcredits" onclick="javascript:pop_aboutbbdkp();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">{L_BBDKP}</a><br />]]></action>
 			</edit>
 		</open>
-			
+
 		<php-installer><![CDATA[install/index.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[Please see the full installation and upgrade instructions here : /docs/install.html
 What has changed ? see here : /docs/changelog.html
 
 Post-install instructions : 
-1) Run bbDKP 1.2.3->1.2.6 database update : install/index.php 
+1) Run bbDKP 1.2.6 database update : install/index.php 
 2) delete the install folder. 
 		Enjoy ;)]]></diy-instructions>
 		<diy-instructions lang="fr"><![CDATA[le guide de mise à jour : /docs/install.html
 Liste des changements : /docs/changelog.html
 
-1) lancer la mise à jour 1.2.3->1.2.6 : install/index.php 
+1) lancer la mise à jour : install/index.php 
 2) Supprimer le repertoire /install pour réactiver le forum.]]></diy-instructions>
 		<diy-instructions lang="de"><![CDATA[Installations und Upgradeanweisungen : /docs/install.html
 Liste der änderungen : /docs/changelog.html
 
-1) Datenbank aktualisierung 1.2.3->1.2.6 : install/index.php 
+1) Datenbank aktualisierung : install/index.php 
 2) lösche das Installations-Verzeichnis „install"]]></diy-instructions>
 	</action-group>
 </mod>

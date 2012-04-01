@@ -6,13 +6,13 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.2.6, 1.2.6-PL1,2,3 to 1.2.6-PL4]]></title>
-		<description lang="en"><![CDATA[Update script 1.2.6, 1.2.6-PL1 to 1.2.6-PL4]]></description>
-		<description lang="fr"><![CDATA[mise à jour 1.2.6, 1.2.6-PL1 vers 1.2.6-PL4]]></description>
-		<description lang="de"><![CDATA[Aktualisierung 1.2.6-PL1 bis 1.2.6-PL4]]></description>
-		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.6 or 1.2.6-PL1,2,3, Replace the files listed below]]></author-notes>
-		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.6 or 1.2.6-PL1,2,3, Remplacez les fichiers listés en bas]]></author-notes>
-		<author-notes lang="de"><![CDATA[Benötigt bbdkp 1.2.6 or 1.2.6-PL1,2,3, ertsetze die hierunder erwähnte Dateien]]></author-notes>
+		<title lang="en"><![CDATA[bbDKP 1.2.6, 1.2.6-PL1,2,3,4 to 1.2.6-PL5]]></title>
+		<description lang="en"><![CDATA[Update script 1.2.6, 1.2.6-PL1 to 1.2.6-PL5]]></description>
+		<description lang="fr"><![CDATA[mise à jour 1.2.6, 1.2.6-PL1 vers 1.2.6-PL5]]></description>
+		<description lang="de"><![CDATA[Aktualisierung 1.2.6-PL1 bis 1.2.6-PL5]]></description>
+		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.6,PL1,2,3,4 Replace the files listed below]]></author-notes>
+		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.6,PL1,2,3,4 Remplacez les fichiers listés en bas]]></author-notes>
+		<author-notes lang="de"><![CDATA[Benötigt bbdkp 1.2.6,PL1,2,3,4 ertsetze die hierunder erwähnte Dateien]]></author-notes>
 		<author-group>
 			<author>
 				<realname><![CDATA[Andy Vandenberghe]]></realname>
@@ -49,7 +49,7 @@
 				</contributions-group>
 			</author>				
 		</author-group>
-		<mod-version>1.2.6-PL4</mod-version>
+		<mod-version>1.2.6-PL5</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>600</time>
@@ -64,6 +64,7 @@
 	<action-group>
 		<copy>
 			<file from="root/adm/style/dkp/acp_mm_editmemberdkp.html" to="adm/style/dkp/acp_mm_editmemberdkp.html"/>
+			<file from="root/adm/style/dkp/acp_editraid.html" to="adm/style/dkp/acp_editraid.html"/>			
 			<file from="root/adm/style/dkp/acp_mm_listmemberdkp.html" to="adm/style/dkp/acp_mm_listmemberdkp.html"/>
 			<file from="root/install/gamesinstall/install_swtor.php" to="install/gamesinstall/install_swtor.php"/>			
 			<file from="root/includes/acp/acp_dkp_item.php" to="includes/acp/acp_dkp_item.php"/>
@@ -74,10 +75,12 @@
 			<file from="root/includes/bbdkp/module/stats.php" to="includes/bbdkp/module/stats.php"/>
 			<file from="root/includes/bbdkp/module/standings.php" to="includes/bbdkp/module/standings.php"/>
 			<file from="root/includes/bbdkp/module/viewmember.php" to="includes/bbdkp/module/viewmember.php"/>
+			<file from="root/includes/bbdkp/module/viewraid.php" to="includes/bbdkp/module/viewraid.php"/>			
 			<file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>			
 			<file from="root/language/en/mods/dkp_common.php" to="includes/language/en/mods/dkp_common.php"/>			
 			<file from="root/styles/prosilver/template/dkp/module/stats.html" to="styles/prosilver/template/dkp/module/stats.html"/>
-			<file from="root/styles/prosilver/template/dkp/module/viewmember.html" to="styles/prosilver/template/dkp/module/viewmember.html"/>			
+			<file from="root/styles/prosilver/template/dkp/module/viewmember.html" to="styles/prosilver/template/dkp/module/viewmember.html"/>
+			<file from="root/styles/prosilver/template/dkp/module/viewraid.html" to="styles/prosilver/template/dkp/module/viewraid.html"/>			
 		</copy>
 		<diy-instructions lang="en"><![CDATA[Afterwards, purge template cache]]></diy-instructions>
 		<diy-instructions lang="fr"><![CDATA[ensuite, purgez la cache]]></diy-instructions>
