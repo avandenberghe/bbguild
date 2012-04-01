@@ -1689,21 +1689,35 @@ class acp_dkp_mm extends bbDKP_Admin
 	}
 
 	/**
-	 * get id given a membername
+	 * get id given a membername and guild
 	 *
 	 * @param string $membername
+	 * @param int $guild_id optional
 	 * @return int
 	 */
-	public function get_member_id ($membername)
+	public function get_member_id ($membername, $guild_id = 0)
 	{
 		global $db;
-		$sql = 'SELECT member_id
-                FROM ' . MEMBER_LIST_TABLE . "
-                WHERE member_name ='" . $db->sql_escape($membername) . "'";
+		if($guild_id !=0)
+		{
+			$sql = 'SELECT member_id
+	                FROM ' . MEMBER_LIST_TABLE . "
+	                WHERE member_name ='" . $db->sql_escape($membername) . "'
+	                AND member_guild_id = " . (int) $db->sql_escape($guild_id);
+			
+		}
+		else
+		{
+			$sql = 'SELECT member_id
+	                FROM ' . MEMBER_LIST_TABLE . "
+	                WHERE member_name ='" . $db->sql_escape($membername) . "'";
+		}
+		
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$membid = $row['member_id'];
+			break;
 		}
 		$db->sql_freeresult($result);
 		if (isset($membid))
