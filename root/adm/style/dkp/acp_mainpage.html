@@ -73,6 +73,69 @@
   </tbody>
 </table>
 
+<table cellspacing="1">
+		<col class="col1" /><col class="col2" />
+		
+		<thead>
+	<tr>
+		<th>Mods Installed</th>
+		<th>Version Installed</th>
+	</tr>
+	</thead>
+	<tbody>
+
+  <tr>
+<!-- IF S_ANY_MODS_INSTALLED -->  
+    <td class="row1" style="width:50%"><B>No bbDKP MODS Currently Installed</B></td>
+    <td class="row1" style="width:50%"><a href="http://www.bbdkp.com/downloads.php?cat=2" target="_blank"><B>Download MODS Here</B></a></td>
+<!-- ENDIF -->    
+  </tr>
+
+  <tr>
+<!-- IF S_BBTIPS_INSTALLED -->  
+    <td class="row2" style="width:50%">bbTips:</td>
+    <td class="row1" style="width:50%">{BBTIPS_VER}</td>
+<!-- ENDIF -->    
+  </tr>
+
+  <tr>  
+<!-- IF S_RAID_TRACKER_INSTALLED -->
+    <td class="row2" style="width:50%">RaidTracker:</td>
+    <td class="row1" style="width:25%">{RAID_TRACK_VER}</td>
+<!-- ENDIF -->    
+  </tr>
+  
+  <tr>
+<!-- IF S_BOSSPROGRESS_INSTALLED -->
+    <td class="row2" style="width:50%">Bossprogress:</td>
+    <td class="row1" style="width:50%">{BP_VER}</td>
+<!-- ENDIF -->
+  </tr>
+
+  <tr>
+<!-- IF S_APPLY_INSTALLED -->
+    <td class="row2" style="width:50%">Apply:</td>
+    <td class="row1" style="width:50%">{APPLY_VER}</td>
+<!-- ENDIF -->
+  </tr>
+
+   <tr>
+<!-- IF S_RAID_PLANNER_INSTALLED -->
+    <td class="row2" style="width:50%">RaidPlanner:</td>
+    <td class="row1" style="width:50%">{RP_VER}</td>
+<!-- ENDIF -->
+  </tr>
+  
+  <tr>
+<!-- IF S_ANY_MODS_AVAIL -->  
+    <td class="row1" style="width:50%"><B>One or more additional bbDKP MODS are availble.</B></td>
+    <td class="row1" style="width:50%"><a href="http://www.bbdkp.com/downloads.php?cat=2" target="_blank"><B>Download MOD/MODS Here</B></a></td>
+<!-- ENDIF -->    
+  </tr>
+  
+  </tbody>
+</table>
+<BR />
 <!-- IF S_LOGS -->
 <table cellspacing="1">
 <caption>{L_NEW_ACTIONS}</caption>
