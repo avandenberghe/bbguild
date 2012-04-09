@@ -379,7 +379,8 @@ class statistics
 		
 		else
 		{
-		    $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($members_result));
+		    $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($members_result),
+		    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o1='.$current_order['uri']['current'] . '" class="rowfoot">'));
 		    
 		    $dkppagination = generate_pagination2($this->u_stats . '&amp;o1=' . $current_order ['uri'] ['current']. '&amp;show=all' ,
 			$member_count, $config ['bbdkp_user_llimit'], $startd, true, 'startdkp'  );
@@ -762,7 +763,8 @@ class statistics
 		
 		else
 		{
-		    $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($result));
+		    $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($result),
+		    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o='.$att_current_order['uri']['current'] . '" class="rowfoot">'));
 		    
 			$attpagination = generate_pagination2($this->u_stats . '&amp;o=' . $att_current_order ['uri'] ['current']. '&amp;show=all' , 
 			$attendance, $config ['bbdkp_user_llimit'], $startatt, true, 'startatt'  );
