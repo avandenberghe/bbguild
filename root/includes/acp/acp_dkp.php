@@ -331,6 +331,128 @@ class acp_dkp extends bbDKP_Admin
 							'UPDATEINSTR' => $user->lang['LATESTVERSION'] . $latest_version . ', <a href="' . $user->lang['WEBURL'] . '">' . $user->lang['DOWNLOAD'] . '</a>'));
 					}
 				}
+
+//begin bbdkp mod look up and version find 
+			//find out if bbtips is installed and get version number if it is
+			$bbtips_installed = $config['bbdkp_plugin_bbtips_version'];
+			if ($bbtips_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_BBTIPS_INSTALLED' => true,
+				'BBTIPS_VER'	 => $config['bbdkp_plugin_bbtips_version'],
+				));
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_BBTIPS_INSTALLED' => false,
+				));
+				}
+
+			//find out if raidtracker is installed and get version number if it is
+			$raidtracker_installed = $config['bbdkp_raidtracker'];
+			if ($raidtracker_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_RAID_TRACKER_INSTALLED' => true,
+				'RAID_TRACK_VER'	 => $config['bbdkp_raidtracker'],
+				));
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_RAID_TRACKER_INSTALLED' => false,
+				));
+				}
+
+			//find out if bossprogress is installed and get version number if it is
+			$bossprogress_installed = $config['bbdkp_bp_version'];
+			if ($bossprogress_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_BOSSPROGRESS_INSTALLED' => true,
+				'BP_VER'	 => $config['bbdkp_bp_version'],
+				));
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_BOSSPROGRESS_INSTALLED' => false,
+				));
+				}
+
+			//find out if apply is installed and get version number if it is
+			$apply_installed = $config['bbdkp_apply_version'];
+			if ($apply_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_APPLY_INSTALLED' => true,
+				'APPLY_VER'	 => $config['bbdkp_apply_version'],
+				));
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_APPLY_INSTALLED' => false,
+				));
+				}
+
+			//find out if apply is installed and get version number if it is
+			$raidplanner_installed = $config['bbdkp_raidplanner'];
+			if ($raidplanner_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_RAID_PLANNER_INSTALLED' => true,
+				'RAID_PLAN_VER'	 => $config['bbdkp_raidplanner'],
+				));
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_RAID_PLANNER_INSTALLED' => false,
+				));
+				}
+//end bbdkp mod lookup and version find			
+
+//begin where to get bbdkp mods if none are installed or not all are installed
+
+				$mods = array(
+				0 => $config['bbdkp_plugin_bbtips_version'] , 
+				1 => $config['bbdkp_raidtracker'] , 
+				2 => $config['bbdkp_bp_version'] , 
+				3 => $config['bbdkp_apply_version'] , 
+				4 => $config['bbdkp_raidplanner']);
+				
+			$modsinstalled = count(array_filter($mods));	
+			if ($modsinstalled > 0)
+				{
+				$template->assign_vars(array(
+				'S_ANY_MODS_INSTALLED' => false,
+				));
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_ANY_MODS_INSTALLED' => true,
+				));
+				}			
+
+			//find if you have all 5 bbdkp mods installed and if now provide link to get more
+			if ($modsinstalled < 5 && $modsinstalled > 0)
+				{
+				$template->assign_vars(array(
+				'S_ANY_MODS_AVAIL' => true,
+				));
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_ANY_MODS_AVAIL' => false,
+				));
+				}			
+
+//end where to get bbdkp mods if none are installed				
+
 				$template->assign_vars(array(
 					'S_LOGS' => $s_logs , 
 					'GLYPH' => "$phpbb_admin_path/images/glyphs/view.gif" , 
