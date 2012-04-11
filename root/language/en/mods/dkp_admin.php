@@ -584,6 +584,7 @@ $lang = array_merge($lang, array(
 'DEFAULT_REALM'    => 'Default Realm',
 'DEFAULT_PERMISSIONS' => 'Default Permissions',
 'DOWNLOAD'		   => 'Download',
+'DOWNLOAD_LATEST'	=> 'Download Latest Version: ',
 'DEFAULT_GAME' => 'Installed games',
 'EVENTS_PER_PAGE' => 'Events per Page',
 'GAME'	=> 'Game', 
