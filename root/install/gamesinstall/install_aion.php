@@ -55,7 +55,7 @@ function install_aion()
 	unset ($sql_ary);	
 
 	 //language table (No races, only factions, dummy value)
-    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'aion' and (attribute_id='class' or attribute_id = 'race')");   	 
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'aion' and (attribute='class' or attribute = 'race')");   	 
 	$sql_ary = array ();
 	$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Elyos' ,  'name_short' =>  'Elyos' );
 	$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Asmodian' ,  'name_short' =>  'Asmodian' );

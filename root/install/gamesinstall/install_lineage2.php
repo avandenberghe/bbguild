@@ -320,7 +320,7 @@ function install_lineage2()
     	$db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 	unset ($sql_ary);	
 
-    	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'lineage2' and (attribute_id='class' or attribute_id = 'race')");
+    	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'lineage2' and (attribute='class' or attribute = 'race')");
     	$sql_ary = array();
 	$sql_ary[] = array( 'game_id' => 'lineage2','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 

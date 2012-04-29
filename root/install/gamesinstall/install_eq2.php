@@ -88,7 +88,7 @@ function install_eq2()
     unset ($sql_ary);
 	global $db, $table_prefix, $umil, $user;
 	
-	$db->sql_query('DELETE FROM  ' . $table_prefix . "bbdkp_language where game_id = 'eq2' and (attribute_id='class' or attribute_id = 'race')"  ); 
+	$db->sql_query('DELETE FROM  ' . $table_prefix . "bbdkp_language where game_id = 'eq2' and (attribute='class' or attribute = 'race')"  ); 
 	$sql_ary = array();
 	$sql_ary[] = array('game_id' => 'eq2',  'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array('game_id' => 'eq2',  'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Assassin' ,  'name_short' =>  'Assassin' );
@@ -248,11 +248,4 @@ function install_eq2()
 	
 
 }
-
-
-
-
-
-
-
 ?>

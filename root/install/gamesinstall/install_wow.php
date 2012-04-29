@@ -7,9 +7,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
  * 
- * 
- * 
- * 
  */
 
 /**
@@ -85,7 +82,7 @@ function install_wow()
 	}
 
 	// classes
-	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'wow' and (attribute_id='class' or attribute_id = 'race')");
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'wow' and (attribute='class' or attribute = 'race')");
 	
 	$sql_ary = array ();
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );

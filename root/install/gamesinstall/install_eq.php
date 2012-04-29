@@ -78,7 +78,7 @@ function install_eq()
     unset ($sql_ary); 
 
     
-    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'eq' and (attribute_id='class' or attribute_id = 'race')");
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'eq' and (attribute='class' or attribute = 'race')");
 	$sql_ary = array ();
 	$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Dummy Zone' ,  'name_short' =>  'Dummy Zone' );
 	$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Dummy Boss' ,  'name_short' =>  'Dummy Boss' );

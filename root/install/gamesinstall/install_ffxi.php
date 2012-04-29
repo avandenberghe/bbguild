@@ -72,7 +72,7 @@ function install_ffxi()
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 
     // Language table
-    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'FFXI' and (attribute_id='class' or attribute_id = 'race')");
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'FFXI' and (attribute='class' or attribute = 'race')");
     unset ($sql_ary); 
 	$sql_ary = array();
 	$sql_ary[] = array('game_id' => 'FFXI','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );

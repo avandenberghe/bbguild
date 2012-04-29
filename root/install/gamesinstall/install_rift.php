@@ -86,7 +86,7 @@ function install_rift()
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 	unset ($sql_ary);	
 
-    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'rift' and (attribute_id='class' or attribute_id = 'race')");
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'rift' and (attribute='class' or attribute = 'race')");
     $sql_ary = array();
 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	

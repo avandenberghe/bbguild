@@ -112,7 +112,7 @@ function install_daoc()
     unset ($sql_ary); 
 
     //language strings 
-    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'daoc' and (attribute_id='class' or attribute_id = 'race')");	   
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'daoc' and (attribute='class' or attribute = 'race')");	   
 	$sql_ary = array();	
 	$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Armsman' ,  'name_short' =>  'Armsman' );

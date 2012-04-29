@@ -73,7 +73,7 @@ function install_swtor()
 	unset ( $sql_ary );
 	
 	// Dictionary
-	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'swtor' and attribute_id in('class','race') ");
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'swtor' and attribute in('class','race') ");
 	$sql_ary = array ();
 	// 
 	$sql_ary[] = array('game_id' => 'swtor', 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'T7-01' );
