@@ -67,6 +67,7 @@
 			<file from="root/includes/acp/acp_dkp_raid.php" to="includes/acp/acp_dkp_raid.php"/>
 			<file from="root/includes/acp/acp_dkp_mdkp.php" to="includes/acp/acp_dkp_mdkp.php"/>			
 			<file from="root/includes/bbdkp/module/viewraid.php" to="includes/bbdkp/module/viewraid.php"/>
+			<file from="root/includes/bbdkp/module/stats.php" to="includes/bbdkp/module/stats.php"/>			
 			<file from="root/styles/prosilver/template/dkp/module/viewraid.html" to="styles/prosilver/template/dkp/module/viewraid.html"/>			
 		</copy>
 		<diy-instructions lang="en"><![CDATA[Afterwards, purge template cache]]></diy-instructions>
