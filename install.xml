@@ -208,10 +208,6 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<link type="contrib" lang="fr" href="contrib/install_124_to_126PL5.xml">Mise à jour de v1.2.4 à v1.2.6-PL5</link>
 			<link type="contrib" lang="de" href="contrib/install_124_to_126PL5.xml">Aktualisierung von v1.2.4 bis v1.2.6-PL5</link>
 			
-			<link type="contrib" lang="en" href="contrib/install_123_to_126PL5.xml">Update from v1.2.3 to v1.2.6-PL5</link>
-			<link type="contrib" lang="fr" href="contrib/install_123_to_126PL5.xml">Mise à jour de v1.2.3 à v1.2.6-PL5</link>
-			<link type="contrib" lang="de" href="contrib/install_123_to_126PL5.xml">Aktualisierung von v1.2.3 bis v1.2.6-PL5</link>
-			
 			<link type="contrib" lang="en" href="contrib/install_122_to_126PL5.xml">Update from v1.2.2 to v1.2.6-PL5</link>
 			<link type="contrib" lang="fr" href="contrib/install_122_to_126PL5.xml">Mise à jour de v1.2.2 à v1.2.6-PL5</link>
 			<link type="contrib" lang="de" href="contrib/install_122_to_126PL5.xml">Aktualisierung von v1.2.2 bis v1.2.6-PL5</link>
@@ -607,16 +603,18 @@ function pop_aboutbbdkp()
 			</edit>
 		</open>
 		<php-installer><![CDATA[install/index.php]]></php-installer>
-		<diy-instructions lang="en"><![CDATA[Please see the full installation, upgrade instructions and changelog here : /docs/install.html
-Post-install instructions : 
+		<diy-instructions lang="en"><![CDATA[bbDKP 1.2.6-PL5 was installed. You need to run the database installer now.
 
 1) Run bbDKP 1.2.6 database installation : install/index.php 
 2) Rename the install folder. 
 
+Please see the full installation, upgrade instructions and changelog here : /docs/install.html
 Note : Should you need to deactivate bbDKP you can open configdkp.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
 
 Enjoy ;)]]></diy-instructions>
-<diy-instructions lang="fr"><![CDATA[le guide d’installation, mise à jour et Liste des changements : /docs/install.html
+<diy-instructions lang="fr"><![CDATA[bbDKP 1.2.6-PL5 a été installé. Il vous reste de lancer l'installateur database. 
+
+le guide d’installation, mise à jour et Liste des changements : /docs/install.html
 
 Résumé des étapes de post-installation
 
@@ -626,12 +624,12 @@ Résumé des étapes de post-installation
 Note : Il est possible de désactiver le MOD en ouvrant configdkp.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
 
 Success ;)]]></diy-instructions>
-<diy-instructions lang="de"><![CDATA[Installations, Upgradeanweisungen und Liste der änderungen : /docs/install.html
+<diy-instructions lang="de"><![CDATA[bbDKP 1.2.6-PL5 ist jetzt installiert. Jetzt nur noch die Datenbank Installierung :
 
-1) 1.2.6 Datenbank Installation order aktualisierung : install/index.php 
+1) öffne install/index.php und klicke auf Install oder Update.
 2) lösche oder umbenenne das Installations-Verzeichnis „install" 
 
-Notiz : Sie können bbDKP deaktivieren indem sie configdkp.php öffnen und @define('EMED_BBDKP', true); ändern nach  //@define('EMED_BBDKP', true);  
+Notiz : bbDKP kan deaktiviert werden indem sie configdkp.php öffnen und @define('EMED_BBDKP', true); ändern nach  //@define('EMED_BBDKP', true);  
 
 Viel Spaß ;)]]></diy-instructions>
 	</action-group>
