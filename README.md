@@ -18,6 +18,12 @@ There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Ra
 ## CURRENT RELEASE
 v. 1.2.6
 
+## in development
+
+v. 1.2.7
+	* sql server, oracle, strict sql support
+	* security update
+	
 ## COMMUNITY
 
 Find support and more on [bbDKP.com](http://www.bbdkp.com)! 

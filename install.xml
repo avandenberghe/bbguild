@@ -9,7 +9,7 @@
 		<title lang="en"><![CDATA[bbDKP]]></title>
 		<title lang="de"><![CDATA[bbDKP]]></title>
 		<title lang="fr"><![CDATA[bbDKP]]></title>
-		<description lang="en"><![CDATA[bbDKP 1.2.6 is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
+		<description lang="en"><![CDATA[bbDKP 1.2.7 is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
 It integrates Game, Guild and DKP management facilites into your phpBB3 Forum. Your users have single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, ACP and UCP modules.
 The framework supports multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION and Rift
@@ -31,7 +31,7 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<description lang="fr"><![CDATA[bbDKP 1.2.6 est une système DKP pour votre forum PHPBB3, developpee depuis EQDKP. Il est multi-pool, supporte le systeme DKP Standard, points par temps passé, Somme Zéro et EPGP.  Il aide les guildes à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft et Rift.  
+<description lang="fr"><![CDATA[bbDKP 1.2.7 est une système DKP pour votre forum PHPBB3, developpee depuis EQDKP. Il est multi-pool, supporte le systeme DKP Standard, points par temps passé, Somme Zéro et EPGP.  Il aide les guildes à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft et Rift.  
 Liste non exhaustive des fonctionnalités : Multiples groupes DKP et guildes, Tribune des points DKP, Raids, Evènements, Valeurs des Objets, Historique des Objets, Statistique des Raids, Page d’avancée des Boss, Armurerie, module PCA avec Backup, Import de EQDKP+. 
 Les Plugins : Importation depuis l’armurerie de Blizzard et Aion, bbTips (Wow), Raidtracker (wow), Bossprogress, Formulaire de Recrutement, Planner (en developpement)
 Pour de plus amples détails, veuillez consulter le changelog. Demandes de développement, questions de support sont les bienvenues à http://www.bbdkp.com. 
@@ -50,7 +50,7 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<description lang="de"><![CDATA[bbDKP 1.2.6 ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Est ein multi-pool DKP System, und bietet Standard DKP, Zeitpunkteverwaltung, Nullpunkteverwaltung, und EPGP. Es ermöglicht die Gildenmitgliederverwaltung, die Raidteilnahme in Raids, die Verwaltung der Gegenstandsankäufe, verwaltung von DKP Konten, und GildenStatistiken. Sie erreichen damit ein einziges Angriffspunkt zum DKP und zum forum, mit eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP unterstützt jetzt Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft und Rift. 
+<description lang="de"><![CDATA[bbDKP 1.2.7 ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Est ein multi-pool DKP System, und bietet Standard DKP, Zeitpunkteverwaltung, Nullpunkteverwaltung, und EPGP. Es ermöglicht die Gildenmitgliederverwaltung, die Raidteilnahme in Raids, die Verwaltung der Gegenstandsankäufe, verwaltung von DKP Konten, und GildenStatistiken. Sie erreichen damit ein einziges Angriffspunkt zum DKP und zum forum, mit eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP unterstützt jetzt Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft und Rift. 
 Nicht vollständige Funktionalitätenliste : Support für Vielfache DKP Gruppen (Pools), Vielfache Gilden, Ein Übersicht der DKP Punkte pro Spieler, Raidsliste, Ereignisliste, Gegenstandswerte, Historiken, Raidstatistiken, Gildenarsenalseite, ACP Modulen, Backupfunktionen, Import von EQDKP und EQDKP+. 
 Vorhandene Plugins : Importation von Mitglieder von das Blizzard oder Aion Arsenal, Bossvorgang, bbTips (tooltips), Raidtracker (wow), Rekrutierungsformular.  
 Für weitere Entwicklungsanfragen und Support heissen wir Sie wilkommen auf unsere internetseite http://www.bbdkp.com. 
@@ -168,7 +168,7 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2.6-PL5</mod-version>
+		<mod-version>1.2.7</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
@@ -183,34 +183,9 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
 			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>	
 			
-
-			<link type="contrib" lang="en" href="contrib/install_126PL4_to_126PL5.xml">Update from v1.2.6PL4 to v1.2.6-PL5</link>
-			<link type="contrib" lang="fr" href="contrib/install_126PL4_to_126PL5.xml">Mise à jour de v1.2.6PL4 à v1.2.6-PL5</link>
-			<link type="contrib" lang="de" href="contrib/install_126PL4_to_126PL5.xml">Aktualisierung von v1.2.6PL4 bis v1.2.6-PL5</link>
-
-			<link type="contrib" lang="en" href="contrib/install_126PL3_to_126PL4.xml">Update from v1.2.6PL3 to v1.2.6-PL4</link>
-			<link type="contrib" lang="fr" href="contrib/install_126PL3_to_126PL4.xml">Mise à jour de v1.2.6PL3 à v1.2.6-PL4</link>
-			<link type="contrib" lang="de" href="contrib/install_126PL3_to_126PL4.xml">Aktualisierung von v1.2.6PL3 bis v1.2.6-PL4</link>
-
-			<link type="contrib" lang="en" href="contrib/install_126_to_126PL5.xml">Update from v1.2.6PL1 to v1.2.6-PL5</link>
-			<link type="contrib" lang="fr" href="contrib/install_126_to_126PL5.xml">Mise à jour de v1.2.6PL1 à v1.2.6-PL5</link>
-			<link type="contrib" lang="de" href="contrib/install_126_to_126PL5.xml">Aktualisierung von v1.2.6PL1 bis v1.2.6-PL5</link>
-
-			<link type="contrib" lang="en" href="contrib/install_126_to_126PL4.xml">Update from v1.2.6PL1 to v1.2.6-PL4</link>
-			<link type="contrib" lang="fr" href="contrib/install_126_to_126PL4.xml">Mise à jour de v1.2.6PL1 à v1.2.6-PL4</link>
-			<link type="contrib" lang="de" href="contrib/install_126_to_126PL4.xml">Aktualisierung von v1.2.6PL1 bis v1.2.6-PL4</link>
-
-			<link type="contrib" lang="en" href="contrib/install_125PL3_to_126PL5.xml">Update from v1.2.5PL3 to v1.2.6-PL5</link>
-			<link type="contrib" lang="fr" href="contrib/install_125PL3_to_126PL5.xml">Mise à jour de v1.2.5PL3 à v1.2.6-PL5</link>
-			<link type="contrib" lang="de" href="contrib/install_125PL3_to_126PL5.xml">Aktualisierung von v1.2.5PL3 bis v1.2.6-PL5</link>
-
-			<link type="contrib" lang="en" href="contrib/install_124_to_126PL5.xml">Update from v1.2.4 to v1.2.6-PL5</link>
-			<link type="contrib" lang="fr" href="contrib/install_124_to_126PL5.xml">Mise à jour de v1.2.4 à v1.2.6-PL5</link>
-			<link type="contrib" lang="de" href="contrib/install_124_to_126PL5.xml">Aktualisierung von v1.2.4 bis v1.2.6-PL5</link>
-			
-			<link type="contrib" lang="en" href="contrib/install_122_to_126PL5.xml">Update from v1.2.2 to v1.2.6-PL5</link>
-			<link type="contrib" lang="fr" href="contrib/install_122_to_126PL5.xml">Mise à jour de v1.2.2 à v1.2.6-PL5</link>
-			<link type="contrib" lang="de" href="contrib/install_122_to_126PL5.xml">Aktualisierung von v1.2.2 bis v1.2.6-PL5</link>
+			<link type="contrib" lang="en" href="contrib/install_126PL4_to_126PL5.xml">Update from v1.2.6PL5 to v1.2.7</link>
+			<link type="contrib" lang="fr" href="contrib/install_126PL4_to_126PL5.xml">Mise à jour de v1.2.6PL5 à v1.2.7</link>
+			<link type="contrib" lang="de" href="contrib/install_126PL4_to_126PL5.xml">Aktualisierung von v1.2.6PL5 bis v1.2.7</link>
 			
 			<link type="text" lang="en" href="docs/INSTALL.html">Read me</link>
 			<link type="text" lang="fr" href="docs/INSTALL.html">Lisez moi</link>
@@ -603,28 +578,28 @@ function pop_aboutbbdkp()
 			</edit>
 		</open>
 		<php-installer><![CDATA[install/index.php]]></php-installer>
-		<diy-instructions lang="en"><![CDATA[bbDKP 1.2.6-PL5 was installed. You need to run the database installer now.
+		<diy-instructions lang="en"><![CDATA[bbDKP 1.2.7 was installed. You need to run the database installer now.
 
-1) Run bbDKP 1.2.6 database installation : install/index.php 
+1) Run bbDKP 1.2.7 database installation : install/index.php 
 2) Rename the install folder. 
 
 Please see the full installation, upgrade instructions and changelog here : /docs/install.html
 Note : Should you need to deactivate bbDKP you can open configdkp.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
 
 Enjoy ;)]]></diy-instructions>
-<diy-instructions lang="fr"><![CDATA[bbDKP 1.2.6-PL5 a été installé. Il vous reste de lancer l'installateur database. 
+<diy-instructions lang="fr"><![CDATA[bbDKP 1.2.7 a été installé. Il vous reste de lancer l'installateur database. 
 
 le guide d’installation, mise à jour et Liste des changements : /docs/install.html
 
 Résumé des étapes de post-installation
 
-1) lance l’installateur ou m.a.j 1.2.6  : install/index.php
+1) lance l’installateur ou m.a.j 1.2.7  : install/index.php
 2) Renomme ou supprime le repertoire /install pour réactiver le forum.
 
 Note : Il est possible de désactiver le MOD en ouvrant configdkp.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
 
 Success ;)]]></diy-instructions>
-<diy-instructions lang="de"><![CDATA[bbDKP 1.2.6-PL5 ist jetzt installiert. Jetzt nur noch die Datenbank Installierung :
+<diy-instructions lang="de"><![CDATA[bbDKP 1.2.7 ist jetzt installiert. Jetzt nur noch die Datenbank Installierung :
 
 1) öffne install/index.php und klicke auf Install oder Update.
 2) lösche oder umbenenne das Installations-Verzeichnis „install" 
