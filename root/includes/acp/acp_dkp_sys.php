@@ -436,7 +436,7 @@ class acp_dkp_sys extends bbDKP_Admin
 			$sql =  'SELECT count(*) as count FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' 
 			AND	member_dkpid = ' . $event_dkpid; 
 			$result = $db->sql_query ($sql);
-			$count = $db->sql_fetchfield('count', 0, $result);
+			$count = $db->sql_fetchfield('count', false, $result);
 			$db->sql_freeresult ( $result);
 			if($count ==1)
 			{
@@ -549,7 +549,7 @@ class acp_dkp_sys extends bbDKP_Admin
 			$sql =  'SELECT count(*) as count FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' 
 			AND	member_dkpid = ' . $event_dkpid; 
 			$result = $db->sql_query ($sql);
-			$count = $db->sql_fetchfield('count', 0, $result);
+			$count = $db->sql_fetchfield('count', false, $result);
 			$db->sql_freeresult ( $result);
 			if($count == 1 )
 			{

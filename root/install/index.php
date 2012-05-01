@@ -251,6 +251,7 @@ $versions = array(
                     'COLUMNS'        => array(
 	      				'game_id' 			=> array('VCHAR', ''), 
                         'f_index'    		=> array('USINT', NULL, 'auto_increment'),
+	         			'game_id' 			=> array('VCHAR', ''), 
                         'faction_id'   		=> array('USINT', 0),
                         'faction_name'     	=> array('VCHAR_UNI', ''),
                         'faction_hide'		=> array('BOOL', 0),
@@ -915,6 +916,11 @@ $versions = array(
           	'bbdkp_caches'
        ), 
     ),
+    
+    '1.2.7' => array(
+    // nothing to see here
+    
+    ), 
     
 
 );

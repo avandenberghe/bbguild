@@ -115,9 +115,12 @@ class acp_dkp_mm extends bbDKP_Admin
 				}
 				else // default pageloading
 				{
-					$sql = 'SELECT max(id) as max FROM ' . GUILD_TABLE;
-					$result = $db->sql_query($sql);
-					$guild_id = $db->sql_fetchfield('max', 0, $result);
+					$sql = 'SELECT id FROM ' . GUILD_TABLE . ' ORDER BY id DESC';
+					$result = $db->sql_query_limit($sql, 1);
+					while ($row = $db->sql_fetchrow($result))
+					{
+						$guild_id = $row['id'];
+					}
 					$db->sql_freeresult($result);
 					// fill popup and set selected to default selection
 					while ($row = $db->sql_fetchrow($resultg))
@@ -300,7 +303,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					// check if membername exists
 					$sql = 'SELECT count(*) as memberexists 
 							FROM ' . MEMBER_LIST_TABLE . "	
-							WHERE ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "') 
+							WHERE UPPER(member_name)= UPPER('" . $db->sql_escape($member_name) . "') 
 							AND member_guild_id = " . $guild_id;
 					$result = $db->sql_query($sql);
 					$countm = $db->sql_fetchfield('memberexists');
@@ -414,7 +417,7 @@ class acp_dkp_mm extends bbDKP_Admin
 						$sql = 'SELECT count(*) as memberexists 
 								FROM ' . MEMBER_LIST_TABLE . '	
 								WHERE member_id <> ' . $member_id . " 
-								AND ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "')";
+								AND UPPER(member_name)= UPPER('" . $db->sql_escape($member_name) . "')";
 						$result = $db->sql_query($sql);
 						$countm = $db->sql_fetchfield('memberexists');
 						$db->sql_freeresult($result);
@@ -589,9 +592,9 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 					else
 					{
-						$sql = "SELECT member_name FROM " . MEMBER_LIST_TABLE . ' where member_id = ' . $member_id;
+						$sql = "SELECT member_name FROM " . MEMBER_LIST_TABLE . ' WHERE member_id = ' . $member_id;
 						$result = $db->sql_query($sql);
-						$member_name = $db->sql_fetchfield('member_name', 1, $result);
+						$member_name = $db->sql_fetchfield('member_name', false, $result);
 						$db->sql_freeresult($result);
 						$s_hidden_fields = build_hidden_fields(array(
 							'delete' => true , 
@@ -1883,7 +1886,7 @@ class acp_dkp_mm extends bbDKP_Admin
 			// get maxlevel
 			$sql = "SELECT max(class_max_level) as maxlevel FROM " . CLASS_TABLE . " where game_id = '" . $game_id . "'";
 			$result = $db->sql_query($sql);
-			$member_lvl = (int) $db->sql_fetchfield('maxlevel', 1, $result);
+			$member_lvl = (int) $db->sql_fetchfield('maxlevel', false, $result);
 		}
 		if (($game_id == 'wow' || $game_id == 'aion') && $memberportraiturl == ' ')
 		{
@@ -1902,8 +1905,8 @@ class acp_dkp_mm extends bbDKP_Admin
 		{
 			$realm = $config['bbdkp_default_realm'];
 		}
+		
 		$query = $db->sql_build_array('INSERT', array(
-			'member_id' => NULL , 
 			'member_name' => ucwords($member_name) , 
 			'member_status' => $member_status , 
 			'member_level' => $member_lvl , 
@@ -1920,15 +1923,19 @@ class acp_dkp_mm extends bbDKP_Admin
 			'phpbb_user_id' => (int) $phpbb_user_id , 
 			'game_id' => (string) $game_id , 
 			'member_portrait_url' => (string) $memberportraiturl));
+		
 		$log_action = array(
-			'header' => 'L_ACTION_MEMBER_ADDED' , 
-			'L_NAME' => $member_name , 
-			'L_LEVEL' => $member_lvl , 
-			'L_RACE' => $race_id , 
-			'L_CLASS' => $class_id , 
+			'header' 	 => 'L_ACTION_MEMBER_ADDED' , 
+			'L_NAME' 	 => $member_name , 
+			'L_LEVEL' 	 => $member_lvl , 
+			'L_RACE' 	 => $race_id , 
+			'L_CLASS' 	 => $class_id , 
 			'L_ADDED_BY' => $user->data['username']);
+		
 		$db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
+		
 		$member_id = $db->sql_nextid();
+		
 		$this->log_insert(array(
 			'log_type' => $log_action['header'] , 
 			'log_action' => $log_action));
@@ -2027,7 +2034,7 @@ class acp_dkp_mm extends bbDKP_Admin
 			// get maxlevel
 			$sql = "SELECT max(class_max_level) as maxlevel FROM " . CLASS_TABLE;
 			$result = $db->sql_query($sql);
-			$member_lvl = (int) $db->sql_fetchfield('maxlevel', 1, $result);
+			$member_lvl = (int) $db->sql_fetchfield('maxlevel', false, $result);
 		}
 		if (($game_id == 'wow' || $game_id == 'aion') && $memberportraiturl == ' ')
 		{
@@ -2052,8 +2059,8 @@ class acp_dkp_mm extends bbDKP_Admin
 			FROM " . RAIDS_TABLE . " a INNER JOIN " . RAID_DETAIL_TABLE . " b on a.raid_id = b.raid_id 
 			WHERE  b.member_id = " . $member_id . " group by b.member_id ";
 		$result = $db->sql_query($sql);
-		$startraiddate = (int) $db->sql_fetchfield('startdate', 0, $result);
-		$endraiddate = (int) $db->sql_fetchfield('enddate', 0, $result);
+		$startraiddate = (int) $db->sql_fetchfield('startdate', false, $result);
+		$endraiddate = (int) $db->sql_fetchfield('enddate', false, $result);
 		$db->sql_freeresult($result);
 		if ($startraiddate != 0 && ($this->old_member['member_joindate'] == 0 || $this->old_member['member_joindate'] > $startraiddate))
 		{

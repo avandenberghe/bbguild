@@ -230,7 +230,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		$max_value = 0.00;
 		$sql = 'SELECT max(event_value) AS max_value FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . $dkpsys_id; 
 		$result = $db->sql_query ($sql);
-		$max_value = (float) $db->sql_fetchfield('max_value', 0, $result);
+		$max_value = (float) $db->sql_fetchfield('max_value', false, $result);
 		$float = @explode ( '.', $max_value );
 		$format = '%0' . @strlen ( $float [0] ) . '.2f';
 		$db->sql_freeresult($result);
@@ -507,7 +507,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		$max_value = 0.00;
 		$sql = 'SELECT max(event_value) AS max_value FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . $raid['event_dkpid']; 
 		$result = $db->sql_query ($sql);
-		$max_value = (float) $db->sql_fetchfield('max_value', 0, $result);
+		$max_value = (float) $db->sql_fetchfield('max_value', false, $result);
 		$float = @explode ( '.', $max_value );
 		$format = '%0' . @strlen ( $float [0] ) . '.2f';
 		$db->sql_freeresult($result);

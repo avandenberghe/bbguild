@@ -76,11 +76,10 @@ function bbDKP_Admin()
     function log_insert($values = array())
     {
         global $db, $user;
-        $log_fields = array('log_id', 'log_date', 'log_type', 'log_action', 'log_ipaddress', 'log_sid', 'log_result', 'log_userid');
+        $log_fields = array('log_date', 'log_type', 'log_action', 'log_ipaddress', 'log_sid', 'log_result', 'log_userid');
         
         // Default our log values
          $defaultlog = array(
-            'log_id'        => NULL,
             'log_date'      => time(),
             'log_type'      => NULL,
             'log_action'    => NULL,
