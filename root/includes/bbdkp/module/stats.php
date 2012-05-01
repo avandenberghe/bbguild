@@ -262,7 +262,7 @@ class statistics
 		    $sql .= ' AND event_dkpid = '. $this->dkp_id; 
 		}
 		$result = $db->sql_query($sql);
-		$total_raids = (int) $db->sql_fetchfield('raidcount',0,$result);   
+		$total_raids = (int) $db->sql_fetchfield('raidcount');   
 		$db->sql_freeresult ( $result );
 		
 		

@@ -420,7 +420,7 @@ class acp_dkp_item extends bbDKP_Admin
 		$sql = "SELECT e.event_dkpid FROM " . EVENTS_TABLE . " e , " . RAIDS_TABLE . " r 
 		where r.raid_id = " . $raid_id . " AND e.event_id = r.event_id"; 
 		$result = $db->sql_query($sql);
-		$dkpid = (int) $db->sql_fetchfield('event_dkpid', false, $result);
+		$dkpid = (int) $db->sql_fetchfield('event_dkpid');
 		$db->sql_freeresult ( $result);
 
 		// start transaction

@@ -127,7 +127,7 @@ if ($query_by_pool)
 }
 $sql = $db->sql_build_query('SELECT', $sql_array);
 $result = $db->sql_query ( $sql);
-$total_items = $db->sql_fetchfield ( 'itemcount', 1, $result);
+$total_items = $db->sql_fetchfield ( 'itemcount');
 $db->sql_freeresult ($result);
 
 $start = request_var ( 'start', 0 );

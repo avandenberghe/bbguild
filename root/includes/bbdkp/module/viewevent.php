@@ -106,7 +106,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
     $db->sql_freeresult($result);
     
     // Find the attendees at each raid
-    $sql = 'SELECT raid_id, count(member_id) AS count 
+    $sql = 'SELECT raid_id, count(member_id) AS countatt 
             FROM ' . RAID_DETAIL_TABLE . ' 
             WHERE ' . $db->sql_in_set('raid_id', $raid_ids) . ' 
             GROUP BY raid_id';
@@ -114,20 +114,20 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 
     while ( $row = $db->sql_fetchrow($result) )
     {
-        $raids[$row['raid_id']]['numattendees'] = $row['count'];
+        $raids[$row['raid_id']]['numattendees'] = $row['countatt'];
     }
     $db->sql_freeresult($result);
     
  
     //calculate the average event attendance and droprate 
     // Find the item drops for each raid
-    $sql = 'SELECT raid_id, count(item_id) AS count 
+    $sql = 'SELECT raid_id, count(item_id) AS countatt 
             FROM ' . RAID_ITEMS_TABLE . ' 
             WHERE ' . $db->sql_in_set('raid_id', $raid_ids) . ' GROUP BY raid_id';
     $result = $db->sql_query($sql);
     while ( $row = $db->sql_fetchrow($result) )
     {
-        $raids[$row['raid_id']]['numitems'] = $row['count'];
+        $raids[$row['raid_id']]['numitems'] = $row['countatt'];
     }
     $db->sql_freeresult($result);
     

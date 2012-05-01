@@ -464,7 +464,7 @@ class acp_dkp_event extends bbDKP_Admin
 			 
 				$sql = 'SELECT count(*) as countevents FROM ' . EVENTS_TABLE;
 				$result = $db->sql_query($sql);	
-				$total_events = (int) $db->sql_fetchfield('countevents', 0, $result);
+				$total_events = (int) $db->sql_fetchfield('countevents');
 				$db->sql_freeresult($result);
 			 
 				$start = request_var('start',0);
