@@ -4,7 +4,7 @@
 <!--For security purposes, please check: http://www.phpbb.com/mods/ for the latest version of this MOD.\nAlthough MODs are checked before being allowed in the MODs Database there is no guarantee that there are no security problems within the MOD.\nNo support will be given for MODs not found within the MODs Database which can be found at http://www.phpbb.com/mods/-->
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
 	<header>
-		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
+		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
 		<title lang="en"><![CDATA[bbDKP]]></title>
 		<title lang="de"><![CDATA[bbDKP]]></title>
@@ -31,7 +31,7 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<description lang="fr"><![CDATA[bbDKP 1.2.7 est une système DKP pour votre forum PHPBB3, developpee depuis EQDKP. Il est multi-pool, supporte le systeme DKP Standard, points par temps passé, Somme Zéro et EPGP.  Il aide les guildes à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft et Rift.  
+		<description lang="fr"><![CDATA[bbDKP 1.2.7 est une système DKP pour votre forum PHPBB3, developpee depuis EQDKP. Il est multi-pool, supporte le systeme DKP Standard, points par temps passé, Somme Zéro et EPGP.  Il aide les guildes à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft et Rift.  
 Liste non exhaustive des fonctionnalités : Multiples groupes DKP et guildes, Tribune des points DKP, Raids, Evènements, Valeurs des Objets, Historique des Objets, Statistique des Raids, Page d’avancée des Boss, Armurerie, module PCA avec Backup, Import de EQDKP+. 
 Les Plugins : Importation depuis l’armurerie de Blizzard et Aion, bbTips (Wow), Raidtracker (wow), Bossprogress, Formulaire de Recrutement, Planner (en developpement)
 Pour de plus amples détails, veuillez consulter le changelog. Demandes de développement, questions de support sont les bienvenues à http://www.bbdkp.com. 
@@ -50,7 +50,7 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<description lang="de"><![CDATA[bbDKP 1.2.7 ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Est ein multi-pool DKP System, und bietet Standard DKP, Zeitpunkteverwaltung, Nullpunkteverwaltung, und EPGP. Es ermöglicht die Gildenmitgliederverwaltung, die Raidteilnahme in Raids, die Verwaltung der Gegenstandsankäufe, verwaltung von DKP Konten, und GildenStatistiken. Sie erreichen damit ein einziges Angriffspunkt zum DKP und zum forum, mit eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP unterstützt jetzt Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft und Rift. 
+		<description lang="de"><![CDATA[bbDKP 1.2.7 ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Est ein multi-pool DKP System, und bietet Standard DKP, Zeitpunkteverwaltung, Nullpunkteverwaltung, und EPGP. Es ermöglicht die Gildenmitgliederverwaltung, die Raidteilnahme in Raids, die Verwaltung der Gegenstandsankäufe, verwaltung von DKP Konten, und GildenStatistiken. Sie erreichen damit ein einziges Angriffspunkt zum DKP und zum forum, mit eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP unterstützt jetzt Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft und Rift. 
 Nicht vollständige Funktionalitätenliste : Support für Vielfache DKP Gruppen (Pools), Vielfache Gilden, Ein Übersicht der DKP Punkte pro Spieler, Raidsliste, Ereignisliste, Gegenstandswerte, Historiken, Raidstatistiken, Gildenarsenalseite, ACP Modulen, Backupfunktionen, Import von EQDKP und EQDKP+. 
 Vorhandene Plugins : Importation von Mitglieder von das Blizzard oder Aion Arsenal, Bossvorgang, bbTips (tooltips), Raidtracker (wow), Rekrutierungsformular.  
 Für weitere Entwicklungsanfragen und Support heissen wir Sie wilkommen auf unsere internetseite http://www.bbdkp.com. 
@@ -69,28 +69,13 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5.2 with Libxml 2.6.0 (simplexml usage), Curl 
-Please read docs\INSTALL.html before beginning ]]>
-</author-notes>
-<author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, PHP 5.2 avec Libxml 2.6.0 (simplexml), Curl 
-Veuillez lire docs\INSTALL.html avant de commencer ]]>
-</author-notes>
-<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5.2 mit Libxml 2.6.0 (simplexml), Curl 
-Bitte lesen sie docs\INSTALL.html bevor. ]]>
-</author-notes>
-<author-group>
-			<author>
-				<realname><![CDATA[TheGadgetGuy]]></realname>
-				<contributions-group>
-					<contributions status="current" from="2012-01-01" position="Contributor"/>
-				</contributions-group>
-			</author>			
-			<author>
-				<realname><![CDATA[Sh1ny]]></realname>
-				<contributions-group>
-					<contributions status="current" from="2012-01-01" position="Contributor"/>
-				</contributions-group>
-			</author>			
+		<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5.2 with Libxml 2.6.0 (simplexml usage), Curl 
+Please read docs\INSTALL.html before beginning]]></author-notes>
+		<author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, PHP 5.2 avec Libxml 2.6.0 (simplexml), Curl 
+Veuillez lire docs\INSTALL.html avant de commencer]]></author-notes>
+		<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5.2 mit Libxml 2.6.0 (simplexml), Curl 
+Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
+		<author-group>
 			<author>
 				<realname><![CDATA[Andy Vandenberghe]]></realname>
 				<username><![CDATA[Sajaki]]></username>
@@ -118,15 +103,6 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 				<contributions-group>
 					<contributions status="current" from="2009-09-01" position="Developer"/>
 					<contributions status="past" from="2007-12-27" to="2009-01-01" position="Former Leader, bbDKP Supporter"/>
-				</contributions-group>
-			</author>
-			<author>
-				<realname><![CDATA[Morten Boegeskov]]></realname>
-				<username><![CDATA[Hroar]]></username>
-				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
-				<email><![CDATA[morten.boegeskov@gmail.com]]></email>
-				<contributions-group>
-					<contributions status="past" from="2009-05-01"  to="2009-09-04" position="Developer"/>
 				</contributions-group>
 			</author>
 			<author>
@@ -175,21 +151,18 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<target-version>3.0.10</target-version>
 		</installation>
 		<link-group>
-			<link type="language" lang="en" href="contrib/fr.xml">French</link>
-			<link type="language" lang="fr" href="contrib/fr.xml">Français</link>
-			<link type="language" lang="de" href="contrib/fr.xml">Franzözisch</link>
-
-			<link type="language" lang="en" href="contrib/de.xml">German</link>
-			<link type="language" lang="fr" href="contrib/de.xml">Allemand</link>
-			<link type="language" lang="de" href="contrib/de.xml">Deutsch</link>	
-			
-			<link type="contrib" lang="en" href="contrib/install_126PL4_to_126PL5.xml">Update from v1.2.6PL5 to v1.2.7</link>
-			<link type="contrib" lang="fr" href="contrib/install_126PL4_to_126PL5.xml">Mise à jour de v1.2.6PL5 à v1.2.7</link>
-			<link type="contrib" lang="de" href="contrib/install_126PL4_to_126PL5.xml">Aktualisierung von v1.2.6PL5 bis v1.2.7</link>
-			
-			<link type="text" lang="en" href="docs/INSTALL.html">Read me</link>
-			<link type="text" lang="fr" href="docs/INSTALL.html">Lisez moi</link>
-			<link type="text" lang="de" href="docs/INSTALL.html">Lies mich</link>
+			<link type="language" href="contrib/fr.xml" lang="en">French</link>
+			<link type="language" href="contrib/fr.xml" lang="fr">Français</link>
+			<link type="language" href="contrib/fr.xml" lang="de">Franzözisch</link>
+			<link type="language" href="contrib/de.xml" lang="en">German</link>
+			<link type="language" href="contrib/de.xml" lang="fr">Allemand</link>
+			<link type="language" href="contrib/de.xml" lang="de">Deutsch</link>
+			<link type="contrib" href="contrib/install_126PL5_to_127.xml" lang="en">Update from v1.2.6PL5 to v1.2.7</link>
+			<link type="contrib" href="contrib/install_126PL5_to_127.xml" lang="fr">Mise à jour de v1.2.6PL5 à v1.2.7</link>
+			<link type="contrib" href="contrib/install_126PL5_to_127.xml" lang="de">Aktualisierung von v1.2.6PL5 bis v1.2.7</link>
+			<link type="text" href="docs/INSTALL.html" lang="en">Read me</link>
+			<link type="text" href="docs/INSTALL.html" lang="fr">Lisez moi</link>
+			<link type="text" href="docs/INSTALL.html" lang="de">Lies mich</link>
 		</link-group>
 	</header>
 	<action-group>
@@ -204,12 +177,11 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/images/event_images/*.*" to="images/event_images/*.*"/>
 			<file from="root/images/icons/*.*" to="images/icons/*.*"/>
 			<file from="root/images/progressbar/*.*" to="images/progressbar/*.*"/>
-			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>			
-			<file from="root/images/recruitblock_images/*.*" to="images/recruitblock_images/*.*"/>	
-			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>	
-			<file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*"/>	
-			<file from="root/images/tooltip/*.*" to="images/tooltip/*.*"/>	
-			
+			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>
+			<file from="root/images/recruitblock_images/*.*" to="images/recruitblock_images/*.*"/>
+			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>
+			<file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*"/>
+			<file from="root/images/tooltip/*.*" to="images/tooltip/*.*"/>
 			<file from="root/includes/acp/acp_dkp_adj.php" to="includes/acp/acp_dkp_adj.php"/>
 			<file from="root/includes/acp/acp_dkp_event.php" to="includes/acp/acp_dkp_event.php"/>
 			<file from="root/includes/acp/acp_dkp_game.php" to="includes/acp/acp_dkp_game.php"/>
@@ -218,9 +190,8 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/includes/acp/acp_dkp_mm.php" to="includes/acp/acp_dkp_mm.php"/>
 			<file from="root/includes/acp/acp_dkp_point.php" to="includes/acp/acp_dkp_point.php"/>
 			<file from="root/includes/acp/acp_dkp_raid.php" to="includes/acp/acp_dkp_raid.php"/>
-			<file from="root/includes/acp/acp_dkp_sys.php" to="includes/acp/acp_dkp_sys.php"/>	
-			<file from="root/includes/acp/acp_dkp.php" to="includes/acp/acp_dkp.php"/>				
-			
+			<file from="root/includes/acp/acp_dkp_sys.php" to="includes/acp/acp_dkp_sys.php"/>
+			<file from="root/includes/acp/acp_dkp.php" to="includes/acp/acp_dkp.php"/>
 			<file from="root/includes/acp/info/acp_dkp_adj.php" to="includes/acp/info/acp_dkp_adj.php"/>
 			<file from="root/includes/acp/info/acp_dkp_event.php" to="includes/acp/info/acp_dkp_event.php"/>
 			<file from="root/includes/acp/info/acp_dkp_game.php" to="includes/acp/info/acp_dkp_game.php"/>
@@ -229,11 +200,10 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/includes/acp/info/acp_dkp_mm.php" to="includes/acp/info/acp_dkp_mm.php"/>
 			<file from="root/includes/acp/info/acp_dkp_point.php" to="includes/acp/info/acp_dkp_point.php"/>
 			<file from="root/includes/acp/info/acp_dkp_raid.php" to="includes/acp/info/acp_dkp_raid.php"/>
-			<file from="root/includes/acp/info/acp_dkp_sys.php" to="includes/acp/info/acp_dkp_sys.php"/>	
-			<file from="root/includes/acp/info/acp_dkp.php" to="includes/acp/info/acp_dkp.php"/>		
-			
+			<file from="root/includes/acp/info/acp_dkp_sys.php" to="includes/acp/info/acp_dkp_sys.php"/>
+			<file from="root/includes/acp/info/acp_dkp.php" to="includes/acp/info/acp_dkp.php"/>
 			<file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>
-			<file from="root/includes/ucp/info/ucp_dkp.php" to="includes/ucp/info/ucp_dkp.php"/>			
+			<file from="root/includes/ucp/info/ucp_dkp.php" to="includes/ucp/info/ucp_dkp.php"/>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
@@ -243,7 +213,6 @@ Bitte lesen sie docs\INSTALL.html bevor. ]]>
 			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
-
 		<open src=".htaccess">
 			<edit>
 				<comment lang="en"><![CDATA[adding htaccess rule to redirect to portal]]></comment>
@@ -256,7 +225,6 @@ Deny from All
 				<action type="after-add"><![CDATA[DirectoryIndex portal.php index.php index.html index.htm]]></action>
 			</edit>
 		</open>
-		
 		<open src="common.php">
 			<edit>
 				<comment lang="en"><![CDATA[adding required classfiles for bbdkp in common.php.]]></comment>
@@ -276,61 +244,16 @@ if(@defined("EMED_BBDKP"))
 }]]></action>
 			</edit>
 		</open>
-		<open src="includes/functions.php">
-			<edit>
-				<comment lang="en"><![CDATA[ preloading dkp language files in functions.php]]></comment>
-				<comment lang="fr"><![CDATA[ ajouter le fichier de langue dans fonctions.php ]]></comment>
-				<comment lang="de"><![CDATA[ zufügen dkp Sprachdatei in functions.php]]></comment>								
-				<find><![CDATA[if (defined('HEADER_INC'))]]></find>
-				<action type="before-add"><![CDATA[$user->add_lang(array('mods/dkp_common'));
-]]></action>
-			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[ adding labels  ]]></comment>
-				<comment lang="en"><![CDATA[ ajouter des labels ]]></comment>
-				<comment lang="en"><![CDATA[ zufügen labels  ]]></comment>
-				<find><![CDATA[		'L_INDEX'			=> $user->lang['FORUM_INDEX'],]]></find>
-				<action type="after-add"><![CDATA[		'L_PORTAL'			=> $user->lang['PORTAL'],]]></action>
-			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[adding links]]></comment>
-				<comment lang="en"><![CDATA[ajouter links]]></comment>
-				<comment lang="en"><![CDATA[zufügen Links]]></comment>
-				<find><![CDATA[		'U_INDEX'				=> append_sid("{$phpbb_root_path}index.$phpEx"),]]></find>
-				<action type="after-add"><![CDATA[		'U_PORTAL'		=> append_sid("{$phpbb_root_path}portal.$phpEx"),
-		'U_DKP'			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=standings'),
-		'L_DKPPAGE'		=> $user->lang['DKP'],
-		'L_BBDKP'		=> $user->lang['FOOTERBBDKP'],
-		'U_ABOUT'         => append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
-]]></action>
-			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[adding cronjobs in footer function]]></comment>
-				<comment lang="en"><![CDATA[ajouter cronjobs dans la fonction footer]]></comment>
-				<comment lang="en"><![CDATA[zufügen Cronjobs in die footer Funktion]]></comment>
-				<find><![CDATA[			$cron_type = 'tidy_sessions';
-		}]]></find>
-				<action type="after-add"><![CDATA[		// bbDKP cron job
-		else if (array_key_exists ('bbdkp_crontime', $config))
-		{
-			if ($time_now - $config['bbdkp_crontime']*3600 > $config['bbdkp_lastcron'])
-			{
-				$cron_type = 'pointdecay';
-			}
-		}]]></action>
-			</edit>
-		</open>
-		
 		<open src="cron.php">
 			<edit>
 				<comment lang="en"><![CDATA[adding cronjobs]]></comment>
 				<comment lang="fr"><![CDATA[ajouter cronjobs]]></comment>
-				<comment lang="de"><![CDATA[zufügen cronjobs]]></comment>								
+				<comment lang="de"><![CDATA[zufügen cronjobs]]></comment>
 				<find><![CDATA[	break;
 
 	case 'prune_forum':
 ]]></find>
-		<action type="replace-with"><![CDATA[	break;
+				<action type="replace-with"><![CDATA[	break;
 
 	case 'pointdecay':
 	
@@ -350,9 +273,8 @@ if(@defined("EMED_BBDKP"))
 		
 	case 'prune_forum':
 ]]></action>
-		</edit>
-		</open>	
-		
+			</edit>
+		</open>
 		<open src="viewtopic.php">
 			<edit>
 				<find><![CDATA[	'S_VIEWTOPIC'			=> true,]]></find>
@@ -360,16 +282,14 @@ if(@defined("EMED_BBDKP"))
 	'S_BBDKP_TOPIC'       => true,
 	// BBDKP END]]></action>
 			</edit>
-
 			<edit>
-			<find><![CDATA[			'SELECT'	=> 'u.*, z.friend, z.foe, p.*',]]></find>
+				<find><![CDATA[			'SELECT'	=> 'u.*, z.friend, z.foe, p.*',]]></find>
 				<action type="replace-with"><![CDATA[	'SELECT'	=> 'u.*, z.friend, z.foe, p.*, 
 		bm.member_id, bm.member_level, bm.member_name, bm.member_gender_id, bl.name as class_name, bc.colorcode, bc.imagename, bl1.name as race_name,  br.image_female_small, br.image_male_small ',  
 ]]></action>
 			</edit>
-			
 			<edit>
-			<find><![CDATA[						'ON'	=> 'z.user_id = ' . $user->data['user_id'] . ' AND z.zebra_id = p.poster_id']]></find>
+				<find><![CDATA[						'ON'	=> 'z.user_id = ' . $user->data['user_id'] . ' AND z.zebra_id = p.poster_id']]></find>
 				<action type="after-add"><![CDATA[		), 
 		array(
 			'FROM'	=> array(MEMBER_LIST_TABLE => 'bm'),
@@ -395,36 +315,28 @@ if(@defined("EMED_BBDKP"))
 			'ON'    => "bl1.attribute_id = br.race_id AND bl1.language= '" . $config['bbdkp_lang'] . "' AND bl1.attribute = 'race'  and bl1.game_id = br.game_id "
 ]]></action>
 			</edit>
-
-
-
 			<edit>
-			<find><![CDATA[$now = phpbb_gmgetdate(time() + $user->timezone + $user->dst);]]></find>
+				<find><![CDATA[$now = phpbb_gmgetdate(time() + $user->timezone + $user->dst);]]></find>
 				<action type="after-add"><![CDATA[//BBDKP
 $bbchar = get_bbchar($result);
 $db->sql_rowseek(0, $result);
 //BBDKP]]></action>
 			</edit>
-
-
 			<edit>
-			<find><![CDATA[				'warnings'			=> 0,]]></find>
+				<find><![CDATA[				'warnings'			=> 0,]]></find>
 				<action type="after-add"><![CDATA[				// BBDKP START
 				'bbchar'			=> '',
 				// BBDKP END]]></action>
 			</edit>
-			
 			<edit>
-			<find><![CDATA[				'posts'			=> $row['user_posts'],]]></find>
+				<find><![CDATA[				'posts'			=> $row['user_posts'],]]></find>
 				<action type="after-add"><![CDATA[				// BBDKP START
 				'bbchar'		=> $bbchar[$poster_id],
 				// BBDKP END]]></action>
 			</edit>
-			
 			<edit>
 				<find><![CDATA[	$template->assign_block_vars('postrow', $postrow);]]></find>
-				<action type="after-add"><![CDATA[
-	// BBDKP START
+				<action type="after-add"><![CDATA[	// BBDKP START
 	if (!empty($user_cache[$poster_id]['bbchar']))
 	{
 		foreach ($user_cache[$poster_id]['bbchar'] as $memberid => $memberdata)
@@ -445,7 +357,6 @@ $db->sql_rowseek(0, $result);
 	// BBDKP END
 ]]></action>
 			</edit>
-
 			<edit>
 				<find><![CDATA[page_footer();]]></find>
 				<action type="after-add"><![CDATA[/**
@@ -486,24 +397,86 @@ function get_bbchar($bbresult)
 }]]></action>
 			</edit>
 		</open>
-		
-		<open src="adm/style/overall_header.html">
-		        <edit>
-		                <comment lang="en"><![CDATA[adding jquery scripts to admin header]]></comment>
-		                <comment lang="fr"><![CDATA[ajout de scripts jquery au header admin ]]></comment>
-		                <comment lang="de"><![CDATA[Zufügung jquery header scripts im admin]]></comment>
-		                <find><![CDATA[</head>]]></find>
-		                <action type="before-add"><![CDATA[
-<!-- begin bbdkp -->
-	<script type="text/javascript" src="style/dkp/jquery.js"></script>
-	<script type="text/javascript" src="style/dkp/farbtastic.js"></script>
-	<link rel="stylesheet" href="style/dkp/farbtastic.css" type="text/css" />
-	<link rel="stylesheet" href="style/dkp/bbdkp.css" type="text/css" />
-<!-- end bbdkp -->
-		                ]]></action>
-		        </edit>
+		<open src="includes/functions.php">
+			<edit>
+				<comment lang="en"><![CDATA[ preloading dkp language files in functions.php]]></comment>
+				<comment lang="fr"><![CDATA[ ajouter le fichier de langue dans fonctions.php ]]></comment>
+				<comment lang="de"><![CDATA[ zufügen dkp Sprachdatei in functions.php]]></comment>
+				<find><![CDATA[if (defined('HEADER_INC'))]]></find>
+				<action type="before-add"><![CDATA[$user->add_lang(array('mods/dkp_common'));
+]]></action>
+			</edit>
+			<edit>
+				<comment lang="en"><![CDATA[ adding labels  ]]></comment>
+				<comment lang="en"><![CDATA[ ajouter des labels ]]></comment>
+				<comment lang="en"><![CDATA[ zufügen labels  ]]></comment>
+				<find><![CDATA[		'L_INDEX'			=> $user->lang['FORUM_INDEX'],]]></find>
+				<action type="after-add"><![CDATA[		'L_PORTAL'			=> $user->lang['PORTAL'],]]></action>
+			</edit>
+			<edit>
+				<comment lang="en"><![CDATA[adding links]]></comment>
+				<comment lang="en"><![CDATA[ajouter links]]></comment>
+				<comment lang="en"><![CDATA[zufügen Links]]></comment>
+				<find><![CDATA[		'U_INDEX'				=> append_sid("{$phpbb_root_path}index.$phpEx"),]]></find>
+				<action type="after-add"><![CDATA[		'U_PORTAL'		=> append_sid("{$phpbb_root_path}portal.$phpEx"),
+		'U_DKP'			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=standings'),
+		'L_DKPPAGE'		=> $user->lang['DKP'],
+		'L_BBDKP'		=> $user->lang['FOOTERBBDKP'],
+		'U_ABOUT'         => append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
+]]></action>
+			</edit>
+			<edit>
+				<comment lang="en"><![CDATA[adding cronjobs in footer function]]></comment>
+				<comment lang="en"><![CDATA[ajouter cronjobs dans la fonction footer]]></comment>
+				<comment lang="en"><![CDATA[zufügen Cronjobs in die footer Funktion]]></comment>
+				<find><![CDATA[			$cron_type = 'tidy_sessions';
+		}]]></find>
+				<action type="after-add"><![CDATA[		// bbDKP cron job
+		else if (array_key_exists ('bbdkp_crontime', $config))
+		{
+			if ($time_now - $config['bbdkp_crontime']*3600 > $config['bbdkp_lastcron'])
+			{
+				$cron_type = 'pointdecay';
+			}
+		}]]></action>
+			</edit>
 		</open>
-		
+		<open src="/styles/prosilver/template/overall_footer.html">
+			<edit>
+				<comment lang="en"><![CDATA[Adding bbdkp credits link in overall_footer ]]></comment>
+				<comment lang="fr"><![CDATA[Ajout lien les crédits dans overall_footer ]]></comment>
+				<comment lang="de"><![CDATA[Zufügung Credits link in overall_footer ]]></comment>
+				<find><![CDATA[		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></find>
+				<action type="replace-with"><![CDATA[<br />
+<script type="text/javascript">
+function pop_aboutbbdkp()
+{
+    search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70');
+    search.focus();
+}
+</script>
+<a class="bbdkpcredits" onclick="javascript:pop_aboutbbdkp();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">{L_BBDKP}</a><br />
+		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></action>
+			</edit>
+		</open>
+		<open src="styles/prosilver/template/overall_header.html">
+			<edit>
+				<comment lang="en"><![CDATA[install bbDKP header - All in one file]]></comment>
+				<comment lang="fr"><![CDATA[installation du fichier header - tous en un]]></comment>
+				<comment lang="de"><![CDATA[Installation Headerdatei - Alles in einem]]></comment>
+				<find><![CDATA[</head>]]></find>
+				<action type="before-add"><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></action>
+			</edit>
+			<edit>
+				<comment lang="en"><![CDATA[insert links in template]]></comment>
+				<comment lang="fr"><![CDATA[inserer liens dans template]]></comment>
+				<comment lang="de"><![CDATA[inseriere Links im Template]]></comment>
+				<find><![CDATA[<li class="icon-home"><a href="{U_INDEX}" accesskey="h">{L_INDEX}</a>]]></find>
+				<action type="before-add"><![CDATA[<li class="icon-home"><a href="{U_PORTAL}">{L_PORTAL}</a></li>
+				<li class="icon-faq"><a href="{U_DKP}">{L_DKPPAGE}</a><!-- BEGIN dkpnavlinks --> <strong>&#8249;</strong> <a href="{dkpnavlinks.U_DKPPAGE}">{dkpnavlinks.DKPPAGE}</a><!-- END dkpnavlinks --></li>
+				]]></action>
+			</edit>
+		</open>
 		<open src="styles/prosilver/template/viewtopic_body.html">
 			<edit>
 				<find><![CDATA[			</dd>
@@ -530,53 +503,32 @@ function get_bbchar($bbresult)
 ]]></action>
 			</edit>
 		</open>		
-		
-		<open src="styles/prosilver/template/overall_header.html">
+		<open src="adm/style/overall_header.html">
 			<edit>
-				<comment lang="en"><![CDATA[install bbDKP header - All in one file]]></comment>
-				<comment lang="fr"><![CDATA[installation du fichier header - tous en un]]></comment>
-				<comment lang="de"><![CDATA[Installation Headerdatei - Alles in einem]]></comment>
+				<comment lang="en"><![CDATA[adding jquery scripts to admin header]]></comment>
+				<comment lang="fr"><![CDATA[ajout de scripts jquery au header admin ]]></comment>
+				<comment lang="de"><![CDATA[Zufügung jquery header scripts im admin]]></comment>
 				<find><![CDATA[</head>]]></find>
-				<action type="before-add"><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></action>
+				<action type="before-add"><![CDATA[<!-- begin bbdkp -->
+	<script type="text/javascript" src="style/dkp/jquery.js"></script>
+	<script type="text/javascript" src="style/dkp/farbtastic.js"></script>
+	<link rel="stylesheet" href="style/dkp/farbtastic.css" type="text/css" />
+	<link rel="stylesheet" href="style/dkp/bbdkp.css" type="text/css" />
+<!-- end bbdkp -->
+		                ]]></action>
 			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[insert links in template]]></comment>
-				<comment lang="fr"><![CDATA[inserer liens dans template]]></comment>
-				<comment lang="de"><![CDATA[inseriere Links im Template]]></comment>								
-				<find><![CDATA[<li class="icon-home"><a href="{U_INDEX}" accesskey="h">{L_INDEX}</a>]]></find>
-				<action type="before-add"><![CDATA[<li class="icon-home"><a href="{U_PORTAL}">{L_PORTAL}</a></li>
-				<li class="icon-faq"><a href="{U_DKP}">{L_DKPPAGE}</a><!-- BEGIN dkpnavlinks --> <strong>&#8249;</strong> <a href="{dkpnavlinks.U_DKPPAGE}">{dkpnavlinks.DKPPAGE}</a><!-- END dkpnavlinks --></li>
-				]]></action>
-			</edit>
-		</open>
-		<open src="/styles/prosilver/template/overall_footer.html">
-			<edit>
-				<comment lang="en"><![CDATA[Adding bbdkp credits link in overall_footer ]]></comment>
-				<comment lang="fr"><![CDATA[Ajout lien les crédits dans overall_footer ]]></comment>
-				<comment lang="de"><![CDATA[Zufügung Credits link in overall_footer ]]></comment>			
-				<find><![CDATA[		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></find>
-				<action type="replace-with"><![CDATA[<br />
-<script type="text/javascript">
-function pop_aboutbbdkp()
-{
-    search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70');
-    search.focus();
-}
-</script>
-<a class="bbdkpcredits" onclick="javascript:pop_aboutbbdkp();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">{L_BBDKP}</a><br />
-		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></action>
-</edit>
 		</open>
 		<open src="/styles/prosilver/theme/stylesheet.css">
 			<edit>
 				<comment lang="en"><![CDATA[bbdkp css]]></comment>
 				<comment lang="fr"><![CDATA[bbdkp css]]></comment>
-				<comment lang="de"><![CDATA[bbdkp css]]></comment>								
+				<comment lang="de"><![CDATA[bbdkp css]]></comment>
 				<find><![CDATA[@import url("colours.css");]]></find>
 				<action type="after-add"><![CDATA[@import url("bbdkp.css");
 ]]></action>
 			</edit>
 		</open>
+		
 		<php-installer><![CDATA[install/index.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[bbDKP 1.2.7 was installed. You need to run the database installer now.
 
@@ -587,7 +539,7 @@ Please see the full installation, upgrade instructions and changelog here : /doc
 Note : Should you need to deactivate bbDKP you can open configdkp.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);  
 
 Enjoy ;)]]></diy-instructions>
-<diy-instructions lang="fr"><![CDATA[bbDKP 1.2.7 a été installé. Il vous reste de lancer l'installateur database. 
+		<diy-instructions lang="fr"><![CDATA[bbDKP 1.2.7 a été installé. Il vous reste de lancer l'installateur database. 
 
 le guide d’installation, mise à jour et Liste des changements : /docs/install.html
 
@@ -599,7 +551,7 @@ Résumé des étapes de post-installation
 Note : Il est possible de désactiver le MOD en ouvrant configdkp.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);  
 
 Success ;)]]></diy-instructions>
-<diy-instructions lang="de"><![CDATA[bbDKP 1.2.7 ist jetzt installiert. Jetzt nur noch die Datenbank Installierung :
+		<diy-instructions lang="de"><![CDATA[bbDKP 1.2.7 ist jetzt installiert. Jetzt nur noch die Datenbank Installierung :
 
 1) öffne install/index.php und klicke auf Install oder Update.
 2) lösche oder umbenenne das Installations-Verzeichnis „install" 
