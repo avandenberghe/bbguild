@@ -1,12 +1,12 @@
 <?php
-/***
-* This class manages Items 
-*
-* @package bbDKP.acp
-* @copyright (c) 2009 bbdkp https://github.com/bbDKP
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* 
-*/
+/**
+ * @package bbDKP.acp
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.7
+ */
 
 /**
 * @ignore
@@ -427,10 +427,10 @@ class acp_dkp_item extends bbDKP_Admin
 		$db->sql_transaction('begin');
 		
 		// increase dkp spent value for buyers 
-		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d 				
-				SET d.member_spent = d.member_spent + ' . (float) $itemvalue  .  ' ,
-					d.member_item_decay = d.member_item_decay + ' . (float) $itemdecay .  '  
-				WHERE d.member_dkpid = ' . (int) $dkpid  . ' 
+		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '  				
+				SET member_spent = member_spent + ' . (float) $itemvalue  .  ' ,
+					member_item_decay = member_item_decay + ' . (float) $itemdecay .  '  
+				WHERE member_dkpid = ' . (int) $dkpid  . ' 
 			  	AND ' . $db->sql_in_set('member_id', $item_buyers) ;
 		$db->sql_query ( $sql );
 		
@@ -662,10 +662,10 @@ class acp_dkp_item extends bbDKP_Admin
 		$db->sql_query ($sql);
 			
 		// decrease dkp spent value and decay from buyer
-		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' d
-				SET d.member_spent = d.member_spent - ' . $old_item ['item_value'] .  ' , 
-				    d.member_item_decay = d.member_item_decay - ' . $old_item ['item_decay'] .  '  
-				WHERE d.member_dkpid = ' . (int) $old_item ['dkpid']  . ' 
+		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' 
+				SET member_spent = member_spent - ' . $old_item ['item_value'] .  ' , 
+				    member_item_decay = member_item_decay - ' . $old_item ['item_decay'] .  '  
+				WHERE member_dkpid = ' . (int) $old_item ['dkpid']  . ' 
 			  	AND ' . $db->sql_in_set('member_id', $old_item ['member_id']) ;
 		$db->sql_query ( $sql );
 		
@@ -868,7 +868,7 @@ class acp_dkp_item extends bbDKP_Admin
 	    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
 	    				and e.event_id = r.event_id 
 	    				and r.raid_id = i.raid_id',  
-	    'GROUP_BY'  => 'd.dkpsys_id', 
+	    'GROUP_BY'  => 'd.dkpsys_id, d.dkpsys_name, d.dkpsys_default', 
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ( $sql );
@@ -1079,8 +1079,6 @@ class acp_dkp_item extends bbDKP_Admin
 			$db->sql_freeresult ( $items_result );
 			
 			$template->assign_vars ( array (
-				//'RAID_NAME'		=> $raid_name,
-				//'RAID_DATE'		=> $raid_date,
 				'ICON_VIEWLOOT'	=> '<img src="' . $phpbb_admin_path . 'images/glyphs/view.gif" alt="' . $user->lang['ITEMS'] . '" title="' . $user->lang['ITEMS'] . '" />',
 				'S_SHOW' 		=> true,
 				'F_LIST_ITEM' 	=>   append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
@@ -1155,7 +1153,7 @@ class acp_dkp_item extends bbDKP_Admin
      * there are 15 players in raid
      * so each raider gets 100/15 = earned bonus 6.67 
      * 
-     * called from raidtracker _loot_add
+     * called from raidtracker_loot_add
      * 
      * @param $raiders : list of raiders
      * @param 
@@ -1169,13 +1167,40 @@ class acp_dkp_item extends bbDKP_Admin
     	global $db;
     	
     	$zerosumdkp = round( $itemvalue / count($this->bossattendees[$this->batchid][$boss] , 2)); 
-    	
-    	$sql = ' UPDATE ' . MEMBER_DKP_TABLE . ' d, ' . MEMBER_LIST_TABLE  . ' m 
-			SET d.member_earned = d.member_earned + ' . (float) $zerosumdkp  .  ' 
-			WHERE d.member_dkpid = ' . (int) $this->dkp  . ' 
-		  	 AND  d.member_id =  m.member_id 
-		  	 AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]  ) ;
-
+		/* note: other dmbs not tested/suppported*/    	
+		switch ($db->sql_layer)
+		{
+			case 'mysqli':
+			case 'mysql4':
+			case 'mysql':
+				    $sql = ' UPDATE ' . MEMBER_DKP_TABLE . ' d, ' . MEMBER_LIST_TABLE  . ' m 
+					SET d.member_earned = d.member_earned + ' . (float) $zerosumdkp  .  ' 
+					WHERE d.member_dkpid = ' . (int) $this->dkp  . ' 
+		  	 		AND  d.member_id =  m.member_id 
+		  	 		AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]  ) ;
+			break;
+			
+			case 'oracle': 
+				$sql= 'UPDATE (
+				  SELECT d.member_earned
+				  FROM ' . MEMBER_DKP_TABLE . ' d
+			      INNER JOIN ' . MEMBER_LIST_TABLE  . ' m ON d.member_id =  m.member_id 
+				   WHERE d.member_dkpid = ' . (int) $this->dkp  . ' 
+				   AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]) . ') t
+				SET t.member_earned = t.member_earned + ' . (float) $zerosumdkp  ;				
+				
+			case 'mssql':
+			case 'mssql_odbc':
+			case 'mssqlnative':	
+					$sql= 'UPDATE d
+					SET d.member_earned = d.member_earned + ' . (float) $zerosumdkp  .  ' 
+					FROM ' . MEMBER_DKP_TABLE . ' d
+					   INNER JOIN ' . MEMBER_LIST_TABLE  . ' m 
+					   ON d.member_id =  m.member_id 
+					   WHERE d.member_dkpid = ' . (int) $this->dkp  . ' 
+					   AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]);
+			break;
+		}
     	return $sql; 
     }
     
@@ -1189,6 +1214,7 @@ class acp_dkp_item extends bbDKP_Admin
 	public function sync_zerosum($mode)
 	{
 		global $user, $db, $config;
+		
 		switch ($mode)
 		{
 			case 0:

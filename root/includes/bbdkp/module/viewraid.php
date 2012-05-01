@@ -1,11 +1,11 @@
 <?php
 /**
- * View individual raid
- * 
- * @package bbDKP
- * @copyright 2009 bbdkp <https://github.com/bbDKP>
+ * @package bbDKP.module
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * 
+ * @version 1.2.7
  */
 
 /**
@@ -381,7 +381,7 @@ $classes = array();
 
 // item selection
 $sql_array = array(
-    'SELECT'    => ' c.class_id, c1.name, c.colorcode, c.imagename ',
+    'SELECT'    => ' c.game_id, c.class_id, c1.name, c.colorcode, c.imagename ',
     'FROM'      => array(
         CLASS_TABLE 		=> 'c', 
         MEMBER_LIST_TABLE 	=> 'l', 
@@ -390,7 +390,7 @@ $sql_array = array(
     'WHERE'     =>  "c.game_id = l.game_id  and c.class_id = l.member_class_id  
     				AND c1.attribute_id = l.member_class_id and c1.game_id = l.game_id
     				AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'",
-    'GROUP_BY'  => 'c.class_id',
+    'GROUP_BY'  => 'c.game_id, c.class_id, c1.name, c.colorcode, c.imagename',
     'ORDER_BY' => 'c1.name'
 );
 

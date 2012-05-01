@@ -1,26 +1,11 @@
 <?php
 /**
-
- * This class manages Game, Race and Class 
-
- * 
-
- * Powered by bbdkp © 2010 The bbDKP Project Team
-
- * If you use this software and find it to be useful, we ask that you
-
- * retain the copyright notice below. 
-
- *
-
  * @package bbDKP.acp
-
- * @copyright (c) 2009 bbdkp https://github.com/bbDKP
-
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-
- * 
-
+ * @version 1.2.7
  */
 
 /**
@@ -48,11 +33,8 @@ class acp_dkp_game extends bbDKP_Admin
 	/** 
 
 	 * main ACP game function
-
 	 * @param int $id the id of the node who parent has to be returned by function 
-
 	 * @param int $mode id of the submenu
-
 	 * @access public 
 
 	 */

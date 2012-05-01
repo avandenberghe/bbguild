@@ -1,11 +1,13 @@
 <?php
 /**
- * @package bbDKP 
- * @version 1.2.7 2012
- * @author sajaki9@gmail.com
- * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
+ * @package bbDKP.install
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.7
  */
+ 
 define('UMIL_AUTO', true);
 define('IN_PHPBB', true);
 define('IN_INSTALL', true);
@@ -252,6 +254,7 @@ $versions = array(
 	      				'game_id' 			=> array('VCHAR', ''), 
                         'f_index'    		=> array('USINT', NULL, 'auto_increment'),
 	         			'game_id' 			=> array('VCHAR', ''), 
+
                         'faction_id'   		=> array('USINT', 0),
                         'faction_name'     	=> array('VCHAR_UNI', ''),
                         'faction_hide'		=> array('BOOL', 0),
@@ -918,10 +921,15 @@ $versions = array(
     ),
     
     '1.2.7' => array(
+
     // nothing to see here
+
     
+
     ), 
+
     
+
 
 );
 
@@ -1060,7 +1068,7 @@ function gameinstall($action, $version)
 				}
 
 			    // report what we did to umil
-				return array('command' => sprintf($user->lang['UMIL_GAME125'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
+				return array('command' => sprintf($user->lang['UMIL_GAME126'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 				break;
 			}
 			break;

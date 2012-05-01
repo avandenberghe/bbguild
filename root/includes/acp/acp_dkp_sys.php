@@ -1,13 +1,11 @@
 <?php
 /**
- * This acp class manages DKP pools and Loot systems
- * 
  * @package bbDKP.acp
- * @author Sajaki
-
- * @copyright (c) 2009 bbdkp https://github.com/bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * 
+ * @version 1.2.7
  */
 
 /**

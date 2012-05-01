@@ -1,12 +1,12 @@
 <?php
-/** 
-*
-* @package ucp
-* @copyright (c) 2010 bbDKP 
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License 
-* @author Sajaki
-* This is the user interface for the character dkp integration
-*/
+/**
+ * @package bbDKP.ucp
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.7
+ */
 			
 /**
 * @package ucp
@@ -54,7 +54,7 @@ class ucp_dkp
 						WHERE member_id = ' . $member_id;
 					$db->sql_query($sql);
 					
-					$sql = 'select member_name from ' . MEMBER_LIST_TABLE . ' 
+					$sql = 'SELECT member_name FROM ' . MEMBER_LIST_TABLE . ' 
 					WHERE member_id = ' . $member_id;
 					$result = $db->sql_query($sql, 0);
 					$member_name = $db->sql_fetchfield('member_name');
@@ -399,7 +399,7 @@ class ucp_dkp
 		}
 		
 		
-		//
+
 		// Class dropdown
 		// reloading is done from ajax to prevent redraw
 		$sql_array = array(
@@ -541,7 +541,7 @@ class ucp_dkp
 		// check if membername exists
 		$sql = 'SELECT count(*) as memberexists 
 				FROM ' . MEMBER_LIST_TABLE . "	
-				WHERE ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "')"; 
+				WHERE UPPER(member_name)= UPPER('" . $db->sql_escape($member_name) . "')"; 
 		$result = $db->sql_query($sql);
 		$countm = $db->sql_fetchfield('memberexists');
 		$db->sql_freeresult($result);
@@ -559,7 +559,7 @@ class ucp_dkp
 		$rank_id = request_var('member_rank_id',99);
 		
 		// check if rank exists
-		$sql = 'SELECT count(*) as rankccount 
+		$sql = 'SELECT COUNT(*) as rankccount 
 				FROM ' . MEMBER_RANKS_TABLE . '
 				WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id; 
 		$result = $db->sql_query($sql);
@@ -572,7 +572,7 @@ class ucp_dkp
 		
 		$member_lvl = request_var('member_level', 0);
 		// check level
-		$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE; 
+		$sql = 'SELECT MAX(class_max_level) AS maxlevel FROM ' . CLASS_TABLE; 
 		$result = $db->sql_query($sql);
 		$maxlevel = $db->sql_fetchfield('maxlevel');
 		$db->sql_freeresult($result);
@@ -649,9 +649,9 @@ class ucp_dkp
 		$db->sql_freeresult($result);
 			
 		// check if membername exists
-		$sql = 'SELECT count(*) as memberexists 
+		$sql = 'SELECT COUNT(*) as memberexists 
 				FROM ' . MEMBER_LIST_TABLE . "	
-				WHERE ucase(member_name)= ucase('" . $db->sql_escape($member_name) . "')"; 
+				WHERE UPPER(member_name)= UPPER('" . $db->sql_escape($member_name) . "')"; 
 		$result = $db->sql_query($sql);
 		$countm = $db->sql_fetchfield('memberexists');
 		$db->sql_freeresult($result);
@@ -798,7 +798,8 @@ class ucp_dkp
 		        USERS_TABLE 		=> 'u', 
 		    	),
 		 
-		    'WHERE'     =>  "  l.game_id = c.game_id and l.attribute_id = c.class_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+		    'WHERE'     =>  "  l.game_id = c.game_id and l.attribute_id = c.class_id 
+		    				  AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
 							  AND (m.member_guild_id = g.id) 
 							  AND (m.member_class_id = c.class_id and m.game_id = c.game_id)
 							  AND m.member_race_id =  a.race_id  and m.game_id = a.game_id
@@ -835,20 +836,19 @@ class ucp_dkp
 			
 			$sql_array2 = array(
 			    'SELECT'    => ' d.dkpsys_id, d.dkpsys_name, 
-				m.member_earned + m.member_adjustment AS ep,
-			    m.member_spent - m.member_item_decay + ( ' . max(0, $config['bbdkp_basegp']) . ') AS gp, 
-     					(m.member_earned + m.member_adjustment - m.member_spent + m.member_item_decay - ( ' . max(0, $config['bbdkp_basegp']) . ') ) AS member_current,
-
-     					sum(case when m.member_spent - m.member_item_decay <= 0 
-				then m.member_earned + m.member_adjustment  
-				else round( (m.member_earned + m.member_adjustment) / (' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay) ,2) end) as pr  
+				SUM(m.member_earned + m.member_adjustment) AS ep,
+			    SUM(m.member_spent - m.member_item_decay + ( ' . max(0, $config['bbdkp_basegp']) . ')) AS gp, 
+     			SUM(m.member_earned + m.member_adjustment - m.member_spent + m.member_item_decay - ( ' . max(0, $config['bbdkp_basegp']) . ') )) AS member_current,
+				SUM(CASE when m.member_spent - m.member_item_decay <= 0 
+				THEN m.member_earned + m.member_adjustment  
+				ELSE ROUND( SUM(m.member_earned + m.member_adjustment) /  SUM(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay) ,2) end) as pr  
 				', 
 			    'FROM'      => array(
 				        MEMBER_DKP_TABLE 	=> 'm', 
 				        DKPSYS_TABLE 		=> 'd',
 			    	),
 			    'WHERE'     => " m.member_dkpid = d.dkpsys_id and m.member_id = " . $row['member_id'],
-				'GROUP_BY'  => " d.dkpsys_name " , 
+				'GROUP_BY'  => " d.dkpsys_id, d.dkpsys_name " , 
 				'ORDER_BY'	=> " d.dkpsys_name ",
 			    );
 
@@ -858,7 +858,8 @@ class ucp_dkp
 			{
 				$template->assign_block_vars('members_row.dkp_row', array(
 					'DKPSYS'        => $row2['dkpsys_name'],
-					'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}dkp.$phpEx", "page=viewmember&amp;". URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id'] ), 
+					'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}dkp.$phpEx", 
+							"page=viewmember&amp;". URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id'] ), 
 					'EARNED'       => $row2['ep'],
 					'SPENT'        => $row2['gp'],
 					'PR'           => $row2['pr'],
@@ -871,13 +872,8 @@ class ucp_dkp
 		}
 		$template->assign_vars(array(
 			'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
-			
 		));
 		$db->sql_freeresult ($members_result);
-		
-		
-		
 	}
-
 }
 ?>

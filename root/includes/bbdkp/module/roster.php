@@ -1,14 +1,11 @@
 <?php
- /**
- * Roster2 - generic version
- * 
- * @package bbDKP
- * @copyright 2011 bbdkp http://www.bbdkp.com
+/**
+ * @package bbDKP.module
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- *
- * more data can be presented in the roster with the armory plugin 
- * 
- * 
+ * @version 1.2.7
  */
 
 /**
