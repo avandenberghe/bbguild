@@ -825,6 +825,27 @@ So the loot would go to player 2 <br />',
 'UPDATE_CLASS' => 'Update Class', 
 'CHANGE_ACTIVATION' => 'Change Activation', 
 
+//Plugin Check System
+
+'PLUGINS_INSTALLED'	 => 'Plugins Installed',
+'PLUGINS_STATUS' 	 => 'Plugin Status',
+
+'NO_PLUGINS_INSTALLED'		=> 'No bbDKP Plugins Currently Installed',
+'ADD_PLUGINS_AVAIL'   		=> 'Additional Plugins Available',
+'DOWNLOAD_PLUGINS'		    => 'Download Plugins Here',
+'DOWNLOAD_LATEST_PLUGINS'	=> 'Download Latest Version',
+'DOWNLOAD_HERE' 			=> 'Download Here',
+'PLUGIN_UP_TO_DATE' 		=> 'Up To Date',
+'LATESTPLUGINVERSION'	   	=> 'Out of date: ', 
+'PLUGIN_VERSION_NOTONLINE' 	=> 'bbDKP Plugin callback failed, cannot look up latest version.',
+
+'APPLY_TITLE' 			=> 'Apply',
+'ARMORY_IMPORTER_TITLE' => 'Armory-Importer',
+'BBTIPS_TITLE' 			=> 'bbTips',
+'BOSSPROGRESS_TITLE' 	=> 'Bossprogress',
+'RAIDPLANNER_TITLE' 	=> 'RaidPlanner',
+'RAIDTRACKER_TITLE' 	=> 'RaidTracker',
+
 // Misc
 'ADJUSTMENT_VALUE' => 'Adjustment Value',
 'ADJUSTMENT_VALUE_NOTE' => 'May be negative',
