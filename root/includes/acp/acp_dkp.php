@@ -332,6 +332,366 @@ class acp_dkp extends bbDKP_Admin
 							'UPDATEINSTR' => $user->lang['LATESTVERSION'] . $latest_version . ', <a href="' . $user->lang['WEBURL'] . '">' . $user->lang['DOWNLOAD'] . '</a>'));
 					}
 				}
+
+//begin bbdkp plugin look up and version find 
+			//find out if apply is installed and get version number if it is
+			$apply_installed = $config['bbdkp_apply_version'];
+			if ($apply_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_APPLY_INSTALLED' => true,
+				));
+
+				// Get current and latest version of apply
+				$errstr = '';
+				$errno = 0;				
+				$installed_version = $config['bbdkp_apply_version'];
+				$info = get_remote_file('bbdkp.googlecode.com', '/svn/trunk', 'version_apply.txt', $errstr, $errno);
+				if ($info === false)
+				{
+					// version file reference does not exist, show error
+					$template->assign_vars(array(
+						'S_APPLY_UP_TO_DATE' => false , 
+						'APPLYVERSION' => $installed_version , 
+						'APPLYUPDATEINSTR' => $user->lang['PLUGIN_VERSION_NOTONLINE']));
+				}
+				else
+				{
+					$info = explode("\n", $info);
+					$latest_version = trim($info[0]);
+					// is the installed version >= the latest version ? then you are up to date
+					$up_to_date = (version_compare(str_replace('rc', 'RC', strtolower($installed_version)), str_replace('rc', 'RC', strtolower($latest_version)), '>=')) ? true : false;
+					if ($up_to_date)
+					{
+						// your version is the same or even newer than the official version
+						$template->assign_vars(array(
+							'S_APPLY_UP_TO_DATE' => true , 
+							'APPLYVERSION' => $config['bbdkp_apply_version']));
+					}
+					else
+					{
+						// you have an old version
+						$template->assign_vars(array(
+							'S_APPLY_UP_TO_DATE' => false , 
+							'APPLYVERSION' =>$installed_version , 
+							'APPLYUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+					}
+				}		
+
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_APPLY_INSTALLED' => false,
+				));
+				}
+
+			//find out if armory updater is installed and get version number if it is
+			$armoryupdater_installed = $config['bbdkp_plugin_armoryupdater'];
+			if ($armoryupdater_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_ARMORY_UPDATER_INSTALLED' => true,
+				));
+
+				// Get current and latest version of armory-updater
+				$errstr = '';
+				$errno = 0;				
+				$installed_version = $config['bbdkp_plugin_armoryupdater'];
+				$info = get_remote_file('bbdkp.googlecode.com', '/svn/trunk', 'version_armory-updater.txt', $errstr, $errno);
+				if ($info === false)
+				{
+					// version file reference does not exist, show error
+					$template->assign_vars(array(
+						'S_ARMORYUPDATER_UP_TO_DATE' => false , 
+						'ARMORYUPDATERVERSION' => $installed_version , 
+						'ARMORYUPDATERUPDATEINSTR' => $user->lang['PLUGIN_VERSION_NOTONLINE']));
+				}
+				else
+				{
+					$info = explode("\n", $info);
+					$latest_version = trim($info[0]);
+					// is the installed version >= the latest version ? then you are up to date
+					$up_to_date = (version_compare(str_replace('rc', 'RC', strtolower($installed_version)), str_replace('rc', 'RC', strtolower($latest_version)), '>=')) ? true : false;
+					if ($up_to_date)
+					{
+						// your version is the same or even newer than the official version
+						$template->assign_vars(array(
+							'S_ARMORYUPDATER_UP_TO_DATE' => true , 
+							'ARMORYUPDATERVERSION' => $config['bbdkp_plugin_armoryupdater']));
+					}
+					else
+					{
+						// you have an old version
+						$template->assign_vars(array(
+							'S_ARMORYUPDATER_UP_TO_DATE' => false , 
+							'ARMORYUPDATERVERSION' =>$installed_version , 
+							'ARMORYUPDATERUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+					}
+				}		
+
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_ARMORY_UPDATER_INSTALLED' => false,
+				));
+				}
+
+			//find out if bbtips is installed and get version number if it is
+			$bbtips_installed = $config['bbdkp_plugin_bbtips_version'];
+			if ($bbtips_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_BBTIPS_INSTALLED' => true,
+				));
+				
+				// Get current and latest version of bbTips
+				$errstr = '';
+				$errno = 0;				
+				$installed_version = $config['bbdkp_plugin_bbtips_version'];
+				$info = get_remote_file('bbdkp.googlecode.com', '/svn/trunk', 'version_bbtips.txt', $errstr, $errno);
+				if ($info === false)
+				{
+					// version file reference does not exist, show error
+					$template->assign_vars(array(
+						'S_BBTIPS_UP_TO_DATE' => false , 
+						'BBTIPSVERSION' => $installed_version , 
+						'BBTIPSUPDATEINSTR' => $user->lang['PLUGIN_VERSION_NOTONLINE']));
+				}
+				else
+				{
+					$info = explode("\n", $info);
+					$latest_version = trim($info[0]);
+					// is the installed version >= the latest version ? then you are up to date
+					$up_to_date = (version_compare(str_replace('rc', 'RC', strtolower($installed_version)), str_replace('rc', 'RC', strtolower($latest_version)), '>=')) ? true : false;
+					if ($up_to_date)
+					{
+						// your version is the same or even newer than the official version
+						$template->assign_vars(array(
+							'S_BBTIPS_UP_TO_DATE' => true , 
+							'BBTIPSVERSION' => $config['bbdkp_plugin_bbtips_version']));
+					}
+					else
+					{
+						// you have an old version
+						$template->assign_vars(array(
+							'S_BBTIPS_UP_TO_DATE' => false , 
+							'BBTIPSVERSION' =>$installed_version , 
+							'BBTIPSUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+					}
+				}		
+				
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_BBTIPS_INSTALLED' => false,
+				));
+				}
+
+			//find out if bossprogress is installed and get version number if it is
+			$bossprogress_installed = $config['bbdkp_bp_version'];
+			if ($bossprogress_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_BOSSPROGRESS_INSTALLED' => true,
+				));
+
+				// Get current and latest version of bossprogress
+				$errstr = '';
+				$errno = 0;				
+				$installed_version = $config['bbdkp_bp_version'];
+				$info = get_remote_file('bbdkp.googlecode.com', '/svn/trunk', 'version_bossprogress.txt', $errstr, $errno);
+				if ($info === false)
+				{
+					// version file reference does not exist, show error
+					$template->assign_vars(array(
+						'S_BOSSPROGRESS_UP_TO_DATE' => false , 
+						'BOSSPROGRESSVERSION' => $installed_version , 
+						'BOSSPROGRESSUPDATEINSTR' => $user->lang['PLUGIN_VERSION_NOTONLINE']));
+				}
+				else
+				{
+					$info = explode("\n", $info);
+					$latest_version = trim($info[0]);
+					// is the installed version >= the latest version ? then you are up to date
+					$up_to_date = (version_compare(str_replace('rc', 'RC', strtolower($installed_version)), str_replace('rc', 'RC', strtolower($latest_version)), '>=')) ? true : false;
+					if ($up_to_date)
+					{
+						// your version is the same or even newer than the official version
+						$template->assign_vars(array(
+							'S_BOSSPROGRESS_UP_TO_DATE' => true , 
+							'BOSSPROGRESSVERSION' => $config['bbdkp_bp_version']));
+					}
+					else
+					{
+						// you have an old version
+						$template->assign_vars(array(
+							'S_BOSSPROGRESS_UP_TO_DATE' => false , 
+							'BOSSPROGRESSVERSION' =>$installed_version , 
+							'BOSSPROGRESSUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+					}
+				}		
+
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_BOSSPROGRESS_INSTALLED' => false,
+				));
+				}
+
+			//find out if raidplanner is installed and get version number if it is
+			$raidplanner_installed = $config['bbdkp_raidplanner'];
+			if ($raidplanner_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_RAID_PLANNER_INSTALLED' => true,
+				));
+
+				// Get current and latest version of raidplanner
+				$errstr = '';
+				$errno = 0;				
+				$installed_version = $config['bbdkp_raidplanner'];
+				$info = get_remote_file('bbdkp.googlecode.com', '/svn/trunk', 'version_raidplanner.txt', $errstr, $errno);
+				if ($info === false)
+				{
+					// version file reference does not exist, show error
+					$template->assign_vars(array(
+						'S_RAIDPLANNER_UP_TO_DATE' => false , 
+						'RAIDPLANNERVERSION' => $installed_version , 
+						'RAIDPLANNERUPDATEINSTR' => $user->lang['PLUGIN_VERSION_NOTONLINE']));
+				}
+				else
+				{
+					$info = explode("\n", $info);
+					$latest_version = trim($info[0]);
+					// is the installed version >= the latest version ? then you are up to date
+					$up_to_date = (version_compare(str_replace('rc', 'RC', strtolower($installed_version)), str_replace('rc', 'RC', strtolower($latest_version)), '>=')) ? true : false;
+					if ($up_to_date)
+					{
+						// your version is the same or even newer than the official version
+						$template->assign_vars(array(
+							'S_RAIDPLANNER_UP_TO_DATE' => true , 
+							'RAIDPLANNERVERSION' => $config['bbdkp_raidplanner']));
+					}
+					else
+					{
+						// you have an old version
+						$template->assign_vars(array(
+							'S_RAIDPLANNER_UP_TO_DATE' => false , 
+							'RAIDPLANNERVERSION' =>$installed_version , 
+							'RAIDPLANNERUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+					}
+				}		
+
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_RAID_PLANNER_INSTALLED' => false,
+				));
+				}
+
+			//find out if raidtracker is installed and get version number if it is
+			$raidtracker_installed = $config['bbdkp_raidtracker'];
+			if ($raidtracker_installed != 0)
+				{
+				$template->assign_vars(array(
+				'S_RAID_TRACKER_INSTALLED' => true,
+				));
+				
+				// Get current and latest version of raidtracker
+				$errstr = '';
+				$errno = 0;				
+				$installed_version = $config['bbdkp_raidtracker'];
+				$info = get_remote_file('bbdkp.googlecode.com', '/svn/trunk', 'version_raidtracker.txt', $errstr, $errno);
+				if ($info === false)
+				{
+					// version file reference does not exist, show error
+					$template->assign_vars(array(
+						'S_RAIDTRACKER_UP_TO_DATE' => false , 
+						'RAIDTRACKVERSION' => $installed_version , 
+						'RAIDTRACKUPDATEINSTR' => $user->lang['PLUGIN_VERSION_NOTONLINE']));
+				}
+				else
+				{
+					$info = explode("\n", $info);
+					$latest_version = trim($info[0]);
+					// is the installed version >= the latest version ? then you are up to date
+					$up_to_date = (version_compare(str_replace('rc', 'RC', strtolower($installed_version)), str_replace('rc', 'RC', strtolower($latest_version)), '>=')) ? true : false;
+					if ($up_to_date)
+					{
+						// your version is the same or even newer than the official version
+						$template->assign_vars(array(
+							'S_RAIDTRACKER_UP_TO_DATE' => true , 
+							'RAIDTRACKVERSION' => $config['bbdkp_raidtracker']));
+					}
+					else
+					{
+						// you have an old version
+						$template->assign_vars(array(
+							'S_RAIDTRACKER_UP_TO_DATE' => false , 
+							'RAIDTRACKVERSION' =>$installed_version , 
+							'RAIDTRACKUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+					}
+				}		
+				
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_RAID_TRACKER_INSTALLED' => false,
+				));
+				}
+				
+//end bbdkp plugin lookup and version find			
+
+//begin where to get bbdkp plugins if none are installed or not all are installed
+
+				$plugins = array(
+				0 => $config['bbdkp_plugin_bbtips_version'] , 
+				1 => $config['bbdkp_raidtracker'] , 
+				2 => $config['bbdkp_bp_version'] , 
+				3 => $config['bbdkp_apply_version'] , 
+				4 => $config['bbdkp_raidplanner'],
+				5 => $config['bbdkp_plugin_armoryupdater']);				
+				
+			$pluginsinstalled = count(array_filter($plugins));	
+			$pluginsavailable = 6 - $pluginsinstalled;
+			if ($pluginsinstalled > 0)
+				{
+				$template->assign_vars(array(
+				'S_ANY_PLUGINS_INSTALLED' => false,
+				));
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_ANY_PLUGINS_INSTALLED' => true,
+				'PLUGINLINK' => $user->lang['PLUGINURL']
+				));
+				}			
+
+			//find if you have all 6 bbdkp mods installed and if now provide link to get more
+			if ($pluginsinstalled < 6 && $pluginsinstalled > 0)
+				{
+				$template->assign_vars(array(
+				'S_ANY_PLUGINS_AVAIL' => true,
+				'PLUGINLINK' => $user->lang['PLUGINURL'],	
+				'NUMBOFPLUGINS' => $pluginsavailable
+				));
+				}
+			else
+				{
+				$template->assign_vars(array(
+				'S_ANY_PLUGINS_AVAIL' => false,
+				));
+				}			
+
+//end where to get bbdkp plugins if none are installed				
+
 				$template->assign_vars(array(
 					'S_LOGS' => $s_logs , 
 					'GLYPH' => "$phpbb_admin_path/images/glyphs/view.gif" , 
