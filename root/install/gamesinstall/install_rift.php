@@ -86,6 +86,20 @@ function install_rift()
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 	unset ($sql_ary);	
 
+	// races
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'rift'");
+	$sql_ary = array ();
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 0, 'race_faction_id' => 1, 'image_female_small' => ' ',  'image_male_small' => ' '  ); //Unknown
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 1, 'race_faction_id' => 1, 'image_female_small' => 'rift_dwarf_small',  'image_male_small' => 'rift_dwarf_small'  ); //Human
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 2, 'race_faction_id' => 1 , 'image_female_small' => 'rift_highelf_small',  'image_male_small' => 'rift_highelf_small' ); //Orc
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 3, 'race_faction_id' => 1 , 'image_female_small' => 'rift_mathosian_small',  'image_male_small' => 'rift_mathosian_small' ); //Dwarf
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 4, 'race_faction_id' => 2 , 'image_female_small' => 'rift_bahmi_small',  'image_male_small' => 'rift_bahmi_small' ) ; //Night Elf
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 5, 'race_faction_id' => 2 , 'image_female_small' => 'rift_eth_small',  'image_male_small' => 'rift_eth_small' ); //Undead
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 6, 'race_faction_id' => 2 , 'image_female_small' => 'rift_kelari_small',  'image_male_small' => 'rift_kelari_small' ); //Tauren
+	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
+	unset ( $sql_ary );
+	
+	
     $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'rift' and (attribute='class' or attribute = 'race')");
     $sql_ary = array();
 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
