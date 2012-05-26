@@ -23,27 +23,27 @@ function install_warhammer()
 
     $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'warhammer'" );    
     $sql_ary = array();
-    $sql_ary[] = array('game_id' => 'warhammer', 'class_id' => 0, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Unknown_small' );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 1, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Witch_Elf_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 2, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Sorcerer_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 3, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Disciple_of_Khaine_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 4, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Chosen_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 5, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Marauder_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 6, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Zealot_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 7, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Magus_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 8, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Squig_Herder_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 9, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Black_Orc_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 10,'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Shaman_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 11, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Rune_Priest_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 12, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Iron_Breaker_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 13, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Engineer_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 14, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Witch_Hunter_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Bright_Wizard_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 16, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Warrior_Priest_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 17, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Archmage_small'  );    
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 18, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Swordmaster_small'  );    
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 19, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_Shadow_Warrior_small'  );
-    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 20, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'war_White_Lion_small'  );    
+    $sql_ary[] = array('game_id' => 'warhammer', 'class_id' => 0, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Unknown_small' );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 1, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Witch_Elf_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 2, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Sorcerer_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 3, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Disciple_of_Khaine_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 4, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Chosen_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 5, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Marauder_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 6, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Zealot_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 7, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Magus_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 8, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Squig_Herder_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 9, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Black_Orc_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 10,'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Shaman_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 11, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Rune_Priest_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 12, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Iron_Breaker_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 13, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Engineer_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 14, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Witch_Hunter_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Bright_Wizard_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 16, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Warrior_Priest_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 17, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Archmage_small'  );    
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 18, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Swordmaster_small'  );    
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 19, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_Shadow_Warrior_small'  );
+    $sql_ary[] = array('game_id' => 'warhammer','class_id' => 20, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'imagename' => 'warhammer_White_Lion_small'  );    
     $db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
 
     // factions
@@ -57,13 +57,14 @@ function install_warhammer()
     unset ($sql_ary);
     $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'warhammer'");  
     $sql_ary = array();
-    $sql_ary[] = array('game_id' => 'warhammer','race_id' => 0, 'race_faction_id' => 0 ); //Unknown
-    $sql_ary[] = array('game_id' => 'warhammer','race_id' => 1, 'race_faction_id' => 1 ); //Dwarf
-    $sql_ary[] = array('game_id' => 'warhammer','race_id' => 2, 'race_faction_id' => 1 ); //The Empire'
-    $sql_ary[] = array('game_id' => 'warhammer','race_id' => 3, 'race_faction_id' => 1 ); //High Elves
-    $sql_ary[] = array('game_id' => 'warhammer','race_id' => 4, 'race_faction_id' => 2 ); //Dark Elves
-    $sql_ary[] = array('game_id' => 'warhammer','race_id' => 5, 'race_faction_id' => 2 ); //Chaos
-    $sql_ary[] = array('game_id' => 'warhammer','race_id' => 6, 'race_faction_id' => 2 ); //Greenskins
+   	$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 0, 'race_faction_id' => 1,  'image_female_small' => ' ',  'image_male_small' => ' '  ); //Unknown
+	$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 1, 'race_faction_id' => 1,  'image_female_small' => 'warhammer_dwarf',  'image_male_small' => 'warhammer_dwarf'  ); //Dwarf
+	$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 2, 'race_faction_id' => 1 , 'image_female_small' => 'warhammer_empire',  'image_male_small' => 'warhammer_empire' ); ///The Empire'
+	$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 3, 'race_faction_id' => 1 , 'image_female_small' => 'warhammer_highelves',  'image_male_small' => 'warhammer_highelves' ); ///High Elves
+	$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 4, 'race_faction_id' => 2 , 'image_female_small' => 'warhammer_delves',  'image_male_small' => 'warhammer_delves' ) ; //Dark Elf
+	$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 5, 'race_faction_id' => 2 , 'image_female_small' => 'warhammer_chaos',  'image_male_small' => 'warhammer_chaos' ); //chaos
+	$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 6, 'race_faction_id' => 2 , 'image_female_small' => 'warhammer_greenskin',  'image_male_small' => 'warhammer_greenskin' ); //Greenskins
+     
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 
 	// dkp system 
