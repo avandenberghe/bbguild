@@ -12,7 +12,7 @@
 		<description lang="en"><![CDATA[bbDKP 1.2.7 is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP. It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. 
 It integrates Game, Guild and DKP management facilites into your phpBB3 Forum. Your users have single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches. 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, ACP and UCP modules.
-The framework supports multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION and Rift
+The framework supports multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, SW:Tor
 There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Bossprogress, Raidplanner (under development)
 
 Further development requests, support questions are welcome at http://www.bbdkp.com. As of the current release, it does not (yet) make coffee ;)
@@ -22,18 +22,16 @@ Languages included:
 » French (fr)
 » Deutsch (de)
 
-Copyright
-Powered by bbDKP (c) 2011 The bbDKP Project Team
 We ask that you retain the copyright notice in overall_footer.html in any Styles you use. It will help build interest in the bbDKP project, and is required for obtaining support.
-http://code.google.com/p/bbdkp/
+
 bbDKP (c) 2011 Sajaki, Blazeflack
 bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-		<description lang="fr"><![CDATA[bbDKP 1.2.7 est une système DKP pour votre forum PHPBB3, developpee depuis EQDKP. Il est multi-pool, supporte le systeme DKP Standard, points par temps passé, Somme Zéro et EPGP.  Il aide les guildes à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft et Rift.  
+		<description lang="fr"><![CDATA[bbDKP 1.2.7 est une système DKP pour votre forum PHPBB3, developpee depuis EQDKP. Il est multi-pool, supporte le systeme DKP Standard, points par temps passé, Somme Zéro et EPGP.  Il aide les guildes à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft, Rift, SW:Tor. 
 Liste non exhaustive des fonctionnalités : Multiples groupes DKP et guildes, Tribune des points DKP, Raids, Evènements, Valeurs des Objets, Historique des Objets, Statistique des Raids, Page d’avancée des Boss, Armurerie, module PCA avec Backup, Import de EQDKP+. 
-Les Plugins : Importation depuis l’armurerie de Blizzard et Aion, bbTips (Wow), Raidtracker (wow), Bossprogress, Formulaire de Recrutement, Planner (en developpement)
+Les Plugins : Importation depuis l’armurerie de Battle.NET, bbTips (Wow), Raidtracker (wow), Bossprogress, Formulaire de Recrutement, Planner
 Pour de plus amples détails, veuillez consulter le changelog. Demandes de développement, questions de support sont les bienvenues à http://www.bbdkp.com. 
 
 Langues inclues :
@@ -41,10 +39,8 @@ Langues inclues :
 » English (en)
 » Deutsch (de)
 
-Copyright
-Powered by bbDKP (c) 2011 The bbDKP Project Team
 Veuillez montrer le la notice de copyright dans overall_footer.html dans les Styles que vous utilisez. Ceci aide à soutenir l’intérêt dans le projèt bbDKP et c’est requis afin d’obtenir du support.
-http://code.google.com/p/bbdkp/
+
 bbDKP (c) 2011 Sajaki, Blazeflack
 bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
@@ -52,7 +48,7 @@ bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
 		<description lang="de"><![CDATA[bbDKP 1.2.7 ist eine DKP Lösung für ihr PHPBB3 Forum, weiterentwickelt aus EQDKP. Est ein multi-pool DKP System, und bietet Standard DKP, Zeitpunkteverwaltung, Nullpunkteverwaltung, und EPGP. Es ermöglicht die Gildenmitgliederverwaltung, die Raidteilnahme in Raids, die Verwaltung der Gegenstandsankäufe, verwaltung von DKP Konten, und GildenStatistiken. Sie erreichen damit ein einziges Angriffspunkt zum DKP und zum forum, mit eine überschauliche interface ohne Integrationsschwierigkeiten. bbDKP unterstützt jetzt Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft und Rift. 
 Nicht vollständige Funktionalitätenliste : Support für Vielfache DKP Gruppen (Pools), Vielfache Gilden, Ein Übersicht der DKP Punkte pro Spieler, Raidsliste, Ereignisliste, Gegenstandswerte, Historiken, Raidstatistiken, Gildenarsenalseite, ACP Modulen, Backupfunktionen, Import von EQDKP und EQDKP+. 
-Vorhandene Plugins : Importation von Mitglieder von das Blizzard oder Aion Arsenal, Bossvorgang, bbTips (tooltips), Raidtracker (wow), Rekrutierungsformular.  
+Vorhandene Plugins : Importation von Mitglieder Battle.NET, Bossvorgang, bbTips (tooltips), Raidtracker (wow), Rekrutierungsformular, Raidplaner
 Für weitere Entwicklungsanfragen und Support heissen wir Sie wilkommen auf unsere internetseite http://www.bbdkp.com. 
 
 Enthaltenen Sprachdateien:
@@ -60,10 +56,8 @@ Enthaltenen Sprachdateien:
 » Deutsch (de)
 » Français (fr)
 
-Copyright
-Powered by bbDKP (c) 2011 The bbDKP Project Team
 Bitte zeige den copyright link in overall_footer.html in den Stylen die gebraucht werden. Es hilft dabei, Interesse in bbDKP zu verbreiten und ist erforderlich falls du Support bekommen willst.
-http://code.google.com/p/bbdkp/
+
 bbDKP (c) 2011 Sajaki, Blazeflack
 bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
@@ -82,8 +76,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
 				<email><![CDATA[sajaki9@gmail.com]]></email>
 				<contributions-group>
-					<contributions status="current" from="2009-01-01" position="Project leader"/>
-					<contributions status="past" from="2008-04-04" to="2009-01-01" position="Developer"/>
+					<contributions status="current" from="2008-04-04" position="Developer"/>
 				</contributions-group>
 			</author>
 			<author>
@@ -92,7 +85,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 				<homepage><![CDATA[http://aegis.dk]]></homepage>
 				<email><![CDATA[blazeflack@gmail.com]]></email>
 				<contributions-group>
-					<contributions status="current" from="2010-06-01" position="Supporter"/>
+					<contributions status="past" from="2010-06-01" position="Supporter"/>
 				</contributions-group>
 			</author>
 			<author>
@@ -101,8 +94,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
 				<email><![CDATA[cs.krushin@gmail.com]]></email>
 				<contributions-group>
-					<contributions status="current" from="2009-09-01" position="Developer"/>
-					<contributions status="past" from="2007-12-27" to="2009-01-01" position="Former Leader, bbDKP Supporter"/>
+					<contributions status="past" from="2007-12-27" to="2009-01-01" position="Developer"/>
 				</contributions-group>
 			</author>
 			<author>
@@ -115,7 +107,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 				<realname><![CDATA[Teksonic]]></realname>
 				<username><![CDATA[Teksonic]]></username>
 				<contributions-group>
-					<contributions status="past" from="2008-04-06" to="2008-06-01" position="Support Manager/ Previous Developer"/>
+					<contributions status="past" from="2008-04-06" to="2008-06-01" position="Developer"/>
 				</contributions-group>
 			</author>
 			<author>
@@ -125,14 +117,6 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 				<email><![CDATA[ippe.he@gmail.com]]></email>
 				<contributions-group>
 					<contributions status="past" from="2007-12-24" to="2008-10-01" position="bbDKP Project Founder, Previous Developer"/>
-				</contributions-group>
-			</author>
-			<author>
-				<realname><![CDATA[sz3]]></realname>
-				<username><![CDATA[sz3]]></username>
-				<homepage><![CDATA[http://www.eqdkp.com]]></homepage>
-				<contributions-group>
-					<contributions status="past" position="original EQDKP BossProgress v3.0.3 by sz3"/>
 				</contributions-group>
 			</author>
 			<author>
