@@ -26,15 +26,15 @@ function install_swtor()
 	// note subclasses not done
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'swtor'" ); 
 	$sql_ary = array ();
-	$sql_ary [] = array ('game_id' => 'swtor', 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#999', 'imagename' => 'swtor_Unknown_small');   
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 1, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#66CCFF', 'imagename' => 'swtor_trooper_small');   
-	$sql_ary [] = array ('game_id' => 'swtor', 'class_id' => 2, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 50, 'colorcode' =>  '#AFDCEC',  'imagename' => 'swtor_smuggler_small');    
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 3, 'class_faction_id' => 2, 'class_armor_type' => 'AUGMENTED', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#437C17',  'imagename' => 'swtor_jedi_small');    
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 4, 'class_faction_id' => 2, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 50 ,  'colorcode' =>  '#663333',  'imagename' => 'swtor_consul_small'); 
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 5, 'class_faction_id' => 3, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#CC0033',  'imagename' => 'swtor_hunter_small'); 
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 6, 'class_faction_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#FF6600',  'imagename' => 'swtor_warrior_small');  
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 7, 'class_faction_id' => 3, 'class_armor_type' => 'AUGMENTED', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#996699',  'imagename' => 'swtor_agent_small'); 
-	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 8, 'class_faction_id' => 4, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#660033',  'imagename' => 'swtor_inquisitor_small');   
+	$sql_ary [] = array ('game_id' => 'swtor', 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#999', 'imagename' => 'swtor_unknown');   
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 1, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#66CCFF', 'imagename' => 'swtor_trooper');   
+	$sql_ary [] = array ('game_id' => 'swtor', 'class_id' => 2, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 50, 'colorcode' =>  '#AFDCEC',  'imagename' => 'swtor_smuggler');    
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 3, 'class_faction_id' => 2, 'class_armor_type' => 'AUGMENTED', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#437C17',  'imagename' => 'swtor_jedi');    
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 4, 'class_faction_id' => 2, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 50 ,  'colorcode' =>  '#663333',  'imagename' => 'swtor_consul'); 
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 5, 'class_faction_id' => 3, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#CC0033',  'imagename' => 'swtor_hunter'); 
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 6, 'class_faction_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#FF6600',  'imagename' => 'swtor_warrior');  
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 7, 'class_faction_id' => 3, 'class_armor_type' => 'AUGMENTED', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#996699',  'imagename' => 'swtor_agent'); 
+	$sql_ary [] = array ('game_id' => 'swtor','class_id' => 8, 'class_faction_id' => 4, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#660033',  'imagename' => 'swtor_inquisitor');   
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
 	unset ( $sql_ary ); 
 
@@ -52,23 +52,23 @@ function install_swtor()
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'swtor'");
 	$sql_ary = array ();
 	//Unknown
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 0, 'race_faction_id' => 1, 'image_female_small' => ' ',  'image_male_small' => ' '  ); 
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 0, 'race_faction_id' => 1, 'image_female' => ' ',  'image_male' => ' '  ); 
 	//Miraluka
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 1, 'race_faction_id' => 2 , 'image_female_small' => 'swtor_miraluka_female_small',  'image_male_small' => 'swtor_miraluka_male_small' );  
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 1, 'race_faction_id' => 2 , 'image_female' => 'swtor_miraluka_female',  'image_male' => 'swtor_miraluka_male' );  
 	//Twilek
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 2, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_twilek_female_small',  'image_male_small' => 'swtor_twilek_male_small' ); 
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 2, 'race_faction_id' => 1 , 'image_female' => 'swtor_twilek_female',  'image_male' => 'swtor_twilek_male' ); 
 	// zabrak also sith
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 3, 'race_faction_id' => 2  , 'image_female_small' => 'swtor_zabrak_female_small',  'image_male_small' => 'swtor_zabrak_male_small' ); 
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 3, 'race_faction_id' => 2  , 'image_female' => 'swtor_zabrak_female',  'image_male' => 'swtor_zabrak_male' ); 
 	//Miralian
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 4, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_miralian_female_small',  'image_male_small' => 'swtor_miralian_male_small' ) ; 
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 4, 'race_faction_id' => 1 , 'image_female' => 'swtor_miralian_female',  'image_male' => 'swtor_miralian_male' ) ; 
 	// human galactic or sith
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 5, 'race_faction_id' => 1 , 'image_female_small' => 'swtor_human_female_small',  'image_male_small' => 'swtor_human_male_small' );  
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 5, 'race_faction_id' => 1 , 'image_female' => 'swtor_human_female',  'image_male' => 'swtor_human_male' );  
 	//Chiss
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 6, 'race_faction_id' => 3, 'image_female_small' => 'swtor_chiss_female_small',  'image_male_small' => 'swtor_chiss_male_small'  ); 
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 6, 'race_faction_id' => 3, 'image_female' => 'swtor_chiss_female',  'image_male' => 'swtor_chiss_male'  ); 
 	//Rattataki
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 7, 'race_faction_id' => 3, 'image_female_small' => 'swtor_rattataki_female_small',  'image_male_small' => 'swtor_rattataki_male_small' ); 
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 7, 'race_faction_id' => 3, 'image_female' => 'swtor_rattataki_female',  'image_male' => 'swtor_rattataki_male' ); 
 	//Red Siths - pureblood
-	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 8, 'race_faction_id' => 3, 'image_female_small' => 'swtor_redsith_female_small',  'image_male_small' => 'swtor_redsith_male_small' );
+	$sql_ary [] = array ('game_id' => 'swtor','race_id' => 8, 'race_faction_id' => 3, 'image_female' => 'swtor_redsith_female',  'image_male' => 'swtor_redsith_male' );
 	$db->sql_multi_insert ($table_prefix . 'bbdkp_races', $sql_ary);
 	unset ( $sql_ary );
 	

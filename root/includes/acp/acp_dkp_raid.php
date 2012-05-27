@@ -650,7 +650,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		
 		$current_order = switch_order ( $sort_order );	
 		$sql_array = array(
-    		'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, m.member_gender_id, a.image_female_small, a.image_male_small, 
+    		'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, m.member_gender_id, a.image_female, a.image_male, 
     						r.raid_value, r.time_bonus, r.zerosum_bonus, 
     						r.raid_decay, (r.raid_value + r.time_bonus + r.zerosum_bonus - r.raid_decay) as total  ',
 	    	'FROM'      => array(
@@ -673,7 +673,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		$raid_details = array ();
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
-			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
 					
 			$raid_details[$row['member_id']]['member_id'] = $row['member_id'];
 			$raid_details[$row['member_id']]['colorcode'] = $row['colorcode'];
@@ -777,7 +777,7 @@ class acp_dkp_raid extends bbDKP_Admin
         $sql_array = array(
 	    'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.item_zs, 
 	    				l.member_name, c.colorcode, c.imagename, l.member_gender_id, 
-	    				a.image_female_small, a.image_male_small, i.item_date, i.raid_id, i.item_value, 
+	    				a.image_female, a.image_male, i.item_date, i.raid_id, i.item_value, 
 	    				i.item_decay, i.item_value - i.item_decay as item_total',
 	    'FROM'      => array(
 	        CLASS_TABLE 		=> 'c', 
@@ -816,7 +816,7 @@ class acp_dkp_raid extends bbDKP_Admin
 				$item_name = $row['item_name'];
 			}
 			
-			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
 
 			$template->assign_block_vars ( 'items_row', array (
 			'DATE' 			=> (! empty ( $row ['item_date'] )) ? $user->format_date($row['item_date']) : '&nbsp;', 

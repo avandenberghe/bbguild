@@ -787,7 +787,7 @@ class ucp_dkp
 		// make a listing of my own characters with dkp for each pool
 		$sql_array = array(
 		    'SELECT'    => 	'm.member_id, m.member_name, m.member_level, u.username, g.name as guildname,
-		    				 m.member_gender_id, a.image_female_small, a.image_male_small, 
+		    				 m.member_gender_id, a.image_female, a.image_male, 
 		    				 l.name as member_class , c.imagename, c.colorcode  ', 
 		    'FROM'      => array(
 		        MEMBER_LIST_TABLE 	=> 'm',
@@ -817,7 +817,7 @@ class ucp_dkp
 		while ( $row = $db->sql_fetchrow($members_result) )
 		{
 			++$member_count;
-			$raceimage = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+			$raceimage = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
 			$template->assign_block_vars('members_row', array(
 				'COUNT'         => $member_count,
 				'NAME'          => $row['member_name'],

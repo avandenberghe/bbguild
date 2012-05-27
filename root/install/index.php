@@ -292,8 +292,8 @@ $versions = array(
                         'race_id'			=> array('USINT', 0),
                         'race_faction_id'	=> array('USINT', 0),
                         'race_hide'			=> array('BOOL', 0),
-						'image_female_small'	=> array('VCHAR:255', ''),
-						'image_male_small'	=> array('VCHAR:255', ''),
+						'image_female'	=> array('VCHAR:255', ''),
+						'image_male'	=> array('VCHAR:255', ''),
                     ),
                     'PRIMARY_KEY'    => array('game_id', 'race_id') ,
                     

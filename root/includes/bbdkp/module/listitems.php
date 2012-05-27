@@ -196,7 +196,7 @@ switch ($mode)
 			'SELECT' => '
 				 e.event_dkpid, e.event_name, e.event_color,   
 				 i.raid_id, i.item_value, i.item_gameid, i.item_id, i.item_name, i.item_date, i.member_id, 
-				 l.member_name, c.colorcode, c.imagename, c.class_id, l.member_gender_id, a.image_female_small, a.image_male_small, 
+				 l.member_name, c.colorcode, c.imagename, c.class_id, l.member_gender_id, a.image_female, a.image_male, 
 				 SUM(i.item_decay) as item_decay, 
 				 SUM(i.item_value - i.item_decay) as item_total, 
 				 SUM(item_zs) as item_zs ', 
@@ -217,7 +217,7 @@ switch ($mode)
            			AND l.game_id = c.game_id', 
 			'GROUP_BY' => 'e.event_dkpid, e.event_name, e.event_color,   
 				 i.raid_id, i.item_value, i.item_gameid, i.item_id, i.item_name, i.item_date, i.member_id, 
-				 l.member_name, c.colorcode, c.imagename, c.class_id, l.member_gender_id, a.image_female_small, a.image_male_small ', 
+				 l.member_name, c.colorcode, c.imagename, c.class_id, l.member_gender_id, a.image_female, a.image_male ', 
            	'ORDER_BY' => $current_order ['sql']);
 		
 		break;
@@ -267,7 +267,7 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 
 	if ($mode == 'history')
 	{
-		$race_image = (string) (($item['member_gender_id']==0) ? $item['image_male_small'] : $item['image_female_small']);
+		$race_image = (string) (($item['member_gender_id']==0) ? $item['image_male'] : $item['image_female']);
 		
 		$template->assign_block_vars ( 'items_row', array (
 			'DATE' 			=> (! empty ( $item ['item_date'] )) ? date($config['bbdkp_date_format'], $item ['item_date'] ) : '&nbsp;', 

@@ -741,7 +741,7 @@ function get_standings($dkpsys_id, $installed_games, $startd, $show_all)
 	       				r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix, 
 	       				l1.name AS member_class, c.class_id, 
 	       				c.colorcode, c.class_armor_type AS armor_type, c.imagename, 
-	       				l.member_gender_id, a.image_female_small, a.image_male_small, 
+	       				l.member_gender_id, a.image_female, a.image_male, 
 						c.class_min_level AS min_level,
 						c.class_max_level AS max_level', 
 	 
@@ -768,7 +768,7 @@ function get_standings($dkpsys_id, $installed_games, $startd, $show_all)
 	       			r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix, 
 	       			l1.name, c.class_id, 
 	       			c.colorcode, c.class_armor_type , c.imagename, 
-	       			l.member_gender_id, a.image_female_small, a.image_male_small, 
+	       			l.member_gender_id, a.image_female, a.image_male, 
 					c.class_min_level ,
 					c.class_max_level ', 
 	);
@@ -881,7 +881,7 @@ function get_standings($dkpsys_id, $installed_games, $startd, $show_all)
 	$member_count =0;
 	while ( $row = $db->sql_fetchrow ( $members_result ) )
 	{
-		$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']);
+		$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
 		
 		++$member_count;
 		$memberarray [$member_count] ['game_id'] = $row ['game_id'];

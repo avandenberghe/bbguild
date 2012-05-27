@@ -24,17 +24,17 @@ function install_wow()
 	// note class 10 does not exist
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'wow'" ); 
 	$sql_ary = array ();
-	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#999', 'imagename' => 'wow_Unknown_small');   
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_Warrior_small');   
-	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_Rogue_small');    
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_Hunter_small');    
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_Paladin_small'); 
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_Shaman_small'); 
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_Druid_small');  
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_Warlock_small'); 
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_Mage_small');   
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_Priest_small');  
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_Death_Knight_small'); 
+	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');   
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_warrior');   
+	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_rogue');    
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_hunter');    
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_paladin'); 
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_shaman'); 
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_druid');  
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_warlock'); 
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_mage');   
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_priest');  
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_death_knight'); 
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
 	unset ( $sql_ary ); 
 
@@ -49,19 +49,19 @@ function install_wow()
 	// races
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'wow'");
 	$sql_ary = array ();
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 0, 'race_faction_id' => 0, 'image_female_small' => ' ',  'image_male_small' => ' '  ); //Unknown
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 1, 'race_faction_id' => 1, 'image_female_small' => 'wow_human_female_small',  'image_male_small' => 'wow_human_male_small'  ); //Human
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 2, 'race_faction_id' => 2 , 'image_female_small' => 'wow_orc_female_small',  'image_male_small' => 'wow_orc_male_small' ); //Orc
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 3, 'race_faction_id' => 1 , 'image_female_small' => 'wow_dwarf_female_small',  'image_male_small' => 'wow_dwarf_male_small' ); //Dwarf
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 4, 'race_faction_id' => 1 , 'image_female_small' => 'wow_nightelf_female_small',  'image_male_small' => 'wow_nightelf_male_small' ) ; //Night Elf
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 5, 'race_faction_id' => 2 , 'image_female_small' => 'wow_scourge_female_small',  'image_male_small' => 'wow_scourge_male_small' ); //Undead
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 6, 'race_faction_id' => 2 , 'image_female_small' => 'wow_tauren_female_small',  'image_male_small' => 'wow_tauren_male_small' ); //Tauren
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 7, 'race_faction_id' => 1 , 'image_female_small' => 'wow_gnome_female_small',  'image_male_small' => 'wow_gnome_male_small' ); //Gnome
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 8, 'race_faction_id' => 2 , 'image_female_small' => 'wow_troll_female_small',  'image_male_small' => 'wow_troll_male_small' ); //Troll
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 9, 'race_faction_id' => 2 , 'image_female_small' => 'wow_goblin_female_small',  'image_male_small' => 'wow_goblin_male_small' ); //Goblin
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 10, 'race_faction_id' => 2 , 'image_female_small' => 'wow_bloodelf_female_small',  'image_male_small' => 'wow_bloodelf_male_small' ); //Blood Elf
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 11, 'race_faction_id' => 1 , 'image_female_small' => 'wow_draenei_female_small',  'image_male_small' => 'wow_draenei_male_small' ); //Draenei
-	$sql_ary [] = array ('game_id' => 'wow','race_id' => 22, 'race_faction_id' => 1 , 'image_female_small' => 'wow_worgen_female_small',  'image_male_small' => 'wow_worgen_male_small' ); //Worgen
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 0, 'race_faction_id' => 0, 'image_female' => ' ',  'image_male' => ' '  ); //Unknown
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 1, 'race_faction_id' => 1, 'image_female' => 'wow_human_female',  'image_male' => 'wow_human_male'  ); //Human
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 2, 'race_faction_id' => 2 , 'image_female' => 'wow_orc_female',  'image_male' => 'wow_orc_male' ); //Orc
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 3, 'race_faction_id' => 1 , 'image_female' => 'wow_dwarf_female',  'image_male' => 'wow_dwarf_male' ); //Dwarf
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 4, 'race_faction_id' => 1 , 'image_female' => 'wow_nightelf_female',  'image_male' => 'wow_nightelf_male' ) ; //Night Elf
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 5, 'race_faction_id' => 2 , 'image_female' => 'wow_scourge_female',  'image_male' => 'wow_scourge_male' ); //Undead
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 6, 'race_faction_id' => 2 , 'image_female' => 'wow_tauren_female',  'image_male' => 'wow_tauren_male' ); //Tauren
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 7, 'race_faction_id' => 1 , 'image_female' => 'wow_gnome_female',  'image_male' => 'wow_gnome_male' ); //Gnome
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 8, 'race_faction_id' => 2 , 'image_female' => 'wow_troll_female',  'image_male' => 'wow_troll_male' ); //Troll
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 9, 'race_faction_id' => 2 , 'image_female' => 'wow_goblin_female',  'image_male' => 'wow_goblin_male' ); //Goblin
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 10, 'race_faction_id' => 2 , 'image_female' => 'wow_bloodelf_female',  'image_male' => 'wow_bloodelf_male' ); //Blood Elf
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 11, 'race_faction_id' => 1 , 'image_female' => 'wow_draenei_female',  'image_male' => 'wow_draenei_male' ); //Draenei
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 22, 'race_faction_id' => 1 , 'image_female' => 'wow_worgen_female',  'image_male' => 'wow_worgen_male' ); //Worgen
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 	unset ( $sql_ary );
 	

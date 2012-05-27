@@ -184,7 +184,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				$sql_array = array(
 					'SELECT' => 'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as member_class, r.rank_id, 
 				    				r.rank_name, r.rank_prefix, r.rank_suffix,
-									 c.colorcode , c.imagename, m.member_gender_id, a.image_female_small, a.image_male_small' , 
+									 c.colorcode , c.imagename, m.member_gender_id, a.image_female, a.image_male' , 
 					'FROM' => array(
 						MEMBER_LIST_TABLE => 'm' , 
 						MEMBER_RANKS_TABLE => 'r' , 
@@ -221,7 +221,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				while ($row = $db->sql_fetchrow($members_result))
 				{
 					$phpbb_user_id = (int) $row['phpbb_user_id'];
-					$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male_small'] : $row['image_female_small']);
+					$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 					$member_count += 1;
 					$lines +=1;
 					$template->assign_block_vars('members_row', array(
@@ -616,7 +616,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					$S_ADD = false;
 					$sql_array = array(
 						'SELECT' => 'm.*, c.colorcode , c.imagename,  c1.name AS member_class, l1.name AS member_race, 
-										r.image_female_small, r.image_male_small, 
+										r.image_female, r.image_male, 
 										g.id as guild_id, g.name as guild_name, g.realm , g.region' , 
 						'FROM' => array(
 							MEMBER_LIST_TABLE => 'm' , 
@@ -643,7 +643,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					$db->sql_freeresult($result);
 					if ($row)
 					{
-						$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male_small'] : $row['image_female_small']);
+						$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 						$this->member = array(
 							'member_id' => $row['member_id'] , 
 							'member_name' => $row['member_name'] , 

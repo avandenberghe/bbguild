@@ -137,7 +137,7 @@ $sql_array = array(
 		c.class_armor_type AS armor_type ,
 		c.colorcode, 
 		c.imagename, 
-		a.member_gender_id, race.image_female_small, race.image_male_small ', 
+		a.member_gender_id, race.image_female, race.image_male ', 
  
     'FROM'      => array(
         MEMBER_LIST_TABLE 	=> 'a',
@@ -216,7 +216,7 @@ $member = array(
 	'member_rank_id'    => $row['member_rank_id'],
 	'member_rank'		=> $row['rank_name'],
 	'classimage'		=> $row['imagename'],
-	'raceimage'			=> (string) (($row['member_gender_id']==0) ? $row['image_male_small'] : $row['image_female_small']), 
+	'raceimage'			=> (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']), 
 	'colorcode'			=> $row['colorcode'], 
 );	
 
