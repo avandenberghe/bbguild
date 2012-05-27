@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.7
+ * @version 1.2.7 
  */
  
 define('UMIL_AUTO', true);
@@ -25,26 +25,27 @@ $error= array();
 // anything lower than php 5.1 not supported (we use simplexml xpath)
 if (version_compare(PHP_VERSION, '5.1.0') < 0)
 {
-	$error[] = 'You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.1.2 or higher before trying to install bbDKP. ';
+	$error[] = 'You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.1.2 or higher before trying to install bbDKP. <br />';
 }
 
-// check for mysql 4. use of subqueries only after 4.1
-$alldbms = get_available_dbms($dbms);
-foreach($alldbms as $thisdmbs)
+switch ($db->sql_layer)
 {
-	switch($thisdmbs['DRIVER'])
-	{
-		case 'mysql':
-			$dbversion = mysql_get_server_info($db->db_connect_id);
-			if (version_compare($dbversion, '4.1.0', '<'))
-			{
-				$error[] = "You are running an unsupported Mysql version ($dbversion) . Please upgrade to Mysql 4.1 or higher before trying to install bbDKP. ";
-			}
-			break;
-	}
+	// The ugly one!
+	case 'mysqli':
+	case 'mysql4':
+	case 'mysql':
+		$dbversion = mysql_get_server_info($db->db_connect_id);
+		if (version_compare($dbversion, '4.1.0', '<'))
+		{
+			$error[] = "You are running an unsupported Mysql version ($dbversion) . Please upgrade to Mysql 4.1 or higher before trying to install bbDKP. <br />";
+		}
+		break;
+	// Untested ! 
+	case 'firebird':
+	case 'sqlite':
+		$error[] = "You are running phpbb on an untested dbms version, please upgrade to a supported dbms (mysql, postgres, oracle, or mssql) to install the bbDKP Mod. <br />";
+		break;
 }
-unset ($alldbms);
-unset ($thisdmbs);
 
 if(count($error) > 0)
 {
@@ -105,12 +106,12 @@ $gameinstall['warhammer']=false;
 $gameinstall['swtor']=false;
 $gameinstall['lineage2']=false;
 
+
 $choice=false;
 if (isset($config['bbdkp_default_game'])) 
 {
 	$gameinstall[$config['bbdkp_default_game']] = $choice = true;
 }
-
 if (isset($config['bbdkp_games_aion']))
 {
 	$gameinstall['aion'] = $config['bbdkp_games_aion'];
@@ -914,16 +915,17 @@ $versions = array(
             
         'custom' => array( 
             'acplink', 
-            'tableupdates', 
             'gameinstall', 
-          	'bbdkp_caches'
        ), 
     ),
     
     '1.2.7' => array(
-
-    // nothing to see here
-
+		// change the class / race table
+       'custom' => array( 
+            'tableupdates', 
+          	'bbdkp_caches'
+       ), 
+ 		
     
 
     ), 
@@ -1083,6 +1085,7 @@ function gameinstall($action, $version)
  */
 function tableupdates($action, $version)
 {
+
 	global $user, $umil, $config, $db, $table_prefix; 
 	switch ($action)
 	{
@@ -1102,7 +1105,21 @@ function tableupdates($action, $version)
 					case '1.2.6':
 						break;
 					case '1.2.7':
-						break;
+						// if we update to v127 then rename the image column, drop the _small
+						// before v127 only mysql was supported so we only need to check this for mssql when upgrading from 126. 
+						switch ($db->sql_layer)
+						{
+							case 'mysqli':
+							case 'mysql4':
+							case 'mysql':
+								$sql = "ALTER TABLE " . $table_prefix . "bbdkp_races CHANGE image_female_small image_female VARCHAR(255) ";
+								$db->sql_query($sql);
+								$sql = "ALTER TABLE " . $table_prefix . "bbdkp_races CHANGE image_male_small image_male VARCHAR(255) ";
+								$db->sql_query($sql);
+								return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
+								break;
+						}
+												
 			}
 			break;
 		case 'uninstall' :
@@ -1114,8 +1131,10 @@ function tableupdates($action, $version)
 					break;					
 			}
 			break;
-	}
 	return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
+	
+	}
+	
 	
 }
 
