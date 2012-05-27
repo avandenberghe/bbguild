@@ -922,7 +922,8 @@ $versions = array(
     '1.2.7' => array(
 		// change the class / race table
        'custom' => array( 
-            'tableupdates', 
+            'tableupdates',
+    		'gameinstall',  
           	'bbdkp_caches'
        ), 
  		
@@ -970,108 +971,154 @@ function gameinstall($action, $version)
 	switch ($action)
 	{
 		case 'install' :
-		 case 'update' :
+		case 'update' :
 			switch ($version)
 			{
 				case '1.2.6':
-				if(request_var('aion', 0) == 1)
-				{
-					install_aion($action, $version); 
-					$umil->config_update('bbdkp_games_aion', 1, true);
-					$installed_games[] = 'aion';
-				}
-
-				if(request_var('daoc', 0) == 1)
-				{
-					install_daoc($action, $version);
-					$umil->config_update('bbdkp_games_daoc', 1, true);
-					$installed_games[] = 'daoc';
-				}
-				
-				if(request_var('eq', 0) == 1)
-				{
-					install_eq($action, $version); 
-					$umil->config_update('bbdkp_games_eq', 1, true);
-					$installed_games[] = 'eq';
-				}
-				
-				if(request_var('eq2', 0) == 1)
-				{
-					install_eq2($action, $version); 
-					$umil->config_update('bbdkp_games_eq2', 1, true);
-					$installed_games[] = 'eq2';
-				}
-
-				if(request_var('FFXI', 0) == 1)
-				{
-					install_ffxi($action, $version); 
-					$umil->config_update('bbdkp_games_FFXI', 1, true);
-					$installed_games[] = 'FFXI';
-				}
-				
-				if(request_var('lotro', 0) == 1)
-				{
-					install_lotro($action, $version); 
-					$umil->config_update('bbdkp_games_lotro', 1, true);
-					$installed_games[] = 'lotro';					
-				}
-
-				if(request_var('vanguard', 0) == 1)
-				{
-					install_vanguard($action, $version); 
-					$umil->config_update('bbdkp_games_vanguard', 1, true);
-					$installed_games[] = 'vanguard';
-				}
-				
-				if(request_var('warhammer', 0) == 1)
-				{
-					install_warhammer($action, $version); 
-					$umil->config_update('bbdkp_games_warhammer', 1, true);
-					$installed_games[] = 'vanguard';
-				}
-				
-				if(request_var('wow', 0) == 1)
-				{
-					install_wow($action, $version); 
-					$umil->config_update('bbdkp_games_wow', 1, true);
-					$installed_games[] = 'wow';
-				}
-				
-				if(request_var('rift', 0) == 1)
-				{
-					// new game
-					install_rift($action, $version); 
-					$umil->config_update('bbdkp_games_rift', 1, true);
-					$installed_games[] = 'rift';
-				}
-				
-				if(request_var('swtor', 0) == 1)
-				{
-					// New game
-					install_swtor($action, $version); 
-					$umil->config_update('bbdkp_games_swtor', 1, true);
-					$installed_games[] = 'swtor';
-				}
-				
-				if(request_var('lineage2', 0) == 1)
-		        {
-	          			install_lineage2($action, $version); 
-	         			$umil->config_update('bbdkp_games_lineage2', 1, true);
-	         			$installed_games[] = 'lineage2';          			
-	       		}
-	       		
-                foreach($installed_games as $gameid)
-                {
-                	// update the guildbank with the first installed gameid
-					$sql = "UPDATE " . $table_prefix . 'bbdkp_memberlist' . " set game_id = '" . $gameid . "' where member_rank_id = '90' ";
-					$db->sql_query($sql);
-					// now break we dont need to run this more than once.
+					if(request_var('aion', 0) == 1)
+					{
+						install_aion($action, $version); 
+						$umil->config_update('bbdkp_games_aion', 1, true);
+						$installed_games[] = 'aion';
+					}
+	
+					if(request_var('daoc', 0) == 1)
+					{
+						install_daoc($action, $version);
+						$umil->config_update('bbdkp_games_daoc', 1, true);
+						$installed_games[] = 'daoc';
+					}
+					
+					if(request_var('eq', 0) == 1)
+					{
+						install_eq($action, $version); 
+						$umil->config_update('bbdkp_games_eq', 1, true);
+						$installed_games[] = 'eq';
+					}
+					
+					if(request_var('eq2', 0) == 1)
+					{
+						install_eq2($action, $version); 
+						$umil->config_update('bbdkp_games_eq2', 1, true);
+						$installed_games[] = 'eq2';
+					}
+	
+					if(request_var('FFXI', 0) == 1)
+					{
+						install_ffxi($action, $version); 
+						$umil->config_update('bbdkp_games_FFXI', 1, true);
+						$installed_games[] = 'FFXI';
+					}
+					
+					if(request_var('lotro', 0) == 1)
+					{
+						install_lotro($action, $version); 
+						$umil->config_update('bbdkp_games_lotro', 1, true);
+						$installed_games[] = 'lotro';					
+					}
+	
+					if(request_var('vanguard', 0) == 1)
+					{
+						install_vanguard($action, $version); 
+						$umil->config_update('bbdkp_games_vanguard', 1, true);
+						$installed_games[] = 'vanguard';
+					}
+					
+					if(request_var('warhammer', 0) == 1)
+					{
+						install_warhammer($action, $version); 
+						$umil->config_update('bbdkp_games_warhammer', 1, true);
+						$installed_games[] = 'vanguard';
+					}
+					
+					if(request_var('wow', 0) == 1)
+					{
+						install_wow($action, $version); 
+						$umil->config_update('bbdkp_games_wow', 1, true);
+						$installed_games[] = 'wow';
+					}
+					
+					if(request_var('rift', 0) == 1)
+					{
+						// new game
+						install_rift($action, $version); 
+						$umil->config_update('bbdkp_games_rift', 1, true);
+						$installed_games[] = 'rift';
+					}
+					
+					if(request_var('swtor', 0) == 1)
+					{
+						// New game
+						install_swtor($action, $version); 
+						$umil->config_update('bbdkp_games_swtor', 1, true);
+						$installed_games[] = 'swtor';
+					}
+					
+					if(request_var('lineage2', 0) == 1)
+			        {
+		          			install_lineage2($action, $version); 
+		         			$umil->config_update('bbdkp_games_lineage2', 1, true);
+		         			$installed_games[] = 'lineage2';          			
+		       		}
+		       		
+	                foreach($installed_games as $gameid)
+	                {
+	                	// update the guildbank with the first installed gameid
+						$sql = "UPDATE " . $table_prefix . 'bbdkp_memberlist' . " set game_id = '" . $gameid . "' where member_rank_id = '90' ";
+						$db->sql_query($sql);
+						// now break we dont need to run this more than once.
+						break;
+					}
+	
+				    // report what we did to umil
+					return array('command' => sprintf($user->lang['UMIL_GAME126'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
-				}
+				case '1.2.7':
+					
+					// truncating and reinserting changed game tables
+					if($config['bbdkp_games_lineage2'] == 1)
+					{
+						install_lineage2($action, $version); 
+						$installed_games[] = 'lineage2';
+					}
+					
+					if($config['bbdkp_games_lotro'] == 1) 
+					{
+						install_lotro($action, $version); 
+						$installed_games[] = 'lotro';
+					}
+					
+					if($config['bbdkp_games_rift'] == 1)  
+					{
+						install_rift($action, $version); 
+						$installed_games[] = 'rift';
+					}
+					
+					if($config['bbdkp_games_swtor'] == 1)
+					{
+						install_swtor($action, $version); 
+						$installed_games[] = 'swtor';
+					}
+					
+					if($config['bbdkp_games_vanguard'] == 1)
+					{
+						install_vanguard($action, $version); 
+						$installed_games[] = 'vanguard';
+					}
 
-			    // report what we did to umil
-				return array('command' => sprintf($user->lang['UMIL_GAME126'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
-				break;
+					if($config['bbdkp_games_warhammer'] == 1)
+					{
+						install_warhammer($action, $version); 
+						$installed_games[] = 'warhammer';
+					}					
+								
+					if($config['bbdkp_games_wow'] == 1) 
+					{
+						install_wow($action, $version); 
+						$installed_games[] = 'wow';
+					}
+					return array('command' => sprintf($user->lang['UMIL_GAME127'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
+					break;
 			}
 			break;
 		case 'uninstall' :
@@ -1093,32 +1140,36 @@ function tableupdates($action, $version)
 		case 'install' :
 			switch ($version)
 			{
-					case '1.2.6':
-						break;	
-					case '1.2.7':
-						break;										
+				case '1.2.6':
+					break;	
+				case '1.2.7':
+					break;										
 			}
 			break;
 		case 'update':
 			switch ($version)
 			{
-					case '1.2.6':
-						break;
-					case '1.2.7':
-						// if we update to v127 then rename the image column, drop the _small
-						// before v127 only mysql was supported so we only need to check this for mssql when upgrading from 126. 
-						switch ($db->sql_layer)
-						{
-							case 'mysqli':
-							case 'mysql4':
-							case 'mysql':
-								$sql = "ALTER TABLE " . $table_prefix . "bbdkp_races CHANGE image_female_small image_female VARCHAR(255) ";
-								$db->sql_query($sql);
-								$sql = "ALTER TABLE " . $table_prefix . "bbdkp_races CHANGE image_male_small image_male VARCHAR(255) ";
-								$db->sql_query($sql);
-								return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
-								break;
-						}
+				case '1.2.6':
+					break;
+				case '1.2.7':
+					// if we update to v127 then rename the image column, drop the _small
+					// before v127 only mysql was supported so we only need to check this for mssql when upgrading from 126. 
+					switch ($db->sql_layer)
+					{
+						case 'mysqli':
+						case 'mysql4':
+						case 'mysql':
+							$sql = "ALTER TABLE " . $table_prefix . "bbdkp_races CHANGE image_female_small image_female VARCHAR(255) ";
+							$db->sql_query($sql);
+							$sql = "ALTER TABLE " . $table_prefix . "bbdkp_races CHANGE image_male_small image_male VARCHAR(255) ";
+							$db->sql_query($sql);
+							$sql = 'UPDATE ' . $table_prefix . "bbdkp_classes SET imagename = REPLACE( imagename, '_small', '') ";
+							$db->sql_query($sql);
+							$sql = 'UPDATE ' . $table_prefix . "bbdkp_classes SET imagename = LOWER(imagename) "; 
+							$db->sql_query($sql);
+							return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
+							break;
+					}
 												
 			}
 			break;
@@ -1131,9 +1182,8 @@ function tableupdates($action, $version)
 					break;					
 			}
 			break;
-	return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
-	
 	}
+	return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
 	
 	
 }
