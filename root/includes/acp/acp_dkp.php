@@ -297,6 +297,7 @@ class acp_dkp extends bbDKP_Admin
 				{
 					$bbdkp_started = '';
 				}
+				
 				// Get current and latest version
 				$errstr = '';
 				$errno = 0;
@@ -337,7 +338,7 @@ class acp_dkp extends bbDKP_Admin
 			//find out if apply is installed and get version number if it is
 			$apply_installed = isset($config['bbdkp_apply_version']) ? $config['bbdkp_apply_version'] : 0;
 			if ($apply_installed != 0)
-				{
+			{
 				$template->assign_vars(array(
 				'S_APPLY_INSTALLED' => true,
 				));
@@ -366,30 +367,31 @@ class acp_dkp extends bbDKP_Admin
 						// your version is the same or even newer than the official version
 						$template->assign_vars(array(
 							'S_APPLY_UP_TO_DATE' => true , 
-							'APPLYVERSION' => $config['bbdkp_apply_version']));
+							'APPLYVERSION' => $config['bbdkp_apply_version'],
+							'APPLYLATEST' => $latest_version ));
 					}
 					else
 					{
 						// you have an old version
 						$template->assign_vars(array(
 							'S_APPLY_UP_TO_DATE' => false , 
-							'APPLYVERSION' =>$installed_version , 
+							'APPLYVERSION' =>	$installed_version , 
 							'APPLYUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
 					}
 				}		
 
-				}
+			}
 			else
-				{
+			{
 				$template->assign_vars(array(
 				'S_APPLY_INSTALLED' => false,
 				));
-				}
+			}
 
 			//find out if armory updater is installed and get version number if it is
 			$armoryupdater_installed = isset($config['bbdkp_plugin_armoryupdater']) ? $config['bbdkp_plugin_armoryupdater'] : 0;
 			if ($armoryupdater_installed != 0)
-				{
+			{
 				$template->assign_vars(array(
 				'S_ARMORY_UPDATER_INSTALLED' => true,
 				));
@@ -418,7 +420,8 @@ class acp_dkp extends bbDKP_Admin
 						// your version is the same or even newer than the official version
 						$template->assign_vars(array(
 							'S_ARMORYUPDATER_UP_TO_DATE' => true , 
-							'ARMORYUPDATERVERSION' => $config['bbdkp_plugin_armoryupdater']));
+							'ARMORYUPDATERVERSION' => $config['bbdkp_plugin_armoryupdater'], 
+							'ARMORYUPDATERLATEST' => $latest_version));
 					}
 					else
 					{
@@ -430,9 +433,9 @@ class acp_dkp extends bbDKP_Admin
 					}
 				}		
 
-				}
+			}
 			else
-				{
+			{
 				$template->assign_vars(array(
 				'S_ARMORY_UPDATER_INSTALLED' => false,
 				));
@@ -441,7 +444,7 @@ class acp_dkp extends bbDKP_Admin
 			//find out if bbtips is installed and get version number if it is
 			$bbtips_installed = isset($config['bbdkp_plugin_bbtips_version']) ? $config['bbdkp_plugin_bbtips_version'] : 0;
 			if ($bbtips_installed != 0)
-				{
+			{
 				$template->assign_vars(array(
 				'S_BBTIPS_INSTALLED' => true,
 				));
@@ -470,7 +473,8 @@ class acp_dkp extends bbDKP_Admin
 						// your version is the same or even newer than the official version
 						$template->assign_vars(array(
 							'S_BBTIPS_UP_TO_DATE' => true , 
-							'BBTIPSVERSION' => $config['bbdkp_plugin_bbtips_version']));
+							'BBTIPSVERSION' => $config['bbdkp_plugin_bbtips_version'], 
+							'BBTIPSLATEST' => $latest_version ));
 					}
 					else
 					{
@@ -482,13 +486,13 @@ class acp_dkp extends bbDKP_Admin
 					}
 				}		
 				
-				}
+			}
 			else
-				{
+			{
 				$template->assign_vars(array(
 				'S_BBTIPS_INSTALLED' => false,
 				));
-				}
+			}
 
 			//find out if bossprogress is installed and get version number if it is
 			$bossprogress_installed = isset($config['bbdkp_bp_version']) ? $config['bbdkp_bp_version'] : 0;
@@ -509,7 +513,8 @@ class acp_dkp extends bbDKP_Admin
 					$template->assign_vars(array(
 						'S_BOSSPROGRESS_UP_TO_DATE' => false , 
 						'BOSSPROGRESSVERSION' => $installed_version , 
-						'BOSSPROGRESSUPDATEINSTR' => $user->lang['PLUGIN_VERSION_NOTONLINE']));
+						'BOSSPROGRESSUPDATEINSTR' => $user->lang['PLUGIN_VERSION_NOTONLINE'], 
+						));
 				}
 				else
 				{
@@ -522,7 +527,8 @@ class acp_dkp extends bbDKP_Admin
 						// your version is the same or even newer than the official version
 						$template->assign_vars(array(
 							'S_BOSSPROGRESS_UP_TO_DATE' => true , 
-							'BOSSPROGRESSVERSION' => $config['bbdkp_bp_version']));
+							'BOSSPROGRESSVERSION' => $config['bbdkp_bp_version'], 
+							'BPLATEST' => $latest_version ));
 					}
 					else
 					{
@@ -534,20 +540,20 @@ class acp_dkp extends bbDKP_Admin
 					}
 				}		
 
-				}
+			}
 			else
-				{
+			{
 				$template->assign_vars(array(
 				'S_BOSSPROGRESS_INSTALLED' => false,
 				));
-				}
+			}
 
 			//find out if raidplanner is installed and get version number if it is
 			$raidplanner_installed = isset($config['bbdkp_raidplanner']) ? $config['bbdkp_raidplanner'] : 0;
 			if ($raidplanner_installed != 0)
-				{
+			{
 				$template->assign_vars(array(
-				'S_RAID_PLANNER_INSTALLED' => true,
+					'S_RAID_PLANNER_INSTALLED' => true,
 				));
 
 				// Get current and latest version of raidplanner
@@ -574,7 +580,8 @@ class acp_dkp extends bbDKP_Admin
 						// your version is the same or even newer than the official version
 						$template->assign_vars(array(
 							'S_RAIDPLANNER_UP_TO_DATE' => true , 
-							'RAIDPLANNERVERSION' => $config['bbdkp_raidplanner']));
+							'RAIDPLANNERVERSION' => $config['bbdkp_raidplanner'], 
+							'RAIDPLANNERLATEST' => $latest_version  ));
 					}
 					else
 					{
@@ -586,18 +593,18 @@ class acp_dkp extends bbDKP_Admin
 					}
 				}		
 
-				}
+			}
 			else
-				{
+			{
 				$template->assign_vars(array(
 				'S_RAID_PLANNER_INSTALLED' => false,
 				));
-				}
+			}
 
 			//find out if raidtracker is installed and get version number if it is
 			$raidtracker_installed = isset($config['bbdkp_raidtracker']) ? $config['bbdkp_raidtracker'] : 0;
 			if ($raidtracker_installed != 0)
-				{
+			{
 				$template->assign_vars(array(
 				'S_RAID_TRACKER_INSTALLED' => true,
 				));
@@ -626,7 +633,8 @@ class acp_dkp extends bbDKP_Admin
 						// your version is the same or even newer than the official version
 						$template->assign_vars(array(
 							'S_RAIDTRACKER_UP_TO_DATE' => true , 
-							'RAIDTRACKVERSION' => $config['bbdkp_raidtracker']));
+							'RAIDTRACKVERSION' => $config['bbdkp_raidtracker'], 
+							'RAIDTRACKLATEST' => $latest_version  ));
 					}
 					else
 					{
@@ -638,13 +646,13 @@ class acp_dkp extends bbDKP_Admin
 					}
 				}		
 				
-				}
+			}
 			else
-				{
+			{
 				$template->assign_vars(array(
 					'S_RAID_TRACKER_INSTALLED' => false,
 				));
-				}
+			}
 				
 			$plugins = array(
 				0 => isset($config['bbdkp_plugin_bbtips_version']) ? $config['bbdkp_plugin_bbtips_version'] : false, 
@@ -658,54 +666,54 @@ class acp_dkp extends bbDKP_Admin
 			$pluginsinstalled = count(array_filter($plugins));	
 			$pluginsavailable = 6 - $pluginsinstalled;
 			if ($pluginsinstalled > 0)
-				{
+			{
 				$template->assign_vars(array(
 				'S_ANY_PLUGINS_INSTALLED' => false,
 				));
-				}
+			}
 			else
-				{
+			{
 				$template->assign_vars(array(
 				'S_ANY_PLUGINS_INSTALLED' => true,
 				'PLUGINLINK' => $user->lang['PLUGINURL']
 				));
-				}			
+			}			
 
 			//find if you have all 6 bbdkp mods installed and if now provide link to get more
 			if ($pluginsinstalled < 6 && $pluginsinstalled > 0)
-				{
+			{
 				$template->assign_vars(array(
 				'S_ANY_PLUGINS_AVAIL' => true,
 				'PLUGINLINK' => $user->lang['PLUGINURL'],	
 				'NUMBOFPLUGINS' => $pluginsavailable
 				));
-				}
+			}
 			else
-				{
+			{
 				$template->assign_vars(array(
 				'S_ANY_PLUGINS_AVAIL' => false,
 				));
-				}			
+			}			
 
 			//end where to get bbdkp plugins if none are installed				
 
-				$template->assign_vars(array(
-					'S_LOGS' => $s_logs , 
-					'GLYPH' => "$phpbb_admin_path/images/glyphs/view.gif" , 
-					'NUMBER_OF_MEMBERS' => $total_members , 
-					'NUMBER_OF_RAIDS' => $total_raids , 
-					'NUMBER_OF_ITEMS' => $total_items , 
-					'NUMBER_OF_MEMBERDKP' => $total_dkpcount , 
-					'NUMBER_OF_DKPSYS' => $total_poolcount , 
-					'NUMBER_OF_GUILDS' => $total_guildcount , 
-					'NUMBER_OF_EVENTS' => $total_eventcount , 
-					'NUMBER_OF_ADJUSTMENTS' => $total_adjustmentcount , 
-					'RAIDS_PER_DAY' => $raids_per_day , 
-					'ITEMS_PER_DAY' => $items_per_day , 
-					'BBDKP_STARTED' => $bbdkp_started));
-				$this->page_title = 'ACP_DKP_MAINPAGE';
-				$this->tpl_name = 'dkp/acp_mainpage';
-				break;
+			$template->assign_vars(array(
+				'S_LOGS' => $s_logs , 
+				'GLYPH' => "$phpbb_admin_path/images/glyphs/view.gif" , 
+				'NUMBER_OF_MEMBERS' => $total_members , 
+				'NUMBER_OF_RAIDS' => $total_raids , 
+				'NUMBER_OF_ITEMS' => $total_items , 
+				'NUMBER_OF_MEMBERDKP' => $total_dkpcount , 
+				'NUMBER_OF_DKPSYS' => $total_poolcount , 
+				'NUMBER_OF_GUILDS' => $total_guildcount , 
+				'NUMBER_OF_EVENTS' => $total_eventcount , 
+				'NUMBER_OF_ADJUSTMENTS' => $total_adjustmentcount , 
+				'RAIDS_PER_DAY' => $raids_per_day , 
+				'ITEMS_PER_DAY' => $items_per_day , 
+				'BBDKP_STARTED' => $bbdkp_started));
+			$this->page_title = 'ACP_DKP_MAINPAGE';
+			$this->tpl_name = 'dkp/acp_mainpage';
+			break;
 				
 			/**************
 			 * DKP CONFIG
