@@ -94,17 +94,17 @@
    </dd>
  </dl>
  
+	<!-- IF S_ADD -->
     <dl>
     <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
-    
     <dd>
 		{L_DAY}: <select id="member_joindate_d" name="member_joindate_d">{S_JOINDATE_DAY_OPTIONS}</select>
 		{L_MONTH}: <select name="member_joindate_mo">{S_JOINDATE_MONTH_OPTIONS}</select> 
 		{L_YEAR}: <select name="member_joindate_y">{S_JOINDATE_YEAR_OPTIONS}</select>
 	</dd>
-    
    </dl> 
-  
+	<!-- ENDIF -->   
+
     <dl>
     <dt><label for="member_comment">{L_COMMENT}:</label></dt>
 	<dd><textarea name="member_comment" type="text" rows="5" cols="10" style="width: 80%" class="input">{MEMBER_COMMENT}</textarea></dd>

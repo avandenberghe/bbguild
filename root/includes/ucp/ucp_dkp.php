@@ -19,12 +19,10 @@ if (!defined('IN_PHPBB'))
 class ucp_dkp
 {
 	var $u_action;
-	public $link;
 					
 	function main($id, $mode)
 	{
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		$s_hidden_fields = '';
 		
 		// Attach the language files
 		$user->add_lang(array('mods/dkp_admin', 'mods/dkp_common', 'acp/common'));
@@ -679,7 +677,7 @@ class ucp_dkp
 	 */
 	private function update_member($member_id)
 	{
-		global $db, $config, $user, $phpbb_root_path, $phpEx;
+		global $db, $user, $phpbb_root_path, $phpEx;
 		
 		// get member name
 		$member_name = utf8_normalize_nfc(request_var('member_name', '',true));
@@ -735,7 +733,7 @@ class ucp_dkp
 		$class_id = request_var('member_class_id', 0); 
 		$gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
 		$member_comment = utf8_normalize_nfc(request_var('member_comment', '', true)); 
-		$joindate	= mktime(0,0,0,request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0)); 
+		//$joindate	= mktime(0,0,0,request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0)); 
 		if (! class_exists ( 'acp_dkp_mm' ))
 		{
 			include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
