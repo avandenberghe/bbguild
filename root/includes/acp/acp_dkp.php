@@ -333,9 +333,9 @@ class acp_dkp extends bbDKP_Admin
 					}
 				}
 
-//begin bbdkp plugin look up and version find 
+			//begin bbdkp plugin look up and version find 
 			//find out if apply is installed and get version number if it is
-			$apply_installed = $config['bbdkp_apply_version'];
+			$apply_installed = isset($config['bbdkp_apply_version']) ? $config['bbdkp_apply_version'] : 0;
 			if ($apply_installed != 0)
 				{
 				$template->assign_vars(array(
@@ -387,7 +387,7 @@ class acp_dkp extends bbDKP_Admin
 				}
 
 			//find out if armory updater is installed and get version number if it is
-			$armoryupdater_installed = $config['bbdkp_plugin_armoryupdater'];
+			$armoryupdater_installed = isset($config['bbdkp_plugin_armoryupdater']) ? $config['bbdkp_plugin_armoryupdater'] : 0;
 			if ($armoryupdater_installed != 0)
 				{
 				$template->assign_vars(array(
@@ -439,7 +439,7 @@ class acp_dkp extends bbDKP_Admin
 				}
 
 			//find out if bbtips is installed and get version number if it is
-			$bbtips_installed = $config['bbdkp_plugin_bbtips_version'];
+			$bbtips_installed = isset($config['bbdkp_plugin_bbtips_version']) ? $config['bbdkp_plugin_bbtips_version'] : 0;
 			if ($bbtips_installed != 0)
 				{
 				$template->assign_vars(array(
@@ -491,7 +491,7 @@ class acp_dkp extends bbDKP_Admin
 				}
 
 			//find out if bossprogress is installed and get version number if it is
-			$bossprogress_installed = $config['bbdkp_bp_version'];
+			$bossprogress_installed = isset($config['bbdkp_bp_version']) ? $config['bbdkp_bp_version'] : 0;
 			if ($bossprogress_installed != 0)
 				{
 				$template->assign_vars(array(
@@ -543,7 +543,7 @@ class acp_dkp extends bbDKP_Admin
 				}
 
 			//find out if raidplanner is installed and get version number if it is
-			$raidplanner_installed = $config['bbdkp_raidplanner'];
+			$raidplanner_installed = isset($config['bbdkp_raidplanner']) ? $config['bbdkp_raidplanner'] : 0;
 			if ($raidplanner_installed != 0)
 				{
 				$template->assign_vars(array(
@@ -595,7 +595,7 @@ class acp_dkp extends bbDKP_Admin
 				}
 
 			//find out if raidtracker is installed and get version number if it is
-			$raidtracker_installed = $config['bbdkp_raidtracker'];
+			$raidtracker_installed = isset($config['bbdkp_raidtracker']) ? $config['bbdkp_raidtracker'] : 0;
 			if ($raidtracker_installed != 0)
 				{
 				$template->assign_vars(array(
@@ -642,21 +642,18 @@ class acp_dkp extends bbDKP_Admin
 			else
 				{
 				$template->assign_vars(array(
-				'S_RAID_TRACKER_INSTALLED' => false,
+					'S_RAID_TRACKER_INSTALLED' => false,
 				));
 				}
 				
-//end bbdkp plugin lookup and version find			
-
-//begin where to get bbdkp plugins if none are installed or not all are installed
-
-				$plugins = array(
-				0 => $config['bbdkp_plugin_bbtips_version'] , 
-				1 => $config['bbdkp_raidtracker'] , 
-				2 => $config['bbdkp_bp_version'] , 
-				3 => $config['bbdkp_apply_version'] , 
-				4 => $config['bbdkp_raidplanner'],
-				5 => $config['bbdkp_plugin_armoryupdater']);				
+			$plugins = array(
+				0 => isset($config['bbdkp_plugin_bbtips_version']) ? $config['bbdkp_plugin_bbtips_version'] : false, 
+				1 => isset($config['bbdkp_raidtracker']) ? $config['bbdkp_raidtracker'] : false, 
+				2 => isset($config['bbdkp_bp_version']) ? $config['bbdkp_bp_version'] : false, 
+				3 => isset($config['bbdkp_apply_version']) ? $config['bbdkp_apply_version'] : false, 
+				4 => isset($config['bbdkp_raidplanner']) ? $config['bbdkp_raidplanner'] : false ,
+				5 => isset($config['bbdkp_plugin_armoryupdater']) ? $config['bbdkp_plugin_armoryupdater'] : false
+			);
 				
 			$pluginsinstalled = count(array_filter($plugins));	
 			$pluginsavailable = 6 - $pluginsinstalled;
@@ -690,7 +687,7 @@ class acp_dkp extends bbDKP_Admin
 				));
 				}			
 
-//end where to get bbdkp plugins if none are installed				
+			//end where to get bbdkp plugins if none are installed				
 
 				$template->assign_vars(array(
 					'S_LOGS' => $s_logs , 
