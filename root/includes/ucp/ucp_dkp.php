@@ -79,7 +79,7 @@ class ucp_dkp
 				$sql = 'SELECT count(*) AS mcount FROM ' . MEMBER_LIST_TABLE .' WHERE member_rank_id < 90  ';
 				$result = $db->sql_query($sql, 0);
 				$mcount = (int) $db->sql_fetchfield('mcount');
-				if ( $mcount == 0)
+				if ($mcount == 0)
 				{
 					$show = false;
 				}
@@ -190,7 +190,7 @@ class ucp_dkp
 	 */
 	private function fill_addmember($member_id)
 	{
-		global $db, $auth, $user, $template, $config;
+		global $db, $auth, $user, $template, $config, $phpbb_root_path;
 		
 		// Attach the language file
 		$user->add_lang('mods/dkp_common');
@@ -219,15 +219,40 @@ class ucp_dkp
 			 	'MAX_CHARS_EXCEEDED' => sprintf($user->lang['MAX_CHARS_EXCEEDED'],$config['bbdkp_maxchars']),
 				));
 			}
-			// add mode
+			// set add mode
 			$S_ADD = true;
 		}
 		else
 		{
+			//update mode
 			$S_ADD = false;
 			$sql = 'SELECT *
 					FROM ' . MEMBER_LIST_TABLE . '	
 					WHERE member_id = ' . (int) $member_id;
+			
+			$sql_array = array(
+		    'SELECT'    => 	'm.*, u.username, 
+		    				 g.name as guildname,
+		    				 a.image_female, a.image_male, 
+		    				 l.name as member_class , 
+		    				 c.imagename, c.colorcode  ', 
+		    'FROM'      => array(
+		        MEMBER_LIST_TABLE 	=> 'm',
+		        CLASS_TABLE  		=> 'c',
+		        RACE_TABLE  		=> 'a',
+		        BB_LANGUAGE			=> 'l', 
+		        GUILD_TABLE  		=> 'g',
+		        USERS_TABLE 		=> 'u', 
+		    	),
+		 
+		    'WHERE'     =>  "  l.game_id = c.game_id and l.attribute_id = c.class_id 
+		    				  AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+							  AND (m.member_guild_id = g.id) 
+							  AND (m.member_class_id = c.class_id and m.game_id = c.game_id)
+							  AND m.member_race_id =  a.race_id  and m.game_id = a.game_id
+							  AND u.user_id = m.phpbb_user_id and m.member_id = " .  (int) $member_id, 
+		    );
+		    $sql = $db->sql_build_query('SELECT', $sql_array);
 			$result = $db->sql_query($sql);
 			$member = array();
 			$member = $db->sql_fetchrow($result);
@@ -294,7 +319,7 @@ class ucp_dkp
 			AND guild_id =	'. (int) $member['member_guild_id'] . ' ORDER BY rank_id';
 			$result = $db->sql_query($sql);
 			
-			while ( $row = $db->sql_fetchrow($result) )
+			while ($row = $db->sql_fetchrow($result) )
 			{
 				$template->assign_block_vars('rank_row', array(
 							'VALUE'	   => $row['rank_id'],
@@ -478,11 +503,24 @@ class ucp_dkp
 			$selected = ($i == $yr ) ? ' selected="selected"' : '';
 			$s_memberjoin_year_options .= "<option value=\"$i\"$selected>$i</option>";
 		}
-              
+		
+		// check if user can add character
+		$S_UPDATE = true;
+		if(!$auth->acl_get('u_dkp_charupdate') )
+		{
+			$S_UPDATE = false;
+		}
+		
+		$S_DELETE = true;
+		if(!$auth->acl_get('u_dkp_chardelete') )
+		{
+			$S_DELETE = false;
+		}
               
 		$form_key = 'characteradd';
 		add_form_key($form_key);
-
+		
+		$race_image = $member_id > 0 ? (($member['member_gender_id'] == 0) ? $member['image_male'] : $member['image_female']) : '';
 		$template->assign_vars(array(
 			'STATUS'				=> $member_id > 0 ? (($member['member_status'] == 1) ? 'Checked ' : '' ): 'Checked ',
 			'MEMBER_NAME'			=> $member_id > 0 ? $member['member_name'] : '',
@@ -496,20 +534,24 @@ class ucp_dkp
 			'MEMBER_URL'			=>  $member_id > 0 ? $member['member_armory_url'] : '',
 			'MEMBER_PORTRAIT'		=>  $member_id > 0 ? $member['member_portrait_url'] : '',
 
-			//'S_MEMBER_PORTRAIT_EXISTS'  => (strlen( $this->member['member_portrait_url'] ) > 1) ? true : false,	
-			'S_CAN_GENERATE_ARMORY'		=>  $member_id >0 ? ($member['game_id'] == 'wow' ? true : false) : false,
+			'S_MEMBER_PORTRAIT_EXISTS'  => $member_id > 0 ? ((strlen( $member['member_portrait_url'] ) > 1) ? true : false) : false,	
+			'S_CAN_GENERATE_ARMORY'		=> $member_id > 0 ? ($member['game_id'] == 'wow' ? true : false) : false,
 		
-			//'COLORCODE' 			=> ($this->member['colorcode'] == '') ? '#123456' : $this->member['colorcode'],
-               	//'CLASS_IMAGE' 			=> $this->member['class_image'],  
-			//'S_CLASS_IMAGE_EXISTS'  => (strlen( $this->member['class_image'] ) > 1) ? true : false, 
-               	//'RACE_IMAGE' 			=> $this->member['race_image'],  
-			//'S_RACE_IMAGE_EXISTS' 	=> (strlen( $this->member['race_image'] ) > 1) ? true : false, 
+			'COLORCODE' 			=> $member_id > 0 ? (($member['colorcode'] == '') ? '#123456' : $member['colorcode']) : '#F123456',
+
+			'CLASS_IMAGE' 			=> $member_id > 0 ? (strlen($member['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $member['imagename'] . ".png" : '' : '' , 
+			'S_CLASS_IMAGE_EXISTS' 	=> $member_id > 0 ? (strlen($member['imagename']) > 1) ? true : false : false, 
+
+			'RACE_IMAGE' 			=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '' , 
+			'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false , 
 		
 			'S_JOINDATE_DAY_OPTIONS'	=> $s_memberjoin_day_options,
 			'S_JOINDATE_MONTH_OPTIONS'	=> $s_memberjoin_month_options,
 			'S_JOINDATE_YEAR_OPTIONS'	=> $s_memberjoin_year_options,
 			'S_SHOW' => $show,
 			'S_ADD' => $S_ADD,
+			'S_CANDELETE' => $S_DELETE,
+			'S_CANUPDATE' => $S_UPDATE,
 		));
 		
 		
@@ -641,8 +683,8 @@ class ucp_dkp
 		// get member name
 		$member_name = utf8_normalize_nfc(request_var('member_name', '',true));
 		$sql = 'SELECT *
-					FROM ' . MEMBER_LIST_TABLE . '	
-					WHERE member_id = ' . (int) $member_id;
+				FROM ' . MEMBER_LIST_TABLE . '	
+				WHERE member_id = ' . (int) $member_id;
 		$result = $db->sql_query($sql);
 		$oldmember = array();
 		$oldmember = $db->sql_fetchrow($result);
@@ -695,7 +737,13 @@ class ucp_dkp
 			include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
 		}
 		$acp_dkp_mm = new acp_dkp_mm ( );
-			
+
+		/*	public function updatemember ($member_name, $member_lvl, $race_id, $class_id, 
+		 * $rank_id, $member_comment, $guild_id, $gender, 
+		 * $achievpoints, $memberarmoryurl = ' ', $memberportraiturl = ' ', 
+		 * $game_id = 'wow', $member_status = 1)
+		*/
+	
 		if ($acp_dkp_mm->updatemember($member_name, $member_lvl, $race_id, $class_id, 
 			$rank_id, $member_comment, $guild_id, $gender, 0, ' ' ,' ' , $game_id, $member_status))
 		{
@@ -830,7 +878,6 @@ class ucp_dkp
 				'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
 		       	'RACE_IMAGE' 	=> (strlen($raceimage) > 1) ? $phpbb_root_path . "images/race_images/" . $raceimage . ".png" : '',  
 				'S_RACE_IMAGE_EXISTS' => (strlen($raceimage) > 1) ? true : false, 			 				
-			
 				)
 			); 
 			
@@ -838,11 +885,11 @@ class ucp_dkp
 			    'SELECT'    => ' d.dkpsys_id, d.dkpsys_name, 
 				SUM(m.member_earned + m.member_adjustment) AS ep,
 			    SUM(m.member_spent - m.member_item_decay + ( ' . max(0, $config['bbdkp_basegp']) . ')) AS gp, 
-     			SUM(m.member_earned + m.member_adjustment - m.member_spent + m.member_item_decay - ( ' . max(0, $config['bbdkp_basegp']) . ') )) AS member_current,
-				SUM(CASE when m.member_spent - m.member_item_decay <= 0 
-				THEN m.member_earned + m.member_adjustment  
-				ELSE ROUND( SUM(m.member_earned + m.member_adjustment) /  SUM(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay) ,2) end) as pr  
-				', 
+     			SUM(m.member_earned + m.member_adjustment - m.member_spent + m.member_item_decay - ( ' . max(0, $config['bbdkp_basegp']) . ') ) AS member_current,
+				CASE WHEN SUM(m.member_spent - m.member_item_decay) <= 0 
+					THEN SUM(m.member_earned + m.member_adjustment)  
+					ELSE ROUND( SUM(m.member_earned + m.member_adjustment) /  SUM(' . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay) ,2) 
+				END AS pr', 
 			    'FROM'      => array(
 				        MEMBER_DKP_TABLE 	=> 'm', 
 				        DKPSYS_TABLE 		=> 'd',

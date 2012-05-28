@@ -653,20 +653,34 @@ $versions = array(
       
         // Assign default permissions to Full admin
         'permission_set' => array(
-            array('ROLE_ADMIN_FULL', 		'a_dkp'),
-            array('ROLE_ADMIN_FULL', 		'u_dkp'),
-            array('ROLE_USER_FULL', 		'u_dkp'),
-            array('ROLE_ADMIN_FULL', 		'u_dkpucp'),
-            array('ROLE_USER_STANDARD', 	'u_dkpucp'),
-           	array('ROLE_USER_STANDARD', 'u_dkp_charadd'),
-            array('ROLE_USER_STANDARD', 'u_dkp_chardelete'),
-            array('ROLE_USER_STANDARD', 'u_dkp_charupdate'),
-            array('ROLE_USER_STANDARD', 'u_dkpucp'),
-            array('ROLE_USER_STANDARD', 'u_dkp'),
-            array('ROLE_USER_FULL', 'u_dkp_charadd'),
-            array('ROLE_USER_FULL', 'u_dkp_chardelete'),
-            array('ROLE_USER_FULL', 'u_dkp_charupdate'),
-            array('ROLE_USER_FULL', 'u_dkpucp'),
+      		//admin can access acp
+            array('GLOBAL_MODERATORS', 	'a_dkp', 'group'),
+            array('ADMINISTRATORS', 	'a_dkp', 'group'),
+            
+            //can see dkp pages
+            array('GUESTS', 'u_dkp', 'group'),
+            array('REGISTERED', 'u_dkp', 'group'),
+            array('NEWLY_REGISTERED', 'u_dkp', 'group'),
+            
+            //can claim a character
+            array('ADMINISTRATORS', 'u_dkpucp', 'group'),
+           	array('GLOBAL_MODERATORS', 	'u_dkpucp', 'group'),
+           	array('REGISTERED', 'u_dkpucp', 'group'),
+            
+            // can delete own character
+            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),		            
+            array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
+            
+            // can add own character
+            array('REGISTERED', 'u_dkp_charadd', 'group'),
+            array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
+            array('REGISTERED', 'u_dkp_charupdate', 'group'),
+            
+            //can update own character
+            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),		            
+            array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
+            array('REGISTERED', 'u_dkp_charupdate', 'group'),
+            
         ),
         
         // add new parameters
@@ -893,20 +907,10 @@ $versions = array(
 			array('ucp', 0, 'UCP_DKP'),
          	
 			// Add one UCP module to the new category
-			array('ucp', 'UCP_DKP', 
-				array(
+			array('ucp', 'UCP_DKP', array(
 					'module_basename'   => 'dkp',
-					'module_langname'   => 'UCP_DKP_CHARACTERS',
-					'module_mode'       => 'characters',
-					'module_auth'       => '',
+					'modes' => array('characters', 'characteradd'), 
 				),
-				
-				array(
-					'module_basename'   => 'dkp',
-					'module_langname'   => 'UCP_DKP_CHARACTER_ADD',
-					'module_mode'       => 'characteradd',
-					'module_auth'       => '',
-					),
 			),
 			
 
@@ -1010,34 +1014,20 @@ function gameinstall($action, $version)
 						$installed_games[] = 'FFXI';
 					}
 					
+					if(request_var('lineage2', 0) == 1)
+			        {
+		          			install_lineage2($action, $version); 
+		         			$umil->config_update('bbdkp_games_lineage2', 1, true);
+		         			$installed_games[] = 'lineage2';          			
+		       		}
+					
 					if(request_var('lotro', 0) == 1)
 					{
 						install_lotro($action, $version); 
 						$umil->config_update('bbdkp_games_lotro', 1, true);
 						$installed_games[] = 'lotro';					
 					}
-	
-					if(request_var('vanguard', 0) == 1)
-					{
-						install_vanguard($action, $version); 
-						$umil->config_update('bbdkp_games_vanguard', 1, true);
-						$installed_games[] = 'vanguard';
-					}
-					
-					if(request_var('warhammer', 0) == 1)
-					{
-						install_warhammer($action, $version); 
-						$umil->config_update('bbdkp_games_warhammer', 1, true);
-						$installed_games[] = 'vanguard';
-					}
-					
-					if(request_var('wow', 0) == 1)
-					{
-						install_wow($action, $version); 
-						$umil->config_update('bbdkp_games_wow', 1, true);
-						$installed_games[] = 'wow';
-					}
-					
+
 					if(request_var('rift', 0) == 1)
 					{
 						// new game
@@ -1053,13 +1043,28 @@ function gameinstall($action, $version)
 						$umil->config_update('bbdkp_games_swtor', 1, true);
 						$installed_games[] = 'swtor';
 					}
+
+					if(request_var('vanguard', 0) == 1)
+					{
+						install_vanguard($action, $version); 
+						$umil->config_update('bbdkp_games_vanguard', 1, true);
+						$installed_games[] = 'vanguard';
+					}
 					
-					if(request_var('lineage2', 0) == 1)
-			        {
-		          			install_lineage2($action, $version); 
-		         			$umil->config_update('bbdkp_games_lineage2', 1, true);
-		         			$installed_games[] = 'lineage2';          			
-		       		}
+					if(request_var('warhammer', 0) == 1)
+					{
+						install_warhammer($action, $version); 
+						$umil->config_update('bbdkp_games_warhammer', 1, true);
+						$installed_games[] = 'vanguard';
+					}
+		       		if(request_var('wow', 0) == 1)
+					{
+						install_wow($action, $version); 
+						$umil->config_update('bbdkp_games_wow', 1, true);
+						$installed_games[] = 'wow';
+					}
+					
+					
 		       		
 	                foreach($installed_games as $gameid)
 	                {
@@ -1076,45 +1081,52 @@ function gameinstall($action, $version)
 				case '1.2.7':
 					
 					// truncating and reinserting changed game tables
-					if($config['bbdkp_games_lineage2'] == 1)
+					if($config['bbdkp_games_lineage2'] == 1 || request_var('lineage2', 0) == 1)
 					{
 						install_lineage2($action, $version); 
+						$umil->config_update('bbdkp_games_lineage2', 1, true);
 						$installed_games[] = 'lineage2';
 					}
 					
-					if($config['bbdkp_games_lotro'] == 1) 
+					if($config['bbdkp_games_lotro'] == 1 || request_var('lotro', 0) == 1) 
 					{
 						install_lotro($action, $version); 
+						$umil->config_update('bbdkp_games_lotro', 1, true);
 						$installed_games[] = 'lotro';
 					}
 					
-					if($config['bbdkp_games_rift'] == 1)  
+					if($config['bbdkp_games_rift'] == 1 || request_var('rift', 0) == 1)  
 					{
-						install_rift($action, $version); 
+						install_rift($action, $version);
+						$umil->config_update('bbdkp_games_rift', 1, true); 
 						$installed_games[] = 'rift';
 					}
 					
-					if($config['bbdkp_games_swtor'] == 1)
+					if($config['bbdkp_games_swtor'] == 1 || request_var('swtor', 0) == 1)
 					{
 						install_swtor($action, $version); 
+						$umil->config_update('bbdkp_games_swtor', 1, true);
 						$installed_games[] = 'swtor';
 					}
 					
-					if($config['bbdkp_games_vanguard'] == 1)
+					if($config['bbdkp_games_vanguard'] == 1 || request_var('vanguard', 0) == 1)
 					{
 						install_vanguard($action, $version); 
+						$umil->config_update('bbdkp_games_vanguard', 1, true);
 						$installed_games[] = 'vanguard';
 					}
 
-					if($config['bbdkp_games_warhammer'] == 1)
+					if($config['bbdkp_games_warhammer'] == 1 || request_var('warhammer', 0) == 1)
 					{
 						install_warhammer($action, $version); 
+						$umil->config_update('bbdkp_games_warhammer', 1, true);
 						$installed_games[] = 'warhammer';
 					}					
 								
-					if($config['bbdkp_games_wow'] == 1) 
+					if($config['bbdkp_games_wow'] == 1 || request_var('wow', 0) == 1) 
 					{
-						install_wow($action, $version); 
+						install_wow($action, $version);
+						$umil->config_update('bbdkp_games_wow', 1, true); 
 						$installed_games[] = 'wow';
 					}
 					return array('command' => sprintf($user->lang['UMIL_GAME127'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');

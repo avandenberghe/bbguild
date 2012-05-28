@@ -2010,17 +2010,17 @@ class acp_dkp_mm extends bbDKP_Admin
 			$member_id = $row['member_id'];
 			$this->old_member = array(
 				'game_id' => $row['game_id'] , 
-				'member_level' => $row['member_level'] , 
-				'member_race_id' => $row['member_race_id'] , 
-				'member_rank_id' => $row['member_rank_id'] , 
-				'member_class_id' => $row['member_class_id'] , 
-				'member_gender_id' => $row['member_gender_id'] , 
-				'member_achiev' => $row['member_achiev'] , 
+				'member_level' => (int) $row['member_level'] , 
+				'member_race_id' => (int) $row['member_race_id'] , 
+				'member_rank_id' => (int) $row['member_rank_id'] , 
+				'member_class_id' => (int) $row['member_class_id'] , 
+				'member_gender_id' => (int) $row['member_gender_id'] , 
+				'member_achiev' => (int) $row['member_achiev'] , 
 				'member_armory_url' => $row['member_armory_url'] , 
 				'member_portrait_url' => $row['member_portrait_url'] , 
-				'member_joindate' => $row['member_joindate'] , 
-				'member_outdate' => $row['member_outdate'] , 
-				'member_status' => $row['member_status']);
+				'member_joindate' => (int) $row['member_joindate'] , 
+				'member_outdate' => (int) $row['member_outdate'] , 
+				'member_status' => (int) $row['member_status']);
 		}
 		$db->sql_freeresult($result);
 		if ($member_id == 0)
@@ -2077,17 +2077,17 @@ class acp_dkp_mm extends bbDKP_Admin
 		}
 		$sql_arr = array(
 			'game_id' => $game_id , 
-			'member_level' => $member_lvl , 
-			'member_race_id' => $race_id , 
-			'member_rank_id' => $rank_id , 
-			'member_class_id' => $class_id , 
-			'member_gender_id' => $gender , 
-			'member_achiev' => $achievpoints , 
-			'member_armory_url' => $memberarmoryurl , 
-			'member_portrait_url' => $memberportraiturl , 
-			'member_joindate' => $joindate , 
-			'member_outdate' => $leavedate , 
-			'member_status' => $member_status);
+			'member_level' => (int) $member_lvl , 
+			'member_race_id' => (int) $race_id , 
+			'member_rank_id' => (int) $rank_id , 
+			'member_class_id' => (int) $class_id , 
+			'member_gender_id' => (int) $gender , 
+			'member_achiev' => (int) $achievpoints , 
+			'member_armory_url' => trim($memberarmoryurl) , 
+			'member_portrait_url' => trim($memberportraiturl) , 
+			'member_joindate' => (int) $joindate , 
+			'member_outdate' => (int) $leavedate , 
+			'member_status' => (int) $member_status);
 		if ($sql_arr != $this->old_member)
 		{
 			// we have changes, so update 
