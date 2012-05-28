@@ -24,17 +24,18 @@ function install_wow()
 	// note class 10 does not exist
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'wow'" ); 
 	$sql_ary = array ();
-	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');   
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_warrior');   
-	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_rogue');    
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_hunter');    
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_paladin'); 
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_shaman'); 
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_druid');  
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_warlock'); 
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_mage');   
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 85 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_priest');  
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 85 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_death_knight'); 
+	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');   
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_warrior');   
+	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_rogue');    
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_hunter');    
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_paladin'); 
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_shaman'); 
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_druid');  
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_warlock'); 
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_mage');   
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_priest');  
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 90 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_death_knight');
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 10, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#008467', 'imagename' => 'wow_monk'); 
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
 	unset ( $sql_ary ); 
 
@@ -62,6 +63,8 @@ function install_wow()
 	$sql_ary [] = array ('game_id' => 'wow','race_id' => 10, 'race_faction_id' => 2 , 'image_female' => 'wow_bloodelf_female',  'image_male' => 'wow_bloodelf_male' ); //Blood Elf
 	$sql_ary [] = array ('game_id' => 'wow','race_id' => 11, 'race_faction_id' => 1 , 'image_female' => 'wow_draenei_female',  'image_male' => 'wow_draenei_male' ); //Draenei
 	$sql_ary [] = array ('game_id' => 'wow','race_id' => 22, 'race_faction_id' => 1 , 'image_female' => 'wow_worgen_female',  'image_male' => 'wow_worgen_male' ); //Worgen
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 24, 'race_faction_id' => 1 , 'image_female' => 'wow_pandaren_female',  'image_male' => 'wow_pandaren_male' ); //Pandaren alliance
+	$sql_ary [] = array ('game_id' => 'wow','race_id' => 25, 'race_faction_id' => 2 , 'image_female' => 'wow_pandaren_female',  'image_male' => 'wow_pandaren_male' ); //Pandaren Horde
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 	unset ( $sql_ary );
 	
@@ -77,6 +80,8 @@ function install_wow()
 		$sql_ary [] = array ('dkpsys_name' => 'WLK25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 		$sql_ary [] = array ('dkpsys_name' => 'CATA10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 		$sql_ary [] = array ('dkpsys_name' => 'CATA25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'PAN10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'PAN25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
 		unset ( $sql_ary );
 	}
@@ -96,6 +101,7 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 8, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Mage' ,  'name_short' =>  'Mage' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Priest' ,  'name_short' =>  'Priest' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Death Knight' ,  'name_short' =>  'Death Knight' );
+	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 10, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Monk' ,  'name_short' =>  'Monk' );
 	
 	//classes in fr
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -109,6 +115,7 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 8, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Mage' ,  'name_short' =>  'Mage' );
 	$sql_ary[] = array('game_id' => 'wow','attribute_id' => 5, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Prêtre' ,  'name_short' =>  'Prêtre' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 6, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chevalier de la Mort' ,  'name_short' =>  'Chevalier de la Mort' );
+	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 10, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Moine' ,  'name_short' =>  'Moine' );
 	
 	//classes in de	
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unbekannt' ,  'name_short' =>  'Unbekannt' );
@@ -122,6 +129,7 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 8, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Magier' ,  'name_short' =>  'Magier' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Priester' ,  'name_short' =>  'Priester' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Todesritter' ,  'name_short' =>  'Todesritter' );
+	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 10, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Mönch' ,  'name_short' =>  'Mönch' );
 				
 	//races in en
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -137,6 +145,8 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 11, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Draenei' ,  'name_short' =>  'Draenei' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 9, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'Goblin' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 22, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
+	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 24, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Pandaren Alliance' ,  'name_short' =>  'Pandaren Alliance' );
+	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 25, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Pandaren Horde' ,  'name_short' =>  'Pandaren Horde' );
 		
 	// races in fr
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -152,7 +162,9 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 11, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Draeneï' ,  'name_short' =>  'Draeneï' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 9, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'Goblin' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 22, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
-			
+	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 24, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Pandaren Alliance' ,  'name_short' =>  'Pandaren Alliance' );
+	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 25, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Pandaren Horde' ,  'name_short' =>  'Pandaren Horde' );
+	
 	//races in de
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 1, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Mensch' ,  'name_short' =>  'Mensch' );
@@ -167,7 +179,9 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 11, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Draenei' ,  'name_short' =>  'Draenei' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 9, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Goblin' ,  'name_short' =>  'Goblin' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 22, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
-
+	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 24, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Pandaren Alliance' ,  'name_short' =>  'Pandaren Alliance' );
+	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 25, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Pandaren Horde' ,  'name_short' =>  'Pandaren Horde' );
+	
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 
