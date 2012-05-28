@@ -19,15 +19,15 @@ if (!defined('IN_PHPBB'))
 class ucp_dkp
 {
 	var $u_action;
+	public $link;
 					
 	function main($id, $mode)
 	{
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$s_hidden_fields = '';
 		
-		// Attach the language file
-		$user->add_lang('mods/dkp_common');
-		$user->add_lang(array('mods/dkp_admin'));
+		// Attach the language files
+		$user->add_lang(array('mods/dkp_admin', 'mods/dkp_common', 'acp/common'));
 			
 		// GET processing logic
 		add_form_key('digests');
@@ -35,6 +35,7 @@ class ucp_dkp
 		{
 			// this mode is shown to users in order to select the character with which they will raid
 			case 'characters':
+				$this->link = '';
 				$submit = (isset($_POST['submit'])) ? true : false;
 				if ($submit)
 				{
@@ -699,7 +700,9 @@ class ucp_dkp
 		$db->sql_freeresult($result);
 		if (($countm != 0) && ($member_name != $oldmember['member_name']))
 		{
+			 meta_refresh(3, $this->u_action . '&amp;member_id=' . $member_id);
 			 trigger_error($user->lang['ERROR_MEMBEREXIST'], E_USER_WARNING);
+			 
 		}
 		
 		$member_status = request_var('activated', 0) > 0 ? 1 : 0;
@@ -713,6 +716,7 @@ class ucp_dkp
 		$db->sql_freeresult($result);
 		if ( $countm == 0)
 		{
+			 meta_refresh(3, $this->u_action . '&amp;member_id=' . $member_id);
 			 trigger_error($user->lang['ERROR_INCORRECTRANK'], E_USER_WARNING);
 		}
 		
@@ -742,14 +746,17 @@ class ucp_dkp
 			$rank_id, $member_comment, $guild_id, $gender, 0, ' ' ,' ' , $game_id, $member_status))
 		{
 			// record updated. 
-			$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], ucwords($member_name));
+			
+			meta_refresh(3, $this->u_action . '&amp;member_id=' . $member_id);
+			$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], ucwords($member_name))  . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
 			trigger_error($success_message, E_USER_NOTICE);
 		}
 		else 
 		{
-			// update fail.  
-			$failure_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_FAIL'], ucwords($member_name));
-			 trigger_error($failure_message, E_USER_WARNING);
+			// update fail.
+			meta_refresh(3, $this->u_action . '&amp;member_id=' . $member_id);
+			$failure_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_FAIL'], ucwords($member_name)) . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
+			trigger_error($failure_message, E_USER_WARNING);
 		}
 		
 	}
