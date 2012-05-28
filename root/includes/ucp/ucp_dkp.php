@@ -737,14 +737,8 @@ class ucp_dkp
 			include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
 		}
 		$acp_dkp_mm = new acp_dkp_mm ( );
-
-		/*	public function updatemember ($member_name, $member_lvl, $race_id, $class_id, 
-		 * $rank_id, $member_comment, $guild_id, $gender, 
-		 * $achievpoints, $memberarmoryurl = ' ', $memberportraiturl = ' ', 
-		 * $game_id = 'wow', $member_status = 1)
-		*/
 	
-		if ($acp_dkp_mm->updatemember($member_name, $member_lvl, $race_id, $class_id, 
+		if ($acp_dkp_mm->updatemember($member_id, $member_name, $member_lvl, $race_id, $class_id, 
 			$rank_id, $member_comment, $guild_id, $gender, 0, ' ' ,' ' , $game_id, $member_status))
 		{
 			// record updated. 
