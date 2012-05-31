@@ -376,7 +376,7 @@ class acp_dkp extends bbDKP_Admin
 						$template->assign_vars(array(
 							'S_APPLY_UP_TO_DATE' => false , 
 							'APPLYVERSION' =>	$installed_version , 
-							'APPLYUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+							'APPLYUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST_PLUGINS'] . $latest_version . '</a>'));
 					}
 				}		
 
@@ -429,7 +429,7 @@ class acp_dkp extends bbDKP_Admin
 						$template->assign_vars(array(
 							'S_ARMORYUPDATER_UP_TO_DATE' => false , 
 							'ARMORYUPDATERVERSION' =>$installed_version , 
-							'ARMORYUPDATERUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+							'ARMORYUPDATERUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST_PLUGINS'] . $latest_version . '</a>'));
 					}
 				}		
 
@@ -482,7 +482,7 @@ class acp_dkp extends bbDKP_Admin
 						$template->assign_vars(array(
 							'S_BBTIPS_UP_TO_DATE' => false , 
 							'BBTIPSVERSION' =>$installed_version , 
-							'BBTIPSUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+							'BBTIPSUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST_PLUGINS'] . $latest_version . '</a>'));
 					}
 				}		
 				
@@ -536,7 +536,7 @@ class acp_dkp extends bbDKP_Admin
 						$template->assign_vars(array(
 							'S_BOSSPROGRESS_UP_TO_DATE' => false , 
 							'BOSSPROGRESSVERSION' =>$installed_version , 
-							'BOSSPROGRESSUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+							'BOSSPROGRESSUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST_PLUGINS'] . $latest_version . '</a>'));
 					}
 				}		
 
@@ -589,7 +589,7 @@ class acp_dkp extends bbDKP_Admin
 						$template->assign_vars(array(
 							'S_RAIDPLANNER_UP_TO_DATE' => false , 
 							'RAIDPLANNERVERSION' =>$installed_version , 
-							'RAIDPLANNERUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+							'RAIDPLANNERUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST_PLUGINS'] . $latest_version . '</a>'));
 					}
 				}		
 
@@ -642,7 +642,7 @@ class acp_dkp extends bbDKP_Admin
 						$template->assign_vars(array(
 							'S_RAIDTRACKER_UP_TO_DATE' => false , 
 							'RAIDTRACKVERSION' =>$installed_version , 
-							'RAIDTRACKUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST'] . $latest_version . '</a>'));
+							'RAIDTRACKUPDATEINSTR' => $user->lang['LATESTPLUGINVERSION'] . '<a href="' . $user->lang['PLUGINURL'] . '">' . $user->lang['DOWNLOAD_LATEST_PLUGINS'] . $latest_version . '</a>'));
 					}
 				}		
 				
