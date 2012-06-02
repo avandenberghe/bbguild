@@ -9,9 +9,7 @@
  */
 
 /**
-
  * @ignore
-
  */
 if (! defined ( 'IN_PHPBB' ))
 {
@@ -26,11 +24,8 @@ if (! defined ( 'EMED_BBDKP' ))
 }
 
 /**
-
  * This class manages member DKP
-
  * 
-
  */
 class acp_dkp_mdkp extends bbDKP_Admin
 {
@@ -49,13 +44,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 		switch ($mode)
 		{
 			/*-----------------------
-
 				  LIST DKP
-
 			-------------------------*/
 			case 'mm_listmemberdkp':
-
-				
 
 				/* initialise */
 
@@ -111,24 +102,17 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				if ($activate)
 				{
 					$active_members = request_var ( 'activate_ids', array (0));
-					
 					$db->sql_transaction ( 'begin' );
 					
 					$sql1 = 'UPDATE ' . MEMBER_DKP_TABLE . "
-
                         SET member_status = '1' 
-
                         WHERE  member_dkpid  = " . $dkpsys_id . ' 
-
                         AND ' . $db->sql_in_set ( 'member_id', $active_members, false, true );
 					$db->sql_query ( $sql1 );
 					
 					$sql2 = 'UPDATE ' . MEMBER_DKP_TABLE . "
-
                         SET member_status = '0' 
-
                         WHERE  member_dkpid  = " . $dkpsys_id . ' 
-
                         AND ' . $db->sql_in_set ( 'member_id', $active_members, true, true );
 					$db->sql_query ( $sql2 );
 					
@@ -139,13 +123,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				
 				$sql_array = array (
 					'SELECT' => 'm.member_id,  a.member_name, a.member_level, m.member_dkpid, 
-
 						m.member_raid_value, m.member_earned, m.member_adjustment, m.member_spent,  
-
 						(m.member_earned + m.member_adjustment - m.member_spent + m.member_item_decay - m.adj_decay) AS member_current,
-
 						m.member_status, m.member_lastraid,
-
 						s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename', 
 					'FROM' => array (
 						MEMBER_LIST_TABLE => 'a', 
@@ -155,19 +135,12 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						BB_LANGUAGE => 'l', 
 						DKPSYS_TABLE => 's' ), 
 					'WHERE' => "(a.member_rank_id = r.rank_id)
-
 		    			AND (a.member_guild_id = r.guild_id)   
-
 						AND (a.member_id = m.member_id) 
-
 						AND (a.member_class_id = c.class_id and a.game_id = c.game_id)  
-
 						AND (m.member_dkpid = s.dkpsys_id)   
-
 						AND l.attribute_id = c.class_id  
-
 						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'    		
-
 						AND (s.dkpsys_id = " . (int) $dkpsys_id . ')' );
 				
 				/***  sort  ***/
@@ -201,32 +174,21 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				if ($config ['bbdkp_decay'] == 1)
 				{
 					$sql_array ['SELECT'] .= ', m.member_raid_decay , m.adj_decay, m.member_item_decay ';
-					$sort_order [9] = array (
-						'(m.member_raid_decay +  m.adj_decay) desc', ' (m.member_raid_decay +  m.adj_decay) ' );
-					$sort_order [13] = array (
-						'm.member_item_decay desc', 'member_item_decay' );
-				
+					$sort_order [9] = array ('(m.member_raid_decay +  m.adj_decay) desc', ' (m.member_raid_decay +  m.adj_decay) ' );
+					$sort_order [13] = array ('m.member_item_decay desc', 'member_item_decay' );
 				}
 				
 				if ($config ['bbdkp_epgp'] == 1)
 				{
 					$sql_array ['SELECT'] .= ', 
-
 					(m.member_earned + m.member_adjustment - m.adj_decay) AS ep, 
-
 					(m.member_spent - m.member_item_decay  + ' . max ( 0, $config ['bbdkp_basegp'] ) . ' ) AS gp, 
-
 					CASE when (m.member_spent - m.member_item_decay + ' . max ( 0, $config ['bbdkp_basegp'] ) . ' ) = 0 then 1  
-
 					ELSE round((m.member_earned + m.member_adjustment - m.adj_decay) / 
-
 					(' . max ( 0, $config ['bbdkp_basegp'] ) . ' + m.member_spent - m.member_item_decay),2) end as pr ';
-					$sort_order [11] = array (
-						'ep desc', 'ep' );
-					$sort_order [14] = array (
-						'gp desc', 'gp' );
-					$sort_order [15] = array (
-						'pr desc', 'pr' );
+					$sort_order [11] = array ('ep desc', 'ep' );
+					$sort_order [14] = array ('gp desc', 'gp' );
+					$sort_order [15] = array ('pr desc', 'pr' );
 				}
 				
 				$current_order = switch_order ( $sort_order );
@@ -392,13 +354,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					
 					$sql_array = array (
 						'SELECT' => 'l.member_name, m.member_id, 
-
 		    				m.member_raid_value, m.member_time_bonus, m.member_zerosum_bonus, 
-
 		    				m.member_earned,
-
 		    				m.member_raid_decay, m.member_adjustment ,
-
 		    				m.member_spent, m.member_item_decay ', 
 		    			'FROM' => array (
 							MEMBER_DKP_TABLE => 'm', 
@@ -432,13 +390,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						'member_item_decay' => request_var ( 'idecay', 0.00 ) ) );
 					
 					$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' 
-
 							SET ' . $query . ' 
-
 					        WHERE member_id = ' . $this->old_member ['member_id'] . '
-
 							AND member_dkpid= ' . ( int ) $dkp_id );
-					
 					$db->sql_transaction ( 'commit' );
 					
 					$log_action = array (
@@ -502,9 +456,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 							//remove member from attendees table but only if linked to raids in selected dkp pool
 
 							$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . '
-
 									WHERE member_id= ' . $del_member . ' 
-
 									AND raid_id IN( SELECT r.raid_id 
 										FROM ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE . ' e 
 
@@ -525,9 +477,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 							//delete player adjustments
 
 							$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . '
-
 									WHERE member_id =' . $del_member . '
-
 									AND adjustment_dkpid= ' . $del_dkpid;
 							$db->sql_query ( $sql );
 							
@@ -579,21 +529,16 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				/* template filling */
 				
 				// Get their correct earned
-
 				$sql_array = array (
 					'SELECT' => 'sum(ra.raid_value) AS raid_value, sum(ra.time_bonus) AS time_bonus, 
-
 				    		sum(ra.zerosum_bonus) AS zerosum_bonus, sum(ra.raid_decay) AS raid_decay   ', 
 				    'FROM' => array (
 						EVENTS_TABLE => 'e', 
 						RAIDS_TABLE => 'r', 
 						RAID_DETAIL_TABLE => 'ra' ), 
 					'WHERE' => ' ra.raid_id = r.raid_id 
-
 				    	and e.event_id = r.event_id
-
 						and ra.member_id=' . $member_id . '
-
 						and e.event_dkpid=' . (int) $dkp_id );
 				
 				$sql = $db->sql_build_query ( 'SELECT', $sql_array );
@@ -617,13 +562,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 						RAIDS_TABLE => 'r', 
 						RAID_ITEMS_TABLE => 'i' ), 
 					'WHERE' => 'e.event_id = r.event_id 
-
-			    				and r.raid_id = i.raid_id 
-
-								and i.member_id=' . $member_id . '
-
-								and e.event_dkpid=' . ( int ) $dkp_id );
-				
+	    				and r.raid_id = i.raid_id 
+						and i.member_id=' . $member_id . '
+						and e.event_dkpid=' . ( int ) $dkp_id );
 				$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 				$result = $db->sql_query ( $sql );
 				while ( $row = $db->sql_fetchrow ( $result ) )
@@ -637,63 +578,34 @@ class acp_dkp_mdkp extends bbDKP_Admin
 
 				$sql_array = array (
 					'SELECT' => '
-
 				    	a.*, 
-
 						m.member_id, 
-
 						m.member_dkpid, 
-
 						m.member_raid_value,
-
 						m.member_time_bonus,
-
 						m.member_zerosum_bonus, 
-
 						m.member_earned,
-
 						m.member_raid_decay, 
-
 						m.member_adjustment, 
-
 						(m.member_earned + m.member_adjustment - m.adj_decay) AS ep	,
-
 						m.member_spent,
-
 						m.member_item_decay,
-
 						(m.member_spent - m.member_item_decay  + ' . max ( 0, $config ['bbdkp_basegp'] ) . ' ) AS gp,
-
 						(m.member_earned + m.member_adjustment - m.member_spent + m.member_item_decay - m.adj_decay ) AS member_current,
-
 						case when (m.member_spent - m.member_item_decay + ' . max ( 0, $config ['bbdkp_basegp'] ) . ' ) = 0 then 1 
-
 						else round( (m.member_earned + m.member_adjustment - m.adj_decay) 
-
-									/ ( ' . max ( 0, $config ['bbdkp_basegp'] ) . ' + m.member_spent - m.member_item_decay),2) end as pr,
-
+							/ ( ' . max ( 0, $config ['bbdkp_basegp'] ) . ' + m.member_spent - m.member_item_decay),2) end as pr,
 						m.adj_decay, 
-
 						m.member_lastraid,
-
 						r1.name AS member_race,
-
 						s.dkpsys_name, 
-
 						l.name AS member_class, 
-
 						r.rank_name, 
-
 						r.rank_prefix, 
-
 						r.rank_suffix, 
-
 						c.class_armor_type AS armor_type ,
-
 						c.colorcode, 
-
 						c.imagename ', 
-							
 					'FROM' => array (
 						MEMBER_LIST_TABLE => 'a', 
 						MEMBER_DKP_TABLE => 'm', 
@@ -707,23 +619,17 @@ class acp_dkp_mdkp extends bbDKP_Admin
 							'FROM' => array (
 								BB_LANGUAGE => 'r1' ), 
 							'ON' => "r1.attribute_id = a.member_race_id 
-								AND r1.language= '" . $config ['bbdkp_lang'] . "' AND r1.attribute = 'race' and r1.game_id = a.game_id" ) ), 
+								AND r1.language= '" . $config ['bbdkp_lang'] . "' 
+								AND r1.attribute = 'race' 
+								AND r1.game_id = a.game_id" ) ), 
 							'WHERE' => " a.member_rank_id = r.rank_id 
-
 			    				AND a.member_guild_id = r.guild_id  
-
 								AND a.member_id = m.member_id 
-
 								AND a.game_id = c.game_id 
-
 								AND a.member_class_id = c.class_id  
-
 								AND m.member_dkpid = s.dkpsys_id   
-
 								AND l.game_id = c.game_id and l.attribute_id = c.class_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'    
-
 								AND s.dkpsys_id = " . $dkp_id . '   
-
 							    AND a.member_id = ' . $member_id );
 				$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 				
@@ -806,7 +712,6 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					'CORRECT_MEMBER_SPENT' => (! empty ( $correct_spent )) ? $correct_spent : '0.00', 
 					'CORRECT_ITEMDECAY' => (! empty ( $correct_itemdecay )) ? $correct_itemdecay : '0.00', 
 					'CORRECT_EARNED' => $correct_raid_value + $correct_time_bonus + $correct_zerosum_bonus - $correct_raid_decay, 
-					
 					'S_SHOWZS' => ($config ['bbdkp_zerosum'] == '1') ? true : false, 
 					'S_SHOWDECAY' => ($config ['bbdkp_decay'] == '1') ? true : false, 
 					'S_SHOWEPGP' => ($config ['bbdkp_epgp'] == '1') ? true : false, 
@@ -819,11 +724,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 			
 			/***************************************/
 			// member dkp transfer
-
 			// this transfers dkp account from one member account to another member account.
-
 			// the old member account will still exist
-
 			/***************************************/
 			
 			case 'mm_transfer' :
@@ -888,11 +790,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				
 				$sql = 'SELECT m.member_id, l.member_name 
 						FROM ' . MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m 
-
 						WHERE m.member_id = l.member_id 
-
 						AND m.member_dkpid = ' . $dkpsys_id . '
-
 						ORDER BY l.member_name';
 				$resultfrom = $db->sql_query ($sql);
 				$maara = 0;
@@ -911,15 +810,10 @@ class acp_dkp_mdkp extends bbDKP_Admin
 
 				$sql = 'SELECT m.member_id, l.member_name FROM ' .
 						 MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_RANKS_TABLE . ' k   
-
 						WHERE l.member_rank_id = k.rank_id 
-
 						AND k.rank_hide != 1 
-
 						AND m.member_id = l.member_id 
-
 						AND m.member_dkpid = ' . $dkpsys_id . '
-
 						ORDER BY l.member_name';
 				$resultto = $db->sql_query ( $sql );
 				$teller_to = 0;
@@ -963,11 +857,8 @@ class acp_dkp_mdkp extends bbDKP_Admin
 	}
 
 	/**
-
 	 * transfer dkp to other member
-
 	 *
-
 	 */
 	function transfer_dkp($dkpsys_id)
 	{
@@ -976,7 +867,6 @@ class acp_dkp_mdkp extends bbDKP_Admin
 		if (confirm_box ( true ))
 		{
 			//fetch hidden variables
-
 			$member_from = request_var ( 'hidden_idfrom', 0 );
 			$member_to = request_var ( 'hidden_idto', 0 );
 			$dkpsys_id = request_var ( 'hidden_dkpid', 0 );
@@ -987,17 +877,11 @@ class acp_dkp_mdkp extends bbDKP_Admin
 			
 			/* 1) collect adjustments to transfer */
 			$sql = 'SELECT 
-
 				sum(adjustment_value) as adjustments, 
-
 				sum(adj_decay) as adj_decay,
-
 				adjustment_dkpid FROM ' . ADJUSTMENTS_TABLE . ' 
-
 				where member_id = ' . $member_from . '
-
 				AND adjustment_dkpid = ' . $dkpsys_id . ' 
-
 				GROUP BY adjustment_dkpid';
 			$result = $db->sql_query ( $sql, 0 );
 			
@@ -1011,19 +895,12 @@ class acp_dkp_mdkp extends bbDKP_Admin
 			
 			/* 2) collect item cost, decay and zspoints to transfer  */
 			$sql = 'SELECT sum(i.item_value) as itemvalue,
-
 				sum(i.item_decay) as item_decay,
-
 				sum(i.item_zs) as item_zs, 
-
 				e.event_dkpid FROM ' . RAID_ITEMS_TABLE . ' i,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
-
 		     			where e.event_id=r.event_id
-
 		     			and e.event_dkpid = ' . $dkpsys_id . '
-
 		     			and r.raid_id=i.raid_id 
-
 		     			and i.member_id = ' . $member_from . ' 
 
 				GROUP BY e.event_dkpid';
@@ -1040,33 +917,20 @@ class acp_dkp_mdkp extends bbDKP_Admin
 
 			 exclude raids where the member_to was also participating to avoid double counting raids */
 			$sql = 'SELECT sum(ra.raid_value) as raidvalue, 
-
 						   sum(ra.time_bonus) as time_bonus,
-
 						   sum(ra.zerosum_bonus) as zerosum_bonus,
-
 						   sum(ra.raid_decay) as raid_decay,
-
 						   max(r.raid_start) as maxraiddate, 
-
 						   min(r.raid_start) as minraiddate, 
-
 						   count(ra.member_id) as raidcount, 
-
 						   e.event_dkpid 
 
 				FROM ' . RAID_DETAIL_TABLE . ' ra,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
-
 		     			WHERE e.event_id = r.event_id
-
 		     			AND r.raid_id = ra.raid_id 
-
 		     			and e.event_dkpid = ' . $dkpsys_id . '
-
 		     			AND ra.member_id = ' . $member_from . ' 
-
 		     			AND r.raid_id not IN( select raid_id from ' . RAID_DETAIL_TABLE . ' where member_id = ' . $member_to . ')
-
 				GROUP BY e.event_dkpid';
 			$result = $db->sql_query ( $sql, 0 );
 			
@@ -1076,7 +940,6 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				$transfer ['time_bonus'] = ( float ) $row ['time_bonus'];
 				$transfer ['zerosum_bonus'] = ( float ) $row ['zerosum_bonus'];
 				$transfer ['raid_decay'] = ( float ) $row ['raid_decay'];
-				
 				$transfer ['maxraiddate'] = ( int ) $row ['maxraiddate'];
 				$transfer ['minraiddate'] = ( int ) $row ['minraiddate'];
 				$transfer ['raidcount'] = ( int ) $row ['raidcount'];
@@ -1213,12 +1076,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 			/*	
 
 			// delete old account
-
-		  					$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . '
-
-		  							WHERE member_id = '. (int) $member_from  . ' and member_dkpid = ' . $dkpsys_id;
-
-		  					$db->sql_query($sql);
+				$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . '
+						WHERE member_id = '. (int) $member_from  . ' and member_dkpid = ' . $dkpsys_id;
+				$db->sql_query($sql);
 
 			*/
 			
@@ -1348,4 +1208,3 @@ class acp_dkp_mdkp extends bbDKP_Admin
 }
 
 ?>
-
