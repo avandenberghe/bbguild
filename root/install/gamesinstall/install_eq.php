@@ -26,23 +26,23 @@ function install_eq()
     
     // Everquest classes
     $sql_ary = array();
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 0, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_Unknown_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 1, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_Warrior_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 2, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_Rogue_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 3, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_Monk_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 4, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_Ranger_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 5, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_Paladin_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 6, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_Shadow_Knight_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 7, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_Bard_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 8, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_Beastlord_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 9, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_Cleric_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 10, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_Druid_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 11, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_Shaman_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 12, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_Enchanter_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 13, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_Wizardsmall'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 14, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_Necromancer_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_Magician_small'  );
-    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 16, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_Berserker_small'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 0, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_unknown'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 1, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_warrior'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 2, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_rogue'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 3, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_monk'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 4, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_ranger'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 5, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_paladin'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 6, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_shadow_Knight'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 7, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_bard'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 8, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_beastlord'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 9, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_cleric'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 10, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_druid'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 11, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70, 'imagename' => 'eq_shaman'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 12, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_enchanter'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 13, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_wizardsmall'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 14, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_necromancer'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_magician'  );
+    $sql_ary[] = array('game_id' => 'eq', 'class_id' => 16, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 70 , 'imagename' => 'eq_berserker'  );
     $db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
     
    	// Everquest factions
@@ -78,7 +78,7 @@ function install_eq()
     unset ($sql_ary); 
 
     
-    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'eq' and (attribute_id='class' or attribute_id = 'race')");
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'eq' and (attribute='class' or attribute = 'race')");
 	$sql_ary = array ();
 	$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'zone' , 'name' =>  'Dummy Zone' ,  'name_short' =>  'Dummy Zone' );
 	$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'boss' , 'name' =>  'Dummy Boss' ,  'name_short' =>  'Dummy Boss' );

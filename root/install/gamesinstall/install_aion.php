@@ -26,15 +26,15 @@ function install_aion()
     $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'aion'" );
     $sql_ary = array();
     // sub classes, excluding the original 4 classes, which are irrelevant endgame 
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Unknown_small' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 1, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Spiritmaster_small' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 2, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Sorcerer_small' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 3, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Assassin_small' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 4, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Ranger_small' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 5, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Chanter_small' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 6, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Cleric_small' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 7, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Gladiator_small' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 8, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_Templar_small' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_unknown' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 1, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_spiritmaster' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 2, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_sorcerer' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 3, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_sssassin' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 4, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_ranger' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 5, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_chanter' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 6, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_cleric' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 7, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_gladiator' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 8, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_templar' );
     $db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
    	unset ($sql_ary); 
     
@@ -55,7 +55,7 @@ function install_aion()
 	unset ($sql_ary);	
 
 	 //language table (No races, only factions, dummy value)
-    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'aion' and (attribute_id='class' or attribute_id = 'race')");   	 
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'aion' and (attribute='class' or attribute = 'race')");   	 
 	$sql_ary = array ();
 	$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Elyos' ,  'name_short' =>  'Elyos' );
 	$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Asmodian' ,  'name_short' =>  'Asmodian' );

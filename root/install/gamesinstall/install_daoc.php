@@ -22,56 +22,56 @@ function install_daoc()
     $sql_ary = array();
     $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'daoc'" );    
     // class general
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 1, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Unknown_small' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 1, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Unknown' );
     // class Albion   
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 2,  'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Armsman_small'  );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 3,  'class_armor_type' => 'Cloth' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Cabalist_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 4,  'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Cleric_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 5,  'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Friar_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 6,  'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Heretic_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 7,  'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Infiltrator_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 8,  'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Mercenary_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 9,  'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Minstrel_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 10, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Necromancer_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 11, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Paladin_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 12, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Reaver_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 13, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Scout_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 14, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Sorcerer_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Theurgist_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 16, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Wizard_small' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 2,  'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_armsman'  );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 3,  'class_armor_type' => 'Cloth' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_cabalist' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 4,  'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_cleric' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 5,  'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_friar' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 6,  'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_heretic' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 7,  'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_infiltrator' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 8,  'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_mercenary' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 9,  'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_minstrel' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 10, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_necromancer' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 11, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_paladin' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 12, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_reaver' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 13, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_scout' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 14, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_sorcerer' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_theurgist' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 16, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_wizard' );
     
    // class Hibernia
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 17, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Animist_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 18, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Bainshee_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 19, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Bard_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 20, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Blademaster_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 21, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Champion_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 22, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Druid_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 23, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Eldritch_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 24, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Enchanter_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 25, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Hero_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 26, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Mentalist_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 27, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Nightshade_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 28, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Ranger_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 29, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Valewalker_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 30, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Vampiir_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 31, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Warden_small' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 17, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_animist' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 18, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_bainshee' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 19, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_bard' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 20, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_blademaster' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 21, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_champion' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 22, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_druid' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 23, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_eldritch' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 24, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_enchanter' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 25, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_hero' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 26, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_mentalist' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 27, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_nightshade' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 28, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_ranger' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 29, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_valewalker' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 30, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_vampiir' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 31, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_warden' );
    
     // class Midgard
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 32, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Berserker_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 33, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Bonedancer_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 34, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Healer_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 35, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Hunter_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 36, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Runemaster_small' );    
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 37, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Savage_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 38, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Shadowblade_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 39, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Shaman_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 40, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Skald_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 41, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Spiritmaster_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 42, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Thane_small' );                                                                                        
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 43, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Valkyrie_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 44, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Warlock_small' );
-    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 45, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Warrior_small' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 32, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_berserker' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 33, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_bonedancer' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 34, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_healer' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 35, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_hunter' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 36, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_runemaster' );    
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 37, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_savage' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 38, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_shadowblade' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 39, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_shaman' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 40, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_skald' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 41, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_spiritmaster' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 42, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_thane' );                                                                                        
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 43, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_valkyrie' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 44, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_warlock' );
+    $sql_ary[] = array('game_id' => 'daoc', 'class_id' => 45, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_warrior' );
     $db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
    	unset ($sql_ary); 
     
@@ -112,7 +112,7 @@ function install_daoc()
     unset ($sql_ary); 
 
     //language strings 
-    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'daoc' and (attribute_id='class' or attribute_id = 'race')");	   
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'daoc' and (attribute='class' or attribute = 'race')");	   
 	$sql_ary = array();	
 	$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Armsman' ,  'name_short' =>  'Armsman' );

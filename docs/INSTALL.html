@@ -11,7 +11,7 @@
 <meta name="copyright" content="2009 bbdkp" />
 <meta name="keywords" content="" />
 <meta name="description" content="bbdkp Installation information" />
-<title>bbDKP &bull; 1.2.6 Guide</title>
+<title>bbDKP &bull; 1.2.7 Guide</title>
 
 <link href="stylesheet.css" rel="stylesheet" type="text/css" media="screen, projection" />
 
@@ -27,16 +27,14 @@
 
 			<div id="doc-description">
 			<a>	<img src="logo.png" alt="" /></a>
-				<h1>bbDKP 1.2.6-PL5 Install</h1>
+				<h1>bbDKP 1.2.7 Install</h1>
 				<p style="display: none;"><a href="#start_here">Skip</a></p>
 			</div>
-
 			<span class="corners-bottom"><span></span></span></div>
 		</div>
 	</div>
 
 	<a name="start_here"></a>
-
 	<div id="page-body">
 
 <h1>Description</h1>
@@ -46,15 +44,24 @@
 		<div class="inner"><span class="corners-top"><span></span></span></div>
 		
 		<div class="content">
-<p>bbDKP is a Dragon Kill system Mod for your phpBB3 Bulletin board, developed from EQDKP+. </p><p>It is a multi-pool loot distribution system that supports Standard DKP, Time based DKP, Zero sum and EPGP. </p><p>It integrates Game, Guild and DKP management functions into your phpBB3 Forum. Your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches.</p>
-<p>Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, ACP and UCP modules. multiple games : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION. </p>
-<p>There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Raidplanner, Bossprogress (under development). </p>
+<p>bbDKP is a Dragon Kill Points Mod for your phpBB3 Bulletin board.</p>
+<p>
+Dragon kill points are a form of currency in guilds, where members bid on game loot and buy the items, paying in DKP. 
 
-<p>Further development requests, support questions are welcome at <a href="http://www.bbdkp.com">http://www.bbdkp.com</a> or in the the <a href="http://www.phpbb.com/community/viewtopic.php?f=70&t=1487295&p=13027056">phpbb Development topic</a>.</p>
-<p>There is also an IRC channel at #bbdkp@irc.freenode.net.</p>
+Different forms of DKP exist and bbDKP supports four point systems : Standard DKP, Time based DKP, Zero sum and EPGP. they can be combined with each other, except zero sum can't be combined with EPGP. 
+
+bbDKP has Game, Guild and DKP management functions built into your phpBB3 Forum. 
+
+This way, your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches.</p>
+<p>
+Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games can be installed : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, and Star Wars-ToR</p>
 
 <p>Languages included: Englisch (en), French (fr), Deutsch (de)</p>
 
+<p>There are a number of plugins, like Raidtracker, bbTips, Armory import, Apply, Raidplanner, and other standalone mods that work well together.</p>
+
+<p>Further development requests, support questions are welcome at <a href="http://www.bbdkp.com">http://www.bbdkp.com</a> or in the the <a href="http://www.phpbb.com/community/viewtopic.php?f=70&t=1487295&p=13027056">phpbb Development topic</a>.</p>
+<p>IRC channel : #bbdkp@irc.freenode.net.</p>
 </div>
 		<div class="back2top"><a href="#wrap" class="top">Back to Top</a></div>
 		<div class="inner"><span class="corners-bottom"><span></span></span></div>
@@ -62,14 +69,12 @@
 	
 <h1>Requirements</h1>
 	<hr />
-
 	<div class="paragraph">
 		<div class="inner"><span class="corners-top"><span></span></span></div>
-		
 		<div class="content">
 			<ol>
 			<li>phpbb3.0.10</li>
-			<li>If you use Mysql then version 5 is required because group functions are used in the order by statement in standings.php</li>			
+			<li>databases : Mysql 5, MSSQL, postgresql, Oracle</li>
 			<li>PHP 5.2 -> 5.3.x / Libxml 2.6.0 (simplexml usage)</li>
 			<li>Curl (preferred) or url_fopen or fsockopen should be available on your server.</li>
 			<li>ftp and founder admin access on your phpbb installation. </li>
@@ -93,7 +98,7 @@
 		<strong>Note : Before installing/upgrading bbDKP, you need to backup your forum.</strong>
 		
 		<div class="content">
-			<h2>New 1.2.6 installation </h2>
+			<h2>New 1.2.7 installation </h2>
 			<ul>
 				<li><strong>using Automod</strong>
 				<ol>
@@ -108,7 +113,7 @@
 						<li>Enter your guildname</li>
 						<li>Choose the realm of your guild</li>
 						<li>Choose the games you wish to have installed.</li>
-						<li>Click submit. This will install 1.2.6 and clear the caches (template, theme, imagesets)</li>
+						<li>Click submit. This will install 1.2.7 and clear the caches (template, theme, imagesets)</li>
 						</ul>
 					</li>
 				</ol>
@@ -126,23 +131,18 @@
 						<li>Enter your guildname</li>
 						<li>Choose the realm of your guild</li>
 						<li>Choose the games you wish to have installed.</li>
-						<li>Click submit. This will install 1.2.6 and clear the caches (template, theme, imagesets)</li>
+						<li>Click submit. This will install 1.2.7 and clear the caches (template, theme, imagesets)</li>
 						</ul>
 					</ol>
 
 				</li>
 			</ul>
-			<h2>Upgrading from 1.2.2, 1.2.3, 1.2.4, 1.2.5-PL3 to 1.2.6-PL5</h2>
-			<strong><em>If you have an earlier version, first update to 1.2.2c</em></strong><br />
+			<h2>Upgrading from 1.2.6-PL5 to 1.2.7</h2>
+			<strong><em>If you have an earlier version, first update to 1.2.6-PL5</em></strong><br />
 
 			<ol>
 				<li>follow the Diff instructions corresponding to your current version : <br />
-				<a href="../contrib/install_122_to_126PL5.xml">122 to 126PL5 </a><br />
-				<a href="../contrib/install_123_to_126PL5.xml">123 to 126PL5</a><br />	
-				<a href="../contrib/install_124_to_126PL5.xml">124 to 126PL5</a><br />
-				<a href="../contrib/install_125PL3_to_126PL5.xml">125PL3 to 126PL5</a><br />
-				<a href="../contrib/install_126_to_126PL5.xml">126 to 126PL5</a><br />
-				<a href="../contrib/install_126PL4_to_126PL5.xml">126PL3 to 126PL5</a><br />
+				<a href="../contrib/install_126PL5_to_127.xml">126PL5 to 127</a><br />
 				</li>				
 				<li>copy the new files to your webserver, replacing any old files. </li>
 				<li>apply the changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
@@ -153,7 +153,7 @@
 					<li>Enter your guildname</li>
 					<li>Choose the realm of your guild</li>
 					<li>Check the games you wish to have installed/updated. (deselecting a game you already have will have no effect on your data)</li>
-					<li>Click submit. This will update to 1.2.6 and clear the caches (template, theme, imagesets)</li>
+					<li>Click submit. This will update to 1.2.7 and clear the caches (template, theme, imagesets)</li>
 				</ul>
 			</ol>
 			
@@ -200,6 +200,23 @@
 		<div class="inner"><span class="corners-top"><span></span></span></div>
 		
 		<div class="content">
+1.2.7 03-06-2012<br />
+<br />
+<ul>		
+<strong>general</strong>
+<li>[UPD] jquery updated to 1.7.2</li>
+<li>[NEW] MSSQL support</li>
+<li>[NEW] postgresql support</li>
+<li>[SEC] new permissions for UCP</li>
+<li>[NEW] new UCP styling</li>
+<li>[NEW] new wow monk classes and Pandaren race</li>
+<li>[NEW] lotro Subnationalities added to races</li>
+<li>[NEW] new icons for Rift, Vanguard</li>
+<li>[NEW] added class colors for Rift, warhammer, lineage</li>
+<li>[NEW] race images renamed (removed '_small)</li>
+<li>[NEW] Plugin manager by Aerwin</li>
+</ul>
+
 1.2.6 12-03-2012<br />
 <br />
 <ul>		

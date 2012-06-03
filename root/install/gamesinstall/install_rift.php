@@ -23,43 +23,43 @@ function install_rift()
     $sql_ary = array();
     
     // class general
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 0, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_Unknown_small' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 0, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#999', 'imagename' => 'rift_Unknown' );
     
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 1, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_champion_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 2, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_reaver_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 3, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_paladin_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 4, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_warlord_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 5, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_paragon_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 6, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_riftblade_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 7, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_voidknight_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 8, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_beastmaster_small' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 1, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#C41F3B','imagename' => 'rift_champion' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 2, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#C79C6E','imagename' => 'rift_reaver' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 3, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#C79C6E', 'imagename' => 'rift_paladin' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 4, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#C79C6E', 'imagename' => 'rift_warlord' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 5, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#C41F3B','imagename' => 'rift_paragon' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 6, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#C41F3B','imagename' => 'rift_riftblade' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 7, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#C79C6E', 'imagename' => 'rift_voidknight' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 8, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60,  'colorcode' =>  '#ABD473', 'imagename' => 'rift_beastmaster' );
 
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 9, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_purifier_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 10, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_inquisitor_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 11, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_sentinel_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 12, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_justicar_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 13, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_shaman_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 14, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_warden_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 15, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_druid_small' );    
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 16, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_cabalist_small' );    
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 9, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60,  'colorcode' =>  '#F58CBA','imagename' => 'rift_purifier' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 10, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60,  'colorcode' =>  '#F58CBA','imagename' => 'rift_inquisitor' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 11, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60,  'colorcode' =>  '#F58CBA','imagename' => 'rift_sentinel' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 12, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60,  'colorcode' =>  '#F58CBA','imagename' => 'rift_justicar' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 13, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#FF7D0A', 'imagename' => 'rift_shaman' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 14, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#FF7D0A', 'imagename' => 'rift_warden' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 15, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#FF7D0A','imagename' => 'rift_druid' );    
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 16, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#FF7D0A', 'imagename' => 'rift_cabalist' );    
     
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 17, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_nightblade_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 18, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_ranger_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 19, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_bladedancer_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 20, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_assassin_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 21, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_riftstalker_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 22, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_marksman_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 23, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_saboteur_small' );    
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 24, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_bard_small' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 17, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#FFF569',  'imagename' => 'rift_nightblade' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 18, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#ABD473', 'imagename' => 'rift_ranger' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 19, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#FFF569',  'imagename' => 'rift_bladedancer' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 20, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#FFF569', 'imagename' => 'rift_assassin' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 21, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#ABD473', 'imagename' => 'rift_riftstalker' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 22, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#ABD473', 'imagename' => 'rift_marksman' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 23, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#FFF569', 'imagename' => 'rift_saboteur' );    
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 24, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#ABD473', 'imagename' => 'rift_bard' );
     
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 25, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_elementalist_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 26, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_warlock_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 27, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_pyromancer_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 28, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_stormcaller_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 29, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_archon_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 30, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_necromancer_small' );
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 31, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_dominator_small' );    
-    $sql_ary[] = array('game_id' => 'rift','class_id' => 32, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'rift_chloromancer_small' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 25, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#0070DE', 'imagename' => 'rift_elementalist' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 26, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#9482C9', 'imagename' => 'rift_warlock' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 27, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#69CCF0', 'imagename' => 'rift_pyromancer' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 28, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#0070DE','imagename' => 'rift_stormcaller' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 29, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#0070DE','imagename' => 'rift_archon' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 30, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#9482C9', 'imagename' => 'rift_necromancer' );
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 31, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#69CCF0', 'imagename' => 'rift_dominator' );    
+    $sql_ary[] = array('game_id' => 'rift','class_id' => 32, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#9482C9', 'imagename' => 'rift_chloromancer' );
 
     $db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
    	unset ($sql_ary); 
@@ -73,20 +73,21 @@ function install_rift()
     $db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
     unset ($sql_ary); 
     
-    // races (No races, only factions, dummy value)
-    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'rift'");  
-    $sql_ary = array();
-    $sql_ary[] = array('game_id' => 'rift','race_id' => 0, 'race_faction_id' => 1 );
-    $sql_ary[] = array('game_id' => 'rift','race_id' => 1, 'race_faction_id' => 1 );
-    $sql_ary[] = array('game_id' => 'rift','race_id' => 2, 'race_faction_id' => 1 );
-    $sql_ary[] = array('game_id' => 'rift','race_id' => 3, 'race_faction_id' => 1 );
-    $sql_ary[] = array('game_id' => 'rift','race_id' => 4, 'race_faction_id' => 2 );
-    $sql_ary[] = array('game_id' => 'rift','race_id' => 5, 'race_faction_id' => 2 );
-    $sql_ary[] = array('game_id' => 'rift','race_id' => 6, 'race_faction_id' => 2 );
-    $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
-	unset ($sql_ary);	
-
-    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'rift' and (attribute_id='class' or attribute_id = 'race')");
+	// races
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'rift'");
+	$sql_ary = array ();
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 0, 'race_faction_id' => 1,  'image_female' => ' ',  'image_male' => ' '  ); //Unknown
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 1, 'race_faction_id' => 1,  'image_female' => 'rift_dwarf_female',  'image_male' => 'rift_dwarf_male'  ); //dwarf
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 2, 'race_faction_id' => 1 , 'image_female' => 'rift_highelf_female',  'image_male' => 'rift_highelf_male' ); //Orchigh elf
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 3, 'race_faction_id' => 1 , 'image_female' => 'rift_mathosian_female',  'image_male' => 'rift_mathosian_male' ); //mathosian 
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 4, 'race_faction_id' => 2 , 'image_female' => 'rift_bahmi_female',  'image_male' => 'rift_bahmi_male' ) ; //Bahmi 
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 5, 'race_faction_id' => 2 , 'image_female' => 'rift_eth_female',  'image_male' => 'rift_eth_male' ); //eth
+	$sql_ary [] = array ('game_id' => 'rift','race_id' => 6, 'race_faction_id' => 2 , 'image_female' => 'rift_kelari_female',  'image_male' => 'rift_kelari_male' ); //kelari
+	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
+	unset ( $sql_ary );
+	
+	
+    $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'rift' and (attribute='class' or attribute = 'race')");
     $sql_ary = array();
 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	

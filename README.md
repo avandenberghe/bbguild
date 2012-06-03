@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-## ABOUT
+## about
 bbDKP is a Dragon Kill Points Mod for your phpBB3 Bulletin board.
 
 Dragon kill points are a form of currency in guilds, where members bid on game loot and buy the items, paying in DKP. 
@@ -13,22 +13,24 @@ This way, your users gain single sign on to dkp and phpBB3, and you as an admini
 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games can be installed : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, and Star Wars-ToR
 
-There are a number of plugins, like Raidtracker, bbTips, Memberimport, Apply, Raidplanner (under development).
+There are a number of plugins, like Raidtracker, bbTips, Armory import, Apply, Raidplanner, and other standalone mods that work well together. 
 
-## CURRENT RELEASE
-v. 1.2.6
+## current
 
-## COMMUNITY
+1.2.7
 
-Find support and more on [bbDKP.com](http://www.bbdkp.com)! 
+## community
 
-## CONTRIBUTE
+Find support and more on [bbDKP.com](http://www.bbdkp.com)  
 
-1. [Create an account on bbDKP.com](http://www.bbDKP.com/ucp.php?mode=register)
-2. [Create a ticket (unless there already is one)](http://www.bbdkp.com/tracker.php)
-3. [Read our Git Contribution Guidelines](http://www.bbdkp.com/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.bbdkp.com/viewtopic.php?f=60&t=1853)
-4. Send us a pull request
+## contributers
 
-## LICENSE
+You can see all the amazing people contributing to this project [here](https://github.com/bbdkp/bbdkp/graphs/contributors). 
+
+1. [Create a ticket (unless there already is one)](http://www.bbdkp.com/tracker.php)
+2. [Read our Git Contribution Guidelines](http://www.bbdkp.com/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.bbdkp.com/viewtopic.php?f=60&t=1853)
+3. Send us a pull request
+
+## license
 
 [GNU General Public License v2](http://opensource.org/licenses/gpl-2.0.php)
