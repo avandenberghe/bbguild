@@ -63,10 +63,27 @@
 	</header>
 	<action-group>
 		<copy>
-			<file from="root/adm/style/dkp/acp_editraid.html" to="adm/style/dkp/acp_editraid.html"/>				
+			<file from="root/adm/style/dkp/acp_addfaction.html" to="adm/style/dkp/acp_addfaction.html"/>
+			<file from="root/adm/style/dkp/acp_addrace.html" to="adm/style/dkp/acp_addrace.html"/>
+			<file from="root/adm/style/dkp/acp_mainpage.html" to="adm/style/dkp/acp_mainpage.html"/>
+			<file from="root/adm/style/dkp/jquery.js" to="adm/style/dkp/jquery.js"/>									
+			<file from="root/images/class_images/*.*" to="images/class_images/*.*"/>
+			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>				
+			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>	
+			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
+			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>			
+			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
+			<file from="root/install/*.*" to="install/*.*"/>
+			<file from="root/language/en/mods/dkp_admin.php" to="language/en/mods/dkp_admin.php"/>
+			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>			
+			<file from="root/styles/prosilver/template/dkp/jquery.js" to="styles/prosilver/template/dkp/jquery.js"/>
+			<file from="root/styles/prosilver/template/dkp/jquery.tools.min.js" to="styles/prosilver/template/dkp/jquery.tools.min.js"/>
+			<file from="root/styles/prosilver/template/dkp/ucp_dkp.html" to="styles/prosilver/template/dkp/ucp_dkp.html"/>
+			<file from="root/styles/prosilver/template/dkp/ucp_dkp_charadd.html" to="styles/prosilver/template/dkp/ucp_dkp_charadd.html"/>									
+			<file from="root/umil/umil.php" to="umil/umil.php"/>		
 		</copy>
-		<diy-instructions lang="en"><![CDATA[Afterwards, purge template cache]]></diy-instructions>
-		<diy-instructions lang="fr"><![CDATA[ensuite, purgez la cache]]></diy-instructions>
-		<diy-instructions lang="de"><![CDATA[danach Cache leeren]]></diy-instructions>
+		<diy-instructions lang="en"><![CDATA[Afterwards, run database installer and purge template cache]]></diy-instructions>
+		<diy-instructions lang="fr"><![CDATA[ensuite, lancer mise à jour db et purgez la cache]]></diy-instructions>
+		<diy-instructions lang="de"><![CDATA[danach database update und Cache leeren]]></diy-instructions>
 	</action-group>
 </mod>
