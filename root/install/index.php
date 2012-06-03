@@ -924,6 +924,55 @@ $versions = array(
     ),
     
     '1.2.7' => array(
+
+	    // unset default permissions
+		'permission_unset' => array(
+            array('ROLE_ADMIN_FULL', 	'a_dkp'),
+            array('ROLE_ADMIN_FULL', 	'u_dkp'),
+            array('ROLE_USER_FULL', 	'u_dkp'),	
+            array('ROLE_ADMIN_FULL', 	'u_dkpucp'),           	
+			array('ROLE_USER_STANDARD', 'u_dkp_charadd'),
+			array('ROLE_USER_STANDARD', 'u_dkp_chardelete'),
+			array('ROLE_USER_STANDARD', 'u_dkp_charupdate'),
+			array('ROLE_USER_STANDARD', 'u_dkpucp'),
+			array('ROLE_USER_STANDARD', 'u_dkp'),
+			array('ROLE_USER_FULL', 'u_dkp_charadd'),
+			array('ROLE_USER_FULL', 'u_dkp_chardelete'),
+			array('ROLE_USER_FULL', 'u_dkp_charupdate'),
+			array('ROLE_USER_FULL', 'u_dkpucp'),
+            ),
+            
+        // reaassign default permissions
+        'permission_set' => array(
+      		//admin can access acp
+            array('GLOBAL_MODERATORS', 	'a_dkp', 'group'),
+            array('ADMINISTRATORS', 	'a_dkp', 'group'),
+            
+            //can see dkp pages
+            array('GUESTS', 'u_dkp', 'group'),
+            array('REGISTERED', 'u_dkp', 'group'),
+            array('NEWLY_REGISTERED', 'u_dkp', 'group'),
+            
+            //can claim a character
+            array('ADMINISTRATORS', 'u_dkpucp', 'group'),
+           	array('GLOBAL_MODERATORS', 	'u_dkpucp', 'group'),
+           	array('REGISTERED', 'u_dkpucp', 'group'),
+            
+            // can delete own character
+            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),		            
+            array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
+            
+            // can add own character
+            array('REGISTERED', 'u_dkp_charadd', 'group'),
+            array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
+            array('REGISTERED', 'u_dkp_charupdate', 'group'),
+            
+            //can update own character
+            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),		            
+            array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
+            array('REGISTERED', 'u_dkp_charupdate', 'group'),
+        ),
+        
 		// change the class / race table
        'custom' => array( 
             'tableupdates',
