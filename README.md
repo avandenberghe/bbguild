@@ -17,16 +17,8 @@ There are a number of plugins, like Raidtracker, bbTips, Armory import, Apply, R
 
 ## current
 
-1.2.6-PL5
-
-## in development
-
 1.2.7
 
-* sql server, postgresql, oracle
-* security update
-* TERA support	
-	
 ## community
 
 Find support and more on [bbDKP.com](http://www.bbdkp.com)  
