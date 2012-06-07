@@ -34,7 +34,7 @@ switch ($db->sql_layer)
 	case 'mysqli':
 	case 'mysql4':
 	case 'mysql':
-		$dbversion = mysql_get_server_info($db->db_connect_id);
+		$dbversion = $db->sql_server_version;
 		if (version_compare($dbversion, '4.1.0', '<'))
 		{
 			$error[] = "You are running an unsupported Mysql version ($dbversion) . Please upgrade to Mysql 4.1 or higher before trying to install bbDKP. <br />";
