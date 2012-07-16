@@ -2514,22 +2514,26 @@ class acp_dkp_raid extends bbDKP_Admin
 				}
 				$db->sql_freeresult ($result);
 				
-				if ($origin == 'cron')
+				if ($countraids > 0)
 				{
-					$origin = $user->lang['DECAYCRON'];
-				}
+					
+					if ($origin == 'cron')
+					{
+						$origin = $user->lang['DECAYCRON'];
+					}
+					
+					$log_action = array (
+					'header' 	=> 'L_ACTION_DECAYSYNC',
+					'L_USER' 	=>  $user->data['user_id'],
+					'L_USERCOLOUR' 	=>  $user->data['user_colour'], 
+					'L_RAIDS' 	=> $countraids,
+					'L_ORIGIN' 		=>  $origin 
+					);
 				
-				$log_action = array (
-				'header' 	=> 'L_ACTION_DECAYSYNC',
-				'L_USER' 	=>  $user->data['user_id'],
-				'L_USERCOLOUR' 	=>  $user->data['user_colour'], 
-				'L_RAIDS' 	=> $countraids,
-				'L_ORIGIN' 		=>  $origin 
-				);
-			
-				$this->log_insert ( array (
-				'log_type' 		=> $log_action ['header'], 
-				'log_action' 	=> $log_action ) );
+					$this->log_insert ( array (
+					'log_type' 		=> $log_action ['header'], 
+					'log_action' 	=> $log_action ) );
+				}
 				
 				return $countraids;
 				
