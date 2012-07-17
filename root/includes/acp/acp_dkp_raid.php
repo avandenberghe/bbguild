@@ -1196,7 +1196,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	 * 
 	 * 
 	 */
-	private function addraid()
+	public function addraid()
 	{
 		global $db, $user, $config, $template, $phpEx ;
 		if (confirm_box ( true )) 
@@ -1343,7 +1343,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	 * 
 	 * @param int $raid_id the raid to update
 	 */
-	private function updateraid($raid_id)
+	public function updateraid($raid_id)
 	{
 		global $db, $user, $config, $template,$phpbb_admin_path, $phpEx;
 		if(!check_form_key('acp_dkp_addraid'))
@@ -1618,7 +1618,6 @@ class acp_dkp_raid extends bbDKP_Admin
         return $raid_detail;
     }
    
-   
 	/**
 	 * 
 	 * this function adds attendee 
@@ -1661,7 +1660,7 @@ class acp_dkp_raid extends bbDKP_Admin
     * set last and first raiddates for the attending raiders
     * 
     */
-    private function add_dkp($raid_value, $time_bonus, $raid_start, $dkpid, $member_id )
+    public function add_dkp($raid_value, $time_bonus, $raid_start, $dkpid, $member_id )
     {
 		global $db, $user;
        // has dkp record ?
@@ -2049,7 +2048,7 @@ class acp_dkp_raid extends bbDKP_Admin
 	 * @param int $dkpid 
 	 * @return bool 
 	 */
-	private function update_player_status($dkpid)
+	public function update_player_status($dkpid)
 	{
 		global $db, $user, $config;
 		
@@ -2483,20 +2482,21 @@ class acp_dkp_raid extends bbDKP_Admin
 				
 				$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = 0'; 
 				$db->sql_query ( $sql);
-				if ($origin=='cron')
-				{
-					$origin = $user->lang['DECAYCRON'];
-				}
-				$log_action = array (
-					'header' 		=> 'L_ACTION_DECAYOFF',
-					'L_USER' 		=>  $user->data['user_id'],
-					'L_USERCOLOUR' 	=>  $user->data['user_colour'], 
-					'L_ORIGIN' 		=>  $origin
-					);
 				
-				$this->log_insert ( array (
-				'log_type' 		=> $log_action ['header'], 
-				'log_action' 	=> $log_action ) );
+				if ($origin != 'cron')
+				{
+					//no logging for cronjobs
+					$log_action = array (
+						'header' 		=> 'L_ACTION_DECAYOFF',
+						'L_USER' 		=>  $user->data['user_id'],
+						'L_USERCOLOUR' 	=>  $user->data['user_colour'], 
+						'L_ORIGIN' 		=>  $origin
+						);
+					
+					$this->log_insert ( array (
+					'log_type' 		=> $log_action ['header'], 
+					'log_action' 	=> $log_action ) );
+				}
 				
 				return true;
 				break;
@@ -2514,14 +2514,9 @@ class acp_dkp_raid extends bbDKP_Admin
 				}
 				$db->sql_freeresult ($result);
 				
-				if ($countraids > 0)
+				if ($countraids > 0 && $origin != 'cron' )
 				{
-					
-					if ($origin == 'cron')
-					{
-						$origin = $user->lang['DECAYCRON'];
-					}
-					
+					//no logging for cronjobs due to users just not getting it.
 					$log_action = array (
 					'header' 	=> 'L_ACTION_DECAYSYNC',
 					'L_USER' 	=>  $user->data['user_id'],
