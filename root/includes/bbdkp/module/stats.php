@@ -188,7 +188,7 @@ class statistics
 		
 		if ($interval > 0)
 		{
-			 $sql .= " AND ( " . (int) $time . " - r.raid_start) / (3600 * 24) < ". (int) $interval;
+			 $sql .= " AND ( - r.raid_start + " . (int) $time . " ) / (3600 * 24) < ". (int) $interval;
 		}
 	
 		$result = $db->sql_query($sql);
@@ -652,7 +652,7 @@ class statistics
 					}				
 					$sql .= " AND ev.event_id = r.event_id
 					AND r.raid_id = rd.raid_id
-					AND(  " . $time . " - r.raid_start )/(3600 * 24) < ". (int) $config['bbdkp_list_p3'];
+					AND( - r.raid_start + " . $time . "  )/(3600 * 24) < ". (int) $config['bbdkp_list_p3'];
 					if ( ($config['bbdkp_hide_inactive'] == 1) && (!$this->show_all) )
 					{
 					   $sql .= " AND d.member_status='1'";
@@ -692,7 +692,7 @@ class statistics
 				}				
 				$sql .= " AND ev.event_id = r.event_id
 				AND r.raid_id = rd.raid_id
-				AND(  " . $time . " - r.raid_start)/(3600 * 24) < ". (int) $config['bbdkp_list_p2'];
+				AND(  - r.raid_start + " . $time . " ) /(3600 * 24) < ". (int) $config['bbdkp_list_p2'];
 				if ( ($config['bbdkp_hide_inactive'] == 1) && (!$this->show_all) )
 				{
 				   $sql .= " AND d.member_status='1'";
@@ -731,7 +731,7 @@ class statistics
 				}				
 				$sql .= " AND ev.event_id = r.event_id
 				AND r.raid_id = rd.raid_id
-				AND( " . $time . " - r.raid_start)/(3600 * 24) < ". (int) $config['bbdkp_list_p1']; 
+				AND( - r.raid_start + " . $time . " )/(3600 * 24) < ". (int) $config['bbdkp_list_p1']; 
 				if ( ($config['bbdkp_hide_inactive'] == 1) && (!$this->show_all) )
 				{
 				   $sql .= " AND d.member_status='1'";
