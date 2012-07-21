@@ -105,7 +105,7 @@ $gameinstall['wow']=false;
 $gameinstall['warhammer']=false;
 $gameinstall['swtor']=false;
 $gameinstall['lineage2']=false;
-
+$gameinstall['tera']=false;
 
 $choice=false;
 if (isset($config['bbdkp_default_game'])) 
@@ -160,6 +160,10 @@ if (isset($config['bbdkp_games_lineage2']))
 {
 	$gameinstall['lineage2'] = $config['bbdkp_games_lineage2'];
 }
+if (isset($config['bbdkp_games_tera']))
+{
+	$gameinstall['tera'] = $config['bbdkp_games_tera'];
+}
 
 $options = array(
 		'guildtag'	=> array('lang' => 'UMIL_GUILD', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
@@ -171,13 +175,14 @@ $options = array(
 		'eq'   => array('lang' => 'EQ', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq']) ? true:false)),
 		'eq2'   => array('lang' => 'EQ2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq2']) ? true:false)),
 		'FFXI'   => array('lang' => 'FFXI', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['FFXI']) ? true:false)),
+		'lineage2'     => array('lang' => 'LINEAGE2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lineage2'] ) ? true:false)),
 		'lotro'   => array('lang' => 'LOTRO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lotro']) ? true:false)),
 		'rift'   => array('lang' => 'RIFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['rift']) ? true:false)),
+		'swtor'     => array('lang' => 'SWTOR', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['swtor'] ) ? true:false)),
+		'tera'     => array('lang' => 'TERA', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['tera'] ) ? true:false)),
 		'vanguard'   => array('lang' => 'VANGUARD', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['vanguard'] ) ? true:false)),
 		'warhammer'   => array('lang' => 'WARHAMMER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['warhammer'] ) ? true:false)),
 		'wow'     => array('lang' => 'WOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['wow'] ) ? true:false)),
-		'swtor'     => array('lang' => 'SWTOR', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['swtor'] ) ? true:false)),
-		'lineage2'     => array('lang' => 'LINEAGE2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lineage2'] ) ? true:false)),
 );
 
 /*
@@ -188,13 +193,14 @@ include($phpbb_root_path .'install/gamesinstall/install_daoc.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_eq.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_eq2.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_ffxi.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_lineage2.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_lotro.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_rift.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_swtor.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_tera.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_vanguard.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_warhammer.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_rift.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_swtor.' . $phpEx);
-include($phpbb_root_path .'install/gamesinstall/install_lineage2.' . $phpEx);
 
 /*
  * insert welcome message
@@ -977,18 +983,22 @@ $versions = array(
        'custom' => array( 
             'tableupdates',
     		'gameinstall',  
-          	'bbdkp_caches'
+         
        ), 
- 		
-     '1.2.8' => array(
-     	// no database changes
-     	
-     ),
-
     ), 
 
-    
-
+     '1.2.8' => array(
+     	// add Tera
+       'config_add' => array(
+    		array('bbdkp_games_tera', 0, true),
+    	),
+     
+     'custom' => array( 
+    		'gameinstall',  
+          	'bbdkp_caches', 
+    	),
+    	    	
+     ),
 
 );
 
@@ -1116,8 +1126,6 @@ function gameinstall($action, $version)
 						$installed_games[] = 'wow';
 					}
 					
-					
-		       		
 	                foreach($installed_games as $gameid)
 	                {
 	                	// update the guildbank with the first installed gameid
@@ -1183,10 +1191,21 @@ function gameinstall($action, $version)
 					}
 					return array('command' => sprintf($user->lang['UMIL_GAME127'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
+				case '1.2.8':
+					
+					// set switch to "on"
+					if(request_var('tera', 0) == 1)
+					{
+						install_tera($action, $version);
+						$umil->config_update('bbdkp_games_tera', 1, true);
+						$installed_games[] = 'tera';
+					}
+					return array('command' => sprintf($user->lang['UMIL_GAME128'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
+					break;
 			}
 			break;
 		case 'uninstall' :
-			return array('command' => 'UMIL_GAMEUNINST126', 'result' => 'SUCCESS');
+			return array('command' => 'UMIL_GAMEUNINST', 'result' => 'SUCCESS');
 	}
 					
 }
@@ -1218,7 +1237,7 @@ function tableupdates($action, $version)
 				case '1.2.7':
 					// if we update to v127 then rename the image column, drop the _small
 					// before v127 only mysql was supported so we only need to check this for mssql when upgrading from 126. 
-					switch ($db->sql_layer)
+					/*switch ($db->sql_layer)
 					{
 						case 'mysqli':
 						case 'mysql4':
@@ -1234,7 +1253,10 @@ function tableupdates($action, $version)
 							return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
 							break;
 					}
-												
+					*/
+					break;
+				case '1.2.8':
+					break;					
 			}
 			break;
 		case 'uninstall' :
@@ -1243,7 +1265,9 @@ function tableupdates($action, $version)
 				case '1.2.6':
 					break;
 				case '1.2.7':
-					break;					
+					break;
+				case '1.2.8':
+					break;	
 			}
 			break;
 	}

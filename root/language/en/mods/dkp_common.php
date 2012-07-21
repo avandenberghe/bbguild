@@ -114,18 +114,19 @@ $lang = array_merge($lang, array(
 'MENU_PLANNER' => 'Planner',
 
 //games supported
-'WOW'        => 'World of Warcraft' , 
-'LOTRO'      => 'The Lord of the Rings Online' , 
-'EQ'         => 'EverQuest' , 
-'DAOC'       => 'Dark Age of Camelot' , 
-'VANGUARD' 	 => 'Vanguard - Saga of Heroes' , 
-'EQ2'        => 'EverQuest II' , 
-'WARHAMMER'  => 'Warhammer Online' ,
 'AION'       => 'Aion' , 
+'DAOC'       => 'Dark Age of Camelot' , 
+'EQ'         => 'EverQuest' , 
+'EQ2'        => 'EverQuest II' , 
 'FFXI'       => 'Final Fantasy XI',
+'LINEAGE2'   => 'Lineage 2', 
+'LOTRO'      => 'Lord of the Rings Online' , 
 'RIFT'       => 'Rift',
 'SWTOR'      => 'Starwars : The old Republic', 
-'LINEAGE2'   => 'Lineage 2', 
+'TERA'   	 => 'Tera', 
+'VANGUARD' 	 => 'Vanguard Saga of Heroes' , 
+'WARHAMMER'  => 'Warhammer Online' ,
+'WOW'        => 'World of Warcraft' , 
 
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status', 

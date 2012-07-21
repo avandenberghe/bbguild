@@ -157,22 +157,9 @@ class acp_dkp_event extends bbDKP_Admin
 				{
 					$s_zonelist_options = '<option value="--" selected="selected">--</option>';
 				}
-			    $games = array(
-                    'wow'        => $user->lang['WOW'], 
-                    'lotro'      => $user->lang['LOTRO'], 
-                    'eq'         => $user->lang['EQ'], 
-                    'daoc'       => $user->lang['DAOC'], 
-                    'vanguard' 	 => $user->lang['VANGUARD'],
-                    'eq2'        => $user->lang['EQ2'],
-                    'warhammer'  => $user->lang['WARHAMMER'],
-                    'aion'       => $user->lang['AION'],
-                    'FFXI'       => $user->lang['FFXI'],
-                	'rift'       => $user->lang['RIFT'],
-                	'swtor'      => $user->lang['SWTOR'], 
-					'lineage2'   => $user->lang['LINEAGE2']	                	
-                );
+
                 $installed_games = array();
-                foreach($games as $gameid => $gamename)
+                foreach($this->games as $gameid => $gamename)
                 {
                 	//add value to dropdown when the game config value is 1
                 	if ($config['bbdkp_games_' . $gameid] == 1)

@@ -202,7 +202,8 @@ $lang = array_merge($lang, array(
 'UMIL_GAME125' => 'Game data 1.2.5 installed for %s', 
 'UMIL_GAME126' => 'Game data 1.2.6 installed for %s',
 'UMIL_GAME127' => 'Game data 1.2.7 installed for %s',
-'UMIL_GAMEUNINST123' => 'Game data uninstalled', 
+'UMIL_GAME128' => 'Game data 1.2.8 installed for %s',
+'UMIL_GAMEUNINST' => 'Game data uninstalled', 
 'UMIL_UPDTABLES' =>  'Tables %s for version %s', 
 
 // ACP titles

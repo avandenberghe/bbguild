@@ -38,25 +38,15 @@ class roster
 		$this->selfurl = $selfurl;
 		$this->mode = ($config['bbdkp_roster_layout'] == '0') ? 'listing' : 'class';
 		$this->start=$start;
-		
-		$games = array(
-		    'wow'        => $user->lang['WOW'], 
-		    'lotro'      => $user->lang['LOTRO'], 
-		    'eq'         => $user->lang['EQ'], 
-		    'daoc'       => $user->lang['DAOC'], 
-		    'vanguard' 	 => $user->lang['VANGUARD'],
-		    'eq2'        => $user->lang['EQ2'],
-		    'warhammer'  => $user->lang['WARHAMMER'],
-		    'aion'       => $user->lang['AION'],
-		    'FFXI'       => $user->lang['FFXI'],
-			'rift'       => $user->lang['RIFT'],
-			'swtor'      => $user->lang['SWTOR'],
-			'lineage2'   => $user->lang['LINEAGE2']
-		);
-
+		// Include the abstract base
+		if (!class_exists('bbDKP_Admin'))
+		{
+			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
+		}
+		$bbdkp = new bbDKP_Admin();
 		$this->game_id = $game_id;
 		$installed_games = array();
-		foreach($games as $id => $gamename)
+		foreach($bbdkp->games as $id => $gamename)
 		{
 			if ($config['bbdkp_games_' . $id] == 1)
 			{
