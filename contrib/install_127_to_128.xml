@@ -6,10 +6,10 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.2.6PL5 to 1.2.7]]></title>
-		<description lang="en"><![CDATA[Update 1.2.6PL5 to 1.2.7]]></description>
-		<description lang="fr"><![CDATA[mise à jour 1.2.6PL5 to 1.2.7]]></description>
-		<description lang="de"><![CDATA[Aktualisierung 1.2.6PL5 to 1.2.7]]></description>
+		<title lang="en"><![CDATA[bbDKP 1.2.7 to 1.2.8]]></title>
+		<description lang="en"><![CDATA[Update 1.2.7 to 1.2.8]]></description>
+		<description lang="fr"><![CDATA[mise à jour 1.2.7 to 1.2.8]]></description>
+		<description lang="de"><![CDATA[Aktualisierung 1.2.7 to 1.2.8]]></description>
 		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.6-PL5, Replace the files listed below]]></author-notes>
 		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.6-PL5, Remplacez les fichiers listés en bas]]></author-notes>
 		<author-notes lang="de"><![CDATA[Benötigt bbdkp 1.2.6-PL5, ertsetze die hierunder erwähnte Dateien]]></author-notes>
@@ -49,7 +49,7 @@
 				</contributions-group>
 			</author>				
 		</author-group>
-		<mod-version>1.2.7</mod-version>
+		<mod-version>1.2.8</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>300</time>
@@ -63,24 +63,7 @@
 	</header>
 	<action-group>
 		<copy>
-			<file from="root/adm/style/dkp/acp_addfaction.html" to="adm/style/dkp/acp_addfaction.html"/>
-			<file from="root/adm/style/dkp/acp_addrace.html" to="adm/style/dkp/acp_addrace.html"/>
-			<file from="root/adm/style/dkp/acp_mainpage.html" to="adm/style/dkp/acp_mainpage.html"/>
-			<file from="root/adm/style/dkp/jquery.js" to="adm/style/dkp/jquery.js"/>									
-			<file from="root/images/class_images/*.*" to="images/class_images/*.*"/>
-			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>				
-			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>	
-			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
-			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>			
-			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
-			<file from="root/install/*.*" to="install/*.*"/>
-			<file from="root/language/en/mods/dkp_admin.php" to="language/en/mods/dkp_admin.php"/>
-			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>			
-			<file from="root/styles/prosilver/template/dkp/jquery.js" to="styles/prosilver/template/dkp/jquery.js"/>
-			<file from="root/styles/prosilver/template/dkp/jquery.tools.min.js" to="styles/prosilver/template/dkp/jquery.tools.min.js"/>
-			<file from="root/styles/prosilver/template/dkp/ucp_dkp.html" to="styles/prosilver/template/dkp/ucp_dkp.html"/>
-			<file from="root/styles/prosilver/template/dkp/ucp_dkp_charadd.html" to="styles/prosilver/template/dkp/ucp_dkp_charadd.html"/>									
-			<file from="root/umil/umil.php" to="umil/umil.php"/>		
+				<!-- todo -->	
 		</copy>
 		<diy-instructions lang="en"><![CDATA[Afterwards, run database installer and purge template cache]]></diy-instructions>
 		<diy-instructions lang="fr"><![CDATA[ensuite, lancer mise à jour db et purgez la cache]]></diy-instructions>
