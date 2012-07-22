@@ -68,23 +68,6 @@ function install_wow()
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 	unset ( $sql_ary );
 	
-	// dkp system
-	// if we only have the default dkp system installed then add some more 
-	$result = $db->sql_query('select count(*) as num_dkp from ' . $table_prefix . 'bbdkp_dkpsystem');
-	$total_dkps = (int) $db->sql_fetchfield('num_dkp');
-	$db->sql_freeresult($result);
-	if($total_dkps == 1)
-	{
-		$sql_ary = array ();
-		$sql_ary [] = array ('dkpsys_name' => 'WLK10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'WLK25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'CATA10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'CATA25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'PAN10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'PAN25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
-		unset ( $sql_ary );
-	}
 
 	// classes
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'wow' and (attribute='class' or attribute = 'race')");
@@ -219,6 +202,58 @@ function install_wow()
 	$db->sql_query($sql);
 	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_tfr' where event_name like 'Throne%' ";  
 	$db->sql_query($sql);
+	
+		// dkp system
+	// if we only have the default dkp system installed then add some more 
+	$result = $db->sql_query('select count(*) as num_dkp from ' . $table_prefix . 'bbdkp_dkpsystem');
+	$total_dkps = (int) $db->sql_fetchfield('num_dkp');
+	$db->sql_freeresult($result);
+	if($total_dkps == 1)
+	{
+		$sql_ary = array ();
+		$sql_ary [] = array ('dkpsys_name' => 'WLK10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'WLK25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'CATA10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'CATA25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'PAN10', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$sql_ary [] = array ('dkpsys_name' => 'PAN25', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
+		unset ( $sql_ary );
+	}
+	
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'Tera Dungeons' ");
+	// dkp pool
+	$sql_ary = array (
+		'dkpsys_name' => 'Tera Dungeons', 
+		'dkpsys_status' => 'Y', 
+		'dkpsys_addedby' => 'admin', 
+		'dkpsys_default' => 'N' );
+	$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+	$db->sql_query($sql);
+	$teradkpid = $db->sql_nextid();
+	
+    $sql_ary = array();
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Bastion of Lok', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => 'tera_lok'  ) ;
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Sinestral Manor', 'event_color' => '#C6DEFF', 'event_value' => 5 , 'event_imagename' => 'tera_sines') ;
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Cultists’ Refuge', 'event_color' => '#6D7B8D', 'event_value' => 5, 'event_imagename' => 'tera_cult' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Necromancer Tomb', 'event_color' => '#6D7B8D', 'event_value' => 5, 'event_imagename' => 'tera_necro' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Sigil Adstringo', 'event_color' => '#6D7B8D', 'event_value' => 5, 'event_imagename' => 'tera_sigil' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Golden Labyrinth', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_gold' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Akasha’s Hideout', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_aka' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Akasha’s Hideout (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_aka2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ascent of Saravash', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_sar' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ebon Tower', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_ebo' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ebon Tower (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_ebo2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Kelsaik’s Nest', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_kel' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Kelsaik’s Nest (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_kel2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Labyrinth of Terror', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_lab' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Labyrinth of Terror (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_lab2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Balder’s Temple', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_bald' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Balder’s Temple (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_bald2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_kap' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_kap2' );
+	
+	$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
 	
 }
 ?>

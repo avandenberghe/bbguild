@@ -31,15 +31,15 @@ function install_tera()
 	// classes
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'tera'" ); 
 	$sql_ary = array ();
-	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#999', 'imagename' => 'tera_unknown');   
-	$sql_ary [] = array ('game_id' => 'tera','class_id' => 1, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#66CCFF', 'imagename' => 'tera_archer');   
-	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 2, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50, 'colorcode' =>  '#AFDCEC',  'imagename' => 'tera_berserker');    
-	$sql_ary [] = array ('game_id' => 'tera','class_id' => 3, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#437C17',  'imagename' => 'tera_lancer');    
-	$sql_ary [] = array ('game_id' => 'tera','class_id' => 4, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 50 ,  'colorcode' =>  '#663333',  'imagename' => 'tera_mystic'); 
-	$sql_ary [] = array ('game_id' => 'tera','class_id' => 5, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 50 , 'colorcode' =>  '#CC0033',  'imagename' => 'tera_priest');
-	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 6, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 50, 'colorcode' =>  '#AFDCEC',  'imagename' => 'tera_slayer');
-	$sql_ary [] = array ('game_id' => 'tera','class_id' => 7, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 50 ,  'colorcode' =>  '#663333',  'imagename' => 'tera_sorcerer');
-	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 8, 'class_faction_id' => 1, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 50, 'colorcode' =>  '#AFDCEC',  'imagename' => 'tera_warrior');	 	  
+	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#999', 'imagename' => 'tera_unknown');   
+	$sql_ary [] = array ('game_id' => 'tera','class_id' => 1, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#66CCFF', 'imagename' => 'tera_archer');   
+	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 2, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#AFDCEC',  'imagename' => 'tera_berserker');    
+	$sql_ary [] = array ('game_id' => 'tera','class_id' => 3, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#437C17',  'imagename' => 'tera_lancer');    
+	$sql_ary [] = array ('game_id' => 'tera','class_id' => 4, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 60 ,  'colorcode' =>  '#663333',  'imagename' => 'tera_mystic'); 
+	$sql_ary [] = array ('game_id' => 'tera','class_id' => 5, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#CC0033',  'imagename' => 'tera_priest');
+	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 6, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#AFDCEC',  'imagename' => 'tera_slayer');
+	$sql_ary [] = array ('game_id' => 'tera','class_id' => 7, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 60 ,  'colorcode' =>  '#663333',  'imagename' => 'tera_sorcerer');
+	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 8, 'class_faction_id' => 1, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#AFDCEC',  'imagename' => 'tera_warrior');	 	  
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
 	unset ( $sql_ary ); 
 
@@ -50,10 +50,10 @@ function install_tera()
 	$sql_ary [] = array ('game_id' => 'tera','race_id' => 1, 'race_faction_id' => 1, 'image_female' => 'tera_aman_female',  'image_male' => 'tera_aman_male' );  
 	$sql_ary [] = array ('game_id' => 'tera','race_id' => 2, 'race_faction_id' => 1, 'image_female' => 'tera_baraka_female',  'image_male' => 'tera_baraka_male' ); 
 	$sql_ary [] = array ('game_id' => 'tera','race_id' => 3, 'race_faction_id' => 1, 'image_female' => 'tera_castanic_female',  'image_male' => 'tera_castanic_male' ); 
-	$sql_ary [] = array ('game_id' => 'tera','race_id' => 4, 'race_faction_id' => 1, 'image_female' => 'tera_elin_female',  'image_male' => 'tera_elin_male' ) ; 
-	$sql_ary [] = array ('game_id' => 'tera','race_id' => 5, 'race_faction_id' => 1, 'image_female' => 'tera_helf_female',  'image_male' => 'tera_helf_male' );  
+	$sql_ary [] = array ('game_id' => 'tera','race_id' => 4, 'race_faction_id' => 1, 'image_female' => 'tera_elin_female',  'image_male' => 'tera_elin_female' ) ; 
+	$sql_ary [] = array ('game_id' => 'tera','race_id' => 5, 'race_faction_id' => 1, 'image_female' => 'tera_highelf_female',  'image_male' => 'tera_highelf_male' );  
 	$sql_ary [] = array ('game_id' => 'tera','race_id' => 6, 'race_faction_id' => 1, 'image_female' => 'tera_human_female',  'image_male' => 'tera_human_male'  ); 
-	$sql_ary [] = array ('game_id' => 'tera','race_id' => 7, 'race_faction_id' => 1, 'image_female' => 'tera_popori_female',  'image_male' => 'tera_popori_male' ); 
+	$sql_ary [] = array ('game_id' => 'tera','race_id' => 7, 'race_faction_id' => 1, 'image_female' => 'tera_popori_male',  'image_male' => 'tera_popori_male' ); 
 	$db->sql_multi_insert ($table_prefix . 'bbdkp_races', $sql_ary);
 	unset ( $sql_ary );
 	
@@ -95,25 +95,27 @@ function install_tera()
 	$teradkpid = $db->sql_nextid();
 	
     $sql_ary = array();
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Bastion of Lok', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => 'tera_lok'  ) ;
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Sinestral Manor', 'event_color' => '#C6DEFF', 'event_value' => 5 , 'event_imagename' => 'tera_sines') ;
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Cultists’ Refuge', 'event_color' => '#6D7B8D', 'event_value' => 5, 'event_imagename' => 'tera_cult' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Necromancer Tomb', 'event_color' => '#6D7B8D', 'event_value' => 5, 'event_imagename' => 'tera_necro' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Sigil Adstringo', 'event_color' => '#6D7B8D', 'event_value' => 5, 'event_imagename' => 'tera_sigil' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Golden Labyrinth', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_gold' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Akasha’s Hideout', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_aka' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Akasha’s Hideout (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_aka2' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ascent of Saravash', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_sar' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ebon Tower', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_ebo' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ebon Tower (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_ebo2' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Kelsaik’s Nest', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_kel' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Kelsaik’s Nest (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_kel2' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Labyrinth of Terror', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_lab' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Labyrinth of Terror (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_lab2' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Balder’s Temple', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_bald' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Balder’s Temple (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_bald2' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_kap' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima (Hard)', 'event_color' => '#842DCE', 'event_value' => 5, 'event_imagename' => 'tera_kap2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Bastion of Lok(20)', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => 'tera_lok'  ) ;
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Sinestral Manor (26)', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => 'tera_sines') ;
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Cultists’ Refuge (35)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'tera_cult' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Necromancer Tomb (41)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'tera_necro' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Sigil Adstringo (45)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'tera_sigil' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Golden Labyrinth (48)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'tera_gold' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Akasha’s Hideout (48)', 'event_color' => '#BBFF66', 'event_value' => 5, 'event_imagename' => 'tera_aka' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Akasha’s Hideout (48* Hard)', 'event_color' => '#BBFF66', 'event_value' => 5, 'event_imagename' => 'tera_aka2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ascent of Saravash (52)', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => 'tera_sar' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Saleron’s Sky Garden (53)', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => 'tera_sal' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Suryati’s Peak (56)', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => 'tera_sur' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ebon Tower (58)', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => 'tera_ebo' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ebon Tower (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'tera_ebo2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Kelsaik’s Nest (58)', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => 'tera_kel' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Kelsaik’s Nest (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'tera_kel2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Labyrinth of Terror (58)', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => 'tera_lab' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Labyrinth of Terror (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'tera_lab2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Balder’s Temple (60)', 'event_color' => '#DD0066', 'event_value' => 5, 'event_imagename' => 'tera_bald' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Balder’s Temple (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'tera_bald2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima (60)', 'event_color' => '#DD0066', 'event_value' => 5, 'event_imagename' => 'tera_kap' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'tera_kap2' );
 	
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
 	
