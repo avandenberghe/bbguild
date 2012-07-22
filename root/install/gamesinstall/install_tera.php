@@ -27,19 +27,19 @@ function install_tera()
 	$sql_ary [] = array ('game_id' => 'tera','faction_id' => 1, 'faction_name' => 'Tera' );
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_factions', $sql_ary );
 	unset ( $sql_ary );
-	
+   
 	// classes
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'tera'" ); 
 	$sql_ary = array ();
 	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#999', 'imagename' => 'tera_unknown');   
-	$sql_ary [] = array ('game_id' => 'tera','class_id' => 1, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#66CCFF', 'imagename' => 'tera_archer');   
-	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 2, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#AFDCEC',  'imagename' => 'tera_berserker');    
-	$sql_ary [] = array ('game_id' => 'tera','class_id' => 3, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#437C17',  'imagename' => 'tera_lancer');    
-	$sql_ary [] = array ('game_id' => 'tera','class_id' => 4, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 60 ,  'colorcode' =>  '#663333',  'imagename' => 'tera_mystic'); 
-	$sql_ary [] = array ('game_id' => 'tera','class_id' => 5, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#CC0033',  'imagename' => 'tera_priest');
-	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 6, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#AFDCEC',  'imagename' => 'tera_slayer');
-	$sql_ary [] = array ('game_id' => 'tera','class_id' => 7, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 60 ,  'colorcode' =>  '#663333',  'imagename' => 'tera_sorcerer');
-	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 8, 'class_faction_id' => 1, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#AFDCEC',  'imagename' => 'tera_warrior');	 	  
+	$sql_ary [] = array ('game_id' => 'tera','class_id' => 1, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#00CC66', 'imagename' => 'tera_archer');   
+	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 2, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#CC0000',  'imagename' => 'tera_berserker');    
+	$sql_ary [] = array ('game_id' => 'tera','class_id' => 3, 'class_faction_id' => 1, 'class_armor_type' => 'HEAVY', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#C0A172',  'imagename' => 'tera_lancer');    
+	$sql_ary [] = array ('game_id' => 'tera','class_id' => 4, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 60 ,  'colorcode' =>  '#7700AA',  'imagename' => 'tera_mystic'); 
+	$sql_ary [] = array ('game_id' => 'tera','class_id' => 5, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 60 , 'colorcode' =>  '#CCCCFF',  'imagename' => 'tera_priest');
+	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 6, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#FFFF33',  'imagename' => 'tera_slayer');
+	$sql_ary [] = array ('game_id' => 'tera','class_id' => 7, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 60 ,  'colorcode' =>  '#0077BB',  'imagename' => 'tera_sorcerer');
+	$sql_ary [] = array ('game_id' => 'tera', 'class_id' => 8, 'class_faction_id' => 1, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 60, 'colorcode' =>  '#FF9900',  'imagename' => 'tera_warrior');	 	  
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
 	unset ( $sql_ary ); 
 
