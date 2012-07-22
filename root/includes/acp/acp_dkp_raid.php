@@ -1411,13 +1411,9 @@ class acp_dkp_raid extends bbDKP_Admin
 		{
 			while ( $row = $db->sql_fetchrow ($result)) 
 			{
-				$old_raid_value = (float) $row['raid_value'];
-				$delta_raid_value = $raid['raid_value'] - $old_raid_value; 
-
-				$old_time_bonus = (float) $row['time_bonus'];
-				$delta_time_bonus =  $raid['time_bonus'] - $old_time_bonus;
-				
-				$delta_tot = $delta_raid_value + $delta_time_bonus; 
+				$old_raid_value = (float) - $row['raid_value'];
+				$old_time_bonus = (float) - $row['time_bonus'];
+				$old_total = $old_raid_value + $old_time_bonus; 
 				
 				$query = $db->sql_build_array ( 'UPDATE', array (
 					'raid_value' 		=> $raid['raid_value'],
@@ -1428,17 +1424,8 @@ class acp_dkp_raid extends bbDKP_Admin
 				( int ) $raid_id . ' and member_id = ' . (int) $row['member_id'] ;
 				$db->sql_query ($sql);
 
-				// update dkp account
-				$sql  = 'UPDATE ' . MEMBER_DKP_TABLE . ' 
-		         SET member_raid_value = member_raid_value + ' . (string) $delta_raid_value . ', 
-		         	 member_time_bonus = member_time_bonus + ' . (string)  $delta_time_bonus . ', 
-		         	 member_earned = member_earned + ' . (string) $delta_tot  .
-		         	' WHERE member_dkpid = ' . (string) $old_raid['event_dkpid'] . ' AND member_id = ' . (string) $row['member_id'];
-				
-				$db->sql_query($sql);
-				
-				// update firstdate & lastdate
-				$this->update_raiddate($row['member_id'], $old_raid['event_dkpid']);
+				$this->add_dkp($old_raid_value, $old_time_bonus, $raid['raid_start'], $old_raid['event_dkpid'], $row['member_id'], -1);
+				$this->add_dkp($raid['raid_value'], $raid['time_bonus'], $raid['raid_start'], $old_raid['event_dkpid'], $row['member_id'], 1);
 				
 			}
 		}
@@ -1654,26 +1641,38 @@ class acp_dkp_raid extends bbDKP_Admin
 
 
 	/**
-    * function add_dkp : 
-    * adds raid value as earned to each raider, 
-    * increase raidcount
-    * set last and first raiddates for the attending raiders
     * 
     */
-    public function add_dkp($raid_value, $time_bonus, $raid_start, $dkpid, $member_id )
+	
+	
+	/**
+     * function add_dkp : 
+     * adds raid value as earned to each raider, 
+     * increase raidcount if action = 1
+     * set last and first raiddates for the attending raiders
+	 *
+	 * @param decimal $raid_value
+	 * @param decimal $time_bonus
+	 * @param int $raid_start
+	 * @param int $dkpid
+	 * @param int $member_id
+	 * @param integer $action (-1 if delete, 0 if existing raid, +1 if new raid)
+	 */
+    public function add_dkp($raid_value, $time_bonus, $raid_start, $dkpid, $member_id, $action = 1)
     {
-		global $db, $user;
-       // has dkp record ?
-        $present = 0;
+		global $db;
+		
+       // check if user has dkp record ?
 		$sql = 'SELECT count(member_id) as present FROM ' . MEMBER_DKP_TABLE . '  
 				WHERE member_id = ' . $member_id . ' 
 				AND member_dkpid = ' . $dkpid;
 		$result = $db->sql_query($sql);
         $present = (int) $db->sql_fetchfield('present', false, $result);
         $db->sql_freeresult($result);
-	 	if ($present == 1)
+	 	
+        if ($present == 1)
         {
-			$this->update_dkprecord($raid_value, $time_bonus, $raid_start, $dkpid, $member_id ); 
+			$this->update_dkprecord($raid_value, $time_bonus, $raid_start, $dkpid, $member_id, $action); 
         }
         elseif ($present == 0)
         {
@@ -1685,9 +1684,21 @@ class acp_dkp_raid extends bbDKP_Admin
      * 
      * updates dkp record
      */
-    private function update_dkprecord($raid_value, $timebonus, $raidstart, $dkpid, $member_id)
+    
+    /**
+     * updates a dkp record
+     *
+     * @param decimal $raid_value
+     * @param decimal $timebonus
+     * @param int $raidstart
+     * @param int $dkpid
+     * @param int $member_id
+     * @param integer $action (-1 if delete, 0 if existing raid, +1 if new raid)
+     * @return boolean
+     */
+    private function update_dkprecord($raid_value, $timebonus, $raidstart, $dkpid, $member_id, $action = 1)
     {
-    	global $db, $user; 
+    	global $db; 
 
     	$sql = 'SELECT member_firstraid, member_lastraid FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' AND  member_dkpid = ' . $dkpid;  
         $result = $db->sql_query($sql);
@@ -1697,35 +1708,55 @@ class acp_dkp_raid extends bbDKP_Admin
 			$lastraid = (int) max(0, $row['member_lastraid']); 
 		}
 		$db->sql_freeresult($result);
-           $sql  = 'UPDATE ' . MEMBER_DKP_TABLE . ' 
-	       SET member_earned = member_earned + ' . (string) $raid_value . ' + ' . (string) $timebonus . ' , 
-	       member_raid_value = member_raid_value + ' . (string) $raid_value . ', 
-	       member_time_bonus = member_time_bonus + ' . (string) $timebonus . ', ';
-	       
-	       // update firstraid if it's later than this raid's starting time
-	       if ( $firstraid > $raidstart )
-	       {
-	          $sql .= 'member_firstraid = ' . $raidstart . ', ';
-	       }
-
-	       // Do update their lastraid if it's earlier than this raid's starting time
-	       if ( $lastraid < $raidstart )
-	       {
-	          $sql .= 'member_lastraid = ' . $raidstart. ', ';
-	       }
-	       
-	       $sql .= ' member_raidcount = member_raidcount + 1
-	       WHERE member_dkpid = ' . (int)  $dkpid . '
-	       AND member_id = ' . (int) $member_id;
+		
+		$sql  = 'UPDATE ' . MEMBER_DKP_TABLE . ' 
+		SET member_earned = member_earned + ' . (string) $raid_value . ' + ' . (string) $timebonus . ' , 
+		member_raid_value = member_raid_value + ' . (string) $raid_value . ', 
+		member_time_bonus = member_time_bonus + ' . (string) $timebonus . ', ';
+		
+		// update firstraid if it's later than this raid's starting time
+		if ( $firstraid > $raidstart )
+		{
+		   $sql .= 'member_firstraid = ' . $raidstart . ', ';
+		}
+		
+		// Do update their lastraid if it's earlier than this raid's starting time
+		if ( $lastraid < $raidstart )
+		{
+		   $sql .= 'member_lastraid = ' . $raidstart. ', ';
+		}
+		
+		switch($action)
+		{
+			case -1:
+				$sql .= ' member_raidcount = member_raidcount - 1 ';
+				break;
+			case 0;
+				break;
+			case 1:
+				$sql .= ' member_raidcount = member_raidcount + 1 ';
+				break;
+		}
+		
+		$sql .' WHERE member_dkpid = ' . (int)  $dkpid . '
+		AND member_id = ' . (int) $member_id;
        $db->sql_query($sql);
        return true;
     }
     
     /**
      * adds dkp record
+     *
+     * @param decimal $raid_value
+     * @param decimal $timebonus
+     * @param int $raidstart
+     * @param int $dkpid
+     * @param int $member_id
+     * @return boolean
      */
     private function add_dkprecord($raid_value, $timebonus, $raidstart, $dkpid, $member_id)
     {
+    	
     	global $db, $user; 
          // insert new dkp record
          $query = $db->sql_build_array('INSERT', array(

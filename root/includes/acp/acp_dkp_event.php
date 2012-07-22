@@ -24,15 +24,15 @@ if (! defined('EMED_BBDKP'))
 
 class acp_dkp_event extends bbDKP_Admin
 {
-	var $u_action;
-	var $link;
+	public $u_action;
+	public $link;
 	/** 
 	* main ACP dkp event function
 	* @param int $id the id of the node who parent has to be returned by function 
 	* @param int $mode id of the submenu
 	* @access public 
 	*/
-	function main($id, $mode)
+	public function main($id, $mode)
 	{
 		global $db, $user, $template;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
@@ -51,7 +51,7 @@ class acp_dkp_event extends bbDKP_Admin
 		switch ($mode)
 		{
 			case 'addevent':
-			/* select data */
+			
 			$update = false;
 
 			if(isset($_GET[URI_EVENT]) )
@@ -401,7 +401,7 @@ class acp_dkp_event extends bbDKP_Admin
 	 */
 	function update_event()
 	{
-		global $db, $user;
+		global $db, $user, $phpbb_root_path, $phpEx;
 		$this->url_id = request_var('hidden_id',0);
 
 		// get old event name, value from db
@@ -442,7 +442,7 @@ class acp_dkp_event extends bbDKP_Admin
 		}
 		
 		//
-		// Update the event
+		// Update the event record
 		//
 		$query = $db->sql_build_array('UPDATE', array(
 			'event_dkpid' => $dkpid, 
@@ -455,6 +455,17 @@ class acp_dkp_event extends bbDKP_Admin
 		$sql = 'UPDATE ' . EVENTS_TABLE . ' SET ' . $query . ' WHERE event_id=' . (int) $this->url_id;
 		$db->sql_query($sql);
  
+		
+		if ($dkpid !=$this->old_event['event_dkpid'])
+		{
+			// synchronise
+			if (! class_exists('acp_dkp_sys'))
+			{
+				require ($phpbb_root_path . 'includes/acp/acp_dkp_sys.' . $phpEx);
+			}
+			$acp_dkp_sys = new acp_dkp_sys();
+			$acp_dkp_sys->syncdkpsys(0);
+		}
 		//
 		// Logging
 		//
