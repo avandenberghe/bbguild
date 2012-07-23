@@ -93,6 +93,10 @@ $lang = array_merge($lang, array(
 'LINK11T' => 'Warhammer', 
 'LINK12' => 'http://www.worldofwarcraft.com', 
 'LINK12T' => 'World of Warcraft', 
+'LINK13' => 'http://tera.enmasse.com/', 
+'LINK13T' => 'Tera', 
+'LINK14' => 'http://www.guildwars2.com', 
+'LINK14T' => 'Guild Wars 2', 
 
 // Main Menu
 'MENU' => 'Menu', 
@@ -119,6 +123,7 @@ $lang = array_merge($lang, array(
 'EQ'         => 'EverQuest' , 
 'EQ2'        => 'EverQuest II' , 
 'FFXI'       => 'Final Fantasy XI',
+'GW2'   	 => 'GuildWars 2',
 'LINEAGE2'   => 'Lineage 2', 
 'LOTRO'      => 'Lord of the Rings Online' , 
 'RIFT'       => 'Rift',
