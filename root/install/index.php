@@ -106,6 +106,7 @@ $gameinstall['warhammer']=false;
 $gameinstall['swtor']=false;
 $gameinstall['lineage2']=false;
 $gameinstall['tera']=false;
+$gameinstall['gw2']=false;
 
 $choice=false;
 if (isset($config['bbdkp_default_game'])) 
@@ -164,6 +165,10 @@ if (isset($config['bbdkp_games_tera']))
 {
 	$gameinstall['tera'] = $config['bbdkp_games_tera'];
 }
+if (isset($config['bbdkp_games_gw2']))
+{
+	$gameinstall['gw2'] = $config['bbdkp_games_gw2'];
+}
 
 $options = array(
 		'guildtag'	=> array('lang' => 'UMIL_GUILD', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
@@ -175,6 +180,7 @@ $options = array(
 		'eq'   => array('lang' => 'EQ', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq']) ? true:false)),
 		'eq2'   => array('lang' => 'EQ2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq2']) ? true:false)),
 		'FFXI'   => array('lang' => 'FFXI', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['FFXI']) ? true:false)),
+		'gw2'   => array('lang' => 'GW2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['gw2']) ? true:false)),
 		'lineage2'     => array('lang' => 'LINEAGE2', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lineage2'] ) ? true:false)),
 		'lotro'   => array('lang' => 'LOTRO', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['lotro']) ? true:false)),
 		'rift'   => array('lang' => 'RIFT', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['rift']) ? true:false)),
@@ -201,6 +207,7 @@ include($phpbb_root_path .'install/gamesinstall/install_tera.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_vanguard.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_warhammer.' . $phpEx);
 include($phpbb_root_path .'install/gamesinstall/install_wow.' . $phpEx);
+include($phpbb_root_path .'install/gamesinstall/install_gw2.' . $phpEx);
 
 /*
  * insert welcome message
@@ -991,6 +998,7 @@ $versions = array(
      	// add Tera
        'config_add' => array(
     		array('bbdkp_games_tera', 0, true),
+    		array('bbdkp_games_gw2', 0, true),
     	),
      
      'custom' => array( 
@@ -1200,6 +1208,12 @@ function gameinstall($action, $version)
 						$umil->config_update('bbdkp_games_tera', 1, true);
 						$installed_games[] = 'tera';
 					}
+					if(request_var('gw2', 0) == 1)
+					{
+						install_gw2($action, $version);
+						$umil->config_update('bbdkp_games_gw2', 1, true);
+						$installed_games[] = 'gw2';
+					}					
 					return array('command' => sprintf($user->lang['UMIL_GAME128'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
 			}
