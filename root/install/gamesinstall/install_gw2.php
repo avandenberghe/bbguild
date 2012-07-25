@@ -41,12 +41,12 @@ function install_gw2()
 	//**Adventurers**
 	//engineer
 	$sql_ary [] = array ('game_id' => 'gw2', 'class_id' => 3, 'class_faction_id' => 1, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 80, 'colorcode' =>  '#FFFF33',  'imagename' => 'gw2_engineer');
-	//archer
-	$sql_ary [] = array ('game_id' => 'gw2','class_id' => 4, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 80 , 'colorcode' =>  '#00CC66', 'imagename' => 'gw2_archer');   
+	//ranger
+	$sql_ary [] = array ('game_id' => 'gw2','class_id' => 4, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 80 , 'colorcode' =>  '#00CC66', 'imagename' => 'gw2_ranger');   
 	//Thief
 	$sql_ary [] = array ('game_id' => 'gw2', 'class_id' => 5, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 80, 'colorcode' =>  '#FF9900',  'imagename' => 'gw2_thief');	 	  
 	//**Scholars**
-	$sql_ary [] = array ('game_id' => 'gw2','class_id' => 6, 'class_faction_id' => 1, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 80 ,  'colorcode' =>  '#7700AA',  'imagename' => 'gw2_elemental'); 
+	$sql_ary [] = array ('game_id' => 'gw2','class_id' => 6, 'class_faction_id' => 1, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 80 ,  'colorcode' =>  '#7700AA',  'imagename' => 'gw2_elementalist'); 
 	//Mesmer
 	$sql_ary [] = array ('game_id' => 'gw2','class_id' => 7, 'class_faction_id' => 1, 'class_armor_type' => 'ROBE', 'class_min_level' => 1, 'class_max_level' => 80 , 'colorcode' =>  '#CCCCFF',  'imagename' => 'gw2_mesmer');
 	//Necromancer
@@ -60,12 +60,12 @@ function install_gw2()
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'gw2'");
 	$sql_ary = array ();
 	//Unknown
-	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 0, 'race_faction_id' => 1, 'image_female' => ' ', 'image_male' => ' '  ); 
-	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 1, 'race_faction_id' => 1, 'image_female' => 'gw2_sylvari_female',  'image_male' => 'gw2_sylvari_male' );  
-	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 2, 'race_faction_id' => 1, 'image_female' => 'gw2_norn_female',  'image_male' => 'gw2_norn_male' ); 
-	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 3, 'race_faction_id' => 1, 'image_female' => 'gw2_charr_female',  'image_male' => 'gw2_charr_male' ); 
-	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 4, 'race_faction_id' => 1, 'image_female' => 'gw2_asura_female',  'image_male' => 'gw2_asura_male' ) ; 
-	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 5, 'race_faction_id' => 1, 'image_female' => 'gw2_human_female',  'image_male' => 'gw2_human_male'  ); 
+	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 0, 'race_faction_id' => 1, 'image_female' => 'gw2_unknown', 'image_male' => 'gw2_unknown'  ); 
+	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 1, 'race_faction_id' => 1, 'image_female' => 'gw2_sylvari',  'image_male' => 'gw2_sylvari' );  
+	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 2, 'race_faction_id' => 1, 'image_female' => 'gw2_norn',  'image_male' => 'gw2_norn' ); 
+	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 3, 'race_faction_id' => 1, 'image_female' => 'gw2_charr',  'image_male' => 'gw2_charr' ); 
+	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 4, 'race_faction_id' => 1, 'image_female' => 'gw2_asura',  'image_male' => 'gw2_asura' ) ; 
+	$sql_ary [] = array ('game_id' => 'gw2','race_id' => 5, 'race_faction_id' => 1, 'image_female' => 'gw2_human',  'image_male' => 'gw2_human'  ); 
 	$db->sql_multi_insert ($table_prefix . 'bbdkp_races', $sql_ary);
 	unset ( $sql_ary );
 	
@@ -77,9 +77,9 @@ function install_gw2()
 	$sql_ary[] = array('game_id' => 'gw2', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
 	$sql_ary[] = array('game_id' => 'gw2', 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Guardian' ,  'name_short' =>  'Guardian' );
 	$sql_ary[] = array('game_id' => 'gw2', 'attribute_id' => 3, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Engineer' ,  'name_short' =>  'Engineer' );
-	$sql_ary[] = array('game_id' => 'gw2', 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Archer' ,  'name_short' =>  'Archer' );
+	$sql_ary[] = array('game_id' => 'gw2', 'attribute_id' => 4, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Ranger' ,  'name_short' =>  'Ranger' );
 	$sql_ary[] = array('game_id' => 'gw2', 'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Thief' ,  'name_short' =>  'Thief' );
-	$sql_ary[] = array('game_id' => 'gw2', 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Elemental' ,  'name_short' =>  'Elemental' );
+	$sql_ary[] = array('game_id' => 'gw2', 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Elementalist' ,  'name_short' =>  'Elementalist' );
 	$sql_ary[] = array('game_id' => 'gw2', 'attribute_id' => 7, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Mesmer' ,  'name_short' =>  'Mesmer' );
 	$sql_ary[] = array('game_id' => 'gw2', 'attribute_id' => 8, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Necromancer' ,  'name_short' =>  'Necromancer' );
 	
