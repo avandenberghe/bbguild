@@ -1147,7 +1147,10 @@ function gameinstall($action, $version)
 					return array('command' => sprintf($user->lang['UMIL_GAME126'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
 				case '1.2.7':
-					
+					// no new games					
+					return array('command' => sprintf($user->lang['UMIL_GAME127'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
+					break;
+				case '1.2.8':
 					// truncating and reinserting changed game tables
 					if($config['bbdkp_games_lineage2'] == 1 || request_var('lineage2', 0) == 1)
 					{
@@ -1197,11 +1200,8 @@ function gameinstall($action, $version)
 						$umil->config_update('bbdkp_games_wow', 1, true); 
 						$installed_games[] = 'wow';
 					}
-					return array('command' => sprintf($user->lang['UMIL_GAME127'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
-					break;
-				case '1.2.8':
-					
-					// set switch to "on"
+
+					// set switch to "on" for new games
 					if(request_var('tera', 0) == 1)
 					{
 						install_tera($action, $version);
