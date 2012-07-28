@@ -344,7 +344,8 @@ class acp_dkp_item extends bbDKP_Admin
 		{
 			$loottime = $row['raid_start'];
 		}
-	
+		$db->sql_freeresult ( $result );
+		
 		//
 		// Generate random group key
 		$group_key = $this->gen_group_key ( $item_name, $loottime, $raid_id + rand(10,100) );

@@ -697,6 +697,17 @@ class acp_dkp extends bbDKP_Admin
 
 			//end where to get bbdkp plugins if none are installed				
 
+			//list installed games
+			$gi = ' ';
+			foreach ($this->games as $gameid => $gamename)
+			{
+				//add value to dropdown when the game config value is 1
+				if ($config['bbdkp_games_' . $gameid] == 1)
+				{
+					$gi .=  $gamename . ' '; 
+				}
+			}
+				
 			$template->assign_vars(array(
 				'S_LOGS' => $s_logs , 
 				'GLYPH' => "$phpbb_admin_path/images/glyphs/view.gif" , 
@@ -710,7 +721,9 @@ class acp_dkp extends bbDKP_Admin
 				'NUMBER_OF_ADJUSTMENTS' => $total_adjustmentcount , 
 				'RAIDS_PER_DAY' => $raids_per_day , 
 				'ITEMS_PER_DAY' => $items_per_day , 
-				'BBDKP_STARTED' => $bbdkp_started));
+				'BBDKP_STARTED' => $bbdkp_started, 
+				'GAMES_INSTALLED' => $gi, 
+			));
 			$this->page_title = 'ACP_DKP_MAINPAGE';
 			$this->tpl_name = 'dkp/acp_mainpage';
 			break;
