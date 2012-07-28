@@ -185,7 +185,7 @@ function install_wow()
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 
-	$db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'WoW Cataclysm' ");
+	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'WoW Cataclysm' ");
 	$row = $db->sql_fetchrow ($result); 
 	if($row)
     {
@@ -221,7 +221,7 @@ function install_wow()
 	$sql_ary2 = array();
 	foreach($sql_ary as $evt => $event)
 	{
-		$db->sql_query('SELECT event_id FROM ' . $table_prefix . ' bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
+		$db->sql_query('SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
 		$row = $db->sql_fetchrow ($result); 
 		if(!$row)
 		{

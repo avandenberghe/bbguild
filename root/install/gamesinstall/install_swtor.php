@@ -111,21 +111,28 @@ function install_swtor()
 	
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
-	
-	//SWTOR Dungeons
-	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'SWTOR Dungeons' ");
-	
-	// dkp pool
-	$sql_ary = array (
-		'dkpsys_name' => 'SWTOR Dungeons', 
-		'dkpsys_status' => 'Y', 
-		'dkpsys_addedby' => 'admin', 
-		'dkpsys_default' => 'N' );
-	$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
-	$db->sql_query($sql);
-	$swtordkpid = $db->sql_nextid();
+		
+	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'SWTOR Dungeons' ");
+	$row = $db->sql_fetchrow ($result); 
+	if($row)
+    {
+		$swtordkpid = $row['dkpsys_id'];    	
+    }
+    else
+    {
+    	// dkp pool
+		$sql_ary = array (
+			'dkpsys_name' => 'SWTOR Dungeons', 
+			'dkpsys_status' => 'Y', 
+			'dkpsys_addedby' => 'admin', 
+			'dkpsys_default' => 'N' );
+		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+		$db->sql_query($sql);
+		$swtordkpid = $db->sql_nextid();
+    }
+    $db->sql_freeresult ( $result );
 
-	$sql_ary = array();
+    $sql_ary = array();
 	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'The Esseles', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => ''  ) ;
 	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Black Talon', 'event_color' => '#C6DEFF', 'event_value' => 5 , 'event_imagename' => '') ;
 	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Hammer Station', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => '' );
@@ -135,7 +142,22 @@ function install_swtor()
 	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Voidstar', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => '' );
 	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Huttball', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => '' );
 	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Alderaan', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => '' );
-	$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
+	
+	$sql_ary2 = array();
+	foreach($sql_ary as $evt => $event)
+	{
+		$db->sql_query('SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
+		$row = $db->sql_fetchrow ($result); 
+		if(!$row)
+		{
+			$sql_ary2[] = $event;
+		}
+	}
+	$db->sql_freeresult ($result);
+	if (count($sql_ary2) > 0)
+	{
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
+	}
 	
 	
 }
