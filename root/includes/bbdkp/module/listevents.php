@@ -150,7 +150,6 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
 	        	'NAME' 			=> $event['event_name'],
 	        	'VALUE' 		=> $event['event_value'], 
 				'EVENTCOLOR'  	=> $event['event_color'],
-                'EVENTIMAGE'  	=> $event['event_imagename'],	    
 	        	'RAIDCOUNT' 	=> ($event['raidcount'] == 0) ? $user->lang['NORAIDS'] : $event['raidcount'],
 	        	'OLDEST' 		=> ($event['oldest']=='' ? '' : date($config['bbdkp_date_format'], $event['oldest']) )  ,
 	    		'NEWEST' 		=> ($event['newest']=='' ? '' : date($config['bbdkp_date_format'], $event['newest']) )  

@@ -30,13 +30,21 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 	$result = $db->sql_query($sql);
 	while ( $row = $db->sql_fetchrow($result))
 	{
-		$eventname =  $row['event_name'];
+		if(strlen( $row['event_imagename']) > 1)
+		{
+			$eventimg = $phpbb_root_path . "images/event_images/" . $row['event_imagename'] . ".png"; 
+		}
+		else 
+		{
+			$eventimg = $phpbb_root_path . "images/event_images/dummy.png";
+		}
+		
+		$eventname =  
 		$template->assign_vars(array(
         	'EVENTNAME' 	 => $row['event_name'],
         	'VALUE' 		 => $row['event_value'], 
-			'IMAGEPATH' 			=> $phpbb_root_path . "images/event_images/" . $row['event_imagename'] . ".png", 
-            'S_EVENT_IMAGE_EXISTS' 	=> (strlen($row['event_imagename']) > 1) ? true : false, 
-			'RECORDED_RAID_HISTORY' => sprintf($user->lang['RECORDED_RAID_HISTORY'], $eventname),
+			'IMAGEPATH' 	=> $eventimg,  
+			'RECORDED_RAID_HISTORY' => sprintf($user->lang['RECORDED_RAID_HISTORY'], $row['event_name']),
 	    ));
 
 	}

@@ -31,6 +31,7 @@ class roster
 	private $current_order;
 	private $game_id;
 	private $member_count;
+	private $games; 
 	
 	public function __construct($game_id, $start, $selfurl)
 	{
@@ -45,8 +46,9 @@ class roster
 		}
 		$bbdkp = new bbDKP_Admin();
 		$this->game_id = $game_id;
+		$this->games = $bbdkp->games; 
 		$installed_games = array();
-		foreach($bbdkp->games as $id => $gamename)
+		foreach($this->games as $id => $gamename)
 		{
 			if ($config['bbdkp_games_' . $id] == 1)
 			{
@@ -87,8 +89,6 @@ class roster
 		{
 			$this->displaylisting();
 		}
-
-		
 		
 	}
 		
@@ -208,6 +208,7 @@ class roster
 		 	$a++;
 			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
 		    $template->assign_block_vars('members_row', array(
+		    	'GAME'			=>  $this->games[$row['game_id']], 
 				'COLORCODE'		=> $row['colorcode'],
 				'CLASS'			=> $row['class_name'],
 				'NAME'			=> $row['member_name'],
@@ -250,11 +251,12 @@ class roster
 		$template->assign_vars(array(
 			'ROSTERPAGINATION' 		=> $rosterpagination ,  			
 			'O_NAME'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][0],
-		    'O_CLASS'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][1],
-		    'O_RANK'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][2],
-		    'O_LEVEL'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][3],
-		    'O_PHPBB'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][4],
-			'O_ACHI'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][5]
+			'O_GAME'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][1],		
+		    'O_CLASS'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][2],
+		    'O_RANK'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][3],
+		    'O_LEVEL'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][4],
+		    'O_PHPBB'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][5],
+			'O_ACHI'	=> $this->selfurl .'&amp;'. URI_ORDER. '='. $this->current_order['uri'][6]
 		));
 	
 		
@@ -331,7 +333,7 @@ class roster
 	{
 		global $db, $config; 
 		$sql_array = array();
-		$sql_array['SELECT'] =  'm.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name, 
+		$sql_array['SELECT'] =  'm.game_id, m.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name, 
 	           				 m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url, m.member_portrait_url, 
 	           				 r.rank_prefix , r.rank_name, r.rank_suffix, e.image_female, e.image_male,
 	           				 g.name, g.realm, g.region, c1.name as class_name, c.colorcode, c.imagename, m.phpbb_user_id, u.username, u.user_colour  '; 
@@ -369,11 +371,12 @@ class roster
 		
 		$sort_order = array(
 		    0 => array('m.member_name', 'm.member_name desc'),
-		    1 => array('m.member_class_id', 'm.member_class_id desc'),
-		    2 => array('m.member_rank_id', 'm.member_rank_id desc'),
-		    3 => array('m.member_level', 'm.member_level  desc'),
-		    4 => array('u.username', 'u.username desc'), 
-		    5 => array('m.member_achiev', 'm.member_achiev  desc')
+		    1 => array('m.game_id', 'm.member_name desc'),
+		    2 => array('m.member_class_id', 'm.member_class_id desc'),
+		    3 => array('m.member_rank_id', 'm.member_rank_id desc'),
+		    4 => array('m.member_level', 'm.member_level  desc'),
+		    5 => array('u.username', 'u.username desc'), 
+		    6 => array('m.member_achiev', 'm.member_achiev  desc')
 		);
 		
 		$this->current_order = switch_order($sort_order);
