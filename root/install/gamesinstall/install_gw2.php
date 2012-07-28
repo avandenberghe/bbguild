@@ -33,7 +33,7 @@ function install_gw2()
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'gw2'" ); 
 	$sql_ary = array ();
 	//**Soldiers**
-	$sql_ary [] = array ('game_id' => 'gw2', 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 80 , 'colorcode' =>  '#999', 'imagename' => 'gw2_unknown');   
+	$sql_ary [] = array ('game_id' => 'gw2', 'class_id' => 0, 'class_faction_id' => 1, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 80 , 'colorcode' =>  '#222222', 'imagename' => 'gw2_unknown');   
 	//warrior
 	$sql_ary [] = array ('game_id' => 'gw2', 'class_id' => 1, 'class_faction_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 80, 'colorcode' =>  '#FFAA44',  'imagename' => 'gw2_warrior');
 	//Guardian    
@@ -44,7 +44,7 @@ function install_gw2()
 	//ranger
 	$sql_ary [] = array ('game_id' => 'gw2','class_id' => 4, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 80 , 'colorcode' =>  '#00CC66', 'imagename' => 'gw2_ranger');   
 	//Thief
-	$sql_ary [] = array ('game_id' => 'gw2', 'class_id' => 5, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 80, 'colorcode' =>  '#FF9900',  'imagename' => 'gw2_thief');	 	  
+	$sql_ary [] = array ('game_id' => 'gw2', 'class_id' => 5, 'class_faction_id' => 1, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 80, 'colorcode' =>  '#777777',  'imagename' => 'gw2_thief');	 	  
 	//**Scholars**
 	$sql_ary [] = array ('game_id' => 'gw2','class_id' => 6, 'class_faction_id' => 1, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 80 ,  'colorcode' =>  '#BB0044',  'imagename' => 'gw2_elementalist'); 
 	//Mesmer

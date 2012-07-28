@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.7
+ * @version 1.2.8
 */
 
 /**
@@ -41,7 +41,6 @@ class acp_dkp_event extends bbDKP_Admin
 		$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=listevents") . '"><h3>'. $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 
 		 /***DKPSYS drop-down ***/
-		$dkpsys_id = 1;
 		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE . ' ORDER BY dkpsys_name';
 		$resultdkpsys = $db->sql_query($sql);
 		
@@ -62,8 +61,6 @@ class acp_dkp_event extends bbDKP_Admin
 			if ( $this->url_id )	 
 			{
 				// we have a GET
-				$update = true;
-				 
 				$sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename 
 						FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b 
 						WHERE a.event_id = " . (int) $this->url_id . " AND b.dkpsys_id = a.event_dkpid";
@@ -494,7 +491,7 @@ class acp_dkp_event extends bbDKP_Admin
 	function delete_event()
 	{
 
-		global $db, $user;
+		global $template, $db, $user;
 		if(isset($_GET[URI_EVENT]))
 		{
 			
@@ -524,6 +521,17 @@ class acp_dkp_event extends bbDKP_Admin
 			}
 			else
 			{
+				
+				$sql = 'SELECT * FROM ' . RAIDS_TABLE . ' a, ' . EVENTS_TABLE . ' b 
+				WHERE b.event_id = a.event_id and b.event_dkpid = ' . (int) $this->url_id;
+						
+				// check for existing events, raids
+				$result = $db->sql_query ( $sql );
+				if ($row = $db->sql_fetchrow ( $result ))
+				{
+					trigger_error ( $user->lang ['FV_RAIDEXIST'] . adm_back_link($this->u_action) , E_USER_WARNING );
+				} 
+						
 				$s_hidden_fields = build_hidden_fields(array(
 					'delete'	=> true,
 					'event_id'	=> request_var(URI_EVENT,0) ,

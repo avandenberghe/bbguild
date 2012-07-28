@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.7
+ * @version 1.2.8
  */
 
 /**
@@ -26,18 +26,41 @@ $total_events= 0;
 $start = request_var('start', 0);
 
 /*** get dkp pools with events with raids ***/
-$sql_array = array (
-	'SELECT' => ' dkpsys_id, dkpsys_name ', 
-	'FROM' => array (
-		DKPSYS_TABLE		=> 'd',
-		EVENTS_TABLE 		=> 'e',		
-		RAIDS_TABLE 		=> 'r' , 
-		), 
-	'WHERE' => 'd.dkpsys_id = e.event_dkpid 
-				and r.event_id = e.event_id ',
-	'GROUP_BY' => 'dkpsys_id, dkpsys_name ', 
-	'ORDER_BY' => 'dkpsys_name'
-);
+if ((int) $config['bbdkp_event_viewall'] == 1)
+{
+	$sql_array = array (
+		'SELECT' => ' dkpsys_id, dkpsys_name ', 
+		'FROM' => array (
+			DKPSYS_TABLE		=> 'd',
+			EVENTS_TABLE 		=> 'e',		
+			),
+		 'LEFT_JOIN' => array(
+	        array(
+	            'FROM'  => array(RAIDS_TABLE => 'r'),
+	            'ON'    => 'r.event_id = e.event_id'
+	        	)
+	    	), 
+		'WHERE' => 'd.dkpsys_id = e.event_dkpid ',
+		'GROUP_BY' => 'dkpsys_id, dkpsys_name ', 
+		'ORDER_BY' => 'dkpsys_name'
+	);	
+}
+else
+{
+	$sql_array = array (
+		'SELECT' => ' dkpsys_id, dkpsys_name ', 
+		'FROM' => array (
+			DKPSYS_TABLE		=> 'd',
+			EVENTS_TABLE 		=> 'e',		
+			RAIDS_TABLE 		=> 'r' , 
+			), 
+		'WHERE' => 'd.dkpsys_id = e.event_dkpid 
+					and r.event_id = e.event_id ',
+		'GROUP_BY' => 'dkpsys_id, dkpsys_name ', 
+		'ORDER_BY' => 'dkpsys_name'
+	);
+	
+}
 
 $sql = $db->sql_build_query('SELECT', $sql_array);
 $dkppool_result = $db->sql_query($sql); 
@@ -52,18 +75,40 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
     ));
 
 	/*** get events ***/
-	$sql_array = array (
-		'SELECT' => ' e.event_dkpid, e.event_id, e.event_name, e.event_value,  e.event_color, e.event_imagename, 
-		COUNT(r.raid_id) as raidcount, MAX(raid_start) as newest, MIN(raid_start) as oldest ', 
-		'FROM' => array (
-			EVENTS_TABLE 		=> 'e',		
-			RAIDS_TABLE 		=> 'r', 
-			), 
-		'WHERE' => 'e.event_dkpid = ' . (int) $pool['dkpsys_id'] . 
-					' and r.event_id = e.event_id ',
-		'ORDER_BY' => 'e.event_name', 
-		'GROUP_BY' => 'e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_color, e.event_imagename', 
-	);
+    if ((int) $config['bbdkp_event_viewall'] == 1)
+	{
+		$sql_array = array (
+			'SELECT' => ' e.event_dkpid, e.event_id, e.event_name, e.event_value,  e.event_color, e.event_imagename, 
+			COUNT(r.raid_id) as raidcount, MAX(raid_start) as newest, MIN(raid_start) as oldest ', 
+			'FROM' => array (
+				EVENTS_TABLE 		=> 'e',		
+				), 
+			'LEFT_JOIN' => array(
+		        array(
+		            'FROM'  => array(RAIDS_TABLE => 'r'),
+		            'ON'    => 'r.event_id = e.event_id'
+		        	)
+		    	), 
+	    	'WHERE' => 'e.event_dkpid = ' . (int) $pool['dkpsys_id'],
+			'ORDER_BY' => 'e.event_name', 
+			'GROUP_BY' => 'e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_color, e.event_imagename', 
+		);
+	}
+	else
+	{
+		$sql_array = array (
+			'SELECT' => ' e.event_dkpid, e.event_id, e.event_name, e.event_value,  e.event_color, e.event_imagename, 
+			COUNT(r.raid_id) as raidcount, MAX(raid_start) as newest, MIN(raid_start) as oldest ', 
+			'FROM' => array (
+				EVENTS_TABLE 		=> 'e',		
+				RAIDS_TABLE 		=> 'r', 
+				), 
+			'WHERE' => 'e.event_dkpid = ' . (int) $pool['dkpsys_id'] . 
+						' and r.event_id = e.event_id ',
+			'ORDER_BY' => 'e.event_name', 
+			'GROUP_BY' => 'e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_color, e.event_imagename', 
+		);
+	}
 	$sql = $db->sql_build_query('SELECT', $sql_array);	
 	
 	$events_result = $db->sql_query_limit($sql, $config['bbdkp_user_elimit'], $start);

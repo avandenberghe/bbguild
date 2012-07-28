@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.7
+ * @version 1.2.8
  */
  
 /**
@@ -753,6 +753,7 @@ class acp_dkp extends bbDKP_Admin
 					set_config('bbdkp_user_llimit', request_var('bbdkp_user_llimit', 0), true);
 					//events					
 					set_config('bbdkp_user_elimit', request_var('bbdkp_user_elimit', 0), true);
+					set_config('bbdkp_event_viewall', (isset($_POST['event_viewall'])) ? request_var('event_viewall', '') : '0', true);
 					//adjustments
 					set_config('bbdkp_user_alimit', request_var('bbdkp_user_alimit', 0), true);
 					set_config('bbdkp_active_point_adj', request_var('bbdkp_active_point_adj', 0.0), true);
@@ -846,6 +847,8 @@ class acp_dkp extends bbDKP_Admin
 					'HIDE_INACTIVE_YES_CHECKED' => ($config['bbdkp_hide_inactive'] == '1') ? ' checked="checked"' : '' , 
 					'HIDE_INACTIVE_NO_CHECKED' => ($config['bbdkp_hide_inactive'] == '0') ? ' checked="checked"' : '' , 
 					'USER_ELIMIT' => $config['bbdkp_user_elimit'] , 
+					'EVENT_VIEWALL_YES_CHECKED' => ($config['bbdkp_event_viewall'] == '1') ? ' checked="checked"' : '' , 
+					'EVENT_VIEWALL_NO_CHECKED' => ($config['bbdkp_event_viewall'] == '0') ? ' checked="checked"' : '' ,
 					'USER_NLIMIT' => $config['bbdkp_user_nlimit'] , 
 					'INACTIVE_PERIOD' => $config['bbdkp_inactive_period'] , 
 					'LIST_P1' => $config['bbdkp_list_p1'] , 

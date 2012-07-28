@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.7
+ * @version 1.2.8
  */
 
 /**
@@ -90,7 +90,10 @@ class bbDKP_Admin
 			'rift' => $user->lang ['RIFT'], 
 			'swtor' => $user->lang ['SWTOR'], 
 			'lineage2' => $user->lang ['LINEAGE2'],
-	    	'tera' => $user->lang ['TERA'], 
+	    	'tera' => $user->lang ['TERA'],
+	    	'gw2' => $user->lang ['GW2'],
+	     
+	    
 	    );
 	    
 	    $boardtime = array(); 
