@@ -93,28 +93,50 @@ function install_gw2()
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 	
-	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'gw2 Dungeons' ");
-	// dkp pool
-	$sql_ary = array (
-		'dkpsys_name' => 'GuildWars2 Dungeons', 
-		'dkpsys_status' => 'Y', 
-		'dkpsys_addedby' => 'admin', 
-		'dkpsys_default' => 'N' );
-	$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
-	$db->sql_query($sql);
-	$gw2dkpid = $db->sql_nextid();
-	
+	$db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'GuildWars2 Dungeons' ");
+	$row = $db->sql_fetchrow ($result); 
+	if($row)
+    {
+		$gw2dkpid = $row['dkpsys_id'];    	
+    }
+    else
+    {
+    	// dkp pool
+		$sql_ary = array (
+			'dkpsys_name' => 'GuildWars2 Dungeons', 
+			'dkpsys_status' => 'Y', 
+			'dkpsys_addedby' => 'admin', 
+			'dkpsys_default' => 'N' );
+		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+		$db->sql_query($sql);
+		$gw2dkpid = $db->sql_nextid();
+    }
+    $db->sql_freeresult ( $result );
+
     $sql_ary = array();
-	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Ascalonian Catacombs (30)', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => 'gw2_cat'  ) ;
-	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Caudecus’s Manor  (45)', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => 'gw2_cau') ;
-	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Twilight Arbor (50)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'gw2_twi' );
-	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Sorrow’s Embrace (65)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'gw2_sor' );
-	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Citadel of Flame (70)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'gw2_cit' );
-	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Crucible of Eternity (75)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'gw2_cru' );
-	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Honor of the Waves (80)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'gw2_hon' );
-	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Arah (80)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'gw2_ara' );
-	
-	$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
+	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Ascalonian Catacombs (30)', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => ''  ) ;
+	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Caudecus’s Manor  (45)', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => '') ;
+	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Twilight Arbor (50)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Sorrow’s Embrace (65)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Citadel of Flame (70)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Crucible of Eternity (75)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Honor of the Waves (80)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $gw2dkpid , 'event_name' => 'Arah (80)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'gw2_ara' );	
+	$sql_ary2 = array();
+	foreach($sql_ary as $evt => $event)
+	{
+		$db->sql_query('SELECT event_id FROM ' . $table_prefix . ' bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
+		$row = $db->sql_fetchrow ($result); 
+		if(!$row)
+		{
+			$sql_ary2[] = $event;
+		}
+	}
+	$db->sql_freeresult ($result);
+	if (count($sql_ary2) > 0)
+	{
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
+	}
 	
 	
 }

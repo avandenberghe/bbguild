@@ -94,7 +94,7 @@ function generate_pagination2($base_url, $num_items, $per_page, $start_item, $ad
 		$tpl_prefix . 'PER_PAGE'		=> $per_page,
 
 		$tpl_prefix . 'PREVIOUS_PAGE'	=> ($on_page == 1) ? '' : $base_url . "{$url_delim}" . $tpl_prefix  . "=" . (($on_page - 2) * $per_page),
-		$tpl_prefix . 'NEXT_PAGE'		=> ($on_page == $total_pages) ? '' : $base_url . "{$url_delim}" . $tpl_prefix  . "	=" . ($on_page * $per_page),
+		$tpl_prefix . 'NEXT_PAGE'		=> ($on_page == $total_pages) ? '' : $base_url . "{$url_delim}" . $tpl_prefix  . "=" . ($on_page * $per_page),
 		$tpl_prefix . 'TOTAL_PAGES'		=> $total_pages,
 	));
 

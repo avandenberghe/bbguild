@@ -83,41 +83,65 @@ function install_tera()
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 	
-	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'Tera Dungeons' ");
-	// dkp pool
-	$sql_ary = array (
-		'dkpsys_name' => 'Tera Dungeons', 
-		'dkpsys_status' => 'Y', 
-		'dkpsys_addedby' => 'admin', 
-		'dkpsys_default' => 'N' );
-	$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
-	$db->sql_query($sql);
-	$teradkpid = $db->sql_nextid();
 	
+	$db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'Tera Dungeons' ");
+	$row = $db->sql_fetchrow ($result); 
+	if($row)
+    {
+		$teradkpid = $row['dkpsys_id'];    	
+    }
+    else
+    {
+    	// dkp pool
+		$sql_ary = array (
+			'dkpsys_name' => 'Tera Dungeons', 
+			'dkpsys_status' => 'Y', 
+			'dkpsys_addedby' => 'admin', 
+			'dkpsys_default' => 'N' );
+		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+		$db->sql_query($sql);
+		$teradkpid = $db->sql_nextid();
+    }
+    $db->sql_freeresult ( $result );
+
     $sql_ary = array();
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Bastion of Lok(20)', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => 'tera_lok'  ) ;
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Sinestral Manor (26)', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => 'tera_sines') ;
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Cultists’ Refuge (35)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'tera_cult' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Necromancer Tomb (41)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'tera_necro' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Sigil Adstringo (45)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'tera_sigil' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Golden Labyrinth (48)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'tera_gold' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Akasha’s Hideout (48)', 'event_color' => '#BBFF66', 'event_value' => 5, 'event_imagename' => 'tera_aka' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Akasha’s Hideout (48* Hard)', 'event_color' => '#BBFF66', 'event_value' => 5, 'event_imagename' => 'tera_aka2' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ascent of Saravash (52)', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => 'tera_sar' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Saleron’s Sky Garden (53)', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => 'tera_sal' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Suryati’s Peak (56)', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => 'tera_sur' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ebon Tower (58)', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => 'tera_ebo' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ebon Tower (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'tera_ebo2' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Kelsaik’s Nest (58)', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => 'tera_kel' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Kelsaik’s Nest (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'tera_kel2' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Labyrinth of Terror (58)', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => 'tera_lab' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Labyrinth of Terror (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'tera_lab2' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Balder’s Temple (60)', 'event_color' => '#DD0066', 'event_value' => 5, 'event_imagename' => 'tera_bald' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Balder’s Temple (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'tera_bald2' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima (60)', 'event_color' => '#DD0066', 'event_value' => 5, 'event_imagename' => 'tera_kap' );
-	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'tera_kap2' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Bastion of Lok(20)', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => ''  ) ;
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Sinestral Manor (26)', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => '') ;
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Cultists’ Refuge (35)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Necromancer Tomb (41)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Sigil Adstringo (45)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Golden Labyrinth (48)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Akasha’s Hideout (48)', 'event_color' => '#BBFF66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Akasha’s Hideout (48* Hard)', 'event_color' => '#BBFF66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ascent of Saravash (52)', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Saleron’s Sky Garden (53)', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Suryati’s Peak (56)', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ebon Tower (58)', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Ebon Tower (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Kelsaik’s Nest (58)', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Kelsaik’s Nest (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Labyrinth of Terror (58)', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Labyrinth of Terror (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Balder’s Temple (60)', 'event_color' => '#DD0066', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Balder’s Temple (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima (60)', 'event_color' => '#DD0066', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
 	
-	$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
+	$sql_ary2 = array();
+	foreach($sql_ary as $evt => $event)
+	{
+		$db->sql_query('SELECT event_id FROM ' . $table_prefix . ' bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
+		$row = $db->sql_fetchrow ($result); 
+		if(!$row)
+		{
+			$sql_ary2[] = $event;
+		}
+	}
+	$db->sql_freeresult ($result);
+	if (count($sql_ary2) > 0)
+	{
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
+	}
 	
 	
 }
