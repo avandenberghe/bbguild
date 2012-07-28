@@ -680,7 +680,7 @@ So the loot would go to player 2 <br />',
 'DECAYFREQ_EXPLAIN' => 'Depreciation is scheduled every n days, weeks or months after each raid. ', 
 'DECAYFREQTYPE' => 'Decay frequency type',  
 'DECAY_SCHEDULE' => 'Automatic Decay Job',
-'DECAY_SCHEDULE_EXPLAIN' => 'Enable to trigger a decay run every 23 hours if forum is visited.',
+'DECAY_SCHEDULE_EXPLAIN' => 'Let bbDKP calculate decay',
 'DECAYCRON' => 'triggered by cronjob', 
 'NO_DECAY_ADJ'	=> 'Adjustment decayable ?',
 
