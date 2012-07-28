@@ -406,6 +406,7 @@ $lang = array_merge($lang, array(
 'MALE'	=> 'Male',
 'MAY_BE_NEGATIVE_NOTE' => 'may be negative',
 'NOT_AVAILABLE' => 'Not Available',
+'NORAIDS' => 'No Raids',
 'OF_RAIDS' => '%d',
 'OF_RAIDS_CHAR' => '%s', 
 'OR' => 'or',
