@@ -43,7 +43,8 @@ class acp_dkp_raid extends bbDKP_Admin
 
 		//do event test.
 		$sql = 'SELECT count(*) as eventcount FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
-			where a.dkpsys_id = b.event_dkpid ';
+			where a.dkpsys_id = b.event_dkpid 
+			AND b.event_status = 1';
 		$result = $db->sql_query ( $sql );
 		$eventcount = $db->sql_fetchfield('eventcount');
 		$db->sql_freeresult( $result );
@@ -186,7 +187,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			//get default dkp pool
 			$sql1 = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default 
 	                 FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . " b 
-					 where a.dkpsys_id = b.event_dkpid and dkpsys_default = 'Y' ";
+					 where a.dkpsys_id = b.event_dkpid and dkpsys_default = 'Y' AND b.event_status = 1 ";
 			$result1 = $db->sql_query ($sql1);
 			// get the default dkp value (dkpsys_default = 'Y') from DB
 			while ( $row = $db->sql_fetchrow ( $result1 ) ) 
@@ -201,7 +202,7 @@ class acp_dkp_raid extends bbDKP_Admin
 			// get first row
 			$sql1 = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
                       FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
-					  where a.dkpsys_id = b.event_dkpid';
+					  where a.dkpsys_id = b.event_dkpid AND b.event_status = 1 ';
 			$result1 = $db->sql_query_limit ( $sql1, 1, 0 );
 			while ( $row = $db->sql_fetchrow ( $result1 ) ) 
 			{
@@ -212,7 +213,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		
 		//fill dkp dropdown
 		$sql = 'SELECT dkpsys_id, dkpsys_name FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
-				where a.dkpsys_id = b.event_dkpid group by dkpsys_id, dkpsys_name ORDER BY dkpsys_name';
+				where a.dkpsys_id = b.event_dkpid AND b.event_status = 1 group by dkpsys_id, dkpsys_name ORDER BY dkpsys_name';
 		$result = $db->sql_query ( $sql );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
 		{
@@ -227,7 +228,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		/* event listbox */
 		// calculate number format
 		$max_value = 0.00;
-		$sql = 'SELECT max(event_value) AS max_value FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . $dkpsys_id; 
+		$sql = 'SELECT max(event_value) AS max_value FROM ' . EVENTS_TABLE . ' where event_status = 1 AND event_dkpid = ' . $dkpsys_id; 
 		$result = $db->sql_query ($sql);
 		$max_value = (float) $db->sql_fetchfield('max_value', false, $result);
 		$float = @explode ( '.', $max_value );
@@ -235,7 +236,8 @@ class acp_dkp_raid extends bbDKP_Admin
 		$db->sql_freeresult($result);
 		
 		$sql = ' SELECT event_id, event_name, event_value 
-		FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . $dkpsys_id . ' ORDER BY event_name';
+		FROM ' . EVENTS_TABLE . ' WHERE event_status = 1 AND 
+		event_dkpid = ' . $dkpsys_id . ' ORDER BY event_name';
 		$result = $db->sql_query($sql);
 		$eventvalue= 0;
 		while ($row = $db->sql_fetchrow($result))
@@ -504,7 +506,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		
 		/* event pulldown */
 		$max_value = 0.00;
-		$sql = 'SELECT max(event_value) AS max_value FROM ' . EVENTS_TABLE . ' where event_dkpid = ' . $raid['event_dkpid']; 
+		$sql = 'SELECT max(event_value) AS max_value FROM ' . EVENTS_TABLE . ' where event_status = 1 and event_dkpid = ' . $raid['event_dkpid']; 
 		$result = $db->sql_query ($sql);
 		$max_value = (float) $db->sql_fetchfield('max_value', false, $result);
 		$float = @explode ( '.', $max_value );
@@ -512,7 +514,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		$db->sql_freeresult($result);
 		
 		$sql = ' SELECT  event_id, event_name, event_value 
-				 FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . $raid['event_dkpid'] . ' ORDER BY event_name';
+				 FROM ' . EVENTS_TABLE . ' WHERE event_status = 1 and event_dkpid = ' . $raid['event_dkpid'] . ' ORDER BY event_name';
 		$result = $db->sql_query($sql);
 		$event_value = 0;
 		while ($row = $db->sql_fetchrow($result))
@@ -955,6 +957,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
                 FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b 
 				WHERE a.dkpsys_id = b.event_dkpid 
+				AND b.event_status = 1  
 				GROUP BY dkpsys_id, dkpsys_name, dkpsys_default';
 		$result = $db->sql_query ( $sql );
 		
@@ -1034,7 +1037,7 @@ class acp_dkp_raid extends bbDKP_Admin
 				RAIDS_TABLE 		=> 'r' , 
 				EVENTS_TABLE 		=> 'e',		
 				), 
-			'WHERE' => "  ra.raid_id = r.raid_id and r.event_id = e.event_id and e.event_dkpid = " . ( int ) $dkpsys_id,
+			'WHERE' => "  ra.raid_id = r.raid_id AND e.event_status = 1 AND r.event_id = e.event_id AND e.event_dkpid = " . ( int ) $dkpsys_id,
 			'GROUP_BY' => 'e.event_dkpid, e.event_name,  
 						  r.raid_id,  r.raid_start, r.raid_end, r.raid_note, 
 						  r.raid_added_by, r.raid_updated_by',	
