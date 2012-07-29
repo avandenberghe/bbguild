@@ -218,21 +218,24 @@ function install_wow()
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Dragon Soul 10hm', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'wow_ds10hm' );
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Dragon Soul 25', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'wow_ds25' );
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Dragon Soul 25hm', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'wow_ds25hm' );
-	$sql_ary2 = array();
+
 	foreach($sql_ary as $evt => $event)
 	{
-		$db->sql_query('SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
+		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
+		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow ($result); 
 		if(!$row)
 		{
 			$sql_ary2[] = $event;
 		}
+		$db->sql_freeresult ($result);
 	}
-	$db->sql_freeresult ($result);
+	
 	if (count($sql_ary2) > 0)
 	{
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
 	}
+	
 	
 	$db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'WoW Pandaria' ");
 	$row = $db->sql_fetchrow ($result); 
@@ -259,21 +262,25 @@ function install_wow()
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Mogu’shan Vaults (90)', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => ''  ) ;
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Terrace of Endless Spring  (90)', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => '') ;
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Heart of Fear (90)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+
 	$sql_ary2 = array();
 	foreach($sql_ary as $evt => $event)
 	{
-		$db->sql_query('SELECT event_id FROM ' . $table_prefix . ' bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
+		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
+		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow ($result); 
 		if(!$row)
 		{
 			$sql_ary2[] = $event;
 		}
+		$db->sql_freeresult ($result);
 	}
-	$db->sql_freeresult ($result);
+	
 	if (count($sql_ary2) > 0)
 	{
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
 	}
+	
 	
 }
 ?>

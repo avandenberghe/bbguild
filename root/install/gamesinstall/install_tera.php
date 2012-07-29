@@ -127,21 +127,23 @@ function install_tera()
 	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima (60)', 'event_color' => '#DD0066', 'event_value' => 5, 'event_imagename' => '' );
 	$sql_ary [] = array('event_dkpid' => $teradkpid , 'event_name' => 'Fane of Kaprima (60* Hard)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
 	
-	$sql_ary2 = array();
 	foreach($sql_ary as $evt => $event)
 	{
-		$db->sql_query('SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
+		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
+		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow ($result); 
 		if(!$row)
 		{
 			$sql_ary2[] = $event;
 		}
+		$db->sql_freeresult ($result);
 	}
-	$db->sql_freeresult ($result);
+	
 	if (count($sql_ary2) > 0)
 	{
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
 	}
+	
 	
 	
 }

@@ -122,14 +122,15 @@ function install_aion()
 	$sql_ary2 = array();
 	foreach($sql_ary as $evt => $event)
 	{
-		$db->sql_query('SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
+		$result = $db->sql_query('SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
 		$row = $db->sql_fetchrow ($result); 
 		if(!$row)
 		{
 			$sql_ary2[] = $event;
 		}
+		$db->sql_freeresult ($result);
 	}
-	$db->sql_freeresult ($result);
+	
 	if (count($sql_ary2) > 0)
 	{
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );

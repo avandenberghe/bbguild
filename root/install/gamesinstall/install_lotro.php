@@ -21,6 +21,14 @@ function install_lotro()
 {
     global  $db, $table_prefix, $umil, $user;
     
+   	// factions
+   	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'lotro'" );	
+    $sql_ary = array();
+    $sql_ary[] = array('game_id' => 'lotro','faction_id' => 1, 'faction_name' => 'Free Peoples' );
+    $sql_ary[] = array('game_id' => 'lotro','faction_id' => 2, 'faction_name' => 'Servants of the Eye' );
+    $db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
+    unset ($sql_ary); 
+    
     $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'lotro'" );    
     $sql_ary = array();
 
@@ -198,15 +206,83 @@ function install_lotro()
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 
-   	// factions
-   	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'lotro'" );	
+	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'Lotro Dungeons' ");
+	$row = $db->sql_fetchrow ($result); 
+	if($row)
+    {
+		$lotrodkpid = $row['dkpsys_id'];    	
+    }
+    else
+    {
+    	// dkp pool
+		$sql_ary = array (
+			'dkpsys_name' => 'Lotro Dungeons', 
+			'dkpsys_status' => 'Y', 
+			'dkpsys_addedby' => 'admin', 
+			'dkpsys_default' => 'N' );
+		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+		$db->sql_query($sql);
+		$lotrodkpid = $db->sql_nextid();
+    }
+    $db->sql_freeresult ( $result );
+
     $sql_ary = array();
-    $sql_ary[] = array('game_id' => 'lotro','faction_id' => 1, 'faction_name' => 'Free Peoples' );
-    $sql_ary[] = array('game_id' => 'lotro','faction_id' => 2, 'faction_name' => 'Servants of the Eye' );
-    $db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
-    unset ($sql_ary); 
-
-
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Great Barrow', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => ''  ) ;
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Garth Agarwen', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => '') ;
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Fornost', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Barad Gúlaran', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Carn Dûm', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Glingant', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Haudh Valandil', 'event_color' => '#BBFF66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Ost Elendil', 'event_color' => '#BBFF66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Helegrod', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Rift of Nurz Ghashu', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Forgotten Treasury', 'event_color' => '#FFCC55', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'The Vile Maw', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'The Grand Stair', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Dark Delvings', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Fil Gashan', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Halls of Crafting', 'event_color' => '#FF7777', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Mirror Halls', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Water Wheels', 'event_color' => '#DD0066', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Filikul', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Urugarth', 'event_color' => '#DD0066', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Sword-Hall', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'The Dungeons', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Warg-Pens', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Sammath Gul', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Barad Guldur', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Lost Temple', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Glacier Fortress', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Northcotton Farm', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Stoneheight', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Ost Dunhoth (T1)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Ost Dunhoth (T2)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Draigoch', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Ost Dunhoth (Challenge)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Tower of Orthanc (T1)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Tower of Orthanc (T2)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $lotrodkpid , 'event_name' => 'Tower of Orthanc (Challenge)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
+	
+	$sql_ary2 = array();
+	foreach($sql_ary as $evt => $event)
+	{
+		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
+		$result = $db->sql_query($sql);
+		$row = $db->sql_fetchrow ($result); 
+		if(!$row)
+		{
+			$sql_ary2[] = $event;
+		}
+		$db->sql_freeresult ($result);
+	}
+	
+	if (count($sql_ary2) > 0)
+	{
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
+	}
+    
+    
 }
 
 ?>
