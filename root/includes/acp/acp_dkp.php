@@ -909,6 +909,8 @@ class acp_dkp extends bbDKP_Admin
 					set_config('bbdkp_portal_rtshow', request_var('show_recenttopics', 0), true);
 					set_config('bbdkp_portal_rtlen', request_var('n_rclength', 0), true);
 					set_config('bbdkp_portal_rtno', request_var('n_rcno', 0), true);
+					set_config('bbdkp_portal_newmembers', request_var('show_newmembers', 0), true);
+					set_config('bbdkp_portal_maxnewmembers', request_var('num_newmembers', 0), true);
 					
 					$cache->destroy('config');
 					$sql = "SELECT class_id FROM " . CLASS_TABLE . " where class_id > 0 order by class_id ";
@@ -1051,7 +1053,11 @@ class acp_dkp extends bbDKP_Admin
 					'SHOW_LINK_YES_CHECKED' => ($config['bbdkp_portal_links'] == '1') ? ' checked="checked"' : '' , 
 					'SHOW_LINK_NO_CHECKED' => ($config['bbdkp_portal_links'] == '0') ? ' checked="checked"' : '' , 
 					'SHOW_MENU_YES_CHECKED' => ($config['bbdkp_portal_menu'] == '1') ? ' checked="checked"' : '' , 
-					'SHOW_MENU_NO_CHECKED' => ($config['bbdkp_portal_menu'] == '0') ? ' checked="checked"' : ''));
+					'SHOW_MENU_NO_CHECKED' => ($config['bbdkp_portal_menu'] == '0') ? ' checked="checked"' : '', 
+					'SHOW_NEWM_YES_CHECKED' => ($config['bbdkp_portal_newmembers'] == '1') ? ' checked="checked"' : '' , 
+					'SHOW_NEWM_NO_CHECKED' => ($config['bbdkp_portal_newmembers'] == '0') ? ' checked="checked"' : '' , 
+					'N_NUMNEWM' => $config['bbdkp_portal_maxnewmembers'],
+				));
 				$this->page_title = $user->lang['ACP_INDEXPAGE'];
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;

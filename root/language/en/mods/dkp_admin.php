@@ -139,6 +139,9 @@ $lang = array_merge($lang, array(
 'WELCOMEBLOCK'	=> 'Welcome Block Text',
 'WELCOMEBLOCKSETTING'	=> 'Welcome Block Settings',
 'WELCOMEBLOCK_EXPLAIN'	=> 'Please enter your Portal Welcome block contents here. BBcodes are supported.',
+'NEWMEMBERS_SETTING'  => 'New members Block Settings', 
+'SHOW_NEWMEMBERS_BLOCK'  => 'Show new members Block', 
+'NUMNEWMEMBERS' => 'Number of members to show', 
 
 'RANK_INSERTED' => 'Rank inserted : %s. ', 
 'TOTAL_RANKS_INSERTED' => 'Total ranks inserted : %s. ', 

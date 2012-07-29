@@ -999,7 +999,9 @@ $versions = array(
        'config_add' => array(
     		array('bbdkp_games_tera', 0, true),
     		array('bbdkp_games_gw2', 0, true),
-    		array('bbdkp_event_viewall', 0, true),
+    		array('bbdkp_event_viewall', 1, true),
+    		array('bbdkp_portal_newmembers', 1, true),
+    		array('bbdkp_portal_maxnewmembers', 5, true),
     	),
      
      'custom' => array( 

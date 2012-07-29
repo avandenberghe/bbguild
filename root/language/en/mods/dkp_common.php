@@ -66,6 +66,7 @@ $lang = array_merge($lang, array(
 'RECENT_TOPICS'				=> 'Recent Topics',	
 'NO_RECENT_TOPICS'			=> 'No recent topics',
 'POSTED_BY_ON'				=> 'by %1$s on %2$s',
+'LATESTMEMBERS'				=> 'Latest members',
 
 //links
 'MENU_LINKS' => 'Weblinks',

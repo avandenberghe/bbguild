@@ -391,9 +391,7 @@ class acp_dkp_item extends bbDKP_Admin
 		// Success message
 		//
 		$success_message = sprintf ( $user->lang ['ADMIN_ADD_ITEM_SUCCESS'], $item_name, implode ( ', ', $item_buyers  ), $itemvalue );
-		
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ) . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a>';
-		
 		trigger_error ( $success_message . $this->link, E_USER_NOTICE );
 	}
 
