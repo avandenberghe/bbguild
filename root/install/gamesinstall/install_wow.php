@@ -202,7 +202,7 @@ function install_wow()
 			'dkpsys_default' => 'N' );
 		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
 		$db->sql_query($sql);
-		$gw2dkpid = $db->sql_nextid();
+		$wowpdkpid = $db->sql_nextid();
     }
     $db->sql_freeresult ( $result );
 
@@ -218,7 +218,8 @@ function install_wow()
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Dragon Soul 10hm', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'wow_ds10hm' );
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Dragon Soul 25', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'wow_ds25' );
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Dragon Soul 25hm', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'wow_ds25hm' );
-
+	
+	$sql_ary2 = array();
 	foreach($sql_ary as $evt => $event)
 	{
 		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
