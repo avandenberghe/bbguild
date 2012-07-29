@@ -254,7 +254,7 @@ function install_wow()
 			'dkpsys_default' => 'N' );
 		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
 		$db->sql_query($sql);
-		$gw2dkpid = $db->sql_nextid();
+		$wowpdkpid = $db->sql_nextid();
     }
     $db->sql_freeresult ( $result );
 
