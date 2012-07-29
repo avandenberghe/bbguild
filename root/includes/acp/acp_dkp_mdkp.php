@@ -119,6 +119,31 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					$db->sql_transaction ( 'commit' );
 				}
 				
+				$activate = (isset ( $_POST ['submit_activate'] )) ? true : false;
+				if ($activate)
+				{
+					// all members in this window
+					$all_members = explode(',', request_var ( 'idlist', ''));
+					// all checked events in this window
+					$active_members = request_var ( 'activate_ids', array (0));
+					$db->sql_transaction ( 'begin' );
+					
+					$sql1 = 'UPDATE ' . MEMBER_DKP_TABLE . "
+                        SET member_status = '1' 
+                        WHERE  member_dkpid  = " . $dkpsys_id . ' 
+                        AND ' . $db->sql_in_set ( 'member_id', $active_members, false, true );
+					$db->sql_query ( $sql1 );
+					
+					$sql2 = 'UPDATE ' . MEMBER_DKP_TABLE . "
+                        SET member_status = '0' 
+                        WHERE  member_dkpid  = " . $dkpsys_id . ' 
+                        AND ' . $db->sql_in_set ( 'member_id', array_diff($all_members, $active_members) , false, true );
+					$db->sql_query ( $sql2 );
+					
+					$db->sql_transaction ( 'commit' );
+				}
+				
+				
 				$member_count = 0;
 				
 				$sql_array = array (
@@ -204,7 +229,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				$lines = 0;
 				
 				$members_row = array ();
-				
+				$membersids = array();
 				while ( $row = $db->sql_fetchrow ( $members_result ) )
 				{
 					++ $member_count;
@@ -258,8 +283,9 @@ class acp_dkp_mdkp extends bbDKP_Admin
 					
 					$template->assign_block_vars ( 'members_row', $members_row );
 					
+					$membersids[] = $row ['member_id'];
+					
 					// unset array 
-
 					unset ( $members_row );
 				}
 				
@@ -269,6 +295,7 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				$footcount_text = sprintf ( $user->lang ['LISTMEMBERS_FOOTCOUNT'], $lines );
 				
 				$output = array (
+					'IDLIST'	=> implode(",", $membersids), 
 					'F_MEMBERS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp&amp;" ) . '&amp;mode=mm_editmemberdkp', 
 					'L_TITLE' => $user->lang ['ACP_DKP_LISTMEMBERDKP'], 
 					'L_EXPLAIN' => $user->lang ['ACP_MM_LISTMEMBERDKP_EXPLAIN'], 
@@ -327,7 +354,6 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				break;
 			
 			/************************************
-
 				  DKP EDIT
 
 			 *************************************/

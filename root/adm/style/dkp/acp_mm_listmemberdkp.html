@@ -62,7 +62,7 @@
   <!-- ELSE -->
   <tr class="row2">
   <!-- ENDIF -->
-    <td style="text-align:center; white-space: nowrap"><input type="checkbox" name="activate_ids[]" value="{members_row.ID}" {members_row.STATUS} /></td>
+    <td style="text-align:center; white-space: nowrap"><input type="checkbox" name="activate_ids[{members_row.ID}]" value="{members_row.ID}" {members_row.STATUS} /></td>
     <td style="text-align:center; white-space: nowrap">{members_row.ID}</td>
     <td style="text-align:left; white-space: nowrap"><strong><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" />&nbsp;<!-- ENDIF -->{members_row.NAME}</a></strong></td>
     <td style="text-align:center; white-space: nowrap">{members_row.RANK}</td>
@@ -119,6 +119,7 @@
 </table>
 
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input type="hidden" name="idlist" value="{IDLIST}" />	
 	<input type="hidden" name="dkpsys" value="{DKPSYS}" />
     {S_FORM_TOKEN}
 	<input type="submit" name="submit_activate" value="{L_CHANGE_ACTIVATION}" class="button1" />

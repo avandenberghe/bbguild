@@ -26,6 +26,7 @@ class acp_dkp_event extends bbDKP_Admin
 {
 	public $u_action;
 	public $link;
+	
 	/** 
 	* main ACP dkp event function
 	* @param int $id the id of the node who parent has to be returned by function 
@@ -61,7 +62,7 @@ class acp_dkp_event extends bbDKP_Admin
 			if ( $this->url_id )	 
 			{
 				// we have a GET
-				$sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename 
+				$sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename, a.event_status 
 						FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b 
 						WHERE a.event_id = " . (int) $this->url_id . " AND b.dkpsys_id = a.event_dkpid";
 
@@ -81,10 +82,11 @@ class acp_dkp_event extends bbDKP_Admin
 						'event_color'			 => $row['event_color'],
 						'event_imagename'		 => $row['event_imagename'],
 						'event_value'			 => $row['event_value'],
-						'event_id'				 => $row['event_id']
+						'event_id'				 => $row['event_id'],
+						'event_status'			 => $row['event_status'],
 					);
 				}
-
+				
 				while ( $row2 = $db->sql_fetchrow($resultdkpsys) )
 				{
 					$template->assign_block_vars('event_dkpid_row', array(
@@ -218,6 +220,7 @@ class acp_dkp_event extends bbDKP_Admin
 						// Form values
 						'EVENT_DKPPOOLNAME'	=> isset($this->event['event_dkpsys_name']) ? $this->event['event_dkpsys_name']: '',
 						'EVENT_NAME'		=> isset($this->event['event_name']) ? $this->event['event_name']: '' ,
+						'S_EVENT_STATUS'	=> ($this->event['event_status'] == 1 ? true : false), 
 						'EVENT_VALUE'		=> isset($this->event['event_value']) ? $this->event['event_value']: '' ,
 						'EVENT_COLOR'		=> isset($this->event['event_color']) ? (($this->event['event_color'] == '') ? '#123456' : $this->event['event_color']) : '#123456',
 						'EVENT_IMAGENAME'	=> isset($this->event['event_imagename']) ? $this->event['event_imagename']: '' ,
@@ -256,11 +259,34 @@ class acp_dkp_event extends bbDKP_Admin
 					break;
 				}
 				
+				$activate = (isset ( $_POST ['deactivate'] )) ? true : false;
+				if ($activate)
+				{
+					// all events in this window
+					$all_events = explode(',', request_var ( 'idlist', '') );
+					// all checked events in this window
+					$active_events = request_var ( 'activate_ids', array (0));
+					$db->sql_transaction ( 'begin' );
+					
+					$sql1 = 'UPDATE ' . EVENTS_TABLE . "
+                        SET event_status = '1' 
+                        WHERE " . $db->sql_in_set ( 'event_id', $active_events, false, true );
+					$db->sql_query ( $sql1 );
+					
+					//deactivate unselected events
+					$sql2 = 'UPDATE ' . EVENTS_TABLE . "
+                        SET event_status = '0' 
+                        WHERE " . $db->sql_in_set ('event_id', array_diff($all_events, $active_events) , false, true );
+					$db->sql_query ( $sql2 );
+					
+					$db->sql_transaction ( 'commit' );
+				}
 				
 				$sort_order = array(
 					0 => array('dkpsys_name', 'dkpsys_name desc'),
 					1 => array('event_name', 'dkpsys_name, event_name desc'),
-					2 => array('event_value desc', 'dkpsys_name, event_value desc')
+					2 => array('event_value desc', 'dkpsys_name, event_value desc'), 
+					3 => array('event_status desc', 'dkpsys_name, event_status, event_name desc'), 
 				);
 				 
 				$current_order = switch_order($sort_order);
@@ -271,7 +297,7 @@ class acp_dkp_event extends bbDKP_Admin
 				$db->sql_freeresult($result);
 			 
 				$start = request_var('start',0);
-				$sql = 'SELECT b.dkpsys_name, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename 
+				$sql = 'SELECT b.dkpsys_name, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename , a.event_status 
 						FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . ' b 
 						WHERE b.dkpsys_id = a.event_dkpid 
 						ORDER BY '. $current_order['sql']; 
@@ -280,24 +306,27 @@ class acp_dkp_event extends bbDKP_Admin
 				{
 					trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'], E_USER_NOTICE);
 				}
-			 
+			 	$idlist = '';
 				while ( $event = $db->sql_fetchrow($events_result) )
 				{
 					$template->assign_block_vars('events_row', array(
+                    	'EVENT_ID' => $event ['event_id'],
 						'U_VIEW_EVENT' =>append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=addevent&amp;" . URI_EVENT ."={$event['event_id']}"),
 						'DKPSYS_EVENT' => $event['dkpsys_name'],
 						'COLOR' => $event['event_color'],
 						'IMAGEPATH' 	=> $phpbb_root_path . "images/event_images/" . $event['event_imagename'] . ".png", 
                     	'S_EVENT_IMAGE_EXISTS' => (strlen($event['event_imagename']) > 1) ? true : false, 
-					
+                    	'S_EVENT_STATUS' => ($event ['event_status'] == 1) ? 'checked="checked" ' : '', 
 						'IMAGENAME' => $event['event_imagename'],
 						'NAME' => $event['event_name'],
 						'VALUE' => $event['event_value'])
 					);
+					$idlist[] = $event ['event_id'];
 				}
 				$db->sql_freeresult($events_result);
-			 
+			    
 				$template->assign_vars(array(
+					'IDLIST'		=> implode(",", $idlist), 
 					'L_TITLE'		=> $user->lang['ACP_LISTEVENTS'],
 					'L_EXPLAIN'		=> $user->lang['ACP_LISTEVENTS_EXPLAIN'],
 					'O_DKPSYS'		=> $current_order['uri'][0],

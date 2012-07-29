@@ -1003,6 +1003,10 @@ $versions = array(
     		array('bbdkp_portal_newmembers', 1, true),
     		array('bbdkp_portal_maxnewmembers', 5, true),
     	),
+    	
+     	'table_column_add' => array(
+			array($table_prefix . 'bbdkp_events', 'event_status' , array('BOOL', 1)),
+		),    	
      
      'custom' => array( 
     		'gameinstall',  
