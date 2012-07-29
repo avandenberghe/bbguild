@@ -146,7 +146,6 @@
 			<file from="root/images/race_images/tera_human.png" to="images/race_images/tera_human.png"/>
 			<file from="root/images/race_images/tera_popori_male.png" to="images/race_images/tera_popori_male.png"/>
 			<file from="root/images/race_images/tera_popori.png" to="images/race_images/tera_popori.png"/>
-			<file from="root/images/roster_classes/.DS_Store" to="images/roster_classes/.DS_Store"/>
 			<file from="root/images/roster_classes/aion_shaman.png" to="images/roster_classes/aion_shaman.png"/>
 			<file from="root/images/roster_classes/eq_bard.png" to="images/roster_classes/eq_bard.png"/>
 			<file from="root/images/roster_classes/eq_beastlord.png" to="images/roster_classes/eq_beastlord.png"/>
