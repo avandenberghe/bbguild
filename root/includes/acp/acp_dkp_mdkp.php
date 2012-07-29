@@ -97,28 +97,6 @@ class acp_dkp_mdkp extends bbDKP_Admin
 				$db->sql_freeresult ( $result );
 				/***  end drop-down query ***/
 				
-				/* check if page was posted back */
-				$activate = (isset ( $_POST ['submit_activate'] )) ? true : false;
-				if ($activate)
-				{
-					$active_members = request_var ( 'activate_ids', array (0));
-					$db->sql_transaction ( 'begin' );
-					
-					$sql1 = 'UPDATE ' . MEMBER_DKP_TABLE . "
-                        SET member_status = '1' 
-                        WHERE  member_dkpid  = " . $dkpsys_id . ' 
-                        AND ' . $db->sql_in_set ( 'member_id', $active_members, false, true );
-					$db->sql_query ( $sql1 );
-					
-					$sql2 = 'UPDATE ' . MEMBER_DKP_TABLE . "
-                        SET member_status = '0' 
-                        WHERE  member_dkpid  = " . $dkpsys_id . ' 
-                        AND ' . $db->sql_in_set ( 'member_id', $active_members, true, true );
-					$db->sql_query ( $sql2 );
-					
-					$db->sql_transaction ( 'commit' );
-				}
-				
 				$activate = (isset ( $_POST ['submit_activate'] )) ? true : false;
 				if ($activate)
 				{
