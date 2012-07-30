@@ -9,15 +9,15 @@ Different forms of DKP exist and bbDKP supports four point systems : Standard DK
 
 bbDKP has Game, Guild and DKP management functions built into your phpBB3 Forum. 
 
-This way, your users gain single sign on to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches.
+This way, your users gain single signon to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches.
 
-Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games can be installed : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, and Star Wars-ToR
+Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games can be installed : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, Star Wars -ToR, Guildwars 2, Tera.
 
-There are a number of plugins, like Raidtracker, bbTips, Armory import, Apply, Raidplanner, and other standalone mods that work well together. 
+There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory import, Apply, and other standalone mods that work well together. 
 
 ## current
 
-1.2.7
+1.2.8
 
 ## community
 
