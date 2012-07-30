@@ -236,17 +236,17 @@
 			<file from="root/styles/prosilver/template/dkp/news_body.html" to="styles/prosilver/template/dkp/news_body.html"/>
 		</copy>
 		<delete>
-			<file name="root/images/class_images/eq_mage.png"/>
-			<file name="root/images/recruitblock_images/dps_icon.png"/>
-			<file name="root/images/recruitblock_images/healer_icon.png"/>
-			<file name="root/images/recruitblock_images/looking_icon.gif"/>
-			<file name="root/images/recruitblock_images/rec.png"/>
-			<file name="root/images/recruitblock_images/rec_closed.png"/>
-			<file name="root/images/recruitblock_images/rec_high.png"/>
-			<file name="root/images/recruitblock_images/rec_low.png"/>
-			<file name="root/images/recruitblock_images/rec_med.png"/>
-			<file name="root/images/recruitblock_images/tank_icon.png"/>
-			<file name="root/images/recruitblock_images/"/>
+			<file name="images/class_images/eq_mage.png"/>
+			<file name="images/recruitblock_images/dps_icon.png"/>
+			<file name="images/recruitblock_images/healer_icon.png"/>
+			<file name="images/recruitblock_images/looking_icon.gif"/>
+			<file name="images/recruitblock_images/rec.png"/>
+			<file name="images/recruitblock_images/rec_closed.png"/>
+			<file name="images/recruitblock_images/rec_high.png"/>
+			<file name="images/recruitblock_images/rec_low.png"/>
+			<file name="images/recruitblock_images/rec_med.png"/>
+			<file name="images/recruitblock_images/tank_icon.png"/>
+			<file name="images/recruitblock_images/"/>
 		</delete>
 		<diy-instructions lang="en"><![CDATA[Afterwards, run database installer and purge template cache]]></diy-instructions>
 		<diy-instructions lang="fr"><![CDATA[ensuite, lancer mise à jour db et purgez la cache]]></diy-instructions>
