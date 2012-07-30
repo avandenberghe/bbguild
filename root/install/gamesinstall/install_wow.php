@@ -207,17 +207,17 @@ function install_wow()
     $db->sql_freeresult ( $result );
 
     $sql_ary = array();
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Blackwing Descent 10', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => 'wow_bd10'  ) ;
-    $sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Bastion of Twilight 10', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => 'wow_bot10'  ) ;
-    $sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Throne of the Four Winds 10', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => 'wow_tfw10');
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Firelands 10', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => 'wow_fl10');
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Firelands 10hm', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => 'wow_fl10hm');
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Firelands 25', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => 'wow_fl25');
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Firelands 25hm', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => 'wow_fl25hm');
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Dragon Soul 10', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'wow_ds10' );
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Dragon Soul 10hm', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'wow_ds10hm' );
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Dragon Soul 25', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'wow_ds25' );
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Dragon Soul 25hm', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => 'wow_ds25hm' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T11 Blackwing Descent 10', 'event_color' => '#77FF11', 'event_value' => 5, 'event_imagename' => 'wow_bd10'  ) ;
+    $sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T11 Bastion of Twilight 10', 'event_color' => '#99FF11', 'event_value' => 5, 'event_imagename' => 'wow_bot10'  ) ;
+    $sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T11 Throne of the Four Winds 10', 'event_color' => '#BBFF11', 'event_value' => 5, 'event_imagename' => 'wow_tfw10');
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T12 Firelands 10', 'event_color' => '#CCFF11', 'event_value' => 5 , 'event_imagename' => 'wow_fl10');
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T12 Firelands 10hm', 'event_color' => '#FF2266', 'event_value' => 5 , 'event_imagename' => 'wow_fl10hm');
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T12 Firelands 25', 'event_color' => '#FFBB22', 'event_value' => 5 , 'event_imagename' => 'wow_fl25');
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T12 Firelands 25hm', 'event_color' => '#FF2266', 'event_value' => 5 , 'event_imagename' => 'wow_fl25hm');
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 10', 'event_color' => '#CCFF22', 'event_value' => 5, 'event_imagename' => 'wow_ds10' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 10hm', 'event_color' => '#FF2266', 'event_value' => 5, 'event_imagename' => 'wow_ds10hm' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 25', 'event_color' => '#FFBB33', 'event_value' => 5, 'event_imagename' => 'wow_ds25' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 25hm', 'event_color' => '#FF2266', 'event_value' => 5, 'event_imagename' => 'wow_ds25hm' );
 	
 	$sql_ary2 = array();
 	foreach($sql_ary as $evt => $event)
@@ -260,9 +260,9 @@ function install_wow()
     $db->sql_freeresult ( $result );
 
     $sql_ary = array();
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Mogu’shan Vaults (90)', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => ''  ) ;
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Terrace of Endless Spring  (90)', 'event_color' => '#888888', 'event_value' => 5 , 'event_imagename' => '') ;
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'Heart of Fear (90)', 'event_color' => '#00CC66', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Mogu’shan Vaults (90)', 'event_color' => '#FF9999', 'event_value' => 5, 'event_imagename' => ''  ) ;
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Terrace of Endless Spring  (90)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => '') ;
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Heart of Fear (90)', 'event_color' => '#DD00AA', 'event_value' => 5, 'event_imagename' => '' );
 
 	$sql_ary2 = array();
 	foreach($sql_ary as $evt => $event)
