@@ -395,7 +395,7 @@
 	<file name="images/recruitblock_images/rec_med.png"/> 
 	<file name="images/recruitblock_images/rec.png"/> 
 	<file name="images/recruitblock_images/tank_icon.png"/> 
-	<file name="images/recruitblock_images/"/> 
+	<file name="images/recruitblock_images/*.*"/> 
 </delete>
 <copy>
 	<file from="root/adm/style/dkp/acp_addfaction.html" to="root/adm/style/dkp/acp_addfaction.html"/> 
@@ -983,6 +983,7 @@
 	<file from="root/styles/prosilver/template/dkp/ucp_dkp.html" to="root/styles/prosilver/template/dkp/ucp_dkp.html"/> 
 	<file from="root/umil/umil.php" to="root/umil/umil.php"/> 
 	</copy>
+	<php-installer><![CDATA[install/index.php]]></php-installer>
 	<diy-instructions lang="en"><![CDATA[Afterwards, run database installer and purge template cache]]></diy-instructions>
 	<diy-instructions lang="fr"><![CDATA[ensuite, lancer mise à jour db et purgez la cache]]></diy-instructions>
 	<diy-instructions lang="de"><![CDATA[danach database update und Cache leeren]]></diy-instructions>

@@ -108,7 +108,6 @@
 			<file from="root/images/event_images/wow_ds10hm.png" to="images/event_images/wow_ds10hm.png"/>
 			<file from="root/images/event_images/wow_ds25.png" to="images/event_images/wow_ds25.png"/>
 			<file from="root/images/event_images/wow_ds25hm.png" to="images/event_images/wow_ds25hm.png"/>
-			<file from="root/images/portal/" to="images/portal/"/>
 			<file from="root/images/portal/member.gif" to="images/portal/member.gif"/>
 			<file from="root/images/portal/recruitblock_images/" to="images/portal/recruitblock_images/"/>
 			<file from="root/images/portal/recruitblock_images/dps_icon.png" to="images/portal/recruitblock_images/dps_icon.png"/>
@@ -246,10 +245,11 @@
 			<file name="images/recruitblock_images/rec_low.png"/>
 			<file name="images/recruitblock_images/rec_med.png"/>
 			<file name="images/recruitblock_images/tank_icon.png"/>
-			<file name="images/recruitblock_images/"/>
+			<file name="images/recruitblock_images/*.*"/>
 		</delete>
-		<diy-instructions lang="en"><![CDATA[Afterwards, run database installer and purge template cache]]></diy-instructions>
-		<diy-instructions lang="fr"><![CDATA[ensuite, lancer mise à jour db et purgez la cache]]></diy-instructions>
-		<diy-instructions lang="de"><![CDATA[danach database update und Cache leeren]]></diy-instructions>
+		<php-installer><![CDATA[install/index.php]]></php-installer>
+		<diy-instructions lang="en"><![CDATA[Afterwards, run database installer and purge template cache. Update your other styles manually]]></diy-instructions>
+		<diy-instructions lang="fr"><![CDATA[Ensuite, lancer mise à jour db et purgez la cache. Mettre à jour les autres styles]]></diy-instructions>
+		<diy-instructions lang="de"><![CDATA[Danach database update und Cache leeren. Andere Themen sind manuell aufzuarbeiten.]]></diy-instructions>
 	</action-group>
 </mod>

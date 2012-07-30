@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.7 
+ * @version 1.2.8
  */
  
 define('UMIL_AUTO', true);
@@ -1062,7 +1062,7 @@ function gameinstall($action, $version)
 						$umil->config_update('bbdkp_games_aion', 1, true);
 						$installed_games[] = 'aion';
 					}
-	
+		
 					if(request_var('daoc', 0) == 1)
 					{
 						install_daoc($action, $version);
@@ -1083,7 +1083,7 @@ function gameinstall($action, $version)
 						$umil->config_update('bbdkp_games_eq2', 1, true);
 						$installed_games[] = 'eq2';
 					}
-	
+		
 					if(request_var('FFXI', 0) == 1)
 					{
 						install_ffxi($action, $version); 
@@ -1093,9 +1093,9 @@ function gameinstall($action, $version)
 					
 					if(request_var('lineage2', 0) == 1)
 			        {
-		          			install_lineage2($action, $version); 
-		         			$umil->config_update('bbdkp_games_lineage2', 1, true);
-		         			$installed_games[] = 'lineage2';          			
+		       			install_lineage2($action, $version); 
+		       			$umil->config_update('bbdkp_games_lineage2', 1, true);
+		       			$installed_games[] = 'lineage2';          			
 		       		}
 					
 					if(request_var('lotro', 0) == 1)
@@ -1104,7 +1104,7 @@ function gameinstall($action, $version)
 						$umil->config_update('bbdkp_games_lotro', 1, true);
 						$installed_games[] = 'lotro';					
 					}
-
+		
 					if(request_var('rift', 0) == 1)
 					{
 						// new game
@@ -1120,7 +1120,7 @@ function gameinstall($action, $version)
 						$umil->config_update('bbdkp_games_swtor', 1, true);
 						$installed_games[] = 'swtor';
 					}
-
+		
 					if(request_var('vanguard', 0) == 1)
 					{
 						install_vanguard($action, $version); 
@@ -1141,15 +1141,14 @@ function gameinstall($action, $version)
 						$installed_games[] = 'wow';
 					}
 					
-	                foreach($installed_games as $gameid)
-	                {
-	                	// update the guildbank with the first installed gameid
+					foreach($installed_games as $gameid)
+					{
+		              	// update the guildbank with the first installed gameid
 						$sql = "UPDATE " . $table_prefix . 'bbdkp_memberlist' . " set game_id = '" . $gameid . "' where member_rank_id = '90' ";
 						$db->sql_query($sql);
 						// now break we dont need to run this more than once.
 						break;
 					}
-	
 				    // report what we did to umil
 					return array('command' => sprintf($user->lang['UMIL_GAME126'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
@@ -1158,57 +1157,60 @@ function gameinstall($action, $version)
 					return array('command' => sprintf($user->lang['UMIL_GAME127'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
 				case '1.2.8':
-					// truncating and reinserting changed game tables
-					if($config['bbdkp_games_lineage2'] == 1 || request_var('lineage2', 0) == 1)
+					if ($action='update')
 					{
-						install_lineage2($action, $version); 
-						$umil->config_update('bbdkp_games_lineage2', 1, true);
-						$installed_games[] = 'lineage2';
+						// //updating from 126 or 127, check 
+						if($config['bbdkp_games_lineage2'] == 1 || request_var('lineage2', 0) == 1)
+						{
+							install_lineage2($action, $version); 
+							$umil->config_update('bbdkp_games_lineage2', 1, true);
+							$installed_games[] = 'lineage2';
+						}
+						
+						if($config['bbdkp_games_lotro'] == 1 || request_var('lotro', 0) == 1) 
+						{
+							install_lotro($action, $version); 
+							$umil->config_update('bbdkp_games_lotro', 1, true);
+							$installed_games[] = 'lotro';
+						}
+						
+						if($config['bbdkp_games_rift'] == 1 || request_var('rift', 0) == 1)  
+						{
+							install_rift($action, $version);
+							$umil->config_update('bbdkp_games_rift', 1, true); 
+							$installed_games[] = 'rift';
+						}
+						
+						if($config['bbdkp_games_swtor'] == 1 || request_var('swtor', 0) == 1)
+						{
+							install_swtor($action, $version); 
+							$umil->config_update('bbdkp_games_swtor', 1, true);
+							$installed_games[] = 'swtor';
+						}
+						
+						if($config['bbdkp_games_vanguard'] == 1 || request_var('vanguard', 0) == 1)
+						{
+							install_vanguard($action, $version); 
+							$umil->config_update('bbdkp_games_vanguard', 1, true);
+							$installed_games[] = 'vanguard';
+						}
+			
+						if($config['bbdkp_games_warhammer'] == 1 || request_var('warhammer', 0) == 1)
+						{
+							install_warhammer($action, $version); 
+							$umil->config_update('bbdkp_games_warhammer', 1, true);
+							$installed_games[] = 'warhammer';
+						}					
+									
+						if($config['bbdkp_games_wow'] == 1 || request_var('wow', 0) == 1) 
+						{
+							install_wow($action, $version);
+							$umil->config_update('bbdkp_games_wow', 1, true); 
+							$installed_games[] = 'wow';
+						}
 					}
-					
-					if($config['bbdkp_games_lotro'] == 1 || request_var('lotro', 0) == 1) 
-					{
-						install_lotro($action, $version); 
-						$umil->config_update('bbdkp_games_lotro', 1, true);
-						$installed_games[] = 'lotro';
-					}
-					
-					if($config['bbdkp_games_rift'] == 1 || request_var('rift', 0) == 1)  
-					{
-						install_rift($action, $version);
-						$umil->config_update('bbdkp_games_rift', 1, true); 
-						$installed_games[] = 'rift';
-					}
-					
-					if($config['bbdkp_games_swtor'] == 1 || request_var('swtor', 0) == 1)
-					{
-						install_swtor($action, $version); 
-						$umil->config_update('bbdkp_games_swtor', 1, true);
-						$installed_games[] = 'swtor';
-					}
-					
-					if($config['bbdkp_games_vanguard'] == 1 || request_var('vanguard', 0) == 1)
-					{
-						install_vanguard($action, $version); 
-						$umil->config_update('bbdkp_games_vanguard', 1, true);
-						$installed_games[] = 'vanguard';
-					}
-
-					if($config['bbdkp_games_warhammer'] == 1 || request_var('warhammer', 0) == 1)
-					{
-						install_warhammer($action, $version); 
-						$umil->config_update('bbdkp_games_warhammer', 1, true);
-						$installed_games[] = 'warhammer';
-					}					
-								
-					if($config['bbdkp_games_wow'] == 1 || request_var('wow', 0) == 1) 
-					{
-						install_wow($action, $version);
-						$umil->config_update('bbdkp_games_wow', 1, true); 
-						$installed_games[] = 'wow';
-					}
-
-					// set switch to "on" for new games
+							
+					// if install or update, check this
 					if(request_var('tera', 0) == 1)
 					{
 						install_tera($action, $version);
@@ -1220,15 +1222,15 @@ function gameinstall($action, $version)
 						install_gw2($action, $version);
 						$umil->config_update('bbdkp_games_gw2', 1, true);
 						$installed_games[] = 'gw2';
-					}					
+					}
 					return array('command' => sprintf($user->lang['UMIL_GAME128'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
 			}
 			break;
-		case 'uninstall' :
+		case 'uninstall':
 			return array('command' => 'UMIL_GAMEUNINST', 'result' => 'SUCCESS');
+			break;
 	}
-					
 }
 
 /*
