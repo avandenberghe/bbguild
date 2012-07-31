@@ -237,8 +237,7 @@ function install_wow()
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
 	}
 	
-	
-	$db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'WoW Pandaria' ");
+	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'WoW Pandaria' ");
 	$row = $db->sql_fetchrow ($result); 
 	if($row)
     {
@@ -281,7 +280,6 @@ function install_wow()
 	{
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
 	}
-	
 	
 }
 ?>

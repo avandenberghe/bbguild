@@ -165,7 +165,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/images/icons/*.*" to="images/icons/*.*"/>
 			<file from="root/images/progressbar/*.*" to="images/progressbar/*.*"/>
 			<file from="root/images/race_images/*.*" to="images/race_images/*.*"/>
-			<file from="root/images/recruitblock_images/*.*" to="images/recruitblock_images/*.*"/>
+			<file from="root/images/portal/*.*" to="images/portal/*.*"/>
 			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>
 			<file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*"/>
 			<file from="root/images/tooltip/*.*" to="images/tooltip/*.*"/>
