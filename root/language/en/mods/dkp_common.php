@@ -171,6 +171,7 @@ $lang = array_merge($lang, array(
 
 'LISTADJ_TITLE' => 'Adjustment Listing',
 'LISTEVENTS_TITLE' => 'Event Values',
+'LISTIADJ_TITLE' => 'Individual Adjustment Listing',
 'LISTITEMS_TITLE' => 'Item Values',
 'LISTPURCHASED_TITLE' => 'Item History',
 'LISTRAIDS_TITLE' => 'Raids Listing',
@@ -224,7 +225,6 @@ $lang = array_merge($lang, array(
 'CLASSMAX' => 'Max level',
 'CLASS_DISTRIBUTION' => 'Class Distribution',
 'CLASS_SUMMARY' => 'Class Summary: %s to %s',
-
 'CONFIGURATION' => 'Configuration',
 'CLOSED' => 'Closed', 
 'DATE' => 'Date',

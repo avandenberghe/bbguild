@@ -101,6 +101,7 @@ $lang = array_merge($lang, array(
 'FV_REQUIRED_RAIDID' => 'A raid must be selected.',
 'FV_REQUIRED_USER' => 'The username field is required.',
 'FV_REQUIRED_VALUE' => 'The value field is required.',
+'FV_REQUIRED_STATUS' => 'The status field is required.',
 'FV_REQUIRED_MESSAGE' => 'The message field is required.',
 'FV_REQUIRED_NAME' => 'The name field is required.',
 'FV_REQUIRED_ID' => 'The id field is required.',
@@ -767,11 +768,10 @@ So the loot would go to player 2 <br />',
 'VIEWLOGS_TITLE' => 'Log Viewer',
 'EDITMEMBER_DKP_TITLE' => 'Edit Guildmember DKP', 
 'EDIT_RACE_TITLE' => 'Edit a Race', 
-'ADD_RACE_TITLE' => 'Race Parameters',
-'ADD_CLASS_TITLE' => 'Class parameters',
 'EDIT_RAID_TITLE' => 'Edit Raid data',
 'EDIT_RAIDER_TITLE' => 'Edit a Raider',
-
+'ADD_RACE_TITLE' => 'Race Parameters',
+'ADD_CLASS_TITLE' => 'Class parameters',
 
 // Page Foot Counts
 'LISTMEMBERS_FOOTCOUNT' => '... found %d members',
