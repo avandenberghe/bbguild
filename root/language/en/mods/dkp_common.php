@@ -24,7 +24,6 @@ if (empty($lang) || !is_array($lang))
 	$lang = array();
 }
 
-
 // DEVELOPERS PLEASE NOTE
 //
 // All language files should use UTF-8 as their encoding and the files must not contain a BOM.
@@ -170,9 +169,8 @@ $lang = array_merge($lang, array(
 'COMPARE_MEMBERS' => 'Compare Members',
 'LISTMEMBERS_FOOTCOUNT' => '... found %d members',
 
-'LISTADJ_TITLE' => 'Group Adjustment Listing',
+'LISTADJ_TITLE' => 'Adjustment Listing',
 'LISTEVENTS_TITLE' => 'Event Values',
-'LISTIADJ_TITLE' => 'Individual Adjustment Listing',
 'LISTITEMS_TITLE' => 'Item Values',
 'LISTPURCHASED_TITLE' => 'Item History',
 'LISTRAIDS_TITLE' => 'Raids Listing',
@@ -226,6 +224,7 @@ $lang = array_merge($lang, array(
 'CLASSMAX' => 'Max level',
 'CLASS_DISTRIBUTION' => 'Class Distribution',
 'CLASS_SUMMARY' => 'Class Summary: %s to %s',
+
 'CONFIGURATION' => 'Configuration',
 'CLOSED' => 'Closed', 
 'DATE' => 'Date',
