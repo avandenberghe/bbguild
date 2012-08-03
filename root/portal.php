@@ -58,6 +58,11 @@ else
 include($phpbb_root_path . 'includes/bbdkp/block/whoisonline.' . $phpEx);
 
 // variable blocks - these depend on acp
+if ($config['bbdkp_portal_newmembers'] == 1)
+{
+	include($phpbb_root_path . 'includes/bbdkp/block/newmembers.' . $phpEx);
+}
+
 if ($config['bbdkp_portal_welcomemsg'] == 1)
 {
 	include($phpbb_root_path . 'includes/bbdkp/block/welcomeblock.' . $phpEx);

@@ -224,7 +224,7 @@ function durationcalc()
 	<dl>
 		<dt><label>{L_EVENT}:</label></dt>
     <dd>
-	    <select id="event_id" onchange="javascript:switch_event_val();" >
+	    <select id="event_id" name="event_id" onchange="javascript:switch_event_val();" >
 			<!-- BEGIN events_row -->
 			<option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
 			<!-- END events_row -->

@@ -26,15 +26,15 @@ function install_aion()
     $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'aion'" );
     $sql_ary = array();
     // sub classes, excluding the original 4 classes, which are irrelevant endgame 
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_unknown' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 1, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_spiritmaster' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 2, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_sorcerer' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 3, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_sssassin' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 4, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_ranger' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 5, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_chanter' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 6, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_cleric' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 7, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_gladiator' );
-    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 8, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 55, 'imagename' => 'aion_templar' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_unknown' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 1, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_spiritmaster' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 2, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_sorcerer' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 3, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_assassin' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 4, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_ranger' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 5, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_chanter' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 6, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_cleric' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 7, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_gladiator' );
+    $sql_ary[] = array('game_id' => 'aion', 'class_id' => 8, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_templar' );
     $db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
    	unset ($sql_ary); 
     
@@ -49,8 +49,8 @@ function install_aion()
     // races (No races, only factions, dummy value)
     $db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'aion'");    
     $sql_ary = array();
-    $sql_ary[] = array('game_id' => 'aion', 'race_id' => 1, 'race_faction_id' => 1 );
-    $sql_ary[] = array('game_id' => 'aion', 'race_id' => 2, 'race_faction_id' => 2 );
+    $sql_ary [] = array ('game_id' => 'aion','race_id' => 1, 'race_faction_id' => 1, 'image_female' => 'aion_elyos', 'image_male' => 'aion_elyos'  ); 
+	$sql_ary [] = array ('game_id' => 'aion','race_id' => 2, 'race_faction_id' => 2, 'image_female' => 'aion_asmodian',  'image_male' => 'aion_asmodian' );  
     $db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
 	unset ($sql_ary);	
 
@@ -95,6 +95,48 @@ function install_aion()
 	$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 8, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Templer' ,  'name_short' =>  'Templer' );
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
+	
+	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'Aion Events' ");
+	$row = $db->sql_fetchrow ($result); 
+	if($row)
+    {
+		$aiondkpid = $row['dkpsys_id'];    	
+    }
+    else
+    {
+    	// dkp pool
+		$sql_ary = array (
+			'dkpsys_name' => 'Aion Events', 
+			'dkpsys_status' => 'Y', 
+			'dkpsys_addedby' => 'admin', 
+			'dkpsys_default' => 'N' );
+		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+		$db->sql_query($sql);
+		$aiondkpid = $db->sql_nextid();
+    }
+    $db->sql_freeresult ( $result );
+
+    $sql_ary = array();
+	$sql_ary [] = array('event_dkpid' => $aiondkpid , 'event_name' => 'Aion PVE', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => 'aion_pve'  ) ;
+
+	$sql_ary2 = array();
+	foreach($sql_ary as $evt => $event)
+	{
+		$result = $db->sql_query('SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char));
+		$row = $db->sql_fetchrow ($result); 
+		if(!$row)
+		{
+			$sql_ary2[] = $event;
+		}
+		$db->sql_freeresult ($result);
+	}
+	
+	if (count($sql_ary2) > 0)
+	{
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
+	}
+	
+	
 }
 
 

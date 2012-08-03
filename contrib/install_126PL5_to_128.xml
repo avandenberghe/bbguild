@@ -1,0 +1,991 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<?xml-stylesheet type="text/xsl" href="modx.prosilver.en.xsl"?>
+<!--NOTICE: Please open this file in your web browser. If presented with a security warning, you may safely tell it to allow the blocked content.-->
+<!--For security purposes, please check: http://www.phpbb.com/mods/ for the latest version of this MOD.\nAlthough MODs are checked before being allowed in the MODs Database there is no guarantee that there are no security problems within the MOD.\nNo support will be given for MODs not found within the MODs Database which can be found at http://www.phpbb.com/mods/-->
+<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.5.xsd">
+	<header>
+		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
+		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
+		<title lang="en"><![CDATA[bbDKP 1.2.6PL5 to 1.2.8]]></title>
+		<description lang="en"><![CDATA[Direct Update 1.2.6PL5 to 1.2.8]]></description>
+		<description lang="fr"><![CDATA[mise à jour directe de 1.2.6PL5 to 1.2.8]]></description>
+		<description lang="de"><![CDATA[Direkte Aktualisierung 1.2.6PL5 to 1.2.8]]></description>
+		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.6-PL5: delete, add and replace the files listed below]]></author-notes>
+		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.6-PL5: supprime, remplace et ajoute les fichiers listés en bas]]></author-notes>
+		<author-notes lang="de"><![CDATA[Benötigt bbdkp 1.2.6-PL5: lösche, ersetze und füge hinzu die hierunder erwähnte Dateien]]></author-notes>
+		<author-group>
+			<author>
+				<realname><![CDATA[Andy Vandenberghe]]></realname>
+				<username><![CDATA[Sajaki]]></username>
+				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
+				<email><![CDATA[sajaki9@gmail.com]]></email>
+				<contributions-group>
+					<contributions status="current" from="2008-04-04" position="Developer"/>
+				</contributions-group>
+			</author>
+			<author>
+				<realname><![CDATA[Steffen]]></realname>
+				<username><![CDATA[Blazeflack]]></username>
+				<homepage><![CDATA[http://aegis.dk]]></homepage>
+				<email><![CDATA[blazeflack@gmail.com]]></email>
+				<contributions-group>
+					<contributions status="current" from="2010-06-01" position="Supporter"/>
+				</contributions-group>
+			</author>
+			<author>
+				<realname><![CDATA[TheGadgetGuy]]></realname>
+				<username><![CDATA[aerwin]]></username>				
+				<homepage><![CDATA[]]></homepage>				
+				<contributions-group>
+					<contributions status="current" from="2012-01-01" position="Contributor"/>
+				</contributions-group>
+			</author>			
+			<author>
+				<realname><![CDATA[Sh1ny]]></realname>
+				<username><![CDATA[Sh1ny]]></username>				
+				<homepage><![CDATA[]]></homepage>								
+				<contributions-group>
+					<contributions status="current" from="2012-01-01" position="Contributor"/>
+				</contributions-group>
+			</author>				
+		</author-group>
+		<mod-version>1.2.8</mod-version>
+		<installation>
+			<level>easy</level>
+			<time>300</time>
+			<target-version>3.0.10</target-version>
+		</installation>
+		<link-group>
+			<link type="parent" href="../install.xml" lang="de">Frisch-Installations-Anleitung</link>
+			<link type="parent" href="../install.xml" lang="en">Clean-Installation Manual</link>
+			<link type="parent" href="../install.xml" lang="fr">Manuel de première installation</link>
+		</link-group>
+	</header>
+	<action-group>
+		<delete>
+		<file name="images/class_images/aion_Assassin_small.png"/> 
+	<file name="images/class_images/aion_Chanter_small.png"/> 
+	<file name="images/class_images/aion_Cleric_small.png"/> 
+	<file name="images/class_images/aion_Gladiator_small.png"/> 
+	<file name="images/class_images/aion_Ranger_small.png"/> 
+	<file name="images/class_images/aion_Sorcerer_small.png"/> 
+	<file name="images/class_images/aion_Spiritmaster_small.png"/> 
+	<file name="images/class_images/aion_Templar_small.png"/> 
+	<file name="images/class_images/daoc_Animist_small.png"/> 
+	<file name="images/class_images/daoc_Armsman_small.png"/> 
+	<file name="images/class_images/daoc_Bainshee_small.png"/> 
+	<file name="images/class_images/daoc_Bard_small.png"/> 
+	<file name="images/class_images/daoc_berserker_small.png"/> 
+	<file name="images/class_images/daoc_Blademaster_small.png"/> 
+	<file name="images/class_images/daoc_bonedancer_small.png"/> 
+	<file name="images/class_images/daoc_Cabalist_small.png"/> 
+	<file name="images/class_images/daoc_Champion_small.png"/> 
+	<file name="images/class_images/daoc_Cleric_small.png"/> 
+	<file name="images/class_images/daoc_Druid_small.png"/> 
+	<file name="images/class_images/daoc_Eldritch_small.png"/> 
+	<file name="images/class_images/daoc_Enchanter_small.png"/> 
+	<file name="images/class_images/daoc_Friar_small.png"/> 
+	<file name="images/class_images/daoc_Healer_small.png"/> 
+	<file name="images/class_images/daoc_Heretic_small.png"/> 
+	<file name="images/class_images/daoc_Hero_small.png"/> 
+	<file name="images/class_images/daoc_Hunter_small.png"/> 
+	<file name="images/class_images/daoc_Infiltrator_small.png"/> 
+	<file name="images/class_images/daoc_Mentalist_small.png"/> 
+	<file name="images/class_images/daoc_Mercenary_small.png"/> 
+	<file name="images/class_images/daoc_Minstrel_small.png"/> 
+	<file name="images/class_images/daoc_Necromancer_small.png"/> 
+	<file name="images/class_images/daoc_Nightshade_small.png"/> 
+	<file name="images/class_images/daoc_Paladin_small.png"/> 
+	<file name="images/class_images/daoc_Ranger_small.png"/> 
+	<file name="images/class_images/daoc_Reaver_small.png"/> 
+	<file name="images/class_images/daoc_Runemaster_small.png"/> 
+	<file name="images/class_images/daoc_Savage_small.png"/> 
+	<file name="images/class_images/daoc_Scout_small.png"/> 
+	<file name="images/class_images/daoc_Shadowblade_small.png"/> 
+	<file name="images/class_images/daoc_Shaman_small.png"/> 
+	<file name="images/class_images/daoc_Skald_small.png"/> 
+	<file name="images/class_images/daoc_Sorcerer_small.png"/> 
+	<file name="images/class_images/daoc_Spiritmaster_small.png"/> 
+	<file name="images/class_images/daoc_Thane_small.png"/> 
+	<file name="images/class_images/daoc_Theurgist_small.png"/> 
+	<file name="images/class_images/daoc_Valewalker_small.png"/> 
+	<file name="images/class_images/daoc_Valkyrie_small.png"/> 
+	<file name="images/class_images/daoc_Vampiir_small.png"/> 
+	<file name="images/class_images/daoc_Warden_small.png"/> 
+	<file name="images/class_images/daoc_Warlock_small.png"/> 
+	<file name="images/class_images/daoc_Warrior_small.png"/> 
+	<file name="images/class_images/daoc_Wizard_small.png"/> 
+	<file name="images/class_images/eq_Bard_small.png"/> 
+	<file name="images/class_images/eq_Beastlord_small.png"/> 
+	<file name="images/class_images/eq_Berserker_small.png"/> 
+	<file name="images/class_images/eq_Cleric_small.png"/> 
+	<file name="images/class_images/eq_Druid_small.png"/> 
+	<file name="images/class_images/eq_Enchanter_small.png"/> 
+	<file name="images/class_images/eq_Mage_small.png"/> 
+	<file name="images/class_images/eq_Monk_small.png"/> 
+	<file name="images/class_images/eq_Necromancer_small.png"/> 
+	<file name="images/class_images/eq_Paladin_small.png"/> 
+	<file name="images/class_images/eq_Ranger_small.png"/> 
+	<file name="images/class_images/eq_Rogue_small.png"/> 
+	<file name="images/class_images/eq_Shadow_Knight_small.png"/> 
+	<file name="images/class_images/eq_Shaman_small.png"/> 
+	<file name="images/class_images/eq_Warrior_small.png"/> 
+	<file name="images/class_images/eq_Wizard_small.png"/> 
+	<file name="images/class_images/eq2_Assassin_small.png"/> 
+	<file name="images/class_images/eq2_Berserker_small.png"/> 
+	<file name="images/class_images/eq2_Brigand_small.png"/> 
+	<file name="images/class_images/eq2_Bruiser_small.png"/> 
+	<file name="images/class_images/eq2_Coercer_small.png"/> 
+	<file name="images/class_images/eq2_Conjuror_small.png"/> 
+	<file name="images/class_images/eq2_Defiler_small.png"/> 
+	<file name="images/class_images/eq2_Dirge_small.png"/> 
+	<file name="images/class_images/eq2_Fury_small.png"/> 
+	<file name="images/class_images/eq2_Guardian_small.png"/> 
+	<file name="images/class_images/eq2_Illusionist_small.png"/> 
+	<file name="images/class_images/eq2_Inquisitor_small.png"/> 
+	<file name="images/class_images/eq2_Monk_small.png"/> 
+	<file name="images/class_images/eq2_Mystic_small.png"/> 
+	<file name="images/class_images/eq2_Necromancer_small.png"/> 
+	<file name="images/class_images/eq2_Paladin_small.png"/> 
+	<file name="images/class_images/eq2_Ranger_small.png"/> 
+	<file name="images/class_images/eq2_Shadowknight_small.png"/> 
+	<file name="images/class_images/eq2_Swashbuckler_small.png"/> 
+	<file name="images/class_images/eq2_Templar_small.png"/> 
+	<file name="images/class_images/eq2_Troubador_small.png"/> 
+	<file name="images/class_images/eq2_Warden_small.png"/> 
+	<file name="images/class_images/eq2_Warlock_small.png"/> 
+	<file name="images/class_images/eq2_Wizard_small.png"/> 
+	<file name="images/class_images/lineage2_abysswalker_small.png"/> 
+	<file name="images/class_images/lineage2_adventurer_small.png"/> 
+	<file name="images/class_images/lineage2_arbalester_small.png"/> 
+	<file name="images/class_images/lineage2_arcanalord_small.png"/> 
+	<file name="images/class_images/lineage2_archmage_small.png"/> 
+	<file name="images/class_images/lineage2_artisan_small.png"/> 
+	<file name="images/class_images/lineage2_assassin_small.png"/> 
+	<file name="images/class_images/lineage2_berserker_small.png"/> 
+	<file name="images/class_images/lineage2_bishop_small.png"/> 
+	<file name="images/class_images/lineage2_bladedancer_small.png"/> 
+	<file name="images/class_images/lineage2_bountyhunter_small.png"/> 
+	<file name="images/class_images/lineage2_cardinal_small.png"/> 
+	<file name="images/class_images/lineage2_darkavenger_small.png"/> 
+	<file name="images/class_images/lineage2_destroyer_small.png"/> 
+	<file name="images/class_images/lineage2_dewizard_small.png"/> 
+	<file name="images/class_images/lineage2_dominator_small.png"/> 
+	<file name="images/class_images/lineage2_doombringer_small.png"/> 
+	<file name="images/class_images/lineage2_doomcryer_small.png"/> 
+	<file name="images/class_images/lineage2_dreadnought_small.png"/> 
+	<file name="images/class_images/lineage2_duelist_small.png"/> 
+	<file name="images/class_images/lineage2_eknight_small.png"/> 
+	<file name="images/class_images/lineage2_elementalmaster_small.png"/> 
+	<file name="images/class_images/lineage2_elementalsummoner_small.png"/> 
+	<file name="images/class_images/lineage2_elvenelder_small.png"/> 
+	<file name="images/class_images/lineage2_eolhhealer_small.png"/> 
+	<file name="images/class_images/lineage2_eoracle_small.png"/> 
+	<file name="images/class_images/lineage2_escout_small.png"/> 
+	<file name="images/class_images/lineage2_evassaint_small.png"/> 
+	<file name="images/class_images/lineage2_evastemplar_small.png"/> 
+	<file name="images/class_images/lineage2_ewizard_small.png"/> 
+	<file name="images/class_images/lineage2_feohwizard_small.png"/> 
+	<file name="images/class_images/lineage2_fortuneseeker_small.png"/> 
+	<file name="images/class_images/lineage2_ghosthunter_small.png"/> 
+	<file name="images/class_images/lineage2_ghosttsentinel_small.png"/> 
+	<file name="images/class_images/lineage2_gladiator_small.png"/> 
+	<file name="images/class_images/lineage2_grandkhavatari_small.png"/> 
+	<file name="images/class_images/lineage2_hawkeye_small.png"/> 
+	<file name="images/class_images/lineage2_hcleric_small.png"/> 
+	<file name="images/class_images/lineage2_hellknight_small.png"/> 
+	<file name="images/class_images/lineage2_hierophant_small.png"/> 
+	<file name="images/class_images/lineage2_hknight_small.png"/> 
+	<file name="images/class_images/lineage2_hrogue_small.png"/> 
+	<file name="images/class_images/lineage2_hwarrior_small.jpg"/> 
+	<file name="images/class_images/lineage2_hwarrior_small.png"/> 
+	<file name="images/class_images/lineage2_hwizard_small.png"/> 
+	<file name="images/class_images/lineage2_inspector_small.png"/> 
+	<file name="images/class_images/lineage2_issenchanter_small.png"/> 
+	<file name="images/class_images/lineage2_judicator_small.png"/> 
+	<file name="images/class_images/lineage2_maestro_small.png"/> 
+	<file name="images/class_images/lineage2_moonlightsentinel_small.png"/> 
+	<file name="images/class_images/lineage2_mysticmuse_small.png"/> 
+	<file name="images/class_images/lineage2_necro_small.png"/> 
+	<file name="images/class_images/lineage2_omonk_small.png"/> 
+	<file name="images/class_images/lineage2_oraider_small.png"/> 
+	<file name="images/class_images/lineage2_oshaman_small.png"/> 
+	<file name="images/class_images/lineage2_othellrogue_small.png"/> 
+	<file name="images/class_images/lineage2_overlord_small.png"/> 
+	<file name="images/class_images/lineage2_paladin_small.png"/> 
+	<file name="images/class_images/lineage2_palusknight_small.png"/> 
+	<file name="images/class_images/lineage2_phantomranger_small.png"/> 
+	<file name="images/class_images/lineage2_phantomsummoner_small.png"/> 
+	<file name="images/class_images/lineage2_phoenixknight_small.png"/> 
+	<file name="images/class_images/lineage2_plainswalker_small.png"/> 
+	<file name="images/class_images/lineage2_prophet_small.png"/> 
+	<file name="images/class_images/lineage2_sagittarius_small.png"/> 
+	<file name="images/class_images/lineage2_scavenger_small.png"/> 
+	<file name="images/class_images/lineage2_shillienelder_small.png"/> 
+	<file name="images/class_images/lineage2_shillienknight_small.png"/> 
+	<file name="images/class_images/lineage2_shilliensaint_small.png"/> 
+	<file name="images/class_images/lineage2_shillientemplar_small.png"/> 
+	<file name="images/class_images/lineage2_sigelknight_small.png"/> 
+	<file name="images/class_images/lineage2_silverranger_small.png"/> 
+	<file name="images/class_images/lineage2_soracle_small.png"/> 
+	<file name="images/class_images/lineage2_sorc_small.png"/> 
+	<file name="images/class_images/lineage2_soulbreaker_small.png"/> 
+	<file name="images/class_images/lineage2_soulhound_small.png"/> 
+	<file name="images/class_images/lineage2_soultaker_small.png"/> 
+	<file name="images/class_images/lineage2_spectraldancer_small.png"/> 
+	<file name="images/class_images/lineage2_spectralmaster_small.png"/> 
+	<file name="images/class_images/lineage2_spellhowler_small.png"/> 
+	<file name="images/class_images/lineage2_spellsinger_small.png"/> 
+	<file name="images/class_images/lineage2_stormscreamer_small.png"/> 
+	<file name="images/class_images/lineage2_swordmuse_small.png"/> 
+	<file name="images/class_images/lineage2_swordsinger_small.png"/> 
+	<file name="images/class_images/lineage2_templeknight_small.png"/> 
+	<file name="images/class_images/lineage2_titan_small.png"/> 
+	<file name="images/class_images/lineage2_treasurehunter_small.png"/> 
+	<file name="images/class_images/lineage2_trickster_small.png"/> 
+	<file name="images/class_images/lineage2_trooper_small.png"/> 
+	<file name="images/class_images/lineage2_tyrant_small.png"/> 
+	<file name="images/class_images/lineage2_tyrwarrior_small.png"/> 
+	<file name="images/class_images/lineage2_warcryer_small.png"/> 
+	<file name="images/class_images/lineage2_warder_small.png"/> 
+	<file name="images/class_images/lineage2_warlock_small.png"/> 
+	<file name="images/class_images/lineage2_warlord_small.png"/> 
+	<file name="images/class_images/lineage2_warsmith_small.png"/> 
+	<file name="images/class_images/lineage2_windrider_small.png"/> 
+	<file name="images/class_images/lineage2_wynnsummoner_small.png"/> 
+	<file name="images/class_images/lineage2_yrarcher_small.png"/> 
+	<file name="images/class_images/lotro_Burglar_small.png"/> 
+	<file name="images/class_images/lotro_Captain_small.png"/> 
+	<file name="images/class_images/lotro_Champion_small.png"/> 
+	<file name="images/class_images/lotro_Guardian_small.png"/> 
+	<file name="images/class_images/lotro_Hunter_small.png"/> 
+	<file name="images/class_images/lotro_Lore-master_small.png"/> 
+	<file name="images/class_images/lotro_Minstrel_small.png"/> 
+	<file name="images/class_images/lotro_Rune-keeper_small.png"/> 
+	<file name="images/class_images/lotro_Warden_small.png"/> 
+	<file name="images/class_images/rift_archon_small.png"/> 
+	<file name="images/class_images/rift_assassin_small.png"/> 
+	<file name="images/class_images/rift_bard_small.png"/> 
+	<file name="images/class_images/rift_beastmaster_small.png"/> 
+	<file name="images/class_images/rift_bladedancer_small.png"/> 
+	<file name="images/class_images/rift_cabalist_small.png"/> 
+	<file name="images/class_images/rift_champion_small.png"/> 
+	<file name="images/class_images/rift_chloromancer_small.png"/> 
+	<file name="images/class_images/rift_dominator_small.png"/> 
+	<file name="images/class_images/rift_druid_small.png"/> 
+	<file name="images/class_images/rift_elementalist_small.png"/> 
+	<file name="images/class_images/rift_inquisitor_small.png"/> 
+	<file name="images/class_images/rift_justicar_small.png"/> 
+	<file name="images/class_images/rift_marksman_small.png"/> 
+	<file name="images/class_images/rift_necromancer_small.png"/> 
+	<file name="images/class_images/rift_nightblade_small.png"/> 
+	<file name="images/class_images/rift_paladin_small.png"/> 
+	<file name="images/class_images/rift_paragon_small.png"/> 
+	<file name="images/class_images/rift_purifier_small.png"/> 
+	<file name="images/class_images/rift_pyromancer_small.png"/> 
+	<file name="images/class_images/rift_ranger_small.png"/> 
+	<file name="images/class_images/rift_reaver_small.png"/> 
+	<file name="images/class_images/rift_riftblade_small.png"/> 
+	<file name="images/class_images/rift_riftstalker_small.png"/> 
+	<file name="images/class_images/rift_saboteur_small.png"/> 
+	<file name="images/class_images/rift_sentinel_small.png"/> 
+	<file name="images/class_images/rift_shaman_small.png"/> 
+	<file name="images/class_images/rift_stormcaller_small.png"/> 
+	<file name="images/class_images/rift_voidknight_small.png"/> 
+	<file name="images/class_images/rift_warden_small.png"/> 
+	<file name="images/class_images/rift_warlock_small.png"/> 
+	<file name="images/class_images/rift_warlord_small.png"/> 
+	<file name="images/class_images/swtor_agent_small.png"/> 
+	<file name="images/class_images/swtor_consul_small.png"/> 
+	<file name="images/class_images/swtor_hunter_small.png"/> 
+	<file name="images/class_images/swtor_inquisitor_small.png"/> 
+	<file name="images/class_images/swtor_jedi_small.png"/> 
+	<file name="images/class_images/swtor_smuggler_small.png"/> 
+	<file name="images/class_images/swtor_trooper_small.png"/> 
+	<file name="images/class_images/swtor_warrior_small.png"/> 
+	<file name="images/class_images/warhammer_Archmage_small.png"/> 
+	<file name="images/class_images/warhammer_Black_Orc_small.png"/> 
+	<file name="images/class_images/warhammer_Bright_Wizard_small.png"/> 
+	<file name="images/class_images/warhammer_Chosen_small.png"/> 
+	<file name="images/class_images/warhammer_Disciple_of_Khaine_small.png"/> 
+	<file name="images/class_images/warhammer_Engineer_small.png"/> 
+	<file name="images/class_images/warhammer_Iron_Breaker_small.png"/> 
+	<file name="images/class_images/warhammer_Magus_small.png"/> 
+	<file name="images/class_images/warhammer_Marauder_small.png"/> 
+	<file name="images/class_images/warhammer_Rune_Priest_small.png"/> 
+	<file name="images/class_images/warhammer_Shadow_Warrior_small.png"/> 
+	<file name="images/class_images/warhammer_Shaman_small.png"/> 
+	<file name="images/class_images/warhammer_Sorceress_small.png"/> 
+	<file name="images/class_images/warhammer_Squig_Herder_small.png"/> 
+	<file name="images/class_images/warhammer_Swordmaster_small.png"/> 
+	<file name="images/class_images/warhammer_Warrior_Priest_small.png"/> 
+	<file name="images/class_images/warhammer_White_Lion_small.png"/> 
+	<file name="images/class_images/warhammer_Witch Elf_small.png"/> 
+	<file name="images/class_images/warhammer_Witch Hunter_small.png"/> 
+	<file name="images/class_images/warhammer_Witch_Elf_small.png"/> 
+	<file name="images/class_images/warhammer_Witch_Hunter_small.png"/> 
+	<file name="images/class_images/warhammer_Zealot_small.png"/> 
+	<file name="images/class_images/wow_Death_Knight_small.png"/> 
+	<file name="images/class_images/wow_Druid_small.png"/> 
+	<file name="images/class_images/wow_Hunter_small.png"/> 
+	<file name="images/class_images/wow_Mage_small.png"/> 
+	<file name="images/class_images/wow_Paladin_small.png"/> 
+	<file name="images/class_images/wow_Priest_small.png"/> 
+	<file name="images/class_images/wow_Rogue_small.png"/> 
+	<file name="images/class_images/wow_Shaman_small.png"/> 
+	<file name="images/class_images/wow_Warlock_small.png"/> 
+	<file name="images/class_images/wow_Warrior_small.png"/> 
+	<file name="images/race_images/rift_bahmi_small.png"/> 
+	<file name="images/race_images/rift_dwarf_small.png"/> 
+	<file name="images/race_images/rift_eth_small.png"/> 
+	<file name="images/race_images/rift_highelf_small.png"/> 
+	<file name="images/race_images/rift_kelari_small.png"/> 
+	<file name="images/race_images/rift_mathosian_small.png"/> 
+	<file name="images/race_images/swtor_chiss_female_small.png"/> 
+	<file name="images/race_images/swtor_chiss_male_small.png"/> 
+	<file name="images/race_images/swtor_criss_male_small.png"/> 
+	<file name="images/race_images/swtor_cyborg_female_small.png"/> 
+	<file name="images/race_images/swtor_cyborg_male_small.png"/> 
+	<file name="images/race_images/swtor_human_female_small.png"/> 
+	<file name="images/race_images/swtor_human_male_small.png"/> 
+	<file name="images/race_images/swtor_miralian_female_small.png"/> 
+	<file name="images/race_images/swtor_miralian_male_small.png"/> 
+	<file name="images/race_images/swtor_miraluka_female_small.png"/> 
+	<file name="images/race_images/swtor_miraluka_male_small.png"/> 
+	<file name="images/race_images/swtor_mirialan_female_small.png"/> 
+	<file name="images/race_images/swtor_rattataki_female_small.png"/> 
+	<file name="images/race_images/swtor_rattataki_male_small.png"/> 
+	<file name="images/race_images/swtor_redsith_female_small.png"/> 
+	<file name="images/race_images/swtor_redsith_male_small.png"/> 
+	<file name="images/race_images/swtor_sith_male_small.png"/> 
+	<file name="images/race_images/swtor_twilek_female_small.png"/> 
+	<file name="images/race_images/swtor_twilek_male_small.png"/> 
+	<file name="images/race_images/swtor_zabrak_female_small.png"/> 
+	<file name="images/race_images/swtor_zabrak_male_small.png"/> 
+	<file name="images/race_images/wow_bloodelf_female_small.png"/> 
+	<file name="images/race_images/wow_bloodelf_male_small.png"/> 
+	<file name="images/race_images/wow_draenei_female_small.png"/> 
+	<file name="images/race_images/wow_draenei_male_small.png"/> 
+	<file name="images/race_images/wow_dwarf_female_small.png"/> 
+	<file name="images/race_images/wow_dwarf_male_small.png"/> 
+	<file name="images/race_images/wow_gnome_female_small.png"/> 
+	<file name="images/race_images/wow_gnome_male_small.png"/> 
+	<file name="images/race_images/wow_goblin_female_small.png"/> 
+	<file name="images/race_images/wow_goblin_male_small.png"/> 
+	<file name="images/race_images/wow_human_female_small.png"/> 
+	<file name="images/race_images/wow_human_male_small.png"/> 
+	<file name="images/race_images/wow_nightelf_female_small.png"/> 
+	<file name="images/race_images/wow_nightelf_male_small.png"/> 
+	<file name="images/race_images/wow_orc_female_small.png"/> 
+	<file name="images/race_images/wow_orc_male_small.png"/> 
+	<file name="images/race_images/wow_scourge_female_small.png"/> 
+	<file name="images/race_images/wow_scourge_male_small.png"/> 
+	<file name="images/race_images/wow_tauren_female_small.png"/> 
+	<file name="images/race_images/wow_tauren_male_small.png"/> 
+	<file name="images/race_images/wow_troll_female_small.png"/> 
+	<file name="images/race_images/wow_troll_male_small.png"/> 
+	<file name="images/race_images/wow_worgen_female_small.png"/> 
+	<file name="images/race_images/wow_worgen_male_small.png"/> 
+	<file name="images/recruitblock_images/dps_icon.png"/> 
+	<file name="images/recruitblock_images/healer_icon.png"/> 
+	<file name="images/recruitblock_images/looking_icon.gif"/> 
+	<file name="images/recruitblock_images/rec_closed.png"/> 
+	<file name="images/recruitblock_images/rec_high.png"/> 
+	<file name="images/recruitblock_images/rec_low.png"/> 
+	<file name="images/recruitblock_images/rec_med.png"/> 
+	<file name="images/recruitblock_images/rec.png"/> 
+	<file name="images/recruitblock_images/tank_icon.png"/> 
+	<file name="images/recruitblock_images/*.*"/> 
+</delete>
+<copy>
+	<file from="root/adm/style/dkp/acp_addfaction.html" to="root/adm/style/dkp/acp_addfaction.html"/> 
+	<file from="root/adm/style/dkp/acp_addrace.html" to="root/adm/style/dkp/acp_addrace.html"/> 
+	<file from="root/adm/style/dkp/acp_dkp_config.html" to="root/adm/style/dkp/acp_dkp_config.html"/> 
+	<file from="root/adm/style/dkp/acp_dkp_indexpageconfig.html" to="root/adm/style/dkp/acp_dkp_indexpageconfig.html"/> 
+	<file from="root/adm/style/dkp/acp_editraid.html" to="root/adm/style/dkp/acp_editraid.html"/> 
+	<file from="root/adm/style/dkp/acp_listevents.html" to="root/adm/style/dkp/acp_listevents.html"/> 
+	<file from="root/adm/style/dkp/acp_mainpage.html" to="root/adm/style/dkp/acp_mainpage.html"/> 
+	<file from="root/adm/style/dkp/acp_mm_listmemberdkp.html" to="root/adm/style/dkp/acp_mm_listmemberdkp.html"/> 
+	<file from="root/adm/style/dkp/acp_mm_listmembers.html" to="root/adm/style/dkp/acp_mm_listmembers.html"/> 
+	<file from="root/adm/style/dkp/jquery.js" to="root/adm/style/dkp/jquery.js"/> 
+	<file from="root/images/class_images/aion_assassin.png" to="images/class_images/aion_assassin.png"/> 
+	<file from="root/images/class_images/aion_chanter.png" to="images/class_images/aion_chanter.png"/> 
+	<file from="root/images/class_images/aion_cleric.png" to="images/class_images/aion_cleric.png"/> 
+	<file from="root/images/class_images/aion_gladiator.png" to="images/class_images/aion_gladiator.png"/> 
+	<file from="root/images/class_images/aion_ranger.png" to="images/class_images/aion_ranger.png"/> 
+	<file from="root/images/class_images/aion_sorcerer.png" to="images/class_images/aion_sorcerer.png"/> 
+	<file from="root/images/class_images/aion_spiritmaster.png" to="images/class_images/aion_spiritmaster.png"/> 
+	<file from="root/images/class_images/aion_templar.png" to="images/class_images/aion_templar.png"/> 
+	<file from="root/images/class_images/aion_unknown.png" to="images/class_images/aion_unknown.png"/> 
+	<file from="root/images/class_images/daoc_animist.png" to="images/class_images/daoc_animist.png"/> 
+	<file from="root/images/class_images/daoc_armsman.png" to="images/class_images/daoc_armsman.png"/> 
+	<file from="root/images/class_images/daoc_bainshee.png" to="images/class_images/daoc_bainshee.png"/> 
+	<file from="root/images/class_images/daoc_bard.png" to="images/class_images/daoc_bard.png"/> 
+	<file from="root/images/class_images/daoc_berserker.png" to="images/class_images/daoc_berserker.png"/> 
+	<file from="root/images/class_images/daoc_blademaster.png" to="images/class_images/daoc_blademaster.png"/> 
+	<file from="root/images/class_images/daoc_bonedancer.png" to="images/class_images/daoc_bonedancer.png"/> 
+	<file from="root/images/class_images/daoc_cabalist.png" to="images/class_images/daoc_cabalist.png"/> 
+	<file from="root/images/class_images/daoc_champion.png" to="images/class_images/daoc_champion.png"/> 
+	<file from="root/images/class_images/daoc_cleric.png" to="images/class_images/daoc_cleric.png"/> 
+	<file from="root/images/class_images/daoc_druid.png" to="images/class_images/daoc_druid.png"/> 
+	<file from="root/images/class_images/daoc_eldritch.png" to="images/class_images/daoc_eldritch.png"/> 
+	<file from="root/images/class_images/daoc_enchanter.png" to="images/class_images/daoc_enchanter.png"/> 
+	<file from="root/images/class_images/daoc_friar.png" to="images/class_images/daoc_friar.png"/> 
+	<file from="root/images/class_images/daoc_healer.png" to="images/class_images/daoc_healer.png"/> 
+	<file from="root/images/class_images/daoc_heretic.png" to="images/class_images/daoc_heretic.png"/> 
+	<file from="root/images/class_images/daoc_hero.png" to="images/class_images/daoc_hero.png"/> 
+	<file from="root/images/class_images/daoc_hunter.png" to="images/class_images/daoc_hunter.png"/> 
+	<file from="root/images/class_images/daoc_infiltrator.png" to="images/class_images/daoc_infiltrator.png"/> 
+	<file from="root/images/class_images/daoc_mentalist.png" to="images/class_images/daoc_mentalist.png"/> 
+	<file from="root/images/class_images/daoc_mercenary.png" to="images/class_images/daoc_mercenary.png"/> 
+	<file from="root/images/class_images/daoc_minstrel.png" to="images/class_images/daoc_minstrel.png"/> 
+	<file from="root/images/class_images/daoc_necromancer.png" to="images/class_images/daoc_necromancer.png"/> 
+	<file from="root/images/class_images/daoc_nightshade.png" to="images/class_images/daoc_nightshade.png"/> 
+	<file from="root/images/class_images/daoc_paladin.png" to="images/class_images/daoc_paladin.png"/> 
+	<file from="root/images/class_images/daoc_ranger.png" to="images/class_images/daoc_ranger.png"/> 
+	<file from="root/images/class_images/daoc_reaver.png" to="images/class_images/daoc_reaver.png"/> 
+	<file from="root/images/class_images/daoc_runemaster.png" to="images/class_images/daoc_runemaster.png"/> 
+	<file from="root/images/class_images/daoc_savage.png" to="images/class_images/daoc_savage.png"/> 
+	<file from="root/images/class_images/daoc_scout.png" to="images/class_images/daoc_scout.png"/> 
+	<file from="root/images/class_images/daoc_shadowblade.png" to="images/class_images/daoc_shadowblade.png"/> 
+	<file from="root/images/class_images/daoc_shaman.png" to="images/class_images/daoc_shaman.png"/> 
+	<file from="root/images/class_images/daoc_skald.png" to="images/class_images/daoc_skald.png"/> 
+	<file from="root/images/class_images/daoc_sorcerer.png" to="images/class_images/daoc_sorcerer.png"/> 
+	<file from="root/images/class_images/daoc_spiritmaster.png" to="images/class_images/daoc_spiritmaster.png"/> 
+	<file from="root/images/class_images/daoc_thane.png" to="images/class_images/daoc_thane.png"/> 
+	<file from="root/images/class_images/daoc_theurgist.png" to="images/class_images/daoc_theurgist.png"/> 
+	<file from="root/images/class_images/daoc_valewalker.png" to="images/class_images/daoc_valewalker.png"/> 
+	<file from="root/images/class_images/daoc_valkyrie.png" to="images/class_images/daoc_valkyrie.png"/> 
+	<file from="root/images/class_images/daoc_vampiir.png" to="images/class_images/daoc_vampiir.png"/> 
+	<file from="root/images/class_images/daoc_warden.png" to="images/class_images/daoc_warden.png"/> 
+	<file from="root/images/class_images/daoc_warlock.png" to="images/class_images/daoc_warlock.png"/> 
+	<file from="root/images/class_images/daoc_warrior.png" to="images/class_images/daoc_warrior.png"/> 
+	<file from="root/images/class_images/daoc_wizard.png" to="images/class_images/daoc_wizard.png"/> 
+	<file from="root/images/class_images/eq_bard.png" to="images/class_images/eq_bard.png"/> 
+	<file from="root/images/class_images/eq_beastlord.png" to="images/class_images/eq_beastlord.png"/> 
+	<file from="root/images/class_images/eq_berserker.png" to="images/class_images/eq_berserker.png"/> 
+	<file from="root/images/class_images/eq_cleric.png" to="images/class_images/eq_cleric.png"/> 
+	<file from="root/images/class_images/eq_druid.png" to="images/class_images/eq_druid.png"/> 
+	<file from="root/images/class_images/eq_enchanter.png" to="images/class_images/eq_enchanter.png"/> 
+	<file from="root/images/class_images/eq_magician.png" to="images/class_images/eq_magician.png"/> 
+	<file from="root/images/class_images/eq_monk.png" to="images/class_images/eq_monk.png"/> 
+	<file from="root/images/class_images/eq_necromancer.png" to="images/class_images/eq_necromancer.png"/> 
+	<file from="root/images/class_images/eq_paladin.png" to="images/class_images/eq_paladin.png"/> 
+	<file from="root/images/class_images/eq_ranger.png" to="images/class_images/eq_ranger.png"/> 
+	<file from="root/images/class_images/eq_rogue.png" to="images/class_images/eq_rogue.png"/> 
+	<file from="root/images/class_images/eq_shadow_knight.png" to="images/class_images/eq_shadow_knight.png"/> 
+	<file from="root/images/class_images/eq_shaman.png" to="images/class_images/eq_shaman.png"/> 
+	<file from="root/images/class_images/eq_warrior.png" to="images/class_images/eq_warrior.png"/> 
+	<file from="root/images/class_images/eq_wizard.png" to="images/class_images/eq_wizard.png"/> 
+	<file from="root/images/class_images/eq2_assassin.png" to="images/class_images/eq2_assassin.png"/> 
+	<file from="root/images/class_images/eq2_berserker.png" to="images/class_images/eq2_berserker.png"/> 
+	<file from="root/images/class_images/eq2_brigand.png" to="images/class_images/eq2_brigand.png"/> 
+	<file from="root/images/class_images/eq2_bruiser.png" to="images/class_images/eq2_bruiser.png"/> 
+	<file from="root/images/class_images/eq2_coercer.png" to="images/class_images/eq2_coercer.png"/> 
+	<file from="root/images/class_images/eq2_conjuror.png" to="images/class_images/eq2_conjuror.png"/> 
+	<file from="root/images/class_images/eq2_defiler.png" to="images/class_images/eq2_defiler.png"/> 
+	<file from="root/images/class_images/eq2_dirge.png" to="images/class_images/eq2_dirge.png"/> 
+	<file from="root/images/class_images/eq2_fury.png" to="images/class_images/eq2_fury.png"/> 
+	<file from="root/images/class_images/eq2_guardian.png" to="images/class_images/eq2_guardian.png"/> 
+	<file from="root/images/class_images/eq2_illusionist.png" to="images/class_images/eq2_illusionist.png"/> 
+	<file from="root/images/class_images/eq2_inquisitor.png" to="images/class_images/eq2_inquisitor.png"/> 
+	<file from="root/images/class_images/eq2_monk.png" to="images/class_images/eq2_monk.png"/> 
+	<file from="root/images/class_images/eq2_mystic.png" to="images/class_images/eq2_mystic.png"/> 
+	<file from="root/images/class_images/eq2_necromancer.png" to="images/class_images/eq2_necromancer.png"/> 
+	<file from="root/images/class_images/eq2_paladin.png" to="images/class_images/eq2_paladin.png"/> 
+	<file from="root/images/class_images/eq2_ranger.png" to="images/class_images/eq2_ranger.png"/> 
+	<file from="root/images/class_images/eq2_shadowknight.png" to="images/class_images/eq2_shadowknight.png"/> 
+	<file from="root/images/class_images/eq2_swashbuckler.png" to="images/class_images/eq2_swashbuckler.png"/> 
+	<file from="root/images/class_images/eq2_templar.png" to="images/class_images/eq2_templar.png"/> 
+	<file from="root/images/class_images/eq2_troubador.png" to="images/class_images/eq2_troubador.png"/> 
+	<file from="root/images/class_images/eq2_warden.png" to="images/class_images/eq2_warden.png"/> 
+	<file from="root/images/class_images/eq2_warlock.png" to="images/class_images/eq2_warlock.png"/> 
+	<file from="root/images/class_images/eq2_wizard.png" to="images/class_images/eq2_wizard.png"/> 
+	<file from="root/images/class_images/gw2_elementalist.png" to="images/class_images/gw2_elementalist.png"/> 
+	<file from="root/images/class_images/gw2_engineer.png" to="images/class_images/gw2_engineer.png"/> 
+	<file from="root/images/class_images/gw2_guardian.png" to="images/class_images/gw2_guardian.png"/> 
+	<file from="root/images/class_images/gw2_mesmer.png" to="images/class_images/gw2_mesmer.png"/> 
+	<file from="root/images/class_images/gw2_necromancer.png" to="images/class_images/gw2_necromancer.png"/> 
+	<file from="root/images/class_images/gw2_ranger.png" to="images/class_images/gw2_ranger.png"/> 
+	<file from="root/images/class_images/gw2_thief.png" to="images/class_images/gw2_thief.png"/> 
+	<file from="root/images/class_images/gw2_unknown.png" to="images/class_images/gw2_unknown.png"/> 
+	<file from="root/images/class_images/gw2_warrior.png" to="images/class_images/gw2_warrior.png"/> 
+	<file from="root/images/class_images/lineage2_abysswalker.png" to="images/class_images/lineage2_abysswalker.png"/> 
+	<file from="root/images/class_images/lineage2_adventurer.png" to="images/class_images/lineage2_adventurer.png"/> 
+	<file from="root/images/class_images/lineage2_arbalester.png" to="images/class_images/lineage2_arbalester.png"/> 
+	<file from="root/images/class_images/lineage2_arcanalord.png" to="images/class_images/lineage2_arcanalord.png"/> 
+	<file from="root/images/class_images/lineage2_archmage.png" to="images/class_images/lineage2_archmage.png"/> 
+	<file from="root/images/class_images/lineage2_artisan.png" to="images/class_images/lineage2_artisan.png"/> 
+	<file from="root/images/class_images/lineage2_assassin.png" to="images/class_images/lineage2_assassin.png"/> 
+	<file from="root/images/class_images/lineage2_berserker.png" to="images/class_images/lineage2_berserker.png"/> 
+	<file from="root/images/class_images/lineage2_bishop.png" to="images/class_images/lineage2_bishop.png"/> 
+	<file from="root/images/class_images/lineage2_bladedancer.png" to="images/class_images/lineage2_bladedancer.png"/> 
+	<file from="root/images/class_images/lineage2_bountyhunter.png" to="images/class_images/lineage2_bountyhunter.png"/> 
+	<file from="root/images/class_images/lineage2_cardinal.png" to="images/class_images/lineage2_cardinal.png"/> 
+	<file from="root/images/class_images/lineage2_darkavenger.png" to="images/class_images/lineage2_darkavenger.png"/> 
+	<file from="root/images/class_images/lineage2_destroyer.png" to="images/class_images/lineage2_destroyer.png"/> 
+	<file from="root/images/class_images/lineage2_dewizard.png" to="images/class_images/lineage2_dewizard.png"/> 
+	<file from="root/images/class_images/lineage2_dominator.png" to="images/class_images/lineage2_dominator.png"/> 
+	<file from="root/images/class_images/lineage2_doombringer.png" to="images/class_images/lineage2_doombringer.png"/> 
+	<file from="root/images/class_images/lineage2_doomcryer.png" to="images/class_images/lineage2_doomcryer.png"/> 
+	<file from="root/images/class_images/lineage2_dreadnought.png" to="images/class_images/lineage2_dreadnought.png"/> 
+	<file from="root/images/class_images/lineage2_duelist.png" to="images/class_images/lineage2_duelist.png"/> 
+	<file from="root/images/class_images/lineage2_eknight.png" to="images/class_images/lineage2_eknight.png"/> 
+	<file from="root/images/class_images/lineage2_elementalmaster.png" to="images/class_images/lineage2_elementalmaster.png"/> 
+	<file from="root/images/class_images/lineage2_elementalsummoner.png" to="images/class_images/lineage2_elementalsummoner.png"/> 
+	<file from="root/images/class_images/lineage2_elvenelder.png" to="images/class_images/lineage2_elvenelder.png"/> 
+	<file from="root/images/class_images/lineage2_eolhhealer.png" to="images/class_images/lineage2_eolhhealer.png"/> 
+	<file from="root/images/class_images/lineage2_eoracle.png" to="images/class_images/lineage2_eoracle.png"/> 
+	<file from="root/images/class_images/lineage2_escout.png" to="images/class_images/lineage2_escout.png"/> 
+	<file from="root/images/class_images/lineage2_evassaint.png" to="images/class_images/lineage2_evassaint.png"/> 
+	<file from="root/images/class_images/lineage2_evastemplar.png" to="images/class_images/lineage2_evastemplar.png"/> 
+	<file from="root/images/class_images/lineage2_ewizard.png" to="images/class_images/lineage2_ewizard.png"/> 
+	<file from="root/images/class_images/lineage2_feohwizard.png" to="images/class_images/lineage2_feohwizard.png"/> 
+	<file from="root/images/class_images/lineage2_fortuneseeker.png" to="images/class_images/lineage2_fortuneseeker.png"/> 
+	<file from="root/images/class_images/lineage2_ghosthunter.png" to="images/class_images/lineage2_ghosthunter.png"/> 
+	<file from="root/images/class_images/lineage2_ghosttsentinel.png" to="images/class_images/lineage2_ghosttsentinel.png"/> 
+	<file from="root/images/class_images/lineage2_gladiator.png" to="images/class_images/lineage2_gladiator.png"/> 
+	<file from="root/images/class_images/lineage2_grandkhavatari.png" to="images/class_images/lineage2_grandkhavatari.png"/> 
+	<file from="root/images/class_images/lineage2_hawkeye.png" to="images/class_images/lineage2_hawkeye.png"/> 
+	<file from="root/images/class_images/lineage2_hcleric.png" to="images/class_images/lineage2_hcleric.png"/> 
+	<file from="root/images/class_images/lineage2_hellknight.png" to="images/class_images/lineage2_hellknight.png"/> 
+	<file from="root/images/class_images/lineage2_hierophant.png" to="images/class_images/lineage2_hierophant.png"/> 
+	<file from="root/images/class_images/lineage2_hknight.png" to="images/class_images/lineage2_hknight.png"/> 
+	<file from="root/images/class_images/lineage2_hrogue.png" to="images/class_images/lineage2_hrogue.png"/> 
+	<file from="root/images/class_images/lineage2_hwarrior.jpg" to="images/class_images/lineage2_hwarrior.jpg"/> 
+	<file from="root/images/class_images/lineage2_hwarrior.png" to="images/class_images/lineage2_hwarrior.png"/> 
+	<file from="root/images/class_images/lineage2_hwizard.png" to="images/class_images/lineage2_hwizard.png"/> 
+	<file from="root/images/class_images/lineage2_inspector.png" to="images/class_images/lineage2_inspector.png"/> 
+	<file from="root/images/class_images/lineage2_issenchanter.png" to="images/class_images/lineage2_issenchanter.png"/> 
+	<file from="root/images/class_images/lineage2_judicator.png" to="images/class_images/lineage2_judicator.png"/> 
+	<file from="root/images/class_images/lineage2_maestro.png" to="images/class_images/lineage2_maestro.png"/> 
+	<file from="root/images/class_images/lineage2_moonlightsentinel.png" to="images/class_images/lineage2_moonlightsentinel.png"/> 
+	<file from="root/images/class_images/lineage2_mysticmuse.png" to="images/class_images/lineage2_mysticmuse.png"/> 
+	<file from="root/images/class_images/lineage2_necro.png" to="images/class_images/lineage2_necro.png"/> 
+	<file from="root/images/class_images/lineage2_omonk.png" to="images/class_images/lineage2_omonk.png"/> 
+	<file from="root/images/class_images/lineage2_oraider.png" to="images/class_images/lineage2_oraider.png"/> 
+	<file from="root/images/class_images/lineage2_oshaman.png" to="images/class_images/lineage2_oshaman.png"/> 
+	<file from="root/images/class_images/lineage2_othellrogue.png" to="images/class_images/lineage2_othellrogue.png"/> 
+	<file from="root/images/class_images/lineage2_overlord.png" to="images/class_images/lineage2_overlord.png"/> 
+	<file from="root/images/class_images/lineage2_paladin.png" to="images/class_images/lineage2_paladin.png"/> 
+	<file from="root/images/class_images/lineage2_palusknight.png" to="images/class_images/lineage2_palusknight.png"/> 
+	<file from="root/images/class_images/lineage2_phantomranger.png" to="images/class_images/lineage2_phantomranger.png"/> 
+	<file from="root/images/class_images/lineage2_phantomsummoner.png" to="images/class_images/lineage2_phantomsummoner.png"/> 
+	<file from="root/images/class_images/lineage2_phoenixknight.png" to="images/class_images/lineage2_phoenixknight.png"/> 
+	<file from="root/images/class_images/lineage2_plainswalker.png" to="images/class_images/lineage2_plainswalker.png"/> 
+	<file from="root/images/class_images/lineage2_prophet.png" to="images/class_images/lineage2_prophet.png"/> 
+	<file from="root/images/class_images/lineage2_sagittarius.png" to="images/class_images/lineage2_sagittarius.png"/> 
+	<file from="root/images/class_images/lineage2_scavenger.png" to="images/class_images/lineage2_scavenger.png"/> 
+	<file from="root/images/class_images/lineage2_shillienelder.png" to="images/class_images/lineage2_shillienelder.png"/> 
+	<file from="root/images/class_images/lineage2_shillienknight.png" to="images/class_images/lineage2_shillienknight.png"/> 
+	<file from="root/images/class_images/lineage2_shilliensaint.png" to="images/class_images/lineage2_shilliensaint.png"/> 
+	<file from="root/images/class_images/lineage2_shillientemplar.png" to="images/class_images/lineage2_shillientemplar.png"/> 
+	<file from="root/images/class_images/lineage2_sigelknight.png" to="images/class_images/lineage2_sigelknight.png"/> 
+	<file from="root/images/class_images/lineage2_silverranger.png" to="images/class_images/lineage2_silverranger.png"/> 
+	<file from="root/images/class_images/lineage2_soracle.png" to="images/class_images/lineage2_soracle.png"/> 
+	<file from="root/images/class_images/lineage2_sorc.png" to="images/class_images/lineage2_sorc.png"/> 
+	<file from="root/images/class_images/lineage2_soulbreaker.png" to="images/class_images/lineage2_soulbreaker.png"/> 
+	<file from="root/images/class_images/lineage2_soulhound.png" to="images/class_images/lineage2_soulhound.png"/> 
+	<file from="root/images/class_images/lineage2_soultaker.png" to="images/class_images/lineage2_soultaker.png"/> 
+	<file from="root/images/class_images/lineage2_spectraldancer.png" to="images/class_images/lineage2_spectraldancer.png"/> 
+	<file from="root/images/class_images/lineage2_spectralmaster.png" to="images/class_images/lineage2_spectralmaster.png"/> 
+	<file from="root/images/class_images/lineage2_spellhowler.png" to="images/class_images/lineage2_spellhowler.png"/> 
+	<file from="root/images/class_images/lineage2_spellsinger.png" to="images/class_images/lineage2_spellsinger.png"/> 
+	<file from="root/images/class_images/lineage2_stormscreamer.png" to="images/class_images/lineage2_stormscreamer.png"/> 
+	<file from="root/images/class_images/lineage2_swordmuse.png" to="images/class_images/lineage2_swordmuse.png"/> 
+	<file from="root/images/class_images/lineage2_swordsinger.png" to="images/class_images/lineage2_swordsinger.png"/> 
+	<file from="root/images/class_images/lineage2_templeknight.png" to="images/class_images/lineage2_templeknight.png"/> 
+	<file from="root/images/class_images/lineage2_titan.png" to="images/class_images/lineage2_titan.png"/> 
+	<file from="root/images/class_images/lineage2_treasurehunter.png" to="images/class_images/lineage2_treasurehunter.png"/> 
+	<file from="root/images/class_images/lineage2_trickster.png" to="images/class_images/lineage2_trickster.png"/> 
+	<file from="root/images/class_images/lineage2_trooper.png" to="images/class_images/lineage2_trooper.png"/> 
+	<file from="root/images/class_images/lineage2_tyrant.png" to="images/class_images/lineage2_tyrant.png"/> 
+	<file from="root/images/class_images/lineage2_tyrwarrior.png" to="images/class_images/lineage2_tyrwarrior.png"/> 
+	<file from="root/images/class_images/lineage2_warcryer.png" to="images/class_images/lineage2_warcryer.png"/> 
+	<file from="root/images/class_images/lineage2_warder.png" to="images/class_images/lineage2_warder.png"/> 
+	<file from="root/images/class_images/lineage2_warlock.png" to="images/class_images/lineage2_warlock.png"/> 
+	<file from="root/images/class_images/lineage2_warlord.png" to="images/class_images/lineage2_warlord.png"/> 
+	<file from="root/images/class_images/lineage2_warsmith.png" to="images/class_images/lineage2_warsmith.png"/> 
+	<file from="root/images/class_images/lineage2_windrider.png" to="images/class_images/lineage2_windrider.png"/> 
+	<file from="root/images/class_images/lineage2_wynnsummoner.png" to="images/class_images/lineage2_wynnsummoner.png"/> 
+	<file from="root/images/class_images/lineage2_yrarcher.png" to="images/class_images/lineage2_yrarcher.png"/> 
+	<file from="root/images/class_images/lotro_blackarrow.png" to="images/class_images/lotro_blackarrow.png"/> 
+	<file from="root/images/class_images/lotro_burglar.png" to="images/class_images/lotro_burglar.png"/> 
+	<file from="root/images/class_images/lotro_captain.png" to="images/class_images/lotro_captain.png"/> 
+	<file from="root/images/class_images/lotro_champion.png" to="images/class_images/lotro_champion.png"/> 
+	<file from="root/images/class_images/lotro_defiler.png" to="images/class_images/lotro_defiler.png"/> 
+	<file from="root/images/class_images/lotro_guardian.png" to="images/class_images/lotro_guardian.png"/> 
+	<file from="root/images/class_images/lotro_hunter.png" to="images/class_images/lotro_hunter.png"/> 
+	<file from="root/images/class_images/lotro_lore-master.png" to="images/class_images/lotro_lore-master.png"/> 
+	<file from="root/images/class_images/lotro_minstrel.png" to="images/class_images/lotro_minstrel.png"/> 
+	<file from="root/images/class_images/lotro_reaver.png" to="images/class_images/lotro_reaver.png"/> 
+	<file from="root/images/class_images/lotro_rune-keeper.png" to="images/class_images/lotro_rune-keeper.png"/> 
+	<file from="root/images/class_images/lotro_stalker.png" to="images/class_images/lotro_stalker.png"/> 
+	<file from="root/images/class_images/lotro_warden.png" to="images/class_images/lotro_warden.png"/> 
+	<file from="root/images/class_images/lotro_warleader.png" to="images/class_images/lotro_warleader.png"/> 
+	<file from="root/images/class_images/lotro_weaver.png" to="images/class_images/lotro_weaver.png"/> 
+	<file from="root/images/class_images/rift_archon.png" to="images/class_images/rift_archon.png"/> 
+	<file from="root/images/class_images/rift_assassin.png" to="images/class_images/rift_assassin.png"/> 
+	<file from="root/images/class_images/rift_bard.png" to="images/class_images/rift_bard.png"/> 
+	<file from="root/images/class_images/rift_beastmaster.png" to="images/class_images/rift_beastmaster.png"/> 
+	<file from="root/images/class_images/rift_bladedancer.png" to="images/class_images/rift_bladedancer.png"/> 
+	<file from="root/images/class_images/rift_cabalist.png" to="images/class_images/rift_cabalist.png"/> 
+	<file from="root/images/class_images/rift_champion.png" to="images/class_images/rift_champion.png"/> 
+	<file from="root/images/class_images/rift_chloromancer.png" to="images/class_images/rift_chloromancer.png"/> 
+	<file from="root/images/class_images/rift_dominator.png" to="images/class_images/rift_dominator.png"/> 
+	<file from="root/images/class_images/rift_druid.png" to="images/class_images/rift_druid.png"/> 
+	<file from="root/images/class_images/rift_elementalist.png" to="images/class_images/rift_elementalist.png"/> 
+	<file from="root/images/class_images/rift_inquisitor.png" to="images/class_images/rift_inquisitor.png"/> 
+	<file from="root/images/class_images/rift_justicar.png" to="images/class_images/rift_justicar.png"/> 
+	<file from="root/images/class_images/rift_marksman.png" to="images/class_images/rift_marksman.png"/> 
+	<file from="root/images/class_images/rift_necromancer.png" to="images/class_images/rift_necromancer.png"/> 
+	<file from="root/images/class_images/rift_nightblade.png" to="images/class_images/rift_nightblade.png"/> 
+	<file from="root/images/class_images/rift_paladin.png" to="images/class_images/rift_paladin.png"/> 
+	<file from="root/images/class_images/rift_paragon.png" to="images/class_images/rift_paragon.png"/> 
+	<file from="root/images/class_images/rift_purifier.png" to="images/class_images/rift_purifier.png"/> 
+	<file from="root/images/class_images/rift_pyromancer.png" to="images/class_images/rift_pyromancer.png"/> 
+	<file from="root/images/class_images/rift_ranger.png" to="images/class_images/rift_ranger.png"/> 
+	<file from="root/images/class_images/rift_reaver.png" to="images/class_images/rift_reaver.png"/> 
+	<file from="root/images/class_images/rift_riftblade.png" to="images/class_images/rift_riftblade.png"/> 
+	<file from="root/images/class_images/rift_riftstalker.png" to="images/class_images/rift_riftstalker.png"/> 
+	<file from="root/images/class_images/rift_saboteur.png" to="images/class_images/rift_saboteur.png"/> 
+	<file from="root/images/class_images/rift_sentinel.png" to="images/class_images/rift_sentinel.png"/> 
+	<file from="root/images/class_images/rift_shaman.png" to="images/class_images/rift_shaman.png"/> 
+	<file from="root/images/class_images/rift_stormcaller.png" to="images/class_images/rift_stormcaller.png"/> 
+	<file from="root/images/class_images/rift_voidknight.png" to="images/class_images/rift_voidknight.png"/> 
+	<file from="root/images/class_images/rift_warden.png" to="images/class_images/rift_warden.png"/> 
+	<file from="root/images/class_images/rift_warlock.png" to="images/class_images/rift_warlock.png"/> 
+	<file from="root/images/class_images/rift_warlord.png" to="images/class_images/rift_warlord.png"/> 
+	<file from="root/images/class_images/swtor_agent.png" to="images/class_images/swtor_agent.png"/> 
+	<file from="root/images/class_images/swtor_consul.png" to="images/class_images/swtor_consul.png"/> 
+	<file from="root/images/class_images/swtor_hunter.png" to="images/class_images/swtor_hunter.png"/> 
+	<file from="root/images/class_images/swtor_inquisitor.png" to="images/class_images/swtor_inquisitor.png"/> 
+	<file from="root/images/class_images/swtor_jedi.png" to="images/class_images/swtor_jedi.png"/> 
+	<file from="root/images/class_images/swtor_smuggler.png" to="images/class_images/swtor_smuggler.png"/> 
+	<file from="root/images/class_images/swtor_trooper.png" to="images/class_images/swtor_trooper.png"/> 
+	<file from="root/images/class_images/swtor_warrior.png" to="images/class_images/swtor_warrior.png"/> 
+	<file from="root/images/class_images/tera_archer.png" to="images/class_images/tera_archer.png"/> 
+	<file from="root/images/class_images/tera_berserker.png" to="images/class_images/tera_berserker.png"/> 
+	<file from="root/images/class_images/tera_lancer.png" to="images/class_images/tera_lancer.png"/> 
+	<file from="root/images/class_images/tera_mystic.png" to="images/class_images/tera_mystic.png"/> 
+	<file from="root/images/class_images/tera_priest.png" to="images/class_images/tera_priest.png"/> 
+	<file from="root/images/class_images/tera_slayer.png" to="images/class_images/tera_slayer.png"/> 
+	<file from="root/images/class_images/tera_sorcerer.png" to="images/class_images/tera_sorcerer.png"/> 
+	<file from="root/images/class_images/tera_warrior.png" to="images/class_images/tera_warrior.png"/> 
+	<file from="root/images/class_images/vanguard_Bard.png" to="images/class_images/vanguard_Bard.png"/> 
+	<file from="root/images/class_images/vanguard_Bloodmage.png" to="images/class_images/vanguard_Bloodmage.png"/> 
+	<file from="root/images/class_images/vanguard_Cleric.png" to="images/class_images/vanguard_Cleric.png"/> 
+	<file from="root/images/class_images/vanguard_Disciple.png" to="images/class_images/vanguard_Disciple.png"/> 
+	<file from="root/images/class_images/vanguard_Dreadknight.png" to="images/class_images/vanguard_Dreadknight.png"/> 
+	<file from="root/images/class_images/vanguard_Druid.png" to="images/class_images/vanguard_Druid.png"/> 
+	<file from="root/images/class_images/vanguard_Monk.png" to="images/class_images/vanguard_Monk.png"/> 
+	<file from="root/images/class_images/vanguard_Necromancer.png" to="images/class_images/vanguard_Necromancer.png"/> 
+	<file from="root/images/class_images/vanguard_Paladin.png" to="images/class_images/vanguard_Paladin.png"/> 
+	<file from="root/images/class_images/vanguard_Psionicist.png" to="images/class_images/vanguard_Psionicist.png"/> 
+	<file from="root/images/class_images/vanguard_Ranger.png" to="images/class_images/vanguard_Ranger.png"/> 
+	<file from="root/images/class_images/vanguard_Rogue.png" to="images/class_images/vanguard_Rogue.png"/> 
+	<file from="root/images/class_images/vanguard_Shaman.png" to="images/class_images/vanguard_Shaman.png"/> 
+	<file from="root/images/class_images/vanguard_Sorcerer.png" to="images/class_images/vanguard_Sorcerer.png"/> 
+	<file from="root/images/class_images/vanguard_Warrior.png" to="images/class_images/vanguard_Warrior.png"/> 
+	<file from="root/images/class_images/warhammer_archmage.png" to="images/class_images/warhammer_archmage.png"/> 
+	<file from="root/images/class_images/warhammer_black_orc.png" to="images/class_images/warhammer_black_orc.png"/> 
+	<file from="root/images/class_images/warhammer_bright_wizard.png" to="images/class_images/warhammer_bright_wizard.png"/> 
+	<file from="root/images/class_images/warhammer_chosen.png" to="images/class_images/warhammer_chosen.png"/> 
+	<file from="root/images/class_images/warhammer_disciple_of_khaine.png" to="images/class_images/warhammer_disciple_of_khaine.png"/> 
+	<file from="root/images/class_images/warhammer_engineer.png" to="images/class_images/warhammer_engineer.png"/> 
+	<file from="root/images/class_images/warhammer_iron_breaker.png" to="images/class_images/warhammer_iron_breaker.png"/> 
+	<file from="root/images/class_images/warhammer_magus.png" to="images/class_images/warhammer_magus.png"/> 
+	<file from="root/images/class_images/warhammer_marauder.png" to="images/class_images/warhammer_marauder.png"/> 
+	<file from="root/images/class_images/warhammer_rune_priest.png" to="images/class_images/warhammer_rune_priest.png"/> 
+	<file from="root/images/class_images/warhammer_shadow_warrior.png" to="images/class_images/warhammer_shadow_warrior.png"/> 
+	<file from="root/images/class_images/warhammer_shaman.png" to="images/class_images/warhammer_shaman.png"/> 
+	<file from="root/images/class_images/warhammer_sorceress.png" to="images/class_images/warhammer_sorceress.png"/> 
+	<file from="root/images/class_images/warhammer_squig_herder.png" to="images/class_images/warhammer_squig_herder.png"/> 
+	<file from="root/images/class_images/warhammer_swordmaster.png" to="images/class_images/warhammer_swordmaster.png"/> 
+	<file from="root/images/class_images/warhammer_warrior_priest.png" to="images/class_images/warhammer_warrior_priest.png"/> 
+	<file from="root/images/class_images/warhammer_white_lion.png" to="images/class_images/warhammer_white_lion.png"/> 
+	<file from="root/images/class_images/warhammer_witch elf.png" to="images/class_images/warhammer_witch elf.png"/> 
+	<file from="root/images/class_images/warhammer_witch hunter.png" to="images/class_images/warhammer_witch hunter.png"/> 
+	<file from="root/images/class_images/warhammer_witch_elf.png" to="images/class_images/warhammer_witch_elf.png"/> 
+	<file from="root/images/class_images/warhammer_witch_hunter.png" to="images/class_images/warhammer_witch_hunter.png"/> 
+	<file from="root/images/class_images/warhammer_zealot.png" to="images/class_images/warhammer_zealot.png"/> 
+	<file from="root/images/class_images/wow_death_knight.png" to="images/class_images/wow_death_knight.png"/> 
+	<file from="root/images/class_images/wow_druid.png" to="images/class_images/wow_druid.png"/> 
+	<file from="root/images/class_images/wow_hunter.png" to="images/class_images/wow_hunter.png"/> 
+	<file from="root/images/class_images/wow_mage.png" to="images/class_images/wow_mage.png"/> 
+	<file from="root/images/class_images/wow_monk.png" to="images/class_images/wow_monk.png"/> 
+	<file from="root/images/class_images/wow_paladin.png" to="images/class_images/wow_paladin.png"/> 
+	<file from="root/images/class_images/wow_priest.png" to="images/class_images/wow_priest.png"/> 
+	<file from="root/images/class_images/wow_rogue.png" to="images/class_images/wow_rogue.png"/> 
+	<file from="root/images/class_images/wow_shaman.png" to="images/class_images/wow_shaman.png"/> 
+	<file from="root/images/class_images/wow_warlock.png" to="images/class_images/wow_warlock.png"/> 
+	<file from="root/images/class_images/wow_warrior.png" to="images/class_images/wow_warrior.png"/> 
+	<file from="root/images/event_images/aion_pve.png" to="images/event_images/aion_pve.png"/> 
+	<file from="root/images/event_images/wow_ds10.png" to="images/event_images/wow_ds10.png"/> 
+	<file from="root/images/event_images/wow_ds10hm.png" to="images/event_images/wow_ds10hm.png"/> 
+	<file from="root/images/event_images/wow_ds25.png" to="images/event_images/wow_ds25.png"/> 
+	<file from="root/images/event_images/wow_ds25hm.png" to="images/event_images/wow_ds25hm.png"/> 
+	<file from="root/images/portal/member.gif" to="images/portal/member.gif"/> 
+	<file from="root/images/portal/recruitblock_images/" to="images/portal/recruitblock_images/"/> 
+	<file from="root/images/portal/recruitblock_images/dps_icon.png" to="images/portal/recruitblock_images/dps_icon.png"/> 
+	<file from="root/images/portal/recruitblock_images/healer_icon.png" to="images/portal/recruitblock_images/healer_icon.png"/> 
+	<file from="root/images/portal/recruitblock_images/looking_icon.gif" to="images/portal/recruitblock_images/looking_icon.gif"/> 
+	<file from="root/images/portal/recruitblock_images/rec_closed.png" to="images/portal/recruitblock_images/rec_closed.png"/> 
+	<file from="root/images/portal/recruitblock_images/rec_high.png" to="images/portal/recruitblock_images/rec_high.png"/> 
+	<file from="root/images/portal/recruitblock_images/rec_low.png" to="images/portal/recruitblock_images/rec_low.png"/> 
+	<file from="root/images/portal/recruitblock_images/rec_med.png" to="images/portal/recruitblock_images/rec_med.png"/> 
+	<file from="root/images/portal/recruitblock_images/rec.png" to="images/portal/recruitblock_images/rec.png"/> 
+	<file from="root/images/portal/recruitblock_images/tank_icon.png" to="images/portal/recruitblock_images/tank_icon.png"/> 
+	<file from="root/images/race_images/aion_asmodian.png" to="images/race_images/aion_asmodian.png"/> 
+	<file from="root/images/race_images/aion_elyos.png" to="images/race_images/aion_elyos.png"/> 
+	<file from="root/images/race_images/gw2_asura.png" to="images/race_images/gw2_asura.png"/> 
+	<file from="root/images/race_images/gw2_charr.png" to="images/race_images/gw2_charr.png"/> 
+	<file from="root/images/race_images/gw2_human.png" to="images/race_images/gw2_human.png"/> 
+	<file from="root/images/race_images/gw2_norn.png" to="images/race_images/gw2_norn.png"/> 
+	<file from="root/images/race_images/gw2_sylvari.png" to="images/race_images/gw2_sylvari.png"/> 
+	<file from="root/images/race_images/gw2_unknown.png" to="images/race_images/gw2_unknown.png"/> 
+	<file from="root/images/race_images/lotro_dwarf_blue.png" to="images/race_images/lotro_dwarf_blue.png"/> 
+	<file from="root/images/race_images/lotro_dwarf_grey.png" to="images/race_images/lotro_dwarf_grey.png"/> 
+	<file from="root/images/race_images/lotro_dwarf_iron.png" to="images/race_images/lotro_dwarf_iron.png"/> 
+	<file from="root/images/race_images/lotro_dwarf_lonely.png" to="images/race_images/lotro_dwarf_lonely.png"/> 
+	<file from="root/images/race_images/lotro_dwarf_white.png" to="images/race_images/lotro_dwarf_white.png"/> 
+	<file from="root/images/race_images/lotro_dwarf.png" to="images/race_images/lotro_dwarf.png"/> 
+	<file from="root/images/race_images/lotro_elf_edhellond.png" to="images/race_images/lotro_elf_edhellond.png"/> 
+	<file from="root/images/race_images/lotro_elf_lindon.png" to="images/race_images/lotro_elf_lindon.png"/> 
+	<file from="root/images/race_images/lotro_elf_lorien.png" to="images/race_images/lotro_elf_lorien.png"/> 
+	<file from="root/images/race_images/lotro_elf_mirkwood.png" to="images/race_images/lotro_elf_mirkwood.png"/> 
+	<file from="root/images/race_images/lotro_elf_rivendell.png" to="images/race_images/lotro_elf_rivendell.png"/> 
+	<file from="root/images/race_images/lotro_elf.png" to="images/race_images/lotro_elf.png"/> 
+	<file from="root/images/race_images/lotro_hobbit_fallohide.png" to="images/race_images/lotro_hobbit_fallohide.png"/> 
+	<file from="root/images/race_images/lotro_hobbit_harfoot.png" to="images/race_images/lotro_hobbit_harfoot.png"/> 
+	<file from="root/images/race_images/lotro_hobbit_stoor.png" to="images/race_images/lotro_hobbit_stoor.png"/> 
+	<file from="root/images/race_images/lotro_hobbit.png" to="images/race_images/lotro_hobbit.png"/> 
+	<file from="root/images/race_images/lotro_man_bree.png" to="images/race_images/lotro_man_bree.png"/> 
+	<file from="root/images/race_images/lotro_man_dalelands.png" to="images/race_images/lotro_man_dalelands.png"/> 
+	<file from="root/images/race_images/lotro_man_gondor.png" to="images/race_images/lotro_man_gondor.png"/> 
+	<file from="root/images/race_images/lotro_man_rohan.png" to="images/race_images/lotro_man_rohan.png"/> 
+	<file from="root/images/race_images/lotro_man.png" to="images/race_images/lotro_man.png"/> 
+	<file from="root/images/race_images/lotro_monster.png" to="images/race_images/lotro_monster.png"/> 
+	<file from="root/images/race_images/lotro_unknown.png" to="images/race_images/lotro_unknown.png"/> 
+	<file from="root/images/race_images/rift_bahmi_female.png" to="images/race_images/rift_bahmi_female.png"/> 
+	<file from="root/images/race_images/rift_bahmi_male.png" to="images/race_images/rift_bahmi_male.png"/> 
+	<file from="root/images/race_images/rift_dwarf_female.png" to="images/race_images/rift_dwarf_female.png"/> 
+	<file from="root/images/race_images/rift_dwarf_male.png" to="images/race_images/rift_dwarf_male.png"/> 
+	<file from="root/images/race_images/rift_eth_female.png" to="images/race_images/rift_eth_female.png"/> 
+	<file from="root/images/race_images/rift_eth_male.png" to="images/race_images/rift_eth_male.png"/> 
+	<file from="root/images/race_images/rift_highelf_female.png" to="images/race_images/rift_highelf_female.png"/> 
+	<file from="root/images/race_images/rift_highelf_male.png" to="images/race_images/rift_highelf_male.png"/> 
+	<file from="root/images/race_images/rift_kelari_female.png" to="images/race_images/rift_kelari_female.png"/> 
+	<file from="root/images/race_images/rift_kelari_male.png" to="images/race_images/rift_kelari_male.png"/> 
+	<file from="root/images/race_images/rift_mathosian_female.png" to="images/race_images/rift_mathosian_female.png"/> 
+	<file from="root/images/race_images/rift_mathosian_male.png" to="images/race_images/rift_mathosian_male.png"/> 
+	<file from="root/images/race_images/riftraces.psd" to="images/race_images/riftraces.psd"/> 
+	<file from="root/images/race_images/swtor_chiss_female.png" to="images/race_images/swtor_chiss_female.png"/> 
+	<file from="root/images/race_images/swtor_chiss_male.png" to="images/race_images/swtor_chiss_male.png"/> 
+	<file from="root/images/race_images/swtor_criss_male.png" to="images/race_images/swtor_criss_male.png"/> 
+	<file from="root/images/race_images/swtor_cyborg_female.png" to="images/race_images/swtor_cyborg_female.png"/> 
+	<file from="root/images/race_images/swtor_cyborg_male.png" to="images/race_images/swtor_cyborg_male.png"/> 
+	<file from="root/images/race_images/swtor_human_female.png" to="images/race_images/swtor_human_female.png"/> 
+	<file from="root/images/race_images/swtor_human_male.png" to="images/race_images/swtor_human_male.png"/> 
+	<file from="root/images/race_images/swtor_miralian_female.png" to="images/race_images/swtor_miralian_female.png"/> 
+	<file from="root/images/race_images/swtor_miralian_male.png" to="images/race_images/swtor_miralian_male.png"/> 
+	<file from="root/images/race_images/swtor_miraluka_female.png" to="images/race_images/swtor_miraluka_female.png"/> 
+	<file from="root/images/race_images/swtor_miraluka_male.png" to="images/race_images/swtor_miraluka_male.png"/> 
+	<file from="root/images/race_images/swtor_mirialan_female.png" to="images/race_images/swtor_mirialan_female.png"/> 
+	<file from="root/images/race_images/swtor_rattataki_female.png" to="images/race_images/swtor_rattataki_female.png"/> 
+	<file from="root/images/race_images/swtor_rattataki_male.png" to="images/race_images/swtor_rattataki_male.png"/> 
+	<file from="root/images/race_images/swtor_redsith_female.png" to="images/race_images/swtor_redsith_female.png"/> 
+	<file from="root/images/race_images/swtor_redsith_male.png" to="images/race_images/swtor_redsith_male.png"/> 
+	<file from="root/images/race_images/swtor_sith_male.png" to="images/race_images/swtor_sith_male.png"/> 
+	<file from="root/images/race_images/swtor_twilek_female.png" to="images/race_images/swtor_twilek_female.png"/> 
+	<file from="root/images/race_images/swtor_twilek_male.png" to="images/race_images/swtor_twilek_male.png"/> 
+	<file from="root/images/race_images/swtor_zabrak_female.png" to="images/race_images/swtor_zabrak_female.png"/> 
+	<file from="root/images/race_images/swtor_zabrak_male.png" to="images/race_images/swtor_zabrak_male.png"/> 
+	<file from="root/images/race_images/tera_aman_female.png" to="images/race_images/tera_aman_female.png"/> 
+	<file from="root/images/race_images/tera_aman_male.png" to="images/race_images/tera_aman_male.png"/> 
+	<file from="root/images/race_images/tera_aman.png" to="images/race_images/tera_aman.png"/> 
+	<file from="root/images/race_images/tera_baraka_female.png" to="images/race_images/tera_baraka_female.png"/> 
+	<file from="root/images/race_images/tera_baraka_male.png" to="images/race_images/tera_baraka_male.png"/> 
+	<file from="root/images/race_images/tera_baraka.png" to="images/race_images/tera_baraka.png"/> 
+	<file from="root/images/race_images/tera_castanic_female.png" to="images/race_images/tera_castanic_female.png"/> 
+	<file from="root/images/race_images/tera_castanic_male.png" to="images/race_images/tera_castanic_male.png"/> 
+	<file from="root/images/race_images/tera_castanic.png" to="images/race_images/tera_castanic.png"/> 
+	<file from="root/images/race_images/tera_elin_female.png" to="images/race_images/tera_elin_female.png"/> 
+	<file from="root/images/race_images/tera_highelf_female.png" to="images/race_images/tera_highelf_female.png"/> 
+	<file from="root/images/race_images/tera_highelf_male.png" to="images/race_images/tera_highelf_male.png"/> 
+	<file from="root/images/race_images/tera_highelf.png" to="images/race_images/tera_highelf.png"/> 
+	<file from="root/images/race_images/tera_human_female.png" to="images/race_images/tera_human_female.png"/> 
+	<file from="root/images/race_images/tera_human_male.png" to="images/race_images/tera_human_male.png"/> 
+	<file from="root/images/race_images/tera_human.png" to="images/race_images/tera_human.png"/> 
+	<file from="root/images/race_images/tera_popori_male.png" to="images/race_images/tera_popori_male.png"/> 
+	<file from="root/images/race_images/tera_popori.png" to="images/race_images/tera_popori.png"/> 
+	<file from="root/images/race_images/vanguard_aelf.png" to="images/race_images/vanguard_aelf.png"/> 
+	<file from="root/images/race_images/vanguard_delf.png" to="images/race_images/vanguard_delf.png"/> 
+	<file from="root/images/race_images/vanguard_dwarf.png" to="images/race_images/vanguard_dwarf.png"/> 
+	<file from="root/images/race_images/vanguard_gnome.png" to="images/race_images/vanguard_gnome.png"/> 
+	<file from="root/images/race_images/vanguard_goblin.png" to="images/race_images/vanguard_goblin.png"/> 
+	<file from="root/images/race_images/vanguard_halfling.png" to="images/race_images/vanguard_halfling.png"/> 
+	<file from="root/images/race_images/vanguard_helf.png" to="images/race_images/vanguard_helf.png"/> 
+	<file from="root/images/race_images/vanguard_kojani.png" to="images/race_images/vanguard_kojani.png"/> 
+	<file from="root/images/race_images/vanguard_kurashasa.png" to="images/race_images/vanguard_kurashasa.png"/> 
+	<file from="root/images/race_images/vanguard_lgiant.png" to="images/race_images/vanguard_lgiant.png"/> 
+	<file from="root/images/race_images/vanguard_mordebi.png" to="images/race_images/vanguard_mordebi.png"/> 
+	<file from="root/images/race_images/vanguard_orc.png" to="images/race_images/vanguard_orc.png"/> 
+	<file from="root/images/race_images/vanguard_qual.png" to="images/race_images/vanguard_qual.png"/> 
+	<file from="root/images/race_images/vanguard_raki.png" to="images/race_images/vanguard_raki.png"/> 
+	<file from="root/images/race_images/vanguard_thestran.png" to="images/race_images/vanguard_thestran.png"/> 
+	<file from="root/images/race_images/vanguard_varan.png" to="images/race_images/vanguard_varan.png"/> 
+	<file from="root/images/race_images/vanguard_varanjer.png" to="images/race_images/vanguard_varanjer.png"/> 
+	<file from="root/images/race_images/vanguard_vulmane.png" to="images/race_images/vanguard_vulmane.png"/> 
+	<file from="root/images/race_images/vanguard_welf.png" to="images/race_images/vanguard_welf.png"/> 
+	<file from="root/images/race_images/warhammer_chaos.png" to="images/race_images/warhammer_chaos.png"/> 
+	<file from="root/images/race_images/warhammer_delves.png" to="images/race_images/warhammer_delves.png"/> 
+	<file from="root/images/race_images/warhammer_dwarf.png" to="images/race_images/warhammer_dwarf.png"/> 
+	<file from="root/images/race_images/warhammer_empire.png" to="images/race_images/warhammer_empire.png"/> 
+	<file from="root/images/race_images/warhammer_greenskin.png" to="images/race_images/warhammer_greenskin.png"/> 
+	<file from="root/images/race_images/warhammer_highelves.png" to="images/race_images/warhammer_highelves.png"/> 
+	<file from="root/images/race_images/wow_bloodelf_female.png" to="images/race_images/wow_bloodelf_female.png"/> 
+	<file from="root/images/race_images/wow_bloodelf_male.png" to="images/race_images/wow_bloodelf_male.png"/> 
+	<file from="root/images/race_images/wow_draenei_female.png" to="images/race_images/wow_draenei_female.png"/> 
+	<file from="root/images/race_images/wow_draenei_male.png" to="images/race_images/wow_draenei_male.png"/> 
+	<file from="root/images/race_images/wow_dwarf_female.png" to="images/race_images/wow_dwarf_female.png"/> 
+	<file from="root/images/race_images/wow_dwarf_male.png" to="images/race_images/wow_dwarf_male.png"/> 
+	<file from="root/images/race_images/wow_gnome_female.png" to="images/race_images/wow_gnome_female.png"/> 
+	<file from="root/images/race_images/wow_gnome_male.png" to="images/race_images/wow_gnome_male.png"/> 
+	<file from="root/images/race_images/wow_goblin_female.png" to="images/race_images/wow_goblin_female.png"/> 
+	<file from="root/images/race_images/wow_goblin_male.png" to="images/race_images/wow_goblin_male.png"/> 
+	<file from="root/images/race_images/wow_human_female.png" to="images/race_images/wow_human_female.png"/> 
+	<file from="root/images/race_images/wow_human_male.png" to="images/race_images/wow_human_male.png"/> 
+	<file from="root/images/race_images/wow_nightelf_female.png" to="images/race_images/wow_nightelf_female.png"/> 
+	<file from="root/images/race_images/wow_nightelf_male.png" to="images/race_images/wow_nightelf_male.png"/> 
+	<file from="root/images/race_images/wow_orc_female.png" to="images/race_images/wow_orc_female.png"/> 
+	<file from="root/images/race_images/wow_orc_male.png" to="images/race_images/wow_orc_male.png"/> 
+	<file from="root/images/race_images/wow_pandaren_female.png" to="images/race_images/wow_pandaren_female.png"/> 
+	<file from="root/images/race_images/wow_pandaren_male.jpg" to="images/race_images/wow_pandaren_male.jpg"/> 
+	<file from="root/images/race_images/wow_pandaren_male.png" to="images/race_images/wow_pandaren_male.png"/> 
+	<file from="root/images/race_images/wow_scourge_female.png" to="images/race_images/wow_scourge_female.png"/> 
+	<file from="root/images/race_images/wow_scourge_male.png" to="images/race_images/wow_scourge_male.png"/> 
+	<file from="root/images/race_images/wow_tauren_female.png" to="images/race_images/wow_tauren_female.png"/> 
+	<file from="root/images/race_images/wow_tauren_male.png" to="images/race_images/wow_tauren_male.png"/> 
+	<file from="root/images/race_images/wow_troll_female.png" to="images/race_images/wow_troll_female.png"/> 
+	<file from="root/images/race_images/wow_troll_male.png" to="images/race_images/wow_troll_male.png"/> 
+	<file from="root/images/race_images/wow_worgen_female.png" to="images/race_images/wow_worgen_female.png"/> 
+	<file from="root/images/race_images/wow_worgen_male.png" to="images/race_images/wow_worgen_male.png"/> 
+	<file from="root/images/roster_classes/aion_shaman.png" to="images/roster_classes/aion_shaman.png"/> 
+	<file from="root/images/roster_classes/eq_bard.png" to="images/roster_classes/eq_bard.png"/> 
+	<file from="root/images/roster_classes/eq_beastlord.png" to="images/roster_classes/eq_beastlord.png"/> 
+	<file from="root/images/roster_classes/eq_berserker.png" to="images/roster_classes/eq_berserker.png"/> 
+	<file from="root/images/roster_classes/eq_cleric.png" to="images/roster_classes/eq_cleric.png"/> 
+	<file from="root/images/roster_classes/eq_druid.png" to="images/roster_classes/eq_druid.png"/> 
+	<file from="root/images/roster_classes/eq_enchanter.png" to="images/roster_classes/eq_enchanter.png"/> 
+	<file from="root/images/roster_classes/eq_magician.png" to="images/roster_classes/eq_magician.png"/> 
+	<file from="root/images/roster_classes/eq_monk.png" to="images/roster_classes/eq_monk.png"/> 
+	<file from="root/images/roster_classes/eq_necromancer.png" to="images/roster_classes/eq_necromancer.png"/> 
+	<file from="root/images/roster_classes/eq_paladin.png" to="images/roster_classes/eq_paladin.png"/> 
+	<file from="root/images/roster_classes/eq_ranger.png" to="images/roster_classes/eq_ranger.png"/> 
+	<file from="root/images/roster_classes/eq_rogue.png" to="images/roster_classes/eq_rogue.png"/> 
+	<file from="root/images/roster_classes/eq_shadowknight.png" to="images/roster_classes/eq_shadowknight.png"/> 
+	<file from="root/images/roster_classes/eq_shaman.png" to="images/roster_classes/eq_shaman.png"/> 
+	<file from="root/images/roster_classes/eq_warrior.png" to="images/roster_classes/eq_warrior.png"/> 
+	<file from="root/images/roster_classes/eq_wizard.png" to="images/roster_classes/eq_wizard.png"/> 
+	<file from="root/images/roster_classes/gw2_elementalist.png" to="images/roster_classes/gw2_elementalist.png"/> 
+	<file from="root/images/roster_classes/gw2_engineer.png" to="images/roster_classes/gw2_engineer.png"/> 
+	<file from="root/images/roster_classes/gw2_guardian.png" to="images/roster_classes/gw2_guardian.png"/> 
+	<file from="root/images/roster_classes/gw2_mesmer.png" to="images/roster_classes/gw2_mesmer.png"/> 
+	<file from="root/images/roster_classes/gw2_necromancer.png" to="images/roster_classes/gw2_necromancer.png"/> 
+	<file from="root/images/roster_classes/gw2_ranger.png" to="images/roster_classes/gw2_ranger.png"/> 
+	<file from="root/images/roster_classes/gw2_warrior.png" to="images/roster_classes/gw2_warrior.png"/> 
+	<file from="root/images/roster_classes/lineage_archer.png" to="images/roster_classes/lineage_archer.png"/> 
+	<file from="root/images/roster_classes/lineage_enchanter.png" to="images/roster_classes/lineage_enchanter.png"/> 
+	<file from="root/images/roster_classes/lineage_healer.png" to="images/roster_classes/lineage_healer.png"/> 
+	<file from="root/images/roster_classes/lineage_knight.png" to="images/roster_classes/lineage_knight.png"/> 
+	<file from="root/images/roster_classes/lineage_rogue.png" to="images/roster_classes/lineage_rogue.png"/> 
+	<file from="root/images/roster_classes/lineage_summoner.png" to="images/roster_classes/lineage_summoner.png"/> 
+	<file from="root/images/roster_classes/lineage_warrior.png" to="images/roster_classes/lineage_warrior.png"/> 
+	<file from="root/images/roster_classes/lineage_wizard.png" to="images/roster_classes/lineage_wizard.png"/> 
+	<file from="root/images/roster_classes/tera_archer.png" to="images/roster_classes/tera_archer.png"/> 
+	<file from="root/images/roster_classes/tera_berserker.png" to="images/roster_classes/tera_berserker.png"/> 
+	<file from="root/images/roster_classes/tera_lancer.png" to="images/roster_classes/tera_lancer.png"/> 
+	<file from="root/images/roster_classes/tera_priest.png" to="images/roster_classes/tera_priest.png"/> 
+	<file from="root/images/roster_classes/tera_slayer.png" to="images/roster_classes/tera_slayer.png"/> 
+	<file from="root/images/roster_classes/tera_sorcerer.png" to="images/roster_classes/tera_sorcerer.png"/> 
+	<file from="root/images/roster_classes/tera_warrior.png" to="images/roster_classes/tera_warrior.png"/> 
+	<file from="root/includes/acp/acp_dkp_adj.php" to="root/includes/acp/acp_dkp_adj.php"/> 
+	<file from="root/includes/acp/acp_dkp_event.php" to="root/includes/acp/acp_dkp_event.php"/> 
+	<file from="root/includes/acp/acp_dkp_game.php" to="root/includes/acp/acp_dkp_game.php"/> 
+	<file from="root/includes/acp/acp_dkp_item.php" to="root/includes/acp/acp_dkp_item.php"/> 
+	<file from="root/includes/acp/acp_dkp_mdkp.php" to="root/includes/acp/acp_dkp_mdkp.php"/> 
+	<file from="root/includes/acp/acp_dkp_mm.php" to="root/includes/acp/acp_dkp_mm.php"/> 
+	<file from="root/includes/acp/acp_dkp_point.php" to="root/includes/acp/acp_dkp_point.php"/> 
+	<file from="root/includes/acp/acp_dkp_raid.php" to="root/includes/acp/acp_dkp_raid.php"/> 
+	<file from="root/includes/acp/acp_dkp_sys.php" to="root/includes/acp/acp_dkp_sys.php"/> 
+	<file from="root/includes/acp/acp_dkp.php" to="root/includes/acp/acp_dkp.php"/> 
+	<file from="root/includes/acp/info/acp_dkp_adj.php" to="root/includes/acp/info/acp_dkp_adj.php"/> 
+	<file from="root/includes/acp/info/acp_dkp_event.php" to="root/includes/acp/info/acp_dkp_event.php"/> 
+	<file from="root/includes/acp/info/acp_dkp_game.php" to="root/includes/acp/info/acp_dkp_game.php"/> 
+	<file from="root/includes/acp/info/acp_dkp_item.php" to="root/includes/acp/info/acp_dkp_item.php"/> 
+	<file from="root/includes/acp/info/acp_dkp_mdkp.php" to="root/includes/acp/info/acp_dkp_mdkp.php"/> 
+	<file from="root/includes/acp/info/acp_dkp_mm.php" to="root/includes/acp/info/acp_dkp_mm.php"/> 
+	<file from="root/includes/acp/info/acp_dkp_point.php" to="root/includes/acp/info/acp_dkp_point.php"/> 
+	<file from="root/includes/acp/info/acp_dkp_raid.php" to="root/includes/acp/info/acp_dkp_raid.php"/> 
+	<file from="root/includes/acp/info/acp_dkp_sys.php" to="root/includes/acp/info/acp_dkp_sys.php"/> 
+	<file from="root/includes/acp/info/acp_dkp.php" to="root/includes/acp/info/acp_dkp.php"/> 
+	<file from="root/includes/bbdkp/bbdkp.php" to="root/includes/bbdkp/bbdkp.php"/> 
+	<file from="root/includes/bbdkp/bbdkpfunctions.php" to="root/includes/bbdkp/bbdkpfunctions.php"/> 
+	<file from="root/includes/bbdkp/block/linksblock.php" to="root/includes/bbdkp/block/linksblock.php"/> 
+	<file from="root/includes/bbdkp/block/newmembers.php" to="includes/bbdkp/block/newmembers.php"/> 
+	<file from="root/includes/bbdkp/constants_bbdkp.php" to="root/includes/bbdkp/constants_bbdkp.php"/> 
+	<file from="root/includes/bbdkp/module/listevents.php" to="root/includes/bbdkp/module/listevents.php"/> 
+	<file from="root/includes/bbdkp/module/listitems.php" to="root/includes/bbdkp/module/listitems.php"/> 
+	<file from="root/includes/bbdkp/module/listraids.php" to="root/includes/bbdkp/module/listraids.php"/> 
+	<file from="root/includes/bbdkp/module/news.php" to="root/includes/bbdkp/module/news.php"/> 
+	<file from="root/includes/bbdkp/module/roster.php" to="root/includes/bbdkp/module/roster.php"/> 
+	<file from="root/includes/bbdkp/module/standings.php" to="root/includes/bbdkp/module/standings.php"/> 
+	<file from="root/includes/bbdkp/module/stats.php" to="root/includes/bbdkp/module/stats.php"/> 
+	<file from="root/includes/bbdkp/module/viewevent.php" to="root/includes/bbdkp/module/viewevent.php"/> 
+	<file from="root/includes/bbdkp/module/viewitem.php" to="root/includes/bbdkp/module/viewitem.php"/> 
+	<file from="root/includes/bbdkp/module/viewmember.php" to="root/includes/bbdkp/module/viewmember.php"/> 
+	<file from="root/includes/bbdkp/module/viewraid.php" to="root/includes/bbdkp/module/viewraid.php"/> 
+	<file from="root/includes/ucp/info/ucp_dkp.php" to="root/includes/ucp/info/ucp_dkp.php"/> 
+	<file from="root/includes/ucp/ucp_dkp.php" to="root/includes/ucp/ucp_dkp.php"/> 
+	<file from="root/install/gamesinstall/install_aion.php" to="root/install/gamesinstall/install_aion.php"/> 
+	<file from="root/install/gamesinstall/install_daoc.php" to="root/install/gamesinstall/install_daoc.php"/> 
+	<file from="root/install/gamesinstall/install_eq.php" to="root/install/gamesinstall/install_eq.php"/> 
+	<file from="root/install/gamesinstall/install_eq2.php" to="root/install/gamesinstall/install_eq2.php"/> 
+	<file from="root/install/gamesinstall/install_ffxi.php" to="root/install/gamesinstall/install_ffxi.php"/> 
+	<file from="root/install/gamesinstall/install_gw2.php" to="install/gamesinstall/install_gw2.php"/> 
+	<file from="root/install/gamesinstall/install_lineage2.php" to="root/install/gamesinstall/install_lineage2.php"/> 
+	<file from="root/install/gamesinstall/install_lotro.php" to="root/install/gamesinstall/install_lotro.php"/> 
+	<file from="root/install/gamesinstall/install_rift.php" to="root/install/gamesinstall/install_rift.php"/> 
+	<file from="root/install/gamesinstall/install_swtor.php" to="root/install/gamesinstall/install_swtor.php"/> 
+	<file from="root/install/gamesinstall/install_tera.php" to="install/gamesinstall/install_tera.php"/> 
+	<file from="root/install/gamesinstall/install_vanguard.php" to="root/install/gamesinstall/install_vanguard.php"/> 
+	<file from="root/install/gamesinstall/install_warhammer.php" to="root/install/gamesinstall/install_warhammer.php"/> 
+	<file from="root/install/gamesinstall/install_wow.php" to="root/install/gamesinstall/install_wow.php"/> 
+	<file from="root/install/index.php" to="root/install/index.php"/> 
+	<file from="root/language/de/mods/dkp_admin.php" to="root/language/de/mods/dkp_admin.php"/> 
+	<file from="root/language/de/mods/dkp_common.php" to="root/language/de/mods/dkp_common.php"/> 
+	<file from="root/language/en/mods/dkp_admin.php" to="root/language/en/mods/dkp_admin.php"/> 
+	<file from="root/language/en/mods/dkp_common.php" to="root/language/en/mods/dkp_common.php"/> 
+	<file from="root/language/fr/mods/dkp_admin.php" to="root/language/fr/mods/dkp_admin.php"/> 
+	<file from="root/language/fr/mods/dkp_common.php" to="root/language/fr/mods/dkp_common.php"/> 
+	<file from="root/styles/prosilver/template/dkp/block/links.html" to="root/styles/prosilver/template/dkp/block/links.html"/> 
+	<file from="root/styles/prosilver/template/dkp/block/newmembers.html" to="styles/prosilver/template/dkp/block/newmembers.html"/> 
+	<file from="root/styles/prosilver/template/dkp/block/recruitment.html" to="root/styles/prosilver/template/dkp/block/recruitment.html"/> 
+	<file from="root/styles/prosilver/template/dkp/dkpmain.html" to="root/styles/prosilver/template/dkp/dkpmain.html"/> 
+	<file from="root/styles/prosilver/template/dkp/jquery.js" to="root/styles/prosilver/template/dkp/jquery.js"/> 
+	<file from="root/styles/prosilver/template/dkp/jquery.tools.min.js" to="root/styles/prosilver/template/dkp/jquery.tools.min.js"/> 
+	<file from="root/styles/prosilver/template/dkp/module/listevents.html" to="root/styles/prosilver/template/dkp/module/listevents.html"/> 
+	<file from="root/styles/prosilver/template/dkp/module/roster.html" to="root/styles/prosilver/template/dkp/module/roster.html"/> 
+	<file from="root/styles/prosilver/template/dkp/module/viewevent.html" to="root/styles/prosilver/template/dkp/module/viewevent.html"/> 
+	<file from="root/styles/prosilver/template/dkp/news_body.html" to="root/styles/prosilver/template/dkp/news_body.html"/> 
+	<file from="root/styles/prosilver/template/dkp/ucp_dkp_charadd.html" to="root/styles/prosilver/template/dkp/ucp_dkp_charadd.html"/> 
+	<file from="root/styles/prosilver/template/dkp/ucp_dkp.html" to="root/styles/prosilver/template/dkp/ucp_dkp.html"/> 
+	<file from="root/umil/umil.php" to="root/umil/umil.php"/> 
+	</copy>
+	<php-installer><![CDATA[install/index.php]]></php-installer>
+	<diy-instructions lang="en"><![CDATA[Afterwards, run database installer and purge template cache]]></diy-instructions>
+	<diy-instructions lang="fr"><![CDATA[ensuite, lancer mise à jour db et purgez la cache]]></diy-instructions>
+	<diy-instructions lang="de"><![CDATA[danach database update und Cache leeren]]></diy-instructions>
+	</action-group>
+</mod>

@@ -185,40 +185,101 @@ function install_wow()
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 
+	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'WoW Cataclysm' ");
+	$row = $db->sql_fetchrow ($result); 
+	if($row)
+    {
+    	//get existing
+		$wowpdkpid = $row['dkpsys_id'];    	
+    }
+    else
+    {
+    	// add new dkp pool
+		$sql_ary = array (
+			'dkpsys_name' => 'WoW Cataclysm', 
+			'dkpsys_status' => 'Y', 
+			'dkpsys_addedby' => 'admin', 
+			'dkpsys_default' => 'N' );
+		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+		$db->sql_query($sql);
+		$wowpdkpid = $db->sql_nextid();
+    }
+    $db->sql_freeresult ( $result );
+
+    $sql_ary = array();
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T11 Blackwing Descent 10', 'event_color' => '#77FF11', 'event_value' => 5, 'event_imagename' => 'wow_bd10'  ) ;
+    $sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T11 Bastion of Twilight 10', 'event_color' => '#99FF11', 'event_value' => 5, 'event_imagename' => 'wow_bot10'  ) ;
+    $sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T11 Throne of the Four Winds 10', 'event_color' => '#BBFF11', 'event_value' => 5, 'event_imagename' => 'wow_tfw10');
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T12 Firelands 10', 'event_color' => '#CCFF11', 'event_value' => 5 , 'event_imagename' => 'wow_fl10');
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T12 Firelands 10hm', 'event_color' => '#FF2266', 'event_value' => 5 , 'event_imagename' => 'wow_fl10hm');
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T12 Firelands 25', 'event_color' => '#FFBB22', 'event_value' => 5 , 'event_imagename' => 'wow_fl25');
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T12 Firelands 25hm', 'event_color' => '#FF2266', 'event_value' => 5 , 'event_imagename' => 'wow_fl25hm');
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 10', 'event_color' => '#CCFF22', 'event_value' => 5, 'event_imagename' => 'wow_ds10' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 10hm', 'event_color' => '#FF2266', 'event_value' => 5, 'event_imagename' => 'wow_ds10hm' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 25', 'event_color' => '#FFBB33', 'event_value' => 5, 'event_imagename' => 'wow_ds25' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 25hm', 'event_color' => '#FF2266', 'event_value' => 5, 'event_imagename' => 'wow_ds25hm' );
 	
-	// insert events if table is empty
+	$sql_ary2 = array();
+	foreach($sql_ary as $evt => $event)
+	{
+		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
+		$result = $db->sql_query($sql);
+		$row = $db->sql_fetchrow ($result); 
+		if(!$row)
+		{
+			$sql_ary2[] = $event;
+		}
+		$db->sql_freeresult ($result);
+	}
 	
-	//@todo
+	if (count($sql_ary2) > 0)
+	{
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
+	}
 	
+	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'WoW Pandaria' ");
+	$row = $db->sql_fetchrow ($result); 
+	if($row)
+    {
+    	//get existing
+		$wowpdkpid = $row['dkpsys_id'];    	
+    }
+    else
+    {
+    	// add new dkp pool
+		$sql_ary = array (
+			'dkpsys_name' => 'WoW Pandaria', 
+			'dkpsys_status' => 'Y', 
+			'dkpsys_addedby' => 'admin', 
+			'dkpsys_default' => 'N' );
+		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+		$db->sql_query($sql);
+		$wowpdkpid = $db->sql_nextid();
+    }
+    $db->sql_freeresult ( $result );
+
+    $sql_ary = array();
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Mogu’shan Vaults (90)', 'event_color' => '#FF9999', 'event_value' => 5, 'event_imagename' => ''  ) ;
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Terrace of Endless Spring  (90)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => '') ;
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Heart of Fear (90)', 'event_color' => '#DD00AA', 'event_value' => 5, 'event_imagename' => '' );
+
+	$sql_ary2 = array();
+	foreach($sql_ary as $evt => $event)
+	{
+		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
+		$result = $db->sql_query($sql);
+		$row = $db->sql_fetchrow ($result); 
+		if(!$row)
+		{
+			$sql_ary2[] = $event;
+		}
+		$db->sql_freeresult ($result);
+	}
 	
-	// set imagenames for wow
-	global $db, $table_prefix;
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_naxx' where event_name like 'Naxx%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_os' where event_name like 'Obsidian%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_voa' where event_name like '%Archavon%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_eoe' where event_name like '%Eternity%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_uld' where event_name like 'Ulduar%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_toc' where event_name like 'Trial%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_icc' where event_name like 'Icecrown%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_rub' where event_name like 'Ruby%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_ony' where event_name like 'Onyxia%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_bot' where event_name like 'Bastion%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_bwd' where event_name like 'Black%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_bar' where event_name like '%Barad%' ";  
-	$db->sql_query($sql);
-	$sql="update " . $table_prefix . "bbdkp_events set event_imagename='wow_tfr' where event_name like 'Throne%' ";  
-	$db->sql_query($sql);
+	if (count($sql_ary2) > 0)
+	{
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
+	}
 	
 }
 ?>

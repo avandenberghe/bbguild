@@ -100,8 +100,10 @@ $lang = array_merge($lang, array(
 	'FV_REQUIRED_RAIDID'	=> 'Un raid doit être sélectionné.',
 	'FV_REQUIRED_USER'	=> 'le nom d’utilisateur est requis.',
 	'FV_REQUIRED_VALUE'	=> 'la valeur est requise.',
-	'FV_REQUIRED_STATUS'	=> 'le statut est requis.',
 	'FV_REQUIRED_MESSAGE'	=> 'le message est requis.',
+	'FV_REQUIRED_NAME' => 'The nom est requis.',
+	'FV_REQUIRED_ID' => 	'l’id est requis.',
+	'FV_REQUIRED_STATUS'	=> 'le statut est requis.',	
 	'FV_REQUIRED_HEADLINE'	=> 'le nom du titre est requis.',
 	'FV_DKPSTATUSYN'	=> 'Le status du groupe DKP doit être Y (Actif) ou N (Inactif)',
 	'FV_RAIDEXIST'	=> 'Suppression du groupe DKP impossible, il reste des raids.',
@@ -135,6 +137,9 @@ $lang = array_merge($lang, array(
 	'WELCOMEBLOCK'	=> 'Texte du bloc Acceuil',
 	'WELCOMEBLOCKSETTING'	=> 'Règlages Bloc d’acceuil',
 	'WELCOMEBLOCK_EXPLAIN'	=> 'Veuillez remplir le texte dans cette zone. les BBcodes sont supportés.',
+	'NEWMEMBERS_SETTING'  => 'bloc nouveaux membres', 
+	'SHOW_NEWMEMBERS_BLOCK'  => 'Montrez bloc nouveau membres', 
+	'NUMNEWMEMBERS' => 'Nombres de nouveax membres à montrer', 
 
 	'RANK_INSERTED'	=> 'Grade inseré : %s. ',	
 	'TOTAL_RANKS_INSERTED'	=> 'Nombre de grades inserés : %s. ',
@@ -196,7 +201,9 @@ $lang = array_merge($lang, array(
 	'UMIL_UPD123'	=> 'Tables mises à jour pour v1.2.3',
 	'UMIL_GAME123'	=> 'Jeu %s installé version 1.2.3',
 	'UMIL_GAME125'	=> 'Jeu %s installé version 1.2.5',	
-	'UMIL_GAME126'	=> 'Jeu %s installé version 1.2.6',		
+	'UMIL_GAME126'	=> 'Jeu %s installé version 1.2.6',	
+	'UMIL_GAME127' => 'Jeu %s installé version 1.2.7',	
+	'UMIL_GAME128' => 'Jeu %s installé version 1.2.8',	
 	'UMIL_GAMEUNINST123'	=> 'Jeux désinstallés.',
 	'UMIL_UPDTABLES' =>  'Tables %s pour version %s', 
 
@@ -784,6 +791,7 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'ADD_EVENT'	=> 'Ajouter Evènement',
 	'ADD_DKPSYS'	=> 'Ajouter groupe DKP',
 	'ADD_ITEM'	=> 'Ajouter objet',
+	'ADD_MEMBER' => 'Ajouter Membre',	
 	'ADD_GUILD'	=> 'Ajouter Guilde',
 	'ADD_RAID'	=> 'Ajouter Raid',
 	'ADD_RACE'	=> 'Ajouter Race',
@@ -816,6 +824,7 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'UPDATE_RACE'	=> 'mise à jour Race',
 	'UPDATE_CLASS'	=> 'mise à jour Classe',
 	'CHANGE_ACTIVATION'	=> 'Change Activation',
+	
 	//Plugin Check System
 	'PLUGINS_INSTALLED'	 => 'Modules Installés',
 	'PLUGINS_STATUS' 	 => 'Etat des Modules',
@@ -966,6 +975,21 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'ALERT_OLDBROWSER'	=> 'Votre browser est incompatible',
 	'JQUERY_MISSING'	=> 'jquery.js n’est pas présent. Vous devez installer jquery.js dans adm/style/dkp pour le cercle de couleurs à apparaitre.',
 
+	'AION_BASEURL' => 'http://db.aion.ign.com/npc/', 
+	'EQ_BASEURL' => 'http://eqbeastiary.allakhazam.com/search.shtml?zone=', 
+	'EQ2_BASEURL' => 'http://eq2.wikia.com/wiki/index.php/',
+	'DAOC_BASEURL' => 'http://camelot.allakhazam.com/db/search.html?cmob=',	
+	'LOTRO_BASEURL' => 'http://lotro.allakhazam.com/db/bestiary.html?lotrmob=',
+	'VANGUARD_BASEURL' => 'http://vg.mmodb.com/bestiary/%s.php', 
+	'VANGUARD_ZONEURL' => 'http://vg.mmodb.com/zones/%s.php',
+	'FFXI_BASEURL' => 'http://ffxi.allakhazam.com/db/bestiary.html?fmob=%s', 
+	'FFXI_ZONEEURL' => 'http://ffxi.allakhazam.com/db/areas.html?farea=%s', 
+	'WARHAMMER_BASEURL' => 'NOT AVAILABLE',
+	'WARHAMMER_ZONEEURL' => 'NOT AVAILABLE',
+	'WOW_BASEURL' => 'http://www.wowhead.com/?npc=%s',
+	'WOW_ZONEEURL' => 'http://www.wowhead.com/?zone=%s',
+	'SWTOR_BASEURL' => 'http://www.torhead.com/npc=%s',
+	'SWTOR_ZONEEURL' => 'http://www.torhead.com/zone=%s',
 
 ));
 

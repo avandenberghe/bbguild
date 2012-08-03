@@ -138,6 +138,64 @@ function install_rift()
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 	
+	/*
+	 *
+		Slivers
+		Greenscale's Blight
+		Hammerknell
+		Infernal Dawn
+		The River of Souls
+		Raid Rifts
+	 */
+	
+	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'Rift Events' ");
+	$row = $db->sql_fetchrow ($result); 
+	if($row)
+    {
+		$swtordkpid = $row['dkpsys_id'];    	
+    }
+    else
+    {
+    	// dkp pool
+		$sql_ary = array (
+			'dkpsys_name' => 'Rift Raids', 
+			'dkpsys_status' => 'Y', 
+			'dkpsys_addedby' => 'admin', 
+			'dkpsys_default' => 'N' );
+		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+		$db->sql_query($sql);
+		$riftdkpid = $db->sql_nextid();
+    }
+    $db->sql_freeresult ( $result );
+
+    $sql_ary = array();
+    $sql_ary [] = array('event_dkpid' => $riftdkpid , 'event_name' => 'Slivers', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => ''  ) ;
+	$sql_ary [] = array('event_dkpid' => $riftdkpid , 'event_name' => 'Greenscale’s Blight', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => ''  ) ;
+	$sql_ary [] = array('event_dkpid' => $riftdkpid , 'event_name' => 'Hammerknell', 'event_color' => '#C6DEFF', 'event_value' => 10 , 'event_imagename' => '') ;
+	$sql_ary [] = array('event_dkpid' => $riftdkpid , 'event_name' => 'Infernal Dawn', 'event_color' => '#6D7B8D', 'event_value' => 15, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $riftdkpid , 'event_name' => 'The River of Souls', 'event_color' => '#6D7B8D', 'event_value' => 15, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $riftdkpid , 'event_name' => 'Expert/Raid rifts', 'event_color' => '#6D7B8D', 'event_value' => 15, 'event_imagename' => '' );
+	
+	$sql_ary2 = array();
+	foreach($sql_ary as $evt => $event)
+	{
+		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
+		$result = $db->sql_query($sql);
+		$row = $db->sql_fetchrow ($result); 
+		if(!$row)
+		{
+			$sql_ary2[] = $event;
+		}
+		$db->sql_freeresult ($result);
+	}
+	
+	if (count($sql_ary2) > 0)
+	{
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
+	}
+	
+	
+	
 }
 
 

@@ -111,43 +111,56 @@ function install_swtor()
 	
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
-	
-	// dkp pool
-	// if we only have the default dkp system installed then add some more 
-	$result = $db->sql_query('select count(*) as num_dkp from ' . $table_prefix . 'bbdkp_dkpsystem');
-	$total_dkps = (int) $db->sql_fetchfield('num_dkp');
-	$db->sql_freeresult($result);
-	if($total_dkps == 1)
-	{
-		$sql_ary = array ();
-		$sql_ary [] = array ('dkpsys_name' => 'Early Game', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'Mid Game', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'End Game', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$sql_ary [] = array ('dkpsys_name' => 'PVP War Zones', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
-		unset ( $sql_ary );
-	}
-	
-    // events
-    // if there are no swtor events set up then insert some sample events 
-    $result = $db->sql_query('select count(*) as num_events from ' . $table_prefix . "bbdkp_events where event_imagename like 'swtor%' ");
-	$total_events = (int) $db->sql_fetchfield('num_events');
-	$db->sql_freeresult($result);
-	if($total_events < 2)
-	{
-	    $sql_ary = array();
-		$sql_ary [] = array('event_dkpid' => 0 , 'event_name' => 'The Esseles', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => 'swtor_es'  ) ;
-		$sql_ary [] = array('event_dkpid' => 0 , 'event_name' => 'Black Talon', 'event_color' => '#C6DEFF', 'event_value' => 5 , 'event_imagename' => 'swtor_blt') ;
-		$sql_ary [] = array('event_dkpid' => 1 , 'event_name' => 'Hammer Station', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => 'swtor_hs' );
-		$sql_ary [] = array('event_dkpid' => 1 , 'event_name' => 'Taral V', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => 'swtor_tar' );
-		$sql_ary [] = array('event_dkpid' => 2 , 'event_name' => 'Boarding party', 'event_color' => '#6D7B8D', 'event_value' => 20, 'event_imagename' => 'swtor_bop' );
-		$sql_ary [] = array('event_dkpid' => 2 , 'event_name' => 'Directive 7', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => 'swtor_d7' );
-		$sql_ary [] = array('event_dkpid' => 3 , 'event_name' => 'Voidstar', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => 'swtor_void' );
-		$sql_ary [] = array('event_dkpid' => 3 , 'event_name' => 'Huttball', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => 'swtor_hutt' );
-		$sql_ary [] = array('event_dkpid' => 3 , 'event_name' => 'Alderaan', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => 'swtor_ald' );
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
 		
+	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'SWTOR Dungeons' ");
+	$row = $db->sql_fetchrow ($result); 
+	if($row)
+    {
+		$swtordkpid = $row['dkpsys_id'];    	
+    }
+    else
+    {
+    	// dkp pool
+		$sql_ary = array (
+			'dkpsys_name' => 'SWTOR Dungeons', 
+			'dkpsys_status' => 'Y', 
+			'dkpsys_addedby' => 'admin', 
+			'dkpsys_default' => 'N' );
+		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+		$db->sql_query($sql);
+		$swtordkpid = $db->sql_nextid();
+    }
+    $db->sql_freeresult ( $result );
+
+    $sql_ary = array();
+	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'The Esseles', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => ''  ) ;
+	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Black Talon', 'event_color' => '#C6DEFF', 'event_value' => 5 , 'event_imagename' => '') ;
+	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Hammer Station', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Taral V', 'event_color' => '#6D7B8D', 'event_value' => 10, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Boarding party', 'event_color' => '#6D7B8D', 'event_value' => 20, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Directive 7', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Voidstar', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Huttball', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $swtordkpid , 'event_name' => 'Alderaan', 'event_color' => '#842DCE', 'event_value' => 20, 'event_imagename' => '' );
+	
+	$sql_ary2 = array();
+	foreach($sql_ary as $evt => $event)
+	{
+		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
+		$result = $db->sql_query($sql);
+		$row = $db->sql_fetchrow ($result); 
+		if(!$row)
+		{
+			$sql_ary2[] = $event;
+		}
+		$db->sql_freeresult ($result);
 	}
+	
+	if (count($sql_ary2) > 0)
+	{
+		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
+	}
+	
 	
 	
 }
