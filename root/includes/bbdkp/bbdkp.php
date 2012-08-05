@@ -258,6 +258,7 @@ class bbDKP_Admin
 			
 			if (curl_errno ( $curl )) 
 			{
+				$errnum = curl_errno ($curl);
 				/*
                       CURLE_OK = 0,
                       CURLE_UNSUPPORTED_PROTOCOL,     1
@@ -269,7 +270,6 @@ class bbDKP_Admin
                       CURLE_COULDNT_CONNECT,          7
                       CURLE_FTP_WEIRD_SERVER_REPLY,   8
                     */
-		       
 				switch ($errnum) 
 				{
 				    case "0" :

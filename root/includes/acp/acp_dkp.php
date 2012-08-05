@@ -1328,7 +1328,7 @@ class acp_dkp extends bbDKP_Admin
 	 */
 	private function delete_log ($marked)
 	{
-		global $db, $user, $phpEx;
+		global $phpbb_admin_path, $db, $user, $phpEx;
 		//if marked array isnt empty
 		if (sizeof($marked) && is_array($marked))
 		{

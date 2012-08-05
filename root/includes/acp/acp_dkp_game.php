@@ -518,7 +518,7 @@ class acp_dkp_game extends bbDKP_Admin
 	 */
 	function add_class()
 	{
-		global $db, $user, $config;
+		global $db, $user, $config, $cache;
 		
 		//user pressed add or update in list
 		$game_id = request_var ( 'game_id', '' );
@@ -582,7 +582,7 @@ class acp_dkp_game extends bbDKP_Admin
 	 */
 	function class_delete()
 	{
-		global $db, $user, $phpbb_admin_path, $phpbb_root_path, $phpEx;
+		global $cache, $config, $db, $user, $phpbb_admin_path, $phpbb_root_path, $phpEx;
 		//unique key
 		$class_id = request_var ( 'id', 0 );
 		$game_id = request_var ( 'game_id', '' );
@@ -679,7 +679,7 @@ class acp_dkp_game extends bbDKP_Admin
 	 */
 	function add_race()
 	{
-		global $db, $user, $cache;
+		global $db, $user, $cache, $config;
 
 		$game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
 		$id = request_var ( 'race_id', 0 );
