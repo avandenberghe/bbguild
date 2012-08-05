@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
+ * @version 1.2.8-PL1
  */
  
 define('UMIL_AUTO', true);
@@ -1013,6 +1013,14 @@ $versions = array(
           	'bbdkp_caches', 
     	),
     	    	
+     ),
+     
+     '1.2.8-pl1' => array(
+     //patch 1, https://github.com/bbDKP/bbDKP/commit/10277b0, no db changes
+     
+     		'custom' => array(
+     				'bbdkp_caches',
+     		),
      ),
 
 );
