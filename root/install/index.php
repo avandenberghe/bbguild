@@ -1021,7 +1021,13 @@ $versions = array(
      			'bbdkp_caches',
      		),
      ),
-
+     '1.2.8-pl2' => array(
+     //patch 2, to fix updater bug going from v126 to v128
+     
+     		'custom' => array(
+     			'bbdkp_caches',
+     		),
+     ),
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
@@ -1266,7 +1272,7 @@ function tableupdates($action, $version)
 					break;
 				case '1.2.7':
 					// if we update to v127 then rename the image column, drop the _small
-					// before v127 only mysql was supported so we only need to check this for mssql when upgrading from 126. 
+					// before v127 only mysql was supported so we only need to check this for mysql when upgrading from 126. 
 					switch ($db->sql_layer)
 					{
 						case 'mysqli':
