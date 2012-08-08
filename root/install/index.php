@@ -837,7 +837,6 @@ $versions = array(
            		 'module_basename' => 'dkp',
             	 'modes'           => array('mainpage', 'dkp_config', 'dkp_logs', 'dkp_indexpageconfig') ,
         		),
-
             ),
             
             array('acp', 'ACP_DKP_MAINPAGE', array(
@@ -1019,7 +1018,7 @@ $versions = array(
      //patch 1, https://github.com/bbDKP/bbDKP/commit/10277b0, no db changes
      
      		'custom' => array(
-     				'bbdkp_caches',
+     			'bbdkp_caches',
      		),
      ),
 
@@ -1268,7 +1267,7 @@ function tableupdates($action, $version)
 				case '1.2.7':
 					// if we update to v127 then rename the image column, drop the _small
 					// before v127 only mysql was supported so we only need to check this for mssql when upgrading from 126. 
-					/*switch ($db->sql_layer)
+					switch ($db->sql_layer)
 					{
 						case 'mysqli':
 						case 'mysql4':
@@ -1284,7 +1283,7 @@ function tableupdates($action, $version)
 							return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
 							break;
 					}
-					*/
+					
 					break;
 				case '1.2.8':
 					break;					
