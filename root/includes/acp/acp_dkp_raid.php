@@ -1717,32 +1717,42 @@ class acp_dkp_raid extends bbDKP_Admin
 		member_raid_value = member_raid_value + ' . (string) $raid_value . ', 
 		member_time_bonus = member_time_bonus + ' . (string) $timebonus . ', ';
 		
-		// update firstraid if it's later than this raid's starting time
-		if ( $firstraid > $raidstart )
-		{
-		   $sql .= 'member_firstraid = ' . $raidstart . ', ';
-		}
-		
-		// Do update their lastraid if it's earlier than this raid's starting time
-		if ( $lastraid < $raidstart )
-		{
-		   $sql .= 'member_lastraid = ' . $raidstart. ', ';
-		}
-		
 		switch($action)
 		{
 			case -1:
+				//@todo alter firstdate  & lastdate if
 				$sql .= ' member_raidcount = member_raidcount - 1 ';
 				break;
 			case 0;
+				// update firstraid if it's later than this raid's starting time
+				if ( $firstraid > $raidstart )
+				{
+				   $sql .= 'member_firstraid = ' . $raidstart . ', ';
+				}
+				
+				// Do update their lastraid if it's earlier than this raid's starting time
+				if ( $lastraid < $raidstart )
+				{
+				   $sql .= 'member_lastraid = ' . $raidstart. ', ';
+				}
 				break;
 			case 1:
+				// update firstraid if it's later than this raid's starting time
+				if ( $firstraid > $raidstart )
+				{
+				   $sql .= 'member_firstraid = ' . $raidstart . ', ';
+				}
+				
+				// Do update their lastraid if it's earlier than this raid's starting time
+				if ( $lastraid < $raidstart )
+				{
+				   $sql .= 'member_lastraid = ' . $raidstart. ', ';
+				}
 				$sql .= ' member_raidcount = member_raidcount + 1 ';
 				break;
 		}
 		
-		$sql .' WHERE member_dkpid = ' . (int)  $dkpid . '
-		AND member_id = ' . (int) $member_id;
+	   $sql .= ' WHERE member_dkpid = ' . (int)  $dkpid . ' AND member_id = ' . (int) $member_id;
        $db->sql_query($sql);
        return true;
     }
