@@ -275,15 +275,15 @@ class statistics
 			SUM(CASE WHEN x.itemcount IS NULL THEN 0 ELSE x.itemcount END) as itemcount, 
 			SUM(d.member_earned - d.member_raid_decay + d.member_adjustment) AS ep,
 			SUM(d.member_earned - d.member_raid_decay + d.member_adjustment) / SUM(d.member_raidcount) AS ep_per_raid,
-			SUM(d.member_earned - d.member_raid_decay + d.member_adjustment) / ((  SUM(" . $time . " - d.member_firstraid) + 86400) / 86400)  AS ep_per_day,
+			SUM(d.member_earned - d.member_raid_decay + d.member_adjustment) / ((  SUM(- d.member_firstraid + " . $time . " ) + 86400) / 86400)  AS ep_per_day,
 			SUM(d.member_spent - d.member_item_decay + ( " . max(0, $config['bbdkp_basegp']) . ")) AS gp, 
 			SUM(d.member_spent - d.member_item_decay + ( " . max(0, $config['bbdkp_basegp']) . ") )  / SUM(d.member_raidcount) AS gp_per_raid, 
-			SUM(d.member_spent - d.member_item_decay + ( " . max(0, $config['bbdkp_basegp']) . ") )  / ((  SUM( " . $time ."  - d.member_firstraid) + 86400) / 86400) AS gp_per_day,
+			SUM(d.member_spent - d.member_item_decay + ( " . max(0, $config['bbdkp_basegp']) . ") )  / ((  SUM(  - d.member_firstraid + " . $time ." ) + 86400) / 86400) AS gp_per_day,
 			SUM(d.member_earned - d.member_raid_decay + d.member_adjustment - d.member_spent + d.member_item_decay - ( " . max(0, $config['bbdkp_basegp']) . ") ) AS member_current,
 			CASE WHEN SUM(d.member_spent - d.member_item_decay) <= 0 
 			THEN ROUND(  SUM(d.member_earned - d.member_raid_decay + d.member_adjustment) / " . max(0, $config['bbdkp_basegp']) . " , 2)
 			ELSE ROUND(  SUM(d.member_earned - d.member_raid_decay + d.member_adjustment) / SUM(" . max(0, $config['bbdkp_basegp']) ." + d.member_spent - d.member_item_decay) ,2) 
-			END AS pr , ((" . $time . " - SUM(member_firstraid)) / 86400) AS zero_check  ";
+			END AS pr , ((- SUM(member_firstraid) + " . $time . " ) / 86400) AS zero_check  ";
 		
 		$sql .= " FROM (". MEMBER_DKP_TABLE ." d LEFT JOIN (
 			SELECT i.member_id, count(i.item_id) AS itemcount
