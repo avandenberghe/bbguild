@@ -177,15 +177,10 @@ class acp_dkp_game extends bbDKP_Admin
 							'SELECT' => ' r.game_id, r.race_id, l.name AS race_name, r.race_faction_id,  r.image_female, r.image_male ', 
 							'FROM' => array (RACE_TABLE => 'r', BB_LANGUAGE => 'l' ), 
 							'WHERE' => "   r.game_id = l.game_id 
-
 							AND r.race_id = l.attribute_id 
-
 							AND l.attribute='race' 
-
 							AND l.language= '" . $config ['bbdkp_lang'] . "'
-
 							AND l.game_id = '" . $game_id . "'
-
 							AND r.race_id = " . $id );
 						
 						$sql = $db->sql_build_query ( 'SELECT', $sql_array );
@@ -460,7 +455,7 @@ class acp_dkp_game extends bbDKP_Admin
 		global $db, $user, $config, $cache;
 				
 		//user pressed add or update in list
-		$game_id = request_var ( 'game_id', '' );
+		$game_id = request_var ( 'game_id_hidden', '' );
 		$classname = utf8_normalize_nfc ( request_var ( 'class_name', '', true ) );
 		$class_id = request_var ( 'class_id', 0 );
 		$min = request_var ( 'class_level_min', 0 );
@@ -503,7 +498,8 @@ class acp_dkp_game extends bbDKP_Admin
 			'name_short' => ( string ) $classname );
 					
 		$sql = 'UPDATE ' . BB_LANGUAGE . ' SET ' . $db->sql_build_array ( 'UPDATE', $names ) . '
-		 WHERE attribute_id = ' . $class_id0 . " AND attribute='class'  AND language= '" . $config ['bbdkp_lang'] . "' AND game_id = '" . $game_id . "'";
+		 WHERE attribute_id = ' . $class_id0 . " AND attribute='class'  
+		 AND language= '" . $config ['bbdkp_lang'] . "' AND game_id = '" . $game_id . "'";
 		$db->sql_query ( $sql );
 		
 		$db->sql_transaction ( 'commit' );
