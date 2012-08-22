@@ -23,7 +23,7 @@ class acp_dkp_point_info
 		return array(
 			'filename'	=> 'acp_dkp_point',
 			'title'		=> 'ACP_DKP_POINT_CONFIG',
-			'version'	=> '1.2.8',
+			'version'	=> '1.2.9',
 			'modes'		=> array(
 				'pointconfig'			=> array(
 					'title' => 'ACP_DKP_POINT_CONFIG', 	

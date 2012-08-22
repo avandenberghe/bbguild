@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8-PL1
+ * @version 1.2.9
  */
  
 define('UMIL_AUTO', true);
@@ -1028,6 +1028,13 @@ $versions = array(
      			'bbdkp_caches',
      		),
      ),
+
+     '1.2.9' => array(
+     		'custom' => array(
+     			'bbdkp_caches',
+     		),
+     ),
+     
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
@@ -1238,6 +1245,8 @@ function gameinstall($action, $version)
 					}
 					return array('command' => sprintf($user->lang['UMIL_GAME128'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
+				case '1.2.9':
+					break;
 			}
 			break;
 		case 'uninstall':
@@ -1262,7 +1271,13 @@ function tableupdates($action, $version)
 				case '1.2.6':
 					break;	
 				case '1.2.7':
-					break;										
+					break;		
+				case '1.2.8':
+					break;
+				case '1.2.9':
+					break;
+					
+													
 			}
 			break;
 		case 'update':
@@ -1292,7 +1307,10 @@ function tableupdates($action, $version)
 					
 					break;
 				case '1.2.8':
-					break;					
+					break;
+				case '1.2.9':
+					break;
+										
 			}
 			break;
 		case 'uninstall' :
@@ -1304,6 +1322,9 @@ function tableupdates($action, $version)
 					break;
 				case '1.2.8':
 					break;	
+				case '1.2.9':
+					break;
+					
 			}
 			break;
 	}
