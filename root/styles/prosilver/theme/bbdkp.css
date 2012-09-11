@@ -12,7 +12,7 @@
 ul.dkpmenu li {
 	overflow: none;
 	text-align: center;
-	font-size: 11px;
+	font-size: 14px !important;
 	list-style-type: none;
 	margin: 0 auto;
 }
