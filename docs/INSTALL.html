@@ -73,7 +73,7 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 		<div class="inner"><span class="corners-top"><span></span></span></div>
 		<div class="content">
 			<ol>
-			<li>phpbb3.0.10</li>
+			<li>phpbb3.0.11</li>
 			<li>databases : Mysql 5, MSSQL, postgresql, Oracle</li>
 			<li>PHP 5.2 -> 5.3.x / Libxml 2.6.0 (simplexml usage)</li>
 			<li>Curl (preferred) or url_fopen or fsockopen should be available on your server.</li>
@@ -176,27 +176,6 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 				</ul>
 			</ol>
 
-			<h2>Upgrading from 1.2.6-PL5 to 1.2.9</h2>
-			<strong><em>If you have an earlier version, first update to 1.2.6-PL5</em></strong><br />
-
-			<ol>
-				<li>follow the Diff instructions corresponding to your current version : <br />
-				<a href="../contrib/install_126PL5_to_129.xml">126PL5 to 129</a><br />
-				</li>
-				<li>note : with automod, just copy bbDKP 1.2.9 in /store and select the updater link <a href="http://imgur.com/U9sPW"><img src="http://i.imgur.com/U9sPW.png" alt="" title="Hosted by imgur.com" /></a></li>				
-				<li>copy the new files to your webserver, replacing any old files. </li>
-				<li>apply the changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
-				<li><em>Make sure your (prosilver based) custom style is updated aswell.</em></li>				
-				<li>launch the DB updater (/install/index.php)</li>
-				<li>Now you see the Umil updater.
-				<ul>
-					<li>Enter your guildname</li>
-					<li>Choose the realm of your guild</li>
-					<li>Check the games you wish to have installed/updated. (deselecting a game you already have will have no effect on your data)</li>
-					<li>Click submit. This will update to 1.2.9 and clear the caches (template, theme, imagesets)</li>
-				</ul>
-			</ol>
-			
 			<h2>Quick Deactivation</h2>
 			<ol>
 			<li>should you wish to Deactivate this Mod quickly you can open configdkp.php and comment out the trigger</li>
@@ -220,7 +199,7 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 		
 		<div class="content">
 			<ol>
-			<li><a href="http://www.bbdkp.com/viewforum.php?f=56">1.2.x Installation support</a></li>
+			<li><a href="http://www.bbdkp.com/viewforum.php?f=56">1.2.9 Installation support</a></li>
 			<li><a href="http://www.bbdkp.com/viewforum.php?f=8">Plugin support</a></li>
 			<li><a href="http://www.bbdkp.com/tracker.php">Bug reports</a></li>
 			<li>IRC channel : visit #bbdkp on Freenode. <a href="http://webchat.freenode.net">webchat</a><br/> </li>
@@ -244,14 +223,10 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 
 1.2.9<br />
 <ul>
-
-tbd
-
-
-
+<li>[FIX] fix bug 212 : add a raid and only put in say one person, it gives the raid value to everyone on the roster not just the person attending</li>
+<li>[FIX] fix bug 213 : html issue : Incorrect URL in listraids </li>
 </ul>
 <br />
-
 
 
 1.2.8 30-07-2012<br />

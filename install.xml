@@ -135,7 +135,7 @@ Bitte lesen sie docs\INSTALL.html bevor.
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
-			<target-version>3.0.10</target-version>
+			<target-version>3.0.11</target-version>
 		</installation>
 		<link-group>
 			<link type="language" href="contrib/fr.xml" lang="en">French</link>
@@ -144,9 +144,6 @@ Bitte lesen sie docs\INSTALL.html bevor.
 			<link type="language" href="contrib/de.xml" lang="en">German</link>
 			<link type="language" href="contrib/de.xml" lang="fr">Allemand</link>
 			<link type="language" href="contrib/de.xml" lang="de">Deutsch</link>
-			<link type="contrib" href="contrib/install_126PL5_to_129.xml" lang="en">Update from v1.2.6PL5 to v1.2.9</link>
-			<link type="contrib" href="contrib/install_126PL5_to_129.xml" lang="fr">Mise à jour de v1.2.6PL5 à v1.2.9</link>
-			<link type="contrib" href="contrib/install_126PL5_to_129.xml" lang="de">Aktualisierung von v1.2.6PL5 bis v1.2.9</link>
 			<link type="contrib" href="contrib/install_127_to_129.xml" lang="en">Update from v1.2.7 to v1.2.9</link>
 			<link type="contrib" href="contrib/install_127_to_129.xml" lang="fr">Mise à jour de v1.2.7 à v1.2.9</link>
 			<link type="contrib" href="contrib/install_127_to_129.xml" lang="de">Aktualisierung von v1.2.7 bis v1.2.9</link>										  

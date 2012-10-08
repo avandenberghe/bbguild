@@ -9,7 +9,7 @@
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
 		<title lang="en"><![CDATA[bbDKP]]></title>
 		<description lang="fr"><![CDATA[Fichiers Français pour bbDKP]]></description>
-		<author-notes lang="fr"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5 with Libxml 2.6.0 (simplexml usage), Curl 
+		<author-notes lang="fr"><![CDATA[Requirements : phpBB3 v3.0.11, Curl 
 Veuillez faire un backup de votre installation phpBB3 avant de commencer.
 ]]>
 </author-notes>
@@ -24,7 +24,7 @@ Veuillez faire un backup de votre installation phpBB3 avant de commencer.
 				</contributions-group>
 			</author>
 			</author-group>
-		<mod-version>1.2.8</mod-version>
+		<mod-version>1.2.9</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
