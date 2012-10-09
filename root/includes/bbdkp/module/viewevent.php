@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
+ * @version 1.2.9
  */
 
 
@@ -39,7 +39,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 			$eventimg = $phpbb_root_path . "images/event_images/dummy.png";
 		}
 		
-		$eventname =  
+		$eventname =  $row['event_name'];
 		$template->assign_vars(array(
         	'EVENTNAME' 	 => $row['event_name'],
         	'VALUE' 		 => $row['event_value'], 
