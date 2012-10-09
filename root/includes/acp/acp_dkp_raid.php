@@ -1703,12 +1703,13 @@ class acp_dkp_raid extends bbDKP_Admin
     {
     	global $db; 
 
-    	$sql = 'SELECT member_firstraid, member_lastraid FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' AND  member_dkpid = ' . $dkpid;  
+    	$sql = 'SELECT member_raidcount, member_firstraid, member_lastraid FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . ' AND  member_dkpid = ' . $dkpid;  
         $result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result) )  
 		{
 			$firstraid = (int) max(0, $row['member_firstraid']); 
-			$lastraid = (int) max(0, $row['member_lastraid']); 
+			$lastraid = (int) max(0, $row['member_lastraid']);
+			$member_raidcount = (int) $row['member_raidcount'];
 		}
 		$db->sql_freeresult($result);
 		
@@ -1721,7 +1722,7 @@ class acp_dkp_raid extends bbDKP_Admin
 		{
 			case -1:
 				//@todo alter firstdate  & lastdate if
-				$sql .= ' member_raidcount = member_raidcount - 1 ';
+				$sql .= ' member_raidcount = ' . max(0, $member_raidcount - 1);
 				break;
 			case 0;
 				// update firstraid if it's later than this raid's starting time
