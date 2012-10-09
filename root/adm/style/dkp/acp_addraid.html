@@ -33,7 +33,7 @@ function check_form()
 function switch_event_val()
 {
   var patt= / - \(([0-9.]+)\)/;
-  if (document.getElementById("event_id").selectedIndex > 0 )
+  if (document.getElementById("event_id").selectedIndex >= 0 )
   {
 	  var eventvalue  = document.getElementById('event_id').options[document.getElementById('event_id').selectedIndex].text.match(patt);
 	  document.getElementById('raid_value').value = eventvalue[eventvalue.length-1]; 
