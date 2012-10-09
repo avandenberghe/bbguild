@@ -987,8 +987,7 @@ $versions = array(
         
 		// change the class / race table
        'custom' => array( 
-            'tableupdates',
-    		'gameinstall',  
+    		'tableupdates', 'gameinstall'  
          
        ), 
     ), 
@@ -1008,8 +1007,8 @@ $versions = array(
 		),    	
      
      'custom' => array( 
+     		// run game installers
     		'gameinstall',  
-          	'bbdkp_caches', 
     	),
     	    	
      ),
@@ -1017,20 +1016,21 @@ $versions = array(
      '1.2.8-pl1' => array(
      //patch 1, https://github.com/bbDKP/bbDKP/commit/10277b0, no db changes
      
-     		'custom' => array(
-     			'bbdkp_caches',
-     		),
      ),
      '1.2.8-pl2' => array(
      //patch 2, to fix updater bug going from v126 to v128
      
-     		'custom' => array(
-     			'bbdkp_caches',
-     		),
      ),
 
      '1.2.9' => array(
+     		
+     		'config_update' => array(
+					// roster layout: main parameter for steering roster layout
+     				array('bbdkp_roster_layout', '0', true),
+     		),
+     		 
      		'custom' => array(
+     			'tableupdates', 
      			'bbdkp_caches',
      		),
      ),
@@ -1061,7 +1061,7 @@ function encode_message($text)
 /******************************
  * 
  *  gametable installer
- *  at each bbdkp verionupdate this function is updated for latest specs. 
+ *  at each bbdkp versionupdate this function is updated for latest specs. 
  * 
  */
 function gameinstall($action, $version)
@@ -1246,6 +1246,7 @@ function gameinstall($action, $version)
 					return array('command' => sprintf($user->lang['UMIL_GAME128'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
 				case '1.2.9':
+					//no new games
 					break;
 			}
 			break;
@@ -1275,11 +1276,23 @@ function tableupdates($action, $version)
 				case '1.2.8':
 					break;
 				case '1.2.9':
+					// add double PK in members table
+					
+					// remove unique index 'member_name' on member table
+					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
+					$db->sql_query($sql);
+					
+					// make new unique composite
+					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
+					$db->sql_query($sql);
+					
+						
 					break;
 					
 													
 			}
 			break;
+			
 		case 'update':
 			switch ($version)
 			{
@@ -1309,6 +1322,16 @@ function tableupdates($action, $version)
 				case '1.2.8':
 					break;
 				case '1.2.9':
+					// add double PK in members table
+
+					// remove unique index 'member_name' on member table
+					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
+					$db->sql_query($sql);
+						
+					// make new unique composite
+					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
+					$db->sql_query($sql);
+					
 					break;
 										
 			}
@@ -1426,17 +1449,13 @@ function check_oldbbdkp()
 	// check config		
 	if($umil->config_exists('bbdkp_version'))
     {
-		if(version_compare($config['bbdkp_version'], '1.2.6') == -1 )
+		if(version_compare($config['bbdkp_version'], '1.2.7') == -1 )
 		{
-			//stop here, the version is less than 1.2.6
+			//stop here, the version is less than 1.2.7
 			//redirect(append_sid($phpbb_root_path . '/olddkpupdate/index.'. $phpEx));
-			trigger_error( $user->lang['ERROR_MINIMUM126'], E_USER_WARNING);  
-			
+			trigger_error( $user->lang['UMIL_127MINIMUM'], E_USER_WARNING);  
 		}
-		
-    }   	
-
-	
+    }
 }
 
 
