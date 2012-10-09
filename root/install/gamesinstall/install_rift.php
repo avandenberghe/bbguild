@@ -148,11 +148,11 @@ function install_rift()
 		Raid Rifts
 	 */
 	
-	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'Rift Events' ");
+	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'Rift Raids' ");
 	$row = $db->sql_fetchrow ($result); 
 	if($row)
     {
-		$swtordkpid = $row['dkpsys_id'];    	
+		$riftdkpid = $row['dkpsys_id'];    	
     }
     else
     {
