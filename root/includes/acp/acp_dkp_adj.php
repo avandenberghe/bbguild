@@ -328,7 +328,8 @@ class acp_dkp_adj extends bbDKP_Admin
 					}
 					$adjval = request_var('adjustment_value', 0.0);
 					$adjreason = utf8_normalize_nfc(request_var('adjustment_reason', '', true));
-					$member_names = request_var('member_names', array(0 => ' '), true);
+					//$member_names = request_var('member_names', array(0 => ' '), true);
+					$member_names = utf8_normalize_nfc(request_var('member_names', array(0 => ' '), true));
 					$candecay = request_var('adj_decayable', 1);
 					//
 					// get value from Pulldown !
@@ -374,7 +375,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					$adjust_id = request_var('hidden_id', 0);
 					$adjval = request_var('adjustment_value', 0.0);
 					$adjreason = utf8_normalize_nfc(request_var('adjustment_reason', '', true));
-					$member_names = utf8_normalize_nfc(request_var('member_names', array(0 => ' ')));
+					$member_names = utf8_normalize_nfc(request_var('member_names', array(0 => ' '), true));
 					$candecay = request_var('adj_decayable', 1);
 					// remove old adjustment
 					$this->remove_old_adjustment($adjust_id, $dkpsys_id);
@@ -388,7 +389,7 @@ class acp_dkp_adj extends bbDKP_Admin
 					$newdkpsys_id = request_var('adj_dkpid', 0);
 					foreach ($member_names as $member_name)
 					{
-						$member_id = $class_members->get_member_id($member_name);
+						$member_id = $class_members->get_member_id(utf8_normalize_nfc($member_name));
 						$this->add_new_adjustment($newdkpsys_id, $member_id, $group_key, $adjval, $adjreason, $candecay);
 					}
 					//
