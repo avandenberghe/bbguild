@@ -1030,7 +1030,8 @@ $versions = array(
      		),
      		 
      		'custom' => array(
-     			'tableupdates', 
+     			'tableupdates',
+     			'gameinstall',  
      			'bbdkp_caches',
      		),
      ),
@@ -1245,8 +1246,40 @@ function gameinstall($action, $version)
 					}
 					return array('command' => sprintf($user->lang['UMIL_GAME128'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
+					
 				case '1.2.9':
 					//no new games
+					
+					if($config['bbdkp_games_wow'] == 1 || request_var('wow', 0) == 1)
+					{
+						/*check if race_ids are correct*/
+						
+						$sql = "SELECT count(*) as countr24 FROM phpbb_bbdkp_races WHERE race_id=24 AND game_id='wow' ";
+						$result = $db->sql_query($sql);
+						$r24 = (int) $db->sql_fetchfield('countr24');
+						$sql = "SELECT count(*) as countr25 FROM phpbb_bbdkp_races WHERE race_id=25 AND game_id='wow' ";
+						$result = $db->sql_query($sql);
+						$r25 = (int) $db->sql_fetchfield('countr25');
+						$sql = "SELECT count(*) as countr26 FROM phpbb_bbdkp_races WHERE race_id=26 AND game_id='wow' ";
+						$result = $db->sql_query($sql);
+						$r26 = (int) $db->sql_fetchfield('countr26');
+						if($r24 == 1 && $r25 == 1 && $r26 == 0)
+						{
+							/*horde*/
+							$db->sql_query("UPDATE phpbb_bbdkp_races SET race_id=26 WHERE race_id=25 AND game_id='wow'");
+							$db->sql_query("UPDATE phpbb_bbdkp_memberlist SET member_race_id=26 WHERE member_race_id=25 AND game_id='wow'");
+							$db->sql_query("UPDATE phpbb_bbdkp_language SET attribute_id=26 WHERE attribute_id=25 AND game_id='wow'");
+							/*alliance*/
+							$db->sql_query("UPDATE phpbb_bbdkp_memberlist SET member_race_id=25 WHERE member_race_id=24 AND game_id='wow'");
+							$db->sql_query("UPDATE phpbb_bbdkp_races SET race_id=25 WHERE race_id=24 AND game_id='wow'");
+							$db->sql_query("UPDATE phpbb_bbdkp_language SET attribute_id=25 WHERE attribute_id=24 AND game_id='wow'");
+						}
+						$db->sql_freeresult($result);
+						
+					}
+						
+					
+						
 					break;
 			}
 			break;
