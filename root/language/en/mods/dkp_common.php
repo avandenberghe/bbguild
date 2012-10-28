@@ -42,8 +42,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.', 
-'FOOTERBBDKP' => 'powered by bbDKP', 
-
+'FOOTERBBDKP' => 'bbDKP1.2.9', 
 //---- Portal blocks ----- 
 'PORTAL'	=> 'Portal', 
 'RECENTLOOT' => 'Recent Loot', 
@@ -410,7 +409,6 @@ $lang = array_merge($lang, array(
 'OF_RAIDS' => '%d',
 'OF_RAIDS_CHAR' => '%s', 
 'OR' => 'or',
-'POWERED_BY' => 'Powered by',
 'REQUIRED_FIELD_NOTE' => 'Items marked with a * are required fields.',
 'SELECT_EXISTING' => 'Select Existing',
 'UPDATED' => 'Updated',
