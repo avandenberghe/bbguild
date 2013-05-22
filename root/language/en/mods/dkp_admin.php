@@ -986,7 +986,7 @@ So the loot would go to player 2 <br />',
 'JQUERY_MISSING'		=> 'jquery.js is not present. You must install jquery.js in adm/style/dkp for the colorwheel to work.', 
 
 'AION_BASEURL' => 'http://db.aion.ign.com/npc/', 
-'EQ_BASEURL' => 'http://eqbeastiary.allakhazam.com/search.shtml?zone=', 
+'EQ_BASEURL' => 'http://eq.magelo.com/npc/%s', 
 'EQ2_BASEURL' => 'http://eq2.wikia.com/wiki/index.php/',
 'DAOC_BASEURL' => 'http://camelot.allakhazam.com/db/search.html?cmob=',
 'LOTRO_BASEURL' => 'http://lotro.allakhazam.com/db/bestiary.html?lotrmob=',
