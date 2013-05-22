@@ -306,7 +306,8 @@ class acp_dkp_event extends bbDKP_Admin
 				{
 					trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'], E_USER_NOTICE);
 				}
-			 	$idlist = '';
+				
+			 	$idlist = array();
 				while ( $event = $db->sql_fetchrow($events_result) )
 				{
 					$template->assign_block_vars('events_row', array(
