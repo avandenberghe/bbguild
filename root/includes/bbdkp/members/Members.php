@@ -397,7 +397,48 @@ class Members implements iMembers {
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
+		unset($bbdkp);
+
 	}
+
+
+	/**
+	 * activates all checked members
+	 * @see \includes\bbdkp\iMembers::activate()
+	 */
+	public function activate(array $mlist, array $mwindow)
+	{
+
+		global $user, $db, $config, $phpEx, $phpbb_root_path;
+
+		$db->sql_transaction('begin');
+		//if checkbox set then activate
+		$sql1 = 'UPDATE ' . MEMBER_LIST_TABLE . "
+                        SET member_status = '1'
+                        WHERE " . $db->sql_in_set('member_id', $mlist, false, true);
+		$db->sql_query($sql1);
+		//if checkbox not set and in window then deactivate
+		$sql2 = 'UPDATE ' . MEMBER_LIST_TABLE . "
+                        SET member_status = '0'
+                        WHERE  " . $db->sql_in_set('member_id', $mlist, true, true) . "
+						AND  " . $db->sql_in_set('member_id', $mwindow, false, true);
+		$db->sql_query($sql2);
+		$db->sql_transaction('commit');
+
+
+	}
+
+
+
+
+
+
+
+
+
+
+
+
 
 	/**
 	 * generates armory link (only wow)

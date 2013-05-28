@@ -1,6 +1,6 @@
 <!-- INCLUDE overall_header.html -->
 <script type="text/javascript">
-//<![CDATA[ 
+//<![CDATA[
 function check_form()
 {
     if (document.getElementById('guild_name').value.length < 2)
@@ -10,7 +10,7 @@ function check_form()
     }
     return true;
 }
-//]]> 
+//]]>
 </script>
 
 <a name="maincontent"></a>
@@ -31,7 +31,7 @@ function check_form()
 		<dt><label for="realm">{L_REALM_NAME}:</label></dt>
 		<dd><input class="medium" type="text" id="realm" name="realm" value="{REALM}" /></dd>
 	</dl>
-	
+
     <dl>
     <dt>
         <label for="region_id">{L_REGION}:</label></dt>
@@ -43,10 +43,15 @@ function check_form()
       </select>
       </dd>
   	</dl>
-    
+
+    <dl>
+    	<dt><label for="region_id">{L_MEMBERCOUNT}:</label></dt>
+		<dd>{MEMBERCOUNT}</dd>
+  	</dl>
+
     <dl>
      <dt><label for="showroster">{L_SHOWONROSTER}:</label></dt>
-       
+
 	<dd style="text-align: left">
 	<input type="checkbox" id="showroster" name="showroster" value="1" {SHOW_ROSTER} /></dd>
    </dl>
