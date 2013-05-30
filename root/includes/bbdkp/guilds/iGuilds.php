@@ -1,6 +1,13 @@
 <?php
-
 namespace includes\bbdkp;
+
+/**
+ * @ignore
+ */
+if (! defined('IN_PHPBB'))
+{
+	exit();
+}
 
 interface iGuilds {
 
@@ -39,5 +46,3 @@ interface iGuilds {
 
 
 }
-
-?>

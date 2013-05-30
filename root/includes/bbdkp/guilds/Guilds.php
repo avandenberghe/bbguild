@@ -8,10 +8,7 @@
  * @version 1.2.9
  */
 
-
-/*
 namespace includes\bbdkp;
-*/
 
 /**
  * @ignore
@@ -25,7 +22,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 
-use includes\bbdkp\iGuilds;
+use includes\bbdkp;
 
 class Guild implements iGuilds
 {

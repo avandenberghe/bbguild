@@ -8,6 +8,7 @@
  * @version 1.2.9
  */
 
+
 /**
  * @ignore
  */
@@ -74,7 +75,7 @@ class acp_dkp_mm extends bbDKP_Admin
 						trigger_error('FORM_INVALID');
 					}
 
-					$activatemember = new Members();
+					$activatemember = new includes\bbdkp\Members();
 					$activate_members = request_var('activate_id', array(0));
 					$member_window = request_var('hidden_member', array(0));
 					$activatemember->activate($activate_members, $member_window);
@@ -139,7 +140,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 				}
 
-				$Guild = new Guild($guild_id);
+				$Guild = new includes\bbdkp\Guild($guild_id);
 
 				//get window
 				$start = request_var('start', 0, false);
@@ -251,7 +252,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				if ($submit)
 				{
 
-					$newmember = new Members();
+					$newmember = new includes\bbdkp\Members();
 					$newmember->game_id = request_var('game_id', '');
 					$newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
 					$newmember->member_guild_id = request_var('member_guild_id', 0);
@@ -293,7 +294,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				if ($update)
 				{
 
-					$updatemember = new Members();
+					$updatemember = new includes\bbdkp\Members();
 					$updatemember->member_id = request_var('hidden_member_id', 0);
 					if ($updatemember->member_id == 0)
 					{
@@ -332,7 +333,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					if (confirm_box(true))
 					{
 						// recall hidden vars
-						$deletemember = new Members();
+						$deletemember = new includes\bbdkp\Members();
 						$deletemember->member_id = request_var('del_member_id', 0);
 						$deletemember->Get();
 						$deletemember->Delete();
@@ -341,7 +342,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 					else
 					{
-						$deletemember = new Members();
+						$deletemember = new includes\bbdkp\Members();
 						$deletemember->member_id = request_var('del_member_id', 0);
 						$deletemember->Get();
 						$s_hidden_fields = build_hidden_fields(array(
@@ -357,7 +358,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				/*
 				 * fill template
 				 */
-				$editmember = new Members();
+				$editmember = new includes\bbdkp\Members();
 				$editmember->member_id = request_var('hidden_member_id', 0);
 				if ($editmember->member_id == 0)
 				{
@@ -699,10 +700,12 @@ class acp_dkp_mm extends bbDKP_Admin
 			case 'mm_ranks':
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK']. '</h3></a>';
+
 				$sql = 'SELECT max(id) as idmax FROM ' . GUILD_TABLE;
 				$result = $db->sql_query($sql);
 				$maxguildid = (int) $db->sql_fetchfield('idmax');
 				$db->sql_freeresult($result);
+
 				$guild_id = request_var('guild_id', $maxguildid);
 				$submit = (isset($_POST['update'])) ? true : false;
 				$deleterank = (isset($_GET['deleterank'])) ? true : false;
@@ -715,11 +718,11 @@ class acp_dkp_mm extends bbDKP_Admin
 						trigger_error('FORM_INVALID');
 					}
 				}
+
 				if ($submit)
 				{
 					// update
-					$modrank = utf8_normalize_nfc(request_var('ranks', array(
-						0 => ''), true));
+					$modrank = utf8_normalize_nfc(request_var('ranks', array(0 => ''), true));
 					foreach ($modrank as $rank_id => $rank_name)
 					{
 						// get old rank array
@@ -730,10 +733,10 @@ class acp_dkp_mm extends bbDKP_Admin
 						while ($row = $db->sql_fetchrow($result))
 						{
 							$old_rank = array(
-								'rank_name' => $row['rank_name'] ,
-								'rank_hide' => $row['rank_hide'] ,
-								'rank_prefix' => $row['rank_prefix'] ,
-								'rank_suffix' => $row['rank_suffix']);
+								'rank_name' 	=> $row['rank_name'] ,
+								'rank_hide' 	=> $row['rank_hide'] ,
+								'rank_prefix' 	=> $row['rank_prefix'] ,
+								'rank_suffix' 	=> $row['rank_suffix']);
 						}
 						$db->sql_freeresult($result);
 						// get new rank array
@@ -787,7 +790,8 @@ class acp_dkp_mm extends bbDKP_Admin
 						$guild_name = request_var('hidden_guild_name', 'x');
 						$old_rank_name = request_var('hidden_rank_name', 'x');
 						// hardcoded exclusion of ranks 90/99
-						$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id != 90 and rank_id != 99 and rank_id=' . $rank_id . ' and guild_id = ' . $guild_id;
+						$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id != 90 and rank_id != 99 and rank_id=' .
+						$rank_id . ' and guild_id = ' . $guild_id;
 						$db->sql_query($sql);
 						// log the action
 						$log_action = array(
@@ -951,7 +955,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				while ($row = $db->sql_fetchrow($guild_result))
 				{
 					$guild_count ++;
-					$listguild = new Guild($row['id']);
+					$listguild = new includes\bbdkp\Guild($row['id']);
 
 					$template->assign_block_vars('guild_row', array(
 						'ID' => $listguild->guildid ,
@@ -1001,7 +1005,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					$this->url_id = request_var(URI_GUILD, 0);
 				}
 
-				$updateguild = new Guild($this->url_id);
+				$updateguild = new includes\bbdkp\Guild($this->url_id);
 
 				if ($updateguild->guildid != 0)
 				{
@@ -1075,7 +1079,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					$updateguild->realm = utf8_normalize_nfc(request_var('realm', ' ', true));
 					$updateguild->region = request_var('region_id', ' ');
 					$updateguild->showroster = request_var('showroster', 0);
-					//@todo complete this
+					//@todo complete for other games
 					$updateguild->aionlegionid = 0;
 					$updateguild->aionserverid = 0;
 					$updateguild->Update($old_guild);
@@ -1088,7 +1092,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				{
 					if (confirm_box(true))
 					{
-						$deleteguild = new Guild(request_var('guild_id', 0));
+						$deleteguild = new includes\bbdkp\Guild(request_var('guild_id', 0));
 						$deleteguild->Get();
 						$deleteguild->Delete();
 						$success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guild_id);
@@ -1161,7 +1165,7 @@ class acp_dkp_mm extends bbDKP_Admin
 			$member_names = utf8_normalize_nfc(request_var('members', array(0 => ' '), true));
 			foreach ($members_to_delete as $memberid)
 			{
-				$delmember = new Members();
+				$delmember = new includes\bbdkp\Members();
 				$delmember->member_id = $memberid;
 				$delmember->get();
 				$delmember->Delete();
@@ -1190,348 +1194,8 @@ class acp_dkp_mm extends bbDKP_Admin
 	}
 
 
-	/**
-	 * get membername given an id
-	 *
-	 * @param int $member_id
-	 * @return string
-	 */
-	public function get_member_name ($member_id)
-	{
-		global $db;
-		$sql = 'SELECT member_name
-                FROM ' . MEMBER_LIST_TABLE . "
-                WHERE member_id = " . (int) $member_id;
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$membname = $row['member_name'];
-		}
-		$db->sql_freeresult($result);
-		if (isset($membname))
-		{
-			return $membname;
-		}
-		else
-		{
-			return '';
-		}
+
+
+
 	}
-
-	/**
-	 * get id given a membername and guild
-	 *
-	 * @param string $membername
-	 * @param int $guild_id optional
-	 * @return int
-	 */
-	public function get_member_id ($membername, $guild_id = 0)
-	{
-		global $db;
-		if($guild_id !=0)
-		{
-			$sql = 'SELECT member_id
-	                FROM ' . MEMBER_LIST_TABLE . "
-	                WHERE member_name ='" . $db->sql_escape($membername) . "'
-	                AND member_guild_id = " . (int) $db->sql_escape($guild_id);
-
-		}
-		else
-		{
-			$sql = 'SELECT member_id
-	                FROM ' . MEMBER_LIST_TABLE . "
-	                WHERE member_name ='" . $db->sql_escape($membername) . "'";
-		}
-
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$membid = $row['member_id'];
-			break;
-		}
-		$db->sql_freeresult($result);
-		if (isset($membid))
-		{
-			return $membid;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
-
-
-	/***
-	 * function for deleting rank
-	 * $nrankid = int
-	 * $guild_id = int
-	 * $override = boolean true to delete even when members exist
-	 * 				boolean false to not delete when members exist
-	 * is also called from armory plugin
-	 */
-	public function deleterank ($nrankid, $guild_id, $override)
-	{
-		global $db, $user, $config;
-		if (! $override)
-		{
-			// check if rank is used
-			$sql = 'SELECT count(*) as rankcount FROM ' . MEMBER_LIST_TABLE . ' WHERE
-            		 member_rank_id   = ' . (int) $nrankid . ' and
-            		 member_guild_id =  ' . (int) $guild_id;
-			$result = $db->sql_query($sql);
-			if ((int) $db->sql_fetchfield('rankcount') >= 1)
-			{
-				trigger('Cannot delete rank ' . $nrankid . '. There are members with this rank in guild . ' . $guild_id, E_USER_WARNING);
-			}
-		}
-		// ok proceed to delete
-		$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE
-        		 rank_id   = ' . (int) $nrankid . ' and
-        		 guild_id =  ' . (int) $guild_id;
-		$db->sql_query($sql);
-		// log the action
-		$log_action = array(
-			'header' => 'L_ACTION_RANK_DELETED' ,
-			'id' => (int) $nrankid ,
-			'GUILD_ID' => (int) $guild_id ,
-			'L_ADDED_BY' => $user->data['username']);
-		$this->log_insert(array(
-			'log_type' => $log_action['header'] ,
-			'log_action' => $log_action));
-		return true;
-	}
-
-	/***
-	 * function for inserting a new rank
-	 * you have to perform argument and ifexist validations before you call this function!
-	 * $nrankid = int
-	 * $guild_id = int
-	 * $nrank_name = string
-	 * $nprefix = string
-	 * $nsuffix = string
-	 * is also called from armory plugin
-	 *
-	 */
-	public function insertnewrank ($nrankid, $nrank_name, $nrank_hide, $nprefix, $nsuffix, $guild_id)
-	{
-		global $db, $user, $config;
-		// build insert array
-		$query = $db->sql_build_array('INSERT', array(
-			'rank_id' => (int) $nrankid ,
-			'rank_name' => $nrank_name ,
-			'rank_hide' => $nrank_hide ,
-			'rank_prefix' => $nprefix ,
-			'rank_suffix' => $nsuffix ,
-			'guild_id' => (int) $guild_id));
-		// insert new rank
-		$db->sql_query('INSERT INTO ' . MEMBER_RANKS_TABLE . $query);
-		// log the action
-		$log_action = array(
-			'header' => 'L_ACTION_RANK_ADDED' ,
-			'id' => (int) $nrankid ,
-			'L_NAME' => $nrank_name ,
-			'L_ADDED_BY' => $user->data['username']);
-		$this->log_insert(array(
-			'log_type' => $log_action['header'] ,
-			'log_action' => $log_action));
-		return true;
-	}
-
-	/***
-	 *
-	 * function for removing member from guild but leave him in the system. this is called from armory plugin
-	 *
-	 */
-	public function removemember ($member_name, $guild_id)
-	{
-		global $db, $user, $config;
-		// find id for existing member name
-		$sql = "SELECT *
-				FROM " . MEMBER_LIST_TABLE . "
-				WHERE member_name = '" . $db->sql_escape($member_name) . "' and member_guild_id = " . (int) $guild_id;
-		$result = $db->sql_query($sql);
-		// get old data
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$this->old_member = array(
-				'member_id' => $row['member_id'] ,
-				'member_rank_id' => $row['member_rank_id'] ,
-				'member_guild_id' => $row['member_guild_id'] ,
-				'member_comment' => $row['member_comment']);
-		}
-		$db->sql_freeresult($result);
-		$sql_arr = array(
-			'member_rank_id' => 99 ,
-			'member_comment' => "Member left " . date("F j, Y, g:i a") . ' by Armory plugin' ,
-			'member_outdate' => $this->time ,
-			'member_guild_id' => 0);
-		$sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
-        SET ' . $db->sql_build_array('UPDATE', $sql_arr) . '
-        WHERE member_id = ' . (int) $this->old_member['member_id'] . ' and member_guild_id = ' . (int) $this->old_member['member_guild_id'];
-		$db->sql_query($sql);
-		$log_action = array(
-			'header' => 'L_ACTION_MEMBER_UPDATED' ,
-			'L_NAME' => $member_name ,
-			'L_RANK_BEFORE' => $this->old_member['member_rank_id'] ,
-			'L_COMMENT_BEFORE' => $this->old_member['member_comment'] ,
-			'L_RANK_AFTER' => 99 ,
-			'L_COMMENT_AFTER' => "Member left " . date("F j, Y, g:i a") . ' by Armory plugin' ,
-			'L_UPDATED_BY' => $user->data['username']);
-		$this->log_insert(array(
-			'log_type' => $log_action['header'] ,
-			'log_action' => $log_action));
-		return true;
-	}
-
-	/***
-	 * function for updating a new member
-	 * is also called from armory plugin for updating existing guildmembers
-	 * guildid is not updated
-	 * url is not updated
-	 */
-	public function updatemember ($member_id, $member_name, $member_lvl, $race_id, $class_id, $rank_id, $member_comment,
-	$guild_id, $gender, $achievpoints, $memberarmoryurl = ' ', $memberportraiturl = ' ', $game_id = 'wow', $member_status = 1)
-	{
-		global $db, $user, $config;
-
-		if ($member_id == 0)
-		{
-			return false;
-		}
-
-		// get existing data
-		$sql = 'SELECT * FROM ' . MEMBER_LIST_TABLE . ' WHERE member_id = ' . (int) $member_id;
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$this->old_member = array(
-				'game_id' => $row['game_id'] ,
-				'member_name' => (string) $row['member_name'] ,
-				'member_level' => (int) $row['member_level'] ,
-				'member_race_id' => (int) $row['member_race_id'] ,
-				'member_rank_id' => (int) $row['member_rank_id'] ,
-				'member_class_id' => (int) $row['member_class_id'] ,
-				'member_gender_id' => (int) $row['member_gender_id'] ,
-				'member_achiev' => (int) $row['member_achiev'] ,
-				'member_armory_url' => $row['member_armory_url'] ,
-				'member_portrait_url' => $row['member_portrait_url'] ,
-				'member_joindate' => (int) $row['member_joindate'] ,
-				'member_outdate' => (int) $row['member_outdate'] ,
-				'member_status' => (int) $row['member_status']);
-		}
-		$db->sql_freeresult($result);
-
-		// check level and set to maxlevel if zero
-		if ($member_lvl == 0)
-		{
-			// get maxlevel
-			$sql = "SELECT max(class_max_level) as maxlevel FROM " . CLASS_TABLE;
-			$result = $db->sql_query($sql);
-			$member_lvl = (int) $db->sql_fetchfield('maxlevel', false, $result);
-		}
-
-		if (($game_id == 'wow' || $game_id == 'aion') && $memberportraiturl == ' ')
-		{
-			$memberportraiturl = $this->generate_portraitlink($game_id, $race_id, $class_id, $gender, $member_lvl);
-		}
-
-		if ($game_id == 'wow' & $memberarmoryurl == ' ')
-		{
-			if ($config['bbdkp_default_region'] == '')
-			{
-				// if region is not set then put EU...
-				set_config('bbdkp_default_region', 'EU', true);
-			}
-			$realm = $config['bbdkp_default_realm'];
-			$memberarmoryurl = $this->generate_armorylink($game_id, $config['bbdkp_default_region'], $realm, $member_name);
-		}
-
-		if ($achievpoints == 0)
-		{
-			$achievpoints = $this->old_member['member_achiev'];
-		}
-
-		// Get first and last raiding dates
-		$sql = "SELECT b.member_id, MIN(a.raid_start) as startdate , MAX(a.raid_start) as enddate
-			FROM " . RAIDS_TABLE . " a INNER JOIN " . RAID_DETAIL_TABLE . " b on a.raid_id = b.raid_id
-			WHERE  b.member_id = " . $member_id . " group by b.member_id ";
-		$result = $db->sql_query($sql);
-		$startraiddate = (int) $db->sql_fetchfield('startdate', false, $result);
-		$endraiddate = (int) $db->sql_fetchfield('enddate', false, $result);
-		$db->sql_freeresult($result);
-		if ($startraiddate != 0 && ($this->old_member['member_joindate'] == 0 || $this->old_member['member_joindate'] > $startraiddate))
-		{
-			$joindate = $startraiddate;
-		}
-		else
-		{
-			$joindate = $this->old_member['member_joindate'];
-		}
-		$leavedate = $this->old_member['member_outdate'];
-		if ($this->old_member['member_outdate'] < $endraiddate || $this->old_member['member_outdate'] > time())
-		{
-			$leavedate = mktime(0, 0, 0, 12, 31, 2030);
-		}
-		$sql_arr = array(
-			'game_id' => $game_id ,
-			'member_name' => (string) $member_name ,
-			'member_level' => (int) $member_lvl ,
-			'member_race_id' => (int) $race_id ,
-			'member_rank_id' => (int) $rank_id ,
-			'member_class_id' => (int) $class_id ,
-			'member_gender_id' => (int) $gender ,
-			'member_achiev' => (int) $achievpoints ,
-			'member_armory_url' => trim($memberarmoryurl) ,
-			'member_portrait_url' => trim($memberportraiturl) ,
-			'member_joindate' => (int) $joindate ,
-			'member_outdate' => (int) $leavedate ,
-			'member_status' => (int) $member_status);
-
-		if ($sql_arr != $this->old_member)
-		{
-			// we have changes, so update
-			$sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
-            SET ' . $db->sql_build_array('UPDATE', $sql_arr) . '
-            WHERE member_id = ' . (int) $member_id;
-			$db->sql_query($sql);
-
-			// update the comment - its not included in array comparison because it always changes.
-			$sql = 'UPDATE ' . MEMBER_LIST_TABLE . "
-            SET member_comment  = '" . $db->sql_escape($member_comment) . "'
-            WHERE member_id = " . (int) $member_id;
-
-			$db->sql_query($sql);
-
-			$log_action = array(
-				'header' => 'L_ACTION_MEMBER_UPDATED' ,
-				'L_NAME' => $member_name ,
-				'L_NAME_BEFORE' => $this->old_member['member_name'] ,
-				'L_LEVEL_BEFORE' => $this->old_member['member_level'] ,
-				'L_RACE_BEFORE' => $this->old_member['member_race_id'] ,
-				'L_RANK_BEFORE' => $this->old_member['member_rank_id'] ,
-				'L_CLASS_BEFORE' => $this->old_member['member_class_id'] ,
-				'L_GENDER_BEFORE' => $this->old_member['member_gender_id'] ,
-				'L_ACHIEV_BEFORE' => $this->old_member['member_achiev'] ,
-				'L_NAME_AFTER' => $member_name,
-				'L_LEVEL_AFTER' => $member_lvl ,
-				'L_RACE_AFTER' => $race_id ,
-				'L_RANK_AFTER' => $rank_id ,
-				'L_CLASS_AFTER' => $class_id ,
-				'L_GENDER_AFTER' => $gender ,
-				'L_ACHIEV_AFTER' => $achievpoints ,
-				'L_UPDATED_BY' => $user->data['username']);
-
-			$this->log_insert(array(
-				'log_type' => $log_action['header'] ,
-				'log_action' => $log_action));
-			return true;
-		}
-		else
-		{
-			// no change
-			return false;
-		}
-	}
-}
 ?>

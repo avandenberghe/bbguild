@@ -8,10 +8,8 @@
  * @version 1.2.9
  */
 
+namespace includes\bbdkp;
 
-/*
-namespace includes\bbdkp\members;
-*/
 
 /**
  * @ignore
@@ -25,7 +23,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
-use includes\bbdkp\iMembers;
+use includes\bbdkp;
 
 class Members implements iMembers {
 	public $game_id;
@@ -152,6 +150,48 @@ class Members implements iMembers {
 	}
 
 	/**
+	 * get member id given a membername and guild
+	 *
+	 * @param string $membername
+	 * @param int $guild_id optional
+	 * @return int
+	 */
+	public function get_member_id ($membername, $guild_id = 0)
+	{
+		global $db;
+		if($guild_id !=0)
+		{
+			$sql = 'SELECT member_id
+	                FROM ' . MEMBER_LIST_TABLE . "
+	                WHERE member_name ='" . $db->sql_escape($membername) . "'
+	                AND member_guild_id = " . (int) $db->sql_escape($guild_id);
+
+		}
+		else
+		{
+			$sql = 'SELECT member_id
+	                FROM ' . MEMBER_LIST_TABLE . "
+	                WHERE member_name ='" . $db->sql_escape($membername) . "'";
+		}
+
+		$result = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$membid = $row['member_id'];
+			break;
+		}
+		$db->sql_freeresult($result);
+		if (isset($membid))
+		{
+			return $membid;
+		}
+		else
+		{
+			return 0;
+		}
+	}
+
+	/**
 	 * inserts a new member to database
 	 * @see \includes\bbdkp\iMembers::Make()
 	 */
@@ -270,9 +310,14 @@ class Members implements iMembers {
 	 * updates a member to database
 	 * @see \includes\bbdkp\iMembers::Update()
 	 */
-	public function Update($old_member)
+	public function Update(Members $old_member)
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
+
+		if ($this->member_id == 0)
+		{
+		    return false;
+		}
 
 		// if user chooses other name then check if it already exists. if so refuse update
 		// namechange to existing membername is not allowed
@@ -291,7 +336,7 @@ class Members implements iMembers {
 			}
 		}
 
-		// check if rank exists
+	    // check if rank exists
 		$sql = 'SELECT count(*) as rankccount
 				FROM ' . MEMBER_RANKS_TABLE . '
 				WHERE rank_id=' . (int) $this->member_rank_id . ' and guild_id = ' . request_var('member_guild_id', 0);
@@ -313,6 +358,46 @@ class Members implements iMembers {
 			$this->member_level = $maxlevel;
 		}
 
+		if (($this->game_id == 'wow' || $this->game_id == 'aion') && $this->member_portrait_url == ' ')
+		{
+		    $this->member_portrait_url = $this->generate_portraitlink();
+		}
+
+		if ($this->game_id == 'wow' & $this->member_armory_url == ' ')
+		{
+		    if ($config['bbdkp_default_region'] == '')
+		    {
+		        // if region is not set then put EU...
+		        set_config('bbdkp_default_region', 'EU', true);
+		    }
+		    $realm = $config['bbdkp_default_realm'];
+		    $this->member_armory_url = $this->generate_armorylink();
+		}
+
+		// Get first and last raiding dates from raid table.
+		$sql = "SELECT b.member_id,
+		        MIN(a.raid_start) AS startdate,
+		        MAX(a.raid_start) AS enddate
+			FROM " . RAIDS_TABLE . " a
+			INNER JOIN " . RAID_DETAIL_TABLE . " b on a.raid_id = b.raid_id
+			WHERE  b.member_id = " . $member_id . "
+			GROUP BY b.member_id ";
+		$result = $db->sql_query($sql);
+		$startraiddate = (int) $db->sql_fetchfield('startdate', false, $result);
+		$endraiddate = (int) $db->sql_fetchfield('enddate', false, $result);
+		$db->sql_freeresult($result);
+
+		// if first recorded raiddate is before joindate then update joindate
+		if ($startraiddate != 0 && ($this->member_joindate == 0 || $this->member_joindate > $startraiddate))
+		{
+		    $this->member_joindate = $startraiddate;
+		}
+
+		// if last raiddate is after outdate or outdate is in future then reset it
+		if ($endraiddate !=0 && ($this->member_outdate < $endraiddate || $this->member_outdate > time()))
+		{
+		    $this->member_outdate = mktime(0, 0, 0, 12, 31, 2030);
+		}
 
 		// update the data including the phpbb userid
 		$query = $db->sql_build_array('UPDATE', array(
@@ -328,9 +413,13 @@ class Members implements iMembers {
 				'member_outdate' => $this->member_outdate,
 				'member_joindate' => $this->member_joindate,
 				'phpbb_user_id' => $this->phpbb_user_id,
+		        'member_armory_url' => $this->member_armory_url,
+		        'member_portrait_url' => $this->member_portrait_url,
+		        'member_achiev' => $this->member_achiev,
 				'game_id' => $this->game_id));
 
-		$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . ' WHERE member_id= ' . $this->member_id);
+		$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
+		        WHERE member_id= ' . $this->member_id);
 
 		// log it
 		if (!class_exists('bbDKP_Admin'))
@@ -341,14 +430,21 @@ class Members implements iMembers {
 
 		$log_action = array(
 				'header' => 'L_ACTION_MEMBER_UPDATED' ,
-				'L_NAME_BEFORE' => $old_member->member_name ,
-				'L_LEVEL_BEFORE' => $old_member->member_level ,
-				'L_RACE_BEFORE' => $old_member->member_race_id ,
-				'L_CLASS_BEFORE' => $old_member->member_class_id ,
+                'L_NAME' => $this->member_name ,
+				'L_NAME_BEFORE' => $old_member->member_name,
+				'L_LEVEL_BEFORE' => $old_member->member_level,
+				'L_RACE_BEFORE' => $old_member->member_race_id,
+                'L_RANK_BEFORE' => $old_member->member_rank_id,
+				'L_CLASS_BEFORE' => $old_member->member_class_id,
+                'L_GENDER_BEFORE' => $old_member->member_gender_id,
+                'L_ACHIEV_BEFORE' => $old_member->member_achiev,
 				'L_NAME_AFTER' => $this->member_name,
 				'L_LEVEL_AFTER' => $this->member_level,
 				'L_RACE_AFTER' => $this->member_race_id ,
+                'L_RANK_AFTER' => $this->member_rank_id,
 				'L_CLASS_AFTER' => $this->member_class_id ,
+                'L_GENDER_AFTER' => $this->member_gender_id,
+                'L_ACHIEV_AFTER' => $this->member_achiev,
 				'L_UPDATED_BY' => $user->data['username']);
 
 		$bbdkp->log_insert(array(
@@ -356,9 +452,6 @@ class Members implements iMembers {
 				'log_action' => $log_action));
 
 		unset($bbdkp);
-
-
-
 	}
 
 	/**
@@ -401,6 +494,52 @@ class Members implements iMembers {
 
 	}
 
+	/**
+	 * function for removing member from guild but leave him in the member table.;
+	 * @param unknown_type $member_name
+	 * @param unknown_type $guild_id
+	 * @return boolean
+	 */
+	public function GuildKick($member_name, $guild_id)
+	{
+		global $db, $user, $config;
+		// find id for existing member name
+		$sql = "SELECT *
+				FROM " . MEMBER_LIST_TABLE . "
+				WHERE member_name = '" . $db->sql_escape($member_name) . "' and member_guild_id = " . (int) $guild_id;
+		$result = $db->sql_query($sql);
+		// get old data
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$this->old_member = array(
+					'member_id' => $row['member_id'] ,
+					'member_rank_id' => $row['member_rank_id'] ,
+					'member_guild_id' => $row['member_guild_id'] ,
+					'member_comment' => $row['member_comment']);
+		}
+		$db->sql_freeresult($result);
+		$sql_arr = array(
+				'member_rank_id' => 99 ,
+				'member_comment' => "Member left " . date("F j, Y, g:i a") . ' by Armory plugin' ,
+				'member_outdate' => $this->time ,
+				'member_guild_id' => 0);
+		$sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
+        SET ' . $db->sql_build_array('UPDATE', $sql_arr) . '
+        WHERE member_id = ' . (int) $this->old_member['member_id'] . ' and member_guild_id = ' . (int) $this->old_member['member_guild_id'];
+		$db->sql_query($sql);
+		$log_action = array(
+				'header' => 'L_ACTION_MEMBER_UPDATED' ,
+				'L_NAME' => $member_name ,
+				'L_RANK_BEFORE' => $this->old_member['member_rank_id'] ,
+				'L_COMMENT_BEFORE' => $this->old_member['member_comment'] ,
+				'L_RANK_AFTER' => 99 ,
+				'L_COMMENT_AFTER' => "Member left " . date("F j, Y, g:i a") . ' by Armory plugin' ,
+				'L_UPDATED_BY' => $user->data['username']);
+		$this->log_insert(array(
+				'log_type' => $log_action['header'] ,
+				'log_action' => $log_action));
+		return true;
+	}
 
 	/**
 	 * activates all checked members
