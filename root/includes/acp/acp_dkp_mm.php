@@ -236,11 +236,11 @@ class acp_dkp_mm extends bbDKP_Admin
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 
-				$submit = (isset($_POST['add'])) ? true : false;
+				$add = (isset($_POST['add'])) ? true : false;
 				$update = (isset($_POST['update'])) ? true : false;
 				$delete = (isset($_GET['delete']) || isset($_POST['delete'])) ? true : false;
 
-				if ($submit || $update)
+				if ($add || $update)
 				{
 					if (! check_form_key('mm_addmember'))
 					{
@@ -249,7 +249,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				}
 
 				// add guildmember handler
-				if ($submit)
+				if ($add)
 				{
 
 					$newmember = new includes\bbdkp\Members();
@@ -694,9 +694,9 @@ class acp_dkp_mm extends bbDKP_Admin
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
 
-			/***************************************/
-			// ranks setup
-			/***************************************/
+		    /**
+			 * ranks setup
+		     */
 			case 'mm_ranks':
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK']. '</h3></a>';
@@ -706,12 +706,12 @@ class acp_dkp_mm extends bbDKP_Admin
 				$maxguildid = (int) $db->sql_fetchfield('idmax');
 				$db->sql_freeresult($result);
 
-				$guild_id = request_var('guild_id', $maxguildid);
-				$submit = (isset($_POST['update'])) ? true : false;
+
+				$update = (isset($_POST['update'])) ? true : false;
 				$deleterank = (isset($_GET['deleterank'])) ? true : false;
 				$add = (isset($_POST['add'])) ? true : false;
 
-				if ($add || $submit)
+				if ($add || $update)
 				{
 					if (! check_form_key('mm_ranks'))
 					{
@@ -719,68 +719,56 @@ class acp_dkp_mm extends bbDKP_Admin
 					}
 				}
 
-				if ($submit)
+				if ($add)
 				{
-					// update
+				    $newrank = new includes\bbdkp\Ranks();
+					$newrank->RankName = utf8_normalize_nfc(request_var('nrankname', '', true));
+					$newrank->RankId = request_var('nrankid', 0);
+					$newrank->GuildId = request_var('guild_id', $maxguildid);
+					$newrank->RankHide = (isset($_POST['nhide'])) ? 1 : 0;
+					$newrank->RankPrefix = utf8_normalize_nfc(request_var('nprefix', '', true));
+					$newrank->RankSuffix = utf8_normalize_nfc(request_var('nsuffix', '', true));
+					$newrank->Make();
+
+					$success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
+					trigger_error($success_message . $this->link);
+				}
+
+				if ($update)
+				{
+					$newrank = new includes\bbdkp\Ranks();
+					$oldrank = new includes\bbdkp\Ranks();
+					// template
 					$modrank = utf8_normalize_nfc(request_var('ranks', array(0 => ''), true));
 					foreach ($modrank as $rank_id => $rank_name)
 					{
-						// get old rank array
-						$sql = 'SELECT rank_name, rank_hide, rank_prefix, rank_suffix
-							FROM ' . MEMBER_RANKS_TABLE . '
-							WHERE rank_id = ' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id;
-						$result = $db->sql_query($sql);
-						while ($row = $db->sql_fetchrow($result))
-						{
-							$old_rank = array(
-								'rank_name' 	=> $row['rank_name'] ,
-								'rank_hide' 	=> $row['rank_hide'] ,
-								'rank_prefix' 	=> $row['rank_prefix'] ,
-								'rank_suffix' 	=> $row['rank_suffix']);
-						}
-						$db->sql_freeresult($result);
-						// get new rank array
+					    $oldrank->Rankid = $rank_id;
+					    $oldrank->GuildId = request_var('guild_id', $maxguildid);
+					    $oldrank->Get();
+
+					    $newrank->Rankid = $rank_id;
+					    $newrank->GuildId = $oldrank->GuildId;
+					    $newrank->RankName = $rank_name;
+					    $newrank->RankHide = (isset($_POST['hide'][$rank_id])) ? 1 : 0;
+
 						$rank_prefix = utf8_normalize_nfc(request_var('prefix', array(
 							(int) $rank_id => ''), true));
+						$newrank->RankPrefix = $rank_prefix[$rank_id];
+
 						$rank_suffix = utf8_normalize_nfc(request_var('suffix', array(
 							(int) $rank_id => ''), true));
-						$sql_ary = array(
-							'rank_name' => $rank_name ,
-							'rank_hide' => (isset($_POST['hide'][$rank_id])) ? 1 : 0 ,
-							'rank_prefix' => $rank_prefix[$rank_id] ,
-							'rank_suffix' => $rank_suffix[$rank_id]);
-						// compare old with new,
-						if ($old_rank == $sql_ary)
-						{
-							// no difference
-						}
-						else
-						{
-							// difference so update and log it
-							$sql = 'UPDATE ' . MEMBER_RANKS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
-				   	      WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id;
-							$db->sql_query($sql);
-							// log it
-							$log_action = array(
-								'header' => 'L_ACTION_RANK_UPDATED' ,
-								'L_NAME_BEFORE' => $old_rank['rank_name'] ,
-								'L_HIDE_BEFORE' => $old_rank['rank_hide'] ,
-								'L_PREFIX_BEFORE' => $old_rank['rank_prefix'] ,
-								'L_SUFFIX_BEFORE' => $old_rank['rank_suffix'] ,
-								'L_NAME_AFTER' => $sql_ary['rank_name'] ,
-								'L_HIDE_AFTER' => $sql_ary['rank_hide'] ,
-								'L_PREFIX_AFTER' => $sql_ary['rank_prefix'] ,
-								'L_SUFFIX_AFTER' => $sql_ary['rank_suffix'] ,
-								'L_UPDATED_BY' => $user->data['username']);
+					    $newrank->RankSuffix = $rank_suffix[$rank_id];
 
-							$this->log_insert(array(
-							'log_type' => $log_action['header'] ,
-								'log_action' => $log_action));
+						// compare old with new,
+						if ($old_rank != $newrank)
+						{
+						    $newrank->Update($old_rank);
 						}
 					}
 					$success_message = $user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
 					trigger_error($success_message . $this->link);
 				}
+
 				if ($deleterank)
 				{
 					if (confirm_box(true))
@@ -835,41 +823,7 @@ class acp_dkp_mm extends bbDKP_Admin
 						confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_RANKS'], $old_rank_name, $guild_name), $s_hidden_fields);
 					}
 				}
-				if ($add)
-				{
-					//check if rankname exists
-					$nrank_name = utf8_normalize_nfc(request_var('nrankname', '', true));
-					if ($nrank_name == '')
-					{
-						trigger_error($user->lang('ERROR_RANK_NAME_EMPTY'), E_USER_WARNING);
-					}
-					//check if guildid is valid
-					if ($guild_id == 0)
-					{
-						trigger_error($user->lang('ERROR_INVALID_GUILDID'), E_USER_WARNING);
-					}
-					//check if rank exists
-					$nrankid = request_var('nrankid', 0);
-					$sql = 'SELECT count(*) as rankcount FROM ' . MEMBER_RANKS_TABLE . '
-                   	WHERE rank_id != 99
-                   	AND rank_id = ' . (int) $nrankid . '
-                   	AND guild_id = ' . (int) $guild_id . '
-                   	ORDER BY rank_id, rank_hide ASC ';
-					$result = $db->sql_query($sql);
-					if ((int) $db->sql_fetchfield('rankcount', false, $result) == 1)
-					{
-						trigger_error(sprintf($user->lang('ERROR_RANK_EXISTS'), $nrankid, $guild_id) . $this->link, E_USER_WARNING);
-					}
-					$db->sql_freeresult($result);
-					$nrank_hide = (isset($_POST['nhide'])) ? 1 : 0;
-					$nprefix = utf8_normalize_nfc(request_var('nprefix', '', true));
-					$nsuffix = utf8_normalize_nfc(request_var('nsuffix', '', true));
-					$this->insertnewrank($nrankid, $nrank_name, $nrank_hide, $nprefix, $nsuffix, $guild_id);
 
-					// display success
-					$success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
-					trigger_error($success_message . $this->link);
-				}
 
 				// template filling
 				$sql = 'SELECT id, name FROM ' . GUILD_TABLE . ' ORDER BY id desc';

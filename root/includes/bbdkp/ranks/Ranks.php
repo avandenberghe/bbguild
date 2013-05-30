@@ -27,6 +27,19 @@ class Ranks implements iRanks
 
 	public function Get()
 	{
+	    global $user, $db, $config, $phpEx, $phpbb_root_path;
+	    $sql = 'SELECT rank_name, rank_hide, rank_prefix, rank_suffix
+    			FROM ' . MEMBER_RANKS_TABLE . '
+    			WHERE rank_id = ' . (int) $this->RankId . ' and guild_id = ' . (int) $this->GuildId;
+	    $result = $db->sql_query($sql);
+	    while ($row = $db->sql_fetchrow($result))
+	    {
+	        $this->RankName = $row['rank_name'];
+	        $this->RankHide	= $row['rank_hide'];
+            $this->RankPrefix = $row['rank_prefix'];
+            $this->RankSuffix = $row['rank_suffix'];
+	    }
+	    $db->sql_freeresult($result);
 
 	}
 
@@ -89,6 +102,7 @@ class Ranks implements iRanks
 				'log_action' => $log_action));
 
 		unset($bbdkp);
+
 
 
 	}
