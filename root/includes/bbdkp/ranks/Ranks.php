@@ -251,5 +251,19 @@ class Ranks implements iRanks
 		return true;
 
 	}
+	
+	public function listranks()
+	{
+		global $user, $db;
+		// rank 99 is the out-rank
+		$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . '
+	        		WHERE guild_id = ' . $this->GuildId . '
+	        		ORDER BY rank_id, rank_hide  ASC ';
+		
+		$result = $db->sql_query($sql);
+		return $result;
+		
+	}
+	
 
 }

@@ -415,12 +415,10 @@ class acp_dkp_mm extends \includes\bbdkp\bbDKP_Admin
 					}
 				}
 
-				// rank 99 is the out-rank
-				$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . '
-	        		WHERE guild_id = ' . $guild_id . '
-	        		ORDER BY rank_id, rank_hide  ASC ';
-
-				$result = $db->sql_query($sql);
+				
+				$listranks = new includes\bbdkp\Ranks();
+				$listranks->game_id = request_var ( 'game_id', '' );
+				$result = $listranks->listranks();
 				while ($row = $db->sql_fetchrow($result))
 				{
 					$prefix = $row['rank_prefix'];

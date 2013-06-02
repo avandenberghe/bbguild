@@ -13,7 +13,7 @@ if (!defined('IN_PHPBB'))
    exit;
 }
 
-$bbDkp_Admin = new bbDkp_Admin;
+$bbDkp_Admin = new \includes\bbdkp\bbDkp_Admin;
 if ($bbDkp_Admin->bbtips == true)
 {
 	if ( !class_exists('bbtips')) 
