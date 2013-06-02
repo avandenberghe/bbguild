@@ -30,7 +30,7 @@ interface iMembers {
 	/**
 	 * updates a member to database
 	 */
-	function Update($old_member);
+	function Update(Members $old_member);
 
 
 	function activate(array $mlist, array $mwindow);

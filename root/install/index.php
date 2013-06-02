@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.2.9
  */
- 
+
 define('UMIL_AUTO', true);
 define('IN_PHPBB', true);
 define('IN_INSTALL', true);
@@ -40,7 +40,7 @@ switch ($db->sql_layer)
 			$error[] = "You are running an unsupported Mysql version ($dbversion) . Please upgrade to Mysql 4.1 or higher before trying to install bbDKP. <br />";
 		}
 		break;
-	// Untested ! 
+	// Untested !
 	case 'firebird':
 	case 'sqlite':
 		$error[] = "You are running phpbb on an untested dbms version, please upgrade to a supported dbms (mysql, postgres, oracle, or mssql) to install the bbDKP Mod. <br />";
@@ -91,7 +91,7 @@ $version_config_name = 'bbdkp_version';
 $language_file = 'mods/dkp_admin';
 
 /*
-* Setting the checkboxes at runtime 
+* Setting the checkboxes at runtime
 */
 $gameinstall['aion']=false;
 $gameinstall['daoc']=false;
@@ -109,7 +109,7 @@ $gameinstall['tera']=false;
 $gameinstall['gw2']=false;
 
 $choice=false;
-if (isset($config['bbdkp_default_game'])) 
+if (isset($config['bbdkp_default_game']))
 {
 	$gameinstall[$config['bbdkp_default_game']] = $choice = true;
 }
@@ -174,7 +174,7 @@ $options = array(
 		'guildtag'	=> array('lang' => 'UMIL_GUILD', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
         'realm'	    => array('lang' => 'REALM_NAME', 'type' => 'text:40:255', 'explain' => false, 'select_user' => false),
 		'region'   => array('lang' => 'REGION', 'type' => 'select', 'function' => 'regionoptions', 'explain' => true),
-		
+
 		'aion'   => array('lang' => 'AION', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['aion']) ? true:false) ),
 		'daoc'   => array('lang' => 'DAOC', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['daoc']) ? true:false)),
 		'eq'   => array('lang' => 'EQ', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['eq']) ? true:false)),
@@ -211,7 +211,7 @@ include($phpbb_root_path .'install/gamesinstall/install_gw2.' . $phpEx);
 
 /*
  * insert welcome message
- */	
+ */
 $welcome_message = encode_message($user->lang['WELCOME_DEFAULT']);
 
 /*
@@ -219,9 +219,9 @@ $welcome_message = encode_message($user->lang['WELCOME_DEFAULT']);
 * $phpbb_root_path will get prepended to the path specified
 * Image height should be 50px to prevent cut-off or stretching.
 */
-$logo_img = 'install/logo.png'; 
+$logo_img = 'install/logo.png';
 /*
-  $user, $config, $db, $table_prefix, $umil, $bbdkp_table_prefix; 
+  $user, $config, $db, $table_prefix, $umil, $bbdkp_table_prefix;
 * The array of versions and actions within each.
 * You do not need to order it a specific way (it will be sorted automatically), however, you must enter every version, even if no actions are done for it.
 *
@@ -242,48 +242,48 @@ $versions = array(
                         'user_id'			=> array('UINT', 0),
                         'bbcode_bitfield'	=> array('VCHAR:20', ''),
                         'bbcode_uid'		=> array('VCHAR:8', ''),
-                        'bbcode_options'	=> array('VCHAR:8', ''),	  		  		  
+                        'bbcode_options'	=> array('VCHAR:8', ''),
                     ),
                     'PRIMARY_KEY'    => 'news_id',
                 ),
             ),
-            
+
             array($table_prefix . 'bbdkp_language', array(
 	              'COLUMNS'            => array(
-	          		  'id'     	       => array('UINT', NULL, 'auto_increment'), 
-                   	  'game_id' 	   => array('VCHAR', ''), 
-	                  'attribute_id'   => array('UINT', 0), 
+	          		  'id'     	       => array('UINT', NULL, 'auto_increment'),
+                   	  'game_id' 	   => array('VCHAR', ''),
+	                  'attribute_id'   => array('UINT', 0),
 	                  'language'       => array('CHAR:2', ''),
-	          		  'attribute'	   => array('VCHAR:30', ''), 
-	                  'name'       	   => array('VCHAR_UNI:255', ''), 
+	          		  'attribute'	   => array('VCHAR:30', ''),
+	                  'name'       	   => array('VCHAR_UNI:255', ''),
 	                  'name_short' 	   => array('VCHAR_UNI:255', ''),
 	          	),
 	                'PRIMARY_KEY'     => array('id'),
 	          		'KEYS'            => array('bbdkp_language' => array('UNIQUE', array('game_id', 'attribute_id', 'language', 'attribute')),
 				)
-	            )),   
+	            )),
 
 	      array($table_prefix . 'bbdkp_factions', array(
                     'COLUMNS'        => array(
-	      				'game_id' 			=> array('VCHAR', ''), 
+	      				'game_id' 			=> array('VCHAR', ''),
                         'f_index'    		=> array('USINT', NULL, 'auto_increment'),
-	         			'game_id' 			=> array('VCHAR', ''), 
+	         			'game_id' 			=> array('VCHAR', ''),
 
                         'faction_id'   		=> array('USINT', 0),
                         'faction_name'     	=> array('VCHAR_UNI', ''),
                         'faction_hide'		=> array('BOOL', 0),
                     ),
-                    'PRIMARY_KEY'    => 'f_index',                   
-                    'KEYS'         => array('bbdkp_factions'    => array('UNIQUE',  array('game_id', 'faction_id'))),    
+                    'PRIMARY_KEY'    => 'f_index',
+                    'KEYS'         => array('bbdkp_factions'    => array('UNIQUE',  array('game_id', 'faction_id'))),
                 ),
             ),
 
           array($table_prefix . 'bbdkp_classes', array(
                     'COLUMNS'        => array(
                         'c_index'    		=> array('USINT', NULL, 'auto_increment'),
-          				'game_id' 			=> array('VCHAR', ''), 
+          				'game_id' 			=> array('VCHAR', ''),
                         'class_id'   		=> array('USINT', 0),
-          				'class_faction_id' 	=> array('UINT', 0), 
+          				'class_faction_id' 	=> array('UINT', 0),
                         'class_min_level'	=> array('USINT', 0),
                         'class_max_level'	=> array('USINT', 0),
                         'class_armor_type'	=> array('VCHAR_UNI', ''),
@@ -293,7 +293,7 @@ $versions = array(
             			'heal'				=> array('USINT', 0),
 						'imagename'			=> array('VCHAR:255', ''),
                 		'colorcode'			=> array('VCHAR:10', ''),
-            
+
                     ),
                     'PRIMARY_KEY'    => 'c_index',
                     'KEYS'         => array('bbclass'    => array('UNIQUE', array('game_id', 'class_id'))),
@@ -310,38 +310,38 @@ $versions = array(
 						'image_male'	=> array('VCHAR:255', ''),
                     ),
                     'PRIMARY_KEY'    => array('game_id', 'race_id') ,
-                    
+
 
                 ),
-            ),            
-           
-            // Guild table 
-			//id is not auto-increment 
+            ),
+
+            // Guild table
+			//id is not auto-increment
            array($table_prefix . 'bbdkp_memberguild', array(
                     'COLUMNS'       => array(
-                       'id'				=> array('USINT', 0), 
-                       'name'			=> array('VCHAR_UNI:255', ''), 
+                       'id'				=> array('USINT', 0),
+                       'name'			=> array('VCHAR_UNI:255', ''),
 		  			   'realm'			=> array('VCHAR_UNI:255', ''),
 					   'region'  		=> array('VCHAR:2', ''),
-					   'roster'  		=> array('BOOL', 0), 
-					   'aion_legion_id' => array('USINT', 0), 
+					   'roster'  		=> array('BOOL', 0),
+					   'aion_legion_id' => array('USINT', 0),
             		   'aion_server_id' => array('USINT', 0),
-            			 
+
                       ),
                     'PRIMARY_KEY'  	=> array('id'),
-					'KEYS'         => array('bbguild'    => array('UNIQUE', array('name', 'id') )),                    
+					'KEYS'         => array('bbguild'    => array('UNIQUE', array('name', 'id') )),
               ),
-            ),  
+            ),
 
            array($table_prefix . 'bbdkp_member_ranks', array(
                     'COLUMNS'        => array(
-            			//rank_id is not auto-increment 
+            			//rank_id is not auto-increment
                         'guild_id'		=> array('USINT', 0),
                         'rank_id'		=> array('USINT', 0),
                         'rank_name'		=> array('VCHAR_UNI:50', ''),
                         'rank_hide'		=> array('BOOL', 0),
                         'rank_prefix'	=> array('VCHAR:75', ''),
-                        'rank_suffix'	=> array('VCHAR:75', ''),                      
+                        'rank_suffix'	=> array('VCHAR:75', ''),
                     ),
                     'PRIMARY_KEY'    => array('rank_id', 'guild_id'),
                 ),
@@ -349,7 +349,7 @@ $versions = array(
 
 		array($table_prefix . 'bbdkp_memberlist', array(
                     'COLUMNS'        	   => array(
-						'game_id'  		   => array('VCHAR', ''), 
+						'game_id'  		   => array('VCHAR', ''),
                         'member_id'        => array('UINT', NULL, 'auto_increment'),
                         'member_name'      => array('VCHAR_UNI:255', ''),
                         'member_status'    => array('BOOL', 0) ,
@@ -366,7 +366,7 @@ $versions = array(
             			'member_armory_url' => array('VCHAR:255', ''),
 						'member_portrait_url' => array('VCHAR', ''),
 						'phpbb_user_id' 	=> array('UINT', 0)
-            
+
                     ),
                     'PRIMARY_KEY'  => 'member_id',
                     'KEYS'         => array('member_name'    => array('UNIQUE', 'member_name')),
@@ -401,10 +401,10 @@ $versions = array(
                     ),
                     'PRIMARY_KEY'    => 'event_id',
                     'KEYS'            => array('event_dkpid'    => array('INDEX', 'event_dkpid')),
-                    
+
                 ),
             ),
-            
+
 		  array($table_prefix . 'bbdkp_memberdkp', array(
                     'COLUMNS'        	 => array(
                         'member_id'			=> array('UINT', 0),
@@ -412,7 +412,7 @@ $versions = array(
 		  				'member_raid_value'	=> array('DECIMAL:11', 0),
 		  				'member_time_bonus'	=> array('DECIMAL:11', 0),
 		  				'member_zerosum_bonus'	=> array('DECIMAL:11', 0),
-                        'member_earned'		=> array('DECIMAL:11', 0),		
+                        'member_earned'		=> array('DECIMAL:11', 0),
 		  				'member_raid_decay'	=> array('DECIMAL:11', 0),
 						'member_spent'		=> array('DECIMAL:11', 0),
 		  				'member_item_decay'	=> array('DECIMAL:11', 0),
@@ -421,8 +421,8 @@ $versions = array(
 						'member_firstraid'  => array('TIMESTAMP', 0),
 						'member_lastraid'	=> array('TIMESTAMP', 0),
 						'member_raidcount'	=> array('UINT', 0),
-		  				'adj_decay' 		=> array('DECIMAL:11', 0.00), 
-            
+		  				'adj_decay' 		=> array('DECIMAL:11', 0.00),
+
                     ),
                     'PRIMARY_KEY'  => array('member_dkpid', 'member_id'),
                 ),
@@ -439,9 +439,9 @@ $versions = array(
 				  'adjustment_added_by'  => array('VCHAR_UNI:255', ''),
 				  'adjustment_updated_by'=> array('VCHAR_UNI:255', ''),
 				  'adjustment_group_key' => array('VCHAR', ''),
-        		  'adj_decay' 			 => array('DECIMAL:11', 0.00), 
-       			  'can_decay' 			 => array('BOOL', 0), 
-         		  'decay_time' 			 => array('DECIMAL:11', 0.00), 
+        		  'adj_decay' 			 => array('DECIMAL:11', 0.00),
+       			  'can_decay' 			 => array('BOOL', 0),
+         		  'decay_time' 			 => array('DECIMAL:11', 0.00),
                 ),
                 'PRIMARY_KEY'    => 'adjustment_id',
                 'KEYS'         => array('member_id'    => array('INDEX', array('member_id', 'adjustment_dkpid'))),
@@ -460,7 +460,7 @@ $versions = array(
 				'PRIMARY_KEY'  => array('raid_id'),
 				'KEYS'         => array('event_id'    => array('INDEX', 'event_id')),
             )),
- 		
+
 		  array($table_prefix . 'bbdkp_raid_detail', array(
 				'COLUMNS'		=> array(
 					'raid_id'		=> array('UINT', 0),
@@ -469,12 +469,12 @@ $versions = array(
 					'time_bonus' 	=> array('DECIMAL:11', 0),
 					'zerosum_bonus' => array('DECIMAL:11', 0),
 		  			'raid_decay' 	=> array('DECIMAL:11', 0),
-		            'decay_time' 	=> array('DECIMAL:11', 0.00), 
+		            'decay_time' 	=> array('DECIMAL:11', 0.00),
 				),
 				'PRIMARY_KEY'  => array('raid_id', 'member_id')
 			)),
 
-                
+
           array($table_prefix . 'bbdkp_raid_items', array(
                     'COLUMNS'     => array(
                     'item_id'         => array('UINT', NULL, 'auto_increment'),
@@ -489,10 +489,10 @@ $versions = array(
 					'item_value'      => array('DECIMAL:11', 0.00),
           			'item_decay'      => array('DECIMAL:11', 0.00), // decay of itemvalue
           			'item_zs'      	  => array('BOOL', 0), 		// if this flag is set the itemvalue will be distributed over raid
-         			'decay_time' 	  => array('DECIMAL:11', 0.00), 
+         			'decay_time' 	  => array('DECIMAL:11', 0.00),
                     ),
                     'PRIMARY_KEY'     => 'item_id',
-                    'KEYS'         => array('raid_id'    => array('INDEX', 'raid_id')),					
+                    'KEYS'         => array('raid_id'    => array('INDEX', 'raid_id')),
              )),
 
           array($table_prefix . 'bbdkp_logs', array(
@@ -505,7 +505,7 @@ $versions = array(
 					   'log_sid'       => array('VCHAR:32', ''),
 					   'log_result'    => array('VCHAR', ''),
 					   'log_userid'    => array('UINT', 0),
-            
+
                     ),
                     'PRIMARY_KEY'  => 'log_id',
                     'KEYS'         => array(
@@ -514,7 +514,7 @@ $versions = array(
 		               'log_ipaddress'	=> array('INDEX', 'log_ipaddress'),
                     )
                 )),
-            
+
 		  array($table_prefix . 'bbdkp_plugins', array(
                   'COLUMNS'        	=> array(
                       'name'			=> array('VCHAR_UNI:255', ''),
@@ -525,7 +525,7 @@ $versions = array(
                   )
                )),
 
-          
+
           array($table_prefix . 'bbdkp_welcomemsg' , array(
                   	'COLUMNS'        => array(
                       'welcome_id'    		=> array('INT:8', NULL, 'auto_increment'),
@@ -540,9 +540,9 @@ $versions = array(
                   'PRIMARY_KEY'    => 'welcome_id'
                 )),
        ),
-           
+
        'table_row_insert'	=> array(
-       
+
 		  // we insert a dummy pool
          array($table_prefix .'bbdkp_dkpsystem',
           array(
@@ -554,14 +554,14 @@ $versions = array(
                   		),
                   )
            ),
-		
+
          // insert a dummy event
          array($table_prefix .'bbdkp_events',
           array(
                   array('event_dkpid' => 1,
                   		'event_name' => 'Default event',
-                  		'event_color' => '#000000', 
-                  		'event_value' => 10 
+                  		'event_color' => '#000000',
+                  		'event_value' => 10
                   		),
                   )
            ),
@@ -573,46 +573,46 @@ $versions = array(
                   array('id'  => 0,
                       'name' => '(None)',
                       'realm' => utf8_normalize_nfc(request_var('realm', '', true)),
-                      'region' => request_var('region', ''), 
+                      'region' => request_var('region', ''),
                       'roster' => 1
                   		),
-                  
-           		  // default guild -> do show on roster                  
+
+           		  // default guild -> do show on roster
                   array('id'  => 1,
-                      'name' => ( request_var('guildtag', ' ')== ' ' ? utf8_normalize_nfc(request_var('guildtag', ' ', true)) : 'default'), 
-                      'realm' => ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default'),  
-                      'region' => (isset($_POST['region']) ? request_var('region', ' ') : 'EU'), 
+                      'name' => ( request_var('guildtag', ' ')== ' ' ? utf8_normalize_nfc(request_var('guildtag', ' ', true)) : 'default'),
+                      'realm' => ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default'),
+                      'region' => (isset($_POST['region']) ? request_var('region', ' ') : 'EU'),
                   	  'roster' => 1 ),
                   )
            ),
-		
-		 array($table_prefix . 'bbdkp_member_ranks', 
+
+		 array($table_prefix . 'bbdkp_member_ranks',
 			 array(
-			 
+
 			 	// standard member rank
 	       		array(
-	       			'guild_id'	=> 1,	
+	       			'guild_id'	=> 1,
 					'rank_id'	=> 0,
 					'rank_name'	=> 'Member',
 					'rank_hide'	=> 0,
 					'rank_prefix'	=> '',
 					'rank_suffix'	=> '',
 				 ),
-				 
-				 
+
+
 				// operating rank, undeletable rank
 	       		array(
-	       			'guild_id'	=> 1,	
+	       			'guild_id'	=> 1,
 					'rank_id'	=> 90,
 					'rank_name'	=> 'Operating',
 					'rank_hide'	=> 1,
 					'rank_prefix'	=> '',
 					'rank_suffix'	=> '',
 				 ),
-				 
+
 				// Out rank : for unguilded, undeletable rank
 	       		array(
-	       			'guild_id'	=> 0,	
+	       			'guild_id'	=> 0,
 					'rank_id'	=> 99,
 					'rank_name'	=> 'Out',
 					'rank_hide'	=> 1,
@@ -620,13 +620,14 @@ $versions = array(
 					'rank_suffix'	=> '',
 				 ),
 				)
-			), 
-			
+			),
+
 		 // create the guildbank character
-		 array($table_prefix . 'bbdkp_memberlist', 
+		 array($table_prefix . 'bbdkp_memberlist',
 			 array(
 	       		array(
-	       			'member_name' 		=> 'Guildbank', 
+	       			'game_id' 			=> 'wow',
+	       			'member_name' 		=> 'Guildbank',
 					'member_status'		=> 1,
 					'member_level'		=> 1,
 					'member_race_id'	=> 0,
@@ -640,16 +641,16 @@ $versions = array(
 	       			'phpbb_user_id'		=> $user->data['user_id'],
 				 ),
 			)),
-			
+
 		  array( $table_prefix . 'bbdkp_welcomemsg',
            		array(
                   array(
-                  	'welcome_title' => 'Welcome to our guild', 
+                  	'welcome_title' => 'Welcome to our guild',
                   	'welcome_timestamp' => (int) time(),
                   	'welcome_msg' => $welcome_message['text'],
                   	'bbcode_uid' => $welcome_message['uid'],
                   	'bbcode_bitfield' => $welcome_message['bitfield'],
-                  	'user_id' => $user->data['user_id'] ),          
+                  	'user_id' => $user->data['user_id'] ),
           	 	)
             ),
 		),
@@ -657,65 +658,65 @@ $versions = array(
     	// create two basic permissions
 	   'permission_add' => array(
             array('a_dkp', true),
-            array('u_dkp', true), 
+            array('u_dkp', true),
             array('u_dkpucp', true),
             array('u_dkp_charadd', true) ,
-            array('u_dkp_chardelete', true), 
-            array('u_dkp_charupdate', true),                       
+            array('u_dkp_chardelete', true),
+            array('u_dkp_charupdate', true),
       	),
-      
+
         // Assign default permissions to Full admin
         'permission_set' => array(
       		//admin can access acp
             array('GLOBAL_MODERATORS', 	'a_dkp', 'group'),
             array('ADMINISTRATORS', 	'a_dkp', 'group'),
-            
+
             //can see dkp pages
             array('GUESTS', 'u_dkp', 'group'),
             array('REGISTERED', 'u_dkp', 'group'),
             array('NEWLY_REGISTERED', 'u_dkp', 'group'),
-            
+
             //can claim a character
             array('ADMINISTRATORS', 'u_dkpucp', 'group'),
            	array('GLOBAL_MODERATORS', 	'u_dkpucp', 'group'),
            	array('REGISTERED', 'u_dkpucp', 'group'),
-            
+
             // can delete own character
-            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),		            
+            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),
             array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
-            
+
             // can add own character
             array('REGISTERED', 'u_dkp_charadd', 'group'),
             array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
             array('REGISTERED', 'u_dkp_charupdate', 'group'),
-            
+
             //can update own character
-            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),		            
+            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),
             array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
             array('REGISTERED', 'u_dkp_charupdate', 'group'),
-            
+
         ),
-        
+
         // add new parameters
         'config_add' => array(
-        
+
         	//bbdkp settings
-        	
-        	// guildname				
+
+        	// guildname
 			array('bbdkp_guildtag', utf8_normalize_nfc(request_var('guildtag', '', true)), true),
 	        // default realm & region
-	        array('bbdkp_default_realm', ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default') , true),  
-	        array('bbdkp_default_region', request_var('region', ''), true),  
+	        array('bbdkp_default_realm', ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default') , true),
+	        array('bbdkp_default_region', request_var('region', ''), true),
 			array('bbdkp_eqdkp_start', mktime(0, 0, 0, date("m")  , date("d"), date("Y")) , true),
 			array('bbdkp_date_format', 'd.m.y', true),
 			array('bbdkp_dkp_name', 'DKP', true),
 			array('bbdkp_default_game', request_var('game', ''), true),
 	        //default dkp language
 	        array('bbdkp_lang', 'en', true),
-	        
+
 	        // news limit
 			array('bbdkp_user_nlimit', '5', true),
-	        // roster layout: main parameter for steering roster layout 
+	        // roster layout: main parameter for steering roster layout
 			array('bbdkp_roster_layout', '1', true),
 	        // showachiev : show the achievement points
 	        array('bbdkp_show_achiev', '0', true),
@@ -723,37 +724,37 @@ $versions = array(
 			array('bbdkp_guild_faction', '1', true),
 	        //guildmemberlist paging
 	        array('bbdkp_user_llimit', '20', true),
-	        
+
 	        //standings
 			array('bbdkp_hide_inactive', '1', true),
 			array('bbdkp_inactive_period', '150', true),
 			array('bbdkp_list_p1', '30', true),
 			array('bbdkp_list_p2', '60', true),
-         	array('bbdkp_list_p3', '90', true),    
-			
+         	array('bbdkp_list_p3', '90', true),
+
 			//events
 			array('bbdkp_user_elimit', '30', true),
-			
+
 			//adjustments
 			array('bbdkp_user_alimit', '30', true),
 			array('bbdkp_active_point_adj', '10.00', true),
 			array('bbdkp_inactive_point_adj', '-10.00', true),
-			array('bbdkp_starting_dkp', '15.00', true), 
-			
+			array('bbdkp_starting_dkp', '15.00', true),
+
 			//items
 			array('bbdkp_user_ilimit', '20', true),
 
 			//raids
 			array('bbdkp_user_rlimit', '20', true),
-			
+
 			//epgp
-			array('bbdkp_epgp', 0, true),	
+			array('bbdkp_epgp', 0, true),
 			array('bbdkp_basegp', 0, true),
-			
-			//decay			
+
+			//decay
 			array('bbdkp_decay', 0, true),
-			array('bbdkp_raiddecaypct', 5, true),	
-			array('bbdkp_itemdecaypct', 5, true),			
+			array('bbdkp_raiddecaypct', 5, true),
+			array('bbdkp_itemdecaypct', 5, true),
 			array('bbdkp_decayfrequency', 1, true),
 			array('bbdkp_decayfreqtype', 1, true),
 
@@ -762,7 +763,7 @@ $versions = array(
 			array('bbdkp_dkptimeunit', 5, true),
 			array('bbdkp_timeunit', 30, true),
 			array('bbdkp_standardduration', 1, true),
-			
+
 			//zerosum
 			array('bbdkp_zerosum', 0, true),
 			array('bbdkp_bankerid', 0, true),
@@ -770,26 +771,26 @@ $versions = array(
 
             // portal settings
 	        // number of news
-	        array('bbdkp_n_news', 5, true),   
+	        array('bbdkp_n_news', 5, true),
 	        // news forum id
-	        array('bbdkp_news_forumid', 2 , true),   
+	        array('bbdkp_news_forumid', 2 , true),
 	        // number of items
-	        array('bbdkp_n_items',5 , true),   
+	        array('bbdkp_n_items',5 , true),
 	        // recruitment forum id
 	        array('bbdkp_recruit_forumid', 3, true),
-			// 1 if open,  if closed             
-	        array('bbdkp_recruitment', 0, true ), 
-			// show loot block          
-	        array('bbdkp_portal_loot', 1, true ), 
-			// show recruitment block          
-	        array('bbdkp_portal_recruitment', 1, true ), 
-			// show link block          
-	        array('bbdkp_portal_links', 1, true ), 
-		    // show post edits in portal          
+			// 1 if open,  if closed
+	        array('bbdkp_recruitment', 0, true ),
+			// show loot block
+	        array('bbdkp_portal_loot', 1, true ),
+			// show recruitment block
+	        array('bbdkp_portal_recruitment', 1, true ),
+			// show link block
+	        array('bbdkp_portal_links', 1, true ),
+		    // show post edits in portal
 	        array('bbdkp_portal_showedits', 1, true ),
 	        // showing or hiding portal
 	        array('bbdkp_portal_menu', 1, true),
-	         
+
 	        array('bbdkp_games_aion', 0, true),
 			array('bbdkp_games_daoc', 0, true),
 			array('bbdkp_games_eq', 0, true),
@@ -801,7 +802,7 @@ $versions = array(
 			array('bbdkp_games_wow', 0, true),
 			array('bbdkp_games_warhammer', 0, true),
 			array('bbdkp_games_swtor', 0, true),
-	        
+
 	        array('bbdkp_portal_welcomemsg', 1, true),
 			array('bbdkp_maxchars', 2, true),
 			array('bbdkp_games_lineage2', 0, true),
@@ -816,133 +817,133 @@ $versions = array(
 	        array('bbdkp_portal_rtlen', 15, true),
 	        array('bbdkp_portal_rtshow', 1, true),
         ),
-          
-        // add the bbdkp modules to ACP using the info files, 
+
+        // add the bbdkp modules to ACP using the info files,
 		'module_add' => array(
       		 /*
              * First, lets add maincategory named ACP_DKP to the root.
-             * note to validation team : phpbb MOD policy wants this in 
+             * note to validation team : phpbb MOD policy wants this in
              * ACP_CAT_DOT_MODS but due to the size of our tree we place it on top (0)
-             * 
-             */ 
+             *
+             */
             array('acp', 0, 'ACP_CAT_DKP'),
-            
+
              /*
              * add main menu
              */
             array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MAINPAGE'),
-            
-            
+
+
             array('acp', 'ACP_DKP_MAINPAGE', array(
            		 'module_basename' => 'dkp',
             	 'modes'           => array('mainpage', 'dkp_config', 'dkp_logs', 'dkp_indexpageconfig') ,
         		),
             ),
-            
+
             array('acp', 'ACP_DKP_MAINPAGE', array(
            		 'module_basename' => 'dkp_point',
             	 'modes'           => array('pointconfig') ,
         		)),
-        		
+
             /*
              * add member management menu
              * note added the roster here
              */
             array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MEMBER'),
-            
+
             // add memberlist-add-ranks-roster
             array('acp', 'ACP_DKP_MEMBER', array(
            		 'module_basename' => 'dkp_mm',
             	 'modes'           => array('mm_listguilds', 'mm_addguild', 'mm_ranks', 'mm_listmembers', 'mm_addmember'),
         		),
-            ),          
-            
+            ),
+
            array('acp', 'ACP_DKP_MEMBER', array(
            		 'module_basename' => 'dkp_game',
             	 'modes'           => array('listgames', 'addfaction', 'addrace', 'addclass'),
-        		)), 
-            
+        		)),
+
             /*
              * add raid management menu
              */
             array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS'),
-            
-            // add raid pools 
+
+            // add raid pools
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_sys',
             	 'modes'           => array('adddkpsys', 'listdkpsys' ),
         		),
             ),
-            
+
             // add events modules
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_event',
             	 'modes'           => array('addevent', 'listevents'),
         		),
-            ),            
-            
+            ),
+
             // add manual raid modules
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_raid',
             	 'modes'           => array('addraid', 'editraid', 'listraids'),
         		),
-            ),            
-            
+            ),
+
             // add item modules
             array('acp', 'ACP_DKP_RAIDS', array(
            		 'module_basename' => 'dkp_item',
             	 'modes'           => array('listitems', 'edititem', 'search', 'viewitem'),
         		),
             ),
-            
+
             /*
              * add member dkp menu
              * note the transfer moved to member dkp
-             */  
+             */
             array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MDKP'),
-                        
+
             // add dkp - edit dkp - transfer dkp
             array('acp', 'ACP_DKP_MDKP', array(
            		 'module_basename' => 'dkp_mdkp',
             	 'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
         		),
-            ),        
+            ),
 
             // add dkp adjustments
             array('acp', 'ACP_DKP_MDKP', array(
            		 'module_basename' => 'dkp_adj',
             	 'modes'           => array('addiadj', 'listiadj'),
         		),
-            ),        
-            
+            ),
+
 			// Add the UCP module in which you link bbDKP memberids to your phpbb account
 			array('ucp', 0, 'UCP_DKP'),
-         	
+
 			// Add one UCP module to the new category
 			array('ucp', 'UCP_DKP', array(
 					'module_basename'   => 'dkp',
-					'modes' => array('characters', 'characteradd'), 
+					'modes' => array('characters', 'characteradd'),
 				),
 			),
-			
 
-				
+
+
           ),
-            
-        'custom' => array( 
-            'acplink', 
-            'gameinstall', 
-       ), 
+
+        'custom' => array(
+            'acplink',
+            'gameinstall',
+       ),
     ),
-    
+
     '1.2.7' => array(
 
 	    // unset default permissions
 		'permission_unset' => array(
             array('ROLE_ADMIN_FULL', 	'a_dkp'),
             array('ROLE_ADMIN_FULL', 	'u_dkp'),
-            array('ROLE_USER_FULL', 	'u_dkp'),	
-            array('ROLE_ADMIN_FULL', 	'u_dkpucp'),           	
+            array('ROLE_USER_FULL', 	'u_dkp'),
+            array('ROLE_ADMIN_FULL', 	'u_dkpucp'),
 			array('ROLE_USER_STANDARD', 'u_dkp_charadd'),
 			array('ROLE_USER_STANDARD', 'u_dkp_chardelete'),
 			array('ROLE_USER_STANDARD', 'u_dkp_charupdate'),
@@ -953,44 +954,44 @@ $versions = array(
 			array('ROLE_USER_FULL', 'u_dkp_charupdate'),
 			array('ROLE_USER_FULL', 'u_dkpucp'),
             ),
-            
+
         // reaassign default permissions
         'permission_set' => array(
       		//admin can access acp
             array('GLOBAL_MODERATORS', 	'a_dkp', 'group'),
             array('ADMINISTRATORS', 	'a_dkp', 'group'),
-            
+
             //can see dkp pages
             array('GUESTS', 'u_dkp', 'group'),
             array('REGISTERED', 'u_dkp', 'group'),
             array('NEWLY_REGISTERED', 'u_dkp', 'group'),
-            
+
             //can claim a character
             array('ADMINISTRATORS', 'u_dkpucp', 'group'),
            	array('GLOBAL_MODERATORS', 	'u_dkpucp', 'group'),
            	array('REGISTERED', 'u_dkpucp', 'group'),
-            
+
             // can delete own character
-            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),		            
+            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),
             array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
-            
+
             // can add own character
             array('REGISTERED', 'u_dkp_charadd', 'group'),
             array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
             array('REGISTERED', 'u_dkp_charupdate', 'group'),
-            
+
             //can update own character
-            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),		            
+            array('ADMINISTRATORS', 'u_dkp_chardelete', 'group'),
             array('GLOBAL_MODERATORS', 'u_dkp_charadd', 'group'),
             array('REGISTERED', 'u_dkp_charupdate', 'group'),
         ),
-        
+
 		// change the class / race table
-       'custom' => array( 
-    		'tableupdates', 'gameinstall'  
-         
-       ), 
-    ), 
+       'custom' => array(
+    		'tableupdates', 'gameinstall'
+
+       ),
+    ),
 
      '1.2.8' => array(
      	// add Tera
@@ -1001,41 +1002,41 @@ $versions = array(
     		array('bbdkp_portal_newmembers', 1, true),
     		array('bbdkp_portal_maxnewmembers', 5, true),
     	),
-    	
+
      	'table_column_add' => array(
 			array($table_prefix . 'bbdkp_events', 'event_status' , array('BOOL', 1)),
-		),    	
-     
-     'custom' => array( 
+		),
+
+     'custom' => array(
      		// run game installers
-    		'gameinstall',  
+    		'gameinstall',
     	),
-    	    	
+
      ),
-     
+
      '1.2.8-pl1' => array(
      //patch 1, https://github.com/bbDKP/bbDKP/commit/10277b0, no db changes
-     
+
      ),
      '1.2.8-pl2' => array(
      //patch 2, to fix updater bug going from v126 to v128
-     
+
      ),
 
      '1.2.9' => array(
-     		
+
      		'config_update' => array(
 					// roster layout: main parameter for steering roster layout
      				array('bbdkp_roster_layout', '0', true),
      		),
-     		 
+
      		'custom' => array(
      			'tableupdates',
-     			'gameinstall',  
+     			'gameinstall',
      			'bbdkp_caches',
      		),
      ),
-     
+
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
@@ -1060,16 +1061,16 @@ function encode_message($text)
 
 
 /******************************
- * 
+ *
  *  gametable installer
- *  at each bbdkp versionupdate this function is updated for latest specs. 
- * 
+ *  at each bbdkp versionupdate this function is updated for latest specs.
+ *
  */
 function gameinstall($action, $version)
 {
-	global $db, $table_prefix, $umil, $user, $config, $phpbb_root_path, $phpEx; 
+	global $db, $table_prefix, $umil, $user, $config, $phpbb_root_path, $phpEx;
 	$installed_games = array();
-	
+
 	switch ($action)
 	{
 		case 'install' :
@@ -1079,89 +1080,89 @@ function gameinstall($action, $version)
 				case '1.2.6':
 					if(request_var('aion', 0) == 1)
 					{
-						install_aion($action, $version); 
+						install_aion($action, $version);
 						$umil->config_update('bbdkp_games_aion', 1, true);
 						$installed_games[] = 'aion';
 					}
-		
+
 					if(request_var('daoc', 0) == 1)
 					{
 						install_daoc($action, $version);
 						$umil->config_update('bbdkp_games_daoc', 1, true);
 						$installed_games[] = 'daoc';
 					}
-					
+
 					if(request_var('eq', 0) == 1)
 					{
-						install_eq($action, $version); 
+						install_eq($action, $version);
 						$umil->config_update('bbdkp_games_eq', 1, true);
 						$installed_games[] = 'eq';
 					}
-					
+
 					if(request_var('eq2', 0) == 1)
 					{
-						install_eq2($action, $version); 
+						install_eq2($action, $version);
 						$umil->config_update('bbdkp_games_eq2', 1, true);
 						$installed_games[] = 'eq2';
 					}
-		
+
 					if(request_var('FFXI', 0) == 1)
 					{
-						install_ffxi($action, $version); 
+						install_ffxi($action, $version);
 						$umil->config_update('bbdkp_games_FFXI', 1, true);
 						$installed_games[] = 'FFXI';
 					}
-					
+
 					if(request_var('lineage2', 0) == 1)
 			        {
-		       			install_lineage2($action, $version); 
+		       			install_lineage2($action, $version);
 		       			$umil->config_update('bbdkp_games_lineage2', 1, true);
-		       			$installed_games[] = 'lineage2';          			
+		       			$installed_games[] = 'lineage2';
 		       		}
-					
+
 					if(request_var('lotro', 0) == 1)
 					{
-						install_lotro($action, $version); 
+						install_lotro($action, $version);
 						$umil->config_update('bbdkp_games_lotro', 1, true);
-						$installed_games[] = 'lotro';					
+						$installed_games[] = 'lotro';
 					}
-		
+
 					if(request_var('rift', 0) == 1)
 					{
 						// new game
-						install_rift($action, $version); 
+						install_rift($action, $version);
 						$umil->config_update('bbdkp_games_rift', 1, true);
 						$installed_games[] = 'rift';
 					}
-					
+
 					if(request_var('swtor', 0) == 1)
 					{
 						// New game
-						install_swtor($action, $version); 
+						install_swtor($action, $version);
 						$umil->config_update('bbdkp_games_swtor', 1, true);
 						$installed_games[] = 'swtor';
 					}
-		
+
 					if(request_var('vanguard', 0) == 1)
 					{
-						install_vanguard($action, $version); 
+						install_vanguard($action, $version);
 						$umil->config_update('bbdkp_games_vanguard', 1, true);
 						$installed_games[] = 'vanguard';
 					}
-					
+
 					if(request_var('warhammer', 0) == 1)
 					{
-						install_warhammer($action, $version); 
+						install_warhammer($action, $version);
 						$umil->config_update('bbdkp_games_warhammer', 1, true);
 						$installed_games[] = 'vanguard';
 					}
 		       		if(request_var('wow', 0) == 1)
 					{
-						install_wow($action, $version); 
+						install_wow($action, $version);
 						$umil->config_update('bbdkp_games_wow', 1, true);
 						$installed_games[] = 'wow';
 					}
-					
+
 					foreach($installed_games as $gameid)
 					{
 		              	// update the guildbank with the first installed gameid
@@ -1174,63 +1175,63 @@ function gameinstall($action, $version)
 					return array('command' => sprintf($user->lang['UMIL_GAME126'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
 				case '1.2.7':
-					// no new games					
+					// no new games
 					return array('command' => sprintf($user->lang['UMIL_GAME127'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
 				case '1.2.8':
 					if ($action='update')
 					{
-						// //updating from 126 or 127, check 
+						// //updating from 126 or 127, check
 						if($config['bbdkp_games_lineage2'] == 1 || request_var('lineage2', 0) == 1)
 						{
-							install_lineage2($action, $version); 
+							install_lineage2($action, $version);
 							$umil->config_update('bbdkp_games_lineage2', 1, true);
 							$installed_games[] = 'lineage2';
 						}
-						
-						if($config['bbdkp_games_lotro'] == 1 || request_var('lotro', 0) == 1) 
+
+						if($config['bbdkp_games_lotro'] == 1 || request_var('lotro', 0) == 1)
 						{
-							install_lotro($action, $version); 
+							install_lotro($action, $version);
 							$umil->config_update('bbdkp_games_lotro', 1, true);
 							$installed_games[] = 'lotro';
 						}
-						
-						if($config['bbdkp_games_rift'] == 1 || request_var('rift', 0) == 1)  
+
+						if($config['bbdkp_games_rift'] == 1 || request_var('rift', 0) == 1)
 						{
 							install_rift($action, $version);
-							$umil->config_update('bbdkp_games_rift', 1, true); 
+							$umil->config_update('bbdkp_games_rift', 1, true);
 							$installed_games[] = 'rift';
 						}
-						
+
 						if($config['bbdkp_games_swtor'] == 1 || request_var('swtor', 0) == 1)
 						{
-							install_swtor($action, $version); 
+							install_swtor($action, $version);
 							$umil->config_update('bbdkp_games_swtor', 1, true);
 							$installed_games[] = 'swtor';
 						}
-						
+
 						if($config['bbdkp_games_vanguard'] == 1 || request_var('vanguard', 0) == 1)
 						{
-							install_vanguard($action, $version); 
+							install_vanguard($action, $version);
 							$umil->config_update('bbdkp_games_vanguard', 1, true);
 							$installed_games[] = 'vanguard';
 						}
-			
+
 						if($config['bbdkp_games_warhammer'] == 1 || request_var('warhammer', 0) == 1)
 						{
-							install_warhammer($action, $version); 
+							install_warhammer($action, $version);
 							$umil->config_update('bbdkp_games_warhammer', 1, true);
 							$installed_games[] = 'warhammer';
-						}					
-									
-						if($config['bbdkp_games_wow'] == 1 || request_var('wow', 0) == 1) 
+						}
+
+						if($config['bbdkp_games_wow'] == 1 || request_var('wow', 0) == 1)
 						{
 							install_wow($action, $version);
-							$umil->config_update('bbdkp_games_wow', 1, true); 
+							$umil->config_update('bbdkp_games_wow', 1, true);
 							$installed_games[] = 'wow';
 						}
 					}
-							
+
 					// if install or update, check this
 					if(request_var('tera', 0) == 1)
 					{
@@ -1246,14 +1247,14 @@ function gameinstall($action, $version)
 					}
 					return array('command' => sprintf($user->lang['UMIL_GAME128'], implode(", ", $installed_games)) , 'result' => 'SUCCESS');
 					break;
-					
+
 				case '1.2.9':
 					//no new games
-					
+
 					if($config['bbdkp_games_wow'] == 1 || request_var('wow', 0) == 1)
 					{
 						/*check if race_ids are correct*/
-						
+
 						$sql = "SELECT count(*) as countr24 FROM phpbb_bbdkp_races WHERE race_id=24 AND game_id='wow' ";
 						$result = $db->sql_query($sql);
 						$r24 = (int) $db->sql_fetchfield('countr24');
@@ -1275,11 +1276,11 @@ function gameinstall($action, $version)
 							$db->sql_query("UPDATE phpbb_bbdkp_language SET attribute_id=25 WHERE attribute_id=24 AND game_id='wow'");
 						}
 						$db->sql_freeresult($result);
-						
+
 					}
-						
-					
-						
+
+
+
 					break;
 			}
 			break;
@@ -1290,42 +1291,42 @@ function gameinstall($action, $version)
 }
 
 /*
- * 
+ *
  */
 function tableupdates($action, $version)
 {
 
-	global $user, $umil, $config, $db, $table_prefix; 
+	global $user, $umil, $config, $db, $table_prefix;
 	switch ($action)
 	{
-				
+
 		case 'install' :
 			switch ($version)
 			{
 				case '1.2.6':
-					break;	
+					break;
 				case '1.2.7':
-					break;		
+					break;
 				case '1.2.8':
 					break;
 				case '1.2.9':
 					// add double PK in members table
-					
+
 					// remove unique index 'member_name' on member table
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
 					$db->sql_query($sql);
-					
+
 					// make new unique composite
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
-					
-						
+
+
 					break;
-					
-													
+
+
 			}
 			break;
-			
+
 		case 'update':
 			switch ($version)
 			{
@@ -1333,7 +1334,7 @@ function tableupdates($action, $version)
 					break;
 				case '1.2.7':
 					// if we update to v127 then rename the image column, drop the _small
-					// before v127 only mysql was supported so we only need to check this for mysql when upgrading from 126. 
+					// before v127 only mysql was supported so we only need to check this for mysql when upgrading from 126.
 					switch ($db->sql_layer)
 					{
 						case 'mysqli':
@@ -1345,12 +1346,12 @@ function tableupdates($action, $version)
 							$db->sql_query($sql);
 							$sql = 'UPDATE ' . $table_prefix . "bbdkp_classes SET imagename = REPLACE( imagename, '_small', '') ";
 							$db->sql_query($sql);
-							$sql = 'UPDATE ' . $table_prefix . "bbdkp_classes SET imagename = LOWER(imagename) "; 
+							$sql = 'UPDATE ' . $table_prefix . "bbdkp_classes SET imagename = LOWER(imagename) ";
 							$db->sql_query($sql);
 							return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
 							break;
 					}
-					
+
 					break;
 				case '1.2.8':
 					break;
@@ -1360,13 +1361,13 @@ function tableupdates($action, $version)
 					// remove unique index 'member_name' on member table
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
 					$db->sql_query($sql);
-						
+
 					// make new unique composite
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
-					
+
 					break;
-										
+
 			}
 			break;
 		case 'uninstall' :
@@ -1377,16 +1378,16 @@ function tableupdates($action, $version)
 				case '1.2.7':
 					break;
 				case '1.2.8':
-					break;	
+					break;
 				case '1.2.9':
 					break;
-					
+
 			}
 			break;
 	}
 	return array('command' => sprintf($user->lang['UMIL_UPDTABLES'], $action, $version) , 'result' => 'SUCCESS');
-	
-	
+
+
 }
 
 /***************************************
@@ -1398,17 +1399,17 @@ function acplink($action, $version)
     global $db, $table_prefix, $umil, $phpbb_root_path, $phpEx;
 	switch ($action)
 	{
-		// lookup first node module id 
+		// lookup first node module id
 		case 'install' :
 		case 'update' :
 		  $sql = 'SELECT module_id FROM ' . $table_prefix . "modules WHERE module_langname = 'ACP_CAT_DKP'";
           $result = $db->sql_query($sql);
-          $modid = (int) $db->sql_fetchfield('module_id'); 
+          $modid = (int) $db->sql_fetchfield('module_id');
           if ($umil->config_exists('bbdkp_module_id'))
           {
               $umil->config_update('bbdkp_module_id', $modid, false);
           }
-          else 
+          else
           {
               $umil->config_add('bbdkp_module_id', $modid, false);
           }
@@ -1421,25 +1422,25 @@ function acplink($action, $version)
                   $umil->config_remove('bbdkp_module_id');
             }
 			return array('command' => 'UMIL_REMOVE_DKPLINK', 'result' => 'SUCCESS');
-		  break; 		  
+		  break;
 	}
 }
 
 /**************************************
- *  
+ *
  * function for rendering region list
- * 
+ *
  */
 function regionoptions($selected_value, $key)
 {
 	global $user;
 
     $regions = array(
-    	'EU'     			=> "European region", 
-    	'US'     			=> "US region",     	 
+    	'EU'     			=> "European region",
+    	'US'     			=> "US region",
     );
-    
-    $default = 'US'; 
+
+    $default = 'US';
 	$pass_char_options = '';
 	foreach ($regions as $key => $region)
 	{
@@ -1452,20 +1453,20 @@ function regionoptions($selected_value, $key)
 
 
 /**************************************
- *  
+ *
  * global function for clearing cache
- * 
+ *
  */
 function bbdkp_caches($action, $version)
 {
     global $umil;
-    
+
     $umil->cache_purge();
     $umil->cache_purge('imageset');
     $umil->cache_purge('template');
     $umil->cache_purge('theme');
     $umil->cache_purge('auth');
-    
+
     return 'UMIL_CACHECLEARED';
 }
 
@@ -1475,18 +1476,18 @@ function bbdkp_caches($action, $version)
 function check_oldbbdkp()
 {
 	global $db, $table_prefix, $umil, $config, $phpbb_root_path, $phpEx;
-	
+
 	include($phpbb_root_path . 'umil/umil.' . $phpEx);
 	$umil=new umil;
-	
-	// check config		
+
+	// check config
 	if($umil->config_exists('bbdkp_version'))
     {
 		if(version_compare($config['bbdkp_version'], '1.2.7') == -1 )
 		{
 			//stop here, the version is less than 1.2.7
 			//redirect(append_sid($phpbb_root_path . '/olddkpupdate/index.'. $phpEx));
-			trigger_error( $user->lang['UMIL_127MINIMUM'], E_USER_WARNING);  
+			trigger_error( $user->lang['UMIL_127MINIMUM'], E_USER_WARNING);
 		}
     }
 }

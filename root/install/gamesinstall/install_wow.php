@@ -6,7 +6,7 @@
  * @copyright (c) 2009 bbDkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
- * 
+ *
  */
 
 /**
@@ -20,24 +20,25 @@ if (! defined ( 'IN_PHPBB' ))
 function install_wow()
 {
 	global $db, $table_prefix, $umil, $user;
+
 	// classes
 	// note class 10 does not exist
-	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'wow'" ); 
+	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'wow'" );
 	$sql_ary = array ();
-	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');   
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_warrior');   
-	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_rogue');    
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_hunter');    
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_paladin'); 
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_shaman'); 
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_druid');  
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_warlock'); 
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_mage');   
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_priest');  
+	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_warrior');
+	$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_rogue');
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_hunter');
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_paladin');
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_shaman');
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_druid');
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_warlock');
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_mage');
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_priest');
 	$sql_ary [] = array ('game_id' => 'wow','class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 90 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_death_knight');
-	$sql_ary [] = array ('game_id' => 'wow','class_id' => 10, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#008467', 'imagename' => 'wow_monk'); 
+	$sql_ary [] = array ('game_id' => 'wow','class_id' => 10, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#008467', 'imagename' => 'wow_monk');
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
-	unset ( $sql_ary ); 
+	unset ( $sql_ary );
 
 	// factions
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'wow'" );
@@ -46,7 +47,7 @@ function install_wow()
 	$sql_ary [] = array ('game_id' => 'wow','faction_id' => 2, 'faction_name' => 'Horde' );
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_factions', $sql_ary );
 	unset ( $sql_ary );
-	
+
 	// races
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'wow'");
 	$sql_ary = array ();
@@ -67,9 +68,9 @@ function install_wow()
 	$sql_ary [] = array ('game_id' => 'wow','race_id' => 25, 'race_faction_id' => 2 , 'image_female' => 'wow_pandaren_female',  'image_male' => 'wow_pandaren_male' ); //Pandaren Horde
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
 	unset ( $sql_ary );
-	
+
 	// dkp system
-	// if we only have the default dkp system installed then add some more 
+	// if we only have the default dkp system installed then add some more
 	$result = $db->sql_query('select count(*) as num_dkp from ' . $table_prefix . 'bbdkp_dkpsystem');
 	$total_dkps = (int) $db->sql_fetchfield('num_dkp');
 	$db->sql_freeresult($result);
@@ -88,7 +89,7 @@ function install_wow()
 
 	// classes
 	$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'wow' and (attribute='class' or attribute = 'race')");
-	
+
 	$sql_ary = array ();
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
@@ -102,7 +103,7 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Priest' ,  'name_short' =>  'Priest' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Death Knight' ,  'name_short' =>  'Death Knight' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 10, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Monk' ,  'name_short' =>  'Monk' );
-	
+
 	//classes in fr
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 1, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
@@ -116,8 +117,8 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow','attribute_id' => 5, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Prêtre' ,  'name_short' =>  'Prêtre' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 6, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Chevalier de la Mort' ,  'name_short' =>  'Chevalier de la Mort' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 10, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Moine' ,  'name_short' =>  'Moine' );
-	
-	//classes in de	
+
+	//classes in de
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Unbekannt' ,  'name_short' =>  'Unbekannt' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 1, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Krieger' ,  'name_short' =>  'Krieger' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 4, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Schurke' ,  'name_short' =>  'Schurke' );
@@ -130,7 +131,7 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Priester' ,  'name_short' =>  'Priester' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Todesritter' ,  'name_short' =>  'Todesritter' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 10, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Mönch' ,  'name_short' =>  'Mönch' );
-				
+
 	//races in en
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 1, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Human' ,  'name_short' =>  'Human' );
@@ -147,7 +148,7 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 22, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 24, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Pandaren Alliance' ,  'name_short' =>  'Pandaren Alliance' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 25, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Pandaren Horde' ,  'name_short' =>  'Pandaren Horde' );
-		
+
 	// races in fr
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 1, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Humain' ,  'name_short' =>  'Humain' );
@@ -164,7 +165,7 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 22, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 24, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Pandaren Alliance' ,  'name_short' =>  'Pandaren Alliance' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 25, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Pandaren Horde' ,  'name_short' =>  'Pandaren Horde' );
-	
+
 	//races in de
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 1, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Mensch' ,  'name_short' =>  'Mensch' );
@@ -181,24 +182,26 @@ function install_wow()
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 22, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Worgen' ,  'name_short' =>  'Worgen' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 24, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Pandaren Alliance' ,  'name_short' =>  'Pandaren Alliance' );
 	$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 25, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Pandaren Horde' ,  'name_short' =>  'Pandaren Horde' );
-	
+
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 
+	populate_wow();
+
 	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'WoW Cataclysm' ");
-	$row = $db->sql_fetchrow ($result); 
+	$row = $db->sql_fetchrow ($result);
 	if($row)
     {
     	//get existing
-		$wowpdkpid = $row['dkpsys_id'];    	
+		$wowpdkpid = $row['dkpsys_id'];
     }
     else
     {
     	// add new dkp pool
 		$sql_ary = array (
-			'dkpsys_name' => 'WoW Cataclysm', 
-			'dkpsys_status' => 'Y', 
-			'dkpsys_addedby' => 'admin', 
+			'dkpsys_name' => 'WoW Cataclysm',
+			'dkpsys_status' => 'Y',
+			'dkpsys_addedby' => 'admin',
 			'dkpsys_default' => 'N' );
 		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
 		$db->sql_query($sql);
@@ -218,39 +221,39 @@ function install_wow()
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 10hm', 'event_color' => '#FF2266', 'event_value' => 5, 'event_imagename' => 'wow_ds10hm' );
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 25', 'event_color' => '#FFBB33', 'event_value' => 5, 'event_imagename' => 'wow_ds25' );
 	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T13 Dragon Soul 25hm', 'event_color' => '#FF2266', 'event_value' => 5, 'event_imagename' => 'wow_ds25hm' );
-	
+
 	$sql_ary2 = array();
 	foreach($sql_ary as $evt => $event)
 	{
-		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
+		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char);
 		$result = $db->sql_query($sql);
-		$row = $db->sql_fetchrow ($result); 
+		$row = $db->sql_fetchrow ($result);
 		if(!$row)
 		{
 			$sql_ary2[] = $event;
 		}
 		$db->sql_freeresult ($result);
 	}
-	
+
 	if (count($sql_ary2) > 0)
 	{
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
 	}
-	
+
 	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'WoW Pandaria' ");
-	$row = $db->sql_fetchrow ($result); 
+	$row = $db->sql_fetchrow ($result);
 	if($row)
     {
     	//get existing
-		$wowpdkpid = $row['dkpsys_id'];    	
+		$wowpdkpid = $row['dkpsys_id'];
     }
     else
     {
     	// add new dkp pool
 		$sql_ary = array (
-			'dkpsys_name' => 'WoW Pandaria', 
-			'dkpsys_status' => 'Y', 
-			'dkpsys_addedby' => 'admin', 
+			'dkpsys_name' => 'WoW Pandaria',
+			'dkpsys_status' => 'Y',
+			'dkpsys_addedby' => 'admin',
 			'dkpsys_default' => 'N' );
 		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
 		$db->sql_query($sql);
@@ -259,27 +262,125 @@ function install_wow()
     $db->sql_freeresult ( $result );
 
     $sql_ary = array();
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Mogu’shan Vaults (90)', 'event_color' => '#FF9999', 'event_value' => 5, 'event_imagename' => ''  ) ;
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Terrace of Endless Spring  (90)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => '') ;
-	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Heart of Fear (90)', 'event_color' => '#DD00AA', 'event_value' => 5, 'event_imagename' => '' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => utf8_encode('T14 MoguShan Vaults (10)'), 'event_color' => '#FF9999', 'event_value' => 5, 'event_imagename' => 'mogushanvaults10'  ) ;
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => utf8_encode('T14 MoguShan Vaults (10HM)'), 'event_color' => '#FF9999', 'event_value' => 5, 'event_imagename' => 'mogushanvaultsh10'  ) ;
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => utf8_encode('T14 MoguShan Vaults (25)'), 'event_color' => '#FF9999', 'event_value' => 5, 'event_imagename' => 'mogushanvaults25'  ) ;
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => utf8_encode('T14 MoguShan Vaults (25HM)'), 'event_color' => '#FF9999', 'event_value' => 5, 'event_imagename' => 'mogushanvaultsh25'  ) ;
+
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Terrace of Endless Spring  (10)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'terraceofendlessspring10') ;
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Terrace of Endless Spring  (10HM)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'terraceofendlessspringh10') ;
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Terrace of Endless Spring  (25)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'terraceofendlessspring25') ;
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Terrace of Endless Spring  (25HM)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'terraceofendlessspringh25') ;
+
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Heart of Fear (10)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'heartoffear10' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Heart of Fear (10HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'heartoffearh10' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Heart of Fear (25)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'heartoffear25' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T14 Heart of Fear (25HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'heartoffearh25' );
+
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T15 Throne of Thunder (10)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'throneofthunder10' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T15 Throne of Thunder (10HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'throneofthunderh10' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T15 Throne of Thunder (25)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'throneofthunder25' );
+	$sql_ary [] = array('event_dkpid' => $wowpdkpid , 'event_name' => 'T15 Throne of Thunder (25HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'throneofthunderh25' );
 
 	$sql_ary2 = array();
 	foreach($sql_ary as $evt => $event)
 	{
-		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char); 
+		$sql = 'SELECT event_id FROM ' . $table_prefix . 'bbdkp_events where event_name ' . $db->sql_like_expression($db->any_char . $event['event_name'] . $db->any_char);
 		$result = $db->sql_query($sql);
-		$row = $db->sql_fetchrow ($result); 
+		$row = $db->sql_fetchrow ($result);
 		if(!$row)
 		{
 			$sql_ary2[] = $event;
 		}
 		$db->sql_freeresult ($result);
 	}
-	
+
 	if (count($sql_ary2) > 0)
 	{
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
 	}
-	
+
+
+
 }
+
+
+/*
+ * demo data
+ * inserts 3 dummy members, 3 dkp accounts, 3 dummy items, and 1 dummy raid
+ */
+function populate_wow()
+{
+
+	global $db, $table_prefix, $umil, $user;
+
+	$sql_ary = array();
+	$sql_ary[] = array(
+			'game_id'  		   => 'wow',
+			'member_name'      => 'wow1',
+			'member_status'    => 1 ,
+			'member_level'     => 90,
+			'member_race_id'   => 1,
+			'member_class_id'  => 1,
+			'member_rank_id'   => 0,
+			'member_comment'   => 'Inserted by installer',
+			'member_joindate'  => time(),
+			'member_outdate'   => '1893456000',
+			'member_guild_id'  => 1,
+			'member_gender_id' => 0,
+			'member_achiev'    => 0,
+			'phpbb_user_id' 	=> $user->data['user_id'],
+	) ;
+
+	$sql_ary[] = array(
+			'game_id'  		   => 'wow',
+			'member_name'      => 'wow2',
+			'member_status'    => 1 ,
+			'member_level'     => 90,
+			'member_race_id'   => 2,
+			'member_class_id'  => 2,
+			'member_rank_id'   => 0,
+			'member_comment'   => 'Inserted by installer',
+			'member_joindate'  => time(),
+			'member_outdate'   => '1893456000',
+			'member_guild_id'  => 1,
+			'member_gender_id' => 0,
+			'member_achiev'    => 0,
+			'phpbb_user_id' 	=> $user->data['user_id'],
+	) ;
+
+	$sql_ary[] = array(
+			'game_id'  		   => 'wow',
+			'member_name'      => 'wow3',
+			'member_status'    => 1 ,
+			'member_level'     => 90,
+			'member_race_id'   => 3,
+			'member_class_id'  => 3,
+			'member_rank_id'   => 0,
+			'member_comment'   => 'Inserted by installer',
+			'member_joindate'  => time(),
+			'member_outdate'   => '1893456000',
+			'member_guild_id'  => 1,
+			'member_gender_id' => 0,
+			'member_achiev'    => 0,
+			'phpbb_user_id' 	=> $user->data['user_id'],
+	) ;
+	$db->sql_multi_insert ( $table_prefix . 'bbdkp_memberlist', $sql_ary );
+
+	if (! class_exists('acp_dkp_mm'))
+	{
+		include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
+		$class_members = new acp_dkp_mm();
+	}
+
+
+
+
+}
+
+
+
+
+
+
 ?>
