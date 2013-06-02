@@ -24,6 +24,19 @@ if (! defined ( 'EMED_BBDKP' ))
 	trigger_error ( $user->lang ['BBDKPDISABLED'], E_USER_WARNING );
 }
 
+if (!class_exists('Faction'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/factions/Faction.$phpEx");
+}
+if (!class_exists('Classes'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/classes/Classes.$phpEx");
+}
+if (!class_exists('Races'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/races/Races.$phpEx");
+}
+
 class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 {
 
@@ -51,90 +64,39 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 		
 		switch ($mode)
 		{
-			case 'addfaction' :
-				$addnew = (isset ( $_POST ['factionadd'] )) ? true : false;
+			case 'listgames' :
 				
-				if ($addnew)
+				//game dropdown
+				$installed_games = array ();
+				
+				$submit = (isset ( $_POST ['game_id'] ) || isset ( $_GET ['game_id'] ) ) ? true : false;
+				if ($submit)
 				{
-					$this->add_faction();
+					$game_id = request_var('game_id', '');
+				}
+				else
+				{
+					//take the 1st one
+					foreach ( $this->games as $gid => $gamename )
+					{
+						if ($config ['bbdkp_games_' . $gid] == 1)
+						{
+							$game_id = $gid;
+						}
+						break;
+					}
 				}
 				
-				$installed_games = array ();
-				foreach ( $this->games as $gameid => $gamename )
+				foreach ( $this->games as $gid => $gamename )
 				{
 					//add value to dropdown when the game config value is 1
-
-					if ($config ['bbdkp_games_' . $gameid] == 1)
+					if ($config ['bbdkp_games_' . $gid] == 1)
 					{
 						$template->assign_block_vars ( 'game_row', array (
-							'VALUE' => $gameid, 'SELECTED' => '', 'OPTION' => $gamename ) );
-						$hidden_game_id = $gameid;
-						$installed_games [] = $gameid;
+								'VALUE' => $gid, 'SELECTED' => ($gid == $game_id) ? ' selected="selected"' : '', 'OPTION' => $gamename ) );
+						$installed_games [] = $gid;
 					}
-				}
-				// send parameters to template
-
-				$template->assign_vars ( array (
-					'GAME_ID' => $hidden_game_id, 
-					'U_ACTION' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addfaction' ), 
-					'MSG_NAME_EMPTY' => $user->lang ['FV_REQUIRED_NAME'] ) );
-				
-				$this->page_title = 'ACP_LISTGAME';
-				$this->tpl_name = 'dkp/acp_' . $mode;
-				break;
-			
-			case 'addrace' :
-				$raceadd = (isset ( $_POST ['add'] )) ? true : false;
-				$raceupdate = (isset ( $_POST ['update'] )) ? true : false;
-				
-				if ($raceadd || $raceupdate)
-				{
-					if (! check_form_key ( 'acp_dkp_game' ))
-					{
-						trigger_error ( 'FORM_INVALID' );
-					}
-				}
-				
-				if ($raceadd)
-				{
-					$this->add_race();
-				}
-				
-				if ($raceupdate)
-				{
-					$this->update_race();				
-				}
-				$this->page_title = 'ACP_LISTGAME';
-				$this->tpl_name = 'dkp/acp_' . $mode;
-				break;
-			
-			case 'addclass' :
-				
-				$classadd = (isset ( $_POST ['add'] )) ? true : false;
-				$classupdate = (isset ( $_POST ['update'] )) ? true : false;
-				
-				if ($classadd || $classupdate)
-				{
-					if (! check_form_key ( 'acp_dkp_game' ))
-					{
-						trigger_error ( 'FORM_INVALID' );
-					}
-				}
-				
-				if ($classadd)
-				{
-					$this->add_class();
-				}
-				
-				if ($classupdate)
-				{
-					$this->update_class();
-				}
-				$this->page_title = 'ACP_LISTGAME';
-				$this->tpl_name = 'dkp/acp_' . $mode;
-				break;
-			
-			case 'listgames' :
+				}				
 				
 				$addrace = (isset ( $_POST ['showraceadd'] )) ? true : false;
 				$addclass = (isset ( $_POST ['showclassadd'] )) ? true : false;
@@ -157,7 +119,33 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 
 				if ($deletefaction)
 				{
-					$this->delete_faction();
+					global $db, $cache, $user;
+					$faction = new includes\bbdkp\Faction();
+					$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
+					$faction->faction_id = request_var ( 'id', 0 );
+					$faction->get();
+					
+					// ask for permission
+					if (confirm_box ( true ))
+					{
+						$faction = new includes\bbdkp\Faction();
+						$faction->game_id = request_var ( 'hidden_game_id','' );
+						$faction->faction_id = request_var ( 'hidden_faction_id', 0 );
+						$faction->get();
+						$faction->Delete();
+						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_FACTION_SUCCESS'], $faction->faction_name ) . $this->link, E_USER_WARNING );
+					}
+					else
+					{
+						// get field content
+						$s_hidden_fields = build_hidden_fields ( array (
+								'delete' => true, 
+								'hidden_faction_id' => $faction->faction_id, 
+								'hidden_game_id' => $faction->game_id, 
+								));
+						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_FACTION'], $faction->faction_name ), $s_hidden_fields );
+					}
+						
 				}
 				
 				// user pressed race add / edit, load acp_addrace	
@@ -169,22 +157,12 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 
 					if (isset ( $_GET ['id'] ))
 					{
-						$id = request_var ( 'id', 0 );
-						$game_id = request_var ( 'game_id', '' );
-						//edit race		
-
-						$sql_array = array (
-							'SELECT' => ' r.game_id, r.race_id, l.name AS race_name, r.race_faction_id,  r.image_female, r.image_male ', 
-							'FROM' => array (RACE_TABLE => 'r', BB_LANGUAGE => 'l' ), 
-							'WHERE' => "   r.game_id = l.game_id 
-							AND r.race_id = l.attribute_id 
-							AND l.attribute='race' 
-							AND l.language= '" . $config ['bbdkp_lang'] . "'
-							AND l.game_id = '" . $game_id . "'
-							AND r.race_id = " . $id );
+						$listraces = new includes\bbdkp\Races();
+												
+						$listraces->race_id = request_var ( 'id', 0 );
+						$listraces->game_id = request_var ( 'game_id', '' );
+						$result = $listraces->listraces();	
 						
-						$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-						$result = $db->sql_query ( $sql );
 						while ( $row = $db->sql_fetchrow ( $result ) )
 						{
 							$factionid = $row['race_faction_id'];
@@ -204,17 +182,16 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 							if ($config ['bbdkp_games_' . $gid] == 1)
 							{
 								$template->assign_block_vars ( 'game_row', array (
-									'VALUE' => $gid, 'SELECTED' => ($game_id == $gid) ? ' selected="selected"' : '', 'OPTION' => $gamename ) );
+									'VALUE' => $gid, 'SELECTED' => ($listraces->game_id == $gid) ? ' selected="selected"' : '', 'OPTION' => $gamename ) );
 								$installed_games [] = $gid;
 							}
 						}
 						
 						// faction dropdown
-
 						$sql_array = array (
 							'SELECT' => ' f.faction_name, f.faction_id ', 
 							'FROM' => array (FACTION_TABLE => 'f' ), 
-							'WHERE' => " f.game_id = '" . $game_id . "'", 
+							'WHERE' => " f.game_id = '" . $listraces->game_id . "'", 
 							'ORDER_BY' => 'faction_id ASC ' );
 						
 						$sql = $db->sql_build_query ( 'SELECT', $sql_array );
@@ -230,8 +207,8 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 						// send parameters to template
 
 						$template->assign_vars ( array (
-							'GAME_ID' => $game_id, 
-							'RACE_ID' => $id, 
+							'GAME_ID' => $listraces->game_id, 
+							'RACE_ID' => $listraces->race_id, 
 							'RACE_NAME' => $race_name, 
 							'S_FACTIONLIST_OPTIONS' => $s_faction_options, 
 							'S_RACE_IMAGE_M_EXISTS' => (strlen ( $race_imagename_m ) > 1) ? true : false, 
@@ -248,9 +225,6 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 					{
 						
 						// build add form
-
-						// list installed games
-
 						$installed_games = array ();
 						foreach ( $this->games as $gameid => $gamename )
 						{
@@ -298,7 +272,35 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 
 				if ($racedelete)
 				{
-					$this->race_delete();
+					// ask for permission
+					if (confirm_box(true))
+					{
+						$deleterace = new includes\bbdkp\Races();
+						$deleterace->race_id = request_var ( 'raceid', 0 );
+						$deleterace->game_id = request_var ( 'game_id', '' );
+						$deleterace->get();
+						$deleterace->Delete();
+						$success_message = sprintf($user->lang['ADMIN_DELETE_RACE_SUCCESS'], $deleterace->race_name);
+						trigger_error($success_message . adm_back_link($this->u_action), E_USER_NOTICE);
+					}
+					else
+					{
+						$deleterace = new includes\bbdkp\Races;
+						$deleterace->race_id = request_var ( 'id', 0 );
+						$deleterace->game_id = request_var ( 'game_id', '' );
+						$deleterace->get();
+						
+						$s_hidden_fields = build_hidden_fields(array(
+								'delete' => true ,
+								'raceid' => $deleterace->race_id, 
+								'gameid' => $deleterace->game_id
+								));
+						
+						$template->assign_vars(array(
+								'S_HIDDEN_FIELDS' => $s_hidden_fields));
+						confirm_box(false, sprintf ( $user->lang ['CONFIRM_DELETE_RACE'], $deleterace->race_name )  , $s_hidden_fields);
+					}
+					
 				}
 				
 				if ($classedit || $addclass)
@@ -317,23 +319,11 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 					if (isset ( $_GET ['id'] ))
 					{
 						//edit this class_id
-
-						$id = request_var ( 'id', 0 );
-						$game_id = request_var ( 'game_id', '' );
+						$listclasses = new includes\bbdkp\Classes;
+						$listclasses->class_id = request_var ( 'id', 0 );
+						$listclasses->game_id = request_var ( 'game_id', '' );
+						$result = $listclasses->listclasses();
 						
-						$sql_array = array (
-							'SELECT' => ' c.c_index, c.class_id, l.name AS class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename, c.colorcode ', 
-							'FROM' => array (
-								CLASS_TABLE => 'c', BB_LANGUAGE => 'l' ), 
-							'WHERE' => " c.class_id = l.attribute_id 
-							AND l.attribute='class' 
-							AND l.game_id = '" . $db->sql_escape ( $game_id ) . "'
-							AND c.game_id = l.game_id
-							AND l.language= '" . $config ['bbdkp_lang'] . "'
-							AND c.class_id = " . $id );
-						
-						$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-						$result = $db->sql_query ( $sql );
 						while ( $row = $db->sql_fetchrow ($result))
 						{
 							$c_index = $row['c_index'];
@@ -357,7 +347,7 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 							if ($config ['bbdkp_games_' . $id] == 1)
 							{
 								$template->assign_block_vars ( 'game_row', array (
-									'VALUE' => $id, 'SELECTED' => ($game_id == $id) ? ' selected="selected"' : '', 'OPTION' => $gamename ) );
+									'VALUE' => $id, 'SELECTED' => ($listclasses->game_id == $id) ? ' selected="selected"' : '', 'OPTION' => $gamename ) );
 								$installed_games [] = $id;
 							}
 						}
@@ -374,7 +364,7 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 						// send parameters to template
 
 						$template->assign_vars ( array (
-							'GAME_ID' => $game_id, 
+							'GAME_ID' => $listclasses->game_id, 
 							'C_INDEX' => $c_index, 
 							'CLASS_ID' => $class_id, 
 							'CLASS_NAME' => $class_name, 
@@ -389,7 +379,6 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 							'U_ACTION' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addclass' ), 
 							'MSG_NAME_EMPTY' => $user->lang ['FV_REQUIRED_NAME'], 
 							'MSG_ID_EMPTY' => $user->lang ['FV_REQUIRED_ID'] ) );
-							
 					
 					}
 					else
@@ -434,457 +423,202 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 
 				if ($classdelete)
 				{
-					$this->class_delete();
+					// ask for permission
+					if (confirm_box ( true ))
+					{
+						$deleteclass = new includes\bbdkp\Classes();
+						$deleteclass->class_id = request_var ( 'hidden_class_id', 0 );
+						$deleteclass->game_id = request_var ( 'hidden_game_id', '' );
+						$deleteclass->get();
+						$deleteclass->Delete();
+							
+						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_CLASS_SUCCESS'], $class_id ) . $this->link, E_USER_WARNING );
+					}
+					else
+					{
+						$deleteclass = new includes\bbdkp\Classes();
+						$deleteclass->class_id = request_var ( 'id', 0 );
+						$deleteclass->game_id = request_var ( 'game_id', '' );
+						$deleteclass->get();
+						
+						// get field content
+						$s_hidden_fields = build_hidden_fields ( array (
+							'delete' => true, 
+							'hidden_game_id' => $deleteclass->game_id, 
+							'hidden_class_id' => $deleteclass->class_id) 
+						);
+						
+						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_CLASS'], $deleteclass->classname ), $s_hidden_fields );
+					}
+						
+					
 				}
 				
-				$this->listgames ();
+				$this->listgames($game_id);
 				$this->page_title = 'ACP_LISTGAME';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				
 				break;
-		
-		}
-	}
-	
-	
-	/**
-	 * update class in db
-	 */
-	function update_class()
-	{
-		global $db, $user, $config, $cache;
-				
-		//user pressed add or update in list
-		$game_id = request_var ( 'game_id_hidden', '' );
-		$classname = utf8_normalize_nfc ( request_var ( 'class_name', '', true ) );
-		$class_id = request_var ( 'class_id', 0 );
-		$min = request_var ( 'class_level_min', 0 );
-		$max = request_var ( 'class_level_max', 0 );
-		$armorytype = request_var ( 'armory', '' );
-		$image = request_var ( 'image', '' );
-		$colorcode = request_var ( 'classcolor', '' );
-		
-		$class_id0 = request_var ( 'class_id0', 0 );
-		$c_index = request_var ( 'c_index', 0 );
-		$class_id = request_var ( 'class_id', 0 );
-		
-		// check for unique classid exception : if this class id exists already 
-		$sql = 'SELECT count(*) AS countclass FROM ' . CLASS_TABLE . ' WHERE c_index != ' . $c_index . " AND 
-				class_id = '" . $db->sql_escape ( $class_id0 ) . "' AND game_id = '" . $game_id . "'";
-		$result = $db->sql_query ( $sql );
-		if (( int ) $db->sql_fetchfield ( 'countclass', false, $result ) > 0)
-		{
-			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_CLASS_FAILED'], $class_id0 ) . $this->link, E_USER_WARNING );
-		}
-		$db->sql_freeresult ( $result );
-		
-		$data = array (
-			'class_id' => ( int ) $class_id, 
-			'class_min_level' => ( int ) $min, 
-			'class_max_level' => ( int ) $max, 
-			'class_armor_type' => ( string ) $armorytype, 
-			'imagename' => $image, 
-			'class_hide' => 0, 
-			'colorcode' => $colorcode );
-		$db->sql_transaction ( 'begin' );
-		$sql = 'UPDATE ' . CLASS_TABLE . ' SET ' . $db->sql_build_array ( 'UPDATE', $data ) . '  
-			    WHERE c_index = ' . $c_index;
-		$db->sql_query ( $sql );
-		
-		// now update the language table!
-		$names = array (
-			'attribute_id' => ( string ) $class_id, //new classid
-			'name' => ( string ) $classname, 
-			'name_short' => ( string ) $classname );
-					
-		$sql = 'UPDATE ' . BB_LANGUAGE . ' SET ' . $db->sql_build_array ( 'UPDATE', $names ) . '
-		 WHERE attribute_id = ' . $class_id0 . " AND attribute='class'  
-		 AND language= '" . $config ['bbdkp_lang'] . "' AND game_id = '" . $game_id . "'";
-		$db->sql_query ( $sql );
-		
-		$db->sql_transaction ( 'commit' );
-		$cache->destroy ( 'sql', BB_LANGUAGE );
-		$cache->destroy ( 'sql', CLASS_TABLE );
-		trigger_error ( sprintf ( $user->lang ['ADMIN_UPDATE_CLASS_SUCCESS'], $classname ) . $this->link, E_USER_NOTICE );
-	}
-	
-	/**
-	 * add the class to db
-	 *
-	 */
-	function add_class()
-	{
-		global $db, $user, $config, $cache;
-		
-		//user pressed add or update in list
-		$game_id = request_var ( 'game_id', '' );
-		$classname = utf8_normalize_nfc ( request_var ( 'class_name', '', true ) );
-		$class_id = request_var ( 'class_id', 0 );
-		$min = request_var ( 'class_level_min', 0 );
-		$max = request_var ( 'class_level_max', 0 );
-		$armorytype = request_var ( 'armory', '' );
-		$image = request_var ( 'image', '' );
-		$colorcode = request_var ( 'classcolor', '' );
-				
-		$sql = 'SELECT count(*) AS countclass FROM ' . CLASS_TABLE . ' WHERE class_id  = ' . $class_id . " AND game_id = '" . $game_id . "'";
-		$resultc = $db->sql_query ( $sql );
-		
-		if (( int ) $db->sql_fetchfield ( 'countclass', false, $resultc ) > 0)
-		{
-			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_CLASS_FAILED'], $class_id ) . $this->link, E_USER_WARNING );
-		}
-		$db->sql_freeresult ( $resultc );
-		unset ( $resultc );
-		
-		$data = array (
-			'class_id' => ( int ) $class_id, 
-			'game_id' => ( string ) $game_id, 
-			'class_min_level' => ( int ) $min, 
-			'class_max_level' => ( int ) $max, 
-			'class_armor_type' => ( string ) $armorytype, 
-			'imagename' => $image, 
-			'class_hide' => 0, 
-			'colorcode' => $colorcode );
-		
-		$db->sql_transaction ( 'begin' );
-		
-		$sql = 'INSERT INTO ' . CLASS_TABLE . ' ' . $db->sql_build_array ( 'INSERT', $data );
-		$db->sql_query ( $sql );
-		
-		$id = $db->sql_nextid ();
-		
-		$names = array (
-			'game_id' => ( string ) $game_id, 
-			'attribute_id' => $class_id, 
-			'language' => $config ['bbdkp_lang'], 
-			'attribute' => 'class', 
-			'name' => ( string ) $classname, 
-			'name_short' => ( string ) $classname );
-		
-		$sql = 'INSERT INTO ' . BB_LANGUAGE . ' ' . $db->sql_build_array ( 'INSERT', $names );
-		$db->sql_query ( $sql );
-		
-		$db->sql_transaction ( 'commit' );
-		$cache->destroy ( 'sql', BB_LANGUAGE );
-		$cache->destroy ( 'sql', CLASS_TABLE );
-		
-		trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_CLASS_SUCCESS'], $classname ) . $this->link, E_USER_NOTICE );
-		
-	}
-	
-	/**
-	 * deletes class id
-	 *
-	 */
-	function class_delete()
-	{
-		global $cache, $config, $db, $user, $phpbb_admin_path, $phpbb_root_path, $phpEx;
-		//unique key
-		$class_id = request_var ( 'id', 0 );
-		$game_id = request_var ( 'game_id', '' );
-		
-		// see if there are members in this class
-		$sql_array = array (
-			'SELECT' => ' c.class_id, COUNT(*) AS classcount  ', 
-			'FROM' => array (
-				MEMBER_LIST_TABLE => 'm', 
-				CLASS_TABLE => 'c' ), 
-			'WHERE' => 	"m.game_id = c.game_id AND m.game_id = '" . $game_id . "' 
-    					and m.member_class_id = c.class_id AND c.class_id =  " . $class_id , 
-			'GROUP_BY' => 'c.class_id'
-				);
-		
-		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-		$result = $db->sql_query ( $sql );
-		$classcount = ( int ) $db->sql_fetchfield ( 'classcount', false, $result );
-		$db->sql_freeresult ( $result );
-		if ($classcount == 0)
-		{
-			// ask for permission
-			if (confirm_box ( true ))
-			{
-				$db->sql_transaction ( 'begin' );
-				
-				$sql = 'DELETE FROM ' . CLASS_TABLE . ' WHERE class_id  = ' . $class_id . " and game_id = '" . $game_id . "'";
-				$db->sql_query ( $sql );
-				
-				$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config ['bbdkp_lang'] . "' AND attribute = 'class' 
-					and attribute_id= " . $class_id . " and game_id = '" . $game_id . "'";
-				$db->sql_query ( $sql );
-				
-				$db->sql_transaction ( 'commit' );
-				$cache->destroy ( 'sql', CLASS_TABLE );
-				$cache->destroy ( 'sql', BB_LANGUAGE );
-				trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_CLASS_SUCCESS'], $class_id ) . $this->link, E_USER_WARNING );
-			}
-			else
-			{
-				// get field content
-				$s_hidden_fields = build_hidden_fields ( array (
-					'delete' => true, 'id' => $class_id ) );
-				confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_CLASS'], $class_id ), $s_hidden_fields );
-			}
-		
-		}
-		else
-		{
-			trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_CLASS_FAILED'], $class_id ) . $this->link, E_USER_WARNING );
-		}
-	}
-	
-	/**
-	 * updates race
-	 */
-	function update_race()
-	{
-		global $db, $user, $config, $cache;
-		
-		$game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
-		$id = request_var ( 'race_id', 0 );
-		$racename = utf8_normalize_nfc ( request_var ( 'racename', '', true ) );
-		$factionid = request_var ( 'faction', 0 );
-		$race_imagename_m = utf8_normalize_nfc ( request_var ( 'image_male', '', true ) );
-		$race_imagename_f = utf8_normalize_nfc ( request_var ( 'image_female', '', true ) );
-				
-		// note you cannot change the game to which a race belongs 
-		$data = array (
-			'race_faction_id' => ( int ) $factionid, 'image_male' => ( string ) $race_imagename_m, 'image_female' => ( string ) $race_imagename_f );
-		
-		$db->sql_transaction ( 'begin' );
-		$sql = 'UPDATE ' . RACE_TABLE . ' SET ' . $db->sql_build_array ( 'UPDATE', $data ) . '  
-			    WHERE race_id = ' . ( int ) $id . " AND game_id = '" . $db->sql_escape ( $game_id ) . "'";
-		$db->sql_query ( $sql );
-		
-		$names = array (
-			'name' => ( string ) $racename, 'name_short' => ( string ) $racename );
-		
-		$sql = 'UPDATE ' . BB_LANGUAGE . ' SET ' . $db->sql_build_array ( 'UPDATE', $names ) . ' 
-			WHERE attribute_id = ' . $id . " AND attribute='race'  AND language= '" . $config ['bbdkp_lang'] . "' AND game_id =   '" . $db->sql_escape ( $game_id ) . "'";
-		$db->sql_query ( $sql );
-		
-		$db->sql_transaction ( 'commit' );
-		$cache->destroy ( 'sql', BB_LANGUAGE );
-		$cache->destroy ( 'sql', RACE_TABLE );
-		trigger_error ( sprintf ( $user->lang ['ADMIN_UPDATE_RACE_SUCCESS'], $racename ) . $this->link, E_USER_NOTICE );
-		
-	}
-	
-	/**
-	 * add the race	 to db
-	 *
-	 */
-	function add_race()
-	{
-		global $db, $user, $cache, $config;
-
-		$game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
-		$id = request_var ( 'race_id', 0 );
-		$racename = utf8_normalize_nfc ( request_var ( 'racename', '', true ) );
-		$factionid = request_var ( 'faction', 0 );
-		$race_imagename_m = utf8_normalize_nfc ( request_var ( 'image_male', '', true ) );
-		$race_imagename_f = utf8_normalize_nfc ( request_var ( 'image_female', '', true ) );
-				
-		$sql = 'SELECT COUNT(race_id) AS countrace 
-			FROM ' . RACE_TABLE . '
-			WHERE race_id  = ' . $id . " 
-			AND game_id = '" . $game_id . "'";
-		$resultr = $db->sql_query ( $sql );
-		$a = $db->sql_fetchfield ( 'countrace', false, $resultr );
-		if (( int ) $a > 0)
-		{
-			//uh oh that race exists
-			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_FAILED'], $id ) . $this->link, E_USER_WARNING );
-		}
-		$db->sql_freeresult ( $resultr );
-		$data = array (
-			'game_id' => ( string ) $game_id, 
-			'race_id' => ( int ) $id, 
-			'race_faction_id' => ( int ) $factionid, 
-			'image_male' => ( string ) $race_imagename_m, 
-			'image_female' => ( string ) $race_imagename_f, 
-			'race_hide' => 0 );
-		
-		$db->sql_transaction ( 'begin' );
-		$sql = 'INSERT INTO ' . RACE_TABLE . ' ' . $db->sql_build_array ( 'INSERT', $data );
-		$db->sql_query ( $sql );
-		
-		$names = array (
-			'attribute_id' => $id, 
-			'game_id' => $game_id, 
-			'language' => $config ['bbdkp_lang'], 
-			'attribute' => 'race', 
-			'name' => ( string ) $racename, 
-			'name_short' => ( string ) $racename );
-		
-		$sql = 'INSERT INTO ' . BB_LANGUAGE . ' ' . $db->sql_build_array ( 'INSERT', $names );
-		$db->sql_query ( $sql );
-		
-		$db->sql_transaction ( 'commit' );
-		$cache->destroy ( 'sql', BB_LANGUAGE );
-		$cache->destroy ( 'sql', RACE_TABLE );
-		trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_SUCCESS'], $racename ) . $this->link, E_USER_NOTICE );
-		
-	}
-	
-		
-	/**
-	 * deletes race
-	 *
-	 */
-	function race_delete()
-	{
-		global $config, $db, $user;
-		
-		$id = request_var ( 'id', 0 );
-		$game_id = request_var ( 'game_id', '' );
-		$sql_array = array (
-			'SELECT' => ' count(*) as racecount  ', 
-			'FROM' => array (
-				MEMBER_LIST_TABLE => 'm', 
-				RACE_TABLE => 'r' ), 
-			'WHERE' => 'm.member_race_id = r.race_id 
-		    			and r.race_id =  ' . $id . " 
-		    			and r.game_id = m.game_id 
-		    			and r.game_id = '" . $game_id . "'" );
-		
-		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-		$result = $db->sql_query ( $sql );
-		$racecount = ( int ) $db->sql_fetchfield ( 'racecount', false, $result );
-		$db->sql_freeresult ( $result );
-		if ($racecount == 0)
-		{
-			// ask for permission
-			if (confirm_box ( true ))
-			{
-				$db->sql_transaction ( 'begin' );
-				
-				$sql = 'DELETE FROM ' . RACE_TABLE . ' WHERE race_id =' . $id . " AND game_id = '" . $game_id . "'";
-				$db->sql_query ( $sql );
-				
-				$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config ['bbdkp_lang'] . "' 
-						AND attribute = 'race' 
-						AND attribute_id= " . $id . " 
-						AND game_id = '" . $game_id . "'";
-				
-				$db->sql_query ( $sql );
-				
-				$db->sql_transaction ( 'commit' );
-				
-				trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_RACE_SUCCESS'], $id ) . $this->link, E_USER_WARNING );
 			
-			}
-			else
-			{
-				// get field content
-				$s_hidden_fields = build_hidden_fields ( array (
-					'delete' => true, 'id' => $id ) );
-				confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_RACE'], $id ), $s_hidden_fields );
-			}
-		
-		}
-		else
-		{
-			trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_RACE_FAILED'], $id ) . $this->link, E_USER_WARNING );
-		}
-	}
-	
-	
-	/**
-	 * adds a faction
-	 *
-	 */
-	function add_faction()
-	{
-		global $db, $cache, $user;
-		
-		if (! check_form_key ( 'acp_dkp_game' ))
-		{
-			trigger_error ( 'FORM_INVALID' );
-		}
-		
-		$game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
-		$factionname = utf8_normalize_nfc ( request_var ( 'factionname', '', true ) );
-		
-		$sql = 'SELECT faction_id FROM ' . FACTION_TABLE . " 
-				WHERE game_id = '" . $game_id . "' 
-				ORDER BY faction_id DESC";
-		$resultf = $db->sql_query_limit ( $sql, 1 );
-		while ( $row = $db->sql_fetchrow ( $resultf ) )
-		{
-			$factionid = ( int ) $row ['faction_id'];
-		}
-		$db->sql_freeresult ( $resultf );
-		
-		$data = array (
-			'game_id' => $game_id, 
-			'faction_name' => ( string ) $factionname, 
-			'faction_id' => ( int ) $factionid + 1, 
-			'faction_hide' => 0 );
-		
-		$db->sql_transaction ( 'begin' );
-		
-		$sql = 'INSERT INTO ' . FACTION_TABLE . ' ' . $db->sql_build_array ( 'INSERT', $data );
-		$db->sql_query ( $sql );
-		
-		$db->sql_transaction ( 'commit' );
-		$cache->destroy ( 'sql', FACTION_TABLE );
-		trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $factionname ) . $this->link, E_USER_NOTICE );
-
-	}
-	
-
-	/**
-	 * deletes faction
-	 *
-	 */
-	function delete_faction()
-	{
-		global $db, $cache, $user; 
-		$id = request_var ( 'id', 0 );
-		$sql_array = array (
-			'SELECT' => ' count(*) AS factioncount  ', 
-			'FROM' => array (
-			RACE_TABLE => 'r', FACTION_TABLE => 'f' ), 
-			'WHERE' => 'r.race_faction_id = f.faction_id AND f.f_index =  ' . $id );
-		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-		$result = $db->sql_query($sql);
-		$factioncount = (int) $db->sql_fetchfield('factioncount');
-		$db->sql_freeresult ( $result );
-		if ($factioncount == 0)
-		{
-			// ask for permission
-			if (confirm_box ( true ))
-			{
-				$sql = 'DELETE FROM ' . FACTION_TABLE . ' WHERE f_index =' . $id;
-				$db->sql_query ( $sql );
-				$cache->destroy ( 'sql', FACTION_TABLE );
+			case 'addfaction' :
+				$addnew = (isset ( $_POST ['factionadd'] )) ? true : false;
 				
-				trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_FACTION_SUCCESS'], $id ) . $this->link, E_USER_WARNING );
-			}
-			else
-			{
-				// get field content
-				$s_hidden_fields = build_hidden_fields ( array (
-					'delete' => true, 'id' => $id ) );
-				confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_FACTION'], $id ), $s_hidden_fields );
-			}
+				if ($addnew)
+				{
+					if (! check_form_key ( 'acp_dkp_game' ))
+					{
+						trigger_error ( 'FORM_INVALID' );
+					}
+					
+					$faction = new includes\bbdkp\Faction();
+					$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
+					$faction->faction_name = utf8_normalize_nfc ( request_var ( 'factionname', '', true ) );
+					$faction->Make();
+					unset($faction);
+				}
+				
+				$installed_games = array ();
+				foreach ( $this->games as $gameid => $gamename )
+				{
+					//add value to dropdown when the game config value is 1
+					if ($config ['bbdkp_games_' . $gameid] == 1)
+					{
+						$template->assign_block_vars ( 'game_row', array (
+							'VALUE' => $gameid, 'SELECTED' => '', 'OPTION' => $gamename ) );
+						$hidden_game_id = $gameid;
+						$installed_games [] = $gameid;
+					}
+				}
+				// send parameters to template
+
+				$template->assign_vars ( array (
+					'GAME_ID' => $hidden_game_id, 
+					'U_ACTION' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addfaction' ), 
+					'MSG_NAME_EMPTY' => $user->lang ['FV_REQUIRED_NAME'] ) );
+				
+				$this->page_title = 'ACP_LISTGAME';
+				$this->tpl_name = 'dkp/acp_' . $mode;
+				break;
+			
+			case 'addrace' :
+				$raceadd = (isset ( $_POST ['add'] )) ? true : false;
+				$raceupdate = (isset ( $_POST ['update'] )) ? true : false;
+				
+				if ($raceadd || $raceupdate)
+				{
+					if (! check_form_key ( 'acp_dkp_game' ))
+					{
+						trigger_error ( 'FORM_INVALID' );
+					}
+				}
+				
+				if ($raceadd)
+				{				
+					$race = new includes\bbdkp\Races();
+					$race->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
+					$race->race_id = request_var ( 'race_id', 0 );
+					$race->racename = utf8_normalize_nfc ( request_var ( 'racename', '', true ) );
+					$race->race_faction_id = request_var ( 'faction', 0 );
+					$race->image_male = utf8_normalize_nfc ( request_var ( 'image_male', '', true ) );
+					$race->image_female = utf8_normalize_nfc ( request_var ( 'image_female', '', true ) );
+					$race->Make();
+					trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_SUCCESS'], $race->race_name ) . $this->link, E_USER_NOTICE );
+				}
+				
+				if ($raceupdate)
+				{
+					$race = new includes\bbdkp\Races();
+					$race->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
+					$race->race_id = request_var ( 'race_id', 0 );
+					$race->Get();
+					$oldrace = $race;
+					
+					$race->racename = utf8_normalize_nfc ( request_var ( 'racename', '', true ) );
+					$race->race_faction_id = request_var ( 'faction', 0 );
+					$race->image_male = utf8_normalize_nfc ( request_var ( 'image_male', '', true ) );
+					$race->image_female = utf8_normalize_nfc ( request_var ( 'image_female', '', true ) );
+					$race->Update($oldrace);
+					trigger_error ( sprintf ( $user->lang ['ADMIN_UPDATE_RACE_SUCCESS'], $race->racename ) . $this->link, E_USER_NOTICE );
+				}
+				
+				$this->page_title = 'ACP_LISTGAME';
+				$this->tpl_name = 'dkp/acp_' . $mode;
+				break;
+			
+			case 'addclass' :
+				
+				$classadd = (isset ( $_POST ['add'] )) ? true : false;
+				$classupdate = (isset ( $_POST ['update'] )) ? true : false;
+				
+				if ($classadd || $classupdate)
+				{
+					if (! check_form_key ( 'acp_dkp_game' ))
+					{
+						trigger_error ( 'FORM_INVALID' );
+					}
+				}
+				
+				if ($classadd)
+				{
+					$newclass = new includes\bbdkp\Classes();
+					$newclass->game_id = request_var ( 'game_id', '' );
+					$newclass->classname = utf8_normalize_nfc ( request_var ( 'class_name', '', true ) );
+					$newclass->class_id = request_var ( 'class_id', 0 );
+					$newclass->min_level = request_var ( 'class_level_min', 0 );
+					$newclass->max_level = request_var ( 'class_level_max', 0 );
+					$newclass->armor_type = request_var ( 'armory', '' );
+					$newclass->imagename = request_var ( 'image', '' );
+					$newclass->colorcode = request_var ( 'classcolor', '' );
+					$newclass->faction_id = '';
+					$newclass->dps = '';
+					$newclass->heal = '';
+					$newclass->tank = '';
+					$newclass->Make();
+					
+					trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_CLASS_SUCCESS'], $newclass->classname ) . $this->link, E_USER_NOTICE );
+					
+					
+				}
+				
+				if ($classupdate)
+				{
+
+					$newclass = new includes\bbdkp\Classes();
+					$newclass->game_id = request_var ( 'game_id_hidden', '' );
+					$newclass->class_id = request_var ( 'class_id0', 0 );
+					$newclass->c_index = request_var ( 'c_index', 0 );
+					$newclass->Get();
+					$oldclass = $newclass;
+					
+					$newclass->class_id = request_var ( 'class_id', 0 );				
+					$newclass->classname = utf8_normalize_nfc ( request_var ( 'class_name', '', true ) );
+					$newclass->min_level = request_var ( 'class_level_min', 0 );
+					$newclass->max_level = request_var ( 'class_level_max', 0 );
+					$newclass->armor_type = request_var ( 'armory', '' );
+					$newclass->imagename = request_var ( 'image', '' );
+					$newclass->colorcode = request_var ( 'classcolor', '' );
+					$newclass->faction_id = '';
+					$newclass->dps = '';
+					$newclass->heal = '';
+					$newclass->tank = '';
+					$newclass->Update($oldclass);
+					
+					trigger_error ( sprintf ( $user->lang ['ADMIN_UPDATE_CLASS_SUCCESS'], $newclass->classname ) . $this->link, E_USER_NOTICE );
+					
+				}
+				$this->page_title = 'ACP_LISTGAME';
+				$this->tpl_name = 'dkp/acp_' . $mode;
+				break;
+			
 		
 		}
-		else
-		{
-			trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_FACTION_FAILED'], $id ) . $this->link, E_USER_WARNING );
-		}
-		
 	}
 	
 	/**
-
 	 * lists game parameters
-
 	 *
-
 	 */
-	function listgames()
+	function listgames($game_id)
 	{
 		
 		global $db, $user, $phpbb_admin_path, $phpbb_root_path, $phpEx, $config, $template;
@@ -894,6 +628,7 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 		$sql_array = array (
 			'SELECT' => 'game_id, f_index, f.faction_id, f.faction_name  ', 
 			'FROM' => array (FACTION_TABLE => 'f' ), 
+			'WHERE' => " game_id = '" . $game_id . "'", 
 			'ORDER_BY' => 'game_id, faction_id' );
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query ( $sql );
@@ -926,7 +661,7 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 			'SELECT' => ' r.game_id, r.race_id, l.name as race_name, r.race_faction_id, r.race_hide, f.faction_name , r.image_female, r.image_male ', 
 			'FROM' => array (RACE_TABLE => 'r', FACTION_TABLE => 'f', BB_LANGUAGE => 'l' ), 
 			'WHERE' => " r.race_faction_id = f.faction_id  AND f.game_id = r.game_id
-
+					AND r.game_id = '" . $game_id . "'
 		    		AND l.attribute_id = r.race_id AND l.game_id = r.game_id and l.language= '" . $config ['bbdkp_lang'] . "' 
 		    		AND l.attribute = 'race' ", 'ORDER_BY' => $current_order ['sql'] );
 		
@@ -967,7 +702,8 @@ class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 			'SELECT' => 'c.game_id, c.c_index, c.class_id, l.name as class_name, c.class_hide, c.class_min_level, class_max_level, c.class_armor_type , 
 			c.imagename, c.colorcode ', 
 			'FROM' => array (CLASS_TABLE => 'c', BB_LANGUAGE => 'l' ), 
-			'WHERE' => " l.game_id = c.game_id AND l.attribute_id = c.class_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class' ", 
+			'WHERE' => " l.game_id = c.game_id AND l.attribute_id = c.class_id AND l.language= '" . $config ['bbdkp_lang'] . "' 
+				AND l.attribute = 'class' AND c.game_id = '" . $game_id . "' ", 
 			'ORDER_BY' => $current_order2 ['sql'] );
 		
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );

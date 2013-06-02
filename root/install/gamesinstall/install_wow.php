@@ -186,8 +186,6 @@ function install_wow()
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 	unset ( $sql_ary );
 
-	populate_wow();
-
 	$result = $db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem  where dkpsys_name = 'WoW Cataclysm' ");
 	$row = $db->sql_fetchrow ($result);
 	if($row)
@@ -366,14 +364,6 @@ function populate_wow()
 			'phpbb_user_id' 	=> $user->data['user_id'],
 	) ;
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_memberlist', $sql_ary );
-
-	if (! class_exists('acp_dkp_mm'))
-	{
-		include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
-		$class_members = new acp_dkp_mm();
-	}
-
-
 
 
 }

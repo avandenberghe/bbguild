@@ -22,6 +22,21 @@ if (! defined('EMED_BBDKP'))
 		'mods/dkp_admin'));
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
+if (!class_exists('Guild'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+}
+
+if (!class_exists('Ranks'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
+}
+
+// Include the base class
+if (!class_exists('Members'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+}
 
 /**
  * This class manages member general info
@@ -47,11 +62,6 @@ class acp_dkp_mm extends \includes\bbdkp\bbDKP_Admin
 			// List Guilds
 			/***************************************/
 			case 'mm_listguilds':
-
-				if (!class_exists('Guild'))
-				{
-					require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
-				}
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 				$showadd = (isset($_POST['guildadd'])) ? true : false;
@@ -120,11 +130,6 @@ class acp_dkp_mm extends \includes\bbdkp\bbDKP_Admin
 			 *  Add Guild 
 			 *************************************/
 			case 'mm_addguild':
-
-				if (!class_exists('Guild'))
-				{
-					require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
-				}
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 				/* select data */
@@ -265,12 +270,6 @@ class acp_dkp_mm extends \includes\bbdkp\bbDKP_Admin
 			case 'mm_ranks':
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK']. '</h3></a>';
-
-				if (!class_exists('Ranks'))
-				{
-					require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
-				}
-				
 				
 				// guild dropdown query
 				$sql = 'SELECT id, name, realm, region FROM ' . GUILD_TABLE . ' ORDER BY id desc';
@@ -451,12 +450,6 @@ class acp_dkp_mm extends \includes\bbdkp\bbDKP_Admin
 			/***************************************/
 			case 'mm_listmembers':
 
-				// Include the base class
-				if (!class_exists('Members'))
-				{
-					require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
-				}
-
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx",
 				"i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
 
@@ -523,11 +516,6 @@ class acp_dkp_mm extends \includes\bbdkp\bbDKP_Admin
 				}
 				$db->sql_freeresult($resultg);
 				$previous_data = '';
-
-				if (!class_exists('Guild'))
-				{
-					require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
-				}
 
 				$Guild = new includes\bbdkp\Guild($guild_id);
 
@@ -617,11 +605,6 @@ class acp_dkp_mm extends \includes\bbdkp\bbDKP_Admin
 			// add member
 			/***************************************/
 			case 'mm_addmember':
-				// Include the base class
-				if (!class_exists('Members'))
-				{
-					require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
-				}
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 

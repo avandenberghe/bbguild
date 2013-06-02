@@ -1034,6 +1034,7 @@ $versions = array(
      			'tableupdates',
      			'gameinstall',
      			'bbdkp_caches',
+     			'populate',
      		),
      ),
 
@@ -1389,6 +1390,36 @@ function tableupdates($action, $version)
 
 
 }
+
+
+/**
+ * enter dummy members
+ * @param unknown_type $action
+ * @param unknown_type $version
+ */
+function populate($action, $version)
+{
+	switch ($action)
+	{
+		case 'install' :
+			switch ($version)
+			{
+				case '1.2.9':
+					
+					if($config['bbdkp_games_wow'] == 1 || request_var('wow', 0) == 1)
+					{
+						populate_wow($action, $version);
+					}
+					break;
+			}
+			break;
+			
+	}
+	return array('command' => sprintf($user->lang['UMIL_DUMMYDATA']) , 'result' => 'SUCCESS');
+						
+}
+
+
 
 /***************************************
  *
