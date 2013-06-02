@@ -46,8 +46,10 @@ if (!class_exists('bbDKP_Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 }
-$bbdkp = new bbDKP_Admin();
-              
+$bbdkp = new \includes\bbdkp\bbDkp_Admin;
+
+
+
 $installed_games = array();
 foreach($bbdkp->games as $gameid => $gamename)
 {

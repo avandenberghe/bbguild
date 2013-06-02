@@ -35,7 +35,7 @@ class roster
 	
 	public function __construct($game_id, $start, $selfurl)
 	{
-		global $user, $config, $template;
+		global $user, $config, $template, $phpEx;
 		$this->selfurl = $selfurl;
 		$this->mode = ($config['bbdkp_roster_layout'] == '0') ? 'listing' : 'class';
 		$this->start=$start;
@@ -44,7 +44,7 @@ class roster
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \includes\bbdkp\bbDkp_Admin;
 		$this->game_id = $game_id;
 		$this->games = $bbdkp->games; 
 		$installed_games = array();
