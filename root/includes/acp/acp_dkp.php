@@ -23,7 +23,7 @@ if (! defined('EMED_BBDKP'))
 /**
  * This acp class manages setting configs, logging
  */
-class acp_dkp extends bbDKP_Admin
+class acp_dkp extends \includes\bbdkp\bbDKP_Admin
 {
 	/**
 	 * main Settings function

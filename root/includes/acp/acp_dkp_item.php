@@ -22,7 +22,7 @@ if (! defined('EMED_BBDKP'))
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
-class acp_dkp_item extends bbDKP_Admin 
+class acp_dkp_item extends \includes\bbdkp\bbDKP_Admin
 {
 	public $u_action;
 	private $link;

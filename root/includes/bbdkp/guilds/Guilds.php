@@ -108,7 +108,7 @@ class Guild implements iGuilds
 
 		// check existing guild-realmname
 		$result = $db->sql_query("SELECT count(*) as evcount from " . GUILD_TABLE . "
-			WHERE UPPER(name) = '" . strtoupper($db->sql_escape($this->name)) . "'
+			WHERE id !=0 AND UPPER(name) = '" . strtoupper($db->sql_escape($this->name)) . "'
 			AND UPPER(realm) = '" . strtoupper($db->sql_escape($this->realm)) . "'");
 		$grow = $db->sql_fetchrow($result);
 
@@ -119,7 +119,7 @@ class Guild implements iGuilds
 
 		$result = $db->sql_query("SELECT MAX(id) as id FROM " . GUILD_TABLE . ";");
 		$row = $db->sql_fetchrow($result);
-		$this_guildid = (int) $row['id'] + 1;
+		$this->guildid = (int) $row['id'] + 1;
 
 		//@todo complete this
 		$this->aionlegionid = 0;
@@ -135,6 +135,22 @@ class Guild implements iGuilds
 				'aion_server_id' => $this->aionserverid
 			));
 
+		$db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
+
+		//add a default rank
+		if (!class_exists('Ranks'))
+		{
+			require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
+		}
+		$newrank = new Ranks();
+		$newrank->RankName = "Member";
+		$newrank->RankId = 0;
+		$newrank->GuildId = $this->guildid;
+		$newrank->RankHide = 0;
+		$newrank->RankPrefix = '';
+		$newrank->RankSuffix = '';
+		$newrank->Make();
+		
 		if (!class_exists('bbDKP_Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
@@ -154,6 +170,7 @@ class Guild implements iGuilds
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 		return  $this->guildid;
+		unset($bbdkp);
 
 	}
 

@@ -27,7 +27,7 @@ if (! defined('EMED_BBDKP'))
  * This class manages member general info
  *
  */
-class acp_dkp_mm extends bbDKP_Admin
+class acp_dkp_mm extends \includes\bbdkp\bbDKP_Admin
 {
 	public $u_action;
 	public $member;
@@ -42,10 +42,412 @@ class acp_dkp_mm extends bbDKP_Admin
 
 		switch ($mode)
 		{
+
+			/***************************************/
+			// List Guilds
+			/***************************************/
+			case 'mm_listguilds':
+
+				if (!class_exists('Guild'))
+				{
+					require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+				}
+
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
+				$showadd = (isset($_POST['guildadd'])) ? true : false;
+
+				if ($showadd)
+				{
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild"));
+					break;
+				}
+				
+				$sort_order = array(
+					0 => array(	'id' , 'id desc') ,
+					1 => array('name' , 'name desc') ,
+					2 => array('realm desc' , 'realm desc') ,
+					3 => array('region' , 'region desc') ,
+					4 => array('roster' , 'roster desc'));
+
+				$current_order = switch_order($sort_order);
+				$guild_count = 0;
+				$previous_data = '';
+				$sort_index = explode('.', $current_order['uri']['current']);
+				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
+				$show_all = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
+
+				$sql = 'SELECT id, name, realm, region, roster FROM ' . GUILD_TABLE . ' ORDER BY ' . $current_order['sql'];
+				if (! ($guild_result = $db->sql_query($sql)))
+				{
+					trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
+				}
+				$lines = 0;
+				while ($row = $db->sql_fetchrow($guild_result))
+				{
+					$guild_count ++;
+					$listguild = new includes\bbdkp\Guild($row['id']);
+
+					$template->assign_block_vars('guild_row', array(
+						'ID' => $listguild->guildid ,
+						'NAME' => $listguild->name ,
+						'REALM' => $listguild->realm ,
+						'REGION' => $listguild->region ,
+						'MEMBERCOUNT' => $listguild->membercount ,
+						'SHOW_ROSTER' => ($listguild->showroster == 1 ? 'yes' : 'no') ,
+						'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild&amp;" . URI_GUILD . '=' . $listguild->guildid)));
+					$previous_data = $row[$previous_source];
+				}
+
+				$form_key = 'mm_listguilds';
+				add_form_key($form_key);
+				$template->assign_vars(array(
+					'F_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addguild' ,
+					'L_TITLE' => $user->lang['ACP_MM_LISTGUILDS'] ,
+					'L_EXPLAIN' => $user->lang['ACP_MM_LISTGUILDS_EXPLAIN'] ,
+					'BUTTON_VALUE' => $user->lang['DELETE_SELECTED_GUILDS'] ,
+					'O_ID' => $current_order['uri'][0] ,
+					'O_NAME' => $current_order['uri'][1] ,
+					'O_REALM' => $current_order['uri'][2] ,
+					'O_REGION' => $current_order['uri'][3] ,
+					'O_ROSTER' => $current_order['uri'][4] ,
+					'U_LIST_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") ,
+					'GUILDMEMBERS_FOOTCOUNT' => sprintf($user->lang['GUILD_FOOTCOUNT'], $guild_count)));
+				$this->page_title = 'ACP_MM_LISTGUILDS';
+				$this->tpl_name = 'dkp/acp_' . $mode;
+				break;
+
+			/*************************************
+			 *  Add Guild 
+			 *************************************/
+			case 'mm_addguild':
+
+				if (!class_exists('Guild'))
+				{
+					require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+				}
+
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
+				/* select data */
+				$update = false;
+
+				if (isset($_GET[URI_GUILD]))
+				{
+					$this->url_id = request_var(URI_GUILD, 0);
+				}
+
+				$updateguild = new includes\bbdkp\Guild($this->url_id);
+
+				if ($updateguild->guildid != 0)
+				{
+					// we have a GET
+					$update = true;
+					foreach ($updateguild->regionlist as $key => $value)
+					{
+						$template->assign_block_vars('region_row', array(
+							'VALUE' => $value ,
+							'SELECTED' => ($updateguild->region == $key) ? ' selected="selected"' : '' ,
+							'OPTION' => (! empty($key)) ? $key : '(None)'));
+					}
+				}
+				else
+				{
+					// NEW PAGE
+					foreach ($updateguild->regionlist as $key => $value)
+					{
+						$template->assign_block_vars('region_row', array(
+							'VALUE' => $value ,
+							'SELECTED' => '' ,
+							'OPTION' => (! empty($key)) ? $key : '(None)'));
+					}
+				}
+
+				$add = (isset($_POST['add'])) ? true : false;
+				$submit = (isset($_POST['update'])) ? true : false;
+				$delete = (isset($_POST['delete'])) ? true : false;
+				if ($add || $submit)
+				{
+					if (! check_form_key('addguild'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+				}
+
+				if ($add)
+				{
+					$updateguild->name = utf8_normalize_nfc(request_var('guild_name', '', true));
+					$updateguild->realm = utf8_normalize_nfc(request_var('realm', '', true));
+					$updateguild->region = request_var('region_id', '');
+					$updateguild->showroster = (isset($_POST['showroster'])) ? true : false;
+					
+					if ($updateguild->Make() > 0)
+					{
+						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'], $updateguild->name);
+						trigger_error($success_message . $this->link, E_USER_NOTICE);
+					}
+					else
+					{
+						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_FAIL'], $updateguild->name);
+						trigger_error($success_message . $this->link, E_USER_WARNING);
+					}
+				}
+
+				//updating
+				if ($submit)
+				{
+					if($updateguild->guildid == 0)
+					{
+						trigger_error($user->lang['ERROR_INVALID_GUILD_PROVIDED'], E_USER_WARNING);
+					}
+
+					$updateguild->guildid = $this->url_id;
+					$updateguild->Get();
+					$old_guild = $updateguild;
+
+					$updateguild->name = utf8_normalize_nfc(request_var('guild_name', ' ', true));
+					$updateguild->realm = utf8_normalize_nfc(request_var('realm', ' ', true));
+					$updateguild->region = request_var('region_id', ' ');
+					$updateguild->showroster = request_var('showroster', 0);
+					//@todo complete for other games
+					$updateguild->aionlegionid = 0;
+					$updateguild->aionserverid = 0;
+					$updateguild->Update($old_guild);
+
+					$success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
+					trigger_error($success_message . $this->link);
+				}
+
+				if ($delete)
+				{
+					if (confirm_box(true))
+					{
+						$deleteguild = new includes\bbdkp\Guild(request_var('guild_id', 0));
+						$deleteguild->Get();
+						$deleteguild->Delete();
+						$success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guild_id);
+						trigger_error($success_message . adm_back_link($this->u_action), E_USER_NOTICE);
+					}
+					else
+					{
+						$s_hidden_fields = build_hidden_fields(array(
+							'delete' => true ,
+							'guild_id' => $updateguild->guildid));
+						$template->assign_vars(array(
+							'S_HIDDEN_FIELDS' => $s_hidden_fields));
+						confirm_box(false, $user->lang['CONFIRM_DELETE_GUILD'], $s_hidden_fields);
+					}
+				}
+
+				$form_key = 'addguild';
+				add_form_key($form_key);
+
+				$template->assign_vars(array(
+					// Form values
+					'GUILD_ID' => $updateguild->guildid ,
+					'GUILD_NAME' => $updateguild->name ,
+					'REALM' => $updateguild->realm  ,
+					'REGION' => $updateguild->region,
+					'MEMBERCOUNT' => $updateguild->membercount ,
+					'SHOW_ROSTER' => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
+					// Language
+					'L_TITLE' => $user->lang['ACP_MM_ADDGUILD'] ,
+					'L_EXPLAIN' => $user->lang['ACP_MM_ADDGUILD_EXPLAIN'] ,
+					'L_ADD_GUILD_TITLE' => (! $this->url_id) ? $user->lang['ADD_GUILD'] : $user->lang['EDIT_GUILD'] ,
+					// Javascript messages
+					'MSG_NAME_EMPTY' => $user->lang['FV_REQUIRED_NAME'] ,
+					'S_ADD' => (! $this->url_id) ? true : false));
+				$this->page_title = $user->lang['ACP_MM_ADDGUILD'];
+				$this->tpl_name = 'dkp/acp_' . $mode;
+				break;
+
+		    /*************************
+			 * ranks setup
+		     *************************/
+			case 'mm_ranks':
+
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK']. '</h3></a>';
+
+				if (!class_exists('Ranks'))
+				{
+					require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
+				}
+				
+				
+				// guild dropdown query
+				$sql = 'SELECT id, name, realm, region FROM ' . GUILD_TABLE . ' ORDER BY id desc';
+				/* check if page was posted back */
+				$submit = (isset ( $_POST ['guild_id'] ) || isset ( $_GET ['guild_id'] ) ) ? true : false;
+				if ($submit)
+				{
+					$guild_id = request_var('guild_id', 0);
+				}
+				else // default pageloading
+				{
+					$result = $db->sql_query_limit($sql, 1);
+					while ($row = $db->sql_fetchrow($result))
+					{
+						$guild_id = $row['id'];
+					}
+					$db->sql_freeresult($result);
+				}
+				// fill popup and set selected to default selection
+				$resultg = $db->sql_query($sql);
+				while ($row = $db->sql_fetchrow($resultg))
+				{
+					$template->assign_block_vars('guild_row', array(
+							'VALUE' => $row['id'] ,
+							'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '' ,
+							'OPTION' => (! empty($row['name'])) ? $row['name'] : '(None)'));
+				}
+				$db->sql_freeresult($resultg);
+				
+				$update = (isset($_POST['update'])) ? true : false;
+				$deleterank = (isset($_GET['deleterank'])) ? true : false;
+				$add = (isset($_POST['add'])) ? true : false;
+
+				if ($add || $update)
+				{
+					if (! check_form_key('mm_ranks'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+				}
+
+				if ($add)
+				{
+				    $newrank = new includes\bbdkp\Ranks();
+					$newrank->RankName = utf8_normalize_nfc(request_var('nrankname', '', true));
+					$newrank->RankId = request_var('nrankid', 0);
+					$newrank->GuildId = $guild_id;
+					$newrank->RankHide = (isset($_POST['nhide'])) ? 1 : 0;
+					$newrank->RankPrefix = utf8_normalize_nfc(request_var('nprefix', '', true));
+					$newrank->RankSuffix = utf8_normalize_nfc(request_var('nsuffix', '', true));
+					$newrank->Make();
+
+					$success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
+					trigger_error($success_message . $this->link);
+				}
+
+				if ($update)
+				{
+					$newrank = new includes\bbdkp\Ranks();
+					$oldrank = new includes\bbdkp\Ranks();
+					// template
+					$modrank = utf8_normalize_nfc(request_var('ranks', array(0 => ''), true));
+					foreach ($modrank as $rank_id => $rank_name)
+					{
+					    $oldrank->Rankid = $rank_id;
+					    $oldrank->GuildId = $guild_id;
+					    $oldrank->Get();
+
+					    $newrank->Rankid = $rank_id;
+					    $newrank->GuildId = $oldrank->GuildId;
+					    $newrank->RankName = $rank_name;
+					    $newrank->RankHide = (isset($_POST['hide'][$rank_id])) ? 1 : 0;
+
+						$rank_prefix = utf8_normalize_nfc(request_var('prefix', array(
+							(int) $rank_id => ''), true));
+						$newrank->RankPrefix = $rank_prefix[$rank_id];
+
+						$rank_suffix = utf8_normalize_nfc(request_var('suffix', array(
+							(int) $rank_id => ''), true));
+					    $newrank->RankSuffix = $rank_suffix[$rank_id];
+
+						// compare old with new,
+						if ($oldrank != $newrank)
+						{
+						    $newrank->Update($oldrank);
+						}
+					}
+					$success_message = $user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
+					trigger_error($success_message . $this->link);
+				}
+
+				if ($deleterank)
+				{
+					if (confirm_box(true))
+					{
+						$guild_id = request_var('hidden_guild_id', 'x');
+						$rank_id = request_var('hidden_rank_id', 'x');
+						$guild_name = request_var('hidden_guild_name', 'x');
+						$old_rank_name = request_var('hidden_rank_name', 'x');
+						// hardcoded exclusion of ranks 90/99
+						$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id != 90 and rank_id != 99 and rank_id=' .
+						$rank_id . ' and guild_id = ' . $guild_id;
+						$db->sql_query($sql);
+						// log the action
+						$log_action = array(
+							'header' => 'L_ACTION_RANK_DELETED' ,
+							'id' => (int) $rank_id ,
+							'L_NAME' => $old_rank_name ,
+							'L_ADDED_BY' => $user->data['username']);
+						$this->log_insert(array(
+							'log_type' => $log_action['header'] ,
+							'log_action' => $log_action));
+					}
+					else
+					{
+						// delete the rank only if there are no members left
+						$rank_id = request_var('ranktodelete', 'x');
+						$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . '
+						where member_rank_id = ' . $rank_id . ' and member_guild_id = ' . $guild_id;
+						$result = $db->sql_query($sql);
+						$countm = $db->sql_fetchfield('countm');
+						$db->sql_freeresult($result);
+						if ($countm != 0)
+						{
+							trigger_error($user->lang['ERROR_RANKMEMBERS'] . $this->link, E_USER_WARNING);
+						}
+						$sql = "select a.rank_name, b.name  from " . MEMBER_RANKS_TABLE . ' a , ' . GUILD_TABLE . ' b
+						where a.guild_id = b.id and a.rank_id = ' . $rank_id . ' and b.id = ' . $guild_id;
+						$result = $db->sql_query($sql);
+						while ($row = $db->sql_fetchrow($result))
+						{
+							$old_rank_name = $row['rank_name'];
+							$guild_name = $row['name'];
+						}
+						$db->sql_freeresult($result);
+						$s_hidden_fields = build_hidden_fields(array(
+							'deleterank' => true ,
+							'hidden_rank_id' => $rank_id ,
+							'hidden_guild_id' => $guild_id ,
+							'hidden_guild_name' => $guild_name ,
+							'hidden_rank_name' => $old_rank_name));
+						confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_RANKS'], $old_rank_name, $guild_name), $s_hidden_fields);
+					}
+				}
+
+				// rank 99 is the out-rank
+				$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . '
+	        		WHERE guild_id = ' . $guild_id . '
+	        		ORDER BY rank_id, rank_hide  ASC ';
+
+				$result = $db->sql_query($sql);
+				while ($row = $db->sql_fetchrow($result))
+				{
+					$prefix = $row['rank_prefix'];
+					$suffix = $row['rank_suffix'];
+					$template->assign_block_vars('ranks_row', array(
+						'RANK_ID' => $row['rank_id'] ,
+						'RANK_NAME' => $row['rank_name'] ,
+						'RANK_PREFIX' => $prefix ,
+						'RANK_SUFFIX' => $suffix ,
+						'HIDE_CHECKED' => ($row['rank_hide'] == 1) ? 'checked="checked"' : '' ,
+						'S_READONLY' => ($row['rank_id'] == 90 || $row['rank_id'] == 99) ? true : false ,
+						'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks&amp;deleterank=1&amp;ranktodelete=" . $row['rank_id'] . "&amp;guild_id=" . $guild_id)));
+				}
+				$db->sql_freeresult($result);
+				$form_key = 'mm_ranks';
+				add_form_key($form_key);
+				$template->assign_vars(array(
+					'F_EDIT_RANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") ,
+					'GUILD_ID' => $guild_id));
+				$this->page_title = 'ACP_MM_RANKS';
+				$this->tpl_name = 'dkp/acp_' . $mode;
+				break;
+
+				
 			/***************************************
-			*
 			* List members
-			*
 			/***************************************/
 			case 'mm_listmembers':
 
@@ -92,47 +494,34 @@ class acp_dkp_mm extends bbDKP_Admin
 				}
 
 				// guild dropdown query
-				$sql = 'SELECT id, name, realm, region
-                       FROM ' . GUILD_TABLE . '
-                       ORDER BY id desc';
-				$resultg = $db->sql_query($sql);
-
-				// show other guild
+				$sql = 'SELECT id, name, realm, region FROM ' . GUILD_TABLE . ' ORDER BY id desc';
 				$submit = (isset ( $_POST ['member_guild_id'] ) || isset ( $_GET ['member_guild_id'] ) ) ? true : false;
-				/* check if page was posted back */
 				if ($submit)
 				{
 					// user selected dropdow - get guildid
 					$guild_id = request_var('member_guild_id', 0);
-					// fill popup and set selected to Post value
-					while ($row = $db->sql_fetchrow($resultg))
-					{
-						$template->assign_block_vars('guild_row', array(
-							'VALUE' => $row['id'] ,
-							'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '' ,
-							'OPTION' => (! empty($row['name'])) ? $row['name'] : '(None)'));
-					}
-					$db->sql_freeresult($resultg);
 				}
-				else // default pageloading
+				else 
 				{
-					$sql = 'SELECT id FROM ' . GUILD_TABLE . ' ORDER BY id DESC';
+				// default pageloading
 					$result = $db->sql_query_limit($sql, 1);
 					while ($row = $db->sql_fetchrow($result))
 					{
 						$guild_id = $row['id'];
 					}
 					$db->sql_freeresult($result);
-					// fill popup and set selected to default selection
-					while ($row = $db->sql_fetchrow($resultg))
-					{
-						$template->assign_block_vars('guild_row', array(
-							'VALUE' => $row['id'] ,
-							'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '' ,
-							'OPTION' => $row['name']));
-					}
-					$db->sql_freeresult($resultg);
 				}
+
+				// fill popup and set selected to default selection
+				$resultg = $db->sql_query($sql);
+				while ($row = $db->sql_fetchrow($resultg))
+				{
+					$template->assign_block_vars('guild_row', array(
+						'VALUE' => $row['id'] ,
+						'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '' ,
+						'OPTION' => (! empty($row['name'])) ? $row['name'] : '(None)'));
+				}
+				$db->sql_freeresult($resultg);
 				$previous_data = '';
 
 				if (!class_exists('Guild'))
@@ -343,7 +732,7 @@ class acp_dkp_mm extends bbDKP_Admin
 					else
 					{
 						$deletemember = new includes\bbdkp\Members();
-						$deletemember->member_id = request_var('del_member_id', 0);
+						$deletemember->member_id = request_var('member_id', 0);
 						$deletemember->Get();
 						$s_hidden_fields = build_hidden_fields(array(
 							'delete' => true ,
@@ -694,396 +1083,7 @@ class acp_dkp_mm extends bbDKP_Admin
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
 
-		    /**
-			 * ranks setup
-		     */
-			case 'mm_ranks':
 
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") . '"><h3>'. $user->lang['RETURN_RANK']. '</h3></a>';
-
-				$sql = 'SELECT max(id) as idmax FROM ' . GUILD_TABLE;
-				$result = $db->sql_query($sql);
-				$maxguildid = (int) $db->sql_fetchfield('idmax');
-				$db->sql_freeresult($result);
-
-
-				$update = (isset($_POST['update'])) ? true : false;
-				$deleterank = (isset($_GET['deleterank'])) ? true : false;
-				$add = (isset($_POST['add'])) ? true : false;
-
-				if ($add || $update)
-				{
-					if (! check_form_key('mm_ranks'))
-					{
-						trigger_error('FORM_INVALID');
-					}
-				}
-
-				if ($add)
-				{
-				    $newrank = new includes\bbdkp\Ranks();
-					$newrank->RankName = utf8_normalize_nfc(request_var('nrankname', '', true));
-					$newrank->RankId = request_var('nrankid', 0);
-					$newrank->GuildId = request_var('guild_id', $maxguildid);
-					$newrank->RankHide = (isset($_POST['nhide'])) ? 1 : 0;
-					$newrank->RankPrefix = utf8_normalize_nfc(request_var('nprefix', '', true));
-					$newrank->RankSuffix = utf8_normalize_nfc(request_var('nsuffix', '', true));
-					$newrank->Make();
-
-					$success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
-					trigger_error($success_message . $this->link);
-				}
-
-				if ($update)
-				{
-					$newrank = new includes\bbdkp\Ranks();
-					$oldrank = new includes\bbdkp\Ranks();
-					// template
-					$modrank = utf8_normalize_nfc(request_var('ranks', array(0 => ''), true));
-					foreach ($modrank as $rank_id => $rank_name)
-					{
-					    $oldrank->Rankid = $rank_id;
-					    $oldrank->GuildId = request_var('guild_id', $maxguildid);
-					    $oldrank->Get();
-
-					    $newrank->Rankid = $rank_id;
-					    $newrank->GuildId = $oldrank->GuildId;
-					    $newrank->RankName = $rank_name;
-					    $newrank->RankHide = (isset($_POST['hide'][$rank_id])) ? 1 : 0;
-
-						$rank_prefix = utf8_normalize_nfc(request_var('prefix', array(
-							(int) $rank_id => ''), true));
-						$newrank->RankPrefix = $rank_prefix[$rank_id];
-
-						$rank_suffix = utf8_normalize_nfc(request_var('suffix', array(
-							(int) $rank_id => ''), true));
-					    $newrank->RankSuffix = $rank_suffix[$rank_id];
-
-						// compare old with new,
-						if ($old_rank != $newrank)
-						{
-						    $newrank->Update($old_rank);
-						}
-					}
-					$success_message = $user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
-					trigger_error($success_message . $this->link);
-				}
-
-				if ($deleterank)
-				{
-					if (confirm_box(true))
-					{
-						$guild_id = request_var('hidden_guild_id', 'x');
-						$rank_id = request_var('hidden_rank_id', 'x');
-						$guild_name = request_var('hidden_guild_name', 'x');
-						$old_rank_name = request_var('hidden_rank_name', 'x');
-						// hardcoded exclusion of ranks 90/99
-						$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id != 90 and rank_id != 99 and rank_id=' .
-						$rank_id . ' and guild_id = ' . $guild_id;
-						$db->sql_query($sql);
-						// log the action
-						$log_action = array(
-							'header' => 'L_ACTION_RANK_DELETED' ,
-							'id' => (int) $rank_id ,
-							'L_NAME' => $old_rank_name ,
-							'L_ADDED_BY' => $user->data['username']);
-						$this->log_insert(array(
-							'log_type' => $log_action['header'] ,
-							'log_action' => $log_action));
-					}
-					else
-					{
-						$rank_id = request_var('ranktodelete', 'x');
-						$guild_id = request_var('guild_id', 'x');
-						// delete the rank only if there are no members left
-						$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . '
-						where member_rank_id = ' . $rank_id . ' and member_guild_id = ' . $guild_id;
-						$result = $db->sql_query($sql);
-						$countm = $db->sql_fetchfield('countm');
-						$db->sql_freeresult($result);
-						if ($countm != 0)
-						{
-							trigger_error($user->lang['ERROR_RANKMEMBERS'] . $this->link, E_USER_WARNING);
-						}
-						$sql = "select a.rank_name, b.name  from " . MEMBER_RANKS_TABLE . ' a , ' . GUILD_TABLE . ' b
-						where a.guild_id = b.id and a.rank_id = ' . $rank_id . ' and b.id = ' . $guild_id;
-						$result = $db->sql_query($sql);
-						while ($row = $db->sql_fetchrow($result))
-						{
-							$old_rank_name = $row['rank_name'];
-							$guild_name = $row['name'];
-						}
-						$db->sql_freeresult($result);
-						$s_hidden_fields = build_hidden_fields(array(
-							'deleterank' => true ,
-							'hidden_rank_id' => $rank_id ,
-							'hidden_guild_id' => $guild_id ,
-							'hidden_guild_name' => $guild_name ,
-							'hidden_rank_name' => $old_rank_name));
-						confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_RANKS'], $old_rank_name, $guild_name), $s_hidden_fields);
-					}
-				}
-
-
-				// template filling
-				$sql = 'SELECT id, name FROM ' . GUILD_TABLE . ' ORDER BY id desc';
-				$resultg = $db->sql_query($sql);
-				while ($row = $db->sql_fetchrow($resultg))
-				{
-					$template->assign_block_vars('guild_row', array(
-						'VALUE' => $row['id'] ,
-						'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '' ,
-						'OPTION' => $row['name']));
-				}
-				$db->sql_freeresult($resultg);
-
-				// rank 99 is the out-rank
-				$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . '
-	        		WHERE guild_id = ' . $guild_id . '
-	        		ORDER BY rank_id, rank_hide  ASC ';
-
-				$result = $db->sql_query($sql);
-				while ($row = $db->sql_fetchrow($result))
-				{
-					$prefix = $row['rank_prefix'];
-					$suffix = $row['rank_suffix'];
-					$template->assign_block_vars('ranks_row', array(
-						'RANK_ID' => $row['rank_id'] ,
-						'RANK_NAME' => $row['rank_name'] ,
-						'RANK_PREFIX' => $prefix ,
-						'RANK_SUFFIX' => $suffix ,
-						'HIDE_CHECKED' => ($row['rank_hide'] == 1) ? 'checked="checked"' : '' ,
-						'S_READONLY' => ($row['rank_id'] == 90 || $row['rank_id'] == 99) ? true : false ,
-						'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks&amp;deleterank=1&amp;ranktodelete=" . $row['rank_id'] . "&amp;guild_id=" . $guild_id)));
-				}
-				$db->sql_freeresult($result);
-				$form_key = 'mm_ranks';
-				add_form_key($form_key);
-				$template->assign_vars(array(
-					'F_EDIT_RANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_ranks") ,
-					'GUILD_ID' => $guild_id));
-				$this->page_title = 'ACP_MM_RANKS';
-				$this->tpl_name = 'dkp/acp_' . $mode;
-				break;
-
-
-			/***************************************/
-			// List Guilds
-			/***************************************/
-			case 'mm_listguilds':
-
-				if (!class_exists('Guild'))
-				{
-					require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
-				}
-
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
-				$showadd = (isset($_POST['guildadd'])) ? true : false;
-
-				if ($showadd)
-				{
-					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild"));
-					break;
-				}
-				$sort_order = array(
-					0 => array(	'id' , 'id desc') ,
-					1 => array('name' , 'name desc') ,
-					2 => array('realm desc' , 'realm desc') ,
-					3 => array('region' , 'region desc') ,
-					4 => array('roster' , 'roster desc'));
-
-				$current_order = switch_order($sort_order);
-				$guild_count = 0;
-				$previous_data = '';
-				$sort_index = explode('.', $current_order['uri']['current']);
-				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
-				$show_all = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
-
-				// we select only guilds with id greater than zero
-				$sql = 'SELECT id, name, realm, region, roster FROM ' . GUILD_TABLE . ' where id > 0  ORDER BY ' . $current_order['sql'];
-				if (! ($guild_result = $db->sql_query($sql)))
-				{
-					trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
-				}
-				$lines = 0;
-				while ($row = $db->sql_fetchrow($guild_result))
-				{
-					$guild_count ++;
-					$listguild = new includes\bbdkp\Guild($row['id']);
-
-					$template->assign_block_vars('guild_row', array(
-						'ID' => $listguild->guildid ,
-						'NAME' => $listguild->name ,
-						'REALM' => $listguild->realm ,
-						'REGION' => $listguild->region ,
-						'MEMBERCOUNT' => $listguild->membercount ,
-						'SHOW_ROSTER' => ($listguild->showroster == 1 ? 'yes' : 'no') ,
-						'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild&amp;" . URI_GUILD . '=' . $listguild->guildid)));
-					$previous_data = $row[$previous_source];
-				}
-
-				$form_key = 'mm_listguilds';
-				add_form_key($form_key);
-				$template->assign_vars(array(
-					'F_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addguild' ,
-					'L_TITLE' => $user->lang['ACP_MM_LISTGUILDS'] ,
-					'L_EXPLAIN' => $user->lang['ACP_MM_LISTGUILDS_EXPLAIN'] ,
-					'BUTTON_VALUE' => $user->lang['DELETE_SELECTED_GUILDS'] ,
-					'O_ID' => $current_order['uri'][0] ,
-					'O_NAME' => $current_order['uri'][1] ,
-					'O_REALM' => $current_order['uri'][2] ,
-					'O_REGION' => $current_order['uri'][3] ,
-					'O_ROSTER' => $current_order['uri'][4] ,
-					'U_LIST_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") ,
-					'GUILDMEMBERS_FOOTCOUNT' => sprintf($user->lang['GUILD_FOOTCOUNT'], $guild_count)));
-				$this->page_title = 'ACP_MM_LISTGUILDS';
-				$this->tpl_name = 'dkp/acp_' . $mode;
-				break;
-
-			/*************************************
-			 * ************ Add Guild ************
-			 *************************************/
-			case 'mm_addguild':
-
-				if (!class_exists('Guild'))
-				{
-					require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
-				}
-
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
-				/* select data */
-				$update = false;
-
-				if (isset($_GET[URI_GUILD]))
-				{
-					$this->url_id = request_var(URI_GUILD, 0);
-				}
-
-				$updateguild = new includes\bbdkp\Guild($this->url_id);
-
-				if ($updateguild->guildid != 0)
-				{
-					// we have a GET
-					$update = true;
-
-						foreach ($updateguild->regionlist as $key => $value)
-						{
-							$template->assign_block_vars('region_row', array(
-								'VALUE' => $value ,
-								'SELECTED' => ($updateguild->region == $key) ? ' selected="selected"' : '' ,
-								'OPTION' => (! empty($key)) ? $key : '(None)'));
-						}
-				}
-				else
-				{
-					// NEW PAGE
-					foreach ($updateguild->regionlist as $key => $value)
-					{
-						$template->assign_block_vars('region_row', array(
-							'VALUE' => $value ,
-							'SELECTED' => '' ,
-							'OPTION' => (! empty($key)) ? $key : '(None)'));
-					}
-				}
-
-				$add = (isset($_POST['add'])) ? true : false;
-				$submit = (isset($_POST['update'])) ? true : false;
-				$delete = (isset($_POST['delete'])) ? true : false;
-				if ($add || $submit)
-				{
-					if (! check_form_key('addguild'))
-					{
-						trigger_error('FORM_INVALID');
-					}
-				}
-
-				if ($add)
-				{
-					$updateguild->name = utf8_normalize_nfc(request_var('guild_name', '', true));
-					$updateguild->realm = utf8_normalize_nfc(request_var('realm', '', true));
-					$updateguild->region = request_var('region_id', '');
-					$updateguild->showroster = (isset($_POST['showroster'])) ? true : false;
-					$updateguild->Make();
-
-					if ($updateguild->Make() > 0)
-					{
-						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'], $updateguild->name);
-						trigger_error($success_message . $this->link, E_USER_NOTICE);
-					}
-					else
-					{
-						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_FAIL'], $updateguild->name);
-						trigger_error($success_message . $this->link, E_USER_WARNING);
-					}
-				}
-
-				//updating
-				if ($submit)
-				{
-					if($updateguild->guildid == 0)
-					{
-						trigger_error($user->lang['ERROR_INVALID_GUILD_PROVIDED'], E_USER_WARNING);
-					}
-
-					$updateguild->guildid = $this->url_id;
-					$updateguild->Get();
-					$old_guild = $updateguild;
-
-					$updateguild->name = utf8_normalize_nfc(request_var('guild_name', ' ', true));
-					$updateguild->realm = utf8_normalize_nfc(request_var('realm', ' ', true));
-					$updateguild->region = request_var('region_id', ' ');
-					$updateguild->showroster = request_var('showroster', 0);
-					//@todo complete for other games
-					$updateguild->aionlegionid = 0;
-					$updateguild->aionserverid = 0;
-					$updateguild->Update($old_guild);
-
-					$success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
-					trigger_error($success_message . $this->link);
-				}
-
-				if ($delete)
-				{
-					if (confirm_box(true))
-					{
-						$deleteguild = new includes\bbdkp\Guild(request_var('guild_id', 0));
-						$deleteguild->Get();
-						$deleteguild->Delete();
-						$success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guild_id);
-						trigger_error($success_message . adm_back_link($this->u_action), E_USER_NOTICE);
-					}
-					else
-					{
-						$s_hidden_fields = build_hidden_fields(array(
-							'delete' => true ,
-							'guild_id' => $updateguild->guildid));
-						$template->assign_vars(array(
-							'S_HIDDEN_FIELDS' => $s_hidden_fields));
-						confirm_box(false, $user->lang['CONFIRM_DELETE_GUILD'], $s_hidden_fields);
-					}
-				}
-
-				$form_key = 'addguild';
-				add_form_key($form_key);
-
-				$template->assign_vars(array(
-					// Form values
-					'GUILD_ID' => $updateguild->guildid ,
-					'GUILD_NAME' => $updateguild->name ,
-					'REALM' => $updateguild->realm  ,
-					'REGION' => $updateguild->region,
-					'MEMBERCOUNT' => $updateguild->membercount ,
-					'SHOW_ROSTER' => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
-					// Language
-					'L_TITLE' => $user->lang['ACP_MM_ADDGUILD'] ,
-					'L_EXPLAIN' => $user->lang['ACP_MM_ADDGUILD_EXPLAIN'] ,
-					'L_ADD_GUILD_TITLE' => (! $this->url_id) ? $user->lang['ADD_GUILD'] : $user->lang['EDIT_GUILD'] ,
-					// Javascript messages
-					'MSG_NAME_EMPTY' => $user->lang['FV_REQUIRED_NAME'] ,
-					'S_ADD' => (! $this->url_id) ? true : false));
-				$this->page_title = $user->lang['ACP_MM_ADDGUILD'];
-				$this->tpl_name = 'dkp/acp_' . $mode;
-				break;
 
 			default:
 				$this->page_title = 'ACP_DKP_MAINPAGE';

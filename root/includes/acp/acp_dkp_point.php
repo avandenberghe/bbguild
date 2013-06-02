@@ -26,7 +26,7 @@ if (! defined('EMED_BBDKP'))
  * This acp class manages point settings
  *
  */
-class acp_dkp_point extends bbDKP_Admin
+class acp_dkp_point extends \includes\bbdkp\bbDKP_Admin
 {
 
 	function main ($id, $mode)

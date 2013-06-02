@@ -26,7 +26,7 @@ if (! defined('EMED_BBDKP'))
  * This class manages guildmembers dkp adjustments
  * 
  */
-class acp_dkp_adj extends bbDKP_Admin
+class acp_dkp_adj extends \includes\bbdkp\bbDKP_Admin
 {
 	public $u_action;
 	private $old_adjustment;

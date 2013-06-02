@@ -23,7 +23,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
-use includes\bbdkp;
+//use includes\bbdkp;
 
 class Members implements iMembers {
 	public $game_id;
@@ -133,6 +133,7 @@ class Members implements iMembers {
 			$this->member_portrait_url = $phpbb_root_path . $row['member_portrait_url'];
 			$this->phpbb_user_id = $row['phpbb_user_id'];
 			$this->member_status = $row['member_status'];
+			$this->member_achiev = $row['member_achiev'];
 			$this->game_id = $row['game_id'];
 			$this->colorcode = $row['colorcode'];
 			$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
@@ -279,6 +280,10 @@ class Members implements iMembers {
 				'game_id' => (string) $this->game_id ,
 				'member_portrait_url' => (string) $this->member_portrait_url));
 
+		$db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
+
+		$this->member_id = $db->sql_nextid();
+
 		if (!class_exists('bbDKP_Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
@@ -292,10 +297,6 @@ class Members implements iMembers {
 				'L_RACE' 	 => $this->member_race_id,
 				'L_CLASS' 	 => $this->member_class_id,
 				'L_ADDED_BY' => $user->data['username']);
-
-		$db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
-
-		$this->member_id = $db->sql_nextid();
 
 		$bbdkp->log_insert(array(
 				'log_type' => $log_action['header'] ,
@@ -380,7 +381,7 @@ class Members implements iMembers {
 		        MAX(a.raid_start) AS enddate
 			FROM " . RAIDS_TABLE . " a
 			INNER JOIN " . RAID_DETAIL_TABLE . " b on a.raid_id = b.raid_id
-			WHERE  b.member_id = " . $member_id . "
+			WHERE  b.member_id = " . $this->member_id . "
 			GROUP BY b.member_id ";
 		$result = $db->sql_query($sql);
 		$startraiddate = (int) $db->sql_fetchfield('startdate', false, $result);
@@ -567,18 +568,7 @@ class Members implements iMembers {
 
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
+	
 	/**
 	 * generates armory link (only wow)
 	*/

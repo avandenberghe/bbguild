@@ -31,6 +31,6 @@ interface iRanks
 	/**
 	 * updates a rank to database
 	*/
-	function Update($old_rank);
+	function Update(Ranks $old_rank);
 
 }

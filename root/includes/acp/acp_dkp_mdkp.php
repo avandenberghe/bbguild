@@ -27,7 +27,7 @@ if (! defined ( 'EMED_BBDKP' ))
  * This class manages member DKP
  * 
  */
-class acp_dkp_mdkp extends bbDKP_Admin
+class acp_dkp_mdkp extends \includes\bbdkp\bbDKP_Admin
 {
 
 	public $u_action;

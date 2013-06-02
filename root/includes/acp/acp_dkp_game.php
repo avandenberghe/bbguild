@@ -24,7 +24,7 @@ if (! defined ( 'EMED_BBDKP' ))
 	trigger_error ( $user->lang ['BBDKPDISABLED'], E_USER_WARNING );
 }
 
-class acp_dkp_game extends bbDKP_Admin
+class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
 {
 
 	public $u_action;
