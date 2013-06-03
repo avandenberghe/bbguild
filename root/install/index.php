@@ -23,9 +23,10 @@ $user->add_lang ( array ('mods/dkp_admin'));
 
 $error= array();
 // anything lower than php 5.1 not supported (we use simplexml xpath)
-if (version_compare(PHP_VERSION, '5.1.0') < 0)
+// anything lower than php 5.3 not supported (we use namespaces)
+if (version_compare(PHP_VERSION, '5.3.3') < 0)
 {
-	$error[] = 'You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.1.2 or higher before trying to install bbDKP. <br />';
+	$error[] = 'You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.3.2 or higher before trying to install bbDKP. <br />';
 }
 
 switch ($db->sql_layer)
