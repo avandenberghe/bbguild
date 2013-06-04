@@ -37,7 +37,7 @@ if (!class_exists('Races'))
 	require("{$phpbb_root_path}includes/bbdkp/races/Races.$phpEx");
 }
 
-class acp_dkp_game extends \includes\bbdkp\bbDKP_Admin
+class acp_dkp_game extends \bbdkp\Admin
 {
 
 	public $u_action;

@@ -246,7 +246,7 @@ $item_total = 0.00;
 while ( $item = $db->sql_fetchrow ( $items_result ) )
 {
 	
-	if ($bbDKP_Admin->bbtips == true)
+	if ($Admin->bbtips == true)
 	{
 
 		if ($item['item_gameid'] > 0 )

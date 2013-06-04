@@ -8,7 +8,7 @@
  * @version 1.2.9
  */
 
-namespace includes\bbdkp;
+namespace bbdkp;
 
 
 /**
@@ -23,7 +23,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
-//use includes\bbdkp;
+//;
 
 class Members implements iMembers {
 	public $game_id;
@@ -67,7 +67,7 @@ class Members implements iMembers {
 
 	/**
 	 * gets a member from database
-	 * @see \includes\bbdkp\iMembers::Get()
+	 * @see \bbdkp\iMembers::Get()
 	 */
 	public function Get()
 	{
@@ -194,7 +194,7 @@ class Members implements iMembers {
 
 	/**
 	 * inserts a new member to database
-	 * @see \includes\bbdkp\iMembers::Make()
+	 * @see \bbdkp\iMembers::Make()
 	 */
 	public function Make()
 	{
@@ -284,11 +284,11 @@ class Members implements iMembers {
 
 		$this->member_id = $db->sql_nextid();
 
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
@@ -309,7 +309,7 @@ class Members implements iMembers {
 
 	/**
 	 * updates a member to database
-	 * @see \includes\bbdkp\iMembers::Update()
+	 * @see \bbdkp\iMembers::Update()
 	 */
 	public function Update(Members $old_member)
 	{
@@ -423,11 +423,11 @@ class Members implements iMembers {
 		        WHERE member_id= ' . $this->member_id);
 
 		// log it
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' => 'L_ACTION_MEMBER_UPDATED' ,
@@ -457,7 +457,7 @@ class Members implements iMembers {
 
 	/**
 	 * deletes a member from database
-	 * @see \includes\bbdkp\iMembers::Delete()
+	 * @see \bbdkp\iMembers::Delete()
 	 */
 	public function Delete()
 	{
@@ -474,11 +474,11 @@ class Members implements iMembers {
 		$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . ' where member_id = ' . (int) $this->member_id;
 		$db->sql_query($sql);
 
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' => sprintf($user->lang['ACTION_MEMBER_DELETED'], $this->member_name) ,
@@ -544,7 +544,7 @@ class Members implements iMembers {
 
 	/**
 	 * activates all checked members
-	 * @see \includes\bbdkp\iMembers::activate()
+	 * @see \bbdkp\iMembers::activate()
 	 */
 	public function activate(array $mlist, array $mwindow)
 	{

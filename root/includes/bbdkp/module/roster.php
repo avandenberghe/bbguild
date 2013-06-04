@@ -40,11 +40,11 @@ class roster
 		$this->mode = ($config['bbdkp_roster_layout'] == '0') ? 'listing' : 'class';
 		$this->start=$start;
 		// Include the abstract base
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new \includes\bbdkp\bbDkp_Admin;
+		$bbdkp = new \bbdkp\Admin;
 		$this->game_id = $game_id;
 		$this->games = $bbdkp->games; 
 		$installed_games = array();

@@ -206,7 +206,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
 			
 	    while ( $row = $db->sql_fetchrow($result) )
 	    {
-			if ($bbDKP_Admin->bbtips == true)
+			if ($Admin->bbtips == true)
 			{
 				$item_name = '<b>' . $bbtips->parse('[itemdkp]' . $row['item_name']  . '[/itemdkp]') . '</b>'; 
 			}

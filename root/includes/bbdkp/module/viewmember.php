@@ -456,7 +456,7 @@ if ( !$items_result)
 
 while ( $item = $db->sql_fetchrow($items_result) )
 {
-	if ($bbDKP_Admin->bbtips == true)
+	if ($Admin->bbtips == true)
 	{
 		if ($item['item_gameid'] > 0 )
 		{

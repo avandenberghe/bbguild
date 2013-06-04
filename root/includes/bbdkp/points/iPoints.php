@@ -17,28 +17,22 @@ if (! defined('IN_PHPBB'))
 	exit();
 }
 
-interface iRaces 
+/**
+ * @version 1.2.9
+ *
+ */
+interface iPoints 
 {
-	/**
-	 * gets race from database
-	 */
-	function Get();
-	
-	/**
-	 * adds a race to database
-	*/
-	function Make();
-	
-	/**
-	 * deletes a race from database
-	*/
-	function Delete();
-	
-	/**
-	 * updates a race to database
-	*/
-	function Update(Races $old_race);
 
+	/**
+	 * Recalculates zero sum points
+	 * -- loops all raids, may run a while
+	 * @param $mode one for recalculating, 0 for setting zerosum to zero.
+	 */
+	function sync_zerosum($mode);
+	
+	
+	
 }
 
 ?>

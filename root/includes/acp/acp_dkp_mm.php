@@ -42,7 +42,7 @@ if (!class_exists('Members'))
  * This class manages member general info
  *
  */
-class acp_dkp_mm extends \includes\bbdkp\bbDKP_Admin
+class acp_dkp_mm extends \bbdkp\Admin
 {
 	public $u_action;
 	public $member;

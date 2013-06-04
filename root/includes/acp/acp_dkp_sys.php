@@ -21,7 +21,7 @@ if (! defined ( 'EMED_BBDKP' ))
 	trigger_error ( $user->lang ['BBDKPDISABLED'], E_USER_WARNING );
 }
 
-class acp_dkp_sys extends \includes\bbdkp\bbDKP_Admin
+class acp_dkp_sys extends \bbdkp\Admin
 {
 	var $u_action;
 	var $link;
@@ -348,7 +348,6 @@ class acp_dkp_sys extends \includes\bbdkp\bbDKP_Admin
 	
 	/**
 	 * resynchronises the DKP points table with the adjustments, raids, items.
-	 * very unusually you need to run this. 
 	 *
 	 */
 	public function syncdkpsys($mode = 1)

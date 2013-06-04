@@ -1,6 +1,6 @@
 <?php
 
-namespace includes\bbdkp;
+namespace bbdkp;
 
 /**
  * @ignore

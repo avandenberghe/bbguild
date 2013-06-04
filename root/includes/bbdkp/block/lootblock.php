@@ -13,8 +13,8 @@ if (!defined('IN_PHPBB'))
    exit;
 }
 
-$bbDkp_Admin = new \includes\bbdkp\bbDkp_Admin;
-if ($bbDkp_Admin->bbtips == true)
+$Admin = new \bbdkp\Admin;
+if ($Admin->bbtips == true)
 {
 	if ( !class_exists('bbtips')) 
 	{
@@ -30,7 +30,7 @@ $sql = "SELECT item_name, item_gameid FROM " . RAID_ITEMS_TABLE . ' ORDER BY ite
 $result = $db->sql_query_limit($sql, $n_items, 0);
 while ($row = $db->sql_fetchrow($result))
 {         
-	if ($bbDkp_Admin->bbtips == true)
+	if ($Admin->bbtips == true)
 	{
 		if ($row['item_gameid'] > 0 )
 		{

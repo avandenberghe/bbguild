@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.2.8-PL1
  */
-
+namespace bbdkp;
 /**
 * @ignore
 */
@@ -25,7 +25,7 @@ global $phpbb_root_path;
 * Extended by admin page classes only
 * 
 */
-class bbDKP_Admin
+class Admin
 {
     // General vars
     
@@ -92,8 +92,6 @@ class bbDKP_Admin
 			'lineage2' => $user->lang ['LINEAGE2'],
 	    	'tera' => $user->lang ['TERA'],
 	    	'gw2' => $user->lang ['GW2'],
-	     
-	    
 	    );
 	    
 	    $boardtime = array(); 

@@ -192,11 +192,11 @@ class ucp_dkp
 		global $db, $auth, $user, $template, $config, $phpbb_root_path;
 		
 		// Include the base class
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \bbdkp\Admin();
 
 		// Attach the language file
 		$user->add_lang('mods/dkp_common');

@@ -26,7 +26,7 @@ if (! defined('EMED_BBDKP'))
 *
 * @package bbDKP.acp
 */
-class acp_dkp_raid extends \includes\bbdkp\bbDKP_Admin
+class acp_dkp_raid extends \bbdkp\Admin
 {
 	private $link;
 	public $u_action;

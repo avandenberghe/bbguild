@@ -8,7 +8,7 @@
  * @version 1.2.9
  */
 
-namespace includes\bbdkp;
+namespace bbdkp;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/factions/iFaction.$phpEx");
 
-use includes\bbdkp;
+;
 
 class Faction implements iFaction 
 {
@@ -42,7 +42,7 @@ class Faction implements iFaction
 	/**
 	 * get faction info
 	 * (non-PHPdoc)
-	 * @see \includes\bbdkp\iFaction::Get()
+	 * @see \bbdkp\iFaction::Get()
 	 */
 	public function Get()
 	{
@@ -64,7 +64,7 @@ class Faction implements iFaction
 	/**
 	 * adds a faction
 	 * (non-PHPdoc)
-	 * @see \includes\bbdkp\iFaction::Make()
+	 * @see \bbdkp\iFaction::Make()
 	 */
 	public function Make()
 	{
@@ -97,7 +97,7 @@ class Faction implements iFaction
 	
 	/**
 	 * (non-PHPdoc)
-	 * @see \includes\bbdkp\iFaction::Update()
+	 * @see \bbdkp\iFaction::Update()
 	 */
 	public function Update(Faction $old_faction)
 	{
@@ -106,7 +106,7 @@ class Faction implements iFaction
 
 	/**
 	 * (non-PHPdoc)
-	 * @see \includes\bbdkp\iFaction::Delete()
+	 * @see \bbdkp\iFaction::Delete()
 	 */
 	public function Delete()
 	{

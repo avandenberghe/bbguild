@@ -8,7 +8,7 @@
  * @version 1.2.9
  */
 
-namespace includes\bbdkp;
+namespace bbdkp;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
 
-use includes\bbdkp;
+;
 
 class Ranks implements iRanks
 {
@@ -63,7 +63,7 @@ class Ranks implements iRanks
 
 	/**
 	 * adds a rank
-	 * @see \includes\bbdkp\iRanks::Make()
+	 * @see \bbdkp\iRanks::Make()
 	 */
 	public function Make()
 	{
@@ -103,11 +103,11 @@ class Ranks implements iRanks
 		$db->sql_query('INSERT INTO ' . MEMBER_RANKS_TABLE . $query);
 		// log the action
 
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' => 'L_ACTION_RANK_ADDED' ,
@@ -145,7 +145,7 @@ class Ranks implements iRanks
 
 	/**
 	 * (non-PHPdoc)
-	 * @see \includes\bbdkp\iRanks::Delete()
+	 * @see \bbdkp\iRanks::Delete()
 	 */
 	public function Delete($override)
 	{
@@ -176,11 +176,11 @@ class Ranks implements iRanks
 
 		// log the action
 
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' => 'L_ACTION_RANK_DELETED' ,
@@ -200,7 +200,7 @@ class Ranks implements iRanks
 
 	/**
 	 * (non-PHPdoc)
-	 * @see \includes\bbdkp\iRanks::Update()
+	 * @see \bbdkp\iRanks::Update()
 	 */
 	public function Update(Ranks $old_rank)
 	{
@@ -225,11 +225,11 @@ class Ranks implements iRanks
 
 
 		// log it
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' 		=> 'L_ACTION_RANK_UPDATED' ,

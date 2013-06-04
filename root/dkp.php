@@ -48,8 +48,8 @@ $template->assign_vars(array(
 $page =  request_var('page', 'standings');
 
 // if bbTips exists then load it
-$bbDKP_Admin = new bbDKP_Admin();
-if ($bbDKP_Admin->bbtips == true)
+$Admin = new \bbdkp\Admin();
+if ($Admin->bbtips == true)
 {
 	if (! class_exists ( 'bbtips' ))
 	{

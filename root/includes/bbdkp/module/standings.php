@@ -42,11 +42,11 @@ else
 $u_listmembers = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings' . $arg );
 
 // Include the base class
-if (!class_exists('bbDKP_Admin'))
+if (!class_exists('\bbdkp\Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 }
-$bbdkp = new \includes\bbdkp\bbDkp_Admin;
+$bbdkp = new \bbdkp\Admin;
 
 
 

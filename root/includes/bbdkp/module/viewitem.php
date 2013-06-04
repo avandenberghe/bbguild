@@ -80,7 +80,7 @@ if (isset($_GET[URI_ITEM]) )
     }
 	$title = $user->lang['ITEM'] . ' : '. $item_name;
 	
-    if ($bbDKP_Admin->bbtips == true)
+    if ($Admin->bbtips == true)
 	{
 		if ($item_gameid > 0 )
 		{

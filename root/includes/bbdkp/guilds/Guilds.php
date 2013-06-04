@@ -8,7 +8,7 @@
  * @version 1.2.9
  */
 
-namespace includes\bbdkp;
+namespace bbdkp;
 
 /**
  * @ignore
@@ -21,8 +21,6 @@ if (! defined('IN_PHPBB'))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
-
-use includes\bbdkp;
 
 class Guild implements iGuilds
 {
@@ -53,7 +51,7 @@ class Guild implements iGuilds
 
 	/**
 	 * gets a guild from database
-	 * @see \includes\bbdkp\iGuilds::Get()
+	 * @see \bbdkp\iGuilds::Get()
 	 */
 	public function Get()
 	{
@@ -93,7 +91,7 @@ class Guild implements iGuilds
 	 * do not delete the zero record in the guild table or you will see that guildless members
 	 * become invisible in the roster and in the memberlist or in any list member selection that makes
 	 * an inner join with the guild table.
-	 * @see \includes\bbdkp\iGuilds::Make()
+	 * @see \bbdkp\iGuilds::Make()
 	 */
 	public function Make()
 	{
@@ -151,11 +149,11 @@ class Guild implements iGuilds
 		$newrank->RankSuffix = '';
 		$newrank->Make();
 		
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_ADDED' ,
@@ -177,7 +175,7 @@ class Guild implements iGuilds
 
 	/**
 	 * updates a guild to database
-	 * @see \includes\bbdkp\iMembers::Update()
+	 * @see \bbdkp\iMembers::Update()
 	 */
 	public function Update($old_guild)
 	{
@@ -210,11 +208,11 @@ class Guild implements iGuilds
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
 		// log it
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_UPDATED' ,
@@ -236,7 +234,7 @@ class Guild implements iGuilds
 
 	/**
 	 * deletes a guild from database
-	 * @see \includes\bbdkp\iMembers::Delete()
+	 * @see \bbdkp\iMembers::Delete()
 	 */
 	public function Delete()
 	{
@@ -267,11 +265,11 @@ class Guild implements iGuilds
 		$sql = 'DELETE FROM ' . GUILD_TABLE . ' WHERE id = ' .  $this->guildid;
 		$db->sql_query($sql);
 
-		if (!class_exists('bbDKP_Admin'))
+		if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 		}
-		$bbdkp = new bbDKP_Admin();
+		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' => sprintf($user->lang['ACTION_GUILD_DELETED'], $this->name) ,
@@ -332,7 +330,7 @@ class Guild implements iGuilds
 
 	/**
 	 * counts all guild members
-	 * @see \includes\bbdkp\iGuilds::countmembers()
+	 * @see \bbdkp\iGuilds::countmembers()
 	 */
 	public function countmembers()
 	{

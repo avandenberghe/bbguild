@@ -8,7 +8,7 @@
  * @version 1.2.9
  */
 
-namespace includes\bbdkp;
+namespace bbdkp;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
 
-use includes\bbdkp;
+;
 
 class Races implements iRaces 
 {
@@ -74,7 +74,7 @@ class Races implements iRaces
 	
 	/**
 	 * adds a race to database
-	 * @see \includes\bbdkp\iRaces::Make()
+	 * @see \bbdkp\iRaces::Make()
 	 */
 	public function Make()
 	{

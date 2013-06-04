@@ -8,7 +8,7 @@
  * @version 1.2.9
  */
 
-namespace includes\bbdkp;
+namespace bbdkp;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/classes/iClasses.$phpEx");
 
-use includes\bbdkp;
+;
 
 /**
  *
@@ -65,7 +65,7 @@ class Classes implements iClasses {
 	
 	/**
 	 * gets class from database
-	 * @see \includes\bbdkp\iClasses::Get()
+	 * @see \bbdkp\iClasses::Get()
 	 */
 	public function Get()
 	{
@@ -103,7 +103,7 @@ class Classes implements iClasses {
 
 	/**
 	 * adds a class to database
-	 * @see \includes\bbdkp\iClasses::Make()
+	 * @see \bbdkp\iClasses::Make()
 	 */
 	public function Make()
 	{
@@ -155,7 +155,7 @@ class Classes implements iClasses {
 	
 	/**
 	 * deletes a class from database
-	 * @see \includes\bbdkp\iClasses::Delete()
+	 * @see \bbdkp\iClasses::Delete()
 	 */
 	public function Delete()
 	{
@@ -204,7 +204,7 @@ class Classes implements iClasses {
 	
 	/**
 	 * updates a class to database
-	 * @see \includes\bbdkp\iClasses::Update()
+	 * @see \bbdkp\iClasses::Update()
 	 */
 	public function Update(Classes $oldclass)
 	{
