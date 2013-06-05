@@ -7,7 +7,6 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.2.9
  */
-
 namespace bbdkp;
 
 /**

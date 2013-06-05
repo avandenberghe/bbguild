@@ -22,7 +22,6 @@ $user->setup();
 $user->add_lang ( array ('mods/dkp_admin'));
 
 $error= array();
-// anything lower than php 5.1 not supported (we use simplexml xpath)
 // anything lower than php 5.3 not supported (we use namespaces)
 if (version_compare(PHP_VERSION, '5.3.3') < 0)
 {

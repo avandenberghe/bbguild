@@ -8,7 +8,6 @@
  * @version 1.2.9
  */
 namespace bbdkp;
-
 /**
  * @ignore
  */
@@ -16,28 +15,19 @@ if (! defined('IN_PHPBB'))
 {
 	exit();
 }
+if (! defined('EMED_BBDKP'))
+{
+	$user->add_lang(array(
+			'mods/dkp_admin'));
+	\trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
+}
 
-interface iClasses {
-
-	/**
-	 * gets class from database
-	 */
-	function Get();
+interface iAdjust 
+{
+	function add();
+	function listadj($order);
+	function decayadj ($olddecay);
 	
-	/**
-	 * adds a class to database
-	*/
-	function Make();
-	
-	/**
-	 * deletes a class from database
-	*/
-	function Delete();
-	
-	/**
-	 * updates a class to database
-	*/
-	function Update(Classes $old_class);
 	
 }
 
