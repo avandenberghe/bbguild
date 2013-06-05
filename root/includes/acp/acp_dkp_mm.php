@@ -95,7 +95,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				while ($row = $db->sql_fetchrow($guild_result))
 				{
 					$guild_count ++;
-					$listguild = new includes\bbdkp\Guild($row['id']);
+					$listguild = new \bbdkp\Guild($row['id']);
 
 					$template->assign_block_vars('guild_row', array(
 						'ID' => $listguild->guildid ,
@@ -140,7 +140,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$this->url_id = request_var(URI_GUILD, 0);
 				}
 
-				$updateguild = new includes\bbdkp\Guild($this->url_id);
+				$updateguild = new \bbdkp\Guild($this->url_id);
 
 				if ($updateguild->guildid != 0)
 				{
@@ -225,7 +225,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				{
 					if (confirm_box(true))
 					{
-						$deleteguild = new includes\bbdkp\Guild(request_var('guild_id', 0));
+						$deleteguild = new \bbdkp\Guild(request_var('guild_id', 0));
 						$deleteguild->Get();
 						$deleteguild->Delete();
 						$success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guild_id);
@@ -313,7 +313,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				if ($add)
 				{
-				    $newrank = new includes\bbdkp\Ranks();
+				    $newrank = new \bbdkp\Ranks();
 					$newrank->RankName = utf8_normalize_nfc(request_var('nrankname', '', true));
 					$newrank->RankId = request_var('nrankid', 0);
 					$newrank->GuildId = $guild_id;
@@ -328,8 +328,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				if ($update)
 				{
-					$newrank = new includes\bbdkp\Ranks();
-					$oldrank = new includes\bbdkp\Ranks();
+					$newrank = new \bbdkp\Ranks();
+					$oldrank = new \bbdkp\Ranks();
 					// template
 					$modrank = utf8_normalize_nfc(request_var('ranks', array(0 => ''), true));
 					foreach ($modrank as $rank_id => $rank_name)
@@ -416,7 +416,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 
 				
-				$listranks = new includes\bbdkp\Ranks();
+				$listranks = new \bbdkp\Ranks();
 				$listranks->game_id = request_var ( 'game_id', '' );
 				$result = $listranks->listranks();
 				while ($row = $db->sql_fetchrow($result))
@@ -468,7 +468,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 						trigger_error('FORM_INVALID');
 					}
 
-					$activatemember = new includes\bbdkp\Members();
+					$activatemember = new \bbdkp\Members();
 					$activate_members = request_var('activate_id', array(0));
 					$member_window = request_var('hidden_member', array(0));
 					$activatemember->activate($activate_members, $member_window);
@@ -515,7 +515,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$db->sql_freeresult($resultg);
 				$previous_data = '';
 
-				$Guild = new includes\bbdkp\Guild($guild_id);
+				$Guild = new \bbdkp\Guild($guild_id);
 
 				//get window
 				$start = request_var('start', 0, false);
@@ -622,7 +622,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				if ($add)
 				{
 
-					$newmember = new includes\bbdkp\Members();
+					$newmember = new \bbdkp\Members();
 					$newmember->game_id = request_var('game_id', '');
 					$newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
 					$newmember->member_guild_id = request_var('member_guild_id', 0);
@@ -664,7 +664,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				if ($update)
 				{
 
-					$updatemember = new includes\bbdkp\Members();
+					$updatemember = new \bbdkp\Members();
 					$updatemember->member_id = request_var('hidden_member_id', 0);
 					if ($updatemember->member_id == 0)
 					{
@@ -703,7 +703,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					if (confirm_box(true))
 					{
 						// recall hidden vars
-						$deletemember = new includes\bbdkp\Members();
+						$deletemember = new \bbdkp\Members();
 						$deletemember->member_id = request_var('del_member_id', 0);
 						$deletemember->Get();
 						$deletemember->Delete();
@@ -712,7 +712,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					}
 					else
 					{
-						$deletemember = new includes\bbdkp\Members();
+						$deletemember = new \bbdkp\Members();
 						$deletemember->member_id = request_var('member_id', 0);
 						$deletemember->Get();
 						$s_hidden_fields = build_hidden_fields(array(
@@ -728,7 +728,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				/*
 				 * fill template
 				 */
-				$editmember = new includes\bbdkp\Members();
+				$editmember = new \bbdkp\Members();
 				$editmember->member_id = request_var('hidden_member_id', 0);
 				if ($editmember->member_id == 0)
 				{
@@ -1100,7 +1100,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 			$member_names = utf8_normalize_nfc(request_var('members', array(0 => ' '), true));
 			foreach ($members_to_delete as $memberid)
 			{
-				$delmember = new includes\bbdkp\Members();
+				$delmember = new \bbdkp\Members();
 				$delmember->member_id = $memberid;
 				$delmember->get();
 				$delmember->Delete();

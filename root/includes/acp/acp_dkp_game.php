@@ -120,7 +120,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				if ($deletefaction)
 				{
 					global $db, $cache, $user;
-					$faction = new includes\bbdkp\Faction();
+					$faction = new \bbdkp\Faction();
 					$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
 					$faction->faction_id = request_var ( 'id', 0 );
 					$faction->get();
@@ -128,7 +128,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					// ask for permission
 					if (confirm_box ( true ))
 					{
-						$faction = new includes\bbdkp\Faction();
+						$faction = new \bbdkp\Faction();
 						$faction->game_id = request_var ( 'hidden_game_id','' );
 						$faction->faction_id = request_var ( 'hidden_faction_id', 0 );
 						$faction->get();
@@ -157,7 +157,7 @@ class acp_dkp_game extends \bbdkp\Admin
 
 					if (isset ( $_GET ['id'] ))
 					{
-						$listraces = new includes\bbdkp\Races();
+						$listraces = new \bbdkp\Races();
 												
 						$listraces->race_id = request_var ( 'id', 0 );
 						$listraces->game_id = request_var ( 'game_id', '' );
@@ -275,7 +275,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					// ask for permission
 					if (confirm_box(true))
 					{
-						$deleterace = new includes\bbdkp\Races();
+						$deleterace = new \bbdkp\Races();
 						$deleterace->race_id = request_var ( 'raceid', 0 );
 						$deleterace->game_id = request_var ( 'game_id', '' );
 						$deleterace->get();
@@ -285,7 +285,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					}
 					else
 					{
-						$deleterace = new includes\bbdkp\Races;
+						$deleterace = new \bbdkp\Races;
 						$deleterace->race_id = request_var ( 'id', 0 );
 						$deleterace->game_id = request_var ( 'game_id', '' );
 						$deleterace->get();
@@ -319,7 +319,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					if (isset ( $_GET ['id'] ))
 					{
 						//edit this class_id
-						$listclasses = new includes\bbdkp\Classes;
+						$listclasses = new \bbdkp\Classes;
 						$listclasses->class_id = request_var ( 'id', 0 );
 						$listclasses->game_id = request_var ( 'game_id', '' );
 						$result = $listclasses->listclasses();
@@ -426,7 +426,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					// ask for permission
 					if (confirm_box ( true ))
 					{
-						$deleteclass = new includes\bbdkp\Classes();
+						$deleteclass = new \bbdkp\Classes();
 						$deleteclass->class_id = request_var ( 'hidden_class_id', 0 );
 						$deleteclass->game_id = request_var ( 'hidden_game_id', '' );
 						$deleteclass->get();
@@ -436,7 +436,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					}
 					else
 					{
-						$deleteclass = new includes\bbdkp\Classes();
+						$deleteclass = new \bbdkp\Classes();
 						$deleteclass->class_id = request_var ( 'id', 0 );
 						$deleteclass->game_id = request_var ( 'game_id', '' );
 						$deleteclass->get();
@@ -470,7 +470,7 @@ class acp_dkp_game extends \bbdkp\Admin
 						trigger_error ( 'FORM_INVALID' );
 					}
 					
-					$faction = new includes\bbdkp\Faction();
+					$faction = new \bbdkp\Faction();
 					$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
 					$faction->faction_name = utf8_normalize_nfc ( request_var ( 'factionname', '', true ) );
 					$faction->Make();
@@ -514,7 +514,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				
 				if ($raceadd)
 				{				
-					$race = new includes\bbdkp\Races();
+					$race = new \bbdkp\Races();
 					$race->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
 					$race->race_id = request_var ( 'race_id', 0 );
 					$race->racename = utf8_normalize_nfc ( request_var ( 'racename', '', true ) );
@@ -527,7 +527,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				
 				if ($raceupdate)
 				{
-					$race = new includes\bbdkp\Races();
+					$race = new \bbdkp\Races();
 					$race->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
 					$race->race_id = request_var ( 'race_id', 0 );
 					$race->Get();
@@ -560,7 +560,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				
 				if ($classadd)
 				{
-					$newclass = new includes\bbdkp\Classes();
+					$newclass = new \bbdkp\Classes();
 					$newclass->game_id = request_var ( 'game_id', '' );
 					$newclass->classname = utf8_normalize_nfc ( request_var ( 'class_name', '', true ) );
 					$newclass->class_id = request_var ( 'class_id', 0 );
@@ -583,7 +583,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				if ($classupdate)
 				{
 
-					$newclass = new includes\bbdkp\Classes();
+					$newclass = new \bbdkp\Classes();
 					$newclass->game_id = request_var ( 'game_id_hidden', '' );
 					$newclass->class_id = request_var ( 'class_id0', 0 );
 					$newclass->c_index = request_var ( 'c_index', 0 );
