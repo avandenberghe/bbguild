@@ -1,26 +1,60 @@
 <?php
-
+/**
+ * @package bbDKP.acp
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2013 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
+ * @since 1.2.9
+ */
 namespace bbdkp;
 
-require_once ('root/includes/bbdkp/Adjustments/iAdjust.php');
+/**
+ * @ignore
+ */
+if (! defined('IN_PHPBB'))
+{
+	exit();
+}
 
-use bbdkp\iAdjust;
+$phpEx = substr(strrchr(__FILE__, '.'), 1);
+global $phpbb_root_path;
+require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 /**
+ *  phpbb_bbdkp_adjustments Class
+ *  
+ * 	phpbb_bbdkp_adjustments
+ *	adjustment_id PK
+ *	member_id index
+ *	adjustment_dkpid index
+ *	adjustment_value 
+ *	adjustment_date 
+ *	adjustment_reason
+ *	adjustment_added_by
+ *	adjustment_updated_by
+ *	adjustment_group_key
+ *	adj_decay
+ *	can_decay
+ *	decay_time
  *
- * @author Ava
- *        
  */
 class Adjust implements iAdjust 
 {
-	
-	public $dkpsys_id = 0;
-	public $adjustment = 0.0;
+	public $adjustment_id; 
 	public $member_id = 0;
-	public $adjreason = ''; 
-	public $candecay = 0;
-	public $adjdate;
-	
+	public $adjustment_dkpid = 0;
+	public $adjustment_value = 0.0;
+	public $adjustment_date;
+	public $adjustment_reason = ''; 
+	public $adjustment_added_by = '';
+	public $adjustment_updated_by = '';
+	public $adjustment_groupkey = '';
+	public $adj_decay;
+	public $can_decay;
+	public $decay_time; 
+		
 	/**
 	 */
 	function __construct() 
@@ -53,28 +87,26 @@ class Adjust implements iAdjust
 		$membercount = (int) $db->sql_fetchfield('membercount');
 		if ($membercount == 1)
 		{
-		// (s)he does. lets update
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-						SET member_adjustment = member_adjustment + ' . $adjval . "
+				SET member_adjustment = member_adjustment + ' . $adjval . "
                 WHERE member_id='" . $member_id . "'
         		AND member_dkpid = " . $dkpsys_id;
 			$db->sql_query($sql);
 			unset($sql);
 		}
 		elseif ($membercount == 0)
-		{
-		// new kid on the block
-		$query = $db->sql_build_array('INSERT', array(
-			'member_dkpid' => $dkpsys_id ,
-			'member_id' => $member_id ,
-					'member_earned' => 0.00 ,
-						'member_spent' => 0.00 ,
-						'member_adjustment' => $adjval ,
-					'member_status' => 1 ,
-					'member_firstraid' => 0 ,
-						'member_lastraid' => 0 ,
-						'member_raidcount' => 0));
-						$db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
+		{	
+			$query = $db->sql_build_array('INSERT', array(
+				'member_dkpid' => $dkpsys_id ,
+				'member_id' => $member_id ,
+				'member_earned' => 0.00 ,
+				'member_spent' => 0.00 ,
+				'member_adjustment' => $adjval ,
+				'member_status' => 1 ,
+				'member_firstraid' => 0 ,
+				'member_lastraid' => 0 ,
+				'member_raidcount' => 0));
+				$db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
 		}
 	
 		//
@@ -84,12 +116,12 @@ class Adjust implements iAdjust
 		'adjustment_dkpid' => $dkpsys_id ,
 		'adjustment_value' => $adjval ,
 		'adjustment_date' => $this->time ,
-			'member_id' => $member_id ,
-				'adjustment_reason' => $adjreason ,
-				'adjustment_group_key' => $group_key ,
-			'can_decay' => $candecay ,
-					'adjustment_added_by' => $user->data['username']));
-								$db->sql_query('INSERT INTO ' . ADJUSTMENTS_TABLE . $query);
+		'member_id' => $member_id ,
+		'adjustment_reason' => $adjreason ,
+		'adjustment_group_key' => $group_key ,
+		'can_decay' => $candecay ,
+		'adjustment_added_by' => $user->data['username']));
+		$db->sql_query('INSERT INTO ' . ADJUSTMENTS_TABLE . $query);
 	}
 	
 	

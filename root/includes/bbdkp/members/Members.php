@@ -23,7 +23,6 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
-//;
 
 class Members implements iMembers {
 	public $game_id;
