@@ -1,9 +1,24 @@
 <!-- INCLUDE overall_header.html -->
 <a name="maincontent"></a>
+
+<h1>{L_ACP_GAMESETTINGS}</h1>
+<p>{L_ACP_GAMESETTINGS_EXPLAIN}</p>
+
 <form id="acp_listgames" method="post" action="{U_ACTION}">
 <div>
+<label for="game_id">{L_GUILD}:</label>
+<select id="game_id" name="game_id" class="input" onchange="javascript:form.submit();" >
+       	<!-- BEGIN game_row -->
+       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
+        <!-- END game_row -->
+</select>
+</div>
+</form>
+<br />
 
-<h1>{L_ACP_LISTFACTION}</h1>
+<form id="acp_listgames" method="post" action="{U_ACTION}">
+<div>
+<h2>{L_ACP_LISTFACTION}</h2>
 <p>{L_ACP_LISTFACTIONS_EXPLAIN}</p>
 
 <table width="50%" cellspacing="1">
@@ -48,7 +63,7 @@
 <br />
 <br />
 
-<h1>{L_ACP_LISTRACE}</h1>
+<h2>{L_ACP_LISTRACE}</h2>
 <p>{L_ACP_LISTRACE_EXPLAIN}</p>
 
 <table cellspacing="1">
@@ -95,7 +110,7 @@
 <br />
 <br />
 <br />
-<h1>{L_ACP_LISTCLASS}</h1>
+<h2>{L_ACP_LISTCLASS}</h2>
 <p>{L_ACP_LISTCLASS_EXPLAIN}</p>
 
 <table cellspacing="1">
