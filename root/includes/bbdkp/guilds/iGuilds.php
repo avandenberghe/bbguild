@@ -9,7 +9,8 @@ if (! defined('IN_PHPBB'))
 	exit();
 }
 
-interface iGuilds {
+interface iGuilds 
+{
 
 	/**
 	 * gets guild from database

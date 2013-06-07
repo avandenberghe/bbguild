@@ -40,7 +40,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
  *	decay_time
  *
  */
-class Adjust implements iAdjust 
+class Adjust extends \bbdkp\Admin implements iAdjust 
 {
 	public $adjustment_id; 
 	public $member_id = 0;
@@ -66,7 +66,7 @@ class Adjust implements iAdjust
 	 * add a new dkp adjustment
 	 *
 	 */
-	public function Add ($group_key)
+	public function Add($group_key)
 	{
 		global $user, $db;
 		// no global scope
@@ -135,7 +135,8 @@ class Adjust implements iAdjust
 	{
 		global $config, $db;
 		$now = getdate();
-		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $adjdate;
+		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], 
+					$now['mday'], $now['year']) - $this->adjustment_date;
 		$i = (float) $config['bbdkp_adjdecaypct'] / 100;
 		// get decay frequency
 		$freq = $config['bbdkp_decayfrequency'];
@@ -210,6 +211,12 @@ class Adjust implements iAdjust
 		return $result;
 		
 	}
+	/* (non-PHPdoc)
+	 * @see \bbdkp\iAdjust::decayadj()
+	 */public function decayadj($olddecay) {
+		// TODO Auto-generated method stub
+		}
+
 }
 
 ?>

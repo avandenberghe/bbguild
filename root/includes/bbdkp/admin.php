@@ -25,73 +25,38 @@ global $phpbb_root_path;
 * Extended by admin page classes only
 * 
 */
-class Admin
+class Admin implements \bbdkp\iAdmin
 {
-    // General vars
-    
-	/**
-	 * points to url constant
-	 *
-	 * @var string
-	 */
-    public $url_id = 0;
-
-    /**
-     * Form Validation
-     *
-     * @var string
-     */
-    public $fv = NULL;
-    
-    /**
-     * bbDKP time
-     *
-     * @var int
-     */
     public $time = 0;
-
-    /**
-     * is bbTips installed
-     *
-     * @var bool
-     */
     public $bbtips = false; 
-    
-    /**
-     * supported games
-     *
-     * @var array
-     */
     public $games; 
     
 	public function __construct()
 	{
-		global $user;
+		global $user, $phpbb_root_path, $phpEx, $config, $user; 
 		
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
-			    if(!defined("EMED_BBDKP"))
+		if(!defined("EMED_BBDKP"))
 	    {
 	        trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 	    }
 	    
-	    global $phpbb_root_path, $phpEx, $config, $user; 
-	    
 	    $this->games = array (
-			'wow' => $user->lang ['WOW'], 
+			'wow' 	=> $user->lang ['WOW'], 
 			'lotro' => $user->lang ['LOTRO'], 
-			'eq' => $user->lang ['EQ'], 
-			'daoc' => $user->lang ['DAOC'], 
+			'eq' 	=> $user->lang ['EQ'], 
+			'daoc' 	=> $user->lang ['DAOC'], 
 			'vanguard' => $user->lang ['VANGUARD'], 
-			'eq2' => $user->lang ['EQ2'], 
+			'eq2' 	=> $user->lang ['EQ2'], 
 			'warhammer' => $user->lang ['WARHAMMER'], 
-			'aion' => $user->lang ['AION'], 
-			'FFXI' => $user->lang ['FFXI'], 
-			'rift' => $user->lang ['RIFT'], 
+			'aion' 	=> $user->lang ['AION'], 
+			'FFXI' 	=> $user->lang ['FFXI'], 
+			'rift' 	=> $user->lang ['RIFT'], 
 			'swtor' => $user->lang ['SWTOR'], 
 			'lineage2' => $user->lang ['LINEAGE2'],
-	    	'tera' => $user->lang ['TERA'],
-	    	'gw2' => $user->lang ['GW2'],
+	    	'tera' 	=> $user->lang ['TERA'],
+	    	'gw2' 	=> $user->lang ['GW2'],
 	    );
 	    
 	    $boardtime = array(); 
@@ -100,79 +65,16 @@ class Admin
 	    $this->fv = new Form_Validate;
 	    
 	    if (isset($config['bbdkp_plugin_bbtips_version']))
-	    {	
+	    {
 	    	//check if config value and parser file exist.
 	    	if($config['bbdkp_plugin_bbtips_version'] >= '0.3.1' && file_exists($phpbb_root_path. 'includes/bbdkp/bbtips/parse.' . $phpEx))
 	    	{
 	    		$this->bbtips = true;
 	    	}
-	
 	    }
 	   
 	    
 	}
-    
-/**  
-* makes an entry in the bbdkp log table
-* log_action is an xml containing the log
-* 	
-* log_id	int(11)		UNSIGNED	No		auto_increment	 	 	 	 	 	 	
-* log_date	int(11)			No	0		 	 	 	 	 	 	
-* log_type	varchar(255)	utf8_bin		No			 	 	 	 	 	 	 
-* log_action	text	utf8_bin		No			 	 	 				 
-* log_ipaddress	varchar(15)	utf8_bin		No			 	 	 	 	 	 	 
-* log_sid	varchar(32)	utf8_bin		No			 	 	 	 	 	 	 
-* log_result	varchar(255)	utf8_bin		No			 	 	 	 	 	 	 
-* log_userid	mediumint(8)	UNSIGNED	No	0	
-*/	 	 	 	 	 	 	
-    public function log_insert($values = array())
-    {
-        global $db, $user;
-        $log_fields = array('log_date', 'log_type', 'log_action', 'log_ipaddress', 'log_sid', 'log_result', 'log_userid');
-
-        
-        // Default our log values
-         $defaultlog = array(
-            'log_date'      => time(),
-            'log_type'      => NULL,
-            'log_action'    => NULL,
-            'log_ipaddress' => $user->ip,
-            'log_sid'       => $user->session_id,
-            'log_result'    => 'L_SUCCESS',
-            'log_userid'    => $user->data['user_id']);
-        
-        if ( sizeof($values) > 0 )
-        {
-            // If they set the value, we use theirs, otherwise we use the default
-            foreach ( $log_fields as $field )
-            {
-                $values[$field] = ( isset($values[$field]) ) ? $values[$field] : $defaultlog[$field];
-                
-                if ( $field == 'log_action' )
-                {
-                    // make xml with log actions
-                    $str_action="<log>";
-                    foreach ( $values['log_action'] as $key => $value )
-                    {
-                        $str_action .= "<" . $key . ">" . $value . "</" . $key . ">";
-                    }
-                    $str_action .="</log>";
-                    $str_action = substr($str_action, 0, strlen($str_action));
-                    // Take the newlines and tabs (or spaces > 1) out 
-                    $str_action = preg_replace("/[[:space:]]{2,}/", '', $str_action);
-                    $str_action = str_replace("\t", '', $str_action);
-                    $str_action = str_replace("\n", '', $str_action);
-                    $str_action = preg_replace("#(\\\){1,}#", "\\", $str_action);
-                    $values['log_action'] = $str_action;
-                }
-            }
-            $query = $db->sql_build_array('INSERT', $values);
-            $sql = 'INSERT INTO ' . LOGS_TABLE . $query;
-            $db->sql_query($sql);
-            return true;
-        }
-        return false;
-    }
     
     /**
 	 * creates a unique key, used as adjustments, import, items and raid identifier
@@ -203,7 +105,7 @@ class Admin
 	 * @param char $loud default false
 	 * @return xml
 	 */
-  public static function read_php($url, $return_Server_Response_Header = false, $loud= false) 
+  public function read_php($url, $return_Server_Response_Header = false, $loud= false) 
 	{
 		$errmsg1= '';
 		$errmsg2= '';
@@ -457,19 +359,80 @@ class Admin
 	
 }
 
-/**
-* Form Validate Class
-* Validates various elements of a form and types of data
-* Available through admin extensions as fv
-*/
+class logging
+{
+
+	/**
+	 * makes an entry in the bbdkp log table
+	 * log_action is an xml containing the log
+	 *
+	 * log_id	int(11)		UNSIGNED	No		auto_increment
+	 * log_date	int(11)			No	0
+	 * log_type	varchar(255)	utf8_bin		No
+	 * log_action	text	utf8_bin		No
+	 * log_ipaddress	varchar(15)	utf8_bin		No
+	 * log_sid	varchar(32)	utf8_bin		No
+	 * log_result	varchar(255)	utf8_bin		No
+	 * log_userid	mediumint(8)	UNSIGNED	No	0
+	 */
+	public function log_insert($values = array())
+	{
+		global $db, $user;
+		$log_fields = array('log_date', 'log_type', 'log_action', 'log_ipaddress', 'log_sid', 'log_result', 'log_userid');
+	
+	
+		// Default our log values
+		$defaultlog = array(
+				'log_date'      => time(),
+				'log_type'      => NULL,
+				'log_action'    => NULL,
+				'log_ipaddress' => $user->ip,
+				'log_sid'       => $user->session_id,
+				'log_result'    => 'L_SUCCESS',
+				'log_userid'    => $user->data['user_id']);
+	
+		if ( sizeof($values) > 0 )
+		{
+			// If they set the value, we use theirs, otherwise we use the default
+			foreach ( $log_fields as $field )
+			{
+				$values[$field] = ( isset($values[$field]) ) ? $values[$field] : $defaultlog[$field];
+	
+				if ( $field == 'log_action' )
+				{
+					// make xml with log actions
+					$str_action="<log>";
+					foreach ( $values['log_action'] as $key => $value )
+					{
+						$str_action .= "<" . $key . ">" . $value . "</" . $key . ">";
+					}
+					$str_action .="</log>";
+					$str_action = substr($str_action, 0, strlen($str_action));
+					// Take the newlines and tabs (or spaces > 1) out
+					$str_action = preg_replace("/[[:space:]]{2,}/", '', $str_action);
+					$str_action = str_replace("\t", '', $str_action);
+					$str_action = str_replace("\n", '', $str_action);
+					$str_action = preg_replace("#(\\\){1,}#", "\\", $str_action);
+					$values['log_action'] = $str_action;
+				}
+			}
+			$query = $db->sql_build_array('INSERT', $values);
+			$sql = 'INSERT INTO ' . LOGS_TABLE . $query;
+			$db->sql_query($sql);
+			return true;
+		}
+		return false;
+	}
+	
+	
+}
+
+
 class Form_Validate
 {
     var $errors = array();   
 
-    
-
-    
-    /**
+   /**
     * Constructor
     *
     * Initiates the error list

@@ -6,6 +6,7 @@
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.2.9
+ * @since 1.2.9 
  */
 
 namespace bbdkp;
@@ -22,11 +23,9 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
 
-;
 
 class Races implements iRaces 
 {
-	
 	public $game_id;
 	public $race_id;
 	public $race_faction_id;

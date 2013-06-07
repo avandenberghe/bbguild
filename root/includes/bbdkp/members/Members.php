@@ -6,10 +6,10 @@
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.2.9
+ * @since 1.2.9 
  */
 
 namespace bbdkp;
-
 
 /**
  * @ignore
@@ -24,7 +24,8 @@ global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 
-class Members implements iMembers {
+class Members implements iMembers 
+{
 	public $game_id;
 	public $member_id;
 	public $member_name;

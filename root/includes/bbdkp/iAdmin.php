@@ -15,18 +15,11 @@ if (! defined('IN_PHPBB'))
 {
 	exit();
 }
-if (! defined('EMED_BBDKP'))
-{
-	$user->add_lang(array(
-			'mods/dkp_admin'));
-	\trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
-}
 
-interface iAdjust extends \bbdkp\iAdmin
+interface iAdmin 
 {
-	function Add();
-	function listadj($order);
-	function decayadj ($olddecay);
+	function log_insert($values);
+
 }
 
 ?>

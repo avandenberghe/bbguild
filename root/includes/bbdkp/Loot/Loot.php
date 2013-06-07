@@ -9,6 +9,7 @@
  * @since 1.2.9 
  */
 namespace bbdkp;
+
 /**
  * @ignore
  */
@@ -19,31 +20,32 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/Raids/iRaids.$phpEx");
+require_once ("{$phpbb_root_path}includes/bbdkp/Loot/iLoot.$phpEx");
 
 /**
- * This class manages the phpbb_bbdkp_raid_detail transaction table
+ * this class manages the loot transaction table (phpbb_bbdkp_raid_items)
  * 
- * raid_id
- * member_id
- * raid_value
- * time_bonus 
- * zerosum_bonus 
- * raid_decay 
+ * item_id pk
+ * raid_id key
+ * item_name 
+ * member_id 
+ * item_date 
+ * item_added_by 
+ * item_updated_by 
+ * item_group_key 
+ * item_gameid 
+ * item_value 
+ * item_decay 
+ * item_zs 
  * decay_time 
- * 
+ *
  */
-class Raids implements iRaids
+class Loot implements iLoot 
 {
 	function __construct() 
 	{
-		
+	
 	}
-	
-	
-	
-	
-	
 }
 
 ?>

@@ -23,9 +23,8 @@ global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
 
 /**
- * 	phpbb_bbdkp_memberdkp class
- *  this class manages the points table where all transaction tables are centralised
- * 
+ *  Points Class
+ *  this class manages the points table where all transaction tables are centralised (phpbb_bbdkp_memberdkp)
  * 
  *	member_id pk
  *	member_dkpid pk 
