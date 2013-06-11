@@ -20,7 +20,7 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
+require_once ("{$phpbb_root_path}includes/bbdkp/Adjustments/iAdjust.$phpEx");
 
 /**
  *  phpbb_bbdkp_adjustments Class
@@ -40,7 +40,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
  *	decay_time
  *
  */
-class Adjust extends \bbdkp\Admin implements iAdjust 
+class Adjust implements iAdjust 
 {
 	public $adjustment_id; 
 	public $member_id = 0;
@@ -66,7 +66,7 @@ class Adjust extends \bbdkp\Admin implements iAdjust
 	 * add a new dkp adjustment
 	 *
 	 */
-	public function Add($group_key)
+	public function Add ()
 	{
 		global $user, $db;
 		// no global scope
@@ -112,6 +112,7 @@ class Adjust extends \bbdkp\Admin implements iAdjust
 		//
 		// Add the adjustment to the database
 		//
+		$group_key = $this->gen_group_key($part1, $part2, $part3);
 		$query = $db->sql_build_array('INSERT', array(
 		'adjustment_dkpid' => $dkpsys_id ,
 		'adjustment_value' => $adjval ,
@@ -133,10 +134,10 @@ class Adjust extends \bbdkp\Admin implements iAdjust
 	 */
 	private function decayadj ($olddecay)
 	{
+		$olddecay = (dec) $olddecay;
 		global $config, $db;
 		$now = getdate();
-		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], 
-					$now['mday'], $now['year']) - $this->adjustment_date;
+		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $adjdate;
 		$i = (float) $config['bbdkp_adjdecaypct'] / 100;
 		// get decay frequency
 		$freq = $config['bbdkp_decayfrequency'];
@@ -180,14 +181,17 @@ class Adjust extends \bbdkp\Admin implements iAdjust
 		return true;
 	}
 	
-
 	/**
+	 * 
 	 * returns list of adjustments to admin page
 	 * @see \bbdkp\iAdjust::listadj()
 	 */
-	function listadj($order)
+	function listadj($order, $member_id, $start=0)
 	{
-		global $user, $db;
+		global $user, $db, $config;
+		$order = (string) $order;
+		$member_id = (int) $member_id;
+		
 		$sql_array = array(
 				'SELECT' => 'a.adjustment_dkpid, a.adjustment_reason,
 			    				b.dkpsys_name, a.adjustment_id, a.adj_decay, a.decay_time, a.can_decay,
@@ -202,21 +206,66 @@ class Adjust extends \bbdkp\Admin implements iAdjust
 			    		b.dkpsys_id = a.adjustment_dkpid
 			    		AND c.class_id = l.member_class_id
 			    		AND l.game_id= c.game_id
-						AND a.adjustment_dkpid 	= ' . (int) $this->dkpsys_id . '
+						AND a.adjustment_dkpid 	= ' . (int) $this->adjustment_dkpid . '
 						AND a.member_id = l.member_id
 						AND a.member_id IS NOT NULL ' ,
 				'ORDER_BY' => $order);
+		
+		if ($member_id != 0)
+		{
+			$sql_array['WHERE'] .= ' AND a.member_id ' . $member_id;
+		}
+		
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-		$result = $db->sql_query ( $sql );
+		if ($start > 0)
+		{
+			$result = $db->sql_query_limit($sql, $config['bbdkp_user_alimit'], $start, 0);
+		}
+		else
+		{
+			$result = $db->sql_query ( $sql );
+		}
 		return $result;
 		
 	}
-	/* (non-PHPdoc)
-	 * @see \bbdkp\iAdjust::decayadj()
-	 */public function decayadj($olddecay) {
-		// TODO Auto-generated method stub
+	
+	/**
+	 * Counts adjustments for a pool/member
+	 * 
+	 * @param int $member_id
+	 * @return unknown
+	 */	
+	function countadjust($member_id)
+	{
+		$member_id = (int) $member_id;
+		global $user, $db;
+		$sql = 'SELECT count(*) as total_adjustments
+					FROM ' . ADJUSTMENTS_TABLE . '
+					WHERE member_id IS NOT NULL
+					and adjustment_dkpid 	= ' . (int) $adjust->adjustment_dkpid;
+		if ($member_id != 0)
+		{
+			$sql .= ' and member_id  = ' . $member_id;
 		}
-
+		$result = $db->sql_query($sql);
+		return $result;
+		
+	}
+	
+	/**
+	 * Lists the pools with adjustments
+	 * @return unknown
+	 */
+	public function listAdjPools()
+	{
+		global $user, $db;
+		$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default
+		          FROM ' . DKPSYS_TABLE . ' a, ' . ADJUSTMENTS_TABLE . ' j
+		          WHERE a.dkpsys_id = j.adjustment_dkpid
+		          GROUP BY dkpsys_id, dkpsys_name , dkpsys_default';
+		$result = $db->sql_query($sql);
+		return $result;
+	}
 }
 
 ?>

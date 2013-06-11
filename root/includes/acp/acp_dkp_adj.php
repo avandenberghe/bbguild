@@ -17,9 +17,16 @@ if (! defined('IN_PHPBB'))
 }
 if (! defined('EMED_BBDKP'))
 {
-	$user->add_lang(array(
-		'mods/dkp_admin'));
+	$user->add_lang(array('mods/dkp_admin'));
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
+}
+if (!class_exists('Adjust'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Adjustments/Adjust.$phpEx");
+}
+if (!class_exists('Members'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
 
 /**
@@ -28,10 +35,12 @@ if (! defined('EMED_BBDKP'))
  */
 class acp_dkp_adj extends \bbdkp\Admin
 {
-	public $u_action;
+	public  $u_action;
 	private $old_adjustment;
 	private $adjustment;
-	private $link; 
+	private $link;
+
+	
 	/** 
 	 * main ACP dkp adjustment function
 	 * @param int $id the id of the node who parent has to be returned by function 
@@ -42,12 +51,6 @@ class acp_dkp_adj extends \bbdkp\Admin
 	{
 		global $db, $user, $template;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		if (! class_exists('acp_dkp_mm'))
-		{
-			// we need this class for getting member id from name and viceversa
-			include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
-			$class_members = new acp_dkp_mm();
-		}
 		$user->add_lang(array('mods/dkp_admin', 'mods/dkp_common'));
 		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 		switch ($mode)
@@ -62,18 +65,15 @@ class acp_dkp_adj extends \bbdkp\Admin
 					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj"));
 					break;
 				}
+				
 				/**  DKPSYS drop-down query ***/
-				// only show pools with adjustments 							
-				$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
-		          FROM ' . DKPSYS_TABLE . ' a, ' . ADJUSTMENTS_TABLE . ' j 
-		          WHERE a.dkpsys_id = j.adjustment_dkpid 
-		          GROUP BY dkpsys_id, dkpsys_name , dkpsys_default';
-				$result = $db->sql_query($sql);
-				$dkpsys_id = 0;
+				$adjust = new \bbdkp\Adjust();
+				$result = $adjust->listAdjPools();
+				$adjust->adjustment_dkpid = 0;
 				$submit = (isset($_POST['dkpsys_id']) || isset($_GET['dkpsys_id'])) ? true : false;
 				if ($submit)
 				{
-					$dkpsys_id = request_var('dkpsys_id', 0);
+					$adjust->adjustment_dkpid = request_var('dkpsys_id', 0);
 				}
 				else
 				{
@@ -81,7 +81,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					{
 						if ($row['dkpsys_default'] == "Y")
 						{
-							$dkpsys_id = $row['dkpsys_id'];
+							$adjust->adjustment_dkpid = $row['dkpsys_id'];
 						}
 					}
 					if ($dkpsys_id == 0)
@@ -89,17 +89,17 @@ class acp_dkp_adj extends \bbdkp\Admin
 						$result = $db->sql_query_limit($sql, 1);
 						while ($row = $db->sql_fetchrow($result))
 						{
-							$dkpsys_id = $row['dkpsys_id'];
+							$adjust->adjustment_dkpid = $row['dkpsys_id'];
 						}
 					}
 				}
 				$db->sql_freeresult($result);
-				$result = $db->sql_query($sql);
+				$result = $adjust->listAdjPools();
 				while ($row = $db->sql_fetchrow($result))
 				{
 					$template->assign_block_vars('dkpsys_row', array(
 						'VALUE' => $row['dkpsys_id'] , 
-						'SELECTED' => ($row['dkpsys_id'] == $dkpsys_id) ? ' selected="selected"' : '' , 
+						'SELECTED' => ($row['dkpsys_id'] == $adjust->adjustment_dkpid) ? ' selected="selected"' : '' , 
 						'OPTION' => (! empty($row['dkpsys_name'])) ? $row['dkpsys_name'] : '(None)'));
 				}
 				$db->sql_freeresult($result);
@@ -107,66 +107,39 @@ class acp_dkp_adj extends \bbdkp\Admin
 				/*** end DKPSYS drop-down ***/
 				$sort_order = array(
 					0 => array('adjustment_date desc' , 'adjustment_date') , 
-					1 => array(	'adjustment_dkpid' , 'adjustment_dkpid desc') , 
+					1 => array('adjustment_dkpid' , 'adjustment_dkpid desc') , 
 					2 => array('dkpsys_name' , 'dkpsys_name desc') , 
 					3 => array('member_name' , 'member_name desc') , 
 					4 => array('adjustment_reason' , 'adjustment_reason desc') , 
 					5 => array('adjustment_value desc' , 'adjustment_value') , 
 					6 => array('adjustment_added_by' , 'adjustment_added_by desc'));
 					
-				$sql2 = 'SELECT count(*) as total_adjustments 
-					FROM ' . ADJUSTMENTS_TABLE . ' 
-					WHERE member_id IS NOT NULL 
-					and adjustment_dkpid 	= ' . (int) $dkpsys_id;
-				
+				$members = new \bbdkp\Members();
 				$member_filter = utf8_normalize_nfc(request_var('member_name', '', true));
 				if ($member_filter != '')
 				{
-					$member_id_filter = intval($class_members->get_member_id(trim($member_filter)));
-					$sql2 .= ' and member_id  = ' . $member_id_filter;
+					$member_id_filter = $members->get_member_id(trim($member_filter));
 				}
 				
-				$result2 = $db->sql_query($sql2);
+				$result2 = $adjust->countadjust($member_id_filter);
 				$total_adjustments = (int) $db->sql_fetchfield('total_adjustments');
 				$db->sql_freeresult($result2);
-				$current_order = switch_order($sort_order);
-				$u_list_adjustments = append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj") . '&amp;' . URI_PAGE;
-				$start = request_var('start', 0);
-				$s_group_adj = false;
-				$sql_array = array(
-					'SELECT' => 'a.adjustment_dkpid, a.adjustment_reason, 
-			    				b.dkpsys_name, a.adjustment_id, a.adj_decay, a.decay_time, a.can_decay, 
-			    				a.adjustment_value, a.member_id, l.member_name,  
-			    				a.adjustment_date, a.adjustment_added_by, c.colorcode, c.imagename ' , 
-					'FROM' => array(
-						ADJUSTMENTS_TABLE => 'a' , 
-						DKPSYS_TABLE => 'b' , 
-						MEMBER_LIST_TABLE => 'l' , 
-						CLASS_TABLE => 'c') , 
-					'WHERE' => ' 
-			    		b.dkpsys_id = a.adjustment_dkpid 
-			    		AND c.class_id = l.member_class_id  
-			    		AND l.game_id= c.game_id 
-						AND a.adjustment_dkpid 	= ' . (int) $dkpsys_id . '  
-						AND a.member_id = l.member_id
-						AND a.member_id IS NOT NULL ' , 
-					'ORDER_BY' => $current_order['sql']);
 				
-				if ($member_filter != '')
-				{
-					$sql_array['WHERE'] .= ' AND l.member_name ' . $db->sql_like_expression($db->any_char . $member_filter . $db->any_char);
-				}
-				$sql = $db->sql_build_query('SELECT', $sql_array);
-				$count = 0;
-				$result = $db->sql_query($sql);
+				$u_list_adjustments = append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj") . '&amp;' . URI_PAGE;
+				$current_order = switch_order($sort_order);
+				$result = $adjust->listadj($current_order['sql'], $member_id_filter);
+				
 				$hasrows = false;
+				$count = 0;
 				while ($adj = $db->sql_fetchrow($result))
 				{
 					$hasrows = true;
 					$count = $count + 1;
 				}
 				$db->sql_freeresult($result);
-				$result = $db->sql_query_limit($sql, $config['bbdkp_user_alimit'], $start, 0);
+				
+				$start = request_var('start', 0);
+				$result = $adjust->listadj($current_order['sql'], $member_id_filter, $start);
 				while ($adj = $db->sql_fetchrow($result))
 				{
 					$template->assign_block_vars('adjustments_row', array(
@@ -190,7 +163,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				}
 				$db->sql_freeresult($result);
 				$listadj_footcount = sprintf($user->lang['LISTADJ_FOOTCOUNT'], $total_adjustments, $config['bbdkp_user_alimit']);
-				$pagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj&amp;dkpsys_id=" . $dkpsys_id) . '&amp;' . URI_PAGE, $total_adjustments, $config['bbdkp_user_alimit'], $start, true);
+				$pagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj&amp;dkpsys_id=" . $adjust->adjustment_dkpid) . '&amp;' . URI_PAGE, $total_adjustments, $config['bbdkp_user_alimit'], $start, true);
 				$template->assign_vars(array(
 					'L_TITLE' => $user->lang['ACP_LISTIADJ'] , 
 					'L_EXPLAIN' => $user->lang['ACP_LISTIADJ_EXPLAIN'] , 
@@ -205,7 +178,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					'U_LIST_ADJUSTMENTS' => $u_list_adjustments , 
 					'MEMBER_NAME' => $member_filter , 
 					'START' => $start , 
-					'S_GROUP_ADJ' => $s_group_adj , 
+					'S_GROUP_ADJ' => false , 
 					'LISTADJ_FOOTCOUNT' => $listadj_footcount , 
 					'ADJUSTMENT_PAGINATION' => $pagination));
 				$this->page_title = 'ACP_LISTIADJ';
