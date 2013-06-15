@@ -20,6 +20,13 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang(array('mods/dkp_admin'));
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
+
+// Include the abstract base
+if (!class_exists('\bbdkp\Admin'))
+{
+	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+}
+
 /**
  * This acp class manages setting configs, logging
  */
@@ -36,6 +43,7 @@ class acp_dkp extends \bbdkp\Admin
 		$user->add_lang(array('mods/dkp_admin'));
 		$user->add_lang(array('mods/dkp_common'));
 		$link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
+		
 		switch ($mode)
 		{
 			/**

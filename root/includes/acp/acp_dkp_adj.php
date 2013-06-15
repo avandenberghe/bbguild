@@ -29,6 +29,13 @@ if (!class_exists('Members'))
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
 
+// Include the abstract base
+if (!class_exists('\bbdkp\Admin'))
+{
+	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+}
+
+
 /**
  * This class manages guildmembers dkp adjustments
  * 
@@ -40,13 +47,6 @@ class acp_dkp_adj extends \bbdkp\Admin
 	private $adjustment;
 	private $link;
 
-	
-	/** 
-	 * main ACP dkp adjustment function
-	 * @param int $id the id of the node who parent has to be returned by function 
-	 * @param int $mode id of the submenu
-	 * @access public 
-	 */
 	public function main ($id, $mode)
 	{
 		global $db, $user, $template;
@@ -55,9 +55,6 @@ class acp_dkp_adj extends \bbdkp\Admin
 		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 		switch ($mode)
 		{
-			/************************************
-			 * LIST INDIVIDUAL ADJUSTMENTS
-			 ************************************/
 			case 'listiadj':
 				$showadd = (isset($_POST['addiadj'])) ? true : false;
 				if ($showadd)
@@ -84,7 +81,8 @@ class acp_dkp_adj extends \bbdkp\Admin
 							$adjust->adjustment_dkpid = $row['dkpsys_id'];
 						}
 					}
-					if ($dkpsys_id == 0)
+					
+					if ($adjust->adjustment_dkpid == 0)
 					{
 						$result = $db->sql_query_limit($sql, 1);
 						while ($row = $db->sql_fetchrow($result))
@@ -95,6 +93,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				}
 				$db->sql_freeresult($result);
 				$result = $adjust->listAdjPools();
+				
 				while ($row = $db->sql_fetchrow($result))
 				{
 					$template->assign_block_vars('dkpsys_row', array(
@@ -126,19 +125,19 @@ class acp_dkp_adj extends \bbdkp\Admin
 				$db->sql_freeresult($result2);
 				
 				$u_list_adjustments = append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj") . '&amp;' . URI_PAGE;
-				$current_order = switch_order($sort_order);
-				$result = $adjust->listadj($current_order['sql'], $member_id_filter);
+				$current_order = $this->switch_order($sort_order);
+				$start = request_var('start', 0);
 				
+				$result = $adjust->listadj($current_order['sql'], $member_id_filter);
 				$hasrows = false;
-				$count = 0;
+				$total_adjustments = 0;
 				while ($adj = $db->sql_fetchrow($result))
 				{
 					$hasrows = true;
-					$count = $count + 1;
+					$total_adjustments +=1; 
 				}
 				$db->sql_freeresult($result);
 				
-				$start = request_var('start', 0);
 				$result = $adjust->listadj($current_order['sql'], $member_id_filter, $start);
 				while ($adj = $db->sql_fetchrow($result))
 				{
@@ -153,17 +152,24 @@ class acp_dkp_adj extends \bbdkp\Admin
 						'U_VIEW_MEMBER' => (isset($adj['member_name'])) ? append_sid("{$phpbb_root_path}dkp.$phpEx", "page=viewmember&amp;" . URI_NAMEID . '=' . $adj['member_id'] . '&amp;' . URI_DKPSYS . '=' . $adj['adjustment_dkpid']) : '' , 
 						'MEMBER' => (isset($adj['member_name'])) ? $adj['member_name'] : '' , 
 						'REASON' => (isset($adj['adjustment_reason'])) ? $adj['adjustment_reason'] : '' , 
-						'ADJUSTMENT' => $adj['adjustment_value'] , 
+						'ADJUSTMENT' => number_format($adj['adjustment_value'],2) , 
 						'ADJ_DECAY' => $adj['adj_decay'] , 
-						'can_decay' => $adj['can_decay'] , 
-						'ADJUSTMENT_NET' => $adj['adjustment_value'] - $adj['adj_decay'] , 
-						'DECAY_TIME' => $adj['decay_time'] , 
+						'CAN_DECAY' => $adj['can_decay'] , 
+						'ADJUSTMENT_NET' => number_format($adj['adjustment_value'] - $adj['adj_decay'], 2) , 
+						'DECAY_TIME' => ($adj['decay_time'] != 0 ?  date($config['bbdkp_date_format'], $adj['decay_time']) : '') , 
 						'C_ADJUSTMENT' => ($adj['adjustment_value'] > 0 ? "positive" : "negative") , 
 						'ADDED_BY' => (isset($adj['adjustment_added_by'])) ? $adj['adjustment_added_by'] : ''));
+					
 				}
 				$db->sql_freeresult($result);
 				$listadj_footcount = sprintf($user->lang['LISTADJ_FOOTCOUNT'], $total_adjustments, $config['bbdkp_user_alimit']);
-				$pagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj&amp;dkpsys_id=" . $adjust->adjustment_dkpid) . '&amp;' . URI_PAGE, $total_adjustments, $config['bbdkp_user_alimit'], $start, true);
+				
+				$pagination = \generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj&amp;dkpsys_id=" . 
+					$adjust->adjustment_dkpid) . '&amp;' . URI_PAGE, 
+					$total_adjustments, 
+					$config['bbdkp_user_alimit'], 
+					$start, true);
+				
 				$template->assign_vars(array(
 					'L_TITLE' => $user->lang['ACP_LISTIADJ'] , 
 					'L_EXPLAIN' => $user->lang['ACP_LISTIADJ_EXPLAIN'] , 
@@ -180,86 +186,43 @@ class acp_dkp_adj extends \bbdkp\Admin
 					'START' => $start , 
 					'S_GROUP_ADJ' => false , 
 					'LISTADJ_FOOTCOUNT' => $listadj_footcount , 
-					'ADJUSTMENT_PAGINATION' => $pagination));
+					'ADJUSTMENT_PAGINATION' => $pagination, 
+					'TOTAL_ADJUSTMENTS' => 'Total Adjustments', 
+					'PAGE_NUMBER'    => on_page($total_adjustments, $config['bbdkp_user_alimit'], $start),
+						));
+				
 				$this->page_title = 'ACP_LISTIADJ';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
 				
-			/************************************
-			 * 
-			 * MANAGE INDIVIDUAL ADJUSTMENTS
-			 * 
-			 ************************************/
 			case 'addiadj':
 				$form_key = 'acp_dkp_adj';
 				add_form_key($form_key);
+				
 				/***  DKPSYS drop-down ***/
 				$dkpsys_id = 1;
 				$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default 
                     FROM ' . DKPSYS_TABLE . '
                     ORDER BY dkpsys_name';
 				$resultdkpsys = $db->sql_query($sql);
-				$this->adjustment = array(
-					'can_decay' => request_var('adj_decayable', 1) , 
-					'adjustment_value' => request_var('adjustment_value', 0.00) , 
-					'adjustment_reason' => utf8_normalize_nfc(request_var('adjustment_reason', ' ', true)) , 
-					'member_names' => utf8_normalize_nfc(request_var('member_names', array(0 => ' '), true)));
-						
+				
+				$showadj = new \bbdkp\Adjust;
+				
 				$adjust_id = request_var(URI_ADJUSTMENT, 0);
 				$dkpsys_id = request_var(URI_DKPSYS, 0);
+				
 				if ($adjust_id != 0 && $dkpsys_id != 0)
 				{
-					// we have a get, process it and fill template default values
-					$sql_array = array(
-						'SELECT' => 'a.adjustment_value, 
-								a.adjustment_dkpid, 
-								a.adjustment_date, 
-								a.adjustment_reason, 
-								a.member_id, 
-								m.member_name,
-								a.adjustment_group_key, 
-								a.can_decay' , 
-						'FROM' => array(
-							ADJUSTMENTS_TABLE => 'a' , 
-							MEMBER_LIST_TABLE => 'm') , 
-						'WHERE' => 'a.member_id = m.member_id   
-								and a.adjustment_id = ' . $adjust_id . ' 
-								AND a.adjustment_dkpid = ' . $dkpsys_id);
-					$sql = $db->sql_build_query('SELECT', $sql_array);
-					$result = $db->sql_query($sql);
-					if (! $row = $db->sql_fetchrow($result))
-					{
-						trigger_error($user->lang['ERROR_INVALID_ADJUSTMENT'], E_USER_NOTICE);
-					}
-					$db->sql_freeresult($result);
-					// add values to dropdown
+					$showadj->get($adjust_id);
+					
 					while ($row2 = $db->sql_fetchrow($resultdkpsys))
 					{
 						$template->assign_block_vars('adj_dkpid_row', array(
 							'VALUE' => $row2['dkpsys_id'] , 
-							'SELECTED' => ($row2['dkpsys_id'] == $row['adjustment_dkpid']) ? ' selected="selected"' : '' , 
+							'SELECTED' => ($row2['dkpsys_id'] == $showadj->adjustment_dkpid ? ' selected="selected"' : '' ), 
 							'OPTION' => (! empty($row2['dkpsys_name'])) ? $row2['dkpsys_name'] : '(None)'));
 					}
-					$this->time = $row['adjustment_date'];
-					$this->adjustment = array(
-						'can_decay' => $row['can_decay'] , 
-						'adjustment_value' => $row['adjustment_value'] , 
-						'adjustment_reason' => $row['adjustment_reason']);
-					$members = array();
-					$sql = " SELECT a.member_id , m.member_name 
-								FROM " . ADJUSTMENTS_TABLE . " a , " . MEMBER_LIST_TABLE . " m  
-								WHERE a.member_id =  m.member_id
-								AND a.adjustment_dkpid = '" . (int) $row['adjustment_dkpid'] . "' 
-								AND a.adjustment_group_key='" . $db->sql_escape($row['adjustment_group_key']) . "'";
-					$result = $db->sql_query($sql);
-					while ($row = $db->sql_fetchrow($result))
-					{
-						$members[] = $row['member_name'];
-					}
-					$db->sql_freeresult($result);
-					$this->adjustment['member_names'] = (isset($_POST['member_names'])) ? request_var('member_names', array(
-						0 => ' '), true) : $members;
-					unset($row, $members, $sql);
+					
 				}
 				else
 				{
@@ -277,6 +240,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						}
 					}
 				}
+				
 				$submit = (isset($_POST['add'])) ? true : false;
 				$update = (isset($_POST['update'])) ? true : false;
 				$delete = (isset($_POST['delete'])) ? true : false;
@@ -287,9 +251,8 @@ class acp_dkp_adj extends \bbdkp\Admin
 						trigger_error('FORM_INVALID');
 					}
 				}
-				/************************************
-				// ADD INDIVIDUAL ADJUSTMENT
-				 ************************************/
+				
+				
 				if ($submit)
 				{
 					// check form
@@ -299,43 +262,55 @@ class acp_dkp_adj extends \bbdkp\Admin
 					{
 						trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
 					}
-					$adjval = request_var('adjustment_value', 0.0);
-					$adjreason = utf8_normalize_nfc(request_var('adjustment_reason', '', true));
-					//$member_names = request_var('member_names', array(0 => ' '), true);
-					$member_names = utf8_normalize_nfc(request_var('member_names', array(0 => ' '), true));
-					$candecay = request_var('adj_decayable', 1);
-					//
-					// get value from Pulldown !
-					//
-					$dkpsys_id = request_var('adj_dkpid', 0);
-					$group_key = $this->gen_group_key($this->time, request_var('adjustment_reason', ' ', true), $adjval);
-					//
-					// Add adjustment to selected members
-					//
-					foreach ($member_names as $member_name)
+					
+					
+					$newadjust = new \bbdkp\Adjust;
+					
+					$temp = str_replace(".", "", request_var('adjustment_value', 0.0));
+					$temp2 = (float) str_replace(",", ".", $temp);
+						
+					$newadjust->adjustment_value = $temp2;
+					$newadjust->adjustment_reason = utf8_normalize_nfc(request_var('adjustment_reason', '', true));
+					$newadjust->can_decay = request_var('adj_decayable', 1);
+					$newadjust->adj_decay = 0;
+					$newadjust->decay_time = 0;
+					$newadjust->adjustment_date = $this->time;
+					$newadjust->adjustment_dkpid = request_var('adj_dkpid', 0);
+					$newadjust->adjustment_groupkey = $this->gen_group_key($this->time, $newadjust->adjustment_reason, $newadjust->adjustment_value);
+					$newadjust->adjustment_added_by = $user->data['username'];
+					
+					$members = request_var('member_names', array(0 => 0), true);
+					$member_names = array(); 
+					foreach ($members as $member_id)
 					{
-						$member_id = $class_members->get_member_id(utf8_normalize_nfc($member_name));
-						$this->add_new_adjustment($dkpsys_id, $member_id, $group_key, $adjval, $adjreason, $candecay);
+						$member = new \bbdkp\Members;
+						$member->member_id = $member_id;
+						$member->Get();
+						$newadjust->member_id = $member_id;
+						$newadjust->member_name = $member->member_name;
+						$member_names[] = $member->member_name;
+						$newadjust->add();
 					}
+					
 					//
 					// Logging
 					//
 					$log_action = array(
 						'header' => 'L_ACTION_INDIVADJ_ADDED' , 
-						'L_ADJUSTMENT' => $adjval , 
-						'L_REASON' => $adjreason , 
+						'L_ADJUSTMENT' => $newadjust->adjustment_value  , 
+						'L_REASON' => $newadjust->adjustment_reason , 
 						'L_MEMBERS' => implode(', ', $member_names) , 
-						'L_ADDED_BY' => $user->data['username']);
+						'L_ADDED_BY' => $newadjust->adjustment_added_by );
+					
 					$this->log_insert(array(
-						'log_type' => $log_action['header'] , 
+						'log_type' => $log_action['header'], 
 						'log_action' => $log_action));
-					$success_message = sprintf($user->lang['ADMIN_ADD_IADJ_SUCCESS'], $config['bbdkp_dkp_name'], $adjval, implode(', ', $member_names));
+					
+					$success_message = sprintf($user->lang['ADMIN_ADD_IADJ_SUCCESS'], $config['bbdkp_dkp_name'], $newadjust->adjustment_value, implode(', ', $member_names));
 					trigger_error($success_message . $this->link);
+					
 				}
 				
-				/************************************
-				// UPDATE INDIVIDUAL ADJUSTMENT
-				 ************************************/
 				if ($update)
 				{
 					$errors_exist = $this->error_check_i();
@@ -344,27 +319,39 @@ class acp_dkp_adj extends \bbdkp\Admin
 					{
 						trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
 					}
-					$dkpsys_id = request_var('hidden_dkpid', 0);
-					$adjust_id = request_var('hidden_id', 0);
-					$adjval = request_var('adjustment_value', 0.0);
-					$adjreason = utf8_normalize_nfc(request_var('adjustment_reason', '', true));
-					$member_names = utf8_normalize_nfc(request_var('member_names', array(0 => ' '), true));
-					$candecay = request_var('adj_decayable', 1);
+					
+					$oldadjust = new \bbdkp\Adjust;
+					$oldadjust->adjustment_id = request_var('hidden_id', 0);
+					$oldadjust->get($oldadjust->adjustment_id);
+					
+					$updadjust = new \bbdkp\Adjust;
+					$temp = str_replace(".", "", request_var('adjustment_value', 0.0));
+					$temp2 = (float) str_replace(",", ".", $temp);
+					$updadjust->adjustment_value = $temp2;
+					$updadjust->adjustment_reason = utf8_normalize_nfc(request_var('adjustment_reason', '', true));
+					$updadjust->can_decay = request_var('adj_decayable', 1);
+					$updadjust->adj_decay = 0;
+					$updadjust->decay_time = 0;
+					$updadjust->adjustment_date = $this->time;
+					$updadjust->adjustment_dkpid = request_var('adj_dkpid', 0);
+					$updadjust->adjustment_added_by = $user->data['username'];
+					$updadjust->adjustment_groupkey = $updadjust->gen_group_key($this->time, $updadjust->adjustment_reason, $updadjust->adjustment_value);
+					
+					$members = request_var('member_names', array(0 => 0), true);
+					
 					// remove old adjustment
-					$this->remove_old_adjustment($adjust_id, $dkpsys_id);
-					//
-					// Generate a new group key
-					//
-					$group_key = $this->gen_group_key($this->time, $adjreason, $adjval);
-					//
-					// Add the new adjustment to selected members
-					//
-					$newdkpsys_id = request_var('adj_dkpid', 0);
-					foreach ($member_names as $member_name)
+					$oldadjust->delete();
+					foreach ($members as $member_id)
 					{
-						$member_id = $class_members->get_member_id(utf8_normalize_nfc($member_name));
-						$this->add_new_adjustment($newdkpsys_id, $member_id, $group_key, $adjval, $adjreason, $candecay);
+						$member = new \bbdkp\Members;
+						$member->member_id = $member_id;
+						$member->Get();
+						$updadjust->member_id = $member_id;
+						$updadjust->member_name = $member->member_name;
+						$member_names[] = $member->member_name;
+						$updadjust->add();
 					}
+					
 					//
 					// Logging
 					//
@@ -374,92 +361,105 @@ class acp_dkp_adj extends \bbdkp\Admin
 						'L_ADJUSTMENT_BEFORE' => $this->old_adjustment['adjustment_value'] , 
 						'L_REASON_BEFORE' => $this->old_adjustment['adjustment_reason'] , 
 						'L_MEMBERS_BEFORE' => implode(', ', $this->old_adjustment['member_names']) , 
-						'L_ADJUSTMENT_AFTER' => $adjval , 
-						'L_REASON_AFTER' => $adjreason , 
+						'L_ADJUSTMENT_AFTER' => $updadjust->adjustment_value  , 
+						'L_REASON_AFTER' => $updadjust->adjustment_reason , 
 						'L_MEMBERS_AFTER' => implode(', ', $member_names) , 
 						'L_UPDATED_BY' => $user->data['username']);
+					
 					$this->log_insert(array(
 						'log_type' => $log_action['header'] , 
 						'log_action' => $log_action));
-					$success_message = sprintf($user->lang['ADMIN_UPDATE_IADJ_SUCCESS'], $config['bbdkp_dkp_name'], $adjval, implode(', ', $member_names));
+					
+					$success_message = sprintf($user->lang['ADMIN_UPDATE_IADJ_SUCCESS'], $config['bbdkp_dkp_name'], $updadjust->adjustment_value, implode(', ', $member_names));
 					trigger_error($success_message . $this->link);
 				}
-				/************************************
-				// DELETE INDIVIDUAL ADJUSTMENT
-				 ************************************/
+				
+				
+				
 				if ($delete)
 				{
 					if (confirm_box(true))
 					{
 						// get form vars
 						$adjust_id = request_var('xhidden_id', 0);
-						$dkpsys_id = request_var('xhidden_dkpid', 0);
-						$this->remove_old_adjustment($adjust_id, $dkpsys_id);
-						//
+						$deleteadj = new \bbdkp\Adjust;
+						$deleteadj->get($adjust_id);
+						$deleteadj->delete(); 
+						
 						// Logging
 						$log_action = array(
 							'header' => 'L_ACTION_INDIVADJ_DELETED' , 
 							'id' => $adjust_id , 
-							'L_ADJUSTMENT' => $this->old_adjustment['adjustment_value'] , 
-							'L_REASON' => $this->old_adjustment['adjustment_reason'] , 
-							'L_MEMBERS' => implode(', ', $this->old_adjustment['member_names']));
+							'L_ADJUSTMENT' => $deleteadj->adjustment_value , 
+							'L_REASON' => $deleteadj->adjustment_reason , 
+							'L_MEMBERS' =>  $deleteadj->member_name );
+						
 						$this->log_insert(array(
 							'log_type' => $log_action['header'] , 
 							'log_action' => $log_action));
 						//
 						// Success messages
-						$success_message = sprintf($user->lang['ADMIN_DELETE_IADJ_SUCCESS'], $config['bbdkp_dkp_name'], $this->old_adjustment['adjustment_value'], implode(', ', $this->old_adjustment['member_names']));
+						$success_message = sprintf($user->lang['ADMIN_DELETE_IADJ_SUCCESS'], $config['bbdkp_dkp_name'], 
+								$deleteadj->adjustment_value , $deleteadj->member_name);
+						
 						trigger_error($success_message . $this->link);
+						
 					}
 					else
 					{
 						$s_hidden_fields = build_hidden_fields(array(
 							'delete' => true , 
 							'xhidden_id' => request_var('hidden_id', 0) , 
-							'xhidden_dkpid' => request_var('hidden_dkpid', 0)));
+							));
 						$template->assign_vars(array(
 							'S_HIDDEN_FIELDS' => $s_hidden_fields));
 						confirm_box(false, $user->lang['CONFIRM_DELETE_IADJ'], $s_hidden_fields);
 					}
 				}
-				$sql = 'SELECT member_name
-				FROM ' . MEMBER_LIST_TABLE . '
-				ORDER BY member_name';
+				
+				/* mark members as selected */
+				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . ' ORDER BY member_name';
 				$result = $db->sql_query($sql);
 				while ($row = $db->sql_fetchrow($result))
 				{
 					if ($adjust_id)
 					{
-						$selected = (@in_array($row['member_name'], $this->adjustment['member_names'])) ? ' selected="selected"' : '';
+						//editmode
+						$selected = (@in_array($row['member_id'],  $showadj->members_samegroupkey  )) ? ' selected="selected"' : '';
 					}
 					else
 					{
-						$selected = (@in_array($row['member_name'], utf8_normalize_nfc(request_var('member_names', array(0 => ' '))))) ? ' selected="selected"' : '';
+						//newmode
+						$selected = (@in_array($row['member_id'],
+						 utf8_normalize_nfc(request_var('member_names', array(0 => 0))))) ? ' selected="selected"' : '';
 					}
+					
 					$template->assign_block_vars('members_row', array(
-						'VALUE' => $row['member_name'] , 
+						'VALUE' => $row['member_id'] , 
 						'SELECTED' => $selected , 
 						'OPTION' => $row['member_name']));
 				}
+				
 				$db->sql_freeresult($result);
 				$template->assign_vars(array(
-					'L_TITLE' => $user->lang['ACP_ADDIADJ'] , 
+					'L_TITLE' =>  ($showadj->adjustment_id == 0) ? $user->lang['ADD_IADJ_TITLE'] : $user->lang['EDIT_IADJ_TITLE'], 
 					'L_EXPLAIN' => $user->lang['ACP_ADDIADJ_EXPLAIN'] , 
 					// Form vars
 					'F_ADD_ADJUSTMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj") , 
-					'ADJUSTMENT_ID' => $adjust_id , 
-					'DKP_ID' => $dkpsys_id , 
+					'ADJUSTMENT_ID' => $showadj->adjustment_id, 
+					'DKP_ID' => $showadj->adjustment_dkpid , 
 					// Form values
-					'ADJUSTMENT_VALUE' => $this->adjustment['adjustment_value'] , 
-					'ADJUSTMENT_REASON' => $this->adjustment['adjustment_reason'] , 
+					'ADJUSTMENT_VALUE' => number_format($showadj->adjustment_value, 2) , 
+					'ADJUSTMENT_REASON' => $showadj->adjustment_reason , 
+					'ADJUSTMENT_DECAY' => number_format($showadj->adj_decay, 2) ,
 					'MO' => date('m', $this->time) , 
 					'D' => date('d', $this->time) , 
 					'Y' => date('Y', $this->time) , 
 					'H' => date('h', $this->time) , 
 					'MI' => date('i', $this->time) , 
 					'S' => date('s', $this->time) , 
-					'CAN_DECAY_NO_CHECKED' => ($this->adjustment['can_decay'] == 0) ? ' checked="checked"' : '' , 
-					'CAN_DECAY_YES_CHECKED' => ($this->adjustment['can_decay'] == 1) ? ' checked="checked"' : '' , 
+					'CAN_DECAY_NO_CHECKED' => ( $showadj->can_decay == 0) ? ' checked="checked"' : '' , 
+					'CAN_DECAY_YES_CHECKED' => ($showadj->can_decay == 1) ? ' checked="checked"' : '' , 
 					// Form validation
 					'FV_MEMBERS' => $this->fv->generate_error('member_names') , 
 					'FV_ADJUSTMENT' => $this->fv->generate_error('adjustment_value') , 
@@ -469,69 +469,13 @@ class acp_dkp_adj extends \bbdkp\Admin
 					// Javascript messages
 					'MSG_VALUE_EMPTY' => $user->lang['FV_REQUIRED_ADJUSTMENT'] , 
 					// Buttons
-					'S_ADD' => (! $adjust_id) ? true : false));
+					'S_ADD' => (! $showadj->adjustment_id) ? true : false));
+				
 				$this->page_title = 'ACP_ADDIADJ';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
 		}
 	}
-
-	/** 
-	 * remove old dkp adjustment values 
-	 *  
-	 */
-	private function remove_old_adjustment ($adjust_id, $dkpsys_id)
-	{
-		global $db, $phpbb_root_path, $phpEx;
-		$dkpsys_id = intval($dkpsys_id);
-		$adjust_id = intval($adjust_id);
-		if (! class_exists('acp_dkp_mm'))
-		{
-			include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
-			$class_members = new acp_dkp_mm();
-		}
-		$adjustment_ids = array();
-		$old_members = array();
-		$sql_array = array(
-			'SELECT' => 'a2.*' , 
-			'FROM' => array(
-				ADJUSTMENTS_TABLE => 'a1') , 
-			'LEFT_JOIN' => array(
-				array(
-					'FROM' => array(
-						ADJUSTMENTS_TABLE => 'a2') , 
-					'ON' => 'a1.adjustment_group_key = a2.adjustment_group_key 
-	            			and a1.adjustment_dkpid = a2.adjustment_dkpid ')) , 
-			'WHERE' => 'a1.adjustment_dkpid=  ' . $dkpsys_id . ' 
-	    				AND a1.adjustment_id= ' . $adjust_id);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$adjustment_ids[] = $row['adjustment_id'];
-			$old_memberids[] = $row['member_id'];
-			$old_membernames[] = $row['member_id'];
-			$this->old_adjustment = array(
-				'adjustment_value' => $row['adjustment_value'] , 
-				'adjustment_date' => $row['adjustment_date'] , 
-				'member_ids' => $old_memberids , 
-				'member_names' => $old_membernames , 
-				'adjustment_reason' => $row['adjustment_reason'] , 
-				'adj_decay' => $row['adj_decay']);
-		}
-		//
-		// Remove the adjustment value from adjustments table
-		//
-		$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . '
-        		WHERE adjustment_dkpid = ' . $dkpsys_id . '  and ' . $db->sql_in_set('adjustment_id', $adjustment_ids, false, true);
-		$db->sql_query($sql);
-		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-                SET member_adjustment = member_adjustment - ' . (float) $this->old_adjustment['adjustment_value'] . ',
-                adj_decay = adj_decay - ' . (float) $this->old_adjustment['adj_decay'] . '   
-                WHERE  member_dkpid = ' . $dkpsys_id . ' AND ' . $db->sql_in_set('member_id', $this->old_adjustment['member_ids'], false, true);
-		$db->sql_query($sql);
-	}
-
 
 
 	/** 
@@ -554,44 +498,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 		return $this->fv->is_error();
 	}
 
-	/**
-	 * Recalculates and updates adjustment decay
-	 * @param $mode 1 for recalculating, 0 for setting decay to zero.
-	 */
-	public function sync_adjdecay ($mode, $origin = '')
-	{
-		global $user, $db;
-		switch ($mode)
-		{
-			case 0:
-				//  Decay = OFF : set all decay to 0
-				//  update item detail to new decay value
-				$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET adj_decay = 0 ';
-				$db->sql_query($sql);
-				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET adj_decay = 0 ';
-				$db->sql_query($sql);
-				if ($origin == 'cron')
-				{
-					$origin = $user->lang['DECAYCRON'];
-				}
-				return true;
-				break;
-			case 1:
-				// Decay is ON : synchronise
-				// loop all ajustments
-				$sql = 'SELECT adjustment_dkpid, adjustment_id, member_id , adjustment_date, adjustment_value, adj_decay FROM ' . ADJUSTMENTS_TABLE . ' WHERE can_decay = 1';
-				$result = $db->sql_query($sql);
-				$countadj = 0;
-				while (($row = $db->sql_fetchrow($result)))
-				{
-					$this->decayadj($row['adjustment_id'], $row['adjustment_dkpid'], $row['member_id'], $row['adjustment_date'], $row['adjustment_value'], $row['adj_decay']);
-					$countadj ++;
-				}
-				$db->sql_freeresult($result);
-				return $countadj;
-				break;
-		}
-	}
+	
 
 
 }

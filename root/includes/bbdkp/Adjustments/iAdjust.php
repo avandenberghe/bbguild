@@ -22,12 +22,18 @@ if (! defined('EMED_BBDKP'))
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
 
-interface iAdjust 
+require ("{$phpbb_root_path}includes/bbdkp/iAdmin.$phpEx");
+
+interface iAdjust extends iAdmin 
 {
+	
 	function add();
 	
+	function get($adjust_id);
+	
+	function delete();
+
 	/**
-	 * 
 	 * @param string $order
 	 * @param int $member_id
 	 */
@@ -43,6 +49,20 @@ interface iAdjust
 	 * lists all pools where there is an adjustment
 	 */
 	function listAdjPools();
+	
+	
+	/**
+	 * 
+	 * @param unknown_type $adjust_id
+	 */
+	function decayadj ($adjust_id); 
+	
+	/**
+	 * 
+	 * @param unknown_type $origin
+	 */
+	function sync_adjdecay ($mode, $origin = '');
+	
 }
 
 ?>

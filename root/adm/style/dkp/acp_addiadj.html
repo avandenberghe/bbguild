@@ -1,7 +1,6 @@
 <!-- INCLUDE overall_header.html -->
 <a name="maincontent"></a>
 <script type="text/javascript">
-
 //<![CDATA[
 function check_form()
 {
@@ -24,7 +23,7 @@ function check_form()
 <div style="float: left; width: 50%;">
 <fieldset>
 
-<legend>{L_ADD_IADJ_TITLE}</legend>
+<legend><!-- IF S_ADD -->{L_ADD_IADJ_TITLE}<!-- ELSE -->{L_EDIT_IADJ_TITLE}<!-- ENDIF --></legend>
 <dl>
  <dt><label for="adj_dkpid">{L_POOL}:</label></dt>
 <dd>
@@ -37,13 +36,13 @@ function check_form()
 </dl>
 <dl>
  <dt><label for="adjustment_reason">{L_REASON}:</label></dt>
- <dd><input type="text" name="adjustment_reason" id="adjustment_reason"  size="35" maxlength="255" value="{ADJUSTMENT_REASON}" class="input" /></dd>
+ <dd><textarea name="adjustment_reason" id="adjustment_reason" rows="5" cols="30" style="width: 100%" class="input">{ADJUSTMENT_REASON}</textarea></dd>
 </dl>
 
 <dl>
   <dt><label for="adjustment_value">{L_VALUE}</label><span class="small">({L_ADJUSTMENT_VALUE_NOTE})</span>:
   </dt>
-  <dd><input type="text" id="adjustment_value" name="adjustment_value" size="7" maxlength="10" 
+  <dd><input type="text" id="adjustment_value" name="adjustment_value" size="35" maxlength="20" 
   	value="{ADJUSTMENT_VALUE}" class="input" />{FV_ADJUSTMENT}
   </dd>
 </dl>
@@ -55,7 +54,7 @@ function check_form()
   <br />{FV_MO}{FV_D}{FV_Y}</dd>
 </dl>
 
-  <dl>
+ <dl>
     <dt><label for="adj_decayable">{L_NO_DECAY_ADJ}</label><br /></dt>
     <dd>
     <input type="radio" id="adj_decayable" name="adj_decayable" value="1"{CAN_DECAY_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
@@ -63,6 +62,11 @@ function check_form()
    </dd>
  </dl>
   
+
+<dl>
+ <dt><label for="adjustment_decay">{L_DECAY}:</label></dt>
+ <dd><input type="text" name="adjustment_decay" id="adjustment_decay"  size="35" maxlength="20" value="{ADJUSTMENT_DECAY}" class="input" /></dd>
+</dl>
 
 </fieldset>
 
@@ -76,7 +80,6 @@ function check_form()
         <option value="{members_row.VALUE}"{members_row.SELECTED}>{members_row.OPTION}</option>
         <!-- END members_row -->
       </select> 
-    
 </fieldset>
 
 
