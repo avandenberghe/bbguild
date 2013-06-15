@@ -323,6 +323,17 @@ class acp_dkp_adj extends \bbdkp\Admin
 					$oldadjust = new \bbdkp\Adjust;
 					$oldadjust->adjustment_id = request_var('hidden_id', 0);
 					$oldadjust->get($oldadjust->adjustment_id);
+					foreach($oldadjust->members_samegroupkey as $member_id)
+					{
+						$oldmembers = new \bbdkp\Members;
+						$oldmembers->member_id = $member_id;
+						$oldmembers->Get();
+						$oldmember_names[] = $oldmembers->member_name;
+						unset($oldmembers);
+						
+						// remove old adjustment
+						$oldadjust->delete();
+					}
 					
 					$updadjust = new \bbdkp\Adjust;
 					$temp = str_replace(".", "", request_var('adjustment_value', 0.0));
@@ -330,8 +341,10 @@ class acp_dkp_adj extends \bbdkp\Admin
 					$updadjust->adjustment_value = $temp2;
 					$updadjust->adjustment_reason = utf8_normalize_nfc(request_var('adjustment_reason', '', true));
 					$updadjust->can_decay = request_var('adj_decayable', 1);
-					$updadjust->adj_decay = 0;
-					$updadjust->decay_time = 0;
+					$temp = str_replace(".", "", request_var('adjustment_decay', 0.0));
+					$temp2 = (float) str_replace(",", ".", $temp);
+					$updadjust->adj_decay = $temp2;
+					$updadjust->decay_time = $oldadjust->decay_time;
 					$updadjust->adjustment_date = $this->time;
 					$updadjust->adjustment_dkpid = request_var('adj_dkpid', 0);
 					$updadjust->adjustment_added_by = $user->data['username'];
@@ -339,17 +352,17 @@ class acp_dkp_adj extends \bbdkp\Admin
 					
 					$members = request_var('member_names', array(0 => 0), true);
 					
-					// remove old adjustment
-					$oldadjust->delete();
 					foreach ($members as $member_id)
 					{
 						$member = new \bbdkp\Members;
 						$member->member_id = $member_id;
+						$updadjust->members_samegroupkey[] = $member_id; 
 						$member->Get();
 						$updadjust->member_id = $member_id;
 						$updadjust->member_name = $member->member_name;
 						$member_names[] = $member->member_name;
 						$updadjust->add();
+						unset($member);
 					}
 					
 					//
@@ -358,9 +371,9 @@ class acp_dkp_adj extends \bbdkp\Admin
 					$log_action = array(
 						'header' => 'L_ACTION_INDIVADJ_UPDATED' , 
 						'id' => $adjust_id , 
-						'L_ADJUSTMENT_BEFORE' => $this->old_adjustment['adjustment_value'] , 
-						'L_REASON_BEFORE' => $this->old_adjustment['adjustment_reason'] , 
-						'L_MEMBERS_BEFORE' => implode(', ', $this->old_adjustment['member_names']) , 
+						'L_ADJUSTMENT_BEFORE' => $oldadjust->adjustment_value , 
+						'L_REASON_BEFORE' => $oldadjust->adjustment_reason , 
+						'L_MEMBERS_BEFORE' => implode(', ', $oldmember_names) , 
 						'L_ADJUSTMENT_AFTER' => $updadjust->adjustment_value  , 
 						'L_REASON_AFTER' => $updadjust->adjustment_reason , 
 						'L_MEMBERS_AFTER' => implode(', ', $member_names) , 
