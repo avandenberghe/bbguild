@@ -3,7 +3,7 @@
  * bbDkp Permission Set (German-Informal)
  * 
  * @author sajaki
- * @package bbDkp
+ * 
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$

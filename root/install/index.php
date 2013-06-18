@@ -1,6 +1,6 @@
 <?php
 /**
- * @package bbDKP.install
+ * .install
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

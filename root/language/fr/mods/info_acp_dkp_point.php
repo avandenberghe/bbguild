@@ -2,7 +2,7 @@
 /**
  * bbdkp acp language file for point settings
  * 
- * @package bbDKP
+ * 
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 

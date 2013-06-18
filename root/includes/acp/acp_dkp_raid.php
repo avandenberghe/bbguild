@@ -1,12 +1,4 @@
 <?php
-/**
- * @package bbDKP.acp
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2009 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
- */
 
 /**
  * @ignore
@@ -21,12 +13,17 @@ if (! defined('EMED_BBDKP'))
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
 
-/**
-*  This acp class manages Manual Raids
-*
-* @package bbDKP.acp
-*/
-class acp_dkp_raid extends \bbdkp\Admin
+ /**
+ *  This acp class manages Manual Raids
+ *  
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.8
+ */
+ class acp_dkp_raid extends \bbdkp\Admin
 {
 	private $link;
 	public $u_action;

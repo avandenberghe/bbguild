@@ -2,7 +2,7 @@
 /**
 * This acp class manages raid editing
 * 
-* @package bbDKP.acp
+*  
 * @author Ippehe, Sajaki
 * @version $Id$
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP

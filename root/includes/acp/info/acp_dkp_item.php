@@ -7,7 +7,7 @@
 * retain the copyright notice below.  While not required for free use,
 * it will help build interest in the bbDKP project.
 *
-* @package bbDKP.acp
+*  
 * @author ippehe
 * @version $Id$
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP

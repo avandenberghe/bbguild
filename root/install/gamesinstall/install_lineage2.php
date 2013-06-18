@@ -2,7 +2,7 @@
 /**
  * @author sh1ny https://github.com/sh1ny/
  * bbdkp lineage2 install data
- * @package bbDkp-installer
+ * -installer
  * @copyright (c) 2011 bbDKP <https://github.com/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 

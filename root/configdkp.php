@@ -1,5 +1,5 @@
 <?php
-/* @package bbDKP
+/* 
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * bbDKP 1.2.6 configuration file
 */ 

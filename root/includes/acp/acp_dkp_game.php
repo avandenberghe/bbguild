@@ -1,23 +1,11 @@
 <?php
 /**
- * @package bbDKP.acp
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2009 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8-PL1
- */
-
-/**
-
  * @ignore
-
  */
 if (! defined ( 'IN_PHPBB' ))
 {
 	exit ();
 }
-
 if (! defined ( 'EMED_BBDKP' ))
 {
 	$user->add_lang ( array ('mods/dkp_admin' ) );
@@ -37,6 +25,17 @@ if (!class_exists('Races'))
 	require("{$phpbb_root_path}includes/bbdkp/races/Races.$phpEx");
 }
 
+/**
+ * 
+ * This class manages Game settings
+ * 
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
+ */
 class acp_dkp_game extends \bbdkp\Admin
 {
 

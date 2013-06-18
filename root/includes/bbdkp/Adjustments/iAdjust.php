@@ -1,6 +1,7 @@
 <?php
 /**
- * @package bbDKP.acp
+ *
+ * @package 	bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -8,6 +9,7 @@
  * @version 1.2.9
  */
 namespace bbdkp;
+
 /**
  * @ignore
  */
@@ -24,6 +26,12 @@ if (! defined('EMED_BBDKP'))
 
 require ("{$phpbb_root_path}includes/bbdkp/iAdmin.$phpEx");
 
+/**
+ * Adjustments framework
+ * 
+ * @package 	bbDKP
+ * @version 1.2.9
+ */
 interface iAdjust extends iAdmin 
 {
 	

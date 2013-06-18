@@ -1,12 +1,4 @@
 <?php
-/**
- * @package bbDKP.functions
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2009 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8-PL1
- */
 namespace bbdkp;
 /**
 * @ignore
@@ -20,12 +12,17 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/iAdmin.$phpEx");
 
-
 /**
-* admin page foundation
-* Extended by admin page classes only
-* 
-*/
+ * bbDKP Admin foundation
+ * 
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
+ * 
+ */
 class Admin implements \bbdkp\iAdmin
 {
     public $time = 0;

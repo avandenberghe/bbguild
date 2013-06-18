@@ -2,7 +2,7 @@
 /**
  * Recent topics block
  * 
- * @package bbDkp
+ * 
  * @copyright 2012 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * Contains Code ported from Easyportal (C) 2008 Noxwizard

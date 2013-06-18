@@ -1,7 +1,7 @@
 <?php
 /**
  * returns item xml based on ajax call 
- * @package bbDkp.acp
+ *  
  * @copyright (c) 2011 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 

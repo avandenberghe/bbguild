@@ -1,12 +1,4 @@
 <?php
-/**
- * @package bbDKP.acp
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2009 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
- */
  
 /**
  * @ignore
@@ -25,8 +17,14 @@ if (! defined('EMED_BBDKP'))
 /**
  * This acp class manages point settings
  *
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.8
  */
-class acp_dkp_point extends \bbdkp\Admin
+ class acp_dkp_point extends \bbdkp\Admin
 {
 
 	function main ($id, $mode)

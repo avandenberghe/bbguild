@@ -1,13 +1,4 @@
 <?php
-/**
- * @package bbDKP.acp
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2013 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
- * @since 1.2.9 
- */
 namespace bbdkp;
 
 /**
@@ -20,27 +11,20 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
+require_once ("{$phpbb_root_path}includes/bbdkp/Points/iPoints.$phpEx");
 
 /**
  *  Points Class
+ *
  *  this class manages the points table where all transaction tables are centralised (phpbb_bbdkp_memberdkp)
- * 
- *	member_id pk
- *	member_dkpid pk 
- *	member_raid_value 
- *	member_time_bonus 
- *	member_zerosum_bonus 
- *	member_earned 
- *	member_raid_decay 
- *	member_spent 
- *	member_item_decay 
- *	member_adjustment 
- *	member_status 
- *	member_firstraid 
- *	member_lastraid 
- *	member_raidcount 
- *	adj_decay 
+ *  
+ * @package 	bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2013 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
+ * @since 1.2.9 
  *
  */
 class Points implements iPoints 

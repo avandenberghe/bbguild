@@ -2,7 +2,7 @@
 /**
  * bbdkp wow install data
  * @author Sajaki@betenoire
- * @package bbDkp-installer
+ * -installer
  * @copyright (c) 2009 bbDkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$

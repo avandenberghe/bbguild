@@ -1,12 +1,4 @@
 <?php
-/**
- * @package bbDKP.acp
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2009 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
- */
 
 /**
  * @ignore
@@ -37,7 +29,14 @@ if (!class_exists('\bbdkp\Admin'))
 
 
 /**
- * This class manages guildmembers dkp adjustments
+ * This acp class manages guildmembers dkp adjustments
+ * 
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
  * 
  */
 class acp_dkp_adj extends \bbdkp\Admin

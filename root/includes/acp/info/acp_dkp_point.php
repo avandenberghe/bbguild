@@ -1,7 +1,7 @@
 <?php
 /**
 * 
-* @package bbDKP.acp
+*  
 * @author Sajaki
 * @copyright (c) 2012 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License

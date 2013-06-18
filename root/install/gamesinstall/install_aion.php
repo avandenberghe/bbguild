@@ -1,7 +1,7 @@
 <?php
 /**
  * bbdkp wow install data
- * @package bbDkp-installer
+ * -installer
  * @copyright (c) 2009 bbDkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id: install_aion.php 661 2009-09-08 22:16:06Z Sajaki9 &Malfate

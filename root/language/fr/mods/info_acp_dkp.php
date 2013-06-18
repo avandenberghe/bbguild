@@ -2,7 +2,7 @@
 /**
  * bbdkp acp language file for mainmenu (FR)
  * 
- * @package bbDkp
+ * 
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$

@@ -1,13 +1,4 @@
 <?php
-/**
- * @package bbDKP.acp
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2013 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
- */
-
 namespace bbdkp;
 
 /**
@@ -22,7 +13,19 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 
-class Guild implements iGuilds
+/**
+ * Guild
+ * 
+ * Manages Guild creation
+ * 
+ * @package 	bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2013 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
+ */
+ class Guild implements iGuilds
 {
 	public $guildid;
 	public $name;

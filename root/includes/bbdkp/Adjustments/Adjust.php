@@ -1,13 +1,15 @@
 <?php
 /**
- * @package bbDKP.acp
-* @link http://www.bbdkp.com
-* @author Sajaki@gmail.com
-* @copyright 2013 bbdkp
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @version 1.2.9
-* @since 1.2.9
-*/
+ *
+ * @package 	bbDKP
+ * @link 		http://www.bbdkp.com
+ * @author 		Sajaki@gmail.com
+ * @copyright 	2013 bbdkp
+ * @license 	http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 	1.2.9
+ * @since 		1.2.9
+ */
+
 namespace bbdkp;
 
 /**
@@ -29,22 +31,11 @@ if (!class_exists('\bbdkp\Admin'))
 }
 
 /**
- *  phpbb_bbdkp_adjustments Class
- *
- * 	phpbb_bbdkp_adjustments
- *	adjustment_id PK
- *	member_id index
- *	adjustment_dkpid index
- *	adjustment_value
- *	adjustment_date
- *	adjustment_reason
- *	adjustment_added_by
- *	adjustment_updated_by
- *	adjustment_group_key
- *	adj_decay
- *	can_decay
- *	decay_time
- *
+ * Adjust
+ * 
+ * phpbb_bbdkp_adjustments Class
+ * 
+ * @package 	bbDKP
  */
 class Adjust extends Admin implements iAdjust
 {

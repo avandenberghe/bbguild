@@ -1,14 +1,4 @@
 <?php
-/**
- * @package bbDKP.acp
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2013 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
- * @since 1.2.9 
- */
-
 namespace bbdkp;
 
 /**
@@ -24,7 +14,18 @@ global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 
-class Members implements iMembers 
+/**
+ * manages member creation
+ * 
+ * @package 	bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2013 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
+ * @since 1.2.9 
+ */
+ class Members implements iMembers 
 {
 	public $game_id;
 	public $member_id;

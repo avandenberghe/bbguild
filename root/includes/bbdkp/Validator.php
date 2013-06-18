@@ -1,12 +1,11 @@
 <?php
-
 namespace bbdkp;
 
 /**
  * Validator
  *
  * Data validation class
- *
+ * @package 	bbDKP
  * @author      Arvind Gupta <contact [ AT ] arvindgupta [ DOT ] co [ DOT ] in>
  * @copyright   Arvind Gupta (c) 2011
  * @link        http://www.arvindgupta.co.in

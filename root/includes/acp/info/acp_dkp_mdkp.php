@@ -2,7 +2,7 @@
 /**
 * This class manages member DKP
 * 
-* @package bbDKP.acp
+*  
 * @author sajaki9@gmail.com
 * @version $Id$
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP

@@ -1,7 +1,7 @@
 <?php
 /**
  * bbdkp Rift install data
- * @package bbDkp-installer
+ * -installer
  * @copyright (c) 2011 bbDKP <https://github.com/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 

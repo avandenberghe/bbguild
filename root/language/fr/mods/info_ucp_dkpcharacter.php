@@ -2,7 +2,7 @@
 /**
  * bbdkp ucp language file french
  * 
- * @package bbDkp
+ * 
  * @copyright 2010 bbdkp <https://www.github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$

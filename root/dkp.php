@@ -1,6 +1,6 @@
 <?php
 /**
- * @package bbDKP
+ * 
  * @copyright (c) 2010 bbDKP (http://www.bbdkp.com)
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.2.3
