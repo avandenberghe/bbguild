@@ -1,6 +1,15 @@
 <?php
 
 namespace bbdkp;
+/**
+ * @package 	bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2013 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
+ * @since 1.2.9
+ */
 
 /**
  * @ignore
@@ -20,12 +29,6 @@ require_once ("{$phpbb_root_path}includes/bbdkp/factions/iFaction.$phpEx");
  * Manages all Game Factions
  * 
  * @package 	bbDKP
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2013 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
- * @since 1.2.9
  */
  class Faction implements iFaction 
 {

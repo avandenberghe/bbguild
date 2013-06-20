@@ -1,13 +1,10 @@
 <?php
 /**
-* This acp class manages DKP pools
-* 
-*  
+ * 
 * @author Sajaki
-* @version $Id$
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* 
+* @version 1.2.9
 */
 
 /**
@@ -20,7 +17,7 @@ if (!defined('IN_PHPBB'))
 
 
 /**
-* @package module_install
+* @package acp
 */
 
 class acp_dkp_sys_info

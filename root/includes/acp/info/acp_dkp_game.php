@@ -1,22 +1,10 @@
 <?php
 /**
-* This class manages Game, Race and Class 
-* 
-* Powered by bbdkp © 2009 The bbDKP Project Team
-* If you use this software and find it to be useful, we ask that you
-* retain the copyright notice below.  While not required for free use,
-* it will help build interest in the bbDKP project.
-*
-*  
-* @version $Id$
+* @package acp
+* @version 1.2.9
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*   'ACP_DKP_GAME'			=> 'Game, Race, Class',
-*	'ACP_DKP_GAME_ADD'		=> 'Ajouter Game',
-*	'ACP_DKP_RACE_ADD'		=> 'Ajouter Race',
-*	'ACP_DKP_CLASS_ADD'		=> 'Ajouter Classe',  
-*	'ACP_DKP_GAME_LIST'		=> 'Liste',
-* 
+
 */
 
 /**
@@ -31,7 +19,9 @@ if (!defined('IN_PHPBB'))
 * @package module_install
 */
 
-
+/**
+ * @package acp
+ */
 class acp_dkp_game_info
 {
 	function module()

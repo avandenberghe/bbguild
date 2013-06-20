@@ -1,4 +1,12 @@
 <?php
+/**
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.8
+ */
 
 /**
  * @ignore
@@ -19,11 +27,6 @@ if (! defined ( 'EMED_BBDKP' ))
  * This class manages member DKP
  * 
  * @package bbDKP
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2009 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
  */
  class acp_dkp_mdkp extends \bbdkp\Admin
 {

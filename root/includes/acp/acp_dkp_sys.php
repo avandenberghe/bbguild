@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
+ */
+
 
 /**
  * @ignore
@@ -17,11 +26,6 @@ if (! defined ( 'EMED_BBDKP' ))
  * This class manages admin settings
  * 
  * @package bbDKP
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2009 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
  */  
  class acp_dkp_sys extends \bbdkp\Admin
 {

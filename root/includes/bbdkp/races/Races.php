@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package 	bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2013 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
+ * @since 1.2.9 
+ */
 namespace bbdkp;
 /**
  * @ignore
@@ -19,12 +28,6 @@ require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
  * Manages creation of Game races
  * 
  * @package 	bbDKP
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2013 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
- * @since 1.2.9 
  */
  class Races implements iRaces 
 {

@@ -1,20 +1,11 @@
 <?php
 /**
-* This class manages Items 
-* 
-* Powered by bbdkp, ported from Eqdkp
-* If you use this software and find it to be useful, we ask that you
-* retain the copyright notice below.  While not required for free use,
-* it will help build interest in the bbDKP project.
-*
-*  
 * @author ippehe
-* @version $Id$
+* @version 1.2.9
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * 
 */
-
 
 /**
 * @ignore
@@ -26,7 +17,7 @@ if (!defined('IN_PHPBB'))
 
 
 /**
-* @package module_install
+* @package acp
 */
 
 

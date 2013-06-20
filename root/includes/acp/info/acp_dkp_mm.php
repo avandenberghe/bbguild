@@ -1,9 +1,7 @@
 <?php
 /**
-* This class manages member general info
-* 
-*  
-* @version $Id$
+
+* @version 1.2.9
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * 
@@ -18,10 +16,8 @@ if (!defined('IN_PHPBB'))
 }
 
 /**
-* @package module_install
+* @package acp
 */
-
-
 class acp_dkp_mm_info
 {
 	function module()

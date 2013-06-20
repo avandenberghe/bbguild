@@ -1,6 +1,9 @@
 <?php
 /**
-* @package bbDKP
+ * @version 1.2.9
+ * @copyright (c) 2009 bbdkp https://github.com/bbDKP
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @package bbDKP
 */
 
 /**
@@ -11,20 +14,8 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
-
 /**
- * This class manages Events
- *
- * Powered by bbdkp © 2009 The bbDKP Project Team
- * If you use this software and find it to be useful, we ask that you
- * retain the copyright notice below.  While not required for free use,
- * it will help build interest in the bbDKP project.
- *
- *
- * @version $Id$
- * @copyright (c) 2009 bbdkp https://github.com/bbDKP
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- *
+ * @package acp
  */
 class acp_dkp_event_info
 {

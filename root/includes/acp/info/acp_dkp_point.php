@@ -1,11 +1,11 @@
 <?php
 /**
 * 
-*  
 * @author Sajaki
 * @copyright (c) 2012 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* 
+* @version 1.2.9
+*  
 */
 
 /**
@@ -16,6 +16,9 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
+/**
+ * @package acp
+ */
 class acp_dkp_point_info
 {
 	function module()

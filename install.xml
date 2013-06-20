@@ -229,8 +229,6 @@ if (file_exists($phpbb_root_path . 'configdkp.' . $phpEx))
 if(@defined("EMED_BBDKP")) 
 {
 	require($phpbb_root_path .  'includes/bbdkp/constants_bbdkp.' . $phpEx);
-	require($phpbb_root_path .  'includes/bbdkp/bbdkpfunctions.'  . $phpEx);
-	require($phpbb_root_path .  'includes/bbdkp/bbdkp.' . $phpEx); 
 }]]></action>
 			</edit>
 		</open>

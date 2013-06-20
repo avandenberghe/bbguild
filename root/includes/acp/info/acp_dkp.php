@@ -1,13 +1,10 @@
 <?php
 /**
-* language file for modules
 * 
-*  
 * @author Ippehe, Sajaki
-* @version $Id$
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* 
+* @version 1.2.9
 */
 
 /**
@@ -19,9 +16,8 @@ if (!defined('IN_PHPBB'))
 }
 
 /**
-* @package module_install
+* @package acp
 */
-
 class acp_dkp_info
 {
 	function module()

@@ -1,10 +1,8 @@
 <?php
 /**
-* This acp class manages raid editing
-* 
-*  
+ * 
 * @author Ippehe, Sajaki
-* @version $Id$
+* @version 1.2.9
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * 
@@ -21,10 +19,8 @@ if (!defined('IN_PHPBB'))
 
 
 /**
-* @package module_install
+* @package acp
 */
-
-
 class acp_dkp_raid_info
 {
 	function module()

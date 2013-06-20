@@ -1,16 +1,9 @@
 <?php
 /**
-* This class manages guildmembers dkp adjustments
-* 
-* Powered by bbdkp © 2009 The bbDKP Project Team
-* If you use this software and find it to be useful, we ask that you
-* retain the copyright notice below.  While not required for free use,
-* it will help build interest in the bbDKP project.
-* 
-*  
+* @package acp
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @version $Id$
+* @version 1.2.9
 * 
 **/
 
@@ -22,6 +15,10 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
+
+/**
+ * @package acp
+ */
 class acp_dkp_adj_info
 {
 	function module()

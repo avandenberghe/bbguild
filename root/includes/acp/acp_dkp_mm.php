@@ -1,4 +1,12 @@
 <?php
+/**
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.2.9
+ */
 
 /**
  * @ignore
@@ -33,11 +41,6 @@ if (!class_exists('Members'))
  * This class manages member general info
  *  
  * @package bbDKP
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2009 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
  */
 class acp_dkp_mm extends \bbdkp\Admin
 {
