@@ -33,17 +33,52 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
  */
  class Members implements iMembers 
 {
-	public $game_id;
+	/**
+	 * game id
+	 */
+    public $game_id;
+
+    /**
+     * primary key in the bbDKP membertable
+     * @var integer
+     */
 	public $member_id;
+
+    /**
+     * utF-8 member name
+     * @var string
+     */
 	public $member_name;
+
+    /**
+     * status (0 or 1)
+     * @var unknown_type
+     */
 	public $member_status;
+
+	/**
+	 * level
+	 * @var integer
+	 */
 	public $member_level;
+
 	public $member_race_id;
 	public $member_race;
 	public $member_class_id;
 	public $member_class;
+
+	/**
+	 * guild rankid
+	 * @var unknown_type
+	 */
 	public $member_rank_id;
+
+	/**
+	 * administrator comment
+	 * @var unknown_type
+	 */
 	public $member_comment;
+
 	public $member_joindate;
 	public $member_joindate_d;
 	public $member_joindate_mo;
@@ -52,18 +87,118 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 	public $member_outdate_d;
 	public $member_outdate_mo;
 	public $member_outdate_y;
+
+	/**
+	 * the id of my guild
+	 * @var unknown_type
+	 */
 	public $member_guild_id;
+
+	/**
+	 * my guildname
+	 * @var unknown_type
+	 */
 	public $member_guild_name;
+
+	/**
+	 * character realm
+	 * @var unknown_type
+	 */
 	public $member_guild_realm;
+
+	/**
+	 * region to which the char is on
+	 * @var unknown_type
+	 */
 	public $member_guild_region;
+
+	/**
+	 *gender ID 0=male, 1=female
+	 * @var unknown_type
+	 */
 	public $member_gender_id;
+
+	/**
+	 * Achievement points
+	 * @var unknown_type
+	 */
 	public $member_achiev;
+
+	/**
+	 * url to armory
+	 * @var string
+	 */
 	public $member_armory_url;
+
+
 	public $member_portrait_url;
+
+	/**
+	 * The phpBB member id linked to this member
+	 * @var unknown_type
+	 */
 	public $phpbb_user_id;
+
+	/**
+	 * Class color
+	 * @var unknown_type
+	 */
 	public $colorcode;
+
+	/**
+	 * Race icon
+	 * @var unknown_type
+	 */
 	public $race_image;
+
+	/**
+	 * Class icon
+	 * @var unknown_type
+	 */
 	public $class_image;
+
+	/**
+	 * current talent builds
+	 * @var string
+	 */
+	public $talents;
+
+	/**
+	 * quests i've done
+	 * @var unknown_type
+	 */
+	public $quests;
+
+    /**
+     * Gear i'm wearing right now
+     * @var unknown_type
+     */
+    public $gear;
+
+
+	/**
+	 * available extra Fields from WOW character API
+	 * standard fields are name, level, faction and achievement points.
+	 *
+	 * @var array
+	 */
+	private $extrafields = array(
+	        'guild',
+	        'stats',
+	        'talents',
+	        'items',
+	        'reputation',
+	        'titles',
+	        'professions',
+	        'appearance',
+	        'companions',
+	        'mounts',
+	        'pets',
+	        'achievements',
+	        'progression',
+	        'pvp',
+	        'quests'
+	);
 
 	/**
 	 */
