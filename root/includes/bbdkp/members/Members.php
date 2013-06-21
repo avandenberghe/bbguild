@@ -104,13 +104,13 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 	 * character realm
 	 * @var unknown_type
 	 */
-	public $member_guild_realm;
+	public $member_realm;
 
 	/**
 	 * region to which the char is on
 	 * @var unknown_type
 	 */
-	public $member_guild_region;
+	public $member_region;
 
 	/**
 	 *gender ID 0=male, 1=female
@@ -269,8 +269,8 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 			$this->member_outdate_y = date('Y', $row['member_outdate']);
 			$this->member_guild_name = $row['guild_name'];
 			$this->member_guild_id = $row['guild_id'];
-			$this->member_guild_realm = $row['realm'];
-			$this->member_guild_region = $row['region'];
+			$this->member_realm = $row['realm'];
+			$this->member_region = $row['region'];
 			$this->member_armory_url = $row['member_armory_url'];
 			$this->member_portrait_url = $phpbb_root_path . $row['member_portrait_url'];
 			$this->phpbb_user_id = $row['phpbb_user_id'];
@@ -381,12 +381,12 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 		$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $this->member_guild_id;
 		$result = $db->sql_query($sql);
-		$this->member_guild_realm  = $config['bbdkp_default_realm'];
-		$this->member_guild_region = '';
+		$this->member_realm  = $config['bbdkp_default_realm'];
+		$this->member_region = '';
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$this->member_guild_realm = $row['realm'];
-			$this->member_guild_region = $row['region'];
+			$this->member_realm = $row['realm'];
+			$this->member_region = $row['region'];
 		}
 
 		if (($this->game_id == 'wow' || $this->game_id == 'aion'))
@@ -461,14 +461,17 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 		{
 		    return false;
 		}
+		
+		$battlenet = $this->Armory_get($this->member_name, $this->member_realm);
+		
 
-		// if user chooses other name then check if it already exists. if so refuse update
+		// if user chooses other name then check if the new name already exists. if so refuse update
 		// namechange to existing membername is not allowed
 		if($this->member_name != $old_member->member_name)
 		{
 			$sql = 'SELECT count(*) as memberexists
 								FROM ' . MEMBER_LIST_TABLE . '
-								WHERE member_id <> ' . $updatemember->member_id . "
+								WHERE member_id <> ' . $this->member_id . "
 								AND UPPER(member_name)= UPPER('" . $db->sql_escape($this->member_name) . "')";
 			$result = $db->sql_query($sql);
 			$countm = $db->sql_fetchfield('memberexists');
@@ -636,6 +639,39 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 		unset($bbdkp);
 
 	}
+	
+	
+	public function Armory_get($Character, $realm)
+	{
+		
+		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		
+		//Initialising the class
+		if (!class_exists('WowAPI'))
+		{
+			require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
+		}
+		
+		$api3= new \WowAPI('character', EUROPE);
+		$character = 'Sajaki';
+		$realm = 'Lightbringer';
+		$data3 = $api3->Character->getCharacter($character, $realm);
+		
+		// available extra fields :
+		// 'guild','stats','talents','items','reputation','titles','professions','appearance',
+		// 'companions','mounts','pets','achievements','progression','pvp','quests'
+		
+		$params = array('talents');
+		$data3 = $api3->Character->getCharacter($character, $realm, $params);
+		
+		
+		
+		
+		
+		
+		
+	}
+	
 
 	/**
 	 * function for removing member from guild but leave him in the member table.;
@@ -729,7 +765,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 			default:
 				$site = 'http://eu.battle.net/wow/en/character/';
 		}
-		return $site . urlencode(str_replace(' ', '-', $this->member_guild_realm)) . '/' . urlencode($this->member_name) . '/simple';
+		return $site . urlencode(str_replace(' ', '-', $this->member_realm)) . '/' . urlencode($this->member_name) . '/simple';
 	}
 
 
