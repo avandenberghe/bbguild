@@ -155,7 +155,7 @@ if ($mode == 'history')
 	$sort_order[4] = array ('member_name asc', 'member_name desc' ); 	
 }
 
-$current_order = switch_order ($sort_order);
+$current_order = $this->switch_order ($sort_order);
 
 if ($query_by_pool)
 {

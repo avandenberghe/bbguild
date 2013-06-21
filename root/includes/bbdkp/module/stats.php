@@ -224,7 +224,7 @@ class statistics
 		     10 => array('itemcount desc', 'itemcount')
 		);
 		
-		$current_order = switch_order($sort_order, 'o1');
+		$current_order = $this->switch_order($sort_order, 'o1');
 		$sort_index = explode('.', $current_order['uri']['current']);
 		$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 		$previous_data = '';
@@ -565,7 +565,7 @@ class statistics
 				4 => array ("e.member_name asc", "e.member_name desc" ),	
 			);
 			
-		$att_current_order = switch_order ( $att_sort_order );		
+		$att_current_order = $this->switch_order ( $att_sort_order );		
 		
 		/** attendance SQL */
 		$sql = "SELECT
