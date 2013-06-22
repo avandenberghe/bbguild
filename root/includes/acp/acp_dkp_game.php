@@ -20,6 +20,10 @@ if (! defined ( 'EMED_BBDKP' ))
 	$user->add_lang ( array ('mods/dkp_admin' ) );
 	trigger_error ( $user->lang ['BBDKPDISABLED'], E_USER_WARNING );
 }
+if (!class_exists('Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+}
 
 if (!class_exists('Faction'))
 {
@@ -29,6 +33,7 @@ if (!class_exists('Classes'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/classes/Classes.$phpEx");
 }
+
 if (!class_exists('Races'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/races/Races.$phpEx");
@@ -658,7 +663,7 @@ class acp_dkp_game extends \bbdkp\Admin
 			'race_name', 'race_name desc' ), 3 => array (
 			'faction_name desc', 'faction_name, race_name desc' ) );
 		
-		$current_order = switch_order ( $sort_order );
+		$current_order = $this->switch_order ( $sort_order );
 		$total_races = 0;
 		$sql_array = array (
 			'SELECT' => ' r.game_id, r.race_id, l.name as race_name, r.race_faction_id, r.race_hide, f.faction_name , r.image_female, r.image_male ', 
@@ -698,7 +703,7 @@ class acp_dkp_game extends \bbdkp\Admin
 			'class_armor_type', 'class_armor_type, class_id desc' ), 4 => array (
 			'class_min_level', 'class_min_level, class_id desc' ), 5 => array (
 			'class_max_level', 'class_max_level, class_id desc' ) );
-		$current_order2 = switch_order ( $sort_order2, "o1" );
+		$current_order2 = $this->switch_order ( $sort_order2, "o1" );
 		
 		$total_classes = 0;
 		$sql_array = array (

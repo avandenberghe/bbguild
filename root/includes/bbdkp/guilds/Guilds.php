@@ -21,6 +21,14 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 
+// Include the base class
+
+if (!class_exists('\bbdkp\Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+}
+
+
 /**
  * Guild
  * 
@@ -28,31 +36,29 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
  * 
  * @package 	bbDKP
  */
- class Guild implements iGuilds
+ class Guild extends \bbdkp\Admin implements iGuilds
 {
-	public $guildid;
-	public $name;
-	public $realm;
-	public $region;
-	public $achievements;
-	public $membercount;
-	public $startdate;
-	public $showroster;
-	public $regionlist;
-	public $aionlegionid;
-	public $aionserverid;
+	public $guildid = 0;
+	public $name = '';
+	public $realm = '';
+	public $region = '';
+	public $achievements = 0;
+	public $membercount = 0;
+	public $startdate = 0;
+	public $showroster = 0;
+	public $aionlegionid = 0;
+	public $aionserverid = 0;
 
 	/**
 	 */
 	function __construct($guild_id)
 	{
-		$this->guildid = $guild_id;
-		$this->Get();
-		$this->countmembers();
-		$this->regionlist = array(
-			'US' => 'US' ,
-			'EU' => 'EU');
-
+		if($guild_id !=0)
+		{
+			$this->guildid = $guild_id;
+			$this->Get();
+			$this->countmembers();
+		}
 	}
 
 	/**
@@ -155,12 +161,6 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 		$newrank->RankSuffix = '';
 		$newrank->Make();
 		
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_ADDED' ,
 				'id' =>  $this->guildid ,
@@ -170,11 +170,11 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 				'L_REALM' => $this->realm ,
 				'L_ADDED_BY' => $user->data['username']);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 		return  $this->guildid;
-		unset($bbdkp);
+		
 
 	}
 
@@ -213,13 +213,6 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
-		// log it
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_UPDATED' ,
 				'L_NAME_BEFORE' => $old_guild->name ,
@@ -228,12 +221,9 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 				'L_REALM_AFTER' => $this->realm,
 				'L_UPDATED_BY' => $user->data['username']);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
-
-		unset($bbdkp);
-
 
 
 	}
@@ -271,23 +261,16 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 		$sql = 'DELETE FROM ' . GUILD_TABLE . ' WHERE id = ' .  $this->guildid;
 		$db->sql_query($sql);
 
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
 		$log_action = array(
 				'header' => sprintf($user->lang['ACTION_GUILD_DELETED'], $this->name) ,
 				'L_NAME' => $this->name ,
 				'L_UPDATED_BY' => $user->data['username'],
 				);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-		unset($bbdkp);
 
 	}
 

@@ -22,8 +22,13 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
+require ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
+// Include the abstract base
+if (!class_exists('\bbdkp\Admin'))
+{
+	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+}
 
 /**
  * manages member creation
@@ -31,7 +36,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
  * @package 	bbDKP
  * 
  */
- class Members implements iMembers 
+ class Members extends \bbdkp\Admin implements \bbdkp\iMembers 
 {
 	/**
 	 * game id
@@ -113,6 +118,12 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 	public $member_region;
 
 	/**
+	 * Allowed regions
+	 * @var array
+	 */
+	protected $regionlist = array( 'eu', 'us' , 'kr', 'tw', 'cn', 'sea');
+	
+	/**
 	 *gender ID 0=male, 1=female
 	 * @var unknown_type
 	 */
@@ -163,42 +174,11 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 	 */
 	public $talents;
 
-	/**
-	 * quests i've done
-	 * @var unknown_type
-	 */
-	public $quests;
-
     /**
-     * Gear i'm wearing right now
+     * Battlenet array
      * @var unknown_type
      */
-    public $gear;
-
-
-	/**
-	 * available extra Fields from WOW character API
-	 * standard fields are name, level, faction and achievement points.
-	 *
-	 * @var array
-	 */
-	private $extrafields = array(
-	        'guild',
-	        'stats',
-	        'talents',
-	        'items',
-	        'reputation',
-	        'titles',
-	        'professions',
-	        'appearance',
-	        'companions',
-	        'mounts',
-	        'pets',
-	        'achievements',
-	        'progression',
-	        'pvp',
-	        'quests'
-	);
+    public $characterData;
 
 	/**
 	 */
@@ -272,7 +252,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 			$this->member_realm = $row['realm'];
 			$this->member_region = $row['region'];
 			$this->member_armory_url = $row['member_armory_url'];
-			$this->member_portrait_url = $phpbb_root_path . $row['member_portrait_url'];
+			$this->member_portrait_url = $row['member_portrait_url'];
 			$this->phpbb_user_id = $row['phpbb_user_id'];
 			$this->member_status = $row['member_status'];
 			$this->member_achiev = $row['member_achiev'];
@@ -336,6 +316,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 	/**
 	 * inserts a new member to database
+	 * 
 	 * @see \bbdkp\iMembers::Make()
 	 */
 	public function Make()
@@ -389,6 +370,26 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 			$this->member_region = $row['region'];
 		}
 
+		$check=0;
+		foreach ($this->games as $gameid => $gamename)
+		{
+			if ($config['bbdkp_games_' . $gameid] == 1)
+			{
+				if ($this->game_id == $config['bbdkp_games_' . $gameid])
+				{
+					$check += 1;
+						
+				}
+			}
+		}
+		
+		if($check==0)
+		{
+			//incorrect game_id
+			return 0;
+			
+		}
+		
 		if (($this->game_id == 'wow' || $this->game_id == 'aion'))
 		{
 			$this->member_portrait_url = $this->generate_portraitlink();
@@ -426,12 +427,6 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 		$this->member_id = $db->sql_nextid();
 
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
 		$log_action = array(
 				'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
 				'L_NAME' 	 => ucwords($this->member_name)  ,
@@ -440,7 +435,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 				'L_CLASS' 	 => $this->member_class_id,
 				'L_ADDED_BY' => $user->data['username']);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
@@ -462,8 +457,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 		    return false;
 		}
 		
-		$battlenet = $this->Armory_get($this->member_name, $this->member_realm);
-		
+		$battlenet = $this->Armory_get();
 
 		// if user chooses other name then check if the new name already exists. if so refuse update
 		// namechange to existing membername is not allowed
@@ -640,35 +634,46 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 	}
 	
-	
-	public function Armory_get($Character, $realm)
+	/**
+	 * Calls api to pull more information
+	 * 
+	 * Currently only the WoW API is available
+	 * 
+	 * @return object
+	 */	
+	public function Armory_get()
 	{
+		global $phpEx, $phpbb_root_path;
 		
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
-		
-		//Initialising the class
-		if (!class_exists('WowAPI'))
+		switch ($this->game_id)
 		{
-			require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
+			case 'wow':
+				//Initialising the class
+				if (!class_exists('WowAPI'))
+				{
+					require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
+				}
+				
+				 /** 
+				  * available extra fields :
+				 * 'guild','stats','talents','items','reputation','titles','professions','appearance',
+				 * 'companions','mounts','pets','achievements','progression','pvp','quests'
+				 */
+				$api = new WowAPI('character', $this->member_region);
+				$params = array('talents','stats', 'items' , 'titles','professions', 'appearance','progression','pvp','quests');
+				$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);
+				
+				$this->member_level = $data['level'];
+				$this->member_race_id = $data['race'];
+				$this->member_class_id = $data['class'];
+				$this->member_gender_id = $data['gender'];
+				$this->member_achiev = $data['achievementPoints'];
+				$this->member_comment += serialize ($data ['professions']);
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $data['realm']. '/' . $data ['name'] . '/simple';
+				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
+				$this->characterData = serialize($data);
+				
 		}
-		
-		$api3= new \WowAPI('character', EUROPE);
-		$character = 'Sajaki';
-		$realm = 'Lightbringer';
-		$data3 = $api3->Character->getCharacter($character, $realm);
-		
-		// available extra fields :
-		// 'guild','stats','talents','items','reputation','titles','professions','appearance',
-		// 'companions','mounts','pets','achievements','progression','pvp','quests'
-		
-		$params = array('talents');
-		$data3 = $api3->Character->getCharacter($character, $realm, $params);
-		
-		
-		
-		
-		
-		
 		
 	}
 	

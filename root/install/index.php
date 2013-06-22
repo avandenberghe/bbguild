@@ -1,6 +1,6 @@
 <?php
 /**
- * .install
+ * @package install
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -1029,7 +1029,13 @@ $versions = array(
 					// roster layout: main parameter for steering roster layout
      				array('bbdkp_roster_layout', '0', true),
      		),
-
+     		
+     		'table_column_add' => array(
+     				array($table_prefix . 'bbdkp_memberlist', 
+     						'characterinfo' , 
+     						array('TEXT_UNI', '') ),
+     		),
+     		
      		'custom' => array(
      			'tableupdates',
      			'gameinstall',
@@ -1321,7 +1327,6 @@ function tableupdates($action, $version)
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
 
-
 					break;
 
 
@@ -1466,12 +1471,16 @@ function regionoptions($selected_value, $key)
 {
 	global $user;
 
-    $regions = array(
-    	'EU'     			=> "European region",
-    	'US'     			=> "US region",
-    );
+	$regions = array(
+		'eu' => $user->lang['REGIONEU'],
+		'us' => $user->lang['REGIONUS'],
+		'tw' => $user->lang['REGIONTW'],
+		'kr' => $user->lang['REGIONKR'],
+		'cn' => $user->lang['REGIONCN'],
+		'sea' => $user->lang['REGIONSEA'],
+	);
 
-    $default = 'US';
+    $default = 'us';
 	$pass_char_options = '';
 	foreach ($regions as $key => $region)
 	{

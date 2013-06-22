@@ -18,13 +18,16 @@ if (! defined('IN_PHPBB'))
 	exit();
 }
 
+require_once("{$phpbb_root_path}includes/bbdkp/iAdmin.$phpEx");
+
 /**
  * Member interface
  *
  * @package 	bbDKP
  * 
  */
-interface iMembers {
+interface iMembers extends \bbdkp\iAdmin
+{
 
 	/**
 	 * gets member from database
@@ -33,6 +36,7 @@ interface iMembers {
 
 	/**
 	 * adds a member to database
+	 * @return int member_id in case of success, 0 if false
 	 */
 	function Make();
 

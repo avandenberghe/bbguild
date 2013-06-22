@@ -21,7 +21,10 @@ if (! defined ( 'EMED_BBDKP' ))
 	$user->add_lang ( array ('mods/dkp_admin' ) );
 	trigger_error ( $user->lang ['BBDKPDISABLED'], E_USER_WARNING );
 }
-
+if (!class_exists('Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+}
 /**
  * This class manages admin settings
  * 
@@ -269,7 +272,7 @@ if (! defined ( 'EMED_BBDKP' ))
 				}
 				
 				$sort_order = array (0 => array ('dkpsys_name', 'dkpsys_name desc' ), 1 => array ('dkpsys_id desc', 'dkpsys_id' ) );
-				$current_order = switch_order ( $sort_order );
+				$current_order = $this->switch_order ( $sort_order );
 				
 				$sql1 = 'SELECT * FROM ' . DKPSYS_TABLE;
 				$result1 = $db->sql_query ( $sql1 );
