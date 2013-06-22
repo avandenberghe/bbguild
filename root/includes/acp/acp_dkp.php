@@ -805,13 +805,9 @@ class acp_dkp extends \bbdkp\Admin
 					$cache->destroy('config');
 					trigger_error('Settings saved.' . $link, E_USER_NOTICE);
 				}
-
-				$languages = array(
-					'de' => $user->lang['LANG_DE'] ,
-					'en' => $user->lang['LANG_EN'] ,
-					'fr' => $user->lang['LANG_FR']);
+				
 				$s_lang_options = '';
-				foreach ($languages as $lang => $langname)
+				foreach ($this->languagecodes as $lang => $langname)
 				{
 					$selected = ($config['bbdkp_lang'] == $lang) ? ' selected="selected"' : '';
 					$s_lang_options .= '<option value="' . $lang . '" ' . $selected . '> ' . $langname . '</option>';
@@ -826,21 +822,8 @@ class acp_dkp extends \bbdkp\Admin
 					'OPTION' => "NO"));
 
 				// list installed games
-				$games = array(
-					'wow' => $user->lang['WOW'] ,
-					'lotro' => $user->lang['LOTRO'] ,
-					'eq' => $user->lang['EQ'] ,
-					'daoc' => $user->lang['DAOC'] ,
-					'vanguard' => $user->lang['VANGUARD'] ,
-					'eq2' => $user->lang['EQ2'] ,
-					'warhammer' => $user->lang['WARHAMMER'] ,
-					'aion' => $user->lang['AION'] ,
-					'FFXI' => $user->lang['FFXI'] ,
-					'rift' => $user->lang['RIFT'] ,
-					'swtor' => $user->lang['SWTOR'] ,
-					'lineage2' => $user->lang['LINEAGE2']);
 				$installed_games = array();
-				foreach ($games as $gameid => $gamename)
+				foreach ($this->games as $gameid => $gamename)
 				{
 					if ($config['bbdkp_games_' . $gameid] == 1)
 					{
@@ -849,10 +832,7 @@ class acp_dkp extends \bbdkp\Admin
 				}
 
 				// Default Region
-				$regions = array(
-					'EU' => $user->lang['REGIONEU'] ,
-					'US' => $user->lang['REGIONUS']);
-				foreach ($regions as $regionid => $regionvalue)
+				foreach ($this->regions as $regionid => $regionvalue)
 				{
 					$template->assign_block_vars('region_row', array(
 						'VALUE' => $regionid ,
@@ -1182,7 +1162,7 @@ class acp_dkp extends \bbdkp\Admin
 							4 => array(
 								'log_result' ,
 								'log_result desc'));
-						$current_order = switch_order($sort_order);
+						$current_order = $this->switch_order($sort_order);
 						$sql_array = array(
 							'SELECT' => 'log_id, log_date, log_type, username, log_ipaddress, log_result ' ,
 							'FROM' => array(

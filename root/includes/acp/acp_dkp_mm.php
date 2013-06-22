@@ -21,20 +21,29 @@ if (! defined('EMED_BBDKP'))
 		'mods/dkp_admin'));
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
-if (!class_exists('Guild'))
+
+// Include the base class
+if (!class_exists('\bbdkp\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
 }
 
-if (!class_exists('Ranks'))
+// include ranks class
+if (!class_exists('\bbdkp\Ranks'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
 }
 
-// Include the base class
-if (!class_exists('Members'))
+// Include the member class
+if (!class_exists('\bbdkp\Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+}
+
+//include the guilds class
+if (!class_exists('\bbdkp\Guild'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
 
 /**
@@ -79,7 +88,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					3 => array('region' , 'region desc') ,
 					4 => array('roster' , 'roster desc'));
 
-				$current_order = switch_order($sort_order);
+				$current_order = $this->switch_order($sort_order);
 				$guild_count = 0;
 				$previous_data = '';
 				$sort_index = explode('.', $current_order['uri']['current']);
@@ -146,23 +155,23 @@ class acp_dkp_mm extends \bbdkp\Admin
 				{
 					// we have a GET
 					$update = true;
-					foreach ($updateguild->regionlist as $key => $value)
+					foreach ($this->regions as $key => $regionname)
 					{
 						$template->assign_block_vars('region_row', array(
-							'VALUE' => $value ,
+							'VALUE' => $key ,
 							'SELECTED' => ($updateguild->region == $key) ? ' selected="selected"' : '' ,
-							'OPTION' => (! empty($key)) ? $key : '(None)'));
+							'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
 					}
 				}
 				else
 				{
 					// NEW PAGE
-					foreach ($updateguild->regionlist as $key => $value)
+					foreach ($this->regions as $key => $regionname)
 					{
 						$template->assign_block_vars('region_row', array(
-							'VALUE' => $value ,
+							'VALUE' => $key ,
 							'SELECTED' => '' ,
-							'OPTION' => (! empty($key)) ? $key : '(None)'));
+							'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
 					}
 				}
 
@@ -529,7 +538,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					6 => array('member_outdate' , 'member_outdate desc') ,
 					7 => array('member_race' ,	'member_race desc'));
 
-				$current_order = switch_order($sort_order);
+				$current_order = $this->switch_order($sort_order);
 				$sort_index = explode('.', $current_order['uri']['current']);
 				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 				$show_all = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
@@ -684,7 +693,9 @@ class acp_dkp_mm extends \bbdkp\Admin
 						$updatemember->member_outdate  = mktime(0, 0, 0, request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0));
 					}
 
+					$updatemember->member_achiev = request_var('member_achiev', 0);  
 					$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
+					$updatemember->member_comment = request_var('member_comment', '');
 					$updatemember->phpbb_user_id = request_var('phpbb_user_id', 0);
 
 					$updatemember->Update($old_member);
@@ -1033,6 +1044,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'MEMBER_NAME' => $editmember->member_id > 0 ? $editmember->member_name : '' ,
 					'MEMBER_ID' => $editmember->member_id > 0 ? $editmember->member_id : '' ,
 					'MEMBER_LEVEL' => $editmember->member_id > 0 ? $editmember->member_level : '' ,
+					'MEMBER_ACHIEV' => $editmember->member_id > 0 ? $editmember->member_achiev : '' ,
+					'MEMBER_TITLE' => $editmember->member_id > 0 ? $editmember->member_title : '' ,
 					'MALE_CHECKED' => ($genderid == '0') ? ' checked="checked"' : '' ,
 					'FEMALE_CHECKED' => ($genderid == '1') ? ' checked="checked"' : '' ,
 					'MEMBER_COMMENT' => $editmember->member_id > 0 ? $editmember->member_comment : '' ,
@@ -1053,6 +1066,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'S_OUTDATE_MONTH_OPTIONS' => $s_memberout_month_options ,
 					'S_OUTDATE_YEAR_OPTIONS' => $s_memberout_year_options ,
 					'S_PHPBBUSER_OPTIONS' => $s_phpbb_user ,
+					'TITLE_NAME' => ($editmember->game_id == 'wow') ? sprintf($editmember->member_title, $editmember->member_name) : '' , 
 					// javascript
 					'LA_ALERT_AJAX' => $user->lang['ALERT_AJAX'] ,
 					'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'] ,

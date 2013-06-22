@@ -57,7 +57,7 @@ if ( isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS])  )
         2 => array('raid_value desc', 'raid_value')
     );
     
-    $current_order = switch_order ( $sort_order );		
+    $current_order = $this->switch_order ( $sort_order );		
 	$sql_array = array (
 		'SELECT' => ' e.event_dkpid, e.event_name,  
 					  r.raid_id, r.raid_start, r.raid_note, 

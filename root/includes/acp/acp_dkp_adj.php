@@ -21,6 +21,14 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang(array('mods/dkp_admin'));
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
+
+
+// Include the abstract base
+if (!class_exists('\bbdkp\Admin'))
+{
+	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+}
+
 if (!class_exists('Adjust'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Adjustments/Adjust.$phpEx");
@@ -29,13 +37,6 @@ if (!class_exists('Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
-
-// Include the abstract base
-if (!class_exists('\bbdkp\Admin'))
-{
-	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
-}
-
 
 /**
  * This acp class manages guildmembers dkp adjustments

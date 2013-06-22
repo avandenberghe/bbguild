@@ -21,7 +21,10 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang ( array ('mods/dkp_admin' ));
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
-
+if (!class_exists('Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+}
 /**
  * This acp class manages Events.
  * 
@@ -296,7 +299,7 @@ if (! defined('EMED_BBDKP'))
 					3 => array('event_status desc', 'dkpsys_name, event_status, event_name desc'), 
 				);
 				 
-				$current_order = switch_order($sort_order);
+				$current_order = $this->switch_order($sort_order);
 			 
 				$sql = 'SELECT count(*) as countevents FROM ' . EVENTS_TABLE;
 				$result = $db->sql_query($sql);	

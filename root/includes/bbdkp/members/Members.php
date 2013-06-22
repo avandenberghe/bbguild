@@ -22,8 +22,13 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
+require ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
+// Include the abstract base
+if (!class_exists('\bbdkp\Admin'))
+{
+	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+}
 
 /**
  * manages member creation
@@ -31,8 +36,9 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
  * @package 	bbDKP
  * 
  */
- class Members implements iMembers 
+ class Members extends \bbdkp\Admin implements \bbdkp\iMembers 
 {
+	
 	/**
 	 * game id
 	 */
@@ -104,14 +110,20 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 	 * character realm
 	 * @var unknown_type
 	 */
-	public $member_guild_realm;
+	public $member_realm;
 
 	/**
 	 * region to which the char is on
 	 * @var unknown_type
 	 */
-	public $member_guild_region;
+	public $member_region;
 
+	/**
+	 * Allowed regions
+	 * @var array
+	 */
+	protected $regionlist = array( 'eu', 'us' , 'kr', 'tw', 'cn', 'sea');
+	
 	/**
 	 *gender ID 0=male, 1=female
 	 * @var unknown_type
@@ -162,49 +174,40 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 	 * @var string
 	 */
 	public $talents;
-
+	
 	/**
-	 * quests i've done
-	 * @var unknown_type
+	 * current title
 	 */
-	public $quests;
+	public $member_title;
 
     /**
-     * Gear i'm wearing right now
+     * Serialised Battlenet array
      * @var unknown_type
      */
-    public $gear;
-
-
-	/**
-	 * available extra Fields from WOW character API
-	 * standard fields are name, level, faction and achievement points.
-	 *
-	 * @var array
-	 */
-	private $extrafields = array(
-	        'guild',
-	        'stats',
-	        'talents',
-	        'items',
-	        'reputation',
-	        'titles',
-	        'professions',
-	        'appearance',
-	        'companions',
-	        'mounts',
-	        'pets',
-	        'achievements',
-	        'progression',
-	        'pvp',
-	        'quests'
-	);
+    public $characterData;
 
 	/**
 	 */
 	function __construct()
 	{
-
+		$this->games = array (
+				'wow' 	=> $user->lang ['WOW'],
+				'lotro' => $user->lang ['LOTRO'],
+				'eq' 	=> $user->lang ['EQ'],
+				'daoc' 	=> $user->lang ['DAOC'],
+				'vanguard' => $user->lang ['VANGUARD'],
+				'eq2' 	=> $user->lang ['EQ2'],
+				'warhammer' => $user->lang ['WARHAMMER'],
+				'aion' 	=> $user->lang ['AION'],
+				'FFXI' 	=> $user->lang ['FFXI'],
+				'rift' 	=> $user->lang ['RIFT'],
+				'swtor' => $user->lang ['SWTOR'],
+				'lineage2' => $user->lang ['LINEAGE2'],
+				'tera' 	=> $user->lang ['TERA'],
+				'gw2' 	=> $user->lang ['GW2'],
+		);
+		
+		$this->characterData = array();
 	}
 
 	/**
@@ -217,7 +220,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 		$sql_array = array(
 				'SELECT' => 'm.*, c.colorcode , c.imagename,  c1.name AS member_class, l1.name AS member_race,
-							r.image_female, r.image_male,
+							r.image_female, r.image_male, 
 							g.id as guild_id, g.name as guild_name, g.realm , g.region' ,
 				'FROM' => array(
 						MEMBER_LIST_TABLE => 'm' ,
@@ -269,10 +272,10 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 			$this->member_outdate_y = date('Y', $row['member_outdate']);
 			$this->member_guild_name = $row['guild_name'];
 			$this->member_guild_id = $row['guild_id'];
-			$this->member_guild_realm = $row['realm'];
-			$this->member_guild_region = $row['region'];
+			$this->member_realm = $row['realm'];
+			$this->member_region = $row['region'];
 			$this->member_armory_url = $row['member_armory_url'];
-			$this->member_portrait_url = $phpbb_root_path . $row['member_portrait_url'];
+			$this->member_portrait_url = $row['member_portrait_url'];
 			$this->phpbb_user_id = $row['phpbb_user_id'];
 			$this->member_status = $row['member_status'];
 			$this->member_achiev = $row['member_achiev'];
@@ -281,7 +284,19 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 			$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 			$this->race_image = (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '';
 			$this->class_image = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '';
-
+			
+			$this->member_title = '';
+			if($this->game_id =='wow')
+			{
+				$this->characterData = unserialize($row['characterinfo']);
+				foreach($this->characterData['titles'] as $key => $title)
+				{
+					if (isset($title['selected']))
+					{
+						$this->member_title = $title['name'];
+					}
+				}
+			}
 			return true;
 		}
 		else
@@ -336,6 +351,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 	/**
 	 * inserts a new member to database
+	 * 
 	 * @see \bbdkp\iMembers::Make()
 	 */
 	public function Make()
@@ -381,29 +397,22 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 		$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $this->member_guild_id;
 		$result = $db->sql_query($sql);
-		$this->member_guild_realm  = $config['bbdkp_default_realm'];
-		$this->member_guild_region = '';
+		$this->member_realm  = $config['bbdkp_default_realm'];
+		$this->member_region = '';
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$this->member_guild_realm = $row['realm'];
-			$this->member_guild_region = $row['region'];
+			$this->member_realm = $row['realm'];
+			$this->member_region = $row['region'];
 		}
 
-		if (($this->game_id == 'wow' || $this->game_id == 'aion'))
+		switch ($this->game_id)
 		{
-			$this->member_portrait_url = $this->generate_portraitlink();
+			case 'wow':
+				$this->Armory_get();
+			case 'aion':
+				$this->member_portrait_url = $this->generate_portraitlink();
 		}
-
-		if ($this->game_id == 'wow' & $this->memberarmoryurl == ' ')
-		{
-			if ($config['bbdkp_default_region'] == '')
-			{
-				// if region is not set then put EU...
-				set_config('bbdkp_default_region', 'EU', true);
-			}
-			$this->memberarmoryurl = $this->generate_armorylink();
-		}
-
+		
 		$query = $db->sql_build_array('INSERT', array(
 				'member_name' => ucwords($this->member_name) ,
 				'member_status' => $this->member_status ,
@@ -420,17 +429,13 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 				'member_armory_url' => (string) $this->member_armory_url ,
 				'phpbb_user_id' => (int) $this->phpbb_user_id ,
 				'game_id' => (string) $this->game_id ,
-				'member_portrait_url' => (string) $this->member_portrait_url));
+				'member_portrait_url' => (string) $this->member_portrait_url, 
+				'characterinfo' => serialize($this->characterData),
+				));
 
 		$db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
 
 		$this->member_id = $db->sql_nextid();
-
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
@@ -440,7 +445,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 				'L_CLASS' 	 => $this->member_class_id,
 				'L_ADDED_BY' => $user->data['username']);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
@@ -461,14 +466,14 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 		{
 		    return false;
 		}
-
-		// if user chooses other name then check if it already exists. if so refuse update
+		
+		// if user chooses other name then check if the new name already exists. if so refuse update
 		// namechange to existing membername is not allowed
 		if($this->member_name != $old_member->member_name)
 		{
 			$sql = 'SELECT count(*) as memberexists
 								FROM ' . MEMBER_LIST_TABLE . '
-								WHERE member_id <> ' . $updatemember->member_id . "
+								WHERE member_id <> ' . $this->member_id . "
 								AND UPPER(member_name)= UPPER('" . $db->sql_escape($this->member_name) . "')";
 			$result = $db->sql_query($sql);
 			$countm = $db->sql_fetchfield('memberexists');
@@ -500,23 +505,18 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 		{
 			$this->member_level = $maxlevel;
 		}
-
-		if (($this->game_id == 'wow' || $this->game_id == 'aion') && $this->member_portrait_url == ' ')
+		
+		switch ($this->game_id)
 		{
-		    $this->member_portrait_url = $this->generate_portraitlink();
+			case 'wow':
+				$this->Armory_get();
+			case 'aion':
+				if(trim($this->member_portrait_url) == '')
+				{
+					$this->member_portrait_url = $this->generate_portraitlink();
+				}
 		}
-
-		if ($this->game_id == 'wow' & $this->member_armory_url == ' ')
-		{
-		    if ($config['bbdkp_default_region'] == '')
-		    {
-		        // if region is not set then put EU...
-		        set_config('bbdkp_default_region', 'EU', true);
-		    }
-		    $realm = $config['bbdkp_default_realm'];
-		    $this->member_armory_url = $this->generate_armorylink();
-		}
-
+		
 		// Get first and last raiding dates from raid table.
 		$sql = "SELECT b.member_id,
 		        MIN(a.raid_start) AS startdate,
@@ -559,7 +559,9 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 		        'member_armory_url' => $this->member_armory_url,
 		        'member_portrait_url' => $this->member_portrait_url,
 		        'member_achiev' => $this->member_achiev,
-				'game_id' => $this->game_id));
+				'game_id' => $this->game_id, 
+				'characterinfo' => serialize($this->characterData)
+				));
 
 		$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
 		        WHERE member_id= ' . $this->member_id);
@@ -636,6 +638,49 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 		unset($bbdkp);
 
 	}
+	
+	/**
+	 * Calls api to pull more information
+	 * 
+	 * Currently only the WoW API is available
+	 * 
+	 * @return object
+	 */	
+	public function Armory_get()
+	{
+		global $phpEx, $phpbb_root_path;
+		
+		switch ($this->game_id)
+		{
+			case 'wow':
+				//Initialising the class
+				if (!class_exists('WowAPI'))
+				{
+					require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
+				}
+				
+				 /** 
+				  * available extra fields :
+				 * 'guild','stats','talents','items','reputation','titles','professions','appearance',
+				 * 'companions','mounts','pets','achievements','progression','pvp','quests'
+				 */
+				$api = new WowAPI('character', $this->member_region);
+				$params = array('guild', 'talents','stats', 'items' , 'titles','professions', 'progression','pvp');
+				$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);
+				
+				$this->member_level = $data['level'];
+				$this->member_race_id = $data['race'];
+				$this->member_class_id = $data['class'];
+				$this->member_gender_id = $data['gender'];
+				$this->member_achiev = $data['achievementPoints'];
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $data['realm']. '/' . $data ['name'] . '/simple';
+				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
+				//@todo update guild membership				
+				$this->characterData = $data;
+		}
+		
+	}
+	
 
 	/**
 	 * function for removing member from guild but leave him in the member table.;
@@ -710,62 +755,16 @@ require_once ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
 
 	}
 
-	
-	/**
-	 * generates armory link (only wow)
-	*/
-	private function generate_armorylink ()
-	{
-		global $config;
-		$site = '';
-		switch ($config['bbdkp_default_region'])
-		{
-			case 'EU':
-				$site = 'http://eu.battle.net/wow/en/character/';
-				break;
-			case 'US':
-				$site = 'http://us.battle.net/wow/en/character/';
-				break;
-			default:
-				$site = 'http://eu.battle.net/wow/en/character/';
-		}
-		return $site . urlencode(str_replace(' ', '-', $this->member_guild_realm)) . '/' . urlencode($this->member_name) . '/simple';
-	}
-
-
 	/*
 	 * generates a standard portrait image url for wow /aion based on characterdata
 	*/
-	private function generate_portraitlink ()
+	private function generate_portraitlink()
 	{
-		$memberportraiturl = '';
+		global $phpbb_root_path;
 		if ($this->game_id == 'aion')
 		{
-			$this->memberportraiturl = 'images/roster_portraits/aion/' . $this->member_race_id . '_' . $this->member_gender_id . '.jpg';
+			$this->memberportraiturl = $phpbb_root_path . 'images/roster_portraits/aion/' . $this->member_race_id . '_' . $this->member_gender_id . '.jpg';
 		}
-
-		elseif ($this->$game_id == 'wow')
-		{
-			if ($this->member_level <= "59")
-			{
-				$maxlvlid = "wow-default";
-			}
-			elseif ($this->member_level <= 69)
-			{
-				$maxlvlid = "wow";
-			}
-			elseif ($this->member_level <= 79)
-			{
-				$maxlvlid = "wow-70";
-			}
-			else
-			{
-				// level 85 is not yet iconified
-				$maxlvlid = "wow-80";
-			}
-			$this->memberportraiturl = 'images/roster_portraits/' . $maxlvlid . '/' . $this->member_gender_id . '-' . $this->member_race_id . '-' . $this->member_class_id . '.gif';
-		}
-
 	}
 	
 	/******

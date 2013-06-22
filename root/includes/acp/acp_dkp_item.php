@@ -21,7 +21,10 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang ( array ('mods/dkp_admin' ));
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
-
+if (!class_exists('Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+}
 /**
  * This ACP class manages Game Loot
  * 
@@ -941,7 +944,7 @@ class acp_dkp_item extends \bbdkp\Admin
 				0 => array ('raid_id desc', 'raid_id' ),
 				1 => array ('event_name desc', 'event_name' ),
 			);
-			$current_order = switch_order ( $sort_order );
+			$current_order = $this->switch_order ( $sort_order );
 			
 			// select all raids for pool			
 			$sql_array = array(
@@ -1016,7 +1019,7 @@ class acp_dkp_item extends \bbdkp\Admin
 				4 => array ('i.item_value desc', 'item_value' ),
 				5 => array ('d.dkpsys_name desc', 'dkpsys_name' )
 				);
-			$current_order = switch_order ($sort_order);
+			$current_order = $this->switch_order ($sort_order);
 			
 			//prepare item list sql
 			$sql_array = array(
