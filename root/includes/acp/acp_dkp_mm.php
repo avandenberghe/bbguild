@@ -1042,6 +1042,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'MEMBER_NAME' => $editmember->member_id > 0 ? $editmember->member_name : '' ,
 					'MEMBER_ID' => $editmember->member_id > 0 ? $editmember->member_id : '' ,
 					'MEMBER_LEVEL' => $editmember->member_id > 0 ? $editmember->member_level : '' ,
+					'MEMBER_ACHIEV' => $editmember->member_id > 0 ? $editmember->member_achiev : '' ,
+					'MEMBER_TITLE' => $editmember->member_id > 0 ? $editmember->member_title : '' ,
 					'MALE_CHECKED' => ($genderid == '0') ? ' checked="checked"' : '' ,
 					'FEMALE_CHECKED' => ($genderid == '1') ? ' checked="checked"' : '' ,
 					'MEMBER_COMMENT' => $editmember->member_id > 0 ? $editmember->member_comment : '' ,
@@ -1062,6 +1064,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'S_OUTDATE_MONTH_OPTIONS' => $s_memberout_month_options ,
 					'S_OUTDATE_YEAR_OPTIONS' => $s_memberout_year_options ,
 					'S_PHPBBUSER_OPTIONS' => $s_phpbb_user ,
+					'TITLE_NAME' => ($editmember->game_id == 'wow') ? sprintf($editmember->member_title, $editmember->member_name) : '' , 
 					// javascript
 					'LA_ALERT_AJAX' => $user->lang['ALERT_AJAX'] ,
 					'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'] ,
