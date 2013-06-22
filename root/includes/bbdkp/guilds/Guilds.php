@@ -49,6 +49,13 @@ if (!class_exists('\bbdkp\Admin'))
 	public $aionlegionid = 0;
 	public $aionserverid = 0;
 
+	public $game_id = '';
+	public $achievementpoints = 0;
+	public $level = 0;
+	public $members = 0;
+	public $emblemurl = '';
+	
+
 	/**
 	 */
 	function __construct($guild_id)

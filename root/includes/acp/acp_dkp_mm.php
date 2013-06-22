@@ -693,7 +693,9 @@ class acp_dkp_mm extends \bbdkp\Admin
 						$updatemember->member_outdate  = mktime(0, 0, 0, request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0));
 					}
 
+					$updatemember->member_achiev = request_var('member_achiev', 0);  
 					$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
+					$updatemember->member_comment = request_var('member_comment', '');
 					$updatemember->phpbb_user_id = request_var('phpbb_user_id', 0);
 
 					$updatemember->Update($old_member);

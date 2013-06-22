@@ -16,11 +16,15 @@
  * @link 	  http://blizzard.github.com/api-wow-docs/#guild-profile-api
  * @version   1.0.4 
  * 
- * The guild profile API is the primary way to access guild information. This guild profile API can be used to fetch a single guild at a time through an HTTP GET request to a url describing the guild profile resource. By default, a basic dataset will be returned and with each request and zero or more additional fields can be retrieved. To access this API, 
+ * The guild profile API is the primary way to access guild information. This guild profile API can be used to fetch a single guild 
+ * at a time through an HTTP GET request to a url describing the guild profile resource. By default, a basic dataset will be 
+ * returned and with each request and zero or more additional fields can be retrieved. To access this API, 
  * craft a resource URL pointing to the guild whos information is to be retrieved.
 	URL = Host + "/api/wow/guild/" + Realm + "/" + GuildName
 	Realm = <proper realm name> | <normalized realm name>
-	There are no required query string parameters when accessing this resource, although the "fields" query string parameter can optionally be passed to indicate that one or more of the optional datasets is to be retrieved. Those additional fields are listed in the subsection titled "Optional Fields".
+	There are no required query string parameters when accessing this resource, although the "fields" query string parameter
+	can optionally be passed to indicate that one or more of the optional datasets is to be retrieved. Those additional 
+	fields are listed in the subsection titled "Optional Fields".
  */
 
 /**

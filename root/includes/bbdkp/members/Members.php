@@ -38,6 +38,7 @@ if (!class_exists('\bbdkp\Admin'))
  */
  class Members extends \bbdkp\Admin implements \bbdkp\iMembers 
 {
+	
 	/**
 	 * game id
 	 */
@@ -189,6 +190,23 @@ if (!class_exists('\bbdkp\Admin'))
 	 */
 	function __construct()
 	{
+		$this->games = array (
+				'wow' 	=> $user->lang ['WOW'],
+				'lotro' => $user->lang ['LOTRO'],
+				'eq' 	=> $user->lang ['EQ'],
+				'daoc' 	=> $user->lang ['DAOC'],
+				'vanguard' => $user->lang ['VANGUARD'],
+				'eq2' 	=> $user->lang ['EQ2'],
+				'warhammer' => $user->lang ['WARHAMMER'],
+				'aion' 	=> $user->lang ['AION'],
+				'FFXI' 	=> $user->lang ['FFXI'],
+				'rift' 	=> $user->lang ['RIFT'],
+				'swtor' => $user->lang ['SWTOR'],
+				'lineage2' => $user->lang ['LINEAGE2'],
+				'tera' 	=> $user->lang ['TERA'],
+				'gw2' 	=> $user->lang ['GW2'],
+		);
+		
 		$this->characterData = array();
 	}
 
@@ -387,26 +405,6 @@ if (!class_exists('\bbdkp\Admin'))
 			$this->member_region = $row['region'];
 		}
 
-		$check=0;
-		foreach ($this->games as $gameid => $gamename)
-		{
-			if ($config['bbdkp_games_' . $gameid] == 1)
-			{
-				if ($this->game_id == $config['bbdkp_games_' . $gameid])
-				{
-					$check += 1;
-						
-				}
-			}
-		}
-		
-		if($check==0)
-		{
-			//incorrect game_id
-			return 0;
-			
-		}
-		
 		switch ($this->game_id)
 		{
 			case 'wow':
@@ -667,7 +665,7 @@ if (!class_exists('\bbdkp\Admin'))
 				 * 'companions','mounts','pets','achievements','progression','pvp','quests'
 				 */
 				$api = new WowAPI('character', $this->member_region);
-				$params = array('talents','stats', 'items' , 'titles','professions', 'progression','pvp');
+				$params = array('guild', 'talents','stats', 'items' , 'titles','professions', 'progression','pvp');
 				$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);
 				
 				$this->member_level = $data['level'];
@@ -675,11 +673,10 @@ if (!class_exists('\bbdkp\Admin'))
 				$this->member_class_id = $data['class'];
 				$this->member_gender_id = $data['gender'];
 				$this->member_achiev = $data['achievementPoints'];
-				$this->member_comment += serialize ($data ['professions']);
 				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $data['realm']. '/' . $data ['name'] . '/simple';
 				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
+				//@todo update guild membership				
 				$this->characterData = $data;
-				
 		}
 		
 	}
