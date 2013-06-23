@@ -16,6 +16,7 @@ if (! defined('IN_PHPBB'))
 {
 	exit();
 }
+require_once("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 
 /**
  * Ranks interface
@@ -23,27 +24,27 @@ if (! defined('IN_PHPBB'))
  * @package 	bbDKP
  * 
  */
-interface iRanks
+interface iRanks extends \bbdkp\iGuilds
 {
 
 	/**
 	 * gets rank from database
 	 */
-	function Get();
+	function Getrank();
 
 	/**
 	 * adds a rank to database
 	*/
-	function Make();
+	function Makerank();
 
 	/**
 	 * deletes a rank from database
 	*/
-	function Delete($override);
+	function Rankdelete($override);
 
 	/**
 	 * updates a rank to database
 	*/
-	function Update(Ranks $old_rank);
+	function Rankupdate(Ranks $old_rank);
 
 }

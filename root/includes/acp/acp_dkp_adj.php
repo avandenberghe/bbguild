@@ -21,6 +21,14 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang(array('mods/dkp_admin'));
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
+
+
+// Include the abstract base
+if (!class_exists('\bbdkp\Admin'))
+{
+	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+}
+
 if (!class_exists('Adjust'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Adjustments/Adjust.$phpEx");
@@ -29,13 +37,6 @@ if (!class_exists('Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
-
-// Include the abstract base
-if (!class_exists('\bbdkp\Admin'))
-{
-	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
-}
-
 
 /**
  * This acp class manages guildmembers dkp adjustments
@@ -287,7 +288,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					{
 						$member = new \bbdkp\Members;
 						$member->member_id = $member_id;
-						$member->Get();
+						$member->Getmember();
 						$newadjust->member_id = $member_id;
 						$newadjust->member_name = $member->member_name;
 						$member_names[] = $member->member_name;
@@ -329,7 +330,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					{
 						$oldmembers = new \bbdkp\Members;
 						$oldmembers->member_id = $member_id;
-						$oldmembers->Get();
+						$oldmembers->Getmember();
 						$oldmember_names[] = $oldmembers->member_name;
 						unset($oldmembers);
 						
@@ -359,7 +360,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						$member = new \bbdkp\Members;
 						$member->member_id = $member_id;
 						$updadjust->members_samegroupkey[] = $member_id; 
-						$member->Get();
+						$member->Getmember();
 						$updadjust->member_id = $member_id;
 						$updadjust->member_name = $member->member_name;
 						$member_names[] = $member->member_name;

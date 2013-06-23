@@ -21,6 +21,14 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 
+// Include the base class
+
+if (!class_exists('\bbdkp\Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+}
+
+
 /**
  * Guild
  * 
@@ -28,42 +36,52 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
  * 
  * @package 	bbDKP
  */
- class Guild implements iGuilds
+ class Guilds extends \bbdkp\Admin implements iGuilds
 {
-	public $guildid;
-	public $name;
-	public $realm;
-	public $region;
-	public $achievements;
-	public $membercount;
-	public $startdate;
-	public $showroster;
-	public $regionlist;
-	public $aionlegionid;
-	public $aionserverid;
+	public $game_id = '';
+	public $guildid = 0;
+	public $name = '';
+	public $realm = '';
+	public $region = '';
+	public $achievements = 0;
+	public $membercount = 0;
+	public $startdate = 0;
+	public $showroster = 0;
+	//aion
+	public $aionlegionid = 0;
+	public $aionserverid = 0;
+	//wow
+	public $achievementpoints = 0;
+	public $level = 0;
+	public $emblempath = '';
+	public $emblem = array(); 
+	public $battlegroup = '';
+	public $guilarmorydurl = '';
+	public $memberdata = array();
+	public $side = 0;
 
 	/**
 	 */
 	function __construct($guild_id)
 	{
-		$this->guildid = $guild_id;
-		$this->Get();
-		$this->countmembers();
-		$this->regionlist = array(
-			'US' => 'US' ,
-			'EU' => 'EU');
-
+		if($guild_id >= 0)
+		{
+			$this->guildid = $guild_id;
+			$this->Getguild();
+			$this->countmembers();
+		}
 	}
 
 	/**
 	 * gets a guild from database
 	 * @see \bbdkp\iGuilds::Get()
 	 */
-	public function Get()
+	public function Getguild()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
-		$sql = 'SELECT id, name, realm, region, roster
+		$sql = 'SELECT id, name, realm, region, roster, game_id, members, 
+				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl
 				FROM ' . GUILD_TABLE . '
 				WHERE id = ' . $this->guildid;
 		$result = $db->sql_query($sql);
@@ -71,6 +89,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 		$db->sql_freeresult($result);
 		if (! $row)
 		{
+			$this->game_id = '';
 			$this->guildid = 0;
 			$this->name = '';
 			$this->realm = '';
@@ -80,11 +99,18 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 		else
 		{
 			// load guild object
+			$this->game_id = $row['game_id'];
 			$this->guildid = $row['id'];
 			$this->name = $row['name'];
 			$this->realm = $row['realm'];
 			$this->region = $row['region'];
 			$this->showroster = $row['roster'];
+			$this->achievementpoints = $row['achievementpoints'];
+			$this->level = $row['level'];
+			$this->battlegroup = $row['battlegroup'];
+			$this->guildarmoryurl = $row['guildarmoryurl'];
+			$this->emblempath = $phpbb_root_path . $row['emblemurl'];
+			
 		}
 
 
@@ -92,14 +118,14 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 
 	/**
 	 * inserts a new guild to database
-	 * we always add guilds with an id greater then zero. this way, the guild with id=zero is the "guildless" guild
+	 * we always add guilds with an id greater than zero. this way, the guild with id=zero is the "guildless" guild
 	 * the zero guild is added by default in a new install.
 	 * do not delete the zero record in the guild table or you will see that guildless members
 	 * become invisible in the roster and in the memberlist or in any list member selection that makes
 	 * an inner join with the guild table.
 	 * @see \bbdkp\iGuilds::Make()
 	 */
-	public function Make()
+	public function MakeGuild()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -130,6 +156,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 		$this->aionserverid = 0;
 
 		$query = $db->sql_build_array('INSERT', array(
+				'game_id' => $this->game_id,
 				'id' => $this->guildid,
 				'name' => $this->name ,
 				'realm' => $this->realm,
@@ -142,7 +169,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 		$db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
 
 		//add a default rank
-		if (!class_exists('Ranks'))
+		if (!class_exists('\bbdkp\Ranks'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
 		}
@@ -155,12 +182,6 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 		$newrank->RankSuffix = '';
 		$newrank->Make();
 		
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_ADDED' ,
 				'id' =>  $this->guildid ,
@@ -170,27 +191,26 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 				'L_REALM' => $this->realm ,
 				'L_ADDED_BY' => $user->data['username']);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 		return  $this->guildid;
-		unset($bbdkp);
+		
 
 	}
-
 
 	/**
 	 * updates a guild to database
 	 * @see \bbdkp\iMembers::Update()
 	 */
-	public function Update($old_guild)
+	public function Guildupdate($old_guild, $params)
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
 		// check if already exists
 		if($this->name != $old_guild->name || $this->realm != $old_guild->realm)
 		{
-				// check existing guild-realmname
+			// check existing guild-realmname
 			$result = $db->sql_query("SELECT count(*) as evcount from " . GUILD_TABLE . "
 				WHERE UPPER(name) = '" . strtoupper($db->sql_escape($this->name)) . "'
 				AND UPPER(realm) = '" . strtoupper($db->sql_escape($this->realm)) . "'");
@@ -200,8 +220,9 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 				trigger_error($user->lang['ERROR_GUILDTAKEN'] . $this->link, E_USER_WARNING);
 			}
 		}
-
+		
 		$query = $db->sql_build_array('UPDATE', array(
+				'game_id' => $this->game_id,  
 				'id' => $this->guildid,
 				'name' => $this->name ,
 				'realm' => $this->realm,
@@ -213,13 +234,49 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
-		// log it
-		if (!class_exists('\bbdkp\Admin'))
+		if ($this->guildid > 0)
 		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
+			switch ($this->game_id)
+			{
+				case 'wow':
+					//$params = array('members', 'achievements','news');
+					$this->Armory_get($params);
+					
+					$query = $db->sql_build_array('UPDATE', array(
+							'achievementpoints' => $this->achievementpoints,
+							'level' => $this->level,
+							'guildarmoryurl' => $this->guilarmorydurl,
+							'emblemurl' => $this->emblempath,
+							'battlegroup' => $this->battlegroup,
+					));
+					
+					$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
+					
+					if (in_array("members", $params))
+					{
+						// update ranks table
+						if (!class_exists('\bbdkp\Ranks'))
+						{
+							require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
+						}
+						
+						$rank = new \bbdkp\Ranks();
+						$rank->ArmoryUpdate($this->memberdata, $this->guildid,  $this->region); 
+						
+						//update member table
+						if (!class_exists('\bbdkp\Members'))
+						{
+							require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+						}
+						
+						$mb = new \bbdkp\Members();
+						$mb->ArmoryUpdate($this->memberdata, $this->guildid,  $this->region);
+						
+					}				
+					break;
+			}
 		}
-		$bbdkp = new \bbdkp\Admin();
-
+		
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_UPDATED' ,
 				'L_NAME_BEFORE' => $old_guild->name ,
@@ -228,21 +285,16 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 				'L_REALM_AFTER' => $this->realm,
 				'L_UPDATED_BY' => $user->data['username']);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
-
-		unset($bbdkp);
-
-
-
 	}
-
+	
 	/**
 	 * deletes a guild from database
 	 * @see \bbdkp\iMembers::Delete()
 	 */
-	public function Delete()
+	public function Guildelete()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -271,25 +323,220 @@ require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 		$sql = 'DELETE FROM ' . GUILD_TABLE . ' WHERE id = ' .  $this->guildid;
 		$db->sql_query($sql);
 
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
 		$log_action = array(
 				'header' => sprintf($user->lang['ACTION_GUILD_DELETED'], $this->name) ,
 				'L_NAME' => $this->name ,
 				'L_UPDATED_BY' => $user->data['username'],
 				);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-		unset($bbdkp);
 
 	}
+	
+	/**
+	 * Calls api to pull more information
+	 *
+	 * Currently only the WoW API is available
+	 *
+	 * @return void
+	 */
+	public function Armory_get($params)
+	{
+		global $phpEx, $phpbb_root_path;
+	
+		switch ($this->game_id)
+		{
+			case 'wow':
+				//Initialising the class
+				if (!class_exists('WowAPI'))
+				{
+					require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
+				}
+				
+				 //available extra fields : 'members', 'achievements','news'
+				$api = new WowAPI('guild', $this->region);
+				
+				$data = $api->Guild->getGuild($this->name, $this->realm, $params);  
+				
+				$this->achievementpoints = $data['achievementPoints'];
+				$this->level = $data['level'];
+				$this->battlegroup = $data['battlegroup'];
+				$this->side = $data['side'];
+				$this->guilarmorydurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $data['realm']. '/' . $data['name'] . '/';
+				//$this->emblemurl = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
+				//@todo update guild membership
+				$this->emblem = $data['emblem'];
+				$this->emblempath = $this->createEmblem(true);
+				$this->memberdata = $data['members'];
+		}
+	
+	}
+	
+	/**
+	 * function to create a Wow Guild emblem, adapted for phpBB from http://us.battle.net/wow/en/forum/topic/3082248497#8
+	 *  	
+ 	 * @author Thomas Andersen <acoon@acoon.dk>
+	 * @copyright Copyright (c) 2011, Thomas Andersen, http://sourceforge.net/projects/wowarmoryapi
+	 * @param boolean $showlevel
+	 * @param int $width
+	 * @return resource
+	 */
+	private function createEmblem($showlevel=TRUE, $width=215)
+	{
+		global $phpEx, $phpbb_root_path;
+		
+		//location to create the file
+		$imgfile = $phpbb_root_path . "images/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
+		$outputpath = "images/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
+		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time()) 
+		{
+			$finalimg = imagecreatefrompng($imgfile);
+			imagesavealpha($finalimg,true);
+			imagealphablending($finalimg, true);
+		} 
+		else 
+		{
+			if ($width > 1 AND $width < 215)
+			{
+				$height = ($width/215)*230;
+				$finalimg = imagecreatetruecolor($width, $height);
+				$trans_colour = imagecolorallocatealpha($finalimg, 0, 0, 0, 127);
+				imagefill($finalimg, 0, 0, $trans_colour);
+				imagesavealpha($finalimg,true);
+				imagealphablending($finalimg, true);
+			}
+				
+			if ($this->side == 0)
+			{
+				$ring = 'alliance';
+			} 
+			else 
+			{
+				$ring = 'horde';
+			}
+	
+			$imgOut = imagecreatetruecolor(215, 230);
+					
+			$emblemURL = $phpbb_root_path ."images/wowapi/emblems/emblem_".sprintf("%02s",$this->emblem['icon']).".png";
+			$borderURL = $phpbb_root_path ."images/wowapi/borders/border_".sprintf("%02s",$this->emblem['border']).".png";
+			$ringURL = $phpbb_root_path ."images/wowapi/static/ring-".$ring.".png";
+			$shadowURL = $phpbb_root_path ."images/wowapi/static/shadow_00.png";
+			$bgURL = $phpbb_root_path ."images/wowapi/static/bg_00.png";
+			$overlayURL = $phpbb_root_path ."images/wowapi//static/overlay_00.png";
+			$hooksURL = $phpbb_root_path ."images/wowapi/static/hooks.png";
+			$levelURL = $phpbb_root_path ."images/wowapi/static/";
+					
+			imagesavealpha($imgOut,true);
+			imagealphablending($imgOut, true);
+			$trans_colour = imagecolorallocatealpha($imgOut, 0, 0, 0, 127);
+			imagefill($imgOut, 0, 0, $trans_colour);
+					
+			$ring = imagecreatefrompng($ringURL);
+			$ring_size = getimagesize($ringURL);
+				
+			$emblem = imagecreatefrompng($emblemURL);
+			$emblem_size = getimagesize($emblemURL);
+			imagelayereffect($emblem, IMG_EFFECT_OVERLAY);
+			$emblemcolor = preg_replace('/^ff/i','',$this->emblem['iconColor']);
+			$color_r = hexdec(substr($emblemcolor,0,2));
+			$color_g = hexdec(substr($emblemcolor,2,2));
+			$color_b = hexdec(substr($emblemcolor,4,2));
+			imagefilledrectangle($emblem,0,0,$emblem_size[0],$emblem_size[1],imagecolorallocatealpha($emblem, $color_r, $color_g, $color_b,0));
+					
+					
+			$border = imagecreatefrompng($borderURL);
+			$border_size = getimagesize($borderURL);
+			imagelayereffect($border, IMG_EFFECT_OVERLAY);
+			$bordercolor = preg_replace('/^ff/i','',$this->emblem['borderColor']);
+			$color_r = hexdec(substr($bordercolor,0,2));
+			$color_g = hexdec(substr($bordercolor,2,2));
+			$color_b = hexdec(substr($bordercolor,4,2));
+			imagefilledrectangle($border,0,0,$border_size[0]+100,$border_size[0]+100,imagecolorallocatealpha($border, $color_r, $color_g, $color_b,0));
+					
+			$shadow = imagecreatefrompng($shadowURL);
+							
+			$bg = imagecreatefrompng($bgURL);
+			$bg_size = getimagesize($bgURL);
+			imagelayereffect($bg, IMG_EFFECT_OVERLAY);
+			$bgcolor = preg_replace('/^ff/i','',$this->emblem['backgroundColor']);
+			$color_r = hexdec(substr($bgcolor,0,2));
+			$color_g = hexdec(substr($bgcolor,2,2));
+			$color_b = hexdec(substr($bgcolor,4,2));
+			imagefilledrectangle($bg,0,0,$bg_size[0]+100,$bg_size[0]+100,imagecolorallocatealpha($bg, $color_r, $color_g, $color_b,0));
+											
+											
+			$overlay = imagecreatefrompng($overlayURL);
+			$hooks = imagecreatefrompng($hooksURL);
+											
+			$x = 20;
+			$y = 23;
+											
+			if (!$this->emblemHideRing)
+			{
+				imagecopy($imgOut,$ring,0,0,0,0, $ring_size[0],$ring_size[1]);
+			}
+			
+			$size = getimagesize($shadowURL);
+			imagecopy($imgOut,$shadow,$x,$y,0,0, $size[0],$size[1]);
+			imagecopy($imgOut,$bg,$x,$y,0,0, $bg_size[0],$bg_size[1]);
+			imagecopy($imgOut,$emblem,$x+17,$y+30,0,0, $emblem_size[0],$emblem_size[1]);
+			imagecopy($imgOut,$border,$x+13,$y+15,0,0, $border_size[0],$border_size[1]);
+			$size = getimagesize($overlayURL);
+			imagecopy($imgOut,$overlay,$x,$y+2,0,0, $size[0],$size[1]);
+			$size = getimagesize($hooksURL);
+			imagecopy($imgOut,$hooks,$x-2,$y,0,0, $size[0],$size[1]);
+			
+			if ($showlevel)
+			{
+				$level = $this->level;
+				if ($level < 10)
+				{
+					$levelIMG = imagecreatefrompng($levelURL.$level.".png");
+				} 
+				else 
+				{
+					$digit[1] = substr($level,0,1);
+					$digit[2] = substr($level,1,1);
+					$digit1 = imagecreatefrompng($levelURL.$digit[1].".png");
+					$digit2 = imagecreatefrompng($levelURL.$digit[2].".png");
+					$digitwidth = imagesx($digit1);
+					$digitheight = imagesy($digit1);
+					$levelIMG = imagecreatetruecolor($digitwidth*2,$digitheight);
+					$trans_colour = imagecolorallocatealpha($levelIMG, 0, 0, 0, 127);
+					imagefill($levelIMG, 0, 0, $trans_colour);
+					imagesavealpha($levelIMG,true);
+					imagealphablending($levelIMG, true);
+					// Last image added first because of the shadow need to be behind first digit
+					imagecopy($levelIMG,$digit2,$digitwidth-12,0,0,0, $digitwidth, $digitheight);
+					imagecopy($levelIMG,$digit1,12,0,0,0, $digitwidth, $digitheight);
+				}
+				$size[0] = imagesx($levelIMG);
+				$size[1] = imagesy($levelIMG);
+				$levelemblem = imagecreatefrompng($ringURL);
+				imagesavealpha($levelemblem,true);
+				imagealphablending($levelemblem, true);
+				imagecopy($levelemblem,$levelIMG,(215/2)-($size[0]/2),(215/2)-($size[1]/2),0,0,$size[0],$size[1]);
+				imagecopyresampled($imgOut, $levelemblem, 143, 150,0,0, 215/3, 215/3, 215, 215);
+			}
+			
+			if ($width > 1 AND $width < 215)
+			{
+				imagecopyresampled($finalimg, $imgOut, 0, 0, 0, 0, $width, $height, 215, 230);
+			} 
+			else 
+			{
+				$finalimg = $imgOut;
+			}
+			
+			imagepng($finalimg,$imgfile);
+		
+		}
+		return $outputpath;
+	}
+	
 
 	/**
 	 * returns a member listing for this guild

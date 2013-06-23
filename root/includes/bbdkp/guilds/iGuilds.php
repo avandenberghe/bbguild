@@ -1,5 +1,5 @@
 <?php
-namespace bbdkp;
+
 /**
  * @package 	bbDKP
  * @link http://www.bbdkp.com
@@ -8,7 +8,7 @@ namespace bbdkp;
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.2.9
  */
-
+namespace bbdkp;
 
 /**
  * @ignore
@@ -17,6 +17,7 @@ if (! defined('IN_PHPBB'))
 {
 	exit();
 }
+require_once("{$phpbb_root_path}includes/bbdkp/iAdmin.$phpEx");
 
 /**
  * Guild
@@ -25,28 +26,31 @@ if (! defined('IN_PHPBB'))
  *
  * @package 	bbDKP
  */
-interface iGuilds 
+interface iGuilds extends \bbdkp\iAdmin
 {
 
 	/**
 	 * gets guild from database
 	 */
-	function Get();
+	function Getguild();
 
 	/**
 	 * adds a guild to database
 	 */
-	function Make();
+	function MakeGuild();
 
 	/**
 	 * deletes a guild from database
 	 */
-	function Delete();
+	function Guildelete();
 
 	/**
-	 * updates a guild to database
+	 * 
+	 * updates a guild to database. If $params array is filled then use it to get additional info from public API
+	 * @param Guilds $old_guild
+	 * @param array $params
 	 */
-	function Update($old_guild);
+	function Guildupdate($old_guild, $params);
 
 	/**
 	 * lists all members for this guild

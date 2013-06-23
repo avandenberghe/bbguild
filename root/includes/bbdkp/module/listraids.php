@@ -112,7 +112,7 @@ $sort_order = array
     4 => array('raid_value desc', 'raid_value')
 );
  
-$current_order = switch_order($sort_order);
+$current_order = $this->switch_order($sort_order);
 //get total nr of raids 
 $sql_array = array(
     'SELECT'    => 	' COUNT(*) as numraids  ', 

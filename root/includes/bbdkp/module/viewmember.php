@@ -616,7 +616,7 @@ $sort_order = array(
 	0 => array('event_name', 'event_name desc'),
 	1 => array('raid_count desc', 'raid_count')
 );
-$current_order = switch_order($sort_order);
+$current_order = $this->switch_order($sort_order);
 
 // Since we can't sort in SQL for this case, we have to sort
 // by the array

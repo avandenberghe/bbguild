@@ -93,7 +93,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
 		if (( int ) $a > 0)
 		{
 			//uh oh that race exists
-			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_FAILED'], $id ) . $this->link, E_USER_WARNING );
+			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_FAILED'], $this->race_id  ) . $this->link, E_USER_WARNING );
 		}
 		$db->sql_freeresult ( $resultr );
 		$data = array (
@@ -143,7 +143,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
 				'WHERE' => 'm.member_race_id = r.race_id
 		    			and r.race_id =  ' .  $this->race_id . "
 		    			and r.game_id = m.game_id
-		    			and r.game_id = '" . $game_id . "'" );
+		    			and r.game_id = '" . $this->game_id . "'" );
 		
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query ( $sql );

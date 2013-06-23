@@ -140,7 +140,7 @@ $sort_order = array (
 		4 => array ('raid_decay asc', 'raid_decay desc' ),
 		5 => array ('total asc', 'total desc' ),
 );
-$current_order = switch_order ($sort_order);	
+$current_order = $this->switch_order ($sort_order);	
 $sql_array = array(
 	'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, c.class_id, 
 					m.member_gender_id, a.image_female, a.image_male, 
@@ -291,7 +291,7 @@ $isort_order = array (
 	2 => array ('i.item_value ', 'item_value desc' ),
 );
 				
-$icurrent_order = switch_order ($isort_order, 'ui');
+$icurrent_order = $this->switch_order ($isort_order, 'ui');
 		
 // item selection
 $sql_array = array(

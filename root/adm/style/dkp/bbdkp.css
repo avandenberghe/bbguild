@@ -15,7 +15,7 @@ color : #00BB55;
 color : #FF3344;
 }
 .highlight {
-background-color : #FFFFDD;
+background-color : #717474;
 }
 .ro {
 background-color : #F1F1EE;
@@ -278,6 +278,13 @@ padding-top : 4px !important ;
 text-align : center;
 text-shadow : 0 1px 1px rgba(0, 0, 0, 0.3);
 }
+
+.button4
+{
+	color : #DC143C !important;	
+}
+
+
 #menu {
 float : left;
 width : 20%;

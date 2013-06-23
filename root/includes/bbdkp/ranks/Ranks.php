@@ -22,6 +22,13 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
 
+// Include the base class
+if (!class_exists('\bbdkp\Guilds'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+}
+
+
 /**
  * Ranks
  * 
@@ -30,7 +37,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
  * @package 	bbDKP
  * 
  */
- class Ranks implements iRanks
+ class Ranks extends \bbdkp\Guilds implements iRanks
 {
 	public $RankName;
 	public $RankId;
@@ -49,7 +56,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
 		$this->RankSuffix='';
 	}
 
-	public function Get()
+	public function Getrank()
 	{
 	    global $user, $db, $config, $phpEx, $phpbb_root_path;
 	    $sql = 'SELECT rank_name, rank_hide, rank_prefix, rank_suffix
@@ -71,7 +78,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
 	 * adds a rank
 	 * @see \bbdkp\iRanks::Make()
 	 */
-	public function Make()
+	public function Makerank()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -109,19 +116,14 @@ require_once ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
 		$db->sql_query('INSERT INTO ' . MEMBER_RANKS_TABLE . $query);
 		// log the action
 
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
+		
 		$log_action = array(
 				'header' => 'L_ACTION_RANK_ADDED' ,
 				'id' => (int)  $this->RankId ,
 				'L_NAME' => $this->RankName ,
 				'L_ADDED_BY' => $user->data['username']);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
@@ -153,7 +155,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
 	 * (non-PHPdoc)
 	 * @see \bbdkp\iRanks::Delete()
 	 */
-	public function Delete($override)
+	public function Rankdelete($override)
 	{
 		global $user, $db, $phpEx, $phpbb_root_path;
 
@@ -171,7 +173,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
 			$result = $db->sql_query($sql);
 			if ((int) $db->sql_fetchfield('rankcount') >= 1)
 			{
-				trigger('Cannot delete rank ' . $this->RankId . '. There are members with this rank in guild . ' . $this->GuildId, E_USER_WARNING);
+				\trigger_error('Cannot delete rank ' . $this->RankId . '. There are members with this rank in guild . ' . $this->GuildId, E_USER_WARNING);
 			}
 		}
 
@@ -208,7 +210,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
 	 * (non-PHPdoc)
 	 * @see \bbdkp\iRanks::Update()
 	 */
-	public function Update(Ranks $old_rank)
+	public function Rankupdate(Ranks $old_rank)
 	{
 
 		global $user, $db, $phpEx, $phpbb_root_path;
@@ -268,6 +270,72 @@ require_once ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
 		
 		$result = $db->sql_query($sql);
 		return $result;
+		
+	}
+	
+	
+	
+	/**
+	 * Updates the Ranks from Armory
+	 * 
+	 * @param unknown_type $memberdata
+	 * @param unknown_type $guild_id
+	 */
+	public function ArmoryUpdate($memberdata, $guild_id, $region)
+	{
+		global $user, $db, $phpEx, $phpbb_root_path;
+		
+		$newranks = array();
+		
+		//init the rank counts per rank
+		foreach ( $memberdata as $new )
+		{
+			$newranks[$new['rank']] = 0;
+		}
+		
+		//count the number of members per rank
+		foreach ( $memberdata as $new )
+		{
+			$newranks[$new['rank']] += 1;
+		}
+		
+		ksort($newranks);
+		
+		/* GET OLD RANKS */
+		$sql = ' select rank_id from ' . MEMBER_RANKS_TABLE . ' WHERE
+				 guild_id =  ' . (int) $guild_id . ' and rank_id < 90 order by rank_id ASC';
+		$result = $db->sql_query ($sql);
+		$oldranks = array ();
+		
+		while ($row = $db->sql_fetchrow ($result))
+		{
+			$oldranks [(int) $row['rank_id']] = 0;
+		}
+		$db->sql_freeresult ( $result );
+		$result = $db->sql_query ($sql);
+		while ($row = $db->sql_fetchrow ($result))
+		{
+			$oldranks [(int) $row['rank_id']] += 1;
+		}
+		$db->sql_freeresult ( $result );
+		
+		// get the new ranks not yet created
+		$diff = array_diff_key($newranks, $oldranks);
+		
+		foreach($diff as $key => $count)
+		{
+			$newrank = new \bbdkp\Ranks();
+			$newrank->RankName = 'Rank'.$key;
+			$newrank->RankId = $key; 
+			$newrank->GuildId = $guild_id;
+			$newrank->RankHide = 0; 
+			$newrank->RankPrefix = ''; 
+			$newrank->RankSuffix = ''; 
+			$newrank->Makerank();
+			unset($newrank); 
+		}
+		
+		
 		
 	}
 	

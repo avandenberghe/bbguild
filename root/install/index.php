@@ -1,6 +1,6 @@
 <?php
 /**
- * .install
+ * @package install
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -22,7 +22,7 @@ $user->setup();
 $user->add_lang ( array ('mods/dkp_admin'));
 
 $error= array();
-// anything lower than php 5.3 not supported (we use namespaces)
+// anything lower than php 5.3.3 not supported (we use namespaces)
 if (version_compare(PHP_VERSION, '5.3.3') < 0)
 {
 	$error[] = 'You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.3.2 or higher before trying to install bbDKP. <br />';
@@ -40,11 +40,22 @@ switch ($db->sql_layer)
 			$error[] = "You are running an unsupported Mysql version ($dbversion) . Please upgrade to Mysql 4.1 or higher before trying to install bbDKP. <br />";
 		}
 		break;
-	// Untested !
+		// Untested !
 	case 'firebird':
 	case 'sqlite':
 		$error[] = "You are running phpbb on an untested dbms version, please upgrade to a supported dbms (mysql, postgres, oracle, or mssql) to install the bbDKP Mod. <br />";
 		break;
+}
+
+
+if (!function_exists('curl_init'))
+{
+	$error[] = $user->lang['CURL_REQUIRED'] . '<br />' ; 
+}
+
+if (!function_exists('json_decode'))
+{
+	$error[] = $user->lang['JSON_REQUIRED'] . '<br />' ; 
 }
 
 if(count($error) > 0)
@@ -571,9 +582,9 @@ $versions = array(
           array(
            		  // guildless -> do show on roster
                   array('id'  => 0,
-                      'name' => '(None)',
-                      'realm' => utf8_normalize_nfc(request_var('realm', '', true)),
-                      'region' => request_var('region', ''),
+                      'name' => 'Guildless',
+                      'realm' => ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default'),
+                      'region' => (isset($_POST['region']) ? request_var('region', ' ') : 'us'),
                       'roster' => 1
                   		),
 
@@ -581,7 +592,7 @@ $versions = array(
                   array('id'  => 1,
                       'name' => ( request_var('guildtag', ' ')== ' ' ? utf8_normalize_nfc(request_var('guildtag', ' ', true)) : 'default'),
                       'realm' => ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default'),
-                      'region' => (isset($_POST['region']) ? request_var('region', ' ') : 'EU'),
+                      'region' => (isset($_POST['region']) ? request_var('region', ' ') : 'us'),
                   	  'roster' => 1 ),
                   )
            ),
@@ -1024,12 +1035,24 @@ $versions = array(
      ),
 
      '1.2.9' => array(
-
+	 // oop release, now requires 553
      		'config_update' => array(
 					// roster layout: main parameter for steering roster layout
      				array('bbdkp_roster_layout', '0', true),
      		),
-
+     		
+     		'table_column_add' => array(
+     				array($table_prefix . 'bbdkp_memberlist', 'title' , array('VCHAR_UNI:255', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'level' ,array('UINT', 0) ),
+     				array($table_prefix . 'bbdkp_memberguild', 'members' ,array('UINT', 0)),
+     				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints' ,array('UINT', 0)),
+     				array($table_prefix . 'bbdkp_memberguild', 'battlegroup' ,array('VCHAR:20', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'guildarmoryurl' ,array('VCHAR:255', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'emblemurl' ,array('VCHAR:255', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'game_id' ,array('VCHAR:10', '')),
+     		),
+     		
+     		
      		'custom' => array(
      			'tableupdates',
      			'gameinstall',
@@ -1321,7 +1344,6 @@ function tableupdates($action, $version)
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
 
-
 					break;
 
 
@@ -1466,12 +1488,16 @@ function regionoptions($selected_value, $key)
 {
 	global $user;
 
-    $regions = array(
-    	'EU'     			=> "European region",
-    	'US'     			=> "US region",
-    );
+	$regions = array(
+		'eu' => $user->lang['REGIONEU'],
+		'us' => $user->lang['REGIONUS'],
+		'tw' => $user->lang['REGIONTW'],
+		'kr' => $user->lang['REGIONKR'],
+		'cn' => $user->lang['REGIONCN'],
+		'sea' => $user->lang['REGIONSEA'],
+	);
 
-    $default = 'US';
+    $default = 'us';
 	$pass_char_options = '';
 	foreach ($regions as $key => $region)
 	{
