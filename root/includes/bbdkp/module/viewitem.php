@@ -25,7 +25,7 @@ if (isset($_GET[URI_ITEM]) )
         2 => array('i.item_value desc', 'i.item_value')
     );
 
-    $current_order = switch_order($sort_order);
+    $current_order = $this->switch_order($sort_order);
     $item_id = request_var(URI_ITEM, 0);
     $sql = 'SELECT item_name, item_gameid FROM ' . RAID_ITEMS_TABLE . " WHERE item_id = " . $item_id ;
     $result = $db->sql_query($sql);

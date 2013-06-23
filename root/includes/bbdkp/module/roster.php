@@ -379,7 +379,7 @@ class roster
 		    6 => array('m.member_achiev', 'm.member_achiev  desc')
 		);
 		
-		$this->current_order = switch_order($sort_order);
+		$this->current_order = $this->switch_order($sort_order);
 		
 		if($this->mode=='class')
 		{

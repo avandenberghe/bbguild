@@ -21,7 +21,10 @@ if (! defined('EMED_BBDKP'))
 		'mods/dkp_admin'));
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
-
+if (!class_exists('Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+}
 /**
  * This acp class manages point settings
  *

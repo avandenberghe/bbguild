@@ -120,7 +120,7 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
 	    1 => array('event_value desc', 'event_dkpid, event_value desc')
 	);
 	
-	$current_order[$pool['dkpsys_id']] = switch_order($sort_order[$pool['dkpsys_id']]);
+	$current_order[$pool['dkpsys_id']] = $this->switch_order($sort_order[$pool['dkpsys_id']]);
 
 	$start = request_var('pool'. $pool['dkpsys_id'], 0);
 	$events_result = $db->sql_query($sql);

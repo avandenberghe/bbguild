@@ -192,7 +192,8 @@ function classracestateChanged()
 
   <dl>
     <dt><label for="member_name">{L_NAME}:</label></dt>
-    <dd><input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" /></dd>
+    <dd><input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" /> {TITLE_NAME}
+    </dd>
   </dl>
    
  <dl>
@@ -202,9 +203,13 @@ function classracestateChanged()
 
  <dl>
     <dt><label for="member_level">{L_LEVEL}:</label></dt>
-		<dd><input type="text" name="member_level" id="member_level" size="20" maxlength="3" value="{MEMBER_LEVEL}" class="input" /></dd>
+		<dd><input type="text" name="member_level" id="member_level" size="5" maxlength="3" value="{MEMBER_LEVEL}" class="input" /></dd>
  </dl> 
 
+<dl>
+    <dt><label for="member_level">{L_ACHIEV}:</label></dt>
+		<dd><input type="text" name="member_achiev" id="member_achiev" size="6" maxlength="6" value="{MEMBER_ACHIEV}" class="input" /></dd>
+</dl> 
  
 <dl>
 <dt><label for="member_guild_id">{L_GUILD}:</label></dt>
@@ -280,9 +285,6 @@ function classracestateChanged()
 		</a>
 		<input type="text" name="member_armorylink" size="80%" maxlength="300" value="{MEMBER_URL}" class="input" />
 		<br/>
-		<!-- IF S_CAN_GENERATE_ARMORY -->
-		<input type="submit" name="generate_armorylink" value="{L_GENERATE_ARMORY_URL}" class="button2" />
-		<!-- ENDIF -->
 		</dd>
 		
    </dd>

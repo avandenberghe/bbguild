@@ -20,7 +20,10 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang ( array ('mods/dkp_admin' ));
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
-
+if (!class_exists('Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+}
  /**
  *  This acp class manages Manual Raids
  *  
@@ -650,7 +653,7 @@ if (! defined('EMED_BBDKP'))
 				5 => array ('total desc', 'total desc' ),
 				);
 		
-		$current_order = switch_order ( $sort_order );	
+		$current_order = $this->switch_order ( $sort_order );	
 		$sql_array = array(
     		'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, m.member_gender_id, a.image_female, a.image_male, 
     						r.raid_value, r.time_bonus, r.zerosum_bonus, 
@@ -773,7 +776,7 @@ if (! defined('EMED_BBDKP'))
 				);
 				
 		// here we pass a nondefault header id to the sort function to sort the right table
-		$icurrent_order = switch_order ($isort_order, 'ui');
+		$icurrent_order = $this->switch_order ($isort_order, 'ui');
 		
 		// item selection
         $sql_array = array(
@@ -1024,7 +1027,7 @@ if (! defined('EMED_BBDKP'))
 				7 => array ('sum(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay) desc', 'sum(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay)' ),
 				);
 		
-		$current_order = switch_order ( $sort_order );		
+		$current_order = $this->switch_order ( $sort_order );		
 		$sql_array = array (
 			'SELECT' => ' sum(ra.raid_value) as raid_value, sum(ra.time_bonus) as time_value, 
 						  sum(ra.zerosum_bonus) as zs_value, sum(ra.raid_decay) as raiddecay, 

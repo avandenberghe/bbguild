@@ -140,12 +140,13 @@ $lang = array_merge($lang, array(
 'HEAL' 	=> 'Heal',
 'RECRUIT_MESSAGE' => 'We are currently looking for new members for the following classes:',
 
-//ROSTER
+//MEMBER
 'GUILDROSTER' => 'Guild Roster',
 'RANK' 		  => 'Rank',
 'CLASS' 	  => 'Class',
 'LVL' 		  => 'Level',
 'ACHIEV'	  => 'Achievements', 
+'PROFFESSION' => 'Proffessions', 
 
 //listmembers
 'ADJUSTMENT' => 'Adjustment',

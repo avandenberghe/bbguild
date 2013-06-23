@@ -22,7 +22,10 @@ if (! defined ( 'EMED_BBDKP' ))
 		'mods/dkp_admin' ) );
 	trigger_error ( $user->lang ['BBDKPDISABLED'], E_USER_WARNING );
 }
-
+if (!class_exists('Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+}
 /**
  * This class manages member DKP
  * 
@@ -195,7 +198,7 @@ if (! defined ( 'EMED_BBDKP' ))
 					$sort_order [15] = array ('pr desc', 'pr' );
 				}
 				
-				$current_order = switch_order ( $sort_order );
+				$current_order = $this->switch_order ( $sort_order );
 				$previous_data = '';
 				$sort_index = explode ( '.', $current_order ['uri'] ['current'] );
 				$previous_source = preg_replace ( '/( (asc|desc))?/i', '', $sort_order [$sort_index [0]] [$sort_index [1]] );

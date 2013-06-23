@@ -28,18 +28,47 @@ class Admin implements \bbdkp\iAdmin
     public $time = 0;
     public $bbtips = false;
     public $games;
-
+    public $regions;
+    public $languagecodes;
+    
 	public function __construct()
 	{
 		global $user, $phpbb_root_path, $phpEx, $config, $user;
 
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
+		
 		if(!defined("EMED_BBDKP"))
-	    {
-	        trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
-	    }
-
+		{
+			trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
+		}
+				
+		// Check for required extensions
+		if (!function_exists('curl_init'))
+		{
+			trigger_error($user->lang['CURL_REQUIRED'], E_USER_WARNING);
+		
+		}
+		
+		if (!function_exists('json_decode'))
+		{
+			trigger_error($user->lang['JSON_REQUIRED'], E_USER_WARNING);
+		}
+		
+		$this->regions = array(
+				'eu' => $user->lang['REGIONEU'],
+				'us' => $user->lang['REGIONUS'],
+				'tw' => $user->lang['REGIONTW'],
+				'kr' => $user->lang['REGIONKR'],
+				'cn' => $user->lang['REGIONCN'],
+				'sea' => $user->lang['REGIONSEA'],
+				);
+		
+		$this->languagecodes = array(
+				'de' => $user->lang['LANG_DE'] ,
+				'en' => $user->lang['LANG_EN'] ,
+				'fr' => $user->lang['LANG_FR']);
+				
 	    $this->games = array (
 			'wow' 	=> $user->lang ['WOW'],
 			'lotro' => $user->lang ['LOTRO'],
@@ -56,11 +85,10 @@ class Admin implements \bbdkp\iAdmin
 	    	'tera' 	=> $user->lang ['TERA'],
 	    	'gw2' 	=> $user->lang ['GW2'],
 	    );
-
+	    
 	    $boardtime = array();
 	    $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
 	    $this->time = $boardtime[0];
-	    $this->fv = new Form_Validate;
 
 	    if (isset($config['bbdkp_plugin_bbtips_version']))
 	    {
@@ -103,136 +131,141 @@ class Admin implements \bbdkp\iAdmin
 	 * @param char $loud default false
 	 * @return array response
 	 */
-  public function curl($url, $return_Server_Response_Header = false, $loud= false)
+    
+    
+    /**
+     * (non-PHPdoc)
+     * @see \bbdkp\iAdmin::curl()
+     */
+  	public function curl($url, $return_Server_Response_Header = false, $loud= false)
 	{
-		$errmsg1= '';
-		$errmsg2= '';
-		$errmsg3= '';
-		$errstrfsk='';
-		$read_phperror=false;
-		$xml_data= '';
-
-	    if ( function_exists ( 'curl_init' ))
+		if ( function_exists ( 'curl_init' ))
 		{
 			 /* Create a CURL handle. */
 			if (($curl = curl_init($url)) === false)
 			{
 				trigger_error('curl_init Failed' , E_USER_WARNING);
 			}
-
-			$useragent = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:15.0) Gecko/20100101 Firefox/15.0';
-
-			@curl_setopt ( $curl, CURLOPT_USERAGENT, $useragent );
-
-			@curl_setopt ( $curl, CURLOPT_URL, $url );
-
-			if ($return_Server_Response_Header == true)
-			{
-			    // only for html, leave this default false if you want xml (like from armory or wowhead items)
-    			@curl_setopt ( $curl, CURLOPT_HEADER, 1);
-			}
-			else
-			{
-			    // only for html, leave this default false if you want xml (like from armory or wowhead items)
-    			@curl_setopt ( $curl, CURLOPT_HEADER, 0);
-			}
-
-
-			curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, false);
-			curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, false);
-
-			 // only for html, leave this default false if you want xml (like from armory or wowhead items)
-			$headers = array(
-				'Accept: text/xml,application/xml,application/xhtml+xml',
-				'Accept-Charset: utf-8,ISO-8859-1'
-				);
-			@curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
-
-			// if safemode or openbasedir is on then no redirection is possible.
-			// the wowapi does not need redirection at this point so we don't really need it.
-			if (!(ini_get("safe_mode") || ini_get("open_basedir")))
-			{
-			    @curl_setopt($curl, CURLOPT_FOLLOWLOCATION, true);
-			}
-
-			curl_setopt ( $curl, CURLOPT_TIMEOUT, 30 );
-
-			curl_setopt($curl, CURLOPT_VERBOSE,	false);
-
+			
+			// set options
+			curl_setopt_array($curl, array(
+				CURLOPT_RETURNTRANSFER => 1,
+				CURLOPT_URL => $url, 
+				CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:15.0) Gecko/20100101 Firefox/15.0', 
+				CURLOPT_SSL_VERIFYHOST => false,
+				CURLOPT_SSL_VERIFYPEER => false, 
+				CURLOPT_TIMEOUT => 30, 
+				CURLOPT_VERBOSE => false, 
+				CURLOPT_HEADER => false, 
+			));
+			
+			//@todo : setup authentication keys
+			
 			// Execute
-			$response	    = curl_exec($curl);
-			$headers		= curl_getinfo($curl);
-
+			$response = curl_exec($curl);
+			$headers = curl_getinfo($curl); 
+			$error = 0;
+			
+			$data = array(
+					'response'		    => json_decode($response, true),
+					'response_headers'  => (array) $headers,
+					'error'				=> '',
+			);
+			
 			//errorhandler
-			if (curl_errno ( $curl ))
+			if (!$response)
 			{
-				$errnum = curl_errno ($curl);
+				$error = curl_errno ($curl);
 				/*
-                      CURLE_OK = 0,
-                      CURLE_UNSUPPORTED_PROTOCOL,     1
-                      CURLE_FAILED_INIT,              2
-                      CURLE_URL_MALFORMAT,            3
-                      CURLE_URL_MALFORMAT_USER,       4 - NOT USED
-                      CURLE_COULDNT_RESOLVE_PROXY,    5
-                      CURLE_COULDNT_RESOLVE_HOST,     6
-                      CURLE_COULDNT_CONNECT,          7
-                      CURLE_FTP_WEIRD_SERVER_REPLY,   8
-                    */
-				switch ($errnum)
+				 CURLE_OK = 0,
+				CURLE_UNSUPPORTED_PROTOCOL,     1
+				CURLE_FAILED_INIT,              2
+				CURLE_URL_MALFORMAT,            3
+				CURLE_URL_MALFORMAT_USER,       4 - NOT USED
+				CURLE_COULDNT_RESOLVE_PROXY,    5
+				CURLE_COULDNT_RESOLVE_HOST,     6
+				CURLE_COULDNT_CONNECT,          7
+				CURLE_FTP_WEIRD_SERVER_REPLY,   8
+				*/
+				switch ($error)
 				{
-				    case "0" :
-				         $read_phperror = false;
-
 					case "28" :
-				        $read_phperror = true;
-					    $errmsg1 = 'cURL error :' . $url . ": No response after 30 second timeout : err " . $errnum . "  ";
+						$data['error'] = 'cURL error :' . $url . ": No response after 30 second timeout : err " . $error . "  ";
 						break;
 					case "1" :
-				        $read_phperror = true;
-				        $errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : UNSUPPORTED_PROTOCOL ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : UNSUPPORTED_PROTOCOL ";
 						break;
 					case "2" :
-   				        $read_phperror = true;
-						$errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : FAILED_INIT ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : FAILED_INIT ";
 						break;
 					case "3" :
-   				        $read_phperror = true;
-					    $errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : URL_MALFORMAT ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : URL_MALFORMAT ";
 						break;
 					case "5" :
-   				        $read_phperror = true;
-						$errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : COULDNT_RESOLVE_PROXY ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_RESOLVE_PROXY ";
 						break;
 					case "6" :
-   				        $read_phperror = true;
-					    $errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : COULDNT_RESOLVE_HOST ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_RESOLVE_HOST ";
 						break;
 					case "7" :
-   				        $read_phperror = true;
-					    $errmsg1 = 'cURL error :' . $url . " : error " . $errnum . " : COULDNT_CONNECT ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_CONNECT ";
 				}
 			}
 
+			
+			
+			if (isset($data['response_headers']['http_code']))
+			{
+				switch ($data['response_headers']['http_code'] )
+				{
+					case 400:
+						$data['error'] .= $user->lang['WOWAPIERR400'] . ': ' . $data['response']['reason'];
+						break;
+					case 401:
+						$data['error'] .= $user->lang['WOWAPIERR401'] . ': ' . $data['response']['reason'];
+						break;
+					case 403:
+						$data['error'] .= $user->lang['WOWAPIERR403'] . ': ' . $data['response']['reason'];
+						break;
+					case 404:
+						$data['error'] .= $user->lang['WOWAPIERR404'] . ': ' . $data['response']['reason'];
+						break;
+					case 500:
+						$data['error'] .= $user->lang['WOWAPIERR500'] . ': ' . $data['response']['reason'];
+						break;
+					case 501:
+						$data['error'] .= $user->lang['WOWAPIERR501'] . ': ' . $data['response']['reason'];
+						break;
+					case 502:
+						$data['error'] .= $user->lang['WOWAPIERR502'] . ': ' . $data['response']['reason'];
+						break;
+					case 503:
+						$data['error'] .= $user->lang['WOWAPIERR503'] . ': ' . $data['response']['reason'];
+						break;
+					case 504:
+						$data['error'] .= $user->lang['WOWAPIERR504'] . ': ' . $data['response']['reason'];
+						break;
+				}
+			}
+				
 			//close conection
 			curl_close ($curl);
 		}
-
+		
 		//report errors?
-		if ($loud == true && $read_phperror == true)
+		if ($loud == true && $data['errnum'] != 0)
 		{
-	         trigger_error($errmsg1 . '<br />' . $errmsg2 . '<br />' . $errmsg3 , E_USER_WARNING);
+	         trigger_error($data['response']['error'], E_USER_WARNING);
+	         return false;
 		}
 
-		if ($this->errno)
+		if ($data['error'] != '')
 		{
-		    return false;
+		   trigger_error($data['error']);
 		}
 		else
 		{
-		    return array(
-		            'response'		    => (array) json_decode($response, true),
-		            'response_headers'  => $headers,
-		    );
+			return $data['response'];
 		}
 
 	}
