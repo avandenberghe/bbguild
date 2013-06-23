@@ -99,25 +99,25 @@ class WowAPI
 		switch ($API)
 		{
 			case 'realm':
-				if (!class_exists('Realm')) 
+				if (!class_exists('\bbdkp\Realm')) 
 				{
 					require($phpbb_root_path . "includes/bbdkp/wowapi/API/Realm.$phpEx");
 				}
-				$this->Realm = new Realm($region);
+				$this->Realm = new \bbdkp\Realm($region);
 				break;
 			case 'guild':
-				if (!class_exists('Guild')) 
+				if (!class_exists('\bbdkp\Guild')) 
 				{
 					require($phpbb_root_path . "includes/bbdkp/wowapi/API/Guild.$phpEx");
 				}				
-				$this->Guild = new Guild($region);
+				$this->Guild = new \bbdkp\Guild($region);
 				break;
 			case 'character':
-				if (!class_exists('Character')) 
+				if (!class_exists('\bbdkp\Character')) 
 				{
 					require($phpbb_root_path . "includes/bbdkp/wowapi/API/Character.$phpEx");
 				}				
-				$this->Character = new Character($region);
+				$this->Character = new \bbdkp\Character($region);
 				break;
 				
 		}

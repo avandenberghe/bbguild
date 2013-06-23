@@ -43,6 +43,7 @@ if (! defined('EMED_BBDKP'))
 /**
  * Resource skeleton
  * 
+ * @package   bbDKP-WoWAPI
  * @throws ResourceException If no methods are defined.
  */
 abstract class Resource extends \bbdkp\Admin

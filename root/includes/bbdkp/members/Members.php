@@ -289,11 +289,15 @@ if (!class_exists('\bbdkp\Admin'))
 			if($this->game_id =='wow')
 			{
 				$this->characterData = unserialize($row['characterinfo']);
-				foreach($this->characterData['titles'] as $key => $title)
+				
+				if (isset($this->characterData['titles']))
 				{
-					if (isset($title['selected']))
+					foreach($this->characterData['titles'] as $key => $title)
 					{
-						$this->member_title = $title['name'];
+						if (isset($title['selected']))
+						{
+							$this->member_title = $title['name'];
+						}
 					}
 				}
 			}
@@ -510,11 +514,13 @@ if (!class_exists('\bbdkp\Admin'))
 		{
 			case 'wow':
 				$this->Armory_get();
+				break;
 			case 'aion':
 				if(trim($this->member_portrait_url) == '')
 				{
 					$this->member_portrait_url = $this->generate_portraitlink();
 				}
+				break;
 		}
 		
 		// Get first and last raiding dates from raid table.

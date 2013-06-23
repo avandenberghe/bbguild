@@ -139,14 +139,7 @@ class Admin implements \bbdkp\iAdmin
      */
   	public function curl($url, $return_Server_Response_Header = false, $loud= false)
 	{
-		$errmsg1= '';
-		$errmsg2= '';
-		$errmsg3= '';
-		$errstrfsk='';
-		$read_phperror=false;
-		$xml_data= '';
-
-	    if ( function_exists ( 'curl_init' ))
+		if ( function_exists ( 'curl_init' ))
 		{
 			 /* Create a CURL handle. */
 			if (($curl = curl_init($url)) === false)

@@ -26,7 +26,7 @@
 	can optionally be passed to indicate that one or more of the optional datasets is to be retrieved. Those additional 
 	fields are listed in the subsection titled "Optional Fields".
  */
-
+namespace bbdkp;
 /**
 * @ignore
 */
@@ -42,9 +42,10 @@ if (!class_exists('Resource'))
 
 /**
  * Guild resource.
- *
+ * @package   bbDKP-WoWAPI
+ * 
  */
-class Guild extends Resource 
+class Guild extends \bbdkp\Resource 
 {
    
 	/**

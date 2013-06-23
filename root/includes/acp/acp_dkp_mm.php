@@ -41,7 +41,7 @@ if (!class_exists('\bbdkp\Members'))
 }
 
 //include the guilds class
-if (!class_exists('\bbdkp\Guild'))
+if (!class_exists('\bbdkp\Guilds'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
@@ -95,7 +95,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 				$show_all = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
 
-				$sql = 'SELECT id, name, realm, region, roster FROM ' . GUILD_TABLE . ' ORDER BY ' . $current_order['sql'];
+				$sql = 'SELECT id, name, realm, region, roster, game_id FROM ' . GUILD_TABLE . ' ORDER BY ' . $current_order['sql'];
 				if (! ($guild_result = $db->sql_query($sql)))
 				{
 					trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
@@ -104,13 +104,14 @@ class acp_dkp_mm extends \bbdkp\Admin
 				while ($row = $db->sql_fetchrow($guild_result))
 				{
 					$guild_count ++;
-					$listguild = new \bbdkp\Guild($row['id']);
+					$listguild = new \bbdkp\Guilds($row['id']);
 
 					$template->assign_block_vars('guild_row', array(
 						'ID' => $listguild->guildid ,
 						'NAME' => $listguild->name ,
 						'REALM' => $listguild->realm ,
 						'REGION' => $listguild->region ,
+						'GAME' => $listguild->game_id ,
 						'MEMBERCOUNT' => $listguild->membercount ,
 						'SHOW_ROSTER' => ($listguild->showroster == 1 ? 'yes' : 'no') ,
 						'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild&amp;" . URI_GUILD . '=' . $listguild->guildid)));
@@ -149,31 +150,9 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$this->url_id = request_var(URI_GUILD, 0);
 				}
 
-				$updateguild = new \bbdkp\Guild($this->url_id);
+				$updateguild = new \bbdkp\Guilds($this->url_id);
 
-				if ($updateguild->guildid != 0)
-				{
-					// we have a GET
-					$update = true;
-					foreach ($this->regions as $key => $regionname)
-					{
-						$template->assign_block_vars('region_row', array(
-							'VALUE' => $key ,
-							'SELECTED' => ($updateguild->region == $key) ? ' selected="selected"' : '' ,
-							'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
-					}
-				}
-				else
-				{
-					// NEW PAGE
-					foreach ($this->regions as $key => $regionname)
-					{
-						$template->assign_block_vars('region_row', array(
-							'VALUE' => $key ,
-							'SELECTED' => '' ,
-							'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
-					}
-				}
+
 
 				$add = (isset($_POST['add'])) ? true : false;
 				$submit = (isset($_POST['update'])) ? true : false;
@@ -191,6 +170,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$updateguild->name = utf8_normalize_nfc(request_var('guild_name', '', true));
 					$updateguild->realm = utf8_normalize_nfc(request_var('realm', '', true));
 					$updateguild->region = request_var('region_id', '');
+					$updateguild->game_id = request_var('game_id', '');
+					
 					$updateguild->showroster = (isset($_POST['showroster'])) ? true : false;
 					
 					if ($updateguild->Make() > 0)
@@ -217,6 +198,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$updateguild->Get();
 					$old_guild = $updateguild;
 
+					$updateguild->game_id = request_var('game_id', '');
 					$updateguild->name = utf8_normalize_nfc(request_var('guild_name', ' ', true));
 					$updateguild->realm = utf8_normalize_nfc(request_var('realm', ' ', true));
 					$updateguild->region = request_var('region_id', ' ');
@@ -234,7 +216,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				{
 					if (confirm_box(true))
 					{
-						$deleteguild = new \bbdkp\Guild(request_var('guild_id', 0));
+						$deleteguild = new \bbdkp\Guilds(request_var('guild_id', 0));
 						$deleteguild->Get();
 						$deleteguild->Delete();
 						$success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guild_id);
@@ -251,14 +233,64 @@ class acp_dkp_mm extends \bbdkp\Admin
 					}
 				}
 
+				if ($updateguild->guildid != 0)
+				{
+					// we have a GET
+					$update = true;
+					foreach ($this->regions as $key => $regionname)
+					{
+						$template->assign_block_vars('region_row', array(
+								'VALUE' => $key ,
+								'SELECTED' => ($updateguild->region == $key) ? ' selected="selected"' : '' ,
+								'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
+					}
+					//add value to dropdown when the game config value is 1
+						foreach ($this->games as $key => $gamename)
+						{
+							if ($config['bbdkp_games_' . $key] == 1)
+							{
+								$template->assign_block_vars('game_row', array(
+										'VALUE' => $key ,
+										'SELECTED' => ($updateguild->game_id == $key) ? ' selected="selected"' : '' ,
+										'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
+							}
+					}
+						
+				}
+				else
+				{
+					// NEW PAGE
+					foreach ($this->regions as $key => $regionname)
+					{
+						$template->assign_block_vars('region_row', array(
+								'VALUE' => $key ,
+								'SELECTED' => '' ,
+								'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
+					}
+						
+					//add value to dropdown when the game config value is 1
+					foreach ($this->games as $key => $gamename)
+					{
+						if ($config['bbdkp_games_' . $key] == 1)
+						{
+							$template->assign_block_vars('game_row', array(
+									'VALUE' => $key ,
+									'SELECTED' => '' ,
+									'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
+						}
+					}
+				}
+				
 				$form_key = 'addguild';
 				add_form_key($form_key);
-
+				
+					
 				$template->assign_vars(array(
 					// Form values
-					'GUILD_ID' => $updateguild->guildid ,
-					'GUILD_NAME' => $updateguild->name ,
-					'REALM' => $updateguild->realm  ,
+					'GAME_ID'	=> $updateguild->game_id,
+					'GUILD_ID' => $updateguild->guildid,
+					'GUILD_NAME' => $updateguild->name,
+					'REALM' => $updateguild->realm,
 					'REGION' => $updateguild->region,
 					'MEMBERCOUNT' => $updateguild->membercount ,
 					'SHOW_ROSTER' => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
@@ -269,6 +301,19 @@ class acp_dkp_mm extends \bbdkp\Admin
 					// Javascript messages
 					'MSG_NAME_EMPTY' => $user->lang['FV_REQUIRED_NAME'] ,
 					'S_ADD' => (! $this->url_id) ? true : false));
+
+				// extra 
+				if($updateguild->game_id == 'wow')
+				{
+					$template->assign_vars(array(
+							'S_WOW' 	=> true, 
+							'EMBLEM'	=> $updateguild->emblempath,
+							'ARMORY'	=> $updateguild->guilarmorydurl,
+							'ACHIEV'	=> $updateguild->achievementpoints,
+					));
+				}
+				
+				
 				$this->page_title = $user->lang['ACP_MM_ADDGUILD'];
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
@@ -524,7 +569,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$db->sql_freeresult($resultg);
 				$previous_data = '';
 
-				$Guild = new \bbdkp\Guild($guild_id);
+				$Guild = new \bbdkp\Guilds($guild_id);
 
 				//get window
 				$start = request_var('start', 0, false);
@@ -680,8 +725,12 @@ class acp_dkp_mm extends \bbdkp\Admin
 						$updatemember->member_id = request_var(URI_NAMEID, 0);
 					}
 					$updatemember->Get();
-
 					$old_member = $updatemember;
+					
+					$updatemember->game_id = request_var('game_id', '');
+					$updatemember->member_class_id = request_var('member_class_id', 0);
+					$updatemember->member_race_id = request_var('member_race_id', 0);
+					
 					$updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
 					$updatemember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
 					$updatemember->member_rank_id = request_var('member_rank_id', 99);
@@ -695,7 +744,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 					$updatemember->member_achiev = request_var('member_achiev', 0);  
 					$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
-					$updatemember->member_comment = request_var('member_comment', '');
+					$updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
 					$updatemember->phpbb_user_id = request_var('phpbb_user_id', 0);
 
 					$updatemember->Update($old_member);
@@ -866,7 +915,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					{
 						$template->assign_block_vars('game_row', array(
 							'VALUE' => $gameid ,
-							'SELECTED' => ($this->member['game_id'] == $gameid) ? ' selected="selected"' : '' ,
+							'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '' ,
 							'OPTION' => $gamename));
 						$installed_games[] = $gameid;
 					}

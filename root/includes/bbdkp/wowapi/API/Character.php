@@ -58,7 +58,7 @@ if (!class_exists('\bbdkp\Resource'))
 
 /**
  * Character resource.
- *
+ * @package   bbDKP-WoWAPI
  */
 class Character extends \bbdkp\Resource
 {
@@ -89,7 +89,7 @@ class Character extends \bbdkp\Resource
 		'professions',
 		'progression',
 		'pvp',
-		'quests',
+		/*'quests',*/
 		'reputation',
 		'stats',
 		'talents',
