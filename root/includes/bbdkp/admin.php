@@ -190,25 +190,25 @@ class Admin implements \bbdkp\iAdmin
 				switch ($error)
 				{
 					case "28" :
-						$data['error'] = 'cURL error :' . $url . ": No response after 30 second timeout : err " . $errnum . "  ";
+						$data['error'] = 'cURL error :' . $url . ": No response after 30 second timeout : err " . $error . "  ";
 						break;
 					case "1" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $errnum . " : UNSUPPORTED_PROTOCOL ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : UNSUPPORTED_PROTOCOL ";
 						break;
 					case "2" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $errnum . " : FAILED_INIT ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : FAILED_INIT ";
 						break;
 					case "3" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $errnum . " : URL_MALFORMAT ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : URL_MALFORMAT ";
 						break;
 					case "5" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $errnum . " : COULDNT_RESOLVE_PROXY ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_RESOLVE_PROXY ";
 						break;
 					case "6" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $errnum . " : COULDNT_RESOLVE_HOST ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_RESOLVE_HOST ";
 						break;
 					case "7" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $errnum . " : COULDNT_CONNECT ";
+						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_CONNECT ";
 				}
 			}
 

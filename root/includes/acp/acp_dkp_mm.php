@@ -143,23 +143,27 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 				/* select data */
-				$update = false;
 
 				if (isset($_GET[URI_GUILD]))
 				{
 					$this->url_id = request_var(URI_GUILD, 0);
+					$add= false; 
+				}
+				else
+				{
+					$this->url_id = -1; 
 				}
 
 				$updateguild = new \bbdkp\Guilds($this->url_id);
 
-
-
 				$add = (isset($_POST['add'])) ? true : false;
 				$submit = (isset($_POST['update'])) ? true : false;
 				$delete = (isset($_POST['delete'])) ? true : false;
-				if ($add || $submit)
+				$getarmorymembers = (isset($_POST['armory'])) ? true : false;
+				  
+				if ($add || $submit || $getarmorymembers)
 				{
-					if (! check_form_key('addguild'))
+					if (! check_form_key('dbT2TvCZNZHjckSvbTPc'))
 					{
 						trigger_error('FORM_INVALID');
 					}
@@ -174,7 +178,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					
 					$updateguild->showroster = (isset($_POST['showroster'])) ? true : false;
 					
-					if ($updateguild->Make() > 0)
+					if ($updateguild->MakeGuild() > 0)
 					{
 						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'], $updateguild->name);
 						trigger_error($success_message . $this->link, E_USER_NOTICE);
@@ -185,17 +189,14 @@ class acp_dkp_mm extends \bbdkp\Admin
 						trigger_error($success_message . $this->link, E_USER_WARNING);
 					}
 				}
+				
+				
 
 				//updating
-				if ($submit)
+				if ($submit || $getarmorymembers)
 				{
-					if($updateguild->guildid == 0)
-					{
-						trigger_error($user->lang['ERROR_INVALID_GUILD_PROVIDED'], E_USER_WARNING);
-					}
-
 					$updateguild->guildid = $this->url_id;
-					$updateguild->Get();
+					$updateguild->Getguild();
 					$old_guild = $updateguild;
 
 					$updateguild->game_id = request_var('game_id', '');
@@ -206,19 +207,25 @@ class acp_dkp_mm extends \bbdkp\Admin
 					//@todo complete for other games
 					$updateguild->aionlegionid = 0;
 					$updateguild->aionserverid = 0;
-					$updateguild->Update($old_guild);
+					$armoryparams = array();
+					if ($getarmorymembers)
+					{
+						$armoryparams = array('members');
+					}
+					$updateguild->Guildupdate($old_guild, $armoryparams);
 
 					$success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
 					trigger_error($success_message . $this->link);
 				}
 
+					
 				if ($delete)
 				{
 					if (confirm_box(true))
 					{
 						$deleteguild = new \bbdkp\Guilds(request_var('guild_id', 0));
-						$deleteguild->Get();
-						$deleteguild->Delete();
+						$deleteguild->Getguild();
+						$deleteguild->Guildelete();
 						$success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guild_id);
 						trigger_error($success_message . adm_back_link($this->u_action), E_USER_NOTICE);
 					}
@@ -281,9 +288,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 					}
 				}
 				
-				$form_key = 'addguild';
+				$form_key = 'dbT2TvCZNZHjckSvbTPc';
 				add_form_key($form_key);
-				
 					
 				$template->assign_vars(array(
 					// Form values
@@ -295,12 +301,12 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'MEMBERCOUNT' => $updateguild->membercount ,
 					'SHOW_ROSTER' => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
 					// Language
-					'L_TITLE' => $user->lang['ACP_MM_ADDGUILD'] ,
-					'L_EXPLAIN' => $user->lang['ACP_MM_ADDGUILD_EXPLAIN'] ,
-					'L_ADD_GUILD_TITLE' => (! $this->url_id) ? $user->lang['ADD_GUILD'] : $user->lang['EDIT_GUILD'] ,
+					'L_TITLE' =>  ($this->url_id < 0 ) ? $user->lang['ACP_MM_ADDGUILD'] : $user->lang['ACP_MM_EDITGUILD'] , 
+					'L_EXPLAIN' => ($this->url_id < 0 ) ?  $user->lang['ACP_MM_ADDGUILD_EXPLAIN'] : $user->lang['ACP_MM_EDITGUILD_EXPLAIN'] ,
+					'L_ADD_GUILD_TITLE' => ($this->url_id < 0) ? $user->lang['ADD_GUILD'] : $user->lang['EDIT_GUILD'] ,
 					// Javascript messages
 					'MSG_NAME_EMPTY' => $user->lang['FV_REQUIRED_NAME'] ,
-					'S_ADD' => (! $this->url_id) ? true : false));
+					'S_ADD' => ($this->url_id < 0 ) ? true : false));
 
 				// extra 
 				if($updateguild->game_id == 'wow')
@@ -374,8 +380,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$newrank->RankHide = (isset($_POST['nhide'])) ? 1 : 0;
 					$newrank->RankPrefix = utf8_normalize_nfc(request_var('nprefix', '', true));
 					$newrank->RankSuffix = utf8_normalize_nfc(request_var('nsuffix', '', true));
-					$newrank->Make();
-
+					$newrank->Makerank();
 					$success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
 					trigger_error($success_message . $this->link);
 				}
@@ -390,7 +395,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					{
 					    $oldrank->Rankid = $rank_id;
 					    $oldrank->GuildId = $guild_id;
-					    $oldrank->Get();
+					    $oldrank->Getrank();
 
 					    $newrank->Rankid = $rank_id;
 					    $newrank->GuildId = $oldrank->GuildId;
@@ -408,7 +413,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 						// compare old with new,
 						if ($oldrank != $newrank)
 						{
-						    $newrank->Update($oldrank);
+						    $newrank->Rankupdate($oldrank);
 						}
 					}
 					$success_message = $user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
@@ -525,7 +530,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$activatemember = new \bbdkp\Members();
 					$activate_members = request_var('activate_id', array(0));
 					$member_window = request_var('hidden_member', array(0));
-					$activatemember->activate($activate_members, $member_window);
+					$activatemember->Activatemembers($activate_members, $member_window);
 					unset($activatemember);
 				}
 
@@ -695,7 +700,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$newmember->member_achiev = 0;
 					$newmember->member_armory_url = utf8_normalize_nfc(request_var('member_armorylink', '', true));
 					$newmember->phpbb_user_id = request_var('phpbb_user_id', 0);
-					$newmember->Make();
+					$newmember->Makemember();
 
 					if ($newmember->member_id > 0)
 					{
@@ -724,7 +729,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					{
 						$updatemember->member_id = request_var(URI_NAMEID, 0);
 					}
-					$updatemember->Get();
+					$updatemember->Getmember();
 					$old_member = $updatemember;
 					
 					$updatemember->game_id = request_var('game_id', '');
@@ -747,7 +752,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
 					$updatemember->phpbb_user_id = request_var('phpbb_user_id', 0);
 
-					$updatemember->Update($old_member);
+					$updatemember->Updatemember($old_member);
 
 					$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], $updatemember->member_name);
 					trigger_error($success_message . $this->link);
@@ -765,8 +770,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 						// recall hidden vars
 						$deletemember = new \bbdkp\Members();
 						$deletemember->member_id = request_var('del_member_id', 0);
-						$deletemember->Get();
-						$deletemember->Delete();
+						$deletemember->Getmember();
+						$deletemember->Deletemember();
 						$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $deletemember->member_name);
 						trigger_error($success_message . $this->link);
 					}
@@ -774,7 +779,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					{
 						$deletemember = new \bbdkp\Members();
 						$deletemember->member_id = request_var('member_id', 0);
-						$deletemember->Get();
+						$deletemember->Getmember();
 						$s_hidden_fields = build_hidden_fields(array(
 							'delete' => true ,
 							'del_member_id' => $deletemember->member_id));
@@ -799,7 +804,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				{
 					// edit mode
 					// build member array if clicked on name in listing
-					if( $editmember->Get() == false)
+					if( $editmember->Getmember() == false)
 					{
 						trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
 					}
@@ -1166,7 +1171,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$delmember = new \bbdkp\Members();
 				$delmember->member_id = $memberid;
 				$delmember->get();
-				$delmember->Delete();
+				$delmember->Deletemember();
 				unset($delmember);
 			}
 			$str_members = implode($member_names, ',');

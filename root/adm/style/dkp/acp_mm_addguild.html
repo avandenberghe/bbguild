@@ -74,9 +74,15 @@ function check_form()
 <input type="hidden" name="{URI_GUILD}" value="{GUILD_ID}" />
  {S_FORM_TOKEN}
     <!-- IF S_ADD -->
-    <input type="submit" name="add" value="{L_ADD_GUILD}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    <input type="submit" name="add" value="{L_ADD_GUILD}" class="button1" /> 
+    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
-    <input type="submit" name="update" value="{L_UPDATE_GUILD}" class="button1" /> <input type="submit"  name="delete" value="{L_DELETE_GUILD}" class="button1" />
+    <!-- IF S_WOW -->
+	<input type="submit" name="armory" value="{L_ARMORY_GUILD}" class="button1" />
+	<!-- ENDIF -->
+    
+    <input type="submit" name="update" value="{L_UPDATE_GUILD}" class="button1" /> 
+    <input type="submit"  name="delete" value="{L_DELETE_GUILD}" class="button4" />
     <!-- ENDIF -->
 </fieldset>
 

@@ -35,7 +35,7 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
-if (!class_exists('Resource')) 
+if (!class_exists('\bbdkp\Resource')) 
 {
 	require($phpbb_root_path . "includes/bbdkp/wowapi/API/Resource.$phpEx");
 }

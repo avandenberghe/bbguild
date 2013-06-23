@@ -328,7 +328,7 @@ function populate_wow()
 			'member_gender_id' => 0,
 			'member_achiev'    => 0,
 			'phpbb_user_id' 	=> $user->data['user_id'],
-			'characterinfo' 	=> '',
+			'title' 	=> '',
 	) ;
 
 	$sql_ary[] = array(
@@ -346,7 +346,7 @@ function populate_wow()
 			'member_gender_id' => 0,
 			'member_achiev'    => 0,
 			'phpbb_user_id' 	=> $user->data['user_id'],
-			'characterinfo' 	=> '',
+			'title' 	=> '',
 	) ;
 
 	$sql_ary[] = array(
@@ -364,7 +364,7 @@ function populate_wow()
 			'member_gender_id' => 0,
 			'member_achiev'    => 0,
 			'phpbb_user_id' 	=> $user->data['user_id'],
-			'characterinfo' 	=> '',
+			'title' 	=> '',
 	) ;
 	$db->sql_multi_insert ( $table_prefix . 'bbdkp_memberlist', $sql_ary );
 

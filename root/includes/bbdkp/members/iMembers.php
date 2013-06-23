@@ -32,26 +32,38 @@ interface iMembers extends \bbdkp\iAdmin
 	/**
 	 * gets member from database
 	 */
-	function Get();
+	function Getmember();
 
 	/**
-	 * adds a member to database
+	 *  inserts a new member to database
 	 * @return int member_id in case of success, 0 if false
 	 */
-	function Make();
+	function Makemember();
 
 	/**
 	 * deletes a member from database
 	 */
-	function Delete();
+	function Deletemember();
 
 	/**
 	 * updates a member to database
 	 */
-	function Update(Members $old_member);
-
-
-	function activate(array $mlist, array $mwindow);
+	function Updatemember(Members $old_member);
+	
+	/**
+	 * Calls api to pull more information
+	 * Currently only the WoW API is available
+	 *
+	 * @return object
+	 */
+	function Armory_getmember();
+	
+	/**
+	 * 
+	 * @param array $mlist
+	 * @param array $mwindow
+	 */
+	function Activatemembers(array $mlist, array $mwindow);
 
 }
 

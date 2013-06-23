@@ -288,7 +288,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					{
 						$member = new \bbdkp\Members;
 						$member->member_id = $member_id;
-						$member->Get();
+						$member->Getmember();
 						$newadjust->member_id = $member_id;
 						$newadjust->member_name = $member->member_name;
 						$member_names[] = $member->member_name;
@@ -330,7 +330,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					{
 						$oldmembers = new \bbdkp\Members;
 						$oldmembers->member_id = $member_id;
-						$oldmembers->Get();
+						$oldmembers->Getmember();
 						$oldmember_names[] = $oldmembers->member_name;
 						unset($oldmembers);
 						
@@ -360,7 +360,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						$member = new \bbdkp\Members;
 						$member->member_id = $member_id;
 						$updadjust->members_samegroupkey[] = $member_id; 
-						$member->Get();
+						$member->Getmember();
 						$updadjust->member_id = $member_id;
 						$updadjust->member_name = $member->member_name;
 						$member_names[] = $member->member_name;

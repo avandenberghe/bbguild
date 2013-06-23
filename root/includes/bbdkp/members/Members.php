@@ -180,12 +180,6 @@ if (!class_exists('\bbdkp\Admin'))
 	 */
 	public $member_title;
 
-    /**
-     * Serialised Battlenet array
-     * @var unknown_type
-     */
-    public $characterData;
-
 	/**
 	 */
 	function __construct()
@@ -207,14 +201,14 @@ if (!class_exists('\bbdkp\Admin'))
 				'gw2' 	=> $user->lang ['GW2'],
 		);
 		
-		$this->characterData = array();
+		$this->title = array();
 	}
 
 	/**
 	 * gets a member from database
 	 * @see \bbdkp\iMembers::Get()
 	 */
-	public function Get()
+	public function Getmember()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -284,23 +278,8 @@ if (!class_exists('\bbdkp\Admin'))
 			$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 			$this->race_image = (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '';
 			$this->class_image = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '';
+			$this->member_title  = $row['member_title'];
 			
-			$this->member_title = '';
-			if($this->game_id =='wow')
-			{
-				$this->characterData = unserialize($row['characterinfo']);
-				
-				if (isset($this->characterData['titles']))
-				{
-					foreach($this->characterData['titles'] as $key => $title)
-					{
-						if (isset($title['selected']))
-						{
-							$this->member_title = $title['name'];
-						}
-					}
-				}
-			}
 			return true;
 		}
 		else
@@ -354,11 +333,10 @@ if (!class_exists('\bbdkp\Admin'))
 	}
 
 	/**
-	 * inserts a new member to database
 	 * 
 	 * @see \bbdkp\iMembers::Make()
 	 */
-	public function Make()
+	public function Makemember()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -412,7 +390,7 @@ if (!class_exists('\bbdkp\Admin'))
 		switch ($this->game_id)
 		{
 			case 'wow':
-				$this->Armory_get();
+				$this->Armory_getmember();
 			case 'aion':
 				$this->member_portrait_url = $this->generate_portraitlink();
 		}
@@ -434,7 +412,7 @@ if (!class_exists('\bbdkp\Admin'))
 				'phpbb_user_id' => (int) $this->phpbb_user_id ,
 				'game_id' => (string) $this->game_id ,
 				'member_portrait_url' => (string) $this->member_portrait_url, 
-				'characterinfo' => serialize($this->characterData),
+				'member_title' => $this->member_title
 				));
 
 		$db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
@@ -459,10 +437,10 @@ if (!class_exists('\bbdkp\Admin'))
 
 
 	/**
-	 * updates a member to database
+	 * 
 	 * @see \bbdkp\iMembers::Update()
 	 */
-	public function Update(Members $old_member)
+	public function Updatemember(Members $old_member)
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -513,7 +491,7 @@ if (!class_exists('\bbdkp\Admin'))
 		switch ($this->game_id)
 		{
 			case 'wow':
-				$this->Armory_get();
+				$this->Armory_getmember();
 				break;
 			case 'aion':
 				if(trim($this->member_portrait_url) == '')
@@ -566,18 +544,11 @@ if (!class_exists('\bbdkp\Admin'))
 		        'member_portrait_url' => $this->member_portrait_url,
 		        'member_achiev' => $this->member_achiev,
 				'game_id' => $this->game_id, 
-				'characterinfo' => serialize($this->characterData)
+				'title' => $this->member_title
 				));
 
 		$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
 		        WHERE member_id= ' . $this->member_id);
-
-		// log it
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
 
 		$log_action = array(
 				'header' => 'L_ACTION_MEMBER_UPDATED' ,
@@ -597,19 +568,19 @@ if (!class_exists('\bbdkp\Admin'))
                 'L_GENDER_AFTER' => $this->member_gender_id,
                 'L_ACHIEV_AFTER' => $this->member_achiev,
 				'L_UPDATED_BY' => $user->data['username']);
-
-		$bbdkp->log_insert(array(
+	
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-		unset($bbdkp);
 	}
 
 	/**
-	 * deletes a member from database
+	 * 
+	 * 
 	 * @see \bbdkp\iMembers::Delete()
 	 */
-	public function Delete()
+	public function Deletemember()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -624,12 +595,6 @@ if (!class_exists('\bbdkp\Admin'))
 		$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . ' where member_id = ' . (int) $this->member_id;
 		$db->sql_query($sql);
 
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
 		$log_action = array(
 				'header' => sprintf($user->lang['ACTION_MEMBER_DELETED'], $this->member_name) ,
 				'L_NAME' => $this->member_name ,
@@ -637,22 +602,18 @@ if (!class_exists('\bbdkp\Admin'))
 				'L_RACE' => $this->member_race_id ,
 				'L_CLASS' => $this->member_class_id);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-		unset($bbdkp);
-
 	}
 	
+
 	/**
-	 * Calls api to pull more information
 	 * 
-	 * Currently only the WoW API is available
-	 * 
-	 * @return object
-	 */	
-	public function Armory_get()
+	 * @see \bbdkp\iMembers::Armory_get()
+	 */
+	public function Armory_getmember()
 	{
 		global $phpEx, $phpbb_root_path;
 		
@@ -671,7 +632,7 @@ if (!class_exists('\bbdkp\Admin'))
 				 * 'companions','mounts','pets','achievements','progression','pvp','quests'
 				 */
 				$api = new WowAPI('character', $this->member_region);
-				$params = array('guild', 'talents','stats', 'items' , 'titles','professions', 'progression','pvp');
+				$params = array('guild', 'titles');
 				$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);
 				
 				$this->member_level = $data['level'];
@@ -681,13 +642,61 @@ if (!class_exists('\bbdkp\Admin'))
 				$this->member_achiev = $data['achievementPoints'];
 				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $data['realm']. '/' . $data ['name'] . '/simple';
 				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
-				//@todo update guild membership				
-				$this->characterData = $data;
+				$this->member_title = '';
+				if (isset($data['titles']))
+				{
+					foreach($data['titles'] as $key => $title)
+					{
+						if (isset($title['selected']))
+						{
+							$this->member_title = $title['name'];
+						}
+					}
+				}
+				
+				
+				
 		}
 		
 	}
 	
+	/**
+	 * activates all checked members
+	 * @see \bbdkp\iMembers::Activatemembers()
+	 */	public function Activatemembers(array $mlist, array $mwindow)
+	{
 
+		global $user, $db, $config, $phpEx, $phpbb_root_path;
+
+		$db->sql_transaction('begin');
+		//if checkbox set then activate
+		$sql1 = 'UPDATE ' . MEMBER_LIST_TABLE . "
+                        SET member_status = '1'
+                        WHERE " . $db->sql_in_set('member_id', $mlist, false, true);
+		$db->sql_query($sql1);
+		//if checkbox not set and in window then deactivate
+		$sql2 = 'UPDATE ' . MEMBER_LIST_TABLE . "
+                        SET member_status = '0'
+                        WHERE  " . $db->sql_in_set('member_id', $mlist, true, true) . "
+						AND  " . $db->sql_in_set('member_id', $mwindow, false, true);
+		$db->sql_query($sql2);
+		$db->sql_transaction('commit');
+
+
+	}
+
+	/*
+	 * generates a standard portrait image url for aion based on characterdata
+	*/
+	private function generate_portraitlink()
+	{
+		global $phpbb_root_path;
+		if ($this->game_id == 'aion')
+		{
+			$this->memberportraiturl = $phpbb_root_path . 'images/roster_portraits/aion/' . $this->member_race_id . '_' . $this->member_gender_id . '.jpg';
+		}
+	}
+	
 	/**
 	 * function for removing member from guild but leave him in the member table.;
 	 * @param unknown_type $member_name
@@ -718,9 +727,11 @@ if (!class_exists('\bbdkp\Admin'))
 				'member_outdate' => $this->time ,
 				'member_guild_id' => 0);
 		$sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
-        SET ' . $db->sql_build_array('UPDATE', $sql_arr) . '
-        WHERE member_id = ' . (int) $this->old_member['member_id'] . ' and member_guild_id = ' . (int) $this->old_member['member_guild_id'];
+	        SET ' . $db->sql_build_array('UPDATE', $sql_arr) . '
+	        WHERE member_id = ' . (int) $this->old_member['member_id'] . ' and member_guild_id = ' . (int) $this->old_member['member_guild_id'];
+
 		$db->sql_query($sql);
+		
 		$log_action = array(
 				'header' => 'L_ACTION_MEMBER_UPDATED' ,
 				'L_NAME' => $member_name ,
@@ -729,48 +740,175 @@ if (!class_exists('\bbdkp\Admin'))
 				'L_RANK_AFTER' => 99 ,
 				'L_COMMENT_AFTER' => "Member left " . date("F j, Y, g:i a") . ' by Armory plugin' ,
 				'L_UPDATED_BY' => $user->data['username']);
+		
 		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
+		
 		return true;
 	}
-
+	
 	/**
-	 * activates all checked members
-	 * @see \bbdkp\iMembers::activate()
+	 * Updates the Member table from Armory
+	 *
+	 * @param array $memberdata
+	 * @param int $guild_id
 	 */
-	public function activate(array $mlist, array $mwindow)
+	public function ArmoryUpdate($memberdata, $guild_id, $region)
 	{
-
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
-
-		$db->sql_transaction('begin');
-		//if checkbox set then activate
-		$sql1 = 'UPDATE ' . MEMBER_LIST_TABLE . "
-                        SET member_status = '1'
-                        WHERE " . $db->sql_in_set('member_id', $mlist, false, true);
-		$db->sql_query($sql1);
-		//if checkbox not set and in window then deactivate
-		$sql2 = 'UPDATE ' . MEMBER_LIST_TABLE . "
-                        SET member_status = '0'
-                        WHERE  " . $db->sql_in_set('member_id', $mlist, true, true) . "
-						AND  " . $db->sql_in_set('member_id', $mwindow, false, true);
-		$db->sql_query($sql2);
-		$db->sql_transaction('commit');
-
-
-	}
-
-	/*
-	 * generates a standard portrait image url for wow /aion based on characterdata
-	*/
-	private function generate_portraitlink()
-	{
-		global $phpbb_root_path;
-		if ($this->game_id == 'aion')
+		global $user, $db, $phpEx, $phpbb_root_path;
+		
+		$member_ids = array();
+		$oldmembers = array();
+		$newmembers = array();
+		
+		/* GET OLD RANKS */
+		$sql = ' select member_name, member_id FROM ' . MEMBER_LIST_TABLE . ' 
+				 WHERE member_guild_id =  ' . (int) $guild_id . " 
+				 AND game_id='wow' order by member_name ASC";
+		$result = $db->sql_query ($sql);
+		while ($row = $db->sql_fetchrow ($result))
 		{
-			$this->memberportraiturl = $phpbb_root_path . 'images/roster_portraits/aion/' . $this->member_race_id . '_' . $this->member_gender_id . '.jpg';
+			$oldmembers[] = $row['member_name'];
+			
+			//this is to find the memberindex when updating
+			$member_ids[ bin2hex($row['member_name'])] = $row['member_id']; 
+			
 		}
+		$db->sql_freeresult ( $result );
+
+		foreach($memberdata as $mb)
+		{
+			$newmembers[] = $mb['character']['name']; 
+		}
+		
+		// get the new members not yet created
+		$to_add = array_diff($newmembers, $oldmembers);
+		
+		// start transaction
+		$db->sql_transaction('begin');
+		
+		foreach($memberdata as $mb)
+		{
+			if (in_array($mb['character']['name'], $to_add))
+			{
+				$this->game_id ='wow';
+				$this->member_guild_id = $guild_id;
+				$this->member_rank_id = $mb['rank'];
+				$this->member_name = $mb['character']['name'];
+				$this->member_level = (int) $mb['character']['level'];
+				$this->member_gender_id = (int) $mb['character']['gender'];
+				$this->member_race_id = (int) $mb['character']['race'];
+				$this->member_class_id = (int) $mb['character']['class'];
+				$this->member_achiev = (int) $mb['character']['achievementPoints'];
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $this->member_realm . '/' . $this->member_name . '/simple';
+				$this->member_status = 1;
+				$this->member_comment = sprintf($user->lang['ACP_SUCCESSMEMBERADD'],  date("F j, Y, g:i a") );
+				$this->member_joindate = $this->time;
+				$this->member_outdate = mktime ( 0, 0, 0, 12, 31, 2030 );
+				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $region, $region) . $mb['character']['thumbnail'];
+				$this->member_title = '';
+				if (isset($mb['titles']))
+				{
+					foreach($mb['titles'] as $key => $title)
+					{
+						if (isset($title['selected']))
+						{
+							$this->member_title = $title['name'];
+						}
+					}
+				}
+				
+								
+				$query [] = array (
+						'member_name' => ucwords($this->member_name) ,
+						'member_status' => $this->member_status ,
+						'member_level' => $this->member_level,
+						'member_race_id' => $this->member_race_id ,
+						'member_guild_id' => $this->member_guild_id ,
+						'member_class_id' => $this->member_class_id ,
+						'member_rank_id' => $this->member_rank_id ,
+						'member_comment' => (string) $this->member_comment ,
+						'member_joindate' => (int) $this->member_joindate ,
+						'member_outdate' => (int) $this->member_outdate ,
+						'member_guild_id' => $this->member_guild_id ,
+						'member_gender_id' => $this->member_gender_id ,
+						'member_achiev' => $this->member_achiev ,
+						'member_armory_url' => (string) $this->member_armory_url ,
+						'phpbb_user_id' => (int) $this->phpbb_user_id ,
+						'game_id' => (string) $this->game_id ,
+						'member_portrait_url' => (string) $this->member_portrait_url,
+						'title' => $this->member_title, 
+					);
+			}
+		}
+		$db->sql_multi_insert(MEMBER_LIST_TABLE, $query);
+		$db->sql_transaction('commit');		
+
+		// get the new members to update
+		$to_update = array_intersect($newmembers, $oldmembers);
+		foreach($memberdata as $mb)
+		{
+			if (in_array($mb['character']['name'], $to_update))
+			{
+				$this->game_id ='wow';
+				$this->member_rank_id = $mb['rank'];
+				$this->member_name = $mb['character']['name'];
+				$this->member_guild_id = $guild_id;
+				$this->member_level = (int) $mb['character']['level'];
+				$this->member_gender_id = (int) $mb['character']['gender'];
+				$this->member_race_id = (int) $mb['character']['race'];
+				$this->member_class_id = (int) $mb['character']['class'];
+				$this->member_achiev = (int) $mb['character']['achievementPoints'];
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $this->member_name . '/simple';
+				$this->member_status = 1;
+				$this->member_comment = sprintf($user->lang['ACP_SUCCESSMEMBERADD'],  date("F j, Y, g:i a") );
+				$this->member_joindate = $this->time;
+				$this->member_outdate = mktime ( 0, 0, 0, 12, 31, 2030 );
+				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $mb['character']['thumbnail'];
+				$this->member_title = '';
+				if (isset($mb['titles']))
+				{
+					foreach($mb['titles'] as $key => $title)
+					{
+						if (isset($title['selected']))
+						{
+							$this->member_title = $title['name'];
+						}
+					}
+				}
+				
+		
+				$sql_ary = array (
+						'member_name' => ucwords($this->member_name) ,
+						'member_status' => $this->member_status ,
+						'member_level' => $this->member_level,
+						'member_race_id' => $this->member_race_id ,
+						'member_class_id' => $this->member_class_id ,
+						'member_rank_id' => $this->member_rank_id ,
+						'member_comment' => (string) $this->member_comment ,
+						'member_joindate' => (int) $this->member_joindate ,
+						'member_outdate' => (int) $this->member_outdate ,
+						'member_guild_id' => $this->member_guild_id ,
+						'member_gender_id' => $this->member_gender_id ,
+						'member_achiev' => $this->member_achiev ,
+						'member_armory_url' => (string) $this->member_armory_url ,
+						'phpbb_user_id' => (int) $this->phpbb_user_id ,
+						'game_id' => (string) $this->game_id ,
+						'member_portrait_url' => (string) $this->member_portrait_url,
+						'title' => $this->member_title
+				); 
+				
+				
+				$sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
+				    SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
+				    WHERE member_id = ' . (int) $member_ids[bin2hex($this->member_name)];
+				$db->sql_query($sql);
+				
+				
+			}
+		}
+		
 	}
 	
 	/******
@@ -789,7 +927,7 @@ if (!class_exists('\bbdkp\Admin'))
 		$start_date = mktime(0, 0, 0, date('m'), date('d')-$days, date('Y'));
 		// member joined in the last $days ?
 	
-		$joindate = _get_joindate($member_id);
+		$joindate = $this->get_joindate($member_id);
 		if ($all==true || $joindate > $start_date)
 		{
 			// then count from join date
@@ -802,25 +940,23 @@ if (!class_exists('\bbdkp\Admin'))
 		{
 			case 0:
 				// get member raidcount
-				return _memberraidcount($member_id, $start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
+				return $this->memberraidcount($member_id, $start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
 				break;
 				 
 			case 1:
 				// get total pool raidcount
-				return _totalraidcount($start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
+				return $this->totalraidcount($start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
 				break;
 	
 			case 2:
-				$memberraidcount = _memberraidcount($member_id, $start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
-				$raid_count = _totalraidcount($start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
+				$memberraidcount = $this->memberraidcount($member_id, $start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
+				$raid_count = $this->totalraidcount($start_date, $end_date, $query_by_pool, $dkpsys_id, $all);
 				$percent_of_raids = ($raid_count > 0 ) ?  round(($memberraidcount / $raid_count) * 100,2) : 0;
 				return (float) $percent_of_raids;
 				break;
 		}
 	
 	}
-	
-	
 	
 	/**
 	 * calculate raid count for the whole pool starting from joindate or startdate
@@ -833,7 +969,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 * @param bool $all
 	 * @return int
 	 */
-	function _memberraidcount($member_id, $start_date, $end_date, $query_by_pool, $dkpsys_id, $all)
+	function memberraidcount($member_id, $start_date, $end_date, $query_by_pool, $dkpsys_id, $all)
 	{
 		global $db;
 		$sql_array = array(
@@ -882,7 +1018,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 * @param boolean $all
 	 * @return int
 	 */
-	function _totalraidcount($start_date, $end_date, $query_by_pool, $dkpsys_id, $all)
+	public function totalraidcount($start_date, $end_date, $query_by_pool, $dkpsys_id, $all)
 	{
 		global $db;
 	
@@ -925,7 +1061,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 * @return unknown
 	 *
 	 */
-	function _get_joindate($member_id)
+	public function get_joindate($member_id)
 	{
 		// get member joindate
 		global $db;

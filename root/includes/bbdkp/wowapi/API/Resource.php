@@ -144,6 +144,7 @@ abstract class Resource extends \bbdkp\Admin
 					$optfields .= $key.'='.$value.'&';
 				}
 				$optfields = rtrim($data, '&');
+				//@debug tis
 			} 
 			else 
 			{

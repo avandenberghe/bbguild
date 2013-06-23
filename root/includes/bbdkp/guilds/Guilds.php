@@ -64,10 +64,10 @@ if (!class_exists('\bbdkp\Admin'))
 	 */
 	function __construct($guild_id)
 	{
-		if($guild_id !=0)
+		if($guild_id >= 0)
 		{
 			$this->guildid = $guild_id;
-			$this->Get();
+			$this->Getguild();
 			$this->countmembers();
 		}
 	}
@@ -76,7 +76,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 * gets a guild from database
 	 * @see \bbdkp\iGuilds::Get()
 	 */
-	public function Get()
+	public function Getguild()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -118,14 +118,14 @@ if (!class_exists('\bbdkp\Admin'))
 
 	/**
 	 * inserts a new guild to database
-	 * we always add guilds with an id greater then zero. this way, the guild with id=zero is the "guildless" guild
+	 * we always add guilds with an id greater than zero. this way, the guild with id=zero is the "guildless" guild
 	 * the zero guild is added by default in a new install.
 	 * do not delete the zero record in the guild table or you will see that guildless members
 	 * become invisible in the roster and in the memberlist or in any list member selection that makes
 	 * an inner join with the guild table.
 	 * @see \bbdkp\iGuilds::Make()
 	 */
-	public function Make()
+	public function MakeGuild()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -199,12 +199,11 @@ if (!class_exists('\bbdkp\Admin'))
 
 	}
 
-
 	/**
 	 * updates a guild to database
 	 * @see \bbdkp\iMembers::Update()
 	 */
-	public function Update($old_guild)
+	public function Guildupdate($old_guild, $params)
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -235,23 +234,47 @@ if (!class_exists('\bbdkp\Admin'))
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
-		switch ($this->game_id)
+		if ($this->guildid > 0)
 		{
-			case 'wow':
-				//$params = array('members', 'achievements','news');
-				$params = array('members' );
-				$this->Armory_get($params);
-				
-				$query = $db->sql_build_array('UPDATE', array(
-						'achievementpoints' => $this->achievementpoints,
-						'level' => $this->level,
-						'guildarmoryurl' => $this->guilarmorydurl,
-						'emblemurl' => $this->emblempath,
-						'battlegroup' => $this->battlegroup,
-				));
-				
-				$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-				break;
+			switch ($this->game_id)
+			{
+				case 'wow':
+					//$params = array('members', 'achievements','news');
+					$this->Armory_get($params);
+					
+					$query = $db->sql_build_array('UPDATE', array(
+							'achievementpoints' => $this->achievementpoints,
+							'level' => $this->level,
+							'guildarmoryurl' => $this->guilarmorydurl,
+							'emblemurl' => $this->emblempath,
+							'battlegroup' => $this->battlegroup,
+					));
+					
+					$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
+					
+					if (in_array("members", $params))
+					{
+						// update ranks table
+						if (!class_exists('\bbdkp\Ranks'))
+						{
+							require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
+						}
+						
+						$rank = new \bbdkp\Ranks();
+						$rank->ArmoryUpdate($this->memberdata, $this->guildid,  $this->region); 
+						
+						//update member table
+						if (!class_exists('\bbdkp\Members'))
+						{
+							require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+						}
+						
+						$mb = new \bbdkp\Members();
+						$mb->ArmoryUpdate($this->memberdata, $this->guildid,  $this->region);
+						
+					}				
+					break;
+			}
 		}
 		
 		$log_action = array(
@@ -265,15 +288,13 @@ if (!class_exists('\bbdkp\Admin'))
 		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
-
-
 	}
-
+	
 	/**
 	 * deletes a guild from database
 	 * @see \bbdkp\iMembers::Delete()
 	 */
-	public function Delete()
+	public function Guildelete()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
