@@ -1032,10 +1032,12 @@ $versions = array(
      		
      		'table_column_add' => array(
      				array($table_prefix . 'bbdkp_memberlist', 'characterinfo' , array('TEXT_UNI', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints' ,array('UINT', 0)),
      				array($table_prefix . 'bbdkp_memberguild', 'level' ,array('UINT', 0) ),
      				array($table_prefix . 'bbdkp_memberguild', 'members' ,array('UINT', 0)),
-     				array($table_prefix . 'bbdkp_memberguild', 'emblemurl' ,array('VCHAR:30', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints' ,array('UINT', 0)),
+     				array($table_prefix . 'bbdkp_memberguild', 'battlegroup' ,array('VCHAR:20', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'guildarmoryurl' ,array('VCHAR:255', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'emblemurl' ,array('VCHAR:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'game_id' ,array('VCHAR:10', '')),
      		),
      		
