@@ -544,7 +544,7 @@ if (!class_exists('\bbdkp\Admin'))
 		        'member_portrait_url' => $this->member_portrait_url,
 		        'member_achiev' => $this->member_achiev,
 				'game_id' => $this->game_id, 
-				'title' => $this->member_title
+				'member_title' => $this->member_title
 				));
 
 		$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
@@ -758,7 +758,7 @@ if (!class_exists('\bbdkp\Admin'))
 	public function ArmoryUpdate($memberdata, $guild_id, $region, $min_armory)
 	{
 		global $user, $db, $phpEx, $phpbb_root_path;
-		
+		$member_id = 0; 
 		$member_ids = array();
 		$oldmembers = array();
 		$newmembers = array();
@@ -802,7 +802,7 @@ if (!class_exists('\bbdkp\Admin'))
 				$this->member_race_id = (int) $mb['character']['race'];
 				$this->member_class_id = (int) $mb['character']['class'];
 				$this->member_achiev = (int) $mb['character']['achievementPoints'];
-				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $this->member_realm . '/' . $this->member_name . '/simple';
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $realm . '/' . $this->member_name . '/simple';
 				$this->member_status = 1;
 				$this->member_comment = sprintf($user->lang['ACP_SUCCESSMEMBERADD'],  date("F j, Y, g:i a") );
 				$this->member_joindate = $this->time;
@@ -839,7 +839,7 @@ if (!class_exists('\bbdkp\Admin'))
 						'phpbb_user_id' => (int) $this->phpbb_user_id ,
 						'game_id' => (string) $this->game_id ,
 						'member_portrait_url' => (string) $this->member_portrait_url,
-						'member_title' => $this->member_title, 
+						
 					);
 			}
 		}
@@ -852,6 +852,7 @@ if (!class_exists('\bbdkp\Admin'))
 		{
 			if (in_array($mb['character']['name'], $to_update))
 			{
+				$member_id =  (int) $member_ids[bin2hex($this->member_name)]; 
 				$this->game_id ='wow';
 				$this->member_rank_id = $mb['rank'];
 				$this->member_name = $mb['character']['name'];
@@ -861,49 +862,27 @@ if (!class_exists('\bbdkp\Admin'))
 				$this->member_race_id = (int) $mb['character']['race'];
 				$this->member_class_id = (int) $mb['character']['class'];
 				$this->member_achiev = (int) $mb['character']['achievementPoints'];
-				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $this->member_name . '/simple';
-				$this->member_status = 1;
-				$this->member_comment = sprintf($user->lang['ACP_SUCCESSMEMBERADD'],  date("F j, Y, g:i a") );
-				$this->member_joindate = $this->time;
-				$this->member_outdate = mktime ( 0, 0, 0, 12, 31, 2030 );
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $realm. '/' . $this->member_name . '/simple';
 				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $mb['character']['thumbnail'];
-				$this->member_title = '';
-				if (isset($mb['titles']))
-				{
-					foreach($mb['titles'] as $key => $title)
-					{
-						if (isset($title['selected']))
-						{
-							$this->member_title = $title['name'];
-						}
-					}
-				}
-				
 		
 				$sql_ary = array (
 						'member_name' => ucwords($this->member_name) ,
-						'member_status' => $this->member_status ,
 						'member_level' => $this->member_level,
 						'member_race_id' => $this->member_race_id ,
 						'member_class_id' => $this->member_class_id ,
 						'member_rank_id' => $this->member_rank_id ,
-						'member_comment' => (string) $this->member_comment ,
-						'member_joindate' => (int) $this->member_joindate ,
-						'member_outdate' => (int) $this->member_outdate ,
 						'member_guild_id' => $this->member_guild_id ,
 						'member_gender_id' => $this->member_gender_id ,
 						'member_achiev' => $this->member_achiev ,
 						'member_armory_url' => (string) $this->member_armory_url ,
 						'phpbb_user_id' => (int) $this->phpbb_user_id ,
-						'game_id' => (string) $this->game_id ,
 						'member_portrait_url' => (string) $this->member_portrait_url,
-						'member_title' => $this->member_title
 				); 
 				
 				
 				$sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
 				    SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
-				    WHERE member_id = ' . (int) $member_ids[bin2hex($this->member_name)];
+				    WHERE member_id = ' . $member_id;
 				$db->sql_query($sql);
 				
 				

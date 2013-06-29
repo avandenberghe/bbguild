@@ -183,7 +183,7 @@ if (!class_exists('\bbdkp\Admin'))
 		$newrank = new Ranks();
 		$newrank->RankName = "Member";
 		$newrank->RankId = 0;
-		$newrank->guildid = $this->guildid;
+		$newrank->RankGuild = $this->guildid;
 		$newrank->RankHide = 0;
 		$newrank->RankPrefix = '';
 		$newrank->RankSuffix = '';
@@ -201,8 +201,7 @@ if (!class_exists('\bbdkp\Admin'))
 		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
-		return  $this->guildid;
-		
+		return true; 
 
 	}
 

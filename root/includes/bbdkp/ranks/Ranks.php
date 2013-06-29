@@ -41,7 +41,7 @@ if (!class_exists('\bbdkp\Guilds'))
 {
 	public $RankName;
 	public $RankId;
-	public $GuildId;
+	public $RankGuild;
 	public $RankHide;
 	public $RankPrefix;
 	public $RankSuffix;
@@ -50,7 +50,7 @@ if (!class_exists('\bbdkp\Guilds'))
 	{
 		$this->RankId=0;
 		$this->RankName='';
-		$this->GuildId=0;
+		$this->RankGuild=0;
 		$this->RankHide=0;
 		$this->RankPrefix='';
 		$this->RankSuffix='';
@@ -61,7 +61,7 @@ if (!class_exists('\bbdkp\Guilds'))
 	    global $user, $db, $config, $phpEx, $phpbb_root_path;
 	    $sql = 'SELECT rank_name, rank_hide, rank_prefix, rank_suffix
     			FROM ' . MEMBER_RANKS_TABLE . '
-    			WHERE rank_id = ' . (int) $this->RankId . ' and guild_id = ' . (int) $this->GuildId;
+    			WHERE rank_id = ' . (int) $this->RankId . ' and guild_id = ' . (int) $this->RankGuild;
 	    $result = $db->sql_query($sql);
 	    while ($row = $db->sql_fetchrow($result))
 	    {
@@ -88,7 +88,7 @@ if (!class_exists('\bbdkp\Guilds'))
 		}
 
 		//check if guildid is valid
-		if ($this->GuildId == 0)
+		if ($this->RankGuild == 0)
 		{
 			trigger_error($user->lang('ERROR_INVALID_GUILDID'), E_USER_WARNING);
 		}
@@ -96,12 +96,12 @@ if (!class_exists('\bbdkp\Guilds'))
 		$sql = 'SELECT count(*) as rankcount FROM ' . MEMBER_RANKS_TABLE . '
                    	WHERE rank_id != 99
                    	AND rank_id = ' . (int) $this->RankId . '
-                   	AND guild_id = ' . (int) $this->GuildId . '
+                   	AND guild_id = ' . (int) $this->RankGuild . '
                    	ORDER BY rank_id, rank_hide ASC ';
 		$result = $db->sql_query($sql);
 		if ((int) $db->sql_fetchfield('rankcount', false, $result) == 1)
 		{
-			trigger_error(sprintf($user->lang('ERROR_RANK_EXISTS'),  $this->RankId ,  $this->GuildId), E_USER_WARNING);
+			trigger_error(sprintf($user->lang('ERROR_RANK_EXISTS'),  $this->RankId ,  $this->RankGuild), E_USER_WARNING);
 		}
 
 		// build insert array
@@ -111,16 +111,17 @@ if (!class_exists('\bbdkp\Guilds'))
 				'rank_hide' => $this->RankHide ,
 				'rank_prefix' => $this->RankPrefix ,
 				'rank_suffix' => $this->RankSuffix ,
-				'guild_id' => (int) $this->GuildId));
+				'guild_id' => (int) $this->RankGuild));
 		// insert new rank
 		$db->sql_query('INSERT INTO ' . MEMBER_RANKS_TABLE . $query);
 		// log the action
 
 		
 		$log_action = array(
-				'header' => 'L_ACTION_RANK_ADDED' ,
-				'id' => (int)  $this->RankId ,
-				'L_NAME' => $this->RankName ,
+				'header' => 'L_ACTION_RANK_ADDED',
+				'id' => (int)  $this->RankId,
+				'L_NAME' => $this->RankName,
+				'L_USERCOLOUR' => $user->data['user_colour'],
 				'L_ADDED_BY' => $user->data['username']);
 
 		$this->log_insert(array(
@@ -142,7 +143,7 @@ if (!class_exists('\bbdkp\Guilds'))
 		global $user, $db;
 
 		$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . '
-			WHERE member_rank_id = ' . $this->RankId . ' and member_guild_id = ' . $this->GuildId;
+			WHERE member_rank_id = ' . $this->RankId . ' and member_guild_id = ' . $this->RankGuild;
 		$result = $db->sql_query($sql);
 		$countm = (int) $db->sql_fetchfield('countm');
 		$db->sql_freeresult($result);
@@ -169,17 +170,17 @@ if (!class_exists('\bbdkp\Guilds'))
 			// check if rank is used
 			$sql = 'SELECT count(*) as rankcount FROM ' . MEMBER_LIST_TABLE . ' WHERE
             		 member_rank_id   = ' . (int) $this->RankId . ' and
-            		 member_guild_id =  ' . (int) $this->GuildId;
+            		 member_guild_id =  ' . (int) $this->RankGuild;
 			$result = $db->sql_query($sql);
 			if ((int) $db->sql_fetchfield('rankcount') >= 1)
 			{
-				\trigger_error('Cannot delete rank ' . $this->RankId . '. There are members with this rank in guild . ' . $this->GuildId, E_USER_WARNING);
+				\trigger_error('Cannot delete rank ' . $this->RankId . '. There are members with this rank in guild . ' . $this->RankGuild, E_USER_WARNING);
 			}
 		}
 
 		// hardcoded exclusion of ranks 90/99
 		$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id != 90 and rank_id != 99 and rank_id= ' .
-				$this->RankId . ' and guild_id = ' . $this->GuildId;
+				$this->RankId . ' and guild_id = ' . $this->RankGuild;
 		$db->sql_query($sql);
 
 		// log the action
@@ -217,7 +218,7 @@ if (!class_exists('\bbdkp\Guilds'))
 
 		$sql_ary = array(
 				'rank_id' => $this->RankId ,
-				'guild_id' => $this->GuildId ,
+				'guild_id' => $this->RankGuild ,
 				'rank_name' => $this->RankName ,
 				'rank_hide' => $this->RankHide ,
 				'rank_prefix' => $this->RankPrefix ,
@@ -228,7 +229,7 @@ if (!class_exists('\bbdkp\Guilds'))
 		$sql = 'UPDATE ' . MEMBER_RANKS_TABLE . '
 			SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
 			WHERE rank_id=' . (int) $old_rank->RankId . '
-			AND guild_id = ' . (int) $old_rank->GuildId;
+			AND guild_id = ' . (int) $old_rank->RankGuild;
 		$db->sql_query($sql);
 
 
@@ -265,7 +266,7 @@ if (!class_exists('\bbdkp\Guilds'))
 		global $user, $db;
 		// rank 99 is the out-rank
 		$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . '
-	        		WHERE guild_id = ' . $this->GuildId . '
+	        		WHERE guild_id = ' . $this->RankGuild . '
 	        		ORDER BY rank_id, rank_hide  ASC ';
 		
 		$result = $db->sql_query($sql);
@@ -327,7 +328,7 @@ if (!class_exists('\bbdkp\Guilds'))
 			$newrank = new \bbdkp\Ranks();
 			$newrank->RankName = 'Rank'.$key;
 			$newrank->RankId = $key; 
-			$newrank->GuildId = $guild_id;
+			$newrank->RankGuild = $guild_id;
 			$newrank->RankHide = 0; 
 			$newrank->RankPrefix = ''; 
 			$newrank->RankSuffix = ''; 

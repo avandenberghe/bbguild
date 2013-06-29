@@ -178,7 +178,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$updateguild->showroster = (isset($_POST['showroster'])) ? true : false;
 					$updateguild->min_armory = request_var('min_armorylevel', 0);
 					
-					if ($updateguild->MakeGuild() > 0)
+					if ($updateguild->MakeGuild() == true)
 					{
 						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'], $updateguild->name);
 						trigger_error($success_message . $this->link, E_USER_NOTICE);
