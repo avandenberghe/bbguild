@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.2.9
  */
-
+// don't add this file to namespace bbdkp
 /**
  * @ignore
  */
@@ -27,16 +27,16 @@ if (!class_exists('Admin'))
 
 if (!class_exists('Faction'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/factions/Faction.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/games/factions/Faction.$phpEx");
 }
 if (!class_exists('Classes'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/classes/Classes.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/games/classes/Classes.$phpEx");
 }
 
 if (!class_exists('Races'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/races/Races.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/games/races/Races.$phpEx");
 }
 
 /**

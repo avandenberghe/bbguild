@@ -8,7 +8,7 @@
  * @version 1.2.9
  *
  */
-
+// don't add this file to namespace bbdkp
 /**
  * @ignore
  */
@@ -22,20 +22,25 @@ if (! defined('EMED_BBDKP'))
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
 
-
 // Include the abstract base
 if (!class_exists('\bbdkp\Admin'))
 {
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
-
+// Include the adjust class
 if (!class_exists('Adjust'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Adjustments/Adjust.$phpEx");
 }
+// Include the members class
 if (!class_exists('Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+}
+// Include the validator class
+if (!class_exists('Validator'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Validator.$phpEx");
 }
 
 /**
@@ -258,14 +263,8 @@ class acp_dkp_adj extends \bbdkp\Admin
 				
 				if ($submit)
 				{
-					// check form
-					$errors_exist = $this->error_check_i();
-					// Errors exist, redisplay the form
-					if ($errors_exist)
-					{
-						trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
-					}
-					
+					global $user;
+					$this->error_check();
 					
 					$newadjust = new \bbdkp\Adjust;
 					
@@ -316,12 +315,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				
 				if ($update)
 				{
-					$errors_exist = $this->error_check_i();
-					// Errors exist, redisplay the form
-					if ($errors_exist)
-					{
-						trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
-					}
+					$this->error_check();
 					
 					$oldadjust = new \bbdkp\Adjust;
 					$oldadjust->adjustment_id = request_var('hidden_id', 0);
@@ -476,12 +470,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					'S' => date('s', $this->time) , 
 					'CAN_DECAY_NO_CHECKED' => ( $showadj->can_decay == 0) ? ' checked="checked"' : '' , 
 					'CAN_DECAY_YES_CHECKED' => ($showadj->can_decay == 1) ? ' checked="checked"' : '' , 
-					// Form validation
-					'FV_MEMBERS' => $this->fv->generate_error('member_names') , 
-					'FV_ADJUSTMENT' => $this->fv->generate_error('adjustment_value') , 
-					'FV_MO' => $this->fv->generate_error('mo') , 
-					'FV_D' => $this->fv->generate_error('d') , 
-					'FV_Y' => $this->fv->generate_error('y') , 
+					
 					// Javascript messages
 					'MSG_VALUE_EMPTY' => $user->lang['FV_REQUIRED_ADJUSTMENT'] , 
 					// Buttons
@@ -498,20 +487,32 @@ class acp_dkp_adj extends \bbdkp\Admin
 	 * validationfunction for adjustment values : required and numeric, date is in range
 	 * @access private 
 	 */
-	private function error_check_i ()
+	private function error_check()
 	{
 		global $user;
+		$validator = new \bbdkp\Validator();
+		//setup validation rules
+		$validator->addRule('member_names', array('require'));
+		$validator->addRule('adjustment_value', array('required'));
+		$validator->addRule('adjustment_day', array('required', 'min' => 1, 'max' => 31 ));
+		$validator->addRule('adjustment_month',array('required', 'min' => 1, 'max' => 12));
+		$validator->addRule('adjustment_year', array('required', 'min' => 2000, 'max' => 2020));
+		$member_names = 'x';
 		if (! isset($_POST['member_names']))
 		{
-			$this->fv->errors['member_names'] = $user->lang['FV_REQUIRED_MEMBERS'];
+			$member_names = '';
 		}
-		$this->fv->is_number(request_var('adjustment_value', 0.00), $user->lang['FV_NUMBER_ADJUSTMENT']);
-		$this->fv->is_filled(request_var('adjustment_value', 0.00), $user->lang['FV_REQUIRED_ADJUSTMENT']);
-		$this->fv->is_within_range(request_var('mo', 0), 1, 12, $user->lang['FV_RANGE_MONTH']);
-		$this->fv->is_within_range(request_var('d', 0), 1, 31, $user->lang['FV_RANGE_DAY']);
-		$this->fv->is_within_range(request_var('y', 0), 1998, 2015, $user->lang['FV_RANGE_YEAR']);
-		$this->time = mktime(0, 0, 0, request_var('mo', 0), request_var('d', 0), request_var('y', 0));
-		return $this->fv->is_error();
+		$data = array(
+				'member_names' => $member_names,
+				'adjustment_value' => request_var('adjustment_value', 0.00),
+				'adjustment_day' => request_var('mo', 0),
+				'adjustment_month' => request_var('y', 0),
+				'adjustment_year' => request_var('y', 0),
+		);
+		$validator->setData($data);
+		$validator->displayerrors();
+		
+
 	}
 
 	

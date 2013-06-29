@@ -17,13 +17,20 @@ if (! defined('IN_PHPBB'))
 {
 	exit();
 }
+
+// Include the abstract base
+if (!interface_exists('\bbdkp\iGame'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/iGame.$phpEx");
+}
+
 /**
  * Factions interface
  *
  * @package 	bbDKP
  * 
  */
-interface iFaction 
+interface iFaction extends \bbdkp\iGame
 {
 	/**
 	 * gets faction from database
@@ -39,12 +46,7 @@ interface iFaction
 	 * deletes a faction from database
 	*/
 	function Delete();
-	
-	/**
-	 * updates a faction to database
-	*/
-	function Update(Faction $old_faction);
-	
+
 }
 
 ?>

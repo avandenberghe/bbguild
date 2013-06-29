@@ -17,40 +17,29 @@ if (! defined('IN_PHPBB'))
 {
 	exit();
 }
-if (! defined('EMED_BBDKP'))
-{
-	$user->add_lang(array(
-			'mods/dkp_admin'));
-	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
-}
-
 /**
- * iClasses
+ * Game interface
  *
  * @package 	bbDKP
+ * 
  */
-interface iClasses 
+interface iGame 
 {
-
 	/**
-	 * gets class from database
+	 * gets Game from database
 	 */
 	function Get();
 	
 	/**
-	 * adds a class to database
+	 * adds a Game to database
 	*/
 	function Make();
 	
 	/**
-	 * deletes a class from database
+	 * deletes a Game from database
 	*/
 	function Delete();
 	
-	/**
-	 * updates a class to database
-	*/
-	function Update(Classes $old_class);
 	
 }
 

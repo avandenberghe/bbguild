@@ -64,6 +64,16 @@ interface iMembers extends \bbdkp\iAdmin
 	 * @param array $mwindow
 	 */
 	function Activatemembers(array $mlist, array $mwindow);
+	
+	/**
+	 * Updates the Member table from Armory
+	 * @param array $memberdata
+	 * @param int $guild_id
+	 * @param char $region
+	 * @param int $min_armory
+	 */
+	public function WoWArmoryUpdate($memberdata, $guild_id, $region, $min_armory); 
+	
 
 }
 

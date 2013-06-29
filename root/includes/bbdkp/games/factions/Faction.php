@@ -21,7 +21,16 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/factions/iFaction.$phpEx");
+
+// Include the abstract base
+if (!class_exists('\bbdkp\Game'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
+}
+if (!interface_exists('\bbdkp\iFaction'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/factions/iFaction.$phpEx");
+}
 
 /**
  * Faction
@@ -30,7 +39,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/factions/iFaction.$phpEx");
  * 
  * @package 	bbDKP
  */
- class Faction implements iFaction 
+ class Faction  extends \bbdkp\Game implements iFaction 
 {
 	public $game_id;
 	public $faction_id;
@@ -97,19 +106,10 @@ require_once ("{$phpbb_root_path}includes/bbdkp/factions/iFaction.$phpEx");
 		$db->sql_transaction ( 'commit' );
 		$cache->destroy ( 'sql', FACTION_TABLE );
 		
-		trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $this->faction_name ) . $this->link, E_USER_NOTICE );
+		trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $this->faction_name ), E_USER_NOTICE );
 	
 	}
 	
-	/**
-	 * (non-PHPdoc)
-	 * @see \bbdkp\iFaction::Update()
-	 */
-	public function Update(Faction $old_faction)
-	{
-		
-	}
-
 	/**
 	 * (non-PHPdoc)
 	 * @see \bbdkp\iFaction::Delete()

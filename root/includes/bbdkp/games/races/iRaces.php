@@ -17,13 +17,19 @@ if (! defined('IN_PHPBB'))
 	exit();
 }
 
+// Include the abstract base
+if (!interface_exists('\bbdkp\iGame'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/iGame.$phpEx");
+}
+
 /**
  * Races interface
  *
  * @package 	bbDKP
  * 
  */
-interface iRaces 
+interface iRaces extends \bbdkp\iGame
 {
 	/**
 	 * gets race from database

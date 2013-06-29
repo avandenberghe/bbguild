@@ -24,8 +24,11 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/realms/iRealms.$phpEx");
-
+//include the abstract base
+if (!interface_exists('\bbdkp\iRealms'))
+{
+	require ("{$phpbb_root_path}includes/bbdkp/realms/iRealms.$phpEx");
+}
 /**
  * @package 	bbDKP
  *

@@ -23,7 +23,12 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/Loot/iLoot.$phpEx");
+
+//include the abstract base interface
+if (!interface_exists('\bbdkp\iLoot'))
+{
+	require ("{$phpbb_root_path}includes/bbdkp/Loot/iLoot.$phpEx");
+}
 
 /**
  * this class manages the loot transaction table (phpbb_bbdkp_raid_items)

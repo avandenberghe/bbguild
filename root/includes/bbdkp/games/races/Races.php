@@ -19,7 +19,16 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
+
+if (!class_exists('\bbdkp\Game'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
+}
+if (!interface_exists('\bbdkp\iRaces'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/races/iRaces.$phpEx");
+}
+
 
 
 /**
@@ -29,7 +38,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
  * 
  * @package 	bbDKP
  */
- class Races implements iRaces 
+ class Races extends \bbdkp\Game implements iRaces 
 {
 	public $game_id;
 	public $race_id;
@@ -93,7 +102,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
 		if (( int ) $a > 0)
 		{
 			//uh oh that race exists
-			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_FAILED'], $this->race_id  ) . $this->link, E_USER_WARNING );
+			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_FAILED'], $this->race_id  ), E_USER_WARNING );
 		}
 		$db->sql_freeresult ( $resultr );
 		$data = array (

@@ -20,8 +20,16 @@ if (! defined('IN_PHPBB'))
 }
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/classes/iClasses.$phpEx");
 
+// Include the abstract base
+if (!class_exists('\bbdkp\Game'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
+}
+if (!interface_exists('\bbdkp\iClasses'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/classes/iClasses.$phpEx");
+}
 
 /**
  * Classes
@@ -30,7 +38,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/classes/iClasses.$phpEx");
  * 
  * @package 	bbDKP
  */
- class Classes implements iClasses 
+ class Classes  extends \bbdkp\Game implements iClasses 
  {
 
 	public $game_id; 
@@ -221,7 +229,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/classes/iClasses.$phpEx");
 		$result = $db->sql_query ( $sql );
 		if (( int ) $db->sql_fetchfield ( 'countclass', false, $result ) > 0)
 		{
-			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_CLASS_FAILED'], $this->classname ) . $this->link, E_USER_WARNING );
+			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_CLASS_FAILED'], $this->classname ), E_USER_WARNING );
 		}
 		$db->sql_freeresult ( $result );
 			

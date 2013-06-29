@@ -22,9 +22,11 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require ("{$phpbb_root_path}includes/bbdkp/Adjustments/iAdjust.$phpEx");
-
 // Include the abstract base
+if (!interface_exists('\bbdkp\iAdjust'))
+{
+	require ("{$phpbb_root_path}includes/bbdkp/Adjustments/iAdjust.$phpEx");
+}
 if (!class_exists('\bbdkp\Admin'))
 {
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
@@ -161,7 +163,7 @@ class Adjust extends Admin implements iAdjust
 		$this->adjustment_reason = $row['adjustment_reason'];
 		$this->member_id = $row['member_id'];
 		$this->member_name = $row['member_name'];
-		$this->adjustment_group_key = $row['adjustment_group_key'];
+		$this->adjustment_groupkey = $row['adjustment_group_key'];
 		$this->adjustment_added_by = $row['adjustment_added_by'];
 		$this->adjustment_updated_by = $row['adjustment_updated_by'];
 		$this->adj_decay = $row['adj_decay'];
@@ -170,7 +172,7 @@ class Adjust extends Admin implements iAdjust
 		
 		
 		$members = array();
-		$sql = 'SELECT member_id from ' . ADJUSTMENTS_TABLE . " WHERE adjustment_group_key = '" . $this->adjustment_group_key . "'";
+		$sql = 'SELECT member_id from ' . ADJUSTMENTS_TABLE . " WHERE adjustment_group_key = '" . $this->adjustment_groupkey . "'";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
@@ -270,7 +272,7 @@ class Adjust extends Admin implements iAdjust
 		$sql = 'SELECT count(*) as total_adjustments
 					FROM ' . ADJUSTMENTS_TABLE . '
 					WHERE member_id IS NOT NULL
-					and adjustment_dkpid 	= ' . (int) $adjust->adjustment_dkpid;
+					and adjustment_dkpid 	= ' . (int) $this->adjustment_dkpid;
 		if ($member_id != 0)
 		{
 			$sql .= ' and member_id  = ' . $member_id;
@@ -307,6 +309,7 @@ class Adjust extends Admin implements iAdjust
 	 * @param unknown_type $value
 	 * @param unknown_type $olddecay
 	 * @return boolean
+	 * @tofix
 	 */
 	public function decayadj ($adjust_id)
 	{
