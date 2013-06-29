@@ -175,8 +175,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$updateguild->realm = utf8_normalize_nfc(request_var('realm', '', true));
 					$updateguild->region = request_var('region_id', '');
 					$updateguild->game_id = request_var('game_id', '');
-					
 					$updateguild->showroster = (isset($_POST['showroster'])) ? true : false;
+					$updateguild->min_armory = request_var('min_armorylevel', 0);
 					
 					if ($updateguild->MakeGuild() > 0)
 					{
@@ -204,6 +204,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$updateguild->realm = utf8_normalize_nfc(request_var('realm', ' ', true));
 					$updateguild->region = request_var('region_id', ' ');
 					$updateguild->showroster = request_var('showroster', 0);
+					$updateguild->min_armory = request_var('min_armorylevel', 0);
 					//@todo complete for other games
 					$updateguild->aionlegionid = 0;
 					$updateguild->aionserverid = 0;
@@ -299,6 +300,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'REALM' => $updateguild->realm,
 					'REGION' => $updateguild->region,
 					'MEMBERCOUNT' => $updateguild->membercount ,
+					'MIN_ARMORYLEVEL' => $updateguild->min_armory ,
 					'SHOW_ROSTER' => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
 					// Language
 					'L_TITLE' =>  ($this->url_id < 0 ) ? $user->lang['ACP_MM_ADDGUILD'] : $user->lang['ACP_MM_EDITGUILD'] , 
@@ -1165,12 +1167,12 @@ class acp_dkp_mm extends \bbdkp\Admin
 		{
 			// recall hidden vars
 			$members_to_delete = request_var('delete_id', array(0 => 0));
-			$member_names = utf8_normalize_nfc(request_var('members', array(0 => ' '), true));
-			foreach ($members_to_delete as $memberid)
+			$member_names = utf8_normalize_nfc(request_var('members', array(0 => ''), true));
+			foreach ($members_to_delete as $memberid => $value)
 			{
 				$delmember = new \bbdkp\Members();
 				$delmember->member_id = $memberid;
-				$delmember->get();
+				$delmember->Getmember();
 				$delmember->Deletemember();
 				unset($delmember);
 			}

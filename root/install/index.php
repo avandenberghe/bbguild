@@ -1042,7 +1042,7 @@ $versions = array(
      		),
      		
      		'table_column_add' => array(
-     				array($table_prefix . 'bbdkp_memberlist', 'title' , array('VCHAR_UNI:255', '')),
+     				array($table_prefix . 'bbdkp_memberlist', 'member_title' , array('VCHAR_UNI:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'level' ,array('UINT', 0) ),
      				array($table_prefix . 'bbdkp_memberguild', 'members' ,array('UINT', 0)),
      				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints' ,array('UINT', 0)),
@@ -1050,6 +1050,7 @@ $versions = array(
      				array($table_prefix . 'bbdkp_memberguild', 'guildarmoryurl' ,array('VCHAR:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'emblemurl' ,array('VCHAR:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'game_id' ,array('VCHAR:10', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'min_armory' ,array('UINT', 90)),
      		),
      		
      		

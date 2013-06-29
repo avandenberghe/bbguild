@@ -38,6 +38,7 @@ if (!class_exists('\bbdkp\Admin'))
  */
  class Guilds extends \bbdkp\Admin implements iGuilds
 {
+	// common
 	public $game_id = '';
 	public $guildid = 0;
 	public $name = '';
@@ -47,16 +48,19 @@ if (!class_exists('\bbdkp\Admin'))
 	public $membercount = 0;
 	public $startdate = 0;
 	public $showroster = 0;
-	//aion
+	public $min_armory = 0;
+
+	//aion parameters
 	public $aionlegionid = 0;
 	public $aionserverid = 0;
-	//wow
+	
+	//wow parameters
 	public $achievementpoints = 0;
 	public $level = 0;
 	public $emblempath = '';
 	public $emblem = array(); 
 	public $battlegroup = '';
-	public $guilarmorydurl = '';
+	public $guildarmoryurl = '';
 	public $memberdata = array();
 	public $side = 0;
 
@@ -81,7 +85,7 @@ if (!class_exists('\bbdkp\Admin'))
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
 		$sql = 'SELECT id, name, realm, region, roster, game_id, members, 
-				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl
+				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory
 				FROM ' . GUILD_TABLE . '
 				WHERE id = ' . $this->guildid;
 		$result = $db->sql_query($sql);
@@ -95,6 +99,7 @@ if (!class_exists('\bbdkp\Admin'))
 			$this->realm = '';
 			$this->region = '';
 			$this->showroster = 0;
+			$this->min_armory = 0; 
 		}
 		else
 		{
@@ -110,6 +115,7 @@ if (!class_exists('\bbdkp\Admin'))
 			$this->battlegroup = $row['battlegroup'];
 			$this->guildarmoryurl = $row['guildarmoryurl'];
 			$this->emblempath = $phpbb_root_path . $row['emblemurl'];
+			$this->min_armory = $row['min_armory'];
 			
 		}
 
@@ -133,7 +139,7 @@ if (!class_exists('\bbdkp\Admin'))
 
 		if ($this->name == null || $this->realm == null)
 		{
-			trigger_error($user->lang['ERROR_GUILDEMPTY'] . $this->link, E_USER_WARNING);
+			trigger_error($user->lang['ERROR_GUILDEMPTY'], E_USER_WARNING);
 		}
 
 		// check existing guild-realmname
@@ -144,7 +150,7 @@ if (!class_exists('\bbdkp\Admin'))
 
 		if ($grow['evcount'] != 0)
 		{
-			trigger_error($user->lang['ERROR_GUILDTAKEN'] . $this->link, E_USER_WARNING);
+			trigger_error($user->lang['ERROR_GUILDTAKEN'], E_USER_WARNING);
 		}
 
 		$result = $db->sql_query("SELECT MAX(id) as id FROM " . GUILD_TABLE . ";");
@@ -163,7 +169,8 @@ if (!class_exists('\bbdkp\Admin'))
 				'region' => $this->region ,
 				'roster' => $this->showroster ,
 				'aion_legion_id' => $this->aionlegionid ,
-				'aion_server_id' => $this->aionserverid
+				'aion_server_id' => $this->aionserverid, 
+				'min_armory' => $this->min_armory,
 			));
 
 		$db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
@@ -176,11 +183,11 @@ if (!class_exists('\bbdkp\Admin'))
 		$newrank = new Ranks();
 		$newrank->RankName = "Member";
 		$newrank->RankId = 0;
-		$newrank->GuildId = $this->guildid;
+		$newrank->guildid = $this->guildid;
 		$newrank->RankHide = 0;
 		$newrank->RankPrefix = '';
 		$newrank->RankSuffix = '';
-		$newrank->Make();
+		$newrank->Makerank();
 		
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_ADDED' ,
@@ -217,7 +224,7 @@ if (!class_exists('\bbdkp\Admin'))
 			$grow = $db->sql_fetchrow($result);
 			if ($grow['evcount'] != 0)
 			{
-				trigger_error($user->lang['ERROR_GUILDTAKEN'] . $this->link, E_USER_WARNING);
+				trigger_error($user->lang['ERROR_GUILDTAKEN'], E_USER_WARNING);
 			}
 		}
 		
@@ -229,7 +236,9 @@ if (!class_exists('\bbdkp\Admin'))
 				'region' => $this->region ,
 				'roster' => $this->showroster ,
 				'aion_legion_id' => $this->aionlegionid ,
-				'aion_server_id' => $this->aionserverid
+				'aion_server_id' => $this->aionserverid, 
+				'min_armory' => $this->min_armory,
+				
 		));
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
@@ -245,7 +254,7 @@ if (!class_exists('\bbdkp\Admin'))
 					$query = $db->sql_build_array('UPDATE', array(
 							'achievementpoints' => $this->achievementpoints,
 							'level' => $this->level,
-							'guildarmoryurl' => $this->guilarmorydurl,
+							'guildarmoryurl' => $this->guildarmoryurl,
 							'emblemurl' => $this->emblempath,
 							'battlegroup' => $this->battlegroup,
 					));
@@ -270,7 +279,7 @@ if (!class_exists('\bbdkp\Admin'))
 						}
 						
 						$mb = new \bbdkp\Members();
-						$mb->ArmoryUpdate($this->memberdata, $this->guildid,  $this->region);
+						$mb->ArmoryUpdate($this->memberdata, $this->guildid,  $this->region, $this->min_armory);
 						
 					}				
 					break;
@@ -365,7 +374,7 @@ if (!class_exists('\bbdkp\Admin'))
 				$this->level = $data['level'];
 				$this->battlegroup = $data['battlegroup'];
 				$this->side = $data['side'];
-				$this->guilarmorydurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $data['realm']. '/' . $data['name'] . '/';
+				$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
 				//$this->emblemurl = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
 				//@todo update guild membership
 				$this->emblem = $data['emblem'];
@@ -474,10 +483,7 @@ if (!class_exists('\bbdkp\Admin'))
 			$x = 20;
 			$y = 23;
 											
-			if (!$this->emblemHideRing)
-			{
-				imagecopy($imgOut,$ring,0,0,0,0, $ring_size[0],$ring_size[1]);
-			}
+			imagecopy($imgOut,$ring,0,0,0,0, $ring_size[0],$ring_size[1]);
 			
 			$size = getimagesize($shadowURL);
 			imagecopy($imgOut,$shadow,$x,$y,0,0, $size[0],$size[1]);

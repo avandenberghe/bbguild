@@ -101,7 +101,7 @@ if (!class_exists('\bbdkp\Guilds'))
 		$result = $db->sql_query($sql);
 		if ((int) $db->sql_fetchfield('rankcount', false, $result) == 1)
 		{
-			trigger_error(sprintf($user->lang('ERROR_RANK_EXISTS'),  $this->RankId ,  $this->GuildId) . $this->link, E_USER_WARNING);
+			trigger_error(sprintf($user->lang('ERROR_RANK_EXISTS'),  $this->RankId ,  $this->GuildId), E_USER_WARNING);
 		}
 
 		// build insert array

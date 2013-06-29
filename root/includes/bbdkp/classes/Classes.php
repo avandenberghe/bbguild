@@ -221,7 +221,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/classes/iClasses.$phpEx");
 		$result = $db->sql_query ( $sql );
 		if (( int ) $db->sql_fetchfield ( 'countclass', false, $result ) > 0)
 		{
-			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_CLASS_FAILED'], $this->classname ) . $this->link, E_USER_WARNING );
+			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_CLASS_FAILED'], $this->classname ), E_USER_WARNING );
 		}
 		$db->sql_freeresult ( $result );
 			

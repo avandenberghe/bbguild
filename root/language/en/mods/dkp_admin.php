@@ -763,6 +763,8 @@ So the loot would go to player 2 <br />',
 'SHOWONROSTER'	=> 'Show on Roster',
 'MINLEVELROSTER' => 'Minimum level',
 'MINLEVELROSTER_EXPLAIN' => 'If member level < this value then no roster display',
+'MIN_ARMORYLEVEL' => 'Minimum level to Download from Armory:',
+
 
 	 // titles
 'ADD_ITEM_RAIDID_NOTE' => 'Only raids less than two weeks old are shown / %sshow all</a>',

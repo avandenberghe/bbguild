@@ -184,6 +184,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 */
 	function __construct()
 	{
+		global $user;
 		$this->games = array (
 				'wow' 	=> $user->lang ['WOW'],
 				'lotro' => $user->lang ['LOTRO'],
@@ -201,7 +202,6 @@ if (!class_exists('\bbdkp\Admin'))
 				'gw2' 	=> $user->lang ['GW2'],
 		);
 		
-		$this->title = array();
 	}
 
 	/**
@@ -278,7 +278,7 @@ if (!class_exists('\bbdkp\Admin'))
 			$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 			$this->race_image = (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '';
 			$this->class_image = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '';
-			$this->member_title  = $row['member_title'];
+			//$this->member_title  = $row['member_title'];
 			
 			return true;
 		}
@@ -371,9 +371,9 @@ if (!class_exists('\bbdkp\Admin'))
 		$result = $db->sql_query($sql);
 		$maxlevel = $db->sql_fetchfield('maxlevel');
 		$db->sql_freeresult($result);
-		if ($this->member_lvl > $maxlevel)
+		if ($this->member_level > $maxlevel)
 		{
-			$this->member_lvl = $maxlevel;
+			$this->member_level = $maxlevel;
 		}
 
 
@@ -462,7 +462,7 @@ if (!class_exists('\bbdkp\Admin'))
 			$db->sql_freeresult($result);
 			if ($countm != 0)
 			{
-				trigger_error(sprintf($user->lang['ADMIN_UPDATE_MEMBER_FAIL'], ucwords($this->member_name)) . $this->link, E_USER_WARNING);
+				trigger_error(sprintf($user->lang['ADMIN_UPDATE_MEMBER_FAIL'], ucwords($this->member_name)) , E_USER_WARNING);
 			}
 		}
 
@@ -475,7 +475,7 @@ if (!class_exists('\bbdkp\Admin'))
 		$db->sql_freeresult($result);
 		if ($countm == 0)
 		{
-			trigger_error($user->lang['ERROR_INCORRECTRANK'] . $this->link, E_USER_WARNING);
+			trigger_error($user->lang['ERROR_INCORRECTRANK'], E_USER_WARNING);
 		}
 
 		// check level
@@ -640,7 +640,7 @@ if (!class_exists('\bbdkp\Admin'))
 				$this->member_class_id = $data['class'];
 				$this->member_gender_id = $data['gender'];
 				$this->member_achiev = $data['achievementPoints'];
-				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $data['realm']. '/' . $data ['name'] . '/simple';
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $data ['name'] . '/simple';
 				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
 				$this->member_title = '';
 				if (isset($data['titles']))
@@ -693,7 +693,7 @@ if (!class_exists('\bbdkp\Admin'))
 		global $phpbb_root_path;
 		if ($this->game_id == 'aion')
 		{
-			$this->memberportraiturl = $phpbb_root_path . 'images/roster_portraits/aion/' . $this->member_race_id . '_' . $this->member_gender_id . '.jpg';
+			$this->member_portrait_url = $phpbb_root_path . 'images/roster_portraits/aion/' . $this->member_race_id . '_' . $this->member_gender_id . '.jpg';
 		}
 	}
 	
@@ -702,6 +702,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 * @param unknown_type $member_name
 	 * @param unknown_type $guild_id
 	 * @return boolean
+	 * @todo fix this
 	 */
 	public function GuildKick($member_name, $guild_id)
 	{
@@ -754,7 +755,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 * @param array $memberdata
 	 * @param int $guild_id
 	 */
-	public function ArmoryUpdate($memberdata, $guild_id, $region)
+	public function ArmoryUpdate($memberdata, $guild_id, $region, $min_armory)
 	{
 		global $user, $db, $phpEx, $phpbb_root_path;
 		
@@ -782,7 +783,7 @@ if (!class_exists('\bbdkp\Admin'))
 			$newmembers[] = $mb['character']['name']; 
 		}
 		
-		// get the new members not yet created
+		// get the new members to insert
 		$to_add = array_diff($newmembers, $oldmembers);
 		
 		// start transaction
@@ -790,7 +791,7 @@ if (!class_exists('\bbdkp\Admin'))
 		
 		foreach($memberdata as $mb)
 		{
-			if (in_array($mb['character']['name'], $to_add))
+			if (in_array($mb['character']['name'], $to_add) && $mb['character']['level'] >= $min_armory )
 			{
 				$this->game_id ='wow';
 				$this->member_guild_id = $guild_id;
@@ -838,14 +839,14 @@ if (!class_exists('\bbdkp\Admin'))
 						'phpbb_user_id' => (int) $this->phpbb_user_id ,
 						'game_id' => (string) $this->game_id ,
 						'member_portrait_url' => (string) $this->member_portrait_url,
-						'title' => $this->member_title, 
+						'member_title' => $this->member_title, 
 					);
 			}
 		}
 		$db->sql_multi_insert(MEMBER_LIST_TABLE, $query);
 		$db->sql_transaction('commit');		
 
-		// get the new members to update
+		// get the members to update
 		$to_update = array_intersect($newmembers, $oldmembers);
 		foreach($memberdata as $mb)
 		{
@@ -896,7 +897,7 @@ if (!class_exists('\bbdkp\Admin'))
 						'phpbb_user_id' => (int) $this->phpbb_user_id ,
 						'game_id' => (string) $this->game_id ,
 						'member_portrait_url' => (string) $this->member_portrait_url,
-						'title' => $this->member_title
+						'member_title' => $this->member_title
 				); 
 				
 				
