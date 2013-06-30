@@ -165,7 +165,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$deleterank = (isset($_GET['deleterank'])) ? true : false;
 				$addrank = (isset($_POST['addrank'])) ? true : false;
 				
-				if ($add || $submit || $getarmorymembers || $updaterank || $deleterank || $addrank)
+				// POST check
+				if ($add || $submit || $getarmorymembers || $updaterank || $addrank )
 				{
 					if (! check_form_key('dbT2TvCZNZHjckSvbTPc'))
 					{
@@ -173,9 +174,6 @@ class acp_dkp_mm extends \bbdkp\Admin
 					}
 				}
 				
-				$form_key = 'dbT2TvCZNZHjckSvbTPc';
-				add_form_key($form_key);
-
 				if ($add)
 				{
 					$updateguild->name = utf8_normalize_nfc(request_var('guild_name', '', true));
@@ -247,63 +245,13 @@ class acp_dkp_mm extends \bbdkp\Admin
 						confirm_box(false, $user->lang['CONFIRM_DELETE_GUILD'], $s_hidden_fields);
 					}
 				}
-
-				if ($updateguild->guildid != 0)
-				{
-					// we have a GET
-					$update = true;
-					foreach ($this->regions as $key => $regionname)
-					{
-						$template->assign_block_vars('region_row', array(
-								'VALUE' => $key ,
-								'SELECTED' => ($updateguild->region == $key) ? ' selected="selected"' : '' ,
-								'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
-					}
-					//add value to dropdown when the game config value is 1
-						foreach ($this->games as $key => $gamename)
-						{
-							if ($config['bbdkp_games_' . $key] == 1)
-							{
-								$template->assign_block_vars('game_row', array(
-										'VALUE' => $key ,
-										'SELECTED' => ($updateguild->game_id == $key) ? ' selected="selected"' : '' ,
-										'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
-							}
-					}
-						
-				}
-				else
-				{
-					// NEW PAGE
-					foreach ($this->regions as $key => $regionname)
-					{
-						$template->assign_block_vars('region_row', array(
-								'VALUE' => $key ,
-								'SELECTED' => '' ,
-								'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
-					}
-						
-					//add value to dropdown when the game config value is 1
-					foreach ($this->games as $key => $gamename)
-					{
-						if ($config['bbdkp_games_' . $key] == 1)
-						{
-							$template->assign_block_vars('game_row', array(
-									'VALUE' => $key ,
-									'SELECTED' => '' ,
-									'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
-						}
-					}
-				}
-				
-				
 						
 				if ($addrank)
 				{
 					$newrank = new \bbdkp\Ranks();
 					$newrank->RankName = utf8_normalize_nfc(request_var('nrankname', '', true));
 					$newrank->RankId = request_var('nrankid', 0);
-					$newrank->GuildId = $guild_id;
+					$newrank->RankGuild = $updateguild->guildid; 
 					$newrank->RankHide = (isset($_POST['nhide'])) ? 1 : 0;
 					$newrank->RankPrefix = utf8_normalize_nfc(request_var('nprefix', '', true));
 					$newrank->RankSuffix = utf8_normalize_nfc(request_var('nsuffix', '', true));
@@ -320,12 +268,12 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$modrank = utf8_normalize_nfc(request_var('ranks', array(0 => ''), true));
 					foreach ($modrank as $rank_id => $rank_name)
 					{
-						$oldrank->Rankid = $rank_id;
-						$oldrank->GuildId = $guild_id;
+						$oldrank->RankId = $rank_id;
+						$oldrank->RankGuild = $updateguild->guildid; 
 						$oldrank->Getrank();
 				
-						$newrank->Rankid = $rank_id;
-						$newrank->GuildId = $oldrank->GuildId;
+						$newrank->RankId = $rank_id;
+						$newrank->RankGuild = $oldrank->RankGuild;
 						$newrank->RankName = $rank_name;
 						$newrank->RankHide = (isset($_POST['hide'][$rank_id])) ? 1 : 0;
 				
@@ -373,17 +321,22 @@ class acp_dkp_mm extends \bbdkp\Admin
 					{
 						// delete the rank only if there are no members left
 						$rank_id = request_var('ranktodelete', 'x');
+						
 						$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . '
-						where member_rank_id = ' . $rank_id . ' and member_guild_id = ' . $guild_id;
+						where member_rank_id = ' . $rank_id . ' and member_guild_id = ' . $updateguild->guildid;
 						$result = $db->sql_query($sql);
 						$countm = $db->sql_fetchfield('countm');
-						$db->sql_freeresult($result);
 						if ($countm != 0)
 						{
 							trigger_error($user->lang['ERROR_RANKMEMBERS'] . $this->link, E_USER_WARNING);
 						}
-						$sql = "select a.rank_name, b.name  from " . MEMBER_RANKS_TABLE . ' a , ' . GUILD_TABLE . ' b
-						where a.guild_id = b.id and a.rank_id = ' . $rank_id . ' and b.id = ' . $guild_id;
+						$db->sql_freeresult($result);
+						
+						$sql = "SELECT a.rank_id, a.rank_name 
+								FROM " . MEMBER_RANKS_TABLE . ' a , ' . GUILD_TABLE . ' b
+								WHERE a.guild_id = b.id 
+								AND a.rank_id = ' . $rank_id . ' 
+								AND b.id = ' . $updateguild->guildid;
 						$result = $db->sql_query($sql);
 						while ($row = $db->sql_fetchrow($result))
 						{
@@ -391,13 +344,64 @@ class acp_dkp_mm extends \bbdkp\Admin
 							$guild_name = $row['name'];
 						}
 						$db->sql_freeresult($result);
+
 						$s_hidden_fields = build_hidden_fields(array(
 								'deleterank' => true ,
 								'hidden_rank_id' => $rank_id ,
-								'hidden_guild_id' => $guild_id ,
-								'hidden_guild_name' => $guild_name ,
+								'hidden_guild_id' => $updateguild->guildid,
+								'hidden_guild_name' => $updateguild->name ,
 								'hidden_rank_name' => $old_rank_name));
-						confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_RANKS'], $old_rank_name, $guild_name), $s_hidden_fields);
+						
+						confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_RANKS'], $old_rank_name, $updateguild->name), $s_hidden_fields);
+					}
+				}
+				
+
+				if ($updateguild->guildid != 0)
+				{
+					// we have a GET
+					$update = true;
+					foreach ($this->regions as $key => $regionname)
+					{
+						$template->assign_block_vars('region_row', array(
+								'VALUE' => $key ,
+								'SELECTED' => ($updateguild->region == $key) ? ' selected="selected"' : '' ,
+								'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
+					}
+					//add value to dropdown when the game config value is 1
+					foreach ($this->games as $key => $gamename)
+					{
+						if ($config['bbdkp_games_' . $key] == 1)
+						{
+							$template->assign_block_vars('game_row', array(
+									'VALUE' => $key ,
+									'SELECTED' => ($updateguild->game_id == $key) ? ' selected="selected"' : '' ,
+									'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
+						}
+					}
+				
+				}
+				else
+				{
+					// NEW PAGE
+					foreach ($this->regions as $key => $regionname)
+					{
+						$template->assign_block_vars('region_row', array(
+								'VALUE' => $key ,
+								'SELECTED' => '' ,
+								'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
+					}
+				
+					//add value to dropdown when the game config value is 1
+					foreach ($this->games as $key => $gamename)
+					{
+						if ($config['bbdkp_games_' . $key] == 1)
+						{
+							$template->assign_block_vars('game_row', array(
+									'VALUE' => $key ,
+									'SELECTED' => '' ,
+									'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
+						}
 					}
 				}
 				
@@ -416,8 +420,10 @@ class acp_dkp_mm extends \bbdkp\Admin
 						'RANK_SUFFIX' => $suffix ,
 						'HIDE_CHECKED' => ($row['rank_hide'] == 1) ? 'checked="checked"' : '' ,
 						'S_READONLY' => ($row['rank_id'] == 90) ? true : false ,
-						'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild&amp;deleterank=1&amp;ranktodelete=" . 
-							$row['rank_id'] . "&amp;guild_id=" . $updateguild->guildid)));
+						'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", 
+							"i=dkp_mm&amp;mode=mm_addguild&amp;deleterank=1&amp;ranktodelete=" . 
+							$row['rank_id'] . "&amp;guild=" . $updateguild->guildid)
+					));
 				}
 				$db->sql_freeresult($result);
 
@@ -431,6 +437,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'MEMBERCOUNT' => $updateguild->membercount ,
 					'MIN_ARMORYLEVEL' => $updateguild->min_armory ,
 					'SHOW_ROSTER' => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
+					'U_ADD_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild&amp;addrank=1&amp;guild=" . $updateguild->guildid), 
 					// Language
 					'L_TITLE' =>  ($this->url_id < 0 ) ? $user->lang['ACP_MM_ADDGUILD'] : $user->lang['ACP_MM_EDITGUILD'] , 
 					'L_EXPLAIN' => ($this->url_id < 0 ) ?  $user->lang['ACP_MM_ADDGUILD_EXPLAIN'] : $user->lang['ACP_MM_EDITGUILD_EXPLAIN'] ,
@@ -451,6 +458,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 					));
 				}
 				
+				$form_key = 'dbT2TvCZNZHjckSvbTPc';
+				add_form_key($form_key);
 				
 				$this->page_title = $user->lang['ACP_MM_ADDGUILD'];
 				$this->tpl_name = 'dkp/acp_' . $mode;
