@@ -1036,13 +1036,15 @@ $versions = array(
 
      '1.2.9' => array(
 	 // oop release, now requires 553
+
      		'config_update' => array(
 					// roster layout: main parameter for steering roster layout
      				array('bbdkp_roster_layout', '0', true),
      		),
      		
+     		// add guild columns
      		'table_column_add' => array(
-     				array($table_prefix . 'bbdkp_memberlist', 'title' , array('VCHAR_UNI:255', '')),
+     				array($table_prefix . 'bbdkp_memberlist', 'member_title' , array('VCHAR_UNI:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'level' ,array('UINT', 0) ),
      				array($table_prefix . 'bbdkp_memberguild', 'members' ,array('UINT', 0)),
      				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints' ,array('UINT', 0)),
@@ -1050,8 +1052,15 @@ $versions = array(
      				array($table_prefix . 'bbdkp_memberguild', 'guildarmoryurl' ,array('VCHAR:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'emblemurl' ,array('VCHAR:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'game_id' ,array('VCHAR:10', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'min_armory' ,array('UINT', 90)),
      		),
      		
+     		//remove the ranks module because it's a part of Guild acp now
+     		'module_remove' => array(
+            array('acp', 'ACP_DKP_MEMBER', array(
+		           		 'module_basename' => 'dkp_mm',
+		            	 'modes'           => array('mm_ranks'),
+				))),
      		
      		'custom' => array(
      			'tableupdates',
@@ -1314,8 +1323,11 @@ function gameinstall($action, $version)
 	}
 }
 
-/*
- *
+/**
+ * custom SQL updates outside of UMIL
+ * @param unknown_type $action
+ * @param unknown_type $version
+ * @return multitype:string
  */
 function tableupdates($action, $version)
 {
@@ -1340,7 +1352,7 @@ function tableupdates($action, $version)
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
 					$db->sql_query($sql);
 
-					// make new unique composite
+					// make new unique composite this way double membernames are enabled
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
 
@@ -1385,7 +1397,7 @@ function tableupdates($action, $version)
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
 					$db->sql_query($sql);
 
-					// make new unique composite
+					// make new unique composite this way double membernames are enabled
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
 
@@ -1443,9 +1455,11 @@ function populate($action, $version)
 
 
 
-/***************************************
- *
+/**
  * adds config value with dkp module Id
+ * @param unknown_type $action
+ * @param unknown_type $version
+ * @return multitype:string
  */
 function acplink($action, $version)
 {
@@ -1479,10 +1493,12 @@ function acplink($action, $version)
 	}
 }
 
-/**************************************
+/**
  *
  * function for rendering region list
- *
+ * @param unknown_type $selected_value
+ * @param unknown_type $key
+ * @return string
  */
 function regionoptions($selected_value, $key)
 {
@@ -1508,11 +1524,12 @@ function regionoptions($selected_value, $key)
 	return $pass_char_options;
 }
 
-
-/**************************************
- *
+/**
  * global function for clearing cache
- *
+ * 
+ * @param unknown_type $action
+ * @param unknown_type $version
+ * @return string
  */
 function bbdkp_caches($action, $version)
 {
@@ -1527,8 +1544,10 @@ function bbdkp_caches($action, $version)
     return 'UMIL_CACHECLEARED';
 }
 
-/***
+/**
  * checks if there is an older install then quit
+ * only updates from 1.2.8 are allowed...
+ * 
  */
 function check_oldbbdkp()
 {
@@ -1540,11 +1559,10 @@ function check_oldbbdkp()
 	// check config
 	if($umil->config_exists('bbdkp_version'))
     {
-		if(version_compare($config['bbdkp_version'], '1.2.7') == -1 )
+		if(version_compare($config['bbdkp_version'], '1.2.6') == -1 )
 		{
-			//stop here, the version is less than 1.2.7
-			//redirect(append_sid($phpbb_root_path . '/olddkpupdate/index.'. $phpEx));
-			trigger_error( $user->lang['UMIL_127MINIMUM'], E_USER_WARNING);
+			//stop here, the version is less than 1.2.6
+			trigger_error( $user->lang['UMIL_126MINIMUM'], E_USER_WARNING);
 		}
     }
 }

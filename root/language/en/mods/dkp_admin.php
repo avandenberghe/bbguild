@@ -332,8 +332,8 @@ $lang = array_merge($lang, array(
 // Manage Members Menu (yes, MMM)
 'ADD_MEMBER' 	=> 'Add New Member',
 'LIST_EDIT_DEL_MEMBER' => 'List, Edit or Delete Members',
-'EDIT_RANKS' 		=> 'Edit Membership Ranks',
-'ADD_RANKS' 		=> 'Add Membership Ranks',
+'EDIT_RANKS' 		=> 'Edit Ranks',
+'ADD_RANKS' 		=> 'Add Ranks',
 'TRANSFER_HISTORY' => 'Transfer Member History',
 
 
@@ -611,6 +611,7 @@ $lang = array_merge($lang, array(
 'GUILD_MEMBERS' => 'Guild Member(s)',
 'GUILD_NAME'	=> 'Guild name',
 'REALM_NAME'	=> 'Realm name',
+'GUILD_EMBLEM'	=> 'Guild Emblem',
 'HIDE_INACTIVE' => 'Hide Inactive Members',
 'HIDE_INACTIVE_NOTE' => 'Hide members that haven’t attended a raid in [inactive period] days?',
 'INACTIVE_PERIOD' => 'Inactive Period',
@@ -763,6 +764,8 @@ So the loot would go to player 2 <br />',
 'SHOWONROSTER'	=> 'Show on Roster',
 'MINLEVELROSTER' => 'Minimum level',
 'MINLEVELROSTER_EXPLAIN' => 'If member level < this value then no roster display',
+'MIN_ARMORYLEVEL' => 'Minimum level to Download from Armory:',
+
 
 	 // titles
 'ADD_ITEM_RAIDID_NOTE' => 'Only raids less than two weeks old are shown / %sshow all</a>',

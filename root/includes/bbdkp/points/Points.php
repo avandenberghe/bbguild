@@ -92,7 +92,7 @@ class Points implements iPoints
 				
 				unset($bbdkp);
 				
-				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_DELETED']) . $this->link , E_USER_NOTICE );
+				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_DELETED']) , E_USER_NOTICE );
 	
 				return true;
 				break;
@@ -245,7 +245,7 @@ class Points implements iPoints
 					'log_type' 		=> $log_action ['header'],
 					'log_action' 	=> $log_action ) );
 	
-				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_SUCCESS'], $itemcount, $accountupdates ) . $this->link , E_USER_NOTICE );
+				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_SUCCESS'], $itemcount, $accountupdates ) , E_USER_NOTICE );
 	
 				return $countraids;
 	

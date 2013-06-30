@@ -97,7 +97,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/factions/iFaction.$phpEx");
 		$db->sql_transaction ( 'commit' );
 		$cache->destroy ( 'sql', FACTION_TABLE );
 		
-		trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $this->faction_name ) . $this->link, E_USER_NOTICE );
+		trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $this->faction_name ), E_USER_NOTICE );
 	
 	}
 	
