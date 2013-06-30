@@ -32,12 +32,11 @@ if (!class_exists('\bbdkp\Guilds'))
 /**
  * Ranks
  * 
- * Manages Guildranks
- * 
+ * Manages Guildranks, extends the guild class
  * @package 	bbDKP
  * 
  */
- class Ranks extends \bbdkp\Guilds implements iRanks
+class Ranks extends \bbdkp\Guilds implements iRanks
 {
 	public $RankName;
 	public $RankId;
@@ -56,6 +55,10 @@ if (!class_exists('\bbdkp\Guilds'))
 		$this->RankSuffix='';
 	}
 
+	/**
+	 * 
+	 * @see \bbdkp\iRanks::Getrank()
+	 */
 	public function Getrank()
 	{
 	    global $user, $db, $config, $phpEx, $phpbb_root_path;
@@ -76,7 +79,7 @@ if (!class_exists('\bbdkp\Guilds'))
 
 	/**
 	 * adds a rank
-	 * @see \bbdkp\iRanks::Make()
+	 * @see \bbdkp\iRanks::Makerank()
 	 */
 	public function Makerank()
 	{
@@ -134,27 +137,10 @@ if (!class_exists('\bbdkp\Guilds'))
 
 	}
 
-	/**
-	 * returns number of members with a certain rank
-	 * @return unknown
-	 */
-	public function countmembers()
-	{
-		global $user, $db;
-
-		$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . '
-			WHERE member_rank_id = ' . $this->RankId . ' and member_guild_id = ' . $this->RankGuild;
-		$result = $db->sql_query($sql);
-		$countm = (int) $db->sql_fetchfield('countm');
-		$db->sql_freeresult($result);
-
-		return $countm;
-	}
-
 
 	/**
 	 * (non-PHPdoc)
-	 * @see \bbdkp\iRanks::Delete()
+	 * @see \bbdkp\iRanks::Rankdelete()
 	 */
 	public function Rankdelete($override)
 	{
@@ -208,8 +194,8 @@ if (!class_exists('\bbdkp\Guilds'))
 	}
 
 	/**
-	 * (non-PHPdoc)
-	 * @see \bbdkp\iRanks::Update()
+	 * 
+	 * @see \bbdkp\iRanks::Rankupdate()
 	 */
 	public function Rankupdate(Ranks $old_rank)
 	{
@@ -261,12 +247,16 @@ if (!class_exists('\bbdkp\Guilds'))
 
 	}
 	
+	/**
+	 * returns rank array
+	 * @return array
+	 */
 	public function listranks()
 	{
 		global $user, $db;
 		// rank 99 is the out-rank
 		$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . '
-	        		WHERE guild_id = ' . $this->RankGuild . '
+	        		WHERE guild_id = ' . $this->RankGuild . ' AND rank_id < 99	
 	        		ORDER BY rank_id, rank_hide  ASC ';
 		
 		$result = $db->sql_query($sql);
@@ -274,15 +264,28 @@ if (!class_exists('\bbdkp\Guilds'))
 		
 	}
 	
-	
+	/**
+	 * 
+	 * @see \bbdkp\Guilds::countmembers()
+	 */
+	public function countmembers()
+	{
+		global $user, $db;
+
+		$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . '
+			WHERE member_rank_id = ' . $this->RankId . ' and member_guild_id = ' . $this->RankGuild;
+		$result = $db->sql_query($sql);
+		$countm = (int) $db->sql_fetchfield('countm');
+		$db->sql_freeresult($result);
+
+		return $countm;
+	}
 	
 	/**
-	 * Updates the Ranks from Armory
 	 * 
-	 * @param unknown_type $memberdata
-	 * @param unknown_type $guild_id
+	 * @see \bbdkp\iRanks::WoWArmoryUpdate($memberdata, $guild_id, $region)
 	 */
-	public function ArmoryUpdate($memberdata, $guild_id, $region)
+	public function WoWArmoryUpdate($memberdata, $guild_id, $region)
 	{
 		global $user, $db, $phpEx, $phpbb_root_path;
 		

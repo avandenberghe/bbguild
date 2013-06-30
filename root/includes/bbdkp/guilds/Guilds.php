@@ -269,7 +269,7 @@ if (!class_exists('\bbdkp\Admin'))
 						}
 						
 						$rank = new \bbdkp\Ranks();
-						$rank->ArmoryUpdate($this->memberdata, $this->guildid,  $this->region); 
+						$rank->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region); 
 						
 						//update member table
 						if (!class_exists('\bbdkp\Members'))
@@ -278,7 +278,7 @@ if (!class_exists('\bbdkp\Admin'))
 						}
 						
 						$mb = new \bbdkp\Members();
-						$mb->ArmoryUpdate($this->memberdata, $this->guildid,  $this->region, $this->min_armory);
+						$mb->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region, $this->min_armory);
 						
 					}				
 					break;
@@ -392,7 +392,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 * @param int $width
 	 * @return resource
 	 */
-	private function createEmblem($showlevel=TRUE, $width=215)
+	private function createEmblem($showlevel=TRUE, $width=115)
 	{
 		global $phpEx, $phpbb_root_path;
 		

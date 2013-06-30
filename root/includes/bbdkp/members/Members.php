@@ -750,12 +750,10 @@ if (!class_exists('\bbdkp\Admin'))
 	}
 	
 	/**
-	 * Updates the Member table from Armory
-	 *
-	 * @param array $memberdata
-	 * @param int $guild_id
+	 * 
+	 * @see \bbdkp\iMembers::WoWArmoryUpdate()
 	 */
-	public function ArmoryUpdate($memberdata, $guild_id, $region, $min_armory)
+	public function WoWArmoryUpdate($memberdata, $guild_id, $region, $min_armory)
 	{
 		global $user, $db, $phpEx, $phpbb_root_path;
 		$member_id = 0; 
