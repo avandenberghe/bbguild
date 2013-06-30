@@ -93,7 +93,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
 		if (( int ) $a > 0)
 		{
 			//uh oh that race exists
-			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_FAILED'], $this->race_id  ) . $this->link, E_USER_WARNING );
+			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_FAILED'], $this->race_id  ), E_USER_WARNING );
 		}
 		$db->sql_freeresult ( $resultr );
 		$data = array (

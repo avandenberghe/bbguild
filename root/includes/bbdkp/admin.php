@@ -131,14 +131,11 @@ class Admin implements \bbdkp\iAdmin
 	 * @param char $loud default false
 	 * @return array response
 	 */
-    
-    
-    /**
-     * (non-PHPdoc)
-     * @see \bbdkp\iAdmin::curl()
-     */
   	public function curl($url, $return_Server_Response_Header = false, $loud= false)
 	{
+		
+		global $user; 
+		
 		if ( function_exists ( 'curl_init' ))
 		{
 			 /* Create a CURL handle. */
@@ -151,10 +148,10 @@ class Admin implements \bbdkp\iAdmin
 			curl_setopt_array($curl, array(
 				CURLOPT_RETURNTRANSFER => 1,
 				CURLOPT_URL => $url, 
-				CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:15.0) Gecko/20100101 Firefox/15.0', 
+				CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0', 
 				CURLOPT_SSL_VERIFYHOST => false,
 				CURLOPT_SSL_VERIFYPEER => false, 
-				CURLOPT_TIMEOUT => 30, 
+				CURLOPT_TIMEOUT => 60, 
 				CURLOPT_VERBOSE => false, 
 				CURLOPT_HEADER => false, 
 			));

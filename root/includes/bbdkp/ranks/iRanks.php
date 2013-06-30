@@ -47,4 +47,12 @@ interface iRanks extends \bbdkp\iGuilds
 	*/
 	function Rankupdate(Ranks $old_rank);
 
+	/**
+	 * Calls wow API to update guild ranks from Battlenet
+	 * 
+	 * @param array $memberdata
+	 * @param int $guild_id
+	 * @param char $region
+	 */
+	function WoWArmoryUpdate($memberdata, $guild_id, $region);
 }
