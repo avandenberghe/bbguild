@@ -40,6 +40,7 @@ input.rank_add {
 <form method="post" action="{F_ADD_GUILD}" onsubmit="return check_form(this)" id="addguild">
 
 <fieldset>
+
 <legend>{L_ADD_GUILD_TITLE}</legend>
 
 	<dl>
@@ -102,10 +103,23 @@ input.rank_add {
 
 
 </fieldset>
+<fieldset class="quick">
+<input type="hidden" name="{URI_GUILD}" value="{GUILD_ID}" />
+
+    <!-- IF S_ADD -->
+    <input type="submit" name="addguild" value="{L_ADD_GUILD}" class="button1" /> 
+    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    <!-- ELSE -->
+    
+    <input type="submit" name="updateguild" value="{L_UPDATE_GUILD}" class="button1" /> 
+    <input type="submit"  name="deleteguild" value="{L_DELETE_GUILD}" class="button4" />
+    <!-- ENDIF -->
+</fieldset>
+
 
 <!-- IF ! S_ADD -->
 
-<div>
+
 <fieldset>
 <legend>{L_EDIT_RANKS}</legend>
 
@@ -174,28 +188,19 @@ input.rank_add {
 </fieldset>
 <!-- ENDIF -->
 
-
 </fieldset>
-</div>
 
 <!-- ENDIF -->
 
-
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+<fieldset class="quick">
 <input type="hidden" name="{URI_GUILD}" value="{GUILD_ID}" />
-
-    <!-- IF S_ADD -->
-    <input type="submit" name="addguild" value="{L_ADD_GUILD}" class="button1" /> 
-    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
-    <!-- ELSE -->
+    <!-- IF ! S_ADD -->
     <!-- IF S_WOW -->
 	<input type="submit" name="armory" value="{L_ARMORY_GUILD}" class="button1" />
 	<!-- ENDIF -->
-    
-    <input type="submit" name="updateguild" value="{L_UPDATE_GUILD}" class="button1" /> 
-    <input type="submit"  name="deleteguild" value="{L_DELETE_GUILD}" class="button4" />
     <!-- ENDIF -->
-</fieldset>
  {S_FORM_TOKEN}
+</fieldset>
+
 </form>
 <!-- INCLUDE dkp/overall_footer.html -->
