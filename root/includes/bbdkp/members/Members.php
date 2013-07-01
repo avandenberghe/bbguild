@@ -786,7 +786,7 @@ if (!class_exists('\bbdkp\Admin'))
 		
 		// start transaction
 		$db->sql_transaction('begin');
-		
+		$query = array(); 
 		foreach($memberdata as $mb)
 		{
 			if (in_array($mb['character']['name'], $to_add) && $mb['character']['level'] >= $min_armory )
@@ -800,7 +800,7 @@ if (!class_exists('\bbdkp\Admin'))
 				$this->member_race_id = (int) $mb['character']['race'];
 				$this->member_class_id = (int) $mb['character']['class'];
 				$this->member_achiev = (int) $mb['character']['achievementPoints'];
-				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $realm . '/' . $this->member_name . '/simple';
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $mb['character']['realm'] . '/' . $this->member_name . '/simple';
 				$this->member_status = 1;
 				$this->member_comment = sprintf($user->lang['ACP_SUCCESSMEMBERADD'],  date("F j, Y, g:i a") );
 				$this->member_joindate = $this->time;
@@ -841,8 +841,12 @@ if (!class_exists('\bbdkp\Admin'))
 					);
 			}
 		}
-		$db->sql_multi_insert(MEMBER_LIST_TABLE, $query);
-		$db->sql_transaction('commit');		
+		
+		if(count($query) > 0)
+		{
+			$db->sql_multi_insert(MEMBER_LIST_TABLE, $query);
+			$db->sql_transaction('commit');		
+		}
 
 		// get the members to update
 		$to_update = array_intersect($newmembers, $oldmembers);
@@ -850,7 +854,7 @@ if (!class_exists('\bbdkp\Admin'))
 		{
 			if (in_array($mb['character']['name'], $to_update))
 			{
-				$member_id =  (int) $member_ids[bin2hex($this->member_name)]; 
+				$member_id =  (int) $member_ids[bin2hex($mb['character']['name'])]; 
 				$this->game_id ='wow';
 				$this->member_rank_id = $mb['rank'];
 				$this->member_name = $mb['character']['name'];
@@ -860,8 +864,8 @@ if (!class_exists('\bbdkp\Admin'))
 				$this->member_race_id = (int) $mb['character']['race'];
 				$this->member_class_id = (int) $mb['character']['class'];
 				$this->member_achiev = (int) $mb['character']['achievementPoints'];
-				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $realm. '/' . $this->member_name . '/simple';
-				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $mb['character']['thumbnail'];
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $mb['character']['realm'] . '/' . $this->member_name . '/simple';
+				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $region, $region) . $mb['character']['thumbnail'];
 		
 				$sql_ary = array (
 						'member_name' => ucwords($this->member_name) ,

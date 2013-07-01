@@ -12,6 +12,25 @@ function check_form()
 }
 //]]>
 </script>
+<style>
+.addrank
+{
+	background-color: #E2FFDE; 
+}
+
+input.rank_add {
+    background-image: url(./images/add.png); /* 16px x 16px */
+    background-color: transparent; /* make the button transparent */
+    background-repeat: no-repeat;  /* make the background image appear only once */
+    background-position: 0px 0px;  /* equivalent to 'top left' */
+    border: none;           /* assuming we don't want any borders */
+    cursor: pointer;        /* make the cursor like hovering over an <a> element */
+    height: 16px;           /* make this the size of your image */
+    padding-left: 16px;     /* make text start to the right of the image */
+    vertical-align: middle; /* align the text vertically centered */
+}
+
+</style>
 
 <a name="maincontent"></a>
 
@@ -21,6 +40,7 @@ function check_form()
 <form method="post" action="{F_ADD_GUILD}" onsubmit="return check_form(this)" id="addguild">
 
 <fieldset>
+
 <legend>{L_ADD_GUILD_TITLE}</legend>
 
 	<dl>
@@ -78,15 +98,28 @@ function check_form()
    
     <dl>
 		<dt><label for="min_armorylevel">{L_MIN_ARMORYLEVEL}</label></dt>
-		<dd><input class="text" type="input" size="5" maxlength="3" id="min_armorylevel" name="min_armorylevel" value="{MIN_ARMORYLEVEL}" /></dd>
+		<dd><input type="text" id="min_armorylevel" name="min_armorylevel" class="text" size="5" maxlength="3" value="{MIN_ARMORYLEVEL}" /></dd>
 	</dl>
 
 
 </fieldset>
+<fieldset class="quick">
+<input type="hidden" name="{URI_GUILD}" value="{GUILD_ID}" />
+
+    <!-- IF S_ADD -->
+    <input type="submit" name="addguild" value="{L_ADD_GUILD}" class="button1" /> 
+    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+    <!-- ELSE -->
+    
+    <input type="submit" name="updateguild" value="{L_UPDATE_GUILD}" class="button1" /> 
+    <input type="submit"  name="deleteguild" value="{L_DELETE_GUILD}" class="button4" />
+    <!-- ENDIF -->
+</fieldset>
+
 
 <!-- IF ! S_ADD -->
 
-<div>
+
 <fieldset>
 <legend>{L_EDIT_RANKS}</legend>
 
@@ -105,12 +138,13 @@ function check_form()
 
 <tfoot> 
   <tr class="row2">
-    <td><input type="text" name="nrankid" size="5" maxlength="2" value="" class="input" /></td>
-    <td><input type="text" name="nrankname" size="30" maxlength="50" value="" class="input" /></td>
+    <td><input type="text" name="nrankid" size="5" maxlength="2" value="" class="addrank" /></td>
+    <td><input type="text" name="nrankname" size="30" maxlength="50" value="" class="addrank" /></td>
     <td  align="center"><input type="checkbox" name="nhide" value="1" /></td>
-    <td><input type="text" name="nprefix" size="25" maxlength="40" value="" class="input" /></td>
-    <td><input type="text" name="nsuffix" size="25" maxlength="40" value="" class="input" /></td>
-    <td><input type="submit" name="add" value="{L_ADD_RANKS}" class="button1" /></td>
+    <td><input type="text" name="nprefix" size="25" maxlength="40" value="" class="addrank" /></td>
+    <td><input type="text" name="nsuffix" size="25" maxlength="40" value="" class="addrank" /></td>
+    <td><input type="submit" name="addrank" value=" " class="rank_add"/></td>
+    
   </tr>
 </tfoot>
 
@@ -140,9 +174,7 @@ function check_form()
 	    <td align="center"><input type="checkbox" name="hide[{ranks_row.RANK_ID}]" value="1" {ranks_row.HIDE_CHECKED} /></td>
 	    <td><input type="text" name="prefix[{ranks_row.RANK_ID}]" size="25" maxlength="40" value="{ranks_row.RANK_PREFIX}" class="input" /></td>
 	    <td><input type="text" name="suffix[{ranks_row.RANK_ID}]" size="25" maxlength="40" value="{ranks_row.RANK_SUFFIX}" class="input" /></td>
-	    <td style="text-align:center; width:5; white-space: nowrap;">
-			<a href="{ranks_row.U_DELETE_RANK}">{ICON_DELETE}</a>
-		</td>
+	    <td style="text-align:center; width:5; white-space: nowrap;"><a href="{ranks_row.U_DELETE_RANK}">{ICON_DELETE}</a></td>
 	    
 	    <!-- ENDIF -->
 	
@@ -152,34 +184,22 @@ function check_form()
 </table>
 <!-- IF .ranks_row -->
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-     <input type="submit" name="update" value="{L_EDIT_RANKS}" class="button1" /> 
-</fieldset>
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-     <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+     <input type="submit" name="updaterank" value="{L_EDIT_RANKS}" class="button1" /> 
 </fieldset>
 <!-- ENDIF -->
 
-
 </fieldset>
-</div>
 
 <!-- ENDIF -->
 
-
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+<fieldset class="quick">
 <input type="hidden" name="{URI_GUILD}" value="{GUILD_ID}" />
- {S_FORM_TOKEN}
-    <!-- IF S_ADD -->
-    <input type="submit" name="addguild" value="{L_ADD_GUILD}" class="button1" /> 
-    <input type="reset" name="reset" value="{L_RESET}" class="button1" />
-    <!-- ELSE -->
+    <!-- IF ! S_ADD -->
     <!-- IF S_WOW -->
 	<input type="submit" name="armory" value="{L_ARMORY_GUILD}" class="button1" />
 	<!-- ENDIF -->
-    
-    <input type="submit" name="updateguild" value="{L_UPDATE_GUILD}" class="button1" /> 
-    <input type="submit"  name="deleteguild" value="{L_DELETE_GUILD}" class="button4" />
     <!-- ENDIF -->
+ {S_FORM_TOKEN}
 </fieldset>
 
 </form>

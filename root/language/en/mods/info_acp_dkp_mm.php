@@ -28,7 +28,7 @@ $lang = array_merge($lang, array(
  	'ACP_DKP_GUILD_ADD'	    => 'Add Guild',  
 	'ACP_DKP_GUILD_LIST'	=> 'Guilds',   
 	'ACP_DKP_MEMBER_ADD'	=> 'Add member',  
-	'ACP_DKP_MEMBER_LIST'	=> 'Members',
+	'ACP_DKP_MEMBER_LIST'	=> 'Roster',
 	'ACP_DKP_MEMBER_RANK'	=> 'Ranks',
 	'ACP_DKP_ARMORYUPDATER'	=> 'Armory updater',	
 ));
