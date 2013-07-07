@@ -42,7 +42,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.', 
-'FOOTERBBDKP' => 'bbDKP1.2.9', 
+'FOOTERBBDKP' => 'bbDKP1.3.0', 
 //---- Portal blocks ----- 
 'PORTAL'	=> 'Portal', 
 'RECENTLOOT' => 'Recent Loot', 
@@ -116,7 +116,7 @@ $lang = array_merge($lang, array(
 'MENU_VIEWEVENT' => 'View Event',
 'MENU_PLANNER' => 'Planner',
 
-//games supported
+//games preinstalled
 'AION'       => 'Aion' , 
 'DAOC'       => 'Dark Age of Camelot' , 
 'EQ'         => 'EverQuest' , 
@@ -131,6 +131,7 @@ $lang = array_merge($lang, array(
 'VANGUARD' 	 => 'Vanguard Saga of Heroes' , 
 'WARHAMMER'  => 'Warhammer Online' ,
 'WOW'        => 'World of Warcraft' , 
+'PREINSTALLED' => 'Preinstalled games: %s', 
 
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status', 

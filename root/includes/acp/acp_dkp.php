@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
+ * @version 1.3.0
  * 
  */
 // don't add this file to namespace bbdkp
@@ -328,12 +328,12 @@ class acp_dkp extends \bbdkp\Admin
 				$errstr = '';
 				$errno = 0;
 				$installed_version = $config['bbdkp_version'];
-				$info = get_remote_file('bbdkp.googlecode.com', '/svn/trunk', 'version.txt', $errstr, $errno);
+				$info = $this->curl('https://raw.github.com/Sajaki/bbDKP/v130/contrib/version.txt', false, false, false);
 				if ($info === false)
 				{
 					// version file reference does not exist, show error
 					$template->assign_vars(array(
-						'S_UP_TO_DATE' => false ,
+						'S_UP_TO_DATE' => 1 ,
 						'BBDKPVERSION' => $user->lang['YOURVERSION'] . $installed_version ,
 						'UPDATEINSTR' => $user->lang['VERSION_NOTONLINE']));
 				}
@@ -342,19 +342,31 @@ class acp_dkp extends \bbdkp\Admin
 					$info = explode("\n", $info);
 					$latest_version = trim($info[0]);
 					// is the installed version >= the latest version ? then you are up to date
-					$up_to_date = (version_compare(str_replace('rc', 'RC', strtolower($installed_version)), str_replace('rc', 'RC', strtolower($latest_version)), '>=')) ? true : false;
-					if ($up_to_date)
+					
+					if (version_compare(
+							str_replace('rc', 'RC', strtolower($installed_version)), 
+							str_replace('rc', 'RC', strtolower($latest_version)), '='))
 					{
-						// your version is the same or even newer than the official version
+						// your version is the same than the official version
 						$template->assign_vars(array(
-							'S_UP_TO_DATE' => true ,
+							'S_UP_TO_DATE' => 0 ,
 							'BBDKPVERSION' => 'bbDKP ' . $config['bbdkp_version']));
+					}
+					elseif (version_compare(
+							str_replace('rc', 'RC', strtolower($installed_version)), 
+							str_replace('rc', 'RC', strtolower($latest_version)), '>')) 
+					{
+						// you have a developmentversion
+						$template->assign_vars(array(
+							'S_UP_TO_DATE' => 1 ,
+							'BBDKPVERSION' => $user->lang['YOURVERSION'] . $installed_version ,
+							'UPDATEINSTR' => $user->lang['LATESTVERSION'] . $latest_version) );
 					}
 					else
 					{
 						// you have an old version
 						$template->assign_vars(array(
-							'S_UP_TO_DATE' => false ,
+							'S_UP_TO_DATE' => -1 ,
 							'BBDKPVERSION' => $user->lang['YOURVERSION'] . $installed_version ,
 							'UPDATEINSTR' => $user->lang['LATESTVERSION'] . $latest_version . ', <a href="' . $user->lang['WEBURL'] . '">' . $user->lang['DOWNLOAD'] . '</a>'));
 					}

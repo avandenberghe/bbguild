@@ -3,12 +3,17 @@
 <a name="maincontent"></a>
 <h1>{L_BBDKP_WELCOME}</h1>
 
-<!-- IF S_UP_TO_DATE -->
-	<div class="successbox">
+<!-- IF S_UP_TO_DATE == 0 -->
+	<div class="successbox"  style="background-color: #62A5CC !important;>
 		<p>{BBDKPVERSION}</p>
 	</div>
-<!-- ELSE -->
+<!-- ELSEIF S_UP_TO_DATE == -1  -->
 	<div class="errorbox">
+		<p>{BBDKPVERSION}</p>
+		<p>{UPDATEINSTR}</p>
+	</div>
+<!-- ELSE  -->
+	<div class="successbox" style="background-color: #62A5CC !important;">
 		<p>{BBDKPVERSION}</p>
 		<p>{UPDATEINSTR}</p>
 	</div>

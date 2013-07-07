@@ -7,8 +7,8 @@ namespace bbdkp;
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
- * @since 1.2.9
+ * @version 1.3.0
+ * @since 1.3.0
  */
 
 /**
@@ -27,10 +27,6 @@ if (!class_exists('\bbdkp\Game'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
 }
-if (!interface_exists('\bbdkp\iFaction'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/games/factions/iFaction.$phpEx");
-}
 
 /**
  * Faction
@@ -39,7 +35,7 @@ if (!interface_exists('\bbdkp\iFaction'))
  * 
  * @package 	bbDKP
  */
- class Faction  extends \bbdkp\Game implements iFaction 
+ class Faction extends \bbdkp\Game 
 {
 	public $game_id;
 	public $faction_id;
@@ -61,7 +57,7 @@ if (!interface_exists('\bbdkp\iFaction'))
 	 */
 	public function Get()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $db;
 		$sql = 'SELECT game_id, faction_id, faction_name, faction_hide
     			FROM ' . FACTION_TABLE . '
     			WHERE faction_id = ' . (int) $this->faction_id . ' and game_id = ' . (int) $this->game_id
@@ -83,7 +79,7 @@ if (!interface_exists('\bbdkp\iFaction'))
 	 */
 	public function Make()
 	{
-		global $db, $cache, $user, $phpEx, $phpbb_root_path;
+		global $db, $user, $cache;
 	
 		$sql = 'SELECT max(faction_id) as faction_id FROM ' . FACTION_TABLE . "
 				WHERE game_id = '" . $this->game_id . "' ";
@@ -111,12 +107,11 @@ if (!interface_exists('\bbdkp\iFaction'))
 	}
 	
 	/**
-	 * (non-PHPdoc)
-	 * @see \bbdkp\iFaction::Delete()
+	 * deletes a specific factions
 	 */
 	public function Delete()
 	{
-		global $db, $cache, $user, $phpEx, $cache, $phpbb_root_path;
+		global $db, $user, $cache; 
 		
 		/* check if there are races tied to this faction */
 		$sql_array = array (
@@ -142,10 +137,17 @@ if (!interface_exists('\bbdkp\iFaction'))
 		{
 			trigger_error (sprintf ( $user->lang ['ADMIN_DELETE_FACTION_FAILED'], $this->faction_name), E_USER_WARNING );
 		}
-		
-		
-		
-		
+	}
+	
+	/**
+	 * deletes a specific factions
+	 */
+	public function Delete_all_factions()
+	{
+		global $db, $user, $cache;
+		$sql = 'DELETE FROM ' . FACTION_TABLE . " WHERE game_id = '" .   $this->game_id . "'"  ;
+		$db->sql_query ( $sql );
+		$cache->destroy ( 'sql', FACTION_TABLE );
 	}
 	
 	

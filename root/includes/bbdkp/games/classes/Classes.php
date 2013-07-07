@@ -6,8 +6,8 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
- * @since 1.2.9
+ * @version 1.3.0
+ * @since 1.3.0
  */
 namespace bbdkp;
 
@@ -26,11 +26,6 @@ if (!class_exists('\bbdkp\Game'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
 }
-if (!interface_exists('\bbdkp\iClasses'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/games/classes/iClasses.$phpEx");
-}
-
 /**
  * Classes
  * 
@@ -38,7 +33,7 @@ if (!interface_exists('\bbdkp\iClasses'))
  * 
  * @package 	bbDKP
  */
- class Classes  extends \bbdkp\Game implements iClasses 
+ class Classes extends \bbdkp\Game
  {
 
 	public $game_id; 
@@ -113,7 +108,6 @@ if (!interface_exists('\bbdkp\iClasses'))
 
 	/**
 	 * adds a class to database
-	 * @see \bbdkp\iClasses::Make()
 	 */
 	public function Make()
 	{
@@ -165,7 +159,6 @@ if (!interface_exists('\bbdkp\iClasses'))
 	
 	/**
 	 * deletes a class from database
-	 * @see \bbdkp\iClasses::Delete()
 	 */
 	public function Delete()
 	{
@@ -213,8 +206,27 @@ if (!interface_exists('\bbdkp\iClasses'))
 	}
 	
 	/**
+	 * deletes all classes from a game
+	 */
+	public function Delete_all_classes()
+	{
+		global $db, $user, $cache;
+	
+		$sql = 'DELETE FROM ' . CLASS_TABLE . " WHERE game_id = '" .   $this->game_id . "'"  ;
+		$db->sql_query ( $sql );
+	
+		$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE attribute = 'class'
+							AND game_id = '" . $this->game_id . "'";
+		$db->sql_query ($sql);
+	
+		$cache->destroy ( 'sql', CLASS_TABLE );
+		$cache->destroy ( 'sql', BB_LANGUAGE );
+	}
+	
+	
+	
+	/**
 	 * updates a class to database
-	 * @see \bbdkp\iClasses::Update()
 	 */
 	public function Update(Classes $oldclass)
 	{

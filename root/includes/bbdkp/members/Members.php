@@ -5,8 +5,8 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
- * @since 1.2.9
+ * @version 1.3.0
+ * @since 1.3.0
  */
 
 namespace bbdkp;

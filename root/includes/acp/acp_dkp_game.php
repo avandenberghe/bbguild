@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
+ * @version 1.3.0
  */
 // don't add this file to namespace bbdkp
 /**
@@ -25,19 +25,19 @@ if (!class_exists('Admin'))
 	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
 }
 
-if (!class_exists('Faction'))
+if (!class_exists('\bbdkp\Faction'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/games/factions/Faction.$phpEx");
 }
-if (!class_exists('Classes'))
+if (!class_exists('\bbdkp\Classes'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/games/classes/Classes.$phpEx");
 }
-
-if (!class_exists('Races'))
+if (!class_exists('\bbdkp\Races'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/games/races/Races.$phpEx");
 }
+
 
 /**
  * 
@@ -65,7 +65,6 @@ class acp_dkp_game extends \bbdkp\Admin
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$user->add_lang (array ('mods/dkp_admin'));
 		$user->add_lang (array ('mods/dkp_common'));
-		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames" ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
 		
 		$form_key = 'acp_dkp_game';
 		add_form_key ( $form_key );
@@ -74,37 +73,115 @@ class acp_dkp_game extends \bbdkp\Admin
 		{
 			case 'listgames' :
 				
+				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames" ) . '"><h3>' . 
+								$user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
 				//game dropdown
 				$installed_games = array ();
+				$listgames = new \bbdkp\Game;
 				
-				$submit = (isset ( $_POST ['game_id'] ) || isset ( $_GET ['game_id'] ) ) ? true : false;
-				if ($submit)
+				//pressed button ? redirect
+				$newpresetgame = (isset ( $_POST ['addgame1'] )) ? true : false;
+				$newcustomgame = (isset ( $_POST ['addgame2'] )) ? true : false;
+				if ($newpresetgame || $newcustomgame)
 				{
-					$game_id = request_var('game_id', '');
-				}
-				else
-				{
-					//take the 1st one
-					foreach ( $this->games as $gid => $gamename )
+					// ask for permission
+					if (confirm_box ( true ))
 					{
-						if ($config ['bbdkp_games_' . $gid] == 1)
+						$editgame = new \bbdkp\Game;
+						$editgame->game_id = request_var ( 'hidden_game_id','' );
+						$editgame->install();
+						trigger_error ( sprintf ( $user->lang ['ADMIN_RESET_GAME_SUCCESS'], $editgame->name ) . $this->link, E_USER_NOTICE );
+					}
+					else
+					{
+						// get field content
+						$listgames->game_id = request_var('ngame_id' , ''); 
+						if($newpresetgame)
 						{
-							$game_id = $gid;
+							$listgames->name =  $listgames->preinstalled_games[$listgames->game_id] ;
 						}
-						break;
+						elseif($newcustomgame)
+						{
+							$listgames->name =  utf8_normalize_nfc(request_var('ngame_name', '', true)); 
+						}
+						
+						$s_hidden_fields = build_hidden_fields ( array (
+								'addgame1' => $newpresetgame,
+								'addgame2' => $newcustomgame,
+								'hidden_game_id' => $listgames->game_id,
+								'hidden_game_name' => $listgames->name,
+								
+						));
+						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_INSTALL_GAME'], $listgames->name ), $s_hidden_fields );
 					}
 				}
+	
+				///template load
 				
-				foreach ( $this->games as $gid => $gamename )
-				{
-					//add value to dropdown when the game config value is 1
-					if ($config ['bbdkp_games_' . $gid] == 1)
-					{
-						$template->assign_block_vars ( 'game_row', array (
-								'VALUE' => $gid, 'SELECTED' => ($gid == $game_id) ? ' selected="selected"' : '', 'OPTION' => $gamename ) );
-						$installed_games [] = $gid;
-					}
-				}				
+				//populate dropdown with installable games
+				$can_install_count = 0; 
+				$not_installed = array_diff($listgames->preinstalled_games, $listgames->installed_games); 
+				foreach ($not_installed  as $key => $game)
+			    {
+			    	//only uninstalled
+					$can_install_count +=1; 
+			        $template->assign_block_vars('gamelistrow', array(
+			            'VALUE'      => $key,
+			            'OPTION'     => $game,
+			        	'SELECTED'   => '',
+			        ));
+			    }
+			    
+			    //list installed games
+			    $sort_order = array(
+			    		0 => array(	'id' , 'id desc') ,
+			    		1 => array('game_id' , 'game_id desc') ,
+			    		2 => array('game_name' , 'game_name desc')); 
+			    $current_order = $this->switch_order($sort_order);
+			    $sort_index = explode('.', $current_order['uri']['current']);
+			    $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
+			     
+			    $result = $listgames->listgames($current_order['sql']);
+			    while ($row = $db->sql_fetchrow($result))
+			    {
+			    	$template->assign_block_vars('gamerow', array(
+			    			'ID' => $row['id'] ,
+			    			'NAME' => $row['game_name'] ,
+			    			'GAME_ID' => $row['game_id'] ,
+			    			'U_VIEW_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME . '=' . $row['game_id'] ), 
+			    			'STATUS' => $row['status'],
+			    	));
+			    	$previous_data = $row[$previous_source];
+			    		
+			    }
+			    $db->sql_freeresult($result);
+			    
+			    $template->assign_vars ( array (
+			    		'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") ,
+			    		'CANINSTALL' => ($can_install_count == 0) ? false : true,
+			    		'O_ID' => $current_order['uri'][0] ,
+			    		'O_GAMEID' => $current_order['uri'][1] ,
+			    		'O_GAMENAME' => $current_order['uri'][2] ,
+					));
+			    
+			    $form_key = '30U05YJ4IfeHxY';
+			    add_form_key($form_key);
+			    
+			    $this->page_title = 'ACP_LISTGAME';
+			    $this->tpl_name = 'dkp/acp_' . $mode;
+
+			    
+			    
+			    break;
+			    
+			case 'editgames' :
+				
+				$editgame = new \bbdkp\Game;
+				$editgame->game_id = request_var(URI_GAME, '');
+				$editgame->Get(); 
+				
+				$gamereset = (isset ( $_POST ['gamereset'] )) ? true : false;
+				$gamedelete = (isset ( $_POST ['gamedelete'] )) ? true : false;
 				
 				$addrace = (isset ( $_POST ['showraceadd'] )) ? true : false;
 				$addclass = (isset ( $_POST ['showclassadd'] )) ? true : false;
@@ -116,6 +193,53 @@ class acp_dkp_game extends \bbdkp\Admin
 				
 				$raceedit = (isset ( $_GET ['raceedit'] )) ? true : false;
 				$classedit = (isset ( $_GET ['classedit'] )) ? true : false;
+				
+				
+				if($gamereset)
+				{
+					// ask for permission
+					if (confirm_box ( true ))
+					{
+						$editgame = new \bbdkp\Game; 
+						$editgame->game_id = request_var ( 'hidden_game_id','' );
+						$editgame->get();
+						$editgame->Delete();
+						$editgame->install();
+						trigger_error ( sprintf ( $user->lang ['ADMIN_RESET_GAME_SUCCESS'], $editgame->name ) . $this->link, E_USER_WARNING );
+					}
+					else
+					{
+						// get field content
+						$s_hidden_fields = build_hidden_fields ( array (
+								'gamereset' => true,
+								'hidden_game_id' => $editgame->game_id,
+						));
+						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_RESET_GAME'], $editgame->name ), $s_hidden_fields );
+					}
+				}
+				
+				if($gamedelete)
+				{
+					// ask for permission
+					if (confirm_box ( true ))
+					{
+						$deletegame = new \bbdkp\Game;
+						$deletegame->game_id = request_var ( 'hidden_game_id','' );
+						$deletegame->name = request_var ( 'hidden_game_name','' );
+						$deletegame->Delete();
+						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->name ) . $this->link, E_USER_WARNING );
+					}
+					else
+					{
+						// get field content
+						$s_hidden_fields = build_hidden_fields ( array (
+								'gamedelete' => true,
+								'hidden_game_name' => $editgame->name,
+								'hidden_game_id' => $editgame->game_id,
+						));
+						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_GAME'], $editgame->name ), $s_hidden_fields );
+					}	
+				}
 				
 				if ($addfaction)
 				{
@@ -129,7 +253,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				{
 					global $db, $cache, $user;
 					$faction = new \bbdkp\Faction();
-					$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
+					$faction->game_id = $editgame->game_id;
 					$faction->faction_id = request_var ( 'id', 0 );
 					$faction->get();
 					
@@ -147,7 +271,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					{
 						// get field content
 						$s_hidden_fields = build_hidden_fields ( array (
-								'delete' => true, 
+								'factiondelete' => true, 
 								'hidden_faction_id' => $faction->faction_id, 
 								'hidden_game_id' => $faction->game_id, 
 								));
@@ -168,7 +292,7 @@ class acp_dkp_game extends \bbdkp\Admin
 						$listraces = new \bbdkp\Races();
 												
 						$listraces->race_id = request_var ( 'id', 0 );
-						$listraces->game_id = request_var ( 'game_id', '' );
+						$listraces->game_id = $editgame->game_id;
 						$result = $listraces->listraces();	
 						
 						while ( $row = $db->sql_fetchrow ( $result ) )
@@ -284,8 +408,8 @@ class acp_dkp_game extends \bbdkp\Admin
 					if (confirm_box(true))
 					{
 						$deleterace = new \bbdkp\Races();
-						$deleterace->race_id = request_var ( 'raceid', 0 );
-						$deleterace->game_id = request_var ( 'game_id', '' );
+						$deleterace->race_id = request_var ( 'hidden_raceid', 0 );
+						$deleterace->game_id = request_var ( 'hidden_game_id', '' );
 						$deleterace->get();
 						$deleterace->Delete();
 						$success_message = sprintf($user->lang['ADMIN_DELETE_RACE_SUCCESS'], $deleterace->race_name);
@@ -299,9 +423,9 @@ class acp_dkp_game extends \bbdkp\Admin
 						$deleterace->get();
 						
 						$s_hidden_fields = build_hidden_fields(array(
-								'delete' => true ,
-								'raceid' => $deleterace->race_id, 
-								'gameid' => $deleterace->game_id
+								'racedelete' => true ,
+								'hidden_raceid' => $deleterace->race_id, 
+								'hidden_gameid' => $editgame->game_id
 								));
 						
 						$template->assign_vars(array(
@@ -446,12 +570,12 @@ class acp_dkp_game extends \bbdkp\Admin
 					{
 						$deleteclass = new \bbdkp\Classes();
 						$deleteclass->class_id = request_var ( 'id', 0 );
-						$deleteclass->game_id = request_var ( 'game_id', '' );
+						$deleteclass->game_id = $editgame->game_id; 
 						$deleteclass->get();
 						
 						// get field content
 						$s_hidden_fields = build_hidden_fields ( array (
-							'delete' => true, 
+							'classdelete' => true, 
 							'hidden_game_id' => $deleteclass->game_id, 
 							'hidden_class_id' => $deleteclass->class_id) 
 						);
@@ -462,8 +586,9 @@ class acp_dkp_game extends \bbdkp\Admin
 					
 				}
 				
-				$this->listgames($game_id);
-				$this->page_title = 'ACP_LISTGAME';
+				$this->showgame($editgame); 
+				
+				$this->page_title = 'ACP_ADDGAME';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				
 				break;
@@ -624,19 +749,31 @@ class acp_dkp_game extends \bbdkp\Admin
 	
 	/**
 	 * lists game parameters
-	 *
+	 * 
+	 * @param \bbdkp\game $editgame
 	 */
-	function listgames($game_id)
+	private function showgame( \bbdkp\game $editgame)
 	{
 		
 		global $db, $user, $phpbb_admin_path, $phpbb_root_path, $phpEx, $config, $template;
+		
+		//populate dropdown
+		foreach ($editgame->installed_games as $key => $game)
+		{
+			$template->assign_block_vars('gamelistrow', array(
+					'VALUE'      => $key,
+					'OPTION'     => $game,
+					'SELECTED'   => $editgame->game_id == $key ? ' selected="selected"' : '' , 
+			));
+		}
+		
 		// list the factions
 
 		$total_factions = 0;
 		$sql_array = array (
 			'SELECT' => 'game_id, f_index, f.faction_id, f.faction_name  ', 
 			'FROM' => array (FACTION_TABLE => 'f' ), 
-			'WHERE' => " game_id = '" . $game_id . "'", 
+			'WHERE' => " game_id = '" . $editgame->game_id . "'", 
 			'ORDER_BY' => 'game_id, faction_id' );
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query ( $sql );
@@ -649,13 +786,14 @@ class acp_dkp_game extends \bbdkp\Admin
 			'FACTIONGAME' => $row ['game_id'], 
 			'FACTIONID' => $row ['faction_id'], 
 			'FACTIONNAME' => $row ['faction_name'], 
-			'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;factiondelete=1&amp;id={$row['f_index']}" ) ) );
+			'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;factiondelete=1&amp;id={$row['f_index']}" ) ) );
 		}
 		
 		$db->sql_freeresult ( $result );
 		unset ( $row, $result );
+		
+		
 		// list the races
-
 		$sort_order = array (
 			0 => array (
 			'game_id asc, race_id asc', 'game_id desc, race_id asc' ), 1 => array (
@@ -669,7 +807,7 @@ class acp_dkp_game extends \bbdkp\Admin
 			'SELECT' => ' r.game_id, r.race_id, l.name as race_name, r.race_faction_id, r.race_hide, f.faction_name , r.image_female, r.image_male ', 
 			'FROM' => array (RACE_TABLE => 'r', FACTION_TABLE => 'f', BB_LANGUAGE => 'l' ), 
 			'WHERE' => " r.race_faction_id = f.faction_id  AND f.game_id = r.game_id
-					AND r.game_id = '" . $game_id . "'
+					AND r.game_id = '" . $editgame->game_id . "'
 		    		AND l.attribute_id = r.race_id AND l.game_id = r.game_id and l.language= '" . $config ['bbdkp_lang'] . "' 
 		    		AND l.attribute = 'race' ", 'ORDER_BY' => $current_order ['sql'] );
 		
@@ -688,13 +826,13 @@ class acp_dkp_game extends \bbdkp\Admin
 				'RACE_IMAGE_F' => (strlen ( $row ['image_female'] ) > 1) ? $phpbb_root_path . "images/race_images/" . $row ['image_female'] . ".png" : '', 
 				'S_RACE_IMAGE_M_EXISTS' => (strlen ( $row ['image_male'] ) > 1) ? true : false, 
 				'S_RACE_IMAGE_F_EXISTS' => (strlen ( $row ['image_female'] ) > 1) ? true : false, 
-				'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;racedelete=1&amp;id={$row['race_id']}&amp;game_id={$row['game_id']}" ), 
-				'U_EDIT' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;raceedit=1&amp;id={$row['race_id']}&amp;game_id={$row['game_id']}" ) ) );
+				'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;racedelete=1&amp;id={$row['race_id']}&amp;game_id={$row['game_id']}" ), 
+				'U_EDIT' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;raceedit=1&amp;id={$row['race_id']}&amp;game_id={$row['game_id']}" ) ) );
 		}
 		$db->sql_freeresult ( $result );
 		unset ( $row, $result );
+		
 		// list the classes
-
 		$sort_order2 = array (
 			0 => array (
 			'game_id asc, class_id asc', 'game_id desc, class_id asc' ), 1 => array (
@@ -711,7 +849,7 @@ class acp_dkp_game extends \bbdkp\Admin
 			c.imagename, c.colorcode ', 
 			'FROM' => array (CLASS_TABLE => 'c', BB_LANGUAGE => 'l' ), 
 			'WHERE' => " l.game_id = c.game_id AND l.attribute_id = c.class_id AND l.language= '" . $config ['bbdkp_lang'] . "' 
-				AND l.attribute = 'class' AND c.game_id = '" . $game_id . "' ", 
+				AND l.attribute = 'class' AND c.game_id = '" . $editgame->game_id . "' ", 
 			'ORDER_BY' => $current_order2 ['sql'] );
 		
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
@@ -732,14 +870,16 @@ class acp_dkp_game extends \bbdkp\Admin
 				'CLASSHIDE' => $row ['class_hide'], 
 				'S_CLASS_IMAGE_EXISTS' => (strlen ( $row ['imagename'] ) > 1) ? true : false, 
 				'CLASSIMAGE' => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/class_images/" . $row ['imagename'] . ".png" : '', 
-				'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classdelete=1&amp;id={$row['class_id']}&amp;game_id={$row['game_id']}" ), 
-				'U_EDIT' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;classedit=1&amp;id={$row['class_id']}&amp;game_id={$row['game_id']}" ) ) );
+				'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;classdelete=1&amp;id={$row['class_id']}&amp;game_id={$row['game_id']}" ), 
+				'U_EDIT' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;classedit=1&amp;id={$row['class_id']}&amp;game_id={$row['game_id']}" ) ) );
 		}
 		$db->sql_freeresult ( $result );
 		unset ( $row, $result );
+		
 		$template->assign_vars ( array (
-				'L_TITLE' => $user->lang ['ACP_LISTGAME'], 
-				'L_EXPLAIN' => $user->lang ['ACP_LISTGAME_EXPLAIN'], 
+				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->name  ) , 
+				'GAME_ID' => $editgame->game_id,  
+				'URI_GAME' => URI_GAME,
 				'O_RACEGAMEID' => $current_order ['uri'] [0], 
 				'O_RACEID' => $current_order ['uri'] [1], 
 				'O_RACENAME' => $current_order ['uri'] [2], 
@@ -752,7 +892,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				'O_CLASSMIN' => $current_order2 ['uri'] [4], 
 				'O_CLASSMAX' => $current_order2 ['uri'] [5], 
 				
-				'U_LIST_GAMES' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames&amp;" ), 
+				'U_ADD_GAMES' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" ), 
 				'LISTFACTION_FOOTCOUNT' => sprintf ( $user->lang ['LISTFACTION_FOOTCOUNT'], $total_factions ), 
 				'LISTRACE_FOOTCOUNT' => sprintf ( $user->lang ['LISTRACE_FOOTCOUNT'], $total_races ), 
 				'LISTCLASS_FOOTCOUNT' => sprintf ( $user->lang ['LISTCLASS_FOOTCOUNT'], $total_classes ), 

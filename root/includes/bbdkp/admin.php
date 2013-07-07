@@ -20,7 +20,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/iAdmin.$phpEx");
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
+ * @version 1.3.0
  *
  */
 class Admin implements \bbdkp\iAdmin
@@ -128,10 +128,12 @@ class Admin implements \bbdkp\iAdmin
     /**
 	 * connects to remote site and gets xml or html using Curl
 	 * @param char $url
-	 * @param char $loud default false
+	 * @param bool $return_Server_Response_Header default false
+	 * @param bool $loud default false
+	 * @param bool $json default false
 	 * @return array response
-	 */
-  	public function curl($url, $return_Server_Response_Header = false, $loud= false)
+     */
+  	public function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
 	{
 		
 		global $user; 
@@ -164,7 +166,7 @@ class Admin implements \bbdkp\iAdmin
 			$error = 0;
 			
 			$data = array(
-					'response'		    => json_decode($response, true),
+					'response'		    => $json ? json_decode($response, true) : $response,
 					'response_headers'  => (array) $headers,
 					'error'				=> '',
 			);
@@ -216,31 +218,31 @@ class Admin implements \bbdkp\iAdmin
 				switch ($data['response_headers']['http_code'] )
 				{
 					case 400:
-						$data['error'] .= $user->lang['WOWAPIERR400'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR400'] . ': ' . $data['response']['reason'];
 						break;
 					case 401:
-						$data['error'] .= $user->lang['WOWAPIERR401'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR401'] . ': ' . $data['response']['reason'];
 						break;
 					case 403:
-						$data['error'] .= $user->lang['WOWAPIERR403'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR403'] . ': ' . $data['response']['reason'];
 						break;
 					case 404:
-						$data['error'] .= $user->lang['WOWAPIERR404'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR404'] . ': ' . $data['response']['reason'];
 						break;
 					case 500:
-						$data['error'] .= $user->lang['WOWAPIERR500'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR500'] . ': ' . $data['response']['reason'];
 						break;
 					case 501:
-						$data['error'] .= $user->lang['WOWAPIERR501'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR501'] . ': ' . $data['response']['reason'];
 						break;
 					case 502:
-						$data['error'] .= $user->lang['WOWAPIERR502'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR502'] . ': ' . $data['response']['reason'];
 						break;
 					case 503:
-						$data['error'] .= $user->lang['WOWAPIERR503'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR503'] . ': ' . $data['response']['reason'];
 						break;
 					case 504:
-						$data['error'] .= $user->lang['WOWAPIERR504'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR504'] . ': ' . $data['response']['reason'];
 						break;
 				}
 			}
@@ -250,15 +252,13 @@ class Admin implements \bbdkp\iAdmin
 		}
 		
 		//report errors?
-		if ($loud == true && $data['errnum'] != 0)
+		if ($data['error'] != 0)
 		{
-	         trigger_error($data['response']['error'], E_USER_WARNING);
-	         return false;
-		}
-
-		if ($data['error'] != '')
-		{
-		   trigger_error($data['error']);
+			if($loud == true)
+			{
+				trigger_error($data['error'], E_USER_WARNING);
+			}
+	        return false;
 		}
 		else
 		{

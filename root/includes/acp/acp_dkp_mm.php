@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
+ * @version 1.3.0
  */
 // don't add this file to namespace bbdkp
 /**
@@ -114,7 +114,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 						'GAME' => $listguild->game_id ,
 						'MEMBERCOUNT' => $listguild->membercount ,
 						'SHOW_ROSTER' => ($listguild->showroster == 1 ? 'yes' : 'no') ,
-						'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild&amp;" . URI_GUILD . '=' . $listguild->guildid)));
+						'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild&amp;" . URI_GUILD . '=' . $listguild->guildid))
+					);
 					$previous_data = $row[$previous_source];
 				}
 
