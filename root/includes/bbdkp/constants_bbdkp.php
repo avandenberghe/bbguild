@@ -30,10 +30,12 @@ define('URI_NEWS',       'news');
 define('URI_ORDER',      'o'); 	 
 define('URI_PAGE',       'pag'); 	 
 define('URI_RAID',       'raid_id');
-define('URI_GUILD',       'guild');  	 
+define('URI_GUILD',      'guild'); 
+define('URI_GAME',       'game_id'); 	 
 define('USER_LLIMIT', 40);  // LOG LIMIT
 
 // TABLE DEFINITIONS
+define('GAMES_TABLE',        	   $table_prefix . 'bbdkp_games');
 define('NEWS_TABLE',        	   $table_prefix . 'bbdkp_news'); 
 define('ADJUSTMENTS_TABLE',        $table_prefix . 'bbdkp_adjustments'); 	 
 define('EVENTS_TABLE',             $table_prefix . 'bbdkp_events'); 	 

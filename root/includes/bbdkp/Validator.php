@@ -147,7 +147,10 @@ class Validator
  
             case 'email':
                 return preg_match('/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i', $value);
- 
+ 	
+            case 'hexcode':
+            	//Checks if a field is a valid hexadecimal color code (#FFFFFF)
+            	return preg_match('/(#)?[0-9A-Fa-f]{6}$/', $value); 
             case 'regex':
                 return preg_match($parameter, $value);
  
@@ -171,9 +174,52 @@ class Validator
                 'min' => 'Value must be at least %s',
                 'url' => 'Value must be a valid URL.',
                 'email' => 'Value must be a valid email.',
+        		'hexcode' => 'Value must be a hexcode',
                 'regex' => 'Invalid value.',
         );
     }
+    
+    /**
+     * 
+     */
+    public function displayerrors()
+    {
+    	global $user;
+    	
+    	if(!$this->isValid())
+    	{
+    		$out 	='';
+    		foreach($this->getErrors() as $field => $messages)
+    		{
+    			if (count($messages) == 1)
+    			{
+	    			$out .= "<li><strong>$field</strong>: $messages[0]</li>";
+    			}
+    				else
+    				{
+    				    // If a field has more than one error
+    					$out .= "<li><strong>$field</strong>:</li>";
+    					$out .= '<ol>';
+    					foreach ($messages as $message)
+    					{
+    					$out .= "<li>$message</li>";
+    				}
+    				$out .= '</ol>';
+    			}
+    		}
+    		
+    		trigger_error ( $user->lang['FORM_ERROR'] . $out, E_USER_WARNING );
+    	}
+    	
+    	
+    }
+    
+    
+    
+    
+    
+    
+    
 }
 
 

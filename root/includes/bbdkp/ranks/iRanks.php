@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
+ * @version 1.3.0
  */
 namespace bbdkp;
 
@@ -47,4 +47,12 @@ interface iRanks extends \bbdkp\iGuilds
 	*/
 	function Rankupdate(Ranks $old_rank);
 
+	/**
+	 * Calls wow API to update guild ranks from Battlenet
+	 * 
+	 * @param array $memberdata
+	 * @param int $guild_id
+	 * @param char $region
+	 */
+	function WoWArmoryUpdate($memberdata, $guild_id, $region);
 }

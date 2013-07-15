@@ -5,8 +5,8 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
- * @since 1.2.9 
+ * @version 1.3.0
+ * @since 1.3.0 
  */
 namespace bbdkp;
 /**
@@ -19,8 +19,11 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
 
+if (!class_exists('\bbdkp\Game'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
+}
 
 /**
  * Races
@@ -29,7 +32,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
  * 
  * @package 	bbDKP
  */
- class Races implements iRaces 
+ class Races extends \bbdkp\Game
 {
 	public $game_id;
 	public $race_id;
@@ -93,7 +96,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
 		if (( int ) $a > 0)
 		{
 			//uh oh that race exists
-			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_FAILED'], $this->race_id  ) . $this->link, E_USER_WARNING );
+			trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_FAILED'], $this->race_id  ), E_USER_WARNING );
 		}
 		$db->sql_freeresult ( $resultr );
 		$data = array (
@@ -167,11 +170,35 @@ require_once ("{$phpbb_root_path}includes/bbdkp/races/iRaces.$phpEx");
 			
 			$db->sql_query ( $sql );
 			
+			$cache->destroy ( 'sql', RACE_TABLE );
+			$cache->destroy ( 'sql', BB_LANGUAGE );
+			
 			$db->sql_transaction ( 'commit' );
 			
 		}
 		
 	}
+	
+
+	/**
+	 * deletes all races from a game
+	 */
+	public function Delete_all_races()
+	{
+		global $db, $user, $cache;
+		
+		$sql = 'DELETE FROM ' . RACE_TABLE . " WHERE game_id = '" .   $this->game_id . "'"  ;
+		$db->sql_query ( $sql );
+		
+		$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE attribute = 'race'							
+							AND game_id = '" . $this->game_id . "'";
+			
+		$db->sql_query ( $sql );
+		
+		$cache->destroy ( 'sql', RACE_TABLE );
+		$cache->destroy ( 'sql', BB_LANGUAGE );
+	}
+	
 	
 	/**
 	 * updates a race to database

@@ -24,11 +24,12 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-    'ACP_DKP_GAME'			=> 'Faction, Race, Class',
+    'ACP_DKP_GAME'			=> 'Game Settings',
 	'ACP_DKP_FACTION_ADD'	=> 'Add Faction',
 	'ACP_DKP_RACE_ADD'		=> 'Add Race',
 	'ACP_DKP_CLASS_ADD'		=> 'Add Class',  
-	'ACP_DKP_GAME_LIST'		=> 'Game',
+	'ACP_DKP_GAME_LIST'		=> 'Game List',
+	'ACP_DKP_GAME_EDIT'		=> 'Edit Game', 
 ));
 
 ?>

@@ -1,10 +1,10 @@
 <?php
 /**
 * @author ippehe
-* @version 1.2.9
+* @version 1.3.0
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* 
+* @package acp
 */
 
 /**
@@ -19,8 +19,6 @@ if (!defined('IN_PHPBB'))
 /**
 * @package acp
 */
-
-
 class acp_dkp_item_info
 {
 	function module()
@@ -28,7 +26,7 @@ class acp_dkp_item_info
 		return array(
 			'filename'	=> 'acp_dkp_item',
 			'title'		=> 'ACP_DKP_ITEM',
-			'version'	=> '1.2.9',
+			'version'	=> '1.3.0',
 			'modes'		=> array(
 				'edititem'			=> array('title' => 'ACP_DKP_ITEM_EDIT', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => false ),
 				'listitems'			=> array('title' => 'ACP_DKP_ITEM_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS') , 'display' => true ),
