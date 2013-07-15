@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## dev
 
-1.2.9
+1.3.0
 
 ## community
 

@@ -1,162 +1,113 @@
 <!-- INCLUDE overall_header.html -->
+<script type="text/javascript">
+//<![CDATA[
+function check_form()
+{
+    if (document.getElementById('game_name').value.length < 2)
+    {
+        alert('{LA_FV_REQUIRED_GAME_NAME}');
+        return false;
+    }
+    if (document.getElementById('game_id').value.length < 2)
+    {
+        alert('{LA_FV_REQUIRED_GAME_ID}');
+        return false;
+    }
+    return true;
+}
+//]]>
+</script>
+<style>
+.addgame
+{
+	background-color: #E2FFDE; 
+}
+
+input.game_add {
+    background-image: url(./images/add.png); /* 16px x 16px */
+    background-color: transparent; /* make the button transparent */
+    background-repeat: no-repeat;  /* make the background image appear only once */
+    background-position: 0px 0px;  /* equivalent to 'top left' */
+    border: none;           /* assuming we don't want any borders */
+    cursor: pointer;        /* make the cursor like hovering over an <a> element */
+    height: 16px;           /* make this the size of your image */
+    padding-left: 16px;     /* make text start to the right of the image */
+    vertical-align: middle; /* align the text vertically centered */
+}
+</style>
+
 <a name="maincontent"></a>
 
-<h1>{L_ACP_GAMESETTINGS}</h1>
-<p>{L_ACP_GAMESETTINGS_EXPLAIN}</p>
+<h1>{L_ACP_NEWGAME}</h1>
+<br />
+<p>{L_ACP_NEWGAME_EXPLAIN} {L_PREINSTALLED}</p>
 
+<fieldset>
+<legend>{L_ADD_GAME}</legend>
+<!-- IF CANINSTALL == 1 -->
 <form id="acp_listgames" method="post" action="{U_ACTION}">
-<div>
-<label for="game_id">{L_GUILD}:</label>
-<select id="game_id" name="game_id" class="input" onchange="javascript:form.submit();" >
-       	<!-- BEGIN game_row -->
-       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
-        <!-- END game_row -->
-</select>
-</div>
+  <dl>
+    <dt><label for="ngame_id">{L_ADD_PRECONFIGGAME}:</label></dt>
+    <dd>
+    	<select id="ngame_id" name="ngame_id" class="input" >
+       	<!-- BEGIN gamelistrow -->
+       <option value="{gamelistrow.VALUE}"{gamelistrow.SELECTED}>{gamelistrow.OPTION}</option>
+        <!-- END gamelistrow -->
+	</select>
+	&nbsp;
+    <input type="submit" name="addgame1" value="{L_ADD}" class="button1"/>
+	{S_FORM_TOKEN}
+    </dd>
+  </dl>
 </form>
-<br />
-
+<!-- ENDIF -->
 <form id="acp_listgames" method="post" action="{U_ACTION}">
-<div>
-<h2>{L_ACP_LISTFACTION}</h2>
-<p>{L_ACP_LISTFACTIONS_EXPLAIN}</p>
+ 
+<dl>
+  <dt><label for="ngame_id">{L_ADD_CUSTOMGAME}:</label></dt>
+    <dd>
+    <input type="text" name="ngame_id" size="10" maxlength="10" value="" class="addgame" />
+    <input type="text" name="ngame_name" size="40" maxlength="255" value="" class="addgame" />
+    <input type="submit" name="addgame2" value="{L_ADD}" class="button1"/>
+	{S_FORM_TOKEN}
+    </dd>
+</dl>
 
-<table width="50%" cellspacing="1">
-<thead>
-  <tr>
-	<th style="text-align:left; width: 10%">{L_GAME}</th>
-    <th style="text-align:left; width: 10%">{L_FACTIONID}</th>
-    <th style="text-align:left; width: 70%">{L_FACTION}</th>
-    <th style="text-align:center; width: 5%">{L_ACTION}</th>
-  </tr>
-</thead>
-<tbody>
-  <!-- BEGIN faction_row -->
-  <!-- IF faction_row.S_ROW_COUNT is even -->
-  <tr class="row1">
-  <!-- ELSE -->
-  <tr class="row2">
-  <!-- ENDIF -->
-    <td><input type="text" name="factiongame[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONGAME}"/></td> 
-    <td><input type="text" name="factionid[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONID}"/></td> 
-    <td><input type="text" name="factionname[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONNAME}"/></td>
-    <td><a href="{faction_row.U_DELETE}">{ICON_DELETE}</a></td>
-  </tr>
-  <!-- END faction_row -->
-  <tr>
-    <th colspan="4" class="footer">{LISTFACTION_FOOTCOUNT}</th>
-  </tr>
-  </tbody>
-</table>
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-	<input class="button2" name="showfactionadd" type="submit" value="{L_ACP_DKP_FACTION_ADD}" />
+   
+</form>
 </fieldset>
+ 
+<!-- IF .gamerow -->
+<fieldset style="width:60%">
+<legend>{L_LIST_GAMES}</legend>
 
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-	<input type="submit" name="factionsave" value="{L_SUBMIT}" class="button1" />
-		&nbsp;
-		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-		{S_FORM_TOKEN}
-</fieldset>
-
-<br />
-<br />
-<br />
-
-<h2>{L_ACP_LISTRACE}</h2>
-<p>{L_ACP_LISTRACE_EXPLAIN}</p>
-
-<table cellspacing="1">
-<thead>
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <thead>
   <tr>
-    <th style="text-align: left; width: 15%"><a href="{U_LIST_GAMES}&amp;o={O_RACEGAMEID}&amp;">{L_GAME}</a></th>
-    <th style="text-align: left; width: 10%"><a href="{U_LIST_GAMES}&amp;o={O_RACEID}&amp;">{L_RACEID}</a></th>
-    <th style="text-align: left; width: 25%"><a href="{U_LIST_GAMES}&amp;o={O_RACENAME}&amp;">{L_RACE}</a></th>
-    <th style="text-align: left; width: 15%">{L_MALE}</th>
-    <th style="text-align: left; width: 15%">{L_FEMALE}</th>
-    <th style="text-align: left; width: 15%"><a href="{U_LIST_GAMES}&amp;o={O_FACTIONNAME}&amp;">{L_FACTION}</a></th>
-  	<th style="text-align: center; width: 5%">{L_ACTION}</th>
+    <th style="text-align: center; width:5%"><a href="{U_LIST_GAME}&amp;o={O_ID}">{L_ID}</a></th>
+    <th style="text-align: left; width:15%; white-space: nowrap"><a href="{U_LIST_GAME}&amp;o={O_GAMEID}">{L_GAME_ID}</a></th>
+    <th style="text-align: left; width:50%; white-space: nowrap"><a href="{U_LIST_GAME}&amp;o={O_GAMENAME}">{L_GAME}</a></th>
+    <th style="text-align: center; width:10%; white-space: nowrap">{L_STATUS}</th>
+    <th style="text-align: center; width:10%;">{L_ACTION}</th>
   </tr>
-</thead>
-<tbody>
-  <!-- BEGIN race_row -->
-  <!-- IF race_row.S_ROW_COUNT is even -->
-  <tr class="row1">
-  <!-- ELSE -->
-  <tr class="row2">
-  <!-- ENDIF -->
-  	<td>{race_row.GAME}</td>
-    <td>{race_row.RACEID}</td>
-    <td><a href="{race_row.U_EDIT}">{race_row.RACENAME}</a></td>
-    <td><!-- IF race_row.S_RACE_IMAGE_M_EXISTS -->  <img src="{race_row.RACE_IMAGE_M}" alt="{race_row.RACE_IMAGE_M}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
-    <td><!-- IF race_row.S_RACE_IMAGE_F_EXISTS -->  <img src="{race_row.RACE_IMAGE_F}" alt="{race_row.RACE_IMAGE_F}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
-    <td>{race_row.FACTIONNAME}</td>
-	<td  style="white-space: nowrap;">
-	<a href="{race_row.U_DELETE}">{ICON_DELETE}</a>
-	<a href="{race_row.U_EDIT}">{ICON_EDIT}</a>
-	</td>
-  </tr>
-  <!-- END race_row -->
-  <tr>
-    <th colspan="7" class="footer">{LISTRACE_FOOTCOUNT}</th>
-  </tr>
-  </tbody>
-</table>
-
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-	<input class="button2" name="showraceadd" type="submit" value="{L_ACP_DKP_RACE_ADD}" />
-</fieldset>
-
-<br />
-<br />
-<br />
-<h2>{L_ACP_LISTCLASS}</h2>
-<p>{L_ACP_LISTCLASS_EXPLAIN}</p>
-
-<table cellspacing="1">
-<thead>
-  <tr>
+  </thead>
   
-  	<th  style="text-align: left; width: 15%"><a href="{U_LIST_GAMES}&amp;o1={O_CLASSGAMEID}&amp;">{L_GAME}</a></th>
-    <th  style="text-align: left; width: 5%"><a href="{U_LIST_GAMES}&amp;o1={O_CLASSID}">{L_CLASSID}</a></th>
-    <th  style="text-align: left; width: 15%"><a href="{U_LIST_GAMES}&amp;o1={O_CLASSNAME}">{L_CLASS}</a></th>
-    <th  style="text-align: left; width: 10%"><a href="{U_LIST_GAMES}&amp;o1={O_CLASSNAME}">{L_CLASSIMAGE}</a></th>
-    <th  style="text-align: left; width: 15%"><a href="{U_LIST_GAMES}&amp;o1={O_CLASSARMOR}">{L_CLASSARMOR}</a></th>
-    <th  style="text-align: left; width: 5%"><a href="{U_LIST_GAMES}&amp;o1={O_CLASSMIN}">{L_CLASSMIN}</a></th>
-    <th  style="text-align: left; width: 5%"><a href="{U_LIST_GAMES}&amp;o1={O_CLASSMAX}">{L_CLASSMAX}</a></th>
-    <th  style="text-align: center; width: 5%">{L_ACTION}</th>
-  </tr>
-</thead>
-<tbody>
-  <!-- BEGIN class_row -->
-  <!-- IF class_row.S_ROW_COUNT is even -->
+  <tbody>
+  <!-- BEGIN gamerow -->
+  <!-- IF gamerow.S_ROW_COUNT is even -->
   <tr class="row1">
   <!-- ELSE -->
   <tr class="row2">
   <!-- ENDIF -->
-  	<td>{class_row.GAME}</td>
-    <td>{class_row.CLASSID}</td>
-    <td><strong><a style="color:{class_row.COLORCODE}" href="{class_row.U_EDIT}">{class_row.CLASSNAME}</a></strong></td>
-    <td><!-- IF class_row.S_CLASS_IMAGE_EXISTS -->  <img src="{class_row.CLASSIMAGE}" alt="{class_row.CLASSNAME}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
-    <td>{class_row.CLASSARMOR}</td>
-    <td>{class_row.CLASSMIN}</td>
-    <td>{class_row.CLASSMAX}</td>
-    <td style="white-space: nowrap">
-    <a href="{class_row.U_DELETE}">{ICON_DELETE}</a>
-    <a href="{class_row.U_EDIT}">{ICON_EDIT}</a></td>
+    <td style="text-align: center; width:10%; white-space: nowrap">{gamerow.ID}</td>
+    <td><a href="{gamerow.U_VIEW_GAME}">{gamerow.GAME_ID}</a></td>
+    <td><a href="{gamerow.U_VIEW_GAME}">{gamerow.NAME}</a></td>
+	<td style="text-align: center; width:10%; white-space: nowrap">{gamerow.STATUS}</td>
+	<td style="text-align: center;"><a href="{gamerow.U_VIEW_GAME}">{ICON_EDIT}</a></td>
   </tr>
-  <!-- END class_row -->
-  <tr>
-    <th colspan="8" class="footer">{LISTCLASS_FOOTCOUNT}</th>
-  </tr>
-  </tbody>
+  <!-- END gamerow -->
+</tbody>
 </table>
-
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-	<input class="button2" name="showclassadd" type="submit" value="{L_ACP_DKP_CLASS_ADD}" />
 </fieldset>
-</div>
-
-</form>
-
+ <!-- ENDIF -->
 <!-- INCLUDE dkp/overall_footer.html -->

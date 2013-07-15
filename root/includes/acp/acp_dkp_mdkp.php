@@ -7,7 +7,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.2.8
  */
-
+// don't add this file to namespace bbdkp
 /**
  * @ignore
  */
@@ -15,14 +15,14 @@ if (! defined ( 'IN_PHPBB' ))
 {
 	exit ();
 }
-
+// don't add this file to namespace bbdkp
 if (! defined ( 'EMED_BBDKP' ))
 {
 	$user->add_lang ( array (
 		'mods/dkp_admin' ) );
 	trigger_error ( $user->lang ['BBDKPDISABLED'], E_USER_WARNING );
 }
-if (!class_exists('Admin'))
+if (!class_exists('\bbdkp\Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
 }
@@ -31,7 +31,7 @@ if (!class_exists('Admin'))
  * 
  * @package bbDKP
  */
- class acp_dkp_mdkp extends \bbdkp\Admin
+class acp_dkp_mdkp extends \bbdkp\Admin
 {
 
 	public $u_action;

@@ -20,7 +20,7 @@ require_once ("{$phpbb_root_path}includes/bbdkp/iAdmin.$phpEx");
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
+ * @version 1.3.0
  *
  */
 class Admin implements \bbdkp\iAdmin
@@ -128,17 +128,16 @@ class Admin implements \bbdkp\iAdmin
     /**
 	 * connects to remote site and gets xml or html using Curl
 	 * @param char $url
-	 * @param char $loud default false
+	 * @param bool $return_Server_Response_Header default false
+	 * @param bool $loud default false
+	 * @param bool $json default false
 	 * @return array response
-	 */
-    
-    
-    /**
-     * (non-PHPdoc)
-     * @see \bbdkp\iAdmin::curl()
      */
-  	public function curl($url, $return_Server_Response_Header = false, $loud= false)
+  	public function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
 	{
+		
+		global $user; 
+		
 		if ( function_exists ( 'curl_init' ))
 		{
 			 /* Create a CURL handle. */
@@ -151,10 +150,10 @@ class Admin implements \bbdkp\iAdmin
 			curl_setopt_array($curl, array(
 				CURLOPT_RETURNTRANSFER => 1,
 				CURLOPT_URL => $url, 
-				CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:15.0) Gecko/20100101 Firefox/15.0', 
+				CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0', 
 				CURLOPT_SSL_VERIFYHOST => false,
 				CURLOPT_SSL_VERIFYPEER => false, 
-				CURLOPT_TIMEOUT => 30, 
+				CURLOPT_TIMEOUT => 60, 
 				CURLOPT_VERBOSE => false, 
 				CURLOPT_HEADER => false, 
 			));
@@ -167,7 +166,7 @@ class Admin implements \bbdkp\iAdmin
 			$error = 0;
 			
 			$data = array(
-					'response'		    => json_decode($response, true),
+					'response'		    => $json ? json_decode($response, true) : $response,
 					'response_headers'  => (array) $headers,
 					'error'				=> '',
 			);
@@ -219,31 +218,31 @@ class Admin implements \bbdkp\iAdmin
 				switch ($data['response_headers']['http_code'] )
 				{
 					case 400:
-						$data['error'] .= $user->lang['WOWAPIERR400'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR400'] . ': ' . $data['response']['reason'];
 						break;
 					case 401:
-						$data['error'] .= $user->lang['WOWAPIERR401'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR401'] . ': ' . $data['response']['reason'];
 						break;
 					case 403:
-						$data['error'] .= $user->lang['WOWAPIERR403'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR403'] . ': ' . $data['response']['reason'];
 						break;
 					case 404:
-						$data['error'] .= $user->lang['WOWAPIERR404'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR404'] . ': ' . $data['response']['reason'];
 						break;
 					case 500:
-						$data['error'] .= $user->lang['WOWAPIERR500'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR500'] . ': ' . $data['response']['reason'];
 						break;
 					case 501:
-						$data['error'] .= $user->lang['WOWAPIERR501'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR501'] . ': ' . $data['response']['reason'];
 						break;
 					case 502:
-						$data['error'] .= $user->lang['WOWAPIERR502'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR502'] . ': ' . $data['response']['reason'];
 						break;
 					case 503:
-						$data['error'] .= $user->lang['WOWAPIERR503'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR503'] . ': ' . $data['response']['reason'];
 						break;
 					case 504:
-						$data['error'] .= $user->lang['WOWAPIERR504'] . ': ' . $data['response']['reason'];
+						$data['error'] .= $user->lang['ERR504'] . ': ' . $data['response']['reason'];
 						break;
 				}
 			}
@@ -253,15 +252,13 @@ class Admin implements \bbdkp\iAdmin
 		}
 		
 		//report errors?
-		if ($loud == true && $data['errnum'] != 0)
+		if ($data['error'] != 0)
 		{
-	         trigger_error($data['response']['error'], E_USER_WARNING);
-	         return false;
-		}
-
-		if ($data['error'] != '')
-		{
-		   trigger_error($data['error']);
+			if($loud == true)
+			{
+				trigger_error($data['error'], E_USER_WARNING);
+			}
+	        return false;
 		}
 		else
 		{
@@ -505,307 +502,5 @@ class Admin implements \bbdkp\iAdmin
 
 
 }
-
-
-class Form_Validate
-{
-    var $errors = array();
-
-   /**
-    * Constructor
-    *
-    * Initiates the error list
-    */
-    function form_validate()
-    {
-        $this->_reset_error_list();
-    }
-
-    /**
-    * Resets the error list
-    *
-    * @access private
-    */
-    function _reset_error_list()
-    {
-        $this->errors = array();
-    }
-
-    /**
-    * Returns the array of errors
-    *
-    * @return array Errors
-    */
-    function get_errors()
-    {
-        return $this->errors;
-    }
-
-    /**
-    * Checks if errors exist
-    *
-    * @return bool
-    */
-    function is_error()
-    {
-        if ( @sizeof($this->errors) > 0 )
-        {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-    * Returns a string with the appropriate error message
-    *
-    * @param $field Field to generate an error for
-    * @return string Error string
-    */
-    function generate_error($field)
-    {
-
-        if ( $field != '' )
-        {
-            if ( !empty($this->errors[$field]) )
-            {
-                $error = $this->errors[$field];
-                return $error;
-            }
-            else
-            {
-                return '';
-            }
-        }
-        else
-        {
-            return '';
-        }
-    }
-
-    /*
-     * displays the error in phpbb
-     */
-	function displayerror($errors)
-	{
-		global $user;
-
-		$out='';
-		foreach ($errors as $error)
-		{
-			$out .= $error . '<br />';
-		}
-
-		trigger_error ( $user->lang['FORM_ERROR'] . $out, E_USER_WARNING );
-	}
-
-
-
-
-    // Begin validator methods
-    // Note: The validation methods can accept arrays for the $field param
-    // and the validation will be performed on each key/val pair.
-    // If an array if used for validation, the method will always return true
-
-    /**
-    * Checks if a field is filled out
-    *
-    * @param $field Field name to check
-    * @param $message Error message to insert
-    * @return bool
-    */
-    function is_filled($field, $message = '')
-    {
-        if ( is_array($field) )
-        {
-            foreach ( $field as $k => $v )
-            {
-                $this->is_filled($v, $message);
-            }
-            return true;
-        }
-        else
-        {
-            $value = $field;
-            if ( trim($value) == '' )
-            {
-                $this->errors[] = $message;
-                return false;
-            }
-            return true;
-        }
-    }
-
-    /**
-    * Checks if a field is numeric
-    *
-    * @param $field Field name to check
-    * @param $message Error message to insert
-    * @return bool
-    */
-    function is_number($field, $message = '')
-    {
-        if ( is_array($field) )
-        {
-            foreach ( $field as $k => $v )
-            {
-                $this->is_number($v, $message);
-            }
-            return true;
-        }
-        else
-        {
-            $value = str_replace(' ','', $field);
-            if ( !is_numeric($value) )
-            {
-                $this->errors[] = $message;
-                return false;
-            }
-            return true;
-        }
-    }
-
-    /**
-    * Checks if a field is alphabetic
-    *
-    * @param $field string or array
-    * @param $message Error message to insert
-    * @return bool
-    */
-    function is_alpha($field, $message = '')
-    {
-        if ( is_array($field) )
-        {
-            foreach ( $field as $k => $v )
-            {
-                $this->is_alpha($v, $message);
-            }
-            return true;
-        }
-        else
-        {
-            $value = $field;
-            if ( preg_match("/[A-Za-z]+/i", $value) ==0 )
-            {
-                $this->errors[] = $message;
-                return false;
-            }
-            return true;
-        }
-    }
-
-    /**
-    * Checks if a field is a valid hexadecimal color code (#FFFFFF)
-    *
-    * @param $field Field name to check
-    * @param $message Error message to insert
-    * @return bool
-    */
-    function is_hex_code($field, $message = '')
-    {
-        if ( is_array($field) )
-        {
-            foreach ( $field as $k => $v )
-            {
-                $this->is_hex_code($v, $message);
-            }
-            return true;
-        }
-        else
-        {
-            $value = $field;
-            if ( !preg_match("/(#)?[0-9A-Fa-f]{6}$/", $value) )
-            {
-                $this->errors[] = $message;
-                return false;
-            }
-            return true;
-        }
-    }
-
-    /**
-    * Checks if a field is within a minimum and maximum range
-    * NOTE: Will NOT accept an array of fields
-    *
-    * @param $field Field name to check
-    * @param $min Minimum value
-    * @param $max Maximum value
-    * @param $message Error message to insert
-    * @return bool
-    */
-    function is_within_range($field, $min, $max, $message = '')
-    {
-        $value = $field;
-        if ( (!is_numeric($value)) || ($value < $min) || ($value > $max) )
-        {
-            $this->errors[] = $message;
-            return false;
-        }
-        return true;
-    }
-
-    /**
-    * Checks if a field has a valid e-mail address pattern
-    *
-    * @param $field Field name to check
-    * @param $message Error message to insert
-    * @return bool
-    */
-    function is_email_address($field, $message = '')
-    {
-        if ( is_array($field) )
-        {
-            foreach ( $field as $k => $v )
-            {
-                $this->is_email_address($v, $message);
-            }
-            return true;
-        }
-        else
-        {
-            $value = $field;
-            if ( !preg_match("/^([a-zA-Z0-9])+([\.a-zA-Z0-9_-])*@([a-zA-Z0-9_-])+(\.[a-zA-Z0-9_-]+)+/", $value) )
-            {
-                $this->errors[] = $message;
-                return false;
-            }
-            return true;
-        }
-    }
-
-    /**
-    *  Checks if a field has a valid IP address pattern
-    *
-    * @param $field Field name to check
-    * @param $message Error message to insert
-    * @return bool
-    */
-    function is_ip_address($field, $message = '')
-    {
-        if ( is_array($field) )
-        {
-            foreach ( $field as $k => $v )
-            {
-                $this->is_ip_address($v, $message);
-            }
-            return true;
-        }
-        else
-        {
-            $value =$field;
-            if ( !preg_match("/([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})\.([0-9]{1,3})/", $value) )
-            {
-                $this->errors[] = $message;
-                return false;
-            }
-            return true;
-        }
-    }
-
-
-
-}
-
-
 
 ?>

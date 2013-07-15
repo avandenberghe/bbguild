@@ -6,8 +6,8 @@ namespace bbdkp;
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.9
- * @since 1.2.9
+ * @version 1.3.0
+ * @since 1.3.0
  *
  */
 
@@ -21,7 +21,12 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/Points/iPoints.$phpEx");
+
+//include the abstract base
+if (!interface_exists('\bbdkp\iPoints'))
+{
+	require ("{$phpbb_root_path}includes/bbdkp/Points/iPoints.$phpEx");
+}
 
 /**
  *  Points Class
@@ -92,7 +97,7 @@ class Points implements iPoints
 				
 				unset($bbdkp);
 				
-				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_DELETED']) . $this->link , E_USER_NOTICE );
+				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_DELETED']) , E_USER_NOTICE );
 	
 				return true;
 				break;
@@ -245,7 +250,7 @@ class Points implements iPoints
 					'log_type' 		=> $log_action ['header'],
 					'log_action' 	=> $log_action ) );
 	
-				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_SUCCESS'], $itemcount, $accountupdates ) . $this->link , E_USER_NOTICE );
+				trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_SUCCESS'], $itemcount, $accountupdates ) , E_USER_NOTICE );
 	
 				return $countraids;
 	
