@@ -509,14 +509,23 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 
 				// guild dropdown query
+				
+				
+				
 				$sql = 'SELECT id, name, realm, region FROM ' . GUILD_TABLE . ' ORDER BY id desc';
-				$submit = (isset ( $_POST ['member_guild_id'] ) || isset ( $_GET ['member_guild_id'] ) ) ? true : false;
+				$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
+				$sortlink = isset ( $_GET [URI_GUILD] )  ? true : false;
 				if ($submit)
 				{
 					// user selected dropdow - get guildid
 					$guild_id = request_var('member_guild_id', 0);
 				}
-				else 
+				elseif($sortlink) 
+				{
+					// user selected dropdow - get guildid
+					$guild_id = request_var(URI_GUILD, 0);
+				}
+				else
 				{
 				// default pageloading
 					$result = $db->sql_query_limit($sql, 1);
@@ -538,7 +547,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 				$db->sql_freeresult($resultg);
 				$previous_data = '';
-
+				
+				
 				$Guild = new \bbdkp\Guilds($guild_id);
 
 				//get window
@@ -598,7 +608,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				$db->sql_freeresult($members_result);
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
-				$memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] . "&amp;member_guild_id=".$guild_id), $Guild->membercount, $config['bbdkp_user_llimit'], $start, true);
+				$memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] . "&amp;". URI_GUILD ."=".$guild_id), $Guild->membercount, $config['bbdkp_user_llimit'], $start, true);
 				$form_key = 'mm_listmembers';
 				add_form_key($form_key);
 
@@ -794,7 +804,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					{
 						$template->assign_block_vars('guild_row', array(
 							'VALUE' => $row['id'] ,
-							'SELECTED' => ($this->member['member_guild_id'] == $row['id']) ? ' selected="selected"' : '' ,
+							'SELECTED' => ($editmember->member_guild_id == $row['id']) ? ' selected="selected"' : '' ,
 							'OPTION' => $row['name']));
 					}
 				}
@@ -1073,7 +1083,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'MEMBER_PORTRAIT' => $editmember->member_id > 0 ? $editmember->member_portrait_url : '' ,
 					'S_MEMBER_PORTRAIT_EXISTS' => (strlen($editmember->member_portrait_url) > 1) ? true : false ,
 					'S_CAN_GENERATE_ARMORY' => $editmember->member_id > 0 ? ($editmember->game_id == 'wow' ? true : false) : false ,
-					'COLORCODE' => ($this->member['colorcode'] == '') ? '#123456' : $editmember->colorcode ,
+					'COLORCODE' => ($editmember->colorcode== '') ? '#123456' : $editmember->colorcode ,
 					'CLASS_IMAGE' => $editmember->class_image ,
 					'S_CLASS_IMAGE_EXISTS' => (strlen($editmember->class_image) > 1) ? true : false ,
 					'RACE_IMAGE' => $editmember->race_image ,
