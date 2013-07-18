@@ -436,6 +436,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'REALM' => $updateguild->realm,
 					'REGION' => $updateguild->region,
 					'MEMBERCOUNT' => $updateguild->membercount ,
+					'ARMORY_URL' => $updateguild->guildarmoryurl ,
 					'MIN_ARMORYLEVEL' => $updateguild->min_armory ,
 					'SHOW_ROSTER' => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
 					'U_ADD_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addguild&amp;addrank=1&amp;guild=" . $updateguild->guildid), 
@@ -454,7 +455,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 							'S_WOW' 	=> true, 
 							'EMBLEM'	=> $updateguild->emblempath,
 							'EMBLEMFILE' => basename($updateguild->emblempath),
-							'ARMORY'	=> $updateguild->guilarmorydurl,
+							'ARMORY'	=> $updateguild->guildarmoryurl,
 							'ACHIEV'	=> $updateguild->achievementpoints,
 					));
 				}

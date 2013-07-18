@@ -41,28 +41,28 @@ if (!class_exists('\bbdkp\Admin'))
 	// common
 	public $game_id = '';
 	public $guildid = 0;
-	public $name = '';
-	public $realm = '';
-	public $region = '';
-	public $achievements = 0;
-	public $membercount = 0;
-	public $startdate = 0;
-	public $showroster = 0;
-	public $min_armory = 0;
+	protected $name = '';
+	protected $realm = '';
+	protected $region = '';
+	protected $achievements = 0;
+	protected $membercount = 0;
+	protected $startdate = 0;
+	protected $showroster = 0;
+	protected $min_armory = 0;
 
 	//aion parameters
-	public $aionlegionid = 0;
-	public $aionserverid = 0;
+	protected $aionlegionid = 0;
+	protected $aionserverid = 0;
 	
 	//wow parameters
-	public $achievementpoints = 0;
-	public $level = 0;
-	public $emblempath = '';
-	public $emblem = array(); 
-	public $battlegroup = '';
-	public $guildarmoryurl = '';
-	public $memberdata = array();
-	public $side = 0;
+	protected $achievementpoints = 0;
+	protected $level = 0;
+	protected $emblempath = '';
+	protected $emblem = array(); 
+	protected $battlegroup = '';
+	protected $guildarmoryurl = '';
+	protected $memberdata = array();
+	protected $side = 0;
 
 	/**
 	 */
@@ -120,6 +120,53 @@ if (!class_exists('\bbdkp\Admin'))
 		}
 
 
+	}
+
+	/**
+	 * 
+	 * @param string $fieldName
+	 */
+	public function __get($fieldName) 
+	{
+		global $user;
+		switch ($fieldname)
+		{
+			case 'membercount':
+				return  $this->countmembers();
+			
+		}
+		
+		if (property_exists($this, $fieldName)) 
+		{
+			return $this->$fieldName;
+		}
+		else
+		{
+			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param unknown_type $property
+	 * @param unknown_type $value
+	 */
+	public function __set($property, $value) 
+	{
+		switch ($fieldname)
+		{
+			case 'membercount':
+				break;
+			default:
+				if (property_exists($this, $property))
+				{
+					$this->$property = $value;
+				}
+				else
+				{
+					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
+				}
+		}
 	}
 
 	/**
@@ -590,7 +637,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 * counts all guild members
 	 * @see \bbdkp\iGuilds::countmembers()
 	 */
-	public function countmembers()
+	private function countmembers()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 		//get total members
