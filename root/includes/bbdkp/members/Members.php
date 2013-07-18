@@ -58,73 +58,73 @@ if (!class_exists('\bbdkp\Admin'))
      * utF-8 member name
      * @var string
      */
-	public $member_name;
+	protected $member_name;
 
     /**
      * status (0 or 1)
      * @var unknown_type
      */
-	public $member_status;
+	protected $member_status;
 
 	/**
 	 * level
 	 * @var integer
 	 */
-	public $member_level;
+	protected $member_level;
 
-	public $member_race_id;
-	public $member_race;
-	public $member_class_id;
-	public $member_class;
+	protected $member_race_id;
+	protected $member_race;
+	protected $member_class_id;
+	protected $member_class;
 
 	/**
 	 * guild rankid
 	 * @var unknown_type
 	 */
-	public $member_rank_id;
+	protected $member_rank_id;
 
 	/**
 	 * administrator comment
 	 * @var unknown_type
 	 */
-	public $member_comment;
+	protected $member_comment;
 
-	public $member_joindate;
-	public $member_joindate_d;
-	public $member_joindate_mo;
-	public $member_joindate_y;
-	public $member_outdate;
-	public $member_outdate_d;
-	public $member_outdate_mo;
-	public $member_outdate_y;
+	protected $member_joindate;
+	protected $member_joindate_d;
+	protected $member_joindate_mo;
+	protected $member_joindate_y;
+	protected $member_outdate;
+	protected $member_outdate_d;
+	protected $member_outdate_mo;
+	protected $member_outdate_y;
 
 	/**
 	 * the id of my guild
 	 * @var unknown_type
 	 */
-	public $member_guild_id;
+	protected $member_guild_id;
 
 	/**
 	 * my guildname
 	 * @var unknown_type
 	 */
-	public $member_guild_name;
+	protected $member_guild_name;
 
 	/**
 	 * character realm
 	 * @var unknown_type
 	 */
-	public $member_realm;
+	protected $member_realm;
 
 	/**
 	 * region to which the char is on
 	 * @var unknown_type
 	 */
-	public $member_region;
+	protected $member_region;
 
 	/**
 	 * Allowed regions
-	 * @var array
+	 * readonly! 
 	 */
 	protected $regionlist = array( 'eu', 'us' , 'kr', 'tw', 'cn', 'sea');
 	
@@ -132,57 +132,57 @@ if (!class_exists('\bbdkp\Admin'))
 	 *gender ID 0=male, 1=female
 	 * @var unknown_type
 	 */
-	public $member_gender_id;
+	protected $member_gender_id;
 
 	/**
 	 * Achievement points
 	 * @var unknown_type
 	 */
-	public $member_achiev;
+	protected $member_achiev;
 
 	/**
 	 * url to armory
 	 * @var string
 	 */
-	public $member_armory_url;
+	protected $member_armory_url;
 
 
-	public $member_portrait_url;
+	protected $member_portrait_url;
 
 	/**
 	 * The phpBB member id linked to this member
 	 * @var unknown_type
 	 */
-	public $phpbb_user_id;
+	protected $phpbb_user_id;
 
 	/**
 	 * Class color
 	 * @var unknown_type
 	 */
-	public $colorcode;
+	protected $colorcode;
 
 	/**
 	 * Race icon
 	 * @var unknown_type
 	 */
-	public $race_image;
+	protected $race_image;
 
 	/**
 	 * Class icon
 	 * @var unknown_type
 	 */
-	public $class_image;
+	protected $class_image;
 
 	/**
 	 * current talent builds
 	 * @var string
 	 */
-	public $talents;
+	protected $talents;
 	
 	/**
 	 * current title
 	 */
-	public $member_title;
+	protected $member_title;
 
 	/**
 	 */
@@ -292,6 +292,49 @@ if (!class_exists('\bbdkp\Admin'))
 		}
 
 
+	}
+	
+
+	/**
+	 *
+	 * @param string $fieldName
+	 */
+	public function __get($fieldName)
+	{
+		global $user;
+	
+		if (property_exists($this, $fieldName))
+		{
+			return $this->$fieldName;
+		}
+		else
+		{
+			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
+		}
+	}
+	
+	/**
+	 *
+	 * @param unknown_type $property
+	 * @param unknown_type $value
+	 */
+	public function __set($property, $value)
+	{
+		switch ($fieldname)
+		{
+			case 'regionlist':
+				// is readonly
+				break;
+			default:
+				if (property_exists($this, $property))
+				{
+					$this->$property = $value;
+				}
+				else
+				{
+					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
+				}
+		}
 	}
 
 	/**
