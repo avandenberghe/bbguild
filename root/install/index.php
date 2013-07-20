@@ -1001,12 +1001,14 @@ $versions = array(
      				array($table_prefix . 'bbdkp_memberguild', 'min_armory' ,array('UINT', 90)),
      		),
      		
-     		//remove the ranks module because it's a part of Guild acp now
      	'module_remove' => array(
+
+     			//remove guild modes from acp_dkp_mm
 	            array('acp', 'ACP_DKP_MEMBER', array(
 			           		 'module_basename' => 'dkp_mm',
-			            	 'modes'           => array('mm_ranks'),
+			            	 'modes'           => array('mm_ranks', 'mm_listguilds', 'mm_addguild' ),
 					)),
+     			
      			//remove the game acp
 	     		array('acp', 'ACP_DKP_MEMBER', array(
 	     				'module_basename' => 'dkp_game',
@@ -1028,7 +1030,14 @@ $versions = array(
      						'module_basename' => 'dkp_game',
      						'modes'           => array('listgames','editgames', 'addfaction', 'addrace', 'addclass'),
      				)),
-     		 		
+     			
+     			// add guild acp
+     			array('acp', 'ACP_DKP_MEMBER', array(
+     					'module_basename' => 'dkp_guild',
+     					'modes'           => array(  'listguilds', 'addguild' ),
+     			),
+     			),
+     			
      		 	//add the points acp to dkp section
    		 		array('acp', 'ACP_DKP_MDKP', array(
      		 				'module_basename' => 'dkp_point',
