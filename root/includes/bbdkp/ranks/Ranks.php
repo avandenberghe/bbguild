@@ -50,18 +50,26 @@ class Ranks extends \bbdkp\Guilds implements iRanks
 	public $RankPrefix;
 	public $RankSuffix;
 
-	public function __construct()
+	public function __construct($RankGuild, $RankId = 0)
 	{
-		$this->RankId=0;
-		$this->RankName='';
-		$this->RankGuild=0;
-		$this->RankHide=0;
-		$this->RankPrefix='';
-		$this->RankSuffix='';
+		if ($RankId >= 0)
+		{
+			$this->RankGuild=$RankGuild;
+			$this->Getrank(); 	
+		}
+		else
+		{
+			$this->RankGuild=$RankGuild;
+			$this->RankId=0;
+			$this->RankName='';
+			$this->RankHide=0;
+			$this->RankPrefix='';
+			$this->RankSuffix='';
+		}
 	}
 
 	/**
-	 * 
+	 * gets all info on one rank
 	 * @see \bbdkp\iRanks::Getrank()
 	 */
 	public function Getrank()

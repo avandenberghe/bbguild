@@ -66,14 +66,19 @@ if (!class_exists('\bbdkp\Admin'))
 
 	/**
 	 */
-	function __construct($guild_id)
+	function __construct($guild_id = 0)
 	{
-		if($guild_id >= 0)
+		if(isset($guild_id))
 		{
 			$this->guildid = $guild_id;
-			$this->Getguild();
-			$this->countmembers();
 		}
+		else
+		{
+			$this->guildid = 0;
+		}
+			
+		$this->Getguild();
+		$this->countmembers();
 	}
 
 	/**
@@ -671,6 +676,23 @@ if (!class_exists('\bbdkp\Admin'))
 		$db->sql_freeresult($result);
 		$this->membercount = $total_members;
 
+	}
+	
+	
+	/**
+	 * gets list of guilds, used in dropdowns
+	 * @return array
+	 */
+	public function guildlist()
+	{
+		global $db; 
+		$sql = 'SELECT a.id, a.name, a.realm, a.region
+				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
+				WHERE a.id = b.guild_id
+				GROUP BY a.id, a.name, a.realm, a.region
+				ORDER BY a.id desc';
+		$result = $db->sql_query($sql);
+		return $result; 
 	}
 
 }

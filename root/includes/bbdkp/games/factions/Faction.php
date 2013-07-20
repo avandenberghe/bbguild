@@ -38,9 +38,10 @@ if (!class_exists('\bbdkp\Game'))
  class Faction extends \bbdkp\Game 
 {
 	public $game_id;
-	public $faction_id;
-	public $faction_name;
-	public $faction_hide;
+	protected $f_index; //readonly
+	protected $faction_id; 
+	protected $faction_name;
+	protected $faction_hide;
 	
 	public function __construct() 
 	{
@@ -58,10 +59,9 @@ if (!class_exists('\bbdkp\Game'))
 	public function Get()
 	{
 		global $db;
-		$sql = 'SELECT game_id, faction_id, faction_name, faction_hide
+		$sql = 'SELECT game_id, f_index, faction_id, faction_name, faction_hide
     			FROM ' . FACTION_TABLE . '
-    			WHERE faction_id = ' . (int) $this->faction_id . ' and game_id = ' . (int) $this->game_id
-		;
+    			WHERE f_index = ' . (int) $this->faction_id . " and game_id = '" . $this->game_id . "'";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
@@ -71,6 +71,47 @@ if (!class_exists('\bbdkp\Game'))
 		$db->sql_freeresult($result);
 		
 	}
+	
+	/**
+	 *
+	 * @param string $fieldName
+	 */
+	public function __get($fieldName)
+	{
+		global $user;
+		if (property_exists($this, $fieldName))
+		{
+			return $this->$fieldName;
+		}
+		else
+		{
+			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
+		}
+	}
+	
+	/**
+	 *
+	 * @param unknown_type $property
+	 * @param unknown_type $value
+	 */
+	public function __set($property, $value)
+	{
+		switch ($fieldname)
+		{
+			case 'f_index':
+				break;
+			default:
+				if (property_exists($this, $property))
+				{
+					$this->$property = $value;
+				}
+				else
+				{
+					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
+				}
+		}
+	}
+	
 	
 	/**
 	 * adds a faction
@@ -135,12 +176,12 @@ if (!class_exists('\bbdkp\Game'))
 		}
 		else
 		{
-			trigger_error (sprintf ( $user->lang ['ADMIN_DELETE_FACTION_FAILED'], $this->faction_name), E_USER_WARNING );
+			trigger_error (sprintf ( $user->lang ['ADMIN_DELETE_FACTION_FAILED'], $this->game_id, $this->faction_name), E_USER_WARNING );
 		}
 	}
 	
 	/**
-	 * deletes a specific factions
+	 * deletes a specific faction
 	 */
 	public function Delete_all_factions()
 	{
@@ -148,6 +189,23 @@ if (!class_exists('\bbdkp\Game'))
 		$sql = 'DELETE FROM ' . FACTION_TABLE . " WHERE game_id = '" .   $this->game_id . "'"  ;
 		$db->sql_query ( $sql );
 		$cache->destroy ( 'sql', FACTION_TABLE );
+	}
+	
+	/**
+	 * get factions for this game
+	 * @return unknown
+	 */
+	public function getfactions()
+	{
+		global $db, $user, $cache;
+		$sql_array = array (
+				'SELECT' => ' f.game_id, f.f_index, f.faction_id, f.faction_name, f.faction_hide ',
+				'FROM' => array (FACTION_TABLE => 'f' ),
+				'WHERE' => " f.game_id = '" . $this->game_id . "'",
+				'ORDER_BY' => 'faction_id ASC ' );
+		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+		$result = $db->sql_query ( $sql );
+		return $result;  
 	}
 	
 	

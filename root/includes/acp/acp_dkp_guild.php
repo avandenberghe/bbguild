@@ -400,9 +400,8 @@ class acp_dkp_guild extends \bbdkp\Admin
 					}
 				}
 				
-				$listranks = new \bbdkp\Ranks();
+				$listranks = new \bbdkp\Ranks($updateguild->guildid);
 				$listranks->game_id = $updateguild->game_id; 
-				$listranks->RankGuild = $updateguild->guildid;
 				$result = $listranks->listranks();
 				while ($row = $db->sql_fetchrow($result))
 				{

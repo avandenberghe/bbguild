@@ -176,12 +176,14 @@ Bitte lesen sie docs\INSTALL.html bevor.
 			<file from="root/images/roster_classes/*.*" to="images/roster_classes/*.*"/>
 			<file from="root/images/roster_portraits/*.*" to="images/roster_portraits/*.*"/>
 			<file from="root/images/tooltip/*.*" to="images/tooltip/*.*"/>
+			<file from="root/images/wowapi/*.*" to="images/wowapi/*.*"/>
 			<file from="root/includes/acp/acp_dkp_adj.php" to="includes/acp/acp_dkp_adj.php"/>
 			<file from="root/includes/acp/acp_dkp_event.php" to="includes/acp/acp_dkp_event.php"/>
 			<file from="root/includes/acp/acp_dkp_game.php" to="includes/acp/acp_dkp_game.php"/>
 			<file from="root/includes/acp/acp_dkp_item.php" to="includes/acp/acp_dkp_item.php"/>
 			<file from="root/includes/acp/acp_dkp_mdkp.php" to="includes/acp/acp_dkp_mdkp.php"/>
 			<file from="root/includes/acp/acp_dkp_mm.php" to="includes/acp/acp_dkp_mm.php"/>
+			<file from="root/includes/acp/acp_dkp_guild.php" to="includes/acp/acp_dkp_guild.php"/>
 			<file from="root/includes/acp/acp_dkp_point.php" to="includes/acp/acp_dkp_point.php"/>
 			<file from="root/includes/acp/acp_dkp_raid.php" to="includes/acp/acp_dkp_raid.php"/>
 			<file from="root/includes/acp/acp_dkp_sys.php" to="includes/acp/acp_dkp_sys.php"/>
@@ -192,6 +194,7 @@ Bitte lesen sie docs\INSTALL.html bevor.
 			<file from="root/includes/acp/info/acp_dkp_item.php" to="includes/acp/info/acp_dkp_item.php"/>
 			<file from="root/includes/acp/info/acp_dkp_mdkp.php" to="includes/acp/info/acp_dkp_mdkp.php"/>
 			<file from="root/includes/acp/info/acp_dkp_mm.php" to="includes/acp/info/acp_dkp_mm.php"/>
+			<file from="root/includes/acp/info/acp_dkp_guild.php" to="includes/acp/info/acp_dkp_guild.php"/>
 			<file from="root/includes/acp/info/acp_dkp_point.php" to="includes/acp/info/acp_dkp_point.php"/>
 			<file from="root/includes/acp/info/acp_dkp_raid.php" to="includes/acp/info/acp_dkp_raid.php"/>
 			<file from="root/includes/acp/info/acp_dkp_sys.php" to="includes/acp/info/acp_dkp_sys.php"/>

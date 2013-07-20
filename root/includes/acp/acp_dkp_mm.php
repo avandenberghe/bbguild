@@ -73,7 +73,9 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx",
 				"i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
-
+				
+				$Guild = new \bbdkp\Guilds();
+				
 				// add member button redirect
 				$showadd = (isset($_POST['memberadd'])) ? true : false;
 				if ($showadd)
@@ -108,10 +110,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 
 				// guild dropdown query
+				$result = $Guild->guildlist(); 	
 				
-				
-				
-				$sql = 'SELECT id, name, realm, region FROM ' . GUILD_TABLE . ' ORDER BY id desc';
 				$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
 				$sortlink = isset ( $_GET [URI_GUILD] )  ? true : false;
 				if ($submit)
@@ -127,16 +127,16 @@ class acp_dkp_mm extends \bbdkp\Admin
 				else
 				{
 				// default pageloading
-					$result = $db->sql_query_limit($sql, 1);
 					while ($row = $db->sql_fetchrow($result))
 					{
 						$guild_id = $row['id'];
+						break;
 					}
 					$db->sql_freeresult($result);
 				}
 
 				// fill popup and set selected to default selection
-				$resultg = $db->sql_query($sql);
+				$resultg = $Guild->guildlist();
 				while ($row = $db->sql_fetchrow($resultg))
 				{
 					$template->assign_block_vars('guild_row', array(
@@ -147,8 +147,6 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$db->sql_freeresult($resultg);
 				$previous_data = '';
 				
-				
-				$Guild = new \bbdkp\Guilds($guild_id);
 
 				//get window
 				$start = request_var('start', 0, false);
@@ -243,6 +241,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$update = (isset($_POST['update'])) ? true : false;
 				$delete = (isset($_GET['delete']) || isset($_POST['delete'])) ? true : false;
 
+				
+				
 				if ($add || $update)
 				{
 					if (! check_form_key('mm_addmember'))
@@ -367,103 +367,45 @@ class acp_dkp_mm extends \bbdkp\Admin
 				/*
 				 * fill template
 				 */
-				$editmember = new \bbdkp\Members();
-				$editmember->member_id = request_var('hidden_member_id', 0);
-				if ($editmember->member_id == 0)
-				{
-					$editmember->member_id = request_var(URI_NAMEID, 0);
-				}
+				$editmember = new \bbdkp\Members(request_var('hidden_member_id', request_var(URI_NAMEID, 0)) );
+				$S_ADD = ($editmember->member_id > 0) ? true: false;
 
-				if ($editmember->member_id > 0)
+				// Game dropdown
+				foreach ($this->installed_games as $gameid => $gamename)
 				{
-					// edit mode
-					// build member array if clicked on name in listing
-					if( $editmember->Getmember() == false)
-					{
-						trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
-					}
-					$S_ADD = false;
+					$template->assign_block_vars('game_row', array(
+							'VALUE' => $gameid ,
+							'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '' ,
+							'OPTION' => $gamename));
 				}
-				else
-				{
-					// add mode
-					$S_ADD = true;
-				}
-
+				
+				
 				//guild dropdown
-				$sql = 'SELECT a.id, a.name, a.realm, a.region
-				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
-				where a.id = b.guild_id
-				group by a.id, a.name, a.realm, a.region
-				order by a.id desc';
-				$result = $db->sql_query($sql);
-				if ($editmember->member_id > 0)
+				$Guild = new \bbdkp\Guilds($editmember->member_guild_id);
+				$result = $Guild->guildlist(); 
+				while ($row = $db->sql_fetchrow($result))
 				{
-					while ($row = $db->sql_fetchrow($result))
-					{
-						$template->assign_block_vars('guild_row', array(
-							'VALUE' => $row['id'] ,
-							'SELECTED' => ($editmember->member_guild_id == $row['id']) ? ' selected="selected"' : '' ,
-							'OPTION' => $row['name']));
-					}
-				}
-				else
-				{
-					$i = 0;
-					while ($row = $db->sql_fetchrow($result))
-					{
-						if ($i == 0)
-						{
-							$noguild_id = (int) $row['id'];
-						}
-						$template->assign_block_vars('guild_row', array(
-							'VALUE' => $row['id'] ,
-							'SELECTED' => '' ,
-							'OPTION' => $row['name']));
-						$i += 1;
-					}
+					$template->assign_block_vars('guild_row', array(
+						'VALUE' => $row['id'] ,
+						'SELECTED' => ($editmember->member_guild_id == $row['id']) ? ' selected="selected"' : '' ,
+						'OPTION' => $row['name']));
 				}
 				$db->sql_freeresult($result);
-
+					
 				// Rank drop-down -> for initial load
 				// reloading is done from ajax to prevent redraw
 				//
 				// this only shows the VISIBLE RANKS
 				// if you want to add someone to an unvisible rank make the rank visible first,
 				// add him and then make rank invisible again.
-				//
-				if ($editmember->member_id <> 0)
+				$Ranks = new \bbdkp\Ranks($Guild->guildid); 
+				$result = $Ranks->listranks(); 
+				while ($row = $db->sql_fetchrow($result))
 				{
-					$sql = 'SELECT rank_id, rank_name
-					FROM ' . MEMBER_RANKS_TABLE . '
-					WHERE rank_hide = 0
-					AND rank_id < 90
-					AND guild_id =	' . $editmember->member_guild_id . ' ORDER BY rank_id';
-					$result = $db->sql_query($sql);
-					while ($row = $db->sql_fetchrow($result))
-					{
-						$template->assign_block_vars('rank_row', array(
-							'VALUE' => $row['rank_id'] ,
-							'SELECTED' => ($editmember->member_guild_id == $row['rank_id']) ? ' selected="selected"' : '' ,
-							'OPTION' => (! empty($row['rank_name'])) ? $row['rank_name'] : '(None)'));
-					}
-				}
-				else
-				{
-					// no member is set, get the ranks from the highest numbered guild
-					$sql = 'SELECT rank_id, rank_name
-					FROM ' . MEMBER_RANKS_TABLE . '
-					WHERE rank_hide = 0
-					AND rank_id < 90
-					AND guild_id = ' . $noguild_id . ' ORDER BY rank_id desc';
-					$result = $db->sql_query($sql);
-					while ($row = $db->sql_fetchrow($result))
-					{
-						$template->assign_block_vars('rank_row', array(
-							'VALUE' => $row['rank_id'] ,
-							'SELECTED' => '' ,
-							'OPTION' => (! empty($row['rank_name'])) ? $row['rank_name'] : '(None)'));
-					}
+					$template->assign_block_vars('rank_row', array(
+						'VALUE' => $row['rank_id'] ,
+						'SELECTED' => ($editmember->member_guild_id == $row['rank_id']) ? ' selected="selected"' : '' ,
+						'OPTION' => (! empty($row['rank_name'])) ? $row['rank_name'] : '(None)'));
 				}
 
 				// phpbb User dropdown
@@ -484,33 +426,15 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$s_phpbb_user .= '<option value="' . $row['user_id'] . '"' . $selected . '>' . $row['username'] . '</option>';
 				}
 
-				// Game dropdown
-				// list installed games
-				$installed_games = array();
-				foreach ($this->games as $gameid => $gamename)
-				{
-					//add value to dropdown when the game config value is 1
-					if ($config['bbdkp_games_' . $gameid] == 1)
-					{
-						$template->assign_block_vars('game_row', array(
-							'VALUE' => $gameid ,
-							'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '' ,
-							'OPTION' => $gamename));
-						$installed_games[] = $gameid;
-					}
-				}
-
-				//
 				// Race dropdown
 				// reloading is done from ajax to prevent redraw
-				$gamepreset = ( $editmember->member_id > 0  ? $editmember->game_id : $installed_games[0]);
 				$sql_array = array(
 					'SELECT' => '  r.race_id, l.name as race_name ' ,
 					'FROM' => array(
 						RACE_TABLE => 'r' ,
 						BB_LANGUAGE => 'l') ,
 					'WHERE' => " r.race_id = l.attribute_id
-								AND r.game_id = '" . $gamepreset . "'
+								AND r.game_id = '" . $editmember->game_id . "'
 								AND l.attribute='race'
 								AND l.game_id = r.game_id
 								AND l.language= '" . $config['bbdkp_lang'] . "'");
@@ -548,7 +472,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'FROM' => array(
 						CLASS_TABLE => 'c' ,
 						BB_LANGUAGE => 'l') ,
-					'WHERE' => " l.game_id = c.game_id  AND c.game_id = '" . $gamepreset . "'
+					'WHERE' => " l.game_id = c.game_id  AND c.game_id = '" . $editmember->game_id . "'
 					AND l.attribute_id = c.class_id  AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ");
 				$sql = $db->sql_build_query('SELECT', $sql_array);
 				$result = $db->sql_query($sql);

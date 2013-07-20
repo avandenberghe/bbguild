@@ -33,6 +33,10 @@ if (!class_exists('\bbdkp\Admin'))
 {
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
+if (!class_exists('\bbdkp\Game'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
+}
 
 /**
  * manages member creation
@@ -186,26 +190,19 @@ if (!class_exists('\bbdkp\Admin'))
 
 	/**
 	 */
-	function __construct()
+	function __construct($member_id)
 	{
-		global $user;
-		$this->games = array (
-				'wow' 	=> $user->lang ['WOW'],
-				'lotro' => $user->lang ['LOTRO'],
-				'eq' 	=> $user->lang ['EQ'],
-				'daoc' 	=> $user->lang ['DAOC'],
-				'vanguard' => $user->lang ['VANGUARD'],
-				'eq2' 	=> $user->lang ['EQ2'],
-				'warhammer' => $user->lang ['WARHAMMER'],
-				'aion' 	=> $user->lang ['AION'],
-				'FFXI' 	=> $user->lang ['FFXI'],
-				'rift' 	=> $user->lang ['RIFT'],
-				'swtor' => $user->lang ['SWTOR'],
-				'lineage2' => $user->lang ['LINEAGE2'],
-				'tera' 	=> $user->lang ['TERA'],
-				'gw2' 	=> $user->lang ['GW2'],
-		);
-		
+		if(isset($member_id))
+		{
+			$this->member_id = $member_id;
+		}
+		else
+		{
+			$this->member_id = 0;
+		}
+			
+		$this->Getmember();
+				
 	}
 
 	/**
@@ -250,6 +247,8 @@ if (!class_exists('\bbdkp\Admin'))
 
 		if ($row)
 		{
+			
+			
 			$this->member_id = $row['member_id'] ;
 			$this->member_name = $row['member_name'] ;
 			$this->member_race_id = $row['member_race_id'] ;
@@ -288,7 +287,47 @@ if (!class_exists('\bbdkp\Admin'))
 		}
 		else
 		{
-			return false;
+			// load games class
+			$games = new \bbdkp\Game();
+			$this->games = $games->preinstalled_games;
+			$this->installed_games = $games->installed_games;
+			foreach($this->installed_games as $key => $value)
+			{
+				$this->game_id = $key;
+				break; 
+			}
+			unset($games); 
+			$this->member_id = 0 ;
+			$this->member_name = $user->lang['NA'] ;
+			$this->member_race_id = 0 ;
+			$this->member_race = '' ;
+			$this->member_class_id = 0;
+			$this->member_class = '' ;
+			$this->member_level = 0;
+			$this->member_rank_id = 0;
+			$this->member_comment = '' ;
+			$this->member_gender_id = 0;
+			$this->member_joindate = $this->time;
+			$this->member_joindate_d = date('j', $this->time) ;
+			$this->member_joindate_mo = date('n', $this->time);
+			$this->member_joindate_y = date('Y', $this->time) ;
+			$this->member_outdate = 0;
+			$this->member_outdate_d = date('j', 0);
+			$this->member_outdate_mo = date('n', 0);
+			$this->member_outdate_y = date('Y', 0);
+			$this->member_guild_name = '';
+			$this->member_guild_id = 0;
+			$this->member_realm = '';
+			$this->member_region = '';
+			$this->member_armory_url = '';
+			$this->member_portrait_url = '';
+			$this->phpbb_user_id = '';
+			$this->member_status = 0;
+			$this->member_achiev = 0;
+			$this->colorcode = "#000000";
+			$race_image = '';
+			$this->race_image = '';
+			$this->class_image = '';
 		}
 
 

@@ -135,7 +135,7 @@ if (!class_exists('\bbdkp\Game'))
 	*/
 	public function Delete()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $user, $db, $config, $phpEx, $phpbb_root_path, $cache;
 
 		/* check if there are members with this raceid */
 		$sql_array = array (
@@ -242,9 +242,7 @@ if (!class_exists('\bbdkp\Game'))
 							AND r.race_id = l.attribute_id
 							AND l.attribute='race'
 							AND l.language= '" . $config ['bbdkp_lang'] . "'
-							AND l.game_id = '" . $this->game_id . "'
-							AND r.race_id = " . $this->race_id );
-		
+							AND l.game_id = '" . $this->game_id . "'");
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query ( $sql );
 		return $result; 

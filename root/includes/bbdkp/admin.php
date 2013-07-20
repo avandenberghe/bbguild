@@ -12,6 +12,11 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 require_once ("{$phpbb_root_path}includes/bbdkp/iAdmin.$phpEx");
 
+if (!class_exists('\bbdkp\Game'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
+}
+
 /**
  * bbDKP Admin foundation
  *
@@ -28,6 +33,7 @@ class Admin implements \bbdkp\iAdmin
     public $time = 0;
     public $bbtips = false;
     public $games;
+    public $installed_games;
     public $regions;
     public $languagecodes;
     
@@ -69,22 +75,9 @@ class Admin implements \bbdkp\iAdmin
 				'en' => $user->lang['LANG_EN'] ,
 				'fr' => $user->lang['LANG_FR']);
 				
-	    $this->games = array (
-			'wow' 	=> $user->lang ['WOW'],
-			'lotro' => $user->lang ['LOTRO'],
-			'eq' 	=> $user->lang ['EQ'],
-			'daoc' 	=> $user->lang ['DAOC'],
-			'vanguard' => $user->lang ['VANGUARD'],
-			'eq2' 	=> $user->lang ['EQ2'],
-			'warhammer' => $user->lang ['WARHAMMER'],
-			'aion' 	=> $user->lang ['AION'],
-			'FFXI' 	=> $user->lang ['FFXI'],
-			'rift' 	=> $user->lang ['RIFT'],
-			'swtor' => $user->lang ['SWTOR'],
-			'lineage2' => $user->lang ['LINEAGE2'],
-	    	'tera' 	=> $user->lang ['TERA'],
-	    	'gw2' 	=> $user->lang ['GW2'],
-	    );
+	    $games = new \bbdkp\Game(); 
+	    $this->games = $games->preinstalled_games; 
+	    $this->installed_games = $games->installed_games;
 	    
 	    $boardtime = array();
 	    $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
