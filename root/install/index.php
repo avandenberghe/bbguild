@@ -970,26 +970,30 @@ $versions = array(
      '1.3.0' => array(
      	// 1.2.8 07-2013
      	// oop release, now requires 553
+     	
        'table_add' => array(
-
+			// add the new game table
        		array($table_prefix . 'bbdkp_games', array(
 	              'COLUMNS'            => array(
 	          		  'id'     	       => array('UINT', NULL, 'auto_increment'),
                    	  'game_id' 	   => array('VCHAR', ''),
-	                  'game_name'       => array('VCHAR_UNI:255', ''),
+	                  'game_name'      => array('VCHAR_UNI:255', ''),
 	          		  'status'	   	   => array('VCHAR:30', ''),
 	          	),
 	                'PRIMARY_KEY'     => array('id'),
 	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id', 'game_name')),
 			)))),
 
-       	'config_update' => array(
-					// roster layout: main parameter for steering roster layout
-     				array('bbdkp_roster_layout', '0', true),
-     		),
      		
-     		// add guild columns
+    	// remove copyright info from plugin table
+     	'table_column_remove' => array(
+				array($table_prefix . 'bbdkp_plugins', 'orginal_copyright'),
+				array($table_prefix . 'bbdkp_plugins', 'bbdkp_copyright'),
+      		),
+     		
+     	// add guild columns
      	'table_column_add' => array(
+     				array($table_prefix . 'bbdkp_plugins', 'installdate' , array('TIMESTAMP', 0)),
      				array($table_prefix . 'bbdkp_memberlist', 'member_title' , array('VCHAR_UNI:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'level' ,array('UINT', 0) ),
      				array($table_prefix . 'bbdkp_memberguild', 'members' ,array('UINT', 0)),
@@ -1001,6 +1005,7 @@ $versions = array(
      				array($table_prefix . 'bbdkp_memberguild', 'min_armory' ,array('UINT', 90)),
      		),
      		
+
      	'module_remove' => array(
 
      			//remove guild modes from acp_dkp_mm
@@ -1024,8 +1029,8 @@ $versions = array(
      				
      			), 
      		
-	     		//add the game acp       		
      	'module_add' => array(
+				//add the game acp       		
      			array('acp', 'ACP_DKP_MAINPAGE', array(
      						'module_basename' => 'dkp_game',
      						'modes'           => array('listgames','editgames', 'addfaction', 'addrace', 'addclass'),
@@ -1048,12 +1053,20 @@ $versions = array(
      		 		
      		 		),
      		
-     	//run this at very end
      	'custom' => array(
 				'tableupdates',
 				'gameinstall',
 				'bbdkp_caches',
      		),
+     	
+       	'config_update' => array(
+     				array('bbdkp_roster_layout', '0', true),
+     		),
+     	
+     	//guild acp makes this config obsolete
+     	'config_delete' => array(
+     				array('bbdkp_guildtag'),
+     		),     		
      ),
 
 );

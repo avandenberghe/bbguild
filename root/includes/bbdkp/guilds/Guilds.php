@@ -134,7 +134,7 @@ if (!class_exists('\bbdkp\Admin'))
 	public function __get($fieldName) 
 	{
 		global $user;
-		switch ($fieldname)
+		switch ($fieldName)
 		{
 			case 'membercount':
 				return  $this->countmembers();
@@ -158,7 +158,8 @@ if (!class_exists('\bbdkp\Admin'))
 	 */
 	public function __set($property, $value) 
 	{
-		switch ($fieldname)
+		global $user; 
+		switch ($property)
 		{
 			case 'membercount':
 				break;
@@ -232,10 +233,9 @@ if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
 		}
-		$newrank = new Ranks();
+		$newrank = new Ranks($this->guildid);
 		$newrank->RankName = "Member";
 		$newrank->RankId = 0;
-		$newrank->RankGuild = $this->guildid;
 		$newrank->RankHide = 0;
 		$newrank->RankPrefix = '';
 		$newrank->RankSuffix = '';

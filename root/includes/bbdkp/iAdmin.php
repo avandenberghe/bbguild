@@ -28,8 +28,7 @@ if (! defined('IN_PHPBB'))
 	function switch_order($sort_order, $arg = URI_ORDER);
 	function create_bar($width, $show_text = '', $color = '#AA0033');
 	function generate_pagination2($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $tpl_prefix = '');
-	function log_insert($values);
-	
+	function log_insert($values = array()); 
 }
 
 ?>

@@ -1,4 +1,13 @@
 <?php
+/**
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.3.0
+ *
+ */
 namespace bbdkp;
 /**
 * @ignore
@@ -17,16 +26,15 @@ if (!class_exists('\bbdkp\Game'))
 	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
 }
 
+if (!class_exists('\bbdkp\log'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/log.$phpEx");
+}
+
 /**
+ * 
  * bbDKP Admin foundation
- *
  * @package bbDKP
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2009 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
- *
  */
 class Admin implements \bbdkp\iAdmin
 {
@@ -36,6 +44,19 @@ class Admin implements \bbdkp\iAdmin
     public $installed_games;
     public $regions;
     public $languagecodes;
+    
+    /**
+     * where versionstring is stored
+     * @var unknown_type
+     */
+    protected $versioncheckurl = array(
+     'bbdkp' 				=> 'https://raw.github.com/Sajaki/bbDKP/v130/contrib/version.txt', 
+ 	 'bbdkp_apply' 			=> 'bbdkp.googlecode.com/svn/trunk/version_apply.txt',  
+     'bbdkp_plugin_bbtips' 	=> 'bbdkp.googlecode.com/svn/trunk/version_bbtips.txt', 
+     'bbdkp_bp' 			=>  'bbdkp.googlecode.com/svn/trunk/version_bossprogress.txt', 
+     'bbdkp_raidplanner' 	=>  'bbdkp.googlecode.com/svn/trunk/version_raidplanner.txt', 
+		); 
+    
     
 	public function __construct()
 	{
@@ -78,7 +99,7 @@ class Admin implements \bbdkp\iAdmin
 	    $games = new \bbdkp\Game(); 
 	    $this->games = $games->preinstalled_games; 
 	    $this->installed_games = $games->installed_games;
-	    
+	    unset($games); 
 	    $boardtime = array();
 	    $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
 	    $this->time = $boardtime[0];
@@ -91,7 +112,8 @@ class Admin implements \bbdkp\iAdmin
 	    		$this->bbtips = true;
 	    	}
 	    }
-
+	    
+	   
 
 	}
 
@@ -268,7 +290,7 @@ class Admin implements \bbdkp\iAdmin
 	 * Pagination routine, generates page number sequence
 	 * tpl_prefix is for using different pagination blocks at one page
 	 */
-	function generate_pagination2($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $tpl_prefix = '')
+	public function generate_pagination2($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $tpl_prefix = '')
 	{
 		global $template, $user;
 
@@ -359,7 +381,7 @@ class Admin implements \bbdkp\iAdmin
 	* @param $arg header variable
 	* @return array SQL/URI information
 	*/
-	function switch_order($sort_order, $arg = URI_ORDER)
+	public function switch_order($sort_order, $arg = URI_ORDER)
 	{
 		$uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : '0.0';
 
@@ -401,7 +423,7 @@ class Admin implements \bbdkp\iAdmin
 	 * @param $class Background class for bar
 	 * @return string Bar HTML
 	 */
-	function create_bar($width, $show_text = '', $color = '#AA0033')
+	public function create_bar($width, $show_text = '', $color = '#AA0033')
 	{
 		$bar = '';
 
@@ -429,8 +451,8 @@ class Admin implements \bbdkp\iAdmin
 
 		return $bar;
 	}
-
-
+	
+	
 	/**
 	 * makes an entry in the bbdkp log table
 	 * log_action is an xml containing the log
@@ -446,53 +468,11 @@ class Admin implements \bbdkp\iAdmin
 	 */
 	public function log_insert($values = array())
 	{
-		global $db, $user;
-		$log_fields = array('log_date', 'log_type', 'log_action', 'log_ipaddress', 'log_sid', 'log_result', 'log_userid');
-
-
-		// Default our log values
-		$defaultlog = array(
-				'log_date'      => time(),
-				'log_type'      => NULL,
-				'log_action'    => NULL,
-				'log_ipaddress' => $user->ip,
-				'log_sid'       => $user->session_id,
-				'log_result'    => 'L_SUCCESS',
-				'log_userid'    => $user->data['user_id']);
-
-		if ( sizeof($values) > 0 )
-		{
-			// If they set the value, we use theirs, otherwise we use the default
-			foreach ( $log_fields as $field )
-			{
-				$values[$field] = ( isset($values[$field]) ) ? $values[$field] : $defaultlog[$field];
-
-				if ( $field == 'log_action' )
-				{
-					// make xml with log actions
-					$str_action="<log>";
-					foreach ( $values['log_action'] as $key => $value )
-					{
-						$str_action .= "<" . $key . ">" . $value . "</" . $key . ">";
-					}
-					$str_action .="</log>";
-					$str_action = substr($str_action, 0, strlen($str_action));
-					// Take the newlines and tabs (or spaces > 1) out
-					$str_action = preg_replace("/[[:space:]]{2,}/", '', $str_action);
-					$str_action = str_replace("\t", '', $str_action);
-					$str_action = str_replace("\n", '', $str_action);
-					$str_action = preg_replace("#(\\\){1,}#", "\\", $str_action);
-					$values['log_action'] = $str_action;
-				}
-			}
-			$query = $db->sql_build_array('INSERT', $values);
-			$sql = 'INSERT INTO ' . LOGS_TABLE . $query;
-			$db->sql_query($sql);
-			return true;
-		}
-		return false;
+		// log
+		$logs = \bbdkp\log::Instance();	
+		return $logs->log_insert($values = array()); 
+		
 	}
-
 
 }
 
