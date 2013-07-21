@@ -24,9 +24,9 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-    'ACP_DKP_MEMBER'	    => 'Guild and Member management',
-	'ACP_DKP_MEMBER_ADD'	=> 'Add member',  
-	'ACP_DKP_MEMBER_LIST'	=> 'Roster',
+	'ACP_DKP_GUILD'			=> 'Guilds', 
+ 	'ACP_DKP_GUILD_ADD'	    => 'Add Guild',  
+	'ACP_DKP_GUILD_LIST'	=> 'Guild List',   
 ));
 
 ?>

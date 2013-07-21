@@ -18,17 +18,17 @@ if (!defined('IN_PHPBB'))
 /**
 * @package acp
 */
-class acp_dkp_mm_info
+class acp_dkp_guild_info
 {
 	function module()
 	{
 		return array(
-			'filename'	=> 'acp_dkp_mm',
-			'title'		=> 'ACP_DKP_MEMBER',
+			'filename'	=> 'acp_dkp_guild',
+			'title'		=> 'ACP_DKP_GUILD',
 			'version'	=> '1.3.0',
 			'modes'		=> array(
-				'mm_addmember'	    => array('title' => 'ACP_DKP_MEMBER_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER'), 'display' => false ),
-				'mm_listmembers'	=> array('title' => 'ACP_DKP_MEMBER_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER')),
+				'addguild'	    => array('title' => 'ACP_DKP_GUILD_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER'), 'display' => false),
+				'listguilds'	    => array('title' => 'ACP_DKP_GUILD_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER')),
 			),
 		);
 	}

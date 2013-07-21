@@ -41,39 +41,44 @@ if (!class_exists('\bbdkp\Admin'))
 	// common
 	public $game_id = '';
 	public $guildid = 0;
-	public $name = '';
-	public $realm = '';
-	public $region = '';
-	public $achievements = 0;
-	public $membercount = 0;
-	public $startdate = 0;
-	public $showroster = 0;
-	public $min_armory = 0;
+	protected $name = '';
+	protected $realm = '';
+	protected $region = '';
+	protected $achievements = 0;
+	protected $membercount = 0;
+	protected $startdate = 0;
+	protected $showroster = 0;
+	protected $min_armory = 0;
 
 	//aion parameters
-	public $aionlegionid = 0;
-	public $aionserverid = 0;
+	protected $aionlegionid = 0;
+	protected $aionserverid = 0;
 	
 	//wow parameters
-	public $achievementpoints = 0;
-	public $level = 0;
-	public $emblempath = '';
-	public $emblem = array(); 
-	public $battlegroup = '';
-	public $guildarmoryurl = '';
-	public $memberdata = array();
-	public $side = 0;
+	protected $achievementpoints = 0;
+	protected $level = 0;
+	protected $emblempath = '';
+	protected $emblem = array(); 
+	protected $battlegroup = '';
+	protected $guildarmoryurl = '';
+	protected $memberdata = array();
+	protected $side = 0;
 
 	/**
 	 */
-	function __construct($guild_id)
+	function __construct($guild_id = 0)
 	{
-		if($guild_id >= 0)
+		if(isset($guild_id))
 		{
 			$this->guildid = $guild_id;
-			$this->Getguild();
-			$this->countmembers();
 		}
+		else
+		{
+			$this->guildid = 0;
+		}
+			
+		$this->Getguild();
+		$this->countmembers();
 	}
 
 	/**
@@ -120,6 +125,54 @@ if (!class_exists('\bbdkp\Admin'))
 		}
 
 
+	}
+
+	/**
+	 * 
+	 * @param string $fieldName
+	 */
+	public function __get($fieldName) 
+	{
+		global $user;
+		switch ($fieldName)
+		{
+			case 'membercount':
+				return  $this->countmembers();
+			
+		}
+		
+		if (property_exists($this, $fieldName)) 
+		{
+			return $this->$fieldName;
+		}
+		else
+		{
+			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
+		}
+	}
+	
+	/**
+	 * 
+	 * @param unknown_type $property
+	 * @param unknown_type $value
+	 */
+	public function __set($property, $value) 
+	{
+		global $user; 
+		switch ($property)
+		{
+			case 'membercount':
+				break;
+			default:
+				if (property_exists($this, $property))
+				{
+					$this->$property = $value;
+				}
+				else
+				{
+					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
+				}
+		}
 	}
 
 	/**
@@ -180,10 +233,9 @@ if (!class_exists('\bbdkp\Admin'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
 		}
-		$newrank = new Ranks();
+		$newrank = new Ranks($this->guildid);
 		$newrank->RankName = "Member";
 		$newrank->RankId = 0;
-		$newrank->RankGuild = $this->guildid;
 		$newrank->RankHide = 0;
 		$newrank->RankPrefix = '';
 		$newrank->RankSuffix = '';
@@ -590,7 +642,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 * counts all guild members
 	 * @see \bbdkp\iGuilds::countmembers()
 	 */
-	public function countmembers()
+	private function countmembers()
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 		//get total members
@@ -624,6 +676,23 @@ if (!class_exists('\bbdkp\Admin'))
 		$db->sql_freeresult($result);
 		$this->membercount = $total_members;
 
+	}
+	
+	
+	/**
+	 * gets list of guilds, used in dropdowns
+	 * @return array
+	 */
+	public function guildlist()
+	{
+		global $db; 
+		$sql = 'SELECT a.id, a.name, a.realm, a.region
+				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
+				WHERE a.id = b.guild_id
+				GROUP BY a.id, a.name, a.realm, a.region
+				ORDER BY a.id desc';
+		$result = $db->sql_query($sql);
+		return $result; 
 	}
 
 }

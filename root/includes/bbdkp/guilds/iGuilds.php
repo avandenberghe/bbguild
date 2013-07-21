@@ -59,11 +59,4 @@ interface iGuilds extends \bbdkp\iAdmin
 	 */
 	function listmembers($order, $start);
 
-	/**
-	 * counts all guild members
-	 */
-	function countmembers();
-
-
-
 }

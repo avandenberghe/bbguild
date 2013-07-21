@@ -33,6 +33,10 @@ if (!class_exists('\bbdkp\Admin'))
 {
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
+if (!class_exists('\bbdkp\Game'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
+}
 
 /**
  * manages member creation
@@ -58,73 +62,73 @@ if (!class_exists('\bbdkp\Admin'))
      * utF-8 member name
      * @var string
      */
-	public $member_name;
+	protected $member_name;
 
     /**
      * status (0 or 1)
      * @var unknown_type
      */
-	public $member_status;
+	protected $member_status;
 
 	/**
 	 * level
 	 * @var integer
 	 */
-	public $member_level;
+	protected $member_level;
 
-	public $member_race_id;
-	public $member_race;
-	public $member_class_id;
-	public $member_class;
+	protected $member_race_id;
+	protected $member_race;
+	protected $member_class_id;
+	protected $member_class;
 
 	/**
 	 * guild rankid
 	 * @var unknown_type
 	 */
-	public $member_rank_id;
+	protected $member_rank_id;
 
 	/**
 	 * administrator comment
 	 * @var unknown_type
 	 */
-	public $member_comment;
+	protected $member_comment;
 
-	public $member_joindate;
-	public $member_joindate_d;
-	public $member_joindate_mo;
-	public $member_joindate_y;
-	public $member_outdate;
-	public $member_outdate_d;
-	public $member_outdate_mo;
-	public $member_outdate_y;
+	protected $member_joindate;
+	protected $member_joindate_d;
+	protected $member_joindate_mo;
+	protected $member_joindate_y;
+	protected $member_outdate;
+	protected $member_outdate_d;
+	protected $member_outdate_mo;
+	protected $member_outdate_y;
 
 	/**
 	 * the id of my guild
 	 * @var unknown_type
 	 */
-	public $member_guild_id;
+	protected $member_guild_id;
 
 	/**
 	 * my guildname
 	 * @var unknown_type
 	 */
-	public $member_guild_name;
+	protected $member_guild_name;
 
 	/**
 	 * character realm
 	 * @var unknown_type
 	 */
-	public $member_realm;
+	protected $member_realm;
 
 	/**
 	 * region to which the char is on
 	 * @var unknown_type
 	 */
-	public $member_region;
+	protected $member_region;
 
 	/**
 	 * Allowed regions
-	 * @var array
+	 * readonly! 
 	 */
 	protected $regionlist = array( 'eu', 'us' , 'kr', 'tw', 'cn', 'sea');
 	
@@ -132,80 +136,73 @@ if (!class_exists('\bbdkp\Admin'))
 	 *gender ID 0=male, 1=female
 	 * @var unknown_type
 	 */
-	public $member_gender_id;
+	protected $member_gender_id;
 
 	/**
 	 * Achievement points
 	 * @var unknown_type
 	 */
-	public $member_achiev;
+	protected $member_achiev;
 
 	/**
 	 * url to armory
 	 * @var string
 	 */
-	public $member_armory_url;
+	protected $member_armory_url;
 
 
-	public $member_portrait_url;
+	protected $member_portrait_url;
 
 	/**
 	 * The phpBB member id linked to this member
 	 * @var unknown_type
 	 */
-	public $phpbb_user_id;
+	protected $phpbb_user_id;
 
 	/**
 	 * Class color
 	 * @var unknown_type
 	 */
-	public $colorcode;
+	protected $colorcode;
 
 	/**
 	 * Race icon
 	 * @var unknown_type
 	 */
-	public $race_image;
+	protected $race_image;
 
 	/**
 	 * Class icon
 	 * @var unknown_type
 	 */
-	public $class_image;
+	protected $class_image;
 
 	/**
 	 * current talent builds
 	 * @var string
 	 */
-	public $talents;
+	protected $talents;
 	
 	/**
 	 * current title
 	 */
-	public $member_title;
+	protected $member_title;
 
 	/**
 	 */
-	function __construct()
+	function __construct($member_id)
 	{
-		global $user;
-		$this->games = array (
-				'wow' 	=> $user->lang ['WOW'],
-				'lotro' => $user->lang ['LOTRO'],
-				'eq' 	=> $user->lang ['EQ'],
-				'daoc' 	=> $user->lang ['DAOC'],
-				'vanguard' => $user->lang ['VANGUARD'],
-				'eq2' 	=> $user->lang ['EQ2'],
-				'warhammer' => $user->lang ['WARHAMMER'],
-				'aion' 	=> $user->lang ['AION'],
-				'FFXI' 	=> $user->lang ['FFXI'],
-				'rift' 	=> $user->lang ['RIFT'],
-				'swtor' => $user->lang ['SWTOR'],
-				'lineage2' => $user->lang ['LINEAGE2'],
-				'tera' 	=> $user->lang ['TERA'],
-				'gw2' 	=> $user->lang ['GW2'],
-		);
-		
+		if(isset($member_id))
+		{
+			$this->member_id = $member_id;
+		}
+		else
+		{
+			$this->member_id = 0;
+		}
+			
+		$this->Getmember();
+				
 	}
 
 	/**
@@ -250,6 +247,8 @@ if (!class_exists('\bbdkp\Admin'))
 
 		if ($row)
 		{
+			
+			
 			$this->member_id = $row['member_id'] ;
 			$this->member_name = $row['member_name'] ;
 			$this->member_race_id = $row['member_race_id'] ;
@@ -288,10 +287,93 @@ if (!class_exists('\bbdkp\Admin'))
 		}
 		else
 		{
-			return false;
+			// load games class
+			$games = new \bbdkp\Game();
+			$this->games = $games->preinstalled_games;
+			$this->installed_games = $games->installed_games;
+			foreach($this->installed_games as $key => $value)
+			{
+				$this->game_id = $key;
+				break; 
+			}
+			unset($games); 
+			$this->member_id = 0 ;
+			$this->member_name = $user->lang['NA'] ;
+			$this->member_race_id = 0 ;
+			$this->member_race = '' ;
+			$this->member_class_id = 0;
+			$this->member_class = '' ;
+			$this->member_level = 0;
+			$this->member_rank_id = 0;
+			$this->member_comment = '' ;
+			$this->member_gender_id = 0;
+			$this->member_joindate = $this->time;
+			$this->member_joindate_d = date('j', $this->time) ;
+			$this->member_joindate_mo = date('n', $this->time);
+			$this->member_joindate_y = date('Y', $this->time) ;
+			$this->member_outdate = 0;
+			$this->member_outdate_d = date('j', 0);
+			$this->member_outdate_mo = date('n', 0);
+			$this->member_outdate_y = date('Y', 0);
+			$this->member_guild_name = '';
+			$this->member_guild_id = 0;
+			$this->member_realm = '';
+			$this->member_region = '';
+			$this->member_armory_url = '';
+			$this->member_portrait_url = '';
+			$this->phpbb_user_id = '';
+			$this->member_status = 0;
+			$this->member_achiev = 0;
+			$this->colorcode = "#000000";
+			$race_image = '';
+			$this->race_image = '';
+			$this->class_image = '';
 		}
 
 
+	}
+	
+
+	/**
+	 *
+	 * @param string $fieldName
+	 */
+	public function __get($fieldName)
+	{
+		global $user;
+	
+		if (property_exists($this, $fieldName))
+		{
+			return $this->$fieldName;
+		}
+		else
+		{
+			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
+		}
+	}
+	
+	/**
+	 *
+	 * @param unknown_type $property
+	 * @param unknown_type $value
+	 */
+	public function __set($property, $value)
+	{
+		switch ($fieldname)
+		{
+			case 'regionlist':
+				// is readonly
+				break;
+			default:
+				if (property_exists($this, $property))
+				{
+					$this->$property = $value;
+				}
+				else
+				{
+					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
+				}
+		}
 	}
 
 	/**
