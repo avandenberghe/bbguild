@@ -502,6 +502,30 @@ class log
 	}
 	
 	/**
+	 * get this log entry
+	 */	
+	function get_logentry($log_id)
+		global $user, $db;
+		$sql_array = array(
+				'FROM' 		=> 	array(LOGS_TABLE => 'l') ,
+				'LEFT_JOIN' => array(
+								'FROM' => array(USERS_TABLE => 'u') ,
+								'ON' => 'u.user_id=l.log_userid')) ,
+				'WHERE' => 'log_id=' . (int) $log_id);
+		$total_sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query($total_sql);
+		$log = $db->sql_fetchrow($result);
+		$db->sql_freeresult($result);
+		$log['log_type'] = str_replace( 'L_', '', $log['log_type']);
+		$log['log_action'] = str_replace( 'L_', '', $log['log_action']); 
+		$log['log_result'] = str_replace( 'L_', '', $log['log_result']);
+		return $log;
+		
+	}
+	
+	
+	
+	/**
 	 * returns log tags from xml
 	 */
 	private function getxmltag($haystack)

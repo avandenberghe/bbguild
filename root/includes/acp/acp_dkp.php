@@ -542,27 +542,11 @@ class acp_dkp extends \bbdkp\Admin
 						break;
 
 					case 'view':
-						// get logged action by logid
-						$sql_array = array(
-							'SELECT' => 'l.*, u.username' ,
-							'FROM' => array(
-								LOGS_TABLE => 'l') ,
-							'LEFT_JOIN' => array(
-								array(
-									'FROM' => array(
-										USERS_TABLE => 'u') ,
-									'ON' => 'u.user_id=l.log_userid')) ,
-							'WHERE' => 'log_id=' . (int) $log_id);
-						$total_sql = $db->sql_build_query('SELECT', $sql_array);
-						$result = $db->sql_query($total_sql);
-						$log = $db->sql_fetchrow($result);
-						$db->sql_freeresult($result);
-						preg_match_all("/{.*?}/", $log['log_action'], $to_replace);
-						$xml = $log['log_action'];
-						//$xml = str_replace("L_", '', $xml);
-						// transform xml into array
+						$viewlog = $logs->get_logentry($log_id);						
+						$xml = $viewlog['log_action'];
+						
 						$array_temp = (array) simplexml_load_string($xml);
-						// get each element
+						
 						$log_action = array();
 						foreach ($array_temp as $key => $value)
 						{
@@ -576,6 +560,7 @@ class acp_dkp extends \bbdkp\Admin
 								$log_action[$key] = trim($value);
 							}
 						}
+						
 						// loop the elements and fill template
 						foreach ($log_action as $k => $v)
 						{
@@ -583,20 +568,21 @@ class acp_dkp extends \bbdkp\Admin
 							if ($k != 'header')
 							{
 								$template->assign_block_vars('log_row', array(
-									'KEY' => $this->lang_replace($k) . ':' ,
-									'VALUE' => $v));
+									'KEY' => 	$k . ':' ,
+									'VALUE' => 	$v));
 							}
 						}
+						
 						// fill constant template elements
 						$template->assign_vars(array(
 							'S_LIST' => false ,
 							'L_TITLE' => $user->lang['ACP_DKP_LOGS'] ,
 							'L_EXPLAIN' => $user->lang['ACP_DKP_LOGS_EXPLAIN'] ,
-							'LOG_DATE' => (! empty($log['log_date'])) ? date($config['bbdkp_date_format'], $log['log_date']) : '&nbsp;' ,
-							'LOG_USERNAME' => (! empty($log['username'])) ? $log['username'] : '&nbsp;' ,
-							'LOG_IP_ADDRESS' => $log['log_ipaddress'] ,
-							'LOG_SESSION_ID' => $log['log_sid'] ,
-							'LOG_ACTION' => (! empty($log_action['header'])) ? $valid_action_types[$log_action['header']] : '&nbsp;'));
+							'LOG_DATE' => (! empty($viewlog['log_date'])) ? date($config['bbdkp_date_format'], $viewlog['log_date']) : '&nbsp;' ,
+							'LOG_USERNAME' => (! empty($viewlog['username'])) ? $viewlog['username'] : '&nbsp;' ,
+							'LOG_IP_ADDRESS' => $viewlog['log_ipaddress'] ,
+							'LOG_SESSION_ID' => $viewlog['log_sid'] ,
+							'LOG_ACTION' => (! empty($log_action['header'])) ? $this->valid_action_types[$log_action['header']] : '&nbsp;'));
 						break;
 				}
 				break;
