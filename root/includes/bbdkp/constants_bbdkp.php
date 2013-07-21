@@ -30,7 +30,7 @@ define('URI_NEWS',       'news');
 define('URI_ORDER',      'o'); 	 
 define('URI_PAGE',       'pag'); 	 
 define('URI_RAID',       'raid_id');
-define('URI_GUILD',      'guild'); 
+define('URI_GUILD',      'guild_id'); 
 define('URI_GAME',       'game_id'); 	 
 define('USER_LLIMIT', 40);  // LOG LIMIT
 
