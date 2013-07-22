@@ -263,7 +263,7 @@ class install_lotro extends \bbdkp\aGameinstall
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
-		$db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Lotro Dungeons' ");
+		$sql = 'SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Lotro Dungeons' ";
 		$result = $db->sql_query($sql);
 		$this->lotrodkpid  = (int) $db->sql_fetchfield('dkpsys_id');
 		$db->sql_freeresult($result);

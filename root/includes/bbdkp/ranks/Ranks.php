@@ -341,7 +341,7 @@ class Ranks extends \bbdkp\Guilds implements iRanks
 		
 		foreach($diff as $key => $count)
 		{
-			$newrank = new \bbdkp\Ranks();
+			$newrank = new \bbdkp\Ranks($guild_id);
 			$newrank->RankName = 'Rank'.$key;
 			$newrank->RankId = $key; 
 			$newrank->RankGuild = $guild_id;

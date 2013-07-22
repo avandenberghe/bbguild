@@ -141,7 +141,7 @@ class install_aion extends \bbdkp\aGameinstall
 		$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 2, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Asmodier' , 'name_short' =>  'Asmodian' );
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 		unset ( $sql_ary );
-		unset ( $sql_ary );
+		
 	}
 	
 	private $aiondkpid = 0;
@@ -154,7 +154,7 @@ class install_aion extends \bbdkp\aGameinstall
 	{
 		global $db, $table_prefix, $umil, $user;
 		
-		$db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Aion Events' ");
+		$sql = 'SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Aion Events' ";
 		$result = $db->sql_query($sql);
 		$this->aiondkpid = (int) $db->sql_fetchfield('dkpsys_id');
 		$db->sql_freeresult($result);
@@ -162,7 +162,6 @@ class install_aion extends \bbdkp\aGameinstall
 		if ($this->aiondkpid == 0)
 		{
 			$db->sql_query('DELETE FROM ' . $table_prefix . 'bbdkp_events WHERE event_dkpid = ' . $this->aiondkpid);
-			$db->sql_query($sql);
 			
 			// dkp pool
 			$sql_ary = array (

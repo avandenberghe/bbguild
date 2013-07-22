@@ -979,30 +979,48 @@ $versions = array(
                    	  'game_id' 	   => array('VCHAR', ''),
 	                  'game_name'      => array('VCHAR_UNI:255', ''),
 	          		  'status'	   	   => array('VCHAR:30', ''),
-	          	),
+	          		),
 	                'PRIMARY_KEY'     => array('id'),
-	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id', 'game_name')),
-			)))),
+	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id', 'game_name')))
+       			)), 
+       		
+       		// add the new recruitment table
+       		array($table_prefix . 'bbdkp_roles', array(
+       				'COLUMNS'            	=> array(
+						'guild_id'     	=> array('UINT', 0),
+       					'game_id'     	=> array('VCHAR', ''),
+       					'role' 	   		=> array('VCHAR', ''),
+       					'class_id'      => array('UINT', 0),
+						'needed'	   	=> array('USINT', 0),
+       				),
+       				'KEYS'            => array('bbdkp_roles' => array('UNIQUE', array('guild_id', 'game_id', 'role', 'class_id' ))),
+       			)),
+       		
+       		),
 
-     		
     	// remove copyright info from plugin table
+	    // remove roles from class table
      	'table_column_remove' => array(
 				array($table_prefix . 'bbdkp_plugins', 'orginal_copyright'),
 				array($table_prefix . 'bbdkp_plugins', 'bbdkp_copyright'),
+     			array($table_prefix . 'bbdkp_classes', 'dps'),
+     			array($table_prefix . 'bbdkp_classes', 'tank'),
+     			array($table_prefix . 'bbdkp_classes', 'heal'),
       		),
      		
      	// add guild columns
      	'table_column_add' => array(
-     				array($table_prefix . 'bbdkp_plugins', 'installdate' , array('TIMESTAMP', 0)),
-     				array($table_prefix . 'bbdkp_memberlist', 'member_title' , array('VCHAR_UNI:255', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'level' ,array('UINT', 0) ),
-     				array($table_prefix . 'bbdkp_memberguild', 'members' ,array('UINT', 0)),
-     				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints' ,array('UINT', 0)),
-     				array($table_prefix . 'bbdkp_memberguild', 'battlegroup' ,array('VCHAR:20', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'guildarmoryurl' ,array('VCHAR:255', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'emblemurl' ,array('VCHAR:255', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'game_id' ,array('VCHAR:10', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'min_armory' ,array('UINT', 90)),
+     				array($table_prefix . 'bbdkp_plugins', 'installdate', array('TIMESTAMP', 0)),
+     				array($table_prefix . 'bbdkp_memberlist', 'member_title', array('VCHAR_UNI:255', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'level', array('UINT', 0) ),
+     				array($table_prefix . 'bbdkp_memberguild', 'members', array('UINT', 0)),
+     				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints', array('UINT', 0)),
+     				array($table_prefix . 'bbdkp_memberguild', 'battlegroup', array('VCHAR:20', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'guildarmoryurl', array('VCHAR:255', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'emblemurl', array('VCHAR:255', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'game_id', array('VCHAR:10', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'min_armory', array('UINT', 90)),
+     				array($table_prefix . 'bbdkp_memberguild', 'rec_status', array('UINT', 0)),
      		),
      		
 
@@ -1065,7 +1083,9 @@ $versions = array(
      	
      	//guild acp makes this config obsolete
      	'config_delete' => array(
-     				array('bbdkp_guildtag'),
+     				array('bbdkp_guildtag') ,
+	     			array('bbdkp_recruitment'),
+     					
      		),     		
      ),
 

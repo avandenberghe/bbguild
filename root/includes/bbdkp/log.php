@@ -69,10 +69,22 @@ class log
 	const GUILD_ADDED = 33; 
 	const MEMBERDKP_UPDATED = 34; 
 	const MEMBERDKP_DELETED = 35; 
-	
+	const GAME_ADDED = 36; 
+	const GAME_DELETED = 37;
+	const SETTINGS_CHANGED = 38;
+	const PORTAL_CHANGED = 39;
+	const FACTION_DELETED = 40;
+	const LOG_DELETED = 41;
+	const FACTION_ADDED = 42; 
+	const RACE_ADDED = 43; 
+	const RACE_DELETED = 44; 
+	const CLASS_ADDED = 45; 
+	const CLASS_DELETED = 46; 
+	const RACE_UPDATED = 47;
+	const CLASS_UPDATED = 48;
 	private static $instance;
 	
-	private $valid_action_types = array(
+	public static $valid_action_types = array(
 			1 => 'DKPSYS_ADDED' ,
 			2 => 'DKPSYS_UPDATED' ,
 			3 =>'DKPSYS_DELETED' ,
@@ -107,18 +119,78 @@ class log
 			32 =>'DEFAULT_DKP_CHANGED' ,
 			33 =>'GUILD_ADDED' ,
 			34 =>'MEMBERDKP_UPDATED' ,
-			35 =>'MEMBERDKP_DELETED');
+			35 =>'MEMBERDKP_DELETED', 
+			36 => 'GAME_ADDED', 
+			37 => 'GAME_DELETED',
+			38 => 'SETTINGS_CHANGED',
+			39 => 'PORTAL_CHANGED', 
+			40 => 'FACTION_DELETED',
+			41 => 'LOG_DELETED', 
+			42 => 'FACTION_ADDED',
+			43 => 'RACE_ADDED',
+			44 => 'RACE_DELETED',
+			45 => 'CLASS_ADDED',
+			46 => 'CLASS_DELETED',
+			47 => 'RACE_UPDATED', 
+			48 => 'CLASS_UPDATED',
+			);
 	
 	/**
 	 * only these tags can be entered in logs
+	 * if tags are not in list then it's not logged
 	 * @var unknown_type
 	 */
-	private $valid_tags = array('L_NAME' ,'L_EARNED_BEFORE' ,'L_EARNED_AFTER' ,'L_SPENT_BEFORE' , 
-				'L_REALM_BEFORE', 'L_NAME_BEFORE' , 'L_REALM_AFTER', 'L_NAME_AFTER', 'L_ORIGIN', 'L_REALM', 'L_RAIDS' , 'L_LOG_ID', 
-				'L_EVENT', 'L_EVENT_BEFORE', 'L_HEADLINE', 'L_HEADLINE_BEFORE', 
-				'L_BUYERS', 'L_BUYERS_BEFORE', 'L_ADJUSTMENT', 'L_ADJUSTMENT_BEFORE', 
-				'L_MEMBERS', 'L_MEMBERS_AFTER', 'L_FROM', 'L_TO', 'L_DKPSYS_NAME', 
-				'L_DKPSYSNAME_BEFORE', 'L_DKPSYSNAME_AFTER', 'L_DKPSYS_STATUS');
+	private static $valid_tags = array(
+				'L_NAME' ,
+				'L_EARNED_BEFORE' ,
+				'L_EARNED_AFTER' ,
+				'L_SPENT_BEFORE' , 
+				'L_REALM_BEFORE', 
+				'L_REALM_AFTER',
+				'L_NAME_BEFORE' , 
+				'L_NAME_AFTER', 
+				'L_RACE_BEFORE', 
+				'L_RACE_AFTER',
+				'L_LEVEL_BEFORE', 
+				'L_LEVEL_AFTER',
+				'L_LEVELBEFORE',
+				'L_LEVELAFTER',			
+				'L_RANK_BEFORE', 
+				'L_RANK_AFTER',
+				'L_CLASS_BEFORE', 
+				'L_CLASS_AFTER',	
+				'L_GENDER_BEFORE', 
+				'L_GENDER_AFTER', 
+				'L_ACHIEV_BEFORE', 
+				'L_ACHIEV_AFTER', 
+				'L_ORIGIN', 
+				'L_REALM', 
+				'L_RAIDS' , 
+				'L_LOG_ID',
+				'L_EVENT', 
+				'L_EVENT_BEFORE', 
+				'L_HEADLINE', 
+				'L_HEADLINE_BEFORE', 
+				'L_BUYERS', 
+				'L_BUYERS_BEFORE', 
+				'L_ADJUSTMENT', 
+				'L_ADJUSTMENT_BEFORE', 
+				'L_MEMBERS', 
+				'L_MEMBERS_AFTER', 
+				'L_FROM', 
+				'L_TO', 	
+				'L_DKPSYS_NAME', 
+				'L_DKPSYSNAME_BEFORE', 
+				'L_DKPSYSNAME_AFTER', 
+				'L_DKPSYS_STATUS', 
+				'L_GAME', 
+				'L_SETTINGS', 	
+				'L_FACTION', 
+				'L_ADDED_BY', 
+				'L_UPDATED_BY', 
+				'L_RACE', 
+				'L_CLASS', 
+				'L_LEVEL');
 	
 	/**
 	 * Call this method to get singleton log instance
@@ -174,7 +246,6 @@ class log
 		
 	}
 	
-
 	private function logcount()
 	{
 		global $db; 
@@ -210,7 +281,7 @@ class log
 		$log_fields = array('log_date', 'log_type', 'log_action', 'log_ipaddress', 'log_sid', 'log_result', 'log_userid');
 	
 		/**
-		 * example
+		 * //example usage
 		 * $log_action = array(
 				'header' => ACTION_INDIVADJ_DELETED , 
 				'id' => $adjust_id , 
@@ -243,20 +314,26 @@ class log
 				switch ($field)
 				{
 					case 'log_type': 
-						if (!array_key_exists($values['log_type'], $this->valid_action_types))
+						$log_type = str_replace( 'L_ACTION_', '', $values['log_type']);
+						if (!in_array($log_type,  (array) self::$valid_action_types ))
 						{
-							//wrong logging type
+							//wrong logging type, can't log
 							return false;
 						}
+						break;
 					case 'log_action': 
 						
 						//check log tags
 						foreach ( $values['log_action'] as $key => $value )
 						{
-							if (!array_key_exists($value, $this->valid_tags))
+							//check tags but skip the header
+							if ($key != 'header')
 							{
-								//wrong logging type
-								return false;
+								if (!in_array($key, (array) self::$valid_tags	))
+								{
+									//wrong logging type
+									return false;
+								}
 							}
 								
 						}
@@ -278,8 +355,7 @@ class log
 						$str_action = str_replace("\n", '', $str_action);
 						$str_action = preg_replace("#(\\\){1,}#", "\\", $str_action);
 						$values['log_action'] = $str_action;
-						
-						
+						break;
 				}
 			}
 			$query = $db->sql_build_array('INSERT', $values);
@@ -288,6 +364,27 @@ class log
 			return true;
 		}
 		return false;
+	}
+	
+	/**
+	 * delete log from Database
+	 */
+	public function delete_log($marked)
+	{
+		global $db, $user;
+		
+		//they hit yes
+		$sql = 'DELETE FROM ' . LOGS_TABLE . ' WHERE 1=1 ';
+		$sql_in = array();
+		foreach ($marked as $mark)
+		{
+			$sql_in[] = $mark;
+		}
+		$sql .= ' AND ' . $db->sql_in_set('log_id', $sql_in);
+		$db->sql_query($sql);
+		
+		return $sql_in; 
+		
 	}
 	
 	/**
@@ -314,9 +411,9 @@ class log
 		{
 			
 			// Check if it's an action
-			if (array_search($search_term, $this->valid_action_types))
+			if (array_search($search_term, self::$valid_action_types))
 			{
-				$sql_array['WHERE'] = " u.user_id=l.log_userid AND l.log_type='" . $db->sql_escape(array_search($search_term, $this->valid_action_types)) . "'";
+				$sql_array['WHERE'] = " u.user_id=l.log_userid AND l.log_type='" . $db->sql_escape( 'L_ACTION_' . $search_term  ) . "'";
 			}
 			// Check it's an IP
 			elseif (preg_match("/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/", $search_term))
@@ -347,6 +444,7 @@ class log
 			$result = $db->sql_query_limit($sql, USER_LLIMIT, $start);
 		}
 		
+		$outlog = array();
 		while ($row = $db->sql_fetchrow($result))
 		{
 			//$log = json_decode( $row['log_action']);
@@ -378,6 +476,7 @@ class log
 	 */
 	private function get_logmessage($log_type, $log_action, $log_userid, $username, $user_colour, $verbose = false)
 	{
+		global $user; 
 			//$log = json_decode($log_action);
 			$logline = '';
 			$log = $this->getxmltag($log_action);
@@ -385,6 +484,9 @@ class log
 				
 			switch ( $log_type )
 			{
+				case 'LOG_DELETED':
+					$logline = sprintf($this->getLogMessage('LOG_DELETED', $verbose), $userstring , $log['L_LOG_ID'] ) ;
+					break;					
 				case 'DKPSYS_ADDED':
 					$logline = sprintf($this->getLogMessage('DKPSYS_ADDED', $verbose), $userstring, $log['L_DKPSYS_NAME'], $log['L_DKPSYS_STATUS']);
 					break;
@@ -495,6 +597,39 @@ class log
 					$logline = sprintf($this->getLogMessage('MEMBERDKP_UPDATED', $verbose), $userstring, $log['L_NAME'],
 					$log['L_EARNED_BEFORE'], $log['L_EARNED_AFTER'], $log['L_SPENT_BEFORE'], $log['L_SPENT_AFTER']);
 					break;
+				case 'GAME_ADDED':
+					$logline = sprintf($this->getLogMessage('GAME_ADDED', $verbose), $userstring , $user->lang[strtoupper($log['L_GAME'])] ) ;
+					break;
+				case 'GAME_DELETED':
+					$logline = sprintf($this->getLogMessage('GAME_DELETED', $verbose), $userstring , $user->lang[strtoupper($log['L_GAME'])] ) ;
+					break;
+				case 'SETTINGS_CHANGED':
+					$logline = sprintf($this->getLogMessage('SETTINGS_CHANGED', $verbose), $userstring , $log['L_SETTINGS'] ) ;
+					break;
+				case 'FACTION_ADDED':
+					$logline = sprintf($this->getLogMessage('FACTION_ADDED', $verbose), $userstring , $log['L_FACTION'], $log['L_GAME'] ) ;
+					break;
+				case 'FACTION_DELETED':
+					$logline = sprintf($this->getLogMessage('FACTION_DELETED', $verbose), $userstring , $log['L_FACTION'], $log['L_GAME'] ) ;
+					break;
+				case 'RACE_ADDED':
+					$logline = sprintf($this->getLogMessage('RACE_ADDED', $verbose), $userstring , $log['L_RACE'], $log['L_GAME'] ) ;
+					break;
+				case 'RACE_DELETED':
+					$logline = sprintf($this->getLogMessage('RACE_DELETED', $verbose), $userstring , $log['L_RACE'], $log['L_GAME'] ) ;
+					break;
+				case 'RACE_UPDATED':
+					$logline = sprintf($this->getLogMessage('RACE_UPDATED', $verbose), $userstring , $log['L_RACE'], $log['L_GAME'] ) ;
+					break;					
+				case 'CLASS_ADDED':
+					$logline = sprintf($this->getLogMessage('CLASS_ADDED', $verbose), $userstring , $log['L_CLASS'], $log['L_GAME'] ) ;
+					break;
+				case 'CLASS_DELETED':
+					$logline = sprintf($this->getLogMessage('CLASS_DELETED', $verbose), $userstring , $log['L_CLASS'], $log['L_GAME'] ) ;
+					break;
+				case 'CLASS_UPDATED':
+					$logline = sprintf($this->getLogMessage('CLASS_UPDATED', $verbose), $userstring , $log['L_CLASS'], $log['L_GAME'] ) ;
+					break;									
 			}
 			
 			return $logline;   
@@ -505,10 +640,13 @@ class log
 	 * get this log entry
 	 */	
 	function get_logentry($log_id)
+	{
 		global $user, $db;
 		$sql_array = array(
+				'SELECT' 	=> 'l.*, u.username, u.user_id, u.user_colour' ,
 				'FROM' 		=> 	array(LOGS_TABLE => 'l') ,
 				'LEFT_JOIN' => array(
+						array(
 								'FROM' => array(USERS_TABLE => 'u') ,
 								'ON' => 'u.user_id=l.log_userid')) ,
 				'WHERE' => 'log_id=' . (int) $log_id);
@@ -516,9 +654,14 @@ class log
 		$result = $db->sql_query($total_sql);
 		$log = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
+		$log['colouruser'] = get_username_string('full', $log['user_id'], $log['username'], $log['user_colour']);
+		$log['log_type'] = str_replace( 'L_ACTION_', '', $log['log_type']);
 		$log['log_type'] = str_replace( 'L_', '', $log['log_type']);
-		$log['log_action'] = str_replace( 'L_', '', $log['log_action']); 
+		$log['log_action'] = str_replace( 'L_ACTION_', '', $log['log_action']);
+		$log['log_action'] = str_replace( 'L_', '', $log['log_action']);
 		$log['log_result'] = str_replace( 'L_', '', $log['log_result']);
+		
+		
 		return $log;
 		
 	}
@@ -534,7 +677,7 @@ class log
 		$array_temp = (array) @simplexml_load_string($haystack);
 		foreach ($array_temp as $tag => $value)
 		{
-			if (in_array($tag, $this->valid_tags))
+			if (in_array($tag, self::$valid_tags))
 			{
 				$found[$tag] = $value;
 			}
@@ -547,17 +690,19 @@ class log
 	 * @param integer $value
 	 * @return string
 	 */
-	private function getLogMessage($value, $verbose = false)
+	public function getLogMessage($value, $verbose = false)
 	{
 		global $user;
 		if($verbose)
 		{
-			return $user->lang['VLOG_' . $this->valid_action_types[constant("self::$value")] ];
+			return $user->lang['VLOG_' . self::$valid_action_types[constant("self::$value")] ];
 		}
 		else
 		{
-			return $user->lang['ACTION_' . $this->valid_action_types[constant("self::$value")] ];
+			return $user->lang['ACTION_' . self::$valid_action_types[constant("self::$value")] ];
 		}
+		
+		
 	}
 	
 	

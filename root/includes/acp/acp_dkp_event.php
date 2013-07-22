@@ -25,6 +25,11 @@ if (!class_exists('Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
 }
+if (!class_exists('Events'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Raids/Events.$phpEx");
+}
+
 /**
  * This acp class manages Events.
  * 
@@ -34,6 +39,10 @@ if (!class_exists('Admin'))
 {
 	public $u_action;
 	public $link;
+	public $url_id; 
+	public $event; 
+	public $fv; 
+	
 	
 	/** 
 	* main ACP dkp event function
@@ -51,76 +60,23 @@ if (!class_exists('Admin'))
 		$user->add_lang(array('mods/dkp_common'));	 
 		$this->link = '<br /><a href="'.append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=listevents") . '"><h3>'. $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 
-		 /***DKPSYS drop-down ***/
-		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE . ' ORDER BY dkpsys_name';
-		$resultdkpsys = $db->sql_query($sql);
-		
 		$form_key = 'acp_dkp_event';
 		add_form_key($form_key);
 					
 		switch ($mode)
 		{
 			case 'addevent':
-			
 			$update = false;
-
-			if(isset($_GET[URI_EVENT]) )
+			$event  = new \bbdkp\Events(  request_var(URI_EVENT, 0 ));
+			foreach ($event->dkpsys as $pool)
 			{
-				$this->url_id = request_var(URI_EVENT, '');
+				$template->assign_block_vars('event_dkpid_row', array(
+					'VALUE' 	=> $pool['id'],
+					'SELECTED' 	=> ($pool['id'] == $event->dkpsys_id) ? ' selected="selected"' : (  ( $pool['default'] == 'Y' ) ? ' selected="selected"' : '' ), 
+					'OPTION'	=> $pool['name'])
+				);
 			}
-			 
-			if ( $this->url_id )	 
-			{
-				// we have a GET
-				$sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename, a.event_status 
-						FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b 
-						WHERE a.event_id = " . (int) $this->url_id . " AND b.dkpsys_id = a.event_dkpid";
-
-				$result = $db->sql_query($sql);
-				$row = $db->sql_fetchrow($result); 
-				$db->sql_freeresult($result);
-				if (!$row)
-				{
-					trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED']);
-				}
-				else 
-				{
-					$this->event = array(
-						'event_dkpsys_name'	 	 => $row['dkpsys_name'],
-						'dkpsys_id'		 		 => $row['dkpsys_id'],
-						'event_name'			 => $row['event_name'],
-						'event_color'			 => $row['event_color'],
-						'event_imagename'		 => $row['event_imagename'],
-						'event_value'			 => $row['event_value'],
-						'event_id'				 => $row['event_id'],
-						'event_status'			 => $row['event_status'],
-					);
-				}
-				
-				while ( $row2 = $db->sql_fetchrow($resultdkpsys) )
-				{
-					$template->assign_block_vars('event_dkpid_row', array(
-					'VALUE' => $row2['dkpsys_id'],
-					'SELECTED' => ( $row2['dkpsys_name'] == $row['dkpsys_name']) ? ' selected="selected"' : '',
-					'OPTION'	 => ( !empty($row2['dkpsys_name']) ) ? $row2['dkpsys_name'] : '(None)')
-					);
-				}
-				 
-			}
-			else
-			{
-				// we dont have a GET so put default values
-				while ($row2 = $db->sql_fetchrow($resultdkpsys) )
-				{
-					//dkpsys_default
-					$template->assign_block_vars('event_dkpid_row', array(
-					 'VALUE' => $row2['dkpsys_id'],
-					 'SELECTED' => ( $row2['dkpsys_default'] == 'Y' ) ? ' selected="selected"' : '',
-					 'OPTION'	=> ( !empty($row2['dkpsys_name']) ) ? $row2['dkpsys_name'] : '(None)')
-					);
-				}
-			}
-			 
+		 
 			$add		= (isset($_POST['add'])) ? true : false;
 			$submit	= (isset($_POST['update'])) ? true : false;
 			$delete	= (isset($_POST['delete'])) ? true : false; 
@@ -242,9 +198,10 @@ if (!class_exists('Admin'))
 						'L_DKP_VALUE'		=> sprintf($user->lang['DKP_VALUE'], $config['bbdkp_dkp_name']),
 					 
 						// Form validation
-						'FV_NAME'=> $this->fv->generate_error('event_name'),
+						/*'FV_NAME'=> $this->fv->generate_error('event_name'),
 						'FV_VALUE' => $this->fv->generate_error('event_value'),
-					 
+					 	*/
+						
 						// Javascript messages
 						'MSG_NAME_EMPTY'=> $user->lang['FV_REQUIRED_NAME'],
 						'MSG_VALUE_EMPTY' => $user->lang['FV_REQUIRED_VALUE'],

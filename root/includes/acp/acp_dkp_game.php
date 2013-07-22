@@ -52,12 +52,10 @@ class acp_dkp_game extends \bbdkp\Admin
 	
 	private $link;
 	/** 
-
 	 * main ACP game function
 	 * @param int $id the id of the node who parent has to be returned by function 
 	 * @param int $mode id of the submenu
 	 * @access public 
-
 	 */
 	function main($id, $mode)
 	{
@@ -90,7 +88,20 @@ class acp_dkp_game extends \bbdkp\Admin
 						$editgame = new \bbdkp\Game;
 						$editgame->game_id = request_var ( 'hidden_game_id','' );
 						$editgame->install();
-						trigger_error ( sprintf ( $user->lang ['ADMIN_RESET_GAME_SUCCESS'], $editgame->name ) . $this->link, E_USER_NOTICE );
+						
+						//
+						// Logging
+						//
+						$log_action = array(
+							'header' => 'L_ACTION_GAME_ADDED' ,
+							'L_GAME' => $editgame->game_id  ,
+							);
+									
+						$this->log_insert(array(
+							'log_type' =>  'L_ACTION_GAME_ADDED',
+							'log_action' => $log_action));
+								
+						trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALLED_GAME_SUCCESS'], $editgame->name ) . $this->link, E_USER_NOTICE );
 					}
 					else
 					{
@@ -186,17 +197,16 @@ class acp_dkp_game extends \bbdkp\Admin
 				$gamereset = (isset ( $_POST ['gamereset'] )) ? true : false;
 				$gamedelete = (isset ( $_POST ['gamedelete'] )) ? true : false;
 				
-				$addrace = (isset ( $_POST ['showraceadd'] )) ? true : false;
-				$addclass = (isset ( $_POST ['showclassadd'] )) ? true : false;
 				$addfaction = (isset ( $_POST ['showfactionadd'] )) ? true : false;
-				
 				$deletefaction = (isset ( $_GET ['factiondelete'] )) ? true : false;
-				$racedelete = (isset ( $_GET ['racedelete'] )) ? true : false;
-				$classdelete = (isset ( $_GET ['classdelete'] )) ? true : false;
 				
+				$addrace = (isset ( $_POST ['showraceadd'] )) ? true : false;
 				$raceedit = (isset ( $_GET ['raceedit'] )) ? true : false;
-				$classedit = (isset ( $_GET ['classedit'] )) ? true : false;
+				$racedelete = (isset ( $_GET ['racedelete'] )) ? true : false;
 				
+				$addclass = (isset ( $_POST ['showclassadd'] )) ? true : false;
+				$classedit = (isset ( $_GET ['classedit'] )) ? true : false;
+				$classdelete = (isset ( $_GET ['classdelete'] )) ? true : false;
 				
 				if($gamereset)
 				{
@@ -208,7 +218,29 @@ class acp_dkp_game extends \bbdkp\Admin
 						$editgame->get();
 						$editgame->Delete();
 						$editgame->install();
-						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$editgame->game_id}" ) );
+						
+						//
+						// Logging
+						//
+						$log_action = array(
+							'header' => 'L_ACTION_GAME_DELETED' ,
+							'L_GAME' => $editgame->game_id  ,
+						);
+							
+						$this->log_insert(array(
+						'log_type' =>  'L_ACTION_GAME_DELETED',
+						'log_action' => $log_action));
+						
+						$log_action = array(
+							'header' => 'L_ACTION_GAME_ADDED' ,
+							'L_GAME' => $editgame->game_id  ,
+						);
+							
+						$this->log_insert(array(
+						'log_type' =>  'L_ACTION_GAME_ADDED',
+						'log_action' => $log_action));
+						
+						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames" ));
 						trigger_error ( sprintf ( $user->lang ['ADMIN_RESET_GAME_SUCCESS'], $editgame->name ) . $this->link, E_USER_WARNING);
 					}
 					else
@@ -231,8 +263,17 @@ class acp_dkp_game extends \bbdkp\Admin
 						$deletegame->game_id = request_var ( 'hidden_game_id','' );
 						$deletegame->name = request_var ( 'hidden_game_name','' );
 						$deletegame->Delete();
+						$log_action = array(
+								'header' => 'L_ACTION_GAME_DELETED' ,
+								'L_GAME' => $deletegame->game_id  ,
+						);
+							
+						$this->log_insert(array(
+								'log_type' =>  'L_ACTION_GAME_DELETED',
+								'log_action' => $log_action));
+						
 						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") );
-						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->name ) . $this->link, E_USER_WARNING);
+						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->name ) , E_USER_WARNING);
 					}
 					else
 					{
@@ -248,7 +289,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				
 				if ($addfaction)
 				{
-					redirect ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addfaction" ) );
+					redirect ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addfaction&amp;". URI_GAME . '=' . $editgame->game_id  ) );
 					break;
 				}
 				
@@ -256,12 +297,6 @@ class acp_dkp_game extends \bbdkp\Admin
 
 				if ($deletefaction)
 				{
-					global $db, $cache, $user;
-					$faction = new \bbdkp\Faction();
-					$faction->game_id = $editgame->game_id;
-					$faction->faction_id = request_var ( 'id', 0 );
-					$faction->get();
-					
 					// ask for permission
 					if (confirm_box ( true ))
 					{
@@ -270,17 +305,38 @@ class acp_dkp_game extends \bbdkp\Admin
 						$faction->faction_id = request_var ( 'hidden_faction_id', 0 );
 						$faction->get();
 						$faction->Delete();
+						
+						//
+						// Logging
+						//
+						$log_action = array(
+							'header' 	=> 'L_ACTION_FACTION_DELETED' ,
+							'L_GAME' 	=> $faction->game_id ,
+							'L_FACTION' => $faction->faction_name ,
+						);
+							
+						$this->log_insert(array(
+						'log_type' 		=> 'L_ACTION_FACTION_DELETED',
+						'log_result' 	=> 'L_SUCCESS',
+						'log_action' 	=> $log_action));
+						
 						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$faction->game_id}" ) );
 						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_FACTION_SUCCESS'], $faction->game_id , $faction->faction_name ) . $this->link, E_USER_WARNING );
 					}
 					else
 					{
+						$faction = new \bbdkp\Faction();
+						$faction->game_id = $editgame->game_id;
+						$faction->faction_id = request_var ( 'id', 0 );
+						$faction->get();
+						
 						// get field content
 						$s_hidden_fields = build_hidden_fields ( array (
 								'factiondelete' => true, 
-								'hidden_faction_id' => $faction->faction_id, 
+								'hidden_faction_id' => $faction->faction_id,
 								'hidden_game_id' => $faction->game_id, 
 								));
+						
 						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_FACTION'], $faction->faction_name ), $s_hidden_fields );
 					}
 						
@@ -295,7 +351,7 @@ class acp_dkp_game extends \bbdkp\Admin
 
 					if (isset ( $_GET ['id'] ))
 					{
-						//race dropdown
+						// edit this race
 						$listraces = new \bbdkp\Races();
 						$listraces->race_id = request_var ( 'id', 0 );
 						$listraces->game_id = $editgame->game_id;
@@ -317,7 +373,7 @@ class acp_dkp_game extends \bbdkp\Admin
 						$s_faction_options = '';
 						while ( $row = $db->sql_fetchrow ( $result ) )
 						{
-							$selected = ($row ['faction_id'] == $factionid) ? ' selected="selected"' : '';
+							$selected = ($row ['faction_id'] == $listraces->race_faction_id) ? ' selected="selected"' : '';
 							$s_faction_options .= '<option value="' . $row ['faction_id'] . '" ' . $selected . '> ' . $row ['faction_name'] . '</option>';
 						}
 						$db->sql_freeresult ( $result );
@@ -343,6 +399,9 @@ class acp_dkp_game extends \bbdkp\Admin
 					}
 					else
 					{
+						// edit this race
+						$listraces = new \bbdkp\Races();
+						$listraces->game_id = $editgame->game_id;
 						
 						foreach ($this->installed_games as $key => $gamename )
 						{
@@ -353,7 +412,6 @@ class acp_dkp_game extends \bbdkp\Admin
 						}
 						
 						//list factions
-						// faction dropdown
 						$listfactions = new \bbdkp\Faction();
 						$listfactions->game_id = $editgame->game_id;
 						$result = $listfactions->getfactions();
@@ -396,6 +454,21 @@ class acp_dkp_game extends \bbdkp\Admin
 						$deleterace->game_id = request_var ( 'hidden_gameid', '' );
 						$deleterace->get();
 						$deleterace->Delete();
+						//
+						// Logging
+						//
+						$log_action = array(
+								'header' 	=> 'L_ACTION_RACE_DELETED' ,
+								'L_GAME' 	=> $deleterace->game_id ,
+								'L_RACE' => $deleterace->race_name ,
+						);
+							
+						$this->log_insert(array(
+						'log_type' 		=> 'L_ACTION_RACE_DELETED',
+						'log_result' 	=> 'L_SUCCESS',
+						'log_action' 	=> $log_action));
+						
+						
 						$success_message = sprintf($user->lang['ADMIN_DELETE_RACE_SUCCESS'], $deleterace->game_id, $deleterace->race_name);
 						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$deleterace->game_id}" ) );
 						trigger_error($success_message . $this->link, E_USER_WARNING);
@@ -494,7 +567,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					}
 					else
 					{
-						
+						// new class
 						foreach ($this->installed_games as $key => $gamename )
 						{
 							$template->assign_block_vars ( 'game_row', array (
@@ -503,7 +576,6 @@ class acp_dkp_game extends \bbdkp\Admin
 									'OPTION' => $gamename));
 						}
 						
-						// new class
 						$s_armor_options = '';
 						foreach ( $armortype as $armor => $armorname )
 						{
@@ -568,8 +640,13 @@ class acp_dkp_game extends \bbdkp\Admin
 				break;
 			
 			case 'addfaction' :
-				$addnew = (isset ( $_POST ['factionadd'] )) ? true : false;
+				$faction = new \bbdkp\Faction();
+				$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
+				$editgame = new \bbdkp\Game;
+				$editgame->game_id = $faction->game_id; 
+				$editgame->Get();
 				
+				$addnew = (isset ( $_POST ['factionadd'] )) ? true : false;
 				if ($addnew)
 				{
 					if (! check_form_key ( 'acp_dkp_game' ))
@@ -577,25 +654,40 @@ class acp_dkp_game extends \bbdkp\Admin
 						trigger_error ( 'FORM_INVALID' );
 					}
 					
-					$faction = new \bbdkp\Faction();
-					$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
 					$faction->faction_name = utf8_normalize_nfc ( request_var ( 'factionname', '', true ) );
 					$faction->Make();
-					unset($faction);
+					
+					//
+					// Logging
+					//
+					$log_action = array(
+							'header' 	=> 'L_ACTION_FACTION_ADDED' ,
+							'L_GAME' 	=> $faction->game_id ,
+							'L_FACTION' => $faction->faction_name ,
+					);
+						
+					$this->log_insert(array(
+					'log_type' 		=> 'L_ACTION_FACTION_ADDED',
+					'log_result' 	=> 'L_SUCCESS',
+					'log_action' 	=> $log_action));
+					
+					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$faction->game_id}" ) );
+					trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $faction->faction_name ), E_USER_NOTICE );
+					
 				}
 				
 				// list installed games
-				foreach ($this->installed_games as $key => $gamename )
+				foreach ($editgame->installed_games as $key => $gamename )
 				{
 					$template->assign_block_vars ( 'game_row', array (
 							'VALUE' => $key,
-							'SELECTED' => ($listclasses->game_id == $key) ? ' selected="selected"' : '',
+							'SELECTED' => ($editgame->game_id == $key) ? ' selected="selected"' : '',
 							'OPTION' => $gamename));
 				}
 				
 				// send parameters to template
 				$template->assign_vars ( array (
-					'GAME_ID' => $hidden_game_id, 
+					'GAME_ID' => $faction->game_id, 
 					'U_ACTION' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addfaction' ), 
 					'MSG_NAME_EMPTY' => $user->lang ['FV_REQUIRED_NAME'] ) );
 				
@@ -625,6 +717,20 @@ class acp_dkp_game extends \bbdkp\Admin
 					$race->image_male = utf8_normalize_nfc ( request_var ( 'image_male', '', true ) );
 					$race->image_female = utf8_normalize_nfc ( request_var ( 'image_female', '', true ) );
 					$race->Make();
+					//
+					// Logging
+					//
+					$log_action = array(
+							'header' 	=> 'L_ACTION_RACE_ADDED' ,
+							'L_GAME' 	=> $race->game_id ,
+							'L_RACE' => $race->race_name ,
+					);
+						
+					$this->log_insert(array(
+					'log_type' 		=> 'L_ACTION_RACE_ADDED',
+					'log_result' 	=> 'L_SUCCESS',
+					'log_action' 	=> $log_action));
+					
 					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$race->game_id}" ) );
 					trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_SUCCESS'], $race->race_name ) . $this->link, E_USER_NOTICE );
 				}
@@ -641,6 +747,21 @@ class acp_dkp_game extends \bbdkp\Admin
 					$race->image_male = utf8_normalize_nfc ( request_var ( 'image_male', '', true ) );
 					$race->image_female = utf8_normalize_nfc ( request_var ( 'image_female', '', true ) );
 					$race->Update($oldrace);
+					
+					//
+					// Logging
+					//
+					$log_action = array(
+							'header' 	=> 'L_ACTION_RACE_UPDATED' ,
+							'L_GAME' 	=> $race->game_id ,
+							'L_RACE' 	=> $race->race_name ,
+					);
+					
+					$this->log_insert(array(
+					'log_type' 		=> 'L_ACTION_RACE_UPDATED',
+					'log_result' 	=> 'L_SUCCESS',
+					'log_action' 	=> $log_action));
+					
 					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$race->game_id}" ) );
 					trigger_error ( sprintf ( $user->lang ['ADMIN_UPDATE_RACE_SUCCESS'], $race->race_name ) . $this->link, E_USER_NOTICE );
 				}
@@ -650,7 +771,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				break;
 			
 			case 'addclass' :
-				
+				// collects data, calls class updater
 				$classadd = (isset ( $_POST ['add'] )) ? true : false;
 				$classupdate = (isset ( $_POST ['update'] )) ? true : false;
 				
