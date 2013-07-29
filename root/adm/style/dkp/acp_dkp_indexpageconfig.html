@@ -146,48 +146,7 @@
      </dd>
   </dl>
 
-  <dl>
-    <dt style="width: 35%;"><label>{L_RECSTATUS}</label></dt>
-    <dd style="margin: 0 0 0 35%; padding: 0 0 0 5px;">
-    <select name="bbdkp_recruitment" class="input" id="bbdkp_recruitment">
-       <!-- BEGIN recruitment_status_row -->
-      <option value="{recruitment_status_row.VALUE}"{recruitment_status_row.SELECTED}>{recruitment_status_row.OPTION}</option>
-      <!-- END recruitment_status_row -->
-     </select>
-     </dd>
-  </dl> 
 
- <!-- BEGIN recruitment -->
-  <dl>
-    <dt style="width: 35%;"><label>{recruitment.CLASSID}) {recruitment.CLASS} :</label>
-   		 <!-- IF recruitment.S_CLASS_IMAGE_EXISTS --> <img src="{recruitment.CLASS_IMAGE}" alt=" " /><!-- ENDIF -->
-    </dt>
-
-    <dd style="margin: 0 0 0 35%; padding: 0 0 0 5px;">
-    <img src="{T_IMAGES_PATH}icons/{recruitment.TANKCOLOR}" alt="tank" />
-    <select name="T{recruitment.CLASSID}" class="input" id="T{recruitment.CLASSID}">
-      <!-- BEGIN tankstatus_row -->
-      <option value="{recruitment.tankstatus_row.VALUE}"{recruitment.tankstatus_row.SELECTED}>Tank : {recruitment.tankstatus_row.OPTION}</option>
-      <!-- END tankstatus_row  -->
-    </select>
-    
-    <img src="{T_IMAGES_PATH}icons/{recruitment.DPSCOLOR}" alt="dps" />
-    <select name="D{recruitment.CLASSID}" class="input" id="D{recruitment.CLASSID}">
-      <!-- BEGIN dpsstatus_row -->
-      <option value="{recruitment.dpsstatus_row.VALUE}"{recruitment.dpsstatus_row.SELECTED}>DPS : {recruitment.dpsstatus_row.OPTION}</option>
-      <!-- END dpsstatus_row  -->
-    </select>
-
-    <img src="{T_IMAGES_PATH}icons/{recruitment.HEALCOLOR}" alt="heal" />  
-    <select name="H{recruitment.CLASSID}" class="input" id="H{recruitment.CLASSID}">
-      <!-- BEGIN healstatus_row -->
-      <option value="{recruitment.healstatus_row.VALUE}"{recruitment.healstatus_row.SELECTED}>Heal : {recruitment.healstatus_row.OPTION}</option>
-      <!-- END healstatus_row  -->
-    </select>
-    </dd> 
-
-  </dl> 
- <!-- END recruitment -->
 </fieldset>
 
 

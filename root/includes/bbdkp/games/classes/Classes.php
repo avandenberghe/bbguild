@@ -35,7 +35,6 @@ if (!class_exists('\bbdkp\Game'))
  */
  class Classes extends \bbdkp\Game
  {
-
 	public $game_id; 
 	public $class_id;
 	public $c_index;
@@ -50,7 +49,7 @@ if (!class_exists('\bbdkp\Game'))
 	public $heal;
 	public $imagename;
 	public $colorcode;
-
+	
 	/**
 	 */
 	public function __construct() 

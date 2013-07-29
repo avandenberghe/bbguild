@@ -96,7 +96,9 @@ if (!class_exists('\bbdkp\Game'))
 	 */
 	public function __set($property, $value)
 	{
-		switch ($fieldname)
+		global $user; 
+		
+		switch ($property)
 		{
 			case 'f_index':
 				break;
@@ -143,7 +145,7 @@ if (!class_exists('\bbdkp\Game'))
 		$db->sql_transaction ( 'commit' );
 		$cache->destroy ( 'sql', FACTION_TABLE );
 		
-		trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $this->faction_name ), E_USER_NOTICE );
+		
 	
 	}
 	
@@ -176,6 +178,25 @@ if (!class_exists('\bbdkp\Game'))
 		}
 		else
 		{
+			//
+			// Logging failure
+			//
+			if (!class_exists('\bbdkp\Admin'))
+			{
+				require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
+			}
+			$bbdkp = new \bbdkp\Admin();
+			$log_action = array(
+					'header' => 'L_ACTION_FACTION_DELETED' ,
+					'L_GAME' => $this->game_id ,
+					'L_FACTION' => $this->faction_name ,
+			);
+			
+			$bbdkp->log_insert(array(
+			'log_type' 		=> 'L_ACTION_FACTION_DELETED',
+			'log_result' 	=> 'L_FAILED', 
+			'log_action' 	=> $log_action));
+			
 			trigger_error (sprintf ( $user->lang ['ADMIN_DELETE_FACTION_FAILED'], $this->game_id, $this->faction_name), E_USER_WARNING );
 		}
 	}

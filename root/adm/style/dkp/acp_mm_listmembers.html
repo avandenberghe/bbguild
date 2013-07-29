@@ -1,24 +1,20 @@
 <!-- INCLUDE overall_header.html -->
 <a name="maincontent"></a>
-
 <h1>{L_TITLE}</h1>
 
+<div>
+<form id="mm_listmembers" method="post" action="{F_MEMBERS_LIST}">
+<fieldset>
 <p>{L_EXPLAIN}</p>
 
-<form method="post" action="{F_MEMBERS_LIST}" id="selectguild">
-
-<div>
 <label for="member_guild_id">{L_GUILD}:</label>
 <select id="member_guild_id" name="member_guild_id" class="input" onchange="javascript:form.submit();" >
        	<!-- BEGIN guild_row -->
        <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
         <!-- END guild_row -->
 </select>
-</div>
-</form>
-
-<form id="mm_listmembers" method="post" action="{F_MEMBERS_LIST}">
-
+<a href="{U_VIEW_GUILD}">{GUILDNAME}</a>
+</fieldset>
 <!-- IF .members_row -->
 <!-- IF MEMBER_PAGINATION -->
 <div class="pagination">
@@ -88,7 +84,7 @@
   	<input type="hidden" name="start" value="{START}" />
   	<!-- END members_row -->
 	<input class="button2" type="submit" name="deactivate" value="{L_CHANGE_STATUS}" />
-	<input class="button2" name="memberadd" type="submit" value="{L_ADD}" />
+	<input class="button2" name="memberadd" type="submit" value="{L_ADD_MEMBER}" />
 	<br /><br />
 </fieldset>
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
@@ -96,9 +92,9 @@
 </fieldset>
 <!-- ELSE -->
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-	<input class="button2" name="memberadd" type="submit" value="{L_ADD}" />
+	<input class="button2" name="memberadd" type="submit" value="{L_ADD_MEMBER}" />
 </fieldset>
 <!-- ENDIF -->
 </form>
-
+</div>
 <!-- INCLUDE dkp/overall_footer.html -->
