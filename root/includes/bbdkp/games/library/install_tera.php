@@ -131,7 +131,7 @@ class install_tera extends \bbdkp\aGameinstall
 	{
 		global $db, $table_prefix;
 		
-		$db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Tera Dungeons' ");
+		$sql = 'SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Tera Dungeons' ";
 		$result = $db->sql_query($sql);
 		$this->teradkpid = (int) $db->sql_fetchfield('dkpsys_id');
 		$db->sql_freeresult($result);

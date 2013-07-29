@@ -309,7 +309,9 @@ $lang = array_merge($lang, array(
 'REASON' => 'Reason',
 'RESULT' => 'Result',
 'SESSION_ID' => 'Session ID',
-
+'TANK'	=> 'Tanking', 
+'DAMAGE' => 'Damage',  
+'HEAL'	=> 'Healing', 
 'SUMMARY_DATES' => 'Raid Summary: %s to %s',
 'TIME' => 'Time',
 'TIME_BONUS' => 'Time bonus',

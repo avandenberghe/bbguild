@@ -40,6 +40,13 @@ if (!class_exists('\bbdkp\Guilds'))
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
 
+
+//include the guilds class
+if (!class_exists('\bbdkp\Roles'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/guilds/Roles.$phpEx");
+}
+
 /**
  * This class manages guilds
  *  
@@ -51,13 +58,16 @@ class acp_dkp_guild extends \bbdkp\Admin
 	public $member;
 	public $old_member;
 	public $link = ' ';
-
+	public  $url_id;
+	
+	
 	public function main ($id, $mode)
 	{
 		global $user, $template, $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$user->add_lang(array('mods/dkp_admin'));
 		$user->add_lang(array('mods/dkp_common'));
-
+		
+		
 		switch ($mode)
 		{
 
@@ -67,13 +77,14 @@ class acp_dkp_guild extends \bbdkp\Admin
 			case 'listguilds':
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
-				$showadd = (isset($_POST['guildadd'])) ? true : false;
 
-				if ($showadd)
+				$guildadd = (isset($_POST['guildadd'])) ? true : false;
+				if ($guildadd)
 				{
 					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=addguild"));
 					break;
 				}
+
 				
 				$sort_order = array(
 					0 => array(	'id' , 'id desc') ,
@@ -149,6 +160,14 @@ class acp_dkp_guild extends \bbdkp\Admin
 					$this->url_id = -1; 
 				}
 
+
+				$memberadd = (isset($_POST['memberadd'])) ? true : false;
+				if ($memberadd)
+				{
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;" . URI_GUILD . "=" . $this->url_id  ));
+					break;
+				}
+				
 				$updateguild = new \bbdkp\Guilds($this->url_id);
 
 				$add = (isset($_POST['addguild'])) ? true : false;
@@ -160,8 +179,10 @@ class acp_dkp_guild extends \bbdkp\Admin
 				$deleterank = (isset($_GET['deleterank'])) ? true : false;
 				$addrank = (isset($_POST['addrank'])) ? true : false;
 				
+				$addrecruitment = (isset($_POST['addrecruitment'])) ? true : false;
+				  
 				// POST check
-				if ($add || $submit || $getarmorymembers || $updaterank || $addrank )
+				if ($add || $submit || $getarmorymembers || $updaterank || $addrank || $addrecruitment)
 				{
 					if (! check_form_key('dbT2TvCZNZHjckSvbTPc'))
 					{
@@ -189,8 +210,6 @@ class acp_dkp_guild extends \bbdkp\Admin
 						trigger_error($success_message . $this->link, E_USER_WARNING);
 					}
 				}
-				
-				
 
 				//updating
 				if ($submit || $getarmorymembers)
@@ -205,6 +224,8 @@ class acp_dkp_guild extends \bbdkp\Admin
 					$updateguild->region = request_var('region_id', ' ');
 					$updateguild->showroster = request_var('showroster', 0);
 					$updateguild->min_armory = request_var('min_armorylevel', 0);
+					$updateguild->recstatus = request_var('switchon_recruitment', 0);
+						
 					//@todo complete for other games
 					$updateguild->aionlegionid = 0;
 					$updateguild->aionserverid = 0;
@@ -243,7 +264,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 						
 				if ($addrank)
 				{
-					$newrank = new \bbdkp\Ranks();
+					$newrank = new \bbdkp\Ranks($updateguild->guildid);
 					$newrank->RankName = utf8_normalize_nfc(request_var('nrankname', '', true));
 					$newrank->RankId = request_var('nrankid', 0);
 					$newrank->RankGuild = $updateguild->guildid; 
@@ -257,8 +278,8 @@ class acp_dkp_guild extends \bbdkp\Admin
 				
 				if ($updaterank)
 				{
-					$newrank = new \bbdkp\Ranks();
-					$oldrank = new \bbdkp\Ranks();
+					$newrank = new \bbdkp\Ranks($updateguild->guildid);
+					$oldrank = new \bbdkp\Ranks($updateguild->guildid);
 					// template
 					$modrank = utf8_normalize_nfc(request_var('ranks', array(0 => ''), true));
 					foreach ($modrank as $rank_id => $rank_name)
@@ -351,6 +372,20 @@ class acp_dkp_guild extends \bbdkp\Admin
 					}
 				}
 				
+				if($addrecruitment)
+				{
+					// insert a row in roles table
+					$addrole = new \bbdkp\Roles(
+							$this->url_id, 
+							request_var('recruitrole' , ''),
+							request_var('recruitclass' , 0), 
+							request_var('recruitneeded' , 0)
+							);
+					$addrole->make(); 
+					unset($addrole); 
+				}
+				
+				// start template loading
 
 				if ($updateguild->guildid != 0)
 				{
@@ -400,6 +435,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					}
 				}
 				
+				// list the ranks for this guild
 				$listranks = new \bbdkp\Ranks($updateguild->guildid);
 				$listranks->game_id = $updateguild->game_id; 
 				$result = $listranks->listranks();
@@ -421,8 +457,67 @@ class acp_dkp_guild extends \bbdkp\Admin
 				}
 				$db->sql_freeresult($result);
 
+				// list the recruitment status per role/class for this guild
+				// get clas distribution
+				$classdistribution = $updateguild->classdistribution(); 
+				
+				foreach ($updateguild->possible_recstatus as $d_value => $d_name)
+				{
+					$template->assign_block_vars('recruitment_status_row', array(
+							'VALUE' => $d_value ,
+							'SELECTED' => ($d_value == $updateguild->recstatus) ? ' selected="selected"' : '' ,
+							'OPTION' => $d_name));
+				}
+				
+				$listroles = new \bbdkp\Roles();
+				$listroles->guild_id = $updateguild->guildid; 
+				foreach ($listroles->roles as $role => $rolename)
+				{
+					$template->assign_block_vars('rolelist_row', array(
+							'VALUE' => $role ,
+							'SELECTED' => '' ,
+							'OPTION' => $rolename));
+				}
+				
+				
+				foreach ($classdistribution as $class_id => $class)
+				{
+					$template->assign_block_vars('classlist_row', array(
+							'VALUE' => $class_id ,
+							'SELECTED' => '' ,
+							'OPTION' => $class['classname']));
+				}				
+				
+				$result = $listroles->listroles(); 
+				while($row = $db->sql_fetchrow($result))
+				{
+					
+					$role = isset($row['role']) ? 
+							( isset($user->lang[$row['role']]) ? $user->lang[$row['role']]  : $row['role']  ) : 
+							$listroles->roles['none'];
+					 
+					$template->assign_block_vars('roles_row', array(
+						'GUILD_ID' 	=> $row['guild_id'] ,
+						'GAME_ID' 	=> $row['game_id'] ,
+						'ROLE' 		=> $role, 
+						'CLASS_ID' 	=> $row['class_id'] ,
+						'CLASS' 	=> $row['class_name'] ,
+						'IMAGENAME' 	=> $row['imagename'] ,
+						'COLORCODE' => $row['colorcode'] ,
+						'CLASS_IMAGE' => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '' ,
+						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false ,
+						'NEEDED' 	=> isset($row['needed']) ? $row['needed'] : '0' ,
+						'CURRENT'	=> $classdistribution[$row['class_id']]['classcount'], 
+					));
+				}
+				$db->sql_freeresult($result);
+				
+				
+				
+				//print all other static info
 				$template->assign_vars(array(
 					// Form values
+					'RECSTATUS' => $updateguild->recstatus,
 					'GAME_ID'	=> $updateguild->game_id,
 					'GUILD_ID' => $updateguild->guildid,
 					'GUILD_NAME' => $updateguild->name,

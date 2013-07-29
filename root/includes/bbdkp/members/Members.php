@@ -190,7 +190,7 @@ if (!class_exists('\bbdkp\Game'))
 
 	/**
 	 */
-	function __construct($member_id)
+	function __construct($member_id = 0)
 	{
 		if(isset($member_id))
 		{
@@ -328,6 +328,7 @@ if (!class_exists('\bbdkp\Game'))
 			$race_image = '';
 			$this->race_image = '';
 			$this->class_image = '';
+			$this->member_title = ''; 
 		}
 
 
@@ -359,7 +360,7 @@ if (!class_exists('\bbdkp\Game'))
 	 */
 	public function __set($property, $value)
 	{
-		switch ($fieldname)
+		switch ($property)
 		{
 			case 'regionlist':
 				// is readonly
@@ -432,7 +433,7 @@ if (!class_exists('\bbdkp\Game'))
 
 		$sql = 'SELECT count(*) as memberexists
 				FROM ' . MEMBER_LIST_TABLE . "
-				WHERE UPPER(member_name)= UPPER('" . $db->sql_escape($this->member_name) . "')
+				WHERE member_name= '" . $db->sql_escape(ucwords($this->member_name)) . "' 
 				AND member_guild_id = " . $this->member_guild_id;
 		$result = $db->sql_query($sql);
 		$countm = $db->sql_fetchfield('memberexists');
@@ -451,6 +452,25 @@ if (!class_exists('\bbdkp\Game'))
 		if ($countm == 0)
 		{
 			$error[]= $user->lang['ERROR_INCORRECTRANK'];
+		}
+		
+		if (count($error) > 0)
+		{
+			$log_action = array(
+					'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
+					'L_NAME' 	 => ucwords($this->member_name)  ,
+					'L_GAME' 	 => $this->game_id,
+					'L_LEVEL' 	 => $this->member_level,
+					'L_RACE' 	 => $this->member_race_id,
+					'L_CLASS' 	 => $this->member_class_id,
+					'L_ADDED_BY' => $user->data['username']);
+			
+			$this->log_insert(array(
+					'log_type' 		=> 'L_ACTION_MEMBER_ADDED' ,
+					'log_result' 	=> 'L_FAILED' ,
+					'log_action' 	=> $log_action));
+			
+			return 0; 
 		}
 
 		$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE;
@@ -477,6 +497,7 @@ if (!class_exists('\bbdkp\Game'))
 		{
 			case 'wow':
 				$this->Armory_getmember();
+				break;
 			case 'aion':
 				$this->member_portrait_url = $this->generate_portraitlink();
 		}
@@ -508,13 +529,14 @@ if (!class_exists('\bbdkp\Game'))
 		$log_action = array(
 				'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
 				'L_NAME' 	 => ucwords($this->member_name)  ,
+				'L_GAME' 	 => $this->game_id,
 				'L_LEVEL' 	 => $this->member_level,
 				'L_RACE' 	 => $this->member_race_id,
 				'L_CLASS' 	 => $this->member_class_id,
 				'L_ADDED_BY' => $user->data['username']);
 
 		$this->log_insert(array(
-				'log_type' => $log_action['header'] ,
+				'log_type' => 'L_ACTION_MEMBER_ADDED' ,
 				'log_action' => $log_action));
 
 		return $this->member_id;
@@ -640,14 +662,14 @@ if (!class_exists('\bbdkp\Game'))
 				'header' => 'L_ACTION_MEMBER_UPDATED' ,
                 'L_NAME' => $this->member_name ,
 				'L_NAME_BEFORE' => $old_member->member_name,
-				'L_LEVEL_BEFORE' => $old_member->member_level,
+				'L_LEVELBEFORE' => $old_member->member_level,
 				'L_RACE_BEFORE' => $old_member->member_race_id,
                 'L_RANK_BEFORE' => $old_member->member_rank_id,
 				'L_CLASS_BEFORE' => $old_member->member_class_id,
                 'L_GENDER_BEFORE' => $old_member->member_gender_id,
                 'L_ACHIEV_BEFORE' => $old_member->member_achiev,
 				'L_NAME_AFTER' => $this->member_name,
-				'L_LEVEL_AFTER' => $this->member_level,
+				'L_LEVELAFTER' => $this->member_level,
 				'L_RACE_AFTER' => $this->member_race_id ,
                 'L_RANK_AFTER' => $this->member_rank_id,
 				'L_CLASS_AFTER' => $this->member_class_id ,
@@ -721,14 +743,13 @@ if (!class_exists('\bbdkp\Game'))
 				$params = array('guild', 'titles');
 				$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);
 				
-				$this->member_level = $data['level'];
-				$this->member_race_id = $data['race'];
-				$this->member_class_id = $data['class'];
-				$this->member_gender_id = $data['gender'];
-				$this->member_achiev = $data['achievementPoints'];
-				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $data ['name'] . '/simple';
-				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
-				$this->member_title = '';
+				$this->member_level = isset($data['level']) ? $data['level'] : $this->member_level;
+				$this->member_race_id = isset($data['race']) ? $data['race'] : $this->member_race_id;
+				$this->member_class_id = isset($data['class']) ? $data['class'] : $this->member_class_id;
+				$this->member_gender_id = isset($data['gender']) ? $data['gender'] : $this->member_gender_id;
+				$this->member_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->member_achiev;
+				$this->member_armory_url = isset($data ['name']) ? sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $data ['name'] . '/simple' : $this->member_armory_url;
+				$this->member_portrait_url = isset( $data['thumbnail'])  ? sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'] : $this->member_portrait_url;
 				if (isset($data['titles']))
 				{
 					foreach($data['titles'] as $key => $title)

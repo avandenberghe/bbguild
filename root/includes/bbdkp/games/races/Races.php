@@ -154,6 +154,28 @@ if (!class_exists('\bbdkp\Game'))
 		
 		if ($racecount != 0)
 		{
+			//
+			// Logging
+			//
+			//
+			// Logging failure
+			//
+			if (!class_exists('\bbdkp\Admin'))
+			{
+			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
+			}
+			$bbdkp = new \bbdkp\Admin();
+			$log_action = array(
+					'header' 	=> 'L_ACTION_RACE_DELETED' ,
+					'L_GAME' 	=> $this->game_id ,
+					'L_RACE' 	=> $this->race_name ,
+			);
+				
+			$bbdkp->log_insert(array(
+			'log_type' 		=> 'L_ACTION_RACE_DELETED',
+			'log_result' 	=> 'L_FAILED',
+			'log_action' 	=> $log_action));
+			
 			trigger_error (sprintf ( $user->lang ['ADMIN_DELETE_RACE_FAILED'], $this->race_name), E_USER_WARNING );
 		}
 		else

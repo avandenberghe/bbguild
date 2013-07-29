@@ -143,7 +143,7 @@ class install_gw2 extends \bbdkp\aGameinstall
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
-		$db->sql_query('SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'GW2 Raids' ");
+		$sql = 'SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'GW2 Raids' ";
 		$result = $db->sql_query($sql);
 		$this->gw2dkpid  = (int) $db->sql_fetchfield('dkpsys_id');
 		$db->sql_freeresult($result);

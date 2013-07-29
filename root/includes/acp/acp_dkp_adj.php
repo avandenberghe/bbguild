@@ -305,7 +305,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						'L_ADDED_BY' => $newadjust->adjustment_added_by );
 					
 					$this->log_insert(array(
-						'log_type' => $log_action['header'], 
+						'log_type' => 'L_ACTION_INDIVADJ_ADDED', 
 						'log_action' => $log_action));
 					
 					$success_message = sprintf($user->lang['ADMIN_ADD_IADJ_SUCCESS'], $config['bbdkp_dkp_name'], $newadjust->adjustment_value, implode(', ', $member_names));

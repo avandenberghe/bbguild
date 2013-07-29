@@ -470,7 +470,7 @@ class Admin implements \bbdkp\iAdmin
 	{
 		// log
 		$logs = \bbdkp\log::Instance();	
-		return $logs->log_insert($values = array()); 
+		return $logs->log_insert($values); 
 		
 	}
 

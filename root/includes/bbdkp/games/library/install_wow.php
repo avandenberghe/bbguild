@@ -230,7 +230,7 @@ class install_wow extends \bbdkp\aGameinstall
 	{
 		global $db, $table_prefix, $umil, $user;
 		
-		$db->sql_query('SELECT count(*) as num_dkp FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Wotlk' ");
+		$sql = 'SELECT count(*) as num_dkp FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Wotlk' ";
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('num_dkp');
 		$db->sql_freeresult($result);			
@@ -242,7 +242,7 @@ class install_wow extends \bbdkp\aGameinstall
 			unset ( $sql_ary );
 		}
 		
-		$db->sql_query('SELECT count(*) as num_dkp FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Cataclysm' ");
+		$sql = 'SELECT count(*) as num_dkp FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Cataclysm' ";
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('num_dkp');
 		$db->sql_freeresult($result);		
@@ -256,7 +256,7 @@ class install_wow extends \bbdkp\aGameinstall
 			$this->InstallEventsCataclysm($dkpid); 
 		}
 		
-		$db->sql_query('SELECT count(*) as num_dkp FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Pandaria' ");
+		$sql = 'SELECT count(*) as num_dkp FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Pandaria' ";
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('num_dkp');
 		$db->sql_freeresult($result);		

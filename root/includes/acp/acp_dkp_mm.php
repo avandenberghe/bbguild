@@ -73,11 +73,14 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx",
 				"i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
-				
 				$Guild = new \bbdkp\Guilds();
-				
 				// add member button redirect
 				$showadd = (isset($_POST['memberadd'])) ? true : false;
+				$activate = (isset($_POST['deactivate'])) ? true : false;
+				$del_batch = (isset($_POST['delete'])) ? true : false;
+				$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
+				$sortlink = isset ( $_GET [URI_GUILD] )  ? true : false;
+				
 				if ($showadd)
 				{
 					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember"));
@@ -85,14 +88,12 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 
 				// set activation flag
-				$activate = (isset($_POST['deactivate'])) ? true : false;
 				if ($activate)
 				{
 					if (! check_form_key('mm_listmembers'))
 					{
 						trigger_error('FORM_INVALID');
 					}
-
 					$activatemember = new \bbdkp\Members();
 					$activate_members = request_var('activate_id', array(0));
 					$member_window = request_var('hidden_member', array(0));
@@ -101,7 +102,6 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 
 				// batch delete
-				$del_batch = (isset($_POST['delete'])) ? true : false;
 				if ($del_batch)
 				{
 					$members_tbdel = request_var('delete_id', array(0));
@@ -110,43 +110,41 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 
 				// guild dropdown query
-				$result = $Guild->guildlist(); 	
-				
-				$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
-				$sortlink = isset ( $_GET [URI_GUILD] )  ? true : false;
 				if ($submit)
 				{
 					// user selected dropdow - get guildid
-					$guild_id = request_var('member_guild_id', 0);
+					$Guild->guildid = request_var('member_guild_id', 0);
 				}
 				elseif($sortlink) 
 				{
 					// user selected dropdow - get guildid
-					$guild_id = request_var(URI_GUILD, 0);
+					$Guild->guildid = request_var(URI_GUILD, 0);
 				}
 				else
 				{
 				// default pageloading
+					
+					$result = $Guild->guildlist();
 					while ($row = $db->sql_fetchrow($result))
 					{
-						$guild_id = $row['id'];
+						$Guild->guildid = $row['id'];
 						break;
 					}
 					$db->sql_freeresult($result);
 				}
 
 				// fill popup and set selected to default selection
+				$Guild->Getguild(); 
 				$resultg = $Guild->guildlist();
 				while ($row = $db->sql_fetchrow($resultg))
 				{
 					$template->assign_block_vars('guild_row', array(
 						'VALUE' => $row['id'] ,
-						'SELECTED' => ($row['id'] == $guild_id) ? ' selected="selected"' : '' ,
+						'SELECTED' => ($row['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
 						'OPTION' => (! empty($row['name'])) ? $row['name'] : '(None)'));
 				}
 				$db->sql_freeresult($resultg);
 				$previous_data = '';
-				
 
 				//get window
 				$start = request_var('start', 0, false);
@@ -205,26 +203,28 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				$db->sql_freeresult($members_result);
 				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
-				$memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] . "&amp;". URI_GUILD ."=".$guild_id), $Guild->membercount, $config['bbdkp_user_llimit'], $start, true);
+				$memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] . "&amp;". URI_GUILD ."=".$Guild->guildid), $Guild->membercount, $config['bbdkp_user_llimit'], $start, true);
 				$form_key = 'mm_listmembers';
 				add_form_key($form_key);
 
 				$template->assign_vars(array(
-					'GUILDID' => $guild_id,
+					'GUILDID' => $Guild->guildid,
+					'GUILDNAME' => $Guild->name,
 					'START' => $start,
 					'F_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember' ,
 					'F_MEMBERS_LIST' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers' ,
 					'L_TITLE' => $user->lang['ACP_MM_LISTMEMBERS'] ,
 					'L_EXPLAIN' => $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'] ,
-					'O_NAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
-					'O_USERNAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
-					'O_LEVEL' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
-					'O_CLASS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
-					'O_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
-					'O_JOINDATE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
-					'O_OUTDATE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][6] . "&amp;" . URI_GUILD . "=" . $guild_id) ,
+					'O_NAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
+					'O_USERNAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
+					'O_LEVEL' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
+					'O_CLASS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
+					'O_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
+					'O_JOINDATE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
+					'O_OUTDATE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][6] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
 					'U_LIST_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;") ,
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text ,
+					'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=addguild&amp;" . URI_GUILD . '=' . $Guild->guildid ), 
 					'MEMBER_PAGINATION' => $memberpagination));
 				$this->page_title = 'ACP_MM_LISTMEMBERS';
 				$this->tpl_name = 'dkp/acp_' . $mode;
@@ -240,8 +240,6 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$add = (isset($_POST['add'])) ? true : false;
 				$update = (isset($_POST['update'])) ? true : false;
 				$delete = (isset($_GET['delete']) || isset($_POST['delete'])) ? true : false;
-
-				
 				
 				if ($add || $update)
 				{
@@ -254,7 +252,6 @@ class acp_dkp_mm extends \bbdkp\Admin
 				// add guildmember handler
 				if ($add)
 				{
-
 					$newmember = new \bbdkp\Members();
 					$newmember->game_id = request_var('game_id', '');
 					$newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
@@ -279,12 +276,18 @@ class acp_dkp_mm extends \bbdkp\Admin
 					if ($newmember->member_id > 0)
 					{
 						//record added. now update some stats
+						meta_refresh(2, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $newmember->member_guild_id ));
 						$success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name));
+						
+						$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $newmember->member_guild_id ) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 						trigger_error($success_message . $this->link, E_USER_NOTICE);
+						
 					}
 					else
 					{
-						$failure_message = sprintf($user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($newmember->member_name), $member_id);
+						meta_refresh(2, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $newmember->member_guild_id ));
+						
+						$failure_message = sprintf($user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($newmember->member_name));
 						trigger_error($failure_message . $this->link, E_USER_WARNING);
 					}
 
@@ -328,6 +331,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 					$updatemember->Updatemember($old_member);
 
+					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $updatemember->member_guild_id ));
+					$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $updatemember->member_guild_id ) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 					$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], $updatemember->member_name);
 					trigger_error($success_message . $this->link);
 				}
@@ -347,7 +352,11 @@ class acp_dkp_mm extends \bbdkp\Admin
 						$deletemember->Getmember();
 						$deletemember->Deletemember();
 						$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $deletemember->member_name);
-						trigger_error($success_message . $this->link);
+						
+						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $deletemember->member_guild_id ));
+						$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $deletemember->member_guild_id ) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+						
+						trigger_error($success_message . $this->link, E_USER_WARNING);
 					}
 					else
 					{
@@ -368,8 +377,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 				 * fill template
 				 */
 				$editmember = new \bbdkp\Members(request_var('hidden_member_id', request_var(URI_NAMEID, 0)) );
-				$S_ADD = ($editmember->member_id > 0) ? true: false;
-
+				$S_ADD = ($editmember->member_id > 0) ? false: true;
+				
 				// Game dropdown
 				foreach ($this->installed_games as $gameid => $gamename)
 				{
@@ -379,6 +388,10 @@ class acp_dkp_mm extends \bbdkp\Admin
 							'OPTION' => $gamename));
 				}
 				
+				if (isset($_GET[URI_GUILD]))
+				{
+					$editmember->member_guild_id = request_var(URI_GUILD, 0);
+				}
 				
 				//guild dropdown
 				$Guild = new \bbdkp\Guilds($editmember->member_guild_id);

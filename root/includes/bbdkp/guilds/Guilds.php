@@ -49,6 +49,7 @@ if (!class_exists('\bbdkp\Admin'))
 	protected $startdate = 0;
 	protected $showroster = 0;
 	protected $min_armory = 0;
+	protected $recstatus = 1;
 
 	//aion parameters
 	protected $aionlegionid = 0;
@@ -64,10 +65,16 @@ if (!class_exists('\bbdkp\Admin'))
 	protected $memberdata = array();
 	protected $side = 0;
 
+	protected $possible_recstatus = array();
+	
+
+
 	/**
 	 */
 	function __construct($guild_id = 0)
 	{
+		global $user;
+		
 		if(isset($guild_id))
 		{
 			$this->guildid = $guild_id;
@@ -79,6 +86,11 @@ if (!class_exists('\bbdkp\Admin'))
 			
 		$this->Getguild();
 		$this->countmembers();
+		
+		$this->possible_recstatus = array(
+			0 => $user->lang['CLOSED'] ,
+			1 => $user->lang['OPEN']);
+		
 	}
 
 	/**
@@ -90,7 +102,7 @@ if (!class_exists('\bbdkp\Admin'))
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
 		$sql = 'SELECT id, name, realm, region, roster, game_id, members, 
-				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory
+				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status
 				FROM ' . GUILD_TABLE . '
 				WHERE id = ' . $this->guildid;
 		$result = $db->sql_query($sql);
@@ -104,7 +116,13 @@ if (!class_exists('\bbdkp\Admin'))
 			$this->realm = '';
 			$this->region = '';
 			$this->showroster = 0;
+			$this->achievementpoints = 0; 
+			$this->level = 0;
+			$this->battlegroup = ''; 
+			$this->guildarmoryurl = ''; 
+			$this->emblempath = ''; 
 			$this->min_armory = 0; 
+			$this->recstatus = 0;
 		}
 		else
 		{
@@ -121,7 +139,7 @@ if (!class_exists('\bbdkp\Admin'))
 			$this->guildarmoryurl = $row['guildarmoryurl'];
 			$this->emblempath = $phpbb_root_path . $row['emblemurl'];
 			$this->min_armory = $row['min_armory'];
-			
+			$this->recstatus = $row['rec_status'];
 		}
 
 
@@ -167,6 +185,7 @@ if (!class_exists('\bbdkp\Admin'))
 				if (property_exists($this, $property))
 				{
 					$this->$property = $value;
+					//@todo persist change in db
 				}
 				else
 				{
@@ -289,11 +308,12 @@ if (!class_exists('\bbdkp\Admin'))
 				'aion_legion_id' => $this->aionlegionid ,
 				'aion_server_id' => $this->aionserverid, 
 				'min_armory' => $this->min_armory,
-				
+				'rec_status' => $this->recstatus,
 		));
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
+		// update WoW specific info
 		if ($this->guildid > 0)
 		{
 			switch ($this->game_id)
@@ -320,7 +340,7 @@ if (!class_exists('\bbdkp\Admin'))
 							require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
 						}
 						
-						$rank = new \bbdkp\Ranks();
+						$rank = new \bbdkp\Ranks($this->guildid);
 						$rank->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region); 
 						
 						//update member table
@@ -331,8 +351,7 @@ if (!class_exists('\bbdkp\Admin'))
 						
 						$mb = new \bbdkp\Members();
 						$mb->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region, $this->min_armory);
-						
-					}				
+					}
 					break;
 			}
 		}
@@ -421,16 +440,26 @@ if (!class_exists('\bbdkp\Admin'))
 				
 				$data = $api->Guild->getGuild($this->name, $this->realm, $params);  
 				
-				$this->achievementpoints = $data['achievementPoints'];
-				$this->level = $data['level'];
-				$this->battlegroup = $data['battlegroup'];
-				$this->side = $data['side'];
-				$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
+				$this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0; 
+				$this->level = isset($data['level']) ? $data['level']: 0;  
+				$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: ''; 
+				$this->side = isset($data['side']) ? $data['side']: ''; 
+
+				if(isset($data['name']))
+				{
+					$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
+				}
+				else
+				{
+					$this->guildarmoryurl = ''; 
+				}
+				
 				//$this->emblemurl = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
 				//@todo update guild membership
-				$this->emblem = $data['emblem'];
-				$this->emblempath = $this->createEmblem(true);
-				$this->memberdata = $data['members'];
+				
+				$this->emblem = isset($data['emblem']) ? $data['emblem']: '';    
+				$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(true)  : '';       
+				$this->memberdata = isset($data['members']) ? $data['members']: '';  
 		}
 	
 	}
@@ -637,6 +666,45 @@ if (!class_exists('\bbdkp\Admin'))
 		return $members_result;
 
 	}
+	
+	/**
+	 * 
+	 * returns a class distribution array for this guild
+	 * @return array
+	 */
+	public function classdistribution()
+	{
+	
+		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		
+		$sql = 'SELECT c.class_id, '; 
+		$sql .= ' l.name                   AS classname, ';
+		$sql .= ' Count(m.member_class_id) AS classcount ';
+		$sql .= ' FROM  phpbb_bbdkp_classes c ';
+		$sql .= ' INNER JOIN phpbb_bbdkp_memberguild g ON c.game_id = g.game_id ';
+		$sql .= ' LEFT OUTER JOIN (SELECT * FROM phpbb_bbdkp_memberlist WHERE member_level >= ' . $this->min_armory . ') m'; 
+		$sql .= '   ON m.game_id = c.game_id  AND m.member_class_id = c.class_id AND m.member_guild_id = 1 ';
+		$sql .= ' INNER JOIN phpbb_bbdkp_language l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
+		$sql .= ' WHERE  1=1 ';
+		$sql .= " AND l.language = 'en' AND l.attribute = 'class' ";
+		$sql .= ' AND g.id =  ' . $this->guildid;
+		$sql .= ' GROUP  BY c.class_id, l.name ';
+		$sql .= ' ORDER  BY c.class_id ASC ';
+		
+		$result = $db->sql_query($sql);
+		$classes = array();
+		while($row = $db->sql_fetchrow($result))
+		{
+			$classes[$row['class_id']] = array(
+				'classname' => $row['classname'], 	
+				'classcount' => $row['classcount']
+				); 
+		}
+		$db->sql_freeresult($result);
+		return $classes; 
+		
+	
+	}
 
 	/**
 	 * counts all guild members
@@ -690,7 +758,7 @@ if (!class_exists('\bbdkp\Admin'))
 				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
 				WHERE a.id = b.guild_id
 				GROUP BY a.id, a.name, a.realm, a.region
-				ORDER BY a.id desc';
+				ORDER BY a.id asc';
 		$result = $db->sql_query($sql);
 		return $result; 
 	}

@@ -56,7 +56,8 @@ define('LOOTSYS_TABLE',	           $table_prefix . 'bbdkp_lootsystem');
 define('BB_LANGUAGE',	           $table_prefix . 'bbdkp_language');
 define('BOSSBASE',          	   $table_prefix . 'bbdkp_bosstable'); 	 
 define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable');
-define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');	  
+define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');
+define('BBDKP_ROLES_TABLE',        $table_prefix . 'bbdkp_roles');	  
 // plugin anchors
 
 // RAIDTRACKER
