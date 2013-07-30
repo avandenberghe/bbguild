@@ -19,7 +19,6 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
 
 // Include the base class
 
@@ -96,13 +95,15 @@ class Roles
 		
 
 		/**
-		 * possible roles that a class can fullfill
+		 * possible roles that a class can fullfill, as exist in Wow API
+		 * note: roleID max 20 chars !!
+		 * this is not stored in database
 		 */
 		$this->roles =  array (
-				'dps' 	=> $user->lang ['DAMAGE'],
-				'heal' 	=> $user->lang ['HEAL'],
-				'tank' 	=> $user->lang ['TANK'],
-				'none' 	=> $user->lang ['NA'],
+				'DPS' 	=> $user->lang ['DAMAGE'],
+				'HEALING' 	=> $user->lang ['HEAL'],
+				'TANKING' 	=> $user->lang ['TANK'],
+				'NA' 	=> $user->lang ['NA'],
 		);
 		
 		$this->classrecstatus = array(

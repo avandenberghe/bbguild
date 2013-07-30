@@ -21,9 +21,9 @@ if (! defined('EMED_BBDKP'))
 		'mods/dkp_admin'));
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
-if (!class_exists('Admin'))
+if (!class_exists('\bbdkp\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
 /**
  * This acp class manages point settings
@@ -37,10 +37,7 @@ if (!class_exists('Admin'))
 	{
 		global $db, $user, $auth, $template, $sid, $cache;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		$user->add_lang(array(
-			'mods/dkp_admin'));
-		$user->add_lang(array(
-			'mods/dkp_common'));
+
 		$link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_point&amp;mode=pointconfig") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 		switch ($mode)
 		{

@@ -48,10 +48,8 @@ class acp_dkp extends \bbdkp\Admin
 	 */
 	function main ($id, $mode)
 	{
-		global $db, $user, $auth, $template, $sid, $cache;
-		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		$user->add_lang(array('mods/dkp_admin'));
-		$user->add_lang(array('mods/dkp_common'));
+		global $db, $user, $template, $cache, $config, $phpbb_admin_path, $phpEx;
+		
 		$link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 		
 		switch ($mode)
@@ -149,7 +147,7 @@ class acp_dkp extends \bbdkp\Admin
 				'RAIDS_PER_DAY' => $raids_per_day ,
 				'ITEMS_PER_DAY' => $items_per_day ,
 				'BBDKP_STARTED' => $bbdkp_started,
-				'GAMES_INSTALLED' => implode(", ", $this->installed_games),
+				'GAMES_INSTALLED' => implode(", ", $this->games),
 			));
 			$this->page_title = 'ACP_DKP_MAINPAGE';
 			$this->tpl_name = 'dkp/acp_mainpage';
@@ -305,7 +303,7 @@ class acp_dkp extends \bbdkp\Admin
 					'EQDKP_START_YY' => date('Y', $config['bbdkp_eqdkp_start']) ,
 					'DATE_FORMAT' => $config['bbdkp_date_format'] ,
 					'DKP_NAME' => $config['bbdkp_dkp_name'] ,
-					'DEFAULT_GAME' => implode(", ", $this->installed_games) ,
+					'DEFAULT_GAME' => implode(", ", $this->games) ,
 					'HIDE_INACTIVE_YES_CHECKED' => ($config['bbdkp_hide_inactive'] == '1') ? ' checked="checked"' : '' ,
 					'HIDE_INACTIVE_NO_CHECKED' => ($config['bbdkp_hide_inactive'] == '0') ? ' checked="checked"' : '' ,
 					'USER_ELIMIT' => $config['bbdkp_user_elimit'] ,

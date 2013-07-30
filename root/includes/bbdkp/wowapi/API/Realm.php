@@ -64,8 +64,7 @@ class Realm extends \bbdkp\Resource
 	
 	public function getRealmStatus($realms = array()) 
 	{
-		global $user, $phpbb_root_path, $phpEx;
-		$user->add_lang ( array ('mods/wowapi' ));
+		global $user, $phpbb_root_path, $phpEx;	
 
 		if (empty($realms)) 
 		{

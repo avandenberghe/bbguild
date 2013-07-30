@@ -20,6 +20,11 @@ if (! defined('IN_PHPBB'))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
+if (!class_exists('\bbdkp\Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+}
+
 /**
  * Games
  *
@@ -27,21 +32,8 @@ global $phpbb_root_path;
  *
  * @package 	bbDKP
  */
-class Game
+class Game extends \bbdkp\Admin
 {
-	
-	/**
-	 * list of allowed games
-	 * @var array
-	 */
-	public $preinstalled_games;
-	
-	/**
-	 * list of currently installed games
-	 * @var unknown_type
-	 */
-	public $installed_games;
-	
 	/**
 	 * primary key in games table
 	 * @var unknown_type
@@ -72,36 +64,10 @@ class Game
 	 */
 	public $install_date;
 	
-	
 	function __construct() 
 	{
+		parent::__construct(); 
 		global $db, $user; 
-		
-		$this->preinstalled_games = array (
-				'aion' 	=> $user->lang ['AION'],
-				'daoc' 	=> $user->lang ['DAOC'],
-				'eq' 	=> $user->lang ['EQ'],
-				'eq2' 	=> $user->lang ['EQ2'],
-				'FFXI' 	=> $user->lang ['FFXI'],
-				'gw2' 	=> $user->lang ['GW2'],
-				'lineage2' => $user->lang ['LINEAGE2'],
-				'lotro' => $user->lang ['LOTRO'],
-				'rift' 	=> $user->lang ['RIFT'],
-				'swtor' => $user->lang ['SWTOR'],
-				'tera' 	=> $user->lang ['TERA'],
-				'vanguard' => $user->lang ['VANGUARD'],
-				'warhammer' => $user->lang ['WARHAMMER'],
-				'wow' 	=> $user->lang ['WOW'],
-		);
-		
-		$result = $this->listgames('id'); 
-		$this->installed_games = array();
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$this->installed_games[$row['game_id']] = $row['game_name'];   
-		}
-		$db->sql_freeresult($result);
-		
 	}
 	
 	/**
@@ -155,7 +121,17 @@ class Game
 		
 		$db->sql_transaction ( 'commit' );
 		
-		
+		//
+		// Logging
+		//
+		$log_action = array(
+			'header' => 'L_ACTION_GAME_ADDED' ,
+			'L_GAME' => $this->game_id  ,
+		);
+			
+		$this->log_insert(array(
+			'log_type' =>  'L_ACTION_GAME_ADDED',
+			'log_action' => $log_action));
 	}
 	
 	/**
@@ -186,6 +162,18 @@ class Game
 			$db->sql_transaction ( 'commit' );
 			
 			$cache->destroy ( 'sql', GAMES_TABLE );
+			
+			//
+			// Logging
+			//
+			$log_action = array(
+				'header' => 'L_ACTION_GAME_DELETED' ,
+				'L_GAME' => $this->game_id  ,
+			);
+				
+			$this->log_insert(array(
+			'log_type' =>  'L_ACTION_GAME_DELETED',
+			'log_action' => $log_action));
 			
 		//@todo delete ranks...
 	}
@@ -220,9 +208,22 @@ class Game
 	public function listgames($order)
 	{
 		global $db;
+		$gamelist = array(); 
 		$sql = 'SELECT id, game_id, game_name, status FROM ' . GAMES_TABLE . ' ORDER BY ' . $order; 
 		$result = $db->sql_query ( $sql );
-		return $result;
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$gamelist[$row['game_id']] = array(
+					'id' => $row['id'] ,
+					'name' => $row['game_name'] ,
+					'game_id' => $row['game_id'] ,
+					'status' => $row['status'],
+			);
+		}
+		$db->sql_freeresult($result);
+		 
+		return $gamelist;
+		
 	}
 	
 	

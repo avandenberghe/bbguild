@@ -22,13 +22,6 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-
-//include the abstract base interface
-if (!interface_exists('\bbdkp\iMembers'))
-{
-	require ("{$phpbb_root_path}includes/bbdkp/members/iMembers.$phpEx");
-}
-
 if (!class_exists('\bbdkp\Admin'))
 {
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
@@ -37,6 +30,16 @@ if (!class_exists('\bbdkp\Game'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
 }
+//include the guilds class
+if (!class_exists('\bbdkp\Roles'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/guilds/Roles.$phpEx");
+}
+//Initialising the class
+if (!class_exists('\bbdkp\WowAPI'))
+{
+	require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
+}
 
 /**
  * manages member creation
@@ -44,11 +47,12 @@ if (!class_exists('\bbdkp\Game'))
  * @package 	bbDKP
  * 
  */
- class Members extends \bbdkp\Admin implements \bbdkp\iMembers 
-{
+ class Members extends \bbdkp\Admin
+ {
 	
 	/**
 	 * game id
+	 * @var string
 	 */
     public $game_id;
 
@@ -66,13 +70,13 @@ if (!class_exists('\bbdkp\Game'))
 
     /**
      * status (0 or 1)
-     * @var unknown_type
+     * @var bool
      */
 	protected $member_status;
 
 	/**
 	 * level
-	 * @var integer
+	 * @var int
 	 */
 	protected $member_level;
 
@@ -83,13 +87,13 @@ if (!class_exists('\bbdkp\Game'))
 
 	/**
 	 * guild rankid
-	 * @var unknown_type
+	 * @var int
 	 */
 	protected $member_rank_id;
 
 	/**
 	 * administrator comment
-	 * @var unknown_type
+	 * @var string
 	 */
 	protected $member_comment;
 
@@ -104,43 +108,45 @@ if (!class_exists('\bbdkp\Game'))
 
 	/**
 	 * the id of my guild
-	 * @var unknown_type
+	 * @var int
 	 */
 	protected $member_guild_id;
 
 	/**
 	 * my guildname
-	 * @var unknown_type
+	 * @var string
 	 */
 	protected $member_guild_name;
 
 	/**
 	 * character realm
-	 * @var unknown_type
+	 * @var string
 	 */
 	protected $member_realm;
 
 	/**
 	 * region to which the char is on
-	 * @var unknown_type
+	 * @var string
 	 */
 	protected $member_region;
+
 
 	/**
 	 * Allowed regions
 	 * readonly! 
+	 * @var array
 	 */
 	protected $regionlist = array( 'eu', 'us' , 'kr', 'tw', 'cn', 'sea');
 	
 	/**
 	 *gender ID 0=male, 1=female
-	 * @var unknown_type
+	 * @var int
 	 */
 	protected $member_gender_id;
 
 	/**
 	 * Achievement points
-	 * @var unknown_type
+	 * @var int
 	 */
 	protected $member_achiev;
 
@@ -155,25 +161,25 @@ if (!class_exists('\bbdkp\Game'))
 
 	/**
 	 * The phpBB member id linked to this member
-	 * @var unknown_type
+	 * @var int
 	 */
 	protected $phpbb_user_id;
 
 	/**
 	 * Class color
-	 * @var unknown_type
+	 * @var string
 	 */
 	protected $colorcode;
 
 	/**
 	 * Race icon
-	 * @var unknown_type
+	 * @var string
 	 */
 	protected $race_image;
 
 	/**
 	 * Class icon
-	 * @var unknown_type
+	 * @var string
 	 */
 	protected $class_image;
 
@@ -185,13 +191,27 @@ if (!class_exists('\bbdkp\Game'))
 	
 	/**
 	 * current title
+	 * @var string
 	 */
 	protected $member_title;
 
 	/**
+	 * the role (for possible roles see role class) 
+	 * @var string
+	 */
+	protected $member_role; 
+	
+	/**
+	 * contains list of members for game x
+	 * @var array
+	 */
+	public $gamememberlist; 
+	
+	/**
 	 */
 	function __construct($member_id = 0)
 	{
+		parent::__construct();
 		if(isset($member_id))
 		{
 			$this->member_id = $member_id;
@@ -202,9 +222,52 @@ if (!class_exists('\bbdkp\Game'))
 		}
 			
 		$this->Getmember();
-				
 	}
 
+	
+	/**
+	 *
+	 * @param string $fieldName
+	 */
+	public function __get($fieldName)
+	{
+		global $user;
+	
+		if (property_exists($this, $fieldName))
+		{
+			return $this->$fieldName;
+		}
+		else
+		{
+			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
+		}
+	}
+	
+	/**
+	 *
+	 * @param unknown_type $property
+	 * @param unknown_type $value
+	 */
+	public function __set($property, $value)
+	{
+		global $user; 
+		switch ($property)
+		{
+			case 'regionlist':
+				// is readonly
+				break;
+			default:
+				if (property_exists($this, $property))
+				{
+					$this->$property = $value;
+				}
+				else
+				{
+					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
+				}
+		}
+	}
+	
 	/**
 	 * gets a member from database
 	 * @see \bbdkp\iMembers::Get()
@@ -260,6 +323,7 @@ if (!class_exists('\bbdkp\Game'))
 			$this->member_comment = $row['member_comment'] ;
 			$this->member_gender_id = $row['member_gender_id'] ;
 			$this->member_joindate = $row['member_outdate'] ;
+			$this->member_role = $row['member_role'] ;
 			$this->member_joindate_d = date('j', $row['member_joindate']) ;
 			$this->member_joindate_mo = date('n', $row['member_joindate']);
 			$this->member_joindate_y = date('Y', $row['member_joindate']) ;
@@ -281,7 +345,7 @@ if (!class_exists('\bbdkp\Game'))
 			$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 			$this->race_image = (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '';
 			$this->class_image = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '';
-			//$this->member_title  = $row['member_title'];
+			$this->member_title  = $row['member_title'];
 			
 			return true;
 		}
@@ -290,8 +354,8 @@ if (!class_exists('\bbdkp\Game'))
 			// load games class
 			$games = new \bbdkp\Game();
 			$this->games = $games->preinstalled_games;
-			$this->installed_games = $games->installed_games;
-			foreach($this->installed_games as $key => $value)
+			$this->games = $games->installed_games;
+			foreach($this->games as $key => $value)
 			{
 				$this->game_id = $key;
 				break; 
@@ -307,6 +371,7 @@ if (!class_exists('\bbdkp\Game'))
 			$this->member_rank_id = 0;
 			$this->member_comment = '' ;
 			$this->member_gender_id = 0;
+			$this->member_role = 'NA';
 			$this->member_joindate = $this->time;
 			$this->member_joindate_d = date('j', $this->time) ;
 			$this->member_joindate_mo = date('n', $this->time);
@@ -332,49 +397,6 @@ if (!class_exists('\bbdkp\Game'))
 		}
 
 
-	}
-	
-
-	/**
-	 *
-	 * @param string $fieldName
-	 */
-	public function __get($fieldName)
-	{
-		global $user;
-	
-		if (property_exists($this, $fieldName))
-		{
-			return $this->$fieldName;
-		}
-		else
-		{
-			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
-		}
-	}
-	
-	/**
-	 *
-	 * @param unknown_type $property
-	 * @param unknown_type $value
-	 */
-	public function __set($property, $value)
-	{
-		switch ($property)
-		{
-			case 'regionlist':
-				// is readonly
-				break;
-			default:
-				if (property_exists($this, $property))
-				{
-					$this->$property = $value;
-				}
-				else
-				{
-					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
-				}
-		}
 	}
 
 	/**
@@ -493,10 +515,11 @@ if (!class_exists('\bbdkp\Game'))
 			$this->member_region = $row['region'];
 		}
 
+		
 		switch ($this->game_id)
 		{
 			case 'wow':
-				$this->Armory_getmember();
+				$this->Armory_getmember(); 
 				break;
 			case 'aion':
 				$this->member_portrait_url = $this->generate_portraitlink();
@@ -509,6 +532,7 @@ if (!class_exists('\bbdkp\Game'))
 				'member_race_id' => $this->member_race_id ,
 				'member_class_id' => $this->member_class_id ,
 				'member_rank_id' => $this->member_rank_id ,
+				'member_role' => $this->member_role, 
 				'member_comment' => (string) $this->member_comment ,
 				'member_joindate' => (int) $this->member_joindate ,
 				'member_outdate' => (int) $this->member_outdate ,
@@ -599,8 +623,8 @@ if (!class_exists('\bbdkp\Game'))
 		switch ($this->game_id)
 		{
 			case 'wow':
-				$this->Armory_getmember();
-				break;
+				$this->Armory_getmember(); 
+				break;			
 			case 'aion':
 				if(trim($this->member_portrait_url) == '')
 				{
@@ -641,6 +665,7 @@ if (!class_exists('\bbdkp\Game'))
 				'member_level' => $this->member_level ,
 				'member_race_id' => $this->member_race_id ,
 				'member_class_id' => $this->member_class_id,
+				'member_role' => $this->member_role,
 				'member_rank_id' => $this->member_rank_id ,
 				'member_gender_id' => $this->member_gender_id ,
 				'member_comment' => $this->member_comment ,
@@ -658,6 +683,18 @@ if (!class_exists('\bbdkp\Game'))
 		$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
 		        WHERE member_id= ' . $this->member_id);
 
+		// if status was 1 before then add a line in user comments
+		if ($this->member_status == 0 && $old_member->member_status == 1)
+		{
+			// update the comment including the phpbb userid
+			$query = $db->sql_build_array('UPDATE', array(
+					'member_comment' => $this->member_comment . '
+' . sprintf($user->lang['BBDKP_MEMBERDEACTIVATED'] , $user->data['username'], date( 'd.m.y G:i:s', $this->time ))  ,
+			));
+			$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
+		        WHERE member_id= ' . $this->member_id);
+		}
+		
 		$log_action = array(
 				'header' => 'L_ACTION_MEMBER_UPDATED' ,
                 'L_NAME' => $this->member_name ,
@@ -716,10 +753,9 @@ if (!class_exists('\bbdkp\Game'))
 
 	}
 	
-
 	/**
-	 * 
-	 * @see \bbdkp\iMembers::Armory_get()
+	 * fetch info from Armory
+	 * @see \bbdkp\iMembers::Armory_getmember()
 	 */
 	public function Armory_getmember()
 	{
@@ -728,44 +764,127 @@ if (!class_exists('\bbdkp\Game'))
 		switch ($this->game_id)
 		{
 			case 'wow':
-				//Initialising the class
-				if (!class_exists('WowAPI'))
-				{
-					require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
-				}
+
 				
 				 /** 
 				  * available extra fields :
 				 * 'guild','stats','talents','items','reputation','titles','professions','appearance',
 				 * 'companions','mounts','pets','achievements','progression','pvp','quests'
 				 */
-				$api = new WowAPI('character', $this->member_region);
-				$params = array('guild', 'titles');
-				$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);
+				$api = new \bbdkp\WowAPI('character', $this->member_region);
+				$params = array('guild', 'titles', 'talents' );
 				
-				$this->member_level = isset($data['level']) ? $data['level'] : $this->member_level;
-				$this->member_race_id = isset($data['race']) ? $data['race'] : $this->member_race_id;
-				$this->member_class_id = isset($data['class']) ? $data['class'] : $this->member_class_id;
-				$this->member_gender_id = isset($data['gender']) ? $data['gender'] : $this->member_gender_id;
-				$this->member_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->member_achiev;
-				$this->member_armory_url = isset($data ['name']) ? sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $data ['name'] . '/simple' : $this->member_armory_url;
-				$this->member_portrait_url = isset( $data['thumbnail'])  ? sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'] : $this->member_portrait_url;
-				if (isset($data['titles']))
+				$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);
+				unset($api); 
+				
+				// if $data == false then there is no character data, so 
+				if($data != false)
 				{
-					foreach($data['titles'] as $key => $title)
+					$this->member_level = isset($data['level']) ? $data['level'] : $this->member_level;
+					$this->member_race_id = isset($data['race']) ? $data['race'] : $this->member_race_id;
+					$this->member_class_id = isset($data['class']) ? $data['class'] : $this->member_class_id;
+					
+					/*
+					 * select the build
+					*/
+					$buildid = 0;
+					if(isset($data['talents'][0]) && isset( $data['talents'][1]) )
 					{
-						if (isset($title['selected']))
+						if( isset($data['talents'][0]['selected']))
 						{
-							$this->member_title = $title['name'];
+							$buildid = 0;
+						}
+						elseif(isset($data['talents'][1]['selected']))
+						{
+							$buildid = 1;
 						}
 					}
+					elseif(isset( $data['talents'][0]))
+					{
+						$buildid = 0;
+					}
+					elseif(isset( $data['talents'][1]))
+					{
+						$buildid = 1;
+					}
+					$role = isset($data['talents'][$buildid]['spec']['role']) ? $data['talents'][$buildid]['spec']['role'] : 'NA';
+					$this->member_role = $role;
+					
+					$this->member_gender_id = isset($data['gender']) ? $data['gender'] : $this->member_gender_id;
+					$this->member_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->member_achiev;
+					
+					if(isset($data['name']))
+					{
+						$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $data ['name'] . '/simple'; 
+					}
+					
+					if(isset($data['thumbnail']))
+					{
+						$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail']; 
+					}					
+					
+					if (isset($data['titles']))
+					{
+						foreach($data['titles'] as $key => $title)
+						{
+							if (isset($title['selected']))
+							{
+								$this->member_title = $title['name'];
+							}
+						}
+					}
+					
+					//if the last logged-in date is > 3 months ago then disable the account
+					if( isset($data['lastModified']))
+					{
+						$latest = $data['lastModified']/1000; 
+						$diff = \round( \abs ( \time() - $latest) / 60 / 60 / 24, 2) ; 
+						if($diff > 90 && $this->member_status == 1)
+						{
+							$this->deactivate_wow($diff); 
+							return false; 
+						}
+						
+					}
+					
+					return true;
+					
 				}
-				
-				
-				
+				else
+				{
+					$this->deactivate_wow('API Error'); 
+					return false; 
+				}
+			default:
+				return true;
 		}
 		
 	}
+	
+	
+	/**
+	 * called when user is deactivated because of wow inactivity > 90 days
+	 */
+	private function deactivate_wow($daysago)
+	{
+		global $user; 
+		$this->member_status = 0;
+		
+		$log_action = array(
+				'header' 	 => 'L_ACTION_MEMBER_DEACTIVATED' ,
+				'L_NAME' 	 => \ucwords($this->member_name)  ,
+				'L_DAYSAGO'  => $daysago,
+				'L_ADDED_BY' => $user->data['username']);
+			
+		$this->log_insert(array(
+				'log_type' 		=> 'L_ACTION_MEMBER_DEACTIVATED' ,
+				'log_result' 	=> 'L_SUCCESS' ,
+				'log_action' 	=> $log_action));
+		
+		
+	}
+	
+	
 	
 	/**
 	 * activates all checked members
@@ -791,6 +910,8 @@ if (!class_exists('\bbdkp\Game'))
 
 
 	}
+	
+	
 
 	/*
 	 * generates a standard portrait image url for aion based on characterdata
@@ -909,7 +1030,7 @@ if (!class_exists('\bbdkp\Game'))
 				$this->member_achiev = (int) $mb['character']['achievementPoints'];
 				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $mb['character']['realm'] . '/' . $this->member_name . '/simple';
 				$this->member_status = 1;
-				$this->member_comment = sprintf($user->lang['ACP_SUCCESSMEMBERADD'],  date("F j, Y, g:i a") );
+				$this->member_comment = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], $this->member_name, date("F j, Y, g:i a") );
 				$this->member_joindate = $this->time;
 				$this->member_outdate = mktime ( 0, 0, 0, 12, 31, 2030 );
 				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $region, $region) . $mb['character']['thumbnail'];
@@ -1161,6 +1282,48 @@ if (!class_exists('\bbdkp\Game'))
 		$db->sql_freeresult($result);
 		return $joindate;
 	
+	}
+	
+	
+	/**
+	 * get a member list for given game
+	 * @param unknown_type $game_id
+	 */
+	public function listallmembers($game_id = '')
+	{
+		global $db;
+		
+		$sql_array = array(
+				'SELECT'    => 'm.member_id ,m.member_name ',
+		
+				'FROM'      => array(
+						MEMBER_LIST_TABLE 	  => 'm',
+						MEMBER_RANKS_TABLE    => 'r',
+				),
+		
+				'WHERE'     =>  ' m.member_guild_id = r.guild_id
+    	    				 AND m.member_rank_id = r.rank_id
+    	    				 AND r.rank_hide != 1 ',
+				'ORDER_BY' => 'm.member_name'
+		);
+		
+		if ($game_id != '')
+		{
+			$sql_array['WHERE'] .= " AND m.game_id = '" . $game_id . "' "; 
+		}
+				
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ( $sql );
+		
+		while ( $row = $db->sql_fetchrow ( $result ) )
+		{
+			$this->gamememberlist[] = array(
+				'member_id' 	=> $row['member_id'],
+				'member_name' 	=> $row['member_name'],
+			); 
+		}
+		
+		$db->sql_freeresult( $result );
 	}
 
 

@@ -35,13 +35,14 @@ if (!class_exists('\bbdkp\Game'))
  */
  class Classes extends \bbdkp\Game
  {
+ 	
+ 	
 	public $game_id; 
 	public $class_id;
 	public $c_index;
 	public $faction_id;
 	public $min_level;
 	public $max_level;
-	public $armor_type;
 	public $classname;
 	public $hide;
 	public $dps;
@@ -49,11 +50,25 @@ if (!class_exists('\bbdkp\Game'))
 	public $heal;
 	public $imagename;
 	public $colorcode;
+	public $armor_type; 
 	
-	/**
-	 */
+	
+	public $armortypes; 
+
+
 	public function __construct() 
 	{
+		global $user; 
+		
+		$this->armortypes = array (
+				'CLOTH' => $user->lang ['CLOTH'],
+				'ROBE' => $user->lang ['ROBE'],
+				'LEATHER' => $user->lang ['LEATHER'],
+				'AUGMENTED' => $user->lang ['AUGMENTED'],
+				'MAIL' => $user->lang ['MAIL'],
+				'HEAVY' => $user->lang ['HEAVY'],
+				'PLATE' => $user->lang ['PLATE'] );
+		
 		$this->game_id = '';
 		$this->c_index = 0;
 		$this->class_id = 0;
@@ -64,7 +79,6 @@ if (!class_exists('\bbdkp\Game'))
 		$this->imagename = '';
 		$this->colorcode = '';
 		$this->faction_id = 0;
-	
 	}
 	
 	/**
@@ -281,24 +295,47 @@ if (!class_exists('\bbdkp\Game'))
 	 * lists all classes
 	 * @return array
 	 */
-	public function listclasses()
+	public function listclasses($order= 'class_id', $mode = 0)
 	{
-		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;
+		global $user, $db, $config;	
 		
 		$sql_array = array (
-				'SELECT' => ' c.c_index, c.class_id, l.name AS class_name, c.class_min_level, c.class_max_level, c.class_armor_type, c.imagename, c.colorcode ',
+				'SELECT' => ' c.game_id, c.c_index, c.class_id, l.name AS class_name, c.class_min_level, c.class_hide, 
+					c.class_max_level, c.class_armor_type, c.imagename, c.colorcode,  g.game_name ', 
 				'FROM' => array (
-						CLASS_TABLE => 'c', BB_LANGUAGE => 'l' ),
-				'WHERE' => " c.class_id = l.attribute_id
-							AND l.attribute='class'
-							AND l.game_id = '" . $db->sql_escape ( $this->game_id ) . "'
-							AND c.game_id = l.game_id
-							AND l.language= '" . $config ['bbdkp_lang'] . "'
-							AND c.class_id = " . $this->class_id );
+						CLASS_TABLE => 'c', 
+						BB_LANGUAGE => 'l', 
+						GAMES_TABLE => 'g'  ),
+				'WHERE' => " c.class_id = l.attribute_id 
+							AND c.game_id = g.game_id AND c.game_id = l.game_id AND l.game_id = '" . $db->sql_escape ( $this->game_id ) . "'
+							AND l.attribute='class' AND l.language= '" . $config ['bbdkp_lang'] . "'", 
+				'ORDER_BY' => $order );
+				
+		if($mode == 0)
+		{
+			$sql_array['WHERE'] .=	'AND c.class_id = ' . $this->class_id;  
+		}
 		
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query ( $sql );
-		return $result; 
+		$cl=array(); 
+		while ( $row = $db->sql_fetchrow ($result))
+		{
+			$cl[$row['class_id']]  = array(
+				'c_index' => (int) $row['c_index'],
+				'game_name' => $row ['game_name'],
+				'class_id' => (int) $row['class_id'],
+				'class_name' => (string) $row['class_name'],
+				'class_min_level' => (int) $row['class_min_level'],
+				'class_max_level' => (int) $row['class_max_level'],
+				'class_armor_type' => (string) $row['class_armor_type'],
+				'class_hide' => (string) $row['class_hide'],
+				'imagename' => (string) $row['imagename'],
+				'colorcode' => (string) $row['colorcode'],
+			);
+		}
+		$db->sql_freeresult ( $result );
+		return $cl; 
 	}
 	
 }

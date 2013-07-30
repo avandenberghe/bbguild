@@ -126,6 +126,19 @@ if (!class_exists('\bbdkp\Game'))
 		$cache->destroy ( 'sql', BB_LANGUAGE );
 		$cache->destroy ( 'sql', RACE_TABLE );
 		
+		//
+		// Logging
+		//
+		$log_action = array(
+				'header' 	=> 'L_ACTION_RACE_ADDED' ,
+				'L_GAME' 	=> $this->game_id ,
+				'L_RACE' 	=> $this->race_name ,
+		);
+		
+		$this->log_insert(array(
+				'log_type' 		=> 'L_ACTION_RACE_ADDED',
+				'log_result' 	=> 'L_SUCCESS',
+				'log_action' 	=> $log_action));
 		
 	}
 	
@@ -197,6 +210,20 @@ if (!class_exists('\bbdkp\Game'))
 			
 			$db->sql_transaction ( 'commit' );
 			
+			//
+			// Logging
+			//
+			$log_action = array(
+					'header' 	=> 'L_ACTION_RACE_DELETED' ,
+					'L_GAME' 	=> $this->game_id ,
+					'L_RACE' => $this->race_name ,
+			);
+				
+			$this->log_insert(array(
+			'log_type' 		=> 'L_ACTION_RACE_DELETED',
+			'log_result' 	=> 'L_SUCCESS',
+			'log_action' 	=> $log_action));
+			
 		}
 		
 	}
@@ -251,24 +278,58 @@ if (!class_exists('\bbdkp\Game'))
 		$cache->destroy ( 'sql', BB_LANGUAGE );
 		$cache->destroy ( 'sql', RACE_TABLE );
 		
+
+		//
+		// Logging
+		//
+		$log_action = array(
+				'header' 	=> 'L_ACTION_RACE_UPDATED' ,
+				'L_GAME' 	=> $this->game_id ,
+				'L_RACE' 	=> $this->race_name ,
+		);
+			
+		$this->log_insert(array(
+				'log_type' 		=> 'L_ACTION_RACE_UPDATED',
+				'log_result' 	=> 'L_SUCCESS',
+				'log_action' 	=> $log_action));
+		
+		
+		
 	}
 	
-	public function listraces()
+	public function listraces($order = 'r.race_id')
 	{
 		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;
 		
 		$sql_array = array (
-				'SELECT' => ' r.game_id, r.race_id, l.name AS race_name, r.race_faction_id,  r.image_female, r.image_male ',
-				'FROM' => array (RACE_TABLE => 'r', BB_LANGUAGE => 'l' ),
-				'WHERE' => "   r.game_id = l.game_id
-							AND r.race_id = l.attribute_id
-							AND l.attribute='race'
-							AND l.language= '" . $config ['bbdkp_lang'] . "'
-							AND l.game_id = '" . $this->game_id . "'");
+				'SELECT' => ' r.game_id, r.race_id, r.race_faction_id, r.race_hide, r.image_female, r.image_male,  
+							  l.name as race_name, f.faction_name, g.game_name ', 
+				'FROM' => array (
+						RACE_TABLE => 'r', 
+						FACTION_TABLE => 'f', 
+						BB_LANGUAGE => 'l', 
+						GAMES_TABLE => 'g' 
+					),
+				'WHERE' => " r.race_faction_id = f.faction_id  
+					AND f.game_id = r.game_id AND r.game_id = g.game_id AND r.game_id = '" . $this->game_id . "'
+		    		AND l.attribute_id = r.race_id AND l.game_id = r.game_id and l.language= '" . $config ['bbdkp_lang'] . "'
+		    		AND l.attribute = 'race' ", 'ORDER_BY' => $order );
+		
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query ( $sql );
-		return $result; 
-		
+		$ra = array(); 
+		while ( $row = $db->sql_fetchrow ( $result ) )
+		{
+			$ra[$row['race_id']] = array(
+					'game_name' => $row ['game_name'],
+					'race_id' => $row ['race_id'],
+					'race_name' => $row ['race_name'],
+					'faction_name' => $row ['faction_name'],
+					'image_male' => $row ['image_male'],
+					'image_female' => $row ['image_female']);
+		}
+		$db->sql_freeresult ($result);	
+		return $ra; 
 	}
 	
 	
