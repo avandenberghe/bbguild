@@ -17,15 +17,14 @@ if (! defined('IN_PHPBB'))
 }
 if (! defined('EMED_BBDKP'))
 {
-	$user->add_lang(array(
-		'mods/dkp_admin'));
+	$user->add_lang(array('mods/dkp_admin'));
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
 
 // Include the base class
 if (!class_exists('\bbdkp\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
 
 // include ranks class
@@ -64,9 +63,6 @@ class acp_dkp_guild extends \bbdkp\Admin
 	public function main ($id, $mode)
 	{
 		global $user, $template, $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		$user->add_lang(array('mods/dkp_admin'));
-		$user->add_lang(array('mods/dkp_common'));
-		
 		
 		switch ($mode)
 		{
@@ -84,7 +80,6 @@ class acp_dkp_guild extends \bbdkp\Admin
 					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=addguild"));
 					break;
 				}
-
 				
 				$sort_order = array(
 					0 => array(	'id' , 'id desc') ,
@@ -143,7 +138,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				break;
 
 			/*************************************
-			 *  Add Guild 
+			 *  Edit / Add Guild 
 			 *************************************/
 			case 'addguild':
 
@@ -159,7 +154,6 @@ class acp_dkp_guild extends \bbdkp\Admin
 				{
 					$this->url_id = -1; 
 				}
-
 
 				$memberadd = (isset($_POST['memberadd'])) ? true : false;
 				if ($memberadd)
@@ -389,8 +383,6 @@ class acp_dkp_guild extends \bbdkp\Admin
 
 				if ($updateguild->guildid != 0)
 				{
-					// we have a GET
-					$update = true;
 					foreach ($this->regions as $key => $regionname)
 					{
 						$template->assign_block_vars('region_row', array(
@@ -401,13 +393,10 @@ class acp_dkp_guild extends \bbdkp\Admin
 					//add value to dropdown when the game config value is 1
 					foreach ($this->games as $key => $gamename)
 					{
-						if ($config['bbdkp_games_' . $key] == 1)
-						{
-							$template->assign_block_vars('game_row', array(
-									'VALUE' => $key ,
-									'SELECTED' => ($updateguild->game_id == $key) ? ' selected="selected"' : '' ,
-									'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
-						}
+						$template->assign_block_vars('game_row', array(
+								'VALUE' => $key ,
+								'SELECTED' => ($updateguild->game_id == $key) ? ' selected="selected"' : '' ,
+								'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
 					}
 				
 				}
@@ -425,13 +414,10 @@ class acp_dkp_guild extends \bbdkp\Admin
 					//add value to dropdown when the game config value is 1
 					foreach ($this->games as $key => $gamename)
 					{
-						if ($config['bbdkp_games_' . $key] == 1)
-						{
-							$template->assign_block_vars('game_row', array(
-									'VALUE' => $key ,
-									'SELECTED' => '' ,
-									'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
-						}
+						$template->assign_block_vars('game_row', array(
+								'VALUE' => $key ,
+								'SELECTED' => '' ,
+								'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
 					}
 				}
 				
@@ -494,7 +480,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					
 					$role = isset($row['role']) ? 
 							( isset($user->lang[$row['role']]) ? $user->lang[$row['role']]  : $row['role']  ) : 
-							$listroles->roles['none'];
+							$listroles->roles['NA'];
 					 
 					$template->assign_block_vars('roles_row', array(
 						'GUILD_ID' 	=> $row['guild_id'] ,

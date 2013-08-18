@@ -249,7 +249,7 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 	if ($Admin->bbtips == true)
 	{
 
-		if ($item['item_gameid'] > 0 )
+		if ($item['item_gameid'] == 'wow' )
 		{
 			$valuename = $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]'); 
 		}

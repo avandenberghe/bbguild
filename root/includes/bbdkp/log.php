@@ -19,8 +19,6 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
-
 /**
  * Singleton bbDKP Logging class
  * @author Nix
@@ -82,6 +80,8 @@ class log
 	const CLASS_DELETED = 46; 
 	const RACE_UPDATED = 47;
 	const CLASS_UPDATED = 48;
+	const MEMBER_DEACTIVATED = 49; 
+	
 	private static $instance;
 	
 	public static $valid_action_types = array(
@@ -133,6 +133,7 @@ class log
 			46 => 'CLASS_DELETED',
 			47 => 'RACE_UPDATED', 
 			48 => 'CLASS_UPDATED',
+			49 => 'MEMBER_DEACTIVATED'
 			);
 	
 	/**
@@ -153,7 +154,7 @@ class log
 				'L_RACE_AFTER',
 				'L_LEVEL_BEFORE', 
 				'L_LEVEL_AFTER',
-				'L_LEVELBEFORE',
+				'L_LEVEL_BEFORE',
 				'L_LEVELAFTER',			
 				'L_RANK_BEFORE', 
 				'L_RANK_AFTER',
@@ -168,7 +169,10 @@ class log
 				'L_RAIDS' , 
 				'L_LOG_ID',
 				'L_EVENT', 
+				'L_EVENT_ID', 
 				'L_EVENT_BEFORE', 
+				'L_VALUE_BEFORE',
+				'L_VALUE_AFTER',
 				'L_HEADLINE', 
 				'L_HEADLINE_BEFORE', 
 				'L_BUYERS', 
@@ -190,7 +194,15 @@ class log
 				'L_UPDATED_BY', 
 				'L_RACE', 
 				'L_CLASS', 
-				'L_LEVEL');
+				'L_LEVEL', 
+				'L_WRONG_KEY', 
+				'id', 
+				'L_RAID_ID', 
+				'L_VALUE', 
+				'L_DAYSAGO'
+						
+	
+	);
 	
 	/**
 	 * Call this method to get singleton log instance
@@ -332,7 +344,7 @@ class log
 								if (!in_array($key, (array) self::$valid_tags	))
 								{
 									//wrong logging type
-									return false;
+									$key = 'L_WRONG_KEY'; 
 								}
 							}
 								
@@ -598,38 +610,42 @@ class log
 					$log['L_EARNED_BEFORE'], $log['L_EARNED_AFTER'], $log['L_SPENT_BEFORE'], $log['L_SPENT_AFTER']);
 					break;
 				case 'GAME_ADDED':
-					$logline = sprintf($this->getLogMessage('GAME_ADDED', $verbose), $userstring , $user->lang[strtoupper($log['L_GAME'])] ) ;
+					$logline = sprintf($this->getLogMessage('GAME_ADDED', $verbose), $userstring , isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME']   ) ;
 					break;
 				case 'GAME_DELETED':
-					$logline = sprintf($this->getLogMessage('GAME_DELETED', $verbose), $userstring , $user->lang[strtoupper($log['L_GAME'])] ) ;
+					$logline = sprintf($this->getLogMessage('GAME_DELETED', $verbose), $userstring , isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
 					break;
 				case 'SETTINGS_CHANGED':
 					$logline = sprintf($this->getLogMessage('SETTINGS_CHANGED', $verbose), $userstring , $log['L_SETTINGS'] ) ;
 					break;
 				case 'FACTION_ADDED':
-					$logline = sprintf($this->getLogMessage('FACTION_ADDED', $verbose), $userstring , $log['L_FACTION'], $log['L_GAME'] ) ;
+					$logline = sprintf($this->getLogMessage('FACTION_ADDED', $verbose), $userstring , $log['L_FACTION'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
 					break;
 				case 'FACTION_DELETED':
-					$logline = sprintf($this->getLogMessage('FACTION_DELETED', $verbose), $userstring , $log['L_FACTION'], $log['L_GAME'] ) ;
+					$logline = sprintf($this->getLogMessage('FACTION_DELETED', $verbose), $userstring , $log['L_FACTION'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
 					break;
 				case 'RACE_ADDED':
-					$logline = sprintf($this->getLogMessage('RACE_ADDED', $verbose), $userstring , $log['L_RACE'], $log['L_GAME'] ) ;
+					$logline = sprintf($this->getLogMessage('RACE_ADDED', $verbose), $userstring , $log['L_RACE'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
 					break;
 				case 'RACE_DELETED':
-					$logline = sprintf($this->getLogMessage('RACE_DELETED', $verbose), $userstring , $log['L_RACE'], $log['L_GAME'] ) ;
+					$logline = sprintf($this->getLogMessage('RACE_DELETED', $verbose), $userstring , $log['L_RACE'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
 					break;
 				case 'RACE_UPDATED':
-					$logline = sprintf($this->getLogMessage('RACE_UPDATED', $verbose), $userstring , $log['L_RACE'], $log['L_GAME'] ) ;
+					$logline = sprintf($this->getLogMessage('RACE_UPDATED', $verbose), $userstring , $log['L_RACE'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
 					break;					
 				case 'CLASS_ADDED':
-					$logline = sprintf($this->getLogMessage('CLASS_ADDED', $verbose), $userstring , $log['L_CLASS'], $log['L_GAME'] ) ;
+					$logline = sprintf($this->getLogMessage('CLASS_ADDED', $verbose), $userstring , $log['L_CLASS'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
 					break;
 				case 'CLASS_DELETED':
-					$logline = sprintf($this->getLogMessage('CLASS_DELETED', $verbose), $userstring , $log['L_CLASS'], $log['L_GAME'] ) ;
+					$logline = sprintf($this->getLogMessage('CLASS_DELETED', $verbose), $userstring , $log['L_CLASS'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
 					break;
 				case 'CLASS_UPDATED':
-					$logline = sprintf($this->getLogMessage('CLASS_UPDATED', $verbose), $userstring , $log['L_CLASS'], $log['L_GAME'] ) ;
-					break;									
+					$logline = sprintf($this->getLogMessage('CLASS_UPDATED', $verbose), $userstring , $log['L_CLASS'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME']) ;
+					break;		
+				case 'MEMBER_DEACTIVATED':
+					$logline = sprintf($this->getLogMessage('MEMBER_DEACTIVATED', $verbose), $userstring , $log['L_NAME'], $log['L_DAYSAGO']  ) ;
+					break;
+							
 			}
 			
 			return $logline;   

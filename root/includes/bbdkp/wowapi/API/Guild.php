@@ -96,7 +96,6 @@ class Guild extends \bbdkp\Resource
 	public function getGuild($name = '', $realm = '', $fields=array()) 
 	{
 		global $user;
-		$user->add_lang ( array ('mods/wowapi' ));
 	
 		if(empty($name))
 		{

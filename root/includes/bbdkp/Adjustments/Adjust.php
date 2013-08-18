@@ -9,9 +9,7 @@
  * @version 	1.3.0
  * @since 		1.3.0
  */
-
 namespace bbdkp;
-
 /**
  * @ignore
  */
@@ -22,11 +20,7 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-// Include the abstract base
-if (!interface_exists('\bbdkp\iAdjust'))
-{
-	require ("{$phpbb_root_path}includes/bbdkp/Adjustments/iAdjust.$phpEx");
-}
+
 if (!class_exists('\bbdkp\Admin'))
 {
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
@@ -39,7 +33,7 @@ if (!class_exists('\bbdkp\Admin'))
  * 
  * @package 	bbDKP
  */
-class Adjust extends Admin implements iAdjust
+class Adjust extends \bbdkp\Admin
 {
 	public $adjustment_id;
 	public $member_id = 0;

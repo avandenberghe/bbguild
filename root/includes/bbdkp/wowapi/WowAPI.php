@@ -83,7 +83,6 @@ class WowAPI
 	public function __construct($API, $region) 
 	{
 		global $user, $phpEx, $phpbb_root_path; 
-		$user->add_lang ( array ('mods/wowapi'));
 		
 		// check for correct API call
 		if (!in_array($API, $this->API)) 

@@ -429,7 +429,7 @@ $versions = array(
                 ),
            ),
 
-        array($table_prefix . 'bbdkp_adjustments', array(
+			array($table_prefix . 'bbdkp_adjustments', array(
               'COLUMNS'        => array(
                   'adjustment_id'        => array('UINT', NULL, 'auto_increment'),
 				  'member_id'        	 => array('UINT', 0),
@@ -968,10 +968,30 @@ $versions = array(
 	), 
 			
      '1.3.0' => array(
-     	// 1.2.8 07-2013
+
      	// oop release, now requires 553
      	
        'table_add' => array(
+       	  
+       	  // add the new transactions table
+		  array($table_prefix . 'bbdkp_transactions', array(
+                    'COLUMNS'        	 => array(
+                    	'trans_id'			=> array('UINT', NULL, 'auto_increment'),
+                    	'member_dkpid'		=> array('USINT', 0),
+                    	'member_id'			=> array('UINT', 0),
+		  				'account'			=> array('UINT', 0),
+		  				'amount'			=> array('DECIMAL:11', 0),
+                    ),
+                    'PRIMARY_KEY'  => array('trans_id'),
+		  			'KEYS'            => array(
+		  					'member_id' => array('INDEX', 'member_id'), 
+		  					'member_dkp' => array('INDEX', 'member_dkpid'),
+		  					'memberiddkp' => array('INDEX', array('member_id', 'member_dkpid')),
+		  					'memberidaccount' => array('INDEX', array('member_id', 'member_dkpid', 'account')),
+		  				)
+                	),
+            ),
+       		
 			// add the new game table
        		array($table_prefix . 'bbdkp_games', array(
 	              'COLUMNS'            => array(
@@ -1012,6 +1032,7 @@ $versions = array(
      	'table_column_add' => array(
      				array($table_prefix . 'bbdkp_plugins', 'installdate', array('TIMESTAMP', 0)),
      				array($table_prefix . 'bbdkp_memberlist', 'member_title', array('VCHAR_UNI:255', '')),
+     				array($table_prefix . 'bbdkp_memberlist', 'member_role', array('VCHAR:20', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'level', array('UINT', 0) ),
      				array($table_prefix . 'bbdkp_memberguild', 'members', array('UINT', 0)),
      				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints', array('UINT', 0)),
@@ -1179,6 +1200,19 @@ function tableupdates($action, $version)
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
 
+					// rename bbdkp_memberdkp table to bbdkp_reporting table
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
+					$db->sql_query($sql);
+					
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raid_items MODIFY item_gameid VARCHAR(8) ';
+					$db->sql_query($sql);
+	
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberlist MODIFY member_comment TEXT ';
+					$db->sql_query($sql);
+					
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raids MODIFY raid_note TEXT ';
+					$db->sql_query($sql);
+					
 					break;
 
 
@@ -1199,7 +1233,19 @@ function tableupdates($action, $version)
 					// make new unique composite this way double membernames are enabled
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
+					
+					// rename the dkp table to reporting table
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
+					$db->sql_query($sql);
 
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raid_items MODIFY item_gameid VARCHAR(8) ';
+					$db->sql_query($sql);
+					
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberlist MODIFY member_comment TEXT ';
+					$db->sql_query($sql);
+					
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raids MODIFY raid_note TEXT ';
+					$db->sql_query($sql);					
 					break;
 
 			}
@@ -1210,6 +1256,9 @@ function tableupdates($action, $version)
 				case '1.2.8':
 					break;
 				case '1.3.0':
+					$sql= "DROP TABLE  " . $table_prefix . 'bbdkp_reporting ';
+					$db->sql_query($sql);
+						
 					break;
 
 			}
