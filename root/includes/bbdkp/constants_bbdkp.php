@@ -43,7 +43,8 @@ define('RAID_ITEMS_TABLE',         $table_prefix . 'bbdkp_raid_items');
 define('LOGS_TABLE',               $table_prefix . 'bbdkp_logs'); 	 
 define('MEMBER_RANKS_TABLE',       $table_prefix . 'bbdkp_member_ranks');
 define('MEMBER_LIST_TABLE',        $table_prefix . 'bbdkp_memberlist'); 	
-define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_memberdkp');  
+define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_reporting');
+// define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_memberdkp');  
 define('RAID_DETAIL_TABLE',        $table_prefix . 'bbdkp_raid_detail'); 	 
 define('RAIDS_TABLE',              $table_prefix . 'bbdkp_raids'); 	 
 define('CLASS_TABLE',              $table_prefix . 'bbdkp_classes'); 	 
@@ -57,7 +58,8 @@ define('BB_LANGUAGE',	           $table_prefix . 'bbdkp_language');
 define('BOSSBASE',          	   $table_prefix . 'bbdkp_bosstable'); 	 
 define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable');
 define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');
-define('BBDKP_ROLES_TABLE',        $table_prefix . 'bbdkp_roles');	  
+define('BBDKP_ROLES_TABLE',        $table_prefix . 'bbdkp_roles');	
+
 // plugin anchors
 
 // RAIDTRACKER

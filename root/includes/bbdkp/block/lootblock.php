@@ -32,7 +32,7 @@ while ($row = $db->sql_fetchrow($result))
 {         
 	if ($Admin->bbtips == true)
 	{
-		if ($row['item_gameid'] > 0 )
+		if ($row['item_gameid'] == 'wow' )
 		{
 			$item_name = $bbtips->parse('[itemdkp]' . $row['item_gameid']  . '[/itemdkp]'); 
 		}

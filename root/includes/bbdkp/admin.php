@@ -19,12 +19,6 @@ if (!defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/iAdmin.$phpEx");
-
-if (!class_exists('\bbdkp\Game'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
-}
 
 if (!class_exists('\bbdkp\log'))
 {
@@ -36,21 +30,21 @@ if (!class_exists('\bbdkp\log'))
  * bbDKP Admin foundation
  * @package bbDKP
  */
-class Admin implements \bbdkp\iAdmin
+abstract class Admin
 {
     public $time = 0;
-    public $bbtips = false;
-    public $games;
-    public $installed_games;
     public $regions;
     public $languagecodes;
+    public $preinstalled_games; 
+    public $bbtips = false;
+    public $games; 
     
     /**
      * where versionstring is stored
      * @var unknown_type
      */
     protected $versioncheckurl = array(
-     'bbdkp' 				=> 'https://raw.github.com/Sajaki/bbDKP/v130/contrib/version.txt', 
+     'bbdkp' 				=> 'https://raw.github.com/Sajaki/bbDKP/master/contrib/version.txt', 
  	 'bbdkp_apply' 			=> 'bbdkp.googlecode.com/svn/trunk/version_apply.txt',  
      'bbdkp_plugin_bbtips' 	=> 'bbdkp.googlecode.com/svn/trunk/version_bbtips.txt', 
      'bbdkp_bp' 			=>  'bbdkp.googlecode.com/svn/trunk/version_bossprogress.txt', 
@@ -95,11 +89,24 @@ class Admin implements \bbdkp\iAdmin
 				'de' => $user->lang['LANG_DE'] ,
 				'en' => $user->lang['LANG_EN'] ,
 				'fr' => $user->lang['LANG_FR']);
-				
-	    $games = new \bbdkp\Game(); 
-	    $this->games = $games->preinstalled_games; 
-	    $this->installed_games = $games->installed_games;
-	    unset($games); 
+	
+		$this->preinstalled_games = array (
+				'aion' 	=> $user->lang ['AION'],
+				'daoc' 	=> $user->lang ['DAOC'],
+				'eq' 	=> $user->lang ['EQ'],
+				'eq2' 	=> $user->lang ['EQ2'],
+				'FFXI' 	=> $user->lang ['FFXI'],
+				'gw2' 	=> $user->lang ['GW2'],
+				'lineage2' => $user->lang ['LINEAGE2'],
+				'lotro' => $user->lang ['LOTRO'],
+				'rift' 	=> $user->lang ['RIFT'],
+				'swtor' => $user->lang ['SWTOR'],
+				'tera' 	=> $user->lang ['TERA'],
+				'vanguard' => $user->lang ['VANGUARD'],
+				'warhammer' => $user->lang ['WARHAMMER'],
+				'wow' 	=> $user->lang ['WOW'],
+		);
+		
 	    $boardtime = array();
 	    $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
 	    $this->time = $boardtime[0];
@@ -113,8 +120,19 @@ class Admin implements \bbdkp\iAdmin
 	    	}
 	    }
 	    
-	   
-
+	    $this->listgames(); 
+	}
+	
+	private function listgames()
+	{
+		global $db;
+		$sql = 'SELECT id, game_id, game_name, status FROM ' . GAMES_TABLE . ' ORDER BY game_id ';
+		$result = $db->sql_query ( $sql );
+		while($row = $db->sql_fetchrow($result))
+		{
+			$this->games[$row['game_id']] = $row['game_name'];  
+		}
+		$db->sql_freeresult($result);
 	}
 
     /**
@@ -126,7 +144,7 @@ class Admin implements \bbdkp\iAdmin
  	 *
  	 * @return $group_key
 	 */
-    public function gen_group_key($part1, $part2, $part3)
+    public final function gen_group_key($part1, $part2, $part3)
     {
         // Get the first 10-11 digits of each md5 hash
         $part1 = substr(md5($part1), 0, 10);
@@ -148,7 +166,7 @@ class Admin implements \bbdkp\iAdmin
 	 * @param bool $json default false
 	 * @return array response
      */
-  	public function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
+  	public final function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
 	{
 		
 		global $user; 
@@ -290,7 +308,7 @@ class Admin implements \bbdkp\iAdmin
 	 * Pagination routine, generates page number sequence
 	 * tpl_prefix is for using different pagination blocks at one page
 	 */
-	public function generate_pagination2($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $tpl_prefix = '')
+	public final function generate_pagination2($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $tpl_prefix = '')
 	{
 		global $template, $user;
 
@@ -381,7 +399,7 @@ class Admin implements \bbdkp\iAdmin
 	* @param $arg header variable
 	* @return array SQL/URI information
 	*/
-	public function switch_order($sort_order, $arg = URI_ORDER)
+	public final function switch_order($sort_order, $arg = URI_ORDER)
 	{
 		$uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : '0.0';
 
@@ -395,7 +413,7 @@ class Admin implements \bbdkp\iAdmin
 			$element2 = 0;
 		}
 
-		foreach($sort_order as $key => $value )
+		foreach((array) $sort_order as $key => $value )
 		{
 			if ( $element1 == $key )
 			{
@@ -423,7 +441,7 @@ class Admin implements \bbdkp\iAdmin
 	 * @param $class Background class for bar
 	 * @return string Bar HTML
 	 */
-	public function create_bar($width, $show_text = '', $color = '#AA0033')
+	public final function create_bar($width, $show_text = '', $color = '#AA0033')
 	{
 		$bar = '';
 
@@ -466,7 +484,7 @@ class Admin implements \bbdkp\iAdmin
 	 * log_result	varchar(255)	utf8_bin		No
 	 * log_userid	mediumint(8)	UNSIGNED	No	0
 	 */
-	public function log_insert($values = array())
+	public final function log_insert($values = array())
 	{
 		// log
 		$logs = \bbdkp\log::Instance();	

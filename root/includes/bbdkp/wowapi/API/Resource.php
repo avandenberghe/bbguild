@@ -28,11 +28,6 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
-if (!class_exists('\bbdkp\Admin'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
-}
-
 if (! defined('EMED_BBDKP'))
 {
 	$user->add_lang(array('mods/dkp_admin'));
@@ -48,6 +43,7 @@ if (! defined('EMED_BBDKP'))
  */
 abstract class Resource extends \bbdkp\Admin
 {
+	
 	/**
 	 * List of region urls
 	 * @var string
@@ -81,7 +77,7 @@ abstract class Resource extends \bbdkp\Admin
 	public function __construct($region='us') 
 	{
 		global $user;
-		$user->add_lang ( array ('mods/wowapi'));
+
 		if (empty($this->methods_allowed)) 
 		{
 			trigger_error($user->lang['NO_METHODS']);
@@ -101,9 +97,8 @@ abstract class Resource extends \bbdkp\Admin
 	 * @return string API URI
 	 */
 	private function getResourceUri($method)
-	{
+	{	
 		$uri = $this->GetURI($this->region);
-		
 		$classname = get_class($this);
 		if (preg_match('@\\\\([\w]+)$@', $classname, $matches)) {
 			$classname = strtolower($matches[1]);
@@ -124,7 +119,6 @@ abstract class Resource extends \bbdkp\Admin
 	public function consume($method, $params=array()) 
 	{
 		global $user;
-		$user->add_lang ( array ('mods/wowapi' ) );
 		
 		// either a valid method is required or an asterisk 
 		if (!in_array($method, $this->methods_allowed)  && !in_array('*', $this->methods_allowed) ) 

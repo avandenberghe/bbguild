@@ -59,7 +59,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 	{
 		global $db, $user, $template;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		$user->add_lang(array('mods/dkp_admin', 'mods/dkp_common'));
+		
 		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 		switch ($mode)
 		{
