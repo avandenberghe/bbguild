@@ -21,12 +21,6 @@ if (! defined('IN_PHPBB'))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
-//include the abstract base
-if (!interface_exists('\bbdkp\iRanks'))
-{
-	require ("{$phpbb_root_path}includes/bbdkp/ranks/iRanks.$phpEx");
-}
-
 // Include the base class
 if (!class_exists('\bbdkp\Guilds'))
 {
@@ -41,7 +35,7 @@ if (!class_exists('\bbdkp\Guilds'))
  * @package 	bbDKP
  * 
  */
-class Ranks extends \bbdkp\Guilds implements iRanks
+class Ranks extends \bbdkp\Guilds
 {
 	public $RankName;
 	public $RankId;

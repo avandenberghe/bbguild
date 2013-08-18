@@ -19,15 +19,16 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
-require_once ("{$phpbb_root_path}includes/bbdkp/guilds/iGuilds.$phpEx");
-
 // Include the base class
 
 if (!class_exists('\bbdkp\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
-
+if (!class_exists('\bbdkp\WowAPI'))
+{
+	require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
+}
 
 /**
  * Guild
@@ -36,7 +37,7 @@ if (!class_exists('\bbdkp\Admin'))
  * 
  * @package 	bbDKP
  */
- class Guilds extends \bbdkp\Admin implements iGuilds
+ class Guilds extends \bbdkp\Admin
 {
 	// common
 	public $game_id = '';
@@ -74,8 +75,9 @@ if (!class_exists('\bbdkp\Admin'))
 	function __construct($guild_id = 0)
 	{
 		global $user;
+		parent::__construct();
 		
-		if(isset($guild_id))
+		if($guild_id > 0)
 		{
 			$this->guildid = $guild_id;
 		}
@@ -85,8 +87,7 @@ if (!class_exists('\bbdkp\Admin'))
 		}
 			
 		$this->Getguild();
-		$this->countmembers();
-		
+				
 		$this->possible_recstatus = array(
 			0 => $user->lang['CLOSED'] ,
 			1 => $user->lang['OPEN']);
@@ -123,6 +124,7 @@ if (!class_exists('\bbdkp\Admin'))
 			$this->emblempath = ''; 
 			$this->min_armory = 0; 
 			$this->recstatus = 0;
+			$this->membercount = 0;
 		}
 		else
 		{
@@ -140,6 +142,7 @@ if (!class_exists('\bbdkp\Admin'))
 			$this->emblempath = $phpbb_root_path . $row['emblemurl'];
 			$this->min_armory = $row['min_armory'];
 			$this->recstatus = $row['rec_status'];
+			$this->membercount =  $row['members']; 
 		}
 
 
@@ -152,12 +155,6 @@ if (!class_exists('\bbdkp\Admin'))
 	public function __get($fieldName) 
 	{
 		global $user;
-		switch ($fieldName)
-		{
-			case 'membercount':
-				return  $this->countmembers();
-			
-		}
 		
 		if (property_exists($this, $fieldName)) 
 		{
@@ -180,6 +177,7 @@ if (!class_exists('\bbdkp\Admin'))
 		switch ($property)
 		{
 			case 'membercount':
+				$this->countmembers();
 				break;
 			default:
 				if (property_exists($this, $property))
@@ -243,6 +241,7 @@ if (!class_exists('\bbdkp\Admin'))
 				'aion_legion_id' => $this->aionlegionid ,
 				'aion_server_id' => $this->aionserverid, 
 				'min_armory' => $this->min_armory,
+				'members' => 0,
 			));
 
 		$db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
@@ -297,6 +296,7 @@ if (!class_exists('\bbdkp\Admin'))
 				trigger_error($user->lang['ERROR_GUILDTAKEN'], E_USER_WARNING);
 			}
 		}
+		$this->countmembers(); 
 		
 		$query = $db->sql_build_array('UPDATE', array(
 				'game_id' => $this->game_id,  
@@ -309,6 +309,7 @@ if (!class_exists('\bbdkp\Admin'))
 				'aion_server_id' => $this->aionserverid, 
 				'min_armory' => $this->min_armory,
 				'rec_status' => $this->recstatus,
+				'members' => $this->membercount,  
 		));
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
@@ -430,16 +431,12 @@ if (!class_exists('\bbdkp\Admin'))
 		{
 			case 'wow':
 				//Initialising the class
-				if (!class_exists('WowAPI'))
-				{
-					require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
-				}
-				
+
 				 //available extra fields : 'members', 'achievements','news'
 				$api = new WowAPI('guild', $this->region);
 				
 				$data = $api->Guild->getGuild($this->name, $this->realm, $params);  
-				
+				unset($api); 
 				$this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0; 
 				$this->level = isset($data['level']) ? $data['level']: 0;  
 				$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: ''; 
@@ -455,7 +452,6 @@ if (!class_exists('\bbdkp\Admin'))
 				}
 				
 				//$this->emblemurl = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
-				//@todo update guild membership
 				
 				$this->emblem = isset($data['emblem']) ? $data['emblem']: '';    
 				$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(true)  : '';       
@@ -630,7 +626,7 @@ if (!class_exists('\bbdkp\Admin'))
 	 * @param int $start
 	 * @return array
 	 */
-	public function listmembers($order, $start)
+	public function listmembers($order = 'm.member_name', $start=0, $mode = 0)
 	{
 
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
@@ -662,7 +658,15 @@ if (!class_exists('\bbdkp\Admin'))
 								AND (m.member_class_id = c.class_id)' ,
 				'ORDER_BY' => $order);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$members_result = $db->sql_query_limit($sql, $config['bbdkp_user_llimit'], $start);
+		
+		if($mode == 1)
+		{
+			$members_result = $db->sql_query_limit($sql, $config['bbdkp_user_llimit'], $start);			
+		}
+		else
+		{
+			$members_result = $db->sql_query($sql);
+		}
 		return $members_result;
 
 	}
@@ -743,7 +747,7 @@ if (!class_exists('\bbdkp\Admin'))
 		$total_members = (int) $db->sql_fetchfield('membercount');
 		$db->sql_freeresult($result);
 		$this->membercount = $total_members;
-
+		return $total_members; 
 	}
 	
 	
@@ -758,7 +762,7 @@ if (!class_exists('\bbdkp\Admin'))
 				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
 				WHERE a.id = b.guild_id
 				GROUP BY a.id, a.name, a.realm, a.region
-				ORDER BY a.id asc';
+				ORDER BY a.members desc, a.id asc';
 		$result = $db->sql_query($sql);
 		return $result; 
 	}

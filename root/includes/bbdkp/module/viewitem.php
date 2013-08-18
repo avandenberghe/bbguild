@@ -82,7 +82,7 @@ if (isset($_GET[URI_ITEM]) )
 	
     if ($Admin->bbtips == true)
 	{
-		if ($item_gameid > 0 )
+		if ($item_gameid == 'wow' )
 		{
 			$item_name = '<strong>' . $bbtips->parse('[itemdkp]' . $item_gameid  . '[/itemdkp]') . '</strong>' ; 
 		}

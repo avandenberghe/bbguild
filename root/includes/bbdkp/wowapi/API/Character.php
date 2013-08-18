@@ -119,7 +119,6 @@ class Character extends \bbdkp\Resource
 	public function getCharacter($name = '', $realm = '', $fields=array()) 
 	{
 		global $user;
-		$user->add_lang ( array ('mods/wowapi' ));
 	
 		if(empty($name))
 		{

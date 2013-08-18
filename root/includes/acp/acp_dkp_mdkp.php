@@ -24,7 +24,7 @@ if (! defined ( 'EMED_BBDKP' ))
 }
 if (!class_exists('\bbdkp\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
 /**
  * This class manages member DKP
@@ -41,8 +41,8 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 	{
 		global $db, $user, $auth, $template, $sid, $cache;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		$user->add_lang ( array ('mods/dkp_admin' ) );
-		$user->add_lang ( array ('mods/dkp_common' ) );
+
+		
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp" ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
 		
 		switch ($mode)

@@ -145,7 +145,19 @@ if (!class_exists('\bbdkp\Game'))
 		$db->sql_transaction ( 'commit' );
 		$cache->destroy ( 'sql', FACTION_TABLE );
 		
+		//
+		// Logging
+		//
+		$log_action = array(
+				'header' 	=> 'L_ACTION_FACTION_ADDED' ,
+				'L_GAME' 	=> $this->game_id ,
+				'L_FACTION' => $this->faction_name ,
+		);
 		
+		$this->log_insert(array(
+			'log_type' 		=> 'L_ACTION_FACTION_ADDED',
+			'log_result' 	=> 'L_SUCCESS',
+			'log_action' 	=> $log_action));
 	
 	}
 	
@@ -174,6 +186,20 @@ if (!class_exists('\bbdkp\Game'))
 			$sql = 'DELETE FROM ' . FACTION_TABLE . ' WHERE f_index =' . $this->faction_id . " AND game_id = '" .   $this->game_id . "'"  ;
 			$db->sql_query ( $sql );
 			$cache->destroy ( 'sql', FACTION_TABLE );
+			//
+			// Logging
+			//
+			$log_action = array(
+					'header' 	=> 'L_ACTION_FACTION_DELETED' ,
+					'L_GAME' 	=> $faction->game_id ,
+					'L_FACTION' => $faction->faction_name ,
+			);
+				
+			$this->log_insert(array(
+			'log_type' 		=> 'L_ACTION_FACTION_DELETED',
+			'log_result' 	=> 'L_SUCCESS',
+			'log_action' 	=> $log_action));
+			
 				
 		}
 		else
@@ -226,7 +252,17 @@ if (!class_exists('\bbdkp\Game'))
 				'ORDER_BY' => 'faction_id ASC ' );
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query ( $sql );
-		return $result;  
+		$fa = array(); 
+		while ( $row = $db->sql_fetchrow ( $result ) )
+		{
+			$fa[$row ['faction_id']] = array(
+				'f_index' => $row ['f_index'],
+				'faction_name' => $row ['faction_name'], 
+				'faction_id' => $row ['faction_id']); 
+		}
+		$db->sql_freeresult ( $result );
+		return $fa; 
+		
 	}
 	
 	

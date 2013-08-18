@@ -189,7 +189,17 @@ function classracestateChanged()
 <legend>{L_ACP_MM_ADDMEMBER}</legend>
 
 <br />
-
+ 
+ <dl>
+    <dt><label for="game_id">{L_GAME}:</label></dt>
+  		<dd>
+  		<select id="game_id" name="game_id" class="input" onchange="return GetClassRace(this.value)">
+       <!-- BEGIN game_row -->
+       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
+        <!-- END game_row -->
+      </select></dd>
+ </dl>
+ 
   <dl>
     <dt><label for="member_name">{L_NAME}:</label></dt>
     <dd><input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" /> {TITLE_NAME}
@@ -234,15 +244,7 @@ function classracestateChanged()
 </dd>
 </dl> 
 
-  <dl>
-    <dt><label for="game_id">{L_GAME}:</label></dt>
-  		<dd>
-  		<select id="game_id" name="game_id" class="input" onchange="return GetClassRace(this.value)">
-       <!-- BEGIN game_row -->
-       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
-        <!-- END game_row -->
-      </select></dd>
- </dl>
+
  
   <dl>
     <dt><label for="member_race_id">{L_RACE}:</label></dt>
@@ -266,6 +268,20 @@ function classracestateChanged()
 		 <!-- IF S_CLASS_IMAGE_EXISTS --><br/><img src="{CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
 		</dd>
   </dl> 
+  
+  
+<dl>
+<dt><label for="member_role">{L_ROLES}:</label></dt>
+<dd>
+	<select name="member_role" id="member_role" class="input" >
+	   <!-- BEGIN role_row -->
+    <option value="{role_row.VALUE}"{role_row.SELECTED}>{role_row.OPTION}</option>
+       <!-- END role_row -->
+    </select>
+</dd>
+</dl>
+
+  
   <dl>
     <dt><label for="gender">{L_GENDER}:</label></dt>
     <dd>
@@ -292,14 +308,13 @@ function classracestateChanged()
  <!-- ENDIF -->
  
     <dl>
-    <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
+	    <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
     
     <dd>
 		{L_DAY}: <select id="member_joindate_d" name="member_joindate_d">{S_JOINDATE_DAY_OPTIONS}</select>
 		{L_MONTH}: <select name="member_joindate_mo">{S_JOINDATE_MONTH_OPTIONS}</select> 
 		{L_YEAR}: <select name="member_joindate_y">{S_JOINDATE_YEAR_OPTIONS}</select>
 	</dd>
-    
    </dl> 
   
     <dl>
@@ -315,8 +330,7 @@ function classracestateChanged()
     <dl>
     <dt><label for="member_comment">{L_COMMENT}:</label></dt>
 	<dd><textarea name="member_comment" id="member_comment" rows="15" cols="30" style="width: 100%" class="input">{MEMBER_COMMENT}</textarea></dd>
-
-  </dl> 
+  	</dl> 
 
     <dl>
     <dt><label for="phpbb_user_id">{L_USERNAME}:</label><br />{L_USERNAME_EXPLAIN}</dt>
