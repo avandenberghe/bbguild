@@ -42,6 +42,8 @@ if (!class_exists('\bbdkp\log'))
  */
 class acp_dkp extends \bbdkp\Admin
 {
+	var $u_action; 
+	
 	/**
 	 * main Settings function
 	 *
@@ -147,7 +149,7 @@ class acp_dkp extends \bbdkp\Admin
 				'RAIDS_PER_DAY' => $raids_per_day ,
 				'ITEMS_PER_DAY' => $items_per_day ,
 				'BBDKP_STARTED' => $bbdkp_started,
-				'GAMES_INSTALLED' => implode(", ", $this->games),
+				'GAMES_INSTALLED' => count($this->games) > 0 ? implode(", ", $this->games) : $user->lang['NA'],
 			));
 			$this->page_title = 'ACP_DKP_MAINPAGE';
 			$this->tpl_name = 'dkp/acp_mainpage';
@@ -158,103 +160,120 @@ class acp_dkp extends \bbdkp\Admin
 			 * DKP CONFIG
 			 */
 			case 'dkp_config':
-				$submit = (isset($_POST['update'])) ? true : false;
-				if ($submit)
+				$action	= request_var('action', '');
+				switch($action)
 				{
-					if (! check_form_key('acp_dkp'))
-					{
-						trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
-					}
-					$day = request_var('bbdkp_start_dd', 0);
-					$month = request_var('bbdkp_start_mm', 0);
-					$year = request_var('bbdkp_start_yy', 0);
-					$bbdkp_start = mktime(0, 0, 0, $month, $day, $year);
-					
-					$settings = array(
-							'bbdkp_default_realm' => utf8_normalize_nfc(request_var('realm', '', true)),
-							'bbdkp_default_region' => utf8_normalize_nfc(request_var('region', '', true)), 
-							'bbdkp_dkp_name' => utf8_normalize_nfc(request_var('dkp_name', '', true)), 
-							'bbdkp_eqdkp_start' => $bbdkp_start, 
-							'bbdkp_user_nlimit' => request_var('bbdkp_user_nlimit', 0), 
-							'bbdkp_date_format' => request_var('date_format', ''), 
-							'bbdkp_date_format' => request_var('date_format', ''),
-							'bbdkp_lang' => request_var('language', 'en'), 
-							'bbdkp_maxchars' => request_var('maxchars', 2), 
-							'bbdkp_minrosterlvl' => request_var('bbdkp_minrosterlvl', 0), 
-							'bbdkp_roster_layout' => request_var('rosterlayout', 0),
-							'bbdkp_show_achiev' => request_var('showachievement', 0),
-							'bbdkp_hide_inactive' =>  (isset($_POST['hide_inactive'])) ? request_var('hide_inactive', '') : '0', 
-							'bbdkp_inactive_period' => request_var('inactive_period', 0),
-							'bbdkp_list_p1' => request_var('list_p1', 0),
-							'bbdkp_list_p2' => request_var('list_p2', 0),
-							'bbdkp_list_p3' => request_var('list_p3', 0),
-							'bbdkp_user_llimit' => request_var('bbdkp_user_llimit', 0),
-							'bbdkp_user_elimit' => request_var('bbdkp_user_elimit', 0),
-							'bbdkp_event_viewall' => (isset($_POST['event_viewall'])) ? request_var('event_viewall', '') : '0', 
-							'bbdkp_user_elimit' => request_var('bbdkp_user_elimit', 0),
-							'bbdkp_user_alimit' => request_var('bbdkp_user_alimit', 0), 
-							'bbdkp_active_point_adj' => request_var('bbdkp_active_point_adj', 0.0),
-							'bbdkp_inactive_point_adj' => request_var('bbdkp_inactive_point_adj', 0.0),
-							'bbdkp_starting_dkp' => request_var('starting_dkp', 0.0), 
-							'bbdkp_user_ilimit' => request_var('bbdkp_user_ilimit', 0), 
-							'bbdkp_user_rlimit' => request_var('bbdkp_user_rlimit', 0),
-							
-						);
-					set_config('bbdkp_default_realm', $settings['bbdkp_default_realm'], true);
-					set_config('bbdkp_default_region', $settings['bbdkp_default_region'], true);
-					set_config('bbdkp_dkp_name',  $settings['bbdkp_dkp_name'], true);
-					set_config('bbdkp_eqdkp_start', $settings['bbdkp_eqdkp_start'], true);
-					
-					set_config('bbdkp_user_nlimit', $settings['bbdkp_user_nlimit'] , true);
-					set_config('bbdkp_date_format', $settings['bbdkp_date_format'] , true);
-					set_config('bbdkp_lang', $settings['bbdkp_lang'] , true);
-					set_config('bbdkp_maxchars', $settings['bbdkp_maxchars'], true);
-					
-					//roster
-					set_config('bbdkp_minrosterlvl', $settings['bbdkp_minrosterlvl'], true);
-					set_config('bbdkp_roster_layout', $settings['bbdkp_roster_layout'], true);
-					set_config('bbdkp_show_achiev', $settings['bbdkp_show_achiev'], true);
-					
-					//standings
-					set_config('bbdkp_hide_inactive', $settings['bbdkp_hide_inactive'], true);
-					set_config('bbdkp_inactive_period', $settings['bbdkp_inactive_period'], true);
-					set_config('bbdkp_list_p1', $settings['bbdkp_list_p1'] , true);
-					set_config('bbdkp_list_p2', $settings['bbdkp_list_p2'] , true);
-					set_config('bbdkp_list_p3', $settings['bbdkp_list_p3'] , true);
-					set_config('bbdkp_user_llimit', $settings['bbdkp_user_llimit'], true);
-					
-					//events
-					set_config('bbdkp_user_elimit', $settings['bbdkp_user_elimit'], true);
-					set_config('bbdkp_event_viewall', $settings['bbdkp_event_viewall'], true);
-					
-					//adjustments
-					set_config('bbdkp_user_alimit', $settings['bbdkp_user_alimit'], true);
-					set_config('bbdkp_active_point_adj',  $settings['bbdkp_active_point_adj'], true);
-					set_config('bbdkp_inactive_point_adj',  $settings['bbdkp_inactive_point_adj'], true);
-					set_config('bbdkp_starting_dkp', $settings['bbdkp_starting_dkp'] , true);
-					
-					//items
-					set_config('bbdkp_user_ilimit', $settings['bbdkp_user_ilimit'], true);
-					
-					//raids
-					set_config('bbdkp_user_rlimit', $settings['bbdkp_user_rlimit'], true);
-					$cache->destroy('config');
-					
-					//
-					// Logging
-					//
-					$log_action = array(
-						'header' => 'L_ACTION_SETTINGS_CHANGED'	 ,
-						'L_SETTINGS' => json_encode ($settings),
-					);
+					case 'addconfig':
+						if (! check_form_key('acp_dkp'))
+						{
+							trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
+						}
+						$day = request_var('bbdkp_start_dd', 0);
+						$month = request_var('bbdkp_start_mm', 0);
+						$year = request_var('bbdkp_start_yy', 0);
+						$bbdkp_start = mktime(0, 0, 0, $month, $day, $year);
+						$settings = array(
+								'bbdkp_default_realm' => utf8_normalize_nfc(request_var('realm', '', true)),
+								'bbdkp_default_region' => utf8_normalize_nfc(request_var('region', '', true)), 
+								'bbdkp_dkp_name' => utf8_normalize_nfc(request_var('dkp_name', '', true)), 
+								'bbdkp_eqdkp_start' => $bbdkp_start, 
+								'bbdkp_user_nlimit' => request_var('bbdkp_user_nlimit', 0), 
+								'bbdkp_date_format' => request_var('date_format', ''), 
+								'bbdkp_date_format' => request_var('date_format', ''),
+								'bbdkp_lang' => request_var('language', 'en'), 
+								'bbdkp_maxchars' => request_var('maxchars', 2), 
+								'bbdkp_minrosterlvl' => request_var('bbdkp_minrosterlvl', 0), 
+								'bbdkp_roster_layout' => request_var('rosterlayout', 0),
+								'bbdkp_show_achiev' => request_var('showachievement', 0),
+								'bbdkp_hide_inactive' =>  (isset($_POST['hide_inactive'])) ? request_var('hide_inactive', '') : '0', 
+								'bbdkp_inactive_period' => request_var('inactive_period', 0),
+								'bbdkp_list_p1' => request_var('list_p1', 0),
+								'bbdkp_list_p2' => request_var('list_p2', 0),
+								'bbdkp_list_p3' => request_var('list_p3', 0),
+								'bbdkp_user_llimit' => request_var('bbdkp_user_llimit', 0),
+								'bbdkp_user_elimit' => request_var('bbdkp_user_elimit', 0),
+								'bbdkp_event_viewall' => (isset($_POST['event_viewall'])) ? request_var('event_viewall', '') : '0', 
+								'bbdkp_user_elimit' => request_var('bbdkp_user_elimit', 0),
+								'bbdkp_user_alimit' => request_var('bbdkp_user_alimit', 0), 
+								'bbdkp_active_point_adj' => request_var('bbdkp_active_point_adj', 0.0),
+								'bbdkp_inactive_point_adj' => request_var('bbdkp_inactive_point_adj', 0.0),
+								'bbdkp_starting_dkp' => request_var('starting_dkp', 0.0), 
+								'bbdkp_user_ilimit' => request_var('bbdkp_user_ilimit', 0), 
+								'bbdkp_user_rlimit' => request_var('bbdkp_user_rlimit', 0),
+								
+							);
+						set_config('bbdkp_default_realm', $settings['bbdkp_default_realm'], true);
+						set_config('bbdkp_default_region', $settings['bbdkp_default_region'], true);
+						set_config('bbdkp_dkp_name',  $settings['bbdkp_dkp_name'], true);
+						set_config('bbdkp_eqdkp_start', $settings['bbdkp_eqdkp_start'], true);
 						
-					$this->log_insert(array(
-						'log_type' =>  'L_ACTION_SETTINGS_CHANGED',
-						'log_action' => $log_action));
-			
+						set_config('bbdkp_user_nlimit', $settings['bbdkp_user_nlimit'] , true);
+						set_config('bbdkp_date_format', $settings['bbdkp_date_format'] , true);
+						set_config('bbdkp_lang', $settings['bbdkp_lang'] , true);
+						set_config('bbdkp_maxchars', $settings['bbdkp_maxchars'], true);
+						
+						//roster
+						set_config('bbdkp_minrosterlvl', $settings['bbdkp_minrosterlvl'], true);
+						set_config('bbdkp_roster_layout', $settings['bbdkp_roster_layout'], true);
+						set_config('bbdkp_show_achiev', $settings['bbdkp_show_achiev'], true);
+						
+						//standings
+						set_config('bbdkp_hide_inactive', $settings['bbdkp_hide_inactive'], true);
+						set_config('bbdkp_inactive_period', $settings['bbdkp_inactive_period'], true);
+						set_config('bbdkp_list_p1', $settings['bbdkp_list_p1'] , true);
+						set_config('bbdkp_list_p2', $settings['bbdkp_list_p2'] , true);
+						set_config('bbdkp_list_p3', $settings['bbdkp_list_p3'] , true);
+						set_config('bbdkp_user_llimit', $settings['bbdkp_user_llimit'], true);
+						
+						//events
+						set_config('bbdkp_user_elimit', $settings['bbdkp_user_elimit'], true);
+						set_config('bbdkp_event_viewall', $settings['bbdkp_event_viewall'], true);
+						
+						//adjustments
+						set_config('bbdkp_user_alimit', $settings['bbdkp_user_alimit'], true);
+						set_config('bbdkp_active_point_adj',  $settings['bbdkp_active_point_adj'], true);
+						set_config('bbdkp_inactive_point_adj',  $settings['bbdkp_inactive_point_adj'], true);
+						set_config('bbdkp_starting_dkp', $settings['bbdkp_starting_dkp'] , true);
+						
+						//items
+						set_config('bbdkp_user_ilimit', $settings['bbdkp_user_ilimit'], true);
+						
+						//raids
+						set_config('bbdkp_user_rlimit', $settings['bbdkp_user_rlimit'], true);
+						
+						// reg id
+						set_config('bbdkp_regid', 1, true);
+						
+						$cache->destroy('config');
+						
+						//
+						// Logging
+						//
+						$log_action = array(
+							'header' => 'L_ACTION_SETTINGS_CHANGED'	 ,
+							'L_SETTINGS' => json_encode ($settings),
+						);
+							
+						$this->log_insert(array(
+							'log_type' =>  'L_ACTION_SETTINGS_CHANGED',
+							'log_action' => $log_action));
+				
+						
+						trigger_error($user->lang['ACTION_SETTINGS_CHANGED']. $link, E_USER_NOTICE);
 					
-					trigger_error($user->lang['ACTION_SETTINGS_CHANGED']. $link, E_USER_NOTICE);
+						break;
+						
+					case 'register' : 
+						
+						$regdata = array(
+							'domainname'	=> request_var('domainname', ''),
+							'phpbbversion'	=> request_var('phpbbversion', ''),
+							'bbdkpversion' 	=> request_var('bbdkpversion', ''),
+						); 
+						$this->post_register_request($regdata); 
+						
 				}
+
 				
 				$s_lang_options = '';
 				foreach ($this->languagecodes as $lang => $langname)
@@ -303,7 +322,7 @@ class acp_dkp extends \bbdkp\Admin
 					'EQDKP_START_YY' => date('Y', $config['bbdkp_eqdkp_start']) ,
 					'DATE_FORMAT' => $config['bbdkp_date_format'] ,
 					'DKP_NAME' => $config['bbdkp_dkp_name'] ,
-					'DEFAULT_GAME' => implode(", ", $this->games) ,
+					'DEFAULT_GAME' =>  count($this->games) > 0 ? implode(", ", $this->games) : $user->lang['NA'],
 					'HIDE_INACTIVE_YES_CHECKED' => ($config['bbdkp_hide_inactive'] == '1') ? ' checked="checked"' : '' ,
 					'HIDE_INACTIVE_NO_CHECKED' => ($config['bbdkp_hide_inactive'] == '0') ? ' checked="checked"' : '' ,
 					'USER_ELIMIT' => $config['bbdkp_user_elimit'] ,
@@ -323,7 +342,16 @@ class acp_dkp extends \bbdkp\Admin
 					'USER_RLIMIT' => $config['bbdkp_user_rlimit'] ,
 					'MAXCHARS' => $config['bbdkp_maxchars'] ,
 					'USER_LLIMIT' => $config['bbdkp_user_llimit'] ,
-					'MINLEVEL' => $config['bbdkp_minrosterlvl']));
+					'MINLEVEL' => $config['bbdkp_minrosterlvl'],
+					'U_REGISTER' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_config&amp;action=register"),
+					'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_config&amp;action=addconfig"),
+					'DOMAINNAME' => $_SERVER['HTTP_HOST'], 
+					'PHPBBVER' => $config['version'],
+					'BBDKPVER' => $config['bbdkp_version'],
+					'REGID' => isset($config['bbdkp_regid']) ? $config['bbdkp_regid'] : '',
+					'S_BBDKPREGISTERED' => isset($config['bbdkp_regid']) ? $config['bbdkp_regid'] : '',
+					
+				));
 				
 				add_form_key('acp_dkp');
 				$this->page_title = 'ACP_DKP_CONFIG';
@@ -591,8 +619,9 @@ class acp_dkp extends \bbdkp\Admin
 						break;
 				}
 				break;
-
 		}
+		
+		
 	}
 
 
