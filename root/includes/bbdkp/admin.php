@@ -300,7 +300,65 @@ abstract class Admin
 
 	}
 
+	/**
+	 * POST request for registration at bbdkp.com
+	 * @param unknown_type $fields
+	 * @param unknown_type $optional_headers
+	 */
+	public final function post_register_request($regdata)
+	{
+		global $cache, $config;
+	
+		$regcode = hash("sha256", serialize(array($regdata['domainname'],$regdata['phpbbversion'], $regdata['bbdkpversion'])));
+		
+		// bbdkp registration url
+		$url = "http://www.bbdkp.com/services/registerbbdkp.php";
+		// Create URL parameter string
+		$fields_string = ''; 
+		foreach( $regdata as $key => $value )
+		{
+			$fields_string .= $key.'='.$value.'&';
+		}
+		$fields_string .= 'regcode='.$regcode;
+	
+		$ch = curl_init();
+		curl_setopt( $ch, CURLOPT_URL, $url);
+		curl_setopt( $ch, CURLOPT_POST, 4 );
+		curl_setopt( $ch, CURLOPT_HEADER , false);
+		curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields_string );
+		$result = curl_exec($ch);
+		curl_close( $ch );
 
+		$this->get_register_request($regdata, $url, $regcode); 
+	}
+	
+	
+	/**
+	 * GET reauests for registration ID
+	 * @param unknown_type $regdata
+	 * @param unknown_type $url
+	 * @param unknown_type $regcode
+	 */
+	public final function get_register_request($regdata, $url, $regcode)
+	{
+		global $cache, $config;
+		
+		$fields_string = '';
+		foreach( $regdata as $key => $value )
+		{
+			$fields_string .= $key.'='.$value.'&';
+		}
+		$fields_string .= 'regcode='.$regcode;
+		
+		$url .= '?' . $fields_string; 
+		
+		$data = $this->Curl($url, 'GET');
+		$regID = isset($data['registration']) ? $data['registration'] : '';
+		set_config('bbdkp_regid', $regID, true);
+		$cache->destroy('config');
+		trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
+	}
+	
 
 	/**
 	 * Pagination function altered from functions.php used in viewmember.php because we need two linked paginations

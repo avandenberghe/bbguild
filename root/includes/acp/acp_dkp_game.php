@@ -115,8 +115,19 @@ class acp_dkp_game extends \bbdkp\Admin
 	
 				///template load
 				$can_install_count = 0; 
-				$not_installed = array_diff($listgames->preinstalled_games, $listgames->games); 
-				foreach ($not_installed  as $key => $game)
+				
+				//is anything isntalled ?
+				if(count($this->games) > 0)
+				{
+					$not_installed = array_diff($listgames->preinstalled_games, $listgames->games); 
+				}
+				else
+				{
+					// brand new install
+					$not_installed = $listgames->preinstalled_games; 
+				}
+				
+				foreach ($not_installed as $key => $game)
 			    {
 					$can_install_count +=1; 
 			        $template->assign_block_vars('gamelistrow', array(

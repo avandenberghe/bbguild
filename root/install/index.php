@@ -1107,7 +1107,13 @@ $versions = array(
      				array('bbdkp_guildtag') ,
 	     			array('bbdkp_recruitment'),
      					
-     		),     		
+     		),
+
+     	// add new parameters
+     	'config_add' => array(
+     				array('bbdkp_regid', '', true),
+     		), 
+     		
      ),
 
 );
