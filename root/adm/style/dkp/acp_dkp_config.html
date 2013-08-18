@@ -1,11 +1,31 @@
 <!-- INCLUDE overall_header.html -->
-
 <a name="maincontent"></a>
 
 <h1>{L_GENERAL_SETTINGS}</h1>
 <p>{L_ACP_DKP_CONFIG_EXPLAIN}</p>
 
-<form method="post" action="{F_ADD_CONFIG}" id="dkpconfig" >
+<form method="post" action="{U_REGISTER}" id="register" >
+ <fieldset>
+ <legend>{L_REGISTER}</legend>
+  <dl>
+    <dt style="width: 75%;"><label for="bbdkp_user_nlimit">{L_REGISTRATIONID}:</label><span style="font-size: smaller;">{L_REGISTRATION_EXPLAIN}</span></dt>
+    <dd>
+    	<!-- IF S_BBDKPREGISTERED -->
+    		&nbsp; {REGID} 
+    	<!-- ELSE -->
+    		&nbsp; <input type="submit" name="update" value="{L_REGISTER}" class="button1" />
+    		{L_NOTREGISTERED}
+    	<!-- ENDIF -->
+    </dd>
+  </dl>
+  
+ </fieldset>
+<input type="hidden" name="domainname" value="{DOMAINNAME}" />
+<input type="hidden" name="phpbbversion" value="{PHPBBVER}" />
+<input type="hidden" name="bbdkpversion" value="{BBDKPVER}" />
+</form>
+
+<form method="post" action="{U_ADDCONFIG}" id="addconfig" >
 
 <fieldset>
 <legend>{L_MENU_GENERAL}</legend>
