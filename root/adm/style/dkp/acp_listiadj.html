@@ -6,9 +6,8 @@
 <p>{L_EXPLAIN}</p>
 
 <form method="post" id="listiadj" action="{F_LISTIADJ}">
-<!-- IF S_SHOW -->
 
-<fieldset>
+<fieldset style="background-color: #EEEEEE">
 <legend>Filter</legend>
     <label for="dkpsys_id">{L_POOL}:</label>
   	<select id="dkpsys_id"  name="dkpsys_id" class="input" onchange="javascript:form.submit();"> 	
@@ -20,6 +19,7 @@
       <input type="submit" name="submit_options" value="{L_FILTER}" class="button1" />
 </fieldset>
 
+<!-- IF .adjustments_row -->
 <div class="pagination">
     <!-- IF ADJUSTMENT_PAGINATION -->
     <a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{PAGE_NUMBER}</a> &bull; 
@@ -69,8 +69,9 @@
 
 
 <!-- ELSE -->
-<div class="errorbox">
-<p>{L_ERROR_NOADJUSTMENTS}</p>
+<div class="warningbox">
+<h3>{L_WARNING}</h3>
+<p>{L_WARNING_NOADJUSTMENTS}</p>
 </div>
 <!-- ENDIF -->
 

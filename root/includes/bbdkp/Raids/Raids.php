@@ -106,7 +106,7 @@ class Raids extends \bbdkp\Admin
 					{
 						case 'raid_note':
 							// limit this to 255
-							$this->$property = (strlen($value) > 2) ? substr($value,0, 250).'...' : $string;
+							$this->$property = (strlen($value) > 2) ? substr($value,0, 250).'...' : $value;
 							break;
 						default:
 							$this->$property = $value;

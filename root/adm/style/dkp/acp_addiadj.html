@@ -11,9 +11,98 @@ function check_form()
     }
     return true;
 }
+
+/*  make a XMLHTTP Request object */
+ 
+function GetXmlHttpObject() 
+{ 
+	var xmlhttp=false;	
+	try
+	{ 
+		//  IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}
+	catch(e)	
+	{	// activex code for IE6, IE5
+		try
+		{			
+			xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		catch(e)
+		{
+			try
+			{
+				xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+			}
+			catch(e1)
+			{
+				xmlhttp=false;
+			}
+		}
+	}
+	return xmlhttp;
+}
+ 
+/* ajax function to find memberlist */ 
+var ajax=false;	
+function GetMembers(guildid)
+{
+   ajax = GetXmlHttpObject();
+   if (ajax == null)
+   {
+	   alert("{LA_ALERT_OLDBROWSER}");
+	   return;  
+   }
+    var strURL="{UA_FINDMEMBERS}&guild="+guildid;
+    ajax.onreadystatechange=GuildStateChanged;
+    ajax.open("GET", strURL, true);
+    ajax.send(null);
+}
+
+/* called from GetMembers when state changed */
+function GuildStateChanged()
+{
+	if (ajax.readyState==4) //request complete
+	{
+		if (ajax.status == 200)
+		{
+			var rsel = document.getElementById('adjmembers'); 
+			//remove select options
+			rsel.options.length = 0; 
+			
+			//receive xml
+			xmlDoc=ajax.responseXML;
+						
+			var root = xmlDoc.getElementsByTagName('memberlist')[0];
+			var members = root.getElementsByTagName("member")
+			for (var i = 0; i < members.length; i++)
+			{
+				var member = members[i]; 
+				var memberid = member.getElementsByTagName("member_id")[0].firstChild.nodeValue;
+				var membername = member.getElementsByTagName("member_name")[0].firstChild.nodeValue;
+			    // add the options
+			    rsel.options[i] = new Option(membername, memberid, true, false); 
+			}
+		}
+		else 
+		{
+   	   		alert("{LA_ALERT_AJAX}:\n" + ajax.statusText);
+	 	}
+	}
+}
+
 //]]>
 
 </script>
+<style>
+#adjmembers {
+    height: 100%;
+	float: left; 
+	width: 100%;
+
+}
+</style>
+
 <form method="post" action="{F_ADD_ADJUSTMENT}" id="addiadj" onsubmit="return check_form(this)">
 
 <h1>{L_TITLE}</h1>
@@ -48,20 +137,22 @@ function check_form()
 </dl>
 
 <dl>
-  <dt><label for="mo">{L_DATE}:</label></dt><dd><input type="text" id="mo" name="mo" size="3" maxlength="2" value="{MO}" class="input" />/
-  <input type="text" name="d" size="3" maxlength="2" value="{D}" class="input" />/
-  <input type="text" name="y" size="5" maxlength="4" value="{Y}" class="input" />
-  <br />{FV_MO}{FV_D}{FV_Y}</dd>
+  <dt>
+  <label for="mo">{L_DATE}:</label></dt>
+  <dd>
+		<select id="adjustment_day" name="adjustment_day">{S_DAY_OPTIONS}</select>
+		<select id="adjustment_month" name="adjustment_month">{S_MONTH_OPTIONS}</select> 
+		<select id="adjustment_year" name="adjustment_year">{S_YEAR_OPTIONS}</select>
+  </dd>
 </dl>
 
- <dl>
+<dl>
     <dt><label for="adj_decayable">{L_NO_DECAY_ADJ}</label><br /></dt>
     <dd>
     <input type="radio" id="adj_decayable" name="adj_decayable" value="1"{CAN_DECAY_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
     <input type="radio" name="adj_decayable" value="0"{CAN_DECAY_NO_CHECKED} /> {L_NO}
    </dd>
- </dl>
-  
+</dl>
 
 <dl>
  <dt><label for="adjustment_decay">{L_DECAY}:</label></dt>
@@ -70,19 +161,30 @@ function check_form()
 
 </fieldset>
 
-
 </div>
-<div style="float: right; width: 48%;"><fieldset>
+<div style="float: left; width: 48%; heigth: 330px;">
+
+<fieldset>
+<dl>
+<dt><label>{L_GUILD}:</label></dt>
+<dd><select id="member_guild_id" name="member_guild_id" class="input" onchange="return GetMembers(this.value)">
+       	<!-- BEGIN guild_row -->
+       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
+        <!-- END guild_row -->
+</select><a href="{U_VIEW_GUILD}">{GUILDNAME}</a>
+</dd>
+</dl>
+
+<span class="small">{L_HOLD_CTRL_NOTE}</span> 
 <legend>{L_MEMBERS}</legend>
-    <span style="small">{L_HOLD_CTRL_NOTE}</span> <br />
-      <select name="member_names[]" style="float: left; width: 100%;" multiple="multiple" class="input">
+      <select id="adjmembers" name="member_names[]" multiple="multiple" size="10" class="input">
         <!-- BEGIN members_row -->
         <option value="{members_row.VALUE}"{members_row.SELECTED}>{members_row.OPTION}</option>
         <!-- END members_row -->
-      </select> 
+      </select>
+      
+      <br />
 </fieldset>
-
-
 </div>  
 <div style="clear:both; width: 100%;">
    <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">

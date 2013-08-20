@@ -4,7 +4,7 @@
 
 <div>
 <form id="mm_listmembers" method="post" action="{F_MEMBERS_LIST}">
-<fieldset>
+<fieldset style="background-color: #EEEEEE">
 <p>{L_EXPLAIN}</p>
 
 <label for="member_guild_id">{L_GUILD}:</label>
@@ -101,7 +101,16 @@
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
 	<input class="button2" type="submit" name="delete" value="{L_DELETE_MEMBER}" />
 </fieldset>
+
 <!-- ELSE -->
+
+<div class="warningbox">
+<h3>{L_WARNING}</h3>
+<p>{L_WARNING_NOMEMBERS}</p>
+</div>
+
+
+
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
 	<input class="button2" name="memberadd" type="submit" value="{L_ADD_MEMBER}" />
 </fieldset>

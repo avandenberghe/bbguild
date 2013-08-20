@@ -39,19 +39,6 @@ abstract class Admin
     public $bbtips = false;
     public $games; 
     
-    /**
-     * where versionstring is stored
-     * @var unknown_type
-     */
-    protected $versioncheckurl = array(
-     'bbdkp' 				=> 'https://raw.github.com/Sajaki/bbDKP/master/contrib/version.txt', 
- 	 'bbdkp_apply' 			=> 'bbdkp.googlecode.com/svn/trunk/version_apply.txt',  
-     'bbdkp_plugin_bbtips' 	=> 'bbdkp.googlecode.com/svn/trunk/version_bbtips.txt', 
-     'bbdkp_bp' 			=>  'bbdkp.googlecode.com/svn/trunk/version_bossprogress.txt', 
-     'bbdkp_raidplanner' 	=>  'bbdkp.googlecode.com/svn/trunk/version_raidplanner.txt', 
-		); 
-    
-    
 	public function __construct()
 	{
 		global $user, $phpbb_root_path, $phpEx, $config, $user;
@@ -339,7 +326,7 @@ abstract class Admin
 	 * @param unknown_type $url
 	 * @param unknown_type $regcode
 	 */
-	public final function get_register_request($regdata, $url, $regcode)
+	private final function get_register_request($regdata, $url, $regcode)
 	{
 		global $cache, $config;
 		
@@ -357,6 +344,76 @@ abstract class Admin
 		set_config('bbdkp_regid', $regID, true);
 		$cache->destroy('config');
 		trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
+	}
+	
+	
+	/**
+	 * retrieve latest bbdkp productversion
+	 * @param string $product productname
+	 * @param bool $force_update Ignores cached data. Defaults to false.
+	 * @param bool $warn_fail Trigger a warning if obtaining the latest version information fails. Defaults to false.
+	 * @param int $ttl Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
+	 * @return string | false Version info on success, false on failure.
+ 	 */
+	public final function get_productversion($product, $force_update = false, $warn_fail = false, $ttl = 86400)
+	{
+		global $cache;
+		//get latest productversion from cache
+		$info = $cache->get('version_' . $product);
+		
+		//if update is forced or cache expired then make the call to refresh latest productversion
+		if ($info === false || $force_update)
+		{
+			$errstr = '';
+			$errno = 0;
+			$info = $this->curl(BBDKP_VERSIONURL . 'version_' . $product .'.txt' , false, false, false);
+			
+			if (empty($info))
+			{
+				$cache->destroy($product. '_version');
+				if ($warn_fail)
+				{
+					trigger_error($errstr, E_USER_WARNING);
+				}
+				return false;
+			}
+			//put this info in the cache
+			$cache->put('version_' . $product , $info, $ttl);
+		}
+		return $info;
+	} 
+	
+	public final function get_plugin_info($force_update = false, $ttl = 86400)
+	{
+		global $cache, $db;
+		//get latest productversion from cache
+		$this->plugins = $cache->get('bbdkpplugins');
+		
+		//if update is forced or cache expired then make the query to refresh latest productversion
+		if ($this->plugins === false || $force_update)
+		{
+			$sql = 'SELECT name, value, version, installdate FROM ' . BBDKPPLUGINS_TABLE . ' ORDER BY installdate DESC ';
+			$result = $db->sql_query ($sql);
+			while($row = $db->sql_fetchrow($result))
+			{
+				$info = $this->curl(BBDKP_VERSIONURL . 'version_' . $row['name'] .'.txt' , false, false, false);
+				
+				//get latest
+				$this->plugins[$row['name']] = array(
+					'name' => $row['name'], 
+					'value' => $row['value'],
+					'version' => $row['version'],
+					'latest' =>  empty($info) ? '?' : $info,
+					'installdate' => $row['installdate']
+				);
+			}
+			$db->sql_freeresult($result);
+			
+			$cache->destroy('bbdkpplugins');
+			$cache->put( 'bbdkpplugins', $this->plugins, $ttl);	
+		}
+		return $this->plugins; 
+		
 	}
 	
 

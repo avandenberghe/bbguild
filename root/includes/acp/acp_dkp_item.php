@@ -29,7 +29,10 @@ if (!class_exists('\bbdkp\LootController'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Loot/Lootcontroller.$phpEx");
 }
-
+if (!class_exists('\bbdkp\PointsController'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
+}
 /**
  * This ACP class manages Game Loot
  * 
@@ -40,6 +43,7 @@ class acp_dkp_item extends \bbdkp\Admin
 	public $u_action;
 	private $link;
 	private $LootController;
+	private $PointsController;
 	
 	public function main($id, $mode) 
 	{
@@ -49,10 +53,12 @@ class acp_dkp_item extends \bbdkp\Admin
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&mode=listitems" ) . '"><h3>'. $user->lang['RETURN_DKPINDEX'] .'</h3></a>';
 
 		$this->LootController = new \bbdkp\Lootcontroller();
+		$this->PointsController = new \bbdkp\PointsController();
+		$this->tpl_name = 'dkp/acp_' . $mode;
 		
 		switch ($mode) 
 		{
-			case 'edititem' :
+			case 'additem' :
 				// $_POST treatment
 				$submit = (isset ( $_POST ['add'] )) ? true : false;
 				$update = (isset ( $_POST ['update'] )) ? true : false;
@@ -82,14 +88,12 @@ class acp_dkp_item extends \bbdkp\Admin
 				
 				$this->displayloot();
 				$this->page_title = 'ACP_ADDITEM';
-				$this->tpl_name = 'dkp/acp_additem';
 				
 				break;
 			
 			case 'listitems' :
 				$this->listitems();
 				$this->page_title = 'ACP_LISTITEMS';
-				$this->tpl_name = 'dkp/acp_' . $mode;
 				
 				break;
 			
@@ -116,7 +120,6 @@ class acp_dkp_item extends \bbdkp\Admin
 				}
 				
 				$this->page_title = 'ACP_VIEW_ITEM';
-				$this->tpl_name = 'dkp/acp_' . $mode;
 				
 			break;
 		
@@ -272,7 +275,7 @@ class acp_dkp_item extends \bbdkp\Admin
 		'U_BACK'			=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
 		'L_TITLE' 			=> $user->lang ['ACP_ADDITEM'], 
 		'L_EXPLAIN' 		=> $user->lang ['ACP_ADDITEM_EXPLAIN'],
-		'F_ADD_ITEM' 		=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_RAID . '=' . $raid_id ), 
+		'F_ADD_ITEM' 		=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_RAID . '=' . $raid_id ), 
 		'ITEM_VALUE' 		=> isset($this->item['item_value']) ? $this->item['item_value'] : 0.00,
 		'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 		'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
@@ -332,27 +335,24 @@ class acp_dkp_item extends \bbdkp\Admin
 		global $user, $config, $phpEx, $phpbb_admin_path;
 
 		$raid_id = request_var('hidden_raid_id', 0);
+		$this->link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id );
+		
 		$item_buyers = request_var('item_buyers', array(0 => 0));
-		$itemvalue 	 = request_var( 'item_value' , 0.0) ; 
+		$item_value = request_var( 'item_value' , 0.0) ; 
 		$item_name = utf8_normalize_nfc(request_var('item_name','', true));
 		$item_name_db = utf8_normalize_nfc(request_var('item_name_db','', true));
 		$item_name = (strlen($item_name) > 0) ? $item_name : $item_name_db;
 		$itemgameid  = request_var( 'item_gameid' , ''); 
-
+		
 		$this->LootController->addloot($raid_id, $item_buyers, $item_value, $item_name, $itemgameid); 
 		
-		//
-		// Success message
-		//
-		$success_message = sprintf ( $user->lang ['ADMIN_ADD_ITEM_SUCCESS'], $item_name, implode ( ', ', $item_buyers  ), $itemvalue );
-		$this->link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id );
+		$success_message = sprintf ( $user->lang ['ADMIN_ADD_ITEM_SUCCESS'], $item_name, count($item_buyers), $item_value );
 		meta_refresh(1, $this->link);
 		trigger_error ( $success_message . '<br /><a href="' . $this->link . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a> ' , E_USER_NOTICE );
 		
-		
 	}
 
-	
+
 	
 	/**
 	 * Deletes item 
@@ -367,30 +367,11 @@ class acp_dkp_item extends \bbdkp\Admin
 		{
 			//retrieve info
 			$old_items = request_var('hidden_old_item', array(0 => array(''=>'')));
-			
-			// delete items and decrease buyer spend
-			$db->sql_transaction('begin');
-		
+
 			foreach($old_items as $old_item)
 			{
-				$this->deleteitem_db($old_item);
+				$this->LootController->deleteloot($old_item);
 			}
-			
-			// commit on mysql only works with innodb, on myisam this is ignored due to lack of atomicity
-			// oracle/postgre/mssql just work
-			$db->sql_transaction('commit');
-			
-			// log action
-			$log_action = array (
-				'header' 	=> 'L_ACTION_ITEM_DELETED',
-				'L_NAME' 	=> $old_item ['item_name'], 
-				'L_BUYER' 	=> $old_item ['member_name'],
-				'L_RAID_ID' => $old_item ['raid_id'], 
-				'L_VALUE' 	=> $old_item ['item_value'] );
-			
-			$this->log_insert ( array (
-				'log_type' 		=> $log_action ['header'], 
-				'log_action' 	=> $log_action ) );
 			
 			$success_message = sprintf ( $user->lang ['ADMIN_DELETE_ITEM_SUCCESS'], 
 			$old_item ['item_name'], $old_item ['member_name'], $old_item ['item_value'] );
@@ -409,73 +390,21 @@ class acp_dkp_item extends \bbdkp\Admin
 				trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] , E_USER_WARNING);
 			}
 			
-			if ($groupdelete)
-			{
-				// many buyers
-				$sql_array = array(
-					'SELECT' 	=> 'i2.* , m.member_name ',
-					'FROM' 		=> array(
-						RAID_ITEMS_TABLE => 'i2', 
-						MEMBER_LIST_TABLE => 'm'
-						),
-					'LEFT_JOIN' => array(
-						array(
-						'FROM' => array(RAID_ITEMS_TABLE => 'i1'),
-						'ON' => ' i1.item_group_key = i2.item_group_key '
-						)),
-					'WHERE' => 'i2.member_id = m.member_id and i1.item_id= '. $item_id,
-					);
-				$sql = $db->sql_build_query('SELECT', $sql_array);
-				$result = $db->sql_query ( $sql );
-			
-			}
-			else 
-			{
-				// one buyer
-				$sql = 'SELECT i.* , m.member_name FROM ' . RAID_ITEMS_TABLE . ' i, ' . MEMBER_LIST_TABLE . ' m WHERE i.member_id = m.member_id 
-				and i.item_id= ' . (int) $item_id;
-				$result = $db->sql_query ( $sql );
-				
-			}
-			
-			$item_buyers = '[';
-			while ( $row = $db->sql_fetchrow ( $result ) ) 
-			{
-				$old_item[$row['item_id']] = array (
-				'item_id' 		=>  (int) 	 $row['item_id'] , 
-				'dkpid'			=>  $dkp_id,
-				'item_name' 	=>  (string) $row['item_name'] , 
-				'member_id' 	=>  (int) 	 $row['member_id'] , 
-				'member_name' 	=>  (string) $row['member_name'] ,
-				'raid_id' 		=>  (int) 	 $row['raid_id'], 
-				'item_date' 	=>  (int) 	 $row['item_date'] , 
-				'item_value' 	=>  (float)  $row['item_value'], 
-				'item_decay' 	=>  (float)  $row['item_decay'],
-				'item_zs' 		=>  (bool)   $row['item_zs'],  
-				);
-				
-				//for confirm question
-				$item_buyers = $item_buyers . ' ' . $row['member_name'] . ' '; 
-				$item_name = $row['member_name'];
-			}
-			$db->sql_freeresult ($result);
-			$item_buyers .= ']';
+			$lootinfo = $this->LootController->getitemdeleteinfo($item_id, $dkp_id); 
 			
 			$s_hidden_fields = build_hidden_fields ( array (
 				'deleteitem' 	  => true, 
-				'hidden_old_item' => $old_item
+				'hidden_old_item' => $lootinfo[1]
 			));
 
 			$template->assign_vars ( array (
-				'S_HIDDEN_FIELDS' => $s_hidden_fields ) );
-			confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $item_name, $item_buyers  ), $s_hidden_fields );
+				'S_HIDDEN_FIELDS' => $s_hidden_fields));
+			
+			confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $lootinfo[2] , $lootinfo[0] ), $s_hidden_fields );
 		}
 				
 	}
 	
-	
-
-
 	/***
 	 * updating item buyer 
 	 * 
@@ -483,11 +412,6 @@ class acp_dkp_item extends \bbdkp\Admin
 	private function updateitem()  
 	{
 		global $db, $user;
-		$errors_exist = $this->error_check ();
-		if ($errors_exist) 
-		{
-			$this->fv->displayerror($this->fv->errors);
-		}
 		
 		// get data
 		$item_id = request_var('hidden_item_id', 0);
@@ -588,6 +512,11 @@ class acp_dkp_item extends \bbdkp\Admin
 	{
 		global $db, $user, $config, $template, $phpEx,$phpbb_admin_path, $phpbb_root_path;
 				
+		if( count((array) $this->LootController->dkpsys) == 0 )
+		{
+			trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
+		}
+		
 		// add member button redirect
 		if ($this->bbtips == true)
 		{
@@ -815,7 +744,7 @@ class acp_dkp_item extends \bbdkp\Admin
 				'ITEMNAME'      => $item_name, 
 				'RAID' 			=> (! empty ( $item ['event_name'] )) ?  $item ['event_name']  : '&lt;<i>Not Found</i>&gt;', 
 				'U_VIEW_BUYER' 	=> (! empty ( $item ['member_name'] )) ? append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp&amp;member_id={$item['member_id']}&amp;" . URI_DKPSYS . "={$item['event_dkpid']}") : '' ,
-				'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_ITEM . "={$item['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
+				'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_ITEM . "={$item['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
 				'VALUE' 		=> $item ['item_value'],
 				
 				));
@@ -853,42 +782,6 @@ class acp_dkp_item extends \bbdkp\Admin
 		}
 		
 
-	}
-	
-	
-	/*
-	 * checks items for errors
-	 */
-	private function error_check() 
-	{
-		global $user;
-		
-		if (! isset ( $_POST ['item_buyers'] ))
-		{
-			trigger_error ( $user->lang ['FV_REQUIRED_BUYERS'], E_USER_WARNING );
-		}
-		
-		$this->fv->is_filled ( 
-		array 
-		(
-			request_var('raid_id',0) 		=> $user->lang ['FV_REQUIRED_RAIDID'], 
-			request_var('item_value',0.00)	=> $user->lang ['FV_REQUIRED_VALUE'] ) 
-		);
-		
-		if (isset ( $_POST ['item_name'] )) 
-		{
-			$this->item ['item_name'] = utf8_normalize_nfc(request_var('item_name', ' ', true));
-		} 
-		
-		elseif ( isset($_POST ['select_item_id'])) 
-		{
-			$this->item ['item_name'] = utf8_normalize_nfc(request_var('select_item_id', ' ', true));
-		} 
-		else 
-		{
-			$this->fv->errors ['item_name'] = $user->lang ['FV_REQUIRED_ITEM_NAME'];
-		}
-		return $this->fv->is_error ();
 	}
 	
 	 /***
