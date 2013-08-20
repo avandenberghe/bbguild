@@ -579,7 +579,7 @@ class PointsController  extends \bbdkp\Admin
 	 * resynchronises the DKP points table with the adjustments, raids, items.
 	 *
 	 */
-	public function syncdkpsys($mode = 1)
+	public function syncdkpsys()
 	{
 		global $user, $db, $phpbb_admin_path, $phpEx, $config;
 		$link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys" ) . '"><h3>'. $user->lang['RETURN_DKPPOOLINDEX'].'</h3></a>';
@@ -826,13 +826,54 @@ class PointsController  extends \bbdkp\Admin
 				'log_type' 		=> $log_action ['header'],
 				'log_action' 	=> $log_action ) );
 	
-		if ($mode==1)
-		{
-			//otherwise do silent sync
-			$message = sprintf($user->lang['ADMIN_DKPPOOLSYNC_SUCCESS'] , $dkpcorr  + $dkpspentcorr + $dkpadded);
-			trigger_error ( $message . $this->link , E_USER_NOTICE );
-		}
+		return ($dkpcorr  + $dkpspentcorr + $dkpadded); 
 	
+	}
+	
+	/**
+	 * Recalculates and updates adjustment decay
+	 * @param $mode 1 for recalculating, 0 for setting decay to zero.
+	 * @see \bbdkp\iAdjust::sync_adjdecay()
+	 */
+	public function sync_adjdecay ($mode, $origin = '')
+	{
+		global $user, $db;
+		switch ($mode)
+		{
+			case 0:
+				//  Decay = OFF : set all decay to 0
+				//  update item detail to new decay value
+	
+				$db->sql_transaction('begin');
+	
+				$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET adj_decay = 0 ';
+				$db->sql_query($sql);
+				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET adj_decay = 0 ';
+				$db->sql_query($sql);
+	
+				$db->sql_transaction('commit');
+	
+				if ($origin == 'cron')
+				{
+					$origin = $user->lang['DECAYCRON'];
+				}
+				return true;
+				break;
+			case 1:
+				// Decay is ON : synchronise
+				// loop all ajustments
+				$sql = 'SELECT adjustment_dkpid, adjustment_id, member_id , adjustment_date, adjustment_value, adj_decay FROM ' . ADJUSTMENTS_TABLE . ' WHERE can_decay = 1';
+				$result = $db->sql_query($sql);
+				$countadj = 0;
+				while (($row = $db->sql_fetchrow($result)))
+				{
+					$this->decayadj($row['adjustment_id']);
+					$countadj ++;
+				}
+				$db->sql_freeresult($result);
+				return $countadj;
+				break;
+		}
 	}
 		
 	/**

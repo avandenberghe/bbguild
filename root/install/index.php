@@ -1050,7 +1050,7 @@ $versions = array(
      			//remove guild modes from acp_dkp_mm
 	            array('acp', 'ACP_DKP_MEMBER', array(
 			           		 'module_basename' => 'dkp_mm',
-			            	 'modes'           => array('mm_ranks', 'mm_listguilds', 'mm_addguild' ),
+			            	 'modes'           => array('mm_ranks', 'mm_listguilds', 'mm_addguild', 'mm_listmembers', 'mm_addmember'),
 					)),
      			
      			//remove the game acp
@@ -1064,8 +1064,22 @@ $versions = array(
      						'module_basename' => 'dkp_point',
      						'modes'           => array('pointconfig') ,
      			)),
-     				
-     				
+     			
+     			
+     			//remove the dkp adjustments
+     			array('acp', 'ACP_DKP_MDKP', array(
+     					'module_basename' => 'dkp_adj',
+     					'modes'           => array('addiadj', 'listiadj'),
+     			),
+     			),
+     			
+     			// remove dkp list
+     			array('acp', 'ACP_DKP_MDKP', array(
+     					'module_basename' => 'dkp_mdkp',
+     					'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
+     			),
+     			),
+     			
      			), 
      		
      	'module_add' => array(
@@ -1078,16 +1092,39 @@ $versions = array(
      			// add guild acp
      			array('acp', 'ACP_DKP_MEMBER', array(
      					'module_basename' => 'dkp_guild',
-     					'modes'           => array(  'listguilds', 'addguild' ),
+     					'modes'           => array(  'listguilds', 'addguild', ),
      			),
      			),
      			
-     		 	//add the points acp to dkp section
-   		 		array('acp', 'ACP_DKP_MDKP', array(
-     		 				'module_basename' => 'dkp_point',
-     		 				'modes'           => array('pointconfig') ,
-     		 		)),
- 		 		
+     			// add member acp
+     			array('acp', 'ACP_DKP_MEMBER', array(
+     					'module_basename' => 'dkp_mm',
+     					'modes'           => array(  'mm_listmembers', 'mm_addmember' ),
+     			),
+     			),
+
+     			
+     			//re-add the points section
+     			array('acp', 'ACP_DKP_MDKP', array(
+     					'module_basename' => 'dkp_point',
+     					'modes'           => array('pointconfig') ,
+     			)),
+     			
+     			// re-add dkp list
+     			array('acp', 'ACP_DKP_MDKP', array(
+     					'module_basename' => 'dkp_mdkp',
+     					'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
+     			),
+     			),
+     			
+     			//re-add the dkp adjustments
+     			array('acp', 'ACP_DKP_MDKP', array(
+     					'module_basename' => 'dkp_adj',
+     					'modes'           => array('addiadj', 'listiadj'),
+     			),
+     			),
+     			
+     				
      		 		
      		 		
      		 		),

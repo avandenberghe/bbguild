@@ -370,51 +370,7 @@ class Adjust extends \bbdkp\Admin
 	}
 	
 
-	/**
-	 * Recalculates and updates adjustment decay
-	 * @param $mode 1 for recalculating, 0 for setting decay to zero.
-	 * @see \bbdkp\iAdjust::sync_adjdecay()
-	 */
-	public function sync_adjdecay ($mode, $origin = '')
-	{
-		global $user, $db;
-		switch ($mode)
-		{
-			case 0:
-				//  Decay = OFF : set all decay to 0
-				//  update item detail to new decay value
-				
-				$db->sql_transaction('begin');
-				
-				$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET adj_decay = 0 ';
-				$db->sql_query($sql);
-				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET adj_decay = 0 ';
-				$db->sql_query($sql);
-				
-				$db->sql_transaction('commit');
-				
-				if ($origin == 'cron')
-				{
-					$origin = $user->lang['DECAYCRON'];
-				}
-				return true;
-				break;
-			case 1:
-				// Decay is ON : synchronise
-				// loop all ajustments
-				$sql = 'SELECT adjustment_dkpid, adjustment_id, member_id , adjustment_date, adjustment_value, adj_decay FROM ' . ADJUSTMENTS_TABLE . ' WHERE can_decay = 1';
-				$result = $db->sql_query($sql);
-				$countadj = 0;
-				while (($row = $db->sql_fetchrow($result)))
-				{
-					$this->decayadj($row['adjustment_id']);
-					$countadj ++;
-				}
-				$db->sql_freeresult($result);
-				return $countadj;
-				break;
-		}
-	}
+
 	
 	
 }
