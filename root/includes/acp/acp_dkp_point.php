@@ -1,4 +1,6 @@
 <?php
+use bbdkp\PointsController;
+
 /**
  * @package bbDKP
  * @link http://www.bbdkp.com
@@ -17,14 +19,19 @@ if (! defined('IN_PHPBB'))
 }
 if (! defined('EMED_BBDKP'))
 {
-	$user->add_lang(array(
-		'mods/dkp_admin'));
+	$user->add_lang(array('mods/dkp_admin'));
 	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
 if (!class_exists('\bbdkp\Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
+
+if (!class_exists('\bbdkp\PointsController'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
+}
+
 /**
  * This acp class manages point settings
  *
@@ -32,13 +39,16 @@ if (!class_exists('\bbdkp\Admin'))
  */
  class acp_dkp_point extends \bbdkp\Admin
 {
-
+	private $PointsController;
+	 
 	function main ($id, $mode)
 	{
-		global $db, $user, $auth, $template, $sid, $cache;
-		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
+		global $user, $template, $cache, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
 		$link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_point&amp;mode=pointconfig") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
+		
+		$this->PointsController = new \bbdkp\PointsController; 
+		
 		switch ($mode)
 		{
 			case 'pointconfig':
@@ -103,12 +113,8 @@ if (!class_exists('\bbdkp\Admin'))
 				{
 					if (confirm_box(true))
 					{
-						if (! class_exists('acp_dkp_sys'))
-						{
-							require ($phpbb_root_path . 'includes/acp/acp_dkp_sys.' . $phpEx);
-						}
-						$acp_dkp_sys = new acp_dkp_sys();
-						$acp_dkp_sys->syncdkpsys();
+						$message = sprintf($user->lang['ADMIN_DKPPOOLSYNC_SUCCESS'] , $this->PointsController->syncdkpsys());
+						trigger_error ( $message . $link , E_USER_NOTICE );
 					}
 					else
 					{
@@ -124,12 +130,7 @@ if (!class_exists('\bbdkp\Admin'))
 				{
 					if (confirm_box(true))
 					{
-						if (! class_exists('acp_dkp_raid'))
-						{
-							require ($phpbb_root_path . 'includes/acp/acp_dkp_item.' . $phpEx);
-						}
-						$acp_dkp_item = new acp_dkp_item();
-						$count = $acp_dkp_item->sync_zerosum($config['bbdkp_zerosum']);
+						$this->PointsController->sync_zerosum($config['bbdkp_zerosum']);
 					}
 					else
 					{
@@ -144,30 +145,19 @@ if (!class_exists('\bbdkp\Admin'))
 				{
 					if (confirm_box(true))
 					{
-						// decay this item
-						if (! class_exists('acp_dkp_raid'))
-						{
-							require ($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx);
-						}
-						$acp_dkp_raid = new acp_dkp_raid();
-						$count = $acp_dkp_raid->sync_decay($config['bbdkp_decay']);
-						if (! class_exists('acp_dkp_adj'))
-						{
-							require ($phpbb_root_path . 'includes/acp/acp_dkp_adj.' . $phpEx);
-						}
-						$acp_dkp_adj = new acp_dkp_adj();
-						$count1 = $acp_dkp_adj->sync_adjdecay($config['bbdkp_decay']);
-						trigger_error(sprintf($user->lang['RESYNC_DECAY_SUCCESS'], $count + $count1) . $link, E_USER_NOTICE);
+						$count = $this->PointsController->sync_decay($config['bbdkp_decay']);
+						$count1 = $this->PointsController->sync_adjdecay($config['bbdkp_decay']);
+						trigger_error(sprintf($user->lang['RESYNC_DECAY_SUCCESS'], $count, $count1) . $link, E_USER_NOTICE);
 					}
 					else
 					{
-						$s_hidden_fields = build_hidden_fields(array(
-							'decay_synchronise' => true));
+						$s_hidden_fields = build_hidden_fields(array('decay_synchronise' => true));
 						$template->assign_vars(array(
 							'S_HIDDEN_FIELDS' => $s_hidden_fields));
 						confirm_box(false, sprintf($user->lang['RESYNC_DECAY_CONFIRM']), $s_hidden_fields);
 					}
 				}
+				
 				$freqtypes = array(
 					0 => $user->lang['FREQ0'] , 
 					1 => $user->lang['FREQ1'] , 
@@ -178,7 +168,9 @@ if (!class_exists('\bbdkp\Admin'))
 					$selected = ($config['bbdkp_decayfreqtype'] == $key) ? ' selected="selected"' : '';
 					$s_freqtype_options .= '<option value="' . $key . '" ' . $selected . '> ' . $type . '</option>';
 				}
+				
 				$s_bankerlist_options = '';
+				global $db;
 				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . " WHERE member_status = '1' order by member_name asc";
 				$result = $db->sql_query($sql);
 				while ($row = $db->sql_fetchrow($result))
@@ -186,6 +178,8 @@ if (!class_exists('\bbdkp\Admin'))
 					$selected = ($config['bbdkp_bankerid'] == $row['member_id']) ? ' selected="selected"' : '';
 					$s_bankerlist_options .= '<option value="' . $row['member_id'] . '" ' . $selected . '> ' . $row['member_name'] . '</option>';
 				}
+				$db->sql_freeresult($result);
+				unset ($db, $result);
 				add_form_key('acp_dkp');
 				$template->assign_vars(array(
 					'DKP_NAME' => $config['bbdkp_dkp_name'] , 

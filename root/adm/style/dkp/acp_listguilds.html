@@ -5,10 +5,31 @@
 
 <p>{L_EXPLAIN}</p>
 
-<form method="post" action="{F_GUILD}" id="listguilds">
-<fieldset class="tabulated">
 
+<form method="post" action="{F_GUILDLIST}" id="listguilddefault">
 <!-- IF .guild_row -->
+
+<fieldset style="background-color: #EEEEEE">
+<legend>{L_DEFAULT_GUILD}</legend>
+	<dl>
+	<dt>
+		{L_DEFAULT_GUILD}
+	</dt>
+	<dd>
+		<select name="defaultguild" class="input" id="defaultguild">
+	      <!-- BEGIN defaultguild_row -->
+	         <option value="{defaultguild_row.VALUE}"{defaultguild_row.SELECTED}>{defaultguild_row.OPTION}</option>
+	      <!-- END defaultguild_row -->
+		</select>
+		<input type="submit" name="upddefaultguild" value="{L_CONFIRM}" class="button1" />
+	</dd>
+</dl>
+</fieldset>
+
+</form>
+<form method="post" action="{F_GUILD}" id="listguilds">
+
+<fieldset class="tabulated">
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <thead>
   <tr>
@@ -49,11 +70,16 @@
   <!-- END guild_row -->
 </tbody>
 </table>
+<!-- ELSE -->
+<div class="errorbox">
+<h3>{L_ERROR}</h3>
+<p>{L_ERROR_NOGUILD}</p>
+</div>
 <!-- ENDIF -->
 
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
 	<input class="button2" name="guildadd" type="submit" value="{L_ADD}" />
 </fieldset>
-</fieldset>
+
 </form>
 <!-- INCLUDE dkp/overall_footer.html -->

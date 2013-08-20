@@ -78,7 +78,9 @@ class Events extends \bbdkp\Admin
 		}
 		
 		// dkp pools
-		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE . ' ORDER BY dkpsys_name';
+		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
+            FROM ' . DKPSYS_TABLE . "  
+            ORDER BY dkpsys_name";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result) )
 		{
@@ -89,7 +91,6 @@ class Events extends \bbdkp\Admin
 		}
 		$db->sql_freeresult($result);
 		
-		$this->countevents(); 
 	}
 	
 
@@ -324,12 +325,15 @@ public function __set($property, $value)
 	public function countevents($dkpid = 0)
 	{
 		global $db; 
-		$this->dkpsys_id = $dkpid; 
 		$sql = 'SELECT count(*) as eventcount FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b
 			where a.dkpsys_id = b.event_dkpid AND b.event_status = 1 ';
 		if($this->dkpsys_id !=0)
 		{
 			$sql .= ' AND a.dkpsys_id = ' . $this->dkpsys_id . ' '; 	
+		}
+		elseif ($dkpid != 0)
+		{
+			$sql .= ' AND a.dkpsys_id = ' . $dkpid. ' ';
 		}
 		$result = $db->sql_query($sql);
 		$this->total_events = (int) $db->sql_fetchfield('eventcount');
@@ -372,7 +376,7 @@ public function __set($property, $value)
 			
 		$sql .= " ORDER BY " . $order;
 			
-		$result = $db->sql_query_limit($sql, $config['bbdkp_user_elimit'], $start);
+		$result = $db->sql_query_limit($sql, $config['bbdkp_user_elimit'], $start,0);
 	
 		while ($row = $db->sql_fetchrow($result) )
 		{

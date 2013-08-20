@@ -11,6 +11,44 @@
     background-color: #FFFFDD;
 }
 
+.warningbox {
+	padding: 8px;
+	margin: 10px 0;
+	color: #000;
+	text-align: center;
+	background-color: #FFC901;
+}
+
+* html .warningbox { height: 1%; } /* Pixel shift fix for IE */
+
+.warningbox h3 {
+	color: #000;
+	margin: 0 0 0.5em;
+	font-size: 1.10em;
+	font-family: "Lucida Grande",Verdana,Helvetica,Arial,sans-serif;
+}
+
+.warningbox p {
+	color: #000;
+	font-size: 0.85em;
+	margin-bottom: 0;
+}
+
+.warningbox a:link, .warningbox a:active, .warningbox a:visited
+{
+	color: #DBD7D1;
+	text-decoration: underline;
+	font-weight: bold;
+}
+
+.warningbox a:hover {
+	color: #FFFFFF;
+	text-decoration: none;
+	font-weight: bold;
+}
+
+
+
 .ro {
 	background-color: #FFFFFF;
 }
@@ -33,4 +71,24 @@ div.search-box input {
     height: 18px;
     size:35;
     maxlength:255;
+}
+
+
+div#main h1 {
+	color: lightslategrey;
+}
+
+h3, h4 {
+	
+	color: teal;
+}
+
+select
+{
+   /* -moz-appearance:none;
+    -webkit-appearance:none;*/
+    border:0.5px solid #efefef;
+    background:#f2f1ef;
+    -webkit-border-radius:0;
+    border-radius:0;
 }

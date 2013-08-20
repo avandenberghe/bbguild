@@ -28,7 +28,7 @@ class acp_dkp_item_info
 			'title'		=> 'ACP_DKP_ITEM',
 			'version'	=> '1.3.0',
 			'modes'		=> array(
-				'edititem'			=> array('title' => 'ACP_DKP_ITEM_EDIT', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => false ),
+				'additem'			=> array('title' => 'ACP_DKP_ITEM_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => false ),
 				'listitems'			=> array('title' => 'ACP_DKP_ITEM_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS') , 'display' => true ),
 				),
 		);

@@ -34,7 +34,6 @@ if (!class_exists('\bbdkp\log'))
 	require("{$phpbb_root_path}includes/bbdkp/log.$phpEx");
 }
 
-
 /**
  * This acp class manages setting configs, logging
  * 
@@ -51,9 +50,7 @@ class acp_dkp extends \bbdkp\Admin
 	function main ($id, $mode)
 	{
 		global $db, $user, $template, $cache, $config, $phpbb_admin_path, $phpEx;
-		
 		$link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
-		
 		switch ($mode)
 		{
 			/**
@@ -135,7 +132,49 @@ class acp_dkp extends \bbdkp\Admin
 						));
 					}
 				}
+
 				
+			$latest_version_info = false;
+			if (($latest_version_info = parent::get_productversion('bbdkp', request_var('versioncheck_force', false))) === false)
+			{
+				$template->assign_var('S_VERSIONCHECK_FAIL', true);
+			}
+			else
+			{
+				$latest_version_info = explode("\n", $latest_version_info);
+				if(phpbb_version_compare(trim($latest_version_info[0]), $config['bbdkp_version'], '<='))
+				{
+					$template->assign_vars(array(
+							'S_VERSION_UP_TO_DATE'	=> true,
+					));
+				} 
+				else 
+				{
+					// you have an old version
+					$template->assign_vars(array(
+						'BBDKP_NOT_UP_TO_DATE_TITLE' => sprintf($user->lang['NOT_UP_TO_DATE_TITLE'], 'bbDKP'), 
+						'BBDKP_LATESTVERSION' => $latest_version_info[0], 
+						'BBDKPVERSION' => $user->lang['YOURVERSION'] . $installed_version ,
+						'UPDATEINSTR' => $user->lang['LATESTVERSION'] . $latest_version_info[0] . ', <a href="' . $user->lang['WEBURL'] . '">' . $user->lang['DOWNLOAD'] . '</a>'));
+				}
+				
+			}
+			
+			//LOOP PLUGINS TABLE
+			$plugin_versioninfo = parent::get_plugin_info(request_var('versioncheck_force', false)); 
+			foreach($plugin_versioninfo as $pname => $pdetails)
+			{
+				$a = phpbb_version_compare(trim( $pdetails['latest'] ), $pdetails['version'] , '<='); 
+				$template->assign_block_vars('plugin_row', array(
+						'PLUGINNAME' 	=> ucwords($pdetails['name']) ,
+						'VERSION' 		=> $pdetails['version'] ,
+						'ISUPTODATE'	=> phpbb_version_compare(trim( $pdetails['latest'] ), $pdetails['version'] , '<=') ,
+						'LATESTVERSION' => $pdetails['latestversion'] ,
+						'UPDATEINSTR' 	=> '<a href="' . BBDKP_PLUGINURL . '">' . $user->lang['DOWNLOAD_LATEST_PLUGINS'] . $pdetails['latest'] . '</a>',  
+						'INSTALLDATE' 	=> $pdetails['installdate'],
+				));
+			}
+			
 			$template->assign_vars(array(
 				'GLYPH' => "$phpbb_admin_path/images/glyphs/view.gif" ,
 				'NUMBER_OF_MEMBERS' => $total_members ,
@@ -149,8 +188,13 @@ class acp_dkp extends \bbdkp\Admin
 				'RAIDS_PER_DAY' => $raids_per_day ,
 				'ITEMS_PER_DAY' => $items_per_day ,
 				'BBDKP_STARTED' => $bbdkp_started,
+				'BBDKP_VERSION'	=> $config['bbdkp_version'], 
+				'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage&amp;versioncheck_force=1"),
 				'GAMES_INSTALLED' => count($this->games) > 0 ? implode(", ", $this->games) : $user->lang['NA'],
 			));
+			
+
+			
 			$this->page_title = 'ACP_DKP_MAINPAGE';
 			$this->tpl_name = 'dkp/acp_mainpage';
 			break;

@@ -17,7 +17,10 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 global $phpbb_root_path; 
-    
+
+define('BBDKP_VERSIONURL', 'http://bbdkp.googlecode.com/svn/trunk/'); 
+define('BBDKP_PLUGINURL' , 'http://www.bbdkp.com/downloads.php?cat=2" target="_blank'); 
+
 //BBDKP
 define('URI_ADJUSTMENT', 'adj');
 define('URI_DKPSYS',     'dkpsys_id'); 	
@@ -43,15 +46,15 @@ define('RAID_ITEMS_TABLE',         $table_prefix . 'bbdkp_raid_items');
 define('LOGS_TABLE',               $table_prefix . 'bbdkp_logs'); 	 
 define('MEMBER_RANKS_TABLE',       $table_prefix . 'bbdkp_member_ranks');
 define('MEMBER_LIST_TABLE',        $table_prefix . 'bbdkp_memberlist'); 	
-define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_reporting');
-// define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_memberdkp');  
+//define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_reporting');
+define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_memberdkp');  
 define('RAID_DETAIL_TABLE',        $table_prefix . 'bbdkp_raid_detail'); 	 
 define('RAIDS_TABLE',              $table_prefix . 'bbdkp_raids'); 	 
 define('CLASS_TABLE',              $table_prefix . 'bbdkp_classes'); 	 
 define('RACE_TABLE',               $table_prefix . 'bbdkp_races'); 	 
 define('FACTION_TABLE',            $table_prefix . 'bbdkp_factions'); 
 define('DKPSYS_TABLE',     		   $table_prefix . 'bbdkp_dkpsystem');
-define('PLUGINS_TABLE',	           $table_prefix . 'bbdkp_plugins');
+define('BBDKPPLUGINS_TABLE',	   $table_prefix . 'bbdkp_plugins');
 define('GUILD_TABLE',	           $table_prefix . 'bbdkp_memberguild');
 define('LOOTSYS_TABLE',	           $table_prefix . 'bbdkp_lootsystem');
 define('BB_LANGUAGE',	           $table_prefix . 'bbdkp_language');

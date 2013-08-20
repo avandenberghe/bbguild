@@ -4,7 +4,9 @@
  * @copyright (c) 2009 bbdkp https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @package acp
-*/
+ * @deprecated file deprecated in rel 1.3
+ * @note : only needed for uninstallation of events module!
+ /
 
 /**
 * @ignore
