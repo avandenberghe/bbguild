@@ -104,7 +104,7 @@ $language_file = 'mods/dkp_admin';
 /**
  * include the game installer class
  */
-//include($phpbb_root_path .'includes/bbdkp/games/Game.' . $phpEx);
+include($phpbb_root_path .'includes/bbdkp/games/Game.' . $phpEx);
 
 /*
 * Setting the checkboxes at runtime
@@ -206,7 +206,6 @@ $options = array(
 		'warhammer'   => array('lang' => 'WARHAMMER', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['warhammer'] ) ? true:false)),
 		'wow'     => array('lang' => 'WOW', 'validate' => 'bool', 'type' => 'radio:yes_no', 'default' => (($gameinstall['wow'] ) ? true:false)),
 );
-
 
 
 /*
@@ -578,38 +577,11 @@ $versions = array(
                       'roster' => 1
                   		),
 
-           		  // default guild -> do show on roster
-                  array('id'  => 1,
-                      'name' => ( request_var('guildtag', ' ')== ' ' ? utf8_normalize_nfc(request_var('guildtag', ' ', true)) : 'default'),
-                      'realm' => ( request_var('realm', ' ', true) == ' ' ? utf8_normalize_nfc(request_var('realm', ' ', true)) : 'default'),
-                      'region' => (isset($_POST['region']) ? request_var('region', ' ') : 'us'),
-                  	  'roster' => 1 ),
                   )
            ),
 
 		 array($table_prefix . 'bbdkp_member_ranks',
 			 array(
-
-			 	// standard member rank
-	       		array(
-	       			'guild_id'	=> 1,
-					'rank_id'	=> 0,
-					'rank_name'	=> 'Member',
-					'rank_hide'	=> 0,
-					'rank_prefix'	=> '',
-					'rank_suffix'	=> '',
-				 ),
-
-
-				// operating rank, undeletable rank
-	       		array(
-	       			'guild_id'	=> 1,
-					'rank_id'	=> 90,
-					'rank_name'	=> 'Operating',
-					'rank_hide'	=> 1,
-					'rank_prefix'	=> '',
-					'rank_suffix'	=> '',
-				 ),
 
 				// Out rank : for unguilded, undeletable rank
 	       		array(
@@ -622,28 +594,6 @@ $versions = array(
 				 ),
 				)
 			),
-
-
-       		 
-		 // create the guildbank character
-		 array($table_prefix . 'bbdkp_memberlist',
-			 array(
-	       		array(
-	       			'game_id' 			=> 'wow',
-	       			'member_name' 		=> 'Guildbank',
-					'member_status'		=> 1,
-					'member_level'		=> 1,
-					'member_race_id'	=> 0,
-					'member_class_id'	=> 0,
-					'member_rank_id'	=> 90,
-	       			'member_comment'	=> 'The guildbank toon',
-	       			'member_joindate'	=> time(),
-	       			'member_outdate'	=> '1893456000',
-	       			'member_guild_id'	=> 1,
-	       			'member_gender_id'	=> 1,
-	       			'phpbb_user_id'		=> $user->data['user_id'],
-				 ),
-			)),
 
 		  array( $table_prefix . 'bbdkp_welcomemsg',
            		array(
@@ -1140,11 +1090,24 @@ $versions = array(
      				array('bbdkp_roster_layout', '0', true),
      		),
      	
-     	//guild acp makes this config obsolete
+     	//guild games acp makes this config obsolete
      	'config_delete' => array(
      				array('bbdkp_guildtag') ,
 	     			array('bbdkp_recruitment'),
-     					
+	     			array('bbdkp_games_aion', 0),
+	     			array('bbdkp_games_daoc', 0),
+	     			array('bbdkp_games_eq', 0),
+	     			array('bbdkp_games_eq2', 0),
+	     			array('bbdkp_games_FFXI', 0),
+	     			array('bbdkp_games_lotro', 0),
+	     			array('bbdkp_games_rift', 0),
+	     			array('bbdkp_games_vanguard', 0),
+	     			array('bbdkp_games_wow', 0),
+	     			array('bbdkp_games_warhammer', 0),
+	     			array('bbdkp_games_swtor', 0),
+	     			array('bbdkp_games_lineage2', 0),
+	     			array('bbdkp_games_tera', 0),
+	     			array('bbdkp_games_gw2', 0),     					
      		),
 
      	// add new parameters
@@ -1245,8 +1208,8 @@ function tableupdates($action, $version)
 					$db->sql_query($sql);
 
 					// rename bbdkp_memberdkp table to bbdkp_reporting table
-					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
-					$db->sql_query($sql);
+					//$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
+					//$db->sql_query($sql);
 					
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raid_items MODIFY item_gameid VARCHAR(8) ';
 					$db->sql_query($sql);
@@ -1279,8 +1242,8 @@ function tableupdates($action, $version)
 					$db->sql_query($sql);
 					
 					// rename the dkp table to reporting table
-					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
-					$db->sql_query($sql);
+					//$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
+					//$db->sql_query($sql);
 
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raid_items MODIFY item_gameid VARCHAR(8) ';
 					$db->sql_query($sql);
@@ -1300,8 +1263,8 @@ function tableupdates($action, $version)
 				case '1.2.8':
 					break;
 				case '1.3.0':
-					$sql= "DROP TABLE  " . $table_prefix . 'bbdkp_reporting ';
-					$db->sql_query($sql);
+					//$sql= "DROP TABLE  " . $table_prefix . 'bbdkp_reporting ';
+					//$db->sql_query($sql);
 						
 					break;
 

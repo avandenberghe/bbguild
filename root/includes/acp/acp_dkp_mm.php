@@ -69,9 +69,9 @@ class acp_dkp_mm extends \bbdkp\Admin
 			 */
 			case 'mm_listmembers':
 
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx",
-				"i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx","i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
 				$Guild = new \bbdkp\Guilds();
+				
 				// add member button redirect
 				$showadd = (isset($_POST['memberadd'])) ? true : false;
 				$activate = (isset($_POST['deactivate'])) ? true : false;
@@ -124,6 +124,27 @@ class acp_dkp_mm extends \bbdkp\Admin
 				// default pageloading
 					
 					$guildlist = $Guild->guildlist();
+					
+					if( count((array) $guildlist) == 0  )
+					{
+						trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+					}
+					
+					if( count((array) $guildlist) == 1 )
+					{
+						foreach ($guildlist as $g)
+						{
+							$Guild->guildid = $g['id'];
+							$Guild->name = $g['name'];
+							if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+							{
+								trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+							}	  
+							break;
+						}
+						
+					}
+					
 					foreach ($guildlist as $g)
 					{
 						$Guild->guildid = $g['id'];
@@ -405,12 +426,20 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$S_ADD = ($editmember->member_id > 0) ? false: true;
 				
 				// Game dropdown
-				foreach ($this->games as $gameid => $gamename)
+				if(isset($this->games))
 				{
-					$template->assign_block_vars('game_row', array(
-							'VALUE' => $gameid ,
-							'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '' ,
-							'OPTION' => $gamename));
+					foreach ($this->games as $gameid => $gamename)
+					{
+						$template->assign_block_vars('game_row', array(
+								'VALUE' => $gameid ,
+								'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '' ,
+								'OPTION' => $gamename));
+					}
+					
+				}
+				else
+				{
+					trigger_error('ERROR_NOGAMES', E_USER_WARNING );
 				}
 				
 				if (isset($_GET[URI_GUILD]))

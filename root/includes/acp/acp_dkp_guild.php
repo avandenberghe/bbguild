@@ -95,7 +95,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 				$show_all = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
 
-				$sql = 'SELECT id, name, realm, region, roster, game_id FROM ' . GUILD_TABLE . ' ORDER BY ' . $current_order['sql'];
+				$sql = 'SELECT id, name, realm, region, roster, game_id FROM ' . GUILD_TABLE . ' WHERE id > 0 ORDER BY ' . $current_order['sql'];
 				if (! ($guild_result = $db->sql_query($sql)))
 				{
 					trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
@@ -248,7 +248,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					else
 					{
 						$s_hidden_fields = build_hidden_fields(array(
-							'delete' => true ,
+							'deleteguild' => true ,
 							'guild_id' => $updateguild->guildid));
 						$template->assign_vars(array(
 							'S_HIDDEN_FIELDS' => $s_hidden_fields));
@@ -391,13 +391,23 @@ class acp_dkp_guild extends \bbdkp\Admin
 								'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
 					}
 					//add value to dropdown when the game config value is 1
-					foreach ($this->games as $key => $gamename)
+					
+					if(isset($this->games))
 					{
-						$template->assign_block_vars('game_row', array(
-								'VALUE' => $key ,
-								'SELECTED' => ($updateguild->game_id == $key) ? ' selected="selected"' : '' ,
-								'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
+						foreach ($this->games as $key => $gamename)
+						{
+							$template->assign_block_vars('game_row', array(
+									'VALUE' => $key ,
+									'SELECTED' => ($updateguild->game_id == $key) ? ' selected="selected"' : '' ,
+									'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
+						}
+						
 					}
+					else
+					{
+						trigger_error('ERROR_NOGAMES', E_USER_WARNING );
+					}
+					
 				
 				}
 				else
@@ -412,13 +422,21 @@ class acp_dkp_guild extends \bbdkp\Admin
 					}
 				
 					//add value to dropdown when the game config value is 1
-					foreach ($this->games as $key => $gamename)
+					if(isset($this->games))
 					{
-						$template->assign_block_vars('game_row', array(
-								'VALUE' => $key ,
-								'SELECTED' => '' ,
-								'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
+						foreach ($this->games as $key => $gamename)
+						{
+							$template->assign_block_vars('game_row', array(
+									'VALUE' => $key ,
+									'SELECTED' => '' ,
+									'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
+						}
 					}
+					else
+					{
+						trigger_error('ERROR_NOGAMES', E_USER_WARNING ); 
+					}
+					
 				}
 				
 				// list the ranks for this guild

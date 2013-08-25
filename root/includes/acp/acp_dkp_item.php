@@ -588,6 +588,11 @@ class acp_dkp_item extends \bbdkp\Admin
 	{
 		global $db, $user, $config, $template, $phpEx,$phpbb_admin_path, $phpbb_root_path;
 				
+		if( count((array) $this->LootController->dkpsys) == 0 )
+		{
+			trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
+		}
+		
 		// add member button redirect
 		if ($this->bbtips == true)
 		{

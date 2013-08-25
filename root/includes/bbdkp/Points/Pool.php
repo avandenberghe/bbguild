@@ -37,6 +37,11 @@ if (!class_exists('\bbdkp\Admin'))
  */
 class Pool extends \bbdkp\Admin
  {
+	/**
+	 * array of pools
+	 * @var unknown_type
+	 */ 	
+ 	public $dkpsys; 
  	
  	public $dkpsys_id; 
  	private $dkpsys_name;
@@ -61,6 +66,21 @@ class Pool extends \bbdkp\Admin
 		$rows1 = $db->sql_fetchrowset ( $result1 );
 		$db->sql_freeresult ( $result1 );
 		$this->poolcount = count ( $rows1 );
+		
+		// get dkp pools
+		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
+            FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . " b
+			WHERE a.dkpsys_id = b.event_dkpid AND b.event_status = 1";
+		$result = $db->sql_query($sql);
+		$this->dkpsys = array();
+		while ($row = $db->sql_fetchrow($result) )
+		{
+			$this->dkpsys[$row['dkpsys_id']] = array(
+					'id' => $row['dkpsys_id'],
+					'name' => $row['dkpsys_name'],
+					'default' => $row['dkpsys_default']);
+		}
+		$db->sql_freeresult($result);
 		
 	}
 	

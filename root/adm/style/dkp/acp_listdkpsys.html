@@ -7,6 +7,7 @@
 
 <p>{L_EXPLAIN}</p>
 
+<!-- IF .dkpsys_row -->
 <fieldset><legend>{L_DEFAULT_DKP_POOL}</legend>
 	<dl>
 	<dt>
@@ -66,7 +67,14 @@
 </div>
 <!-- ENDIF -->
 
+<!-- ELSE -->
 
+<div class="errorbox">
+<h3>{L_ERROR}</h3>
+<p>{L_ERROR_NOPOOLS}</p>
+</div>
+
+<!-- ENDIF -->
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
 	<input class="button2" name="dkpsysadd" type="submit" value="{L_ADD}" />
 </fieldset>

@@ -191,8 +191,8 @@ if (!class_exists('\bbdkp\Game'))
 			//
 			$log_action = array(
 					'header' 	=> 'L_ACTION_FACTION_DELETED' ,
-					'L_GAME' 	=> $faction->game_id ,
-					'L_FACTION' => $faction->faction_name ,
+					'L_GAME' 	=> $this->game_id ,
+					'L_FACTION' => $this->faction_name ,
 			);
 				
 			$this->log_insert(array(

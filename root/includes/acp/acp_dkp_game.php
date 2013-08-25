@@ -85,6 +85,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					{
 						$editgame = new \bbdkp\Game;
 						$editgame->game_id = request_var ( 'hidden_game_id','' );
+						$editgame->name =  utf8_normalize_nfc(request_var('hidden_game_name', '', true)); 
 						$editgame->install();
 								
 						trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALLED_GAME_SUCCESS'], $editgame->name ) . $this->link, E_USER_NOTICE );
@@ -357,6 +358,12 @@ class acp_dkp_game extends \bbdkp\Admin
 						$listfactions->game_id = $editgame->game_id;
 						
 						$fa = $listfactions->getfactions();
+						
+						if(count($fa) == 0)
+						{
+							trigger_error ('ERROR_NOFACTION' , E_USER_WARNING);
+						}
+						
 						$s_faction_options = '';
 						foreach($fa as $faction_id => $faction)
 						{
@@ -485,11 +492,12 @@ class acp_dkp_game extends \bbdkp\Admin
 						{
 							$s_armor_options .= '<option value="' . $armor . '" > ' . $armorname . '</option>';
 						}
+						
 						// send parameters to template
-
 						$template->assign_vars ( array (
 							'S_ARMOR_OPTIONS' => $s_armor_options, 
 							'S_ADD' => TRUE, 
+							'COLORCODE' => '#EE8611',
 							'U_ACTION' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addclass' ), 
 							'MSG_NAME_EMPTY' => $user->lang ['FV_REQUIRED_NAME'], 
 							'MSG_ID_EMPTY' => $user->lang ['FV_REQUIRED_ID'] ) );
@@ -565,7 +573,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				}
 				
 				// list installed games
-				foreach ($editgame->installed_games as $key => $gamename )
+				foreach ($editgame->games as $key => $gamename )
 				{
 					$template->assign_block_vars ( 'game_row', array (
 							'VALUE' => $key,

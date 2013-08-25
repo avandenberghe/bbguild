@@ -50,6 +50,30 @@ class Adjust extends \bbdkp\Admin
 	public $decay_time = 0;
 	public $members_samegroupkey = array();
 
+	public $dkpsys;
+	
+	
+	function __construct($dkpsys = 0)
+	{
+		global $db;
+		parent::__construct(); //to load admin
+		
+		// get dkp pools
+		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
+            FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . " b
+			WHERE a.dkpsys_id = b.event_dkpid AND b.event_status = 1";
+		$result = $db->sql_query($sql);
+		$this->dkpsys = array();
+		while ($row = $db->sql_fetchrow($result) )
+		{
+			$this->dkpsys[$row['dkpsys_id']] = array(
+					'id' => $row['dkpsys_id'],
+					'name' => $row['dkpsys_name'],
+					'default' => $row['dkpsys_default']);
+		}
+		$db->sql_freeresult($result);
+	}
+	
 	/**
 	 * add a new dkp adjustment
 	 *

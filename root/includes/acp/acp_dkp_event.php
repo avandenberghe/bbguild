@@ -63,13 +63,21 @@ if (!class_exists('Events'))
 			case 'addevent':
 			$update = false;
 			$event  = new \bbdkp\Events(  request_var(URI_EVENT, 0 ));
-			foreach ($event->dkpsys as $pool)
+			
+			if(isset($event->dkpsys))
 			{
-				$template->assign_block_vars('event_dkpid_row', array(
-					'VALUE' 	=> $pool['id'],
-					'SELECTED' 	=> ($pool['id'] == $event->dkpsys_id) ? ' selected="selected"' : (  ( $pool['default'] == 'Y' ) ? ' selected="selected"' : '' ), 
-					'OPTION'	=> $pool['name'])
-				);
+				foreach ($event->dkpsys as $pool)
+				{
+					$template->assign_block_vars('event_dkpid_row', array(
+						'VALUE' 	=> $pool['id'],
+						'SELECTED' 	=> ($pool['id'] == $event->dkpsys_id) ? ' selected="selected"' : (  ( $pool['default'] == 'Y' ) ? ' selected="selected"' : '' ), 
+						'OPTION'	=> $pool['name'])
+					);
+				}
+			}
+			else
+			{
+				trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
 			}
 		 
 			$add = (isset($_POST['add'])) ? true : false;
@@ -239,21 +247,25 @@ if (!class_exists('Events'))
 			 
 			 	$idlist = array();
 			 	
-			 	foreach ($event->events as $id => $listevent)
-
-					$template->assign_block_vars('events_row', array(
-                    	'EVENT_ID' => $listevent ['event_id'],
-						'U_VIEW_EVENT' =>append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=addevent&amp;" . URI_EVENT ."={$id}"),
-						'DKPSYS_EVENT' => $listevent['dkpsys_name'],
-						'COLOR' => $listevent['event_color'],
-						'IMAGEPATH' 	=> $phpbb_root_path . "images/event_images/" . $listevent['event_imagename'] . ".png", 
-                    	'S_EVENT_IMAGE_EXISTS' => (strlen($listevent['event_imagename']) > 1) ? true : false, 
-                    	'S_EVENT_STATUS' => ($listevent ['event_status'] == 1) ? 'checked="checked" ' : '', 
-						'IMAGENAME' => $listevent['event_imagename'],
-						'NAME' => $listevent['event_name'],
-						'VALUE' => $listevent['event_value'])
-					);
-					$idlist[] = $listevent ['event_id'];
+			 	if(isset($event->events))
+			 	{
+				 	foreach ($event->events as $id => $listevent)
+				 	{
+						$template->assign_block_vars('events_row', array(
+	                    	'EVENT_ID' => $listevent ['event_id'],
+							'U_VIEW_EVENT' =>append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_event&amp;mode=addevent&amp;" . URI_EVENT ."={$id}"),
+							'DKPSYS_EVENT' => $listevent['dkpsys_name'],
+							'COLOR' => $listevent['event_color'],
+							'IMAGEPATH' 	=> $phpbb_root_path . "images/event_images/" . $listevent['event_imagename'] . ".png", 
+	                    	'S_EVENT_IMAGE_EXISTS' => (strlen($listevent['event_imagename']) > 1) ? true : false, 
+	                    	'S_EVENT_STATUS' => ($listevent ['event_status'] == 1) ? 'checked="checked" ' : '', 
+							'IMAGENAME' => $listevent['event_imagename'],
+							'NAME' => $listevent['event_name'],
+							'VALUE' => $listevent['event_value'])
+						);
+						$idlist[] = $listevent ['event_id'];
+				 	}
+			 	}
 			    
 				$template->assign_vars(array(
 					'IDLIST'		=> implode(",", $idlist), 

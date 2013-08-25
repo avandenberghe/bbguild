@@ -786,6 +786,11 @@ if (!class_exists('\bbdkp\Members'))
         
         if($dkpsys_id==0)
         {
+        	if( count((array) $this->RaidController->dkpsys) == 0 )
+        	{
+        		trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
+        	}
+        	
         	//get default dkp pool
         	foreach ($this->RaidController->dkpsys as $pool)
         	{

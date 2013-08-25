@@ -7,6 +7,8 @@
 <p>{L_EXPLAIN}</p>
 <br /> 
 
+<!-- IF .events_row -->
+
 <!-- IF EVENT_PAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{EVENT_PAGINATION}</span>
@@ -66,6 +68,17 @@
 </fieldset>
 <!-- ENDIF -->
 </div>
+
+<!-- ELSE -->
+<div class="errorbox">
+<h3>{L_ERROR}</h3>
+<p>{L_ERROR_NOEVENTSDEFINED}</p>
+</div>
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input class="button2" name="eventadd" type="submit" value="{L_ADD}" />
+</fieldset>
+<!-- ENDIF -->
+
 </form>
 
 

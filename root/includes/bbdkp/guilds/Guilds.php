@@ -383,11 +383,6 @@ if (!class_exists('\bbdkp\WowAPI'))
 			trigger_error($user->lang['ERROR_INVALID_GUILD_PROVIDED'], E_USER_WARNING);
 		}
 
-		if ($this->guildid < 2)
-		{
-			trigger_error($user->lang['ERROR_GUILDIDRESERVED'], E_USER_WARNING);
-		}
-
 		// check if guild has members
 		$sql = 'SELECT COUNT(*) as mcount FROM ' . MEMBER_LIST_TABLE . '
            WHERE member_guild_id = ' . $this->guildid;
