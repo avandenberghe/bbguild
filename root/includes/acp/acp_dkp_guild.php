@@ -74,6 +74,25 @@ class acp_dkp_guild extends \bbdkp\Admin
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 
+				$updateguild = new \bbdkp\Guilds();
+				$guildlist = $updateguild->guildlist();
+				foreach ($guildlist as $g)
+				{
+					$template->assign_block_vars('defaultguild_row', array(
+							'VALUE' => $g['id'] ,
+							'SELECTED' => ($g['guilddefault'] == '1') ? ' selected="selected"' : '' ,
+							'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+				}
+				
+				$guilddefaultupdate = (isset($_POST['upddefaultguild'])) ? true : false;
+				if($guilddefaultupdate)
+				{
+					$id = request_var('defaultguild', 0); 
+					$updateguild->update_guilddefault($id	); 
+					$success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $id);
+						trigger_error($success_message . $this->link, E_USER_NOTICE);
+				}
+				
 				$guildadd = (isset($_POST['guildadd'])) ? true : false;
 				if ($guildadd)
 				{
@@ -122,6 +141,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				$form_key = 'listguilds';
 				add_form_key($form_key);
 				$template->assign_vars(array(
+					'F_GUILDLIST' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=listguilds' ,
 					'F_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=addguild' ,
 					'L_TITLE' => $user->lang['ACP_LISTGUILDS'] ,
 					'L_EXPLAIN' => $user->lang['ACP_LISTGUILDS_EXPLAIN'] ,

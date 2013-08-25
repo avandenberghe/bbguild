@@ -994,7 +994,7 @@ $versions = array(
      				array($table_prefix . 'bbdkp_memberguild', 'game_id', array('VCHAR:10', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'min_armory', array('UINT', 90)),
      				array($table_prefix . 'bbdkp_memberguild', 'rec_status', array('BOOL', 0)),
-     				array($table_prefix . 'bbdkp_memberguild', 'default', array('BOOL', 0)),
+     				array($table_prefix . 'bbdkp_memberguild', 'guilddefault', array('BOOL', 0)),
      		),
      		
 
