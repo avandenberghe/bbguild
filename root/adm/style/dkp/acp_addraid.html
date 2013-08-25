@@ -216,6 +216,16 @@ function fnRemoveMember()
 //]]>
 
 </script>
+<style>
+dt 
+{
+	width: 35% !important; 	
+}
+dd
+{
+	margin-left: 35% !important;
+}
+</style>
 <a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a>
 <form method="post" action="{F_ADD_RAID}" id="addraid" onsubmit="return check_form(this)" >
 <div>
@@ -311,14 +321,26 @@ function fnRemoveMember()
 
 <div style="float: left; width: 45%;">
 <fieldset>
-
 <legend>{L_SEARCH}</legend>
-	<div style="text-align:center">
-	
-	<span>{L_SEARCH}: <input type="text" name="memberSearch" id="memberSearch"  size="35" maxlength="255" value="" onkeyup="fnSearch(event);" /></span>
-	<br/>
-	<span class="small">{L_HOLD_CTRL_NOTE}</span>
-	<br />
+<div style="text-left">
+
+<dl>
+<dt><label>{L_GUILD}:</label></dt>
+<dd><select id="member_guild_id" name="member_guild_id" class="input" >
+       	<!-- BEGIN guild_row -->
+       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
+        <!-- END guild_row -->
+</select><a href="{U_VIEW_GUILD}">{GUILDNAME}</a>
+</dd>
+</dl>
+<dl>
+<dt><label>{L_SEARCH}: </label></dt>
+<dd>
+<input type="text" name="memberSearch" id="memberSearch"  size="35" maxlength="255" value="" onkeyup="fnSearch(event);" />
+</dd>
+</dl>
+
+<span class="small">{L_HOLD_CTRL_NOTE}</span>
 
 	<select style="float: left; width: 47%;" id="all_members" name="all_members" size="20" multiple="multiple" class="input">
 		<!-- BEGIN members_row -->

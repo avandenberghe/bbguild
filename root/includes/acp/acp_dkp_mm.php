@@ -123,13 +123,12 @@ class acp_dkp_mm extends \bbdkp\Admin
 				{
 				// default pageloading
 					
-					$result = $Guild->guildlist();
-					while ($row = $db->sql_fetchrow($result))
+					$guildlist = $Guild->guildlist();
+					foreach ($guildlist as $g)
 					{
-						$Guild->guildid = $row['id'];
+						$Guild->guildid = $g['id'];
 						break;
 					}
-					$db->sql_freeresult($result);
 				}
 
 				if($charapicall)
@@ -157,15 +156,15 @@ class acp_dkp_mm extends \bbdkp\Admin
 				
 				// fill popup and set selected to default selection
 				$Guild->Getguild(); 
-				$resultg = $Guild->guildlist();
-				while ($row = $db->sql_fetchrow($resultg))
+				$guildlist = $Guild->guildlist();
+				foreach ($guildlist as $g)
 				{
 					$template->assign_block_vars('guild_row', array(
-						'VALUE' => $row['id'] ,
-						'SELECTED' => ($row['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
-						'OPTION' => (! empty($row['name'])) ? $row['name'] : '(None)'));
+						'VALUE' => $g['id'] ,
+						'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
+						'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
 				}
-				$db->sql_freeresult($resultg);
+				
 				$previous_data = '';
 
 				//get window
@@ -421,15 +420,14 @@ class acp_dkp_mm extends \bbdkp\Admin
 				
 				//guild dropdown
 				$Guild = new \bbdkp\Guilds($editmember->member_guild_id);
-				$result = $Guild->guildlist(); 
-				while ($row = $db->sql_fetchrow($result))
+				$guildlist = $Guild->guildlist(); 
+				foreach ($guildlist as $g)
 				{
 					$template->assign_block_vars('guild_row', array(
-						'VALUE' => $row['id'] ,
-						'SELECTED' => ($editmember->member_guild_id == $row['id']) ? ' selected="selected"' : '' ,
-						'OPTION' => $row['name']));
+						'VALUE' => $g['id'] ,
+						'SELECTED' => ($editmember->member_guild_id == $g['id']) ? ' selected="selected"' : '' ,
+						'OPTION' => $g['name']));
 				}
-				$db->sql_freeresult($result);
 					
 				// Rank drop-down -> for initial load
 				// reloading is done from ajax to prevent redraw

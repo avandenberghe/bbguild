@@ -354,7 +354,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 			// load games class
 			$games = new \bbdkp\Game();
 			$this->games = $games->preinstalled_games;
-			$this->games = $games->installed_games;
+			$this->games = $games->games;
 			foreach($this->games as $key => $value)
 			{
 				$this->game_id = $key;

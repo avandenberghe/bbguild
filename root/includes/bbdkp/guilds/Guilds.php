@@ -764,9 +764,18 @@ if (!class_exists('\bbdkp\WowAPI'))
 				GROUP BY a.id, a.name, a.realm, a.region
 				ORDER BY a.members desc, a.id asc';
 		$result = $db->sql_query($sql);
-		return $result; 
+		$guild = array(); 
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$guild [] = array (		
+				'id' => $row['id'] ,
+				'name' => $row['name']
+			);
+		}
+		$db->sql_freeresult($result);
+		return $guild; 
 	}
-
+	
 }
 
 ?>

@@ -1,5 +1,4 @@
 <?php
-
 /**
  * @package 	bbDKP
  * @link http://www.bbdkp.com

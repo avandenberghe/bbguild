@@ -34,3 +34,13 @@ div.search-box input {
     size:35;
     maxlength:255;
 }
+
+
+div#main h1 {
+	color: lightslategrey;
+}
+
+h3, h4 {
+	
+	color: teal;
+}

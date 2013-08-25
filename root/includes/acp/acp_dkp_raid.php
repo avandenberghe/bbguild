@@ -245,6 +245,17 @@ if (!class_exists('\bbdkp\Members'))
 			));
 		}
 		
+		//guild dropdown
+		$Guild = new \bbdkp\Guilds();
+		$guildlist = $Guild->guildlist();
+		foreach ( (array) $guildlist as $g )
+		{
+			$template->assign_block_vars('guild_row', array(
+					'VALUE' => $g['id'] ,
+					'SELECTED' => '' ,
+					'OPTION' => $g['name']));
+		}
+		
 		$membercount = 0; 
 		foreach ( (array) $this->RaidController->memberlist as $member )
 		{
@@ -376,6 +387,7 @@ if (!class_exists('\bbdkp\Members'))
 		{
 			$time_bonus = round($config['bbdkp_dkptimeunit'] * $timediff / $config['bbdkp_timeunit'], 2) ;	
 		}
+		
 		
 		add_form_key('acp_dkp_addraid');
 		

@@ -998,10 +998,10 @@ class PointsController  extends \bbdkp\Admin
 					{
 						//no logging for cronjobs due to users just not getting it.
 						$log_action = array (
-								'header' 	=> 'L_ACTION_DECAYSYNC',
-								'L_USER' 	=>  $user->data['user_id'],
+								'header' 		=> 'L_ACTION_DECAYSYNC',
+								'L_USER' 		=>  $user->data['user_id'],
 								'L_USERCOLOUR' 	=>  $user->data['user_colour'],
-								'L_RAIDS' 	=> $countraids,
+								'L_RAIDS' 		=>  $countraids,
 								'L_ORIGIN' 		=>  $origin
 						);
 		

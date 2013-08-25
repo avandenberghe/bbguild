@@ -199,8 +199,7 @@ class log
 				'id', 
 				'L_RAID_ID', 
 				'L_VALUE', 
-				'L_DAYSAGO'
-						
+				'L_DAYSAGO', 					
 	
 	);
 	
@@ -581,19 +580,60 @@ class log
 					$logline = sprintf($this->getLogMessage('RT_CONFIG_UPDATED', $verbose), $userstring );
 					break;
 				case 'DECAYSYNC':
-					$logline = sprintf($this->getLogMessage('DECAYSYNC', $verbose), $userstring, $log['L_RAIDS'] ) . ' ' . $log['L_ORIGIN'] ;
+					
+					if (isset($log['L_ORIGIN']) )
+					{
+						$origin = $log['L_ORIGIN']; 
+					}
+					else
+					{
+						$origin = '';
+					}
+					$logline = sprintf($this->getLogMessage('DECAYSYNC', $verbose), $userstring, isset($log['L_RAIDS']) ? $log['L_RAIDS'] : 0) . ' ' . $origin;
 					break;
 				case 'DECAYOFF':
-					$logline = sprintf($this->getLogMessage('DECAYOFF', $verbose), $userstring, $log['L_ORIGIN']);
+					if (isset($log['L_ORIGIN']) )
+					{
+						$origin = $log['L_ORIGIN'];
+					}
+					else
+					{
+						$origin = '';
+					}
+					$logline = sprintf($this->getLogMessage('DECAYOFF', $verbose), $userstring, $origin);
 					break;
 				case 'ZSYNC':
-					$logline = sprintf($this->getLogMessage('ZSYNC', $verbose), $userstring, $log['L_RAIDS'] ) . ' '. $log['L_ORIGIN'];
+					if (isset($log['L_ORIGIN']) )
+					{
+						$origin = $log['L_ORIGIN'];
+					}
+					else
+					{
+						$origin = '';
+					}
+					$logline = sprintf($this->getLogMessage('ZSYNC', $verbose), $userstring, isset($log['L_RAIDS']) ? $log['L_RAIDS'] :0 ) . ' '. $origin;
 					break;
 				case 'DKPSYNC':
-					$logline = sprintf($this->getLogMessage('DKPSYNC', $verbose), $userstring) . ' '. $log['L_ORIGIN'];
+					if (isset($log['L_ORIGIN']) )
+					{
+						$origin = $log['L_ORIGIN'];
+					}
+					else
+					{
+						$origin = '';
+					}
+					$logline = sprintf($this->getLogMessage('DKPSYNC', $verbose), $userstring) . ' '. $origin;
 					break;
 				case 'DEFAULT_DKP_CHANGED':
-					$logline = sprintf($this->getLogMessage('DEFAULT_DKP_CHANGED', $verbose), $userstring , $log['L_ORIGIN']) ;
+					if (isset($log['L_ORIGIN']) )
+					{
+						$origin = $log['L_ORIGIN'];
+					}
+					else
+					{
+						$origin = '';
+					}
+					$logline = sprintf($this->getLogMessage('DEFAULT_DKP_CHANGED', $verbose), $userstring , $origin) ;
 					break;
 				case 'GUILD_ADDED':
 					$logline = sprintf($this->getLogMessage('GUILD_ADDED', $verbose), $userstring , $log['L_REALM'] . '-' . $log['L_NAME'] ) ;
