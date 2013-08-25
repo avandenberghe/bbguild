@@ -93,7 +93,6 @@ class Roles
 	{
 		global $user; 
 		
-		
 		$this->guild_id = $guild_id;
 		$this->role = $role;
 		$this->class_id = $class_id;
@@ -197,11 +196,6 @@ class Roles
 		$db->sql_freeresult($result);
 		if (! $row)
 		{
-			$this->guild_id = 0;
-			$this->game_id = '';
-			$this->role = '';
-			$this->class_id = 0;
-			$this->needed = 0;
 			return 0;
 		}
 		else
