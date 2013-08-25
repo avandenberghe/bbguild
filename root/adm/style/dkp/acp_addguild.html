@@ -222,19 +222,21 @@ input.inputrow {
 
 
 
-<table cellspacing="1" style="width:70%">
+<table cellspacing="1" style="width:80%">
 <thead>
 	<tr>
+  	<th style="text-align: left">{L_ID}</th>
     <th style="text-align: left">{L_ROLES}</th>
     <th style="text-align: center">{L_CLASS}</th>
-    <th style="text-align: center">{L_NEEDED}</th>
     <th style="text-align: center">{L_CURRENT}</th>
+    <th style="text-align: center">{L_NEEDED}</th>
+    <th style="text-align: center">{L_DIFFERENCE}</th>
   </tr> 
 </thead>
 
 <tfoot>
-
   <tr class="row2">
+   <td></td>
     <td>
 	    <select name="recruitrole" id="recruitrole" class="input" id="role">
       	<!-- BEGIN rolelist_row -->
@@ -249,10 +251,14 @@ input.inputrow {
       	<!-- END classlist_row  -->
     	</select>
     </td>
-    <td style="text-align: center"><input type="text" name="recruitneeded" size="5" maxlength="2" value="" class="editfield" /></td>
-    <td style="text-align: center"><input type="submit" name="addrecruitment" value=" " class="inputrow"/></td>
+    <td style="text-align: center"><strong>{CURRENT}</strong> </td>
+    <td style="text-align: center">
+    <strong>{NEEDED}</strong> <input type="text" name="recruitneeded" size="5" maxlength="2" value="" class="editfield" /> 
+    <input type="submit" name="addrecruitment" value=" " class="inputrow"  /></td>
+    <td style="text-align: center"><strong>{DIFFERENCE}</strong></td>
   </tr>
 </tfoot>
+
 <tbody> 
   <!-- BEGIN roles_row -->
 	  <!-- IF roles_row.S_ROW_COUNT is even -->
@@ -260,18 +266,29 @@ input.inputrow {
 	  <!-- ELSE -->
 	  <tr class="row2">
 	  <!-- ENDIF -->
+	    <td style="text-align: left">{roles_row.ROLEID}</td>
 	    <td style="text-align: left">{roles_row.ROLE}</td>
 	    <td style="text-align: left"> <!-- IF roles_row.S_CLASS_IMAGE_EXISTS --> <img src="{roles_row.CLASS_IMAGE}" alt=" " /><!-- ENDIF -->&nbsp;{roles_row.CLASS}</td>
-	    <td style="text-align: center">{roles_row.NEEDED}</td>
 	    <td style="text-align: center">{roles_row.CURRENT}</td>
+	    <td style="text-align: center">
+	    	<!-- IF roles_row.ROLEID != 0 -->
+		    <input style="text-align: right" type="text" name="needed[{roles_row.ROLEID}]" size="5" maxlength="2" value="{roles_row.NEEDED}" class="input" />
+		    <!-- ELSE -->
+		    	{roles_row.NEEDED}
+		    <!-- ENDIF -->
+	    </td>
+	    <td style="text-align: center"><span class="{roles_row.STIJL}"><strong>{roles_row.DIFFERENCE}</strong></span></td>
 	  </tr>
+
 	  <!-- END roles_row -->
-	  </tbody>
+</tbody>
 </table>
 
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+     <input type="submit" name="updateroles" value="{L_EDIT_ROLES}" class="button1" /> 
 </fieldset>
 
-
+</fieldset>
 
 <!-- ENDIF -->
 

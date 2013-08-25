@@ -68,9 +68,9 @@ if (!class_exists('\bbdkp\WowAPI'))
 
 	protected $possible_recstatus = array();
 	
-
-
 	/**
+	 * guild class constructor
+	 * @param unknown_type $guild_id
 	 */
 	function __construct($guild_id = 0)
 	{

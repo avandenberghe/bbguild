@@ -174,7 +174,8 @@ class acp_dkp_guild extends \bbdkp\Admin
 				$addrank = (isset($_POST['addrank'])) ? true : false;
 				
 				$addrecruitment = (isset($_POST['addrecruitment'])) ? true : false;
-				  
+				$updateroles = (isset($_POST['updateroles'])) ? true : false;
+				
 				// POST check
 				if ($add || $submit || $getarmorymembers || $updaterank || $addrank || $addrecruitment)
 				{
@@ -379,6 +380,18 @@ class acp_dkp_guild extends \bbdkp\Admin
 					unset($addrole); 
 				}
 				
+				if($updateroles)
+				{
+					$updaterole = new \bbdkp\Roles(); 
+					$modroles = utf8_normalize_nfc(request_var('needed', array(0 => 0), true));
+					foreach ($modroles as $id => $needed)
+					{
+						$updaterole->id = $id; 
+						$updaterole->needed = $needed;
+						$updaterole->update(); 
+					}
+				}
+				
 				// start template loading
 
 				if ($updateguild->guildid != 0)
@@ -483,7 +496,6 @@ class acp_dkp_guild extends \bbdkp\Admin
 							'OPTION' => $rolename));
 				}
 				
-				
 				foreach ($classdistribution as $class_id => $class)
 				{
 					$template->assign_block_vars('classlist_row', array(
@@ -492,35 +504,55 @@ class acp_dkp_guild extends \bbdkp\Admin
 							'OPTION' => $class['classname']));
 				}				
 				
-				$result = $listroles->listroles(); 
+				$result = $listroles->listroles();
+
+				$current = 0; 
+				$needed = 0;
+				$difference = 0;
 				while($row = $db->sql_fetchrow($result))
 				{
 					
 					$role = isset($row['role']) ? 
 							( isset($user->lang[$row['role']]) ? $user->lang[$row['role']]  : $row['role']  ) : 
 							$listroles->roles['NA'];
+
+					$current += (int) $classdistribution[$row['class_id']]['classcount'];
+					$needed += (int) isset($row['needed']) ? (int) $row['needed'] : 0;
+					
+					$css = 'positive';
+					if (((int) $classdistribution[$row['class_id']]['classcount'] - ((int) isset($row['needed']) ? (int) $row['needed'] : 0) ) < 0) 
+					{
+						$css = 'negative'; 
+					}
 					 
 					$template->assign_block_vars('roles_row', array(
 						'GUILD_ID' 	=> $row['guild_id'] ,
 						'GAME_ID' 	=> $row['game_id'] ,
+						'ROLEID' 	=> $row['roleid'], 
 						'ROLE' 		=> $role, 
+						'STIJL' 	=> $css, 
 						'CLASS_ID' 	=> $row['class_id'] ,
 						'CLASS' 	=> $row['class_name'] ,
 						'IMAGENAME' 	=> $row['imagename'] ,
 						'COLORCODE' => $row['colorcode'] ,
 						'CLASS_IMAGE' => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '' ,
 						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false ,
+						'CURRENT'		=> $classdistribution[$row['class_id']]['classcount'],
 						'NEEDED' 	=> isset($row['needed']) ? $row['needed'] : '0' ,
-						'CURRENT'	=> $classdistribution[$row['class_id']]['classcount'], 
+						'DIFFERENCE'	=> (int) $classdistribution[$row['class_id']]['classcount'] - (isset($row['needed']) ? (int) $row['needed'] : 0) ,
 					));
+					
+					
 				}
 				$db->sql_freeresult($result);
-				
 				
 				
 				//print all other static info
 				$template->assign_vars(array(
 					// Form values
+					'CURRENT' => $current,
+					'NEEDED' => $needed,
+					'DIFFERENCE' => ($current - $needed),
 					'RECSTATUS' => $updateguild->recstatus,
 					'GAME_ID'	=> $updateguild->game_id,
 					'GUILD_ID' => $updateguild->guildid,

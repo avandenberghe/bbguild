@@ -957,12 +957,14 @@ $versions = array(
        		// add the new recruitment table
        		array($table_prefix . 'bbdkp_roles', array(
        				'COLUMNS'            	=> array(
-						'guild_id'     	=> array('UINT', 0),
+						'id'     	    => array('UINT', NULL, 'auto_increment'),
+       					'guild_id'     	=> array('UINT', 0),
        					'game_id'     	=> array('VCHAR', ''),
        					'role' 	   		=> array('VCHAR', ''),
        					'class_id'      => array('UINT', 0),
 						'needed'	   	=> array('USINT', 0),
        				),
+       				'PRIMARY_KEY'     => array('id'),
        				'KEYS'            => array('bbdkp_roles' => array('UNIQUE', array('guild_id', 'game_id', 'role', 'class_id' ))),
        			)),
        		
@@ -1211,6 +1213,9 @@ function tableupdates($action, $version)
 					//$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
 					//$db->sql_query($sql);
 					
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberguild MODIFY region VARCHAR(3) ';
+					$db->sql_query($sql);
+										
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raid_items MODIFY item_gameid VARCHAR(8) ';
 					$db->sql_query($sql);
 	
@@ -1245,6 +1250,9 @@ function tableupdates($action, $version)
 					//$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
 					//$db->sql_query($sql);
 
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberguild MODIFY region VARCHAR(3) ';
+					$db->sql_query($sql);
+					
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raid_items MODIFY item_gameid VARCHAR(8) ';
 					$db->sql_query($sql);
 					

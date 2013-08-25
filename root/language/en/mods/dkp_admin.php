@@ -345,6 +345,7 @@ $lang = array_merge($lang, array(
 'ADD_ROLES' 		=> 'Add Roles',
 'ROLES' 			=> 'Roles',
 'NEEDED' 			=> 'Needed',
+'DIFFERENCE' 		=> 'Difference',
 'TRANSFER_HISTORY' => 'Transfer Member History',
 
 
