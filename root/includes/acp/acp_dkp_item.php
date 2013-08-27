@@ -29,7 +29,10 @@ if (!class_exists('\bbdkp\LootController'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Loot/Lootcontroller.$phpEx");
 }
-
+if (!class_exists('\bbdkp\PointsController'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
+}
 /**
  * This ACP class manages Game Loot
  * 
@@ -40,6 +43,7 @@ class acp_dkp_item extends \bbdkp\Admin
 	public $u_action;
 	private $link;
 	private $LootController;
+	private $PointsController;
 	
 	public function main($id, $mode) 
 	{
@@ -49,6 +53,7 @@ class acp_dkp_item extends \bbdkp\Admin
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&mode=listitems" ) . '"><h3>'. $user->lang['RETURN_DKPINDEX'] .'</h3></a>';
 
 		$this->LootController = new \bbdkp\Lootcontroller();
+		$this->PointsController = new \bbdkp\PointsController();
 		
 		switch ($mode) 
 		{
@@ -333,14 +338,13 @@ class acp_dkp_item extends \bbdkp\Admin
 
 		$raid_id = request_var('hidden_raid_id', 0);
 		$item_buyers = request_var('item_buyers', array(0 => 0));
-		$itemvalue 	 = request_var( 'item_value' , 0.0) ; 
+		$item_value = request_var( 'item_value' , 0.0) ; 
 		$item_name = utf8_normalize_nfc(request_var('item_name','', true));
 		$item_name_db = utf8_normalize_nfc(request_var('item_name_db','', true));
 		$item_name = (strlen($item_name) > 0) ? $item_name : $item_name_db;
 		$itemgameid  = request_var( 'item_gameid' , ''); 
-
 		$this->LootController->addloot($raid_id, $item_buyers, $item_value, $item_name, $itemgameid); 
-		
+		$this->PointsController->addloot_update_dkprecord($item_value, $raid_id, $item_buyers); 
 		//
 		// Success message
 		//

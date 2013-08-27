@@ -357,9 +357,12 @@ class PointsController  extends \bbdkp\Admin
 	}
 	
 	
-	public function addloot_update_dkprecord($item_value, $dkpid, $member_id)
+	public function addloot_update_dkprecord($item_value, $raid_id, $member_id)
 	{
-		$this->Points->dkpid = $dkpid;
+		$raid = new \bbdkp\Raids($raid_id);
+		
+		
+		$this->Points->dkpid = $raid->event_dkpid;
 		$this->Points->member_id = $member_id;
 		$this->Points->read_account();
 		

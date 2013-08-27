@@ -32,6 +32,10 @@ if (!class_exists('\bbdkp\Loot'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Loot/Loot.$phpEx");
 }
+if (!class_exists('\bbdkp\Raids'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Raids/Raids.$phpEx");
+}
 
 /**
  * this class manages the loot transaction table (phpbb_bbdkp_raid_items)
@@ -67,27 +71,31 @@ class LootController  extends \bbdkp\Admin
 		
 	}
 
-/**
+	/**
 	 * adds 1 attendee to a raid
+	 * 
 	 * @param unknown_type $raid_id
-	 * @param unknown_type $raid_value
-	 * @param unknown_type $time_bonus
-	 * @param unknown_type $dkpid
-	 * @param unknown_type $member_id
-	 * @param unknown_type $raid_start
+	 * @param unknown_type $item_buyers
+	 * @param unknown_type $item_value
+	 * @param unknown_type $item_name
+	 * @param unknown_type $loottime
+	 * @param unknown_type $itemgameid
 	 * @return boolean
 	 */
 	public function addloot($raid_id, $item_buyers, $item_value, $item_name, $loottime, $itemgameid = 0 )
 	{
-		global $config; 
+		global $user, $config; 
 		$this->loot = new \bbdkp\Loot();
 		$this->loot->raid_id = $raid_id;
+		
+		$raid = new \bbdkp\Raids($raid_id); 
+		
 		$this->loot->item_value = $item_value; 
 		$this->loot->item_name = $item_name;
-		$this->loot->dkpid = $dkpid;
-		$this->loot->item_date = $this->loottime;
+		$this->loot->dkpid = $raid->event_dkpid;
+		$this->loot->item_date = $loottime;
 		
-		$group_key = $this->gen_group_key ( $this->loot->item_name, $loottime, $this->lootraid_id + rand(10,100) );
+		$group_key = $this->gen_group_key ( $this->loot->item_name, $loottime, $raid_id + rand(10,100) );
 		
 		$decayarray = array();
 		$decayarray[0] = 0;
@@ -95,21 +103,15 @@ class LootController  extends \bbdkp\Admin
 		
 		if ($config['bbdkp_decay'] == '1')
 		{
-			if ( !class_exists('acp_dkp_raid'))
-			{
-				require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx);
-			}
-			$acp_dkp_raid = new acp_dkp_raid;
 			//diff between now and the raidtime
 			$now = getdate();
 			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $loottime;
 			$decayarray = $acp_dkp_raid->decay($itemvalue, $timediff, 2);
 		}
 		
-		$this->add_dkp ($raid_value, $time_bonus, $raid_start, $dkpid, $member_id);
 		//
 		// Add item to selected members
-		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid, $decayarray[0]);
+		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $item_value, $raid_id, $loottime, $itemgameid, $decayarray[0]);
 		
 		//
 		// Logging
@@ -119,7 +121,7 @@ class LootController  extends \bbdkp\Admin
 		'L_NAME' 		=> $item_name,
 		'L_BUYERS' 		=> implode ( ', ', $item_buyers  ),
 				'L_RAID_ID' 	=> $raid_id,
-				'L_VALUE'   	=> $itemvalue ,
+				'L_VALUE'   	=> $item_value ,
 				'L_ADDED_BY' 	=> $user->data['username']);
 		
 				$this->log_insert ( array (
