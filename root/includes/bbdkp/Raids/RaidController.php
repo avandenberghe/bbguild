@@ -118,7 +118,7 @@ class RaidController  extends \bbdkp\Admin
 		$this->eventinfo = $events->events;  
 		
 		$members = new \bbdkp\Members();
-		$members->listallmembers();
+		$members->listallmembers($this->game_id, $this->guildid);
 		$this->memberlist = $members->gamememberlist;
 		if(count($this->memberlist) == 0)
 		{

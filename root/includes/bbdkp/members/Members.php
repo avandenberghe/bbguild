@@ -1291,12 +1291,12 @@ if (!class_exists('\bbdkp\WowAPI'))
 	 * get a member list for given game
 	 * @param unknown_type $game_id
 	 */
-	public function listallmembers($game_id = '')
+	public function listallmembers($game_id = '', $guild_id = 0)
 	{
 		global $db;
 		
 		$sql_array = array(
-				'SELECT'    => 'm.member_id ,m.member_name ',
+				'SELECT'    => 'r.rank_name, m.member_id ,m.member_name ',
 		
 				'FROM'      => array(
 						MEMBER_LIST_TABLE 	  => 'm',
@@ -1306,8 +1306,13 @@ if (!class_exists('\bbdkp\WowAPI'))
 				'WHERE'     =>  ' m.member_guild_id = r.guild_id
     	    				 AND m.member_rank_id = r.rank_id
     	    				 AND r.rank_hide != 1 ',
-				'ORDER_BY' => 'm.member_name'
+				'ORDER_BY' => 'm.member_rank_id asc, m.member_level desc, m.member_name asc'
 		);
+		
+		if($guild_id != 0)
+		{
+			$sql_array['WHERE'] .= ' AND m.member_guild_id = ' . $guild_id;
+		}	
 		
 		if ($game_id != '')
 		{
@@ -1322,6 +1327,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 			$this->gamememberlist[] = array(
 				'member_id' 	=> $row['member_id'],
 				'member_name' 	=> $row['member_name'],
+				'rank_name'  	=> $row['rank_name'],
 			); 
 		}
 		

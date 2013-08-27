@@ -224,8 +224,35 @@ if (!class_exists('\bbdkp\Members'))
 		
 		$this->RaidController->dkpid = $dkpsys_id;
 		
-		/* load info for listboxes */
+		//guild dropdown
+		$Guild = new \bbdkp\Guilds();
+		$guildlist = $Guild->guildlist();
+		foreach ( (array) $guildlist as $g )
+		{
+			if($g['guilddefault'] == 1 )
+			{
+				$this->RaidController->guildid  = $g['id'];
+				$this->RaidController->game_id  = $g['game_id'];
+			}
+			
+			$template->assign_block_vars('guild_row', array(
+					'VALUE' => $g['id'] ,
+					'SELECTED' => $g['guilddefault'] == 1 ? ' selected="selected"' : '',
+					'OPTION' => $g['name']));
+		}
+		
 		$this->RaidController->init_newraid();
+		
+		$membercount = 0; 
+		foreach ( (array) $this->RaidController->memberlist as $member )
+		{
+			$class_colorcode = $member['member_id'] == '' ? '#123456' : $member['member_id']; 
+			$membercount++;
+			$template->assign_block_vars ( 'members_row', array (
+				'VALUE' 	=> $member['member_id'], 
+				'OPTION' 	=> $member['rank_name'] . ' '.  $member['member_name'],
+			));
+		}
 		
 		$eventvalue = 0;
 		foreach ($this->RaidController->eventinfo as $event )
@@ -245,27 +272,6 @@ if (!class_exists('\bbdkp\Members'))
 			));
 		}
 		
-		//guild dropdown
-		$Guild = new \bbdkp\Guilds();
-		$guildlist = $Guild->guildlist();
-		foreach ( (array) $guildlist as $g )
-		{
-			$template->assign_block_vars('guild_row', array(
-					'VALUE' => $g['id'] ,
-					'SELECTED' => '' ,
-					'OPTION' => $g['name']));
-		}
-		
-		$membercount = 0; 
-		foreach ( (array) $this->RaidController->memberlist as $member )
-		{
-			$class_colorcode = $member['member_id'] == '' ? '#123456' : $member['member_id']; 
-			$membercount++;
-			$template->assign_block_vars ( 'members_row', array (
-				'VALUE' 	=> $member['member_id'], 
-				'OPTION' 	=> $member['member_name'],
-			));
-		}
 		
 		// build presets for raiddate and hour pulldown
 		
@@ -435,6 +441,11 @@ if (!class_exists('\bbdkp\Members'))
 				// Javascript messages
 				'MSG_ATTENDEES_EMPTY' => $user->lang ['FV_REQUIRED_ATTENDEES'], 
 				'MSG_NAME_EMPTY' 	  => $user->lang ['FV_REQUIRED_EVENT_NAME'], 
+				'LA_ALERT_AJAX' => $user->lang['ALERT_AJAX'] ,
+				'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'] ,
+				'UA_FINDMEMBERS' => append_sid($phpbb_admin_path . "style/dkp/findmembers.$phpEx") ,
+				'UA_FINDEVENTS'  => append_sid($phpbb_admin_path . "style/dkp/findevents.$phpEx") ,
+				
 		));
 	}
 	
@@ -755,6 +766,9 @@ if (!class_exists('\bbdkp\Members'))
 			
 			// Javascript messages
 			'MSG_ATTENDEES_EMPTY' => $user->lang ['FV_REQUIRED_ATTENDEES'], 
+			'LA_ALERT_AJAX' => $user->lang['ALERT_AJAX'] ,
+			'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'] ,
+			'UA_FINDMEMBERS' => append_sid($phpbb_admin_path . "style/dkp/findmembers.$phpEx") ,
 			
 			));
 				

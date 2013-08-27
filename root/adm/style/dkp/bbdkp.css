@@ -82,3 +82,13 @@ h3, h4 {
 	
 	color: teal;
 }
+
+select
+{
+   /* -moz-appearance:none;
+    -webkit-appearance:none;*/
+    border:0.5px solid #efefef;
+    background:#f2f1ef;
+    -webkit-border-radius:0;
+    border-radius:0;
+}

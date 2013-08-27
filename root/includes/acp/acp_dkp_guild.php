@@ -231,7 +231,8 @@ class acp_dkp_guild extends \bbdkp\Admin
 				{
 					$updateguild->guildid = $this->url_id;
 					$updateguild->Getguild();
-					$old_guild = $updateguild;
+					$old_guild = new \bbdkp\Guilds($this->url_id);
+					$old_guild->Getguild();
 
 					$updateguild->game_id = request_var('game_id', '');
 					$updateguild->name = utf8_normalize_nfc(request_var('guild_name', ' ', true));

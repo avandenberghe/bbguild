@@ -37,7 +37,7 @@ if (!class_exists('\bbdkp\WowAPI'))
  * 
  * @package 	bbDKP
  */
- class Guilds extends \bbdkp\Admin
+class Guilds extends \bbdkp\Admin
 {
 	// common
 	public $game_id = '';
@@ -758,7 +758,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 	public function guildlist()
 	{
 		global $db; 
-		$sql = 'SELECT a.guilddefault, a.id, a.name, a.realm, a.region
+		$sql = 'SELECT a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region
 				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
 				WHERE a.id = b.guild_id
 				GROUP BY a.guilddefault, a.id, a.name, a.realm, a.region
@@ -767,7 +767,8 @@ if (!class_exists('\bbdkp\WowAPI'))
 		$guild = array(); 
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$guild [] = array (		
+			$guild [] = array (
+				'game_id' => $row['game_id'] ,
 				'id' => $row['id'] ,
 				'name' => $row['name'], 
 				'guilddefault' => $row['guilddefault']

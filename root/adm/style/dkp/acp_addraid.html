@@ -213,10 +213,148 @@ function fnRemoveMember()
   }
 }
 
+/*
+ * guild pulldown handler
+ */
+
+/*  make a XMLHTTP Request object */
+function GetXmlHttpObject() 
+{ 
+	var xmlhttp=false;	
+	
+	try
+	{ 
+		//  IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}
+	catch(e)	
+	{	// activex code for IE6, IE5
+		try
+		{			
+			xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		catch(e)
+		{
+			try
+			{
+				xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+			}
+			catch(e1)
+			{
+				xmlhttp=false;
+			}
+		}
+	}
+	return xmlhttp;
+}
+
+
+
+
+ 
+var xmlhttp; 
+
+/* ajax function to find memberlist */ 
+function GetMembers(guildid)
+{
+   xmlhttp = GetXmlHttpObject();
+   if (xmlhttp == null)
+   {
+	   alert("{LA_ALERT_OLDBROWSER}");
+	   return;  
+   }
+    var strURL="{UA_FINDMEMBERS}&guild="+guildid;
+    xmlhttp.onreadystatechange=GuildStateChanged;
+    xmlhttp.open("GET", strURL, true);
+    // send to server
+    xmlhttp.send(null);
+}
+
+/* ajax function to find events */ 
+function GetEvents(dkpsys_id)
+{
+   xmlhttp = GetXmlHttpObject();
+   if (xmlhttp == null)
+   {
+	   alert("{LA_ALERT_OLDBROWSER}");
+	   return;  
+   }
+    var strURL="{UA_FINDEVENTS}&dkpsysid="+dkpsys_id;
+    xmlhttp.onreadystatechange=PoolStateChanged;
+    xmlhttp.open("GET", strURL, true);
+    // send to server
+    xmlhttp.send(null);
+}
+
+/* called from GetMembers when state changed */
+function GuildStateChanged()
+{
+	if (xmlhttp.readyState==4) //request complete
+	{
+		if (xmlhttp.status == 200)
+		{
+			var rsel = document.getElementById('all_members'); 
+			//remove select options
+			rsel.options.length = 0; 
+			
+			//receive xml
+			xmlDoc=xmlhttp.responseXML;
+						
+			var root = xmlDoc.getElementsByTagName('memberlist')[0];
+			var members = root.getElementsByTagName("member")
+			for (var i = 0; i < members.length; i++)
+			{
+				var member = members[i]; 
+				var memberid = member.getElementsByTagName("member_id")[0].firstChild.nodeValue;
+				var membername = member.getElementsByTagName("member_name")[0].firstChild.nodeValue;
+			    // add the options
+			    rsel.options[i] = new Option(membername, memberid, true, false); 
+			}
+		}
+		else 
+		{
+   	   		alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+	 	}
+	}
+}
+
+/* called from GetEvents when state changed */
+function PoolStateChanged()
+{
+	if (xmlhttp.readyState==4) //request complete
+	{
+		if (xmlhttp.status == 200)
+		{
+			var rsel = document.getElementById('event_id'); 
+			//remove select options
+			rsel.options.length = 0; 
+			
+			//receive xml
+			xmlDoc=xmlhttp.responseXML;
+						
+			var root = xmlDoc.getElementsByTagName('eventlist')[0];
+			var events = root.getElementsByTagName("event")
+			for (var i = 0; i < events.length; i++)
+			{
+				var event = events[i]; 
+				var eventid = event.getElementsByTagName("event_id")[0].firstChild.nodeValue;
+				var eventname = event.getElementsByTagName("event_name")[0].firstChild.nodeValue;
+			    // add the options
+			    rsel.options[i] = new Option(eventname, eventid, true, false); 
+			}
+		}
+		else 
+		{
+   	   		alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+	 	}
+	}
+}
+
 //]]>
 
 </script>
 <style>
+
 dt 
 {
 	width: 35% !important; 	
@@ -239,7 +377,7 @@ dd
 
 	<dl><dt><label>{L_POOL}:</label></dt>
 	<dd>
-	<select name="dkpsys_id" class="input" onchange="javascript:form.submit();">
+	<select name="dkpsys_id" class="input" onchange="return GetEvents(this.value)">
 		<!-- BEGIN dkpsys_row -->
 		<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
 		<!-- END dkpsys_row -->
@@ -326,7 +464,7 @@ dd
 
 <dl>
 <dt><label>{L_GUILD}:</label></dt>
-<dd><select id="member_guild_id" name="member_guild_id" class="input" >
+<dd><select id="member_guild_id" name="member_guild_id" class="input" onchange="return GetMembers(this.value)">
        	<!-- BEGIN guild_row -->
        <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
         <!-- END guild_row -->
