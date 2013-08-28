@@ -175,7 +175,7 @@ class acp_dkp_game extends \bbdkp\Admin
 			case 'editgames' :
 				
 				$editgame = new \bbdkp\Game;
-				$editgame->game_id = request_var(URI_GAME, '');
+				$editgame->game_id = request_var(URI_GAME, request_var ( 'hidden_game_id','' ));
 				$editgame->Get(); 
 				
 				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$editgame->game_id}" ) . '"><h3>' .

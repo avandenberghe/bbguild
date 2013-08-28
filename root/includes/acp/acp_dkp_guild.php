@@ -63,7 +63,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 	public function main ($id, $mode)
 	{
 		global $user, $template, $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		
+		$this->tpl_name = 'dkp/acp_' . $mode;
 		switch ($mode)
 		{
 
@@ -154,7 +154,6 @@ class acp_dkp_guild extends \bbdkp\Admin
 					'U_LIST_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds") ,
 					'GUILDMEMBERS_FOOTCOUNT' => sprintf($user->lang['GUILD_FOOTCOUNT'], $guild_count)));
 				$this->page_title = 'ACP_LISTGUILDS';
-				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
 
 			/*************************************
@@ -242,7 +241,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					$updateguild->min_armory = request_var('min_armorylevel', 0);
 					$updateguild->recstatus = request_var('switchon_recruitment', 0);
 						
-					//@todo complete for other games
+					//@todo complete for other games?
 					$updateguild->aionlegionid = 0;
 					$updateguild->aionserverid = 0;
 					$armoryparams = array();
@@ -609,12 +608,11 @@ class acp_dkp_guild extends \bbdkp\Admin
 				add_form_key($form_key);
 				
 				$this->page_title = $user->lang['ACP_ADDGUILD'];
-				$this->tpl_name = 'dkp/acp_' . $mode;
+				
 				break;
 
 			default:
 				$this->page_title = 'ACP_DKP_MAINPAGE';
-				$this->tpl_name = 'dkp/acp_mainpage';
 				$success_message = 'Error';
 				trigger_error($success_message . $this->link, E_USER_WARNING);
 		}

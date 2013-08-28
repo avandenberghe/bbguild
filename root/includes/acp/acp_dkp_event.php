@@ -21,11 +21,11 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang ( array ('mods/dkp_admin' ));
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
-if (!class_exists('Admin'))
+if (!class_exists('\bbdkp\Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
-if (!class_exists('Events'))
+if (!class_exists('\bbdkp\Events'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Raids/Events.$phpEx");
 }

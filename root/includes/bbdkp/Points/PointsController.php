@@ -30,6 +30,11 @@ if (!class_exists('\bbdkp\Pool'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Points/Pool.$phpEx");
 }
+// Include the member class
+if (!class_exists('\bbdkp\Members'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+}
 
 /**
  * 
@@ -357,12 +362,10 @@ class PointsController  extends \bbdkp\Admin
 	}
 	
 	
-	public function addloot_update_dkprecord($item_value, $raid_id, $member_id)
+	public function addloot_update_dkprecord($item_value, $member_id)
 	{
-		$raid = new \bbdkp\Raids($raid_id);
-		
-		
-		$this->Points->dkpid = $raid->event_dkpid;
+				
+		$this->Points->dkpid = $this->dkpsys_id;
 		$this->Points->member_id = $member_id;
 		$this->Points->read_account();
 		
@@ -370,9 +373,9 @@ class PointsController  extends \bbdkp\Admin
 		$this->Points->update_account();	
 	}
 	
-	public function removeloot_update_dkprecord($item_value, $dkpid, $member_id)
+	public function removeloot_update_dkprecord($item_value, $member_id)
 	{
-		$this->Points->dkpid = $dkpid;
+		$this->Points->dkpid = $this->dkpsys_id;
 		$this->Points->member_id = $member_id;
 		$this->Points->read_account();
 		

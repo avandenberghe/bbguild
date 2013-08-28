@@ -114,11 +114,11 @@ if (!class_exists('\bbdkp\Members'))
 				elseif($additem)
 				{
 					//show form for adding items
-					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=edititem&amp;' . URI_RAID .'=' . $raid_id));
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_item&amp;mode=additem&amp;' . URI_RAID .'=' . $raid_id));
 				}
 				elseif($deleteitem)
 				{
-					$this->deleteitem(); 
+					$this->deleteitem($raid_id); 
 				}
 				elseif($addraider)
 				{
@@ -507,9 +507,9 @@ if (!class_exists('\bbdkp\Members'))
 		}
 		
 		$s_memberlist_options = '';
-		foreach( (array) $this->RaidController->nonattendees as $nonattendees)
+		foreach( (array) $this->RaidController->nonattendees as $member_id => $nonattendee)
 		{
-			$s_memberlist_options .= '<option value="' . $nonattendees['member_id'] . '"> ' . $nonattendees['member_name'] . '</option>';
+			$s_memberlist_options .= '<option value="' . $member_id . '"> ' . $nonattendee . '</option>';
 		}
 		
 		// populate item buyer list
@@ -560,9 +560,9 @@ if (!class_exists('\bbdkp\Members'))
 					'ITEMNAME'      => $item_name,
 					'ITEM_ID'		=> $lootdetail['item_id'],
 					'ITEM_ZS'      	=> ($lootdetail['item_zs'] == 1) ? ' checked="checked"' : '',
-					'U_VIEW_BUYER' 	=> (! empty ( $lootdetail ['member_name'] )) ? append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $lootdetail['member_id']) : '',
-					'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=edititem&amp;" . URI_ITEM . "={$lootdetail['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
-					'U_DELETE_ITEM' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteitem=1&amp;" . URI_ITEM . "={$lootdetail['item_id']}&amp;" . URI_DKPSYS. "=" . $raid->event_dkpid ),
+					'U_VIEW_BUYER' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" . $raid_id . "&amp;" . URI_NAMEID . "=" . $lootdetail['member_id']) ,
+					'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_ITEM . "={$lootdetail['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
+					'U_DELETE_ITEM' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteitem=1&amp;" . URI_ITEM . "={$lootdetail['item_id']}&amp;" . URI_DKPSYS. "=" . $raid->event_dkpid . "&amp;" . URI_RAID . "={$raid_id}"),
 					'ITEMVALUE' 	=> $lootdetail['item_value'],
 					'DECAYVALUE' 	=> $lootdetail['item_decay'],
 					'TOTAL' 		=> $lootdetail['item_total'],
@@ -983,8 +983,8 @@ if (!class_exists('\bbdkp\Members'))
 		
 		$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_RAID_SUCCESS'], request_var ( 'mo', ' ' ), request_var ( 'd', ' ' ),
 				request_var ( 'Y', ' ' ), request_var ( 'event_id', 0 ));
-		$link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "={$raid_id}" );
-		meta_refresh(1, $link);
+		$this->link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "={$raid_id}" );
+		meta_refresh(1, $this->link );
 		trigger_error ( $success_message . $this->link, E_USER_NOTICE );		
 	}
 	
@@ -1147,23 +1147,26 @@ if (!class_exists('\bbdkp\Members'))
 	 */
 	private function deleteitem()
 	{
-		global $user, $template;
+		global $user, $template, $phpbb_admin_path, $phpEx;
 	
 		if (confirm_box ( true ))
 		{
 			//retrieve info
+			$raid_id = request_var('raid_id', 0);
 			$old_item = request_var('hidden_old_item', array(''=>''));
-			
-			$this->LootController->delete($old_item); 
+			$this->LootController->deleteloot($old_item); 
 				
 			$success_message = sprintf ( $user->lang ['ADMIN_DELETE_ITEM_SUCCESS'],
 					$old_item ['item_name'], $old_item ['member_name'], $old_item ['item_value'] );
-				
-			trigger_error ( $success_message . $this->link, E_USER_NOTICE );
+			
+			$this->link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "={$raid_id}" );
+			meta_refresh(1, $this->link );
+			trigger_error ( $success_message, E_USER_NOTICE );
 	
 		}
 		else
 		{
+			$raid_id = request_var ( URI_RAID, 0);
 			$dkpid = request_var ( URI_DKPSYS, 0);
 			$item_id = request_var( URI_ITEM, 0);
 			if($item_id==0)
@@ -1171,14 +1174,14 @@ if (!class_exists('\bbdkp\Members'))
 				trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] , E_USER_WARNING);
 			}
 				
-			$loot = $this->LootController->Getloot($item_id); 
-
+			$loot = (array) $this->LootController->Getloot($item_id); 
 			$s_hidden_fields = build_hidden_fields ( array (
+					'raid_id'		  => $raid_id,
 					'deleteitem' 	  => true,
 					'hidden_old_item' => $loot, 
 			));
 			$template->assign_vars ( array ('S_HIDDEN_FIELDS' => $s_hidden_fields ) );
-			confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $loot->item_name, $loot->member_name ), $s_hidden_fields );
+			confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $loot['item_name'], $loot['member_name'] ), $s_hidden_fields );
 		}
 	
 	}

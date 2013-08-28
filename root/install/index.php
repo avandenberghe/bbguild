@@ -1033,6 +1033,14 @@ $versions = array(
      			),
      			),
      			
+     			
+     			// remove item modules
+     			array('acp', 'ACP_DKP_RAIDS', array(
+     					'module_basename' => 'dkp_item',
+     					'modes'           => array('listitems', 'edititem', 'search', 'viewitem'),
+     			),
+     			),
+     			
      			), 
      		
      	'module_add' => array(
@@ -1077,10 +1085,15 @@ $versions = array(
      			),
      			),
      			
-     				
+     			// remove item modules
+     			array('acp', 'ACP_DKP_RAIDS', array(
+     					'module_basename' => 'dkp_item',
+     					'modes'           => array('listitems', 'additem', 'search', 'viewitem'),
+     			),
+     			),
      		 		
      		 		
-     		 		),
+     		 	),
      		
      	'custom' => array(
 				'tableupdates',

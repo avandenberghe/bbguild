@@ -206,6 +206,8 @@ class Loot
 					RAID_ITEMS_TABLE . ' i, ' . 
 					MEMBER_LIST_TABLE . ' m ' .
 					RAIDS_TABLE . ' r ' .
+					MEMBER_LIST_TABLE . ' m, ' .
+					RAIDS_TABLE . ' r, ' .
 					EVENTS_TABLE . ' e 
 				WHERE i.member_id = m.member_id 
 				AND i.raid_id = r.raid_id

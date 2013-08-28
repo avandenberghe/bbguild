@@ -36,6 +36,11 @@ if (!class_exists('\bbdkp\Raids'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Raids/Raids.$phpEx");
 }
+// Include the members class
+if (!class_exists('\bbdkp\Members'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+}
 
 /**
  * this class manages the loot transaction table (phpbb_bbdkp_raid_items)
@@ -106,37 +111,40 @@ class LootController  extends \bbdkp\Admin
 			//diff between now and the raidtime
 			$now = getdate();
 			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $loottime;
-			$decayarray = $acp_dkp_raid->decay($itemvalue, $timediff, 2);
+			$decayarray = $acp_dkp_raid->decay($item_value, $timediff, 2);
 		}
 		
 		//
 		// Add item to selected members
 		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $item_value, $raid_id, $loottime, $itemgameid, $decayarray[0]);
 		
+		$buyernames = ''; 
+		foreach($item_buyers as $member_id)
+		{
+			$buyernames == '' ? '': $buyernames .= ', ';  
+			$member = new \bbdkp\Members($member_id); 
+			$buyernames .= $member->member_name;
+		}
+		
 		//
 		// Logging
-		//
+		//@todo fix logging
 		$log_action = array (
 		'header' 		=> 'L_ACTION_ITEM_ADDED',
 		'L_NAME' 		=> $item_name,
-		'L_BUYERS' 		=> implode ( ', ', $item_buyers  ),
-				'L_RAID_ID' 	=> $raid_id,
-				'L_VALUE'   	=> $item_value ,
-				'L_ADDED_BY' 	=> $user->data['username']);
+		'L_BUYERS' 		=> $buyernames,
+		'L_RAID_ID' 	=> $raid_id,
+		'L_VALUE'   	=> $item_value ,
+		'L_ADDED_BY' 	=> $user->data['username']);
 		
-				$this->log_insert ( array (
-				'log_type' => $log_action ['header'],
-				'log_action' => $log_action ) );
-		
+		$this->log_insert ( array (
+		'log_type' => $log_action ['header'],
+		'log_action' => $log_action ) );
 		
 		return true;
 		
 	}
-	
-	public function deleteloot()
-	{
-		
-	}
+
 	
 	/**
 	 * does the actual item-adding database operations
@@ -259,9 +267,8 @@ class LootController  extends \bbdkp\Admin
 	
 	public function Getloot($item_id)
 	{
-		$loot = new \bbdkp\Loot(); 
 		$this->loot->Getloot($item_id); 
-		return $loot;
+		return $this->loot;
 	}
 	
 	
@@ -312,7 +319,60 @@ class LootController  extends \bbdkp\Admin
 		}
 		$db->sql_freeresult ($result);
 	}
+
 	
+	/**
+	 * get item info
+	 * 
+	 */
+	public function getitemdeleteinfo($item_id, $dkp_id)
+	{
+		
+		global $db; 
+		
+		$sql_array = array(
+				'SELECT' 	=> 'i2.* , m.member_name ',
+				'FROM' 		=> array(
+						RAID_ITEMS_TABLE => 'i2',
+						MEMBER_LIST_TABLE => 'm'
+				),
+				'LEFT_JOIN' => array(
+						array(
+								'FROM' => array(RAID_ITEMS_TABLE => 'i1'),
+								'ON' => ' i1.item_group_key = i2.item_group_key '
+						)),
+				'WHERE' => 'i2.member_id = m.member_id AND i1.item_id= '. $item_id,
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ( $sql );
+				
+			
+		$item_buyers = '[';
+		while ( $row = $db->sql_fetchrow ( $result ) )
+		{
+			$old_item[$row['item_id']] = array (
+					'item_id' 		=>  (int) 	 $row['item_id'] ,
+					'dkpid'			=>  $dkp_id,
+					'item_name' 	=>  (string) $row['item_name'] ,
+					'member_id' 	=>  (int) 	 $row['member_id'] ,
+					'member_name' 	=>  (string) $row['member_name'] ,
+					'raid_id' 		=>  (int) 	 $row['raid_id'],
+					'item_date' 	=>  (int) 	 $row['item_date'] ,
+					'item_value' 	=>  (float)  $row['item_value'],
+					'item_decay' 	=>  (float)  $row['item_decay'],
+					'item_zs' 		=>  (bool)   $row['item_zs'],
+			);
+		
+			//for confirm question
+			$item_buyers = $item_buyers . ' ' . $row['member_name'] . ' ';
+			$item_name = $row['item_name'];
+		}
+		$db->sql_freeresult ($result);
+		$item_buyers .= ']';
+			
+		return array($item_buyers, $old_item, $item_name); 
+		
+	}
 	
 	/*
 	 * delete : does one item deletion in database
@@ -332,7 +392,7 @@ class LootController  extends \bbdkp\Admin
 	*	'item_zs' 		=>  (bool)   $row['item_zs'],
 	*
 	*/
-	public function delete($old_item)
+	public function deleteloot($old_item)
 	{
 		global $config, $db;
 		$db->sql_transaction('begin');
@@ -403,7 +463,7 @@ class LootController  extends \bbdkp\Admin
 	
 			}
 		}
-	
+
 		$db->sql_transaction('commit');
 	
 		$log_action = array (

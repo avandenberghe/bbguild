@@ -529,7 +529,10 @@ class log
 					$logline = sprintf($this->getLogMessage('INDIVADJ_DELETED', $verbose), $userstring, $log['L_ADJUSTMENT'], $log['L_MEMBERS']);
 					break;
 				case 'ITEM_ADDED':
-					$logline = sprintf($this->getLogMessage('ITEM_ADDED', $verbose), $userstring, $log['L_ADJUSTMENT'], $log['L_MEMBERS'], count( explode(', ', $log['L_BUYERS'])), $log['L_VALUE']  );
+					$logline = sprintf($this->getLogMessage('ITEM_ADDED', $verbose), $userstring, 
+						isset($log['L_NAME']) ? $log['L_NAME'] : '', 
+						isset($log['L_BUYERS']) ? $log['L_BUYERS'] : ''	,
+						 $log['L_VALUE']  );
 					break;
 				case 'ITEM_UPDATED':
 					$logline = sprintf($this->getLogMessage('ITEM_UPDATED', $verbose), $userstring, $log['L_NAME_BEFORE'], count(explode(', ', $log['L_BUYERS_BEFORE'] )));

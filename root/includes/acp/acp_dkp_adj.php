@@ -28,17 +28,17 @@ if (!class_exists('\bbdkp\Admin'))
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
 // Include the adjust class
-if (!class_exists('Adjust'))
+if (!class_exists('\bbdkp\Adjust'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Adjustments/Adjust.$phpEx");
 }
 // Include the members class
-if (!class_exists('Members'))
+if (!class_exists('\bbdkp\Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
 // Include the validator class
-if (!class_exists('Validator'))
+if (!class_exists('\bbdkp\Validator'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Validator.$phpEx");
 }
