@@ -204,8 +204,6 @@ class Loot
 		
 		$sql = 'SELECT * FROM ' . 
 					RAID_ITEMS_TABLE . ' i, ' . 
-					MEMBER_LIST_TABLE . ' m ' .
-					RAIDS_TABLE . ' r ' .
 					MEMBER_LIST_TABLE . ' m, ' .
 					RAIDS_TABLE . ' r, ' .
 					EVENTS_TABLE . ' e 
