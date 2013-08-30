@@ -688,7 +688,7 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 				'S_NOTMM' => false,
 				'LISTMEMBERS_FOOTCOUNT' => $footcount_text,
 				'DKPSYS' => $this->PointsController->dkpsys_id,
-				'DKPSYSNAME' => $this->PointsController->dkpsys[$this->PointsController->dkpsys_id] );
+				'DKPSYSNAME' => $this->PointsController->dkpsys[$this->PointsController->dkpsys_id]['name'] );
 		
 		if ($config ['bbdkp_timebased'] == 1)
 		{

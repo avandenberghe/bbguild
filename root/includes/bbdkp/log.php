@@ -175,6 +175,7 @@ class log
 				'L_VALUE_AFTER',
 				'L_HEADLINE', 
 				'L_HEADLINE_BEFORE', 
+				'L_BUYER',
 				'L_BUYERS', 
 				'L_BUYERS_BEFORE', 
 				'L_ADJUSTMENT', 
@@ -520,7 +521,7 @@ class log
 					$logline = sprintf($this->getLogMessage('HISTORY_TRANSFER', $verbose), $userstring, $log['L_FROM'] , $log['L_TO'] );
 					break;
 				case 'INDIVADJ_ADDED':
-					$logline = sprintf($this->getLogMessage('INDIVADJ_ADDED', $verbose), $userstring, $log['L_ADJUSTMENT'], count($log['L_MEMBERS']), $log['L_MEMBERS']);
+					$logline = sprintf($this->getLogMessage('INDIVADJ_ADDED', $verbose), $userstring, $log['L_ADJUSTMENT'], count( explode(",", $log['L_MEMBERS']) ), $log['L_MEMBERS']);
 					break;
 				case 'INDIVADJ_UPDATED':
 					$logline = sprintf($this->getLogMessage('INDIVADJ_UPDATED', $verbose), $userstring, $log['L_ADJUSTMENT_BEFORE'], $log['L_MEMBERS_AFTER']);
@@ -535,10 +536,10 @@ class log
 						 $log['L_VALUE']  );
 					break;
 				case 'ITEM_UPDATED':
-					$logline = sprintf($this->getLogMessage('ITEM_UPDATED', $verbose), $userstring, $log['L_NAME_BEFORE'], count(explode(', ', $log['L_BUYERS_BEFORE'] )));
+					$logline = sprintf($this->getLogMessage('ITEM_UPDATED', $verbose), $userstring, $log['L_NAME_BEFORE'] );
 					break;
 				case 'ITEM_DELETED':
-					$logline = sprintf($this->getLogMessage('ITEM_DELETED', $verbose), $userstring, $log['L_NAME'], count(explode(', ', $log['L_BUYERS'] )));
+					$logline = sprintf($this->getLogMessage('ITEM_DELETED', $verbose), $userstring, $log['L_NAME'], (isset($log['L_BUYER']) ? $log['L_BUYER'] : '') , (isset($log['L_VALUE']) ? $log['L_VALUE'] : '0')  );
 					break;
 				case 'MEMBER_ADDED':
 					$logline = sprintf($this->getLogMessage('MEMBER_ADDED', $verbose), $userstring, $log['L_NAME']);

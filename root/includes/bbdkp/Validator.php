@@ -111,7 +111,7 @@ class Validator
     {
         switch ($rule)
         {
-            case 'require' :
+            case 'required' :
                 return!(trim($value) == '');
  
             case 'maxlength' :

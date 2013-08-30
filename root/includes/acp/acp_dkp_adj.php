@@ -498,7 +498,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 		global $user;
 		$validator = new \bbdkp\Validator();
 		//setup validation rules
-		$validator->addRule('member_names', array('require'));
+		$validator->addRule('member_names', array('required'));
 		$validator->addRule('adjustment_value', array('required'));
 		$validator->addRule('adjustment_day', array('required', 'min' => 1, 'max' => 31 ));
 		$validator->addRule('adjustment_month',array('required', 'min' => 1, 'max' => 12));
@@ -511,8 +511,8 @@ class acp_dkp_adj extends \bbdkp\Admin
 		$data = array(
 				'member_names' => $member_names,
 				'adjustment_value' => request_var('adjustment_value', 0.00),
-				'adjustment_day' => request_var('mo', 0),
-				'adjustment_month' => request_var('y', 0),
+				'adjustment_day' => request_var('d', 0),
+				'adjustment_month' => request_var('mo', 0),
 				'adjustment_year' => request_var('y', 0),
 		);
 		$validator->setData($data);

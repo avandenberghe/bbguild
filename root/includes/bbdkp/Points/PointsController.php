@@ -85,7 +85,7 @@ class PointsController  extends \bbdkp\Admin
 	 */
 	public function listdkpaccounts()
 	{
-		global $db, $config;
+		global $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		
 	
 		$sql_array = array (
@@ -168,6 +168,9 @@ class PointsController  extends \bbdkp\Admin
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$members_result = $db->sql_query ( $sql );
 		$members_row = array(); 
+		
+		$member_count = 0;
+		$lines = 0;
 		while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{
 			++ $member_count;
@@ -177,7 +180,7 @@ class PointsController  extends \bbdkp\Admin
 					'STATUS' => ($row ['member_status'] == 1) ? 'checked="checked" ' : '',
 					'ID' => $row ['member_id'],
 					'DKPID' => $row ['member_dkpid'],
-					'DKPSYS_S' => $dkpsys_id,
+					'DKPSYS_S' => $this->dkpsys_id,
 					'DKPSYS_NAME' => $row ['dkpsys_name'],
 					'CLASS' => ($row ['member_class'] != 'NULL') ? $row ['member_class'] : '&nbsp;',
 					'COLORCODE' => ($row ['colorcode'] == '') ? '#123456' : $row ['colorcode'],
