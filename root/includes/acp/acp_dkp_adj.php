@@ -267,6 +267,32 @@ class acp_dkp_adj extends \bbdkp\Admin
 					}
 				}
 				
+				$now = getdate();
+				$s_day_options = '';
+				
+				$day = $showadj->adjustment_date > 0 ? date('j', $showadj->adjustment_date) : $now['mday'] ;
+				for ($i = 1; $i < 32; $i++)
+				{
+					$selected = ($i == $day ) ? ' selected="selected"' : '';
+					$s_day_options .= "<option value=\"$i\"$selected>$i</option>";
+				}
+				
+				$s_month_options = '';
+				$month = $showadj->adjustment_date > 0 ? date('n', $showadj->adjustment_date) : $now['mon'] ;
+				for ($i = 1; $i < 13; $i++)
+				{
+					$selected = ($i == $month ) ? ' selected="selected"' : '';
+					$s_month_options .= "<option value=\"$i\"$selected>$i</option>";
+				}
+				
+				$s_year_options = '';
+				$yr = $showadj->adjustment_date > 0 ? date('Y', $showadj->adjustment_date) : $now['year'] ;
+				for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+				{
+					$selected = ($i == $yr ) ? ' selected="selected"' : '';
+					$s_year_options .= "<option value=\"$i\"$selected>$i</option>";
+				}
+				
 				
 				if ($submit)
 				{
@@ -434,9 +460,36 @@ class acp_dkp_adj extends \bbdkp\Admin
 					}
 				}
 				
+				
+				//guild dropdown
+				$guildid  = request_var('member_guild_id', 0); 
+				$Guild = new \bbdkp\Guilds();
+				$guildlist = $Guild->guildlist();
+				foreach ( (array) $guildlist as $g )
+				{
+					
+					if ($guildid  == 0)
+					{
+						$guildid  = $g['id'];
+					}
+						
+					if($g['guilddefault'] == 1 )
+					{
+						$guildid  = $g['id'];
+					}
+						
+					$template->assign_block_vars('guild_row', array(
+							'VALUE' => $g['id'] ,
+							'SELECTED' => ($guildid == $g['id']) ? ' selected="selected"' : '',
+							'OPTION' => $g['name']));
+				}
+				
 				/* mark members as selected */
-				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . ' ORDER BY member_name';
+				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . ' 
+						WHERE member_guild_id = ' . $guildid . ' 
+						ORDER BY member_name ';
 				$result = $db->sql_query($sql);
+				
 				while ($row = $db->sql_fetchrow($result))
 				{
 					if ($adjust_id)
@@ -457,6 +510,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						'OPTION' => $row['member_name']));
 				}
 				
+				
 				$db->sql_freeresult($result);
 				$template->assign_vars(array(
 					'L_TITLE' =>  ($showadj->adjustment_id == 0) ? $user->lang['ADD_IADJ_TITLE'] : $user->lang['EDIT_IADJ_TITLE'], 
@@ -469,18 +523,18 @@ class acp_dkp_adj extends \bbdkp\Admin
 					'ADJUSTMENT_VALUE' => number_format($showadj->adjustment_value, 2) , 
 					'ADJUSTMENT_REASON' => $showadj->adjustment_reason , 
 					'ADJUSTMENT_DECAY' => number_format($showadj->adj_decay, 2) ,
-					'MO' => date('m', $this->time) , 
-					'D' => date('d', $this->time) , 
-					'Y' => date('Y', $this->time) , 
-					'H' => date('h', $this->time) , 
-					'MI' => date('i', $this->time) , 
-					'S' => date('s', $this->time) , 
+
+					'S_DAY_OPTIONS'		=> $s_day_options,
+					'S_MONTH_OPTIONS'	=> $s_month_options,
+					'S_YEAR_OPTIONS'	=> $s_year_options,
+					
 					'CAN_DECAY_NO_CHECKED' => ( $showadj->can_decay == 0) ? ' checked="checked"' : '' , 
 					'CAN_DECAY_YES_CHECKED' => ($showadj->can_decay == 1) ? ' checked="checked"' : '' , 
 					
 					// Javascript messages
 					'MSG_VALUE_EMPTY' => $user->lang['FV_REQUIRED_ADJUSTMENT'] , 
 					// Buttons
+					'UA_FINDMEMBERS' => append_sid($phpbb_admin_path . "style/dkp/findmembers.$phpEx") ,
 					'S_ADD' => (! $showadj->adjustment_id) ? true : false));
 				
 				$this->page_title = 'ACP_ADDIADJ';
