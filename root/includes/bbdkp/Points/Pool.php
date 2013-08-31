@@ -208,7 +208,13 @@ class Pool extends \bbdkp\Admin
 	{
 		global $config, $db;
 	
-		$sql = 'SELECT * FROM ' . DKPSYS_TABLE . ' ORDER BY ' . $order; 
+		
+		$sql = 'SELECT d.*, count(e.event_id) as numevents
+				FROM  ' . DKPSYS_TABLE . ' d LEFT OUTER JOIN ' . EVENTS_TABLE . ' e 
+				ON d.dkpsys_id = e.event_dkpid
+				GROUP BY d.dkpsys_id  
+				ORDER BY ' . $order; 
+		 
 		if($mode == 1)
 		{
 			$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_elimit'], $start );
@@ -221,6 +227,7 @@ class Pool extends \bbdkp\Admin
 		while ( ($row = $db->sql_fetchrow ( $result )) )
 		{
 			$listpools [$row['dkpsys_id']]= array(
+				'numevents' => $row['numevents'],
 				'dkpsys_id' => $row['dkpsys_id'],
 				'dkpsys_name' => $row['dkpsys_name'], 
 				'dkpsys_default' => $row['dkpsys_default'], 

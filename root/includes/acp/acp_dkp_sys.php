@@ -360,6 +360,8 @@ if (!class_exists('\bbdkp\Events'))
 				}
 				
 				$event  = new \bbdkp\Events();
+				$event->countevents($dkpsys_id);
+				
 				if ($activate)
 				{
 					// all events in this window
@@ -392,9 +394,9 @@ if (!class_exists('\bbdkp\Events'))
 				// Event list
 				
 				$sort_order = array(
-						0 => array('dkpsys_name', 'dkpsys_name desc'),
-						1 => array('event_name', 'dkpsys_name, event_name desc'),
-						2 => array('event_value desc', 'dkpsys_name, event_value desc'),
+						0 => array('event_name', 'dkpsys_name, event_name desc'),
+						1 => array('event_value desc', 'dkpsys_name, event_value desc'),
+						2 => array('event_status desc', 'dkpsys_name, event_status, event_name desc'),
 						3 => array('event_status desc', 'dkpsys_name, event_status, event_name desc'),
 				);
 				
@@ -430,10 +432,10 @@ if (!class_exists('\bbdkp\Events'))
 						'O_DKPSYS'		=> $current_order['uri'][0],
 						'O_NAME'		=> $current_order['uri'][1],
 						'O_VALUE'		=> $current_order['uri'][2],
-						'U_LIST_EVENTS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listevents&amp;"),
 						'START'			=> $start,
+						'U_LIST_EVENTS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=editdkpsys&amp;" . URI_DKPSYS . "={$dkpsys_id}"   ),
 						'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $event->total_events, $config['bbdkp_user_elimit']),
-						'EVENT_PAGINATION'	=> generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listevents&amp;" .
+						'EVENT_PAGINATION'	=> generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=editdkpsys&amp;" . URI_DKPSYS . "={$dkpsys_id}&amp;" .  
 						URI_ORDER . '='.$current_order['uri']['current']), $event->total_events, $config['bbdkp_user_elimit'],$start, true))
 				
 				);
@@ -514,6 +516,7 @@ if (!class_exists('\bbdkp\Events'))
 							'U_VIEW_DKPSYS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=editdkpsys&amp;" . URI_DKPSYS . "={$dkpsys_id}" ), 
 							'U_DELETE_DKPSYS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;delete=1&amp;" . URI_DKPSYS . "={$dkpsys_id}" ), 
 							'ID' => $pool['dkpsys_id'],
+							'NUMEVENTS' => $pool['numevents'],
 							'NAME' => $pool['dkpsys_name'], 
 							'STATUS' => $pool['dkpsys_status'], 
 							'DEFAULT' => $pool['dkpsys_default'] ));

@@ -89,7 +89,6 @@ class Events extends \bbdkp\Admin
 		}
 		$db->sql_freeresult($result);
 		
-		$this->countevents($this->dkpsys_id); 
 	}
 	
 
@@ -332,7 +331,7 @@ public function __set($property, $value)
 		}
 		elseif ($dkpid != 0)
 		{
-			$sql .= ' AND a.dkpsys_id = ' . $this->dkpsys_id . ' ';
+			$sql .= ' AND a.dkpsys_id = ' . $dkpid. ' ';
 		}
 		$result = $db->sql_query($sql);
 		$this->total_events = (int) $db->sql_fetchfield('eventcount');
@@ -375,7 +374,7 @@ public function __set($property, $value)
 			
 		$sql .= " ORDER BY " . $order;
 			
-		$result = $db->sql_query_limit($sql, $config['bbdkp_user_elimit'], $start);
+		$result = $db->sql_query_limit($sql, $config['bbdkp_user_elimit'], $start,0);
 	
 		while ($row = $db->sql_fetchrow($result) )
 		{
