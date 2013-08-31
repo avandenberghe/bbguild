@@ -62,6 +62,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 
 		$this->adjustment = new \bbdkp\Adjust;  //always late binding in php
 		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
+		$this->tpl_name = 'dkp/acp_' . $mode;
 		
 		switch ($mode)
 		{
@@ -206,7 +207,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						));
 				
 				$this->page_title = 'ACP_LISTIADJ';
-				$this->tpl_name = 'dkp/acp_' . $mode;
+				
 				break;
 				
 			case 'addiadj':
@@ -538,7 +539,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					'S_ADD' => (! $showadj->adjustment_id) ? true : false));
 				
 				$this->page_title = 'ACP_ADDIADJ';
-				$this->tpl_name = 'dkp/acp_' . $mode;
+				
 				break;
 		}
 	}
@@ -566,9 +567,9 @@ class acp_dkp_adj extends \bbdkp\Admin
 		$data = array(
 				'member_names' => $member_names,
 				'adjustment_value' => request_var('adjustment_value', 0.00),
-				'adjustment_day' => request_var('d', 0),
-				'adjustment_month' => request_var('mo', 0),
-				'adjustment_year' => request_var('y', 0),
+				'adjustment_day' => request_var('adjustment_day', 0),
+				'adjustment_month' => request_var('adjustment_month', 0),
+				'adjustment_year' => request_var('adjustment_year', 0),
 		);
 		$validator->setData($data);
 		$validator->displayerrors();

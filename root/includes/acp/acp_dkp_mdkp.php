@@ -463,9 +463,9 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 				
 				/***  DKPSYS drop-down query ***/
 				$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default 
-
-		                FROM ' . DKPSYS_TABLE . '  
-		                GROUP BY dkpsys_id, dkpsys_name , dkpsys_default  ';
+		                FROM ' . DKPSYS_TABLE . "  
+		                WHERE dkpsys_status = 'Y' 
+		                GROUP BY dkpsys_id, dkpsys_name , dkpsys_default  ";
 				$result = $db->sql_query ( $sql );
 				$dkpsys_id = 0;
 				

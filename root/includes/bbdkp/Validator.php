@@ -127,15 +127,15 @@ class Validator
                 return is_int($value);
  
             case 'min' :
-                return $value > $parameter ? true : false;
+                return $value >= $parameter ? true : false;
  
             case 'max' :
-                return $value < $parameter ? true : false;
+                return $value <= $parameter ? true : false;
  
             case 'url':
                 // Regex taken from symfony
                 return preg_match('~^
-                  (https?)://                               # protocol
+                  (https?)://                           # protocol
                   (
                 ([a-z0-9-]+\.)+[a-z]{2,6}               # a domain name
                   |                                     #  or

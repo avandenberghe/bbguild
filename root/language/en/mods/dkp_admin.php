@@ -580,7 +580,7 @@ $lang = array_merge($lang, array(
 'ERROR_NOGUILDMEMBERSDEFINED'   	=>  'Error : no Guildmembers. cannot add Raid ',
 'ERROR_RANKMEMBERS'			=> 'Cannot delete this rank. There are still members with this rank. ',
 'ERROR_NOSELECT'			=> 'Please select a From and a To-member.',
-
+'WARNING_BATTLENET' 		=> 'Updating all members from Battle.NET Character API may take several minutes. Please confirm.', 
 //Curl errors
 'ERR_UNKNOWN'					=> 'Unknown error occurred.',
 'CURL_REQUIRED'					=> 'Curl is required for SDK usage.',
