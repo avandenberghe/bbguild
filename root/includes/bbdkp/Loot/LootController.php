@@ -62,7 +62,8 @@ class LootController  extends \bbdkp\Admin
 		// get dkp pools
 		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
             FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . " b
-			WHERE a.dkpsys_id = b.event_dkpid AND b.event_status = 1";
+			WHERE a.dkpsys_id = b.event_dkpid AND b.event_status = 1 
+            AND a.dkpsys_status = 'Y'";
 		$result = $db->sql_query($sql);
 		$this->dkpsys = array();
 		while ($row = $db->sql_fetchrow($result) )

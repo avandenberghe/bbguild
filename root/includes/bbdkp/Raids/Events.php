@@ -78,7 +78,9 @@ class Events extends \bbdkp\Admin
 		}
 		
 		// dkp pools
-		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default FROM ' . DKPSYS_TABLE . ' ORDER BY dkpsys_name';
+		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
+            FROM ' . DKPSYS_TABLE . "  
+            ORDER BY dkpsys_name";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result) )
 		{

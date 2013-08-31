@@ -216,8 +216,9 @@ class acp_dkp_adj extends \bbdkp\Admin
 				/***  DKPSYS drop-down ***/
 				$dkpsys_id = 1;
 				$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default 
-                    FROM ' . DKPSYS_TABLE . '
-                    ORDER BY dkpsys_name';
+                    FROM ' . DKPSYS_TABLE . "
+		            WHERE dkpsys_status = 'Y' 
+                    ORDER BY dkpsys_name";
 				$resultdkpsys = $db->sql_query($sql);
 				
 				$showadj = new \bbdkp\Adjust;

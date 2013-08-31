@@ -603,7 +603,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 	    // check if rank exists
 		$sql = 'SELECT count(*) as rankccount
 				FROM ' . MEMBER_RANKS_TABLE . '
-				WHERE rank_id=' . (int) $this->member_rank_id . ' and guild_id = ' . request_var('member_guild_id', 0);
+				WHERE rank_id=' . (int) $this->member_rank_id . ' and guild_id = ' . $this->member_guild_id;
 		$result = $db->sql_query($sql);
 		$countm = $db->sql_fetchfield('rankccount');
 		$db->sql_freeresult($result);

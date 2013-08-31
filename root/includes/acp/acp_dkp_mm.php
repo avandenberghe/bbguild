@@ -154,23 +154,39 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				if($charapicall)
 				{
-					$Guild->guildid = request_var('hidden_guildid', 0);
-					$Guild->Getguild();				
-					$members_result = $Guild->listmembers();
-					$log = ''; 
-					$i = 0;
-					while ($row = $db->sql_fetchrow($members_result))
+					
+					if (confirm_box(true))
 					{
-						$i +=1; 
-						if($log != '') $log .= ', '; 
-						$member = new \bbdkp\Members($row['member_id']);
-						$member->Updatemember($member); 
-						unset($member);
-						$log .= $row['member_name']; 
-					}				
-					$db->sql_freeresult($members_result);
-					unset ($members_result); 
-					trigger_error(sprintf($user->lang['CHARAPIDONE'] , $i, $log), E_USER_NOTICE);
+						$Guild = new \bbdkp\Guilds();
+						$Guild->guildid = request_var('hidden_guildid', 0);
+						$Guild->Getguild();				
+						$members_result = $Guild->listmembers();
+						$log = ''; 
+						$i = 0;
+						while ($row = $db->sql_fetchrow($members_result))
+						{
+							$i +=1; 
+							if($log != '') $log .= ', '; 
+							$member = new \bbdkp\Members($row['member_id']);
+							$member->Updatemember($member); 
+							unset($member);
+							$log .= $row['member_name']; 
+						}				
+						$db->sql_freeresult($members_result);
+						unset ($members_result); 
+						
+						trigger_error(sprintf($user->lang['CHARAPIDONE'] , $i, $log), E_USER_NOTICE);
+						
+					}
+					else
+					{
+						$s_hidden_fields = build_hidden_fields(array(
+								'charapicall' => true ,
+								'hidden_guildid' => request_var('hidden_guildid', 0)
+								));
+						confirm_box(false, $user->lang['WARNING_BATTLENET'], $s_hidden_fields);
+					}
+					
 					
 				}
 				
