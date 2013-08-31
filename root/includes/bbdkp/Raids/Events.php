@@ -89,7 +89,7 @@ class Events extends \bbdkp\Admin
 		}
 		$db->sql_freeresult($result);
 		
-		$this->countevents(); 
+		$this->countevents($this->dkpsys_id); 
 	}
 	
 
@@ -324,12 +324,15 @@ public function __set($property, $value)
 	public function countevents($dkpid = 0)
 	{
 		global $db; 
-		$this->dkpsys_id = $dkpid; 
 		$sql = 'SELECT count(*) as eventcount FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b
 			where a.dkpsys_id = b.event_dkpid AND b.event_status = 1 ';
 		if($this->dkpsys_id !=0)
 		{
 			$sql .= ' AND a.dkpsys_id = ' . $this->dkpsys_id . ' '; 	
+		}
+		elseif ($dkpid != 0)
+		{
+			$sql .= ' AND a.dkpsys_id = ' . $this->dkpsys_id . ' ';
 		}
 		$result = $db->sql_query($sql);
 		$this->total_events = (int) $db->sql_fetchfield('eventcount');

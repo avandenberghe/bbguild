@@ -1012,12 +1012,7 @@ $versions = array(
 	     				'modes'           => array('listgames', 'addfaction', 'addrace', 'addclass'),
 	     		)),
      		 
-     			//remove the points acp
-				array('acp', 'ACP_DKP_MAINPAGE', array(
-     						'module_basename' => 'dkp_point',
-     						'modes'           => array('pointconfig') ,
-     			)),
-     			
+    			
      			
      			//remove the dkp adjustments
      			array('acp', 'ACP_DKP_MDKP', array(
@@ -1038,6 +1033,14 @@ $versions = array(
      			array('acp', 'ACP_DKP_RAIDS', array(
      					'module_basename' => 'dkp_item',
      					'modes'           => array('listitems', 'edititem', 'search', 'viewitem'),
+     			),
+     			),
+     			
+     			
+     			// remove events module
+     			array('acp', 'ACP_DKP_RAIDS', array(
+     					'module_basename' => 'dkp_event',
+     					'modes'           => array('addevent', 'listevents'),
      			),
      			),
      			
@@ -1063,13 +1066,14 @@ $versions = array(
      					'modes'           => array(  'mm_listmembers', 'mm_addmember' ),
      			),
      			),
-
      			
-     			//re-add the points section
-     			array('acp', 'ACP_DKP_MDKP', array(
-     					'module_basename' => 'dkp_point',
-     					'modes'           => array('pointconfig') ,
-     			)),
+     			//add edit dkp pool, addevent
+     			array('acp', 'ACP_DKP_RAIDS', array(
+     					'module_basename' => 'dkp_sys',
+     					'modes'           => array('editdkpsys', 'addevent' ),
+     			),
+     			),
+
      			
      			// re-add dkp list
      			array('acp', 'ACP_DKP_MDKP', array(

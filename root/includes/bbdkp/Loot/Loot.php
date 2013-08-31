@@ -211,7 +211,9 @@ class Loot
 				AND i.raid_id = r.raid_id
 				AND r.event_id = e.event_id
 				AND i.item_id= ' . (int) $item_id;
+		
 		$result = $db->sql_query ( $sql );
+		
 		while ( $row = $db->sql_fetchrow ( $result ) )
 		{
 			$this->item_id = $item_id; 
@@ -227,6 +229,9 @@ class Loot
 			$this->item_zs = (bool)  $row['item_zs']; 
 		}		
 		$db->sql_freeresult ($result);
+		
+		$a = 1; 
+		
 	}
 	
 	
