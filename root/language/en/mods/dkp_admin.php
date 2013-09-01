@@ -43,8 +43,26 @@ if (empty($lang) || !is_array($lang))
 
 // DKP
 $lang = array_merge($lang, array(
+'NOT_UP_TO_DATE_TITLE'	=> 'Your %s is out of date.',
+'BBDKP_LATESTVERSION'	=> 'Latest Version:',		
 'BBDKPDISABLED' => 'bbDKP is currently disabled.',
 'BBDKPSCRIPTALERT' => 'bbDKP includes embedded Javascript. You are invited to use a javascript-enabled browser.',
+		
+//Plugin Check System
+
+'PLUGINS_INSTALLED'	 => 'Plugins Installed',
+'PLUGINS_STATUS' 	 => 'Plugin Status',
+'DOWNLOAD_LATEST_PLUGINS'	=> 'Latest Version: ',
+'PLUGIN_UP_TO_DATE' 		=> 'Up To Date',
+'PLUGIN_VERSION_NOTONLINE' 	=> 'bbDKP Plugin callback failed, cannot look up latest version.',
+
+'APPLY_TITLE' 			=> 'Apply',
+'ARMORY_IMPORTER_TITLE' => 'Armory-Importer',
+'BBTIPS_TITLE' 			=> 'bbTips',
+'BOSSPROGRESS_TITLE' 	=> 'Bossprogress',
+'RAIDPLANNER_TITLE' 	=> 'RaidPlanner',
+'RAIDTRACKER_TITLE' 	=> 'RaidTracker',
+		
 //addnews
 'ADD_NEWS' => 'Add News',
 'ADDNEWS_TITLE' => 'Add a News Entry',
@@ -704,7 +722,7 @@ $lang = array_merge($lang, array(
 'INACTIVE_POINT_ADJ' => 'Inactive Point Adjustment',
 'INACTIVE_POINT_ADJ_NOTE' => 'Point adjustment to make on a member when they become inactive.',
 'ITEMS_PER_PAGE' => 'Items per Page',
-'LATESTVERSION'	   => 'Latest bbDKP version : ',
+'BBDKP_VERSION'	   => 'bbDKP version : ',
 'VERSION_UPDATE' => 'Version Update',
 'VERSION_NOTONLINE' => 'bbDKP callback failed, cannot look up latest version.',
 'WHO_ONLINE' => 'Who’s Online',
@@ -942,27 +960,6 @@ So the loot would go to player 2 <br />',
 'UPDATE_CLASS' => 'Update Class',
 'CHANGE_ACTIVATION' => 'Change Activation',
 'CHARACTERAPICALL' => 'Update Members from Character API', 
-
-//Plugin Check System
-
-'PLUGINS_INSTALLED'	 => 'Plugins Installed',
-'PLUGINS_STATUS' 	 => 'Plugin Status',
-
-'NO_PLUGINS_INSTALLED'		=> 'No bbDKP Plugins Currently Installed',
-'ADD_PLUGINS_AVAIL'   		=> 'Additional Plugins Available',
-'DOWNLOAD_PLUGINS'		    => 'Download Plugins Here',
-'DOWNLOAD_LATEST_PLUGINS'	=> 'Download Latest Version',
-'DOWNLOAD_HERE' 			=> 'Download Here',
-'PLUGIN_UP_TO_DATE' 		=> 'Up To Date',
-'LATESTPLUGINVERSION'	   	=> 'Out of date: ',
-'PLUGIN_VERSION_NOTONLINE' 	=> 'bbDKP Plugin callback failed, cannot look up latest version.',
-
-'APPLY_TITLE' 			=> 'Apply',
-'ARMORY_IMPORTER_TITLE' => 'Armory-Importer',
-'BBTIPS_TITLE' 			=> 'bbTips',
-'BOSSPROGRESS_TITLE' 	=> 'Bossprogress',
-'RAIDPLANNER_TITLE' 	=> 'RaidPlanner',
-'RAIDTRACKER_TITLE' 	=> 'RaidTracker',
 
 // Misc
 'ADJUSTMENT_VALUE' => 'Adjustment Value',

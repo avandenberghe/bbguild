@@ -17,7 +17,10 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 global $phpbb_root_path; 
-    
+
+define('BBDKP_VERSIONURL', 'http://bbdkp.googlecode.com/svn/trunk/'); 
+define('BBDKP_PLUGINURL' , 'http://www.bbdkp.com/downloads.php?cat=2" target="_blank'); 
+
 //BBDKP
 define('URI_ADJUSTMENT', 'adj');
 define('URI_DKPSYS',     'dkpsys_id'); 	
@@ -51,7 +54,7 @@ define('CLASS_TABLE',              $table_prefix . 'bbdkp_classes');
 define('RACE_TABLE',               $table_prefix . 'bbdkp_races'); 	 
 define('FACTION_TABLE',            $table_prefix . 'bbdkp_factions'); 
 define('DKPSYS_TABLE',     		   $table_prefix . 'bbdkp_dkpsystem');
-define('PLUGINS_TABLE',	           $table_prefix . 'bbdkp_plugins');
+define('BBDKPPLUGINS_TABLE',	   $table_prefix . 'bbdkp_plugins');
 define('GUILD_TABLE',	           $table_prefix . 'bbdkp_memberguild');
 define('LOOTSYS_TABLE',	           $table_prefix . 'bbdkp_lootsystem');
 define('BB_LANGUAGE',	           $table_prefix . 'bbdkp_language');
