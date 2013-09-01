@@ -143,7 +143,7 @@ if (!class_exists('\bbdkp\Members'))
 				elseif($decayraid)
 				{
 					$dkpid = request_var('hidden_dkpid', 0);
-					$this->decayraid($raid_id, $dkpid);
+					$this->PointsController->decayraid($raid_id, $dkpid);
 					$this->displayraid($raid_id);
 				}
 				else

@@ -1209,6 +1209,101 @@ class PointsController  extends \bbdkp\Admin
 		}
 		
 		
+		/**
+		 * function to decay one specific raid
+		 * calling this function multiple time will not lead to cumulative decays, just the delta is applied.
+		 *
+		 * @param int $raid_id the raid id to decay
+		 * @param int $dkpid dkpid for adapting accounts
+		 */
+		public function decayraid($raid_id, $dkpid)
+		{
+			global $config, $db;
+			//loop raid detail, pass earned and timediff to decay function, update raid detail
+		
+			//get old raidinfo
+			$sql_array = array (
+					'SELECT' => ' r.raid_start, ra.member_id, (ra.raid_value + ra.time_bonus + ra.zerosum_bonus) as earned, ra.raid_decay ',
+					'FROM' => array (
+							RAIDS_TABLE 		=> 'r' ,
+							RAID_DETAIL_TABLE	=> 'ra' ,
+					),
+					'WHERE' => " r.raid_id = ra.raid_id and r.raid_id=" . ( int ) $raid_id,
+			);
+			$sql = $db->sql_build_query('SELECT', $sql_array);
+			$result = $db->sql_query ($sql);
+			$raidstart = 0;
+			$raid = array();
+			while ( ($row = $db->sql_fetchrow ( $result )) )
+			{
+				$raidstart =  $row['raid_start'];
+				$raid[$row['member_id']] = array (
+						'member_id' 	=> $row['member_id'],
+						'earned' 		=> $row['earned'],
+						'raid_decay' 	=> $row['raid_decay'],
+				);
+			}
+			$db->sql_freeresult ($result);
+		
+			//get timediff
+			$now = getdate();
+			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $raidstart  ;
+		
+			// loop raid detail
+			foreach($raid as $member_id => $raiddetail)
+			{
+				// get new decay : may be different per player due to it being calculated on earned
+				$decay = $this->decay($raiddetail['earned'], $timediff, 1);
+		
+				// update raid detail to new decay value
+				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = ' . $decay[0] . ', decay_time = ' . $decay[1] . ' WHERE raid_id = ' . ( int ) $raid_id . '
+				AND member_id = ' . $raiddetail['member_id'] ;
+				$db->sql_query ( $sql );
+		
+				// update dkp account, deduct old, add new decay
+				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_raid_decay = member_raid_decay - ' . $raiddetail['raid_decay'] . ' + ' . $decay[0] . "
+				WHERE member_id = " . ( int ) $member_id . '
+				and member_dkpid = ' . $dkpid ;
+				$db->sql_query ( $sql );
+			}
+		
+			//now loop raid items detail
+			$sql = 'SELECT i.item_id, i.member_id, i.item_value, i.item_decay FROM ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id;
+			$result = $db->sql_query ($sql);
+			$items= array();
+			while ( ($row = $db->sql_fetchrow ( $result )) )
+			{
+				$items[$row['item_id']] = array (
+						'member_id'		=> $row['member_id'],
+						'item_value' 	=> $row['item_value'],
+						'item_decay' 	=> $row['item_decay'],
+				);
+			}
+			$db->sql_freeresult ($result);
+		
+		
+			// loot decay
+			foreach($items as $item_id => $item)
+			{
+				// get new itemdecay
+				$itemdecay = $this->decay($item['item_value'], $timediff, 2);
+		
+				//  update item detail to new decay value
+				$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = ' . $itemdecay[0] . ', decay_time = ' . $itemdecay[1] . ' WHERE item_id = ' . $item_id;
+				$db->sql_query ( $sql);
+		
+				// update dkp account, deduct old, add new decay
+				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_item_decay = member_item_decay - ' . $item['item_decay'] . ' + ' . $itemdecay[0] . "
+				WHERE member_id = " . ( int ) $item['member_id'] . ' and member_dkpid = ' . $dkpid ;
+				$db->sql_query ( $sql );
+			}
+		
+			return true;
+		
+		
+		}
+		
+		
 		
 }
 

@@ -2,7 +2,7 @@
 <?xml-stylesheet type="text/xsl" href="modx.prosilver.en.xsl"?>
 <!--NOTICE: Please open this file in your web browser. If presented with a security warning, you may safely tell it to allow the blocked content.-->
 <!--For security purposes, please check: http://www.phpbb.com/mods/ for the latest version of this MOD.\nAlthough MODs are checked before being allowed in the MODs Database there is no guarantee that there are no security problems within the MOD.\nNo support will be given for MODs not found within the MODs Database which can be found at http://www.phpbb.com/mods/-->
-<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
+<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
@@ -70,18 +70,15 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli 
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-		<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5.2 with Libxml 2.6.0 (simplexml usage), Curl 
-Please read docs\INSTALL.html before beginning
-]]></author-notes>
-		<author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, PHP 5.2 avec Libxml 2.6.0 (simplexml), Curl 
-Veuillez lire docs\INSTALL.html avant de commencer
-]]></author-notes>
-		<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5.2 mit Libxml 2.6.0 (simplexml), Curl 
-Bitte lesen sie docs\INSTALL.html bevor.
-]]></author-notes>
+		<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, PHP 5.3.3, Curl 
+Please read docs\INSTALL.html before beginning]]></author-notes>
+		<author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, PHP 5.3.3, Curl 
+Veuillez lire docs\INSTALL.html avant de commencer]]></author-notes>
+		<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, PHP 5.3.3, Curl 
+Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 		<author-group>
 			<author>
-				<realname><![CDATA[Andy Vandenberghe]]></realname>
+				<realname><![CDATA[Andreas]]></realname>
 				<username><![CDATA[Sajaki]]></username>
 				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
 				<email><![CDATA[sajaki9@gmail.com]]></email>
@@ -153,7 +150,7 @@ Bitte lesen sie docs\INSTALL.html bevor.
 			<link type="language" href="contrib/de.xml" lang="de">Deutsch</link>
 			<link type="contrib" href="contrib/install_128_to_129.xml" lang="en">Update from v1.2.8 to v1.2.9</link>
 			<link type="contrib" href="contrib/install_128_to_129.xml" lang="fr">Mise à jour de v1.2.8 à v1.2.9</link>
-			<link type="contrib" href="contrib/install_128_to_129.xml" lang="de">Aktualisierung von v1.2.8 bis v1.2.9</link>										  
+			<link type="contrib" href="contrib/install_128_to_129.xml" lang="de">Aktualisierung von v1.2.8 bis v1.2.9</link>
 			<link type="text" href="docs/INSTALL.html" lang="en">Read me</link>
 			<link type="text" href="docs/INSTALL.html" lang="fr">Lisez moi</link>
 			<link type="text" href="docs/INSTALL.html" lang="de">Lies mich</link>
@@ -251,18 +248,17 @@ if(@defined("EMED_BBDKP"))
 				<action type="replace-with"><![CDATA[	break;
 
 	case 'pointdecay':
-	
+		
 		if ($config['bbdkp_decaycron'] == 1 && (time() - $config['bbdkp_crontime'] * 3600 <= $config['bbdkp_lastcron']))
 		{
 			break;
 		}
-
-		if ( !class_exists('acp_dkp_raid')) 
+		if (!class_exists('\bbdkp\PointsController'))
 		{
-			require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx); 
+		require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
 		}
-		$acp_dkp_raid = new acp_dkp_raid;
-		$acp_dkp_raid->sync_decay($config['bbdkp_decaycron'], 'cron');
+		$PointsController = new \bbdkp\PointsController; 
+		$PointsController->sync_decay($config['bbdkp_decay']  , 'cron' );
 		set_config('bbdkp_lastcron', time(), true);
 		break;
 		
@@ -392,6 +388,48 @@ function get_bbchar($bbresult)
 }]]></action>
 			</edit>
 		</open>
+		<open src="/styles/prosilver/template/overall_footer.html">
+			<edit>
+				<comment lang="en"><![CDATA[Adding bbdkp credits link in overall_footer ]]></comment>
+				<comment lang="fr"><![CDATA[Ajout lien les crédits dans overall_footer ]]></comment>
+				<comment lang="de"><![CDATA[Zufügung Credits link in overall_footer ]]></comment>
+				<find><![CDATA[		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></find>
+				<action type="replace-with"><![CDATA[<script type="text/javascript">
+function pop_aboutbbdkp()
+{
+    search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70');
+    search.focus();
+}
+</script>
+<br/><a class="bbdkpcredits" onclick="javascript:pop_aboutbbdkp();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">{L_BBDKP}</a>
+		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></action>
+			</edit>
+		</open>
+		<open src="/styles/prosilver/theme/stylesheet.css">
+			<edit>
+				<comment lang="en"><![CDATA[bbdkp css]]></comment>
+				<comment lang="fr"><![CDATA[bbdkp css]]></comment>
+				<comment lang="de"><![CDATA[bbdkp css]]></comment>
+				<find><![CDATA[@import url("colours.css");]]></find>
+				<action type="after-add"><![CDATA[@import url("bbdkp.css");
+]]></action>
+			</edit>
+		</open>
+		<open src="adm/style/overall_header.html">
+			<edit>
+				<comment lang="en"><![CDATA[adding jquery scripts to admin header]]></comment>
+				<comment lang="fr"><![CDATA[ajout de scripts jquery au header admin ]]></comment>
+				<comment lang="de"><![CDATA[Zufügung jquery header scripts im admin]]></comment>
+				<find><![CDATA[</head>]]></find>
+				<action type="before-add"><![CDATA[<!-- begin bbdkp -->
+	<script type="text/javascript" src="style/dkp/jquery.js"></script>
+	<script type="text/javascript" src="style/dkp/farbtastic.js"></script>
+	<link rel="stylesheet" href="style/dkp/farbtastic.css" type="text/css" />
+	<link rel="stylesheet" href="style/dkp/bbdkp.css" type="text/css" />
+<!-- end bbdkp -->
+		                ]]></action>
+			</edit>
+		</open>
 		<open src="includes/functions.php">
 			<edit>
 				<comment lang="en"><![CDATA[ preloading dkp language files in functions.php]]></comment>
@@ -434,24 +472,6 @@ function get_bbchar($bbresult)
 				$cron_type = 'pointdecay';
 			}
 		}]]></action>
-			</edit>
-		</open>
-		<open src="/styles/prosilver/template/overall_footer.html">
-			<edit>
-				<comment lang="en"><![CDATA[Adding bbdkp credits link in overall_footer ]]></comment>
-				<comment lang="fr"><![CDATA[Ajout lien les crédits dans overall_footer ]]></comment>
-				<comment lang="de"><![CDATA[Zufügung Credits link in overall_footer ]]></comment>
-				<find><![CDATA[		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></find>
-				<action type="replace-with"><![CDATA[
-<script type="text/javascript">
-function pop_aboutbbdkp()
-{
-    search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70');
-    search.focus();
-}
-</script>
-<br/><a class="bbdkpcredits" onclick="javascript:pop_aboutbbdkp();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">{L_BBDKP}</a>
-		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></action>
 			</edit>
 		</open>
 		<open src="styles/prosilver/template/overall_header.html">
@@ -497,33 +517,7 @@ function pop_aboutbbdkp()
 		<!-- BBDKP END -->
 ]]></action>
 			</edit>
-		</open>		
-		<open src="adm/style/overall_header.html">
-			<edit>
-				<comment lang="en"><![CDATA[adding jquery scripts to admin header]]></comment>
-				<comment lang="fr"><![CDATA[ajout de scripts jquery au header admin ]]></comment>
-				<comment lang="de"><![CDATA[Zufügung jquery header scripts im admin]]></comment>
-				<find><![CDATA[</head>]]></find>
-				<action type="before-add"><![CDATA[<!-- begin bbdkp -->
-	<script type="text/javascript" src="style/dkp/jquery.js"></script>
-	<script type="text/javascript" src="style/dkp/farbtastic.js"></script>
-	<link rel="stylesheet" href="style/dkp/farbtastic.css" type="text/css" />
-	<link rel="stylesheet" href="style/dkp/bbdkp.css" type="text/css" />
-<!-- end bbdkp -->
-		                ]]></action>
-			</edit>
 		</open>
-		<open src="/styles/prosilver/theme/stylesheet.css">
-			<edit>
-				<comment lang="en"><![CDATA[bbdkp css]]></comment>
-				<comment lang="fr"><![CDATA[bbdkp css]]></comment>
-				<comment lang="de"><![CDATA[bbdkp css]]></comment>
-				<find><![CDATA[@import url("colours.css");]]></find>
-				<action type="after-add"><![CDATA[@import url("bbdkp.css");
-]]></action>
-			</edit>
-		</open>
-		
 		<php-installer><![CDATA[install/index.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[bbDKP 1.3 was installed. You need to run the database installer now.
 

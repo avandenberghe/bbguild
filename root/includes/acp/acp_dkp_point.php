@@ -145,9 +145,9 @@ if (!class_exists('\bbdkp\PointsController'))
 				{
 					if (confirm_box(true))
 					{
-						$this->PointsController->sync_decay($config['bbdkp_decay']);
-						$this->PointsController->sync_adjdecay($config['bbdkp_decay']);
-						trigger_error(sprintf($user->lang['RESYNC_DECAY_SUCCESS'], $count + $count1) . $link, E_USER_NOTICE);
+						$count = $this->PointsController->sync_decay($config['bbdkp_decay']);
+						$count1 = $this->PointsController->sync_adjdecay($config['bbdkp_decay']);
+						trigger_error(sprintf($user->lang['RESYNC_DECAY_SUCCESS'], $count, $count1) . $link, E_USER_NOTICE);
 					}
 					else
 					{
