@@ -28,17 +28,17 @@ if (!class_exists('\bbdkp\Admin'))
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
 // Include the adjust class
-if (!class_exists('Adjust'))
+if (!class_exists('\bbdkp\Adjust'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Adjustments/Adjust.$phpEx");
 }
 // Include the members class
-if (!class_exists('Members'))
+if (!class_exists('\bbdkp\Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
 // Include the validator class
-if (!class_exists('Validator'))
+if (!class_exists('\bbdkp\Validator'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Validator.$phpEx");
 }
@@ -59,8 +59,11 @@ class acp_dkp_adj extends \bbdkp\Admin
 	{
 		global $db, $user, $template;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		
+
+		$this->adjustment = new \bbdkp\Adjust;  //always late binding in php
 		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
+		$this->tpl_name = 'dkp/acp_' . $mode;
+		
 		switch ($mode)
 		{
 			case 'listiadj':
@@ -71,45 +74,48 @@ class acp_dkp_adj extends \bbdkp\Admin
 					break;
 				}
 				
-				/**  DKPSYS drop-down query ***/
-				$adjust = new \bbdkp\Adjust();
-				$result = $adjust->listAdjPools();
-				$adjust->adjustment_dkpid = 0;
-				$submit = (isset($_POST['dkpsys_id']) || isset($_GET['dkpsys_id'])) ? true : false;
-				if ($submit)
+				/* dkp pool */
+				$this->adjustment->adjustment_dkpid =0;
+				if (isset($_GET[URI_DKPSYS]) OR isset ( $_POST[URI_DKPSYS]))
 				{
-					$adjust->adjustment_dkpid = request_var('dkpsys_id', 0);
+					$this->adjustment->adjustment_dkpid = request_var ( URI_DKPSYS, 0 );
 				}
-				else
+				
+				if($this->adjustment->adjustment_dkpid==0)
 				{
-					while ($row = $db->sql_fetchrow($result))
+					
+					if( count((array) $this->adjustment->dkpsys) == 0 )
 					{
-						if ($row['dkpsys_default'] == "Y")
-						{
-							$adjust->adjustment_dkpid = $row['dkpsys_id'];
-						}
+						trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
 					}
 					
-					if ($adjust->adjustment_dkpid == 0)
+					//get default dkp pool
+					foreach ($this->adjustment->dkpsys as $pool)
 					{
-						$result = $db->sql_query_limit($sql, 1);
-						while ($row = $db->sql_fetchrow($result))
+						if ($pool['default'] == 'Y' )
 						{
-							$adjust->adjustment_dkpid = $row['dkpsys_id'];
+							$this->adjustment->adjustment_dkpid = $pool['id'];
+							break;
+						}
+					}
+					//if still 0 then get first one
+					if($this->adjustment->adjustment_dkpid==0)
+					{
+						foreach ($this->adjustment->dkpsys as $pool)
+						{
+							$this->adjustment->adjustment_dkpid = $pool['id'];
+							break;
 						}
 					}
 				}
-				$db->sql_freeresult($result);
-				$result = $adjust->listAdjPools();
-				
-				while ($row = $db->sql_fetchrow($result))
+				foreach ($this->adjustment->dkpsys as $pool)
 				{
-					$template->assign_block_vars('dkpsys_row', array(
-						'VALUE' => $row['dkpsys_id'] , 
-						'SELECTED' => ($row['dkpsys_id'] == $adjust->adjustment_dkpid) ? ' selected="selected"' : '' , 
-						'OPTION' => (! empty($row['dkpsys_name'])) ? $row['dkpsys_name'] : '(None)'));
+					$template->assign_block_vars ( 'dkpsys_row', array (
+							'VALUE' 	=> $pool['id'],
+							'SELECTED' 	=> ($pool['id'] == $this->adjustment->adjustment_dkpid) ? ' selected="selected"' : '',
+							'OPTION' 	=> (! empty ( $pool['name'] )) ? $pool['name'] : '(None)' )
+					);
 				}
-				$db->sql_freeresult($result);
 				
 				/*** end DKPSYS drop-down ***/
 				$sort_order = array(
@@ -123,12 +129,13 @@ class acp_dkp_adj extends \bbdkp\Admin
 					
 				$members = new \bbdkp\Members();
 				$member_filter = utf8_normalize_nfc(request_var('member_name', '', true));
+				$member_id_filter = ''; 
 				if ($member_filter != '')
 				{
 					$member_id_filter = $members->get_member_id(trim($member_filter));
 				}
 				
-				$result2 = $adjust->countadjust($member_id_filter);
+				$result2 = $this->adjustment->countadjust($member_id_filter);
 				$total_adjustments = (int) $db->sql_fetchfield('total_adjustments');
 				$db->sql_freeresult($result2);
 				
@@ -136,7 +143,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				$current_order = $this->switch_order($sort_order);
 				$start = request_var('start', 0);
 				
-				$result = $adjust->listadj($current_order['sql'], $member_id_filter);
+				$result = $this->adjustment->listadj($current_order['sql'], $member_id_filter);
 				$hasrows = false;
 				$total_adjustments = 0;
 				while ($adj = $db->sql_fetchrow($result))
@@ -146,7 +153,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				}
 				$db->sql_freeresult($result);
 				
-				$result = $adjust->listadj($current_order['sql'], $member_id_filter, $start);
+				$result = $this->adjustment->listadj($current_order['sql'], $member_id_filter, $start);
 				while ($adj = $db->sql_fetchrow($result))
 				{
 					$template->assign_block_vars('adjustments_row', array(
@@ -173,7 +180,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				$listadj_footcount = sprintf($user->lang['LISTADJ_FOOTCOUNT'], $total_adjustments, $config['bbdkp_user_alimit']);
 				
 				$pagination = \generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj&amp;dkpsys_id=" . 
-					$adjust->adjustment_dkpid) . '&amp;' . URI_PAGE, 
+					$this->adjustment->adjustment_dkpid) . '&amp;' . URI_PAGE, 
 					$total_adjustments, 
 					$config['bbdkp_user_alimit'], 
 					$start, true);
@@ -200,7 +207,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						));
 				
 				$this->page_title = 'ACP_LISTIADJ';
-				$this->tpl_name = 'dkp/acp_' . $mode;
+				
 				break;
 				
 			case 'addiadj':
@@ -210,8 +217,9 @@ class acp_dkp_adj extends \bbdkp\Admin
 				/***  DKPSYS drop-down ***/
 				$dkpsys_id = 1;
 				$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default 
-                    FROM ' . DKPSYS_TABLE . '
-                    ORDER BY dkpsys_name';
+                    FROM ' . DKPSYS_TABLE . "
+		            WHERE dkpsys_status = 'Y' 
+                    ORDER BY dkpsys_name";
 				$resultdkpsys = $db->sql_query($sql);
 				
 				$showadj = new \bbdkp\Adjust;
@@ -258,6 +266,32 @@ class acp_dkp_adj extends \bbdkp\Admin
 					{
 						trigger_error('FORM_INVALID');
 					}
+				}
+				
+				$now = getdate();
+				$s_day_options = '';
+				
+				$day = $showadj->adjustment_date > 0 ? date('j', $showadj->adjustment_date) : $now['mday'] ;
+				for ($i = 1; $i < 32; $i++)
+				{
+					$selected = ($i == $day ) ? ' selected="selected"' : '';
+					$s_day_options .= "<option value=\"$i\"$selected>$i</option>";
+				}
+				
+				$s_month_options = '';
+				$month = $showadj->adjustment_date > 0 ? date('n', $showadj->adjustment_date) : $now['mon'] ;
+				for ($i = 1; $i < 13; $i++)
+				{
+					$selected = ($i == $month ) ? ' selected="selected"' : '';
+					$s_month_options .= "<option value=\"$i\"$selected>$i</option>";
+				}
+				
+				$s_year_options = '';
+				$yr = $showadj->adjustment_date > 0 ? date('Y', $showadj->adjustment_date) : $now['year'] ;
+				for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+				{
+					$selected = ($i == $yr ) ? ' selected="selected"' : '';
+					$s_year_options .= "<option value=\"$i\"$selected>$i</option>";
 				}
 				
 				
@@ -427,9 +461,36 @@ class acp_dkp_adj extends \bbdkp\Admin
 					}
 				}
 				
+				
+				//guild dropdown
+				$guildid  = request_var('member_guild_id', 0); 
+				$Guild = new \bbdkp\Guilds();
+				$guildlist = $Guild->guildlist();
+				foreach ( (array) $guildlist as $g )
+				{
+					
+					if ($guildid  == 0)
+					{
+						$guildid  = $g['id'];
+					}
+						
+					if($g['guilddefault'] == 1 )
+					{
+						$guildid  = $g['id'];
+					}
+						
+					$template->assign_block_vars('guild_row', array(
+							'VALUE' => $g['id'] ,
+							'SELECTED' => ($guildid == $g['id']) ? ' selected="selected"' : '',
+							'OPTION' => $g['name']));
+				}
+				
 				/* mark members as selected */
-				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . ' ORDER BY member_name';
+				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . ' 
+						WHERE member_guild_id = ' . $guildid . ' 
+						ORDER BY member_name ';
 				$result = $db->sql_query($sql);
+				
 				while ($row = $db->sql_fetchrow($result))
 				{
 					if ($adjust_id)
@@ -450,6 +511,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						'OPTION' => $row['member_name']));
 				}
 				
+				
 				$db->sql_freeresult($result);
 				$template->assign_vars(array(
 					'L_TITLE' =>  ($showadj->adjustment_id == 0) ? $user->lang['ADD_IADJ_TITLE'] : $user->lang['EDIT_IADJ_TITLE'], 
@@ -462,22 +524,22 @@ class acp_dkp_adj extends \bbdkp\Admin
 					'ADJUSTMENT_VALUE' => number_format($showadj->adjustment_value, 2) , 
 					'ADJUSTMENT_REASON' => $showadj->adjustment_reason , 
 					'ADJUSTMENT_DECAY' => number_format($showadj->adj_decay, 2) ,
-					'MO' => date('m', $this->time) , 
-					'D' => date('d', $this->time) , 
-					'Y' => date('Y', $this->time) , 
-					'H' => date('h', $this->time) , 
-					'MI' => date('i', $this->time) , 
-					'S' => date('s', $this->time) , 
+
+					'S_DAY_OPTIONS'		=> $s_day_options,
+					'S_MONTH_OPTIONS'	=> $s_month_options,
+					'S_YEAR_OPTIONS'	=> $s_year_options,
+					
 					'CAN_DECAY_NO_CHECKED' => ( $showadj->can_decay == 0) ? ' checked="checked"' : '' , 
 					'CAN_DECAY_YES_CHECKED' => ($showadj->can_decay == 1) ? ' checked="checked"' : '' , 
 					
 					// Javascript messages
 					'MSG_VALUE_EMPTY' => $user->lang['FV_REQUIRED_ADJUSTMENT'] , 
 					// Buttons
+					'UA_FINDMEMBERS' => append_sid($phpbb_admin_path . "style/dkp/findmembers.$phpEx") ,
 					'S_ADD' => (! $showadj->adjustment_id) ? true : false));
 				
 				$this->page_title = 'ACP_ADDIADJ';
-				$this->tpl_name = 'dkp/acp_' . $mode;
+				
 				break;
 		}
 	}
@@ -492,7 +554,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 		global $user;
 		$validator = new \bbdkp\Validator();
 		//setup validation rules
-		$validator->addRule('member_names', array('require'));
+		$validator->addRule('member_names', array('required'));
 		$validator->addRule('adjustment_value', array('required'));
 		$validator->addRule('adjustment_day', array('required', 'min' => 1, 'max' => 31 ));
 		$validator->addRule('adjustment_month',array('required', 'min' => 1, 'max' => 12));
@@ -505,9 +567,9 @@ class acp_dkp_adj extends \bbdkp\Admin
 		$data = array(
 				'member_names' => $member_names,
 				'adjustment_value' => request_var('adjustment_value', 0.00),
-				'adjustment_day' => request_var('mo', 0),
-				'adjustment_month' => request_var('y', 0),
-				'adjustment_year' => request_var('y', 0),
+				'adjustment_day' => request_var('adjustment_day', 0),
+				'adjustment_month' => request_var('adjustment_month', 0),
+				'adjustment_year' => request_var('adjustment_year', 0),
 		);
 		$validator->setData($data);
 		$validator->displayerrors();

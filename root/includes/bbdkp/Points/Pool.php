@@ -37,6 +37,11 @@ if (!class_exists('\bbdkp\Admin'))
  */
 class Pool extends \bbdkp\Admin
  {
+	/**
+	 * array of pools
+	 * @var unknown_type
+	 */ 	
+ 	public $dkpsys; 
  	
  	public $dkpsys_id; 
  	private $dkpsys_name;
@@ -61,6 +66,22 @@ class Pool extends \bbdkp\Admin
 		$rows1 = $db->sql_fetchrowset ( $result1 );
 		$db->sql_freeresult ( $result1 );
 		$this->poolcount = count ( $rows1 );
+		
+		// get dkp pools
+		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
+            FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . " b
+			WHERE a.dkpsys_id = b.event_dkpid AND b.event_status = 1 
+            AND a.dkpsys_status = 'Y'";
+		$result = $db->sql_query($sql);
+		$this->dkpsys = array();
+		while ($row = $db->sql_fetchrow($result) )
+		{
+			$this->dkpsys[$row['dkpsys_id']] = array(
+					'id' => $row['dkpsys_id'],
+					'name' => $row['dkpsys_name'],
+					'default' => $row['dkpsys_default']);
+		}
+		$db->sql_freeresult($result);
 		
 	}
 	
@@ -105,25 +126,7 @@ class Pool extends \bbdkp\Admin
 							break;
 						case 'dkpsys_name':
 							// limit this to 255
-							$this->$property = (strlen($value) > 255) ? substr($value,0, 250).'...' : $string;
-							break;
-						case 'dkpsys_status':
-							if($value === 'N' or $value === 'Y')
-							{
-								$this->$property = $value;
-							}
-							elseif ($value === false)
-							{
-								$this->$property = 'N'; 
-							}
-							elseif ($value === true)
-							{
-								$this->$property = 'Y';
-							}		
-							else
-							{
-								$this->$property = 'Y';
-							}					
+							$this->$property = (strlen($value) > 255) ? substr($value,0, 250).'...' : $value;
 							break;
 						case 'dkpsys_addedby':
 							$this->$property = $value;
@@ -131,29 +134,34 @@ class Pool extends \bbdkp\Admin
 						case 'dkpsys_updatedby':
 							$this->$property = $value;
 							break;
+						case 'dkpsys_status':
+								switch ($value)
+								{
+									case 'N':
+									case '0':
+									case false:
+										$this->$property = 'N';
+										break;
+									case 'Y':
+									case '1':
+									case true:
+										$this->$property = 'Y';
+										break;
+								}
+								break;							
 						case 'dkpsys_default':
-							if($value === 'Y')
+							switch ($value)
 							{
-								$this->$property = $value;
-								$this->updateotherdefaults();
-							}
-							if($value === 'N')
-							{
-								$this->$property = $value;
-							}
-							elseif ($value === false)
-							{
-								$this->$property = 'N';
-							}
-							elseif ($value === true)
-							{
-								$this->$property = 'Y';
-								$this->updateotherdefaults();
-							}
-							else
-							{
-								$this->$property = 'N';
-								
+								case 'N':
+								case '0':
+								case false:
+									$this->$property = 'N';
+									break;
+								case 'Y':
+								case '1':
+								case true:
+									$this->$property = 'Y';
+									break;
 							}
 							break;												
 					}
@@ -183,6 +191,7 @@ class Pool extends \bbdkp\Admin
 		$result = $db->sql_query ($sql);
 		while ( ($row = $db->sql_fetchrow ( $result )) )
 		{
+			$this->dkpsys_id = $row['dkpsys_id'];
 			$this->dkpsys_name = $row['dkpsys_name'];
 			$this->dkpsys_default = $row['dkpsys_default'];
 			$this->dkpsys_status = $row['dkpsys_status'];	
@@ -200,7 +209,13 @@ class Pool extends \bbdkp\Admin
 	{
 		global $config, $db;
 	
-		$sql = 'SELECT * FROM ' . DKPSYS_TABLE . ' ORDER BY ' . $order; 
+		
+		$sql = 'SELECT d.*, count(e.event_id) as numevents
+				FROM  ' . DKPSYS_TABLE . ' d LEFT OUTER JOIN ' . EVENTS_TABLE . ' e 
+				ON d.dkpsys_id = e.event_dkpid
+				GROUP BY d.dkpsys_id  
+				ORDER BY ' . $order; 
+		 
 		if($mode == 1)
 		{
 			$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_elimit'], $start );
@@ -213,6 +228,8 @@ class Pool extends \bbdkp\Admin
 		while ( ($row = $db->sql_fetchrow ( $result )) )
 		{
 			$listpools [$row['dkpsys_id']]= array(
+				'numevents' => $row['numevents'],
+				'dkpsys_id' => $row['dkpsys_id'],
 				'dkpsys_name' => $row['dkpsys_name'], 
 				'dkpsys_default' => $row['dkpsys_default'], 
 				'dkpsys_status' => $row['dkpsys_status'], 
@@ -270,7 +287,10 @@ class Pool extends \bbdkp\Admin
 		$sql = 'UPDATE ' . DKPSYS_TABLE . ' SET ' . $query . ' WHERE dkpsys_id = ' . (int) $this->dkpsys_id;
 		$db->sql_query ( $sql );
 		
-		
+		if($this->dkpsys_default != $olddkpsys->dkpsys_default)
+		{
+			$this->updateotherdefaults();
+		}
 		// Logging, put old & new
 		$log_action = array (
 				'header' => 'L_ACTION_DKPSYS_UPDATED',

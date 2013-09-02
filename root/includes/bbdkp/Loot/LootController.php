@@ -32,6 +32,15 @@ if (!class_exists('\bbdkp\Loot'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Loot/Loot.$phpEx");
 }
+if (!class_exists('\bbdkp\Raids'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Raids/Raids.$phpEx");
+}
+// Include the members class
+if (!class_exists('\bbdkp\Members'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+}
 
 /**
  * this class manages the loot transaction table (phpbb_bbdkp_raid_items)
@@ -41,33 +50,58 @@ if (!class_exists('\bbdkp\Loot'))
 class LootController  extends \bbdkp\Admin
 {
 	private $loot;
+	
+	public $dkpsys;
+	
 	function __construct() 
 	{
+		global $db; 
 		parent::__construct();
 		$this->loot = new \bbdkp\loot(); 
+		
+		// get dkp pools
+		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
+            FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . " b
+			WHERE a.dkpsys_id = b.event_dkpid AND b.event_status = 1 
+            AND a.dkpsys_status = 'Y'";
+		$result = $db->sql_query($sql);
+		$this->dkpsys = array();
+		while ($row = $db->sql_fetchrow($result) )
+		{
+			$this->dkpsys[$row['dkpsys_id']] = array(
+					'id' => $row['dkpsys_id'],
+					'name' => $row['dkpsys_name'],
+					'default' => $row['dkpsys_default']);
+		}
+		$db->sql_freeresult($result);
+		
 	}
 
-/**
+	/**
 	 * adds 1 attendee to a raid
+	 * 
 	 * @param unknown_type $raid_id
-	 * @param unknown_type $raid_value
-	 * @param unknown_type $time_bonus
-	 * @param unknown_type $dkpid
-	 * @param unknown_type $member_id
-	 * @param unknown_type $raid_start
+	 * @param unknown_type $item_buyers
+	 * @param unknown_type $item_value
+	 * @param unknown_type $item_name
+	 * @param unknown_type $loottime
+	 * @param unknown_type $itemgameid
 	 * @return boolean
 	 */
 	public function addloot($raid_id, $item_buyers, $item_value, $item_name, $loottime, $itemgameid = 0 )
 	{
-		global $config; 
+		global $user, $config; 
 		$this->loot = new \bbdkp\Loot();
 		$this->loot->raid_id = $raid_id;
+		
+		$raid = new \bbdkp\Raids($raid_id); 
+		
 		$this->loot->item_value = $item_value; 
 		$this->loot->item_name = $item_name;
-		$this->loot->dkpid = $dkpid;
-		$this->loot->item_date = $this->loottime;
+		$this->loot->dkpid = $raid->event_dkpid;
+		$this->loot->item_date = $loottime;
 		
-		$group_key = $this->gen_group_key ( $this->loot->item_name, $loottime, $this->lootraid_id + rand(10,100) );
+		$group_key = $this->gen_group_key ( $this->loot->item_name, $loottime, $raid_id + rand(10,100) );
 		
 		$decayarray = array();
 		$decayarray[0] = 0;
@@ -75,46 +109,43 @@ class LootController  extends \bbdkp\Admin
 		
 		if ($config['bbdkp_decay'] == '1')
 		{
-			if ( !class_exists('acp_dkp_raid'))
-			{
-				require($phpbb_root_path . 'includes/acp/acp_dkp_raid.' . $phpEx);
-			}
-			$acp_dkp_raid = new acp_dkp_raid;
 			//diff between now and the raidtime
 			$now = getdate();
 			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $loottime;
-			$decayarray = $acp_dkp_raid->decay($itemvalue, $timediff, 2);
+			$decayarray = $acp_dkp_raid->decay($item_value, $timediff, 2);
 		}
 		
-		$this->add_dkp ($raid_value, $time_bonus, $raid_start, $dkpid, $member_id);
 		//
 		// Add item to selected members
-		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid, $decayarray[0]);
+		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $item_value, $raid_id, $loottime, $itemgameid, $decayarray[0]);
+		
+		$buyernames = ''; 
+		foreach($item_buyers as $member_id)
+		{
+			$buyernames == '' ? '': $buyernames .= ', ';  
+			$member = new \bbdkp\Members($member_id); 
+			$buyernames .= $member->member_name;
+		}
 		
 		//
 		// Logging
-		//
+		//@todo fix logging
 		$log_action = array (
 		'header' 		=> 'L_ACTION_ITEM_ADDED',
 		'L_NAME' 		=> $item_name,
-		'L_BUYERS' 		=> implode ( ', ', $item_buyers  ),
-				'L_RAID_ID' 	=> $raid_id,
-				'L_VALUE'   	=> $itemvalue ,
-				'L_ADDED_BY' 	=> $user->data['username']);
+		'L_BUYERS' 		=> $buyernames,
+		'L_RAID_ID' 	=> $raid_id,
+		'L_VALUE'   	=> $item_value ,
+		'L_ADDED_BY' 	=> $user->data['username']);
 		
-				$this->log_insert ( array (
-				'log_type' => $log_action ['header'],
-				'log_action' => $log_action ) );
-		
+		$this->log_insert ( array (
+		'log_type' => $log_action ['header'],
+		'log_action' => $log_action ) );
 		
 		return true;
 		
 	}
-	
-	public function deleteloot()
-	{
-		
-	}
+
 	
 	/**
 	 * does the actual item-adding database operations
@@ -237,9 +268,8 @@ class LootController  extends \bbdkp\Admin
 	
 	public function Getloot($item_id)
 	{
-		$loot = new \bbdkp\Loot(); 
 		$this->loot->Getloot($item_id); 
-		return $loot;
+		return $this->loot;
 	}
 	
 	
@@ -290,7 +320,60 @@ class LootController  extends \bbdkp\Admin
 		}
 		$db->sql_freeresult ($result);
 	}
+
 	
+	/**
+	 * get item info
+	 * 
+	 */
+	public function getitemdeleteinfo($item_id, $dkp_id)
+	{
+		
+		global $db; 
+		
+		$sql_array = array(
+				'SELECT' 	=> 'i2.* , m.member_name ',
+				'FROM' 		=> array(
+						RAID_ITEMS_TABLE => 'i2',
+						MEMBER_LIST_TABLE => 'm'
+				),
+				'LEFT_JOIN' => array(
+						array(
+								'FROM' => array(RAID_ITEMS_TABLE => 'i1'),
+								'ON' => ' i1.item_group_key = i2.item_group_key '
+						)),
+				'WHERE' => 'i2.member_id = m.member_id AND i1.item_id= '. $item_id,
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ( $sql );
+				
+			
+		$item_buyers = '[';
+		while ( $row = $db->sql_fetchrow ( $result ) )
+		{
+			$old_item[$row['item_id']] = array (
+					'item_id' 		=>  (int) 	 $row['item_id'] ,
+					'dkpid'			=>  $dkp_id,
+					'item_name' 	=>  (string) $row['item_name'] ,
+					'member_id' 	=>  (int) 	 $row['member_id'] ,
+					'member_name' 	=>  (string) $row['member_name'] ,
+					'raid_id' 		=>  (int) 	 $row['raid_id'],
+					'item_date' 	=>  (int) 	 $row['item_date'] ,
+					'item_value' 	=>  (float)  $row['item_value'],
+					'item_decay' 	=>  (float)  $row['item_decay'],
+					'item_zs' 		=>  (bool)   $row['item_zs'],
+			);
+		
+			//for confirm question
+			$item_buyers = $item_buyers . ' ' . $row['member_name'] . ' ';
+			$item_name = $row['item_name'];
+		}
+		$db->sql_freeresult ($result);
+		$item_buyers .= ']';
+			
+		return array($item_buyers, $old_item, $item_name); 
+		
+	}
 	
 	/*
 	 * delete : does one item deletion in database
@@ -310,7 +393,7 @@ class LootController  extends \bbdkp\Admin
 	*	'item_zs' 		=>  (bool)   $row['item_zs'],
 	*
 	*/
-	public function delete($old_item)
+	public function deleteloot($old_item)
 	{
 		global $config, $db;
 		$db->sql_transaction('begin');
@@ -381,7 +464,7 @@ class LootController  extends \bbdkp\Admin
 	
 			}
 		}
-	
+
 		$db->sql_transaction('commit');
 	
 		$log_action = array (

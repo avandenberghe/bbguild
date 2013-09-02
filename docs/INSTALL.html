@@ -11,7 +11,7 @@
 <meta name="copyright" content="2009 bbdkp" />
 <meta name="keywords" content="" />
 <meta name="description" content="bbdkp Installation information" />
-<title>bbDKP &bull; 1.2.9 Guide</title>
+<title>bbDKP &bull; 1.3.0 Guide</title>
 
 <link href="stylesheet.css" rel="stylesheet" type="text/css" media="screen, projection" />
 
@@ -27,7 +27,7 @@
 
 			<div id="doc-description">
 			<a>	<img src="logo.png" alt="" /></a>
-				<h1>bbDKP 1.2.9 Install</h1>
+				<h1>bbDKP 1.3.0 Install</h1>
 				<p style="display: none;"><a href="#start_here">Skip</a></p>
 			</div>
 			<span class="corners-bottom"><span></span></span></div>
@@ -75,8 +75,8 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 			<ol>
 			<li>phpbb3.0.11</li>
 			<li>databases : Mysql 5, MSSQL, postgresql, Oracle</li>
-			<li>PHP 5.3.x / Libxml 2.6.0 (simplexml usage)</li>
-			<li>Curl (preferred) or url_fopen or fsockopen should be available on your server.</li>
+			<li>PHP 5.3.3 or higher</li>
+			<li>Curl should be available on your server.</li>
 			<li>ftp and founder admin access on your phpbb installation. </li>
 			</ol>
 			
@@ -95,25 +95,24 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 		<p>Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. </p>
 		
 		<h2>Step-by-step Guide</h2>
-		<strong>Note : Before installing/upgrading bbDKP, you need to backup your forum.</strong>
-		
+		<br/>
+		<strong>Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver</strong>
+
 		<div class="content">
-			<h2>New 1.2.9 installation </h2>
+			<h2>New 1.3.0 installation </h2>
 			<ul>
-				<li><strong>using Automod</strong>
+				<li><strong><a name="Automodinstall">Using Automod</a></strong>
 				<ol>
-					<li><strong>Make sure you have the latest patched Automod from <a href="https://github.com/Sajaki/automod/zipball/master">Github</a>!</strong> </li>
+					<li><strong>Make sure you have the latest Automod 1.0.2 from <a href="https://www.phpbb.com/mods/automod/">phpBB</a>!</strong> </li>
 					<li>Unzip the bbdkp zip file.</li>
 					<li>Upload it to your webserver, into /store/mods/ </li>
 					<li>Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits. </li>
-					<li><strong><em>Make sure your (prosilver based) custom style is updated aswell.</em></strong></li>					
+					<li><em>Make sure your (prosilver based) custom style is updated aswell. If you need help with that, please make a request on bbdkp.com</em></li>					
 					<li>Then click on the blue link given, this will redirect you to /install/index.php, 
-					<li>and you will see the umil installation page. 
+					<li>and you will see the database installation page. 
 						<ul>
-						<li>Enter your guildname</li>
-						<li>Choose the realm of your guild</li>
-						<li>Choose the games you wish to have installed.</li>
-						<li>Click submit. This will install 1.2.9 and clear the caches (template, theme, imagesets)</li>
+						<li>Choose the games you wish to have (note: this is optional, you can load them afterwards from the ACP)</li>
+						<li>Click submit. This will install 1.3.0 and clear the caches (template, theme, imagesets)</li>
 						</ul>
 					</li>
 				</ol>
@@ -123,59 +122,56 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 						<li>open the MODX file : <a href="../install.xml">install.xml</a> using a web browser.</li>
 						<li>Copy all mod files to your webserver like they laid out in the MODX file.</li>	
 						<li>Apply the changes to the core phpbb files. use a good text editor, like Notepad++ (PC) or Textwrangler (Mac).</li>
-						<li><strong><em>Make sure your (prosilver based) custom style is updated aswell.</em></strong></li>						
+						<li><em>Make sure your (prosilver based) custom style is updated aswell. If you need help with that, please make a request on bbdkp.com</em></li>						
 						<li>Upload your modded files.</li>					
 						<li>Then launch the DB Installer (/install/index.php)</li>
 						<li>Now you see the Umil installation page. Click Submit. </il>
 						<ul>
-						<li>Enter your guildname</li>
-						<li>Choose the realm of your guild</li>
-						<li>Choose the games you wish to have installed.</li>
-						<li>Click submit. This will install 1.2.9 and clear the caches (template, theme, imagesets)</li>
+						<li>Choose the games you wish to have (note: this is optional, you can load them afterwards from the ACP)</li>
+						<li>Click submit. This will install 1.3.0 and clear the caches (template, theme, imagesets)</li>
 						</ul>
 					</ol>
 
 				</li>
 			</ul>
 			
-			<h2>Upgrading from 1.2.8 to 1.2.9</h2>
-			<ol>
-				<li>follow the Diff instructions corresponding to your current version : <br />
-				<a href="../contrib/install_128_to_129.xml">128 to 129</a><br />
-				</li>				
-				<li>note : with automod, just copy bbDKP 1.2.9 in /store and select the updater link <a href="http://imgur.com/U9sPW"><img src="http://i.imgur.com/U9sPW.png" alt="" title="Hosted by imgur.com" /></a></li>
-				<li>copy the new files to your webserver, replacing any old files. </li>
-				<li>apply the changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
-				<li><em>Make sure your (prosilver based) custom style is updated aswell.</em></li>				
-				<li>launch the DB updater (/install/index.php)</li>
-				<li>Now you see the Umil updater.
-				<ul>
-					<li>Enter your guildname</li>
-					<li>Choose the realm of your guild</li>
-					<li>Check the games you wish to have installed/updated. (deselecting a game you already have will have no effect on your data)</li>
-					<li>Click submit. This will update to 1.2.9 and clear the caches (template, theme, imagesets)</li>
-				</ul>
+			<h2>Upgrading from 1.2.8-pl2 to 1.3.0</h2>
+			<ul>
+				<li><strong>Uninstall 1.2.8-pl2 and re-install 1.3.0 using Automod</strong>
+					<ol>
+					<li>If you installed any bbDKP plugins, these have to be uninstalled first. So uninstall them from Automod, but don't run the plugin database uninstallers. </li>
+					<li>then, from Automod, do uninstall bbDKP 1.2.8-pl2.</li>
+					<li>now install bbDKP, as described in <a href="#Automodinstall">new </a> install procedure</li>
+					<li>when you come at the database part, press the "update"</li>					
+					</ol>
+				</li>
+				<li><strong>Manually</strong>
+				<ol>
+					<li>download your forum to localhost, as we will make the changes locally and then upload the new/changed</li>
+					<li>follow the diff steps described here : <a href="../contrib/install_128_to_130.xml">1.2.8-pl2 to 1.3.0</a><br /></li>
+					<ol>
+					<li>copy the new files, replacing any old files.</li>
+					<li>delete the old files mentioned in the delete section</li>
+					<li>apply the changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
+					<li><em>Make sure your (prosilver based) custom style is updated aswell.</em></li>
+					<li>launch the DB updater locally (/install/index.php)</li>
+					<li>Now you see the Umil updater.
+					<ul>
+						<li>Check the games you wish to have installed/updated. (deselecting a game you already have will have no effect on your data)</li>
+						<li>Click submit. This will update to 1.3.0 and clear the caches (template, theme, imagesets)</li>
+					</ul>
+					</ol>
+					<li>check that it works</li>
+					<li>FTP the whole folder to to your webserver.</li>
+					<li>launch the DB updater on your webserver (/install/index.php) and redo the db changes on live.</li>
+				</ol>
+			</ul>
+			
+			<h2>Upgrading from an earlier version to 1.3.0</h2>			
+			<ol>Please upgrade to v1.2.8-pl2 first.
 			</ol>
 			
-			<h2>Upgrading from 1.2.7 to 1.2.9</h2>
-			<ol>
-				<li>follow the Diff instructions corresponding to your current version : <br />
-				<a href="../contrib/install_127_to_129.xml">127 to 129</a><br />
-				</li>				
-				<li>note : with automod, just copy bbDKP 1.2.9 in /store and select the updater link <a href="http://imgur.com/U9sPW"><img src="http://i.imgur.com/U9sPW.png" alt="" title="Hosted by imgur.com" /></a></li>
-				<li>copy the new files to your webserver, replacing any old files. </li>
-				<li>apply the changes to the core phpbb files. use a good text editor, like Notepad++  (PC) or Textwrangler (Mac).</li>
-				<li><em>Make sure your (prosilver based) custom style is updated aswell.</em></li>				
-				<li>launch the DB updater (/install/index.php)</li>
-				<li>Now you see the Umil updater.
-				<ul>
-					<li>Enter your guildname</li>
-					<li>Choose the realm of your guild</li>
-					<li>Check the games you wish to have installed/updated. (deselecting a game you already have will have no effect on your data)</li>
-					<li>Click submit. This will update to 1.2.9 and clear the caches (template, theme, imagesets)</li>
-				</ul>
-			</ol>
-
+			
 			<h2>Quick Deactivation</h2>
 			<ol>
 			<li>should you wish to Deactivate this Mod quickly you can open configdkp.php and comment out the trigger</li>
@@ -199,7 +195,7 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 		
 		<div class="content">
 			<ol>
-			<li><a href="http://www.bbdkp.com/viewforum.php?f=56">1.2.9 Installation support</a></li>
+			<li><a href="http://www.bbdkp.com/viewforum.php?f=56">1.3.0 Installation support</a></li>
 			<li><a href="http://www.bbdkp.com/viewforum.php?f=8">Plugin support</a></li>
 			<li><a href="http://www.bbdkp.com/tracker.php">Bug reports</a></li>
 			<li>IRC channel : visit #bbdkp on Freenode. <a href="http://webchat.freenode.net">webchat</a><br/> </li>
@@ -221,7 +217,7 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 		<div class="content">
 <br />
 
-1.2.9<br />
+1.3.0<br />
 <ul>
 <li>[FIX] fix bug 212 : add a raid and only put in say one person, it gives the raid value to everyone on the roster not just the person attending</li>
 <li>[FIX] fix bug 213 : html issue : Incorrect URL in listraids </li>
@@ -229,7 +225,7 @@ Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member
 <br />
 
 
-1.2.8 30-07-2012<br />
+1.2.8-pl2 30-07-2012<br />
 <ul>
 <li>[NEW] new 'new members' portal block ,  portal images moved to subfolder</li>
 <li>[NEW] event frontpage redone</li>

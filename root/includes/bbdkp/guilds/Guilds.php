@@ -37,7 +37,7 @@ if (!class_exists('\bbdkp\WowAPI'))
  * 
  * @package 	bbDKP
  */
- class Guilds extends \bbdkp\Admin
+class Guilds extends \bbdkp\Admin
 {
 	// common
 	public $game_id = '';
@@ -51,7 +51,8 @@ if (!class_exists('\bbdkp\WowAPI'))
 	protected $showroster = 0;
 	protected $min_armory = 0;
 	protected $recstatus = 1;
-
+	protected $guilddefault = 1;
+	
 	//aion parameters
 	protected $aionlegionid = 0;
 	protected $aionserverid = 0;
@@ -68,9 +69,9 @@ if (!class_exists('\bbdkp\WowAPI'))
 
 	protected $possible_recstatus = array();
 	
-
-
 	/**
+	 * guild class constructor
+	 * @param unknown_type $guild_id
 	 */
 	function __construct($guild_id = 0)
 	{
@@ -103,7 +104,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
 		$sql = 'SELECT id, name, realm, region, roster, game_id, members, 
-				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status
+				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault
 				FROM ' . GUILD_TABLE . '
 				WHERE id = ' . $this->guildid;
 		$result = $db->sql_query($sql);
@@ -125,6 +126,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 			$this->min_armory = 0; 
 			$this->recstatus = 0;
 			$this->membercount = 0;
+			$this->guilddefault = 0;
 		}
 		else
 		{
@@ -143,6 +145,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 			$this->min_armory = $row['min_armory'];
 			$this->recstatus = $row['rec_status'];
 			$this->membercount =  $row['members']; 
+			$this->guilddefault = $row['guilddefault'];
 		}
 
 
@@ -241,6 +244,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 				'aion_legion_id' => $this->aionlegionid ,
 				'aion_server_id' => $this->aionserverid, 
 				'min_armory' => $this->min_armory,
+				'guilddefault' => $this->guilddefault,
 				'members' => 0,
 			));
 
@@ -310,6 +314,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 				'min_armory' => $this->min_armory,
 				'rec_status' => $this->recstatus,
 				'members' => $this->membercount,  
+				'guilddefault' => $this->guilddefault,
 		));
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
@@ -381,11 +386,6 @@ if (!class_exists('\bbdkp\WowAPI'))
 		if($this->guildid == 0)
 		{
 			trigger_error($user->lang['ERROR_INVALID_GUILD_PROVIDED'], E_USER_WARNING);
-		}
-
-		if ($this->guildid < 2)
-		{
-			trigger_error($user->lang['ERROR_GUILDIDRESERVED'], E_USER_WARNING);
 		}
 
 		// check if guild has members
@@ -687,7 +687,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 		$sql .= ' FROM  phpbb_bbdkp_classes c ';
 		$sql .= ' INNER JOIN phpbb_bbdkp_memberguild g ON c.game_id = g.game_id ';
 		$sql .= ' LEFT OUTER JOIN (SELECT * FROM phpbb_bbdkp_memberlist WHERE member_level >= ' . $this->min_armory . ') m'; 
-		$sql .= '   ON m.game_id = c.game_id  AND m.member_class_id = c.class_id AND m.member_guild_id = 1 ';
+		$sql .= '   ON m.game_id = c.game_id  AND m.member_class_id = c.class_id  ';
 		$sql .= ' INNER JOIN phpbb_bbdkp_language l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
 		$sql .= ' WHERE  1=1 ';
 		$sql .= " AND l.language = 'en' AND l.attribute = 'class' ";
@@ -758,15 +758,39 @@ if (!class_exists('\bbdkp\WowAPI'))
 	public function guildlist()
 	{
 		global $db; 
-		$sql = 'SELECT a.id, a.name, a.realm, a.region
+		$sql = 'SELECT a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region
 				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
 				WHERE a.id = b.guild_id
-				GROUP BY a.id, a.name, a.realm, a.region
-				ORDER BY a.members desc, a.id asc';
+				GROUP BY a.guilddefault, a.id, a.name, a.realm, a.region
+				ORDER BY a.guilddefault desc, a.members desc, a.id asc';
 		$result = $db->sql_query($sql);
-		return $result; 
+		$guild = array(); 
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$guild [] = array (
+				'game_id' => $row['game_id'] ,
+				'id' => $row['id'] ,
+				'name' => $row['name'], 
+				'guilddefault' => $row['guilddefault']
+			);
+		}
+		$db->sql_freeresult($result);
+		return $guild; 
 	}
+	
+	public function update_guilddefault($id)
+	{
+		global $db; 
 
+		$sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 1 WHERE id = ' . (int) $id;
+		$db->sql_query ( $sql );
+		
+		$sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 0 WHERE id != ' . (int) $id;
+		$db->sql_query ( $sql );
+		
+	}
+	
+	
 }
 
 ?>

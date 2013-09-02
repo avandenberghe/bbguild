@@ -204,14 +204,16 @@ class Loot
 		
 		$sql = 'SELECT * FROM ' . 
 					RAID_ITEMS_TABLE . ' i, ' . 
-					MEMBER_LIST_TABLE . ' m ' .
-					RAIDS_TABLE . ' r ' .
+					MEMBER_LIST_TABLE . ' m, ' .
+					RAIDS_TABLE . ' r, ' .
 					EVENTS_TABLE . ' e 
 				WHERE i.member_id = m.member_id 
 				AND i.raid_id = r.raid_id
 				AND r.event_id = e.event_id
 				AND i.item_id= ' . (int) $item_id;
+		
 		$result = $db->sql_query ( $sql );
+		
 		while ( $row = $db->sql_fetchrow ( $result ) )
 		{
 			$this->item_id = $item_id; 
@@ -227,6 +229,9 @@ class Loot
 			$this->item_zs = (bool)  $row['item_zs']; 
 		}		
 		$db->sql_freeresult ($result);
+		
+		$a = 1; 
+		
 	}
 	
 	
