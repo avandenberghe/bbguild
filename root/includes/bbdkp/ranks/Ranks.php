@@ -178,19 +178,13 @@ class Ranks extends \bbdkp\Guilds
 
 		// log the action
 
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
 		$log_action = array(
 				'header' => 'L_ACTION_RANK_DELETED' ,
 				'id' => (int) $this->RankId  ,
 				'L_NAME' => $this->RankName ,
 				'L_ADDED_BY' => $user->data['username']);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
@@ -225,14 +219,6 @@ class Ranks extends \bbdkp\Guilds
 			AND guild_id = ' . (int) $old_rank->RankGuild;
 		$db->sql_query($sql);
 
-
-		// log it
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
 		$log_action = array(
 				'header' 		=> 'L_ACTION_RANK_UPDATED' ,
 				'L_NAME_BEFORE' => $old_rank->RankName ,
@@ -245,7 +231,7 @@ class Ranks extends \bbdkp\Guilds
 				'L_SUFFIX_AFTER' => $this->RankSuffix ,
 				'L_UPDATED_BY' => $user->data['username']);
 
-		$bbdkp->log_insert(array(
+		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 

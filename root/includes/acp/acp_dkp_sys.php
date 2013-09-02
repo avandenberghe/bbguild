@@ -29,6 +29,11 @@ if (!class_exists('\bbdkp\Pool'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Points/Pool.$phpEx");
 }
+if (!class_exists('\bbdkp\Events'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Raids/Events.$phpEx");
+}
+
 
 /**
  * This class manages admin settings
@@ -43,81 +48,405 @@ if (!class_exists('\bbdkp\Pool'))
 	
 	function main($id, $mode)
 	{
-		global $user, $template, $config, $phpbb_admin_path, $phpEx;
+		global $user, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		
-		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys" ) .'"><h3>'. $user->lang['RETURN_DKPPOOLINDEX'].'</h3></a>';
+		
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		
 		switch ($mode)
 		{
 			case 'adddkpsys' :
-				$update = false;
 				$add = (isset ( $_POST ['add'] )) ? true : false;
-				$submit = (isset ( $_POST ['update'] )) ? true : false;
-				
-                if ( $add || $submit)
-                {
+				if ($add)
+				{
                   	if (!check_form_key('adddkpsys'))
 					{
 						trigger_error('FORM_INVALID');
 					}
-      			}
-      			
-				if ($add)
-				{
 					$this->dkpsys = new \bbdkp\Pool();
-					$this->dkpsys->dkpsys_name =utf8_normalize_nfc (request_var ( 'dkpsys_name', '', true ));  
+					$this->dkpsys->dkpsys_name = utf8_normalize_nfc (request_var ( 'dkpsys_name', '', true ));  
 					$this->dkpsys->dkpsys_status = request_var ( 'dkpsys_status', 'Y' );
 					$this->dkpsys->dkpsys_default = request_var ( 'dkpsys_default', 'Y' );
 					$this->dkpsys->add(); 
 					$success_message = sprintf ( $user->lang ['ADMIN_ADD_DKPSYS_SUCCESS'], $this->dkpsys->dkpsys_name );
+					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys" ) );
 					trigger_error ( $success_message . $this->link );
 				}
-				
-				if ($submit)
-				{
-					$this->dkpsys = new \bbdkp\Pool(request_var('hidden_id', 0));
-					$olddkpsys = new \bbdkp\Pool(request_var('hidden_id', 0));			
-					
-					$this->dkpsys->dkpsys_name =utf8_normalize_nfc (request_var ( 'dkpsys_name', '', true ));
-					$this->dkpsys->dkpsys_status = request_var ( 'dkpsys_status', 'Y' );
-					$this->dkpsys->dkpsys_default = request_var ( 'dkpsys_default', 'Y'); 
-					
-					$this->dkpsys->update($olddkpsys); 
-					unset($olddkpsys); 
-					$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_DKPSYS_SUCCESS'], $this->dkpsys->dkpsys_id, 
-							$this->dkpsys->dkpsys_name, $this->dkpsys->dkpsys_status  );
-					
-					trigger_error ( $success_message . $this->link );
-				}
-				
-				$form_key = 'adddkpsys';
-				add_form_key($form_key);
-				
-				$id = request_var ( URI_DKPSYS, 0 );
-				$this->dkpsys = new \bbdkp\Pool($id);
 				
 				$template->assign_vars ( array (
-					'DKPSYS_ID' => $this->dkpsys->dkpsys_id, 
-					'L_TITLE' 	=> $user->lang ['ACP_ADDDKPSYS'], 
-					'L_EXPLAIN' => $user->lang ['ACP_ADDDKPSYS_EXPLAIN'], 				
-					'DKPSYS_NAME' => $this->dkpsys->dkpsys_name, 
-					'DKPSYS_STATUS' => $this->dkpsys->dkpsys_status,  
-					'MSG_NAME_EMPTY' => $user->lang ['FV_REQUIRED_NAME'], 
-					'MSG_STATUS_EMPTY' => $user->lang ['FV_REQUIRED_STATUS'], 
-					'S_ADD' => ($this->dkpsys->dkpsys_id > 0 ) ? false : true) );
-
+						
+						'L_TITLE' 	=> $user->lang ['ACP_ADDDKPSYS'],
+						'L_EXPLAIN' => $user->lang ['ACP_ADDDKPSYS_EXPLAIN'],
+						'MSG_NAME_EMPTY' => $user->lang ['FV_REQUIRED_NAME'],
+						'MSG_STATUS_EMPTY' => $user->lang ['FV_REQUIRED_STATUS'],
+						'S_ADD' => true 
+					));
+				
+				add_form_key('adddkpsys');
 				$this->page_title = 'ACP_ADDDKPSYS';
 				
 				break;
-			
+			case 'addevent':
+				$update = false;
+				$event_id = request_var(URI_EVENT, 0); 
+				$event  = new \bbdkp\Events($event_id);
+				
+				$url = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=editdkpsys&amp;" . URI_DKPSYS . "={$event->dkpsys_id}" );
+				$this->link = '<br /><a href="' . $url .'"><h3>'. $user->lang['RETURN_DKPPOOLINDEX'].'</h3></a>';
+				
+				/*
+				 * @todo atlas
+				 * 
+				 * 	if (isset($config['bbdkp_bp_version']))
+			{
+				if (isset($this->event))
+				{
+					$s_zonelist_options = '<option value="--">--</option>';		
+				}
+				else 
+				{
+					$s_zonelist_options = '<option value="--" selected="selected">--</option>';
+				}
+
+                $installed_games = array();
+                foreach($this->games as $gameid => $gamename)
+                {
+                	//add value to dropdown when the game config value is 1
+                	if ($config['bbdkp_games_' . $gameid] == 1)
+                	{
+                		$installed_games[] = $gameid; 
+                	} 
+                }
+                
+				// list of zones
+				$sql_array = array(
+				'SELECT'	=>	' z.id, l.name ', 
+				'FROM'		=> array(
+						ZONEBASE		=> 'z',
+						BB_LANGUAGE		=> 'l',
+							),
+				'WHERE'		=> " z.id = l.attribute_id 
+								AND l.attribute='zone' 
+								AND l.game_id = z.game
+								AND l.language= '" . $config['bbdkp_lang'] ."' 
+								AND " . $db->sql_in_set('l.game_id', $installed_games), 
+				'ORDER_BY'	=> 'sequence desc, id desc ',
+				);
+				
+				$sql = $db->sql_build_query('SELECT', $sql_array);					
+				$result = $db->sql_query($sql);
+				while ( $row = $db->sql_fetchrow($result) )
+				{
+					if (!isset($this->event))
+					{
+						$s_zonelist_options .= '<option value="' . $row['name'] . '"> ' . $row['name'] . '</option>';	
+					}
+					else
+					{
+						$select = ($row['name'] == $this->event['event_name'] ) ? ' selected="selected" ' : ' ';
+						$s_zonelist_options .= '<option value="' . $row['name'] . '" ' . $select . ' > ' . $row['name'] . '</option>';
+					}
+										
+				}
+					
+				$template->assign_vars(array(
+						'S_ZONEEVENT_OPTIONS'		=> $s_zonelist_options,
+						'S_BP_SHOW'	=> true,
+					));
+					}
+				 * 
+				 */
+				
+				
+				if(isset($event->dkpsys))
+				{
+					foreach ($event->dkpsys as $pool)
+					{
+						if($pool['id'] == $event->dkpsys_id)
+						{
+							$a = 1;	
+						}
+						
+						$template->assign_block_vars('event_dkpid_row', array(
+								'VALUE' 	=> $pool['id'],
+								'SELECTED' 	=> ($pool['id'] == $event->dkpsys_id) ? ' selected="selected"' : '' ,
+								'OPTION'	=> $pool['name'])
+						);
+					}
+				}
+				else
+				{
+					trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
+				}
+					
+				$add = (isset($_POST['add'])) ? true : false;
+				$submit	= (isset($_POST['update'])) ? true : false;
+				$delete	= (isset($_POST['delete'])) ? true : false;
+				$addraid = (isset($_POST['newraid'])) ? true : false;
+				
+				if ( $add || $submit || $addraid)
+				{
+				    if (!check_form_key('addevent'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+				}
+					
+				if ($addraid)
+				{
+					redirect(append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid&amp;".URI_DKPSYS . '=' .
+							$event->dkpsys_id . '&amp;' . URI_EVENT . '=' . $event->event_id ));
+				}
+				
+				if ($add)
+				{
+					
+					/*
+					 if (isset($config['bbdkp_bp_version']))
+					 {
+					if (isset($config['bbdkp_bp_version']))
+					{
+					$zone= utf8_normalize_nfc(request_var('zoneevent','', true));
+					if ($zone != "--")
+					{
+					$event->event_name= $zone;
+					}
+					}
+					}
+					*/
+								
+					
+					$event->dkpsys_id = request_var('event_dkpid',0);
+					$event->event_name = utf8_normalize_nfc(request_var('event_name','', true));
+					$event->event_imagename = utf8_normalize_nfc(request_var('event_image','', true));
+					$event->event_color = utf8_normalize_nfc(request_var('event_color','', true));
+					$event->event_value= request_var('event_value', 0.0);
+					$event->add();
+					$url = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=editdkpsys&amp;" . URI_DKPSYS . "={$event->dkpsys_id}" ); 
+					$success_message = sprintf($user->lang['ADMIN_ADD_EVENT_SUCCESS'], $event->event_value , $event->event_name );
+					
+					meta_refresh(1,$url); 
+					trigger_error($success_message . $this->link);
+					
+					
+				}
+					
+				if ($submit)
+				{
+					// get old event name, value from db
+					$oldevent = new \bbdkp\Events($event_id);
+					$newvent = new \bbdkp\Events($event_id);
+					
+					$newvent->event_name = utf8_normalize_nfc(request_var('event_name','', true));
+					
+					if (strlen($newvent->event_name) < 3)
+					{
+						trigger_error($user->lang['ERROR_INVALID_EVENT_PROVIDED'] . $this->link, E_USER_WARNING);
+					}
+					
+					/*
+					 if (isset($config['bbdkp_bp_version']))
+					 {
+					$zone= utf8_normalize_nfc(request_var('zoneevent','', true));
+					if ($zone != "--")
+					{
+					$new_event_name = $zone;
+					}
+					}
+					*/
+					
+					$newvent->dkpsys_id = request_var('event_dkpid', '');
+					$newvent->event_imagename = utf8_normalize_nfc(request_var('event_image','', true));
+					$newvent->event_color  = utf8_normalize_nfc(request_var('event_color','', true));
+					$newvent->event_value = request_var('event_value', 0.0);
+					$newvent->update($oldevent);
+					
+					$success_message = sprintf($user->lang['ADMIN_UPDATE_EVENT_SUCCESS'], $newvent->event_value, $newvent->event_name);
+					
+					unset($newvent);
+					unset($oldevent);
+					
+					meta_refresh(1,$url);
+					trigger_error($success_message . $this->link);
+					
+					
+				}
+				
+				if ($delete)
+				{
+					// give a warning that raids cant be without event
+					if (confirm_box(true))
+					{
+						$event = new \bbdkp\Events(request_var(URI_EVENT,0));
+						$url = request_var( 'url', '');
+						$event->delete();
+						$success_message = sprintf($user->lang['ADMIN_DELETE_EVENT_SUCCESS'], $event->event_value, $event->event_name);
+						
+						meta_refresh(1,$url);
+						trigger_error($success_message);
+					}
+					else
+					{
+						$s_hidden_fields = build_hidden_fields(array(
+								'delete'	=> true,
+								'event_id'	=> $event->event_id ,
+								'url' 		=> $url
+						)
+						);
+						$template->assign_vars(array(
+								'S_HIDDEN_FIELDS'	 => $s_hidden_fields)
+						);
+						confirm_box(false, $user->lang['CONFIRM_DELETE_EVENT'], $s_hidden_fields);
+					}
+						
+					
+				}
+				
+				add_form_key('addevent');
+				$template->assign_vars(array(
+						'L_TITLE'			=> $user->lang['ACP_ADDEVENT'],
+						'L_EXPLAIN' 		=> $user->lang['ACP_ADDEVENT_EXPLAIN'],
+						'EVENT_ID'			=> $event->event_id,
+						'EVENT_DKPPOOLNAME'	=> $event->dkpsys_name,
+						'EVENT_NAME'		=> $event->event_name,
+						'S_EVENT_STATUS'	=> $event->event_status == 1 ? true : false,
+						'EVENT_VALUE'		=> $event->event_value,
+						'EVENT_COLOR'		=> ($event->event_color == '') ? '#FFFFFF' : $event->event_color,
+						'EVENT_IMAGENAME'	=> $event->event_imagename,
+						'IMAGEPATH' 		=> $phpbb_root_path . "images/event_images/" . $event->event_imagename . ".png",
+						'S_EVENT_IMAGE_EXISTS' 	=> (strlen($event->event_imagename) > 1) ? true : false,
+						'L_DKP_VALUE'		=> sprintf($user->lang['DKP_VALUE'], $config['bbdkp_dkp_name']),
+						'MSG_NAME_EMPTY'	=> $user->lang['FV_REQUIRED_NAME'],
+						'MSG_VALUE_EMPTY' 	=> $user->lang['FV_REQUIRED_VALUE'],
+						'S_ADD' 			=> $event->event_id  == 0 ? true : false
+				)
+				);
+				
+				
+				break;
+				 	
+			case 'editdkpsys' :
+				//edit Pool name, list events, and add event
+				$submit = (isset ( $_POST ['update'] )  or isset ( $_POST ['dkpsys_status'] ) ) ? true : false;
+				$dkpsys_id = request_var ( URI_DKPSYS, 0 );
+				$activate = (isset ( $_POST ['deactivate'] )) ? true : false;
+				$addevent = (isset($_POST['addevent'])) ? true : false;
+				
+				if($addevent)
+				{
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=addevent"));
+					break;
+				}
+				
+				if ($submit) 
+				{
+					// update point pool
+					if (!check_form_key('editdkpsys'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+					$this->dkpsys = new \bbdkp\Pool($dkpsys_id);
+					$olddkpsys = new \bbdkp\Pool($dkpsys_id);
+						
+					$this->dkpsys->dkpsys_name =utf8_normalize_nfc (request_var ( 'dkpsys_name', '', true ));
+					$this->dkpsys->dkpsys_status = request_var ( 'dkpsys_status', 'Y' );
+					$this->dkpsys->dkpsys_default = request_var ( 'dkpsys_default', 'Y');
+						
+					$this->dkpsys->update($olddkpsys);
+					unset($olddkpsys);
+					$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_DKPSYS_SUCCESS'], $this->dkpsys->dkpsys_id, $this->dkpsys->dkpsys_name, $this->dkpsys->dkpsys_status);
+					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=editdkpsys&amp;" . URI_DKPSYS . "={$dkpsys_id}" )); 
+					trigger_error ( $success_message . $this->link );
+				}
+				
+				$event  = new \bbdkp\Events();
+				$event->countevents($dkpsys_id);
+				
+				if ($activate)
+				{
+					// all events in this window
+					$all_events = explode(',', request_var ( 'idlist', '') );
+					// all checked events in this window
+					$active_events = request_var ( 'activate_ids', array (0));
+					//activate selected events
+					$event->activateevents(1, $active_events);
+					//deactivate unselected events
+					$event->activateevents(0,  array_diff($all_events, $active_events) );
+						
+				}
+				
+				//show pool
+				
+				$this->dkpsys = new \bbdkp\Pool($dkpsys_id);
+				$template->assign_vars ( array (
+						'DKPSYS_ID' => $this->dkpsys->dkpsys_id,
+						'L_TITLE' 	=> $user->lang ['ACP_ADDDKPSYS'],
+						'L_EXPLAIN' => $user->lang ['ACP_ADDDKPSYS_EXPLAIN'],
+						'DKPSYS_NAME' => $this->dkpsys->dkpsys_name,
+						'DKPSYS_STATUS' => $this->dkpsys->dkpsys_status,
+						'MSG_NAME_EMPTY' => $user->lang ['FV_REQUIRED_NAME'],
+						'MSG_STATUS_EMPTY' => $user->lang ['FV_REQUIRED_STATUS'],
+						'S_ADD' => false ));
+				
+				add_form_key('editdkpsys');
+				
+				
+				// Event list
+				
+				$sort_order = array(
+						0 => array('event_name', 'dkpsys_name, event_name desc'),
+						1 => array('event_value desc', 'dkpsys_name, event_value desc'),
+						2 => array('event_status desc', 'dkpsys_name, event_status, event_name desc'),
+						3 => array('event_status desc', 'dkpsys_name, event_status, event_name desc'),
+				);
+				
+				$current_order = $this->switch_order($sort_order);
+				$start = request_var('start',0);
+				$event->listevents($start, $current_order['sql'], $dkpsys_id);
+				
+				$idlist = array();
+					
+				if(isset($event->events))
+				{
+					foreach ($event->events as $id => $listevent)
+					{
+						$template->assign_block_vars('events_row', array(
+								'EVENT_ID' => $listevent ['event_id'],
+								'U_VIEW_EVENT' =>append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=addevent&amp;" . URI_EVENT ."={$id}"),
+								'COLOR' => $listevent['event_color'],
+								'IMAGEPATH' 	=> $phpbb_root_path . "images/event_images/" . $listevent['event_imagename'] . ".png",
+								'S_EVENT_IMAGE_EXISTS' => (strlen($listevent['event_imagename']) > 1) ? true : false,
+								'S_EVENT_STATUS' => ($listevent ['event_status'] == 1) ? 'checked="checked" ' : '',
+								'IMAGENAME' => $listevent['event_imagename'],
+								'NAME' => $listevent['event_name'],
+								'VALUE' => $listevent['event_value'])
+						);
+						$idlist[] = $listevent ['event_id'];
+					}
+				}
+				 
+				$template->assign_vars(array(
+						'IDLIST'		=> implode(",", $idlist),
+						'L_TITLE'		=> $user->lang['ACP_LISTEVENTS'],
+						'L_EXPLAIN'		=> $user->lang['ACP_LISTEVENTS_EXPLAIN'],
+						'O_DKPSYS'		=> $current_order['uri'][0],
+						'O_NAME'		=> $current_order['uri'][1],
+						'O_VALUE'		=> $current_order['uri'][2],
+						'START'			=> $start,
+						'U_LIST_EVENTS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=editdkpsys&amp;" . URI_DKPSYS . "={$dkpsys_id}"   ),
+						'LISTEVENTS_FOOTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $event->total_events, $config['bbdkp_user_elimit']),
+						'EVENT_PAGINATION'	=> generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=editdkpsys&amp;" . URI_DKPSYS . "={$dkpsys_id}&amp;" .  
+						URI_ORDER . '='.$current_order['uri']['current']), $event->total_events, $config['bbdkp_user_elimit'],$start, true))
+				
+				);
+				
+				break;
 			case 'listdkpsys' :
 				
 				// list of pools
 				$showadd = (isset ( $_POST ['dkpsysadd'] )) ? true : false;
 				$delete = (isset ( $_GET ['delete'] ) && isset ( $_GET [URI_DKPSYS] )) ? true : false;
-				$submit = (isset ( $_POST ['upddkpsysdef'] )) ? true : false;
-				
+				$submit = (isset ( $_POST ['defaultsys'] )  ) ? true : false; //pulldown js submit 
 				//add new pool
 				if ($showadd)
 				{
@@ -152,10 +481,11 @@ if (!class_exists('\bbdkp\Pool'))
 				{
 					$this->dkpsys = new \bbdkp\Pool(request_var ( 'defaultsys', 0 ));
 					$olddkpsys = new \bbdkp\Pool(request_var ( 'defaultsys', 0 ));  
-					$this->dkpsys->dkpsys_default = true;
+					$this->dkpsys->dkpsys_default = 'Y';
 					$this->dkpsys->update($olddkpsys); 
 					unset($olddkpsys); 
 					$success_message = sprintf ( $user->lang ['ADMIN_DEFAULTPOOL_SUCCESS'],  $this->dkpsys->dkpsys_name );
+					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys"));
 					trigger_error ( $success_message . $this->link) ;
 				}
 				
@@ -183,8 +513,10 @@ if (!class_exists('\bbdkp\Pool'))
 				{
 					$template->assign_block_vars ( 'dkpsys_row', 
 						array (
-							'U_VIEW_DKPSYS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=adddkpsys&amp;" . URI_DKPSYS . "={$dkpsys_id}" ), 
+							'U_VIEW_DKPSYS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=editdkpsys&amp;" . URI_DKPSYS . "={$dkpsys_id}" ), 
 							'U_DELETE_DKPSYS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;delete=1&amp;" . URI_DKPSYS . "={$dkpsys_id}" ), 
+							'ID' => $pool['dkpsys_id'],
+							'NUMEVENTS' => $pool['numevents'],
 							'NAME' => $pool['dkpsys_name'], 
 							'STATUS' => $pool['dkpsys_status'], 
 							'DEFAULT' => $pool['dkpsys_default'] ));
@@ -197,6 +529,7 @@ if (!class_exists('\bbdkp\Pool'))
 					'O_STATUS' 		=> $current_order ['uri'] [1], 
 					'U_LIST_DKPSYS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;" ), 
 					'START' 		=> $start, 
+					'UA_UPDATEPOOLSTATUS' => append_sid($phpbb_admin_path . "style/dkp/updatedefaultpools.$phpEx") ,
 					'LISTDKPSYS_FOOTCOUNT' => sprintf ( $user->lang ['LISTDKPSYS_FOOTCOUNT'], $this->dkpsys->poolcount, $config ['bbdkp_user_elimit'] ), 
 					'DKPSYS_PAGINATION' => generate_pagination ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys&amp;" ) . "&amp;o=" . 
 						$current_order ['uri'] ['current'], $this->dkpsys->poolcount, $config ['bbdkp_user_elimit'], $start )), true );

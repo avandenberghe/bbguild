@@ -42,7 +42,7 @@ input.game_add {
 <br />
 <p>{L_ACP_NEWGAME_EXPLAIN} {L_PREINSTALLED}</p>
 
-<fieldset>
+<fieldset style="background-color: #EEEEEE">
 <legend>{L_ADD_GAME}</legend>
 <!-- IF CANINSTALL == 1 -->
 <form id="acp_listgames" method="post" action="{U_ACTION}">
@@ -109,5 +109,14 @@ input.game_add {
 </tbody>
 </table>
 </fieldset>
+
+
+<!-- ELSE -->
+
+<div class="errorbox">
+<h3>{L_ERROR}</h3>
+<p>{L_ERROR_NOGAMES}</p>
+</div>
+
  <!-- ENDIF -->
 <!-- INCLUDE dkp/overall_footer.html -->

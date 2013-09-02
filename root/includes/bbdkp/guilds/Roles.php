@@ -40,6 +40,12 @@ if (!class_exists('\bbdkp\Guilds'))
  */
 class Roles 
 {
+	
+	/**
+	 * primary key 
+	 */
+	public $id; 
+	
 	/**
 	 * guild for which we want to recruit
 	 * @var int
@@ -87,7 +93,6 @@ class Roles
 	{
 		global $user; 
 		
-		
 		$this->guild_id = $guild_id;
 		$this->role = $role;
 		$this->class_id = $class_id;
@@ -97,12 +102,13 @@ class Roles
 		/**
 		 * possible roles that a class can fullfill, as exist in Wow API
 		 * note: roleID max 20 chars !!
-		 * this is not stored in database
+		 * the role types are *not* stored in database but only in this array. so if you need something else edit this array
+		 * the concrete roles are stored in the bbdkp_roles table
 		 */
 		$this->roles =  array (
 				'DPS' 	=> $user->lang ['DAMAGE'],
-				'HEALING' 	=> $user->lang ['HEAL'],
-				'TANKING' 	=> $user->lang ['TANK'],
+				'HEAL' 	=> $user->lang ['HEAL'],
+				'TANK' 	=> $user->lang ['TANK'],
 				'NA' 	=> $user->lang ['NA'],
 		);
 		
@@ -133,6 +139,11 @@ class Roles
 			trigger_error($user->lang['ERROR_GUILDEMPTY'], E_USER_WARNING);
 		}
 		
+		if($this->get($this->guild_id, $this->role, $this->class_id) == 1)
+		{
+			return 0;  			
+		} 
+		
 		$recruitingguild = new \bbdkp\Guilds($this->guild_id );
 		$this->game_id = $recruitingguild->game_id; 
 		$query = $db->sql_build_array('INSERT', array(
@@ -144,6 +155,16 @@ class Roles
 		));
 		
 		$db->sql_query('INSERT INTO ' . BBDKP_ROLES_TABLE . $query);
+		return 1;
+	}
+	
+	public function update()
+	{
+		global $db; 
+		$query = $db->sql_build_array('UPDATE', array(
+				'needed' => $this->needed,
+		));
+		$db->sql_query('UPDATE ' . BBDKP_ROLES_TABLE . ' SET ' . $query . ' WHERE id = ' . $this->id);
 		
 	}
 	
@@ -164,7 +185,7 @@ class Roles
 	public function get($guild_id, $role, $class_id)
 	{
 		global $user, $db;
-		$sql = 'SELECT game_id, guild_id, role, class_id, needed
+		$sql = 'SELECT id, game_id, guild_id, role, class_id, needed
 				FROM ' . BBDKP_ROLES_TABLE . '
 				WHERE guild_id = ' . $this->guild_id . "
 				AND role = '" . $this->role . "' 
@@ -175,11 +196,7 @@ class Roles
 		$db->sql_freeresult($result);
 		if (! $row)
 		{
-			$this->guild_id = 0;
-			$this->game_id = '';
-			$this->role = '';
-			$this->class_id = 0;
-			$this->needed = 0;
+			return 0;
 		}
 		else
 		{
@@ -188,8 +205,10 @@ class Roles
 			$this->role = (isset($user->lang[$row['role']])) ? $user->lang[$row['role']] : $row['role'];
 			$this->class_id = $row['class_id'];
 			$this->needed = $row['needed'];
+			
+			return 1;
 		}
-	
+		
 	}
 
 	/**
@@ -204,7 +223,7 @@ class Roles
 				WHERE guild_id = ' . $this->guild_id; 
 		*/
 		
-		$sql =  'SELECT c.class_id, l.name as class_name, c.colorcode, c.imagename, ';  
+		$sql =  'SELECT a.id as roleid, c.class_id, l.name as class_name, c.colorcode, c.imagename, ';  
 		$sql .= ' a.game_id, g.id as guild_id,  a.role, a.needed '; 
 		$sql .= ' FROM ' . CLASS_TABLE . ' c ';
 		$sql .= ' INNER JOIN ' . BB_LANGUAGE. ' l ON l.attribute_id = c.class_id AND c.game_id = l.game_id ' ;

@@ -2,20 +2,20 @@
 <?xml-stylesheet type="text/xsl" href="modx.prosilver.en.xsl"?>
 <!--NOTICE: Please open this file in your web browser. If presented with a security warning, you may safely tell it to allow the blocked content.-->
 <!--For security purposes, please check: http://www.phpbb.com/mods/ for the latest version of this MOD.\nAlthough MODs are checked before being allowed in the MODs Database there is no guarantee that there are no security problems within the MOD.\nNo support will be given for MODs not found within the MODs Database which can be found at http://www.phpbb.com/mods/-->
-<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
+<mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP 1.2.8 to 1.2.9]]></title>
-		<description lang="en"><![CDATA[Update 1.2.8 to 1.2.9]]></description>
-		<description lang="fr"><![CDATA[mise à jour 1.2.8 to 1.2.9]]></description>
-		<description lang="de"><![CDATA[Aktualisierung 1.2.8 to 1.2.9]]></description>
-		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.8, delete, add and Replace the files listed below]]></author-notes>
-		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.8, supprimez, ajoutez et remplacez les fichiers listés en bas]]></author-notes>
-		<author-notes lang="de"><![CDATA[Benötigt bbdkp 1.2.8, ertsetze die hierunder erwähnte Dateien]]></author-notes>
+		<title lang="en"><![CDATA[bbDKP 1.2.8 to 1.3.0]]></title>
+		<description lang="en"><![CDATA[Update 1.2.8 to 1.3.0]]></description>
+		<description lang="fr"><![CDATA[mise à jour 1.2.8 to 1.3.0]]></description>
+		<description lang="de"><![CDATA[Aktualisierung 1.2.8 to 1.3.0]]></description>
+		<author-notes lang="en"><![CDATA[Requires bbdkp 1.2.8-pl2 delete, add and Replace the files listed below]]></author-notes>
+		<author-notes lang="fr"><![CDATA[Requiert bbdkp 1.2.8-pl2, supprimez, ajoutez et remplacez les fichiers listés en bas]]></author-notes>
+		<author-notes lang="de"><![CDATA[Benötigt bbdkp 1.2.8-pl2, ersetze die hierunter erwähnte Dateien]]></author-notes>
 		<author-group>
 			<author>
-				<realname><![CDATA[Andy Vandenberghe]]></realname>
+				<realname><![CDATA[Andreas]]></realname>
 				<username><![CDATA[Sajaki]]></username>
 				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
 				<email><![CDATA[sajaki9@gmail.com]]></email>
@@ -47,11 +47,11 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.2.9</mod-version>
+		<mod-version>1.3.0</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>300</time>
-			<target-version>3.0.10</target-version>
+			<target-version>3.0.11</target-version>
 		</installation>
 		<link-group>
 			<link type="parent" href="../install.xml" lang="de">Frisch-Installations-Anleitung</link>
@@ -249,7 +249,7 @@
 		</delete>
 		<php-installer><![CDATA[install/index.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[Afterwards, run database installer and purge template cache. Update your other styles manually]]></diy-instructions>
-		<diy-instructions lang="fr"><![CDATA[Ensuite, lancer mise à jour db et purgez la cache. Mettre à jour les autres styles]]></diy-instructions>
-		<diy-instructions lang="de"><![CDATA[Danach database update und Cache leeren. Andere Themen sind manuell aufzuarbeiten.]]></diy-instructions>
+		<diy-instructions lang="fr"><![CDATA[Ensuite, lancer mise à jour de la base de données et purge la cache. Mettre à jour les autres styles]]></diy-instructions>
+		<diy-instructions lang="de"><![CDATA[Danach Datenbank aktualisieren und Cache leeren. Andere Themen sind manuell aufzuarbeiten.]]></diy-instructions>
 	</action-group>
 </mod>

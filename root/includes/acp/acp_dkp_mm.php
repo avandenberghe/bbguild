@@ -69,9 +69,9 @@ class acp_dkp_mm extends \bbdkp\Admin
 			 */
 			case 'mm_listmembers':
 
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx",
-				"i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
+				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx","i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
 				$Guild = new \bbdkp\Guilds();
+				
 				// add member button redirect
 				$showadd = (isset($_POST['memberadd'])) ? true : false;
 				$activate = (isset($_POST['deactivate'])) ? true : false;
@@ -123,49 +123,85 @@ class acp_dkp_mm extends \bbdkp\Admin
 				{
 				// default pageloading
 					
-					$result = $Guild->guildlist();
-					while ($row = $db->sql_fetchrow($result))
+					$guildlist = $Guild->guildlist();
+					
+					if( count((array) $guildlist) == 0  )
 					{
-						$Guild->guildid = $row['id'];
+						trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+					}
+					
+					if( count((array) $guildlist) == 1 )
+					{
+						foreach ($guildlist as $g)
+						{
+							$Guild->guildid = $g['id'];
+							$Guild->name = $g['name'];
+							if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+							{
+								trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+							}	  
+							break;
+						}
+						
+					}
+					
+					foreach ($guildlist as $g)
+					{
+						$Guild->guildid = $g['id'];
 						break;
 					}
-					$db->sql_freeresult($result);
 				}
 
 				if($charapicall)
 				{
-					$Guild->guildid = request_var('hidden_guildid', 0);
-					$Guild->Getguild();				
-					$members_result = $Guild->listmembers();
-					$log = ''; 
-					$i = 0;
-					while ($row = $db->sql_fetchrow($members_result))
+					
+					if (confirm_box(true))
 					{
-						$i +=1; 
-						if($log != '') $log .= ', '; 
-						$member = new \bbdkp\Members($row['member_id']);
-						$member->Updatemember($member); 
-						unset($member);
-						$log .= $row['member_name']; 
-					}				
-					$db->sql_freeresult($members_result);
-					unset ($members_result); 
-					trigger_error(sprintf($user->lang['CHARAPIDONE'] , $i, $log), E_USER_NOTICE);
+						$Guild = new \bbdkp\Guilds();
+						$Guild->guildid = request_var('hidden_guildid', 0);
+						$Guild->Getguild();				
+						$members_result = $Guild->listmembers();
+						$log = ''; 
+						$i = 0;
+						while ($row = $db->sql_fetchrow($members_result))
+						{
+							$i +=1; 
+							if($log != '') $log .= ', '; 
+							$member = new \bbdkp\Members($row['member_id']);
+							$member->Updatemember($member); 
+							unset($member);
+							$log .= $row['member_name']; 
+						}				
+						$db->sql_freeresult($members_result);
+						unset ($members_result); 
+						
+						trigger_error(sprintf($user->lang['CHARAPIDONE'] , $i, $log), E_USER_NOTICE);
+						
+					}
+					else
+					{
+						$s_hidden_fields = build_hidden_fields(array(
+								'charapicall' => true ,
+								'hidden_guildid' => request_var('hidden_guildid', 0)
+								));
+						confirm_box(false, $user->lang['WARNING_BATTLENET'], $s_hidden_fields);
+					}
+					
 					
 				}
 				
 				
 				// fill popup and set selected to default selection
 				$Guild->Getguild(); 
-				$resultg = $Guild->guildlist();
-				while ($row = $db->sql_fetchrow($resultg))
+				$guildlist = $Guild->guildlist();
+				foreach ($guildlist as $g)
 				{
 					$template->assign_block_vars('guild_row', array(
-						'VALUE' => $row['id'] ,
-						'SELECTED' => ($row['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
-						'OPTION' => (! empty($row['name'])) ? $row['name'] : '(None)'));
+						'VALUE' => $g['id'] ,
+						'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
+						'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
 				}
-				$db->sql_freeresult($resultg);
+				
 				$previous_data = '';
 
 				//get window
@@ -406,12 +442,20 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$S_ADD = ($editmember->member_id > 0) ? false: true;
 				
 				// Game dropdown
-				foreach ($this->games as $gameid => $gamename)
+				if(isset($this->games))
 				{
-					$template->assign_block_vars('game_row', array(
-							'VALUE' => $gameid ,
-							'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '' ,
-							'OPTION' => $gamename));
+					foreach ($this->games as $gameid => $gamename)
+					{
+						$template->assign_block_vars('game_row', array(
+								'VALUE' => $gameid ,
+								'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '' ,
+								'OPTION' => $gamename));
+					}
+					
+				}
+				else
+				{
+					trigger_error('ERROR_NOGAMES', E_USER_WARNING );
 				}
 				
 				if (isset($_GET[URI_GUILD]))
@@ -421,15 +465,14 @@ class acp_dkp_mm extends \bbdkp\Admin
 				
 				//guild dropdown
 				$Guild = new \bbdkp\Guilds($editmember->member_guild_id);
-				$result = $Guild->guildlist(); 
-				while ($row = $db->sql_fetchrow($result))
+				$guildlist = $Guild->guildlist(); 
+				foreach ($guildlist as $g)
 				{
 					$template->assign_block_vars('guild_row', array(
-						'VALUE' => $row['id'] ,
-						'SELECTED' => ($editmember->member_guild_id == $row['id']) ? ' selected="selected"' : '' ,
-						'OPTION' => $row['name']));
+						'VALUE' => $g['id'] ,
+						'SELECTED' => ($editmember->member_guild_id == $g['id']) ? ' selected="selected"' : '' ,
+						'OPTION' => $g['name']));
 				}
-				$db->sql_freeresult($result);
 					
 				// Rank drop-down -> for initial load
 				// reloading is done from ajax to prevent redraw

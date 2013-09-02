@@ -191,8 +191,8 @@ if (!class_exists('\bbdkp\Game'))
 			//
 			$log_action = array(
 					'header' 	=> 'L_ACTION_FACTION_DELETED' ,
-					'L_GAME' 	=> $faction->game_id ,
-					'L_FACTION' => $faction->faction_name ,
+					'L_GAME' 	=> $this->game_id ,
+					'L_FACTION' => $this->faction_name ,
 			);
 				
 			$this->log_insert(array(
@@ -211,14 +211,14 @@ if (!class_exists('\bbdkp\Game'))
 			{
 				require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 			}
-			$bbdkp = new \bbdkp\Admin();
+			
 			$log_action = array(
 					'header' => 'L_ACTION_FACTION_DELETED' ,
 					'L_GAME' => $this->game_id ,
 					'L_FACTION' => $this->faction_name ,
 			);
 			
-			$bbdkp->log_insert(array(
+			$this->log_insert(array(
 			'log_type' 		=> 'L_ACTION_FACTION_DELETED',
 			'log_result' 	=> 'L_FAILED', 
 			'log_action' 	=> $log_action));

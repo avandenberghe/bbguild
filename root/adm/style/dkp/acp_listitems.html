@@ -12,23 +12,25 @@
 <a name="maincontent"></a>
 <h1>{L_TITLE}</h1>
 <p>{L_EXPLAIN}</p>
-<!-- IF S_SHOW -->
+
 <form method="post" action="{F_LIST_ITEM}" id="listitems">
+
+<fieldset style="background-color: #EEEEEE">
+<label for="dkpsys_id">{L_POOL}:</label>
+	<select id="dkpsys_id" name="dkpsys_id" class="input" onchange="javascript:form.submit();">
+	<!-- BEGIN dkpsys_row -->
+	<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
+	<!-- END dkpsys_row -->
+	</select>
+</fieldset>
+
+<!-- IF .raids_row --> 
 
 <div style = "float: left; width:50%">
 
 <fieldset>
 <legend>{L_RAIDS}</legend>
 
-<label for="dkpsys_id">{L_POOL}:</label>
-<select id="dkpsys_id" name="dkpsys_id" class="input" onchange="javascript:form.submit();">
-	<!-- BEGIN dkpsys_row -->
-	<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
-	<!-- END dkpsys_row -->
-</select> <br />
-<br />
-
- 
 <!-- IF RAID_PAGINATION -->
 <div class="pagination">
 	<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a> &bull; <span>{RAID_PAGINATION}</span>
@@ -110,8 +112,9 @@
 </div>
 </form>
 <!-- ELSE -->
-<div class="errorbox">
-<p>{L_ERROR_NOITEMS}</p>
+<div class="warningbox">
+<h3>{L_WARNING}</h3>
+<p>{L_WARNING_NOITEMS}</p>
 </div>
 <!-- ENDIF -->
 
