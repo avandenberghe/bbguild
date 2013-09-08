@@ -113,6 +113,7 @@ abstract class Admin
 	private function listgames()
 	{
 		global $db;
+		$this->games= array(); 
 		$sql = 'SELECT id, game_id, game_name, status FROM ' . GAMES_TABLE . ' ORDER BY game_id ';
 		$result = $db->sql_query ( $sql );
 		while($row = $db->sql_fetchrow($result))

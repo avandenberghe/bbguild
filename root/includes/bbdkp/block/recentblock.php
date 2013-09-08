@@ -2,10 +2,12 @@
 /**
  * Recent topics block
  * 
- * 
- * @copyright 2012 bbdkp <https://github.com/bbDKP>
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * Contains Code ported from Easyportal (C) 2008 Noxwizard
+ * @version 1.3.0
  * 
  */
 

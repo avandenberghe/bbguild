@@ -1,31 +1,45 @@
 <?php
 /**
+ * frontpage for bbdkp
  * 
- * @copyright (c) 2010 bbDKP (http://www.bbdkp.com)
+ * @package bbDKP
+ * @copyright 2011 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.3
+ * @author ippehe <ippe.he@gmail.com>
+ * @author sajaki <sajaki@gmail.com>
+ * @link http://www.bbdkp.com
  * 
  */
+
+/**
+ * @ignore
+ */
 define('IN_PHPBB', true);
+define('IN_BBDKP', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
 
-// Start session management
 $user->session_begin();
 $auth->acl($user->data);
-$user->setup('viewforum');
-$user->add_lang(array('mods/dkp_common', 'mods/dkp_admin'));
+$user->setup(array('mods/dkp_common', 'mods/dkp_admin'));
 
-// check if user can access pages
-if (! defined ( "EMED_BBDKP" ))
+if(!defined("EMED_BBDKP"))
 {
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
+	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
-
+if (!isset($config['bbdkp_version']))
+{
+	// THE CONFIGS AND DATABASE TABLES AREN'T INSTALLED, EXIT
+	trigger_error('GENERAL_ERROR', E_USER_WARNING);
+}
 if (!$auth->acl_get('u_dkp'))
 {
 	trigger_error('NOT_AUTHORISED');
+}
+if (!class_exists('\bbdkp\views'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/views.$phpEx");
 }
 
 $template->assign_vars(array(
@@ -42,72 +56,17 @@ $template->assign_vars(array(
 	'U_ROSTER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster'), 
 	'U_STATS'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats'), 
 	'U_ABOUT'         	=> append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
-	'U_DKP_ACP'			=> ($auth->acl_get('a_') && !empty($user->data['is_registered'])) ? append_sid("{$phpbb_root_path}adm/index.$phpEx", 'i=' . (isset($config['bbdkp_module_id']) ? $config['bbdkp_module_id'] : 194) ,true,$user->session_id ) :'',
+	'U_DKP_ACP'			=> ($auth->acl_get('a_') && !empty($user->data['is_registered'])) ? append_sid("{$phpbb_root_path}adm/index.$phpEx", 'i=' .
+	 (isset($config['bbdkp_module_id']) ? $config['bbdkp_module_id'] : 194) ,true,$user->session_id ) :'',
 ));	
 
-$page =  request_var('page', 'standings');
-
-// if bbTips exists then load it
-$Admin = new \bbdkp\Admin();
-if ($Admin->bbtips == true)
-{
-	if (! class_exists ( 'bbtips' ))
-	{
-		require ($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx);
-	}
-	$bbtips = new bbtips ( );
-}
-
-define('IN_BBDKP', true);
- 
-// load modules
-switch ($page)
-{
-	case 'news':
-		page_header($user->lang['MENU_NEWS']);
-		include($phpbb_root_path . 'includes/bbdkp/module/news.' . $phpEx);
-		break;
-	case 'standings':
-		page_header($user->lang['MENU_STANDINGS']);
-		include($phpbb_root_path . 'includes/bbdkp/module/standings.' . $phpEx);
-		break;
-	case 'listitems':
-		include($phpbb_root_path . 'includes/bbdkp/module/listitems.' . $phpEx);
-		break;
-	case 'listevents':
-		include($phpbb_root_path . 'includes/bbdkp/module/listevents.' . $phpEx);
-		break;
-	case 'stats':
-		include($phpbb_root_path . 'includes/bbdkp/module/stats.' . $phpEx);
-		break;
-	case 'listraids':
-		include($phpbb_root_path . 'includes/bbdkp/module/listraids.' . $phpEx);		
-		break;
-	case 'viewevent':
-		include($phpbb_root_path . 'includes/bbdkp/module/viewevent.' . $phpEx);
-		break;
-	case 'viewitem':
-		include($phpbb_root_path . 'includes/bbdkp/module/viewitem.' . $phpEx);
-		break;
-	case 'viewraid':
-		include($phpbb_root_path . 'includes/bbdkp/module/viewraid.' . $phpEx);
-		break;
-	case 'viewmember':
-		include($phpbb_root_path . 'includes/bbdkp/module/viewmember.' . $phpEx);
-		break;
-	case 'bossprogress':
-		include($phpbb_root_path . 'includes/bbdkp/module/bossprogress.' . $phpEx);
-		break;		
-	case 'roster':
-		include($phpbb_root_path . 'includes/bbdkp/module/roster.' . $phpEx);
-		break;	
-	case 'planner':
-		include($phpbb_root_path . 'includes/bbdkp/raidplanner/planner.' . $phpEx);
-		break;	
-}
 $template->set_filenames(array(
 	'body' => 'dkp/dkpmain.html')
 );
+
+$views = new \bbdkp\views();
+$page =  request_var('page', 'standings');
+$views->load($page);
 
 page_footer();
 

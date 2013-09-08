@@ -1,6 +1,6 @@
 <?php
 /**
- * 
+ * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -18,47 +18,41 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 
 $newstats = new statistics();
 
-class statistics
+$title = $user->lang['MENU_STATS'];
+
+$navlinks_array = array(
+		array(
+				'DKPPAGE' => $user->lang['MENU_STATS'],
+				'U_DKPPAGE' => $this->u_stats,
+		));
+
+foreach( $navlinks_array as $name )
 {
-	
+	$template->assign_block_vars('dkpnavlinks', array(
+			'DKPPAGE' => $name['DKPPAGE'],
+			'U_DKPPAGE' => $name['U_DKPPAGE'],
+	));
+}
+
+$newstats->show_all = ( (isset($_GET['show'])) && (request_var('show', '') == "all") ) ? true : false;
+$newstats->dkppulldown();
+
+$time = time() + $user->timezone + $user->dst;
+
+$newstats->memberstats($time);
+$newstats->class_statistics();
+$newstats->attendance_statistics($time);
+
+// Output page
+page_header($title);
+
+class statistics extends \bbdkp\views
+{
+	public $show_all;
 	private $u_stats;
-	private $show_all;
 	private $query_by_pool;
 	private $total_drops;
 	private $dkp_id;
-	
-	public function __construct()
-	{
-		global $template, $user;
-		
-		$navlinks_array = array(
-		array(
-		 'DKPPAGE' => $user->lang['MENU_STATS'],
-		 'U_DKPPAGE' => $this->u_stats,
-		)); 
-		
-		foreach( $navlinks_array as $name )
-		{
-			 $template->assign_block_vars('dkpnavlinks', array(
-			 'DKPPAGE' => $name['DKPPAGE'],
-			 'U_DKPPAGE' => $name['U_DKPPAGE'],
-			 ));
-		}
-		
-		$this->show_all = ( (isset($_GET['show'])) && (request_var('show', '') == "all") ) ? true : false;
-		$this->dkppulldown();
-		
-		$time = time() + $user->timezone + $user->dst;
-		
-		$this->memberstats($time);
-		$this->class_statistics();
-		$this->attendance_statistics($time);
-		
-		$title = $user->lang['MENU_STATS'];
-		
-		// Output page
-		page_header($title);
-	}
 	
 	/**
 	 * dkpsys pulldown ...
@@ -205,7 +199,7 @@ class statistics
 	 *  Member Statistics
 	 *
 	 */
-	private function memberstats($time)
+	public function memberstats($time)
 	{
 		global $db, $template, $config, $phpEx, $phpbb_root_path, $user;
 		
@@ -372,7 +366,7 @@ class statistics
 		    $footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($members_result),
 		    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o1='.$current_order['uri']['current']. '&amp;show=all' ) . '" class="rowfoot">');
 		    
-		    $dkppagination = generate_pagination2($this->u_stats . '&amp;o1=' . $current_order ['uri'] ['current'] ,
+		    $dkppagination = $this->generate_pagination2($this->u_stats . '&amp;o1=' . $current_order ['uri'] ['current'] ,
 			$member_count, $config ['bbdkp_user_llimit'], $startd, true, 'startdkp'  );
 
 		}
@@ -421,7 +415,7 @@ class statistics
 	 * Class Drop Statistics 
 	 *
 	 */
-	protected function class_statistics()
+	public function class_statistics()
 	{
 		global $db, $config, $template, $phpEx, $phpbb_root_path;
 		
@@ -547,7 +541,7 @@ class statistics
 	/**
 	 * Attendance Statistics 
 	 */
-	protected function attendance_statistics($time)
+	public function attendance_statistics($time)
 	{
 		/* get overall raidcount for 4 intervals */
 		global $db, $template, $phpEx, $phpbb_root_path, $config, $user;
@@ -770,7 +764,7 @@ class statistics
 		    $footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($result),
 		    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o='.$att_current_order['uri']['current']. '&amp;show=all' ) . '" class="rowfoot">');
 		    
-			$attpagination = generate_pagination2($this->u_stats . '&amp;o=' . $att_current_order ['uri'] ['current'] , 
+			$attpagination = $this->generate_pagination2($this->u_stats . '&amp;o=' . $att_current_order ['uri'] ['current'] , 
 			$attendance, $config ['bbdkp_user_llimit'], $startatt, true, 'startatt'  );
 
 		}
@@ -780,7 +774,7 @@ class statistics
 		    $footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($result),
 		    '<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o='.$att_current_order['uri']['current'] . '" class="rowfoot">'));
 		    
-			$attpagination = generate_pagination2($this->u_stats . '&amp;o=' . $att_current_order ['uri'] ['current']. '&amp;show=all' , 
+			$attpagination = $this->generate_pagination2($this->u_stats . '&amp;o=' . $att_current_order ['uri'] ['current']. '&amp;show=all' , 
 			$attendance, $config ['bbdkp_user_llimit'], $startatt, true, 'startatt'  );
 
 		}

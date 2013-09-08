@@ -2,11 +2,12 @@
 /**
  * user block
  * 
- * 
- * @copyright 2009 bbdkp <https://github.com/bbDKP>
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * 
- * credits to angelside phpbb3portal
+ * @version 1.3.0
  * 
  */
 if (!defined('IN_PHPBB'))

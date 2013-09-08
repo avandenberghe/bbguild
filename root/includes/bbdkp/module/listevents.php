@@ -1,11 +1,11 @@
 <?php
 /**
- * 
+ * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
+ * @version 1.3.0
  */
 
 /**
@@ -15,7 +15,6 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
-
 
 $total_events= 0;
 
@@ -134,7 +133,7 @@ while ( $pool = $db->sql_fetchrow($dkppool_result) )
 			'O_NAME' 	 => $current_order[$pool['dkpsys_id']]['uri'][0],
 		    'O_VALUE'    => $current_order[$pool['dkpsys_id']]['uri'][1],
 		    'START' 	 => $start,
-		    'EVENT_PAGINATION' => generate_pagination2( $u_listevents . '&amp;o='.$current_order[$pool['dkpsys_id']]['uri']['current'],
+		    'EVENT_PAGINATION' => $this->generate_pagination2( $u_listevents . '&amp;o='.$current_order[$pool['dkpsys_id']]['uri']['current'],
 							$total_events, $config['bbdkp_user_elimit'], $start, true, 'pool' . $pool['dkpsys_id']),
 	    	'NAME' 		 => $pool['dkpsys_name'],
 			'EVENTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events , $config['bbdkp_user_elimit']),

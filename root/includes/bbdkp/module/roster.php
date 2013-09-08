@@ -1,13 +1,13 @@
 <?php
 /**
- * 
+ * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
+ * @version 1.3.0
  */
-
+namespace bbdkp;
 /**
  * @ignore
  */
@@ -16,81 +16,55 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 	exit;
 }
 
-$game_id = request_var('displaygame', '');
-$start = request_var('start' ,0);
-$selfurl = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster') ;
-$newroster = new roster($game_id, $start, $selfurl);
 
-class roster
+$newroster = new roster($game_id, $start);
+
+$newroster->selfurl = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster');
+$newroster->start=request_var('start' ,0);
+$newroster->game_id = request_var('displaygame', '');
+
+$newroster->get_listingresult(); 
+//show chosen game
+
+// push common data to template
+foreach ($this->games as $id => $gamename)
 {
-	private $dataset;
-	private $classes;
-	private $mode;
-	private $start;
+	$template->assign_block_vars ( 'game_row', array (
+			'VALUE' => $id,
+			'SELECTED' => ($id == $this->game_id) ? ' selected="selected"' : '',
+			'OPTION' => $gamename));
+}
+
+$template->assign_vars(array(
+		'GUILDNAME'			=>  $config['bbdkp_guildtag'],
+		'S_MULTIGAME'		=> (sizeof($this->games) > 1) ? true:false,
+		'S_DISPLAY_ROSTER' => true,
+		'F_ROSTER'			=> $newroster->selfurl,
+		'S_GAME'		    => $newroster->game_id,
+));
+
+
+$newroster->mode = ($config['bbdkp_roster_layout'] == '0') ? 'listing' : 'class';
+if($newroster->mode == 'class')
+{
+	$newroster->displaygrid();
+}
+else
+{
+	$newroster->displaylisting();
+}
+
+class roster extends \bbdkp\views
+{
 	public $selfurl;
-	private $current_order;
-	private $game_id;
-	private $member_count;
-	private $games; 
+	public $mode;
+	public $game_id;
+	public $start;
 	
-	public function __construct($game_id, $start, $selfurl)
-	{
-		global $user, $config, $template, $phpEx;
-		$this->selfurl = $selfurl;
-		$this->mode = ($config['bbdkp_roster_layout'] == '0') ? 'listing' : 'class';
-		$this->start=$start;
-		// Include the abstract base
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin;
-		$this->game_id = $game_id;
-		$this->games = $bbdkp->games; 
-		$installed_games = array();
-		foreach($this->games as $id => $gamename)
-		{
-			if ($config['bbdkp_games_' . $id] == 1)
-			{
-				$installed_games[$id] = $gamename; 
-				if ($this->game_id == '')
-				{
-					$this->game_id = $id;
-				}
-			} 
-			
-		}
-		
-		// push common data to template
-		foreach ($installed_games as $id => $gamename)
-		{
-			$template->assign_block_vars ( 'game_row', array (
-				'VALUE' => $id, 
-				'SELECTED' => ($id == $this->game_id) ? ' selected="selected"' : '',
-				'OPTION' => $gamename));
-		}
-		
-		$template->assign_vars(array(
-		    'GUILDNAME'			=>  $config['bbdkp_guildtag'],
-			'S_MULTIGAME'		=> (sizeof($installed_games) > 1) ? true:false, 
-			'S_DISPLAY_ROSTER' => true,
-			'F_ROSTER'			=> $this->selfurl, 
-			'S_GAME'		    => $this->game_id,
-		));
-		
-		$this->get_listingresult();
-		
-		//show chosen game
-		if($this->mode == 'class')
-		{
-			$this->displaygrid();
-		}
-		else
-		{
-			$this->displaylisting();
-		}
-		
-	}
+	private $dataset;
+	private $current_order;
+	private $member_count;
+	
 		
 	/*
 	 * Displays the class grid
@@ -226,7 +200,7 @@ class roster
 		      	));
 	    }
 	
-		$rosterpagination = generate_pagination2($this->selfurl . '&amp;o=' . 
+		$rosterpagination = $this->generate_pagination2($this->selfurl . '&amp;o=' . 
 			$this->current_order ['uri'] ['current'] , 
 			$this->member_count, 
 			$config ['bbdkp_user_llimit'], 
@@ -329,7 +303,7 @@ class roster
 	}
 	
 	
-	protected function get_listingresult($classid=0)
+	public function get_listingresult($classid=0)
 	{
 		global $db, $config; 
 		$sql_array = array();
@@ -447,7 +421,6 @@ class roster
 	    $result = $db->sql_query($sql);
 	    $this->classes = $db->sql_fetchrowset($result);
 	    $db->sql_freeresult($result);
-		
 	}
 		
 	
