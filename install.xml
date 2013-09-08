@@ -164,7 +164,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/portal.php" to="portal.php"/>
 			<file from="root/dkp.php" to="dkp.php"/>
 			<file from="root/configdkp.php" to="configdkp.php"/>
-			<file from="root/adm/images/glyphs/*.*" to="adm/images/glyphs/*.*"/>
+			<file from="root/adm/images/*.*" to="adm/images/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
 			<file from="root/images/class_images/*.*" to="images/class_images/*.*"/>
 			<file from="root/images/event_images/*.*" to="images/event_images/*.*"/>
@@ -188,6 +188,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/includes/acp/acp_dkp.php" to="includes/acp/acp_dkp.php"/>
 			<file from="root/includes/acp/info/acp_dkp_adj.php" to="includes/acp/info/acp_dkp_adj.php"/>
 			<file from="root/includes/acp/info/acp_dkp_game.php" to="includes/acp/info/acp_dkp_game.php"/>
+			<file from="root/includes/acp/info/acp_dkp_event.php" to="includes/acp/info/acp_dkp_event.php"/>
 			<file from="root/includes/acp/info/acp_dkp_guild.php" to="includes/acp/info/acp_dkp_guild.php"/>			
 			<file from="root/includes/acp/info/acp_dkp_item.php" to="includes/acp/info/acp_dkp_item.php"/>
 			<file from="root/includes/acp/info/acp_dkp_mdkp.php" to="includes/acp/info/acp_dkp_mdkp.php"/>
