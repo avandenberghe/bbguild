@@ -37,10 +37,6 @@ if (!$auth->acl_get('u_dkp'))
 {
 	trigger_error('NOT_AUTHORISED');
 }
-if (!class_exists('\bbdkp\views'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/module/views.$phpEx");
-}
 
 $template->assign_vars(array(
 	'U_NEWS'  			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=news'),
@@ -60,9 +56,15 @@ $template->assign_vars(array(
 	 (isset($config['bbdkp_module_id']) ? $config['bbdkp_module_id'] : 194) ,true,$user->session_id ) :'',
 ));
 
+//load template frame
 $template->set_filenames(array(
 	'body' => 'dkp/dkpmain.html')
 );
+// load view class
+if (!class_exists('\bbdkp\views'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/module/views.$phpEx");
+}
 
 $views = new \bbdkp\views();
 $page =  request_var('page', 'standings');

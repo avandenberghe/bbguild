@@ -588,6 +588,22 @@ abstract class Admin
 	
 	
 	/**
+	 * remove end of a string
+	 * @param unknown_type $string
+	 * @param unknown_type $stringToRemove
+	 * @return string
+	 */
+	public function removeFromEnd($string, $stringToRemove)
+	{
+		$stringToRemoveLen = strlen($stringToRemove);
+		$stringLen = strlen($string);
+		$pos = $stringLen - $stringToRemoveLen;
+		$out = substr($string, 0, $pos);
+		return $out;
+	}
+	
+	
+	/**
 	 * makes an entry in the bbdkp log table
 	 * log_action is an xml containing the log
 	 *

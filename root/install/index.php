@@ -870,8 +870,6 @@ $versions = array(
     	// remove copyright info from plugin table
 	    // remove roles from class table
      	'table_column_remove' => array(
-				array($table_prefix . 'bbdkp_plugins', 'orginal_copyright'),
-				array($table_prefix . 'bbdkp_plugins', 'bbdkp_copyright'),
      			array($table_prefix . 'bbdkp_classes', 'dps'),
      			array($table_prefix . 'bbdkp_classes', 'tank'),
      			array($table_prefix . 'bbdkp_classes', 'heal'),

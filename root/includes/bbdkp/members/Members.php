@@ -54,24 +54,24 @@ class Members extends \bbdkp\Admin
 	 * game id
 	 * @var string
 	 */
-		public $game_id;
+	public $game_id;
 
-		/**
-		 * primary key in the bbDKP membertable
-		 * @var integer
-		 */
+	/**
+	 * primary key in the bbDKP membertable
+	 * @var integer
+	 */
 	public $member_id;
 
-		/**
-		 * utF-8 member name
-		 * @var string
-		 */
+	/**
+	 * utF-8 member name
+	 * @var string
+	 */
 	protected $member_name;
 
-		/**
-		 * status (0 or 1)
-		 * @var bool
-		 */
+	/**
+	 * status (0 or 1)
+	 * @var bool
+	 */
 	protected $member_status;
 
 	/**
@@ -269,7 +269,7 @@ class Members extends \bbdkp\Admin
 	}
 
 	/**
-	 * gets a member from database
+	 * gets 1 member from database
 	 */
 	public function Getmember()
 	{
@@ -1139,7 +1139,8 @@ class Members extends \bbdkp\Admin
 
 
 	/**
-	 * get a member list for given game
+	 * ACP listmembers grid
+	 * get a member list for given game/guild
 	 * @param unknown_type $game_id
 	 */
 	public function listallmembers($game_id = '', $guild_id = 0)
@@ -1183,6 +1184,217 @@ class Members extends \bbdkp\Admin
 
 		$db->sql_freeresult( $result );
 	}
+	
+	/**
+	 * Frontview : member Roster listing 
+	 * required class game property to be set before call
+	 * 
+	 * @param string $mode (listing or class)
+	 * @param int $start start of query window
+	 * @param int $guild_id optional guild id
+	 * @param int $class_id optional class id
+	 * @param int $race_id optional race id
+	 * @param int $level1 optional level1 (default 1)
+	 * @param int $level2 optional level2 (default 200)
+	 * @return array (membercount, sql_fetchrowset of all rows)
+	 *  
+	 *  
+	 */
+	public function get_listingresult($start, $mode, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200)
+	{
+		global $db, $config;
+		$sql_array = array();
+
+		$sql_array['SELECT'] =  'm.game_id, m.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name,
+    		m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url, m.member_portrait_url,
+    		r.rank_prefix , r.rank_name, r.rank_suffix, e.image_female, e.image_male,
+    		g.name, g.realm, g.region, c1.name as class_name, c.colorcode, c.imagename, m.phpbb_user_id, u.username, u.user_colour  ';
+	
+		$sql_array['FROM'] = array(
+				MEMBER_LIST_TABLE    =>  'm',
+				CLASS_TABLE          =>  'c',
+				GUILD_TABLE          =>  'g',
+				MEMBER_RANKS_TABLE   =>  'r',
+				RACE_TABLE           =>  'e',
+				BB_LANGUAGE			 =>  'e1');
+	
+		$sql_array['LEFT_JOIN'] = array(
+				array(
+						'FROM'  => array(USERS_TABLE => 'u'),
+						'ON'    => 'u.user_id = m.phpbb_user_id '),
+				array(
+						'FROM'  => array(BB_LANGUAGE => 'c1'),
+						'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'  and c1.game_id = c.game_id "
+				));
+	
+		$sql_array['WHERE'] = " c.class_id = m.member_class_id
+			AND c.game_id = m.game_id
+			AND e.race_id = m.member_race_id
+			AND e.game_id = m.game_id
+			AND g.id = m.member_guild_id
+			AND r.guild_id = m.member_guild_id
+			AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
+			AND m.member_status = 1
+			AND m.member_level >= ".  intval($config['bbdkp_minrosterlvl']) . "
+			AND m.member_rank_id != 99
+			AND m.game_id = '" . $db->sql_escape($this->game_id) . "'
+			AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "'
+			AND e1.attribute = 'race' and e1.game_id = e.game_id";
+		
+		// filters
+		if($guild_id > 0)
+		{
+			$sql_array['WHERE'] .= " AND m.member_guild_id =  " . $guild_id;  
+		}
+		
+		if($class_id > 0)
+		{
+			$sql_array['WHERE'] .= " m.member_class_id =  " . $class_id;  
+		}
+		
+		if($race_id > 0)
+		{
+			$sql_array['WHERE'] .= " m.member_race_id =  " . $race_id;
+		}
+
+		if($level1 > 0)
+		{
+			$sql_array['WHERE'] .= " m.member_level >=  " . $level1;
+		}
+
+		if($level2 != 200)
+		{
+			$sql_array['WHERE'] .= " m.member_level <=  " . $level2;
+		}
+		
+		// order
+		$sort_order = array(
+				0 => array('m.member_name', 'm.member_name desc'),
+				1 => array('m.game_id', 'm.member_name desc'),
+				2 => array('m.member_class_id', 'm.member_class_id desc'),
+				3 => array('m.member_rank_id', 'm.member_rank_id desc'),
+				4 => array('m.member_level', 'm.member_level  desc'),
+				5 => array('u.username', 'u.username desc'),
+				6 => array('m.member_achiev', 'm.member_achiev  desc')
+		);
+	
+		$current_order = $this->switch_order($sort_order);
+	
+		if( $mode =='class')
+		{
+			$sql_array['ORDER_BY']  = "m.member_class_id, " . $current_order['sql'];
+		}
+		elseif ($mode =='listing')
+		{
+			$sql_array['ORDER_BY']  = $current_order['sql'];
+		}
+	
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+	
+		if ($mode =='listing')
+		{
+			// LISTING MODE
+			$member_count=0;
+			
+			// get membercount in selection
+			$result = $db->sql_query($sql);
+			while ($row = $db->sql_fetchrow($result))
+			{
+				$member_count++;
+			}
+	
+			//now get wanted window
+			$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $start );
+			$dataset = $db->sql_fetchrowset($result);
+		}
+		else
+		{
+			$result = $db->sql_query($sql);
+			$dataset = $db->sql_fetchrowset($result);
+			$member_count = count($dataset);
+		}
+	
+		$db->sql_freeresult($result);
+		
+		return array($member_count, $dataset, $current_order); 
+	}
+	
+	/**
+	 * Frontview : gets all classes in roster selection
+	 * required class game property to be set before call
+	 * 
+	 * @param int $guild_id optional guild id
+	 * @param int $classid optional class id
+	 * @param int $race optional race id
+	 * @param int $level1 optional level1 (default 1)
+	 * @param int $level2 optional level2 (default 200)
+	 * @return array
+	 * 
+	 */
+	public function get_classes($guild_id = 0, $classid = 0, $race_id = 0, $level1=0, $level2=200)
+	{
+		global $db, $config;
+		$sql_array = array(
+				'SELECT'    => 'c.class_id, c1.name as class_name, c.imagename, c.colorcode' ,
+				'FROM'      => array(
+						MEMBER_LIST_TABLE    =>  'm',
+						CLASS_TABLE          =>  'c',
+						BB_LANGUAGE			=>  'c1',
+						MEMBER_RANKS_TABLE   =>  'r',
+				),
+				'WHERE'     => " c.class_id = m.member_class_id
+    							AND c.game_id = m.game_id
+    							AND r.guild_id = m.member_guild_id
+    							AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
+    							AND c1.attribute_id =  c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'
+    							AND (c.game_id = '" . $db->sql_escape($this->game_id) . "')
+    							AND c1.game_id=c.game_id
+	
+    							",
+				'ORDER_BY'  =>  'c1.name asc', 
+				'GROUP_BY'  =>  'c.class_id, c1.name, c.imagename, c.colorcode'  
+		);
+		
+		// filters
+		if($guild_id > 0)
+		{
+			$sql_array['WHERE'] .= " AND m.member_guild_id =  " . $guild_id;
+		}
+		
+		if($classid > 0)
+		{
+			$sql_array['WHERE'] .= " m.member_class_id =  " . $classid;
+		}
+		
+		if($race_id > 0)
+		{
+			$sql_array['WHERE'] .= " m.member_race_id =  " . $race_id;
+		}
+		
+		if($level1 > 0)
+		{
+			$sql_array['WHERE'] .= " m.member_level >=  " . $level1;
+		}
+		
+		if($level2 != 200)
+		{
+			$sql_array['WHERE'] .= " m.member_level <=  " . $level2;
+		}
+		
+		
+		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query($sql);
+		$dataset = $db->sql_fetchrowset($result);
+		$db->sql_freeresult($result);
+		unset ($result); 
+		return $dataset; 
+	}
+	
+	
+	
+	
+	
 
 
 }
