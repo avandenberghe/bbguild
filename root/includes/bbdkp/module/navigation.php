@@ -23,35 +23,38 @@ if (!class_exists('\bbdkp\Guilds'))
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
 $guilds = new \bbdkp\Guilds();
+$guildid = request_var(URI_GUILD, 0); 
 $guildlist = $guilds->guildlist();
-$default = 0;
+
 foreach ($guildlist as $g)
 {
-	if($default == 0)
+	if($guildid == 0)
 	{
 		if($g['guilddefault'] == '1') 
 		{
-			$default = $g['id']; 
+			$guildid = $g['id']; 
 		}
 		
-		if($default == 0 && $g['membercount'] > 1)
+		if($guildid == 0 && $g['membercount'] > 1)
 		{
-			$default = $g['id'];
+			$guildid = $g['id'];
 		}
 	}
 	
-	//populate guild popup
-	$template->assign_block_vars('guild_row', array(
-			'VALUE' => $g['id'] ,
-			'SELECTED' => ($g['guilddefault'] == '1') ? ' selected="selected"' : '' ,
-			'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+	//populate guild popup 
+	if($g['id'] > 0) // exclude guildless
+	{
+		$template->assign_block_vars('guild_row', array(
+				'VALUE' => $g['id'] ,
+				'SELECTED' => ($g['id'] == $guildid ) ? ' selected="selected"' : '' ,
+				'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+	}
 	
 }
 
 $mode = request_var('mode', ($config['bbdkp_roster_layout'] == '0') ? 'listing': 'class' );
 $navurl = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;mode=' . $mode);
-
-$guilds->guildid = request_var(URI_GUILD, $default);
+$guilds->guildid = $guildid;  
 $guilds->Getguild(); 
 $template->assign_vars(array(
 		// Form values

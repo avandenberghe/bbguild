@@ -27,7 +27,7 @@ function check_nav()
 	    <li style="list-style:none"><a href="{U_LISTMEMBERS}"><strong>{L_MENU_STANDINGS}</strong></a></li>
 		<li style="list-style:none"><a href="{U_LISTITEMHIST}"><strong>{L_MENU_ITEMHIST}</strong></a></li>
 		<li style="list-style:none">
-		<select name="guild_id" class="input" id="guild_id" onchange="return check_nav(this);">
+		<select name="guild_id" id="guild_id" class="input" onchange="this.form.submit();">
 	      <!-- BEGIN guild_row -->
 	       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
 	      <!-- END guild_row -->
