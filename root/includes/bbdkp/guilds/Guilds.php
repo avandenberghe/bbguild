@@ -474,8 +474,8 @@ class Guilds extends \bbdkp\Admin
 		global $phpEx, $phpbb_root_path;
 		
 		//location to create the file
-		$imgfile = $phpbb_root_path . "images/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
-		$outputpath = "images/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
+		$imgfile = $phpbb_root_path . "images/bbdkp/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
+		$outputpath = "images/bbdkp/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
 		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time()) 
 		{
 			$finalimg = imagecreatefrompng($imgfile);
@@ -505,14 +505,14 @@ class Guilds extends \bbdkp\Admin
 	
 			$imgOut = imagecreatetruecolor(215, 230);
 					
-			$emblemURL = $phpbb_root_path ."images/wowapi/emblems/emblem_".sprintf("%02s",$this->emblem['icon']).".png";
-			$borderURL = $phpbb_root_path ."images/wowapi/borders/border_".sprintf("%02s",$this->emblem['border']).".png";
-			$ringURL = $phpbb_root_path ."images/wowapi/static/ring-".$ring.".png";
-			$shadowURL = $phpbb_root_path ."images/wowapi/static/shadow_00.png";
-			$bgURL = $phpbb_root_path ."images/wowapi/static/bg_00.png";
-			$overlayURL = $phpbb_root_path ."images/wowapi//static/overlay_00.png";
-			$hooksURL = $phpbb_root_path ."images/wowapi/static/hooks.png";
-			$levelURL = $phpbb_root_path ."images/wowapi/static/";
+			$emblemURL = $phpbb_root_path ."images/bbdkp/wowapi/emblems/emblem_".sprintf("%02s",$this->emblem['icon']).".png";
+			$borderURL = $phpbb_root_path ."images/bbdkp/wowapi/borders/border_".sprintf("%02s",$this->emblem['border']).".png";
+			$ringURL = $phpbb_root_path ."images/bbdkp/wowapi/static/ring-".$ring.".png";
+			$shadowURL = $phpbb_root_path ."images/bbdkp/wowapi/static/shadow_00.png";
+			$bgURL = $phpbb_root_path ."images/bbdkp/wowapi/static/bg_00.png";
+			$overlayURL = $phpbb_root_path ."images/bbdkp/wowapi//static/overlay_00.png";
+			$hooksURL = $phpbb_root_path ."images/bbdkp/wowapi/static/hooks.png";
+			$levelURL = $phpbb_root_path ."images/bbdkp/wowapi/static/";
 					
 			imagesavealpha($imgOut,true);
 			imagealphablending($imgOut, true);
@@ -758,7 +758,7 @@ class Guilds extends \bbdkp\Admin
 	public function guildlist()
 	{
 		global $db; 
-		$sql = 'SELECT a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region
+		$sql = 'SELECT a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, a.members 
 				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
 				WHERE a.id = b.guild_id
 				GROUP BY a.guilddefault, a.id, a.name, a.realm, a.region
@@ -771,7 +771,8 @@ class Guilds extends \bbdkp\Admin
 				'game_id' => $row['game_id'] ,
 				'id' => $row['id'] ,
 				'name' => $row['name'], 
-				'guilddefault' => $row['guilddefault']
+				'guilddefault' => $row['guilddefault'], 
+				'membercount' => $row['members']
 			);
 		}
 		$db->sql_freeresult($result);

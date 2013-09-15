@@ -196,6 +196,10 @@ class Points
 				$this->time_bonus  = (float)  $row['member_time_bonus']; 
 				$this->zerosum_bonus = (float)  $row['member_zerosum_bonus'];
 				$this->member_earned = $this->raid_value + $this->time_bonus + $this->zerosum_bonus; 
+				if($row['member_earned'] != $this->total_earned)
+				{
+				    //fix this
+				}
 				$this->earned_decay = (float) $row['member_raid_decay'];
 				 
 				$this->spent = (float) $row['member_spent']; 

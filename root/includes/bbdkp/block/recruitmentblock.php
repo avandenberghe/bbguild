@@ -1,9 +1,12 @@
 <?php
-/* recruitment block
-  
-  @copyright 2009 bbdkp <https://github.com/bbDKP>
-  @license http://opensource.org/licenses/gpl-license.php GNU Public License
-  @author Sajaki, Blazeflack, Malfate
+/* recruitment block 
+ * 
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @copyright 2009 bbdkp
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.3.0
+ * @author Sajaki, Blazeflack, Malfate
  */
 
 if (! defined('IN_PHPBB'))
@@ -27,7 +30,6 @@ if ($config['bbdkp_recruitment'] == 1)
 	$rec_forum_id = $config['bbdkp_recruit_forumid'];
 	
 	// get recruitment statuses from class table
-	
 	$sql_array = array(
 		'SELECT' => ' c.class_id, l.name as class_name, c.colorcode, 
 	    				  c.imagename, c.dps, c.tank, c.heal ' , 
@@ -76,7 +78,7 @@ else
 		'S_DISPLAY_RECRUIT' => true , 
 		'MESSAGE' => $user->lang['RECRUIT_CLOSED']));
 }
-$template->assign_vars(array(
-	'S_DISPLAY_RECRUIT' => true));
+$template->assign_vars(array( 'S_DISPLAY_RECRUIT' => true));
+
 /**  end recruitment block ***/
 ?>

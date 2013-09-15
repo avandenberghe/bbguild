@@ -82,7 +82,7 @@ if (!class_exists('\bbdkp\Game'))
 	}
 	
 	/**
-	 * gets class from database
+	 * gets 1 class from database
 	 * @see \bbdkp\iClasses::Get()
 	 */
 	public function Get()

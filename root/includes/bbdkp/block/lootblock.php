@@ -2,25 +2,19 @@
 /**
  * loot block
  * 
- * 
- * @copyright 2009 bbdkp <https://github.com/bbDKP>
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.3.0
+ 
  * 
  */
 
 if (!defined('IN_PHPBB'))
 {
    exit;
-}
-
-$Admin = new \bbdkp\Admin;
-if ($Admin->bbtips == true)
-{
-	if ( !class_exists('bbtips')) 
-	{
-		require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx); 
-	}
-	$bbtips = new bbtips;
 }
 
 $n_items = $config['bbdkp_n_items'];
@@ -30,21 +24,22 @@ $sql = "SELECT item_name, item_gameid FROM " . RAID_ITEMS_TABLE . ' ORDER BY ite
 $result = $db->sql_query_limit($sql, $n_items, 0);
 while ($row = $db->sql_fetchrow($result))
 {         
-	if ($Admin->bbtips == true)
+	if ($this->bbtips == true)
 	{
 		if ($row['item_gameid'] == 'wow' )
 		{
-			$item_name = $bbtips->parse('[itemdkp]' . $row['item_gameid']  . '[/itemdkp]'); 
+			$item_name = $this->bbtips->parse('[itemdkp]' . $row['item_gameid']  . '[/itemdkp]'); 
 		}
 		else 
 		{
-			$item_name = $bbtips->parse('[itemdkp]' . $row['item_name']  . '[/itemdkp]');
+			$item_name = $this->bbtips->parse('[itemdkp]' . $row['item_name']  . '[/itemdkp]');
 		}
 	}
 	else
 	{
 		$item_name = $row['item_name'];
 	}
+	
 	$template->assign_block_vars('itemit', array(
 	    'ITEMI1' => $item_name, 
 	));  
