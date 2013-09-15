@@ -2,9 +2,12 @@
 /**
  * main menu block
  * 
- * 
- * @copyright 2009 bbdkp <https://github.com/bbDKP>
+ * @package bbDKP
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.3.0
  * 
  */
 
@@ -16,7 +19,6 @@ if (!defined('IN_PHPBB'))
 
 $template->assign_vars(array(
 	'S_DISPLAY_MAINMENU' 	=> true,
-
 	'U_LISTMEMBERS'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=standings'),
 	'U_LISTITEMS'     	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listitems'),  
 	'U_LISTITEMHIST'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listitems&amp;mode=history'),

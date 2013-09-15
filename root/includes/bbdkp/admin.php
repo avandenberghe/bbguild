@@ -113,6 +113,7 @@ abstract class Admin
 	private function listgames()
 	{
 		global $db;
+		$this->games= array(); 
 		$sql = 'SELECT id, game_id, game_name, status FROM ' . GAMES_TABLE . ' ORDER BY game_id ';
 		$result = $db->sql_query ( $sql );
 		while($row = $db->sql_fetchrow($result))
@@ -392,6 +393,7 @@ abstract class Admin
 		//if update is forced or cache expired then make the query to refresh latest productversion
 		if ($this->plugins === false || $force_update)
 		{
+			$this->plugins = array();
 			$sql = 'SELECT name, value, version, installdate FROM ' . BBDKPPLUGINS_TABLE . ' ORDER BY installdate DESC ';
 			$result = $db->sql_query ($sql);
 			while($row = $db->sql_fetchrow($result))
@@ -583,6 +585,22 @@ abstract class Admin
 		}
 
 		return $bar;
+	}
+	
+	
+	/**
+	 * remove end of a string
+	 * @param unknown_type $string
+	 * @param unknown_type $stringToRemove
+	 * @return string
+	 */
+	public function removeFromEnd($string, $stringToRemove)
+	{
+		$stringToRemoveLen = strlen($stringToRemove);
+		$stringLen = strlen($string);
+		$pos = $stringLen - $stringToRemoveLen;
+		$out = substr($string, 0, $pos);
+		return $out;
 	}
 	
 	

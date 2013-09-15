@@ -284,11 +284,11 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 			'BUYER' 		=> $item ['member_name'], 
 		
 			'U_VIEW_BUYER' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewmember&amp;" . URI_NAMEID . '=' . $item ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $item ['event_dkpid'] ), 
-			'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',  
+			'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '',  
 			'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
 
 			'CLASSCOLOR' 	=> $item['colorcode'], 
-			'CLASS_IMAGE' 	=> (strlen($item['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $item['imagename'] . ".png" : '',  
+			'CLASS_IMAGE' 	=> (strlen($item['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $item['imagename'] . ".png" : '',  
 			'S_CLASS_IMAGE_EXISTS' => (strlen($item['imagename']) > 1) ? true : false, 				
 		));	
 	}

@@ -432,7 +432,7 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 					'MEMBER_RACE' => $this->member ['member_race'], 
 					'MEMBER_CLASS' => $this->member ['member_class'], 
 					'COLORCODE' => $this->member ['colorcode'], 
-					'IMAGENAME' => (strlen ( $this->member ['imagename'] ) > 1) ? $phpbb_root_path . "images/class_images/" . $this->member ['imagename'] . ".png" : '', 
+					'IMAGENAME' => (strlen ( $this->member ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $this->member ['imagename'] . ".png" : '', 
 					'MEMBER_RANK' => $this->member ['member_rank'], 
 					'CORRECT_RAIDVAL' => (! empty ( $correct_raid_value )) ? $correct_raid_value : '0.00', 
 					'CORRECT_TIMEBONUS' => (! empty ( $correct_time_bonus )) ? $correct_time_bonus : '0.00', 

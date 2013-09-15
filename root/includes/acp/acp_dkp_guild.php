@@ -556,7 +556,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 						'CLASS' 	=> $row['class_name'] ,
 						'IMAGENAME' 	=> $row['imagename'] ,
 						'COLORCODE' => $row['colorcode'] ,
-						'CLASS_IMAGE' => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '' ,
+						'CLASS_IMAGE' => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '' ,
 						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false ,
 						'CURRENT'		=> $classdistribution[$row['class_id']]['classcount'],
 						'NEEDED' 	=> isset($row['needed']) ? $row['needed'] : '0' ,
