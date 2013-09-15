@@ -361,25 +361,23 @@ class RaidController  extends \bbdkp\Admin
 		$raiddetail->time_bonus = $time_bonus;
 		$raiddetail->dkpid = $dkpid;
 		$raiddetail->member_id = $member_id;
-		$raiddetail->create(); 
-		
-		$this->add_dkp ($raid_value, $time_bonus, $raid_start, $dkpid, $member_id);
-			
+		$raiddetail->create();
 		return true;
 		
 	}
-	
+
+    /**
+     * delete 1 raider from raid
+     * @param int $raid_id
+     * @param int $member_id
+     */
 	public function deleteraider($raid_id, $member_id)
 	{
 		$raid = new \bbdkp\Raids($raid_id);
 		$raiddetail = new \bbdkp\Raiddetail($raid_id);
-		$raiddetail->Get($raid_id, $member_id); 
-		$raiddetail->delete(); 
-		
-		// update last & firstdates
-		$this->update_raiddate($member_id, $dkpid);
-		//$this->remove_dkp($member_id, $oraid_value, $otime_bonus, $zerosum, $dkpid, $decay);
-		
+		$raiddetail->Get($raid_id, $member_id);
+		$raiddetail->delete();
+		return true;
 	}
 	
 	
