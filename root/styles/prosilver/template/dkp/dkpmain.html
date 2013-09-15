@@ -1,14 +1,18 @@
 <!-- INCLUDE overall_header.html -->
+
+
 <div>
 
 <!-- left bbDKP sidebar -->
-<div style="float: left; width: 0%; margin:0.5%">
+<div style="float: left; width: 22%; margin:0.5%">
+
+<!-- INCLUDE dkp/module/profile-sidebar.html -->
 
 </div>
 
-<div style="float: left; width: 100%; margin:0.5%">
+<div style="float: left; width: 75%; margin:0.5%">
 
-<!-- INCLUDE dkp/module/menu.html -->
+
 <!-- IF S_DISPLAY_STANDINGS -->
 	<!-- INCLUDE dkp/module/standings.html -->
 <!-- ENDIF -->
@@ -36,9 +40,14 @@
 <!-- IF S_DISPLAY_VIEWITEM -->
 	<!-- INCLUDE dkp/module/viewitem.html -->
 <!-- ENDIF -->
-<!-- IF S_DISPLAY_ROSTER -->
-	<!-- INCLUDE dkp/module/roster.html -->
+
+<!-- IF S_DISPLAY_ROSTERGRID -->
+	<!-- INCLUDE dkp/module/rostergrid.html -->
 <!-- ENDIF -->
+<!-- IF S_DISPLAY_ROSTERLISTING -->
+	<!-- INCLUDE dkp/module/rosterlisting.html -->
+<!-- ENDIF -->
+
 <!-- IF S_DISPLAY_NEWS -->
 	<!-- INCLUDE dkp/module/news.html -->
 <!-- ENDIF -->

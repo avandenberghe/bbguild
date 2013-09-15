@@ -1,0 +1,93 @@
+<div class="forabg" >
+<span class="corners-top"><span></span></span>
+
+<div style="float: left; width:10%">
+	<h1 style="color:#dfc065; white-space:nowrap;">{L_GUILDROSTER}</h1>
+</div>
+
+<div style="text-align: center; float: left; width:90%">
+	<h4>{GUILDNAME} </h4>
+</div>
+
+<span class="corners-bottom"><span></span></span>
+</div>
+
+<!-- 
+**************
+8-column grid layout 
+**************
+ -->
+ 
+<div class="panel">
+
+<div class="inner">
+<span class="corners-top"><span></span></span>
+
+<!-- BEGIN class -->
+
+<h2> <img src="{class.CLASSIMG}" alt="{class.CLASSNAME}"  />
+&nbsp;
+<span style="color: {class.COLORCODE};">{class.CLASSNAME}</span>  
+</h2>
+
+<table  style="width: 100%" border="0" cellspacing="0" cellpadding="0">
+  
+<colgroup span="8">
+	<col width="12.5%" />
+	<col width="12.5%" />
+	<col width="12.5%" />
+	<col width="12.5%" />
+	
+	<col width="12.5%" />
+	<col width="12.5%" />
+	<col width="12.5%" />
+	<col width="12.5%" />
+</colgroup>
+  
+  <!-- BEGIN members_row -->
+  
+  <!-- IF members_row.S_ROW_COUNT % 4 == 0 -->
+  <tr class="bg1">
+  <!-- ENDIF -->
+ 	<td style="text-align:center; width:100;" class="bg1" >
+	<a href="{class.members_row.ARMORY}">
+	<img src="{class.members_row.PORTRAIT}" alt=" " width="64" height="64" /></a></td>
+  	<td style="text-align:left; width:100" class="bg2" >
+	<strong><a style="color: {class.COLORCODE};" href="{class.members_row.ARMORY}" >{class.members_row.NAME}</a></strong>
+	<p>
+	{class.members_row.GNOTE}<br/>
+	{class.members_row.CLASS} 
+	{class.members_row.LVL}
+	<!-- IF S_SHOWACH == 1 -->
+    	<br/> Apt: {class.members_row.ACHIEVPTS}
+	<!-- ENDIF --> 
+	</p>
+	</td>
+    <!-- IF members_row.S_ROW_COUNT % 4 == 0 -->
+   	  <!-- IF members_row.S_LAST_ROW -->
+    	<td colspan="10"></td></tr>
+  	  <!-- ENDIF -->
+      <!-- ELSEIF members_row.S_ROW_COUNT % 4 == 1 -->
+       <!-- IF members_row.S_LAST_ROW -->
+    	 <td colspan="8"></td></tr>
+  	   <!-- ENDIF -->
+    <!-- ELSEIF members_row.S_ROW_COUNT % 4 == 2 -->
+       <!-- IF members_row.S_LAST_ROW -->
+        <td colspan="6"></td></tr>
+  	   <!-- ENDIF -->
+    <!-- ELSEIF members_row.S_ROW_COUNT % 4 == 3 -->
+       <!-- IF members_row.S_LAST_ROW -->
+         <td colspan="4"></td></tr>
+  	   <!-- ENDIF -->
+  	<!-- ENDIF -->  
+  <!-- END members_row -->
+</table>
+ <br />
+<!-- END class -->
+
+<span class="corners-bottom"><span></span></span>
+</div>
+
+
+
+</div>

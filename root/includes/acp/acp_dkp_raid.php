@@ -486,9 +486,9 @@ if (!class_exists('\bbdkp\Members'))
 					'U_DELETE_ATTENDEE' => append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
 					'NAME' 		 => $raid_detail['member_name'],
 					'COLORCODE'  => ($raid_detail['colorcode'] == '') ? '#123456' : $raid_detail['colorcode'],
-					'CLASS_IMAGE' 	=> (strlen($raid_detail['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $raid_detail['imagename'] . ".png" : '',
+					'CLASS_IMAGE' 	=> (strlen($raid_detail['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $raid_detail['imagename'] . ".png" : '',
 					'S_CLASS_IMAGE_EXISTS' => (strlen($raid_detail['imagename']) > 1) ? true : false,
-					'RACE_IMAGE' 	=> (strlen($raid_detail['raceimage']) > 1) ? $phpbb_root_path . "images/race_images/" . $raid_detail['raceimage'] . ".png" : '',
+					'RACE_IMAGE' 	=> (strlen($raid_detail['raceimage']) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $raid_detail['raceimage'] . ".png" : '',
 					'S_RACE_IMAGE_EXISTS' => (strlen($raid_detail['raceimage']) > 1) ? true : false,
 					'CLASS_NAME' => $raid_detail['classname'],
 					'RAIDVALUE'  => $raid_detail['raid_value'],
@@ -552,9 +552,9 @@ if (!class_exists('\bbdkp\Members'))
 			$template->assign_block_vars ( 'items_row', array (
 					'DATE' 			=> (! empty ( $lootdetail ['item_date'] )) ? $user->format_date($lootdetail['item_date']) : '&nbsp;',
 					'COLORCODE'  	=> ($lootdetail['colorcode'] == '') ? '#123456' : $lootdetail['colorcode'],
-					'CLASS_IMAGE' 	=> (strlen($lootdetail['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $lootdetail['imagename'] . ".png" : '',
+					'CLASS_IMAGE' 	=> (strlen($lootdetail['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $lootdetail['imagename'] . ".png" : '',
 					'S_CLASS_IMAGE_EXISTS' => (strlen($lootdetail['imagename']) > 1) ? true : false,
-					'RACE_IMAGE' 	=> (strlen($lootdetail['raceimage']) > 1) ? $phpbb_root_path . "images/race_images/" . $lootdetail['raceimage'] . ".png" : '',
+					'RACE_IMAGE' 	=> (strlen($lootdetail['raceimage']) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $lootdetail['raceimage'] . ".png" : '',
 					'S_RACE_IMAGE_EXISTS' => (strlen($lootdetail['raceimage']) > 1) ? true : false,
 					'BUYER' 		=> (! empty ( $lootdetail ['member_name'] )) ? $lootdetail ['member_name'] : '&lt;<i>Not Found</i>&gt;',
 					'ITEMNAME'      => $item_name,
@@ -881,7 +881,7 @@ if (!class_exists('\bbdkp\Members'))
 					( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;dkpsys_id=". $this->RaidController->dkpid ."&amp;o=" . $this->RaidController->raidlistorder['uri'] ['current']) , 
 					$this->RaidController->totalraidcount, 
 					$config ['bbdkp_user_rlimit'], $start, true ), 
-			'ICON_RCOPY'		  => '<img src="' . $phpbb_admin_path . 'images/file_new.gif" alt="' . $user->lang['DUPLICATE_RAID'] . '" title="' . $user->lang['DUPLICATE_RAID'] . '" />',
+			'ICON_RCOPY'		  => '<img src="' . $phpbb_admin_path . 'images/bbdkp/file_new.gif" alt="' . $user->lang['DUPLICATE_RAID'] . '" title="' . $user->lang['DUPLICATE_RAID'] . '" />',
 			));
 		
 	}
@@ -906,10 +906,10 @@ if (!class_exists('\bbdkp\Members'))
 					'event_id' 			=> request_var ('hidden_event_id', 0),
 					'raid_attendees' 	=> request_var ('hidden_raid_attendees', array ( 0 => 0 )),
 			);
-			
-			$raid_id = $this->RaidController->add_raid($raidinfo); 
-			$this->PointsController->add_raid($raid_id); 
-							
+
+			$raid_id = $this->RaidController->add_raid($raidinfo);
+			$this->PointsController->add_points($raid_id);
+
 			//
 			// Success message
 			//
@@ -1083,14 +1083,14 @@ if (!class_exists('\bbdkp\Members'))
 		{
 			trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);	
 		}
-        $raid_value = request_var('raid_value', 0.00); 
-        $time_bonus = request_var('time_bonus', 0.00); 
-		$dkpid = request_var('hidden_dkpid', 0); 
-		$member_id =  request_var('attendee_id', 0); 
-		$raid_start = mktime(request_var('sh', 0), request_var('smi', 0), request_var('ss', 0), request_var('mo', 0), request_var('d', 0), request_var('Y', 0)); 
+        $raid_value = request_var('raid_value', 0.00);
+        $time_bonus = request_var('time_bonus', 0.00);
+		$dkpid = request_var('hidden_dkpid', 0);
+		$member_id =  request_var('attendee_id', 0);
+		$raid_start = mktime(request_var('sh', 0), request_var('smi', 0), request_var('ss', 0), request_var('mo', 0), request_var('d', 0), request_var('Y', 0));
+		$this->RaidController->addraider($raid_id, $raid_value, $time_bonus, $dkpid, $member_id, $raid_start);
+		$this->PointsController->add_points($raid_id,$member_id);
 
-		$this->RaidController->addraider($raid_id, $raid_value, $time_bonus, $dkpid, $member_id, $raid_start); 
-		
 		return true;
 	}
 
@@ -1111,11 +1111,16 @@ if (!class_exists('\bbdkp\Members'))
 		
 		if (confirm_box(true))
 		{
-			//recall vars 
-			$raid_id = request_var('raid_idx', 0); 
-			$member_id = request_var('attendee', 0);  
-			$this->RaidController->deleteraider($raid_id, $member_id); 
+			//recall vars
+			$raid_id = request_var('raid_idx', 0);
+			$member_id = request_var('attendee', 0);
+			$this->PointsController->removeraid_delete_dkprecord($raid_id, $member_id);
+			//carry on with fact tables
+			$this->RaidController->deleteraider($raid_id, $member_id);
+
 			trigger_error( sprintf( $user->lang['ADMIN_RAID_ATTENDEE_DELETED_SUCCESS'],  utf8_normalize_nfc(request_var('attendeename', '', true)) , $raid_id) . $link, E_USER_WARNING);
+			//update fact tables
+			// do accounting
 		}
 		else
 		{

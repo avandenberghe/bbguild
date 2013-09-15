@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
+ * @version 1.3.0
  */
 			
 /**
@@ -531,10 +531,10 @@ class ucp_dkp
 		
 			'COLORCODE' 			=> $member_id > 0 ? (($member['colorcode'] == '') ? '#123456' : $member['colorcode']) : '#F123456',
 
-			'CLASS_IMAGE' 			=> $member_id > 0 ? (strlen($member['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $member['imagename'] . ".png" : '' : '' , 
+			'CLASS_IMAGE' 			=> $member_id > 0 ? (strlen($member['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $member['imagename'] . ".png" : '' : '' , 
 			'S_CLASS_IMAGE_EXISTS' 	=> $member_id > 0 ? (strlen($member['imagename']) > 1) ? true : false : false, 
 
-			'RACE_IMAGE' 			=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '' , 
+			'RACE_IMAGE' 			=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '' , 
 			'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false , 
 		
 			'S_JOINDATE_DAY_OPTIONS'	=> $s_memberjoin_day_options,
@@ -866,9 +866,9 @@ class ucp_dkp
 				'GUILD'         => $row['guildname'],
 				'U_EDIT'		=> append_sid("{$phpbb_root_path}ucp.$phpEx", "i=dkp&amp;mode=characteradd&amp;". URI_NAMEID . '=' . $row['member_id']),
 				'COLORCODE'  	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
-		        'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',  
+		        'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',  
 				'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-		       	'RACE_IMAGE' 	=> (strlen($raceimage) > 1) ? $phpbb_root_path . "images/race_images/" . $raceimage . ".png" : '',  
+		       	'RACE_IMAGE' 	=> (strlen($raceimage) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $raceimage . ".png" : '',  
 				'S_RACE_IMAGE_EXISTS' => (strlen($raceimage) > 1) ? true : false, 			 				
 				)
 			); 

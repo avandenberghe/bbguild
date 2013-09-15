@@ -184,7 +184,7 @@ class PointsController  extends \bbdkp\Admin
 					'DKPSYS_NAME' => $row ['dkpsys_name'],
 					'CLASS' => ($row ['member_class'] != 'NULL') ? $row ['member_class'] : '&nbsp;',
 					'COLORCODE' => ($row ['colorcode'] == '') ? '#123456' : $row ['colorcode'],
-					'CLASS_IMAGE' => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/class_images/" . $row ['imagename'] . ".png" : '',
+					'CLASS_IMAGE' => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row ['imagename'] . ".png" : '',
 					'NAME' => $row ['rank_prefix'] . $row ['member_name'] . $row ['rank_suffix'],
 					'S_CLASS_IMAGE_EXISTS' => (strlen ( $row ['imagename'] ) > 1) ? true : false,
 					'RANK' => $row ['rank_name'],
@@ -233,93 +233,113 @@ class PointsController  extends \bbdkp\Admin
 	
 	
 	/**
-	 * wrapper for new raid; this must be called after the raid and raid detail tables are filled.
-	 * 
+	 * add dkp points.
+	 * this must be called after the raid and raid detail tables are filled.
+	 *
 	 * @param float $raid_value
 	 * @param float $time_bonus
 	 * @param int $raid_start
 	 * @param int $dkpid
 	 * @param int $member_id
 	 */
-	public function add_raid($raid_id)
+	public function add_points($raid_id, $member_id = 0)
 	{
 		global $config, $db;
 		
 		$new_raid = new \bbdkp\Raids($raid_id);
 		$raiddetail = new \bbdkp\Raiddetail($raid_id);
-		$raiddetail->Get($raid_id);
-		$a = 'debug'; 
-		foreach ((array) $raiddetail->raid_details as $member_id => $attendee)
+		if ($member_id > 0)
 		{
-			$this->Points = new \bbdkp\Points(); 
-			$this->Points->dkpid = $new_raid->event_dkpid;
-			$this->Points->member_id = $member_id;
-			
-			if($this->Points->has_account($member_id, $new_raid->event_dkpid))
-			{
-				$this->Points->read_account();
-				$this->Points->raid_value += $attendee['raid_value'];
-				$this->Points->time_bonus += $attendee['time_bonus'];
-				$this->Points->zerosum_bonus += $attendee['zerosum_bonus'];
-				
-				// update firstraid if it's later than this raid's starting time
-				if ( $this->Points->firstraid >  $new_raid->raid_start )
-				{
-					$this->Points->firstraid =  $new_raid->raid_start;
-				}
-				
-				// update their lastraid if it's earlier than this raid's starting time
-				if ( $this->Points->lastraid <  $new_raid->raid_start )
-				{
-					$this->Points->lastraid =  $new_raid->raid_start;
-				}
-				$this->Points->update_account();
-				$this->update_raiddate($member_id, $new_raid->event_dkpid);
-				
-			}
-			else
-			{
-				
-				$this->Points->raid_value = $attendee['raid_value'];
-				$this->Points->time_bonus = $attendee['time_bonus'];
-				$this->Points->zerosum_bonus = $attendee['zerosum_bonus'];
-				$this->Points->earned_decay = 0.0; 
-				$this->Points->spent = 0.0;
-				$this->Points->item_decay = 0.0;
-				$this->Points->adjustment = 0.0;
-				$this->Points->adj_decay = 0.0;
-				$this->Points->firstraid = $new_raid->raid_start ;
-				$this->Points->lastraid = $new_raid->raid_start;
-				$this->Points->raidcount = 1;
-				$this->Points->status = 1;
-				$this->Points->open_account();
-				$this->update_raiddate($member_id, $new_raid->event_dkpid);
-			}
-			
-			unset($this->Points); 
-			
+		    $raiddetail->Get($raid_id, $member_id);
+		}
+		else
+		{
+    		$raiddetail->Get($raid_id);
 		}
 		
+
+		foreach ((array) $raiddetail->raid_details as $member_id => $raiddetail)
+		{
+            $this->addpoint($new_raid, $raiddetail, $member_id);
+		}
+
 		if ($config ['bbdkp_hide_inactive'] == 1)
 		{
 			$this->update_player_status ($new_raid->event_dkpid);
 		}
 	}
 	
+
+	/**
+	 *
+	 * @param int $new_raid
+	 * @param array $raiddetail
+	 * @param int $member_id
+	 */
+	private function addpoint($new_raid, $raiddetail, $member_id)
+	{
+
+	    $this->Points = new \bbdkp\Points();
+	    $this->Points->dkpid = $new_raid->event_dkpid;
+	    $this->Points->member_id = $member_id;
+
+	    if($this->Points->has_account($member_id, $new_raid->event_dkpid))
+	    {
+	        $this->Points->read_account();
+	        $this->Points->raid_value += $raiddetail['raid_value'];
+	        $this->Points->time_bonus += $raiddetail['time_bonus'];
+	        $this->Points->zerosum_bonus += $raiddetail['zerosum_bonus'];
+	        $this->Points->raidcount += 1;
+
+	        // update firstraid if it's later than this raid's starting time
+	        if ( $this->Points->firstraid >  $new_raid->raid_start )
+	        {
+	            $this->Points->firstraid =  $new_raid->raid_start;
+	        }
+
+	        // update their lastraid if it's earlier than this raid's starting time
+	        if ( $this->Points->lastraid <  $new_raid->raid_start )
+	        {
+	            $this->Points->lastraid =  $new_raid->raid_start;
+	        }
+	        $this->Points->update_account();
+	    }
+	    else
+	    {
+
+	        $this->Points->raid_value = $raiddetail['raid_value'];
+	        $this->Points->time_bonus = $raiddetail['time_bonus'];
+	        $this->Points->zerosum_bonus = $raiddetail['zerosum_bonus'];
+	        $this->Points->earned_decay = 0.0;
+	        $this->Points->spent = 0.0;
+	        $this->Points->item_decay = 0.0;
+	        $this->Points->adjustment = 0.0;
+	        $this->Points->adj_decay = 0.0;
+	        $this->Points->firstraid = $new_raid->raid_start ;
+	        $this->Points->lastraid = $new_raid->raid_start;
+	        $this->Points->raidcount = 1;
+	        $this->Points->status = 1;
+	        $this->Points->open_account();
+	        $this->update_raiddate($member_id, $new_raid->event_dkpid);
+	    }
+
+	    unset($this->Points);
+
+	}
+
+
 	/**
 	 * remove a raid from existing dkprecord
-	 * @param unknown_type $raid_value
-	 * @param unknown_type $timebonus
-	 * @param unknown_type $raidstart
-	 * @param unknown_type $dkpid
-	 * @param unknown_type $member_id
+	 * @param int $raid_id
+	 * @param int $member_id
 	 */
 	public function removeraid_delete_dkprecord($raid_id, $member_id = 0)
 	{
 		global $config; 
 	
-		if($member_id = 0)
+		if($member_id == 0)
 		{
+		    // remove whole raid
 			$old_raid = new \bbdkp\Raids($raid_id);
 			$raiddetail = new \bbdkp\Raiddetail($raid_id);
 			$raiddetail->Get($raid_id);
@@ -329,16 +349,20 @@ class PointsController  extends \bbdkp\Admin
 				$this->Points->dkpid = $old_raid->event_dkpid;
 				$this->Points->member_id = $member_id;
 				$this->Points->read_account();
+
 				$this->Points->raid_value -= $attendee['raid_value'];
 				$this->Points->time_bonus -= $attendee['time_bonus'];
 				$this->Points->zerosum_bonus -= $attendee['zerosum_bonus'];
 				$this->Points->earned_decay -= $raiddetail->raid_decay;
+				$this->Points->raidcount -= 1;
 				$this->Points->update_account();
+				$this->update_raiddate($member_id, $old_raid->event_dkpid);
 			}
 				
 		}
 		else
 		{
+		    // remove 1 member
 			$old_raid = new \bbdkp\Raids($raid_id);
 			$raiddetail = new \bbdkp\Raiddetail($raid_id);
 			$raiddetail->Get($raid_id, $member_id);
@@ -347,14 +371,15 @@ class PointsController  extends \bbdkp\Admin
 			$this->Points->member_id = $member_id;
 			$this->Points->read_account();
 				
-				
 			$this->Points->raid_value -= $raiddetail->raid_value;
 			$this->Points->time_bonus -= $raiddetail->time_bonus;
 			$this->Points->zerosum_bonus -= $raiddetail->zerosum_bonus;
 			$this->Points->earned_decay -= $raiddetail->raid_decay;
-				
+			$this->Points->raidcount -= 1;
 			$this->Points->update_account();
-				
+
+			$this->update_raiddate($member_id, $old_raid->event_dkpid);
+
 		}
 
 		if ($config ['bbdkp_hide_inactive'] == 1)
@@ -1125,186 +1150,186 @@ class PointsController  extends \bbdkp\Admin
 		return array($decay, $n) ;
 	
 	}
-	
-		
-		
-		/**
-		 * Recalculates and updates decay
-		 * loops all raids - caution this may run a long time
-		 *
-		 * @param $mode 1 for recalculating, 0 for setting decay to zero.
-		 */
-		public function sync_decay($mode, $origin= '')
+
+	/**
+	 * Recalculates and updates decay
+	 * loops all raids - caution this may run a long time
+	 *
+	 * @param $mode 1 for recalculating, 0 for setting decay to zero.
+	 */
+	public function sync_decay($mode, $origin= '')
+	{
+		global $user, $db;
+		switch ($mode)
 		{
-			global $user, $db;
-			switch ($mode)
-			{
-				case 0:
-					//  Decay = OFF : set all decay to 0
-					//  update item detail to new decay value
-					$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = 0 ' ;
-					$db->sql_query ( $sql );
-		
-					// update dkp account, deduct old, add new decay
-					$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_raid_decay = 0, member_item_decay = 0';
-					$db->sql_query ( $sql );
-		
-					$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = 0';
-					$db->sql_query ( $sql);
-		
-					if ($origin != 'cron')
-					{
-						//no logging for cronjobs
-						$log_action = array (
-								'header' 		=> 'L_ACTION_DECAYOFF',
-								'L_USER' 		=>  $user->data['user_id'],
-								'L_USERCOLOUR' 	=>  $user->data['user_colour'],
-								'L_ORIGIN' 		=>  $origin
-						);
-		
-						$this->log_insert ( array (
-								'log_type' 		=> $log_action ['header'],
-								'log_action' 	=> $log_action ) );
-					}
-		
-					return true;
-					break;
-		
-				case 1:
-					// Decay is ON : synchronise
-					// loop all raids
-					$sql = 'SELECT e.event_dkpid, r.raid_id FROM '. RAIDS_TABLE. ' r, ' . EVENTS_TABLE . ' e WHERE e.event_id = r.event_id ' ;
-					$result = $db->sql_query ($sql);
-					$countraids=0;
-					while ( ($row = $db->sql_fetchrow ( $result )) )
-					{
-						$this->decayraid($row['raid_id'], $row['event_dkpid']);
-						$countraids++;
-					}
-					$db->sql_freeresult ($result);
-		
-					if ($countraids > 0 && $origin != 'cron' )
-					{
-						//no logging for cronjobs due to users just not getting it.
-						$log_action = array (
-								'header' 		=> 'L_ACTION_DECAYSYNC',
-								'L_USER' 		=>  $user->data['user_id'],
-								'L_USERCOLOUR' 	=>  $user->data['user_colour'],
-								'L_RAIDS' 		=>  $countraids,
-								'L_ORIGIN' 		=>  $origin
-						);
-		
-						$this->log_insert ( array (
-								'log_type' 		=> $log_action ['header'],
-								'log_action' 	=> $log_action ) );
-					}
-		
-					return $countraids;
-		
-					break;
-						
-			}
-		
-		
-		}
-		
-		
-		/**
-		 * function to decay one specific raid
-		 * calling this function multiple time will not lead to cumulative decays, just the delta is applied.
-		 *
-		 * @param int $raid_id the raid id to decay
-		 * @param int $dkpid dkpid for adapting accounts
-		 */
-		public function decayraid($raid_id, $dkpid)
-		{
-			global $config, $db;
-			//loop raid detail, pass earned and timediff to decay function, update raid detail
-		
-			//get old raidinfo
-			$sql_array = array (
-					'SELECT' => ' r.raid_start, ra.member_id, (ra.raid_value + ra.time_bonus + ra.zerosum_bonus) as earned, ra.raid_decay ',
-					'FROM' => array (
-							RAIDS_TABLE 		=> 'r' ,
-							RAID_DETAIL_TABLE	=> 'ra' ,
-					),
-					'WHERE' => " r.raid_id = ra.raid_id and r.raid_id=" . ( int ) $raid_id,
-			);
-			$sql = $db->sql_build_query('SELECT', $sql_array);
-			$result = $db->sql_query ($sql);
-			$raidstart = 0;
-			$raid = array();
-			while ( ($row = $db->sql_fetchrow ( $result )) )
-			{
-				$raidstart =  $row['raid_start'];
-				$raid[$row['member_id']] = array (
-						'member_id' 	=> $row['member_id'],
-						'earned' 		=> $row['earned'],
-						'raid_decay' 	=> $row['raid_decay'],
-				);
-			}
-			$db->sql_freeresult ($result);
-		
-			//get timediff
-			$now = getdate();
-			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $raidstart  ;
-		
-			// loop raid detail
-			foreach($raid as $member_id => $raiddetail)
-			{
-				// get new decay : may be different per player due to it being calculated on earned
-				$decay = $this->decay($raiddetail['earned'], $timediff, 1);
-		
-				// update raid detail to new decay value
-				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = ' . $decay[0] . ', decay_time = ' . $decay[1] . ' WHERE raid_id = ' . ( int ) $raid_id . '
-				AND member_id = ' . $raiddetail['member_id'] ;
-				$db->sql_query ( $sql );
-		
-				// update dkp account, deduct old, add new decay
-				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_raid_decay = member_raid_decay - ' . $raiddetail['raid_decay'] . ' + ' . $decay[0] . "
-				WHERE member_id = " . ( int ) $member_id . '
-				and member_dkpid = ' . $dkpid ;
-				$db->sql_query ( $sql );
-			}
-		
-			//now loop raid items detail
-			$sql = 'SELECT i.item_id, i.member_id, i.item_value, i.item_decay FROM ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id;
-			$result = $db->sql_query ($sql);
-			$items= array();
-			while ( ($row = $db->sql_fetchrow ( $result )) )
-			{
-				$items[$row['item_id']] = array (
-						'member_id'		=> $row['member_id'],
-						'item_value' 	=> $row['item_value'],
-						'item_decay' 	=> $row['item_decay'],
-				);
-			}
-			$db->sql_freeresult ($result);
-		
-		
-			// loot decay
-			foreach($items as $item_id => $item)
-			{
-				// get new itemdecay
-				$itemdecay = $this->decay($item['item_value'], $timediff, 2);
-		
+			case 0:
+				//  Decay = OFF : set all decay to 0
 				//  update item detail to new decay value
-				$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = ' . $itemdecay[0] . ', decay_time = ' . $itemdecay[1] . ' WHERE item_id = ' . $item_id;
-				$db->sql_query ( $sql);
-		
-				// update dkp account, deduct old, add new decay
-				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_item_decay = member_item_decay - ' . $item['item_decay'] . ' + ' . $itemdecay[0] . "
-				WHERE member_id = " . ( int ) $item['member_id'] . ' and member_dkpid = ' . $dkpid ;
+				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = 0 ' ;
 				$db->sql_query ( $sql );
-			}
-		
-			return true;
-		
-		
+
+				// update dkp account, deduct old, add new decay
+				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_raid_decay = 0, member_item_decay = 0';
+				$db->sql_query ( $sql );
+			//now loop raid items detail
+			$items= array();
+
+				$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = 0';
+				$db->sql_query ( $sql);
+
+				if ($origin != 'cron')
+				{
+					//no logging for cronjobs
+					$log_action = array (
+							'header' 		=> 'L_ACTION_DECAYOFF',
+							'L_USER' 		=>  $user->data['user_id'],
+							'L_USERCOLOUR' 	=>  $user->data['user_colour'],
+							'L_ORIGIN' 		=>  $origin
+					);
+
+					$this->log_insert ( array (
+							'log_type' 		=> $log_action ['header'],
+							'log_action' 	=> $log_action ) );
+				}
+
+				return true;
+				break;
+
+			case 1:
+				// Decay is ON : synchronise
+				// loop all raids
+				$sql = 'SELECT e.event_dkpid, r.raid_id FROM '. RAIDS_TABLE. ' r, ' . EVENTS_TABLE . ' e WHERE e.event_id = r.event_id ' ;
+				$result = $db->sql_query ($sql);
+				$countraids=0;
+				while ( ($row = $db->sql_fetchrow ( $result )) )
+				{
+					$this->decayraid($row['raid_id'], $row['event_dkpid']);
+					$countraids++;
+				}
+				$db->sql_freeresult ($result);
+
+				if ($countraids > 0 && $origin != 'cron' )
+				{
+					//no logging for cronjobs due to users just not getting it.
+					$log_action = array (
+							'header' 		=> 'L_ACTION_DECAYSYNC',
+							'L_USER' 		=>  $user->data['user_id'],
+							'L_USERCOLOUR' 	=>  $user->data['user_colour'],
+							'L_RAIDS' 		=>  $countraids,
+							'L_ORIGIN' 		=>  $origin
+					);
+
+					$this->log_insert ( array (
+							'log_type' 		=> $log_action ['header'],
+							'log_action' 	=> $log_action ) );
+				}
+
+				return $countraids;
+
+				break;
+
 		}
-		
-		
-		
+
+
+	}
+
+
+	/**
+	 * function to decay one specific raid
+	 * calling this function multiple time will not lead to cumulative decays, just the delta is applied.
+	 *
+	 * @param int $raid_id the raid id to decay
+	 * @param int $dkpid dkpid for adapting accounts
+	 */
+	public function decayraid($raid_id, $dkpid)
+	{
+		global $config, $db;
+		//loop raid detail, pass earned and timediff to decay function, update raid detail
+
+		//get old raidinfo
+		$sql_array = array (
+				'SELECT' => ' r.raid_start, ra.member_id, (ra.raid_value + ra.time_bonus + ra.zerosum_bonus) as earned, ra.raid_decay ',
+				'FROM' => array (
+						RAIDS_TABLE 		=> 'r' ,
+						RAID_DETAIL_TABLE	=> 'ra' ,
+				),
+				'WHERE' => " r.raid_id = ra.raid_id and r.raid_id=" . ( int ) $raid_id,
+		);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ($sql);
+		$raidstart = 0;
+		$raid = array();
+		while ( ($row = $db->sql_fetchrow ( $result )) )
+		{
+			$raidstart =  $row['raid_start'];
+			$raid[$row['member_id']] = array (
+					'member_id' 	=> $row['member_id'],
+					'earned' 		=> $row['earned'],
+					'raid_decay' 	=> $row['raid_decay'],
+			);
+		}
+		$db->sql_freeresult ($result);
+
+		//get timediff
+		$now = getdate();
+		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $raidstart  ;
+
+		// loop raid detail
+		foreach($raid as $member_id => $raiddetail)
+		{
+			// get new decay : may be different per player due to it being calculated on earned
+			$decay = $this->decay($raiddetail['earned'], $timediff, 1);
+
+			// update raid detail to new decay value
+			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET raid_decay = ' . $decay[0] . ', decay_time = ' . $decay[1] . ' WHERE raid_id = ' . ( int ) $raid_id . '
+			AND member_id = ' . $raiddetail['member_id'] ;
+			$db->sql_query ( $sql );
+
+			// update dkp account, deduct old, add new decay
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_raid_decay = member_raid_decay - ' . $raiddetail['raid_decay'] . ' + ' . $decay[0] . "
+			WHERE member_id = " . ( int ) $member_id . '
+			and member_dkpid = ' . $dkpid ;
+			$db->sql_query ( $sql );
+		}
+
+		//now loop raid items detail
+		$sql = 'SELECT i.item_id, i.member_id, i.item_value, i.item_decay FROM ' . RAID_ITEMS_TABLE . ' i where i.raid_id = ' .  $raid_id;
+		$result = $db->sql_query ($sql);
+		$items= array();
+		while ( ($row = $db->sql_fetchrow ( $result )) )
+		{
+			$items[$row['item_id']] = array (
+					'member_id'		=> $row['member_id'],
+					'item_value' 	=> $row['item_value'],
+					'item_decay' 	=> $row['item_decay'],
+			);
+		}
+		$db->sql_freeresult ($result);
+
+
+		// loot decay
+		foreach($items as $item_id => $item)
+		{
+			// get new itemdecay
+			$itemdecay = $this->decay($item['item_value'], $timediff, 2);
+
+			//  update item detail to new decay value
+			$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = ' . $itemdecay[0] . ', decay_time = ' . $itemdecay[1] . ' WHERE item_id = ' . $item_id;
+			$db->sql_query ( $sql);
+
+			// update dkp account, deduct old, add new decay
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_item_decay = member_item_decay - ' . $item['item_decay'] . ' + ' . $itemdecay[0] . "
+			WHERE member_id = " . ( int ) $item['member_id'] . ' and member_dkpid = ' . $dkpid ;
+			$db->sql_query ( $sql );
+		}
+
+		return true;
+
+
+	}
+
+
+
 }
 
 ?>

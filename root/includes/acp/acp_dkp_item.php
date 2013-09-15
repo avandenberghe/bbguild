@@ -737,7 +737,7 @@ class acp_dkp_item extends \bbdkp\Admin
 	
 				$template->assign_block_vars ( 'items_row', array (
 				'COLORCODE'  	=> ($item['colorcode'] == '') ? '#123456' : $item['colorcode'],
-            	'CLASS_IMAGE' 	=> (strlen($item['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $item['imagename'] . ".png" : '',  
+            	'CLASS_IMAGE' 	=> (strlen($item['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $item['imagename'] . ".png" : '',  
 				'S_CLASS_IMAGE_EXISTS' => (strlen($item['imagename']) > 1) ? true : false, 				
 				'DATE' 			=> (! empty ( $item ['item_date'] )) ? $user->format_date($item['item_date'], $config['bbdkp_date_format']) : '&nbsp;', 
 				'BUYER' 		=> (! empty ( $item ['member_name'] )) ? $item ['member_name'] : '&lt;<i>Not Found</i>&gt;', 
@@ -753,7 +753,7 @@ class acp_dkp_item extends \bbdkp\Admin
 			$db->sql_freeresult ( $items_result );
 			
 			$template->assign_vars ( array (
-				'ICON_VIEWLOOT'	=> '<img src="' . $phpbb_admin_path . 'images/glyphs/view.gif" alt="' . $user->lang['ITEMS'] . '" title="' . $user->lang['ITEMS'] . '" />',
+				'ICON_VIEWLOOT'	=> '<img src="' . $phpbb_admin_path . 'images/bbdkp/glyphs/view.gif" alt="' . $user->lang['ITEMS'] . '" title="' . $user->lang['ITEMS'] . '" />',
 				'S_SHOW' 		=> true,
 				'F_LIST_ITEM' 	=>   append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
 				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 
