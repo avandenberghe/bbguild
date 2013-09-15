@@ -45,6 +45,10 @@ class views extends \bbdkp\admin
 			}
 			$bbtips = new bbtips ( );
 		}
+		
+		//load navigation
+		include($phpbb_root_path . 'includes/bbdkp/module/navigation.' . $phpEx);
+		
 
 		// load modules
 		switch ($page)
@@ -161,6 +165,8 @@ class views extends \bbdkp\admin
 	 * @param int $dkpsys_id
 	 * @param bool $query_by_pool
 	 * @param bool $show_all
+	 * 
+	 * @todo move this
 	 */
 	private function leaderboard($memberarray, $classarray)
 	{

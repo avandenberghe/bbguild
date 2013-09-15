@@ -168,7 +168,7 @@ class acp_dkp extends \bbdkp\Admin
 						'PLUGINNAME' 	=> ucwords($pdetails['name']) ,
 						'VERSION' 		=> $pdetails['version'] ,
 						'ISUPTODATE'	=> phpbb_version_compare(trim( $pdetails['latest'] ), $pdetails['version'] , '<=') ,
-						'LATESTVERSION' => $pdetails['latestversion'] ,
+						'LATESTVERSION' => $pdetails['latest'] ,
 						'UPDATEINSTR' 	=> '<a href="' . BBDKP_PLUGINURL . '">' . $user->lang['DOWNLOAD_LATEST_PLUGINS'] . $pdetails['latest'] . '</a>',
 						'INSTALLDATE' 	=> $pdetails['installdate'],
 				));

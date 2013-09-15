@@ -393,6 +393,7 @@ abstract class Admin
 		//if update is forced or cache expired then make the query to refresh latest productversion
 		if ($this->plugins === false || $force_update)
 		{
+			$this->plugins = array();
 			$sql = 'SELECT name, value, version, installdate FROM ' . BBDKPPLUGINS_TABLE . ' ORDER BY installdate DESC ';
 			$result = $db->sql_query ($sql);
 			while($row = $db->sql_fetchrow($result))
