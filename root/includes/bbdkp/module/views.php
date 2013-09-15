@@ -512,9 +512,9 @@ class views extends \bbdkp\admin
 			$memberarray [$member_count] ['member_level'] = $row ['member_level'];
 			$memberarray [$member_count] ['member_class'] = $row ['member_class'];
 			$memberarray [$member_count] ['colorcode'] = $row ['colorcode'];
-			$memberarray [$member_count] ['class_image'] = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '';
+			$memberarray [$member_count] ['class_image'] = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '';
 			$memberarray [$member_count] ['class_image_exists'] = (strlen($row['imagename']) > 1) ? true : false;
-			$memberarray [$member_count] ['race_image'] = (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '';
+			$memberarray [$member_count] ['race_image'] = (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '';
 			$memberarray [$member_count] ['race_image_exists'] = (strlen($race_image) > 1) ? true : false;
 
 			$memberarray [$member_count] ['armor_type'] = $row ['armor_type'];

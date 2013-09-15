@@ -274,9 +274,9 @@ $template->assign_vars(array(
 	'MEMBER_RACE'     => $member['member_race'],
 	'MEMBER_CLASS'    => $member['member_class'],
 	'COLORCODE'       => $member['colorcode'],
-	'CLASS_IMAGE'       => (strlen($member['classimage']) > 1) ? $phpbb_root_path . "images/class_images/" . $member['classimage'] . ".png" : '',
+	'CLASS_IMAGE'       => (strlen($member['classimage']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $member['classimage'] . ".png" : '',
 	'S_CLASS_IMAGE_EXISTS' =>  (strlen($member['classimage']) > 1) ? true : false,
-	'RACE_IMAGE'       => (strlen($member['raceimage']) > 1) ? $phpbb_root_path . "images/race_images/" . $member['raceimage'] . ".png" : '',
+	'RACE_IMAGE'       => (strlen($member['raceimage']) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $member['raceimage'] . ".png" : '',
 	'S_RACE_IMAGE_EXISTS' =>  (strlen($member['raceimage']) > 1) ? true : false,
 
 	'MEMBER_RANK'     => $member['member_rank'],

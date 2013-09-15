@@ -36,7 +36,7 @@ $members = new \bbdkp\Members;
 $members->game_id = $game_id; 
 
 $start = request_var('start' ,0);
-$mode = ($config['bbdkp_roster_layout'] == '0') ? 'class' : 'listing' ;// 'class';
+$mode = request_var('mode', ($config['bbdkp_roster_layout'] == '0') ? 'listing': 'class' ); 
 $url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;mode=' . $mode); 
 $guild_id =  request_var('guild_id',0);
 $race_id =  request_var('race_id',0);
@@ -67,9 +67,9 @@ if ($mode =='listing')
 				'PHPBBUID'		=> get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),
 				'PORTRAIT'		=> $row['member_portrait_url'],
 				'ACHIEVPTS'		=> $row['member_achiev'],
-				'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',
+				'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
 				'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-				'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',
+				'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '',
 				'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
 		));
 	}
@@ -96,7 +96,6 @@ if ($mode =='listing')
 	$template->assign_vars(array(
 			'ROSTERPAGINATION' 		=> $rosterpagination ,
 			'O_NAME'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][0],
-			'O_GAME'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][1],
 			'O_CLASS'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][2],
 			'O_RANK'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][3],
 			'O_LEVEL'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][4],
@@ -110,6 +109,7 @@ if ($mode =='listing')
 			'S_RSTYLE'		    => '0',
 			'S_SHOWACH'			=> $config['bbdkp_show_achiev'],
 			'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . $data[0],
+			'S_DISPLAY_ROSTERLISTING' => true
 	));
 	
 
@@ -123,14 +123,14 @@ elseif($mode == 'class')
 	{
 		foreach($classgroup as $row1 )
 		{
-			$classes[$row['class_id']]['name'] 		= $row1['class_name'];
-			$classes[$row['class_id']]['imagename'] = $row1['imagename'];
-			$classes[$row['class_id']]['colorcode'] = $row1['colorcode'];
+			$classes[$row1['class_id']]['name'] = $row1['class_name'];
+			$classes[$row1['class_id']]['imagename'] = $row1['imagename'];
+			$classes[$row1['class_id']]['colorcode'] = $row1['colorcode'];
 		}
 
 		foreach ($classes as  $classid => $class )
 		{
-			$classimgurl =  $phpbb_root_path . "images/roster_classes/" . $class['imagename'] .'.png';
+			$classimgurl =  $phpbb_root_path . "images/bbdkp/roster_classes/" . $class['imagename'] .'.png';
 			$classcolor = $class['colorcode'];
 
 			$template->assign_block_vars('class', array(
@@ -156,9 +156,9 @@ elseif($mode == 'class')
 							'PORTRAIT'		=> $row2['member_portrait_url'],
 							'PHPBBUID'		=> get_username_string('full', $row2['phpbb_user_id'], $row2['username'], $row2['user_colour']),
 							'ACHIEVPTS'		=> $row2['member_achiev'],
-							'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row2['imagename'] . ".png" : '',
+							'CLASS_IMAGE' 	=> (strlen($row2['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row2['imagename'] . ".png" : '',
 							'S_CLASS_IMAGE_EXISTS' => (strlen($row2['imagename']) > 1) ? true : false,
-							'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/race_images/" . $race_image . ".png" : '',
+							'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '',
 							'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
 					));
 					$classmembers++;
@@ -166,7 +166,8 @@ elseif($mode == 'class')
 			}
 		}
 
-		$rosterpagination = $this->generate_pagination2($url . '&amp;o=' . $data[2] ['uri'] ['current'] , $data[0], $config ['bbdkp_user_llimit'], $this->start, true, 'start'  );
+		$rosterpagination = $this->generate_pagination2($url . '&amp;o=' . $data[2] ['uri'] ['current'] ,
+			$data[0], $config ['bbdkp_user_llimit'], $start, true, 'start'  );
 
 		if (isset($data[2]) && sizeof ($data[2]) > 0)
 		{
@@ -185,6 +186,7 @@ elseif($mode == 'class')
 		$template->assign_vars(array(
 				'S_SHOWACH'			=> $config['bbdkp_show_achiev'],
 				'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . $data[0],
+				'S_DISPLAY_ROSTERGRID' => true
 		));
 	}
 
@@ -203,7 +205,7 @@ elseif($mode == 'class')
 				'U_DKPPAGE' => $name['U_DKPPAGE'],
 		));
 	}
-*/
+	*/
 	$template->assign_vars(array(
 			'S_RSTYLE'		    => '1',
 	));
@@ -211,17 +213,14 @@ elseif($mode == 'class')
 
 }
 
-
 $template->assign_vars(array(
-		'GUILDNAME'			=>  $config['bbdkp_guildtag'],
 		'S_MULTIGAME'		=> (sizeof($this->games) > 1) ? true:false,
 		'S_DISPLAY_ROSTER'  => true,
-		'F_ROSTER'			=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;mode=' . $mode),
+		'F_ROSTER'			=> $url,
 		'S_GAME'		    => $members->game_id,
 ));
 
 $header = $user->lang['GUILDROSTER'];
 page_header($header);
-
 
 ?>

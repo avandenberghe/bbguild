@@ -184,7 +184,7 @@ class PointsController  extends \bbdkp\Admin
 					'DKPSYS_NAME' => $row ['dkpsys_name'],
 					'CLASS' => ($row ['member_class'] != 'NULL') ? $row ['member_class'] : '&nbsp;',
 					'COLORCODE' => ($row ['colorcode'] == '') ? '#123456' : $row ['colorcode'],
-					'CLASS_IMAGE' => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/class_images/" . $row ['imagename'] . ".png" : '',
+					'CLASS_IMAGE' => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row ['imagename'] . ".png" : '',
 					'NAME' => $row ['rank_prefix'] . $row ['member_name'] . $row ['rank_suffix'],
 					'S_CLASS_IMAGE_EXISTS' => (strlen ( $row ['imagename'] ) > 1) ? true : false,
 					'RANK' => $row ['rank_name'],

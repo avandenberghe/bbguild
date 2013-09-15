@@ -509,7 +509,7 @@ class statistics extends \bbdkp\views
 					$template->assign_block_vars('class_row', array(
 					'U_LIST_MEMBERS' 	=> $lmlink ,
 				'COLORCODE'  		=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
-					'CLASS_IMAGE' 		=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/class_images/" . $row['imagename'] . ".png" : '',
+					'CLASS_IMAGE' 		=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
 				'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
 						'CLASS_NAME'		=> $row['class_name'],
 
