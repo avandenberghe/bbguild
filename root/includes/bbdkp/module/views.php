@@ -351,20 +351,30 @@ class views extends \bbdkp\admin
 		global $query_by_armor, $query_by_class, $filter;
 
 		$sql_array = array(
-				'SELECT'    => 	'l.game_id, m.member_dkpid, d.dkpsys_name, m.member_id, m.member_status, m.member_lastraid,
-							sum(m.member_raid_value) as member_raid_value,
-							sum(m.member_earned) as member_earned,
-							sum(m.member_adjustment - m.adj_decay) as member_adjustment,
-							sum(m.member_spent) as member_spent,
-						sum(m.member_earned + m.member_adjustment - m.member_spent - m.adj_decay ) AS member_current,
-							 l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
-								 r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix,
-								 l1.name AS member_class, c.class_id,
-								 c.colorcode, c.class_armor_type AS armor_type, c.imagename,
-								 l.member_gender_id, a.image_female, a.image_male,
-						c.class_min_level AS min_level,
-						c.class_max_level AS max_level',
-
+				'SELECT'    => 	'l.game_id, m.member_dkpid, d.dkpsys_name, m.member_id, 
+					m.member_status, m.member_lastraid, m.member_raidcount, 
+					sum(m.member_raid_value) as member_raid_value,
+					sum(m.member_time_bonus) as member_time_bonus,
+					sum(m.member_zerosum_bonus) as member_zerosum_bonus, 
+					sum(m.member_earned) as member_earned,
+					sum(m.member_raid_decay) as member_raid_decay,
+					sum(m.member_spent) as member_spent,
+					sum(m.member_item_decay) as member_item_decay,  
+					sum(m.member_adjustment - m.adj_decay) as member_adjustment,
+					sum(m.member_earned + m.member_adjustment - m.member_spent - m.adj_decay ) AS member_current,
+					l.member_name, l.member_level, 
+					l.member_race_id , 
+					l.member_class_id, 
+					l.member_rank_id ,
+					r.rank_name, 
+					r.rank_hide, 
+					r.rank_prefix, 
+					r.rank_suffix,
+					l1.name AS member_class, c.class_id,
+					c.colorcode, c.class_armor_type AS armor_type, c.imagename,
+					l.member_gender_id, a.image_female, a.image_male,
+					c.class_min_level AS min_level,
+					c.class_max_level AS max_level',
 				'FROM'      => array(
 						MEMBER_DKP_TABLE 	=> 'm',
 						DKPSYS_TABLE 		=> 'd',
@@ -376,13 +386,14 @@ class views extends \bbdkp\admin
 				),
 
 				'WHERE'     =>  "(m.member_id = l.member_id)
-					AND l1.attribute_id =  c.class_id AND l1.language= '" . $config['bbdkp_lang'] . "' AND l1.attribute = 'class' and c.game_id = l1.game_id
-				AND (c.class_id = l.member_class_id and c.game_id=l.game_id)
-				AND (l.member_race_id =  a.race_id and a.game_id=l.game_id)
-				AND (r.rank_id = l.member_rank_id)
-				AND (m.member_dkpid = d.dkpsys_id)
-				AND (l.member_guild_id = r.guild_id)
-				AND r.rank_hide = 0 " ,
+					AND l1.attribute_id =  c.class_id AND l1.language= '" . $config['bbdkp_lang'] . "' 
+					AND l1.attribute = 'class' and c.game_id = l1.game_id
+					AND (c.class_id = l.member_class_id and c.game_id=l.game_id)
+					AND (l.member_race_id =  a.race_id and a.game_id=l.game_id)
+					AND (r.rank_id = l.member_rank_id)
+					AND (m.member_dkpid = d.dkpsys_id)
+					AND (l.member_guild_id = r.guild_id)
+					AND r.rank_hide = 0 " ,
 				'GROUP_BY' => 'l.game_id, m.member_dkpid, d.dkpsys_name, m.member_id, m.member_status, m.member_lastraid,
 						 l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
 							 r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix,
@@ -392,24 +403,6 @@ class views extends \bbdkp\admin
 					c.class_min_level ,
 					c.class_max_level ',
 		);
-
-
-		if($config['bbdkp_timebased'] == 1)
-		{
-			$sql_array[ 'SELECT'] .= ', sum(m.member_time_bonus) as member_time_bonus ';
-		}
-
-		if($config['bbdkp_zerosum'] == 1)
-		{
-			$sql_array[ 'SELECT'] .= ', sum(m.member_zerosum_bonus) as member_zerosum_bonus';
-		}
-
-		if($config['bbdkp_decay'] == 1)
-		{
-			$sql_array[ 'SELECT'] .= ',
-			sum(m.member_raid_decay) as member_raid_decay,
-			sum(m.member_item_decay) as member_item_decay ';
-		}
 
 		if($config['bbdkp_epgp'] == 1)
 		{
@@ -439,7 +432,6 @@ class views extends \bbdkp\admin
 		{
 			$sql_array['WHERE'] .= ' AND m.member_dkpid = ' . $dkpsys_id . ' ';
 		}
-
 
 		if (isset ( $_GET ['rank'] ))
 		{
@@ -484,6 +476,7 @@ class views extends \bbdkp\admin
 
 
 		$sql = $db->sql_build_query('SELECT_DISTINCT', $sql_array);
+		
 		if (! ($members_result = $db->sql_query ( $sql )))
 		{
 			trigger_error ($user->lang['MNOTFOUND']);

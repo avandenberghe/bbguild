@@ -340,6 +340,8 @@ for($i = 1; $i <= 20; $i ++)
 	}
 
 }
+
+$allmember_count = 0; 
 // calculate pagination
 $sortorder = request_var ( URI_ORDER, 0 );
 $dkppagination = $this->generate_pagination2($u_listmembers . '&amp;o=' . $sortorder , 
