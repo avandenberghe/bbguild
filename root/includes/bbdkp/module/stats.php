@@ -60,24 +60,37 @@ class statistics extends \bbdkp\views
 	 * @param int $this->dkp_id
 	 *
 	 */
-	private function get_overallraidcount($interval, $time)
+	private function get_overallraidcount($interval, $time, $guild_id)
 	{
 		global $db;
-		$sql = " SELECT count(raid_id) AS rc
-				FROM " . RAIDS_TABLE . " r , ". EVENTS_TABLE . " e
-				WHERE e.event_id = r.event_id ";
+		// get raidcount
+		$sql_array = array (
+				'SELECT' => ' count(r.raid_id) AS raidcount ',
+				'FROM' => array (
+						EVENTS_TABLE => 'e',
+						RAIDS_TABLE => 'r',
+						RAID_DETAIL_TABLE => 'd',
+						MEMBER_LIST_TABLE => 'l'
+				),
+				'WHERE' => ' e.event_id = r.event_id
+						AND d.raid_id = r.raid_id
+						AND l.member_id = d.member_id
+						AND l.member_guild_id = ' . $guild_id,
+				'GROUP_BY' => 'r.raid_id'
+		);
+		
 		if ($this->query_by_pool)
 		{
-				$sql .= " AND e.event_dkpid = ". (int) $this->dkp_id;
+			$sql_array['WHERE'] .= ' and event_dkpid = '. (int) $this->dkp_id . ' ';
 		}
-
+		
 		if ($interval > 0)
 		{
-			$sql .= " AND ( - r.raid_start + " . (int) $time . " ) / (3600 * 24) < ". (int) $interval;
+			$sql_array['WHERE'] .= " AND ( - r.raid_start + " . (int) $time . " ) / (3600 * 24) < ". (int) $interval;
 		}
-
+		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query($sql);
-		$rc = (int) $db->sql_fetchfield('rc');
+		$rc = (int) $db->sql_fetchfield('raidcount');
 
 		$db->sql_freeresult($result);
 
@@ -120,10 +133,13 @@ class statistics extends \bbdkp\views
 				EVENTS_TABLE => 'e',
 				RAIDS_TABLE => 'r',
 				RAID_ITEMS_TABLE => 'i',
+				MEMBER_LIST_TABLE => 'l'
 				),
 			'WHERE' => ' e.event_id = r.event_id
 						AND i.raid_id = r.raid_id
-						AND item_value != 0'
+						AND i.item_value != 0  
+						AND l.member_id = i.member_id 
+						AND l.member_guild_id = ' . $guild_id
 		);
 
 		if ($this->query_by_pool)
@@ -134,17 +150,31 @@ class statistics extends \bbdkp\views
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query($sql);
 
-
 		$this->total_drops = (int) $db->sql_fetchfield('items');
 
 		$db->sql_freeresult($result);
 
 		// get raidcount
-		$sql = 'SELECT count(*) as raidcount FROM ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE . ' e where r.event_id = e.event_id ';
+		$sql_array = array (
+				'SELECT' => ' count(r.raid_id) AS raidcount ',
+				'FROM' => array (
+						EVENTS_TABLE => 'e',
+						RAIDS_TABLE => 'r',
+						RAID_DETAIL_TABLE => 'd', 
+						MEMBER_LIST_TABLE => 'l'
+				),
+				'WHERE' => ' e.event_id = r.event_id
+						AND d.raid_id = r.raid_id
+						AND l.member_id = d.member_id
+						AND l.member_guild_id = ' . $guild_id, 
+				'GROUP_BY' => 'r.raid_id'
+		);
+		
 		if ($this->query_by_pool)
 		{
-				$sql .= ' AND event_dkpid = '. $this->dkp_id;
+			$sql_array['WHERE'] .= ' AND event_dkpid = '. $this->dkp_id;
 		}
+		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query($sql);
 		$total_raids = (int) $db->sql_fetchfield('raidcount');
 		$db->sql_freeresult ( $result );
@@ -152,7 +182,6 @@ class statistics extends \bbdkp\views
 
 
 		/* loot distribution per member and class */
-
 		$sql = "SELECT
 			c.game_id, c.colorcode,  c.imagename, c.class_id, d.member_dkpid, l.member_id, l.member_name,
 			SUM(d.member_raidcount) as member_raidcount,
@@ -183,7 +212,7 @@ class statistics extends \bbdkp\views
 		$sql .= " GROUP BY i.member_id
 			) x
 			on d.member_id = x.member_id)
-			INNER JOIN " . MEMBER_LIST_TABLE . " l ON l.member_id = d.member_id
+			INNER JOIN " . MEMBER_LIST_TABLE . " l ON l.member_id = d.member_id  AND l.member_guild_id = " . $guild_id . " 
 			INNER JOIN ". CLASS_TABLE ." c ON l.member_class_id = c.class_id AND l.game_id = c.game_id
 			WHERE 1=1 ";
 
@@ -227,34 +256,34 @@ class statistics extends \bbdkp\views
 
 				$template->assign_block_vars('stats_row', array(
 
-						'NAME' 					=> $row['member_name'],
-						'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),
+					'NAME' 					=> $row['member_name'],
+					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),
 					'COLORCODE'				=> $row['colorcode'],
 					'ID'            		=> $row['member_id'],
 					'COUNT'         		=> $line,
-						'ATTENDED_COUNT' 		=> $row['member_raidcount'],
+					'ATTENDED_COUNT' 		=> $row['member_raidcount'],
 					'ITEM_COUNT' 			=> $row['itemcount'],
 					'MEMBER_DROP_PCT'		=> sprintf("%s %%", $member_drop_pct),
 
-						'EP_TOTAL' 				=> $row['ep'],
-						'EP_PER_DAY' 			=> sprintf("%.2f", $row['ep_per_day']),
-						'EP_PER_RAID' 			=> sprintf("%.2f", $row['ep_per_raid']),
-						'GP_TOTAL' 				=> $row['gp'],
-						'GP_PER_DAY' 			=> sprintf("%.2f", $row['gp_per_day']),
-						'GP_PER_RAID' 			=> sprintf("%.2f", $row['gp_per_raid']),
-						'PR'			 		=> sprintf("%.2f", $row['pr']),
-						'CURRENT' 				=> intval($row['member_current']),
-						'C_CURRENT'				=> ($row['member_current'] > 0 ? 'positive' : 'negative'),
-				)
-				);
-
-				$previous_data = $row[$previous_source];
+					'EP_TOTAL' 				=> $row['ep'],
+					'EP_PER_DAY' 			=> sprintf("%.2f", $row['ep_per_day']),
+					'EP_PER_RAID' 			=> sprintf("%.2f", $row['ep_per_raid']),
+					'GP_TOTAL' 				=> $row['gp'],
+					'GP_PER_DAY' 			=> sprintf("%.2f", $row['gp_per_day']),
+					'GP_PER_RAID' 			=> sprintf("%.2f", $row['gp_per_raid']),
+					'PR'			 		=> sprintf("%.2f", $row['pr']),
+					'CURRENT' 				=> intval($row['member_current']),
+					'C_CURRENT'				=> ($row['member_current'] > 0 ? 'positive' : 'negative'),
+			)
+			);
+			$previous_data = $row[$previous_source];
+			
 		}
 
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$this->show_all) )
 		{
-				$footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($members_result),
-				'<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o1='.$current_order['uri']['current']. '&amp;show=all' ) . '" class="rowfoot">');
+			$footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($members_result),
+			'<a href="' . append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;o1='.$current_order['uri']['current']. '&amp;show=all' ) . '" class="rowfoot">');
 
 						$dkppagination = $this->generate_pagination2($this->u_stats . '&amp;o1=' . $current_order ['uri'] ['current'] ,
 			$member_count, $config ['bbdkp_user_llimit'], $startd, true, 'startdkp'  );
@@ -297,10 +326,6 @@ class statistics extends \bbdkp\views
 
 	}
 
-
-
-
-
 	/**
 	 * Class Drop Statistics
 	 *
@@ -310,32 +335,43 @@ class statistics extends \bbdkp\views
 		global $db, $config, $template, $phpEx, $phpbb_root_path;
 
 		// Find total # members with a dkp record
-		$sql = 'SELECT count(member_id) AS members FROM ' . MEMBER_DKP_TABLE . ' where 1 = 1 ' ;
+		// get raidcount
+		$sql_array = array (
+				'SELECT' => ' count(m.member_id) AS members ',
+				'FROM' => array (
+						MEMBER_DKP_TABLE => 'm',
+						MEMBER_LIST_TABLE => 'l'
+				),
+				'WHERE' => ' l.member_id = m.member_id
+						 AND l.member_guild_id = ' . $guild_id,
+		);
+		
 		if ($this->query_by_pool)
 		{
-				$sql .= ' AND member_dkpid = '. $this->dkp_id . ' ';
+			$sql_array['WHERE'] .= ' AND m.event_dkpid = '. $this->dkp_id;
 		}
-
+		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+		
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$this->show_all) )
 		{
-			$sql .= " AND member_status='1'";
+			$sql_array['WHERE'] .= " AND m.member_status='1'";
 		}
-
+	
+		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query($sql);
 		$total_members = (int) $db->sql_fetchfield('members');
 
-
 		// get #classcount, #drops per class
 
-		$sql = "select
-		c1.name as class_name, c.class_id, c.game_id, c.colorcode,  c.imagename,
-		count(c.class_id) as class_count, sum(case when x.itemcount is null then 0 else x.itemcount end) as itemcount
-		from ((" . MEMBER_DKP_TABLE . " d left join
-		(
-		SELECT i.member_id, count(i.item_id) as itemcount
-		FROM
-		((" . EVENTS_TABLE ." e inner join ". RAIDS_TABLE ." r on e.event_id=r.event_id)
-		inner join " . RAID_ITEMS_TABLE . " i on  r.raid_id = i.raid_id ) ";
+		$sql = "SELECT
+			c1.name as class_name, c.class_id, c.game_id, c.colorcode,  c.imagename,
+			count(c.class_id) AS class_count, SUM(CASE WHEN x.itemcount is NULL THEN 0 ELSE x.itemcount END) AS itemcount
+			FROM ((" . MEMBER_DKP_TABLE . " d LEFT JOIN
+			(
+				SELECT i.member_id, count(i.item_id) AS itemcount
+				FROM
+				((" . EVENTS_TABLE ." e INNER JOIN ". RAIDS_TABLE ." r ON e.event_id=r.event_id)
+				INNER JOIN " . RAID_ITEMS_TABLE . " i ON r.raid_id = i.raid_id ) ";
 
 		if ($this->query_by_pool)
 		{
@@ -344,8 +380,8 @@ class statistics extends \bbdkp\views
 
 		$sql .= " GROUP BY i.member_id
 		) x
-		on d.member_id = x.member_id)
-		INNER JOIN " . MEMBER_LIST_TABLE . " l on l.member_id = d.member_id
+		ON d.member_id = x.member_id)
+		INNER JOIN " . MEMBER_LIST_TABLE . " l on l.member_id = d.member_id  AND l.member_guild_id = " . $guild_id . " 
 		INNER JOIN " . CLASS_TABLE ." c on l.member_class_id = c.class_id and l.game_id = c.game_id)
 		INNER JOIN " . BB_LANGUAGE . " c1 ON c.game_id = c1.game_id AND c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'
 		";
@@ -397,52 +433,51 @@ class statistics extends \bbdkp\views
 				}
 
 					$template->assign_block_vars('class_row', array(
-					'U_LIST_MEMBERS' 	=> $lmlink ,
-				'COLORCODE'  		=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
-					'CLASS_IMAGE' 		=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
-				'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
+						'U_LIST_MEMBERS' 	=> $lmlink ,
+						'COLORCODE'  		=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
+						'CLASS_IMAGE' 		=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
+						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
 						'CLASS_NAME'		=> $row['class_name'],
-
 						'CLASS_COUNT' 		=> (int) $class_count,
-				'CLASS_PCT' 		=> $classpct,
+						'CLASS_PCT' 		=> $classpct,
 						'CLASS_PCT_STR' 	=> sprintf("%s %%", $classpct ),
-
 						'LOOT_COUNT' 		=> $loot_drops,
 						'CLASS_DROP_PCT'	=> $class_drop_pct,
-					'CLASS_DROP_PCT_STR' => sprintf("%s %%", $class_drop_pct  ),
-
-					'C_LOOT_FACTOR'		=> ($lootoverrun < 	0) ? 'negative' : 'positive',
+						'CLASS_DROP_PCT_STR' => sprintf("%s %%", $class_drop_pct  ),
+						'C_LOOT_FACTOR'		=> ($lootoverrun < 	0) ? 'negative' : 'positive',
 						'LOOTOVERRUN'		=> sprintf("%s %%", $lootoverrun),
 				)
 				);
 		}
 
 			/* send information to template */
-		$template->assign_vars(array(
+			$template->assign_vars(array(
 			'CLASSPCTCUMUL'		=> round($class_drop_pct_cum),
-				)
+			)
 		);
 
 
 	}
 
-
-
 	/**
 	 * Attendance Statistics
+	 * 
+	 * @param unknown_type $time
+	 * @param unknown_type $u_stats
+	 * @param unknown_type $guild_id
 	 */
 	public function attendance_statistics($time, $u_stats, $guild_id)
 	{
 		/* get overall raidcount for 4 intervals */
 		global $db, $template, $phpEx, $phpbb_root_path, $config, $user;
 
-		$rcall = $this->get_overallraidcount(0, $time);
-		$rc90 = $this->get_overallraidcount((int) $config['bbdkp_list_p3'], $time);
-		$rc60 = $this->get_overallraidcount((int) $config['bbdkp_list_p2'], $time);
-		$rc30 = $this->get_overallraidcount((int) $config['bbdkp_list_p1'], $time);
+		$rcall = $this->get_overallraidcount(0, $time,$guild_id);
+		$rc90 = $this->get_overallraidcount((int) $config['bbdkp_list_p3'], $time, $guild_id);
+		$rc60 = $this->get_overallraidcount((int) $config['bbdkp_list_p2'], $time, $guild_id);
+		$rc30 = $this->get_overallraidcount((int) $config['bbdkp_list_p1'], $time, $guild_id);
 
 		$att_sort_order = array (
-				0 => array ("sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) desc", "sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) asc" ),
+				0 => array ("sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) DESC", "sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) ASC" ),
 				1 => array ("sum(CASE e.days WHEN '".$config['bbdkp_list_p3']."' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '".$config['bbdkp_list_p3']."' THEN e.attendance END ) asc" ),
 				2 => array ("sum(CASE e.days WHEN '".$config['bbdkp_list_p2']."' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '".$config['bbdkp_list_p2']."' THEN e.attendance END ) asc" ),
 				3 => array ("sum(CASE e.days WHEN '".$config['bbdkp_list_p1']."' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '".$config['bbdkp_list_p1']."' THEN e.attendance END ) asc" ),
@@ -502,7 +537,7 @@ class statistics extends \bbdkp\views
 				$sql .= "
 				AND ev.event_id = r.event_id
 				AND r.raid_id = rd.raid_id
-				AND l.member_id = rd.member_id
+				AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . " 
 				AND l.member_joindate < r.raid_start
 				GROUP BY
 					d.member_lastraid,
@@ -542,7 +577,7 @@ class statistics extends \bbdkp\views
 						$sql .= " AND d.member_status='1'";
 					}
 					$sql .= "
-					AND l.member_id = rd.member_id
+					AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . " 
 					AND l.member_joindate < r.raid_start
 					GROUP BY
 					d.member_lastraid,
@@ -581,7 +616,7 @@ class statistics extends \bbdkp\views
 				{
 					$sql .= " AND d.member_status='1'";
 				}
-				$sql .= " AND l.member_id = rd.member_id
+				$sql .= " AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . " 
 				AND l.member_joindate < r.raid_start
 				GROUP BY
 					d.member_lastraid,
@@ -607,7 +642,7 @@ class statistics extends \bbdkp\views
 					" . EVENTS_TABLE . " ev,
 					" . RAIDS_TABLE . " r
 				WHERE
-					rd.member_id = d.member_id
+					rd.member_id = d.member_id 
 				AND ev.event_dkpid = d.member_dkpid";
 				if ($this->query_by_pool)
 				{
@@ -620,7 +655,7 @@ class statistics extends \bbdkp\views
 				{
 					$sql .= " AND d.member_status='1'";
 				}
-				$sql .= " AND l.member_id = rd.member_id
+				$sql .= " AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . " 
 				AND l.member_joindate < r.raid_start
 			GROUP BY
 				d.member_lastraid,
@@ -628,8 +663,8 @@ class statistics extends \bbdkp\views
 				ev.event_dkpid,
 				l.member_name,
 				rd.member_id
-		) e inner join " . MEMBER_LIST_TABLE . " l on  e.member_id = l.member_id
-			inner join " . CLASS_TABLE . " c on c.class_id = l.member_class_id and c.game_id = l.game_id
+		) e INNER JOIN " . MEMBER_LIST_TABLE . " l on  e.member_id = l.member_id
+			INNER JOIN " . CLASS_TABLE . " c on c.class_id = l.member_class_id and c.game_id = l.game_id
 		GROUP BY
 			c.game_id, c.colorcode,  c.imagename,
 			e.event_dkpid,
