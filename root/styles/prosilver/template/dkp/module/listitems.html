@@ -1,34 +1,26 @@
-<form method="post" action="{F_LISTITEM}">
 
-<div class="forabg" >
-<span class="corners-top"><span></span></span>
 <ul class="topiclist">
 <li class="header">
 
-<div style="float: left; width:50%">
+<div style="float: left; width:49%; white-space:nowrap;">
 <!-- IF S_HISTORY -->
-<h1 style="color:#dfc065; white-space:nowrap;">{L_MENU_ITEMHIST}</h1>
+<h2 style="white-space:nowrap;">{L_MENU_ITEMHIST}</h2>
  <!-- ELSE -->
-<h1 style="color:#dfc065; white-space:nowrap;">{L_MENU_ITEMVAL}</h1>
+<h2 style="white-space:nowrap;">{L_MENU_ITEMVAL}</h2>
 <!-- ENDIF -->
 </div>
-<div style="float: left; width:50%">
-<br/>
-<div style="color:white; text-align:left; white-space:nowrap;">{L_POOL}:
-      <select id="pool" name="pool" class="input" onchange="javascript:form.submit();">
-        <!-- BEGIN pool_row -->
-        <option value="{pool_row.VALUE}" {pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
-        <!-- END pool_row -->
-      </select>
+	<form method="post" action="{F_LISTITEM}">
+<div style="float: right; width:40%; white-space:nowrap; text-align: right;">
+<p>{L_POOL}:
+<select id="pool" name="pool" class="input" onchange="javascript:form.submit();">
+<!-- BEGIN pool_row -->
+<option value="{pool_row.VALUE}" {pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
+<!-- END pool_row -->
+</select>
+</p>
 </div>
-</div>
-
-</li>
-</ul>
-<span class="corners-bottom"><span></span></span>
-</div>
-</form> 
-
+	</form> 
+<hr />
 
 <div class="forumbg forumbg-table">
 <div class="inner">

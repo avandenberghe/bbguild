@@ -1200,7 +1200,9 @@ class Members extends \bbdkp\Admin
 	 *  
 	 *  
 	 */
-	public function get_listingresult($start, $mode, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200)
+	public function get_listingresult($start, $mode,
+		$query_by_armor, $query_by_class, $filter, $game_id, 
+		$guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200)
 	{
 		global $db, $config;
 		$sql_array = array();
@@ -1266,6 +1268,26 @@ class Members extends \bbdkp\Admin
 		{
 			$sql_array['WHERE'] .= " m.member_level <=  " . $level2;
 		}
+		
+		if ($query_by_class)
+		{
+			//wow_class_8 = Mage
+			//lotro_class_5=Hunter
+			//x is for avoiding output zero which may be outcome of false
+			if (strpos('x'.$filter, $game_id) > 0)
+			{
+				$class_id = substr($filter, strlen($game_id)+7);
+				$sql_array['WHERE'] .= " AND c.class_id =  '" . $db->sql_escape ($class_id) . "' ";
+				$sql_array['WHERE'] .= " AND c.game_id =  '" . $db->sql_escape ($game_id) . "' ";
+			}
+		
+		}
+		
+		if ($query_by_armor)
+		{
+			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $filter ) . "'";
+		}
+		
 		
 		// order
 		$sort_order = array(

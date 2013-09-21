@@ -1,16 +1,13 @@
 <form method="post" action="{F_MEMBERS}">
 
-<div class="forabg" >
-<span class="corners-top"><span></span></span>
-<ul class="topiclist">
-<li class="header">
-
 <div style="float: left; width:50%; white-space:nowrap;">
-	<h1 style = "color:#dfc065"><span style="color:{COLORCODE}"><strong>{NAME}</strong></span>
+	<h2 style="white-space:nowrap;">
 	<!-- IF S_RACE_IMAGE_EXISTS --><img src="{RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE --><!-- ENDIF -->
-	<!-- IF S_CLASS_IMAGE_EXISTS --><img src="{CLASS_IMAGE}" alt="{CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;</h1>
+	<!-- IF S_CLASS_IMAGE_EXISTS --><img src="{CLASS_IMAGE}" alt="{CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;
+	<span style="color:{COLORCODE}"><strong>{NAME}</strong></span>
+	</h2>
 </div>
-<div style="color:white; text-align:left; float:left; width:50%; white-space:nowrap;">
+<div style="color:white; text-align:right; float:right; width:50%; white-space:nowrap;">
 <br/>
 {L_POOL}:
 <select name="pool" class="input" onchange="javascript:form.submit();">
@@ -19,13 +16,8 @@
         <option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
         <!-- END pool_row -->
 </select>
-
 </div>
-</li>
-</ul>
-<span class="corners-bottom"><span></span></span>
-</div>
-
+<hr/>	
 <!-- IF ! S_SHOWEPGP -->
 <!--  non epgp classic dkp overview  -->
 

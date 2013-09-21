@@ -32,11 +32,22 @@ if (!class_exists('\bbdkp\Admin'))
  */
 class views extends \bbdkp\admin
 {
+	private $guild_id;
+	private $game_id;
+	private $query_by_pool = true;
+	private $query_by_armor = false;
+	private $query_by_class = false;
+	private $filter = '';
+	private $show_all = false; 
+	private $dkpsys_id = 0; 
+	
 	public function load($page)
 	{
 		global $user, $template, $config, $phpbb_root_path, $phpEx ;
 		global $db, $auth;
-
+		
+		$this->filter = $user->lang['ALL'];
+		
 		if ($this->bbtips == true)
 		{
 			if (! class_exists ( 'bbtips' ))
@@ -49,7 +60,6 @@ class views extends \bbdkp\admin
 		//load navigation
 		include($phpbb_root_path . 'includes/bbdkp/module/navigation.' . $phpEx);
 		
-
 		// load modules
 		switch ($page)
 		{
@@ -153,426 +163,23 @@ class views extends \bbdkp\admin
 					include($phpbb_root_path . 'includes/bbdkp/block/linksblock.' . $phpEx);
 				}
 				break;
-
-
 		}
 	}
-
-
+	
+	
 	/**
-	 * this function builds a grid with PR or earned (after decay)
-	 *
-	 * @param int $dkpsys_id
-	 * @param bool $query_by_pool
-	 * @param bool $show_all
-	 * 
-	 * @todo move this
-	 */
-	private function leaderboard($memberarray, $classarray)
-	{
-		// get all classes that have dkp members
-		global $db, $template, $config;
-		global $phpbb_root_path, $phpbb_admin_path, $phpEx;
-
-		$classes = array ();
-		foreach ($classarray as $k => $class)
-		{
-			$template->assign_block_vars ( 'class',
-					array (
-							'CLASSNAME' 	=> $class ['class_name'],
-							'CLASSIMGPATH'	=> (strlen($class['imagename']) > 1) ? $class['imagename'] . ".png" : '',
-							'COLORCODE' 	=> $class['colorcode']
-					)
-			);
-
-
-			foreach ($memberarray as  $member)
-			{
-				if($member['class_id'] == $class['class_id'] && $member['game_id'] == $class['game_id'])
-				{
-					//dkp data per class
-					$dkprowarray= array (
-							'NAME' => ($member ['member_status'] == '0') ? '<em>' . $member ['member_name'] . '</em>' : $member ['member_name'] ,
-							'CURRENT' => $member ['member_current'],
-							'DKPCOLOUR' => ($member ['member_current'] >= 0) ? 'positive' : 'negative',
-							'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;'.
-							URI_NAMEID . '=' . $member ['member_id'] . '&amp;' .
-							URI_DKPSYS . '=' . $member['member_dkpid'] ) );
-
-					if($config['bbdkp_epgp'] == 1)
-					{
-						$dkprowarray[ 'PR'] = $member ['pr'] ;
-					}
-
-					$template->assign_block_vars ( 'class.dkp_row', $dkprowarray );
-				}
-
-			}
-
-			$template->assign_vars ( array (
-					'S_SHOWLEAD' => true,
-			));
-		}
-
-		if(count($classarray)==0)
-		{
-			$template->assign_vars ( array (
-					'S_SHOWLEAD' => false,
-			));
-		}
-
-		unset($memberarray);
-		unset($classarray);
-	}
-
-
-	/**
-	 * prepares armor dropdown
-	 *
-	 */
-	private function armor()
-	{
-		global $config, $user, $db, $template, $query_by_pool;
-
-		global $query_by_armor, $query_by_class, $filter;
-
-		/***** begin armor-class pulldown ****/
-		$classarray = array();
-		$filtervalues = array();
-		$armor_type = array();
-		$classname = array();
-
-		$filtervalues ['all'] = $user->lang['ALL'];
-		$filtervalues ['separator1'] = '--------';
-
-		// generic armor list
-		$sql = 'SELECT class_armor_type FROM ' . CLASS_TABLE . ' GROUP BY class_armor_type';
-		$result = $db->sql_query ( $sql, 604000 );
-		while ( $row = $db->sql_fetchrow ( $result ) )
-		{
-			$filtervalues [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
-			$armor_type [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
-		}
-		$db->sql_freeresult ( $result );
-		$filtervalues ['separator2'] = '--------';
-
-		// get classlist
-		$sql_array = array(
-			'SELECT'    => 	'  c.game_id, c.class_id, l.name as class_name, c.class_min_level,
-		c.class_max_level, c.imagename, c.colorcode ',
-			'FROM'      => array(
-					CLASS_TABLE 	=> 'c',
-					BB_LANGUAGE		=> 'l',
-					MEMBER_LIST_TABLE	=> 'i',
-					MEMBER_DKP_TABLE	=> 'd',
-			),
-			'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id and c.game_id = l.game_id
-		 AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
-		 AND i.member_class_id = c.class_id and i.game_id = c.game_id
-		 AND d.member_id = i.member_id ",
-			'GROUP_BY'	=> 'c.game_id, c.class_id, l.name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode',
-			'ORDER_BY'	=> 'c.game_id, c.class_id ',
-		);
-
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query ( $sql, 604000);
-		$classarray = array();
-		while ( $row = $db->sql_fetchrow ( $result ) )
-		{
-			$classarray[] = $row;
-			$filtervalues [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
-			$classname [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
-		}
-		$db->sql_freeresult ( $result );
-
-		$query_by_armor = 0;
-		$query_by_class = 0;
-		$submitfilter = (isset ( $_GET ['filter'] ) or isset ( $_POST ['filter'] )) ? true : false;
-		if ($submitfilter)
-		{
-			$filter = request_var ( 'filter', '' );
-
-			if ($filter == "all")
-			{
-				// select all
-				$query_by_armor = 0;
-				$query_by_class = 0;
-			}
-			elseif (array_key_exists ( $filter, $armor_type ))
-			{
-				// looking for an armor type
-				$filter = preg_replace ( '/ Armor/', '', $filter );
-				$query_by_armor = 1;
-				$query_by_class = 0;
-			}
-			elseif (array_key_exists ( $filter, $classname ))
-			{
-				// looking for a class
-				$query_by_class = 1;
-				$query_by_armor = 0;
-			}
-		}
-		else
-		{
-			// select all
-			$query_by_armor = 0;
-			$query_by_class = 0;
-			$filter = 'all';
-		}
-
-		// dump filtervalues to dropdown template
-		foreach ( $filtervalues as $fid => $fname )
-		{
-			$template->assign_block_vars ( 'filter_row', array (
-					'VALUE' => $fid,
-					'SELECTED' => ($fid == $filter && $fname !=  '--------' ) ? ' selected="selected"' : '',
-					'DISABLED' => ($fname == '--------' ) ? ' disabled="disabled"' : '',
-					'OPTION' => (! empty ( $fname )) ? $fname : $user->lang['ALL'] ) );
-		}
-
-		/***** end armor - class pulldown ****/
-		return $classarray;
-	}
-
-
-
-	/**
-	 * gets array with members to display
-	 *
-	 * @param int $dkpsys_id
-	 * @param array $installed_games
-	 * @param int $startd
-	 * @return array $memberarray
-	 */
-	private function get_standings($dkpsys_id, $installed_games, $startd, $show_all)
-	{
-
-		global $config, $user, $db, $template, $query_by_pool, $phpbb_root_path;
-		global $query_by_armor, $query_by_class, $filter;
-
-		$sql_array = array(
-				'SELECT'    => 	'l.game_id, m.member_dkpid, d.dkpsys_name, m.member_id, 
-					m.member_status, m.member_lastraid, m.member_raidcount, 
-					sum(m.member_raid_value) as member_raid_value,
-					sum(m.member_time_bonus) as member_time_bonus,
-					sum(m.member_zerosum_bonus) as member_zerosum_bonus, 
-					sum(m.member_earned) as member_earned,
-					sum(m.member_raid_decay) as member_raid_decay,
-					sum(m.member_spent) as member_spent,
-					sum(m.member_item_decay) as member_item_decay,  
-					sum(m.member_adjustment - m.adj_decay) as member_adjustment,
-					sum(m.member_earned + m.member_adjustment - m.member_spent - m.adj_decay ) AS member_current,
-					l.member_name, l.member_level, 
-					l.member_race_id , 
-					l.member_class_id, 
-					l.member_rank_id ,
-					r.rank_name, 
-					r.rank_hide, 
-					r.rank_prefix, 
-					r.rank_suffix,
-					l1.name AS member_class, c.class_id,
-					c.colorcode, c.class_armor_type AS armor_type, c.imagename,
-					l.member_gender_id, a.image_female, a.image_male,
-					c.class_min_level AS min_level,
-					c.class_max_level AS max_level',
-				'FROM'      => array(
-						MEMBER_DKP_TABLE 	=> 'm',
-						DKPSYS_TABLE 		=> 'd',
-						MEMBER_LIST_TABLE 	=> 'l',
-						MEMBER_RANKS_TABLE  => 'r',
-						RACE_TABLE  		=> 'a',
-						CLASS_TABLE    		=> 'c',
-						BB_LANGUAGE			=> 'l1',
-				),
-
-				'WHERE'     =>  "(m.member_id = l.member_id)
-					AND l1.attribute_id =  c.class_id AND l1.language= '" . $config['bbdkp_lang'] . "' 
-					AND l1.attribute = 'class' and c.game_id = l1.game_id
-					AND (c.class_id = l.member_class_id and c.game_id=l.game_id)
-					AND (l.member_race_id =  a.race_id and a.game_id=l.game_id)
-					AND (r.rank_id = l.member_rank_id)
-					AND (m.member_dkpid = d.dkpsys_id)
-					AND (l.member_guild_id = r.guild_id)
-					AND r.rank_hide = 0 " ,
-				'GROUP_BY' => 'l.game_id, m.member_dkpid, d.dkpsys_name, m.member_id, m.member_status, m.member_lastraid,
-						 l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
-							 r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix,
-							 l1.name, c.class_id,
-							 c.colorcode, c.class_armor_type , c.imagename,
-							 l.member_gender_id, a.image_female, a.image_male,
-					c.class_min_level ,
-					c.class_max_level ',
-		);
-
-		if($config['bbdkp_epgp'] == 1)
-		{
-			$sql_array[ 'SELECT'] .= ",
-			sum(m.member_earned + m.member_adjustment - m.adj_decay) AS ep,
-			sum(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . " ) AS gp,
-		CASE  WHEN SUM(m.member_spent - m.member_item_decay  + " . max(0, $config['bbdkp_basegp']) . " ) = 0
-		THEN  1
-		ELSE  ROUND(SUM(m.member_earned + m.member_adjustment - m.adj_decay) /
-				SUM(" . max(0, $config['bbdkp_basegp']) . " + m.member_spent - m.member_item_decay),2) END AS pr " ;
-		}
-
-		//check if inactive members will be shown
-		if ($config ['bbdkp_hide_inactive'] == '1' && !$show_all )
-		{
-			// don't show inactive members
-			$sql_array[ 'WHERE'] .= ' AND m.member_status = 1 ';
-		}
-
-		if  (isset($_POST['compare']) && isset($_POST['compare_ids']))
-		{
-			$compare =  request_var('compare_ids', array('' => 0)) ;
-			$sql_array['WHERE'] .= ' AND ' . $db->sql_in_set('m.member_id', $compare, false, true);
-		}
-
-		if ($query_by_pool)
-		{
-			$sql_array['WHERE'] .= ' AND m.member_dkpid = ' . $dkpsys_id . ' ';
-		}
-
-		if (isset ( $_GET ['rank'] ))
-		{
-			$sql_array['WHERE'] .= " AND r.rank_name='" . request_var ( 'rank', '' ) . "'";
-		}
-
-		if ($query_by_class == 1)
-		{
-			//wow_class_8 = Mage
-			//lotro_class_5=Hunter
-			foreach($installed_games as $k=>$gamename)
-			{
-				//x is for avoiding output zero which may be outcome of false
-				if (strpos('x'.$filter,$k) > 0)
-				{
-					$class_id = substr($filter, strlen($k)+7);
-					$sql_array['WHERE'] .= " AND c.class_id =  '" . $db->sql_escape ( $class_id ) . "' ";
-					$sql_array['WHERE'] .= " AND c.game_id =  '" . $db->sql_escape ( $k ) . "' ";
-					break 1;
-				}
-			}
-
-		}
-
-		if ($query_by_armor == 1)
-		{
-			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $filter ) . "'";
-		}
-
-		// default sorting
-		if($config['bbdkp_epgp'] == 1)
-		{
-			$sql_array[ 'ORDER_BY'] = "CASE WHEN SUM(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . "  ) = 0
-		THEN 1
-		ELSE ROUND(SUM(m.member_earned + m.member_adjustment - m.adj_decay) /
-		SUM(" . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) END DESC ' ;
-		}
-		else
-		{
-			$sql_array[ 'ORDER_BY'] = 'sum(m.member_earned + m.member_adjustment - m.member_spent - m.adj_decay) desc, l.member_name asc ' ;
-		}
-
-
-		$sql = $db->sql_build_query('SELECT_DISTINCT', $sql_array);
-		
-		if (! ($members_result = $db->sql_query ( $sql )))
-		{
-			trigger_error ($user->lang['MNOTFOUND']);
-		}
-
-		global $allmember_count;
-		$allmember_count = 0;
-		while ( $row = $db->sql_fetchrow ( $members_result ) )
-		{
-			++$allmember_count;
-		}
-
-		$members_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $startd );
-		$memberarray = array ();
-		$member_count =0;
-		while ( $row = $db->sql_fetchrow ( $members_result ) )
-		{
-			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
-
-			++$member_count;
-			$memberarray [$member_count] ['game_id'] = $row ['game_id'];
-			$memberarray [$member_count] ['class_id'] = $row ['class_id'];
-			$memberarray [$member_count] ['dkpsys_name'] = $row ['dkpsys_name'];
-			$memberarray [$member_count] ['member_id'] = $row ['member_id'];
-			$memberarray [$member_count] ['count'] = $member_count;
-			$memberarray [$member_count] ['member_name'] = $row ['member_name'];
-			$memberarray [$member_count] ['member_status'] = $row ['member_status'];
-			$memberarray [$member_count] ['rank_prefix'] = $row ['rank_prefix'];
-			$memberarray [$member_count] ['rank_suffix'] = $row ['rank_suffix'];
-			$memberarray [$member_count] ['rank_name'] = $row ['rank_name'];
-			$memberarray [$member_count] ['rank_hide'] = $row ['rank_hide'];
-			$memberarray [$member_count] ['member_level'] = $row ['member_level'];
-			$memberarray [$member_count] ['member_class'] = $row ['member_class'];
-			$memberarray [$member_count] ['colorcode'] = $row ['colorcode'];
-			$memberarray [$member_count] ['class_image'] = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '';
-			$memberarray [$member_count] ['class_image_exists'] = (strlen($row['imagename']) > 1) ? true : false;
-			$memberarray [$member_count] ['race_image'] = (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '';
-			$memberarray [$member_count] ['race_image_exists'] = (strlen($race_image) > 1) ? true : false;
-
-			$memberarray [$member_count] ['armor_type'] = $row ['armor_type'];
-			$memberarray [$member_count] ['member_raid_value'] = $row ['member_raid_value'];
-			if($config['bbdkp_timebased'] == 1)
-			{
-				$memberarray [$member_count] ['member_time_bonus'] = $row ['member_time_bonus'];
-
-			}
-			if($config['bbdkp_zerosum'] == 1)
-			{
-				$memberarray [$member_count] ['member_zerosum_bonus'] = $row ['member_zerosum_bonus'];
-			}
-			$memberarray [$member_count] ['member_earned'] = $row ['member_earned'];
-
-			$memberarray [$member_count] ['member_adjustment'] = $row ['member_adjustment'];
-
-			if($config['bbdkp_decay'] == 1)
-			{
-				$memberarray [$member_count] ['member_raid_decay'] = $row ['member_raid_decay'];
-				$memberarray [$member_count] ['member_item_decay'] = $row ['member_item_decay'];
-			}
-
-			$memberarray [$member_count] ['member_spent'] = $row ['member_spent'];
-			$memberarray [$member_count] ['member_current'] = $row ['member_current'];
-
-			if($config['bbdkp_epgp'] == 1)
-			{
-				$memberarray [$member_count] ['ep'] = $row ['ep'];
-				$memberarray [$member_count] ['gp'] = $row ['gp'];
-				$memberarray [$member_count] ['pr'] = $row ['pr'];
-			}
-
-			$memberarray [$member_count] ['member_lastraid'] = $row ['member_lastraid'];
-			$memberarray [$member_count] ['attendanceP1'] = $row ['member_raidcount'];
-			//raidcount ( true, $row ['member_dkpid'], $config ['bbdkp_list_p1'], $row ['member_id'],2,false );
-			$memberarray [$member_count] ['member_dkpid'] = $row ['member_dkpid'];
-
-		}
-		$db->sql_freeresult ( $members_result );
-
-		return $memberarray;
-	}
-
-
-
-	/**
-	 * prepares dkp dropdown,
+	 * prepares dkp dropdown, for standings/stats
 	 *
 	 * @return int $dkpsys_id
 	 */
 	private function dkppulldown()
 	{
 		global $user, $db, $template, $query_by_pool;
-
-		$query_by_pool = false;
+	
+		$this->query_by_pool = false;
 		$defaultpool = 99;
 		$dkpvalues = array();
-
+	
 		$dkpvalues[0] = $user->lang['ALL'];
 		$dkpvalues[1] = '--------';
 		// find only pools with dkp records
@@ -581,12 +188,14 @@ class views extends \bbdkp\admin
 				'FROM'		=> array(
 						DKPSYS_TABLE => 'a',
 						MEMBER_DKP_TABLE => 'd',
+						MEMBER_LIST_TABLE => 'l'
 				),
-				'WHERE'  => ' a.dkpsys_id = d.member_dkpid',
+				
+				'WHERE'  => ' a.dkpsys_id = d.member_dkpid AND d.member_id = l.member_id AND l.member_guild_id = ' . $this->guild_id ,
 				'GROUP_BY'  => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default'
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-
+	
 		$result = $db->sql_query ($sql);
 		$index = 3;
 		while ( $row = $db->sql_fetchrow ( $result ) )
@@ -600,8 +209,8 @@ class views extends \bbdkp\admin
 			$index +=1;
 		}
 		$db->sql_freeresult ( $result );
-
-		$dkpsys_id = 0;
+	
+		$this->dkpsys_id = 0;
 		if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
 		{
 			if (isset( $_POST ['pool']) )
@@ -609,33 +218,33 @@ class views extends \bbdkp\admin
 				$pulldownval = request_var('pool',  $user->lang['ALL']);
 				if(is_numeric($pulldownval))
 				{
-					$query_by_pool = true;
-					$dkpsys_id = intval($pulldownval);
+					$this->query_by_pool = true;
+					$this->dkpsys_id = intval($pulldownval);
 				}
 			}
 			elseif (isset ( $_GET [URI_DKPSYS] ))
 			{
-
+	
 				$pulldownval = request_var(URI_DKPSYS,  $user->lang['ALL']);
 				if(is_numeric($pulldownval))
 				{
-					$query_by_pool = true;
-					$dkpsys_id = request_var(URI_DKPSYS, 0);
+					$this->query_by_pool = true;
+					$this->dkpsys_id = request_var(URI_DKPSYS, 0);
 				}
 				else
 				{
-					$query_by_pool = false;
-					$dkpsys_id = $defaultpool;
+					$this->query_by_pool = false;
+					$this->dkpsys_id = $defaultpool;
 				}
 			}
 		}
 		else
 		{
 			// if no parameters passed to this page then show default pool
-			$query_by_pool = true;
-			$dkpsys_id = $defaultpool;
+			$this->query_by_pool = true;
+			$this->dkpsys_id = $defaultpool;
 		}
-
+	
 		foreach ($dkpvalues as $key => $value)
 		{
 			if(!is_array($value))
@@ -651,15 +260,121 @@ class views extends \bbdkp\admin
 			{
 				$template->assign_block_vars ( 'pool_row', array (
 						'VALUE' => $value['id'],
-						'SELECTED' => ($dkpsys_id == $value['id']  && $query_by_pool ) ? ' selected="selected"' : '',
+						'SELECTED' => ($this->dkpsys_id == $value['id']  && $query_by_pool ) ? ' selected="selected"' : '',
 						'OPTION' => $value['text'],
 				));
+	
+			}
+		}
+	}
+	
+	/**
+	 * prepares Class / armor dropdown
+	 * 
+	 * @param string $page
+	 * @return array
+	 */
+	private function armor($page)
+	{
+		global $config, $user, $db, $template, $query_by_pool;
 
+		$this->query_by_armor = false;
+		$this->query_by_class = false;
+		$this->filter= request_var('filter', $user->lang['ALL']);
+		
+		/***** begin armor-class pulldown ****/
+		$classarray = array();
+		$filtervalues = array();
+		$armor_type = array();
+		$classname = array();
+
+		$filtervalues ['all'] = $user->lang['ALL'];
+		$filtervalues ['separator1'] = '--------';
+
+		// generic armor list
+		$sql = 'SELECT class_armor_type FROM ' . CLASS_TABLE . ' GROUP BY class_armor_type';
+		$result = $db->sql_query ( $sql);
+		while ( $row = $db->sql_fetchrow ( $result ) )
+		{
+			$filtervalues [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
+			$armor_type [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
+		}
+		$db->sql_freeresult ( $result );
+		$filtervalues ['separator2'] = '--------';
+
+		
+		// get classlist, depending on page	
+		$sql_array = array(
+				'SELECT'    => 	'  c.game_id, c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode ',
+				'FROM'      => array(
+						CLASS_TABLE 	=> 'c',
+						BB_LANGUAGE		=> 'l',
+						MEMBER_LIST_TABLE	=> 'i',
+				),
+				'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id and c.game_id = l.game_id
+				 		AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+				 		AND i.member_class_id = c.class_id and i.game_id = c.game_id AND i.game_id = '" .  $this->game_id . "'" ,
+				 
+				'GROUP_BY'	=> 'c.game_id, c.class_id, l.name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode',
+				'ORDER_BY'	=> 'c.game_id, c.class_id ',
+		);
+		
+		$sql_array[ 'WHERE'] .= ' AND i.member_guild_id = ' . $this->guild_id . ' '; 
+				
+		if($page =='standings' or $page =='stats')
+		{
+			$sql_array['FROM'][MEMBER_DKP_TABLE] = 'd'; 
+			$sql_array[ 'WHERE'] .= 'AND d.member_id = i.member_id'; 
+			if ($config ['bbdkp_hide_inactive'] == '1' && ! $this->show_all )
+			{
+				// don't show inactive members
+				$sql_array['WHERE'] .= ' AND d.member_status = 1 ';
+			}
+		}
+		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ($sql);
+		$classarray = array();
+		while ( $row = $db->sql_fetchrow ( $result ) )
+		{
+			$classarray[] = $row;
+			$filtervalues [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
+			$classname [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
+		}
+		$db->sql_freeresult ( $result );
+
+		if ($this->filter!= $user->lang['ALL'])
+		{
+			if (array_key_exists ( $this->filter, $armor_type ))
+			{
+				// looking for an armor type
+				$this->filter= preg_replace ( '/ Armor/', '', $this->filter);
+				$this->query_by_armor = true;
+				$this->query_by_class = false;
+			}
+			elseif (array_key_exists ( $this->filter, $classname ))
+			{
+				// looking for a class
+				$this->query_by_class = true;
+				$this->query_by_armor = false;
 			}
 		}
 
-		return $dkpsys_id;
+		// dump filtervalues to dropdown template
+		foreach ( $filtervalues as $fid => $fname )
+		{
+			$template->assign_block_vars ( 'filter_row', array (
+					'VALUE' => $fid,
+					'SELECTED' => ($fid == $this->filter && $fname !=  '--------' ) ? ' selected="selected"' : '',
+					'DISABLED' => ($fname == '--------' ) ? ' disabled="disabled"' : '',
+					'OPTION' => (! empty ( $fname )) ? $fname : $user->lang['ALL'] ) );
+		}
+
+		/***** end armor - class pulldown ****/
+		return $classarray;
 	}
+
+
 
 }
 

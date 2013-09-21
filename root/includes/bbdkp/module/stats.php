@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
+ * @version 1.3.0
  */
 
 /**
@@ -17,15 +17,14 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 }
 
 $newstats = new statistics();
-
+$u_stats = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=stats' . '&amp;guild_id=' . $this->guild_id );
 $title = $user->lang['MENU_STATS'];
 
 $navlinks_array = array(
 		array(
 				'DKPPAGE' => $user->lang['MENU_STATS'],
-				'U_DKPPAGE' => $this->u_stats,
+				'U_DKPPAGE' => $u_stats,
 		));
-
 foreach( $navlinks_array as $name )
 {
 	$template->assign_block_vars('dkpnavlinks', array(
@@ -35,13 +34,12 @@ foreach( $navlinks_array as $name )
 }
 
 $newstats->show_all = ( (isset($_GET['show'])) && (request_var('show', '') == "all") ) ? true : false;
-$newstats->dkppulldown();
 
 $time = time() + $user->timezone + $user->dst;
 
-$newstats->memberstats($time);
-$newstats->class_statistics();
-$newstats->attendance_statistics($time);
+$newstats->memberstats($time, $this->guild_id);
+$newstats->class_statistics($this->guild_id);
+$newstats->attendance_statistics($time, $u_stats, $this->guild_id);
 
 // Output page
 page_header($title);
@@ -53,113 +51,6 @@ class statistics extends \bbdkp\views
 	private $query_by_pool;
 	private $total_drops;
 	private $dkp_id;
-
-	/**
-	 * dkpsys pulldown ...
-	 *
-	 */
-	private function dkppulldown()
-	{
-		global $user, $db, $template, $phpEx, $phpbb_root_path;
-
-		$this->query_by_pool = false;
-		$defaultpool = 99;
-
-		$dkpvalues[0] = $user->lang['ALL'];
-		$dkpvalues[1] = '--------';
-		// find only pools with dkp records
-		$sql_array = array(
-			'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
-			'FROM'		=> array(
-						DKPSYS_TABLE => 'a',
-						MEMBER_DKP_TABLE => 'd',
-						),
-			'WHERE'  => ' a.dkpsys_id = d.member_dkpid',
-			'GROUP_BY'  => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default'
-		);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query ( $sql );
-		$index = 3;
-		while ( $row = $db->sql_fetchrow ( $result ) )
-		{
-			$dkpvalues[$index]['id'] = $row ['dkpsys_id'];
-			$dkpvalues[$index]['text'] = $row ['dkpsys_name'];
-			if (strtoupper ( $row ['dkpsys_default'] ) == 'Y')
-			{
-				$defaultpool = $row ['dkpsys_id'];
-			}
-			$index +=1;
-		}
-		$db->sql_freeresult ( $result );
-
-		$this->dkp_id = 0;
-		if(isset( $_POST ['pool']) or isset( $_POST ['getdksysid']) or isset ( $_GET [URI_DKPSYS] ) )
-		{
-			if (isset( $_POST ['pool']) )
-			{
-				$pulldownval = request_var('pool',  $user->lang['ALL']);
-				if(is_numeric($pulldownval))
-				{
-					$this->query_by_pool = true;
-					$this->dkp_id = intval($pulldownval);
-				}
-			}
-			elseif (isset ( $_GET [URI_DKPSYS] ))
-			{
-				$pulldownval = request_var(URI_DKPSYS,  $user->lang['ALL']);
-				if(is_numeric($pulldownval))
-				{
-					$this->query_by_pool = true;
-					$this->dkp_id = request_var(URI_DKPSYS, 0);
-				}
-				else
-				{
-					$this->query_by_pool = false;
-					$this->dkp_id = $defaultpool;
-				}
-			}
-		}
-		else
-		{
-			// if no parameters passed to this page then show default pool
-			$this->query_by_pool = true;
-			$this->dkp_id = $defaultpool;
-		}
-
-		foreach ( $dkpvalues as $key => $value )
-		{
-			if(!is_array($value))
-			{
-				$template->assign_block_vars ( 'pool_row', array (
-					'VALUE' => $value,
-					'SELECTED' => (!$this->query_by_pool && $value != '--------') ? ' selected="selected"' : '',
-					'DISABLED' => ($value == '--------' ) ? ' disabled="disabled"' : '',
-					'OPTION' => $value,
-				));
-			}
-			else
-			{
-				$template->assign_block_vars ( 'pool_row', array (
-					'VALUE' => $value['id'],
-					'SELECTED' => ($this->dkp_id == $value['id'] && $this->query_by_pool) ? ' selected="selected"' : '',
-					'OPTION' => $value['text'],
-				));
-
-			}
-		}
-
-		$arg='';
-		if ($this->query_by_pool)
-		{
-				$arg = '&amp;' . URI_DKPSYS. '=' . $this->dkp_id;
-		}
-
-		$this->u_stats = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=stats' . $arg );
-
-	}
-
-
-
 
 	/**
 	 * gets overall raid count in interval of N days before today
@@ -191,7 +82,6 @@ class statistics extends \bbdkp\views
 		$db->sql_freeresult($result);
 
 		return $rc;
-
 	}
 
 
@@ -199,7 +89,7 @@ class statistics extends \bbdkp\views
 	 *  Member Statistics
 	 *
 	 */
-	public function memberstats($time)
+	public function memberstats($time, $guild_id)
 	{
 		global $db, $template, $config, $phpEx, $phpbb_root_path, $user;
 
@@ -415,7 +305,7 @@ class statistics extends \bbdkp\views
 	 * Class Drop Statistics
 	 *
 	 */
-	public function class_statistics()
+	public function class_statistics($guild_id)
 	{
 		global $db, $config, $template, $phpEx, $phpbb_root_path;
 
@@ -541,7 +431,7 @@ class statistics extends \bbdkp\views
 	/**
 	 * Attendance Statistics
 	 */
-	public function attendance_statistics($time)
+	public function attendance_statistics($time, $u_stats, $guild_id)
 	{
 		/* get overall raidcount for 4 intervals */
 		global $db, $template, $phpEx, $phpbb_root_path, $config, $user;
@@ -784,11 +674,11 @@ class statistics extends \bbdkp\views
 		{
 
 				$template->assign_block_vars('attendance_row', array(
-						'NAME' 					=> $row['member_name'],
-						'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $this->dkp_id . '&amp;' . URI_NAMEID . '='.$row['member_id']),
+					'NAME' 					=> $row['member_name'],
+					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $this->dkp_id . '&amp;' . URI_NAMEID . '='.$row['member_id']),
 					'COLORCODE'				=> $row['colorcode'],
 					'ID'            		=> $row['member_id'],
-						'FIRSTRAID' 			=> $row['member_firstraid'],
+					'FIRSTRAID' 			=> $row['member_firstraid'],
 					'LASTRAID' 				=> $row['member_lastraid'],
 					'GRCTLIFE' 				=> $row['gloraidcountlife'],
 					'IRCTLIFE' 				=> $row['iraidcountlife'],
@@ -822,10 +712,10 @@ class statistics extends \bbdkp\views
 			'O_MEMBER' 		  => $att_current_order ['uri'] [4],
 			'ATTPAGINATION' 	=> $attpagination ,
 			'S_DISPLAY_STATS'		=> true,
-			'U_STATS' => $this->u_stats . '&amp;startatt='. $startatt,
-				'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
+			'U_STATS' => $u_stats . '&amp;startatt='. $startatt,
+			'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
 			'TOTAL_MEMBERS' 	=> $attendance,
-				'ATTEND_FOOTCOUNT' 	=> $footcount_text,
+			'ATTEND_FOOTCOUNT' 	=> $footcount_text,
 				)
 		);
 

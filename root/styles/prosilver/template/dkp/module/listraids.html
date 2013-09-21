@@ -1,28 +1,16 @@
-<form method="post" action="{U_LIST_RAIDS}">
-
-<div class="forabg" >
-<span class="corners-top"><span></span></span>
-<ul class="topiclist">
-<li class="header">
-
-
-<div style="float: left; width:50%">
-<h1 style ="color:#dfc065;">{L_RAIDS}</h1>
+<div style="float: left; width:49%; white-space:nowrap;">
+<h2 style ="white-space:nowrap;">{L_RAIDS}</h2>
 </div>
-<div style="float: left; width:50%">
-<br/>
-<div style="color:white; text-align:left; width:56; white-space:nowrap;">{L_POOL}:
+<form method="post" action="{U_LIST_RAIDS}">
+<div style="float: right; width:49%; white-space:nowrap; text-align: right;">
+<p>
+{L_POOL}:
       <select name="pool" class="input" onchange="javascript:form.submit();">
         <!-- BEGIN pool_row -->
         <option value="{pool_row.VALUE}" {pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
         <!-- END pool_row -->
       </select>
- </div>
-</div>
-
-</li>
-</ul>
-<span class="corners-bottom"><span></span></span>
+</p>
 </div>
 </form> 
 
