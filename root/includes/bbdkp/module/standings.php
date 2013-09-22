@@ -34,7 +34,7 @@ if (!class_exists('\bbdkp\PointsController'))
 }
 $memberpoints = new \bbdkp\PointsController;
 
-$memberarray = $memberpoints->get_standings($this->guild_id, $this->dkpsys_id, $this->game_id, $startd, $this->show_all, $this->query_by_armor, $this->query_by_class, $this->filter);
+$memberarray = $memberpoints->get_standings($this->guild_id, $this->dkpsys_id, $this->game_id, $startd, $this->show_all, $this->query_by_armor, $this->query_by_class, $this->filter, $this->query_by_pool);
 
 // loop sorted member array and dump to template
 foreach ( $memberarray as $key => $member )

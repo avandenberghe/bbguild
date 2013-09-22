@@ -251,7 +251,7 @@ class views extends \bbdkp\admin
 			{
 				$template->assign_block_vars ( 'pool_row', array (
 						'VALUE' => $value,
-						'SELECTED' => (!$query_by_pool && $value != '--------') ? ' selected="selected"' : '',
+						'SELECTED' => (!$this->query_by_pool && $value != '--------') ? ' selected="selected"' : '',
 						'DISABLED' => ($value == '--------' ) ? ' disabled="disabled"' : '',
 						'OPTION' => $value,
 				));
@@ -260,7 +260,7 @@ class views extends \bbdkp\admin
 			{
 				$template->assign_block_vars ( 'pool_row', array (
 						'VALUE' => $value['id'],
-						'SELECTED' => ($this->dkpsys_id == $value['id']  && $query_by_pool ) ? ' selected="selected"' : '',
+						'SELECTED' => ($this->dkpsys_id == $value['id']  && $this->query_by_pool ) ? ' selected="selected"' : '',
 						'OPTION' => $value['text'],
 				));
 	

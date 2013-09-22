@@ -241,9 +241,9 @@ class PointsController  extends \bbdkp\Admin
 	 * @param int $startd
 	 * @return array $memberarray
 	 */
-	public function get_standings($guild_id, $dkpsys_id, $game_id, $startd, $show_all, $query_by_armor, $query_by_class, $filter)
+	public function get_standings($guild_id, $dkpsys_id, $game_id, $startd, $show_all, $query_by_armor, $query_by_class, $filter, $query_by_pool)
 	{
-		global $config, $user, $db, $template, $query_by_pool, $phpbb_root_path;
+		global $config, $user, $db, $template, $phpbb_root_path;
 	
 		$sql_array = array(
 				'SELECT'    => 	'l.game_id, m.member_dkpid, d.dkpsys_name, m.member_id,
@@ -366,7 +366,6 @@ class PointsController  extends \bbdkp\Admin
 		{
 			$sql_array[ 'ORDER_BY'] = 'sum(m.member_earned + m.member_adjustment - m.member_spent - m.adj_decay) desc, l.member_name asc ' ;
 		}
-	
 	
 		$sql = $db->sql_build_query('SELECT_DISTINCT', $sql_array);
 	
