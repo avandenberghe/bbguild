@@ -202,10 +202,10 @@ class Members extends \bbdkp\Admin
 	protected $member_role;
 
 	/**
-	 * contains list of members for game x
+	 * contains list of members for guild x
 	 * @var array
 	 */
-	public $gamememberlist;
+	public $guildmemberlist;
 
 	/**
 	 */
@@ -1140,10 +1140,10 @@ class Members extends \bbdkp\Admin
 
 	/**
 	 * ACP listmembers grid
-	 * get a member list for given game/guild
-	 * @param unknown_type $game_id
+	 * get a member list for given guild
+	 * @param unknown_type $guild_id
 	 */
-	public function listallmembers($game_id = '', $guild_id = 0)
+	public function listallmembers($guild_id = 0)
 	{
 		global $db;
 
@@ -1164,18 +1164,13 @@ class Members extends \bbdkp\Admin
 		{
 			$sql_array['WHERE'] .= ' AND m.member_guild_id = ' . $guild_id;
 		}
-
-		if ($game_id != '')
-		{
-			$sql_array['WHERE'] .= " AND m.game_id = '" . $game_id . "' ";
-		}
-
+		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ( $sql );
 
 		while ( $row = $db->sql_fetchrow ( $result ) )
 		{
-			$this->gamememberlist[] = array(
+			$this->guildmemberlist[] = array(
 				'member_id' 	=> $row['member_id'],
 				'member_name' 	=> $row['member_name'],
 				'rank_name'  	=> $row['rank_name'],

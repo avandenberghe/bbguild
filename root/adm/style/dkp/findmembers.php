@@ -14,24 +14,25 @@ include($phpbb_root_path . 'common.' . $phpEx);
 
 $guild_id = request_var('guild', 0);
 
-$sql = 'SELECT member_id, member_name  
-		FROM ' . MEMBER_LIST_TABLE . ' WHERE member_status = 1 and 
-		member_guild_id =  '. $guild_id . ' ORDER BY member_rank_id asc, member_level desc, member_name asc';
+if (!class_exists('\bbdkp\Members'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+}
+$members = new \bbdkp\Members();
+$members->listallmembers($guild_id);
 
-$result = $db->sql_query($sql);
 header('Content-type: text/xml');
 // preparing xml
 $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <memberlist>';
-while ( $row = $db->sql_fetchrow($result)) 
+foreach ( (array) $members->guildmemberlist as $member )
 {
-	 $xml .= '<member>'; 
-	 $xml .= "<member_id>" . $row['member_id'] . "</member_id>";
-	 $xml .= "<member_name>" . $row['member_name'] . "</member_name>";
-	 $xml .= '</member>'; 	 
+	$xml .= '<member>';
+	$xml .= "<member_id>" . $member['member_id'] . "</member_id>";
+	$xml .= "<member_name>" . $member['rank_name'] . ' '.  $member['member_name'] . "</member_name>";
+	$xml .= '</member>';
 }
 $xml .= '</memberlist>';
-$db->sql_freeresult($result);
 //return xml to ajax
 echo($xml); 
 ?>
