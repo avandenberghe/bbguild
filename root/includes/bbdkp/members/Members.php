@@ -321,7 +321,7 @@ class Members extends \bbdkp\Admin
 			$this->member_rank_id = $row['member_rank_id'] ;
 			$this->member_comment = $row['member_comment'] ;
 			$this->member_gender_id = $row['member_gender_id'] ;
-			$this->member_joindate = $row['member_outdate'] ;
+			$this->member_joindate = $row['member_joindate'] ;
 			$this->member_role = $row['member_role'] ;
 			$this->member_joindate_d = date('j', $row['member_joindate']) ;
 			$this->member_joindate_mo = date('n', $row['member_joindate']);
@@ -589,7 +589,7 @@ class Members extends \bbdkp\Admin
 			$sql = 'SELECT count(*) as memberexists
 				FROM ' . MEMBER_LIST_TABLE . '
 				WHERE member_id <> ' . $this->member_id . "
-				AND UPPER(member_name)= UPPER('" . $db->sql_escape($this->member_name) . "')";
+				AND UPPER(member_name) = UPPER('" . $db->sql_escape($this->member_name) . "')";
 			$result = $db->sql_query($sql);
 			$countm = $db->sql_fetchfield('memberexists');
 			$db->sql_freeresult($result);

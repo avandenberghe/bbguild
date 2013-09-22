@@ -260,7 +260,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 
 				$db->sql_freeresult($members_result);
-				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
+				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $Guild->membercount);
 				$memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] . "&amp;". URI_GUILD ."=".$Guild->guildid), 
 						$Guild->membercount, $config['bbdkp_user_llimit'], $start, true
 				);
