@@ -356,10 +356,11 @@ public function __set($property, $value)
 		return $max_value; 
 	}
 	
-	
-	
 	/**
-	 *
+	 * Get all events from pool
+	 * @param unknown_type $start
+	 * @param unknown_type $order
+	 * @param unknown_type $dkpid
 	 */
 	public function listevents($start = 0, $order = 'b.dkpsys_id, a.event_name' , $dkpid=0  )
 	{
@@ -395,6 +396,160 @@ public function __set($property, $value)
 	}
 	
 	
+	/**
+	 * front View Event listing, by guild
+	 * @param unknown_type $start
+	 * @param unknown_type $order
+	 * @param unknown_type $dkpid
+	 */
+	public function viewlistevents($guild_id)
+	{
+		global $user, $template, $db, $config, $phpbb_root_path, $phpEx; 
+					
+		if ((int) $config['bbdkp_event_viewall'] == 1)
+		{
+			/*** get all dkp pools with events ***/
+			$sql_array = array (
+				'SELECT' => ' d.dkpsys_id, d.dkpsys_name, COUNT(r.raid_id) AS raidcount ', 
+				'FROM' => array (
+					DKPSYS_TABLE		=> 'd',
+					EVENTS_TABLE 		=> 'e',		
+					),
+				 'LEFT_JOIN' => array(
+			        array(
+			            'FROM'  => array(RAIDS_TABLE => 'r'),
+			            'ON'    => 'r.event_id = e.event_id'
+			        	)
+			    	), 
+				'WHERE' => ' d.dkpsys_id = e.event_dkpid AND e.event_status = 1  ',
+				'GROUP_BY' => 'dkpsys_id, dkpsys_name ', 
+				'ORDER_BY' => 'COUNT(r.raid_id) DESC, dkpsys_name ASC'
+			);	
+		}
+		else
+		{
+			/*** get dkp pools with events with raids ***/
+			$sql_array = array (
+				'SELECT' => ' d.dkpsys_id, d.dkpsys_name, COUNT(r.raid_id) AS raidcount ', 
+				'FROM' => array (
+					DKPSYS_TABLE		=> 'd',
+					EVENTS_TABLE 		=> 'e',		
+					RAIDS_TABLE 		=> 'r',
+					RAID_DETAIL_TABLE 	=> 'dt',
+					MEMBER_LIST_TABLE 	=> 'l',
+					), 
+				'WHERE' => 'd.dkpsys_id = e.event_dkpid AND e.event_status = 1  
+							AND r.event_id = e.event_id 
+							AND r.raid_id = dt.raid_id
+							AND dt.member_id = l.member_id
+							AND l.member_guild_id = ' . $guild_id,  
+				'GROUP_BY' => 'dkpsys_id, dkpsys_name ', 
+				'ORDER_BY' => 'COUNT(r.raid_id) DESC, dkpsys_name ASC'
+			);
+			
+		}
+		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$dkppool_result = $db->sql_query($sql); 
+		
+		while ( $pool = $db->sql_fetchrow($dkppool_result) )
+		{
+			$total_events = 0;
+			/*** get events ***/
+		    if ((int) $config['bbdkp_event_viewall'] == 1)
+			{
+				$sql = 'SELECT e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_color, e.event_imagename,
+						rr.raidcount, rr.newest, rr.oldest 
+					FROM phpbb_bbdkp_events e
+					LEFT JOIN 
+					(
+						SELECT 
+							r.event_id, 
+							COUNT( DISTINCT r.raid_id) as raidcount, 
+							MAX(r.raid_start) as newest, 
+							MIN(r.raid_start) as oldest 
+						FROM phpbb_bbdkp_raids r 
+						INNER JOIN phpbb_bbdkp_raid_detail dt ON (r.raid_id = dt.raid_id) 
+						INNER JOIN phpbb_bbdkp_memberlist l ON dt.member_id = l.member_id AND member_guild_id = ' . $guild_id . '
+						GROUP BY r.event_id
+					) rr
+					ON rr.event_id = e.event_id 
+					WHERE e.event_dkpid = '. (int) $pool['dkpsys_id'] .' AND e.event_status = 1  
+					GROUP BY e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_color, e.event_imagename
+					ORDER BY e.event_id';  
+			}
+			else
+			{
+				$sql_array = array (
+					'SELECT' => ' e.event_dkpid, e.event_id, e.event_name, e.event_value,  e.event_color, e.event_imagename, 
+					COUNT( DISTINCT r.raid_id) as raidcount, MAX(raid_start) as newest, MIN(raid_start) as oldest ', 
+					'FROM' => array (
+						EVENTS_TABLE 		=> 'e',		
+						RAIDS_TABLE 		=> 'r', 
+						RAID_DETAIL_TABLE 	=> 'dt',
+						MEMBER_LIST_TABLE 	=> 'l',
+						), 
+					'WHERE' => 'e.event_dkpid = ' . (int) $pool['dkpsys_id'] . 
+								' AND e.event_status = 1 
+								  AND r.event_id = e.event_id 
+								  AND r.raid_id = dt.raid_id
+								  AND dt.member_id = l.member_id
+								  AND l.member_guild_id = ' . $guild_id,  
+					'ORDER_BY' => 'e.event_id', 
+					'GROUP_BY' => 'e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_color, e.event_imagename', 
+				);
+				$sql = $db->sql_build_query('SELECT', $sql_array);
+			}
+				
+			
+			$sort_order[$pool['dkpsys_id']] = array(
+			    0 => array('event_name', 'event_dkpid, event_name desc'),
+			    1 => array('event_value desc', 'event_dkpid, event_value desc')
+			);
+			
+			$current_order[$pool['dkpsys_id']] = $this->switch_order($sort_order[$pool['dkpsys_id']]);
+		
+			$start = request_var('pool'. $pool['dkpsys_id'], 0);
+			$events_result = $db->sql_query($sql);
+			while ( $event = $db->sql_fetchrow($events_result))
+			{
+				$total_events ++;	
+			}
+			$u_listevents = append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listevents&amp;guild_id=' . $guild_id);
+			$template->assign_block_vars(
+		    	'dkpsys_row', array(
+					'O_NAME' 	 => $current_order[$pool['dkpsys_id']]['uri'][0],
+				    'O_VALUE'    => $current_order[$pool['dkpsys_id']]['uri'][1],
+				    'START' 	 => $start,
+				    'EVENT_PAGINATION' => $this->generate_pagination2( $u_listevents . '&amp;o='.$current_order[$pool['dkpsys_id']]['uri']['current'],
+									$total_events, $config['bbdkp_user_elimit'], $start, true, 'pool' . $pool['dkpsys_id']),
+			    	'NAME' 		 => $pool['dkpsys_name'],
+					'EVENTCOUNT' => sprintf($user->lang['LISTEVENTS_FOOTCOUNT'], $total_events , $config['bbdkp_user_elimit']),
+			    	'ID' 		 => $pool['dkpsys_id']
+		    ));
+		    
+		    $events_result = $db->sql_query_limit($sql, $config['bbdkp_user_elimit'], $start);
+		    while ( $event = $db->sql_fetchrow($events_result))
+			{
+			    $template->assign_block_vars(
+			    	'dkpsys_row.events_row', array(
+			        	'U_VIEW_EVENT' =>  append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewevent&amp;' . URI_EVENT . '='.$event['event_id'] . '&amp;'.URI_DKPSYS.'='.$event['event_dkpid']) ,
+			        	'NAME' 			=> $event['event_name'],
+			        	'VALUE' 		=> $event['event_value'], 
+			        	'IMAGEPATH' 	=> $phpbb_root_path . "images/bbdkp/event_images/" . $event['event_imagename'] . ".png",
+			        	'S_EVENT_IMAGE_EXISTS' => (strlen($event['event_imagename']) > 1) ? true : false,
+			        	'IMAGENAME' => $event['event_imagename'],
+						'EVENTCOLOR'  	=> $event['event_color'],
+			        	'RAIDCOUNT' 	=> ($event['raidcount'] == 0) ? $user->lang['NORAIDS'] : $event['raidcount'],
+			        	'OLDEST' 		=> ($event['oldest']=='' ? '' : date($config['bbdkp_date_format'], $event['oldest']) )  ,
+			    		'NEWEST' 		=> ($event['newest']=='' ? '' : date($config['bbdkp_date_format'], $event['newest']) )  
+			    ));
+			}
+			$db->sql_freeresult($events_result);
+		    
+		}
+		$db->sql_freeresult($dkppool_result);
+	}
 	
 	/**
 	 * mark an event selection active or unactive
