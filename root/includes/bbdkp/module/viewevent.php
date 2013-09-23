@@ -223,7 +223,7 @@ if($raid_count > 0)
 			'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '',
 			'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
 			'BUYER' 		=> (! empty ( $row ['member_name'] )) ? $row ['member_name'] : '&lt;<i>Not Found</i>&gt;',
-			'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' . URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '='. $dkpid) ,
+			'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' . URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '='. $this->dkpsys_id) ,
 			'ITEMNAME'      => $item_name,
 			'U_VIEW_ITEM'   => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewitem&amp;' . URI_ITEM . '=' . $row['item_id']) ,
 			'ITEM_ZS'      	=> ($row['item_zs'] == 1) ? ' checked="checked"' : '',
