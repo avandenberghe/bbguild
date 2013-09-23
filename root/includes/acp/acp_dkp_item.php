@@ -753,7 +753,7 @@ class acp_dkp_item extends \bbdkp\Admin
 			$db->sql_freeresult ( $items_result );
 			
 			$template->assign_vars ( array (
-				'ICON_VIEWLOOT'	=> '<img src="' . $phpbb_admin_path . 'images/bbdkp/glyphs/view.gif" alt="' . $user->lang['ITEMS'] . '" title="' . $user->lang['ITEMS'] . '" />',
+				'ICON_VIEWLOOT'	=> '<img src="' . $phpbb_admin_path . 'images/glyphs/view.gif" alt="' . $user->lang['ITEMS'] . '" title="' . $user->lang['ITEMS'] . '" />',
 				'S_SHOW' 		=> true,
 				'F_LIST_ITEM' 	=>   append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems" ), 
 				'L_TITLE' 		=> $user->lang ['ACP_LISTITEMS'], 

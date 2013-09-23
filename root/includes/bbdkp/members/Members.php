@@ -202,10 +202,10 @@ class Members extends \bbdkp\Admin
 	protected $member_role;
 
 	/**
-	 * contains list of members for game x
+	 * contains list of members for guild x
 	 * @var array
 	 */
-	public $gamememberlist;
+	public $guildmemberlist;
 
 	/**
 	 */
@@ -321,7 +321,7 @@ class Members extends \bbdkp\Admin
 			$this->member_rank_id = $row['member_rank_id'] ;
 			$this->member_comment = $row['member_comment'] ;
 			$this->member_gender_id = $row['member_gender_id'] ;
-			$this->member_joindate = $row['member_outdate'] ;
+			$this->member_joindate = $row['member_joindate'] ;
 			$this->member_role = $row['member_role'] ;
 			$this->member_joindate_d = date('j', $row['member_joindate']) ;
 			$this->member_joindate_mo = date('n', $row['member_joindate']);
@@ -589,7 +589,7 @@ class Members extends \bbdkp\Admin
 			$sql = 'SELECT count(*) as memberexists
 				FROM ' . MEMBER_LIST_TABLE . '
 				WHERE member_id <> ' . $this->member_id . "
-				AND UPPER(member_name)= UPPER('" . $db->sql_escape($this->member_name) . "')";
+				AND UPPER(member_name) = UPPER('" . $db->sql_escape($this->member_name) . "')";
 			$result = $db->sql_query($sql);
 			$countm = $db->sql_fetchfield('memberexists');
 			$db->sql_freeresult($result);
@@ -1140,10 +1140,10 @@ class Members extends \bbdkp\Admin
 
 	/**
 	 * ACP listmembers grid
-	 * get a member list for given game/guild
-	 * @param unknown_type $game_id
+	 * get a member list for given guild
+	 * @param unknown_type $guild_id
 	 */
-	public function listallmembers($game_id = '', $guild_id = 0)
+	public function listallmembers($guild_id = 0)
 	{
 		global $db;
 
@@ -1164,18 +1164,13 @@ class Members extends \bbdkp\Admin
 		{
 			$sql_array['WHERE'] .= ' AND m.member_guild_id = ' . $guild_id;
 		}
-
-		if ($game_id != '')
-		{
-			$sql_array['WHERE'] .= " AND m.game_id = '" . $game_id . "' ";
-		}
-
+		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ( $sql );
 
 		while ( $row = $db->sql_fetchrow ( $result ) )
 		{
-			$this->gamememberlist[] = array(
+			$this->guildmemberlist[] = array(
 				'member_id' 	=> $row['member_id'],
 				'member_name' 	=> $row['member_name'],
 				'rank_name'  	=> $row['rank_name'],
@@ -1200,7 +1195,9 @@ class Members extends \bbdkp\Admin
 	 *  
 	 *  
 	 */
-	public function get_listingresult($start, $mode, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200)
+	public function get_listingresult($start, $mode,
+		$query_by_armor, $query_by_class, $filter, $game_id, 
+		$guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200)
 	{
 		global $db, $config;
 		$sql_array = array();
@@ -1266,6 +1263,26 @@ class Members extends \bbdkp\Admin
 		{
 			$sql_array['WHERE'] .= " m.member_level <=  " . $level2;
 		}
+		
+		if ($query_by_class)
+		{
+			//wow_class_8 = Mage
+			//lotro_class_5=Hunter
+			//x is for avoiding output zero which may be outcome of false
+			if (strpos('x'.$filter, $game_id) > 0)
+			{
+				$class_id = substr($filter, strlen($game_id)+7);
+				$sql_array['WHERE'] .= " AND c.class_id =  '" . $db->sql_escape ($class_id) . "' ";
+				$sql_array['WHERE'] .= " AND c.game_id =  '" . $db->sql_escape ($game_id) . "' ";
+			}
+		
+		}
+		
+		if ($query_by_armor)
+		{
+			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $filter ) . "'";
+		}
+		
 		
 		// order
 		$sort_order = array(

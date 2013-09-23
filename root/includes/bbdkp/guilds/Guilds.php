@@ -130,6 +130,7 @@ class Guilds extends \bbdkp\Admin
 		}
 		else
 		{
+			
 			// load guild object
 			$this->game_id = $row['game_id'];
 			$this->guildid = $row['id'];
@@ -144,7 +145,8 @@ class Guilds extends \bbdkp\Admin
 			$this->emblempath = $phpbb_root_path . $row['emblemurl'];
 			$this->min_armory = $row['min_armory'];
 			$this->recstatus = $row['rec_status'];
-			$this->membercount =  $row['members']; 
+			 
+			$this->countmembers(); 
 			$this->guilddefault = $row['guilddefault'];
 		}
 

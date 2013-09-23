@@ -10,21 +10,21 @@ function check_nav()
 //]]>
 </script>
 <form method="post" action="{F_NAVURL}" id="setguild">
+<h2 style="white-space:nowrap;">{GUILD_NAME}</h2>
 
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-	
 	<img src="{EMBLEM}" alt="{GUILD_NAME}" />
-	
 	<div>
 	<ul>
+	    <li style="list-style:none"><a href="{U_NEWS}"><strong>{L_MENU_NEWS}</strong></a></li>
 	    <li style="list-style:none"><a href="{U_ROSTER}"><strong>{L_MENU_ROSTER}</strong></a></li>
-		<li style="list-style:none"><a href="{U_LISTEVENTS}"><strong>{L_MENU_EVENTS}</strong></a></li>
-		<li style="list-style:none"><a href="{U_LISTITEMS}"><strong>{L_MENU_ITEMVAL}</strong></a></li>
-		<li style="list-style:none"><a href="{U_STATS}"><strong>{L_MENU_STATS}</strong></a></li>
-		<li style="list-style:none"><a href="{U_LISTRAIDS}"><strong>{L_MENU_RAIDS}</strong></a></li>
 	    <li style="list-style:none"><a href="{U_LISTMEMBERS}"><strong>{L_MENU_STANDINGS}</strong></a></li>
+		<li style="list-style:none"><a href="{U_STATS}"><strong>{L_MENU_STATS}</strong></a></li>
+		<li style="list-style:none"><a href="{U_LISTEVENTS}"><strong>{L_MENU_EVENTS}</strong></a></li>
+		<li style="list-style:none"><a href="{U_LISTRAIDS}"><strong>{L_MENU_RAIDS}</strong></a></li>
+		<li style="list-style:none"><a href="{U_LISTITEMS}"><strong>{L_MENU_ITEMVAL}</strong></a></li>
 		<li style="list-style:none"><a href="{U_LISTITEMHIST}"><strong>{L_MENU_ITEMHIST}</strong></a></li>
 		<li style="list-style:none">
 		<select name="guild_id" id="guild_id" class="input" onchange="this.form.submit();">
@@ -40,4 +40,6 @@ function check_nav()
 </div>
 </div>
 <br />
+<input type="hidden" name="hidden_guild_id" value="{GUILD_ID}" />
+<input type="hidden" name="hidden_show" value="{SHOWALL}" />
 </form>

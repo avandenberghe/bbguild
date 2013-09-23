@@ -175,7 +175,7 @@ class acp_dkp extends \bbdkp\Admin
 			}
 
 			$template->assign_vars(array(
-				'GLYPH' => "$phpbb_admin_path/images/bbdkp/glyphs/view.gif" ,
+				'GLYPH' => "$phpbb_admin_path/images/glyphs/view.gif" ,
 				'NUMBER_OF_MEMBERS' => $total_members ,
 				'NUMBER_OF_RAIDS' => $total_raids ,
 				'NUMBER_OF_ITEMS' => $total_items ,
