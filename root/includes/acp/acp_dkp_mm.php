@@ -246,9 +246,9 @@ class acp_dkp_mm extends \bbdkp\Admin
 						'LEVEL' => ($row['member_level'] > 0) ? $row['member_level'] : '&nbsp;' ,
 						'ARMOR' => (! empty($row['armor_type'])) ? $row['armor_type'] : '&nbsp;' ,
 						'COLORCODE' => ($row['colorcode'] == '') ? '#123456' : $row['colorcode'] ,
-						'CLASS_IMAGE' => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images" . $row['imagename'] . ".png" : '' ,
+						'CLASS_IMAGE' => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '' ,
 						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false ,
-						'RACE_IMAGE' => (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/bbdkp/" . $race_image . ".png" : '' ,
+						'RACE_IMAGE' => (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '' ,
 						'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false ,
 						'CLASS' => ($row['member_class'] != 'NULL') ? $row['member_class'] : '&nbsp;' ,
 						'JOINDATE' => date($config['bbdkp_date_format'], $row['member_joindate']) ,
@@ -260,7 +260,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 
 				$db->sql_freeresult($members_result);
-				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $lines);
+				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $Guild->membercount);
 				$memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] . "&amp;". URI_GUILD ."=".$Guild->guildid), 
 						$Guild->membercount, $config['bbdkp_user_llimit'], $start, true
 				);

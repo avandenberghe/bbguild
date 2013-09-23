@@ -1,27 +1,24 @@
-<div class="forabg" >
-<span class="corners-top"><span></span></span>
 
-<div style="float: left; width:10%">
-	<h1 style="color:#dfc065; white-space:nowrap;">{L_GUILDROSTER}</h1>
+<div style="float: left; width:49%; white-space:nowrap;">
+	<h2 style="white-space:nowrap;">{L_GUILDROSTER}</h2>
 </div>
 
-<div style="text-align: center; float: left; width:90%">
-	<h4>{GUILDNAME} </h4>
+<form method="post" action="{F_MEMBERS}">
+<div style="float: right; width:49%; white-space:nowrap; text-align: right;">
+<br/>
+<div style="color:#FFFFDD; text-align:right; white-space:nowrap;" >
+<select name="filter" class="input" onchange="javascript:form.submit();">
+<!-- BEGIN filter_row -->
+<option value="{filter_row.VALUE}"{filter_row.SELECTED}{filter_row.DISABLED}>{filter_row.OPTION}</option>
+<!-- END filter_row -->
+</select>
+<input type="hidden" name="hidden_show" value="{SHOWALL}" />
+</div>
 </div>
 
-<span class="corners-bottom"><span></span></span>
-</div>
+</form>
+<hr />
 
-<!-- 
-**************
-8-column grid layout 
-**************
- -->
- 
-<div class="panel">
-
-<div class="inner">
-<span class="corners-top"><span></span></span>
 
 <!-- BEGIN class -->
 
@@ -84,10 +81,3 @@
 </table>
  <br />
 <!-- END class -->
-
-<span class="corners-bottom"><span></span></span>
-</div>
-
-
-
-</div>

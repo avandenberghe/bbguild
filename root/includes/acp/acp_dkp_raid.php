@@ -881,7 +881,7 @@ if (!class_exists('\bbdkp\Members'))
 					( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids&amp;dkpsys_id=". $this->RaidController->dkpid ."&amp;o=" . $this->RaidController->raidlistorder['uri'] ['current']) , 
 					$this->RaidController->totalraidcount, 
 					$config ['bbdkp_user_rlimit'], $start, true ), 
-			'ICON_RCOPY'		  => '<img src="' . $phpbb_admin_path . 'images/bbdkp/file_new.gif" alt="' . $user->lang['DUPLICATE_RAID'] . '" title="' . $user->lang['DUPLICATE_RAID'] . '" />',
+			'ICON_RCOPY'		  => '<img src="' . $phpbb_admin_path . 'images/file_new.gif" alt="' . $user->lang['DUPLICATE_RAID'] . '" title="' . $user->lang['DUPLICATE_RAID'] . '" />',
 			));
 		
 	}

@@ -38,24 +38,6 @@ if (!$auth->acl_get('u_dkp'))
 	trigger_error('NOT_AUTHORISED');
 }
 
-$template->assign_vars(array(
-	'U_NEWS'  			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=news'),
-	'U_LISTMEMBERS'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=standings'),
-	'U_LISTITEMS'     	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listitems'),
-	'U_LISTITEMHIST'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listitems&amp;mode=history'),
-	'U_LISTEVENTS'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listevents'),
-	'U_LISTRAIDS'   	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listraids'),
-	'U_VIEWITEM'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewitem'),
-	'U_VIEWMEMBER'   	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember'),
-	'U_VIEWRAID'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid'),
-	'U_BP'   			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=bossprogress'),
-	'U_ROSTER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster'),
-	'U_STATS'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats'),
-	'U_ABOUT'         	=> append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
-	'U_DKP_ACP'			=> ($auth->acl_get('a_') && !empty($user->data['is_registered'])) ? append_sid("{$phpbb_root_path}adm/index.$phpEx", 'i=' .
-	 (isset($config['bbdkp_module_id']) ? $config['bbdkp_module_id'] : 194) ,true,$user->session_id ) :'',
-));
-
 //load template frame
 $template->set_filenames(array(
 	'body' => 'dkp/dkpmain.html')
