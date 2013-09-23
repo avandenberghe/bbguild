@@ -1,5 +1,8 @@
 <?php
 /**
+ * bbdkp view class
+ * roster block
+ * 
  * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -7,7 +10,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
-namespace bbdkp;
+
 /**
  * @ignore
  */
@@ -15,6 +18,7 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
+$mode = request_var('mode', ($config['bbdkp_roster_layout'] == '0') ? 'listing': 'class' );
 
 $game_id = request_var(URI_GAME, '');
 // push common data to template
@@ -36,17 +40,16 @@ $members = new \bbdkp\Members;
 $members->game_id = $game_id; 
 
 $start = request_var('start' ,0);
-$mode = request_var('mode', ($config['bbdkp_roster_layout'] == '0') ? 'listing': 'class' ); 
-$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;mode=' . $mode); 
-$guild_id =  request_var('guild_id',0);
+ 
+$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;mode=' . $mode .'&amp;guild_id=' . $this->guild_id );
 $race_id =  request_var('race_id',0);
 $class_id =  request_var('class_id',0);
 $level1 =  request_var('$level1',0);
 $level2 =  request_var('classid', 200);
+$data = $members->get_listingresult($start, $mode, $this->query_by_armor, $this->query_by_class, $this->filter, $this->game_id, 
+		$this->guild_id, $class_id, $race_id, $level1, $level2); 
 
-$data = $members->get_listingresult($start, $mode, $guild_id, $class_id, $race_id, $level1, $level2); 
-
-if ($mode =='listing')
+if ($mode =='listing') 
 {
 	/*
 	 * Displays the listing
@@ -117,7 +120,7 @@ if ($mode =='listing')
 elseif($mode == 'class')
 {
 	//display grid 
-	$classgroup = $members->get_classes($guild_id, $class_id, $race_id, $level1, $level2); 
+	$classgroup = $members->get_classes($this->guild_id, $class_id, $race_id, $level1, $level2); 
 	
 	if(count($classgroup) > 0)
 	{
@@ -173,11 +176,11 @@ elseif($mode == 'class')
 		{
 			$template->assign_vars(array(
 					'ROSTERPAGINATION' 		=> $rosterpagination ,
-					'U_LIST_MEMBERS0'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $data[2]['uri'][0]),
-					'U_LIST_MEMBERS1'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $data[2]['uri'][1]),
-					'U_LIST_MEMBERS2'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $data[2]['uri'][2]),
-					'U_LIST_MEMBERS3'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $data[2]['uri'][3]),
-					'U_LIST_MEMBERS4'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;'. URI_ORDER. '='. $data[2]['uri'][4]),
+					'U_LIST_MEMBERS0'	=> $url . '&amp;'. URI_ORDER. '='. $data[2]['uri'][0],
+					'U_LIST_MEMBERS1'	=> $url . '&amp;'. URI_ORDER. '='. $data[2]['uri'][1],
+					'U_LIST_MEMBERS2'	=> $url . '&amp;'. URI_ORDER. '='. $data[2]['uri'][2],
+					'U_LIST_MEMBERS3'	=> $url . '&amp;'. URI_ORDER. '='. $data[2]['uri'][3],
+					'U_LIST_MEMBERS4'	=> $url . '&amp;'. URI_ORDER. '='. $data[2]['uri'][4],
 			));
 
 		}
@@ -190,12 +193,11 @@ elseif($mode == 'class')
 		));
 	}
 
-	// add navigationlinks
-	/*
+	// add menu navigationlinks
 	$navlinks_array = array(
 			array(
 					'DKPPAGE' => $user->lang['MENU_ROSTER'],
-					'U_DKPPAGE' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster'),
+					'U_DKPPAGE' => $url,
 	));
 
 	foreach( $navlinks_array as $name )
@@ -205,11 +207,10 @@ elseif($mode == 'class')
 				'U_DKPPAGE' => $name['U_DKPPAGE'],
 		));
 	}
-	*/
+	
 	$template->assign_vars(array(
 			'S_RSTYLE'		    => '1',
 	));
-
 
 }
 

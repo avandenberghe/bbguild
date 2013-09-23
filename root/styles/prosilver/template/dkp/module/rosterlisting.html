@@ -1,17 +1,22 @@
-<div class="forabg" >
-<span class="corners-top"><span></span></span>
-<ul class="topiclist">
-<li class="header">
-<div style="float: left; width:10%">
-	<h1 style="color:#dfc065; white-space:nowrap;">{L_GUILDROSTER}</h1>
+<div style="float: left; width:50%">
+	<h2 style="white-space:nowrap;">{L_GUILDROSTER}</h2>
+</div>
+<form method="post" action="{F_MEMBERS}">
+<div style="float: right; width:49%; white-space:nowrap; text-align: right;">
+<br/>
+<div style="color:#FFFFDD; text-align:right; white-space:nowrap;" >
+</select>
+<select name="filter" class="input" onchange="javascript:form.submit();">
+<!-- BEGIN filter_row -->
+<option value="{filter_row.VALUE}"{filter_row.SELECTED}{filter_row.DISABLED}>{filter_row.OPTION}</option>
+<!-- END filter_row -->
+</select>
+<input type="hidden" name="hidden_show" value="{SHOWALL}" />
+</div>
 </div>
 
-<div style="text-align: center; float: left; width:90%">
-	<h4>{GUILDNAME} </h4>
-</div>
-<span class="corners-bottom"><span></span></span>
-</div>
-
+</form>
+<hr />
 <!-- 
 **************
 list layout 
@@ -31,40 +36,40 @@ list layout
 <table class="table1" width="95%" border="0" cellspacing="0" cellpadding="0">
 <thead>
 <tr>
+ 	<!-- IF S_GAME == wow || S_GAME == aion -->  
+ 	<th style="text-align: left;width: 5%">{L_ARMORY_URL}</th>
+ 	<!-- ENDIF --> 
 	<th style="text-align: left; width: 15%"><a href="{O_NAME}">{L_NAME}</a></th>
-	<th style="text-align: left; width: 7%"><a href="{O_RANK}">{L_RANK}</a></th>
     <th style="text-align: center;width: 5%"><a href="{O_LEVEL}">{L_LEVEL}</a></th>
  	<th style="text-align: left;width: 15%"><a href="{O_RACE}">{L_RACE}</a></th>
  	<th style="text-align: left;width: 15%"><a href="{O_CLASS}">{L_CLASS}</a></th>
+	<th style="text-align: left; width: 7%"><a href="{O_RANK}">{L_RANK}</a></th>
  	<th style="text-align: left;width: 15%"><a href="{O_PHPBB}">{L_MEMBER}</a></th>
  	<!-- IF S_SHOWACH == 1 -->
  	<th style="text-align: left;width: 15%"><a href="{O_ACHI}">{L_ACHIEV}</a></th>
  	<!-- ENDIF -->
- 	<!-- IF S_GAME == wow || S_GAME == aion -->  
- 	<th style="text-align: left;">{L_ARMORY_URL}</th>
- 	<!-- ENDIF --> 
 </tr>
 </thead>
 
 <!-- BEGIN members_row -->
 	<tr class="<!-- IF members_row.S_ROW_COUNT is even -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+	    <!-- IF S_GAME == wow || S_GAME == aion -->
+	    <td style="text-align:left;"><a href="{members_row.ARMORY}"><img src="adm/images/glyphs/view.gif"  alt="View" /></a></td>
+	    <!-- ENDIF -->
 		<td style="text-align: left;">
-			<a style="white-space: nowrap; color:{members_row.COLORCODE}" href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a>
+			<a style="font-size:larger; white-space: nowrap; color:{members_row.COLORCODE}" href="{members_row.U_VIEW_MEMBER}">{members_row.NAME}</a>
 		</td>
-		<td style="text-align:left;">{members_row.RANK}</td>
-    	<td style="text-align:center;">{members_row.LVL}</td>
+    	<td style="font-size:larger; text-align:center;">{members_row.LVL}</td>
 		<td style="text-align: left;"><!-- IF members_row.S_RACE_IMAGE_EXISTS --><img src="{members_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE --><!-- ENDIF -->{members_row.RACE}</td>		
     	<td style="text-align: left;">
     	<!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;
     	<span style="white-space: nowrap; color:{members_row.COLORCODE}"><strong>{members_row.CLASS}</strong></span>
     	</td>
-    	<td style="text-align:left;">{members_row.PHPBBUID}</td>
+		<td style="font-size:larger; text-align:left;">{members_row.RANK}</td>
+    	<td style="font-size:larger;text-align:left;">{members_row.PHPBBUID}</td>
     	<!-- IF S_SHOWACH == 1 -->
- 		<td style="text-align: left;width: 15%">{members_row.ACHIEVPTS}</td>
+ 		<td style="font-size:larger;text-align: left;width: 15%">{members_row.ACHIEVPTS}</td>
  		<!-- ENDIF -->
-	    <!-- IF S_GAME == wow || S_GAME == aion -->
-	    <td style="text-align:left;"><a href="{members_row.ARMORY}"><img src="adm/images/glyphs/view.gif"  alt="View" /></a></td>
-	    <!-- ENDIF -->
 	</tr>
 
   <!-- END members_row -->

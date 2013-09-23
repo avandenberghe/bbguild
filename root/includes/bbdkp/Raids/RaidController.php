@@ -119,8 +119,8 @@ class RaidController  extends \bbdkp\Admin
 		$this->eventinfo = $events->events;  
 		
 		$members = new \bbdkp\Members();
-		$members->listallmembers($this->game_id, $this->guildid);
-		$this->memberlist = $members->gamememberlist;
+		$members->listallmembers($this->guildid);
+		$this->memberlist = $members->guildmemberlist;
 		if(count($this->memberlist) == 0)
 		{
 			trigger_error ( $user->lang['ERROR_NOGUILDMEMBERSDEFINED'], E_USER_WARNING );

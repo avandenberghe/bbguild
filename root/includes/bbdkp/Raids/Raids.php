@@ -26,7 +26,7 @@ if (!class_exists('\bbdkp\Admin'))
 }
 if (!class_exists('\bbdkp\Members'))
 {
-		require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
 
 /**
@@ -234,10 +234,10 @@ class Raids extends \bbdkp\Admin
 		return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_rlimit'], $start );
 
 	}
+	
 
 	/**
 	 * returns raid attendance percentage for a range member/pool
-	*  @param bool $query_by_pool
 	*  @param $dkpsys_id = int
 	*  @param $days = int
 	*  @param $member_id = int
@@ -360,6 +360,351 @@ class Raids extends \bbdkp\Admin
 			$db->sql_freeresult ($result);
 
 			return $total_raids;
+	}
+	
+	
+	/**
+	 * Guild Raid Attendance Statistics
+	 *
+	 * @param unknown_type $time
+	 * @param unknown_type $u_stats
+	 * @param unknown_type $guild_id
+	 */
+	public function attendance_statistics($time, $u_stats, $guild_id, $query_by_pool, $dkp_id, $show_all)
+	{
+		/* get overall raidcount for 4 intervals */
+		global $db, $template, $phpEx, $phpbb_root_path, $config, $user;
+	
+		$rcall = $this->get_overallraidcount(0, $time,$guild_id, $query_by_pool, $dkp_id);
+		$rc90 = $this->get_overallraidcount((int) $config['bbdkp_list_p3'], $time, $guild_id, $query_by_pool, $dkp_id);
+		$rc60 = $this->get_overallraidcount((int) $config['bbdkp_list_p2'], $time, $guild_id, $query_by_pool, $dkp_id);
+		$rc30 = $this->get_overallraidcount((int) $config['bbdkp_list_p1'], $time, $guild_id, $query_by_pool, $dkp_id);
+	
+		$att_sort_order = array (
+				0 => array ("sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) DESC", "sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) ASC" ),
+				1 => array ("sum(CASE e.days WHEN '".$config['bbdkp_list_p3']."' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '".$config['bbdkp_list_p3']."' THEN e.attendance END ) asc" ),
+				2 => array ("sum(CASE e.days WHEN '".$config['bbdkp_list_p2']."' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '".$config['bbdkp_list_p2']."' THEN e.attendance END ) asc" ),
+				3 => array ("sum(CASE e.days WHEN '".$config['bbdkp_list_p1']."' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '".$config['bbdkp_list_p1']."' THEN e.attendance END ) asc" ),
+				4 => array ("e.member_name asc", "e.member_name desc" ),
+		);
+	
+		$att_current_order = $this->switch_order ( $att_sort_order );
+	
+		/** attendance SQL */
+		$sql = "SELECT
+			c.game_id, c.colorcode,  c.imagename,
+			e.event_dkpid,
+			e.member_name,
+			e.member_id,
+			e.member_firstraid,
+			e.member_lastraid,
+			sum(CASE e.days WHEN 'lifetime' THEN e.gloraidcount END) AS gloraidcountlife,
+			sum(CASE e.days WHEN 'lifetime' THEN e.iraidcount END ) AS iraidcountlife,
+			sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) AS attendancelife,
+			sum(CASE e.days WHEN '".$config['bbdkp_list_p3']."' THEN e.gloraidcount END ) AS gloraidcount90,
+			sum(CASE e.days WHEN '".$config['bbdkp_list_p3']."' THEN e.iraidcount END ) AS iraidcount90,
+			sum(CASE e.days WHEN '".$config['bbdkp_list_p3']."' THEN e.attendance END) AS attendance90,
+			sum(CASE e.days WHEN '".$config['bbdkp_list_p2']."' THEN e.gloraidcount END ) AS gloraidcount60,
+			sum(CASE e.days WHEN '".$config['bbdkp_list_p2']."' THEN e.iraidcount END) AS iraidcount60,
+			sum(CASE e.days WHEN '".$config['bbdkp_list_p2']."' THEN e.attendance END ) AS attendance60,
+			sum(CASE e.days WHEN '".$config['bbdkp_list_p1']."' THEN e.gloraidcount END ) AS gloraidcount30,
+			sum(CASE e.days WHEN '".$config['bbdkp_list_p1']."' THEN e.iraidcount END ) AS iraidcount30,
+			sum(CASE e.days WHEN '".$config['bbdkp_list_p1']."' THEN e.attendance END ) AS attendance30
+		FROM
+			(
+				SELECT
+					d.member_lastraid,
+					d.member_firstraid,
+					ev.event_dkpid,
+					l.member_name,
+					rd.member_id,
+					'lifetime' AS days,
+					count(rd.member_id) AS iraidcount,
+					". (string) $rcall . " AS gloraidcount,
+					round(count(rd.member_id) / " . (string) $rcall . " * 100,2) AS attendance
+				FROM
+					" . MEMBER_LIST_TABLE . " l,
+					" . MEMBER_DKP_TABLE ." d,
+					" . RAID_DETAIL_TABLE . " rd,
+					" . EVENTS_TABLE . " ev,
+					" . RAIDS_TABLE . " r
+				WHERE rd.member_id = d.member_id
+				AND ev.event_dkpid = d.member_dkpid";
+		if ($query_by_pool)
+		{
+			$sql .= " AND d.member_dkpid = " . $dkp_id;
+		}
+		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+		{
+			$sql .= " AND d.member_status='1'";
+		}
+		$sql .= "
+				AND ev.event_id = r.event_id
+				AND r.raid_id = rd.raid_id
+				AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . "
+				AND l.member_joindate < r.raid_start
+				GROUP BY
+					d.member_lastraid,
+					d.member_firstraid,
+					ev.event_dkpid,
+					l.member_name,
+					rd.member_id
+			UNION ALL
+				SELECT
+					d.member_lastraid,
+					d.member_firstraid,
+					ev.event_dkpid,
+					l.member_name,
+					rd.member_id,
+					'". (int) $config['bbdkp_list_p3'] ."' AS days,
+					count(rd.member_id) AS iraidcount,
+					". (string) $rc90 . " AS gloraidcount,
+					round(count(rd.member_id)/ ". (string) $rc90 . " * 100,2) AS attendance
+					FROM
+						" . MEMBER_LIST_TABLE . " l,
+						" . MEMBER_DKP_TABLE ." d,
+						" . RAID_DETAIL_TABLE . " rd,
+						" . EVENTS_TABLE . " ev,
+						" . RAIDS_TABLE . " r
+					WHERE
+						rd.member_id = d.member_id
+					AND ev.event_dkpid = d.member_dkpid ";
+		if ($query_by_pool)
+		{
+			$sql .= " AND d.member_dkpid = " . $dkp_id;
+		}
+		$sql .= " AND ev.event_id = r.event_id
+					AND r.raid_id = rd.raid_id
+					AND( - r.raid_start + " . $time . "  )/(3600 * 24) < ". (int) $config['bbdkp_list_p3'];
+		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+		{
+			$sql .= " AND d.member_status='1'";
+		}
+		$sql .= "
+					AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . "
+					AND l.member_joindate < r.raid_start
+					GROUP BY
+					d.member_lastraid,
+					d.member_firstraid,
+					ev.event_dkpid,
+					l.member_name,
+					rd.member_id
+			UNION ALL
+				SELECT
+					d.member_lastraid,
+					d.member_firstraid,
+					ev.event_dkpid,
+					l.member_name,
+					rd.member_id,
+					'". (int) $config['bbdkp_list_p2'] ."' AS days,
+					count(rd.member_id) AS iraidcount,
+					". (string) $rc60 . " AS gloraidcount,
+					round( count(rd.member_id)/ ". (string) $rc60 . " * 100, 2 ) AS attendance
+				FROM
+					" . MEMBER_LIST_TABLE . " l,
+					" . MEMBER_DKP_TABLE ." d,
+					" . RAID_DETAIL_TABLE . " rd,
+					" . EVENTS_TABLE . " ev,
+					" . RAIDS_TABLE . " r
+				WHERE
+					rd.member_id = d.member_id
+				AND ev.event_dkpid = d.member_dkpid";
+		if ($query_by_pool)
+		{
+			$sql .= " AND d.member_dkpid = " . $dkp_id;
+		}
+		$sql .= " AND ev.event_id = r.event_id
+				AND r.raid_id = rd.raid_id
+				AND(  - r.raid_start + " . $time . " ) /(3600 * 24) < ". (int) $config['bbdkp_list_p2'];
+		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+		{
+			$sql .= " AND d.member_status='1'";
+		}
+		$sql .= " AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . "
+				AND l.member_joindate < r.raid_start
+				GROUP BY
+					d.member_lastraid,
+					d.member_firstraid,
+					ev.event_dkpid,
+					l.member_name,
+					rd.member_id
+			UNION ALL
+				SELECT
+					d.member_lastraid,
+					d.member_firstraid,
+					ev.event_dkpid,
+					l.member_name,
+					rd.member_id,
+					'". (int) $config['bbdkp_list_p1'] ."' AS days,
+					count(rd.member_id) AS iraidcount,
+					'". (string) $rc30 . "' AS gloraidcount,
+					round(count(rd.member_id)/ ". (string) $rc30 . " * 100,2) AS attendance
+				FROM
+					" . MEMBER_LIST_TABLE . " l,
+					" . MEMBER_DKP_TABLE ." d,
+					" . RAID_DETAIL_TABLE . " rd,
+					" . EVENTS_TABLE . " ev,
+					" . RAIDS_TABLE . " r
+				WHERE
+					rd.member_id = d.member_id
+				AND ev.event_dkpid = d.member_dkpid";
+		if ($query_by_pool)
+		{
+			$sql .= " AND d.member_dkpid = " . $dkp_id;
+		}
+		$sql .= " AND ev.event_id = r.event_id
+				AND r.raid_id = rd.raid_id
+				AND( - r.raid_start + " . $time . " )/(3600 * 24) < ". (int) $config['bbdkp_list_p1'];
+		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+		{
+			$sql .= " AND d.member_status='1'";
+		}
+		$sql .= " AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . "
+				AND l.member_joindate < r.raid_start
+			GROUP BY
+				d.member_lastraid,
+				d.member_firstraid,
+				ev.event_dkpid,
+				l.member_name,
+				rd.member_id
+		) e INNER JOIN " . MEMBER_LIST_TABLE . " l on  e.member_id = l.member_id
+			INNER JOIN " . CLASS_TABLE . " c on c.class_id = l.member_class_id and c.game_id = l.game_id
+		GROUP BY
+			c.game_id, c.colorcode,  c.imagename,
+			e.event_dkpid,
+			e.member_name,
+			e.member_id,
+			e.member_firstraid,
+			e.member_lastraid
+		ORDER BY " . $att_current_order ['sql'];
+	
+		$attendance = 0;
+		$result = $db->sql_query($sql);
+		while ( $row = $db->sql_fetchrow($result))
+		{
+			$attendance++;
+		}
+		
+		$u_stats = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;' .URI_GUILD . '=' . $guild_id);
+		
+		$startatt = request_var ( 'startatt', 0 );
+		$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $startatt );
+	
+		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+		{
+			$footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($result),
+					'<a href="' . $u_stats . '&amp;o='.$att_current_order['uri']['current']. '&amp;show=all" class="rowfoot">');
+	
+			$attpagination = $this->generate_pagination2($u_stats. '&amp;o=' . $att_current_order ['uri'] ['current'] ,
+					$attendance, $config ['bbdkp_user_llimit'], $startatt, true, 'startatt'  );
+	
+		}
+	
+		else
+		{
+			$footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($result),
+					'<a href="' . $u_stats. '&amp;o='.$att_current_order['uri']['current'] . '" class="rowfoot">');
+	
+			$attpagination = $this->generate_pagination2($u_stats . '&amp;o=' . $att_current_order ['uri'] ['current']. '&amp;show=all' ,
+					$attendance, $config ['bbdkp_user_llimit'], $startatt, true, 'startatt'  );
+	
+		}
+	
+		$attendance=0;
+		while ( $row = $db->sql_fetchrow($result) )
+		{
+	
+			$template->assign_block_vars('attendance_row', array(
+					'NAME' 					=> $row['member_name'],
+					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $dkp_id . '&amp;' . URI_NAMEID . '='.$row['member_id']),
+					'COLORCODE'				=> $row['colorcode'],
+					'ID'            		=> $row['member_id'],
+					'FIRSTRAID' 			=> $row['member_firstraid'],
+					'LASTRAID' 				=> $row['member_lastraid'],
+					'GRCTLIFE' 				=> $row['gloraidcountlife'],
+					'IRCTLIFE' 				=> $row['iraidcountlife'],
+					'ATTLIFESTR' 			=> sprintf("%.2f%%", $row['attendancelife']),
+					'ATTLIFE' 				=> sprintf("%.2f", $row['attendancelife']),
+					'GRCT90' 				=> $row['gloraidcount90'],
+					'IRCT90' 				=> $row['iraidcount90'],
+					'ATT90STR' 				=> sprintf("%.2f%%", $row['attendance90']),
+					'ATT90' 				=> sprintf("%.2f", $row['attendance90']),
+					'GRCT60' 				=> $row['gloraidcount60'],
+					'IRCT60' 				=> $row['iraidcount60'],
+					'ATT60STR' 				=> sprintf("%.2f%%", $row['attendance60']),
+					'ATT60' 				=> sprintf("%.2f", $row['attendance60']),
+					'GRCT30' 				=> $row['gloraidcount30'],
+					'IRCT30' 				=> $row['iraidcount30'],
+					'ATT30STR' 				=> sprintf("%.2f%%", $row['attendance30']),
+					'ATT30' 				=> sprintf("%.2f", $row['attendance30']),
+			)
+			);
+		}
+	
+		/* send information to template */
+		$template->assign_vars(array(
+				'RAIDS_X1_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p3']),
+				'RAIDS_X2_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p2']),
+				'RAIDS_X3_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p1']),
+				'O_LIF' 		  => $att_current_order ['uri'] [0],
+				'O_90' 			  => $att_current_order ['uri'] [1],
+				'O_60' 			  => $att_current_order ['uri'] [2],
+				'O_30' 			  => $att_current_order ['uri'] [3],
+				'O_MEMBER' 		  => $att_current_order ['uri'] [4],
+				'ATTPAGINATION' 	=> $attpagination ,
+				'S_DISPLAY_STATS'		=> true,
+				'U_STATS' => $u_stats . '&amp;startatt='. $startatt,
+				'SHOW' => ( isset($_GET['show']) ) ? request_var('show', '') : '',
+				'TOTAL_MEMBERS' 	=> $attendance,
+				'ATTEND_FOOTCOUNT' 	=> $footcount_text,
+		)
+		);
+	
+	}
+	
+	/**
+	 * gets overall raid count in interval of N days before today
+	 * 
+	 * @param int $interval
+	 * @param int $time
+	 * @param int $dkp_id
+	 *
+	 */
+	private function get_overallraidcount($interval, $time, $guild_id, $query_by_pool, $dkp_id)
+	{
+		global $db;
+		// get raidcount
+		$sql_array = array (
+				'SELECT' => ' count(r.raid_id) AS raidcount ',
+				'FROM' => array (
+						EVENTS_TABLE => 'e',
+						RAIDS_TABLE => 'r',
+						RAID_DETAIL_TABLE => 'd',
+						MEMBER_LIST_TABLE => 'l'
+				),
+				'WHERE' => ' e.event_id = r.event_id
+						AND d.raid_id = r.raid_id
+						AND l.member_id = d.member_id
+						AND l.member_guild_id = ' . $guild_id,
+				'GROUP_BY' => 'r.raid_id'
+		);
+	
+		if ($query_by_pool)
+		{
+			$sql_array['WHERE'] .= ' and event_dkpid = '. (int) $dkp_id . ' ';
+		}
+	
+		if ($interval > 0)
+		{
+			$sql_array['WHERE'] .= " AND ( - r.raid_start + " . (int) $time . " ) / (3600 * 24) < ". (int) $interval;
+		}
+		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+		$result = $db->sql_query($sql);
+		$rc = (int) $db->sql_fetchfield('raidcount');
+	
+		$db->sql_freeresult($result);
+	
+		return $rc;
 	}
 
 }

@@ -49,17 +49,13 @@
 </script>
 <script type="text/javascript" src="{T_TEMPLATE_PATH}/editor.js"></script>
 
-<form id="postform" method="post" action="{F_NEWS}" onsubmit="return checkForm(this);">
-
-<div class="forabg" >
-<span class="corners-top"><span></span></span>
 <ul class="topiclist">
 <li class="header">
-<h1 style="color:#dfc065; white-space:nowrap;">{L_MENU_NEWS}</h1>
+<h2 style="white-space:nowrap;">{L_MENU_NEWS}</h2>
 </li>
 </ul>
-<span class="corners-bottom"><span></span></span>
-</div>
+
+<form id="postform" method="post" action="{F_NEWS}" onsubmit="return checkForm(this);">
  
 <!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
  
