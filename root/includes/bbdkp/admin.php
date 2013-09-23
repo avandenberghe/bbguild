@@ -107,10 +107,11 @@ abstract class Admin
 	    	}
 	    }
 	    
-	    $this->listgames(); 
+	    $this->gamesarray(); 
+	    $debug=1;
 	}
 	
-	private function listgames()
+	private function gamesarray()
 	{
 		global $db;
 		$this->games= array(); 

@@ -41,7 +41,10 @@ if (!class_exists('\bbdkp\Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
-
+if (!class_exists('\bbdkp\PointsController'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
+}
 /**
  * this class manages the loot transaction table (phpbb_bbdkp_raid_items)
  * @package 	bbDKP
@@ -112,7 +115,8 @@ class LootController  extends \bbdkp\Admin
 			//diff between now and the raidtime
 			$now = getdate();
 			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $loottime;
-			$decayarray = $acp_dkp_raid->decay($item_value, $timediff, 2);
+			$PointsController = new \bbdkp\PointsController();
+			$decayarray = $PointsController->decay($this->loot->item_value,$timediff,2 ); 
 		}
 
 		//
