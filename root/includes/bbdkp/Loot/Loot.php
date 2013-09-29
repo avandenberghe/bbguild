@@ -196,6 +196,8 @@ class Loot
 	
 	/**
 	 * get one item from raid
+	 * @uses acp
+	 * @access public
 	 * @param unknown_type $item_id
 	 */	
 	public function Getloot($item_id)
@@ -236,62 +238,48 @@ class Loot
 	
 	
 	/**
-	 * get array of all loot for the raid or for a member
-	 * @param unknown_type $raid_id
-	 * @param unknown_type $order
-	 * @param unknown_type $member_id
-	 * @return unknown
+	 * get array of all loot for 1 raid or for 1 member
+	 * @param int $raid_id
+	 * @param int $member_id
+	 * @param int $istart
+	 * @param string $order
+	 * @return array
 	 */
-	public function Get($raid_id, $order = ' i.member_id' , $member_id = 0)
+	public function GetAllLoot($raid_id = 0, $member_id = 0, $order = ' i.item_date', $all=true, $istart = 0)
 	{
 		global $config, $db;
 	
 		$sql_array = array(
-				'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.item_zs,
-	    				m.member_name, c.colorcode, c.imagename, m.member_gender_id,
-	    				a.image_female, a.image_male, i.item_date, i.raid_id, 
-						i.item_value, i.item_decay, i.item_value - i.item_decay as item_total',
+				'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, 
+								i.item_value, i.item_zs, i.item_decay, i.item_value - i.item_decay as item_net',
 				'FROM'      => array(
-						CLASS_TABLE 		=> 'c',
-						RACE_TABLE  		=> 'a',
 						MEMBER_LIST_TABLE 	=> 'm',
 						RAID_ITEMS_TABLE    => 'i',
 				),
-				'WHERE'     =>  "c.game_id = m.game_id and c.class_id = m.member_class_id
-	    				 AND m.member_race_id =  a.race_id and a.game_id = m.game_id
-	    				 and m.member_id = i.member_id and i.raid_id = " . (int) $raid_id,
+				'WHERE'     =>  " m.member_id = i.member_id ", 
 				'ORDER_BY'  => $order ,
 		);
 		
+		if($raid_id > 0)
+		{
+			$sql_array['WHERE'] .= " AND i.raid_id = " . $raid_id ." ";
+		}
+
 		if($member_id > 0)
 		{
 			$sql_array['WHERE'] .= " AND m.member_id = '" . $member_id ."'";
 		}
 		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query ( $sql );
-	
-		$lootlist = array ();
-		while ( $row = $db->sql_fetchrow ( $result ) )
+		if($all)
 		{
-			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
-	
-			$this->lootdetails[$row['item_id']]['item_id'] = $row['item_id'];
-			$this->lootdetails[$row['item_id']]['item_name'] = $row['item_name'];
-			$this->lootdetails[$row['item_id']]['gameid'] = $row['item_gameid'];
-			$this->lootdetails[$row['item_id']]['member_id'] = $row['member_id'];
-			$this->lootdetails[$row['item_id']]['colorcode'] = $row['colorcode'];
-			$this->lootdetails[$row['item_id']]['imagename'] = $row['imagename'];
-			$this->lootdetails[$row['item_id']]['raceimage'] = $race_image;
-			$this->lootdetails[$row['item_id']]['member_name'] = $row['member_name'];
-			$this->lootdetails[$row['item_id']]['item_value'] = $row['item_value'];
-			$this->lootdetails[$row['item_id']]['item_total'] = $row['item_total'];
-			$this->lootdetails[$row['item_id']]['item_zs'] = $row['item_zs'];
-			$this->lootdetails[$row['item_id']]['item_decay'] = $row['item_decay'];
+			return  $db->sql_query ($sql);
 		}
-	
-		return $this->lootdetails;
-	
+		else
+		{
+			return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_ilimit'], $istart ); 
+		}
+		
 	}
 	
 	

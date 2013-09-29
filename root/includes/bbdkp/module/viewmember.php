@@ -29,6 +29,11 @@ if (!class_exists('\bbdkp\Points'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Points/Points.$phpEx");
 }
+if (!class_exists('\bbdkp\Loot'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/loot/Loot.$phpEx");
+}
+
 $member_id = request_var(URI_NAMEID, 0);
 $member = new \bbdkp\Members($member_id);
 $points = new \bbdkp\Points($member_id, $this->dkpsys_id);
@@ -77,26 +82,12 @@ while ( $raid = $db->sql_fetchrow($raids_result))
 
 /** loot history **/
 $istart = request_var('istart', 0);
-
-$sql_array = array(
-		'SELECT'	=>	'i.item_id, i.item_name, i.item_value, i.item_date, i.raid_id, i.item_gameid, e.event_name ',
-		'FROM'		=> array(
-				EVENTS_TABLE	=> 'e',
-				RAID_ITEMS_TABLE	=> 'i',
-				RAIDS_TABLE		=> 'r',
-		),
-
-		'WHERE'		=>	' e.event_id = r.event_id
-			AND e.event_dkpid=' .	 (int) $dkp_id . '
-			AND r.raid_id = i.raid_id
-			AND i.member_id = ' . $member_id,
-		'ORDER_BY'	=> 'i.raid_id DESC, i.item_date DESC',
-);
-$sql = $db->sql_build_query('SELECT', $sql_array);
+$loot = new \bbdkp\Loot();
+$lootdetails = $loot->GetAllLoot(0, $member_id, ' i.item_date', false, $istart); 
 
 //calculate first window
 $current_spent = 0;
-if($istart > 0)
+if($istart > 0) 
 {
 	if (!$items_result = $db->sql_query_limit($sql, $istart , 0))
 	{
