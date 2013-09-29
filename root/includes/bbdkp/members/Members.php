@@ -67,7 +67,7 @@ class Members extends \bbdkp\Admin
 	 * @var string
 	 */
 	protected $member_name;
-
+	
 	/**
 	 * status (0 or 1)
 	 * @var bool
@@ -1110,11 +1110,8 @@ class Members extends \bbdkp\Admin
 						SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
 						WHERE member_id = ' . $member_id;
 				$db->sql_query($sql);
-
-
 			}
 		}
-
 	}
 
 	/**

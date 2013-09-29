@@ -339,7 +339,7 @@ $lang = array_merge($lang, array(
 'EPNET'	=> 'EP net',
 'GP'	=> 'GP',
 'GPNET'	=> 'GP net',
-'PR'	=> 'Priority',
+'PR'	=> 'PR',
 
 // Page Foot Counts
 
