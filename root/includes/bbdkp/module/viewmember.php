@@ -83,48 +83,20 @@ while ( $raid = $db->sql_fetchrow($raids_result))
 /** loot history **/
 $istart = request_var('istart', 0);
 $loot = new \bbdkp\Loot();
-$lootdetails = $loot->GetAllLoot(0, $member_id, ' i.item_date', false, $istart); 
-
-//calculate first window
-$current_spent = 0;
-if($istart > 0) 
+$current_spent = 0; 
+$lootdetails = $loot->GetAllLoot( ' i.item_date', 0, $istart, $member_id, false ); 
+while ( $item = $db->sql_fetchrow($lootdetails) )
 {
-	if (!$items_result = $db->sql_query_limit($sql, $istart , 0))
-	{
-		trigger_error ($user->lang['MNOTFOUND']);
-	}
-	$current_spent = $member['member_spent'];
-
-	while ( $item = $db->sql_fetchrow($items_result))
-	{
-		$current_spent = $current_spent - $item['item_value'];
-	}
-}
-else
-{
-	$current_spent = $member['member_spent'];
-}
-
-$itemlines = $config['bbdkp_user_ilimit'];
-$items_result = $db->sql_query_limit($sql, $itemlines, $istart);
-if ( !$items_result)
-{
-	trigger_error ($user->lang['MNOTFOUND']);
-}
-
-while ( $item = $db->sql_fetchrow($items_result) )
-{
-	if ($Admin->bbtips == true)
+	if ($this->bbtips == true)
 	{
 		if ($item['item_gameid'] == 'wow' )
 		{
-			$item_name = '<strong>' . $bbtips->parse('[itemdkp]' . $item['item_gameid']	 . '[/itemdkp]') . '</strong>' ;
+			$item_name = '<strong>' . $this->bbtips->parse('[itemdkp]' . $item['item_gameid']	 . '[/itemdkp]') . '</strong>' ;
 		}
 		else
 		{
-			$item_name = '<strong>' . $bbtips->parse ( '[itemdkp]' . $item ['item_name'] . '[/itemdkp]' . '</strong>'  );
+			$item_name = '<strong>' . $this->bbtips->parse ( '[itemdkp]' . $item ['item_name'] . '[/itemdkp]' . '</strong>'  );
 		}
-
 	}
 	else
 	{
@@ -132,7 +104,7 @@ while ( $item = $db->sql_fetchrow($items_result) )
 	}
 
 	$template->assign_block_vars('items_row', array(
-			'DATE'			=> ( !empty($item['item_date']) ) ? date($config['bbdkp_date_format'], $item['item_date']) : '&nbsp;',
+			'DATE'			=> ( !empty($item['item_date']) ) ? date($config['bbdkp_date_format'], $item['item_date']) : $item['item_date'] . '&nbsp;',
 			'U_VIEW_ITEM'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewitem&amp;' . URI_ITEM . '=' . $item['item_id']),
 			'U_VIEW_RAID'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;' . URI_RAID . '=' . $item['raid_id']),
 			'NAME'			=> $item_name,
@@ -142,7 +114,7 @@ while ( $item = $db->sql_fetchrow($items_result) )
 	);
 	$current_spent -= $item['item_value'];
 }
-$db->sql_freeresult($items_result);
+$db->sql_freeresult($lootdetails);
 
 $sql_array = array(
 		'SELECT'	=>	'count(*) as itemcount	',
@@ -153,7 +125,7 @@ $sql_array = array(
 		),
 
 		'WHERE'		=>	" e.event_id = r.event_id
-		AND e.event_dkpid=" . (int) $dkp_id . '
+		AND e.event_dkpid=" . (int) $this->dkpsys_id . '
 		AND r.raid_id = i.raid_id
 		AND i.member_id  = ' . $member_id,
 );
@@ -162,23 +134,22 @@ $result6 = $db->sql_query($sql6);
 $total_purchased_items = $db->sql_fetchfield('itemcount');
 $db->sql_freeresult($result6);
 
-$raidpag  = $this->generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart=' .$istart),
-$total_attended_raids, $raidlines, $rstart, 1, 'rstart');
+$raidpag  = $this->generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . 
+URI_DKPSYS.'='.$this->dkpsys_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart=' .$istart),
+$points->raidcount, $config ['bbdkp_user_rlimit'], $rstart, 1, 'rstart');
 
-$itpag =   $this->generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx" ,'page=viewmember&amp;'.  URI_DKPSYS.'='.$dkp_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;rstart='.$rstart ),
-$total_purchased_items,	 $itemlines, $istart, 1 ,'istart');
+$itpag =   $this->generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx" ,'page=viewmember&amp;'.  URI_DKPSYS.'='.$this->dkpsys_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;rstart='.$rstart ),
+$total_purchased_items,	  $config ['bbdkp_user_ilimit'], $istart, 1 ,'istart');
 
 $template->assign_vars(array(
 		'RAID_PAGINATION'	  => $raidpag,
 		'RSTART'			  => $rstart,
-		'RAID_FOOTCOUNT'	  => sprintf($user->lang['VIEWMEMBER_RAID_FOOTCOUNT'], $total_attended_raids, $raidlines),
+		'RAID_FOOTCOUNT'	  => sprintf($user->lang['VIEWMEMBER_RAID_FOOTCOUNT'], $points->raidcount, $config ['bbdkp_user_rlimit']),
 		'ITEM_PAGINATION'	  => $itpag,
 		'ISTART'			  => $istart,
-		'ITEM_FOOTCOUNT'	  => sprintf($user->lang['VIEWMEMBER_ITEM_FOOTCOUNT'], $total_purchased_items, $itemlines),
+		'ITEM_FOOTCOUNT'	  => sprintf($user->lang['VIEWMEMBER_ITEM_FOOTCOUNT'], $total_purchased_items, $config ['bbdkp_user_ilimit']),
 		'ITEMS'				  => ( is_null($total_purchased_items) ) ? false : true,
 ));
-
-
 
 //output
 $url = append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id); 
