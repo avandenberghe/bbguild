@@ -34,6 +34,10 @@ if (!class_exists('\bbdkp\Loot'))
 	require("{$phpbb_root_path}includes/bbdkp/loot/Loot.$phpEx");
 }
 
+if ( !isset($_GET[URI_NAMEID]) )
+{
+	trigger_error ($user->lang['MNOTFOUND']);
+}
 $member_id = request_var(URI_NAMEID, 0);
 $member = new \bbdkp\Members($member_id);
 $points = new \bbdkp\Points($member_id, $this->dkpsys_id);

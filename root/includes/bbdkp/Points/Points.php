@@ -291,7 +291,7 @@ class Points
 					MEMBER_DKP_TABLE 	=> 'm', 
 					DKPSYS_TABLE		=> 'd',
 				  );  
-		$sql_array['WHERE'] = " d.dkpsys_status != 'N' and m.member_id = " . (int) $this->member_id; 
+		$sql_array['WHERE'] = " d.dkpsys_id=m.member_dkpid AND d.dkpsys_status != 'N' and m.member_id = " . (int) $this->member_id; 
 		if ($this->dkpid > 0)
 		{
 			$sql_array['SELECT'] .= ', m.member_dkpid '; 

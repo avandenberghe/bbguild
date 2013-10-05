@@ -15,25 +15,26 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
-
+if (!class_exists('\bbdkp\Raids'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Raids/Raids.$phpEx");
+}
 
 if ( !isset($_GET[URI_RAID]) )
 {
-	trigger_error ($user->lang['MNOTFOUND']);
+	trigger_error ($user->lang['RNOTFOUND']);
 }
 $raid_id = request_var(URI_RAID,0);
 
-/********************************
- * page info
- ********************************/
+ // breadcrumbs
 $navlinks_array = array(
 	array(
 	'DKPPAGE'		=> $user->lang['MENU_RAIDS'],
-	'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listraids'),
+	'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listraids&amp;guild_id=' . $this->guild_id),
 	),
 	array(
 	'DKPPAGE'		=> $user->lang['MENU_VIEWRAID'],
-	'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listraids&amp;' . URI_RAID . '=' . $raid_id),
+	'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listraids&amp;' . URI_RAID . '=' . $raid_id . '&amp;guild_id=' . $this->guild_id),
 	),
 );
 
@@ -50,77 +51,21 @@ foreach($navlinks_array as $name)
  ********************************/
 
 /*** get general raid info  ***/
-$sql_array = array (
-	'SELECT' => ' d.dkpsys_name, e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_imagename,
-					r.raid_id, r.raid_start, r.raid_end, r.raid_note,
-					r.raid_added_by, r.raid_updated_by ',
-	'FROM' => array (
-		DKPSYS_TABLE 		=> 'd' ,
-		RAIDS_TABLE 		=> 'r' ,
-		EVENTS_TABLE 		=> 'e',
-		),
-	'WHERE' => " d.dkpsys_id = e.event_dkpid and r.event_id = e.event_id and r.raid_id=" . ( int ) $raid_id,
-);
+$raid = new \bbdkp\Raids($raid_id);
 
-$sql = $db->sql_build_query('SELECT', $sql_array);
-$result = $db->sql_query ($sql);
-while ( $row = $db->sql_fetchrow ( $result ) )
-{
-	$raid = array (
-		'dkpsys_name' 		=> $row['dkpsys_name'],
-		'event_dkpid' 		=> $row['event_dkpid'],
-		'event_id' 			=> $row['event_id'],
-		'event_name' 		=> $row['event_name'],
-		'event_value' 		=> $row['event_value'],
-		'event_imagename' 	=> $row['event_imagename'],
-		'raid_start' 		=> $row['raid_start'],
-		'raid_end' 			=> $row['raid_end'],
-		'raid_note' 		=> $row['raid_note'],
-		'raid_added_by' 	=> $row['raid_added_by'],
-		'raid_updated_by' 	=> $row['raid_updated_by'] );
-}
-$db->sql_freeresult ($result);
 
-$sql = $db->sql_build_query('SELECT', $sql_array);
-if ( !($raid_result = $db->sql_query($sql)) )
-{
-	trigger_error ($user->lang['MNOTFOUND']);
-}
-
-if ( !$raid = $db->sql_fetchrow($raid_result) )
-{
-	trigger_error ($user->lang['MNOTFOUND']);
-}
-$db->sql_freeresult($raid_result);
-
-$dkpid = (int) $raid['event_dkpid'];
-
-// Calculate the difference in hours between the 2 timestamps
-$hours = intval(($raid['raid_end'] - $raid['raid_start'])/3600) ;
-// add hours to duration
-$duration = str_pad($hours, 2, "0", STR_PAD_LEFT). ":";
-// get number of minutes
-$minutes = intval(($raid['raid_end'] - $raid['raid_start'] / 60) % 60);
-// add minutes
-$duration .= str_pad($minutes, 2, "0", STR_PAD_LEFT). ":";
-// get seconds past minute
-$seconds = intval( ($raid['raid_end'] - $raid['raid_start']) % 60);
-// add seconds to duration
-$duration .= str_pad($seconds, 2, "0", STR_PAD_LEFT);
-
-$raid_id = (int) $raid['raid_id'];
-$title =  sprintf($user->lang['RAID_ON'], $raid['event_name'], date('F j, Y', $raid['raid_start']));
+$title =  sprintf($user->lang['RAID_ON'], $raid->event_name, date('F j, Y', $raid->raid_start));
 
 $template->assign_vars(array(
-	'L_RAID_ON' 		  => sprintf($user->lang['RAID_ON'], $raid['event_name'], date('F j, Y', $raid['raid_start'])),
-	'RAIDSTART' 		  => date('H:i:s', $raid['raid_start']),
-	'RAIDEND' 		  	  => (!empty($raid['raid_end']) ) ? date('H:i:s', $raid['raid_end']): ' '  ,
-	'DURATION' 		  	  => $duration,
-	'RAID_ADDED_BY'		  => sprintf($user->lang['ADDED_BY'], 	(!empty($raid['raid_added_by']) ) ? $raid['raid_added_by'] : 'N/A'),
-	'RAID_UPDATED_BY'	  => ($raid['raid_updated_by'] != ' ') ? sprintf ( $user->lang ['UPDATED_BY'], $raid['raid_updated_by']) : ' ',
-	'RAID_NOTE'			  => ( !empty($raid['raid_note']) ) ? $raid['raid_note'] : '&nbsp;',
-	'IMAGEPATH' 			=> $phpbb_root_path . "images/event_images/" . $raid['event_imagename'] . ".png",
-		'S_EVENT_IMAGE_EXISTS' 	=> (strlen($raid['event_imagename']) > 1) ? true : false,
+	'L_RAID_ON' 		  => sprintf($user->lang['RAID_ON'], $raid->event_name, date('F j, Y', $raid->raid_start)),
+	'RAIDSTART' 		  => date('H:i:s', $raid->raid_start),
+	'RAIDEND' 		  	  => (!empty($raid->raid_end) ) ? date('H:i:s', $raid->raid_end): ' '  ,
+	'DURATION' 		  	  => $raid->raid_duration,
+	'RAID_ADDED_BY'		  => sprintf($user->lang['ADDED_BY'], 	(!empty($raid->raid_added_by) ) ? $raid->raid_added_by : 'N/A'),
+	'RAID_UPDATED_BY'	  => ($raid->raid_updated_by != ' ') ? sprintf ( $user->lang ['UPDATED_BY'], $raid->raid_updated_by) : ' ',
+	'RAID_NOTE'			  => ( !empty($raid->raid_note) ) ? $raid->raid_note : '&nbsp;',
+	'IMAGEPATH' 			=> $phpbb_root_path . "images/event_images/" . $raid->event_imagename . ".png",
+	'S_EVENT_IMAGE_EXISTS' 	=> (strlen($raid->event_imagename) > 1) ? true : false,
 	'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false,
 	'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
 	'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,

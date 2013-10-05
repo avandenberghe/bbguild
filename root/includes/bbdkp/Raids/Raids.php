@@ -46,6 +46,7 @@ class Raids extends \bbdkp\Admin
 	private $event_value;
 	private $raid_start;
 	private $raid_end;
+	private $raid_duration;
 	private $raid_note;
 	private $raid_added_by;
 	private $raid_updated_by;
@@ -125,7 +126,7 @@ class Raids extends \bbdkp\Admin
 
 
 	/**
-	 * inserts a raid postfacto
+	 * inserts a raid 
 	 */
 	public function Create()
 	{
@@ -183,8 +184,10 @@ class Raids extends \bbdkp\Admin
 						RAIDS_TABLE 		=> 'r' ,
 						EVENTS_TABLE 		=> 'e',
 				),
-				'WHERE' => " d.dkpsys_id = e.event_dkpid and r.event_id = e.event_id and d.dkpsys_status != 'N' 
-				r.raid_id=" . (int) $this->raid_id,
+				'WHERE' => " d.dkpsys_id = e.event_dkpid 
+				AND r.event_id = e.event_id 
+				AND d.dkpsys_status != 'N' 
+				AND r.raid_id=" . (int) $this->raid_id,
 		);
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -204,12 +207,29 @@ class Raids extends \bbdkp\Admin
 			$this->raid_added_by 	= $row['raid_added_by'];
 			$this->raid_updated_by 	= $row['raid_updated_by'];
 		}
+		
+		// Calculate the difference in hours between the 2 timestamps
+		$hours = intval(($this->raid_end - $this->raid_start)/3600) ;
+		// get number of minutes
+		$minutes = intval(($this->raid_end - $this->raid_start / 60) % 60);
+		// get seconds past minute
+		$seconds = intval( ($this->raid_end - $this->raid_start) % 60);
+
+		// add hours to duration
+		$duration = str_pad($hours, 2, "0", STR_PAD_LEFT). ":";
+		// add minutes
+		$duration .= str_pad($minutes, 2, "0", STR_PAD_LEFT). ":";
+		// add seconds to duration
+		$duration .= str_pad($seconds, 2, "0", STR_PAD_LEFT);
+
+		$this->raid_duration = $duration; 
+		
 		$db->sql_freeresult ($result);
 		unset($row);
 	}
 
 	/**
-	 * raid list used by acp and viewmember.php
+	 * raid list used by acp, viewmember and listraids
 	 * @param string $order
 	 * @param int $dkpsys_id
 	 * @param int $start
@@ -234,7 +254,8 @@ class Raids extends \bbdkp\Admin
 				SUM(ra.time_bonus) AS time_value,
 				SUM(ra.zerosum_bonus) AS zs_value, 
 				SUM(ra.raid_decay) AS raiddecay,
-				SUM(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay) AS net_earned ',
+				SUM(ra.raid_value + ra.time_bonus + ra.zerosum_bonus - ra.raid_decay) AS net_earned ,
+				COUNT(ra.member_id) as attendees ',
 			'FROM' => array (
 					DKPSYS_TABLE 		=> 'd' ,
 					EVENTS_TABLE 		=> 'e',
@@ -273,7 +294,7 @@ class Raids extends \bbdkp\Admin
 	}
 	
 	/**
-	* returns raid attendance percentage for a range member/pool
+	* returns raid count, or attendance percentage for a range member/pool
 	*  @param $dkpsys_id = int
 	*  @param $days = int
 	*  @param $member_id = int
@@ -338,14 +359,15 @@ class Raids extends \bbdkp\Admin
 	{
 		global $db;
 		$sql_array = array(
-			'SELECT'    => 	' COUNT(*) as raidcount  ',
+			'SELECT'    => 	' r.raid_id  ',
 			'FROM'      => array(
 				DKPSYS_TABLE 			=> 'd' ,
 				EVENTS_TABLE			=> 'e',
 				RAIDS_TABLE 			=> 'r',
 				RAID_DETAIL_TABLE	    => 'ra',
 			),
-			'WHERE'		=> " d.dkpsys_id = e.event_dkpid  and r.event_id = e.event_id AND ra.raid_id = r.raid_id  AND d.dkpsys_status != 'N' "
+			'WHERE'		=> " d.dkpsys_id = e.event_dkpid  and r.event_id = e.event_id AND ra.raid_id = r.raid_id  AND d.dkpsys_status != 'N' ", 
+			'GROUP_BY' => 'r.raid_id '
 		);
 
 		if ($member_id > 0)
@@ -366,8 +388,11 @@ class Raids extends \bbdkp\Admin
 		{
 			$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkpsys_id;
 		}
+		
+		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-
+		$sql = "SELECT COUNT(a.raid_id) as raidcount FROM (" . $sql ." ) a "; 
+		
 		$result = $db->sql_query($sql);
 		$raid_count = (int) $db->sql_fetchfield('raidcount');
 		$db->sql_freeresult($result);
