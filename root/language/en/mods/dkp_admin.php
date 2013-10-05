@@ -283,7 +283,9 @@ $lang = array_merge($lang, array(
 'ACP_ADDDKPSYS_EXPLAIN' => 'Here you can add or change the name/status of a DKP Pool. Before setting up Events you need to make a DKP Pool.',
 'ACP_LISTDKPSYS_EXPLAIN' => 'List DKP Pools; a DKP pool combines a series of Events, Raids and Items. This way you can manage multiple DKP Tiers separately. ',
 'ACP_ADDEVENT_EXPLAIN' => 'Here you can add / change event information. DKP Pools must be set up first.',
-'ACP_LISTEVENTS_EXPLAIN' => 'List of Events. The preset values will be used as standard Raidvalue for any raid on that event. To create events you can choose a zonename from the zonelist. You can also import Events with the Raidtracker Eventtrigger import tool.',
+'ACP_LISTEVENTS_EXPLAIN' => 'List of Events. The preset values will be used as standard Raidvalue for any raid on that event. 
+		To create events you can choose a zonename from the zonelist. You can also import Events with the Raidtracker Eventtrigger import tool.
+		<em>Only raids belonging to active events are shown on the loot or Raid list. It is recommended to only deactivate events that are fully decayed or have no raids.</em>',
 'ACP_ADDIADJ_EXPLAIN'=> 'Here you can add / change individual adjustments. ',
 'ACP_LISTIADJ_EXPLAIN' => 'List Individual Adjustments',
 'ACP_ADDITEM_EXPLAIN' => 'Here you can add / change item information.',
@@ -590,7 +592,7 @@ $lang = array_merge($lang, array(
 'ERROR_NOGAMES'				=>  'Error : No Games Installed',
 'ERROR_NOFACTION'			=>  'Error : No Factions found for this game',
 'INFO_NOLOGS'				=>  'Information: No bbDKP logs found',
-'ERROR_NOPOOLS'    			=>  'No Pools defined, cannot add Events, Raids',
+'ERROR_NOPOOLS'    			=>  'No Pools defined or all inactive, cannot add Events, Raids, loot or adjustments',
 'WARNING_NOEVENTSFOUND'   =>  'No Events found.',
 'FORM_ERROR'				=>  'Form validation Error : Check input <br />',
 'ERROR_RAID_NOATTENDEES'    =>  'Error : old raid has no attendees. Cannot remove value of old raid attendees. STOP ',

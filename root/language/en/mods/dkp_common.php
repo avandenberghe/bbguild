@@ -241,6 +241,7 @@ $lang = array_merge($lang, array(
 'ADJDECAY' => 'Adjustment decay', 
 'DECAY' => 'Decay',
 'DROPS' => 'Drops',
+'EVENTNOTE' => 'Note: only lists attended raids or obtained loot from active events.', 
 'EVENT' => 'Event',
 'EVENTNAME' => 'Event Name',
 'EVENTS' => 'Events',

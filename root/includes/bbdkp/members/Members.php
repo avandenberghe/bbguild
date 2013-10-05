@@ -390,7 +390,7 @@ class Members extends \bbdkp\Admin
 			$this->phpbb_user_id = '';
 			$this->member_status = 0;
 			$this->member_achiev = 0;
-			$this->colorcode = "#000000";
+			$this->colorcode = "#8899aa";
 			$race_image = '';
 			$this->race_image = '';
 			$this->class_image = '';

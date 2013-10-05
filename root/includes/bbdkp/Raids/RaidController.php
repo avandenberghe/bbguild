@@ -115,7 +115,7 @@ class RaidController  extends \bbdkp\Admin
 		{
 			trigger_error ( $user->lang['ERROR_NOEVENTSDEFINED'], E_USER_WARNING );
 		}
-		$events->listevents(0, 'event_name', $this->dkpid);
+		$events->listevents(0, 'event_name', $this->dkpid, false);
 		$this->eventinfo = $events->events;  
 		
 		$members = new \bbdkp\Members();
@@ -129,12 +129,13 @@ class RaidController  extends \bbdkp\Admin
 	}
 	
 	/**
-	 * fetch the raid and pass it t the view
+	 * fetch the raid and pass it to the view
 	 * @param unknown_type $raid_id
 	 * @return \bbdkp\Raids
 	 */
 	public function displayraid($raid_id)
 	{
+		global $db; 
 		$this->raid = new \bbdkp\Raids($raid_id);
 		
 		$events = new \bbdkp\Events();
@@ -168,9 +169,8 @@ class RaidController  extends \bbdkp\Admin
 		);
 		$this->lootlistorder = $this->switch_order ($isort_order, 'ui');
 		$lootlist = new \bbdkp\Loot($this->raid->raid_id); 
-		$this->lootlist = $lootlist->get($this->raid->raid_id, $this->lootlistorder['sql']);
-		
-		
+		$this->lootlist = $db->sql_fetchrowset($lootlist->GetAllLoot($this->lootlistorder['sql'], 0, $this->raid->raid_id)); 
+		$a = 1;
 	}
 
 	/**
@@ -409,7 +409,7 @@ class RaidController  extends \bbdkp\Admin
 		$this->raidlistorder = $this->switch_order ( $sort_order ); 
 		
 		$raids = new \bbdkp\Raids();
-		$raids_result = $raids->getRaids($this->raidlistorder['sql'], $dkpsys_id, $start, $member_id); 
+		$raids_result = $raids->getRaids($this->raidlistorder['sql'], $dkpsys_id, 0, $start, $member_id); 
 		if($member_id>0)
 		{
 			$this->totalraidcount = $raids->raidcount($dkpsys_id, $days, $member_id, 0, true); 

@@ -183,7 +183,8 @@ class Raids extends \bbdkp\Admin
 						RAIDS_TABLE 		=> 'r' ,
 						EVENTS_TABLE 		=> 'e',
 				),
-				'WHERE' => " d.dkpsys_id = e.event_dkpid and r.event_id = e.event_id and r.raid_id=" . (int) $this->raid_id,
+				'WHERE' => " d.dkpsys_id = e.event_dkpid and r.event_id = e.event_id and d.dkpsys_status != 'N' 
+				r.raid_id=" . (int) $this->raid_id,
 		);
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -214,7 +215,7 @@ class Raids extends \bbdkp\Admin
 	 * @param int $start
 	 * @param int $member_id 
 	 */
-	public function getRaids($order = 'r.raid_start DESC', $dkpsys_id=0, $start=0, $member_id=0)
+	public function getRaids($order = 'r.raid_start DESC', $dkpsys_id=0, $raid_id = 0, $start=0, $member_id=0)
 	{
 		global $config, $db;
 
@@ -222,6 +223,7 @@ class Raids extends \bbdkp\Admin
 			'SELECT' => ' 
 				e.event_dkpid, 
 				e.event_name, 
+				e.event_id, 
 				r.raid_id,  
 				r.raid_start, 
 				r.raid_end, 
@@ -234,23 +236,35 @@ class Raids extends \bbdkp\Admin
 				SUM(ra.raid_decay) AS raiddecay,
 				SUM(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay) AS net_earned ',
 			'FROM' => array (
+					DKPSYS_TABLE 		=> 'd' ,
 					EVENTS_TABLE 		=> 'e',
 					RAIDS_TABLE 		=> 'r' ,
 					RAID_DETAIL_TABLE	=> 'ra' ,
 			),
-			'WHERE' => "  ra.raid_id = r.raid_id 
-						AND e.event_status = 1 
-						AND r.event_id = e.event_id 
-						AND e.event_dkpid = " . (int) $dkpsys_id,
-			'GROUP_BY' => 'e.event_dkpid, e.event_name,
+			'WHERE' => " d.dkpsys_id = e.event_dkpid 
+						 AND ra.raid_id = r.raid_id 
+						 AND e.event_status = 1 
+						 AND r.event_id = e.event_id
+						 AND d.dkpsys_status != 'N' " ,
+			'GROUP_BY' => '	e.event_id, e.event_dkpid, e.event_name,
 						r.raid_id,  r.raid_start, r.raid_end, r.raid_note,
 						r.raid_added_by, r.raid_updated_by',
 			'ORDER_BY' => $order,
 		);
 
+		if($dkpsys_id > 0)
+		{
+			$sql_array['WHERE'] .= ' AND e.event_dkpid=' . (int) $dkpsys_id;
+		}
+		
+		if($raid_id > 0)
+		{
+			$sql_array['WHERE'] .= " AND r.raid_id = " . (int) $raid_id ." ";
+		}
+		
 		if($member_id > 0)
 		{
-			$sql_array['WHERE'] .= ' AND ra.member_id=' . $member_id; 
+			$sql_array['WHERE'] .= ' AND ra.member_id=' . (int) $member_id; 
 		}
 					
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -326,11 +340,12 @@ class Raids extends \bbdkp\Admin
 		$sql_array = array(
 			'SELECT'    => 	' COUNT(*) as raidcount  ',
 			'FROM'      => array(
+				DKPSYS_TABLE 			=> 'd' ,
 				EVENTS_TABLE			=> 'e',
 				RAIDS_TABLE 			=> 'r',
 				RAID_DETAIL_TABLE	    => 'ra',
 			),
-			'WHERE'		=> 'r.event_id = e.event_id AND ra.raid_id = r.raid_id '
+			'WHERE'		=> " d.dkpsys_id = e.event_dkpid  and r.event_id = e.event_id AND ra.raid_id = r.raid_id  AND d.dkpsys_status != 'N' "
 		);
 
 		if ($member_id > 0)
@@ -447,10 +462,11 @@ class Raids extends \bbdkp\Admin
 				FROM
 					" . MEMBER_LIST_TABLE . " l,
 					" . MEMBER_DKP_TABLE ." d,
+					" . DKPSYS_TABLE . " s ,
 					" . RAID_DETAIL_TABLE . " rd,
 					" . EVENTS_TABLE . " ev,
 					" . RAIDS_TABLE . " r
-				WHERE rd.member_id = d.member_id
+				WHERE s.dkpsys_id = ev.event_dkpid and s.dkpsys_status != 'N' and rd.member_id = d.member_id
 				AND ev.event_dkpid = d.member_dkpid";
 		if ($query_by_pool)
 		{
@@ -485,10 +501,11 @@ class Raids extends \bbdkp\Admin
 					FROM
 						" . MEMBER_LIST_TABLE . " l,
 						" . MEMBER_DKP_TABLE ." d,
+						" . DKPSYS_TABLE . " s ,
 						" . RAID_DETAIL_TABLE . " rd,
 						" . EVENTS_TABLE . " ev,
 						" . RAIDS_TABLE . " r
-					WHERE
+					WHERE s.dkpsys_id = ev.event_dkpid and s.dkpsys_status != 'N' and
 						rd.member_id = d.member_id
 					AND ev.event_dkpid = d.member_dkpid ";
 		if ($query_by_pool)
@@ -525,10 +542,11 @@ class Raids extends \bbdkp\Admin
 				FROM
 					" . MEMBER_LIST_TABLE . " l,
 					" . MEMBER_DKP_TABLE ." d,
+					" . DKPSYS_TABLE . " s ,
 					" . RAID_DETAIL_TABLE . " rd,
 					" . EVENTS_TABLE . " ev,
 					" . RAIDS_TABLE . " r
-				WHERE
+				WHERE s.dkpsys_id = ev.event_dkpid and s.dkpsys_status != 'N' and
 					rd.member_id = d.member_id
 				AND ev.event_dkpid = d.member_dkpid";
 		if ($query_by_pool)
@@ -564,10 +582,11 @@ class Raids extends \bbdkp\Admin
 				FROM
 					" . MEMBER_LIST_TABLE . " l,
 					" . MEMBER_DKP_TABLE ." d,
+					" . DKPSYS_TABLE . " s ,
 					" . RAID_DETAIL_TABLE . " rd,
 					" . EVENTS_TABLE . " ev,
 					" . RAIDS_TABLE . " r
-				WHERE
+				WHERE s.dkpsys_id = ev.event_dkpid and s.dkpsys_status != 'N' and
 					rd.member_id = d.member_id
 				AND ev.event_dkpid = d.member_dkpid";
 		if ($query_by_pool)
@@ -699,15 +718,16 @@ class Raids extends \bbdkp\Admin
 		$sql_array = array (
 				'SELECT' => ' count(r.raid_id) AS raidcount ',
 				'FROM' => array (
+						DKPSYS_TABLE =>  's' ,
 						EVENTS_TABLE => 'e',
 						RAIDS_TABLE => 'r',
 						RAID_DETAIL_TABLE => 'd',
 						MEMBER_LIST_TABLE => 'l'
 				),
-				'WHERE' => ' e.event_id = r.event_id
+				'WHERE' => " s.dkpsys_id = e.event_dkpid and s.dkpsys_status != 'N' and e.event_id = r.event_id
 						AND d.raid_id = r.raid_id
 						AND l.member_id = d.member_id
-						AND l.member_guild_id = ' . $guild_id,
+						AND l.member_guild_id = " . $guild_id,
 				'GROUP_BY' => 'r.raid_id'
 		);
 	

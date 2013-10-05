@@ -99,12 +99,21 @@ class LootController  extends \bbdkp\Admin
 
 		$raid = new \bbdkp\Raids($raid_id);
 
+		
 		$this->loot->item_value = $item_value;
 		$this->loot->item_name = $item_name;
 		$this->loot->dkpid = $raid->event_dkpid;
-		$this->loot->item_date = $loottime;
+		
+		if($loottime == 0)
+		{
+			$this->loot->item_date = $raid->raid_start;
+		}
+		else
+		{
+			$this->loot->item_date = $loottime;
+		}
 
-		$group_key = $this->gen_group_key ( $this->loot->item_name, $loottime, $raid_id + rand(10,100) );
+		$group_key = $this->gen_group_key ( $this->loot->item_name, $this->loot->item_date, $raid_id + rand(10,100) );
 
 		$decayarray = array();
 		$decayarray[0] = 0;
@@ -114,14 +123,14 @@ class LootController  extends \bbdkp\Admin
 		{
 			//diff between now and the raidtime
 			$now = getdate();
-			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $loottime;
+			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $this->loot->item_date;
 			$PointsController = new \bbdkp\PointsController();
 			$decayarray = $PointsController->decay($this->loot->item_value,$timediff,2 ); 
 		}
 
 		//
 		// Add item to selected members
-		$this->add_new_item_db ($item_name, $item_buyers, $group_key, $item_value, $raid_id, $loottime, $itemgameid, $decayarray[0]);
+		$this->add_new_item_db ($this->loot->item_name, $item_buyers, $group_key, $this->loot->item_value, $this->loot->raid_id, $this->loot->item_date, $itemgameid, $decayarray[0]);
 
 		$buyernames = '';
 		foreach($item_buyers as $member_id)
@@ -133,7 +142,6 @@ class LootController  extends \bbdkp\Admin
 
 		//
 		// Logging
-		//@todo fix logging
 		$log_action = array (
 		'header' 		=> 'L_ACTION_ITEM_ADDED',
 		'L_NAME' 		=> $item_name,

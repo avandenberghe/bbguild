@@ -56,12 +56,12 @@ class Adjust extends \bbdkp\Admin
 	function __construct($dkpsys = 0)
 	{
 		global $db;
-		parent::__construct(); //to load admin
+		parent::__construct(); 
 		
-		// get dkp pools
+		// get dkp pools that are active. 
 		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
-            FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . " b
-			WHERE a.dkpsys_id = b.event_dkpid AND b.event_status = 1 and  dkpsys_status = 'Y' ";
+            FROM ' . DKPSYS_TABLE . " a  
+			WHERE a.dkpsys_status = 'Y' ";
 		$result = $db->sql_query($sql);
 		$this->dkpsys = array();
 		while ($row = $db->sql_fetchrow($result) )
@@ -76,7 +76,6 @@ class Adjust extends \bbdkp\Admin
 	
 	/**
 	 * add a new dkp adjustment
-	 *
 	 */
 	public function add()
 	{

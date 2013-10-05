@@ -245,7 +245,7 @@ class Loot
 	 * @param string $order
 	 * @return array
 	 */
-	public function GetAllLoot($order = ' i.item_date', $raid_id = 0, $istart = 0, $member_id = 0, $all=true)
+	public function GetAllLoot($order = ' i.item_date', $dkpsys_id=0, $raid_id = 0, $istart = 0, $member_id = 0)
 	{
 		global $config, $db;
 	
@@ -259,31 +259,31 @@ class Loot
 						RAIDS_TABLE 		=> 'r' ,
 						EVENTS_TABLE 		=> 'e', 
 				),
-				'WHERE'     =>  " m.member_id = i.member_id 
+				'WHERE'     =>  " e.event_status = 1 
+								  AND m.member_id = i.member_id 
 								  AND i.raid_id = r.raid_id
 								  AND r.event_id = e.event_id ", 
 				'ORDER_BY'  => $order ,
 		);
 		
+
+		if($dkpsys_id > 0)
+		{
+			$sql_array['WHERE'] .= ' AND e.event_dkpid=' . (int) $dkpsys_id;
+		}
+		
 		if($raid_id > 0)
 		{
-			$sql_array['WHERE'] .= " AND i.raid_id = " . $raid_id ." ";
+			$sql_array['WHERE'] .= " AND i.raid_id = " . (int) $raid_id ." ";
 		}
 
 		if($member_id > 0)
 		{
-			$sql_array['WHERE'] .= " AND m.member_id = '" . $member_id ."'";
+			$sql_array['WHERE'] .= " AND m.member_id = '" . (int) $member_id ."'";
 		}
 		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-		if($all)
-		{
-			return  $db->sql_query ($sql);
-		}
-		else
-		{
-			return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_ilimit'], $istart ); 
-		}
+		return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_ilimit'], $istart ); 
 		
 	}
 	

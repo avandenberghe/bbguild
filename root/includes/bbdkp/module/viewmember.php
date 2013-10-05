@@ -62,7 +62,7 @@ $pctlife = ( $pclife > 0 ) ? round(($mclife / $pclife) * 100, 1) : 0;
 /*get raids*/
 $rstart = request_var('rstart',0) ;
 $current_earned = $points->earned_net; 
-$raids_result = $Raids->getRaids('r.raid_start DESC', $this->dkpsys_id, $rstart, $member_id);
+$raids_result = $Raids->getRaids('r.raid_start DESC', $this->dkpsys_id, 0, $rstart, $member_id);
 while ( $raid = $db->sql_fetchrow($raids_result))
 {
 	$template->assign_block_vars('raids_row', array(
@@ -84,8 +84,8 @@ while ( $raid = $db->sql_fetchrow($raids_result))
 $istart = request_var('istart', 0);
 $loot = new \bbdkp\Loot();
 $current_spent = 0; 
-$lootdetails = $loot->GetAllLoot( ' i.item_date', 0, $istart, $member_id, false ); 
-while ( $item = $db->sql_fetchrow($lootdetails) )
+$lootdetails = $loot->GetAllLoot( ' i.item_date DESC ', $this->dkpsys_id,0, $istart, $member_id ); 
+while ( $item = $db->sql_fetchrow($lootdetails))
 {
 	if ($this->bbtips == true)
 	{
@@ -167,7 +167,7 @@ $template->assign_vars(array(
 		'REALM'	   		  => $member->member_realm,
 		'MEMBER_LEVEL'    => $member->member_level,
 		'MEMBER_DKPID'    => $this->dkpsys_id,
-		'MEMBER_DKPNAME'  => $points->pool->dkpsys_name,
+		'MEMBER_DKPNAME'  => $this->dkpsys_name, 
 		'MEMBER_RACE'     => $member->member_race,
 		'MEMBER_CLASS'    => $member->member_class,
 		'COLORCODE'       => $member->colorcode,

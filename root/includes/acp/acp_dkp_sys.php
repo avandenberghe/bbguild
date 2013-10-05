@@ -402,7 +402,7 @@ if (!class_exists('\bbdkp\Events'))
 				
 				$current_order = $this->switch_order($sort_order);
 				$start = request_var('start',0);
-				$event->listevents($start, $current_order['sql'], $dkpsys_id);
+				$event->listevents($start, $current_order['sql'], $dkpsys_id, true);
 				
 				$idlist = array();
 					

@@ -290,7 +290,9 @@ class PointsController  extends \bbdkp\Admin
 					AND (r.rank_id = l.member_rank_id)
 					AND (m.member_dkpid = d.dkpsys_id)
 					AND (l.member_guild_id = r.guild_id)
-					AND r.rank_hide = 0 " ,
+					AND r.rank_hide = 0 
+					AND d.dkpsys_status != 'N'
+				" ,
 				'GROUP_BY' => 'l.game_id, m.member_id, m.member_status, 
 						 l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
 							 r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix,

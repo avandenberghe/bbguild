@@ -335,6 +335,8 @@ class acp_dkp_item extends \bbdkp\Admin
 		global $user, $config, $phpEx, $phpbb_admin_path;
 
 		$raid_id = request_var('hidden_raid_id', 0);
+		$raid = new \bbdkp\Raids($raid_id);
+		
 		$this->link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id );
 		
 		$item_buyers = request_var('item_buyers', array(0 => 0));
@@ -343,8 +345,9 @@ class acp_dkp_item extends \bbdkp\Admin
 		$item_name_db = utf8_normalize_nfc(request_var('item_name_db','', true));
 		$item_name = (strlen($item_name) > 0) ? $item_name : $item_name_db;
 		$itemgameid  = request_var( 'item_gameid' , ''); 
+		$loot_time = $raid->raid_start; 
 		
-		$this->LootController->addloot($raid_id, $item_buyers, $item_value, $item_name, $itemgameid); 
+		$this->LootController->addloot($raid_id, $item_buyers, $item_value, $item_name, $loot_time, $itemgameid); 
 		
 		$success_message = sprintf ( $user->lang ['ADMIN_ADD_ITEM_SUCCESS'], $item_name, count($item_buyers), $item_value );
 		meta_refresh(1, $this->link);

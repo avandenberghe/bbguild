@@ -248,9 +248,6 @@ class Points
 			$this->pool = new \bbdkp\Pool($dkpid);
 			$this->read_account();
 		}
-			
-		
-	
 	}
 	
 	public function has_account($member_id, $dkpid)
@@ -273,7 +270,7 @@ class Points
 	}
 	
 	/**
-	 * read account
+	 * read account from an active DKP pool
 	 */
 	public function read_account()
 	{
@@ -289,8 +286,12 @@ class Points
 				sum(m.member_adjustment) as member_adjustment,
 				sum(m.adj_decay) as adj_decay,
 				sum(m.member_raidcount) as member_raidcount ';
-		$sql_array['FROM'] = array (MEMBER_DKP_TABLE => 'm');  
-		$sql_array['WHERE'] = 'm.member_id = ' . (int) $this->member_id; 
+		$sql_array['FROM'] = 
+			array (
+					MEMBER_DKP_TABLE 	=> 'm', 
+					DKPSYS_TABLE		=> 'd',
+				  );  
+		$sql_array['WHERE'] = " d.dkpsys_status != 'N' and m.member_id = " . (int) $this->member_id; 
 		if ($this->dkpid > 0)
 		{
 			$sql_array['SELECT'] .= ', m.member_dkpid '; 
@@ -363,6 +364,12 @@ class Points
 	{
 		global $db;
 		
+		//@todo check if pool is active before adding an account...
+		if ($this->pool->dkpsys_status == 'N')
+		{
+			return false;
+		}
+		
 		$query = $db->sql_build_array('INSERT', array(
 			'member_dkpid'       	=> $this->dkpid,
 			'member_id'          	=> $this->member_id,
@@ -407,7 +414,8 @@ class Points
 			'member_raidcount'   	=> $this->raidcount
 		)); 
 		
-		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . " WHERE member_id = " . (int) $this->member_id . ' AND member_dkpid = ' . $this->dkpid );
+		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . " 
+			WHERE member_id = " . (int) $this->member_id . ' AND member_dkpid = ' . $this->dkpid );
 		
 	}
 	
@@ -415,7 +423,8 @@ class Points
 	{
 		global $db; 
 		
-		$sql = "DELETE FROM " . MEMBER_DKP_TABLE . " WHERE member_id = " . (int) $this->member_id . " AND member_dkpid = " . $this->dkpid ; 
+		$sql = "DELETE FROM " . MEMBER_DKP_TABLE . " 
+				WHERE member_id = " . (int) $this->member_id . " AND member_dkpid = " . $this->dkpid ; 
 		$db->sql_query($sql);
 		
 	}
