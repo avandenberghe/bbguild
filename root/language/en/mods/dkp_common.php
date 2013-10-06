@@ -241,6 +241,7 @@ $lang = array_merge($lang, array(
 'ADJDECAY' => 'Adjustment decay', 
 'DECAY' => 'Decay',
 'DROPS' => 'Drops',
+'EVENTNOTE' => 'Note: only lists attended raids or obtained loot from active events.', 
 'EVENT' => 'Event',
 'EVENTNAME' => 'Event Name',
 'EVENTS' => 'Events',
@@ -339,7 +340,7 @@ $lang = array_merge($lang, array(
 'EPNET'	=> 'EP net',
 'GP'	=> 'GP',
 'GPNET'	=> 'GP net',
-'PR'	=> 'Priority',
+'PR'	=> 'PR',
 
 // Page Foot Counts
 

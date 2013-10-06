@@ -19,7 +19,6 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 	exit;
 }
 
-
 $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', '') ); 
 $this->query_by_pool = true;
 $this->query_by_armor = false;
@@ -59,7 +58,6 @@ foreach ($guildlist as $g)
 				'SELECTED' => ($g['id'] == $this->guild_id ) ? ' selected="selected"' : '' ,
 				'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
 	}
-	
 }
 
 $this->dkppulldown();

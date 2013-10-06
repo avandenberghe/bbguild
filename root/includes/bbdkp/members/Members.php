@@ -67,7 +67,7 @@ class Members extends \bbdkp\Admin
 	 * @var string
 	 */
 	protected $member_name;
-
+	
 	/**
 	 * status (0 or 1)
 	 * @var bool
@@ -390,7 +390,7 @@ class Members extends \bbdkp\Admin
 			$this->phpbb_user_id = '';
 			$this->member_status = 0;
 			$this->member_achiev = 0;
-			$this->colorcode = "#000000";
+			$this->colorcode = "#8899aa";
 			$race_image = '';
 			$this->race_image = '';
 			$this->class_image = '';
@@ -1110,11 +1110,8 @@ class Members extends \bbdkp\Admin
 						SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
 						WHERE member_id = ' . $member_id;
 				$db->sql_query($sql);
-
-
 			}
 		}
-
 	}
 
 	/**

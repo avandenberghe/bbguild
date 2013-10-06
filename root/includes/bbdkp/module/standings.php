@@ -34,7 +34,8 @@ if (!class_exists('\bbdkp\PointsController'))
 }
 $memberpoints = new \bbdkp\PointsController;
 
-$memberarray = $memberpoints->get_standings($this->guild_id, $this->dkpsys_id, $this->game_id, $startd, $this->show_all, $this->query_by_armor, $this->query_by_class, $this->filter, $this->query_by_pool);
+$memberarray = $memberpoints->get_standings($this->guild_id, $this->dkpsys_id, $this->game_id, $startd, $this->show_all, 
+		$this->query_by_armor, $this->query_by_class, $this->filter, $this->query_by_pool);
 
 // loop sorted member array and dump to template
 foreach ( $memberarray as $key => $member )
@@ -49,7 +50,6 @@ foreach ( $memberarray as $key => $member )
 	
 	$templatearray = array (
 		'COLORCODE' 	=> $member ['colorcode'],
-		'DKPNAME'		=> $member ['dkpsys_name'],  
 		'CLASS_IMAGE' 	=> $member['class_image'],
 		'S_CLASS_IMAGE_EXISTS' =>  $member['class_image_exists'],
 		'RACE_IMAGE' 	=> $member['race_image'],
@@ -78,7 +78,7 @@ foreach ( $memberarray as $key => $member )
 		'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx",
 			'page=viewmember' .  
 			'&amp;' . URI_NAMEID . '=' . $member ['member_id'] . 
-			'&amp;' . URI_DKPSYS . '=' . $member ['member_dkpid']), 
+			'&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id), 
 	);
 		
 		if($config['bbdkp_timebased'] == 1)
@@ -129,7 +129,7 @@ foreach ($classarray as $k => $class)
 					'DKPCOLOUR' => ($member ['member_current'] >= 0) ? 'positive' : 'negative',
 					'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;'.
 					URI_NAMEID . '=' . $member ['member_id'] . '&amp;' .
-					URI_DKPSYS . '=' . $member['member_dkpid'] ) );
+					URI_DKPSYS . '=' . $this->dkpsys_id ) );
 
 			if($config['bbdkp_epgp'] == 1)
 			{
@@ -167,11 +167,13 @@ for($i = 1; $i <= 20; $i ++)
 	{
 		if ($this->query_by_pool)
 		{
-			$sortlink [$i] = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;' . URI_ORDER. '=' . $j . $uri_addon . '&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id . '&amp;guild_id=' . $this->guild_id );
+			$sortlink [$i] = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;' . URI_ORDER. '=' . $j . $uri_addon .
+			 '&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id . '&amp;guild_id=' . $this->guild_id );
 		} 
 		else
 		{
-			$sortlink [$i] = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;' . URI_ORDER. '=' . $j . $uri_addon . '&amp;' . URI_DKPSYS . '=' . $user->lang['ALL'] . '&amp;guild_id=' . $this->guild_id);
+			$sortlink [$i] = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;' . URI_ORDER. '=' . $j . $uri_addon .
+			 '&amp;' . URI_DKPSYS . '=' . $user->lang['ALL'] . '&amp;guild_id=' . $this->guild_id);
 		}
 	}
 
@@ -216,8 +218,6 @@ else
 
 $template->assign_vars ( array (
 	'F_MEMBERS' => $u_listmembers, 
-	'F_DKPSYS_NAME' => (isset ( $dkpsysname ) == true) ? $dkpsysname : $user->lang['ALL'], 
-	'F_DKPSYS_ID' => $this->dkpsys_id, 
 	'O_NAME' => $sortlink [1], 
 	'O_RANK' => $sortlink [2], 
 	'O_LEVEL' => $sortlink [3], 

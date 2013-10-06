@@ -115,7 +115,7 @@ class RaidController  extends \bbdkp\Admin
 		{
 			trigger_error ( $user->lang['ERROR_NOEVENTSDEFINED'], E_USER_WARNING );
 		}
-		$events->listevents(0, 'event_name', $this->dkpid);
+		$events->listevents(0, 'event_name', $this->dkpid, false);
 		$this->eventinfo = $events->events;  
 		
 		$members = new \bbdkp\Members();
@@ -129,12 +129,13 @@ class RaidController  extends \bbdkp\Admin
 	}
 	
 	/**
-	 * fetch the raid and pass it t the view
+	 * fetch the raid and pass it to the view
 	 * @param unknown_type $raid_id
 	 * @return \bbdkp\Raids
 	 */
 	public function displayraid($raid_id)
 	{
+		global $db; 
 		$this->raid = new \bbdkp\Raids($raid_id);
 		
 		$events = new \bbdkp\Events();
@@ -168,9 +169,8 @@ class RaidController  extends \bbdkp\Admin
 		);
 		$this->lootlistorder = $this->switch_order ($isort_order, 'ui');
 		$lootlist = new \bbdkp\Loot($this->raid->raid_id); 
-		$this->lootlist = $lootlist->get($this->raid->raid_id, $this->lootlistorder['sql']);
-		
-		
+		$this->lootlist = $db->sql_fetchrowset($lootlist->GetAllLoot($this->lootlistorder['sql'], 0, $this->raid->raid_id)); 
+		$a = 1;
 	}
 
 	/**
@@ -388,7 +388,7 @@ class RaidController  extends \bbdkp\Admin
 	 * @param int $start
 	 * @param char $order
 	 */
-	public function listraids($dkpsys_id, $start = 0)
+	public function listraids($dkpsys_id=0, $start = 0, $member_id=0)
 	{
 		
 		global $user, $config, $db, $phpEx;
@@ -402,14 +402,22 @@ class RaidController  extends \bbdkp\Admin
 				5 => array ('sum(ra.time_value) desc', 'sum(ra.time_value)' ),
 				6 => array ('sum(ra.zs_value) desc', 'sum(ra.zs_value)' ),
 				7 => array ('sum(ra.raiddecay) desc', 'sum(ra.raiddecay)' ),
-				8 => array ('sum(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay) desc', 'sum(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay)' ),
+				8 => array ('sum(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay) desc', 
+						'sum(ra.raid_value + ra.time_bonus  +ra.zerosum_bonus - ra.raid_decay)' ),
 		);
 		
 		$this->raidlistorder = $this->switch_order ( $sort_order ); 
 		
 		$raids = new \bbdkp\Raids();
-		$raids_result = $raids->getRaids($this->raidlistorder['sql'], $dkpsys_id, $start); 	
-		$this->totalraidcount = $raids->countraids($dkpsys_id); 
+		$raids_result = $raids->getRaids($this->raidlistorder['sql'], $dkpsys_id, 0, $start, $member_id); 
+		if($member_id>0)
+		{
+			$this->totalraidcount = $raids->raidcount($dkpsys_id, $days, $member_id, 0, true); 
+		}
+		else
+		{
+			$this->totalraidcount = $raids->countraids($dkpsys_id, $member_id); 
+		}
 		
 		$this->raidlist = array(); 
 		while ( $row = $db->sql_fetchrow ($raids_result) )
@@ -423,7 +431,7 @@ class RaidController  extends \bbdkp\Admin
 				'timevalue'  => $row['time_value'],
 				'zsvalue' 	 => $row['zs_value'],
 				'decayvalue' => $row['raiddecay'],
-				'total' 	 => $row['total'],
+				'total' 	 => $row['net_earned'],
 				'viewlink'   => append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=editraid&amp;" . URI_RAID . "={$row['raid_id']}" ),
 				'copylink'   => append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=listraids&amp;action=duplicate&amp;" . URI_RAID . "={$row['raid_id']}" ),
 				'deletelink' => append_sid ( "index.$phpEx?i=dkp_raid&amp;mode=listraids&amp;action=delete&amp;" . URI_RAID . "={$row['raid_id']}" ),
