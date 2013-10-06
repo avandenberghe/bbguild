@@ -15,7 +15,7 @@ include($phpbb_root_path . 'common.' . $phpEx);
 $pool_id = request_var('dkpsysid', 0);
 
 $sql = 'SELECT event_id, event_name, event_value  
-		FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = '. $pool_id . ' ORDER BY event_name';
+		FROM ' . EVENTS_TABLE . ' WHERE event_status=1 AND event_dkpid = '. $pool_id . ' ORDER BY event_name';
 
 $result = $db->sql_query($sql);
 header('Content-type: text/xml');

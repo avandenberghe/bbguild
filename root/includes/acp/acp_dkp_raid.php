@@ -548,15 +548,17 @@ if (!class_exists('\bbdkp\Members'))
 			{
 				$item_name = $lootdetail['item_name'];
 			}
-				
+			
+			$buyer = new \bbdkp\Members($lootdetail['member_id']);
+			
 			$template->assign_block_vars ( 'items_row', array (
 					'DATE' 			=> (! empty ( $lootdetail ['item_date'] )) ? $user->format_date($lootdetail['item_date']) : '&nbsp;',
-					'COLORCODE'  	=> ($lootdetail['colorcode'] == '') ? '#123456' : $lootdetail['colorcode'],
-					'CLASS_IMAGE' 	=> (strlen($lootdetail['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $lootdetail['imagename'] . ".png" : '',
-					'S_CLASS_IMAGE_EXISTS' => (strlen($lootdetail['imagename']) > 1) ? true : false,
-					'RACE_IMAGE' 	=> (strlen($lootdetail['raceimage']) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $lootdetail['raceimage'] . ".png" : '',
-					'S_RACE_IMAGE_EXISTS' => (strlen($lootdetail['raceimage']) > 1) ? true : false,
-					'BUYER' 		=> (! empty ( $lootdetail ['member_name'] )) ? $lootdetail ['member_name'] : '&lt;<i>Not Found</i>&gt;',
+					'COLORCODE'  	=> ($buyer->colorcode == '') ? '#8899aa' : $buyer->colorcode,
+					'CLASS_IMAGE' 	=> (strlen($buyer->class_image) > 1) ? $buyer->class_image : '',
+					'S_CLASS_IMAGE_EXISTS' => (strlen($buyer->class_image ) > 1) ? true : false,
+					'RACE_IMAGE' 	=> (strlen($buyer->race_image ) > 1) ? $buyer->race_image : '',
+					'S_RACE_IMAGE_EXISTS' => (strlen($buyer->race_image) > 1) ? true : false,
+					'BUYER' 		=> $buyer->member_name,
 					'ITEMNAME'      => $item_name,
 					'ITEM_ID'		=> $lootdetail['item_id'],
 					'ITEM_ZS'      	=> ($lootdetail['item_zs'] == 1) ? ' checked="checked"' : '',
@@ -565,13 +567,13 @@ if (!class_exists('\bbdkp\Members'))
 					'U_DELETE_ITEM' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteitem=1&amp;" . URI_ITEM . "={$lootdetail['item_id']}&amp;" . URI_DKPSYS. "=" . $raid->event_dkpid . "&amp;" . URI_RAID . "={$raid_id}"),
 					'ITEMVALUE' 	=> $lootdetail['item_value'],
 					'DECAYVALUE' 	=> $lootdetail['item_decay'],
-					'TOTAL' 		=> $lootdetail['item_total'],
+					'TOTAL' 		=> $lootdetail['item_net'],
 			));
 		
 			$number_items++;
 			$item_value += $lootdetail['item_value'];
 			$item_decay += $lootdetail['item_decay'];
-			$item_total += $lootdetail['item_total'];
+			$item_total += $lootdetail['item_net'];
 		}
 		
 		// build presets for raiddate and hour pulldown

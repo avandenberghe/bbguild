@@ -164,7 +164,8 @@ public function __set($property, $value)
 				a.event_id, a.event_color, a.event_imagename, a.event_status
 				FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b
 				WHERE a.event_id = " . (int) $event_id . " 
-				AND b.dkpsys_id = a.event_dkpid ";
+				AND b.dkpsys_id = a.event_dkpid 
+				AND b.dkpsys_status != 'N' ";
 	
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
@@ -325,8 +326,8 @@ public function __set($property, $value)
 	public function countevents($dkpid = 0)
 	{
 		global $db; 
-		$sql = 'SELECT count(*) as eventcount FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . ' b
-			where a.dkpsys_id = b.event_dkpid AND b.event_status = 1 ';
+		$sql = 'SELECT count(*) as eventcount FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . " b
+			where a.dkpsys_id = b.event_dkpid AND b.event_status = 1 AND a.dkpsys_status != 'N' ";
 		if($this->dkpsys_id !=0)
 		{
 			$sql .= ' AND a.dkpsys_id = ' . $this->dkpsys_id . ' '; 	
@@ -362,14 +363,19 @@ public function __set($property, $value)
 	 * @param unknown_type $order
 	 * @param unknown_type $dkpid
 	 */
-	public function listevents($start = 0, $order = 'b.dkpsys_id, a.event_name' , $dkpid=0  )
+	public function listevents($start = 0, $order = 'b.dkpsys_id, a.event_name' , $dkpid=0, $all=true  )
 	{
 		global $config, $db, $user;
 	
 		$sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename, a.event_status
 				FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b
-				WHERE b.dkpsys_id = a.event_dkpid";
-			
+				WHERE b.dkpsys_id = a.event_dkpid AND b.dkpsys_status != 'N' ";
+		
+		if (!$all)
+		{
+			$sql .= ' AND a.event_status= 1 ';   
+		}
+		
 		if($dkpid != 0)
 		{
 			$sql .= " AND b.dkpsys_id = " . $dkpid;
@@ -421,7 +427,7 @@ public function __set($property, $value)
 			            'ON'    => 'r.event_id = e.event_id'
 			        	)
 			    	), 
-				'WHERE' => ' d.dkpsys_id = e.event_dkpid AND e.event_status = 1  ',
+				'WHERE' => " d.dkpsys_id = e.event_dkpid AND e.event_status = 1 AND d.dkpsys_status != 'N'  ",
 				'GROUP_BY' => 'dkpsys_id, dkpsys_name ', 
 				'ORDER_BY' => 'COUNT(r.raid_id) DESC, dkpsys_name ASC'
 			);	
@@ -438,11 +444,11 @@ public function __set($property, $value)
 					RAID_DETAIL_TABLE 	=> 'dt',
 					MEMBER_LIST_TABLE 	=> 'l',
 					), 
-				'WHERE' => 'd.dkpsys_id = e.event_dkpid AND e.event_status = 1  
+				'WHERE' => "d.dkpsys_id = e.event_dkpid AND e.event_status = 1  AND d.dkpsys_status != 'N' 
 							AND r.event_id = e.event_id 
 							AND r.raid_id = dt.raid_id
 							AND dt.member_id = l.member_id
-							AND l.member_guild_id = ' . $guild_id,  
+							AND l.member_guild_id = " . $guild_id,  
 				'GROUP_BY' => 'dkpsys_id, dkpsys_name ', 
 				'ORDER_BY' => 'COUNT(r.raid_id) DESC, dkpsys_name ASC'
 			);
