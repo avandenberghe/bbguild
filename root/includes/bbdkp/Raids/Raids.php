@@ -384,12 +384,12 @@ class Raids extends \bbdkp\Admin
 	
 	/**
 	* returns raid count, or attendance percentage for a range member/pool
+	* used by listmembers.php and viewmember.php
 	*  @param $dkpsys_id = int
 	*  @param $days = int
 	*  @param $member_id = int
 	*  @param $mode= 0 -> indiv raidcount, 1 -> total rc, 2 -> attendancepct
 	*  @param $all : if true then get count forever, otherwise since x days
-	* used by listmembers.php and viewmember.php
 	*
 	*/
 	public function raidcount($dkpsys_id, $days, $member_id=0, $mode=1, $all = false, $guild_id=0)

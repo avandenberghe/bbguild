@@ -58,8 +58,9 @@ while ( $raid = $db->sql_fetchrow($raids_result))
 	$template->assign_block_vars('raids_row', array(
 			'DATE'			=> ( !empty($raid['raid_start']) ) ? date($config['bbdkp_date_format'], $raid['raid_start']) : '&nbsp;',
 			'NAME'			=> $raid['event_name'],
-	        'U_VIEW_RAID'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;' . URI_RAID . '='.$raid['raid_id']),
-	    	'U_VIEW_EVENT' 	=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewevent&amp;' . URI_EVENT . '='.  $raid['event_id'] . '&amp;' . URI_DKPSYS . '=' . $raid['event_dkpid']),
+	        'U_VIEW_RAID'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;' . URI_RAID . '='.$raid['raid_id'] . '&amp;guild_id=' . $this->guild_id ),
+	    	'U_VIEW_EVENT' 	=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewevent&amp;' . URI_EVENT . '='.  $raid['event_id'] . '&amp;' . URI_DKPSYS . '=' .
+	    					$raid['event_dkpid'] . '&amp;guild_id=' . $this->guild_id ),
 			'POOL' 			=> 	$this->dkpsys_name, 
 	    	'EVENTCOLOR' 	=> ( !empty($raid['event_color']) ) ? $raid['event_color'] : '#123456',
 			'NOTE'			=> ( !empty($raid['raid_note']) ) ? $raid['raid_note'] : '&nbsp;',
