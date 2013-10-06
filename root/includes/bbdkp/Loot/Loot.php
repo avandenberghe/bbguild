@@ -239,28 +239,29 @@ class Loot
 	
 	/**
 	 * get array of all loot for 1 raid or for 1 member
+	 * note: member_name is only included for sorting
 	 * @param int $raid_id
 	 * @param int $member_id
 	 * @param int $istart
 	 * @param string $order
 	 * @return array
 	 */
-	public function GetAllLoot($order = ' i.item_date', $dkpsys_id=0, $raid_id = 0, $istart = 0, $member_id = 0)
+	public function GetAllLoot($order = ' i.item_date desc', $dkpsys_id=0, $raid_id = 0, $istart = 0, $member_id = 0)
 	{
 		global $config, $db;
 	
 		$sql_array = array(
-				'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, 
+				'SELECT'    => 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, 
 								i.item_value, i.item_zs, i.item_decay, i.item_value - i.item_decay as item_net, 
 								e.event_name ',
 				'FROM'      => array(
-						MEMBER_LIST_TABLE 	=> 'm',
+						MEMBER_LIST_TABLE   => 'm',
 						RAID_ITEMS_TABLE    => 'i',
 						RAIDS_TABLE 		=> 'r' ,
 						EVENTS_TABLE 		=> 'e', 
 				),
 				'WHERE'     =>  " e.event_status = 1 
-								  AND m.member_id = i.member_id 
+								  AND m.member_id = i.member_id
 								  AND i.raid_id = r.raid_id
 								  AND r.event_id = e.event_id ", 
 				'ORDER_BY'  => $order ,
@@ -279,7 +280,7 @@ class Loot
 
 		if($member_id > 0)
 		{
-			$sql_array['WHERE'] .= " AND m.member_id = '" . (int) $member_id ."'";
+			$sql_array['WHERE'] .= " AND i.member_id = '" . (int) $member_id ."'";
 		}
 		
 		$sql = $db->sql_build_query('SELECT', $sql_array);

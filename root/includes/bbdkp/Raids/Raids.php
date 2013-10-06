@@ -1,6 +1,6 @@
 <?php
 /**
- * @package 	bbDKP
+ * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -32,25 +32,102 @@ if (!class_exists('\bbdkp\Members'))
 /**
  * This class controls raid acp.
  *
- * @package 	bbDKP
+ * @package bbDKP
  *
  */
 class Raids extends \bbdkp\Admin
 {
-	//header fields
+	/**
+	 * primary key
+	 * @var int
+	 */
 	public $raid_id;
-	private $event_id;
-	private $event_dkpid;
-	private $dkpsys_name;
-	private $event_name;
-	private $event_value;
-	private $raid_start;
-	private $raid_end;
-	private $raid_duration;
-	private $raid_note;
-	private $raid_added_by;
-	private $raid_updated_by;
 
+	/**
+	 * event id 
+	 * @var int
+	 */
+	private $event_id;
+	
+	/**
+	 * dkp pool
+	 * @var int
+	 */
+	private $event_dkpid;
+	
+	/**
+	 * name of the dkp pool
+	 * @var string
+	 */
+	private $dkpsys_name;
+	
+	/**
+	 * event name
+	 * @var string
+	 */
+	private $event_name;
+	
+	/**
+	 * Raid value (default from event value)
+	 * @var string
+	 */
+	private $event_value;
+	
+	/**
+	 * filename of event image
+	 * @var string
+	 */
+	private $event_imagename;
+	
+	/**
+	 * unix timestamp of raidstart
+	 * @var int
+	 */
+	private $raid_start;
+	
+	/**
+	 * unix timestamp of raid end
+	 * @var int
+	 */
+	private $raid_end;
+	
+	/**
+	 * difference between end and start
+	 * @var int
+	 */
+	private $raid_duration;
+	
+	/**
+	 * raidnote (255 char)
+	 * @var string
+	 */
+	private $raid_note;
+	
+	/**
+	 * name of raid author
+	 * @var string
+	 */
+	private $raid_added_by;
+	
+	/**
+	 * name of userid that updated the raid
+	 * @var string
+	 */
+	private $raid_updated_by;
+	
+	/**
+	 * Raid details array
+	 * @var array
+	 */
+	public $raid_details; 
+	
+	/**
+	 * loot details array
+	 * @var array
+	 */
+	public $loot_details;
+	
+	
 	function __construct($raid_id = 0)
 	{
 		parent::__construct();
@@ -66,6 +143,7 @@ class Raids extends \bbdkp\Admin
 			$this->event_dkpid 		= 0;
 			$this->event_id			= 0;
 			$this->event_name 		= '';
+			$this->event_imagename 		= '';
 			$this->event_value 		= 0.0;
 			$this->raid_start 		= 0;
 			$this->raid_end 		= 0;
@@ -176,7 +254,8 @@ class Raids extends \bbdkp\Admin
 		global $db;
 
 		$sql_array = array (
-				'SELECT' => ' d.dkpsys_name, e.event_dkpid, e.event_id, e.event_name, e.event_value,
+				'SELECT' => ' d.dkpsys_name, 
+							e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_imagename, e.event_status, 
 							r.raid_id, r.raid_start, r.raid_end, r.raid_note,
 							r.raid_added_by, r.raid_updated_by ',
 				'FROM' => array (
@@ -201,6 +280,7 @@ class Raids extends \bbdkp\Admin
 			$this->event_id			= $row['event_id'];
 			$this->event_name 		= $row['event_name'];
 			$this->event_value 		= $row['event_value'];
+			$this->event_imagename 		= $row['event_imagename'];
 			$this->raid_start 		= $row['raid_start'];
 			$this->raid_end 		= $row['raid_end'];
 			$this->raid_note 		= $row['raid_note'];
@@ -228,12 +308,15 @@ class Raids extends \bbdkp\Admin
 		unset($row);
 	}
 
+	
 	/**
+	 * 
 	 * raid list used by acp, viewmember and listraids
 	 * @param string $order
 	 * @param int $dkpsys_id
+	 * @param int $raid_id
 	 * @param int $start
-	 * @param int $member_id 
+	 * @param int $member_id
 	 */
 	public function getRaids($order = 'r.raid_start DESC', $dkpsys_id=0, $raid_id = 0, $start=0, $member_id=0)
 	{
@@ -424,13 +507,15 @@ class Raids extends \bbdkp\Admin
 			return $total_raids;
 	}
 	
-	
 	/**
+	 * 
 	 * Guild Raid Attendance Statistics
-	 *
-	 * @param unknown_type $time
-	 * @param unknown_type $u_stats
-	 * @param unknown_type $guild_id
+	 * @param int $time
+	 * @param string $u_stats
+	 * @param int $guild_id
+	 * @param bool $query_by_pool
+	 * @param int $dkp_id
+	 * @param bool $show_all
 	 */
 	public function attendance_statistics($time, $u_stats, $guild_id, $query_by_pool, $dkp_id, $show_all)
 	{
