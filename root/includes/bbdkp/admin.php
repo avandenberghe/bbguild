@@ -107,10 +107,11 @@ abstract class Admin
 	    	}
 	    }
 	    
-	    $this->listgames(); 
+	    $this->gamesarray(); 
+	    $debug=1;
 	}
 	
-	private function listgames()
+	private function gamesarray()
 	{
 		global $db;
 		$this->games= array(); 
@@ -550,44 +551,6 @@ abstract class Admin
 	}
 
 
-	/**
-	 * Create a bar graph
-	 *
-	 * @param $width
-	 * @param $show_number Show number in middle of bar?
-	 * @param $class Background class for bar
-	 * @return string Bar HTML
-	 */
-	public final function create_bar($width, $show_text = '', $color = '#AA0033')
-	{
-		$bar = '';
-
-		if ( strstr($width, '%') )
-		{
-			$width = intval(str_replace('%', '', $width));
-			if ( $width > 0 )
-			{
-				$width = ( intval($width) <= 100 ) ? $width . '%' : '100%';
-			}
-		}
-
-		if ( $width > 0 )
-		{
-			$bar = '<table width="' . $width . '" border="0" cellpadding="0" cellspacing="0">';
-			$bar .= '<tr><td style="text-align:left; background-color:' . $color .'; width: 100%; white-space: nowrap"  >';
-
-			if ( $show_text != '' )
-			{
-				$bar .= '<span style="color:#EEEEEE" class="small">' . $show_text . '</span>';
-			}
-
-			$bar .= '</td></tr></table>';
-		}
-
-		return $bar;
-	}
-	
-	
 	/**
 	 * remove end of a string
 	 * @param unknown_type $string

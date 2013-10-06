@@ -246,8 +246,10 @@ class PointsController  extends \bbdkp\Admin
 		global $config, $user, $db, $template, $phpbb_root_path;
 	
 		$sql_array = array(
-				'SELECT'    => 	'l.game_id, m.member_dkpid, d.dkpsys_name, m.member_id,
-					m.member_status, m.member_lastraid, m.member_raidcount,
+				'SELECT'    => 	'l.game_id, m.member_id,
+					m.member_status, 
+					max(m.member_lastraid) as member_lastraid, 
+					sum(m.member_raidcount) as member_raidcount,
 					sum(m.member_raid_value) as member_raid_value,
 					sum(m.member_time_bonus) as member_time_bonus,
 					sum(m.member_zerosum_bonus) as member_zerosum_bonus,
@@ -288,8 +290,10 @@ class PointsController  extends \bbdkp\Admin
 					AND (r.rank_id = l.member_rank_id)
 					AND (m.member_dkpid = d.dkpsys_id)
 					AND (l.member_guild_id = r.guild_id)
-					AND r.rank_hide = 0 " ,
-				'GROUP_BY' => 'l.game_id, m.member_dkpid, d.dkpsys_name, m.member_id, m.member_status, m.member_lastraid,
+					AND r.rank_hide = 0 
+					AND d.dkpsys_status != 'N'
+				" ,
+				'GROUP_BY' => 'l.game_id, m.member_id, m.member_status, 
 						 l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
 							 r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix,
 							 l1.name, c.class_id,
@@ -391,7 +395,6 @@ class PointsController  extends \bbdkp\Admin
 			++$member_count;
 			$memberarray [$member_count] ['game_id'] = $row ['game_id'];
 			$memberarray [$member_count] ['class_id'] = $row ['class_id'];
-			$memberarray [$member_count] ['dkpsys_name'] = $row ['dkpsys_name'];
 			$memberarray [$member_count] ['member_id'] = $row ['member_id'];
 			$memberarray [$member_count] ['count'] = $member_count;
 			$memberarray [$member_count] ['member_name'] = $row ['member_name'];
@@ -407,7 +410,6 @@ class PointsController  extends \bbdkp\Admin
 			$memberarray [$member_count] ['class_image_exists'] = (strlen($row['imagename']) > 1) ? true : false;
 			$memberarray [$member_count] ['race_image'] = (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '';
 			$memberarray [$member_count] ['race_image_exists'] = (strlen($race_image) > 1) ? true : false;
-	
 			$memberarray [$member_count] ['armor_type'] = $row ['armor_type'];
 			$memberarray [$member_count] ['member_raid_value'] = $row ['member_raid_value'];
 			if($config['bbdkp_timebased'] == 1)
@@ -442,7 +444,6 @@ class PointsController  extends \bbdkp\Admin
 			$memberarray [$member_count] ['member_lastraid'] = $row ['member_lastraid'];
 			$memberarray [$member_count] ['attendanceP1'] = $row ['member_raidcount'];
 			//raidcount ( true, $row ['member_dkpid'], $config ['bbdkp_list_p1'], $row ['member_id'],2,false );
-			$memberarray [$member_count] ['member_dkpid'] = $row ['member_dkpid'];
 	
 		}
 		$db->sql_freeresult ( $members_result );
@@ -463,8 +464,8 @@ class PointsController  extends \bbdkp\Admin
 				if($config['bbdkp_timebased'] == 1)
 				{
 					$member_time_bonus [$key] ['member_time_bonus'] = $member ['member_time_bonus'];
-						
 				}
+				
 				if($config['bbdkp_zerosum'] == 1)
 				{
 					$member_zerosum_bonus [$key] ['member_zerosum_bonus'] = $member ['member_zerosum_bonus'];

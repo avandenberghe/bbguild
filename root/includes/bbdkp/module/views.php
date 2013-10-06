@@ -40,6 +40,7 @@ class views extends \bbdkp\admin
 	private $filter = '';
 	private $show_all = false; 
 	private $dkpsys_id = 0; 
+	private $dkpsys_name = '';
 	
 	public function load($page)
 	{
@@ -54,7 +55,7 @@ class views extends \bbdkp\admin
 			{
 				require ($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx);
 			}
-			$bbtips = new bbtips ( );
+			//$bbtips = new bbtips ( );
 		}
 		
 		//load navigation
@@ -168,21 +169,22 @@ class views extends \bbdkp\admin
 	
 	
 	/**
-	 * prepares dkp dropdown, for standings/stats
-	 *
+	 * prepares dkp dropdown, for standings/stats, called by navigation
 	 * @return int $dkpsys_id
 	 */
 	private function dkppulldown()
 	{
 		global $user, $db, $template, $query_by_pool;
 	
-		$this->query_by_pool = false;
+		
 		$defaultpool = 99;
 		$dkpvalues = array();
 	
 		$dkpvalues[0] = $user->lang['ALL'];
 		$dkpvalues[1] = '--------';
-		// find only pools with dkp records
+		
+		// find only pools with dkp records that are active
+		
 		$sql_array = array(
 				'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
 				'FROM'		=> array(
@@ -191,8 +193,12 @@ class views extends \bbdkp\admin
 						MEMBER_LIST_TABLE => 'l'
 				),
 				
-				'WHERE'  => ' a.dkpsys_id = d.member_dkpid AND d.member_id = l.member_id AND l.member_guild_id = ' . $this->guild_id ,
-				'GROUP_BY'  => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default'
+				'WHERE'  => " a.dkpsys_id = d.member_dkpid
+							AND a.dkpsys_status != 'N' 
+							AND d.member_id = l.member_id 
+							AND l.member_guild_id = " . $this->guild_id ,
+				'GROUP_BY'  => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default', 
+				'ORDER_BY'  => 'a.dkpsys_id '
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 	
@@ -209,12 +215,15 @@ class views extends \bbdkp\admin
 			$index +=1;
 		}
 		$db->sql_freeresult ( $result );
-	
+		
+		$this->query_by_pool = false;
 		$this->dkpsys_id = 0;
+		$this->dkpsys_name = $user->lang['ALL'];
 		if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
 		{
 			if (isset( $_POST ['pool']) )
 			{
+				//user changed pulldown
 				$pulldownval = request_var('pool',  $user->lang['ALL']);
 				if(is_numeric($pulldownval))
 				{
@@ -224,7 +233,7 @@ class views extends \bbdkp\admin
 			}
 			elseif (isset ( $_GET [URI_DKPSYS] ))
 			{
-	
+				//use get value
 				$pulldownval = request_var(URI_DKPSYS,  $user->lang['ALL']);
 				if(is_numeric($pulldownval))
 				{
@@ -263,6 +272,11 @@ class views extends \bbdkp\admin
 						'SELECTED' => ($this->dkpsys_id == $value['id']  && $this->query_by_pool ) ? ' selected="selected"' : '',
 						'OPTION' => $value['text'],
 				));
+				
+				if($this->dkpsys_id == $value['id'] && $this->query_by_pool )
+				{
+					$this->dkpsys_name = $value['text']; 
+				}
 	
 			}
 		}
