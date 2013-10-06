@@ -48,15 +48,15 @@ $range1 = $config['bbdkp_list_p1'];
 $range2 = $config['bbdkp_list_p2'];
 $range3 = $config['bbdkp_list_p3'];
 
-$mc1 = $Raids->raidcount($this->dkpsys_id, $range1, $member_id, 0, false);
-$mc2 = $Raids->raidcount($this->dkpsys_id, $range2, $member_id, 0, false);
-$mc3 = $Raids->raidcount($this->dkpsys_id, $range3, $member_id, 0, false);
-$mclife = $Raids->raidcount($this->dkpsys_id, 0, $member_id, 0, true);
+$mc1 = $Raids->raidcount($this->dkpsys_id, $range1, $member_id, 0, false, $member->member_guild_id);
+$mc2 = $Raids->raidcount($this->dkpsys_id, $range2, $member_id, 0, false, $member->member_guild_id);
+$mc3 = $Raids->raidcount($this->dkpsys_id, $range3, $member_id, 0, false, $member->member_guild_id);
+$mclife = $Raids->raidcount($this->dkpsys_id, 0, $member_id, 0, true, $member->member_guild_id);
 
-$pc1	= $Raids->raidcount($this->dkpsys_id, $range1, $member_id, 1, false);
-$pc2	= $Raids->raidcount($this->dkpsys_id, $range2, $member_id, 1, false);
-$pc3	= $Raids->raidcount($this->dkpsys_id, $range3, $member_id, 1, false);
-$pclife = $Raids->raidcount($this->dkpsys_id, 0, $member_id, 1, true);
+$pc1	= $Raids->raidcount($this->dkpsys_id, $range1, $member_id, 1, false, $member->member_guild_id);
+$pc2	= $Raids->raidcount($this->dkpsys_id, $range2, $member_id, 1, false, $member->member_guild_id);
+$pc3	= $Raids->raidcount($this->dkpsys_id, $range3, $member_id, 1, false, $member->member_guild_id);
+$pclife = $Raids->raidcount($this->dkpsys_id, 0, $member_id, 1, true, $member->member_guild_id);
 
 $pct1 =	 ( $pc1 > 0 ) ? round(($mc1 / $pc1) * 100, 1) : 0;
 $pct2 =	 ( $pc2 > 0 ) ? round(($mc2 / $pc2) * 100, 1) : 0;

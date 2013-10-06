@@ -35,7 +35,7 @@ $sort_order = array
  
 $current_order = $this->switch_order($sort_order);
 //total raids in the last year
-$total_raids = $raids->raidcount($this->dkpsys_id, 365, 0, 1, true);
+$total_raids = $raids->raidcount($this->dkpsys_id, 365, 0, 1, true, $this->guild_id);
 
 if ($this->query_by_pool)
 {
@@ -52,7 +52,7 @@ else
     $u_list_raids =  append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=listraids&amp;guild_id=' . $this->guild_id);
 }
 
-$raids_result = $raids->getRaids('r.raid_start DESC', $this->dkpsys_id, 0, $start, 0);
+$raids_result = $raids->getRaids('r.raid_start DESC', $this->dkpsys_id, 0, $start, 0, $this->guild_id);
 while ( $raid = $db->sql_fetchrow($raids_result))
 {
 	$template->assign_block_vars('raids_row', array(

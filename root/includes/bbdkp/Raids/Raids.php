@@ -127,7 +127,6 @@ class Raids extends \bbdkp\Admin
 	 */
 	public $loot_details;
 	
-	
 	function __construct($raid_id = 0)
 	{
 		parent::__construct();
@@ -318,7 +317,7 @@ class Raids extends \bbdkp\Admin
 	 * @param int $start
 	 * @param int $member_id
 	 */
-	public function getRaids($order = 'r.raid_start DESC', $dkpsys_id=0, $raid_id = 0, $start=0, $member_id=0)
+	public function getRaids($order = 'r.raid_start DESC', $dkpsys_id=0, $raid_id = 0, $start=0, $member_id=0, $guild_id=0)
 	{
 		global $config, $db;
 
@@ -344,12 +343,14 @@ class Raids extends \bbdkp\Admin
 					EVENTS_TABLE 		=> 'e',
 					RAIDS_TABLE 		=> 'r' ,
 					RAID_DETAIL_TABLE	=> 'ra' ,
+					MEMBER_LIST_TABLE	=> 'l' ,
 			),
 			'WHERE' => " d.dkpsys_id = e.event_dkpid 
 						 AND ra.raid_id = r.raid_id 
 						 AND e.event_status = 1 
 						 AND r.event_id = e.event_id
-						 AND d.dkpsys_status != 'N' " ,
+						 AND d.dkpsys_status != 'N'
+						 AND l.member_id = ra.member_id " ,
 			'GROUP_BY' => '	e.event_id, e.event_dkpid, e.event_name,
 						r.raid_id,  r.raid_start, r.raid_end, r.raid_note,
 						r.raid_added_by, r.raid_updated_by',
@@ -371,6 +372,11 @@ class Raids extends \bbdkp\Admin
 			$sql_array['WHERE'] .= ' AND ra.member_id=' . (int) $member_id; 
 		}
 					
+		if($guild_id > 0)
+		{
+			$sql_array['WHERE'] .= ' AND l.member_guild_id=' . (int) $guild_id; 
+		}
+
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_rlimit'], $start );
 
@@ -386,9 +392,10 @@ class Raids extends \bbdkp\Admin
 	* used by listmembers.php and viewmember.php
 	*
 	*/
-	public function raidcount($dkpsys_id, $days, $member_id=0, $mode=1, $all = false)
+	public function raidcount($dkpsys_id, $days, $member_id=0, $mode=1, $all = false, $guild_id=0)
 	{
 		$start_date = mktime(0, 0, 0, date('m'), date('d')-$days, date('Y'));
+		$end_date = time();
 		// member joined in the last $days ?
 
 		if($member_id > 0)
@@ -400,30 +407,36 @@ class Raids extends \bbdkp\Admin
 				// then count from join date
 				$start_date = $joindate;
 			}
+			
+			switch ($mode)
+			{
+				case 0:
+					// get member or guild raidcount in pool
+					return $this->getraidcount($start_date, $end_date, $dkpsys_id, $all, $attendee->member_id, $attendee->member_guild_id);
+					break;
+	
+				case 1:
+					// get guild raidcount in pool
+					return $this->getraidcount($start_date, $end_date, $dkpsys_id, $all, 0, $attendee->member_guild_id);
+					break;
+	
+				case 2:
+					//get percentage
+					$memberraidcount = $this->getraidcount($start_date, $end_date, $dkpsys_id, $all, $attendee->member_id, $attendee->member_guild_id);
+					$raid_count = $this->getraidcount($start_date, $end_date, $dkpsys_id, $all, 0, $attendee->member_guild_id);
+					$percent_of_raids = ($raid_count > 0 ) ?  round(($memberraidcount / $raid_count) * 100,2) : 0;
+					return (float) $percent_of_raids;
+					break;
+			}
 			unset($attendee);
 		}
-
-		$end_date = time();
-
-		switch ($mode)
+		else
 		{
-			case 0:
-				// get member raidcount
-				return $this->getraidcount($start_date, $end_date, $dkpsys_id, $all, $member_id);
-				break;
-
-			case 1:
-				// get total pool raidcount
-				return $this->getraidcount($start_date, $end_date, $dkpsys_id, $all);
-				break;
-
-			case 2:
-				$memberraidcount = $this->getraidcount($start_date, $end_date, $dkpsys_id, $all, $member_id);
-				$raid_count = $this->getraidcount($start_date, $end_date, $dkpsys_id, $all);
-				$percent_of_raids = ($raid_count > 0 ) ?  round(($memberraidcount / $raid_count) * 100,2) : 0;
-				return (float) $percent_of_raids;
-				break;
+			return $this->getraidcount($start_date, $end_date, $dkpsys_id, true, 0, $guild_id);
 		}
+		
+		
+		
 
 	}
 
@@ -438,7 +451,7 @@ class Raids extends \bbdkp\Admin
 	 * @param int $member_id optional
 	 * @return number
 	 */
-	private function getraidcount($start_date, $end_date, $dkpsys_id, $all, $member_id = 0)
+	private function getraidcount($start_date, $end_date, $dkpsys_id, $all, $member_id = 0, $guild_id)
 	{
 		global $db;
 		$sql_array = array(
@@ -448,10 +461,17 @@ class Raids extends \bbdkp\Admin
 				EVENTS_TABLE			=> 'e',
 				RAIDS_TABLE 			=> 'r',
 				RAID_DETAIL_TABLE	    => 'ra',
+				MEMBER_LIST_TABLE		=> 'l'
 			),
-			'WHERE'		=> " d.dkpsys_id = e.event_dkpid  and r.event_id = e.event_id AND ra.raid_id = r.raid_id  AND d.dkpsys_status != 'N' ", 
+			'WHERE'		=> " d.dkpsys_id = e.event_dkpid AND ra.member_id= l.member_id
+							and r.event_id = e.event_id AND ra.raid_id = r.raid_id  AND d.dkpsys_status != 'N' ", 
 			'GROUP_BY' => 'r.raid_id '
 		);
+
+		if ($guild_id > 0)
+		{
+			$sql_array['WHERE'] .= ' AND l.member_guild_id = ' . (int) $guild_id;
+		}
 
 		if ($member_id > 0)
 		{
