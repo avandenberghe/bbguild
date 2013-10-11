@@ -73,8 +73,11 @@ class views extends \bbdkp\admin
 			case 'standings':
 				include($phpbb_root_path . 'includes/bbdkp/module/standings.' . $phpEx);
 				break;
-			case 'listitems':
-				include($phpbb_root_path . 'includes/bbdkp/module/listitems.' . $phpEx);
+			case 'loothistory':
+				include($phpbb_root_path . 'includes/bbdkp/module/loothistory.' . $phpEx);
+				break;
+			case 'lootdb':
+				include($phpbb_root_path . 'includes/bbdkp/module/lootdb.' . $phpEx);
 				break;
 			case 'listevents':
 				include($phpbb_root_path . 'includes/bbdkp/module/listevents.' . $phpEx);

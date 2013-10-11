@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
+ * @version 1.3.0
  */
  
 /**
@@ -15,92 +15,11 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
-
-/**** begin dkpsys pulldown  ****/
-$query_by_pool = false;
-$defaultpool = 99;
-
-$dkpvalues [0] = $user->lang ['ALL'];
-$dkpvalues [1] = '--------';
-// select dkp pools with drops
-$sql_array = array(
-	'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default', 
-	'FROM'		=> array( 
-				DKPSYS_TABLE => 'a', 
-				EVENTS_TABLE => 'e',
-				RAIDS_TABLE => 'r',
-				RAID_ITEMS_TABLE => 'ri',
-				), 
-	'WHERE'  => ' a.dkpsys_id = e.event_dkpid and e.event_id=r.event_id and ri.raid_id = r.raid_id', 
-	'GROUP_BY'  => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default'
-);
-$sql = $db->sql_build_query('SELECT', $sql_array);
-$result = $db->sql_query ( $sql );
-$index = 3;
-while ( $row = $db->sql_fetchrow ( $result ) )
+if (!class_exists('\bbdkp\Loot'))
 {
-	$dkpvalues [$index] ['id'] = $row ['dkpsys_id'];
-	$dkpvalues [$index] ['text'] = $row ['dkpsys_name'];
-	if (strtoupper ( $row ['dkpsys_default'] ) == 'Y')
-	{
-		$defaultpool = $row ['dkpsys_id'];
-	}
-	$index += 1;
-}
-$db->sql_freeresult ( $result );
-
-$dkp_id = 0;
-if (isset ( $_POST ['pool'] ) or isset ( $_POST ['getdksysid'] ) or isset ( $_GET [URI_DKPSYS] ))
-{
-	if (isset ( $_POST ['pool'] ))
-	{
-		$pulldownval = request_var ( 'pool', $user->lang ['ALL'] );
-		if (is_numeric ( $pulldownval ))
-		{
-			$query_by_pool = true;
-			$dkp_id = intval ( $pulldownval );
-		}
-	}
-	elseif (isset ( $_GET [URI_DKPSYS] ))
-	{
-		$query_by_pool = true;
-		$dkp_id = request_var ( URI_DKPSYS, 0 );
-	}
-}
-else 
-{
-	$query_by_pool = true;
-	$dkp_id = $defaultpool; 
+	require("{$phpbb_root_path}includes/bbdkp/Loot/Loot.$phpEx");
 }
 
-foreach ( $dkpvalues as $key => $value )
-{
-	if (! is_array ( $value ))
-	{
-		$template->assign_block_vars ( 'pool_row', array (
-			'VALUE' => $value, 
-			'SELECTED' => ($value == $dkp_id && $value != '--------') ? ' selected="selected"' : '', 
-			'DISABLED' => ($value == '--------') ? ' disabled="disabled"' : '', 
-			'OPTION' => $value ) );
-	} else
-	{
-		$template->assign_block_vars ( 'pool_row', array (
-			'VALUE' => $value ['id'], 
-			'SELECTED' => ($dkp_id == $value ['id']) ? ' selected="selected"' : '', 
-			'OPTION' => $value ['text'] ) );
-	
-	}
-}
-
-$query_by_pool = ($dkp_id != 0) ? true : false;
-/**** end dkpsys pulldown  ****/
-
-/**
- *
- * Item Purchase History (all items)
- * Item Value listing  (item values)
- *
- **/
 $mode = request_var ( 'mode', 'values' );
 
 $sql_array = array();

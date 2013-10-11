@@ -251,9 +251,11 @@ class Loot
 		global $config, $db;
 	
 		$sql_array = array(
-				'SELECT'    => 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, 
-								i.item_value, i.item_zs, i.item_decay, i.item_value - i.item_decay as item_net, 
-								e.event_name ',
+				'SELECT'    => 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid, 
+								SUM(i.item_value) as item_value,  
+								SUM(i.item_zs) as item_zs ,  
+								SUM(i.item_decay) as item_decay, 
+								SUM(i.item_value - i.item_decay) as item_net ',
 				'FROM'      => array(
 						MEMBER_LIST_TABLE   => 'm',
 						RAID_ITEMS_TABLE    => 'i',
@@ -263,7 +265,8 @@ class Loot
 				'WHERE'     =>  " e.event_status = 1 
 								  AND m.member_id = i.member_id
 								  AND i.raid_id = r.raid_id
-								  AND r.event_id = e.event_id ", 
+								  AND r.event_id = e.event_id ",
+				'GROUP_BY'	=> 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid',  
 				'ORDER_BY'  => $order ,
 		);
 		
@@ -288,6 +291,53 @@ class Loot
 		
 	}
 	
+	
+	/**
+	 * count loot per pool or member
+	 * @param string $mode
+	 * @param int $dkp_id
+	 * @param int $member_id
+	 * @return int
+	 */
+	public function countloot($mode, $dkp_id=0, $member_id=0)
+	{
+		global $db; 
+		$sql_array = array();
+		switch ($mode)
+		{
+			case 'values' :
+				$sql_array['SELECT'] = ' COUNT(DISTINCT item_name) as itemcount ' ;
+				break;
+			case 'history' :
+				$sql_array['SELECT'] = ' COUNT(*) as itemcount ' ;
+				break;
+		}
+		
+		$sql_array['FROM'] = array(
+				EVENTS_TABLE 		=> 'e',
+				RAIDS_TABLE 		=> 'r',
+				RAID_ITEMS_TABLE 		=> 'i',
+		);
+		
+		$sql_array['WHERE'] = ' e.event_id = r.event_id AND r.raid_id = i.raid_id ';
+		
+		if ($dkp_id > 0)
+		{
+			$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkp_id . ' ';
+		}
+		
+		if($member_id > 0)
+		{
+			$sql_array['WHERE'] .= " AND i.member_id = '" . (int) $member_id ."'";
+		}
+		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query ( $sql);
+		$total_items = $db->sql_fetchfield ( 'itemcount');
+		$db->sql_freeresult ($result);
+		return $total_items; 
+		
+	}
 	
 	
 	
