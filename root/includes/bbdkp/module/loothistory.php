@@ -24,10 +24,7 @@ if (!class_exists('\bbdkp\Members'))
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
 
-$mode = request_var ( 'mode', 'values' );
-
 $loot = new \bbdkp\loot();
-
 $total_items = $loot->countloot('history', $this->dkpsys_id); 
 
 if ($this->dkpsys_id > 0)
@@ -42,11 +39,12 @@ else
 $listitems_footcount = sprintf ( $user->lang ['LISTPURCHASED_FOOTCOUNT'], $total_items , $config ['bbdkp_user_ilimit'] );
 
 $sort_order = array (
-	0 => array ('item_date desc', 'item_date asc' ), 
-	1 => array ('item_name asc', 'item_name desc' ), 
-	2 => array ('event_name asc', 'event_name desc' ), 
-	3 => array ('item_value desc', 'item_value asc' ) );
-$sort_order[4] = array ('member_name asc', 'member_name desc' ); 	
+	0 => array ('item_date desc, item_value desc', 'item_date asc, item_value desc'), 
+	1 => array ('member_name asc, item_value desc', 'member_name desc, item_value desc'),  	
+	2 => array ('item_name asc, item_value desc', 'item_name desc, item_value desc'), 
+	3 => array ('event_name asc, item_value desc', 'event_name desc, item_value desc'), 
+	4 => array ('item_value desc', 'item_value asc')); 
+ 
 $current_order = $this->switch_order ($sort_order);
 $start = request_var ( 'start', 0 );
 
@@ -90,16 +88,14 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 		'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewraid&amp;" . URI_RAID . '=' . $item ['raid_id'] ), 
 		'EVENTCOLOR' => ( !empty($item['event_color']) ) ? $item['event_color'] : '#123456',
 		
-		'ITEM_ZS'      	=> ($item['item_zs'] == 1) ? ' checked="checked"' : '',
 		'ITEMVALUE' 	=> sprintf("%.2f", $item['item_value'])   ,
 		'DECAYVALUE' 	=> sprintf("%.2f", $item['item_decay']),
 		'TOTAL' 		=> sprintf("%.2f", $item['item_net']),
+		
 		'BUYER' 		=> $item ['member_name'], 
-	
 		'U_VIEW_BUYER' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewmember&amp;" . URI_NAMEID . '=' . $item ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $item ['event_dkpid'] ), 
 		'RACE_IMAGE' 	=> $member->race_image,  
 		'S_RACE_IMAGE_EXISTS' => (strlen($member->race_image) > 1) ? true : false,
-
 		'CLASSCOLOR' 	=> $member->colorcode, 
 		'CLASS_IMAGE' 	=> $member->class_image,  
 		'S_CLASS_IMAGE_EXISTS' => (strlen($member->class_image) > 1) ? true : false, 				
@@ -127,12 +123,12 @@ foreach ( $navlinks_array as $name )
 }
 
 $template->assign_vars ( array (
-	'F_LISTITEM' => $u_list_items, 
-	'O_DATE' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=loothistory&amp;o=' . $current_order ['uri'] [0] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id>0), 
-	'O_NAME' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=loothistory&amp;o=' . $current_order ['uri'] [3] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id>0),  
-	'O_RAID' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=loothistory&amp;o=' . $current_order ['uri'] [1] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id>0),
-	'O_VALUE' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=loothistor&amp;o=' . $current_order ['uri'] [2] . '&amp;start=' . $start . '&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id>0), 
-	'S_SHOWZS' 		=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
+	'F_LISTITEM' 	=> $u_list_items, 
+	'O_DATE' 		=> $u_list_items .'&amp;o=' . $current_order ['uri'] [0] . '&amp;start=' . $start,
+	'O_BUYER' 		=> $u_list_items .'&amp;o=' . $current_order ['uri'] [1] . '&amp;start=' . $start,
+	'O_ITEMNAME' 	=> $u_list_items .'&amp;o=' . $current_order ['uri'] [2] . '&amp;start=' . $start,   
+	'O_RAID' 		=> $u_list_items .'&amp;o=' . $current_order ['uri'] [3] . '&amp;start=' . $start, 
+	'O_VALUE' 		=> $u_list_items .'&amp;o=' . $current_order ['uri'] [4] . '&amp;start=' . $start,  
 	'S_SHOWTIME' 	=> ($config['bbdkp_timebased'] == '1') ? true : false,
 	'S_SHOWDECAY' 	=> ($config['bbdkp_decay'] == '1') ? true : false,
 	'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
@@ -144,10 +140,6 @@ $template->assign_vars ( array (
 	'S_DISPLAY_LOOTHISTORY' => true,
 ));
 
-$template->assign_vars ( array (
-'O_BUYER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=listitems&amp;mode=' . 
-	$mode . '&amp;o=' . $current_order ['uri'] [4] . '&amp;start=' . 
-	$start . '&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id > 0 )));
 
 $title = $user->lang ['MENU_ITEMHIST']; 
 

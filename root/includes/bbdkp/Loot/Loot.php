@@ -253,7 +253,6 @@ class Loot
 		$sql_array = array(
 				'SELECT'    => 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid, 
 								SUM(i.item_value) as item_value,  
-								SUM(i.item_zs) as item_zs ,  
 								SUM(i.item_decay) as item_decay, 
 								SUM(i.item_value - i.item_decay) as item_net ',
 				'FROM'      => array(
@@ -339,7 +338,57 @@ class Loot
 		
 	}
 	
+	/**
+	 * get statistic of all loot drops
+	 * note: member_name is only included for sorting
+	 * @param int $raid_id
+	 * @param int $member_id
+	 * @param int $istart
+	 * @param string $order
+	 * @return array
+	 */
+	public function Lootstat($order = ' MAX(i.item_date) desc', $dkpsys_id=0, $raid_id = 0, $istart = 0)
+	{
+		global $config, $db;
 	
+		$sql_array = array(
+				'SELECT'    => 'i.item_name, i.item_gameid, e.event_name, e.event_dkpid,
+								MAX(i.raid_id) as raid_id, 
+								MAX(i.item_id) as item_id, 
+								MAX(i.item_date) as item_date,
+								COUNT(i.item_id) as dropcount,
+								SUM(i.item_value) as item_value,
+								SUM(i.item_decay) as item_decay,
+								SUM(i.item_value - i.item_decay) as item_net ',
+				'FROM'      => array(
+						RAID_ITEMS_TABLE    => 'i',
+						RAIDS_TABLE 		=> 'r' ,
+						EVENTS_TABLE 		=> 'e',
+				),
+				'WHERE'     =>  " e.event_status = 1
+								  AND i.raid_id = r.raid_id
+								  AND r.event_id = e.event_id ",
+				'GROUP_BY'	=> 'i.item_name, i.item_gameid, e.event_name, e.event_dkpid',
+				'ORDER_BY'  => $order ,
+		);
+	
+	
+		if($dkpsys_id > 0)
+		{
+			$sql_array['WHERE'] .= ' AND e.event_dkpid=' . (int) $dkpsys_id;
+		}
+	
+		if($raid_id > 0)
+		{
+			$sql_array['WHERE'] .= " AND i.raid_id = " . (int) $raid_id ." ";
+		}
+	
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_ilimit'], $istart );
+	
+	}
+	
+		
 	
 }
 

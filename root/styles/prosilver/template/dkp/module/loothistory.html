@@ -1,8 +1,7 @@
-
-
 <div style="float: left; width:49%; white-space:nowrap;">
 <h2 style ="white-space:nowrap;">{L_MENU_ITEMHIST}</h2>
 </div>
+
 <form method="post" action="{F_LISTITEM}">
 <div style="float: right; width:49%; white-space:nowrap; text-align: right;">
 <br/>
@@ -16,7 +15,6 @@
 </div>
 </form> 
 <hr />
-
 
 
 <!-- IF ITEM_PAGINATION -->  
@@ -35,7 +33,7 @@
     <th style="text-align:left; width:7%; white-space: nowrap;" >{L_CLASS}</th>
     <th style="text-align:left; width:10%"><a href="{O_BUYER}&amp;">{L_NAME}</a></th>
     
-  	<th style="text-align:left; width:3%"><img src="adm/images/glyphs/view.gif" width="16" height="16" alt="View" /></th>
+  	<th style="text-align:left; width:3%"><a href="{O_ITEMNAME}"><img src="adm/images/glyphs/view.gif" width="16" height="16" alt="View" /></a></th>
     <th style="text-align:left; width:25%"><a href="{O_ITEMNAME}">{L_ITEM}</a></th>
 
     <th style="text-align:left; width:5%" ><a href="{O_DATE}">{L_DATE}</a></th>
@@ -45,7 +43,7 @@
     <!-- IF S_SHOWDECAY -->    
     <th style="text-align:right; width:7%; white-space: nowrap;">{L_ITEMDECAY}</th>
     <!-- ENDIF -->
-    <th style="text-align:right; width:7%; white-space: nowrap;"><a href="{O_ITEMTOTAL}">{L_ITEMTOTAL}</a></th>
+    <th style="text-align:right; width:7%; white-space: nowrap;"><a href="{O_VALUE}">{L_ITEMTOTAL}</a></th>
   </tr>
   </thead>
   <tfoot>
