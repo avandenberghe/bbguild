@@ -88,7 +88,7 @@ while ( $raid = $db->sql_fetchrow($raids_result))
 $istart = request_var('istart', 0);
 $current_spent = 0; 
 $loot = new \bbdkp\Loot();
-$lootdetails = $loot->GetAllLoot( ' i.item_date DESC ', $this->dkpsys_id,0, $istart, $member_id ); 
+$lootdetails = $loot->GetAllLoot( ' i.item_date DESC ',0,  $this->dkpsys_id, 0, $istart, $member_id ); 
 while ( $item = $db->sql_fetchrow($lootdetails))
 {
 	if ($this->bbtips == true)

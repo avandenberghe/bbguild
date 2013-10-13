@@ -25,7 +25,7 @@ if (!class_exists('\bbdkp\Members'))
 }
 
 $loot = new \bbdkp\loot();
-$total_items = $loot->countloot('history', $this->dkpsys_id); 
+$total_items = $loot->countloot('history', $this->guild_id, $this->dkpsys_id); 
 
 if ($this->dkpsys_id > 0)
 {
@@ -50,7 +50,7 @@ $start = request_var ( 'start', 0 );
 
 $pagination = generate_pagination ( $u_list_items . '&amp;o=' . $current_order ['uri'] ['current'] , $total_items, $config ['bbdkp_user_ilimit'], $start, true );
 
-$items_result = $loot->GetAllLoot($current_order['sql'], $this->dkpsys_id,0,$start,0); 
+$items_result = $loot->GetAllLoot($current_order['sql'], $this->guild_id, $this->dkpsys_id,0,$start,0); 
 
 $number_items = 0;
 $item_value = 0.00;

@@ -169,7 +169,7 @@ class RaidController  extends \bbdkp\Admin
 		);
 		$this->lootlistorder = $this->switch_order ($isort_order, 'ui');
 		$lootlist = new \bbdkp\Loot($this->raid->raid_id); 
-		$this->lootlist = $db->sql_fetchrowset($lootlist->GetAllLoot($this->lootlistorder['sql'], 0, $this->raid->raid_id)); 
+		$this->lootlist = $db->sql_fetchrowset($lootlist->GetAllLoot($this->lootlistorder['sql'], 0, 0, $this->raid->raid_id)); 
 		$a = 1;
 	}
 

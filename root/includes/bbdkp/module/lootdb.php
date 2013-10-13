@@ -23,7 +23,7 @@ if (!class_exists('\bbdkp\Loot'))
 }
 
 $loot = new \bbdkp\loot();
-$total_items = $loot->countloot('values', $this->dkpsys_id);
+$total_items = $loot->countloot('values', $this->guild_id, $this->dkpsys_id);
 
 $start = request_var ( 'start', 0 );
 
@@ -47,7 +47,7 @@ $sort_order = array (
 		);
 
 $current_order = $this->switch_order ($sort_order);
-$items_result = $loot->Lootstat($current_order['sql'], $this->dkpsys_id,0,$start,0);
+$items_result = $loot->Lootstat($current_order['sql'], $this->guild_id, $this->dkpsys_id, 0, $start,0);
 $pagination = generate_pagination ( $u_list_items . '&amp;o=' . $current_order ['uri']['current'],$total_items, $config['bbdkp_user_ilimit'], $start, true );
 
 $number_items = 0;

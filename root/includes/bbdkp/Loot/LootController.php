@@ -286,19 +286,16 @@ class LootController  extends \bbdkp\Admin
 
 
 	/**
+	 * 
 	 * counts the number of loot of this attendee in raid
-	 * @param unknown_type $raid_id
-	 * @param unknown_type $member_id
-	 * @return number
+	 * @param int $raid_id
+	 * @param int $member_id
+	 * @return int
 	 */
 	public function Countloot($raid_id, $member_id)
 	{
-		global $db;
-		$sql = 'SELECT count(*) as countitems FROM ' . RAID_ITEMS_TABLE . ' where member_id = ' . $member_id . ' and raid_id = ' .  $raid_id;
-		$result = $db->sql_query($sql);
-		$countitems = (int) $db->sql_fetchfield('countitems');
-		$db->sql_freeresult($result);
-		return $countitems;
+		
+		return $this->loot->countloot('history' , 0, 0,$member_id, $raid_id);
 	}
 
 	public function delete_raid($raid_id)
@@ -496,10 +493,10 @@ class LootController  extends \bbdkp\Admin
 	
 	
 	/**
-	 *  Guild Loot Statistics
+	 *  EPGP Guild Loot Statistics
 	 *
 	 */
-	public function MemberLootStats($time, $guild_id, $query_by_pool, $dkp_id, $show_all)
+	public function EPGPMemberLootStats($time, $guild_id, $query_by_pool, $dkp_id, $show_all)
 	{
 		global $db, $template, $config, $phpEx, $phpbb_root_path, $user;
 	
@@ -576,9 +573,8 @@ class LootController  extends \bbdkp\Admin
 		$total_raids = (int) $db->sql_fetchfield('raidcount');
 		$db->sql_freeresult ( $result );
 	
-	
-	
 		/* loot distribution per member and class */
+		/* reason for long sql is order by */
 		$sql = "SELECT
 			c.game_id, c.colorcode,  c.imagename, c.class_id, d.member_dkpid, l.member_id, l.member_name,
 			SUM(d.member_raidcount) as member_raidcount,
@@ -598,8 +594,10 @@ class LootController  extends \bbdkp\Admin
 		$sql .= " FROM (". MEMBER_DKP_TABLE ." d LEFT JOIN (
 			SELECT i.member_id, count(i.item_id) AS itemcount
 			FROM
-			((". EVENTS_TABLE." e INNER JOIN " . RAIDS_TABLE ." r ON e.event_id=r.event_id)
-			INNER JOIN ". RAID_ITEMS_TABLE . " i ON  r.raid_id = i.raid_id ) ";
+				(". EVENTS_TABLE." e INNER JOIN " . RAIDS_TABLE ." r ON e.event_id=r.event_id
+				INNER JOIN ". RAID_ITEMS_TABLE . " i ON  r.raid_id = i.raid_id 
+				INNER JOIN " . MEMBER_LIST_TABLE . " l ON l.member_id = i.member_id AND l.member_guild_id =  " . $guild_id . "	
+				) ";
 	
 		if ($query_by_pool)
 		{
@@ -644,13 +642,8 @@ class LootController  extends \bbdkp\Admin
 		{
 			$line++;
 			$raid_count += $row['member_raidcount'];
-			$row['earned_per_day'] = ( ( (!empty($row['earned_per_day']) ) && ( $row['zero_check'] > 0.01) )) ? $row['earned_per_day'] : '0.00';
-			$row['earned_per_raid'] = (!empty($row['earned_per_raid'])) ? $row['earned_per_raid'] : '0.00';
-			$row['spent_per_day'] = ( ( (!empty($row['spent_per_day']) ) && ($row['zero_check'] > 0.01) )) ? $row['spent_per_day'] : '0.00';
-			$row['spent_per_raid'] = (!empty($row['spent_per_raid'])) ? $row['spent_per_raid'] : '0';
 			$row['er'] = (!empty($row['er'])) ? $row['er'] : '0.00';
 			$member_drop_pct = (float) ( $this->total_drops > 0 ) ? round( ( (int) $row['itemcount'] / $this->total_drops) * 100, 1 ) : 0;
-	
 			$template->assign_block_vars('stats_row', array(
 	
 					'NAME' 					=> $row['member_name'],
@@ -668,7 +661,7 @@ class LootController  extends \bbdkp\Admin
 					'GP_TOTAL' 				=> $row['gp'],
 					'GP_PER_DAY' 			=> sprintf("%.2f", $row['gp_per_day']),
 					'GP_PER_RAID' 			=> sprintf("%.2f", $row['gp_per_raid']),
-					'PR'			 		=> sprintf("%.2f", $row['pr']),
+					'PR'			 		=> sprintf("%.2f", ($row['pr'] == 0) ? 1: $row['pr']) ,
 					'CURRENT' 				=> intval($row['member_current']),
 					'C_CURRENT'				=> ($row['member_current'] > 0 ? 'positive' : 'negative'),
 			)
@@ -719,6 +712,226 @@ class LootController  extends \bbdkp\Admin
 				'TOTAL_RAIDS' 	=> $raid_count,
 				'TOTAL_DROPS' 	=> $this->total_drops,
 				'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
+				'TOTAL_DROPS' 		=> $this->total_drops,
+		)
+		);
+	
+	}
+	
+	/**
+	 *  Guild Loot Statistics
+	 *
+	 */
+	public function MemberLootStats($time, $guild_id, $query_by_pool, $dkp_id, $show_all)
+	{
+		global $db, $template, $config, $phpEx, $phpbb_root_path, $user;
+	
+		/**** column sorting *****/
+		$sort_order = array(
+				0 => array('member_current desc', 'member_current'),
+				1 => array('member_raidcount desc', 'member_raidcount asc'),
+				2 => array('member_name asc', 'member_name desc'),
+				3 => array('itemcount desc', 'itemcount')
+		);
+	
+		$current_order = $this->switch_order($sort_order, 'o1');
+		$sort_index = explode('.', $current_order['uri']['current']);
+		$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
+		$previous_data = '';
+	
+		// Find total # drops
+		$sql_array = array (
+				'SELECT' => ' count(item_id) AS items ',
+				'FROM' => array (
+						EVENTS_TABLE => 'e',
+						RAIDS_TABLE => 'r',
+						RAID_ITEMS_TABLE => 'i',
+						MEMBER_LIST_TABLE => 'l'
+				),
+				'WHERE' => ' e.event_id = r.event_id
+						AND i.raid_id = r.raid_id
+						AND i.item_value != 0
+						AND l.member_id = i.member_id
+						AND l.member_guild_id = ' . $guild_id
+		);
+	
+		if ($query_by_pool)
+		{
+			$sql_array['WHERE'] .= ' and e.event_dkpid = '. (int) $dkp_id . ' ';
+		}
+	
+		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+		$result = $db->sql_query($sql);
+	
+		$this->total_drops = (int) $db->sql_fetchfield('items');
+	
+		$db->sql_freeresult($result);
+	
+		// get raidcount
+		$sql_array = array (
+				'SELECT' => ' count(r.raid_id) AS raidcount ',
+				'FROM' => array (
+						EVENTS_TABLE => 'e',
+						RAIDS_TABLE => 'r',
+						RAID_DETAIL_TABLE => 'd',
+						MEMBER_LIST_TABLE => 'l'
+				),
+				'WHERE' => ' e.event_id = r.event_id
+						AND d.raid_id = r.raid_id
+						AND l.member_id = d.member_id
+						AND l.member_guild_id = ' . $guild_id,
+				'GROUP_BY' => 'r.raid_id'
+		);
+	
+		if ($query_by_pool)
+		{
+			$sql_array['WHERE'] .= ' AND event_dkpid = '. $dkp_id;
+		}
+		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+		$result = $db->sql_query($sql);
+		$total_raids = (int) $db->sql_fetchfield('raidcount');
+		$db->sql_freeresult ( $result );
+	
+		/* loot distribution per member and class */
+		$sql = "
+		   SELECT
+		   d.member_dkpid,
+	       l.member_id,
+	       l.member_name,
+	       max(d.member_firstraid) as member_firstraid,
+		   max(d.member_lastraid) as member_lastraid,
+	       Sum(d.member_raidcount) AS member_raidcount,
+		   Sum(d.member_raid_value - d.member_raid_decay) AS member_raid_value, 
+		   sum(d.member_zerosum_bonus) as member_zerosum_bonus,
+	       Sum(d.member_time_bonus) AS member_time_bonus, 
+	       Sum(d.member_adjustment - d.adj_decay) AS member_adjustment,
+	       Sum(d.member_spent - d.member_item_decay) as member_spent, 
+	       Sum(CASE  WHEN x.itemcount IS NULL THEN 0 ELSE x.itemcount end) AS itemcount,
+		   sum((d.member_earned - d.member_raid_decay) + (d.member_adjustment - d.adj_decay) - (d.member_spent - d.member_item_decay)  ) AS member_current "; 
+		
+		$sql .= " FROM ". MEMBER_DKP_TABLE ." d LEFT JOIN (
+			SELECT i.member_id, count(i.item_id) AS itemcount
+			FROM
+			". EVENTS_TABLE." e INNER JOIN " . RAIDS_TABLE ." r ON e.event_id=r.event_id
+			INNER JOIN ". RAID_ITEMS_TABLE . " i ON  r.raid_id = i.raid_id  
+			INNER JOIN " . MEMBER_LIST_TABLE . " l ON l.member_id = i.member_id AND l.member_guild_id =  " . $guild_id;
+			if ($query_by_pool)
+			{
+				$sql .= " WHERE e.event_dkpid  = " . $dkp_id;
+			}
+			$sql .= " GROUP BY i.member_id
+				) x
+				on d.member_id = x.member_id
+				INNER JOIN " . MEMBER_LIST_TABLE . " l ON l.member_id = d.member_id  AND l.member_guild_id = " . $guild_id . "
+				INNER JOIN ". CLASS_TABLE ." c ON l.member_class_id = c.class_id AND l.game_id = c.game_id
+				WHERE 1=1 ";
+	
+		if ($query_by_pool)
+		{
+			$sql .= " AND d.member_dkpid = " . $dkp_id;
+		}
+	
+		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+		{
+			$sql .= " AND d.member_status='1'";
+		}
+	
+		$sql .= " GROUP BY d.member_dkpid, l.member_id, l.member_name ";
+		$sql .= " ORDER BY " . $current_order['sql'];
+	
+		//get total lines
+		$member_count = 0;
+		$members_result = $db->sql_query($sql);
+		while ( $row = $db->sql_fetchrow($members_result) )
+		{
+			$member_count++;
+		}
+	
+		$startd = request_var ( 'startdkp', 0 );
+		$members_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $startd );
+		$totalcount = $db->sql_affectedrows($members_result);
+	
+		
+		$raid_count=  0;
+		$line = 0;
+		while ( $row = $db->sql_fetchrow($members_result) )
+		{
+			$member = new \bbdkp\Members($row['member_id']);
+			$line++;
+			$raid_count += $row['member_raidcount'];
+			$row['earned_per_day'] = ( ( (!empty($row['earned_per_day']) ) && ( $row['zero_check'] > 0.01) )) ? $row['earned_per_day'] : '0.00';
+			$row['earned_per_raid'] = (!empty($row['earned_per_raid'])) ? $row['earned_per_raid'] : '0.00';
+			$row['spent_per_day'] = ( ( (!empty($row['spent_per_day']) ) && ($row['zero_check'] > 0.01) )) ? $row['spent_per_day'] : '0.00';
+			$row['spent_per_raid'] = (!empty($row['spent_per_raid'])) ? $row['spent_per_raid'] : '0';
+			$member_drop_pct = (float) ( $this->total_drops > 0 ) ? round( ( (int) $row['itemcount'] / $this->total_drops) * 100, 1 ) : 0;
+	
+			$template->assign_block_vars('stats_row', array(
+					'NAME' 					=> $member->member_name,
+					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),
+					'COLORCODE'				=> $member->colorcode,
+					'ID'            		=> $row['member_id'],
+					'COUNT'         		=> $line,
+					'ATTENDED_COUNT' 		=> $row['member_raidcount'],
+					'ITEM_COUNT' 			=> $row['itemcount'],
+					'MEMBER_DROP_PCT'		=> sprintf("%s %%", $member_drop_pct),
+					'CURRENT' 				=> intval($row['member_current']),
+					'C_CURRENT'				=> ($row['member_current'] > 0 ? 'positive' : 'negative'),
+			)
+			);
+			$previous_data = $row[$previous_source];
+	
+		}
+	
+		$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;' .URI_GUILD . '=' . $guild_id);
+	
+		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
+		{
+			$footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($members_result),
+					'<a href="' . $url . '&amp;o1='. $current_order['uri']['current']. '&amp;show=all" class="rowfoot">');
+	
+			$dkppagination = $this->generate_pagination2(
+					$url . '&amp;o1=' . $current_order ['uri'] ['current'] ,
+					$member_count, $config ['bbdkp_user_llimit'], $startd, true, 'startdkp'  );
+	
+		}
+	
+		else
+		{
+			$footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($members_result),
+					'<a href="' . $url . '&amp;o1='. $current_order['uri']['current'] . '" class="rowfoot">' );
+	
+			$dkppagination = $this->generate_pagination2($url . '&amp;o1=' . $current_order ['uri'] ['current']. '&amp;show=all' ,
+					$member_count, $config ['bbdkp_user_llimit'], $startd, true, 'startdkp'  );
+		}
+	
+		$db->sql_freeresult($members_result);
+		
+		$sort_order = array(
+				0 => array('member_current desc', 'member_current'),
+				1 => array('member_raidcount desc', 'member_raidcount asc'),
+				2 => array('member_name asc', 'member_name desc'),
+				3 => array('itemcount desc', 'itemcount')
+		);
+		
+		
+		/* send information to template */
+		$template->assign_vars(array(
+				'DKPPAGINATION' 	=> $dkppagination ,
+				'O_CURRENT' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'O_NAME'       		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][2] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')),
+				'O_EARNED' 			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][0] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				/*'O_EARNED_PER_DAY' 	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][5] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'O_EARNED_PER_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][6] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'O_SPENT' 			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][7] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'O_SPENT_PER_DAY' 	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][8] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'O_SPENT_PER_RAID'  => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][9] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				*/
+				'O_RAIDCOUNT' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'O_ITEMCOUNT' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][3] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'STATS_FOOTCOUNT' 	=> $footcount_text,
+				'TOTAL_RAIDS' 		=> $raid_count,
+				'TOTAL_DROPS' 		=> $this->total_drops,
+				'S_SHOWEPGP' 		=> ($config['bbdkp_epgp'] == '1') ? true : false,
 				'TOTAL_DROPS' 		=> $this->total_drops,
 		)
 		);

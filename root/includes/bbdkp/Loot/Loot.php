@@ -173,9 +173,6 @@ class Loot
 		
 		$db->sql_query($sql);
 		
-		
-		
-		
 	}
 	
 	public function delete()
@@ -246,7 +243,7 @@ class Loot
 	 * @param string $order
 	 * @return array
 	 */
-	public function GetAllLoot($order = ' i.item_date desc', $dkpsys_id=0, $raid_id = 0, $istart = 0, $member_id = 0)
+	public function GetAllLoot($order = ' i.item_date desc', $guild_id=0, $dkpsys_id=0, $raid_id = 0, $istart = 0, $member_id = 0)
 	{
 		global $config, $db;
 	
@@ -285,20 +282,27 @@ class Loot
 			$sql_array['WHERE'] .= " AND i.member_id = '" . (int) $member_id ."'";
 		}
 		
+		if ($guild_id > 0)
+		{
+			$sql_array['WHERE'] .= ' and m.member_guild_id = ' . $guild_id . ' ';
+		}
+
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_ilimit'], $istart ); 
 		
 	}
 	
-	
 	/**
-	 * count loot per pool or member
+	 * 
+	 * count loot per pool/guild/raid/member
 	 * @param string $mode
+	 * @param int $guild_id
 	 * @param int $dkp_id
 	 * @param int $member_id
+	 * @param int $raid_id
 	 * @return int
 	 */
-	public function countloot($mode, $dkp_id=0, $member_id=0)
+	public function countloot($mode, $guild_id=0, $dkp_id=0, $member_id=0, $raid_id=0)
 	{
 		global $db; 
 		$sql_array = array();
@@ -316,18 +320,30 @@ class Loot
 				EVENTS_TABLE 		=> 'e',
 				RAIDS_TABLE 		=> 'r',
 				RAID_ITEMS_TABLE 		=> 'i',
+				MEMBER_LIST_TABLE		=> 'l'
 		);
 		
-		$sql_array['WHERE'] = ' e.event_id = r.event_id AND r.raid_id = i.raid_id ';
+		$sql_array['WHERE'] = ' e.event_id = r.event_id AND r.raid_id = i.raid_id and l.member_id=i.member_id ';
+		
+
+		if ($guild_id > 0)
+		{
+			$sql_array['WHERE'] .= ' and l.member_guild_id = ' . $guild_id . ' ';
+		}
 		
 		if ($dkp_id > 0)
 		{
 			$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkp_id . ' ';
 		}
 		
+		if($raid_id > 0)
+		{
+			$sql_array['WHERE'] .= ' AND r.raid_id = ' . $raid_id;
+		}
+				
 		if($member_id > 0)
 		{
-			$sql_array['WHERE'] .= " AND i.member_id = '" . (int) $member_id ."'";
+			$sql_array['WHERE'] .= ' AND i.member_id = ' . $member_id;
 		}
 		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -347,7 +363,7 @@ class Loot
 	 * @param string $order
 	 * @return array
 	 */
-	public function Lootstat($order = ' MAX(i.item_date) desc', $dkpsys_id=0, $raid_id = 0, $istart = 0)
+	public function Lootstat($order = ' MAX(i.item_date) desc', $guild_id=0, $dkpsys_id=0, $raid_id = 0, $istart = 0)
 	{
 		global $config, $db;
 	
@@ -364,14 +380,21 @@ class Loot
 						RAID_ITEMS_TABLE    => 'i',
 						RAIDS_TABLE 		=> 'r' ,
 						EVENTS_TABLE 		=> 'e',
+						MEMBER_LIST_TABLE		=> 'l'
 				),
 				'WHERE'     =>  " e.event_status = 1
 								  AND i.raid_id = r.raid_id
-								  AND r.event_id = e.event_id ",
+								  AND r.event_id = e.event_id 
+				 				  AND l.member_id = i.member_id ",
 				'GROUP_BY'	=> 'i.item_name, i.item_gameid, e.event_name, e.event_dkpid',
 				'ORDER_BY'  => $order ,
 		);
-	
+
+		if ($guild_id > 0)
+		{
+			$sql_array['WHERE'] .= ' and l.member_guild_id = ' .  (int) $guild_id . ' ';
+		}
+		
 	
 		if($dkpsys_id > 0)
 		{
