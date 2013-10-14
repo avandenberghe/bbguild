@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.3.0-b1
  */
 
 define('UMIL_AUTO', true);
@@ -814,7 +814,7 @@ $versions = array(
 		// dev version, never released
 	), 
 			
-     '1.3.0' => array(
+     '1.3.0-b1' => array(
 
      	// oop release, now requires 553
      	
@@ -1071,7 +1071,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0':
+				case '1.3.0-b1':
 					// add double PK in members table
 
 					// remove unique index 'member_name' on member table
@@ -1109,7 +1109,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0':
+				case '1.3.0-b1':
 					// add double PK in members table
 					// remove unique index 'member_name' on member table
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
@@ -1143,7 +1143,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0':
+				case '1.3.0-b1':
 					//$sql= "DROP TABLE  " . $table_prefix . 'bbdkp_reporting ';
 					//$db->sql_query($sql);
 						
