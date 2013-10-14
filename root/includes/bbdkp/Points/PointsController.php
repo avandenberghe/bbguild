@@ -258,7 +258,7 @@ class PointsController  extends \bbdkp\Admin
 					sum(m.member_spent) as member_spent,
 					sum(m.member_item_decay) as member_item_decay,
 					sum(m.member_adjustment - m.adj_decay) as member_adjustment,
-					sum(m.member_earned + m.member_adjustment - m.member_spent - m.adj_decay ) AS member_current,
+					sum(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent - m.adj_decay ) AS member_current,
 					l.member_name, l.member_level,
 					l.member_race_id ,
 					l.member_class_id,
@@ -306,11 +306,11 @@ class PointsController  extends \bbdkp\Admin
 		if($config['bbdkp_epgp'] == 1)
 		{
 			$sql_array[ 'SELECT'] .= ",
-			sum(m.member_earned + m.member_adjustment - m.adj_decay) AS ep,
+			sum(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep,
 			sum(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . " ) AS gp,
 		CASE  WHEN SUM(m.member_spent - m.member_item_decay  + " . max(0, $config['bbdkp_basegp']) . " ) = 0
 		THEN  1
-		ELSE  ROUND(SUM(m.member_earned + m.member_adjustment - m.adj_decay) /
+		ELSE  ROUND(SUM(m.member_earned - m.member_raid_decay +  m.member_adjustment - m.adj_decay) /
 				SUM(" . max(0, $config['bbdkp_basegp']) . " + m.member_spent - m.member_item_decay),2) END AS pr " ;
 		}
 	
@@ -362,9 +362,9 @@ class PointsController  extends \bbdkp\Admin
 		if($config['bbdkp_epgp'] == 1)
 		{
 			$sql_array[ 'ORDER_BY'] = "CASE WHEN SUM(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . "  ) = 0
-		THEN 1
-		ELSE ROUND(SUM(m.member_earned + m.member_adjustment - m.adj_decay) /
-		SUM(" . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) END DESC ' ;
+			THEN 1
+			ELSE ROUND(SUM(m.member_earned + m.member_adjustment - m.adj_decay) /
+			SUM(" . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) END DESC ' ;
 		}
 		else
 		{
