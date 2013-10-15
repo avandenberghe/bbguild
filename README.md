@@ -17,7 +17,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## current
 
-1.3.0
+1.3.0-a1
 
 ## community
 
