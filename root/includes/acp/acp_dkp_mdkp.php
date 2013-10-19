@@ -58,7 +58,16 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 				$this->list_memberdkp(); 
 								
 				$this->page_title = 'ACP_DKP_LISTMEMBERDKP';
-				$this->tpl_name = 'dkp/acp_' . $mode;
+				if ($config ['bbdkp_epgp'] == '1')
+				{
+					$this->tpl_name = 'dkp/acp_mm_listmemberepgp';
+				}
+				else
+				{
+					$this->tpl_name = 'dkp/acp_mm_listmemberdkp';
+				}
+				
+				
 				break;
 			case 'mm_editmemberdkp' :
 				// invisible module
@@ -648,7 +657,14 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 			$this->PointsController->activate($all_members, $active_members); 
 		}
 		
-		$memberlist = $this->PointsController->listdkpaccounts();
+		if ($config ['bbdkp_epgp'] == '1')
+		{
+			$memberlist = $this->PointsController->listEPGPaccounts();
+		}
+		else
+		{
+			$memberlist = $this->PointsController->listdkpaccounts();
+		}
 		$current_order = $memberlist[1]; 
 		$membersids = array(); 
 		$lines = 0; 
@@ -675,10 +691,8 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 				'O_LEVEL' => $current_order ['uri'] [3],
 				'O_CLASS' => $current_order ['uri'] [4],
 				'O_RAIDVALUE' => $current_order ['uri'] [5],
-				'O_EARNED' => $current_order ['uri'] [8],
 				'O_ADJUSTMENT' => $current_order ['uri'] [10],
 				'O_SPENT' => $current_order ['uri'] [12],
-				'O_CURRENT' => $current_order ['uri'] [16],
 				'O_LASTRAID' => $current_order ['uri'] [17],
 				'S_SHOWZS' => ($config ['bbdkp_zerosum'] == '1') ? true : false,
 				'S_SHOWDECAY' => ($config ['bbdkp_decay'] == '1') ? true : false,
@@ -714,6 +728,11 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 			$output ['O_GP'] = $current_order ['uri'] [14];
 			$output ['O_PR'] = $current_order ['uri'] [15];
 		}
+		else
+		{
+			$output ['O_EARNED'] = $current_order ['uri'] [8];
+			$output ['O_CURRENT'] = $current_order ['uri'] [16];
+		}	
 		
 		$template->assign_vars ( $output );
 		
