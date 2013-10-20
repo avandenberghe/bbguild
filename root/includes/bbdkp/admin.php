@@ -517,7 +517,7 @@ abstract class Admin
 	* @param $arg header variable
 	* @return array SQL/URI information
 	*/
-	public final function switch_order($sort_order, $arg = URI_ORDER)
+	public final function switch_order($sort_order, $arg = URI_ORDER, $forcedorder=0)
 	{
 		$uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : '0.0';
 
