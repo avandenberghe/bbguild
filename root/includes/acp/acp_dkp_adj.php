@@ -173,7 +173,8 @@ class acp_dkp_adj extends \bbdkp\Admin
 						'ADJUSTMENT_NET' => number_format($adj['adjustment_value'] - $adj['adj_decay'], 2) , 
 						'DECAY_TIME' => ($adj['decay_time'] != 0 ?  date($config['bbdkp_date_format'], $adj['decay_time']) : '') , 
 						'C_ADJUSTMENT' => ($adj['adjustment_value'] > 0 ? "positive" : "negative") , 
-						'ADDED_BY' => (isset($adj['adjustment_added_by'])) ? $adj['adjustment_added_by'] : ''));
+						'ADDED_BY' => $adj['adjustment_added_by']
+					)); 
 					
 				}
 				$db->sql_freeresult($result);
@@ -214,7 +215,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				$form_key = 'acp_dkp_adj';
 				add_form_key($form_key);
 				
-				/***  DKPSYS drop-down ***/
+				//  begin DKPSYS drop-down
 				$dkpsys_id = 1;
 				$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default 
                     FROM ' . DKPSYS_TABLE . "
@@ -256,7 +257,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						}
 					}
 				}
-				
+				//  end DKPSYS drop-down				
 				$submit = (isset($_POST['add'])) ? true : false;
 				$update = (isset($_POST['update'])) ? true : false;
 				$delete = (isset($_POST['delete'])) ? true : false;
@@ -310,7 +311,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					$newadjust->can_decay = request_var('adj_decayable', 1);
 					$newadjust->adj_decay = 0;
 					$newadjust->decay_time = 0;
-					$newadjust->adjustment_date = $this->time;
+					$newadjust->adjustment_date = mktime(12, 0, 0, request_var('adjustment_month', 0), request_var('adjustment_day', 0), request_var('adjustment_year', 0));
 					$newadjust->adjustment_dkpid = request_var('adj_dkpid', 0);
 					$newadjust->adjustment_groupkey = $this->gen_group_key($this->time, $newadjust->adjustment_reason, $newadjust->adjustment_value);
 					$newadjust->adjustment_added_by = $user->data['username'];
@@ -372,11 +373,9 @@ class acp_dkp_adj extends \bbdkp\Admin
 					$updadjust->adjustment_value = $temp2;
 					$updadjust->adjustment_reason = utf8_normalize_nfc(request_var('adjustment_reason', '', true));
 					$updadjust->can_decay = request_var('adj_decayable', 1);
-					$temp = str_replace(".", "", request_var('adjustment_decay', 0.0));
-					$temp2 = (float) str_replace(",", ".", $temp);
-					$updadjust->adj_decay = $temp2;
+					$updadjust->adj_decay = request_var('adjustment_decay', 0.0); 
 					$updadjust->decay_time = $oldadjust->decay_time;
-					$updadjust->adjustment_date = $this->time;
+					$updadjust->adjustment_date = mktime(12, 0, 0, request_var('adjustment_month', 0), request_var('adjustment_day', 0), request_var('adjustment_year', 0));
 					$updadjust->adjustment_dkpid = request_var('adj_dkpid', 0);
 					$updadjust->adjustment_added_by = $user->data['username'];
 					$updadjust->adjustment_groupkey = $updadjust->gen_group_key($this->time, $updadjust->adjustment_reason, $updadjust->adjustment_value);

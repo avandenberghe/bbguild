@@ -35,11 +35,15 @@ if (!class_exists('\bbdkp\Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
-
+// Include the Adjustments class
+if (!class_exists('\bbdkp\Adjust'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Adjustments/Adjust.$phpEx");
+}
 /**
  * 
  * 
- * @package 	bbDKP
+ * @package bbDKP
  */
 class PointsController  extends \bbdkp\Admin
 {
@@ -112,8 +116,7 @@ class PointsController  extends \bbdkp\Admin
 						AND l.attribute_id = c.class_id
 						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'
 						AND (s.dkpsys_id = " . (int) $this->dkpsys_id . ')' );
-		
-			$sql_array ['SELECT'] .= '';
+	
 			
 		/***  sort  ***/
 		
@@ -741,15 +744,15 @@ class PointsController  extends \bbdkp\Admin
 	
 
 	/**
-	 *
-	 * @param int $new_raid
-	 * @param array $raiddetail
-	 * @param int $member_id
+	 * add points to record
+	 * @param \bbdkp\Raids $new_raid
+	 * @param \bbdkp\Raiddetail $raiddetail
+	 * @param unknown_type $member_id
 	 */
-	private function addpoint($new_raid, $raiddetail, $member_id)
+	private function addpoint(\bbdkp\Raids $new_raid, $raiddetail, $member_id)
 	{
 
-	    $this->Points = new \bbdkp\Points();
+	    $this->Points = new \bbdkp\Points($member_id, $new_raid->event_dkpid);
 	    $this->Points->dkpid = $new_raid->event_dkpid;
 	    $this->Points->member_id = $member_id;
 
@@ -1546,12 +1549,13 @@ class PointsController  extends \bbdkp\Admin
 			case 1:
 				// Decay is ON : synchronise
 				// loop all ajustments
+				$adj = new \bbdkp\Adjust();
 				$sql = 'SELECT adjustment_dkpid, adjustment_id, member_id , adjustment_date, adjustment_value, adj_decay FROM ' . ADJUSTMENTS_TABLE . ' WHERE can_decay = 1';
 				$result = $db->sql_query($sql);
 				$countadj = 0;
 				while (($row = $db->sql_fetchrow($result)))
 				{
-					$this->decayadj($row['adjustment_id']);
+					$adj->decayadj($row['adjustment_id']);
 					$countadj ++;
 				}
 				$db->sql_freeresult($result);

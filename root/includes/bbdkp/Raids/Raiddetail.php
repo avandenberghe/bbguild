@@ -127,10 +127,12 @@ class Raiddetail
 		global $db; 
 		
 		$raid_detail = array(
-				'raid_id'      => (int) $this->raid_id,
-				'member_id'   =>  $this->member_id,
-				'raid_value'   => $this->raid_value,
-				'time_bonus'   => $this->time_bonus,
+				'raid_id'       => (int) $this->raid_id,
+				'member_id'     =>  $this->member_id,
+				'raid_value'    => $this->raid_value,
+				'time_bonus'    => $this->time_bonus,
+				'zerosum_bonus' => $this->zerosum_bonus, 
+				'raid_decay' 	=> $this->raid_decay, 
 		);
 		
 		$sql = 'INSERT INTO ' . RAID_DETAIL_TABLE . ' ' . $db->sql_build_array('INSERT', $raid_detail);
