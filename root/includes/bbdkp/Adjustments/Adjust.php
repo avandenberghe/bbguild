@@ -230,6 +230,19 @@ class Adjust extends \bbdkp\Admin
 	
 	
 	/**
+	 * deletes all adjustments foer one member
+	 */
+	function delete_memberadjustments()
+	{
+		global $db;
+	
+		$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . ' WHERE member_id = ' . $this->member_id . ' AND member_dkpid  = ' .  $this->adjustment_dkpid;
+		$db->sql_query($sql);
+	
+	}
+	
+	
+	/**
 	 *
 	 * returns list of adjustments to admin page
 	 * @see \bbdkp\iAdjust::listadj()

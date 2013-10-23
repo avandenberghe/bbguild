@@ -30,6 +30,7 @@ if (!class_exists('\bbdkp\PointsController'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
 }
+
 /**
  * This class manages member DKP
  * 
@@ -89,178 +90,29 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 				{
 					$member_id = request_var ( 'hidden_id', 0 );
 					$dkp_id = request_var ( 'hidden_dkpid', 0 );
+					$this->PointsController->dkpsys_id = $dkp_id; 
+					$this->PointsController->update_dkpaccount($member_id);
 					
-					$sql_array = array (
-						'SELECT' => 'l.member_name, m.member_id, 
-		    				m.member_raid_value, m.member_time_bonus, m.member_zerosum_bonus, 
-		    				m.member_earned,
-		    				m.member_raid_decay, m.member_adjustment ,
-		    				m.member_spent, m.member_item_decay ', 
-		    			'FROM' => array (
-							MEMBER_DKP_TABLE => 'm', 
-							MEMBER_LIST_TABLE => 'l' ), 
-						'WHERE' => 'm.member_id = l.member_id and m.member_id=' . $member_id . ' 
-							AND m.member_dkpid=' . $dkp_id );
-					
-					$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-					$result = $db->sql_query ( $sql );
-					while ( $row = $db->sql_fetchrow ( $result ) )
-					{
-						$this->old_member = array (
-						'member_name' => $row ['member_name'], 
-						'member_id' => $row ['member_id'], 
-						'member_earned' => $row ['member_earned'], 
-						'member_raid_value' => $row ['member_raid_value'], 
-						'member_time_bonus' => $row ['member_time_bonus'], 
-						'member_zerosum_bonus' => $row ['member_zerosum_bonus'], 
-						'member_spent' => $row ['member_spent'] );
-					}
-					$db->sql_freeresult ( $result );
-					
-					$db->sql_transaction ( 'begin' );
-					$query = $db->sql_build_array ( 'UPDATE', array (
-						'member_raid_value' => request_var ( 'raid_value', 0.00 ), 
-						'member_time_bonus' => request_var ( 'time_value', 0.00 ), 
-						'member_zerosum_bonus' => request_var ( 'zerosum', 0.00 ), 
-						'member_earned' => request_var ( 'earned', 0.00 ), 
-						'member_raid_decay' => request_var ( 'rdecay', 0.00 ), 
-						'member_spent' => request_var ( 'spent', 0.00 ), 
-						'member_item_decay' => request_var ( 'idecay', 0.00 ) ) );
-					
-					$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' 
-							SET ' . $query . ' 
-					        WHERE member_id = ' . $this->old_member ['member_id'] . '
-							AND member_dkpid= ' . ( int ) $dkp_id );
-					$db->sql_transaction ( 'commit' );
-					
-					$log_action = array (
-						'header' => 'L_ACTION_MEMBERDKP_UPDATED', 
-						'L_USER' => $user->data ['user_id'], 
-						'L_USERCOLOUR' => $user->data ['user_colour'], 
-						'L_NAME' => $this->old_member ['member_name'], 
-						'L_EARNED_BEFORE' => $this->old_member ['member_earned'], 
-						'L_SPENT_BEFORE' => $this->old_member ['member_spent'], 
-						'L_EARNED_AFTER' => request_var ( 'earned', 0.00 ), 
-						'L_SPENT_AFTER' => request_var ( 'spent', 0.00 ) );
-					
-					$this->log_insert ( array (
-						'log_type' => $log_action ['header'], 'log_action' => $log_action ) );
-					
-					$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_MEMBERDKP_SUCCESS'], $this->old_member ['member_name'] );
-					trigger_error ( $success_message . $this->link );
 				}
 				elseif ($delete)
 				{
-					
-					if (((isset ( $_POST ['hidden_id'] )) and (isset ( $_POST ['hidden_dkpid'] ))) == true)
+					if (confirm_box (true))
 					{
-						
-						$del_member = request_var ( 'hidden_id', 0 );
-						$del_dkpid = request_var ( 'hidden_dkpid', 0 );
-						
-						// get data on dkp to be deleted
-
-						$sql_array = array (
-							'SELECT' => 'm.member_name, d.member_id, d.member_earned, d.member_spent, d.member_adjustment', 
-							'FROM' => array (
-								MEMBER_LIST_TABLE => 'm', 
-								MEMBER_DKP_TABLE => 'd' ), 
-							'WHERE' => "m.member_id = ' . $del_member . '
-
-			       				AND d.member_dkpid = " . $del_dkpid . '
-
-			   					AND d.member_id = m.member_id' );
-						
-						$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-						$result = $db->sql_query ( $sql );
-						while ( $row = $db->sql_fetchrow ( $result ) )
-						{
-							$this->old_member = array (
-								'member_id' => $del_member, 
-								'member_name' => $row ['member_name'], 
-								'member_earned' => ( float ) $row ['member_earned'], 
-								'member_spent' => ( float ) $row ['member_spent'], 
-								'member_adjustment' => (float) $row ['member_adjustment'] );
-						}
-						$db->sql_freeresult ( $result );
-						
-						if (confirm_box (true))
-						{
-							// begin transaction
-
-							$db->sql_transaction ('begin');
-							
-							$names = $del_member;
-							//remove member from attendees table but only if linked to raids in selected dkp pool
-
-							$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . '
-									WHERE member_id= ' . $del_member . ' 
-									AND raid_id IN( SELECT r.raid_id 
-										FROM ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE . ' e 
-
-										WHERE r.event_id = e.event_id 
-										AND e.event_dkpid = ' . ( int ) $del_dkpid . ')';
-							$db->sql_query ( $sql );
-							
-							$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' 
-								WHERE member_id = ' . $del_member . ' and raid_id 
-								IN ( 
-
-								SELECT raid_id FROM ' . RAIDS_TABLE . ' r , ' . 
-								EVENTS_TABLE . ' e 
-								WHERE r.event_id  = e.event_id 
-								AND e.event_dkpid = ' . ( int ) $del_dkpid . ')';
-							$db->sql_query ( $sql );
-							
-							//delete player adjustments
-
-							$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . '
-									WHERE member_id =' . $del_member . '
-									AND adjustment_dkpid= ' . $del_dkpid;
-							$db->sql_query ( $sql );
-							
-							//delete player dkp points
-
-							$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' 
-								WHERE member_id = ' . $del_member . ' AND member_dkpid= ' . $del_dkpid;
-							$db->sql_query ( $sql );
-							
-							//commit
-
-							$db->sql_transaction ( 'commit' );
-							
-							$log_action = array (
-								'header' => 'ACTION_MEMBERDKP_DELETED', 
-									'L_NAME' => $this->old_member ['member_name'], 
-									'L_EARNED' => $this->old_member ['member_earned'], 
-									'L_SPENT' => $this->old_member ['member_spent'], 
-									'L_ADJUSTMENT' => $this->old_member ['member_adjustment'] );
-							
-							$this->log_insert ( array (
-								'log_type' => $log_action ['header'], 
-								'log_action' => $log_action ) );
-							
-							$success_message = sprintf ( $user->lang ['ADMIN_DELETE_MEMBERDKP_SUCCESS'], $del_member, $del_dkpid );
-							trigger_error ( $success_message . $this->link );
-						}
-						else
-						{
-							$s_hidden_fields = build_hidden_fields ( array (
-								'delete' => true, 
-								'hidden_id' => $del_member, 
-								'hidden_dkpid' => $del_dkpid, 
-								'old_member' => $this->old_member ));
-							confirm_box ( false, $user->lang ['CONFIRM_DELETE_MEMBERDKP'], $s_hidden_fields );
-						
-						}
+						$this->PointsController->dkpsys_id = request_var ( 'hidden_dkpid', 0 );
+						$this->PointsController->delete_dkpaccount(request_var ('hidden_id', 0 ));
+					
 					}
 					else
 					{
-						$success_message = sprintf ( $user->lang ['ADMIN_DELETE_MEMBERDKP_FAILED'], 'UNKNOWN', 'UNKNOWN' );
-						trigger_error ( $success_message . $this->link, E_USER_WARNING );
+						$s_hidden_fields = build_hidden_fields ( array (
+							'delete' => true, 
+							'hidden_id' => request_var ('hidden_id', 0),   
+							'hidden_dkpid' => request_var ('hidden_dkpid',0)
+								));
+						confirm_box ( false, $user->lang ['CONFIRM_DELETE_MEMBERDKP'], $s_hidden_fields );
 					}
 					
-					redirect ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp&amp;" ) );
+					redirect (append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp"));
 				
 				}
 				

@@ -149,6 +149,23 @@ class Raiddetail
 		
 	}
 	
+	
+	/**
+	 * delete attendee from raiddetail table
+	 */
+	public function deleteaccount($member_id, $dkp_id)
+	{
+		global $db;
+		$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . '
+				WHERE member_id= ' . $member_id . '
+				AND raid_id IN ( SELECT r.raid_id
+					FROM ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE . ' e
+					WHERE r.event_id = e.event_id
+					AND e.event_dkpid = ' . ( int ) $dkp_id . ')';
+		$db->sql_query($sql);
+		
+	}
+	
 	public function deleteRaid($raid_id)
 	{
 		global $db;

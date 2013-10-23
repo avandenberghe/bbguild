@@ -47,9 +47,29 @@ if (!class_exists('\bbdkp\Adjust'))
  */
 class PointsController  extends \bbdkp\Admin
 {
+	
+	/**
+	 * instance of points object
+	 * @var unknown_type
+	 */
 	private $Points; 
+	
+	/**
+	 * instance of pools object
+	 * @var \bbdkp\Pool
+	 */
 	private $Pools;
+	
+	/**
+	 * object
+	 * @var object
+	 */
 	public $dkpsys;
+	
+	/**
+	 * point pool
+	 * @var int
+	 */
 	public $dkpsys_id;
 	
 	function __construct() 
@@ -700,7 +720,113 @@ class PointsController  extends \bbdkp\Admin
 		return $memberarray;
 	}
 	
+	/**
+	 * updates a dkp account 
+ 	 * @param int $member_id
+	 * @uses called by acp_dkp_mkdkp
+	 */
+	public function update_dkpaccount($member_id)
+	{
+		global $user; 
+		$member= new \bbdkp\Members($member_id);
+		$oldpoints = new \bbdkp\Points($member_id, $this->dkpsys_id);
+		$oldpoints->dkpid = $this->dkpsys_id;
+		$oldpoints->member_id = $member_id;
+		
+		$newpoints = new \bbdkp\Points($member_id, $this->dkpsys_id);
+		$newpoints->dkpid = $this->dkpsys_id;
+		$newpoints->member_id = $member_id;
+		
+		$newpoints->raid_value = request_var ( 'raid_value', 0.00 ); 
+		$newpoints->time_bonus = request_var ( 'time_value', 0.00 ); 
+		$newpoints->zerosum_bonus = request_var ( 'zerosum', 0.00 ); 
+		$newpoints->earned_decay = request_var ( 'rdecay', 0.00 ); 
+		$newpoints->spent = request_var ( 'spent', 0.00 ); 
+		$newpoints->item_decay = request_var ( 'idecay', 0.00 );
+		
+		$newpoints->update_account(); 
+
+		$log_action = array (
+				'header' => 'L_ACTION_MEMBERDKP_UPDATED',
+				'L_USER' => $user->data ['user_id'],
+				'L_USERCOLOUR' => $user->data ['user_colour'],
+				'L_NAME' => $member->member_name,
+				'L_EARNED_BEFORE' => $oldpoints->raid_value + $oldpoints->time_bonus + $oldpoints->zerosum_bonus,
+				'L_SPENT_BEFORE' =>  $newpoints->spent,
+				'L_EARNED_AFTER' => $newpoints->raid_value + $newpoints->time_bonus + $newpoints->zerosum_bonus,
+				'L_SPENT_AFTER' => $oldpoints->spent);
+			
+		$this->log_insert ( array (
+			'log_type' => $log_action ['header'], 
+			'log_action' => $log_action ));
+			
+		$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_MEMBERDKP_SUCCESS'], $member->member_name );
+		
+		unset($member); 
+		unset($oldpoints);
+		unset($newpoints); 
+		
+		trigger_error ( $success_message);
+		
+	}
 	
+	/**
+	 * deletes a dkp account
+	 * @param int $member_id
+	 * @uses called by acp_dkp_mkdkp
+	 */
+	public function delete_dkpaccount($member_id)
+	{
+		global $user, $phpbb_root_path,$phpEx;
+		$member= new \bbdkp\Members($member_id);
+		
+		//delete player from raiddetail table
+		if (!class_exists('\bbdkp\Raiddetail'))
+		{
+			require("{$phpbb_root_path}includes/bbdkp/Raids/Raiddetail.$phpEx");
+		}
+		
+		$raiddetail = new \bbdkp\Raiddetail();
+		$raiddetail->deleteaccount($member_id, $this->dkpsys_id); 
+		
+		
+		//delete player from adjustments table
+		if (!class_exists('\bbdkp\Adjust'))
+		{
+			require("{$phpbb_root_path}includes/bbdkp/Adjustments/Adjust.$phpEx");
+		}
+		$Adjust = new \bbdkp\Adjust($this->dkpsys_id);
+		$Adjust->member_id = $member_id;
+		$Adjust->delete_memberadjustments();
+		
+		
+		//delete player dkp points
+		$oldpoints = new \bbdkp\Points($member_id, $this->dkpsys_id);
+		$oldpoints->dkpid = $this->dkpsys_id;
+		$oldpoints->member_id = $member_id;
+		$oldpoints->delete_account();
+			
+		$log_action = array (
+				'header' => 'ACTION_MEMBERDKP_DELETED',
+				'L_NAME' => $member->member_name,
+				'L_EARNED' => $oldpoints->raid_value + $oldpoints->time_bonus + $oldpoints->zerosum_bonus,
+				'L_SPENT' => $oldpoints->spent,
+				'L_ADJUSTMENT' => $oldpoints->adjustment );
+			
+		$this->log_insert ( array (
+				'log_type' => $log_action ['header'],
+				'log_action' => $log_action ) );
+			
+		$success_message = sprintf ( $user->lang ['ADMIN_DELETE_MEMBERDKP_SUCCESS'], $member_id, $this->dkpsys_id );
+		
+		unset($member);
+		unset($raiddetail);
+		unset($Adjust);
+		unset($oldpoints); 
+		
+		trigger_error ($success_message);
+		
+	}
 	
 	/**
 	 * add dkp points.
@@ -739,7 +865,6 @@ class PointsController  extends \bbdkp\Admin
 		}
 	}
 	
-
 	/**
 	 * add points to record
 	 * @param \bbdkp\Raids $new_raid
