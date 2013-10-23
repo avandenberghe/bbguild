@@ -73,7 +73,7 @@ $pctlife = ( $pclife > 0 ) ? round(($mclife / $pclife) * 100, 1) : 0;
 $rstart = request_var('rstart',0);
 if($config['bbdkp_epgp'] == '1')
 {
-	$current_earned = $points->ep_net; 
+	$current_earned = $points->earned_net; 
 }
 else
 {	

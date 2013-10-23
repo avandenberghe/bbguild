@@ -561,7 +561,7 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 					$template->assign_block_vars ( 'transfer_to_row', array (
 						'VALUE' => $row ['member_id'], 
 						'SELECTED' => ($member_to == $row ['member_id']) ? ' selected="selected"' : '',
-						'OPTION' => $row ['member_name'] ) );
+						'OPTION' => $row ['member_name']));
 				}
 				$db->sql_freeresult ( $resultto );
 				

@@ -167,12 +167,11 @@ class acp_dkp_adj extends \bbdkp\Admin
 						'U_VIEW_MEMBER' => (isset($adj['member_name'])) ? append_sid("{$phpbb_root_path}dkp.$phpEx", "page=viewmember&amp;" . URI_NAMEID . '=' . $adj['member_id'] . '&amp;' . URI_DKPSYS . '=' . $adj['adjustment_dkpid']) : '' , 
 						'MEMBER' => (isset($adj['member_name'])) ? $adj['member_name'] : '' , 
 						'REASON' => (isset($adj['adjustment_reason'])) ? $adj['adjustment_reason'] : '' , 
-						'ADJUSTMENT' => number_format($adj['adjustment_value'],2) , 
-						'ADJ_DECAY' => $adj['adj_decay'] , 
-						'CAN_DECAY' => $adj['can_decay'] , 
-						'ADJUSTMENT_NET' => number_format($adj['adjustment_value'] - $adj['adj_decay'], 2) , 
+						'CAN_DECAY' => $adj['can_decay'], 
+						'ADJUSTMENT' => $adj['adjustment_value'] == 0 ? '' : number_format($adj['adjustment_value'],2) , 
+						'ADJ_DECAY' => -1 * $adj['adj_decay'] == 0 ? '' : -1 * $adj['adj_decay'], 
+						'ADJUSTMENT_NET' => ($adj['adjustment_value'] - $adj['adj_decay']) == 0 ? '' : number_format($adj['adjustment_value'] - $adj['adj_decay'], 2) , 
 						'DECAY_TIME' => ($adj['decay_time'] != 0 ?  date($config['bbdkp_date_format'], $adj['decay_time']) : '') , 
-						'C_ADJUSTMENT' => ($adj['adjustment_value'] > 0 ? "positive" : "negative") , 
 						'ADDED_BY' => $adj['adjustment_added_by']
 					)); 
 					

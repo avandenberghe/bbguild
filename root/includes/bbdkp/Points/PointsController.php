@@ -122,21 +122,21 @@ class PointsController  extends \bbdkp\Admin
 		
 		$previous_data = '';
 		$sort_order = array (
-				0 => array ('member_current desc', 'member_current' ),
-				1 => array ('a.member_name', 'a.member_name desc' ),
-				2 => array ('r.rank_name', 'r.rank_name desc' ),
-				3 => array ('a.member_level desc', 'a.member_level' ),
-				4 => array ('a.member_class', 'a.member_class desc' ),
-				5 => array ('m.member_raid_value desc', 'm.member_raid_value' ),
-				6 => array ('m.member_time_bonus desc', 'm.member_time_bonus' ), 
+				0 => array ('member_status desc, member_name asc', 'member_status asc, member_name asc' ),
+				1 => array ('member_name', 'member_name desc' ),
+				2 => array ('rank_name', 'rank_name desc' ),
+				3 => array ('member_level desc', 'member_level' ),
+				4 => array ('member_class', 'member_class desc' ),
+				5 => array ('member_raid_value desc', 'member_raid_value' ),
+				6 => array ('member_time_bonus desc', 'member_time_bonus' ), 
 				7 => array ('member_zerosum_bonus desc', 'member_zerosum_bonus' ), 
-				8 => array ('m.member_earned', 'm.member_earned desc' ),
-				9 => array ('m.member_raid_decay desc', 'm.member_raid_decay' ), 
-				10 => array ('m.member_adjustment desc', 'm.member_adjustment' ),
-				12 => array ('m.member_spent desc', 'm.member_spent' ),
-				13 => array ('m.member_item_decay desc', 'member_item_decay' ), 
+				8 => array ('member_earned', 'member_earned desc' ),
+				9 => array ('member_raid_decay desc', 'member_raid_decay' ), 
+				10 => array ('member_adjustment desc', 'member_adjustment' ),
+				12 => array ('member_spent desc', 'member_spent' ),
+				13 => array ('member_item_decay desc', 'member_item_decay' ), 
 				16 => array ('member_current desc', 'member_current' ),
-				17 => array ('m.member_lastraid desc', 'm.member_lastraid' ),  
+				17 => array ('member_lastraid desc', 'member_lastraid' ),  
 				
 				);
 	
@@ -145,9 +145,9 @@ class PointsController  extends \bbdkp\Admin
 		$sort_index = explode ( '.', $current_order ['uri'] ['current'] );
 		$previous_source = preg_replace ( '/( (asc|desc))?/i', '', $sort_order [$sort_index [0]] [$sort_index [1]] );
 		
-		$sql_array ['ORDER_BY'] = $current_order ['sql'];
-		
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+		$sql = 'SELECT * FROM ( ' . $sql . ' ) as s  ORDER BY ' . $current_order ['sql'];
+		
 		$members_result = $db->sql_query ( $sql );
 		$members_row = array(); 
 		
@@ -229,30 +229,29 @@ class PointsController  extends \bbdkp\Admin
 		/***  sort  ***/
 	
 		$sort_order = array (
-				0 => array ('pr desc', 'pr' ),
-				1 => array ('a.member_name', 'a.member_name desc' ),
-				2 => array ('r.rank_name', 'r.rank_name desc' ),
-				3 => array ('a.member_level desc', 'a.member_level' ),
-				4 => array ('a.member_class', 'a.member_class desc' ),
-				5 => array ('m.member_raid_value desc', 'm.member_raid_value' ),
-				6 => array ('m.member_time_bonus desc', 'm.member_time_bonus' ),
-				9 => array ('m.member_raid_decay desc', 'm.member_raid_decay' ),
-				10 => array ('m.member_adjustment desc', 'm.member_adjustment' ),
+				0 => array ('member_status desc, member_name asc', 'member_status asc, member_name asc'),
+				1 => array ('member_name', 'member_name desc' ),
+				2 => array ('rank_name', 'rank_name desc' ),
+				3 => array ('member_level desc', 'member_level' ),
+				4 => array ('member_class', 'member_class desc' ),
+				5 => array ('member_raid_value desc', 'member_raid_value' ),
+				6 => array ('member_time_bonus desc', 'member_time_bonus' ),
+				9 => array ('member_raid_decay desc', 'member_raid_decay' ),
+				10 => array ('member_adjustment desc', 'member_adjustment' ),
 				11 => array ('ep desc', 'ep ' ),
-				12 => array ('m.member_spent desc', 'm.member_spent' ),
-				13 => array ('m.member_item_decay desc', 'member_item_decay' ),
+				12 => array ('member_spent desc', 'member_spent' ),
+				13 => array ('member_item_decay desc', 'member_item_decay' ),
 				14 => array ('gp desc', 'gp ' ),
 				15 => array ('pr desc', 'pr ' ),
-				17 => array ('m.member_lastraid desc', 'm.member_lastraid' ),
+				17 => array ('member_lastraid desc', 'member_lastraid' ),
 		);
 	
 		$current_order = $this->switch_order ( $sort_order );
 		$sort_index = explode ( '.', $current_order ['uri'] ['current'] );
 		$previous_source = preg_replace ( '/( (asc|desc))?/i', '', $sort_order [$sort_index [0]] [$sort_index [1]] );
 	
-		$sql_array ['ORDER_BY'] = $current_order ['sql'];
-	
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+		$sql = 'SELECT * FROM ( ' . $sql . ' ) as s  ORDER BY ' . $current_order ['sql'];
 		$members_result = $db->sql_query ( $sql );
 		$members_row = array();
 	
@@ -996,13 +995,13 @@ class PointsController  extends \bbdkp\Admin
 				$group_key = $this->gen_group_key ( $this->time, $adj_reason, $adj_value );
 				$query = $db->sql_build_array ( 'INSERT',
 				array (
-		'adjustment_dkpid' 		=> $dkpid,
-		'adjustment_value' 		=> $adj_value,
-		'adjustment_date' 		=> $this->time,
-		'member_id' 			=> $row['member_id'],
-		'adjustment_reason' 	=> $adj_reason,
-		'adjustment_group_key' 	=> $group_key,
-		'adjustment_added_by' 	=> $user->data ['username'] ));
+					'adjustment_dkpid' 		=> $dkpid,
+					'adjustment_value' 		=> $adj_value,
+					'adjustment_date' 		=> $this->time,
+					'member_id' 			=> $row['member_id'],
+					'adjustment_reason' 	=> $adj_reason,
+					'adjustment_group_key' 	=> $group_key,
+					'adjustment_added_by' 	=> $user->data ['username'] ));
 					
 				$db->sql_query ( 'INSERT INTO ' . ADJUSTMENTS_TABLE . $query );
 		}
@@ -1038,8 +1037,8 @@ class PointsController  extends \bbdkp\Admin
 			$adj_value = (float) $config ['bbdkp_active_point_adj'];
 	
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-		SET member_status = 1, member_adjustment = member_adjustment + ' . (string) $adj_value . '
-		WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $active_members );
+			SET member_status = 1, member_adjustment = member_adjustment + ' . (string) $adj_value . '
+			WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $active_members );
 	
 			$db->sql_query($sql);
 	
@@ -1059,11 +1058,11 @@ class PointsController  extends \bbdkp\Admin
 				
 			// Active -> Inactive
 			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . " SET member_status = 0 WHERE member_dkpid = " . $dkpid . "
-		AND (member_lastraid <  " . $inactive_time . ") AND (member_status= 1)" );
+			AND (member_lastraid <  " . $inactive_time . ") AND (member_status= 1)" );
 				
 			// Inactive -> Active
 			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . " SET member_status = 1 WHERE member_dkpid = " . $dkpid . "
-		AND (member_lastraid >= " . $inactive_time . ") AND (member_status= 0)" );
+			AND (member_lastraid >= " . $inactive_time . ") AND (member_status= 0)" );
 		}
 	
 		return true;

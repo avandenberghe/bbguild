@@ -561,7 +561,7 @@ if (!class_exists('\bbdkp\Members'))
 					'BUYER' 		=> $buyer->member_name,
 					'ITEMNAME'      => $item_name,
 					'ITEM_ID'		=> $lootdetail['item_id'],
-					'ITEM_ZS'      	=> ($lootdetail['item_zs'] == 1) ? ' checked="checked"' : '',
+				 /* 'ITEM_ZS'      	=> ($lootdetail['item_zs'] == 1) ? ' checked="checked"' : '',  */
 					'U_VIEW_BUYER' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" . $raid_id . "&amp;" . URI_NAMEID . "=" . $lootdetail['member_id']) ,
 					'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_ITEM . "={$lootdetail['item_id']}&amp;" . URI_RAID . "={$raid_id}" ),
 					'U_DELETE_ITEM' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteitem=1&amp;" . URI_ITEM . "={$lootdetail['item_id']}&amp;" . URI_DKPSYS. "=" . $raid->event_dkpid . "&amp;" . URI_RAID . "={$raid_id}"),
