@@ -67,9 +67,8 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 				{
 					$this->tpl_name = 'dkp/acp_mm_listmemberdkp';
 				}
-				
-				
 				break;
+				
 			case 'mm_editmemberdkp' :
 				// invisible module
 
@@ -77,24 +76,21 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 				$dkp_id = request_var ( URI_DKPSYS, 0 );
 				
 				$update = (isset ( $_POST ['update'] )) ? true : false;
-				$delete = (isset ( $_POST ['delete'] )) ? true : false;
-				if ($update || $delete)
+				if ($update)
 				{
 					if (! check_form_key ( 'mm_editmemberdkp' ))
 					{
 						trigger_error ( 'FORM_INVALID' );
 					}
-				}
-				
-				if ($update)
-				{
+					
 					$member_id = request_var ( 'hidden_id', 0 );
 					$dkp_id = request_var ( 'hidden_dkpid', 0 );
 					$this->PointsController->dkpsys_id = $dkp_id; 
 					$this->PointsController->update_dkpaccount($member_id);
-					
 				}
-				elseif ($delete)
+				
+				$delete = (isset ( $_POST ['delete'] )) ? true : false;
+				if ($delete)
 				{
 					if (confirm_box (true))
 					{
@@ -104,16 +100,21 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 					}
 					else
 					{
+						// Include the member class
+						if (!class_exists('\bbdkp\Members'))
+						{
+							require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+						}
+						$member= new \bbdkp\Members(request_var ('hidden_id', 0));
+						
 						$s_hidden_fields = build_hidden_fields ( array (
 							'delete' => true, 
 							'hidden_id' => request_var ('hidden_id', 0),   
 							'hidden_dkpid' => request_var ('hidden_dkpid',0)
 								));
-						confirm_box ( false, $user->lang ['CONFIRM_DELETE_MEMBERDKP'], $s_hidden_fields );
+						confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_MEMBERDKP'] , $member->member_name  ), $s_hidden_fields );
 					}
 					
-					redirect (append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_listmemberdkp"));
-				
 				}
 				
 				/* template filling */
@@ -279,6 +280,7 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 					'ADJDECAY' => $this->member ['adj_decay'], 
 					'EP' => $this->member ['ep'], 
 					'SPENT' => $this->member ['member_spent'], 
+					'BGP' => $config['bbdkp_basegp'], 
 					'ITEMDECAY' => $this->member ['member_item_decay'], 
 					'GP' => $this->member ['gp'], 
 					'PR' => $this->member ['pr'], 

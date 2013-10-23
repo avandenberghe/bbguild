@@ -236,7 +236,7 @@ class Adjust extends \bbdkp\Admin
 	{
 		global $db;
 	
-		$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . ' WHERE member_id = ' . $this->member_id . ' AND member_dkpid  = ' .  $this->adjustment_dkpid;
+		$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . ' WHERE member_id = ' . $this->member_id . ' AND adjustment_dkpid  = ' .  $this->adjustment_dkpid;
 		$db->sql_query($sql);
 	
 	}

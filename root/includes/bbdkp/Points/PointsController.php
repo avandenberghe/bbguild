@@ -727,7 +727,7 @@ class PointsController  extends \bbdkp\Admin
 	 */
 	public function update_dkpaccount($member_id)
 	{
-		global $user; 
+		global $phpbb_admin_path, $user, $phpEx; 
 		$member= new \bbdkp\Members($member_id);
 		$oldpoints = new \bbdkp\Points($member_id, $this->dkpsys_id);
 		$oldpoints->dkpid = $this->dkpsys_id;
@@ -766,7 +766,9 @@ class PointsController  extends \bbdkp\Admin
 		unset($oldpoints);
 		unset($newpoints); 
 		
-		trigger_error ( $success_message);
+		$link =  '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp" ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
+		trigger_error ($success_message . ' ' . $link , E_USER_NOTICE );
+		
 		
 	}
 	
@@ -777,7 +779,7 @@ class PointsController  extends \bbdkp\Admin
 	 */
 	public function delete_dkpaccount($member_id)
 	{
-		global $user, $phpbb_root_path,$phpEx;
+		global $user, $phpbb_admin_path, $phpbb_root_path, $phpEx;
 		$member= new \bbdkp\Members($member_id);
 		
 		//delete player from raiddetail table
@@ -797,6 +799,7 @@ class PointsController  extends \bbdkp\Admin
 		}
 		$Adjust = new \bbdkp\Adjust($this->dkpsys_id);
 		$Adjust->member_id = $member_id;
+		$Adjust->adjustment_dkpid = $this->dkpsys_id; 
 		$Adjust->delete_memberadjustments();
 		
 		
@@ -817,14 +820,15 @@ class PointsController  extends \bbdkp\Admin
 				'log_type' => $log_action ['header'],
 				'log_action' => $log_action ) );
 			
-		$success_message = sprintf ( $user->lang ['ADMIN_DELETE_MEMBERDKP_SUCCESS'], $member_id, $this->dkpsys_id );
+		$success_message = sprintf ( $user->lang ['ADMIN_DELETE_MEMBERDKP_SUCCESS'], $member->member_name, $this->dkpsys_id );
 		
 		unset($member);
 		unset($raiddetail);
 		unset($Adjust);
 		unset($oldpoints); 
 		
-		trigger_error ($success_message);
+		$link =  '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp" ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>'; 
+		trigger_error ($success_message . ' ' . $link , E_USER_NOTICE );
 		
 	}
 	
