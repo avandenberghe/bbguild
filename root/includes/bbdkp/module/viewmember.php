@@ -63,9 +63,23 @@ $pct2 =	 ( $pc2 > 0 ) ? round(($mc2 / $pc2) * 100, 1) : 0;
 $pct3 =	 ( $pc3 > 0 ) ? round(($mc3 / $pc3) * 100, 1) : 0;
 $pctlife = ( $pclife > 0 ) ? round(($mclife / $pclife) * 100, 1) : 0;
 
-/*get raids*/
-$rstart = request_var('rstart',0) ;
-$current_earned = $points->earned_net; 
+/** 
+ * 
+ * RAID history
+ * 
+ *  
+ **/
+
+$rstart = request_var('rstart',0);
+if($config['bbdkp_epgp'] == '1')
+{
+	$current_earned = $points->earned_net; 
+}
+else
+{	
+	$current_earned = $points->earned_net;
+}
+
 $raids_result = $Raids->getRaids('r.raid_start DESC', $this->dkpsys_id, 0, $rstart, $member_id);
 while ( $raid = $db->sql_fetchrow($raids_result))
 {
@@ -84,11 +98,25 @@ while ( $raid = $db->sql_fetchrow($raids_result))
 	$current_earned = $current_earned - $raid['net_earned'];
 }
 
-/** loot history **/
+/** 
+ * 
+ * loot history
+ * 
+ *  
+ **/
+
 $istart = request_var('istart', 0);
-$current_spent = 0; 
+if($config['bbdkp_epgp'] == '1')
+{
+	$current_spent = $points->gp_net; 
+}
+else
+{	
+	$current_spent = $points->earned_net;
+}
+
 $loot = new \bbdkp\Loot();
-$lootdetails = $loot->GetAllLoot( ' i.item_date DESC ', $this->dkpsys_id,0, $istart, $member_id ); 
+$lootdetails = $loot->GetAllLoot( ' i.item_date DESC ',0,  $this->dkpsys_id, 0, $istart, $member_id ); 
 while ( $item = $db->sql_fetchrow($lootdetails))
 {
 	if ($this->bbtips == true)
@@ -114,9 +142,12 @@ while ( $item = $db->sql_fetchrow($lootdetails))
 			'NAME'			=> $item_name,
 			'RAID'			=> ( !empty($item['event_name']) ) ? $item['event_name'] : '&lt;<i>Not Found</i>&gt;',
 			'SPENT'			=> $item['item_value'],
+			'DECAY'			=> $item['item_decay'],
+			'SPENT_NET'		=> $item['item_net'],
 			'CURRENT_SPENT' => sprintf("%.2f", $current_spent))
 	);
-	$current_spent -= $item['item_value'];
+	$current_spent -= $item['item_net'];
+	
 }
 $db->sql_freeresult($lootdetails);
 

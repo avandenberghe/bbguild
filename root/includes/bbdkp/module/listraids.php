@@ -98,8 +98,9 @@ $template->assign_vars(array(
     'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
 	'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
 	'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
-    
-    'O_DATE'  => $sortlink[0],
+	'S_EPGP' 			=> $config['bbdkp_epgp'] == '1' ? true: false,
+
+	'O_DATE'  => $sortlink[0],
     'O_POOL'  => $sortlink[1],
     'O_NAME'  => $sortlink[2],
     'O_NOTE'  => $sortlink[3],
@@ -111,6 +112,7 @@ $template->assign_vars(array(
     'START' => $start,
     'RAID_PAGINATION' => $pagination, 
 	'S_DISPLAY_RAIDS' => true
+		
 ));
 
 // Output page

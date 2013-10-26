@@ -205,7 +205,7 @@ $isort_order = array (
 
 $icurrent_order = $this->switch_order ($isort_order, 'ui');
 $loot = new \bbdkp\Loot();
-$raid->loot_details = $loot->GetAllLoot( $icurrent_order ['sql'], $this->dkpsys_id, $raid_id, 0, 0);
+$raid->loot_details = $loot->GetAllLoot( $icurrent_order ['sql'], 0, $this->dkpsys_id, $raid_id, 0, 0);
 
 $number_items = 0;
 $item_value = 0.00;

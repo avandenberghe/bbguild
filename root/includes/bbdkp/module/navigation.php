@@ -72,8 +72,8 @@ $template->assign_vars(array(
 		// Form values
 		'U_NEWS'  			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=news&amp;guild_id=' . $this->guild_id),
 		'U_LISTMEMBERS'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;guild_id=' . $this->guild_id),
-		'U_LISTITEMS'     	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listitems&amp;guild_id=' . $this->guild_id),
-		'U_LISTITEMHIST'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listitems&amp;mode=history&amp;guild_id=' . $this->guild_id),
+		'U_LOOTDB'     		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=lootdb&amp;guild_id=' . $this->guild_id),
+		'U_LOOTHIST'  		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=loothistory&amp;guild_id=' . $this->guild_id),
 		'U_LISTEVENTS'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listevents&amp;guild_id=' . $this->guild_id),
 		'U_LISTRAIDS'   	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=listraids&amp;guild_id=' . $this->guild_id),
 		'U_VIEWITEM'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewitem&amp;guild_id=' . $this->guild_id),

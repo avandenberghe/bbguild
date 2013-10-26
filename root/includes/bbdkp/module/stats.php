@@ -47,7 +47,14 @@ $this->show_all = ( (isset($_GET['show'])) && (request_var('show', '') == "all")
 
 $time = time() + $user->timezone + $user->dst;
 
-$LootStats->MemberLootStats($time, $this->guild_id, $this->query_by_pool, $this->dkpsys_id, $this->show_all);
+if($config['bbdkp_epgp'] == '1')
+{
+	$LootStats->EPGPMemberLootStats($time, $this->guild_id, $this->query_by_pool, $this->dkpsys_id, $this->show_all);
+}
+else
+{
+	$LootStats->MemberLootStats($time, $this->guild_id, $this->query_by_pool, $this->dkpsys_id, $this->show_all);
+}
 $LootStats->ClassLootStats(NULL, $this->guild_id, $this->query_by_pool, $this->dkpsys_id, $this->show_all);
 $RaidStats->attendance_statistics($time, $u_stats, $this->guild_id, $this->query_by_pool, $this->dkpsys_id, $this->show_all);
 

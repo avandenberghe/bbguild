@@ -124,11 +124,12 @@ class Adjust extends \bbdkp\Admin
 		$query = $db->sql_build_array('INSERT', array(
 				'adjustment_dkpid' => $this->adjustment_dkpid ,
 				'adjustment_value' => $this->adjustment_value ,
-				'adjustment_date' => $this->time ,
+				'adjustment_date' => $this->adjustment_date ,
 				'member_id' => $this->member_id ,
 				'adjustment_reason' => $this->adjustment_reason ,
 				'adjustment_group_key' => $this->adjustment_groupkey ,
 				'can_decay' => $this->can_decay ,
+				'adj_decay' => $this->adj_decay, 
 				'adjustment_added_by' => $user->data['username']));
 
 		$db->sql_query('INSERT INTO ' . ADJUSTMENTS_TABLE . $query);
@@ -198,7 +199,7 @@ class Adjust extends \bbdkp\Admin
 		
 		$this->members_samegroupkey = $members;
 		unset($members);
-	
+		return $this;
 
 	}
 
@@ -225,6 +226,19 @@ class Adjust extends \bbdkp\Admin
 		$db->sql_query($sql);
 		
 		$db->sql_transaction('commit');
+	}
+	
+	
+	/**
+	 * deletes all adjustments foer one member
+	 */
+	function delete_memberadjustments()
+	{
+		global $db;
+	
+		$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . ' WHERE member_id = ' . $this->member_id . ' AND adjustment_dkpid  = ' .  $this->adjustment_dkpid;
+		$db->sql_query($sql);
+	
 	}
 	
 	
@@ -314,19 +328,12 @@ class Adjust extends \bbdkp\Admin
 		return $result;
 	}
 	
-	
 
 	/**
+	 * 
 	 * function to decay one specific adjustment
-	 *
-	 * @param int adj_id the adjustment id to decay
-	 * @param int $dkpid dkpid for adapting accounts
-	 * @param unknown_type $member_id
-	 * @param unknown_type $adjdate
-	 * @param unknown_type $value
-	 * @param unknown_type $olddecay
+	 * @param int $adjust_id
 	 * @return boolean
-	 * @tofix
 	 */
 	public function decayadj ($adjust_id)
 	{

@@ -43,10 +43,13 @@ class Raiddetail
 	 */
 	public $raid_details; 
 	
-	public function __construct($raid_id) 
+	public function __construct($raid_id=0) 
 	{
-		$this->raid_id = $raid_id;
-		$this->Get($raid_id); 
+		if ($raid_id > 0)
+		{
+			$this->raid_id = $raid_id;
+			$this->Get($raid_id); 
+		}
 	}
 	
 	
@@ -127,10 +130,12 @@ class Raiddetail
 		global $db; 
 		
 		$raid_detail = array(
-				'raid_id'      => (int) $this->raid_id,
-				'member_id'   =>  $this->member_id,
-				'raid_value'   => $this->raid_value,
-				'time_bonus'   => $this->time_bonus,
+				'raid_id'       => (int) $this->raid_id,
+				'member_id'     =>  $this->member_id,
+				'raid_value'    => $this->raid_value,
+				'time_bonus'    => $this->time_bonus,
+				'zerosum_bonus' => $this->zerosum_bonus, 
+				'raid_decay' 	=> $this->raid_decay, 
 		);
 		
 		$sql = 'INSERT INTO ' . RAID_DETAIL_TABLE . ' ' . $db->sql_build_array('INSERT', $raid_detail);
@@ -144,6 +149,23 @@ class Raiddetail
 		
 		$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' WHERE raid_id= ' . $this->raid_id . ' and member_id = ' . $this->member_id ;
 		$db->sql_query($sql);		
+		
+	}
+	
+	
+	/**
+	 * delete attendee from raiddetail table
+	 */
+	public function deleteaccount($member_id, $dkp_id)
+	{
+		global $db;
+		$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . '
+				WHERE member_id= ' . $member_id . '
+				AND raid_id IN ( SELECT r.raid_id
+					FROM ' . RAIDS_TABLE . ' r, ' . EVENTS_TABLE . ' e
+					WHERE r.event_id = e.event_id
+					AND e.event_dkpid = ' . ( int ) $dkp_id . ')';
+		$db->sql_query($sql);
 		
 	}
 	
