@@ -1,5 +1,7 @@
 <?php
 /**
+ * dkp pool acp file
+ * 
  * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -42,10 +44,22 @@ if (!class_exists('\bbdkp\Events'))
  */  
  class acp_dkp_sys extends \bbdkp\Admin
 {
-	var $u_action;
+	/**
+	 * link in trigger window
+	 * @var string
+	 */
 	var $link;
+	/**
+	 * dkp pool
+	 * @var int
+	 */
 	var $dkpsys; 
 	
+	/**
+	 * acp entrypoint
+	 * @param int $id
+	 * @param int $mode
+	 */
 	function main($id, $mode)
 	{
 		global $user, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;

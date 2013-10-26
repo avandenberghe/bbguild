@@ -1,7 +1,6 @@
 <?php
 /**
- * bbdkp view class
- * navigation block
+ * left front navigation block
  * 
  * @package bbDKP
  * @link http://www.bbdkp.com

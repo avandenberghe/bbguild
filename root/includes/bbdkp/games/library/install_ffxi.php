@@ -27,6 +27,11 @@ if (!class_exists('\bbdkp\aGameinstall'))
 	require("{$phpbb_root_path}includes/bbdkp/games/library/aGameinstall.$phpEx");
 }
 
+/**
+ * FFXI Installer Class
+ * @package bbDKP
+ *
+ */
 class install_ffxi extends \bbdkp\aGameinstall
 {
 	

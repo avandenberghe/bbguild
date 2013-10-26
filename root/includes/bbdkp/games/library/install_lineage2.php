@@ -1,8 +1,8 @@
 <?php
 /**
- * bbdkp Lineage2 install data
+ * bbdkp Lineage2 install file
  * 
- * @package 	bbDKP
+ * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -10,6 +10,7 @@
  * @version 1.3.0
  *
  */
+
 namespace bbdkp;
 /**
  * @ignore
@@ -27,6 +28,12 @@ if (!class_exists('\bbdkp\aGameinstall'))
 	require("{$phpbb_root_path}includes/bbdkp/games/library/aGameinstall.$phpEx");
 }
 
+/**
+ * Lineage 2 Installer class
+ * 
+ * @package bbDKP
+ *
+ */
 class install_lineage2 extends \bbdkp\aGameinstall
 {
 	

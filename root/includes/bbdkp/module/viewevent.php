@@ -1,5 +1,7 @@
 <?php
 /**
+ * Module Viewevent
+ * 
  * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com

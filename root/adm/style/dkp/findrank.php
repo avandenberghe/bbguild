@@ -1,10 +1,11 @@
 <?php
 /**
  * returns rank xml based on ajax call 
- *  
+ * 
+ * @package bbDKP
  * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-
+ * 
  */
 define('IN_PHPBB', true);
 define('ADMIN_START', true);

@@ -2,7 +2,6 @@
 /**
  * lootdb : loot catalogue
  * 
- * 
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

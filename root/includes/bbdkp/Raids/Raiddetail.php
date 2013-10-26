@@ -1,6 +1,9 @@
 <?php
 /**
- * @package 	bbDKP
+ * 
+ * Raiddetail Class
+ * 
+ * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -20,21 +23,72 @@ if (! defined('IN_PHPBB'))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
+/**
+ * Raid detail table Class
+ * 
+ * @package bbDKP
+ */
 class Raiddetail
 {
-	public $raid_id; 
+	/**
+	 * Raid pk
+	 * @var Int
+	 */
+	public $raid_id;
+	/**
+	 * member id
+	 * @var int
+	 */ 
 	public $member_id;
+	/**
+	 * event value of this raid
+	 * @var decimal
+	 */
 	public $raid_value; 
+	/**
+	 * time bonus earned
+	 * @var decimal
+	 */
 	public $time_bonus;
-	public $zerosum_bonus; 
+	/**
+	 * Zero sum value earned on loot
+	 * @var decimal
+	 */
+	public $zerosum_bonus;
+	/**
+	 * raid decay on sum of raiddertail, timebonus, zerosumbonus 
+	 * @var unknown
+	 */ 
 	public $raid_decay;
+	/**
+	 * time of decay
+	 * @var unknown
+	 */
 	public $raid_decay_time;
-	
+	/**
+	 * dkp pool id
+	 * @var Int
+	 */
 	public $dkpid;
+	/**
+	 * name of member account
+	 * @var String
+	 */
 	public $member_name;
+	/**
+	 * hexadecimal value of class color
+	 * @var unknown
+	 */
 	public $colorcode;
+	/**
+	 * class image
+	 * @var unknown
+	 */
 	public $imagename;
-	
+	/**
+	 * array of guildmembers not attending the raid
+	 * @var array
+	 */
 	public $nonattendees; 
 	
 	/**
@@ -43,6 +97,10 @@ class Raiddetail
 	 */
 	public $raid_details; 
 	
+	/**
+	 * Constructor
+	 * @param number $raid_id
+	 */
 	public function __construct($raid_id=0) 
 	{
 		if ($raid_id > 0)
@@ -52,11 +110,14 @@ class Raiddetail
 		}
 	}
 	
-	
+
 	/**
+	 * 
 	 * gets detail for one member or for all
-	 * @param unknown_type $raid_id
-	 * @param unknown_type $member_id
+	 * @param number $raid_id
+	 * @param number $member_id
+	 * @param string $order
+	 * @return multitype:
 	 */
 	public function Get($raid_id, $member_id = 0, $order = ' m.member_id' )
 	{
@@ -124,7 +185,9 @@ class Raiddetail
 		
 	}
 	
-	
+	/**
+	 * inserts a raid attendee
+	 */
 	public function create()
 	{
 		global $db; 
@@ -142,7 +205,9 @@ class Raiddetail
 		$db->sql_query($sql);
 	}
 	
-	
+	/**
+	 * removes a raid attendee given member id ans raid id
+	 */
 	public function delete()
 	{
 		global $db;
@@ -151,10 +216,12 @@ class Raiddetail
 		$db->sql_query($sql);		
 		
 	}
-	
-	
+
 	/**
+	 * 
 	 * delete attendee from raiddetail table
+	 * @param number $member_id
+	 * @param number $dkp_id
 	 */
 	public function deleteaccount($member_id, $dkp_id)
 	{
@@ -169,6 +236,10 @@ class Raiddetail
 		
 	}
 	
+	/**
+	 * deletes all attendees from a raid
+	 * @param int $raid_id
+	 */
 	public function deleteRaid($raid_id)
 	{
 		global $db;
@@ -176,6 +247,9 @@ class Raiddetail
 		$db->sql_query($sql);
 	}
 	
+	/**
+	 * update a raid detail record
+	 */
 	public function update()
 	{
 		global $db, $user;
@@ -193,9 +267,9 @@ class Raiddetail
 		$db->sql_query ($sql);
 	}
 	
-
-	
-	
+	/**
+	 * get array of non attendees
+	 */
 	public function GetNonAttendees()
 	{
 		global $config, $db;
@@ -225,11 +299,7 @@ class Raiddetail
 		
 	}
 	
-	
-	
-	
-	
-	
+
 	
 }
 

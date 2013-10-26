@@ -27,6 +27,11 @@ if (!class_exists('\bbdkp\aGameinstall'))
 	require("{$phpbb_root_path}includes/bbdkp/games/library/aGameinstall.$phpEx");
 }
 
+/**
+ * Tera Installer class
+ * @package 	bbDKP
+ *
+ */
 class install_tera extends \bbdkp\aGameinstall
 {
 	

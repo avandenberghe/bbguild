@@ -1,5 +1,7 @@
 <?php
 /**
+ * Stats module. show guild statistics 
+ * 
  * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com

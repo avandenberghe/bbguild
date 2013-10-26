@@ -9,8 +9,8 @@
  * file that was distributed with this source code.
  *
  * @package   bbDKP-WoWAPI
- * @author	  Andy Vandenberghe <sajaki9@gmail.com> 
- * @copyright Copyright (c) 2011, Chris Saylor, Daniel Cannon,  Andy Vandenberghe
+ * @author	  Andreas Vandenberghe <sajaki9@gmail.com> 
+ * @copyright Copyright (c) 2011, Chris Saylor, Daniel Cannon,  Andreas Vandenberghe
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	  https://github.com/bbDKP/WoWAPI
  * @link 	  http://blizzard.github.com/api-wow-docs/#guild-profile-api
@@ -42,7 +42,7 @@ if (!class_exists('\bbdkp\Resource'))
 
 /**
  * Guild resource.
- * @package   bbDKP-WoWAPI
+ * @package   bbDKP
  * 
  */
 class Guild extends \bbdkp\Resource 

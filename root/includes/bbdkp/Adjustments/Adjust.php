@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * Adjustments class file
  * @package 	bbDKP
  * @link 		http://www.bbdkp.com
  * @author 		Sajaki@gmail.com
@@ -35,24 +35,88 @@ if (!class_exists('\bbdkp\Admin'))
  */
 class Adjust extends \bbdkp\Admin
 {
+	/**
+	 * Pk adjustmnent identifier
+	 * @var int
+	 */
 	public $adjustment_id;
+	
+	/**
+	 * id of member to adjust
+	 * @var int
+	 */
 	public $member_id = 0;
+	/**
+	 * name of member to be adjusted
+	 * @var int
+	 */
 	public $member_name = '';
+	/**
+	 * adjustment dkp id
+	 * @var int
+	 */
 	public $adjustment_dkpid = 0;
+	
+	/**
+	 * value of the adjustment
+	 * @var float signed
+	 */
 	public $adjustment_value = 0.0;
+	/**
+	 * date of adjustment
+	 * @var int
+	 */
 	public $adjustment_date;
+	/**
+	 * reason for the adjustment
+	 * @var string
+	 */
 	public $adjustment_reason = '';
+	/**
+	 * reason for adjustment
+	 * @var string
+	 */
 	public $adjustment_added_by = '';
+	/**
+	 * who updated
+	 * @var string
+	 */
 	public $adjustment_updated_by = '';
+	/**
+	 * unique key for identifying group of adjustments
+	 * @var unknown
+	 */
 	public $adjustment_groupkey = '';
+	/**
+	 * amount of adjustment decay
+	 * @var float
+	 */
 	public $adj_decay = 0.0;
+	/**
+	 * bool to indicate if this can be decayed
+	 * @var bool
+	 */
 	public $can_decay = 0;
+	/**
+	 * time if decay
+	 * @var int
+	 */
 	public $decay_time = 0;
+	/**
+	 * array with members sharing adjustment
+	 * @var unknown
+	 */
 	public $members_samegroupkey = array();
-
+	/**
+	 * dkp pool for adjust
+	 * @var unknown
+	 */
 	public $dkpsys;
 	
-	
+	/**
+	 * Adjustment class constructor
+	 * @param number $dkpsys
+	 */
 	function __construct($dkpsys = 0)
 	{
 		global $db;
@@ -140,7 +204,6 @@ class Adjust extends \bbdkp\Admin
 
 	/**
 	 * get an adjustment from database
-	 * @see \bbdkp\iAdjust::get()
 	 */
 	public function get($adjust_id)
 	{
@@ -206,7 +269,6 @@ class Adjust extends \bbdkp\Admin
 	
 	/**
 	 * deletes adjustment
-	 * @see \bbdkp\iAdjust::delete()
 	 */
 	function delete()
 	{
@@ -241,11 +303,13 @@ class Adjust extends \bbdkp\Admin
 	
 	}
 	
-	
 	/**
-	 *
 	 * returns list of adjustments to admin page
-	 * @see \bbdkp\iAdjust::listadj()
+	 * 
+	 * @param string $order
+	 * @param int $member_id
+	 * @param int $start
+	 * @return array
 	 */
 	function listadj($order, $member_id, $start=0)
 	{
@@ -294,7 +358,7 @@ class Adjust extends \bbdkp\Admin
 	 * Counts adjustments for a pool/member
 	 *
 	 * @param int $member_id
-	 * @return unknown
+	 * @return array
 	 */
 	function countadjust($member_id)
 	{
@@ -315,7 +379,7 @@ class Adjust extends \bbdkp\Admin
 
 	/**
 	 * Lists the pools with adjustments
-	 * @return unknown
+	 * @return array
 	 */
 	function listAdjPools()
 	{

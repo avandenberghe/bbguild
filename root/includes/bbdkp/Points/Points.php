@@ -1,6 +1,7 @@
 <?php
-namespace bbdkp;
 /**
+ * Points class file
+ * 
  * @package 	bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -10,7 +11,7 @@ namespace bbdkp;
  * @since 1.3.0
  *
  */
-
+namespace bbdkp;
 /**
  * @ignore
  */
@@ -23,10 +24,10 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
 /**
- *  Points Class
+ * Points Class
  *  this class manages the points summary table where the 3 
  *  transaction tables are centralised (phpbb_bbdkp_memberdkp)
- *  	transaction tables : raid_detail, adjustments, items
+ *  transaction tables : raid_detail, adjustments, items
  *  
  * @package 	bbDKP
  */
@@ -53,10 +54,24 @@ class Points
 	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 	*/
 	
+	/**
+	 * pk for points class
+	 * @var int
+	 */
 	public $member_id; // pk
+
+	/**
+	 * pk : dkp id 
+	 * @var int
+	 */
 	public $dkpid;  //pk
 	
+	/**
+	 * name of dkp pool
+	 * @var unknown
+	 */
 	public $dksys_name;  
+
 	/*
 	 * Classic DKP points
 	 */
@@ -225,7 +240,11 @@ class Points
 	 */
 	public $pool;
 	
-
+	/**
+	 * Points Class constructor
+	 * @param number $member_id
+	 * @param number $dkpid
+	 */
 	function __construct($member_id=0, $dkpid=0) 
 	{
 		global $phpbb_root_path, $phpEx; 
@@ -249,6 +268,12 @@ class Points
 		
 	}
 	
+	/**
+	 * Chacks if user has an account
+	 * @param int $member_id
+	 * @param int $dkpid
+	 * @return boolean
+	 */
 	public function has_account($member_id, $dkpid)
 	{
 		global $db; 
@@ -411,6 +436,9 @@ class Points
 	}
 	
 
+	/**
+	 * updates an account
+	 */
 	public function update_account()
 	{
 		global $user, $db;
@@ -438,6 +466,9 @@ class Points
 		
 	}
 	
+	/**
+	 * deletes the account
+	 */
 	public function delete_account()
 	{
 		global $db; 

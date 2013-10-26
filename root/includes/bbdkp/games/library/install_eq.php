@@ -2,7 +2,7 @@
 /**
  * everquest install data
  * 
- * @package 	bbDKP
+ * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -29,7 +29,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
 
 
 /**
- * Installs Everquest
+ * Everquest Installer Class
  * 
  * @author Sajaki
  * @package 	bbDKP

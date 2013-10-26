@@ -1,10 +1,11 @@
 <?php
 /**
- * returns memberlist xml based on ajax call 
- *  used by acp_addraid.html
+ * returns memberlist xml based on ajax call used by acp_addraid.html
+ * 
+ * @package bbDKP
  * @copyright (c) 2013 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-
+ * 
  */
 define('IN_PHPBB', true);
 define('ADMIN_START', true);
