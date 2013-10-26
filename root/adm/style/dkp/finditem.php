@@ -2,10 +2,12 @@
 /**
  * returns item xml based on ajax call 
  *  
- * @copyright (c) 2011 bbDkp <https://github.com/bbDKP>
+ * @package bbDKP
+ * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-
+ * @link http://www.bbdkp.com
  */
+
 define('IN_PHPBB', true);
 define('ADMIN_START', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../../../';

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Daoc Installer File
+ * 
  * @package 	bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -27,7 +29,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
 
 
 /**
- * Installs DaoC
+ *  DaoC Installer Class
  * 
  * @author Sajaki
  * @package 	bbDKP

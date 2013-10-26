@@ -1,8 +1,13 @@
 <?php
-/* 
+/**
+ * bbDKP 1.3.0 configuration file
+ * 
+ * @package bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * bbDKP 1.2.6 configuration file
-*/ 
+ * @author Sajaki
+ * @version 1.3.0
+ * 
+ */
 
 /**
 * @ignore

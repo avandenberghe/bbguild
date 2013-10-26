@@ -1,5 +1,7 @@
 <?php
 /**
+ * Loot ACP file
+ * 
  * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com

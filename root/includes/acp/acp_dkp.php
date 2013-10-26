@@ -1,5 +1,7 @@
 <?php
 /**
+ * bbDKP Mainpage ACP
+ * 
  * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -8,6 +10,7 @@
  * @version 1.3.0
  *
  */
+
 // don't add this file to namespace bbdkp
  /**
  * @ignore
@@ -41,11 +44,12 @@ if (!class_exists('\bbdkp\log'))
  */
 class acp_dkp extends \bbdkp\Admin
 {
-	var $u_action;
 
 	/**
 	 * main Settings function
 	 *
+	 * @param int $id
+	 * @param String $mode
 	 */
 	function main ($id, $mode)
 	{

@@ -1,6 +1,6 @@
 <?php
 /**
- * bbdkp SWTOR install data
+ * bbdkp SWTOR install file
  * 
  * @package 	bbDKP
  * @link http://www.bbdkp.com
@@ -27,6 +27,11 @@ if (!class_exists('\bbdkp\aGameinstall'))
 	require("{$phpbb_root_path}includes/bbdkp/games/library/aGameinstall.$phpEx");
 }
 
+/**
+ * SwTor Installer class
+ * @package 	bbDKP
+ *
+ */
 class install_swtor extends \bbdkp\aGameinstall
 {
 	/**
@@ -148,6 +153,10 @@ class install_swtor extends \bbdkp\aGameinstall
 		
 	}
 	
+	/**
+	 * dkp pool created for SWTOR
+	 * @var int
+	 */
 	private $swtordkpid = 0; 
 	
 	/**

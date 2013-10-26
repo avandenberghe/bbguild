@@ -1,5 +1,7 @@
 <?php
 /**
+ * Aion Installer file
+ * 
  * @package 	bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -27,6 +29,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
 
 
 /**
+ * Aion Installer Class
  * 
  * @author Sajaki
  * @package 	bbDKP

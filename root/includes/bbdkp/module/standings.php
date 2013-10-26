@@ -1,7 +1,6 @@
 <?php
 /**
- * bbdkp view class
- * standings and ladders block
+ * standings module
  * 
  * @package bbDKP
  * @link http://www.bbdkp.com

@@ -27,6 +27,11 @@ if (!class_exists('\bbdkp\aGameinstall'))
 	require("{$phpbb_root_path}includes/bbdkp/games/library/aGameinstall.$phpEx");
 }
 
+/**
+ * Guildwars INstaller Class
+ * @package 	bbDKP
+ *
+ */
 class install_gw2 extends \bbdkp\aGameinstall
 {
 	

@@ -1,7 +1,6 @@
 <?php
 /**
- * bbdkp view class
- * roster block
+ * roster module
  * 
  * @package bbDKP
  * @link http://www.bbdkp.com

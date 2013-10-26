@@ -1,6 +1,6 @@
 <?php
 /**
-* 
+* ACP info class acp_dkp_info 
 * @author Ippehe, Sajaki
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -17,10 +17,14 @@ if (!defined('IN_PHPBB'))
 }
 
 /**
+* info class for acp module dkp
 * @package acp
 */
 class acp_dkp_info
 {
+	/**
+	 * phpbb module function
+	 */
 	function module()
 	{
 		return array(
@@ -35,11 +39,15 @@ class acp_dkp_info
 				),
 		);
 	}
-
+	/**
+	 * phpbb module function
+	 */
 	function install()
 	{
 	}
-
+	/**
+	 * phpbb module function
+	 */
 	function uninstall()
 	{
 	}

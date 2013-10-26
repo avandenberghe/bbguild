@@ -27,6 +27,11 @@ if (!class_exists('\bbdkp\aGameinstall'))
 	require("{$phpbb_root_path}includes/bbdkp/games/library/aGameinstall.$phpEx");
 }
 
+/**
+ * Warhammer INstaller class
+ * @package 	bbDKP
+ *
+ */
 class install_warhammer extends \bbdkp\aGameinstall
 {
 	/**

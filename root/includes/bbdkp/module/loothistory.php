@@ -1,5 +1,6 @@
 <?php
 /**
+ * loot history module
  * 
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com

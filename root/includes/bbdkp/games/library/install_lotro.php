@@ -1,6 +1,6 @@
 <?php
 /**
- * bbdkp LOTRO install data
+ * bbdkp LOTRO install file
  * 
  * @package 	bbDKP
  * @link http://www.bbdkp.com
@@ -27,6 +27,12 @@ if (!class_exists('\bbdkp\aGameinstall'))
 	require("{$phpbb_root_path}includes/bbdkp/games/library/aGameinstall.$phpEx");
 }
 
+/**
+ * Lotro Installer class
+ * 
+ * @package bbDKP
+ *
+ */
 class install_lotro extends \bbdkp\aGameinstall
 {
 	
