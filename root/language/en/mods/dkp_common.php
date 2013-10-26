@@ -159,6 +159,7 @@ $lang = array_merge($lang, array(
 'LEVEL' => 'Level',
 'LISTMEMBERS_TITLE' => 'Member Standings',
 'MNOTFOUND' => 'Could not obtain member information', 
+'RNOTFOUND' => 'Could not obtain Raid information',
 'EMPTYRAIDNAME' => 'Raidname Not Found', 
 'NAME' => 'Name',
 'POOL' => 'Point Pool',
@@ -337,10 +338,14 @@ $lang = array_merge($lang, array(
 
 //lootsystems
 'EP'	=> 'EP',
+'EPLONG'	=> 'Effort points',
 'EPNET'	=> 'EP net',
+'EPNETLONG'	=> 'Net Effort Points',
 'GP'	=> 'GP',
+'GPLONG'	=> 'Gear points',
 'GPNET'	=> 'GP net',
 'PR'	=> 'PR',
+'PRLONG'	=> 'Priority ratio',
 
 // Page Foot Counts
 

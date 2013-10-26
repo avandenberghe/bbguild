@@ -261,6 +261,7 @@ if($raid_count > 0)
 		'START' 			=> $start,
 		'ITEM_PAGINATION' 	=> $itempagination,
 		'S_DISPLAY_VIEWEVENT' => true,
+		'S_EPGP' => $config['bbdkp_epgp'] == '1' ? true: false, 
 		));
 }
 else

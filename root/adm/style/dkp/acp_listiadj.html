@@ -28,15 +28,14 @@
 <br />
 <table cellspacing="1">
   <tr class="rowhead">
-    <th style="text-align:left; width:70; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
-    <th style="text-align:left; width:150; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_MEMBER}&amp;start={START}">{L_MEMBER}</a></th>
-    <th style="text-align:left; width:400"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_REASON}&amp;start={START}">{L_REASON}</a></th>
-    <th style="text-align:left; width:90; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADDED_BY}&amp;start={START}">{L_ADDED_BY}</a></th>
-    <th style="text-align:right; width:90; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADJUSTMENT}&amp;start={START}">{L_ADJUSTMENT}</a></th>
-    <th style="text-align:right; width:90; white-space: nowrap">{L_DECAY}</th>
-    <th style="text-align:right; width:90; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADJUSTMENT}&amp;start={START}">{L_ADJUSTMENT_NET}</a></th>
-    <th style="text-align:right; width:90; white-space: nowrap">{L_TIME}</th>
-    <th style="text-align:center; width:5">{L_ACTION}</th>
+    <th style="text-align:left; width:10%; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
+    <th style="text-align:left; width:20%; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_MEMBER}&amp;start={START}">{L_MEMBER}</a></th>
+    <th style="text-align:left; width:20%"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_REASON}&amp;start={START}">{L_REASON}</a></th>
+    <th style="text-align:left; width:7%; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADDED_BY}&amp;start={START}">{L_USER}</a></th>
+    <th style="text-align:right; width:7%; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADJUSTMENT}&amp;start={START}">{L_ADJUSTMENT}</a></th>
+    <th style="text-align:right; width:7%; white-space: nowrap">{L_DECAY}</th>
+    <th style="text-align:right; width:7%; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADJUSTMENT}&amp;start={START}">{L_ADJUSTMENT_NET}</a></th>
+    <th style="text-align:center; width:5%">{L_ACTION}</th>
   </tr>
   
   <!-- BEGIN adjustments_row -->
@@ -47,10 +46,9 @@
     <td style="text-align:left;"><!-- IF adjustments_row.S_CLASS_IMAGE_EXISTS --><img src="{adjustments_row.CLASS_IMAGE}" alt="{adjustments_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;<strong><a style="color:{adjustments_row.COLORCODE}" href="{adjustments_row.U_VIEW_MEMBER}">{adjustments_row.MEMBER}</a></strong></td>
     <td style="text-align:left;">{adjustments_row.REASON}</td>
     <td style="text-align:left;" class="{adjustments_row.ADDED_BY}">{adjustments_row.ADDED_BY}</td>
-    <td style="text-align:right;" class="{adjustments_row.C_ADJUSTMENT}">{adjustments_row.ADJUSTMENT}</td>
-    <td style="text-align:right;">{adjustments_row.ADJ_DECAY}</td>
-    <td style="text-align:right;" class="{adjustments_row.C_ADJUSTMENT}">{adjustments_row.ADJUSTMENT_NET}</td>
-    <td style="text-align:right;">{adjustments_row.DECAY_TIME}</td>
+    <td style="text-align:right;" class="<!-- IF adjustments_row.ADJUSTMENT > 0 --> positive <!-- ELSE -->negative<!-- ENDIF -->">{adjustments_row.ADJUSTMENT}</td>
+    <td style="text-align:right;" class="<!-- IF adjustments_row.ADJ_DECAY > 0 --> positive <!-- ELSE -->negative<!-- ENDIF -->">{adjustments_row.ADJ_DECAY}</td>
+    <td style="text-align:right;" class="<!-- IF adjustments_row.ADJUSTMENT_NET > 0 --> positive <!-- ELSE -->negative<!-- ENDIF -->">{adjustments_row.ADJUSTMENT_NET}</td>
     <td style="text-align:center;">
 		<a href="{adjustments_row.U_ADD_ADJUSTMENT}">{ICON_EDIT}</a>
 	</td>

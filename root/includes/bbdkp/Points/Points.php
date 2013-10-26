@@ -234,20 +234,19 @@ class Points
 			require("{$phpbb_root_path}includes/bbdkp/Points/Pool.$phpEx");
 		}
 		
-		if(($member_id > 0 && $dkpid > 0) && $this->has_account($member_id, $dkpid))
+		if($member_id > 0 && $dkpid > 0)
 		{
 			$this->member_id = $member_id;
 			$this->dkpid = $dkpid;
 			$this->pool = new \bbdkp\Pool($dkpid); 
 			$this->read_account();
 		}
-		elseif ($member_id > 0 && $dkpid == 0)
+		elseif  ($dkpid > 0)
 		{
-			$this->member_id = $member_id;
 			$this->dkpid = $dkpid;
 			$this->pool = new \bbdkp\Pool($dkpid);
-			$this->read_account();
 		}
+		
 	}
 	
 	public function has_account($member_id, $dkpid)
@@ -309,6 +308,26 @@ class Points
 			$this->raidcount = $row['member_raidcount'];
 			if($config['bbdkp_epgp'] == '1')
 			{
+				
+				$this->raid_value = (float)  $row['member_raid_value'];
+				$this->time_bonus  = (float)  $row['member_time_bonus'];
+				$this->zerosum_bonus = (float)  $row['member_zerosum_bonus'];
+				$this->total_earned = $this->raid_value + $this->time_bonus + $this->zerosum_bonus;
+				$this->earned_decay = (float) $row['member_raid_decay'];
+				$this->earned_net =  $this->total_earned - $this->earned_decay;
+				
+				$this->spent = (float) $row['member_spent'];
+				$this->item_decay = (float) $row['member_item_decay'];
+				$this->item_net = $this->spent - $this->item_decay;
+				
+				$this->adjustment = (float) $row['member_adjustment'];
+				$this->adj_decay = (float) $row['adj_decay'];
+				
+				$this->total = $this->total_earned - $this->spent + $this->adjustment;
+				$this->total_decayed = $this->earned_decay - $this->item_decay + $this->adj_decay;
+				
+				$this->total_net = $this->total - $this->total_decayed;
+				
 				$this->ep = (float) $row['member_raid_value'] + $row['member_time_bonus'] + $row['member_adjustment']; 					
 				$this->ep_net = (float) $this->ep - $row['member_raid_decay']; 
 				$this->gp = (float) $row['member_spent'] + max(0, (int) $config['bbdkp_basegp']);
