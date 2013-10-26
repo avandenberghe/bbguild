@@ -1,5 +1,6 @@
 <?php
 /**
+* ACP info class acp_dkp_item_info 
 * @author ippehe
 * @version 1.3.0
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
@@ -17,10 +18,14 @@ if (!defined('IN_PHPBB'))
 
 
 /**
+ * info class for acp module dkp_item
 * @package acp
 */
 class acp_dkp_item_info
 {
+	/**
+	 * phpbb module function
+	 */
 	function module()
 	{
 		return array(
@@ -33,11 +38,15 @@ class acp_dkp_item_info
 				),
 		);
 	}
-
+	/**
+	 * phpbb module function
+	 */
 	function install()
 	{
 	}
-
+	/**
+	 * phpbb module function
+	 */
 	function uninstall()
 	{
 	}

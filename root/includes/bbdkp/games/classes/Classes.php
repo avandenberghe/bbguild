@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * This file contains the Classes Class  
  * @package 	bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -36,26 +36,88 @@ if (!class_exists('\bbdkp\Game'))
  class Classes extends \bbdkp\Game
  {
  	
- 	
-	public $game_id; 
+ 	/**
+ 	 * game identifier
+ 	 * @var string
+ 	 */
+	public $game_id;
+
+	/**
+	 * Class id
+	 * @var INT
+	 */
 	public $class_id;
+	
+	/**
+	 * Primary key
+	 * @var int
+	 */
 	public $c_index;
+	/**
+	 * game faction ID
+	 * @var int
+	 */
 	public $faction_id;
+	/**
+	 * minimum level
+	 * @var number
+	 */
 	public $min_level;
+	/**
+	 * maximum level
+	 * @var int
+	 */
 	public $max_level;
+	/**
+	 * name of class
+	 * @var String
+	 */
 	public $classname;
+	/**
+	 * class is hidden or not?
+	 * @var bool
+	 */
 	public $hide;
+	/**
+	 * how many needed of this class in the Dps role ?
+	 * @var number
+	 */
 	public $dps;
+	/**
+	 * how many needed of this class in the tank role ?
+	 * @var int
+	 */
 	public $tank;
+	/**
+	 * how many needed of this class in the heal role ?
+	 * @var int
+	 */
 	public $heal;
+	/**
+	 * name of image file
+	 * @var unknown
+	 */
 	public $imagename;
+	/**
+	 * class color hex
+	 * @var streing
+	 */
 	public $colorcode;
+	/**
+	 * armor type
+	 * @var String
+	 */
 	public $armor_type; 
 	
-	
+	/**
+	 * array of all armor types
+	 * @var array
+	 */
 	public $armortypes; 
 
-
+	/**
+	 * Classes Class constructor
+	 */
 	public function __construct() 
 	{
 		global $user; 
@@ -83,7 +145,6 @@ if (!class_exists('\bbdkp\Game'))
 	
 	/**
 	 * gets 1 class from database
-	 * @see \bbdkp\iClasses::Get()
 	 */
 	public function Get()
 	{
@@ -292,8 +353,11 @@ if (!class_exists('\bbdkp\Game'))
 	
 	
 	/**
+	 * 
 	 * lists all classes
-	 * @return array
+	 * @param string $order
+	 * @param number $mode
+	 * @return multitype:multitype:number string unknown
 	 */
 	public function listclasses($order= 'class_id', $mode = 0)
 	{

@@ -1,14 +1,15 @@
 <?php
-namespace bbdkp;
-
 /**
- * @package 	bbDKP
+ * abstract class aGameInstall
+ * 
+ * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
+namespace bbdkp;
 
 /**
  * @ignore
@@ -19,14 +20,15 @@ if (! defined('IN_PHPBB'))
 }
 /**
  * Game interface
- * 
  *
  * @package 	bbDKP
  * 
  */
 abstract class aGameinstall 
 {
-	
+	/**
+	 * Install a game
+	 */
 	public function install()
 	{
 		$this->Installfactions();
@@ -59,6 +61,10 @@ abstract class aGameinstall
 		
 	}
 
+	/**
+	 * install events
+	 * leave implementation to daughter class
+	 */
 	private function InstallEvents()
 	{
 		

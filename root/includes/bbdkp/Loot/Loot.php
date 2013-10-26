@@ -1,7 +1,8 @@
 <?php
-namespace bbdkp;
 /**
- * @package 	bbDKP
+ * Loot class file
+ * 
+ * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -10,7 +11,7 @@ namespace bbdkp;
  * @since 1.3.0
  *
  */
-
+namespace bbdkp;
 /**
  * @ignore
  */
@@ -24,7 +25,6 @@ global $phpbb_root_path;
 
 /**
  * this class manages the Item transaction table (phpbb_bbdkp_raid_items)
- * 
  * Items do not have to be tied to raids
  * Items can be crafted, bought from vendors or gotten from the guild bank, etc. 
  * In that case the raid_id is '0' 
@@ -69,6 +69,7 @@ class Loot
 	public $raid_id; 
 	
 	/**
+	 * dkp pool
 	 * @var unknown_type
 	 */
 	public $dkpid;
@@ -80,57 +81,63 @@ class Loot
 
 	/**
 	 * to who does it belong ? if 0 then it belongs to noone
-	 * @var unknown_type
+	 * @var int
 	 */
 	public $member_id; 
 	
 	/**
-	 * 
-	 * @var unknown_type
+	 * name of buyer
+	 * @var string
 	 */
 	public $member_name; 
 	
 	/**
 	 * when was it acquired ?
-	 * @var unknown_type
+	 * @var int
 	 */
 	public $item_date; 
 	
 	
 	/**
-	 * who added it to the inventory ?
-	 * @var string
+	 * memberid of who added it to the inventory ?
+	 * @var int
 	 */
 	public $item_added_by; 
 	
 	/**
-	 * who updated it ?  
+	 * memberid of who updated it to the inventory ?
+	 * @var int
 	 */
 	public $item_updated_by; 
 	
 	/**
 	 * if item was added to multiple persons at the same time then the group_key will be shared. 
+	 * @var int
 	 */
 	public $item_group_key; 
 	
 	/**
 	 * what game does item belong to ? 
+	 * @var string
 	 */
 	public $game_id;
 	
 	/**
 	 * how much is it bought for ? 
 	 * prix d'achat
+	 * @var float
 	 */
 	public $item_value;
 	
 	/**
 	 * how much did it depreciate ?
+	 * @var float
 	 */
 	public $item_decay; 
 	
 	/**
 	 * if the item purchaseprice was offset by an equal "zero sum" earning then this flag is 1 
+	 * @var int
 	 */
 	public $item_zs; 
 	
@@ -143,15 +150,22 @@ class Loot
 	
 	/**
 	 * array with loot details
-	 * @var unknown_type
+	 * @var array
 	 */
 	public $lootdetails; 
 	
+	/**
+	 * Loot class constructor
+	 * @param number $raid_id
+	 */
 	function __construct($raid_id = 0) 
 	{
 		$this->raid_id = $raid_id;
 	}
 	
+	/**
+	 * add a new loot to database
+	 */
 	public function insert()
 	{
 		global $db; 
@@ -175,15 +189,19 @@ class Loot
 		
 	}
 	
+	/**
+	 * remove a loot from database
+	 */
 	public function delete()
 	{
 		global $db;
 		$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' WHERE item_id = ' . $this->item_id ;
 		$db->sql_query ($sql);
 	}
-	
-	
-	
+
+	/**
+	 * remove a loot from database
+	 */
 	public function update()
 	{
 		$this->delete();
@@ -195,7 +213,7 @@ class Loot
 	 * get one item from raid
 	 * @uses acp
 	 * @access public
-	 * @param unknown_type $item_id
+	 * @param int $item_id
 	 */	
 	public function Getloot($item_id)
 	{
@@ -233,15 +251,16 @@ class Loot
 		
 	}
 	
-	
 	/**
+	 * 
 	 * get array of all loot for 1 raid or for 1 member
 	 * note: member_name is only included for sorting
-	 * @param int $raid_id
-	 * @param int $member_id
-	 * @param int $istart
 	 * @param string $order
-	 * @return array
+	 * @param number $guild_id
+	 * @param number $dkpsys_id
+	 * @param number $raid_id
+	 * @param number $istart
+	 * @param number $member_id
 	 */
 	public function GetAllLoot($order = ' i.item_date desc', $guild_id=0, $dkpsys_id=0, $raid_id = 0, $istart = 0, $member_id = 0)
 	{
@@ -293,14 +312,14 @@ class Loot
 	}
 	
 	/**
-	 * 
 	 * count loot per pool/guild/raid/member
+	 * 
 	 * @param string $mode
 	 * @param int $guild_id
 	 * @param int $dkp_id
 	 * @param int $member_id
 	 * @param int $raid_id
-	 * @return int
+	 * @return unknown
 	 */
 	public function countloot($mode, $guild_id=0, $dkp_id=0, $member_id=0, $raid_id=0)
 	{

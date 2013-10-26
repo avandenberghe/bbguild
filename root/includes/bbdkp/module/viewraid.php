@@ -1,6 +1,6 @@
 <?php
 /**
- *
+ * Viewraid module. shows one raid to user
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

@@ -1,5 +1,7 @@
 <?php
 /**
+ * Raids Class file
+ * 
  * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -127,6 +129,10 @@ class Raids extends \bbdkp\Admin
 	 */
 	public $loot_details;
 	
+	/**
+	 * Raid Constructor
+	 * @param number $raid_id
+	 */
 	function __construct($raid_id = 0)
 	{
 		parent::__construct();
@@ -153,7 +159,7 @@ class Raids extends \bbdkp\Admin
 	}
 
 	/**
-	 *
+	 * Property Getter
 	 * @param string $property
 	 */
 	public function __get($property)
@@ -171,9 +177,9 @@ class Raids extends \bbdkp\Admin
 	}
 
 	/**
-	 *
-	 * @param unknown_type $property
-	 * @param unknown_type $value
+	 * Property Setter
+	 * @param string $property
+	 * @param string $value
 	 */
 	public function __set($property, $value)
 	{
@@ -231,6 +237,10 @@ class Raids extends \bbdkp\Admin
 		$db->sql_query ('DELETE FROM ' . RAIDS_TABLE . " WHERE raid_id= " . (int) $this->raid_id);
 	}
 
+	/**
+	 * updates raid table
+	 * 
+	 */
 	public function update()
 	{
 		global $user, $db;
@@ -316,6 +326,7 @@ class Raids extends \bbdkp\Admin
 	 * @param int $raid_id
 	 * @param int $start
 	 * @param int $member_id
+	 * @param int $guild_id
 	 */
 	public function getRaids($order = 'r.raid_start DESC', $dkpsys_id=0, $raid_id = 0, $start=0, $member_id=0, $guild_id=0)
 	{
@@ -385,13 +396,15 @@ class Raids extends \bbdkp\Admin
 	/**
 	* returns raid count, or attendance percentage for a range member/pool
 	* used by listmembers.php and viewmember.php
-	*  @param $dkpsys_id = int
-	*  @param $days = int
-	*  @param $member_id = int
-	*  @param $mode= 0 -> indiv raidcount, 1 -> total rc, 2 -> attendancepct
-	*  @param $all : if true then get count forever, otherwise since x days
-	*
-	*/
+	 * 
+	 * @param number $dkpsys_id
+	 * @param number $days
+	 * @param number $member_id
+	 * @param number $mode indiv raidcount, 1 -> total rc, 2 -> attendancepct
+	 * @param string $all  if true then get count forever, otherwise since x days
+	 * @param number $guild_id
+	 * @return number
+	 */
 	public function raidcount($dkpsys_id, $days, $member_id=0, $mode=1, $all = false, $guild_id=0)
 	{
 		$start_date = mktime(0, 0, 0, date('m'), date('d')-$days, date('Y'));
@@ -447,8 +460,9 @@ class Raids extends \bbdkp\Admin
 	 * @param int $start_date first raiddate (join date)
 	 * @param int $end_date last raiddate
 	 * @param int $dkpsys_id
-	 * @param bool $all
+	 * @param boolean $all
 	 * @param int $member_id optional
+	 * @param int $guild_id
 	 * @return number
 	 */
 	private function getraidcount($start_date, $end_date, $dkpsys_id, $all, $member_id = 0, $guild_id)
@@ -505,6 +519,7 @@ class Raids extends \bbdkp\Admin
 
 	/**
 	 * counts total raidcount in a dkp pool
+	 * @param int $dkpsys_id
 	 * @return number
 	 */
 	public function countraids($dkpsys_id)
@@ -838,8 +853,10 @@ class Raids extends \bbdkp\Admin
 	 * 
 	 * @param int $interval
 	 * @param int $time
+	 * @param int $guild_id
+	 * @param bool $query_by_pool
 	 * @param int $dkp_id
-	 *
+	 * @return number
 	 */
 	private function get_overallraidcount($interval, $time, $guild_id, $query_by_pool, $dkp_id)
 	{

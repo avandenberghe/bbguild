@@ -1,6 +1,7 @@
 <?php
-namespace bbdkp;
 /**
+ * Logging class file
+ * 
  * @package 	bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -8,7 +9,7 @@ namespace bbdkp;
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
-
+namespace bbdkp;
 /**
  * @ignore
  */
@@ -19,16 +20,17 @@ if (! defined('IN_PHPBB'))
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
+
 /**
  * Singleton bbDKP Logging class
- * @author Nix
+ * @package bbDKP
  *
  */
 class log
 {
 	/**
 	 * number of logs
-	 * @var unknown_type
+	 * @var int
 	 */
 	protected $total_logs;
 	
@@ -82,8 +84,16 @@ class log
 	const CLASS_UPDATED = 48;
 	const MEMBER_DEACTIVATED = 49; 
 	
+	/**
+	 * refers to this instance of the logging class
+	 * @var log
+	 */
 	private static $instance;
 	
+	/**
+	 * valid action types array - needed for getting language string
+	 * @var array
+	 */
 	public static $valid_action_types = array(
 			1 => 'DKPSYS_ADDED' ,
 			2 => 'DKPSYS_UPDATED' ,
@@ -139,7 +149,7 @@ class log
 	/**
 	 * only these tags can be entered in logs
 	 * if tags are not in list then it's not logged
-	 * @var unknown_type
+	 * @var array
 	 */
 	private static $valid_tags = array(
 				'L_NAME' ,
@@ -221,6 +231,9 @@ class log
         
 	}
 	
+	/**
+	 * Cloning class is blocked
+	 */
 	public function __clone()
 	{
 		//cloning not allowed
@@ -228,9 +241,11 @@ class log
 		trigger_error($user->lang['ERROR'], E_USER_ERROR);
 	}
 	
+	/**
+	 * cannot deserialise
+	 */
 	public function __wakeup()
 	{
-		//cannot deserialise
 		global $user;
 		trigger_error($user->lang['ERROR'], E_USER_ERROR);
 	}
@@ -245,7 +260,7 @@ class log
 	}
 	
 	/**
-	 *
+	 * property getter
 	 * @param string $fieldName
 	 */
 	public function __get($fieldName)
@@ -258,6 +273,10 @@ class log
 		
 	}
 	
+	/**
+	 * Get number of logs
+	 * @return int  total_logs
+	 */
 	private function logcount()
 	{
 		global $db; 
@@ -269,11 +288,12 @@ class log
 		return $this->total_logs; 
 		
 	}
+	
 	/**
 	 * makes an entry in the bbdkp log table
 	 * log_action is an xml containing the log
 	 * 
-	 * @param unknown_type $values
+	 * @param array $values
 	 * @return boolean
 	 */
 	public static function log_insert($values = array())
@@ -380,6 +400,9 @@ class log
 	
 	/**
 	 * delete log from Database
+	 * 
+	 * @param array $marked
+	 * @return multitype:unknown
 	 */
 	public function delete_log($marked)
 	{
@@ -400,12 +423,14 @@ class log
 	}
 	
 	/**
-	 * read simple log
 	 * 
+	 * read simple log
 	 * @param string $order
 	 * @param string $search
-	 * @param bool $verbose
-	 * @return array $outlog
+	 * @param string $verbose
+	 * @param string $search_term
+	 * @param string $start
+	 * @return multitype:multitype:string NULL unknown mixed
 	 */
 	public function read_log($order= '', $search = false, $verbose = false, $search_term = '', $start = '')
 	{
@@ -482,9 +507,16 @@ class log
 		
 	}
 	
-	
 	/**
+	 * 
 	 * returns logline
+	 * @param string $log_type
+	 * @param string $log_action
+	 * @param string $log_userid
+	 * @param string $username
+	 * @param string $user_colour
+	 * @param string $verbose
+	 * @return string
 	 */
 	private function get_logmessage($log_type, $log_action, $log_userid, $username, $user_colour, $verbose = false)
 	{
@@ -698,7 +730,10 @@ class log
 	
 	/**
 	 * get this log entry
-	 */	
+	 * 
+	 * @param int $log_id
+	 * @return mixed
+	 */
 	function get_logentry($log_id)
 	{
 		global $user, $db;
@@ -727,9 +762,11 @@ class log
 	}
 	
 	
-	
 	/**
 	 * returns log tags from xml
+	 * 
+	 * @param string $haystack
+	 * @return multitype:string
 	 */
 	private function getxmltag($haystack)
 	{
@@ -748,6 +785,7 @@ class log
 	/**
 	 * Get error message of a value. It's actually the lang value of the constant's name
 	 * @param integer $value
+	 * @param boolean $verbose
 	 * @return string
 	 */
 	public function getLogMessage($value, $verbose = false)

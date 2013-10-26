@@ -1,5 +1,7 @@
 <?php
 /**
+ * News module
+ * 
  * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com

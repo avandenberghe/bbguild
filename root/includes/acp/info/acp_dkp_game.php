@@ -1,5 +1,6 @@
 <?php
 /**
+* ACP info class acp_dkp_game_info 
 * @package acp
 * @version 1.3.0
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
@@ -16,14 +17,14 @@ if (!defined('IN_PHPBB'))
 }
 
 /**
-* @package module_install
-*/
-
-/**
+ * info class for acp module dkp_game
  * @package acp
  */
 class acp_dkp_game_info
 {
+	/**
+	 * phpbb module function
+	 */
 	function module()
 	{
 		return array(
@@ -39,11 +40,15 @@ class acp_dkp_game_info
 				),
 		);
 	}
-
+	/**
+	 * phpbb module function
+	 */
 	function install()
 	{
 	}
-
+	/**
+	 * phpbb module function
+	 */
 	function uninstall()
 	{
 	}

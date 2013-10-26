@@ -1,5 +1,6 @@
 <?php
 /**
+ * Races Class file
  * @package 	bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -34,14 +35,51 @@ if (!class_exists('\bbdkp\Game'))
  */
  class Races extends \bbdkp\Game
 {
+	/**
+	 * game id
+	 * @var string
+	 */
 	public $game_id;
+	
+	/**
+	 * race id
+	 * @var int
+	 */
 	public $race_id;
+	
+	/**
+	 * race faction id
+	 * @var int
+	 */
 	public $race_faction_id;
+	
+	/**
+	 * true if race is visible
+	 * @var bool
+	 */
 	public $race_hide;
+
+	/**
+	 * image path female icon
+	 * @var string
+	 */
 	public $image_female;
+	
+	/**
+	 * image path male icon
+	 * @var string
+	 */
 	public $image_male;
+	
+	/**
+	 * race nam
+	 * @var unknown
+	 */
 	public $race_name;
-		
+
+	/**
+	 * constructor
+	 */
 	function __construct() 
 	{
 		
@@ -80,8 +118,7 @@ if (!class_exists('\bbdkp\Game'))
 	}
 	
 	/**
-	 * adds a race to database
-	 * @see \bbdkp\iRaces::Make()
+	 * adds a race to database	
 	 */
 	public function Make()
 	{
@@ -238,10 +275,10 @@ if (!class_exists('\bbdkp\Game'))
 		$cache->destroy ( 'sql', BB_LANGUAGE );
 	}
 	
-	
 	/**
 	 * updates a race to database
-	*/
+	 * @param Races $old_race
+	 */
 	public function Update(Races $old_race)
 	{
 		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;
@@ -287,6 +324,11 @@ if (!class_exists('\bbdkp\Game'))
 		
 	}
 	
+	/**
+	 * get array with races
+	 * @param string $order
+	 * @return multitype:multitype:string
+	 */
 	public function listraces($order = 'r.race_id')
 	{
 		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;

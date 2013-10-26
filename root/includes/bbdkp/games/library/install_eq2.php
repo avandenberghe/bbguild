@@ -29,7 +29,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
 
 
 /**
- * Installs Everquest
+ * Installs Everquest 2
  * 
  * @author Sajaki
  * @package 	bbDKP

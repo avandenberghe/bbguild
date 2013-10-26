@@ -17,7 +17,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## current
 
-1.3.0-b1
+1.3.0-a1
 
 ## community
 
@@ -27,7 +27,7 @@ Find support and more on [bbDKP.com](http://www.bbdkp.com)
 
 You can see all the amazing people contributing to this project [here](https://github.com/bbdkp/bbdkp/graphs/contributors). 
 
-1. [Create a ticket (unless there already is one)](http://www.bbdkp.com/tracker.php)
+1. [Create a ticket (unless there already is one)] : https://github.com/bbDKP/bbDKP/issues or http://www.bbdkp.com/tracker.php
 2. [Read our Git Contribution Guidelines](http://www.bbdkp.com/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.bbdkp.com/viewtopic.php?f=60&t=1853)
 3. Send us a pull request
 

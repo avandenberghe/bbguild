@@ -1,5 +1,7 @@
 <?php
 /**
+ * Game ACP file
+ * 
  * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -51,7 +53,10 @@ if (!class_exists('\bbdkp\Game'))
  */
 class acp_dkp_game extends \bbdkp\Admin
 {
-	public $u_action;
+	/**
+	 * link in trigger window
+	 * @var string
+	 */
 	private $link;
 	/** 
 	 * main ACP game function

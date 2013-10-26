@@ -1,11 +1,13 @@
 <?php
 /**
- * @package install
+ * bbDKP Umil Installer
+ * 
+ * @package bbDKP.install
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0-b1
+ * @version 1.3.0
  */
 
 define('UMIL_AUTO', true);
@@ -1055,8 +1057,8 @@ function encode_message($text)
 /**
  * 
  * custom SQL updates outside of UMIL
- * @param unknown_type $action
- * @param unknown_type $version
+ * @param string $action
+ * @param string $version
  * @return multitype:string
  */
 function tableupdates($action, $version)
@@ -1158,8 +1160,8 @@ function tableupdates($action, $version)
 /**
  * global function for clearing cache
  * 
- * @param unknown_type $action
- * @param unknown_type $version
+ * @param string $action
+ * @param string $version
  * @return string
  */
 function bbdkp_caches($action, $version)
