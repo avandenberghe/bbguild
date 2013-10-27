@@ -41,6 +41,10 @@ if (!class_exists('\bbdkp\Resource'))
  */
 class Realm extends \bbdkp\Resource 
 {
+	/**
+	 * allowed realm api methods
+	 * @var array
+	 */
 	protected $methods_allowed = array(
 		'status'
 	);

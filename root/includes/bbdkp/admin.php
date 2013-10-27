@@ -1,5 +1,7 @@
 <?php
 /**
+ * bbDKP Admin class file
+ * 
  * @package bbDKP
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -32,13 +34,46 @@ if (!class_exists('\bbdkp\log'))
  */
 abstract class Admin
 {
+	/**
+	 * bbdkp timestamp 
+	 * @var integer
+	 */
     public $time = 0;
+    /**
+     * game ragions
+     * @var array
+     */
     public $regions;
+    
+    /**
+     * supported languages. The game related texts (class names etc) are not stored in language files but in the database.
+     * supported languages are en, fr, de : to add a new language you need to a) make language files b) make db installers in new language c) adapt this array
+     *   
+     * @var array
+     */
     public $languagecodes;
-    public $preinstalled_games; 
+    
+    /**
+     * games that come pre-installed with bbDKP
+     * @var array
+     */
+    public $preinstalled_games;
+
+    /**
+     * bbtips is installed ?
+     * @var boolean
+     */
     public $bbtips = false;
+    
+    /**
+     * installed games
+     * @var array
+     */
     public $games; 
     
+    /**
+     * Admin class constructor
+     */
 	public function __construct()
 	{
 		global $user, $phpbb_root_path, $phpEx, $config, $user;
@@ -111,6 +146,9 @@ abstract class Admin
 	    $debug=1;
 	}
 	
+	/**
+	 * constructs the games array
+	 */
 	private function gamesarray()
 	{
 		global $db;
@@ -127,10 +165,9 @@ abstract class Admin
     /**
 	 * creates a unique key, used as adjustments, import, items and raid identifier
 	 *
-	 * @param $part1
-	 * @param $part2
- 	 * @param $part3
- 	 *
+	 * @param string $part1
+	 * @param string $part2
+ 	 * @param string $part3
  	 * @return $group_key
 	 */
     public final function gen_group_key($part1, $part2, $part3)
@@ -288,11 +325,10 @@ abstract class Admin
 		}
 
 	}
-
+	
 	/**
-	 * POST request for registration at bbdkp.com
-	 * @param unknown_type $fields
-	 * @param unknown_type $optional_headers
+	 * sends POST request to bbdkp.com for registration
+	 * @param array $regdata
 	 */
 	public final function post_register_request($regdata)
 	{
@@ -324,9 +360,9 @@ abstract class Admin
 	
 	/**
 	 * GET reauests for registration ID
-	 * @param unknown_type $regdata
-	 * @param unknown_type $url
-	 * @param unknown_type $regcode
+	 * @param array $regdata
+	 * @param string $url
+	 * @param string $regcode
 	 */
 	private final function get_register_request($regdata, $url, $regcode)
 	{
@@ -385,6 +421,12 @@ abstract class Admin
 		return $info;
 	} 
 	
+	/**
+	 * get plugin info
+	 * @param string $force_update
+	 * @param number $ttl
+	 * @return Ambigous <multitype:, multitype:unknown Ambigous <string, multitype:, boolean, array, mixed> >
+	 */
 	public final function get_plugin_info($force_update = false, $ttl = 86400)
 	{
 		global $cache, $db;
@@ -419,12 +461,16 @@ abstract class Admin
 		
 	}
 	
-
 	/**
 	 * Pagination function altered from functions.php used in viewmember.php because we need two linked paginations
-	 *
-	 * Pagination routine, generates page number sequence
-	 * tpl_prefix is for using different pagination blocks at one page
+	 * 
+	 * @param string $base_url
+	 * @param integer $num_items
+	 * @param integer $per_page
+	 * @param integer $start_item
+	 * @param boolean $add_prevnext_text
+	 * @param string $tpl_prefix  using different pagination blocks at one page
+	 * @return boolean|string
 	 */
 	public final function generate_pagination2($base_url, $num_items, $per_page, $start_item, $add_prevnext_text = true, $tpl_prefix = '')
 	{
@@ -505,18 +551,19 @@ abstract class Admin
 		return $page_string;
 	}
 
-	/*
+	/**
+	 * Switch array order 
 	 * Switches the sorting order of a supplied array, prerserving key values
-	* The array is in the format [number][0/1] (0 = the default, 1 = the opposite)
-	* Returns an array containing the code to use in an SQL query and the code to
-	* use to pass the sort value through the URI.  URI is in the format
-	* (number).(0/1)
-	*
-	* checks that the 2nd element is either 0 or 1
-	* @param $sort_order Sorting order array
-	* @param $arg header variable
-	* @return array SQL/URI information
-	*/
+	 * The array is in the format [number][0/1] (0 = the default, 1 = the opposite)
+	 * Returns an array containing the code to use in an SQL query and the code to
+	 * use to pass the sort value through the URI.  URI is in the format
+	 * checks that the 2nd element is either 0 or 1
+	 * 
+	 * @param array $sort_order Sorting order array
+	 * @param string $arg
+	 * @param number $forcedorder
+	 * @return array
+	 */
 	public final function switch_order($sort_order, $arg = URI_ORDER, $forcedorder=0)
 	{
 		$uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : '0.0';
@@ -553,8 +600,8 @@ abstract class Admin
 
 	/**
 	 * remove end of a string
-	 * @param unknown_type $string
-	 * @param unknown_type $stringToRemove
+	 * @param string $string
+	 * @param string $stringToRemove
 	 * @return string
 	 */
 	public function removeFromEnd($string, $stringToRemove)
@@ -565,7 +612,6 @@ abstract class Admin
 		$out = substr($string, 0, $pos);
 		return $out;
 	}
-	
 	
 	/**
 	 * makes an entry in the bbdkp log table
@@ -579,6 +625,8 @@ abstract class Admin
 	 * log_sid	varchar(32)	utf8_bin		No
 	 * log_result	varchar(255)	utf8_bin		No
 	 * log_userid	mediumint(8)	UNSIGNED	No	0
+	 * 
+	 * @param array $values
 	 */
 	public final function log_insert($values = array())
 	{

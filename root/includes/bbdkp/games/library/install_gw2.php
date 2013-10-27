@@ -2,7 +2,7 @@
 /**
  * bbdkp Guildwars2 install data
  * 
- * @package 	bbDKP
+ * @package bbDKP\Game\library
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -29,8 +29,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
 
 /**
  * Guildwars INstaller Class
- * @package 	bbDKP
- *
+ * @package bbDKP\Game\library
  */
 class install_gw2 extends \bbdkp\aGameinstall
 {
@@ -137,7 +136,10 @@ class install_gw2 extends \bbdkp\aGameinstall
 		unset ( $sql_ary );
 		
 	}
-		
+	
+	/**
+	 * GW2 dkp id to be created
+	 */
 	private $gw2dkpid = 0; 
 	
 	/**

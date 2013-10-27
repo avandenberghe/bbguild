@@ -1,6 +1,7 @@
 <?PHP
 /**
- * @package 	bbDKP
+ * Game clas file
+ * @package bbDKP\game
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -30,7 +31,7 @@ if (!class_exists('\bbdkp\Admin'))
  *
  * Manages creation of Game
  *
- * @package 	bbDKP
+ * @package bbDKP\game
  */
 class Game extends \bbdkp\Admin
 {
@@ -64,6 +65,9 @@ class Game extends \bbdkp\Admin
 	 */
 	public $install_date;
 	
+	/**
+	 * Game class constructor
+	 */
 	function __construct() 
 	{
 		parent::__construct(); 
@@ -71,7 +75,7 @@ class Game extends \bbdkp\Admin
 	}
 	
 	/**
-	 * @todo adds a Game to database
+	 * adds a Game to database
 	*/
 	public function install()
 	{
@@ -179,7 +183,7 @@ class Game extends \bbdkp\Admin
 	}
 	
 	/**
-	 * @todo gets Game info from database
+	 * gets Game info from database
 	 * 
 	 */
 	function Get()
@@ -203,6 +207,7 @@ class Game extends \bbdkp\Admin
 	
 	/**
 	 * lists all games
+	 * @var string $order
 	 * @return array
 	 */
 	public function listgames($order)

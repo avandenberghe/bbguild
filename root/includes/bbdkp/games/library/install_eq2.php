@@ -2,7 +2,7 @@
 /**
  * everquest2 install data
  * 
- * @package 	bbDKP
+ * @package 	bbDKP\Game\library
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
  * Installs Everquest 2
  * 
  * @author Sajaki
- * @package 	bbDKP
+ * @package 	bbDKP\Game\library
  * 
  */
 class install_eq2 extends \bbdkp\aGameinstall

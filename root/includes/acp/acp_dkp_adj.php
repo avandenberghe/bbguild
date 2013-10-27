@@ -52,11 +52,24 @@ if (!class_exists('\bbdkp\Validator'))
  */
 class acp_dkp_adj extends \bbdkp\Admin
 {
-	public  $u_action;
-	private $old_adjustment;
+	
+	/**
+	 * adjustment class instance
+	 * @var \bbdkp\Adjust
+	 */
 	private $adjustment;
+	
+	/**
+	 * url in triggers
+	 * @var string
+	 */
 	private $link;
 
+	/**
+	 * main dkp_adj acp function 
+	 * @param integer $id
+	 * @param string $mode
+	 */
 	public function main ($id, $mode)
 	{
 		global $db, $user, $template;

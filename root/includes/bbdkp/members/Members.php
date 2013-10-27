@@ -1,6 +1,8 @@
 <?php
 /**
- * @package 	bbDKP
+ * Member class file
+ * 
+ * @package bbDKP\Members
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -8,7 +10,6 @@
  * @version 1.3.0
  * @since 1.3.0
  */
-
 namespace bbdkp;
 
 /**
@@ -44,7 +45,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 /**
  * manages member creation
  *
- * @package 	bbDKP
+ * @package 	bbDKP\Members
  *
  */
 class Members extends \bbdkp\Admin
@@ -80,9 +81,25 @@ class Members extends \bbdkp\Admin
 	 */
 	protected $member_level;
 
+	/**
+	 * race id
+	 * @var integer
+	 */
 	protected $member_race_id;
+	/**	
+	 * race name
+	 * @var string
+	 */
 	protected $member_race;
+	/**
+	 * Class id
+	 * @var integer
+	 */
 	protected $member_class_id;
+	/**
+	 * Class name
+	 * @var string
+	 */
 	protected $member_class;
 
 	/**
@@ -97,13 +114,45 @@ class Members extends \bbdkp\Admin
 	 */
 	protected $member_comment;
 
+	/**
+	 * member guild join date
+	 * @var integer
+	 */
 	protected $member_joindate;
+	/**
+	 * join day
+	 * @var integer
+	 */
 	protected $member_joindate_d;
+	/**
+	 * join month
+	 * @var integer
+	 */
 	protected $member_joindate_mo;
+	/**
+	 * join year
+	 * @var integer
+	 */
 	protected $member_joindate_y;
+	/**
+	 * out date 
+	 * @var int
+	 */
 	protected $member_outdate;
+	/**
+	 * out day 
+	 * @var integer
+	 */
 	protected $member_outdate_d;
+	/**
+	 * out month
+	 * @var integer
+	 */
 	protected $member_outdate_mo;
+	/**
+	 * out year
+	 * @var integer
+	 */
 	protected $member_outdate_y;
 
 	/**
@@ -156,7 +205,10 @@ class Members extends \bbdkp\Admin
 	 */
 	protected $member_armory_url;
 
-
+	/**
+	 * (wow) battle.net portrait url
+	 * @var unknown
+	 */
 	protected $member_portrait_url;
 
 	/**
@@ -208,6 +260,8 @@ class Members extends \bbdkp\Admin
 	public $guildmemberlist;
 
 	/**
+	 * Member class constructor
+	 * @param number $member_id
 	 */
 	function __construct($member_id = 0)
 	{
@@ -226,7 +280,7 @@ class Members extends \bbdkp\Admin
 
 
 	/**
-	 *
+	 * member class property getter
 	 * @param string $fieldName
 	 */
 	public function __get($fieldName)
@@ -244,9 +298,9 @@ class Members extends \bbdkp\Admin
 	}
 
 	/**
-	 *
-	 * @param unknown_type $property
-	 * @param unknown_type $value
+	 * member class property setter
+	 * @param string $property
+	 * @param string $value
 	 */
 	public function __set($property, $value)
 	{
@@ -570,10 +624,10 @@ class Members extends \bbdkp\Admin
 
 	/**
 	 * update member
-	 * @param Members $old_member
+	 * @param \bbdkp\Members $old_member
 	 * @return boolean
 	 */
-	public function Updatemember(Members $old_member)
+	public function Updatemember(\bbdkp\Members $old_member)
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
@@ -860,6 +914,7 @@ class Members extends \bbdkp\Admin
 
 	/**
 	 * called when user is deactivated because of wow inactivity > 90 days
+	 * @param unknown $daysago
 	 */
 	private function deactivate_wow($daysago)
 	{
@@ -920,8 +975,8 @@ class Members extends \bbdkp\Admin
 
 	/**
 	 * function for removing member from guild but leave him in the member table.;
-	 * @param unknown_type $member_name
-	 * @param unknown_type $guild_id
+	 * @param string $member_name
+	 * @param int $guild_id
 	 * @return boolean
 	 * @todo fix this
 	 */
@@ -1117,7 +1172,7 @@ class Members extends \bbdkp\Admin
 	/**
 	 * Enter joindate for guildmember (query is cached for 1 week !)
 	 *
-	 * @param unknown_type $member_id
+	 * @param int $member_id
 	 * @return unknown
 	 *
 	 */
@@ -1138,7 +1193,7 @@ class Members extends \bbdkp\Admin
 	/**
 	 * ACP listmembers grid
 	 * get a member list for given guild
-	 * @param unknown_type $guild_id
+	 * @param int $guild_id
 	 */
 	public function listallmembers($guild_id = 0)
 	{
@@ -1178,19 +1233,21 @@ class Members extends \bbdkp\Admin
 	}
 	
 	/**
-	 * Frontview : member Roster listing 
+	 * Frontview : member Roster listing
 	 * required class game property to be set before call
 	 * 
-	 * @param string $mode (listing or class)
-	 * @param int $start start of query window
-	 * @param int $guild_id optional guild id
-	 * @param int $class_id optional class id
-	 * @param int $race_id optional race id
-	 * @param int $level1 optional level1 (default 1)
-	 * @param int $level2 optional level2 (default 200)
-	 * @return array (membercount, sql_fetchrowset of all rows)
-	 *  
-	 *  
+	 * @param unknown $start
+	 * @param unknown $mode (listing or class)
+	 * @param unknown $query_by_armor
+	 * @param unknown $query_by_class
+	 * @param unknown $filter
+	 * @param unknown $game_id
+	 * @param number $guild_id  optional guild id
+	 * @param number $class_id optional class id
+	 * @param number $race_id optional race id
+	 * @param number $level1 optional level1 (default 1)
+	 * @param number $level2 optional level2 (default 200)
+	 * @return array  (membercount, sql_fetchrowset of all rows)
 	 */
 	public function get_listingresult($start, $mode,
 		$query_by_armor, $query_by_class, $filter, $game_id, 
@@ -1339,7 +1396,7 @@ class Members extends \bbdkp\Admin
 	 * 
 	 * @param int $guild_id optional guild id
 	 * @param int $classid optional class id
-	 * @param int $race optional race id
+	 * @param int $race_id optional race id
 	 * @param int $level1 optional level1 (default 1)
 	 * @param int $level2 optional level2 (default 200)
 	 * @return array

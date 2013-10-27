@@ -55,11 +55,24 @@ if (!class_exists('\bbdkp\Guilds'))
  */
 class acp_dkp_mm extends \bbdkp\Admin
 {
-	public $u_action;
+	/**
+	 * instance of member class
+	 * @var \bbdkp\Members
+	 */
 	public $member;
-	public $old_member;
+	
+	/**
+	 * trigger link
+	 * @var string
+	 */
 	public $link = ' ';
 
+	
+	/**
+	 * main acp_dkp_mm function
+	 * @param integer $id
+	 * @param string $mode
+	 */
 	public function main ($id, $mode)
 	{
 		global $user, $template, $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;

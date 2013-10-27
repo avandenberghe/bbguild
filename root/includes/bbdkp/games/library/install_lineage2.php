@@ -2,7 +2,7 @@
 /**
  * bbdkp Lineage2 install file
  * 
- * @package bbDKP
+ * @package bbDKP\Game\library
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -31,7 +31,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
 /**
  * Lineage 2 Installer class
  * 
- * @package bbDKP
+ * @package bbDKP\Game\library
  *
  */
 class install_lineage2 extends \bbdkp\aGameinstall

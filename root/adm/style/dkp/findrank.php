@@ -1,6 +1,6 @@
 <?php
 /**
- * returns rank xml based on ajax call 
+ * Returns rank xml based on ajax call 
  * 
  * @package bbDKP
  * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
@@ -43,5 +43,4 @@ while ( $row = $db->sql_fetchrow($result))
 $xml .= '</ranklist>';
 $db->sql_freeresult($result);
 //return xml to ajax
-echo($xml); 
-?>
+echo($xml);

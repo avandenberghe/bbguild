@@ -1,25 +1,31 @@
 <?php
-namespace bbdkp;
-
 /**
  * Validator
  *
  * Data validation class
- * @package 	bbDKP
+ * @package 	bbDKP\Admin\Validator
  * @author      Arvind Gupta <contact [ AT ] arvindgupta [ DOT ] co [ DOT ] in>
  * @copyright   Arvind Gupta (c) 2011
  * @link        http://www.arvindgupta.co.in
  * @license     You're free to do whatever with this as long as this notice
  *              remains intact.
  */
+namespace bbdkp;
+/**
+ * Validator class
+ * @package  bbDKP\Admin\Validator
+ */
 class Validator
 {
- 
+ 	
     protected $_rules = array();
     protected $_data = array();
     protected $_messages = array();
     protected $_errors = array();
  
+    /**
+     * Validator constructor
+     */
     public function __construct()
     {
         $this->setDefaultMessages();

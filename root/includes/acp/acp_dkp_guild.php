@@ -55,13 +55,29 @@ if (!class_exists('\bbdkp\Roles'))
  */
 class acp_dkp_guild extends \bbdkp\Admin
 {
+	/**
+	 * url action
+	 * @var string
+	 */
 	public $u_action;
-	public $member;
-	public $old_member;
+	
+	/**
+	 * trigger url
+	 * @var string
+	 */
 	public $link = ' ';
+	
+	/**
+	 * current rul
+	 * @var string
+	 */
 	public  $url_id;
 	
-	
+	/**
+	 * main acp function
+	 * @param integer $id
+	 * @param string $mode
+	 */
 	public function main ($id, $mode)
 	{
 		global $user, $template, $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;

@@ -1,7 +1,8 @@
 <?php
-namespace bbdkp;
 /**
- * @package 	bbDKP
+ * Pool class file
+ * 
+ * @package 	bbDKP\Points
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -10,6 +11,7 @@ namespace bbdkp;
  * @since 1.3.0
  *
  */
+namespace bbdkp;
 
 /**
  * @ignore
@@ -33,7 +35,7 @@ if (!class_exists('\bbdkp\Admin'))
  *  Pools are a superset for events and dkp accounts.
  *  this class needs no controller so it extends admin.
  *  
- * @package 	bbDKP
+ * @package 	bbDKP\Points
  */
 class Pool extends \bbdkp\Admin
  {
@@ -43,14 +45,47 @@ class Pool extends \bbdkp\Admin
 	 */ 	
  	public $dkpsys; 
  	
- 	public $dkpsys_id; 
+ 	/**
+ 	 * Pool id
+ 	 * @var integer
+ 	 */
+ 	public $dkpsys_id;
+ 	/**
+ 	 * Pool name
+ 	 * @var string
+ 	 */ 
  	private $dkpsys_name;
+ 	/**
+ 	 * Pool status
+ 	 * @var string
+ 	 */
  	private $dkpsys_status;
+	/**
+	 * pool added by 
+	 * @var string
+	 */
  	private $dkpsys_addedby;
+ 	
+ 	/**
+ 	 * pool updated by
+ 	 * @var string
+ 	 */
  	private $dkpsys_updatedby;
+ 	/**
+ 	 * if pool is default then 'Y' else 'N'
+ 	 * @var string
+ 	 */
  	private $dkpsys_default;
+ 	/**
+ 	 * number of pools
+ 	 * @var integer
+ 	 */
  	private $poolcount;
  	
+ 	/**
+ 	 * Pool class constructor
+ 	 * @param number $dkpsys
+ 	 */
 	function __construct($dkpsys = 0) 
 	{
 		global $db;
@@ -86,7 +121,7 @@ class Pool extends \bbdkp\Admin
 	}
 	
 	/**
-	 *
+	 * Pool class property getter
 	 * @param string $property
 	 */
 	public function __get($property)
@@ -104,9 +139,9 @@ class Pool extends \bbdkp\Admin
 	}
 	
 	/**
-	 *
-	 * @param unknown_type $property
-	 * @param unknown_type $value
+	 * Pool class property Setter
+	 * @param string $property
+	 * @param string $value
 	 */
 	public function __set($property, $value)
 	{
@@ -173,6 +208,9 @@ class Pool extends \bbdkp\Admin
 		}
 	}
 	
+	/**
+	 * updates other pool to not default
+	 */
 	private function updateotherdefaults()
 	{
 		global $db; 
@@ -181,7 +219,7 @@ class Pool extends \bbdkp\Admin
 	}
 	
 	/**
-	 * read account
+	 * make a pool instance given the pool id
 	 */
 	private function read()
 	{
@@ -201,9 +239,15 @@ class Pool extends \bbdkp\Admin
 		$db->sql_freeresult ($result);
 		
 	}
+
 	
 	/**
-	 * read account
+	 * 
+	 * list pools
+	 * @param string $order
+	 * @param number $start
+	 * @param number $mode
+	 * @return multitype:multitype:unknown
 	 */
 	public function listpools($order = 'dkpsys_name', $start = 0, $mode = 0)
 	{
