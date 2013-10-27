@@ -2,7 +2,7 @@
 /**
  * Events Class file
  * 
- * @package bbDKP\Raids
+ * @package bbDKP\Events\Raids
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp

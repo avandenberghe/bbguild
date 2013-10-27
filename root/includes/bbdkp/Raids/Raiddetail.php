@@ -3,7 +3,7 @@
  * 
  * Raiddetail Class
  * 
- * @package bbDKP\Raids
+ * @package bbDKP\Events\Raids\Raiddetail
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -26,7 +26,7 @@ global $phpbb_root_path;
 /**
  * Raid detail table Class
  * 
- * @package bbDKP\Raids
+* @package bbDKP\Events\Raids\Raiddetail
  */
 class Raiddetail
 {

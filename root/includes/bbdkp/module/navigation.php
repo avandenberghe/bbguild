@@ -2,7 +2,7 @@
 /**
  * left front navigation block
  * 
- * @package bbDKP
+* @package bbDKP\views\navigation
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp

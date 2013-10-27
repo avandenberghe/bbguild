@@ -914,7 +914,7 @@ class Members extends \bbdkp\Admin
 
 	/**
 	 * called when user is deactivated because of wow inactivity > 90 days
-	 * @param unknown $daysago
+	 * @param integer $daysago
 	 */
 	private function deactivate_wow($daysago)
 	{
@@ -1236,12 +1236,12 @@ class Members extends \bbdkp\Admin
 	 * Frontview : member Roster listing
 	 * required class game property to be set before call
 	 * 
-	 * @param unknown $start
-	 * @param unknown $mode (listing or class)
-	 * @param unknown $query_by_armor
-	 * @param unknown $query_by_class
-	 * @param unknown $filter
-	 * @param unknown $game_id
+	 * @param int $start
+	 * @param string $mode (listing or class)
+	 * @param boolean $query_by_armor
+	 * @param boolean $query_by_class
+	 * @param string $filter
+	 * @param number $game_id
 	 * @param number $guild_id  optional guild id
 	 * @param number $class_id optional class id
 	 * @param number $race_id optional race id

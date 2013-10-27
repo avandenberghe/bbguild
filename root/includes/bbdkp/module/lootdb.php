@@ -1,7 +1,7 @@
 <?php
 /**
  * lootdb : loot catalogue
- * 
+* @package bbDKP\views\lootcatalogue
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

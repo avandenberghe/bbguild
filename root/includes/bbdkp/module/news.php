@@ -2,7 +2,7 @@
 /**
  * News module
  * 
- * @package bbDKP
+* @package bbDKP\views\news
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

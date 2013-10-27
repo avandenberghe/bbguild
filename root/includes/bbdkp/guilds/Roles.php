@@ -1,7 +1,7 @@
 <?php
 namespace bbdkp;
 /**
- * @package 	bbDKP
+ * @package 	bbDKP\Guilds
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -35,7 +35,7 @@ if (!class_exists('\bbdkp\Guilds'))
 
 /**
  * holds vacancies per guild, game, role and class
- * @package 	bbDKP
+ * @package 	bbDKP\Guilds
  *
  */
 class Roles 
