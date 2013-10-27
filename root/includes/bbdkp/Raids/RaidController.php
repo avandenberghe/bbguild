@@ -1,6 +1,7 @@
 <?php
 /**
- * @package 	bbDKP
+ * Raid controller file
+ * @package bbDKP\Events\Raids\Raidcontroller
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -48,39 +49,94 @@ if (!class_exists('\bbdkp\Loot'))
 	require("{$phpbb_root_path}includes/bbdkp/Loot/Loot.$phpEx");
 }
 /**
- * Raid controller class
+ * Raid controller class : the routines controlling the raid workflow
  * 
- * @package 	bbDKP
+* @package bbDKP\Events\Raids\Raidcontroller
  */
 class RaidController  extends \bbdkp\Admin
 {
-	/*
-	|--------------------------------------------------------------------------
-	| Raid Controller
-	|--------------------------------------------------------------------------
-	| here are all the routines controlling the raid workflow
-	|
-	*/
-	
+	/**
+	 * dkp pool to which this raid belongs
+	 * @var integer
+	 */
 	public $dkpid; 
+	/**
+	 * array of dkp pool 
+	 * @var array
+	 */
 	public $dkpsys;
+	/**
+	 * guild id
+	 * @var integer
+	 */
 	public $guildid;
+	/**
+	 * array with events
+	 * @var array
+	 */
 	public $eventinfo;
+	/**
+	 * game id for this raid
+	 * @var string
+	 */
 	public $game_id;
-	public $memberlist; 
+	/**
+	 * Guild memberlist
+	 * @var array
+	 */
+	public $memberlist;
+	/**
+	 * raid count
+	 * @var integer
+	 */ 
 	public $totalraidcount;
-	
+	/**
+	 * list of raids in a dkp pool
+	 * @var array
+	 */
 	public $raidlist;
+	/**
+	 * order of raids in raid list
+	 * @var array
+	 */
 	public $raidlistorder; 
 	
+	/**
+	 * instance of Raid class
+	 * @var \bbdkp\Raids
+	 */
 	public $raid; 
+	/**
+	 * instance of Raid detail class
+	 * @var \bbdkp\Raiddetail
+	 */
 	public $raiddetail;
-	public $raiddetailorder;
 	
+	/**
+	 * order of Raid detail array
+	 * @var unknown
+	 */
+	public $raiddetailorder;
+	/**
+	 * raid loot array 
+	 * @var array
+	 */
 	public $lootlist;
+	/**
+	 * order of raid loot array
+	 * @var array
+	 */
 	public $lootlistorder;
+	/**
+	 * array of benched
+	 * @var array
+	 */
 	public $nonattendees;
 	
+	/**
+	 * Raidcontroller constructor
+	 * @param number $dkpid
+	 */
 	public function __construct($dkpid = 0) 
 	{
 		parent::__construct();
@@ -106,6 +162,9 @@ class RaidController  extends \bbdkp\Admin
 
 	}
 	
+	/**
+	 * prepares objects to crate new raid
+	 */
 	public function init_newraid()
 	{
 		global $user;
@@ -130,7 +189,7 @@ class RaidController  extends \bbdkp\Admin
 	
 	/**
 	 * fetch the raid and pass it to the view
-	 * @param unknown_type $raid_id
+	 * @param integer $raid_id
 	 * @return \bbdkp\Raids
 	 */
 	public function displayraid($raid_id)
@@ -175,7 +234,7 @@ class RaidController  extends \bbdkp\Admin
 
 	/**
 	 * add a raid
-	 * @param array $raidinfo
+	 * 
 		'raid_note' 		=> utf8_normalize_nfc (request_var ( 'hidden_raid_note', ' ', true )),
 		'raid_event'		=> utf8_normalize_nfc (request_var ( 'hidden_raid_name', ' ', true )),
 		'raid_value' 		=> request_var ('hidden_raid_value', 0.00 ),
@@ -184,6 +243,7 @@ class RaidController  extends \bbdkp\Admin
 		'raid_end'			=> request_var ('hidden_endraid_date', 0),
 		'event_id' 			=> request_var ('hidden_event_id', 0),
 		'raid_attendees' 	=> request_var ('hidden_raid_attendees', array ( 0 => 0 )),
+	 * @param array $raidinfo
 	 */
 	public function add_raid(array $raidinfo)
 	{
@@ -245,8 +305,8 @@ class RaidController  extends \bbdkp\Admin
 
 	/**
 	 * duplicates a passed raid x
-	 * 
 	 * @todo attached loot.
+	 * 
 	 * @param int $old_raid_id
 	 */
 	public function duplicateraid($old_raid_id)
@@ -275,7 +335,10 @@ class RaidController  extends \bbdkp\Admin
 	}
 	
 	
-	
+	/**
+	 * update raid
+	 * @param array $raidinfo
+	 */
 	public function update_raid(array $raidinfo)
 	{
 		global $user, $config;
@@ -346,14 +409,17 @@ class RaidController  extends \bbdkp\Admin
 		
 	}
 	
+	
+	
 	/**
 	 * adds 1 attendee to a raid
-	 * @param unknown_type $raid_id
-	 * @param unknown_type $raid_value
-	 * @param unknown_type $time_bonus
-	 * @param unknown_type $dkpid
-	 * @param unknown_type $member_id
-	 * @param unknown_type $raid_start
+	 * 
+	 * @param int $raid_id
+	 * @param float $raid_value
+	 * @param float $time_bonus
+	 * @param int $dkpid
+	 * @param int $member_id
+	 * @param int $raid_start
 	 * @return boolean
 	 */
 	public function addraider($raid_id, $raid_value, $time_bonus, $dkpid, $member_id, $raid_start)
@@ -388,7 +454,7 @@ class RaidController  extends \bbdkp\Admin
 	 * 
 	 * @param int $dkpsys_id
 	 * @param int $start
-	 * @param char $order
+	 * @param int $member_id
 	 */
 	public function listraids($dkpsys_id=0, $start = 0, $member_id=0)
 	{

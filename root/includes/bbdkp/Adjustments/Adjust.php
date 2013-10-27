@@ -1,7 +1,7 @@
 <?php
 /**
  * Adjustments class file
- * @package 	bbDKP
+ * @package 	bbDKP\Adjust
  * @link 		http://www.bbdkp.com
  * @author 		Sajaki@gmail.com
  * @copyright 	2013 bbdkp
@@ -31,7 +31,7 @@ if (!class_exists('\bbdkp\Admin'))
  * 
  * phpbb_bbdkp_adjustments Class
  * 
- * @package 	bbDKP
+ * @package 	bbDKP\Adjust
  */
 class Adjust extends \bbdkp\Admin
 {

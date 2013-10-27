@@ -1,6 +1,8 @@
 <?php
 /**
- * @package 	bbDKP
+ * Events Class file
+ * 
+ * @package bbDKP\Events\Raids
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -27,36 +29,74 @@ if (!class_exists('\bbdkp\Admin'))
 
 /**
  * Events are Types of raids. Raids are hooked up to Events
- * example of events: 
- * 		10-man raids, 
- * 		progress raids, 
- * 		recurring farm raid , ...
- * 		RBG ...
- * 		Flashpoints, ...
  * 
- * it's advised to not create an event for each instance
- * because instances are implemented with the location class		
+ * example of events: 10-man raids, progress raids, Flex raid, recurring farm raid , RBG, Flashpoints, ...
  * 
- * 
- * @package 	bbDKP
+ * @package bbDKP\Raids
  * 
  */
 class Events extends \bbdkp\Admin
 {
-	
+	/**
+	 * Event id primary key
+	 * @var integer
+	 */
 	public $event_id;
+	/**
+	 * dkpsys id
+	 * @var integer
+	 */
 	private $dkpsys_id;
+	/**
+	 * name of dkp pool
+	 * @var string
+	 */
 	private $dkpsys_name;
-	private $event_name; 
+	/**
+	 * Name of the event
+	 * @var string
+	 */
+	private $event_name;
+	/**
+	 * Standard event value
+	 * @var float
+	 */ 
 	private $event_value;
+	/**
+	 * Event color hex
+	 * @var string
+	 */
 	private $event_color;
+	/**
+	 * image name. provide images it looks nicer
+	 * @var string
+	 */
 	private $event_imagename;
+	/**
+	 * Event status
+	 * @var integer 1 or 0
+	 */
 	private $event_status;
-	
+	/**
+	 * total number of evnets within a Pool
+	 * @var integer
+	 */
 	public $total_events;
+	/**
+	 * Pool array
+	 * @var array
+	 */
 	public $dkpsys;
+	/**
+	 * array of all events in Pool
+	 * @var array
+	 */
 	public $events; 
 	
+	/**
+	 * Event class constructor
+	 * @param number $event_id
+	 */
 	function __construct($event_id = 0) 
 	{
 		global $db; 
@@ -95,7 +135,7 @@ class Events extends \bbdkp\Admin
 	
 
 /**
- *
+ * Event class Property Getter
  * @param string $property
  */
 public function __get($property)
@@ -113,9 +153,9 @@ public function __get($property)
 }
 	
 /**
- *
- * @param unknown_type $property
- * @param unknown_type $value
+ * Event class Property Setter
+ * @param string $property
+ * @param string $value
  */
 public function __set($property, $value)
 {
@@ -152,9 +192,9 @@ public function __set($property, $value)
 	
 
 	/**
+	 * Get Event instance from database
 	 * 
-	 * @param unknown_type $dkpid
-	 * @param unknown_type $event_id
+	 * @param integer $event_id
 	 */
 	public function get($event_id = 0)
 	{
@@ -240,9 +280,9 @@ public function __set($property, $value)
 		
 	}
 	
-	
 	/**
 	 * updates Database
+	 * @var \bbdkp\Events $oldevent
 	 */
 	public function update(\bbdkp\Events $oldevent)
 	{
@@ -321,7 +361,7 @@ public function __set($property, $value)
 	
 	/**
 	 * counts number of events, evtl per dkp pool
-	 * 
+	 * @param number $dkpid
 	 */
 	public function countevents($dkpid = 0)
 	{
@@ -344,7 +384,7 @@ public function __set($property, $value)
 
 	/**
 	 * counts number of events, evtl per dkp pool
-	 *
+	 * @param number $dkpid
 	 */
 	public function getmax($dkpid = 0)
 	{
@@ -359,9 +399,11 @@ public function __set($property, $value)
 	
 	/**
 	 * Get all events from pool
-	 * @param unknown_type $start
-	 * @param unknown_type $order
-	 * @param unknown_type $dkpid
+	 * 
+	 * @param number $start
+	 * @param string $order
+	 * @param number $dkpid
+	 * @param boolean $all
 	 */
 	public function listevents($start = 0, $order = 'b.dkpsys_id, a.event_name' , $dkpid=0, $all=true  )
 	{
@@ -404,9 +446,7 @@ public function __set($property, $value)
 	
 	/**
 	 * front View Event listing, by guild
-	 * @param unknown_type $start
-	 * @param unknown_type $order
-	 * @param unknown_type $dkpid
+	 * @param integer $guild_id
 	 */
 	public function viewlistevents($guild_id)
 	{
@@ -559,8 +599,8 @@ public function __set($property, $value)
 	
 	/**
 	 * mark an event selection active or unactive
-	 * @param unknown_type $action
-	 * @param unknown_type $selected_events
+	 * @param integer $action
+	 * @param array $selected_events
 	 */
 	public function activateevents($action = 1, $selected_events)
 	{

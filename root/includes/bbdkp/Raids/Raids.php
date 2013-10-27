@@ -2,7 +2,7 @@
 /**
  * Raids Class file
  * 
- * @package bbDKP
+ * @package bbDKP\Events\Raids
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -34,7 +34,7 @@ if (!class_exists('\bbdkp\Members'))
 /**
  * This class controls raid acp.
  *
- * @package bbDKP
+ * @package bbDKP\Events\Raids
  *
  */
 class Raids extends \bbdkp\Admin

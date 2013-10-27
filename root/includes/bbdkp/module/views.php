@@ -1,7 +1,7 @@
 <?php
 /**
  * View class
- * @package bbDKP
+ * @package bbDKP\views
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -33,16 +33,57 @@ if (!class_exists('\bbdkp\Admin'))
  */
 class views extends \bbdkp\admin
 {
+	/**
+	 * guild id
+	 * @var int
+	 */
 	private $guild_id;
+	/**
+	 * game id
+	 * @var string
+	 */
 	private $game_id;
+	/**
+	 * filter by pool ?
+	 * @var boolean
+	 */
 	private $query_by_pool = true;
+	/**
+	 * filter by armor ?
+	 * @var boolean
+	 */
 	private $query_by_armor = false;
+	/**
+	 * filter by class ?
+	 * @var unknown
+	 */
 	private $query_by_class = false;
+	/**
+	 * the filter string
+	 * @var string
+	 */
 	private $filter = '';
-	private $show_all = false; 
-	private $dkpsys_id = 0; 
+	/**
+	 * show all members even not active ?
+	 * @var boolean
+	 */
+	private $show_all = false;
+	/**
+	 * pool id
+	 * @var integer
+	 */ 
+	private $dkpsys_id = 0;
+	/**
+	 * name of pool
+	 * @var string
+	 */ 
 	private $dkpsys_name = '';
 	
+	/**
+	 * load a page asked for by user
+	 * 
+	 * @param string $page
+	 */
 	public function load($page)
 	{
 		global $user, $template, $config, $phpbb_root_path, $phpEx ;

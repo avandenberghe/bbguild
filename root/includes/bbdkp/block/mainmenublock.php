@@ -2,7 +2,7 @@
 /**
  * main menu block
  * 
- * @package bbDKP
+ * @package bbDKP\portal\block
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

@@ -1,7 +1,7 @@
 <?php
 /**
  * Races Class file
- * @package 	bbDKP
+ * @package 	bbDKP\Game\Races
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -31,7 +31,7 @@ if (!class_exists('\bbdkp\Game'))
  * 
  * Manages creation of Game races
  * 
- * @package 	bbDKP
+ * @package 	bbDKP\Game\Races
  */
  class Races extends \bbdkp\Game
 {

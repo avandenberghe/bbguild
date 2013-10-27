@@ -2,7 +2,7 @@
 /**
  * bbdkp Rift install data
  * 
- * @package 	bbDKP
+ * @package 	bbDKP\Game\library
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -29,7 +29,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
 
 /**
  * Rift Installer class
- * @package 	bbDKP
+ * @package 	bbDKP\Game\library
  *
  */
 class install_rift extends \bbdkp\aGameinstall

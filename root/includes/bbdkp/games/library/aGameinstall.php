@@ -2,7 +2,7 @@
 /**
  * abstract class aGameInstall
  * 
- * @package bbDKP
+ * @package bbDKP\Game\library
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -21,7 +21,7 @@ if (! defined('IN_PHPBB'))
 /**
  * Game interface
  *
- * @package 	bbDKP
+ * @package 	bbDKP\Game\library
  * 
  */
 abstract class aGameinstall 

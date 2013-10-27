@@ -2,7 +2,7 @@
 /**
  * Wow Installer File
  * 
- * @package 	bbDKP
+ * @package 	bbDKP\Game\library
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -31,12 +31,14 @@ if (!class_exists('\bbdkp\aGameinstall'))
 /**
  * Wow installer Class
  * @author Sajaki
- * @package 	bbDKP
+ * @package 	bbDKP\Game\library
  * 
  */
 class install_wow extends \bbdkp\aGameinstall
 {
-	
+	/**
+	 * Installs WoW
+	 */
 	public function install()
 	{
 		$this->Installfactions();
@@ -275,10 +277,10 @@ class install_wow extends \bbdkp\aGameinstall
 	}
 	
 	
-	
 	/**
 	 * Install Events
 	 * an Event answers the 'what' question
+	 * @param integer $dkpid
 	 */
 	private function InstallEventsCataclysm($dkpid)
 	{
@@ -305,6 +307,7 @@ class install_wow extends \bbdkp\aGameinstall
 	/**
 	 * Install Events
 	 * an Event answers the 'what' question
+	 * @param integer $dkpid
 	 */
 	private function InstallEventsPandaria($dkpid)
 	{
@@ -337,9 +340,9 @@ class install_wow extends \bbdkp\aGameinstall
 	
 	}
 
-	/*
-	 * demo data
-	* inserts 3 dummy members, 3 dkp accounts, 3 dummy items, and 1 dummy raid
+
+	/**
+	* inserts demo data 3 dummy members, 3 dkp accounts, 3 dummy items, and 1 dummy raid
 	*/
 	private function populate_wow()
 	{

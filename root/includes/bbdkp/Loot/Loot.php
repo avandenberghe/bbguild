@@ -2,7 +2,7 @@
 /**
  * Loot class file
  * 
- * @package bbDKP
+ * @package bbDKP\Events\Raid\Loot
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -29,7 +29,7 @@ global $phpbb_root_path;
  * Items can be crafted, bought from vendors or gotten from the guild bank, etc. 
  * In that case the raid_id is '0' 
  * 
- * @package 	bbDKP
+ * @package 	 bbDKP\Events\Raid\Loot
  */
 class Loot 
 {

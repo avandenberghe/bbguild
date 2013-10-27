@@ -2,7 +2,7 @@
 
 namespace bbdkp;
 /**
- * @package 	bbDKP
+ * @package 	bbDKP\Game\Faction
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -33,7 +33,7 @@ if (!class_exists('\bbdkp\Game'))
  * 
  * Manages all Game Factions
  * 
- * @package 	bbDKP
+ * @package 	bbDKP\Game\Faction
  */
  class Faction extends \bbdkp\Game 
 {

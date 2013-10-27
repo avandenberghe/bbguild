@@ -2,7 +2,7 @@
 /**
  * Indexpage for bbdkp
  *
- * @package bbDKP
+ * @package bbDKP\portal
  * @copyright 2011 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author ippehe <ippe.he@gmail.com>
