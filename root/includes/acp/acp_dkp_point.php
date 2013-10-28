@@ -2,7 +2,7 @@
 /**
  * Points acp file
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_point
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -35,12 +35,21 @@ if (!class_exists('\bbdkp\PointsController'))
 /**
  * This acp class manages point settings
  *
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_point
  */
  class acp_dkp_point extends \bbdkp\Admin
 {
+	/**
+	 * instance of PointsController class
+	 * @var \bbdkp\PointsController
+	 */	
 	private $PointsController;
 	 
+	/**
+	 * Main points acp function
+	 * @param int $id
+	 * @param string $mode
+	 */
 	function main ($id, $mode)
 	{
 		global $user, $template, $cache, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;

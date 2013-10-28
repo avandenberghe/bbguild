@@ -2,7 +2,7 @@
 /**
  * bbDKP Umil Installer
  * 
- * @package bbDKP.install
+ * @package bbDKP\install
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -1042,6 +1042,7 @@ include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
  *
  * @param string $text
  * @return array
+ * @package bbDKP\install
  */
 function encode_message($text)
 {
@@ -1055,11 +1056,12 @@ function encode_message($text)
 }
 
 /**
- * 
  * custom SQL updates outside of UMIL
+ * 
  * @param string $action
  * @param string $version
  * @return multitype:string
+ * @package bbDKP\install
  */
 function tableupdates($action, $version)
 {
@@ -1159,7 +1161,7 @@ function tableupdates($action, $version)
 
 /**
  * global function for clearing cache
- * 
+ * @package bbDKP\install
  * @param string $action
  * @param string $version
  * @return string
@@ -1180,7 +1182,7 @@ function bbdkp_caches($action, $version)
 /**
  * checks if there is an older install then quit
  * only updates from 1.2.8 are allowed...
- * 
+ * @package bbDKP\install
  */
 function check_oldbbdkp()
 {

@@ -2,7 +2,7 @@
 /**
  * returns memberlist xml based on ajax call used by acp_addraid.html
  * 
- * @package bbDKP\acp\ajax
+ * @package acp\ajax
  * @copyright (c) 2013 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 

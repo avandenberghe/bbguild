@@ -2,7 +2,7 @@
 /**
  * Raid acp file
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_raid
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -48,18 +48,37 @@ if (!class_exists('\bbdkp\Members'))
  /**
  *  This ACP class manages Raids
  *  
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_raid
  */
  class acp_dkp_raid extends \bbdkp\Admin
 {
+	/**
+	 * url in triggers
+	 * @var string
+	 */
 	private $link;
-	public $u_action;
-	private $RaidController;
-	private $LootController;
-	private $PointsController;
 	
 	/**
+	 * instance of Raidcontroller class
+	 * @var \bbdkp\Raidcontroller
+	 */
+	private $RaidController;
+	/**
+	 * instance of lootcontroller class
+	 * @var \bbdkp\Lootcontroller
+	 */	
+	private $LootController;
+	/**
+	 * instance of PointsController class
+	 * @var \bbdkp\PointsController
+	 */	
+	private $PointsController;
+
+	/**
 	 * main Raid function
+	 * 
+	 * @param int $id
+	 * @param string $mode
 	 */
 	public function main($id, $mode) 
 	{
@@ -454,7 +473,7 @@ if (!class_exists('\bbdkp\Members'))
 	/**
 	 * displays a raid
 	 * 
-	 * @param  $raid_id int the raid to display
+	 * @param  int $raid_id the raid to display
 	 */
 	private function displayraid($raid_id)
 	{

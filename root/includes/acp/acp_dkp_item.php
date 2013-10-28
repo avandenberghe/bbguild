@@ -2,7 +2,7 @@
 /**
  * Loot ACP file
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_item
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -38,15 +38,34 @@ if (!class_exists('\bbdkp\PointsController'))
 /**
  * This ACP class manages Game Loot
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_item
  */
 class acp_dkp_item extends \bbdkp\Admin
 {
-	public $u_action;
+	/**
+	 * url in triggers
+	 * @var string
+	 */
 	private $link;
+	
+	/**
+	 * instance of lootcontroller class
+	 * @var \bbdkp\Lootcontroller
+	 */
 	private $LootController;
+	
+	/**
+	 * instance of PointsController class
+	 * @var \bbdkp\PointsController
+	 */
 	private $PointsController;
 	
+	
+	/**
+	 * Main ACP function
+	 * @param integer $id
+	 * @param string $mode
+	 */
 	public function main($id, $mode) 
 	{
 		global $db, $user, $template;
@@ -358,12 +377,10 @@ class acp_dkp_item extends \bbdkp\Admin
 	}
 
 
-	
 	/**
 	 * Deletes item 
-	 * @groupdelete : if true then all groupid items also deleted
-	 *  
-	 */	
+	 * @param boolean $groupdelete if true then all groupid items also deleted
+	 */
 	private function deleteitem($groupdelete = false)
 	{
 		global $db, $user, $config, $template;
@@ -410,9 +427,8 @@ class acp_dkp_item extends \bbdkp\Admin
 				
 	}
 	
-	/***
-	 * updating item buyer 
-	 * 
+	/**
+	 * updating item buyer
 	 */
 	private function updateitem()  
 	{
@@ -789,22 +805,17 @@ class acp_dkp_item extends \bbdkp\Admin
 
 	}
 	
-	 /***
+	/**
      * Zero-sum DKP function
+     * 
      * will increase earned points for members present at loot time (== bosskill time) or present in Raid, depending on Settings
      * ex. player A pays 100dkp for item A
      * there are 15 players in raid
      * so each raider gets 100/15 = earned bonus 6.67 
      * 
-     * called from raidtracker_loot_add
-     * 
-     * @param $raiders : list of raiders
-     * @param 
-     * @param $itemvalue : all itemvalue 
-     * 
-     * returns the sql to update
-     * 
-     */
+     * @param float $itemvalue 
+	 * @return string
+	 */
     public function zero_balance($itemvalue)
     {
     	global $db;

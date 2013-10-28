@@ -1,6 +1,7 @@
 <?php
 /**
- * .ucp
+ * bbDKP ucp class
+ * @package bbDKP\ucp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -18,8 +19,17 @@ if (!defined('IN_PHPBB'))
 
 class ucp_dkp
 {
+	/**
+	 * module action
+	 * @var string
+	 */
 	var $u_action;
 					
+	/**
+	 * main ucp function
+	 * @param int $id
+	 * @param string $mode
+	 */
 	function main($id, $mode)
 	{
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
@@ -185,7 +195,7 @@ class ucp_dkp
 	/**
 	 * shows add/edit character form
 	 *
-	 * @param unknown_type $member_id
+	 * @param int $member_id
 	 */
 	private function fill_addmember($member_id)
 	{

@@ -1,6 +1,6 @@
 <?php
-namespace bbdkp;
 /**
+ * Guilds class file
  * @package 	bbDKP\Guilds
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -8,7 +8,7 @@ namespace bbdkp;
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
-
+namespace bbdkp;
 /**
  * @ignore
  */
@@ -39,39 +39,129 @@ if (!class_exists('\bbdkp\WowAPI'))
  */
 class Guilds extends \bbdkp\Admin
 {
-	// common
+	/**
+	 * guild game id 
+	 * @var string
+	 */
 	public $game_id = '';
+	/**
+	 * Guild pk
+	 * @var int
+	 */
 	public $guildid = 0;
+	/**
+	 * guild name
+	 * @var string
+	 */
 	protected $name = '';
+	/**
+	 * guiled realm
+	 * @var string
+	 */
 	protected $realm = '';
+	/**
+	 * guild region
+	 * @var string
+	 */
 	protected $region = '';
+	/**
+	 * guild achievements
+	 * @var int
+	 */
 	protected $achievements = 0;
+	/**
+	 * guild member count
+	 * @var int
+	 */
 	protected $membercount = 0;
+	/**
+	 * guild start date
+	 * @var int
+	 */
 	protected $startdate = 0;
+	/**
+	 * guild on roster ?
+	 * @var int 1 or 0
+	 */
 	protected $showroster = 0;
+	/**
+	 * min. level on roster
+	 * @var int 
+	 */
 	protected $min_armory = 0;
+	/**
+	 * does guild recruit ? 
+	 * @var int 1 or 0
+	 */
 	protected $recstatus = 1;
+	/**
+	 * is this the default guild ?
+	 * @var int 1 or 0
+	 */
 	protected $guilddefault = 1;
 	
 	//aion parameters
+	/**
+	 * Aion legion id
+	 * @var int
+	 */
 	protected $aionlegionid = 0;
+	/**
+	 * Aion Server id
+	 * @var int
+	 */
 	protected $aionserverid = 0;
 	
 	//wow parameters
+	/**
+	 * guild achievement points
+	 * @var int
+	 */
 	protected $achievementpoints = 0;
+	/**
+	 * guild level
+	 * @var int 1-25
+	 */
 	protected $level = 0;
+	/**
+	 * guild emblem image path
+	 */
 	protected $emblempath = '';
-	protected $emblem = array(); 
+	/**
+	 * battle net emblem info so we can make the image
+	 * @var array
+	 */
+	protected $emblem = array();
+	/**
+	 * guild battlegroup
+	 * @var string
+	 */ 
 	protected $battlegroup = '';
+	/**
+	 * guild armory url
+	 * @var string
+	 */
 	protected $guildarmoryurl = '';
+	/**
+	 * guild members
+	 * @var array
+	 */
 	protected $memberdata = array();
+	/**
+	 * guild side 
+	 * @var int 0 or 1
+	 */
 	protected $side = 0;
 
+	/**
+	 * holds recruitment statuses
+	 * @var array
+	 */
 	protected $possible_recstatus = array();
 	
 	/**
 	 * guild class constructor
-	 * @param unknown_type $guild_id
+	 * @param int $guild_id
 	 */
 	function __construct($guild_id = 0)
 	{
@@ -97,7 +187,6 @@ class Guilds extends \bbdkp\Admin
 
 	/**
 	 * gets a guild from database
-	 * @see \bbdkp\iGuilds::Get()
 	 */
 	public function Getguild()
 	{
@@ -154,7 +243,7 @@ class Guilds extends \bbdkp\Admin
 	}
 
 	/**
-	 * 
+	 * guild class property setter
 	 * @param string $fieldName
 	 */
 	public function __get($fieldName) 
@@ -172,9 +261,9 @@ class Guilds extends \bbdkp\Admin
 	}
 	
 	/**
-	 * 
-	 * @param unknown_type $property
-	 * @param unknown_type $value
+	 * guild class property setter
+	 * @param string $property
+	 * @param string $value
 	 */
 	public function __set($property, $value) 
 	{
@@ -199,12 +288,12 @@ class Guilds extends \bbdkp\Admin
 
 	/**
 	 * inserts a new guild to database
+	 * 
 	 * we always add guilds with an id greater than zero. this way, the guild with id=zero is the "guildless" guild
 	 * the zero guild is added by default in a new install.
 	 * do not delete the zero record in the guild table or you will see that guildless members
 	 * become invisible in the roster and in the memberlist or in any list member selection that makes
 	 * an inner join with the guild table.
-	 * @see \bbdkp\iGuilds::Make()
 	 */
 	public function MakeGuild()
 	{
@@ -283,7 +372,9 @@ class Guilds extends \bbdkp\Admin
 
 	/**
 	 * updates a guild to database
-	 * @see \bbdkp\iMembers::Update()
+	 * 
+	 * @param Guild $old_guild
+	 * @param array $params
 	 */
 	public function Guildupdate($old_guild, $params)
 	{
@@ -379,7 +470,6 @@ class Guilds extends \bbdkp\Admin
 	
 	/**
 	 * deletes a guild from database
-	 * @see \bbdkp\iMembers::Delete()
 	 */
 	public function Guildelete()
 	{
@@ -420,9 +510,9 @@ class Guilds extends \bbdkp\Admin
 	
 	/**
 	 * Calls api to pull more information
-	 *
 	 * Currently only the WoW API is available
-	 *
+	 * 
+	 * @var array $params
 	 * @return void
 	 */
 	public function Armory_get($params)
@@ -714,7 +804,6 @@ class Guilds extends \bbdkp\Admin
 
 	/**
 	 * counts all guild members
-	 * @see \bbdkp\iGuilds::countmembers()
 	 */
 	private function countmembers()
 	{
@@ -781,6 +870,10 @@ class Guilds extends \bbdkp\Admin
 		return $guild; 
 	}
 	
+	/**
+	 * updates the default guild flag
+	 * @param int $id
+	 */
 	public function update_guilddefault($id)
 	{
 		global $db; 

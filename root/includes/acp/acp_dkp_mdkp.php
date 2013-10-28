@@ -2,7 +2,7 @@
 /**
  * dkp ACP file
  *  
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_mdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -36,17 +36,34 @@ if (!class_exists('\bbdkp\PointsController'))
 /**
  * This class manages member DKP
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_mdkp
  */
 class acp_dkp_mdkp extends \bbdkp\Admin
 {
 
-	public $u_action;
+	/**
+	 * trigger url
+	 * @var string
+	 */
 	private $link;
 	
+	/**
+	 * instance of PointsController class
+	 * @var \bbdkp\PointsController
+	 */
 	private $PointsController;
+	
+	/**
+	 * pool id
+	 * @var int
+	 */
 	public $dkpsys_id; 
 	
+	/**
+	 * Main acp function
+	 * @param int $id
+	 * @param string $mode
+	 */
 	public function main($id, $mode)
 	{
 		global $db, $user, $auth, $template, $sid, $cache;
@@ -594,10 +611,11 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 		
 		
 	}
-
+	
+	
 	/**
-	 * transfer dkp to other member
-	 *
+	 * transfer dkp to other member 
+	 * @param int $dkpsys_id
 	 */
 	function transfer_dkp($dkpsys_id)
 	{

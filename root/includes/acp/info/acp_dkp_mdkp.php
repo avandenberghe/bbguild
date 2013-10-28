@@ -5,7 +5,7 @@
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * @author sajaki9@gmail.com
-* @package acp
+* @package bbDKP\acp\dkp_mdkp\info
 * 
 */
 
@@ -19,7 +19,7 @@ if (!defined('IN_PHPBB'))
 
 /**
  * info class for acp module dkp_mdkp
-* @package acp
+* @package bbDKP\acp\dkp_mdkp\info
 */
 class acp_dkp_mdkp_info
 {

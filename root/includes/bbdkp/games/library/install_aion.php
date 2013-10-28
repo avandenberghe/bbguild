@@ -147,6 +147,10 @@ class install_aion extends \bbdkp\aGameinstall
 		
 	}
 	
+	/**
+	 * dkp pool created for lotro
+	 * @var int
+	 */
 	private $aiondkpid = 0;
 	
 	/**

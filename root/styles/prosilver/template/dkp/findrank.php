@@ -1,9 +1,10 @@
 <?php
 /**
- * returns rank xml based on ajax call 
+ * Returns rank xml based on ajax call 
  *  
- * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
+ * @copyright (c) 2011 https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * 
  */
 define('IN_PHPBB', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../../../../';

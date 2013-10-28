@@ -259,6 +259,10 @@ class install_lotro extends \bbdkp\aGameinstall
 		
 	}
 	
+	/**
+	 * dkp pool created for lotro
+	 * @var int
+	 */
 	private $lotrodkpid = 0;
 	 
 	/**

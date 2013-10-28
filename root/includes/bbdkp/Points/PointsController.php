@@ -1,6 +1,6 @@
 <?php
-namespace bbdkp;
 /**
+ * Pointscontroller class file
  * @package 	bbDKP\Points
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -10,6 +10,7 @@ namespace bbdkp;
  * @since 1.3.0
  *
  */
+namespace bbdkp;
 
 /**
  * @ignore
@@ -72,6 +73,9 @@ class PointsController  extends \bbdkp\Admin
 	 */
 	public $dkpsys_id;
 	
+	/**
+	 * pointscontroller constructor
+	 */
 	function __construct() 
 	{
 		//load model
@@ -81,7 +85,11 @@ class PointsController  extends \bbdkp\Admin
 		$this->dkpsys = $this->Pools->dkpsys;  
 	}
 	
-	
+	/**
+	 * activate member dkp account
+	 * @param array $all_members
+	 * @param array $active_members
+	 */
 	public function activate($all_members, $active_members)
 	{
 		global $db; 
@@ -105,8 +113,8 @@ class PointsController  extends \bbdkp\Admin
 	
 	
 	/**
-	 * @category acp
 	 * returns an array to list all dkp accounts
+	 * 
 	 */
 	public function listdkpaccounts()
 	{
@@ -213,7 +221,6 @@ class PointsController  extends \bbdkp\Admin
 	
 	
 	/**
-	 * @category acp
 	 * returns an array to list all EPGP accounts
 	 */
 	public function listEPGPaccounts()
@@ -319,14 +326,21 @@ class PointsController  extends \bbdkp\Admin
 	
 	}
 	
+
 	/**
 	 * used by standings view
 	 * gets array with members to display
-	 *
+	 * 
+	 * @param int $guild_id
 	 * @param int $dkpsys_id
-	 * @param array $installed_games
+	 * @param string $game_id
 	 * @param int $startd
-	 * @return array $memberarray
+	 * @param boolean $show_all
+	 * @param boolean $query_by_armor
+	 * @param boolean $query_by_class
+	 * @param string $filter
+	 * @param boolean $query_by_pool
+	 * @return Ambigous <multitype:, unknown>
 	 */
 	public function get_standings($guild_id, $dkpsys_id, $game_id, $startd, $show_all, $query_by_armor, $query_by_class, $filter, $query_by_pool)
 	{
@@ -831,16 +845,13 @@ class PointsController  extends \bbdkp\Admin
 		trigger_error ($success_message . ' ' . $link , E_USER_NOTICE );
 		
 	}
-	
+
 	/**
 	 * add dkp points.
 	 * this must be called after the raid and raid detail tables are filled.
-	 *
-	 * @param float $raid_value
-	 * @param float $time_bonus
-	 * @param int $raid_start
-	 * @param int $dkpid
-	 * @param int $member_id
+	 * 
+	 * @param unknown $raid_id
+	 * @param number $member_id
 	 */
 	public function add_points($raid_id, $member_id = 0)
 	{
@@ -872,8 +883,8 @@ class PointsController  extends \bbdkp\Admin
 	/**
 	 * add points to record
 	 * @param \bbdkp\Raids $new_raid
-	 * @param \bbdkp\Raiddetail $raiddetail
-	 * @param unknown_type $member_id
+	 * @param array $raiddetail
+	 * @param int $member_id
 	 */
 	private function addpoint(\bbdkp\Raids $new_raid, $raiddetail, $member_id)
 	{
@@ -988,7 +999,11 @@ class PointsController  extends \bbdkp\Admin
 		
 	}
 	
-	
+	/**
+	 * add loot to account
+	 * @param float $item_value
+	 * @param integer $member_id
+	 */
 	public function addloot_update_dkprecord($item_value, $member_id)
 	{
 				
@@ -1199,7 +1214,7 @@ class PointsController  extends \bbdkp\Admin
 		
 	
 	/**
-	 * 
+	 * syncchronise zero sum 
 	 * @param int $mode 0 or 1 (0= set to 0, 1="resynchronise")
 	 * @return boolean|number
 	 */
@@ -1646,7 +1661,7 @@ class PointsController  extends \bbdkp\Admin
 	/**
 	 * Recalculates and updates adjustment decay
 	 * @param $mode 1 for recalculating, 0 for setting decay to zero.
-	 * @see \bbdkp\iAdjust::sync_adjdecay()
+	 * @param string $origin 
 	 */
 	public function sync_adjdecay ($mode, $origin = '')
 	{
