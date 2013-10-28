@@ -207,7 +207,8 @@ class Game extends \bbdkp\Admin
 	
 	/**
 	 * lists all games
-	 * @var string $order
+	 * 
+	 * @param string $order
 	 * @return array
 	 */
 	public function listgames($order)

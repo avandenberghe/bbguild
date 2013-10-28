@@ -39,8 +39,17 @@ if (!class_exists('\bbdkp\PointsController'))
  */
  class acp_dkp_point extends \bbdkp\Admin
 {
+	/**
+	 * instance of PointsController class
+	 * @var \bbdkp\PointsController
+	 */	
 	private $PointsController;
 	 
+	/**
+	 * Main points acp function
+	 * @param int $id
+	 * @param string $mode
+	 */
 	function main ($id, $mode)
 	{
 		global $user, $template, $cache, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
