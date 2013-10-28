@@ -2,7 +2,7 @@
 /**
  * Returns rank xml based on ajax call 
  * 
- * @package bbDKP\acp\ajax
+ * @package acp\ajax
  * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 

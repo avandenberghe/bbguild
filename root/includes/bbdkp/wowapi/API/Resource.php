@@ -72,6 +72,7 @@ abstract class Resource extends \bbdkp\Admin
 	protected $methods_allowed;
 
 	/**
+	 * realm api constructor
 	 * @param string $region Server region
 	 */
 	public function __construct($region='us') 
@@ -85,6 +86,11 @@ abstract class Resource extends \bbdkp\Admin
 		$this->region = $region;
 	}
 	
+	/**
+	 * get the uri property
+	 * @param char $region
+	 * @return string
+	 */
 	public function GetURI($region)
 	{
 		return $this->api_url[$this->region];

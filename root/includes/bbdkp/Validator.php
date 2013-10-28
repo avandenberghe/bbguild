@@ -17,10 +17,26 @@ namespace bbdkp;
  */
 class Validator
 {
- 	
+ 	/**
+ 	 * error rules
+ 	 * @var array
+ 	 */
     protected $_rules = array();
+    
+    /**
+     * userdata array
+     * @var array
+     */
     protected $_data = array();
+    /**
+     * message array
+     * @var array
+     */
     protected $_messages = array();
+    /**
+     * error array
+     * @var array
+     */
     protected $_errors = array();
  
     /**
@@ -113,6 +129,13 @@ class Validator
         return $this->_errors;
     }
  
+    /**
+     * check for errors
+     * @param string $value
+     * @param string $rule
+     * @param string $parameter
+     * @return boolean|number
+     */
     protected function check($value, $rule, $parameter)
     {
         switch ($rule)
@@ -168,6 +191,9 @@ class Validator
         }
     }
  
+    /**
+     * default error strings
+     */
     protected function setDefaultMessages()
     {
         $this->_messages = array(
@@ -185,9 +211,9 @@ class Validator
         );
     }
     
-    /**
-     * 
-     */
+	/**
+	 * funnel error messages to user
+	 */
     public function displayerrors()
     {
     	global $user;

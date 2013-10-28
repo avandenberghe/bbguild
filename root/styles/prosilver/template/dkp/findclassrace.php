@@ -2,9 +2,6 @@
 /**
  * returns race & class xml based on ajax call 
  *  
- * @copyright (c) 2011 https://github.com/bbDKP
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * 
  * will return an xml like this 
  * <?xml version="1.0" encoding="UTF-8"?>
 <document>
@@ -12,7 +9,8 @@
 <classlist><class><class_id>0</class_id><class_name>Unknown</class_name></class><class><class_id>1</class_id><class_name>Warrior</class_name></class><class><class_id>2</class_id><class_name>Paladin</class_name></class><class><class_id>3</class_id><class_name>Hunter</class_name></class><class><class_id>4</class_id><class_name>Rogue</class_name></class><class><class_id>5</class_id><class_name>Priest</class_name></class><class><class_id>6</class_id><class_name>Death Knight</class_name></class><class><class_id>7</class_id><class_name>Shaman</class_name></class><class><class_id>8</class_id><class_name>Mage</class_name></class><class><class_id>9</class_id><class_name>Warlock</class_name></class><class><class_id>11</class_id><class_name>Druid</class_name></class>
 </classlist>
 </document>
- * 
+ * @copyright (c) 2011 https://github.com/bbDKP
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  */
 define('IN_PHPBB', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../../../../';

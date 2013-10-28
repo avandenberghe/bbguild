@@ -2,7 +2,7 @@
 /**
  * Game ACP file
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_game
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -49,7 +49,7 @@ if (!class_exists('\bbdkp\Game'))
  * 
  * This class manages Game settings
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_game
  */
 class acp_dkp_game extends \bbdkp\Admin
 {

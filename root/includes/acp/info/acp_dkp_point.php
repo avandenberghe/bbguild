@@ -5,7 +5,7 @@
 * @copyright (c) 2012 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * @version 1.3.0
-* @package acp
+* @package bbDKP\acp\dkp_point\info
 */
 
 /**
@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 
 /**
  * info class for acp module dkp_point
- * @package acp
+ * @package bbDKP\acp\dkp_point\info
  */
 class acp_dkp_point_info
 {

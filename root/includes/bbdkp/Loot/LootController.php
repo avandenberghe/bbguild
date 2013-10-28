@@ -1,8 +1,7 @@
 <?php
-namespace bbdkp;
 /**
-
- * @package 	 bbDKP\Events\Raids\LootController
+ * Lootcontroller class file
+ * @package bbDKP\Events\Raids\LootController
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -11,7 +10,7 @@ namespace bbdkp;
  * @since 1.3.0
  *
  */
-
+namespace bbdkp;
 /**
  * @ignore
  */
@@ -52,10 +51,21 @@ if (!class_exists('\bbdkp\PointsController'))
  */
 class LootController  extends \bbdkp\Admin
 {
+	/**
+	 * instance of loot
+	 * @var \bbdkp\loot
+	 */
 	private $loot;
 
+	/**
+	 * Pool id
+	 * @var int
+	 */
 	public $dkpsys;
 
+	/**
+	 * lootcontroller constructor
+	 */
 	function __construct()
 	{
 		global $db;
@@ -83,12 +93,12 @@ class LootController  extends \bbdkp\Admin
 	/**
 	 * adds 1 attendee to a raid
 	 *
-	 * @param unknown_type $raid_id
-	 * @param unknown_type $item_buyers
-	 * @param unknown_type $item_value
-	 * @param unknown_type $item_name
-	 * @param unknown_type $loottime
-	 * @param unknown_type $itemgameid
+	 * @param int $raid_id
+	 * @param array $item_buyers
+	 * @param float $item_value
+	 * @param string $item_name
+	 * @param int $loottime
+	 * @param int $itemgameid
 	 * @return boolean
 	 */
 	public function addloot($raid_id, $item_buyers, $item_value, $item_name, $loottime, $itemgameid = 0 )
@@ -157,22 +167,21 @@ class LootController  extends \bbdkp\Admin
 		return true;
 
 	}
-
-
+	
 	/**
 	 * does the actual item-adding database operations
 	 * called from : item acp adding, updating item acp
 	 * closed box - no need for other params than passed
-	 *
-	 * @param item_name
-	 * @param item_buyers = array with buyers
-	 * @param group key : hash
-	 * @param raidid = the raid to which we add the item
-	 * @param itemvalue (float) the item cost
-	 * @param raidid
-	 * @param item_decay = decay to be applied on item
-	 * @param $itemgameid : if this is zero we dont care
-	 *
+	 * 
+	 * @param string $item_name
+	 * @param array $item_buyers
+	 * @param string $group_key
+	 * @param float $itemvalue
+	 * @param int $raid_id
+	 * @param int $loottime
+	 * @param int $itemgameid
+	 * @param float $itemdecay 
+	 * @return boolean
 	 */
 	private function add_new_item_db($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemgameid, $itemdecay)
 	{
@@ -278,6 +287,11 @@ class LootController  extends \bbdkp\Admin
 		return true;
 	}
 
+	/**
+	 * get loot from database
+	 * @param int $item_id
+	 * @return \bbdkp\loot
+	 */
 	public function Getloot($item_id)
 	{
 		$this->loot->Getloot($item_id);
@@ -298,6 +312,10 @@ class LootController  extends \bbdkp\Admin
 		return $this->loot->countloot('history' , 0, 0,$member_id, $raid_id);
 	}
 
+	/**
+	 * delete raid from db
+	 * @param int $raid_id
+	 */
 	public function delete_raid($raid_id)
 	{
 		global $db;
@@ -330,10 +348,12 @@ class LootController  extends \bbdkp\Admin
 		$db->sql_freeresult ($result);
 	}
 
-
 	/**
 	 * get item info
-	 *
+	 * 
+	 * @param int $item_id
+	 * @param int $dkp_id
+	 * @return multitype:string multitype:number string boolean unknown  unknown
 	 */
 	public function getitemdeleteinfo($item_id, $dkp_id)
 	{
@@ -383,12 +403,9 @@ class LootController  extends \bbdkp\Admin
 		return array($item_buyers, $old_item, $item_name);
 
 	}
-
-	/*
-	 * delete : does one item deletion in database
-	*
-	* @param : array $old_item
-	*
+	
+	/**
+	* delete : does one item deletion in database
 	*  array structure required for @param :
 	*	'item_id' 		=>  (int) $item_id ,
 	*	'dkpid'			=>  $dkp_id,
@@ -400,8 +417,10 @@ class LootController  extends \bbdkp\Admin
 	*	'item_value' 	=>  (float)  $row['item_value'],
 	*	'item_decay' 	=>  (float)  $row['item_decay'],
 	*	'item_zs' 		=>  (bool)   $row['item_zs'],
-	*
-	*/
+	 * 
+	 * @param array $old_item
+	 * @return boolean
+	 */
 	public function deleteloot($old_item)
 	{
 		global $config, $db;
@@ -494,7 +513,12 @@ class LootController  extends \bbdkp\Admin
 	
 	/**
 	 *  EPGP Guild Loot Statistics
-	 *
+	 * 
+	 * @param int $time
+	 * @param int $guild_id
+	 * @param boolean $query_by_pool
+	 * @param int $dkp_id
+	 * @param boolean $show_all
 	 */
 	public function EPGPMemberLootStats($time, $guild_id, $query_by_pool, $dkp_id, $show_all)
 	{
@@ -718,9 +742,14 @@ class LootController  extends \bbdkp\Admin
 	
 	}
 	
+
 	/**
 	 *  Guild Loot Statistics
-	 *
+	 * @param int $time
+	 * @param int $guild_id
+	 * @param boolean $query_by_pool
+	 * @param int $dkp_id
+	 * @param boolean $show_all
 	 */
 	public function MemberLootStats($time, $guild_id, $query_by_pool, $dkp_id, $show_all)
 	{

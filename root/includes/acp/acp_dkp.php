@@ -2,7 +2,7 @@
 /**
  * bbDKP Mainpage ACP
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -40,7 +40,7 @@ if (!class_exists('\bbdkp\log'))
 /**
  * This acp class manages setting configs, logging
  *
- * @package bbDKP
+ * @package \bbDKP\acp\dkp
  */
 class acp_dkp extends \bbdkp\Admin
 {

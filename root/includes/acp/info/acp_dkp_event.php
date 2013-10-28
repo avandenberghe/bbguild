@@ -5,7 +5,7 @@
  * @version 1.3.0
  * @copyright (c) 2009 bbdkp https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @package acp
+ * @package bbDKP\acp\dkp_event\info
  * @deprecated file deprecated in rel 1.3
  * @note : only needed for uninstallation of events module!
  /
@@ -20,7 +20,7 @@ if (!defined('IN_PHPBB'))
 
 /**
  * info class for acp module dkp_event
- * @package acp
+ * @package bbDKP\acp\dkp_event\info
  */
 class acp_dkp_event_info
 {

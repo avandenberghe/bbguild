@@ -1,7 +1,7 @@
 <?php
 /**
  * Constants used by bbDKP
- * 
+ * @package bbDKP\Admin\constants
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

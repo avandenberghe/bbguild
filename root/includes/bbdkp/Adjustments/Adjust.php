@@ -201,9 +201,10 @@ class Adjust extends \bbdkp\Admin
 		$db->sql_transaction('commit');
 	}
 
-
 	/**
 	 * get an adjustment from database
+	 * @param integer $adjust_id
+	 * @return Adjust
 	 */
 	public function get($adjust_id)
 	{

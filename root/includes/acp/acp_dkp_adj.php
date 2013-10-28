@@ -2,7 +2,7 @@
 /**
  * DKP Adjustments ACP file
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_adj
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -48,7 +48,7 @@ if (!class_exists('\bbdkp\Validator'))
 /**
  * This acp class manages guildmembers dkp adjustments
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_adj
  */
 class acp_dkp_adj extends \bbdkp\Admin
 {

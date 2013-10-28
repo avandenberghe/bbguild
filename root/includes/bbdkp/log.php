@@ -2,7 +2,7 @@
 /**
  * Logging class file
  * 
- * @package 	bbDKP
+ * @package bbDKP\Admin\log
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp

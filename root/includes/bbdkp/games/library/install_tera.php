@@ -156,6 +156,10 @@ class install_tera extends \bbdkp\aGameinstall
 		}
 	}
 	
+	/**
+	 * dkp pool created for tera
+	 * @var int
+	 */
 	private $teradkpid = 0; 
 	
 	/**

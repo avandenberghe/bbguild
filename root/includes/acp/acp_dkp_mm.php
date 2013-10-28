@@ -2,7 +2,7 @@
 /**
  * members acp file
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_mm
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -51,7 +51,7 @@ if (!class_exists('\bbdkp\Guilds'))
 /**
  * This class manages member general info
  *  
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_mm
  */
 class acp_dkp_mm extends \bbdkp\Admin
 {

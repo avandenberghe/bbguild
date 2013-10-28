@@ -2,7 +2,7 @@
 /**
  * returns race & class xml based on ajax call 
  * 
- * @package bbDKP\acp\ajax
+ * @package acp\ajax
  * @copyright (c) 2011 https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 

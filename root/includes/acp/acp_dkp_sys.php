@@ -2,7 +2,7 @@
 /**
  * dkp pool acp file
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_sys
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -40,7 +40,7 @@ if (!class_exists('\bbdkp\Events'))
 /**
  * This class manages admin settings
  * 
- * @package bbDKP
+ * @package \bbDKP\acp\dkp_sys
  */  
  class acp_dkp_sys extends \bbdkp\Admin
 {
