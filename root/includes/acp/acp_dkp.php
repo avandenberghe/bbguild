@@ -158,8 +158,8 @@ class acp_dkp extends \bbdkp\Admin
 						$template->assign_vars(array(
 							'BBDKP_NOT_UP_TO_DATE_TITLE' => sprintf($user->lang['NOT_UP_TO_DATE_TITLE'], 'bbDKP'),
 							'BBDKP_LATESTVERSION' => $latest_version_info[0],
-							'BBDKPVERSION' => $user->lang['YOURVERSION'] . $installed_version ,
-							'UPDATEINSTR' => $user->lang['LATESTVERSION'] . $latest_version_info[0] . ', <a href="' . $user->lang['WEBURL'] . '">' . $user->lang['DOWNLOAD'] . '</a>'));
+							'BBDKPVERSION' => $user->lang['BBDKP_YOURVERSION'] . $config['bbdkp_version'] ,
+							'UPDATEINSTR' => $user->lang['BBDKP_LATESTVERSION'] . $latest_version_info[0] . ', <a href="' . $user->lang['WEBURL'] . '">' . $user->lang['DOWNLOAD'] . '</a>'));
 					}
 				}
 		

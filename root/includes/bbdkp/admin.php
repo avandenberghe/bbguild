@@ -395,7 +395,7 @@ abstract class Admin
  	 */
 	public final function get_productversion($product, $force_update = false, $warn_fail = false, $ttl = 86400)
 	{
-		global $cache;
+		global $config, $cache;
 		//get latest productversion from cache
 		$info = $cache->get('version_' . $product);
 		

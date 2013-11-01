@@ -75,6 +75,12 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 		switch ($mode)
 		{
 			case 'mm_listmemberdkp':
+				
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+				}
+				
 				$this->list_memberdkp(); 
 								
 				$this->page_title = 'ACP_DKP_LISTMEMBERDKP';
@@ -340,6 +346,13 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 			/***************************************/
 			
 			case 'mm_transfer' :
+				
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+				}
+				
+				
 				$submit = (isset ( $_POST ['transfer'] )) ? true : false;
 				$submitdkp = (isset ( $_POST ['dkpsys_id'] ) || isset ( $_GET ['dkpsys_id'] )) ? true : false;
 				
