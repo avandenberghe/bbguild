@@ -850,7 +850,7 @@ class PointsController  extends \bbdkp\Admin
 	 * add dkp points.
 	 * this must be called after the raid and raid detail tables are filled.
 	 * 
-	 * @param unknown $raid_id
+	 * @param int $raid_id
 	 * @param number $member_id
 	 */
 	public function add_points($raid_id, $member_id = 0)
@@ -1015,6 +1015,11 @@ class PointsController  extends \bbdkp\Admin
 		$this->Points->update_account();	
 	}
 	
+	/**
+	 * update a dkp account to remove loot
+	 * @param float $item_value
+	 * @param int $member_id
+	 */
 	public function removeloot_update_dkprecord($item_value, $member_id)
 	{
 		$this->Points->dkpid = $this->dkpsys_id;
@@ -1767,10 +1772,18 @@ class PointsController  extends \bbdkp\Admin
 	}
 
 	/**
+	 *
+	 */
+	
+	
+	
+	/**
 	 * Recalculates and updates decay
 	 * loops all raids - caution this may run a long time
-	 *
-	 * @param $mode 1 for recalculating, 0 for setting decay to zero.
+	 * 
+	 * @param int $mode 1 for recalculating, 0 for setting decay to zero.
+	 * @param string $origin
+	 * @return boolean|number
 	 */
 	public function sync_decay($mode, $origin= '')
 	{
@@ -1949,6 +1962,7 @@ class PointsController  extends \bbdkp\Admin
 	 * @param int $member_from
 	 * @param int $member_to
 	 * @param int $dkpsys_id
+	 * @param string $link
 	 */
 	public function transfer_points( $member_from, $member_to, $dkpsys_id, $link)
 	{

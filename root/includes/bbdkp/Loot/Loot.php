@@ -373,13 +373,16 @@ class Loot
 		
 	}
 	
+
 	/**
 	 * get statistic of all loot drops
 	 * note: member_name is only included for sorting
-	 * @param int $raid_id
-	 * @param int $member_id
-	 * @param int $istart
+	 * 
 	 * @param string $order
+	 * @param number $guild_id
+	 * @param number $dkpsys_id
+	 * @param number $raid_id
+	 * @param number $istart
 	 * @return array
 	 */
 	public function Lootstat($order = ' MAX(i.item_date) desc', $guild_id=0, $dkpsys_id=0, $raid_id = 0, $istart = 0)

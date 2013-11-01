@@ -196,6 +196,9 @@ class install_rift extends \bbdkp\aGameinstall
 		
 	}
 	
+	/**
+	 * rift dkp id to be created
+	 */
 	private $riftdkpid = 0; 
 	
 	/**

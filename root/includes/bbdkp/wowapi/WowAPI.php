@@ -77,9 +77,8 @@ class WowAPI
 	/**
 	 * WoWAPI Class constructor
 	 * 
-	 * @param string $resource, 
+	 * @param string $API
 	 * @param string $region
-	 * 
 	 */
 	public function __construct($API, $region) 
 	{

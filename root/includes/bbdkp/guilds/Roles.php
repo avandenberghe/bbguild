@@ -1,14 +1,15 @@
 <?php
-namespace bbdkp;
 /**
- * @package 	bbDKP\Guilds
+ * Roles Classfile
+ * 
+ * @package 	bbDKP\Guilds\Roles
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
-
+namespace bbdkp;
 /**
  * @ignore
  */
@@ -35,7 +36,7 @@ if (!class_exists('\bbdkp\Guilds'))
 
 /**
  * holds vacancies per guild, game, role and class
- * @package 	bbDKP\Guilds
+ * @package 	bbDKP\Guilds\Roles
  *
  */
 class Roles 
@@ -82,12 +83,25 @@ class Roles
 	 */
 	public $roles = array();
 	
+	/**
+	 * possible recruitment statuses
+	 * @var array
+	 */
 	protected $classrecstatus = array();
 	
+	/**
+	 * possible recruitment colors
+	 * @var array
+	 */
 	protected $classreccolor= array();
 	
 	/**
-	 * class constructor
+	 * Roles class constructor
+	 * 
+	 * @param number $guild_id
+	 * @param string $role
+	 * @param number $class_id
+	 * @param number $needed
 	 */
 	public function __construct($guild_id = 0, $role = '', $class_id = 0, $needed = 0) 
 	{
@@ -158,6 +172,9 @@ class Roles
 		return 1;
 	}
 	
+	/**
+	 * update my roles
+	 */
 	public function update()
 	{
 		global $db; 
@@ -171,7 +188,7 @@ class Roles
 	
 	/**
 	 * for all classes, initialises class roles
-	 * 
+	 * @todo not finished
 	 */
 	public function init_guildroles()
 	{
@@ -180,7 +197,12 @@ class Roles
 	}
 	
 	/**
-	 * gets how many needed for this role
+	 * construct role object
+	 * 
+	 * @param int $guild_id
+	 * @param string $role
+	 * @param int $class_id
+	 * @return number
 	 */
 	public function get($guild_id, $role, $class_id)
 	{

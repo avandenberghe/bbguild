@@ -1,6 +1,8 @@
 <?php
 /**
- * @package 	bbDKP
+ * Ranks class file
+ * 
+ * @package 	bbDKP\Guilds\Ranks
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -29,21 +31,50 @@ if (!class_exists('\bbdkp\Guilds'))
 
 
 /**
- * Ranks
+ * Ranks Class
  * 
  * Manages Guildranks, extends the guild class
- * @package 	bbDKP
+ * @package 	bbDKP\Guilds\Ranks
  * 
  */
 class Ranks extends \bbdkp\Guilds
 {
+	/**
+	 * Name of rank
+	 * @var string
+	 */
 	public $RankName;
+	/**
+	 * id of rank. 0 is highest
+	 * @var int
+	 */
 	public $RankId;
+	/**
+	 * id of guild
+	 * @var int
+	 */
 	public $RankGuild;
+	/**
+	 * is rank shown ?
+	 * @var int (1 or 0)
+	 */
 	public $RankHide;
+	/**
+	 * prefix of rank
+	 * @var string
+	 */
 	public $RankPrefix;
+	/**
+	 * suffix of rank
+	 * @var string
+	 */
 	public $RankSuffix;
 
+	/**
+	 * rank class constructor
+	 * @param int $RankGuild
+	 * @param number $RankId
+	 */
 	public function __construct($RankGuild, $RankId = 0)
 	{
 		if ($RankId >= 0)
@@ -64,7 +95,7 @@ class Ranks extends \bbdkp\Guilds
 
 	/**
 	 * gets all info on one rank
-	 * @see \bbdkp\iRanks::Getrank()
+	 * 
 	 */
 	public function Getrank()
 	{
@@ -86,7 +117,6 @@ class Ranks extends \bbdkp\Guilds
 
 	/**
 	 * adds a rank
-	 * @see \bbdkp\iRanks::Makerank()
 	 */
 	public function Makerank()
 	{
@@ -144,10 +174,11 @@ class Ranks extends \bbdkp\Guilds
 
 	}
 
-
 	/**
-	 * (non-PHPdoc)
-	 * @see \bbdkp\iRanks::Rankdelete()
+	 * deletes a rank
+	 * 
+	 * @param int $override
+	 * @return boolean
 	 */
 	public function Rankdelete($override)
 	{
@@ -167,7 +198,7 @@ class Ranks extends \bbdkp\Guilds
 			$result = $db->sql_query($sql);
 			if ((int) $db->sql_fetchfield('rankcount') >= 1)
 			{
-				\trigger_error('Cannot delete rank ' . $this->RankId . '. There are members with this rank in guild . ' . $this->RankGuild, E_USER_WARNING);
+				trigger_error('Cannot delete rank ' . $this->RankId . '. There are members with this rank in guild . ' . $this->RankGuild, E_USER_WARNING);
 			}
 		}
 
@@ -195,8 +226,10 @@ class Ranks extends \bbdkp\Guilds
 	}
 
 	/**
+	 * updates a rank
 	 * 
-	 * @see \bbdkp\iRanks::Rankupdate()
+	 * @param Ranks $old_rank
+	 * @return boolean
 	 */
 	public function Rankupdate(Ranks $old_rank)
 	{
@@ -258,8 +291,7 @@ class Ranks extends \bbdkp\Guilds
 	}
 	
 	/**
-	 * 
-	 * @see \bbdkp\Guilds::countmembers()
+	 * counts members in guild with a given rank
 	 */
 	public function countmembers()
 	{
@@ -273,10 +305,14 @@ class Ranks extends \bbdkp\Guilds
 
 		return $countm;
 	}
+
 	
 	/**
+	 * updates a wow guild rank list from Battle.NET API
 	 * 
-	 * @see \bbdkp\iRanks::WoWArmoryUpdate($memberdata, $guild_id, $region)
+	 * @param array $memberdata
+	 * @param int $guild_id
+	 * @param string $region
 	 */
 	public function WoWArmoryUpdate($memberdata, $guild_id, $region)
 	{
