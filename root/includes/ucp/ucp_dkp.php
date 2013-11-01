@@ -1,6 +1,6 @@
 <?php
 /**
- * bbDKP ucp class
+ * bbDKP ucp class file
  * @package bbDKP\ucp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -16,7 +16,11 @@ if (!defined('IN_PHPBB'))
 {
 	exit;
 }
-
+/**
+ * bbDKP ucp class
+ * @package bbDKP\ucp
+ *
+ */
 class ucp_dkp
 {
 	/**
@@ -676,7 +680,7 @@ class ucp_dkp
 	
 	/**
 	 * gets user input, updates member
-	 *
+	 * @param int $member_id
 	 */
 	private function update_member($member_id)
 	{
@@ -764,7 +768,7 @@ class ucp_dkp
 	
 	/**
 	 * deletes member
-	 *
+	 * @param int $member_id
 	 */
 	private function delete_member($member_id)
 	{

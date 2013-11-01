@@ -344,7 +344,7 @@ class Guilds extends \bbdkp\Admin
 		//add a default rank
 		if (!class_exists('\bbdkp\Ranks'))
 		{
-			require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
+			require("{$phpbb_root_path}includes/bbdkp/guilds/Ranks.$phpEx");
 		}
 		$newrank = new Ranks($this->guildid);
 		$newrank->RankName = "Member";
@@ -436,7 +436,7 @@ class Guilds extends \bbdkp\Admin
 						// update ranks table
 						if (!class_exists('\bbdkp\Ranks'))
 						{
-							require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
+							require("{$phpbb_root_path}includes/bbdkp/guilds/Ranks.$phpEx");
 						}
 						
 						$rank = new \bbdkp\Ranks($this->guildid);
@@ -509,10 +509,9 @@ class Guilds extends \bbdkp\Admin
 	}
 	
 	/**
-	 * Calls api to pull more information
-	 * Currently only the WoW API is available
+	 * Calls api to pull more information. Currently only the WoW API is available
 	 * 
-	 * @var array $params
+	 * @param array $params
 	 * @return void
 	 */
 	public function Armory_get($params)
@@ -711,11 +710,13 @@ class Guilds extends \bbdkp\Admin
 		return $outputpath;
 	}
 	
-
+	
 	/**
 	 * returns a member listing for this guild
+	 * 
 	 * @param string $order
-	 * @param int $start
+	 * @param number $start
+	 * @param number $mode
 	 * @return array
 	 */
 	public function listmembers($order = 'm.member_name', $start=0, $mode = 0)

@@ -1,7 +1,8 @@
 <?php
 /**
  * Returns rank xml based on ajax call 
- *  
+ * 
+ * @package bbDKP\template
  * @copyright (c) 2011 https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 

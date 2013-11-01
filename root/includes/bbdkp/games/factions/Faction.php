@@ -1,7 +1,7 @@
 <?php
-
-namespace bbdkp;
 /**
+ * Faction Class file
+ * 
  * @package 	bbDKP\Game\Faction
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -10,7 +10,7 @@ namespace bbdkp;
  * @version 1.3.0
  * @since 1.3.0
  */
-
+namespace bbdkp;
 /**
  * @ignore
  */
@@ -29,7 +29,7 @@ if (!class_exists('\bbdkp\Game'))
 }
 
 /**
- * Faction
+ * Faction Class
  * 
  * Manages all Game Factions
  * 
@@ -37,12 +37,37 @@ if (!class_exists('\bbdkp\Game'))
  */
  class Faction extends \bbdkp\Game 
 {
+	/**
+	 * game id 
+	 * @var string
+	 */
 	public $game_id;
+	
+	/**
+	 * pk
+	 * @var int
+	 */
 	protected $f_index; //readonly
-	protected $faction_id; 
+	
+	/**
+	 * faction id
+	 * @var int
+	 */
+	protected $faction_id;
+	/**
+	 * name of faction
+	 * @var string
+	 */ 
 	protected $faction_name;
+	/**
+	 * flag to show or hide (0 or 1)
+	 * @var int
+	 */
 	protected $faction_hide;
 	
+	/**
+	 * Faction class constructor
+	 */
 	public function __construct() 
 	{
 		$this->game_id='';
@@ -53,8 +78,7 @@ if (!class_exists('\bbdkp\Game'))
 
 	/**
 	 * get faction info
-	 * (non-PHPdoc)
-	 * @see \bbdkp\iFaction::Get()
+	 * 
 	 */
 	public function Get()
 	{
@@ -73,7 +97,7 @@ if (!class_exists('\bbdkp\Game'))
 	}
 	
 	/**
-	 *
+	 * faction property getter
 	 * @param string $fieldName
 	 */
 	public function __get($fieldName)
@@ -90,9 +114,9 @@ if (!class_exists('\bbdkp\Game'))
 	}
 	
 	/**
-	 *
-	 * @param unknown_type $property
-	 * @param unknown_type $value
+	 * faction property setter
+	 * @param string $property
+	 * @param string $value
 	 */
 	public function __set($property, $value)
 	{
@@ -117,8 +141,6 @@ if (!class_exists('\bbdkp\Game'))
 	
 	/**
 	 * adds a faction
-	 * (non-PHPdoc)
-	 * @see \bbdkp\iFaction::Make()
 	 */
 	public function Make()
 	{
@@ -228,7 +250,7 @@ if (!class_exists('\bbdkp\Game'))
 	}
 	
 	/**
-	 * deletes a specific faction
+	 * deletes factions from a game
 	 */
 	public function Delete_all_factions()
 	{
@@ -240,7 +262,7 @@ if (!class_exists('\bbdkp\Game'))
 	
 	/**
 	 * get factions for this game
-	 * @return unknown
+	 * @return array
 	 */
 	public function getfactions()
 	{

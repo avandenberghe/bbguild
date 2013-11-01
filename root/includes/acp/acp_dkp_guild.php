@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\Admin'))
 // include ranks class
 if (!class_exists('\bbdkp\Ranks'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/guilds/Ranks.$phpEx");
 }
 
 //include the guilds class
