@@ -859,7 +859,7 @@ So the loot would go to player 2 <br />',
 'SITE_DESCRIPTION' => 'Site Description',
 'SYNCDKP'	=> 'Synchronise DKP Pools',
 'SYNC'	=> 'Synchronise',
-'YOURVERSION'	   => 'Your bbDKP Version :',
+'BBDKP_YOURVERSION'	   => 'Your bbDKP Version :',
 
 // roster
 'ARM_LAYOUT' => 'Roster Layout',
