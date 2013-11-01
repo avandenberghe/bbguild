@@ -312,7 +312,7 @@ class Adjust extends \bbdkp\Admin
 	 * @param int $start
 	 * @return array
 	 */
-	function listadj($order, $member_id, $start=0)
+	function listadj($order, $member_id, $start=0, $guild_id = 0)
 	{
 		global $user, $db, $config;
 		$order = (string) $order;
@@ -341,7 +341,12 @@ class Adjust extends \bbdkp\Admin
 		{
 			$sql_array['WHERE'] .= ' AND a.member_id = ' . $member_id;
 		}
-
+		
+		if ($guild_id != 0)
+		{
+			$sql_array['WHERE'] .= ' AND l.member_guild_id = ' . $guild_id;
+		}
+		
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		if ($start > 0)
 		{

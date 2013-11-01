@@ -74,6 +74,12 @@ class PointsController  extends \bbdkp\Admin
 	public $dkpsys_id;
 	
 	/**
+	 * guild id
+	 * @var int
+	 */
+	public $guild_id; 
+	
+	/**
 	 * pointscontroller constructor
 	 */
 	function __construct() 
@@ -143,6 +149,7 @@ class PointsController  extends \bbdkp\Admin
 						AND (m.member_dkpid = s.dkpsys_id)
 						AND l.attribute_id = c.class_id
 						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'
+						AND a.member_guild_id = " . $this->guild_id . "
 						AND (s.dkpsys_id = " . (int) $this->dkpsys_id . ')' );
 	
 			
@@ -250,6 +257,7 @@ class PointsController  extends \bbdkp\Admin
 						AND (a.member_class_id = c.class_id and a.game_id = c.game_id)
 						AND (m.member_dkpid = s.dkpsys_id)
 						AND l.attribute_id = c.class_id
+						AND a.member_guild_id = " . $this->guild_id . "
 						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'
 						AND (s.dkpsys_id = " . (int) $this->dkpsys_id . ')' );
 			
@@ -2242,22 +2250,7 @@ class PointsController  extends \bbdkp\Admin
 				$member1->member_name, $member2->member_name, $member1->member_name, $dkpsys_id );
 		trigger_error ( $success_message . $link );
 		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
-		
+			
 	}
 
 

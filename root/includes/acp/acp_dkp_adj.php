@@ -44,7 +44,11 @@ if (!class_exists('\bbdkp\Validator'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Validator.$phpEx");
 }
-
+//include the guilds class
+if (!class_exists('\bbdkp\Guilds'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+}
 /**
  * This acp class manages guildmembers dkp adjustments
  * 
@@ -93,6 +97,37 @@ class acp_dkp_adj extends \bbdkp\Admin
 				{
 					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj"));
 					break;
+				}
+				
+				// guild dropdown
+				$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
+				$Guild = new \bbdkp\Guilds();
+				$guildlist = $Guild->guildlist();
+				
+				if($submit)
+				{
+					$Guild->guildid = request_var('member_guild_id', 0);
+				}
+				else
+				{
+					foreach ($guildlist as $g)
+					{
+						$Guild->guildid = $g['id'];
+						$Guild->name = $g['name'];
+						if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+						{
+							trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+						}
+						break;
+					}
+				}
+				
+				foreach ($guildlist as $g)
+				{
+					$template->assign_block_vars('guild_row', array(
+							'VALUE' => $g['id'] ,
+							'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
+							'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
 				}
 				
 				/* dkp pool */
@@ -164,7 +199,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				$current_order = $this->switch_order($sort_order);
 				$start = request_var('start', 0);
 				
-				$result = $this->adjustment->listadj($current_order['sql'], $member_id_filter);
+				$result = $this->adjustment->listadj($current_order['sql'], $member_id_filter, 0, $Guild->guildid);
 				$hasrows = false;
 				$total_adjustments = 0;
 				while ($adj = $db->sql_fetchrow($result))
@@ -174,7 +209,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				}
 				$db->sql_freeresult($result);
 				
-				$result = $this->adjustment->listadj($current_order['sql'], $member_id_filter, $start);
+				$result = $this->adjustment->listadj($current_order['sql'], $member_id_filter, $start, $Guild->guildid);
 				while ($adj = $db->sql_fetchrow($result))
 				{
 					$template->assign_block_vars('adjustments_row', array(

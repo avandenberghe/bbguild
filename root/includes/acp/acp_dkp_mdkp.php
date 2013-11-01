@@ -32,6 +32,11 @@ if (!class_exists('\bbdkp\PointsController'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
 }
+//include the guilds class
+if (!class_exists('\bbdkp\Guilds'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+}
 
 /**
  * This class manages member DKP
@@ -486,6 +491,39 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 	private function list_memberdkp()
 	{
 		global $user, $template, $config, $phpbb_admin_path, $phpEx;
+		
+		// guild dropdown
+		$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
+		$Guild = new \bbdkp\Guilds();
+		$guildlist = $Guild->guildlist();
+		
+		if($submit)
+		{
+			$Guild->guildid = request_var('member_guild_id', 0);
+		}
+		else
+		{
+			foreach ($guildlist as $g)
+			{
+				$Guild->guildid = $g['id'];
+				$Guild->name = $g['name'];
+				if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+				{
+					trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+				}
+				break;
+			}
+		}
+		
+		foreach ($guildlist as $g)
+		{
+			$template->assign_block_vars('guild_row', array(
+					'VALUE' => $g['id'] ,
+					'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
+					'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+		}
+		
+		$this->PointsController->guild_id = $Guild->guildid; 
 		
 		/* dkp pool */
 		$this->PointsController->dkpsys_id=0;

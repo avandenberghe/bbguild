@@ -450,13 +450,14 @@ class RaidController  extends \bbdkp\Admin
 	
 	
 	/**
-	 * get list of raids in a dkp pool
+	 * get list of raids in a dkp pool, return raidcount
 	 * 
 	 * @param int $dkpsys_id
 	 * @param int $start
 	 * @param int $member_id
+	 * @return number
 	 */
-	public function listraids($dkpsys_id=0, $start = 0, $member_id=0)
+	public function listraids($dkpsys_id=0, $start = 0, $member_id=0, $guild_id=0)
 	{
 		
 		global $user, $config, $db, $phpEx;
@@ -493,7 +494,11 @@ class RaidController  extends \bbdkp\Admin
 			$this->raidlist[$row['raid_id']] = array(
 				'raid_id' => $row['raid_id'], 
 				'date' => (! empty ( $row['raid_start'] )) ? date ( $config ['bbdkp_date_format'], $row['raid_start'] ) : '&nbsp;',
-				'name' => $row['event_name'],
+				'event_name' => $row['event_name'],
+				'event_color' => $row['event_color'],
+				'event_imagename' => $row['event_imagename'],
+				'raid_start'	=> $row['raid_start'],
+				'raid_note'		=> $row['raid_note'],
 				'note' => (! empty ( $row['raid_note'] )) ? $row['raid_note'] : '&nbsp;',
 				'raidvalue'  => $row['raid_value'],
 				'timevalue'  => $row['time_value'],
@@ -508,6 +513,21 @@ class RaidController  extends \bbdkp\Admin
 		}
 		$db->sql_freeresult ($raids_result);
 		
+		return $this->totalraidcount;
+	}
+	
+	
+	/**
+	 * return Raid count for a guild & dkp pool
+	 * @param int $dkpsys_id
+	 * @param int $guild_id
+	 * @return number
+	 */
+	public function guildraidcount($dkpsys_id, $guild_id)
+	{
+		$raids = new \bbdkp\Raids();
+		$this->totalraidcount = $raids->countraids2($dkpsys_id, $guild_id);
+		return $this->totalraidcount; 
 	}
 	
 	

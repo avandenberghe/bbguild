@@ -909,7 +909,7 @@ if (!class_exists('\bbdkp\Guilds'))
 			$template->assign_block_vars ( 'raids_row', array (
 				'ID' 		 =>  $raid['raid_id'], 
 				'DATE' 		 =>  $raid['date'], 
-				'NAME' 		 => $raid['name'],  
+				'NAME' 		 => $raid['event_name'],  
 				'NOTE' 		 => $raid['note'],  
 				'RAIDVALUE'  => $raid['raidvalue'],  
 				'TIMEVALUE'  => $raid['timevalue'], 

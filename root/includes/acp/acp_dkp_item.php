@@ -35,6 +35,10 @@ if (!class_exists('\bbdkp\PointsController'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
 }
+if (!class_exists('\bbdkp\RaidController'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/Raids/RaidController.$phpEx");
+}
 //include the guilds class
 if (!class_exists('\bbdkp\Guilds'))
 {
@@ -65,6 +69,11 @@ class acp_dkp_item extends \bbdkp\Admin
 	 */
 	private $PointsController;
 	
+	/**
+	 * instance of RaidController class
+	 * @var  \bbdkp\RaidController
+	 */
+	private $RaidController; 
 	
 	/**
 	 * Main ACP function
@@ -80,6 +89,7 @@ class acp_dkp_item extends \bbdkp\Admin
 
 		$this->LootController = new \bbdkp\Lootcontroller();
 		$this->PointsController = new \bbdkp\PointsController();
+		$this->RaidController = new \bbdkp\RaidController();
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		
 		switch ($mode) 
@@ -488,22 +498,15 @@ class acp_dkp_item extends \bbdkp\Admin
 		$item_name = utf8_normalize_nfc(request_var('item_name','', true));
 		$item_name_db = utf8_normalize_nfc(request_var('item_name_db','', true));
 		$item_name = (strlen($item_name) > 0) ? $item_name : $item_name_db;
-
 		$itemgameid  = request_var( 'item_gameid' , '') ;
-
 		$itemvalue 	 = request_var( 'item_value' , 0.0) ; 
-		
 		// if user wants to manually edit item decay but this is uncommon...
 		$itemdecay  = request_var( 'item_decay' , 0.00) ;
-		
 		$item_buyers = request_var('item_buyers', array(0 => 0));
-		
 		$itemdate= request_var('hidden_raiddate', 0);
 		
 		//generate new hash
 		$group_key = $this->gen_group_key ( $item_name, $itemdate, $item_id + rand(10,100) );
-
-		//
 		// Add new item to newly selected members
 		$this->add_new_item_db($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $itemdate, $itemgameid, $itemdecay); 
 		
@@ -541,7 +544,7 @@ class acp_dkp_item extends \bbdkp\Admin
 	private function listitems()
 	{
 		global $db, $user, $config, $template, $phpEx,$phpbb_admin_path, $phpbb_root_path;
-				
+		
 		if( count((array) $this->LootController->dkpsys) == 0 )
 		{
 			trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
@@ -646,25 +649,15 @@ class acp_dkp_item extends \bbdkp\Admin
 		$db->sql_freeresult( $result );
 		/***  end drop-down query ***/
 		
+		// user clicks on master raid list
+		$raid_id  = request_var('raid_id', 0);
+		
 		$lootcount  = $this->LootController->Countloot(0, 0,$Guild->guildid ); 
+	
 		if ($lootcount  > 0)
 		{
-			//get raidcount with items
-			$sql_array = array (
-			'SELECT' => ' count(*) as raidcount', 
-			    'FROM'    	=> array(DKPSYS_TABLE => 'd', 
-									 EVENTS_TABLE => 'e',
-	        						 RAIDS_TABLE => 'r'
-									 ),
-			    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
-	    						and e.event_id = r.event_id 
-			    				and d.dkpsys_id = ' . $dkpsys_id ,
-			);
-			$sql = $db->sql_build_query('SELECT', $sql_array);
-			$result = $db->sql_query($sql);
-			$total_raids = (int) $db->sql_fetchfield('raidcount');
-			$db->sql_freeresult ($result);
-			//$total_raids == 7
+			
+			$total_raids = (int) $this->RaidController->guildraidcount($dkpsys_id,  $Guild->guildid); 
 			
 			$start = request_var ('start', 0, false );
 			$sort_order = array (
@@ -672,61 +665,28 @@ class acp_dkp_item extends \bbdkp\Admin
 				1 => array ('event_name desc', 'event_name' ),
 			);
 			$current_order = $this->switch_order ( $sort_order );
-			
-			// select all raids for pool			
-			$sql_array = array(
-			    'SELECT'    => 'r.raid_id, e.event_name, e.event_color, e.event_imagename, e.event_dkpid, 
-			    				r.raid_start, raid_note  ',
-			    'FROM'    	=> array(DKPSYS_TABLE => 'd', 
-									 EVENTS_TABLE => 'e',
-	        						 RAIDS_TABLE => 'r'
-									 ),
-			    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
-	    						and e.event_id = r.event_id 
-			    				and d.dkpsys_id = ' . $dkpsys_id ,
-				'ORDER_BY'  =>  $current_order ['sql']
-			);
-			$sql = $db->sql_build_query('SELECT', $sql_array);
-							
-			$submitraid = (isset ( $_POST ['raid_id']) || isset ( $_GET ['raid_id']) ) ? true : false;
-			$raid_id = 0;
-			if ($submitraid)
-			{
-				$raid_id  = request_var('raid_id', 0);  
-			}
-			else
-			{
-				//get 1st raid from this window
-				$result = $db->sql_query_limit ( $sql, 1, $start );
-				while ($row = $db->sql_fetchrow ($result)) 
-				{
-					$raid_id = (int) $row['raid_id'];
-				}
-				$db->sql_freeresult ($result);
-			}
-			
+
 			// populate raid master grid
-			$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_rlimit'], $start );
-			while ( $row = $db->sql_fetchrow ( $result ) )
+			$this->RaidController->listraids($dkpsys_id, $start, 0, $Guild->guildid);
+			foreach ($this->RaidController->raidlist as $id => $raid)
 			{
 				$template->assign_block_vars ( 'raids_row', array (
-					'EVENTCOLOR'    => (! empty ( $row ['event_color'] )) ? $row ['event_color']  : '',
-					'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "={$row['raid_id']}" ), 
-					'ID' 	=> $row['raid_id'],
-					'DATE' 	=> $user->format_date($row['raid_start']), 
-					'RAIDNAME' => $row['event_name'],
-					'RAIDNOTE' => $row['raid_note'],
-					'ONCLICK' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" . URI_DKPSYS . "={$dkpsys_id}&amp;" . URI_RAID . "={$row['raid_id']}&amp;start=" .$start ),
+					'EVENTCOLOR'    => (! empty ( $raid ['event_color'] )) ? $raid ['event_color']  : '',
+					'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "={$id}" ), 
+					'ID' 	=> $id,
+					'DATE' 	=> $user->format_date($raid['raid_start']), 
+					'RAIDNAME' => $raid['event_name'],
+					'RAIDNOTE' => $raid['raid_note'],
+					'ONCLICK' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" . URI_DKPSYS . "={$dkpsys_id}&amp;" . URI_RAID . "={$id}&amp;start=" .$start ),
 				));
 
-				if($raid_id == $row['raid_id'])
+				if($raid_id == $id)
 				{
-					$raid_name =  $row['event_name'];
-					$raid_date =  $user->format_date($row['raid_start']);
+					$raid_name =  $raid['event_name'];
+					$raid_date =  $user->format_date($raid['raid_start']);
 				}
 			}
-			$db->sql_freeresult ( $result );
-			
+
 			$raidpgination = generate_pagination (append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=listitems&amp;" . URI_DKPSYS . "=". $dkpsys_id ."&amp;o=" . $current_order ['uri'] ['current']) ,
 			$total_raids, $config ['bbdkp_user_rlimit'], $start, true );
 			
@@ -748,32 +708,8 @@ class acp_dkp_item extends \bbdkp\Admin
 				);
 			$current_order = $this->switch_order ($sort_order);
 			
-			//prepare item list sql
-			$sql_array = array(
-		    'SELECT'    => 'd.dkpsys_name, i.item_id, i.item_name, i.item_gameid, e.event_dkpid, 
-		    				i.member_id, l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, e.event_name ',
-		    'FROM'      => array(
-		        DKPSYS_TABLE   => 'd', 
-				EVENTS_TABLE   => 'e',
-		        RAIDS_TABLE    => 'r',
-		        MEMBER_LIST_TABLE => 'l', 
-		        CLASS_TABLE 		=> 'c', 
-		        RAID_ITEMS_TABLE    => 'i',
-		    ),
-		    'WHERE'     =>  'c.class_id = l.member_class_id   
-		    				and d.dkpsys_id = e.event_dkpid 
-	    					and e.event_id = r.event_id 
-	    					and i.member_id = l.member_id 
-	    					AND l.game_id = c.game_id
-	    					and r.raid_id = i.raid_id 
-		     				and d.dkpsys_id = ' . $dkpsys_id . ' 
-		     				AND i.raid_id = ' .  $raid_id,  
-		    'ORDER_BY'  => $current_order ['sql'], 
-			);
-	
-			$sql = $db->sql_build_query('SELECT', $sql_array);					
-			$items_result = $db->sql_query ( $sql );
-			
+			$items_result = $this->LootController->listRaidLoot($dkpsys_id, $raid_id, $current_order['sql']);
+			 
 			$listitems_footcount = sprintf ($user->lang ['LISTPURCHASED_FOOTCOUNT_SHORT'], $total_items);
 			
 			while ( $item = $db->sql_fetchrow ( $items_result ) ) 
@@ -844,61 +780,6 @@ class acp_dkp_item extends \bbdkp\Admin
 
 	}
 	
-	/**
-     * Zero-sum DKP function
-     * 
-     * will increase earned points for members present at loot time (== bosskill time) or present in Raid, depending on Settings
-     * ex. player A pays 100dkp for item A
-     * there are 15 players in raid
-     * so each raider gets 100/15 = earned bonus 6.67 
-     * 
-     * @param float $itemvalue 
-	 * @return string
-	 */
-    public function zero_balance($itemvalue)
-    {
-    	global $db;
-    	
-    	$zerosumdkp = round( $itemvalue / count($this->bossattendees[$this->batchid][$boss] , 2)); 
-		/* note: other dmbs not tested/suppported*/    	
-		switch ($db->sql_layer)
-		{
-			case 'mysqli':
-			case 'mysql4':
-			case 'mysql':
-				    $sql = ' UPDATE ' . MEMBER_DKP_TABLE . ' d, ' . MEMBER_LIST_TABLE  . ' m 
-					SET d.member_earned = d.member_earned + ' . (float) $zerosumdkp  .  ' 
-					WHERE d.member_dkpid = ' . (int) $this->dkp  . ' 
-		  	 		AND  d.member_id =  m.member_id 
-		  	 		AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]  ) ;
-			break;
-			
-			case 'oracle': 
-				$sql= 'UPDATE (
-				  SELECT d.member_earned
-				  FROM ' . MEMBER_DKP_TABLE . ' d
-			      INNER JOIN ' . MEMBER_LIST_TABLE  . ' m ON d.member_id =  m.member_id 
-				   WHERE d.member_dkpid = ' . (int) $this->dkp  . ' 
-				   AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]) . ') t
-				SET t.member_earned = t.member_earned + ' . (float) $zerosumdkp  ;				
-				
-			case 'mssql':
-			case 'mssql_odbc':
-			case 'mssqlnative':	
-					$sql= 'UPDATE d
-					SET d.member_earned = d.member_earned + ' . (float) $zerosumdkp  .  ' 
-					FROM ' . MEMBER_DKP_TABLE . ' d
-					   INNER JOIN ' . MEMBER_LIST_TABLE  . ' m 
-					   ON d.member_id =  m.member_id 
-					   WHERE d.member_dkpid = ' . (int) $this->dkp  . ' 
-					   AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]);
-			break;
-		}
-    	return $sql; 
-    }
-    
-	
-
 
 } // end class
 
