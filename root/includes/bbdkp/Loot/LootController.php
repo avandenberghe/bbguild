@@ -304,12 +304,13 @@ class LootController  extends \bbdkp\Admin
 	 * counts the number of loot of this attendee in raid
 	 * @param int $raid_id
 	 * @param int $member_id
+	 * @param int $guild_id optional
 	 * @return int
 	 */
-	public function Countloot($raid_id, $member_id)
+	public function Countloot($raid_id, $member_id, $guild_id=0 )
 	{
 		
-		return $this->loot->countloot('history' , 0, 0,$member_id, $raid_id);
+		return $this->loot->countloot('history' , 0, 0,$member_id, $raid_id, $guild_id);
 	}
 
 	/**

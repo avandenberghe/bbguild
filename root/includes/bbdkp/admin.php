@@ -189,7 +189,7 @@ abstract class Admin
 	 * @param char $url
 	 * @param bool $return_Server_Response_Header default false
 	 * @param bool $loud default false
-	 * @param bool $json default false
+	 * @param bool $json default true
 	 * @return array response
      */
   	public final function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)

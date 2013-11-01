@@ -35,6 +35,11 @@ if (!class_exists('\bbdkp\PointsController'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
 }
+//include the guilds class
+if (!class_exists('\bbdkp\Guilds'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+}
 /**
  * This ACP class manages Game Loot
  * 
@@ -542,6 +547,37 @@ class acp_dkp_item extends \bbdkp\Admin
 			trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
 		}
 		
+		// guild dropdown
+		$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
+		$Guild = new \bbdkp\Guilds();
+		$guildlist = $Guild->guildlist();
+		
+		if($submit)
+		{
+			$Guild->guildid = request_var('member_guild_id', 0);
+		}
+		else
+		{
+			foreach ($guildlist as $g)
+			{
+				$Guild->guildid = $g['id'];
+				$Guild->name = $g['name'];
+				if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+				{
+					trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+				}
+				break;
+			}
+		}
+		
+		foreach ($guildlist as $g)
+		{
+			$template->assign_block_vars('guild_row', array(
+					'VALUE' => $g['id'] ,
+					'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
+					'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+		}
+		
 		// add member button redirect
 		if ($this->bbtips == true)
 		{
@@ -555,18 +591,16 @@ class acp_dkp_item extends \bbdkp\Admin
 		/***  DKPSYS drop-down query ***/
         $dkpsys_id = 0;
         
-        // select all dkp pools that have items				
+        // select all dkp pools that have raids 		
 		$sql_array = array(
 	    'SELECT'    => 'd.dkpsys_id, d.dkpsys_name, d.dkpsys_default',
 	    'FROM'      => array(
 	        DKPSYS_TABLE => 'd',
 	        EVENTS_TABLE => 'e',
 	        RAIDS_TABLE => 'r',
-	        RAID_ITEMS_TABLE    => 'i'
 	    ),
 	    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid 
-	    				and e.event_id = r.event_id 
-	    				and r.raid_id = i.raid_id',  
+	    				and e.event_id = r.event_id ' , 
 	    'GROUP_BY'  => 'd.dkpsys_id, d.dkpsys_name, d.dkpsys_default', 
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -597,7 +631,7 @@ class acp_dkp_item extends \bbdkp\Admin
 				}
 			}
 		}
-		$poolhasitems = false;
+		
 		
 		$result = $db->sql_query ( $sql );
 		while ( $row = $db->sql_fetchrow ( $result ) ) 
@@ -612,7 +646,8 @@ class acp_dkp_item extends \bbdkp\Admin
 		$db->sql_freeresult( $result );
 		/***  end drop-down query ***/
 		
-		if($poolhasitems==true)
+		$lootcount  = $this->LootController->Countloot(0, 0,$Guild->guildid ); 
+		if ($lootcount  > 0)
 		{
 			//get raidcount with items
 			$sql_array = array (

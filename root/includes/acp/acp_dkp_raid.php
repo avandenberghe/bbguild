@@ -44,7 +44,11 @@ if (!class_exists('\bbdkp\Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
-
+//include the guilds class
+if (!class_exists('\bbdkp\Guilds'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+}
  /**
  *  This ACP class manages Raids
  *  
@@ -817,6 +821,36 @@ if (!class_exists('\bbdkp\Members'))
 			redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid"));            		
          	break;
         }
+        // guild dropdown
+        $submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
+        $Guild = new \bbdkp\Guilds();
+        $guildlist = $Guild->guildlist();
+        
+        if($submit)
+        {
+        	$Guild->guildid = request_var('member_guild_id', 0);
+        }
+        else
+        {
+			foreach ($guildlist as $g)
+			{
+				$Guild->guildid = $g['id'];
+	        	$Guild->name = $g['name'];
+	        	if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+	        	{
+	        		trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+	        	}
+	        	break;
+	        }
+        }
+        
+        foreach ($guildlist as $g)
+        {
+        	$template->assign_block_vars('guild_row', array(
+        			'VALUE' => $g['id'] ,
+        			'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
+        			'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+        }
         
         /* dkp pool */
         $dkpsys_id=0;
@@ -865,6 +899,8 @@ if (!class_exists('\bbdkp\Members'))
         }
         
         $this->RaidController->dkpid = $dkpsys_id;
+        $this->RaidController->guildid = $Guild->guildid;
+        
 		$start = \request_var ( 'start', 0, false );
 		$this->RaidController->listraids($this->RaidController->dkpid, $start);
 		

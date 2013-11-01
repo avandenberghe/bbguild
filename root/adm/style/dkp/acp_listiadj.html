@@ -17,6 +17,14 @@
     </select><label>&nbsp;&nbsp;{L_NAME}:</label>
     <input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" />
       <input type="submit" name="submit_options" value="{L_FILTER}" class="button1" />
+
+<label for="member_guild_id">&nbsp;{L_GUILD}:</label>
+<select id="member_guild_id" name="member_guild_id" class="input" onchange="javascript:form.submit();" >
+       	<!-- BEGIN guild_row -->
+       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
+        <!-- END guild_row -->
+</select>
+
 </fieldset>
 
 <!-- IF .adjustments_row -->

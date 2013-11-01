@@ -321,7 +321,7 @@ class Loot
 	 * @param int $raid_id
 	 * @return unknown
 	 */
-	public function countloot($mode, $guild_id=0, $dkp_id=0, $member_id=0, $raid_id=0)
+	public function countloot($mode, $guild_id=0, $dkp_id=0, $member_id=0, $raid_id=0, $guild_id=0)
 	{
 		global $db; 
 		$sql_array = array();
@@ -364,6 +364,12 @@ class Loot
 		{
 			$sql_array['WHERE'] .= ' AND i.member_id = ' . $member_id;
 		}
+		
+		if($guild_id > 0)
+		{
+			$sql_array['WHERE'] .= ' AND l.member_guild_id = ' . $guild_id;
+		}
+		
 		
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ( $sql);

@@ -477,7 +477,7 @@ class RaidController  extends \bbdkp\Admin
 		$this->raidlistorder = $this->switch_order ( $sort_order ); 
 		
 		$raids = new \bbdkp\Raids();
-		$raids_result = $raids->getRaids($this->raidlistorder['sql'], $dkpsys_id, 0, $start, $member_id); 
+		$raids_result = $raids->getRaids($this->raidlistorder['sql'], $dkpsys_id, 0, $start, $member_id, $this->guildid); 
 		if($member_id>0)
 		{
 			$this->totalraidcount = $raids->raidcount($dkpsys_id, $days, $member_id, 0, true); 
