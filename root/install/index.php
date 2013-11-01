@@ -816,7 +816,7 @@ $versions = array(
 		// dev version, never released
 	), 
 			
-     '1.3.0-b1' => array(
+     '1.3.0-a1' => array(
 
      	// oop release, now requires 553
      	
@@ -1075,7 +1075,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0-b1':
+				case '1.3.0-a1':
 					// add double PK in members table
 
 					// remove unique index 'member_name' on member table
@@ -1113,7 +1113,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0-b1':
+				case '1.3.0-a1':
 					// add double PK in members table
 					// remove unique index 'member_name' on member table
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
@@ -1147,7 +1147,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0-b1':
+				case '1.3.0-a1':
 					//$sql= "DROP TABLE  " . $table_prefix . 'bbdkp_reporting ';
 					//$db->sql_query($sql);
 						
