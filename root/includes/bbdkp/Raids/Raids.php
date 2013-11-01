@@ -324,7 +324,7 @@ class Raids extends \bbdkp\Admin
 	 * @param string $order
 	 * @param int $dkpsys_id
 	 * @param int $raid_id
-	 * @param int $start
+	 * @param int $start ( >= 0 then get window)
 	 * @param int $member_id
 	 * @param int $guild_id
 	 */
@@ -335,7 +335,7 @@ class Raids extends \bbdkp\Admin
 		$sql_array = array (
 			'SELECT' => ' 
 				e.event_dkpid, 
-				e.event_name, 
+				e.event_name, e.event_color, e.event_imagename,
 				e.event_id, 
 				r.raid_id,  
 				r.raid_start, 
@@ -389,7 +389,14 @@ class Raids extends \bbdkp\Admin
 		}
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-		return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_rlimit'], $start );
+		if ($start >= 0)
+		{
+			return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_rlimit'], $start );
+		}
+		else
+		{
+			return  $db->sql_query ($sql);
+		}
 
 	}
 	
@@ -530,6 +537,7 @@ class Raids extends \bbdkp\Admin
 				'FROM' => array (
 					RAIDS_TABLE 		=> 'r' ,
 					EVENTS_TABLE 		=> 'e',
+						
 				),
 				'WHERE' => " r.event_id = e.event_id and e.event_dkpid = " . ( int ) $dkpsys_id,
 			);
@@ -540,6 +548,39 @@ class Raids extends \bbdkp\Admin
 			$db->sql_freeresult ($result);
 
 			return $total_raids;
+	}
+	
+	/**
+	 * counts total raidcount in a dkp pool and in a guild
+	 * @param int $dkpsys_id
+	 * @param int $guild_id
+	 * @return number
+	 */
+	public function countraids2($dkpsys_id, $guild_id)
+	{
+		global $db;
+		$sql_array = array (
+			'SELECT' => ' count(DISTINCT r.raid_id) as raidcount',
+			'FROM' => array (
+					RAIDS_TABLE 			=> 'r' ,
+					EVENTS_TABLE 			=> 'e',
+					RAID_DETAIL_TABLE	    => 'ra',
+					MEMBER_LIST_TABLE		=> 'l'
+			),
+			'WHERE' => " r.event_id = e.event_id  
+						AND ra.raid_id = r.raid_id 
+						AND ra.member_id= l.member_id 
+						AND e.event_dkpid = " . (int) $dkpsys_id . '
+						AND l.member_guild_id = ' . (int) $guild_id, 
+			
+		);
+	
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query($sql);
+		$total_raids = (int) $db->sql_fetchfield('raidcount');
+		$db->sql_freeresult ($result);
+	
+		return $total_raids;
 	}
 	
 	/**

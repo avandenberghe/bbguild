@@ -155,7 +155,7 @@ abstract class Resource extends \bbdkp\Admin
 		}
 		
 		
-		$data = $this->Curl($url, 'GET');
+		$data = $this->Curl($url, false, true, true);
 		return $data;
 	}
 

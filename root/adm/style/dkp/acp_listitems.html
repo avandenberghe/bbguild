@@ -17,11 +17,19 @@
 
 <fieldset style="background-color: #EEEEEE">
 <label for="dkpsys_id">{L_POOL}:</label>
-	<select id="dkpsys_id" name="dkpsys_id" class="input" onchange="javascript:form.submit();">
+<select id="dkpsys_id" name="dkpsys_id" class="input" onchange="javascript:form.submit();">
 	<!-- BEGIN dkpsys_row -->
 	<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
 	<!-- END dkpsys_row -->
-	</select>
+</select>
+
+<label for="member_guild_id">&nbsp;	{L_GUILD}:</label>
+<select id="member_guild_id" name="member_guild_id" class="input" onchange="javascript:form.submit();" >
+       	<!-- BEGIN guild_row -->
+       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
+        <!-- END guild_row -->
+</select>
+
 </fieldset>
 
 <!-- IF .raids_row --> 

@@ -304,16 +304,17 @@ class LootController  extends \bbdkp\Admin
 	 * counts the number of loot of this attendee in raid
 	 * @param int $raid_id
 	 * @param int $member_id
+	 * @param int $guild_id optional
 	 * @return int
 	 */
-	public function Countloot($raid_id, $member_id)
+	public function Countloot($raid_id, $member_id, $guild_id=0 )
 	{
 		
-		return $this->loot->countloot('history' , 0, 0,$member_id, $raid_id);
+		return $this->loot->countloot('history' , 0, 0,$member_id, $raid_id, $guild_id);
 	}
 
 	/**
-	 * delete raid from db
+	 * delete raid from loot table
 	 * @param int $raid_id
 	 */
 	public function delete_raid($raid_id)
@@ -508,6 +509,97 @@ class LootController  extends \bbdkp\Admin
 
 		return true;
 
+	}
+	
+	/**
+	 * Zero-sum DKP function
+	 *
+	 * will increase earned points for members present at loot time (== bosskill time) or present in Raid, depending on Settings
+	 * ex. player A pays 100dkp for item A
+	 * there are 15 players in raid
+	 * so each raider gets 100/15 = earned bonus 6.67
+	 *
+	 * @param float $itemvalue
+	 * @return string
+	 */
+	public function zero_balance($itemvalue)
+	{
+		global $db;
+		 
+		$zerosumdkp = round( $itemvalue / count($this->bossattendees[$this->batchid][$boss] , 2));
+		/* note: other dmbs not tested/suppported*/
+		switch ($db->sql_layer)
+		{
+			case 'mysqli':
+			case 'mysql4':
+			case 'mysql':
+				$sql = ' UPDATE ' . MEMBER_DKP_TABLE . ' d, ' . MEMBER_LIST_TABLE  . ' m
+					SET d.member_earned = d.member_earned + ' . (float) $zerosumdkp  .  '
+					WHERE d.member_dkpid = ' . (int) $this->dkp  . '
+		  	 		AND  d.member_id =  m.member_id
+		  	 		AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]  ) ;
+				break;
+					
+			case 'oracle':
+				$sql= 'UPDATE (
+				  SELECT d.member_earned
+				  FROM ' . MEMBER_DKP_TABLE . ' d
+			      INNER JOIN ' . MEMBER_LIST_TABLE  . ' m ON d.member_id =  m.member_id
+				   WHERE d.member_dkpid = ' . (int) $this->dkp  . '
+				   AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]) . ') t
+				SET t.member_earned = t.member_earned + ' . (float) $zerosumdkp  ;
+	
+			case 'mssql':
+			case 'mssql_odbc':
+			case 'mssqlnative':
+				$sql= 'UPDATE d
+					SET d.member_earned = d.member_earned + ' . (float) $zerosumdkp  .  '
+					FROM ' . MEMBER_DKP_TABLE . ' d
+					   INNER JOIN ' . MEMBER_LIST_TABLE  . ' m
+					   ON d.member_id =  m.member_id
+					   WHERE d.member_dkpid = ' . (int) $this->dkp  . '
+					   AND ' . $db->sql_in_set('m.member_name', $this->bossattendees[$this->batchid][$boss]);
+				break;
+		}
+		return $sql;
+	}
+	
+	/**
+	 * prepare Raid loot listing for ACP
+	 * @param int $dkpsys_id
+	 * @param int $raid_id
+	 * @param string $order
+	 * @return unknown
+	 */
+	public function listRaidLoot($dkpsys_id, $raid_id, $order)
+	{
+		global $db; 
+		//prepare item list sql
+		$sql_array = array(
+				'SELECT'    => 'd.dkpsys_name, i.item_id, i.item_name, i.item_gameid, e.event_dkpid,
+		    				i.member_id, l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, e.event_name ',
+				'FROM'      => array(
+						DKPSYS_TABLE   => 'd',
+						EVENTS_TABLE   => 'e',
+						RAIDS_TABLE    => 'r',
+						MEMBER_LIST_TABLE => 'l',
+						CLASS_TABLE 		=> 'c',
+						RAID_ITEMS_TABLE    => 'i',
+				),
+				'WHERE'     =>  'c.class_id = l.member_class_id
+		    				and d.dkpsys_id = e.event_dkpid
+	    					and e.event_id = r.event_id
+	    					and i.member_id = l.member_id
+	    					AND l.game_id = c.game_id
+	    					and r.raid_id = i.raid_id
+		     				and d.dkpsys_id = ' . $dkpsys_id . '
+		     				AND i.raid_id = ' .  $raid_id,
+				'ORDER_BY'  => $order,
+		);
+		
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$items_result = $db->sql_query ( $sql );
+		return $items_result; 
 	}
 	
 	
