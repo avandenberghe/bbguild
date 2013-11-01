@@ -850,7 +850,7 @@ $versions = array(
 	          		  'status'	   	   => array('VCHAR:30', ''),
 	          		),
 	                'PRIMARY_KEY'     => array('id'),
-	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id', 'game_name')))
+	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id')))
        			)), 
        		
        		// add the new recruitment table
