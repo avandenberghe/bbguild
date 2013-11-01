@@ -457,6 +457,11 @@ if (!class_exists('\bbdkp\Events'))
 				break;
 			case 'listdkpsys' :
 				
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+				}
+				
 				// list of pools
 				$showadd = (isset ( $_POST ['dkpsysadd'] )) ? true : false;
 				$delete = (isset ( $_GET ['delete'] ) && isset ( $_GET [URI_DKPSYS] )) ? true : false;

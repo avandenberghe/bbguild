@@ -82,6 +82,12 @@ class acp_dkp_adj extends \bbdkp\Admin
 		switch ($mode)
 		{
 			case 'listiadj':
+				
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+				}
+				
 				$showadd = (isset($_POST['addiadj'])) ? true : false;
 				if ($showadd)
 				{

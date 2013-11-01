@@ -113,6 +113,10 @@ class acp_dkp_item extends \bbdkp\Admin
 				break;
 			
 			case 'listitems' :
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+				}
 				$this->listitems();
 				$this->page_title = 'ACP_LISTITEMS';
 				

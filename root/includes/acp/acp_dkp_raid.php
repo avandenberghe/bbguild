@@ -176,6 +176,11 @@ if (!class_exists('\bbdkp\Members'))
 				break;
 				
 			case 'listraids' :
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+				}
+				
 				$this->page_title = 'ACP_DKP_RAID_LIST';
 				$action = request_var ('action', '');
 				$raid_id = request_var (URI_RAID, 0);

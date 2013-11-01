@@ -75,7 +75,7 @@ $lang = array_merge($lang, array(
 //REGISTRATION
 'REGISTRATIONID' => 'bbDKP Registration key', 
 'NOTREGISTERED' => 'Unregistered',
-'REGISTRATION_EXPLAIN' => 'If you press the registration button, your domainname, phpbb version, bbDKP version are communicated to bbDKP.com and you will receive a registration key. This is entirely up to you, registration is not needed to use this software. ', 
+'REGISTRATION_EXPLAIN' => 'If you press the registration button, your domainname, phpbb version, bbDKP version are sent to bbDKP.com and you get a registration key. This is entirely up to you, registration is not needed to use this software. ', 
 //JAVASCRIPT
 'B_HELP' => 'Bold text: [b]text[/b]',
 'I_HELP' => 'Italic text: [i]text[/i]',

@@ -92,6 +92,11 @@ class acp_dkp_guild extends \bbdkp\Admin
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING); 
+				}
+				
 				$updateguild = new \bbdkp\Guilds();
 				$guildlist = $updateguild->guildlist();
 				foreach ($guildlist as $g)
