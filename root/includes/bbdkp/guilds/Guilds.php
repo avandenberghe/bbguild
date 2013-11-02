@@ -347,7 +347,8 @@ class Guilds extends \bbdkp\Admin
 			require("{$phpbb_root_path}includes/bbdkp/guilds/Ranks.$phpEx");
 		}
 		$newrank = new Ranks($this->guildid);
-		$newrank->RankName = "Member";
+		// add guildleader rank
+		$newrank->RankName = $user->lang['GUILDLEADER'];
 		$newrank->RankId = 0;
 		$newrank->RankHide = 0;
 		$newrank->RankPrefix = '';

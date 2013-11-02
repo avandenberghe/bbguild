@@ -158,14 +158,14 @@ class LootController  extends \bbdkp\Admin
 		'L_RAID_ID_BEFORE' 	=> $old_item ['raid_id'],
 		'L_VALUE_BEFORE' 	=> $old_item ['item_value'],
 		'L_NAME_AFTER' 		=> $item_name ,
-				'L_BUYERS_AFTER' 	=> (is_array($item_buyers) ? implode ( ', ', $item_buyers  ) : trim($item_buyers)),
-				'L_RAID_ID_AFTER' 	=> $raid_id ,
-				'L_VALUE_AFTER' 	=> $item_value ,
-				'L_UPDATED_BY' 		=> $user->data ['username'] );
+		'L_BUYERS_AFTER' 	=> (is_array($item_buyers) ? implode ( ', ', $item_buyers  ) : trim($item_buyers)),
+		'L_RAID_ID_AFTER' 	=> $raid_id ,
+		'L_VALUE_AFTER' 	=> $item_value ,
+		'L_UPDATED_BY' 		=> $user->data ['username'] );
 		
 		$this->log_insert ( array (
-						'log_type' => $log_action ['header'],
-						'log_action' => $log_action ) );
+			'log_type' => $log_action ['header'],
+			'log_action' => $log_action ) );
 		
 
 	}
@@ -183,15 +183,14 @@ class LootController  extends \bbdkp\Admin
 	public function addloot($raid_id, $item_buyers, $item_value, $item_name, $loottime = 0 )
 	{
 		global $user, $config;
+		$raid = new \bbdkp\Raids($raid_id);
 		
-		$PointsController = new \bbdkp\PointsController();
+		$PointsController = new \bbdkp\PointsController($raid->event_dkpid);
 		
 		$this->loot = new \bbdkp\Loot();
 		$this->loot->raid_id = $raid_id;
 		
-		$raid = new \bbdkp\Raids($raid_id);
 		
-		$this->loot->game_id = 
 		$this->loot->item_value = $item_value;
 		$this->loot->item_name = $item_name;
 		$this->loot->dkpid = $raid->event_dkpid;
@@ -218,9 +217,23 @@ class LootController  extends \bbdkp\Admin
 		$this->loot->decay_time = $decayarray[1];
 		
 		// Add purchase(s) to items table
+		$buyernames = '';
 		foreach ( $item_buyers as $key => $this_member_id )
 		{
-			$this->loot->insert(); 
+			$buyer = new \bbdkp\Members($this_member_id); 
+			$this->loot->member_id = $this_member_id;
+			$this->loot->member_name = $buyer->member_name; 
+			$this->loot->game_id = $buyer->game_id; 
+			if($config['bbdkp_zerosum'] == 1 )
+			{
+				$this->loot->item_zs = 1; 
+			}
+			$this->loot->insert();
+
+			$PointsController->addloot_update_dkprecord($this->loot->item_value, $this_member_id);
+			$buyernames == '' ? '': $buyernames .= ', ';
+			$buyernames .= $buyer->member_name;
+			unset ($buyer);
 		}
 		
 		//if zerosum flag is set and  then distribute item value over raiders
@@ -237,18 +250,8 @@ class LootController  extends \bbdkp\Admin
 			}
 		}
 		
-		$buyernames = '';
-		foreach($item_buyers as $member_id)
-		{
-			$buyernames == '' ? '': $buyernames .= ', ';
-			$member = new \bbdkp\Members($member_id);
-			$buyernames .= $member->member_name;
-			unset ($member); 
-		}
-		
 		unset ($raid);
 		
-		//
 		// Logging
 		$log_action = array (
 		'header' 		=> 'L_ACTION_ITEM_ADDED',

@@ -82,12 +82,12 @@ class PointsController  extends \bbdkp\Admin
 	/**
 	 * pointscontroller constructor
 	 */
-	function __construct() 
+	function __construct($dkpsys_id = 0) 
 	{
 		//load model
 		parent::__construct();
-		$this->Points = new \bbdkp\Points(); 
-		$this->Pools = new \bbdkp\Pool();
+		$this->Points = new \bbdkp\Points(0, $dkpsys_id); 
+		$this->Pools = new \bbdkp\Pool($dkpsys_id);
 		$this->dkpsys = $this->Pools->dkpsys;  
 	}
 	
@@ -1236,48 +1236,46 @@ class PointsController  extends \bbdkp\Admin
 	 * @param int $looter_id
 	 * @param int $raid_id
 	 * @param float $itemvalue
-	 * @return string
 	 */
 	public function zero_balance($looter_id, $raid_id, $itemvalue)
 	{
-		global $db;
-		
+		global $config, $db;
 		$raiddetail = new \bbdkp\Raiddetail($raid_id); 
-	
-		/*
-		$zerosumdkp = round( $itemvalue / count($this->bossattendees[$this->batchid][$boss] , 2));
+		
+		$zerosumdkp = round( $itemvalue / count($raiddetail->raid_details) , 2);
 		// increase raid detail table
 		$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
-						SET zerosum_bonus = zerosum_bonus + ' . (float) $distributed . '
-						WHERE raid_id = ' . (int) $raid_id . ' AND ' . $db->sql_in_set('member_id', $raiders);
+						SET zerosum_bonus = zerosum_bonus + ' . (float) $zerosumdkp . '
+						WHERE raid_id = ' . (int) $raid_id . ' AND ' .  $db->sql_in_set('member_id',  array_keys($raiddetail->raid_details))   ;
 		$db->sql_query ( $sql );
 	
 		// allocate dkp itemvalue bought to all raiders
 		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-						SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $distributed  .  ',
-						member_earned = member_earned + ' . (float) $distributed  .  '
-						WHERE member_dkpid = ' . (int) $dkpid  . '
-					  	AND ' . $db->sql_in_set('member_id', $raiders) ;
+						SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $zerosumdkp  .  ',
+						member_earned = member_earned + ' . (float) $zerosumdkp  .  '
+						WHERE member_dkpid = ' . (int) $this->dkpsys_id  . '
+					  	AND ' . $db->sql_in_set('member_id', array_keys($raiddetail->raid_details) ) ;
 		$db->sql_query ( $sql );
 	
 		// give rest value to buyer or guildbank
-		if($restvalue!=0 )
+		$restvalue = $itemvalue - ($zerosumdkp * count($raiddetail->raid_details)); 
+		if($restvalue != 0 )
 		{
 	
 			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
 							SET zerosum_bonus = zerosum_bonus + ' . (float) $restvalue  .  '
 							WHERE raid_id = ' . (int) $raid_id . '
-						  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $this_member_id);
+						  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $looter_id);
 			$db->sql_query ( $sql );
 	
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 							SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $restvalue  .  ',
 							member_earned = member_earned + ' . (float) $restvalue  .  '
-							WHERE member_dkpid = ' . (int) $dkpid  . '
-						  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $this_member_id);
+							WHERE member_dkpid = ' . (int) $this->dkpsys_id  . '
+						  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $looter_id);
 			$db->sql_query ( $sql );
 		}
-		*/
+		
 		
 	}
 	
