@@ -86,6 +86,7 @@ class PointsController  extends \bbdkp\Admin
 	{
 		//load model
 		parent::__construct();
+		$this->dkpsys_id = $dkpsys_id; 
 		$this->Points = new \bbdkp\Points(0, $dkpsys_id); 
 		$this->Pools = new \bbdkp\Pool($dkpsys_id);
 		$this->dkpsys = $this->Pools->dkpsys;  
@@ -1025,16 +1026,17 @@ class PointsController  extends \bbdkp\Admin
 	
 	/**
 	 * update a dkp account to remove loot
-	 * @param float $item_value
-	 * @param int $member_id
+	 * @param  \bbdkp\Loot $loot
 	 */
-	public function removeloot_update_dkprecord($item_value, $member_id)
+	public function removeloot_update_dkprecord(\bbdkp\Loot $loot)
 	{
 		$this->Points->dkpid = $this->dkpsys_id;
-		$this->Points->member_id = $member_id;
+		$this->Points->member_id = $loot->member_id;
 		$this->Points->read_account();
 		
-		$this->Points->spent -= $item_value;
+		$this->Points->spent -= $loot->item_value;
+		$this->Points->decay -= $loot->item_decay;
+		
 		$this->Points->update_account();	
 	}
 
@@ -1236,19 +1238,23 @@ class PointsController  extends \bbdkp\Admin
 	 * @param int $looter_id
 	 * @param int $raid_id
 	 * @param float $itemvalue
+	 * @return boolean
 	 */
 	public function zero_balance($looter_id, $raid_id, $itemvalue)
 	{
-		global $config, $db;
+		global $db;
 		$raiddetail = new \bbdkp\Raiddetail($raid_id); 
 		
-		$zerosumdkp = round( $itemvalue / count($raiddetail->raid_details) , 2);
+		$zerosumdkp = round( $itemvalue / max(1, count($raiddetail->raid_details)) , 2);
+		
 		// increase raid detail table
 		$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
 						SET zerosum_bonus = zerosum_bonus + ' . (float) $zerosumdkp . '
 						WHERE raid_id = ' . (int) $raid_id . ' AND ' .  $db->sql_in_set('member_id',  array_keys($raiddetail->raid_details))   ;
 		$db->sql_query ( $sql );
 	
+		// @note : this zero sum should be decay-synchronised 
+		
 		// allocate dkp itemvalue bought to all raiders
 		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 						SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $zerosumdkp  .  ',
@@ -1265,18 +1271,73 @@ class PointsController  extends \bbdkp\Admin
 			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
 							SET zerosum_bonus = zerosum_bonus + ' . (float) $restvalue  .  '
 							WHERE raid_id = ' . (int) $raid_id . '
-						  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $looter_id);
+						  	AND member_id = ' . $looter_id;
 			$db->sql_query ( $sql );
 	
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 							SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $restvalue  .  ',
 							member_earned = member_earned + ' . (float) $restvalue  .  '
 							WHERE member_dkpid = ' . (int) $this->dkpsys_id  . '
-						  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $looter_id);
+						  	AND member_id = ' . $looter_id;
 			$db->sql_query ( $sql );
 		}
+		return true;
+	}
+	
+	/**
+	 * delete zero sum points for this item
+	 * @param \bbdkp\Loot $Loot
+	 * @return boolean
+	 */
+	public function zero_balance_delete(\bbdkp\Loot $Loot)
+	{
+		global $db; 
+		if ($Loot->item_zs == 0)
+		{
+			return false;
+		}
+		
+		//get raid detail of this loot
+		$raiddetail = new \bbdkp\Raiddetail($Loot->raid_id);
+		$zerosumdkp = round( $Loot->item_value / max(1, count($raiddetail->raid_details)) , 2);
+		
+		// decrease values raid detail table
+		$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
+						SET zerosum_bonus = zerosum_bonus - ' . (float) $zerosumdkp . '
+						WHERE raid_id = ' . (int) $Loot->raid_id . ' AND ' .  $db->sql_in_set('member_id',  array_keys($raiddetail->raid_details))   ;
+		$db->sql_query ( $sql );
+		
+		// @note : this should be decay-synchronised again  
+		
+		// deallocate dkp zero sum value bought to all raiders
+		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+						SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $zerosumdkp  .  ',
+						member_earned = member_earned - ' . (float) $zerosumdkp  .  '
+						WHERE member_dkpid = ' . (int) $Loot->dkpid . '
+					  	AND ' . $db->sql_in_set('member_id', array_keys($raiddetail->raid_details) ) ;
+		$db->sql_query ( $sql );
 		
 		
+		// give rest value to buyer or guildbank
+		$restvalue = $Loot->item_value - ($zerosumdkp *  max(1, count($raiddetail->raid_details)) );
+		if($restvalue != 0 )
+		{
+			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
+							SET zerosum_bonus = zerosum_bonus - ' . (float) $restvalue  .  '
+							WHERE raid_id = ' . (int) $Loot->raid_id. '
+						  	AND member_id = ' . $Loot->member_id ;
+			$db->sql_query ( $sql );
+			
+			//remove the rest value from dkp table
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+							SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $restvalue  .  ',
+							member_earned = member_earned - ' . (float) $restvalue  .  '
+							WHERE member_dkpid = ' . (int) $this->dkpsys_id  . '
+						  	AND member_id = ' . $Loot->member_id ;
+			$db->sql_query ( $sql );
+		}
+
+		return true;
 	}
 	
 	

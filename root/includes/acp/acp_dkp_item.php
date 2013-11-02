@@ -100,7 +100,6 @@ class acp_dkp_item extends \bbdkp\Admin
        			if ($submit) 
 				{
 					$raid_id = request_var('hidden_raid_id', 0);
-					
 					$item_buyers = request_var('item_buyers', array(0 => 0));
 					$item_value = request_var( 'item_value' , 0.0) ; 
 					$item_name = utf8_normalize_nfc(request_var('item_name','', true));
@@ -111,7 +110,6 @@ class acp_dkp_item extends \bbdkp\Admin
 					$this->link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id );
 					meta_refresh(1, $this->link);
 					trigger_error ( $success_message . '<br /><a href="' . $this->link . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a> ' , E_USER_NOTICE );
-
 					
 				}
 				if ($update) 
@@ -119,26 +117,20 @@ class acp_dkp_item extends \bbdkp\Admin
 					// get data
 					$item_id = request_var('hidden_item_id', 0);
 					$dkp_id = request_var('hidden_dkp_id', 0);
-					
 					$raid_id = request_var('hidden_raid_id', 0);
-					
 					$item_name = utf8_normalize_nfc(request_var('item_name','', true));
-					$item_name_db = utf8_normalize_nfc(request_var('item_name_db','', true));
-					$item_name = (strlen($item_name) > 0) ? $item_name : $item_name_db;
 					$itemgameid  = request_var( 'item_gameid' , '') ;
 					$itemvalue 	 = request_var( 'item_value' , 0.0) ;
-					// if user wants to manually edit item decay but this is uncommon...
 					$itemdecay  = request_var( 'item_decay' , 0.00) ;
 					$item_buyers = request_var('item_buyers', array(0 => 0));
 					$itemdate= request_var('hidden_raiddate', 0);
 					
-					$this->LootController->updateloot($item_id, $dkp_id,  $raid_id, $item_buyers, $item_value, $item_name, $loot_time, $itemgameid   ); 
-					
+					$this->LootController->updateloot($item_id, $dkp_id, $raid_id, $item_buyers, $item_value, $item_name, $itemdate, $itemgameid   ); 
+				
 					$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_ITEM_SUCCESS'], $item_name,
 							(is_array($item_buyers) ? implode ( ', ',$item_buyers) : trim($item_buyers)  ) , $itemvalue );
 						
 					trigger_error ( $success_message . $this->link, E_USER_NOTICE );
-						
 					
 				}
 				if ($delete) 
@@ -149,9 +141,9 @@ class acp_dkp_item extends \bbdkp\Admin
 						//retrieve info
 						$old_items = request_var('hidden_old_item', array(0 => array(''=>'')));
 			
-						foreach($old_items as $old_item)
+						foreach($old_items as $item_id => $old_item)
 						{
-							$this->LootController->deleteloot($old_item);
+							$this->LootController->deleteloot($item_id);
 						}
 						
 						$success_message = sprintf ( $user->lang ['ADMIN_DELETE_ITEM_SUCCESS'], 

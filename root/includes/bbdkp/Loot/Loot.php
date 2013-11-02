@@ -57,25 +57,26 @@ class Loot
 
 	/**
 	 * primary key
-	 * @var unknown_type
+	 * @var int
 	 */
 	public $item_id;
 	
 	/**
 	 * raid in which item dropped.
 	 * non unique key
-	 * @var unknown_type
+	 * @var int
 	 */
 	public $raid_id; 
 	
 	/**
 	 * dkp pool
-	 * @var unknown_type
+	 * @var int
 	 */
 	public $dkpid;
 
 	/**
 	 * given name
+	 * @var string
 	 */
 	public $item_name;
 
@@ -158,13 +159,121 @@ class Loot
 	 * Loot class constructor
 	 * @param number $raid_id
 	 */
-	function __construct($raid_id = 0) 
+	function __construct($item_id = 0) 
 	{
-		$this->raid_id = $raid_id;
+		if($item_id > 0)
+		{
+			$this->Getloot($item_id); 
+		}
+		
 	}
 	
 	/**
-	 * add a new loot to database
+	 * get one item from raid
+	 * @uses acp
+	 * @access public
+	 * @param int $item_id
+	 */
+	public function Getloot($item_id)
+	{
+		global $db;
+	
+		$sql = 'SELECT * FROM ' .
+				RAID_ITEMS_TABLE . ' i, ' .
+				MEMBER_LIST_TABLE . ' m, ' .
+				RAIDS_TABLE . ' r, ' .
+				EVENTS_TABLE . ' e
+				WHERE i.member_id = m.member_id
+				AND i.raid_id = r.raid_id
+				AND r.event_id = e.event_id
+				AND i.item_id= ' . (int) $item_id;
+	
+		$result = $db->sql_query ( $sql );
+	
+		while ( $row = $db->sql_fetchrow ( $result ) )
+		{
+			$this->item_id = $item_id;
+			$this->dkpid = $row['event_dkpid'];
+			$this->item_name = (string) $row['item_name'];
+			$this->member_id = (int) 	$row['member_id'];
+			$this->member_name = (string)	$row['member_name'];
+			$this->game_id = $row['game_id'];
+			$this->raid_id = (int) 	$row['raid_id'];
+			$this->item_date = (int) 	$row['item_date'];
+			$this->item_value = (float) $row['item_value'];
+			$this->item_decay =   (float) $row['item_decay'];
+			$this->item_zs = (bool)  $row['item_zs'];
+		}
+		$db->sql_freeresult ($result);
+	
+		
+	
+	}
+	
+
+	/**
+	 * get array of all loot for 1 raid or for 1 member
+	 * 
+	 * note: member_name is only included for sorting
+	 * @param string $order
+	 * @param number $guild_id
+	 * @param number $dkpsys_id
+	 * @param number $raid_id
+	 * @param number $istart
+	 * @param number $member_id
+	 */
+	public function GetAllLoot($order = ' i.item_date desc', $guild_id=0, $dkpsys_id=0, $raid_id = 0, $istart = 0, $member_id = 0)
+	{
+		global $config, $db;
+	
+		$sql_array = array(
+				'SELECT'    => 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid,
+								SUM(i.item_value) as item_value,
+								SUM(i.item_decay) as item_decay,
+								SUM(i.item_value - i.item_decay) as item_net ',
+				'FROM'      => array(
+						MEMBER_LIST_TABLE   => 'm',
+						RAID_ITEMS_TABLE    => 'i',
+						RAIDS_TABLE 		=> 'r' ,
+						EVENTS_TABLE 		=> 'e',
+				),
+				'WHERE'     =>  " e.event_status = 1
+								  AND m.member_id = i.member_id
+								  AND i.raid_id = r.raid_id
+								  AND r.event_id = e.event_id ",
+				'GROUP_BY'	=> 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid',
+				'ORDER_BY'  => $order ,
+		);
+	
+	
+		if($dkpsys_id > 0)
+		{
+			$sql_array['WHERE'] .= ' AND e.event_dkpid=' . (int) $dkpsys_id;
+		}
+	
+		if($raid_id > 0)
+		{
+			$sql_array['WHERE'] .= " AND i.raid_id = " . (int) $raid_id ." ";
+		}
+	
+		if($member_id > 0)
+		{
+			$sql_array['WHERE'] .= " AND i.member_id = '" . (int) $member_id ."'";
+		}
+	
+		if ($guild_id > 0)
+		{
+			$sql_array['WHERE'] .= ' and m.member_guild_id = ' . $guild_id . ' ';
+		}
+	
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_ilimit'], $istart );
+	
+	}
+
+	
+	/**
+	 * insert new loot in database
 	 */
 	public function insert()
 	{
@@ -206,109 +315,6 @@ class Loot
 	{
 		$this->delete();
 		$this->insert();		
-	}
-	
-	
-	/**
-	 * get one item from raid
-	 * @uses acp
-	 * @access public
-	 * @param int $item_id
-	 */	
-	public function Getloot($item_id)
-	{
-		global $db;
-		
-		$sql = 'SELECT * FROM ' . 
-					RAID_ITEMS_TABLE . ' i, ' . 
-					MEMBER_LIST_TABLE . ' m, ' .
-					RAIDS_TABLE . ' r, ' .
-					EVENTS_TABLE . ' e 
-				WHERE i.member_id = m.member_id 
-				AND i.raid_id = r.raid_id
-				AND r.event_id = e.event_id
-				AND i.item_id= ' . (int) $item_id;
-		
-		$result = $db->sql_query ( $sql );
-		
-		while ( $row = $db->sql_fetchrow ( $result ) )
-		{
-			$this->item_id = $item_id; 
-			$this->dkpid = $row['event_dkpid']; 
-			$this->item_name = (string) $row['item_name'];
-			$this->member_id = (int) 	$row['member_id']; 
-			$this->member_name = (string)	$row['member_name']; 
-			$this->game_id = $row['game_id'];
-			$this->raid_id = (int) 	$row['raid_id']; 
-			$this->item_date = (int) 	$row['item_date']; 
-			$this->item_value = (float) $row['item_value']; 
-			$this->item_decay =   (float) $row['item_decay']; 
-			$this->item_zs = (bool)  $row['item_zs']; 
-		}		
-		$db->sql_freeresult ($result);
-		
-		$a = 1; 
-		
-	}
-	
-	/**
-	 * 
-	 * get array of all loot for 1 raid or for 1 member
-	 * note: member_name is only included for sorting
-	 * @param string $order
-	 * @param number $guild_id
-	 * @param number $dkpsys_id
-	 * @param number $raid_id
-	 * @param number $istart
-	 * @param number $member_id
-	 */
-	public function GetAllLoot($order = ' i.item_date desc', $guild_id=0, $dkpsys_id=0, $raid_id = 0, $istart = 0, $member_id = 0)
-	{
-		global $config, $db;
-	
-		$sql_array = array(
-				'SELECT'    => 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid, 
-								SUM(i.item_value) as item_value,  
-								SUM(i.item_decay) as item_decay, 
-								SUM(i.item_value - i.item_decay) as item_net ',
-				'FROM'      => array(
-						MEMBER_LIST_TABLE   => 'm',
-						RAID_ITEMS_TABLE    => 'i',
-						RAIDS_TABLE 		=> 'r' ,
-						EVENTS_TABLE 		=> 'e', 
-				),
-				'WHERE'     =>  " e.event_status = 1 
-								  AND m.member_id = i.member_id
-								  AND i.raid_id = r.raid_id
-								  AND r.event_id = e.event_id ",
-				'GROUP_BY'	=> 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid',  
-				'ORDER_BY'  => $order ,
-		);
-		
-
-		if($dkpsys_id > 0)
-		{
-			$sql_array['WHERE'] .= ' AND e.event_dkpid=' . (int) $dkpsys_id;
-		}
-		
-		if($raid_id > 0)
-		{
-			$sql_array['WHERE'] .= " AND i.raid_id = " . (int) $raid_id ." ";
-		}
-
-		if($member_id > 0)
-		{
-			$sql_array['WHERE'] .= " AND i.member_id = '" . (int) $member_id ."'";
-		}
-		
-		if ($guild_id > 0)
-		{
-			$sql_array['WHERE'] .= ' and m.member_guild_id = ' . $guild_id . ' ';
-		}
-
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_ilimit'], $istart ); 
-		
 	}
 	
 	/**

@@ -89,6 +89,178 @@ class LootController  extends \bbdkp\Admin
 		$db->sql_freeresult($result);
 
 	}
+
+	/**
+	 * get loot from database
+	 * @param int $item_id
+	 * @return \bbdkp\loot
+	 */
+	public function Getloot($item_id)
+	{
+		$this->loot->Getloot($item_id);
+		return $this->loot;
+	}
+	
+	/**
+	 * adds loot to a group of buyers
+	 *
+	 * @param int $raid_id
+	 * @param array $item_buyers
+	 * @param float $item_value
+	 * @param string $item_name
+	 * @param int $loottime optional
+	 * @return boolean
+	 */
+	public function addloot($raid_id, $item_buyers, $item_value, $item_name, $loottime = 0 )
+	{
+		global $user, $config;
+	
+		$this->loot = new \bbdkp\Loot();
+		$this->loot->raid_id = $raid_id;
+		$this->loot->item_value = $item_value;
+		$this->loot->item_name = $item_name;
+		$raid = new \bbdkp\Raids($raid_id);
+		$this->loot->dkpid = $raid->event_dkpid;
+		$this->loot->item_date = $loottime;
+		if($loottime == 0)
+		{
+			$this->loot->item_date = $raid->raid_start;
+		}
+		$this->loot->item_group_key = $this->gen_group_key ( $this->loot->item_name, $this->loot->item_date, $raid_id + rand(10,100) );
+		$this->loot->item_added_by = (string) $user->data ['username'];
+	
+		$PointsController = new \bbdkp\PointsController($raid->event_dkpid);
+		$decayarray = array(0.0, 0);
+		if ($config['bbdkp_decay'] == '1')
+		{
+			//diff between now and the raidtime
+			$now = getdate();
+			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $this->loot->item_date;
+			$decayarray = $PointsController->decay($this->loot->item_value,$timediff,2 );
+		}
+		$this->loot->item_decay = $decayarray[0];
+		$this->loot->decay_time = $decayarray[1];
+	
+		// Add purchase(s) to items table
+		$buyernames = '';
+		foreach ( $item_buyers as $key => $this_member_id )
+		{
+			$buyer = new \bbdkp\Members($this_member_id);
+			$this->loot->member_id = $this_member_id;
+			$this->loot->member_name = $buyer->member_name;
+			$this->loot->game_id = $buyer->game_id;
+			if($config['bbdkp_zerosum'] == 1 )
+			{
+				$this->loot->item_zs = 1;
+			}
+			$this->loot->insert();
+	
+			$PointsController->addloot_update_dkprecord($this->loot->item_value, $this_member_id);
+			$buyernames == '' ? '': $buyernames .= ', ';
+			$buyernames .= $buyer->member_name;
+			unset ($buyer);
+		}
+	
+		//if zerosum flag is set and  then distribute item value over raiders
+		// item decay is not redistributed to zerosum earnings, because that is depreciated using raid decay
+		if($config['bbdkp_zerosum'] == 1 )
+		{
+			foreach ( $item_buyers as $key => $this_member_id )
+			{
+				$PointsController->zero_balance($this_member_id, $raid_id, $this->loot->item_value);
+			}
+		}
+	
+		unset ($raid);
+	
+		// Logging
+		$log_action = array (
+				'header' 		=> 'L_ACTION_ITEM_ADDED',
+				'L_NAME' 		=> $item_name,
+				'L_BUYERS' 		=> $buyernames,
+				'L_RAID_ID' 	=> $raid_id,
+				'L_VALUE'   	=> $item_value ,
+				'L_ADDED_BY' 	=> $user->data['username']);
+	
+		$this->log_insert ( array (
+				'log_type' => $log_action ['header'],
+				'log_action' => $log_action ) );
+	
+		return true;
+	
+	}
+	
+	/**
+	 * Delete one loot
+	 * @param int $item_id
+	 * @return boolean
+	 */
+	public function deleteloot($item_id)
+	{
+		global $config, $db;
+		$this->loot = new \bbdkp\Loot($item_id);
+		$this->loot->delete(); 
+	
+		$raid = new \bbdkp\Raids($this->loot->raid_id);
+		$PointsController = new \bbdkp\PointsController($raid->event_dkpid);
+		$PointsController->removeloot_update_dkprecord($this->loot); 
+		
+		if($config['bbdkp_zerosum'] == 1)
+		{
+			$PointsController->zero_balance_delete($this->loot);			
+		}
+		
+		$log_action = array (
+				'header' 	=> 'L_ACTION_ITEM_DELETED',
+				'L_NAME' 	=> $this->loot->item_name,
+				'L_BUYER' 	=> $this->loot->member_name,
+				'L_RAID_ID' => $this->loot->raid_id,
+				'L_VALUE' 	=> $this->loot->item_value );
+	
+		$this->log_insert ( array (
+				'log_type' 		=> $log_action ['header'],
+				'log_action' 	=> $log_action ) );
+	
+		return true;
+	
+	}
+	
+	
+	/**
+	 * delete raid from loot table
+	 * @param int $raid_id
+	 */
+	public function delete_raid($raid_id)
+	{
+		global $db;
+		$sql = 'SELECT i.*, m.member_name FROM ' .
+				RAID_ITEMS_TABLE . ' i, ' .
+				MEMBER_LIST_TABLE . ' m
+				WHERE i.member_id = m.member_id
+				and raid_id = ' . (int) $raid_id;
+		$result = $db->sql_query ( $sql );
+	
+		// loop the items collection
+		while ( $row = $db->sql_fetchrow( $result ) )
+		{
+			$old_item = array (
+					'item_id' 		=>  (int) $row['item_id'] ,
+					'dkpid'			=>  $oldraid['event_dkpid'],
+					'item_name' 	=>  (string) $row['item_name'] ,
+					'member_id' 	=>  (int) 	$row['member_id'] ,
+					'member_name' 	=>  (string) $row['member_name'] ,
+					'raid_id' 		=>  (int) 	$row['raid_id'],
+					'item_date' 	=>  (int) 	$row['item_date'] ,
+					'item_value' 	=>  (float) $row['item_value'],
+					'item_decay' 	=>  (float) $row['item_decay'] ,
+					'item_zs' 		=>  (bool)   $row['item_zs'],
+			);
+	
+			$this->delete($old_item);
+	
+		}
+		$db->sql_freeresult ($result);
+	}
 	
 	/**
 	 * update loot
@@ -106,47 +278,10 @@ class LootController  extends \bbdkp\Admin
 	{
 		global $user, $db; 
 		
-		$old_buyers = array ();
-		$sql_array = array(
-				'SELECT' 	=> 'i2.* , m.member_name ',
-				'FROM' 		=> array(
-						RAID_ITEMS_TABLE => 'i2',
-						MEMBER_LIST_TABLE => 'm'
-				),
-				'LEFT_JOIN' => array(
-						array(
-								'FROM' => array(RAID_ITEMS_TABLE => 'i1'),
-								'ON' => ' i1.item_group_key = i2.item_group_key '
-						)),
-				'WHERE' => 'i2.member_id = m.member_id and i1.item_id= '. $item_id,
-		);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query ( $sql );
+		$oldloot = new \bbdkp\loot($item_id);
+		$this->deleteloot($item_id);
 		
-		while ( $row = $db->sql_fetchrow ($result))
-		{
-			$old_item = array (
-					'item_id' 		=>  (int) 	 $row['item_id'] ,
-					'dkpid'			=>  $dkp_id,
-					'item_name' 	=>  (string) $row['item_name'] ,
-					'member_id' 	=>  (int) 	 $row['member_id'] ,
-					'member_name' 	=>  (string) $row['member_name'] ,
-					'raid_id' 		=>  (int) 	 $row['raid_id'],
-					'item_date' 	=>  (int) 	 $row['item_date'] ,
-					'item_value' 	=>  (float)  $row['item_value'],
-					'item_decay' 	=>  (float)  $row['item_decay'],
-					'item_zs' 		=>  (bool)   $row['item_zs'],
-			);
-				
-			$this->deleteloot($old_item);
-				
-		}
-		$db->sql_freeresult ( $result );
-		
-		//generate new hash
 		$group_key = $this->gen_group_key ( $item_name, $loot_time, $item_id + rand(10,100) );
-		// Add new item to newly selected members
-		
 		$this->addloot($raid_id, $item_buyers, $item_value, $item_name, $loot_time);
 		
 		//
@@ -166,179 +301,7 @@ class LootController  extends \bbdkp\Admin
 		$this->log_insert ( array (
 			'log_type' => $log_action ['header'],
 			'log_action' => $log_action ) );
-		
-
 	}
-
-	/**
-	 * adds loot to a group of buyers
-	 *
-	 * @param int $raid_id
-	 * @param array $item_buyers
-	 * @param float $item_value
-	 * @param string $item_name
-	 * @param int $loottime optional
-	 * @return boolean
-	 */
-	public function addloot($raid_id, $item_buyers, $item_value, $item_name, $loottime = 0 )
-	{
-		global $user, $config;
-		$raid = new \bbdkp\Raids($raid_id);
-		
-		$PointsController = new \bbdkp\PointsController($raid->event_dkpid);
-		
-		$this->loot = new \bbdkp\Loot();
-		$this->loot->raid_id = $raid_id;
-		
-		
-		$this->loot->item_value = $item_value;
-		$this->loot->item_name = $item_name;
-		$this->loot->dkpid = $raid->event_dkpid;
-		$this->loot->item_date = $loottime;
-		if($loottime == 0)
-		{
-			$this->loot->item_date = $raid->raid_start;
-		}
-
-		$this->loot->item_group_key = $this->gen_group_key ( $this->loot->item_name, $this->loot->item_date, $raid_id + rand(10,100) );
-		$this->loot->item_added_by = (string) $user->data ['username'];
-		
-		$decayarray = array(0.0, 0);
-
-		if ($config['bbdkp_decay'] == '1')
-		{
-			//diff between now and the raidtime
-			$now = getdate();
-			$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $this->loot->item_date;
-			$decayarray = $PointsController->decay($this->loot->item_value,$timediff,2 ); 
-		}
-		
-		$this->loot->item_decay = $decayarray[0]; 
-		$this->loot->decay_time = $decayarray[1];
-		
-		// Add purchase(s) to items table
-		$buyernames = '';
-		foreach ( $item_buyers as $key => $this_member_id )
-		{
-			$buyer = new \bbdkp\Members($this_member_id); 
-			$this->loot->member_id = $this_member_id;
-			$this->loot->member_name = $buyer->member_name; 
-			$this->loot->game_id = $buyer->game_id; 
-			if($config['bbdkp_zerosum'] == 1 )
-			{
-				$this->loot->item_zs = 1; 
-			}
-			$this->loot->insert();
-
-			$PointsController->addloot_update_dkprecord($this->loot->item_value, $this_member_id);
-			$buyernames == '' ? '': $buyernames .= ', ';
-			$buyernames .= $buyer->member_name;
-			unset ($buyer);
-		}
-		
-		//if zerosum flag is set and  then distribute item value over raiders
-		// item decay is not redistributed to zerosum earnings, because that is depreciated using raid decay
-		if($config['bbdkp_zerosum'] == 1 )
-		{
-			foreach ( $item_buyers as $key => $this_member_id )
-			{
-				//if the bank is not set to the looter 
-				if($config['bbdkp_bankerid'] != $this_member_id)
-				{
-					$PointsController->zero_balance($this_member_id, $raid_id, $this->loot->item_value); 
-				}
-			}
-		}
-		
-		unset ($raid);
-		
-		// Logging
-		$log_action = array (
-		'header' 		=> 'L_ACTION_ITEM_ADDED',
-		'L_NAME' 		=> $item_name,
-		'L_BUYERS' 		=> $buyernames,
-		'L_RAID_ID' 	=> $raid_id,
-		'L_VALUE'   	=> $item_value ,
-		'L_ADDED_BY' 	=> $user->data['username']);
-
-		$this->log_insert ( array (
-		'log_type' => $log_action ['header'],
-		'log_action' => $log_action ) );
-
-		return true;
-
-	}
-	
-
-	/**
-	 * does the actual item-adding database operations
-	 * called from : item acp adding, updating item acp
-	 * closed box - no need for other params than passed
-	 * 
-	 * @param string $item_name
-	 * @param array $item_buyers
-	 * @param string $group_key
-	 * @param float $itemvalue
-	 * @param int $raid_id
-	 * @param int $loottime
-	 * @param int $itemgameid
-	 * @param float $itemdecay 
-	 * @return boolean
-	 */
-	private function add_new_item_db($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $loottime, $itemdecay)
-	{
-
-		global $db, $user, $config;
-		$query = array ();
-
-		// start transaction
-		$db->sql_transaction('begin');
-
-		// increase dkp spent value for buyers
-		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-				SET member_spent = member_spent + ' . (float) $itemvalue  .  ' ,
-					member_item_decay = member_item_decay + ' . (float) $itemdecay .  '
-				WHERE member_dkpid = ' . (int) $dkpid  . '
-			  	AND ' . $db->sql_in_set('member_id', $item_buyers) ;
-		$db->sql_query ( $sql );
-
-		$sql = 'SELECT member_id FROM ' . RAID_DETAIL_TABLE . ' WHERE raid_id = ' . $raid_id;
-		$result = $db->sql_query($sql);
-		unset($raiders);
-		$raiders = array();
-		while ( $row = $db->sql_fetchrow ($result))
-		{
-			// don't add the guildbank to the list of raiders
-			if ($row['member_id'] != $config['bbdkp_bankerid'])
-			{
-				$raiders[]= $row['member_id'];
-			}
-
-		}
-		$db->sql_freeresult ( $result);
-
-		$numraiders = count($raiders);
-		$distributed = round($itemvalue/max(1, $numraiders), 2);
-		// rest of division
-		$restvalue = $itemvalue - ($numraiders * $distributed);
-
-	
-		$db->sql_transaction('commit');
-
-		return true;
-	}
-
-	/**
-	 * get loot from database
-	 * @param int $item_id
-	 * @return \bbdkp\loot
-	 */
-	public function Getloot($item_id)
-	{
-		$this->loot->Getloot($item_id);
-		return $this->loot;
-	}
-
 
 	/**
 	 * 
@@ -354,41 +317,7 @@ class LootController  extends \bbdkp\Admin
 		return $this->loot->countloot('history' , 0, 0,$member_id, $raid_id, $guild_id);
 	}
 
-	/**
-	 * delete raid from loot table
-	 * @param int $raid_id
-	 */
-	public function delete_raid($raid_id)
-	{
-		global $db;
-		$sql = 'SELECT i.*, m.member_name FROM ' .
-				RAID_ITEMS_TABLE . ' i, ' .
-				MEMBER_LIST_TABLE . ' m
-				WHERE i.member_id = m.member_id
-				and raid_id = ' . (int) $raid_id;
-		$result = $db->sql_query ( $sql );
 
-		// loop the items collection
-		while ( $row = $db->sql_fetchrow( $result ) )
-		{
-			$old_item = array (
-					'item_id' 		=>  (int) $row['item_id'] ,
-					'dkpid'			=>  $oldraid['event_dkpid'],
-					'item_name' 	=>  (string) $row['item_name'] ,
-					'member_id' 	=>  (int) 	$row['member_id'] ,
-					'member_name' 	=>  (string) $row['member_name'] ,
-					'raid_id' 		=>  (int) 	$row['raid_id'],
-					'item_date' 	=>  (int) 	$row['item_date'] ,
-					'item_value' 	=>  (float) $row['item_value'],
-					'item_decay' 	=>  (float) $row['item_decay'] ,
-					'item_zs' 		=>  (bool)   $row['item_zs'],
-			);
-
-			$this->delete($old_item);
-
-		}
-		$db->sql_freeresult ($result);
-	}
 
 	/**
 	 * get item info
@@ -446,111 +375,6 @@ class LootController  extends \bbdkp\Admin
 
 	}
 	
-	/**
-	* delete : does one item deletion in database
-	*  array structure required for @param :
-	*	'item_id' 		=>  (int) $item_id ,
-	*	'dkpid'			=>  $dkp_id,
-	*	'item_name' 	=>  (string) $row['item_name'] ,
-	*	'member_id' 	=>  (int) 	 $row['member_id'] ,
-	*	'member_name' 	=>  (string) $row['member_name'] ,
-	*	'raid_id' 		=>  (int) 	 $row['raid_id'],
-	*	'item_date' 	=>  (int) 	 $row['item_date'] ,
-	*	'item_value' 	=>  (float)  $row['item_value'],
-	*	'item_decay' 	=>  (float)  $row['item_decay'],
-	*	'item_zs' 		=>  (bool)   $row['item_zs'],
-	 * 
-	 * @param array $old_item
-	 * @return boolean
-	 */
-	public function deleteloot($old_item)
-	{
-		global $config, $db;
-		$db->sql_transaction('begin');
-
-		// 1) Remove the item purchase from the items table
-		$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' WHERE item_id = ' . $old_item ['item_id'] ;
-		$db->sql_query ($sql);
-
-		// decrease dkp spent value and decay from buyer
-		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-				SET member_spent = member_spent - ' . $old_item ['item_value'] .  ' ,
-				    member_item_decay = member_item_decay - ' . $old_item ['item_decay'] .  '
-				WHERE member_dkpid = ' . (int) $old_item ['dkpid']  . '
-			  	AND ' . $db->sql_in_set('member_id', $old_item ['member_id']) ;
-		$db->sql_query ( $sql );
-
-		// if zerosum was given then remove item value from earned value
-		if ($old_item ['item_zs'] == true)
-		{
-			$sql = 'SELECT member_id FROM ' . RAID_DETAIL_TABLE . ' WHERE raid_id = ' . $old_item ['raid_id'] ;
-			$result = $db->sql_query($sql);
-			unset($raiders);
-			$raiders = array();
-			while ( $row = $db->sql_fetchrow ($result))
-			{
-				if ($row['member_id'] != $config['bbdkp_bankerid'])
-				{
-					$raiders[]= $row['member_id'];
-				}
-			}
-			$db->sql_freeresult ( $result);
-
-			$numraiders = count($raiders);
-			$distributed = round( $old_item ['item_value']/ max(1, $numraiders), 2);
-
-			// decrease raid detail table
-			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
-					SET zerosum_bonus = zerosum_bonus - ' . (float) $distributed . '
-					WHERE raid_id = ' . (int) $old_item ['raid_id'] . ' AND ' . $db->sql_in_set('member_id', $raiders);
-			$db->sql_query ( $sql );
-
-			// deallocate dkp itemvalue bought to all raiders
-			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-					SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $distributed  .  ',
-					member_earned = member_earned - ' . (float) $distributed  .  '
-					WHERE member_dkpid = ' . (int) $old_item ['dkpid']  . '
-				  	AND ' . $db->sql_in_set('member_id', $raiders) ;
-			$db->sql_query ( $sql );
-
-			// handle the rest amount
-			$restvalue = $old_item ['item_value'] - ($numraiders * $distributed);
-
-			if ($restvalue !=0)
-			{
-				// deduct it from the buyer
-				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
-						SET zerosum_bonus = zerosum_bonus - ' . (float) $restvalue  .  '
-						WHERE raid_id = ' . (int) $old_item ['raid_id'] . '
-					  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $old_item ['member_id']);
-				$db->sql_query ( $sql );
-
-				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-						SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $restvalue  .  ',
-						member_earned = member_earned - ' . (float) $restvalue  .  '
-						WHERE member_dkpid = ' . (int) $old_item ['dkpid']  . '
-					  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $old_item ['member_id']);
-				$db->sql_query ( $sql );
-
-			}
-		}
-
-		$db->sql_transaction('commit');
-
-		$log_action = array (
-				'header' 	=> 'L_ACTION_ITEM_DELETED',
-				'L_NAME' 	=> $old_item ['item_name'],
-				'L_BUYER' 	=> $old_item ['member_name'],
-				'L_RAID_ID' => $old_item ['raid_id'],
-				'L_VALUE' 	=> $old_item ['item_value'] );
-
-		$this->log_insert ( array (
-				'log_type' 		=> $log_action ['header'],
-				'log_action' 	=> $log_action ) );
-
-		return true;
-
-	}
 
 	
 	/**
