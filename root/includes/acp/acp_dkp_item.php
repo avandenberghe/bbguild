@@ -31,10 +31,6 @@ if (!class_exists('\bbdkp\LootController'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Loot/Lootcontroller.$phpEx");
 }
-if (!class_exists('\bbdkp\PointsController'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
-}
 if (!class_exists('\bbdkp\RaidController'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Raids/RaidController.$phpEx");
@@ -64,12 +60,6 @@ class acp_dkp_item extends \bbdkp\Admin
 	private $LootController;
 	
 	/**
-	 * instance of PointsController class
-	 * @var \bbdkp\PointsController
-	 */
-	private $PointsController;
-	
-	/**
 	 * instance of RaidController class
 	 * @var  \bbdkp\RaidController
 	 */
@@ -88,7 +78,6 @@ class acp_dkp_item extends \bbdkp\Admin
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&mode=listitems" ) . '"><h3>'. $user->lang['RETURN_DKPINDEX'] .'</h3></a>';
 
 		$this->LootController = new \bbdkp\Lootcontroller();
-		$this->PointsController = new \bbdkp\PointsController();
 		$this->RaidController = new \bbdkp\RaidController();
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		
@@ -110,16 +99,90 @@ class acp_dkp_item extends \bbdkp\Admin
 
        			if ($submit) 
 				{
-					$this->additem(); 
+					$raid_id = request_var('hidden_raid_id', 0);
+					
+					$item_buyers = request_var('item_buyers', array(0 => 0));
+					$item_value = request_var( 'item_value' , 0.0) ; 
+					$item_name = utf8_normalize_nfc(request_var('item_name','', true));
+					
+					$this->LootController->addloot($raid_id, $item_buyers, $item_value, $item_name); 
+					
+					$success_message = sprintf ( $user->lang ['ADMIN_ADD_ITEM_SUCCESS'], $item_name, count($item_buyers), $item_value );
+					$this->link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id );
+					meta_refresh(1, $this->link);
+					trigger_error ( $success_message . '<br /><a href="' . $this->link . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a> ' , E_USER_NOTICE );
+
+					
 				}
 				if ($update) 
 				{
-					$this->updateitem();  
+					// get data
+					$item_id = request_var('hidden_item_id', 0);
+					$dkp_id = request_var('hidden_dkp_id', 0);
+					
+					$raid_id = request_var('hidden_raid_id', 0);
+					
+					$item_name = utf8_normalize_nfc(request_var('item_name','', true));
+					$item_name_db = utf8_normalize_nfc(request_var('item_name_db','', true));
+					$item_name = (strlen($item_name) > 0) ? $item_name : $item_name_db;
+					$itemgameid  = request_var( 'item_gameid' , '') ;
+					$itemvalue 	 = request_var( 'item_value' , 0.0) ;
+					// if user wants to manually edit item decay but this is uncommon...
+					$itemdecay  = request_var( 'item_decay' , 0.00) ;
+					$item_buyers = request_var('item_buyers', array(0 => 0));
+					$itemdate= request_var('hidden_raiddate', 0);
+					
+					$this->LootController->updateloot($item_id, $dkp_id,  $raid_id, $item_buyers, $item_value, $item_name, $loot_time, $itemgameid   ); 
+					
+					$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_ITEM_SUCCESS'], $item_name,
+							(is_array($item_buyers) ? implode ( ', ',$item_buyers) : trim($item_buyers)  ) , $itemvalue );
+						
+					trigger_error ( $success_message . $this->link, E_USER_NOTICE );
+						
+					
 				}
 				if ($delete) 
 				{
-					// from item acp
-					$this->deleteitem(true);
+			
+					if (confirm_box ( true )) 
+					{
+						//retrieve info
+						$old_items = request_var('hidden_old_item', array(0 => array(''=>'')));
+			
+						foreach($old_items as $old_item)
+						{
+							$this->LootController->deleteloot($old_item);
+						}
+						
+						$success_message = sprintf ( $user->lang ['ADMIN_DELETE_ITEM_SUCCESS'], 
+						$old_item ['item_name'], $old_item ['member_name'], $old_item ['item_value'] );
+						
+						trigger_error ( $success_message . $this->link, E_USER_NOTICE );
+					
+					}
+					else
+					{
+						
+						$item_id = request_var('hidden_item_id', 0);
+						$dkp_id = request_var('hidden_dkp_id', 0);
+						
+						if($item_id == 0)
+						{	
+							trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] , E_USER_WARNING);
+						}
+						
+						$lootinfo = $this->LootController->getitemdeleteinfo($item_id, $dkp_id); 
+						
+						$s_hidden_fields = build_hidden_fields ( array (
+							'deleteitem' 	  => true, 
+							'hidden_old_item' => $lootinfo[1]
+						));
+			
+						$template->assign_vars ( array (
+							'S_HIDDEN_FIELDS' => $s_hidden_fields));
+						
+						confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $lootinfo[2] , $lootinfo[0] ), $s_hidden_fields );
+					}
 				}
 				
 				$this->displayloot();
@@ -361,180 +424,8 @@ class acp_dkp_item extends \bbdkp\Admin
 		
 		
 	}
-	
-	/**
-	 * adding new items to a raid
-	 * adds an item to the database
-	 * increases buyer account spent
-	 * 
-	 * called from : acp item adding
-	 * 
-	 */
-	private function additem()
-	{
-		global $user, $config, $phpEx, $phpbb_admin_path;
-
-		$raid_id = request_var('hidden_raid_id', 0);
-		$raid = new \bbdkp\Raids($raid_id);
-		
-		$this->link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id );
-		
-		$item_buyers = request_var('item_buyers', array(0 => 0));
-		$item_value = request_var( 'item_value' , 0.0) ; 
-		$item_name = utf8_normalize_nfc(request_var('item_name','', true));
-		$item_name_db = utf8_normalize_nfc(request_var('item_name_db','', true));
-		$item_name = (strlen($item_name) > 0) ? $item_name : $item_name_db;
-		$itemgameid  = request_var( 'item_gameid' , ''); 
-		$loot_time = $raid->raid_start; 
-		
-		$this->LootController->addloot($raid_id, $item_buyers, $item_value, $item_name, $loot_time, $itemgameid); 
-		
-		$success_message = sprintf ( $user->lang ['ADMIN_ADD_ITEM_SUCCESS'], $item_name, count($item_buyers), $item_value );
-		meta_refresh(1, $this->link);
-		trigger_error ( $success_message . '<br /><a href="' . $this->link . '"><h3>'.$user->lang['RETURN_RAID'].'</h3></a> ' , E_USER_NOTICE );
-		
-	}
 
 
-	/**
-	 * Deletes item 
-	 * @param boolean $groupdelete if true then all groupid items also deleted
-	 */
-	private function deleteitem($groupdelete = false)
-	{
-		global $db, $user, $config, $template;
-
-		if (confirm_box ( true )) 
-		{
-			//retrieve info
-			$old_items = request_var('hidden_old_item', array(0 => array(''=>'')));
-
-			foreach($old_items as $old_item)
-			{
-				$this->LootController->deleteloot($old_item);
-			}
-			
-			$success_message = sprintf ( $user->lang ['ADMIN_DELETE_ITEM_SUCCESS'], 
-			$old_item ['item_name'], $old_item ['member_name'], $old_item ['item_value'] );
-			
-			trigger_error ( $success_message . $this->link, E_USER_NOTICE );
-		
-		}
-		else
-		{
-			
-			$item_id = request_var('hidden_item_id', 0);
-			$dkp_id = request_var('hidden_dkp_id', 0);
-			
-			if($item_id == 0)
-			{	
-				trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] , E_USER_WARNING);
-			}
-			
-			$lootinfo = $this->LootController->getitemdeleteinfo($item_id, $dkp_id); 
-			
-			$s_hidden_fields = build_hidden_fields ( array (
-				'deleteitem' 	  => true, 
-				'hidden_old_item' => $lootinfo[1]
-			));
-
-			$template->assign_vars ( array (
-				'S_HIDDEN_FIELDS' => $s_hidden_fields));
-			
-			confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $lootinfo[2] , $lootinfo[0] ), $s_hidden_fields );
-		}
-				
-	}
-	
-	/**
-	 * updating item buyer
-	 */
-	private function updateitem()  
-	{
-		global $db, $user;
-		
-		// get data
-		$item_id = request_var('hidden_item_id', 0);
-		$dkp_id = request_var('hidden_dkp_id', 0);
-		
-		$old_buyers = array ();
-		$sql_array = array(
-			'SELECT' 	=> 'i2.* , m.member_name ',
-			'FROM' 		=> array(
-				RAID_ITEMS_TABLE => 'i2', 
-				MEMBER_LIST_TABLE => 'm'
-				),
-			'LEFT_JOIN' => array(
-				array(
-				'FROM' => array(RAID_ITEMS_TABLE => 'i1'),
-				'ON' => ' i1.item_group_key = i2.item_group_key '
-				)),
-			'WHERE' => 'i2.member_id = m.member_id and i1.item_id= '. $item_id,
-			);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query ( $sql );
-		
-		while ( $row = $db->sql_fetchrow ($result)) 
-		{
-			$old_item = array (
-			'item_id' 		=>  (int) 	 $row['item_id'] , 
-			'dkpid'			=>  $dkp_id,
-			'item_name' 	=>  (string) $row['item_name'] , 
-			'member_id' 	=>  (int) 	 $row['member_id'] , 
-			'member_name' 	=>  (string) $row['member_name'] ,
-			'raid_id' 		=>  (int) 	 $row['raid_id'], 
-			'item_date' 	=>  (int) 	 $row['item_date'] , 
-			'item_value' 	=>  (float)  $row['item_value'], 
-			'item_decay' 	=>  (float)  $row['item_decay'],
-			'item_zs' 		=>  (bool)   $row['item_zs'],  
-			);
-			
-			$this->deleteitem_db($old_item);
-		}
-		$db->sql_freeresult ( $result );
-		
-		$raid_id = request_var('hidden_raid_id', 0);
-		
-		$item_name = utf8_normalize_nfc(request_var('item_name','', true));
-		$item_name_db = utf8_normalize_nfc(request_var('item_name_db','', true));
-		$item_name = (strlen($item_name) > 0) ? $item_name : $item_name_db;
-		$itemgameid  = request_var( 'item_gameid' , '') ;
-		$itemvalue 	 = request_var( 'item_value' , 0.0) ; 
-		// if user wants to manually edit item decay but this is uncommon...
-		$itemdecay  = request_var( 'item_decay' , 0.00) ;
-		$item_buyers = request_var('item_buyers', array(0 => 0));
-		$itemdate= request_var('hidden_raiddate', 0);
-		
-		//generate new hash
-		$group_key = $this->gen_group_key ( $item_name, $itemdate, $item_id + rand(10,100) );
-		// Add new item to newly selected members
-		$this->add_new_item_db($item_name, $item_buyers, $group_key, $itemvalue, $raid_id, $itemdate, $itemgameid, $itemdecay); 
-		
-		//
-		// Logging
-		// 
-		$log_action = array (
-		'header' => 		'L_ACTION_ITEM_UPDATED',
-		'L_NAME_BEFORE' 	=> $old_item ['item_name'],
-		'L_RAID_ID_BEFORE' 	=> $old_item ['raid_id'], 
-		'L_VALUE_BEFORE' 	=> $old_item ['item_value'], 
-		'L_NAME_AFTER' 		=> $item_name , 
-		'L_BUYERS_AFTER' 	=> (is_array($item_buyers) ? implode ( ', ', $item_buyers  ) : trim($item_buyers)), 
-		'L_RAID_ID_AFTER' 	=> $raid_id , 
-		'L_VALUE_AFTER' 	=> $itemvalue , 
-		'L_UPDATED_BY' 		=> $user->data ['username'] );
-		
-		$this->log_insert ( array (
-		'log_type' => $log_action ['header'], 
-		'log_action' => $log_action ) );
-		
-		//
-		// Success message
-		$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_ITEM_SUCCESS'], $item_name, 
-			(is_array($item_buyers) ? implode ( ', ',$item_buyers) : trim($item_buyers)  ) , $itemvalue );
-			
-		trigger_error ( $success_message . $this->link, E_USER_NOTICE );
-	}	
 	
 	
 	/**

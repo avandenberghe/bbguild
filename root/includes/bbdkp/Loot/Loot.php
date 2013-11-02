@@ -168,8 +168,8 @@ class Loot
 	 */
 	public function insert()
 	{
-		global $db; 
-		
+		global $db, $config; 
+		// note : itemid is generated with primary key autoincrease
 		$sql_ary = array (
 				'item_name' 		=> (string) $this->item_name ,
 				'member_id' 		=> (int) $this->member_id,
@@ -179,7 +179,7 @@ class Loot
 				'item_date' 		=> (int) $this->item_date,
 				'item_group_key' 	=> (string) $this->item_group_key,
 				'item_gameid' 		=> $this->game_id,
-				'item_zs'			=> (int) $this->item_zs,
+				'item_zs'			=> (int) $config['bbdkp_zerosum'],
 				'item_added_by' 	=> (string) $this->item_added_by
 		);
 		
@@ -200,7 +200,7 @@ class Loot
 	}
 
 	/**
-	 * remove a loot from database
+	 * update loot in database
 	 */
 	public function update()
 	{

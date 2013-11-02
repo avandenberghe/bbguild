@@ -1225,6 +1225,62 @@ class PointsController  extends \bbdkp\Admin
 		return true;
 	}
 		
+	/**
+	 * Zero-sum DKP function
+	 *
+	 * will increase earned points for members present at loot time (== bosskill time) or present in Raid, depending on Settings
+	 * ex. player A pays 100dkp for item A
+	 * there are 15 players in raid
+	 * so each raider gets 100/15 = earned bonus 6.67
+	 *
+	 * @param int $looter_id
+	 * @param int $raid_id
+	 * @param float $itemvalue
+	 * @return string
+	 */
+	public function zero_balance($looter_id, $raid_id, $itemvalue)
+	{
+		global $db;
+		
+		$raiddetail = new \bbdkp\Raiddetail($raid_id); 
+	
+		/*
+		$zerosumdkp = round( $itemvalue / count($this->bossattendees[$this->batchid][$boss] , 2));
+		// increase raid detail table
+		$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
+						SET zerosum_bonus = zerosum_bonus + ' . (float) $distributed . '
+						WHERE raid_id = ' . (int) $raid_id . ' AND ' . $db->sql_in_set('member_id', $raiders);
+		$db->sql_query ( $sql );
+	
+		// allocate dkp itemvalue bought to all raiders
+		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+						SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $distributed  .  ',
+						member_earned = member_earned + ' . (float) $distributed  .  '
+						WHERE member_dkpid = ' . (int) $dkpid  . '
+					  	AND ' . $db->sql_in_set('member_id', $raiders) ;
+		$db->sql_query ( $sql );
+	
+		// give rest value to buyer or guildbank
+		if($restvalue!=0 )
+		{
+	
+			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
+							SET zerosum_bonus = zerosum_bonus + ' . (float) $restvalue  .  '
+							WHERE raid_id = ' . (int) $raid_id . '
+						  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $this_member_id);
+			$db->sql_query ( $sql );
+	
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+							SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $restvalue  .  ',
+							member_earned = member_earned + ' . (float) $restvalue  .  '
+							WHERE member_dkpid = ' . (int) $dkpid  . '
+						  	AND member_id = ' . ($config['bbdkp_zerosumdistother'] == 1 ? $config['bbdkp_bankerid'] : $this_member_id);
+			$db->sql_query ( $sql );
+		}
+		*/
+		
+	}
+	
 	
 	/**
 	 * syncchronise zero sum 
@@ -1720,11 +1776,12 @@ class PointsController  extends \bbdkp\Admin
 		
 	/**
 	 * calculates decay on epoch timedifference (seconds) and earned
-	 * we decay the sum of earned ( = raid value + time bonus + zerosumpoints) 
-	 * @param int $value = the value to decay
-	 * @param int $timediff = diff in seconds since raidstart
-	 * @param int $mode = 1 for raid, 2 for items
-	 *
+	 * we decay the sum of earned ( = raid value + time bonus + zerosumpoints)
+	 * 
+	 * @param unknown_type $value = the value to decay
+	 * @param unknown_type $timediff   = diff in seconds since raidstart
+	 * @param unknown_type $mode  1 for raid, 2 for items
+	 * @return array (decay, decay time)
 	 */
 	public function decay($value, $timediff, $mode)
 	{
@@ -1778,12 +1835,6 @@ class PointsController  extends \bbdkp\Admin
 		return array($decay, $n) ;
 	
 	}
-
-	/**
-	 *
-	 */
-	
-	
 	
 	/**
 	 * Recalculates and updates decay
