@@ -82,12 +82,13 @@ class PointsController  extends \bbdkp\Admin
 	/**
 	 * pointscontroller constructor
 	 */
-	function __construct() 
+	function __construct($dkpsys_id = 0) 
 	{
 		//load model
 		parent::__construct();
-		$this->Points = new \bbdkp\Points(); 
-		$this->Pools = new \bbdkp\Pool();
+		$this->dkpsys_id = $dkpsys_id; 
+		$this->Points = new \bbdkp\Points(0, $dkpsys_id); 
+		$this->Pools = new \bbdkp\Pool($dkpsys_id);
 		$this->dkpsys = $this->Pools->dkpsys;  
 	}
 	
@@ -1025,16 +1026,17 @@ class PointsController  extends \bbdkp\Admin
 	
 	/**
 	 * update a dkp account to remove loot
-	 * @param float $item_value
-	 * @param int $member_id
+	 * @param  \bbdkp\Loot $loot
 	 */
-	public function removeloot_update_dkprecord($item_value, $member_id)
+	public function removeloot_update_dkprecord(\bbdkp\Loot $loot)
 	{
 		$this->Points->dkpid = $this->dkpsys_id;
-		$this->Points->member_id = $member_id;
+		$this->Points->member_id = $loot->member_id;
 		$this->Points->read_account();
 		
-		$this->Points->spent -= $item_value;
+		$this->Points->spent -= $loot->item_value;
+		$this->Points->decay -= $loot->item_decay;
+		
 		$this->Points->update_account();	
 	}
 
@@ -1225,6 +1227,119 @@ class PointsController  extends \bbdkp\Admin
 		return true;
 	}
 		
+	/**
+	 * Zero-sum DKP function
+	 *
+	 * will increase earned points for members present at loot time (== bosskill time) or present in Raid, depending on Settings
+	 * ex. player A pays 100dkp for item A
+	 * there are 15 players in raid
+	 * so each raider gets 100/15 = earned bonus 6.67
+	 *
+	 * @param int $looter_id
+	 * @param int $raid_id
+	 * @param float $itemvalue
+	 * @return boolean
+	 */
+	public function zero_balance($looter_id, $raid_id, $itemvalue)
+	{
+		global $db;
+		$raiddetail = new \bbdkp\Raiddetail($raid_id); 
+		
+		$zerosumdkp = round( $itemvalue / max(1, count($raiddetail->raid_details)) , 2);
+		
+		// increase raid detail table
+		$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
+						SET zerosum_bonus = zerosum_bonus + ' . (float) $zerosumdkp . '
+						WHERE raid_id = ' . (int) $raid_id . ' AND ' .  $db->sql_in_set('member_id',  array_keys($raiddetail->raid_details))   ;
+		$db->sql_query ( $sql );
+	
+		// @note : this zero sum should be decay-synchronised 
+		
+		// allocate dkp itemvalue bought to all raiders
+		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+						SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $zerosumdkp  .  ',
+						member_earned = member_earned + ' . (float) $zerosumdkp  .  '
+						WHERE member_dkpid = ' . (int) $this->dkpsys_id  . '
+					  	AND ' . $db->sql_in_set('member_id', array_keys($raiddetail->raid_details) ) ;
+		$db->sql_query ( $sql );
+	
+		// give rest value to buyer or guildbank
+		$restvalue = $itemvalue - ($zerosumdkp * count($raiddetail->raid_details)); 
+		if($restvalue != 0 )
+		{
+	
+			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
+							SET zerosum_bonus = zerosum_bonus + ' . (float) $restvalue  .  '
+							WHERE raid_id = ' . (int) $raid_id . '
+						  	AND member_id = ' . $looter_id;
+			$db->sql_query ( $sql );
+	
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+							SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $restvalue  .  ',
+							member_earned = member_earned + ' . (float) $restvalue  .  '
+							WHERE member_dkpid = ' . (int) $this->dkpsys_id  . '
+						  	AND member_id = ' . $looter_id;
+			$db->sql_query ( $sql );
+		}
+		return true;
+	}
+	
+	/**
+	 * delete zero sum points for this item
+	 * @param \bbdkp\Loot $Loot
+	 * @return boolean
+	 */
+	public function zero_balance_delete(\bbdkp\Loot $Loot)
+	{
+		global $db; 
+		if ($Loot->item_zs == 0)
+		{
+			return false;
+		}
+		
+		//get raid detail of this loot
+		$raiddetail = new \bbdkp\Raiddetail($Loot->raid_id);
+		$zerosumdkp = round( $Loot->item_value / max(1, count($raiddetail->raid_details)) , 2);
+		
+		// decrease values raid detail table
+		$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
+						SET zerosum_bonus = zerosum_bonus - ' . (float) $zerosumdkp . '
+						WHERE raid_id = ' . (int) $Loot->raid_id . ' AND ' .  $db->sql_in_set('member_id',  array_keys($raiddetail->raid_details))   ;
+		$db->sql_query ( $sql );
+		
+		// @note : this should be decay-synchronised again  
+		
+		// deallocate dkp zero sum value bought to all raiders
+		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+						SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $zerosumdkp  .  ',
+						member_earned = member_earned - ' . (float) $zerosumdkp  .  '
+						WHERE member_dkpid = ' . (int) $Loot->dkpid . '
+					  	AND ' . $db->sql_in_set('member_id', array_keys($raiddetail->raid_details) ) ;
+		$db->sql_query ( $sql );
+		
+		
+		// give rest value to buyer or guildbank
+		$restvalue = $Loot->item_value - ($zerosumdkp *  max(1, count($raiddetail->raid_details)) );
+		if($restvalue != 0 )
+		{
+			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
+							SET zerosum_bonus = zerosum_bonus - ' . (float) $restvalue  .  '
+							WHERE raid_id = ' . (int) $Loot->raid_id. '
+						  	AND member_id = ' . $Loot->member_id ;
+			$db->sql_query ( $sql );
+			
+			//remove the rest value from dkp table
+			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+							SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $restvalue  .  ',
+							member_earned = member_earned - ' . (float) $restvalue  .  '
+							WHERE member_dkpid = ' . (int) $this->dkpsys_id  . '
+						  	AND member_id = ' . $Loot->member_id ;
+			$db->sql_query ( $sql );
+		}
+
+		return true;
+	}
+	
 	
 	/**
 	 * syncchronise zero sum 
@@ -1720,11 +1835,12 @@ class PointsController  extends \bbdkp\Admin
 		
 	/**
 	 * calculates decay on epoch timedifference (seconds) and earned
-	 * we decay the sum of earned ( = raid value + time bonus + zerosumpoints) 
-	 * @param int $value = the value to decay
-	 * @param int $timediff = diff in seconds since raidstart
-	 * @param int $mode = 1 for raid, 2 for items
-	 *
+	 * we decay the sum of earned ( = raid value + time bonus + zerosumpoints)
+	 * 
+	 * @param unknown_type $value = the value to decay
+	 * @param unknown_type $timediff   = diff in seconds since raidstart
+	 * @param unknown_type $mode  1 for raid, 2 for items
+	 * @return array (decay, decay time)
 	 */
 	public function decay($value, $timediff, $mode)
 	{
@@ -1778,12 +1894,6 @@ class PointsController  extends \bbdkp\Admin
 		return array($decay, $n) ;
 	
 	}
-
-	/**
-	 *
-	 */
-	
-	
 	
 	/**
 	 * Recalculates and updates decay

@@ -1222,15 +1222,11 @@ if (!class_exists('\bbdkp\Guilds'))
 		{
 			//retrieve info
 			$raid_id = request_var('raid_id', 0);
-			$old_item = request_var('hidden_old_item', array(''=>''));
-			$this->LootController->deleteloot($old_item); 
+			$item_id = request_var('item_id', 0);
+			$this->LootController->deleteloot($item_id); 
 				
-			$success_message = sprintf ( $user->lang ['ADMIN_DELETE_ITEM_SUCCESS'],
-					$old_item ['item_name'], $old_item ['member_name'], $old_item ['item_value'] );
-			
 			$this->link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "={$raid_id}" );
 			meta_refresh(1, $this->link );
-			trigger_error ( $success_message, E_USER_NOTICE );
 	
 		}
 		else
@@ -1247,7 +1243,7 @@ if (!class_exists('\bbdkp\Guilds'))
 			$s_hidden_fields = build_hidden_fields ( array (
 					'raid_id'		  => $raid_id,
 					'deleteitem' 	  => true,
-					'hidden_old_item' => $loot, 
+					'item_id' 		  => $item_id, 
 			));
 			$template->assign_vars ( array ('S_HIDDEN_FIELDS' => $s_hidden_fields ) );
 			confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $loot['item_name'], $loot['member_name'] ), $s_hidden_fields );
