@@ -310,6 +310,7 @@ class Adjust extends \bbdkp\Admin
 	 * @param string $order
 	 * @param int $member_id
 	 * @param int $start
+	 * @param int $guild_id
 	 * @return array
 	 */
 	function listadj($order, $member_id, $start=0, $guild_id = 0)

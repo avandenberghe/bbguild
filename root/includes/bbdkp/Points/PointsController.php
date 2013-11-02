@@ -81,6 +81,7 @@ class PointsController  extends \bbdkp\Admin
 	
 	/**
 	 * pointscontroller constructor
+	 * @param number $dkpsys_id
 	 */
 	function __construct($dkpsys_id = 0) 
 	{
@@ -1837,9 +1838,9 @@ class PointsController  extends \bbdkp\Admin
 	 * calculates decay on epoch timedifference (seconds) and earned
 	 * we decay the sum of earned ( = raid value + time bonus + zerosumpoints)
 	 * 
-	 * @param unknown_type $value = the value to decay
-	 * @param unknown_type $timediff   = diff in seconds since raidstart
-	 * @param unknown_type $mode  1 for raid, 2 for items
+	 * @param float $value = the value to decay
+	 * @param int $timediff   = diff in seconds since raidstart
+	 * @param int $mode  1 for raid, 2 for items
 	 * @return array (decay, decay time)
 	 */
 	public function decay($value, $timediff, $mode)

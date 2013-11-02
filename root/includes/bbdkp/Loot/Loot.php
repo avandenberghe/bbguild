@@ -157,7 +157,7 @@ class Loot
 	
 	/**
 	 * Loot class constructor
-	 * @param number $raid_id
+	 * @param number $item_id
 	 */
 	function __construct($item_id = 0) 
 	{

@@ -455,6 +455,7 @@ class RaidController  extends \bbdkp\Admin
 	 * @param int $dkpsys_id
 	 * @param int $start
 	 * @param int $member_id
+	 * @param int $guild_id
 	 * @return number
 	 */
 	public function listraids($dkpsys_id=0, $start = 0, $member_id=0, $guild_id=0)
