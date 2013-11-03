@@ -10,7 +10,7 @@
  * @version 1.3.0
  *
  */
-namespace bbdkp;
+namespace bbdkp\controller\games;
 /**
  * @ignore
  */
@@ -22,9 +22,9 @@ if (! defined ( 'IN_PHPBB' ))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
-if (!class_exists('\bbdkp\aGameinstall'))
+if (!class_exists('\bbdkp\GameInstall'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/games/library/aGameinstall.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/games/library/GameInstall.$phpEx");
 }
 
 /**
@@ -33,7 +33,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
  *   @package bbdkp
  *
  */
-class install_lotro extends \bbdkp\aGameinstall
+class install_lotro extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**

@@ -27,7 +27,7 @@ if (!class_exists('\bbdkp\Admin'))
 {
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
-if (!class_exists('\bbdkp\Game'))
+if (!class_exists('\bbdkp\controller\games\Game'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
 }
@@ -405,7 +405,7 @@ class Members extends \bbdkp\Admin
 		else
 		{
 			// load games class
-			$games = new \bbdkp\Game();
+			$games = new \bbdkp\controller\games\Game();
 			if(isset($games->games))
 			{
 				$this->games = $games->games;

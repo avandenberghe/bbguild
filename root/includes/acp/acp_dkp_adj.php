@@ -2,7 +2,7 @@
 /**
  * DKP Adjustments ACP file
  * 
- *   @package bbdkp
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -30,7 +30,7 @@ if (!class_exists('\bbdkp\Admin'))
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
 // Include the adjust class
-if (!class_exists('\bbdkp\Adjust'))
+if (!class_exists('\bbdkp\controller\adjustments\Adjust'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/Adjustments/Adjust.$phpEx");
 }
@@ -79,7 +79,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 		global $db, $user, $template;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
-		$this->adjustment = new \bbdkp\Adjust;  //always late binding in php
+		$this->adjustment = new \bbdkp\controller\adjustments\Adjust;  //always late binding in php
 		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		
@@ -278,7 +278,7 @@ class acp_dkp_adj extends \bbdkp\Admin
                     ORDER BY dkpsys_name";
 				$resultdkpsys = $db->sql_query($sql);
 				
-				$showadj = new \bbdkp\Adjust;
+				$showadj = new \bbdkp\controller\adjustments\Adjust;
 				
 				$adjust_id = request_var(URI_ADJUSTMENT, 0);
 				$dkpsys_id = request_var(URI_DKPSYS, 0);
@@ -356,7 +356,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					global $user;
 					$this->error_check();
 					
-					$newadjust = new \bbdkp\Adjust;
+					$newadjust = new \bbdkp\controller\adjustments\Adjust;
 					
 					$temp = str_replace(".", "", request_var('adjustment_value', 0.0));
 					$temp2 = (float) str_replace(",", ".", $temp);
@@ -407,7 +407,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				{
 					$this->error_check();
 					
-					$oldadjust = new \bbdkp\Adjust;
+					$oldadjust = new \bbdkp\controller\adjustments\Adjust;
 					$oldadjust->adjustment_id = request_var('hidden_id', 0);
 					$oldadjust->get($oldadjust->adjustment_id);
 					foreach($oldadjust->members_samegroupkey as $member_id)
@@ -422,7 +422,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						$oldadjust->delete();
 					}
 					
-					$updadjust = new \bbdkp\Adjust;
+					$updadjust = new \bbdkp\controller\adjustments\Adjust;
 					$temp = str_replace(".", "", request_var('adjustment_value', 0.0));
 					$temp2 = (float) str_replace(",", ".", $temp);
 					$updadjust->adjustment_value = $temp2;
@@ -480,7 +480,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 					{
 						// get form vars
 						$adjust_id = request_var('xhidden_id', 0);
-						$deleteadj = new \bbdkp\Adjust;
+						$deleteadj = new \bbdkp\controller\adjustments\Adjust;
 						$deleteadj->get($adjust_id);
 						$deleteadj->delete(); 
 						

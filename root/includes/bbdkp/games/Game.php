@@ -9,7 +9,7 @@
  * @version 1.3.0
  * @since 1.3.0
  */
-namespace bbdkp;
+namespace bbdkp\controller\games;
 /**
  * @ignore
  */
@@ -151,15 +151,15 @@ class Game extends \bbdkp\Admin
 			$sql = 'DELETE FROM ' . GAMES_TABLE . " WHERE game_id = '" .   $this->game_id . "'";
 			$db->sql_query ($sql);
 			
-			$factions = new \bbdkp\Faction(); 
+			$factions = new \bbdkp\controller\games\Faction(); 
 			$factions->game_id = $this->game_id; 
 			$factions->Delete_all_factions(); 
 
-			$races = new \bbdkp\Races();
+			$races = new \bbdkp\controller\games\Races();
 			$races->game_id = $this->game_id;
 			$races->Delete_all_races(); 
 
-			$classes = new \bbdkp\Classes();
+			$classes = new \bbdkp\controller\games\Classes();
 			$classes->game_id = $this->game_id;
 			$classes->Delete_all_classes();
 			

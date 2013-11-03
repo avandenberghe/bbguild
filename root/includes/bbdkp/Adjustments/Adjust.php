@@ -1,7 +1,7 @@
 <?php
 /**
  * Adjustments class file
- *   @package bbdkp
+ * @package bbdkp
  * @link 		http://www.bbdkp.com
  * @author 		Sajaki@gmail.com
  * @copyright 	2013 bbdkp
@@ -9,7 +9,7 @@
  * @version 	1.3.0
  * @since 		1.3.0
  */
-namespace bbdkp;
+namespace bbdkp\controller\adjustments;
 /**
  * @ignore
  */

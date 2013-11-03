@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
-namespace bbdkp;
+namespace bbdkp\controller\games;
 
 /**
  * @ignore
@@ -19,9 +19,10 @@ if (! defined('IN_PHPBB'))
 }
 /**
  * Game interface
+ * this abstract class is the framework for all game installers
  * 
  */
-abstract class aGameinstall 
+abstract class Install
 {
 	/**
 	 * Install a game

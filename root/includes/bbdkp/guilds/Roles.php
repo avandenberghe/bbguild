@@ -23,7 +23,7 @@ global $phpbb_root_path;
 
 // Include the base class
 
-if (!class_exists('\bbdkp\Classes'))
+if (!class_exists('\bbdkp\controller\games\Classes'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/games/classes/Classes.$phpEx");
 }

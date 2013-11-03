@@ -22,7 +22,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
 // Include the abstract base
-if (!class_exists('\bbdkp\Game'))
+if (!class_exists('\bbdkp\controller\games\Game'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
 }
@@ -33,7 +33,7 @@ if (!class_exists('\bbdkp\Game'))
  * 
  *   @package bbdkp
  */
- class Classes extends \bbdkp\Game
+ class Classes extends \bbdkp\controller\games\Game
  {
  	
  	/**
