@@ -2,7 +2,7 @@
 /**
  * Loot ACP file
  * 
- * @package \bbDKP\acp\dkp_item
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -27,23 +27,23 @@ if (!class_exists('\bbdkp\Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
-if (!class_exists('\bbdkp\LootController'))
+if (!class_exists('\bbdkp\controller\loot\LootController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Loot/Lootcontroller.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/Lootcontroller.$phpEx");
 }
-if (!class_exists('\bbdkp\RaidController'))
+if (!class_exists('\bbdkp\controller\raids\RaidController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/RaidController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/RaidController.$phpEx");
 }
 //include the guilds class
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
 }
 /**
  * This ACP class manages Game Loot
  * 
- * @package \bbDKP\acp\dkp_item
+ *   @package bbdkp
  */
 class acp_dkp_item extends \bbdkp\Admin
 {
@@ -55,13 +55,13 @@ class acp_dkp_item extends \bbdkp\Admin
 	
 	/**
 	 * instance of lootcontroller class
-	 * @var \bbdkp\Lootcontroller
+	 * @var \bbdkp\controller\loot\Lootcontroller
 	 */
 	private $LootController;
 	
 	/**
 	 * instance of RaidController class
-	 * @var  \bbdkp\RaidController
+	 * @var  \bbdkp\controller\raids\RaidController
 	 */
 	private $RaidController; 
 	
@@ -77,8 +77,8 @@ class acp_dkp_item extends \bbdkp\Admin
 		
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&mode=listitems" ) . '"><h3>'. $user->lang['RETURN_DKPINDEX'] .'</h3></a>';
 
-		$this->LootController = new \bbdkp\Lootcontroller();
-		$this->RaidController = new \bbdkp\RaidController();
+		$this->LootController = new \bbdkp\controller\loot\Lootcontroller();
+		$this->RaidController = new \bbdkp\controller\raids\RaidController();
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		
 		switch ($mode) 
@@ -119,16 +119,16 @@ class acp_dkp_item extends \bbdkp\Admin
 					$dkp_id = request_var('hidden_dkp_id', 0);
 					$raid_id = request_var('hidden_raid_id', 0);
 					$item_name = utf8_normalize_nfc(request_var('item_name','', true));
-					$itemgameid  = request_var( 'item_gameid' , '') ;
-					$itemvalue 	 = request_var( 'item_value' , 0.0) ;
-					$itemdecay  = request_var( 'item_decay' , 0.00) ;
+					$itemgameid = request_var( 'item_gameid' , '') ;
+					$item_value = request_var( 'item_value' , 0.0) ;
+					$itemdecay = request_var( 'item_decay' , 0.00) ;
 					$item_buyers = request_var('item_buyers', array(0 => 0));
 					$itemdate= request_var('hidden_raiddate', 0);
 					
 					$this->LootController->updateloot($item_id, $dkp_id, $raid_id, $item_buyers, $item_value, $item_name, $itemdate, $itemgameid   ); 
 				
 					$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_ITEM_SUCCESS'], $item_name,
-							(is_array($item_buyers) ? implode ( ', ',$item_buyers) : trim($item_buyers)  ) , $itemvalue );
+							(is_array($item_buyers) ? implode ( ', ',$item_buyers) : trim($item_buyers)  ) , $item_value );
 						
 					trigger_error ( $success_message . $this->link, E_USER_NOTICE );
 					
@@ -435,7 +435,7 @@ class acp_dkp_item extends \bbdkp\Admin
 		
 		// guild dropdown
 		$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
-		$Guild = new \bbdkp\Guilds();
+		$Guild = new \bbdkp\controller\guilds\Guilds();
 		$guildlist = $Guild->guildlist();
 		
 		if($submit)

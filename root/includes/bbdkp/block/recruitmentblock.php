@@ -2,7 +2,7 @@
 /**
  * Recruitment block
  * 
- * @package bbDKP\portal\block
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License

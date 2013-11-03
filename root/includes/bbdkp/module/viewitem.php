@@ -1,7 +1,7 @@
 <?php
 /**
 * Viewitem module. shows one loot to user
-* @package bbDKP\views\viewmitem
+*   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

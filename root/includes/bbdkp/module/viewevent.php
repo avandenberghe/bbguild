@@ -2,7 +2,7 @@
 /**
  * Module Viewevent
  * 
-* @package bbDKP\views\viewevent
+*   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -23,15 +23,15 @@ if ( !(isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS]) ))
 	trigger_error($user->lang['ERROR_EVENT_UNKNOWN']);
 }
 
-if (!class_exists('\bbdkp\Events'))
+if (!class_exists('\bbdkp\controller\raids\Events'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/Events.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/Events.$phpEx");
 }
 
 $event_id = request_var(URI_EVENT, 0);
 $url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewevent&amp;' . URI_EVENT . '='.  $event_id . '&amp;' . URI_DKPSYS . '='. $this->dkpsys_id ) ;
 
-$event  = new \bbdkp\Events();
+$event  = new \bbdkp\controller\raids\Events();
 $event->get($event_id); 
 if(strlen($event->event_imagename) > 0)
 {

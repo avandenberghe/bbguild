@@ -1,7 +1,7 @@
 <?php
 /**
  * Viewraid module. shows one raid to user
- * @package bbDKP\views\viewraid
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -16,21 +16,21 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
-if (!class_exists('\bbdkp\Raids'))
+if (!class_exists('\bbdkp\controller\raids\Raids'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/Raids.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raids.$phpEx");
 }
-if (!class_exists('\bbdkp\Raiddetail'))
+if (!class_exists('\bbdkp\controller\raids\Raiddetail'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/Raiddetail.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raiddetail.$phpEx");
 }
-if (!class_exists('\bbdkp\Loot'))
+if (!class_exists('\bbdkp\controller\loot\Loot'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/loot/Loot.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/Loot.$phpEx");
 }
-if (!class_exists('\bbdkp\LootController'))
+if (!class_exists('\bbdkp\controller\loot\LootController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Loot/LootController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/LootController.$phpEx");
 }
 if ( !isset($_GET[URI_RAID]) )
 {
@@ -59,7 +59,7 @@ foreach($navlinks_array as $name)
 }
 
 //Raid information block
-$raid = new \bbdkp\Raids($raid_id);
+$raid = new \bbdkp\controller\raids\Raids($raid_id);
 
 $title =  sprintf($user->lang['RAID_ON'], $raid->event_name, date('F j, Y', $raid->raid_start));
 
@@ -92,7 +92,7 @@ $sort_order = array (
 );
 $current_order = $this->switch_order ($sort_order);
 
-$raid_details = new \bbdkp\Raiddetail($raid_id); 
+$raid_details = new \bbdkp\controller\raids\Raiddetail($raid_id); 
 $raid->raid_details = (array) $raid_details->raid_details; 
 
 $raid_value = 0.00;
@@ -205,7 +205,7 @@ $isort_order = array (
 );
 
 $icurrent_order = $this->switch_order ($isort_order, 'ui');
-$loot = new \bbdkp\Loot();
+$loot = new \bbdkp\controller\loot\Loot();
 $raid->loot_details = $loot->GetAllLoot( $icurrent_order ['sql'], 0, $this->dkpsys_id, $raid_id, 0, 0);
 
 $number_items = 0;
@@ -230,7 +230,7 @@ while ( $item = $db->sql_fetchrow($raid->loot_details))
 		$item_name = $item['item_name'];
 	}
 	
-	$buyer = new \bbdkp\Members( $item['member_id']);
+	$buyer = new \bbdkp\controller\members\Members( $item['member_id']);
 	
 	$template->assign_block_vars ( 'items_row', array (
 		'DATE' 			=> (! empty ( $item ['item_date'] )) ? $user->format_date($item['item_date']) : '&nbsp;',
@@ -268,7 +268,7 @@ $template->assign_vars(array(
 ));
 
 // Class statistics
-$LootStats = new \bbdkp\LootController;
+$LootStats = new \bbdkp\controller\loot\LootController;
 $LootStats->ClassLootStats($raid, 0, true, $this->dkpsys_id, false);
 
 // Output page

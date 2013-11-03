@@ -2,7 +2,7 @@
 /**
  * Logging class file
  * 
- * @package bbDKP\Admin\log
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -23,7 +23,7 @@ global $phpbb_root_path;
 
 /**
  * Singleton bbDKP Logging class
- * @package bbDKP
+ *   @package bbdkp
  *
  */
 class log

@@ -2,7 +2,7 @@
 /**
  * loot history module
  * 
-* @package bbDKP\views\loothistory
+*   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -17,16 +17,16 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
-if (!class_exists('\bbdkp\Loot'))
+if (!class_exists('\bbdkp\controller\loot\Loot'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Loot/Loot.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/Loot.$phpEx");
 }
-if (!class_exists('\bbdkp\Members'))
+if (!class_exists('\bbdkp\controller\members\Members'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
 
-$loot = new \bbdkp\loot();
+$loot = new \bbdkp\controller\loot\Loot();
 $total_items = $loot->countloot('history', $this->guild_id, $this->dkpsys_id); 
 
 if ($this->dkpsys_id > 0)
@@ -80,7 +80,7 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 		$valuename = $item ['item_name'];
 	}
 	
-	$member = new \bbdkp\Members($item ['member_id']);
+	$member = new \bbdkp\controller\members\Members($item ['member_id']);
 
 	$template->assign_block_vars ( 'items_row', array (
 		'DATE' 			=> (! empty ( $item ['item_date'] )) ? date($config['bbdkp_date_format'], $item ['item_date'] ) : '&nbsp;', 

@@ -2,7 +2,7 @@
 /**
  * Game ACP file
  * 
- * @package \bbDKP\acp\dkp_game
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -28,28 +28,28 @@ if (!class_exists('\bbdkp\Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
-if (!class_exists('\bbdkp\Faction'))
+if (!class_exists('\bbdkp\controller\games\Faction'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/games/factions/Faction.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/games/factions/Faction.$phpEx");
 }
-if (!class_exists('\bbdkp\Classes'))
+if (!class_exists('\bbdkp\controller\games\Classes'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/games/classes/Classes.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/games/classes/Classes.$phpEx");
 }
-if (!class_exists('\bbdkp\Races'))
+if (!class_exists('\bbdkp\controller\games\Races'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/games/races/Races.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/games/races/Races.$phpEx");
 }
-if (!class_exists('\bbdkp\Game'))
+if (!class_exists('\bbdkp\controller\games\Game'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/games/Game/Races.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game/Races.$phpEx");
 }
 
 /**
  * 
  * This class manages Game settings
  * 
- * @package \bbDKP\acp\dkp_game
+ *   @package bbdkp
  */
 class acp_dkp_game extends \bbdkp\Admin
 {
@@ -78,7 +78,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames" ) . '"><h3>' . 
 								$user->lang ['RETURN_GAMELIST'] . '</h3></a>';
 				//game dropdown
-				$listgames = new \bbdkp\Game;
+				$listgames = new \bbdkp\controller\games\Game;
 				
 				//pressed button ? redirect
 				$newpresetgame = (isset ( $_POST ['addgame1'] )) ? true : false;
@@ -88,7 +88,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					// ask for permission
 					if (confirm_box ( true ))
 					{
-						$editgame = new \bbdkp\Game;
+						$editgame = new \bbdkp\controller\games\Game;
 						$editgame->game_id = request_var ( 'hidden_game_id','' );
 						$editgame->name =  utf8_normalize_nfc(request_var('hidden_game_name', '', true)); 
 						$editgame->install();
@@ -179,7 +179,7 @@ class acp_dkp_game extends \bbdkp\Admin
 			    
 			case 'editgames' :
 				
-				$editgame = new \bbdkp\Game;
+				$editgame = new \bbdkp\controller\games\Game;
 				$editgame->game_id = request_var(URI_GAME, request_var ( 'hidden_game_id','' ));
 				$editgame->Get(); 
 				
@@ -205,7 +205,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					// ask for permission
 					if (confirm_box ( true ))
 					{
-						$editgame = new \bbdkp\Game; 
+						$editgame = new \bbdkp\controller\games\Game; 
 						$editgame->game_id = request_var ( 'hidden_game_id','' );
 						$editgame->get();
 						$editgame->Delete();
@@ -230,7 +230,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					// ask for permission
 					if (confirm_box ( true ))
 					{
-						$deletegame = new \bbdkp\Game;
+						$deletegame = new \bbdkp\controller\games\Game;
 						$deletegame->game_id = request_var ( 'hidden_game_id','' );
 						$deletegame->name = request_var ( 'hidden_game_name','' );
 						$deletegame->Delete();
@@ -262,7 +262,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					// ask for permission
 					if (confirm_box ( true ))
 					{
-						$faction = new \bbdkp\Faction();
+						$faction = new \bbdkp\controller\games\Faction();
 						$faction->game_id = request_var ( 'hidden_game_id','' );
 						$faction->faction_id = request_var ( 'hidden_faction_id', 0 );
 						$faction->get();
@@ -273,7 +273,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					}
 					else
 					{
-						$faction = new \bbdkp\Faction();
+						$faction = new \bbdkp\controller\games\Faction();
 						$faction->game_id = $editgame->game_id;
 						$faction->faction_id = request_var ( 'id', 0 );
 						$faction->get();
@@ -300,7 +300,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					if (isset ( $_GET ['id'] ))
 					{
 						// edit this race
-						$listraces = new \bbdkp\Races();
+						$listraces = new \bbdkp\controller\games\Races();
 						$listraces->race_id = request_var ( 'id', 0 );
 						$listraces->game_id = $editgame->game_id;
 						$listraces->get();	
@@ -314,7 +314,7 @@ class acp_dkp_game extends \bbdkp\Admin
 						}
 						
 						// faction dropdown
-						$listfactions = new \bbdkp\Faction();
+						$listfactions = new \bbdkp\controller\games\Faction();
 						$listfactions->game_id = $editgame->game_id;
 						$fa = $listfactions->getfactions(); 
 						
@@ -347,7 +347,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					else
 					{
 						// edit this race
-						$listraces = new \bbdkp\Races();
+						$listraces = new \bbdkp\controller\games\Races();
 						$listraces->game_id = $editgame->game_id;
 						
 						foreach ($this->games as $key => $gamename )
@@ -359,7 +359,7 @@ class acp_dkp_game extends \bbdkp\Admin
 						}
 						
 						//list factions
-						$listfactions = new \bbdkp\Faction();
+						$listfactions = new \bbdkp\controller\games\Faction();
 						$listfactions->game_id = $editgame->game_id;
 						
 						$fa = $listfactions->getfactions();
@@ -402,7 +402,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					// ask for permission
 					if (confirm_box(true))
 					{
-						$deleterace = new \bbdkp\Races();
+						$deleterace = new \bbdkp\controller\games\Races();
 						$deleterace->race_id = request_var ( 'hidden_raceid', 0 );
 						$deleterace->game_id = request_var ( 'hidden_gameid', '' );
 						$deleterace->get();
@@ -414,7 +414,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					}
 					else
 					{
-						$deleterace = new \bbdkp\Races;
+						$deleterace = new \bbdkp\controller\games\Races;
 						$deleterace->race_id = request_var ( 'id', 0 );
 						$deleterace->game_id = request_var ( 'game_id', '' );
 						$deleterace->get();
@@ -440,7 +440,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					if (isset ( $_GET ['id'] ))
 					{
 						//edit this class_id
-						$listclasses = new \bbdkp\Classes;
+						$listclasses = new \bbdkp\controller\games\Classes;
 						$listclasses->class_id = request_var ( 'id', 0 );
 						$listclasses->game_id = request_var ( 'game_id', '' );
 						
@@ -492,7 +492,7 @@ class acp_dkp_game extends \bbdkp\Admin
 						}
 						
 						$s_armor_options = '';
-						$listclasses = new \bbdkp\Classes;
+						$listclasses = new \bbdkp\controller\games\Classes;
 						foreach ( $listclasses->armortypes as $armor => $armorname )
 						{
 							$s_armor_options .= '<option value="' . $armor . '" > ' . $armorname . '</option>';
@@ -521,7 +521,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					// ask for permission
 					if (confirm_box ( true ))
 					{
-						$deleteclass = new \bbdkp\Classes();
+						$deleteclass = new \bbdkp\controller\games\Classes();
 						$deleteclass->class_id = request_var ( 'hidden_class_id', 0 );
 						$deleteclass->game_id = request_var ( 'hidden_game_id', '' );
 						$deleteclass->get();
@@ -531,7 +531,7 @@ class acp_dkp_game extends \bbdkp\Admin
 					}
 					else
 					{
-						$deleteclass = new \bbdkp\Classes();
+						$deleteclass = new \bbdkp\controller\games\Classes();
 						$deleteclass->class_id = request_var ( 'id', 0 );
 						$deleteclass->game_id = $editgame->game_id; 
 						$deleteclass->get();
@@ -555,9 +555,9 @@ class acp_dkp_game extends \bbdkp\Admin
 				break;
 			
 			case 'addfaction' :
-				$faction = new \bbdkp\Faction();
+				$faction = new \bbdkp\controller\games\Faction();
 				$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
-				$editgame = new \bbdkp\Game;
+				$editgame = new \bbdkp\controller\games\Game;
 				$editgame->game_id = $faction->game_id; 
 				$editgame->Get();
 				
@@ -609,7 +609,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				
 				if ($raceadd)
 				{				
-					$race = new \bbdkp\Races();
+					$race = new \bbdkp\controller\games\Races();
 					$race->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
 					$race->race_id = request_var ( 'race_id', 0 );
 					$race->race_name = utf8_normalize_nfc ( request_var ( 'racename', '', true ) );
@@ -624,12 +624,12 @@ class acp_dkp_game extends \bbdkp\Admin
 				
 				if ($raceupdate)
 				{
-					$oldrace = new \bbdkp\Races();
+					$oldrace = new \bbdkp\controller\games\Races();
 					$oldrace->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
 					$oldrace->race_id = request_var ( 'race_id', 0 );
 					$oldrace->Get();
 					
-					$race = new \bbdkp\Races();
+					$race = new \bbdkp\controller\games\Races();
 					$race->game_id = $oldrace->game_id; 
 					$race->race_id = $oldrace->race_id; 
 					$race->Get();
@@ -662,7 +662,7 @@ class acp_dkp_game extends \bbdkp\Admin
 				
 				if ($classadd)
 				{
-					$newclass = new \bbdkp\Classes();
+					$newclass = new \bbdkp\controller\games\Classes();
 					$newclass->game_id = request_var ( 'game_id', '' );
 					$newclass->classname = utf8_normalize_nfc ( request_var ( 'class_name', '', true ) );
 					$newclass->class_id = request_var ( 'class_id', 0 );
@@ -685,13 +685,13 @@ class acp_dkp_game extends \bbdkp\Admin
 				if ($classupdate)
 				{
 
-					$oldclass = new \bbdkp\Classes();
+					$oldclass = new \bbdkp\controller\games\Classes();
 					$oldclass->game_id = request_var ( 'game_id_hidden', '' );
 					$oldclass->class_id = request_var ( 'class_id0', 0 );
 					$oldclass->c_index = request_var ( 'c_index', 0 );
 					$oldclass->Get();
 					
-					$newclass = new \bbdkp\Classes();
+					$newclass = new \bbdkp\controller\games\Classes();
 					$newclass->game_id = request_var ( 'game_id_hidden', '' );
 					$newclass->class_id = request_var ( 'class_id0', 0 );
 					$newclass->c_index = request_var ( 'c_index', 0 );
@@ -724,7 +724,7 @@ class acp_dkp_game extends \bbdkp\Admin
 	 * 
 	 * @param \bbdkp\game $editgame
 	 */
-	private function showgame( \bbdkp\game $editgame)
+	private function showgame( \bbdkp\controller\games\game $editgame)
 	{
 		global $user, $phpbb_admin_path, $phpbb_root_path, $phpEx, $config, $template;
 		
@@ -739,7 +739,7 @@ class acp_dkp_game extends \bbdkp\Admin
 		}
 		
 		// list the factions
-		$listfactions = new \bbdkp\Faction();
+		$listfactions = new \bbdkp\controller\games\Faction();
 		$listfactions->game_id = $editgame->game_id;
 		$fa = $listfactions->getfactions();
 		$total_factions = 0;
@@ -764,7 +764,7 @@ class acp_dkp_game extends \bbdkp\Admin
 		$current_order = $this->switch_order ( $sort_order );
 		$total_races = 0;
 
-		$listraces = new \bbdkp\Races(); 
+		$listraces = new \bbdkp\controller\games\Races(); 
 		$listraces->game_id = $editgame->game_id; 
 		$ra = $listraces->listraces($current_order ['sql']); 
 		foreach ( $ra as $race_id => $race )
@@ -796,7 +796,7 @@ class acp_dkp_game extends \bbdkp\Admin
 		$current_order2 = $this->switch_order ( $sort_order2, "o1" );
 		$total_classes = 0;
 		
-		$listclasses = new \bbdkp\classes();
+		$listclasses = new  \bbdkp\controller\games\Classes();
 		$listclasses->game_id = $editgame->game_id; 
 		$cl = $listclasses->listclasses($current_order2['sql'], 1); 
 		foreach ( $cl as $c_index => $class )

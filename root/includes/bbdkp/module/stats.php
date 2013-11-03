@@ -2,7 +2,7 @@
 /**
  * Stats module. show guild statistics 
  * 
-* @package bbDKP\views\stats
+*   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -17,17 +17,17 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
-if (!class_exists('\bbdkp\LootController'))
+if (!class_exists('\bbdkp\controller\loot\LootController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Loot/LootController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/LootController.$phpEx");
 }
-$LootStats = new \bbdkp\LootController;
+$LootStats = new \bbdkp\controller\loot\LootController;
 
-if (!class_exists('\bbdkp\Raids'))
+if (!class_exists('\bbdkp\controller\raids\Raids'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/Raids.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raids.$phpEx");
 }
-$RaidStats = new \bbdkp\Raids;
+$RaidStats = new \bbdkp\controller\raids\Raids;
 
 $u_stats = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=stats' . '&amp;guild_id=' . $this->guild_id );
 $title = $user->lang['MENU_STATS'];

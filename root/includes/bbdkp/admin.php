@@ -2,7 +2,7 @@
 /**
  * bbDKP Admin class file
  * 
- * @package bbDKP\Admin
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -30,9 +30,9 @@ if (!class_exists('\bbdkp\log'))
 /**
  * 
  * bbDKP Admin foundation
- * @package bbDKP\Admin
+ *   @package bbdkp
  */
-abstract class Admin
+abstract class Admin 
 {
 	/**
 	 * bbdkp timestamp 

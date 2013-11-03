@@ -2,7 +2,7 @@
 /**
  * Guild ACP file
  * 
- * @package \bbDKP\acp\dkp_guild
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -30,28 +30,28 @@ if (!class_exists('\bbdkp\Admin'))
 }
 
 // include ranks class
-if (!class_exists('\bbdkp\Ranks'))
+if (!class_exists('\bbdkp\controller\guilds\Ranks'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Ranks.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
 }
 
 //include the guilds class
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
 }
 
 
 //include the guilds class
-if (!class_exists('\bbdkp\Roles'))
+if (!class_exists('\bbdkp\controller\guilds\Roles'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Roles.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Roles.$phpEx");
 }
 
 /**
  * This class manages guilds
  *  
- * @package \bbDKP\acp\dkp_guild
+ *   @package bbdkp
  */
 class acp_dkp_guild extends \bbdkp\Admin
 {
@@ -97,7 +97,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING); 
 				}
 				
-				$updateguild = new \bbdkp\Guilds();
+				$updateguild = new \bbdkp\controller\guilds\Guilds();
 				$guildlist = $updateguild->guildlist();
 				foreach ($guildlist as $g)
 				{
@@ -146,7 +146,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				while ($row = $db->sql_fetchrow($guild_result))
 				{
 					$guild_count ++;
-					$listguild = new \bbdkp\Guilds($row['id']);
+					$listguild = new \bbdkp\controller\guilds\Guilds($row['id']);
 
 					$template->assign_block_vars('guild_row', array(
 						'ID' => $listguild->guildid ,
@@ -204,7 +204,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					break;
 				}
 				
-				$updateguild = new \bbdkp\Guilds($this->url_id);
+				$updateguild = new \bbdkp\controller\guilds\Guilds($this->url_id);
 
 				$add = (isset($_POST['addguild'])) ? true : false;
 				$submit = (isset($_POST['updateguild'])) ? true : false;
@@ -254,7 +254,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				{
 					$updateguild->guildid = $this->url_id;
 					$updateguild->Getguild();
-					$old_guild = new \bbdkp\Guilds($this->url_id);
+					$old_guild = new \bbdkp\controller\guilds\Guilds($this->url_id);
 					$old_guild->Getguild();
 
 					$updateguild->game_id = request_var('game_id', '');
@@ -284,7 +284,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				{
 					if (confirm_box(true))
 					{
-						$deleteguild = new \bbdkp\Guilds(request_var('guild_id', 0));
+						$deleteguild = new \bbdkp\controller\guilds\Guilds(request_var('guild_id', 0));
 						$deleteguild->Getguild();
 						$deleteguild->Guildelete();
 						$success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guild_id);
@@ -303,7 +303,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 						
 				if ($addrank)
 				{
-					$newrank = new \bbdkp\Ranks($updateguild->guildid);
+					$newrank = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
 					$newrank->RankName = utf8_normalize_nfc(request_var('nrankname', '', true));
 					$newrank->RankId = request_var('nrankid', 0);
 					$newrank->RankGuild = $updateguild->guildid; 
@@ -317,8 +317,8 @@ class acp_dkp_guild extends \bbdkp\Admin
 				
 				if ($updaterank)
 				{
-					$newrank = new \bbdkp\Ranks($updateguild->guildid);
-					$oldrank = new \bbdkp\Ranks($updateguild->guildid);
+					$newrank = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
+					$oldrank = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
 					// template
 					$modrank = utf8_normalize_nfc(request_var('ranks', array(0 => ''), true));
 					foreach ($modrank as $rank_id => $rank_name)
@@ -414,7 +414,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				if($addrecruitment)
 				{
 					// insert a row in roles table
-					$addrole = new \bbdkp\Roles(
+					$addrole = new \bbdkp\controller\guilds\Roles(
 							$this->url_id, 
 							request_var('recruitrole' , ''),
 							request_var('recruitclass' , 0), 
@@ -426,7 +426,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				
 				if($updateroles)
 				{
-					$updaterole = new \bbdkp\Roles(); 
+					$updaterole = new \bbdkp\controller\guilds\Roles(); 
 					$modroles = utf8_normalize_nfc(request_var('needed', array(0 => 0), true));
 					foreach ($modroles as $id => $needed)
 					{
@@ -497,7 +497,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				}
 				
 				// list the ranks for this guild
-				$listranks = new \bbdkp\Ranks($updateguild->guildid);
+				$listranks = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
 				$listranks->game_id = $updateguild->game_id; 
 				$result = $listranks->listranks();
 				while ($row = $db->sql_fetchrow($result))
@@ -530,7 +530,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 							'OPTION' => $d_name));
 				}
 				
-				$listroles = new \bbdkp\Roles();
+				$listroles = new \bbdkp\controller\guilds\Roles();
 				$listroles->guild_id = $updateguild->guildid; 
 				foreach ($listroles->roles as $role => $rolename)
 				{
