@@ -27,18 +27,18 @@ if (!class_exists('\bbdkp\Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
-if (!class_exists('\bbdkp\LootController'))
+if (!class_exists('\bbdkp\controller\loot\LootController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Loot/Lootcontroller.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/Lootcontroller.$phpEx");
 }
-if (!class_exists('\bbdkp\RaidController'))
+if (!class_exists('\bbdkp\controller\raids\RaidController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/RaidController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/RaidController.$phpEx");
 }
 //include the guilds class
 if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
 }
 /**
  * This ACP class manages Game Loot
@@ -55,13 +55,13 @@ class acp_dkp_item extends \bbdkp\Admin
 	
 	/**
 	 * instance of lootcontroller class
-	 * @var \bbdkp\Lootcontroller
+	 * @var \bbdkp\controller\loot\Lootcontroller
 	 */
 	private $LootController;
 	
 	/**
 	 * instance of RaidController class
-	 * @var  \bbdkp\RaidController
+	 * @var  \bbdkp\controller\raids\RaidController
 	 */
 	private $RaidController; 
 	
@@ -77,8 +77,8 @@ class acp_dkp_item extends \bbdkp\Admin
 		
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&mode=listitems" ) . '"><h3>'. $user->lang['RETURN_DKPINDEX'] .'</h3></a>';
 
-		$this->LootController = new \bbdkp\Lootcontroller();
-		$this->RaidController = new \bbdkp\RaidController();
+		$this->LootController = new \bbdkp\controller\loot\Lootcontroller();
+		$this->RaidController = new \bbdkp\controller\raids\RaidController();
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		
 		switch ($mode) 

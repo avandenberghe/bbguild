@@ -28,7 +28,7 @@ $this->show_all = ( request_var ( 'show', request_var ( 'hidden_show', '' )) == 
 //include the guilds class
 if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
 }
 $guilds = new \bbdkp\controller\guilds\Guilds();
 

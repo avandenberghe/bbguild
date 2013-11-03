@@ -28,26 +28,26 @@ if (!class_exists('\bbdkp\Admin'))
 	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
 
-if (!class_exists('\bbdkp\RaidController'))
+if (!class_exists('\bbdkp\controller\raids\RaidController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/RaidController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/RaidController.$phpEx");
 }
-if (!class_exists('\bbdkp\LootController'))
+if (!class_exists('\bbdkp\controller\loot\LootController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Loot/Lootcontroller.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/Lootcontroller.$phpEx");
 }
-if (!class_exists('\bbdkp\PointsController'))
+if (!class_exists('\bbdkp\controller\points\PointsController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/points/PointsController.$phpEx");
 }
-if (!class_exists('\bbdkp\Members'))
+if (!class_exists('\bbdkp\controller\members\Members'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
 //include the guilds class
 if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
 }
  /**
  *  This ACP class manages Raids
@@ -69,12 +69,12 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 	private $RaidController;
 	/**
 	 * instance of lootcontroller class
-	 * @var \bbdkp\Lootcontroller
+	 * @var \bbdkp\controller\loot\Lootcontroller
 	 */	
 	private $LootController;
 	/**
 	 * instance of PointsController class
-	 * @var \bbdkp\PointsController
+	 * @var \bbdkp\controller\points\PointsController
 	 */	
 	private $PointsController;
 
@@ -89,9 +89,9 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 		global $user, $template, $config, $phpbb_admin_path, $phpEx;
 
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
-		$this->RaidController = new \bbdkp\RaidController();
-		$this->LootController = new \bbdkp\Lootcontroller();
-		$this->PointsController = new \bbdkp\PointsController();
+		$this->RaidController = new \bbdkp\controller\raids\RaidController();
+		$this->LootController = new \bbdkp\controller\loot\Lootcontroller();
+		$this->PointsController = new \bbdkp\controller\points\PointsController();
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		
 		switch ($mode)
@@ -579,7 +579,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 				$item_name = $lootdetail['item_name'];
 			}
 			
-			$buyer = new \bbdkp\Members($lootdetail['member_id']);
+			$buyer = new \bbdkp\controller\members\Members($lootdetail['member_id']);
 			
 			$template->assign_block_vars ( 'items_row', array (
 					'DATE' 			=> (! empty ( $lootdetail ['item_date'] )) ? $user->format_date($lootdetail['item_date']) : '&nbsp;',
@@ -988,7 +988,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 		}
 		else
 		{
-			$this->RaidController = new \bbdkp\RaidController(request_var ( 'dkpsys_id', 0));
+			$this->RaidController = new \bbdkp\controller\raids\RaidController(request_var ( 'dkpsys_id', 0));
 			$event_id = request_var ( 'event_id', 0);
 			if (($event_id == 0))
 			{
@@ -1193,7 +1193,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 				trigger_error( sprintf( $user->lang['ADMIN_RAID_ATTENDEE_DELETED_FAILED'],  utf8_normalize_nfc(request_var('attendeename', '', true)) , $raid_id) . $link, E_USER_WARNING);				
 			}
 			
-			$attendee = new \bbdkp\Members($attendee_id);
+			$attendee = new \bbdkp\controller\members\Members($attendee_id);
 			
 			$s_hidden_fields = build_hidden_fields(array(
 				'deleteraider'	=> true,

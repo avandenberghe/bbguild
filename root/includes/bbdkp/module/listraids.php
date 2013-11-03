@@ -16,11 +16,11 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
-if (!class_exists('\bbdkp\Raids'))
+if (!class_exists('\bbdkp\controller\raids\Raids'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/Raids.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raids.$phpEx");
 }
-$raids = new \bbdkp\Raids();
+$raids = new \bbdkp\controller\raids\Raids();
 $start = request_var('start', 0);   
 $total_raids=0;
 

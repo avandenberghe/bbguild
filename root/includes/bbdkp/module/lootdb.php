@@ -16,12 +16,12 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
-if (!class_exists('\bbdkp\Loot'))
+if (!class_exists('\bbdkp\controller\loot\Loot'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Loot/Loot.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/Loot.$phpEx");
 }
 
-$loot = new \bbdkp\loot();
+$loot = new \bbdkp\controller\loot\Loot();
 $total_items = $loot->countloot('values', $this->guild_id, $this->dkpsys_id);
 
 $start = request_var ( 'start', 0 );

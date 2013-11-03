@@ -32,20 +32,20 @@ if (!class_exists('\bbdkp\Admin'))
 // include ranks class
 if (!class_exists('\bbdkp\controller\guilds\Ranks'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Ranks.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
 }
 
 //include the guilds class
 if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
 }
 
 
 //include the guilds class
 if (!class_exists('\bbdkp\controller\guilds\Roles'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Roles.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Roles.$phpEx");
 }
 
 /**

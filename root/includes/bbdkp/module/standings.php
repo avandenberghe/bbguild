@@ -27,11 +27,11 @@ if(count($classarray)==0)
 	));
 }
 
-if (!class_exists('\bbdkp\PointsController'))
+if (!class_exists('\bbdkp\controller\points\PointsController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/points/PointsController.$phpEx");
 }
-$memberpoints = new \bbdkp\PointsController;
+$memberpoints = new \bbdkp\controller\points\PointsController;
 
 $memberarray = $memberpoints->get_standings($this->guild_id, $this->dkpsys_id, $this->game_id, $startd, $this->show_all, 
 		$this->query_by_armor, $this->query_by_class, $this->filter, $this->query_by_pool);

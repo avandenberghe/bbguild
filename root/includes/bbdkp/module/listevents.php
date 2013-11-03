@@ -33,12 +33,12 @@ foreach( $navlinks_array as $name )
 	'U_DKPPAGE' => $name['U_DKPPAGE'],
 	));
 }
-if (!class_exists('\bbdkp\Events'))
+if (!class_exists('\bbdkp\controller\raids\Events'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/Events.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/Events.$phpEx");
 }
 
-$event  = new \bbdkp\Events();
+$event  = new \bbdkp\controller\raids\Events();
 $event->countevents($this->dkpsys_id);
 $event->viewlistevents($this->guild_id);
 

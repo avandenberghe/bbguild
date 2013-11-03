@@ -15,11 +15,11 @@ include($phpbb_root_path . 'common.' . $phpEx);
 
 $guild_id = request_var('guild', 0);
 
-if (!class_exists('\bbdkp\Members'))
+if (!class_exists('\bbdkp\controller\members\Members'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
-$members = new \bbdkp\Members();
+$members = new \bbdkp\controller\members\Members();
 $members->listallmembers($guild_id);
 
 header('Content-type: text/xml');

@@ -18,21 +18,21 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 }
 
 // Include the member class
-if (!class_exists('\bbdkp\Members'))
+if (!class_exists('\bbdkp\controller\members\Members'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
-if (!class_exists('\bbdkp\Raids'))
+if (!class_exists('\bbdkp\controller\raids\Raids'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/Raids.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raids.$phpEx");
 }
-if (!class_exists('\bbdkp\Points'))
+if (!class_exists('\bbdkp\controller\points\Points'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Points/Points.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/points/Points.$phpEx");
 }
-if (!class_exists('\bbdkp\Loot'))
+if (!class_exists('\bbdkp\controller\loot\Loot'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/loot/Loot.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/Loot.$phpEx");
 }
 
 if ( !isset($_GET[URI_NAMEID]) )
@@ -40,9 +40,9 @@ if ( !isset($_GET[URI_NAMEID]) )
 	trigger_error ($user->lang['MNOTFOUND']);
 }
 $member_id = request_var(URI_NAMEID, 0);
-$member = new \bbdkp\Members($member_id);
-$points = new \bbdkp\Points($member_id, $this->dkpsys_id);
-$Raids = new \bbdkp\Raids();
+$member = new \bbdkp\controller\members\Members($member_id);
+$points = new \bbdkp\controller\points\Points($member_id, $this->dkpsys_id);
+$Raids = new \bbdkp\controller\raids\Raids();
 
 /* Get attendance */
 $range1 = $config['bbdkp_list_p1'];
@@ -116,7 +116,7 @@ else
 	$current_spent = $points->earned_net;
 }
 
-$loot = new \bbdkp\Loot();
+$loot = new \bbdkp\controller\loot\Loot();
 $lootdetails = $loot->GetAllLoot( ' i.item_date DESC ',0,  $this->dkpsys_id, 0, $istart, $member_id ); 
 while ( $item = $db->sql_fetchrow($lootdetails))
 {

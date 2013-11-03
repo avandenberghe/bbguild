@@ -27,9 +27,9 @@ if (!class_exists('\bbdkp\Admin'))
 	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
 
-if (!class_exists('\bbdkp\PointsController'))
+if (!class_exists('\bbdkp\controller\points\PointsController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/points/PointsController.$phpEx");
 }
 
 /**
@@ -41,7 +41,7 @@ if (!class_exists('\bbdkp\PointsController'))
 {
 	/**
 	 * instance of PointsController class
-	 * @var \bbdkp\PointsController
+	 * @var \bbdkp\controller\points\PointsController
 	 */	
 	private $PointsController;
 	 
@@ -56,7 +56,7 @@ if (!class_exists('\bbdkp\PointsController'))
 
 		$link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_point&amp;mode=pointconfig") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 		
-		$this->PointsController = new \bbdkp\PointsController; 
+		$this->PointsController = new \bbdkp\controller\points\PointsController; 
 		
 		switch ($mode)
 		{

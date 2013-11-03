@@ -30,19 +30,19 @@ if (!class_exists('\bbdkp\Admin'))
 }
 if (!class_exists('\bbdkp\controller\games\Faction'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/games/factions/Faction.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/games/factions/Faction.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\games\Classes'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/games/classes/Classes.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/games/classes/Classes.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\games\Races'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/games/races/Races.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/games/races/Races.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\games\Game'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/games/Game/Races.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game/Races.$phpEx");
 }
 
 /**
