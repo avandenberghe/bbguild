@@ -119,16 +119,16 @@ class acp_dkp_item extends \bbdkp\Admin
 					$dkp_id = request_var('hidden_dkp_id', 0);
 					$raid_id = request_var('hidden_raid_id', 0);
 					$item_name = utf8_normalize_nfc(request_var('item_name','', true));
-					$itemgameid  = request_var( 'item_gameid' , '') ;
-					$itemvalue 	 = request_var( 'item_value' , 0.0) ;
-					$itemdecay  = request_var( 'item_decay' , 0.00) ;
+					$itemgameid = request_var( 'item_gameid' , '') ;
+					$item_value = request_var( 'item_value' , 0.0) ;
+					$itemdecay = request_var( 'item_decay' , 0.00) ;
 					$item_buyers = request_var('item_buyers', array(0 => 0));
 					$itemdate= request_var('hidden_raiddate', 0);
 					
 					$this->LootController->updateloot($item_id, $dkp_id, $raid_id, $item_buyers, $item_value, $item_name, $itemdate, $itemgameid   ); 
 				
 					$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_ITEM_SUCCESS'], $item_name,
-							(is_array($item_buyers) ? implode ( ', ',$item_buyers) : trim($item_buyers)  ) , $itemvalue );
+							(is_array($item_buyers) ? implode ( ', ',$item_buyers) : trim($item_buyers)  ) , $item_value );
 						
 					trigger_error ( $success_message . $this->link, E_USER_NOTICE );
 					

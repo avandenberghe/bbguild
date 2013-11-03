@@ -229,37 +229,14 @@ class LootController  extends \bbdkp\Admin
 	/**
 	 * delete raid from loot table
 	 * @param int $raid_id
+	 * @uses \bbdkp\Loot::delete_raid()
 	 */
 	public function delete_raid($raid_id)
 	{
-		global $db;
-		$sql = 'SELECT i.*, m.member_name FROM ' .
-				RAID_ITEMS_TABLE . ' i, ' .
-				MEMBER_LIST_TABLE . ' m
-				WHERE i.member_id = m.member_id
-				and raid_id = ' . (int) $raid_id;
-		$result = $db->sql_query ( $sql );
-	
-		// loop the items collection
-		while ( $row = $db->sql_fetchrow( $result ) )
-		{
-			$old_item = array (
-					'item_id' 		=>  (int) $row['item_id'] ,
-					'dkpid'			=>  $oldraid['event_dkpid'],
-					'item_name' 	=>  (string) $row['item_name'] ,
-					'member_id' 	=>  (int) 	$row['member_id'] ,
-					'member_name' 	=>  (string) $row['member_name'] ,
-					'raid_id' 		=>  (int) 	$row['raid_id'],
-					'item_date' 	=>  (int) 	$row['item_date'] ,
-					'item_value' 	=>  (float) $row['item_value'],
-					'item_decay' 	=>  (float) $row['item_decay'] ,
-					'item_zs' 		=>  (bool)   $row['item_zs'],
-			);
-	
-			$this->delete($old_item);
-	
-		}
-		$db->sql_freeresult ($result);
+		$this->loot = new \bbdkp\Loot();
+		$this->loot->raid_id = $raid_id; 
+		$this->loot->delete_raid(); 
+		
 	}
 	
 	/**
@@ -273,6 +250,8 @@ class LootController  extends \bbdkp\Admin
 	 * @param string $item_name
 	 * @param int $loot_time
 	 * @param string $itemgameid
+	 * 
+	 * @todo fix this
 	 */
 	public function updateloot($item_id, $dkp_id, $raid_id, $item_buyers, $item_value, $item_name, $loot_time, $itemgameid)
 	{
@@ -289,9 +268,9 @@ class LootController  extends \bbdkp\Admin
 		//
 		$log_action = array (
 		'header' => 		'L_ACTION_ITEM_UPDATED',
-		'L_NAME_BEFORE' 	=> $old_item ['item_name'],
-		'L_RAID_ID_BEFORE' 	=> $old_item ['raid_id'],
-		'L_VALUE_BEFORE' 	=> $old_item ['item_value'],
+		'L_NAME_BEFORE' 	=> $oldloot->item_name,
+		'L_RAID_ID_BEFORE' 	=> $oldloot->raid_id,
+		'L_VALUE_BEFORE' 	=> $oldloot->item_value,
 		'L_NAME_AFTER' 		=> $item_name ,
 		'L_BUYERS_AFTER' 	=> (is_array($item_buyers) ? implode ( ', ', $item_buyers  ) : trim($item_buyers)),
 		'L_RAID_ID_AFTER' 	=> $raid_id ,

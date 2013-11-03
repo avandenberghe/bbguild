@@ -300,20 +300,30 @@ class Loot
 	
 	/**
 	 * remove a loot from database
+	 * @usedby update()
 	 */
-	public function delete()
+	public function delete_loot()
 	{
 		global $db;
 		$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' WHERE item_id = ' . $this->item_id ;
 		$db->sql_query ($sql);
 	}
+	
+	/**
+	 * remove loot for raid
+	 * @usedby \bbdkp\LootController::delete_raid()
+	public function delete_raid()
+		global $db;
+		$db->sql_query ($sql);
+	}
 
 	/**
 	 * update loot in database
+	 * @uses delete_loot()
 	 */
 	public function update()
 	{
-		$this->delete();
+		$this->delete_loot();
 		$this->insert();		
 	}
 	
