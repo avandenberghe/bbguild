@@ -1,7 +1,7 @@
 <?php
 /** 
 * info class file for ucp module dkp
-* @package \bbDKP\ucp\dkp\info
+*   @package bbdkp
 * @copyright (c) 2007 phpBB Group 
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 *
@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 
 /**
  * info class for ucp module dkp
- * @package \bbDKP\ucp\dkp\info
+ *   @package bbdkp
  */
 class ucp_dkp_info
 {	/**

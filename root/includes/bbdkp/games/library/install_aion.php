@@ -2,7 +2,6 @@
 /**
  * Aion Installer file
  * 
- * @package 	bbDKP\Game\library
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -32,7 +31,6 @@ if (!class_exists('\bbdkp\aGameinstall'))
  * Aion Installer Class
  * 
  * @author Sajaki
- * @package 	bbDKP\Game\library
  * 
  */
 class install_aion extends \bbdkp\aGameinstall

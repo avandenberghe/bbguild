@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package   bbDKP
+ *   @package bbdkp
  * @author	  Andreas Vandenberghe <sajaki9@gmail.com>
  * @author	  Chris Saylor
  * @author	  Daniel Cannon <daniel@danielcannon.co.uk>  
@@ -31,7 +31,7 @@ if (!defined('IN_PHPBB'))
 /**
  * Battle.net WoW API PHP SDK
  * 
- * @package bbDKP
+ *   @package bbdkp
  * @throws Exception If requirements are not met.
  */
 class WowAPI

@@ -2,7 +2,7 @@
 /**
  * standings module
  * 
-* @package bbDKP\views\standings
+*   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

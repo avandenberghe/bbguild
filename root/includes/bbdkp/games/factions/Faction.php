@@ -2,7 +2,7 @@
 /**
  * Faction Class file
  * 
- * @package 	bbDKP\Game\Faction
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -33,7 +33,7 @@ if (!class_exists('\bbdkp\Game'))
  * 
  * Manages all Game Factions
  * 
- * @package 	bbDKP\Game\Faction
+ *   @package bbdkp
  */
  class Faction extends \bbdkp\Game 
 {

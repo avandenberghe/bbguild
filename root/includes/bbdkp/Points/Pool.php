@@ -2,7 +2,7 @@
 /**
  * Pool class file
  * 
- * @package 	bbDKP\Points
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -35,7 +35,7 @@ if (!class_exists('\bbdkp\Admin'))
  *  Pools are a superset for events and dkp accounts.
  *  this class needs no controller so it extends admin.
  *  
- * @package 	bbDKP\Points
+ *   @package bbdkp
  */
 class Pool extends \bbdkp\Admin
  {

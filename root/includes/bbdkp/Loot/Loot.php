@@ -2,7 +2,7 @@
 /**
  * Loot class file
  * 
- * @package bbDKP\Events\Raid\Loot
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -29,7 +29,7 @@ global $phpbb_root_path;
  * Items can be crafted, bought from vendors or gotten from the guild bank, etc. 
  * In that case the raid_id is '0' 
  * 
- * @package 	 bbDKP\Events\Raid\Loot
+ *   @package bbdkp
  */
 class Loot 
 {
@@ -312,8 +312,11 @@ class Loot
 	/**
 	 * remove loot for raid
 	 * @usedby \bbdkp\LootController::delete_raid()
+	 */
 	public function delete_raid()
+	{
 		global $db;
+		$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' WHERE raid_id = ' . $this->raid_id ;
 		$db->sql_query ($sql);
 	}
 

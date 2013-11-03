@@ -2,7 +2,7 @@
 /**
  * Member class file
  * 
- * @package bbDKP\Members
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -45,7 +45,7 @@ if (!class_exists('\bbdkp\WowAPI'))
 /**
  * manages member creation
  *
- * @package 	bbDKP\Members
+ *   @package bbdkp
  *
  */
 class Members extends \bbdkp\Admin

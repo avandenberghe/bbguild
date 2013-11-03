@@ -2,7 +2,7 @@
 /**
  * who's online block
  * 
- * @package bbDKP\portal\block
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

@@ -2,7 +2,7 @@
 /**
  * Points class file
  * 
- * @package 	bbDKP\Points
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -30,7 +30,7 @@ global $phpbb_root_path;
  *  transaction tables are centralised (phpbb_bbdkp_memberdkp)
  *  transaction tables : raid_detail, adjustments, items
  *  
- * @package 	bbDKP\Points
+ *   @package bbdkp
  */
 class Points
 {	

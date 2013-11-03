@@ -2,7 +2,7 @@
 /**
  * Events Class file
  * 
- * @package bbDKP\Events\Raids
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\Admin'))
  * 
  * example of events: 10-man raids, progress raids, Flex raid, recurring farm raid , RBG, Flashpoints, ...
  * 
- * @package bbDKP\Raids
+ *   @package bbdkp
  * 
  */
 class Events extends \bbdkp\Admin

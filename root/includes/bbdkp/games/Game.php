@@ -1,7 +1,7 @@
 <?PHP
 /**
  * Game clas file
- * @package bbDKP\Game
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -31,7 +31,7 @@ if (!class_exists('\bbdkp\Admin'))
  *
  * Manages creation of Game
  *
- * @package bbDKP\Game
+ *   @package bbdkp
  */
 class Game extends \bbdkp\Admin
 {

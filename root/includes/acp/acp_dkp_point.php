@@ -2,7 +2,7 @@
 /**
  * Points acp file
  * 
- * @package \bbDKP\acp\dkp_point
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -35,7 +35,7 @@ if (!class_exists('\bbdkp\PointsController'))
 /**
  * This acp class manages point settings
  *
- * @package \bbDKP\acp\dkp_point
+ *   @package bbdkp
  */
  class acp_dkp_point extends \bbdkp\Admin
 {

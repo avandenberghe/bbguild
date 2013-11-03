@@ -2,7 +2,7 @@
 /**
  * Ranks class file
  * 
- * @package 	bbDKP\Guilds\Ranks
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -34,7 +34,7 @@ if (!class_exists('\bbdkp\Guilds'))
  * Ranks Class
  * 
  * Manages Guildranks, extends the guild class
- * @package 	bbDKP\Guilds\Ranks
+ *   @package bbdkp
  * 
  */
 class Ranks extends \bbdkp\Guilds

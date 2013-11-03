@@ -1,7 +1,7 @@
 <?php
 /**
  * bbDKP ucp class file
- * @package bbDKP\ucp
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -18,7 +18,7 @@ if (!defined('IN_PHPBB'))
 }
 /**
  * bbDKP ucp class
- * @package bbDKP\ucp
+ *   @package bbdkp
  *
  */
 class ucp_dkp

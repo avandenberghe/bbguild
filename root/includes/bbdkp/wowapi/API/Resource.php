@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package   bbDKP
+ *   @package bbdkp
  * @author	  Chris Saylor
  * @author	  Daniel Cannon <daniel@danielcannon.co.uk>
  * @author	  Andreas Vandenberghe <sajaki9@gmail.com> 
@@ -38,7 +38,7 @@ if (! defined('EMED_BBDKP'))
 /**
  * Resource skeleton
  * 
- * @package   bbDKP
+ *   @package bbdkp
  * @throws ResourceException If no methods are defined.
  */
 abstract class Resource extends \bbdkp\Admin

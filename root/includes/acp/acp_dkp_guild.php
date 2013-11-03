@@ -2,7 +2,7 @@
 /**
  * Guild ACP file
  * 
- * @package \bbDKP\acp\dkp_guild
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -51,7 +51,7 @@ if (!class_exists('\bbdkp\Roles'))
 /**
  * This class manages guilds
  *  
- * @package \bbDKP\acp\dkp_guild
+ *   @package bbdkp
  */
 class acp_dkp_guild extends \bbdkp\Admin
 {

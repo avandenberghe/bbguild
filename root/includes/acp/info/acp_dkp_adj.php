@@ -1,7 +1,7 @@
 <?php
 /**
 * ACP info class acp_dkp_adj_info
-* @package \bbDKP\acp\dkp_adj\info
+*   @package bbdkp
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 * @version 1.3.0
@@ -19,7 +19,7 @@ if (!defined('IN_PHPBB'))
 
 /**
  * info class for acp module dkp_adj
- * @package \bbDKP\acp\dkp_adj\info
+ *   @package bbdkp
  */
 class acp_dkp_adj_info
 {

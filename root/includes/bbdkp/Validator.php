@@ -3,7 +3,7 @@
  * Validator
  *
  * Data validation class
- * @package 	bbDKP\Admin\Validator
+ *   @package bbdkp
  * @author      Arvind Gupta <contact [ AT ] arvindgupta [ DOT ] co [ DOT ] in>
  * @copyright   Arvind Gupta (c) 2011
  * @link        http://www.arvindgupta.co.in
@@ -13,7 +13,7 @@
 namespace bbdkp;
 /**
  * Validator class
- * @package  bbDKP\Admin\Validator
+ *   @package bbdkp
  */
 class Validator
 {

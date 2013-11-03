@@ -2,7 +2,7 @@
 /**
  * Module Viewevent
  * 
-* @package bbDKP\views\viewevent
+*   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

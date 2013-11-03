@@ -1,7 +1,7 @@
 <?php
 /**
  * Lootcontroller class file
- * @package bbDKP\Events\Raids\LootController
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -46,7 +46,7 @@ if (!class_exists('\bbdkp\PointsController'))
 }
 /**
  * this class manages the loot transaction table (phpbb_bbdkp_raid_items)
- * @package 	 bbDKP\Events\Raids\LootController
+ *   @package bbdkp
  *
  */
 class LootController  extends \bbdkp\Admin
@@ -199,7 +199,7 @@ class LootController  extends \bbdkp\Admin
 	{
 		global $config, $db;
 		$this->loot = new \bbdkp\Loot($item_id);
-		$this->loot->delete(); 
+		$this->loot->delete_loot(); 
 	
 		$raid = new \bbdkp\Raids($this->loot->raid_id);
 		$PointsController = new \bbdkp\PointsController($raid->event_dkpid);

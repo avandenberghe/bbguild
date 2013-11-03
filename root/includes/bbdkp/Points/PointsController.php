@@ -1,7 +1,7 @@
 <?php
 /**
  * Pointscontroller class file
- * @package 	bbDKP\Points
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -44,7 +44,7 @@ if (!class_exists('\bbdkp\Adjust'))
 /**
  * Points controller
  * 
- * @package bbDKP\Points
+ *   @package bbdkp
  */
 class PointsController  extends \bbdkp\Admin
 {

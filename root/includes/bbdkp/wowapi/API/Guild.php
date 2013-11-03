@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * @package   bbDKP-WoWAPI
+ *   @package bbdkp
  * @author	  Andreas Vandenberghe <sajaki9@gmail.com> 
  * @copyright Copyright (c) 2011, Chris Saylor, Daniel Cannon,  Andreas Vandenberghe
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
@@ -42,7 +42,7 @@ if (!class_exists('\bbdkp\Resource'))
 
 /**
  * Guild resource.
- * @package   bbDKP
+ *   @package bbdkp
  * 
  */
 class Guild extends \bbdkp\Resource 

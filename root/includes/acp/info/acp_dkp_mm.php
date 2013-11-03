@@ -4,7 +4,7 @@
 * @version 1.3.0
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @package bbDKP\acp\dkp_mm\info
+*   @package bbdkp
 */
 
 /**
@@ -17,7 +17,7 @@ if (!defined('IN_PHPBB'))
 
 /**
  * info class for acp module dkp_mm
-* @package bbDKP\acp\dkp_mm\info
+*   @package bbdkp
 */
 class acp_dkp_mm_info
 {

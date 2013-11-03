@@ -2,7 +2,7 @@
 /**
  * bbdkp TERA install data
  * 
- * @package 	bbDKP\Game\library
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -29,7 +29,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
 
 /**
  * Tera Installer class
- * @package 	bbDKP\Game\library
+ *   @package bbdkp
  *
  */
 class install_tera extends \bbdkp\aGameinstall

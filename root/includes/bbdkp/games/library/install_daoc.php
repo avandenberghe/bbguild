@@ -2,7 +2,7 @@
 /**
  * Daoc Installer File
  * 
- * @package 	bbDKP\Game\library
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
  *  DaoC Installer Class
  * 
  * @author Sajaki
- * @package 	bbDKP\Game\library
+ *   @package bbdkp
  * 
  */
 class install_daoc extends \bbdkp\aGameinstall

@@ -1,7 +1,7 @@
 <?php
 /**
  * View class
- * @package bbDKP\views
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -28,7 +28,7 @@ if (!class_exists('\bbdkp\Admin'))
 
 /**
  * dispatch request to right viewpage
- * @package bbDKP
+ *   @package bbdkp
  *
  */
 class views extends \bbdkp\admin

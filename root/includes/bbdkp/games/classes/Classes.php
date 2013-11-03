@@ -1,7 +1,7 @@
 <?php
 /**
  * This file contains the Classes Class  
- * @package 	bbDKP\Game\Classes
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -31,7 +31,7 @@ if (!class_exists('\bbdkp\Game'))
  * 
  * Manages all Game Classes
  * 
- * @package 	bbDKP\Game\Classes
+ *   @package bbdkp
  */
  class Classes extends \bbdkp\Game
  {

@@ -1,7 +1,7 @@
 <?php
 /**
  * Guilds class file
- * @package 	bbDKP\Guilds
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -35,7 +35,7 @@ if (!class_exists('\bbdkp\WowAPI'))
  * 
  * Manages Guild creation
  * 
- * @package 	bbDKP\Guilds
+ *   @package bbdkp
  */
 class Guilds extends \bbdkp\Admin
 {
@@ -854,6 +854,7 @@ class Guilds extends \bbdkp\Admin
 		$sql = 'SELECT a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, a.members 
 				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
 				WHERE a.id = b.guild_id
+				AND guild_id>0
 				GROUP BY a.guilddefault, a.id, a.name, a.realm, a.region
 				ORDER BY a.guilddefault desc, a.members desc, a.id asc';
 		$result = $db->sql_query($sql);

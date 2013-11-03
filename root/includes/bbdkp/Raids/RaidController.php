@@ -1,7 +1,7 @@
 <?php
 /**
  * Raid controller file
- * @package bbDKP\Events\Raids\Raidcontroller
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -51,7 +51,7 @@ if (!class_exists('\bbdkp\Loot'))
 /**
  * Raid controller class : the routines controlling the raid workflow
  * 
-* @package bbDKP\Events\Raids\Raidcontroller
+*   @package bbdkp
  */
 class RaidController  extends \bbdkp\Admin
 {

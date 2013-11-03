@@ -2,7 +2,7 @@
 /**
  * Loot ACP file
  * 
- * @package \bbDKP\acp\dkp_item
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -43,7 +43,7 @@ if (!class_exists('\bbdkp\Guilds'))
 /**
  * This ACP class manages Game Loot
  * 
- * @package \bbDKP\acp\dkp_item
+ *   @package bbdkp
  */
 class acp_dkp_item extends \bbdkp\Admin
 {

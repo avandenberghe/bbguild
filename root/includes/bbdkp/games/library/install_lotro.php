@@ -2,7 +2,7 @@
 /**
  * bbdkp LOTRO install file
  * 
- * @package 	bbDKP\Game\library
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -30,7 +30,7 @@ if (!class_exists('\bbdkp\aGameinstall'))
 /**
  * Lotro Installer class
  * 
- * @package bbDKP\Game\library
+ *   @package bbdkp
  *
  */
 class install_lotro extends \bbdkp\aGameinstall

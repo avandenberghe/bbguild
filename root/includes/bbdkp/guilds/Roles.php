@@ -2,7 +2,7 @@
 /**
  * Roles Classfile
  * 
- * @package 	bbDKP\Guilds\Roles
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -36,7 +36,7 @@ if (!class_exists('\bbdkp\Guilds'))
 
 /**
  * holds vacancies per guild, game, role and class
- * @package 	bbDKP\Guilds\Roles
+ *   @package bbdkp
  *
  */
 class Roles 
