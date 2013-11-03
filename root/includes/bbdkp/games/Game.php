@@ -43,13 +43,13 @@ class Game extends \bbdkp\Admin
 	
 	/**
 	 * name of game
-	 * @var unknown_type
+	 * @var string
 	 */
 	public $name;
 	
 	/**
 	 * the game_id (unique key)
-	 * @var unknown_type
+	 * @var string
 	 */
 	public $game_id;
 	
@@ -61,7 +61,7 @@ class Game extends \bbdkp\Admin
 	
 	/**
 	 * date at which this game was installed
-	 * @var unknown_type
+	 * @var int
 	 */
 	public $install_date;
 	
@@ -100,14 +100,13 @@ class Game extends \bbdkp\Admin
 		{
 			$this->name= $this->preinstalled_games[$this->game_id];
 			
-			if (!class_exists('\bbdkp\install_' . $this->game_id))
+			if (!class_exists('\bbdkp\controller\games\install_' . $this->game_id))
 			{
 				include($phpbb_root_path .'includes/bbdkp/games/library/install_' . $this->game_id . '.' . $phpEx);
 			}
 		
-			$classname = '\bbdkp\install_' . $this->game_id;
+			$classname = '\bbdkp\controller\games\install_' . $this->game_id;
 			$installgame = new $classname; 
-			
 			
 			$installgame->install();
 		}

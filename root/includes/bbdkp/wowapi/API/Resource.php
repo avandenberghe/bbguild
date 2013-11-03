@@ -18,7 +18,7 @@
  * @link 	  http://blizzard.github.com/api-wow-docs 
  * @version   1.0.4
  */
-namespace bbdkp;
+namespace bbdkp\wowapi;
 
 /**
 * @ignore
@@ -106,7 +106,8 @@ abstract class Resource extends \bbdkp\Admin
 	{	
 		$uri = $this->GetURI($this->region);
 		$classname = get_class($this);
-		if (preg_match('@\\\\([\w]+)$@', $classname, $matches)) {
+		if (preg_match('@\\\\([\w]+)$@', $classname, $matches)) 
+		{
 			$classname = strtolower($matches[1]);
 		}
 		$uri .= $classname ;

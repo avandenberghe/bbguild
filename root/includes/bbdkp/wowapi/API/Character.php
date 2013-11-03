@@ -41,7 +41,7 @@ The core dataset returned includes the character's realm, name, level, last modi
 race id, achievement points value, gender id and class id.
 
 **/
-namespace bbdkp;
+namespace bbdkp\wowapi;
 
 /**
 * @ignore
@@ -51,7 +51,7 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
-if (!class_exists('\bbdkp\Resource')) 
+if (!class_exists('\bbdkp\wowapi\Resource')) 
 {
 	require($phpbb_root_path . "includes/bbdkp/wowapi/API/Resource.$phpEx");
 }
@@ -60,7 +60,7 @@ if (!class_exists('\bbdkp\Resource'))
  * Character resource.
  *   @package bbdkp
  */
-class Character extends \bbdkp\Resource
+class Character extends \bbdkp\wowapi\Resource
 {
    
 	/**

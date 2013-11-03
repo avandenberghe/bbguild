@@ -32,14 +32,14 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	require("{$phpbb_root_path}includes/bbdkp/games/Game.$phpEx");
 }
 //include the guilds class
-if (!class_exists('\bbdkp\Roles'))
+if (!class_exists('\bbdkp\controller\guilds\Roles'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Roles.$phpEx");
 }
 //Initialising the class
-if (!class_exists('\bbdkp\WowAPI'))
+if (!class_exists('\bbdkp\wowapi\BattleNet'))
 {
-	require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
+	require($phpbb_root_path . 'includes/bbdkp/wowapi/BattleNet.' . $phpEx);
 }
 
 /**
@@ -821,7 +821,7 @@ class Members extends \bbdkp\Admin
 				 * 'guild','stats','talents','items','reputation','titles','professions','appearance',
 				 * 'companions','mounts','pets','achievements','progression','pvp','quests'
 				 */
-				$api = new \bbdkp\WowAPI('character', $this->member_region);
+				$api = new \bbdkp\wowapi\BattleNet('character', $this->member_region);
 				$params = array('guild', 'titles', 'talents' );
 
 				$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);

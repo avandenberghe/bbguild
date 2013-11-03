@@ -21,7 +21,7 @@ if (! defined ( 'IN_PHPBB' ))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
-if (!class_exists('\bbdkp\GameInstall'))
+if (!class_exists('\bbdkp\controller\games\GameInstall'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/games/library/GameInstall.$phpEx");
 }

@@ -45,7 +45,7 @@ if (!class_exists('\bbdkp\Members'))
 	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
 }
 //include the guilds class
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
@@ -255,7 +255,7 @@ if (!class_exists('\bbdkp\Guilds'))
 		$this->RaidController->dkpid = $dkpsys_id;
 		
 		//guild dropdown
-		$Guild = new \bbdkp\Guilds();
+		$Guild = new \bbdkp\controller\guilds\Guilds();
 		$guildlist = $Guild->guildlist();
 		foreach ( (array) $guildlist as $g )
 		{
@@ -823,7 +823,7 @@ if (!class_exists('\bbdkp\Guilds'))
         }
         // guild dropdown
         $submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
-        $Guild = new \bbdkp\Guilds();
+        $Guild = new \bbdkp\controller\guilds\Guilds();
         $guildlist = $Guild->guildlist();
         
         if($submit)

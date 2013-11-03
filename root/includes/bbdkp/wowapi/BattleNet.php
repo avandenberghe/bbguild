@@ -18,7 +18,7 @@
  * @link	  https://github.com/bbDKP/WoWAPI
  * @version   1.0.4 
  */
-namespace bbdkp;
+namespace bbdkp\wowapi;
 
 /**
 * @ignore
@@ -31,10 +31,10 @@ if (!defined('IN_PHPBB'))
 /**
  * Battle.net WoW API PHP SDK
  * 
- *   @package bbdkp
+ * @package bbdkp
  * @throws Exception If requirements are not met.
  */
-class WowAPI
+class BattleNet
 {
 	/**
 	 * acceptable regions for WoW
@@ -98,25 +98,25 @@ class WowAPI
 		switch ($API)
 		{
 			case 'realm':
-				if (!class_exists('\bbdkp\Realm')) 
+				if (!class_exists('\bbdkp\wowapi\Realm')) 
 				{
 					require($phpbb_root_path . "includes/bbdkp/wowapi/API/Realm.$phpEx");
 				}
-				$this->Realm = new \bbdkp\Realm($region);
+				$this->Realm = new \bbdkp\wowapi\Realm($region);
 				break;
 			case 'guild':
-				if (!class_exists('\bbdkp\Guild')) 
+				if (!class_exists('\bbdkp\wowapi\Guild')) 
 				{
 					require($phpbb_root_path . "includes/bbdkp/wowapi/API/Guild.$phpEx");
 				}				
-				$this->Guild = new \bbdkp\Guild($region);
+				$this->Guild = new \bbdkp\wowapi\Guild($region);
 				break;
 			case 'character':
-				if (!class_exists('\bbdkp\Character')) 
+				if (!class_exists('\bbdkp\wowapi\Character')) 
 				{
 					require($phpbb_root_path . "includes/bbdkp/wowapi/API/Character.$phpEx");
 				}				
-				$this->Character = new \bbdkp\Character($region);
+				$this->Character = new \bbdkp\wowapi\Character($region);
 				break;
 				
 		}

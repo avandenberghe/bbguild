@@ -36,7 +36,7 @@ if (!class_exists('\bbdkp\RaidController'))
 	require("{$phpbb_root_path}includes/bbdkp/Raids/RaidController.$phpEx");
 }
 //include the guilds class
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
@@ -435,7 +435,7 @@ class acp_dkp_item extends \bbdkp\Admin
 		
 		// guild dropdown
 		$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
-		$Guild = new \bbdkp\Guilds();
+		$Guild = new \bbdkp\controller\guilds\Guilds();
 		$guildlist = $Guild->guildlist();
 		
 		if($submit)

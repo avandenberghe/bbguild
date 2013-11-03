@@ -45,7 +45,7 @@ if (!class_exists('\bbdkp\Validator'))
 	require("{$phpbb_root_path}includes/bbdkp/Validator.$phpEx");
 }
 //include the guilds class
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
@@ -101,7 +101,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				
 				// guild dropdown
 				$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
-				$Guild = new \bbdkp\Guilds();
+				$Guild = new \bbdkp\controller\guilds\Guilds();
 				$guildlist = $Guild->guildlist();
 				
 				if($submit)
@@ -518,7 +518,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 				
 				//guild dropdown
 				$guildid  = request_var('member_guild_id', 0); 
-				$Guild = new \bbdkp\Guilds();
+				$Guild = new \bbdkp\controller\guilds\Guilds();
 				$guildlist = $Guild->guildlist();
 				foreach ( (array) $guildlist as $g )
 				{

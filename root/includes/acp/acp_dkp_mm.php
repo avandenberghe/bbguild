@@ -31,7 +31,7 @@ if (!class_exists('\bbdkp\Admin'))
 }
 
 // include ranks class
-if (!class_exists('\bbdkp\Ranks'))
+if (!class_exists('\bbdkp\controller\guilds\Ranks'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Ranks.$phpEx");
 }
@@ -43,7 +43,7 @@ if (!class_exists('\bbdkp\Members'))
 }
 
 //include the guilds class
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
@@ -85,7 +85,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 			case 'mm_listmembers':
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx","i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
-				$Guild = new \bbdkp\Guilds();
+				$Guild = new \bbdkp\controller\guilds\Guilds();
 				
 				// add member button redirect
 				$showadd = (isset($_POST['memberadd'])) ? true : false;
@@ -172,7 +172,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					
 					if (confirm_box(true))
 					{
-						$Guild = new \bbdkp\Guilds();
+						$Guild = new \bbdkp\controller\guilds\Guilds();
 						$Guild->guildid = request_var('hidden_guildid', 0);
 						$Guild->Getguild();				
 						$members_result = $Guild->listmembers();
@@ -479,7 +479,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 				
 				//guild dropdown
-				$Guild = new \bbdkp\Guilds($editmember->member_guild_id);
+				$Guild = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
 				$guildlist = $Guild->guildlist(); 
 				foreach ($guildlist as $g)
 				{
@@ -495,7 +495,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				// this only shows the VISIBLE RANKS
 				// if you want to add someone to an unvisible rank make the rank visible first,
 				// add him and then make rank invisible again.
-				$Ranks = new \bbdkp\Ranks($Guild->guildid); 
+				$Ranks = new \bbdkp\controller\guilds\Ranks($Guild->guildid); 
 				$result = $Ranks->listranks(); 
 				while ($row = $db->sql_fetchrow($result))
 				{
@@ -586,7 +586,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$db->sql_freeresult($result);
 
 				//Role dropdown
-				$Roles = new \bbdkp\Roles($editmember->member_guild_id); 
+				$Roles = new \bbdkp\controller\guilds\Roles($editmember->member_guild_id); 
 				foreach($Roles->roles as $roleid => $Role )
 				{
 					$template->assign_block_vars('role_row', array(

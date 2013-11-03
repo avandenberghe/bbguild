@@ -10,7 +10,7 @@
  * @version 1.3.0
  *
  */
-namespace bbdkp;
+namespace bbdkp\controller\guilds;
 
 /**
  * @ignore
@@ -24,7 +24,7 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
 // Include the base class
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
@@ -37,7 +37,7 @@ if (!class_exists('\bbdkp\Guilds'))
  *   @package bbdkp
  * 
  */
-class Ranks extends \bbdkp\Guilds
+class Ranks extends \bbdkp\controller\guilds\Guilds
 {
 	/**
 	 * Name of rank
@@ -357,7 +357,7 @@ class Ranks extends \bbdkp\Guilds
 		
 		foreach($diff as $key => $count)
 		{
-			$newrank = new \bbdkp\Ranks($guild_id);
+			$newrank = new \bbdkp\controller\guilds\Ranks($guild_id);
 			$newrank->RankName = 'Rank'.$key;
 			$newrank->RankId = $key; 
 			$newrank->RankGuild = $guild_id;

@@ -26,7 +26,7 @@
 	can optionally be passed to indicate that one or more of the optional datasets is to be retrieved. Those additional 
 	fields are listed in the subsection titled "Optional Fields".
  */
-namespace bbdkp;
+namespace bbdkp\wowapi;
 /**
 * @ignore
 */
@@ -35,7 +35,7 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
-if (!class_exists('\bbdkp\Resource')) 
+if (!class_exists('\bbdkp\wowapi\Resource')) 
 {
 	require($phpbb_root_path . "includes/bbdkp/wowapi/API/Resource.$phpEx");
 }
@@ -45,7 +45,7 @@ if (!class_exists('\bbdkp\Resource'))
  *   @package bbdkp
  * 
  */
-class Guild extends \bbdkp\Resource 
+class Guild extends \bbdkp\wowapi\Resource 
 {
    
 	/**

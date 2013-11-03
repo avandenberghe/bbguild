@@ -22,7 +22,7 @@ if (! defined('IN_PHPBB'))
  * this abstract class is the framework for all game installers
  * 
  */
-abstract class Install
+abstract class GameInstall
 {
 	/**
 	 * Install a game

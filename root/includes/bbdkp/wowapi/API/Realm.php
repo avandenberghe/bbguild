@@ -18,7 +18,7 @@
  * @link 	  http://blizzard.github.com/api-wow-docs/#realm-status-api
  * @version   1.0.4 
  */
-namespace bbdkp;
+namespace bbdkp\wowapi;
 
 /**
 * @ignore
@@ -28,7 +28,7 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
-if (!class_exists('\bbdkp\Resource')) 
+if (!class_exists('\bbdkp\wowapi\Resource')) 
 {
 	require($phpbb_root_path . "includes/bbdkp/wowapi/API/Resource.$phpEx");
 }
@@ -39,7 +39,7 @@ if (!class_exists('\bbdkp\Resource'))
  *   @package bbdkp
  * @throws ResourceException If no methods are defined.
  */
-class Realm extends \bbdkp\Resource 
+class Realm extends \bbdkp\wowapi\Resource 
 {
 	/**
 	 * allowed realm api methods

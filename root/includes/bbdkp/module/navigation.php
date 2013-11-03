@@ -26,11 +26,11 @@ $this->filter = request_var('filter', '');
 $this->show_all = ( request_var ( 'show', request_var ( 'hidden_show', '' )) == $user->lang['ALL']) ? true : false;
 
 //include the guilds class
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
-$guilds = new \bbdkp\Guilds();
+$guilds = new \bbdkp\controller\guilds\Guilds();
 
 $guildlist = $guilds->guildlist();
 

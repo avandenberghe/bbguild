@@ -8,7 +8,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
-namespace bbdkp;
+namespace bbdkp\controller\guilds;
 /**
  * @ignore
  */
@@ -25,9 +25,9 @@ if (!class_exists('\bbdkp\Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
-if (!class_exists('\bbdkp\WowAPI'))
+if (!class_exists('\bbdkp\wowapi\BattleNet'))
 {
-	require($phpbb_root_path . 'includes/bbdkp/wowapi/WowAPI.' . $phpEx);
+	require($phpbb_root_path . 'includes/bbdkp/wowapi/BattleNet.' . $phpEx);
 }
 
 /**
@@ -342,7 +342,7 @@ class Guilds extends \bbdkp\Admin
 		$db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
 
 		//add a default rank
-		if (!class_exists('\bbdkp\Ranks'))
+		if (!class_exists('\bbdkp\controller\guilds\Ranks'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/guilds/Ranks.$phpEx");
 		}
@@ -435,12 +435,12 @@ class Guilds extends \bbdkp\Admin
 					if (in_array("members", $params))
 					{
 						// update ranks table
-						if (!class_exists('\bbdkp\Ranks'))
+						if (!class_exists('\bbdkp\controller\guilds\Ranks'))
 						{
 							require("{$phpbb_root_path}includes/bbdkp/guilds/Ranks.$phpEx");
 						}
 						
-						$rank = new \bbdkp\Ranks($this->guildid);
+						$rank = new \bbdkp\controller\guilds\Ranks($this->guildid);
 						$rank->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region); 
 						
 						//update member table
@@ -525,7 +525,7 @@ class Guilds extends \bbdkp\Admin
 				//Initialising the class
 
 				 //available extra fields : 'members', 'achievements','news'
-				$api = new WowAPI('guild', $this->region);
+				$api = new \bbdkp\wowapi\BattleNet('guild', $this->region);
 				
 				$data = $api->Guild->getGuild($this->name, $this->realm, $params);  
 				unset($api); 

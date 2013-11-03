@@ -33,7 +33,7 @@ if (!class_exists('\bbdkp\PointsController'))
 	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
 }
 //include the guilds class
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
@@ -494,7 +494,7 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 		
 		// guild dropdown
 		$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
-		$Guild = new \bbdkp\Guilds();
+		$Guild = new \bbdkp\controller\guilds\Guilds();
 		$guildlist = $Guild->guildlist();
 		
 		if($submit)

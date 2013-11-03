@@ -796,7 +796,7 @@ class acp_dkp_game extends \bbdkp\Admin
 		$current_order2 = $this->switch_order ( $sort_order2, "o1" );
 		$total_classes = 0;
 		
-		$listclasses = new \bbdkp\classes();
+		$listclasses = new  \bbdkp\controller\games\Classes();
 		$listclasses->game_id = $editgame->game_id; 
 		$cl = $listclasses->listclasses($current_order2['sql'], 1); 
 		foreach ( $cl as $c_index => $class )

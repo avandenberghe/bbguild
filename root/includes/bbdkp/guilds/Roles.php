@@ -9,7 +9,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
-namespace bbdkp;
+namespace bbdkp\controller\guilds;
 /**
  * @ignore
  */
@@ -28,11 +28,10 @@ if (!class_exists('\bbdkp\controller\games\Classes'))
 	require("{$phpbb_root_path}includes/bbdkp/games/classes/Classes.$phpEx");
 }
 
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
 }
-
 
 /**
  * holds vacancies per guild, game, role and class
@@ -158,7 +157,7 @@ class Roles
 			return 0;  			
 		} 
 		
-		$recruitingguild = new \bbdkp\Guilds($this->guild_id );
+		$recruitingguild = new \bbdkp\controller\guilds\Guilds($this->guild_id );
 		$this->game_id = $recruitingguild->game_id; 
 		$query = $db->sql_build_array('INSERT', array(
 				'game_id' => $this->game_id, 
