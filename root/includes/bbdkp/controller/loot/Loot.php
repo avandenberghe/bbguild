@@ -168,6 +168,21 @@ class Loot
 		
 	}
 	
+	
+	public function GetGroupLoot($item_id)
+	{
+		global $db;
+		$sql = 'SELECT i.item_id FROM ' . RAID_ITEMS_TABLE . ' i WHERE i.item_group_key = ( ';
+		$sql .= ' SELECT a.item_group_key FROM ' . RAID_ITEMS_TABLE . ' a WHERE a.item_id = ' . (int) $item_id . ') ';
+		$result = $db->sql_query ($sql);
+		$item_ids= array();
+		while ( $row = $db->sql_fetchrow ( $result ) )
+		{
+			$item_ids[]=$row['item_id']; 
+		}
+		return $item_ids; 
+	}
+	
 	/**
 	 * get one item from raid
 	 * @uses acp

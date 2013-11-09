@@ -254,9 +254,9 @@ if(@defined("EMED_BBDKP"))
 		}
 		if (!class_exists('\bbdkp\PointsController'))
 		{
-		require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
+		require("{$phpbb_root_path}includes/bbdkp/controller/points/PointsController.$phpEx");
 		}
-		$PointsController = new \bbdkp\PointsController; 
+		$PointsController = new \bbdkp\controller\points\PointsController; 
 		$PointsController->sync_decay($config['bbdkp_decay']  , 'cron' );
 		set_config('bbdkp_lastcron', time(), true);
 		break;

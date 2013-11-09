@@ -258,8 +258,11 @@ class LootController  extends \bbdkp\Admin
 		global $user, $db; 
 		
 		$oldloot = new \bbdkp\controller\loot\Loot($item_id);
-		$this->deleteloot($item_id);
-		
+		$item_ids = $oldloot->GetGroupLoot($item_id); 
+		foreach($item_ids as $i)
+		{
+			$this->deleteloot($i);
+		}
 		$group_key = $this->gen_group_key ( $item_name, $loot_time, $item_id + rand(10,100) );
 		$this->addloot($raid_id, $item_buyers, $item_value, $item_name, $loot_time);
 		
