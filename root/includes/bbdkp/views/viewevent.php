@@ -1,13 +1,13 @@
 <?php
 /**
  * Module Viewevent
- * 
+ *
 *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.2.8
  */
 
 /**
@@ -32,7 +32,7 @@ $event_id = request_var(URI_EVENT, 0);
 $url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewevent&amp;' . URI_EVENT . '='.  $event_id . '&amp;' . URI_DKPSYS . '='. $this->dkpsys_id ) ;
 
 $event  = new \bbdkp\controller\raids\Events();
-$event->get($event_id); 
+$event->get($event_id);
 if(strlen($event->event_imagename) > 0)
 {
 	$eventimg = $phpbb_root_path . "images/bbdkp/event_images/" . $event->event_imagename . ".png";
@@ -60,9 +60,9 @@ $sql_array = array (
 	'SELECT' => ' e.event_dkpid, e.event_name,
 					r.raid_id, r.raid_start, r.raid_note,
 					r.raid_added_by, r.raid_updated_by,
-					SUM(ra.raid_value) as raid_value, 
+					SUM(ra.raid_value) as raid_value,
 					SUM(ra.time_bonus) as time_value,
-					SUM(ra.zerosum_bonus) as zs_value, 
+					SUM(ra.zerosum_bonus) as zs_value,
 					SUM(ra.raid_decay) as raiddecay,
 					SUM(ra.raid_value + ra.time_bonus  + ra.zerosum_bonus - ra.raid_decay) as total',
 	'FROM' => array (
@@ -71,9 +71,9 @@ $sql_array = array (
 		RAID_DETAIL_TABLE	=> 'ra' ,
 		MEMBER_LIST_TABLE 	=> 'l',
 		),
-	'WHERE' => ' ra.raid_id = r.raid_id 
-				AND r.event_id = e.event_id 
-				AND e.event_id = ' . ( int ) $event_id .'   
+	'WHERE' => ' ra.raid_id = r.raid_id
+				AND r.event_id = e.event_id
+				AND e.event_id = ' . ( int ) $event_id .'
 				AND ra.member_id = l.member_id
 				AND l.member_guild_id = ' . $this->guild_id,
 	'GROUP_BY' =>  'e.event_dkpid, e.event_name,
@@ -92,7 +92,7 @@ while ($row = $db->sql_fetchrow($result))
 
 if($raid_count > 0)
 {
-	
+
 	$startr = request_var ( 'startr', 0 );
 	// get requested window
 	$raid_ids = array();
@@ -110,24 +110,24 @@ if($raid_count > 0)
 				'raiddecay' 	=> $row['raiddecay'],
 				'total' 		=> $row['total'],
 			);
-	
+
 			$raid_ids[] = $row['raid_id'];
 	}
 	$db->sql_freeresult($result);
-	
+
 	// Find the attendees at each raid
 	$sql = 'SELECT raid_id, count(member_id) AS countatt
 			FROM ' . RAID_DETAIL_TABLE . '
 			WHERE ' . $db->sql_in_set('raid_id', $raid_ids) . '
 			GROUP BY raid_id';
 	$result = $db->sql_query($sql);
-	
+
 	while ( $row = $db->sql_fetchrow($result) )
 	{
 			$raids[$row['raid_id']]['numattendees'] = $row['countatt'];
 	}
 	$db->sql_freeresult($result);
-	
+
 	//calculate the average event attendance and droprate
 	// Find the item drops for each raid
 	$sql = 'SELECT raid_id, count(item_id) AS countatt
@@ -139,18 +139,18 @@ if($raid_count > 0)
 		$raids[$row['raid_id']]['numitems'] = $row['countatt'];
 	}
 	$db->sql_freeresult($result);
-	
+
 	$total_drop_count = 0;
 	$total_attendees_count = 0;
 	$total_earned = 0;
-	
+
 	// Loop through the raids for this event
 	$total_raid_count = sizeof($raids);
 	foreach ( $raids as $raid_id => $raid )
 	{
 		$drop_count = ( isset($raid['numitems']) ) ? $raid['numitems'] : 0;
 		$attendees_count = ( isset($raid['numattendees']) ) ? $raid['numattendees'] : 0;
-	
+
 		$template->assign_block_vars('raids_row', array(
 			'U_VIEW_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewraid&amp;'. URI_RAID . '='.$raid['raid_id']),
 			'DATE'        => date($config['bbdkp_date_format'], $raid['raid_start']),
@@ -164,20 +164,20 @@ if($raid_count > 0)
 			'TOTAL'       => $raid['total'],
 			)
 		);
-	
+
 		$total_drop_count += $drop_count;
 		$total_attendees_count += $attendees_count;
 		$total_earned += $raid['raid_value'];
 	}
-	
+
 	// Prevent div by 0
 	$average_attendees = ( $total_raid_count > 0 ) ? round($total_attendees_count / $total_raid_count, 2) : 0;
 	$average_drops     = ( $total_drop_count > 0 ) ? round($total_drop_count / $total_raid_count,2 )      : 0;
-	
+
 	$raidpagination = $this->generate_pagination2($url . '&amp;o1=' . $current_order ['uri'] ['current'] , $raid_count, $config ['bbdkp_user_rlimit'], $startr, true, 'startr'  );
-	
+
 	$start = request_var('start' ,0);
-	
+
 	// item selection
 	$sql_array = array(
 		'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.item_zs,
@@ -197,14 +197,14 @@ if($raid_count > 0)
 			and l.member_id = i.member_id AND ' . $db->sql_in_set('raid_id', $raid_ids),
 	);
 	$sql = $db->sql_build_query('SELECT', $sql_array);
-	
+
 	$result = $db->sql_query_limit($sql, $config['bbdkp_user_ilimit'], $start);
-	
+
 	$number_items = 0;
 	$item_value = 0.00;
 	$item_decay = 0.00;
 	$item_total = 0.00;
-	
+
 	while ( $row = $db->sql_fetchrow($result) )
 	{
 		if ($this->bbtips == true)
@@ -233,37 +233,37 @@ if($raid_count > 0)
 			'DECAYVALUE' 	=> $row['item_decay'],
 			'TOTAL' 		=> $row['item_total'],
 		));
-	
+
 		$number_items++;
 		$item_value += $row['item_value'];
 		$item_decay += $row['item_decay'];
 		$item_total += $row['item_total'];
 	}
-	
+
 	$itempagination = generate_pagination($url, $total_drop_count, $config['bbdkp_user_ilimit'], $start, true);
-	
+
 	$template->assign_vars(array(
 		'RAIDPAGINATION' 	  => $raidpagination ,
 		'O_DATE'  			  => $current_order['uri'][0],
 		'O_NOTE'  			  => $current_order['uri'][1],
 		'O_VALUE' 			  => $current_order['uri'][2],
-	
-		'DKPPOOL'			  => $event->dkpsys_name, 
+
+		'DKPPOOL'			  => $event->dkpsys_name,
 		'AVERAGE_ATTENDEES'   => $average_attendees,
 		'AVERAGE_DROPS'       => $average_drops,
 		'TOTAL_EARNED'        => sprintf("%.2f", $total_earned),
 		'VIEWEVENT_FOOTCOUNT' => sprintf($user->lang['VIEWEVENT_FOOTCOUNT'], $total_raid_count),
-	
+
 		'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false,
 		'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
 		'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
-	
+
 		'L_RECORDED_DROP_HISTORY' => sprintf($user->lang['RECORDED_DROP_HISTORY'], $event->event_name),
 		'ITEM_FOOTCOUNT'      => sprintf($user->lang['VIEWITEM_FOOTCOUNT'], $total_drop_count, $total_drop_count),
 		'START' 			=> $start,
 		'ITEM_PAGINATION' 	=> $itempagination,
 		'S_DISPLAY_VIEWEVENT' => true,
-		'S_EPGP' => $config['bbdkp_epgp'] == '1' ? true: false, 
+		'S_EPGP' => $config['bbdkp_epgp'] == '1' ? true: false,
 		));
 }
 else

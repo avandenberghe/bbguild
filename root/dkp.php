@@ -45,7 +45,7 @@ $template->set_filenames(array(
 // load view class
 if (!class_exists('\bbdkp\views'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/module/views.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/views/views.$phpEx");
 }
 
 $views = new \bbdkp\views();

@@ -58,9 +58,9 @@
 	<tbody>
 	<!-- BEGIN raids_row -->
 		<!-- IF raids_row.S_ROW_COUNT is even -->
-		<tr class="row1" onclick="DoNav('{raids_row.ONCLICK}');">
+		<tr class="row1" onmouseover="DoNav('{raids_row.ONCLICK}');" onclick="DoNav('{raids_row.ONCLICK}');">
 			<!-- ELSE -->
-		<tr class="row2" onclick="DoNav('{raids_row.ONCLICK}');">
+		<tr class="row2" onmouseover="DoNav('{raids_row.ONCLICK}');" onclick="DoNav('{raids_row.ONCLICK}');">
 		<!-- ENDIF -->
 			<td style="white-space:nowrap;">{raids_row.DATE}</td>
 			<td style="white-space:nowrap;">{raids_row.ID}</td>

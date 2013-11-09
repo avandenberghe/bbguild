@@ -1,7 +1,7 @@
 <?php
 /**
  * bbDKP Admin class file
- * 
+ *
  *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -28,14 +28,14 @@ if (!class_exists('\bbdkp\log'))
 }
 
 /**
- * 
+ *
  * bbDKP Admin foundation
  *   @package bbdkp
  */
-abstract class Admin 
+abstract class Admin
 {
 	/**
-	 * bbdkp timestamp 
+	 * bbdkp timestamp
 	 * @var integer
 	 */
     public $time = 0;
@@ -44,15 +44,15 @@ abstract class Admin
      * @var array
      */
     public $regions;
-    
+
     /**
      * supported languages. The game related texts (class names etc) are not stored in language files but in the database.
      * supported languages are en, fr, de : to add a new language you need to a) make language files b) make db installers in new language c) adapt this array
-     *   
+     *
      * @var array
      */
     public $languagecodes;
-    
+
     /**
      * games that come pre-installed with bbDKP
      * @var array
@@ -64,13 +64,13 @@ abstract class Admin
      * @var boolean
      */
     public $bbtips = false;
-    
+
     /**
      * installed games
      * @var array
      */
-    public $games; 
-    
+    public $games;
+
     /**
      * Admin class constructor
      */
@@ -80,24 +80,24 @@ abstract class Admin
 
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
-		
+
 		if(!defined("EMED_BBDKP"))
 		{
 			trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 		}
-				
+
 		// Check for required extensions
 		if (!function_exists('curl_init'))
 		{
 			trigger_error($user->lang['CURL_REQUIRED'], E_USER_WARNING);
-		
+
 		}
-		
+
 		if (!function_exists('json_decode'))
 		{
 			trigger_error($user->lang['JSON_REQUIRED'], E_USER_WARNING);
 		}
-		
+
 		$this->regions = array(
 				'eu' => $user->lang['REGIONEU'],
 				'us' => $user->lang['REGIONUS'],
@@ -106,12 +106,12 @@ abstract class Admin
 				'cn' => $user->lang['REGIONCN'],
 				'sea' => $user->lang['REGIONSEA'],
 				);
-		
+
 		$this->languagecodes = array(
 				'de' => $user->lang['LANG_DE'] ,
 				'en' => $user->lang['LANG_EN'] ,
 				'fr' => $user->lang['LANG_FR']);
-	
+
 		$this->preinstalled_games = array (
 				'aion' 	=> $user->lang ['AION'],
 				'daoc' 	=> $user->lang ['DAOC'],
@@ -128,7 +128,7 @@ abstract class Admin
 				'warhammer' => $user->lang ['WARHAMMER'],
 				'wow' 	=> $user->lang ['WOW'],
 		);
-		
+
 	    $boardtime = array();
 	    $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
 	    $this->time = $boardtime[0];
@@ -141,23 +141,23 @@ abstract class Admin
 	    		$this->bbtips = true;
 	    	}
 	    }
-	    
-	    $this->gamesarray(); 
+
+	    $this->gamesarray();
 	    $debug=1;
 	}
-	
+
 	/**
 	 * constructs the games array
 	 */
 	private function gamesarray()
 	{
 		global $db;
-		$this->games= array(); 
+		$this->games= array();
 		$sql = 'SELECT id, game_id, game_name, status FROM ' . GAMES_TABLE . ' ORDER BY game_id ';
 		$result = $db->sql_query ( $sql );
 		while($row = $db->sql_fetchrow($result))
 		{
-			$this->games[$row['game_id']] = $row['game_name'];  
+			$this->games[$row['game_id']] = $row['game_name'];
 		}
 		$db->sql_freeresult($result);
 	}
@@ -194,9 +194,9 @@ abstract class Admin
      */
   	public final function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
 	{
-		
-		global $user; 
-		
+
+		global $user;
+
 		if ( function_exists ( 'curl_init' ))
 		{
 			 /* Create a CURL handle. */
@@ -204,32 +204,32 @@ abstract class Admin
 			{
 				trigger_error('curl_init Failed' , E_USER_WARNING);
 			}
-			
+
 			// set options
 			curl_setopt_array($curl, array(
 				CURLOPT_RETURNTRANSFER => 1,
-				CURLOPT_URL => $url, 
-				CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0', 
+				CURLOPT_URL => $url,
+				CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
 				CURLOPT_SSL_VERIFYHOST => false,
-				CURLOPT_SSL_VERIFYPEER => false, 
-				CURLOPT_TIMEOUT => 60, 
-				CURLOPT_VERBOSE => false, 
-				CURLOPT_HEADER => false, 
+				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_TIMEOUT => 60,
+				CURLOPT_VERBOSE => false,
+				CURLOPT_HEADER => false,
 			));
-			
+
 			//@todo : setup authentication keys
-			
+
 			// Execute
 			$response = curl_exec($curl);
-			$headers = curl_getinfo($curl); 
+			$headers = curl_getinfo($curl);
 			$error = 0;
-			
+
 			$data = array(
 					'response'		    => $json ? json_decode($response, true) : $response,
 					'response_headers'  => (array) $headers,
 					'error'				=> '',
 			);
-			
+
 			//errorhandler
 			if (!$response)
 			{
@@ -270,8 +270,8 @@ abstract class Admin
 				}
 			}
 
-			
-			
+
+
 			if (isset($data['response_headers']['http_code']))
 			{
 				switch ($data['response_headers']['http_code'] )
@@ -305,11 +305,11 @@ abstract class Admin
 						break;
 				}
 			}
-				
+
 			//close conection
 			curl_close ($curl);
 		}
-		
+
 		//report errors?
 		if ($data['error'] != 0)
 		{
@@ -325,7 +325,7 @@ abstract class Admin
 		}
 
 	}
-	
+
 	/**
 	 * sends POST request to bbdkp.com for registration
 	 * @param array $regdata
@@ -333,19 +333,19 @@ abstract class Admin
 	public final function post_register_request($regdata)
 	{
 		global $cache, $config;
-	
+
 		$regcode = hash("sha256", serialize(array($regdata['domainname'],$regdata['phpbbversion'], $regdata['bbdkpversion'])));
-		
+
 		// bbdkp registration url
 		$url = "http://www.bbdkp.com/services/registerbbdkp.php";
 		// Create URL parameter string
-		$fields_string = ''; 
+		$fields_string = '';
 		foreach( $regdata as $key => $value )
 		{
 			$fields_string .= $key.'='.$value.'&';
 		}
 		$fields_string .= 'regcode='.$regcode;
-	
+
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, $url);
 		curl_setopt( $ch, CURLOPT_POST, 4 );
@@ -354,10 +354,10 @@ abstract class Admin
 		$result = curl_exec($ch);
 		curl_close( $ch );
 
-		$this->get_register_request($regdata, $url, $regcode); 
+		$this->get_register_request($regdata, $url, $regcode);
 	}
-	
-	
+
+
 	/**
 	 * GET reauests for registration ID
 	 * @param array $regdata
@@ -367,24 +367,24 @@ abstract class Admin
 	private final function get_register_request($regdata, $url, $regcode)
 	{
 		global $cache, $config;
-		
+
 		$fields_string = '';
 		foreach( $regdata as $key => $value )
 		{
 			$fields_string .= $key.'='.$value.'&';
 		}
 		$fields_string .= 'regcode='.$regcode;
-		
-		$url .= '?' . $fields_string; 
-		
+
+		$url .= '?' . $fields_string;
+
 		$data = $this->Curl($url, 'GET');
 		$regID = isset($data['registration']) ? $data['registration'] : '';
 		set_config('bbdkp_regid', $regID, true);
 		$cache->destroy('config');
 		trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
 	}
-	
-	
+
+
 	/**
 	 * retrieve latest bbdkp productversion
 	 * @param string $product productname
@@ -398,14 +398,14 @@ abstract class Admin
 		global $config, $cache;
 		//get latest productversion from cache
 		$info = $cache->get('version_' . $product);
-		
+
 		//if update is forced or cache expired then make the call to refresh latest productversion
 		if ($info === false || $force_update)
 		{
 			$errstr = '';
 			$errno = 0;
 			$info = $this->curl(BBDKP_VERSIONURL . 'version_' . $product .'.txt' , false, false, false);
-			
+
 			if (empty($info))
 			{
 				$cache->destroy($product. '_version');
@@ -419,8 +419,8 @@ abstract class Admin
 			$cache->put('version_' . $product , $info, $ttl);
 		}
 		return $info;
-	} 
-	
+	}
+
 	/**
 	 * get plugin info
 	 * @param string $force_update
@@ -432,7 +432,7 @@ abstract class Admin
 		global $cache, $db;
 		//get latest productversion from cache
 		$this->plugins = $cache->get('bbdkpplugins');
-		
+
 		//if update is forced or cache expired then make the query to refresh latest productversion
 		if ($this->plugins === false || $force_update)
 		{
@@ -442,10 +442,10 @@ abstract class Admin
 			while($row = $db->sql_fetchrow($result))
 			{
 				$info = $this->curl(BBDKP_VERSIONURL . 'version_' . $row['name'] .'.txt' , false, false, false);
-				
+
 				//get latest
 				$this->plugins[$row['name']] = array(
-					'name' => $row['name'], 
+					'name' => $row['name'],
 					'value' => $row['value'],
 					'version' => $row['version'],
 					'latest' =>  empty($info) ? '?' : $info,
@@ -453,17 +453,17 @@ abstract class Admin
 				);
 			}
 			$db->sql_freeresult($result);
-			
+
 			$cache->destroy('bbdkpplugins');
-			$cache->put( 'bbdkpplugins', $this->plugins, $ttl);	
+			$cache->put( 'bbdkpplugins', $this->plugins, $ttl);
 		}
-		return $this->plugins; 
-		
+		return $this->plugins;
+
 	}
-	
+
 	/**
 	 * Pagination function altered from functions.php used in viewmember.php because we need two linked paginations
-	 * 
+	 *
 	 * @param string $base_url
 	 * @param integer $num_items
 	 * @param integer $per_page
@@ -552,13 +552,13 @@ abstract class Admin
 	}
 
 	/**
-	 * Switch array order 
+	 * Switch array order
 	 * Switches the sorting order of a supplied array, prerserving key values
 	 * The array is in the format [number][0/1] (0 = the default, 1 = the opposite)
 	 * Returns an array containing the code to use in an SQL query and the code to
 	 * use to pass the sort value through the URI.  URI is in the format
 	 * checks that the 2nd element is either 0 or 1
-	 * 
+	 *
 	 * @param array $sort_order Sorting order array
 	 * @param string $arg
 	 * @param number $forcedorder
@@ -612,7 +612,7 @@ abstract class Admin
 		$out = substr($string, 0, $pos);
 		return $out;
 	}
-	
+
 	/**
 	 * makes an entry in the bbdkp log table
 	 * log_action is an xml containing the log
@@ -625,15 +625,15 @@ abstract class Admin
 	 * log_sid	varchar(32)	utf8_bin		No
 	 * log_result	varchar(255)	utf8_bin		No
 	 * log_userid	mediumint(8)	UNSIGNED	No	0
-	 * 
+	 *
 	 * @param array $values
 	 */
 	public final function log_insert($values = array())
 	{
 		// log
-		$logs = \bbdkp\log::Instance();	
-		return $logs->log_insert($values); 
-		
+		$logs = \bbdkp\log::Instance();
+		return $logs->log_insert($values);
+
 	}
 
 }

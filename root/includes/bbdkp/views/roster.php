@@ -1,8 +1,8 @@
 <?php
 /**
  * roster module
- * 
-*   @package bbdkp
+ *
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -28,7 +28,7 @@ foreach ($this->games as $id => $gamename)
 			'SELECTED' => ($id == $game_id) ? ' selected="selected"' : '',
 			'OPTION' => $gamename));
 }
-$game_id = ($game_id == '') ? $id : $game_id;  
+$game_id = ($game_id == '') ? $id : $game_id;
 
 // Include the member class
 if (!class_exists('\bbdkp\controller\members\Members'))
@@ -36,57 +36,53 @@ if (!class_exists('\bbdkp\controller\members\Members'))
 	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
 $members = new \bbdkp\controller\members\Members;
-$members->game_id = $game_id; 
+$members->game_id = $game_id;
 
 $start = request_var('start' ,0);
- 
 $url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;mode=' . $mode .'&amp;guild_id=' . $this->guild_id );
 $race_id =  request_var('race_id',0);
 $class_id =  request_var('class_id',0);
 $level1 =  request_var('$level1',0);
 $level2 =  request_var('classid', 200);
-$data = $members->get_listingresult($start, $mode, $this->query_by_armor, $this->query_by_class, $this->filter, $this->game_id, 
-		$this->guild_id, $class_id, $race_id, $level1, $level2); 
+$characters = $members->getmemberlist($start, $mode, $this->query_by_armor, $this->query_by_class, $this->filter, $this->game_id, $this->guild_id, $class_id, $race_id, $level1, $level2, false);
 
-if ($mode =='listing') 
+if ($mode =='listing')
 {
 	/*
 	 * Displays the listing
 	*/
 	// use pagination
-	foreach ($data[1] as $row)
+	foreach ($characters[0] as $char)
 	{
-		$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
 		$template->assign_block_vars('members_row', array(
-				'GAME'			=>  $this->games[$row['game_id']],
-				'COLORCODE'		=> $row['colorcode'],
-				'CLASS'			=> $row['class_name'],
-				'NAME'			=> $row['member_name'],
-				'RACE'			=> $row['race_name'],
-				'RANK'			=>  $row['rank_prefix'] . ' ' . $row['rank_name'] . ' ' . $row['rank_suffix'] ,
-				'LVL'			=> $row['member_level'],
-				'ARMORY'		=> $row['member_armory_url'],
-				'PHPBBUID'		=> get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),
-				'PORTRAIT'		=> $row['member_portrait_url'],
-				'ACHIEVPTS'		=> $row['member_achiev'],
-				'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
-				'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-				'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '',
-				'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
+				'GAME'			=> $char['game_id'],
+				'COLORCODE'		=> $char['colorcode'],
+				'CLASS'			=> $char['class_name'],
+				'NAME'			=> $char['member_name'],
+				'RACE'			=> $char['race_name'],
+				'RANK'			=> $char['member_rank'],
+				'LVL'			=> $char['member_level'],
+				'ARMORY'		=> $char['member_armory_url'],
+				'PHPBBUID'		=> $char['username'],
+				'PORTRAIT'		=> $char['member_portrait_url'],
+				'ACHIEVPTS'		=> $char['member_achiev'],
+				'CLASS_IMAGE' 	=> $char['class_image'],
+				'RACE_IMAGE' 	=> $char['race_image'],
 		));
 	}
-	
-	$rosterpagination = $this->generate_pagination2($url . '&amp;o=' . $data[2] ['uri'] ['current'] , $data[0],
+
+	$rosterpagination = $this->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] ,
+			count($characters[0]),
 			$config ['bbdkp_user_llimit'],
-			$start, true, 'start'  );
-	
+			$start, true, 'start' );
+
 	// add navigationlinks
 	$navlinks_array = array(
 			array(
 					'DKPPAGE' => $user->lang['MENU_ROSTER'],
 					'U_DKPPAGE' => $url,
 	));
-	
+
 	foreach($navlinks_array as $name )
 	{
 		$template->assign_block_vars('dkpnavlinks', array(
@@ -94,33 +90,33 @@ if ($mode =='listing')
 				'U_DKPPAGE' => $name['U_DKPPAGE'],
 		));
 	}
-	
+
 	$template->assign_vars(array(
 			'ROSTERPAGINATION' 		=> $rosterpagination ,
-			'O_NAME'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][0],
-			'O_CLASS'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][2],
-			'O_RANK'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][3],
-			'O_LEVEL'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][4],
-			'O_PHPBB'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][5],
-			'O_ACHI'	=> $url .'&amp;'. URI_ORDER. '='. $data[2]['uri'][6]
+			'O_NAME'	=> $url .'&amp;'. URI_ORDER. '='. $characters[1]['uri'][0],
+			'O_CLASS'	=> $url .'&amp;'. URI_ORDER. '='. $characters[1]['uri'][2],
+			'O_RANK'	=> $url .'&amp;'. URI_ORDER. '='. $characters[1]['uri'][3],
+			'O_LEVEL'	=> $url .'&amp;'. URI_ORDER. '='. $characters[1]['uri'][4],
+			'O_PHPBB'	=> $url .'&amp;'. URI_ORDER. '='. $characters[1]['uri'][5],
+			'O_ACHI'	=> $url .'&amp;'. URI_ORDER. '='. $characters[1]['uri'][6]
 	));
-	
-	
+
+
 	// add template constants
 	$template->assign_vars(array(
 			'S_RSTYLE'		    => '0',
 			'S_SHOWACH'			=> $config['bbdkp_show_achiev'],
-			'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . $data[0],
+			'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . count($characters[0]),
 			'S_DISPLAY_ROSTERLISTING' => true
 	));
-	
+
 
 }
 elseif($mode == 'class')
 {
-	//display grid 
-	$classgroup = $members->get_classes($this->guild_id, $class_id, $race_id, $level1, $level2); 
-	
+	//display grid
+	$classgroup = $members->get_classes($this->guild_id, $class_id, $race_id, $level1, $level2);
+
 	if(count($classgroup) > 0)
 	{
 		foreach($classgroup as $row1 )
@@ -130,7 +126,7 @@ elseif($mode == 'class')
 			$classes[$row1['class_id']]['colorcode'] = $row1['colorcode'];
 		}
 
-		foreach ($classes as  $classid => $class )
+		foreach ($classes as  $classid => $class)
 		{
 			$classimgurl =  $phpbb_root_path . "images/bbdkp/roster_classes/" . $class['imagename'] .'.png';
 			$classcolor = $class['colorcode'];
@@ -140,46 +136,44 @@ elseif($mode == 'class')
 					'CLASSIMG'		=> $classimgurl,
 					'COLORCODE'		=> $classcolor,
 			));
-			
+
 			$classmembers=1;
-			foreach ($data[1] as $row2)
+			foreach ($characters[0] as $row2)
 			{
 				if($row2['member_class_id'] == $classid)
 				{
-					$race_image = (string) (($row2['member_gender_id']==0) ? $row2['image_male'] : $row2['image_female']);
 					$template->assign_block_vars('class.members_row', array(
+							'GAME'			=> $row2['game_id'],
 							'COLORCODE'		=> $row2['colorcode'],
 							'CLASS'			=> $row2['class_name'],
 							'NAME'			=> $row2['member_name'],
 							'RACE'			=> $row2['race_name'],
-							'RANK'			=> $row2['rank_prefix'] . ' ' . $row2['rank_name'] . ' ' . $row2['rank_suffix'] ,
+							'RANK'			=> $row2['member_rank'],
 							'LVL'			=> $row2['member_level'],
 							'ARMORY'		=> $row2['member_armory_url'],
+							'PHPBBUID'		=> $row2['username'],
 							'PORTRAIT'		=> $row2['member_portrait_url'],
-							'PHPBBUID'		=> get_username_string('full', $row2['phpbb_user_id'], $row2['username'], $row2['user_colour']),
 							'ACHIEVPTS'		=> $row2['member_achiev'],
-							'CLASS_IMAGE' 	=> (strlen($row2['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row2['imagename'] . ".png" : '',
-							'S_CLASS_IMAGE_EXISTS' => (strlen($row2['imagename']) > 1) ? true : false,
-							'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '',
-							'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false,
+							'CLASS_IMAGE' 	=> $row2['class_image'],
+							'RACE_IMAGE' 	=> $row2['race_image'],
 					));
 					$classmembers++;
 				}
 			}
 		}
 
-		$rosterpagination = $this->generate_pagination2($url . '&amp;o=' . $data[2] ['uri'] ['current'] ,
-			$data[0], $config ['bbdkp_user_llimit'], $start, true, 'start'  );
+		$rosterpagination = $this->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] ,
+				count($characters[0]), $config ['bbdkp_user_llimit'], $start, true, 'start' );
 
-		if (isset($data[2]) && sizeof ($data[2]) > 0)
+		if (isset($characters[1]) && sizeof ($characters[1]) > 0)
 		{
 			$template->assign_vars(array(
 					'ROSTERPAGINATION' 		=> $rosterpagination ,
-					'U_LIST_MEMBERS0'	=> $url . '&amp;'. URI_ORDER. '='. $data[2]['uri'][0],
-					'U_LIST_MEMBERS1'	=> $url . '&amp;'. URI_ORDER. '='. $data[2]['uri'][1],
-					'U_LIST_MEMBERS2'	=> $url . '&amp;'. URI_ORDER. '='. $data[2]['uri'][2],
-					'U_LIST_MEMBERS3'	=> $url . '&amp;'. URI_ORDER. '='. $data[2]['uri'][3],
-					'U_LIST_MEMBERS4'	=> $url . '&amp;'. URI_ORDER. '='. $data[2]['uri'][4],
+					'U_LIST_MEMBERS0'	=> $url . '&amp;'. URI_ORDER. '='. $characters[1]['uri'][0],
+					'U_LIST_MEMBERS1'	=> $url . '&amp;'. URI_ORDER. '='. $characters[1]['uri'][1],
+					'U_LIST_MEMBERS2'	=> $url . '&amp;'. URI_ORDER. '='. $characters[1]['uri'][2],
+					'U_LIST_MEMBERS3'	=> $url . '&amp;'. URI_ORDER. '='. $characters[1]['uri'][3],
+					'U_LIST_MEMBERS4'	=> $url . '&amp;'. URI_ORDER. '='. $characters[1]['uri'][4],
 			));
 
 		}
@@ -187,7 +181,7 @@ elseif($mode == 'class')
 		// add template constants
 		$template->assign_vars(array(
 				'S_SHOWACH'			=> $config['bbdkp_show_achiev'],
-				'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . $data[0],
+				'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . count($characters[0]),
 				'S_DISPLAY_ROSTERGRID' => true
 		));
 	}
@@ -206,7 +200,7 @@ elseif($mode == 'class')
 				'U_DKPPAGE' => $name['U_DKPPAGE'],
 		));
 	}
-	
+
 	$template->assign_vars(array(
 			'S_RSTYLE'		    => '1',
 	));

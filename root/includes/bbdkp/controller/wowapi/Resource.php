@@ -11,11 +11,11 @@
  *   @package bbdkp
  * @author	  Chris Saylor
  * @author	  Daniel Cannon <daniel@danielcannon.co.uk>
- * @author	  Andreas Vandenberghe <sajaki9@gmail.com> 
+ * @author	  Andreas Vandenberghe <sajaki9@gmail.com>
  * @copyright Copyright (c) 2011, Chris Saylor, Daniel Cannon,  Andreas Vandenberghe
  * @license   http://opensource.org/licenses/gpl-license.php GNU Public License
  * @link	  https://github.com/bbDKP/WoWAPI
- * @link 	  http://blizzard.github.com/api-wow-docs 
+ * @link 	  http://blizzard.github.com/api-wow-docs
  * @version   1.0.4
  */
 namespace bbdkp\controller\wowapi;
@@ -37,13 +37,13 @@ if (! defined('EMED_BBDKP'))
 
 /**
  * Resource skeleton
- * 
+ *
  *   @package bbdkp
  * @throws ResourceException If no methods are defined.
  */
 abstract class Resource extends \bbdkp\Admin
 {
-	
+
 	/**
 	 * List of region urls
 	 * @var string
@@ -56,14 +56,14 @@ abstract class Resource extends \bbdkp\Admin
 		'cn' => 'http://www.battlenet.com.cn/api/wow/',
 		'sea' => 'http://sea.battle.net/api/wow/'
 	);
-	
+
 	/**
 	 * Battlenet region
-	 * 
+	 *
 	 * @var string
 	 */
-	public $region; 
-	
+	public $region;
+
 	/**
 	 * Methods allowed by this resource (or available).
 	 *
@@ -75,17 +75,17 @@ abstract class Resource extends \bbdkp\Admin
 	 * realm api constructor
 	 * @param string $region Server region
 	 */
-	public function __construct($region='us') 
+	public function __construct($region='us')
 	{
 		global $user;
 
-		if (empty($this->methods_allowed)) 
+		if (empty($this->methods_allowed))
 		{
 			trigger_error($user->lang['NO_METHODS']);
 		}
 		$this->region = $region;
 	}
-	
+
 	/**
 	 * get the uri property
 	 * @param char $region
@@ -95,7 +95,7 @@ abstract class Resource extends \bbdkp\Admin
 	{
 		return $this->api_url[$this->region];
 	}
-	
+
 	/**
 	 * Returns the URI for use with the request object
 	 *
@@ -103,10 +103,10 @@ abstract class Resource extends \bbdkp\Admin
 	 * @return string API URI
 	 */
 	private function getResourceUri($method)
-	{	
+	{
 		$uri = $this->GetURI($this->region);
 		$classname = get_class($this);
-		if (preg_match('@\\\\([\w]+)$@', $classname, $matches)) 
+		if (preg_match('@\\\\([\w]+)$@', $classname, $matches))
 		{
 			$classname = strtolower($matches[1]);
 		}
@@ -123,42 +123,42 @@ abstract class Resource extends \bbdkp\Admin
 	 * @throws ResourceException If request method is not allowed
 	 * @return array Request data
 	 */
-	public function consume($method, $params=array()) 
+	public function consume($method, $params=array())
 	{
 		global $user;
-		
-		// either a valid method is required or an asterisk 
-		if (!in_array($method, $this->methods_allowed)  && !in_array('*', $this->methods_allowed) ) 
+
+		// either a valid method is required or an asterisk
+		if (!in_array($method, $this->methods_allowed)  && !in_array('*', $this->methods_allowed) )
 		{
 			trigger_error($user->lang['WOWAPI_METH_NOTALLOWED']);
 		}
 		$url = $this->getResourceUri($method);
-		
+
 		//process parameters
-		if (isset($params['data']) && !empty($params['data'])) 
+		if (isset($params['data']) && !empty($params['data']))
 		{
-			if (is_array($params['data'])) 
+			if (is_array($params['data']))
 			{
 				$optfields = '';
-				foreach($params['data'] as $key => $value) 
+				foreach($params['data'] as $key => $value)
 				{
 					$optfields .= $key.'='.$value.'&';
 				}
 				$optfields = rtrim($data, '&');
 				//@debug tis
-			} 
-			else 
+			}
+			else
 			{
 				$optfields = $params['data'];
 			}
-			
-			$url .= '?' . $optfields; 
+
+			$url .= '?' . $optfields;
 		}
-		
-		
-		$data = $this->Curl($url, false, true, true);
+
+
+		$data = $this->Curl($url, false, false, true);
 		return $data;
 	}
 
-	
+
 }

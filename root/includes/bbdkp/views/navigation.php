@@ -1,7 +1,7 @@
 <?php
 /**
  * left front navigation block
- * 
+ *
 *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -18,7 +18,7 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 	exit;
 }
 
-$this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', '') ); 
+$this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
 $this->query_by_pool = true;
 $this->query_by_armor = false;
 $this->query_by_class = false;
@@ -36,20 +36,30 @@ $guildlist = $guilds->guildlist();
 
 foreach ($guildlist as $g)
 {
-	if($this->guild_id == '')
+	//assign guild_id property
+	if($this->guild_id == 0)
 	{
-		if($g['guilddefault'] == '1') 
+		//if there is a default guild
+		if($g['guilddefault'] == 1)
 		{
-			$this->guild_id = $g['id']; 
+			$this->guild_id = $g['id'];
 		}
-		
+
+		//if member count > 0
 		if($this->guild_id == 0 && $g['membercount'] > 1)
 		{
 			$this->guild_id = $g['id'];
 		}
+
+		//if guild id field > 0
+		if($this->guild_id == 0 && $g['id'] > 0)
+		{
+			$this->guild_id = $g['id'];
+		}
+
 	}
-	
-	//populate guild popup 
+
+	//populate guild popup
 	if($g['id'] > 0) // exclude guildless
 	{
 		$template->assign_block_vars('guild_row', array(
@@ -62,8 +72,8 @@ foreach ($guildlist as $g)
 $this->dkppulldown();
 
 $guilds->guildid = $this->guild_id;
-$guilds->Getguild(); 
-$this->game_id = $guilds->game_id; 
+$guilds->Getguild();
+$this->game_id = $guilds->game_id;
 
 $classarray = $this->armor($page);
 
@@ -95,7 +105,7 @@ $template->assign_vars(array(
 		'EMBLEMFILE' 		=> basename($guilds->emblempath),
 		'ARMORY'			=> $guilds->guildarmoryurl,
 		'ACHIEV'			=> $guilds->achievementpoints,
-		'SHOWALL'			=> ($this->show_all) ? $user->lang['ALL']: '', 
+		'SHOWALL'			=> ($this->show_all) ? $user->lang['ALL']: '',
 		'F_NAVURL' 			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id),
 ));
 
