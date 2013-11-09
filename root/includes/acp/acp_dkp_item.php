@@ -176,8 +176,14 @@ class acp_dkp_item extends \bbdkp\Admin
 						confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $lootinfo[2] , $lootinfo[0] ), $s_hidden_fields );
 					}
 				}
+
+				$raid_id = request_var(URI_RAID, 0);
+				$item_id = request_var(URI_ITEM, 0);
+				$this->LootController->displayloot($raid_id, $item_id);
 				
-				$this->displayloot();
+				$form_key = 'additem';
+				add_form_key($form_key);
+				
 				$this->page_title = 'ACP_ADDITEM';
 				
 				break;
@@ -221,204 +227,6 @@ class acp_dkp_item extends \bbdkp\Admin
 		}
 	
 	} // end main
-	
-	/**
-	 * template filling for item
-	 * index.php?i=dkp_item&mode=additem&item=2
-	 * index.php?i=dkp_item&mode=additem&raid_id=1;
-	 */
-	private function displayloot()
-	{
-		global $db, $user, $config, $template, $phpEx, $phpbb_admin_path;
-		
-		// fetch params from $_GET
-		$raid_id = request_var(URI_RAID, 0);
-		$item_id = request_var(URI_ITEM, 0);
-
-		//fetch raidinfo
-		$sql_array = array(
-			    'SELECT'    => 'r.raid_id, e.event_dkpid, e.event_name, r.raid_start, r.raid_note  ',
-			    'FROM'    	=> array(EVENTS_TABLE => 'e', 
-									 RAIDS_TABLE => 'r', 
-									  ),
-			    'WHERE'     =>  'r.event_id = e.event_id and r.raid_id = ' . (int) $raid_id
-			);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$dkpid = 0;
-		$raidtitle = '';
-		$raiddate = '';
-		$result = $db->sql_query ($sql);
-		while ( $row = $db->sql_fetchrow ( $result ) )
-		{
-			$dkpid = $row['event_dkpid']; 
-			$raidtitle = $row['event_name']; 
-			$raiddateformat = $user->format_date($row['raid_start']);
-			$raidstart = $row['raid_start']; 
-			$template->assign_block_vars ( 'raids_row', array (
-				'VALUE' 	=> $row['raid_id'], 
-				'SELECTED' 	=> ($raid_id == $row['raid_id']) ? ' selected="selected"' : '', 
-				'OPTION' 	=> date ( $config['bbdkp_date_format'], $row['raid_start'] ) . ' - ' .  $row['event_name'] . ' ' . $row['raid_note'])  );
-		}
-		$db->sql_freeresult ( $result );
-
-		// fetch item info
-		$buyer_source = ''; 
-		if($item_id != 0)
-		{	
-			//get groupkey and base info from item
-			$sql_array = array(
-			    'SELECT'    => 'i.item_name, i.member_id, i.raid_id, i.item_value, i.item_date, i.item_gameid, i.item_group_key, i.item_decay, i.item_zs  ',
-			    'FROM'    	=> array(RAID_ITEMS_TABLE => 'i'),
-			    'WHERE'     =>  'i.item_id = ' . (int) $item_id
-			);
-			$sql = $db->sql_build_query('SELECT', $sql_array);
-			$result = $db->sql_query ( $sql );
-			if (! $row = $db->sql_fetchrow ( $result )) 
-			{
-				trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] );
-			}
-
-			$db->sql_freeresult ( $result );
-			$this->item = array (
-				'select_item_id' 	=> utf8_normalize_nfc(request_var('select_item_id', ''),true) ,  
-				'item_name' 		=> $row['item_name'],
-			    'item_gameid' 		=> $row['item_gameid'],
-				'raid_id' 			=> $row['raid_id'], 
-				'item_value' 		=> $row[ 'item_value'],
-				'item_group_key'	=> $row[ 'item_group_key'],
-				'item_decay'		=> $row[ 'item_decay'],
-				'item_zs'			=> $row[ 'item_zs'],
-			);
-			
-			//get all buyers who bought the same item, they share item_group_key
-			$buyers = array ();
-			$sql_array = array(
-			    'SELECT'    => 'i.member_id, l.member_name, i.item_group_key  ',
-			    'FROM'    	=> array(RAID_ITEMS_TABLE => 'i', 
-									 MEMBER_LIST_TABLE => 'l', 
-									  ),
-			    'WHERE'     =>  "i.member_id = l.member_id and i.item_group_key = '" . (string) $this->item ['item_group_key'] . "'"  
-			);
-			$sql = $db->sql_build_query('SELECT', $sql_array);
-			$result = $db->sql_query ( $sql );
-			while ($row = $db->sql_fetchrow ( $result )) 
-			{
-				$buyers [] = $row['member_id'];
-			}
-			
-			if (isset($_POST['member_id']))
-			{
-				$this->item ['member_id'] = request_var('item_buyers', array(0 => 0),true); 
-			}
-			else 
-			{
-				$this->item ['item_buyers']  = $buyers; 
-			}
-			unset ( $buyers );
-			$buyer_source = $this->item ['item_buyers']; 
-			$db->sql_freeresult ( $result );
-	
-			//left selection member pane : select all members from the raid where this item dropped
-			$sql = 'SELECT a.member_id, l.member_name from ' . RAID_DETAIL_TABLE . ' a, ' . RAID_ITEMS_TABLE . ' b,  ' . MEMBER_LIST_TABLE . ' l 
-			where a.member_id = l.member_id  and a.raid_id = b.raid_id
-			and b.item_id = ' . (int) $item_id . ' ORDER BY l.member_name ';
-		
-		}
-		else 
-		{
-			//no itemid
-			if ($raid_id != 0)
-			{
-				//left selection member pane : get all raidatendees
-				$sql = 'SELECT a.member_id, l.member_name from ' . RAID_DETAIL_TABLE . ' a , ' . MEMBER_LIST_TABLE . ' l 
-				where a.member_id = l.member_id and a.raid_id = ' .  $raid_id . ' ORDER BY l.member_name '; 
-			}
-		
-			if(isset ( $_POST ['item_buyers'] ))
-			{
-				$buyer_source = request_var('item_buyers', array(0 => 0)); 
-			}
-		}
-		
-		// process sql for left select selection pane
-		$result = $db->sql_query ( $sql );
-		while ( $row = $db->sql_fetchrow ( $result ) ) 
-		{
-			//left
-			$template->assign_block_vars ( 
-				'raiders_row', array (
-				'VALUE' => $row['member_id'], 
-				'OPTION' => $row['member_name'] ) );
-
-			//right
-			if (@in_array ( $row['member_id'], $buyer_source )) 
-			{
-				// fill buyer block if it is in raidmember block
-				$template->assign_block_vars ( 
-				'buyers_row', array (
-				'VALUE' => $row['member_id'], 
-				'OPTION' => $row['member_name'] ) );
-			}
-		}
-		$db->sql_freeresult ( $result );
-		
-		$form_key = 'additem';
-		add_form_key($form_key);
-					
-		//constant template variables
-		$template->assign_vars ( array (
-		'U_BACK'			=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
-		'L_TITLE' 			=> $user->lang ['ACP_ADDITEM'], 
-		'L_EXPLAIN' 		=> $user->lang ['ACP_ADDITEM_EXPLAIN'],
-		'F_ADD_ITEM' 		=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_RAID . '=' . $raid_id ), 
-		'ITEM_VALUE' 		=> isset($this->item['item_value']) ? $this->item['item_value'] : 0.00,
-		'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false, 
-		'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
-		
-		// Language
-		'MSG_NAME_EMPTY' 	=> $user->lang ['FV_REQUIRED_ITEM_NAME'],
-		'MSG_VALUE_EMPTY' 	=> $user->lang ['FV_REQUIRED_VALUE'], 
-
-		'LA_ALERT_AJAX'		  => $user->lang['ALERT_AJAX'],
-		'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
-		'LA_MSG_NAME_EMPTY'	  => $user->lang['FV_REQUIRED_NAME'],
-		'UA_FINDITEMS'		  => append_sid($phpbb_admin_path . "style/dkp/finditem.$phpEx"),
-		'ADMPATH' 			  => $phpbb_admin_path
-		)
-		
-		);
-
-		if($item_id)
-		{
-			$template->assign_vars ( array (
-				'ITEMTITLE'		=> sprintf($user->lang['LOOTUPD'], $raidtitle, $raiddateformat  ) , 
-				'RAID_DATE'		=> $raidstart, 
-				'ITEM_ZS'		=> ($this->item['item_zs'] == 1) ? ' checked="checked"' : '',  
-				'ITEM_DECAY'	=> $this->item['item_decay'],
-				'ITEM_NAME' 	=> isset($this->item['item_name']) ? $this->item['item_name'] : '' , 
-				'ITEM_GAMEID' 	=> isset($this->item['item_gameid']) ? $this->item['item_gameid'] : '' ,
-				'S_ADD' 		=> false, 
-				'ITEM_ID' 		=> $item_id, 
-				'ITEM_DKPID'	=> $dkpid,
-				'ITEM_RAIDID'	=> $raid_id,
-				
-			));
-		}
-		else 
-		{
-			$template->assign_vars ( array (
-				'ITEMTITLE'		=> sprintf($user->lang['LOOTADD'], $raidtitle, $raiddate  ) , 
-				'S_ADD' 		=> true, 
-				'ITEM_RAIDID'	=> $raid_id,
-				'ITEM_DKPID'	=> $dkpid,
-			));			
-		}
-		
-		
-	}
-
-
-	
 	
 	/**
 	 * list items for a pool. master-detail form
@@ -594,22 +402,24 @@ class acp_dkp_item extends \bbdkp\Admin
 			$items_result = $this->LootController->listRaidLoot($dkpsys_id, $raid_id, $current_order['sql']);
 			 
 			$listitems_footcount = sprintf ($user->lang ['LISTPURCHASED_FOOTCOUNT_SHORT'], $total_items);
-			
+			$this->bbtips = false;
 			while ( $item = $db->sql_fetchrow ( $items_result ) ) 
 			{
-			    if ($this->bbtips == true)
+				$item_name = $item['item_name'];
+				if ($item['item_gameid'] == 'wow' )
 				{
-					if ($item['item_gameid'] == 'wow' )
+					$this->bbtips = true;
+					if(is_numeric($item['item_gameid']))
 					{
-						$item_name = $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]'); 
+						//$item_name = $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]');
 					}
-					else 
+					else
 					{
-						$item_name = $bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]');
+						//$item_name = $bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]');
 					}
-			
+					
 				}
-				else
+				else 
 				{
 					$item_name = $item['item_name'];
 				}

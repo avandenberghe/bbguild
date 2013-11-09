@@ -568,7 +568,7 @@ class log
 						 $log['L_VALUE']  );
 					break;
 				case 'ITEM_UPDATED':
-					$logline = sprintf($this->getLogMessage('ITEM_UPDATED', $verbose), $userstring, $log['L_NAME_BEFORE'] );
+					$logline = sprintf($this->getLogMessage('ITEM_UPDATED', $verbose), $userstring, $log['L_NAME_BEFORE'], $log['L_VALUE_AFTER']);
 					break;
 				case 'ITEM_DELETED':
 					$logline = sprintf($this->getLogMessage('ITEM_DELETED', $verbose), $userstring, $log['L_NAME'], (isset($log['L_BUYER']) ? $log['L_BUYER'] : '') , (isset($log['L_VALUE']) ? $log['L_VALUE'] : '0')  );

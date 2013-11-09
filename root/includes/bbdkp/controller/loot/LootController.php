@@ -101,6 +101,203 @@ class LootController  extends \bbdkp\Admin
 		return $this->loot;
 	}
 	
+
+	/**
+	 * raid acp-> view loot index.php?i=dkp_item&mode=additem&raid_id=1;
+	 * item acp-> view loot index.php?i=dkp_item&mode=additem&item=2
+	 * @usedby acp_dkp_item.php acp_dkp_raid.php
+	 * @param int $raid_id
+	 * @param int $item_id
+	 */
+	public function displayloot($raid_id=0, $item_id=0)
+	{
+		global $db, $user, $config, $template, $phpEx, $phpbb_root_path, $phpbb_admin_path;
+	
+		if ($raid_id == 0 && $item_id != 0)
+		{
+			$raid_id= $db->sql_fetchfield('SELECT raid_id from ' . RAID_ITEMS_TABLE . ' WHERE item_id = ' . $item_id, 'raid_id');
+		}
+		if (!class_exists('\bbdkp\controller\raids\Raids'))
+		{
+			require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raids.$phpEx");
+		}
+		$raid = new \bbdkp\controller\raids\Raids($raid_id);
+		
+		
+		if (!class_exists('\bbdkp\controller\raids\Raiddetail'))
+		{
+			require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raiddetail.$phpEx");
+		}
+			
+		$raiddetail = new \bbdkp\controller\raids\Raiddetail($raid_id);
+		foreach ((array) $raiddetail->raid_details as $member_id => $rd)
+		{
+			$template->assign_block_vars (
+				'raiders_row', array (
+					'VALUE' => $rd['member_id'],
+					'OPTION' => $rd['member_name'] ) );
+		}
+	
+		
+		if(isset ( $_POST ['item_buyers'] ))
+		{
+			$buyer_source = request_var('item_buyers', array(0 => 0));
+		}
+		
+		$template->assign_vars ( array (
+			'ITEMTITLE'		=> sprintf($user->lang['LOOTADD'], $raid->event_name, $user->format_date($raid->raid_start)  ) ,
+			'S_ADD' 		=> true,
+			'ITEM_RAIDID'	=> $raid_id,
+			'ITEM_DKPID'	=> $raid->event_dkpid,
+			'U_BACK'			=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "=" .$raid_id ),
+			'L_TITLE' 			=> $user->lang ['ACP_ADDITEM'],
+			'L_EXPLAIN' 		=> $user->lang ['ACP_ADDITEM_EXPLAIN'],
+			'F_ADD_ITEM' 		=> append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_item&amp;mode=additem&amp;" . URI_RAID . '=' . $raid_id ),
+			'ITEM_VALUE' 		=> isset($this->item['item_value']) ? $this->item['item_value'] : 0.00,
+			'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false,
+			'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
+			
+			'MSG_NAME_EMPTY' 	=> $user->lang ['FV_REQUIRED_ITEM_NAME'],
+			'MSG_VALUE_EMPTY' 	=> $user->lang ['FV_REQUIRED_VALUE'],
+			
+			'LA_ALERT_AJAX'		  => $user->lang['ALERT_AJAX'],
+			'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
+			'LA_MSG_NAME_EMPTY'	  => $user->lang['FV_REQUIRED_NAME'],
+			'UA_FINDITEMS'		  => append_sid($phpbb_admin_path . "style/dkp/finditem.$phpEx"),
+			'ADMPATH' 			  => $phpbb_admin_path)
+		);
+		
+
+		
+		if($item_id != 0)
+		{
+			//get groupkey and base info from item
+			$sql_array = array(
+					'SELECT'    => 'i.item_name, i.member_id, i.raid_id, i.item_value, i.item_date, i.item_gameid, i.item_group_key, i.item_decay, i.item_zs  ',
+					'FROM'    	=> array(RAID_ITEMS_TABLE => 'i'),
+					'WHERE'     =>  'i.item_id = ' . (int) $item_id
+			);
+			$sql = $db->sql_build_query('SELECT', $sql_array);
+			$result = $db->sql_query ( $sql );
+			if (! $row = $db->sql_fetchrow ( $result ))
+			{
+				trigger_error ( $user->lang ['ERROR_INVALID_ITEM_PROVIDED'] );
+			}
+	
+			$db->sql_freeresult ( $result );
+			$this->item = array (
+					'select_item_id' 	=> utf8_normalize_nfc(request_var('select_item_id', ''),true) ,
+					'item_name' 		=> $row['item_name'],
+					'item_gameid' 		=> $row['item_gameid'],
+					'raid_id' 			=> $row['raid_id'],
+					'item_value' 		=> $row[ 'item_value'],
+					'item_group_key'	=> $row[ 'item_group_key'],
+					'item_decay'		=> $row[ 'item_decay'],
+					'item_zs'			=> $row[ 'item_zs'],
+			);
+				
+			//get all buyers who bought the same item, they share item_group_key
+			$buyers = array ();
+			$sql_array = array(
+					'SELECT'    => 'i.member_id, l.member_name, i.item_group_key  ',
+					'FROM'    	=> array(RAID_ITEMS_TABLE => 'i',
+							MEMBER_LIST_TABLE => 'l',
+					),
+					'WHERE'     =>  "i.member_id = l.member_id and i.item_group_key = '" . (string) $this->item ['item_group_key'] . "'"
+			);
+			$sql = $db->sql_build_query('SELECT', $sql_array);
+			$result = $db->sql_query ( $sql );
+			while ($row = $db->sql_fetchrow ( $result ))
+			{
+				$buyers [] = $row['member_id'];
+			}
+				
+			if (isset($_POST['member_id']))
+			{
+				$this->item ['member_id'] = request_var('item_buyers', array(0 => 0),true);
+			}
+			else
+			{
+				$this->item ['item_buyers']  = $buyers;
+			}
+			unset ( $buyers );
+			$buyer_source = $this->item ['item_buyers'];
+			$db->sql_freeresult ( $result );
+	
+			//left selection member pane : select all members from the raid where this item dropped
+			$sql = 'SELECT a.member_id, l.member_name from ' . RAID_DETAIL_TABLE . ' a, ' . RAID_ITEMS_TABLE . ' b,  ' . MEMBER_LIST_TABLE . ' l
+			where a.member_id = l.member_id  and a.raid_id = b.raid_id
+			and b.item_id = ' . (int) $item_id . ' ORDER BY l.member_name ';
+			
+			$template->assign_vars ( array (
+					'ITEMTITLE'		=> sprintf($user->lang['LOOTUPD'], $raid->event_name, $user->format_date($raid->raid_start)   ) ,
+					'RAID_DATE'		=> $raid->raid_start,
+					'ITEM_ZS'		=> ($this->item['item_zs'] == 1) ? ' checked="checked"' : '',
+					'ITEM_DECAY'	=> $this->item['item_decay'],
+					'ITEM_NAME' 	=> isset($this->item['item_name']) ? $this->item['item_name'] : '' ,
+					'ITEM_GAMEID' 	=> isset($this->item['item_gameid']) ? $this->item['item_gameid'] : '' ,
+					'S_ADD' 		=> false,
+					'ITEM_ID' 		=> $item_id,
+					'ITEM_DKPID'	=> $raid->event_dkpid,
+					'ITEM_RAIDID'	=> $raid_id,
+		
+			));
+
+			while ( $row = $db->sql_fetchrow ( $result ) )
+			{
+				if (@in_array ( $row['member_id'], $buyer_source ))
+				{
+					// fill buyer block if it is in raidmember block
+					$template->assign_block_vars (
+							'buyers_row', array (
+									'VALUE' => $row['member_id'],
+									'OPTION' => $row['member_name'] ) );
+				}
+			}
+				
+		}
+		
+		/**
+		 * prepare Raid loot listing for ACP
+		 * @param int $dkpsys_id
+		 * @param int $raid_id
+		 * @param string $order
+		 * @return unknown
+		 */
+		public function listRaidLoot($dkpsys_id, $raid_id, $order)
+		{
+			global $db;
+			//prepare item list sql
+			$sql_array = array(
+					'SELECT'    => 'd.dkpsys_name, i.item_id, i.item_name, i.item_gameid, e.event_dkpid,
+		    				i.member_id, l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, e.event_name ',
+					'FROM'      => array(
+							DKPSYS_TABLE   => 'd',
+							EVENTS_TABLE   => 'e',
+							RAIDS_TABLE    => 'r',
+							MEMBER_LIST_TABLE => 'l',
+							CLASS_TABLE 		=> 'c',
+							RAID_ITEMS_TABLE    => 'i',
+					),
+					'WHERE'     =>  'c.class_id = l.member_class_id
+		    				and d.dkpsys_id = e.event_dkpid
+	    					and e.event_id = r.event_id
+	    					and i.member_id = l.member_id
+	    					AND l.game_id = c.game_id
+	    					and r.raid_id = i.raid_id
+		     				and d.dkpsys_id = ' . $dkpsys_id . '
+		     				AND i.raid_id = ' .  $raid_id,
+					'ORDER_BY'  => $order,
+			);
+		
+			$sql = $db->sql_build_query('SELECT', $sql_array);
+			$items_result = $db->sql_query ( $sql );
+			return $items_result;
+		}
+
+		
+	}
+	
 	/**
 	 * adds loot to a group of buyers
 	 *
@@ -358,46 +555,6 @@ class LootController  extends \bbdkp\Admin
 	}
 	
 
-	
-	/**
-	 * prepare Raid loot listing for ACP
-	 * @param int $dkpsys_id
-	 * @param int $raid_id
-	 * @param string $order
-	 * @return unknown
-	 */
-	public function listRaidLoot($dkpsys_id, $raid_id, $order)
-	{
-		global $db; 
-		//prepare item list sql
-		$sql_array = array(
-				'SELECT'    => 'd.dkpsys_name, i.item_id, i.item_name, i.item_gameid, e.event_dkpid,
-		    				i.member_id, l.member_name, c.colorcode, c.imagename, i.item_date, i.raid_id, i.item_value, e.event_name ',
-				'FROM'      => array(
-						DKPSYS_TABLE   => 'd',
-						EVENTS_TABLE   => 'e',
-						RAIDS_TABLE    => 'r',
-						MEMBER_LIST_TABLE => 'l',
-						CLASS_TABLE 		=> 'c',
-						RAID_ITEMS_TABLE    => 'i',
-				),
-				'WHERE'     =>  'c.class_id = l.member_class_id
-		    				and d.dkpsys_id = e.event_dkpid
-	    					and e.event_id = r.event_id
-	    					and i.member_id = l.member_id
-	    					AND l.game_id = c.game_id
-	    					and r.raid_id = i.raid_id
-		     				and d.dkpsys_id = ' . $dkpsys_id . '
-		     				AND i.raid_id = ' .  $raid_id,
-				'ORDER_BY'  => $order,
-		);
-		
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$items_result = $db->sql_query ( $sql );
-		return $items_result; 
-	}
-	
-	
 	/**
 	 *  EPGP Guild Loot Statistics
 	 * 
