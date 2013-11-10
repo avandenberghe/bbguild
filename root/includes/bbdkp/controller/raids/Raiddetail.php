@@ -41,6 +41,11 @@ class Raiddetail
 	 */ 
 	public $member_id;
 	/**
+	 * guild of the attendee
+	 * @var unknown_type
+	 */
+	public $member_guild_id;
+	/**
 	 * event value of this raid
 	 * @var decimal
 	 */
@@ -124,8 +129,8 @@ class Raiddetail
 		global $config, $db;
 
 		$sql_array = array(
-				'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, m.member_gender_id, a.image_female, a.image_male,
-    						r.raid_value, r.time_bonus, r.zerosum_bonus, r.decay_time,  
+				'SELECT'    => 'm.member_id ,m.member_name, c.colorcode, c.imagename, l.name, m.member_gender_id, a.image_female, a.image_male, m.member_guild_id,
+    						r.raid_value, r.time_bonus, r.zerosum_bonus, r.decay_time,
     						r.raid_decay, (r.raid_value + r.time_bonus + r.zerosum_bonus - r.raid_decay) as total  ',
 				'FROM'      => array(
 						MEMBER_LIST_TABLE 	=> 'm',
@@ -157,6 +162,7 @@ class Raiddetail
 			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
 		
 			$this->raid_details[$row['member_id']]['member_id'] = $row['member_id'];
+			$this->raid_details[$row['member_id']]['member_guild_id'] = $row['member_guild_id'];
 			$this->raid_details[$row['member_id']]['colorcode'] = $row['colorcode'];
 			$this->raid_details[$row['member_id']]['imagename'] = $row['imagename'];
 			$this->raid_details[$row['member_id']]['classname'] = $row['name'];
@@ -169,10 +175,11 @@ class Raiddetail
 			
 			if($member_id > 0)
 			{
-				$this->member_id = $row['member_id']; 
-				$this->colorcode = $row['colorcode']; 
-				$this->imagename = $row['imagename']; 
-				$this->member_name = $row['member_name']; 
+				$this->member_id = $row['member_id'];
+				$this->member_guild_id = $row['member_guild_id'];
+				$this->colorcode = $row['colorcode'];
+				$this->imagename = $row['imagename'];
+				$this->member_name = $row['member_name'];
 				$this->raid_value = $row['raid_value'];
 				$this->time_bonus = $row['time_bonus'];
 				$this->zerosum_bonus = $row['zerosum_bonus'];

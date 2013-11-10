@@ -880,6 +880,7 @@ $versions = array(
      	// add guild columns
      	'table_column_add' => array(
      				array($table_prefix . 'bbdkp_plugins', 'installdate', array('TIMESTAMP', 0)),
+     				array($table_prefix . 'bbdkp_raid_items', 'wowhead_id', array('UINT', 0)),
      				array($table_prefix . 'bbdkp_memberlist', 'member_title', array('VCHAR_UNI:255', '')),
      				array($table_prefix . 'bbdkp_memberlist', 'member_role', array('VCHAR:20', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'level', array('UINT', 0) ),
@@ -1138,6 +1139,9 @@ function tableupdates($action, $version)
 					
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raids MODIFY raid_note TEXT ';
 					$db->sql_query($sql);					
+					//if the game_id is numeric consider it as a wowheadid
+					$sql= "UPDATE  " . $table_prefix . "bbdkp_raid_items SET wowhead_id = (CASE WHEN item_gameid REGEXP ('^[0-9]+$') THEN item_gameid ELSE 0 END) ";
+					$db->sql_query($sql);
 					break;
 
 			}
