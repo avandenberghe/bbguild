@@ -1229,7 +1229,7 @@ class Members extends \bbdkp\Admin
 
 		if($assignedonly == true)
 		{
-			$sql_array['WHERE'] .= ' AND m.phpbb_user_id != 0 ';
+			$sql_array['WHERE'] .= ' AND m.phpbb_user_id = 0 ';
 		}
 
 		if($guild_id != 0)
@@ -1252,6 +1252,9 @@ class Members extends \bbdkp\Admin
 		$db->sql_freeresult( $result );
 	}
 
+	/**
+	 * Claim a character to your phpbb User
+	 */
 	public function Claim_Member()
 	{
 		global $db, $user;
@@ -1269,33 +1272,60 @@ class Members extends \bbdkp\Admin
 	}
 
 	/**
+	 * check if user exceeded allowed character count
+	 *
+	 * @return boolean
+	 */
+	public function has_reached_maxbbdkpaccounts()
+	{
+		global $config, $user, $db;
+		$sql = 'SELECT count(*) as charcount
+				FROM ' . MEMBER_LIST_TABLE . '
+				WHERE phpbb_user_id = ' . (int) $user->data['user_id'];
+		$result = $db->sql_query($sql);
+		$countc = $db->sql_fetchfield('charcount');
+		$db->sql_freeresult($result);
+
+		if ($countc >= $config['bbdkp_maxchars'])
+		{
+			return true;
+		}
+		else
+		{
+			return false;
+		}
+	}
+
+
+
+	/**
+	 *
 	 * Frontview : member Roster listing
 	 * required class game property to be set before call
 	 *
 	 * @param int $start
-	 * @param string $mode (listing or class)
+	 * @param string $mode ('listing' or 'class')
 	 * @param boolean $query_by_armor
 	 * @param boolean $query_by_class
 	 * @param string $filter
 	 * @param number $game_id
-	 * @param number $guild_id  optional guild id
-	 * @param number $class_id optional class id
-	 * @param number $race_id optional race id
-	 * @param number $level1 optional level1 (default 1)
-	 * @param number $level2 optional level2 (default 200)
+	 * @param number $guild_id optional=0
+	 * @param number $class_id optional=0
+	 * @param number $race_id optional=0
+	 * @param number $level1 optional =1
+	 * @param number $level2 optional = 200
+	 * @param boolean $mycharsonly optional = false
 	 * @return array  (membercount, sql_fetchrowset of all rows)
 	 */
-	public function get_listingresult($start, $mode,
-		$query_by_armor, $query_by_class, $filter, $game_id,
-		$guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200)
+	public function getmemberlist($start, $mode, $query_by_armor, $query_by_class, $filter, $game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false)
 	{
-		global $db, $config;
+		global $db, $config, $user, $phpbb_root_path;
 		$sql_array = array();
 
-		$sql_array['SELECT'] =  'm.game_id, m.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name,
+		$sql_array['SELECT'] =  'm.member_id, m.game_id, m.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name,
     		m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url, m.member_portrait_url,
     		r.rank_prefix , r.rank_name, r.rank_suffix, e.image_female, e.image_male,
-    		g.name, g.realm, g.region, c1.name as class_name, c.colorcode, c.imagename, m.phpbb_user_id, u.username, u.user_colour  ';
+    		g.name as guildname, g.realm, g.region, c1.name as class_name, c.colorcode, c.imagename, m.phpbb_user_id, u.username, u.user_colour  ';
 
 		$sql_array['FROM'] = array(
 				MEMBER_LIST_TABLE    =>  'm',
@@ -1324,11 +1354,20 @@ class Members extends \bbdkp\Admin
 			AND m.member_status = 1
 			AND m.member_level >= ".  intval($config['bbdkp_minrosterlvl']) . "
 			AND m.member_rank_id != 99
-			AND m.game_id = '" . $db->sql_escape($this->game_id) . "'
 			AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "'
 			AND e1.attribute = 'race' and e1.game_id = e.game_id";
 
 		// filters
+
+		if($game_id != '' )
+		{
+			$sql_array['WHERE'] .= " AND m.game_id =  '" .  $db->sql_escape($game_id) . "'";
+		}
+
+		if($mycharsonly == true)
+		{
+			$sql_array['WHERE'] .= ' AND m.phpbb_user_id =  ' . $user->data['user_id'];
+		}
 		if($guild_id > 0)
 		{
 			$sql_array['WHERE'] .= " AND m.member_guild_id =  " . $guild_id;
@@ -1354,7 +1393,7 @@ class Members extends \bbdkp\Admin
 			$sql_array['WHERE'] .= " m.member_level <=  " . $level2;
 		}
 
-		if ($query_by_class)
+		if ($query_by_class == true)
 		{
 			//wow_class_8 = Mage
 			//lotro_class_5=Hunter
@@ -1368,7 +1407,7 @@ class Members extends \bbdkp\Admin
 
 		}
 
-		if ($query_by_armor)
+		if ($query_by_armor == true)
 		{
 			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $filter ) . "'";
 		}
@@ -1387,18 +1426,18 @@ class Members extends \bbdkp\Admin
 
 		$current_order = $this->switch_order($sort_order);
 
-		if( $mode =='class')
+		if( $mode == 'class')
 		{
 			$sql_array['ORDER_BY']  = "m.member_class_id, " . $current_order['sql'];
 		}
-		elseif ($mode =='listing')
+		elseif ($mode == 'listing')
 		{
 			$sql_array['ORDER_BY']  = $current_order['sql'];
 		}
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 
-		if ($mode =='listing')
+		if ($mode == 'listing')
 		{
 			// LISTING MODE
 			$member_count=0;
@@ -1414,8 +1453,9 @@ class Members extends \bbdkp\Admin
 			$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $start );
 			$dataset = $db->sql_fetchrowset($result);
 		}
-		else
+		elseif ($mode == 'class')
 		{
+			// CLASS mode
 			$result = $db->sql_query($sql);
 			$dataset = $db->sql_fetchrowset($result);
 			$member_count = count($dataset);
@@ -1423,7 +1463,37 @@ class Members extends \bbdkp\Admin
 
 		$db->sql_freeresult($result);
 
-		return array($member_count, $dataset, $current_order);
+		$characters = array();
+
+		foreach ($dataset as $row)
+		{
+			$characters[]= array(
+					'game_id' => $this->games[$row['game_id']],
+					'member_id' => $row['member_id'],
+					'member_name' => $row['member_name'],
+					'guildname' => $row['guildname'],
+					'realm'	=> $row['realm'],
+					'region'	=> $row['region'],
+					'colorcode' => $row['colorcode'],
+					'member_class_id' => $row['member_class_id'],
+					'class_name' => $row['class_name'],
+					'class_image' => $phpbb_root_path . 'images/bbdkp/class_images/' . $row['imagename'] . '.png',
+					'race_name' => $row['race_name'],
+					'member_gender_id' => $row['member_gender_id'],
+					'race_image' =>  $phpbb_root_path . 'images/bbdkp/race_images/' . (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']) . '.png',
+					'image_female' => $row['image_female'],
+					'image_male' => $row['image_male'],
+					'member_rank'	=> $row['rank_prefix'] . ' ' . $row['rank_name'] . ' ' . $row['rank_suffix'],
+					'member_level' => $row['member_level'],
+					'username' => get_username_string('full', $row['phpbb_user_id'], $row['username'], $row['user_colour']),
+					'member_portrait_url' => $row['member_portrait_url'],
+					'member_armory_url' => $row['member_armory_url'],
+					'member_achiev' => $row['member_achiev'],
+			);
+		}
+		$db->sql_freeresult($result);
+
+		return array($characters, $current_order);
 	}
 
 	/**

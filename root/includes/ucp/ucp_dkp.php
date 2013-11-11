@@ -16,7 +16,11 @@ if (!defined('IN_PHPBB'))
 {
 	exit;
 }
-
+// Include the base class
+if (!class_exists('\bbdkp\Admin'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+}
 if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
@@ -32,7 +36,7 @@ if (!class_exists('\bbdkp\controller\members\Members'))
  * @package bbdkp
  *
  */
-class ucp_dkp
+class ucp_dkp extends \bbdkp\Admin
 {
 	/**
 	 * module action
@@ -71,6 +75,7 @@ class ucp_dkp
 			case 'characters':
 				$this->link = '';
 				$submit = (isset($_POST['submit'])) ? true : false;
+				$member = new \bbdkp\controller\members\Members();
 				if ($submit)
 				{
 					if (!check_form_key('digests'))
@@ -78,10 +83,11 @@ class ucp_dkp
 						trigger_error('FORM_INVALID');
 					}
 					$member_id = (int) request_var('memberlist', 0);
-					$member = new \bbdkp\controller\members\Members($member_id);
+					$member->member_id = $member_id;
+					$member->Getmember();
 					$member->Claim_Member();
 					// Generate confirmation page. It will redirect back to the calling page
-					meta_refresh(3, $this->u_action);
+					meta_refresh(2, $this->u_action);
 					$message = sprintf($user->lang['CHARACTERS_UPDATED'], $member->member_name) . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
 					unset($member);
 					trigger_error($message);
@@ -92,6 +98,11 @@ class ucp_dkp
 				$s_guildmembers = ' ';
 				//if user has no access to claiming chars, don't show the add button.
 				if(!$auth->acl_get('u_dkpucp'))
+				{
+					$show_buttons = false;
+				}
+
+				if($member->has_reached_maxbbdkpaccounts())
 				{
 					$show_buttons = false;
 				}
@@ -150,15 +161,16 @@ class ucp_dkp
 
 					// build popup for adding new chars to my phpbb account, get only those that are not assigned yet.
 					// note if someone picks a guildmember that does not belong to them then the guild admin can override this in acp
-					$memberlist = new \bbdkp\controller\members\Members();
-					$memberlist->listallmembers($guilds->guildid, false);
-					foreach ($memberlist->guildmemberlist as $id => $m  )
+
+					$member->listallmembers($guilds->guildid, true);
+					foreach ($member->guildmemberlist as $id => $m  )
                     {
 						$s_guildmembers .= '<option value="' . $m['member_id'] .'">'. $m['rank_name']  . ' ' . $m['member_name'] . '</option>';
                     }
 
 				}
 				$db->sql_freeresult ($result);
+				unset($member);
 
 				// These template variables are used on all the pages
 				$template->assign_vars(array(
@@ -176,11 +188,8 @@ class ucp_dkp
 
 				break;
 			case 'characteradd':
-				//SHOW ADD MEMBER FORM
-
 				//get member_id if selected from pulldown
 				$member_id =  request_var('hidden_member_id',  request_var(URI_NAMEID, 0));
-
 				$submit	 = (isset($_POST['add'])) ? true : false;
 				$update	 = (isset($_POST['update'])) ? true : false;
 				$delete	 = (isset($_POST['delete'])) ? true : false;
@@ -245,14 +254,7 @@ class ucp_dkp
 	private function fill_addmember($member_id)
 	{
 		global $db, $auth, $user, $template, $config, $phpbb_root_path;
-
-		// Include the base class
-		if (!class_exists('\bbdkp\Admin'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-		}
-		$bbdkp = new \bbdkp\Admin();
-
+		$members = new \bbdkp\controller\members\Members();
 		// Attach the language file
 		$user->add_lang('mods/dkp_common');
 		$user->add_lang(array('mods/dkp_admin'));
@@ -265,20 +267,18 @@ class ucp_dkp
 				trigger_error($user->lang['NOUCPADDCHARS']);
 			}
 
-			// check if user exceeded allowed character count
-			$sql = 'SELECT count(*) as charcount
-					FROM ' . MEMBER_LIST_TABLE . '
-					WHERE phpbb_user_id = ' . (int) $user->data['user_id'];
-			$result = $db->sql_query($sql);
-			$countc = $db->sql_fetchfield('charcount');
-			$db->sql_freeresult($result);
-
-			if ($countc >= $config['bbdkp_maxchars'])
+			if(!$auth->acl_get('u_dkpucp'))
 			{
-				 $show=false;
-				 $template->assign_vars(array(
-			 	'MAX_CHARS_EXCEEDED' => sprintf($user->lang['MAX_CHARS_EXCEEDED'],$config['bbdkp_maxchars']),
+				trigger_error($user->lang['NOUCPADDCHARS']);
+			}
+
+			if($members->has_reached_maxbbdkpaccounts())
+			{
+				$show=false;
+				$template->assign_vars(array(
+				 	'MAX_CHARS_EXCEEDED' => sprintf($user->lang['MAX_CHARS_EXCEEDED'],$config['bbdkp_maxchars']),
 				));
+
 			}
 			// set add mode
 			$S_ADD = true;
@@ -411,23 +411,26 @@ class ucp_dkp
 
 
         $installed_games = array();
-        foreach($bbdkp->games as $gameid => $gamename)
+        foreach($this->games as $gameid => $gamename)
         {
-        	//add value to dropdown when the game config value is 1
-        	if ($config['bbdkp_games_' . $gameid] == 1)
-        	{
-        		$template->assign_block_vars('game_row', array(
+         	$template->assign_block_vars('game_row', array(
 				'VALUE' => $gameid,
 				'SELECTED' => ( (isset($member['game_id']) ? $member['game_id'] : '') == $gameid ) ? ' selected="selected"' : '',
 				'OPTION'   => $gamename,
 				));
-         		$installed_games[] = $gameid;
-         	}
+         	$installed_games[] = $gameid;
          }
 
 		// Race dropdown
 		// reloading is done from ajax to prevent redraw
-        $gamepreset = ($member_id > 0 ? $member['game_id'] : $installed_games[0]);
+		if  ($member_id > 0)
+		{
+			$gamepreset = $member['game_id'];
+		}
+		else
+		{
+			$gamepreset = $installed_games[0];
+		}
 
 		$sql_array = array(
 		'SELECT'	=>	'  r.race_id, l.name as race_name ',
@@ -878,55 +881,33 @@ class ucp_dkp
 	{
 
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpEx;
+		$members = new \bbdkp\controller\members\Members();
 
-		// make a listing of my own characters with dkp for each pool
-		$sql_array = array(
-		    'SELECT'    => 	'm.member_id, m.member_name, m.member_level, u.username, g.name as guildname,
-		    				 m.member_gender_id, a.image_female, a.image_male,
-		    				 l.name as member_class , c.imagename, c.colorcode  ',
-		    'FROM'      => array(
-		        MEMBER_LIST_TABLE 	=> 'm',
-		        CLASS_TABLE  		=> 'c',
-		        RACE_TABLE  		=> 'a',
-		        BB_LANGUAGE			=> 'l',
-		        GUILD_TABLE  		=> 'g',
-		        USERS_TABLE 		=> 'u',
-		    	),
+		$mycharacters = $members->getmemberlist(0, 'listing', false, false, '', '', 0, 0, 0, 0, 200, true);
 
-		    'WHERE'     =>  "  l.game_id = c.game_id and l.attribute_id = c.class_id
-		    				  AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
-							  AND (m.member_guild_id = g.id)
-							  AND (m.member_class_id = c.class_id and m.game_id = c.game_id)
-							  AND m.member_race_id =  a.race_id  and m.game_id = a.game_id
-							  AND u.user_id = m.phpbb_user_id and u.user_id = " . $user->data['user_id']  ,
-			'ORDER_BY'	=> " m.member_name ",
-		    );
-
-	    $sql = $db->sql_build_query('SELECT', $sql_array);
-		if (!($members_result = $db->sql_query($sql)) )
-		{
-			trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
-		}
 		$lines = 0;
-		$member_count = 0;
-		while ( $row = $db->sql_fetchrow($members_result) )
+		foreach ($mycharacters[0] as $char)
 		{
-			++$member_count;
-			$raceimage = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
 			$template->assign_block_vars('members_row', array(
-				'COUNT'         => $member_count,
-				'NAME'          => $row['member_name'],
-				'LEVEL'         => $row['member_level'],
-				'CLASS'         => $row['member_class'],
-				'GUILD'         => $row['guildname'],
-				'U_EDIT'		=> append_sid("{$phpbb_root_path}ucp.$phpEx", "i=dkp&amp;mode=characteradd&amp;". URI_NAMEID . '=' . $row['member_id']),
-				'COLORCODE'  	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
-		        'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
-				'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-		       	'RACE_IMAGE' 	=> (strlen($raceimage) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $raceimage . ".png" : '',
-				'S_RACE_IMAGE_EXISTS' => (strlen($raceimage) > 1) ? true : false,
-				)
-			);
+					'U_EDIT'		=> append_sid("{$phpbb_root_path}ucp.$phpEx", "i=dkp&amp;mode=characteradd&amp;". URI_NAMEID . '=' . $char['member_id']),
+					'GAME'			=> $char['game_id'],
+					'COLORCODE'		=> $char['colorcode'],
+					'CLASS'			=> $char['class_name'],
+					'NAME'			=> $char['member_name'],
+					'RACE'			=> $char['race_name'],
+					'GUILD'			=> $char['guildname'],
+					'REALM'			=> $char['realm'],
+					'REGION'		=> $char['region'],
+					'RANK'			=> $char['member_rank'],
+					'LEVEL'			=> $char['member_level'],
+					'ARMORY'		=> $char['member_armory_url'],
+					'PHPBBUID'		=> $char['username'],
+					'PORTRAIT'		=> $char['member_portrait_url'],
+					'ACHIEVPTS'		=> $char['member_achiev'],
+					'CLASS_IMAGE' 	=> $char['class_image'],
+					'RACE_IMAGE' 	=> $char['race_image'],
+			));
+
 
 			$sql_array2 = array(
 			    'SELECT'    => ' d.dkpsys_id, d.dkpsys_name,
@@ -941,7 +922,7 @@ class ucp_dkp
 				        MEMBER_DKP_TABLE 	=> 'm',
 				        DKPSYS_TABLE 		=> 'd',
 			    	),
-			    'WHERE'     => " m.member_dkpid = d.dkpsys_id and m.member_id = " . $row['member_id'],
+			    'WHERE'     => " m.member_dkpid = d.dkpsys_id and m.member_id = " . $char['member_id'],
 				'GROUP_BY'  => " d.dkpsys_id, d.dkpsys_name " ,
 				'ORDER_BY'	=> " d.dkpsys_name ",
 			    );
@@ -967,7 +948,10 @@ class ucp_dkp
 		$template->assign_vars(array(
 			'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
 		));
-		$db->sql_freeresult ($members_result);
+
 	}
+
+
+
 }
 ?>

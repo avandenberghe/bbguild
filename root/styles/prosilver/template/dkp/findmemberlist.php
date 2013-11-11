@@ -21,7 +21,7 @@ if (!class_exists('\bbdkp\controller\members\Members'))
 	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
 $members = new \bbdkp\controller\members\Members();
-$members->listallmembers($guild_id);
+$members->listallmembers($guild_id, true);
 
 header('Content-type: text/xml');
 // preparing xml
