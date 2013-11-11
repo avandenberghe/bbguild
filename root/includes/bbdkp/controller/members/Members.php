@@ -450,8 +450,6 @@ class Members extends \bbdkp\Admin
 			$this->class_image = '';
 			$this->member_title = '';
 		}
-
-
 	}
 
 	/**
@@ -920,8 +918,6 @@ class Members extends \bbdkp\Admin
 	{
 		global $user;
 		$this->member_status = 0;
-		$this->member_comment = $this->member_comment . '
-' . sprintf($user->lang['ADMIN_DEACTIVATE_MEMBER_SUCCESS'], $this->member_name, $daysago, date( 'd.m.y G:i:s', $this->time ));
 		$log_action = array(
 			'header' 	 => 'L_ACTION_MEMBER_DEACTIVATED' ,
 			'L_NAME' 	 => \ucwords($this->member_name)  ,
@@ -1071,16 +1067,25 @@ class Members extends \bbdkp\Admin
 		{
 			if (in_array($mb['character']['name'], $to_add) && $mb['character']['level'] >= $min_armory )
 			{
+				if(!isset( $mb['character']['realm']))
+				{
+					$realm = 'unknown';
+				}
+				else
+				{
+					$realm = $mb['character']['realm'];
+				}
+
 				$this->game_id ='wow';
 				$this->member_guild_id = $guild_id;
-				$this->member_rank_id = $mb['rank'];
+				$this->member_rank_id = isset($mb['rank']) ? $mb['rank'] : 1;
 				$this->member_name = $mb['character']['name'];
 				$this->member_level = (int) $mb['character']['level'];
 				$this->member_gender_id = (int) $mb['character']['gender'];
 				$this->member_race_id = (int) $mb['character']['race'];
 				$this->member_class_id = (int) $mb['character']['class'];
 				$this->member_achiev = (int) $mb['character']['achievementPoints'];
-				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $mb['character']['realm'] . '/' . $this->member_name . '/simple';
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $realm . '/' . $this->member_name . '/simple';
 				$this->member_status = 1;
 				$this->member_comment = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], $this->member_name, date("F j, Y, g:i a") );
 				$this->member_joindate = $this->time;
@@ -1098,7 +1103,6 @@ class Members extends \bbdkp\Admin
 					}
 				}
 
-
 				$query [] = array (
 					'member_name' => ucwords($this->member_name) ,
 					'member_status' => $this->member_status ,
@@ -1114,7 +1118,7 @@ class Members extends \bbdkp\Admin
 					'member_gender_id' => $this->member_gender_id ,
 					'member_achiev' => $this->member_achiev ,
 					'member_armory_url' => (string) $this->member_armory_url ,
-					'phpbb_user_id' => (int) $this->phpbb_user_id ,
+					'phpbb_user_id' => 0 ,
 					'game_id' => (string) $this->game_id ,
 					'member_portrait_url' => (string) $this->member_portrait_url,
 
@@ -1132,6 +1136,16 @@ class Members extends \bbdkp\Admin
 		$to_update = array_intersect($newmembers, $oldmembers);
 		foreach($memberdata as $mb)
 		{
+
+			if(!isset( $mb['character']['realm']))
+			{
+				$realm = 'unknown';
+			}
+			else
+			{
+				$realm = $mb['character']['realm'];
+			}
+
 			if (in_array($mb['character']['name'], $to_update))
 			{
 				$member_id =  (int) $member_ids[bin2hex($mb['character']['name'])];
@@ -1144,7 +1158,7 @@ class Members extends \bbdkp\Admin
 				$this->member_race_id = (int) $mb['character']['race'];
 				$this->member_class_id = (int) $mb['character']['class'];
 				$this->member_achiev = (int) $mb['character']['achievementPoints'];
-				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $mb['character']['realm'] . '/' . $this->member_name . '/simple';
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $realm  . '/' . $this->member_name . '/simple';
 				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $region, $region) . $mb['character']['thumbnail'];
 
 				$sql_ary = array (
@@ -1157,7 +1171,6 @@ class Members extends \bbdkp\Admin
 					'member_gender_id' => $this->member_gender_id ,
 					'member_achiev' => $this->member_achiev ,
 					'member_armory_url' => (string) $this->member_armory_url ,
-					'phpbb_user_id' => (int) $this->phpbb_user_id ,
 					'member_portrait_url' => (string) $this->member_portrait_url,
 				);
 
@@ -1462,8 +1475,6 @@ class Members extends \bbdkp\Admin
 		unset ($result);
 		return $dataset;
 	}
-
-
 
 
 

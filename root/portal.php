@@ -39,7 +39,7 @@ if (!isset($config['bbdkp_version']))
 }
 if (!class_exists('\bbdkp\views'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/module/views.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/views/views.$phpEx");
 }
 
 $template->assign_var('S_PORTAL', true);

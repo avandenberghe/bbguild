@@ -841,17 +841,24 @@ class Guilds extends \bbdkp\Admin
 
 	/**
 	 * gets list of guilds, used in dropdowns
+	 * @param int $minimum optional
 	 * @return array
 	 */
-	public function guildlist()
+	public function guildlist($minimum = 0)
 	{
 		global $db;
-		$sql = 'SELECT a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, a.members
-				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
-				WHERE a.id = b.guild_id
-				AND guild_id>0
-				GROUP BY a.guilddefault, a.id, a.name, a.realm, a.region
-				ORDER BY a.guilddefault desc, a.members desc, a.id asc';
+		$sql_array = array(
+				'SELECT' => 'a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, count(c.member_id) as membercount ' ,
+				'FROM' => array(
+						GUILD_TABLE => 'a' ,
+						MEMBER_RANKS_TABLE => 'b' ,
+						MEMBER_LIST_TABLE => 'c' ),
+				'WHERE' => " a.id = b.guild_id and a.id = c.member_guild_id AND b.guild_id > 0",
+				'GROUP_BY' => ' a.guilddefault, a.id, a.name, a.realm, a.region ',
+				'HAVING' => 'count(c.member_id) > ' . $minimum,
+ 				'ORDER_BY' => ' a.guilddefault desc,  count(c.member_id) desc, a.id asc'
+				);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 		$guild = array();
 		while ($row = $db->sql_fetchrow($result))
@@ -861,7 +868,7 @@ class Guilds extends \bbdkp\Admin
 				'id' => $row['id'] ,
 				'name' => $row['name'],
 				'guilddefault' => $row['guilddefault'],
-				'membercount' => $row['members']
+				'membercount' => $row['membercount']
 			);
 		}
 		$db->sql_freeresult($result);
