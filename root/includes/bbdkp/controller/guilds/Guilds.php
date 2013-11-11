@@ -32,15 +32,15 @@ if (!class_exists('\bbdkp\controller\wowapi\BattleNet'))
 
 /**
  * Guild
- * 
+ *
  * Manages Guild creation
- * 
+ *
  *   @package bbdkp
  */
 class Guilds extends \bbdkp\Admin
 {
 	/**
-	 * guild game id 
+	 * guild game id
 	 * @var string
 	 */
 	public $game_id = '';
@@ -86,11 +86,11 @@ class Guilds extends \bbdkp\Admin
 	protected $showroster = 0;
 	/**
 	 * min. level on roster
-	 * @var int 
+	 * @var int
 	 */
 	protected $min_armory = 0;
 	/**
-	 * does guild recruit ? 
+	 * does guild recruit ?
 	 * @var int 1 or 0
 	 */
 	protected $recstatus = 1;
@@ -99,7 +99,7 @@ class Guilds extends \bbdkp\Admin
 	 * @var int 1 or 0
 	 */
 	protected $guilddefault = 1;
-	
+
 	//aion parameters
 	/**
 	 * Aion legion id
@@ -111,7 +111,7 @@ class Guilds extends \bbdkp\Admin
 	 * @var int
 	 */
 	protected $aionserverid = 0;
-	
+
 	//wow parameters
 	/**
 	 * guild achievement points
@@ -135,7 +135,7 @@ class Guilds extends \bbdkp\Admin
 	/**
 	 * guild battlegroup
 	 * @var string
-	 */ 
+	 */
 	protected $battlegroup = '';
 	/**
 	 * guild armory url
@@ -148,7 +148,7 @@ class Guilds extends \bbdkp\Admin
 	 */
 	protected $memberdata = array();
 	/**
-	 * guild side 
+	 * guild side
 	 * @var int 0 or 1
 	 */
 	protected $side = 0;
@@ -158,7 +158,7 @@ class Guilds extends \bbdkp\Admin
 	 * @var array
 	 */
 	protected $possible_recstatus = array();
-	
+
 	/**
 	 * guild class constructor
 	 * @param int $guild_id
@@ -167,22 +167,36 @@ class Guilds extends \bbdkp\Admin
 	{
 		global $user;
 		parent::__construct();
-		
+
 		if($guild_id > 0)
 		{
 			$this->guildid = $guild_id;
+			$this->Getguild();
 		}
 		else
 		{
+			//set defaults
+			$this->game_id = '';
 			$this->guildid = 0;
+			$this->name = '';
+			$this->realm = '';
+			$this->region = '';
+			$this->showroster = 1;
+			$this->achievementpoints = 0;
+			$this->level = 0;
+			$this->battlegroup = '';
+			$this->guildarmoryurl = '';
+			$this->emblempath = '';
+			$this->min_armory = 0;
+			$this->recstatus = 1;
+			$this->membercount = 0;
+			$this->guilddefault = 0;
 		}
-			
-		$this->Getguild();
-				
+
 		$this->possible_recstatus = array(
 			0 => $user->lang['CLOSED'] ,
 			1 => $user->lang['OPEN']);
-		
+
 	}
 
 	/**
@@ -192,34 +206,15 @@ class Guilds extends \bbdkp\Admin
 	{
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
-		$sql = 'SELECT id, name, realm, region, roster, game_id, members, 
+		$sql = 'SELECT id, name, realm, region, roster, game_id, members,
 				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault
 				FROM ' . GUILD_TABLE . '
 				WHERE id = ' . $this->guildid;
 		$result = $db->sql_query($sql);
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
-		if (! $row)
+		if ($row)
 		{
-			$this->game_id = '';
-			$this->guildid = 0;
-			$this->name = '';
-			$this->realm = '';
-			$this->region = '';
-			$this->showroster = 0;
-			$this->achievementpoints = 0; 
-			$this->level = 0;
-			$this->battlegroup = ''; 
-			$this->guildarmoryurl = ''; 
-			$this->emblempath = ''; 
-			$this->min_armory = 0; 
-			$this->recstatus = 0;
-			$this->membercount = 0;
-			$this->guilddefault = 0;
-		}
-		else
-		{
-			
 			// load guild object
 			$this->game_id = $row['game_id'];
 			$this->guildid = $row['id'];
@@ -234,8 +229,8 @@ class Guilds extends \bbdkp\Admin
 			$this->emblempath = $phpbb_root_path . $row['emblemurl'];
 			$this->min_armory = $row['min_armory'];
 			$this->recstatus = $row['rec_status'];
-			 
-			$this->countmembers(); 
+
+			$this->countmembers();
 			$this->guilddefault = $row['guilddefault'];
 		}
 
@@ -246,11 +241,11 @@ class Guilds extends \bbdkp\Admin
 	 * guild class property setter
 	 * @param string $fieldName
 	 */
-	public function __get($fieldName) 
+	public function __get($fieldName)
 	{
 		global $user;
-		
-		if (property_exists($this, $fieldName)) 
+
+		if (property_exists($this, $fieldName))
 		{
 			return $this->$fieldName;
 		}
@@ -259,15 +254,15 @@ class Guilds extends \bbdkp\Admin
 			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
 		}
 	}
-	
+
 	/**
 	 * guild class property setter
 	 * @param string $property
 	 * @param string $value
 	 */
-	public function __set($property, $value) 
+	public function __set($property, $value)
 	{
-		global $user; 
+		global $user;
 		switch ($property)
 		{
 			case 'membercount':
@@ -288,7 +283,7 @@ class Guilds extends \bbdkp\Admin
 
 	/**
 	 * inserts a new guild to database
-	 * 
+	 *
 	 * we always add guilds with an id greater than zero. this way, the guild with id=zero is the "guildless" guild
 	 * the zero guild is added by default in a new install.
 	 * do not delete the zero record in the guild table or you will see that guildless members
@@ -333,7 +328,7 @@ class Guilds extends \bbdkp\Admin
 				'region' => $this->region ,
 				'roster' => $this->showroster ,
 				'aion_legion_id' => $this->aionlegionid ,
-				'aion_server_id' => $this->aionserverid, 
+				'aion_server_id' => $this->aionserverid,
 				'min_armory' => $this->min_armory,
 				'guilddefault' => $this->guilddefault,
 				'members' => 0,
@@ -354,7 +349,7 @@ class Guilds extends \bbdkp\Admin
 		$newrank->RankPrefix = '';
 		$newrank->RankSuffix = '';
 		$newrank->Makerank();
-		
+
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_ADDED' ,
 				'id' =>  $this->guildid ,
@@ -367,13 +362,13 @@ class Guilds extends \bbdkp\Admin
 		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
-		return true; 
+		return true;
 
 	}
 
 	/**
 	 * updates a guild to database
-	 * 
+	 *
 	 * @param Guild $old_guild
 	 * @param array $params
 	 */
@@ -394,20 +389,20 @@ class Guilds extends \bbdkp\Admin
 				trigger_error($user->lang['ERROR_GUILDTAKEN'], E_USER_WARNING);
 			}
 		}
-		$this->countmembers(); 
-		
+		$this->countmembers();
+
 		$query = $db->sql_build_array('UPDATE', array(
-				'game_id' => $this->game_id,  
+				'game_id' => $this->game_id,
 				'id' => $this->guildid,
 				'name' => $this->name ,
 				'realm' => $this->realm,
 				'region' => $this->region ,
 				'roster' => $this->showroster ,
 				'aion_legion_id' => $this->aionlegionid ,
-				'aion_server_id' => $this->aionserverid, 
+				'aion_server_id' => $this->aionserverid,
 				'min_armory' => $this->min_armory,
 				'rec_status' => $this->recstatus,
-				'members' => $this->membercount,  
+				'members' => $this->membercount,
 				'guilddefault' => $this->guilddefault,
 		));
 
@@ -421,7 +416,7 @@ class Guilds extends \bbdkp\Admin
 				case 'wow':
 					//$params = array('members', 'achievements','news');
 					$this->Armory_get($params);
-					
+
 					$query = $db->sql_build_array('UPDATE', array(
 							'achievementpoints' => $this->achievementpoints,
 							'level' => $this->level,
@@ -429,9 +424,9 @@ class Guilds extends \bbdkp\Admin
 							'emblemurl' => $this->emblempath,
 							'battlegroup' => $this->battlegroup,
 					));
-					
+
 					$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-					
+
 					if (in_array("members", $params))
 					{
 						// update ranks table
@@ -439,23 +434,23 @@ class Guilds extends \bbdkp\Admin
 						{
 							require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
 						}
-						
+
 						$rank = new \bbdkp\controller\guilds\Ranks($this->guildid);
-						$rank->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region); 
-						
+						$rank->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region);
+
 						//update member table
 						if (!class_exists('\bbdkp\controller\members\Members'))
 						{
 							require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 						}
-						
+
 						$mb = new \bbdkp\controller\members\Members();
 						$mb->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region, $this->min_armory);
 					}
 					break;
 			}
 		}
-		
+
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_UPDATED' ,
 				'L_NAME_BEFORE' => $old_guild->name ,
@@ -468,7 +463,7 @@ class Guilds extends \bbdkp\Admin
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 	}
-	
+
 	/**
 	 * deletes a guild from database
 	 */
@@ -508,17 +503,17 @@ class Guilds extends \bbdkp\Admin
 
 
 	}
-	
+
 	/**
 	 * Calls api to pull more information. Currently only the WoW API is available
-	 * 
+	 *
 	 * @param array $params
 	 * @return void
 	 */
 	public function Armory_get($params)
 	{
 		global $phpEx, $phpbb_root_path;
-	
+
 		switch ($this->game_id)
 		{
 			case 'wow':
@@ -526,13 +521,13 @@ class Guilds extends \bbdkp\Admin
 
 				 //available extra fields : 'members', 'achievements','news'
 				$api = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region);
-				
-				$data = $api->Guild->getGuild($this->name, $this->realm, $params);  
-				unset($api); 
-				$this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0; 
-				$this->level = isset($data['level']) ? $data['level']: 0;  
-				$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: ''; 
-				$this->side = isset($data['side']) ? $data['side']: ''; 
+
+				$data = $api->Guild->getGuild($this->name, $this->realm, $params);
+				unset($api);
+				$this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0;
+				$this->level = isset($data['level']) ? $data['level']: 0;
+				$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
+				$this->side = isset($data['side']) ? $data['side']: '';
 
 				if(isset($data['name']))
 				{
@@ -540,21 +535,21 @@ class Guilds extends \bbdkp\Admin
 				}
 				else
 				{
-					$this->guildarmoryurl = ''; 
+					$this->guildarmoryurl = '';
 				}
-				
+
 				//$this->emblemurl = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
-				
-				$this->emblem = isset($data['emblem']) ? $data['emblem']: '';    
-				$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(true)  : '';       
-				$this->memberdata = isset($data['members']) ? $data['members']: '';  
+
+				$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
+				$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(true)  : '';
+				$this->memberdata = isset($data['members']) ? $data['members']: '';
 		}
-	
+
 	}
-	
+
 	/**
 	 * function to create a Wow Guild emblem, adapted for phpBB from http://us.battle.net/wow/en/forum/topic/3082248497#8
-	 *  	
+	 *
  	 * @author Thomas Andersen <acoon@acoon.dk>
 	 * @copyright Copyright (c) 2011, Thomas Andersen, http://sourceforge.net/projects/wowarmoryapi
 	 * @param boolean $showlevel
@@ -564,17 +559,17 @@ class Guilds extends \bbdkp\Admin
 	private function createEmblem($showlevel=TRUE, $width=115)
 	{
 		global $phpEx, $phpbb_root_path;
-		
+
 		//location to create the file
 		$imgfile = $phpbb_root_path . "images/bbdkp/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
 		$outputpath = "images/bbdkp/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
-		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time()) 
+		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time())
 		{
 			$finalimg = imagecreatefrompng($imgfile);
 			imagesavealpha($finalimg,true);
 			imagealphablending($finalimg, true);
-		} 
-		else 
+		}
+		else
 		{
 			if ($width > 1 AND $width < 215)
 			{
@@ -585,18 +580,18 @@ class Guilds extends \bbdkp\Admin
 				imagesavealpha($finalimg,true);
 				imagealphablending($finalimg, true);
 			}
-				
+
 			if ($this->side == 0)
 			{
 				$ring = 'alliance';
-			} 
-			else 
+			}
+			else
 			{
 				$ring = 'horde';
 			}
-	
+
 			$imgOut = imagecreatetruecolor(215, 230);
-					
+
 			$emblemURL = $phpbb_root_path ."images/bbdkp/wowapi/emblems/emblem_".sprintf("%02s",$this->emblem['icon']).".png";
 			$borderURL = $phpbb_root_path ."images/bbdkp/wowapi/borders/border_".sprintf("%02s",$this->emblem['border']).".png";
 			$ringURL = $phpbb_root_path ."images/bbdkp/wowapi/static/ring-".$ring.".png";
@@ -605,15 +600,15 @@ class Guilds extends \bbdkp\Admin
 			$overlayURL = $phpbb_root_path ."images/bbdkp/wowapi//static/overlay_00.png";
 			$hooksURL = $phpbb_root_path ."images/bbdkp/wowapi/static/hooks.png";
 			$levelURL = $phpbb_root_path ."images/bbdkp/wowapi/static/";
-					
+
 			imagesavealpha($imgOut,true);
 			imagealphablending($imgOut, true);
 			$trans_colour = imagecolorallocatealpha($imgOut, 0, 0, 0, 127);
 			imagefill($imgOut, 0, 0, $trans_colour);
-					
+
 			$ring = imagecreatefrompng($ringURL);
 			$ring_size = getimagesize($ringURL);
-				
+
 			$emblem = imagecreatefrompng($emblemURL);
 			$emblem_size = getimagesize($emblemURL);
 			imagelayereffect($emblem, IMG_EFFECT_OVERLAY);
@@ -622,8 +617,8 @@ class Guilds extends \bbdkp\Admin
 			$color_g = hexdec(substr($emblemcolor,2,2));
 			$color_b = hexdec(substr($emblemcolor,4,2));
 			imagefilledrectangle($emblem,0,0,$emblem_size[0],$emblem_size[1],imagecolorallocatealpha($emblem, $color_r, $color_g, $color_b,0));
-					
-					
+
+
 			$border = imagecreatefrompng($borderURL);
 			$border_size = getimagesize($borderURL);
 			imagelayereffect($border, IMG_EFFECT_OVERLAY);
@@ -632,9 +627,9 @@ class Guilds extends \bbdkp\Admin
 			$color_g = hexdec(substr($bordercolor,2,2));
 			$color_b = hexdec(substr($bordercolor,4,2));
 			imagefilledrectangle($border,0,0,$border_size[0]+100,$border_size[0]+100,imagecolorallocatealpha($border, $color_r, $color_g, $color_b,0));
-					
+
 			$shadow = imagecreatefrompng($shadowURL);
-							
+
 			$bg = imagecreatefrompng($bgURL);
 			$bg_size = getimagesize($bgURL);
 			imagelayereffect($bg, IMG_EFFECT_OVERLAY);
@@ -643,16 +638,16 @@ class Guilds extends \bbdkp\Admin
 			$color_g = hexdec(substr($bgcolor,2,2));
 			$color_b = hexdec(substr($bgcolor,4,2));
 			imagefilledrectangle($bg,0,0,$bg_size[0]+100,$bg_size[0]+100,imagecolorallocatealpha($bg, $color_r, $color_g, $color_b,0));
-											
-											
+
+
 			$overlay = imagecreatefrompng($overlayURL);
 			$hooks = imagecreatefrompng($hooksURL);
-											
+
 			$x = 20;
 			$y = 23;
-											
+
 			imagecopy($imgOut,$ring,0,0,0,0, $ring_size[0],$ring_size[1]);
-			
+
 			$size = getimagesize($shadowURL);
 			imagecopy($imgOut,$shadow,$x,$y,0,0, $size[0],$size[1]);
 			imagecopy($imgOut,$bg,$x,$y,0,0, $bg_size[0],$bg_size[1]);
@@ -662,15 +657,15 @@ class Guilds extends \bbdkp\Admin
 			imagecopy($imgOut,$overlay,$x,$y+2,0,0, $size[0],$size[1]);
 			$size = getimagesize($hooksURL);
 			imagecopy($imgOut,$hooks,$x-2,$y,0,0, $size[0],$size[1]);
-			
+
 			if ($showlevel)
 			{
 				$level = $this->level;
 				if ($level < 10)
 				{
 					$levelIMG = imagecreatefrompng($levelURL.$level.".png");
-				} 
-				else 
+				}
+				else
 				{
 					$digit[1] = substr($level,0,1);
 					$digit[2] = substr($level,1,1);
@@ -695,26 +690,26 @@ class Guilds extends \bbdkp\Admin
 				imagecopy($levelemblem,$levelIMG,(215/2)-($size[0]/2),(215/2)-($size[1]/2),0,0,$size[0],$size[1]);
 				imagecopyresampled($imgOut, $levelemblem, 143, 150,0,0, 215/3, 215/3, 215, 215);
 			}
-			
+
 			if ($width > 1 AND $width < 215)
 			{
 				imagecopyresampled($finalimg, $imgOut, 0, 0, 0, 0, $width, $height, 215, 230);
-			} 
-			else 
+			}
+			else
 			{
 				$finalimg = $imgOut;
 			}
-			
+
 			imagepng($finalimg,$imgfile);
-		
+
 		}
 		return $outputpath;
 	}
-	
-	
+
+
 	/**
 	 * returns a member listing for this guild
-	 * 
+	 *
 	 * @param string $order
 	 * @param number $start
 	 * @param number $mode
@@ -752,10 +747,10 @@ class Guilds extends \bbdkp\Admin
 								AND (m.member_class_id = c.class_id)' ,
 				'ORDER_BY' => $order);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-		
+
 		if($mode == 1)
 		{
-			$members_result = $db->sql_query_limit($sql, $config['bbdkp_user_llimit'], $start);			
+			$members_result = $db->sql_query_limit($sql, $config['bbdkp_user_llimit'], $start);
 		}
 		else
 		{
@@ -764,23 +759,23 @@ class Guilds extends \bbdkp\Admin
 		return $members_result;
 
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * returns a class distribution array for this guild
 	 * @return array
 	 */
 	public function classdistribution()
 	{
-	
+
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
-		
-		$sql = 'SELECT c.class_id, '; 
+
+		$sql = 'SELECT c.class_id, ';
 		$sql .= ' l.name                   AS classname, ';
 		$sql .= ' Count(m.member_class_id) AS classcount ';
 		$sql .= ' FROM  phpbb_bbdkp_classes c ';
 		$sql .= ' INNER JOIN phpbb_bbdkp_memberguild g ON c.game_id = g.game_id ';
-		$sql .= ' LEFT OUTER JOIN (SELECT * FROM phpbb_bbdkp_memberlist WHERE member_level >= ' . $this->min_armory . ') m'; 
+		$sql .= ' LEFT OUTER JOIN (SELECT * FROM phpbb_bbdkp_memberlist WHERE member_level >= ' . $this->min_armory . ') m';
 		$sql .= '   ON m.game_id = c.game_id  AND m.member_class_id = c.class_id  ';
 		$sql .= ' INNER JOIN phpbb_bbdkp_language l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
 		$sql .= ' WHERE  1=1 ';
@@ -788,20 +783,20 @@ class Guilds extends \bbdkp\Admin
 		$sql .= ' AND g.id =  ' . $this->guildid;
 		$sql .= ' GROUP  BY c.class_id, l.name ';
 		$sql .= ' ORDER  BY c.class_id ASC ';
-		
+
 		$result = $db->sql_query($sql);
 		$classes = array();
 		while($row = $db->sql_fetchrow($result))
 		{
 			$classes[$row['class_id']] = array(
-				'classname' => $row['classname'], 	
+				'classname' => $row['classname'],
 				'classcount' => $row['classcount']
-				); 
+				);
 		}
 		$db->sql_freeresult($result);
-		return $classes; 
-		
-	
+		return $classes;
+
+
 	}
 
 	/**
@@ -840,56 +835,56 @@ class Guilds extends \bbdkp\Admin
 		$total_members = (int) $db->sql_fetchfield('membercount');
 		$db->sql_freeresult($result);
 		$this->membercount = $total_members;
-		return $total_members; 
+		return $total_members;
 	}
-	
-	
+
+
 	/**
 	 * gets list of guilds, used in dropdowns
 	 * @return array
 	 */
 	public function guildlist()
 	{
-		global $db; 
-		$sql = 'SELECT a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, a.members 
+		global $db;
+		$sql = 'SELECT a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, a.members
 				FROM ' . GUILD_TABLE . ' a, ' . MEMBER_RANKS_TABLE . ' b
 				WHERE a.id = b.guild_id
 				AND guild_id>0
 				GROUP BY a.guilddefault, a.id, a.name, a.realm, a.region
 				ORDER BY a.guilddefault desc, a.members desc, a.id asc';
 		$result = $db->sql_query($sql);
-		$guild = array(); 
+		$guild = array();
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$guild [] = array (
 				'game_id' => $row['game_id'] ,
 				'id' => $row['id'] ,
-				'name' => $row['name'], 
-				'guilddefault' => $row['guilddefault'], 
+				'name' => $row['name'],
+				'guilddefault' => $row['guilddefault'],
 				'membercount' => $row['members']
 			);
 		}
 		$db->sql_freeresult($result);
-		return $guild; 
+		return $guild;
 	}
-	
+
 	/**
 	 * updates the default guild flag
 	 * @param int $id
 	 */
 	public function update_guilddefault($id)
 	{
-		global $db; 
+		global $db;
 
 		$sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 1 WHERE id = ' . (int) $id;
 		$db->sql_query ( $sql );
-		
+
 		$sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 0 WHERE id != ' . (int) $id;
 		$db->sql_query ( $sql );
-		
+
 	}
-	
-	
+
+
 }
 
 ?>
