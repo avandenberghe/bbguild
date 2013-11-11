@@ -278,7 +278,7 @@ class LootController  extends \bbdkp\Admin
 	 * @param int $loottime optional
 	 * @return boolean
 	 */
-	public function addloot($raid_id, $item_buyers, $item_value, $item_name, $loottime = 0 , $wowhead_id=0)
+	public function addloot($raid_id, $item_buyers, $item_value, $item_name, $loottime = 0, $wowhead_id=0)
 	{
 		global $user, $config;
 
@@ -432,7 +432,7 @@ class LootController  extends \bbdkp\Admin
 			$this->deleteloot($i);
 		}
 		$group_key = $this->gen_group_key ( $item_name, $loot_time, $item_id + rand(10,100) );
-		$this->addloot($raid_id, $item_buyers, $item_value, $item_name, $loot_time);
+		$this->addloot($raid_id, $item_buyers, $item_value, $item_name, $loot_time, $wowhead_id);
 
 		//
 		// Logging

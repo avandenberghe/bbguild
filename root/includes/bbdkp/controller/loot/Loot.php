@@ -101,13 +101,13 @@ class Loot
 
 	/**
 	 * memberid of who added it to the inventory ?
-	 * @var int
+	 * @var string
 	 */
 	public $item_added_by;
 
 	/**
 	 * memberid of who updated it to the inventory ?
-	 * @var int
+	 * @var string
 	 */
 	public $item_updated_by;
 
@@ -195,6 +195,7 @@ class Loot
 	 * @uses acp
 	 * @access public
 	 * @param int $item_id
+	 * @return  bbdkp\controller\Loot\Loot
 	 */
 	public function Getloot($item_id)
 	{
@@ -222,13 +223,15 @@ class Loot
 			$this->member_id = (int) 	$row['member_id'];
 			$this->member_name = (string)	$row['member_name'];
 			$this->raid_id = (int) 	$row['raid_id'];
+			$this->item_group_key = $row['item_group_key'];
 			$this->item_date = (int) 	$row['item_date'];
 			$this->item_value = (float) $row['item_value'];
 			$this->item_decay =   (float) $row['item_decay'];
 			$this->item_zs = (bool)  $row['item_zs'];
+			$this->item_added_by = (string)  $row['item_added_by'];
+			$this->item_updated_by = (string)  $row['item_updated_by'];
 		}
 		$db->sql_freeresult ($result);
-
 
 
 	}
@@ -295,8 +298,51 @@ class Loot
 	}
 
 	/**
-	 * list acquired loot in left pane loot acp
+	 * get all purchased items with the same name
+	 * @usedby views
+	 * @param int $item_id
+	 */
+	public function Loothistory($item_name)
+	{
+		global $db;
+		$sql_array = array(
+				'SELECT'    => 	'i.item_id',
+				'FROM'      => array(
+						EVENTS_TABLE 		=> 'e',
+						RAIDS_TABLE 		=> 'r',
+						CLASS_TABLE			=> 'c',
+						MEMBER_LIST_TABLE 	=> 'l',
+						RAID_ITEMS_TABLE 		=> 'i',
+				),
 
+				'WHERE'     =>  " e.event_id = r.event_id
+						AND e.event_status = 1
+    					AND r.raid_id = i.raid_id
+	    				AND l.member_class_id = c.class_id
+	    				AND l.game_id = c.game_id
+	    				AND i.member_id = l.member_id
+				        AND i.item_name='". $db->sql_escape($item_name) . "'",
+				'ORDER_BY'	=> 'i.item_date desc ',
+		);
+
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query($sql);
+		$purchased_items = array();
+		while ($row = $db->sql_fetchrow($result) )
+		{
+			$this->Getloot($row['item_id']);
+			$purchased_items[ $row['item_id']] = (array) $this;
+			unset($this);
+		}
+		$db->sql_freeresult($result);
+		return $purchased_items;
+
+
+	}
+
+	/**
+	 * list acquired loot in left pane loot acp
+	 * @usedby acp
 	 * @param int $guild_id
 	 * @return multitype:unknown
 	 */
@@ -316,7 +362,7 @@ class Loot
 								  AND m.member_guild_id = ' . $guild_id . '
 								  AND i.raid_id = r.raid_id
 								  AND r.event_id = e.event_id ',
-				'GROUP_BY'	=> ' i.item_name, i.item_gameid, e.event_name, e.event_dkpid, i.wowhead_id',
+				'GROUP_BY'	=> ' i.item_name, i.item_gameid, e.event_dkpid, i.wowhead_id',
 				'ORDER_BY'  => ' i.item_date ',
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -517,7 +563,6 @@ class Loot
 		return  $db->sql_query_limit ( $sql, $config ['bbdkp_user_ilimit'], $istart );
 
 	}
-
 
 
 }
