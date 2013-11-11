@@ -276,6 +276,7 @@ class Members extends \bbdkp\Admin
 		}
 
 		$this->Getmember();
+		$this->guildmemberlist = array();
 	}
 
 
@@ -1209,7 +1210,7 @@ class Members extends \bbdkp\Admin
 	 * get a member list for given guild
 	 * @param int $guild_id
 	 */
-	public function listallmembers($guild_id = 0)
+	public function listallmembers($guild_id = 0, $assignedonly=false)
 	{
 		global $db;
 
@@ -1225,6 +1226,11 @@ class Members extends \bbdkp\Admin
 								AND r.rank_hide != 1 ',
 			'ORDER_BY' => 'm.member_rank_id asc, m.member_level desc, m.member_name asc'
 		);
+
+		if($assignedonly == true)
+		{
+			$sql_array['WHERE'] .= ' AND m.phpbb_user_id != 0 ';
+		}
 
 		if($guild_id != 0)
 		{
@@ -1244,6 +1250,22 @@ class Members extends \bbdkp\Admin
 		}
 
 		$db->sql_freeresult( $result );
+	}
+
+	public function Claim_Member()
+	{
+		global $db, $user;
+
+		$sql_ary = array(
+				'phpbb_user_id'	=> $user->data['user_id'],
+		);
+
+		$sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
+						SET ' . $db->sql_build_array('UPDATE', $sql_ary) . '
+						WHERE member_id = ' . $this->member_id;
+		$db->sql_query($sql);
+
+
 	}
 
 	/**

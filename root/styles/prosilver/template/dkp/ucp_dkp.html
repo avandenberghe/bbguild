@@ -1,24 +1,111 @@
 <!-- INCLUDE ucp_header.html -->
+<script type="text/javascript">
+// <![CDATA[
 
+/*  make a XMLHTTP Request object */
+function GetXmlHttpObject()
+{
+	var xmlhttp=false;
+
+	try
+	{
+		//  IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp=new XMLHttpRequest();
+	}
+	catch(e)
+	{	// activex code for IE6, IE5
+		try
+		{
+			xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		catch(e)
+		{
+			try
+			{
+				xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+			}
+			catch(e1)
+			{
+				xmlhttp=false;
+			}
+		}
+	}
+	return xmlhttp;
+}
+
+/* ajax function to find memberlist when guild is selected in pulldown */
+var xmlhttp;
+function GetMemberlist(guildid)
+{
+   xmlhttp = GetXmlHttpObject();
+   if (xmlhttp == null)
+   {
+	   alert("{LA_ALERT_OLDBROWSER}");
+	   return;
+   }
+    var strURL="{T_TEMPLATE_PATH}/dkp/findmemberlist.php?guild_id="+guildid;
+    xmlhttp.onreadystatechange=GuildStateChanged;
+    xmlhttp.open("GET", strURL, true);
+    // send to server
+    xmlhttp.send(null);
+}
+
+
+/* called from GetMemberlist when state changed */
+function GuildStateChanged()
+{
+	if (xmlhttp.readyState==4) //request complete
+	{
+		if (xmlhttp.status == 200)
+		{
+			//receive xml
+			xmlDoc=xmlhttp.responseXML;
+			var memberlist = xmlDoc.getElementsByTagName('memberlist')[0];
+			var members = memberlist.getElementsByTagName("member");
+
+			//now modify html : first remove old select options
+			var rsel = document.getElementById('memberlist');
+			rsel.options.length = 0;
+
+			for (var i = 0; i < members.length; i++)
+			{
+				var member = members[i];
+				var memberid = member.getElementsByTagName("member_id")[0].firstChild.nodeValue;
+				var membername = member.getElementsByTagName("member_name")[0].firstChild.nodeValue;
+			    // add the options
+			    rsel.options[i] = new Option(membername,memberid, true, false);
+			}
+		}
+		else
+		{
+   	   		alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+	 	}
+	}
+}
+
+
+
+
+// ]]>
+</script>
 <h2>{L_UCP_DKP_CHARACTERS}</h2>
-
 
 <div class="panel">
 <div class="inner"><span class="corners-top"><span></span></span>
 
-<fieldset><!-- IF ERROR -->
-<p class="error">{ERROR}</p>
-<!-- ENDIF -->
-</fieldset>
-
 <!-- IF S_SHOW -->
-	<!-- IF  .members_row -->
-	
-	<div class="panel">
-	<div class="inner">
 
-	<!-- BEGIN members_row -->
-	<ul class ="topiclist">	
+<!-- IF ERROR -->
+<fieldset>
+<p class="error">{ERROR}</p>
+</fieldset>
+<!-- ENDIF -->
+
+<!-- IF  .members_row -->
+<div class="panel">
+<div class="inner">
+<!-- BEGIN members_row -->
+	<ul class ="topiclist">
 		<li class="header">
 			<dl>
 				<dt>
@@ -30,11 +117,11 @@
 				</dt>
 				<dd class="mark">
 				{L_EDIT}<br />
-				<a href="{members_row.U_EDIT}"><img title="Edit" alt="Edit" src="./images/icons/view.gif" /></a></dd>	
+				<a href="{members_row.U_EDIT}"><img title="Edit" alt="Edit" src="./images/icons/view.gif" /></a></dd>
 			</dl>
 		</li>
 	</ul>
-	<ul class ="topiclist cplist">	
+	<ul class ="topiclist cplist">
 		<!-- BEGIN dkp_row -->
 		<!-- IF dkp_row.S_ROW_COUNT is even -->
 		<li class="row bg1">
@@ -46,7 +133,7 @@
 					<dd style="width:15%">{L_EARNED}: {members_row.dkp_row.EARNED} &nbsp;</dd>
 					<dd style="width:15%">{L_SPENT}: {members_row.dkp_row.SPENT}&nbsp;</dd>
 					<dd style="width:15%">{L_CURRENT}: {members_row.dkp_row.CURRENT}&nbsp;</dd>
-					<!-- IF S_SHOWEPGP --> 
+					<!-- IF S_SHOWEPGP -->
 					<dd style="width:15%">{L_PR}: {members_row.dkp_row.PR}&nbsp;</dd>
 					<!-- ENDIF -->
 			</dl>
@@ -54,33 +141,46 @@
 		<!-- END dkp_row -->
 	</ul>
 	<!-- END members_row -->
-	</div>
-	</div>
-
+</div>
+</div>
+<!-- ELSE -->
+<p class="error">{L_NO_CHARACTERS_BOUND} </p><p><br /></p>
 <!-- ENDIF -->
 
-<span class="corners-bottom"><span></span></span></div>
+<span class="corners-bottom"><span></span></span>
+</div>
 </div>
 
-<!-- IF S_SHOW_BUTTONS -->
 <form id="characters" method="post" action="{U_ACTION}">
 <div class="panel">
 <div class="inner"><span class="corners-top"><span></span></span>
+<!-- IF S_SHOW_BUTTONS -->
 
 <fieldset class="submit-buttons">
 <dl>
-	<dt><label for="dkpmember"></label>{L_CHARACTER_EXPLAIN}</dt>
-	<dd><select id="dkpmember" name="dkpmember">
+	<dt><label for="memberlist"></label>{L_CHARACTER_EXPLAIN}</dt>
+	<dd>
+	<!-- IF  .guild_row -->
+		<select name="guild_id" id="guild_id" class="input" onchange="return GetMemberlist(this.value);">
+	      <!-- BEGIN guild_row -->
+	       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
+	      <!-- END guild_row -->
+		</select>
+	<!-- ENDIF -->
+	<select id="memberlist" name="memberlist">
 		{S_DKPMEMBER_OPTIONS}
-	</select></dd>
+	</select>
+	</dd>
 </dl>
 	 <input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" /> {S_FORM_TOKEN}
 </fieldset>
-<!-- ENDIF --> 
+<!-- ENDIF -->
 
-<!-- ELSE --> 
-<p class="error">{L_NO_CHARACTERS} </p><p><br /></p>
-<!-- ENDIF --> 
+<!-- ELSE -->
+<fieldset>
+<p class="error"><span>{L_NO_CHARACTERS}</span></p>
+</fieldset>
+<!-- ENDIF -->
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
