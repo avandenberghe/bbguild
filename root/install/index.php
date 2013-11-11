@@ -442,29 +442,6 @@ $versions = array(
 
        'table_row_insert'	=> array(
 
-		  // we insert a dummy pool
-         array($table_prefix .'bbdkp_dkpsystem',
-          array(
-                  array(
-                  		'dkpsys_name' 	 => 'Default DKP Pool' ,
-                  		'dkpsys_status'  => 'Y',
-                   		'dkpsys_addedby' =>  'admin' ,
-                   		'dkpsys_default' =>  'Y'
-                  		),
-                  )
-           ),
-
-         // insert a dummy event
-         array($table_prefix .'bbdkp_events',
-          array(
-                  array('event_dkpid' => 1,
-                  		'event_name' => 'Default event',
-                  		'event_color' => '#000000',
-                  		'event_value' => 10
-                  		),
-                  )
-           ),
-
           // we insert a dummy guild (None) for guildless people and also the default guild
          array($table_prefix .'bbdkp_memberguild',
           array(
