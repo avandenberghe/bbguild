@@ -2,7 +2,7 @@
 /**
  * bbdkp admin language file [English]
  * @author Sajaki@bbdkp.com
- * 
+ *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
@@ -44,10 +44,10 @@ if (empty($lang) || !is_array($lang))
 // DKP
 $lang = array_merge($lang, array(
 'NOT_UP_TO_DATE_TITLE'	=> 'Your %s is out of date.',
-'BBDKP_LATESTVERSION'	=> 'Latest Version:',		
+'BBDKP_LATESTVERSION'	=> 'Latest Version:',
 'BBDKPDISABLED' => 'bbDKP is currently disabled.',
 'BBDKPSCRIPTALERT' => 'bbDKP includes embedded Javascript. You are invited to use a javascript-enabled browser.',
-		
+
 //Plugin Check System
 
 'PLUGINS_INSTALLED'	 => 'Plugins Installed',
@@ -62,7 +62,7 @@ $lang = array_merge($lang, array(
 'BOSSPROGRESS_TITLE' 	=> 'Bossprogress',
 'RAIDPLANNER_TITLE' 	=> 'RaidPlanner',
 'RAIDTRACKER_TITLE' 	=> 'RaidTracker',
-		
+
 //addnews
 'ADD_NEWS' => 'Add News',
 'ADDNEWS_TITLE' => 'Add a News Entry',
@@ -73,9 +73,9 @@ $lang = array_merge($lang, array(
 'UPDATE_DATE_TO' => 'Update date to<br />%s?',
 
 //REGISTRATION
-'REGISTRATIONID' => 'bbDKP Registration key', 
+'REGISTRATIONID' => 'bbDKP Registration key',
 'NOTREGISTERED' => 'Unregistered',
-'REGISTRATION_EXPLAIN' => 'If you press the registration button, your domainname, phpbb version, bbDKP version are sent to bbDKP.com and you get a registration key. This is entirely up to you, registration is not needed to use this software. ', 
+'REGISTRATION_EXPLAIN' => 'If you press the registration button, your domainname, phpbb version, bbDKP version are sent to bbDKP.com and you get a registration key. This is entirely up to you, registration is not needed to use this software. ',
 //JAVASCRIPT
 'B_HELP' => 'Bold text: [b]text[/b]',
 'I_HELP' => 'Italic text: [i]text[/i]',
@@ -276,14 +276,14 @@ $lang = array_merge($lang, array(
 'ACP_INDEXPAGE' => 'Portal Configuration',
 'POINT_SETTINGS' => 'Point Settings',
 'ACP_NEWGAME' => 'Game List',
-'ACP_EDITGAME'	=> 'Edit Game: %s', 
+'ACP_EDITGAME'	=> 'Edit Game: %s',
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Adminpanel Index',
 'ACP_ADDDKPSYS_EXPLAIN' => 'Here you can add or change the name/status of a DKP Pool. Before setting up Events you need to make a DKP Pool.',
 'ACP_LISTDKPSYS_EXPLAIN' => 'List DKP Pools; a DKP pool combines a series of Events, Raids and Items. This way you can manage multiple DKP Tiers separately. ',
 'ACP_ADDEVENT_EXPLAIN' => 'Here you can add / change event information. DKP Pools must be set up first.',
-'ACP_LISTEVENTS_EXPLAIN' => 'List of Events. The preset values will be used as standard Raidvalue for any raid on that event. 
+'ACP_LISTEVENTS_EXPLAIN' => 'List of Events. The preset values will be used as standard Raidvalue for any raid on that event.
 		To create events you can choose a zonename from the zonelist. You can also import Events with the Raidtracker Eventtrigger import tool.
 		<em>Only raids belonging to active events are shown on the loot or Raid list. It is recommended to only deactivate events that are fully decayed or have no raids.</em>',
 'ACP_ADDIADJ_EXPLAIN'=> 'Here you can add / change individual adjustments. ',
@@ -332,9 +332,9 @@ $lang = array_merge($lang, array(
 'ACP_NEWGAME_EXPLAIN' => 'Here you can add new custom or preconfigured MMO games and maintain your installed games.',
 'ACP_EDITGAME_EXPLAIN' => 'Here you can edit the static elements of any MMO game: Factions, classes, races. <br />
 		<em>Currently not included are professions, skills, PVP, and geography including raids, dungeons and bosses.</em>',
-'ACP_GAME_EXPLAIN' => 'Here you can reset a game to its default settings or delete a game.', 
-'ACP_GAME_RESET' => 'Reset the game settings. ', 
-'ACP_GAME_DELETE' => 'Delete this game.', 
+'ACP_GAME_EXPLAIN' => 'Here you can reset a game to its default settings or delete a game.',
+'ACP_GAME_RESET' => 'Reset the game settings. ',
+'ACP_GAME_DELETE' => 'Delete this game.',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -465,7 +465,7 @@ $lang = array_merge($lang, array(
 'VLOG_MEMBER_ADDED' => '%s added the member %s.',
 'VLOG_MEMBER_UPDATED' => '%s updated the member %s.',
 'VLOG_MEMBER_DELETED' => '%s deleted the member %s.',
-'VLOG_MEMBER_DEACTIVATED' => '%s deactivated the member %s, last WoW login %s days ago ',
+'VLOG_MEMBER_DEACTIVATED' => '%s deactivated the member %s due to inactivity (%s) ',
 'VLOG_MEMBERDKP_UPDATED' => '%s updated the dkp points of %s : earned: %.2f -> %.2f, spent: %.2f -> %.2f',
 'VLOG_MEMBERDKP_DELETED' => '%s deleted the dkp points of %s !',
 'VLOG_NEWS_ADDED' => '%s added the news entry %s.',
@@ -543,11 +543,11 @@ $lang = array_merge($lang, array(
 'VALUE_AFTER' => 'Value After',
 'REALM_BEFORE' => 'Realm Before',
 'REALM_AFTER' => 'Realm After',
-'GENDER_BEFORE' => 'Gender Before', 
+'GENDER_BEFORE' => 'Gender Before',
 'GENDER_AFTER' => 'Gender After',
-'RANK_BEFORE' => 'Rank Before', 
+'RANK_BEFORE' => 'Rank Before',
 'RANK_AFTER' => 'Rank After',
-'ACHIEV_BEFORE' => 'Achievements Before', 
+'ACHIEV_BEFORE' => 'Achievements Before',
 'ACHIEV_AFTER' => 'Achievements After',
 
 //log
@@ -600,7 +600,7 @@ $lang = array_merge($lang, array(
 'ERROR_NOGUILDMEMBERSDEFINED'   	=>  'Error : no Guildmembers. cannot add Raid ',
 'ERROR_RANKMEMBERS'			=> 'Cannot delete this rank. There are still members with this rank. ',
 'ERROR_NOSELECT'			=> 'Please select a From and a To-member.',
-'WARNING_BATTLENET' 		=> 'Updating all members from Battle.NET Character API may take several minutes. Please confirm.', 
+'WARNING_BATTLENET' 		=> 'Updating all members from Battle.NET Character API may take several minutes. Please confirm.',
 //Curl errors
 'ERR_UNKNOWN'					=> 'Unknown error occurred.',
 'CURL_REQUIRED'					=> 'Curl is required for SDK usage.',
@@ -658,6 +658,7 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_IADJ_SUCCESS' => 'The individual %s adjustment of %.2f for %s has been updated in the database for your guild.',
 'ADMIN_UPDATE_ITEM_SUCCESS' => 'The item purchase entry for %s, purchased by %s for %.2f has been updated in the database for your guild.',
 'ADMIN_UPDATE_MEMBER_SUCCESS' => 'Character settings for %s have been updated.',
+'ADMIN_DEACTIVATE_MEMBER_SUCCESS' => 'Member %s was deactivated due to inactivity (%s)',
 'ADMIN_UPDATE_MEMBER_FAIL' => 'Cannot update Character name %s.',
 'ADMIN_UPDATE_MEMBERDKP_SUCCESS' => 'Dkp for %s has been updated.',
 'ADMIN_UPDATE_NEWS_SUCCESS' => 'The news entry has been updated in the database for your guild.',
@@ -845,7 +846,7 @@ So the loot would go to player 2 <br />',
 'PLUGINS' => 'Plugins',
 'POINT_NAME' => 'Point Name',
 'POINT_NAME_NOTE' => 'Ex: DKP, RP, etc.',
-'RAIDS' => 'Raids', 
+'RAIDS' => 'Raids',
 'RAIDS_PER_PAGE' => 'Raids per Page',
 'REGION'	=> 'Region',
 'REGIONEU'	=> 'Europe/Africa',
@@ -928,7 +929,7 @@ So the loot would go to player 2 <br />',
 'ADD_RAID' => 'Add Raid',
 'ADD_RACE' => 'Add Race',
 'ADD_CLASS' => 'Add Class',
-'ADD_GAME' => 'Add Game', 
+'ADD_GAME' => 'Add Game',
 'ADD_PRECONFIGGAME' => 'Add Game from template',
 'ADD_CUSTOMGAME' => 'Add Custom Game',
 'LIST_GAMES' => 'List Games',
@@ -961,14 +962,14 @@ So the loot would go to player 2 <br />',
 'UPDATE_RACE' => 'Update Race',
 'UPDATE_CLASS' => 'Update Class',
 'CHANGE_ACTIVATION' => 'Change Activation',
-'CHARACTERAPICALL' => 'Update Members from Character API', 
+'CHARACTERAPICALL' => 'Update Members from Character API',
 
 // Misc
 'ADJUSTMENT_VALUE' => 'Adjustment Value',
 'ADJUSTMENT_VALUE_NOTE' => 'May be negative',
 'ADJUSTMENT_NET' => 'Adjustment Net',
 'ARMORY_URL' => 'Armory link',
-'CHARAPIDONE' => 'Character API Call done: %s Characters updated : %s' ,   
+'CHARAPIDONE' => 'Character API Call done: %s Characters updated : %s' ,
 'ATTENDEEADD_EXPLAIN' => 'Choose additional member to add to raid',
 'CHANGE_STATUS' => 'Change Status',
 'CLASS_NAME' => 'Class Name',
@@ -981,7 +982,7 @@ So the loot would go to player 2 <br />',
 'CONTACT' => 'Contact',
 'CREATE' => 'Create',
 'DATE_FORMAT' => 'Date Format in lists',
-'BBDKP_MEMBERDEACTIVATED' => 'Deactivated by %s on %s', 
+'BBDKP_MEMBERDEACTIVATED' => 'Deactivated by %s on %s',
 'DEFAULT_DKP_POOL' => 'Default DKP Pool',
 'DEFAULT_GUILD' => 'Default Guild',
 'DKPPERTIME' => '%s DKP per %s minutes.',
@@ -1006,9 +1007,9 @@ So the loot would go to player 2 <br />',
 'EVENT_IMAGE_EXPLAIN' => 'event imagename, without extension. png file should exist in /images/bbdkp/event_images',
 'EVENT_VIEWALL' => 'View all events',
 'EVENT_VIEWALL_EXPLAIN' => 'Also view events without raids',
-'GAMEITEMID_EXPLAIN' => 'Game Item id (WoW)',
+'GAMEITEMID_EXPLAIN' => 'Game ItemId',
 'GAMES_INST' => 'Games installed',
-'GUILDLEADER' => 'Guildleader', 
+'GUILDLEADER' => 'Guildleader',
 'STATUS' => 'Status',
 'FACTION_NAME' => 'Faction Name',
 'HIDE' => 'Hide?',

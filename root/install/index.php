@@ -1,7 +1,7 @@
 <?php
 /**
  * bbDKP Umil Installer
- * 
+ *
  *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -52,12 +52,12 @@ switch ($db->sql_layer)
 
 if (!function_exists('curl_init'))
 {
-	$error[] = $user->lang['CURL_REQUIRED'] . '<br />' ; 
+	$error[] = $user->lang['CURL_REQUIRED'] . '<br />' ;
 }
 
 if (!function_exists('json_decode'))
 {
-	$error[] = $user->lang['JSON_REQUIRED'] . '<br />' ; 
+	$error[] = $user->lang['JSON_REQUIRED'] . '<br />' ;
 }
 
 if(count($error) > 0)
@@ -297,7 +297,7 @@ $versions = array(
                         'event_value'		=> array('DECIMAL:11', 0),
                         'event_added_by'	=> array('VCHAR_UNI:255', ''),
                         'event_updated_by'	=> array('VCHAR_UNI:255', ''),
-                    	'event_status' 		=> array('BOOL', 1), 
+                    	'event_status' 		=> array('BOOL', 1),
                     ),
                     'PRIMARY_KEY'    => 'event_id',
                     'KEYS'            => array('event_dkpid'    => array('INDEX', 'event_dkpid')),
@@ -442,29 +442,6 @@ $versions = array(
 
        'table_row_insert'	=> array(
 
-		  // we insert a dummy pool
-         array($table_prefix .'bbdkp_dkpsystem',
-          array(
-                  array(
-                  		'dkpsys_name' 	 => 'Default DKP Pool' ,
-                  		'dkpsys_status'  => 'Y',
-                   		'dkpsys_addedby' =>  'admin' ,
-                   		'dkpsys_default' =>  'Y'
-                  		),
-                  )
-           ),
-
-         // insert a dummy event
-         array($table_prefix .'bbdkp_events',
-          array(
-                  array('event_dkpid' => 1,
-                  		'event_name' => 'Default event',
-                  		'event_color' => '#000000',
-                  		'event_value' => 10
-                  		),
-                  )
-           ),
-
           // we insert a dummy guild (None) for guildless people and also the default guild
          array($table_prefix .'bbdkp_memberguild',
           array(
@@ -533,7 +510,7 @@ $versions = array(
 			array('ROLE_USER_FULL', 'u_dkp_charupdate'),
 			array('ROLE_USER_FULL', 'u_dkpucp'),
             ),
-    		
+
 		// Assign default permissions to Full admin
         'permission_set' => array(
       		//admin can access acp
@@ -685,13 +662,13 @@ $versions = array(
 	        array('bbdkp_portal_rtno', 5, true),
 	        array('bbdkp_portal_rtlen', 15, true),
 	        array('bbdkp_portal_rtshow', 1, true),
-        		
+
        		array('bbdkp_games_tera', 0, true),
        		array('bbdkp_games_gw2', 0, true),
        		array('bbdkp_event_viewall', 1, true),
        		array('bbdkp_portal_newmembers', 1, true),
        		array('bbdkp_portal_maxnewmembers', 5, true),
-        		
+
         ),
 
         // add the bbdkp modules to ACP using the info files,
@@ -799,7 +776,7 @@ $versions = array(
 			array('ucp', 'UCP_DKP', array(
 					'module_basename'   => 'dkp',
 					'modes' => array('characters', 'characteradd'),
-			))), 
+			))),
 
     ),
 
@@ -814,14 +791,18 @@ $versions = array(
 
 	'1.2.9' => array(
 		// dev version, never released
-	), 
-			
-     '1.3.0-a1' => array(
+	),
+
+	'1.3.0-a1' => array(
+				// dev version, never released
+		),
+
+    '1.3.0-a2' => array(
 
      	// oop release, now requires 553
-     	
+
        'table_add' => array(
-       	  
+
        	  // add the new transactions table
 		  array($table_prefix . 'bbdkp_transactions', array(
                     'COLUMNS'        	 => array(
@@ -833,14 +814,14 @@ $versions = array(
                     ),
                     'PRIMARY_KEY'  => array('trans_id'),
 		  			'KEYS'            => array(
-		  					'member_id' => array('INDEX', 'member_id'), 
+		  					'member_id' => array('INDEX', 'member_id'),
 		  					'member_dkp' => array('INDEX', 'member_dkpid'),
 		  					'memberiddkp' => array('INDEX', array('member_id', 'member_dkpid')),
 		  					'memberidaccount' => array('INDEX', array('member_id', 'member_dkpid', 'account')),
 		  				)
                 	),
             ),
-       		
+
 			// add the new game table
        		array($table_prefix . 'bbdkp_games', array(
 	              'COLUMNS'            => array(
@@ -851,8 +832,8 @@ $versions = array(
 	          		),
 	                'PRIMARY_KEY'     => array('id'),
 	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id')))
-       			)), 
-       		
+       			)),
+
        		// add the new recruitment table
        		array($table_prefix . 'bbdkp_roles', array(
        				'COLUMNS'            	=> array(
@@ -866,7 +847,7 @@ $versions = array(
        				'PRIMARY_KEY'     => array('id'),
        				'KEYS'            => array('bbdkp_roles' => array('UNIQUE', array('guild_id', 'game_id', 'role', 'class_id' ))),
        			)),
-       		
+
        		),
 
     	// remove copyright info from plugin table
@@ -876,10 +857,11 @@ $versions = array(
      			array($table_prefix . 'bbdkp_classes', 'tank'),
      			array($table_prefix . 'bbdkp_classes', 'heal'),
       		),
-     		
+
      	// add guild columns
      	'table_column_add' => array(
      				array($table_prefix . 'bbdkp_plugins', 'installdate', array('TIMESTAMP', 0)),
+     				array($table_prefix . 'bbdkp_raid_items', 'wowhead_id', array('UINT', 0)),
      				array($table_prefix . 'bbdkp_memberlist', 'member_title', array('VCHAR_UNI:255', '')),
      				array($table_prefix . 'bbdkp_memberlist', 'member_role', array('VCHAR:20', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'level', array('UINT', 0) ),
@@ -893,7 +875,7 @@ $versions = array(
      				array($table_prefix . 'bbdkp_memberguild', 'rec_status', array('BOOL', 0)),
      				array($table_prefix . 'bbdkp_memberguild', 'guilddefault', array('BOOL', 0)),
      		),
-     		
+
 
      	'module_remove' => array(
 
@@ -902,68 +884,68 @@ $versions = array(
 			           		 'module_basename' => 'dkp_mm',
 			            	 'modes'           => array('mm_ranks', 'mm_listguilds', 'mm_addguild', 'mm_listmembers', 'mm_addmember'),
 					)),
-     			
+
      			//remove the game acp
 	     		array('acp', 'ACP_DKP_MEMBER', array(
 	     				'module_basename' => 'dkp_game',
 	     				'modes'           => array('listgames', 'addfaction', 'addrace', 'addclass'),
 	     		)),
-     		 
-    			
-     			
+
+
+
      			//remove the dkp adjustments
      			array('acp', 'ACP_DKP_MDKP', array(
      					'module_basename' => 'dkp_adj',
      					'modes'           => array('addiadj', 'listiadj'),
      			),
      			),
-     			
+
      			// remove dkp list
      			array('acp', 'ACP_DKP_MDKP', array(
      					'module_basename' => 'dkp_mdkp',
      					'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
      			),
      			),
-     			
-     			
+
+
      			// remove item modules
      			array('acp', 'ACP_DKP_RAIDS', array(
      					'module_basename' => 'dkp_item',
      					'modes'           => array('listitems', 'edititem', 'search', 'viewitem'),
      			),
      			),
-     			
-     			
+
+
      			// remove events module
      			array('acp', 'ACP_DKP_RAIDS', array(
      					'module_basename' => 'dkp_event',
      					'modes'           => array('addevent', 'listevents'),
      			),
      			),
-     			
-     			), 
-     		
+
+     			),
+
      	'module_add' => array(
-				//add the game acp       		
+				//add the game acp
      			array('acp', 'ACP_DKP_MAINPAGE', array(
      						'module_basename' => 'dkp_game',
      						'modes'           => array('listgames','editgames', 'addfaction', 'addrace', 'addclass'),
      				)),
-     			
+
      			// add guild acp
      			array('acp', 'ACP_DKP_MEMBER', array(
      					'module_basename' => 'dkp_guild',
      					'modes'           => array(  'listguilds', 'addguild', ),
      			),
      			),
-     			
+
      			// add member acp
      			array('acp', 'ACP_DKP_MEMBER', array(
      					'module_basename' => 'dkp_mm',
      					'modes'           => array(  'mm_listmembers', 'mm_addmember' ),
      			),
      			),
-     			
+
      			//add edit dkp pool, addevent
      			array('acp', 'ACP_DKP_RAIDS', array(
      					'module_basename' => 'dkp_sys',
@@ -971,40 +953,40 @@ $versions = array(
      			),
      			),
 
-     			
+
      			// re-add dkp list
      			array('acp', 'ACP_DKP_MDKP', array(
      					'module_basename' => 'dkp_mdkp',
      					'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
      			),
      			),
-     			
+
      			//re-add the dkp adjustments
      			array('acp', 'ACP_DKP_MDKP', array(
      					'module_basename' => 'dkp_adj',
      					'modes'           => array('addiadj', 'listiadj'),
      			),
      			),
-     			
+
      			// remove item modules
      			array('acp', 'ACP_DKP_RAIDS', array(
      					'module_basename' => 'dkp_item',
      					'modes'           => array('listitems', 'additem', 'search', 'viewitem'),
      			),
      			),
-     		 		
-     		 		
+
+
      		 	),
-     		
+
      	'custom' => array(
 				'tableupdates',
 				'bbdkp_caches',
      		),
-     	
+
        	'config_update' => array(
      				array('bbdkp_roster_layout', '0', true),
      		),
-     	
+
      	//guild games acp makes this config obsolete
      	'config_delete' => array(
      				array('bbdkp_guildtag') ,
@@ -1022,14 +1004,14 @@ $versions = array(
 	     			array('bbdkp_games_swtor'),
 	     			array('bbdkp_games_lineage2'),
 	     			array('bbdkp_games_tera'),
-	     			array('bbdkp_games_gw2'),     					
+	     			array('bbdkp_games_gw2'),
      		),
 
      	// add new parameters
      	'config_add' => array(
      				array('bbdkp_regid', '', true),
-     		), 
-     		
+     		),
+
      ),
 
 );
@@ -1057,7 +1039,7 @@ function encode_message($text)
 
 /**
  * custom SQL updates outside of UMIL
- * 
+ *
  * @param string $action
  * @param string $version
  * @return multitype:string
@@ -1075,7 +1057,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0-a1':
+				case '1.3.0-a2':
 					// add double PK in members table
 
 					// remove unique index 'member_name' on member table
@@ -1089,19 +1071,19 @@ function tableupdates($action, $version)
 					// rename bbdkp_memberdkp table to bbdkp_reporting table
 					//$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
 					//$db->sql_query($sql);
-					
+
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberguild MODIFY region VARCHAR(3) ';
 					$db->sql_query($sql);
-										
+
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raid_items MODIFY item_gameid VARCHAR(8) ';
 					$db->sql_query($sql);
-	
+
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberlist MODIFY member_comment TEXT ';
 					$db->sql_query($sql);
-					
+
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raids MODIFY raid_note TEXT ';
 					$db->sql_query($sql);
-					
+
 					break;
 
 
@@ -1113,7 +1095,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0-a1':
+				case '1.3.0-a2':
 					// add double PK in members table
 					// remove unique index 'member_name' on member table
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
@@ -1122,22 +1104,25 @@ function tableupdates($action, $version)
 					// make new unique composite this way double membernames are enabled
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
-					
+
 					// rename the dkp table to reporting table
 					//$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
 					//$db->sql_query($sql);
 
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberguild MODIFY region VARCHAR(3) ';
 					$db->sql_query($sql);
-					
+
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raid_items MODIFY item_gameid VARCHAR(8) ';
 					$db->sql_query($sql);
-					
+
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberlist MODIFY member_comment TEXT ';
 					$db->sql_query($sql);
-					
+
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raids MODIFY raid_note TEXT ';
-					$db->sql_query($sql);					
+					$db->sql_query($sql);
+					//if the game_id is numeric consider it as a wowheadid
+					$sql= "UPDATE  " . $table_prefix . "bbdkp_raid_items SET wowhead_id = (CASE WHEN item_gameid REGEXP ('^[0-9]+$') THEN item_gameid ELSE 0 END) ";
+					$db->sql_query($sql);
 					break;
 
 			}
@@ -1147,10 +1132,10 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0-a1':
+				case '1.3.0-a2':
 					//$sql= "DROP TABLE  " . $table_prefix . 'bbdkp_reporting ';
 					//$db->sql_query($sql);
-						
+
 					break;
 
 			}

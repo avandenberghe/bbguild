@@ -71,26 +71,26 @@ class views extends \bbdkp\admin
 	/**
 	 * pool id
 	 * @var integer
-	 */ 
+	 */
 	private $dkpsys_id = 0;
 	/**
 	 * name of pool
 	 * @var string
-	 */ 
+	 */
 	private $dkpsys_name = '';
-	
+
 	/**
 	 * load a page asked for by user
-	 * 
+	 *
 	 * @param string $page
 	 */
 	public function load($page)
 	{
 		global $user, $template, $config, $phpbb_root_path, $phpEx ;
 		global $db, $auth;
-		
+
 		$this->filter = $user->lang['ALL'];
-		
+
 		if ($this->bbtips == true)
 		{
 			if (! class_exists ( 'bbtips' ))
@@ -99,51 +99,52 @@ class views extends \bbdkp\admin
 			}
 			//$bbtips = new bbtips ( );
 		}
-		
+
 		//load navigation
-		include($phpbb_root_path . 'includes/bbdkp/module/navigation.' . $phpEx);
-		
-		// load modules
+		include($phpbb_root_path . 'includes/bbdkp/views/navigation.' . $phpEx);
+
+		// load viewss
 		switch ($page)
 		{
 			case 'roster':
-				include($phpbb_root_path . 'includes/bbdkp/module/roster.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/roster.' . $phpEx);
 				break;
 			case 'news':
-				include($phpbb_root_path . 'includes/bbdkp/module/news.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/news.' . $phpEx);
 				break;
 			case 'standings':
-				include($phpbb_root_path . 'includes/bbdkp/module/standings.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/standings.' . $phpEx);
 				break;
 			case 'loothistory':
-				include($phpbb_root_path . 'includes/bbdkp/module/loothistory.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/loothistory.' . $phpEx);
 				break;
 			case 'lootdb':
-				include($phpbb_root_path . 'includes/bbdkp/module/lootdb.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/lootdb.' . $phpEx);
 				break;
 			case 'listevents':
-				include($phpbb_root_path . 'includes/bbdkp/module/listevents.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/listevents.' . $phpEx);
 				break;
 			case 'stats':
-				include($phpbb_root_path . 'includes/bbdkp/module/stats.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/stats.' . $phpEx);
 				break;
 			case 'listraids':
-				include($phpbb_root_path . 'includes/bbdkp/module/listraids.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/listraids.' . $phpEx);
 				break;
 			case 'viewevent':
-				include($phpbb_root_path . 'includes/bbdkp/module/viewevent.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/viewevent.' . $phpEx);
 				break;
 			case 'viewitem':
-				include($phpbb_root_path . 'includes/bbdkp/module/viewitem.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/controller/loot/Loot.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/viewitem.' . $phpEx);
 				break;
 			case 'viewraid':
-				include($phpbb_root_path . 'includes/bbdkp/module/viewraid.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/viewraid.' . $phpEx);
 				break;
 			case 'viewmember':
-				include($phpbb_root_path . 'includes/bbdkp/module/viewmember.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/viewmember.' . $phpEx);
 				break;
 			case 'bossprogress':
-				include($phpbb_root_path . 'includes/bbdkp/module/bossprogress.' . $phpEx);
+				include($phpbb_root_path . 'includes/bbdkp/views/bossprogress.' . $phpEx);
 				break;
 			case 'planner':
 				include($phpbb_root_path . 'includes/bbdkp/raidplanner/planner.' . $phpEx);
@@ -211,8 +212,8 @@ class views extends \bbdkp\admin
 				break;
 		}
 	}
-	
-	
+
+
 	/**
 	 * prepares dkp dropdown, for standings/stats, called by navigation
 	 * @return int $dkpsys_id
@@ -220,16 +221,16 @@ class views extends \bbdkp\admin
 	private function dkppulldown()
 	{
 		global $user, $db, $template, $query_by_pool;
-	
-		
+
+
 		$defaultpool = 99;
 		$dkpvalues = array();
-	
+
 		$dkpvalues[0] = $user->lang['ALL'];
 		$dkpvalues[1] = '--------';
-		
+
 		// find only pools with dkp records that are active
-		
+
 		$sql_array = array(
 				'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
 				'FROM'		=> array(
@@ -237,16 +238,16 @@ class views extends \bbdkp\admin
 						MEMBER_DKP_TABLE => 'd',
 						MEMBER_LIST_TABLE => 'l'
 				),
-				
+
 				'WHERE'  => " a.dkpsys_id = d.member_dkpid
-							AND a.dkpsys_status != 'N' 
-							AND d.member_id = l.member_id 
+							AND a.dkpsys_status != 'N'
+							AND d.member_id = l.member_id
 							AND l.member_guild_id = " . $this->guild_id ,
-				'GROUP_BY'  => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default', 
+				'GROUP_BY'  => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
 				'ORDER_BY'  => 'a.dkpsys_id '
 		);
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-	
+
 		$result = $db->sql_query ($sql);
 		$index = 3;
 		while ( $row = $db->sql_fetchrow ( $result ) )
@@ -260,7 +261,7 @@ class views extends \bbdkp\admin
 			$index +=1;
 		}
 		$db->sql_freeresult ( $result );
-		
+
 		$this->query_by_pool = false;
 		$this->dkpsys_id = 0;
 		$this->dkpsys_name = $user->lang['ALL'];
@@ -298,7 +299,7 @@ class views extends \bbdkp\admin
 			$this->query_by_pool = true;
 			$this->dkpsys_id = $defaultpool;
 		}
-	
+
 		foreach ($dkpvalues as $key => $value)
 		{
 			if(!is_array($value))
@@ -317,19 +318,19 @@ class views extends \bbdkp\admin
 						'SELECTED' => ($this->dkpsys_id == $value['id']  && $this->query_by_pool ) ? ' selected="selected"' : '',
 						'OPTION' => $value['text'],
 				));
-				
+
 				if($this->dkpsys_id == $value['id'] && $this->query_by_pool )
 				{
-					$this->dkpsys_name = $value['text']; 
+					$this->dkpsys_name = $value['text'];
 				}
-	
+
 			}
 		}
 	}
-	
+
 	/**
 	 * prepares Class / armor dropdown
-	 * 
+	 *
 	 * @param string $page
 	 * @return array
 	 */
@@ -340,7 +341,7 @@ class views extends \bbdkp\admin
 		$this->query_by_armor = false;
 		$this->query_by_class = false;
 		$this->filter= request_var('filter', $user->lang['ALL']);
-		
+
 		/***** begin armor-class pulldown ****/
 		$classarray = array();
 		$filtervalues = array();
@@ -361,8 +362,8 @@ class views extends \bbdkp\admin
 		$db->sql_freeresult ( $result );
 		$filtervalues ['separator2'] = '--------';
 
-		
-		// get classlist, depending on page	
+
+		// get classlist, depending on page
 		$sql_array = array(
 				'SELECT'    => 	'  c.game_id, c.class_id, l.name as class_name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode ',
 				'FROM'      => array(
@@ -373,24 +374,24 @@ class views extends \bbdkp\admin
 				'WHERE'		=> " c.class_id > 0 and l.attribute_id = c.class_id and c.game_id = l.game_id
 				 		AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
 				 		AND i.member_class_id = c.class_id and i.game_id = c.game_id AND i.game_id = '" .  $this->game_id . "'" ,
-				 
+
 				'GROUP_BY'	=> 'c.game_id, c.class_id, l.name, c.class_min_level, c.class_max_level, c.imagename, c.colorcode',
 				'ORDER_BY'	=> 'c.game_id, c.class_id ',
 		);
-		
-		$sql_array[ 'WHERE'] .= ' AND i.member_guild_id = ' . $this->guild_id . ' '; 
-				
+
+		$sql_array[ 'WHERE'] .= ' AND i.member_guild_id = ' . $this->guild_id . ' ';
+
 		if($page =='standings' or $page =='stats')
 		{
-			$sql_array['FROM'][MEMBER_DKP_TABLE] = 'd'; 
-			$sql_array[ 'WHERE'] .= 'AND d.member_id = i.member_id'; 
+			$sql_array['FROM'][MEMBER_DKP_TABLE] = 'd';
+			$sql_array[ 'WHERE'] .= 'AND d.member_id = i.member_id';
 			if ($config ['bbdkp_hide_inactive'] == '1' && ! $this->show_all )
 			{
 				// don't show inactive members
 				$sql_array['WHERE'] .= ' AND d.member_status = 1 ';
 			}
 		}
-		
+
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ($sql);
 		$classarray = array();
