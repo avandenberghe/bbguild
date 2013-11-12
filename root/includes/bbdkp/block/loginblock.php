@@ -2,7 +2,7 @@
 /**
  * login block
  * 
- * @package bbDKP
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp

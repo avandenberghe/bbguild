@@ -2,7 +2,7 @@
 /**
  * frontpage for bbdkp
  *
- * @package bbDKP
+ *   @package bbdkp
  * @copyright 2011 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author ippehe <ippe.he@gmail.com>
@@ -45,7 +45,7 @@ $template->set_filenames(array(
 // load view class
 if (!class_exists('\bbdkp\views'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/module/views.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/views/views.$phpEx");
 }
 
 $views = new \bbdkp\views();

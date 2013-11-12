@@ -2,7 +2,7 @@
 /**
  * Indexpage for bbdkp
  *
- * @package bbDKP
+ *   @package bbdkp
  * @copyright 2011 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author ippehe <ippe.he@gmail.com>
@@ -39,7 +39,7 @@ if (!isset($config['bbdkp_version']))
 }
 if (!class_exists('\bbdkp\views'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/module/views.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/views/views.$phpEx");
 }
 
 $template->assign_var('S_PORTAL', true);

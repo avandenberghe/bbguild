@@ -2,7 +2,7 @@
 /**
  * dkp pool acp file
  * 
- * @package bbDKP
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -27,20 +27,20 @@ if (!class_exists('\bbdkp\Admin'))
 {
 	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
-if (!class_exists('\bbdkp\Pool'))
+if (!class_exists('\bbdkp\controller\points\Pool'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Points/Pool.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/points/Pool.$phpEx");
 }
-if (!class_exists('\bbdkp\Events'))
+if (!class_exists('\bbdkp\controller\raids\Events'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/Events.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/Events.$phpEx");
 }
 
 
 /**
  * This class manages admin settings
  * 
- * @package bbDKP
+ *   @package bbdkp
  */  
  class acp_dkp_sys extends \bbdkp\Admin
 {
@@ -77,7 +77,7 @@ if (!class_exists('\bbdkp\Events'))
 					{
 						trigger_error('FORM_INVALID');
 					}
-					$this->dkpsys = new \bbdkp\Pool();
+					$this->dkpsys = new \bbdkp\controller\points\Pool();
 					$this->dkpsys->dkpsys_name = utf8_normalize_nfc (request_var ( 'dkpsys_name', '', true ));  
 					$this->dkpsys->dkpsys_status = request_var ( 'dkpsys_status', 'Y' );
 					$this->dkpsys->dkpsys_default = request_var ( 'dkpsys_default', 'Y' );
@@ -103,7 +103,7 @@ if (!class_exists('\bbdkp\Events'))
 			case 'addevent':
 				$update = false;
 				$event_id = request_var(URI_EVENT, 0); 
-				$event  = new \bbdkp\Events($event_id);
+				$event  = new \bbdkp\controller\raids\Events($event_id);
 				
 				$url = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=editdkpsys&amp;" . URI_DKPSYS . "={$event->dkpsys_id}" );
 				$this->link = '<br /><a href="' . $url .'"><h3>'. $user->lang['RETURN_DKPPOOLINDEX'].'</h3></a>';
@@ -248,8 +248,8 @@ if (!class_exists('\bbdkp\Events'))
 				if ($submit)
 				{
 					// get old event name, value from db
-					$oldevent = new \bbdkp\Events($event_id);
-					$newvent = new \bbdkp\Events($event_id);
+					$oldevent = new \bbdkp\controller\raids\Events($event_id);
+					$newvent = new \bbdkp\controller\raids\Events($event_id);
 					
 					$newvent->event_name = utf8_normalize_nfc(request_var('event_name','', true));
 					
@@ -291,7 +291,7 @@ if (!class_exists('\bbdkp\Events'))
 					// give a warning that raids cant be without event
 					if (confirm_box(true))
 					{
-						$event = new \bbdkp\Events(request_var(URI_EVENT,0));
+						$event = new \bbdkp\controller\raids\Events(request_var(URI_EVENT,0));
 						$url = request_var( 'url', '');
 						$event->delete();
 						$success_message = sprintf($user->lang['ADMIN_DELETE_EVENT_SUCCESS'], $event->event_value, $event->event_name);
@@ -359,8 +359,8 @@ if (!class_exists('\bbdkp\Events'))
 					{
 						trigger_error('FORM_INVALID');
 					}
-					$this->dkpsys = new \bbdkp\Pool($dkpsys_id);
-					$olddkpsys = new \bbdkp\Pool($dkpsys_id);
+					$this->dkpsys = new \bbdkp\controller\points\Pool($dkpsys_id);
+					$olddkpsys = new \bbdkp\controller\points\Pool($dkpsys_id);
 						
 					$this->dkpsys->dkpsys_name =utf8_normalize_nfc (request_var ( 'dkpsys_name', '', true ));
 					$this->dkpsys->dkpsys_status = request_var ( 'dkpsys_status', 'Y' );
@@ -373,7 +373,7 @@ if (!class_exists('\bbdkp\Events'))
 					trigger_error ( $success_message . $this->link );
 				}
 				
-				$event  = new \bbdkp\Events();
+				$event  = new \bbdkp\controller\raids\Events();
 				$event->countevents($dkpsys_id);
 				
 				if ($activate)
@@ -391,7 +391,7 @@ if (!class_exists('\bbdkp\Events'))
 				
 				//show pool
 				
-				$this->dkpsys = new \bbdkp\Pool($dkpsys_id);
+				$this->dkpsys = new \bbdkp\controller\points\Pool($dkpsys_id);
 				$template->assign_vars ( array (
 						'DKPSYS_ID' => $this->dkpsys->dkpsys_id,
 						'L_TITLE' 	=> $user->lang ['ACP_ADDDKPSYS'],
@@ -457,6 +457,11 @@ if (!class_exists('\bbdkp\Events'))
 				break;
 			case 'listdkpsys' :
 				
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+				}
+				
 				// list of pools
 				$showadd = (isset ( $_POST ['dkpsysadd'] )) ? true : false;
 				$delete = (isset ( $_GET ['delete'] ) && isset ( $_GET [URI_DKPSYS] )) ? true : false;
@@ -473,7 +478,7 @@ if (!class_exists('\bbdkp\Events'))
 				{
 					if (confirm_box ( true ))
 					{
-						$this->dkpsys = new \bbdkp\Pool( request_var ( 'hidden_dkpsys_id' , 0 ) );
+						$this->dkpsys = new \bbdkp\controller\points\Pool( request_var ( 'hidden_dkpsys_id' , 0 ) );
 						$this->dkpsys->delete(); 
 					
 						$success_message = sprintf ($user->lang ['ADMIN_DELETE_DKPSYS_SUCCESS'], $this->dkpsys->dkpsys_name);
@@ -493,8 +498,8 @@ if (!class_exists('\bbdkp\Events'))
 				// DEFAULT DKPSYS submit buttonhandler
 				if ($submit)
 				{
-					$this->dkpsys = new \bbdkp\Pool(request_var ( 'defaultsys', 0 ));
-					$olddkpsys = new \bbdkp\Pool(request_var ( 'defaultsys', 0 ));  
+					$this->dkpsys = new \bbdkp\controller\points\Pool(request_var ( 'defaultsys', 0 ));
+					$olddkpsys = new \bbdkp\controller\points\Pool(request_var ( 'defaultsys', 0 ));  
 					$this->dkpsys->dkpsys_default = 'Y';
 					$this->dkpsys->update($olddkpsys); 
 					unset($olddkpsys); 
@@ -505,7 +510,7 @@ if (!class_exists('\bbdkp\Events'))
 				
 				// template
 				
-				$this->dkpsys = new \bbdkp\Pool();
+				$this->dkpsys = new \bbdkp\controller\points\Pool();
 				$listpools = $this->dkpsys->listpools();
 				foreach($listpools as $dkpsys_id => $pool)
 				{

@@ -1,25 +1,47 @@
 <?php
-namespace bbdkp;
-
 /**
  * Validator
  *
  * Data validation class
- * @package 	bbDKP
+ *   @package bbdkp
  * @author      Arvind Gupta <contact [ AT ] arvindgupta [ DOT ] co [ DOT ] in>
  * @copyright   Arvind Gupta (c) 2011
  * @link        http://www.arvindgupta.co.in
  * @license     You're free to do whatever with this as long as this notice
  *              remains intact.
  */
+namespace bbdkp;
+/**
+ * Validator class
+ *   @package bbdkp
+ */
 class Validator
 {
- 
+ 	/**
+ 	 * error rules
+ 	 * @var array
+ 	 */
     protected $_rules = array();
+    
+    /**
+     * userdata array
+     * @var array
+     */
     protected $_data = array();
+    /**
+     * message array
+     * @var array
+     */
     protected $_messages = array();
+    /**
+     * error array
+     * @var array
+     */
     protected $_errors = array();
  
+    /**
+     * Validator constructor
+     */
     public function __construct()
     {
         $this->setDefaultMessages();
@@ -107,6 +129,13 @@ class Validator
         return $this->_errors;
     }
  
+    /**
+     * check for errors
+     * @param string $value
+     * @param string $rule
+     * @param string $parameter
+     * @return boolean|number
+     */
     protected function check($value, $rule, $parameter)
     {
         switch ($rule)
@@ -162,6 +191,9 @@ class Validator
         }
     }
  
+    /**
+     * default error strings
+     */
     protected function setDefaultMessages()
     {
         $this->_messages = array(
@@ -179,9 +211,9 @@ class Validator
         );
     }
     
-    /**
-     * 
-     */
+	/**
+	 * funnel error messages to user
+	 */
     public function displayerrors()
     {
     	global $user;

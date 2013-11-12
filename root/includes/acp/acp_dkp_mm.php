@@ -2,7 +2,7 @@
 /**
  * members acp file
  * 
- * @package bbDKP
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -31,35 +31,48 @@ if (!class_exists('\bbdkp\Admin'))
 }
 
 // include ranks class
-if (!class_exists('\bbdkp\Ranks'))
+if (!class_exists('\bbdkp\controller\guilds\Ranks'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/ranks/Ranks.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
 }
 
 // Include the member class
-if (!class_exists('\bbdkp\Members'))
+if (!class_exists('\bbdkp\controller\members\Members'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
 
 //include the guilds class
-if (!class_exists('\bbdkp\Guilds'))
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/guilds/Guilds.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
 }
 
 /**
  * This class manages member general info
  *  
- * @package bbDKP
+ *   @package bbdkp
  */
 class acp_dkp_mm extends \bbdkp\Admin
 {
-	public $u_action;
+	/**
+	 * instance of member class
+	 * @var \bbdkp\controller\members\Members
+	 */
 	public $member;
-	public $old_member;
+	
+	/**
+	 * trigger link
+	 * @var string
+	 */
 	public $link = ' ';
 
+	
+	/**
+	 * main acp_dkp_mm function
+	 * @param integer $id
+	 * @param string $mode
+	 */
 	public function main ($id, $mode)
 	{
 		global $user, $template, $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
@@ -72,7 +85,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 			case 'mm_listmembers':
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx","i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
-				$Guild = new \bbdkp\Guilds();
+				$Guild = new \bbdkp\controller\guilds\Guilds();
 				
 				// add member button redirect
 				$showadd = (isset($_POST['memberadd'])) ? true : false;
@@ -95,7 +108,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					{
 						trigger_error('FORM_INVALID');
 					}
-					$activatemember = new \bbdkp\Members();
+					$activatemember = new \bbdkp\controller\members\Members();
 					$activate_members = request_var('activate_id', array(0));
 					$member_window = request_var('hidden_member', array(0));
 					$activatemember->Activatemembers($activate_members, $member_window);
@@ -159,7 +172,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					
 					if (confirm_box(true))
 					{
-						$Guild = new \bbdkp\Guilds();
+						$Guild = new \bbdkp\controller\guilds\Guilds();
 						$Guild->guildid = request_var('hidden_guildid', 0);
 						$Guild->Getguild();				
 						$members_result = $Guild->listmembers();
@@ -169,7 +182,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 						{
 							$i +=1; 
 							if($log != '') $log .= ', '; 
-							$member = new \bbdkp\Members($row['member_id']);
+							$member = new \bbdkp\controller\members\Members($row['member_id']);
 							$member->Updatemember($member); 
 							unset($member);
 							$log .= $row['member_name']; 
@@ -315,7 +328,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				// add guildmember handler
 				if ($add)
 				{
-					$newmember = new \bbdkp\Members();
+					$newmember = new \bbdkp\controller\members\Members();
 					$newmember->game_id = request_var('game_id', '');
 					$newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
 					$newmember->member_guild_id = request_var('member_guild_id', 0);
@@ -364,7 +377,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				if ($update)
 				{
 
-					$updatemember = new \bbdkp\Members();
+					$updatemember = new \bbdkp\controller\members\Members();
 					$updatemember->member_id = request_var('hidden_member_id', 0);
 					if ($updatemember->member_id == 0)
 					{
@@ -411,7 +424,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					if (confirm_box(true))
 					{
 						// recall hidden vars
-						$deletemember = new \bbdkp\Members();
+						$deletemember = new \bbdkp\controller\members\Members();
 						$deletemember->member_id = request_var('del_member_id', 0);
 						$deletemember->Getmember();
 						$deletemember->Deletemember();
@@ -424,7 +437,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					}
 					else
 					{
-						$deletemember = new \bbdkp\Members();
+						$deletemember = new \bbdkp\controller\members\Members();
 						$deletemember->member_id = request_var('member_id', 0);
 						$deletemember->Getmember();
 						$s_hidden_fields = build_hidden_fields(array(
@@ -440,7 +453,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				/*
 				 * fill template
 				 */
-				$editmember = new \bbdkp\Members(request_var('hidden_member_id', request_var(URI_NAMEID, 0)) );
+				$editmember = new \bbdkp\controller\members\Members(request_var('hidden_member_id', request_var(URI_NAMEID, 0)) );
 				$S_ADD = ($editmember->member_id > 0) ? false: true;
 				
 				// Game dropdown
@@ -466,7 +479,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 				
 				//guild dropdown
-				$Guild = new \bbdkp\Guilds($editmember->member_guild_id);
+				$Guild = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
 				$guildlist = $Guild->guildlist(); 
 				foreach ($guildlist as $g)
 				{
@@ -482,7 +495,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				// this only shows the VISIBLE RANKS
 				// if you want to add someone to an unvisible rank make the rank visible first,
 				// add him and then make rank invisible again.
-				$Ranks = new \bbdkp\Ranks($Guild->guildid); 
+				$Ranks = new \bbdkp\controller\guilds\Ranks($Guild->guildid); 
 				$result = $Ranks->listranks(); 
 				while ($row = $db->sql_fetchrow($result))
 				{
@@ -573,7 +586,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 				$db->sql_freeresult($result);
 
 				//Role dropdown
-				$Roles = new \bbdkp\Roles($editmember->member_guild_id); 
+				$Roles = new \bbdkp\controller\guilds\Roles($editmember->member_guild_id); 
 				foreach($Roles->roles as $roleid => $Role )
 				{
 					$template->assign_block_vars('role_row', array(
@@ -761,7 +774,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 			$member_names = utf8_normalize_nfc(request_var('members', array(0 => ''), true));
 			foreach ($members_to_delete as $memberid => $value)
 			{
-				$delmember = new \bbdkp\Members();
+				$delmember = new \bbdkp\controller\members\Members();
 				$delmember->member_id = $memberid;
 				$delmember->Getmember();
 				$delmember->Deletemember();

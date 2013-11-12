@@ -27,7 +27,7 @@
 
 <hr/>
 
-<h3>{L_TIMEDKP}</h3>
+<!-- IF F_TIMEBONUSACTIVATE == 1 --><h1><strong>{L_TIMEDKP}</strong></h1><!-- ELSE --><h3>{L_TIMEDKP}</h3><!-- ENDIF -->
 <p>{L_TIMEDKP_EXPLAIN}</p>
 
 <p>{L_TIMEDKP_EXAMPLE}</p>
@@ -73,7 +73,8 @@
 
 <hr/>
 
-<h3>{L_ZEROSUM}</h3>
+
+<!-- IF F_ZEROSUMACTIVATE == 1 --><h1><strong>{L_ZEROSUM}</strong></h1><!-- ELSE --><h3>{L_ZEROSUM}</h3><!-- ENDIF -->
 <p>{L_ZEROSUM_EXPLAIN}</p>
 <p>{L_ZEROSUM_EXAMPLE}</p>
 <dl><dt>  
@@ -116,7 +117,8 @@
 </dl> 
 
 <hr/>
-<h3>{L_DECAY}</h3>
+
+<!-- IF F_DECAYACTIVATE == 1 --><h1><strong>{L_DECAY}</strong></h1><!-- ELSE --><h3>{L_DECAY}</h3><!-- ENDIF -->
 <p>{L_DECAY_EXPLAIN}</p>
 
 <dl><dt>  
@@ -206,7 +208,7 @@
 
 <hr/>
 
-<h3>{L_EPGP}</h3>
+<!-- IF F_DECAYACTIVATE == 1 --><h1><strong>{L_EPGP}</strong></h1><!-- ELSE --><h3>{L_EPGP}</h3><!-- ENDIF -->
 <p>{L_EPGP_EXPLAIN}</p>
 
 <dl>

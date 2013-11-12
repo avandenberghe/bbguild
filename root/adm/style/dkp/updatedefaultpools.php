@@ -1,9 +1,9 @@
 <?php
 /**
  * sets pool status from ajax call in acp_listdkpsys.html
+ * @package acp\ajax
  * @copyright (c) 2013 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-
  */
 $a = 1; 
 define('IN_PHPBB', true);

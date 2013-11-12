@@ -2,7 +2,7 @@
 /**
  * dkp ACP file
  *  
- * @package bbDKP
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -28,36 +28,64 @@ if (!class_exists('\bbdkp\Admin'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
-if (!class_exists('\bbdkp\PointsController'))
+if (!class_exists('\bbdkp\controller\points\PointsController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/points/PointsController.$phpEx");
+}
+//include the guilds class
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
 }
 
 /**
  * This class manages member DKP
  * 
- * @package bbDKP
+ *   @package bbdkp
  */
 class acp_dkp_mdkp extends \bbdkp\Admin
 {
 
-	public $u_action;
+	/**
+	 * trigger url
+	 * @var string
+	 */
 	private $link;
 	
+	/**
+	 * instance of PointsController class
+	 * @var \bbdkp\controller\points\PointsController
+	 */
 	private $PointsController;
+	
+	/**
+	 * pool id
+	 * @var int
+	 */
 	public $dkpsys_id; 
 	
+	/**
+	 * Main acp function
+	 * @param int $id
+	 * @param string $mode
+	 */
 	public function main($id, $mode)
 	{
 		global $db, $user, $auth, $template, $sid, $cache;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
-		$this->PointsController = new \bbdkp\PointsController();
+		$this->PointsController = new \bbdkp\controller\points\PointsController();
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp" ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
 		
 		switch ($mode)
 		{
 			case 'mm_listmemberdkp':
+				
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+				}
+				
 				$this->list_memberdkp(); 
 								
 				$this->page_title = 'ACP_DKP_LISTMEMBERDKP';
@@ -103,11 +131,11 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 					else
 					{
 						// Include the member class
-						if (!class_exists('\bbdkp\Members'))
+						if (!class_exists('\bbdkp\controller\members\Members'))
 						{
-							require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+							require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 						}
-						$member= new \bbdkp\Members(request_var ('hidden_id', 0));
+						$member= new \bbdkp\controller\members\Members(request_var ('hidden_id', 0));
 						
 						$s_hidden_fields = build_hidden_fields ( array (
 							'delete' => true, 
@@ -323,6 +351,13 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 			/***************************************/
 			
 			case 'mm_transfer' :
+				
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+				}
+				
+				
 				$submit = (isset ( $_POST ['transfer'] )) ? true : false;
 				$submitdkp = (isset ( $_POST ['dkpsys_id'] ) || isset ( $_GET ['dkpsys_id'] )) ? true : false;
 				
@@ -456,6 +491,39 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 	private function list_memberdkp()
 	{
 		global $user, $template, $config, $phpbb_admin_path, $phpEx;
+		
+		// guild dropdown
+		$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
+		$Guild = new \bbdkp\controller\guilds\Guilds();
+		$guildlist = $Guild->guildlist();
+		
+		if($submit)
+		{
+			$Guild->guildid = request_var('member_guild_id', 0);
+		}
+		else
+		{
+			foreach ($guildlist as $g)
+			{
+				$Guild->guildid = $g['id'];
+				$Guild->name = $g['name'];
+				if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+				{
+					trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+				}
+				break;
+			}
+		}
+		
+		foreach ($guildlist as $g)
+		{
+			$template->assign_block_vars('guild_row', array(
+					'VALUE' => $g['id'] ,
+					'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
+					'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+		}
+		
+		$this->PointsController->guild_id = $Guild->guildid; 
 		
 		/* dkp pool */
 		$this->PointsController->dkpsys_id=0;
@@ -594,10 +662,11 @@ class acp_dkp_mdkp extends \bbdkp\Admin
 		
 		
 	}
-
+	
+	
 	/**
-	 * transfer dkp to other member
-	 *
+	 * transfer dkp to other member 
+	 * @param int $dkpsys_id
 	 */
 	function transfer_dkp($dkpsys_id)
 	{

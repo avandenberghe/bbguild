@@ -2,7 +2,7 @@
 /**
  * Recent topics block
  * 
- * @package bbDKP
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -61,12 +61,15 @@ else
 		)
 	);
 
-
-
-
+	
 /**
 * Retrieve a set of topics and trim the names if necessary
-*/
+ * 
+ * @param array $forum_id_ary
+ * @param int $num_topics
+ * @param int $num_chars
+ * @return multitype:
+ */
 function fetch_topics($forum_id_ary, $num_topics, $num_chars)
 {
 	global $db, $user;

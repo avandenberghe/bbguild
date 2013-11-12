@@ -2,7 +2,7 @@
 /**
  * Raid acp file
  * 
- * @package bbDKP
+ *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -28,47 +28,70 @@ if (!class_exists('\bbdkp\Admin'))
 	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
 }
 
-if (!class_exists('\bbdkp\RaidController'))
+if (!class_exists('\bbdkp\controller\raids\RaidController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Raids/RaidController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/raids/RaidController.$phpEx");
 }
-if (!class_exists('\bbdkp\LootController'))
+if (!class_exists('\bbdkp\controller\loot\LootController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Loot/Lootcontroller.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/Lootcontroller.$phpEx");
 }
-if (!class_exists('\bbdkp\PointsController'))
+if (!class_exists('\bbdkp\controller\points\PointsController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Points/PointsController.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/points/PointsController.$phpEx");
 }
-if (!class_exists('\bbdkp\Members'))
+if (!class_exists('\bbdkp\controller\members\Members'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/members/Members.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
-
+//include the guilds class
+if (!class_exists('\bbdkp\controller\guilds\Guilds'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
+}
  /**
  *  This ACP class manages Raids
  *  
- * @package bbDKP
+ *   @package bbdkp
  */
  class acp_dkp_raid extends \bbdkp\Admin
 {
+	/**
+	 * url in triggers
+	 * @var string
+	 */
 	private $link;
-	public $u_action;
-	private $RaidController;
-	private $LootController;
-	private $PointsController;
 	
 	/**
+	 * instance of Raidcontroller class
+	 * @var \bbdkp\Raidcontroller
+	 */
+	private $RaidController;
+	/**
+	 * instance of lootcontroller class
+	 * @var \bbdkp\controller\loot\Lootcontroller
+	 */	
+	private $LootController;
+	/**
+	 * instance of PointsController class
+	 * @var \bbdkp\controller\points\PointsController
+	 */	
+	private $PointsController;
+
+	/**
 	 * main Raid function
+	 * 
+	 * @param int $id
+	 * @param string $mode
 	 */
 	public function main($id, $mode) 
 	{
 		global $user, $template, $config, $phpbb_admin_path, $phpEx;
 
 		$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=listraids" ) . '"><h3>'.$user->lang['RETURN_DKPINDEX'].'</h3></a>';
-		$this->RaidController = new \bbdkp\RaidController();
-		$this->LootController = new \bbdkp\Lootcontroller();
-		$this->PointsController = new \bbdkp\PointsController();
+		$this->RaidController = new \bbdkp\controller\raids\RaidController();
+		$this->LootController = new \bbdkp\controller\loot\Lootcontroller();
+		$this->PointsController = new \bbdkp\controller\points\PointsController();
 		$this->tpl_name = 'dkp/acp_' . $mode;
 		
 		switch ($mode)
@@ -157,6 +180,11 @@ if (!class_exists('\bbdkp\Members'))
 				break;
 				
 			case 'listraids' :
+				if(count($this->games) == 0)
+				{
+					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+				}
+				
 				$this->page_title = 'ACP_DKP_RAID_LIST';
 				$action = request_var ('action', '');
 				$raid_id = request_var (URI_RAID, 0);
@@ -227,7 +255,7 @@ if (!class_exists('\bbdkp\Members'))
 		$this->RaidController->dkpid = $dkpsys_id;
 		
 		//guild dropdown
-		$Guild = new \bbdkp\Guilds();
+		$Guild = new \bbdkp\controller\guilds\Guilds();
 		$guildlist = $Guild->guildlist();
 		foreach ( (array) $guildlist as $g )
 		{
@@ -454,7 +482,7 @@ if (!class_exists('\bbdkp\Members'))
 	/**
 	 * displays a raid
 	 * 
-	 * @param  $raid_id int the raid to display
+	 * @param  int $raid_id the raid to display
 	 */
 	private function displayraid($raid_id)
 	{
@@ -551,7 +579,7 @@ if (!class_exists('\bbdkp\Members'))
 				$item_name = $lootdetail['item_name'];
 			}
 			
-			$buyer = new \bbdkp\Members($lootdetail['member_id']);
+			$buyer = new \bbdkp\controller\members\Members($lootdetail['member_id']);
 			
 			$template->assign_block_vars ( 'items_row', array (
 					'DATE' 			=> (! empty ( $lootdetail ['item_date'] )) ? $user->format_date($lootdetail['item_date']) : '&nbsp;',
@@ -793,6 +821,36 @@ if (!class_exists('\bbdkp\Members'))
 			redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid"));            		
          	break;
         }
+        // guild dropdown
+        $submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
+        $Guild = new \bbdkp\controller\guilds\Guilds();
+        $guildlist = $Guild->guildlist();
+        
+        if($submit)
+        {
+        	$Guild->guildid = request_var('member_guild_id', 0);
+        }
+        else
+        {
+			foreach ($guildlist as $g)
+			{
+				$Guild->guildid = $g['id'];
+	        	$Guild->name = $g['name'];
+	        	if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+	        	{
+	        		trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+	        	}
+	        	break;
+	        }
+        }
+        
+        foreach ($guildlist as $g)
+        {
+        	$template->assign_block_vars('guild_row', array(
+        			'VALUE' => $g['id'] ,
+        			'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
+        			'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+        }
         
         /* dkp pool */
         $dkpsys_id=0;
@@ -841,6 +899,8 @@ if (!class_exists('\bbdkp\Members'))
         }
         
         $this->RaidController->dkpid = $dkpsys_id;
+        $this->RaidController->guildid = $Guild->guildid;
+        
 		$start = \request_var ( 'start', 0, false );
 		$this->RaidController->listraids($this->RaidController->dkpid, $start);
 		
@@ -849,7 +909,7 @@ if (!class_exists('\bbdkp\Members'))
 			$template->assign_block_vars ( 'raids_row', array (
 				'ID' 		 =>  $raid['raid_id'], 
 				'DATE' 		 =>  $raid['date'], 
-				'NAME' 		 => $raid['name'],  
+				'NAME' 		 => $raid['event_name'],  
 				'NOTE' 		 => $raid['note'],  
 				'RAIDVALUE'  => $raid['raidvalue'],  
 				'TIMEVALUE'  => $raid['timevalue'], 
@@ -928,7 +988,7 @@ if (!class_exists('\bbdkp\Members'))
 		}
 		else
 		{
-			$this->RaidController = new \bbdkp\RaidController(request_var ( 'dkpsys_id', 0));
+			$this->RaidController = new \bbdkp\controller\raids\RaidController(request_var ( 'dkpsys_id', 0));
 			$event_id = request_var ( 'event_id', 0);
 			if (($event_id == 0))
 			{
@@ -1133,7 +1193,7 @@ if (!class_exists('\bbdkp\Members'))
 				trigger_error( sprintf( $user->lang['ADMIN_RAID_ATTENDEE_DELETED_FAILED'],  utf8_normalize_nfc(request_var('attendeename', '', true)) , $raid_id) . $link, E_USER_WARNING);				
 			}
 			
-			$attendee = new \bbdkp\Members($attendee_id);
+			$attendee = new \bbdkp\controller\members\Members($attendee_id);
 			
 			$s_hidden_fields = build_hidden_fields(array(
 				'deleteraider'	=> true,
@@ -1162,15 +1222,11 @@ if (!class_exists('\bbdkp\Members'))
 		{
 			//retrieve info
 			$raid_id = request_var('raid_id', 0);
-			$old_item = request_var('hidden_old_item', array(''=>''));
-			$this->LootController->deleteloot($old_item); 
+			$item_id = request_var('item_id', 0);
+			$this->LootController->deleteloot($item_id); 
 				
-			$success_message = sprintf ( $user->lang ['ADMIN_DELETE_ITEM_SUCCESS'],
-					$old_item ['item_name'], $old_item ['member_name'], $old_item ['item_value'] );
-			
 			$this->link = append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;". URI_RAID . "={$raid_id}" );
 			meta_refresh(1, $this->link );
-			trigger_error ( $success_message, E_USER_NOTICE );
 	
 		}
 		else
@@ -1187,7 +1243,7 @@ if (!class_exists('\bbdkp\Members'))
 			$s_hidden_fields = build_hidden_fields ( array (
 					'raid_id'		  => $raid_id,
 					'deleteitem' 	  => true,
-					'hidden_old_item' => $loot, 
+					'item_id' 		  => $item_id, 
 			));
 			$template->assign_vars ( array ('S_HIDDEN_FIELDS' => $s_hidden_fields ) );
 			confirm_box ( false, sprintf($user->lang ['CONFIRM_DELETE_ITEM'], $loot['item_name'], $loot['member_name'] ), $s_hidden_fields );

@@ -17,11 +17,19 @@
 
 <fieldset style="background-color: #EEEEEE">
 <label for="dkpsys_id">{L_POOL}:</label>
-	<select id="dkpsys_id" name="dkpsys_id" class="input" onchange="javascript:form.submit();">
+<select id="dkpsys_id" name="dkpsys_id" class="input" onchange="javascript:form.submit();">
 	<!-- BEGIN dkpsys_row -->
 	<option value="{dkpsys_row.VALUE}"{dkpsys_row.SELECTED}>{dkpsys_row.OPTION}</option>
 	<!-- END dkpsys_row -->
-	</select>
+</select>
+
+<label for="member_guild_id">&nbsp;	{L_GUILD}:</label>
+<select id="member_guild_id" name="member_guild_id" class="input" onchange="javascript:form.submit();" >
+       	<!-- BEGIN guild_row -->
+       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
+        <!-- END guild_row -->
+</select>
+
 </fieldset>
 
 <!-- IF .raids_row --> 
@@ -50,9 +58,9 @@
 	<tbody>
 	<!-- BEGIN raids_row -->
 		<!-- IF raids_row.S_ROW_COUNT is even -->
-		<tr class="row1" onclick="DoNav('{raids_row.ONCLICK}');">
+		<tr class="row1" onmouseover="DoNav('{raids_row.ONCLICK}');" onclick="DoNav('{raids_row.ONCLICK}');">
 			<!-- ELSE -->
-		<tr class="row2" onclick="DoNav('{raids_row.ONCLICK}');">
+		<tr class="row2" onmouseover="DoNav('{raids_row.ONCLICK}');" onclick="DoNav('{raids_row.ONCLICK}');">
 		<!-- ENDIF -->
 			<td style="white-space:nowrap;">{raids_row.DATE}</td>
 			<td style="white-space:nowrap;">{raids_row.ID}</td>

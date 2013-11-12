@@ -23,14 +23,14 @@
  <dt><label for="activated">{L_ACTIVE}:</label></dt>
  <dd><input type="checkbox" class="radio" name="activated" value="{MEMBER_ID}" {STATUS} /></dd>
  </dl>
-   
+
 <dl>
     <dt><label for="member_level">{L_LEVEL}:</label></dt>
 		<dd><input type="text" name="member_level" size="20" maxlength="3" value="{MEMBER_LEVEL}" class="input" /></dd>
-</dl> 
- 
+</dl>
 
- 
+
+
 <dl>
 <dt><label for="member_guild_id">{L_GUILD}:</label></dt>
 <dd>
@@ -52,7 +52,7 @@
 </select>
 
 </dd>
-</dl> 
+</dl>
 
   <dl>
     <dt><label for="game_id">{L_GAME}:</label></dt>
@@ -63,7 +63,7 @@
         <!-- END game_row -->
       </select></dd>
  </dl>
- 
+
   <dl>
     <dt><label for="member_race_id">{L_RACE}:</label></dt>
   		<dd><select id="raceselect" name="member_race_id" class="input">
@@ -71,7 +71,7 @@
        <option value="{race_row.VALUE}"{race_row.SELECTED}>{race_row.OPTION}</option>
         <!-- END race_row -->
         </select>
-       
+
    		<!-- IF S_RACE_IMAGE_EXISTS --> <br/><img src="{RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF -->
       </dd>
  </dl>
@@ -85,7 +85,7 @@
       </select>
 		<!-- IF S_CLASS_IMAGE_EXISTS --><br/><img src="{CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
 		</dd>
-  </dl> 
+  </dl>
   <dl>
     <dt><label for="gender">{L_GENDER}:</label></dt>
     <dd>
@@ -93,23 +93,23 @@
     <input type="radio" name="gender"  value="1"{FEMALE_CHECKED} /> {L_FEMALE}
    </dd>
  </dl>
- 
+
 	<!-- IF S_ADD -->
     <dl>
     <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
     <dd>
 		{L_DAY}: <select id="member_joindate_d" name="member_joindate_d">{S_JOINDATE_DAY_OPTIONS}</select>
-		{L_MONTH}: <select name="member_joindate_mo">{S_JOINDATE_MONTH_OPTIONS}</select> 
+		{L_MONTH}: <select name="member_joindate_mo">{S_JOINDATE_MONTH_OPTIONS}</select>
 		{L_YEAR}: <select name="member_joindate_y">{S_JOINDATE_YEAR_OPTIONS}</select>
 	</dd>
-   </dl> 
-	<!-- ENDIF -->   
+   </dl>
+	<!-- ENDIF -->
 
     <dl>
     <dt><label for="member_comment">{L_COMMENT}:</label></dt>
 	<dd><textarea name="member_comment" type="text" rows="5" cols="10" style="width: 80%" class="input">{MEMBER_COMMENT}</textarea></dd>
 
-  	</dl> 
+  	</dl>
 
 	</p>
 
@@ -127,15 +127,15 @@
 			<input type="submit"  name="delete" value="{L_DELETE_MEMBER}" class="button1" />
 			<!-- ENDIF -->
 		<!-- ELSE -->
-			<input type="submit" name="add" value="{L_ADD_MEMBER}" class="button2" /> 
+			<input type="submit" name="add" value="{L_ADD_MEMBER}" class="button2" />
 			<input type="reset" name="reset" value="{L_RESET}" class="button1" />
 		<!-- ENDIF -->
 	</dd>
 </dl>
 
-<!-- ELSE --> 
+<!-- ELSE -->
 	<p class="error">{MAX_CHARS_EXCEEDED} </p><p><br /><br /></p>
-<!-- ENDIF --> 
+<!-- ENDIF -->
 
 <!-- ENDIF -->
 
@@ -160,19 +160,19 @@ function check_form()
 }
 
 /*  make a XMLHTTP Request object */
-function GetXmlHttpObject() 
-{ 
-	var xmlhttp=false;	
-	
+function GetXmlHttpObject()
+{
+	var xmlhttp=false;
+
 	try
-	{ 
+	{
 		//  IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}
-	catch(e)	
+	catch(e)
 	{	// activex code for IE6, IE5
 		try
-		{			
+		{
 			xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
 		}
 		catch(e)
@@ -191,16 +191,16 @@ function GetXmlHttpObject()
 }
 
 
-/* ajax function to find rank */ 
- 
-var xmlhttp; 
+/* ajax function to find rank */
+
+var xmlhttp;
 function GetRank(guildid)
 {
    xmlhttp = GetXmlHttpObject();
    if (xmlhttp == null)
    {
 	   alert("{LA_ALERT_OLDBROWSER}");
-	   return;  
+	   return;
    }
     var strURL="{T_TEMPLATE_PATH}/dkp/findrank.php?guild="+guildid;
     xmlhttp.onreadystatechange=stateChanged;
@@ -218,24 +218,24 @@ function stateChanged()
 		if (xmlhttp.status == 200)
 		{
 			//remove select options
-			var rsel = document.getElementById('rankselect'); 
-			rsel.options.length = 0; 
-			
+			var rsel = document.getElementById('rankselect');
+			rsel.options.length = 0;
+
 			//receive xml
 			xmlDoc=xmlhttp.responseXML;
-			
+
 			var root = xmlDoc.getElementsByTagName('ranklist')[0];
 			var ranks = root.getElementsByTagName("rank")
 			for (var i = 0; i < ranks.length; i++)
 			{
-				var rank = ranks[i]; 
+				var rank = ranks[i];
 				var rankid = rank.getElementsByTagName("rank_id")[0].firstChild.nodeValue;
 				var rankname = rank.getElementsByTagName("rank_name")[0].firstChild.nodeValue;
 			    // add the options
-			    rsel.options[i] = new Option(rankname,rankid, true, false); 
+			    rsel.options[i] = new Option(rankname,rankid, true, false);
 			}
 		}
-		else 
+		else
 		{
    	   		alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
 	 	}
@@ -243,14 +243,14 @@ function stateChanged()
 }
 
 
-/* ajax function to find class and race array based on game */ 
+/* ajax function to find class and race array based on game */
 function GetClassRace(game_id)
 {
    xmlhttp = GetXmlHttpObject();
    if (xmlhttp == null)
    {
 	   alert("{LA_ALERT_OLDBROWSER}");
-	   return;  
+	   return;
    }
     var strURL="{T_TEMPLATE_PATH}/dkp/findclassrace.php?game_id="+game_id;
     xmlhttp.onreadystatechange=classracestateChanged;
@@ -275,39 +275,39 @@ function classracestateChanged()
 
 			var species = racelist.getElementsByTagName("race");
 			var classes = classlist.getElementsByTagName("class");
-			
-			//now modify html : first remove old select options
-			var rsel = document.getElementById('raceselect'); 
-			rsel.options.length = 0; 
 
-			
+			//now modify html : first remove old select options
+			var rsel = document.getElementById('raceselect');
+			rsel.options.length = 0;
+
+
 			for (var i = 0; i < species.length; i++)
 			{
-				var spec = species[i]; 
+				var spec = species[i];
 				var raceid = spec.getElementsByTagName("race_id")[0].firstChild.nodeValue;
 				var racename = spec.getElementsByTagName("race_name")[0].firstChild.nodeValue;
 			    // add the options
-			    rsel.options[i] = new Option(racename,raceid, true, false); 
+			    rsel.options[i] = new Option(racename,raceid, true, false);
 			}
-			
-			var csel = document.getElementById('classselect'); 
-			csel.options.length = 0; 
 
-			
+			var csel = document.getElementById('classselect');
+			csel.options.length = 0;
+
+
 			for (var j = 0; j < classes.length; j++)
 			{
-				
-				var cla = classes[j]; 
+
+				var cla = classes[j];
 				var classid = cla.getElementsByTagName("class_id")[0].firstChild.nodeValue;
 				var classname = cla.getElementsByTagName("class_name")[0].firstChild.nodeValue;
 			    // add the options
-			    csel.options[j] = new Option(classname,classid, true, false); 
+			    csel.options[j] = new Option(classname,classid, true, false);
 			}
-			
-			
-			
+
+
+
 		}
-		else 
+		else
 		{
    	   		alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
 	 	}

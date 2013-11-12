@@ -1,7 +1,7 @@
 <?php
 /** 
-*
-* @package ucp
+* info class file for ucp module dkp
+*   @package bbdkp
 * @copyright (c) 2007 phpBB Group 
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
 *
@@ -15,8 +15,15 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
+
+/**
+ * info class for ucp module dkp
+ *   @package bbdkp
+ */
 class ucp_dkp_info
-{
+{	/**
+	 * phpbb module function
+	 */
 	function module()
 	{
 		return array(
@@ -29,11 +36,15 @@ class ucp_dkp_info
 				),
 			);
 	}
-							
+	/**
+	 * phpbb module function
+	 */
 	function install()
 	{
 	}
-								
+	/**
+	 * phpbb module function
+	 */
 	function uninstall()
 	{
 	}
