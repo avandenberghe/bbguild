@@ -118,7 +118,7 @@ function GuildStateChanged()
 	<ul class ="topiclist">
 		<li class="row<!-- IF members_row.S_ROW_COUNT is odd --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
 			<dl>
-				<dt style="width:20%"><strong> <span style="color:{members_row.COLORCODE}">{members_row.NAME}</span></strong></dt>
+				<dt style="width:20%"><strong> <a class="forumtitle" style="color:{members_row.COLORCODE}" href="{members_row.ARMORY}">{members_row.NAME}</a> </strong></dt>
 				<dd class="info" style="width:20%">{members_row.REALM}-{members_row.REGION}&nbsp;</dd>
 				<dd class="info" style="width:5%"><img src="{members_row.RACE_IMAGE}" alt="" />&nbsp;</dd>
 				<dd class="info" style="width:5%"><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" />&nbsp;</dd>
