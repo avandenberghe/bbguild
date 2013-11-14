@@ -505,8 +505,7 @@ class Members extends \bbdkp\Admin
 
 		$error = array ();
 
-		$this->member_status = 1;
-
+		// check if membername exists
 		$sql = 'SELECT count(*) as memberexists
 				FROM ' . MEMBER_LIST_TABLE . "
 				WHERE member_name= '" . $db->sql_escape(ucwords($this->member_name)) . "'
@@ -519,6 +518,7 @@ class Members extends \bbdkp\Admin
 			$error[]= $user->lang['ERROR_MEMBEREXIST'];
 		}
 
+		// check if rank exists
 		$sql = 'SELECT count(*) as rankccount
 			FROM ' . MEMBER_RANKS_TABLE . '
 			WHERE rank_id=' . (int) $this->member_rank_id . '
@@ -550,6 +550,7 @@ class Members extends \bbdkp\Admin
 			return 0;
 		}
 
+		// check level
 		$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE;
 		$result = $db->sql_query($sql);
 		$maxlevel = $db->sql_fetchfield('maxlevel');
@@ -559,6 +560,7 @@ class Members extends \bbdkp\Admin
 			$this->member_level = $maxlevel;
 		}
 
+		// set realm, region
 		$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $this->member_guild_id;
 		$result = $db->sql_query($sql);
 		$this->member_realm  = $config['bbdkp_default_realm'];

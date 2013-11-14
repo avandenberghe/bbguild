@@ -216,7 +216,32 @@ class ucp_dkp extends \bbdkp\Admin
 						{
 							trigger_error($user->lang['NOUCPDELCHARS']);
 						}
-						$this->delete_member($member_id);
+
+                        if (confirm_box(true))
+                		{
+                		    $deletemember = new \bbdkp\controller\members\Members();
+                		    $deletemember->member_id = request_var('del_member_id', 0);
+                		    $deletemember->Getmember();
+                		    $deletemember->Deletemember();
+
+                			$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $deletemember->member_name);
+                			trigger_error($success_message);
+                		}
+                		else
+                		{
+                		    $deletemember = new \bbdkp\controller\members\Members();
+                		    $deletemember->member_id = request_var('member_id', 0);
+                		    $deletemember->Getmember();
+
+                			$s_hidden_fields = build_hidden_fields(array(
+                				'delete'				=> true,
+                				'del_member_id'			=> $deletemember->member_id,
+                				)
+                			);
+
+                			confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_MEMBER'], $deletemember->member_name) , $s_hidden_fields);
+                		}
+
 					}
 
 					if($submit)
@@ -225,7 +250,47 @@ class ucp_dkp extends \bbdkp\Admin
 						{
 							trigger_error('FORM_INVALID');
 						}
-						$this->add_member();
+
+					    $newmember = new \bbdkp\controller\members\Members();
+						if($newmember->has_reached_maxbbdkpaccounts())
+						{
+						    trigger_error(sprintf($user->lang['MAX_CHARS_EXCEEDED'],$config['bbdkp_maxchars']) , E_USER_WARNING);
+						}
+
+					    $newmember->game_id = request_var('game_id', '');
+					    // get member name
+					    $newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
+					    $newmember->member_guild_id = request_var('member_guild_id', 0);
+					    $newmember->member_rank_id = request_var('member_rank_id', 99);
+					    $newmember->member_level = request_var('member_level', 0);
+					    $newmember->member_race_id = request_var('member_race_id', 0);
+					    $newmember->member_class_id = request_var('member_class_id', 0);
+					    $newmember->member_role = request_var('member_role', '');
+					    $newmember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
+					    $newmember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
+					    $newmember->member_joindate = mktime(0, 0, 0, request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
+					    $newmember->member_outdate = mktime ( 0, 0, 0, 12, 31, 2030 );
+					    if (request_var('member_outdate_mo', 0) + request_var('member_outdate_d', 0) != 0)
+					    {
+					        $newmember->member_outdate = mktime(0, 0, 0, request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0));
+					    }
+					    $newmember->member_achiev = 0;
+					    $newmember->member_armory_url = utf8_normalize_nfc(request_var('member_armorylink', '', true));
+					    $newmember->phpbb_user_id = $user->data['user_id'];
+					    $member_status = request_var('activated', 0) > 0 ? 1 : 0;
+					    $newmember->Makemember();
+
+					    if ($newmember->member_id > 0)
+					    {
+					        // record added.
+					        $success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name));
+					        trigger_error($success_message, E_USER_NOTICE);
+					    }
+					    else
+					    {
+					        $failure_message = sprintf($user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($newmember->member_name), $newmember->member_id);
+					        trigger_error($failure_message, E_USER_WARNING);
+					    }
 					}
 
 					if($update)
@@ -506,121 +571,6 @@ class ucp_dkp extends \bbdkp\Admin
 	}
 
 	/**
-	 * gets user input, adds member
-	 *
-	 */
-	private function add_member()
-	{
-		global $db, $config, $user, $phpbb_root_path, $phpEx;
-
-		// check again if user exceeded allowed character count
-		$sql = 'SELECT count(*) as charcount
-				FROM ' . MEMBER_LIST_TABLE . '
-				WHERE phpbb_user_id = ' .  (int) $user->data['user_id'];
-		$result = $db->sql_query($sql);
-		$countc = $db->sql_fetchfield('charcount');
-		$db->sql_freeresult($result);
-		if ($countc >= $config['bbdkp_maxchars'])
-		{
-			 trigger_error(sprintf($user->lang['MAX_CHARS_EXCEEDED'],$config['bbdkp_maxchars']) , E_USER_WARNING);
-		}
-
-		// get member name
-		$member_name = utf8_normalize_nfc(request_var('member_name', '',true));
-
-		// check if membername exists
-		$sql = 'SELECT count(*) as memberexists
-				FROM ' . MEMBER_LIST_TABLE . "
-				WHERE UPPER(member_name)= UPPER('" . $db->sql_escape($member_name) . "')";
-		$result = $db->sql_query($sql);
-		$countm = $db->sql_fetchfield('memberexists');
-		$db->sql_freeresult($result);
-		if ($countm != 0)
-		{
-			 trigger_error($user->lang['ERROR_MEMBEREXIST'], E_USER_WARNING);
-		}
-
-		// set member active
-		$member_status = request_var('activated', 0) > 0 ? 1 : 0;
-
-		$guild_id = request_var('member_guild_id', 0);
-
-		// get rank
-		$rank_id = request_var('member_rank_id',99);
-
-		// check if rank exists
-		$sql = 'SELECT COUNT(*) as rankccount
-				FROM ' . MEMBER_RANKS_TABLE . '
-				WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id;
-		$result = $db->sql_query($sql);
-		$countm = $db->sql_fetchfield('rankccount');
-		$db->sql_freeresult($result);
-		if ( $countm == 0)
-		{
-			 trigger_error($user->lang['ERROR_INCORRECTRANK'], E_USER_WARNING);
-		}
-
-		$member_lvl = request_var('member_level', 0);
-		// check level
-		$sql = 'SELECT MAX(class_max_level) AS maxlevel FROM ' . CLASS_TABLE;
-		$result = $db->sql_query($sql);
-		$maxlevel = $db->sql_fetchfield('maxlevel');
-		$db->sql_freeresult($result);
-		if ( $member_lvl > $maxlevel)
-		{
-			$member_lvl = $maxlevel;
-		}
-
-		$game_id = request_var('game_id', '');
-		$race_id = request_var('member_race_id', 0);
-		$class_id = request_var('member_class_id', 0);
-		$gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
-
-		$member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
-
-		$joindate	= mktime(0,0,0,request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
-
-		//is there leavedate?
-		$achievpoints = 0;
-		$url = utf8_normalize_nfc(request_var('member_armorylink', '', true));
-
-		$phpbb_user_id = $user->data['user_id'];
-		$leavedate = mktime ( 0, 0, 0, 12, 31, 2030 );
-		$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $guild_id;
-		$result = $db->sql_query($sql);
-		$realm = ''; $region='';
-
-		while ( $row = $db->sql_fetchrow($result) )
-		{
-			$realm = $row['realm'];
-			$region = $row['region'];
-		}
-
-		if (! class_exists ( 'acp_dkp_mm' ))
-		{
-			include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
-		}
-		$acp_dkp_mm = new acp_dkp_mm ( );
-
-		$member_id = $acp_dkp_mm->insertnewmember($member_name, $member_status, $member_lvl, $race_id, $class_id,
-			$rank_id, $member_comment, $joindate, $leavedate, $guild_id, $gender, $achievpoints, $url, ' ', $realm, $game_id, $phpbb_user_id);
-
-		if ($member_id > 0)
-		{
-			// record added.
-			$success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($member_name));
-			trigger_error($success_message, E_USER_NOTICE);
-		}
-		else
-		{
-			$failure_message = sprintf($user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($member_name), $member_id);
-			 trigger_error($failure_message, E_USER_WARNING);
-		}
-
-	}
-
-
-	/**
 	 * gets user input, updates member
 	 * @param int $member_id
 	 */
@@ -705,71 +655,7 @@ class ucp_dkp extends \bbdkp\Admin
 			$failure_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_FAIL'], ucwords($member_name)) . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
 			trigger_error($failure_message, E_USER_WARNING);
 		}
-
 	}
-
-	/**
-	 * deletes member
-	 * @param int $member_id
-	 */
-	private function delete_member($member_id)
-	{
-		global $user, $db, $config, $phpbb_root_path, $phpEx;
-
-		if (confirm_box(true))
-		{
-			// recall hidden vars
-			$del_member = request_var('del_member_id', 0);
-			$del_membername = utf8_normalize_nfc(request_var('del_member_name','',true));
-			$log_action = array(
-				'header'	=>	 sprintf( $user->lang['ACTION_MEMBER_DELETED'], $del_membername),
-				'L_NAME'	=> $del_membername
-			);
-
-			if (! class_exists ( 'acp_dkp' ))
-			{
-				include ($phpbb_root_path . 'includes/acp/acp_dkp.' . $phpEx);
-			}
-			$acp_dkp = new acp_dkp ( );
-
-			$acp_dkp->log_insert(array(
-				'log_type'	 => $log_action['header'],
-				'log_action' => $log_action)
-			);
-
-			$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' where member_id= ' . (int) $del_member;
-			$db->sql_query($sql);
-			$sql = 'DELETE FROM ' . RAID_ITEMS_TABLE . ' where member_id= ' . (int) $del_member;
-			$db->sql_query($sql);
-			$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' where member_id= ' . (int) $del_member;
-			$db->sql_query($sql);
-			$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE .' where member_id= ' . (int) $del_member;
-			$db->sql_query($sql);
-			$sql = 'DELETE FROM ' . MEMBER_LIST_TABLE . ' where member_id= ' . (int) $del_member;
-			$db->sql_query($sql);
-
-			$success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $del_membername);
-			trigger_error($success_message);
-		}
-		else
-		{
-
-		    $sql = "SELECT member_name FROM " . MEMBER_LIST_TABLE . ' where member_id = ' . $member_id ;
-		    $result = $db->sql_query($sql);
-			$member_name = $db->sql_fetchfield('member_name', 1, $result);
-			$db->sql_freeresult($result);
-
-			$s_hidden_fields = build_hidden_fields(array(
-				'delete'				=> true,
-				'del_member_id'			=> $member_id,
-				'del_member_name'		=> $member_name,
-				)
-			);
-
-			confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_MEMBER'], $member_name) , $s_hidden_fields);
-		}
-	}
-
 
 	/**
 	 * lists all my characters
