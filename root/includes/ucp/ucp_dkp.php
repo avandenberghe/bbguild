@@ -305,7 +305,29 @@ class ucp_dkp extends \bbdkp\Admin
 						{
 							trigger_error($user->lang['NOUCPUPDCHARS']);
 						}
-						$this->update_member($member_id);
+
+						$updatemember = new \bbdkp\controller\members\Members();
+						$updatemember->member_id = $member_id;
+						$updatemember->Getmember();
+						$oldmember = new \bbdkp\controller\members\Members();
+
+						// get member name
+						$updatemember->member_name = utf8_normalize_nfc(request_var('member_name', '',true));
+						$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
+						$updatemember->member_guild_id =request_var('member_guild_id', 0);
+						$updatemember->member_rank_id =request_var('member_rank_id',99);
+						$updatemember->member_level = request_var('member_level', 0);
+						$updatemember->game_id = request_var('game_id', '');
+						$updatemember->member_race_id = request_var('member_race_id', 0);
+						$updatemember->member_class_id = request_var('member_class_id', 0);
+						$updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
+						$updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
+						$updatemember->Updatemember($oldmember);
+
+						//meta_refresh(1, $this->u_action . '&amp;member_id=' . $updatemember->member_id);
+						//$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], ucwords($updatemember->member_name))  . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
+						//trigger_error($success_message, E_USER_NOTICE);
+
 					}
 				}
 
@@ -570,92 +592,6 @@ class ucp_dkp extends \bbdkp\Admin
 
 	}
 
-	/**
-	 * gets user input, updates member
-	 * @param int $member_id
-	 */
-	private function update_member($member_id)
-	{
-		global $db, $user, $phpbb_root_path, $phpEx;
-
-		// get member name
-		$member_name = utf8_normalize_nfc(request_var('member_name', '',true));
-		$sql = 'SELECT *
-				FROM ' . MEMBER_LIST_TABLE . '
-				WHERE member_id = ' . (int) $member_id;
-		$result = $db->sql_query($sql);
-		$oldmember = array();
-		$oldmember = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
-
-		// check if membername exists
-		$sql = 'SELECT COUNT(*) as memberexists
-				FROM ' . MEMBER_LIST_TABLE . "
-				WHERE UPPER(member_name)= UPPER('" . $db->sql_escape($member_name) . "')";
-		$result = $db->sql_query($sql);
-		$countm = $db->sql_fetchfield('memberexists');
-		$db->sql_freeresult($result);
-		if (($countm != 0) && ($member_name != $oldmember['member_name']))
-		{
-			 meta_refresh(3, $this->u_action . '&amp;member_id=' . $member_id);
-			 trigger_error($user->lang['ERROR_MEMBEREXIST'], E_USER_WARNING);
-
-		}
-
-		$member_status = request_var('activated', 0) > 0 ? 1 : 0;
-		$guild_id = request_var('member_guild_id', 0);
-		$rank_id = request_var('member_rank_id',99);
-		$sql = 'SELECT count(*) as rankccount
-				FROM ' . MEMBER_RANKS_TABLE . '
-				WHERE rank_id=' . (int) $rank_id . ' and guild_id = ' . (int) $guild_id;
-		$result = $db->sql_query($sql);
-		$countm = $db->sql_fetchfield('rankccount');
-		$db->sql_freeresult($result);
-		if ( $countm == 0)
-		{
-			 meta_refresh(3, $this->u_action . '&amp;member_id=' . $member_id);
-			 trigger_error($user->lang['ERROR_INCORRECTRANK'], E_USER_WARNING);
-		}
-
-		$member_lvl = request_var('member_level', 0);
-		$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE;
-		$result = $db->sql_query($sql);
-		$maxlevel = $db->sql_fetchfield('maxlevel');
-		$db->sql_freeresult($result);
-		if ( $member_lvl > $maxlevel)
-		{
-			$member_lvl = $maxlevel;
-		}
-
-		$game_id = request_var('game_id', '');
-		$race_id = request_var('member_race_id', 0);
-		$class_id = request_var('member_class_id', 0);
-		$gender = isset($_POST['gender']) ? request_var('gender', '') : '0';
-		$member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
-		//$joindate	= mktime(0,0,0,request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
-		if (! class_exists ( 'acp_dkp_mm' ))
-		{
-			include ($phpbb_root_path . 'includes/acp/acp_dkp_mm.' . $phpEx);
-		}
-		$acp_dkp_mm = new acp_dkp_mm ( );
-
-		if ($acp_dkp_mm->updatemember($member_id, $member_name, $member_lvl, $race_id, $class_id,
-			$rank_id, $member_comment, $guild_id, $gender, 0, ' ' ,' ' , $game_id, $member_status))
-		{
-			// record updated.
-
-			meta_refresh(3, $this->u_action . '&amp;member_id=' . $member_id);
-			$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], ucwords($member_name))  . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
-			trigger_error($success_message, E_USER_NOTICE);
-		}
-		else
-		{
-			// update fail.
-			meta_refresh(3, $this->u_action . '&amp;member_id=' . $member_id);
-			$failure_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_FAIL'], ucwords($member_name)) . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
-			trigger_error($failure_message, E_USER_WARNING);
-		}
-	}
 
 	/**
 	 * lists all my characters
