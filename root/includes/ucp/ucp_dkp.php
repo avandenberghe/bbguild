@@ -122,7 +122,6 @@ class ucp_dkp extends \bbdkp\Admin
 		add_form_key('digests');
 		switch ($mode)
 		{
-			// this mode is shown to users in order to select the character with which they will raid
 			case 'characters':
 				$this->link = '';
 				$submit = (isset($_POST['submit'])) ? true : false;
@@ -262,9 +261,9 @@ class ucp_dkp extends \bbdkp\Admin
 					    $newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
 					    $newmember->member_guild_id = request_var('member_guild_id', 0);
 					    $newmember->member_rank_id = request_var('member_rank_id', 99);
-					    $newmember->member_level = request_var('member_level', 0);
-					    $newmember->member_race_id = request_var('member_race_id', 0);
-					    $newmember->member_class_id = request_var('member_class_id', 0);
+					    $newmember->member_level = request_var('member_level', 1);
+					    $newmember->member_race_id = request_var('member_race_id', 1);
+					    $newmember->member_class_id = request_var('member_class_id', 1);
 					    $newmember->member_role = request_var('member_role', '');
 					    $newmember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
 					    $newmember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
@@ -283,11 +282,15 @@ class ucp_dkp extends \bbdkp\Admin
 					    if ($newmember->member_id > 0)
 					    {
 					        // record added.
-					        $success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name));
+					    	$newmember->member_comment = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name), date("F j, Y, g:i a"));
+					    	$newmember->Updatemember($newmember);
+					    	meta_refresh(1, $this->u_action . '&amp;member_id=' . $newmember->member_id);
+					        $success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name), date("F j, Y, g:i a") );
 					        trigger_error($success_message, E_USER_NOTICE);
 					    }
 					    else
 					    {
+					    	meta_refresh(1, $this->u_action . '&amp;member_id=' . $newmember->member_id);
 					        $failure_message = sprintf($user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($newmember->member_name), $newmember->member_id);
 					        trigger_error($failure_message, E_USER_WARNING);
 					    }
@@ -324,7 +327,7 @@ class ucp_dkp extends \bbdkp\Admin
 						$updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
 						$updatemember->Updatemember($oldmember);
 
-						//meta_refresh(1, $this->u_action . '&amp;member_id=' . $updatemember->member_id);
+						meta_refresh(1, $this->u_action . '&amp;member_id=' . $updatemember->member_id);
 						//$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], ucwords($updatemember->member_name))  . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
 						//trigger_error($success_message, E_USER_NOTICE);
 
@@ -342,7 +345,6 @@ class ucp_dkp extends \bbdkp\Admin
 				));
 				$this->tpl_name 	= 'dkp/ucp_dkp_charadd';
 				break;
-
 		}
 	}
 
@@ -408,7 +410,7 @@ class ucp_dkp extends \bbdkp\Admin
 
 		// Rank drop-down -> for initial load
 		// reloading is done from ajax to prevent redraw
-		$Ranks = new \bbdkp\controller\guilds\Ranks($this->guild_id);
+		$Ranks = new \bbdkp\controller\guilds\Ranks($members->member_guild_id);
 		$result = $Ranks->listranks();
 		while ($row = $db->sql_fetchrow($result))
 		{
@@ -431,6 +433,7 @@ class ucp_dkp extends \bbdkp\Admin
 						AND l.attribute='race'
 						AND l.game_id = r.game_id
 						AND l.language= '" . $config['bbdkp_lang'] ."'",
+		'ORDER_BY'	=> 'l.name asc'
 		);
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -472,6 +475,7 @@ class ucp_dkp extends \bbdkp\Admin
 				),
 			'WHERE'		=> " l.game_id = c.game_id  AND c.game_id = '" . $this->game_id . "'
 			AND l.attribute_id = c.class_id  AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",
+			'ORDER_BY'	=> 'l.name asc'
 			);
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -508,6 +512,16 @@ class ucp_dkp extends \bbdkp\Admin
 
 		}
 		$db->sql_freeresult($result);
+
+		//Role dropdown
+		$Roles = new \bbdkp\controller\guilds\Roles($members->member_guild_id);
+		foreach($Roles->roles as $roleid => $Role )
+		{
+			$template->assign_block_vars('role_row', array(
+					'VALUE' => $roleid ,
+					'SELECTED' => ($members->member_role == $roleid) ? ' selected="selected"' : '' ,
+					'OPTION' => $Role ));
+		}
 
 		// set the genderdefault to male if a new form is opened, otherwise take rowdata.
 		$genderid = $member_id > 0? $members->member_gender_id : '0';
@@ -560,7 +574,7 @@ class ucp_dkp extends \bbdkp\Admin
 			'STATUS'				=> $member_id > 0 ? (($members->member_status == 1) ? 'Checked ' : '' ): 'Checked ',
 			'MEMBER_NAME'			=> $member_id > 0 ? $members->member_name : '',
 			'MEMBER_ID'				=> $member_id > 0 ? $members->member_id : '',
-			'MEMBER_LEVEL'			=> $member_id > 0 ? $members->member_level : '',
+			'MEMBER_LEVEL'			=> $member_id > 0 ? $members->member_level : '1',
 			'MALE_CHECKED'			=> ($genderid == '0') ? ' checked="checked"' : '' ,
 			'FEMALE_CHECKED'		=> ($genderid == '1') ? ' checked="checked"' : '' ,
 			'MEMBER_COMMENT'		=> $member_id > 0 ? $members->member_comment : '',
