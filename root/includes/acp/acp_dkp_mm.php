@@ -221,40 +221,54 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				//get window
 				$start = request_var('start', 0, false);
+				$minlevel = request_var('minlevel', 0);
+				$maxlevel = request_var('maxlevel', 200);
+				//show active by default
+				$selectactive = isset($_POST['active']) ? 1 : request_var('active', 1);;
+				//hide nonactive by default
+				$selectnonactive = isset($_POST['nonactive']) ? 1 : request_var('nonactive', 0);;
+
 				$sort_order = array(
-					0 => array('member_name' , 'member_name desc') ,
-					1 => array('username' , 'username desc') ,
-					2 => array('member_level' , 'member_level desc') ,
-					3 => array('member_class' , 'member_class desc') ,
-					4 => array('rank_name' , 'rank_name desc') ,
-					5 => array('member_joindate' , 'member_joindate desc') ,
-					6 => array('member_outdate' , 'member_outdate desc') ,
-					7 => array('member_race' ,	'member_race desc'));
+					0 => array('member_name', 'member_name desc') ,
+					1 => array('username', 'username desc') ,
+					2 => array('member_level', 'member_level desc') ,
+					3 => array('member_class', 'member_class desc') ,
+					4 => array('rank_name', 'rank_name desc'),
+					5 => array('member_joindate', 'member_joindate desc'),
+					6 => array('member_outdate', 'member_outdate desc'),
+					7 => array('member_id', 'member_id desc')
+				);
 
 				$current_order = $this->switch_order($sort_order);
 				$sort_index = explode('.', $current_order['uri']['current']);
 				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 				$show_all = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
 
-				$members_result = $Guild->listmembers($current_order['sql'], $start, 1);
-				if (! ($members_result))
+				$result = $Guild->listmembers($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive);
+				$member_count = 0;
+				while ($row = $db->sql_fetchrow($result))
+				{
+					$member_count += 1;
+				}
+
+				if (! ($result))
 				{
 					trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
 				}
-				$lines = 0;
-				$member_count = 0;
+				$db->sql_freeresult($result);
 
+				$members_result = $Guild->listmembers($current_order['sql'], $start, 1, $minlevel, $maxlevel, $selectactive, $selectnonactive);
+				$lines = 0;
 				while ($row = $db->sql_fetchrow($members_result))
 				{
 					$phpbb_user_id = (int) $row['phpbb_user_id'];
 					$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
-					$member_count += 1;
 					$lines +=1;
 					$template->assign_block_vars('members_row', array(
 						'S_READONLY' => ($row['rank_id'] == 90 || $row['rank_id'] == 99) ? true : false ,
 						'STATUS' => ($row['member_status'] == 1) ? 'checked="checked" ' : '' ,
-						'ID' => $row['member_id'] ,
-						'COUNT' => $member_count ,
+						'ID' => $row['member_id'],
+						'COUNT' => $member_count,
 						'NAME' => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'] ,
 						'USERNAME' => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) ,
 						'RANK' => $row['rank_name'] ,
@@ -275,28 +289,62 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 
 				$db->sql_freeresult($members_result);
-				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $Guild->membercount);
-				$memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] . "&amp;". URI_GUILD ."=".$Guild->guildid),
-						$Guild->membercount, $config['bbdkp_user_llimit'], $start, true
-				);
+				$footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $member_count);
+				$memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx",
+						"i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] .
+						"&amp;". URI_GUILD ."=".$Guild->guildid .
+						"&amp;minlevel=".$minlevel .
+						"&amp;maxlevel=".$maxlevel .
+						"&amp;active=".$selectactive .
+						"&amp;nonactive=".$selectnonactive ),
+						$member_count, $config['bbdkp_user_llimit'], $start, true);
 				$form_key = 'mm_listmembers';
 				add_form_key($form_key);
 
 				$template->assign_vars(array(
+					'F_SELECTACTIVE'  => $selectactive,
+					'F_SELECTNONACTIVE'  => $selectnonactive,
 					'GUILDID' => $Guild->guildid,
 					'GUILDNAME' => $Guild->name,
+					'MINLEVEL' => $minlevel,
+					'MAXLEVEL' => $maxlevel,
 					'START' => $start,
 					'F_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember' ,
 					'F_MEMBERS_LIST' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers' ,
 					'L_TITLE' => $user->lang['ACP_MM_LISTMEMBERS'] ,
 					'L_EXPLAIN' => $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'] ,
-					'O_NAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
-					'O_USERNAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
-					'O_LEVEL' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
-					'O_CLASS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
-					'O_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
-					'O_JOINDATE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
-					'O_OUTDATE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][6] . "&amp;" . URI_GUILD . "=" . $Guild->guildid) ,
+					'O_NAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
+						"&amp;maxlevel=".$maxlevel .
+						"&amp;active=".$selectactive .
+						"&amp;nonactive=".$selectnonactive) ,
+					'O_USERNAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->guildid. "&amp;minlevel=".$minlevel .
+						"&amp;maxlevel=".$maxlevel .
+						"&amp;active=".$selectactive .
+						"&amp;nonactive=".$selectnonactive) ,
+					'O_LEVEL' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->guildid. "&amp;minlevel=".$minlevel .
+						"&amp;maxlevel=".$maxlevel .
+						"&amp;active=".$selectactive .
+						"&amp;nonactive=".$selectnonactive) ,
+					'O_CLASS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
+						"&amp;maxlevel=".$maxlevel .
+						"&amp;active=".$selectactive .
+						"&amp;nonactive=".$selectnonactive) ,
+					'O_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
+						"&amp;maxlevel=".$maxlevel .
+						"&amp;active=".$selectactive .
+						"&amp;nonactive=".$selectnonactive) ,
+					'O_JOINDATE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
+						"&amp;maxlevel=".$maxlevel .
+						"&amp;active=".$selectactive .
+						"&amp;nonactive=".$selectnonactive) ,
+					'O_OUTDATE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][6] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
+						"&amp;maxlevel=".$maxlevel .
+						"&amp;active=".$selectactive .
+						"&amp;nonactive=".$selectnonactive) ,
+					'O_ID' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
+						"&amp;maxlevel=".$maxlevel .
+						"&amp;active=".$selectactive .
+						"&amp;nonactive=".$selectnonactive),
 					'U_LIST_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;") ,
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text ,
 					'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=addguild&amp;" . URI_GUILD . '=' . $Guild->guildid ),

@@ -1,7 +1,7 @@
 <?php
 /**
  * Ranks class file
- * 
+ *
  *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -32,10 +32,10 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 
 /**
  * Ranks Class
- * 
+ *
  * Manages Guildranks, extends the guild class
  *   @package bbdkp
- * 
+ *
  */
 class Ranks extends \bbdkp\controller\guilds\Guilds
 {
@@ -80,7 +80,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 		if ($RankId >= 0)
 		{
 			$this->RankGuild=$RankGuild;
-			$this->Getrank(); 	
+			$this->Getrank();
 		}
 		else
 		{
@@ -95,7 +95,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 
 	/**
 	 * gets all info on one rank
-	 * 
+	 *
 	 */
 	public function Getrank()
 	{
@@ -156,7 +156,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 		$db->sql_query('INSERT INTO ' . MEMBER_RANKS_TABLE . $query);
 		// log the action
 
-		
+
 		$log_action = array(
 				'header' => 'L_ACTION_RANK_ADDED',
 				'id' => (int)  $this->RankId,
@@ -176,7 +176,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 
 	/**
 	 * deletes a rank
-	 * 
+	 *
 	 * @param int $override
 	 * @return boolean
 	 */
@@ -227,7 +227,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 
 	/**
 	 * updates a rank
-	 * 
+	 *
 	 * @param Ranks $old_rank
 	 * @return boolean
 	 */
@@ -272,7 +272,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 		return true;
 
 	}
-	
+
 	/**
 	 * returns rank array
 	 * @return array
@@ -282,14 +282,14 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 		global $user, $db;
 		// rank 99 is the out-rank
 		$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . '
-	        		WHERE guild_id = ' . $this->RankGuild . ' AND rank_id < 99	
+	        		WHERE guild_id = ' . $this->RankGuild . ' AND rank_id < 99
 	        		ORDER BY rank_id, rank_hide  ASC ';
-		
+
 		$result = $db->sql_query($sql);
 		return $result;
-		
+
 	}
-	
+
 	/**
 	 * counts members in guild with a given rank
 	 */
@@ -306,10 +306,10 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 		return $countm;
 	}
 
-	
+
 	/**
 	 * updates a wow guild rank list from Battle.NET API
-	 * 
+	 *
 	 * @param array $memberdata
 	 * @param int $guild_id
 	 * @param string $region
@@ -317,29 +317,29 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 	public function WoWArmoryUpdate($memberdata, $guild_id, $region)
 	{
 		global $user, $db, $phpEx, $phpbb_root_path;
-		
+
 		$newranks = array();
-		
+
 		//init the rank counts per rank
 		foreach ( $memberdata as $new )
 		{
 			$newranks[$new['rank']] = 0;
 		}
-		
+
 		//count the number of members per rank
 		foreach ( $memberdata as $new )
 		{
 			$newranks[$new['rank']] += 1;
 		}
-		
+
 		ksort($newranks);
-		
+
 		/* GET OLD RANKS */
 		$sql = ' select rank_id from ' . MEMBER_RANKS_TABLE . ' WHERE
 				 guild_id =  ' . (int) $guild_id . ' and rank_id < 90 order by rank_id ASC';
 		$result = $db->sql_query ($sql);
 		$oldranks = array ();
-		
+
 		while ($row = $db->sql_fetchrow ($result))
 		{
 			$oldranks [(int) $row['rank_id']] = 0;
@@ -351,26 +351,26 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 			$oldranks [(int) $row['rank_id']] += 1;
 		}
 		$db->sql_freeresult ( $result );
-		
+
 		// get the new ranks not yet created
 		$diff = array_diff_key($newranks, $oldranks);
-		
+
 		foreach($diff as $key => $count)
 		{
 			$newrank = new \bbdkp\controller\guilds\Ranks($guild_id);
 			$newrank->RankName = 'Rank'.$key;
-			$newrank->RankId = $key; 
+			$newrank->RankId = $key;
 			$newrank->RankGuild = $guild_id;
-			$newrank->RankHide = 0; 
-			$newrank->RankPrefix = ''; 
-			$newrank->RankSuffix = ''; 
+			$newrank->RankHide = 0;
+			$newrank->RankPrefix = '';
+			$newrank->RankSuffix = '';
 			$newrank->Makerank();
-			unset($newrank); 
+			unset($newrank);
 		}
-		
-		
-		
+
+
+
 	}
-	
+
 
 }

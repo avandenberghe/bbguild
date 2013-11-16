@@ -1353,13 +1353,17 @@ class Members extends \bbdkp\Admin
 			AND g.id = m.member_guild_id
 			AND r.guild_id = m.member_guild_id
 			AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
-			AND m.member_status = 1
-			AND m.member_level >= ".  intval($config['bbdkp_minrosterlvl']) . "
-			AND m.member_rank_id != 99
+			AND m.member_status = 1 ";
+
+		if ($mycharsonly ==false)
+		{
+			$sql_array['WHERE'] .= " AND m.member_level >= ".  intval($config['bbdkp_minrosterlvl']) ;
+		}
+
+		$sql_array['WHERE'] .= " AND m.member_rank_id != 99
 			AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "'
 			AND e1.attribute = 'race' and e1.game_id = e.game_id";
 
-		// filters
 
 		if($game_id != '' )
 		{
