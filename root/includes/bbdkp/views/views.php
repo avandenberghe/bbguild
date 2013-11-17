@@ -134,7 +134,6 @@ class views extends \bbdkp\admin
 				include($phpbb_root_path . 'includes/bbdkp/views/viewevent.' . $phpEx);
 				break;
 			case 'viewitem':
-				include($phpbb_root_path . 'includes/bbdkp/controller/loot/Loot.' . $phpEx);
 				include($phpbb_root_path . 'includes/bbdkp/views/viewitem.' . $phpEx);
 				break;
 			case 'viewraid':

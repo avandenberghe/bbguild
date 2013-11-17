@@ -15,6 +15,16 @@
 <br />
 
   <dl>
+    <dt><label for="game_id">{L_GAME}:</label></dt>
+  		<dd>
+  		<select name="game_id" class="input" onchange="return GetClassRace(this.value)">
+       <!-- BEGIN game_row -->
+       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
+        <!-- END game_row -->
+      </select></dd>
+ </dl>
+
+  <dl>
     <dt><label for="member_name">{L_NAME}:</label></dt>
     <dd><input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" /></dd>
   </dl>
@@ -26,7 +36,7 @@
 
 <dl>
     <dt><label for="member_level">{L_LEVEL}:</label></dt>
-		<dd><input type="text" name="member_level" size="20" maxlength="3" value="{MEMBER_LEVEL}" class="input" /></dd>
+		<dd><input type="text" name="member_level" size="5" maxlength="3" value="{MEMBER_LEVEL}" class="input" /></dd>
 </dl>
 
 
@@ -54,15 +64,7 @@
 </dd>
 </dl>
 
-  <dl>
-    <dt><label for="game_id">{L_GAME}:</label></dt>
-  		<dd>
-  		<select name="game_id" class="input" onchange="return GetClassRace(this.value)">
-       <!-- BEGIN game_row -->
-       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
-        <!-- END game_row -->
-      </select></dd>
- </dl>
+
 
   <dl>
     <dt><label for="member_race_id">{L_RACE}:</label></dt>
@@ -86,6 +88,19 @@
 		<!-- IF S_CLASS_IMAGE_EXISTS --><br/><img src="{CLASS_IMAGE}" alt="" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
 		</dd>
   </dl>
+
+  <dl>
+<dt><label for="member_role">{L_ROLES}:</label></dt>
+<dd>
+	<select name="member_role" id="member_role" class="input" >
+	   <!-- BEGIN role_row -->
+    <option value="{role_row.VALUE}"{role_row.SELECTED}>{role_row.OPTION}</option>
+       <!-- END role_row -->
+    </select>
+</dd>
+</dl>
+
+
   <dl>
     <dt><label for="gender">{L_GENDER}:</label></dt>
     <dd>
@@ -134,6 +149,7 @@
 </dl>
 
 <!-- ELSE -->
+
 	<p class="error">{MAX_CHARS_EXCEEDED} </p><p><br /><br /></p>
 <!-- ENDIF -->
 

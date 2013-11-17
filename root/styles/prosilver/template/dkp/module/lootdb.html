@@ -13,10 +13,10 @@
 </select>
 </div>
 </div>
-</form> 
+</form>
 <hr />
 
-<!-- IF ITEM_PAGINATION -->  
+<!-- IF ITEM_PAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{ITEM_PAGINATION}<br /><br /></span>
@@ -30,15 +30,15 @@
   <tr style="color:white;">
     <th style="text-align:left; width:30%"><a href="{O_ITEMNAME}"><img src="adm/images/glyphs/view.gif" width="16" height="16" alt="View" /></a> &nbsp;<a href="{O_ITEMNAME}">{L_ITEM}</a></th>
     <th style="text-align:left; width:5%" ><a href="{O_DATE}">{L_DATE}</a></th>
-    <th style="text-align:left; width:15%"><a href="{O_RAID}">{L_RAID}</a></th> 
+    <th style="text-align:left; width:15%"><a href="{O_RAID}">{L_RAID}</a></th>
     <th style="text-align:right; width:7%; "><a href="{O_DROPCOUNT}">&nbsp;#&nbsp;</a></th>
     <th style="text-align:right; width:7%; ">{L_ITEMVALUE}</th>
-    <!-- IF S_SHOWDECAY -->    
+    <!-- IF S_SHOWDECAY -->
     <th style="text-align:right; width:7%; ">{L_ITEMDECAY}</th>
     <!-- ENDIF -->
     <th style="text-align:right; width:7%; "><a href="{O_VALUE}">{L_ITEMTOTAL}</a></th>
-    
-    
+
+
   </tr>
   </thead>
   <tfoot>
@@ -48,7 +48,7 @@
     	</th>
     	<th></th>
     	<th style="text-align:right; width:10%">{TOTAL_ITEMVALUE}</th>
-	    <!-- IF S_SHOWDECAY -->      
+	    <!-- IF S_SHOWDECAY -->
 	    <th style="text-align:right; width:10%">{TOTAL_ITEMDECAY}</th>
 	    <!-- ENDIF -->
 	    <th style="text-align:right; width:15%">{TOTAL_ITEMTOTAL}</th>
@@ -59,14 +59,14 @@
   <tr <!-- IF items_row.S_ROW_COUNT is even -->class="bg1"<!-- ELSE -->class="bg2"<!-- ENDIF -->>
     <td style="text-align:left; width:30%;"><a href="{items_row.U_VIEW_ITEM}"><img src="adm/images/glyphs/view.gif" width="16" height="16" alt="View" /></a> &nbsp;<strong><a href="{items_row.U_VIEW_ITEM}">{items_row.ITEMNAME}</a></strong></td>
 	<td style="text-align:left; width:5%;"><a href="{items_row.U_VIEW_RAID}">{items_row.DATE}</a></td>
-    <td style="text-align:left; width:30%"><a href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td> 
+    <td style="text-align:left; width:30%; white-space: nowrap;"><a style="color:{items_row.EVENT_COLOR}" href="{items_row.U_VIEW_RAID}">{items_row.RAID}</a></td>
     <td style="text-align:right; width:7%"><span class="positive" >{items_row.DROPCOUNT}</span></td>
     <td style="text-align:right; width:7%"><span class="negative">{items_row.ITEMVALUE}</span></td>
-    <!-- IF S_SHOWDECAY -->      
+    <!-- IF S_SHOWDECAY -->
     <td style="text-align:right; width:7%"><span class="positive" >{items_row.DECAYVALUE}</span></td>
     <!-- ENDIF -->
     <td style="text-align:right; width:7%"><strong><span class="negative" >{items_row.TOTAL}</span></strong></td>
-    
+
   </tr>
   <!-- END items_row -->
   </tbody>
@@ -75,7 +75,7 @@
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
-<!-- IF ITEM_PAGINATION -->  
+<!-- IF ITEM_PAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{ITEM_PAGINATION}<br /><br /></span>
