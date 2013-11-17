@@ -274,7 +274,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 						'RANK' => $row['rank_name'] ,
 						'LEVEL' => ($row['member_level'] > 0) ? $row['member_level'] : '&nbsp;' ,
 						'ARMOR' => (! empty($row['armor_type'])) ? $row['armor_type'] : '&nbsp;' ,
-						'COLORCODE' => ($row['colorcode'] == '') ? '#123456' : $row['colorcode'] ,
+						'COLORCODE' => ($row['colorcode'] == '') ? '#254689' : $row['colorcode'] ,
 						'CLASS_IMAGE' => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '' ,
 						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false ,
 						'RACE_IMAGE' => (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '' ,
@@ -673,10 +673,6 @@ class acp_dkp_mm extends \bbdkp\Admin
 				}
 
 
-				// set the genderdefault to male if a new form is opened, otherwise take rowdata.
-				$genderid = $editmember->member_id > 0 ? $editmember->member_gender_id : '0';
-
-
 				// build presets for joindate pulldowns
 				$now = getdate();
 				$s_memberjoin_day_options = '<option value="0"	>--</option>';
@@ -777,21 +773,21 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'L_TITLE' => $user->lang['ACP_MM_ADDMEMBER'] ,
 					'L_EXPLAIN' => $user->lang['ACP_MM_ADDMEMBER_EXPLAIN'] ,
 					'F_ADD_MEMBER' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;") ,
-					'STATUS' => $editmember->member_id > 0 ? (($editmember->member_status == 1) ? 'checked="checked" ' : '') : 'checked="checked" ' ,
-					'MEMBER_NAME' => $editmember->member_id > 0 ? $editmember->member_name : '' ,
-					'MEMBER_ID' => $editmember->member_id > 0 ? $editmember->member_id : '' ,
-					'MEMBER_LEVEL' => $editmember->member_id > 0 ? $editmember->member_level : '1' ,
-					'MEMBER_ACHIEV' => $editmember->member_id > 0 ? $editmember->member_achiev : '' ,
-					'MEMBER_TITLE' => $editmember->member_id > 0 ? $editmember->member_title : '' ,
-					'MALE_CHECKED' => ($genderid == '0') ? ' checked="checked"' : '' ,
-					'FEMALE_CHECKED' => ($genderid == '1') ? ' checked="checked"' : '' ,
-					'MEMBER_COMMENT' => $editmember->member_id > 0 ? $editmember->member_comment : '' ,
-					'S_CAN_HAVE_ARMORY' => $editmember->member_id > 0 ? ($editmember->game_id == 'wow' || $editmember->game_id == 'aion' ? true : false) : false ,
-					'MEMBER_URL' => $editmember->member_id > 0 ? $editmember->member_armory_url : '' ,
-					'MEMBER_PORTRAIT' => $editmember->member_id > 0 ? $editmember->member_portrait_url : '' ,
+					'STATUS' => $editmember->member_status == 1 ? 'checked="checked" ' : '' ,
+					'MEMBER_NAME' => $editmember->member_name,
+					'MEMBER_ID' => $editmember->member_id,
+					'MEMBER_LEVEL' => $editmember->member_level,
+					'MEMBER_ACHIEV' => $editmember->member_achiev,
+					'MEMBER_TITLE' => $editmember->member_title,
+					'MALE_CHECKED' => ( $editmember->member_gender_id == '0') ? ' checked="checked"' : '' ,
+					'FEMALE_CHECKED' => ( $editmember->member_gender_id == '1') ? ' checked="checked"' : '' ,
+					'MEMBER_COMMENT' => $editmember->member_comment,
+					'S_CAN_HAVE_ARMORY' => $editmember->game_id == 'wow' || $editmember->game_id == 'aion' ? true : false,
+					'MEMBER_URL' => $editmember->member_armory_url,
+					'MEMBER_PORTRAIT' => $editmember->member_portrait_url,
 					'S_MEMBER_PORTRAIT_EXISTS' => (strlen($editmember->member_portrait_url) > 1) ? true : false ,
-					'S_CAN_GENERATE_ARMORY' => $editmember->member_id > 0 ? ($editmember->game_id == 'wow' ? true : false) : false ,
-					'COLORCODE' => ($editmember->colorcode== '') ? '#123456' : $editmember->colorcode ,
+					'S_CAN_GENERATE_ARMORY' => $editmember->game_id == 'wow' ? true : false,
+					'COLORCODE' => ($editmember->colorcode== '') ? '#254689' : $editmember->colorcode ,
 					'CLASS_IMAGE' => $editmember->class_image ,
 					'S_CLASS_IMAGE_EXISTS' => (strlen($editmember->class_image) > 1) ? true : false ,
 					'RACE_IMAGE' => $editmember->race_image ,
