@@ -43,7 +43,7 @@ function GetMemberlist(guildid)
 	   alert("{LA_ALERT_OLDBROWSER}");
 	   return;
    }
-    var strURL="{T_TEMPLATE_PATH}/dkp/findmemberlist.php?guild_id="+guildid;
+    var strURL="{UA_MEMBERLIST}?guild_id="+guildid;
     xmlhttp.onreadystatechange=GuildStateChanged;
     xmlhttp.open("GET", strURL, true);
     // send to server

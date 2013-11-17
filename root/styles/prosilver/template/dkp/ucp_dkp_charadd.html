@@ -218,7 +218,7 @@ function GetRank(guildid)
 	   alert("{LA_ALERT_OLDBROWSER}");
 	   return;
    }
-    var strURL="{T_TEMPLATE_PATH}/dkp/findrank.php?guild="+guildid;
+    var strURL="{UA_FINDRANK}?guild="+guildid;
     xmlhttp.onreadystatechange=stateChanged;
     xmlhttp.open("GET", strURL, true);
     // send to server
@@ -268,7 +268,7 @@ function GetClassRace(game_id)
 	   alert("{LA_ALERT_OLDBROWSER}");
 	   return;
    }
-    var strURL="{T_TEMPLATE_PATH}/dkp/findclassrace.php?game_id="+game_id;
+    var strURL="{UA_FINDCLASSRACE}?game_id="+game_id;
     xmlhttp.onreadystatechange=classracestateChanged;
     xmlhttp.open("GET", strURL, true);
     // send to server
