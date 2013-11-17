@@ -29,7 +29,24 @@ function check_form()
 	<dd><input class="button2" name="gamedelete" type="submit" value="{L_DELETE}" /></dd>
 </dl>
 
- </fieldset>
+</fieldset>
+
+
+<fieldset>
+<legend>{L_ACP_GAMESETTINGS}</legend>
+	<dl>
+		<dt><label for="gameimage">{L_CLASS_IMAGE}:</label>{GAMEIMAGEEXPLAIN}</dt>
+		<dd><input class="medium" type="text" id="imagename" name="imagename" value="{GAMEIMAGE}" />
+			<!-- IF S_GAMEIMAGE_EXISTS --><img src="{GAMEIMAGE}" alt="{GAMEIMAGE}" /><!-- ENDIF -->
+		</dd>
+	</dl>
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+<input class="button2" name="gamesettings" type="submit" value="{L_SUBMIT}" />
+</fieldset>
+
+
+
+</fieldset>
 
 <fieldset>
 <legend>{L_ACP_LISTFACTION}</legend>
@@ -38,6 +55,7 @@ function check_form()
 
 <!-- IF .faction_row -->
 <table width="50%" cellspacing="1">
+
 <thead>
   <tr>
 	<th style="text-align:left; width: 10%">{L_GAME}</th>

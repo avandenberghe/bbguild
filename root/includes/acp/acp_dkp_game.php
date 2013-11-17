@@ -200,6 +200,8 @@ class acp_dkp_game extends \bbdkp\Admin
 				$classedit = (isset ( $_GET ['classedit'] )) ? true : false;
 				$classdelete = (isset ( $_GET ['classdelete'] )) ? true : false;
 
+				$gamesettings = (isset ( $_POST ['gamesettings'] )) ? true : false;
+
 				if($gamereset)
 				{
 					// ask for permission
@@ -225,8 +227,16 @@ class acp_dkp_game extends \bbdkp\Admin
 					}
 				}
 
-				// delete actions
+				// save game settings
+				if($gamesettings)
+				{
+					$editgame = new \bbdkp\controller\games\Game;
+					$editgame->game_id = request_var ( 'game_id','' );
+					$editgame->imagename = request_var ( 'imagename','' );
+					$editgame->update();
+				}
 
+				// delete actions
 				if($gamedelete)
 				{
 					// ask for permission
@@ -797,6 +807,9 @@ class acp_dkp_game extends \bbdkp\Admin
 		unset ( $listclasses, $cl );
 
 		$template->assign_vars ( array (
+				'GAMEIMAGEEXPLAIN' => sprintf($user->lang['GAME_IMAGE_EXPLAIN'], $editgame->game_id),
+				'GAMEIMAGE' => $editgame->imagename,
+				'S_GAMEIMAGE_EXISTS' => (strlen($editgame->imagename) > 0 && file_exists($phpbb_root_path. 'images/bbdkp/games/'. $editgame->game_id. '.png')  ) ? true : false,
 				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->name  ) ,
 				'GAME_ID' => $editgame->game_id,
 				'URI_GAME' => URI_GAME,
