@@ -806,10 +806,13 @@ class acp_dkp_game extends \bbdkp\Admin
 
 		unset ( $listclasses, $cl );
 
+		$imgexists = file_exists($phpbb_root_path. 'images/bbdkp/games/'. $editgame->game_id. '/'. $editgame->imagename . '.png');
+
 		$template->assign_vars ( array (
 				'GAMEIMAGEEXPLAIN' => sprintf($user->lang['GAME_IMAGE_EXPLAIN'], $editgame->game_id),
 				'GAMEIMAGE' => $editgame->imagename,
-				'S_GAMEIMAGE_EXISTS' => (strlen($editgame->imagename) > 0 && file_exists($phpbb_root_path. 'images/bbdkp/games/'. $editgame->game_id. '.png')  ) ? true : false,
+				'GAMEPATH' => $phpbb_root_path. 'images/bbdkp/games/'. $editgame->game_id. '/'. $editgame->imagename . '.png',
+				'S_GAMEIMAGE_EXISTS' => (strlen($editgame->imagename) > 0 && $imgexists  ) ? true : false,
 				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->name  ) ,
 				'GAME_ID' => $editgame->game_id,
 				'URI_GAME' => URI_GAME,

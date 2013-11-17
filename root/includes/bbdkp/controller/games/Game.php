@@ -230,7 +230,7 @@ class Game extends \bbdkp\Admin
 		$db->sql_transaction ( 'begin' );
 
 		$query = $db->sql_build_array('UPDATE', array(
-				'imagename' => substr($this->imagename, 1, 20) ,
+				'imagename' => substr($this->imagename, 0, 20) ,
 		));
 
 		$sql = 'UPDATE ' . GAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";

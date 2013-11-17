@@ -988,7 +988,7 @@ $versions = array(
      		),
 
      	//guild games acp makes this config obsolete
-     	'config_delete' => array(
+     	'config_remove' => array(
      				array('bbdkp_guildtag') ,
 	     			array('bbdkp_recruitment'),
 	     			array('bbdkp_games_aion'),
