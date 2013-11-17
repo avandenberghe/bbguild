@@ -505,8 +505,7 @@ class Members extends \bbdkp\Admin
 
 		$error = array ();
 
-		$this->member_status = 1;
-
+		// check if membername exists
 		$sql = 'SELECT count(*) as memberexists
 				FROM ' . MEMBER_LIST_TABLE . "
 				WHERE member_name= '" . $db->sql_escape(ucwords($this->member_name)) . "'
@@ -519,6 +518,7 @@ class Members extends \bbdkp\Admin
 			$error[]= $user->lang['ERROR_MEMBEREXIST'];
 		}
 
+		// check if rank exists
 		$sql = 'SELECT count(*) as rankccount
 			FROM ' . MEMBER_RANKS_TABLE . '
 			WHERE rank_id=' . (int) $this->member_rank_id . '
@@ -550,6 +550,7 @@ class Members extends \bbdkp\Admin
 			return 0;
 		}
 
+		// check level
 		$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE;
 		$result = $db->sql_query($sql);
 		$maxlevel = $db->sql_fetchfield('maxlevel');
@@ -559,6 +560,7 @@ class Members extends \bbdkp\Admin
 			$this->member_level = $maxlevel;
 		}
 
+		// set realm, region
 		$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $this->member_guild_id;
 		$result = $db->sql_query($sql);
 		$this->member_realm  = $config['bbdkp_default_realm'];
@@ -1351,13 +1353,17 @@ class Members extends \bbdkp\Admin
 			AND g.id = m.member_guild_id
 			AND r.guild_id = m.member_guild_id
 			AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
-			AND m.member_status = 1
-			AND m.member_level >= ".  intval($config['bbdkp_minrosterlvl']) . "
-			AND m.member_rank_id != 99
+			AND m.member_status = 1 ";
+
+		if ($mycharsonly ==false)
+		{
+			$sql_array['WHERE'] .= " AND m.member_level >= ".  intval($config['bbdkp_minrosterlvl']) ;
+		}
+
+		$sql_array['WHERE'] .= " AND m.member_rank_id != 99
 			AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "'
 			AND e1.attribute = 'race' and e1.game_id = e.game_id";
 
-		// filters
 
 		if($game_id != '' )
 		{

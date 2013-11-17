@@ -715,7 +715,7 @@ class Guilds extends \bbdkp\Admin
 	 * @param number $mode
 	 * @return array
 	 */
-	public function listmembers($order = 'm.member_name', $start=0, $mode = 0)
+	public function listmembers($order = 'm.member_name', $start=0, $mode = 0, $minlevel=1, $maxlevel=200, $selectactive=1, $selectnonactive=1)
 	{
 
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
@@ -744,8 +744,20 @@ class Guilds extends \bbdkp\Admin
 								AND m.game_id =  a.game_id
 								AND m.game_id =  c.game_id
 								AND m.member_race_id =  a.race_id
-								AND (m.member_class_id = c.class_id)' ,
+								AND (m.member_class_id = c.class_id)
+								AND m.member_level >= ' . $minlevel . '
+								AND m.member_level <= ' . $maxlevel,
 				'ORDER_BY' => $order);
+
+		if($selectactive == 0 && $selectnonactive == 1)
+		{
+			$sql_array['WHERE'] .= ' AND m.member_status = 0 ';
+		}
+		elseif ($selectactive == 1 && $selectnonactive == 0)
+		{
+			$sql_array['WHERE'] .= ' AND m.member_status = 1 ';
+		}
+
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 
 		if($mode == 1)

@@ -1,7 +1,7 @@
 <?php
 /**
  * Raids Class file
- * 
+ *
  *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -46,89 +46,95 @@ class Raids extends \bbdkp\Admin
 	public $raid_id;
 
 	/**
-	 * event id 
+	 * event id
 	 * @var int
 	 */
 	private $event_id;
-	
+
 	/**
 	 * dkp pool
 	 * @var int
 	 */
 	private $event_dkpid;
-	
+
 	/**
 	 * name of the dkp pool
 	 * @var string
 	 */
 	private $dkpsys_name;
-	
+
 	/**
 	 * event name
 	 * @var string
 	 */
 	private $event_name;
-	
+
 	/**
 	 * Raid value (default from event value)
 	 * @var string
 	 */
 	private $event_value;
-	
+
 	/**
 	 * filename of event image
 	 * @var string
 	 */
 	private $event_imagename;
-	
+
+	/**
+	 * color hexvalue for this event
+	 * @var string
+	 */
+	private $event_color;
+
 	/**
 	 * unix timestamp of raidstart
 	 * @var int
 	 */
 	private $raid_start;
-	
+
 	/**
 	 * unix timestamp of raid end
 	 * @var int
 	 */
 	private $raid_end;
-	
+
 	/**
 	 * difference between end and start
 	 * @var int
 	 */
 	private $raid_duration;
-	
+
 	/**
 	 * raidnote (255 char)
 	 * @var string
 	 */
 	private $raid_note;
-	
+
 	/**
 	 * name of raid author
 	 * @var string
 	 */
 	private $raid_added_by;
-	
+
 	/**
 	 * name of userid that updated the raid
 	 * @var string
 	 */
 	private $raid_updated_by;
-	
+
 	/**
 	 * Raid details array
 	 * @var array
 	 */
-	public $raid_details; 
-	
+	public $raid_details;
+
 	/**
 	 * loot details array
 	 * @var array
 	 */
 	public $loot_details;
-	
+
 	/**
 	 * Raid Constructor
 	 * @param number $raid_id
@@ -150,6 +156,7 @@ class Raids extends \bbdkp\Admin
 			$this->event_name 		= '';
 			$this->event_imagename 		= '';
 			$this->event_value 		= 0.0;
+			$this->event_color 		= '#FFFFFF';
 			$this->raid_start 		= 0;
 			$this->raid_end 		= 0;
 			$this->raid_note 		= '';
@@ -209,7 +216,7 @@ class Raids extends \bbdkp\Admin
 
 
 	/**
-	 * inserts a raid 
+	 * inserts a raid
 	 */
 	public function Create()
 	{
@@ -239,7 +246,7 @@ class Raids extends \bbdkp\Admin
 
 	/**
 	 * updates raid table
-	 * 
+	 *
 	 */
 	public function update()
 	{
@@ -263,8 +270,8 @@ class Raids extends \bbdkp\Admin
 		global $db;
 
 		$sql_array = array (
-				'SELECT' => ' d.dkpsys_name, 
-							e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_imagename, e.event_status, 
+				'SELECT' => ' d.dkpsys_name,
+							e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_imagename, e.event_status, e.event_color,
 							r.raid_id, r.raid_start, r.raid_end, r.raid_note,
 							r.raid_added_by, r.raid_updated_by ',
 				'FROM' => array (
@@ -272,9 +279,9 @@ class Raids extends \bbdkp\Admin
 						RAIDS_TABLE 		=> 'r' ,
 						EVENTS_TABLE 		=> 'e',
 				),
-				'WHERE' => " d.dkpsys_id = e.event_dkpid 
-				AND r.event_id = e.event_id 
-				AND d.dkpsys_status != 'N' 
+				'WHERE' => " d.dkpsys_id = e.event_dkpid
+				AND r.event_id = e.event_id
+				AND d.dkpsys_status != 'N'
 				AND r.raid_id=" . (int) $this->raid_id,
 		);
 
@@ -289,14 +296,15 @@ class Raids extends \bbdkp\Admin
 			$this->event_id			= $row['event_id'];
 			$this->event_name 		= $row['event_name'];
 			$this->event_value 		= $row['event_value'];
-			$this->event_imagename 		= $row['event_imagename'];
+			$this->event_color		= $row['event_color'];
+			$this->event_imagename 	= $row['event_imagename'];
 			$this->raid_start 		= $row['raid_start'];
 			$this->raid_end 		= $row['raid_end'];
 			$this->raid_note 		= $row['raid_note'];
 			$this->raid_added_by 	= $row['raid_added_by'];
 			$this->raid_updated_by 	= $row['raid_updated_by'];
 		}
-		
+
 		// Calculate the difference in hours between the 2 timestamps
 		$hours = intval(($this->raid_end - $this->raid_start)/3600) ;
 		// get number of minutes
@@ -311,15 +319,15 @@ class Raids extends \bbdkp\Admin
 		// add seconds to duration
 		$duration .= str_pad($seconds, 2, "0", STR_PAD_LEFT);
 
-		$this->raid_duration = $duration; 
-		
+		$this->raid_duration = $duration;
+
 		$db->sql_freeresult ($result);
 		unset($row);
 	}
 
-	
+
 	/**
-	 * 
+	 *
 	 * raid list used by acp, viewmember and listraids
 	 * @param string $order
 	 * @param int $dkpsys_id
@@ -333,19 +341,19 @@ class Raids extends \bbdkp\Admin
 		global $config, $db;
 
 		$sql_array = array (
-			'SELECT' => ' 
-				e.event_dkpid, 
+			'SELECT' => '
+				e.event_dkpid,
 				e.event_name, e.event_color, e.event_imagename,
-				e.event_id, 
-				r.raid_id,  
-				r.raid_start, 
-				r.raid_end, 
+				e.event_id,
+				r.raid_id,
+				r.raid_start,
+				r.raid_end,
 				r.raid_note,
-				r.raid_added_by, 
+				r.raid_added_by,
 				r.raid_updated_by,
-				SUM(ra.raid_value) AS raid_value, 
+				SUM(ra.raid_value) AS raid_value,
 				SUM(ra.time_bonus) AS time_value,
-				SUM(ra.zerosum_bonus) AS zs_value, 
+				SUM(ra.zerosum_bonus) AS zs_value,
 				SUM(ra.raid_decay) AS raiddecay,
 				SUM(ra.raid_value + ra.time_bonus + ra.zerosum_bonus - ra.raid_decay) AS net_earned ,
 				COUNT(ra.member_id) as attendees ',
@@ -356,9 +364,9 @@ class Raids extends \bbdkp\Admin
 					RAID_DETAIL_TABLE	=> 'ra' ,
 					MEMBER_LIST_TABLE	=> 'l' ,
 			),
-			'WHERE' => " d.dkpsys_id = e.event_dkpid 
-						 AND ra.raid_id = r.raid_id 
-						 AND e.event_status = 1 
+			'WHERE' => " d.dkpsys_id = e.event_dkpid
+						 AND ra.raid_id = r.raid_id
+						 AND e.event_status = 1
 						 AND r.event_id = e.event_id
 						 AND d.dkpsys_status != 'N'
 						 AND l.member_id = ra.member_id " ,
@@ -372,20 +380,20 @@ class Raids extends \bbdkp\Admin
 		{
 			$sql_array['WHERE'] .= ' AND e.event_dkpid=' . (int) $dkpsys_id;
 		}
-		
+
 		if($raid_id > 0)
 		{
 			$sql_array['WHERE'] .= " AND r.raid_id = " . (int) $raid_id ." ";
 		}
-		
+
 		if($member_id > 0)
 		{
-			$sql_array['WHERE'] .= ' AND ra.member_id=' . (int) $member_id; 
+			$sql_array['WHERE'] .= ' AND ra.member_id=' . (int) $member_id;
 		}
-					
+
 		if($guild_id > 0)
 		{
-			$sql_array['WHERE'] .= ' AND l.member_guild_id=' . (int) $guild_id; 
+			$sql_array['WHERE'] .= ' AND l.member_guild_id=' . (int) $guild_id;
 		}
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
@@ -399,11 +407,11 @@ class Raids extends \bbdkp\Admin
 		}
 
 	}
-	
+
 	/**
 	* returns raid count, or attendance percentage for a range member/pool
 	* used by listmembers.php and viewmember.php
-	 * 
+	 *
 	 * @param number $dkpsys_id
 	 * @param number $days
 	 * @param number $member_id
@@ -427,19 +435,19 @@ class Raids extends \bbdkp\Admin
 				// then count from join date
 				$start_date = $joindate;
 			}
-			
+
 			switch ($mode)
 			{
 				case 0:
 					// get member or guild raidcount in pool
 					return $this->getraidcount($start_date, $end_date, $dkpsys_id, $all, $attendee->member_id, $attendee->member_guild_id);
 					break;
-	
+
 				case 1:
 					// get guild raidcount in pool
 					return $this->getraidcount($start_date, $end_date, $dkpsys_id, $all, 0, $attendee->member_guild_id);
 					break;
-	
+
 				case 2:
 					//get percentage
 					$memberraidcount = $this->getraidcount($start_date, $end_date, $dkpsys_id, $all, $attendee->member_id, $attendee->member_guild_id);
@@ -454,9 +462,9 @@ class Raids extends \bbdkp\Admin
 		{
 			return $this->getraidcount($start_date, $end_date, $dkpsys_id, true, 0, $guild_id);
 		}
-		
-		
-		
+
+
+
 
 	}
 
@@ -485,7 +493,7 @@ class Raids extends \bbdkp\Admin
 				MEMBER_LIST_TABLE		=> 'l'
 			),
 			'WHERE'		=> " d.dkpsys_id = e.event_dkpid AND ra.member_id= l.member_id
-							and r.event_id = e.event_id AND ra.raid_id = r.raid_id  AND d.dkpsys_status != 'N' ", 
+							and r.event_id = e.event_id AND ra.raid_id = r.raid_id  AND d.dkpsys_status != 'N' ",
 			'GROUP_BY' => 'r.raid_id '
 		);
 
@@ -512,11 +520,11 @@ class Raids extends \bbdkp\Admin
 		{
 			$sql_array['WHERE'] .= ' AND e.event_dkpid = ' . $dkpsys_id;
 		}
-		
-		
+
+
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$sql = "SELECT COUNT(a.raid_id) as raidcount FROM (" . $sql ." ) a "; 
-		
+		$sql = "SELECT COUNT(a.raid_id) as raidcount FROM (" . $sql ." ) a ";
+
 		$result = $db->sql_query($sql);
 		$raid_count = (int) $db->sql_fetchfield('raidcount');
 		$db->sql_freeresult($result);
@@ -537,7 +545,7 @@ class Raids extends \bbdkp\Admin
 				'FROM' => array (
 					RAIDS_TABLE 		=> 'r' ,
 					EVENTS_TABLE 		=> 'e',
-						
+
 				),
 				'WHERE' => " r.event_id = e.event_id and e.event_dkpid = " . ( int ) $dkpsys_id,
 			);
@@ -549,7 +557,7 @@ class Raids extends \bbdkp\Admin
 
 			return $total_raids;
 	}
-	
+
 	/**
 	 * counts total raidcount in a dkp pool and in a guild
 	 * @param int $dkpsys_id
@@ -567,24 +575,24 @@ class Raids extends \bbdkp\Admin
 					RAID_DETAIL_TABLE	    => 'ra',
 					MEMBER_LIST_TABLE		=> 'l'
 			),
-			'WHERE' => " r.event_id = e.event_id  
-						AND ra.raid_id = r.raid_id 
-						AND ra.member_id= l.member_id 
+			'WHERE' => " r.event_id = e.event_id
+						AND ra.raid_id = r.raid_id
+						AND ra.member_id= l.member_id
 						AND e.event_dkpid = " . (int) $dkpsys_id . '
-						AND l.member_guild_id = ' . (int) $guild_id, 
-			
+						AND l.member_guild_id = ' . (int) $guild_id,
+
 		);
-	
+
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 		$total_raids = (int) $db->sql_fetchfield('raidcount');
 		$db->sql_freeresult ($result);
-	
+
 		return $total_raids;
 	}
-	
+
 	/**
-	 * 
+	 *
 	 * Guild Raid Attendance Statistics
 	 * @param int $time
 	 * @param string $u_stats
@@ -597,12 +605,12 @@ class Raids extends \bbdkp\Admin
 	{
 		/* get overall raidcount for 4 intervals */
 		global $db, $template, $phpEx, $phpbb_root_path, $config, $user;
-	
+
 		$rcall = $this->get_overallraidcount(0, $time,$guild_id, $query_by_pool, $dkp_id);
 		$rc90 = $this->get_overallraidcount((int) $config['bbdkp_list_p3'], $time, $guild_id, $query_by_pool, $dkp_id);
 		$rc60 = $this->get_overallraidcount((int) $config['bbdkp_list_p2'], $time, $guild_id, $query_by_pool, $dkp_id);
 		$rc30 = $this->get_overallraidcount((int) $config['bbdkp_list_p1'], $time, $guild_id, $query_by_pool, $dkp_id);
-	
+
 		$att_sort_order = array (
 				0 => array ("sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) DESC", "sum(CASE e.days WHEN 'lifetime' THEN e.attendance END ) ASC" ),
 				1 => array ("sum(CASE e.days WHEN '".$config['bbdkp_list_p3']."' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '".$config['bbdkp_list_p3']."' THEN e.attendance END ) asc" ),
@@ -610,9 +618,9 @@ class Raids extends \bbdkp\Admin
 				3 => array ("sum(CASE e.days WHEN '".$config['bbdkp_list_p1']."' THEN e.attendance END ) desc", "sum(CASE e.days WHEN '".$config['bbdkp_list_p1']."' THEN e.attendance END ) asc" ),
 				4 => array ("e.member_name asc", "e.member_name desc" ),
 		);
-	
+
 		$att_current_order = $this->switch_order ( $att_sort_order );
-	
+
 		/** attendance SQL */
 		$sql = "SELECT
 			c.game_id, c.colorcode,  c.imagename,
@@ -804,43 +812,43 @@ class Raids extends \bbdkp\Admin
 			e.member_firstraid,
 			e.member_lastraid
 		ORDER BY " . $att_current_order ['sql'];
-	
+
 		$attendance = 0;
 		$result = $db->sql_query($sql);
 		while ( $row = $db->sql_fetchrow($result))
 		{
 			$attendance++;
 		}
-		
+
 		$u_stats = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;' .URI_GUILD . '=' . $guild_id);
-		
+
 		$startatt = request_var ( 'startatt', 0 );
 		$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $startatt );
-	
+
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 		{
 			$footcount_text = sprintf($user->lang['STATS_ACTIVE_FOOTCOUNT'], $db->sql_affectedrows($result),
 					'<a href="' . $u_stats . '&amp;o='.$att_current_order['uri']['current']. '&amp;show=all" class="rowfoot">');
-	
+
 			$attpagination = $this->generate_pagination2($u_stats. '&amp;o=' . $att_current_order ['uri'] ['current'] ,
 					$attendance, $config ['bbdkp_user_llimit'], $startatt, true, 'startatt'  );
-	
+
 		}
-	
+
 		else
 		{
 			$footcount_text = sprintf($user->lang['STATS_FOOTCOUNT'], $db->sql_affectedrows($result),
 					'<a href="' . $u_stats. '&amp;o='.$att_current_order['uri']['current'] . '" class="rowfoot">');
-	
+
 			$attpagination = $this->generate_pagination2($u_stats . '&amp;o=' . $att_current_order ['uri'] ['current']. '&amp;show=all' ,
 					$attendance, $config ['bbdkp_user_llimit'], $startatt, true, 'startatt'  );
-	
+
 		}
-	
+
 		$attendance=0;
 		while ( $row = $db->sql_fetchrow($result) )
 		{
-	
+
 			$template->assign_block_vars('attendance_row', array(
 					'NAME' 					=> $row['member_name'],
 					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $dkp_id . '&amp;' . URI_NAMEID . '='.$row['member_id']),
@@ -867,7 +875,7 @@ class Raids extends \bbdkp\Admin
 			)
 			);
 		}
-	
+
 		/* send information to template */
 		$template->assign_vars(array(
 				'RAIDS_X1_DAYS'	  => sprintf($user->lang['RAIDS_X_DAYS'],  $config['bbdkp_list_p3']),
@@ -886,12 +894,12 @@ class Raids extends \bbdkp\Admin
 				'ATTEND_FOOTCOUNT' 	=> $footcount_text,
 		)
 		);
-	
+
 	}
-	
+
 	/**
 	 * gets overall raid count in interval of N days before today
-	 * 
+	 *
 	 * @param int $interval
 	 * @param int $time
 	 * @param int $guild_id
@@ -918,12 +926,12 @@ class Raids extends \bbdkp\Admin
 						AND l.member_guild_id = " . $guild_id,
 				'GROUP_BY' => 'r.raid_id'
 		);
-	
+
 		if ($query_by_pool)
 		{
 			$sql_array['WHERE'] .= ' and event_dkpid = '. (int) $dkp_id . ' ';
 		}
-	
+
 		if ($interval > 0)
 		{
 			$sql_array['WHERE'] .= " AND ( - r.raid_start + " . (int) $time . " ) / (3600 * 24) < ". (int) $interval;
@@ -931,9 +939,9 @@ class Raids extends \bbdkp\Admin
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query($sql);
 		$rc = (int) $db->sql_fetchfield('raidcount');
-	
+
 		$db->sql_freeresult($result);
-	
+
 		return $rc;
 	}
 

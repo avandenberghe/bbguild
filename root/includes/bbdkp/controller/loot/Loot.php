@@ -144,6 +144,12 @@ class Loot
 	public $item_decay;
 
 	/**
+	 * net value after accounting for depreciation
+	 * var float
+	 */
+	public $item_net;
+
+	/**
 	 * if the item purchaseprice was offset by an equal "zero sum" earning then this flag is 1
 	 * @var int
 	 */
@@ -227,18 +233,19 @@ class Loot
 			$this->item_date = (int) 	$row['item_date'];
 			$this->item_value = (float) $row['item_value'];
 			$this->item_decay =   (float) $row['item_decay'];
+			$this->item_net =   (float) $row['item_value'] - $row['item_decay'];
 			$this->item_zs = (bool)  $row['item_zs'];
 			$this->item_added_by = (string)  $row['item_added_by'];
 			$this->item_updated_by = (string)  $row['item_updated_by'];
 		}
 		$db->sql_freeresult ($result);
-
+		return $this;
 
 	}
 
 
 	/**
-	 * get array of all loot for 1 raid or for 1 member
+	 * get array of all loot for 1 guild, raid or member
 	 *
 	 * note: member_name is only included for sorting
 	 * @param string $order
@@ -253,7 +260,7 @@ class Loot
 		global $config, $db;
 
 		$sql_array = array(
-				'SELECT'    => 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid, i.wowhead_id,
+				'SELECT'    => 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid, i.wowhead_id, e.event_color,
 								SUM(i.item_value) as item_value,
 								SUM(i.item_decay) as item_decay,
 								SUM(i.item_value - i.item_decay) as item_net ',
@@ -270,7 +277,6 @@ class Loot
 				'GROUP_BY'	=> 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid',
 				'ORDER_BY'  => $order ,
 		);
-
 
 		if($dkpsys_id > 0)
 		{
@@ -330,9 +336,9 @@ class Loot
 		$purchased_items = array();
 		while ($row = $db->sql_fetchrow($result) )
 		{
-			$this->Getloot($row['item_id']);
-			$purchased_items[ $row['item_id']] = (array) $this;
-			unset($this);
+			$loot = $this->Getloot($row['item_id']);
+			$purchased_items[ $row['item_id']] = (array) $loot;
+			unset($loot);
 		}
 		$db->sql_freeresult($result);
 		return $purchased_items;

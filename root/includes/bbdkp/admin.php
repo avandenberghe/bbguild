@@ -153,7 +153,12 @@ abstract class Admin
 	{
 		global $db;
 		$this->games= array();
-		$sql = 'SELECT id, game_id, game_name, status FROM ' . GAMES_TABLE . ' ORDER BY game_id ';
+		$sql = ' SELECT g.id, g.game_id, g.game_name, status';
+		$sql .= ' FROM ' . GAMES_TABLE . '  g';
+		$sql .= ' INNER JOIN '. RACE_TABLE . ' r ON r.game_id = g.game_id';
+		$sql .= ' INNER JOIN  ' . CLASS_TABLE . ' c ON c.game_id= g.game_id';
+		$sql .= ' GROUP BY g.id, g.game_id, g.game_name';
+		$sql .= ' ORDER BY g.game_id';
 		$result = $db->sql_query ( $sql );
 		while($row = $db->sql_fetchrow($result))
 		{
