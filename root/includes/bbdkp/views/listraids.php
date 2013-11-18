@@ -63,7 +63,7 @@ while ( $raid = $db->sql_fetchrow($raids_result))
 	    	'U_VIEW_EVENT' 	=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewevent&amp;' . URI_EVENT . '='.  $raid['event_id'] . '&amp;' . URI_DKPSYS . '=' .
 	    					$raid['event_dkpid'] . '&amp;guild_id=' . $this->guild_id ),
 			'POOL' 			=> 	$this->dkpsys_name, 
-	    	'EVENTCOLOR' 	=> ( !empty($raid['event_color']) ) ? $raid['event_color'] : '#123456',
+	    	'EVENTCOLOR' 	=> ( !empty($raid['event_color']) ) ? $raid['event_color'] : '#254689',
 			'NOTE'			=> ( !empty($raid['raid_note']) ) ? $raid['raid_note'] : '&nbsp;',
 	    	'ATTENDEES' 	=> $raid['attendees'],
 	        'RAIDVALUE' 	=> $raid['raid_value'],

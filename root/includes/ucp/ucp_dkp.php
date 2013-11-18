@@ -71,7 +71,6 @@ class ucp_dkp extends \bbdkp\Admin
 		// Attach the language files
 		$user->add_lang(array('mods/dkp_admin', 'mods/dkp_common', 'acp/common'));
 
-
 		//guild dropdown
 		//include the guilds class
 		if (!class_exists('\bbdkp\controller\guilds\Guilds'))
@@ -104,7 +103,6 @@ class ucp_dkp extends \bbdkp\Admin
 				{
 					$this->guild_id = $g['id'];
 				}
-
 			}
 
 			//populate guild popup
@@ -193,6 +191,7 @@ class ucp_dkp extends \bbdkp\Admin
 					'U_ACTION'  			=> $this->u_action,
 					'LA_ALERT_AJAX' 		=> $user->lang['ALERT_AJAX'] ,
 					'LA_ALERT_OLDBROWSER' 	=> $user->lang['ALERT_OLDBROWSER'] ,
+					'UA_MEMBERLIST'			=> append_sid("{$phpbb_root_path}styles/" . rawurlencode($user->theme['template_path']) . '/template/dkp/findmemberlist.'. $phpEx ),
 					)
 				);
 
@@ -342,6 +341,8 @@ class ucp_dkp extends \bbdkp\Admin
 					'LA_ALERT_AJAX'		  => $user->lang['ALERT_AJAX'],
 					'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
 					'LA_MSG_NAME_EMPTY'	  => $user->lang['FV_REQUIRED_NAME'],
+					'UA_FINDRANK'		  => append_sid("{$phpbb_root_path}styles/" . rawurlencode($user->theme['template_path']) . '/template/dkp/findrank.'. $phpEx ),
+					'UA_FINDCLASSRACE'	  => append_sid("{$phpbb_root_path}styles/" . rawurlencode($user->theme['template_path']) . '/template/dkp/findclassrace.'. $phpEx ),
 				));
 				$this->tpl_name 	= 'dkp/ucp_dkp_charadd';
 				break;
@@ -410,13 +411,13 @@ class ucp_dkp extends \bbdkp\Admin
 
 		// Rank drop-down -> for initial load
 		// reloading is done from ajax to prevent redraw
-		$Ranks = new \bbdkp\controller\guilds\Ranks($members->member_guild_id);
+		$Ranks = new \bbdkp\controller\guilds\Ranks($this->guild_id);
 		$result = $Ranks->listranks();
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$template->assign_block_vars('rank_row', array(
 				'VALUE' => $row['rank_id'] ,
-				'SELECTED' => ($members->member_rank_id == $row['rank_id']) ? ' selected="selected"' : '' ,
+				'SELECTED' => ($this->guild_id == $row['rank_id']) ? ' selected="selected"' : '' ,
 				'OPTION' => (! empty($row['rank_name'])) ? $row['rank_name'] : '(None)'));
 		}
 
@@ -523,9 +524,6 @@ class ucp_dkp extends \bbdkp\Admin
 					'OPTION' => $Role ));
 		}
 
-		// set the genderdefault to male if a new form is opened, otherwise take rowdata.
-		$genderid = $member_id > 0? $members->member_gender_id : '0';
-
 
 		// build presets for joindate pulldowns
 		$now = getdate();
@@ -568,31 +566,31 @@ class ucp_dkp extends \bbdkp\Admin
 
 		$form_key = 'characteradd';
 		add_form_key($form_key);
-		$genderid = $members->member_id > 0 ? $members->member_gender_id : '0';
+
 
 		$template->assign_vars(array(
-			'STATUS'				=> $member_id > 0 ? (($members->member_status == 1) ? 'Checked ' : '' ): 'Checked ',
-			'MEMBER_NAME'			=> $member_id > 0 ? $members->member_name : '',
-			'MEMBER_ID'				=> $member_id > 0 ? $members->member_id : '',
-			'MEMBER_LEVEL'			=> $member_id > 0 ? $members->member_level : '1',
-			'MALE_CHECKED'			=> ($genderid == '0') ? ' checked="checked"' : '' ,
-			'FEMALE_CHECKED'		=> ($genderid == '1') ? ' checked="checked"' : '' ,
-			'MEMBER_COMMENT'		=> $member_id > 0 ? $members->member_comment : '',
+			'STATUS'				=> ($members->member_status == 1) ? 'Checked ' : '',
+			'MEMBER_NAME'			=> $members->member_name,
+			'MEMBER_ID'				=> $members->member_id,
+			'MEMBER_LEVEL'			=> $members->member_level,
+			'MALE_CHECKED'			=> ($members->member_gender_id  == '0') ? ' checked="checked"' : '' ,
+			'FEMALE_CHECKED'		=> ($members->member_gender_id  == '1') ? ' checked="checked"' : '' ,
+			'MEMBER_COMMENT'		=> $members->member_comment,
 
-			'S_CAN_HAVE_ARMORY'		=>  $member_id > 0 ? ($members->game_id == 'wow' || $members->game_id == 'aion'  ? true : false) : false,
-			'MEMBER_URL'			=>  $member_id > 0 ? $members->member_armory_url : '',
-			'MEMBER_PORTRAIT'		=>  $member_id > 0 ? $members->member_portrait_url : '',
+			'S_CAN_HAVE_ARMORY'		=>  $members->game_id == 'wow' || $members->game_id == 'aion'  ? true : false,
+			'MEMBER_URL'			=>  $members->member_armory_url,
+			'MEMBER_PORTRAIT'		=>  $members->member_portrait_url,
 
-			'S_MEMBER_PORTRAIT_EXISTS'  => $member_id > 0 ? ((strlen( $members->member_portrait_url ) > 1) ? true : false) : false,
-			'S_CAN_GENERATE_ARMORY'		=> $member_id > 0 ? ($members->game_id == 'wow' ? true : false) : false,
+			'S_MEMBER_PORTRAIT_EXISTS'  => strlen( $members->member_portrait_url ) > 1 ? true : false,
+			'S_CAN_GENERATE_ARMORY'		=> $members->game_id == 'wow' ? true : false,
 
-			'COLORCODE' 			=> $member_id > 0 ? (($members->colorcode == '') ? '#123456' : $members->colorcode) : '#F123456',
+			'COLORCODE' 			=> $members->colorcode == '' ? '#123456' : $members->colorcode,
 
 			'CLASS_IMAGE' 			=> $members->class_image,
-			'S_CLASS_IMAGE_EXISTS' 	=> $member_id > 0 ? (strlen($members->class_image) > 1) ? true : false : false,
+			'S_CLASS_IMAGE_EXISTS' 	=> strlen($members->class_image) > 1 ? true : false,
 
-			'RACE_IMAGE' 			=> $members->race_image ,
-			'S_RACE_IMAGE_EXISTS' => (strlen( $members->race_image) > 1) ? true : false ,
+			'RACE_IMAGE' 			=> $members->race_image,
+			'S_RACE_IMAGE_EXISTS' 	=> strlen( $members->race_image) > 1 ? true : false ,
 
 			'S_JOINDATE_DAY_OPTIONS'	=> $s_memberjoin_day_options,
 			'S_JOINDATE_MONTH_OPTIONS'	=> $s_memberjoin_month_options,

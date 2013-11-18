@@ -219,7 +219,7 @@ if($raid_count > 0)
 		$template->assign_block_vars('items_row', array(
 			'DATE'          => date($config['bbdkp_date_format'], $row['item_date']),
 			'U_VIEW_RAID'   => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewraid&amp;' . URI_RAID . '=' . $row['raid_id']) ,
-			'COLORCODE'  	=> ($row['colorcode'] == '') ? '#123456' : $row['colorcode'],
+			'COLORCODE'  	=> ($row['colorcode'] == '') ? '#254689' : $row['colorcode'],
 			'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
 			'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
 			'RACE_IMAGE' 	=> (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '',

@@ -829,6 +829,7 @@ $versions = array(
                    	  'game_id' 	   => array('VCHAR', ''),
 	                  'game_name'      => array('VCHAR_UNI:255', ''),
 	          		  'status'	   	   => array('VCHAR:30', ''),
+	              	  'imagename'	   => array('VCHAR:20', ''),
 	          		),
 	                'PRIMARY_KEY'     => array('id'),
 	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id')))
@@ -878,7 +879,6 @@ $versions = array(
 
 
      	'module_remove' => array(
-
      			//remove guild modes from acp_dkp_mm
 	            array('acp', 'ACP_DKP_MEMBER', array(
 			           		 'module_basename' => 'dkp_mm',
@@ -988,7 +988,7 @@ $versions = array(
      		),
 
      	//guild games acp makes this config obsolete
-     	'config_delete' => array(
+     	'config_remove' => array(
      				array('bbdkp_guildtag') ,
 	     			array('bbdkp_recruitment'),
 	     			array('bbdkp_games_aion'),

@@ -83,7 +83,7 @@ while ( $item = $db->sql_fetchrow ( $items_result ) )
 		'ITEMNAME' 		=> $valuename,
 		'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewitem&amp;" .  URI_ITEM . '=' . $item ['item_id'] ),
 		'RAID' 			=> $item ['event_name'],
-		'EVENTCOLOR' 	=> (!empty($item['event_color']) ) ? $item['event_color'] : '#123456',
+		'EVENTCOLOR' 	=> (!empty($item['event_color']) ) ? $item['event_color'] : '#254689',
 		'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewraid&amp;" . URI_RAID . '=' . $item ['raid_id'] ),
 		'EVENT_COLOR' 	=> $raid->event_color,
 		'ITEMVALUE' 	=> sprintf("%.2f", $item['item_value'])   ,

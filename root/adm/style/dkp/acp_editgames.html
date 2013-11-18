@@ -13,20 +13,6 @@ function check_form()
 <h1>{EDITGAME}</h1>
 <p>{L_ACP_EDITGAME_EXPLAIN}</p>
 
-<form id="acp_editgames1" method="post" action="{U_ACTION}">
-<dl>
-   	<dt><label>{L_GAME}</label></dt>
-	<dd>
-		<select id="game_id" name="game_id" class="input" onchange="this.form.submit()">
-		<!-- BEGIN gamelistrow -->
-			<option value="{gamelistrow.VALUE}"{gamelistrow.SELECTED}>{gamelistrow.OPTION}</option>
-		<!-- END gamelistrow -->
-		</select>
-	</dd>
-</dl>
-<dl>
-</form>
-
 <form id="acp_editgames2" method="post" action="{U_ACTION}">
 <input type="hidden" name="{URI_GAME}" value="{GAME_ID}" />
 <fieldset>
@@ -43,7 +29,24 @@ function check_form()
 	<dd><input class="button2" name="gamedelete" type="submit" value="{L_DELETE}" /></dd>
 </dl>
 
- </fieldset>
+</fieldset>
+
+
+<fieldset>
+<legend>{L_ACP_GAMESETTINGS}</legend>
+	<dl>
+		<dt><label for="gameimage">{L_CLASS_IMAGE}:</label>{GAMEIMAGEEXPLAIN}</dt>
+		<dd><input class="medium" type="text" id="imagename" name="imagename" value="{GAMEIMAGE}" />
+			<!-- IF S_GAMEIMAGE_EXISTS --><img src="{GAMEIMAGE}" alt="{GAMEIMAGE}" /><!-- ENDIF -->
+		</dd>
+	</dl>
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+<input class="button2" name="gamesettings" type="submit" value="{L_SUBMIT}" />
+</fieldset>
+
+
+
+</fieldset>
 
 <fieldset>
 <legend>{L_ACP_LISTFACTION}</legend>
@@ -52,6 +55,7 @@ function check_form()
 
 <!-- IF .faction_row -->
 <table width="50%" cellspacing="1">
+
 <thead>
   <tr>
 	<th style="text-align:left; width: 10%">{L_GAME}</th>
@@ -67,8 +71,8 @@ function check_form()
   <!-- ELSE -->
   <tr class="row2">
   <!-- ENDIF -->
-    <td><input type="text" name="factiongame[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONGAME}"/></td> 
-    <td><input type="text" name="factionid[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONID}"/></td> 
+    <td><input type="text" name="factiongame[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONGAME}"/></td>
+    <td><input type="text" name="factionid[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONID}"/></td>
     <td><input type="text" name="factionname[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONNAME}"/></td>
     <td><a href="{faction_row.U_DELETE}">{ICON_DELETE}</a></td>
   </tr>
@@ -145,7 +149,7 @@ function check_form()
 <table cellspacing="1">
 <thead>
   <tr>
-  
+
   	<th  style="text-align: left; width: 15%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSGAMEID}&amp;">{L_GAME}</a></th>
     <th  style="text-align: left; width: 5%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSID}">{L_CLASSID}</a></th>
     <th  style="text-align: left; width: 15%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSNAME}">{L_CLASS}</a></th>
