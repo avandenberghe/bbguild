@@ -146,6 +146,8 @@ $lang = array_merge($lang, array(
 'RANK' 		  => 'Rank',
 'CLASS' 	  => 'Class',
 'LVL' 		  => 'Level',
+'REALM'		  => 'Realm',
+'REGION'	  => 'Region',
 'ACHIEV'	  => 'Achievements',
 'PROFFESSION' => 'Proffessions',
 

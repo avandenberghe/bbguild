@@ -217,7 +217,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 						'DATE' => date($config['bbdkp_date_format'], $adj['adjustment_date']) , 
 						'DKPID' => $adj['adjustment_dkpid'] , 
 						'DKPPOOL' => $adj['dkpsys_name'] , 
-						'COLORCODE' => ($adj['colorcode'] == '') ? '#123456' : $adj['colorcode'] , 
+						'COLORCODE' => ($adj['colorcode'] == '') ? '#254689' : $adj['colorcode'] , 
 						'CLASS_IMAGE' => (strlen($adj['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $adj['imagename'] . ".png" : '' , 
 						'S_CLASS_IMAGE_EXISTS' => (strlen($adj['imagename']) > 1) ? true : false , 
 						'U_VIEW_MEMBER' => (isset($adj['member_name'])) ? append_sid("{$phpbb_root_path}dkp.$phpEx", "page=viewmember&amp;" . URI_NAMEID . '=' . $adj['member_id'] . '&amp;' . URI_DKPSYS . '=' . $adj['adjustment_dkpid']) : '' , 

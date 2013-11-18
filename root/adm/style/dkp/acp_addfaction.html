@@ -19,17 +19,12 @@ function check_form()
 <form id="acp_addfaction" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
 <div>
 
-<input type="hidden" name="hidden_game_id" value="{GAME_ID}" />
-
 <fieldset>
-	  <dl>
-	    <dt><label for="game_id">{L_GAME}:</label></dt>
-	  		<dd>
-	  		<select id="game_id" name="game_id" class="input">
-	       <!-- BEGIN game_row -->
-	       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
-	       <!-- END game_row -->
-	      </select></dd>
+    <dl>
+	    <dt><label>{L_GAME}:</label><br />{L_GAME_CLASSRACEUPDATE_EXPLAIN}</dt>
+	  	   <dd>
+	      		{GAME_NAME}
+	      </dd>
 	 </dl>
 	<dl>
 		<dt><label for="factionname">{L_FACTION_NAME}:</label></dt>
@@ -38,6 +33,7 @@ function check_form()
 </fieldset>
  <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
    {S_FORM_TOKEN}
+    <input type="hidden" name="hidden_game_id" value="{GAME_ID}" />
     <input type="submit" name="factionadd" value="{L_ACP_DKP_FACTION_ADD}" class="button1" />
     <input type="reset" name="reset" value="{L_RESET}" class="button1" />
 	</fieldset>

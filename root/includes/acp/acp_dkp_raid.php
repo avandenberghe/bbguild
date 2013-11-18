@@ -276,7 +276,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 		$membercount = 0; 
 		foreach ( (array) $this->RaidController->memberlist as $member )
 		{
-			$class_colorcode = $member['member_id'] == '' ? '#123456' : $member['member_id']; 
+			$class_colorcode = $member['member_id'] == '' ? '#254689' : $member['member_id']; 
 			$membercount++;
 			$template->assign_block_vars ( 'members_row', array (
 				'VALUE' 	=> $member['member_id'], 
@@ -515,7 +515,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 					'U_EDIT_ATTENDEE' => append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;editraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
 					'U_DELETE_ATTENDEE' => append_sid ("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=editraid&amp;deleteraider=1&amp;". URI_RAID . "=" .$raid_id . "&amp;" . URI_NAMEID . "=" . $member_id),
 					'NAME' 		 => $raid_detail['member_name'],
-					'COLORCODE'  => ($raid_detail['colorcode'] == '') ? '#123456' : $raid_detail['colorcode'],
+					'COLORCODE'  => ($raid_detail['colorcode'] == '') ? '#254689' : $raid_detail['colorcode'],
 					'CLASS_IMAGE' 	=> (strlen($raid_detail['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $raid_detail['imagename'] . ".png" : '',
 					'S_CLASS_IMAGE_EXISTS' => (strlen($raid_detail['imagename']) > 1) ? true : false,
 					'RACE_IMAGE' 	=> (strlen($raid_detail['raceimage']) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $raid_detail['raceimage'] . ".png" : '',

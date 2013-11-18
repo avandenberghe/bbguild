@@ -425,7 +425,7 @@ class acp_dkp_item extends \bbdkp\Admin
 				}
 
 				$template->assign_block_vars ( 'items_row', array (
-				'COLORCODE'  	=> ($item['colorcode'] == '') ? '#123456' : $item['colorcode'],
+				'COLORCODE'  	=> ($item['colorcode'] == '') ? '#254689' : $item['colorcode'],
             	'CLASS_IMAGE' 	=> (strlen($item['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $item['imagename'] . ".png" : '',
 				'S_CLASS_IMAGE_EXISTS' => (strlen($item['imagename']) > 1) ? true : false,
 				'DATE' 			=> (! empty ( $item ['item_date'] )) ? $user->format_date($item['item_date'], $config['bbdkp_date_format']) : '&nbsp;',

@@ -109,7 +109,7 @@ foreach($raid->raid_details as $raid_detail)
 		'U_VIEW_ATTENDEE' 		=> append_sid ("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' . URI_NAMEID . 
 							"={$raid_detail['member_id']}&amp;" . URI_DKPSYS. "=" . $raid->event_dkpid),
 		'NAME' 		 			=> $raid_detail['member_name'],
-		'COLORCODE'  			=> ($raid_detail['colorcode'] == '') ? '#123456' : $raid_detail['colorcode'],
+		'COLORCODE'  			=> ($raid_detail['colorcode'] == '') ? '#254689' : $raid_detail['colorcode'],
 		'CLASS_IMAGE' 			=> (strlen($raid_detail['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $raid_detail['imagename'] . ".png" : '',
 		'S_CLASS_IMAGE_EXISTS' 	=> (strlen($raid_detail['imagename']) > 1) ? true : false,
 		'RACE_IMAGE' 			=> (strlen($raid_detail['raceimage']) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $raid_detail['raceimage'] . ".png" : '',

@@ -418,12 +418,12 @@ class Members extends \bbdkp\Admin
 			}
 			unset($games);
 			$this->member_id = 0 ;
-			$this->member_name = $user->lang['NA'] ;
+			$this->member_name = '';
 			$this->member_race_id = 0 ;
 			$this->member_race = '' ;
 			$this->member_class_id = 0;
 			$this->member_class = '' ;
-			$this->member_level = 0;
+			$this->member_level = 1;
 			$this->member_rank_id = 0;
 			$this->member_comment = '' ;
 			$this->member_gender_id = 0;
@@ -443,7 +443,7 @@ class Members extends \bbdkp\Admin
 			$this->member_armory_url = '';
 			$this->member_portrait_url = '';
 			$this->phpbb_user_id = '';
-			$this->member_status = 0;
+			$this->member_status = 1;
 			$this->member_achiev = 0;
 			$this->colorcode = "#8899aa";
 			$race_image = '';
