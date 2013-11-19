@@ -563,18 +563,12 @@ class acp_dkp_guild extends \bbdkp\Admin
 					$current += (int) $classdistribution[$row['class_id']]['classcount'];
 					$needed += (int) isset($row['needed']) ? (int) $row['needed'] : 0;
 
-					$css = 'positive';
-					if (((int) $classdistribution[$row['class_id']]['classcount'] - ((int) isset($row['needed']) ? (int) $row['needed'] : 0) ) < 0)
-					{
-						$css = 'negative';
-					}
-
 					$template->assign_block_vars('roles_row', array(
 						'GUILD_ID' 	=> $row['guild_id'] ,
 						'GAME_ID' 	=> $row['game_id'] ,
 						'ROLEID' 	=> $row['roleid'],
 						'ROLE' 		=> $role,
-						'STIJL' 	=> $css,
+						'STIJL' 	=> 'positive',
 						'CLASS_ID' 	=> $row['class_id'] ,
 						'CLASS' 	=> $row['class_name'] ,
 						'IMAGENAME' 	=> $row['imagename'] ,
@@ -583,7 +577,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 						'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false ,
 						'CURRENT'		=> $classdistribution[$row['class_id']]['classcount'],
 						'NEEDED' 	=> isset($row['needed']) ? $row['needed'] : '0' ,
-						'DIFFERENCE'	=> (int) $classdistribution[$row['class_id']]['classcount'] - (isset($row['needed']) ? (int) $row['needed'] : 0) ,
+						'TARGET'	=> (int) $classdistribution[$row['class_id']]['classcount'] + (isset($row['needed']) ? (int) $row['needed'] : 0) ,
 					));
 
 
@@ -596,7 +590,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					// Form values
 					'CURRENT' => $current,
 					'NEEDED' => $needed,
-					'DIFFERENCE' => ($current - $needed),
+					'TARGET' => ($current + $needed),
 					'RECSTATUS' => $updateguild->recstatus,
 					'GAME_ID'	=> $updateguild->game_id,
 					'GUILD_ID' => $updateguild->guildid,
