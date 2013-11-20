@@ -584,7 +584,7 @@ class ucp_dkp extends \bbdkp\Admin
 			'S_MEMBER_PORTRAIT_EXISTS'  => strlen( $members->member_portrait_url ) > 1 ? true : false,
 			'S_CAN_GENERATE_ARMORY'		=> $members->game_id == 'wow' ? true : false,
 
-			'COLORCODE' 			=> $members->colorcode == '' ? '#123456' : $members->colorcode,
+			'COLORCODE' 			=> $members->colorcode == '' ? '#254689' : $members->colorcode,
 
 			'CLASS_IMAGE' 			=> $members->class_image,
 			'S_CLASS_IMAGE_EXISTS' 	=> strlen($members->class_image) > 1 ? true : false,
