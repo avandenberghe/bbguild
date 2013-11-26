@@ -875,8 +875,8 @@ $versions = array(
      				array($table_prefix . 'bbdkp_memberguild', 'min_armory', array('UINT', 90)),
      				array($table_prefix . 'bbdkp_memberguild', 'rec_status', array('BOOL', 0)),
      				array($table_prefix . 'bbdkp_memberguild', 'guilddefault', array('BOOL', 0)),
+     			    array($table_prefix . 'bbdkp_memberguild', 'armory_enabled', array('BOOL', 0)),
      		),
-
 
      	'module_remove' => array(
      			//remove guild modes from acp_dkp_mm
@@ -987,7 +987,7 @@ $versions = array(
      				array('bbdkp_roster_layout', '0', true),
      		),
 
-     	//guild games acp makes this config obsolete
+     	
      	'config_remove' => array(
      				array('bbdkp_guildtag') ,
 	     			array('bbdkp_recruitment'),
@@ -1010,6 +1010,7 @@ $versions = array(
      	// add new parameters
      	'config_add' => array(
      				array('bbdkp_regid', '', true),
+     			    array('bbdkp_armory_enabled', '', true),
      		),
 
      ),
