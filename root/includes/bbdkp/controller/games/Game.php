@@ -69,9 +69,15 @@ class Game extends \bbdkp\Admin
 	/**
 	 * name of game logo png
 	 * in /images/bbdkp/games/<game_id>
+	 * @var string
 	 */
 	public $imagename;
 
+	/**
+	 * true if armory is on
+	 * @var boolean
+	 */
+	public $armory_enabled;
 
 	/**
 	 * Game class constructor
@@ -202,7 +208,7 @@ class Game extends \bbdkp\Admin
 	{
 		//read phpbb_bbdkp_games table
 		global $db;
-		$sql = 'SELECT id, game_id, game_name, status, imagename
+		$sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled
     			FROM ' . GAMES_TABLE . "
     			WHERE game_id = '" . $this->game_id . "'";
 
@@ -213,6 +219,7 @@ class Game extends \bbdkp\Admin
 			$this->name = $row['game_name'];
 			$this->status= ($row['status'] == 1) ? true : false;
 			$this->imagename = $row['imagename'];
+			$this->armory_enabled = $row['armory_enabled'];
 		}
 		$db->sql_freeresult($result);
 
@@ -231,6 +238,7 @@ class Game extends \bbdkp\Admin
 
 		$query = $db->sql_build_array('UPDATE', array(
 				'imagename' => substr($this->imagename, 0, 20) ,
+				'armory_enabled' => $this->armory_enabled,
 		));
 
 		$sql = 'UPDATE ' . GAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";

@@ -29,6 +29,10 @@ if (!class_exists('\bbdkp\controller\wowapi\BattleNet'))
 {
 	require($phpbb_root_path . 'includes/bbdkp/controller/wowapi/BattleNet.' . $phpEx);
 }
+if (!class_exists('\bbdkp\controller\games\Game'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
+}
 
 /**
  * Guild
@@ -160,6 +164,12 @@ class Guilds extends \bbdkp\Admin
 	protected $possible_recstatus = array();
 
 	/**
+	 * true if armory is on
+	 * @var boolean
+	 */
+	public $armory_enabled;
+
+	/**
 	 * guild class constructor
 	 * @param int $guild_id
 	 */
@@ -191,6 +201,7 @@ class Guilds extends \bbdkp\Admin
 			$this->recstatus = 1;
 			$this->membercount = 0;
 			$this->guilddefault = 0;
+			$this->armory_enabled = 0;
 		}
 
 		$this->possible_recstatus = array(
@@ -207,7 +218,7 @@ class Guilds extends \bbdkp\Admin
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
 		$sql = 'SELECT id, name, realm, region, roster, game_id, members,
-				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault
+				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled
 				FROM ' . GUILD_TABLE . '
 				WHERE id = ' . $this->guildid;
 		$result = $db->sql_query($sql);
@@ -229,6 +240,7 @@ class Guilds extends \bbdkp\Admin
 			$this->emblempath = $phpbb_root_path . $row['emblemurl'];
 			$this->min_armory = $row['min_armory'];
 			$this->recstatus = $row['rec_status'];
+			$this->armory_enabled = $row['armory_enabled'];
 
 			$this->countmembers();
 			$this->guilddefault = $row['guilddefault'];
@@ -331,6 +343,7 @@ class Guilds extends \bbdkp\Admin
 				'aion_server_id' => $this->aionserverid,
 				'min_armory' => $this->min_armory,
 				'guilddefault' => $this->guilddefault,
+				'armory_enabled' => $this->armory_enabled,
 				'members' => 0,
 			));
 
@@ -404,51 +417,59 @@ class Guilds extends \bbdkp\Admin
 				'rec_status' => $this->recstatus,
 				'members' => $this->membercount,
 				'guilddefault' => $this->guilddefault,
+				'armory_enabled' => $this->armory_enabled,
 		));
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
-		// update WoW specific info
+		// update from armory
 		if ($this->guildid > 0)
 		{
-			switch ($this->game_id)
+			$game = new \bbdkp\controller\games\Game;
+			$game->game_id = $this->game_id;
+			$game->Get();
+			if ($game->armory_enabled == 1 && $this->armory_enabled ==1 )
 			{
-				case 'wow':
-					//$params = array('members', 'achievements','news');
-					$this->Armory_get($params);
+				switch ($this->game_id)
+				{
+					case 'wow':
+						//$params = array('members', 'achievements','news');
+						$this->Armory_get($params);
 
-					$query = $db->sql_build_array('UPDATE', array(
-							'achievementpoints' => $this->achievementpoints,
-							'level' => $this->level,
-							'guildarmoryurl' => $this->guildarmoryurl,
-							'emblemurl' => $this->emblempath,
-							'battlegroup' => $this->battlegroup,
-					));
+						$query = $db->sql_build_array('UPDATE', array(
+								'achievementpoints' => $this->achievementpoints,
+								'level' => $this->level,
+								'guildarmoryurl' => $this->guildarmoryurl,
+								'emblemurl' => $this->emblempath,
+								'battlegroup' => $this->battlegroup,
+						));
 
-					$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
+						$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
-					if (in_array("members", $params))
-					{
-						// update ranks table
-						if (!class_exists('\bbdkp\controller\guilds\Ranks'))
+						if (in_array("members", $params))
 						{
-							require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
+							// update ranks table
+							if (!class_exists('\bbdkp\controller\guilds\Ranks'))
+							{
+								require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
+							}
+
+							$rank = new \bbdkp\controller\guilds\Ranks($this->guildid);
+							$rank->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region);
+
+							//update member table
+							if (!class_exists('\bbdkp\controller\members\Members'))
+							{
+								require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
+							}
+
+							$mb = new \bbdkp\controller\members\Members();
+							$mb->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region, $this->min_armory);
 						}
-
-						$rank = new \bbdkp\controller\guilds\Ranks($this->guildid);
-						$rank->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region);
-
-						//update member table
-						if (!class_exists('\bbdkp\controller\members\Members'))
-						{
-							require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
-						}
-
-						$mb = new \bbdkp\controller\members\Members();
-						$mb->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region, $this->min_armory);
-					}
-					break;
+						break;
+				}
 			}
+
 		}
 
 		$log_action = array(

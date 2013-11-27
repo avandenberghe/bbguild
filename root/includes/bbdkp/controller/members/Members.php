@@ -572,11 +572,23 @@ class Members extends \bbdkp\Admin
 		}
 
 
+		//decide if game is armory-enabled
+		$game = new \bbdkp\controller\games\Game;
+		$game->game_id = $this->game_id;
+		$game->Get();
+		if ($game->armory_enabled == 1)
+		{
+			//select the armory
+			switch ($this->game_id)
+			{
+				case 'wow':
+					//get member from armory
+					$this->Armory_getmember();
+			}
+		}
+
 		switch ($this->game_id)
 		{
-			case 'wow':
-				$this->Armory_getmember();
-				break;
 			case 'aion':
 				$this->member_portrait_url = $this->generate_portraitlink();
 		}
