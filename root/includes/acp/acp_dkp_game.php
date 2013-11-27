@@ -42,7 +42,7 @@ if (!class_exists('\bbdkp\controller\games\Races'))
 }
 if (!class_exists('\bbdkp\controller\games\Game'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game/Races.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
 }
 
 /**
@@ -232,7 +232,11 @@ class acp_dkp_game extends \bbdkp\Admin
 				{
 					$editgame = new \bbdkp\controller\games\Game;
 					$editgame->game_id = request_var ( 'game_id','' );
+					$editgame->Get();
+
 					$editgame->imagename = request_var ( 'imagename','' );
+					$editgame->armory_enabled = request_var('enable_armory', 0);
+
 					$editgame->update();
 				}
 
@@ -809,6 +813,7 @@ class acp_dkp_game extends \bbdkp\Admin
 		$imgexists = file_exists($phpbb_root_path. 'images/bbdkp/games/'. $editgame->game_id. '/'. $editgame->imagename . '.png');
 
 		$template->assign_vars ( array (
+				'F_ENABLEARMORY' => $editgame->armory_enabled ,
 				'GAMEIMAGEEXPLAIN' => sprintf($user->lang['GAME_IMAGE_EXPLAIN'], $editgame->game_id),
 				'GAMEIMAGE' => $editgame->imagename,
 				'GAMEPATH' => $phpbb_root_path. 'images/bbdkp/games/'. $editgame->game_id. '/'. $editgame->imagename . '.png',

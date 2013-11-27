@@ -67,7 +67,7 @@ input.inputrow {
 
 	<!-- IF S_WOW -->
 	<dl>
-		<dt><label for="guild_emblem">{L_GUILD_EMBLEM}:</label></dt>
+		<dt><label for="guild_emblem">{L_GUILD_EMBLEM}:</label>{L_GUILD_EMBLEM_EXPLAIN}</dt>
 		<dd>
 			<img src="{EMBLEM}" alt="{GUILD_NAME}" /><br />
 			<input type="text" size="40" id="guild_emblem" name="guild_emblem" value="{EMBLEMFILE}" />
@@ -101,14 +101,14 @@ input.inputrow {
 	<input type="checkbox" id="showroster" name="showroster" value="1" {SHOW_ROSTER} /></dd>
     </dl>
 
-	  <dl>
-	    <dt><label for="enable_armory">{L_ENABLE_ARMORY}:</label><br />{L_ENABLE_ARMORY_EXPLAIN}</dt>
-	    <dd>
-	    <input type="radio" id="enable_armory" name="enable_armory" value="1"{EVENT_ARMORY_YES_CHECKED} /> {L_YES}&nbsp;&nbsp;
-	    <input type="radio" name="enable_armory" value="0"{EVENT_ARMORYL_NO_CHECKED} /> {L_NO}
-	   </dd>
-	  </dl>
-    
+	 <dl>
+     <dt><label for="enable_armory">{L_ARMORY_ENABLED}:</label>{L_ARMORY_ENABLED_GUILD_EXPLAIN}</dt>
+     <dd>
+     <input type="radio" name="armory_enabled" value="1"<!-- IF F_ENABLEARMORY == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
+     <input type="radio" name="armory_enabled" value="0"<!-- IF F_ENABLEARMORY == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
+     </dd>
+     </dl>
+
    <!-- IF S_WOW -->
     <dl>
 		<dt><label for="min_armorylevel">{L_MIN_ARMORYLEVEL}</label></dt>
@@ -213,7 +213,7 @@ input.inputrow {
      <input type="submit" name="updaterank" value="{L_EDIT_RANKS}" class="button1" />
 </fieldset>
 
-<!-- IF S_WOW -->
+<!-- IF F_ENABLEARMORY == 1 -->
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
 		<input type="submit" name="armory" value="{L_ARMORY_GUILD}" class="button1" />
 </fieldset>

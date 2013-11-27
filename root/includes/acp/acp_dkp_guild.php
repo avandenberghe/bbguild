@@ -235,6 +235,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					$updateguild->game_id = request_var('game_id', '');
 					$updateguild->showroster = (isset($_POST['showroster'])) ? true : false;
 					$updateguild->min_armory = request_var('min_armorylevel', 0);
+					$updateguild->armory_enabled = request_var('armory_enabled', 0);
 
 					if ($updateguild->MakeGuild() == true)
 					{
@@ -264,6 +265,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					$updateguild->showroster = request_var('showroster', 0);
 					$updateguild->min_armory = request_var('min_armorylevel', 0);
 					$updateguild->recstatus = request_var('switchon_recruitment', 0);
+					$updateguild->armory_enabled = request_var('armory_enabled', 0);
 
 					//@todo complete for other games?
 					$updateguild->aionlegionid = 0;
@@ -588,6 +590,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				//print all other static info
 				$template->assign_vars(array(
 					// Form values
+					'F_ENABLEARMORY' => $updateguild->armory_enabled ,
 					'CURRENT' => $current,
 					'NEEDED' => $needed,
 					'TARGET' => ($current + $needed),
