@@ -830,6 +830,7 @@ $versions = array(
 	                  'game_name'      => array('VCHAR_UNI:255', ''),
 	          		  'status'	   	   => array('VCHAR:30', ''),
 	              	  'imagename'	   => array('VCHAR:20', ''),
+	              	  'armory_enabled' => array('UINT', 0),
 	          		),
 	                'PRIMARY_KEY'     => array('id'),
 	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id')))
@@ -1010,7 +1011,7 @@ $versions = array(
      	// add new parameters
      	'config_add' => array(
      				array('bbdkp_regid', '', true),
-     			    array('bbdkp_armory_enabled', '', true),
+     			   
      		),
 
      ),
