@@ -37,30 +37,24 @@ $guildlist = $guilds->guildlist();
 foreach ($guildlist as $g)
 {
 	//assign guild_id property
-	/**
-	if($this->guild_id == 0)
+
+	//if there is a default guild
+	if($g['guilddefault'] == 1)
 	{
-		//if there is a default guild
-		if($g['guilddefault'] == 1)
-		{
-			$this->guild_id = $g['id'];
-		}
-
-		//if member count > 0
-		if($this->guild_id == 0 && $g['membercount'] > 1)
-		{
-			$this->guild_id = $g['id'];
-		}
-
-		//if guild id field > 0
-		if($this->guild_id == 0 && $g['id'] > 0)
-		{
-			$this->guild_id = $g['id'];
-		}
-
+		$this->guild_id = $g['id'];
 	}
-	 *
-	 */
+
+	//if member count > 0
+	if($this->guild_id == 0 && $g['membercount'] > 1)
+	{
+		$this->guild_id = $g['id'];
+	}
+
+	//if guild id field > 0
+	if($this->guild_id == 0 && $g['id'] > 0)
+	{
+		$this->guild_id = $g['id'];
+	}
 
 	//populate guild popup
 	if($g['id'] > 0) // exclude guildless
