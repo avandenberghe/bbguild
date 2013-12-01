@@ -273,7 +273,6 @@ class acp_dkp_guild extends \bbdkp\Admin
 
 				$updateguild = new \bbdkp\controller\guilds\Guilds($this->url_id);
 
-
 				$submit = (isset($_POST['updateguild'])) ? true : false;
 				$delete = (isset($_POST['deleteguild'])) ? true : false;
 				$getarmorymembers = (isset($_POST['armory'])) ? true : false;
@@ -293,8 +292,6 @@ class acp_dkp_guild extends \bbdkp\Admin
 						trigger_error('FORM_INVALID');
 					}
 				}
-
-
 
 				//updating
 				if ($submit || $getarmorymembers)
@@ -482,6 +479,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				}
 
 				// list the ranks for this guild
+				// everything from rank 90 is readonly
 				$listranks = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
 				$listranks->game_id = $updateguild->game_id;
 				$result = $listranks->listranks();
@@ -495,10 +493,8 @@ class acp_dkp_guild extends \bbdkp\Admin
 						'RANK_PREFIX' => $prefix ,
 						'RANK_SUFFIX' => $suffix ,
 						'HIDE_CHECKED' => ($row['rank_hide'] == 1) ? 'checked="checked"' : '' ,
-						'S_READONLY' => ($row['rank_id'] == 90) ? true : false ,
-						'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx",
-							"i=dkp_guild&amp;mode=addguild&amp;deleterank=1&amp;ranktodelete=" .
-							$row['rank_id'] . "&amp;". URI_GUILD ."=" . $updateguild->guildid)
+						'S_READONLY' => ($row['rank_id'] >= 90) ? true : false ,
+						'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;deleterank=1&amp;ranktodelete=" . $row['rank_id'] . "&amp;". URI_GUILD ."=" . $updateguild->guildid)
 					));
 				}
 				$db->sql_freeresult($result);
@@ -575,6 +571,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				//print all other static info
 				$template->assign_vars(array(
 					// Form values
+					'S_GUILDLESS' => ($updateguild->guildid==0) ? true:false,
 					'F_ENABLGAMEEARMORY' => $game->armory_enabled,
 					'F_ENABLEARMORY' => $updateguild->armory_enabled ,
 					'CURRENT' => $current,
@@ -590,7 +587,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					'ARMORY_URL' => $updateguild->guildarmoryurl ,
 					'MIN_ARMORYLEVEL' => $updateguild->min_armory ,
 					'SHOW_ROSTER' => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
-					'U_ADD_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=addguild&amp;addrank=1&amp;guild=" . $updateguild->guildid),
+					'U_ADD_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;addrank=1&amp;guild=" . $updateguild->guildid),
 					// Language
 					'L_TITLE' =>  ($this->url_id < 0 ) ? $user->lang['ACP_ADDGUILD'] : $user->lang['ACP_EDITGUILD'] ,
 					'L_EXPLAIN' => ($this->url_id < 0 ) ?  $user->lang['ACP_ADDGUILD_EXPLAIN'] : $user->lang['ACP_EDITGUILD_EXPLAIN'] ,
