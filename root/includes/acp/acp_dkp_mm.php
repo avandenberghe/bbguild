@@ -183,8 +183,12 @@ class acp_dkp_mm extends \bbdkp\Admin
 							$i +=1;
 							if($log != '') $log .= ', ';
 							$member = new \bbdkp\controller\members\Members($row['member_id']);
-							$member->Updatemember($member);
-							unset($member);
+							if(isset($member))
+							{
+								$member->Updatemember($member);
+								unset($member);
+							}
+
 							$log .= $row['member_name'];
 						}
 						$db->sql_freeresult($members_result);
@@ -382,6 +386,12 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$newmember->member_guild_id = request_var('member_guild_id', 0);
 					$newmember->member_rank_id = request_var('member_rank_id', 99);
 					$newmember->member_level = request_var('member_level', 1);
+					$newmember->member_realm = request_var('realm', '');
+					$newmember->member_region = request_var('region_id', '');
+					if(!in_array($newmember->member_region, $newmember->regionlist ))
+					{
+						$newmember->member_region = '';
+					}
 					$newmember->member_race_id = request_var('member_race_id', 1);
 					$newmember->member_class_id = request_var('member_class_id', 1);
 					$newmember->member_role = request_var('member_role', '');
@@ -438,6 +448,12 @@ class acp_dkp_mm extends \bbdkp\Admin
 					$updatemember->member_class_id = request_var('member_class_id', 0);
 					$updatemember->member_race_id = request_var('member_race_id', 0);
 					$updatemember->member_role = request_var('member_role', '');
+					$updatemember->member_realm = request_var('realm', '');
+					$updatemember->member_region = request_var('region_id', '');
+					if(!in_array($updatemember->member_region, $updatemember->regionlist ))
+					{
+						$updatemember->member_region = '';
+					}
 					$updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
 					$updatemember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
 					$updatemember->member_rank_id = request_var('member_rank_id', 99);
@@ -521,51 +537,33 @@ class acp_dkp_mm extends \bbdkp\Admin
 					trigger_error('ERROR_NOGAMES', E_USER_WARNING );
 				}
 
+				foreach ($this->regions as $key => $regionname)
+				{
+					$template->assign_block_vars('region_row', array(
+							'VALUE' => $key ,
+							'SELECTED' => ($editmember->member_region == $key) ? ' selected="selected"' : '' ,
+							'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
+				}
+
+				//guild dropdown
 				if (isset($_GET[URI_GUILD]))
 				{
 					$editmember->member_guild_id = request_var(URI_GUILD, 0);
 				}
 
-				//guild dropdown
 				$Guild = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
 				$guildlist = $Guild->guildlist();
 
 				foreach ($guildlist as $g)
 				{
-					//assign guild_id property
-					if($Guild->guildid == 0)
-					{
-						//if there is a default guild
-						if($g['guilddefault'] == 1)
-						{
-							$Guild->guildid = $g['id'];
-						}
-
-						//if member count > 0
-						if($Guild->guildid == 0 && $g['membercount'] > 1)
-						{
-							$Guild->guildid = $g['id'];
-						}
-
-						//if guild id field > 0
-						if($Guild->guildid == 0 && $g['id'] > 0)
-						{
-							$Guild->guildid = $g['id'];
-						}
-
-					}
-
 					//populate guild popup
-					if($g['id'] > 0) // exclude guildless
-					{
-						$template->assign_block_vars('guild_row', array(
-								'VALUE' => $g['id'] ,
-								'SELECTED' => ($g['id'] == $Guild->guildid ) ? ' selected="selected"' : '' ,
-								'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
-					}
+					$template->assign_block_vars('guild_row', array(
+							'VALUE' => $g['id'] ,
+							'SELECTED' => ($g['id'] == $Guild->guildid ) ? ' selected="selected"' : '' ,
+							'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+
 				}
 				$editmember->member_guild_id = $Guild->guildid;
-				//
 
 				// Rank drop-down -> for initial load
 				// reloading is done from ajax to prevent redraw
@@ -767,6 +765,8 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				unset($now);
 
+
+
 				$form_key = 'mm_addmember';
 				add_form_key($form_key);
 				$template->assign_vars(array(
@@ -777,6 +777,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 					'MEMBER_NAME' => $editmember->member_name,
 					'MEMBER_ID' => $editmember->member_id,
 					'MEMBER_LEVEL' => $editmember->member_level,
+					'REALM' =>  $editmember->member_realm,
 					'MEMBER_ACHIEV' => $editmember->member_achiev,
 					'MEMBER_TITLE' => $editmember->member_title,
 					'MALE_CHECKED' => ( $editmember->member_gender_id == '0') ? ' checked="checked"' : '' ,

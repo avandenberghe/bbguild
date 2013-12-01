@@ -560,17 +560,19 @@ class Members extends \bbdkp\Admin
 			$this->member_level = $maxlevel;
 		}
 
-		// set realm, region
-		$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $this->member_guild_id;
-		$result = $db->sql_query($sql);
-		$this->member_realm  = $config['bbdkp_default_realm'];
-		$this->member_region = '';
-		while ($row = $db->sql_fetchrow($result))
+		// if region/realm is nil then default it from guild
+		if($this->member_realm =='' or  $this->member_region =='')
 		{
-			$this->member_realm = $row['realm'];
-			$this->member_region = $row['region'];
+			$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $this->member_guild_id;
+			$result = $db->sql_query($sql);
+			$this->member_realm  = $config['bbdkp_default_realm'];
+			$this->member_region = '';
+			while ($row = $db->sql_fetchrow($result))
+			{
+				$this->member_realm = $row['realm'];
+				$this->member_region = $row['region'];
+			}
 		}
-
 
 		//decide if game is armory-enabled
 		$game = new \bbdkp\controller\games\Game;
@@ -601,6 +603,8 @@ class Members extends \bbdkp\Admin
 			'member_class_id' => $this->member_class_id ,
 			'member_rank_id' => $this->member_rank_id ,
 			'member_role' => $this->member_role,
+			'member_realm' => $this->member_realm,
+			'member_region' => $this->member_region,
 			'member_comment' => (string) $this->member_comment ,
 			'member_joindate' => (int) $this->member_joindate ,
 			'member_outdate' => (int) $this->member_outdate ,
@@ -729,6 +733,8 @@ class Members extends \bbdkp\Admin
 		// update the data including the phpbb userid
 		$query = $db->sql_build_array('UPDATE', array(
 			'member_name' => $this->member_name ,
+			'member_realm' => $this->member_realm,
+			'member_region' => $this->member_region,
 			'member_status' => $this->member_status ,
 			'member_level' => $this->member_level ,
 			'member_race_id' => $this->member_race_id ,
@@ -884,6 +890,11 @@ class Members extends \bbdkp\Admin
 					if(isset($data['thumbnail']))
 					{
 						$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
+					}
+
+					if(isset($data['realm']))
+					{
+						$this->member_realm = $data['realm'];
 					}
 
 					if (isset($data['titles']))

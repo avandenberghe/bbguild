@@ -77,9 +77,10 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 	 */
 	public function __construct($RankGuild, $RankId = 0)
 	{
-		if ($RankId >= 0)
+		if (($RankId >= 0 && $RankId = 0) or ($RankId == 0 && $RankId = 99) )
 		{
 			$this->RankGuild=$RankGuild;
+			$this->RankId=$RankId;
 			$this->Getrank();
 		}
 		else
@@ -180,7 +181,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 	 * @param int $override
 	 * @return boolean
 	 */
-	public function Rankdelete($override)
+	public function Rankdelete($override=false)
 	{
 		global $user, $db, $phpEx, $phpbb_root_path;
 
@@ -282,7 +283,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 		global $user, $db;
 		// rank 99 is the out-rank
 		$sql = 'SELECT rank_id, rank_name, rank_hide, rank_prefix, rank_suffix, guild_id FROM ' . MEMBER_RANKS_TABLE . '
-	        		WHERE guild_id = ' . $this->RankGuild . ' AND rank_id < 99
+	        		WHERE guild_id = ' . $this->RankGuild . '
 	        		ORDER BY rank_id, rank_hide  ASC ';
 
 		$result = $db->sql_query($sql);
@@ -308,7 +309,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 
 
 	/**
-	 * updates a wow guild rank list from Battle.NET API
+	 * updates a wow guild rank list from Battle.NET API -- except guildless
 	 *
 	 * @param array $memberdata
 	 * @param int $guild_id

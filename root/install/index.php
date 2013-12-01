@@ -866,6 +866,8 @@ $versions = array(
      				array($table_prefix . 'bbdkp_raid_items', 'wowhead_id', array('UINT', 0)),
      				array($table_prefix . 'bbdkp_memberlist', 'member_title', array('VCHAR_UNI:255', '')),
      				array($table_prefix . 'bbdkp_memberlist', 'member_role', array('VCHAR:20', '')),
+     				array($table_prefix . 'bbdkp_memberlist', 'member_region', array('VCHAR', '')),
+     				array($table_prefix . 'bbdkp_memberlist', 'member_realm', array('VCHAR', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'level', array('UINT', 0) ),
      				array($table_prefix . 'bbdkp_memberguild', 'members', array('UINT', 0)),
      				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints', array('UINT', 0)),
@@ -936,7 +938,7 @@ $versions = array(
      			// add guild acp
      			array('acp', 'ACP_DKP_MEMBER', array(
      					'module_basename' => 'dkp_guild',
-     					'modes'           => array(  'listguilds', 'addguild', ),
+     					'modes'           => array(  'listguilds', 'addguild', 'editguild',  ),
      			),
      			),
 
@@ -988,7 +990,7 @@ $versions = array(
      				array('bbdkp_roster_layout', '0', true),
      		),
 
-     	
+
      	'config_remove' => array(
      				array('bbdkp_guildtag') ,
 	     			array('bbdkp_recruitment'),
@@ -1011,10 +1013,15 @@ $versions = array(
      	// add new parameters
      	'config_add' => array(
      				array('bbdkp_regid', '', true),
-     			   
+
      		),
 
      ),
+
+
+	'1.3.0-a3' => array(
+	//alpha3
+			),
 
 );
 
