@@ -165,7 +165,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				add_form_key($form_key);
 				$template->assign_vars(array(
 					'F_GUILDLIST' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=listguilds' ,
-					'F_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=addguild' ,
+					'F_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=editguild' ,
 					'L_TITLE' => $user->lang['ACP_LISTGUILDS'] ,
 					'L_EXPLAIN' => $user->lang['ACP_LISTGUILDS_EXPLAIN'] ,
 					'BUTTON_VALUE' => $user->lang['DELETE_SELECTED_GUILDS'] ,
@@ -180,9 +180,16 @@ class acp_dkp_guild extends \bbdkp\Admin
 				break;
 
 			/*************************************
-			 *  Edit / Add Guild
+			 *  Add Guild
 			 *************************************/
 			case 'addguild':
+
+
+				break;
+			/*************************************
+			 *  Edit Guild
+			 *************************************/
+			case 'editguild':
 
 				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 				$this->url_id = request_var(URI_GUILD, 0);
