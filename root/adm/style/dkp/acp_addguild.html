@@ -101,6 +101,7 @@ input.inputrow {
 	<input type="checkbox" id="showroster" name="showroster" value="1" {SHOW_ROSTER} /></dd>
     </dl>
 
+	<!-- IF F_ENABLGAMEEARMORY -->
 	 <dl>
      <dt><label for="enable_armory">{L_ARMORY_ENABLED}:</label>{L_ARMORY_ENABLED_GUILD_EXPLAIN}</dt>
      <dd>
@@ -108,6 +109,7 @@ input.inputrow {
      <input type="radio" name="armory_enabled" value="0"<!-- IF F_ENABLEARMORY == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
      </dd>
      </dl>
+	<!-- ENDIF -->
 
    <!-- IF S_WOW -->
     <dl>

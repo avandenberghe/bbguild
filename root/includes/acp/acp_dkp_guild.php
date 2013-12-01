@@ -286,17 +286,17 @@ class acp_dkp_guild extends \bbdkp\Admin
 				{
 					if (confirm_box(true))
 					{
-						$deleteguild = new \bbdkp\controller\guilds\Guilds(request_var('guild_id', 0));
+						$deleteguild = new \bbdkp\controller\guilds\Guilds(request_var('guildid', 0));
 						$deleteguild->Getguild();
 						$deleteguild->Guildelete();
-						$success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guild_id);
+						$success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guildid);
 						trigger_error($success_message . adm_back_link($this->u_action), E_USER_NOTICE);
 					}
 					else
 					{
 						$s_hidden_fields = build_hidden_fields(array(
 							'deleteguild' => true ,
-							'guild_id' => $updateguild->guildid));
+							'guildid' => $updateguild->guildid));
 						$template->assign_vars(array(
 							'S_HIDDEN_FIELDS' => $s_hidden_fields));
 						confirm_box(false, $user->lang['CONFIRM_DELETE_GUILD'], $s_hidden_fields);
@@ -356,13 +356,13 @@ class acp_dkp_guild extends \bbdkp\Admin
 				{
 					if (confirm_box(true))
 					{
-						$guild_id = request_var('hidden_guild_id', 'x');
+						$guildid = request_var('hidden_guildid', 'x');
 						$rank_id = request_var('hidden_rank_id', 'x');
 						$guild_name = request_var('hidden_guild_name', 'x');
 						$old_rank_name = request_var('hidden_rank_name', 'x');
 						// hardcoded exclusion of ranks 90/99
 						$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_id != 90 and rank_id != 99 and rank_id=' .
-								$rank_id . ' and guild_id = ' . $guild_id;
+								$rank_id . ' and guildid = ' . $guildid;
 						$db->sql_query($sql);
 						// log the action
 						$log_action = array(
@@ -380,7 +380,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 						$rank_id = request_var('ranktodelete', 'x');
 
 						$sql = 'SELECT count(*) as countm FROM ' . MEMBER_LIST_TABLE . '
-						where member_rank_id = ' . $rank_id . ' and member_guild_id = ' . $updateguild->guildid;
+						where member_rank_id = ' . $rank_id . ' and member_guildid = ' . $updateguild->guildid;
 						$result = $db->sql_query($sql);
 						$countm = $db->sql_fetchfield('countm');
 						if ($countm != 0)
@@ -391,7 +391,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 
 						$sql = "SELECT a.rank_id, a.rank_name
 								FROM " . MEMBER_RANKS_TABLE . ' a , ' . GUILD_TABLE . ' b
-								WHERE a.guild_id = b.id
+								WHERE a.guildid = b.id
 								AND a.rank_id = ' . $rank_id . '
 								AND b.id = ' . $updateguild->guildid;
 						$result = $db->sql_query($sql);
@@ -405,7 +405,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 						$s_hidden_fields = build_hidden_fields(array(
 								'deleterank' => true ,
 								'hidden_rank_id' => $rank_id ,
-								'hidden_guild_id' => $updateguild->guildid,
+								'hidden_guildid' => $updateguild->guildid,
 								'hidden_guild_name' => $updateguild->name ,
 								'hidden_rank_name' => $old_rank_name));
 
@@ -439,6 +439,12 @@ class acp_dkp_guild extends \bbdkp\Admin
 				}
 
 				// start template loading
+
+				if (!class_exists('\bbdkp\controller\games\Game'))
+				{
+					require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
+				}
+
 
 				if ($updateguild->guildid != 0)
 				{
@@ -533,7 +539,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				}
 
 				$listroles = new \bbdkp\controller\guilds\Roles();
-				$listroles->guild_id = $updateguild->guildid;
+				$listroles->guildid = $updateguild->guildid;
 				foreach ($listroles->roles as $role => $rolename)
 				{
 					$template->assign_block_vars('rolelist_row', array(
@@ -566,7 +572,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 					$needed += (int) isset($row['needed']) ? (int) $row['needed'] : 0;
 
 					$template->assign_block_vars('roles_row', array(
-						'GUILD_ID' 	=> $row['guild_id'] ,
+						'guildid' 	=> $row['guildid'] ,
 						'GAME_ID' 	=> $row['game_id'] ,
 						'ROLEID' 	=> $row['roleid'],
 						'ROLE' 		=> $role,
@@ -586,17 +592,20 @@ class acp_dkp_guild extends \bbdkp\Admin
 				}
 				$db->sql_freeresult($result);
 
-
+				$game = new \bbdkp\controller\games\Game;
+				$game->game_id = $updateguild->game_id;
+				$game->Get();
 				//print all other static info
 				$template->assign_vars(array(
 					// Form values
+					'F_ENABLGAMEEARMORY' => $game->armory_enabled,
 					'F_ENABLEARMORY' => $updateguild->armory_enabled ,
 					'CURRENT' => $current,
 					'NEEDED' => $needed,
 					'TARGET' => ($current + $needed),
 					'RECSTATUS' => $updateguild->recstatus,
 					'GAME_ID'	=> $updateguild->game_id,
-					'GUILD_ID' => $updateguild->guildid,
+					'guildid' => $updateguild->guildid,
 					'GUILD_NAME' => $updateguild->name,
 					'REALM' => $updateguild->realm,
 					'REGION' => $updateguild->region,
