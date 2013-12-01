@@ -1,13 +1,10 @@
 <!-- INCLUDE overall_header.html -->
 <a name="maincontent"></a>
-
 <h1>{L_TITLE}</h1>
-
 <p>{L_EXPLAIN}</p>
 
-
-<form method="post" action="{F_GUILDLIST}" id="listguilddefault">
 <!-- IF .guild_row -->
+<form method="post" action="{F_GUILDLIST}" id="listguilddefault">
 
 <fieldset style="background-color: #EEEEEE">
 <legend>{L_DEFAULT_GUILD}</legend>
@@ -70,16 +67,20 @@
   <!-- END guild_row -->
 </tbody>
 </table>
+</fieldset>
+</form>
 <!-- ELSE -->
 <div class="errorbox">
 <h3>{L_ERROR}</h3>
 <p>{L_ERROR_NOGUILD}</p>
 </div>
+
 <!-- ENDIF -->
 
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-	<input class="button2" name="guildadd" type="submit" value="{L_ADD}" />
-</fieldset>
 
+<form method="post" action="{F_ADDGUILD}" id="addguildform">
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input class="button2" name="addguild" type="submit" value="{L_ADD}" />
+</fieldset>
 </form>
 <!-- INCLUDE dkp/overall_footer.html -->

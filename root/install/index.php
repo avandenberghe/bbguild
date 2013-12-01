@@ -938,7 +938,7 @@ $versions = array(
      			// add guild acp
      			array('acp', 'ACP_DKP_MEMBER', array(
      					'module_basename' => 'dkp_guild',
-     					'modes'           => array(  'listguilds', 'addguild', ),
+     					'modes'           => array(  'listguilds', 'addguild', 'editguild',  ),
      			),
      			),
 

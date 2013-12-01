@@ -116,7 +116,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 						trigger_error($success_message . $this->link, E_USER_NOTICE);
 				}
 
-				$guildadd = (isset($_POST['guildadd'])) ? true : false;
+				$guildadd = (isset($_POST['addguild'])) ? true : false;
 				if ($guildadd)
 				{
 					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=addguild"));
@@ -156,15 +156,17 @@ class acp_dkp_guild extends \bbdkp\Admin
 						'GAME' => $listguild->game_id ,
 						'MEMBERCOUNT' => $listguild->membercount ,
 						'SHOW_ROSTER' => ($listguild->showroster == 1 ? 'yes' : 'no') ,
-						'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=addguild&amp;" . URI_GUILD . '=' . $listguild->guildid))
+						'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $listguild->guildid))
 					);
 					$previous_data = $row[$previous_source];
 				}
 
 				$form_key = 'listguilds';
 				add_form_key($form_key);
+
 				$template->assign_vars(array(
 					'F_GUILDLIST' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=listguilds' ,
+					'F_ADDGUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=addguild' ,
 					'F_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=editguild' ,
 					'L_TITLE' => $user->lang['ACP_LISTGUILDS'] ,
 					'L_EXPLAIN' => $user->lang['ACP_LISTGUILDS_EXPLAIN'] ,
@@ -184,7 +186,74 @@ class acp_dkp_guild extends \bbdkp\Admin
 			 *************************************/
 			case 'addguild':
 
+				if (!class_exists('\bbdkp\controller\games\Game'))
+				{
+					require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
+				}
 
+				$addguild = new \bbdkp\controller\guilds\Guilds();
+
+				$add = (isset($_POST['newguild'])) ? true : false;
+				if ($add)
+				{
+					if (! check_form_key('addguild'))
+					{
+						trigger_error('FORM_INVALID');
+					}
+
+					$addguild->name = utf8_normalize_nfc(request_var('guild_name', '', true));
+					$addguild->realm = utf8_normalize_nfc(request_var('realm', '', true));
+					$addguild->region = request_var('region_id', '');
+					$addguild->game_id = request_var('game_id', '');
+					$addguild->showroster = (isset($_POST['showroster'])) ? true : false;
+					$addguild->min_armory = request_var('min_armorylevel', 0);
+					$addguild->armory_enabled = request_var('armory_enabled', 0);
+
+					if ($addguild->MakeGuild() == true)
+					{
+						$addguild->Guildupdate($addguild, array());
+						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
+						trigger_error($success_message . $this->link, E_USER_NOTICE);
+					}
+					else
+					{
+						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_FAIL'], $addguild->name);
+						trigger_error($success_message . $this->link, E_USER_WARNING);
+					}
+
+				}
+
+
+				foreach ($this->regions as $key => $regionname)
+				{
+					$template->assign_block_vars('region_row', array(
+							'VALUE' => $key ,
+							'SELECTED' => ($addguild->region == $key) ? ' selected="selected"' : '' ,
+							'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
+				}
+
+				if(isset($this->games))
+				{
+					foreach ($this->games as $key => $gamename)
+					{
+						$template->assign_block_vars('game_row', array(
+								'VALUE' => $key ,
+								'SELECTED' => ($addguild->game_id == $key) ? ' selected="selected"' : '' ,
+								'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
+					}
+
+				}
+				else
+				{
+					trigger_error('ERROR_NOGAMES', E_USER_WARNING );
+				}
+
+				$this->page_title = $user->lang['ACP_ADDGUILD'];
+
+				$form_key = 'addguild';
+				add_form_key($form_key);
+
+				$debug=1;
 				break;
 			/*************************************
 			 *  Edit Guild
@@ -204,7 +273,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 
 				$updateguild = new \bbdkp\controller\guilds\Guilds($this->url_id);
 
-				$add = (isset($_POST['addguild'])) ? true : false;
+
 				$submit = (isset($_POST['updateguild'])) ? true : false;
 				$delete = (isset($_POST['deleteguild'])) ? true : false;
 				$getarmorymembers = (isset($_POST['armory'])) ? true : false;
@@ -217,36 +286,15 @@ class acp_dkp_guild extends \bbdkp\Admin
 				$updateroles = (isset($_POST['updateroles'])) ? true : false;
 
 				// POST check
-				if ($add || $submit || $getarmorymembers || $updaterank || $addrank || $addrecruitment)
+				if ($submit || $getarmorymembers || $updaterank || $addrank || $addrecruitment)
 				{
-					if (! check_form_key('dbT2TvCZNZHjckSvbTPc'))
+					if (! check_form_key('editguild'))
 					{
 						trigger_error('FORM_INVALID');
 					}
 				}
 
-				if ($add)
-				{
-					$updateguild->name = utf8_normalize_nfc(request_var('guild_name', '', true));
-					$updateguild->realm = utf8_normalize_nfc(request_var('realm', '', true));
-					$updateguild->region = request_var('region_id', '');
-					$updateguild->game_id = request_var('game_id', '');
-					$updateguild->showroster = (isset($_POST['showroster'])) ? true : false;
-					$updateguild->min_armory = request_var('min_armorylevel', 0);
-					$updateguild->armory_enabled = request_var('armory_enabled', 0);
 
-					if ($updateguild->MakeGuild() == true)
-					{
-						$updateguild->Guildupdate($updateguild, array());
-						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'], $updateguild->name);
-						trigger_error($success_message . $this->link, E_USER_NOTICE);
-					}
-					else
-					{
-						$success_message = sprintf($user->lang['ADMIN_ADD_GUILD_FAIL'], $updateguild->name);
-						trigger_error($success_message . $this->link, E_USER_WARNING);
-					}
-				}
 
 				//updating
 				if ($submit || $getarmorymembers)
@@ -563,10 +611,10 @@ class acp_dkp_guild extends \bbdkp\Admin
 					));
 				}
 
-				$form_key = 'dbT2TvCZNZHjckSvbTPc';
+				$form_key = 'editguild';
 				add_form_key($form_key);
 
-				$this->page_title = $user->lang['ACP_ADDGUILD'];
+				$this->page_title = $user->lang['ACP_EDITGUILD'];
 
 				break;
 
