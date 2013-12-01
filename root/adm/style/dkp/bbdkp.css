@@ -1,4 +1,4 @@
-/* bbdkp 
+/* bbdkp
 ------------*/
 .positive {
 	color: #00BB55;
@@ -8,7 +8,7 @@
 }
 
 .highlight {
-    background-color: #FFFFDD;
+    background-color: #cccccc;
 }
 
 .warningbox {
@@ -79,7 +79,7 @@ div#main h1 {
 }
 
 h3, h4 {
-	
+
 	color: teal;
 }
 

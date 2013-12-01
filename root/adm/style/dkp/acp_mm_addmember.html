@@ -190,7 +190,7 @@ function classracestateChanged()
 
 <br />
 
- <dl>
+<dl>
     <dt><label for="game_id">{L_GAME}:</label></dt>
   		<dd>
   		<select id="game_id" name="game_id" class="input" onchange="return GetClassRace(this.value)">
@@ -198,19 +198,32 @@ function classracestateChanged()
        <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
         <!-- END game_row -->
       </select></dd>
- </dl>
+</dl>
 
-  <dl>
+<dl>
     <dt><label for="member_name">{L_NAME}:</label></dt>
     <dd><input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" /> {TITLE_NAME}
     </dd>
-  </dl>
-  <dl>
-		<dt><label for="realm">{L_REALM_NAME}:</label></dt>
-		<dd><input class="medium" type="text" id="realm" name="realm" value="{REALM}" /></dd>
 </dl>
 
+<dl>
+		<dt><label for="realm">{L_REALM_NAME}:</label></dt>
+		<dd><input type="text" id="realm" size="20" maxlength="30" name="realm" value="{REALM}" /></dd>
+</dl>
+
+<dl>
+    <dt>
+        <label for="region_id">{L_REGION}:</label></dt>
+       <dd>
+      <select id="region_id" name="region_id" class="input">
+        <!-- BEGIN region_row -->
+        <option value="{region_row.VALUE}"{region_row.SELECTED}>{region_row.OPTION}</option>
+        <!-- END region_row -->
+      </select>
+      </dd>
+  	</dl>
  <dl>
+
  <dt><label for="activated">{L_ACTIVE}:</label></dt>
  <dd><input type="checkbox" class="radio" name="activated" id="activated"  value="{MEMBER_ID}" {STATUS} /></dd>
  </dl>
@@ -298,15 +311,13 @@ function classracestateChanged()
   <dl>
     <dt><label>{L_ARMORY_URL}:</label></dt>
     <dd>
-		<dd><a href="{MEMBER_URL}" alt="{MEMBER_NAME}" />
+		<a href="{MEMBER_URL}" alt="{MEMBER_NAME}" />
 		<!-- IF S_MEMBER_PORTRAIT_EXISTS -->
 		<img src="{MEMBER_PORTRAIT}" alt="image" width="64" height="64"></img>
 		<!-- ENDIF -->
 		</a>
 		<input type="text" name="member_armorylink" size="80%" maxlength="300" value="{MEMBER_URL}" class="input" />
 		<br/>
-		</dd>
-
    </dd>
   </dl>
  <!-- ENDIF -->

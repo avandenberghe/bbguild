@@ -177,32 +177,8 @@ class Guilds extends \bbdkp\Admin
 	{
 		global $user;
 		parent::__construct();
-
-		if($guild_id > 0)
-		{
-			$this->guildid = $guild_id;
-			$this->Getguild();
-		}
-		else
-		{
-			//set defaults
-			$this->game_id = '';
-			$this->guildid = 0;
-			$this->name = '';
-			$this->realm = '';
-			$this->region = '';
-			$this->showroster = 1;
-			$this->achievementpoints = 0;
-			$this->level = 0;
-			$this->battlegroup = '';
-			$this->guildarmoryurl = '';
-			$this->emblempath = '';
-			$this->min_armory = 0;
-			$this->recstatus = 1;
-			$this->membercount = 0;
-			$this->guilddefault = 0;
-			$this->armory_enabled = 0;
-		}
+		$this->guildid = $guild_id;
+		$this->Getguild();
 
 		$this->possible_recstatus = array(
 			0 => $user->lang['CLOSED'] ,
@@ -884,13 +860,18 @@ class Guilds extends \bbdkp\Admin
 				'SELECT' => 'a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, count(c.member_id) as membercount ' ,
 				'FROM' => array(
 						GUILD_TABLE => 'a' ,
-						MEMBER_RANKS_TABLE => 'b' ,
-						MEMBER_LIST_TABLE => 'c' ),
-				'WHERE' => " a.id = b.guild_id and a.id = c.member_guild_id AND b.guild_id > 0",
+						MEMBER_RANKS_TABLE => 'b' ,),
+				'LEFT_JOIN' => array(
+						array(
+								'FROM'  => array(MEMBER_LIST_TABLE => 'c'),
+								'ON'    => 'a.id = c.member_guild_id '
+						)
+				),
+				'WHERE' => " a.id = b.guild_id AND b.guild_id >= " . $minimum,
 				'GROUP_BY' => ' a.guilddefault, a.id, a.name, a.realm, a.region ',
-				'HAVING' => 'count(c.member_id) > ' . $minimum,
  				'ORDER_BY' => ' a.guilddefault desc,  count(c.member_id) desc, a.id asc'
 				);
+
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 		$guild = array();

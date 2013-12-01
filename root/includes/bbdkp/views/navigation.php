@@ -37,6 +37,7 @@ $guildlist = $guilds->guildlist();
 foreach ($guildlist as $g)
 {
 	//assign guild_id property
+	/**
 	if($this->guild_id == 0)
 	{
 		//if there is a default guild
@@ -58,6 +59,8 @@ foreach ($guildlist as $g)
 		}
 
 	}
+	 *
+	 */
 
 	//populate guild popup
 	if($g['id'] > 0) // exclude guildless
