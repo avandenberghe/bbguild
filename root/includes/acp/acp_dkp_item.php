@@ -244,7 +244,7 @@ class acp_dkp_item extends \bbdkp\Admin
 		// guild dropdown
 		$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
 		$Guild = new \bbdkp\controller\guilds\Guilds();
-		$guildlist = $Guild->guildlist();
+		$guildlist = $Guild->guildlist(1);
 
 		if($submit)
 		{

@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 }
 $guilds = new \bbdkp\controller\guilds\Guilds();
 
-$guildlist = $guilds->guildlist();
+$guildlist = $guilds->guildlist(1);
 
 foreach ($guildlist as $g)
 {

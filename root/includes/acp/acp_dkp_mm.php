@@ -212,7 +212,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				// fill popup and set selected to default selection
 				$Guild->Getguild();
-				$guildlist = $Guild->guildlist();
+				$guildlist = $Guild->guildlist(1);
 				foreach ($guildlist as $g)
 				{
 					$template->assign_block_vars('guild_row', array(

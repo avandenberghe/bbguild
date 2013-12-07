@@ -98,7 +98,7 @@ class acp_dkp_guild extends \bbdkp\Admin
 				}
 
 				$updateguild = new \bbdkp\controller\guilds\Guilds();
-				$guildlist = $updateguild->guildlist();
+				$guildlist = $updateguild->guildlist(1);
 				foreach ($guildlist as $g)
 				{
 					$template->assign_block_vars('defaultguild_row', array(
