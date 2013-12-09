@@ -170,6 +170,13 @@ class Guilds extends \bbdkp\Admin
 	public $armory_enabled;
 
 	/**
+	 * rank to which raidtracker should add new attendees
+	 *
+	 * @var int
+	 */
+	public $raidtrackerrank;
+
+	/**
 	 * guild class constructor
 	 * @param int $guild_id
 	 */
@@ -220,6 +227,7 @@ class Guilds extends \bbdkp\Admin
 
 			$this->countmembers();
 			$this->guilddefault = $row['guilddefault'];
+			$this->raidtrackerrank = $this->maxrank();
 		}
 
 
@@ -847,7 +855,20 @@ class Guilds extends \bbdkp\Admin
 		return $total_members;
 	}
 
-
+	/**
+	 * get default rank to add new member to
+	 *
+	 * @return number
+	 */
+	private function maxrank()
+	{
+		global $db;
+		$sql = 'select max(rank_id) AS rank_id from ' . MEMBER_RANKS_TABLE . ' where guild_id = ' . (int) $this->guildid . ' and rank_id != 90';
+		$result = $db->sql_query_limit($sql,1);
+		$defaultrank_id = (int) $db->sql_fetchfield ('rank_id', false, $result );
+		$db->sql_freeresult($result);
+		return $defaultrank_id;
+	}
 	/**
 	 * gets list of guilds, used in dropdowns
 	 * @param int $minimum optional
@@ -882,7 +903,8 @@ class Guilds extends \bbdkp\Admin
 				'id' => $row['id'] ,
 				'name' => $row['name'],
 				'guilddefault' => $row['guilddefault'],
-				'membercount' => $row['membercount']
+				'membercount' => $row['membercount'],
+				'realm' => $row['realm'],
 			);
 		}
 		$db->sql_freeresult($result);

@@ -964,15 +964,25 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 			$raidinfo = array(
 					'raid_note' 		=> utf8_normalize_nfc (request_var ( 'hidden_raid_note', ' ', true )),
 					'raid_event'		=> utf8_normalize_nfc (request_var ( 'hidden_raid_event', ' ', true )),
-					'raid_value' 		=> request_var ('hidden_raid_value', 0.00 ),
-					'raid_timebonus'	=> request_var ('hidden_raid_timebonus', 0.00 ),
 					'raid_start' 		=> request_var ('hidden_startraid_date', 0),
 					'raid_end'			=> request_var ('hidden_endraid_date', 0),
 					'event_id' 			=> request_var ('hidden_event_id', 0),
-					'raid_attendees' 	=> request_var ('hidden_raid_attendees', array ( 0 => 0 )),
 			);
 
-			$raid_id = $this->RaidController->add_raid($raidinfo);
+			$raid_attendees = request_var ('hidden_raid_attendees', array ( 0 => 0 ));
+
+			foreach ($raid_attendees as $member_id)
+			{
+				$raiddetail[] = array (
+					'member_id' => $member_id,
+					'raid_value'   => (float) request_var ('hidden_raid_value', 0.00 ),
+					'time_bonus'   => (float) request_var ('hidden_raid_timebonus', 0.00 ),
+				);
+			}
+
+			//fill raid and raiddetail table
+			$raid_id = $this->RaidController->add_raid($raidinfo, $raiddetail);
+			//fill dkp table
 			$this->PointsController->add_points($raid_id);
 
 			//
