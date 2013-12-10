@@ -1102,7 +1102,12 @@ class Members extends \bbdkp\admin\Admin
 					$realm = $mb['character']['realm'];
 				}
 
+				if(isset($mb['character']['realm']))
+				{
+					$this->member_realm = $mb['character']['realm'];
+				}
 				$this->game_id ='wow';
+				$this->member_region = $region;
 				$this->member_guild_id = $guild_id;
 				$this->member_rank_id = isset($mb['rank']) ? $mb['rank'] : 1;
 				$this->member_name = $mb['character']['name'];
@@ -1130,6 +1135,7 @@ class Members extends \bbdkp\admin\Admin
 				}
 
 				$query [] = array (
+					'member_region' => $this->member_region,
 					'member_name' => ucwords($this->member_name) ,
 					'member_status' => $this->member_status ,
 					'member_level' => $this->member_level,
@@ -1142,6 +1148,7 @@ class Members extends \bbdkp\admin\Admin
 					'member_outdate' => (int) $this->member_outdate ,
 					'member_guild_id' => $this->member_guild_id ,
 					'member_gender_id' => $this->member_gender_id ,
+					'member_realm' => $this->member_realm,
 					'member_achiev' => $this->member_achiev ,
 					'member_armory_url' => (string) $this->member_armory_url ,
 					'phpbb_user_id' => 0 ,
@@ -1176,6 +1183,8 @@ class Members extends \bbdkp\admin\Admin
 			{
 				$member_id =  (int) $member_ids[bin2hex($mb['character']['name'])];
 				$this->game_id ='wow';
+				$this->member_region = $region;
+				$this->member_realm = $mb['character']['realm'];
 				$this->member_rank_id = $mb['rank'];
 				$this->member_name = $mb['character']['name'];
 				$this->member_guild_id = $guild_id;
@@ -1191,6 +1200,8 @@ class Members extends \bbdkp\admin\Admin
 					'member_name' => ucwords($this->member_name) ,
 					'member_level' => $this->member_level,
 					'member_race_id' => $this->member_race_id ,
+					'member_realm' => $this->member_realm,
+					'member_region' => $this->member_region,
 					'member_class_id' => $this->member_class_id ,
 					'member_rank_id' => $this->member_rank_id ,
 					'member_guild_id' => $this->member_guild_id ,
