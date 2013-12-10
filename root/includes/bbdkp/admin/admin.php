@@ -636,7 +636,7 @@ abstract class Admin
 	public final function log_insert($values = array())
 	{
 		// log
-		$logs = \bbdkp\log::Instance();
+		$logs = \bbdkp\admin\log::Instance();
 		return $logs->log_insert($values);
 
 	}
