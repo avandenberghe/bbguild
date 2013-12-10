@@ -23,9 +23,9 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
 //include the abstract base interface
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require ("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\loot\Loot'))
 {
@@ -49,7 +49,7 @@ if (!class_exists('\bbdkp\controller\points\PointsController'))
  *   @package bbdkp
  *
  */
-class LootController  extends \bbdkp\Admin
+class LootController  extends \bbdkp\admin\Admin
 {
 	/**
 	 * instance of loot

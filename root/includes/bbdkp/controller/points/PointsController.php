@@ -46,7 +46,7 @@ if (!class_exists('\bbdkp\controller\adjustments\Adjust'))
  *
  *   @package bbdkp
  */
-class PointsController  extends \bbdkp\Admin
+class PointsController  extends \bbdkp\admin\Admin
 {
 
 	/**

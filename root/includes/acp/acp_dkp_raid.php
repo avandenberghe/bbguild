@@ -2,7 +2,7 @@
 /**
  * Raid acp file
  *
- *   @package bbdkp
+ * @package acp\bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -23,9 +23,9 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang ( array ('mods/dkp_admin' ));
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 
 if (!class_exists('\bbdkp\controller\raids\RaidController'))
@@ -51,10 +51,9 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 }
  /**
  *  This ACP class manages Raids
- *
- *   @package bbdkp
+ *  @package acp\bbdkp
  */
- class acp_dkp_raid extends \bbdkp\Admin
+ class acp_dkp_raid extends \bbdkp\admin\Admin
 {
 	/**
 	 * url in triggers

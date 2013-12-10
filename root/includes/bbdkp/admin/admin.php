@@ -10,7 +10,7 @@
  * @version 1.3.0
  *
  */
-namespace bbdkp;
+namespace bbdkp\admin;
 /**
 * @ignore
 */
@@ -22,9 +22,9 @@ if (!defined('IN_PHPBB'))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
-if (!class_exists('\bbdkp\log'))
+if (!class_exists('\bbdkp\admin\log'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/log.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin/log.$phpEx");
 }
 
 /**

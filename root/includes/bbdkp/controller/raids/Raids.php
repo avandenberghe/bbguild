@@ -22,9 +22,9 @@ if (! defined('IN_PHPBB'))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require ("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\members\Members'))
 {
@@ -37,7 +37,7 @@ if (!class_exists('\bbdkp\controller\members\Members'))
  *   @package bbdkp
  *
  */
-class Raids extends \bbdkp\Admin
+class Raids extends \bbdkp\admin\Admin
 {
 	/**
 	 * primary key

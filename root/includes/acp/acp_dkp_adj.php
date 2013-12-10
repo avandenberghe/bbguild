@@ -25,9 +25,9 @@ if (! defined('EMED_BBDKP'))
 }
 
 // Include the abstract base
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require ("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 // Include the adjust class
 if (!class_exists('\bbdkp\controller\adjustments\Adjust'))
@@ -40,9 +40,9 @@ if (!class_exists('\bbdkp\controller\members\Members'))
 	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
 // Include the validator class
-if (!class_exists('\bbdkp\Validator'))
+if (!class_exists('\bbdkp\admin\Validator'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/Validator.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin/validator.$phpEx");
 }
 //include the guilds class
 if (!class_exists('\bbdkp\controller\guilds\Guilds'))
@@ -54,7 +54,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
  *
  *   @package bbdkp
  */
-class acp_dkp_adj extends \bbdkp\Admin
+class acp_dkp_adj extends \bbdkp\admin\Admin
 {
 
 	/**
@@ -606,7 +606,7 @@ class acp_dkp_adj extends \bbdkp\Admin
 	private function error_check()
 	{
 		global $user;
-		$validator = new \bbdkp\Validator();
+		$validator = new \bbdkp\admin\Validator();
 		//setup validation rules
 		$validator->addRule('member_names', array('required'));
 		$validator->addRule('adjustment_value', array('required'));

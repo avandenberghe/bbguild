@@ -21,9 +21,9 @@ $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 // Include the base class
 
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\wowapi\BattleNet'))
 {
@@ -41,7 +41,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  *
  *   @package bbdkp
  */
-class Guilds extends \bbdkp\Admin
+class Guilds extends \bbdkp\admin\Admin
 {
 	/**
 	 * guild game id

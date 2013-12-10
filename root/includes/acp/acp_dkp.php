@@ -26,15 +26,15 @@ if (! defined('EMED_BBDKP'))
 }
 
 // Include the abstract base
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require ("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 
 // Include the log class
-if (!class_exists('\bbdkp\log'))
+if (!class_exists('\bbdkp\admin\log'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/log.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin/log.$phpEx");
 }
 
 /**
@@ -42,7 +42,7 @@ if (!class_exists('\bbdkp\log'))
  *
  *   @package bbdkp
  */
-class acp_dkp extends \bbdkp\Admin
+class acp_dkp extends \bbdkp\admin\Admin
 {
 
 	/**
@@ -122,7 +122,7 @@ class acp_dkp extends \bbdkp\Admin
 				}
 
 				// read verbose log
-				$logs = \bbdkp\log::Instance();
+				$logs = \bbdkp\admin\log::Instance();
 
 				$listlogs = $logs->read_log('', false, true, '', '');
 				if(isset($listlogs))
@@ -512,7 +512,7 @@ class acp_dkp extends \bbdkp\Admin
 			case 'dkp_logs':
 				$this->page_title = 'ACP_DKP_LOGS';
 				$this->tpl_name = 'dkp/acp_' . $mode;
-				$logs = \bbdkp\log::Instance();
+				$logs = \bbdkp\admin\log::Instance();
 				$log_id = (isset($_GET[URI_LOG])) ? request_var(URI_LOG, 0) : false;
 				$search = (isset($_GET['search'])) ? true : false;
 				if ($log_id)
@@ -543,7 +543,7 @@ class acp_dkp extends \bbdkp\Admin
 								if (confirm_box(true))
 								{
 									$marked = request_var('mark', array(0));
-									$logs = \bbdkp\log::Instance();
+									$logs = \bbdkp\admin\log::Instance();
 									$log_action = array(
 											'header' => 'L_ACTION_LOG_DELETED' ,
 											'L_ADDED_BY' => $user->data['username'] ,

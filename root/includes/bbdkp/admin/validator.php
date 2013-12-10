@@ -1,28 +1,26 @@
 <?php
 /**
- * Validator
+ * validator
  *
  * Data validation class
- *   @package bbdkp
  * @author      Arvind Gupta <contact [ AT ] arvindgupta [ DOT ] co [ DOT ] in>
  * @copyright   Arvind Gupta (c) 2011
  * @link        http://www.arvindgupta.co.in
  * @license     You're free to do whatever with this as long as this notice
  *              remains intact.
  */
-namespace bbdkp;
+namespace bbdkp\admin;
 /**
- * Validator class
- *   @package bbdkp
+ * validator class
  */
-class Validator
+class validator
 {
  	/**
  	 * error rules
  	 * @var array
  	 */
     protected $_rules = array();
-    
+
     /**
      * userdata array
      * @var array
@@ -38,15 +36,15 @@ class Validator
      * @var array
      */
     protected $_errors = array();
- 
+
     /**
-     * Validator constructor
+     * validator constructor
      */
     public function __construct()
     {
         $this->setDefaultMessages();
     }
- 
+
     /**
      * Add a rule
      *
@@ -57,7 +55,7 @@ class Validator
     {
         $this->_rules[$field] = $rules;
     }
- 
+
     /**
      * Set data to be validated
      *
@@ -67,7 +65,7 @@ class Validator
     {
         $this->_data = $data;
     }
- 
+
     /**
      * Set error message for rule
      *
@@ -78,7 +76,7 @@ class Validator
     {
         $this->_messages[$rule] = $message;
     }
- 
+
     /**
      * Validates current data with current rules
      *
@@ -90,7 +88,7 @@ class Validator
         foreach ($this->_rules as $field => $rules)
         {
             $value = isset($this->_data[$field]) ? $this->_data[$field] : '';
- 
+
             foreach ($rules as $rule => $parameter)
             {
                 // If rule does not require parameter
@@ -99,11 +97,11 @@ class Validator
                     $rule = $parameter;
                     $parameter = null;
                 }
- 
+
                 if (!$this->check($value, $rule, $parameter))
                 {
                     $valid = false;
- 
+
                     if (stripos($this->_messages[$rule], '%s') !== false)
                     {
                         $this->_errors[$field][] = sprintf($this->_messages[$rule], $parameter);
@@ -115,10 +113,10 @@ class Validator
                 }
             }
         }
- 
+
         return $valid;
     }
- 
+
     /**
      * Get error messages if validation fails
      *
@@ -128,7 +126,7 @@ class Validator
     {
         return $this->_errors;
     }
- 
+
     /**
      * check for errors
      * @param string $value
@@ -142,25 +140,25 @@ class Validator
         {
             case 'required' :
                 return!(trim($value) == '');
- 
+
             case 'maxlength' :
                 return (strlen($value) <= $parameter);
- 
+
             case 'minlength' :
                 return (strlen($value) >= $parameter);
- 
+
             case 'numeric' :
                 return is_numeric($value);
- 
+
             case 'int' :
                 return is_int($value);
- 
+
             case 'min' :
                 return $value >= $parameter ? true : false;
- 
+
             case 'max' :
                 return $value <= $parameter ? true : false;
- 
+
             case 'url':
                 // Regex taken from symfony
                 return preg_match('~^
@@ -173,24 +171,24 @@ class Validator
                   (:[0-9]+)?                                # a port (optional)
                   (/?|/\S+)                                 # a /, nothing or a / with something
                 $~ix', $value);
- 
+
             case 'email':
                 return preg_match('/^([^@\s]+)@((?:[-a-z0-9]+\.)+[a-z]{2,})$/i', $value);
- 	
+
             case 'hexcode':
             	//Checks if a field is a valid hexadecimal color code (#FFFFFF)
-            	return preg_match('/(#)?[0-9A-Fa-f]{6}$/', $value); 
+            	return preg_match('/(#)?[0-9A-Fa-f]{6}$/', $value);
             case 'regex':
                 return preg_match($parameter, $value);
- 
+
             case 'pass':
                 return true;
- 
+
             default :
                 return false;
         }
     }
- 
+
     /**
      * default error strings
      */
@@ -210,14 +208,14 @@ class Validator
                 'regex' => 'Invalid value.',
         );
     }
-    
+
 	/**
 	 * funnel error messages to user
 	 */
     public function displayerrors()
     {
     	global $user;
-    	
+
     	if(!$this->isValid())
     	{
     		$out 	='';
@@ -239,19 +237,19 @@ class Validator
     				$out .= '</ol>';
     			}
     		}
-    		
+
     		trigger_error ( $user->lang['FORM_ERROR'] . $out, E_USER_WARNING );
     	}
-    	
-    	
+
+
     }
-    
-    
-    
-    
-    
-    
-    
+
+
+
+
+
+
+
 }
 
 

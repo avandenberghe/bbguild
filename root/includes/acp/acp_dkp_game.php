@@ -24,9 +24,9 @@ if (! defined ( 'EMED_BBDKP' ))
 }
 
 // Include the base class
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\games\Faction'))
 {
@@ -51,7 +51,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  *
  *   @package bbdkp
  */
-class acp_dkp_game extends \bbdkp\Admin
+class acp_dkp_game extends \bbdkp\admin\Admin
 {
 	/**
 	 * link in trigger window
