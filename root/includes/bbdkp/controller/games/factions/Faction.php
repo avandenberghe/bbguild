@@ -228,7 +228,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 			//
 			// Logging failure
 			//
-			if (!class_exists('\bbdkp\Admin'))
+			if (!class_exists('\bbdkp\admin\Admin'))
 			{
 				require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
 			}

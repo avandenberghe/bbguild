@@ -41,7 +41,7 @@ if (! defined('EMED_BBDKP'))
  *   @package bbdkp
  * @throws ResourceException If no methods are defined.
  */
-abstract class Resource extends \bbdkp\Admin
+abstract class Resource extends \bbdkp\admin\Admin
 {
 
 	/**

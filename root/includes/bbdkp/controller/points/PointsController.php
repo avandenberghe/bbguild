@@ -43,56 +43,56 @@ if (!class_exists('\bbdkp\controller\adjustments\Adjust'))
 }
 /**
  * Points controller
- * 
+ *
  *   @package bbdkp
  */
-class PointsController  extends \bbdkp\Admin
+class PointsController  extends \bbdkp\admin\Admin
 {
-	
+
 	/**
 	 * instance of points object
 	 * @var unknown_type
 	 */
-	private $Points; 
-	
+	private $Points;
+
 	/**
 	 * instance of pools object
 	 * @var \bbdkp\controller\points\Pool
 	 */
 	private $Pools;
-	
+
 	/**
 	 * object
 	 * @var object
 	 */
 	public $dkpsys;
-	
+
 	/**
 	 * point pool
 	 * @var int
 	 */
 	public $dkpsys_id;
-	
+
 	/**
 	 * guild id
 	 * @var int
 	 */
-	public $guild_id; 
-	
+	public $guild_id;
+
 	/**
 	 * pointscontroller constructor
 	 * @param number $dkpsys_id
 	 */
-	function __construct($dkpsys_id = 0) 
+	function __construct($dkpsys_id = 0)
 	{
 		//load model
 		parent::__construct();
-		$this->dkpsys_id = $dkpsys_id; 
-		$this->Points = new \bbdkp\controller\points\Points(0, $dkpsys_id); 
+		$this->dkpsys_id = $dkpsys_id;
+		$this->Points = new \bbdkp\controller\points\Points(0, $dkpsys_id);
 		$this->Pools = new \bbdkp\controller\points\Pool($dkpsys_id);
-		$this->dkpsys = $this->Pools->dkpsys;  
+		$this->dkpsys = $this->Pools->dkpsys;
 	}
-	
+
 	/**
 	 * activate member dkp account
 	 * @param array $all_members
@@ -100,39 +100,39 @@ class PointsController  extends \bbdkp\Admin
 	 */
 	public function activate($all_members, $active_members)
 	{
-		global $db; 
-		
+		global $db;
+
 		$db->sql_transaction ( 'begin' );
-		
+
 		$sql1 = 'UPDATE ' . MEMBER_DKP_TABLE . "
                         SET member_status = '1'
                         WHERE  member_dkpid  = " . $dkpsys_id . '
                         AND ' . $db->sql_in_set ( 'member_id', $active_members, false, true );
 		$db->sql_query ( $sql1 );
-		
+
 		$sql2 = 'UPDATE ' . MEMBER_DKP_TABLE . "
                         SET member_status = '0'
                         WHERE  member_dkpid  = " . $dkpsys_id . '
                         AND ' . $db->sql_in_set ( 'member_id', array_diff($all_members, $active_members) , false, true );
 		$db->sql_query ( $sql2 );
-		
+
 		$db->sql_transaction ( 'commit' );
 	}
-	
-	
+
+
 	/**
 	 * returns an array to list all dkp accounts
-	 * 
+	 *
 	 */
 	public function listdkpaccounts()
 	{
 		global $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-		
-	
+
+
 		$sql_array = array (
 				'SELECT' => 'm.member_id,  a.member_name, a.member_level, m.member_dkpid,
-						m.member_raid_value, m.member_raid_decay,  m.member_time_bonus, m.member_zerosum_bonus, m.member_earned - m.member_raid_decay as member_earned, 
-						m.member_spent, m.member_item_decay, m.member_spent- m.member_item_decay as net_spent, 
+						m.member_raid_value, m.member_raid_decay,  m.member_time_bonus, m.member_zerosum_bonus, m.member_earned - m.member_raid_decay as member_earned,
+						m.member_spent, m.member_item_decay, m.member_spent- m.member_item_decay as net_spent,
 						m.member_adjustment,  m.adj_decay,
 						(m.member_earned - m.member_raid_decay - (m.member_spent - m.member_item_decay) + m.member_adjustment - m.adj_decay) AS member_current,
 						m.member_status, m.member_lastraid,
@@ -153,10 +153,10 @@ class PointsController  extends \bbdkp\Admin
 						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'
 						AND a.member_guild_id = " . $this->guild_id . "
 						AND (s.dkpsys_id = " . (int) $this->dkpsys_id . ')' );
-	
-			
+
+
 		/***  sort  ***/
-		
+
 		$previous_data = '';
 		$sort_order = array (
 				0 => array ('member_status desc, member_name asc', 'member_status asc, member_name asc' ),
@@ -165,36 +165,36 @@ class PointsController  extends \bbdkp\Admin
 				3 => array ('member_level desc', 'member_level' ),
 				4 => array ('member_class', 'member_class desc' ),
 				5 => array ('member_raid_value desc', 'member_raid_value' ),
-				6 => array ('member_time_bonus desc', 'member_time_bonus' ), 
-				7 => array ('member_zerosum_bonus desc', 'member_zerosum_bonus' ), 
+				6 => array ('member_time_bonus desc', 'member_time_bonus' ),
+				7 => array ('member_zerosum_bonus desc', 'member_zerosum_bonus' ),
 				8 => array ('member_earned', 'member_earned desc' ),
-				9 => array ('member_raid_decay desc', 'member_raid_decay' ), 
+				9 => array ('member_raid_decay desc', 'member_raid_decay' ),
 				10 => array ('member_adjustment desc', 'member_adjustment' ),
 				12 => array ('member_spent desc', 'member_spent' ),
-				13 => array ('member_item_decay desc', 'member_item_decay' ), 
+				13 => array ('member_item_decay desc', 'member_item_decay' ),
 				16 => array ('member_current desc', 'member_current' ),
-				17 => array ('member_lastraid desc', 'member_lastraid' ),  
-				
+				17 => array ('member_lastraid desc', 'member_lastraid' ),
+
 				);
-	
+
 		$current_order = $this->switch_order ( $sort_order );
 		$previous_data = '';
 		$sort_index = explode ( '.', $current_order ['uri'] ['current'] );
 		$previous_source = preg_replace ( '/( (asc|desc))?/i', '', $sort_order [$sort_index [0]] [$sort_index [1]] );
-		
+
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$sql = 'SELECT * FROM ( ' . $sql . ' ) as s  ORDER BY ' . $current_order ['sql'];
-		
+
 		$members_result = $db->sql_query ( $sql );
-		$members_row = array(); 
-		
+		$members_row = array();
+
 		$member_count = 0;
 		$lines = 0;
 		while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{
 			++ $member_count;
 			++ $lines;
-		
+
 			$members_row [$row ['member_id']] = array (
 					'STATUS' => ($row ['member_status'] == 1) ? 'checked="checked" ' : '',
 					'ID' => $row ['member_id'],
@@ -209,9 +209,9 @@ class PointsController  extends \bbdkp\Admin
 					'RANK' => $row ['rank_name'],
 					'LEVEL' => ($row ['member_level'] > 0) ? $row ['member_level'] : '&nbsp;',
 					'RAIDVAL' => $row ['member_raid_value'],
-					'RAIDDECAY' => - $row ['member_raid_decay'], 
-					'TIMEBONUS' => $row ['member_time_bonus'], 
-					'ZEROSUM' => $row ['member_zerosum_bonus'], 
+					'RAIDDECAY' => - $row ['member_raid_decay'],
+					'TIMEBONUS' => $row ['member_time_bonus'],
+					'ZEROSUM' => $row ['member_zerosum_bonus'],
 					'EARNED' => $row ['member_earned'],
 					'ADJUSTMENT' => ($row ['member_adjustment'] - $row ['adj_decay']) != 0 ? ($row ['member_adjustment'] - $row ['adj_decay']) : '',
 					'SPENT' => - $row ['member_spent'] != 0 ?  - $row ['member_spent'] : '',
@@ -221,24 +221,24 @@ class PointsController  extends \bbdkp\Admin
 					'LASTRAID' => (! empty ( $row ['member_lastraid'] )) ? date ( $config ['bbdkp_date_format'], $row ['member_lastraid'] ) : '&nbsp;',
 					'U_VIEW_MEMBER' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp" ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'] );
 		}
-					
+
 		$db->sql_freeresult ($members_result);
-		return array($members_row, $current_order); 
-		
-		
+		return array($members_row, $current_order);
+
+
 	}
-	
-	
+
+
 	/**
 	 * returns an array to list all EPGP accounts
 	 */
 	public function listEPGPaccounts()
 	{
 		global $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
-	
-	
+
+
 		$sql_array = array (
-				'SELECT' => 's.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename, 
+				'SELECT' => 's.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename,
 						m.member_id,  a.member_name, a.member_level, m.member_dkpid, m.member_status, m.member_lastraid,
 						m.member_raid_value,  m.member_time_bonus, m.member_raid_decay, m.member_spent, m.member_item_decay,  m.member_adjustment,  m.adj_decay,
 						(m.member_raid_value + m.member_time_bonus - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep,
@@ -262,9 +262,9 @@ class PointsController  extends \bbdkp\Admin
 						AND a.member_guild_id = " . $this->guild_id . "
 						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'
 						AND (s.dkpsys_id = " . (int) $this->dkpsys_id . ')' );
-			
+
 		/***  sort  ***/
-	
+
 		$sort_order = array (
 				0 => array ('member_status desc, member_name asc', 'member_status asc, member_name asc'),
 				1 => array ('member_name', 'member_name desc' ),
@@ -282,23 +282,23 @@ class PointsController  extends \bbdkp\Admin
 				15 => array ('pr desc', 'pr ' ),
 				17 => array ('member_lastraid desc', 'member_lastraid' ),
 		);
-	
+
 		$current_order = $this->switch_order ( $sort_order );
 		$sort_index = explode ( '.', $current_order ['uri'] ['current'] );
 		$previous_source = preg_replace ( '/( (asc|desc))?/i', '', $sort_order [$sort_index [0]] [$sort_index [1]] );
-	
+
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$sql = 'SELECT * FROM ( ' . $sql . ' ) as s  ORDER BY ' . $current_order ['sql'];
 		$members_result = $db->sql_query ( $sql );
 		$members_row = array();
-	
+
 		$member_count = 0;
 		$lines = 0;
 		while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{
 			++ $member_count;
 			++ $lines;
-	
+
 			$members_row [$row ['member_id']] = array (
 					'STATUS' => ($row ['member_status'] == 1) ? 'checked="checked" ' : '',
 					'ID' => $row ['member_id'],
@@ -314,33 +314,33 @@ class PointsController  extends \bbdkp\Admin
 					'LEVEL' => ($row ['member_level'] > 0) ? $row ['member_level'] : '&nbsp;',
 					'RAIDVAL' => $row ['member_raid_value'],
 					'LASTRAID' => (! empty ( $row ['member_lastraid'] )) ? date ( $config ['bbdkp_date_format'], $row ['member_lastraid'] ) : '&nbsp;',
-					'RAIDDECAY' => $row ['member_raid_decay'] != 0 ?  $row ['member_raid_decay'] : '', 
+					'RAIDDECAY' => $row ['member_raid_decay'] != 0 ?  $row ['member_raid_decay'] : '',
 					'ADJUSTMENT' => ($row ['member_adjustment'] - $row ['adj_decay']) != 0 ? ($row ['member_adjustment'] - $row ['adj_decay']) : '',
-					'EP' => $row ['ep'], 
+					'EP' => $row ['ep'],
 					'SPENT' => $row ['member_spent'] != 0 ? $row ['member_spent'] : '',
 					'ITEMDECAY' =>  $row ['member_item_decay'] != 0 ?  $row ['member_item_decay'] : '',
-					'GP' => $row ['gp'], 
-					'PR' => $row ['pr'], 
+					'GP' => $row ['gp'],
+					'PR' => $row ['pr'],
 					'U_VIEW_MEMBER' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp" ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'] );
-	
+
 			if ($config ['bbdkp_timebased'] == 1)
 			{
 				$members_row [$row ['member_id']] ['TIMEBONUS'] = $row ['member_time_bonus'];
 			}
 
 		}
-			
+
 		$db->sql_freeresult ($members_result);
 		return array($members_row, $current_order);
-	
-	
+
+
 	}
-	
+
 
 	/**
 	 * used by standings view
 	 * gets array with members to display
-	 * 
+	 *
 	 * @param int $guild_id
 	 * @param int $dkpsys_id
 	 * @param string $game_id
@@ -355,11 +355,11 @@ class PointsController  extends \bbdkp\Admin
 	public function get_standings($guild_id, $dkpsys_id, $game_id, $startd, $show_all, $query_by_armor, $query_by_class, $filter, $query_by_pool)
 	{
 		global $config, $user, $db, $template, $phpbb_root_path;
-	
+
 		$sql_array = array(
 				'SELECT'    => 	'l.game_id, m.member_id,
-					m.member_status, 
-					max(m.member_lastraid) as member_lastraid, 
+					m.member_status,
+					max(m.member_lastraid) as member_lastraid,
 					sum(m.member_raidcount) as member_raidcount,
 					sum(m.member_raid_value) as member_raid_value,
 					sum(m.member_time_bonus) as member_time_bonus,
@@ -392,7 +392,7 @@ class PointsController  extends \bbdkp\Admin
 						CLASS_TABLE    		=> 'c',
 						BB_LANGUAGE			=> 'l1',
 				),
-	
+
 				'WHERE'     =>  "(m.member_id = l.member_id)
 					AND l1.attribute_id =  c.class_id AND l1.language= '" . $config['bbdkp_lang'] . "'
 					AND l1.attribute = 'class' and c.game_id = l1.game_id
@@ -401,10 +401,10 @@ class PointsController  extends \bbdkp\Admin
 					AND (r.rank_id = l.member_rank_id)
 					AND (m.member_dkpid = d.dkpsys_id)
 					AND (l.member_guild_id = r.guild_id)
-					AND r.rank_hide = 0 
+					AND r.rank_hide = 0
 					AND d.dkpsys_status != 'N'
 				" ,
-				'GROUP_BY' => 'l.game_id, m.member_id, m.member_status, 
+				'GROUP_BY' => 'l.game_id, m.member_id, m.member_status,
 						 l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
 							 r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix,
 							 l1.name, c.class_id,
@@ -413,7 +413,7 @@ class PointsController  extends \bbdkp\Admin
 					c.class_min_level ,
 					c.class_max_level ',
 		);
-	
+
 		if($config['bbdkp_epgp'] == 1)
 		{
 			$sql_array[ 'SELECT'] .= ",
@@ -424,32 +424,32 @@ class PointsController  extends \bbdkp\Admin
 		ELSE  ROUND(SUM(m.member_earned - m.member_raid_decay +  m.member_adjustment - m.adj_decay) /
 				SUM(" . max(0, $config['bbdkp_basegp']) . " + m.member_spent - m.member_item_decay),2) END AS pr " ;
 		}
-	
+
 		//check if inactive members will be shown
 		if ($config ['bbdkp_hide_inactive'] == '1' && !$show_all )
 		{
 			// don't show inactive members
 			$sql_array[ 'WHERE'] .= ' AND m.member_status = 1 ';
 		}
-	
+
 		if  (isset($_POST['compare']) && isset($_POST['compare_ids']))
 		{
 			$compare =  request_var('compare_ids', array('' => 0)) ;
 			$sql_array['WHERE'] .= ' AND ' . $db->sql_in_set('m.member_id', $compare, false, true);
 		}
-		
+
 		$sql_array['WHERE'] .= ' AND l.member_guild_id = ' . $guild_id . ' ';
-		
+
 		if ($query_by_pool)
 		{
 			$sql_array['WHERE'] .= ' AND m.member_dkpid = ' . $dkpsys_id . ' ';
 		}
-	
+
 		if (isset ( $_GET ['rank'] ))
 		{
 			$sql_array['WHERE'] .= " AND r.rank_name='" . request_var ( 'rank', '' ) . "'";
 		}
-	
+
 		if ($query_by_class)
 		{
 			//wow_class_8 = Mage
@@ -461,14 +461,14 @@ class PointsController  extends \bbdkp\Admin
 				$sql_array['WHERE'] .= " AND c.class_id =  '" . $db->sql_escape ($class_id) . "' ";
 				$sql_array['WHERE'] .= " AND c.game_id =  '" . $db->sql_escape ($game_id) . "' ";
 			}
-		
+
 		}
-		
+
 		if ($query_by_armor)
 		{
 			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $filter ) . "'";
 		}
-	
+
 		// default sorting
 		if($config['bbdkp_epgp'] == 1)
 		{
@@ -481,28 +481,28 @@ class PointsController  extends \bbdkp\Admin
 		{
 			$sql_array[ 'ORDER_BY'] = 'sum(m.member_earned + m.member_adjustment - m.member_spent - m.adj_decay) desc, l.member_name asc ' ;
 		}
-	
+
 		$sql = $db->sql_build_query('SELECT_DISTINCT', $sql_array);
-	
+
 		if (! ($members_result = $db->sql_query ( $sql )))
 		{
 			trigger_error ($user->lang['MNOTFOUND']);
 		}
-	
+
 		global $allmember_count;
 		$allmember_count = 0;
 		while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{
 			++$allmember_count;
 		}
-	
+
 		$members_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $startd );
 		$memberarray = array ();
 		$member_count =0;
 		while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{
 			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
-	
+
 			++$member_count;
 			$memberarray [$member_count] ['game_id'] = $row ['game_id'];
 			$memberarray [$member_count] ['class_id'] = $row ['class_id'];
@@ -526,39 +526,39 @@ class PointsController  extends \bbdkp\Admin
 			if($config['bbdkp_timebased'] == 1)
 			{
 				$memberarray [$member_count] ['member_time_bonus'] = $row ['member_time_bonus'];
-	
+
 			}
 			if($config['bbdkp_zerosum'] == 1)
 			{
 				$memberarray [$member_count] ['member_zerosum_bonus'] = $row ['member_zerosum_bonus'];
 			}
 			$memberarray [$member_count] ['member_earned'] = $row ['member_earned'];
-	
+
 			$memberarray [$member_count] ['member_adjustment'] = $row ['member_adjustment'];
-	
+
 			if($config['bbdkp_decay'] == 1)
 			{
 				$memberarray [$member_count] ['member_raid_decay'] = $row ['member_raid_decay'];
 				$memberarray [$member_count] ['member_item_decay'] = $row ['member_item_decay'];
 			}
-	
+
 			$memberarray [$member_count] ['member_spent'] = $row ['member_spent'];
 			$memberarray [$member_count] ['member_current'] = $row ['member_current'];
-	
+
 			if($config['bbdkp_epgp'] == 1)
 			{
 				$memberarray [$member_count] ['ep'] = $row ['ep'];
 				$memberarray [$member_count] ['gp'] = $row ['gp'];
 				$memberarray [$member_count] ['pr'] = $row ['pr'];
 			}
-	
+
 			$memberarray [$member_count] ['member_lastraid'] = $row ['member_lastraid'];
 			$memberarray [$member_count] ['attendanceP1'] = $row ['member_raidcount'];
 			//raidcount ( true, $row ['member_dkpid'], $config ['bbdkp_list_p1'], $row ['member_id'],2,false );
-	
+
 		}
 		$db->sql_freeresult ( $members_result );
-	
+
 
 		// Obtain a list of columns for sorting the array
 		if (count ($memberarray))
@@ -571,40 +571,40 @@ class PointsController  extends \bbdkp\Admin
 				$member_class [$key] = $member ['member_class'];
 				$armor_type [$key] = $member ['armor_type'];
 				$member_raid_value [$key] = $member ['member_raid_value'];
-		
+
 				if($config['bbdkp_timebased'] == 1)
 				{
 					$member_time_bonus [$key] ['member_time_bonus'] = $member ['member_time_bonus'];
 				}
-				
+
 				if($config['bbdkp_zerosum'] == 1)
 				{
 					$member_zerosum_bonus [$key] ['member_zerosum_bonus'] = $member ['member_zerosum_bonus'];
 				}
-		
+
 				$member_earned [$key] = $member ['member_earned']; //*
 				$member_adjustment [$key] = $member ['member_adjustment']; //*
-		
+
 				if($config['bbdkp_decay'] == 1)
 				{
 					$member_raid_decay[$key]['member_raid_decay'] = $member['member_raid_decay'];
 					$member_item_decay[$key]['member_item_decay'] = $member['member_item_decay'];
 				}
-		
+
 				if($config['bbdkp_epgp'] == 1)
 				{
 					$ep[$key]['ep'] = $member['ep'];
 					$gp[$key]['gp'] = $member['gp'];
 					$pr[$key]['pr'] = $member['pr'];
 				}
-		
+
 				$member_spent [$key] = $member ['member_spent'];
 				$member_current [$key] = $member ['member_current'];
 				$member_lastraid [$key] = $member ['member_lastraid'];
 				$attendanceP1 [$key] = $member ['attendanceP1'];
 			}
-		
-		
+
+
 			// do the multi-dimensional sorting
 			$sortorder = request_var ( URI_ORDER, 0 );
 			switch ($sortorder)
@@ -639,136 +639,136 @@ class PointsController  extends \bbdkp\Admin
 				case - 5 : //armor
 					array_multisort ( $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 6 : //member_raid_value
 					array_multisort ( $member_raid_value, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 6 : //member_raid_value
 					array_multisort ( $member_raid_value , SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 7 : //bbdkp_dkphour
 					array_multisort ( $member_time_bonus, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 7 : //bbdkp_dkphour
 					array_multisort ( $member_time_bonus , SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-		
+
 				case 8 : //member_zerosum_bonus
 					array_multisort ( $member_zerosum_bonus, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 8 : //member_zerosum_bonus
 					array_multisort ( $member_zerosum_bonus , SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-		
+
 				case 9 : //earned
 					array_multisort ( $member_earned, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 9 : //earned
 					array_multisort ( $member_earned, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 10 : //adjustment
 					array_multisort ( $member_adjustment, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 10 : //adjustment
 					array_multisort ( $member_adjustment, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 11 : //ep decay
 					array_multisort ( $member_raid_decay, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 11 : //ep decay
 					array_multisort ( $member_raid_decay, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 12 : //ep
 					array_multisort ( $ep, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 12 : //ep
 					array_multisort ( $ep, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 13 : //spent
 					array_multisort ( $member_spent, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 13 : //spent
 					array_multisort ( $member_spent, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 14 : //item_decay
 					array_multisort ( $member_item_decay, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 14 : //item_decay
 					array_multisort ( $member_item_decay, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 15 : // gp
 					array_multisort ( $gp, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 15 : // gp
 					array_multisort ( $gp, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 16 : // Pr
 					array_multisort ( $pr, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 16 : // Pr
 					array_multisort ( $pr, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 17 : //current
 					array_multisort ( $member_current, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 17 : //current
 					array_multisort ( $member_current, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-						
+
 				case 18 : //lastraid
 					array_multisort ( $member_lastraid, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 18 : //lastraid
 					array_multisort ( $member_lastraid, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-		
+
 				case 19 : //raidattendance P1
 					array_multisort ( $attendanceP1, SORT_DESC, $member_name, SORT_ASC, $memberarray );
 					break;
 				case - 19 : //raidattendance P1
 					array_multisort ( $attendanceP1, SORT_ASC, $member_name, SORT_DESC, $memberarray );
 					break;
-		
+
 			}
 		}
-		
+
 		return $memberarray;
 	}
-	
+
 	/**
-	 * updates a dkp account 
+	 * updates a dkp account
  	 * @param int $member_id
 	 * @uses called by acp_dkp_mkdkp
 	 */
 	public function update_dkpaccount($member_id)
 	{
-		global $phpbb_admin_path, $user, $phpEx; 
+		global $phpbb_admin_path, $user, $phpEx;
 		$member= new \bbdkp\controller\members\Members($member_id);
 		$oldpoints = new \bbdkp\controller\points\Points($member_id, $this->dkpsys_id);
 		$oldpoints->dkpid = $this->dkpsys_id;
 		$oldpoints->member_id = $member_id;
-		
+
 		$newpoints = new \bbdkp\controller\points\Points($member_id, $this->dkpsys_id);
 		$newpoints->dkpid = $this->dkpsys_id;
 		$newpoints->member_id = $member_id;
-		
-		$newpoints->raid_value = request_var ( 'raid_value', 0.00 ); 
-		$newpoints->time_bonus = request_var ( 'time_value', 0.00 ); 
-		$newpoints->zerosum_bonus = request_var ( 'zerosum', 0.00 ); 
-		$newpoints->earned_decay = request_var ( 'rdecay', 0.00 ); 
-		$newpoints->spent = request_var ( 'spent', 0.00 ); 
+
+		$newpoints->raid_value = request_var ( 'raid_value', 0.00 );
+		$newpoints->time_bonus = request_var ( 'time_value', 0.00 );
+		$newpoints->zerosum_bonus = request_var ( 'zerosum', 0.00 );
+		$newpoints->earned_decay = request_var ( 'rdecay', 0.00 );
+		$newpoints->spent = request_var ( 'spent', 0.00 );
 		$newpoints->item_decay = request_var ( 'idecay', 0.00 );
-		
-		$newpoints->update_account(); 
+
+		$newpoints->update_account();
 
 		$log_action = array (
 				'header' => 'L_ACTION_MEMBERDKP_UPDATED',
@@ -779,23 +779,23 @@ class PointsController  extends \bbdkp\Admin
 				'L_SPENT_BEFORE' =>  $newpoints->spent,
 				'L_EARNED_AFTER' => $newpoints->raid_value + $newpoints->time_bonus + $newpoints->zerosum_bonus,
 				'L_SPENT_AFTER' => $oldpoints->spent);
-			
+
 		$this->log_insert ( array (
-			'log_type' => $log_action ['header'], 
+			'log_type' => $log_action ['header'],
 			'log_action' => $log_action ));
-			
+
 		$success_message = sprintf ( $user->lang ['ADMIN_UPDATE_MEMBERDKP_SUCCESS'], $member->member_name );
-		
-		unset($member); 
+
+		unset($member);
 		unset($oldpoints);
-		unset($newpoints); 
-		
+		unset($newpoints);
+
 		$link =  '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp" ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
 		trigger_error ($success_message . ' ' . $link , E_USER_NOTICE );
-		
-		
+
+
 	}
-	
+
 	/**
 	 * deletes a dkp account
 	 * @param int $member_id
@@ -805,17 +805,17 @@ class PointsController  extends \bbdkp\Admin
 	{
 		global $user, $phpbb_admin_path, $phpbb_root_path, $phpEx;
 		$member= new \bbdkp\controller\members\Members($member_id);
-		
+
 		//delete player from raiddetail table
 		if (!class_exists('\bbdkp\controller\raids\Raiddetail'))
 		{
 			require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raiddetail.$phpEx");
 		}
-		
+
 		$raiddetail = new \bbdkp\controller\raids\Raiddetail();
-		$raiddetail->deleteaccount($member_id, $this->dkpsys_id); 
-		
-		
+		$raiddetail->deleteaccount($member_id, $this->dkpsys_id);
+
+
 		//delete player from adjustments table
 		if (!class_exists('\bbdkp\controller\adjustments\Adjust'))
 		{
@@ -823,50 +823,50 @@ class PointsController  extends \bbdkp\Admin
 		}
 		$Adjust = new \bbdkp\controller\adjustments\Adjust($this->dkpsys_id);
 		$Adjust->member_id = $member_id;
-		$Adjust->adjustment_dkpid = $this->dkpsys_id; 
+		$Adjust->adjustment_dkpid = $this->dkpsys_id;
 		$Adjust->delete_memberadjustments();
-		
-		
+
+
 		//delete player dkp points
 		$oldpoints = new \bbdkp\controller\points\Points($member_id, $this->dkpsys_id);
 		$oldpoints->dkpid = $this->dkpsys_id;
 		$oldpoints->member_id = $member_id;
 		$oldpoints->delete_account();
-			
+
 		$log_action = array (
 				'header' => 'ACTION_MEMBERDKP_DELETED',
 				'L_NAME' => $member->member_name,
 				'L_EARNED' => $oldpoints->raid_value + $oldpoints->time_bonus + $oldpoints->zerosum_bonus,
 				'L_SPENT' => $oldpoints->spent,
 				'L_ADJUSTMENT' => $oldpoints->adjustment );
-			
+
 		$this->log_insert ( array (
 				'log_type' => $log_action ['header'],
 				'log_action' => $log_action ) );
-			
+
 		$success_message = sprintf ( $user->lang ['ADMIN_DELETE_MEMBERDKP_SUCCESS'], $member->member_name, $this->dkpsys_id );
-		
+
 		unset($member);
 		unset($raiddetail);
 		unset($Adjust);
-		unset($oldpoints); 
-		
-		$link =  '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp" ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>'; 
+		unset($oldpoints);
+
+		$link =  '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp" ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
 		trigger_error ($success_message . ' ' . $link , E_USER_NOTICE );
-		
+
 	}
 
 	/**
 	 * add dkp points.
 	 * this must be called after the raid and raid detail tables are filled.
-	 * 
+	 *
 	 * @param int $raid_id
 	 * @param number $member_id
 	 */
 	public function add_points($raid_id, $member_id = 0)
 	{
 		global $config, $db;
-		
+
 		$new_raid = new \bbdkp\controller\raids\Raids($raid_id);
 		$raiddetail = new \bbdkp\controller\raids\Raiddetail($raid_id);
 		if ($member_id > 0)
@@ -877,7 +877,7 @@ class PointsController  extends \bbdkp\Admin
 		{
     		$raiddetail->Get($raid_id);
 		}
-		
+
 
 		foreach ((array) $raiddetail->raid_details as $member_id => $raiddetail)
 		{
@@ -889,7 +889,7 @@ class PointsController  extends \bbdkp\Admin
 			$this->update_player_status ($new_raid->event_dkpid);
 		}
 	}
-	
+
 	/**
 	 * add points to record
 	 * @param \bbdkp\controller\raids\Raids $new_raid
@@ -955,8 +955,8 @@ class PointsController  extends \bbdkp\Admin
 	 */
 	public function removeraid_delete_dkprecord($raid_id, $member_id = 0)
 	{
-		global $config; 
-	
+		global $config;
+
 		if($member_id == 0)
 		{
 		    // remove whole raid
@@ -978,7 +978,7 @@ class PointsController  extends \bbdkp\Admin
 				$this->Points->update_account();
 				$this->update_raiddate($member_id, $old_raid->event_dkpid);
 			}
-				
+
 		}
 		else
 		{
@@ -986,11 +986,11 @@ class PointsController  extends \bbdkp\Admin
 			$old_raid = new \bbdkp\controller\raids\Raids($raid_id);
 			$raiddetail = new \bbdkp\controller\raids\Raiddetail($raid_id);
 			$raiddetail->Get($raid_id, $member_id);
-				
+
 			$this->Points->dkpid = $old_raid->event_dkpid;
 			$this->Points->member_id = $member_id;
 			$this->Points->read_account();
-				
+
 			$this->Points->raid_value -= $raiddetail->raid_value;
 			$this->Points->time_bonus -= $raiddetail->time_bonus;
 			$this->Points->zerosum_bonus -= $raiddetail->zerosum_bonus;
@@ -1006,9 +1006,9 @@ class PointsController  extends \bbdkp\Admin
 		{
 			$this->update_player_status ( $old_raid->event_dkpid);
 		}
-		
+
 	}
-	
+
 	/**
 	 * add loot to account
 	 * @param float $item_value
@@ -1016,15 +1016,15 @@ class PointsController  extends \bbdkp\Admin
 	 */
 	public function addloot_update_dkprecord($item_value, $member_id)
 	{
-				
+
 		$this->Points->dkpid = $this->dkpsys_id;
 		$this->Points->member_id = $member_id;
 		$this->Points->read_account();
-		
-		$this->Points->spent += $item_value; 
-		$this->Points->update_account();	
+
+		$this->Points->spent += $item_value;
+		$this->Points->update_account();
 	}
-	
+
 	/**
 	 * update a dkp account to remove loot
 	 * @param  \bbdkp\controller\loot\Loot $loot
@@ -1034,11 +1034,11 @@ class PointsController  extends \bbdkp\Admin
 		$this->Points->dkpid = $this->dkpsys_id;
 		$this->Points->member_id = $loot->member_id;
 		$this->Points->read_account();
-		
+
 		$this->Points->spent -= $loot->item_value;
 		$this->Points->decay -= $loot->item_decay;
-		
-		$this->Points->update_account();	
+
+		$this->Points->update_account();
 	}
 
 
@@ -1051,7 +1051,7 @@ class PointsController  extends \bbdkp\Admin
 	private function update_raiddate($member_id, $dkpid)
 	{
 		global $db, $user;
-	
+
 		// get first & last raids
 		$sql_array = array (
 				'SELECT' => 'MIN(r.raid_start) AS member_firstraid, MAX(r.raid_start) AS member_lastraid, ra.member_id ',
@@ -1066,7 +1066,7 @@ class PointsController  extends \bbdkp\Admin
 					AND ra.member_id  = ' . $member_id,
 				'GROUP_BY' => 'member_id',
 		);
-	
+
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query ( $sql );
 		$member_firstraid = 0;
@@ -1077,20 +1077,20 @@ class PointsController  extends \bbdkp\Admin
 			$member_lastraid = $row['member_lastraid'];
 		}
 		$db->sql_freeresult ($result);
-	
+
 		$first_raid = ( isset($member_firstraid) ? $member_firstraid : 0 );
 		$last_raid = ( isset($member_lastraid) ? $member_lastraid : 0 );
-	
+
 		$query = $db->sql_build_array ( 'UPDATE', array (
 				'member_firstraid' 		=> $first_raid,
 				'member_lastraid' 		=> $last_raid,
 		));
-	
+
 		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . '
 	            WHERE member_id = ' . $member_id . '
 	            AND  member_dkpid = ' . $dkpid);
 	}
-	
+
 
 
 	/**
@@ -1104,12 +1104,12 @@ class PointsController  extends \bbdkp\Admin
 	private function update_player_status($dkpid)
 	{
 		global $db, $user, $config;
-	
+
 		$inactive_time = mktime (0, 0, 0, date ( 'm' ), date ( 'd' ) - $config ['bbdkp_inactive_period'], date ( 'Y' ) );
-	
+
 		$active_members = array ();
 		$inactive_members = array ();
-	
+
 		// Don't do active/inactive adjustments if we don't need to.
 		if (($config ['bbdkp_active_point_adj'] != 0) || ($config ['bbdkp_inactive_point_adj'] != 0))
 		{
@@ -1130,7 +1130,7 @@ class PointsController  extends \bbdkp\Admin
 			{
 				unset ( $adj_value ); // destroy local
 				unset ( $adj_reason );
-	
+
 				// Active -> Inactive
 				if (((float) $config ['bbdkp_inactive_point_adj'] != 0.00) && ($row['member_status'] == 1) && ($row['member_lastraid'] < $inactive_time))
 				{
@@ -1147,7 +1147,7 @@ class PointsController  extends \bbdkp\Admin
 					$active_members [] = $row['member_id'];
 					$active_membernames [] = $row['member_name'];
 				}
-	
+
 				//
 				// Insert individual adjustment
 				if ((isset ( $adj_value )) && (isset ( $adj_reason )))
@@ -1162,72 +1162,72 @@ class PointsController  extends \bbdkp\Admin
 					'adjustment_reason' 	=> $adj_reason,
 					'adjustment_group_key' 	=> $group_key,
 					'adjustment_added_by' 	=> $user->data ['username'] ));
-					
+
 				$db->sql_query ( 'INSERT INTO ' . ADJUSTMENTS_TABLE . $query );
 		}
 		}
 		$db->sql_freeresult( $result );
-			
+
 		// Update members to inactive and put dkp adjustment
 		if (sizeof ( $inactive_members ) > 0)
 		{
 			$adj_value = (float) $config ['bbdkp_inactive_point_adj'];
 			$adj_reason = 'Inactive adjustment';
-	
+
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 		SET member_status = 0, member_adjustment = member_adjustment + ' . (string) $adj_value . '
 		WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $inactive_members ) ;
 			$db->sql_query($sql);
-	
+
 			$log_action = array (
 					'header' 		=> 'L_ACTION_INDIVADJ_ADDED',
 					'L_ADJUSTMENT' 	=> $config ['bbdkp_inactive_point_adj'],
 					'L_MEMBERS' 	=> implode ( ', ', $inactive_membernames ),
 					'L_REASON' 		=> $user->lang['INACTIVE_POINT_ADJ'],
 					'L_ADDED_BY'	=> $user->data ['username'] );
-	
+
 			$this->log_insert ( array (
 					'log_type' 		=> $log_action ['header'],
 					'log_action' 	=> $log_action ));
 		}
-			
+
 		// Update active members' adjustment
 		if (sizeof ( $active_members ) > 0)
 		{
 			$adj_value = (float) $config ['bbdkp_active_point_adj'];
-	
+
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 			SET member_status = 1, member_adjustment = member_adjustment + ' . (string) $adj_value . '
 			WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $active_members );
-	
+
 			$db->sql_query($sql);
-	
+
 			$log_action = array (
 					'header' 		=> 'L_ACTION_INDIVADJ_ADDED',
 					'L_ADJUSTMENT' 	=> $config ['bbdkp_active_point_adj'],
 					'L_MEMBERS' 	=> implode ( ', ', $active_membernames ),
 					'L_REASON' 		=> $user->lang['ACTIVE_POINT_ADJ'],
 					'L_ADDED_BY' 	=> $user->data ['username'] );
-	
+
 			$this->log_insert ( array ('log_type' => $log_action ['header'], 'log_action' => $log_action ) );
 		}
 		}
 		else
 		{
 			// only adapt status
-				
+
 			// Active -> Inactive
 			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . " SET member_status = 0 WHERE member_dkpid = " . $dkpid . "
 			AND (member_lastraid <  " . $inactive_time . ") AND (member_status= 1)" );
-				
+
 			// Inactive -> Active
 			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . " SET member_status = 1 WHERE member_dkpid = " . $dkpid . "
 			AND (member_lastraid >= " . $inactive_time . ") AND (member_status= 0)" );
 		}
-	
+
 		return true;
 	}
-		
+
 	/**
 	 * Zero-sum DKP function
 	 *
@@ -1244,18 +1244,18 @@ class PointsController  extends \bbdkp\Admin
 	public function zero_balance($looter_id, $raid_id, $itemvalue)
 	{
 		global $db;
-		$raiddetail = new \bbdkp\controller\raids\Raiddetail($raid_id); 
-		
+		$raiddetail = new \bbdkp\controller\raids\Raiddetail($raid_id);
+
 		$zerosumdkp = round( $itemvalue / max(1, count($raiddetail->raid_details)) , 2);
-		
+
 		// increase raid detail table
 		$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
 						SET zerosum_bonus = zerosum_bonus + ' . (float) $zerosumdkp . '
 						WHERE raid_id = ' . (int) $raid_id . ' AND ' .  $db->sql_in_set('member_id',  array_keys($raiddetail->raid_details))   ;
 		$db->sql_query ( $sql );
-	
-		// @note : this zero sum should be decay-synchronised 
-		
+
+		// @note : this zero sum should be decay-synchronised
+
 		// allocate dkp itemvalue bought to all raiders
 		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 						SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $zerosumdkp  .  ',
@@ -1263,18 +1263,18 @@ class PointsController  extends \bbdkp\Admin
 						WHERE member_dkpid = ' . (int) $this->dkpsys_id  . '
 					  	AND ' . $db->sql_in_set('member_id', array_keys($raiddetail->raid_details) ) ;
 		$db->sql_query ( $sql );
-	
+
 		// give rest value to buyer or guildbank
-		$restvalue = $itemvalue - ($zerosumdkp * count($raiddetail->raid_details)); 
+		$restvalue = $itemvalue - ($zerosumdkp * count($raiddetail->raid_details));
 		if($restvalue != 0 )
 		{
-	
+
 			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
 							SET zerosum_bonus = zerosum_bonus + ' . (float) $restvalue  .  '
 							WHERE raid_id = ' . (int) $raid_id . '
 						  	AND member_id = ' . $looter_id;
 			$db->sql_query ( $sql );
-	
+
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 							SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $restvalue  .  ',
 							member_earned = member_earned + ' . (float) $restvalue  .  '
@@ -1284,7 +1284,7 @@ class PointsController  extends \bbdkp\Admin
 		}
 		return true;
 	}
-	
+
 	/**
 	 * delete zero sum points for this item
 	 * @param \bbdkp\controller\loot\Loot $Loot
@@ -1292,24 +1292,24 @@ class PointsController  extends \bbdkp\Admin
 	 */
 	public function zero_balance_delete(\bbdkp\controller\loot\Loot $Loot)
 	{
-		global $db; 
+		global $db;
 		if ($Loot->item_zs == 0)
 		{
 			return false;
 		}
-		
+
 		//get raid detail of this loot
 		$raiddetail = new \bbdkp\controller\raids\Raiddetail($Loot->raid_id);
 		$zerosumdkp = round( $Loot->item_value / max(1, count($raiddetail->raid_details)) , 2);
-		
+
 		// decrease values raid detail table
 		$sql = 'UPDATE ' . RAID_DETAIL_TABLE . '
 						SET zerosum_bonus = zerosum_bonus - ' . (float) $zerosumdkp . '
 						WHERE raid_id = ' . (int) $Loot->raid_id . ' AND ' .  $db->sql_in_set('member_id',  array_keys($raiddetail->raid_details))   ;
 		$db->sql_query ( $sql );
-		
-		// @note : this should be decay-synchronised again  
-		
+
+		// @note : this should be decay-synchronised again
+
 		// deallocate dkp zero sum value bought to all raiders
 		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 						SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $zerosumdkp  .  ',
@@ -1317,8 +1317,8 @@ class PointsController  extends \bbdkp\Admin
 						WHERE member_dkpid = ' . (int) $Loot->dkpid . '
 					  	AND ' . $db->sql_in_set('member_id', array_keys($raiddetail->raid_details) ) ;
 		$db->sql_query ( $sql );
-		
-		
+
+
 		// give rest value to buyer or guildbank
 		$restvalue = $Loot->item_value - ($zerosumdkp *  max(1, count($raiddetail->raid_details)) );
 		if($restvalue != 0 )
@@ -1328,7 +1328,7 @@ class PointsController  extends \bbdkp\Admin
 							WHERE raid_id = ' . (int) $Loot->raid_id. '
 						  	AND member_id = ' . $Loot->member_id ;
 			$db->sql_query ( $sql );
-			
+
 			//remove the rest value from dkp table
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 							SET member_zerosum_bonus = member_zerosum_bonus - ' . (float) $restvalue  .  ',
@@ -1340,17 +1340,17 @@ class PointsController  extends \bbdkp\Admin
 
 		return true;
 	}
-	
-	
+
+
 	/**
-	 * syncchronise zero sum 
+	 * syncchronise zero sum
 	 * @param int $mode 0 or 1 (0= set to 0, 1="resynchronise")
 	 * @return boolean|number
 	 */
 	public function sync_zerosum($mode)
 	{
 		global $user, $db, $config;
-	
+
 		switch ($mode)
 		{
 			case 0:
@@ -1358,7 +1358,7 @@ class PointsController  extends \bbdkp\Admin
 				//  update raid detail table to 0
 				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET zerosum_bonus = 0 ' ;
 				$db->sql_query ( $sql );
-	
+
 				// update dkp account
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_zerosum_bonus = 0, member_earned = member_raid_value + member_time_bonus';
 				$db->sql_query ( $sql );
@@ -1367,29 +1367,29 @@ class PointsController  extends \bbdkp\Admin
 						'header' 		=> 'L_ACTION_ZSYNC',
 						'L_USER' 		=>  $user->data['user_id'],
 						'L_USERCOLOUR' 	=>  $user->data['user_colour'],
-							
+
 				);
 				$this->log_insert ( array (
 						'log_type' 		=> $log_action ['header'],
 						'log_action' 	=> $log_action ) );
-	
+
 				\trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_DELETED']) , E_USER_NOTICE );
-	
+
 				return true;
 				break;
-	
+
 			case 1:
 				// redistribute
-	
+
 				//  update raid detail table to 0
 				$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET zerosum_bonus = 0 ' ;
 				$db->sql_query ( $sql );
-	
+
 				// update dkp account
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_zerosum_bonus = 0, member_earned = member_raid_value + member_time_bonus';
 				$db->sql_query ( $sql );
-	
-	
+
+
 				// loop raids having items
 				$sql = 'SELECT e.event_dkpid, r.raid_id FROM '.
 						RAIDS_TABLE. ' r, ' .
@@ -1407,7 +1407,7 @@ class PointsController  extends \bbdkp\Admin
 					$countraids++;
 				}
 				$db->sql_freeresult ( $result);
-	
+
 				//build an array
 				foreach($raids as $raid_id => $raid)
 				{
@@ -1423,9 +1423,9 @@ class PointsController  extends \bbdkp\Admin
 						$numraiders++;
 					}
 					$raids[$raid_id]['numraiders'] = $numraiders;
-	
+
 					$db->sql_freeresult ( $result);
-	
+
 					$sql = 'SELECT member_id, item_value, item_id FROM ' . RAID_ITEMS_TABLE . ' WHERE raid_id = ' . $raid_id;
 					$result = $db->sql_query($sql);
 					$numbuyers=0;
@@ -1433,22 +1433,22 @@ class PointsController  extends \bbdkp\Admin
 					{
 						$raids[$raid_id]['item'][$row['item_id']]['buyer'] = $row['member_id'];
 						$raids[$raid_id]['item'][$row['item_id']]['item_value'] = $row['item_value'];
-	
+
 						$distributed = round($row['item_value'] / max(1, $numraiders), 2);
 						$raids[$raid_id]['item'][$row['item_id']]['distributed_value']= $distributed;
-	
+
 						// rest of division
 						$restvalue = $row['item_value'] - ($numraiders * $distributed);
 						$raids[$raid_id]['item'][$row['item_id']]['rest_value'] = $restvalue;
-	
+
 						$numbuyers++;
-	
+
 					}
-	
+
 					$db->sql_freeresult ( $result);
 					$raids[$raid_id]['numbuyers'] = $numbuyers;
 				}
-	
+
 				/*
 				 * now process the raid array with following structure
 				 "$raids[1]"	Array [5]
@@ -1472,7 +1472,7 @@ class PointsController  extends \bbdkp\Admin
 				rest_value	(double) 0
 				numbuyers	(int) 2
 				*/
-	
+
 				$itemcount = 0;
 				$accountupdates=0;
 				foreach($raids as $raid_id => $raid)
@@ -1487,7 +1487,7 @@ class PointsController  extends \bbdkp\Admin
 								WHERE raid_id = ' . (int) $raid_id . ' AND ' . $db->sql_in_set('member_id', $raid['raiders']);
 						$db->sql_query ( $sql );
 						$itemcount ++;
-		
+
 						// update their dkp account aswell
 						$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 							SET member_zerosum_bonus = member_zerosum_bonus + ' . (float) $item['distributed_value']  .  ',
@@ -1495,7 +1495,7 @@ class PointsController  extends \bbdkp\Admin
 										WHERE member_dkpid = ' . (int) $raid['dkpid']  . '
 							  	AND ' . $db->sql_in_set('member_id', $raid['raiders']   ) ;
 					  	$db->sql_query ( $sql );
-										  	
+
 					  	// give rest value to the buyer in raiddetail or to the guild bank
 					  	if($item['rest_value']!=0 )
 					  	{
@@ -1514,7 +1514,7 @@ class PointsController  extends \bbdkp\Admin
 					  	}
 					}
 				}
-				
+
 				$log_action = array (
 						'header' 		=> 'L_ACTION_ZSYNC',
 						'L_USER' 		=>  $user->data['user_id'],
@@ -1523,15 +1523,15 @@ class PointsController  extends \bbdkp\Admin
 				$this->log_insert ( array (
 						'log_type' 		=> $log_action ['header'],
 						'log_action' 	=> $log_action ) );
-	
+
 				\trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_SUCCESS'], $itemcount, $accountupdates ) , E_USER_NOTICE );
 				return $countraids;
 				break;
 		}
-	
+
 	}
-	
-	
+
+
 	/**
 	 * resynchronises the DKP points table with the adjustments, raids, items.
 	 *
@@ -1540,13 +1540,13 @@ class PointsController  extends \bbdkp\Admin
 	{
 		global $user, $db, $phpbb_admin_path, $phpEx, $config;
 		$link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys" ) . '"><h3>'. $user->lang['RETURN_DKPPOOLINDEX'].'</h3></a>';
-	
+
 		/* start transaction */
-	
+
 		/* reinintialise the dkp points table */
 		$sql = "DELETE from " . MEMBER_DKP_TABLE;
 		$db->sql_query ($sql);
-	
+
 		$db->sql_transaction('begin');
 		/* select adjustments */
 		$sql = "SELECT adjustment_dkpid, member_id, SUM(adjustment_value) AS adjustment_value
@@ -1556,7 +1556,7 @@ class PointsController  extends \bbdkp\Admin
 		$result = $db->sql_query ($sql);
 		while ($row = $db->sql_fetchrow ( $result))
 		{
-	
+
 			$query = $db->sql_build_array('INSERT', array(
 					'member_dkpid'     	   => $row['adjustment_dkpid'],
 					'member_id'           =>  $row['member_id'],
@@ -1571,24 +1571,24 @@ class PointsController  extends \bbdkp\Admin
 			$db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
 		}
 		$db->sql_freeresult ( $result);
-	
+
 		/* select raids */
 		$sql = 'SELECT e.event_dkpid, d.member_id FROM '.
 				EVENTS_TABLE . ' e
 			INNER JOIN ' . RAIDS_TABLE. ' r ON e.event_id = r.event_id
 			INNER JOIN ' . RAID_DETAIL_TABLE . ' d ON r.raid_id = d.raid_id
 			GROUP BY e.event_dkpid, d.member_id';
-	
+
 		$dkpcorr = 0;
 		$dkpadded = 0;
 		$dkpspentcorr = 0;
-			
+
 		$result0 = $db->sql_query ($sql);
 		while ($row = $db->sql_fetchrow ( $result0 ))
 		{
 			$member_id = $row['member_id'];
 			$event_dkpid = $row['event_dkpid'];
-	
+
 			/* select raid values */
 			$sql = 'SELECT
 				MIN(r.raid_start) as first_raid,
@@ -1615,13 +1615,13 @@ class PointsController  extends \bbdkp\Admin
 				$zerosum_bonus = $rowd['zerosum_bonus'];
 			}
 			$db->sql_freeresult ( $result);
-				
+
 			$sql =  'SELECT count(*) as count FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . '
 			AND	member_dkpid = ' . $event_dkpid;
 			$result = $db->sql_query ($sql);
 			$count = $db->sql_fetchfield('count', false, $result);
 			$db->sql_freeresult ( $result);
-				
+
 			//this will be zero at first loop
 			if($count ==1)
 			{
@@ -1640,7 +1640,7 @@ class PointsController  extends \bbdkp\Admin
 					$earned_accounted = $rowe['member_earned'];
 				}
 				$db->sql_freeresult ( $result);
-					
+
 				if(( $first_raid != $first_raid_accounted) ||
 						($last_raid != $last_raid_accounted) ||
 						($raidcount != $raidcount_accounted) ||
@@ -1650,7 +1650,7 @@ class PointsController  extends \bbdkp\Admin
 						($zerosum_bonus != $zerosum_bonus_accounted))
 				{
 					$dkpcorr +=1;
-						
+
 					$data = array(
 							'member_firstraid'      => $first_raid,
 							'member_lastraid'       => $last_raid,
@@ -1661,13 +1661,13 @@ class PointsController  extends \bbdkp\Admin
 							'member_zerosum_bonus'	=> $zerosum_bonus,
 							'member_earned'     	=> $raid_value+$time_bonus+$zerosum_bonus-$raid_decay,
 					);
-						
+
 					$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 					SET ' . $db->sql_build_array('UPDATE', $data) .
 						' WHERE member_id = ' . $member_id . '
 					AND	member_dkpid = ' . $event_dkpid;
 					$db->sql_query ($sql);
-						
+
 				}
 			}
 			else
@@ -1676,7 +1676,7 @@ class PointsController  extends \bbdkp\Admin
 				$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . '
 				AND	member_dkpid = ' . $event_dkpid;
 				$db->sql_query ($sql);
-	
+
 				$data = array(
 						'member_dkpid'      	=> $event_dkpid,
 						'member_id'      		=> $member_id,
@@ -1691,23 +1691,23 @@ class PointsController  extends \bbdkp\Admin
 						'member_earned'     	=> $raid_value+$time_bonus+$zerosum_bonus-$raid_decay,
 				);
 				$dkpadded +=1;
-	
+
 				$sql = 'INSERT INTO ' . MEMBER_DKP_TABLE . $db->sql_build_array('INSERT', $data);
 				$db->sql_query ($sql);
-	
+
 			}
 		}
 		$db->sql_freeresult ( $result0);
-			
+
 		/* select loot */
 		$sql = 'SELECT e.event_dkpid, i.member_id FROM '.
 				EVENTS_TABLE . ' e
 				INNER JOIN ' . RAIDS_TABLE. ' r ON e.event_id = r.event_id
 				INNER JOIN ' . RAID_ITEMS_TABLE . ' i ON r.raid_id = i.raid_id
 				GROUP BY e.event_dkpid, i.member_id' ;
-	
+
 		$result0 = $db->sql_query ($sql);
-	
+
 		while ($row = $db->sql_fetchrow ( $result0 ))
 		{
 			$member_id = $row['member_id'];
@@ -1730,7 +1730,7 @@ class PointsController  extends \bbdkp\Admin
 				$item_decay= $rowd['item_decay'];
 			}
 			$db->sql_freeresult ( $result);
-				
+
 			$sql =  'SELECT count(*) as count FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . $member_id . '
 			AND	member_dkpid = ' . $event_dkpid;
 			$result = $db->sql_query ($sql);
@@ -1756,22 +1756,22 @@ class PointsController  extends \bbdkp\Admin
 							'member_spent'     		=> $item_value,
 							'member_item_decay'     => $item_decay,
 					);
-						
+
 					$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 					SET ' . $db->sql_build_array('UPDATE', $data) .
 						' WHERE member_id = ' . $member_id . '
 					AND	member_dkpid = ' . $event_dkpid;
 					$db->sql_query ($sql);
-	
-						
+
+
 				}
 			}
 			// case count=0 is not possible
 		}
 		$db->sql_freeresult ( $result0);
-	
+
 		$db->sql_transaction('commit');
-	
+
 		$log_action = array (
 				'header' 	=> 'L_ACTION_DKPSYNC',
 				'L_USER' 		=>  $user->data['user_id'],
@@ -1782,15 +1782,15 @@ class PointsController  extends \bbdkp\Admin
 		$this->log_insert ( array (
 				'log_type' 		=> $log_action ['header'],
 				'log_action' 	=> $log_action ) );
-	
-		return ($dkpcorr  + $dkpspentcorr + $dkpadded); 
-	
+
+		return ($dkpcorr  + $dkpspentcorr + $dkpadded);
+
 	}
-	
+
 	/**
 	 * Recalculates and updates adjustment decay
 	 * @param $mode 1 for recalculating, 0 for setting decay to zero.
-	 * @param string $origin 
+	 * @param string $origin
 	 */
 	public function sync_adjdecay ($mode, $origin = '')
 	{
@@ -1800,16 +1800,16 @@ class PointsController  extends \bbdkp\Admin
 			case 0:
 				//  Decay = OFF : set all decay to 0
 				//  update item detail to new decay value
-	
+
 				$db->sql_transaction('begin');
-	
+
 				$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET adj_decay = 0 ';
 				$db->sql_query($sql);
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET adj_decay = 0 ';
 				$db->sql_query($sql);
-	
+
 				$db->sql_transaction('commit');
-	
+
 				if ($origin == 'cron')
 				{
 					$origin = $user->lang['DECAYCRON'];
@@ -1833,11 +1833,11 @@ class PointsController  extends \bbdkp\Admin
 				break;
 		}
 	}
-		
+
 	/**
 	 * calculates decay on epoch timedifference (seconds) and earned
 	 * we decay the sum of earned ( = raid value + time bonus + zerosumpoints)
-	 * 
+	 *
 	 * @param float $value = the value to decay
 	 * @param int $timediff   = diff in seconds since raidstart
 	 * @param int $mode  1 for raid, 2 for items
@@ -1858,7 +1858,7 @@ class PointsController  extends \bbdkp\Admin
 				$i = (float) $config['bbdkp_itemdecaypct']/100;
 				break;
 		}
-	
+
 		// get decay frequency
 		$freq = $config['bbdkp_decayfrequency'];
 		if ($freq==0)
@@ -1866,7 +1866,7 @@ class PointsController  extends \bbdkp\Admin
 			//frequency can't be 0. throw error
 			trigger_error($user->lang['FV_FREQUENCY_NOTZERO'],E_USER_WARNING );
 		}
-	
+
 		//pick decay frequency type (0=days, 1=weeks, 2=months) and convert timediff to that
 		$t=0;
 		switch ($config['bbdkp_decayfreqtype'])
@@ -1884,22 +1884,22 @@ class PointsController  extends \bbdkp\Admin
 				$t = (float) $timediff / (86400*30.44);
 				break;
 		}
-	
+
 		// take the integer part of time and interval division base 10,
 		// since we only decay after a set interval
 		$n = intval($t/$freq, 10);
-	
+
 		//calculate rounded raid decay, defaults to rounds half up PHP_ROUND_HALF_UP, so 9.495 becomes 9.50
 		$decay = round($value * (1 - pow(1-$i, $n)), 2);
-	
+
 		return array($decay, $n) ;
-	
+
 	}
-	
+
 	/**
 	 * Recalculates and updates decay
 	 * loops all raids - caution this may run a long time
-	 * 
+	 *
 	 * @param int $mode 1 for recalculating, 0 for setting decay to zero.
 	 * @param string $origin
 	 * @return boolean|number
@@ -2074,8 +2074,8 @@ class PointsController  extends \bbdkp\Admin
 
 
 	}
-	
-	
+
+
 	/**
 	 * Transfer points from member a to b
 	 * @param int $member_from
@@ -2085,13 +2085,13 @@ class PointsController  extends \bbdkp\Admin
 	 */
 	public function transfer_points( $member_from, $member_to, $dkpsys_id, $link)
 	{
-		global $user, $db; 
+		global $user, $db;
 
-		//declare transfer array 
+		//declare transfer array
 		$transfer = array ();
-		$member1= new \bbdkp\controller\members\Members($member_from); 
+		$member1= new \bbdkp\controller\members\Members($member_from);
 		$member2= new \bbdkp\controller\members\Members($member_to);
-		
+
 		/* 1) collect adjustments to transfer */
 		$sql = 'SELECT
 				sum(adjustment_value) as adjustments,
@@ -2101,15 +2101,15 @@ class PointsController  extends \bbdkp\Admin
 				AND adjustment_dkpid = ' . $dkpsys_id . '
 				GROUP BY adjustment_dkpid';
 		$result = $db->sql_query ( $sql, 0 );
-			
+
 		while ( $row = $db->sql_fetchrow ( $result ) )
 		{
 			$transfer ['adjustments'] = ( float ) $row ['adjustments'];
 			$transfer ['adj_decay'] = ( float ) $row ['adj_decay'];
 		}
 		$db->sql_freeresult ( $result );
-		
-		
+
+
 		/* 2) collect item cost, decay and zspoints to transfer  */
 		$sql = 'SELECT sum(i.item_value) as itemvalue,
 				sum(i.item_decay) as item_decay,
@@ -2119,7 +2119,7 @@ class PointsController  extends \bbdkp\Admin
 		     			and e.event_dkpid = ' . $dkpsys_id . '
 		     			and r.raid_id=i.raid_id
 		     			and i.member_id = ' . $member_from . '
-		
+
 				GROUP BY e.event_dkpid';
 		$result = $db->sql_query ( $sql, 0 );
 		while ( $row = $db->sql_fetchrow ( $result ) )
@@ -2129,8 +2129,8 @@ class PointsController  extends \bbdkp\Admin
 			$transfer ['item_zs'] = ( float ) $row ['item_zs'];
 		}
 		$db->sql_freeresult ( $result );
-		
-		
+
+
 		/* 3) calculate points earned, raidcount, first, last raiddate by dkp pool to transfer to new dkp account
 		 exclude raids where the member_to was also participating to avoid double counting raids */
 		$sql = 'SELECT sum(ra.raid_value) as raidvalue,
@@ -2141,7 +2141,7 @@ class PointsController  extends \bbdkp\Admin
 						   min(r.raid_start) as minraiddate,
 						   count(ra.member_id) as raidcount,
 						   e.event_dkpid
-		
+
 				FROM ' . RAID_DETAIL_TABLE . ' ra,  ' . RAIDS_TABLE . ' r,  ' . EVENTS_TABLE . ' e
 		     			WHERE e.event_id = r.event_id
 		     			AND r.raid_id = ra.raid_id
@@ -2150,7 +2150,7 @@ class PointsController  extends \bbdkp\Admin
 		     			AND r.raid_id not IN( select raid_id from ' . RAID_DETAIL_TABLE . ' where member_id = ' . $member_to . ')
 				GROUP BY e.event_dkpid';
 		$result = $db->sql_query ( $sql, 0 );
-			
+
 		while ( $row = $db->sql_fetchrow ( $result ) )
 		{
 			$transfer ['raidvalue'] = ( float ) $row ['raidvalue'];
@@ -2162,28 +2162,28 @@ class PointsController  extends \bbdkp\Admin
 			$transfer ['raidcount'] = ( int ) $row ['raidcount'];
 		}
 		$db->sql_freeresult ( $result );
-		
-		
-	
+
+
+
 		// begin transaction
-		
+
 		$db->sql_transaction ( 'begin' );
-			
+
 		/* 4) now update dkp table */
-			
+
 		// check if pool record exists in dkp table for $member_to
-		
-		
+
+
 		$sql = 'SELECT count(*) as memberpoolcount FROM ' . MEMBER_DKP_TABLE . '
 	            WHERE member_id = ' . $member_to . ' and member_dkpid = ' . $dkpsys_id;
 		$result = $db->sql_query ( $sql, 0 );
 		$total_rowto = ( int ) $db->sql_fetchfield ( 'memberpoolcount' );
 		$db->sql_freeresult ( $result );
-			
+
 		if ($total_rowto == 1)
 		{
 			// target account exists so update row
-		
+
 			$sql = 'SELECT member_raid_value, member_time_bonus, member_zerosum_bonus, member_earned, member_raid_decay,
 					member_spent, member_item_decay, member_adjustment, member_firstraid, member_lastraid, member_raidcount , adj_decay
 		            FROM ' . MEMBER_DKP_TABLE . ' WHERE member_id = ' . ( int ) $member_to . ' and member_dkpid = ' . $dkpsys_id;
@@ -2202,7 +2202,7 @@ class PointsController  extends \bbdkp\Admin
 				$oldmember_firstraid = ( int ) $row ['member_firstraid'];
 				$oldmember_lastraid = ( int ) $row ['member_lastraid'];
 				$oldmember_raidcount = ( int ) $row ['member_raidcount'];
-					
+
 				if (isset ( $transfer ['minraiddate'] ))
 				{
 					$newfirstraid = ($oldmember_firstraid <= $transfer ['minraiddate']) ? $oldmember_firstraid : $transfer ['minraiddate'];
@@ -2211,7 +2211,7 @@ class PointsController  extends \bbdkp\Admin
 				{
 					$newfirstraid = $oldmember_firstraid;
 				}
-					
+
 				if (isset ( $transfer ['maxraiddate'] ))
 				{
 					$newlastraid = ($oldmember_lastraid <= $transfer ['maxraiddate']) ? $oldmember_lastraid : $transfer ['maxraiddate'];
@@ -2220,10 +2220,10 @@ class PointsController  extends \bbdkp\Admin
 				{
 					$newlastraid = $oldmember_lastraid;
 				}
-		
+
 			}
 			$db->sql_freeresult ( $result );
-		
+
 			//build update query
 			$query = $db->sql_build_array ( 'UPDATE', array (
 					'member_raid_value' => $oldmember_raid_value + (isset ( $transfer ['member_raid_value'] ) ? $transfer ['member_raid_value'] : 0.00),
@@ -2238,17 +2238,17 @@ class PointsController  extends \bbdkp\Admin
 					'member_firstraid' => $newfirstraid,
 					'member_lastraid' => $newlastraid,
 					'member_raidcount' => $oldmember_raidcount + (isset ( $transfer ['raidcount'] ) ? $transfer ['raidcount'] : 0) ) );
-			
+
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . '
 					WHERE member_id = ' . $member_to . '
 					AND member_dkpid = ' . $dkpsys_id;
 			$db->sql_query ( $sql );
-				
+
 		}
 		elseif ($total_rowto == 0)
 		{
 			//insert new account
-		
+
 			$query = $db->sql_build_array ( 'INSERT', array (
 					'member_dkpid' => $dkpsys_id,
 					'member_id' => $member_to,
@@ -2268,10 +2268,10 @@ class PointsController  extends \bbdkp\Admin
 			$sql = 'INSERT INTO ' . MEMBER_DKP_TABLE . $query;
 			$db->sql_query ( $sql );
 		}
-		
-		
+
+
 		// set old member account to 0
-		
+
 		$query = $db->sql_build_array ( 'UPDATE', array (
 				'member_raid_value' => 0.00,
 				'member_time_bonus' => 0.00,
@@ -2285,19 +2285,19 @@ class PointsController  extends \bbdkp\Admin
 				'member_firstraid' => '0',
 				'member_lastraid' => '0',
 				'member_raidcount' => 0 ) );
-			
+
 		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . '
 				 WHERE member_id = ' . $member_from . '
 				 AND member_dkpid = ' . $dkpsys_id;
 		$db->sql_query ( $sql );
-		
+
 		/*
 		// delete old account
 		$sql = 'DELETE FROM ' . MEMBER_DKP_TABLE . '
 						WHERE member_id = '. (int) $member_from  . ' and member_dkpid = ' . $dkpsys_id;
 		$db->sql_query($sql);
 		*/
-			
+
 		/* 5) transfer old attendee name to new member */
 		// if $member_from participated in a raid the $member_to did too, delete the entry. (unique key)
 		$sql_array = array (
@@ -2310,7 +2310,7 @@ class PointsController  extends \bbdkp\Admin
 					AND e.event_id = r.event_id
 					AND r.raid_id = rd.raid_id
 					AND rd.member_id = ' . $member_from, 'ORDER_BY' => 'raid_id' );
-		
+
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query ( $sql, 0 );
 		$raid_ids = array ();
@@ -2318,50 +2318,50 @@ class PointsController  extends \bbdkp\Admin
 		{
 			$raid_ids [] = $row ['raid_id'];
 		}
-			
+
 		if (count ( $raid_ids ) > 0)
 		{
 			// 6) delete from these raids all member b if they also participated (otherwise you get unique key violation)
 			$sql = 'DELETE FROM ' . RAID_DETAIL_TABLE . ' WHERE member_id =' . $member_to . '
 					AND ' . $db->sql_in_set ( 'raid_id', $raid_ids, true, true );
 			$db->sql_query ( $sql );
-		
+
 			// 7) now update the memberid to b
 			$sql = 'UPDATE ' . RAID_DETAIL_TABLE . ' SET member_id =' . $member_to . ' WHERE member_id=' . $member_from . '
 					AND ' . $db->sql_in_set ( 'raid_id', $raid_ids, true, true );
 			$db->sql_query ( $sql );
-		
+
 			/* 8) transfer loot to new owner */
 			$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET member_id =' . $member_to . ' WHERE member_id=' . $member_from . '
 					AND ' . $db->sql_in_set ( 'raid_id', $raid_ids, true, true );
 			$db->sql_query ( $sql );
 		}
-		
+
 		// 9) update the adjustments table for this dkpid
 		$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . ' SET member_id=' . $member_to . ' WHERE member_id= ' . $member_from . '
 					AND adjustment_dkpid = ' . $dkpsys_id;
 		$db->sql_query ( $sql );
-		
+
 
 		$db->sql_transaction ( 'commit' );
-			
-	
+
+
 		//log the action
-		
+
 		$log_action = array (
 				'header' => 'L_ACTION_HISTORY_TRANSFER',
 				'L_FROM' => $member1->member_name,
 				'L_TO' => $member2->member_name );
-			
+
 		$this->log_insert ( array (
 				'log_type' => $log_action ['header'],
 				'log_action' => $log_action ) );
-			
+
 		$success_message = sprintf ( $user->lang ['ADMIN_TRANSFER_HISTORY_SUCCESS'],
 				$member1->member_name, $member2->member_name, $member1->member_name, $dkpsys_id );
 		trigger_error ( $success_message . $link );
-		
-			
+
+
 	}
 
 

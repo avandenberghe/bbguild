@@ -1,6 +1,7 @@
 <?php
 /**
  * Adjustments class file
+ *
  * @package bbdkp
  * @link 		http://www.bbdkp.com
  * @author 		Sajaki@gmail.com
@@ -21,26 +22,25 @@ if (! defined('IN_PHPBB'))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require ("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 
 /**
- * Adjust
- * 
- * phpbb_bbdkp_adjustments Class
- * 
- *   @package bbdkp
+ *
+ * Adjustments Class
+ *
+ * @package bbdkp
  */
-class Adjust extends \bbdkp\Admin
+class Adjust extends \bbdkp\admin\Admin
 {
 	/**
 	 * Pk adjustmnent identifier
 	 * @var int
 	 */
 	public $adjustment_id;
-	
+
 	/**
 	 * id of member to adjust
 	 * @var int
@@ -56,7 +56,7 @@ class Adjust extends \bbdkp\Admin
 	 * @var int
 	 */
 	public $adjustment_dkpid = 0;
-	
+
 	/**
 	 * value of the adjustment
 	 * @var float signed
@@ -112,7 +112,7 @@ class Adjust extends \bbdkp\Admin
 	 * @var unknown
 	 */
 	public $dkpsys;
-	
+
 	/**
 	 * Adjustment class constructor
 	 * @param number $dkpsys
@@ -120,11 +120,11 @@ class Adjust extends \bbdkp\Admin
 	function __construct($dkpsys = 0)
 	{
 		global $db;
-		parent::__construct(); 
-		
-		// get dkp pools that are active. 
+		parent::__construct();
+
+		// get dkp pools that are active.
 		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
-            FROM ' . DKPSYS_TABLE . " a  
+            FROM ' . DKPSYS_TABLE . " a
 			WHERE a.dkpsys_status = 'Y' ";
 		$result = $db->sql_query($sql);
 		$this->dkpsys = array();
@@ -137,7 +137,7 @@ class Adjust extends \bbdkp\Admin
 		}
 		$db->sql_freeresult($result);
 	}
-	
+
 	/**
 	 * add a new dkp adjustment
 	 */
@@ -171,7 +171,7 @@ class Adjust extends \bbdkp\Admin
 		}
 		elseif ($membercount == 0)
 		{
-			
+
 			$query = $db->sql_build_array('INSERT', array(
 					'member_dkpid' => $this->adjustment_dkpid ,
 					'member_id' => $this->member_id ,
@@ -193,7 +193,7 @@ class Adjust extends \bbdkp\Admin
 				'adjustment_reason' => $this->adjustment_reason ,
 				'adjustment_group_key' => $this->adjustment_groupkey ,
 				'can_decay' => $this->can_decay ,
-				'adj_decay' => $this->adj_decay, 
+				'adj_decay' => $this->adj_decay,
 				'adjustment_added_by' => $user->data['username']));
 
 		$db->sql_query('INSERT INTO ' . ADJUSTMENTS_TABLE . $query);
@@ -237,8 +237,8 @@ class Adjust extends \bbdkp\Admin
 			trigger_error($user->lang['ERROR_INVALID_ADJUSTMENT'], E_USER_NOTICE);
 		}
 		$db->sql_freeresult($result);
-		
-		$this->adjustment_id = $row['adjustment_id']; 
+
+		$this->adjustment_id = $row['adjustment_id'];
 		$this->adjustment_value = $row['adjustment_value'];
 		$this->adjustment_dkpid = $row['adjustment_dkpid'];
 		$this->adjustment_date = $row['adjustment_date'];
@@ -251,23 +251,23 @@ class Adjust extends \bbdkp\Admin
 		$this->adj_decay = $row['adj_decay'];
 		$this->decay_time = $row['decay_time'];
 		$this->can_decay = $row['can_decay'];
-		
-		
+
+
 		$members = array();
 		$sql = 'SELECT member_id from ' . ADJUSTMENTS_TABLE . " WHERE adjustment_group_key = '" . $this->adjustment_groupkey . "'";
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$members[] = $row['member_id']; 
+			$members[] = $row['member_id'];
 		}
-		
+
 		$this->members_samegroupkey = $members;
 		unset($members);
 		return $this;
 
 	}
 
-	
+
 	/**
 	 * deletes adjustment
 	 */
@@ -276,37 +276,37 @@ class Adjust extends \bbdkp\Admin
 		global $db;
 
 		$db->sql_transaction ( 'begin' );
-		
+
 		$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . ' WHERE adjustment_id = ' . $this->adjustment_id;
 		$db->sql_query($sql);
-		
+
 		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 			SET member_adjustment = member_adjustment - ' . (float) $this->adjustment_value . ',
 			adj_decay = adj_decay - ' . (float) $this->adj_decay . '
-			WHERE  member_dkpid = ' . $this->adjustment_dkpid . ' 
-			AND member_id = ' . $this->member_id; 
-		
+			WHERE  member_dkpid = ' . $this->adjustment_dkpid . '
+			AND member_id = ' . $this->member_id;
+
 		$db->sql_query($sql);
-		
+
 		$db->sql_transaction('commit');
 	}
-	
-	
+
+
 	/**
 	 * deletes all adjustments foer one member
 	 */
 	function delete_memberadjustments()
 	{
 		global $db;
-	
+
 		$sql = 'DELETE FROM ' . ADJUSTMENTS_TABLE . ' WHERE member_id = ' . $this->member_id . ' AND adjustment_dkpid  = ' .  $this->adjustment_dkpid;
 		$db->sql_query($sql);
-	
+
 	}
-	
+
 	/**
 	 * returns list of adjustments to admin page
-	 * 
+	 *
 	 * @param string $order
 	 * @param int $member_id
 	 * @param int $start
@@ -342,12 +342,12 @@ class Adjust extends \bbdkp\Admin
 		{
 			$sql_array['WHERE'] .= ' AND a.member_id = ' . $member_id;
 		}
-		
+
 		if ($guild_id != 0)
 		{
 			$sql_array['WHERE'] .= ' AND l.member_guild_id = ' . $guild_id;
 		}
-		
+
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		if ($start > 0)
 		{
@@ -398,10 +398,10 @@ class Adjust extends \bbdkp\Admin
 		$result = $db->sql_query($sql);
 		return $result;
 	}
-	
+
 
 	/**
-	 * 
+	 *
 	 * function to decay one specific adjustment
 	 * @param int $adjust_id
 	 * @return boolean
@@ -410,11 +410,11 @@ class Adjust extends \bbdkp\Admin
 	{
 		global $user, $config, $db;
 		$oldadj = $this->get($adjust_id);
-	
+
 		$now = getdate();
 		$timediff = mktime($now['hours'], $now['minutes'], $now['seconds'], $now['mon'], $now['mday'], $now['year']) - $this->adjustment_date;
 		$i = (float) $config['bbdkp_adjdecaypct'] / 100;
-	
+
 		// get decay frequency
 		$freq = $config['bbdkp_decayfrequency'];
 		if ($freq == 0)
@@ -422,7 +422,7 @@ class Adjust extends \bbdkp\Admin
 			//frequency can't be 0. throw error
 			trigger_error($user->lang['FV_FREQUENCY_NOTZERO'], E_USER_WARNING);
 		}
-	
+
 		//pick decay frequency type (0=days, 1=weeks, 2=months) and convert timediff to that
 		$t = 0;
 		switch ($config['bbdkp_decayfreqtype'])
@@ -440,39 +440,39 @@ class Adjust extends \bbdkp\Admin
 				$t = (float) $timediff / (86400 * 30.44);
 				break;
 		}
-	
+
 		// take the integer part of time and interval division base 10,
 		// since we only decay after a set interval
 		$n = intval($t / $freq, 10);
-	
+
 		//calculate rounded adjustment decay, defaults to rounds half up PHP_ROUND_HALF_UP, so 9.495 becomes 9.50
 		$this->adj_decay = round($this->adjustment_value * (1 - pow(1 - $i, $n)), 2);
-	
+
 		$db->sql_transaction ( 'begin' );
-		
+
 		// update adj detail to new decay value
 		$sql = 'UPDATE ' . ADJUSTMENTS_TABLE . '
 			SET adj_decay = ' . $this->adj_decay . ", decay_time = " . $n . "
 			WHERE adjustment_id = " . (int) $adjust_id;
 		$db->sql_query($sql);
-	
+
 		// update dkp account, deduct old, add new decay
 		$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET adj_decay = adj_decay - '  . $oldadj->adj_decay . ' + ' . $this->adj_decay . "
 			WHERE member_id = " . (int) $this->member_id . '
 			and member_dkpid = ' . $this->adjustment_dkpid;
-	
+
 		$db->sql_query($sql);
-		
+
 		$db->sql_transaction('commit');
-	
+
 		unset ($oldadj);
-	
+
 		return true;
 	}
-	
 
 
-	
-	
+
+
+
 }
 ?>

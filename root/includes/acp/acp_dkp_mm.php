@@ -25,9 +25,9 @@ if (! defined('EMED_BBDKP'))
 }
 
 // Include the base class
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 
 // include ranks class
@@ -53,7 +53,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
  *
  *   @package bbdkp
  */
-class acp_dkp_mm extends \bbdkp\Admin
+class acp_dkp_mm extends \bbdkp\admin\Admin
 {
 	/**
 	 * instance of member class
@@ -212,7 +212,7 @@ class acp_dkp_mm extends \bbdkp\Admin
 
 				// fill popup and set selected to default selection
 				$Guild->Getguild();
-				$guildlist = $Guild->guildlist();
+				$guildlist = $Guild->guildlist(1);
 				foreach ($guildlist as $g)
 				{
 					$template->assign_block_vars('guild_row', array(

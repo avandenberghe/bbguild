@@ -1,7 +1,6 @@
 <?php
 /**
  * View class
- *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -9,7 +8,7 @@
  * @version 1.3.0
  *
  */
-namespace bbdkp;
+namespace bbdkp\views;
 /**
  * @ignore
  */
@@ -21,9 +20,9 @@ if (!defined('IN_PHPBB'))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 
 /**
@@ -31,7 +30,7 @@ if (!class_exists('\bbdkp\Admin'))
  *   @package bbdkp
  *
  */
-class views extends \bbdkp\admin
+class views extends \bbdkp\admin\Admin
 {
 	/**
 	 * guild id

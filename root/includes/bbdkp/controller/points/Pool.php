@@ -1,7 +1,7 @@
 <?php
 /**
  * Pool class file
- * 
+ *
  *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -24,27 +24,27 @@ if (! defined('IN_PHPBB'))
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 global $phpbb_root_path;
 
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require ("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 
 /**
  *  Pool Class
- *  this class manages the points Pool in the phpbb_bbdkp_dkpsystem table.  
+ *  this class manages the points Pool in the phpbb_bbdkp_dkpsystem table.
  *  Pools are a superset for events and dkp accounts.
  *  this class needs no controller so it extends admin.
- *  
+ *
  *   @package bbdkp
  */
-class Pool extends \bbdkp\Admin
+class Pool extends \bbdkp\admin\Admin
  {
 	/**
 	 * array of pools
 	 * @var unknown_type
-	 */ 	
- 	public $dkpsys; 
- 	
+	 */
+ 	public $dkpsys;
+
  	/**
  	 * Pool id
  	 * @var integer
@@ -53,7 +53,7 @@ class Pool extends \bbdkp\Admin
  	/**
  	 * Pool name
  	 * @var string
- 	 */ 
+ 	 */
  	private $dkpsys_name;
  	/**
  	 * Pool status
@@ -61,11 +61,11 @@ class Pool extends \bbdkp\Admin
  	 */
  	private $dkpsys_status;
 	/**
-	 * pool added by 
+	 * pool added by
 	 * @var string
 	 */
  	private $dkpsys_addedby;
- 	
+
  	/**
  	 * pool updated by
  	 * @var string
@@ -81,31 +81,31 @@ class Pool extends \bbdkp\Admin
  	 * @var integer
  	 */
  	private $poolcount;
- 	
+
  	/**
  	 * Pool class constructor
  	 * @param number $dkpsys
  	 */
-	function __construct($dkpsys = 0) 
+	function __construct($dkpsys = 0)
 	{
 		global $db;
 		parent::__construct(); //to load admin
 		if($dkpsys > 0)
 		{
 			$this->dkpsys_id = $dkpsys;
-			$this->read(); 	
+			$this->read();
 		}
-		
+
 		$sql1 = 'SELECT * FROM ' . DKPSYS_TABLE;
 		$result1 = $db->sql_query ( $sql1 );
 		$rows1 = $db->sql_fetchrowset ( $result1 );
 		$db->sql_freeresult ( $result1 );
 		$this->poolcount = count ( $rows1 );
-		
+
 		// get dkp pools
 		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
             FROM ' . DKPSYS_TABLE . ' a , ' . EVENTS_TABLE . " b
-			WHERE a.dkpsys_id = b.event_dkpid AND b.event_status = 1 
+			WHERE a.dkpsys_id = b.event_dkpid AND b.event_status = 1
             AND a.dkpsys_status = 'Y'";
 		$result = $db->sql_query($sql);
 		$this->dkpsys = array();
@@ -117,9 +117,9 @@ class Pool extends \bbdkp\Admin
 					'default' => $row['dkpsys_default']);
 		}
 		$db->sql_freeresult($result);
-		
+
 	}
-	
+
 	/**
 	 * Pool class property getter
 	 * @param string $property
@@ -127,7 +127,7 @@ class Pool extends \bbdkp\Admin
 	public function __get($property)
 	{
 		global $user;
-	
+
 		if (property_exists($this, $property))
 		{
 			return $this->$property;
@@ -137,7 +137,7 @@ class Pool extends \bbdkp\Admin
 			trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
 		}
 	}
-	
+
 	/**
 	 * Pool class property Setter
 	 * @param string $property
@@ -183,7 +183,7 @@ class Pool extends \bbdkp\Admin
 										$this->$property = 'Y';
 										break;
 								}
-								break;							
+								break;
 						case 'dkpsys_default':
 							switch ($value)
 							{
@@ -198,7 +198,7 @@ class Pool extends \bbdkp\Admin
 									$this->$property = 'Y';
 									break;
 							}
-							break;												
+							break;
 					}
 				}
 				else
@@ -207,24 +207,24 @@ class Pool extends \bbdkp\Admin
 				}
 		}
 	}
-	
+
 	/**
 	 * updates other pool to not default
 	 */
 	private function updateotherdefaults()
 	{
-		global $db; 
+		global $db;
 		$sql = 'UPDATE ' . DKPSYS_TABLE . " SET dkpsys_default = 'N' WHERE dkpsys_id != " . (int) $this->dkpsys_id;
 		$db->sql_query ( $sql );
 	}
-	
+
 	/**
 	 * make a pool instance given the pool id
 	 */
 	private function read()
 	{
 		global $db;
-	
+
 		$sql = 'SELECT * FROM ' . DKPSYS_TABLE . ' WHERE dkpsys_id = ' . (int) $this->dkpsys_id;
 		$result = $db->sql_query ($sql);
 		while ( ($row = $db->sql_fetchrow ( $result )) )
@@ -232,17 +232,17 @@ class Pool extends \bbdkp\Admin
 			$this->dkpsys_id = $row['dkpsys_id'];
 			$this->dkpsys_name = $row['dkpsys_name'];
 			$this->dkpsys_default = $row['dkpsys_default'];
-			$this->dkpsys_status = $row['dkpsys_status'];	
+			$this->dkpsys_status = $row['dkpsys_status'];
 			$this->dkpsys_addedby = $row['dkpsys_addedby'];
-			$this->dkpsys_updatedby  = $row['dkpsys_updatedby'];		
+			$this->dkpsys_updatedby  = $row['dkpsys_updatedby'];
 		}
 		$db->sql_freeresult ($result);
-		
+
 	}
 
-	
+
 	/**
-	 * 
+	 *
 	 * list pools
 	 * @param string $order
 	 * @param number $start
@@ -252,14 +252,14 @@ class Pool extends \bbdkp\Admin
 	public function listpools($order = 'dkpsys_name', $start = 0, $mode = 0)
 	{
 		global $config, $db;
-	
-		
+
+
 		$sql = 'SELECT d.*, count(e.event_id) as numevents
-				FROM  ' . DKPSYS_TABLE . ' d LEFT OUTER JOIN ' . EVENTS_TABLE . ' e 
+				FROM  ' . DKPSYS_TABLE . ' d LEFT OUTER JOIN ' . EVENTS_TABLE . ' e
 				ON d.dkpsys_id = e.event_dkpid
-				GROUP BY d.dkpsys_id  
-				ORDER BY ' . $order; 
-		 
+				GROUP BY d.dkpsys_id
+				ORDER BY ' . $order;
+
 		if($mode == 1)
 		{
 			$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_elimit'], $start );
@@ -268,22 +268,22 @@ class Pool extends \bbdkp\Admin
 		{
 			$result = $db->sql_query($sql);
 		}
-		$listpools = array(); 
+		$listpools = array();
 		while ( ($row = $db->sql_fetchrow ( $result )) )
 		{
 			$listpools [$row['dkpsys_id']]= array(
 				'numevents' => $row['numevents'],
 				'dkpsys_id' => $row['dkpsys_id'],
-				'dkpsys_name' => $row['dkpsys_name'], 
-				'dkpsys_default' => $row['dkpsys_default'], 
-				'dkpsys_status' => $row['dkpsys_status'], 
-				'dkpsys_addedby' => $row['dkpsys_addedby'], 
-				'dkpsys_updatedby'  => $row['dkpsys_updatedby']); 
+				'dkpsys_name' => $row['dkpsys_name'],
+				'dkpsys_default' => $row['dkpsys_default'],
+				'dkpsys_status' => $row['dkpsys_status'],
+				'dkpsys_addedby' => $row['dkpsys_addedby'],
+				'dkpsys_updatedby'  => $row['dkpsys_updatedby']);
 		}
 		$db->sql_freeresult ($result);
-		return $listpools; 
+		return $listpools;
 	}
-	
+
 	/**
 	 * insert new pool
 	 */
@@ -304,14 +304,14 @@ class Pool extends \bbdkp\Admin
 				'L_DKPSYS_NAME' => $this->dkpsys_name,
 				'L_DKPSYS_STATUS' => $this->dkpsys_status,
 				'L_ADDED_BY' => $user->data['username'] );
-		
+
 		$this->log_insert ( array (
 				'log_type' => $log_action ['header'],
 				'log_action' => $log_action ) );
-		
+
 	}
-	
-	
+
+
 	/**
 	 * update the pool. you have to pass the old object for logging
 	 * @param Pool $olddkpsys
@@ -323,14 +323,14 @@ class Pool extends \bbdkp\Admin
 				'UPDATE',
 				array (
 						'dkpsys_name' => $this->dkpsys_name,
-						'dkpsys_status' => $this->dkpsys_status, 
-						'dkpsys_default' => $this->dkpsys_default, 
+						'dkpsys_status' => $this->dkpsys_status,
+						'dkpsys_default' => $this->dkpsys_default,
 						'dkpsys_updatedby' => $user->data['username']));
-		
-		
+
+
 		$sql = 'UPDATE ' . DKPSYS_TABLE . ' SET ' . $query . ' WHERE dkpsys_id = ' . (int) $this->dkpsys_id;
 		$db->sql_query ( $sql );
-		
+
 		if($this->dkpsys_default != $olddkpsys->dkpsys_default)
 		{
 			$this->updateotherdefaults();
@@ -342,24 +342,24 @@ class Pool extends \bbdkp\Admin
 				'L_DKPSYSNAME_BEFORE' => $olddkpsys->dkpsys_name,
 				'L_DKPSYSSTATUS_BEFORE' => $olddkpsys->dkpsys_status,
 				'L_DKPSYSNAME_AFTER' => $this->dkpsys_name,
-				'L_DKPSYSSTATUS_AFTER' => $this->dkpsys_status, 
+				'L_DKPSYSSTATUS_AFTER' => $this->dkpsys_status,
 				'L_DKPSYSUPDATED_BY' => $user->data['username'] );
 		$this->log_insert (
 			array ( 'log_type' => $log_action ['header'],
 				'log_action' => $log_action ) );
-			
-		
+
+
 	}
-	
+
 	/**
-	 * delete the pool. 
+	 * delete the pool.
 	 * check if there are still raids/events on the pool
 	 */
 	public function delete()
 	{
 		global $user, $db;
-		
-		$sql = 'SELECT * FROM ' . RAIDS_TABLE . ' a, ' . EVENTS_TABLE . ' b 
+
+		$sql = 'SELECT * FROM ' . RAIDS_TABLE . ' a, ' . EVENTS_TABLE . ' b
 				WHERE b.event_id = a.event_id and b.event_dkpid = ' . (int) $this->dkpsys_id;
 		$result = $db->sql_query ( $sql );
 		if ($row = $db->sql_fetchrow ( $result ))
@@ -367,7 +367,7 @@ class Pool extends \bbdkp\Admin
 			$db->sql_freeresult ( $result );
 			trigger_error ( $user->lang ['FV_RAIDEXIST'], E_USER_WARNING );
 		}
-		
+
 
 		$sql = 'SELECT * FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . (int) $this->dkpsys_id;
 		$result = $db->sql_query ( $sql );
@@ -376,24 +376,24 @@ class Pool extends \bbdkp\Admin
 			$db->sql_freeresult ( $result );
 			trigger_error ( $user->lang ['FV_EVENTEXIST'], E_USER_WARNING );
 		}
-		
+
 		$sql = 'DELETE FROM ' . DKPSYS_TABLE . ' WHERE dkpsys_id = ' . (int) $this->dkpsys_id;
 		$db->sql_query ($sql);
-		
+
 		$log_action = array (
 				'header' => 'L_ACTION_DKPSYS_DELETED',
 				'id' => $this->dkpsys_id,
 				'L_DKPSYS_NAME' => $this->dkpsys_name,
 				'L_DKPSYS_STATUS' => $this->dkpsys_status);
-		
+
 		$this->log_insert ( array (
 				'log_type' => $log_action ['header'],
 				'log_action' => $log_action ));
-		
+
 	}
-	
-	
-	
+
+
+
 }
 
 ?>

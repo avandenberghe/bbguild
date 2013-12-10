@@ -2,14 +2,13 @@
 /**
  * left front navigation block
  *
-*   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
-
+namespace bbdkp\views;
 /**
  * @ignore
  */
@@ -32,38 +31,43 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 }
 $guilds = new \bbdkp\controller\guilds\Guilds();
 
-$guildlist = $guilds->guildlist();
-
-foreach ($guildlist as $g)
+$guildlist = $guilds->guildlist(1);
+if(count($guildlist) > 0)
 {
-	//assign guild_id property
-
-	//if there is a default guild
-	if($g['guilddefault'] == 1)
+	foreach ($guildlist as $g)
 	{
-		$this->guild_id = $g['id'];
+		//assign guild_id property
+
+		//if there is a default guild
+		if($g['guilddefault'] == 1)
+		{
+			$this->guild_id = $g['id'];
+		}
+		elseif($g['membercount'] > 1)
+		{
+			$this->guild_id = $g['id'];
+		}
+
+		//if guild id field still 0
+		if($this->guild_id == 0 && $g['id'] > 0)
+		{
+			$this->guild_id = $g['id'];
+		}
+
+		//populate guild popup
+		if($g['id'] > 0) // exclude guildless
+		{
+			$template->assign_block_vars('guild_row', array(
+					'VALUE' => $g['id'] ,
+					'SELECTED' => ($g['id'] == $this->guild_id ) ? ' selected="selected"' : '' ,
+					'OPTION' =>  $g['name']));
+		}
 	}
 
-	//if member count > 0
-	if($this->guild_id == 0 && $g['membercount'] > 1)
-	{
-		$this->guild_id = $g['id'];
-	}
-
-	//if guild id field > 0
-	if($this->guild_id == 0 && $g['id'] > 0)
-	{
-		$this->guild_id = $g['id'];
-	}
-
-	//populate guild popup
-	if($g['id'] > 0) // exclude guildless
-	{
-		$template->assign_block_vars('guild_row', array(
-				'VALUE' => $g['id'] ,
-				'SELECTED' => ($g['id'] == $this->guild_id ) ? ' selected="selected"' : '' ,
-				'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
-	}
+}
+else
+{
+	trigger_error('ERROR_NOGUILD', E_USER_WARNING );
 }
 
 $this->dkppulldown();
@@ -76,7 +80,8 @@ $classarray = $this->armor($page);
 
 $template->assign_vars(array(
 		// Form values
-		'U_NEWS'  			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=news&amp;guild_id=' . $this->guild_id),
+		'S_GUILDDROPDOWN'	=> count($guildlist) > 1 ? true : false,
+ 		'U_NEWS'  			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=news&amp;guild_id=' . $this->guild_id),
 		'U_LISTMEMBERS'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=standings&amp;guild_id=' . $this->guild_id),
 		'U_LOOTDB'     		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=lootdb&amp;guild_id=' . $this->guild_id),
 		'U_LOOTHIST'  		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=loothistory&amp;guild_id=' . $this->guild_id),

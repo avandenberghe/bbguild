@@ -23,9 +23,9 @@ if (! defined ( 'EMED_BBDKP' ))
 	$user->add_lang ( array ('mods/dkp_admin' ) );
 	trigger_error ( $user->lang ['BBDKPDISABLED'], E_USER_WARNING );
 }
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require ("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require ("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\points\Pool'))
 {
@@ -42,7 +42,7 @@ if (!class_exists('\bbdkp\controller\raids\Events'))
  *
  *   @package bbdkp
  */
- class acp_dkp_sys extends \bbdkp\Admin
+ class acp_dkp_sys extends \bbdkp\admin\Admin
 {
 	/**
 	 * link in trigger window

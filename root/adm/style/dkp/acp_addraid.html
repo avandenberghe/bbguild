@@ -19,8 +19,8 @@ function check_form()
         alert('{MSG_ATTENDEES_EMPTY}');
         return false;
     }
-    
-    // checking if there is an event selected	
+
+    // checking if there is an event selected
     if (document.getElementById("event_id").selectedIndex < 0 )
     {
         alert('{MSG_NAME_EMPTY}');
@@ -36,16 +36,16 @@ function switch_event_val()
   if (document.getElementById("event_id").selectedIndex >= 0 )
   {
 	  var eventvalue  = document.getElementById('event_id').options[document.getElementById('event_id').selectedIndex].text.match(patt);
-	  document.getElementById('raid_value').value = eventvalue[eventvalue.length-1]; 
+	  document.getElementById('raid_value').value = eventvalue[eventvalue.length-1];
   }
 }
 <!-- IF S_SHOWTIME -->
-/* time dkp bonus from duration */ 
+/* time dkp bonus from duration */
 function update_timebonus()
 {
 	var duration = durationcalc();
 	var dkp_per_timeunit = document.getElementById("dkptimeunit").value;
-	var unitminutes = document.getElementById("timeunit").value;  
+	var unitminutes = document.getElementById("timeunit").value;
 	var dkp_bonus = 0;
 	if(unitminutes > 0)
 	{
@@ -77,7 +77,7 @@ function durationcalc()
 	var starts = document.getElementById("ss").options[document.getElementById("ss").selectedIndex].text;
 	starts= starts.replace("--", "0");
 	raidbegin.setSeconds(starts);
-	
+
 	var raidend = new Date();
 	var stopday = document.getElementById("ed").options[document.getElementById("ed").selectedIndex].text;
 	stopday= stopday.replace("--", "1");
@@ -102,27 +102,27 @@ function durationcalc()
 	if(diff> 0)
 	{
 		diff=diff/86400000*24;
-		diff=diff.toFixed(2);		
+		diff=diff.toFixed(2);
 		document.getElementById("raid_duration").value = diff;
 	}
 	else
 	{
 		document.getElementById("raid_duration").value = 0;
 	}
-	
+
 	return document.getElementById("raid_duration").value;
 }
 
 
 function fnSearch(event)
 {
-   
-    var searchBox = document.getElementById("memberSearch");  
+
+    var searchBox = document.getElementById("memberSearch");
     var reSearch = new RegExp( searchBox.value, "i" );
-    
+
     var selectBox = document.getElementById("all_members");
     var len = selectBox.options.length;
-    
+
     for ( var i = 0; i < len; i++ )
     {
         if( reSearch.test( selectBox.options[i].text ) )
@@ -140,7 +140,7 @@ function fnSearch(event)
 
 function fnAddMember()
 {
-    
+
     var fromField = document.getElementById("all_members");
     var toField = document.getElementById("raid_attendees");
 
@@ -190,7 +190,7 @@ function fnAddMember()
             toField.options[toSize + i - offset].selected = true;
         }
     }
-    
+
     /* done - clear the search box and focus it for the next entry */
     document.getElementById('memberSearch').value = "";
     document.getElementById('memberSearch').focus();
@@ -199,14 +199,14 @@ function fnAddMember()
 
 function fnRemoveMember()
 {
-  
+
   var toField = document.getElementById("raid_attendees");
   var toSize = toField.options.length;
-    
+
   var i;
-  for (i = toField.length - 1; i>=0; i--) 
+  for (i = toField.length - 1; i>=0; i--)
   {
-  	if (toField.options[i].selected) 
+  	if (toField.options[i].selected)
   	  {
      	 toField.remove(i);
   	  }
@@ -218,19 +218,19 @@ function fnRemoveMember()
  */
 
 /*  make a XMLHTTP Request object */
-function GetXmlHttpObject() 
-{ 
-	var xmlhttp=false;	
-	
+function GetXmlHttpObject()
+{
+	var xmlhttp=false;
+
 	try
-	{ 
+	{
 		//  IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}
-	catch(e)	
+	catch(e)
 	{	// activex code for IE6, IE5
 		try
-		{			
+		{
 			xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
 		}
 		catch(e)
@@ -251,17 +251,17 @@ function GetXmlHttpObject()
 
 
 
- 
-var xmlhttp; 
 
-/* ajax function to find memberlist */ 
+var xmlhttp;
+
+/* ajax function to find memberlist */
 function GetMembers(guildid)
 {
    xmlhttp = GetXmlHttpObject();
    if (xmlhttp == null)
    {
 	   alert("{LA_ALERT_OLDBROWSER}");
-	   return;  
+	   return;
    }
     var strURL="{UA_FINDMEMBERS}&guild="+guildid;
     xmlhttp.onreadystatechange=GuildStateChanged;
@@ -270,14 +270,14 @@ function GetMembers(guildid)
     xmlhttp.send(null);
 }
 
-/* ajax function to find events */ 
+/* ajax function to find events */
 function GetEvents(dkpsys_id)
 {
    xmlhttp = GetXmlHttpObject();
    if (xmlhttp == null)
    {
 	   alert("{LA_ALERT_OLDBROWSER}");
-	   return;  
+	   return;
    }
     var strURL="{UA_FINDEVENTS}&dkpsysid="+dkpsys_id;
     xmlhttp.onreadystatechange=PoolStateChanged;
@@ -293,25 +293,25 @@ function GuildStateChanged()
 	{
 		if (xmlhttp.status == 200)
 		{
-			var rsel = document.getElementById('all_members'); 
+			var rsel = document.getElementById('all_members');
 			//remove select options
-			rsel.options.length = 0; 
-			
+			rsel.options.length = 0;
+
 			//receive xml
 			xmlDoc=xmlhttp.responseXML;
-						
+
 			var root = xmlDoc.getElementsByTagName('memberlist')[0];
 			var members = root.getElementsByTagName("member")
 			for (var i = 0; i < members.length; i++)
 			{
-				var member = members[i]; 
+				var member = members[i];
 				var memberid = member.getElementsByTagName("member_id")[0].firstChild.nodeValue;
 				var membername = member.getElementsByTagName("member_name")[0].firstChild.nodeValue;
 			    // add the options
-			    rsel.options[i] = new Option(membername, memberid, true, false); 
+			    rsel.options[i] = new Option(membername, memberid, true, false);
 			}
 		}
-		else 
+		else
 		{
    	   		alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
 	 	}
@@ -325,25 +325,25 @@ function PoolStateChanged()
 	{
 		if (xmlhttp.status == 200)
 		{
-			var rsel = document.getElementById('event_id'); 
+			var rsel = document.getElementById('event_id');
 			//remove select options
-			rsel.options.length = 0; 
-			
+			rsel.options.length = 0;
+
 			//receive xml
 			xmlDoc=xmlhttp.responseXML;
-						
+
 			var root = xmlDoc.getElementsByTagName('eventlist')[0];
 			var events = root.getElementsByTagName("event")
 			for (var i = 0; i < events.length; i++)
 			{
-				var event = events[i]; 
+				var event = events[i];
 				var eventid = event.getElementsByTagName("event_id")[0].firstChild.nodeValue;
 				var eventname = event.getElementsByTagName("event_name")[0].firstChild.nodeValue;
 			    // add the options
-			    rsel.options[i] = new Option(eventname, eventid, true, false); 
+			    rsel.options[i] = new Option(eventname, eventid, true, false);
 			}
 		}
-		else 
+		else
 		{
    	   		alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
 	 	}
@@ -355,9 +355,9 @@ function PoolStateChanged()
 </script>
 <style>
 
-dt 
+dt
 {
-	width: 35% !important; 	
+	width: 35% !important;
 }
 dd
 {
@@ -371,9 +371,22 @@ dd
 <h1>{L_TITLE}</h1>
 <p>{L_EXPLAIN}</p>
 
-<div style="float: left; width: 55%;">
+<div style="float: left; width: 98%;">
+
+
 <fieldset>
 <legend>{L_ADD_RAID_TITLE}</legend>
+
+	<dl>
+	<dt><label>{L_GUILD}:</label></dt>
+	<dd><select id="member_guild_id" name="member_guild_id" class="input" onchange="return GetMembers(this.value)">
+	       	<!-- BEGIN guild_row -->
+	       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
+	        <!-- END guild_row -->
+	</select><a href="{U_VIEW_GUILD}">{GUILDNAME}</a>
+	</dd>
+	</dl>
+
 
 	<dl><dt><label>{L_POOL}:</label></dt>
 	<dd>
@@ -384,28 +397,32 @@ dd
 	</select>
 	</dd>
 	</dl>
-	
+
 	<dl>
 		<dt><label>{L_EVENT}:</label> (<a href="{U_ADD_EVENT}">{L_ADD_EVENT}</a>)</dt>
     <dd>
-	    <select name="event_id" id="event_id" class="input" size="10" style="width: 100%;" onchange="javascript:switch_event_val();" >
+	    <select name="event_id" id="event_id" class="input" style="width: 100%;" onchange="javascript:switch_event_val();" >
 			<!-- BEGIN events_row -->
 			<option value="{events_row.VALUE}"{events_row.SELECTED}>{events_row.OPTION}</option>
 			<!-- END events_row -->
 		</select>
 	</dd>
-	</dl>		
-	
+	</dl>
+	<dl>
+		<dt><label>{L_NOTE}:</label></dt>
+		<dd><textarea name="raid_note" id="raid_note" rows="3" cols="15">{RAID_NOTE}</textarea></dd>
+	</dl>
+
 	<dl>
 		<dt><label>{L_RAIDSTART}:</label></dt>
 		<dd>
 			<select id="d" name="d"  <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();"   <!-- ENDIF -->>{S_RAIDDATE_DAY_OPTIONS}</select>
-			<select id="mo" name="mo" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDDATE_MONTH_OPTIONS}</select> 
+			<select id="mo" name="mo" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDDATE_MONTH_OPTIONS}</select>
 			<select id="Y" name="Y" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDDATE_YEAR_OPTIONS}</select>
 	   </dd>
 		<dd>
 			<select id="sh" name="sh" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_H_OPTIONS}</select>
-			<select id="smi" name="smi" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_MI_OPTIONS}</select> 
+			<select id="smi" name="smi" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_MI_OPTIONS}</select>
 			<select id="ss" name="ss" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDSTART_S_OPTIONS}</select>
 		</dd>
 	</dl>
@@ -413,27 +430,27 @@ dd
 		<dt><label>{L_RAIDEND}:</label></dt>
 		<dd>
 			<select id="ed" name="ed" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF --> >{S_RAIDENDDATE_DAY_OPTIONS}</select>
-			<select id="emo" name="emo" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF --> >{S_RAIDENDDATE_MONTH_OPTIONS}</select> 
+			<select id="emo" name="emo" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF --> >{S_RAIDENDDATE_MONTH_OPTIONS}</select>
 			<select id="eY" name="eY" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ENDIF --> >{S_RAIDENDDATE_YEAR_OPTIONS}</select>
 		</dd>
 		<dd>
 			<select id="eh" name="eh" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_H_OPTIONS}</select>
-			<select id="emi" name="emi" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_MI_OPTIONS}</select> 
+			<select id="emi" name="emi" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_MI_OPTIONS}</select>
 			<select id="es" name="es" <!-- IF S_SHOWTIME --> onchange="javascript:update_timebonus();" <!-- ELSE --> onchange="javascript:durationcalc();" <!-- ENDIF -->>{S_RAIDEND_S_OPTIONS}</select>
 		</dd>
 	</dl>
-	
+
 	<dl>
 		<dt><label>{L_RAIDDURATION}:</label>({L_RAIDDURATION_EXPLAIN})</dt>
 		<dd>
 			<input readonly="readonly" type="text" name="raid_duration" id="raid_duration" size="8" maxlength="7" value="{RAID_DURATION}" class="input"  style="border: none"/>
 		</dd>
 	</dl>
-	
+
 	<!-- IF S_SHOWTIME -->
-	
-	<input type="hidden" name="dkptimeunit" id="dkptimeunit" value="{DKPTIMEUNIT}" /> 
-	<input type="hidden" id="timeunit" name="timeunit" value="{TIMEUNIT}" /> 
+
+	<input type="hidden" name="dkptimeunit" id="dkptimeunit" value="{DKPTIMEUNIT}" />
+	<input type="hidden" id="timeunit" name="timeunit" value="{TIMEUNIT}" />
 	<dl>
 		<dt><label>{L_TIME_BONUS}:</label>&nbsp;{L_TIME_BONUS_EXPLAIN}&nbsp;{DKPPERTIME}</dt>
 		<dd>
@@ -441,36 +458,17 @@ dd
 		</dd>
 	</dl>
 	<!-- ENDIF -->
-	
+
 	<dl>
 		<dt><label>{L_RAIDVALUE}:</label>({L_ADD_RAID_VALUE_NOTE})</dt>
 		<dd>
 			<input type="text" name="raid_value" id="raid_value" size="8" maxlength="7" value="{RAID_VALUE}" class="input" />
 		</dd>
 	</dl>
-	<dl>
-		<dt><label>{L_NOTE}:</label></dt>
-		<dd><textarea name="raid_note" id="raid_note" cols="40" rows="5">{RAID_NOTE}</textarea></dd>
-	</dl>
-			
-</fieldset>
-</div>
 
 
-<div style="float: left; width: 45%;">
-<fieldset>
-<legend>{L_SEARCH}</legend>
 <div style="text-left">
 
-<dl>
-<dt><label>{L_GUILD}:</label></dt>
-<dd><select id="member_guild_id" name="member_guild_id" class="input" onchange="return GetMembers(this.value)">
-       	<!-- BEGIN guild_row -->
-       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
-        <!-- END guild_row -->
-</select><a href="{U_VIEW_GUILD}">{GUILDNAME}</a>
-</dd>
-</dl>
 <dl>
 <dt><label>{L_SEARCH}: </label></dt>
 <dd>
@@ -480,32 +478,37 @@ dd
 
 <span class="small">{L_HOLD_CTRL_NOTE}</span>
 
-	<select style="float: left; width: 47%;" id="all_members" name="all_members" size="20" multiple="multiple" class="input">
+	<select style="float: left; width: 47%;" id="all_members" name="all_members" size="10" multiple="multiple" class="input">
 		<!-- BEGIN members_row -->
 		<option value="{members_row.VALUE}">{members_row.OPTION}</option>
 		<!-- END members_row -->
 	</select>
 
-	<select style="float: right; width: 47%;" name="raid_attendees[]" id="raid_attendees" size="20" multiple="multiple" class="input">
+	<select style="float: right; width: 47%;" name="raid_attendees[]" id="raid_attendees" size="10" multiple="multiple" class="input">
 		<!-- BEGIN raid_attendees_row -->
 		<option value="{raid_attendees_row.VALUE}" selected="selected">{raid_attendees_row.OPTION}</option>
 		<!-- END raid_attendees_row -->
 	</select>
-	
+
 	<br />
-	<input type="button" name="button1" value="&lt;&lt;" accesskey="r" title="Enter your email address here" onclick="return fnRemoveMember()" class="button1" /> 
+	<input type="button" name="button1" value="&lt;&lt;" accesskey="r" title="Enter your email address here" onclick="return fnRemoveMember()" class="button1" />
 	<input type="button" name="button2" value="&gt;&gt;" accesskey="m" title="Enter your email address here" onclick="return fnAddMember()" class="button1" />
 	</div>
 </fieldset>
 </div>
 
 
+<div style="float: left; width: 45%;">
+
+</div>
+
+
 </div>
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
 	{S_FORM_TOKEN}
-    <input type="submit" name="add"	value="{L_ADD_RAID}" class="button1" /> 
+    <input type="submit" name="add"	value="{L_ADD_RAID}" class="button1" />
     <input type="reset" name="reset" value="{L_RESET}" class="button1" />
-</fieldset> 
+</fieldset>
 
 </form>
 

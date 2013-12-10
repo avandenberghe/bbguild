@@ -2,14 +2,13 @@
 /**
  * Stats module. show guild statistics 
  * 
-*   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
-
+namespace bbdkp\views;
 /**
  * @ignore
  */

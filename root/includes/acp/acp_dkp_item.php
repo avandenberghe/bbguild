@@ -23,9 +23,9 @@ if (! defined('EMED_BBDKP'))
 	$user->add_lang ( array ('mods/dkp_admin' ));
 	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
 }
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\loot\LootController'))
 {
@@ -45,7 +45,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
  *
  *   @package bbdkp
  */
-class acp_dkp_item extends \bbdkp\Admin
+class acp_dkp_item extends \bbdkp\admin\Admin
 {
 	/**
 	 * url in triggers
@@ -244,7 +244,7 @@ class acp_dkp_item extends \bbdkp\Admin
 		// guild dropdown
 		$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
 		$Guild = new \bbdkp\controller\guilds\Guilds();
-		$guildlist = $Guild->guildlist();
+		$guildlist = $Guild->guildlist(1);
 
 		if($submit)
 		{
