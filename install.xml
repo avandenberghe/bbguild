@@ -166,16 +166,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/configdkp.php" to="configdkp.php"/>
 			<file from="root/adm/images/*.*" to="adm/images/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
-			<file from="root/images/bbdkp/class_images/*.*" to="images/bbdkp/class_images/*.*"/>
-			<file from="root/images/bbdkp/event_images/*.*" to="images/bbdkp/event_images/*.*"/>
-			<file from="root/images/bbdkp/icons/*.*" to="images/bbdkp/icons/*.*"/>
-			<file from="root/images/bbdkp/progressbar/*.*" to="images/bbdkp/progressbar/*.*"/>
-			<file from="root/images/bbdkp/race_images/*.*" to="images/bbdkp/race_images/*.*"/>
-			<file from="root/images/bbdkp/portal/*.*" to="images/bbdkp/portal/*.*"/>
-			<file from="root/images/bbdkp/roster_classes/*.*" to="images/bbdkp/roster_classes/*.*"/>
-			<file from="root/images/bbdkp/roster_portraits/*.*" to="images/bbdkp/roster_portraits/*.*"/>
-			<file from="root/images/bbdkp/tooltip/*.*" to="images/bbdkp/tooltip/*.*"/>
-			<file from="root/images/bbdkp/wowapi/*.*" to="images/bbdkp/wowapi/*.*"/>
+			<file from="root/images/bbdkp/*.*" to="images/bbdkp/*.*"/>
 			<file from="root/includes/acp/acp_dkp_adj.php" to="includes/acp/acp_dkp_adj.php"/>
 			<file from="root/includes/acp/acp_dkp_game.php" to="includes/acp/acp_dkp_game.php"/>
 			<file from="root/includes/acp/acp_dkp_guild.php" to="includes/acp/acp_dkp_guild.php"/>			
