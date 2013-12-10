@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\admin\log'))
  * bbDKP Admin foundation
  *   @package bbdkp
  */
-abstract class Admin
+class Admin
 {
 	/**
 	 * bbdkp timestamp
@@ -436,12 +436,12 @@ abstract class Admin
 	{
 		global $cache, $db;
 		//get latest productversion from cache
-		$this->plugins = $cache->get('bbdkpplugins');
+		$plugins = $cache->get('bbdkpplugins');
 
 		//if update is forced or cache expired then make the query to refresh latest productversion
-		if ($this->plugins === false || $force_update)
+		if ($plugins === false || $force_update)
 		{
-			$this->plugins = array();
+			$plugins = array();
 			$sql = 'SELECT name, value, version, installdate FROM ' . BBDKPPLUGINS_TABLE . ' ORDER BY installdate DESC ';
 			$result = $db->sql_query ($sql);
 			while($row = $db->sql_fetchrow($result))
@@ -449,7 +449,7 @@ abstract class Admin
 				$info = $this->curl(BBDKP_VERSIONURL . 'version_' . $row['name'] .'.txt' , false, false, false);
 
 				//get latest
-				$this->plugins[$row['name']] = array(
+				$plugins[$row['name']] = array(
 					'name' => $row['name'],
 					'value' => $row['value'],
 					'version' => $row['version'],
@@ -460,9 +460,9 @@ abstract class Admin
 			$db->sql_freeresult($result);
 
 			$cache->destroy('bbdkpplugins');
-			$cache->put( 'bbdkpplugins', $this->plugins, $ttl);
+			$cache->put( 'bbdkpplugins', $plugins, $ttl);
 		}
-		return $this->plugins;
+		return $plugins;
 
 	}
 

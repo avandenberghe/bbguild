@@ -37,7 +37,7 @@ if (!isset($config['bbdkp_version']))
 	// THE CONFIGS AND DATABASE TABLES AREN'T INSTALLED, EXIT
 	trigger_error('GENERAL_ERROR', E_USER_WARNING);
 }
-if (!class_exists('\bbdkp\views'))
+if (!class_exists('\bbdkp\views\views'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/views/views.$phpEx");
 }
@@ -50,7 +50,7 @@ $template->set_filenames(array(
 		'body' => 'dkp/news_body.html')
 );
 
-$views = new \bbdkp\views();
+$views = new \bbdkp\views\views();
 $views->load('portal');
 
 make_jumpbox(append_sid("{$phpbb_root_path}viewforum.$phpEx"));
