@@ -189,7 +189,10 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 							$member = new \bbdkp\controller\members\Members($row['member_id']);
 							if(isset($member))
 							{
-								$member->Armory_getmember();
+								if($member->member_rank_id < 90)
+								{
+									$member->Armory_getmember();
+								}
 								$member->Updatemember($member);
 								unset($member);
 							}
@@ -475,7 +478,11 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
 					$updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
 					$updatemember->phpbb_user_id = request_var('phpbb_user_id', 0);
-					$updatemember->Armory_getmember();
+					if($updatemember->member_rank_id < 90)
+					{
+						$updatemember->Armory_getmember();
+					}
+
 					$updatemember->Updatemember($old_member);
 
 					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $updatemember->member_guild_id ));
