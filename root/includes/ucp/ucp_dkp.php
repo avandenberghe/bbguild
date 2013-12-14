@@ -17,9 +17,9 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 // Include the base class
-if (!class_exists('\bbdkp\Admin'))
+if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/admin.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
@@ -40,7 +40,7 @@ if (!class_exists('\bbdkp\controller\guilds\Ranks'))
  * @package bbdkp
  *
  */
-class ucp_dkp extends \bbdkp\Admin
+class ucp_dkp extends \bbdkp\admin\Admin
 {
 	/**
 	 * module action
@@ -276,12 +276,14 @@ class ucp_dkp extends \bbdkp\Admin
 					    $newmember->member_armory_url = utf8_normalize_nfc(request_var('member_armorylink', '', true));
 					    $newmember->phpbb_user_id = $user->data['user_id'];
 					    $member_status = request_var('activated', 0) > 0 ? 1 : 0;
+					    $newmember->Armory_getmember();
 					    $newmember->Makemember();
 
 					    if ($newmember->member_id > 0)
 					    {
 					        // record added.
 					    	$newmember->member_comment = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name), date("F j, Y, g:i a"));
+					    	$newmember->Armory_getmember();
 					    	$newmember->Updatemember($newmember);
 					    	meta_refresh(1, $this->u_action . '&amp;member_id=' . $newmember->member_id);
 					        $success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name), date("F j, Y, g:i a") );
@@ -324,6 +326,7 @@ class ucp_dkp extends \bbdkp\Admin
 						$updatemember->member_class_id = request_var('member_class_id', 0);
 						$updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
 						$updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
+						$updatemember->Armory_getmember();
 						$updatemember->Updatemember($oldmember);
 
 						meta_refresh(1, $this->u_action . '&amp;member_id=' . $updatemember->member_id);

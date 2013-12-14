@@ -31,11 +31,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
 }
-//include the guilds class
-if (!class_exists('\bbdkp\controller\guilds\Roles'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Roles.$phpEx");
-}
 //Initialising the class
 if (!class_exists('\bbdkp\controller\wowapi\BattleNet'))
 {
@@ -260,10 +255,19 @@ class Members extends \bbdkp\admin\Admin
 	public $guildmemberlist;
 
 	/**
-	 * Member class constructor
-	 * @param number $member_id
+	 * array of guilds
+	 * @var array
 	 */
-	function __construct($member_id = 0)
+	public $guildlist;
+
+
+	/**
+	 * Member class constructor
+	 *
+	 * @param unknown_type $member_id
+	 * @param array $guildlist
+	 */
+	function __construct($member_id = 0, array $guildlist = null)
 	{
 		parent::__construct();
 		if(isset($member_id))
@@ -277,6 +281,22 @@ class Members extends \bbdkp\admin\Admin
 
 		$this->Getmember();
 		$this->guildmemberlist = array();
+
+		if($guildlist == null)
+		{
+			//include the guilds class
+			if (!class_exists('\bbdkp\controller\guilds\Guilds'))
+			{
+				require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
+			}
+			$guild = new \bbdkp\controller\guilds\Guilds();
+			$this->guildlist = $guild->guildlist(1);
+		}
+		else
+		{
+			$this->guildlist = $guildlist;
+		}
+
 	}
 
 
@@ -504,6 +524,9 @@ class Members extends \bbdkp\admin\Admin
 		global $user, $db, $config, $phpEx, $phpbb_root_path;
 
 		$error = array ();
+		$found=false;
+
+		//perform checks
 
 		// check if membername exists
 		$sql = 'SELECT count(*) as memberexists
@@ -516,6 +539,11 @@ class Members extends \bbdkp\admin\Admin
 		if ($countm != 0)
 		{
 			$error[]= $user->lang['ERROR_MEMBEREXIST'];
+		}
+
+		if($this->member_rank_id == null)
+		{
+			$error[]= $user->lang['ERROR_INCORRECTRANK'];
 		}
 
 		// check if rank exists
@@ -535,7 +563,7 @@ class Members extends \bbdkp\admin\Admin
 		{
 			$log_action = array(
 				'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
-				'L_NAME' 	 => ucwords($this->member_name)  ,
+				'L_NAME' 	 => ucwords($this->member_name) . implode(',', $error)  ,
 				'L_GAME' 	 => $this->game_id,
 				'L_LEVEL' 	 => $this->member_level,
 				'L_RACE' 	 => $this->member_race_id,
@@ -574,26 +602,16 @@ class Members extends \bbdkp\admin\Admin
 			}
 		}
 
-		//decide if game is armory-enabled
 		$game = new \bbdkp\controller\games\Game;
 		$game->game_id = $this->game_id;
 		$game->Get();
-		if ($game->armory_enabled == 1)
-		{
-			//select the armory
-			switch ($this->game_id)
-			{
-				case 'wow':
-					//get member from armory
-					$this->Armory_getmember();
-			}
-		}
 
 		switch ($this->game_id)
 		{
 			case 'aion':
 				$this->member_portrait_url = $this->generate_portraitlink();
 		}
+
 
 		$query = $db->sql_build_array('INSERT', array(
 			'member_name' => ucwords($this->member_name) ,
@@ -694,9 +712,6 @@ class Members extends \bbdkp\admin\Admin
 
 		switch ($this->game_id)
 		{
-			case 'wow':
-				$this->Armory_getmember();
-				break;
 			case 'aion':
 				if(trim($this->member_portrait_url) == '')
 				{
@@ -827,110 +842,151 @@ class Members extends \bbdkp\admin\Admin
 
 	/**
 	 * fetch info from Armory
-	 * @return boolean
+	 *
+	 * @return integer
 	 */
 	public function Armory_getmember()
 	{
 		global $phpEx, $phpbb_root_path;
-		switch ($this->game_id)
+
+		$game = new \bbdkp\controller\games\Game;
+		$game->game_id = $this->game_id;
+		$game->Get();
+
+		if ($this->game_id != 'wow')
 		{
-			case 'wow':
-				/**
-					* available extra fields :
-				 * 'guild','stats','talents','items','reputation','titles','professions','appearance',
-				 * 'companions','mounts','pets','achievements','progression','pvp','quests'
-				 */
-				$api = new \bbdkp\controller\wowapi\BattleNet('character', $this->member_region);
-				$params = array('guild', 'titles', 'talents' );
+			return -1;
+		}
 
-				$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);
-				unset($api);
+		if ($game->armory_enabled == 0)
+		{
+			return -1;
+		}
 
-				// if $data == false then there is no character data, so
-				if($data != false)
+		/**
+			* available extra fields :
+		 * 'guild','stats','talents','items','reputation','titles','professions','appearance',
+		 * 'companions','mounts','pets','achievements','progression','pvp','quests'
+		 */
+		$api = new \bbdkp\controller\wowapi\BattleNet('character', $this->member_region);
+		$params = array('guild', 'titles', 'talents' );
+
+		$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);
+		unset($api);
+
+		// if $data == false then there is no character data, so
+		if($data != false)
+		{
+			$this->member_level = isset($data['level']) ? $data['level'] : $this->member_level;
+			$this->member_race_id = isset($data['race']) ? $data['race'] : $this->member_race_id;
+			$this->member_class_id = isset($data['class']) ? $data['class'] : $this->member_class_id;
+
+			/*
+			 * select the build
+			*/
+			$buildid = 0;
+			if(isset($data['talents'][0]) && isset( $data['talents'][1]) )
+			{
+				if( isset($data['talents'][0]['selected']))
 				{
-					$this->member_level = isset($data['level']) ? $data['level'] : $this->member_level;
-					$this->member_race_id = isset($data['race']) ? $data['race'] : $this->member_race_id;
-					$this->member_class_id = isset($data['class']) ? $data['class'] : $this->member_class_id;
-
-					/*
-					 * select the build
-					*/
 					$buildid = 0;
-					if(isset($data['talents'][0]) && isset( $data['talents'][1]) )
-					{
-						if( isset($data['talents'][0]['selected']))
-						{
-							$buildid = 0;
-						}
-						elseif(isset($data['talents'][1]['selected']))
-						{
-							$buildid = 1;
-						}
-					}
-					elseif(isset( $data['talents'][0]))
-					{
-						$buildid = 0;
-					}
-					elseif(isset( $data['talents'][1]))
-					{
-						$buildid = 1;
-					}
-					$role = isset($data['talents'][$buildid]['spec']['role']) ? $data['talents'][$buildid]['spec']['role'] : 'NA';
-					$this->member_role = $role;
-
-					$this->member_gender_id = isset($data['gender']) ? $data['gender'] : $this->member_gender_id;
-					$this->member_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->member_achiev;
-
-					if(isset($data['name']))
-					{
-						$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $data ['name'] . '/simple';
-					}
-
-					if(isset($data['thumbnail']))
-					{
-						$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
-					}
-
-					if(isset($data['realm']))
-					{
-						$this->member_realm = $data['realm'];
-					}
-
-					if (isset($data['titles']))
-					{
-						foreach($data['titles'] as $key => $title)
-						{
-							if (isset($title['selected']))
-							{
-								$this->member_title = $title['name'];
-							}
-						}
-					}
-
-					//if the last logged-in date is > 3 months ago then disable the account
-					if( isset($data['lastModified']))
-					{
-						$latest = $data['lastModified']/1000;
-						$diff = \round( \abs ( \time() - $latest) / 60 / 60 / 24, 2) ;
-						if($diff > 90 && $this->member_status == 1)
-						{
-							$this->deactivate_wow($diff);
-							return false;
-						}
-
-					}
-
-					return true;
-
 				}
-				else
+				elseif(isset($data['talents'][1]['selected']))
 				{
-					$this->deactivate_wow('API Error');
-					return false;
+					$buildid = 1;
 				}
-			default:
-				return true;
+			}
+			elseif(isset( $data['talents'][0]))
+			{
+				$buildid = 0;
+			}
+			elseif(isset( $data['talents'][1]))
+			{
+				$buildid = 1;
+			}
+			$role = isset($data['talents'][$buildid]['spec']['role']) ? $data['talents'][$buildid]['spec']['role'] : 'NA';
+			$this->member_role = $role;
+
+			$this->member_gender_id = isset($data['gender']) ? $data['gender'] : $this->member_gender_id;
+			$this->member_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->member_achiev;
+
+			if(isset($data['name']))
+			{
+				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $data ['name'] . '/simple';
+			}
+
+			if(isset($data['thumbnail']))
+			{
+				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
+			}
+
+			if(isset($data['realm']))
+			{
+				$this->member_realm = $data['realm'];
+			}
+
+			if (isset($data['guild']))
+			{
+				$found=false;
+				foreach($this->guildlist as $guild)
+				{
+					if($data['name'] == 'Xeeni')
+					{
+						$debug =1;
+					}
+					if($guild['name'] == $data['guild']['name'])
+					{
+						$this->member_guild_id = $guild['id'];
+						$this->member_guild_name = $guild['name'];
+						$this->member_rank_id = $guild['joinrank'];
+						$found=true;
+						break;
+					}
+				}
+				if($found==false)
+				{
+					$this->member_guild_id = 0;
+					$this->member_rank_id = 99;
+				}
+			}
+			else
+			{
+				$this->member_guild_id = 0;
+				$this->member_rank_id = 99;
+			}
+
+			if (isset($data['titles']))
+			{
+				foreach($data['titles'] as $key => $title)
+				{
+					if (isset($title['selected']))
+					{
+						$this->member_title = $title['name'];
+						break;
+					}
+				}
+			}
+
+			//if the last logged-in date is > 3 months ago then disable the account
+			if( isset($data['lastModified']))
+			{
+				$latest = $data['lastModified']/1000;
+				$diff = \round( \abs ( \time() - $latest) / 60 / 60 / 24, 2) ;
+				if($diff > 90 && $this->member_status == 1)
+				{
+					$this->deactivate_wow($diff);
+					return 0;
+				}
+
+			}
+
+			return 1;
+
+		}
+		else
+		{
+			$this->deactivate_wow('API Error');
+			return - 1;
 		}
 
 	}
