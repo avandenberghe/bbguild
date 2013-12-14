@@ -41,7 +41,11 @@ if (!class_exists('\bbdkp\controller\members\Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
-
+//include the roles class
+if (!class_exists('\bbdkp\controller\guilds\Roles'))
+{
+ require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Roles.$phpEx");
+}
 //include the guilds class
 if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
@@ -213,7 +217,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 
 				// fill popup and set selected to default selection
 				$Guild->Getguild();
-				$guildlist = $Guild->guildlist(1);
+				$guildlist = $Guild->guildlist(0);
 				foreach ($guildlist as $g)
 				{
 					$template->assign_block_vars('guild_row', array(
