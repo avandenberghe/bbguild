@@ -115,13 +115,13 @@ class Adjust extends \bbdkp\admin\Admin
 
 	/**
 	 * Adjustment class constructor
-	 * @param number $dkpsys
+	 * @param number $adjustment_dkpid
 	 */
-	function __construct($dkpsys = 0)
+	function __construct($adjustment_dkpid = 0)
 	{
 		global $db;
 		parent::__construct();
-
+		$this->adjustment_dkpid = $adjustment_dkpid;
 		// get dkp pools that are active.
 		$sql = 'SELECT dkpsys_id, dkpsys_name, dkpsys_default
             FROM ' . DKPSYS_TABLE . " a

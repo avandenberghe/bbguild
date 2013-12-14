@@ -41,7 +41,11 @@ if (!class_exists('\bbdkp\controller\members\Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
-
+//include the roles class
+if (!class_exists('\bbdkp\controller\guilds\Roles'))
+{
+ require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Roles.$phpEx");
+}
 //include the guilds class
 if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
@@ -185,6 +189,10 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 							$member = new \bbdkp\controller\members\Members($row['member_id']);
 							if(isset($member))
 							{
+								if($member->member_rank_id < 90)
+								{
+									$member->Armory_getmember();
+								}
 								$member->Updatemember($member);
 								unset($member);
 							}
@@ -212,7 +220,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 
 				// fill popup and set selected to default selection
 				$Guild->Getguild();
-				$guildlist = $Guild->guildlist(1);
+				$guildlist = $Guild->guildlist(0);
 				foreach ($guildlist as $g)
 				{
 					$template->assign_block_vars('guild_row', array(
@@ -406,6 +414,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					$newmember->member_achiev = 0;
 					$newmember->member_armory_url = utf8_normalize_nfc(request_var('member_armorylink', '', true));
 					$newmember->phpbb_user_id = request_var('phpbb_user_id', 0);
+					$newmember->Armory_getmember();
 					$newmember->Makemember();
 
 					if ($newmember->member_id > 0)
@@ -469,6 +478,10 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
 					$updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
 					$updatemember->phpbb_user_id = request_var('phpbb_user_id', 0);
+					if($updatemember->member_rank_id < 90)
+					{
+						$updatemember->Armory_getmember();
+					}
 
 					$updatemember->Updatemember($old_member);
 

@@ -878,7 +878,7 @@ class Guilds extends \bbdkp\admin\Admin
 	{
 		global $db;
 		$sql_array = array(
-				'SELECT' => 'a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, count(c.member_id) as membercount ' ,
+				'SELECT' => 'a.game_id, a.guilddefault, a.id, a.name, a.realm, a.region, count(c.member_id) as membercount, max(b.rank_id) as joinrank ' ,
 				'FROM' => array(
 						GUILD_TABLE => 'a' ,
 						MEMBER_RANKS_TABLE => 'b' ,),
@@ -888,7 +888,7 @@ class Guilds extends \bbdkp\admin\Admin
 								'ON'    => 'a.id = c.member_guild_id '
 						)
 				),
-				'WHERE' => " a.id = b.guild_id AND b.guild_id >= " . $minimum,
+				'WHERE' => " a.id = b.guild_id AND b.rank_id != 90 and b.guild_id >= " . $minimum,
 				'GROUP_BY' => ' a.guilddefault, a.id, a.name, a.realm, a.region ',
  				'ORDER_BY' => ' a.guilddefault desc,  count(c.member_id) desc, a.id asc'
 				);
@@ -905,6 +905,7 @@ class Guilds extends \bbdkp\admin\Admin
 				'guilddefault' => $row['guilddefault'],
 				'membercount' => $row['membercount'],
 				'realm' => $row['realm'],
+				'joinrank' => $row['joinrank'],
 			);
 		}
 		$db->sql_freeresult($result);
