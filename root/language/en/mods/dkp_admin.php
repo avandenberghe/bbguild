@@ -216,8 +216,6 @@ $lang = array_merge($lang, array(
 'UMIL_OLD_RESTORE_SUCCESS' => 'bbdkp (%s) dkpsystem, events, raids, raid_attendees, items, member_ranks, memberlist, temp_memberdkp tables restored successfully.',
 'UMIL_OLD_RESTORE_NOT' => 'No bbdkp (%s) installation found to restore.',
 'UMIL_OLD_UNINSTALL_SUCCESS' => 'bbdkp (%s) uninstalled. ',
-'UMIL_RENAMETABLESNEW' => 'Renaming of tables from custom ‘bbeqdkp_‘ prefix to ‘phpbb_‘ prefix',
-'UMIL_RENAMETABLESOLD' => 'Renaming of tables from ‘phpbb_‘ prefix TO custom ‘bbeqdkp_‘ prefix ',
 'UMIL_128MINIMUM' => 'Old version. 1.2.8 is required for updating to 1.3.0',
 'UMIL_NOGAMECHOSEN' => 'Please choose a game before installing.',
 'UMIL_GAME' => 'Game data installed for %s',
@@ -283,9 +281,7 @@ $lang = array_merge($lang, array(
 'ACP_ADDDKPSYS_EXPLAIN' => 'Here you can add or change the name/status of a DKP Pool. Before setting up Events you need to make a DKP Pool.',
 'ACP_LISTDKPSYS_EXPLAIN' => 'List DKP Pools; a DKP pool combines a series of Events, Raids and Items. This way you can manage multiple DKP Tiers separately. ',
 'ACP_ADDEVENT_EXPLAIN' => 'Here you can add / change event information. DKP Pools must be set up first.',
-'ACP_LISTEVENTS_EXPLAIN' => 'List of Events. The preset values will be used as standard Raidvalue for any raid on that event.
-		To create events you can choose a zonename from the zonelist. You can also import Events with the Raidtracker Eventtrigger import tool.
-		<em>Only raids belonging to active events are shown on the loot or Raid list. It is recommended to only deactivate events that are fully decayed or have no raids.</em>',
+'ACP_LISTEVENTS_EXPLAIN' => 'List of Events. The preset values will be used as standard Raidvalue for any raid on that event. To create events you can choose a zonename from the zonelist. You can also import Events with the Raidtracker Eventtrigger import tool. <em>Only raids belonging to active events are shown on the loot or Raid list. It is recommended to only deactivate events that are fully decayed or have no raids.</em>',
 'ACP_ADDIADJ_EXPLAIN'=> 'Here you can add / change individual adjustments. ',
 'ACP_LISTIADJ_EXPLAIN' => 'List Individual Adjustments',
 'ACP_ADDITEM_EXPLAIN' => 'Here you can add / change item information.',
@@ -296,6 +292,7 @@ $lang = array_merge($lang, array(
 'ACP_DKP_LOGS_EXPLAIN' => 'This lists all the actions in bbDKP. You can sort by username, date, IP or action.',
 'ACP_RANKS_EXPLAIN' => 'Here you can add/edit/delete raid ranks and name prefix/suffix. Ranks can be overwritten by the in-game ranks through the armorylink plugin. Custom ranks (90 and 99) are read-only. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Guild member list. Shows only visible ranks. You can add new guild members or update existing ones or remove them (green/red buttons). <br /> &#8853; If you have the Armory plugin (only for WoW) you can add new members in batch from Battle.NET. <br /> &#8853; The left checkboxes are for (de)activating members. Only active members show on Roster. Click ’Change Status’ to save your changes. <br />  &#8853; The right checkboxes are for mass deleting members. Click Mark All/Unmark all to toggle the checkboxes. Then click Delete Marked to proceed. A confirmation will be asked. <br/> &#8853; The Guild selector switches between guilds. ',
+
 'ACP_LISTGUILDS_EXPLAIN' => 'List of guilds. before you add members, you have to add a guild.',
 'ACP_ADDGUILD_EXPLAIN' => 'Here you can add a guild. ',
 'ACP_EDITGUILD_EXPLAIN' => 'Here you can edit or delete a guild. ',
@@ -332,8 +329,7 @@ $lang = array_merge($lang, array(
 'SYNCDKP_EXPLAIN'	=> 'Truncates the member DKP Table, rebuilds the values from the source Raid, Raid detail, Items, Adjustments table. Use only when necessary.',
 'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Here you can configure the Points system for your Guild.',
 'ACP_NEWGAME_EXPLAIN' => 'Here you can add new custom or preconfigured MMO games and maintain your installed games.',
-'ACP_EDITGAME_EXPLAIN' => 'Here you can edit the static elements of any MMO game: Factions, classes, races. <br />
-		<em>Currently not included are professions, skills, PVP, and geography including raids, dungeons and bosses.</em>',
+'ACP_EDITGAME_EXPLAIN' => 'Here you can edit the static elements of any MMO game: Factions, classes, races. <br /><em>Currently not included are professions, skills, PVP, and geography including raids, dungeons and bosses.</em>',
 'ACP_GAME_EXPLAIN' => 'Here you can reset a game to its default settings or delete a game.',
 'ACP_GAME_RESET' => 'Reset the game settings. ',
 'ACP_GAME_DELETE' => 'Delete this game.',
