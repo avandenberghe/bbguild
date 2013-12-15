@@ -5,7 +5,7 @@
  *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
+ * @version 1.3.0
  *
  */
 
@@ -873,7 +873,7 @@ So the loot would go to player 2 <br />',
 'MIN_ARMORYLEVEL' => 'Minimum level to Download from Armory:',
 
 
-	 // titles
+// titles
 'ADD_ITEM_RAIDID_NOTE' => 'Only raids less than two weeks old are shown / %sshow all</a>',
 'ADD_ITEM_RAIDID_SHOWALL_NOTE' => 'All raids are shown / %s show some</a>',
 'ADD_RAID_VALUE_NOTE' => 'for a one-time bonus; preset value for the event selected is used if left blank',
@@ -983,6 +983,7 @@ So the loot would go to player 2 <br />',
 'CONTACT' => 'Contact',
 'CREATE' => 'Create',
 'DATE_FORMAT' => 'Date Format in lists',
+
 'BBDKP_MEMBERDEACTIVATED' => 'Deactivated by %s on %s',
 'DEFAULT_DKP_POOL' => 'Default DKP Pool',
 'DEFAULT_GUILD' => 'Default Guild',
@@ -1029,6 +1030,7 @@ So the loot would go to player 2 <br />',
 'MEMBER_RANK' => 'Member Rank',
 'NO_IMAGE' => 'No image',
 'NONACTIVE' => 'non-Active',
+'NOLOOT'	=> 'No Loot found',
 'POOL' => 'Point Pool',
 'POOLID' => 'Dkp id',
 'PRCALC' => 'Priority Ratio Calculation',
@@ -1074,7 +1076,7 @@ So the loot would go to player 2 <br />',
 'FREQ0'    => 'Days',
 'FREQ1'    => 'Weeks',
 'FREQ2'    => 'Months',
-'NOLOOT'	=> 'No Loot found',
+
 
 //Games
 'MIN' => 'Min ',
