@@ -1,13 +1,11 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu (German-Informal)
- * 
- * 
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * bbdkp acp language file for mainmenu
+ *
+ *
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
- * @translation unknown author
- * 
+ *
  */
 
 /**
@@ -26,9 +24,11 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-    'ACP_DKP_EVENT'			=> 'Ereignisse',
-	'ACP_DKP_EVENT_ADD'		=> 'Ereignis hinzufügen',  
-	'ACP_DKP_EVENT_LIST'	=> 'Ereignisse',
+	'ACP_DKP_GUILD'			=> 'Gilden',
+ 	'ACP_DKP_GUILD_ADD'	    => 'Neue Gilde ',
+	'ACP_DKP_GUILD_EDIT'	=> 'Gilde bearbeiten',
+	'ACP_DKP_GUILD_LIST'	=> 'Gilden liste',
+	
 ));
 
 ?>
