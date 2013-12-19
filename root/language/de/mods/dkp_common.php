@@ -1,12 +1,11 @@
 <?php
 /**
- * bbdkp common language file
+ * bbdkp common language file - de German
  * 
- * 
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
-  * @translation various unknown authors, killerpommes
+ * @version 1.3
+ * @translation various unknown authors, killerpommes
  * 
  */
 
@@ -43,8 +42,8 @@ if (empty($lang) || !is_array($lang))
 //
 
 $lang = array_merge($lang, array(
-	'BBDKPDISABLED'	=> 'bbDKP is momentan deaktiviert.',
-
+	'BBDKPDISABLED'	=> 'bbDKP is zur zeit nicht erreichbar.',
+	'FOOTERBBDKP' => 'bbDKP 1.3.0',
 //---- Portal blocks ----- 
 	'PORTAL'	=> 'Portal',
 	'RECENTLOOT'	=> 'Letzte Beute',
@@ -59,7 +58,6 @@ $lang = array_merge($lang, array(
 	'ERROR_INVALID_NEWS_PROVIDED'	=> 'Ungültige Nachricht.',
 	'BOSSPROGRESS'	=> 'Instanz-Fortschritt',
 	'WELCOME'	=> 'Willkommen', 
-	'FOOTERBBDKP'	=> 'bbDKP1.2.9', 
 	'RECENT_LENGTH' 	=> 'Anzahl angezeigte Buchstaben',
 	'NUMTOPICS'					=> 'Anzahl angezeigte Beiträge',
 	'SHOW_RT_BLOCK'				=> 'neue Beiträge anzeigen',
@@ -67,6 +65,7 @@ $lang = array_merge($lang, array(
 	'RECENT_TOPICS'				=> 'Neue Beiträge',	
 	'NO_RECENT_TOPICS'			=> 'Keine neue Beiträge',
 	'POSTED_BY_ON'				=> '%2$s von %1$s',	
+	'LATESTMEMBERS'				=> 'Neueste Mitglieder',
 	
 // Main Menu
 	'MENU'	=> 'Menü',
@@ -87,55 +86,54 @@ $lang = array_merge($lang, array(
 	'MENU_VIEWEVENT'	=> 'Ereignis ansehen',
 	'MENU_PLANNER'	=> 'Planer',
 
-
 	//links
 	'MENU_LINKS' => 'Weblinks',
-	'LINK1' => 'http://www.bbdkp.com', 
+	'LINK1' => 'http://www.bbdkp.com',
 	'LINK1T' => 'Powered By: bbDKP',
-	'LINK2' => 'http://uk.aiononline.com', 
-	'LINK2T' => 'Aion Online', 
-	'LINK3' => 'http://darkageofcamelot.com', 
-	'LINK3T' => 'Dark age of Camelot', 
-	'LINK4' => 'http://everquest2.station.sony.com/', 
-	'LINK4T' => 'Everquest 2', 
-	'LINK5' => 'http://www.playonline.com/ff11us/index.shtml', 
-	'LINK5T' => 'FFXI', 
-	'LINK6' => 'http://www.guildwars2.com', 
-	'LINK6T' => 'Guild Wars 2', 
-	'LINK7' => 'http://www.lineage2.com', 
-	'LINK7T' => 'Lineage 2', 
-	'LINK8' => 'http://www.lotro.com', 
-	'LINK8T' => 'Lord of the Rings', 
-	'LINK9' => 'http://www.riftgame.com', 
-	'LINK9T' => 'Rift', 
-	'LINK10' => 'http://www.swtor.com', 
-	'LINK10T' => 'Star Wars : ToR', 
-	'LINK11' => 'http://tera.enmasse.com/', 
-	'LINK11T' => 'Tera', 
-	'LINK12' => 'http://www.vanguardmmorpg.com', 
-	'LINK12T' => 'Vanguard', 
-	'LINK13' => 'http://www.warhammeronline.com', 
-	'LINK13T' => 'Warhammer', 
-	'LINK14' => 'http://www.worldofwarcraft.com', 
-	'LINK14T' => 'World of Warcraft', 
-
+	'LINK2' => 'http://uk.aiononline.com',
+	'LINK2T' => 'Aion Online',
+	'LINK3' => 'http://darkageofcamelot.com',
+	'LINK3T' => 'Dark age of Camelot',
+	'LINK4' => 'http://everquest2.station.sony.com/',
+	'LINK4T' => 'Everquest 2',
+	'LINK5' => 'http://www.playonline.com/ff11us/index.shtml',
+	'LINK5T' => 'FFXI',
+	'LINK6' => 'http://www.guildwars2.com',
+	'LINK6T' => 'Guild Wars 2',
+	'LINK7' => 'http://www.lineage2.com',
+	'LINK7T' => 'Lineage 2',
+	'LINK8' => 'http://www.lotro.com',
+	'LINK8T' => 'Lord of the Rings',
+	'LINK9' => 'http://www.riftgame.com',
+	'LINK9T' => 'Rift',
+	'LINK10' => 'http://www.swtor.com',
+	'LINK10T' => 'Star Wars : ToR',
+	'LINK11' => 'http://tera.enmasse.com/',
+	'LINK11T' => 'Tera',
+	'LINK12' => 'http://www.vanguardmmorpg.com',
+	'LINK12T' => 'Vanguard',
+	'LINK13' => 'http://www.warhammeronline.com',
+	'LINK13T' => 'Warhammer',
+	'LINK14' => 'http://www.worldofwarcraft.com',
+	'LINK14T' => 'World of Warcraft',
 
 //games supported
-	'WOW'			=> 'World of Warcraft',
-	'LOTRO'			=> 'The Lord of the Rings Online',
-	'EQ'			=> 'EverQuest',
-	'DAOC'			=> 'Dark Age of Camelot',
-	'VANGUARD'		=> 'Vanguard - Saga of Heroes',
-	'EQ2'			=> 'EverQuest II',
-	'WARHAMMER'		=> 'Warhammer Online',
 	'AION'			=> 'Aion',
-	'FFXI'			=> 'Final Fantasy XI',
-	'RIFT'       	=> 'Rift',
-	'SWTOR'       	=> 'Starwars : The old Republic', 
+	'DAOC'			=> 'Dark Age of Camelot',
+	'EQ'			=> 'EverQuest',
+	'EQ2'			=> 'EverQuest II',	
+	'FFXI'			=> 'Final Fantasy XI',	
+	'GW2'       	=> 'Guildwars 2', 	
 	'LINEAGE2'      => 'Lineage 2', 
-	'GW2'       	=> 'Guildwars 2', 
-	'TERA'       	=> 'Tera', 
-	'NORAIDS'       => 'No Raids', 
+	'LOTRO'			=> 'The Lord of the Rings Online',	
+	'RIFT'       	=> 'Rift',	
+	'SWTOR'       	=> 'Starwars : The old Republic', 	
+	'TERA'       	=> 'Tera', 	
+	'VANGUARD'		=> 'Vanguard - Saga of Heroes',
+	'WARHAMMER'		=> 'Warhammer Online',
+	'WOW'			=> 'World of Warcraft',	
+	'PREINSTALLED' => 'Vorinstallierte Spiele: %s',
+	
 //Recruitment
 	'RECRUITMENT_BLOCK'	=> 'Rekrutierungs Status',
 	'RECRUIT_CLOSED'	=> 'Geschlossen !',
@@ -145,13 +143,15 @@ $lang = array_merge($lang, array(
 	'RECRUIT_MESSAGE'	=> 'Wir sind zurzeit auf der Suche nach neuen Mitstreitern folgender Klassen und Spezialisierungen:',
 
 //ROSTER
-
 	'GUILDROSTER'	=> 'Mitgliedsbuch',
-	'RANK'	=> 'Rang',
-	'CLASS'	=> 'Klasse',
-	'LVL'	=> 'Level',
+	'RANK'		=> 'Rang',
+	'CLASS'		=> 'Klasse',
+	'LVL'		=> 'Niveau',
+	'REALM'		=> 'Realm',
+	'REGION'	=> 'Region',
 	'ACHIEV'	=> 'Erfolge',
-
+	'PROFFESSION' => 'Berufe',
+	
 //listmembers
 	'ADJUSTMENT'	=> 'Korrektur',
 	'ALL'	=> 'Alle',
@@ -162,6 +162,7 @@ $lang = array_merge($lang, array(
 	'LEVEL'	=> 'Level',
 	'LISTMEMBERS_TITLE'	=> 'Mitglieder Statistik',
 	'MNOTFOUND'	=> 'Mitglied nicht gefunden',
+	'RNOTFOUND' => 'Raid icht gefunden',
 	'EMPTYRAIDNAME'	=> 'Raidname nicht gefunden',
 	'NAME'	=> 'Name',
 	'POOL'	=> 'DKP Pool',
@@ -204,7 +205,7 @@ $lang = array_merge($lang, array(
 	'ATTENDANCE_BY_EVENT'	=> 'Beteiligung bei Ereignis',
 	'ATTENDED'	=> 'Teilgenommen',
 	'ATTENDEES'	=> 'Teilnehmer',
-	'ATTENDANCE_LIFETIME' => 'Allgemeine Teilnahme',
+	'ATTENDANCE' => 'Teilnahme',
 	'AVERAGE'	=> 'Durchschnitt',
 	'BOSS'	=> 'Boss',
 	'BUYER'	=> 'Käufer',
@@ -230,7 +231,7 @@ $lang = array_merge($lang, array(
 	'CLASS_DISTRIBUTION'	=> 'Klassenverteilung',
 	'CLASS_SUMMARY'	=> 'Klassen Übersicht: %s zu %s',
 	'CONFIGURATION'	=> 'Konfiguration',
-
+	'CLOSED' => 'Geschlossen',
 	'DATE'	=> 'Datum',
 	'DELETE'	=> 'Löschen',
 	'DELETE_CONFIRMATION'	=> 'Bestätige Löschung',
@@ -239,11 +240,13 @@ $lang = array_merge($lang, array(
 	'CHARACTER'	=> 'Charaktername',
 	'CHARACTER_EXPLAIN'	=> 'Wähle dein Charakternamen and bestätige.',
 	'CHARACTERS_UPDATED'	=> 'Der Charaktername %s wurde an dein Forumkonto gekoppelt. ',
+	'NO_CHARACTERS_BOUND' => 'Keine Charaktere an sind an Ihr Account verbunden.',	
 	'NO_CHARACTERS'	=> 'Keine Charaktere gefunden.',
 	'RAIDDECAY'	=> 'Raid Entwertung',
 	'ADJDECAY' => 'Ajustierungsentwertung', 
 	'DECAY'	=> 'Entwert',
 	'DROPS'	=> 'Beute',
+	'EVENTNOTE' => 'Notiz: Nur Raids und Beute von aktive Ereignisse werden gezeigt',	
 	'EVENT'	=> 'Ereignis',
 	'EVENTNAME'	=> 'Ereignisname',
 	'EVENTS'	=> 'Ereignisse',
@@ -252,6 +255,7 @@ $lang = array_merge($lang, array(
 	'FIRST'	=> 'Erster',
 	'GROUP_ADJ'	=> 'Gruppen Korrektur.',
 	'GROUP_ADJUSTMENTS'	=> 'Gruppenkorrekturen',
+	'HIGH'	=> 'hoch',
 	'INDIVIDUAL_ADJUSTMENTS'	=> 'Individuelle Korrekturen',
 	'INDIVIDUAL_ADJUSTMENT_HISTORY'	=> 'Individuelle Korrekturen Verlauf',
 	'INDIV_ADJ'	=> 'Korr.',
@@ -264,8 +268,7 @@ $lang = array_merge($lang, array(
 	'JOINDATE'	=> 'Gilden Eintrittsdatum',
 	'LAST'	=> 'Letzter',
 	'LASTLOOT'	=> 'Letztes Beute',
-	'LAST_VISIT'	=> 'Letzter Besuch',
-	'LATESTMEMBERS' => 'Neueste Benutzer', 
+	'LAST_VISIT'	=> 'Letzter Besuch',	
 	'LOG_DATE_TIME'	=> 'Datum/Zeit dieses Logs',
 	'LOOT_FACTOR'	=> 'Beute Faktor',
 	'LOOTS'	=> 'Beute',
@@ -411,6 +414,7 @@ $lang = array_merge($lang, array(
 	'MEDIUM'	=> 'Mittel',	
 	'MAY_BE_NEGATIVE_NOTE'	=> 'darf negativ sein',
 	'NA'	=> 'N/V',		
+		'NORAIDS'       => 'No Raids', 
 	'NOT_AVAILABLE'	=> 'Nicht vorhanden',
 	'OF_RAIDS'	=> '%d',
 	'OF_RAIDS_CHAR'	=> '%s',

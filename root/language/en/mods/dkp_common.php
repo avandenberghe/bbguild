@@ -1,10 +1,11 @@
 <?php
 /**
- * bbdkp common language file
- *
+ * bbdkp common language file - en
  *
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.3
+ *
  *
  */
 
@@ -66,6 +67,25 @@ $lang = array_merge($lang, array(
 'POSTED_BY_ON'				=> 'by %1$s on %2$s',
 'LATESTMEMBERS'				=> 'Latest members',
 
+// Main Menu
+'MENU' => 'Menu',
+'MENU_ADMIN_PANEL' => 'Administration Panel',
+'MENU_BOSS' => 'Bossprogress',
+'MENU_EVENTS' => 'Events',
+'MENU_ITEMVAL' => 'Item Values',
+'MENU_ITEMHIST' => 'Item History',
+'MENU_NEWS' => 'News',
+'MENU_RAIDS' => 'Raids',
+'MENU_ROSTER'	=> 'Roster',
+'MENU_STATS' => 'Statistics',
+'MENU_SUMMARY' => 'Summary',
+'MENU_STANDINGS' => 'Standings',
+'MENU_VIEWMEMBER' => 'View Member',
+'MENU_VIEWITEM' => 'View Item',
+'MENU_VIEWRAID' => 'View Raid',
+'MENU_VIEWEVENT' => 'View Event',
+'MENU_PLANNER' => 'Planner',
+
 //links
 'MENU_LINKS' => 'Weblinks',
 'LINK1' => 'http://www.bbdkp.com',
@@ -97,25 +117,6 @@ $lang = array_merge($lang, array(
 'LINK14' => 'http://www.worldofwarcraft.com',
 'LINK14T' => 'World of Warcraft',
 
-// Main Menu
-'MENU' => 'Menu',
-'MENU_ADMIN_PANEL' => 'Administration Panel',
-'MENU_BOSS' => 'Bossprogress',
-'MENU_EVENTS' => 'Events',
-'MENU_ITEMVAL' => 'Item Values',
-'MENU_ITEMHIST' => 'Item History',
-'MENU_NEWS' => 'News',
-'MENU_RAIDS' => 'Raids',
-'MENU_ROSTER'	=> 'Roster',
-'MENU_STATS' => 'Statistics',
-'MENU_SUMMARY' => 'Summary',
-'MENU_STANDINGS' => 'Standings',
-'MENU_VIEWMEMBER' => 'View Member',
-'MENU_VIEWITEM' => 'View Item',
-'MENU_VIEWRAID' => 'View Raid',
-'MENU_VIEWEVENT' => 'View Event',
-'MENU_PLANNER' => 'Planner',
-
 //games preinstalled
 'AION'       => 'Aion' ,
 'DAOC'       => 'Dark Age of Camelot' ,
@@ -141,7 +142,7 @@ $lang = array_merge($lang, array(
 'HEAL' 	=> 'Heal',
 'RECRUIT_MESSAGE' => 'We are currently looking for new members for the following classes:',
 
-//MEMBER
+//ROSTER
 'GUILDROSTER' => 'Guild Roster',
 'RANK' 		  => 'Rank',
 'CLASS' 	  => 'Class',
