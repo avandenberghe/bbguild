@@ -5,7 +5,8 @@
  * 
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * 
+ * @version 1.3.0
+ *
  */
 
 /**
@@ -40,10 +41,15 @@ if (empty($lang) || !is_array($lang))
 // ‚Äô ¬ª ‚Äú ‚Äù ‚Ä¶
 //
 
-$lang = array_merge($lang, array(
 // DKP
+$lang = array_merge($lang, array(
+	'NOT_UP_TO_DATE_TITLE' => 'Votre %s n’est pas à jour', 
+	'BBDKP_LATESTVERSION' => 'Dernière Version: ', 	
 	'BBDKPDISABLED'	=> 'bbDKP est temporairement désactivé.',
 	'BBDKPSCRIPTALERT'	=> 'bbDKP contient du Javascript. Veuillez svp activer le javascript dans votre browser.',
+	
+//Plugin Check System
+
 	'ADD_NEWS'	=> 'Ajouter Nouvelles',
 	'ADDNEWS_TITLE'	=> 'Ajouter un article',
 	'DELETE_NEWS'	=> 'Supprimer un article',
