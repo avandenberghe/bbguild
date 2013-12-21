@@ -48,21 +48,6 @@ $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.',
 'BBDKPSCRIPTALERT' => 'bbDKP includes embedded Javascript. You are invited to use a javascript-enabled browser.',
 
-//Plugin Check System
-
-'PLUGINS_INSTALLED'	 => 'Plugins Installed',
-'PLUGINS_STATUS' 	 => 'Plugin Status',
-'DOWNLOAD_LATEST_PLUGINS'	=> 'Latest Version: ',
-'PLUGIN_UP_TO_DATE' 		=> 'Up To Date',
-'PLUGIN_VERSION_NOTONLINE' 	=> 'bbDKP Plugin callback failed, cannot look up latest version.',
-
-'APPLY_TITLE' 			=> 'Apply',
-'ARMORY_IMPORTER_TITLE' => 'Armory-Importer',
-'BBTIPS_TITLE' 			=> 'bbTips',
-'BOSSPROGRESS_TITLE' 	=> 'Bossprogress',
-'RAIDPLANNER_TITLE' 	=> 'RaidPlanner',
-'RAIDTRACKER_TITLE' 	=> 'RaidTracker',
-
 //addnews
 'ADD_NEWS' => 'Add News',
 'ADDNEWS_TITLE' => 'Add a News Entry',
@@ -76,14 +61,15 @@ $lang = array_merge($lang, array(
 'REGISTRATIONID' => 'bbDKP Registration key',
 'NOTREGISTERED' => 'Unregistered',
 'REGISTRATION_EXPLAIN' => 'If you press the registration button, your domainname, phpbb version, bbDKP version are sent to bbDKP.com and you get a registration key. This is entirely up to you, registration is not needed to use this software. ',
+
 //JAVASCRIPT
-'B_HELP' => 'Bold text: [b]text[/b]',
-'I_HELP' => 'Italic text: [i]text[/i]',
-'U_HELP' => 'Underlined text: [u]text[/u]',
-'Q_HELP' => 'Quote text: [quote]text[/quote]',
-'C_HELP' => 'Center text: [center]text[/center]',
-'P_HELP' => 'Insert image: [img]http://image_url[/img]',
-'W_HELP' => 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
+'B_HELP' 	=> 'Bold text: [b]text[/b]',
+'I_HELP' 	=> 'Italic text: [i]text[/i]',
+'U_HELP' 	=> 'Underlined text: [u]text[/u]',
+'Q_HELP' 	=> 'Quote text: [quote]text[/quote]',
+'C_HELP' 	=> 'Center text: [center]text[/center]',
+'P_HELP' 	=> 'Insert image: [img]http://image_url[/img]',
+'W_HELP' 	=> 'Insert URL: [url]http://url[/url] or [url=http://url]URL text[/url]',
 'ITEM_HELP' => 'Wowhead : [item]text[/item]',
 
 // Form Validation Errors
@@ -119,6 +105,7 @@ $lang = array_merge($lang, array(
 'FV_REQUIRED_MEMBERS' => 'At least one member must be selected.',
 'FV_REQUIRED_DKPSYS_NAME' => 'The Dkp Pool field is required.',
 'FV_REQUIRED_NAME' => 'The name field is required.',
+'FV_REQUIRED_ID' => 'l’id est requis.',
 'FV_REQUIRED_PASSWORD' => 'The password field is required.',
 'FV_REQUIRED_RAIDID' => 'A raid must be selected.',
 'FV_REQUIRED_USER' => 'The username field is required.',
@@ -217,7 +204,6 @@ $lang = array_merge($lang, array(
 'UMIL_OLD_RESTORE_NOT' => 'No bbdkp (%s) installation found to restore.',
 'UMIL_OLD_UNINSTALL_SUCCESS' => 'bbdkp (%s) uninstalled. ',
 'UMIL_128MINIMUM' => 'Old version. 1.2.8 is required for updating to 1.3.0',
-'UMIL_NOGAMECHOSEN' => 'Please choose a game before installing.',
 'UMIL_GAME' => 'Game data installed for %s',
 'UMIL_DUMMYDATA' => 'Dummy data entered',
 'UMIL_GAMEUNINST' => 'Game data uninstalled',
@@ -282,6 +268,7 @@ $lang = array_merge($lang, array(
 'ACP_LISTDKPSYS_EXPLAIN' => 'List DKP Pools; a DKP pool combines a series of Events, Raids and Items. This way you can manage multiple DKP Tiers separately. ',
 'ACP_ADDEVENT_EXPLAIN' => 'Here you can add / change event information. DKP Pools must be set up first.',
 'ACP_LISTEVENTS_EXPLAIN' => 'List of Events. The preset values will be used as standard Raidvalue for any raid on that event. To create events you can choose a zonename from the zonelist. You can also import Events with the Raidtracker Eventtrigger import tool. <em>Only raids belonging to active events are shown on the loot or Raid list. It is recommended to only deactivate events that are fully decayed or have no raids.</em>',
+
 'ACP_ADDIADJ_EXPLAIN'=> 'Here you can add / change individual adjustments. ',
 'ACP_LISTIADJ_EXPLAIN' => 'List Individual Adjustments',
 'ACP_ADDITEM_EXPLAIN' => 'Here you can add / change item information.',
@@ -730,105 +717,7 @@ $lang = array_merge($lang, array(
 'WHO_ONLINE' => 'Who’s Online',
 'LISTMEMBERS_PER_PAGE' => 'Members per Page',
 
-// LOOTSYSTEM
-'DESCRIPTION' => 'lootsystem',
-'EXAMPLE' => 'lootsystem',
-'ADVANTAGE' => 'lootsystem',
-'LOOTSYSTEM' => 'lootsystem',
-'STANDARDDKP' => 'Standard DKP',
-'STANDARDDKP_EXPLAIN' => '<strong>Description: </strong>The default DKP system. Players only receive DKP points as a result of being on time, or staying on bench, or killing a boss, or just plain participating.
-Points are spent on loot just like in zero sum, but there is no redistribution. ',
-'STANDARDDKP_EXAMPLE'=> '<strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points.  <br />
-players receive 5 points for slaying a dragon, 2 points for being on time or on attendance.
- <br />net result for whole raid : earned : (5+2) * 10 = 70 <br /> spent : 20 <br /> difference= 50',
-'STANDARDDKP_ADVANTAGE' => '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
-'STANDARDDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there’s a disequilibrium towards the other players.',
-
-'ZEROSUM' => 'Zero Sum DKP',
-'ZEROSUM_ONOFF_EXPLAIN' => 'Can not be combined with EPGP',
-'ZEROSUM_EXPLAIN' => '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. The raid members will thusly gain dkp points when someone received an item. this ensures that there is no inflation, or point hoarding. <br/>',
-'ZEROSUM_EXAMPLE' => ' <strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br/> The balance at the end is : earned 20, spent 20.',
-'ZEROSUM_ADVANTAGE' => ' <strong>Advantage</strong> : no point inflation if all players start at the same gearlevel.',
-'ZEROSUM_DISADVANTAGE' => '<strong>Disadvantage</strong> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points untill he’s at a disequilibrium towards the other players.
-Not much incentive to join a raid if it is a difficult progress raid and wipes are expected and no loot likely will drop. ',
-
-'ZEROSUMPLUS' => 'Zero Sum DKP + Bonus',
-'ZEROSUMPLUS_EXPLAIN' => '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. <br /> Any bonus points earned are offset to a dummy account.<br /> The raid members will gain dkp points when someone received an item, plus a bonus. this ensures that there is no inflation, or point hoarding. <br />',
-'ZEROSUMPLUS_EXAMPLE' => ' <strong>example</strong>: there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points.
-<br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br /> on top of that, players receive 5 points for a bosskill, 2 points for being on time or on attendance. these extra points are offset with the zerosum dummy account.
-The balance at the end is : earned 20+7=27, spent 20+7=27.',
-'ZEROSUMPLUS_ADVANTAGE' => ' <strong>Advantage</strong> :<br />  no point inflation if all players start at the same gearlevel. The bonus points are added to the system so as to offer an incentive to play, since a raid without loots will earn no points. ',
-'ZEROSUMPLUS_DISADVANTAGE' => '   <strong>Disadvantage</strong> :<br /> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he’s at a disequilibrium towards the other players.',
-
-'TIMEDKP' => 'Time Bonus',
-'TIMEDKP_EXPLAIN' => '<strong>Description: </strong>Lootsystem where players receive points per started Hour present in the raid or being available. Time is measured from when the raid starts to the end.
-Points are spent on loot just like in bonus system. Bonus points may be awarded for other reasons aswell.',
-'TIMEDKP_EXAMPLE'=> '<strong>Example</strong> : 10 raiders, each present for 90 minutes.  <br />dkp/hour is 20 points, so this means that each raider gets 90/60 * 20 = 1,5 * 20 = 30 points <br />1 item dropped, for 20 points <br />
-net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20 <br />difference = 280',
-'TIMEDKP_ADVANTAGE' => '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
-'TIMEDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there’s a disequilibrium towards the other players.',
-
-'EPGP' => 'EPGP Effort / Gearpoints',
-'EPGP_ONOFF_EXPLAIN' => 'Can not be combined with Zerosum',
-'EPGP_EXPLAIN' => '<strong>Description: </strong>A Lootsystem where the loot is allocated to the person with the highest Effort to Gear ratio. Effort points are Raid bonuses, Time points. and Adjustments. Gear points are the Item cost. EP and GP are both decayed.',
-'EPGP_EXAMPLE' => '<strong>Example</strong> : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />
-The item costs 20 Gearpoints<br />
-effortpoints player 1 : 202, EP/GP ratio 10.1<br />
-effortpoints player 2 : 342, EP/GP ratio 17.1<br />
-So the loot would go to player 2 <br />',
-'EPGP_ADVANTAGE' => '<strong>Advantage</strong> : no inflation, no hoarding. ',
-'EPGP_DISADVANTAGE' => '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ',
-'DECAY_EXPLAIN'	=> 'Earned points and Item cost get depreciated over time. Can be used with standard dkp, time dkp, epgp. ',
-'DECAY_EXAMPLE'	=> 'Decay example',
-
-'FORMULA' 	=> 'Formula’s',
-'DECAY_N'	=> '<strong>Age of Raid in weeks</strong> = n',
-'DECAY_I'	=> '<strong>Raid Decay percentage</strong> = i',
-'DECAY_D'	=> '<strong>Decay factor</strong> d = 1 - (1-i)^n ',
-'DECAY_R'	=> '<strong>Raid Value</strong> = r',
-'DECAY_K'	=> '<strong>Raid Decay</strong> k = r * d',
-'DECAY_L'	=> '<strong>Item Decay percentage</strong> = l',
-'DECAY_J'	=> '<strong>Item Value</strong> = j',
-'DECAY_F'	=> '<strong>Item Decay</strong> f = j * l',
-
-'DECAYPCTRAIDS' => 'Raid decay rate (%)',
-'DECAYPCTRAIDS_EXPLAIN' => 'The Raid earned value depreciates by this percentage per set period.',
-'DECAYPCTITEM' => 'Item/Gearpoint decay rate (%)',
-'DECAYPCTITEM_EXPLAIN' => 'The cost of items will depreciate by this percentage per set period.',
-'DECAYPCTADJ' => 'Adjustment decay rate (%)',
-'DECAYPCTADJ_EXPLAIN' => 'The adjustments depreciate by this percentage.',
-'DECAYFREQ' => 'Decay Schedule',
-'DECAYFREQ_EXPLAIN' => 'Depreciation is scheduled every n days, weeks or months after each raid. ',
-'DECAYFREQTYPE' => 'Decay frequency type',
-'DECAY_SCHEDULE' => 'Automatic Decay Job',
-'DECAY_SCHEDULE_EXPLAIN' => 'Let bbDKP calculate decay',
-'DECAYCRON' => 'triggered by cronjob',
-'NO_DECAY_ADJ'	=> 'Adjustment decayable ?',
-
-'PR' => 'Priority ratio',
-'EP_DEFINITION'  => '<strong>EP</strong> = Earned points = Raid Bonus + Time Bonuspoints + Zerosum points + Adjustments ',
-'DECAY_EP'  => '<strong>EP After Decay</strong> = EP_eff * d',
-'MEP'  => 'Minimum ep',
-'MEP_EXPLAIN'  => 'MEP = minimum EP threshold Value. Effective PR is 0 until EP_min is reached.',
-'MEP_DEFINITION'  => '<strong>EP_eff</strong> = max( 0, (EP - MEP))',
-'GP_DEFINITION'  => '<strong>GP</strong> = Base GP + Real GP',
-'RGP_DEFINITION'  => '<strong>RGP</strong> = Real Gear points = Item Cost',
-'BGP'  => 'Base gp',
-'BGP_EXPLAIN'  => 'BGP = Base Gearpoint Value. will not be decayed.',
-'DECAY_GP'  => '<strong>GP After Decay</strong> = BGP + RGP - RGP * l',
-
-//resynchronisation
-'RESYNC_ZEROSUM'				=> 'Resynchronise Zero sum',
-'RESYNC_ZEROSUM_CONFIRM'		=> 'Are you sure you wish to resynchronise all zerosum values? This will affect all DKP balances. ',
-'RESYNC_ZEROSUM_EXPLAIN'		=> 'First sets to zero all existing zero sum bonuses. If zerosum flag is set, recalculates according to item values for each raid.',
-'RESYNC_ZEROSUM_SUCCESS'		=> 'Successfully (re)distributed %s item values and updated DKP accounts %s times. ',
-'RESYNC_ZEROSUM_DELETED'		=> 'Successfully set to zero all zerosum distributions. ',
-'RESYNC_DECAY'					=> 'Resynchronise decay values',
-'RESYNC_DECAY_CONFIRM'			=> 'Are you sure you wish to resynchronise Decay values? This will affect all EP end GP values. ',
-'RESYNC_DECAY_EXPLAIN'			=> 'First sets all raid and item decay to zero, then if Decay flag is set, recalculates Decay according to parameters.',
-'RESYNC_DECAY_SUCCESS'			=> 'Successfully decayed %s raids',
-'RESYNC_DKP_CONFIRM'			=> 'Are you SURE you wish to resynchronise DKP values ? ',
-
+// menus
 'MENU_RAIDS' => 'Raids',
 'MENU_EVENTS' => 'Events',
 'MENU_ITEMHIST' => 'Item History',
@@ -1127,6 +1016,106 @@ So the loot would go to player 2 <br />',
 'WOW_ZONEEURL' => 'http://www.wowhead.com/?zone=%s',
 'SWTOR_BASEURL' => 'http://www.torhead.com/npc=%s',
 'SWTOR_ZONEEURL' => 'http://www.torhead.com/zone=%s',
+
+
+// LOOTSYSTEM
+'DESCRIPTION' => 'lootsystem',
+'EXAMPLE' => 'lootsystem',
+'ADVANTAGE' => 'lootsystem',
+'LOOTSYSTEM' => 'lootsystem',
+'STANDARDDKP' => 'Standard DKP',
+'STANDARDDKP_EXPLAIN' => '<strong>Description: </strong>The default DKP system. Players only receive DKP points as a result of being on time, or staying on bench, or killing a boss, or just plain participating.
+Points are spent on loot just like in zero sum, but there is no redistribution. ',
+'STANDARDDKP_EXAMPLE'=> '<strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points.  <br />
+players receive 5 points for slaying a dragon, 2 points for being on time or on attendance.
+ <br />net result for whole raid : earned : (5+2) * 10 = 70 <br /> spent : 20 <br /> difference= 50',
+'STANDARDDKP_ADVANTAGE' => '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
+'STANDARDDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there’s a disequilibrium towards the other players.',
+'ZEROSUM' => 'Zero Sum DKP',
+'ZEROSUM_ONOFF_EXPLAIN' => 'Can not be combined with EPGP',
+'ZEROSUM_EXPLAIN' => '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. The raid members will thusly gain dkp points when someone received an item. this ensures that there is no inflation, or point hoarding. <br/>',
+'ZEROSUM_EXAMPLE' => ' <strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br/> The balance at the end is : earned 20, spent 20.',
+'ZEROSUM_ADVANTAGE' => ' <strong>Advantage</strong> : no point inflation if all players start at the same gearlevel.',
+'ZEROSUM_DISADVANTAGE' => '<strong>Disadvantage</strong> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points untill he’s at a disequilibrium towards the other players.
+Not much incentive to join a raid if it is a difficult progress raid and wipes are expected and no loot likely will drop. ',
+
+'ZEROSUMPLUS' => 'Zero Sum DKP + Bonus',
+'ZEROSUMPLUS_EXPLAIN' => '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. <br /> Any bonus points earned are offset to a dummy account.<br /> The raid members will gain dkp points when someone received an item, plus a bonus. this ensures that there is no inflation, or point hoarding. <br />',
+'ZEROSUMPLUS_EXAMPLE' => ' <strong>example</strong>: there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points.
+<br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br /> on top of that, players receive 5 points for a bosskill, 2 points for being on time or on attendance. these extra points are offset with the zerosum dummy account.
+The balance at the end is : earned 20+7=27, spent 20+7=27.',
+'ZEROSUMPLUS_ADVANTAGE' => ' <strong>Advantage</strong> :<br />  no point inflation if all players start at the same gearlevel. The bonus points are added to the system so as to offer an incentive to play, since a raid without loots will earn no points. ',
+'ZEROSUMPLUS_DISADVANTAGE' => '   <strong>Disadvantage</strong> :<br /> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he’s at a disequilibrium towards the other players.',
+
+'TIMEDKP' => 'Time Bonus',
+'TIMEDKP_EXPLAIN' => '<strong>Description: </strong>Lootsystem where players receive points per started Hour present in the raid or being available. Time is measured from when the raid starts to the end.
+Points are spent on loot just like in bonus system. Bonus points may be awarded for other reasons aswell.',
+'TIMEDKP_EXAMPLE'=> '<strong>Example</strong> : 10 raiders, each present for 90 minutes.  <br />dkp/hour is 20 points, so this means that each raider gets 90/60 * 20 = 1,5 * 20 = 30 points <br />1 item dropped, for 20 points <br />
+net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20 <br />difference = 280',
+
+'TIMEDKP_ADVANTAGE' => '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
+'TIMEDKP_DISADVANTAGE' => '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there’s a disequilibrium towards the other players.',
+
+'EPGP' => 'EPGP Effort / Gearpoints',
+'EPGP_ONOFF_EXPLAIN' => 'Can not be combined with Zerosum',
+'EPGP_EXPLAIN' => '<strong>Description: </strong>A Lootsystem where the loot is allocated to the person with the highest Effort to Gear ratio. Effort points are Raid bonuses, Time points. and Adjustments. Gear points are the Item cost. EP and GP are both decayed.',
+'EPGP_EXAMPLE' => '<strong>Example</strong> : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />
+The item costs 20 Gearpoints<br />
+effortpoints player 1 : 202, EP/GP ratio 10.1<br />
+effortpoints player 2 : 342, EP/GP ratio 17.1<br />
+So the loot would go to player 2 <br />',
+'EPGP_ADVANTAGE' => '<strong>Advantage</strong> : no inflation, no hoarding. ',
+'EPGP_DISADVANTAGE' => '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ',
+'DECAY_EXPLAIN'	=> 'Earned points and Item cost get depreciated over time. Can be used with standard dkp, time dkp, epgp. ',
+'DECAY_EXAMPLE'	=> 'Decay example',
+
+'FORMULA' 	=> 'Formula’s',
+'DECAY_N'	=> '<strong>Age of Raid in weeks</strong> = n',
+'DECAY_I'	=> '<strong>Raid Decay percentage</strong> = i',
+'DECAY_D'	=> '<strong>Decay factor</strong> d = 1 - (1-i)^n ',
+'DECAY_R'	=> '<strong>Raid Value</strong> = r',
+'DECAY_K'	=> '<strong>Raid Decay</strong> k = r * d',
+'DECAY_L'	=> '<strong>Item Decay percentage</strong> = l',
+'DECAY_J'	=> '<strong>Item Value</strong> = j',
+'DECAY_F'	=> '<strong>Item Decay</strong> f = j * l',
+
+'DECAYPCTRAIDS' => 'Raid decay rate (%)',
+'DECAYPCTRAIDS_EXPLAIN' => 'The Raid earned value depreciates by this percentage per set period.',
+'DECAYPCTITEM' => 'Item/Gearpoint decay rate (%)',
+'DECAYPCTITEM_EXPLAIN' => 'The cost of items will depreciate by this percentage per set period.',
+'DECAYPCTADJ' => 'Adjustment decay rate (%)',
+'DECAYPCTADJ_EXPLAIN' => 'The adjustments depreciate by this percentage.',
+'DECAYFREQ' => 'Decay Schedule',
+'DECAYFREQ_EXPLAIN' => 'Depreciation is scheduled every n days, weeks or months after each raid. ',
+'DECAYFREQTYPE' => 'Decay frequency type',
+'DECAY_SCHEDULE' => 'Automatic Decay Job',
+'DECAY_SCHEDULE_EXPLAIN' => 'Let bbDKP calculate decay',
+'DECAYCRON' => 'triggered by cronjob',
+'NO_DECAY_ADJ'	=> 'Adjustment decayable ?',
+
+'PR' => 'Priority ratio',
+'EP_DEFINITION'  => '<strong>EP</strong> = Earned points = Raid Bonus + Time Bonuspoints + Zerosum points + Adjustments ',
+'DECAY_EP'  => '<strong>EP After Decay</strong> = EP_eff * d',
+'MEP'  => 'Minimum ep',
+'MEP_EXPLAIN'  => 'MEP = minimum EP threshold Value. Effective PR is 0 until EP_min is reached.',
+'MEP_DEFINITION'  => '<strong>EP_eff</strong> = max( 0, (EP - MEP))',
+'GP_DEFINITION'  => '<strong>GP</strong> = Base GP + Real GP',
+'RGP_DEFINITION'  => '<strong>RGP</strong> = Real Gear points = Item Cost',
+'BGP'  => 'Base gp',
+'BGP_EXPLAIN'  => 'BGP = Base Gearpoint Value. will not be decayed.',
+'DECAY_GP'  => '<strong>GP After Decay</strong> = BGP + RGP - RGP * l',
+
+//resynchronisation
+'RESYNC_ZEROSUM'				=> 'Resynchronise Zero sum',
+'RESYNC_ZEROSUM_CONFIRM'		=> 'Are you sure you wish to resynchronise all zerosum values? This will affect all DKP balances. ',
+'RESYNC_ZEROSUM_EXPLAIN'		=> 'First sets to zero all existing zero sum bonuses. If zerosum flag is set, recalculates according to item values for each raid.',
+'RESYNC_ZEROSUM_SUCCESS'		=> 'Successfully (re)distributed %s item values and updated DKP accounts %s times. ',
+'RESYNC_ZEROSUM_DELETED'		=> 'Successfully set to zero all zerosum distributions. ',
+'RESYNC_DECAY'					=> 'Resynchronise decay values',
+'RESYNC_DECAY_CONFIRM'			=> 'Are you sure you wish to resynchronise Decay values? This will affect all EP end GP values. ',
+'RESYNC_DECAY_EXPLAIN'			=> 'First sets all raid and item decay to zero, then if Decay flag is set, recalculates Decay according to parameters.',
+'RESYNC_DECAY_SUCCESS'			=> 'Successfully decayed %s raids',
+'RESYNC_DKP_CONFIRM'			=> 'Are you SURE you wish to resynchronise DKP values ? ',
 ));
 
 ?>

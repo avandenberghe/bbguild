@@ -48,8 +48,7 @@ $lang = array_merge($lang, array(
 	'BBDKPDISABLED'	=> 'bbDKP est temporairement désactivé.',
 	'BBDKPSCRIPTALERT'	=> 'bbDKP contient du Javascript. Veuillez svp activer le javascript dans votre browser.',
 	
-//Plugin Check System
-
+//addnews
 	'ADD_NEWS'	=> 'Ajouter Nouvelles',
 	'ADDNEWS_TITLE'	=> 'Ajouter un article',
 	'DELETE_NEWS'	=> 'Supprimer un article',
@@ -57,6 +56,11 @@ $lang = array_merge($lang, array(
 	'MESSAGE_BODY'	=> 'Article',
 	'UPDATE_NEWS'	=> 'Mise à jour d’un qrticle',
 	'UPDATE_DATE_TO'	=> 'M.a.j. date à<br />%s?',
+
+//REGISTRATION
+'REGISTRATIONID' => 'clef d’enregistrement bbDKP',
+'NOTREGISTERED' => 'pas registré',
+'REGISTRATION_EXPLAIN' => 'en cliquant le bouton enregistrement, vous envoyez votre nom de domaine, version phpbb, verion bbDKP vers bbDKP.com et vous obtenez une clef. ceci est volontaire. ',
 
 //JAVASCRIPT
 	'B_HELP'	=> 'Texte en gras: [b]text[/b]',
@@ -67,7 +71,7 @@ $lang = array_merge($lang, array(
 	'P_HELP'	=> 'Image inseré: [img]http://image_url[/img]',
 	'W_HELP'	=> 'Inserer un lien: [url]http://url[/url] or [url=http://url]URL text[/url]',
 	'ITEM_HELP'	=> 'lien Wowhead : [item]text[/item]',
-		
+
 	// Form Validation Errors
 	'FV_FORMVALIDATION'	=> 'Erreur de validation',
 	'FV_ALPHA_ATTENDEES'	=> 'Les noms en EverQuest ne contiennent que les caractères alphabétiques.',
@@ -106,6 +110,7 @@ $lang = array_merge($lang, array(
 	'FV_REQUIRED_RAIDID'	=> 'Un raid doit être sélectionné.',
 	'FV_REQUIRED_USER'	=> 'le nom d’utilisateur est requis.',
 	'FV_REQUIRED_VALUE'	=> 'la valeur est requise.',
+	'FV_REQUIRED_STATUS' => 'Le statut est requis.',	
 	'FV_REQUIRED_MESSAGE'	=> 'le message est requis.',
 	'FV_REQUIRED_NAME' => 'The nom est requis.',
 	'FV_REQUIRED_ID' => 	'l’id est requis.',
@@ -198,19 +203,10 @@ $lang = array_merge($lang, array(
 	'UMIL_OLD_RESTORE_SUCCESS'	=> 'Les tables bbdkp (%s) Groupe DKP, évènements, raids, participants au raid, objets, grades, liste membres, sont restaurées depuis les tables temporaires.',
 	'UMIL_OLD_RESTORE_NOT'	=> 'Pas trouvé d’installation bbdkp (%s) à restaurer.',
 	'UMIL_OLD_UNINSTALL_SUCCESS'	=> 'bbdkp (%s) Désinstallé. ',
-	'UMIL_109_ILLEGALVERSION'	=> 'trouvé 1.0.9 beta, vous devez vous mettre à jour à 1.0.9rc1 et depuis 1.09rc1 vous pourrez monter à la version 1.1.2',
-	'UMIL_RENAMETABLESNEW'	=> 'Tables renommés de prefixe bbeqdkp_ à phpbb_',
-	'UMIL_RENAMETABLESOLD'	=> 'Tables renommés de prefixe phpbb_ à bbeqdkp_ ',
-	'UMIL_UPDATE120'	=> 'tables actualisés de 1.1.2.2 à 1.2',
-	'UMIL_122MINIMUM'	=> 'Old version. 1.2.2 is required for updating to 1.2.3',
-	'UMIL_NOGAMECHOSEN'	=> 'Veuillez choisir un jeu avant d‘installer.',
-	'UMIL_UPD123'	=> 'Tables mises à jour pour v1.2.3',
-	'UMIL_GAME123'	=> 'Jeu %s installé version 1.2.3',
-	'UMIL_GAME125'	=> 'Jeu %s installé version 1.2.5',	
-	'UMIL_GAME126'	=> 'Jeu %s installé version 1.2.6',	
-	'UMIL_GAME127' => 'Jeu %s installé version 1.2.7',	
-	'UMIL_GAME128' => 'Jeu %s installé version 1.2.8',	
-	'UMIL_GAMEUNINST123'	=> 'Jeux désinstallés.',
+	'UMIL_128MINIMUM'	=> 'Vieille version trouvée. 1.2.8 est requis avant de mettre à jour à 1.3',
+	'UMIL_GAME'		=> 'Jeu %s installé pour version %s',
+	'UMIL_DUMMYDATA' => 'Données demo enregistrés',
+	'UMIL_GAMEUNINST'	=> 'Jeux désinstallés.',
 	'UMIL_UPDTABLES' =>  'Tables %s pour version %s', 
 
 	// ACP titles
@@ -227,8 +223,10 @@ $lang = array_merge($lang, array(
 	'ACP_LISTITEMS'	=> 'Liste des Objets',
 	'ACP_ADDRAID'	=> 'Ajouter un Raid',
 	'ACP_LISTRAIDS'	=> 'Liste des Raids',
-	'ACP_ADDGAME'	=> 'Ajouter Game',
-	'ACP_LISTGAME'	=> 'Liste Games',
+	'ACP_ADDGAME'	=> 'Ajouter Jeu',
+	'ACP_EDITGAME' => 'Edition Jeu',	
+	'ACP_LISTGAME'	=> 'Liste Jeux',
+	'ACP_GAMESETTINGS' => 'Règles de Jeux',	
 	'ACP_ADDRACE'	=> 'Maintien Races',
 	'ACP_LISTRACE'	=> 'Liste Races',
 	'ACP_ADDCLASS'	=> 'Maintien des Classes',
@@ -238,9 +236,10 @@ $lang = array_merge($lang, array(
 	'ACP_MM_ADDMEMBER'	=> 'Ajouter un Membre',
 	'ACP_MM_EDITMEMBER'	=> 'Edition Membre',	
 	'ACP_MM_LISTMEMBERS'	=> 'Liste des Membres',
-	'ACP_MM_ADDGUILD'	=> 'Ajouter une Guilde',
-	'ACP_MM_LISTGUILDS'	=> 'Liste des Guildes',
-	'ACP_MM_RANKS'	=> 'Grades',
+	'ACP_ADDGUILD'	=> 'Ajouter une Guilde',
+	'ACP_EDITGUILD' => 'Edit Guild',	
+	'ACP_LISTGUILDS'	=> 'Liste des Guildes',
+	'ACP_RANKS'	=> 'Grades',
 	'ACP_MM_TRANSFER'	=> 'Transfer',
 	'ACP_DKP_LOGS'	=> 'Consulter les Logs',
 	'ACP_SEARCH_ITEM'	=> 'Recherche d’objets',
@@ -254,17 +253,23 @@ $lang = array_merge($lang, array(
 	'RETURN_RANK'	=> 'Retourner à la liste des Grades',	
 	'RETURN_MEMBERLIST'  => 'Retourne au listing des membres ',
 	'RETURN_GUILDLIST'  => 'Retourne à la liste de guildes ',	
-	'ACP_DKP'	=> 'Panneau de réglage bbDKP',
+	'RETURN_GAMEVIEW'  => 'Retourne au jeu',
+	'RETURN_GAMELIST'  => 'Retourne à la liste de jeux',
+	'ACP_DKP'		=> 'Panneau de réglage bbDKP',
 	'ACP_ITEMSTATS'	=> 'Réglage des Pop-ups Itemstats',
 	'ACP_INDEXPAGE'	=> 'Réglage du Portail',
 	'POINT_SETTINGS' => 'Système de Points.',	
+	'ACP_NEWGAME' 	=> 'Liste de Jeux',
+	'ACP_EDITGAME'	=> 'Editer Jeux: %s',
 	
-// Explains	
+	// Explains	
 	'ACP_DKP_MAINPAGE_EXPLAIN'	=> 'Panneau de réglage',
 	'ACP_ADDDKPSYS_EXPLAIN'	=> 'Ici vous pouvez ajouter ou changer le nom/statut d’un groupe DKP. Avant d’ajouter des évènements vous devez enregistrer un groupe DKP. ',
+	
 	'ACP_LISTDKPSYS_EXPLAIN'	=> 'Lister les groupes DKP; un groupe DKP combine une série d’Evènements, Raids et objets. De cette façon, vous pouvez gérer des tiers DKP séparément. ',
 	'ACP_ADDEVENT_EXPLAIN'	=> 'Vous pouvez modifier ici l’information des évènements. Les groupes DKP doivent déjà exister.',
 	'ACP_LISTEVENTS_EXPLAIN'	=> 'Liste d’évènements. Cette valeur est utilisée comme standard pour un raid sur cet évènement.',
+
 	'ACP_ADDIADJ_EXPLAIN'	=> 'Vous pouvez modifier/ajouter ici les ajustements individuelles.',
 	'ACP_LISTIADJ_EXPLAIN'	=> 'Liste des ajustements individuels',
 	'ACP_ADDITEM_EXPLAIN'	=> 'Vous pouvez ajouter ou modifier des Objets',
@@ -273,10 +278,12 @@ $lang = array_merge($lang, array(
 	'ACP_EDITRAID_EXPLAIN'	=> 'Ici vous pouvez éditer un Raid',
 	'ACP_LISTRAIDS_EXPLAIN'	=> 'Liste des Raids par Groupe DKP. Cliquer sur un nom de Raid vous amène dans le mode Edition/Suppression',
 	'ACP_DKP_LOGS_EXPLAIN'	=> 'Ceci liste toutes les actions dans bbDKP. vous pouvez trier par nom de membre, date, IP ou action.',
-	'ACP_MM_RANKS_EXPLAIN'	=> 'Ici vous pouvez éditer les noms des grades et leur suffixe/préfixe. (Pour ajouter, entrer un grade sur la dernière ligne. Pour supprimer, effacez le nom du grade et appuyez le bouton). le grade 99 (Grade ’out’) n’est pas visible. Ces grades (hormis le 99) peuvent être écrasés par le plugin Armurerie. ',
+	'ACP_RANKS_EXPLAIN'	=> 'Ici vous pouvez éditer les noms des grades et leur suffixe/préfixe. (Pour ajouter, entrer un grade sur la dernière ligne. Pour supprimer, effacez le nom du grade et appuyez le bouton). le grade 99 (Grade ’out’) n’est pas visible. Ces grades (hormis le 99) peuvent être écrasés par le plugin Armurerie. ',
 	'ACP_MM_LISTMEMBERS_EXPLAIN'	=> 'Liste des Membres. Ici vous pouvez supprimer des membres. Ceci supprime aussi l’historique totale des raids du membre dans tous les groupes DKP! ainsi que son compte DKP.',
-	'ACP_MM_LISTGUILDS_EXPLAIN'	=> 'Liste de guildes. Avant d’jouter un membre, il faut ajouter une guilde.',
-	'ACP_MM_ADDGUILD_EXPLAIN'	=> 'Ici vous pouvez ajouter, editer ou supprimer une Guilde. ',
+
+	'ACP_LISTGUILDS_EXPLAIN'	=> 'Liste de guildes. Avant d’jouter un membre, il faut ajouter une guilde.',
+	'ACP_ADDGUILD_EXPLAIN'	=> 'Ici vous pouvez ajouter, editer ou supprimer une Guilde. ',
+	'ACP_EDITGUILD_EXPLAIN' => 'Ici vous pouvez editer une Guilde. ',	
 	'ACP_MM_LISTMEMBERDKP_EXPLAIN'	=> 'Ici vous pouvez consulter, modifier le DKP d’un membre. ',
 	'ACP_MM_ADDMEMBER_EXPLAIN'	=> 'Ici vous pouvez ajouter/modifier des membres de votre guilde. ',
 	'ACP_MM_EDITMEMBERDKP_EXPLAIN'	=> 'Ici vous pouvez editer/supprimer des comptes DKP. ',
@@ -287,10 +294,12 @@ $lang = array_merge($lang, array(
 	'TRANSFER_MEMBER_HISTORY_DESCRIPTION'	=> 'Ceci transfère la totalité des données historiques d’un membre (raids, objets, ajustments) vers un autre membre.',
 	'ACP_LISTRACE_EXPLAIN'	=> 'Ici vous pouvez éditer les Races du jeu. Faites attention que pour WOW, les ID doivent être identiques à ceux de l’armurerie de Blizzard',
 	'ACP_LISTCLASS_EXPLAIN'	=> 'Ici vous pouvez éditer les Classes du jeu. Faites attention que pour WOW, les ID doivent être identiques à ceux de l’armurerie de Blizzard',
+	'ACP_GAMESETTINGS_EXPLAIN' => 'Ici vous pouvez editer les classes, races, factions et autres règles du jeu',	
 	'ACP_LISTFACTIONS_EXPLAIN'	=> 'Ici vous pouvez éditer ou supprimer les differentes factions',
 	'ACP_ADDRACE_EXPLAIN'	=> 'Ici vous pouvez Ajouter/éditer des Races.',
 	'ACP_ADDCLASS_EXPLAIN'	=> 'Ici vous pouvez Ajouter/éditer les Classes du jeu. Faites attention que pour WOW, les ID doivent être identiques à ceux de l’armurerie de Blizzard',
 	'ACP_ADDFACTIONS_EXPLAIN'	=> 'Ici vous pouvez Ajouter des factions',
+	'ACP_ADDRACE_EXPLAIN'	=> 'Ici vous pouvez Ajouter des races',	
 	'RACEID_EXPLAIN'	=> 'Note. le ID est unique. pour Wow, il doit correspondre au raceId de l’XML de l’armurerie.  ',
 	'RACE_EXPLAIN'	=> 'Nom de la Race. ',
 	'CLASS_ID_EXPLAIN'	=> 'Note. le ID est unique. pour Wow, il doit correspondre au classId de l’XML de l’armurerie. ',
@@ -329,10 +338,15 @@ $lang = array_merge($lang, array(
 	'NOAUTH_A_LOGS_VIEW'	=> 'Vous n’avez pas la permission de consulter les logs',
 	
 	// Manage Members Menu (yes, MMM)	
-	'ADD_MEMBER'	=> 'Ajouter Membre',
+	'ADD_MEMBER'		=> 'Ajouter Membre',
 	'LIST_EDIT_DEL_MEMBER'	=> 'Lister, Editer ou supprimer des Membres',
-	'EDIT_RANKS'	=> 'Editer les Grades',
-	'ADD_RANKS'	=> 'Ajouter les Grades',
+	'EDIT_RANKS'		=> 'Editer les Grades',
+	'EDIT_ROLES' 		=> 'Editer les Rôles',	
+	'ADD_RANKS'			=> 'Ajouter les Grades',
+	'ADD_ROLES'			=> 'Ajouter les Rôles',	
+	'ROLES' 			=> 'Rôles' , 
+	'NEEDED' 			=> 'Requis' , 	
+	'DIFFERENCE' 		=> 'Difference' , 	
 	'TRANSFER_HISTORY'	=> 'Transfert d’ Historique',
 
 	// Delete Confirmation Texts	
@@ -408,15 +422,19 @@ $lang = array_merge($lang, array(
 	'VLOG_ITEM_ADDED'	=> '%s a ajouté l’objet %s pour %d membres(s) pour %.2f points.',
 	'VLOG_ITEM_UPDATED'	=> '%s a mis à jour l’objet %s chargé à %d membre(s).',
 	'VLOG_ITEM_DELETED'	=> '%s a supprimé l’objet %s chargé à %d membre(s).',
+	'VLOG_LOG_DELETED' => '%s a supprimé le log %s.',	
 	'VLOG_MEMBER_ADDED'	=> '%s a ajouté le membre %s.',
 	'VLOG_MEMBER_UPDATED'	=> '%s a mis à jour le membre %s.',
 	'VLOG_MEMBER_DELETED'	=> '%s a supprimé le membre %s.',
-	'VLOG_RANK_ADDED'	=> '%s a ajouté le grade %s',
-	'VLOG_RANK_DELETED'	=> '%s a supprimé le grade %s',
-	'VLOG_RANK_UPDATED'	=> '%s a mis à jour le grade %s à %s',
+	'VLOG_MEMBER_DEACTIVATED' => '%s a déactivaté le membre %s suite à inactivité (%s) ',
+	'VLOG_MEMBERDKP_UPDATED' => '%s a mis à jour les points de %s : gagné: %.2f -> %.2f, dépense: %.2f -> %.2f',
+	'VLOG_MEMBERDKP_DELETED' => '%s supprimé les points de %s !',
 	'VLOG_NEWS_ADDED'	=> '%s a ajouté l’actualité %s.',
 	'VLOG_NEWS_UPDATED'	=> '%s a mis a jour l’actualité %s.',
 	'VLOG_NEWS_DELETED'	=> '%s a supprimé l’actualité %s.',
+	'VLOG_RANK_ADDED'	=> '%s a ajouté le grade %s',
+	'VLOG_RANK_DELETED'	=> '%s a supprimé le grade %s',
+	'VLOG_RANK_UPDATED'	=> '%s a mis à jour le grade %s à %s',	
 	'VLOG_RAID_ADDED'	=> '%s a ajouté le raid sur %s.',
 	'VLOG_RAID_UPDATED'	=> '%s a mis à jour le raid sur %s.',
 	'VLOG_RAID_DELETED'	=> '%s a supprimé le raid sur %s.',
@@ -616,104 +634,6 @@ $lang = array_merge($lang, array(
 	'WHO_ONLINE'	=> 'Qui est en ligne ?',
 	'LISTMEMBERS_PER_PAGE'	=> 'Nombre de membres par page',
  	
-	// LOOTSYSTEM	
-	'DESCRIPTION'	=> 'lootsystem',
-	'EXAMPLE'	=> 'lootsystem',
-	'ADVANTAGE'	=> 'lootsystem',
-	'LOOTSYSTEM'	=> 'lootsystem',
-	'STANDARDDKP'	=> '<strong>Bonus DKP</strong>',
-	'STANDARDDKP_EXPLAIN'	=> '<strong>Description: </strong> A lootsystem where players only receive DKP points as a result of being on time, or staying on bench, or killing a boss, or just plain participating.  Points are spent on loot just like in zero sum, but there is no redistribution. ',
-	'STANDARDDKP_EXAMPLE'	=> '<strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points.  <br /> 
-
-players receive 5 points for slaying a dragon, 2 points for being on time or on attendance. 
-
- <br />net result for whole raid : earned : (5+2) * 10 = 70 <br /> spent : 20 <br /> difference= 50',
-	'STANDARDDKP_ADVANTAGE'	=> '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
-	'STANDARDDKP_DISADVANTAGE'	=> '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there‘s a disequilibrium towards the other players.',
-	'ZEROSUM'	=> '<strong>Zero Sum DKP</strong>',
-	'ZEROSUM_ONOFF_EXPLAIN'	=> 'Ne peut pas être combiné avec EPGP',	
-	'ZEROSUM_EXPLAIN'	=> '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. The raid members will thusly gain dkp points when someone received an item. this ensures that there is no inflation, or point hoarding. <br/>',
-	'ZEROSUM_EXAMPLE'	=> ' <strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br/> The balance at the end is : earned 20, spent 20.',
-	'ZEROSUM_ADVANTAGE'	=> ' <strong>Advantage</strong> : no point inflation if all players start at the same gearlevel.',
-	'ZEROSUM_DISADVANTAGE'	=> '<strong>Disadvantage</strong> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points untill he‘s at a disequilibrium towards the other players. 
-
-Not much incentive to join a raid if it is a difficult progress raid and wipes are expected and no loot likely will drop. ',
-	'ZEROSUMPLUS'	=> '<strong>Zero Sum DKP + Bonus</strong>',
-	'ZEROSUMPLUS_EXPLAIN'	=> '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. <br /> Any bonus points earned are offset to a dummy account.<br /> The raid members will gain dkp points when someone received an item, plus a bonus. this ensures that there is no inflation, or point hoarding. <br />',
-	'ZEROSUMPLUS_EXAMPLE'	=> ' <strong>example</strong>: there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. 
-
-<br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br /> on top of that, players receive 5 points for a bosskill, 2 points for being on time or on attendance. these extra points are offset with the zerosum dummy account. 
-
-The balance at the end is : earned 20+7=27, spent 20+7=27.',
-	'ZEROSUMPLUS_ADVANTAGE'	=> ' <strong>Advantage</strong> :<br />  no point inflation if all players start at the same gearlevel. The bonus points are added to the system so as to offer an incentive to play, since a raid without loots will earn no points. ',
-	'ZEROSUMPLUS_DISADVANTAGE'	=> '   <strong>Disadvantage</strong> :<br /> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he‘s at a disequilibrium towards the other players.',
-	'TIMEDKP'	=> '<strong>Time based</strong>',
-	'TIMEDKP_EXPLAIN'	=> '<strong>Description: </strong>Lootsystem where players receive points per started Hour present in the raid or being available. Time is measured from when the raid starts to the end. 
-
-Points are spent on loot just like in bonus system. Bonus points may be awarded for other reasons aswell.',
-	'TIMEDKP_EXAMPLE'	=> '<strong>Example</strong> : 10 raiders, each present for 90 minutes.  <br />dkp/hour is 20 points, so this means that each raider gets 90/60 * 20 = 1,5 * 20 = 30 points <br />1 item dropped, for 20 points <br />
-
-net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20 <br />difference = 280',
-	'TIMEDKP_ADVANTAGE'	=> '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
-	'TIMEDKP_DISADVANTAGE'	=> '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there‘s a disequilibrium towards the other players.',
-	
-	'EPGP'	=> '<strong>EPGP Effort / Gearpoints</strong>',
-	'EPGP_ONOFF_EXPLAIN'	=> 'Ne peut pas pas être combiné avec Calcul de somme zero.',	
-	'EPGP_EXPLAIN'	=> '<strong>Description: </strong>A Lootsystem where the loot is allocated to the person with the highest ep/gp ratio. Effort points are gained through diverse means, like attending, being on time. Standby could also get EP. Bonuse EP could be given when the boss was killed with skill. Effort Points also decay over time. Loot is then paid with Gear points.',
-	'EPGP_EXAMPLE'	=> '<strong>Example</strong> : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />  The item costs 20 Gearpoints<br /> effortpoints player 1 : 202, EP/GP ratio 10.1<br /> effortpoints player 2 : 342, EP/GP ratio 17.1<br /> So the loot would go to player 2 <br />',
-	'EPGP_ADVANTAGE'	=> '<strong>Advantage</strong> : no inflation, no hoarding. ',
-	'EPGP_DISADVANTAGE'	=> '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ',
-	'DECAY_EXPLAIN'	=> 'Les Points gagés et côuts de butin sont amorties dans le temps.',	
-	'DECAY_EXAMPLE'	=> 'exemple d‘amortissement',
-
-	'FORMULA'	=> 'Formules',
-	'DECAY_N'	=> '<strong>Durée de Raid en semaines<strong> = n',
-	'DECAY_I'	=> '<strong>pct d‘amortissement</strong> = i',
-	'DECAY_D'	=> '<strong>formule d‘amortissement</strong> d = 1 - (1-i)^n ',
-	'DECAY_R'	=> '<strong>Valeur du Raid</strong> = r',
-	'DECAY_K'	=> '<strong>Amortissement du Raid</strong> k = r * d',
-	'DECAY_L'	=> '<strong>pct d‘amortissement de butin</strong> = l',
-	'DECAY_J'	=> '<strong>Valeur de butin</strong> = j',
-	'DECAY_F'	=> '<strong>amortissement de butin</strong> f = j * l',
-
-	'DECAYPCTRAIDS'	=> 'taux d‘amortissment pour raids (%)',
-	'DECAYPCTRAIDS_EXPLAIN'	=> 'Les raids seront amortis par ce % par periode.',
-	'DECAYPCTITEM'	=> 'taux d‘amortissment pour points de butin (%)',
-	'DECAYPCTADJ' 	=>  'taux d‘amortissment poir ajustements (%)',
-	'DECAYPCTADJ_EXPLAIN' => 'Les ajustements seront amortis par ce % par intervalle.',
-	'DECAYPCTITEM_EXPLAIN'	=> 'Le côut de butin sera amorti par ce % par intervalle.',
-	'DECAYFREQ'	=> 'Frequence d‘amortissement',
-	'DECAYFREQ_EXPLAIN'	=> 'Amortissement va passer n fois',
-	'DECAYFREQTYPE'	=> 'type de frequence',
-	'DECAYFREQTYPE_EXPLAIN'	=> 'Choisis jours, semaines ou mois.',
-	'DECAY_SCHEDULE' => 'Amortissement programmé',
-	'DECAY_SCHEDULE_EXPLAIN' => 'Activez pour demarrer un amortissement chaque 23 heures si forum est visité.',
-	'DECAYCRON' => 'activé par cron', 
-	'NO_DECAY_ADJ'	=> 'Ajustment amortissable ?',
-	
-	'PR' => 'ratio de Priorité', 
-	'EP_DEFINITION'	=> '<strong>EP</strong> = Points gagnés = Raid Bonus + Bonus de temps + Bonus sommation zero + Ajustments ',
-	'DECAY_EP'	=> '<strong>EP après Amortissement</strong> = EP - EP * d',
-	'MEP'  => 'EP Minimum',
-	'MEP_EXPLAIN'  => 'MEP = niveau EP minimum. PR effectif est 0 jusqu‘à ce que EP_min est atteint.',
-	'MEP_DEFINITION'  => '<strong>EP_eff</strong> = max( 0, (EP - MEP))',
-	'GP_DEFINITION'	=> '<strong>GP</strong> = GP base + GP Réel',
-	'RGP_DEFINITION'	=> '<strong>RGP</strong> = Points GP Réels = Côut de butin',
-	'BGP'	=> 'GP de Base',
-	'BGP_EXPLAIN'	=> 'BGP = Points GP de base, ne sont pas amorties.',
-	'DECAY_GP'	=> '<strong>GP après amortissement</strong> = BGP + RGP - RGP * l',
-
-	//resynchronisation
-	'RESYNC_ZEROSUM'	=> 'Synchronisation des sommes zéro',
-	'RESYNC_ZEROSUM_CONFIRM'	=> 'Ëtes-vous sûr de vouloir recalculer tous les sommations à zéro? Ceci affectera tous les comptes DKP.',
-	'RESYNC_ZEROSUM_EXPLAIN'	=> 'Mettra d‘abord à zéro tous les bonus zero existant. Puis, si le flag Sommation zero est mis, redistribue les valeurs de butin dans chaque Raid.',
-	'RESYNC_ZEROSUM_SUCCESS'	=> 'Redistribution réussie de %s pièces de butin et mise à jour de %s comptes DKP.',
-	'RESYNC_ZEROSUM_DELETED'	=> 'Redistribution réussie des valeurs de butin.',
-	'RESYNC_DECAY'	=> 'Synchronisation des amortissements',
-	'RESYNC_DECAY_CONFIRM'	=> 'Etes-vous sür de resynchroniser les amortissements ? Ceci affectera tous les comptes DKP et les points EP/GP/PR',
-	'RESYNC_DECAY_EXPLAIN'	=> 'Mettra d‘abord à zéro tous les amortissements, et puis si le flag est mis, recalcule l‘amortissement selon les paramètres.',
-	'RESYNC_DECAY_SUCCESS'	=> 'Amortissement réussi de %s Raids',
-	'RESYNC_DKP_CONFIRM' => 'Etes-vous certain de vouloir synchroniser les comptes DKP ?' ,	
 	
 	// menus
 	'MENU_RAIDS'	=> 'Raids',
@@ -996,6 +916,104 @@ net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20
 	'WOW_ZONEEURL' => 'http://www.wowhead.com/?zone=%s',
 	'SWTOR_BASEURL' => 'http://www.torhead.com/npc=%s',
 	'SWTOR_ZONEEURL' => 'http://www.torhead.com/zone=%s',
+
+	// LOOTSYSTEM	
+	'DESCRIPTION'	=> 'lootsystem',
+	'EXAMPLE'	=> 'lootsystem',
+	'ADVANTAGE'	=> 'lootsystem',
+	'LOOTSYSTEM'	=> 'lootsystem',
+	'STANDARDDKP'	=> '<strong>Bonus DKP</strong>',
+	'STANDARDDKP_EXPLAIN'	=> '<strong>Description: </strong> A lootsystem where players only receive DKP points as a result of being on time, or staying on bench, or killing a boss, or just plain participating.  Points are spent on loot just like in zero sum, but there is no redistribution. ',
+	'STANDARDDKP_EXAMPLE'	=> '<strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points.  <br /> 
+
+players receive 5 points for slaying a dragon, 2 points for being on time or on attendance. 
+
+ <br />net result for whole raid : earned : (5+2) * 10 = 70 <br /> spent : 20 <br /> difference= 50',
+	'STANDARDDKP_ADVANTAGE'	=> '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
+	'STANDARDDKP_DISADVANTAGE'	=> '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there‘s a disequilibrium towards the other players.',
+	'ZEROSUM'	=> '<strong>Zero Sum DKP</strong>',
+	'ZEROSUM_ONOFF_EXPLAIN'	=> 'Ne peut pas être combiné avec EPGP',	
+	'ZEROSUM_EXPLAIN'	=> '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. The raid members will thusly gain dkp points when someone received an item. this ensures that there is no inflation, or point hoarding. <br/>',
+	'ZEROSUM_EXAMPLE'	=> ' <strong>Example</strong> : there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. <br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br/> The balance at the end is : earned 20, spent 20.',
+	'ZEROSUM_ADVANTAGE'	=> ' <strong>Advantage</strong> : no point inflation if all players start at the same gearlevel.',
+	'ZEROSUM_DISADVANTAGE'	=> '<strong>Disadvantage</strong> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points untill he‘s at a disequilibrium towards the other players. Not much incentive to join a raid if it is a difficult progress raid and wipes are expected and no loot likely will drop. ',
+	
+	'ZEROSUMPLUS'	=> '<strong>Zero Sum DKP + Bonus</strong>',
+	'ZEROSUMPLUS_EXPLAIN'	=> '<strong>Description: </strong>A lootsystem where all spent points are redistributed to the raid, so that at the end, the sum of earned and spent is the same. <br /> Any bonus points earned are offset to a dummy account.<br /> The raid members will gain dkp points when someone received an item, plus a bonus. this ensures that there is no inflation, or point hoarding. <br />',
+	'ZEROSUMPLUS_EXAMPLE'	=> ' <strong>example</strong>: there were 10 raiders. the item "Sword" dropped for player 1. it costs 20 points. 
+<br /> player 1 pays 20, earns 20/10 = 2. player 2 to 10 earn each 20/10 = 2 points.  <br /> on top of that, players receive 5 points for a bosskill, 2 points for being on time or on attendance. these extra points are offset with the zerosum dummy account. 
+
+The balance at the end is : earned 20+7=27, spent 20+7=27.',
+	'ZEROSUMPLUS_ADVANTAGE'	=> ' <strong>Advantage</strong> :<br />  no point inflation if all players start at the same gearlevel. The bonus points are added to the system so as to offer an incentive to play, since a raid without loots will earn no points. ',
+	'ZEROSUMPLUS_DISADVANTAGE'	=> '   <strong>Disadvantage</strong> :<br /> hoarding. if a highly geared player joins the guild he will not spend and so will hoard his points till he‘s at a disequilibrium towards the other players.',
+
+	'TIMEDKP'	=> '<strong>Time based</strong>',
+	'TIMEDKP_EXPLAIN'	=> '<strong>Description: </strong>Lootsystem where players receive points per started Hour present in the raid or being available. Time is measured from when the raid starts to the end. 
+Points are spent on loot just like in bonus system. Bonus points may be awarded for other reasons aswell.',
+	'TIMEDKP_EXAMPLE'	=> '<strong>Example</strong> : 10 raiders, each present for 90 minutes.  <br />dkp/hour is 20 points, so this means that each raider gets 90/60 * 20 = 1,5 * 20 = 30 points <br />1 item dropped, for 20 points <br />
+
+net result for whole raid : <br />earned : 30 *10 = 300 points <br /> spent : 20 <br />difference = 280',
+
+	'TIMEDKP_ADVANTAGE'	=> '<strong>Advantage</strong> : simple. no calculation necessary for loot distribution.',
+	'TIMEDKP_DISADVANTAGE'	=> '<strong>Disadvantage</strong> : point inflation. <br /> hoarding. New undergeared players will be at a disadvantage towards better equipped players. better equipped players do not spend and so will hoard points till there‘s a disequilibrium towards the other players.',
+
+	'EPGP'	=> '<strong>EPGP Effort / Gearpoints</strong>',
+	'EPGP_ONOFF_EXPLAIN'	=> 'Ne peut pas pas être combiné avec Calcul de somme zero.',	
+	'EPGP_EXPLAIN'	=> '<strong>Description: </strong>A Lootsystem where the loot is allocated to the person with the highest ep/gp ratio. Effort points are gained through diverse means, like attending, being on time. Standby could also get EP. Bonuse EP could be given when the boss was killed with skill. Effort Points also decay over time. Loot is then paid with Gear points.',
+	'EPGP_EXAMPLE'	=> '<strong>Example</strong> : 10 player raid, item x dropped for 20 gearpoints. player 1 & 2 bid<br />  The item costs 20 Gearpoints<br /> effortpoints player 1 : 202, EP/GP ratio 10.1<br /> effortpoints player 2 : 342, EP/GP ratio 17.1<br /> So the loot would go to player 2 <br />',
+	'EPGP_ADVANTAGE'	=> '<strong>Advantage</strong> : no inflation, no hoarding. ',
+	'EPGP_DISADVANTAGE'	=> '<strong>Disadvantage</strong>: Hard to manage because you have to set EP policies and set Gear prices. ',
+	'DECAY_EXPLAIN'	=> 'Les Points gagés et côuts de butin sont amorties dans le temps.',	
+	'DECAY_EXAMPLE'	=> 'exemple d‘amortissement',
+
+	'FORMULA'	=> 'Formules',
+	'DECAY_N'	=> '<strong>Durée de Raid en semaines<strong> = n',
+	'DECAY_I'	=> '<strong>pct d‘amortissement</strong> = i',
+	'DECAY_D'	=> '<strong>formule d‘amortissement</strong> d = 1 - (1-i)^n ',
+	'DECAY_R'	=> '<strong>Valeur du Raid</strong> = r',
+	'DECAY_K'	=> '<strong>Amortissement du Raid</strong> k = r * d',
+	'DECAY_L'	=> '<strong>pct d‘amortissement butin</strong> = l',
+	'DECAY_J'	=> '<strong>Valeur butin</strong> = j',
+	'DECAY_F'	=> '<strong>amortissement butin</strong> f = j * l',
+
+	'DECAYPCTRAIDS'	=> 'taux d‘amortissment pour raids (%)',
+	'DECAYPCTRAIDS_EXPLAIN'	=> 'Les raids seront amortis par ce % par periode.',
+	'DECAYPCTITEM'	=> 'taux d‘amortissment pour points de butin (%)',
+	'DECAYPCTADJ' 	=>  'taux d‘amortissment poir ajustements (%)',
+	'DECAYPCTADJ_EXPLAIN' => 'Les ajustements seront amortis par ce % par intervalle.',
+	'DECAYPCTITEM_EXPLAIN'	=> 'Le côut de butin sera amorti par ce % par intervalle.',
+	'DECAYFREQ'	=> 'Frequence d‘amortissement',
+	'DECAYFREQ_EXPLAIN'	=> 'Amortissement va passer n fois',
+	'DECAYFREQTYPE'	=> 'type de frequence',
+	'DECAYFREQTYPE_EXPLAIN'	=> 'Choisis jours, semaines ou mois.',
+	'DECAY_SCHEDULE' => 'Amortissement programmé',
+	'DECAY_SCHEDULE_EXPLAIN' => 'Activez pour demarrer un amortissement chaque 23 heures si forum est visité.',
+	'DECAYCRON' => 'activé par cron', 
+	'NO_DECAY_ADJ'	=> 'Ajustment amortissable ?',
+	
+	'PR' => 'ratio de Priorité', 
+	'EP_DEFINITION'	=> '<strong>EP</strong> = Points gagnés = Raid Bonus + Bonus de temps + Bonus sommation zero + Ajustments ',
+	'DECAY_EP'	=> '<strong>EP après Amortissement</strong> = EP - EP * d',
+	'MEP'  => 'EP Minimum',
+	'MEP_EXPLAIN'  => 'MEP = niveau EP minimum. PR effectif est 0 jusqu‘à ce que EP_min est atteint.',
+	'MEP_DEFINITION'  => '<strong>EP_eff</strong> = max( 0, (EP - MEP))',
+	'GP_DEFINITION'	=> '<strong>GP</strong> = GP base + GP Réel',
+	'RGP_DEFINITION'	=> '<strong>RGP</strong> = Points GP Réels = Côut de butin',
+	'BGP'	=> 'GP de Base',
+	'BGP_EXPLAIN'	=> 'BGP = Points GP de base, ne sont pas amorties.',
+	'DECAY_GP'	=> '<strong>GP après amortissement</strong> = BGP + RGP - RGP * l',
+
+	//resynchronisation
+	'RESYNC_ZEROSUM'	=> 'Synchronisation des sommes zéro',
+	'RESYNC_ZEROSUM_CONFIRM'	=> 'Ëtes-vous sûr de vouloir recalculer tous les sommations à zéro? Ceci affectera tous les comptes DKP.',
+	'RESYNC_ZEROSUM_EXPLAIN'	=> 'Mettra d‘abord à zéro tous les bonus zero existant. Puis, si le flag Sommation zero est mis, redistribue les valeurs de butin dans chaque Raid.',
+	'RESYNC_ZEROSUM_SUCCESS'	=> 'Redistribution réussie de %s pièces de butin et mise à jour de %s comptes DKP.',
+	'RESYNC_ZEROSUM_DELETED'	=> 'Redistribution réussie des valeurs de butin.',
+	'RESYNC_DECAY'	=> 'Synchronisation des amortissements',
+	'RESYNC_DECAY_CONFIRM'	=> 'Etes-vous sür de resynchroniser les amortissements ? Ceci affectera tous les comptes DKP et les points EP/GP/PR',
+	'RESYNC_DECAY_EXPLAIN'	=> 'Mettra d‘abord à zéro tous les amortissements, et puis si le flag est mis, recalcule l‘amortissement selon les paramètres.',
+	'RESYNC_DECAY_SUCCESS'	=> 'Amortissement réussi de %s Raids',
+	'RESYNC_DKP_CONFIRM' => 'Etes-vous certain de vouloir synchroniser les comptes DKP ?' ,	
 
 ));
 
