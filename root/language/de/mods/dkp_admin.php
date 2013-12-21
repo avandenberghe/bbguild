@@ -734,105 +734,6 @@ $lang = array_merge($lang, array(
 'WHO_ONLINE' => 'Wer ist online?',
 'LISTMEMBERS_PER_PAGE' => 'Mitgliederanzahl pro Seite',
 
-// LOOTSYSTEM
-'DESCRIPTION' => 'lootsystem',
-'EXAMPLE' => 'lootsystem',
-'ADVANTAGE' => 'lootsystem',
-'LOOTSYSTEM' => 'lootsystem', 
-'STANDARDDKP' => 'Standart DKP',
-'STANDARDDKP_EXPLAIN' => '<strong>Beschreibung: </strong>Das Standart DKP System. Spieler erhalten DKP Punkte als Ergebnis der Pünktlichkeit, ob man Ersatzmann ist , der Boss Tötungen, oder einfach nur teilnimmt.
-Punkte können für Gegenstände ausgegeben werden, wie bei Nullsummen DKP, aber hier gibt es keine Begrenzung . ',
-'STANDARDDKP_EXAMPLE'=> '<strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 2. Es kostet 20 Punkte  <br /> 
-Der Spieler bekommt 5 Punkte da er einen Drachen besiegt hat, 2 Punkte weil er pünktlich oder Anwesend ist. 
- <br />Netto Ergebnis für den ganzen Raid: bekommen : (5+2) * 10 = 70 <br /> ausgegeben : 20 <br /> differenz= 50', 
-'STANDARDDKP_ADVANTAGE' => '<strong>Vorteile</strong> : einfach. Beine Berechnung für Beuteverteilung notwendig .',  
-'STANDARDDKP_DISADVANTAGE' => '<strong>Nachteile</strong> : Punkt Inflation. <br /> Anhäufung. Neue schlecht ausgerüstete Spieler sind im Nachteil gegenüber besser ausgerüstete Spieler. Besser ausgerüstete Spieler geben nichts aus und so wird Punkte horten bis ein Ungleichgewicht gegenüber den anderen Spielern entsteht.', 
-
-'ZEROSUM' => 'Nullsummen DKP', 
-'ZEROSUM_ONOFF_EXPLAIN' => 'Kann nicht kombiniert werden mit EPGP', 
-'ZEROSUM_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo alle ausgegebenen Punkte auf den Raid umverteilt werden, so das am Ende die Summe der bekommenen und ausgegebenen Punkte gleich sind. Die Raid Mitglieder werden folglich DKP Punkte bekommen wenn jemand ein Item bekommt. Dies sorgt dafür das es keine inflation oder Punkte horten gibt <br/>',
-'ZEROSUM_EXAMPLE' => ' <strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 1. Es kostet 20 Punkte.  <br/>  Spieler 1 bezahlt 20 Punkte, bekommt 20/10 = 2 Punkte. Spieler 2 bis 10 bekommt jeder 20/10 =2 Punkte.  <br/> Das Gleichgewicht am Ende ist: bekommen 20 Punkte, ausgegeben 20 Punkte.',
-'ZEROSUM_ADVANTAGE' => ' <strong>Vorteile</strong> : Keine Punkte inflation, wenn alle Spieler auf dem gleichen Ausrüstungslevel sind.', 
-'ZEROSUM_DISADVANTAGE' => '<strong>Nachteile</strong> horten. Wenn ein gut ausgerüsteter Spieler der Gilde beitritt wird er nichts ausgeben und so seine Punkte horten, bis er bei einem Ungleichgewicht gegenüber den anderen Spielern ist. 
-Nicht viel Anreitz sich für einen Raid anzumelden, wenn er schwieriger Raid ist, tode zu erwarten sind und keine Gegenstände droppen. ',
-
-'ZEROSUMPLUS' => 'Nullsummen DKP + Bonus', 
-'ZEROSUMPLUS_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo alle ausgegebenen Punkte auf den Raid umverteilt werden, so das am Ende der, die Summe der bekommenen und ausgegebenen Punkte gleich sind. <br /> Alle Bonus Punkte werden einem dummy Account angerechnet.<br /> Die Raid Mitglieder werden folglich DKP Punkte bekommen wenn jemand ein Item bekommt mit Bonus. Dies sorgt dafür das es keine inflation oder Punkte horten gibt <br/>', 
-'ZEROSUMPLUS_EXAMPLE' => ' <strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 1. Es kostet 20 Punkte.  
-<br />  Spieler 1 bezahlt 20 Punkte, bekommt 20/10 = 2 Punkte. Spieler 2 bis 10 bekommt jeder 20/10 =2 Punkte.  <br/> dazu bekommen die Spieler 5 Punkte für einen Bosstot, 2 points weil er pünktlich oder Anwesend ist. Diese Bonus Punkte werden einem dummy Account angerechnet.
-Das Gleichgewicht am Ende ist: bekommen 20+7=27 Punkte, ausgegeben 20+7=27 Punkte.',
-'ZEROSUMPLUS_ADVANTAGE' => ' <strong>Vorteile</strong> : Keine Punkte inflation, wenn alle Spieler auf dem gleichen Ausrüstungslevel sind. Die Bonuspunkte werden dem System hinzugefügt um einen Anzeiz zum Spielen zu geben, da mit einem Raid ohne Beute keine Punkte verdiehnt werden. ', 
-'ZEROSUMPLUS_DISADVANTAGE' => '<strong>Nachteile</strong> horten. Wenn ein gut ausgerüsteter Spieler der Gilde beitritt wird er nichts ausgeben und so seine Punkte horten, bis er bei einem Ungleichgewicht gegenüber den anderen Spielern ist.',
-
-'TIMEDKP' => 'Zeit Bonus',
-'TIMEDKP_EXPLAIN' => '<strong>Beschreibung: </strong>Beutesystem wo Spieler Punkte pro angefangene Stunde bekommen, wenn sie im Raid sind oder verfügbar. Die Zeit wird gemessen vom Raidstart und dem Ende.
-Punkte werden wie im Bonus System für Beute ausgegeben. Bonuspunkte bekommt man vielleicht auch für andere Gründe.',
-'TIMEDKP_EXAMPLE'=> '<strong>Beispie</strong> : 10 Spieler, jeder anwesend für 90 Minuten.  <br />dkp/Stunde sind 20 Punkte, das bedeutet jeder Spieler bekommt 90/60 * 20 = 1,5 * 20 = 30 Punkte <br />1 Gegenstand ist für 20 Punkte gefallen <br />
-netto Ergebnis für den ganzen Raid: <br />bekommen : 30 *10 = 300 Punkte <br /> ausgegeben : 20 <br />unterschied = 280', 
-'TIMEDKP_ADVANTAGE' => '<strong>Vorteile</strong> : einfach. Beine Berechnung für Beuteverteilung notwendig für Beuteverteilung.',  
-'TIMEDKP_DISADVANTAGE' => '<strong>Nachteile</strong> : Punkt Inflation. <br /> Anhäufung. Neue schlecht ausgerüstete Spieler sind im Nachteil gegenüber besser ausgerüstete Spieler. Besser ausgerüstete Spieler geben nichts aus und so wird Punkte horten bis ein Ungleichgewicht gegenüber den anderen Spielern entsteht.', 
-
-'EPGP' => 'EPGP Anstrengung / Ausrüstungspunkte',
-'EPGP_ONOFF_EXPLAIN' => 'Kann nicht mit Nullsummen kombiniert werden',  
-'EPGP_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo die Beute dem zugesprochen wird der das höchste Anstrengung zu Ausrüstung Verhältnis hat. Anstrengungspunkte sind Raid Boni, Zeit Punkten und Anpassungen. Ausrüstungspunkte sind Gegenstandskosten. EP und GP verfallen beide.', 
-'EPGP_EXAMPLE' => '<strong>Beispiel</strong> : 10 Spieler Raid, Gegenstand x gefallen für 20 Ausrüstungspunkte. Spieler 1 & 2 bieten<br />  
-Der Gegenstand kostet 20 Ausrüstungsüunkte<br />
-Anstrengungspunkte Spieler 1 : 202, EP/GP Verhältnis 10.1<br />
-Anstrengungspunkte Spieler 2 : 342, EP/GP Verhältnis 17.1<br /> 
-Also würde die Beute an Spieler 2 gehen <br />', 
-'EPGP_ADVANTAGE' => '<strong>Vorteile</strong> : keine inflation, kein horten. ', 
-'EPGP_DISADVANTAGE' => '<strong>Nachteile</strong>: Schwer zu verwalten weil man EP Strategien und Ausrüstungspreise festsetzen muss. ', 
-'DECAY_EXPLAIN' => 'Gewinn und Verlustpunkte werden Entwertet. ',
-'DECAY_EXAMPLE'	=> 'Verfallvorbild',
-
-'FORMULA' => 'Formeln',
-'DECAY_N' => '<strong>Raid Dauer in Wochen</strong> = n',
-'DECAY_I' => '<strong>Raid Entwertungs Prozentsatz</strong> = i',
-'DECAY_D' => '<strong>Entwertungs Faktor</strong> d = 1 - (1-i)^n ',
-'DECAY_R' => '<strong>Raid Wert</strong> = r',
-'DECAY_K' => '<strong>Raid Entwertung</strong> k = r * d',
-'DECAY_L' => '<strong>Item Entwertungs Prozentsatz</strong> = l',
-'DECAY_J' => '<strong>Item Wert</strong> = j',
-'DECAY_F' => '<strong>Item Entwertung</strong> f = j * l',
-
-'DECAYPCTRAIDS' => 'Raid Entwertungsprozentsatz(%)', 
-'DECAYPCTRAIDS_EXPLAIN' => 'Der Raidwert wird abgeschrieben mit diesen prozentsatz', 
-'DECAYPCTITEM' => 'Item/Gearpoint Entwertungssatz (%)',  
-'DECAYPCTITEM_EXPLAIN' => 'Der Itemcost wird entwertet mit diesen prozentsatz.', 
-'DECAYPCTADJ'	=>  'Ajustierungsentwertungsprozentsatz(%)', 
-'DECAYPCTADJ_EXPLAIN' => 'Die Ajustierungen werden entwertet mit diesen prozentsatz.',
-'DECAYFREQ' => 'Entwertungsfrekwenz.',  
-'DECAYFREQ_EXPLAIN' => 'Entwertung ist geplant jede n Tage, Wochen oder Monate nach jeden Raid. ', 
-'DECAYFREQTYPE' => 'Entwertungsfrequenztyp',  
-'DECAY_SCHEDULE' => 'Vorprogrammierte Entwertung',
-'DECAY_SCHEDULE_EXPLAIN' => 'betätigt ein cronjob der eine automatische Entwertung startet jede 23 Stunden insofern das Forum besucht wird.',
-'DECAYCRON' => 'betätigt durch cronjob', 
-'NO_DECAY_ADJ'	=> 'Ajustierungen entwertbar ?',
-
-'PR' => 'PR Prioritätswert', 
-'EP_DEFINITION' => '<strong>EP</strong> = Gewinn = Raid Bonus + Zeitbonus + Nullsumme + Ajustierung ',
-'DECAY_EP' => '<strong>EP Nach Entwertung</strong> = EP - EP * d',
-'MEP'  => 'Minimum EP',
-'MEP_EXPLAIN'  => 'MEP = minimum EP Wert. Effektiver PR bleibt 0 bis EP_min erreicht ist.',
-'MEP_DEFINITION'  => '<strong>EP_eff</strong> = max( 0, (EP - MEP))',
-'GP_DEFINITION' => '<strong>GP</strong> = Basis GP + Realer GP',
-'RGP_DEFINITION' => '<strong>RGP</strong> = Reale Gearpoints = Itempunkte',
-'BGP' => 'Basis GP',
-'BGP_EXPLAIN' => 'BGP = Basis Gearpoint Wert, wird nicht entwertet.',
-'DECAY_GP' => '<strong>GP nach Entwertung</strong> = BGP + RGP - RGP * l',
-
-//resynchronisation
-'RESYNC_ZEROSUM' => 'Resynchronisiere Nullsummen verteilung',
-'RESYNC_ZEROSUM_CONFIRM' => 'Bitte bestätige dass alle Nullsummenwerte synchronisiert werden sollen? Dies wird alle DKP Konten berühren. ',
-'RESYNC_ZEROSUM_EXPLAIN' => 'Setzt erstens alle Nullsummenboni auf Null, und wenn Nullsummenkalkulierung aktiviert is, berechnet Boni für jeden Raid erneut.',
-'RESYNC_ZEROSUM_SUCCESS' => 'Erfolgreich %s item werte distribuiert und %s DKP konten neuberechnet.',
-'RESYNC_ZEROSUM_DELETED' => 'Erfolgreich alle Nullsummenboni auf null gesetzt.',
-'RESYNC_DECAY' => 'Resynchronisiere Entwertungen.',
-'RESYNC_DECAY_CONFIRM' => 'Bitte Bestätige dass du die Entwertungspunkte neuberechnen willst ? Dies wird alle DKP Konten und EPGP werte berühren. ',
-'RESYNC_DECAY_EXPLAIN' => 'Setzt erstens alle Raids und ItemEntwertungen auf Null, und wenn Entwertungskalkulation aktiviert ist, berechnet die Entwertungen erneut.',
-'RESYNC_DECAY_SUCCESS' => 'Erfolgreich %s Raids entwertet.',
-'RESYNC_DKP_CONFIRM' => 'Bist du dir sicher das du die DKP Werte syncronisieren willst ? ',
-
 'MENU_RAIDS' => 'Angriffe',
 'MENU_EVENTS' => 'Ereignisse',
 'MENU_ITEMHIST' => 'Item Geschichte',
@@ -1128,6 +1029,106 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'WOW_ZONEEURL' => 'http://www.wowhead.com/?zone=%s',
 'SWTOR_BASEURL' => 'http://www.torhead.com/npc=%s',
 'SWTOR_ZONEEURL' => 'http://www.torhead.com/zone=%s',
+
+// LOOTSYSTEM
+'DESCRIPTION' => 'lootsystem',
+'EXAMPLE' => 'lootsystem',
+'ADVANTAGE' => 'lootsystem',
+'LOOTSYSTEM' => 'lootsystem', 
+'STANDARDDKP' => 'Standart DKP',
+'STANDARDDKP_EXPLAIN' => '<strong>Beschreibung: </strong>Das Standart DKP System. Spieler erhalten DKP Punkte als Ergebnis der Pünktlichkeit, ob man Ersatzmann ist , der Boss Tötungen, oder einfach nur teilnimmt.
+Punkte können für Gegenstände ausgegeben werden, wie bei Nullsummen DKP, aber hier gibt es keine Begrenzung . ',
+'STANDARDDKP_EXAMPLE'=> '<strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 2. Es kostet 20 Punkte  <br /> 
+Der Spieler bekommt 5 Punkte da er einen Drachen besiegt hat, 2 Punkte weil er pünktlich oder Anwesend ist. 
+ <br />Netto Ergebnis für den ganzen Raid: bekommen : (5+2) * 10 = 70 <br /> ausgegeben : 20 <br /> differenz= 50', 
+'STANDARDDKP_ADVANTAGE' => '<strong>Vorteile</strong> : einfach. Beine Berechnung für Beuteverteilung notwendig .',  
+'STANDARDDKP_DISADVANTAGE' => '<strong>Nachteile</strong> : Punkt Inflation. <br /> Anhäufung. Neue schlecht ausgerüstete Spieler sind im Nachteil gegenüber besser ausgerüstete Spieler. Besser ausgerüstete Spieler geben nichts aus und so wird Punkte horten bis ein Ungleichgewicht gegenüber den anderen Spielern entsteht.', 
+
+'ZEROSUM' => 'Nullsummen DKP', 
+'ZEROSUM_ONOFF_EXPLAIN' => 'Kann nicht kombiniert werden mit EPGP', 
+'ZEROSUM_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo alle ausgegebenen Punkte auf den Raid umverteilt werden, so das am Ende die Summe der bekommenen und ausgegebenen Punkte gleich sind. Die Raid Mitglieder werden folglich DKP Punkte bekommen wenn jemand ein Item bekommt. Dies sorgt dafür das es keine inflation oder Punkte horten gibt <br/>',
+'ZEROSUM_EXAMPLE' => ' <strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 1. Es kostet 20 Punkte.  <br/>  Spieler 1 bezahlt 20 Punkte, bekommt 20/10 = 2 Punkte. Spieler 2 bis 10 bekommt jeder 20/10 =2 Punkte.  <br/> Das Gleichgewicht am Ende ist: bekommen 20 Punkte, ausgegeben 20 Punkte.',
+'ZEROSUM_ADVANTAGE' => ' <strong>Vorteile</strong> : Keine Punkte inflation, wenn alle Spieler auf dem gleichen Ausrüstungslevel sind.', 
+'ZEROSUM_DISADVANTAGE' => '<strong>Nachteile</strong> horten. Wenn ein gut ausgerüsteter Spieler der Gilde beitritt wird er nichts ausgeben und so seine Punkte horten, bis er bei einem Ungleichgewicht gegenüber den anderen Spielern ist. 
+Nicht viel Anreitz sich für einen Raid anzumelden, wenn er schwieriger Raid ist, tode zu erwarten sind und keine Gegenstände droppen. ',
+
+'ZEROSUMPLUS' => 'Nullsummen DKP + Bonus', 
+'ZEROSUMPLUS_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo alle ausgegebenen Punkte auf den Raid umverteilt werden, so das am Ende der, die Summe der bekommenen und ausgegebenen Punkte gleich sind. <br /> Alle Bonus Punkte werden einem dummy Account angerechnet.<br /> Die Raid Mitglieder werden folglich DKP Punkte bekommen wenn jemand ein Item bekommt mit Bonus. Dies sorgt dafür das es keine inflation oder Punkte horten gibt <br/>', 
+'ZEROSUMPLUS_EXAMPLE' => ' <strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 1. Es kostet 20 Punkte.  
+<br />  Spieler 1 bezahlt 20 Punkte, bekommt 20/10 = 2 Punkte. Spieler 2 bis 10 bekommt jeder 20/10 =2 Punkte.  <br/> dazu bekommen die Spieler 5 Punkte für einen Bosstot, 2 points weil er pünktlich oder Anwesend ist. Diese Bonus Punkte werden einem dummy Account angerechnet.
+Das Gleichgewicht am Ende ist: bekommen 20+7=27 Punkte, ausgegeben 20+7=27 Punkte.',
+'ZEROSUMPLUS_ADVANTAGE' => ' <strong>Vorteile</strong> : Keine Punkte inflation, wenn alle Spieler auf dem gleichen Ausrüstungslevel sind. Die Bonuspunkte werden dem System hinzugefügt um einen Anzeiz zum Spielen zu geben, da mit einem Raid ohne Beute keine Punkte verdiehnt werden. ', 
+'ZEROSUMPLUS_DISADVANTAGE' => '<strong>Nachteile</strong> horten. Wenn ein gut ausgerüsteter Spieler der Gilde beitritt wird er nichts ausgeben und so seine Punkte horten, bis er bei einem Ungleichgewicht gegenüber den anderen Spielern ist.',
+
+'TIMEDKP' => 'Zeit Bonus',
+'TIMEDKP_EXPLAIN' => '<strong>Beschreibung: </strong>Beutesystem wo Spieler Punkte pro angefangene Stunde bekommen, wenn sie im Raid sind oder verfügbar. Die Zeit wird gemessen vom Raidstart und dem Ende.
+Punkte werden wie im Bonus System für Beute ausgegeben. Bonuspunkte bekommt man vielleicht auch für andere Gründe.',
+'TIMEDKP_EXAMPLE'=> '<strong>Beispie</strong> : 10 Spieler, jeder anwesend für 90 Minuten.  <br />dkp/Stunde sind 20 Punkte, das bedeutet jeder Spieler bekommt 90/60 * 20 = 1,5 * 20 = 30 Punkte <br />1 Gegenstand ist für 20 Punkte gefallen <br />
+netto Ergebnis für den ganzen Raid: <br />bekommen : 30 *10 = 300 Punkte <br /> ausgegeben : 20 <br />unterschied = 280', 
+'TIMEDKP_ADVANTAGE' => '<strong>Vorteile</strong> : einfach. Beine Berechnung für Beuteverteilung notwendig für Beuteverteilung.',  
+'TIMEDKP_DISADVANTAGE' => '<strong>Nachteile</strong> : Punkt Inflation. <br /> Anhäufung. Neue schlecht ausgerüstete Spieler sind im Nachteil gegenüber besser ausgerüstete Spieler. Besser ausgerüstete Spieler geben nichts aus und so wird Punkte horten bis ein Ungleichgewicht gegenüber den anderen Spielern entsteht.', 
+
+'EPGP' => 'EPGP Anstrengung / Ausrüstungspunkte',
+'EPGP_ONOFF_EXPLAIN' => 'Kann nicht mit Nullsummen kombiniert werden',  
+'EPGP_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo die Beute dem zugesprochen wird der das höchste Anstrengung zu Ausrüstung Verhältnis hat. Anstrengungspunkte sind Raid Boni, Zeit Punkten und Anpassungen. Ausrüstungspunkte sind Gegenstandskosten. EP und GP verfallen beide.', 
+'EPGP_EXAMPLE' => '<strong>Beispiel</strong> : 10 Spieler Raid, Gegenstand x gefallen für 20 Ausrüstungspunkte. Spieler 1 & 2 bieten<br />  
+Der Gegenstand kostet 20 Ausrüstungsüunkte<br />
+Anstrengungspunkte Spieler 1 : 202, EP/GP Verhältnis 10.1<br />
+Anstrengungspunkte Spieler 2 : 342, EP/GP Verhältnis 17.1<br /> 
+Also würde die Beute an Spieler 2 gehen <br />', 
+'EPGP_ADVANTAGE' => '<strong>Vorteile</strong> : keine inflation, kein horten. ', 
+'EPGP_DISADVANTAGE' => '<strong>Nachteile</strong>: Schwer zu verwalten weil man EP Strategien und Ausrüstungspreise festsetzen muss. ', 
+'DECAY_EXPLAIN' => 'Gewinn und Verlustpunkte werden Entwertet. ',
+'DECAY_EXAMPLE'	=> 'Verfallvorbild',
+
+'FORMULA' => 'Formeln',
+'DECAY_N' => '<strong>Raid Dauer in Wochen</strong> = n',
+'DECAY_I' => '<strong>Raid Entwertungs Prozentsatz</strong> = i',
+'DECAY_D' => '<strong>Entwertungs Faktor</strong> d = 1 - (1-i)^n ',
+'DECAY_R' => '<strong>Raid Wert</strong> = r',
+'DECAY_K' => '<strong>Raid Entwertung</strong> k = r * d',
+'DECAY_L' => '<strong>Item Entwertungs Prozentsatz</strong> = l',
+'DECAY_J' => '<strong>Item Wert</strong> = j',
+'DECAY_F' => '<strong>Item Entwertung</strong> f = j * l',
+
+'DECAYPCTRAIDS' => 'Raid Entwertungsprozentsatz(%)', 
+'DECAYPCTRAIDS_EXPLAIN' => 'Der Raidwert wird abgeschrieben mit diesen prozentsatz', 
+'DECAYPCTITEM' => 'Item/Gearpoint Entwertungssatz (%)',  
+'DECAYPCTITEM_EXPLAIN' => 'Der Itemcost wird entwertet mit diesen prozentsatz.', 
+'DECAYPCTADJ'	=>  'Ajustierungsentwertungsprozentsatz(%)', 
+'DECAYPCTADJ_EXPLAIN' => 'Die Ajustierungen werden entwertet mit diesen prozentsatz.',
+'DECAYFREQ' => 'Entwertungsfrekwenz.',  
+'DECAYFREQ_EXPLAIN' => 'Entwertung ist geplant jede n Tage, Wochen oder Monate nach jeden Raid. ', 
+'DECAYFREQTYPE' => 'Entwertungsfrequenztyp',  
+'DECAY_SCHEDULE' => 'Vorprogrammierte Entwertung',
+'DECAY_SCHEDULE_EXPLAIN' => 'betätigt ein cronjob der eine automatische Entwertung startet jede 23 Stunden insofern das Forum besucht wird.',
+'DECAYCRON' => 'betätigt durch cronjob', 
+'NO_DECAY_ADJ'	=> 'Ajustierungen entwertbar ?',
+
+'PR' => 'PR Prioritätswert', 
+'EP_DEFINITION' => '<strong>EP</strong> = Gewinn = Raid Bonus + Zeitbonus + Nullsumme + Ajustierung ',
+'DECAY_EP' => '<strong>EP Nach Entwertung</strong> = EP - EP * d',
+'MEP'  => 'Minimum EP',
+'MEP_EXPLAIN'  => 'MEP = minimum EP Wert. Effektiver PR bleibt 0 bis EP_min erreicht ist.',
+'MEP_DEFINITION'  => '<strong>EP_eff</strong> = max( 0, (EP - MEP))',
+'GP_DEFINITION' => '<strong>GP</strong> = Basis GP + Realer GP',
+'RGP_DEFINITION' => '<strong>RGP</strong> = Reale Gearpoints = Itempunkte',
+'BGP' => 'Basis GP',
+'BGP_EXPLAIN' => 'BGP = Basis Gearpoint Wert, wird nicht entwertet.',
+'DECAY_GP' => '<strong>GP nach Entwertung</strong> = BGP + RGP - RGP * l',
+
+//resynchronisation
+'RESYNC_ZEROSUM' => 'Resynchronisiere Nullsummen verteilung',
+'RESYNC_ZEROSUM_CONFIRM' => 'Bitte bestätige dass alle Nullsummenwerte synchronisiert werden sollen? Dies wird alle DKP Konten berühren. ',
+'RESYNC_ZEROSUM_EXPLAIN' => 'Setzt erstens alle Nullsummenboni auf Null, und wenn Nullsummenkalkulierung aktiviert is, berechnet Boni für jeden Raid erneut.',
+'RESYNC_ZEROSUM_SUCCESS' => 'Erfolgreich %s item werte distribuiert und %s DKP konten neuberechnet.',
+'RESYNC_ZEROSUM_DELETED' => 'Erfolgreich alle Nullsummenboni auf null gesetzt.',
+'RESYNC_DECAY' => 'Resynchronisiere Entwertungen.',
+'RESYNC_DECAY_CONFIRM' => 'Bitte Bestätige dass du die Entwertungspunkte neuberechnen willst ? Dies wird alle DKP Konten und EPGP werte berühren. ',
+'RESYNC_DECAY_EXPLAIN' => 'Setzt erstens alle Raids und ItemEntwertungen auf Null, und wenn Entwertungskalkulation aktiviert ist, berechnet die Entwertungen erneut.',
+'RESYNC_DECAY_SUCCESS' => 'Erfolgreich %s Raids entwertet.',
+'RESYNC_DKP_CONFIRM' => 'Bist du dir sicher das du die DKP Werte syncronisieren willst ? ',
+
 ));
 
 ?>

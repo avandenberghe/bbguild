@@ -1116,6 +1116,7 @@ So the loot would go to player 2 <br />',
 'RESYNC_DECAY_EXPLAIN'			=> 'First sets all raid and item decay to zero, then if Decay flag is set, recalculates Decay according to parameters.',
 'RESYNC_DECAY_SUCCESS'			=> 'Successfully decayed %s raids',
 'RESYNC_DKP_CONFIRM'			=> 'Are you SURE you wish to resynchronise DKP values ? ',
+
 ));
 
 ?>
