@@ -15,7 +15,7 @@
 */
 if (!defined('IN_PHPBB'))
 {
-	exit;
+exit;
 }
 
 /**
@@ -23,7 +23,7 @@ if (!defined('IN_PHPBB'))
 */
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+$lang = array();
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -43,25 +43,10 @@ if (empty($lang) || !is_array($lang))
 
 // DKP
 $lang = array_merge($lang, array(
-'NOT_UP_TO_DATE_TITLE'	=> '%s ist veraltet.',
-'BBDKP_LATESTVERSION'	=> 'Neueste Version:',
+'NOT_UP_TO_DATE_TITLE' => '%s ist veraltet.',
+'BBDKP_LATESTVERSION' => 'Neueste Version:',
 'BBDKPDISABLED' => 'bbDKP ist vorübergehend nicht verfügbar.',
 'BBDKPSCRIPTALERT' => 'bbDKP enthält Javascript. Bitte aktivieren Sie javascript in ihren Browser.',
-
-//Plugin Check System
-
-'PLUGINS_INSTALLED'	 => 'Installierte Plugins',
-'PLUGINS_STATUS' 	 => 'Plugin-Status',
-'DOWNLOAD_LATEST_PLUGINS'	=> 'Neueste Version: ',
-'PLUGIN_UP_TO_DATE' 		=> 'auf dem neuesten Stand',
-'PLUGIN_VERSION_NOTONLINE' 	=> 'Die Informationen über die aktuelle Version konnten nicht abgerufen werden. ',
-
-'APPLY_TITLE' 			=> 'Apply',
-'ARMORY_IMPORTER_TITLE' => 'Armory-Importer',
-'BBTIPS_TITLE' 			=> 'bbTips',
-'BOSSPROGRESS_TITLE' 	=> 'Bossprogress',
-'RAIDPLANNER_TITLE' 	=> 'RaidPlanner',
-'RAIDTRACKER_TITLE' 	=> 'RaidTracker',
 
 //addnews
 'ADD_NEWS' => 'News hinzufügen',
@@ -142,9 +127,9 @@ $lang = array_merge($lang, array(
 'SHOWRECBLOCK' => 'Diesen Block auf dem Portal anzeigen.',
 'RECFORUM' => 'Rekrutierungs Forum :',
 'RECSTATUS' => 'Rekrutierungs Stand :',
-'TANK' 	=> 'Schutz',
-'DPS' 	=> 'Schaden',
-'HEAL' 	=> 'Heilung',
+'TANK' => 'Schutz',
+'DPS' => 'Schaden',
+'HEAL' => 'Heilung',
 'LOOTBLOCKSETTING' => 'Einstellungen für das Item block',
 'SHOWLOOTBLOCK' => 'Item Block Anzeigen:',
 'NUMBITEMS' => 'Anzahl der Items :',
@@ -217,7 +202,6 @@ $lang = array_merge($lang, array(
 'UMIL_OLD_RESTORE_NOT' => 'Keine bbDKP (%s) Installation ist gefunden worden zum wiederherstellen.',
 'UMIL_OLD_UNINSTALL_SUCCESS' => 'bbDKP (%s) wurde gelöscht. ',
 'UMIL_128MINIMUM' => 'Alte Version. 1.2.8 wird benötigt vom auf 1.3.0 umzudaten',
-'UMIL_NOGAMECHOSEN' => 'Bitte wähle ein Spiel.',
 'UMIL_GAME' => 'Spieldaten für %s installiert',
 'UMIL_DUMMYDATA' => 'Dummy data entered',
 'UMIL_GAMEUNINST' => 'Spieldaten entfernt.',
@@ -274,7 +258,7 @@ $lang = array_merge($lang, array(
 'ACP_INDEXPAGE' => 'Portal Einstellungen',
 'POINT_SETTINGS' => 'Point Settings', 
 'ACP_NEWGAME' => 'Spieleliste',
-'ACP_EDITGAME'	=> 'Spiel bearbeiten: %s',
+'ACP_EDITGAME' => 'Spiel bearbeiten: %s',
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Adminpanel Index',
@@ -306,6 +290,7 @@ $lang = array_merge($lang, array(
 'TRANSFER_MEMBER_HISTORY_DESCRIPTION' => 'Hier kan die gesamte Geschichte (Raids, Gegenstände, Anpassungen) eines Mitglieds übersetzt werden nach einen anderen Mitglied.',
 'ACP_LISTRACE_EXPLAIN' => 'Hier kannst du die Spielrassen anpassen. Bitte achte darauf, dass das WoW Rass-id muss übereinstimmen mit das Blizzard XML',
 'ACP_LISTCLASS_EXPLAIN' => 'Hier kannst du die Spielklassen anpassen. Bitte achte darauf, dass das WoW Klassen-id muss übereinstimmen mit das Blizzard XML',
+'ACP_GAMESETTINGS_EXPLAIN' => 'Hier kannst du die Spieleeinstellungen anpassen: Klassen, Rasses, Faktionen.',
 'ACP_LISTFACTIONS_EXPLAIN' => 'Hier kannst du die Faktionen verwalten. ',
 'ACP_ADDRACE_EXPLAIN' => 'Hier kannst du die Spielrassen verwalten',
 'ACP_ADDCLASS_EXPLAIN' => 'Hier kannst du die Spielklassen anpassen. Bitte achte darauf dass das Wow Spielrassenid muss ubereinstimmen mit dass von den Arsenal.',
@@ -355,16 +340,16 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_LOGS_VIEW' => 'Du hast keine Berechtigung Protokolle zu sehen.',
 
 // Manage Members Menu (yes, MMM)
-'ADD_MEMBER' 	=> 'füge Mitglied zu',
-'LIST_EDIT_DEL_MEMBER' 	=> 'Mitglieder Auflisten, bearbeiten oder löschen',
-'EDIT_RANKS' 	=> 'Gildenränge bearbeiten',
-'EDIT_ROLES' 		=> 'Rollen bearbeiten',
-'ADD_RANKS' 	=> 'Gildenränge hinzufügen',
-'ADD_ROLES' 		=> 'Rollen hinzufügen',
-'ROLES' 			=> 'Rollen',
-'NEEDED' 			=> 'Benötigt',
-'DIFFERENCE' 		=> 'Differenz',
-'TRANSFER_HISTORY' 	=> 'Mitglied verschieben',
+'ADD_MEMBER' => 'füge Mitglied zu',
+'LIST_EDIT_DEL_MEMBER' => 'Mitglieder Auflisten, bearbeiten oder löschen',
+'EDIT_RANKS' => 'Gildenränge bearbeiten',
+'EDIT_ROLES' => 'Rollen bearbeiten',
+'ADD_RANKS' => 'Gildenränge hinzufügen',
+'ADD_ROLES' => 'Rollen hinzufügen',
+'ROLES' => 'Rollen',
+'NEEDED' => 'Benötigt',
+'DIFFERENCE' => 'Differenz',
+'TRANSFER_HISTORY' => 'Mitglied verschieben',
 
 
 // Delete Confirmation Texts
@@ -581,49 +566,49 @@ $lang = array_merge($lang, array(
 'ERROR_INCORRECTRANK' => 'Diesen Rang gehört nicht zu diese Gilde. Wähle einen korrekten Gildenrang.',
 'RANK_EXISTS' => 'Fehler: Gildenrang %s ist an Gilde %s zugeschrieben',
 'WARNING_NOATTENDEES' => 'Achtung, Dieser gelöschte Angriff hatte kaine Teilnehmer',
-'WARNING_NOITEMS'			=>  'Es gibt keine Gegenstände in die Datanbank.',
-'WARNING_NORAIDS'			=>  'Keine Raids gefunden in diese Pool.',
-'WARNING_NOMEMBERS'			=>  'Keine Mitglieder gefunden in diese Gilde.',
-'WARNING_NOADJUSTMENTS'		=>  'Keine Ajustierungen gefundend in diesen Pool',
-'WARNING_POOLNOPOINTS'  	=>  'Keine Punkte gefunden in ',
-'ERROR_NOGUILD'				=>  'Error : No Guilds defined',
-'ERROR_NOGAMES'				=>  'Error : No Games Installed',
-'ERROR_NOFACTION'			=>  'Error : No Factions found for this game',
-'INFO_NOLOGS'				=>  'Information: No bbDKP logs found',
-'ERROR_NOPOOLS'    			=>  'No Pools defined or all inactive, cannot add Events, Raids, loot or adjustments',
-'WARNING_NOEVENTSFOUND'   	=>  'No Events found.',
-'FORM_ERROR'				=> 'Einführungsfehler : bitte eingaben kontrollieren <br />',
-'ERROR_RAID_NOATTENDEES' 	=> 'Fehler: Alter Angriff hat keine Teilnehmer. Gewinnwerte der alten Teilnehmer können nicht gelöscht werden. ',
-'ERROR_NODKPACCOUNT' 		=> 'Achtung : keine DKP konten gefunden zur Überweisung',
-'ERROR_NOEVENTSDEFINED' 	=> 'Achtung : keine Events definiert. Kann kein Raid hinzufügen. ',
+'WARNING_NOITEMS' =>  'Es gibt keine Gegenstände in die Datanbank.',
+'WARNING_NORAIDS' =>  'Keine Raids gefunden in diese Pool.',
+'WARNING_NOMEMBERS' =>  'Keine Mitglieder gefunden in diese Gilde.',
+'WARNING_NOADJUSTMENTS' =>  'Keine Ajustierungen gefundend in diesen Pool',
+'WARNING_POOLNOPOINTS'  =>  'Keine Punkte gefunden in ',
+'ERROR_NOGUILD' =>  'Error : No Guilds defined',
+'ERROR_NOGAMES' =>  'Error : No Games Installed',
+'ERROR_NOFACTION' =>  'Error : No Factions found for this game',
+'INFO_NOLOGS' =>  'Information: No bbDKP logs found',
+'ERROR_NOPOOLS'    =>  'No Pools defined or all inactive, cannot add Events, Raids, loot or adjustments',
+'WARNING_NOEVENTSFOUND'   =>  'No Events found.',
+'FORM_ERROR' => 'Einführungsfehler : bitte eingaben kontrollieren <br />',
+'ERROR_RAID_NOATTENDEES' => 'Fehler: Alter Angriff hat keine Teilnehmer. Gewinnwerte der alten Teilnehmer können nicht gelöscht werden. ',
+'ERROR_NODKPACCOUNT' => 'Achtung : keine DKP konten gefunden zur Überweisung',
+'ERROR_NOEVENTSDEFINED' => 'Achtung : keine Events definiert. Kann kein Raid hinzufügen. ',
 'ERROR_NOGUILDMEMBERSDEFINED' => 'Achtung : keine Gildenmitglieder, kann kein Raid hinzufügen.',
-'ERROR_RANKMEMBERS' 		=> 'Achtung : Kann Rang nicht löschen denn es gibt noch immer Mitglieder mit diesen Rang.',
-'ERROR_NOSELECT' 			=> 'Bitte wähle ein VON und ein ZU Mitgliedername',
-'WARNING_BATTLENET' 		=> 'Alle Mitglieder bearbeiten vom Battle.NET Character API kann einige Minuten dauern. Bitte bestätigen.',
+'ERROR_RANKMEMBERS' => 'Achtung : Kann Rang nicht löschen denn es gibt noch immer Mitglieder mit diesen Rang.',
+'ERROR_NOSELECT' => 'Bitte wähle ein VON und ein ZU Mitgliedername',
+'WARNING_BATTLENET' => 'Alle Mitglieder bearbeiten vom Battle.NET Character API kann einige Minuten dauern. Bitte bestätigen.',
 
 //Curl errors
-'ERR_UNKNOWN'					=> 'Unknown error occurred.',
-'CURL_REQUIRED'					=> 'Curl is required for SDK usage.',
-'JSON_REQUIRED'					=> 'JSON PHP extension required for SDK usage.',
-'NO_METHODS' 					=> 'No methods defined in this resource.',
-'WOWAPI_METH_NOTALLOWED'		=> 'Method not allowed.',
-'WOWAPI_REGION_NOTALLOWED'		=> 'Region not allowed.',
-'WOWAPI_API_NOTIMPLEMENTED'		=> 'API not allowed.',
-'WOWAPI_NO_REALMS' 				=> 'No realm specified.',
-'WOWAPI_NO_GUILD'				=> 'Guildname name not specified.',
-'WOWAPI_INVALID_FIELD'			=> 'Invalid field requested : %s',
-'ERR400'					=> '400 Bad request',
-'ERR401'					=> '401 Unauthorised',
-'ERR403'					=> '403 Forbidden',
-'ERR404'					=> '404 Not Found',
-'ERR500'					=> '500 Internal Server Error',
-'ERR501'					=> '501 Not Implemented',
-'IERR502'					=> '502 Bad Gateway',
-'IERR503'					=> '503 Service Unavailable',
-'IERR504'					=> '504 Gateway Timeout',
-'IERROTH'					=> 'Other error',
-'WOWAPI_NO_CHARACTER'			=> 'Character name not specified.',
-'CURL_NOT_AVAILABLE'			=> 'Curl is not available on your server. :< ',
+'ERR_UNKNOWN' => 'Unknown error occurred.',
+'CURL_REQUIRED' => 'Curl is required for SDK usage.',
+'JSON_REQUIRED' => 'JSON PHP extension required for SDK usage.',
+'NO_METHODS' => 'No methods defined in this resource.',
+'WOWAPI_METH_NOTALLOWED' => 'Method not allowed.',
+'WOWAPI_REGION_NOTALLOWED' => 'Region not allowed.',
+'WOWAPI_API_NOTIMPLEMENTED' => 'API not allowed.',
+'WOWAPI_NO_REALMS' => 'No realm specified.',
+'WOWAPI_NO_GUILD' => 'Guildname name not specified.',
+'WOWAPI_INVALID_FIELD' => 'Invalid field requested : %s',
+'ERR400' => '400 Bad request',
+'ERR401' => '401 Unauthorised',
+'ERR403' => '403 Forbidden',
+'ERR404' => '404 Not Found',
+'ERR500' => '500 Internal Server Error',
+'ERR501' => '501 Not Implemented',
+'IERR502' => '502 Bad Gateway',
+'IERR503' => '503 Service Unavailable',
+'IERR504' => '504 Gateway Timeout',
+'IERROTH' => 'Other error',
+'WOWAPI_NO_CHARACTER' => 'Character name not specified.',
+'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Teilnehmer %s konnte nicht vom Raid %s herausgenommen worden.',
@@ -718,9 +703,9 @@ $lang = array_merge($lang, array(
 'GUILDTAG_NOTE' => 'Wird im Titel fast jeder Seite angezeigt',
 'GUILD_MEMBERS' => 'Gildenmitglieder',
 'GUILD_NAME' => 'Gildenname',
-'REALM_NAME'	=> 'Realmname',
-'GUILD_EMBLEM'	=> 'Gildenwappe',
-'GUILD_EMBLEM_EXPLAIN'	=> 'png Datei in /images/bbdkp/wowapi/guildemblem/',
+'REALM_NAME' => 'Realmname',
+'GUILD_EMBLEM' => 'Gildenwappe',
+'GUILD_EMBLEM_EXPLAIN' => 'png Datei in /images/bbdkp/wowapi/guildemblem/',
 'HIDE_INACTIVE' => 'Inaktive Mitglieder verbergen.',
 'HIDE_INACTIVE_NOTE' => 'Mitglieder ohne Raid Teilnehmerschaft in benutzerbestimmtes Zeitraum?',
 'INACTIVE_PERIOD' => 'Inaktiver Zeitraum',
@@ -728,7 +713,7 @@ $lang = array_merge($lang, array(
 'INACTIVE_POINT_ADJ' => 'Inaktiv Punkteanpassung',
 'INACTIVE_POINT_ADJ_NOTE' => 'Punkteanpassung fällig wenn ein Mitglied als inaktiv betrachtet wird.',
 'ITEMS_PER_PAGE' => 'Itemanzahl pro Seite',
-'BBDKP_VERSION'	   => 'bbDKP Version',
+'BBDKP_VERSION'   => 'bbDKP Version',
 'VERSION_UPDATE' => 'Versionsaktualisierung',
 'VERSION_NOTONLINE' => 'Die Informationen über die aktuelle bbDKP Version könnten nicht abgerufen werden.',
 'WHO_ONLINE' => 'Wer ist online?',
@@ -752,13 +737,13 @@ $lang = array_merge($lang, array(
 'POINT_NAME_NOTE' => 'Bsp: DKP, RP, etc.',
 'RAIDS' => 'Raids',
 'RAIDS_PER_PAGE' => 'Raids pro Seite',
-'REGION'	=> 'Region',
-'REGIONEU'	=> 'Europa',
-'REGIONUS'	=> 'Amerika',
-'REGIONKR'	=> 'Korea',
-'REGIONTW'	=> 'Taiwan',
-'REGIONCN'	=> 'China',
-'REGIONSEA'	=> 'Süd-Asien',
+'REGION' => 'Region',
+'REGIONEU' => 'Europa',
+'REGIONUS' => 'Amerika',
+'REGIONKR' => 'Korea',
+'REGIONTW' => 'Taiwan',
+'REGIONCN' => 'China',
+'REGIONSEA' => 'Süd-Asien',
 
 'SITE_NAME' => 'Seitenname',
 'SITE_DESCRIPTION' => 'Seitenbeschreibung',
@@ -777,7 +762,7 @@ $lang = array_merge($lang, array(
 'MINLEVELROSTER_EXPLAIN' => 'If Stufe < diesen Wert dann keine Anzeige', 
 'MIN_ARMORYLEVEL' => 'Minimumstufe zum herunterladen vom Armory :',
 
-	
+
  // titles
 'ADD_ITEM_RAIDID_NOTE' => 'Nur Raids innerhalb zwei wochen werden angedeutet / %s Alle andeuten</a>',
 'ADD_ITEM_RAIDID_SHOWALL_NOTE' => 'Alle Raids / %s Nur die letzten</a>',
@@ -913,7 +898,7 @@ $lang = array_merge($lang, array(
 'EVENT_COLOR_EXPLAIN' => 'Planer-Ereignisse werden angezeigt mit diese Farbe.',
 'EVENT_IMAGE' => 'Ereignisbild',
 'EVENT_IMAGE_EXPLAIN' => 'Dieses Ereignis wird mit dieses Bild angezeigt auf den Planer.',
-'EVENT_VIEWALL'	=> 'Zeige alle Events', 
+'EVENT_VIEWALL' => 'Zeige alle Events', 
 'EVENT_VIEWALL_EXPLAIN' => 'auch Ereignisse ohne Raids anzeigen', 
 'GAMEITEMID_EXPLAIN' => 'Wowhead Item id',
 'GAMES_INST' => 'Installierte Spiele',
@@ -1010,9 +995,9 @@ $lang = array_merge($lang, array(
 'MAX_NUMBER_CHARS'  => 'Maximale #characters',
 
 //js alerts
-'ALERT_AJAX' 		=> 'Es ist ein Problem aufgetreten beim Versuch XMLHTTP Ajax zu nutzen.',
+'ALERT_AJAX' => 'Es ist ein Problem aufgetreten beim Versuch XMLHTTP Ajax zu nutzen.',
 'ALERT_OLDBROWSER'  => 'Ihr Browser ist veraltet.',
-'JQUERY_MISSING' 	=> 'jquery.js fehlt. Diese Datei muss sich im ordner adm/style/dkp befinden damit der Farbenzirkel angezeigt wird.',
+'JQUERY_MISSING' => 'jquery.js fehlt. Diese Datei muss sich im ordner adm/style/dkp befinden damit der Farbenzirkel angezeigt wird.',
 
 'AION_BASEURL' => 'http://db.aion.ign.com/npc/',
 'EQ_BASEURL' => 'http://eq.magelo.com/npc/%s',
@@ -1038,7 +1023,7 @@ $lang = array_merge($lang, array(
 'STANDARDDKP' => 'Standart DKP',
 'STANDARDDKP_EXPLAIN' => '<strong>Beschreibung: </strong>Das Standart DKP System. Spieler erhalten DKP Punkte als Ergebnis der Pünktlichkeit, ob man Ersatzmann ist , der Boss Tötungen, oder einfach nur teilnimmt.
 Punkte können für Gegenstände ausgegeben werden, wie bei Nullsummen DKP, aber hier gibt es keine Begrenzung . ',
-'STANDARDDKP_EXAMPLE'=> '<strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 2. Es kostet 20 Punkte  <br /> 
+'STANDARDDKP_EXAMPLE' => '<strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 2. Es kostet 20 Punkte  <br /> 
 Der Spieler bekommt 5 Punkte da er einen Drachen besiegt hat, 2 Punkte weil er pünktlich oder Anwesend ist. 
  <br />Netto Ergebnis für den ganzen Raid: bekommen : (5+2) * 10 = 70 <br /> ausgegeben : 20 <br /> differenz= 50', 
 'STANDARDDKP_ADVANTAGE' => '<strong>Vorteile</strong> : einfach. Beine Berechnung für Beuteverteilung notwendig .',  
@@ -1063,7 +1048,7 @@ Das Gleichgewicht am Ende ist: bekommen 20+7=27 Punkte, ausgegeben 20+7=27 Punkt
 'TIMEDKP' => 'Zeit Bonus',
 'TIMEDKP_EXPLAIN' => '<strong>Beschreibung: </strong>Beutesystem wo Spieler Punkte pro angefangene Stunde bekommen, wenn sie im Raid sind oder verfügbar. Die Zeit wird gemessen vom Raidstart und dem Ende.
 Punkte werden wie im Bonus System für Beute ausgegeben. Bonuspunkte bekommt man vielleicht auch für andere Gründe.',
-'TIMEDKP_EXAMPLE'=> '<strong>Beispie</strong> : 10 Spieler, jeder anwesend für 90 Minuten.  <br />dkp/Stunde sind 20 Punkte, das bedeutet jeder Spieler bekommt 90/60 * 20 = 1,5 * 20 = 30 Punkte <br />1 Gegenstand ist für 20 Punkte gefallen <br />
+'TIMEDKP_EXAMPLE' => '<strong>Beispie</strong> : 10 Spieler, jeder anwesend für 90 Minuten.  <br />dkp/Stunde sind 20 Punkte, das bedeutet jeder Spieler bekommt 90/60 * 20 = 1,5 * 20 = 30 Punkte <br />1 Gegenstand ist für 20 Punkte gefallen <br />
 netto Ergebnis für den ganzen Raid: <br />bekommen : 30 *10 = 300 Punkte <br /> ausgegeben : 20 <br />unterschied = 280', 
 'TIMEDKP_ADVANTAGE' => '<strong>Vorteile</strong> : einfach. Beine Berechnung für Beuteverteilung notwendig für Beuteverteilung.',  
 'TIMEDKP_DISADVANTAGE' => '<strong>Nachteile</strong> : Punkt Inflation. <br /> Anhäufung. Neue schlecht ausgerüstete Spieler sind im Nachteil gegenüber besser ausgerüstete Spieler. Besser ausgerüstete Spieler geben nichts aus und so wird Punkte horten bis ein Ungleichgewicht gegenüber den anderen Spielern entsteht.', 
@@ -1079,7 +1064,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'EPGP_ADVANTAGE' => '<strong>Vorteile</strong> : keine inflation, kein horten. ', 
 'EPGP_DISADVANTAGE' => '<strong>Nachteile</strong>: Schwer zu verwalten weil man EP Strategien und Ausrüstungspreise festsetzen muss. ', 
 'DECAY_EXPLAIN' => 'Gewinn und Verlustpunkte werden Entwertet. ',
-'DECAY_EXAMPLE'	=> 'Verfallvorbild',
+'DECAY_EXAMPLE' => 'Verfallvorbild',
 
 'FORMULA' => 'Formeln',
 'DECAY_N' => '<strong>Raid Dauer in Wochen</strong> = n',
@@ -1095,7 +1080,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'DECAYPCTRAIDS_EXPLAIN' => 'Der Raidwert wird abgeschrieben mit diesen prozentsatz', 
 'DECAYPCTITEM' => 'Item/Gearpoint Entwertungssatz (%)',  
 'DECAYPCTITEM_EXPLAIN' => 'Der Itemcost wird entwertet mit diesen prozentsatz.', 
-'DECAYPCTADJ'	=>  'Ajustierungsentwertungsprozentsatz(%)', 
+'DECAYPCTADJ' =>  'Ajustierungsentwertungsprozentsatz(%)', 
 'DECAYPCTADJ_EXPLAIN' => 'Die Ajustierungen werden entwertet mit diesen prozentsatz.',
 'DECAYFREQ' => 'Entwertungsfrekwenz.',  
 'DECAYFREQ_EXPLAIN' => 'Entwertung ist geplant jede n Tage, Wochen oder Monate nach jeden Raid. ', 
@@ -1103,7 +1088,7 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'DECAY_SCHEDULE' => 'Vorprogrammierte Entwertung',
 'DECAY_SCHEDULE_EXPLAIN' => 'betätigt ein cronjob der eine automatische Entwertung startet jede 23 Stunden insofern das Forum besucht wird.',
 'DECAYCRON' => 'betätigt durch cronjob', 
-'NO_DECAY_ADJ'	=> 'Ajustierungen entwertbar ?',
+'NO_DECAY_ADJ' => 'Ajustierungen entwertbar ?',
 
 'PR' => 'PR Prioritätswert', 
 'EP_DEFINITION' => '<strong>EP</strong> = Gewinn = Raid Bonus + Zeitbonus + Nullsumme + Ajustierung ',
