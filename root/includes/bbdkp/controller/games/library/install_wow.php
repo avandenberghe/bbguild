@@ -36,16 +36,6 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_wow extends \bbdkp\controller\games\GameInstall
 {
-	/**
-	 * Installs WoW
-	 */
-	public function install()
-	{
-		$this->Installfactions();
-		$this->InstallClasses();
-		$this->InstallRaces();
-		$this->InstallEventGroup();
-	}
 
 	/**
 	 * Installs factions

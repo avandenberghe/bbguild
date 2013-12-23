@@ -101,8 +101,6 @@ class Game extends \bbdkp\admin\Admin
 			\trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALL_GAME_FAILURE'], $this->name ) . E_USER_WARNING );
 		}
 
-		$db->sql_transaction ( 'begin' );
-
 		if(! array_key_exists($this->game_id, $this->preinstalled_games))
 		{
 			if ($this->name == '')
@@ -126,22 +124,8 @@ class Game extends \bbdkp\admin\Admin
 			$installgame = new $classname;
 
 			//call the game installer
-			$installgame->install();
+			$installgame->install($this->game_id, $this->name );
 		}
-
-		//insert a new entry in the game table
-		$data = array (
-				'game_id' => ( string ) $this->game_id,
-				'game_name' => ( string ) $this->name,
-				'status' => 1
-				);
-
-		$sql = 'INSERT INTO ' . GAMES_TABLE . ' ' . $db->sql_build_array ( 'INSERT', $data );
-		$db->sql_query ( $sql );
-
-		$this->id = $db->sql_nextid ();
-
-		$db->sql_transaction ( 'commit' );
 
 		//
 		// Logging
