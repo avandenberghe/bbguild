@@ -35,6 +35,11 @@ if (!class_exists('\bbdkp\controller\guilds\Ranks'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
 }
+// include ranks class
+if (!class_exists('\bbdkp\controller\guilds\Roles'))
+{
+	require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Roles.$phpEx");
+}
 /**
  * bbDKP ucp class
  * @package bbdkp
@@ -121,7 +126,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 		$guilds->guildid = $this->guild_id;
 
 		// GET processing logic
-		add_form_key('digests');
+		add_form_key('cocoa');
 		switch ($mode)
 		{
 			case 'characters':
@@ -130,7 +135,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 				$member = new \bbdkp\controller\members\Members();
 				if ($submit)
 				{
-					if (!check_form_key('digests'))
+					if (!check_form_key('cocoa'))
 					{
 						trigger_error('FORM_INVALID');
 					}
