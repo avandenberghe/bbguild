@@ -1,12 +1,12 @@
 <?php
 /**
  * bbdkp common language file - de German
- * 
+ *
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3
  * @translation various unknown authors, killerpommes
- * 
+ *
  */
 
 /**
@@ -44,7 +44,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'BBDKPDISABLED'	=> 'bbDKP is zur zeit nicht erreichbar.',
 	'FOOTERBBDKP' => 'bbDKP 1.3.0',
-//---- Portal blocks ----- 
+//---- Portal blocks -----
 	'PORTAL'	=> 'Portal',
 	'RECENTLOOT'	=> 'Letzte Beute',
 	'REMEMBERME'	=> 'Login merken',
@@ -57,16 +57,16 @@ $lang = array_merge($lang, array(
 	'NEWS_PER_PAGE'	=> 'Nachrichten pro Seite',
 	'ERROR_INVALID_NEWS_PROVIDED'	=> 'Ungültige Nachricht.',
 	'BOSSPROGRESS'	=> 'Instanz-Fortschritt',
-	'WELCOME'	=> 'Willkommen', 
+	'WELCOME'	=> 'Willkommen',
 	'RECENT_LENGTH' 	=> 'Anzahl angezeigte Buchstaben',
 	'NUMTOPICS'					=> 'Anzahl angezeigte Beiträge',
 	'SHOW_RT_BLOCK'				=> 'neue Beiträge anzeigen',
 	'RECENT_TOPICS_SETTING'		=> 'Einstellungen neue Beiträge',
-	'RECENT_TOPICS'				=> 'Neue Beiträge',	
+	'RECENT_TOPICS'				=> 'Neue Beiträge',
 	'NO_RECENT_TOPICS'			=> 'Keine neue Beiträge',
-	'POSTED_BY_ON'				=> '%2$s von %1$s',	
+	'POSTED_BY_ON'				=> '%2$s von %1$s',
 	'LATESTMEMBERS'				=> 'Neueste Mitglieder',
-	
+
 // Main Menu
 	'MENU'	=> 'Menü',
 	'MENU_ADMIN_PANEL'	=> 'Administration',
@@ -121,19 +121,19 @@ $lang = array_merge($lang, array(
 	'AION'			=> 'Aion',
 	'DAOC'			=> 'Dark Age of Camelot',
 	'EQ'			=> 'EverQuest',
-	'EQ2'			=> 'EverQuest II',	
-	'FFXI'			=> 'Final Fantasy XI',	
-	'GW2'       	=> 'Guildwars 2', 	
-	'LINEAGE2'      => 'Lineage 2', 
-	'LOTRO'			=> 'The Lord of the Rings Online',	
-	'RIFT'       	=> 'Rift',	
-	'SWTOR'       	=> 'Starwars : The old Republic', 	
-	'TERA'       	=> 'Tera', 	
+	'EQ2'			=> 'EverQuest II',
+	'FFXI'			=> 'Final Fantasy XI',
+	'GW2'       	=> 'Guildwars 2',
+	'LINEAGE2'      => 'Lineage 2',
+	'LOTRO'			=> 'The Lord of the Rings Online',
+	'RIFT'       	=> 'Rift',
+	'SWTOR'       	=> 'Starwars : The old Republic',
+	'TERA'       	=> 'Tera',
 	'VANGUARD'		=> 'Vanguard - Saga of Heroes',
 	'WARHAMMER'		=> 'Warhammer Online',
-	'WOW'			=> 'World of Warcraft',	
+	'WOW'			=> 'World of Warcraft',
 	'PREINSTALLED' => 'Vorinstallierte Spiele: %s',
-	
+
 //Recruitment
 	'RECRUITMENT_BLOCK'	=> 'Rekrutierungs Status',
 	'RECRUIT_CLOSED'	=> 'Geschlossen !',
@@ -151,7 +151,7 @@ $lang = array_merge($lang, array(
 	'REGION'	=> 'Region',
 	'ACHIEV'	=> 'Erfolge',
 	'PROFFESSION' => 'Berufe',
-	
+
 //listmembers
 	'ADJUSTMENT'	=> 'Korrektur',
 	'ALL'	=> 'Alle',
@@ -173,7 +173,7 @@ $lang = array_merge($lang, array(
 	'SPENT'	=> 'Ausgegeben',
 	'COMPARE_MEMBERS'	=> 'Vergleiche Mitglieder',
 	'LISTMEMBERS_FOOTCOUNT'	=> '... %d Mitglieder gefunden',
-	
+
 	'LISTADJ_TITLE'	=> 'Korrekturen',
 	'LISTEVENTS_TITLE'	=> 'Ereignisse',
 	'LISTIADJ_TITLE'	=> 'Korrekturen',
@@ -187,10 +187,10 @@ $lang = array_merge($lang, array(
 	'VIEWITEM_TITLE'	=> 'Kauf Historie für %s',
 	'VIEWMEMBER_TITLE'	=> 'Raid Historie für %s',
 	'VIEWRAID_TITLE'	=> 'Raid Zusammenfassung',
-	'NODKPACCOUNTS'	=> 'Keine DKP Konten gefunden', 
-	'NOUCPACCESS' => 'Du kannst keine Charaktere einstellen.', 
-	'NOUCPADDCHARS' => 'Du kannst keine Charaktere hinzufügen.', 
-	'NOUCPUPDCHARS' => 'Du kannst deine Charaktere nicht bearbeiten.', 
+	'NODKPACCOUNTS'	=> 'Keine DKP Konten gefunden',
+	'NOUCPACCESS' => 'Du kannst keine Charaktere einstellen.',
+	'NOUCPADDCHARS' => 'Du kannst keine Charaktere hinzufügen.',
+	'NOUCPUPDCHARS' => 'Du kannst deine Charaktere nicht bearbeiten.',
 	'NOUCPDELCHARS' => 'Du kannst deine Charaktere nicht löschen',
 
 // Various
@@ -215,11 +215,11 @@ $lang = array_merge($lang, array(
 
 // TYPES of armor are static across games, no need to put it in DB
 	'CLOTH'	=> 'Stoff',
-	'ROBE' => 'Robe', 
+	'ROBE' => 'Robe',
 	'LEATHER'	=> 'Leder',
-	'AUGMENTED' => 'Erweiterter Anzug', 
-	'MAIL' =>  'Mittel / Kettenhemd', 
-	'HEAVY' => 'Schwere Rüstung', 
+	'AUGMENTED' => 'Erweiterter Anzug',
+	'MAIL' =>  'Mittel / Kettenhemd',
+	'HEAVY' => 'Schwere Rüstung',
 	'PLATE'	=> 'Schwer / Platte',
 
 	'CLASSID'	=> 'Klassen ID',
@@ -240,13 +240,13 @@ $lang = array_merge($lang, array(
 	'CHARACTER'	=> 'Charaktername',
 	'CHARACTER_EXPLAIN'	=> 'Wähle dein Charakternamen and bestätige.',
 	'CHARACTERS_UPDATED'	=> 'Der Charaktername %s wurde an dein Forumkonto gekoppelt. ',
-	'NO_CHARACTERS_BOUND' => 'Keine Charaktere an sind an Ihr Account verbunden.',	
+	'NO_CHARACTERS_BOUND' => 'Keine Charaktere an sind an Ihr Account verbunden.',
 	'NO_CHARACTERS'	=> 'Keine Charaktere gefunden.',
 	'RAIDDECAY'	=> 'Raid Entwertung',
-	'ADJDECAY' => 'Ajustierungsentwertung', 
+	'ADJDECAY' => 'Ajustierungsentwertung',
 	'DECAY'	=> 'Entwert',
 	'DROPS'	=> 'Beute',
-	'EVENTNOTE' => 'Notiz: Nur Raids und Beute von aktive Ereignisse werden gezeigt',	
+	'EVENTNOTE' => 'Notiz: Nur Raids und Beute von aktive Ereignisse werden gezeigt',
 	'EVENT'	=> 'Ereignis',
 	'EVENTNAME'	=> 'Ereignisname',
 	'EVENTS'	=> 'Ereignisse',
@@ -268,26 +268,26 @@ $lang = array_merge($lang, array(
 	'JOINDATE'	=> 'Gilden Eintrittsdatum',
 	'LAST'	=> 'Letzter',
 	'LASTLOOT'	=> 'Letztes Beute',
-	'LAST_VISIT'	=> 'Letzter Besuch',	
+	'LAST_VISIT'	=> 'Letzter Besuch',
 	'LOG_DATE_TIME'	=> 'Datum/Zeit dieses Logs',
 	'LOOT_FACTOR'	=> 'Beute Faktor',
 	'LOOTS'	=> 'Beute',
 	'LOOTDIST_CLASS'	=> 'Beute-Klassenverteilung',
-	'LOW' => 'Niedrig',	
-	'MANAGE'	=> 'Verwalten',	
+	'LOW' => 'Niedrig',
+	'MANAGE'	=> 'Verwalten',
 	'MEDIUM' => 'Mittel',
 	'MEMBER'	=> 'Mitglied',
 	'MEMBERS'	=> 'Mitglieder',
 	'NA' => 'n.v.',
-	'NETADJUSTMENT' => 'Netto Ajustierung', 	
+	'NETADJUSTMENT' => 'Netto Ajustierung',
 	'NO_DATA' => 'Keine Daten',
 	'RAID_ON'	=> 'Raid von %s in %s',
-	'MAX_CHARS_EXCEEDED' => 'Du kannst höchstens %s Charaktere an dein Forumkonto koppeln.', 
+	'MAX_CHARS_EXCEEDED' => 'Du kannst höchstens %s Charaktere an dein Forumkonto koppeln.',
 	'MISCELLANEOUS'	=> 'Verschiedenes',
 	'NEWEST'	=> 'Neuester Raid',
 	'NOTE'	=> 'Notiz',
 	'OLDEST'	=> 'Ältester Raid',
-	'OPEN' => 'Offen',	
+	'OPEN' => 'Offen',
 	'OPTIONS'	=> 'Einstellungen',
 	'OUTDATE'	=> 'Gilden Austrittsdatum',
 	'PERCENT'	=> 'Prozent',
@@ -341,22 +341,22 @@ $lang = array_merge($lang, array(
 	'ZEROSUM'	=> 'Nullsummenbonus',
 
 //lootsystems
-	'EP'	=> 'LP'
-	'EPLONG'	=> 'Leistungspunkte',	
+	'EP'	=> 'LP',
+	'EPLONG'	=> 'Leistungspunkte',
 	'EPNET'	=> 'LP net',
-	'EPNETLONG'	=> 'Netto LP',	
+	'EPNETLONG'	=> 'Netto LP',
 	'GP'	=> 'RP',
-	'GPLONG'	=> 'Rüstungs Punkte',	
+	'GPLONG'	=> 'Rüstungs Punkte',
 	'GPNET'	=> 'RP netto',
 	'PR'	=> 'Priorität',
-	'PRLONG'	=> 'Prioritätenschlüssel',	
+	'PRLONG'	=> 'Prioritätenschlüssel',
 
 // Page Foot Counts
 
 	'LISTEVENTS_FOOTCOUNT'	=> '... %d Ereignisse gefunden / %d pro Seite',
 	'LISTIADJ_FOOTCOUNT'	=> '... %d Korrektionen gefunden / %d pro Seite',
 	'LISTITEMS_FOOTCOUNT'	=> '... %d einmalige Gegenstände / %d pro Seite',
-	'LISTNEWS_FOOTCOUNT'	=> '... %d Nachrichten gefunden', 
+	'LISTNEWS_FOOTCOUNT'	=> '... %d Nachrichten gefunden',
 	'LISTMEMBERS_ACTIVE_FOOTCOUNT'	=> '... %d aktive(s) Mitglied(er) gefunden / %s Zeige alle</a>',
 	'LISTMEMBERS_COMPARE_FOOTCOUNT'	=> '... vergleiche %d Mitglieder',
 	'LISTPURCHASED_FOOTCOUNT'	=> '... %d Gegenstände gefunden / %d pro Seite',
@@ -410,17 +410,17 @@ $lang = array_merge($lang, array(
 	'ENTER_NEW_GAMEITEMID'	=> 'Gegenstand ID',
 	'FEMALE'	=> 'weiblich',
 	'GENDER'	=> 'Geschlecht',
-	'GUILD'	=> 'Gilde',	
-	'LIST'	=> 'Liste',  
+	'GUILD'	=> 'Gilde',
+	'LIST'	=> 'Liste',
 	'LIST_EVENTS'	=> 'Ereignisse zeigen',
 	'LIST_INDIVADJ'	=> 'Individuelle Korrekturen anzeigen',
 	'LIST_ITEMS'	=> 'Gegenstände zeigen',
 	'LIST_MEMBERS'	=> 'Mitglieder zeigen',
 	'LIST_RAIDS'	=> 'Raids zeigen',
 	'MALE'	=> 'männlich',
-	'MAY_BE_NEGATIVE_NOTE'	=> 'darf negativ sein',	
+	'MAY_BE_NEGATIVE_NOTE'	=> 'darf negativ sein',
 	'NOT_AVAILABLE'	=> 'Nicht vorhanden',
-	'NORAIDS'       => 'Keine Raids', 
+	'NORAIDS'       => 'Keine Raids',
 	'OF_RAIDS'	=> '%d',
 	'OF_RAIDS_CHAR'	=> '%s',
 	'OR'	=> 'oder',
@@ -431,7 +431,7 @@ $lang = array_merge($lang, array(
 // Error messages
 	'NOT_ADMIN'	=> 'Du bist kein Administrator',
 
-//---- About --- do not change anything here 
+//---- About --- do not change anything here
 //tabs
 	'ABOUT'	=> 'Über',
 	'MAINIMG'	=> 'bbdkp.png',
@@ -456,19 +456,19 @@ $lang = array_merge($lang, array(
 	'PAYPALLINK'	=> '<form action="https://www.paypal.com/cgi-bin/webscr" method="post"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
 "><input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt=""><img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </form>',
-	'LICENSE1'	=> 'bbDKP ist freie Software. Du kannst es unter den Bedingungen 
-		der GNU General Public License, wie von der Free Software Foundation 
-		veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß 
-		Version 2 der Lizenz oder (nach Ihrer Wahl) jeder späteren Version. 
-		
-		Die Veröffentlichung bbDKP erfolgt in der Hoffnung, 
-		daß es dir von Nutzen sein wird, aber OHNE IRGENDEINE 
-		GARANTIE, sogar ohne die implizite Garantie der MARKTREIFE 
-		oder der VERWENDBARKEIT FÜR EINEN BESTIMMTEN ZWECK. 
-		Details finden Sie in der GNU General Public License. 
-		
-		Du solltest ein Exemplar der GNU General Public License 
-		zusammen mit diesem Programm erhalten haben. 
+	'LICENSE1'	=> 'bbDKP ist freie Software. Du kannst es unter den Bedingungen
+		der GNU General Public License, wie von der Free Software Foundation
+		veröffentlicht, weitergeben und/oder modifizieren, entweder gemäß
+		Version 2 der Lizenz oder (nach Ihrer Wahl) jeder späteren Version.
+
+		Die Veröffentlichung bbDKP erfolgt in der Hoffnung,
+		daß es dir von Nutzen sein wird, aber OHNE IRGENDEINE
+		GARANTIE, sogar ohne die implizite Garantie der MARKTREIFE
+		oder der VERWENDBARKEIT FÜR EINEN BESTIMMTEN ZWECK.
+		Details finden Sie in der GNU General Public License.
+
+		Du solltest ein Exemplar der GNU General Public License
+		zusammen mit diesem Programm erhalten haben.
 		Falls nicht schau unter http://www.gnu.org/licenses',
 	'LICENSE2'	=> 'Powered by bbDkp (c) 2009 The bbDkp Project Team. Wenn Sie diese Software benutzen und hilfreich finden, möchten wir Sie bitten den Copyright-Hinweis zu erhalten. Auch wenn er für die freie Verwendung nicht notwendig ist, so hilft er Interesse am Projekt bbDKP zu wecken und <strong>ist Voraussetzung um Support zu erhalten</strong>.',
 	'COPYRIGHT3'	=> 'bbDKP (c) 2010 Sajaki, Malfate, Blazeflack <br /> bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
