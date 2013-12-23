@@ -79,7 +79,11 @@ class ucp_dkp extends \bbdkp\admin\Admin
 		}
 		$guilds = new \bbdkp\controller\guilds\Guilds();
 
-		$guildlist = $guilds->guildlist();
+		$guildlist = $guilds->guildlist(1);
+		if(count($guildlist) == 0)
+		{
+			trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+		}
 
 		foreach ($guildlist as $g)
 		{
