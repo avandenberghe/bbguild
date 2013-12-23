@@ -2,12 +2,12 @@
 /**
  * bbdkp admin language file (German-Informal)
  * @author Sajaki@bbdkp.com
- * 
+ *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  * @translation various unknown authors, killerpommes
- * 
+ *
  */
 
 /**
@@ -117,7 +117,7 @@ $lang = array_merge($lang, array(
 'FV_DKPSTATUSYN' => 'DKP Pool muss entweder Y (Aktiv) oder N (Inaktiv) sein.',
 'FV_RAIDEXIST' => 'Dieser DKP Pool DKP Pool kann nicht gelöscht werden, denn es gibt noch einige Raids in diesen Pool. ',
 'FV_EVENTEXIST' => 'Dieser DKP Pool DKP Pool kann nicht gelöscht werden, denn es gibt noch einige Ereignisse in diesen Pool. ',
-'FV_FREQUENCY_NOTZERO'  => 'Abklingen Frequenzen können nicht Null sein', 
+'FV_FREQUENCY_NOTZERO'  => 'Abklingen Frequenzen können nicht Null sein',
 
 // Portal config
 'NEWSBLOCKSETTING' => 'Nachrichten Block ',
@@ -141,7 +141,7 @@ $lang = array_merge($lang, array(
 'MENUBLOCKSETTING' => 'Menü Block Einstellungen',
 'SHOWMENUBLOCK' => 'Menü Block anzeigen',
 'BLOCKSHOWPROGRESSBAR' => 'Vorgangsbalke im Portal Block zeigen',
-'WELCOME_DEFAULT' => '[b]Willkommen bei unserer Gilde[/b]! Bitte ändere die Willkommens-Nachricht im ACP.', 
+'WELCOME_DEFAULT' => '[b]Willkommen bei unserer Gilde[/b]! Bitte ändere die Willkommens-Nachricht im ACP.',
 'SHOWWELCOME' => 'Zeige Willkommens Block',
 'WELCOMEBLOCK' => 'Willkommens Block Text',
 'WELCOMEBLOCKSETTING' => 'Willkommens Block Einstellungen',
@@ -205,7 +205,7 @@ $lang = array_merge($lang, array(
 'UMIL_GAME' => 'Spieldaten für %s installiert',
 'UMIL_DUMMYDATA' => 'Dummy data entered',
 'UMIL_GAMEUNINST' => 'Spieldaten entfernt.',
-'UMIL_UPDTABLES' =>  'Tabellen %s für Version %s', 
+'UMIL_UPDTABLES' =>  'Tabellen %s für Version %s',
 
 // ACP titles
 'BBDKP_WELCOME' => 'Willkommen bei bbDKP',
@@ -256,7 +256,7 @@ $lang = array_merge($lang, array(
 'ACP_DKP' => 'bbDKP Einstellungsbereich',
 'ACP_ITEMSTATS' => 'Tooltip Einstellungen',
 'ACP_INDEXPAGE' => 'Portal Einstellungen',
-'POINT_SETTINGS' => 'Point Settings', 
+'POINT_SETTINGS' => 'Point Settings',
 'ACP_NEWGAME' => 'Spieleliste',
 'ACP_EDITGAME' => 'Spiel bearbeiten: %s',
 
@@ -273,7 +273,7 @@ $lang = array_merge($lang, array(
 'ACP_ADDRAID_EXPLAIN' => 'Hier kannst du Raid Informationen ändern oder hinzufügen.',
 'ACP_EDITRAID_EXPLAIN'  => 'Hier kannst du deinen Raid bearbeiten.',
 'ACP_LISTRAIDS_EXPLAIN' => 'Hier ist die Raid Liste pro DKP Pool. Wenn du den Raidnamen anklickst, bringt dich in Verwaltungsmodus',
-'ACP_DKP_LOGS_EXPLAIN'  => 'Hier werden alle Aktionen von bbDKP aufgelistet. Du kannst nach Benutzername, Datum, IP oder Aktion.',
+'ACP_DKP_LOGS_EXPLAIN'  => 'Diese Liste zeigt alle bbDKP-Vorgänge. Du kannst nach Benutzername, Datum, IP oder Aktion sortieren.',
 'ACP_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenranken und Präfix/Suffixe einstellen. (Zum hinzufügen, die letzte Zeile eintippen und bestätigen. Zum löschen, entferne den Namen und bestätige). Rang 99 (den ‘out‘ Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch den Arsenal-Plugin. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Gildenmitgliederliste. Hier kannst du Mitglieder verwalten oder löschen. ACHTUNG: löschung bedeutet dass die ganze Mitgliedraidgeschichte in allen DKP Pools vernichtet wird! ',
 
@@ -295,7 +295,7 @@ $lang = array_merge($lang, array(
 'ACP_ADDRACE_EXPLAIN' => 'Hier kannst du die Spielrassen verwalten',
 'ACP_ADDCLASS_EXPLAIN' => 'Hier kannst du die Spielklassen anpassen. Bitte achte darauf dass das Wow Spielrassenid muss ubereinstimmen mit dass von den Arsenal.',
 'ACP_ADDFACTIONS_EXPLAIN' => 'Hier kannst du die Faktionen verwalten.',
-'ACP_ADDRACE_EXPLAIN'  => 'Hier kannst du die Rassen verwalten.', 
+'ACP_ADDRACE_EXPLAIN'  => 'Hier kannst du die Rassen verwalten.',
 'RACEID_EXPLAIN' => 'Das ID ist einmalig und sollte (für wow) mit das Blizzard-XML übereinstimmen',
 'RACE_EXPLAIN' => 'Namen',
 'CLASS_ID_EXPLAIN' => 'Das ID ist einmalig und sollte (für wow) mit das Blizzard-XML übereinstimmen',
@@ -406,11 +406,11 @@ $lang = array_merge($lang, array(
 'ACTION_RAID_ADDED' => 'Angriff erfolgreich hinzugefügt',
 'ACTION_RAID_DELETED' => 'Angriff erfolgreich gelöscht',
 'ACTION_RAID_UPDATED' => 'Angriff aktualisiert',
-'ACTION_DECAYOFF' => 'Verfall wurde gelöscht.', 
+'ACTION_DECAYOFF' => 'Verfall wurde gelöscht.',
 'ACTION_DECAYSYNC' => 'Verfall nachkalkuliert',
-'ACTION_ZSYNC' => 'Nullsummendkp wurde nachkalkuliert', 
-'ACTION_DKPSYNC' => 'DKP wurde nachkalkuliert',  
-'ACTION_DEFAULT_DKP_CHANGED' => 'Standard DKP wurde geändert', 
+'ACTION_ZSYNC' => 'Nullsummendkp wurde nachkalkuliert',
+'ACTION_DKPSYNC' => 'DKP wurde nachkalkuliert',
+'ACTION_DEFAULT_DKP_CHANGED' => 'Standard DKP wurde geändert',
 'ACTION_GUILD_ADDED' => 'Gilde hinzugefügt',
 'ACTION_GUILD_UPDATED' => 'Gilde aktualisiert',
 'ACTION_GUILD_DELETED' => 'Gilde gelöscht',
@@ -450,7 +450,7 @@ $lang = array_merge($lang, array(
 'VLOG_MEMBER_DELETED' => '%s hat das Mitglied %s gelöscht.',
 'VLOG_MEMBER_DEACTIVATED' => '%s hat das Mitglied %s abgeschaltet wegen Inactivität (%s) ',
 'VLOG_MEMBERDKP_UPDATED' => '%s hat die DKP punkte von %s geändert : gerntet: %.2f -> %.2f, ausgegeben: %.2f -> %.2f',
-'VLOG_MEMBERDKP_DELETED' => '%s hat das DKP Konto von %s gelöscht !', 
+'VLOG_MEMBERDKP_DELETED' => '%s hat das DKP Konto von %s gelöscht !',
 'VLOG_NEWS_ADDED' => '%s hat die Nachricht %s hinzugefügt.',
 'VLOG_NEWS_UPDATED' => '%s hat die Nachricht %s hinzugefügt.',
 'VLOG_NEWS_DELETED' => '%s hat die Nachricht %s gelöscht.',
@@ -460,10 +460,10 @@ $lang = array_merge($lang, array(
 'VLOG_RAID_ADDED' => '%s hat ein Angriff auf %s hinzugefügt.',
 'VLOG_RAID_UPDATED' => '%s hat ein Angriff auf %s aktualisiert.',
 'VLOG_RAID_DELETED' => '%s hat ein Angriff auf %s gelöscht.',
-'VLOG_DECAYOFF' => '%s hat Punkteverfall abgestellt', 
+'VLOG_DECAYOFF' => '%s hat Punkteverfall abgestellt',
 'VLOG_DECAYSYNC' => '%s hat Punkteverfall neu berechnet für %s Raids',
-'VLOG_ZSYNC' => '%s hat NullsummenDKP neu berechnet', 
-'VLOG_DKPSYNC' => '%s hat DKP neu berechnet',  
+'VLOG_ZSYNC' => '%s hat NullsummenDKP neu berechnet',
+'VLOG_DKPSYNC' => '%s hat DKP neu berechnet',
 'VLOG_DEFAULT_DKP_CHANGED' => '%s hat Standard Pool geändert auf %s',
 'VLOG_GUILD_ADDED' => '%s hat Gilde %s zugefügt',
 'VLOG_GUILD_UPDATED' => '%s updated guild %s to %s',
@@ -571,16 +571,16 @@ $lang = array_merge($lang, array(
 'WARNING_NOMEMBERS' =>  'Keine Mitglieder gefunden in diese Gilde.',
 'WARNING_NOADJUSTMENTS' =>  'Keine Ajustierungen gefundend in diesen Pool',
 'WARNING_POOLNOPOINTS'  =>  'Keine Punkte gefunden in ',
-'ERROR_NOGUILD' =>  'Error : No Guilds defined',
-'ERROR_NOGAMES' =>  'Error : No Games Installed',
-'ERROR_NOFACTION' =>  'Error : No Factions found for this game',
-'INFO_NOLOGS' =>  'Information: No bbDKP logs found',
-'ERROR_NOPOOLS'    =>  'No Pools defined or all inactive, cannot add Events, Raids, loot or adjustments',
-'WARNING_NOEVENTSFOUND'   =>  'No Events found.',
+'ERROR_NOGUILD' =>  'Fehler : keine Gilden definiert',
+'ERROR_NOGAMES' =>  'Fehler : Kein Spiel installiert',
+'ERROR_NOFACTION' =>  'Fehler : keine Faktionen definiert',
+'INFO_NOLOGS' =>  'Information: keine bbDKP logs gefunden',
+'ERROR_NOPOOLS'    =>  'Keine Punktegruppen definiert oder alle inaktiv',
+'WARNING_NOEVENTSFOUND'   =>  'Keine Ereignisse gefunden.',
 'FORM_ERROR' => 'Einführungsfehler : bitte eingaben kontrollieren <br />',
 'ERROR_RAID_NOATTENDEES' => 'Fehler: Alter Angriff hat keine Teilnehmer. Gewinnwerte der alten Teilnehmer können nicht gelöscht werden. ',
 'ERROR_NODKPACCOUNT' => 'Achtung : keine DKP konten gefunden zur Überweisung',
-'ERROR_NOEVENTSDEFINED' => 'Achtung : keine Events definiert. Kann kein Raid hinzufügen. ',
+'ERROR_NOEVENTSDEFINED' => 'Achtung : keine Ereignisse definiert. Kann kein Raid hinzufügen. ',
 'ERROR_NOGUILDMEMBERSDEFINED' => 'Achtung : keine Gildenmitglieder, kann kein Raid hinzufügen.',
 'ERROR_RANKMEMBERS' => 'Achtung : Kann Rang nicht löschen denn es gibt noch immer Mitglieder mit diesen Rang.',
 'ERROR_NOSELECT' => 'Bitte wähle ein VON und ein ZU Mitgliedername',
@@ -615,7 +615,7 @@ $lang = array_merge($lang, array(
 
 'ADMIN_ADD_ADJ_SUCCESS' => 'Die %s Punkteanpassung von %.2f wurde erfolgreich hinzugefügt.',
 'ADMIN_ADD_DKPSYS_SUCCESS' => 'Den neuen DKP Pool %s wurde erfolgreich hinzugefügt.',
-'ADMIN_ADD_EVENT_SUCCESS' => 'Der Standardwert von %s für Angriffe auf %s wurde ergolgreich zugefugt.',
+'ADMIN_ADD_EVENT_SUCCESS' => 'Der Standardwert von %s für Ereignisse auf %s wurde ergolgreich zugefugt.',
 'ADMIN_ADD_IADJ_SUCCESS' => 'Die %s Punkteanpassung von %.2f für %s ist erfolgreich hinzugefügt.',
 'ADMIN_ADD_ITEM_SUCCESS' => 'Der Gegenstandsankauf für %s, gekauft von %s für %.2f wurde erfolgreich hinzugefügt.',
 'ADMIN_ADD_MEMBER_SUCCESS' => '%s wurde erfolgreich hinzugefügt an die Mitgliederliste.',
@@ -625,7 +625,7 @@ $lang = array_merge($lang, array(
 'ADMIN_ADD_RAID_SUCCESS' => 'Der Angriff von %s auf %s wurde erfolgreich hinzugefügt.',
 'ADMIN_DELETE_ADJ_SUCCESS' => 'Die Punkteanpassung %s für %.2f wurde erfolgreich gelöscht.',
 'ADMIN_DELETE_DKPSYS_SUCCESS' => 'Der DKP Pool %s wurde erfolgreich gelöscht!',
-'ADMIN_DELETE_EVENT_SUCCESS' => 'Der Standardwert %s Für Angriffe auf %s wurde erfolgreich gelöscht.',
+'ADMIN_DELETE_EVENT_SUCCESS' => 'Der Standardwert %s für Ereignisse auf %s wurde erfolgreich gelöscht.',
 'ADMIN_DELETE_GUILD_SUCCESS' => 'Die Gilde mit Nummer %s wurde erfolgreich gelöscht.',
 'ADMIN_DELETE_IADJ_SUCCESS' => 'Die  %s Punkteanpassung von %.2f für %s wurde erfolgreich gelöscht',
 'ADMIN_DELETE_ITEM_SUCCESS' => 'Der Ankauf von %s, durch %s für %.2f wurde gelöscht.',
@@ -640,7 +640,7 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_ADJ_SUCCESS' => 'Die Punkteanpassung %s för %.2f wurde aktualisiert.',
 'ADMIN_UPDATE_DKPSYS_SUCCESS' => 'Den Namen und Status des DKP Pools %s wurde geändert nach : %s, %s',
 'ADMIN_UPDATE_GUILD_SUCCESS' => 'Die Gilde mit id %d wurde aktualisiert.',
-'ADMIN_UPDATE_EVENT_SUCCESS' => 'Der Standardwert %s für Angriffe auf %s wurde aktualisiert..',
+'ADMIN_UPDATE_EVENT_SUCCESS' => 'Der Standardwert %s für Ereignisse auf %s wurde aktualisiert..',
 'ADMIN_UPDATE_IADJ_SUCCESS' => 'Die Punkteanpassung %s von %.2f für %s wurde aktualisiert.',
 'ADMIN_UPDATE_ITEM_SUCCESS' => 'Der Ankauf von %s, durch %s für %.2f wurde aktualisiert.',
 'ADMIN_UPDATE_MEMBER_SUCCESS' => 'Die Mitgliedseinstellungen von %s wurden aktualisiert.',
@@ -697,7 +697,7 @@ $lang = array_merge($lang, array(
 'GAME_ID' => 'Game id',
 'EVENTS_PER_PAGE' => 'Ereignisse pro Seite',
 'GAME' => 'Spiel',
- 
+
 'GENERAL_SETTINGS' => 'Allgemeine Einstellungen',
 'GUILDTAG' => 'Gilden- / Gruppenname',
 'GUILDTAG_NOTE' => 'Wird im Titel fast jeder Seite angezeigt',
@@ -755,11 +755,11 @@ $lang = array_merge($lang, array(
 'ARM_LAYOUT' => 'Anordnung der Anzeigetafel',
 'ARM_LAYOUTDO' => 'Wähle die Anordnung',
 'ARM_SHOWACH' => 'Zeige Erfolgspunkte an ?',
-'ARM_STAND' => 'Standard', 
+'ARM_STAND' => 'Standard',
 'ARM_CLASS' => 'Klasse',
 'SHOWONROSTER' => 'Auf der Anzeigetafel anschauen',
-'MINLEVELROSTER' => 'Minimum niveau', 
-'MINLEVELROSTER_EXPLAIN' => 'If Stufe < diesen Wert dann keine Anzeige', 
+'MINLEVELROSTER' => 'Minimum niveau',
+'MINLEVELROSTER_EXPLAIN' => 'If Stufe < diesen Wert dann keine Anzeige',
 'MIN_ARMORYLEVEL' => 'Minimumstufe zum herunterladen vom Armory :',
 
 
@@ -769,7 +769,7 @@ $lang = array_merge($lang, array(
 'ADD_RAID_VALUE_NOTE' => 'Einzigmaligen Raidbonus; wenn ledig, gilt der Standardwert des Ereignisses',
 'ADD_ITEMS_FROM_RAID' => 'füge Gegenstände zu',
 'ADDADJ_TITLE' => 'Füge Punkteanpassung zu',
-'ADD_EVENT_TITLE' => 'Fuge Ereignis zu',
+'ADD_EVENT_TITLE' => 'Füge Ereignis zu',
 'ADD_DKPSYS_TITLE' => 'Füge DKP Pool zu',
 'EDIT_DKPSYS_TITLE' => 'Punkte-Pool bearbeiten',
 'ADD_GUILD_TITLE' => 'Füge Gilde zu',
@@ -834,7 +834,7 @@ $lang = array_merge($lang, array(
 'DELETE_RAID' => 'Lösche Angriff',
 'DELETE_SELECTED_MEMBERS' => 'lösche die ausgewälte Mitglieder',
 'DELETE_SELECTED_GUILDS' => 'lösche die ausgewählte Gilde(n)',
-'DUPLICATE_RAID'  => 'verdopple Raid', 
+'DUPLICATE_RAID'  => 'verdopple Raid',
 'EDIT_GUILD' => 'bearbeite Gilde',
 'SEARCH_EXISTING' => 'Suche vorhandene',
 'SELECT' => 'Wähle',
@@ -879,7 +879,7 @@ $lang = array_merge($lang, array(
 'DEFAULT_GUILD' => 'Voreingestellte Gilde',
 'DKPPERTIME' => '%s DKP pro %s Minuten.',
 'DONE' => 'Fertig',
-'DUPLICATED' => 'Verdoppelt', 
+'DUPLICATED' => 'Verdoppelt',
 'HOLD_CTRL_NOTE' => 'Drücke CTRL(PC) oder CMD(Mac) zur Mehrfachauswahl<br />',
 'DKP_STATUS' => 'DKP Pool Status (Y oder N)',
 'DKPTIMEUNIT' => 'DKP verdient pro Zeiteinheit',
@@ -898,15 +898,15 @@ $lang = array_merge($lang, array(
 'EVENT_COLOR_EXPLAIN' => 'Planer-Ereignisse werden angezeigt mit diese Farbe.',
 'EVENT_IMAGE' => 'Ereignisbild',
 'EVENT_IMAGE_EXPLAIN' => 'Dieses Ereignis wird mit dieses Bild angezeigt auf den Planer.',
-'EVENT_VIEWALL' => 'Zeige alle Events', 
-'EVENT_VIEWALL_EXPLAIN' => 'auch Ereignisse ohne Raids anzeigen', 
+'EVENT_VIEWALL' => 'Zeige alle Events',
+'EVENT_VIEWALL_EXPLAIN' => 'auch Ereignisse ohne Raids anzeigen',
 'GAMEITEMID_EXPLAIN' => 'Wowhead Item id',
 'GAMES_INST' => 'Installierte Spiele',
 'GUILDLEADER' => 'Gildenmeister',
-'STATUS'  => 'Status', 
+'STATUS'  => 'Status',
 'FACTION_NAME' => 'Faktionsname',
 'HIDE' => 'Nicht anschauen ?',
-'ID'  => 'Id', 
+'ID'  => 'Id',
 'INSTALL' => 'Installiere',
 'GAME_IMAGE_EXPLAIN' => 'Spielbilddatei in images/bbdkp/%s',
 'IMPORTBOSSZONE' => 'Importiere Boss Zone ',
@@ -920,7 +920,7 @@ $lang = array_merge($lang, array(
 'MEMBER_RANK' => 'Mitgliedsrang',
 'NO_IMAGE' => 'Kein Bild',
 'NONACTIVE' => 'nicht aktiv',
-'NOLOOT' => 'Keine Beute gefunden', 
+'NOLOOT' => 'Keine Beute gefunden',
 'POOL'  => 'Dkp Pool',
 'POOLID'  => 'Dkp id',
 'PRCALC' => 'Vorrangsschlüssel Berechnung',
@@ -955,12 +955,12 @@ $lang = array_merge($lang, array(
 'SELECT_1OFX_MEMBERS' => 'Wähle 1 von %d Mitglieder...',
 'ZEROSUMBANKER' => 'Nullsummen Bank Konto',
 'ZEROSUMBANKER_EXPLAIN' => 'Wähle den Spieler zurdem Überschuss Gewinnpunkte über Nullsummen DKP addiert werden sollen sodass die Bilanz gleich Null bleibt.',
-'ZEROSUM_DISTRIBUTEOTHER'  => 'Bonusausgleich', 
+'ZEROSUM_DISTRIBUTEOTHER'  => 'Bonusausgleich',
 'ZEROSUM_DISTRIBUTEOTHER_EXPLAIN' => 'Ankreuzen um Raid und Zeit Boni mit Gildenbank Konto auszugleichen.',
 'ZS_CHECKED_EXPLAIN' => 'Angekreuzt wenn Nullsumme berechnet wurde ',
 'LANG_DE'  => 'Deutsch',
-'LANG_FR' => 'Français', 
-'LANG_EN' => 'English', 
+'LANG_FR' => 'Français',
+'LANG_EN' => 'English',
 'FREQ0' => 'Tage',
 'FREQ1' => 'Wochen',
 'FREQ2' => 'Monate',
@@ -970,7 +970,7 @@ $lang = array_merge($lang, array(
 'MAX' => 'Max ',
 
 // Admin Index
-'BBDKP_STARTED' => 'bbDKP wurde gestarted',
+'BBDKP_STARTED' => 'Installierdatum',
 'IP_ADDRESS' => 'IP Addresse',
 'ITEMS_PER_DAY' => 'Gegenstände pro Tag',
 'LAST_UPDATE' => 'Letster Update',
@@ -978,12 +978,12 @@ $lang = array_merge($lang, array(
 
 'NUMBER_OF_ITEMS' => 'Anzahl an Items',
 'NUMBER_OF_LOGS' => 'Protokollanzahl',
-'NUMBER_OF_MEMBERS' => 'Anzahl an Mitgleider (Aktiv / Inaktiv)',
-'NUMBER_OF_RAIDS' => 'Anzahl an Raids',
-'NUMBER_OF_ITEMS'  => 'Anzahl an Gegenständen',
-'NUMBER_OF_MEMBERDKP' => 'Anzahl an DKP Konten',
-'NUMBER_OF_DKPSYS' => 'Anzahl an DKP Pools',
-'NUMBER_OF_GUILDS' => 'Anzahl an Gilden',
+'NUMBER_OF_MEMBERS' => 'Mitgliederanzahl (Aktiv / Inaktiv)',
+'NUMBER_OF_RAIDS' => 'Anzahl der Raids',
+'NUMBER_OF_ITEMS'  => 'Anzahl der Gegenstände',
+'NUMBER_OF_MEMBERDKP' => 'Kontenanzahl',
+'NUMBER_OF_DKPSYS' => 'Punktegruppenanzahl',
+'NUMBER_OF_GUILDS' => 'Gildenanzahl',
 'NUMBER_OF_ADJUSTMENTS' => 'Anzahl Punkteanpassungen',
 'NUMBER_OF_EVENTS' => 'Anzahl Ereignisse',
 'MEMBERCOUNT' => 'Mitgliederanzahl',
@@ -991,7 +991,7 @@ $lang = array_merge($lang, array(
 'ATTENDANCEDAYS' => 'Teilnehmer Tagen (für Anzeigetafel)',
 'STATISTICS' => 'Statistiken',
 'TOTALS' => 'Totale',
-'MAX_NUMBER_CHARS_EXPLAIN'  => 'Maximale Anzahl von Charakere die Mitglieder hinzufügen oder angeben dürfen.', 
+'MAX_NUMBER_CHARS_EXPLAIN'  => 'Maximale Anzahl von Charakere die Mitglieder hinzufügen oder angeben dürfen.',
 'MAX_NUMBER_CHARS'  => 'Maximale #characters',
 
 //js alerts
@@ -1019,50 +1019,50 @@ $lang = array_merge($lang, array(
 'DESCRIPTION' => 'lootsystem',
 'EXAMPLE' => 'lootsystem',
 'ADVANTAGE' => 'lootsystem',
-'LOOTSYSTEM' => 'lootsystem', 
+'LOOTSYSTEM' => 'lootsystem',
 'STANDARDDKP' => 'Standart DKP',
 'STANDARDDKP_EXPLAIN' => '<strong>Beschreibung: </strong>Das Standart DKP System. Spieler erhalten DKP Punkte als Ergebnis der Pünktlichkeit, ob man Ersatzmann ist , der Boss Tötungen, oder einfach nur teilnimmt.
 Punkte können für Gegenstände ausgegeben werden, wie bei Nullsummen DKP, aber hier gibt es keine Begrenzung . ',
-'STANDARDDKP_EXAMPLE' => '<strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 2. Es kostet 20 Punkte  <br /> 
-Der Spieler bekommt 5 Punkte da er einen Drachen besiegt hat, 2 Punkte weil er pünktlich oder Anwesend ist. 
- <br />Netto Ergebnis für den ganzen Raid: bekommen : (5+2) * 10 = 70 <br /> ausgegeben : 20 <br /> differenz= 50', 
-'STANDARDDKP_ADVANTAGE' => '<strong>Vorteile</strong> : einfach. Beine Berechnung für Beuteverteilung notwendig .',  
-'STANDARDDKP_DISADVANTAGE' => '<strong>Nachteile</strong> : Punkt Inflation. <br /> Anhäufung. Neue schlecht ausgerüstete Spieler sind im Nachteil gegenüber besser ausgerüstete Spieler. Besser ausgerüstete Spieler geben nichts aus und so wird Punkte horten bis ein Ungleichgewicht gegenüber den anderen Spielern entsteht.', 
+'STANDARDDKP_EXAMPLE' => '<strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 2. Es kostet 20 Punkte  <br />
+Der Spieler bekommt 5 Punkte da er einen Drachen besiegt hat, 2 Punkte weil er pünktlich oder Anwesend ist.
+ <br />Netto Ergebnis für den ganzen Raid: bekommen : (5+2) * 10 = 70 <br /> ausgegeben : 20 <br /> differenz= 50',
+'STANDARDDKP_ADVANTAGE' => '<strong>Vorteile</strong> : einfach. Beine Berechnung für Beuteverteilung notwendig .',
+'STANDARDDKP_DISADVANTAGE' => '<strong>Nachteile</strong> : Punkt Inflation. <br /> Anhäufung. Neue schlecht ausgerüstete Spieler sind im Nachteil gegenüber besser ausgerüstete Spieler. Besser ausgerüstete Spieler geben nichts aus und so wird Punkte horten bis ein Ungleichgewicht gegenüber den anderen Spielern entsteht.',
 
-'ZEROSUM' => 'Nullsummen DKP', 
-'ZEROSUM_ONOFF_EXPLAIN' => 'Kann nicht kombiniert werden mit EPGP', 
+'ZEROSUM' => 'Nullsummen DKP',
+'ZEROSUM_ONOFF_EXPLAIN' => 'Kann nicht kombiniert werden mit EPGP',
 'ZEROSUM_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo alle ausgegebenen Punkte auf den Raid umverteilt werden, so das am Ende die Summe der bekommenen und ausgegebenen Punkte gleich sind. Die Raid Mitglieder werden folglich DKP Punkte bekommen wenn jemand ein Item bekommt. Dies sorgt dafür das es keine inflation oder Punkte horten gibt <br/>',
 'ZEROSUM_EXAMPLE' => ' <strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 1. Es kostet 20 Punkte.  <br/>  Spieler 1 bezahlt 20 Punkte, bekommt 20/10 = 2 Punkte. Spieler 2 bis 10 bekommt jeder 20/10 =2 Punkte.  <br/> Das Gleichgewicht am Ende ist: bekommen 20 Punkte, ausgegeben 20 Punkte.',
-'ZEROSUM_ADVANTAGE' => ' <strong>Vorteile</strong> : Keine Punkte inflation, wenn alle Spieler auf dem gleichen Ausrüstungslevel sind.', 
-'ZEROSUM_DISADVANTAGE' => '<strong>Nachteile</strong> horten. Wenn ein gut ausgerüsteter Spieler der Gilde beitritt wird er nichts ausgeben und so seine Punkte horten, bis er bei einem Ungleichgewicht gegenüber den anderen Spielern ist. 
+'ZEROSUM_ADVANTAGE' => ' <strong>Vorteile</strong> : Keine Punkte inflation, wenn alle Spieler auf dem gleichen Ausrüstungslevel sind.',
+'ZEROSUM_DISADVANTAGE' => '<strong>Nachteile</strong> horten. Wenn ein gut ausgerüsteter Spieler der Gilde beitritt wird er nichts ausgeben und so seine Punkte horten, bis er bei einem Ungleichgewicht gegenüber den anderen Spielern ist.
 Nicht viel Anreitz sich für einen Raid anzumelden, wenn er schwieriger Raid ist, tode zu erwarten sind und keine Gegenstände droppen. ',
 
-'ZEROSUMPLUS' => 'Nullsummen DKP + Bonus', 
-'ZEROSUMPLUS_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo alle ausgegebenen Punkte auf den Raid umverteilt werden, so das am Ende der, die Summe der bekommenen und ausgegebenen Punkte gleich sind. <br /> Alle Bonus Punkte werden einem dummy Account angerechnet.<br /> Die Raid Mitglieder werden folglich DKP Punkte bekommen wenn jemand ein Item bekommt mit Bonus. Dies sorgt dafür das es keine inflation oder Punkte horten gibt <br/>', 
-'ZEROSUMPLUS_EXAMPLE' => ' <strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 1. Es kostet 20 Punkte.  
+'ZEROSUMPLUS' => 'Nullsummen DKP + Bonus',
+'ZEROSUMPLUS_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo alle ausgegebenen Punkte auf den Raid umverteilt werden, so das am Ende der, die Summe der bekommenen und ausgegebenen Punkte gleich sind. <br /> Alle Bonus Punkte werden einem dummy Account angerechnet.<br /> Die Raid Mitglieder werden folglich DKP Punkte bekommen wenn jemand ein Item bekommt mit Bonus. Dies sorgt dafür das es keine inflation oder Punkte horten gibt <br/>',
+'ZEROSUMPLUS_EXAMPLE' => ' <strong>Beispiel</strong> : es sind 10 Spieler. Der Gegenstand "Schwert" droppt für Spieler 1. Es kostet 20 Punkte.
 <br />  Spieler 1 bezahlt 20 Punkte, bekommt 20/10 = 2 Punkte. Spieler 2 bis 10 bekommt jeder 20/10 =2 Punkte.  <br/> dazu bekommen die Spieler 5 Punkte für einen Bosstot, 2 points weil er pünktlich oder Anwesend ist. Diese Bonus Punkte werden einem dummy Account angerechnet.
 Das Gleichgewicht am Ende ist: bekommen 20+7=27 Punkte, ausgegeben 20+7=27 Punkte.',
-'ZEROSUMPLUS_ADVANTAGE' => ' <strong>Vorteile</strong> : Keine Punkte inflation, wenn alle Spieler auf dem gleichen Ausrüstungslevel sind. Die Bonuspunkte werden dem System hinzugefügt um einen Anzeiz zum Spielen zu geben, da mit einem Raid ohne Beute keine Punkte verdiehnt werden. ', 
+'ZEROSUMPLUS_ADVANTAGE' => ' <strong>Vorteile</strong> : Keine Punkte inflation, wenn alle Spieler auf dem gleichen Ausrüstungslevel sind. Die Bonuspunkte werden dem System hinzugefügt um einen Anzeiz zum Spielen zu geben, da mit einem Raid ohne Beute keine Punkte verdiehnt werden. ',
 'ZEROSUMPLUS_DISADVANTAGE' => '<strong>Nachteile</strong> horten. Wenn ein gut ausgerüsteter Spieler der Gilde beitritt wird er nichts ausgeben und so seine Punkte horten, bis er bei einem Ungleichgewicht gegenüber den anderen Spielern ist.',
 
 'TIMEDKP' => 'Zeit Bonus',
 'TIMEDKP_EXPLAIN' => '<strong>Beschreibung: </strong>Beutesystem wo Spieler Punkte pro angefangene Stunde bekommen, wenn sie im Raid sind oder verfügbar. Die Zeit wird gemessen vom Raidstart und dem Ende.
 Punkte werden wie im Bonus System für Beute ausgegeben. Bonuspunkte bekommt man vielleicht auch für andere Gründe.',
 'TIMEDKP_EXAMPLE' => '<strong>Beispie</strong> : 10 Spieler, jeder anwesend für 90 Minuten.  <br />dkp/Stunde sind 20 Punkte, das bedeutet jeder Spieler bekommt 90/60 * 20 = 1,5 * 20 = 30 Punkte <br />1 Gegenstand ist für 20 Punkte gefallen <br />
-netto Ergebnis für den ganzen Raid: <br />bekommen : 30 *10 = 300 Punkte <br /> ausgegeben : 20 <br />unterschied = 280', 
-'TIMEDKP_ADVANTAGE' => '<strong>Vorteile</strong> : einfach. Beine Berechnung für Beuteverteilung notwendig für Beuteverteilung.',  
-'TIMEDKP_DISADVANTAGE' => '<strong>Nachteile</strong> : Punkt Inflation. <br /> Anhäufung. Neue schlecht ausgerüstete Spieler sind im Nachteil gegenüber besser ausgerüstete Spieler. Besser ausgerüstete Spieler geben nichts aus und so wird Punkte horten bis ein Ungleichgewicht gegenüber den anderen Spielern entsteht.', 
+netto Ergebnis für den ganzen Raid: <br />bekommen : 30 *10 = 300 Punkte <br /> ausgegeben : 20 <br />unterschied = 280',
+'TIMEDKP_ADVANTAGE' => '<strong>Vorteile</strong> : einfach. Beine Berechnung für Beuteverteilung notwendig für Beuteverteilung.',
+'TIMEDKP_DISADVANTAGE' => '<strong>Nachteile</strong> : Punkt Inflation. <br /> Anhäufung. Neue schlecht ausgerüstete Spieler sind im Nachteil gegenüber besser ausgerüstete Spieler. Besser ausgerüstete Spieler geben nichts aus und so wird Punkte horten bis ein Ungleichgewicht gegenüber den anderen Spielern entsteht.',
 
 'EPGP' => 'EPGP Anstrengung / Ausrüstungspunkte',
-'EPGP_ONOFF_EXPLAIN' => 'Kann nicht mit Nullsummen kombiniert werden',  
-'EPGP_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo die Beute dem zugesprochen wird der das höchste Anstrengung zu Ausrüstung Verhältnis hat. Anstrengungspunkte sind Raid Boni, Zeit Punkten und Anpassungen. Ausrüstungspunkte sind Gegenstandskosten. EP und GP verfallen beide.', 
-'EPGP_EXAMPLE' => '<strong>Beispiel</strong> : 10 Spieler Raid, Gegenstand x gefallen für 20 Ausrüstungspunkte. Spieler 1 & 2 bieten<br />  
+'EPGP_ONOFF_EXPLAIN' => 'Kann nicht mit Nullsummen kombiniert werden',
+'EPGP_EXPLAIN' => '<strong>Beschreibung: </strong>Ein Beutesystem wo die Beute dem zugesprochen wird der das höchste Anstrengung zu Ausrüstung Verhältnis hat. Anstrengungspunkte sind Raid Boni, Zeit Punkten und Anpassungen. Ausrüstungspunkte sind Gegenstandskosten. EP und GP verfallen beide.',
+'EPGP_EXAMPLE' => '<strong>Beispiel</strong> : 10 Spieler Raid, Gegenstand x gefallen für 20 Ausrüstungspunkte. Spieler 1 & 2 bieten<br />
 Der Gegenstand kostet 20 Ausrüstungsüunkte<br />
 Anstrengungspunkte Spieler 1 : 202, EP/GP Verhältnis 10.1<br />
-Anstrengungspunkte Spieler 2 : 342, EP/GP Verhältnis 17.1<br /> 
-Also würde die Beute an Spieler 2 gehen <br />', 
-'EPGP_ADVANTAGE' => '<strong>Vorteile</strong> : keine inflation, kein horten. ', 
-'EPGP_DISADVANTAGE' => '<strong>Nachteile</strong>: Schwer zu verwalten weil man EP Strategien und Ausrüstungspreise festsetzen muss. ', 
+Anstrengungspunkte Spieler 2 : 342, EP/GP Verhältnis 17.1<br />
+Also würde die Beute an Spieler 2 gehen <br />',
+'EPGP_ADVANTAGE' => '<strong>Vorteile</strong> : keine inflation, kein horten. ',
+'EPGP_DISADVANTAGE' => '<strong>Nachteile</strong>: Schwer zu verwalten weil man EP Strategien und Ausrüstungspreise festsetzen muss. ',
 'DECAY_EXPLAIN' => 'Gewinn und Verlustpunkte werden Entwertet. ',
 'DECAY_EXAMPLE' => 'Verfallvorbild',
 
@@ -1076,21 +1076,21 @@ Also würde die Beute an Spieler 2 gehen <br />',
 'DECAY_J' => '<strong>Item Wert</strong> = j',
 'DECAY_F' => '<strong>Item Entwertung</strong> f = j * l',
 
-'DECAYPCTRAIDS' => 'Raid Entwertungsprozentsatz(%)', 
-'DECAYPCTRAIDS_EXPLAIN' => 'Der Raidwert wird abgeschrieben mit diesen prozentsatz', 
-'DECAYPCTITEM' => 'Item/Gearpoint Entwertungssatz (%)',  
-'DECAYPCTITEM_EXPLAIN' => 'Der Itemcost wird entwertet mit diesen prozentsatz.', 
-'DECAYPCTADJ' =>  'Ajustierungsentwertungsprozentsatz(%)', 
+'DECAYPCTRAIDS' => 'Raid Entwertungsprozentsatz(%)',
+'DECAYPCTRAIDS_EXPLAIN' => 'Der Raidwert wird abgeschrieben mit diesen prozentsatz',
+'DECAYPCTITEM' => 'Item/Gearpoint Entwertungssatz (%)',
+'DECAYPCTITEM_EXPLAIN' => 'Der Itemcost wird entwertet mit diesen prozentsatz.',
+'DECAYPCTADJ' =>  'Ajustierungsentwertungsprozentsatz(%)',
 'DECAYPCTADJ_EXPLAIN' => 'Die Ajustierungen werden entwertet mit diesen prozentsatz.',
-'DECAYFREQ' => 'Entwertungsfrekwenz.',  
-'DECAYFREQ_EXPLAIN' => 'Entwertung ist geplant jede n Tage, Wochen oder Monate nach jeden Raid. ', 
-'DECAYFREQTYPE' => 'Entwertungsfrequenztyp',  
+'DECAYFREQ' => 'Entwertungsfrekwenz.',
+'DECAYFREQ_EXPLAIN' => 'Entwertung ist geplant jede n Tage, Wochen oder Monate nach jeden Raid. ',
+'DECAYFREQTYPE' => 'Entwertungsfrequenztyp',
 'DECAY_SCHEDULE' => 'Vorprogrammierte Entwertung',
 'DECAY_SCHEDULE_EXPLAIN' => 'betätigt ein cronjob der eine automatische Entwertung startet jede 23 Stunden insofern das Forum besucht wird.',
-'DECAYCRON' => 'betätigt durch cronjob', 
+'DECAYCRON' => 'betätigt durch cronjob',
 'NO_DECAY_ADJ' => 'Ajustierungen entwertbar ?',
 
-'PR' => 'PR Prioritätswert', 
+'PR' => 'PR Prioritätswert',
 'EP_DEFINITION' => '<strong>EP</strong> = Gewinn = Raid Bonus + Zeitbonus + Nullsumme + Ajustierung ',
 'DECAY_EP' => '<strong>EP Nach Entwertung</strong> = EP - EP * d',
 'MEP'  => 'Minimum EP',
