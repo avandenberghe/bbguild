@@ -60,16 +60,19 @@ abstract class GameInstall
 
 	/**
 	 * Installs factions
+	 * must be implemented
 	 */
 	abstract function Installfactions();
 
 	/**
 	 * Installs game classes
+	 * must be implemented
 	*/
 	abstract function InstallClasses();
 
 	/**
 	 * Installs races
+	 * must be implemented
 	*/
 	abstract function InstallRaces();
 
@@ -94,6 +97,8 @@ abstract class GameInstall
 	/**
 	 * install worldprogress (bossprogress successor)
 	 * installs Lands, Dungeons, bosses
+	 * replaces the bossprogress mod...
+	 *
 	 */
 	public function InstallWorld()
 	{

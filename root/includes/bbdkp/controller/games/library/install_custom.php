@@ -65,12 +65,6 @@ class install_custom extends \bbdkp\controller\games\GameInstall
 	}
 
 	/**
-	 * dkp pool created for lotro
-	 * @var int
-	 */
-	private $aiondkpid = 0;
-
-	/**
 	 * Install sample Event Groups
 	 * an Event answers the 'what' question
 	*/
