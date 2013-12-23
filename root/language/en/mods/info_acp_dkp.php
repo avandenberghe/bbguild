@@ -4,8 +4,8 @@
  * 
  * 
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * 
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License 
+ * @version 1.3.0 * 
  */
 
 /**
@@ -26,8 +26,8 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
     'ACP_CAT_DKP'			=> 'BBDKP',
 	'ACP_DKP_MAINPAGE'		=> 'General Settings',  
-	'ACP_DKP_PANEL'		    => 'Adminpanel',  
-	'ACP_DKP_CONFIG'		=> 'Main Settings',
+	'ACP_DKP_PANEL'		    	=> 'Adminpanel',  
+	'ACP_DKP_CONFIG'		=> 'bbdkp Settings',
 	'ACP_DKP_INDEX'			=> 'Portal Settings',
 	'ACP_DKP_LOGS'			=> 'View Logs',
 ));

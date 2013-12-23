@@ -3,9 +3,9 @@
  * bbdkp acp language file for Items (FR)
  * 
  * 
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
+ * @version 1.3.0
  * 
  */
 
@@ -28,7 +28,8 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_ITEM'			=> 'Gestion des Objets',  
 	'ACP_DKP_ITEM_ADD'		=> 'Ajouter objet',
 	'ACP_DKP_ITEM_LIST'		=> 'Liste des Objets',
-	'ACP_DKP_ITEM_SEARCH'	=> 'Recherche d’objets',
+	'ACP_DKP_ITEM_EDIT'		=> 'Editer Objet', 
+	'ACP_DKP_ITEM_SEARCH'		=> 'Recherche d’objets',
 	'ACP_DKP_ITEM_VIEW'		=> 'Visualisation d’objets',
 ));
 
