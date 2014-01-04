@@ -68,7 +68,7 @@ $lang = array_merge($lang, array(
 	'LATESTMEMBERS'				=> 'Neueste Mitglieder',
 
 // Main Menu
-	'MENU'	=> 'Menü',
+	'MENU'	=> 'Navigation',
 	'MENU_ADMIN_PANEL'	=> 'Administration',
 	'MENU_BOSS'	=> 'Instanz-Fortschritt',
 	'MENU_EVENTS'	=> 'Ereignisse',

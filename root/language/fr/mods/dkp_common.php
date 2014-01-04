@@ -43,9 +43,9 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP est actuellement désactivé.',
-'FOOTERBBDKP' => 'bbDKP 1.3.0', 
+'FOOTERBBDKP' => 'bbDKP 1.3.0',
 
-//---- Portal blocks ----- 
+//---- Portal blocks -----
 'PORTAL' => 'Portail',
 'RECENTLOOT' => 'Objets récents',
 'REMEMBERME' => 'Me retenir',
@@ -58,7 +58,7 @@ $lang = array_merge($lang, array(
 'NEWS_PER_PAGE' => 'Entrées par page',
 'ERROR_INVALID_NEWS_PROVIDED' => 'Cette information n’a pas été trouvé',
 'BOSSPROGRESS' => 'Avancée des Boss',
-'WELCOME' => 'Bienvenu', 
+'WELCOME' => 'Bienvenu',
 'RECENT_LENGTH' => 'n° de caractères affichés',
 'NUMTOPICS' => 'n° de sujets affichés',
 'SHOW_RT_BLOCK' => 'Montrer Sujets récents sur Portail',
@@ -66,10 +66,10 @@ $lang = array_merge($lang, array(
 'RECENT_TOPICS' => 'Sujets récents',
 'NO_RECENT_TOPICS' => 'Pas de Sujets récents',
 'POSTED_BY_ON' => 'par %1$s le %2$s',
-'LATESTMEMBERS' => 'Derniers membres', 
+'LATESTMEMBERS' => 'Derniers membres',
 
 // Main Menu
-'MENU' => 'Menu',
+'MENU' => 'Navigation',
 'MENU_ADMIN_PANEL' => 'PCA',
 'MENU_BOSS' => 'Avancée des Boss',
 'MENU_EVENTS' => 'Evènements',
@@ -89,34 +89,34 @@ $lang = array_merge($lang, array(
 
 //links
 'MENU_LINKS' => 'Weblinks',
-'LINK1' => 'http://www.bbdkp.com', 
+'LINK1' => 'http://www.bbdkp.com',
 'LINK1T' => 'Powered By: bbDKP',
-'LINK2' => 'http://uk.aiononline.com', 
-'LINK2T' => 'Aion Online', 
-'LINK3' => 'http://darkageofcamelot.com', 
-'LINK3T' => 'Dark age of Camelot', 
-'LINK4' => 'http://everquest2.station.sony.com/', 
-'LINK4T' => 'Everquest 2', 
-'LINK5' => 'http://www.playonline.com/ff11us/index.shtml', 
-'LINK5T' => 'FFXI', 
-'LINK6' => 'http://www.guildwars2.com', 
-'LINK6T' => 'Guild Wars 2', 
-'LINK7' => 'http://www.lineage2.com', 
-'LINK7T' => 'Lineage 2', 
-'LINK8' => 'http://www.lotro.com', 
-'LINK8T' => 'Lord of the Rings', 
-'LINK9' => 'http://www.riftgame.com', 
-'LINK9T' => 'Rift', 
-'LINK10' => 'http://www.swtor.com', 
-'LINK10T' => 'Star Wars : ToR', 
-'LINK11' => 'http://tera.enmasse.com/', 
-'LINK11T' => 'Tera', 
-'LINK12' => 'http://www.vanguardmmorpg.com', 
-'LINK12T' => 'Vanguard', 
-'LINK13' => 'http://www.warhammeronline.com', 
-'LINK13T' => 'Warhammer', 
-'LINK14' => 'http://www.worldofwarcraft.com', 
-'LINK14T' => 'World of Warcraft', 
+'LINK2' => 'http://uk.aiononline.com',
+'LINK2T' => 'Aion Online',
+'LINK3' => 'http://darkageofcamelot.com',
+'LINK3T' => 'Dark age of Camelot',
+'LINK4' => 'http://everquest2.station.sony.com/',
+'LINK4T' => 'Everquest 2',
+'LINK5' => 'http://www.playonline.com/ff11us/index.shtml',
+'LINK5T' => 'FFXI',
+'LINK6' => 'http://www.guildwars2.com',
+'LINK6T' => 'Guild Wars 2',
+'LINK7' => 'http://www.lineage2.com',
+'LINK7T' => 'Lineage 2',
+'LINK8' => 'http://www.lotro.com',
+'LINK8T' => 'Lord of the Rings',
+'LINK9' => 'http://www.riftgame.com',
+'LINK9T' => 'Rift',
+'LINK10' => 'http://www.swtor.com',
+'LINK10T' => 'Star Wars : ToR',
+'LINK11' => 'http://tera.enmasse.com/',
+'LINK11T' => 'Tera',
+'LINK12' => 'http://www.vanguardmmorpg.com',
+'LINK12T' => 'Vanguard',
+'LINK13' => 'http://www.warhammeronline.com',
+'LINK13T' => 'Warhammer',
+'LINK14' => 'http://www.worldofwarcraft.com',
+'LINK14T' => 'World of Warcraft',
 
 //games preinstalled
 'AION'       => 'Aion' ,
@@ -171,7 +171,7 @@ $lang = array_merge($lang, array(
 'RAID_ATTENDANCE_HISTORY' => 'Historique Participation',
 'RAIDS_LIFETIME' => 'à Vie (%s - %s)',
 'ATTENDANCE_LIFETIME' => 'Participation globale',
-'ATTENDANCE' => 'Particip.', 
+'ATTENDANCE' => 'Particip.',
 'MEMBERS_PRESENT_AT' => 'Membres Présent à %s sur %s',
 'RAIDS_X_DAYS' => 'Derniers %d Jours',
 'SPENT' => 'Dépensé',
@@ -193,9 +193,9 @@ $lang = array_merge($lang, array(
 'VIEWMEMBER_TITLE' => 'Historique de %s',
 'VIEWRAID_TITLE' => 'Vue du Raid',
 'NODKPACCOUNTS' => 'Pas de comptes DKP trouvés',
-'NOUCPACCESS' => 'Vous ne pouvez pas ajouter des Caractères à votre compte.', 
-'NOUCPADDCHARS' => 'Vous ne pouvez pas ajouter vos caractères', 
-'NOUCPUPDCHARS' => 'Vous ne pouvez pas mettre à jour vos caractères', 
+'NOUCPACCESS' => 'Vous ne pouvez pas ajouter des Caractères à votre compte.',
+'NOUCPADDCHARS' => 'Vous ne pouvez pas ajouter vos caractères',
+'NOUCPUPDCHARS' => 'Vous ne pouvez pas mettre à jour vos caractères',
 'NOUCPDELCHARS' => 'Vous ne pouvez pas supprimer vos caractères',
 
 //Various
@@ -210,13 +210,13 @@ $lang = array_merge($lang, array(
 'ATTENDANCE_BY_EVENT' => 'Parricipation par Evènement',
 'ATTENDED' => 'Participé',
 'ATTENDEES' => 'Participants',
-'ATTENDANCE' => 'Participation', 
+'ATTENDANCE' => 'Participation',
 'AVERAGE' => 'Moyen',
 'BOSS' => 'Boss',
 'BUYER' => 'Acheteur',
 'BUYERS' => 'Acheteurs',
 'ARMOR' => 'Armure',
-'TYPE' => 'Armure', 
+'TYPE' => 'Armure',
 
 // TYPES of armor are static across games, no need to put it in DB
 'CLOTH' => 'Tissu',
@@ -278,14 +278,14 @@ $lang = array_merge($lang, array(
 'LOOT_FACTOR' => 'Facteur de Loot',
 'LOOTS' => 'Trésors',
 'LOOTDIST_CLASS' => 'Distribution par classe du butin.',
-'LOW' => 'Bas',  
+'LOW' => 'Bas',
 'MANAGE' => 'Gérer',
 'MEDIUM' => 'Moyen',
 'MEMBER' => 'Membre',
 'MEMBERS' => 'Membres',
 'NA' => 'P/A',
-'NETADJUSTMENT' => 'Ajustement Net', 
-'NO_DATA' => 'Pas de données', 
+'NETADJUSTMENT' => 'Ajustement Net',
+'NO_DATA' => 'Pas de données',
 'RAID_ON' => 'Raid sur %s le %s',
 'MAX_CHARS_EXCEEDED' => 'Vous ne pouvez avoir que %s charactères liés à votre compte forum',
 'MISCELLANEOUS' => 'Divers',
@@ -331,7 +331,7 @@ $lang = array_merge($lang, array(
 'TIME' => 'Temps',
 'TIME_BONUS' => 'Bonus Temps',
 'TOTAL' => 'Total',
-'TIMEVALUE' => 'Points par temps', 
+'TIMEVALUE' => 'Points par temps',
 'TOTAL_EARNED' => 'Total Gagné',
 'TOTAL_ITEMS' => 'Total Objets',
 'TOTAL_RAIDS' => 'Total Raids',
@@ -467,16 +467,16 @@ $lang = array_merge($lang, array(
 'PAYPALLINK' => '<form action="https://www.paypal.com/cgi-bin/webscr" method="post"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----MIIHFgYJKoZIhvcNAQcEoIIHBzCCBwMCAQExggEwMIIBLAIBADCBlDCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20CAQAwDQYJKoZIhvcNAQEBBQAEgYCEy7RFAw8M2YFhSsVh1GKUOGCLqkdxZ+oaq0KL7L83fjBGVe5BumAsNf+xIRpQnMDR1oZht+MYmVGz8VjO+NCVvtGN6oKGvgqZiyYZ2r/IOXJUweLs8k6BFoJYifJemYXmsN/F4NSviXGmK4Rej0J1th8g+1Fins0b82+Z14ZF7zELMAkGBSsOAwIaBQAwgZMGCSqGSIb3DQEHATAUBggqhkiG9w0DBwQIZrP6tuiLbouAcByJoUUzpg0lP+KiskCV8oOpZEt1qJpzCOGR1Kn+e9YMbXI1R+2Xu5qrg3Df+jI5yZmAkhja1TBX0pveCVHc6tv2H+Q+zr0Gv8rc8DtKD6SgItvKIw/H4u5DYvQTNzR5l/iN4grCvIXtBL0hFCCOyxmgggOHMIIDgzCCAuygAwIBAgIBADANBgkqhkiG9w0BAQUFADCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wHhcNMDQwMjEzMTAxMzE1WhcNMzUwMjEzMTAxMzE1WjCBjjELMAkGA1UEBhMCVVMxCzAJBgNVBAgTAkNBMRYwFAYDVQQHEw1Nb3VudGFpbiBWaWV3MRQwEgYDVQQKEwtQYXlQYWwgSW5jLjETMBEGA1UECxQKbGl2ZV9jZXJ0czERMA8GA1UEAxQIbGl2ZV9hcGkxHDAaBgkqhkiG9w0BCQEWDXJlQHBheXBhbC5jb20wgZ8wDQYJKoZIhvcNAQEBBQADgY0AMIGJAoGBAMFHTt38RMxLXJyO2SmS+Ndl72T7oKJ4u4uw+6awntALWh03PewmIJuzbALScsTS4sZoS1fKciBGoh11gIfHzylvkdNe/hJl66/RGqrj5rFb08sAABNTzDTiqqNpJeBsYs/c2aiGozptX2RlnBktH+SUNpAajW724Nv2Wvhif6sFAgMBAAGjge4wgeswHQYDVR0OBBYEFJaffLvGbxe9WT9S1wob7BDWZJRrMIG7BgNVHSMEgbMwgbCAFJaffLvGbxe9WT9S1wob7BDWZJRroYGUpIGRMIGOMQswCQYDVQQGEwJVUzELMAkGA1UECBMCQ0ExFjAUBgNVBAcTDU1vdW50YWluIFZpZXcxFDASBgNVBAoTC1BheVBhbCBJbmMuMRMwEQYDVQQLFApsaXZlX2NlcnRzMREwDwYDVQQDFAhsaXZlX2FwaTEcMBoGCSqGSIb3DQEJARYNcmVAcGF5cGFsLmNvbYIBADAMBgNVHRMEBTADAQH/MA0GCSqGSIb3DQEBBQUAA4GBAIFfOlaagFrl71+jq6OKidbWFSE+Q4FqROvdgIONth+8kSK//Y/4ihuE4Ymvzn5ceE3S/iBSQQMjyvb+s2TWbQYDwcp129OPIbD9epdr4tJOUNiSojw7BHwYRiPh58S1xGlFgHFXwrEBb3dgNbMUa+u4qectsMAXpVHnD9wIyfmHMYIBmjCCAZYCAQEwgZQwgY4xCzAJBgNVBAYTAlVTMQswCQYDVQQIEwJDQTEWMBQGA1UEBxMNTW91bnRhaW4gVmlldzEUMBIGA1UEChMLUGF5UGFsIEluYy4xEzARBgNVBAsUCmxpdmVfY2VydHMxETAPBgNVBAMUCGxpdmVfYXBpMRwwGgYJKoZIhvcNAQkBFg1yZUBwYXlwYWwuY29tAgEAMAkGBSsOAwIaBQCgXTAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcBMBwGCSqGSIb3DQEJBTEPFw0wOTAxMjkwMTM4MDJaMCMGCSqGSIb3DQEJBDEWBBTw/TlgVSrphVx5vOgV1tcWYSoT/DANBgkqhkiG9w0BAQEFAASBgJI0hNrE/O/Q7ZiamF4bNUiyHY8WnLo0jCsOU4F7fXZ47SuTQYytOLwT/vEAx5nVWSwtoIdV+p4FqZhvhIvtxlbOfcalUe3m0/RwZSkTcH3VAtrP0YelcuhJLrNTZ8rHFnfDtOLIpw6dlLxqhoCUE1LOwb6VqDLDgzjx4xrJwjUL-----END PKCS7-----
 "><input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt=""><img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
 </form>',
-'LICENSE1' => 'bbDKP est un logiciel distribué sous la licence GPL v2. Vous pouvez copier et distribuer des copies conformes du code source du Programme, tel que 
-Vous l’avez reçu, sur n’importe quel support, à condition de placer sur chaque copie un copyright approprié et une restriction de garantie, de ne pas modifier 
-ou omettre toutes les stipulations se référant à la présente Licence et à la limitation de garantie, et de fournir avec toute copie de bbDKP un exemplaire de la Licence. 
-Parce que l’utilisation de bbDKP est libre et gratuite, aucune garantie n’est fournie, comme le permet la loi. Sauf mention écrite, les détenteurs du copyright et/ou 
-les tiers fournissent le Programme en l’état, sans aucune sorte de garantie explicite ou implicite, y compris les garanties de commercialisation ou d’adaptation 
-dans un but particulier. Vous assumez tous les risques quant à la qualité et aux effets du Programme. Si le Programme est défectueux, Vous assumez le coût 
+'LICENSE1' => 'bbDKP est un logiciel distribué sous la licence GPL v2. Vous pouvez copier et distribuer des copies conformes du code source du Programme, tel que
+Vous l’avez reçu, sur n’importe quel support, à condition de placer sur chaque copie un copyright approprié et une restriction de garantie, de ne pas modifier
+ou omettre toutes les stipulations se référant à la présente Licence et à la limitation de garantie, et de fournir avec toute copie de bbDKP un exemplaire de la Licence.
+Parce que l’utilisation de bbDKP est libre et gratuite, aucune garantie n’est fournie, comme le permet la loi. Sauf mention écrite, les détenteurs du copyright et/ou
+les tiers fournissent le Programme en l’état, sans aucune sorte de garantie explicite ou implicite, y compris les garanties de commercialisation ou d’adaptation
+dans un but particulier. Vous assumez tous les risques quant à la qualité et aux effets du Programme. Si le Programme est défectueux, Vous assumez le coût
 de tous les services, corrections ou réparations nécessaires. <br />
-Vous devez avoir reçu une copie de la Licence Publique Générale GNU en même temps que ce programme ; si ce n’est pas le cas, écrivez à la Free Software Foundation, 
+Vous devez avoir reçu une copie de la Licence Publique Générale GNU en même temps que ce programme ; si ce n’est pas le cas, écrivez à la Free Software Foundation,
 Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307, États-Unis. http://www.gnu.org/licenses',
-'LICENSE2' => 'Powered by bbDkp (c) 2007 The bbDkp Project Team. Si vous utilisez ce logiciel et vous trouvez qu’il vous plait,  nous vous demandons que vous retenez la marque de copyright au dessous. 
+'LICENSE2' => 'Powered by bbDkp (c) 2007 The bbDkp Project Team. Si vous utilisez ce logiciel et vous trouvez qu’il vous plait,  nous vous demandons que vous retenez la marque de copyright au dessous.
 Même si elle n’est pas requise pour l’usage gratuit, elle aide à soutenir l’intérêt dans le projet bbDKP et est <strong>requis pour obtenir du support</strong>.',
 'COPYRIGHT3' => 'bbDKP (c) 2010 Sajaki, Malfate, Blazeflack <br /> bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'COPYRIGHT2' => 'bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN',

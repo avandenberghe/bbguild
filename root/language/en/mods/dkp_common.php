@@ -69,7 +69,7 @@ $lang = array_merge($lang, array(
 'LATESTMEMBERS' => 'Latest members',
 
 // Main Menu
-'MENU' => 'Menu',
+'MENU' => 'Navigation',
 'MENU_ADMIN_PANEL' => 'Administration Panel',
 'MENU_BOSS' => 'Bossprogress',
 'MENU_EVENTS' => 'Events',
