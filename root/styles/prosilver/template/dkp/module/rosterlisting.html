@@ -22,6 +22,11 @@
 	<option value="{filter_row.VALUE}"{filter_row.SELECTED}{filter_row.DISABLED}>{filter_row.OPTION}</option>
 	<!-- END filter_row -->
 	</select>
+	<select name="rosterlayout" id="rosterlayout" class="input" onchange="javascript:form.submit();">
+	<!-- BEGIN rosterlayout_row -->
+			 <option value="{rosterlayout_row.VALUE}"{rosterlayout_row.SELECTED}>{rosterlayout_row.OPTION}</option>
+	<!-- END rosterlayout_row -->
+	</select>
 	<input type="hidden" name="hidden_show" value="{SHOWALL}" />
 	</form>
 <span class="corners-bottom"><span></span></span>
@@ -35,17 +40,17 @@ list layout
 **************
 -->
 
-
-<!-- IF .members_row -->
-<div class="forumbg forumbg-table">
-<div class="inner">
-<span class="corners-top"><span></span></span>
 <!-- IF ROSTERPAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{ROSTERPAGINATION}<br /><br /></span>
 </div>
 <!-- ENDIF -->
+<!-- IF .members_row -->
+<div class="forumbg forumbg-table">
+<div class="inner">
+<span class="corners-top"><span></span></span>
+
 <table class="table1 bbdkp">
 <thead>
 <tr>
@@ -93,17 +98,18 @@ list layout
 
   <!-- END members_row -->
 </table>
+
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
+<!-- ENDIF -->
+
 <!-- IF ROSTERPAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{ROSTERPAGINATION}<br /><br /></span>
 </div>
 <!-- ENDIF -->
-<span class="corners-bottom"><span></span></span>
-</div>
-</div>
-<!-- ENDIF -->
-
 
 <span class="corners-bottom"><span></span></span>
 </div>
