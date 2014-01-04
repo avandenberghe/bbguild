@@ -19,6 +19,7 @@ define('IN_BBDKP', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
+include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 
 $user->session_begin();
 $auth->acl($user->data);
@@ -47,7 +48,7 @@ $template->assign_var('S_PORTAL', true);
 page_header($user->lang['NEWS']);
 
 $template->set_filenames(array(
-		'body' => 'dkp/news_body.html')
+		'body' => 'dkp/portal_body.html')
 );
 
 $views = new \bbdkp\views\views();

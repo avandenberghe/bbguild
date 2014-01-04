@@ -1,4 +1,3 @@
-<!--  begin loginblock  -->
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
@@ -8,21 +7,19 @@
 	<span class="genmed">{L_USERNAME}:</span><br />
 	<input type="text" tabindex="1" name="username" id="username" size="25" maxlength="40" value="" class="inputbox autowidth" /><br />
 	<span class="genmed">{L_PASSWORD}:</span><br />
-	<input type="password" tabindex="2" id="password" name="password" size="25" class="inputbox autowidth" /> 
-	
-	<!-- IF S_DISPLAY_FULL_LOGIN -->			
+	<input type="password" tabindex="2" id="password" name="password" size="25" class="inputbox autowidth" />
+
+	<!-- IF S_DISPLAY_FULL_LOGIN -->
 		<br /><br />
 		<!-- IF S_AUTOLOGIN_ENABLED -->
 			<input type="checkbox" class="radio" name="autologin" tabindex="3" /> <span class="gensmall">{L_UM_LOG_ME_IN}</span><br />
 		<!-- ENDIF -->
-	<!-- ENDIF -->		
+	<!-- ENDIF -->
 	<br />
 	<input type="hidden" name="redirect" value="{U_PORTAL}" />
 		<input type="submit" name="login" tabindex="5" value="{L_LOGIN}" class="button1" />
 	</div>
 </form>
-
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
-<!--  end loginblock  -->
