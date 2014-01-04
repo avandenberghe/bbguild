@@ -16,8 +16,6 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
-$mode = request_var('mode', ($config['bbdkp_roster_layout'] == '0') ? 'listing': 'class' );
-
 // Include the member class
 if (!class_exists('\bbdkp\controller\members\Members'))
 {
@@ -26,17 +24,31 @@ if (!class_exists('\bbdkp\controller\members\Members'))
 $members = new \bbdkp\controller\members\Members;
 
 $start = request_var('start' ,0);
-$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;mode=' . $mode .'&amp;guild_id=' . $this->guild_id);
+$mode = request_var('rosterlayout', 0);
+
+$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;rosterlayout=' . $mode .'&amp;guild_id=' . $this->guild_id);
 
 $characters = $members->getmemberlist($start, $mode, $this->query_by_armor, $this->query_by_class, $this->filter,
 		$this->game_id, $this->guild_id, $this->class_id, $this->race_id, $level1, $level2, false);
 
-if ($mode =='listing')
+$rosterlayoutlist = array(
+		0 => $user->lang['ARM_STAND'] ,
+		1 => $user->lang['ARM_CLASS']);
+foreach ($rosterlayoutlist as $lid => $lname)
+{
+	$template->assign_block_vars('rosterlayout_row', array(
+			'VALUE' => $lid ,
+			'SELECTED' => ($lid == $mode) ? ' selected="selected"' : '' ,
+			'OPTION' => $lname));
+}
+
+if ($mode ==0)
 {
 	/*
 	 * Displays the listing
 	*/
 	// use pagination
+	$t=0;
 	foreach ($characters[0] as $char)
 	{
 		$template->assign_block_vars('members_row', array(
@@ -57,10 +69,7 @@ if ($mode =='listing')
 		));
 	}
 
-	$rosterpagination = $this->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] ,
-			count($characters[0]),
-			$config ['bbdkp_user_llimit'],
-			$start, true, 'start' );
+	$rosterpagination = $this->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] , $characters[2], $config['bbdkp_user_llimit'], $start, true, 'start' );
 
 	// add navigationlinks
 	$navlinks_array = array(
@@ -92,13 +101,13 @@ if ($mode =='listing')
 	$template->assign_vars(array(
 			'S_RSTYLE'		    => '0',
 			'S_SHOWACH'			=> $config['bbdkp_show_achiev'],
-			'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . count($characters[0]),
+			'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . $characters[2] ,
 			'S_DISPLAY_ROSTERLISTING' => true
 	));
 
 
 }
-elseif($mode == 'class')
+elseif($mode == 1)
 {
 	//display grid
 	$classgroup = $members->get_classes($this->filter, $this->query_by_armor,

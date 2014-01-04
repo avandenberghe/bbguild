@@ -107,6 +107,8 @@ if ($this->filter!= $user->lang['ALL'])
 	}
 }
 
+$mode = request_var('rosterlayout', 0);
+
 $template->assign_vars(array(
 		// Form values
 		'S_GUILDDROPDOWN'	=> count($guildlist) > 1 ? true : false,
@@ -120,7 +122,7 @@ $template->assign_vars(array(
 		'U_VIEWMEMBER'   	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;guild_id=' . $this->guild_id),
 		'U_VIEWRAID'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;guild_id=' . $this->guild_id),
 		'U_BP'   			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=bossprogress&ampg;uild_id=' . $this->guild_id),
-		'U_ROSTER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id),
+		'U_ROSTER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id . '&amp;rosterlayout='.$mode),
 		'U_STATS'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;guild_id=' . $this->guild_id),
 		'U_ABOUT'         	=> append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
 		'GAME_ID'			=> $guilds->game_id,

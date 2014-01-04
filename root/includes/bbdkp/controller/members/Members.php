@@ -1508,18 +1508,18 @@ class Members extends \bbdkp\admin\Admin
 
 		$current_order = $this->switch_order($sort_order);
 
-		if( $mode == 'class')
+		if( $mode == 1)
 		{
 			$sql_array['ORDER_BY']  = " m.member_class_id, " . $current_order['sql'];
 		}
-		elseif ($mode == 'listing')
+		elseif ($mode == 0)
 		{
 			$sql_array['ORDER_BY']  = $current_order['sql'];
 		}
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 
-		if ($mode == 'listing')
+		if ($mode == 0)
 		{
 			// LISTING MODE
 			$member_count=0;
@@ -1535,7 +1535,7 @@ class Members extends \bbdkp\admin\Admin
 			$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $start );
 			$dataset = $db->sql_fetchrowset($result);
 		}
-		elseif ($mode == 'class')
+		elseif ($mode == 1)
 		{
 			// CLASS mode
 			$result = $db->sql_query($sql);
@@ -1575,7 +1575,7 @@ class Members extends \bbdkp\admin\Admin
 		}
 		$db->sql_freeresult($result);
 
-		return array($characters, $current_order);
+		return array($characters, $current_order, $member_count);
 	}
 
 	/**
