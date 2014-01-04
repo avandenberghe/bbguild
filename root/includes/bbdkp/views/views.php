@@ -78,6 +78,24 @@ class views extends \bbdkp\admin\Admin
 	 */
 	private $dkpsys_name = '';
 
+
+	/**
+	 * values of armor types
+	 * @var array
+	 */
+	private $armor_type = array();
+	private $classname = array();
+
+	/**
+	 * race id from pulldown
+	 */
+	private $race_id = 0;
+
+	/**
+	 * class id from pulldown
+	 */
+	private $class_id = 0;
+
 	/**
 	 * load a page asked for by user
 	 *
@@ -213,7 +231,7 @@ class views extends \bbdkp\admin\Admin
 
 
 	/**
-	 * prepares dkp dropdown, for standings/stats, called by navigation
+	 * build dkp dropdown, for standings/stats, called by navigation
 	 * @return int $dkpsys_id
 	 */
 	private function dkppulldown()
@@ -327,7 +345,7 @@ class views extends \bbdkp\admin\Admin
 	}
 
 	/**
-	 * prepares Class / armor dropdown
+	 * build Class / armor dropdown
 	 *
 	 * @param string $page
 	 * @return array
@@ -336,15 +354,11 @@ class views extends \bbdkp\admin\Admin
 	{
 		global $config, $user, $db, $template, $query_by_pool;
 
-		$this->query_by_armor = false;
-		$this->query_by_class = false;
-		$this->filter= request_var('filter', $user->lang['ALL']);
-
 		/***** begin armor-class pulldown ****/
 		$classarray = array();
 		$filtervalues = array();
-		$armor_type = array();
-		$classname = array();
+		$this->armor_type = array();
+		$this->classname = array();
 
 		$filtervalues ['all'] = $user->lang['ALL'];
 		$filtervalues ['separator1'] = '--------';
@@ -355,7 +369,7 @@ class views extends \bbdkp\admin\Admin
 		while ( $row = $db->sql_fetchrow ( $result ) )
 		{
 			$filtervalues [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
-			$armor_type [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
+			$this->armor_type [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
 		}
 		$db->sql_freeresult ( $result );
 		$filtervalues ['separator2'] = '--------';
@@ -397,26 +411,9 @@ class views extends \bbdkp\admin\Admin
 		{
 			$classarray[] = $row;
 			$filtervalues [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
-			$classname [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
+			$this->classname [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
 		}
 		$db->sql_freeresult ( $result );
-
-		if ($this->filter!= $user->lang['ALL'])
-		{
-			if (array_key_exists ( $this->filter, $armor_type ))
-			{
-				// looking for an armor type
-				$this->filter= preg_replace ( '/ Armor/', '', $this->filter);
-				$this->query_by_armor = true;
-				$this->query_by_class = false;
-			}
-			elseif (array_key_exists ( $this->filter, $classname ))
-			{
-				// looking for a class
-				$this->query_by_class = true;
-				$this->query_by_armor = false;
-			}
-		}
 
 		// dump filtervalues to dropdown template
 		foreach ( $filtervalues as $fid => $fname )
@@ -429,7 +426,7 @@ class views extends \bbdkp\admin\Admin
 		}
 
 		/***** end armor - class pulldown ****/
-		return $classarray;
+
 	}
 
 

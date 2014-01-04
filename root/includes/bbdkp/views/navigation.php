@@ -17,11 +17,10 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 	exit;
 }
 
+// get inputs
 $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
-$this->query_by_pool = true;
-$this->query_by_armor = false;
-$this->query_by_class = false;
-$this->filter = request_var('filter', '');
+
+
 $this->show_all = ( request_var ( 'show', request_var ( 'hidden_show', '' )) == $user->lang['ALL']) ? true : false;
 
 //include the guilds class
@@ -31,7 +30,6 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 }
 $guilds = new \bbdkp\controller\guilds\Guilds();
 
-$this->guild_id = request_var(URI_GUILD,0);
 $guildlist = $guilds->guildlist(1);
 if(count($guildlist) > 0)
 {
@@ -73,13 +71,41 @@ else
 	trigger_error('ERROR_NOGUILD', E_USER_WARNING );
 }
 
-$this->dkppulldown();
 
 $guilds->guildid = $this->guild_id;
 $guilds->Getguild();
 $this->game_id = $guilds->game_id;
 
-$classarray = $this->armor($page);
+$this->query_by_pool = true;
+$this->dkppulldown();
+
+$race_id =  request_var('race_id',0);
+$level1 =  request_var('$level1',0);
+$level2 =  request_var('classid', 200);
+
+$this->filter= request_var('filter', $user->lang['ALL']);
+$this->query_by_armor = false;
+$this->query_by_class = false;
+$this->armor($page);
+
+if ($this->filter!= $user->lang['ALL'])
+{
+	if (array_key_exists ( $this->filter, $this->armor_type ))
+	{
+		// looking for an armor type
+		$this->filter= preg_replace ( '/ Armor/', '', $this->filter);
+		$this->query_by_armor = true;
+		$this->query_by_class = false;
+	}
+	elseif (array_key_exists ( $this->filter, $this->classname ))
+	{
+		// looking for a class
+		$this->query_by_class = true;
+		$t = explode("_", $this->filter);
+		$this->class_id = count($t) > 1 ? $t[2]: 0;
+		$this->query_by_armor = false;
+	}
+}
 
 $template->assign_vars(array(
 		// Form values

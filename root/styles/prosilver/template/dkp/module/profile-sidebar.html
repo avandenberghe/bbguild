@@ -1,6 +1,4 @@
 <!--  profile sidebar -->
-
-
 <script type="text/javascript">
 //<![CDATA[
 function check_nav()
@@ -9,14 +7,24 @@ function check_nav()
 }
 //]]>
 </script>
-<form method="post" action="{F_NAVURL}" id="setguild">
-<h2 style="white-space:nowrap;">{GUILD_NAME}</h2>
 
-<div class="panel">
+<div class="forabg">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-	<img src="{EMBLEM}" alt="{GUILD_NAME}" />
+
+<ul class="topiclist" style="padding: 4px">
+<li class="header">
+<dl>
+<dt style="padding: 0px 0px 2px; white-space: nowrap; margin-bottom: 0px; margin-top: 0px;">
+<h4>{GUILD_NAME}</h4>
+</dt>
+</dl>
+</li>
+</ul>
+<ul class="topiclist forums portalmenu" style="padding: 5px">
+<li>
 	<div>
+	<img src="{EMBLEM}" alt="{GUILD_NAME}" />
 	<ul>
 	    <li style="list-style:none"><a href="{U_NEWS}"><strong>{L_MENU_NEWS}</strong></a></li>
 	    <li style="list-style:none"><a href="{U_ROSTER}"><strong>{L_MENU_ROSTER}</strong></a></li>
@@ -26,20 +34,22 @@ function check_nav()
 		<li style="list-style:none"><a href="{U_LISTRAIDS}"><strong>{L_MENU_RAIDS}</strong></a></li>
 		<li style="list-style:none"><a href="{U_LOOTHIST}"><strong>{L_MENU_ITEMHIST}</strong></a></li>
 		<li style="list-style:none"><a href="{U_LOOTDB}"><strong>{L_MENU_ITEMVAL}</strong></a></li>
-		<li style="list-style:none">
+		</ul>
+		<form method="post" action="{F_NAVURL}" id="setguild">
 		<select name="guild_id" id="guild_id" class="input" onchange="this.form.submit();">
 	      <!-- BEGIN guild_row -->
 	       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
 	      <!-- END guild_row -->
 		</select>
-		</li>
-		</ul>
+		</form>
 	</div>
-		
+
+</li>
+</ul>
+
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
 <br />
 <input type="hidden" name="hidden_guild_id" value="{GUILD_ID}" />
 <input type="hidden" name="hidden_show" value="{SHOWALL}" />
-</form>

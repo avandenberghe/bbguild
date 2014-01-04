@@ -1409,7 +1409,8 @@ class Members extends \bbdkp\admin\Admin
 	 * @param boolean $mycharsonly optional = false
 	 * @return array  (membercount, sql_fetchrowset of all rows)
 	 */
-	public function getmemberlist($start, $mode, $query_by_armor, $query_by_class, $filter, $game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false)
+	public function getmemberlist($start, $mode, $query_by_armor, $query_by_class, $filter,
+			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false)
 	{
 		global $db, $config, $user, $phpbb_root_path;
 		$sql_array = array();
@@ -1469,45 +1470,30 @@ class Members extends \bbdkp\admin\Admin
 			$sql_array['WHERE'] .= " AND m.member_guild_id =  " . $guild_id;
 		}
 
-		if($class_id > 0)
+		if($class_id > 0 && $query_by_class == true)
 		{
-			$sql_array['WHERE'] .= " m.member_class_id =  " . $class_id;
+			$sql_array['WHERE'] .= " AND m.member_class_id =  " . $class_id;
 		}
 
 		if($race_id > 0)
 		{
-			$sql_array['WHERE'] .= " m.member_race_id =  " . $race_id;
+			$sql_array['WHERE'] .= " AND m.member_race_id =  " . $race_id;
 		}
 
 		if($level1 > 0)
 		{
-			$sql_array['WHERE'] .= " m.member_level >=  " . $level1;
+			$sql_array['WHERE'] .= " AND m.member_level >=  " . $level1;
 		}
 
 		if($level2 != 200)
 		{
-			$sql_array['WHERE'] .= " m.member_level <=  " . $level2;
+			$sql_array['WHERE'] .= " AND m.member_level <=  " . $level2;
 		}
 
-		if ($query_by_class == true)
-		{
-			//wow_class_8 = Mage
-			//lotro_class_5=Hunter
-			//x is for avoiding output zero which may be outcome of false
-			if (strpos('x'.$filter, $game_id) > 0)
-			{
-				$class_id = substr($filter, strlen($game_id)+7);
-				$sql_array['WHERE'] .= " AND c.class_id =  '" . $db->sql_escape ($class_id) . "' ";
-				$sql_array['WHERE'] .= " AND c.game_id =  '" . $db->sql_escape ($game_id) . "' ";
-			}
-
-		}
-
-		if ($query_by_armor == true)
+		if ($filter != '' && $query_by_armor == true)
 		{
 			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $filter ) . "'";
 		}
-
 
 		// order
 		$sort_order = array(
@@ -1524,7 +1510,7 @@ class Members extends \bbdkp\admin\Admin
 
 		if( $mode == 'class')
 		{
-			$sql_array['ORDER_BY']  = "m.member_class_id, " . $current_order['sql'];
+			$sql_array['ORDER_BY']  = " m.member_class_id, " . $current_order['sql'];
 		}
 		elseif ($mode == 'listing')
 		{
@@ -1604,7 +1590,7 @@ class Members extends \bbdkp\admin\Admin
 	 * @return array
 	 *
 	 */
-	public function get_classes($guild_id = 0, $classid = 0, $race_id = 0, $level1=0, $level2=200)
+	public function get_classes($filter = '', $query_by_armor, $classid = 0, $guild_id = 0,  $race_id = 0, $level1=0, $level2=200)
 	{
 		global $db, $config;
 		$sql_array = array(
@@ -1629,6 +1615,11 @@ class Members extends \bbdkp\admin\Admin
 		);
 
 		// filters
+		if ($filter != '' && $query_by_armor == true)
+		{
+			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $filter ) . "'";
+		}
+
 		if($guild_id > 0)
 		{
 			$sql_array['WHERE'] .= " AND m.member_guild_id =  " . $guild_id;
@@ -1636,22 +1627,22 @@ class Members extends \bbdkp\admin\Admin
 
 		if($classid > 0)
 		{
-			$sql_array['WHERE'] .= " m.member_class_id =  " . $classid;
+			$sql_array['WHERE'] .= " AND m.member_class_id =  " . $classid;
 		}
 
 		if($race_id > 0)
 		{
-			$sql_array['WHERE'] .= " m.member_race_id =  " . $race_id;
+			$sql_array['WHERE'] .= " AND m.member_race_id =  " . $race_id;
 		}
 
 		if($level1 > 0)
 		{
-			$sql_array['WHERE'] .= " m.member_level >=  " . $level1;
+			$sql_array['WHERE'] .= " AND m.member_level >=  " . $level1;
 		}
 
 		if($level2 != 200)
 		{
-			$sql_array['WHERE'] .= " m.member_level <=  " . $level2;
+			$sql_array['WHERE'] .= " AND m.member_level <=  " . $level2;
 		}
 
 

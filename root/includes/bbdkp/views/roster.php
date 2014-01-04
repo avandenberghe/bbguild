@@ -18,32 +18,18 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 }
 $mode = request_var('mode', ($config['bbdkp_roster_layout'] == '0') ? 'listing': 'class' );
 
-$game_id = request_var(URI_GAME, '');
-// push common data to template
-foreach ($this->games as $id => $gamename)
-{
-	$template->assign_block_vars ( 'game_row', array (
-			'VALUE' => $id,
-			'SELECTED' => ($id == $game_id) ? ' selected="selected"' : '',
-			'OPTION' => $gamename));
-}
-$game_id = ($game_id == '') ? $id : $game_id;
-
 // Include the member class
 if (!class_exists('\bbdkp\controller\members\Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
 $members = new \bbdkp\controller\members\Members;
-$members->game_id = $game_id;
 
 $start = request_var('start' ,0);
-$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;mode=' . $mode .'&amp;guild_id=' . $this->guild_id );
-$race_id =  request_var('race_id',0);
-$class_id =  request_var('class_id',0);
-$level1 =  request_var('$level1',0);
-$level2 =  request_var('classid', 200);
-$characters = $members->getmemberlist($start, $mode, $this->query_by_armor, $this->query_by_class, $this->filter, $this->game_id, $this->guild_id, $class_id, $race_id, $level1, $level2, false);
+$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;mode=' . $mode .'&amp;guild_id=' . $this->guild_id);
+
+$characters = $members->getmemberlist($start, $mode, $this->query_by_armor, $this->query_by_class, $this->filter,
+		$this->game_id, $this->guild_id, $this->class_id, $this->race_id, $level1, $level2, false);
 
 if ($mode =='listing')
 {
@@ -54,6 +40,7 @@ if ($mode =='listing')
 	foreach ($characters[0] as $char)
 	{
 		$template->assign_block_vars('members_row', array(
+				'MEMBER_ID'		=> $char['member_id'],
 				'GAME'			=> $char['game_id'],
 				'COLORCODE'		=> $char['colorcode'],
 				'CLASS'			=> $char['class_name'],
@@ -114,7 +101,8 @@ if ($mode =='listing')
 elseif($mode == 'class')
 {
 	//display grid
-	$classgroup = $members->get_classes($this->guild_id, $class_id, $race_id, $level1, $level2);
+	$classgroup = $members->get_classes($this->filter, $this->query_by_armor,
+		$this->class_id, $this->guild_id,  $this->race_id, $level1, $level2);
 
 	if(count($classgroup) > 0)
 	{
@@ -142,6 +130,7 @@ elseif($mode == 'class')
 				if($row2['member_class_id'] == $classid)
 				{
 					$template->assign_block_vars('class.members_row', array(
+							'MEMBER_ID'		=> $row2['member_id'],
 							'GAME'			=> $row2['game_id'],
 							'COLORCODE'		=> $row2['colorcode'],
 							'CLASS'			=> $row2['class_name'],
