@@ -31,27 +31,30 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 }
 $guilds = new \bbdkp\controller\guilds\Guilds();
 
+$this->guild_id = request_var(URI_GUILD,0);
 $guildlist = $guilds->guildlist(1);
 if(count($guildlist) > 0)
 {
 	foreach ($guildlist as $g)
 	{
 		//assign guild_id property
+		if($this->guild_id==0)
+		{
+			//if there is a default guild
+			if($g['guilddefault'] == 1)
+			{
+				$this->guild_id = $g['id'];
+			}
+			elseif($g['membercount'] > 1)
+			{
+				$this->guild_id = $g['id'];
+			}
 
-		//if there is a default guild
-		if($g['guilddefault'] == 1)
-		{
-			$this->guild_id = $g['id'];
-		}
-		elseif($g['membercount'] > 1)
-		{
-			$this->guild_id = $g['id'];
-		}
-
-		//if guild id field still 0
-		if($this->guild_id == 0 && $g['id'] > 0)
-		{
-			$this->guild_id = $g['id'];
+			//if guild id field still 0
+			if($this->guild_id == 0 && $g['id'] > 0)
+			{
+				$this->guild_id = $g['id'];
+			}
 		}
 
 		//populate guild popup
