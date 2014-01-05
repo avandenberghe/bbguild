@@ -47,6 +47,7 @@ $lang = array_merge($lang, array(
 
 //---- Portal blocks -----
 'PORTAL' => 'Portal',
+'USER_MENU'			=> 'User menu',
 'RECENTLOOT' => 'Recent Loot',
 'REMEMBERME' => 'Remember me',
 'INFORUM' => 'Posted in',
@@ -282,6 +283,8 @@ $lang = array_merge($lang, array(
 'NA' => 'N/A',
 'NETADJUSTMENT' => 'Net Adjustment',
 'NO_DATA' => 'No Data',
+'NO_LOOT' => 'No Loot',
+'NO_RAIDS' => 'No Raids',
 'RAID_ON' => 'Raid on %s on %s',
 'MAX_CHARS_EXCEEDED' => 'Sorry, you can only have %s Characters bound to your phpBB account.',
 'MISCELLANEOUS' => 'Miscellaneous',

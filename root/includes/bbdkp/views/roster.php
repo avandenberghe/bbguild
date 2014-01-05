@@ -22,7 +22,7 @@ if (!class_exists('\bbdkp\controller\members\Members'))
 	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
 $members = new \bbdkp\controller\members\Members;
-
+$members->game_id = $this->game_id;
 $start = request_var('start' ,0);
 $mode = request_var('rosterlayout', 0);
 $url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;rosterlayout=' . $mode .'&amp;guild_id=' . $this->guild_id);
@@ -52,6 +52,9 @@ if ($mode ==0)
 	{
 		$template->assign_block_vars('members_row', array(
 				'MEMBER_ID'		=> $char['member_id'],
+				'U_VIEW_MEMBER'	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;'.
+						URI_NAMEID . '=' . $char ['member_id'] . '&amp;' .
+						URI_DKPSYS . '=' . 0 ),
 				'GAME'			=> $char['game_id'],
 				'COLORCODE'		=> $char['colorcode'],
 				'CLASS'			=> $char['class_name'],
