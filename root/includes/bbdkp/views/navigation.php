@@ -76,8 +76,6 @@ $guilds->guildid = $this->guild_id;
 $guilds->Getguild();
 $this->game_id = $guilds->game_id;
 
-$this->query_by_pool = true;
-$this->dkppulldown();
 
 $race_id =  request_var('race_id',0);
 $level1 =  request_var('$level1',0);
@@ -86,7 +84,7 @@ $level2 =  request_var('classid', 200);
 $this->filter= request_var('filter', $user->lang['ALL']);
 $this->query_by_armor = false;
 $this->query_by_class = false;
-$this->armor($page);
+
 
 if ($this->filter!= $user->lang['ALL'])
 {
@@ -106,6 +104,47 @@ if ($this->filter!= $user->lang['ALL'])
 		$this->query_by_armor = false;
 	}
 }
+$this->armor($page);
+
+$this->query_by_pool = false;
+$this->dkpsys_id = 0;
+$this->dkpsys_name = $user->lang['ALL'];
+if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
+{
+	if (isset( $_POST ['pool']) )
+	{
+		//user changed pulldown
+		$pulldownval = request_var('pool',  $user->lang['ALL']);
+		if(is_numeric($pulldownval))
+		{
+			$this->query_by_pool = true;
+			$this->dkpsys_id = intval($pulldownval);
+		}
+	}
+	elseif (isset ( $_GET [URI_DKPSYS] ))
+	{
+		//use get value
+		$pulldownval = request_var(URI_DKPSYS,  $user->lang['ALL']);
+		if(is_numeric($pulldownval))
+		{
+			$this->query_by_pool = true;
+			$this->dkpsys_id = request_var(URI_DKPSYS, 0);
+		}
+		else
+		{
+			$this->query_by_pool = false;
+			$this->dkpsys_id = $this->defaultpool;
+		}
+	}
+}
+else
+{
+	// if no parameters passed to this page then show all points
+	$this->query_by_pool = false;
+	$this->dkpsys_id = $this->defaultpool;
+}
+
+$this->dkppulldown();
 
 $mode = request_var('rosterlayout', 0);
 

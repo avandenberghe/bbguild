@@ -267,21 +267,24 @@ class Members extends \bbdkp\admin\Admin
 	 * @param unknown_type $member_id
 	 * @param array $guildlist
 	 */
-	function __construct($member_id = 0, array $guildlist = null)
+	function __construct($member_id = 0, $guildlist = null)
 	{
+		global $phpbb_root_path, $phpEx;
 		parent::__construct();
 		if(isset($member_id))
 		{
-			$this->member_id = $member_id;
+			if($member_id > 0)
+			{
+				$this->member_id = $member_id;
+				$this->Getmember();
+			}
 		}
 		else
 		{
 			$this->member_id = 0;
 		}
 
-		$this->Getmember();
 		$this->guildmemberlist = array();
-
 		if($guildlist == null)
 		{
 			//include the guilds class

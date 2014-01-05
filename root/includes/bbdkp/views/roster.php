@@ -25,7 +25,6 @@ $members = new \bbdkp\controller\members\Members;
 
 $start = request_var('start' ,0);
 $mode = request_var('rosterlayout', 0);
-
 $url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;rosterlayout=' . $mode .'&amp;guild_id=' . $this->guild_id);
 
 $characters = $members->getmemberlist($start, $mode, $this->query_by_armor, $this->query_by_class, $this->filter,
