@@ -22,18 +22,58 @@ if (!class_exists('\bbdkp\controller\points\PointsController'))
 	require("{$phpbb_root_path}includes/bbdkp/controller/points/PointsController.$phpEx");
 }
 $memberpoints = new \bbdkp\controller\points\PointsController;
-if(count($this->classarray)==0)
-{
-	$template->assign_vars ( array (
-			'S_SHOWLEAD' => false,
-	));
-}
 
 $startd = request_var ( 'startdkp', 0 );
 $classes = array ();
 
 $memberarray = $memberpoints->get_standings($this->guild_id, $this->dkpsys_id, $this->game_id, $startd, $this->show_all,
 		$this->query_by_armor, $this->query_by_class, $this->filter, $this->query_by_pool);
+
+// loop sorted member array and dump to template
+foreach ( $memberarray as $key => $member )
+{
+	$classes [] = $member['class_id'];
+}
+
+$classes = array_unique($classes);
+
+//leaderboard
+foreach ($this->classarray as $k => $class)
+{
+	if(in_array( $class['class_id'], $classes))
+	{
+		$template->assign_block_vars ( 'class',
+				array (
+						'CLASSNAME' 	=> $class ['class_name'],
+						'CLASSIMGPATH'	=> (strlen($class['imagename']) > 1) ? $class['imagename'] . ".png" : '',
+						'COLORCODE' 	=> $class['colorcode']
+				)
+		);
+
+		foreach ($memberarray as $member)
+		{
+			if($member['class_id'] == $class['class_id'] && $member['game_id'] == $class['game_id'])
+			{
+				//dkp data per class
+				$dkprowarray= array (
+						'NAME' => ($member ['member_status'] == '0') ? '<em>' . $member ['member_name'] . '</em>' : $member ['member_name'] ,
+						'CURRENT' => $member ['member_current'],
+						'DKPCOLOUR' => ($member ['member_current'] >= 0) ? 'positive' : 'negative',
+						'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;'.
+						URI_NAMEID . '=' . $member ['member_id'] . '&amp;' .
+						URI_DKPSYS . '=' . $this->dkpsys_id ) );
+
+				if($config['bbdkp_epgp'] == 1)
+				{
+					$dkprowarray[ 'PR'] = $member ['pr'] ;
+				}
+
+				$template->assign_block_vars ( 'class.dkp_row', $dkprowarray );
+			}
+		}
+	}
+}
+
 
 // loop sorted member array and dump to template
 foreach ( $memberarray as $key => $member )
@@ -105,44 +145,6 @@ foreach ( $memberarray as $key => $member )
 
 }
 
-//leaderboard
-foreach ($this->classarray as $k => $class)
-{
-	$template->assign_block_vars ( 'class',
-			array (
-					'CLASSNAME' 	=> $class ['class_name'],
-					'CLASSIMGPATH'	=> (strlen($class['imagename']) > 1) ? $class['imagename'] . ".png" : '',
-					'COLORCODE' 	=> $class['colorcode']
-			)
-	);
-
-	foreach ($memberarray as $member)
-	{
-		if($member['class_id'] == $class['class_id'] && $member['game_id'] == $class['game_id'])
-		{
-			//dkp data per class
-			$dkprowarray= array (
-					'NAME' => ($member ['member_status'] == '0') ? '<em>' . $member ['member_name'] . '</em>' : $member ['member_name'] ,
-					'CURRENT' => $member ['member_current'],
-					'DKPCOLOUR' => ($member ['member_current'] >= 0) ? 'positive' : 'negative',
-					'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;'.
-					URI_NAMEID . '=' . $member ['member_id'] . '&amp;' .
-					URI_DKPSYS . '=' . $this->dkpsys_id ) );
-
-			if($config['bbdkp_epgp'] == 1)
-			{
-				$dkprowarray[ 'PR'] = $member ['pr'] ;
-			}
-
-			$template->assign_block_vars ( 'class.dkp_row', $dkprowarray );
-		}
-
-	}
-
-	$template->assign_vars ( array (
-			'S_SHOWLEAD' => true,
-	));
-}
 
 // Added to the end of the sort links
 $uri_addon = '';
@@ -215,6 +217,7 @@ else
 }
 
 $template->assign_vars ( array (
+	'S_SHOWLEAD' => true,
 	'F_MEMBERS' => $u_listmembers,
 	'O_NAME' => $sortlink [1],
 	'O_RANK' => $sortlink [2],
