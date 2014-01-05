@@ -67,16 +67,37 @@ class views extends \bbdkp\admin\Admin
 	 * @var boolean
 	 */
 	private $show_all = false;
+
 	/**
 	 * pool id
 	 * @var integer
 	 */
 	private $dkpsys_id = 0;
+	private $defaultpool = 0;
+
 	/**
 	 * name of pool
 	 * @var string
 	 */
 	private $dkpsys_name = '';
+
+
+	/**
+	 * values of armor types
+	 * @var array
+	 */
+	private $armor_type = array();
+	private $classname = array();
+	private $classarray = array();
+	/**
+	 * race id from pulldown
+	 */
+	private $race_id = 0;
+
+	/**
+	 * class id from pulldown
+	 */
+	private $class_id = 0;
 
 	/**
 	 * load a page asked for by user
@@ -213,7 +234,7 @@ class views extends \bbdkp\admin\Admin
 
 
 	/**
-	 * prepares dkp dropdown, for standings/stats, called by navigation
+	 * build dkp dropdown, for standings/stats, called by navigation
 	 * @return int $dkpsys_id
 	 */
 	private function dkppulldown()
@@ -254,49 +275,11 @@ class views extends \bbdkp\admin\Admin
 			$dkpvalues[$index]['text'] = $row ['dkpsys_name'];
 			if (strtoupper ( $row ['dkpsys_default'] ) == 'Y')
 			{
-				$defaultpool = $row ['dkpsys_id'];
+				$this->defaultpool = $row ['dkpsys_id'];
 			}
 			$index +=1;
 		}
 		$db->sql_freeresult ( $result );
-
-		$this->query_by_pool = false;
-		$this->dkpsys_id = 0;
-		$this->dkpsys_name = $user->lang['ALL'];
-		if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
-		{
-			if (isset( $_POST ['pool']) )
-			{
-				//user changed pulldown
-				$pulldownval = request_var('pool',  $user->lang['ALL']);
-				if(is_numeric($pulldownval))
-				{
-					$this->query_by_pool = true;
-					$this->dkpsys_id = intval($pulldownval);
-				}
-			}
-			elseif (isset ( $_GET [URI_DKPSYS] ))
-			{
-				//use get value
-				$pulldownval = request_var(URI_DKPSYS,  $user->lang['ALL']);
-				if(is_numeric($pulldownval))
-				{
-					$this->query_by_pool = true;
-					$this->dkpsys_id = request_var(URI_DKPSYS, 0);
-				}
-				else
-				{
-					$this->query_by_pool = false;
-					$this->dkpsys_id = $defaultpool;
-				}
-			}
-		}
-		else
-		{
-			// if no parameters passed to this page then show default pool
-			$this->query_by_pool = true;
-			$this->dkpsys_id = $defaultpool;
-		}
 
 		foreach ($dkpvalues as $key => $value)
 		{
@@ -327,7 +310,7 @@ class views extends \bbdkp\admin\Admin
 	}
 
 	/**
-	 * prepares Class / armor dropdown
+	 * build Class / armor dropdown
 	 *
 	 * @param string $page
 	 * @return array
@@ -336,15 +319,8 @@ class views extends \bbdkp\admin\Admin
 	{
 		global $config, $user, $db, $template, $query_by_pool;
 
-		$this->query_by_armor = false;
-		$this->query_by_class = false;
-		$this->filter= request_var('filter', $user->lang['ALL']);
-
 		/***** begin armor-class pulldown ****/
-		$classarray = array();
 		$filtervalues = array();
-		$armor_type = array();
-		$classname = array();
 
 		$filtervalues ['all'] = $user->lang['ALL'];
 		$filtervalues ['separator1'] = '--------';
@@ -355,7 +331,7 @@ class views extends \bbdkp\admin\Admin
 		while ( $row = $db->sql_fetchrow ( $result ) )
 		{
 			$filtervalues [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
-			$armor_type [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
+			$this->armor_type [strtoupper($row ['class_armor_type'])] = $user->lang[strtoupper($row ['class_armor_type'])];
 		}
 		$db->sql_freeresult ( $result );
 		$filtervalues ['separator2'] = '--------';
@@ -392,31 +368,14 @@ class views extends \bbdkp\admin\Admin
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query ($sql);
-		$classarray = array();
+		$this->classarray = array();
 		while ( $row = $db->sql_fetchrow ( $result ) )
 		{
-			$classarray[] = $row;
+			$this->classarray[] = $row;
 			$filtervalues [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
-			$classname [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
+			$this->classname [$row['game_id'] . '_class_' . $row ['class_id']] = $row ['class_name'];
 		}
 		$db->sql_freeresult ( $result );
-
-		if ($this->filter!= $user->lang['ALL'])
-		{
-			if (array_key_exists ( $this->filter, $armor_type ))
-			{
-				// looking for an armor type
-				$this->filter= preg_replace ( '/ Armor/', '', $this->filter);
-				$this->query_by_armor = true;
-				$this->query_by_class = false;
-			}
-			elseif (array_key_exists ( $this->filter, $classname ))
-			{
-				// looking for a class
-				$this->query_by_class = true;
-				$this->query_by_armor = false;
-			}
-		}
 
 		// dump filtervalues to dropdown template
 		foreach ( $filtervalues as $fid => $fname )
@@ -429,7 +388,7 @@ class views extends \bbdkp\admin\Admin
 		}
 
 		/***** end armor - class pulldown ****/
-		return $classarray;
+
 	}
 
 

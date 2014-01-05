@@ -1,13 +1,12 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
+ * bbdkp acp language file for  Ajdustments (en)
  * 
  * 
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * 
+ * @version 1.3.0
  */
-
 /**
 * @ignore
 */

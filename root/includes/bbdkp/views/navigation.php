@@ -17,11 +17,9 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 	exit;
 }
 
+// get inputs
 $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
-$this->query_by_pool = true;
-$this->query_by_armor = false;
-$this->query_by_class = false;
-$this->filter = request_var('filter', '');
+
 $this->show_all = ( request_var ( 'show', request_var ( 'hidden_show', '' )) == $user->lang['ALL']) ? true : false;
 
 //include the guilds class
@@ -37,21 +35,23 @@ if(count($guildlist) > 0)
 	foreach ($guildlist as $g)
 	{
 		//assign guild_id property
+		if($this->guild_id==0)
+		{
+			//if there is a default guild
+			if($g['guilddefault'] == 1)
+			{
+				$this->guild_id = $g['id'];
+			}
+			elseif($g['membercount'] > 1)
+			{
+				$this->guild_id = $g['id'];
+			}
 
-		//if there is a default guild
-		if($g['guilddefault'] == 1)
-		{
-			$this->guild_id = $g['id'];
-		}
-		elseif($g['membercount'] > 1)
-		{
-			$this->guild_id = $g['id'];
-		}
-
-		//if guild id field still 0
-		if($this->guild_id == 0 && $g['id'] > 0)
-		{
-			$this->guild_id = $g['id'];
+			//if guild id field still 0
+			if($this->guild_id == 0 && $g['id'] > 0)
+			{
+				$this->guild_id = $g['id'];
+			}
 		}
 
 		//populate guild popup
@@ -70,13 +70,81 @@ else
 	trigger_error('ERROR_NOGUILD', E_USER_WARNING );
 }
 
-$this->dkppulldown();
 
 $guilds->guildid = $this->guild_id;
 $guilds->Getguild();
 $this->game_id = $guilds->game_id;
 
-$classarray = $this->armor($page);
+
+$race_id =  request_var('race_id',0);
+$level1 =  request_var('$level1',0);
+$level2 =  request_var('classid', 200);
+
+$this->filter= request_var('filter', $user->lang['ALL']);
+$this->query_by_armor = false;
+$this->query_by_class = false;
+
+$this->armor($page);
+if ($this->filter!= $user->lang['ALL'])
+{
+	if (array_key_exists ( $this->filter, $this->armor_type ))
+	{
+		// looking for an armor type
+		$this->filter= preg_replace ( '/ Armor/', '', $this->filter);
+		$this->query_by_armor = true;
+		$this->query_by_class = false;
+	}
+	elseif (array_key_exists ( $this->filter, $this->classname ))
+	{
+		// looking for a class
+		$this->query_by_class = true;
+		$t = explode("_", $this->filter);
+		$this->class_id = count($t) > 1 ? $t[2]: 0;
+		$this->query_by_armor = false;
+	}
+}
+
+$this->query_by_pool = false;
+$this->dkpsys_id = 0;
+$this->dkpsys_name = $user->lang['ALL'];
+if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
+{
+	if (isset( $_POST ['pool']) )
+	{
+		//user changed pulldown
+		$pulldownval = request_var('pool',  $user->lang['ALL']);
+		if(is_numeric($pulldownval))
+		{
+			$this->query_by_pool = true;
+			$this->dkpsys_id = intval($pulldownval);
+		}
+	}
+	elseif (isset ( $_GET [URI_DKPSYS] ))
+	{
+		//use get value
+		$pulldownval = request_var(URI_DKPSYS,  $user->lang['ALL']);
+		if(is_numeric($pulldownval))
+		{
+			$this->query_by_pool = true;
+			$this->dkpsys_id = request_var(URI_DKPSYS, 0);
+		}
+		else
+		{
+			$this->query_by_pool = false;
+			$this->dkpsys_id = $this->defaultpool;
+		}
+	}
+}
+else
+{
+	// if no parameters passed to this page then show all points
+	$this->query_by_pool = false;
+	$this->dkpsys_id = $this->defaultpool;
+}
+
+$this->dkppulldown();
+
+$mode = request_var('rosterlayout', 0);
 
 $template->assign_vars(array(
 		// Form values
@@ -91,7 +159,7 @@ $template->assign_vars(array(
 		'U_VIEWMEMBER'   	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;guild_id=' . $this->guild_id),
 		'U_VIEWRAID'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;guild_id=' . $this->guild_id),
 		'U_BP'   			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=bossprogress&ampg;uild_id=' . $this->guild_id),
-		'U_ROSTER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id),
+		'U_ROSTER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id . '&amp;rosterlayout='.$mode),
 		'U_STATS'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;guild_id=' . $this->guild_id),
 		'U_ABOUT'         	=> append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
 		'GAME_ID'			=> $guilds->game_id,

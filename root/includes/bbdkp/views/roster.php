@@ -16,44 +16,45 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 {
 	exit;
 }
-$mode = request_var('mode', ($config['bbdkp_roster_layout'] == '0') ? 'listing': 'class' );
-
-$game_id = request_var(URI_GAME, '');
-// push common data to template
-foreach ($this->games as $id => $gamename)
-{
-	$template->assign_block_vars ( 'game_row', array (
-			'VALUE' => $id,
-			'SELECTED' => ($id == $game_id) ? ' selected="selected"' : '',
-			'OPTION' => $gamename));
-}
-$game_id = ($game_id == '') ? $id : $game_id;
-
 // Include the member class
 if (!class_exists('\bbdkp\controller\members\Members'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
 $members = new \bbdkp\controller\members\Members;
-$members->game_id = $game_id;
-
+$members->game_id = $this->game_id;
 $start = request_var('start' ,0);
-$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;mode=' . $mode .'&amp;guild_id=' . $this->guild_id );
-$race_id =  request_var('race_id',0);
-$class_id =  request_var('class_id',0);
-$level1 =  request_var('$level1',0);
-$level2 =  request_var('classid', 200);
-$characters = $members->getmemberlist($start, $mode, $this->query_by_armor, $this->query_by_class, $this->filter, $this->game_id, $this->guild_id, $class_id, $race_id, $level1, $level2, false);
+$mode = request_var('rosterlayout', 0);
+$url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;rosterlayout=' . $mode .'&amp;guild_id=' . $this->guild_id);
 
-if ($mode =='listing')
+$characters = $members->getmemberlist($start, $mode, $this->query_by_armor, $this->query_by_class, $this->filter,
+		$this->game_id, $this->guild_id, $this->class_id, $this->race_id, $level1, $level2, false);
+
+$rosterlayoutlist = array(
+		0 => $user->lang['ARM_STAND'] ,
+		1 => $user->lang['ARM_CLASS']);
+foreach ($rosterlayoutlist as $lid => $lname)
+{
+	$template->assign_block_vars('rosterlayout_row', array(
+			'VALUE' => $lid ,
+			'SELECTED' => ($lid == $mode) ? ' selected="selected"' : '' ,
+			'OPTION' => $lname));
+}
+
+if ($mode ==0)
 {
 	/*
 	 * Displays the listing
 	*/
 	// use pagination
+	$t=0;
 	foreach ($characters[0] as $char)
 	{
 		$template->assign_block_vars('members_row', array(
+				'MEMBER_ID'		=> $char['member_id'],
+				'U_VIEW_MEMBER'	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;'.
+						URI_NAMEID . '=' . $char ['member_id'] . '&amp;' .
+						URI_DKPSYS . '=' . 0 ),
 				'GAME'			=> $char['game_id'],
 				'COLORCODE'		=> $char['colorcode'],
 				'CLASS'			=> $char['class_name'],
@@ -70,10 +71,7 @@ if ($mode =='listing')
 		));
 	}
 
-	$rosterpagination = $this->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] ,
-			count($characters[0]),
-			$config ['bbdkp_user_llimit'],
-			$start, true, 'start' );
+	$rosterpagination = $this->generate_pagination2($url . '&amp;o=' . $characters[1] ['uri'] ['current'] , $characters[2], $config['bbdkp_user_llimit'], $start, true, 'start' );
 
 	// add navigationlinks
 	$navlinks_array = array(
@@ -105,16 +103,17 @@ if ($mode =='listing')
 	$template->assign_vars(array(
 			'S_RSTYLE'		    => '0',
 			'S_SHOWACH'			=> $config['bbdkp_show_achiev'],
-			'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . count($characters[0]),
+			'LISTMEMBERS_FOOTCOUNT' => 'Total members : ' . $characters[2] ,
 			'S_DISPLAY_ROSTERLISTING' => true
 	));
 
 
 }
-elseif($mode == 'class')
+elseif($mode == 1)
 {
 	//display grid
-	$classgroup = $members->get_classes($this->guild_id, $class_id, $race_id, $level1, $level2);
+	$classgroup = $members->get_classes($this->filter, $this->query_by_armor,
+		$this->class_id, $this->game_id, $this->guild_id,  $this->race_id, $level1, $level2);
 
 	if(count($classgroup) > 0)
 	{
@@ -142,6 +141,7 @@ elseif($mode == 'class')
 				if($row2['member_class_id'] == $classid)
 				{
 					$template->assign_block_vars('class.members_row', array(
+							'MEMBER_ID'		=> $row2['member_id'],
 							'GAME'			=> $row2['game_id'],
 							'COLORCODE'		=> $row2['colorcode'],
 							'CLASS'			=> $row2['class_name'],

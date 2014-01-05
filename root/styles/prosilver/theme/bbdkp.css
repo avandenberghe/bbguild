@@ -24,7 +24,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 }
 
 /* mainmenu.html  */
-.portalmenu ul 
+.portalmenu ul
 {
 	list-style-type: none;
 	margin: 0 0 8px;
@@ -44,7 +44,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	background-image: url("{T_THEME_PATH}/images/dkp/menu.png");
 	background-position: 2% center;
 	background-repeat: no-repeat;
-	font-size: 90%;
+	font-size: 105%;
 	font-weight: bold;
 	display: block;
 	margin-bottom: 0px;
@@ -52,7 +52,20 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	text-decoration: none;
 }
 
-/* Bossprogress block Colors 
+.bbdkpheader {
+	color:#A60000;
+}
+
+ .bbdkp {
+	font-size:1em;
+	width: 80%;
+	border:0px !important;
+	border-spacing: 0px;
+	cellspacing:0px;
+	cellpadding:0px;
+}
+
+/* Bossprogress block Colors
 ----------------------------------*/
 .bpprogress00,.bpprogress00:link,.bpprogress00:visited,.bpprogress00:active
 	{
@@ -118,7 +131,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	font-family:Arial,Helvetica,sans-serif;
 	font-size:11px;
 	line-height:150%;
-	
+
 	text-decoration: underline;
 	color: #88FFDD;
 }
@@ -128,7 +141,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	font-family:Arial,Helvetica,sans-serif;
 	font-size:11px;
 	line-height:150%;
-	
+
 	text-decoration: none;
 	color: #00EE00;
 }
@@ -137,7 +150,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	font-family:Arial,Helvetica,sans-serif;
 	font-size:11px;
 	line-height:150%;
-	
+
 	text-decoration: underline;
 	color: #00EE00;
 }
@@ -156,7 +169,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 /**** portal tooltip css ****/
 
 a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active {
-	text-decoration: none; 
+	text-decoration: none;
 	 color: #FFD100; /* tooltip boss link color */
 	white-space: nowrap;
 }
@@ -171,11 +184,11 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 	margin:0px auto;
 	font-size: 10px;
 	min-width:200px;
-	max-width:400px; 
+	max-width:400px;
 	color:#FFFFDD;
 	z-index:1;
 	margin-left:12px; /* default, width of left corner */
-	margin-bottom:0.5em; /* spacing under dialog */	
+	margin-bottom:0.5em; /* spacing under dialog */
 }
 
 .bbtooltip .bbinner,
@@ -186,9 +199,9 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
  background-color: transparent;
  background-repeat: no-repeat;
  background-position: right top;
- 
+
 }
-	
+
 .bbtooltip .bbinner {
  position:relative;
  zoom:1;
@@ -226,7 +239,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 /* bottom corner width */
 .bbtooltip .b div {
  position:absolute;
- width:12px; 
+ width:12px;
  margin-left:-12px;
  background-position:bottom left;
 }
@@ -241,7 +254,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
  /* extra content protector - preventing vertical overflow (past background) */
  position:static;
  max-height:1000px;
- overflow:auto; 
+ overflow:auto;
 }
 
 .bbtooltip h1,
@@ -264,39 +277,39 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 }
 /* bossprogress.php css */
 
-.progresspage dl { 
-	margin: 0; 
-	padding: 0;     				
+.progresspage dl {
+	margin: 0;
+	padding: 0;
 }
-.progresspage dd { 
+.progresspage dd {
 	position: relative;
-	display: block;     			
-	float: left;     
-	width: 800px; 
-	height: 120px; 
-	margin: 0 0 0px; 
-	background: url("images/bossprogress/rp/g_colorbar2.jpg"); 
+	display: block;
+	float: left;
+	width: 800px;
+	height: 120px;
+	margin: 0 0 0px;
+	background: url("images/bossprogress/rp/g_colorbar2.jpg");
 }
-* .html dd { float: none; } 
+* .html dd { float: none; }
 
-.progresspage dd div { 
-  	position: relative; 
-	background: url("images/bossprogress/rp/g_colorbar.jpg"); 
-	height: 120px; 
-	width: 100%; 
-	text-align:right; 
+.progresspage dd div {
+  	position: relative;
+	background: url("images/bossprogress/rp/g_colorbar.jpg");
+	height: 120px;
+	width: 100%;
+	text-align:right;
 }
-.progresspage dd div strong 
-{ 
+.progresspage dd div strong
+{
 	position: absolute;
-	right: -5px; 
-	top: -2px; 
-	display: block; 
-	background: url("images/bossprogress/rp/g_marker.gif"); 
-	height: 24px; 
-	width: 9px; 
+	right: -5px;
+	top: -2px;
+	display: block;
+	background: url("images/bossprogress/rp/g_marker.gif");
+	height: 24px;
+	width: 9px;
 	text-align: left;
-	text-indent: -9999px; 
+	text-indent: -9999px;
 	overflow: hidden;
 }
 
@@ -335,7 +348,7 @@ span.corners-inner-bottom {
 	background-image: url('none');
 	background-position: 0 100%;
 	margin: 0 -5px;
-	clear: both; 
+	clear: both;
 }
 
 span.corners-inner-bottom span {
@@ -343,11 +356,11 @@ span.corners-inner-bottom span {
 	background-position: 100% 100%;
 }
 
-span.corners-inner-top, span.corners-inner-bottom { 
-	background-image: url('{T_THEME_PATH}/images/corners_left.png'); 
+span.corners-inner-top, span.corners-inner-bottom {
+	background-image: url('{T_THEME_PATH}/images/corners_left.png');
 }
-span.corners-inner-top span, span.corners-inner-bottom span { 
-	background-image: url('{T_THEME_PATH}/images/corners_right.png'); 
+span.corners-inner-top span, span.corners-inner-bottom span {
+	background-image: url('{T_THEME_PATH}/images/corners_right.png');
 }
 
 /** flot statistics **/
@@ -370,7 +383,7 @@ div.valueLabel {
 	border:none;
 }
 
-div.tickLabel { 
+div.tickLabel {
 	padding-left:20px !important;
 	font-size: 11px !important;
     font-style: italic !important;
@@ -384,11 +397,11 @@ div.tickLabel {
 	background-color: #000;
 	margin:0px auto;
 	min-width:100px;
-	max-width:100px; 
+	max-width:100px;
 	color:#FFFFDD;
 	z-index:1;
 	margin-left:10px; /* default, width of left corner */
-	margin-bottom:0.5em; /* spacing under dialog */	
+	margin-bottom:0.5em; /* spacing under dialog */
 	font-size: 11px;
 }
 

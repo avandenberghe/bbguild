@@ -1,7 +1,7 @@
 <?php
 /**
  * welcome block
- * 
+ *
  *   @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
@@ -16,7 +16,7 @@ if (!defined('IN_PHPBB'))
 }
 $user->add_lang(array('posting'));
 
-if (!function_exists('generate_text_for_display')) 
+if (!function_exists('generate_text_for_display'))
 {
 	include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 }
@@ -32,12 +32,12 @@ while ( $row = $db->sql_fetchrow($result) )
 	$bbcode_options = $row['bbcode_options'];
 }
 $db->sql_freeresult($result);
-		
+
 $message = generate_text_for_display($text, $bbcode_uid, $bbcode_bitfield, $bbcode_options);
 $message = smiley_text($message);
 
 $template->assign_vars(array(
-	'WELCOME_MESSAGE'		=> $message, 
-	'S_DISPLAY_WELCOME' 	=> true, 
+	'WELCOME_MESSAGE'		=> $message,
+	'S_DISPLAY_WELCOME' 	=> true,
 ));
 ?>

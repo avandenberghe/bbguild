@@ -1,10 +1,11 @@
 <?php
 /**
- * bbdkp common language file
- *
+ * bbdkp common language file - en
  *
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.3
+ *
  *
  */
 
@@ -13,7 +14,7 @@
 */
 if (!defined('IN_PHPBB'))
 {
-	exit;
+exit;
 }
 
 /**
@@ -21,7 +22,7 @@ if (!defined('IN_PHPBB'))
 */
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+$lang = array();
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -43,12 +44,14 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.',
 'FOOTERBBDKP' => 'bbDKP 1.3.0',
+
 //---- Portal blocks -----
-'PORTAL'	=> 'Portal',
+'PORTAL' => 'Portal',
+'USER_MENU'			=> 'User menu',
 'RECENTLOOT' => 'Recent Loot',
 'REMEMBERME' => 'Remember me',
-'INFORUM'	=> 'Posted in',
-'DKP'	=> 'DKP',
+'INFORUM' => 'Posted in',
+'DKP' => 'DKP',
 'NEWS' => 'News',
 'COMMENT' => 'Comment',
 'LIST_NEWS' => 'List News',
@@ -56,15 +59,34 @@ $lang = array_merge($lang, array(
 'NEWS_PER_PAGE' => 'News Entries per Page',
 'ERROR_INVALID_NEWS_PROVIDED' => 'A valid news id was not provided.',
 'BOSSPROGRESS' => 'Bossprogress',
-'WELCOME'	=> 'Welcome',
-'RECENT_LENGTH' 	=> 'Number of chars retrieved',
-'NUMTOPICS'					=> 'Number of topics retrieved',
-'SHOW_RT_BLOCK'				=> 'Show Recent Topics',
-'RECENT_TOPICS_SETTING'		=> 'Recent Topics Settings',
-'RECENT_TOPICS'				=> 'Recent Topics',
-'NO_RECENT_TOPICS'			=> 'No recent topics',
-'POSTED_BY_ON'				=> 'by %1$s on %2$s',
-'LATESTMEMBERS'				=> 'Latest members',
+'WELCOME' => 'Welcome',
+'RECENT_LENGTH' => 'Number of chars retrieved',
+'NUMTOPICS' => 'Number of topics retrieved',
+'SHOW_RT_BLOCK' => 'Show Recent Topics',
+'RECENT_TOPICS_SETTING' => 'Recent Topics Settings',
+'RECENT_TOPICS' => 'Recent Topics',
+'NO_RECENT_TOPICS' => 'No recent topics',
+'POSTED_BY_ON' => 'by %1$s on %2$s',
+'LATESTMEMBERS' => 'Latest members',
+
+// Main Menu
+'MENU' => 'Navigation',
+'MENU_ADMIN_PANEL' => 'Administration Panel',
+'MENU_BOSS' => 'Bossprogress',
+'MENU_EVENTS' => 'Events',
+'MENU_ITEMVAL' => 'Item Values',
+'MENU_ITEMHIST' => 'Item History',
+'MENU_NEWS' => 'News',
+'MENU_RAIDS' => 'Raids',
+'MENU_ROSTER' => 'Roster',
+'MENU_STATS' => 'Statistics',
+'MENU_SUMMARY' => 'Summary',
+'MENU_STANDINGS' => 'Standings',
+'MENU_VIEWMEMBER' => 'View Member',
+'MENU_VIEWITEM' => 'View Item',
+'MENU_VIEWRAID' => 'View Raid',
+'MENU_VIEWEVENT' => 'View Event',
+'MENU_PLANNER' => 'Planner',
 
 //links
 'MENU_LINKS' => 'Weblinks',
@@ -97,38 +119,19 @@ $lang = array_merge($lang, array(
 'LINK14' => 'http://www.worldofwarcraft.com',
 'LINK14T' => 'World of Warcraft',
 
-// Main Menu
-'MENU' => 'Menu',
-'MENU_ADMIN_PANEL' => 'Administration Panel',
-'MENU_BOSS' => 'Bossprogress',
-'MENU_EVENTS' => 'Events',
-'MENU_ITEMVAL' => 'Item Values',
-'MENU_ITEMHIST' => 'Item History',
-'MENU_NEWS' => 'News',
-'MENU_RAIDS' => 'Raids',
-'MENU_ROSTER'	=> 'Roster',
-'MENU_STATS' => 'Statistics',
-'MENU_SUMMARY' => 'Summary',
-'MENU_STANDINGS' => 'Standings',
-'MENU_VIEWMEMBER' => 'View Member',
-'MENU_VIEWITEM' => 'View Item',
-'MENU_VIEWRAID' => 'View Raid',
-'MENU_VIEWEVENT' => 'View Event',
-'MENU_PLANNER' => 'Planner',
-
 //games preinstalled
 'AION'       => 'Aion' ,
 'DAOC'       => 'Dark Age of Camelot' ,
 'EQ'         => 'EverQuest' ,
 'EQ2'        => 'EverQuest II' ,
 'FFXI'       => 'Final Fantasy XI',
-'GW2'   	 => 'GuildWars 2',
+'GW2'    => 'GuildWars 2',
 'LINEAGE2'   => 'Lineage 2',
 'LOTRO'      => 'Lord of the Rings Online' ,
 'RIFT'       => 'Rift',
 'SWTOR'      => 'Starwars : The old Republic',
-'TERA'   	 => 'Tera',
-'VANGUARD' 	 => 'Vanguard Saga of Heroes' ,
+'TERA'    => 'Tera',
+'VANGUARD'  => 'Vanguard Saga of Heroes' ,
 'WARHAMMER'  => 'Warhammer Online' ,
 'WOW'        => 'World of Warcraft' ,
 'PREINSTALLED' => 'Preinstalled games: %s',
@@ -137,18 +140,18 @@ $lang = array_merge($lang, array(
 'RECRUITMENT_BLOCK' => 'Recruitment Status',
 'RECRUIT_CLOSED' => 'Closed !',
 'TANK' => 'Tank',
-'DPS'	=> 'Dps' ,
-'HEAL' 	=> 'Heal',
+'DPS' => 'Dps' ,
+'HEAL' => 'Heal',
 'RECRUIT_MESSAGE' => 'We are currently looking for new members for the following classes:',
 
-//MEMBER
+//ROSTER
 'GUILDROSTER' => 'Guild Roster',
-'RANK' 		  => 'Rank',
-'CLASS' 	  => 'Class',
-'LVL' 		  => 'Level',
-'REALM'		  => 'Realm',
-'REGION'	  => 'Region',
-'ACHIEV'	  => 'Achievements',
+'RANK'   => 'Rank',
+'CLASS'   => 'Class',
+'LVL'   => 'Level',
+'REALM'  => 'Realm',
+'REGION'  => 'Region',
+'ACHIEV'  => 'Achievements',
 'PROFFESSION' => 'Proffessions',
 
 //listmembers
@@ -186,7 +189,7 @@ $lang = array_merge($lang, array(
 'VIEWITEM_TITLE' => 'Viewing Purchase History for %s',
 'VIEWMEMBER_TITLE' => 'History for %s',
 'VIEWRAID_TITLE' => 'Raid Summary',
-'NODKPACCOUNTS'	=> 'No DKP accounts found',
+'NODKPACCOUNTS' => 'No DKP accounts found',
 'NOUCPACCESS' => 'You are not authorised to claim characters',
 'NOUCPADDCHARS' => 'You are not authorised to add characters',
 'NOUCPUPDCHARS' => 'You are not authorised to update your characters',
@@ -229,21 +232,21 @@ $lang = array_merge($lang, array(
 'CLASSMAX' => 'Max level',
 'CLASS_DISTRIBUTION' => 'Class Distribution',
 'CLASS_SUMMARY' => 'Class Summary: %s to %s',
+
 'CONFIGURATION' => 'Configuration',
 'CLOSED' => 'Closed',
 'DATE' => 'Date',
 'DELETE' => 'Delete',
 'DELETE_CONFIRMATION' => 'Delete Confirmation',
 'DKP_VALUE' => '%s Value',
+
+'NO_CHARACTERS' => 'No characters in database',
 'STATUS' => 'Status Y/N',
 'CHARACTER' => 'Here is a list of all your Characters. ',
 'CHARACTER_EXPLAIN' => 'Choose an unclaimed Character to claim it and press submit.',
 'CHARACTERS_UPDATED' => 'The Charactername %s was assigned to your account. ',
 'NO_CHARACTERS_BOUND' => 'No characters bound to your Account.',
-'NO_CHARACTERS' => 'No characters in database',
-'RAIDDECAY' => 'Raid Decay',
-'ADJDECAY' => 'Adjustment decay',
-'DECAY' => 'Decay',
+
 'DROPS' => 'Drops',
 'EVENTNOTE' => 'Note: only lists attended raids or obtained loot from active events.',
 'EVENT' => 'Event',
@@ -254,7 +257,7 @@ $lang = array_merge($lang, array(
 'FIRST' => 'First',
 'GROUP_ADJ' => 'Group Adj.',
 'GROUP_ADJUSTMENTS' => 'Group Adjustments',
-'HIGH'	=> 'High',
+'HIGH' => 'High',
 'INDIVIDUAL_ADJUSTMENTS' => 'Individual Adjustments',
 'INDIVIDUAL_ADJUSTMENT_HISTORY' => 'Individual Adjustment History',
 'INDIV_ADJ' => 'Indiv. Adj.',
@@ -280,10 +283,13 @@ $lang = array_merge($lang, array(
 'NA' => 'N/A',
 'NETADJUSTMENT' => 'Net Adjustment',
 'NO_DATA' => 'No Data',
+'NO_LOOT' => 'No Loot',
+'NO_RAIDS' => 'No Raids',
 'RAID_ON' => 'Raid on %s on %s',
 'MAX_CHARS_EXCEEDED' => 'Sorry, you can only have %s Characters bound to your phpBB account.',
 'MISCELLANEOUS' => 'Miscellaneous',
 'NEWEST' => 'Newest raid',
+
 'NOTE' => 'Note',
 'OLDEST' => 'Oldest raid',
 'OPEN' => 'Open',
@@ -296,6 +302,7 @@ $lang = array_merge($lang, array(
 'PCT_EARNED_LOST_TO' => '% Earned Lost to',
 'PREFERENCES' => 'Preferences',
 'PURCHASE_HISTORY_FOR' => 'Purchase History for %s',
+
 'QUOTE' => 'Quote',
 'RACE' => 'Race',
 'RACEID' => 'Race ID',
@@ -313,10 +320,12 @@ $lang = array_merge($lang, array(
 'RECORDED_DROP_HISTORY' => 'Purchase History',
 'REASON' => 'Reason',
 'RESULT' => 'Result',
+
 'SESSION_ID' => 'Session ID',
-'TANK'	=> 'Tanking',
+
+'TANK' => 'Tanking',
 'DAMAGE' => 'Damage',
-'HEAL'	=> 'Healing',
+'HEAL' => 'Healing',
 'SUMMARY_DATES' => 'Raid Summary: %s to %s',
 'TIME' => 'Time',
 'TIME_BONUS' => 'Time bonus',
@@ -340,15 +349,18 @@ $lang = array_merge($lang, array(
 'ZEROSUM' => 'Zerosum bonus',
 
 //lootsystems
-'EP'	=> 'EP',
-'EPLONG'	=> 'Effort points',
-'EPNET'	=> 'EP net',
-'EPNETLONG'	=> 'Net Effort Points',
-'GP'	=> 'GP',
-'GPLONG'	=> 'Gear points',
-'GPNET'	=> 'GP net',
-'PR'	=> 'PR',
-'PRLONG'	=> 'Priority ratio',
+'EP' => 'EP',
+'EPLONG' => 'Effort points',
+'EPNET' => 'EP net',
+'EPNETLONG' => 'Net Effort Points',
+'GP' => 'GP',
+'GPLONG' => 'Gear points',
+'GPNET' => 'GP net',
+'PR' => 'PR',
+'PRLONG' => 'Priority ratio',
+'RAIDDECAY' => 'Raid Decay',
+'ADJDECAY' => 'Adjustment decay',
+'DECAY' => 'Decay',
 
 // Page Foot Counts
 
@@ -403,19 +415,20 @@ $lang = array_merge($lang, array(
 // Miscellaneous
 'ADDED' => 'Added',
 'BOSSKILLCOUNT' => 'Bosskills',
+'CLOSED' => 'closed',
 'DELETED' => 'Deleted',
 'ENTER_NEW' => 'Enter New Name',
 'ENTER_NEW_GAMEITEMID' => 'Game item ID',
-'FEMALE'	=> 'Female',
-'GENDER'	=> 'Gender',
-'GUILD'	=> 'Guild',
+'FEMALE' => 'Female',
+'GENDER' => 'Gender',
+'GUILD' => 'Guild',
 'LIST' => 'List',
 'LIST_EVENTS' => 'List Events',
 'LIST_INDIVADJ' => 'List Individual Adjustments',
 'LIST_ITEMS' => 'List Items',
 'LIST_MEMBERS' => 'List Members',
 'LIST_RAIDS' => 'List Raids',
-'MALE'	=> 'Male',
+'MALE' => 'Male',
 'MAY_BE_NEGATIVE_NOTE' => 'may be negative',
 'NOT_AVAILABLE' => 'Not Available',
 'NORAIDS' => 'No Raids',
@@ -426,8 +439,6 @@ $lang = array_merge($lang, array(
 'SELECT_EXISTING' => 'Select Existing',
 'UPDATED' => 'Updated',
 
-// Error messages
-'NOT_ADMIN' => 'You are not an administrator',
 
 //---- About --- do not change anything here
 //tabs
@@ -442,15 +453,14 @@ $lang = array_merge($lang, array(
 'TPLUGINS' => 'PlugIns',
 'CREATED' => 'Created by',
 'DEVELOPEDBY' => 'Developed by',
-'DEVTEAM'=> 'bbDKP Development Team',
+'DEVTEAM' => 'bbDKP Development Team',
 'AUTHNAME' => 'Ippeh',
 'WEBNAME' =>'Website',
 'SVNNAME' => 'Repository',
 'SVNURL' => 'https://github.com/bbDKP',
 'WEBURL' => 'http://www.bbdkp.com',
-
 'WOWHEADID' => 'Wowhead id',
-'AUTHWEB' => 'http://www.explodinglabrats.com/',
+'AUTHWEB' => 'http://www.bbdkp.com/',
 'DONATIONCOMMENT' => 'bbDKP is freeware, but you can support our development efforts by making a contribution.',
 'PAYPALLINK' => '<form action="https://www.paypal.com/cgi-bin/webscr" method="post"><input type="hidden" name="cmd" value="_s-xclick"><input type="hidden" name="encrypted" value="-----BEGIN PKCS7-----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-----END PKCS7-----
 "><input type="image" src="https://www.paypal.com/en_US/i/btn/btn_donate_LG.gif" border="0" name="submit" alt=""><img alt="" border="0" src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1">
@@ -488,13 +498,10 @@ bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'EQDKPDEV' => 'Tsigo',
 'EQDKPLINK' => 'http://www.eqdkp.com/',
 
-'PLUGINS' => 	'Plugins',
-'PLUGINVERS'=> 	'Version',
-'AUTHOR'=> 		'Author',
-'MAINT'=> 		'Maintainer',
-
-'DONATORS' => 'Unexpectedgreg, Bisa, Sniperpaladin, McTurk, Mizpah, Kapli, Hroar, Chrome, haqzore',
-
+'PLUGINS' => 'Plugins',
+'PLUGINVERS' => 'Version',
+'AUTHOR' => 'Author',
+'MAINT' => 'Maintainer',
 'DONATION' => 'Donation',
 'DONA_NAME' => 'Name',
 'ADDITIONS' => 'Code Additions',

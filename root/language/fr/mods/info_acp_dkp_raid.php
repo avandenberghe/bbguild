@@ -1,24 +1,21 @@
 <?php
 /**
-*
-* mods_info_acp_dkp_raid.php [French]
-*
-* @package language
-* @version $Id: $
-* @copyright (c) 2011 phpBB Group
-* @author 2011-03-14 - Maël Soucaze
-* @license http://opensource.org/licenses/gpl-license.php GNU Public License
-*
-*/
+ * bbdkp acp language file for raids acp - french
+ * 
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
+ * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * 
+ */
 
 /**
-* DO NOT CHANGE
+* @ignore
 */
 if (!defined('IN_PHPBB'))
 {
 	exit;
 }
 
+// Create the lang array if it does not already exist
 if (empty($lang) || !is_array($lang))
 {
 	$lang = array();
@@ -37,10 +34,10 @@ if (empty($lang) || !is_array($lang))
 // in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
 
 $lang = array_merge($lang, array(
+	'ACP_DKP_RAIDS'		=> 'Gestion de Raid',
+	'ACP_DKP_RAID_ADD'	=> 'Ajouter Raid',
 	'ACP_DKP_RAID_EDIT'	=> 'Edition Raid',
-	'ACP_DKP_RAIDS'	=> 'Gestion des Raids',
-	'ACP_DKP_RAID_ADD'	=> 'Ajouter Raid manuellement',
-	'ACP_DKP_RAID_LIST'	=> 'Liste des Raids',
+	'ACP_DKP_RAID_LIST'	=> 'Liste de Raids',
 ));
 
 ?>

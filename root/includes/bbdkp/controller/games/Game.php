@@ -101,47 +101,33 @@ class Game extends \bbdkp\admin\Admin
 			\trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALL_GAME_FAILURE'], $this->name ) . E_USER_WARNING );
 		}
 
-		$db->sql_transaction ( 'begin' );
-
-		if(! array_key_exists($this->game_id, $this->preinstalled_games))
+		if(array_key_exists($this->game_id, $this->preinstalled_games))
 		{
+			//game id is one of the preinstallable games
+			$this->name= $this->preinstalled_games[$this->game_id];
+		}
+		else
+		{
+			//custom game, this is dispatched to dummy game installer
+			$this->game_id = 'custom';
 			if ($this->name == '')
 			{
 				$this->name='Custom';
 			}
 		}
-		else
+
+		//fetch installer
+		if (!class_exists('\bbdkp\controller\games\install_' . $this->game_id))
 		{
-			//game id is one of the preinstallable games
-			$this->name= $this->preinstalled_games[$this->game_id];
-
-			//fetch installer
-			if (!class_exists('\bbdkp\controller\games\install_' . $this->game_id))
-			{
-				include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_' . $this->game_id . '.' . $phpEx);
-			}
-
-			//build name of the namespaced game installer class
-			$classname = '\bbdkp\controller\games\install_' . $this->game_id;
-			$installgame = new $classname;
-
-			//call the game installer
-			$installgame->install();
+			include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_' . $this->game_id . '.' . $phpEx);
 		}
 
-		//insert a new entry in the game table
-		$data = array (
-				'game_id' => ( string ) $this->game_id,
-				'game_name' => ( string ) $this->name,
-				'status' => 1
-				);
+		//build name of the namespaced game installer class
+		$classname = '\bbdkp\controller\games\install_' . $this->game_id;
+		$installgame = new $classname;
 
-		$sql = 'INSERT INTO ' . GAMES_TABLE . ' ' . $db->sql_build_array ( 'INSERT', $data );
-		$db->sql_query ( $sql );
-
-		$this->id = $db->sql_nextid ();
-
-		$db->sql_transaction ( 'commit' );
+		//call the game installer
+		$installgame->install($this->game_id, $this->name );
 
 		//
 		// Logging
