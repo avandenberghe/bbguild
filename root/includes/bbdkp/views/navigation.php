@@ -20,7 +20,6 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 // get inputs
 $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
 
-
 $this->show_all = ( request_var ( 'show', request_var ( 'hidden_show', '' )) == $user->lang['ALL']) ? true : false;
 
 //include the guilds class
@@ -85,7 +84,7 @@ $this->filter= request_var('filter', $user->lang['ALL']);
 $this->query_by_armor = false;
 $this->query_by_class = false;
 
-
+$this->armor($page);
 if ($this->filter!= $user->lang['ALL'])
 {
 	if (array_key_exists ( $this->filter, $this->armor_type ))
@@ -104,7 +103,6 @@ if ($this->filter!= $user->lang['ALL'])
 		$this->query_by_armor = false;
 	}
 }
-$this->armor($page);
 
 $this->query_by_pool = false;
 $this->dkpsys_id = 0;

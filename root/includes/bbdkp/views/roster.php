@@ -110,7 +110,7 @@ elseif($mode == 1)
 {
 	//display grid
 	$classgroup = $members->get_classes($this->filter, $this->query_by_armor,
-		$this->class_id, $this->guild_id,  $this->race_id, $level1, $level2);
+		$this->class_id, $this->game_id, $this->guild_id,  $this->race_id, $level1, $level2);
 
 	if(count($classgroup) > 0)
 	{

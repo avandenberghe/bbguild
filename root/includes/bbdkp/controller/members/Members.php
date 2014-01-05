@@ -1583,19 +1583,20 @@ class Members extends \bbdkp\admin\Admin
 
 	/**
 	 * Frontview : gets all classes in roster selection
-	 * required class game property to be set before call
 	 *
-	 * @param int $guild_id optional guild id
-	 * @param int $classid optional class id
-	 * @param int $race_id optional race id
-	 * @param int $level1 optional level1 (default 1)
-	 * @param int $level2 optional level2 (default 200)
+	 * @param string $filter
+	 * @param bool $query_by_armor
+	 * @param int $classid
+	 * @param string $game_id
+	 * @param int $guild_id
+	 * @param int $race_id
+	 * @param int $level1
+	 * @param int $level2
 	 * @return array
-	 *
 	 */
-	public function get_classes($filter = '', $query_by_armor, $classid = 0, $guild_id = 0,  $race_id = 0, $level1=0, $level2=200)
+	public function get_classes($filter, $query_by_armor, $classid, $game_id, $guild_id = 0,  $race_id = 0, $level1=0, $level2=200)
 	{
-		global $db, $config;
+		global $db, $user, $config;
 		$sql_array = array(
 				'SELECT'    => 'c.class_id, c1.name as class_name, c.imagename, c.colorcode' ,
 				'FROM'      => array(
@@ -1609,7 +1610,7 @@ class Members extends \bbdkp\admin\Admin
     							AND r.guild_id = m.member_guild_id
     							AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
     							AND c1.attribute_id =  c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'
-    							AND (c.game_id = '" . $db->sql_escape($this->game_id) . "')
+    							AND (c.game_id = '" . $db->sql_escape($game_id) . "')
     							AND c1.game_id=c.game_id
 
     							",
@@ -1618,7 +1619,7 @@ class Members extends \bbdkp\admin\Admin
 		);
 
 		// filters
-		if ($filter != '' && $query_by_armor == true)
+		if ($filter != $user->lang['ALL'] && $query_by_armor == true)
 		{
 			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $filter ) . "'";
 		}
@@ -1628,7 +1629,7 @@ class Members extends \bbdkp\admin\Admin
 			$sql_array['WHERE'] .= " AND m.member_guild_id =  " . $guild_id;
 		}
 
-		if($classid > 0)
+		if($filter != $user->lang['ALL']  && $classid > 0)
 		{
 			$sql_array['WHERE'] .= " AND m.member_class_id =  " . $classid;
 		}
@@ -1647,8 +1648,6 @@ class Members extends \bbdkp\admin\Admin
 		{
 			$sql_array['WHERE'] .= " AND m.member_level <=  " . $level2;
 		}
-
-
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
