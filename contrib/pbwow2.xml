@@ -37,8 +37,7 @@
 	</header>
 	<action-group>
 		<copy>
-			<file from="root/styles/pbwow2/theme/*.*" to="styles/pbwow2/theme/*.*"/>
-			<file from="root/styles/pbwow2/template/dkp/*.*" to="styles/pbwow2/template/dkp/*.*"/>
+			<file from="root/styles/pbwow2/*.*" to="styles/pbwow2/*.*"/>
 		</copy>
 		<open src="styles/pbwow2/template/overall_header.html">
 			<edit>
@@ -92,8 +91,5 @@
 ]]></action>
 			</edit>
 		</open>
-		<diy-instructions lang="en">purge the cache and refresh theme<![CDATA[]]></diy-instructions>
-		<diy-instructions lang="fr">purge the cache and refresh theme<![CDATA[]]></diy-instructions>
-		<diy-instructions lang="de">purge the cache and refresh theme<![CDATA[]]></diy-instructions>
 </action-group>
 </mod>

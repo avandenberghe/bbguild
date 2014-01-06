@@ -114,9 +114,5 @@ function pop_aboutbbdkp()
 ]]></action>
 			</edit>
 		</open>
-
-		<diy-instructions lang="en">purge the cache and refresh theme<![CDATA[]]></diy-instructions>
-		<diy-instructions lang="fr">purge the cache and refresh theme<![CDATA[]]></diy-instructions>
-		<diy-instructions lang="de">purge the cache and refresh theme<![CDATA[]]></diy-instructions>
 </action-group>
 </mod>
