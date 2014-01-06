@@ -1023,6 +1023,11 @@ $versions = array(
 	//alpha3
 			),
 
+	'1.3.0-b1' => array(
+	//beta1 06-01-2014
+	),
+
+
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
@@ -1033,7 +1038,7 @@ include($phpbb_root_path . 'umil/umil_auto.' . $phpEx);
  *
  * @param string $text
  * @return array
- *   @package bbdkp
+ * @package bbdkp
  */
 function encode_message($text)
 {
