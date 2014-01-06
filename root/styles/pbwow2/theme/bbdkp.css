@@ -38,6 +38,8 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 
 .portalmenu li {
 	text-decoration: none;
+	padding-bottom: 1px;
+	padding-top: 0px;
 }
 
 .portalmenu a {
