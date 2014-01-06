@@ -1,19 +1,35 @@
-<div style="float: left; width:49%; white-space:nowrap;">
-<h2 style ="white-space:nowrap;"><strong>{L_MENU_ITEMHIST}</strong></h2>
+<div class="panel">
+<div class="inner">
+<span class="corners-top"><span></span></span>
+
+<ul class="topiclist" style="padding: 4px">
+<li class="header">
+<dl>
+<dt style="padding: 0px 0px 2px; white-space: nowrap; margin-bottom: 0px; margin-top: 0px; display:inline;width:auto;text-align:center;">
+<div style="float: left; width:49%; white-space:nowrap; text-align: left;">
+<h4 class="bbdkpheader">{L_MENU_ITEMHIST}</h4>
+</div>
+</dt>
+</dl>
+</li>
+</ul>
+
+<div class="navbar" style="clear:both;">
+<span class="corners-top"><span></span></span>
+	<form method="post" action="{F_LISTITEM}">
+	<div style="float: right; width:49%; white-space:nowrap; text-align: right;">
+	<div style="text-align:right; white-space:nowrap;" >{L_POOL}:
+	<select name="pool" class="input" onchange="javascript:form.submit();">
+	<!-- BEGIN pool_row -->
+	<option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
+	<!-- END pool_row -->
+	</select>
+	</div>
+	</div>
+	</form>
+<span class="corners-bottom"><span></span></span>
 </div>
 
-<form method="post" action="{F_LISTITEM}">
-<div style="float: right; width:49%; white-space:nowrap; text-align: right;">
-<br/>
-<div style="text-align:right; white-space:nowrap;" >{L_POOL}:
-<select name="pool" class="input" onchange="javascript:form.submit();">
-<!-- BEGIN pool_row -->
-<option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
-<!-- END pool_row -->
-</select>
-</div>
-</div>
-</form>
 <hr />
 
 <!-- IF ITEM_PAGINATION -->
@@ -100,3 +116,8 @@
 		<span>{ITEM_PAGINATION}<br /><br /></span>
 </div>
 <!-- ENDIF -->
+
+
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>

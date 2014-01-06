@@ -44,7 +44,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	background-image: url("{T_THEME_PATH}/images/dkp/menu.png");
 	background-position: 2% center;
 	background-repeat: no-repeat;
-	font-size: 90%;
+	font-size: 105%;
 	font-weight: bold;
 	display: block;
 	margin-bottom: 0px;
@@ -52,10 +52,17 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
 	text-decoration: none;
 }
 
-.portaltextglow
-{
-	text-shadow: 1px 0.5px 0.5px #FBB917;
-	filter: progid:DXImageTransform.Microsoft.Shadow(color= #FBB917,direction=45);
+.bbdkpheader {
+	color:#A60000;
+}
+
+ .bbdkp {
+	font-size:1em;
+	width: 80%;
+	border:0px !important;
+	border-spacing: 0px;
+	cellspacing:0px;
+	cellpadding:0px;
 }
 
 /* Bossprogress block Colors

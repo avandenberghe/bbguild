@@ -1,468 +1,132 @@
 <!--[if lte IE 8]><script type="text/javascript" src="{T_TEMPLATE_PATH}/dkp/flot/excanvas.min.js"></script><![endif]-->
-<script src="{T_TEMPLATE_PATH}/dkp/flot/jquery.flot.js" type="text/javascript"></script> 
-<script src="{T_TEMPLATE_PATH}/dkp/flot/jquery.flot.valuelabels.js" type="text/javascript"></script> 
-<script src="{T_TEMPLATE_PATH}/dkp/flot/jquery.flot.pie.min.js" type="text/javascript"></script> 
+<script src="{T_TEMPLATE_PATH}/dkp/flot/jquery.flot.js" type="text/javascript"></script>
+<script src="{T_TEMPLATE_PATH}/dkp/flot/jquery.flot.pie.min.js" type="text/javascript"></script>
 <!-- Credits : the Stats page uses Flot from http://code.google.com/p/flot/ -->
 
-<h2 style = "white-space:nowrap;"><!-- IF S_EVENT_IMAGE_EXISTS --><img src="{IMAGEPATH}" alt="{EVENTNAME}" /><!-- ENDIF --> {L_RAID_ON}</h2>
-<hr />
-<div class="post">
 
-<div>
-
-<div style="float: left; width: 60%;">
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-    <td style="width:15%; white-space:nowrap; text-align:center;" class="bg1"><strong>{L_RAIDVALUE}</strong>: <span class="positive">{RAIDVALUE}</span></td>
 
-    <!-- IF S_SHOWTIME -->
-    <td style="width:15%; white-space:nowrap; text-align:center;" class="bg1"><strong>{L_TIME_BONUS}</strong>: <span class="positive">{TIMEVALUE}</span></td>
-    <!-- ENDIF -->
+<ul class="topiclist" style="padding: 4px">
+<li class="header">
 
-    <td style="width:15%; white-space:nowrap; text-align:center;" class="bg1">
-    <!-- IF S_SHOWZS -->
-        <strong>{L_ZEROSUM}</strong>: <span class="positive">{ZSVALUE}</span>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWDECAY -->
-    <strong>{L_RAIDDECAY}</strong>: <span class="negative">{RAIDDECAY}</span>
-    <!-- ENDIF -->
-    </td>
-	<td class="bg1"></td>
-    <!-- IF S_SHOWEPGP -->
-    <td style="width:18%; white-space:nowrap; text-align:center;" class="bg2"><h4><strong>Net {L_EARNED} {L_EP}</strong>: <span class="positive">{TOTAL}</span></h4></td>
-    <!-- ELSE -->
-    <td style="width:18%; white-space:nowrap; text-align:center;" class="bg2"><h4><strong>{L_TOTAL} {L_EARNED} {L_DKP}</strong>: <span class="positive">{TOTAL}</span></h4></td>
-  	<!-- ENDIF -->
+<h4 class="bbdkpheader"> <!-- IF S_EVENT_IMAGE_EXISTS --><img src="{IMAGEPATH}" alt="{EVENTNAME}" /><!-- ENDIF --> {L_RAID_ON}</h4>
+</li>
+</ul>
 
-</tr>
-<tr>
-    <td style="width:18%; white-space:nowrap; text-align:center;" class="bg1"><strong>{L_SPENT}</strong>: <span class="negative">{ITEM_VALUE}</span></td>
-    
-    <!-- IF S_SHOWTIME -->
-    <td style="width:15%; white-space:nowrap; text-align:center;" class="bg1"></td>
-    <!-- ENDIF -->
-    
-    <td style="width:15%; white-space:nowrap; text-align:center;" class="bg1">
-    <!-- IF S_SHOWZS -->
-        
-	<!-- ENDIF -->
-	<!-- IF S_SHOWDECAY -->	        
-   		<strong>{L_ITEMDECAY}</strong>: <span class="positive">{ITEMDECAYVALUE}</span>
-	<!-- ENDIF -->
-	</td>
-	
-		
-	<td style="width:18%; white-space:nowrap; text-align:center;" class="bg2">
-	<!-- IF S_EPGP -->
-	<h4><strong>{L_SPENT} </strong>: <span class="negative">{ITEMTOTAL}</span></h4>
-	<!-- ELSE -->
-    <h4><strong>{L_TOTAL} {L_SPENT} {POINTNAME}</strong>: <span class="negative">{ITEMTOTAL}</span></h4>
-	<!-- ENDIF -->
-	</td>
-</tr>
+<div style="float: left; width: 100%;">
 
-<tr>
-    <td class="bg1"></td>
-    <td class="bg1"></td>
-    <td class="bg1"></td>
-	<td style="width:18%; white-space:nowrap; text-align:center;" class="bg2">
-    <h4><strong>{L_TOTAL}</strong>: <span class="negative">{RAIDNET}</span></h4>
-	</td>
-</tr>
-
-
-
-
-</table>
-<span class="corners-bottom"><span></span></span>
-</div>
-</div>
-</div>
-
-<div style="float: right; width: 39%;">
+<h3>{L_RAID}</h3>
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
-<table width="100%" border="0" cellspacing="0" cellpadding="0">
-  <tr>
-	<td class="bg1" style="width:33%"><h4>{L_RAIDSTART}: <strong>{RAIDSTART}</strong></h4></td>
-	<td class="bg1" style="width:33%"><h4>{L_RAIDEND}: <strong>{RAIDEND}</strong></h4></td>
-	<td class="bg1" style="width:33%"><h4>{L_RAIDDURATION}: <strong>{DURATION}</strong></h4></td>
-</tr>
-<tr>
-	<td class="bg1" style="width:33%">{RAID_ADDED_BY}</td>
-	<td></td>
-	<td></td>
-  </tr>
-<tr>
-	<td class="bg1" style="width:33%">{RAID_UPDATED_BY}</td>
-	<td class="bg1"></td>
-	<td class="bg1"></td>
-  </tr>
-
-
-</table>
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    {RAID_ADDED_BY}&nbsp;:&nbsp;{RAID_UPDATED_BY}
+    </div>
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    {L_RAIDSTART}&nbsp;:&nbsp;<strong>{RAIDSTART}</strong>
+    </div>
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    {L_RAIDEND}&nbsp;:&nbsp;<strong>{RAIDEND}</strong>
+    </div>
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    {L_RAIDDURATION}&nbsp;:&nbsp;<strong>{DURATION}</strong>
+    </div>
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
+
+<h3>{L_DKP}</h3>
+<div class="panel">
+<div class="inner">
+<span class="corners-top"><span></span></span>
+
+
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    {L_RAIDVALUE}&nbsp;:&nbsp;<span class="positive">{RAIDVALUE}</span>
+    </div>
+     <!-- IF S_SHOWTIME -->
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    {L_TIME_BONUS}&nbsp;:&nbsp;<span class="positive">{TIMEVALUE}</span>
+    </div>
+    <!-- ENDIF -->
+
+     <!-- IF S_SHOWZS -->
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    {L_ZEROSUM}&nbsp;:&nbsp;<span class="positive">{ZSVALUE}</span>
+    </div>
+    <!-- ENDIF -->
+
+     <!-- IF S_SHOWDECAY -->
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    {L_RAIDDECAY}&nbsp;:&nbsp;<span class="negative">{RAIDDECAY}</span>
+    </div>
+    <!-- ENDIF -->
+
+     <!-- IF S_SHOWEPGP -->
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    <strong>Net {L_EARNED} {L_EP}</strong>&nbsp;:&nbsp; <span class="positive">{TOTAL}</span>
+    </div>
+     <!-- ELSE -->
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    <h4><strong>{L_TOTAL} {L_EARNED} {L_DKP}</strong>&nbsp;:&nbsp; <span class="positive">{TOTAL}</span></h4>
+    </div>
+    <!-- ENDIF -->
+<div style="clear: both;"></div>
+
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    {L_SPENT}&nbsp;:&nbsp;<span class="negative">{ITEM_VALUE}</span>
+    </div>
+
+     <!-- IF S_SHOWDECAY -->
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    {L_ITEMDECAY}&nbsp;:&nbsp;<span class="positive">{ITEMDECAYVALUE}</span>
+    </div>
+    <!-- ENDIF -->
+
+     <!-- IF S_SHOWEPGP -->
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    <strong>Net {L_SPENT} {L_GP}</strong>&nbsp;:&nbsp; <span class="negative">{ITEMTOTAL}</span>
+    </div>
+     <!-- ELSE -->
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    <h4><strong>{L_TOTAL} {L_SPENT} {POINTNAME}</strong>&nbsp;:&nbsp; <span class="negative">{ITEMTOTAL}</span></h4>
+    </div>
+    <!-- ENDIF -->
+	<div style="clear: both;"></div>
+
+    <div style="width:25%; white-space:nowrap; text-align:center; float:left; margin-left: auto;" class="bg2">
+    <h4>{L_TOTAL}&nbsp;:&nbsp;<span class="negative">{RAIDNET}</span></h4>
+	</div>
+
+<span class="corners-bottom"><span></span></span>
+</div>
 </div>
 
-<div style="clear: both;">
+</div>
+
+<h3>{L_NOTE}</h3>
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
 <strong>{L_NOTE} : </strong> {RAID_NOTE}
-
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
-</div>
 
-
-</div>
-
-<div style="clear: both;">
-
-<h2>{L_ATTENDEES}</h2>
-<div class="panel">
-<div class="inner">
-<span class="corners-top"><span></span></span>
-<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
- 
-  <!-- BEGIN attendees_row -->
-  <tr>
-    <!-- IF S_COLUMN0 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg2">{attendees_row.COLUMN0_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN1 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg1">{attendees_row.COLUMN1_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN2 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg2">{attendees_row.COLUMN2_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN3 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg1">{attendees_row.COLUMN3_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN4 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg2">{attendees_row.COLUMN4_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN5 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg1">{attendees_row.COLUMN5_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN6 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg2">{attendees_row.COLUMN6_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN7 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg1">{attendees_row.COLUMN7_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN8 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg2">{attendees_row.COLUMN8_NAME}</td><!-- ENDIF -->
-    <!-- IF S_COLUMN9 --><td style="width:{COLUMN_WIDTH}%; whitepace:nowrap;" class="bg1">{attendees_row.COLUMN9_NAME}</td><!-- ENDIF -->
-  </tr>
-  <!-- END attendees_row -->
-
-</table>
-<span class="corners-bottom"><span></span></span>
-</div>
-</div>
-</div>
-
-<div class="forumbg forumbg-table">
-<div class="inner">
-<span class="corners-inner-top"><span></span></span>
-<table class="table1" cellspacing="1">
-<thead>
-  <tr>
-    <th style="text-align:left; white-space: nowrap; width:7%" >{L_RACE}/{L_CLASS}</th>
-    <th style="text-align:left; width:25%"><a href="{F_RAID}&amp;o={O_NAME}">{L_NAME}</a></th>
-    <th style="text-align:right; white-space: nowrap; width:15%"><a href="{F_RAID}&amp;o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
-    <!-- IF S_SHOWTIME -->
-    <th style="text-align:right; white-space: nowrap; width:15%"><a href="{F_RAID}&amp;o={O_TIMEVALUE}">{L_TIME_BONUS}</a></th>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWZS -->
-    <th style="text-align:right; white-space: nowrap; width:15%"> <a href="{F_RAID}&amp;o={O_ZSVALUE}">{L_ZSVALUE}</a></th>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWDECAY -->
-    <th style="text-align:right; white-space: nowrap; width:15%" ><a href="{F_RAID}&amp;o={O_DECAYVALUE}">{L_DECAY}</a></th>
-    <!-- ENDIF -->
-    <th style="text-align:right; white-space: nowrap; width:15%" ><a href="{F_RAID}&amp;o={O_TOTALVALUE}">{L_TOTAL}</a></th>
-    
-  </tr>
-  </thead>
-<tfoot>
-  <tr style="color:white;">
-    <th></th>
-    <th class="footer">{LISTRAIDS_FOOTCOUNT}</th>
-    <th class="footer" style="text-align:right; white-space: nowrap; width:15%"> ={RAIDVALUE}</th>
-    <!-- IF S_SHOWTIME -->
-    <th class="footer" style="text-align:right; white-space: nowrap; width:15%">{TIMEVALUE}</th>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWZS -->
-    <th class="footer" style="text-align:right; white-space: nowrap; width:15%">{ZSVALUE}</th>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWDECAY -->    
-    <th class="footer" style="text-align:right; white-space: nowrap; width:15%">{RAIDDECAY}</th>
-    <!-- ENDIF -->
-    <th class="footer" style="text-align:right; white-space: nowrap; width:15%">{TOTAL}</th>
-  </tr>
-  </tfoot>  
-<tbody>
-  <!-- BEGIN raids_row -->
-  <!-- IF raids_row.S_ROW_COUNT is even --><tr class="bg1"><!-- ELSE --><tr class="bg2"><!-- ENDIF -->
-    <td  style="text-align:left;" ><!-- IF raids_row.S_RACE_IMAGE_EXISTS --><img src="{raids_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF raids_row.S_CLASS_IMAGE_EXISTS --><img src="{raids_row.CLASS_IMAGE}" alt="{raids_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></td>
-    <td style="text-align:left;"><strong><a style="color:{raids_row.COLORCODE}" href="{raids_row.U_VIEW_ATTENDEE}">{raids_row.NAME}</a></strong></td>
-    <td style="text-align:right;" class="positive">{raids_row.RAIDVALUE}</td>
-    <!-- IF S_SHOWTIME -->
-    <td style="text-align:right;" class="positive">{raids_row.TIMEVALUE}</td>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWZS -->
-    <td style="text-align:right;" class="positive">{raids_row.ZSVALUE}</td>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWDECAY -->
-    <td style="text-align:right;" class="negative">{raids_row.DECAYVALUE}</td>
-    <!-- ENDIF -->
-    <td style="text-align:right;" class="positive">{raids_row.TOTAL}</td>
-  </tr>
-  <!-- END raids_row -->
-  </tbody>
-
-</table>
-  
-<span class="corners-inner-bottom"><span></span></span>
-</div>
-</div>
-
-
-
+<br />
+<!-- INCLUDE dkp/module/viewraid_attendees.html -->
+<br />
 <!-- IF S_SHOWITEMPANE -->
-<br />
-<h2>{L_ITEMS}</h2>
-<div class="forumbg forumbg-table">
-<div class="inner">
-<span class="corners-inner-top"><span></span></span>
-
-<table class="table1"  cellspacing="1">
-<thead>
-  <tr>
-    <th style="text-align:left; width:7%; white-space: nowrap;">{L_CLASS}</th>
-    <th style="text-align:left; width:25%; white-space: nowrap;"><a href="{F_RAID}&amp;ui={O_BUYER}&amp;">{L_NAME}</a></th>
-    <th style="text-align:left; width:25%; white-space: nowrap;"><a href="{F_RAID}&amp;ui={O_ITEMNAME}">{L_ITEM}</a></th>
-    <th style="text-align:right; width:15%; white-space: nowrap;">{L_ITEMVALUE}</th>
-    <!-- IF S_SHOWZS -->
-    <th style="text-align:right; width:5%; white-space: nowrap;">zs</th>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWDECAY -->    
-    <th style="text-align:right; width:15%; white-space: nowrap;">{L_ITEMDECAY}</th>
-    <!-- ENDIF -->
-    <th style="text-align:right; width:15%; white-space: nowrap;"><a href="{F_RAID}&amp;ui={O_ITEMTOTAL}">{L_ITEMTOTAL}</a></th>
-  </tr>
-  </thead>
-<tfoot>
-  <tr  style="color:white;">
-    <th class="footer" colspan="2" >{ITEM_FOOTCOUNT}</th>
-    <th class="footer"></th>
-    <th class="footer" style="text-align:right;">{ITEM_VALUE}</th>
-    <!-- IF S_SHOWZS -->
-    <th class="footer"></th>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWDECAY --> 
-    <th class="footer" style="text-align:right; white-space: nowrap;">{ITEMDECAYVALUE}</th>
-    <!-- ENDIF -->
-    <th class="footer" style="text-align:right; white-space: nowrap;" >{ITEMTOTAL}</th>
-  </tr>
-  </tfoot>
-  <tbody>
-  <!-- BEGIN items_row -->
-  <!-- IF items_row.S_ROW_COUNT is even --><tr class="bg1"><!-- ELSE --><tr class="bg2"><!-- ENDIF -->
-    <td  style="text-align:left;" ><!-- IF items_row.S_RACE_IMAGE_EXISTS --><img src="{items_row.RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE -->&nbsp;<!-- ENDIF --><!-- IF items_row.S_CLASS_IMAGE_EXISTS --><img src="{items_row.CLASS_IMAGE}" alt="{items_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></td>
-    <td style="text-align:left;"><strong><a style="color:{items_row.COLORCODE}" href="{items_row.U_VIEW_BUYER}">{items_row.BUYER}</a></strong></td>
-    <td style="text-align:left;"><a href="{items_row.U_VIEW_ITEM}">{items_row.ITEMNAME}</a></td>
-    <td style="text-align:right;" class="positive">{items_row.ITEMVALUE}</td>
-    <!-- IF S_SHOWZS -->
-    <td style="text-align:right;" class="positive"> <input type="checkbox" READONLY DISABLED name="item[{items_row.ITEM_ID}]" value="1" {items_row.ITEM_ZS} />  </td>
-    <!-- ENDIF -->
-    <!-- IF S_SHOWDECAY -->      
-    <td style="text-align:right;" class="negative">{items_row.DECAYVALUE}</td>
-    <!-- ENDIF -->
-    <td style="text-align:right;" class="positive">{items_row.TOTAL}</td>
-  </tr>
-  <!-- END items_row -->
-  </tbody>
-
-</table>
-<span class="corners-inner-bottom"><span></span></span>
-</div>
-</div>
-
-<!-- ENDIF -->
-
-<br />
-
-<h2>{L_LOOTDIST_CLASS}</h2>
-
-<div class="panel">
-<div class="inner">
-<span class="corners-top"><span></span></span>
-
-<!-- IF .class_row -->
-<div class="forabg" style="width:50%; float:left;">
-<div class="inner">
-
-<span class="corners-inner-top"><span></span></span>
-<table class="table1" width="100%" border="0" cellspacing="1" cellpadding="0">
-<thead>
-<tr>
-<th style="color:white; font-size :9pt; text-align: left;">{L_CLASS}</th>
-<th colspan="2" style="color:white; font-size :9pt; text-align: center;"># {L_MEMBERS}</th>
-
-<th style="color:white; font-size :9pt; text-align: center;"># {L_LOOTS}</th>
-<th style="color:white; font-size :9pt; text-align: center; text-align: center;">% {L_LOOTS}</th>
-<th style="color:white; font-size :9pt; text-align: center;"></th>
-
-</tr>
-</thead>
-<tfoot>
-
-<tr>
-<th style="color:white; font-size :9pt; text-align: left;"></th>
-<th colspan="2" style="color:white; font-size :9pt; text-align: center;">{TOTAL_MEMBERS}</th>
-
-<th style="color:white; font-size :9pt; text-align: center;">{TOTAL_DROPS}</th>
-<th style="color:white; font-size :9pt; text-align: center; text-align: center;"></th>
-<th style="color:white; font-size :9pt; text-align: center;">{CLASSPCTCUMUL}</th>
-
-</tr>
-</tfoot>
-<tbody>
-<!-- BEGIN class_row -->  
-   <!-- IF class_row.S_ROW_COUNT is even -->
-   <tr class="bg1">
-   <!-- ELSE -->
-   <tr class="bg2">
-   <!-- ENDIF -->
-	  <td style="width:20%; white-space: nowrap;"><!-- IF class_row.S_CLASS_IMAGE_EXISTS --><img src="{class_row.CLASS_IMAGE}" alt="abc" /><!-- ELSE -->&nbsp;<!-- ENDIF -->
-	  &nbsp;<a style="white-space: nowrap; color:{class_row.COLORCODE}" href="{class_row.U_LIST_MEMBERS}"><strong>{class_row.CLASS_NAME}</strong></a> </td>
-	  <td style="width:7.5%; text-align:center;">{class_row.CLASS_COUNT}</td>
-	  <td style="width:7.5%; text-align:center;">{class_row.CLASS_PCT}</td>
-	  <td style="width:7.5%; text-align:center;">{class_row.LOOT_COUNT}</td>
-	  <td style="width:7.5%; text-align:center;">{class_row.CLASS_DROP_PCT_STR}</td>
-	  <td style="width:7.5%; text-align:center;"><span class= "{class_row.C_LOOT_FACTOR}">{class_row.LOOTOVERRUN}</span></td>
-  </tr>
-  
-<!-- END class_row -->
-</tbody>
-</table>
-
-<span class="corners-inner-bottom"><span></span></span>
-</div>
-</div>
-
-<div class="panel" style="width:45%; float:left;">
-<div class="inner">
-<span class="corners-inner-top"><span></span></span>
-
-<div>
-<div class="inner">
-<span class="corners-top"><span></span></span>
-<h4>% {L_MEMBERS}</h4>
-<div id="classdropgraphs" class="graph"></div>
-<span class="corners-inner-bottom"><span></span></span>
-</div>
-</div>
-
-<div>
-<div class="inner">
-<span class="corners-top"><span></span></span>
-<h4>% {L_LOOTS}</h4>
-<div id="classdropgraphs2" class="graph"></div>
-<span class="corners-inner-bottom"><span></span></span>
-</div>
-</div>
-
-<script type="text/javascript">
-//<![CDATA[
-jQuery(function () {
-	var plotarea = jQuery("#classdropgraphs");  
-	plotarea.css("height", "200px");  
-	plotarea.css("width", "100%");
-	var plotarea2 = jQuery("#classdropgraphs2");  
-	plotarea2.css("height", "200px");  
-	plotarea2.css("width", "100%");
-
-	var classpct = [<!-- BEGIN class_row --> {label: "{class_row.CLASS_NAME}", data : {class_row.CLASS_PCT}, color:"{class_row.COLORCODE}" }, <!-- END class_row -->];
-	var plot = jQuery.plot( plotarea ,
-	classpct, 
-	{
-		series: {
-				pie: {
-						show: true,
-						combine: {
-		                    color: '#999',
-		                    threshold: 0.02
-		                },
-						radius: 100,
-						label: {
-		                    show: true,
-		                    radius: 1,
-		                    formatter: function(label, series){
-		                        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-		                    },
-		                    background: { 
-			                    opacity: 0.5,
-		                    	color: '#000' },
-		                    threshold: 0.02
-		                    
-		                }
-				}
-		},
-	 	legend: {
-            show: false
-        },
-		grid: {
-    		hoverable: true 
-		},
-	});
-	
-	var classdroppct = [<!-- BEGIN class_row --> {label: "{class_row.CLASS_NAME}" , data : {class_row.CLASS_DROP_PCT}, color : "{class_row.COLORCODE}" } <!-- IF ! class_row.S_LAST_ROW -->, <!-- ENDIF --> <!-- END class_row -->];
-	var plot = jQuery.plot( plotarea2 ,
-	classdroppct, 
-	{
-		series: {
-				pie: {
-						show: true,
-						combine: {
-		                    color: '#999',
-		                    threshold: 0.05
-		                },
-						radius: 100,
-						label: {
-		                    show: true,
-		                    radius: 1,
-		                    formatter: function(label, series){
-		                        return '<div style="font-size:8pt;text-align:center;padding:2px;color:white;">'+label+'<br/>'+Math.round(series.percent)+'%</div>';
-		                    },
-		                    background: { 
-			                    opacity: 0.5,
-		                    	color: '#000' },
-		                    threshold: 0.02
-		                    
-		                }
-				}
-		},
-	 	legend: {
-            show: false
-        },
-		grid: {
-    		hoverable: true 
-		},
-	});
-	
-});
-//]]>
-</script>
-
-
-
-<span class="corners--inner-bottom"><span></span></span>
-</div>
-</div>
-
-
+	<!-- INCLUDE dkp/module/viewraid_loot.html -->
+	<!-- INCLUDE dkp/module/viewraid_loot_classdist.html -->
 <!-- ELSE -->
-<p class= "error">{L_NO_DATA}</p>
+<br />
+<h3>{L_ITEMS}</h3>
+<p class= "error">{L_NO_LOOT}</p>
 <!-- ENDIF -->
 
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
-
-<div style="clear:both;"></div>
-
-
-</div>  
