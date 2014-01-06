@@ -6,12 +6,12 @@
 	<header>
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="en"><![CDATA[bbDKP - pbWoW 2.0.7]]></title>
-		<title lang="de"><![CDATA[bbDKP - pbWoW 2.0.7]]></title>
-		<title lang="fr"><![CDATA[bbDKP - pbWoW 2.0.7]]></title>
-		<description lang="en"><![CDATA[adds bbDKP-pbWoW]]></description>
-		<description lang="fr"><![CDATA[ajoute bbDKP-pbWoW]]></description>
-		<description lang="de"><![CDATA[installiert bbDKP-pbWoW]]></description>
+		<title lang="en"><![CDATA[bbDKP - pbwow2 2.0.7]]></title>
+		<title lang="de"><![CDATA[bbDKP - pbwow2 2.0.7]]></title>
+		<title lang="fr"><![CDATA[bbDKP - pbwow2 2.0.7]]></title>
+		<description lang="en"><![CDATA[adds bbDKP-pbwow2]]></description>
+		<description lang="fr"><![CDATA[ajoute bbDKP-pbwow2]]></description>
+		<description lang="de"><![CDATA[installiert bbDKP-pbwow2]]></description>
 		<author-notes lang="en"><![CDATA[requires bbDKP 1.3.0-b1]]></author-notes>
 		<author-notes lang="fr"><![CDATA[nécessite bbDKP 1.3.0-b1]]></author-notes>
 		<author-notes lang="de"><![CDATA[benötigt bbDKP 1.3.0-b1]]></author-notes>
@@ -29,15 +29,18 @@
 			<time>60</time>
 			<target-version>3.0.12</target-version>
 		</installation>
+		<link-group>
+			<link type="parent" lang="en" href="../install.xml">Install instructions</link>
+			<link type="parent" lang="fr" href="../install.xml">Manue d'installation</link>
+			<link type="parent" lang="de" href="../install.xml">Installations-Anleitung</link>
+    	</link-group>
 	</header>
 	<action-group>
 		<copy>
-			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
-			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
-			<file from="root/styles/prosilver/theme/jquery-ui-1.8.4.custom.css" to="styles/prosilver/theme/jquery-ui-1.8.4.custom.css"/>
-			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
+			<file from="root/styles/pbwow2/theme/*.*" to="styles/pbwow2/theme/*.*"/>
+			<file from="root/styles/pbwow2/template/dkp/*.*" to="styles/pbwow2/template/dkp/*.*"/>
 		</copy>
-		<open src="styles/prosilver/template/overall_header.html">
+		<open src="styles/pbwow2/template/overall_header.html">
 			<edit>
 				<find><![CDATA[</head>]]></find>
 				<action type="before-add"><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></action>
@@ -64,7 +67,7 @@
 
 		</open>
 
-		<open src="/styles/prosilver/template/overall_footer.html">
+		<open src="styles/pbwow2/template/overall_footer.html">
 			<edit>
 				<find><![CDATA[		<div class="copyright">{CREDIT_LINE}]]></find>
 				<action type="after-add"><![CDATA[
@@ -79,7 +82,7 @@
 				]]></action>
 		</edit>
 		</open>
-		<open src="/styles/prosilver/theme/stylesheet.css">
+		<open src="styles/pbwow2/theme/stylesheet.css">
 			<edit>
 				<comment lang="en"><![CDATA[bbdkp css]]></comment>
 				<comment lang="fr"><![CDATA[bbdkp css]]></comment>
@@ -89,8 +92,8 @@
 ]]></action>
 			</edit>
 		</open>
-		<diy-instructions lang="en"><![CDATA[]]></diy-instructions>
-		<diy-instructions lang="fr"><![CDATA[]]></diy-instructions>
-		<diy-instructions lang="de"><![CDATA[]]></diy-instructions>
+		<diy-instructions lang="en">purge the cache and refresh theme<![CDATA[]]></diy-instructions>
+		<diy-instructions lang="fr">purge the cache and refresh theme<![CDATA[]]></diy-instructions>
+		<diy-instructions lang="de">purge the cache and refresh theme<![CDATA[]]></diy-instructions>
 </action-group>
 </mod>

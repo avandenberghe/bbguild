@@ -156,7 +156,8 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<link type="text" href="docs/INSTALL.html" lang="en">Read me</link>
 			<link type="text" href="docs/INSTALL.html" lang="fr">Lisez moi</link>
 			<link type="text" href="docs/INSTALL.html" lang="de">Lies mich</link>
-			<link type="template" href="pbwow.xml" lang="en">pbWoW</link>
+			<link type="template" href="contrib/prosilver.xml" lang="en">Prosilver</link>
+			<link type="template" href="contrib/pbwow2.xml" lang="en">PBWoW2</link>
 		</link-group>
 	</header>
 	<action-group>
@@ -194,10 +195,6 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
-			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
-			<file from="root/styles/prosilver/theme/jquery-ui-1.8.4.custom.css" to="styles/prosilver/theme/jquery-ui-1.8.4.custom.css"/>
-			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
 			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
 		<open src=".htaccess">
@@ -376,33 +373,6 @@ function get_bbchar($bbresult)
 }]]></action>
 		</edit>
 		</open>
-		<open src="/styles/prosilver/template/overall_footer.html">
-			<edit>
-				<comment lang="en"><![CDATA[Adding bbdkp credits link in overall_footer ]]></comment>
-				<comment lang="fr"><![CDATA[Ajout lien les crédits dans overall_footer ]]></comment>
-				<comment lang="de"><![CDATA[Zufügung Credits link in overall_footer ]]></comment>
-				<find><![CDATA[		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></find>
-				<action type="replace-with"><![CDATA[<script type="text/javascript">
-function pop_aboutbbdkp()
-{
-    search = window.open('aboutbbdkp.php','search','resizable=no,toolbar=no,status=no,height=400,width=680,screenX=50,screenY=25,left=100,top=70');
-    search.focus();
-}
-</script>
-<br/><a class="bbdkpcredits" onclick="javascript:pop_aboutbbdkp();" style="cursor:pointer;" onmouseover="style.textDecoration='underline';" onmouseout="style.textDecoration='none';">{L_BBDKP}</a>
-		<!-- IF TRANSLATION_INFO --><br />{TRANSLATION_INFO}<!-- ENDIF -->]]></action>
-		</edit>
-		</open>
-		<open src="/styles/prosilver/theme/stylesheet.css">
-			<edit>
-				<comment lang="en"><![CDATA[bbdkp css]]></comment>
-				<comment lang="fr"><![CDATA[bbdkp css]]></comment>
-				<comment lang="de"><![CDATA[bbdkp css]]></comment>
-				<find><![CDATA[@import url("colours.css");]]></find>
-				<action type="after-add"><![CDATA[@import url("bbdkp.css");
-]]></action>
-			</edit>
-		</open>
 		<open src="adm/style/overall_header.html">
 			<edit>
 				<comment lang="en"><![CDATA[adding jquery scripts to admin header]]></comment>
@@ -462,68 +432,27 @@ function pop_aboutbbdkp()
 		}]]></action>
 		</edit>
 		</open>
-		<open src="styles/prosilver/template/overall_header.html">
-			<edit>
-				<comment lang="en"><![CDATA[install bbDKP header - All in one file]]></comment>
-				<comment lang="fr"><![CDATA[installation du fichier header - tous en un]]></comment>
-				<comment lang="de"><![CDATA[Installation Headerdatei - Alles in einem]]></comment>
-				<find><![CDATA[</head>]]></find>
-				<action type="before-add"><![CDATA[<!-- INCLUDE dkp/dkpheader.html -->]]></action>
-			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[insert links in template]]></comment>
-				<comment lang="fr"><![CDATA[inserer liens dans template]]></comment>
-				<comment lang="de"><![CDATA[inseriere Links im Template]]></comment>
-				<find><![CDATA[<li class="icon-home"><a href="{U_INDEX}" accesskey="h">{L_INDEX}</a>]]></find>
-				<action type="before-add"><![CDATA[<li class="icon-home"><a href="{U_PORTAL}">{L_PORTAL}</a></li>
-				<li class="icon-faq"><a href="{U_DKP}">{L_DKPPAGE}</a><!-- BEGIN dkpnavlinks --> <strong>&#8249;</strong> <a href="{dkpnavlinks.U_DKPPAGE}">{dkpnavlinks.DKPPAGE}</a><!-- END dkpnavlinks --></li>
-				]]></action>
-			</edit>
-		</open>
-		<open src="styles/prosilver/template/viewtopic_body.html">
-			<edit>
-			<find><![CDATA[			</dd>
-		<!-- ENDIF -->
-		<!-- ENDIF -->
-]]></find>
-			<action type="after-add"><![CDATA[
-		<!-- BBDKP START -->
-		<dd>&nbsp;</dd>
-		<dd>&nbsp;</dd>
-		<dd>
-			<!-- BEGIN bbchar -->
-			<ul style="list-style: none;">
-				<li>
-				<!-- IF postrow.bbchar.BBRACEIMG --><img src="{postrow.bbchar.BBRACEIMG}" alt="{postrow.bbchar.RACE}" /> <!-- ENDIF -->
-				<!-- IF postrow.bbchar.BBCLASSIMG --><img src="{postrow.bbchar.BBCLASSIMG}" alt="{postrow.bbchar.CLASS}" /> <!-- ENDIF -->
-				<a href="{postrow.bbchar.U_VIEW_BBMEMBER}"><span style="white-space: nowrap; color:{postrow.bbchar.BBCOLORCODE}">{postrow.bbchar.BBMEMBERNAME}</span> </a>
-				<strong><!-- IF postrow.bbchar.BBLEVEL -->{postrow.bbchar.BBLEVEL}<!-- ENDIF --></strong>
-			</li>
-			</ul>
-			<!-- END bbchar -->
-		</dd>
-		<!-- BBDKP END -->
-]]></action>
-			</edit>
-		</open>
 		<php-installer><![CDATA[install/index.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[bbDKP 1.3.0-b1 was installed. You need to run the database installer now.
 1) Run bbDKP 1.3.0-b1 database installation/upgrade : install/index.php
 2) Rename the install folder.
 Please see the full installation, upgrade instructions and changelog here : /docs/install.html
-Note : Should you need to deactivate bbDKP you can open configdkp.php change  @define('EMED_BBDKP', true);  to  //@define('EMED_BBDKP', true);
-Enjoy ;)]]></diy-instructions>
+Note: automod will not install styles other than Prosilver. So if you use another style (deathwing/Jade/pbwow2...) then these styles have to be modded manually using the joined xml files in /contrib. or use the premodded styles from our download area.
+)]]></diy-instructions>
 		<diy-instructions lang="fr"><![CDATA[bbDKP 1.3.0-b1 a été installé. Il vous reste de lancer l'installateur database.
 le guide d’installation, mise à jour et Liste des changements : /docs/install.html
 Résumé des étapes de post-installation
 1) lance l’installateur ou m.a.j 1.3.0-b1 : install/index.php
 2) Renomme ou supprime le repertoire /install pour réactiver le forum.
-Note : Il est possible de désactiver le MOD en ouvrant configdkp.php et en changeant  @define('EMED_BBDKP', true);  à  //@define('EMED_BBDKP', true);
-Success ;)]]></diy-instructions>
+Note: automod n'installe qeulement sur Prosilver. si vous utilisez le style deathwing/Jade/pbwow l'installation doit se faire manuellement en utilisant les fichiers xml dans /contrib. sinon utilisez les styles premodifiés.
+]]></diy-instructions>
 		<diy-instructions lang="de"><![CDATA[bbDKP 1.3.0-b1 ist jetzt installiert. Jetzt nur noch die Datenbank Installierung :
 1) öffne install/index.php und klicke auf Install oder Update.
 2) lösche oder umbenenne das Installations-Verzeichnis „install"
-Notiz : bbDKP kan deaktiviert werden indem sie configdkp.php öffnen und @define('EMED_BBDKP', true); ändern nach  //@define('EMED_BBDKP', true);
-Viel Spaß ;)]]></diy-instructions>
+
+Nota: automod installiert sich sur auf Prosilver. falls sie also deathwing/Jade/pbwow haben soll die Installation handmässig erfolgen mit die xml dateien im /contrib, oder sie installieren den premodifizierten Style.
+
+
+]]></diy-instructions>
 </action-group>
 </mod>
