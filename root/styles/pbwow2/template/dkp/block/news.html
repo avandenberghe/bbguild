@@ -5,7 +5,10 @@
 
 <!-- BEGIN news_row -->
 
-<div class="postbody" style="width: 98%">
+<div class="postbody" style="width: 100%">
+
+<div class=" <!-- IF news_row.S_ROW_COUNT is odd -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
+<div style="padding:10px">
 <h4 class="first">{news_row.ATTACH_ICON_IMG}<a href="{news_row.LINK}"><strong>{news_row.HEADLINE}</strong></a></h4>
 
 <ul class="linklist">
@@ -15,7 +18,7 @@
 </li>
 <li class="rightside">{L_INFORUM}: <strong><a href="{news_row.U_VIEWFORUM}">{INFORUMNAME}</a></strong></li>
 </ul>
-
+</div>
 <div class="content"><br />
 {news_row.MESSAGE}
 </div>
@@ -39,6 +42,7 @@
 </div>
 
 <br />
+</div>
 <!-- END news_row -->
 
 
