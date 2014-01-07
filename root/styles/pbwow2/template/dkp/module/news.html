@@ -3,7 +3,7 @@
 	var form_name = 'postform';
 	var text_name = 'news_message';
 	var headline_name = 'news_headline';
-	
+
 	// Define the bbCode tags
 	var bbcode = new Array();
 	var bbtags = new Array('[b]','[/b]','[i]','[/i]','[u]','[/u]','[quote]','[/quote]','[code]','[/code]','[list]','[/list]','[list=]','[/list]','[img]','[/img]','[url]','[/url]','[flash=]', '[/flash]','[size=]','[/size]'<!-- BEGIN custom_tags -->, {custom_tags.BBCODE_NAME}<!-- END custom_tags -->);
@@ -43,22 +43,33 @@
 			return false;
 		}
 		return true;
-		
+
 	}
 //-->
 </script>
 <script type="text/javascript" src="{T_TEMPLATE_PATH}/editor.js"></script>
 
-<ul class="topiclist">
-<li class="header">
-<h2 style="white-space:nowrap;">{L_MENU_NEWS}</h2>
-</li>
-</ul>
 
+<div class="panel">
+<div class="inner">
+<span class="corners-top"><span></span></span>
+
+<ul class="topiclist" style="padding: 4px">
+	<li class="header">
+		<dl>
+			<dt style="padding: 0px 0px 2px; white-space: nowrap; margin-bottom: 0px; margin-top: 0px; display:inline;width:auto;text-align:center;">
+				<div style="float: left; width:49%; white-space:nowrap; text-align: left;">
+					<h4 class="bbdkpheader">{L_MENU_NEWS}</h4>
+				</div>
+			</dt>
+		</dl>
+	</li>
+</ul>
+<hr/>
 <form id="postform" method="post" action="{F_NEWS}" onsubmit="return checkForm(this);">
- 
+
 <!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
- 
+
 <!-- IF S_POST_ACTION -->
 <div class="panel bg2">
 <div class="inner">
@@ -140,14 +151,14 @@
 	<!-- IF S_SMILIES_ALLOWED and .smiley -->
 	<strong>{L_SMILIES}</strong><br />
 	<!-- BEGIN smiley -->
-		<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" 
+		<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}"
 		height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
 	<!-- END smiley -->
 	<!-- ENDIF -->
 	<!-- IF S_SHOW_SMILEY_LINK and S_SMILIES_ALLOWED-->
 	<br /><a href="{U_MORE_SMILIES}" onclick="window.open('{U_MORE_SMILIES}', '_phpbbsmilies', 'HEIGHT=350,resizable=yes,scrollbars=yes,WIDTH=300'); return false;">{L_MORE_SMILIES}</a>
 	<!-- ENDIF -->
-	
+
 	<!-- IF BBCODE_STATUS -->
 	<!-- IF .smiley --><hr /><!-- ENDIF -->
 	{BBCODE_STATUS}<br />
@@ -160,7 +171,7 @@
 	<!-- ENDIF -->
 </div>
 <div id="message-box">
-	<textarea name="news_message" id="news_message" rows="10" cols="60" tabindex="3" onselect="storeCaret(this);" 
+	<textarea name="news_message" id="news_message" rows="10" cols="60" tabindex="3" onselect="storeCaret(this);"
 	onclick="storeCaret(this);" onkeyup="storeCaret(this);" class="inputbox">{MESSAGE}</textarea>
 </div>
 </div>
@@ -170,7 +181,7 @@
 	{S_FORM_TOKEN}
 	<input type="submit" accesskey="s" tabindex="6" name="post" value="{L_SUBMIT}"  class="button1 default-submit-action" />&nbsp;
 </fieldset>
-		
+
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
@@ -178,7 +189,7 @@
 <!-- ELSE -->
 
 
-<!-- IF NEWS_PAGINATION -->  
+<!-- IF NEWS_PAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{NEWS_PAGINATION}<br /><br /> {COUNTNEWS}</span>
@@ -190,12 +201,10 @@
 		<div class="post-icon" title="{L_POST_TOPIC}">
 		<a href="{U_POST_NEW_TOPIC}"><span></span>{L_POST_TOPIC}</a></div>
 	</div>
-</div>	
+</div>
 <!-- ENDIF -->
 <!-- BEGIN news_row -->
-<div id="p{news_row.ID}" class="post <!-- IF news_row.S_ROW_COUNT is odd -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
-<div class="inner">
-<span class="corners-top"><span></span></span>  
+<div id="p{news_row.ID}" class="panel <!-- IF news_row.S_ROW_COUNT is odd -->bg1<!-- ELSE -->bg2<!-- ENDIF -->">
 
 <div class="postbody" style="width: 100%">
      <!-- IF news_row.U_DELETE or news_row.U_EDIT -->
@@ -205,7 +214,7 @@
 		<li class="edit-icon"><a href="{news_row.U_EDIT}" title="{L_EDIT_POST}"><span>{L_EDIT_POST}</span></a></li>
 		<!-- ENDIF -->
 		<!-- ENDIF -->
-		<!-- IF S_DELETE_ALLOWED --> 
+		<!-- IF S_DELETE_ALLOWED -->
 		<!-- IF news_row.U_DELETE -->
 		<li class="delete-icon"><a href="{news_row.U_DELETE}"
 			title="{L_DELETE_POST}"><span>{L_DELETE_POST}</span></a></li>
@@ -217,14 +226,14 @@
 	<p class="author">{L_POST_BY_AUTHOR} {news_row.AUTHOR} <strong></strong> &raquo; {news_row.DATE}, {news_row.TIME}</p>
 	<div class="content">{news_row.MESSAGE}</div>
 </div>
-<span class="corners-bottom"><span></span></span>
-</div>
+
+
 </div>
 <!-- END news_row -->
 
 <!-- ENDIF -->
 
-<!-- IF NEWS_PAGINATION -->  
+<!-- IF NEWS_PAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{NEWS_PAGINATION}<br /><br /></span>
@@ -232,3 +241,7 @@
 <!-- ENDIF -->
 </form>
 
+
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>

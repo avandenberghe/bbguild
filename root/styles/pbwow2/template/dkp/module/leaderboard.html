@@ -1,5 +1,5 @@
 <!-- IF S_SHOWLEAD -->
-<div class="panel" >
+<div class="panel bg3" >
 <div class="inner">
 <span class="corners-top"><span></span></span>
 
@@ -18,8 +18,10 @@
   <tr class="bg1">
 <!-- ENDIF -->
 <td style="text-align:center;">
+<div style="text-align: center;">
 <img src="{ROOT_PATH}images/bbdkp/class_images/{class.CLASSIMGPATH}" alt="pic" width="20" height="20"></img>
-<span style="color:{class.COLORCODE}"><strong>{class.CLASSNAME}</strong></span>
+<span style="color:{class.COLORCODE}; font-size:1.5em"><strong>{class.CLASSNAME}</strong></span>
+</div>
 
 <div class="post">
 <table style="width: 100%"  border="0" cellspacing="0" cellpadding="0">
@@ -70,7 +72,7 @@
   	   <!-- ENDIF -->
     <!-- ELSEIF class.S_ROW_COUNT % 5 == 4 -->
          <td></td></tr>
-  	<!-- ENDIF -->  
+  	<!-- ENDIF -->
 <!-- END class -->
 
 </table>

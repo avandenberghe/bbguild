@@ -1,36 +1,44 @@
-<div style="float: left; width:49%; white-space:nowrap;">
-<h2 style="white-space:nowrap;">{L_LISTMEMBERS_TITLE}</h2>
-</div>
-
-<form method="post" action="{F_MEMBERS}">
-<div style="float: right; width:49%; white-space:nowrap; text-align: right;">
-<br/>
-<div style="text-align:right; white-space:nowrap;" >{L_POOL}:
-<select name="pool" class="input" onchange="javascript:form.submit();">
-<!-- BEGIN pool_row -->
-<option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
-<!-- END pool_row -->
-</select>
-<select name="filter" class="input" onchange="javascript:form.submit();">
-<!-- BEGIN filter_row -->
-<option value="{filter_row.VALUE}"{filter_row.SELECTED}{filter_row.DISABLED}>{filter_row.OPTION}</option>
-<!-- END filter_row -->
-</select>
-<input type="hidden" name="hidden_show" value="{SHOWALL}" />
-</div>
-</div>
-
-<hr />
-
-<!-- IF ! .members_row -->
 <div class="panel">
 <div class="inner">
 <span class="corners-top"><span></span></span>
 
-<p class= "error">{L_NO_DATA}</p>
+<ul class="topiclist" style="padding: 4px">
+<li class="header">
+<dl>
+<dt style="padding: 0px 0px 2px; white-space: nowrap; margin-bottom: 0px; margin-top: 0px; display:inline;width:auto;text-align:center;">
+<div style="float: left; width:49%; white-space:nowrap; text-align: left;">
+<h4 class="bbdkpheader">{L_LISTMEMBERS_TITLE}</h4>
+</div>
+</dt>
+</dl>
+</li>
+</ul>
+
+<div class="navbar" style="clear:both;">
+<span class="corners-top"><span></span></span>
+	<form method="post" action="{F_MEMBERS}">
+	<div style="float: right; width:49%; white-space:nowrap; text-align: right;">
+	<div style="text-align:right; white-space:nowrap;" >{L_POOL}:
+	<select name="pool" class="input" onchange="javascript:form.submit();">
+	<!-- BEGIN pool_row -->
+	<option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
+	<!-- END pool_row -->
+	</select>
+	<select name="filter" class="input" onchange="javascript:form.submit();">
+	<!-- BEGIN filter_row -->
+	<option value="{filter_row.VALUE}"{filter_row.SELECTED}{filter_row.DISABLED}>{filter_row.OPTION}</option>
+	<!-- END filter_row -->
+	</select>
+	<input type="hidden" name="hidden_show" value="{SHOWALL}" />
+	</div>
+	</div>
+	</form>
 <span class="corners-bottom"><span></span></span>
 </div>
-</div>
+<hr />
+
+<!-- IF ! .members_row -->
+<p class= "error">{L_NO_DATA}</p>
 <!-- ENDIF -->
 
 <!-- IF .members_row -->
@@ -38,16 +46,16 @@
 
 <div class="forumbg forumbg-table">
 <div class="inner">
-   <span class="corners-top"><span></span></span>
-   
-<!-- IF DKPPAGINATION -->  
+<span class="corners-top"><span></span></span>
+
+<!-- IF DKPPAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{DKPPAGINATION}<br /><br /></span>
 </div>
 <!-- ENDIF -->
-   
-	<table class="table1" width="100%" border="0" cellspacing="0" cellpadding="0">
+
+	<table class="table1 bbdkp" width="100%" border="0" cellspacing="0" cellpadding="0">
 	<thead>
 	  <tr>
 	    <th style="text-align: center; width:4%;"><a href="{O_CLASS}">{L_CLASS}</a></th>
@@ -69,13 +77,13 @@
 	    <th style="text-align: center; width:3%;"><a href="{O_CLASS}">#</a></th>
 	  </tr>
 	</thead>
-	
+
 	<tfoot>
 	<tr>
 	<th style="text-align: left; white-space: nowrap; color:white;" colspan="0">{FOOTCOUNT}</th>
 	</tr>
 	</tfoot>
-	
+
 	<tbody>
 	  <!-- BEGIN members_row -->
 	  <!-- IF members_row.S_ROW_COUNT is even -->
@@ -95,18 +103,18 @@
 	    <td style="text-align: right;"><span class="positive">{members_row.EARNED}</span></td>
 	    <td style="text-align: right;" ><span class="negative">{members_row.SPENT}</span></td>
 		<td style="text-align: right;">{members_row.ADJUSTMENT}</td>
-	    <td style="text-align: right;"><span class="{members_row.DKPCOLOUR2}"><strong>{members_row.CURRENT}</strong></span></td>   
-	     <!-- ENDIF -->        
+	    <td style="text-align: right;"><span class="{members_row.DKPCOLOUR2}"><strong>{members_row.CURRENT}</strong></span></td>
+	     <!-- ENDIF -->
 	    <td style="text-align: right;">{members_row.LASTRAID}</td>
 	    <td style="text-align: right;">{members_row.RAIDS_P1_DAYS}%</td>
 	    <td><input type="checkbox" name="compare_ids[]" value="{members_row.ID}" /></td>
-	
+
 	  </tr>
-	  <!-- END members_row -->	
+	  <!-- END members_row -->
 	</tbody>
 </table>
 
-<!-- IF DKPPAGINATION -->  
+<!-- IF DKPPAGINATION -->
 <div class="pagination">
 		<a href="#" onclick="jumpto(); return false;" title="{L_JUMP_TO_PAGE}">{S_ON_PAGE}</a>
 		<span>{DKPPAGINATION}<br /><br /></span>
@@ -116,7 +124,7 @@
 <span class="corners-bottom"><span></span></span>
 </div>
 </div>
-	
+
 <table width="100%" border="0" cellspacing="0" cellpadding="0">
 <tr>
  		<td style="text-align: center;">
@@ -129,3 +137,6 @@
 <!-- ENDIF -->
 </form>
 
+<span class="corners-bottom"><span></span></span>
+</div>
+</div>
