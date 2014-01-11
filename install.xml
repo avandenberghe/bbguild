@@ -209,23 +209,6 @@ Deny from All
 				<action type="after-add"><![CDATA[DirectoryIndex portal.php index.php index.html index.htm]]></action>
 			</edit>
 		</open>
-		<open src="common.php">
-			<edit>
-				<comment lang="en"><![CDATA[adding required classfiles for bbdkp in common.php.]]></comment>
-				<comment lang="fr"><![CDATA[Ajout des fichiers requis pour inclusion dans common.php]]></comment>
-				<comment lang="de"><![CDATA[Zufügung bbDKP Dateien im common.php]]></comment>
-				<find><![CDATA[require($phpbb_root_path . 'includes/utf/utf_tools.' . $phpEx);]]></find>
-				<action type="after-add"><![CDATA[// bbDKP
-if (file_exists($phpbb_root_path . 'configdkp.' . $phpEx))
-{
-	require($phpbb_root_path . 'configdkp.' . $phpEx);
-}
-if(@defined("EMED_BBDKP"))
-{
-	require($phpbb_root_path .  'includes/bbdkp/admin/constants_bbdkp.' . $phpEx);
-}]]></action>
-			</edit>
-		</open>
 		<open src="cron.php">
 			<edit>
 				<comment lang="en"><![CDATA[adding cronjobs]]></comment>
