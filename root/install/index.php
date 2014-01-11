@@ -802,26 +802,6 @@ $versions = array(
      	// oop release, now requires 553
 
        'table_add' => array(
-
-       	  // add the new transactions table
-		  array($table_prefix . 'bbdkp_transactions', array(
-                    'COLUMNS'        	 => array(
-                    	'trans_id'			=> array('UINT', NULL, 'auto_increment'),
-                    	'member_dkpid'		=> array('USINT', 0),
-                    	'member_id'			=> array('UINT', 0),
-		  				'account'			=> array('UINT', 0),
-		  				'amount'			=> array('DECIMAL:11', 0),
-                    ),
-                    'PRIMARY_KEY'  => array('trans_id'),
-		  			'KEYS'            => array(
-		  					'member_id' => array('INDEX', 'member_id'),
-		  					'member_dkp' => array('INDEX', 'member_dkpid'),
-		  					'memberiddkp' => array('INDEX', array('member_id', 'member_dkpid')),
-		  					'memberidaccount' => array('INDEX', array('member_id', 'member_dkpid', 'account')),
-		  				)
-                	),
-            ),
-
 			// add the new game table
        		array($table_prefix . 'bbdkp_games', array(
 	              'COLUMNS'            => array(
@@ -1089,9 +1069,6 @@ function tableupdates($action, $version)
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberguild MODIFY region VARCHAR(3) ';
 					$db->sql_query($sql);
 
-					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberguild MODIFY region VARCHAR(3) ';
-					$db->sql_query($sql);
-
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_raid_items MODIFY item_gameid VARCHAR(8) ';
 					$db->sql_query($sql);
 
@@ -1121,10 +1098,6 @@ function tableupdates($action, $version)
 					// make new unique composite this way double membernames are enabled
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
-
-					// rename the dkp table to reporting table
-					//$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
-					//$db->sql_query($sql);
 
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberguild MODIFY region VARCHAR(3) ';
 					$db->sql_query($sql);
