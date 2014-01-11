@@ -871,7 +871,7 @@ $versions = array(
      				array($table_prefix . 'bbdkp_memberguild', 'level', array('UINT', 0) ),
      				array($table_prefix . 'bbdkp_memberguild', 'members', array('UINT', 0)),
      				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints', array('UINT', 0)),
-     				array($table_prefix . 'bbdkp_memberguild', 'battlegroup', array('VCHAR:20', '')),
+     				array($table_prefix . 'bbdkp_memberguild', 'battlegroup', array('VCHAR:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'guildarmoryurl', array('VCHAR:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'emblemurl', array('VCHAR:255', '')),
      				array($table_prefix . 'bbdkp_memberguild', 'game_id', array('VCHAR:10', '')),
@@ -1085,6 +1085,9 @@ function tableupdates($action, $version)
 					// rename bbdkp_memberdkp table to bbdkp_reporting table
 					//$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
 					//$db->sql_query($sql);
+
+					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberguild MODIFY region VARCHAR(3) ';
+					$db->sql_query($sql);
 
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberguild MODIFY region VARCHAR(3) ';
 					$db->sql_query($sql);
