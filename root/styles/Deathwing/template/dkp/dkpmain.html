@@ -1,0 +1,82 @@
+<!-- INCLUDE overall_header.html -->
+
+<div>
+
+<!-- left bbDKP sidebar -->
+<div style="float: left; width: 15%; margin:0.5%">
+
+<!-- INCLUDE dkp/module/profile-sidebar.html -->
+
+</div>
+
+<div style="float: left; width: 83%; margin:0.5%">
+
+<!-- IF S_DISPLAY_STANDINGS -->
+	<!-- INCLUDE dkp/module/standings.html -->
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_VIEWMEMBER -->
+
+	<!-- IF S_SHOWEPGP -->
+		<!-- INCLUDE dkp/module/viewmember_epgp.html -->
+	<!-- ELSE -->
+		<!-- INCLUDE dkp/module/viewmember.html -->
+	<!-- ENDIF -->
+
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_STATS -->
+	<!-- INCLUDE dkp/module/stats.html -->
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_LISTEVENTS -->
+	<!-- INCLUDE dkp/module/listevents.html -->
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_VIEWEVENT -->
+	<!-- INCLUDE dkp/module/viewevent.html -->
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_RAIDS -->
+	<!-- INCLUDE dkp/module/listraids.html -->
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_VIEWRAIDS -->
+	<!-- INCLUDE dkp/module/viewraid.html -->
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_LOOTHISTORY -->
+	<!-- INCLUDE dkp/module/loothistory.html -->
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_LOOTDB -->
+	<!-- INCLUDE dkp/module/lootdb.html -->
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_VIEWITEM -->
+	<!-- INCLUDE dkp/module/viewitem.html -->
+<!-- ENDIF -->
+
+<!-- IF S_DISPLAY_ROSTERGRID -->
+	<!-- INCLUDE dkp/module/rostergrid.html -->
+<!-- ENDIF -->
+<!-- IF S_DISPLAY_ROSTERLISTING -->
+	<!-- INCLUDE dkp/module/rosterlisting.html -->
+<!-- ENDIF -->
+
+<!-- IF S_DISPLAY_NEWS -->
+	<!-- INCLUDE dkp/module/news.html -->
+<!-- ENDIF -->
+
+<!-- [+] Bossprogress -->
+
+<!-- [-] Bossprogress -->
+
+<!-- [+] Raidplanner -->
+
+<!-- [-] Raidplanner -->
+
+<!-- [+] Apply -->
+
+<!-- [-] Apply -->
+
+</div>
+
+<!-- right bbDKP sidebar -->
+<div style="float: left; width: 0%; margin:0.5%">
+
+</div>
+<div style="clear:both;"></div>
+</div>
+<!-- INCLUDE overall_footer.html -->

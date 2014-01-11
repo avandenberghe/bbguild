@@ -1,0 +1,510 @@
+html {
+	background-color: #000;
+}
+
+body {
+	background-color: #000;
+}
+
+.deathwing
+{
+	margin: auto;
+	height : 1000px;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.deathwing  .dw_top {
+	position:  relative;
+	background-color: transparent;
+	background-image: url("{T_THEME_PATH}/images/bg_top.jpg");
+	background-repeat: no-repeat;
+	background-position:center;
+	margin-top: 100px;
+}
+
+.deathwing .dw_inner
+{
+	position:  relative;
+	height: 400px;
+	width: 1000px;
+	top: -100px  !important;
+	background-color: #000;
+	background-position:center;
+	filter:alpha(opacity=90);
+		-moz-opacity: 0.9;
+		opacity: 0.9;
+	background-image: url("{T_THEME_PATH}/images/bg_header.jpg");
+	background-repeat: no-repeat;
+	padding: 5px;
+}
+
+/* after wrap */
+.subframe {
+	background-position: center;
+	background-image: url("{T_THEME_PATH}/images/bg_mid.jpg");
+	background-repeat: repeat-y;
+	margin-top: 50px;
+	padding: 0 0px;
+	width: 100%;
+	margin-top: -100px !important;
+}
+
+.container {
+	margin: auto;
+	padding: 0;
+	text-align: left;
+	width: 1000px;
+
+}
+
+/* Main blocks
+---------------------------------------- */
+
+#page-body {
+	/*background: url("{T_THEME_PATH}/images/bottom-bg.png");*/
+	background-repeat: repeat-y;
+	background-position: center, top;
+}
+
+/**************
+	navigation
+****************/
+ul.mainlevel-nav {
+	font-size:11px;
+  	list-style:none outside none;
+  	margin:0 auto;
+  	padding:0 0 0 10px;
+}
+
+ul.mainlevel-nav li {
+  background-color:transparent;
+  background-image:none;
+  float:left;
+  font-size:11px;
+  height:20px;
+  line-height:20px;
+  margin:9px auto 0;
+  padding:0;
+  text-align:center;
+  white-space:nowrap;
+}
+
+ul.mainlevel-nav li.floatright {
+  background-color:transparent;
+  background-image:none;
+  float:right;
+  font-size:11px;
+  font-weight:bold;
+  height:20px;
+  line-height:20px;
+  margin:9px auto 0;
+  padding:0;
+  text-align:center;
+  white-space:nowrap;
+}
+
+ul.mainlevel-nav li a {
+  background-image: url("{T_THEME_PATH}/images/nav.gif");
+  background-repeat: repeat-x;
+  border-color: #111111 #222222 #222222 #111111;
+  border-style: solid;
+  border-width: 1px;
+  color:#FFA400;
+  display:block;
+  font-size:12px;
+  font-variant: small-caps;
+  margin-right:5px;
+  padding-left:7px;
+  padding-right:7px;
+  text-align:center;
+}
+
+
+ul.mainlevel-nav li a hover {
+  text-decoration:none;
+}
+
+ul.mainlevel-nav li.floatright a {
+  background-image: url("{T_THEME_PATH}/images/nav.gif");
+  background-repeat: repeat-x;
+  border-color: #111111 #222222 #222222 #111111;
+  border-style: solid;
+  border-width: 1px;
+  color:#FFA400;
+  display:block;
+  font-size:12px;
+  font-variant: small-caps;
+  font-weight:normal;
+  margin-right:5px;
+  padding-left:7px;
+  padding-right:7px;
+  text-align:center;
+  text-decoration:none;
+}
+
+ul.mainlevel-nav li a:hover {
+  border-color: #222222 #333333 #333333 #222222;
+  border-style: solid;
+  border-width: 1px;
+  color:#EFC9A0;
+  text-decoration:none;
+}
+
+.content_up {
+    height: 30px;
+    margin-bottom: 5px;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    width: 100%;
+}
+
+.content_up_left {
+    background-color: transparent;
+    background-image: url("{T_THEME_PATH}/images/content_up_left.gif");
+    background-repeat: repeat-x;
+    float: left;
+    height: 30px;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    width: 100%;
+}
+
+
+/* swf */
+#content_down {
+	font-size: 10px;
+	color: #666;
+	width: 100%;
+	height: 20px;
+	margin:5px 0 5px 0;
+	padding:0;
+	background-image:url("{T_THEME_PATH}/images/content_down_left.gif");
+	background-repeat: repeat-x;
+	width: 100%;
+	height: 20px;
+	padding:0;
+	margin:0;
+}
+
+.underfooter {
+	clear: both;
+	width: 100%;
+	padding: 7px 0 7px 0;
+	text-align:center;
+	overflow:hidden;
+	background-position: center top;
+	background-repeat:no-repeat;
+	color: #999;
+	background-color: #1A0F08;
+	background-image: url("{T_THEME_PATH}/images/bg_footer.jpg");
+}
+
+/* fix for firefox 1px swf border */
+object:focus
+{
+	outline: none;
+	-moz-outline-style: none;
+	overflow:hidden;
+}
+
+ul.sublevel-nav {
+	font-size:11px;
+  	list-style:none outside none;
+  	margin:0 auto;
+  	padding:0 0 0 10px;
+}
+
+ul.sublevel-nav li {
+  background-color:transparent;
+  float:left;
+  background-image:none;
+  font-size:11px;
+  font-weight:bold;
+  height:20px;
+  line-height:20px;
+  margin:4px auto 0;
+  padding:0;
+  text-align:center;
+  white-space:nowrap;
+}
+
+ul.sublevel-nav li a {
+  background-image: url("{T_THEME_PATH}/images/nav.gif");
+  background-repeat: repeat-x;
+  border-color: #111111 #222222 #222222 #111111;
+  border-style: solid;
+  border-width: 1px;
+  color:#FFB100;
+  color:#764B00;
+  display:block;
+  font-size:11px;
+  font-variant: small-caps;
+  font-weight:normal;
+  margin-right:5px;
+  padding-left:7px;
+  padding-right:7px;
+  text-align:center;
+  text-decoration:none;
+}
+
+ul.sublevel-nav li.floatright {
+  float:right;
+}
+
+/**********************************************************************
+ 	portal blocks
+ 	special css for Deathwing 1.0.7premod
+***********************************************************************/
+
+div.portalblock
+{
+	border: transparent;
+	background-repeat:repeat-x;
+	min-height: 100px;
+	border-top: 1px;
+	border-left: 1px;
+	border-right: 1px;
+	border-bottom: 1px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	overflow:hidden;
+	margin-left: 2%;
+	padding-bottom: 5px;
+}
+
+.portalblock p
+{
+  	color: #FFFFDD;
+    font-size: 1.2em;
+    display: block;
+}
+
+.contentheading {
+    background-image: url("{T_THEME_PATH}/images/contentheading.gif");
+    background-repeat: no-repeat;
+    color: #CBBF9B;
+    font-weight: normal;
+    line-height: 30px;
+    margin: 5px;
+    padding-left: 40px;
+    display:block;
+}
+
+.contentheading h4 {
+	line-height: 33px;
+	font-variant: small-caps;
+	color: #e43f19 !important;
+	padding-left: 35px;
+}
+
+.contentheading h2 {
+	line-height: 33px;
+	font-variant: small-caps;
+	color: #e43f19 !important;
+	padding-left: 35px;
+}
+
+.contentheading p {
+	font-size: 1.25em;
+}
+
+div.portalmenublock
+{
+	overflow:hidden;
+	margin-bottom: 25px;
+	padding : 0;
+	text-align: left;
+}
+
+h3.portalblock
+{
+	background-image : url("{T_THEME_PATH}/images/user_h3.gif");
+	background-repeat : repeat-x;
+	background-color: #000;
+	color: #e43f19;
+	text-align : left;
+	height : 30px;
+	line-height : 30px;
+	padding:0;
+	margin :0;
+	padding-left: 18px;
+	overflow : hidden;
+	font-weight:normal;
+	border:none;
+	font-size : 14px;
+	text-decoration: none;
+    font-family: Arial,Helvetica,Verdana,sans-serif;
+    font-variant:small-caps;
+    text-transform: none;
+}
+
+.navbar ul.mainlevel-nav li a  {
+	color:#AA0022;
+}
+
+.navbar2 ul.mainlevel-nav li a  {
+	color:#AA0022;
+}
+
+.navbar2 {
+    background-color: rgba(0, 0, 0, 0);
+    background-image: url("{T_THEME_PATH}/images/navigation2.gif");
+    height: 40px;
+	color:red;
+    margin-bottom: 0;
+    margin-left: 0;
+    margin-right: 0;
+    margin-top: 0;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    text-align: center;
+}
+
+/**************/
+div.block_menu {
+    background-color: transparent;
+    background-image: url("{T_THEME_PATH}/images/menu_rb.jpg");
+    overflow-x: hidden;
+    overflow-y: hidden;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-origin: padding-box;
+    background-position: right bottom;
+    background-repeat: no-repeat;
+    background-size: auto auto;
+    margin-bottom: 25px;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+    padding-bottom: 10;
+    text-align: left;
+}
+
+
+h3.block_menu {
+	color: #E43F19;
+    background-color: transparent;
+    background-image: url("{T_THEME_PATH}/images/module_left_h3.gif");
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    height: 37px;
+    line-height: 45px;
+    margin: 0;
+    padding: 0;
+    padding-left: 10px;
+    overflow : hidden;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-color: transparent;
+    color: #E43F19;
+    font-family: Arial,Helvetica,Verdana,sans-serif;
+    font-size : 14px;
+    font-variant:small-caps;
+    text-transform: none;
+}
+
+h3.block_menu a {
+    color: #E43F19;
+
+}
+
+div.block_menu div.block_inner {
+	background-color: transparent;
+    background-image: url("{T_THEME_PATH}/images/menu_lb.jpg");
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-origin: padding-box;
+    background-position: left bottom;
+    background-repeat: no-repeat;
+    background-size: auto auto;
+ 	padding-left: 10px;
+    padding-right: 10px;
+}
+
+ul.portalmenu {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    list-style-image: none;
+    list-style-position: outside;
+    list-style-type: none;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
+    padding-bottom: 2px;
+    padding-left: 2px;
+    padding-right: 2px;
+    padding-top: 2px;
+    text-align: center;
+}
+
+ul.portalmenu li {
+    background-position: 0 2px;
+    background-repeat: no-repeat;
+    line-height: 14px;
+    list-style-type: none;
+    text-align: left;
+    background-image: url("{T_THEME_PATH}/images/list.png");
+}
+
+
+/******************/
+div.copyright {
+	clear: both;
+	font-size: 9px;
+	color: #444;
+	padding:0;
+	margin:0;
+	text-align:center;
+	overflow:hidden;
+}
+
+div.copyright a {
+	color: #444;
+	font-size:9px;
+}
+
+/* Search box
+--------------------------------------------- */
+
+#search-box {
+	color: #E6CB36;
+}
+
+#search-box #keywords {
+	background-color: #1A0F08;
+}
+
+#search-box input {
+	border-color: #E33E02;
+}
+
+
+
