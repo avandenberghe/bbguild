@@ -142,6 +142,7 @@ $lang = array_merge($lang, array(
 'TANK' => 'Tank',
 'DPS' => 'Dps' ,
 'HEAL' => 'Heal',
+'HEALER' => 'Healer',
 'RECRUIT_MESSAGE' => 'We are currently looking for new members for the following classes:',
 
 //ROSTER

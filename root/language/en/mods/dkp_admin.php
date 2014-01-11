@@ -346,13 +346,14 @@ $lang = array_merge($lang, array(
 'EDIT_RANKS' => 'Edit Ranks',
 'EDIT_ROLES' => 'Edit Roles',
 'ADD_RANKS' => 'Add Ranks',
+'ADD_RANK' => 'Add Rank',
 'ADD_ROLES' => 'Add Roles',
+'ADD_ROLE' => 'Add Role',
 'ROLES' => 'Roles',
+'ROLE' => 'Role',
 'NEEDED' => 'Needed',
 'DIFFERENCE' => 'Difference',
 'TRANSFER_HISTORY' => 'Transfer Member History',
-
-
 
 
 // Delete Confirmation Texts

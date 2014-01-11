@@ -674,7 +674,8 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 				$db->sql_freeresult($result);
 
 				//Role dropdown
-				$Roles = new \bbdkp\controller\guilds\Roles($editmember->member_guild_id);
+				$Roles = new \bbdkp\controller\guilds\Roles();
+				$Roles->guild_id = $editmember->member_guild_id;
 				foreach($Roles->roles as $roleid => $Role )
 				{
 					$template->assign_block_vars('role_row', array(

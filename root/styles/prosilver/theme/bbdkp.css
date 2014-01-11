@@ -183,8 +183,8 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 	position:relative;
 	margin:0px auto;
 	font-size: 10px;
-	min-width:200px;
-	max-width:400px;
+	min-width:100px;
+	max-width:200px;
 	color:#FFFFDD;
 	z-index:1;
 	margin-left:12px; /* default, width of left corner */
@@ -195,7 +195,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 .bbtooltip .t,
 .bbtooltip .b,
 .bbtooltip .b div {
- background-image: url("images/tooltip/tooltip.png");
+ background-image: url("images/bbdkp/tooltip/tooltip.png");
  background-color: transparent;
  background-repeat: no-repeat;
  background-position: right top;

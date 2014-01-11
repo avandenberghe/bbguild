@@ -124,7 +124,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 				}
 
 				$sort_order = array(
-					0 => array(	'id' , 'id desc') ,
+					0 => array('id' , 'id desc'),
 					1 => array('name' , 'name desc') ,
 					2 => array('realm desc' , 'realm desc') ,
 					3 => array('region' , 'region desc') ,
@@ -425,12 +425,11 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 				if($addrecruitment)
 				{
 					// insert a row in roles table
-					$addrole = new \bbdkp\controller\guilds\Roles(
-							$this->url_id,
-							request_var('recruitrole' , ''),
-							request_var('recruitclass' , 0),
-							request_var('recruitneeded' , 0)
-							);
+					$addrole = new \bbdkp\controller\guilds\Roles();
+					$addrole->guild_id = request_var(URI_GUILD, 0);
+					$addrole->role = request_var('recruitrole' , '');
+					$addrole->class_id = request_var('recruitclass' , 0);
+					$addrole->needed = request_var('recruitneeded' , 0);
 					$addrole->make();
 					unset($addrole);
 				}
@@ -512,7 +511,8 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 				}
 
 				$listroles = new \bbdkp\controller\guilds\Roles();
-				$listroles->guildid = $updateguild->guildid;
+				$listroles->guild_id = $updateguild->guildid;
+
 				foreach ($listroles->roles as $role => $rolename)
 				{
 					$template->assign_block_vars('rolelist_row', array(
