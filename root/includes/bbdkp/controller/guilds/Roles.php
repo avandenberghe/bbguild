@@ -102,15 +102,9 @@ class Roles
 	 * @param number $class_id
 	 * @param number $needed
 	 */
-	public function __construct($guild_id = 0, $role = '', $class_id = 0, $needed = 0)
+	public function __construct()
 	{
 		global $user;
-
-		$this->guild_id = $guild_id;
-		$this->role = $role;
-		$this->class_id = $class_id;
-		$this->needed = $needed;
-
 
 		/**
 		 * possible roles that a class can fullfill, as exist in Wow API
@@ -145,7 +139,7 @@ class Roles
 	 */
 	public function make()
 	{
-		global $db;
+		global $user, $db;
 
 		if($this->guild_id == null)
 		{
@@ -239,11 +233,6 @@ class Roles
 	{
 		global $config, $db;
 
-		/*$sql = 'SELECT game_id, guild_id, role, class_id, needed
-				FROM ' . BBDKP_ROLES_TABLE . '
-				WHERE guild_id = ' . $this->guild_id;
-		*/
-
 		$sql =  'SELECT a.id as roleid, c.class_id, l.name as class_name, c.colorcode, c.imagename, ';
 		$sql .= ' a.game_id, g.id as guild_id,  a.role, a.needed ';
 		$sql .= ' FROM ' . CLASS_TABLE . ' c ';
@@ -256,7 +245,6 @@ class Roles
 
 		$result = $db->sql_query($sql);
 		return $result;
-
 
 	}
 
@@ -281,9 +269,9 @@ class Roles
 		// get recruitment statuses from Roles table
 		$sql_array = array(
 				'SELECT' => " g.id, g.name, c.class_id, r.role, r.needed, c.imagename, c.colorcode, l.name AS class_name,
-	case when r.role='DPS' then r.needed else 0 end AS dps,
-	case when r.role='HEAL' then r.needed else 0 end AS heal,
-	case when r.role='TANK' then r.needed else 0 end AS tank " ,
+					case when r.role='DPS' then r.needed else 0 end AS dps,
+					case when r.role='HEAL' then r.needed else 0 end AS heal,
+					case when r.role='TANK' then r.needed else 0 end AS tank " ,
 				'FROM' => array(
 						GUILD_TABLE => 'g',
 						BBDKP_ROLES_TABLE => 'r',
