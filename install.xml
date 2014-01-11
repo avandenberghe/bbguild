@@ -169,6 +169,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/adm/images/*.*" to="adm/images/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
 			<file from="root/images/bbdkp/*.*" to="images/bbdkp/*.*"/>
+			<file from="root/includes/hooks/hook_bbdkp.php" to="includes/hooks/hook_bbdkp.php"/>
 			<file from="root/includes/acp/acp_dkp_adj.php" to="includes/acp/acp_dkp_adj.php"/>
 			<file from="root/includes/acp/acp_dkp_game.php" to="includes/acp/acp_dkp_game.php"/>
 			<file from="root/includes/acp/acp_dkp_guild.php" to="includes/acp/acp_dkp_guild.php"/>
@@ -372,33 +373,6 @@ function get_bbchar($bbresult)
 		</edit>
 		</open>
 		<open src="includes/functions.php">
-			<edit>
-				<comment lang="en"><![CDATA[ preloading dkp language files in functions.php]]></comment>
-				<comment lang="fr"><![CDATA[ ajouter le fichier de langue dans fonctions.php ]]></comment>
-				<comment lang="de"><![CDATA[ zufügen dkp Sprachdatei in functions.php]]></comment>
-				<find><![CDATA[if (defined('HEADER_INC'))]]></find>
-				<action type="before-add"><![CDATA[$user->add_lang(array('mods/dkp_common'));
-]]></action>
-			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[ adding labels  ]]></comment>
-				<comment lang="en"><![CDATA[ ajouter des labels ]]></comment>
-				<comment lang="en"><![CDATA[ zufügen labels  ]]></comment>
-				<find><![CDATA[		'L_INDEX'			=> $user->lang['FORUM_INDEX'],]]></find>
-				<action type="after-add"><![CDATA[		'L_PORTAL'			=> $user->lang['PORTAL'],]]></action>
-			</edit>
-			<edit>
-				<comment lang="en"><![CDATA[adding links]]></comment>
-				<comment lang="en"><![CDATA[ajouter links]]></comment>
-				<comment lang="en"><![CDATA[zufügen Links]]></comment>
-				<find><![CDATA[		'U_INDEX'				=> append_sid("{$phpbb_root_path}index.$phpEx"),]]></find>
-			<action type="after-add"><![CDATA[		'U_PORTAL'		=> append_sid("{$phpbb_root_path}portal.$phpEx"),
-		'U_DKP'			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=standings'),
-		'L_DKPPAGE'		=> $user->lang['DKP'],
-		'L_BBDKP'		=> $user->lang['FOOTERBBDKP'],
-		'U_ABOUT'         => append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
-]]></action>
-			</edit>
 			<edit>
 				<comment lang="en"><![CDATA[adding cronjobs in footer function]]></comment>
 				<comment lang="en"><![CDATA[ajouter cronjobs dans la fonction footer]]></comment>
