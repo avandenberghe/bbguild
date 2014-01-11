@@ -124,7 +124,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 				}
 
 				$sort_order = array(
-					0 => array(	'id' , 'id desc') ,
+					0 => array('id' , 'id desc'),
 					1 => array('name' , 'name desc') ,
 					2 => array('realm desc' , 'realm desc') ,
 					3 => array('region' , 'region desc') ,

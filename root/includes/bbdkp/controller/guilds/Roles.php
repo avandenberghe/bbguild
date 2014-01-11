@@ -262,8 +262,33 @@ class Roles
 
 	}
 
+	/**
+	 * get the guilds that recruit
+	 * @return array
+	 */
+	public function get_recruiting_guilds()
+	{
+		global $config, $db;
+		$sql_array = array(
+				'SELECT' => " g.id, g.name, g.emblemurl, rec_status ",
+				'FROM' => array(
+						GUILD_TABLE => 'g',
+						BBDKP_ROLES_TABLE => 'r'),
+				'WHERE' => "r.guild_id = g.id AND r.needed > 0 ",
+				'GROUP_BY' => ' g.name ',
+				'ORDER_BY' => ' g.name ');
 
-	public function recruitblock()
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query($sql);
+		return $result;
+	}
+
+	/**
+	 * get roles, classes that are being recruited
+	 * @param int $guild_id
+	 * @return array
+	 */
+	public function recruitblock($guild_id)
 	{
 		global $config, $db;
 		// get recruitment statuses from Roles table
@@ -277,16 +302,15 @@ class Roles
 						BBDKP_ROLES_TABLE => 'r',
 						CLASS_TABLE => 'c',
 						BB_LANGUAGE => 'l') ,
-				'WHERE' => "
-		r.guild_id = g.id
-		AND c.class_id = r.class_id and c.game_id=r.game_id
-		AND c.game_id=l.game_id
-		AND l.attribute_id = c.class_id
-		AND c.class_id > 0 AND l.attribute_id = c.class_id
-		AND l.language = '" . $config['bbdkp_lang'] . "' and l.attribute='class'
-		AND r.needed > 0 ",
+				'WHERE' => "r.guild_id = g.id
+					AND r.guild_id = " . $guild_id . "
+					AND c.class_id = r.class_id and c.game_id=r.game_id
+					AND c.game_id=l.game_id
+					AND l.attribute_id = c.class_id
+					AND c.class_id > 0 AND l.attribute_id = c.class_id
+					AND l.language = '" . $config['bbdkp_lang'] . "' and l.attribute='class'
+					AND r.needed > 0 ",
 				'ORDER_BY' => ' l.name ');
-
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);
 		return $result;
