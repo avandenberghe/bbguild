@@ -63,7 +63,9 @@ ul.portalmenu {
     background-attachment: scroll;
     background-clip: border-box;
     background-color: transparent;
+	background-color: #eef5f9;
     background-image: none;
+	background-image: url("{T_THEME_PATH}/images/gradient.gif");
     background-origin: padding-box;
     background-position: 0 0;
     background-repeat: repeat;
@@ -71,10 +73,10 @@ ul.portalmenu {
     list-style-image: none;
     list-style-position: outside;
     list-style-type: none;
-    margin-bottom: 5px;
-    margin-left: 5px;
-    margin-right: 5px;
-    margin-top: 5px;
+    margin-bottom: 1px;
+    margin-left: 1px;
+    margin-right: 1px;
+    margin-top: 1px;
     padding-bottom: 2px;
     padding-left: 2px;
     padding-right: 2px;
@@ -89,7 +91,7 @@ ul.portalmenu li {
     list-style-type: none;
     padding-left: 20px;
     text-align: left;
-    background-image: url("{T_THEME_PATH}/images/list.png");
+    background-image: url("{T_THEME_PATH}/images/dkp/list.png");
 }
 
 .portalmenu a {
