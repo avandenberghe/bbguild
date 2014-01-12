@@ -27,13 +27,13 @@ if(@defined("EMED_BBDKP"))
 	require($phpbb_root_path .  'includes/bbdkp/admin/constants_bbdkp.' . $phpEx);
 }
 /**
- * bbdkp header hook
+ * hook in template chain to inject values
  *
  */
 function hook_bbdkp(&$hook)
 {
 	global $db, $phpEx, $phpbb_root_path, $user, $template;
-
+	$user->add_lang(array('mods/dkp_common'));
 	if ($user->data['is_registered'])
 	{
 		// new posts since last visit
@@ -49,7 +49,6 @@ function hook_bbdkp(&$hook)
 			WHERE user_id = " . $user->data['user_id'];
 		$result = $db->sql_query($sql);
 		$you_posts_count = (int) $db->sql_fetchfield('user_posts');
-
 		$template->assign_vars(array(
 			'L_NEW_POSTS'	=> $user->lang['SEARCH_NEW'] . '&nbsp;(' . $new_posts_count . ')',
 			'L_SELF_POSTS'	=> $user->lang['SEARCH_SELF'] . '&nbsp;(' . $you_posts_count . ')',
@@ -57,6 +56,16 @@ function hook_bbdkp(&$hook)
 			'U_SELF_POSTS'	=> append_sid($phpbb_root_path . 'search.' . $phpEx . '?search_id=egosearch'),
 		));
 	}
+
+	$template->assign_vars(array(
+			'L_PORTAL'		=> $user->lang['PORTAL'],
+			'U_PORTAL'		=> append_sid("{$phpbb_root_path}portal.$phpEx"),
+			'U_DKP'			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=standings'),
+			'L_DKPPAGE'		=> $user->lang['DKP'],
+			'L_BBDKP'		=> $user->lang['FOOTERBBDKP'],
+			'U_ABOUT'       => append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
+	));
+
 
 
 }
