@@ -17,7 +17,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## version
 
-- beta 1.3.0-b1
+- beta 1.3.0-b2
 
 - stable 1.2.8-pl2
 

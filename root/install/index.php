@@ -2,7 +2,7 @@
 /**
  * bbDKP Umil Installer
  *
- *   @package bbdkp
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -1007,6 +1007,9 @@ $versions = array(
 	//beta1 06-01-2014
 	),
 
+	'1.3.0-b2' => array(
+	//beta2 13-01-2014
+		),
 
 );
 

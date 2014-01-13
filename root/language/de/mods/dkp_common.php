@@ -132,6 +132,7 @@ $lang = array_merge($lang, array(
 	'VANGUARD'		=> 'Vanguard - Saga of Heroes',
 	'WARHAMMER'		=> 'Warhammer Online',
 	'WOW'			=> 'World of Warcraft',
+	'FFXIV'        => 'Final Fantasy XIV' ,
 	'PREINSTALLED' => 'Vorinstallierte Spiele: %s',
 
 //Recruitment

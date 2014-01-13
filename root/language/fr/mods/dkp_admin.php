@@ -2,7 +2,7 @@
 /**
  * bbdkp admin language file [French]
  * @author Sajaki@bbdkp.com
- * 
+ *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
@@ -43,8 +43,8 @@ $lang = array();
 
 // DKP
 $lang = array_merge($lang, array(
-'NOT_UP_TO_DATE_TITLE' => 'Votre %s n’est pas à jour', 
-'BBDKP_LATESTVERSION' => 'Dernière Version: ', 
+'NOT_UP_TO_DATE_TITLE' => 'Votre %s n’est pas à jour',
+'BBDKP_LATESTVERSION' => 'Dernière Version: ',
 'BBDKPDISABLED' => 'bbDKP est temporairement désactivé.',
 'BBDKPSCRIPTALERT' => 'bbDKP contient du Javascript. Veuillez svp activer le javascript dans votre browser.',
 
@@ -118,7 +118,7 @@ $lang = array_merge($lang, array(
 'FV_DKPSTATUSYN' => 'Le status du groupe DKP doit être Y (Actif) ou N (Inactif)',
 'FV_RAIDEXIST' => 'Suppression du groupe DKP impossible, il reste des raids.',
 'FV_EVENTEXIST' => 'Suppression de l’évènement impossible, il reste des raids',
-'FV_FREQUENCY_NOTZERO' => 'La fréquence d‘amortissement ne peut être zero', 
+'FV_FREQUENCY_NOTZERO' => 'La fréquence d‘amortissement ne peut être zero',
 
 // Portal config
 'NEWSBLOCKSETTING' => 'Rubrique Actualités',
@@ -142,14 +142,14 @@ $lang = array_merge($lang, array(
 'MENUBLOCKSETTING' => 'Bloc de menus',
 'SHOWMENUBLOCK' => 'Montrer bloc de menus',
 'BLOCKSHOWPROGRESSBAR' => 'Montrer barre de progression dans Portail',
-'WELCOME_DEFAULT'        => '[b]Bienvenu(e) dans notre Guilde[/b]!', 
+'WELCOME_DEFAULT'        => '[b]Bienvenu(e) dans notre Guilde[/b]!',
 'SHOWWELCOME' => 'Montrer Block Acceuil',
 'WELCOMEBLOCK' => 'Texte du bloc Acceuil',
 'WELCOMEBLOCKSETTING' => 'Règlages Bloc d’acceuil',
 'WELCOMEBLOCK_EXPLAIN' => 'Veuillez remplir le texte dans cette zone. les BBcodes sont supportés.',
-'NEWMEMBERS_SETTING'  => 'bloc nouveaux membres', 
-'SHOW_NEWMEMBERS_BLOCK'  => 'Montrez bloc nouveau membres', 
-'NUMNEWMEMBERS' => 'Nombres de nouveax membres à montrer', 
+'NEWMEMBERS_SETTING'  => 'bloc nouveaux membres',
+'SHOW_NEWMEMBERS_BLOCK'  => 'Montrez bloc nouveau membres',
+'NUMNEWMEMBERS' => 'Nombres de nouveax membres à montrer',
 
 'RANK_INSERTED' => 'Grade inseré : %s. ',
 'TOTAL_RANKS_INSERTED' => 'Nombre de grades inserés : %s. ',
@@ -186,6 +186,7 @@ $lang = array_merge($lang, array(
 'UMIL_INSERT_WOWDATA' => 'Insertion de Données Warcraft ',
 'UMIL_INSERT_WARDATA' => 'Insertion de Données Warhammer',
 'UMIL_INSERT_AIONDATA' => 'Insertion de Données Aion',
+'UMIL_INSERT_FFXIVDATA'	=> 'Insertion de Données Final Fantasy XIV',
 'UMIL_ITEMSTATS' => 'Ajouté Module de fenêtres surgissantes Itemstats',
 'UMIL_ITEMSTATS_HIDDEN' => 'Ajouté Module cachée de fenêtres surgissantes Itemstats',
 'UMIL_ITEMSTATS_REMOVED' => 'Supprimé Module de fenêtres surgissantes Itemstats',
@@ -206,7 +207,7 @@ $lang = array_merge($lang, array(
 'UMIL_GAME' => 'Jeu %s installé pour version %s',
 'UMIL_DUMMYDATA' => 'Données demo enregistrés',
 'UMIL_GAMEUNINST' => 'Jeux désinstallés.',
-'UMIL_UPDTABLES' =>  'Tables %s pour version %s', 
+'UMIL_UPDTABLES' =>  'Tables %s pour version %s',
 
 // ACP titles
 'BBDKP_WELCOME' => 'Bienvenue sur bbDKP',
@@ -350,9 +351,9 @@ $lang = array_merge($lang, array(
 'EDIT_ROLES' => 'Editer les Rôles',
 'ADD_RANKS' => 'Ajouter les Grades',
 'ADD_ROLES' => 'Ajouter les Rôles',
-'ROLES' => 'Rôles' , 
-'NEEDED' => 'Requis' , 
-'DIFFERENCE' => 'Difference' , 
+'ROLES' => 'Rôles' ,
+'NEEDED' => 'Requis' ,
+'DIFFERENCE' => 'Difference' ,
 'TRANSFER_HISTORY' => 'Transfert d’ Historique',
 
 // Delete Confirmation Texts
@@ -409,11 +410,11 @@ $lang = array_merge($lang, array(
 'ACTION_RAID_ADDED' => 'Raid ajouté',
 'ACTION_RAID_DELETED' => 'Raid Supprimé',
 'ACTION_RAID_UPDATED' => 'Raid mis à jour',
-'ACTION_DECAYOFF' => 'Amortissement mis à zero', 
+'ACTION_DECAYOFF' => 'Amortissement mis à zero',
 'ACTION_DECAYSYNC' => 'Amortissement recalculé',
-'ACTION_ZSYNC' => 'Sommezero recalculé', 
-'ACTION_DKPSYNC' => 'DKP recalculé',  
-'ACTION_DEFAULT_DKP_CHANGED' => 'Pool par défault mis à jour', 
+'ACTION_ZSYNC' => 'Sommezero recalculé',
+'ACTION_DKPSYNC' => 'DKP recalculé',
+'ACTION_DEFAULT_DKP_CHANGED' => 'Pool par défault mis à jour',
 'ACTION_GUILD_ADDED' => 'Une guilde a été ajoutée',
 'ACTION_GUILD_UPDATED' => 'une Guilde a été mise à jour',
 'ACTION_GUILD_DELETED' => 'une Guilde a été supprimée',
@@ -464,10 +465,10 @@ $lang = array_merge($lang, array(
 'VLOG_RAID_ADDED' => '%s a ajouté le raid sur %s.',
 'VLOG_RAID_UPDATED' => '%s a mis à jour le raid sur %s.',
 'VLOG_RAID_DELETED' => '%s a supprimé le raid sur %s.',
-'VLOG_DECAYOFF' => '%s a mis l‘alortissement à zero', 
+'VLOG_DECAYOFF' => '%s a mis l‘alortissement à zero',
 'VLOG_DECAYSYNC' => '%s a recalculé les amortissements pour %s raids',
-'VLOG_ZSYNC' => '%s a recalculé la somme zero', 
-'VLOG_DKPSYNC' => '%s a recalculé DKP',  
+'VLOG_ZSYNC' => '%s a recalculé la somme zero',
+'VLOG_DKPSYNC' => '%s a recalculé DKP',
 'VLOG_DEFAULT_DKP_CHANGED' => '%s a changé le groupe DKP par défaut à %s',
 'VLOG_GUILD_ADDED' => '%s a ajouté la guilde %s',
 'VLOG_GUILD_UPDATED' => '%s a mis à jour la guilde %s à %s',
@@ -762,8 +763,8 @@ $lang = array_merge($lang, array(
 'ARM_STAND' => 'Standard',
 'ARM_CLASS' => 'Classe',
 'SHOWONROSTER' => 'Montrer sur le Tableau des membres',
-'MINLEVELROSTER' => 'Niveau minimum', 
-'MINLEVELROSTER_EXPLAIN' => 'Si member < cette valeur alors pas listé', 
+'MINLEVELROSTER' => 'Niveau minimum',
+'MINLEVELROSTER_EXPLAIN' => 'Si member < cette valeur alors pas listé',
 'MIN_ARMORYLEVEL' => 'Niveau minimum de téléchargement Armurerie:',
 
 
@@ -790,7 +791,7 @@ $lang = array_merge($lang, array(
 'EDITMEMBER_DKP_TITLE' => 'Editer un compte DKP',
 'EDIT_RACE_TITLE' => 'Editer une Race',
 'EDIT_RAID_TITLE' => 'Editer un Raid',
-'EDIT_RAIDER_TITLE' => 'Editer un Raider', 
+'EDIT_RAIDER_TITLE' => 'Editer un Raider',
 'ADD_RACE_TITLE' => 'Paramètres de la Race',
 'ADD_CLASS_TITLE' => 'Paramètres de la classe',
 
@@ -837,7 +838,7 @@ $lang = array_merge($lang, array(
 'DELETE_RAID' => 'Supprimer Raid',
 'DELETE_SELECTED_MEMBERS' => 'Supprimer Membre séléctionné',
 'DELETE_SELECTED_GUILDS' => 'Supprimer Guilde selectionnée',
-'DUPLICATE_RAID' => 'Dupliquer Assaut', 
+'DUPLICATE_RAID' => 'Dupliquer Assaut',
 'EDIT_GUILD' => 'Editer Guilde',
 'SEARCH_EXISTING' => 'Recherce dans existant',
 'SELECT' => 'Sélectionner',
@@ -881,7 +882,7 @@ $lang = array_merge($lang, array(
 'DEFAULT_GUILD' => 'Guilde par défaut',
 'DKPPERTIME' => '%s DKP tous les %s minutes.',
 'DONE' => 'Terminé',
-'DUPLICATED' => 'Dupliqué', 
+'DUPLICATED' => 'Dupliqué',
 'HOLD_CTRL_NOTE' => 'Appuyez CTRL(PC) ou CMD(Mac) pour séléction multiple<br />',
 'DKP_STATUS' => 'Status de Groupe DKP (Y ou N)',
 'DKPTIMEUNIT' => 'DKP gagné par intervalle de temps',
@@ -1011,6 +1012,8 @@ $lang = array_merge($lang, array(
 'VANGUARD_ZONEURL' => 'http://vg.mmodb.com/zones/%s.php',
 'FFXI_BASEURL' => 'http://ffxi.allakhazam.com/db/bestiary.html?fmob=%s',
 'FFXI_ZONEEURL' => 'http://ffxi.allakhazam.com/db/areas.html?farea=%s',
+'FFXIV_BASEURL' => 'http://fr.finalfantasyxiv.com/lodestone/playguide/db/npc/?db_search_category=npc&category2=&q=%s',
+'FFXIV_ZONEEURL' => 'NOT AVAILABLE',
 'WARHAMMER_BASEURL' => 'NOT AVAILABLE',
 'WARHAMMER_ZONEEURL' => 'NOT AVAILABLE',
 'WOW_BASEURL' => 'http://www.wowhead.com/?npc=%s',
@@ -1025,8 +1028,8 @@ $lang = array_merge($lang, array(
 'LOOTSYSTEM' => 'lootsystem',
 'STANDARDDKP' => '<strong>Bonus DKP</strong>',
 'STANDARDDKP_EXPLAIN' => '<strong>Description: </strong> Système de partage ou les joueurs recouvent des points pour être à temps, ou en restant disponibles, ou en battant le boss, ou simplement suite à la participation. La dépense des points se fait suite à l’achat d’objets. ',
-'STANDARDDKP_EXAMPLE' => '<strong>Exemple</strong> : il y a 10 joueurs. l’objet "Bottes en cuir du Temps figé." tombe pour joueur 1. il coute 20 points.<br /> 
-les joureurs recoivent 5 points pour battre le boss, et 2 points pour être arrivé à temps au raid. 
+'STANDARDDKP_EXAMPLE' => '<strong>Exemple</strong> : il y a 10 joueurs. l’objet "Bottes en cuir du Temps figé." tombe pour joueur 1. il coute 20 points.<br />
+les joureurs recoivent 5 points pour battre le boss, et 2 points pour être arrivé à temps au raid.
  <br />résultat net du raid : gagné : (5+2) * 10 = 70 <br /> dépensé : 20 <br /> différence= 50',
 'STANDARDDKP_ADVANTAGE' => '<strong>Avantage</strong> : simple. pas de calculation necessary pour la distribution du butin.',
 'STANDARDDKP_DISADVANTAGE' => '<strong>Désavantage</strong>: inflation de points. <br /> accumulation de points en cas de difference de niveau initial dans le groupe de joueurs. le nouveau arrivé est en désavantage par rapport aux joueurs mieux équipés, car les mieux équipés ne dépensent pas autant et accumulent donc plus de points et on arrive à un déséquiliblre.',
@@ -1040,7 +1043,7 @@ les joureurs recoivent 5 points pour battre le boss, et 2 points pour être arri
 'ZEROSUMPLUS' => '<strong>Zero Sum DKP + Bonus</strong>',
 'ZEROSUMPLUS_EXPLAIN' => '<strong>Description: </strong>idem que le système zero points, mais des points bonus sont comptabilisés contre la banque (afin d’assurer le solde zéro)<br /> les joueurs recoivent donc des points bien qu’il n’y a pas eu de dépenses. <br />',
 'ZEROSUMPLUS_EXAMPLE' => ' <strong>example</strong>:il y a 10 joueurs. l’objet "Fardeau de l’éternité." tombe pour joueur 1. il coute 20 points.
-<br />  joueur 1 paie 20, gagne 20/10 = 2. joueurs 2 à 10 gagnent chacun 20/10 = 2 points.  <br /> En plus, les joueurs recoivent 5 par victoire, 2 points si arrivés à temps. ces points attribués sont comptabilisées contre le compte banque de la guilde. 
+<br />  joueur 1 paie 20, gagne 20/10 = 2. joueurs 2 à 10 gagnent chacun 20/10 = 2 points.  <br /> En plus, les joueurs recoivent 5 par victoire, 2 points si arrivés à temps. ces points attribués sont comptabilisées contre le compte banque de la guilde.
 balance à la fin : gagné 20+7=27, dépense 20+7=27.',
 'ZEROSUMPLUS_ADVANTAGE' => ' <strong>Avantage</strong> :<br />  pas d’inflation si les joueurs sont au même niveau d’équipement. les points bonus sont ajoutés comme incentive de participation, car autrement un raid sans butin ne rapporte rien. ',
 'ZEROSUMPLUS_DISADVANTAGE' => '   <strong>Désavantage</strong> :<br /> accumulation de points. Sans dépenses personne gagne en points donc un joueur bien équipé est en avantage par rapport à un joueur nouveau. .',
@@ -1082,10 +1085,10 @@ résultat du raid : <br />gagné : 30 *10 = 300 points <br /> depense : 20 <br /
 'DECAYFREQTYPE_EXPLAIN' => 'Choisis jours, semaines ou mois.',
 'DECAY_SCHEDULE' => 'Amortissement programmé',
 'DECAY_SCHEDULE_EXPLAIN' => 'Activez pour demarrer un amortissement chaque 23 heures si forum est visité.',
-'DECAYCRON' => 'activé par cron', 
+'DECAYCRON' => 'activé par cron',
 'NO_DECAY_ADJ' => 'Ajustment amortissable ?',
 
-'PR' => 'ratio de Priorité', 
+'PR' => 'ratio de Priorité',
 'EP_DEFINITION' => '<strong>EP</strong> = Points gagnés = Raid Bonus + Bonus de temps + Bonus sommation zero + Ajustments ',
 'DECAY_EP' => '<strong>EP après Amortissement</strong> = EP - EP * d',
 'MEP'  => 'EP Minimum',
