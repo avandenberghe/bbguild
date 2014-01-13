@@ -263,7 +263,7 @@ class Loot
 				'SELECT'    => 'm.member_name, i.item_id, i.item_name, i.item_gameid, i.member_id, i.raid_id, i.item_date, e.event_name, e.event_dkpid, i.wowhead_id, e.event_color,
 								SUM(i.item_value) as item_value,
 								SUM(i.item_decay) as item_decay,
-								SUM(i.item_value - i.item_decay) as item_net ',
+								SUM(i.item_value - i.item_decay) as item_net , i.item_zs',
 				'FROM'      => array(
 						MEMBER_LIST_TABLE   => 'm',
 						RAID_ITEMS_TABLE    => 'i',

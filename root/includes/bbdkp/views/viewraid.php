@@ -91,8 +91,8 @@ $sort_order = array (
 );
 $current_order = $this->switch_order ($sort_order);
 
-$raid_details = new \bbdkp\controller\raids\Raiddetail($raid_id); 
-$raid->raid_details = (array) $raid_details->raid_details; 
+$raid_details = new \bbdkp\controller\raids\Raiddetail($raid_id);
+$raid->raid_details = (array) $raid_details->raid_details;
 
 $raid_value = 0.00;
 $time_bonus = 0.00;
@@ -105,7 +105,7 @@ foreach($raid->raid_details as $raid_detail)
 {
 	// fill attendees table
 	$template->assign_block_vars ('raids_row', array (
-		'U_VIEW_ATTENDEE' 		=> append_sid ("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' . URI_NAMEID . 
+		'U_VIEW_ATTENDEE' 		=> append_sid ("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' . URI_NAMEID .
 							"={$raid_detail['member_id']}&amp;" . URI_DKPSYS. "=" . $raid->event_dkpid),
 		'NAME' 		 			=> $raid_detail['member_name'],
 		'COLORCODE'  			=> ($raid_detail['colorcode'] == '') ? '#254689' : $raid_detail['colorcode'],
@@ -130,7 +130,7 @@ foreach($raid->raid_details as $raid_detail)
 }
 $raid_total = $raid_value + $time_bonus + $zerosum_bonus - $raid_decay;
 //reset the keys
-$raid->raid_details = array_values($raid->raid_details); 
+$raid->raid_details = array_values($raid->raid_details);
 // count blocks
 $blocksize = 7;
 $x = ceil(count($raid->raid_details) / $blocksize);
@@ -146,9 +146,9 @@ for ( $i = 0; $i < $x; $i++ )
 		if ( $attendee != '' )
 		{
 			$block_vars += array(
-				'COLUMN'.$j.'_NAME' => '<strong><a style="color: '. $raid->raid_details[$offset]['colorcode'].';" href="' . 
+				'COLUMN'.$j.'_NAME' => '<strong><a style="color: '. $raid->raid_details[$offset]['colorcode'].';" href="' .
 					append_sid("{$phpbb_root_path}dkp.$phpEx", "page=viewmember&amp;" . URI_NAMEID . '=' .
-					$raid->raid_details[$offset]['member_id'] . '&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id) . '">' . 
+					$raid->raid_details[$offset]['member_id'] . '&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id) . '">' .
 					$raid->raid_details[$offset]['member_name'] . '</a></strong>'
 			);
 		}
@@ -228,9 +228,9 @@ while ( $item = $db->sql_fetchrow($raid->loot_details))
 	{
 		$item_name = $item['item_name'];
 	}
-	
+
 	$buyer = new \bbdkp\controller\members\Members( $item['member_id']);
-	
+
 	$template->assign_block_vars ( 'items_row', array (
 		'DATE' 			=> (! empty ( $item ['item_date'] )) ? $user->format_date($item['item_date']) : '&nbsp;',
 		'COLORCODE'  	=> $buyer->colorcode,
@@ -247,8 +247,8 @@ while ( $item = $db->sql_fetchrow($raid->loot_details))
 		'DECAYVALUE' 	=> $item['item_decay'],
 		'TOTAL' 		=> $item['item_net'],
 	));
-	unset($buyer); 
-	
+	unset($buyer);
+
 	$number_items++;
 	$item_value += $item['item_value'];
 	$item_decay += $item['item_decay'];
@@ -263,7 +263,7 @@ $template->assign_vars(array(
 	'ITEMTOTAL'			 => $item_total,
 	'RAIDNET'			 => $raid_total - $item_total,
 	'ITEM_FOOTCOUNT'	 => sprintf($user->lang['VIEWRAID_DROPS_FOOTCOUNT'], $number_items) ,
-	
+
 ));
 
 // Class statistics

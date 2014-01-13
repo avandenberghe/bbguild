@@ -14,25 +14,7 @@
 	<!-- INCLUDE dkp/module/standings.html -->
 <!-- ENDIF -->
 <!-- IF S_DISPLAY_VIEWMEMBER -->
-	<form method="post" action="{F_MEMBERS}">
-	<div style="float: left; width:50%; white-space:nowrap;">
-		<h2 style="white-space:nowrap;">
-		<!-- IF S_RACE_IMAGE_EXISTS --><img src="{RACE_IMAGE}" alt="" />&nbsp;<!-- ELSE --><!-- ENDIF -->
-		<!-- IF S_CLASS_IMAGE_EXISTS --><img src="{CLASS_IMAGE}" alt="{CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;
-		<span style="color:{COLORCODE}"><strong>{NAME}</strong></span>
-		</h2>
-	</div>
-	<div style="color:white; text-align:right; float:right; width:50%; white-space:nowrap;">
-	<br/>
-	{L_POOL}:
-	<select name="pool" class="input" onchange="javascript:form.submit();">
-		<!-- BEGIN pool_row -->
-		<option value="{pool_row.VALUE}"{pool_row.SELECTED}{pool_row.DISABLED}>{pool_row.OPTION}</option>
-		<!-- END pool_row -->
-	</select>
-	</div>
-	<hr/>
-	</form>
+
 	<!-- IF S_SHOWEPGP -->
 		<!-- INCLUDE dkp/module/viewmember_epgp.html -->
 	<!-- ELSE -->
