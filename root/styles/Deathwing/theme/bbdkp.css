@@ -194,7 +194,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 .bbtooltip .t,
 .bbtooltip .b,
 .bbtooltip .b div {
- background-image: url("images/tooltip/tooltip.png");
+ background-image: url("images/bbdkp/tooltip/tooltip.png");
  background-color: transparent;
  background-repeat: no-repeat;
  background-position: right top;
@@ -287,13 +287,13 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 	width: 800px;
 	height: 120px;
 	margin: 0 0 0px;
-	background: url("images/bossprogress/rp/g_colorbar2.jpg");
+	background: url("images/bbdkp/bossprogress/rp/g_colorbar2.jpg");
 }
 * .html dd { float: none; }
 
 .progresspage dd div {
   	position: relative;
-	background: url("images/bossprogress/rp/g_colorbar.jpg");
+	background: url("images/bbdkp/bossprogress/rp/g_colorbar.jpg");
 	height: 120px;
 	width: 100%;
 	text-align:right;
@@ -304,7 +304,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 	right: -5px;
 	top: -2px;
 	display: block;
-	background: url("images/bossprogress/rp/g_marker.gif");
+	background: url("images/bbdkp/bossprogress/rp/g_marker.gif");
 	height: 24px;
 	width: 9px;
 	text-align: left;
