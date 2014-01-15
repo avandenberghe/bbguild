@@ -18,11 +18,15 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 // bbDKP
-if (! file_exists($phpbb_root_path . 'configdkp.' . $phpEx))
+if (file_exists($phpbb_root_path . 'configdkp.' . $phpEx))
 {
-	exit;
+	require($phpbb_root_path . 'configdkp.' . $phpEx);
+	$user->add_lang(array('mods/dkp_common'));
+	if(@defined("EMED_BBDKP"))
+	{
+		require($phpbb_root_path .  'includes/bbdkp/constants_bbdkp.' . $phpEx);
+	}
 }
-require($phpbb_root_path . 'configdkp.' . $phpEx);
 
 /**
  * hook in template chain to inject values
@@ -32,10 +36,9 @@ function hook_bbdkp(&$hook)
 {
 
 	global $db, $phpEx, $phpbb_root_path, $user, $template;
-	require($phpbb_root_path .  'includes/bbdkp/admin/constants_bbdkp.' . $phpEx);
-
 	if ($user->data['is_registered'])
 	{
+
 		// new posts since last visit
 		$sql = "SELECT COUNT(distinct post_id) as total
 		FROM " . POSTS_TABLE . "
