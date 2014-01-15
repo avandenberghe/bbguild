@@ -24,7 +24,7 @@ if (file_exists($phpbb_root_path . 'configdkp.' . $phpEx))
 	$user->add_lang(array('mods/dkp_common'));
 	if(@defined("EMED_BBDKP"))
 	{
-		require($phpbb_root_path .  'includes/bbdkp/constants_bbdkp.' . $phpEx);
+		require($phpbb_root_path .  'includes/bbdkp/admin/constants_bbdkp.' . $phpEx);
 	}
 }
 
