@@ -12,6 +12,24 @@ function check_form()
     return true;
 }
 
+//Wait for the page to load first
+window.onload = function() {
+
+  //Get a reference to the link on the page
+  // with an id of "mylink"
+  var levelup = document.getElementById("levelup");
+  var leveldown = document.getElementById("leveldown");
+
+  levelup.onclick = function() {
+ 	 var textBox = document.getElementById("member_level");
+     textBox.value++;
+     return false;}
+
+  leveldown.onclick = function() {
+	var textBox = document.getElementById("member_level");
+	textBox.value--;
+    return false;}
+  }
 
 
 /*  make a XMLHTTP Request object */
@@ -171,7 +189,6 @@ function classracestateChanged()
 
 
 
-
 // ]]>
 </script>
 <a name="maincontent"></a>
@@ -230,7 +247,10 @@ function classracestateChanged()
 
  <dl>
     <dt><label for="member_level">{L_LEVEL}:</label></dt>
-		<dd><input type="text" name="member_level" id="member_level" size="5" maxlength="3" value="{MEMBER_LEVEL}" class="input" /></dd>
+		<dd><input type="text" name="member_level" id="member_level" size="5" maxlength="3" value="{MEMBER_LEVEL}" class="input" />
+		<a id="levelup"  href="{F_ADD_MEMBER}" target="_blank"><img src="./images/icon_up.gif" /></a>
+		<a id="leveldown" href="{F_ADD_MEMBER}" target="_blank"><img src="./images/icon_down.gif" /></a>
+		</dd>
  </dl>
 
 <dl>

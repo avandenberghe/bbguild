@@ -140,10 +140,9 @@ function isValidChar(char){
     {S_FORM_TOKEN}
   	<!-- BEGIN members_row -->
   	<input type="hidden" name="hidden_member[{members_row.ID}]" value="{members_row.ID}" />
-  	<input type="hidden" name="start" value="{START}" />
-  	<input type="hidden" name="hidden_guildid" value="{GUILDID}" />
   	<!-- END members_row -->
-	<input class="button2" type="submit" name="deactivate" value="{L_CHANGE_STATUS}" />
+  	<input type="hidden" name="start" value="{START}" />
+ 	<input class="button2" type="submit" name="deactivate" value="{L_CHANGE_STATUS}" />
 	<input class="button2" name="memberadd" type="submit" value="{L_ADD_MEMBER}" />
 	<!-- IF S_WOW -->
 	<input class="button2" name="charapicall" type="submit" value="{L_CHARACTERAPICALL}" />
@@ -161,10 +160,9 @@ function isValidChar(char){
 <p>{L_WARNING_NOMEMBERS}</p>
 </div>
 
-
-
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-	<input class="button2" name="memberadd" type="submit" value="{L_ADD_MEMBER}" />
+	<input type="submit" name="memberadd"  value="{L_ADD_MEMBER}" class="button2" />
+	<input type="hidden" name="hidden_guildid" value="{GUILDID}" />
 </fieldset>
 <!-- ENDIF -->
 </form>
