@@ -77,7 +77,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 	 */
 	public function __construct($RankGuild, $RankId = 0)
 	{
-		if (($RankId >= 0 && $RankId = 0) or ($RankId == 0 && $RankId = 99) )
+		if (($RankGuild >= 0 && $RankId = 0) or ($RankGuild == 0 && $RankId = 99) )
 		{
 			$this->RankGuild=$RankGuild;
 			$this->RankId=$RankId;

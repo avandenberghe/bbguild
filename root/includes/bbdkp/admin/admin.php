@@ -127,7 +127,7 @@ class Admin
 				'vanguard' => $user->lang ['VANGUARD'],
 				'warhammer' => $user->lang ['WARHAMMER'],
 				'wow' 	=> $user->lang ['WOW'],
-				'FFXIV'	=> $user->lang ['FFXIV'],
+				'ffxiv'	=> $user->lang ['FFXIV'],
 		);
 
 	    $boardtime = array();
