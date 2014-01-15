@@ -82,7 +82,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	    $sql_ary[] = array('game_id' => 'FFXIV','class_id' => 13, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'ffxiv_black_mage' );
 	    $sql_ary[] = array('game_id' => 'FFXIV','class_id' => 14, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'ffxiv_arcanist' );
 	    $sql_ary[] = array('game_id' => 'FFXIV','class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'ffxiv_summoner' );
-	    $sql_ary[] = array('game_id' => 'FFXIV','class_id' => 15, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'ffxiv_scholar' );
+	    $sql_ary[] = array('game_id' => 'FFXIV','class_id' => 16, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'ffxiv_scholar' );
 		$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
 		unset ($sql_ary);
 
