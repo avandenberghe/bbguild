@@ -151,7 +151,6 @@ class ucp_dkp extends \bbdkp\admin\Admin
 				}
 
 				$show_buttons = true;
-				$show = true;
 				$s_guildmembers = ' ';
 				//if user has no access to claiming chars, don't show the add button.
 				if(!$auth->acl_get('u_dkpucp'))
@@ -168,12 +167,13 @@ class ucp_dkp extends \bbdkp\admin\Admin
 				$sql = 'SELECT count(*) AS mcount FROM ' . MEMBER_LIST_TABLE .' WHERE member_rank_id < 90  ';
 				$result = $db->sql_query($sql, 0);
 				$mcount = (int) $db->sql_fetchfield('mcount');
+				$show = true;
 				if ($mcount == 0)
 				{
 					$show = false;
 				}
 
-				if ($show != false)
+				if ($show)
 				{
 
 					// list all characters bound to me
@@ -209,6 +209,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 
 				break;
 			case 'characteradd':
+
 				//get member_id if selected from pulldown
 				$member_id =  request_var('hidden_member_id',  request_var(URI_NAMEID, 0));
 				$submit	 = (isset($_POST['add'])) ? true : false;
@@ -267,6 +268,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 					    $newmember->game_id = request_var('game_id', '');
 					    // get member name
 					    $newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
+					    $newmember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
 					    $newmember->member_guild_id = request_var('member_guild_id', 0);
 					    $newmember->member_rank_id = request_var('member_rank_id', 99);
 					    $newmember->member_level = request_var('member_level', 1);
@@ -326,6 +328,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 
 						// get member name
 						$updatemember->member_name = utf8_normalize_nfc(request_var('member_name', '',true));
+						$updatemember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
 						$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
 						$updatemember->member_guild_id =request_var('member_guild_id', 0);
 						$updatemember->member_rank_id =request_var('member_rank_id',99);
@@ -371,10 +374,12 @@ class ucp_dkp extends \bbdkp\admin\Admin
 	{
 		global $db, $auth, $user, $template, $config, $phpbb_root_path;
 		$members = new \bbdkp\controller\members\Members();
+
 		// Attach the language file
 		$user->add_lang('mods/dkp_common');
 		$user->add_lang(array('mods/dkp_admin'));
 		$show=true;
+
 		if($member_id == 0)
 		{
 			// check if user can add character
@@ -583,6 +588,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 		$template->assign_vars(array(
 			'STATUS'				=> ($members->member_status == 1) ? 'Checked ' : '',
 			'MEMBER_NAME'			=> $members->member_name,
+			'MEMBER_TITLE'			=> $members->member_title,
 			'MEMBER_ID'				=> $members->member_id,
 			'MEMBER_LEVEL'			=> $members->member_level,
 			'MALE_CHECKED'			=> ($members->member_gender_id  == '0') ? ' checked="checked"' : '' ,
