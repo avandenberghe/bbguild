@@ -101,7 +101,8 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 
 				if ($showadd)
 				{
-					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember"));
+					$a = request_var('member_guild_id', request_var('hidden_guildid', 0));
+					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;guild_id=" . $a ));
 					break;
 				}
 
@@ -530,8 +531,32 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 				/*
 				 * fill template
 				 */
-				$editmember = new \bbdkp\controller\members\Members(request_var('hidden_member_id', request_var(URI_NAMEID, 0)) );
-				$S_ADD = ($editmember->member_id > 0) ? false: true;
+				$member_id = request_var('hidden_member_id', request_var(URI_NAMEID, 0));
+				$editmember = new \bbdkp\controller\members\Members($member_id);
+
+				$S_ADD = ($member_id > 0) ? false: true;
+				if ($S_ADD)
+				{
+					$editmember->member_guild_id = request_var(URI_GUILD, 0);
+				}
+
+				$Guild = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
+				$guildlist = $Guild->guildlist();
+
+				if ($S_ADD)
+				{
+					$editmember->game_id = $Guild->game_id;
+				}
+
+				foreach ($guildlist as $g)
+				{
+					//populate guild popup
+					$template->assign_block_vars('guild_row', array(
+							'VALUE' => $g['id'] ,
+							'SELECTED' => ($g['id'] == $editmember->member_guild_id ) ? ' selected="selected"' : '' ,
+							'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+
+				}
 
 				// Game dropdown
 				if(isset($this->games))
@@ -557,26 +582,6 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 							'SELECTED' => ($editmember->member_region == $key) ? ' selected="selected"' : '' ,
 							'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
 				}
-
-				//guild dropdown
-				if (isset($_GET[URI_GUILD]))
-				{
-					$editmember->member_guild_id = request_var(URI_GUILD, 0);
-				}
-
-				$Guild = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
-				$guildlist = $Guild->guildlist();
-
-				foreach ($guildlist as $g)
-				{
-					//populate guild popup
-					$template->assign_block_vars('guild_row', array(
-							'VALUE' => $g['id'] ,
-							'SELECTED' => ($g['id'] == $Guild->guildid ) ? ' selected="selected"' : '' ,
-							'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
-
-				}
-				$editmember->member_guild_id = $Guild->guildid;
 
 				// Rank drop-down -> for initial load
 				// reloading is done from ajax to prevent redraw

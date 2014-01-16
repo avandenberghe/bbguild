@@ -21,21 +21,24 @@ if (!defined('IN_PHPBB'))
 if (file_exists($phpbb_root_path . 'configdkp.' . $phpEx))
 {
 	require($phpbb_root_path . 'configdkp.' . $phpEx);
+	$user->add_lang(array('mods/dkp_common'));
+	if(@defined("EMED_BBDKP"))
+	{
+		require($phpbb_root_path .  'includes/bbdkp/admin/constants_bbdkp.' . $phpEx);
+	}
 }
-if(@defined("EMED_BBDKP"))
-{
-	require($phpbb_root_path .  'includes/bbdkp/admin/constants_bbdkp.' . $phpEx);
-}
+
 /**
  * hook in template chain to inject values
  *
  */
 function hook_bbdkp(&$hook)
 {
+
 	global $db, $phpEx, $phpbb_root_path, $user, $template;
-	$user->add_lang(array('mods/dkp_common'));
 	if ($user->data['is_registered'])
 	{
+
 		// new posts since last visit
 		$sql = "SELECT COUNT(distinct post_id) as total
 		FROM " . POSTS_TABLE . "
@@ -65,14 +68,12 @@ function hook_bbdkp(&$hook)
 			'L_BBDKP'		=> $user->lang['FOOTERBBDKP'],
 			'U_ABOUT'       => append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
 	));
-
-
-
 }
 
 /**
- * Register all necessary hooks
+ * Register all necessary hooks if bbdkp is present
  */
+
 $phpbb_hook->register(array('template', 'display'), 'hook_bbdkp');
 
 ?>

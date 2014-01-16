@@ -158,8 +158,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<link type="text" href="docs/INSTALL.html" lang="fr">Lisez moi</link>
 			<link type="text" href="docs/INSTALL.html" lang="de">Lies mich</link>
 			<link type="template" href="contrib/prosilver.xml" lang="en">Prosilver</link>
-			<link type="template" href="contrib/Deathwing.xml" lang="en">Deathwing</link>
-			<link type="template" href="contrib/pbwow2.xml" lang="en">PBWoW2</link>
+
 		</link-group>
 	</header>
 	<action-group>
@@ -210,6 +209,34 @@ Order Allow,Deny
 Deny from All
 </Files>]]></find>
 				<action type="after-add"><![CDATA[DirectoryIndex portal.php index.php index.html index.htm]]></action>
+			</edit>
+		</open>
+	
+		<open src="includes/functions.php">
+			<edit>
+				<comment lang="en"><![CDATA[ preloading dkp language file in functions.php]]></comment>
+				<comment lang="fr"><![CDATA[ ajouter le fichier de langue dans fonctions.php ]]></comment>
+				<comment lang="de"><![CDATA[ zufügen dkp Sprachdatei in functions.php]]></comment>
+				<find><![CDATA[if (defined('HEADER_INC'))]]></find>
+				<action type="before-add"><![CDATA[$user->add_lang(array('mods/dkp_common'));
+]]></action>
+			</edit>
+			
+			
+			<edit>
+				<comment lang="en"><![CDATA[adding cronjobs in footer function]]></comment>
+				<comment lang="en"><![CDATA[ajouter cronjobs dans la fonction footer]]></comment>
+				<comment lang="en"><![CDATA[zufügen Cronjobs in die footer Funktion]]></comment>
+				<find><![CDATA[			$cron_type = 'tidy_sessions';
+		}]]></find>
+				<action type="after-add"><![CDATA[		// bbDKP cron job
+		else if (array_key_exists ('bbdkp_crontime', $config))
+		{
+			if ($time_now - $config['bbdkp_crontime']*3600 > $config['bbdkp_lastcron'])
+			{
+				$cron_type = 'pointdecay';
+			}
+		}]]></action>
 			</edit>
 		</open>
 		<open src="cron.php">
