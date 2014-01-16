@@ -392,6 +392,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					$newmember = new \bbdkp\controller\members\Members();
 					$newmember->game_id = request_var('game_id', '');
 					$newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
+					$newmember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
 					$newmember->member_guild_id = request_var('member_guild_id', 0);
 					$newmember->member_rank_id = request_var('member_rank_id', 99);
 					$newmember->member_level = request_var('member_level', 1);
@@ -466,6 +467,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					}
 					$updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
 					$updatemember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
+					$updatemember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
 					$updatemember->member_rank_id = request_var('member_rank_id', 99);
 					$updatemember->member_level = request_var('member_level', 0);
 					$updatemember->member_joindate = mktime(0, 0, 0, request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
@@ -797,6 +799,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					'MEMBER_ID' => $editmember->member_id,
 					'MEMBER_LEVEL' => $editmember->member_level,
 					'REALM' =>  $editmember->member_realm,
+
 					'MEMBER_ACHIEV' => $editmember->member_achiev,
 					'MEMBER_TITLE' => $editmember->member_title,
 					'MALE_CHECKED' => ( $editmember->member_gender_id == '0') ? ' checked="checked"' : '' ,
