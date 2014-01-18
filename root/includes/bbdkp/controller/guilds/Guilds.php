@@ -177,6 +177,14 @@ class Guilds extends \bbdkp\admin\Admin
 	public $raidtrackerrank;
 
 	/**
+	 * rank to which apply should add new recruits
+	 *
+	 * @var int
+	 */
+	public $applyrank;
+
+
+	/**
 	 * guild class constructor
 	 * @param int $guild_id
 	 */
@@ -228,6 +236,7 @@ class Guilds extends \bbdkp\admin\Admin
 			$this->countmembers();
 			$this->guilddefault = $row['guilddefault'];
 			$this->raidtrackerrank = $this->maxrank();
+			$this->applyrank = $this->maxrank();
 		}
 
 
