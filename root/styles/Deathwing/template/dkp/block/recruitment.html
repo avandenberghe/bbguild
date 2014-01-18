@@ -13,13 +13,18 @@
 
 <div>
 <div style="width: 50%; float: left;">
-<span><img src="{guild.EMBLEM}" alt="{guild.GUILD_NAME}" /></span>
+<span><img style="width:60%; height:60%" src="{guild.EMBLEM}" alt="{guild.GUILD_NAME}" /></span>
 </div>
 <div style="width: 40%; float: left; text-align:left;">
 <h1>{guild.NAME}</h1>
 </div>
 </div>
 <div style="width: 90%; clear: both; moz-box-shadow: inset 0 0 30px #000f; -webkit-box-shadow: inset 0 0 30px #000f; box-shadow: inset 0 0 30px #000f; margin:auto;">
+
+<!-- IF guild.S_CLOSED -->
+<p style="text-align:center; text-shadow: 1px 1px;">{L_RECRUIT_CLOSED}</p>
+<!-- ELSE -->
+<p style="text-align:center; text-shadow: 1px 1px;">{L_RECRUIT_MESSAGE}</p>
 
 <table width="100%" cellpadding="2" cellspacing="1" border="0" class="forumline">
 <tr>
@@ -29,6 +34,7 @@
  <th style="text-align:center;"><img src="{ROOT_PATH}/images/bbdkp/portal/recruitblock_images/healer_icon.png" alt="{L_HEAL}" title="{L_HEAL}" />
 </th>
 </tr>
+
 
 <!-- BEGIN rec -->
 <script type="text/javascript">
@@ -118,6 +124,7 @@ jQuery(document).ready( function()
     </tr>
 <!-- END rec -->
 </table>
+<!-- ENDIF -->
 </div>
 </div>
 <!-- END guild -->
