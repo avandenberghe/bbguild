@@ -1,6 +1,24 @@
 <!-- INCLUDE overall_header.html -->
 <script type="text/javascript">
 //<![CDATA[
+
+
+window.onload = function() {
+
+  var neededup = document.getElementById("neededup");
+  var neededdown = document.getElementById("neededdown");
+
+  neededup.onclick = function() {
+ 	 var textBox = document.getElementById("recruitneeded");
+     textBox.value++;
+     return false;}
+
+  neededdown.onclick = function() {
+	var textBox = document.getElementById("recruitneeded");
+	textBox.value--;
+    return false;}
+}
+
 function check_form()
 {
     if (document.getElementById('guild_name').value.length < 2)
@@ -10,6 +28,10 @@ function check_form()
     }
     return true;
 }
+
+
+
+
 //]]>
 </script>
 <style>
@@ -259,47 +281,38 @@ input.inputrow {
 <!-- IF ! S_GUILDLESS -->
 
 <fieldset>
-<fieldset>
-<legend>{L_ADD_ROLES}</legend>
 
-	<dl>
-		<dt><label for="recruitrole">{L_ROLE}:</label></dt>
-		<dd>
-			<select name="recruitrole" id="recruitrole" class="input" id="role">
+	<div style= "background-color: #EEEEEE;">
+		<div style="float:left; width:10%"><label for="recruitrole"><strong>{L_ADD_ROLES}</strong>:</label></div>
+		<div style="float:left;  width:80%; vertical-align: top; text-align: left;">
+			<p>{L_ROLE}
+      		<select name="recruitrole" id="recruitrole" class="input" id="role">
 	      	<!-- BEGIN rolelist_row -->
 	      	<option value="{rolelist_row.VALUE}"{rolelist_row.SELECTED}>{rolelist_row.OPTION}</option>
 	      	<!-- END rolelist_row  -->
 	      	</select>
-      	</dd>
-     </dl>
-
-	<dl>
-      	<dt><label for="recruitclass">{L_ROLE}:</label></dt>
-      	<dd>
+	      	{L_CLASS}
     		<select name="recruitclass" id="recruitclass" class="input" id="role">
 	      	<!-- BEGIN classlist_row -->
 	      	<option value="{classlist_row.VALUE}"{classlist_row.SELECTED}>{classlist_row.OPTION}</option>
 	      	<!-- END classlist_row  -->
 	    	</select>
-		</dd>
-	</dl>
+	    	
+	    	{L_NEEDED}
+	    	<input type="text" name="recruitneeded" id="recruitneeded" size="4" maxlength="4" value="" class="input" />&nbsp;
+	    	<a id="neededup"  href="{F_ADD_GUILD}" target="_blank"><img src="./images/icon_up.gif" /></a>
+			<a id="neededdown" href="{F_ADD_GUILD}" target="_blank"><img src="./images/icon_down.gif" /></a>
+			</p>
+			
+      	</div>
+      	<div style="float:left; width:10%">
+      	<input type="submit" name="addrecruitment" value="{L_ADD_ROLE}" class="button1"  />
+      	</div>
+		
+     </div>
 
-	<dl>
-      	<dt><label for="recruitneeded">{L_NEEDED}:</label></dt>
-      	<dd>
-    		<input type="text" name="recruitneeded" size="10" maxlength="2" value="" class="editfield" />
-	    	</select>
-		</dd>
-	</dl>
 
-	<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-		<input type="submit" name="addrecruitment" value="{L_ADD_ROLE}" class="button1"  />
-	</fieldset>
-</fieldset>
 
-<!-- ENDIF -->
-
-<!-- IF ! S_GUILDLESS -->
 <fieldset class="tabulated">
 <legend>{L_EDIT_ROLES}</legend>
 <table cellspacing="1" style="width:80%">
