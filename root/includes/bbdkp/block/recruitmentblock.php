@@ -46,7 +46,7 @@ while ($row = $db->sql_fetchrow($guildrecruitingresult))
 	$template->assign_block_vars('guild', array(
 			'EMBLEM' 	=> $row['emblemurl'],
 			'NAME' 		=> $row['name'],
-			'MESSAGE' => $row['rec_status'] ==0 ? $user->lang['RECRUIT_CLOSED'] : $user->lang['RECRUIT_MESSAGE'],
+			'S_CLOSED'  => $row['rec_status'] ==0 ? true : false,
 	));
 
 

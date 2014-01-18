@@ -41,6 +41,8 @@ function check_nav()
 	       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
 	      <!-- END guild_row -->
 		</select>
+		<input type="hidden" name="hidden_guild_id" value="{GUILD_ID}" />
+		<input type="hidden" name="hidden_show" value="{SHOWALL}" />
 		</form>
 	</div>
 
@@ -51,5 +53,3 @@ function check_nav()
 </div>
 </div>
 <br />
-<input type="hidden" name="hidden_guild_id" value="{GUILD_ID}" />
-<input type="hidden" name="hidden_show" value="{SHOWALL}" />

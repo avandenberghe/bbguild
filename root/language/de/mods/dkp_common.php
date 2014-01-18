@@ -46,6 +46,7 @@ $lang = array_merge($lang, array(
 	'FOOTERBBDKP' => 'bbDKP 1.3.0',
 //---- Portal blocks -----
 	'PORTAL'	=> 'Portal',
+	'USER_MENU'			=> 'Dein menu',
 	'RECENTLOOT'	=> 'Letzte Beute',
 	'REMEMBERME'	=> 'Login merken',
 	'INFORUM'	=> 'in',
@@ -141,6 +142,7 @@ $lang = array_merge($lang, array(
 	'TANK'	=> 'Schutz',
 	'DPS'	=> 'Schaden',
 	'HEAL'	=> 'Heilung',
+	'HEALER' => 'Heiler',
 	'RECRUIT_MESSAGE'	=> 'Wir sind zurzeit auf der Suche nach neuen Mitstreitern folgender Klassen und Spezialisierungen:',
 
 //ROSTER
@@ -237,15 +239,14 @@ $lang = array_merge($lang, array(
 	'DELETE'	=> 'Löschen',
 	'DELETE_CONFIRMATION'	=> 'Bestätige Löschung',
 	'DKP_VALUE'	=> '%s Wert',
+	
+	'NO_CHARACTERS'	=> 'Keine Charaktere gefunden.',
 	'STATUS'	=> 'Status Y/N',
 	'CHARACTER'	=> 'Charaktername',
 	'CHARACTER_EXPLAIN'	=> 'Wähle dein Charakternamen and bestätige.',
 	'CHARACTERS_UPDATED'	=> 'Der Charaktername %s wurde an dein Forumkonto gekoppelt. ',
 	'NO_CHARACTERS_BOUND' => 'Keine Charaktere an sind an Ihr Account verbunden.',
-	'NO_CHARACTERS'	=> 'Keine Charaktere gefunden.',
-	'RAIDDECAY'	=> 'Raid Entwertung',
-	'ADJDECAY' => 'Ajustierungsentwertung',
-	'DECAY'	=> 'Entwert',
+	
 	'DROPS'	=> 'Beute',
 	'EVENTNOTE' => 'Notiz: Nur Raids und Beute von aktive Ereignisse werden gezeigt',
 	'EVENT'	=> 'Ereignis',
@@ -351,6 +352,11 @@ $lang = array_merge($lang, array(
 	'GPNET'	=> 'RP netto',
 	'PR'	=> 'Priorität',
 	'PRLONG'	=> 'Prioritätenschlüssel',
+	'RAIDDECAY'	=> 'Raid Entwertung',
+	'ADJDECAY' => 'Ajustierungsentwertung',
+	'DECAY'	=> 'Entwert',
+
+
 
 // Page Foot Counts
 
@@ -428,9 +434,6 @@ $lang = array_merge($lang, array(
 	'REQUIRED_FIELD_NOTE'	=> 'Mit * gekennzeichnete Felder sind Pflichtfelder.',
 	'SELECT_EXISTING'	=> 'Wähle vorhandene',
 	'UPDATED'	=> 'Aktualisiert',
-
-// Error messages
-	'NOT_ADMIN'	=> 'Du bist kein Administrator',
 
 //---- About --- do not change anything here
 //tabs
