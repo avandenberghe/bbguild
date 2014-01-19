@@ -1,15 +1,15 @@
 <?php
 /**
  * loot block
- * 
- *   @package bbdkp
+ *
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
- 
- * 
+
+ *
  */
 
 if (!defined('IN_PHPBB'))
@@ -20,38 +20,28 @@ if (!defined('IN_PHPBB'))
 $n_items = $config['bbdkp_n_items'];
 
 /**  begin loot block ***/
-$sql = "SELECT item_name, item_gameid FROM " . RAID_ITEMS_TABLE . ' ORDER BY item_date DESC ';
+$sql = "SELECT item_name, item_gameid, wowhead_id FROM " . RAID_ITEMS_TABLE . ' ORDER BY item_date DESC ';
 $result = $db->sql_query_limit($sql, $n_items, 0);
-while ($row = $db->sql_fetchrow($result))
-{         
-	if ($this->bbtips == true)
+while ($item = $db->sql_fetchrow($result))
+{
+	if ($this->bbtips == true && $item['item_gameid'] == 'wow')
 	{
-		if ($row['item_gameid'] == 'wow' )
-		{
-			$item_name = $this->bbtips->parse('[itemdkp]' . $row['item_gameid']  . '[/itemdkp]'); 
-		}
-		else 
-		{
-			$item_name = $this->bbtips->parse('[itemdkp]' . $row['item_name']  . '[/itemdkp]');
-		}
+		$item_name = '<strong>' . $this->bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]') . '</strong>';
 	}
 	else
 	{
-		$item_name = $row['item_name'];
+		$item_name = '<strong>' .  $item ['item_name'] . '</strong>';
 	}
-	
+
 	$template->assign_block_vars('itemit', array(
-	    'ITEMI1' => $item_name, 
-	));  
+	    'ITEMI1' => $item_name,
+	));
 }
 
 $db->sql_freeresult($result);
 $template->assign_vars(array(
-	'S_DISPLAY_LOOT' 	=> true, 
+	'S_DISPLAY_LOOT' 	=> true,
 ));
-
-/**  end loot block ***/
-
 
 
 ?>

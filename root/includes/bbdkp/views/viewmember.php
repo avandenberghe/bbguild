@@ -63,20 +63,20 @@ $pct2 =	 ( $pc2 > 0 ) ? round(($mc2 / $pc2) * 100, 1) : 0;
 $pct3 =	 ( $pc3 > 0 ) ? round(($mc3 / $pc3) * 100, 1) : 0;
 $pctlife = ( $pclife > 0 ) ? round(($mclife / $pclife) * 100, 1) : 0;
 
-/** 
- * 
+/**
+ *
  * RAID history
- * 
- *  
+ *
+ *
  **/
 
 $rstart = request_var('rstart',0);
 if($config['bbdkp_epgp'] == '1')
 {
-	$current_earned = $points->earned_net; 
+	$current_earned = $points->earned_net;
 }
 else
-{	
+{
 	$current_earned = $points->earned_net;
 }
 
@@ -98,36 +98,36 @@ while ( $raid = $db->sql_fetchrow($raids_result))
 	$current_earned = $current_earned - $raid['net_earned'];
 }
 
-/** 
- * 
+/**
+ *
  * loot history
- * 
- *  
+ *
+ *
  **/
 
 $istart = request_var('istart', 0);
 if($config['bbdkp_epgp'] == '1')
 {
-	$current_spent = $points->gp_net; 
+	$current_spent = $points->gp_net;
 }
 else
-{	
+{
 	$current_spent = $points->earned_net;
 }
 
 $loot = new \bbdkp\controller\loot\Loot();
-$lootdetails = $loot->GetAllLoot( ' i.item_date DESC ',0,  $this->dkpsys_id, 0, $istart, $member_id ); 
+$lootdetails = $loot->GetAllLoot( ' i.item_date DESC ',0,  $this->dkpsys_id, 0, $istart, $member_id );
 while ( $item = $db->sql_fetchrow($lootdetails))
 {
-	if ($this->bbtips == true)
+	if ($this->bbtips == true && $item['item_gameid'] == 'wow')
 	{
-		if ($item['item_gameid'] == 'wow' )
+		if($item['wowhead_id'] > 0)
 		{
-			$item_name = '<strong>' . $this->bbtips->parse('[itemdkp]' . $item['item_gameid']	 . '[/itemdkp]') . '</strong>' ;
+			$item_name = '<strong>' . $this->bbtips->parse('[itemdkp]' . $item['wowhead_id']	 . '[/itemdkp]') . '</strong>' ;
 		}
 		else
 		{
-			$item_name = '<strong>' . $this->bbtips->parse ( '[itemdkp]' . $item ['item_name'] . '[/itemdkp]' . '</strong>'  );
+			$item_name = '<strong>' . $this->bbtips->parse('[itemdkp]' . $item['item_name']	 . '[/itemdkp]') . '</strong>' ;
 		}
 	}
 	else
@@ -147,7 +147,7 @@ while ( $item = $db->sql_fetchrow($lootdetails))
 			'CURRENT_SPENT' => sprintf("%.2f", $current_spent))
 	);
 	$current_spent -= $item['item_net'];
-	
+
 }
 $db->sql_freeresult($lootdetails);
 
@@ -169,7 +169,7 @@ $result6 = $db->sql_query($sql6);
 $total_purchased_items = $db->sql_fetchfield('itemcount');
 $db->sql_freeresult($result6);
 
-$raidpag  = $this->generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . 
+$raidpag  = $this->generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' .
 URI_DKPSYS.'='.$this->dkpsys_id. '&amp;' . URI_NAMEID. '='.$member_id. '&amp;istart=' .$istart),
 $points->raidcount, $config ['bbdkp_user_rlimit'], $rstart, 1, 'rstart');
 
@@ -187,7 +187,7 @@ $template->assign_vars(array(
 ));
 
 //output
-$url = append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id); 
+$url = append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewmember&amp;' . URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id);
 
 $template->assign_vars(array(
 		'S_DISPLAY_VIEWMEMBER' => true,
@@ -195,14 +195,14 @@ $template->assign_vars(array(
 		'S_SHOWDECAY' 	   => ($config['bbdkp_decay'] == '1') ? true : false,
 		'S_SHOWEPGP' 	   => ($config['bbdkp_epgp'] == '1') ? true : false,
 		'S_SHOWTIME' 	   => ($config['bbdkp_timebased'] == '1') ? true : false,
-		
-		'NAME'	   		  => $member->member_name, 
+
+		'NAME'	   		  => $member->member_name,
 		'GUILD'	   		  => $member->member_guild_name,
 		'REGION'   		  => $member->member_region,
 		'REALM'	   		  => $member->member_realm,
 		'MEMBER_LEVEL'    => $member->member_level,
 		'MEMBER_DKPID'    => $this->dkpsys_id,
-		'MEMBER_DKPNAME'  => $this->dkpsys_name, 
+		'MEMBER_DKPNAME'  => $this->dkpsys_name,
 		'MEMBER_RACE'     => $member->member_race,
 		'MEMBER_CLASS'    => $member->member_class,
 		'COLORCODE'       => $member->colorcode,
@@ -224,10 +224,10 @@ if($config['bbdkp_epgp'] == '0')
 		'RAIDDECAY'		=> $points->earned_decay,
 		'EARNED'        => $points->total_earned ,
 		'EARNED_NET'    => $points->earned_net,
-			 
+
 		'SPENT'         => $points->spent,
 		'ITEMDECAY'     => $points->item_decay,
-		'ITEMNET'		=> $points->item_net, 
+		'ITEMNET'		=> $points->item_net,
 		'CURRENT'       => $points->total,
 		'C_CURRENT'       => ($points->total > 0) ? 'positive' : 'negative',
 		'ADJUSTMENT'    => $points->adjustment,
@@ -238,7 +238,7 @@ if($config['bbdkp_epgp'] == '0')
 		'C_TOTAL_DECAY'	=> $points->total_decayed > 0 ? 'negative' : 'positive',
 		'NETCURRENT'    => $points->total_net,
 		'C_NETCURRENT'  => $points->total_net > 0 ? 'positive' : 'negative',
-));	
+));
 }
 elseif($config['bbdkp_epgp'] == '1')
 {

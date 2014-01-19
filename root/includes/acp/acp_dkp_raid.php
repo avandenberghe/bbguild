@@ -543,18 +543,6 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 
 		// populate item buyer list
 
-		// if bbtips plugin exists load it
-		if ($this->bbtips == true)
-		{
-			if ( !class_exists('bbtips'))
-			{
-				require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx);
-			}
-			$bbtips = new bbtips;
-		}
-
-		// item selection
-
 		$number_items = 0;
 		$item_value = 0.00;
 		$item_decay = 0.00;
@@ -562,20 +550,14 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 
 		foreach((array) $this->RaidController->lootlist as $item_id => $lootdetail)
 		{
-			if ($this->bbtips == true)
+
+			if ($this->bbtips == true && $lootdetail['item_gameid'] == 'wow')
 			{
-				if ($lootdetail['item_gameid'] == 'wow' )
-				{
-					$item_name = $bbtips->parse('[itemdkp]' . $lootdetail['	']  . '[/itemdkp]');
-				}
-				else
-				{
-					$item_name = $bbtips->parse('[itemdkp]' . $lootdetail['item_name']  . '[/itemdkp]');
-				}
+				$item_name = '<strong>' .  $this->bbtips->parse('[itemdkp]' . $lootdetail['item_name']  . '[/itemdkp]') . '</strong>';
 			}
 			else
 			{
-				$item_name = $lootdetail['item_name'];
+				$item_name = '<strong>' .$lootdetail['item_name'] . '</strong>';
 			}
 
 			$buyer = new \bbdkp\controller\members\Members($lootdetail['member_id']);

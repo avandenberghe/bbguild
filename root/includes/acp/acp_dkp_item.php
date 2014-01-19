@@ -272,16 +272,6 @@ class acp_dkp_item extends \bbdkp\admin\Admin
 					'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
 		}
 
-		// add member button redirect
-		if ($this->bbtips == true)
-		{
-			if ( !class_exists('bbtips'))
-			{
-				require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx);
-			}
-			$bbtips = new bbtips;
-		}
-
 		/***  DKPSYS drop-down query ***/
         $dkpsys_id = 0;
 
@@ -405,23 +395,21 @@ class acp_dkp_item extends \bbdkp\admin\Admin
 			$this->bbtips = false;
 			while ( $item = $db->sql_fetchrow ( $items_result ) )
 			{
-				$item_name = $item['item_name'];
-				if ($item['item_gameid'] == 'wow' )
+
+				if ($this->bbtips == true && $item['item_gameid'] == 'wow')
 				{
-					$this->bbtips = true;
 					if(is_numeric($item['item_gameid']))
 					{
-						//$item_name = $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]');
+						$item_name = '<strong>' . $this->bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]') . '</strong>';
 					}
 					else
 					{
-						//$item_name = $bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]');
+						$item_name = '<strong>' . $this->bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]') . '</strong>';
 					}
-
 				}
 				else
 				{
-					$item_name = $item['item_name'];
+					$item_name = $item ['item_name'];
 				}
 
 				$template->assign_block_vars ( 'items_row', array (

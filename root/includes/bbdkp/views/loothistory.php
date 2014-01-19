@@ -61,18 +61,9 @@ $item_total = 0.00;
 while ( $item = $db->sql_fetchrow ( $items_result ) )
 {
 
-	if ($this->bbtips == true)
+	if ($this->bbtips == true && $item['item_gameid'] == 'wow')
 	{
-
-		if ($item['item_gameid'] == 'wow' )
-		{
-			$valuename = $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]');
-		}
-		else
-		{
-			$valuename = $bbtips->parse ( '[itemdkp]' . $item ['item_name'] . '[/itemdkp]' );
-		}
-
+		$valuename = '<strong>' . $this->bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]') . '</strong>';
 	}
 	else
 	{
