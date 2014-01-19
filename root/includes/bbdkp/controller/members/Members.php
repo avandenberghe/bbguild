@@ -544,9 +544,19 @@ class Members extends \bbdkp\admin\Admin
 			$error[]= $user->lang['ERROR_MEMBEREXIST'];
 		}
 
-		if($this->member_rank_id == null)
+		if($this->member_rank_id === null)
 		{
 			$error[]= $user->lang['ERROR_INCORRECTRANK'];
+		}
+
+		if($this->member_status === null )
+		{
+			$this->member_status = 1;
+		}
+
+		if($this->member_title === null )
+		{
+			$this->member_title = ' ';
 		}
 
 		// check if rank exists
@@ -1447,7 +1457,7 @@ class Members extends \bbdkp\admin\Admin
 			AND g.id = m.member_guild_id
 			AND r.guild_id = m.member_guild_id
 			AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
-			AND m.member_status = 1 ";
+			 ";
 
 		if ($mycharsonly ==false)
 		{

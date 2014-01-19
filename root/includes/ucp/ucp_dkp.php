@@ -684,7 +684,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 				$template->assign_block_vars('members_row.dkp_row', array(
 					'DKPSYS'        => $row2['dkpsys_name'],
 					'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}dkp.$phpEx",
-							"page=viewmember&amp;". URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id'] ),
+							"page=viewmember&amp;". URI_NAMEID . '=' . $char['member_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id'] ),
 					'EARNED'       => $row2['ep'],
 					'SPENT'        => $row2['gp'],
 					'PR'           => $row2['pr'],
