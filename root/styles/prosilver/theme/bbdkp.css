@@ -68,7 +68,7 @@ ul.portalmenu {
 	background-image: url("{T_THEME_PATH}/images/gradient.gif");
     background-origin: padding-box;
     background-position: 0 0;
-    background-repeat: repeat;
+    background-repeat: repeat-x;
     background-size: auto auto;
     list-style-image: none;
     list-style-position: outside;
