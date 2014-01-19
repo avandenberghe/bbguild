@@ -134,13 +134,20 @@ class Admin
 	    $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
 	    $this->time = $boardtime[0];
 
+	    $this->bbtips = false;
 	    if (isset($config['bbdkp_plugin_bbtips_version']))
 	    {
 	    	//check if config value and parser file exist.
-	    	if($config['bbdkp_plugin_bbtips_version'] >= '0.3.1' && file_exists($phpbb_root_path. 'includes/bbdkp/bbtips/parse.' . $phpEx))
+	    	if($config['bbdkp_plugin_bbtips_version'] >= '1.1' && file_exists($phpbb_root_path. 'includes/bbdkp/bbtips/parse.' . $phpEx))
 	    	{
 	    		$this->bbtips = true;
+    			if ( !class_exists('bbtips'))
+    			{
+    				require($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx);
+    			}
+    			$this->bbtips = new \bbtips;
 	    	}
+
 	    }
 
 	    $this->gamesarray();

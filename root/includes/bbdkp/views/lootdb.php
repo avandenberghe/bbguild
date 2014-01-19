@@ -23,6 +23,8 @@ if (!class_exists('\bbdkp\controller\raids\Raids'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raids.$phpEx");
 }
+
+
 $loot = new \bbdkp\controller\loot\Loot();
 $total_items = $loot->countloot('values', $this->guild_id, $this->dkpsys_id);
 
@@ -59,22 +61,13 @@ $item_total = 0.00;
 while ( $item = $db->sql_fetchrow ( $items_result ) )
 {
 
-	if ($this->bbtips == true)
+	if ($this->bbtips == true && $item['item_gameid'] == 'wow')
 	{
-
-		if ($item['item_gameid'] == 'wow' )
-		{
-			$valuename = $bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]');
-		}
-		else
-		{
-			$valuename = $bbtips->parse ( '[itemdkp]' . $item ['item_name'] . '[/itemdkp]' );
-		}
-
+		$valuename = '<strong>' . $this->bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]')  . '</strong>';
 	}
 	else
 	{
-		$valuename = $item ['item_name'];
+		$valuename = '<strong>' . $item ['item_name'] . '</strong>';
 	}
 	$raid = new \bbdkp\controller\raids\Raids($item ['raid_id']);
 	$template->assign_block_vars ( 'items_row', array (

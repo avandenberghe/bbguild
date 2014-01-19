@@ -6,7 +6,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.2.8
+ * @version 1.3.0
  */
 namespace bbdkp\views;
 /**
@@ -179,7 +179,7 @@ if($raid_count > 0)
 
 	// item selection
 	$sql_array = array(
-		'SELECT'    => 'i.item_id, i.item_name, i.item_gameid, i.member_id, i.item_zs,
+		'SELECT'    => 'i.item_id, i.item_gameid, i.item_name, i.item_gameid, i.member_id, i.item_zs,
 			l.member_name, c.colorcode, c.imagename, l.member_gender_id,
 			a.image_female, a.image_male, i.item_date, i.raid_id, i.item_value,
 			i.item_decay, i.item_value - i.item_decay as item_total',
@@ -206,14 +206,15 @@ if($raid_count > 0)
 
 	while ( $row = $db->sql_fetchrow($result) )
 	{
-		if ($this->bbtips == true)
+		if ($this->bbtips == true && $row['item_gameid'] == 'wow')
 		{
-			$item_name = '<b>' . $this->bbtips->parse('[itemdkp]' . $row['item_name']  . '[/itemdkp]') . '</b>';
+			$item_name = '<strong>' . $this->bbtips->parse('[itemdkp]' .  $row['item_name']   . '[/itemdkp]') . '</strong>';
 		}
 		else
 		{
-			$item_name = '<b>' . $row['item_name']. '</b>';
+			$item_name = '<strong>' . $row['item_name'] . '</strong>';
 		}
+
 		$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
 		$template->assign_block_vars('items_row', array(
 			'DATE'          => date($config['bbdkp_date_format'], $row['item_date']),

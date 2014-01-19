@@ -34,16 +34,9 @@ $purchased_items = $loot->Loothistory($loot->item_name);
 
 $title = $user->lang['ITEM'] . ' : '. $loot->item_name;
 
-if ($this->bbtips == true)
+if ($this->bbtips == true && $loot->game_id == 'wow')
 {
-	if ($item_gameid == 'wow' )
-	{
-		$item_name = '<strong>' . $bbtips->parse('[itemdkp]' . $loot->wowhead_id  . '[/itemdkp]') . '</strong>' ;
-	}
-	else
-	{
-		$item_name = '<strong>' . $bbtips->parse ( '[itemdkp]' . $loot->item_name . '[/itemdkp]' . '</strong>'  );
-	}
+	$valuename = '<strong>' . $this->bbtips->parse('[itemdkp]' .  $loot->item_name   . '[/itemdkp]') . '</strong>';
 }
 else
 {
