@@ -31,11 +31,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
 }
-//Initialising the class
-if (!class_exists('\bbdkp\controller\wowapi\BattleNet'))
-{
-	require($phpbb_root_path . 'includes/bbdkp/controller/wowapi/BattleNet.' . $phpEx);
-}
 
 /**
  * manages member creation
@@ -53,7 +48,7 @@ class Members extends \bbdkp\admin\Admin
 	public $game_id;
 
 	/**
-	 * primary key in the bbDKP membertable
+	 * primary key in the bbDKP member table
 	 * @var integer
 	 */
 	public $member_id;
@@ -862,6 +857,7 @@ class Members extends \bbdkp\admin\Admin
 	{
 		global $phpEx, $phpbb_root_path;
 
+
 		$game = new \bbdkp\controller\games\Game;
 		$game->game_id = $this->game_id;
 		$game->Get();
@@ -875,6 +871,12 @@ class Members extends \bbdkp\admin\Admin
 		{
 			return -1;
 		}
+
+        //Initialising the class
+        if (!class_exists('\bbdkp\controller\wowapi\BattleNet'))
+        {
+            require($phpbb_root_path . 'includes/bbdkp/controller/wowapi/BattleNet.' . $phpEx);
+        }
 
 		/**
 			* available extra fields :
@@ -1215,7 +1217,6 @@ class Members extends \bbdkp\admin\Admin
 					'member_comment' => (string) $this->member_comment ,
 					'member_joindate' => (int) $this->member_joindate ,
 					'member_outdate' => (int) $this->member_outdate ,
-					'member_guild_id' => $this->member_guild_id ,
 					'member_gender_id' => $this->member_gender_id ,
 					'member_realm' => $this->member_realm,
 					'member_achiev' => $this->member_achiev ,

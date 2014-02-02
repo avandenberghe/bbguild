@@ -117,7 +117,6 @@ class views extends \bbdkp\admin\Admin
 			{
 				require ($phpbb_root_path . 'includes/bbdkp/bbtips/parse.' . $phpEx);
 			}
-			//$bbtips = new bbtips ( );
 		}
 
 		//load navigation
@@ -228,6 +227,21 @@ class views extends \bbdkp\admin\Admin
 				{
 					include($phpbb_root_path . 'includes/bbdkp/block/linksblock.' . $phpEx);
 				}
+
+				if (isset($config['bbdkp_raidplanner']))
+				{
+				    if ($config['rp_show_portal'] == 1)
+				    {
+				        $user->add_lang(array('mods/raidplanner'));
+                        if (!class_exists('\rpblocks', false))
+                        {
+                            //display the blocks
+                            include($phpbb_root_path . 'includes/bbdkp/raidplanner/rpblocks.' . $phpEx);
+                        }
+                        $blocks = new \rpblocks();
+                        $blocks->display();
+                    }
+                }
 				break;
 		}
 	}

@@ -751,7 +751,6 @@ class LootController  extends \bbdkp\admin\Admin
 				'TOTAL_RAIDS' 	=> $raid_count,
 				'TOTAL_DROPS' 	=> $this->total_drops,
 				'S_SHOWEPGP' 	=> ($config['bbdkp_epgp'] == '1') ? true : false,
-				'TOTAL_DROPS' 		=> $this->total_drops,
 		)
 		);
 
@@ -976,7 +975,6 @@ class LootController  extends \bbdkp\admin\Admin
 				'TOTAL_RAIDS' 		=> $raid_count,
 				'TOTAL_DROPS' 		=> $this->total_drops,
 				'S_SHOWEPGP' 		=> ($config['bbdkp_epgp'] == '1') ? true : false,
-				'TOTAL_DROPS' 		=> $this->total_drops,
 		)
 		);
 
