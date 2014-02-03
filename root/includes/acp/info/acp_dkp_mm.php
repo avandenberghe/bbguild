@@ -50,4 +50,3 @@ class acp_dkp_mm_info
 	}
 }
 
-?>

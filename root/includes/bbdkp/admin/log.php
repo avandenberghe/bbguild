@@ -269,6 +269,7 @@ class log
 			case 'total_logs':
 				return  $this->logcount();
 		}
+        return null;
 
 	}
 

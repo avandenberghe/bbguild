@@ -40,4 +40,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_RAID_LIST'	=> 'Liste de Raids',
 ));
 
-?>

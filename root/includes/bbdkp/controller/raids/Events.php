@@ -150,6 +150,8 @@ public function __get($property)
 	{
 		trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
 	}
+
+    return null;
 }
 
 /**

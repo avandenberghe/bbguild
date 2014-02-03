@@ -37,4 +37,3 @@ $xml .= '</itemlist>';
 $db->sql_freeresult($result);
 //return xml to ajax
 echo($xml); 
-?>

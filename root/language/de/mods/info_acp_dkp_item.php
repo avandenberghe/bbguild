@@ -32,5 +32,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_ITEM_SEARCH'	=> 'Gegenstandssuche',
 	'ACP_DKP_ITEM_VIEW'		=> 'Gegenstand zeigen',
 ));
-
-?>

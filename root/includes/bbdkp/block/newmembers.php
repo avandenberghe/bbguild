@@ -49,4 +49,3 @@ $template->assign_vars(array(
 ));
 
 /**  end newmembers block ***/
-?>

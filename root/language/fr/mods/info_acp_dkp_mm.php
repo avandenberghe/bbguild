@@ -29,5 +29,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_MEMBER_ADD'	=> 'Ajouter membre',  
 	'ACP_DKP_MEMBER_LIST'	=> 'Membres',
 ));
-
-?>

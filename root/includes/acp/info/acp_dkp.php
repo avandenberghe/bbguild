@@ -52,5 +52,3 @@ class acp_dkp_info
 	{
 	}
 }
-
-?>

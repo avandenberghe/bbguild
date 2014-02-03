@@ -30,5 +30,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_GUILD_EDIT'	=> 'Editer Guilde',
 	'ACP_DKP_GUILD_LIST'	=> 'Liste de guildes',
 ));
-
-?>

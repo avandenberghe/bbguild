@@ -30,5 +30,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_NEWS_LIST'		=> 'Actualités',
 	'ACP_DKP_NEWS_LIST_EXPLAIN'	=> 'Ceci montre les Informations de la Guilde. ',
 ));
-
-?>

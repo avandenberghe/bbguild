@@ -197,7 +197,6 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/mods/*.*" to="language/en/mods/*.*"/>
-			<file from="root/umil/*.*" to="umil/*.*"/>
 		</copy>
 		<open src=".htaccess">
 			<edit>

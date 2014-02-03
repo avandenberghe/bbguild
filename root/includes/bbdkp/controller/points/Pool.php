@@ -136,6 +136,8 @@ class Pool extends \bbdkp\admin\Admin
 		{
 			trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
 		}
+
+        return null;
 	}
 
 	/**

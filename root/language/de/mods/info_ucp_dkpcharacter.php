@@ -32,5 +32,3 @@ $lang = array_merge($lang, array(
 	'UCP_DKP'				=> 'bbDKP Benutzermenü', 
 
 ));
-
-?>

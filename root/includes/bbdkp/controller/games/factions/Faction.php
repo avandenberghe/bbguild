@@ -110,6 +110,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 		{
 			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
 		}
+        return null;
 	}
 	
 	/**

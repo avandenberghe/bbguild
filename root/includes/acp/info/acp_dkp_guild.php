@@ -51,4 +51,3 @@ class acp_dkp_guild_info
 	}
 }
 
-?>

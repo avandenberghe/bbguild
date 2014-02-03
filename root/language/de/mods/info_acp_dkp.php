@@ -33,5 +33,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_INDEX'			=> 'Portaleinstellungen',
 	'ACP_DKP_LOGS'			=> 'bbDKP-Protokoll',
 ));
-
-?>

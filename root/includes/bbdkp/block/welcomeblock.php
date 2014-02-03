@@ -40,4 +40,3 @@ $template->assign_vars(array(
 	'WELCOME_MESSAGE'		=> $message,
 	'S_DISPLAY_WELCOME' 	=> true,
 ));
-?>

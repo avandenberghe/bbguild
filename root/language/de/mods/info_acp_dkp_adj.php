@@ -31,4 +31,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_LISTADJ'		=> 'Punkteanpassungen',
 ));
 
-?>

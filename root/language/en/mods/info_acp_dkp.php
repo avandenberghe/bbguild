@@ -31,5 +31,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_INDEX'			=> 'Portal Settings',
 	'ACP_DKP_LOGS'			=> 'View Logs',
 ));
-
-?>

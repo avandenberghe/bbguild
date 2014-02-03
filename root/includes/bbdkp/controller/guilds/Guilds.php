@@ -258,6 +258,8 @@ class Guilds extends \bbdkp\admin\Admin
 		{
 			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
 		}
+
+        return null;
 	}
 
 	/**

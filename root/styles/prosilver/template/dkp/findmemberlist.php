@@ -37,4 +37,3 @@ foreach ( (array) $members->guildmemberlist as $member )
 $xml .= '</memberlist>';
 //return xml to ajax
 echo($xml);
-?>

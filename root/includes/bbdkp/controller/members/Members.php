@@ -314,6 +314,7 @@ class Members extends \bbdkp\admin\Admin
 		{
 			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
 		}
+        return null;
 	}
 
 	/**
@@ -419,7 +420,7 @@ class Members extends \bbdkp\admin\Admin
 			$this->class_image = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '';
 			$this->member_title  = $row['member_title'];
 
-			return true;
+			return $this->member_id;
 		}
 		else
 		{
@@ -468,7 +469,10 @@ class Members extends \bbdkp\admin\Admin
 			$this->race_image = '';
 			$this->class_image = '';
 			$this->member_title = '';
+            return 0;
 		}
+
+
 	}
 
 	/**
@@ -814,6 +818,8 @@ class Members extends \bbdkp\admin\Admin
 		$this->log_insert(array(
 			'log_type' => $log_action['header'] ,
 			'log_action' => $log_action));
+
+        return true;
 
 	}
 

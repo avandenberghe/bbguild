@@ -31,6 +31,3 @@ $template->assign_vars(array(
 	'U_TERMS'      		=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'mode=terms'),
 	'U_PRIV'      		=> append_sid("{$phpbb_root_path}ucp.$phpEx", 'mode=privacy'),
 ));
-
-
-?>

@@ -51,5 +51,3 @@ class acp_dkp_item_info
 	{
 	}
 }
-
-?>
