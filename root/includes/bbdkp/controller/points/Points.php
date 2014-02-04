@@ -438,6 +438,8 @@ class Points
 		));
 
 		$db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
+
+        return true;
 	}
 
 

@@ -27,5 +27,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_ADDADJ'		=> 'Add Adjustments',
 	'ACP_DKP_LISTADJ'		=> 'Adjustments',
 ));
-
-?>

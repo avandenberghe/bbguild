@@ -30,5 +30,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_LISTMEMBERDKP'		=> 'Liste des comptes',  
 	'ACP_DKP_MEMBER_TRF'		=> 'Transfert de compte',
 ));
-
-?>

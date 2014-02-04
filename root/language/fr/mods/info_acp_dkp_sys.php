@@ -30,5 +30,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_POOL_LIST'		=> 'Groupes DKP',
 	'ACP_DKP_EVENT_ADD'		=> 'Ajoute évènement' ,
 ));
-
-?>

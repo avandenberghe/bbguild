@@ -27,4 +27,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_POINT_CONFIG'		=> 'Punkte Einstellungen',
 ));
 
-?>

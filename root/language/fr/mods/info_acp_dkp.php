@@ -32,5 +32,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_INDEX'			=> 'Réglages portail',
 	'ACP_DKP_LOGS'			=> 'Consulter les Logs',
 ));
-
-?>

@@ -30,5 +30,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_NEWS_LIST'		=> 'News',
 	'ACP_DKP_NEWS_LIST_EXPLAIN'	=> 'List of newsitem(s)',
 ));
-
-?>

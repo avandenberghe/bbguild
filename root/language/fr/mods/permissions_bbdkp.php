@@ -39,5 +39,3 @@ $lang = array_merge($lang, array(
 	'acl_u_dkp_charupdate'	=> array('lang' => 'Peut mettre à jour ses charactères en PCU', 'cat' => 'bbdkp'),
 	'acl_u_dkp_chardelete'	=> array('lang' => 'Peut supprimer ses charactères en PCU', 'cat' => 'bbdkp'),
 	));
-
-?>

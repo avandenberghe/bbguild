@@ -181,6 +181,7 @@ class Raids extends \bbdkp\admin\Admin
 		{
 			trigger_error($user->lang['ERROR'] . ' ' . get_class($this) . ' : ' . $property, E_USER_WARNING);
 		}
+        return null;
 	}
 
 	/**
@@ -463,8 +464,7 @@ class Raids extends \bbdkp\admin\Admin
 			return $this->getraidcount($start_date, $end_date, $dkpsys_id, true, 0, $guild_id);
 		}
 
-
-
+        return 0;
 
 	}
 

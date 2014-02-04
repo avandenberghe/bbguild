@@ -30,5 +30,3 @@ $lang = array_merge($lang, array(
 	'UCP_DKP_CHARACTER_ADD'		=> 'Add Character'
 
 ));
-
-?>

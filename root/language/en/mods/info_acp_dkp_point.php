@@ -25,5 +25,3 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'ACP_DKP_POINT_CONFIG'		=> 'Point Settings',
 ));
-
-?>

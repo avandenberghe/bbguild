@@ -30,5 +30,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_LISTMEMBERDKP'		=> 'Member Points',  
 	'ACP_DKP_MEMBER_TRF'		=> 'Points Transfer',
 ));
-
-?>

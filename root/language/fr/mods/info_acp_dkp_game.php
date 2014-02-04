@@ -31,5 +31,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_GAME_LIST'		=> 'Réglages Jeux',
 	'ACP_DKP_GAME_EDIT'		=> 'Edition Jeux', 
 ));
-
-?>

@@ -21,5 +21,3 @@ if (!defined('IN_PHPBB'))
 $template->assign_var('S_DISPLAY_LINKS', true);
 
 
-/**  end links block ***/
-?>

@@ -19,4 +19,3 @@ if (!defined('IN_PHPBB'))
 
 // you can switch off bbDKP by commenting this line
 @define('EMED_BBDKP', true);
-?>

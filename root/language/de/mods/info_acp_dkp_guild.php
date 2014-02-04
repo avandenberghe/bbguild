@@ -30,5 +30,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_GUILD_LIST'	=> 'Gilden liste',
 	
 ));
-
-?>

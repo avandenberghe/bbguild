@@ -104,7 +104,6 @@ $lang = array_merge($lang, array(
 'FV_REQUIRED_MEMBER' => 'A member must be selected.',
 'FV_REQUIRED_MEMBERS' => 'At least one member must be selected.',
 'FV_REQUIRED_DKPSYS_NAME' => 'The Dkp Pool field is required.',
-'FV_REQUIRED_NAME' => 'The name field is required.',
 'FV_REQUIRED_PASSWORD' => 'The password field is required.',
 'FV_REQUIRED_RAIDID' => 'A raid must be selected.',
 'FV_REQUIRED_USER' => 'The username field is required.',
@@ -224,7 +223,6 @@ $lang = array_merge($lang, array(
 'ACP_ADDRAID' => 'Add Raid',
 'ACP_LISTRAIDS' => 'List Raids',
 'ACP_ADDGAME' => 'Add Game',
-'ACP_EDITGAME' => 'Edit Game',
 'ACP_LISTGAME' => 'List Games',
 'ACP_GAMESETTINGS' => 'Game Settings',
 'ACP_ADDRACE' => 'Add Race',
@@ -295,8 +293,7 @@ $lang = array_merge($lang, array(
 'ACP_LISTCLASS_EXPLAIN' => 'Here you can edit the game classes.',
 'ACP_GAMESETTINGS_EXPLAIN' => 'Here you can edit the game Settings: Classes, Races, factions.',
 'ACP_LISTFACTIONS_EXPLAIN' => 'Here you can edit the game Factions. ',
-'ACP_ADDRACE_EXPLAIN' => 'Here you can add/edit the game races. Please mind that for WoW the race id has to match those of the Blizzard Armory. ',
-'ACP_ADDCLASS_EXPLAIN' => 'Here you can add/edit the game Classes. Please mind that for WoW the race id has to match those of the Blizzard Armory.',
+'ACP_ADDCLASS_EXPLAIN' => 'Here you can add/edit the game Classes.',
 'ACP_ADDFACTIONS_EXPLAIN' => 'Here you can add/edit the Factions',
 'ACP_ADDRACE_EXPLAIN' => 'Here you can add/edit the Races.',
 'RACEID_EXPLAIN' =>'Note. the ID is unique. for Wow, it should match the raceId XML Armory tag. ',
@@ -354,7 +351,6 @@ $lang = array_merge($lang, array(
 'ROLE' => 'Role',
 'NEEDED' => 'Needed',
 'DIFFERENCE' => 'Difference',
-'TRANSFER_HISTORY' => 'Transfer Member History',
 
 
 // Delete Confirmation Texts
@@ -381,7 +377,6 @@ $lang = array_merge($lang, array(
 'CONFIRM_DELETE_GAME' => 'Please confirm deletion of game "%s".',
 
 // Log Actions
-'ACTION_DEFAULT_DKP_CHANGED' => 'Default DKP Pool changed',
 'ACTION_DKPSYS_ADDED' => 'dkpsys Added',
 'ACTION_DKPSYS_DELETED' => 'dkpsys Deleted',
 'ACTION_DKPSYS_UPDATED' => 'dkpsys Updated',
@@ -739,7 +734,6 @@ $lang = array_merge($lang, array(
 'DOWNLOAD_LATEST_PLUGINS' => 'Download plugins ',
 'PLUGINS_INSTALLED' => 'Plugins Installed',
 'PLUGINS_STATUS' => 'Plugin Status',
-'DOWNLOAD_LATEST_PLUGINS' => 'Download plugins ',
 'PLUGIN_UP_TO_DATE' => 'Plugin up to date',
 'POINT_NAME' => 'Point Name',
 'POINT_NAME_NOTE' => 'Ex: DKP, RP, etc.',
@@ -985,7 +979,6 @@ $lang = array_merge($lang, array(
 'LAST_UPDATE' => 'Last Update',
 'LOCATION' => 'Location',
 
-'NUMBER_OF_ITEMS' => 'Number of Items',
 'NUMBER_OF_LOGS' => 'Number of Log Entries',
 'NUMBER_OF_MEMBERS' => 'Number of Members (Active / Inactive)',
 'NUMBER_OF_RAIDS' => 'Number of Raids',

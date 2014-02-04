@@ -256,12 +256,12 @@ class RaidController  extends \bbdkp\admin\Admin
 		$raidvalue_avg = 0.0;
 		if(sizeof($raidinfo) == 0)
 		{
-			return;
+			return null;
 		}
 
 		if(sizeof($raiddetails) == 0)
 		{
-			return;
+			return null;
 		}
 
 		//raid handling

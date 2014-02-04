@@ -40,4 +40,3 @@ $lang = array_merge($lang, array(
 	'acl_u_dkp_chardelete'	=> array('lang' => 'Can delete own characters in UCP', 'cat' => 'bbdkp'),
 ));
 
-?>

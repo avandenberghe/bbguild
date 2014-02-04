@@ -27,5 +27,3 @@ $template->assign_vars(array(
 	'L_UM_LOG_ME_IN'		=> $user->lang['REMEMBERME'],
 ));
 /**  end login block ***/
-
-?>

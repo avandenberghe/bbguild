@@ -43,5 +43,3 @@ $template->assign_vars(array(
 	'S_DISPLAY_LOOT' 	=> true,
 ));
 
-
-?>
