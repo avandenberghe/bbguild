@@ -208,6 +208,7 @@ class Admin
   	public final function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
 	{
 
+        //@todo log all curl calls
 		global $user;
 
 		if ( function_exists ( 'curl_init' ))
@@ -299,7 +300,11 @@ class Admin
 						$data['error'] .= $user->lang['ERR403'] . ': ' . $data['response']['reason'];
 						break;
 					case 404:
-						$data['error'] .= $user->lang['ERR404'] . ': ' . $data['response']['reason'];
+                        $data['error'] .= $user->lang['ERR404'];
+                        if(isset($data['response']['reason']))
+                        {
+                            $data['error'] .=  ': ' . $data['response']['reason'];
+                        }
 						break;
 					case 500:
 						$data['error'] .= $user->lang['ERR500'] . ': ' . $data['response']['reason'];
