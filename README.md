@@ -25,6 +25,7 @@ v1.3.0-b3
 
 #### Requirements
 1.	phpbb 3.0.12
+2.	UMIL 1.0.5, Automod 1.0.2
 2.	databases : Mysql 5, MSSQL, postgresql, Oracle
 3.	PHP 5.3.3 or higher. Curl should be available on your server.
 4.	ftp and founder admin access on your phpbb installation.
@@ -70,7 +71,7 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
     
 ## Changelog 
 
-1.3.0
+1.3.0-b3
 
 -	[NEW] Added support for FFXIV (@author: Brytor)
 -	[FIX] fix bug 212 : add a raid and only put in say one person, it gives the raid value to everyone on the roster not just the person attending
