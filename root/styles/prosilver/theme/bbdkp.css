@@ -251,7 +251,7 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 	margin:0px auto;
 	font-size: 10px;
 	min-width:100px;
-	max-width:200px;
+	max-width:230px;
 	color:#FFFFDD;
 	z-index:1;
 	margin-left:12px; /* default, width of left corner */
@@ -342,6 +342,8 @@ a.bossprogress,a.bossprogress:link,a.bossprogress:visited,a.bossprogress:active 
 	min-height:100px !important;
 	max-height:100px !important;
 }
+
+
 /* bossprogress.php css */
 
 .progresspage dl {
