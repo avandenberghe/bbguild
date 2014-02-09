@@ -47,23 +47,15 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 #### Upgrading from 1.2.8-pl2 to 1.3.0
 
 * Uninstall 1.2.8-pl2 and re-install 1.3.0-b3 using Automod
-	1. If you installed any bbDKP plugins, these have to be uninstalled first. So uninstall them from Automod, but don't run the plugin database uninstallers.
-    2. then, from Automod, do uninstall bbDKP 1.2.8-pl2.
+	1. uninstall any bbDKP plugins first from Automod, but don't run the plugin database uninstallers.
+    	2. then, uninstall bbDKP 1.2.8-pl2 from automod
 	3. now install bbDKP, as described in new install procedure
-    4. update database: goto /install, press the "update"
+    	4. update database: goto /install, press the "update"
 * Manually
 	1. download your forum to localhost, as we will make the changes locally and then upload the new/changed
-	2.	follow the diff steps described here : 1.2.8-pl2 to 1.3.0-b3
-	3.	copy the new files, replacing any old files.
-	4.	delete the old files mentioned in the delete section
-	5.	apply the changes to the core phpbb files. use a good text editor
-	6.	Make sure your (prosilver based) custom style is updated aswell.
-	7.	launch the DB updater locally (/install/index.php)
-	8.	Now you see the Umil updater.
-	9.	Click submit. This will update to 1.3.0 and clear the caches (template, theme, imagesets)
-	10.	FTP the whole folder to to your webserver.
-	11.	launch the DB updater on your webserver (/install/index.php) and redo the db changes on live.
-	
+	2. uninstall bbdkp 1.2.8-pl2, by doing the INSTALL.xml instructions in reverse.
+	3. then install 1.3.0 as described above
+
 #### Upgrading from earlier version
 Please upgrade to v1.2.8-pl2 first
 
