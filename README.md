@@ -48,9 +48,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 
 * Uninstall 1.2.8-pl2 and re-install 1.3.0-b3 using Automod
 	1. uninstall any bbDKP plugins first from Automod, but don't run the plugin database uninstallers.
-    	2. then, uninstall bbDKP 1.2.8-pl2 from automod
+	2. then, uninstall bbDKP 1.2.8-pl2 from automod
 	3. now install bbDKP, as described in new install procedure
-    	4. update database: goto /install, press the "update"
+	4. update database: goto /install, press the "update"
 * Manually
 	1. download your forum to localhost, as we will make the changes locally and then upload the new/changed
 	2. uninstall bbdkp 1.2.8-pl2, by doing the INSTALL.xml instructions in reverse.
