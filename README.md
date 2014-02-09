@@ -26,8 +26,8 @@ v1.3.0-b3
 #### Requirements
 1.	PHP 5.3.3 or higher. Curl should be available on your server.
 2.	databases : Mysql 5, MSSQL, postgresql, Oracle
-3.	phpbb 3.0.12
-4.	UMIL 1.0.5
+3.	[phpbb 3.0.12](https://www.phpbb.com/downloads/)
+4.	[UMIL 1.0.5](https://www.phpbb.com/mods/umil/)
 5.	[Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 6.	ftp and founder admin access on your phpbb installation.
 
