@@ -41,7 +41,7 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs factions
 	 */
-	public function Installfactions()
+    protected function Installfactions()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		// Everquest factions
@@ -58,7 +58,7 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -113,7 +113,7 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -181,7 +181,13 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 	 * see parent function InstallEvents()
 	 */
 
-	
+    /**
+     * dummy implementation
+     */
+    protected function InstallWorld()
+    {
+
+    }
 }
 
 

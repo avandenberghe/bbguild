@@ -40,7 +40,7 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs factions
 	 */
-	public function Installfactions()
+    protected function Installfactions()
 	{
 		global $db, $table_prefix, $umil, $user;
 		
@@ -56,7 +56,7 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 		global $db, $table_prefix, $umil, $user;
 		
@@ -475,7 +475,7 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 		global $db, $table_prefix, $umil, $user;
 		
@@ -507,6 +507,14 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 		unset ( $sql_ary );
 		
 	}
+
+    /**
+     * dummy implementation
+     */
+    protected function InstallWorld()
+    {
+
+    }
 	
 }
 	

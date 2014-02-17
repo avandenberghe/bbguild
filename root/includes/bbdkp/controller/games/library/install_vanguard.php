@@ -163,6 +163,14 @@ class install_vanguard extends \bbdkp\controller\games\GameInstall
 		
 		
 	}
+
+    /**
+     * dummy implementation
+     */
+    protected function InstallWorld()
+    {
+
+    }
 	
   
   

@@ -30,8 +30,9 @@ abstract class GameInstall
 
 	/**
 	 * Install a game
+     * can be implemented, this is the default install
 	 */
-	public function install($game_id, $gamename)
+    protected function install($game_id, $gamename)
 	{
 		$this->game_id = $game_id;
 		$this->gamename = $gamename;
@@ -62,48 +63,36 @@ abstract class GameInstall
 	 * Installs factions
 	 * must be implemented
 	 */
-	abstract function Installfactions();
+    abstract protected function Installfactions();
 
 	/**
 	 * Installs game classes
 	 * must be implemented
 	*/
-	abstract function InstallClasses();
+    abstract protected function InstallClasses();
 
 	/**
 	 * Installs races
 	 * must be implemented
 	*/
-	abstract function InstallRaces();
+    abstract protected function InstallRaces();
+
+    /**
+     * install worldprogress (bossprogress successor)
+     * installs Lands, Dungeons, bosses
+     * replaces the bossprogress mod...
+     * must be implemented
+     */
+    abstract protected function InstallWorld();
 
 	/**
 	 * Install sample Event Groups
 	 * an Event answers the 'what' question
+     * must be implemented
 	 */
-	public function InstallEventGroup()
-	{
+    abstract protected function InstallEventGroup();
 
-	}
 
-	/**
-	 * install events
-	 * leave implementation to daughter class
-	 */
-	private function InstallEvents()
-	{
-
-	}
-
-	/**
-	 * install worldprogress (bossprogress successor)
-	 * installs Lands, Dungeons, bosses
-	 * replaces the bossprogress mod...
-	 *
-	 */
-	public function InstallWorld()
-	{
-		// @todo
-	}
 }
 
 ?>

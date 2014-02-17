@@ -41,7 +41,7 @@ class install_aion extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs factions
 	 */
-	public function Installfactions()
+    protected function Installfactions()
 	{
 		global $db, $table_prefix, $umil, $user;
 
@@ -58,7 +58,7 @@ class install_aion extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	 */
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 		global $db, $table_prefix, $umil, $user;
 
@@ -122,7 +122,7 @@ class install_aion extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	 */
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 		global $db, $table_prefix, $umil, $user;
 		// races (No races, only factions, dummy value)
@@ -157,7 +157,7 @@ class install_aion extends \bbdkp\controller\games\GameInstall
 	 * Install sample Event Groups
 	 * an Event answers the 'what' question
 	*/
-	public function InstallEventGroup()
+    protected function InstallEventGroup()
 	{
 		global $db, $table_prefix, $umil, $user;
 
@@ -188,7 +188,7 @@ class install_aion extends \bbdkp\controller\games\GameInstall
 	 * Install sample Events and Events
 	 * an Event answers the 'what' question
 	*/
-	private function InstallEvents()
+    private function InstallEvents()
 	{
 		global $db, $table_prefix, $umil, $user;
 
@@ -202,6 +202,14 @@ class install_aion extends \bbdkp\controller\games\GameInstall
 		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_events ' . $db->sql_build_array('INSERT', $sql_ary);
 		$db->sql_query($sql);
 	}
+
+    /**
+     * dummy implementation
+     */
+    protected function InstallWorld()
+    {
+
+    }
 }
 
 ?>

@@ -39,7 +39,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs factions
 	 */
-	function Installfactions()
+    protected function Installfactions()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -57,7 +57,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	function InstallClasses()
+    protected function InstallClasses()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -148,7 +148,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	function InstallRaces()
+    protected function InstallRaces()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -269,7 +269,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 	 * Install sample Event Groups
 	 * an Event answers the 'what' question
 	*/
-	function InstallEventGroup()
+    protected function InstallEventGroup()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -300,7 +300,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 	 * Install sample Events and Events
 	 * an Event answers the 'what' question
 	 */
-	private function InstallEvents()
+    protected function InstallEvents()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -346,6 +346,14 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
 		
 	}
+
+    /**
+     * dummy implementation
+     */
+    protected function InstallWorld()
+    {
+
+    }
 	
     
     

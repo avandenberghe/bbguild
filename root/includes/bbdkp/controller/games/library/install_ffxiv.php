@@ -39,7 +39,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs factions
 	 */
-	public function Installfactions()
+    protected function Installfactions()
 	{
 		global  $db, $table_prefix, $umil, $user;
 
@@ -58,7 +58,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 		global  $db, $table_prefix, $umil, $user;
 
@@ -150,7 +150,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'FFXIV'");
@@ -198,7 +198,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Install event groups - Events answer the 'what' question
 	 */
-	public function  InstallEventGroup()
+    protected function  InstallEventGroup()
 	{
 		global $db, $table_prefix, $umil, $user;
 
@@ -217,7 +217,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 			$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
 			$db->sql_query($sql);
 			$ffxivpdkpid = $db->sql_nextid();
-			$this->InstallEventsFFXIV($ffxivpdkpid);
+			$this->InstallEvents($ffxivpdkpid);
 		}
 
 	}
@@ -229,7 +229,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	 * @author Brytor
 	 * @param integer $dkpid
 	 */
-	private function InstallEventsFFXIV($ffxivpdkpid)
+	private function InstallEvents($ffxivpdkpid)
 	{
 		global $db, $table_prefix, $umil, $user;
 
@@ -324,8 +324,15 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 			$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary2 );
 		}
 
+    }
 
-	}
+    /**
+     * dummy implementation
+     */
+    protected function InstallWorld()
+    {
+
+    }
 
 
 

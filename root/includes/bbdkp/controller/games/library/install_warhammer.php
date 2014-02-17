@@ -175,6 +175,15 @@ class install_warhammer extends \bbdkp\controller\games\GameInstall
 		unset ( $sql_ary );
 	}
 
+
+    /**
+     * dummy implementation
+     */
+    protected function InstallWorld()
+    {
+
+    }
+
 }
 	
 
