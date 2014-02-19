@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-class install_warhammer extends \bbdkp\controller\games\GameInstall
+abstract class install_warhammer extends \bbdkp\controller\games\GameInstall
 {
 	/**
 	 * Installs factions
@@ -174,6 +174,7 @@ class install_warhammer extends \bbdkp\controller\games\GameInstall
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 		unset ( $sql_ary );
 	}
+
 
 }
 	

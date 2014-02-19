@@ -35,13 +35,13 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  * 
  */
-class install_eq2 extends \bbdkp\controller\games\GameInstall
+abstract class install_eq2 extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**
 	 * Everquest factions
 	 */
-	public function Installfactions()
+    protected function Installfactions()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		$db->sql_query('DELETE from ' . $table_prefix . "bbdkp_factions where game_id = 'eq2'"  );
@@ -57,7 +57,7 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		// Everquest 2 classes
@@ -181,7 +181,7 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 		global  $db, $table_prefix, $umil, $user;
 
@@ -295,7 +295,6 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 		unset ( $sql_ary );
 		
 	}
-	
-	
+
 }
 ?>

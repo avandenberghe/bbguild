@@ -31,13 +31,13 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  * Guildwars INstaller Class
  *   @package bbdkp
  */
-class install_gw2 extends \bbdkp\controller\games\GameInstall
+abstract class install_gw2 extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**
 	 * Installs factions
 	 */
-	public function Installfactions()
+    protected function Installfactions()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -53,7 +53,7 @@ class install_gw2 extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -106,7 +106,7 @@ class install_gw2 extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 		global  $db, $table_prefix, $umil, $user;
 
@@ -146,7 +146,7 @@ class install_gw2 extends \bbdkp\controller\games\GameInstall
 	 * Install sample Event Groups
 	 * an Event answers the 'what' question
 	*/
-	public function InstallEventGroup()
+    protected function InstallEventGroup()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -176,7 +176,7 @@ class install_gw2 extends \bbdkp\controller\games\GameInstall
 	 * Install sample Events and Events
 	 * an Event answers the 'what' question
 	 */
-	private function InstallEvents()
+    protected function InstallEvents()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		$db->sql_query('DELETE FROM ' . $table_prefix . 'bbdkp_events WHERE event_dkpid = ' . $this->gw2dkpid );
@@ -191,7 +191,9 @@ class install_gw2 extends \bbdkp\controller\games\GameInstall
 		$sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Arah (80)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => 'gw2_ara' );
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
 	}
-	
+
+
+
 	
 }
 

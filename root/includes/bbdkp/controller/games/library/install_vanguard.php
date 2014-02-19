@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-class install_vanguard extends \bbdkp\controller\games\GameInstall
+abstract class install_vanguard extends \bbdkp\controller\games\GameInstall
 {
 	/**
 	 * Installs factions
@@ -163,6 +163,7 @@ class install_vanguard extends \bbdkp\controller\games\GameInstall
 		
 		
 	}
+
 	
   
   

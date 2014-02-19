@@ -9,7 +9,7 @@
  * @version 1.3.0
  */
 namespace bbdkp\controller\games;
-
+use bbdkp\controller\games;
 /**
  * @ignore
  */
@@ -30,9 +30,11 @@ abstract class GameInstall
 
 	/**
 	 * Install a game
+     * can be implemented, this is the default install
 	 */
-	public function install($game_id, $gamename)
+    public function install($game_id, $gamename)
 	{
+        global $phpbb_root_path, $phpEx;
 		$this->game_id = $game_id;
 		$this->gamename = $gamename;
 		global $db, $user, $config;
@@ -41,6 +43,16 @@ abstract class GameInstall
 		$this->InstallClasses();
 		$this->InstallRaces();
 		$this->InstallEventGroup();
+        if( isset($config['bbdkp_bp_version']))
+        {
+            if (!class_exists('\bbdkp\controller\games\world_' . $game_id))
+            {
+                require("{$phpbb_root_path}includes/bbdkp/controller/games/library/world_.$game_id.$phpEx");
+            }
+            $class_name = 'world_' . $game_id;
+            $wo = new $class_name;
+            $wo->InstallWorld();
+        }
 
 		//insert a new entry in the game table
 		$data = array (
@@ -62,48 +74,35 @@ abstract class GameInstall
 	 * Installs factions
 	 * must be implemented
 	 */
-	abstract function Installfactions();
+    abstract protected function Installfactions();
 
 	/**
 	 * Installs game classes
 	 * must be implemented
 	*/
-	abstract function InstallClasses();
+    abstract protected function InstallClasses();
 
 	/**
 	 * Installs races
 	 * must be implemented
 	*/
-	abstract function InstallRaces();
+    abstract protected function InstallRaces();
+
+    /**
+     * install bossprogress
+     * installs Lands, Dungeons, bosses
+     * must be implemented by bossprogress
+     */
+    abstract protected function InstallWorld();
 
 	/**
 	 * Install sample Event Groups
 	 * an Event answers the 'what' question
+     * must be implemented
 	 */
-	public function InstallEventGroup()
-	{
+    abstract protected function InstallEventGroup();
 
-	}
 
-	/**
-	 * install events
-	 * leave implementation to daughter class
-	 */
-	private function InstallEvents()
-	{
-
-	}
-
-	/**
-	 * install worldprogress (bossprogress successor)
-	 * installs Lands, Dungeons, bosses
-	 * replaces the bossprogress mod...
-	 *
-	 */
-	public function InstallWorld()
-	{
-		// @todo
-	}
 }
 
 ?>

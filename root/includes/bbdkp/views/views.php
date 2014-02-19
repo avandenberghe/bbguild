@@ -233,12 +233,12 @@ class views extends \bbdkp\admin\Admin
 				    if ($config['rp_show_portal'] == 1)
 				    {
 				        $user->add_lang(array('mods/raidplanner'));
-                        if (!class_exists('\rpblocks', false))
+                        if (!class_exists('\bbdkp\raidplanner\rpblocks', false))
                         {
                             //display the blocks
                             include($phpbb_root_path . 'includes/bbdkp/raidplanner/rpblocks.' . $phpEx);
                         }
-                        $blocks = new \rpblocks();
+                        $blocks = new \bbdkp\raidplanner\rpblocks();
                         $blocks->display();
                     }
                 }

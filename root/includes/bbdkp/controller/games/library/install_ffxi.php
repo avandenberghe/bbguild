@@ -32,13 +32,13 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-class install_ffxi extends \bbdkp\controller\games\GameInstall
+abstract class install_ffxi extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**
 	 * Installs factions
 	 */
-	public function Installfactions()
+    protected function Installfactions()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -58,7 +58,7 @@ class install_ffxi extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 		global  $db, $table_prefix, $umil, $user;
 
@@ -168,7 +168,7 @@ class install_ffxi extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -211,6 +211,7 @@ class install_ffxi extends \bbdkp\controller\games\GameInstall
 		unset ( $sql_ary );
 		
 	}
+
 	
 
 }

@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-class install_tera extends \bbdkp\controller\games\GameInstall
+abstract class install_tera extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**
@@ -166,7 +166,7 @@ class install_tera extends \bbdkp\controller\games\GameInstall
 	 * Install sample Events and Events
 	 * an Event answers the 'what' question
 	 */
-	private function InstallEvents()
+    private function InstallEvents()
 	{
 		global $db, $table_prefix;
 		
@@ -195,6 +195,7 @@ class install_tera extends \bbdkp\controller\games\GameInstall
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
 		
 	}
+
 	
 }
 ?>

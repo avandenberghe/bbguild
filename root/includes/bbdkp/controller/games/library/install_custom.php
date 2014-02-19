@@ -34,7 +34,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  * @author Sajaki
  *
  */
-class install_custom extends \bbdkp\controller\games\GameInstall
+abstract class install_custom extends \bbdkp\controller\games\GameInstall
 {
 
 	public $game_id;
@@ -42,7 +42,7 @@ class install_custom extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs factions
 	 */
-	public function Installfactions()
+    protected function Installfactions()
 	{
 
 
@@ -51,7 +51,7 @@ class install_custom extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	 */
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 
 	}
@@ -59,7 +59,7 @@ class install_custom extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	 */
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 
 	}
@@ -68,7 +68,7 @@ class install_custom extends \bbdkp\controller\games\GameInstall
 	 * Install sample Event Groups
 	 * an Event answers the 'what' question
 	*/
-	public function InstallEventGroup()
+    protected function InstallEventGroup()
 	{
 
 	}
@@ -78,10 +78,12 @@ class install_custom extends \bbdkp\controller\games\GameInstall
 	 * Install sample Events and Events
 	 * an Event answers the 'what' question
 	*/
-	private function InstallEvents()
+    protected function InstallEvents()
 	{
 
 	}
+
+
 }
 
 ?>

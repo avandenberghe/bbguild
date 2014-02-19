@@ -32,12 +32,12 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-class install_swtor extends \bbdkp\controller\games\GameInstall
+abstract class install_swtor extends \bbdkp\controller\games\GameInstall
 {
 	/**
 	 * Installs factions
 	 */
-	public function Installfactions()
+    protected function Installfactions()
 	{
 		global $db, $table_prefix, $umil, $user;
 		// factions
@@ -54,7 +54,7 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 		global $db, $table_prefix, $umil, $user;
 		// note subclasses not done
@@ -102,7 +102,7 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 		global $db, $table_prefix, $umil, $user;
 		
@@ -163,7 +163,7 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 	 * Install sample Event Groups
 	 * an Event answers the 'what' question
 	*/
-	public function InstallEventGroup()
+    protected function InstallEventGroup()
 	{
 		global $db, $table_prefix, $umil, $user;
 		
@@ -193,7 +193,7 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 	 * Install sample Events and Events
 	 * an Event answers the 'what' question
 	 */
-	private function InstallEvents()
+    protected function InstallEvents()
 	{
 		global $db, $table_prefix, $umil, $user;
 		$sql_ary = array();
@@ -209,7 +209,7 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
 		
 	}
-	
+
 				
 	
 	

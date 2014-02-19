@@ -11,6 +11,8 @@
  *
  */
 namespace bbdkp\controller\games;
+use bbdkp\controller\games;
+
 /**
  * @ignore
  */
@@ -34,13 +36,13 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  * @package bbdkp
  *
  */
-class install_wow extends \bbdkp\controller\games\GameInstall
+abstract class install_wow extends GameInstall
 {
 
 	/**
 	 * Installs factions
 	 */
-	public function Installfactions()
+    protected function Installfactions()
 	{
 		global $db, $table_prefix, $umil, $user;
 
@@ -58,7 +60,7 @@ class install_wow extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 		global $db, $table_prefix, $umil, $user;
 
@@ -134,7 +136,7 @@ class install_wow extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 		global $db, $table_prefix, $umil, $user;
 
@@ -220,7 +222,7 @@ class install_wow extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Install event groups - Events answer the 'what' question
 	 */
-	public function  InstallEventGroup()
+    protected function  InstallEventGroup()
 	{
 		global $db, $table_prefix, $umil, $user;
 
@@ -402,6 +404,7 @@ class install_wow extends \bbdkp\controller\games\GameInstall
 
 
 	}
+
 
 
 }
