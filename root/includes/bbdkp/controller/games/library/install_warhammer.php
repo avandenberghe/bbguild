@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-class install_warhammer extends \bbdkp\controller\games\GameInstall
+abstract class install_warhammer extends \bbdkp\controller\games\GameInstall
 {
 	/**
 	 * Installs factions
@@ -175,14 +175,6 @@ class install_warhammer extends \bbdkp\controller\games\GameInstall
 		unset ( $sql_ary );
 	}
 
-
-    /**
-     * dummy implementation
-     */
-    protected function InstallWorld()
-    {
-
-    }
 
 }
 	

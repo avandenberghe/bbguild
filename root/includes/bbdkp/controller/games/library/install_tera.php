@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-class install_tera extends \bbdkp\controller\games\GameInstall
+abstract class install_tera extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**
@@ -196,13 +196,6 @@ class install_tera extends \bbdkp\controller\games\GameInstall
 		
 	}
 
-    /**
-     * dummy implementation
-     */
-    protected function InstallWorld()
-    {
-
-    }
 	
 }
 ?>

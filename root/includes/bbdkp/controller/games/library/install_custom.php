@@ -34,7 +34,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  * @author Sajaki
  *
  */
-class install_custom extends \bbdkp\controller\games\GameInstall
+abstract class install_custom extends \bbdkp\controller\games\GameInstall
 {
 
 	public $game_id;
@@ -83,13 +83,6 @@ class install_custom extends \bbdkp\controller\games\GameInstall
 
 	}
 
-    /**
-     * dummy implementation
-     */
-    protected function InstallWorld()
-    {
-
-    }
 
 }
 

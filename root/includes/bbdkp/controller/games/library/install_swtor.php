@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-class install_swtor extends \bbdkp\controller\games\GameInstall
+abstract class install_swtor extends \bbdkp\controller\games\GameInstall
 {
 	/**
 	 * Installs factions
@@ -210,14 +210,6 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 		
 	}
 
-    /**
-     * dummy implementation
-     */
-    protected function InstallWorld()
-    {
-
-    }
-	
 				
 	
 	

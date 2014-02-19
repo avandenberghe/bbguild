@@ -35,7 +35,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  * 
  */
-class install_eq2 extends \bbdkp\controller\games\GameInstall
+abstract class install_eq2 extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**
@@ -296,14 +296,5 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 		
 	}
 
-    /**
-     * dummy implementation
-     */
-    protected function InstallWorld()
-    {
-
-    }
-	
-	
 }
 ?>

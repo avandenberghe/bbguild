@@ -9,7 +9,7 @@
  * @version 1.3.0
  */
 namespace bbdkp\controller\games;
-
+use bbdkp\controller\games;
 /**
  * @ignore
  */
@@ -32,8 +32,9 @@ abstract class GameInstall
 	 * Install a game
      * can be implemented, this is the default install
 	 */
-    protected function install($game_id, $gamename)
+    public function install($game_id, $gamename)
 	{
+        global $phpbb_root_path, $phpEx;
 		$this->game_id = $game_id;
 		$this->gamename = $gamename;
 		global $db, $user, $config;
@@ -42,6 +43,16 @@ abstract class GameInstall
 		$this->InstallClasses();
 		$this->InstallRaces();
 		$this->InstallEventGroup();
+        if( isset($config['bbdkp_bp_version']))
+        {
+            if (!class_exists('\bbdkp\controller\games\world_' . $game_id))
+            {
+                require("{$phpbb_root_path}includes/bbdkp/controller/games/library/world_.$game_id.$phpEx");
+            }
+            $class_name = 'world_' . $game_id;
+            $wo = new $class_name;
+            $wo->InstallWorld();
+        }
 
 		//insert a new entry in the game table
 		$data = array (
@@ -78,10 +89,9 @@ abstract class GameInstall
     abstract protected function InstallRaces();
 
     /**
-     * install worldprogress (bossprogress successor)
+     * install bossprogress
      * installs Lands, Dungeons, bosses
-     * replaces the bossprogress mod...
-     * must be implemented
+     * must be implemented by bossprogress
      */
     abstract protected function InstallWorld();
 

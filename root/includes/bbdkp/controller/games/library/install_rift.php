@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-class install_rift extends \bbdkp\controller\games\GameInstall
+abstract class install_rift extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**
@@ -256,14 +256,7 @@ class install_rift extends \bbdkp\controller\games\GameInstall
     	$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
     }
 
-    /**
-     * dummy implementation
-     */
-    protected function InstallWorld()
-    {
 
-    }
-	
 }
 
 
