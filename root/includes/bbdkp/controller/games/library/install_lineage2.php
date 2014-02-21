@@ -34,7 +34,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-abstract class install_lineage2 extends \bbdkp\controller\games\GameInstall
+class install_lineage2 extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**

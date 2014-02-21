@@ -36,7 +36,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  * @package bbdkp
  *
  */
-abstract class install_wow extends GameInstall
+class install_wow extends GameInstall
 {
 
 	/**

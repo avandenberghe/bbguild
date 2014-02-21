@@ -33,7 +33,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  * @author Sajaki
  *
  */
-abstract class install_aion extends \bbdkp\controller\games\GameInstall
+class install_aion extends \bbdkp\controller\games\GameInstall
 {
 
 	public $game_id;

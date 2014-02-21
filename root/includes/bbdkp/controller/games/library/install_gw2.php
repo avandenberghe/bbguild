@@ -31,7 +31,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  * Guildwars INstaller Class
  *   @package bbdkp
  */
-abstract class install_gw2 extends \bbdkp\controller\games\GameInstall
+class install_gw2 extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**

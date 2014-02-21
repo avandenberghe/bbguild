@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-abstract class install_warhammer extends \bbdkp\controller\games\GameInstall
+class install_warhammer extends \bbdkp\controller\games\GameInstall
 {
 	/**
 	 * Installs factions

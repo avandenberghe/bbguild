@@ -43,16 +43,6 @@ abstract class GameInstall
 		$this->InstallClasses();
 		$this->InstallRaces();
 		$this->InstallEventGroup();
-        if( isset($config['bbdkp_bp_version']))
-        {
-            if (!class_exists('\bbdkp\controller\games\world_' . $game_id))
-            {
-                require("{$phpbb_root_path}includes/bbdkp/controller/games/library/world_.$game_id.$phpEx");
-            }
-            $class_name = 'world_' . $game_id;
-            $wo = new $class_name;
-            $wo->InstallWorld();
-        }
 
 		//insert a new entry in the game table
 		$data = array (
@@ -87,13 +77,6 @@ abstract class GameInstall
 	 * must be implemented
 	*/
     abstract protected function InstallRaces();
-
-    /**
-     * install bossprogress
-     * installs Lands, Dungeons, bosses
-     * must be implemented by bossprogress
-     */
-    abstract protected function InstallWorld();
 
 	/**
 	 * Install sample Event Groups

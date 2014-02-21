@@ -35,7 +35,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  * 
  */
-abstract class install_eq extends \bbdkp\controller\games\GameInstall
+class install_eq extends \bbdkp\controller\games\GameInstall
 {
 
 	/**
