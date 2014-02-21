@@ -151,9 +151,6 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<link type="language" href="contrib/de.xml" lang="en">German</link>
 			<link type="language" href="contrib/de.xml" lang="fr">Allemand</link>
 			<link type="language" href="contrib/de.xml" lang="de">Deutsch</link>
-			<link type="contrib" href="contrib/install_128_to_130.xml" lang="en">Update from v1.2.8 to v1.3.0-b3</link>
-			<link type="contrib" href="contrib/install_128_to_130.xml" lang="fr">Mise à jour de v1.2.8 à v1.3.0-b3</link>
-			<link type="contrib" href="contrib/install_128_to_130.xml" lang="de">Aktualisierung von v1.2.8 bis v1.3.0-b3</link>
 			<link type="text" href="docs/INSTALL.html" lang="en">Read me</link>
 			<link type="text" href="docs/INSTALL.html" lang="fr">Lisez moi</link>
 			<link type="text" href="docs/INSTALL.html" lang="de">Lies mich</link>
