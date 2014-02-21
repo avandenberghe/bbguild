@@ -475,8 +475,9 @@ function get_bbchar($bbresult)
 				<comment lang="en"><![CDATA[adding jquery scripts to admin header]]></comment>
 				<comment lang="fr"><![CDATA[ajout de scripts jquery au header admin ]]></comment>
 				<comment lang="de"><![CDATA[Zufügung jquery header scripts im admin]]></comment>
-				<find><![CDATA[</head>]]></find>
-				<action type="before-add"><![CDATA[<!-- begin bbdkp -->
+				<find><![CDATA[<link href="style/admin.css" rel="stylesheet" type="text/css" media="screen" />]]></find>
+				<action type="after-add"><![CDATA[
+<!-- begin bbdkp -->
 	<script type="text/javascript" src="style/dkp/jquery.js"></script>
 	<script type="text/javascript" src="style/dkp/farbtastic.js"></script>
 	<link rel="stylesheet" href="style/dkp/farbtastic.css" type="text/css" />
