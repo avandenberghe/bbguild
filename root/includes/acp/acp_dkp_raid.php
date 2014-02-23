@@ -800,7 +800,6 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
         if($showadd)
         {
 			redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_raid&amp;mode=addraid"));
-         	break;
         }
         // guild dropdown
         $submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
@@ -1135,6 +1134,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 	 */
 	private function addraider($raid_id)
 	{
+        global $user;
 		if(!check_form_key('acp_dkp_addraid'))
 		{
 			trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
@@ -1309,7 +1309,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 				EVENTS_TABLE   		=> 'e',
 					),
 		'WHERE'		=> ' e.event_id = e.event_id and r.raid_id = ra.raid_id and l.member_id = ra.member_id and ra.raid_id = ' . (int) $raid_id . ' and  ra.member_id = ' . (int) $attendee_id,
-	    );
+	 );
 
 	    $sql = $db->sql_build_query('SELECT', $sql_array);
 		$result = $db->sql_query($sql);

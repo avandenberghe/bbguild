@@ -423,7 +423,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					{
 						//record added. now update some stats
 						meta_refresh(2, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $newmember->member_guild_id ));
-						$success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name), date("F j, Y, g:i a")    );
+						$success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name), date("F j, Y, g:i a") );
 
 						$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $newmember->member_guild_id ) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 						trigger_error($success_message . $this->link, E_USER_NOTICE);
