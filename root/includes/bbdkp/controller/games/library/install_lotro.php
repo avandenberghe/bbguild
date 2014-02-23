@@ -44,11 +44,11 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 		global  $db, $table_prefix, $umil, $user;
 		
 		// factions
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'lotro'" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'lotro'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'lotro','faction_id' => 1, 'faction_name' => 'Free Peoples' );
 		$sql_ary[] = array('game_id' => 'lotro','faction_id' => 2, 'faction_name' => 'Servants of the Eye' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
+		$db->sql_multi_insert( FACTION_TABLE, $sql_ary);
 		unset ($sql_ary);
 		
 		
@@ -61,7 +61,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'lotro'" );
+		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'lotro'" );
 		$sql_ary = array();
 		
 		// class :
@@ -82,11 +82,11 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'lotro','class_id' => 24, 'class_armor_type' => 'PLATE' , 'class_min_level' => 75 , 'class_max_level'  => 75, 'colorcode' =>  '#CC9933',  'imagename' => 'lotro_warleader');
 		$sql_ary[] = array('game_id' => 'lotro','class_id' => 25, 'class_armor_type' => 'MAIL' , 'class_min_level' => 75 , 'class_max_level'  => 75, 'colorcode' =>  '#FF0044',  'imagename' => 'lotro_stalker');
 		
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
+		$db->sql_multi_insert( CLASS_TABLE, $sql_ary);
 		unset ($sql_ary);
 		
 
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'lotro' and attribute='class'  ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'lotro' and attribute='class'  ");
 		$sql_ary = array();
 		$sql_ary[] = array( 'game_id' => 'lotro','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array( 'game_id' => 'lotro','attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Burglar' ,  'name_short' =>  'Burglar' );
@@ -140,7 +140,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array( 'game_id' => 'lotro','attribute_id' => 24, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Commandeur' ,  'name_short' =>  'Commandeur' );
 		$sql_ary[] = array( 'game_id' => 'lotro','attribute_id' => 25, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Malfrat' ,  'name_short' =>  'Malfrat' );
 		
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary );
 		unset ( $sql_ary );
 		
 	}
@@ -153,7 +153,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 		global  $db, $table_prefix, $umil, $user;
 		
 		// races
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'lotro'");
+		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'lotro'");
 		$sql_ary = array();
 		$sql_ary [] = array ('game_id' => 'lotro','race_id' => 0, 'race_faction_id' => 1,  'image_female' => 'lotro_unknown',  'image_male' => 'lotro_unknown'  ); //Unknown
 		
@@ -183,10 +183,10 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 		
 		$sql_ary [] = array ('game_id' => 'lotro','race_id' => 50, 'race_faction_id' => 2,  'image_female' => 'lotro_monster',  'image_male' => 'lotro_monster'  ); //Unknown
 		
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
+		$db->sql_multi_insert(  RACE_TABLE , $sql_ary);
 		unset ($sql_ary);
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'lotro' and attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'lotro' and attribute = 'race' ");
 		$sql_ary = array();
 
 		$sql_ary[] = array( 'game_id' => 'lotro','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -252,7 +252,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 		
 		$sql_ary[] = array( 'game_id' => 'lotro','attribute_id' => 50, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Serviteurs de l‘Oeil' ,  'name_short' =>  'Serviteurs de l‘Oeil' );
 		
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert ( BB_LANGUAGE , $sql_ary );
 		unset ( $sql_ary );
 		
 		
@@ -273,13 +273,13 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
-		$sql = 'SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Lotro Dungeons' ";
+		$sql = 'SELECT dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'Lotro Dungeons' ";
 		$result = $db->sql_query($sql);
 		$this->lotrodkpid  = (int) $db->sql_fetchfield('dkpsys_id');
 		$db->sql_freeresult($result);
 		if ($this->lotrodkpid == 0)
 		{
-			$db->sql_query('DELETE FROM ' . $table_prefix . 'bbdkp_events WHERE event_dkpid = ' . $this->lotrodkpid );
+			$db->sql_query('DELETE FROM ' .  EVENTS_TABLE . ' WHERE event_dkpid = ' . $this->lotrodkpid );
 			
 			// dkp pool
 			$sql_ary = array (
@@ -287,7 +287,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 					'dkpsys_status' => 'Y',
 					'dkpsys_addedby' => 'admin',
 					'dkpsys_default' => 'N' );
-			$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+			$sql = 'INSERT INTO ' .  DKPSYS_TABLE  . $db->sql_build_array('INSERT', $sql_ary);
 			$db->sql_query($sql);
 			$this->lotrodkpid  = $db->sql_nextid();
 		    $db->sql_freeresult ( $result );
@@ -343,7 +343,7 @@ class install_lotro extends \bbdkp\controller\games\GameInstall
 		$sql_ary [] = array('event_dkpid' => $this->lotrodkpid , 'event_name' => 'Tower of Orthanc (T2)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
 		$sql_ary [] = array('event_dkpid' => $this->lotrodkpid , 'event_name' => 'Tower of Orthanc (Challenge)', 'event_color' => '#AA0099', 'event_value' => 5, 'event_imagename' => '' );
 
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
+		$db->sql_multi_insert (  EVENTS_TABLE , $sql_ary );
 		
 	}
 

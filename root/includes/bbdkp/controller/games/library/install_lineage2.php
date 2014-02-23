@@ -45,10 +45,10 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 		global $db, $table_prefix, $umil, $user;
 		
 		// factions
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'lineage2'" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'lineage2'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'lineage2','faction_id' => 1, 'faction_name' => 'Default' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
+		$db->sql_multi_insert( FACTION_TABLE, $sql_ary);
 		unset ($sql_ary);
 		
 	}
@@ -60,7 +60,7 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 	{
 		global $db, $table_prefix, $umil, $user;
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'lineage2'" );
+		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'lineage2'" );
 		$sql_ary = array();
 		
 		// class general
@@ -337,10 +337,10 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 		// Wynn Summoner - 85-99
 		$sql_ary[] = array('game_id' => 'lineage2','class_id' => 109, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 85 , 'class_max_level'  => 99, 'colorcode' =>  '#CC00BB', 'imagename' => 'lineage2_wynnsummoner' );
 		
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
+		$db->sql_multi_insert( CLASS_TABLE, $sql_ary);
 		unset ($sql_ary);
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'lineage2' and attribute='class' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'lineage2' and attribute='class' ");
 		$sql_ary = array();
 		$sql_ary[] = array( 'game_id' => 'lineage2','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array( 'game_id' => 'lineage2','attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Human Fighter' ,  'name_short' =>  'Human Fighter' );
@@ -467,7 +467,7 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array( 'game_id' => 'lineage2','attribute_id' => 108, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Eolh Healer' ,  'name_short' =>  'Eolh Healer' );
 		$sql_ary[] = array( 'game_id' => 'lineage2','attribute_id' => 109, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Wynn Summoner' ,  'name_short' =>  'Wynn Summoner' );
 
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary );
 		unset ( $sql_ary );
 		
 	}
@@ -480,7 +480,7 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 		global $db, $table_prefix, $umil, $user;
 		
 		// races
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'lineage2'");
+		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'lineage2'");
 		$sql_ary = array();
 		$sql_ary [] = array ('game_id' => 'lineage2','race_id' => 0, 'race_faction_id' => 1,  'image_female' => ' ',  'image_male' => ' '  ); //Unknown
 		$sql_ary [] = array ('game_id' => 'lineage2','race_id' => 1, 'race_faction_id' => 1,  'image_female' => 'lineage2_human_female',  'image_male' => 'lineage2_human_male'  ); //Human
@@ -489,10 +489,10 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 		$sql_ary [] = array ('game_id' => 'lineage2','race_id' => 4, 'race_faction_id' => 1 , 'image_female' => 'lineage2_dwarf_female',  'image_male' => 'lineage2_dwarf_male' ) ; //Night Elf
 		$sql_ary [] = array ('game_id' => 'lineage2','race_id' => 5, 'race_faction_id' => 1 , 'image_female' => 'lineage2_orc_female',  'image_male' => 'lineage2_orc_male' ); //Undead
 		$sql_ary [] = array ('game_id' => 'lineage2','race_id' => 6, 'race_faction_id' => 1 , 'image_female' => 'lineage2_kamael_female',  'image_male' => 'lineage2_kamael_male' ); //Tauren
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
+		$db->sql_multi_insert(  RACE_TABLE , $sql_ary);
 		unset ($sql_ary);
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'lineage2' and attribute='race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'lineage2' and attribute='race' ");
 		$sql_ary = array();
 		
 		$sql_ary[] = array( 'game_id' => 'lineage2','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -503,7 +503,7 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array( 'game_id' => 'lineage2','attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Orc' , 'name_short' =>  'Orc' );
 		$sql_ary[] = array( 'game_id' => 'lineage2','attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Kamael' ,  'name_short' =>  'Kamael' );
 		
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary );
 		unset ( $sql_ary );
 		
 	}

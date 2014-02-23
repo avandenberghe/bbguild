@@ -45,12 +45,12 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 	{
 		global  $db, $table_prefix, $umil, $user;
 		// Everquest factions
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'eq'" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'eq'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'eq', 'faction_id' => 1, 'faction_name' => 'Good' );
 		$sql_ary[] = array('game_id' => 'eq', 'faction_id' => 2, 'faction_name' => 'Evil' );
 		$sql_ary[] = array('game_id' => 'eq', 'faction_id' => 3, 'faction_name' => 'Neutral' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
+		$db->sql_multi_insert( FACTION_TABLE, $sql_ary);
 		unset ($sql_ary);
 		
 	}
@@ -62,7 +62,7 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes WHERE game_id = 'eq'" );
+		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = 'eq'" );
 		$sql_ary = array();
 		
 		// Everquest classes - level cap raised to 100
@@ -84,9 +84,9 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 		$sql_ary [] = array ('game_id' => 'eq', 'class_id' => 14, 'class_faction_id' => 3, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#AA00AA', 'imagename' => 'eq_necromancer');
 		$sql_ary [] = array ('game_id' => 'eq', 'class_id' => 15, 'class_faction_id' => 3, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#CC0099', 'imagename' => 'eq_magician');
 		$sql_ary [] = array ('game_id' => 'eq', 'class_id' => 16, 'class_faction_id' => 3, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#FFBB55', 'imagename' => 'eq_berserker');
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
+		$db->sql_multi_insert( CLASS_TABLE, $sql_ary);
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language WHERE game_id = 'eq' AND attribute='class'  ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . " WHERE game_id = 'eq' AND attribute='class'  ");
 		$sql_ary = array ();
 		$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
@@ -106,7 +106,7 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 15, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Magician' ,  'name_short' =>  'Magician' );
 		$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 16, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Berserker' ,  'name_short' =>  'Berserker' );
 		// remark : no french / german content since eq is english only
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary);
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary);
 		unset ( $sql_ary );
 	}
 	
@@ -118,7 +118,7 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 		global  $db, $table_prefix, $umil, $user;
 		
 		// Everquest races
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'eq'");
+		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'eq'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'eq', 'race_id' => 0, 'race_faction_id' => 2 ); //Unknown
 		$sql_ary[] = array('game_id' => 'eq', 'race_id' => 1, 'race_faction_id' => 3 ); //Gnome
@@ -137,11 +137,11 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'eq', 'race_id' => 14, 'race_faction_id' => 3 ); //Erudite
 		$sql_ary[] = array('game_id' => 'eq', 'race_id' => 15, 'race_faction_id' => 1 ); //Halfling
 		$sql_ary[] = array('game_id' => 'eq', 'race_id' => 16, 'race_faction_id' => 3 ); //Drakkin
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
+		$db->sql_multi_insert(  RACE_TABLE , $sql_ary);
 		unset ($sql_ary);
 		
 
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'eq' and attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'eq' and attribute = 'race' ");
 		$sql_ary = array ();
 		
 
@@ -164,7 +164,7 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'eq', 'attribute_id' => 16, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Drakkin' ,  'name_short' =>  'Drakkin' );
 		
 		// remark : no french / german content since eq is english only
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary);
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary);
 		unset ( $sql_ary );
 	}
 	

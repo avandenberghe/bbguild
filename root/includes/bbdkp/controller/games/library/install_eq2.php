@@ -44,12 +44,12 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
     protected function Installfactions()
 	{
 		global  $db, $table_prefix, $umil, $user;
-		$db->sql_query('DELETE from ' . $table_prefix . "bbdkp_factions where game_id = 'eq2'"  );
+		$db->sql_query('DELETE from ' . FACTION_TABLE . " where game_id = 'eq2'"  );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'eq2', 'faction_id' => 1, 'faction_name' => 'Good' );
 		$sql_ary[] = array('game_id' => 'eq2', 'faction_id' => 2, 'faction_name' => 'Evil' );
 		$sql_ary[] = array('game_id' => 'eq2', 'faction_id' => 3, 'faction_name' => 'Neutral' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
+		$db->sql_multi_insert( FACTION_TABLE, $sql_ary);
 		unset ($sql_ary);
 		
 	}
@@ -62,7 +62,7 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 		global  $db, $table_prefix, $umil, $user;
 		// Everquest 2 classes
 		
-		$db->sql_query('DELETE FROM  ' . $table_prefix . "bbdkp_classes where game_id = 'eq2'");
+		$db->sql_query('DELETE FROM  ' . CLASS_TABLE . " where game_id = 'eq2'");
 		$sql_ary = array();
 		$sql_ary [] = array ('game_id' => 'eq2', 'class_id' => 0, 'class_faction_id' => 3, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 99 , 'colorcode' =>  '#DCD09A', 'imagename' => 'eq2_unknown');
 		$sql_ary [] = array ('game_id' => 'eq2', 'class_id' => 1, 'class_faction_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 99 , 'colorcode' =>  '#FFFF66', 'imagename' => 'eq2_assassin');
@@ -89,10 +89,10 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 		$sql_ary [] = array ('game_id' => 'eq2', 'class_id' => 22, 'class_faction_id' => 3, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 99 , 'colorcode' =>  '#2200BB', 'imagename' => 'eq2_warlock');
 		$sql_ary [] = array ('game_id' => 'eq2', 'class_id' => 23, 'class_faction_id' => 3, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 99 , 'colorcode' =>  '#777777', 'imagename' => 'eq2_warden');
 		$sql_ary [] = array ('game_id' => 'eq2', 'class_id' => 24, 'class_faction_id' => 3, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 99 , 'colorcode' =>  '#8888FF', 'imagename' => 'eq2_wizard');
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
+		$db->sql_multi_insert( CLASS_TABLE, $sql_ary);
 		unset ($sql_ary);
 		
-		$db->sql_query('DELETE FROM  ' . $table_prefix . "bbdkp_language where game_id = 'eq2' and attribute='class' "  );
+		$db->sql_query('DELETE FROM  ' . BB_LANGUAGE . " where game_id = 'eq2' and attribute='class' "  );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'eq2',  'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array('game_id' => 'eq2',  'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Assassin' ,  'name_short' =>  'Assassin' );
@@ -173,7 +173,7 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'eq2',  'attribute_id' => 23, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Warter' ,  'name_short' =>  'Warden' );
 		$sql_ary[] = array('game_id' => 'eq2',  'attribute_id' => 24, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Zauberer' ,  'name_short' =>  'Wizard' );
 		
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary );
 		unset ( $sql_ary );
 		
 	}
@@ -186,7 +186,7 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 		global  $db, $table_prefix, $umil, $user;
 
 		// Everquest 2 races
-		$db->sql_query('DELETE FROM  ' . $table_prefix . "bbdkp_races where game_id = 'eq2'"  );
+		$db->sql_query('DELETE FROM  ' .  RACE_TABLE . " where game_id = 'eq2'"  );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'eq2', 'race_id' => 0, 'race_faction_id' => 2 ); //Unknown
 		$sql_ary[] = array('game_id' => 'eq2', 'race_id' => 1, 'race_faction_id' => 3 ); //Gnome
@@ -210,10 +210,10 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'eq2', 'race_id' => 19, 'race_faction_id' => 1 ); //Arasai
 		$sql_ary[] = array('game_id' => 'eq2', 'race_id' => 20, 'race_faction_id' => 3 ); //Sarnak
 		$sql_ary[] = array('game_id' => 'eq2', 'race_id' => 21, 'race_faction_id' => 3); //Freeblood
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
+		$db->sql_multi_insert(  RACE_TABLE , $sql_ary);
 		unset ($sql_ary);
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  WHERE game_id = 'eq2' and attribute='race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  WHERE game_id = 'eq2' and attribute='race' ");
 		$sql_ary = array();
 		
 		//races
@@ -291,7 +291,7 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'eq2',  'attribute_id' => 21, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Freeblood' ,  'name_short' =>  'Freeblood' );
 		$sql_ary[] = array('game_id' => 'eq2',  'attribute_id' => 21, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Freeblood' ,  'name_short' =>  'Freeblood' );
 		
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary );
 		unset ( $sql_ary );
 		
 	}
