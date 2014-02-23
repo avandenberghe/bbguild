@@ -37,7 +37,7 @@ class install_vanguard extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs factions
 	 */
-	function Installfactions()
+    protected function Installfactions()
 	{
 		
 		global  $db, $table_prefix, $umil, $user;
@@ -54,7 +54,7 @@ class install_vanguard extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	function InstallClasses()
+    protected function InstallClasses()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -107,7 +107,7 @@ class install_vanguard extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	function InstallRaces()
+    protected function InstallRaces()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		// races
@@ -164,8 +164,16 @@ class install_vanguard extends \bbdkp\controller\games\GameInstall
 		
 	}
 
-	
-  
+
+
+    /**
+     * Event Groups
+     * see parent function InstallEventGroup()
+     */
+    protected function  InstallEventGroup()
+    {
+
+    }
   
 	
 		

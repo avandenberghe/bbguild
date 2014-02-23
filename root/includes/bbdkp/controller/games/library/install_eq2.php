@@ -296,5 +296,16 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 		
 	}
 
+
+
+    /**
+     * Event Groups
+     * see parent function InstallEventGroup()
+     */
+    protected function  InstallEventGroup()
+    {
+
+    }
+
 }
 ?>

@@ -212,6 +212,17 @@ class install_ffxi extends \bbdkp\controller\games\GameInstall
 		
 	}
 
+
+    /**
+     * Event Groups
+     * see parent function InstallEventGroup()
+     */
+    protected function  InstallEventGroup()
+    {
+
+    }
+
+
 	
 
 }

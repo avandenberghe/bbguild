@@ -166,23 +166,14 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 		// remark : no french / german content since eq is english only
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary);
 		unset ( $sql_ary );
-		
-		
 	}
 	
 	/**
 	 * Event Groups
 	 * see parent function InstallEventGroup()
 	 */
+    protected function  InstallEventGroup()
+    {
 
-
-	/**
-	 * Events and Events
-	 * see parent function InstallEvents()
-	 */
-
+    }
 }
-
-
-    
-?>

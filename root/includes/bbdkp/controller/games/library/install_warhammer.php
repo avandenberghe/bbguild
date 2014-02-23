@@ -37,7 +37,7 @@ class install_warhammer extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs factions
 	 */
-	function Installfactions()
+    protected function Installfactions()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -53,7 +53,7 @@ class install_warhammer extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	function InstallClasses()
+    protected function InstallClasses()
 	{
 		global  $db, $table_prefix, $umil, $user;
 		
@@ -137,7 +137,7 @@ class install_warhammer extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	function InstallRaces()
+    protected function InstallRaces()
 	{
 		
 		global  $db, $table_prefix, $umil, $user;
@@ -174,6 +174,17 @@ class install_warhammer extends \bbdkp\controller\games\GameInstall
 		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
 		unset ( $sql_ary );
 	}
+
+
+
+    /**
+     * Event Groups
+     * see parent function InstallEventGroup()
+     */
+    protected function  InstallEventGroup()
+    {
+
+    }
 
 
 }

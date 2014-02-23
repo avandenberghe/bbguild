@@ -38,7 +38,7 @@ class install_tera extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs factions
 	 */
-	public function Installfactions()
+	protected function Installfactions()
 	{
 		global $db, $table_prefix;
 		// factions
@@ -53,7 +53,7 @@ class install_tera extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs game classes
 	*/
-	public function InstallClasses()
+    protected function InstallClasses()
 	{
 		global $db, $table_prefix;
 		// classes
@@ -93,7 +93,7 @@ class install_tera extends \bbdkp\controller\games\GameInstall
 	/**
 	 * Installs races
 	*/
-	public function InstallRaces()
+    protected function InstallRaces()
 	{
 		global $db, $table_prefix;
 		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'tera'");
@@ -132,7 +132,7 @@ class install_tera extends \bbdkp\controller\games\GameInstall
 	 * Install sample Event Groups
 	 * an Event answers the 'what' question
 	*/
-	public function InstallEventGroup()
+    protected function InstallEventGroup()
 	{
 		global $db, $table_prefix;
 		

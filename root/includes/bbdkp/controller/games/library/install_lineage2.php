@@ -508,6 +508,14 @@ class install_lineage2 extends \bbdkp\controller\games\GameInstall
 		
 	}
 
+    /**
+     * Event Groups
+     * see parent function InstallEventGroup()
+     */
+    protected function  InstallEventGroup()
+    {
+
+    }
 	
 }
 	
