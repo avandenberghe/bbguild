@@ -46,7 +46,6 @@ namespace bbdkp\admin
 	define('LOGS_TABLE',               $table_prefix . 'bbdkp_logs');
 	define('MEMBER_RANKS_TABLE',       $table_prefix . 'bbdkp_member_ranks');
 	define('MEMBER_LIST_TABLE',        $table_prefix . 'bbdkp_memberlist');
-	//define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_reporting');
 	define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_memberdkp');
 	define('RAID_DETAIL_TABLE',        $table_prefix . 'bbdkp_raid_detail');
 	define('RAIDS_TABLE',              $table_prefix . 'bbdkp_raids');
@@ -62,14 +61,13 @@ namespace bbdkp\admin
 	define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable');
 	define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');
 	define('BBDKP_ROLES_TABLE',        $table_prefix . 'bbdkp_roles');
-
+    define('GUILD_BOSS',               $table_prefix . 'bbdkp_guildboss');
+    define('GUILD_WORLD',              $table_prefix . 'bbdkp_guildworld');
 	// plugin anchors
 
 	// RAIDTRACKER
 
 	// BBTIPS
-
-	// ARMORY
 
 	// RAIDPLANNER
 
