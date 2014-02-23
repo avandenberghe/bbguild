@@ -39,7 +39,7 @@ class install_gw2 extends \bbdkp\controller\games\GameInstall
 	 */
     protected function Installfactions()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
 		// factions
 		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'gw2'" );
@@ -55,7 +55,7 @@ class install_gw2 extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
 		// professions
 		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'gw2'" );
@@ -108,7 +108,7 @@ class install_gw2 extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'gw2'");
 		$sql_ary = array ();
@@ -148,7 +148,7 @@ class install_gw2 extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallEventGroup()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
 		$sql = 'SELECT dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'GW2 Raids' ";
 		$result = $db->sql_query($sql);
@@ -178,7 +178,7 @@ class install_gw2 extends \bbdkp\controller\games\GameInstall
 	 */
     protected function InstallEvents()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		$db->sql_query('DELETE FROM ' .  EVENTS_TABLE . '  WHERE event_dkpid = ' . $this->gw2dkpid );
 		$sql_ary = array();
 		$sql_ary [] = array('event_dkpid' => $this->gw2dkpid , 'event_name' => 'Ascalonian Catacombs (30)', 'event_color' => '#888888', 'event_value' => 5, 'event_imagename' => ''  ) ;

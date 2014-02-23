@@ -39,7 +39,7 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 	 */
     protected function Installfactions()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 		// factions
 		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'swtor'" );
 		$sql_ary = array();
@@ -56,7 +56,7 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 		// note subclasses not done
 		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'swtor'" );
 		$sql_ary = array ();
@@ -104,7 +104,7 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 		
 		// species source : http://starwars.wikia.com/wiki/Star_Wars:_The_Old_Republic
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'swtor'");
@@ -165,7 +165,7 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallEventGroup()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 		
 		$sql = 'SELECT dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'SWTOR Flashpoints' ";
 		$result = $db->sql_query($sql);
@@ -195,7 +195,7 @@ class install_swtor extends \bbdkp\controller\games\GameInstall
 	 */
     protected function InstallEvents()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 		$sql_ary = array();
 		$sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'The Esseles', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => ''  ) ;
 		$sql_ary [] = array('event_dkpid' => $this->swtordkpid , 'event_name' => 'Black Talon', 'event_color' => '#C6DEFF', 'event_value' => 5 , 'event_imagename' => '') ;

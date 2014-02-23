@@ -41,7 +41,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	 */
     protected function Installfactions()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 
 		// factions
 		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'ffxiv'" );
@@ -60,7 +60,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 
 
 		// class :
@@ -152,7 +152,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'ffxiv'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'ffxiv','race_id' => 1, 'race_faction_id' => 3, 'image_female' => '',  'image_male' => '' ); //Unknown
@@ -200,7 +200,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	 */
     protected function  InstallEventGroup()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql = 'SELECT count(*) as num_dkp FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'ffxiv: A Realm Reborn' ";
 		$result = $db->sql_query($sql);
@@ -231,7 +231,7 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	 */
 	private function InstallEvents($ffxivpdkpid)
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql_ary = array();
 		// Dungeons:

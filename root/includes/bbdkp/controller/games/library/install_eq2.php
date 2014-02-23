@@ -43,7 +43,7 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 	 */
     protected function Installfactions()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		$db->sql_query('DELETE from ' . FACTION_TABLE . " where game_id = 'eq2'"  );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'eq2', 'faction_id' => 1, 'faction_name' => 'Good' );
@@ -59,7 +59,7 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		// Everquest 2 classes
 		
 		$db->sql_query('DELETE FROM  ' . CLASS_TABLE . " where game_id = 'eq2'");
@@ -183,7 +183,7 @@ class install_eq2 extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 
 		// Everquest 2 races
 		$db->sql_query('DELETE FROM  ' .  RACE_TABLE . " where game_id = 'eq2'"  );

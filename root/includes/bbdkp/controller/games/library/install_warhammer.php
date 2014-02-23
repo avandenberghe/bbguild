@@ -39,7 +39,7 @@ class install_warhammer extends \bbdkp\controller\games\GameInstall
 	 */
     protected function Installfactions()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
 		// factions
 		unset ($sql_ary);
@@ -55,7 +55,7 @@ class install_warhammer extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
 		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = 'warhammer'" );
 		$sql_ary = array();
@@ -140,7 +140,7 @@ class install_warhammer extends \bbdkp\controller\games\GameInstall
     protected function InstallRaces()
 	{
 		
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  WHERE game_id = 'warhammer'");
 		$sql_ary = array();

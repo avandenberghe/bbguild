@@ -44,7 +44,7 @@ class install_wow extends GameInstall
 	 */
     protected function Installfactions()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		// factions
 		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " WHERE game_id = 'wow'" );
@@ -62,7 +62,7 @@ class install_wow extends GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		// classes
 		// note class 10 does not exist
@@ -138,7 +138,7 @@ class install_wow extends GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		// races
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . " WHERE game_id = 'wow'");
@@ -224,7 +224,7 @@ class install_wow extends GameInstall
 	 */
     protected function  InstallEventGroup()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql = 'SELECT count(*) as num_dkp FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'Wotlk' ";
 		$result = $db->sql_query($sql);
@@ -276,7 +276,7 @@ class install_wow extends GameInstall
 	 */
 	private function InstallEventsCataclysm($dkpid)
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 	    $sql_ary = array();
 		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T11 Blackwing Descent 10', 'event_color' => '#77FF11', 'event_value' => 5, 'event_imagename' => 'wow_bd10'  ) ;
@@ -303,7 +303,7 @@ class install_wow extends GameInstall
 	 */
 	private function InstallEventsPandaria($dkpid)
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql_ary = array();
 
@@ -344,7 +344,7 @@ class install_wow extends GameInstall
 	private function populate_wow()
 	{
 
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql_ary = array();
 		$sql_ary[] = array(

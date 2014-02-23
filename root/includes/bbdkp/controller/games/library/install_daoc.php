@@ -61,7 +61,7 @@ class install_daoc extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql_ary = array();
 		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'daoc'" );
@@ -224,7 +224,7 @@ class install_daoc extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		// races
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'daoc'");

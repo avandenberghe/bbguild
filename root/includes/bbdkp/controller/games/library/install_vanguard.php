@@ -40,7 +40,7 @@ class install_vanguard extends \bbdkp\controller\games\GameInstall
     protected function Installfactions()
 	{
 		
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		// factions
 		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " WHERE game_id = 'vanguard'" );
 		$sql_ary = array();
@@ -56,7 +56,7 @@ class install_vanguard extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
 		// class :
 		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = 'vanguard'" );
@@ -109,7 +109,7 @@ class install_vanguard extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		// races
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'vanguard'");
 		$sql_ary = array();
