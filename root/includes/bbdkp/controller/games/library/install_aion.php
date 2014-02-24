@@ -33,7 +33,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  * @author Sajaki
  *
  */
-abstract class install_aion extends \bbdkp\controller\games\GameInstall
+class install_aion extends \bbdkp\controller\games\GameInstall
 {
 
 	public $game_id;
@@ -43,14 +43,14 @@ abstract class install_aion extends \bbdkp\controller\games\GameInstall
 	 */
     protected function Installfactions()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		// factions
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'aion'" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'aion'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'aion', 'faction_id' => 1, 'faction_name' => 'Light' );
 		$sql_ary[] = array('game_id' => 'aion', 'faction_id' => 2, 'faction_name' => 'Darkness' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
+		$db->sql_multi_insert( FACTION_TABLE , $sql_ary);
 		unset ($sql_ary);
 
 	}
@@ -60,11 +60,11 @@ abstract class install_aion extends \bbdkp\controller\games\GameInstall
 	 */
     protected function InstallClasses()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql_ary = array();
 		// class general
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'aion'" );
+		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'aion'" );
 		$sql_ary = array();
 		// sub classes, excluding the original 4 classes, which are irrelevant endgame
 		$sql_ary[] = array('game_id' => 'aion', 'class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_unknown' );
@@ -76,11 +76,11 @@ abstract class install_aion extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'aion', 'class_id' => 6, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_cleric' );
 		$sql_ary[] = array('game_id' => 'aion', 'class_id' => 7, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_gladiator' );
 		$sql_ary[] = array('game_id' => 'aion', 'class_id' => 8, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'imagename' => 'aion_templar' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
+		$db->sql_multi_insert( CLASS_TABLE , $sql_ary);
 		unset ($sql_ary);
 
 		//language table (No races, only factions, dummy value)
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'aion' and attribute = 'class' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . " where game_id = 'aion' and attribute = 'class' ");
 
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -112,7 +112,7 @@ abstract class install_aion extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Kleriker' ,  'name_short' =>  'Kleriker' );
 		$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 7, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Gladiator' ,  'name_short' =>  'Gladiator' );
 		$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 8, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Templer' ,  'name_short' =>  'Templer' );
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert ( BB_LANGUAGE , $sql_ary );
 		unset ( $sql_ary );
 
 
@@ -124,17 +124,17 @@ abstract class install_aion extends \bbdkp\controller\games\GameInstall
 	 */
     protected function InstallRaces()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 		// races (No races, only factions, dummy value)
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'aion'");
+		$db->sql_query('DELETE FROM ' . RACE_TABLE . "  where game_id = 'aion'");
 		$sql_ary = array();
 		$sql_ary [] = array ('game_id' => 'aion','race_id' => 1, 'race_faction_id' => 1, 'image_female' => 'aion_elyos', 'image_male' => 'aion_elyos'  );
 		$sql_ary [] = array ('game_id' => 'aion','race_id' => 2, 'race_faction_id' => 2, 'image_female' => 'aion_asmodian',  'image_male' => 'aion_asmodian' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
+		$db->sql_multi_insert( RACE_TABLE , $sql_ary);
 		unset ($sql_ary);
 
 		//language table (No races, only factions, dummy value)
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'aion' and attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'aion' and attribute = 'race' ");
 		$sql_ary = array ();
 		$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Elyos' ,  'name_short' =>  'Elyos' );
 		$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Asmodian' ,  'name_short' =>  'Asmodian' );
@@ -142,7 +142,7 @@ abstract class install_aion extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 2, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Asmodiens' ,  'name_short' =>  'Asmodiens' );
 		$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 1, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Elyos' ,  'name_short' =>  'Elyos' );
 		$sql_ary[] = array('game_id' => 'aion', 'attribute_id' => 2, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Asmodier' , 'name_short' =>  'Asmodian' );
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert ( BB_LANGUAGE , $sql_ary );
 		unset ( $sql_ary );
 
 	}
@@ -159,16 +159,16 @@ abstract class install_aion extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallEventGroup()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
-		$sql = 'SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Aion Events' ";
+		$sql = 'SELECT dkpsys_id FROM ' . DKPSYS_TABLE . " WHERE dkpsys_name = 'Aion Events' ";
 		$result = $db->sql_query($sql);
 		$this->aiondkpid = (int) $db->sql_fetchfield('dkpsys_id');
 		$db->sql_freeresult($result);
 
 		if ($this->aiondkpid == 0)
 		{
-			$db->sql_query('DELETE FROM ' . $table_prefix . 'bbdkp_events WHERE event_dkpid = ' . $this->aiondkpid);
+			$db->sql_query('DELETE FROM ' . EVENTS_TABLE . ' WHERE event_dkpid = ' . $this->aiondkpid);
 
 			// dkp pool
 			$sql_ary = array (
@@ -176,7 +176,7 @@ abstract class install_aion extends \bbdkp\controller\games\GameInstall
 					'dkpsys_status' => 'Y',
 					'dkpsys_addedby' => 'admin',
 					'dkpsys_default' => 'N' );
-			$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+			$sql = 'INSERT INTO ' . DKPSYS_TABLE . $db->sql_build_array('INSERT', $sql_ary);
 			$db->sql_query($sql);
 			$this->aiondkpid = $db->sql_nextid();
 			$this->InstallEvents();
@@ -190,7 +190,7 @@ abstract class install_aion extends \bbdkp\controller\games\GameInstall
 	*/
     private function InstallEvents()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql_ary = array(
 				'event_dkpid' => $this->aiondkpid ,
@@ -199,7 +199,7 @@ abstract class install_aion extends \bbdkp\controller\games\GameInstall
 				'event_value' => 5,
 				'event_imagename' => 'aion_pve' );
 
-		$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_events ' . $db->sql_build_array('INSERT', $sql_ary);
+		$sql = 'INSERT INTO ' . EVENTS_TABLE . $db->sql_build_array('INSERT', $sql_ary);
 		$db->sql_query($sql);
 	}
 

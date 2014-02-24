@@ -36,7 +36,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  * @package bbdkp
  *
  */
-abstract class install_wow extends GameInstall
+class install_wow extends GameInstall
 {
 
 	/**
@@ -44,14 +44,14 @@ abstract class install_wow extends GameInstall
 	 */
     protected function Installfactions()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		// factions
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions WHERE game_id = 'wow'" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " WHERE game_id = 'wow'" );
 		$sql_ary = array();
 		$sql_ary [] = array ('game_id' => 'wow','faction_id' => 1, 'faction_name' => 'Alliance' );
 		$sql_ary [] = array ('game_id' => 'wow','faction_id' => 2, 'faction_name' => 'Horde' );
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_factions', $sql_ary );
+		$db->sql_multi_insert ( FACTION_TABLE, $sql_ary );
 		unset ( $sql_ary );
 
 
@@ -62,11 +62,11 @@ abstract class install_wow extends GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		// classes
 		// note class 10 does not exist
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes WHERE game_id = 'wow'" );
+		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = 'wow'" );
 		$sql_ary = array ();
 		$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');
 		$sql_ary [] = array ('game_id' => 'wow','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_warrior');
@@ -80,11 +80,11 @@ abstract class install_wow extends GameInstall
 		$sql_ary [] = array ('game_id' => 'wow','class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_priest');
 		$sql_ary [] = array ('game_id' => 'wow','class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 90 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_death_knight');
 		$sql_ary [] = array ('game_id' => 'wow','class_id' => 10, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#008467', 'imagename' => 'wow_monk');
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_classes', $sql_ary );
+		$db->sql_multi_insert ( CLASS_TABLE, $sql_ary );
 		unset ( $sql_ary );
 
 		// languages
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language WHERE game_id = 'wow' AND attribute='class' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . " WHERE game_id = 'wow' AND attribute='class' ");
 
 		$sql_ary = array ();
 		$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -128,7 +128,7 @@ abstract class install_wow extends GameInstall
 		$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Todesritter' ,  'name_short' =>  'Todesritter' );
 		$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 10, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Mönch' ,  'name_short' =>  'Mönch' );
 
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert ( BB_LANGUAGE , $sql_ary );
 		unset ( $sql_ary );
 
 	}
@@ -138,10 +138,10 @@ abstract class install_wow extends GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		// races
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races WHERE game_id = 'wow'");
+		$db->sql_query('DELETE FROM ' .  RACE_TABLE . " WHERE game_id = 'wow'");
 		$sql_ary = array ();
 		$sql_ary [] = array ('game_id' => 'wow','race_id' => 0, 'race_faction_id' => 0, 'image_female' => ' ',  'image_male' => ' '  ); //Unknown
 		$sql_ary [] = array ('game_id' => 'wow','race_id' => 1, 'race_faction_id' => 1, 'image_female' => 'wow_human_female',  'image_male' => 'wow_human_male'  ); //Human
@@ -158,10 +158,10 @@ abstract class install_wow extends GameInstall
 		$sql_ary [] = array ('game_id' => 'wow','race_id' => 22, 'race_faction_id' => 1 , 'image_female' => 'wow_worgen_female',  'image_male' => 'wow_worgen_male' ); //Worgen
 		$sql_ary [] = array ('game_id' => 'wow','race_id' => 25, 'race_faction_id' => 1 , 'image_female' => 'wow_pandaren_female',  'image_male' => 'wow_pandaren_male' ); //Pandaren alliance
 		$sql_ary [] = array ('game_id' => 'wow','race_id' => 26, 'race_faction_id' => 2 , 'image_female' => 'wow_pandaren_female',  'image_male' => 'wow_pandaren_male' ); //Pandaren Horde
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
+		$db->sql_multi_insert (  RACE_TABLE , $sql_ary );
 		unset ( $sql_ary );
 
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language WHERE game_id = 'wow' AND attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . " WHERE game_id = 'wow' AND attribute = 'race' ");
 
 		//races in en
 		$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 0, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -214,7 +214,7 @@ abstract class install_wow extends GameInstall
 		$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 25, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Pandaren Alliance' ,  'name_short' =>  'Pandaren Alliance' );
 		$sql_ary[] = array('game_id' => 'wow', 'attribute_id' => 26, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Pandaren Horde' ,  'name_short' =>  'Pandaren Horde' );
 
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert ( BB_LANGUAGE , $sql_ary );
 		unset ( $sql_ary );
 
 	}
@@ -224,9 +224,9 @@ abstract class install_wow extends GameInstall
 	 */
     protected function  InstallEventGroup()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
-		$sql = 'SELECT count(*) as num_dkp FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Wotlk' ";
+		$sql = 'SELECT count(*) as num_dkp FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'Wotlk' ";
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('num_dkp');
 		$db->sql_freeresult($result);
@@ -234,11 +234,11 @@ abstract class install_wow extends GameInstall
 		{
 			$sql_ary = array ();
 			$sql_ary [] = array ('dkpsys_name' => 'Wotlk', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-			$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
+			$db->sql_multi_insert (  DKPSYS_TABLE  , $sql_ary );
 			unset ( $sql_ary );
 		}
 
-		$sql = 'SELECT count(*) as num_dkp FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Cataclysm' ";
+		$sql = 'SELECT count(*) as num_dkp FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'Cataclysm' ";
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('num_dkp');
 		$db->sql_freeresult($result);
@@ -246,13 +246,13 @@ abstract class install_wow extends GameInstall
 		{
 			$sql_ary = array ();
 			$sql_ary [] = array ('dkpsys_name' => 'Cataclysm', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-			$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
-			$result = $db->sql_query('select dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name='Cataclysm'" );
+			$db->sql_multi_insert (  DKPSYS_TABLE  , $sql_ary );
+			$result = $db->sql_query('select dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name='Cataclysm'" );
 			$dkpid = (int) $db->sql_fetchfield('dkpsys_id');
 			$this->InstallEventsCataclysm($dkpid);
 		}
 
-		$sql = 'SELECT count(*) as num_dkp FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Pandaria' ";
+		$sql = 'SELECT count(*) as num_dkp FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'Pandaria' ";
 		$result = $db->sql_query($sql);
 		$dkpid = (int) $db->sql_fetchfield('num_dkp');
 		$db->sql_freeresult($result);
@@ -260,8 +260,8 @@ abstract class install_wow extends GameInstall
 		{
 			$sql_ary = array ();
 			$sql_ary [] = array ('dkpsys_name' => 'Pandaria', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
-			$db->sql_multi_insert ( $table_prefix . 'bbdkp_dkpsystem', $sql_ary );
-			$result = $db->sql_query('select dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name='Pandaria'" );
+			$db->sql_multi_insert (  DKPSYS_TABLE  , $sql_ary );
+			$result = $db->sql_query('select dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name='Pandaria'" );
 			$dkpid = (int) $db->sql_fetchfield('dkpsys_id');
 			$this->InstallEventsPandaria($dkpid);
 		}
@@ -276,7 +276,7 @@ abstract class install_wow extends GameInstall
 	 */
 	private function InstallEventsCataclysm($dkpid)
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 	    $sql_ary = array();
 		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T11 Blackwing Descent 10', 'event_color' => '#77FF11', 'event_value' => 5, 'event_imagename' => 'wow_bd10'  ) ;
@@ -291,7 +291,7 @@ abstract class install_wow extends GameInstall
 		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T13 Dragon Soul 25', 'event_color' => '#FFBB33', 'event_value' => 5, 'event_imagename' => 'wow_ds25' );
 		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T13 Dragon Soul 25hm', 'event_color' => '#FF2266', 'event_value' => 5, 'event_imagename' => 'wow_ds25hm' );
 
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
+		$db->sql_multi_insert (  EVENTS_TABLE , $sql_ary );
 		unset ( $sql_ary );
 
 	}
@@ -303,7 +303,7 @@ abstract class install_wow extends GameInstall
 	 */
 	private function InstallEventsPandaria($dkpid)
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql_ary = array();
 
@@ -332,7 +332,7 @@ abstract class install_wow extends GameInstall
 		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T16 Siege of Orgrimmar (25)', 'event_color' => '#3F5347', 'event_value' => 20, 'event_imagename' => 'SOG25' );
 		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T16 Siege of Orgrimmar (25HM)', 'event_color' => '#3F5347', 'event_value' => 20, 'event_imagename' => 'SOG25' );
 
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
+		$db->sql_multi_insert (  EVENTS_TABLE , $sql_ary );
 		unset ( $sql_ary );
 
 	}
@@ -344,7 +344,7 @@ abstract class install_wow extends GameInstall
 	private function populate_wow()
 	{
 
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql_ary = array();
 		$sql_ary[] = array(

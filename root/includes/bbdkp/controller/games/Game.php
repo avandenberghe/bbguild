@@ -94,7 +94,7 @@ class Game extends \bbdkp\admin\Admin
 	public function install()
 	{
 		//insert into phpbb_bbdkp_games table
-		global $user, $db, $phpEx, $phpbb_root_path;
+		global $user, $phpEx, $phpbb_root_path, $config;
 
 		if ($this->game_id == '')
 		{
@@ -125,9 +125,24 @@ class Game extends \bbdkp\admin\Admin
 		//build name of the namespaced game installer class
 		$classname = '\bbdkp\controller\games\install_' . $this->game_id;
 		$installgame = new $classname;
+        //call the game installer
+        $installgame->Install($this->game_id, $this->name );
 
-		//call the game installer
-		$installgame->install($this->game_id, $this->name );
+        //is bossprogress installed ?
+        if(isset($config['bbdkp_bp_version']))
+        {
+            if ($config['bbdkp_bp_version'] >= '1.0.10')
+            {
+                if (!class_exists('\bbdkp\controller\games\world_' . $this->game_id))
+                {
+                    include($phpbb_root_path .'includes/bbdkp/controller/games/library/world_' . $this->game_id . '.' . $phpEx);
+                }
+                $classname = '\bbdkp\controller\games\world_' . $this->game_id;
+                $installworld = new $classname;
+                $installworld->Install($this->game_id);
+
+            }
+        }
 
 		//
 		// Logging
@@ -144,46 +159,56 @@ class Game extends \bbdkp\admin\Admin
 
 	/**
 	 * deletes a Game from database, including all factions, classes and races.
+    *  @todo delete ranks...
 	*/
 	public function Delete()
 	{
-		//delete from phpbb_bbdkp_games table
-		global $db, $user, $cache;
 
-			$db->sql_transaction ( 'begin' );
+        global $user, $phpEx, $phpbb_root_path, $config;
+        if ($this->game_id == '')
+        {
+            \trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALL_GAME_FAILURE'], $this->name ) . E_USER_WARNING );
+        }
 
-			$sql = 'DELETE FROM ' . GAMES_TABLE . " WHERE game_id = '" .   $this->game_id . "'";
-			$db->sql_query ($sql);
+        //fetch installer
+        if (!class_exists('\bbdkp\controller\games\install_' . $this->game_id))
+        {
+            include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_' . $this->game_id . '.' . $phpEx);
+        }
 
-			$factions = new \bbdkp\controller\games\Faction();
-			$factions->game_id = $this->game_id;
-			$factions->Delete_all_factions();
+        //build name of the namespaced game installer class
+        $classname = '\bbdkp\controller\games\install_' . $this->game_id;
+        $installgame = new $classname;
+        //call the game installer
+        $installgame->Uninstall($this->game_id, $this->name );
 
-			$races = new \bbdkp\controller\games\Races();
-			$races->game_id = $this->game_id;
-			$races->Delete_all_races();
+        //is bossprogress installed ?
+        if(isset($config['bbdkp_bp_version']))
+        {
+            if ($config['bbdkp_bp_version'] >= '1.0.10')
+            {
+                if (!class_exists('\bbdkp\controller\games\world_' . $this->game_id))
+                {
+                    include($phpbb_root_path .'includes/bbdkp/controller/games/library/world_' . $this->game_id . '.' . $phpEx);
+                }
+                $classname = '\bbdkp\controller\games\world_' . $this->game_id;
+                $installworld = new $classname;
+                $installworld->Uninstall($this->game_id);
+            }
+        }
 
-			$classes = new \bbdkp\controller\games\Classes();
-			$classes->game_id = $this->game_id;
-			$classes->Delete_all_classes();
+        //
+        // Logging
+        //
+        $log_action = array(
+            'header' => 'L_ACTION_GAME_DELETED' ,
+            'L_GAME' => $this->game_id  ,
+        );
 
-			$db->sql_transaction ( 'commit' );
+        $this->log_insert(array(
+        'log_type' =>  'L_ACTION_GAME_DELETED',
+        'log_action' => $log_action));
 
-			$cache->destroy ( 'sql', GAMES_TABLE );
-
-			//
-			// Logging
-			//
-			$log_action = array(
-				'header' => 'L_ACTION_GAME_DELETED' ,
-				'L_GAME' => $this->game_id  ,
-			);
-
-			$this->log_insert(array(
-			'log_type' =>  'L_ACTION_GAME_DELETED',
-			'log_action' => $log_action));
-
-		//@todo delete ranks...
 	}
 
 	/**

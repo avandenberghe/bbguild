@@ -523,6 +523,8 @@ class acp_dkp extends \bbdkp\admin\Admin
 				{
 					$action = 'list';
 				}
+
+
 				switch ($action)
 				{
 					case 'list':
@@ -590,7 +592,7 @@ class acp_dkp extends \bbdkp\admin\Admin
 								'ID'		=> $log['log_id'],
 								'DATE' 		=> $log['datestamp'],
 								'TYPE' 		=> $log['log_type'],
-								'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;" . URI_LOG . '=' . $log['log_id'] ) ,
+								'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;" . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ) ,
 								'VERBOSE'	=> $verbose,
 								'USER' 		=> $log['username'],
 								'ACTION' 	=> $log['log_line'],
@@ -623,6 +625,8 @@ class acp_dkp extends \bbdkp\admin\Admin
 					case 'view':
 						$viewlog = $logs->get_logentry($log_id);
 						$log_actionxml = $viewlog['log_action'];
+                        $search_term = request_var('search', '');
+                        $start = request_var('start', 0);
 						$log_action = (array) simplexml_load_string($log_actionxml);
 						// loop the action elements and fill template
 						foreach ($log_action as $key => $value)
@@ -661,8 +665,12 @@ class acp_dkp extends \bbdkp\admin\Admin
 							'LOG_ACTION' => $log_actionstr, ));
 
 						break;
-					}
-					break;
+				}
+
+                $template->assign_vars(array(
+                        'U_BACK'    => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
+                 ));
+			    break;
 		}
 
 

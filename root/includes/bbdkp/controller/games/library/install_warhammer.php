@@ -32,32 +32,32 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-abstract class install_warhammer extends \bbdkp\controller\games\GameInstall
+class install_warhammer extends \bbdkp\controller\games\GameInstall
 {
 	/**
 	 * Installs factions
 	 */
-	function Installfactions()
+    protected function Installfactions()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
 		// factions
 		unset ($sql_ary);
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions WHERE game_id = 'warhammer'" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " WHERE game_id = 'warhammer'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'warhammer','faction_id' => 1, 'faction_name' => 'Order' );
 		$sql_ary[] = array('game_id' => 'warhammer','faction_id' => 2, 'faction_name' => 'Destruction' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
+		$db->sql_multi_insert( FACTION_TABLE, $sql_ary);
 	}
 	
 	/**
 	 * Installs game classes
 	*/
-	function InstallClasses()
+    protected function InstallClasses()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes WHERE game_id = 'warhammer'" );
+		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = 'warhammer'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'warhammer', 'class_id' => 0, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40,  'colorcode' =>  '#999', 'imagename' => 'warhammer_unknown' );
 		$sql_ary[] = array('game_id' => 'warhammer','class_id' => 1, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40,   'colorcode' =>  '#FF0044','imagename' => 'warhammer_witch_Elf'  );
@@ -80,9 +80,9 @@ abstract class install_warhammer extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'warhammer','class_id' => 18, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40, 'colorcode' =>  '#CC9933', 'imagename' => 'warhammer_swordmaster'  );
 		$sql_ary[] = array('game_id' => 'warhammer','class_id' => 19, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 40,  'colorcode' =>  '#FF0044', 'imagename' => 'warhammer_shadow_warrior'  );
 		$sql_ary[] = array('game_id' => 'warhammer','class_id' => 20, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 40,  'colorcode' =>  '#FF0044', 'imagename' => 'warhammer_white_lion'  );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
+		$db->sql_multi_insert( CLASS_TABLE, $sql_ary);
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  WHERE game_id = 'warhammer' AND attribute='class' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  WHERE game_id = 'warhammer' AND attribute='class' ");
 		unset ( $sql_ary );
 		
 		$sql_ary = array();
@@ -130,19 +130,19 @@ abstract class install_warhammer extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array( 'game_id' => 'warhammer','attribute_id' => 19, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Shadow Warrior' ,  'name_short' =>  'Shadow Warrior' );
 		$sql_ary[] = array( 'game_id' => 'warhammer','attribute_id' => 20, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'White Lion' ,  'name_short' =>  'White Lion' );
 
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert ( BB_LANGUAGE , $sql_ary );
 		unset ( $sql_ary );
 	}
 	
 	/**
 	 * Installs races
 	*/
-	function InstallRaces()
+    protected function InstallRaces()
 	{
 		
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  WHERE game_id = 'warhammer'");
+		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  WHERE game_id = 'warhammer'");
 		$sql_ary = array();
 		$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 0, 'race_faction_id' => 1,  'image_female' => ' ',  'image_male' => ' '  ); //Unknown
 		$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 1, 'race_faction_id' => 1,  'image_female' => 'warhammer_dwarf',  'image_male' => 'warhammer_dwarf'  ); //Dwarf
@@ -152,9 +152,9 @@ abstract class install_warhammer extends \bbdkp\controller\games\GameInstall
 		$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 5, 'race_faction_id' => 2 , 'image_female' => 'warhammer_chaos',  'image_male' => 'warhammer_chaos' ); //chaos
 		$sql_ary [] = array ('game_id' => 'warhammer','race_id' => 6, 'race_faction_id' => 2 , 'image_female' => 'warhammer_greenskin',  'image_male' => 'warhammer_greenskin' ); //Greenskins
 		 
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
+		$db->sql_multi_insert(  RACE_TABLE , $sql_ary);
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  WHERE game_id = 'warhammer' AND attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  WHERE game_id = 'warhammer' AND attribute = 'race' ");
 		unset ( $sql_ary );
 		$sql_ary[] = array( 'game_id' => 'warhammer','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array( 'game_id' => 'warhammer','attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Dwarf' ,  'name_short' =>  'Dwarf' );
@@ -171,9 +171,20 @@ abstract class install_warhammer extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array( 'game_id' => 'warhammer','attribute_id' => 4, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Dark Elves' ,  'name_short' =>  'Dark Elves' );
 		$sql_ary[] = array( 'game_id' => 'warhammer','attribute_id' => 5, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Chaos' ,  'name_short' =>  'Chaos' );
 		$sql_ary[] = array( 'game_id' => 'warhammer','attribute_id' => 6, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Greenskins' ,  'name_short' =>  'Greenskins' );
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert ( BB_LANGUAGE , $sql_ary );
 		unset ( $sql_ary );
 	}
+
+
+
+    /**
+     * Event Groups
+     * see parent function InstallEventGroup()
+     */
+    protected function  InstallEventGroup()
+    {
+
+    }
 
 
 }

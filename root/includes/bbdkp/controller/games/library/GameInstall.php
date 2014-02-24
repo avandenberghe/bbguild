@@ -32,27 +32,16 @@ abstract class GameInstall
 	 * Install a game
      * can be implemented, this is the default install
 	 */
-    public function install($game_id, $gamename)
+    public final function Install($game_id, $gamename)
 	{
-        global $phpbb_root_path, $phpEx;
+		global $db;
 		$this->game_id = $game_id;
 		$this->gamename = $gamename;
-		global $db, $user, $config;
 		$db->sql_transaction ( 'begin' );
 		$this->Installfactions();
 		$this->InstallClasses();
 		$this->InstallRaces();
 		$this->InstallEventGroup();
-        if( isset($config['bbdkp_bp_version']))
-        {
-            if (!class_exists('\bbdkp\controller\games\world_' . $game_id))
-            {
-                require("{$phpbb_root_path}includes/bbdkp/controller/games/library/world_.$game_id.$phpEx");
-            }
-            $class_name = 'world_' . $game_id;
-            $wo = new $class_name;
-            $wo->InstallWorld();
-        }
 
 		//insert a new entry in the game table
 		$data = array (
@@ -69,6 +58,40 @@ abstract class GameInstall
 		$db->sql_transaction ( 'commit' );
 
 	}
+
+
+    Public final function Uninstall($game_id, $gamename)
+    {
+        global $cache, $db;
+        $this->game_id = $game_id;
+        $this->gamename = $gamename;
+
+        $db->sql_transaction ( 'begin' );
+
+        $factions = new \bbdkp\controller\games\Faction();
+        $factions->game_id = $this->game_id;
+        $factions->Delete_all_factions();
+
+        $races = new \bbdkp\controller\games\Races();
+        $races->game_id = $this->game_id;
+        $races->Delete_all_races();
+
+        $classes = new \bbdkp\controller\games\Classes();
+        $classes->game_id = $this->game_id;
+        $classes->Delete_all_classes();
+
+        $sql = 'DELETE FROM ' . GAMES_TABLE . " WHERE game_id = '" .   $this->game_id . "'";
+        $db->sql_query ($sql);
+
+        $db->sql_transaction ( 'commit' );
+
+        $cache->destroy ( 'sql', GAMES_TABLE );
+
+
+
+    }
+
+
 
 	/**
 	 * Installs factions
@@ -87,13 +110,6 @@ abstract class GameInstall
 	 * must be implemented
 	*/
     abstract protected function InstallRaces();
-
-    /**
-     * install bossprogress
-     * installs Lands, Dungeons, bosses
-     * must be implemented by bossprogress
-     */
-    abstract protected function InstallWorld();
 
 	/**
 	 * Install sample Event Groups

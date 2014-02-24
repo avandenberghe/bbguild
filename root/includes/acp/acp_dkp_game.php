@@ -202,6 +202,10 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 				$gamesettings = (isset ( $_POST ['gamesettings'] )) ? true : false;
 
+                $template->assign_vars ( array (
+                    'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") ,
+                ));
+
 				if($gamereset)
 				{
 					// ask for permission

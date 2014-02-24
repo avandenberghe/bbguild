@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-abstract class install_rift extends \bbdkp\controller\games\GameInstall
+class install_rift extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**
@@ -40,14 +40,14 @@ abstract class install_rift extends \bbdkp\controller\games\GameInstall
 	 */
     protected function Installfactions()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 		// factions
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'rift'" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'rift'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'rift','faction_id' => 1, 'faction_name' => 'Guardians' );
 		$sql_ary[] = array('game_id' => 'rift','faction_id' => 2, 'faction_name' => 'Defiant' );
 		$sql_ary[] = array('game_id' => 'rift','faction_id' => 3, 'faction_name' => 'NPC' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
+		$db->sql_multi_insert( FACTION_TABLE, $sql_ary);
 		unset ($sql_ary);
 	}
 	
@@ -57,8 +57,8 @@ abstract class install_rift extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global $db, $table_prefix, $umil, $user;
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'rift'" );
+		global $db;
+		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'rift'" );
 		$sql_ary = array();
 		
 		// class general
@@ -104,10 +104,10 @@ abstract class install_rift extends \bbdkp\controller\games\GameInstall
 		//     $sql_ary[] = array('game_id' => 'rift','class_id' => 31, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#69CCF0', 'imagename' => 'rift_dominator' );
 		//     $sql_ary[] = array('game_id' => 'rift','class_id' => 32, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 60, 'colorcode' =>  '#9482C9', 'imagename' => 'rift_chloromancer' );
 		
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
+		$db->sql_multi_insert( CLASS_TABLE, $sql_ary);
 		unset ($sql_ary);
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'rift' and attribute='class'   ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'rift' and attribute='class'   ");
 		$sql_ary = array();
 		$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		
@@ -154,7 +154,7 @@ abstract class install_rift extends \bbdkp\controller\games\GameInstall
 		// 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 30, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Necromancer' ,  'name_short' =>  'Necromancer' );
 		// 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 31, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Dominator' ,  'name_short' =>  'Dominator' );
 		// 	$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 32, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Chloromancer' ,  'name_short' =>  'Chloromancer' );
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert ( BB_LANGUAGE , $sql_ary );
 		unset ( $sql_ary );
 		
 	}
@@ -164,9 +164,9 @@ abstract class install_rift extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 		// races
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'rift'");
+		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'rift'");
 		$sql_ary = array ();
 		$sql_ary [] = array ('game_id' => 'rift','race_id' => 0, 'race_faction_id' => 1,  'image_female' => ' ',  'image_male' => ' '  ); //Unknown
 		$sql_ary [] = array ('game_id' => 'rift','race_id' => 1, 'race_faction_id' => 1,  'image_female' => 'rift_dwarf_female',  'image_male' => 'rift_dwarf_male'  ); //dwarf
@@ -175,10 +175,10 @@ abstract class install_rift extends \bbdkp\controller\games\GameInstall
 		$sql_ary [] = array ('game_id' => 'rift','race_id' => 4, 'race_faction_id' => 2 , 'image_female' => 'rift_bahmi_female',  'image_male' => 'rift_bahmi_male' ) ; //Bahmi
 		$sql_ary [] = array ('game_id' => 'rift','race_id' => 5, 'race_faction_id' => 2 , 'image_female' => 'rift_eth_female',  'image_male' => 'rift_eth_male' ); //eth
 		$sql_ary [] = array ('game_id' => 'rift','race_id' => 6, 'race_faction_id' => 2 , 'image_female' => 'rift_kelari_female',  'image_male' => 'rift_kelari_male' ); //kelari
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_races', $sql_ary );
+		$db->sql_multi_insert (  RACE_TABLE , $sql_ary );
 		unset ( $sql_ary );
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'rift' and attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'rift' and attribute = 'race' ");
 		$sql_ary = array();
 		
 		$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -189,7 +189,7 @@ abstract class install_rift extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 5, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Eth' , 'name_short' =>  'Eth' );
 		$sql_ary[] = array( 'game_id' => 'rift','attribute_id' => 6, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Kelari' ,  'name_short' =>  'Kelari' );
 		
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert ( BB_LANGUAGE , $sql_ary );
 		unset ( $sql_ary );
 		
 		
@@ -214,23 +214,23 @@ abstract class install_rift extends \bbdkp\controller\games\GameInstall
 	 */
     protected function InstallEventGroup()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 		
-		$sql = 'SELECT dkpsys_id FROM ' . $table_prefix . "bbdkp_dkpsystem WHERE dkpsys_name = 'Rift Raids' ";
+		$sql = 'SELECT dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name = 'Rift Raids' ";
 		$result = $db->sql_query($sql);
 		$this->riftdkpid = (int) $db->sql_fetchfield('dkpsys_id');
 		$db->sql_freeresult($result);
 		
 		if ($this->riftdkpid == 0)
 		{
-			$db->sql_query('DELETE FROM ' . $table_prefix . 'bbdkp_events WHERE event_dkpid = ' . $this->riftdkpid );
+			$db->sql_query('DELETE FROM ' .  EVENTS_TABLE  .' WHERE event_dkpid = ' . $this->riftdkpid );
 			
 			$sql_ary = array (
 					'dkpsys_name' => 'Rift Raids',
 					'dkpsys_status' => 'Y',
 					'dkpsys_addedby' => 'admin',
 					'dkpsys_default' => 'N' );
-			$sql = 'INSERT INTO ' . $table_prefix . 'bbdkp_dkpsystem ' . $db->sql_build_array('INSERT', $sql_ary);
+			$sql = 'INSERT INTO ' .  DKPSYS_TABLE  . $db->sql_build_array('INSERT', $sql_ary);
 			$db->sql_query($sql);
 			$this->riftdkpid = $db->sql_nextid();
 			$this->InstallEvents(); 
@@ -244,7 +244,7 @@ abstract class install_rift extends \bbdkp\controller\games\GameInstall
      */
     protected function InstallEvents()
     {
-    	global $db, $table_prefix, $umil, $user;
+    	global $db;
     	
     	$sql_ary = array();
     	$sql_ary [] = array('event_dkpid' => $this->riftdkpid , 'event_name' => 'Slivers', 'event_color' => '#C6DEFF', 'event_value' => 5, 'event_imagename' => ''  ) ;
@@ -253,7 +253,7 @@ abstract class install_rift extends \bbdkp\controller\games\GameInstall
     	$sql_ary [] = array('event_dkpid' => $this->riftdkpid , 'event_name' => 'Infernal Dawn', 'event_color' => '#6D7B8D', 'event_value' => 15, 'event_imagename' => '' );
     	$sql_ary [] = array('event_dkpid' => $this->riftdkpid , 'event_name' => 'The River of Souls', 'event_color' => '#6D7B8D', 'event_value' => 15, 'event_imagename' => '' );
     	$sql_ary [] = array('event_dkpid' => $this->riftdkpid , 'event_name' => 'Expert/Raid rifts', 'event_color' => '#6D7B8D', 'event_value' => 15, 'event_imagename' => '' );
-    	$db->sql_multi_insert ( $table_prefix . 'bbdkp_events', $sql_ary );
+    	$db->sql_multi_insert (  EVENTS_TABLE , $sql_ary );
     }
 
 

@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-abstract class install_ffxi extends \bbdkp\controller\games\GameInstall
+class install_ffxi extends \bbdkp\controller\games\GameInstall
 {
 	
 	/**
@@ -40,16 +40,16 @@ abstract class install_ffxi extends \bbdkp\controller\games\GameInstall
 	 */
     protected function Installfactions()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
 		// factions
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'FFXI'" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'FFXI'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'FFXI','faction_id' => 1, 'faction_name' => 'Bastok' );
 		$sql_ary[] = array('game_id' => 'FFXI','faction_id' => 2, 'faction_name' => 'San d\'Oria' );
 		$sql_ary[] = array('game_id' => 'FFXI','faction_id' => 3, 'faction_name' => 'Windurst' );
 		$sql_ary[] = array('game_id' => 'FFXI','faction_id' => 4, 'faction_name' => 'Jueno' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
+		$db->sql_multi_insert( FACTION_TABLE, $sql_ary);
 		unset ($sql_ary);
 		
 	}
@@ -60,11 +60,11 @@ abstract class install_ffxi extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 
 
 		// class :
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'FFXI'" );
+		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'FFXI'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'FFXI','class_id' => 0, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 75, 'imagename' => 'ffxi_unknown' );
 		$sql_ary[] = array('game_id' => 'FFXI','class_id' => 1, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 75, 'imagename' => 'ffxi_warrior' );
@@ -87,11 +87,11 @@ abstract class install_ffxi extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'FFXI','class_id' => 18, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 75 , 'imagename' => 'ffxi_bard' );
 		$sql_ary[] = array('game_id' => 'FFXI','class_id' => 19, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 75 , 'imagename' => 'ffxi_beastmaster' );
 		$sql_ary[] = array('game_id' => 'FFXI','class_id' => 20, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 75 , 'imagename' => 'ffxi_puppetmaster' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
+		$db->sql_multi_insert( CLASS_TABLE, $sql_ary);
 		unset ($sql_ary);
 
 		// Language table
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'FFXI' and attribute='class' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'FFXI' and attribute='class' ");
 		
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'FFXI','attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -160,7 +160,7 @@ abstract class install_ffxi extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'FFXI', 'attribute_id' => 19, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Beastmaster' ,  'name_short' =>  'Beastmaster' );
 		$sql_ary[] = array('game_id' => 'FFXI', 'attribute_id' => 20, 'language' =>  'de' , 'attribute' =>  'class' , 'name' =>  'Puppetmaster' ,  'name_short' =>  'Puppetmaster' );
 		
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary );
 		unset ( $sql_ary );
 		
 	}
@@ -170,9 +170,9 @@ abstract class install_ffxi extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global  $db, $table_prefix, $umil, $user;
+		global  $db;
 		
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'FFXI'");
+		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'FFXI'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'FFXI','race_id' => 1, 'race_faction_id' => 3 ); //Unknown
 		$sql_ary[] = array('game_id' => 'FFXI','race_id' => 2, 'race_faction_id' => 1 ); //Galka
@@ -180,11 +180,11 @@ abstract class install_ffxi extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'FFXI','race_id' => 4, 'race_faction_id' => 2 ); ///Elvaan
 		$sql_ary[] = array('game_id' => 'FFXI','race_id' => 5, 'race_faction_id' => 3 ); //Tarutaru
 		$sql_ary[] = array('game_id' => 'FFXI','race_id' => 6, 'race_faction_id' => 3 ); //Mithra
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
+		$db->sql_multi_insert(  RACE_TABLE , $sql_ary);
 		
 
 		// Language table
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'FFXI' and attribute='race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'FFXI' and attribute='race' ");
 		$sql_ary = array();
 		
 		$sql_ary[] = array('game_id' => 'FFXI', 'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
@@ -207,10 +207,21 @@ abstract class install_ffxi extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'FFXI', 'attribute_id' => 4, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Elvaan' ,  'name_short' =>  'Elvaan' );
 		$sql_ary[] = array('game_id' => 'FFXI', 'attribute_id' => 5, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Tarutaru' ,  'name_short' =>  'Tarutaru' );
 		$sql_ary[] = array('game_id' => 'FFXI', 'attribute_id' => 6, 'language' =>  'de' , 'attribute' =>  'race' , 'name' =>  'Mithra' ,  'name_short' =>  'Mithra' );
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary );
 		unset ( $sql_ary );
 		
 	}
+
+
+    /**
+     * Event Groups
+     * see parent function InstallEventGroup()
+     */
+    protected function  InstallEventGroup()
+    {
+
+    }
+
 
 	
 

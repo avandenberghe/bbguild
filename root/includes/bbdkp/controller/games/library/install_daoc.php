@@ -34,7 +34,7 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  *   @package bbdkp
  *
  */
-abstract class install_daoc extends \bbdkp\controller\games\GameInstall
+class install_daoc extends \bbdkp\controller\games\GameInstall
 {
 
 	/**
@@ -42,16 +42,16 @@ abstract class install_daoc extends \bbdkp\controller\games\GameInstall
 	 */
     protected function Installfactions()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		// factions
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_factions where game_id = 'daoc'" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'daoc'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'daoc', 'faction_id' => 1, 'faction_name' => 'Albion' );
 		$sql_ary[] = array('game_id' => 'daoc', 'faction_id' => 2, 'faction_name' => 'Hibernian' );
 		$sql_ary[] = array('game_id' => 'daoc', 'faction_id' => 3, 'faction_name' => 'Midgard' );
 		$sql_ary[] = array('game_id' => 'daoc', 'faction_id' => 4, 'faction_name' => 'DaoC' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_factions', $sql_ary);
+		$db->sql_multi_insert( FACTION_TABLE, $sql_ary);
 		unset ($sql_ary);
 
 	}
@@ -61,10 +61,10 @@ abstract class install_daoc extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		$sql_ary = array();
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_classes where game_id = 'daoc'" );
+		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'daoc'" );
 		// class general
 		$sql_ary[] = array('game_id' => 'daoc', 'class_id' => 1, 'class_armor_type' => 'LEATHER' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_Unknown' );
 		// class Albion
@@ -116,11 +116,11 @@ abstract class install_daoc extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'daoc', 'class_id' => 43, 'class_armor_type' => 'MAIL' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_valkyrie' );
 		$sql_ary[] = array('game_id' => 'daoc', 'class_id' => 44, 'class_armor_type' => 'CLOTH' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_warlock' );
 		$sql_ary[] = array('game_id' => 'daoc', 'class_id' => 45, 'class_armor_type' => 'PLATE' , 'class_min_level' => 1 , 'class_max_level'  => 50, 'imagename' => 'daoc_warrior' );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_classes', $sql_ary);
+		$db->sql_multi_insert( CLASS_TABLE, $sql_ary);
 		unset ($sql_ary);
 
 		//language strings
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'daoc' and attribute='class' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'daoc' and attribute='class' ");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 2, 'language' =>  'en' , 'attribute' =>  'class' , 'name' =>  'Armsman' ,  'name_short' =>  'Armsman' );
@@ -214,7 +214,7 @@ abstract class install_daoc extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 44, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Warlock' ,  'name_short' =>  'Warlock' );
 		$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 45, 'language' =>  'fr' , 'attribute' =>  'class' , 'name' =>  'Warrior' ,  'name_short' =>  'Warrior' );
 
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary );
 		unset ( $sql_ary );
 
 	}
@@ -224,10 +224,10 @@ abstract class install_daoc extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global $db, $table_prefix, $umil, $user;
+		global $db;
 
 		// races
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_races  where game_id = 'daoc'");
+		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'daoc'");
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => 'daoc',  'race_id' => 1,  'race_faction_id' => 1 );
 		$sql_ary[] = array('game_id' => 'daoc', 'race_id' => 2,  'race_faction_id' => 1 );
@@ -249,11 +249,11 @@ abstract class install_daoc extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'daoc', 'race_id' => 18, 'race_faction_id' => 3 );
 		$sql_ary[] = array('game_id' => 'daoc', 'race_id' => 19, 'race_faction_id' => 3 );
 		$sql_ary[] = array('game_id' => 'daoc', 'race_id' => 20, 'race_faction_id' => 3 );
-		$db->sql_multi_insert( $table_prefix . 'bbdkp_races', $sql_ary);
+		$db->sql_multi_insert(  RACE_TABLE , $sql_ary);
 		unset ($sql_ary);
 
 		//language strings
-		$db->sql_query('DELETE FROM ' . $table_prefix . "bbdkp_language  where game_id = 'daoc' and attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  where game_id = 'daoc' and attribute = 'race' ");
 
 
 		$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Briton' ,  'name_short' =>  'Briton' );
@@ -298,7 +298,7 @@ abstract class install_daoc extends \bbdkp\controller\games\GameInstall
 		$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 19, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Frostalf' ,  'name_short' =>  'Frostalf' );
 		$sql_ary[] = array('game_id' => 'daoc',  'attribute_id' => 20, 'language' =>  'fr' , 'attribute' =>  'race' , 'name' =>  'Deifrang' ,  'name_short' =>  'Deifrang' );
 
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_language', $sql_ary );
+		$db->sql_multi_insert (  BB_LANGUAGE  , $sql_ary );
 		unset ( $sql_ary );
 
 	}
