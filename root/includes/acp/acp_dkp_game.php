@@ -814,13 +814,13 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 		unset ( $listclasses, $cl );
 
-		$imgexists = file_exists($phpbb_root_path. 'images/bbdkp/games/'. $editgame->game_id. '/'. $editgame->imagename . '.png');
+		$imgexists = file_exists($phpbb_root_path. 'images/bbdkp/gameworld/'. $editgame->game_id. '/'. $editgame->imagename . '.png');
 
 		$template->assign_vars ( array (
 				'F_ENABLEARMORY' => $editgame->armory_enabled ,
 				'GAMEIMAGEEXPLAIN' => sprintf($user->lang['GAME_IMAGE_EXPLAIN'], $editgame->game_id),
 				'GAMEIMAGE' => $editgame->imagename,
-				'GAMEPATH' => $phpbb_root_path. 'images/bbdkp/games/'. $editgame->game_id. '/'. $editgame->imagename . '.png',
+				'GAMEPATH' => $phpbb_root_path. 'images/bbdkp/gameworld/'. $editgame->game_id. '/'. $editgame->imagename . '.png',
 				'S_GAMEIMAGE_EXISTS' => (strlen($editgame->imagename) > 0 && $imgexists  ) ? true : false,
 				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->name  ) ,
 				'GAME_ID' => $editgame->game_id,

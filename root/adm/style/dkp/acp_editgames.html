@@ -21,12 +21,12 @@ function check_form()
 <p>{L_ACP_GAME_EXPLAIN}</p>
 
 <dl>
-   	<dt><label>{L_ACP_GAME_RESET}</label></dt>
-	<dd><input class="button2" name="gamereset" type="submit" value="{L_RESET}" /></dd>
+   	<dt><label for="gamereset">{L_ACP_GAME_RESET}</label></dt>
+	<dd><input class="button2" id="gamereset" type="submit" value="{L_RESET}" /></dd>
 </dl>
 <dl>
-   	<dt><label>{L_ACP_GAME_DELETE}</label></dt>
-	<dd><input class="button2" name="gamedelete" type="submit" value="{L_DELETE}" /></dd>
+   	<dt><label for="gamedelete">{L_ACP_GAME_DELETE}</label></dt>
+	<dd><input class="button2" id="gamedelete" name="gamedelete" type="submit" value="{L_DELETE}" /></dd>
 </dl>
 
 </fieldset>
@@ -35,7 +35,7 @@ function check_form()
 <fieldset>
 <legend>{L_ACP_GAMESETTINGS}</legend>
 	<dl>
-		<dt><label for="gameimage">{L_CLASS_IMAGE}:</label>{GAMEIMAGEEXPLAIN}</dt>
+		<dt><label for="imagename">{L_CLASS_IMAGE}:</label>{GAMEIMAGEEXPLAIN}</dt>
 		<dd><input class="medium" type="text" id="imagename" name="imagename" value="{GAMEIMAGE}" /><br />
 			<!-- IF S_GAMEIMAGE_EXISTS --><img src="{GAMEPATH}" alt="{GAMEIMAGE}" /><!-- ENDIF -->
 		</dd>
@@ -45,7 +45,7 @@ function check_form()
   <dl>
     <dt><label for="enable_armory">{L_ARMORY_ENABLED}:</label>{L_ARMORY_ENABLED_EXPLAIN}</dt>
     <dd>
-     <input type="radio" name="enable_armory" value="1"<!-- IF F_ENABLEARMORY == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
+     <input type="radio" id="enable_armory" name="enable_armory" value="1"<!-- IF F_ENABLEARMORY == 1 --> checked="checked"<!-- ENDIF --> /> {L_ON}&nbsp;&nbsp;
      <input type="radio" name="enable_armory" value="0"<!-- IF F_ENABLEARMORY == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
    </dd>
   </dl>

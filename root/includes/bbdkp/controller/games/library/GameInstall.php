@@ -47,7 +47,7 @@ abstract class GameInstall
 		$data = array (
 				'game_id' => $this->game_id,
 				'game_name' => $this->gamename,
-				'imagename' => '',
+				'imagename' => $this->game_id,
 				'armory_enabled' => ($this->game_id == 'wow' ? 1 : 0),
 				'status' => 1
 		);
