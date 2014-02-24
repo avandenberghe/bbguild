@@ -152,9 +152,9 @@ if (!class_exists('\bbdkp\controller\raids\Events'))
 				{
 
 					/*
-					 if (isset($config['bbdkp_bp_version']))
+					 if (isset($config['bbdkp_gameworld_version']))
 					 {
-					if (isset($config['bbdkp_bp_version']))
+					if (isset($config['bbdkp_gameworld_version']))
 					{
 					$zone= utf8_normalize_nfc(request_var('zoneevent','', true));
 					if ($zone != "--")
@@ -195,7 +195,7 @@ if (!class_exists('\bbdkp\controller\raids\Events'))
 					}
 
 					/*
-					 if (isset($config['bbdkp_bp_version']))
+					 if (isset($config['bbdkp_gameworld_version']))
 					 {
 					$zone= utf8_normalize_nfc(request_var('zoneevent','', true));
 					if ($zone != "--")

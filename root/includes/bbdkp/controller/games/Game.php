@@ -129,9 +129,9 @@ class Game extends \bbdkp\admin\Admin
         $installgame->Install($this->game_id, $this->name );
 
         //is bossprogress installed ?
-        if(isset($config['bbdkp_bp_version']))
+        if(isset($config['bbdkp_gameworld_version']))
         {
-            if ($config['bbdkp_bp_version'] >= '1.0.10')
+            if ($config['bbdkp_gameworld_version'] >= '1.1')
             {
                 if (!class_exists('\bbdkp\controller\games\world_' . $this->game_id))
                 {
@@ -183,9 +183,9 @@ class Game extends \bbdkp\admin\Admin
         $installgame->Uninstall($this->game_id, $this->name );
 
         //is bossprogress installed ?
-        if(isset($config['bbdkp_bp_version']))
+        if(isset($config['bbdkp_gameworld_version']))
         {
-            if ($config['bbdkp_bp_version'] >= '1.0.10')
+            if ($config['bbdkp_gameworld_version'] >= '1.0.10')
             {
                 if (!class_exists('\bbdkp\controller\games\world_' . $this->game_id))
                 {
@@ -203,7 +203,7 @@ class Game extends \bbdkp\admin\Admin
         $log_action = array(
             'header' => 'L_ACTION_GAME_DELETED' ,
             'L_GAME' => $this->game_id  ,
-        );
+     );
 
         $this->log_insert(array(
         'log_type' =>  'L_ACTION_GAME_DELETED',
@@ -264,7 +264,7 @@ class Game extends \bbdkp\admin\Admin
 	 * @param string $order
 	 * @return array
 	 */
-	public function listgames($order)
+	public function listgames($order='game_id')
 	{
 		global $db;
 		$gamelist = array();
