@@ -811,6 +811,8 @@ $versions = array(
 	          		  'status'	   	   => array('VCHAR:30', ''),
 	              	  'imagename'	   => array('VCHAR:20', ''),
 	              	  'armory_enabled' => array('UINT', 0),
+                      'bossbaseurl'    => array('VCHAR:50', ''),
+                      'zonebaseurl'    => array('VCHAR:50', ''),
 	          		),
 	                'PRIMARY_KEY'     => array('id'),
 	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id')))
