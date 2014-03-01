@@ -35,6 +35,8 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_ffxiv extends \bbdkp\controller\games\GameInstall
 {
+    protected $basebossurl = 'http://na.finalfantasyxiv.com/lodestone/playguide/db/npc/enemy/%s/';
+    protected $basezoneurl = 'http://na.finalfantasyxiv.com/lodestone/playguide/db/npc/?category2=enemy&area=%s';
 
 	/**
 	 * Installs factions

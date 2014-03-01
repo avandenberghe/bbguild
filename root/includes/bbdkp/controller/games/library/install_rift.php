@@ -34,8 +34,10 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_rift extends \bbdkp\controller\games\GameInstall
 {
-	
-	/**
+    protected $basebossurl = 'http://rift.zam.com/en/npc.html?riftnpc=%s';
+    protected $basezoneurl = 'ttp://rift.zam.com/en/zone/%s';
+
+    /**
 	 * Installs factions
 	 */
     protected function Installfactions()

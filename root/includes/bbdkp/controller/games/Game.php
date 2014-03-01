@@ -15,7 +15,7 @@ namespace bbdkp\controller\games;
  */
 if (! defined('IN_PHPBB'))
 {
-	exit();
+    exit();
 }
 
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
@@ -23,7 +23,7 @@ global $phpbb_root_path;
 
 if (!class_exists('\bbdkp\admin\Admin'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
+    require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 
 /**
@@ -35,100 +35,215 @@ if (!class_exists('\bbdkp\admin\Admin'))
  */
 class Game extends \bbdkp\admin\Admin
 {
-	/**
-	 * primary key in games table
-	 * @var unknown_type
-	 */
-	private $id;
 
-	/**
-	 * name of game
-	 * @var string
-	 */
-	public $name;
-
-	/**
-	 * the game_id (unique key)
-	 * @var string
-	 */
-	public $game_id;
-
-	/**
-	 * game status (not used atm)
-	 * @var boolean
-	 */
-	public $status;
-
-	/**
-	 * date at which this game was installed
-	 * @var int
-	 */
-	public $install_date;
+    /**
+     * primary key in games table
+     * @var unknown_type
+     */
+    private $id;
 
 
-	/**
-	 * name of game logo png
-	 * in /images/bbdkp/games/<game_id>
-	 * @var string
-	 */
-	public $imagename;
+    /**
+     * the game_id (unique key)
+     * @var string
+     */
+    public $game_id;
 
-	/**
-	 * true if armory is on
-	 * @var boolean
-	 */
-	public $armory_enabled;
+    /**
+     * name of game
+     * @var string
+     */
+    protected $name;
 
-	/**
-	 * Game class constructor
-	 */
-	function __construct()
-	{
-		parent::__construct();
-		global $db, $user;
-	}
+    /**
+     * game status (not used atm)
+     * @var boolean
+     */
+    protected $status;
 
-	/**
-	 * adds a Game to database
-	*/
-	public function install()
-	{
-		//insert into phpbb_bbdkp_games table
-		global $user, $phpEx, $phpbb_root_path, $config;
+    /**
+     * date at which this game was installed
+     * @var int
+     */
+    protected $install_date;
 
-		if ($this->game_id == '')
-		{
-			\trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALL_GAME_FAILURE'], $this->name ) . E_USER_WARNING );
-		}
+    /**
+     * name of game logo png
+     * in /images/bbdkp/games/<game_id>
+     * @var string
+     */
+    protected $imagename;
 
-		if(array_key_exists($this->game_id, $this->preinstalled_games))
-		{
-			//game id is one of the preinstallable games
-			$this->name= $this->preinstalled_games[$this->game_id];
-		}
-		else
-		{
-			//custom game, this is dispatched to dummy game installer
-			$this->game_id = 'custom';
-			if ($this->name == '')
-			{
-				$this->name='Custom';
-			}
-		}
+    /**
+     * true if armory is on
+     * @var boolean
+     */
+    protected $armory_enabled;
 
-		//fetch installer
-		if (!class_exists('\bbdkp\controller\games\install_' . $this->game_id))
-		{
-			include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_' . $this->game_id . '.' . $phpEx);
-		}
+    /**
+     * base boss database url
+     * @var boolean
+     */
+    protected $basebossurl;
 
-		//build name of the namespaced game installer class
-		$classname = '\bbdkp\controller\games\install_' . $this->game_id;
-		$installgame = new $classname;
+    /**
+     * base zone database url
+     * @var string
+     */
+    protected $basezoneurl;
+
+
+
+    /**
+     * Game class constructor
+     */
+    function __construct()
+    {
+        parent::__construct();
+        global $db, $user;
+    }
+
+    /**
+     * @param boolean $basebossurl
+     */
+    public function setBasebossurl($basebossurl)
+    {
+        $this->basebossurl = $basebossurl;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getBasebossurl()
+    {
+        return $this->basebossurl;
+    }
+
+    /**
+     * @param string $basezoneurl
+     */
+    public function setBasezoneurl($basezoneurl)
+    {
+        $this->basezoneurl = $basezoneurl;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBasezoneurl()
+    {
+        return $this->basezoneurl;
+    }
+
+
+    /**
+     * @param string $imagename
+     */
+    public function setImagename($imagename)
+    {
+        $this->imagename = $imagename;
+    }
+
+    /**
+     * @return string
+     */
+    public function getImagename()
+    {
+        return $this->imagename;
+    }
+
+    /**
+     * @param string $name
+     */
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+
+    /**
+     * @return string
+     */
+    public function getName()
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param boolean $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param boolean $armory_enabled
+     */
+    public function setArmoryEnabled($armory_enabled)
+    {
+        $this->armory_enabled = $armory_enabled;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getArmoryEnabled()
+    {
+        return $this->armory_enabled;
+    }
+
+
+
+    /**
+     * adds a Game to database
+     */
+    public function install()
+    {
+        //insert into phpbb_bbdkp_games table
+        global $user, $phpEx, $phpbb_root_path, $config;
+
+        if ($this->game_id == '')
+        {
+            \trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALL_GAME_FAILURE'], $this->name ) . E_USER_WARNING );
+        }
+
+        if(array_key_exists($this->game_id, $this->preinstalled_games))
+        {
+            //game id is one of the preinstallable games
+            $this->name= $this->preinstalled_games[$this->game_id];
+        }
+        else
+        {
+            //custom game, this is dispatched to dummy game installer
+            $this->game_id = 'custom';
+            if ($this->name == '')
+            {
+                $this->name='Custom';
+            }
+        }
+
+        //fetch installer
+        if (!class_exists('\bbdkp\controller\games\install_' . $this->game_id))
+        {
+            include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_' . $this->game_id . '.' . $phpEx);
+        }
+
+        //build name of the namespaced game installer class
+        $classname = '\bbdkp\controller\games\install_' . $this->game_id;
+        $installgame = new $classname;
         //call the game installer
-        $installgame->Install($this->game_id, $this->name );
+        $installgame->Install($this->game_id, $this->name,
+            $installgame->getBasebossurl(), $installgame->getBasebossurl() );
 
-        //is bossprogress installed ?
+        //is gameworld installed ?
         if(isset($config['bbdkp_gameworld_version']))
         {
             if ($config['bbdkp_gameworld_version'] >= '1.1')
@@ -144,25 +259,24 @@ class Game extends \bbdkp\admin\Admin
             }
         }
 
-		//
-		// Logging
-		//
-		$log_action = array(
-			'header' => 'L_ACTION_GAME_ADDED' ,
-			'L_GAME' => $this->game_id  ,
-		);
+        //
+        // Logging
+        //
+        $log_action = array(
+            'header' => 'L_ACTION_GAME_ADDED' ,
+            'L_GAME' => $this->game_id  ,
+        );
 
-		$this->log_insert(array(
-			'log_type' =>  'L_ACTION_GAME_ADDED',
-			'log_action' => $log_action));
-	}
+        $this->log_insert(array(
+            'log_type' =>  'L_ACTION_GAME_ADDED',
+            'log_action' => $log_action));
+    }
 
-	/**
-	 * deletes a Game from database, including all factions, classes and races.
-    *  @todo delete ranks...
-	*/
-	public function Delete()
-	{
+    /**
+     * deletes a Game from database, including all factions, classes and races.
+     */
+    public function Delete()
+    {
 
         global $user, $phpEx, $phpbb_root_path, $config;
         if ($this->game_id == '')
@@ -185,7 +299,7 @@ class Game extends \bbdkp\admin\Admin
         //is bossprogress installed ?
         if(isset($config['bbdkp_gameworld_version']))
         {
-            if ($config['bbdkp_gameworld_version'] >= '1.0.10')
+            if ($config['bbdkp_gameworld_version'] >= '1.1')
             {
                 if (!class_exists('\bbdkp\controller\games\world_' . $this->game_id))
                 {
@@ -203,91 +317,96 @@ class Game extends \bbdkp\admin\Admin
         $log_action = array(
             'header' => 'L_ACTION_GAME_DELETED' ,
             'L_GAME' => $this->game_id  ,
-     );
+        );
 
         $this->log_insert(array(
-        'log_type' =>  'L_ACTION_GAME_DELETED',
-        'log_action' => $log_action));
+            'log_type' =>  'L_ACTION_GAME_DELETED',
+            'log_action' => $log_action));
 
-	}
+    }
 
-	/**
-	 * gets Game info from database
-	 *
-	 */
-	public function Get()
-	{
-		//read phpbb_bbdkp_games table
-		global $db;
-		$sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled
+    /**
+     * gets Game info from database
+     *
+     */
+    public function Get()
+    {
+        //read phpbb_bbdkp_games table
+        global $db;
+        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, basebossurl, basezoneurl
     			FROM ' . GAMES_TABLE . "
     			WHERE game_id = '" . $this->game_id . "'";
 
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$this->id = $row['id'];
-			$this->name = $row['game_name'];
-			$this->status= ($row['status'] == 1) ? true : false;
-			$this->imagename = $row['imagename'];
-			$this->armory_enabled = $row['armory_enabled'];
-		}
-		$db->sql_freeresult($result);
+        $result = $db->sql_query($sql);
+        while ($row = $db->sql_fetchrow($result))
+        {
+            $this->id = $row['id'];
+            $this->name = $row['game_name'];
+            $this->status= ($row['status'] == 1) ? true : false;
+            $this->imagename = $row['imagename'];
+            $this->armory_enabled = $row['armory_enabled'];
+            $this->basebossurl = $row['basebossurl'];
+            $this->basezoneurl = $row['basezoneurl'];
+        }
+        $db->sql_freeresult($result);
 
-	}
+    }
 
-	/**
-	 * update this game
-	 */
-	public function update()
-	{
+    /**
+     * update this game
+     */
+    public function update()
+    {
 
-		//delete from phpbb_bbdkp_games table
-		global $db;
+        //delete from phpbb_bbdkp_games table
+        global $db;
 
-		$db->sql_transaction ( 'begin' );
+        $db->sql_transaction ( 'begin' );
 
-		$query = $db->sql_build_array('UPDATE', array(
-				'imagename' => substr($this->imagename, 0, 20) ,
-				'armory_enabled' => $this->armory_enabled,
-		));
+        $query = $db->sql_build_array('UPDATE', array(
+            'imagename'      => substr($this->imagename, 0, 20) ,
+            'armory_enabled' => $this->armory_enabled,
+            'basebossurl'    => $this->basebossurl,
+            'basezoneurl'    => $this->basezoneurl
+        ));
 
-		$sql = 'UPDATE ' . GAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";
-		$db->sql_query($sql);
+        $sql = 'UPDATE ' . GAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";
+        $db->sql_query($sql);
 
-		$db->sql_transaction ('commit');
-	}
+        $db->sql_transaction ('commit');
+    }
 
-	/**
-	 * lists all games
-	 *
-	 * @param string $order
-	 * @return array
-	 */
-	public function listgames($order='game_id')
-	{
-		global $db;
-		$gamelist = array();
-		$sql = 'SELECT id, game_id, game_name, status, imagename FROM ' . GAMES_TABLE . ' ORDER BY ' . $order;
-		$result = $db->sql_query ( $sql );
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$gamelist[$row['game_id']] = array(
-					'id' => $row['id'] ,
-					'name' => $row['game_name'] ,
-					'game_id' => $row['game_id'] ,
-					'status' => $row['status'],
-					'imagename' => $row['imagename'],
-			);
-		}
-		$db->sql_freeresult($result);
+    /**
+     * lists all games
+     *
+     * @param string $order
+     * @return array
+     */
+    public function listgames($order= 'game_id ASC')
+    {
+        global $db;
+        $gamelist = array();
+        $sql = 'SELECT id, game_id, game_name, status, imagename, basebossurl, basezoneurl FROM ' . GAMES_TABLE . ' ORDER BY ' . $order;
+        $result = $db->sql_query ( $sql );
+        while ($row = $db->sql_fetchrow($result))
+        {
+            $gamelist[$row['game_id']] = array(
+                'id' => $row['id'] ,
+                'name' => $row['game_name'] ,
+                'game_id' => $row['game_id'] ,
+                'status' => $row['status'],
+                'imagename' => $row['imagename'],
+                'basebossurl'   => $row['basebossurl'],
+                'basezoneurl'   => $row['basezoneurl'],
 
-		return $gamelist;
+            );
+        }
+        $db->sql_freeresult($result);
 
-	}
+        return $gamelist;
+
+    }
 
 
 
 }
-
-?>

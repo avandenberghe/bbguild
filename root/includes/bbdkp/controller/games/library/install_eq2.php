@@ -37,7 +37,14 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_eq2 extends \bbdkp\controller\games\GameInstall
 {
-	
+
+    protected $basebossurl = 'http://eq2.zam.com/db/mob.html?eq2mob=%s';
+    protected $basezoneurl = 'http://eq2.zam.com/db/zone.html?eq2zone=%s';
+
+    //formerly from wikia
+    //'EQ2_ZONEURL' => 'http://eq2.wikia.com/wiki/index.php/%s',
+    //'EQ2_BASEURL' => 'http://eq2.wikia.com/wiki/index.php/%s',
+
 	/**
 	 * Everquest factions
 	 */

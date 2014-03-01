@@ -2,7 +2,7 @@
 /**
  * everquest install data
  * 
- *   @package bbdkp
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -37,6 +37,9 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_eq extends \bbdkp\controller\games\GameInstall
 {
+    // credit shadowfox  http://www.bbdkp.com/viewtopic.php?f=33&t=2676
+    protected $basebossurl = 'http://everquest.allakhazam.com/db/npc.html?id=%s';
+    protected $basezoneurl = 'http://everquest.allakhazam.com/db/zone.html?zstrat=%s';
 
 	/**
 	 * Installs factions

@@ -22,7 +22,7 @@ function check_form()
 
 <dl>
    	<dt><label for="gamereset">{L_ACP_GAME_RESET}</label></dt>
-	<dd><input class="button2" id="gamereset" type="submit" value="{L_RESET}" /></dd>
+	<dd><input class="button2" id="gamereset" name="gamereset" type="submit" value="{L_RESET}" /></dd>
 </dl>
 <dl>
    	<dt><label for="gamedelete">{L_ACP_GAME_DELETE}</label></dt>
@@ -36,7 +36,7 @@ function check_form()
 <legend>{L_ACP_GAMESETTINGS}</legend>
 	<dl>
 		<dt><label for="imagename">{L_CLASS_IMAGE}:</label>{GAMEIMAGEEXPLAIN}</dt>
-		<dd><input class="medium" type="text" id="imagename" name="imagename" value="{GAMEIMAGE}" /><br />
+		<dd><input class="medium" type="text" name="imagename" id="imagename" value="{GAMEIMAGE}" /><br />
 			<!-- IF S_GAMEIMAGE_EXISTS --><img src="{GAMEPATH}" alt="{GAMEIMAGE}" /><!-- ENDIF -->
 		</dd>
 	</dl>
@@ -51,7 +51,17 @@ function check_form()
   </dl>
 
 
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+    <dl>
+        <dt><label for="bossbaseurl">{L_BOSSBASEURL}:</label><br /><span>{L_BOSSBASEURL_EXPLAIN}</span></dt>
+        <dd><input name="bossbaseurl" type="text" id="bossbaseurl" size="60" maxlength="100" value="{BOSSBASEURL}"/></dd>
+    </dl>
+
+    <dl>
+        <dt><label for="zonebaseurl">{L_ZONEBASEURL}:</label><br /><span>{L_ZONEBASEURL_EXPLAIN}</span></dt>
+        <dd><input name="zonebaseurl" type="text" id="zonebaseurl" size="60" maxlength="100" value="{ZONEBASEURL}"/></dd>
+    </dl>
+
+    <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
 <input class="button2" name="gamesettings" type="submit" value="{L_SUBMIT}" />
 </fieldset>
 

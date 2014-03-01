@@ -34,14 +34,16 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_ffxi extends \bbdkp\controller\games\GameInstall
 {
-	
+    protected $basebossurl = 'http://ffxi.allakhazam.com/db/bestiary.html?fmob=%s';
+    protected $basezoneurl = 'http://ffxi.allakhazam.com/db/areas.html?farea=%s';
+
 	/**
 	 * Installs factions
 	 */
     protected function Installfactions()
 	{
 		global  $db;
-		
+
 		// factions
 		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'FFXI'" );
 		$sql_ary = array();
