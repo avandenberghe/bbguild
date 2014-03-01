@@ -241,7 +241,7 @@ class Game extends \bbdkp\admin\Admin
         $installgame = new $classname;
         //call the game installer
         $installgame->Install($this->game_id, $this->name,
-            $installgame->getBasebossurl(), $installgame->getBasebossurl() );
+            $installgame->getBasebossurl(), $installgame->getBasezoneurl() );
 
         //is gameworld installed ?
         if(isset($config['bbdkp_gameworld_version']))
