@@ -35,8 +35,8 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_aion extends \bbdkp\controller\games\GameInstall
 {
-
-	public $game_id;
+    protected $basebossurl = 'http://db.aion.ign.com/npc/%s';
+    protected $basezoneurl = 'http://db.aion.ign.com/%s';
 
 	/**
 	 * Installs factions

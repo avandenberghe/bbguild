@@ -414,7 +414,7 @@ class acp_dkp extends \bbdkp\admin\Admin
 					{
 						trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
 					}
-					if (isset($config['bbdkp_bp_version']))
+					if (isset($config['bbdkp_gameworld_version']))
 					{
 						set_config('bbdkp_portal_bossprogress', request_var('show_bosspblock', 0), true);
 					}
@@ -466,7 +466,7 @@ class acp_dkp extends \bbdkp\admin\Admin
 				$n_items = $config['bbdkp_n_items'];
 
 				add_form_key('acp_dkp_portal');
-				if (isset($config['bbdkp_bp_version']))
+				if (isset($config['bbdkp_gameworld_version']))
 				{
 					$template->assign_vars(array(
 						'S_BP_SHOW' => true ,

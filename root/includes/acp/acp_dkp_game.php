@@ -80,7 +80,6 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				//game dropdown
 				$listgames = new \bbdkp\controller\games\Game;
 
-				//pressed button ? redirect
 				$newpresetgame = (isset ( $_POST ['addgame1'] )) ? true : false;
 				$newcustomgame = (isset ( $_POST ['addgame2'] )) ? true : false;
 				if ($newpresetgame || $newcustomgame)
@@ -90,10 +89,10 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					{
 						$editgame = new \bbdkp\controller\games\Game;
 						$editgame->game_id = request_var ( 'hidden_game_id','' );
-						$editgame->name =  utf8_normalize_nfc(request_var('hidden_game_name', '', true));
+						$editgame->setName(utf8_normalize_nfc(request_var('hidden_game_name', '', true)));
 						$editgame->install();
 
-						trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALLED_GAME_SUCCESS'], $editgame->name ) . $this->link, E_USER_NOTICE );
+						trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALLED_GAME_SUCCESS'], $editgame->getName() ) . $this->link, E_USER_NOTICE );
 					}
 					else
 					{
@@ -101,21 +100,21 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 						$listgames->game_id = request_var('ngame_id' , '');
 						if($newpresetgame)
 						{
-							$listgames->name =  $listgames->preinstalled_games[$listgames->game_id] ;
+							$listgames->setName($listgames->preinstalled_games[$listgames->game_id]) ;
 						}
 						elseif($newcustomgame)
 						{
-							$listgames->name =  utf8_normalize_nfc(request_var('ngame_name', '', true));
+							$listgames->setName(utf8_normalize_nfc(request_var('ngame_name', '', true)));
 						}
 
 						$s_hidden_fields = build_hidden_fields ( array (
 								'addgame1' => $newpresetgame,
 								'addgame2' => $newcustomgame,
 								'hidden_game_id' => $listgames->game_id,
-								'hidden_game_name' => $listgames->name,
+								'hidden_game_name' => $listgames->getName(),
 
 						));
-						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_INSTALL_GAME'], $listgames->name ), $s_hidden_fields );
+						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_INSTALL_GAME'], $listgames->getName() ), $s_hidden_fields );
 					}
 				}
 
@@ -218,7 +217,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 						$editgame->install();
 
 						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames" ));
-						trigger_error ( sprintf ( $user->lang ['ADMIN_RESET_GAME_SUCCESS'], $editgame->name ) . $this->link, E_USER_WARNING);
+						trigger_error ( sprintf ( $user->lang ['ADMIN_RESET_GAME_SUCCESS'], $editgame->getName() ) . $this->link, E_USER_WARNING);
 					}
 					else
 					{
@@ -227,7 +226,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 								'gamereset' => true,
 								'hidden_game_id' => $editgame->game_id,
 						));
-						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_RESET_GAME'], $editgame->name ), $s_hidden_fields );
+						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_RESET_GAME'], $editgame->getName() ), $s_hidden_fields );
 					}
 				}
 
@@ -238,9 +237,10 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					$editgame->game_id = request_var ( 'game_id','' );
 					$editgame->Get();
 
-					$editgame->imagename = request_var ( 'imagename','' );
-					$editgame->armory_enabled = request_var('enable_armory', 0);
-
+					$editgame->setImagename(request_var('imagename',''));
+					$editgame->setArmoryEnabled(request_var('enable_armory', 0));
+                    $editgame->setBasebossurl(request_var('bossbaseurl','' ));
+                    $editgame->setBasezoneurl(request_var('zonebaseurl','' ));
 					$editgame->update();
 				}
 
@@ -252,7 +252,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					{
 						$deletegame = new \bbdkp\controller\games\Game;
 						$deletegame->game_id = request_var ( 'hidden_game_id','' );
-						$deletegame->name = request_var ( 'hidden_game_name','' );
+						$deletegame->setName(request_var ( 'hidden_game_name','' ));
 						$deletegame->Delete();
 
 						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") );
@@ -263,7 +263,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 						// get field content
 						$s_hidden_fields = build_hidden_fields ( array (
 								'gamedelete' => true,
-								'hidden_game_name' => $editgame->name,
+								'hidden_game_name' => $editgame->getName(),
 								'hidden_game_id' => $editgame->game_id,
 						));
 						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_GAME'], $editgame->name ), $s_hidden_fields );
@@ -744,7 +744,8 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 			'FACTIONGAME' => $editgame->game_id,
 			'FACTIONID' => $faction['faction_id'],
 			'FACTIONNAME' => $faction['faction_name'],
-			'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;factiondelete=1&amp;id={$faction['f_index']}&amp;" . URI_GAME . '=' . $editgame->game_id)
+			'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx",
+                    "i=dkp_game&amp;mode=editgames&amp;factiondelete=1&amp;id={$faction['f_index']}&amp;" . URI_GAME . '=' . $editgame->game_id)
 				));
 		}
 
@@ -814,15 +815,17 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 		unset ( $listclasses, $cl );
 
-		$imgexists = file_exists($phpbb_root_path. 'images/bbdkp/games/'. $editgame->game_id. '/'. $editgame->imagename . '.png');
+		$imgexists = file_exists($phpbb_root_path. 'images/bbdkp/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png');
 
 		$template->assign_vars ( array (
-				'F_ENABLEARMORY' => $editgame->armory_enabled ,
+				'F_ENABLEARMORY' => $editgame->getArmoryEnabled() ,
 				'GAMEIMAGEEXPLAIN' => sprintf($user->lang['GAME_IMAGE_EXPLAIN'], $editgame->game_id),
-				'GAMEIMAGE' => $editgame->imagename,
-				'GAMEPATH' => $phpbb_root_path. 'images/bbdkp/games/'. $editgame->game_id. '/'. $editgame->imagename . '.png',
-				'S_GAMEIMAGE_EXISTS' => (strlen($editgame->imagename) > 0 && $imgexists  ) ? true : false,
-				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->name  ) ,
+				'GAMEIMAGE' => $editgame->getImagename(),
+				'GAMEPATH' => $phpbb_root_path. 'images/bbdkp/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png',
+				'S_GAMEIMAGE_EXISTS' => (strlen($editgame->getImagename()) > 0 && $imgexists  ) ? true : false,
+				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->getName()  ) ,
+                'BOSSBASEURL' => $editgame->getBasebossurl(),
+                'ZONEBASEURL' => $editgame->getBasezoneurl(),
 				'GAME_ID' => $editgame->game_id,
 				'URI_GAME' => URI_GAME,
 				'O_RACEGAMEID' => $current_order ['uri'] [0],

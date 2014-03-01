@@ -214,7 +214,7 @@ class views extends \bbdkp\admin\Admin
 				}
 
 				$template->assign_var('S_BPSHOW', false);
-				if (isset($config['bbdkp_bp_version']))
+				if (isset($config['bbdkp_gameworld_version']))
 				{
 					if ($config['bbdkp_portal_bossprogress'] == 1)
 					{

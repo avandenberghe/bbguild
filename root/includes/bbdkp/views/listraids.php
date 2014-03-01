@@ -72,7 +72,7 @@ while ( $raid = $db->sql_fetchrow($raids_result))
 			'TOTAL'		 	=> $raid['net_earned'],
 		    
         )
-    );
+ );
 }
 
 $sortlink = array();

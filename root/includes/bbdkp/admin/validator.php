@@ -206,7 +206,7 @@ class validator
                 'email' => 'Value must be a valid email.',
         		'hexcode' => 'Value must be a hexcode',
                 'regex' => 'Invalid value.',
-        );
+     );
     }
 
 	/**

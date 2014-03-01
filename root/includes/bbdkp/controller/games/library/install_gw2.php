@@ -28,13 +28,15 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
 }
 
 /**
- * Guildwars INstaller Class
+ * Guildwars  Installer Class
  *   @package bbdkp
  */
 class install_gw2 extends \bbdkp\controller\games\GameInstall
 {
-	
-	/**
+    protected $basebossurl = '';
+    protected $basezoneurl = '';
+
+    /**
 	 * Installs factions
 	 */
     protected function Installfactions()

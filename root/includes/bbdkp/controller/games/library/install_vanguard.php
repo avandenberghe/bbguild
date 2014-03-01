@@ -34,7 +34,10 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_vanguard extends \bbdkp\controller\games\GameInstall
 {
-	/**
+    protected $basebossurl = 'http://vg.mmodb.com/bestiary/%s.php';
+    protected $basezoneurl = 'http://vg.mmodb.com/zones/%s.php';
+
+    /**
 	 * Installs factions
 	 */
     protected function Installfactions()

@@ -39,7 +39,10 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
 class install_wow extends GameInstall
 {
 
-	/**
+    protected $basebossurl = 'http://www.wowhead.com/?npc=%s';
+    protected $basezoneurl = 'http://www.wowhead.com/?zone=%s';
+
+    /**
 	 * Installs factions
 	 */
     protected function Installfactions()
