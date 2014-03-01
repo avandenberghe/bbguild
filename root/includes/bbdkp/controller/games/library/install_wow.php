@@ -315,25 +315,25 @@ class install_wow extends GameInstall
 		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Mogu’Shan Vaults (25)', 'event_color' => '#FF9999', 'event_value' => 5, 'event_imagename' => 'mogushanvaults25'  ) ;
 		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Mogu’Shan Vaults (25HM)', 'event_color' => '#FF9999', 'event_value' => 5, 'event_imagename' => 'mogushanvaultsh25'  ) ;
 
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Terrace of Endless Spring  (10)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'terraceofendlessspring10') ;
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Terrace of Endless Spring  (10HM)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'terraceofendlessspringh10') ;
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Terrace of Endless Spring  (25)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'terraceofendlessspring25') ;
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Terrace of Endless Spring  (25HM)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'terraceofendlessspringh25') ;
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Terrace of Endless Spring  (10)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'wow_tes10') ;
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Terrace of Endless Spring  (10HM)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'wow_tes10') ;
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Terrace of Endless Spring  (25)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'wow_tes25') ;
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Terrace of Endless Spring  (25HM)', 'event_color' => '#FF88AA', 'event_value' => 5 , 'event_imagename' => 'wow_tes25') ;
 
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Heart of Fear (10)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'heartoffear10' );
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Heart of Fear (10HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'heartoffearh10' );
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Heart of Fear (25)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'heartoffear25' );
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Heart of Fear (25HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'heartoffearh25' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Heart of Fear (10)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'wow_hof10' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Heart of Fear (10HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'wow_hof10' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Heart of Fear (25)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'wow_hof25' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T14 Heart of Fear (25HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'wow_hof25' );
 
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T15 Throne of Thunder (10)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'throneofthunder10' );
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T15 Throne of Thunder (10HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'throneofthunderh10' );
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T15 Throne of Thunder (25)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'throneofthunder25' );
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T15 Throne of Thunder (25HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'throneofthunderh25' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T15 Throne of Thunder (10)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'wow_tot10' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T15 Throne of Thunder (10HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'wow_tot10' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T15 Throne of Thunder (25)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'wow_tot25' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T15 Throne of Thunder (25HM)', 'event_color' => '#DD00AA', 'event_value' => 10, 'event_imagename' => 'wow_tot25' );
 
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T16 Siege of Orgrimmar (10)', 'event_color' =>  '#3F5347'  , 'event_value' => 20, 'event_imagename' => 'SOG10' );
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T16 Siege of Orgrimmar (10HM)', 'event_color' => '#3F5347', 'event_value' => 20, 'event_imagename' => 'SOG' );
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T16 Siege of Orgrimmar (25)', 'event_color' => '#3F5347', 'event_value' => 20, 'event_imagename' => 'SOG25' );
-		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T16 Siege of Orgrimmar (25HM)', 'event_color' => '#3F5347', 'event_value' => 20, 'event_imagename' => 'SOG25' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T16 Siege of Orgrimmar (10)', 'event_color' =>  '#3F5347'  , 'event_value' => 20, 'event_imagename' => 'wow_sog10' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T16 Siege of Orgrimmar (10HM)', 'event_color' => '#3F5347', 'event_value' => 20, 'event_imagename' => 'wow_sog10' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T16 Siege of Orgrimmar (25)', 'event_color' => '#3F5347', 'event_value' => 20, 'event_imagename' => 'wow_sog25' );
+		$sql_ary [] = array('event_dkpid' => $dkpid , 'event_name' => 'T16 Siege of Orgrimmar (25HM)', 'event_color' => '#3F5347', 'event_value' => 20, 'event_imagename' => 'wow_sog25' );
 
 		$db->sql_multi_insert (  EVENTS_TABLE , $sql_ary );
 		unset ( $sql_ary );
@@ -347,7 +347,7 @@ class install_wow extends GameInstall
 	private function populate_wow()
 	{
 
-		global $db;
+		global $user, $db;
 
 		$sql_ary = array();
 		$sql_ary[] = array(
@@ -403,7 +403,7 @@ class install_wow extends GameInstall
 				'phpbb_user_id' 	=> $user->data['user_id'],
 				'member_title' 	=> '',
 		) ;
-		$db->sql_multi_insert ( $table_prefix . 'bbdkp_memberlist', $sql_ary );
+		$db->sql_multi_insert ( MEMBER_LIST_TABLE , $sql_ary );
 
 
 	}
