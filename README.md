@@ -66,10 +66,7 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
 
 1.3.0-b3
 
--	[NEW] Added support for FFXIV (@author: Brytor)
--	[FIX] fix bug 212 : add a raid and only put in say one person, it gives the raid value to everyone on the roster not just the person attending
--	[FIX] fix bug 213 : html issue : Incorrect URL in listraids
-
+@todo write changelog
 
 1.2.8-pl2 30-07-2012
 
