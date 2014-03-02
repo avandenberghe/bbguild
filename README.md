@@ -1,5 +1,8 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
+#1.3 Beta 3#
+
+
 ## about
 
 bbDKP is a Dragon Kill Points Mod for your phpBB3 Bulletin board.
