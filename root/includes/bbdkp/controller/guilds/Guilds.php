@@ -423,7 +423,7 @@ class Guilds extends \bbdkp\admin\Admin
 			$game = new \bbdkp\controller\games\Game;
 			$game->game_id = $this->game_id;
 			$game->Get();
-			if ($game->armory_enabled == 1 && $this->armory_enabled ==1 )
+			if ($game->getArmoryEnabled() == 1 && $this->armory_enabled ==1 )
 			{
 				switch ($this->game_id)
 				{

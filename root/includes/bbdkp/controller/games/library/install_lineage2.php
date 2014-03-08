@@ -36,8 +36,8 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_lineage2 extends \bbdkp\controller\games\GameInstall
 {
-    protected $basebossurl = 'http://www.lineage2-online.com/database/en/monsters/%s.php';
-    protected $basezoneurl = 'http://www.lineage2-online.com/database/en/quests/%s.php';
+    protected $bossbaseurl = 'http://www.lineage2-online.com/database/en/monsters/%s.php';
+    protected $zonebaseurl = 'http://www.lineage2-online.com/database/en/quests/%s.php';
 
 
     /**

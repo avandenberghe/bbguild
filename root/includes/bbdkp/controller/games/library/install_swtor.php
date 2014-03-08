@@ -34,8 +34,8 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_swtor extends \bbdkp\controller\games\GameInstall
 {
-    protected $basebossurl = 'http://www.swtor-spy.com/codex/%s';
-    protected $basezoneurl = 'http://www.swtor-spy.com/codex/%s';
+    protected $bossbaseurl = 'http://www.swtor-spy.com/codex/%s';
+    protected $zonebaseurl = 'http://www.swtor-spy.com/codex/%s';
 
     /**
 	 * Installs factions

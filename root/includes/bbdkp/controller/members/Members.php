@@ -873,7 +873,7 @@ class Members extends \bbdkp\admin\Admin
 			return -1;
 		}
 
-		if ($game->armory_enabled == 0)
+		if ($game->getArmoryEnabled() == 0)
 		{
 			return -1;
 		}

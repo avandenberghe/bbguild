@@ -36,8 +36,8 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_daoc extends \bbdkp\controller\games\GameInstall
 {
-    protected $basebossurl = 'http://camelot.allakhazam.com/db/search.html?cmob=%s';
-    protected $basezoneurl = 'http://camelot.allakhazam.com/db/%s';
+    protected $bossbaseurl = 'http://camelot.allakhazam.com/db/search.html?cmob=%s';
+    protected $zonebaseurl = 'http://camelot.allakhazam.com/db/%s';
 
 	/**
 	 * Installs factions
