@@ -33,8 +33,8 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_gw2 extends \bbdkp\controller\games\GameInstall
 {
-    protected $basebossurl = '';
-    protected $basezoneurl = '';
+    protected $bossbaseurl = '';
+    protected $zonebaseurl = '';
 
     /**
 	 * Installs factions

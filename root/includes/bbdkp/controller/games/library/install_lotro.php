@@ -35,8 +35,8 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_lotro extends \bbdkp\controller\games\GameInstall
 {
-    protected $basebossurl = 'http://lotro.allakhazam.com/db/bestiary.html?lotrmob=%s';
-    protected $basezoneurl = 'http://lotro.allakhazam.com/db/geography.html?lotrarea=%s';
+    protected $bossbaseurl = 'http://lotro.allakhazam.com/db/bestiary.html?lotrmob=%s';
+    protected $zonebaseurl = 'http://lotro.allakhazam.com/db/geography.html?lotrarea=%s';
 
     /**
 	 * Installs factions

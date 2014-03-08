@@ -27,36 +27,36 @@ abstract class GameInstall
 
 	private $game_id;
 	private $gamename;
-    protected $basebossurl;
-    protected $basezoneurl;
+    protected $bossbaseurl;
+    protected $zonebaseurl;
 
     /**
      * @return string
      */
-    public final function getBasebossurl()
+    public final function getBossbaseurl()
     {
-        return $this->basebossurl;
+        return $this->bossbaseurl;
     }
 
     /**
      * @return string
      */
-    public final function getBasezoneurl()
+    public final function getZonebaseurl()
     {
-        return $this->basezoneurl;
+        return $this->zonebaseurl;
     }
 
     /**
 	 * Install a game
      * can be implemented, this is the default install
 	 */
-    public final function Install($game_id, $gamename, $basebossurl, $basezoneurl)
+    public final function Install($game_id, $gamename, $bossbaseurl, $zonebaseurl)
 	{
 		global $db;
 		$this->game_id = $game_id;
 		$this->gamename = $gamename;
-        $this->basebossurl = $basebossurl;
-        $this->basezoneurl = $basezoneurl;
+        $this->bossbaseurl = $bossbaseurl;
+        $this->zonebaseurl = $zonebaseurl;
 
 		$db->sql_transaction ( 'begin' );
 		$this->Installfactions();
@@ -70,8 +70,8 @@ abstract class GameInstall
 				'game_name' => $this->gamename,
 				'imagename' => $this->game_id,
 				'armory_enabled' => ($this->game_id == 'wow' ? 1 : 0),
-                'basebossurl' => $this->basebossurl,
-                'basezoneurl' => $this->basezoneurl ,
+                'bossbaseurl' => $this->bossbaseurl,
+                'zonebaseurl' => $this->zonebaseurl ,
 				'status' => 1
 		);
 

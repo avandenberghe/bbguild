@@ -84,13 +84,13 @@ class Game extends \bbdkp\admin\Admin
      * base boss database url
      * @var boolean
      */
-    protected $basebossurl;
+    protected $bossbaseurl;
 
     /**
      * base zone database url
      * @var string
      */
-    protected $basezoneurl;
+    protected $zonebaseurl;
 
 
 
@@ -106,33 +106,33 @@ class Game extends \bbdkp\admin\Admin
     /**
      * @param boolean $basebossurl
      */
-    public function setBasebossurl($basebossurl)
+    public function setBossbaseurl($basebossurl)
     {
-        $this->basebossurl = $basebossurl;
+        $this->bossbaseurl = $basebossurl;
     }
 
     /**
      * @return boolean
      */
-    public function getBasebossurl()
+    public function getBossbaseurl()
     {
-        return $this->basebossurl;
+        return $this->bossbaseurl;
     }
 
     /**
      * @param string $basezoneurl
      */
-    public function setBasezoneurl($basezoneurl)
+    public function setZonebaseurl($basezoneurl)
     {
-        $this->basezoneurl = $basezoneurl;
+        $this->zonebaseurl = $basezoneurl;
     }
 
     /**
      * @return string
      */
-    public function getBasezoneurl()
+    public function getZonebaseurl()
     {
-        return $this->basezoneurl;
+        return $this->zonebaseurl;
     }
 
 
@@ -241,7 +241,7 @@ class Game extends \bbdkp\admin\Admin
         $installgame = new $classname;
         //call the game installer
         $installgame->Install($this->game_id, $this->name,
-            $installgame->getBasebossurl(), $installgame->getBasezoneurl() );
+            $installgame->getBossbaseurl(), $installgame->getZonebaseurl() );
 
         //is gameworld installed ?
         if(isset($config['bbdkp_gameworld_version']))
@@ -327,13 +327,13 @@ class Game extends \bbdkp\admin\Admin
 
     /**
      * gets Game info from database
+     * read phpbb_bbdkp_games table
      *
      */
     public function Get()
     {
-        //read phpbb_bbdkp_games table
         global $db;
-        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, basebossurl, basezoneurl
+        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl
     			FROM ' . GAMES_TABLE . "
     			WHERE game_id = '" . $this->game_id . "'";
 
@@ -345,8 +345,8 @@ class Game extends \bbdkp\admin\Admin
             $this->status= ($row['status'] == 1) ? true : false;
             $this->imagename = $row['imagename'];
             $this->armory_enabled = $row['armory_enabled'];
-            $this->basebossurl = $row['basebossurl'];
-            $this->basezoneurl = $row['basezoneurl'];
+            $this->bossbaseurl = $row['bossbaseurl'];
+            $this->zonebaseurl = $row['zonebaseurl'];
         }
         $db->sql_freeresult($result);
 
@@ -366,8 +366,8 @@ class Game extends \bbdkp\admin\Admin
         $query = $db->sql_build_array('UPDATE', array(
             'imagename'      => substr($this->imagename, 0, 20) ,
             'armory_enabled' => $this->armory_enabled,
-            'basebossurl'    => $this->basebossurl,
-            'basezoneurl'    => $this->basezoneurl
+            'bossbaseurl'    => $this->bossbaseurl,
+            'basezoneurl'    => $this->zonebaseurl
         ));
 
         $sql = 'UPDATE ' . GAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";
@@ -386,7 +386,7 @@ class Game extends \bbdkp\admin\Admin
     {
         global $db;
         $gamelist = array();
-        $sql = 'SELECT id, game_id, game_name, status, imagename, basebossurl, basezoneurl FROM ' . GAMES_TABLE . ' ORDER BY ' . $order;
+        $sql = 'SELECT id, game_id, game_name, status, imagename, bossbaseurl, zonebaseurl FROM ' . GAMES_TABLE . ' ORDER BY ' . $order;
         $result = $db->sql_query ( $sql );
         while ($row = $db->sql_fetchrow($result))
         {
@@ -396,9 +396,8 @@ class Game extends \bbdkp\admin\Admin
                 'game_id' => $row['game_id'] ,
                 'status' => $row['status'],
                 'imagename' => $row['imagename'],
-                'basebossurl'   => $row['basebossurl'],
-                'basezoneurl'   => $row['basezoneurl'],
-
+                'bossbaseurl'   => $row['bossbaseurl'],
+                'basezoneurl'   => $row['zonebaseurl'],
             );
         }
         $db->sql_freeresult($result);

@@ -32,7 +32,6 @@ if (version_compare(PHP_VERSION, '5.3.3') < 0)
 
 switch ($db->sql_layer)
 {
-	// The ugly one!
 	case 'mysqli':
 	case 'mysql4':
 	case 'mysql':
@@ -78,7 +77,7 @@ if ($user->data['user_type'] != USER_FOUNDER)
 
 if (!file_exists($phpbb_root_path . 'umil/umil_auto.' . $phpEx))
 {
-    trigger_error('Please download the latest UMIL (Unified MOD Install Library) from: <a href="http://www.phpbb.com/mods/umil/">phpBB.com/mods/umil</a>', E_USER_ERROR);
+    trigger_error('Please download the latest UMIL (Unified MOD Install Library) from: <a href="http://www.phpbb.com/mods/umil/">phpBB.com/mods/umil</a>', E_USER_WARNING);
 }
 
 if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
@@ -811,8 +810,8 @@ $versions = array(
 	          		  'status'	   	   => array('VCHAR:30', ''),
 	              	  'imagename'	   => array('VCHAR:20', ''),
 	              	  'armory_enabled' => array('UINT', 0),
-                      'bossbaseurl'    => array('VCHAR:50', ''),
-                      'zonebaseurl'    => array('VCHAR:50', ''),
+                      'bossbaseurl'    => array('VCHAR:255', ''),
+                      'zonebaseurl'    => array('VCHAR:255', ''),
 	          		),
 	                'PRIMARY_KEY'     => array('id'),
 	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id')))
@@ -1070,10 +1069,6 @@ function tableupdates($action, $version)
 					// make new unique composite this way double membernames are enabled
 					$sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_guild_id, member_name) ";
 					$db->sql_query($sql);
-
-					// rename bbdkp_memberdkp table to bbdkp_reporting table
-					//$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberdkp RENAME ' . $table_prefix  . 'bbdkp_reporting ';
-					//$db->sql_query($sql);
 
 					$sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_memberguild MODIFY region VARCHAR(3) ';
 					$db->sql_query($sql);
