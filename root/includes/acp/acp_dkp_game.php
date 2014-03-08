@@ -239,8 +239,8 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 					$editgame->setImagename(request_var('imagename',''));
 					$editgame->setArmoryEnabled(request_var('enable_armory', 0));
-                    $editgame->setBasebossurl(request_var('bossbaseurl','' ));
-                    $editgame->setBasezoneurl(request_var('zonebaseurl','' ));
+                    $editgame->setBossbaseurl(request_var('bossbaseurl','' ));
+                    $editgame->setZonebaseurl(request_var('zonebaseurl','' ));
 					$editgame->update();
 				}
 
@@ -824,8 +824,8 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				'GAMEPATH' => $phpbb_root_path. 'images/bbdkp/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png',
 				'S_GAMEIMAGE_EXISTS' => (strlen($editgame->getImagename()) > 0 && $imgexists  ) ? true : false,
 				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->getName()  ) ,
-                'BOSSBASEURL' => $editgame->getBasebossurl(),
-                'ZONEBASEURL' => $editgame->getBasezoneurl(),
+                'BOSSBASEURL' => $editgame->getBossbaseurl(),
+                'ZONEBASEURL' => $editgame->getZonebaseurl(),
 				'GAME_ID' => $editgame->game_id,
 				'URI_GAME' => URI_GAME,
 				'O_RACEGAMEID' => $current_order ['uri'] [0],

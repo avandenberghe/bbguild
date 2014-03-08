@@ -120,11 +120,11 @@ class Game extends \bbdkp\admin\Admin
     }
 
     /**
-     * @param string $basezoneurl
+     * @param string $zonebaseurl
      */
-    public function setZonebaseurl($basezoneurl)
+    public function setZonebaseurl($zonebaseurl)
     {
-        $this->zonebaseurl = $basezoneurl;
+        $this->zonebaseurl = $zonebaseurl;
     }
 
     /**
@@ -367,7 +367,7 @@ class Game extends \bbdkp\admin\Admin
             'imagename'      => substr($this->imagename, 0, 20) ,
             'armory_enabled' => $this->armory_enabled,
             'bossbaseurl'    => $this->bossbaseurl,
-            'basezoneurl'    => $this->zonebaseurl
+            'zonebaseurl'    => $this->zonebaseurl
         ));
 
         $sql = 'UPDATE ' . GAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";
@@ -397,7 +397,7 @@ class Game extends \bbdkp\admin\Admin
                 'status' => $row['status'],
                 'imagename' => $row['imagename'],
                 'bossbaseurl'   => $row['bossbaseurl'],
-                'basezoneurl'   => $row['zonebaseurl'],
+                'zonebaseurl'   => $row['zonebaseurl'],
             );
         }
         $db->sql_freeresult($result);
