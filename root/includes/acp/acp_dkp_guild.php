@@ -572,7 +572,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 				$template->assign_vars(array(
 					// Form values
 					'S_GUILDLESS' => ($updateguild->guildid==0) ? true:false,
-					'F_ENABLGAMEEARMORY' => $game->armory_enabled,
+					'F_ENABLGAMEEARMORY' => $game->getArmoryEnabled(),
 					'F_ENABLEARMORY' => $updateguild->armory_enabled ,
 					'CURRENT' => $current,
 					'NEEDED' => $needed,

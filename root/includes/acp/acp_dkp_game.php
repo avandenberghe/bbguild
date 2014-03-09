@@ -256,7 +256,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 						$deletegame->Delete();
 
 						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") );
-						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->name ) , E_USER_WARNING);
+						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->getName() ) , E_USER_WARNING);
 					}
 					else
 					{
@@ -266,7 +266,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 								'hidden_game_name' => $editgame->getName(),
 								'hidden_game_id' => $editgame->game_id,
 						));
-						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_GAME'], $editgame->name ), $s_hidden_fields );
+						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_GAME'], $editgame->getName() ), $s_hidden_fields );
 					}
 				}
 
@@ -585,7 +585,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				// send parameters to template
 				$template->assign_vars ( array (
 					'GAME_ID' => $faction->game_id,
-					'GAME_NAME' => $editgame->name,
+					'GAME_NAME' => $editgame->getName(),
 					'U_ACTION' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addfaction' ),
 					'MSG_NAME_EMPTY' => $user->lang ['FV_REQUIRED_NAME'] ) );
 
@@ -715,7 +715,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 	/**
 	 * lists game parameters
 	 *
-	 * @param \bbdkp\game $editgame
+	 * @param \bbdkp\controller\games\game $editgame
 	 */
 	private function showgame( \bbdkp\controller\games\game $editgame)
 	{
