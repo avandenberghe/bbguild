@@ -62,7 +62,6 @@ namespace bbdkp\admin
 	define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');
 	define('BBDKP_ROLES_TABLE',        $table_prefix . 'bbdkp_roles');
     define('GUILD_BOSS',               $table_prefix . 'bbdkp_guildboss');
-    define('GUILD_WORLD',              $table_prefix . 'bbdkp_guildworld');
 	// plugin anchors
 
 	// RAIDTRACKER
@@ -73,7 +72,3 @@ namespace bbdkp\admin
 
 	// APPLY
 }
-
-
-
-?>
