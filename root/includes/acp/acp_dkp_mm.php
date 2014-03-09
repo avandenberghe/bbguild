@@ -362,7 +362,10 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					'LISTMEMBERS_FOOTCOUNT' => $footcount_text ,
 					'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=addguild&amp;" . URI_GUILD . '=' . $Guild->guildid ),
 					'S_WOW'  => ($Guild->game_id  == 'wow') ? true: false,
-					'MEMBER_PAGINATION' => $memberpagination));
+					'MEMBER_PAGINATION' => $memberpagination,
+                    'GUILD_EMBLEM'      => $Guild->emblempath,
+                    'GUILD_NAME'        => $Guild->name,
+                ));
 				$this->page_title = 'ACP_MM_LISTMEMBERS';
 				$this->tpl_name = 'dkp/acp_' . $mode;
 				break;
