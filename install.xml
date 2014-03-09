@@ -196,6 +196,7 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/includes/bbdkp/admin/constants_bbdkp.php" to="includes/bbdkp/admin/constants_bbdkp.php"/>
 			<file from="root/includes/bbdkp/admin/log.php" to="includes/bbdkp/admin/log.php"/>
 			<file from="root/includes/bbdkp/admin/validator.php" to="includes/bbdkp/admin/validator.php"/>
+			<file from="root/includes/bbdkp/admin/krequest.php" to="includes/bbdkp/admin/krequest.php"/>
 			<!-- blocks -->
 			<file from="root/includes/bbdkp/block/linksblock.php" to="includes/bbdkp/block/linksblock.php"/>
 			<file from="root/includes/bbdkp/block/loginblock.php" to="includes/bbdkp/block/loginblock.php"/>
