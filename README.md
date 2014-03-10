@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3 Beta 3#
+#1.3 Beta 4#
 
 
 ## about
@@ -21,19 +21,18 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-v1.3.0-b3
+v1.3.0-b4
 
 
 ## Installation
 
 #### Requirements
-1.	PHP 5.3.3 or higher. Curl should be available on your server.
+1.	phpbb 3.0.12
+2.	UMIL 1.0.5, Automod 1.0.2
 2.	databases : Mysql 5, MSSQL, postgresql, Oracle
-3.	[phpbb 3.0.12](https://www.phpbb.com/downloads/)
-4.	[UMIL 1.0.5](https://www.phpbb.com/mods/umil/)
-5.	[Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
-6.	ftp and founder admin access on your phpbb installation.
-
+3.	PHP 5.3.3 or higher. Curl should be available on your server.
+4.	ftp and founder admin access on your phpbb installation.
+5.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
 #### MODX installation
 
@@ -50,15 +49,23 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 #### Upgrading from 1.2.8-pl2 to 1.3.0
 
 * Uninstall 1.2.8-pl2 and re-install 1.3.0-b3 using Automod
-	1. uninstall any bbDKP plugins first from Automod, but don't run the plugin database uninstallers.
-	2. then, uninstall bbDKP 1.2.8-pl2 from automod
+	1. If you installed any bbDKP plugins, these have to be uninstalled first. So uninstall them from Automod, but don't run the plugin database uninstallers.
+    2. then, from Automod, do uninstall bbDKP 1.2.8-pl2.
 	3. now install bbDKP, as described in new install procedure
-	4. update database: goto /install, press the "update"
+    4. update database: goto /install, press the "update"
 * Manually
 	1. download your forum to localhost, as we will make the changes locally and then upload the new/changed
-	2. uninstall bbdkp 1.2.8-pl2, by doing the INSTALL.xml instructions in reverse.
-	3. then install 1.3.0 as described above
-
+	2.	follow the diff steps described here : 1.2.8-pl2 to 1.3.0-b3
+	3.	copy the new files, replacing any old files.
+	4.	delete the old files mentioned in the delete section
+	5.	apply the changes to the core phpbb files. use a good text editor
+	6.	Make sure your (prosilver based) custom style is updated aswell.
+	7.	launch the DB updater locally (/install/index.php)
+	8.	Now you see the Umil updater.
+	9.	Click submit. This will update to 1.3.0 and clear the caches (template, theme, imagesets)
+	10.	FTP the whole folder to to your webserver.
+	11.	launch the DB updater on your webserver (/install/index.php) and redo the db changes on live.
+	
 #### Upgrading from earlier version
 Please upgrade to v1.2.8-pl2 first
 
@@ -67,9 +74,9 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
     
 ## Changelog 
 
-1.3.0-b3
+1.3.0
 
-@todo write changelog
+@todo
 
 1.2.8-pl2 30-07-2012
 
