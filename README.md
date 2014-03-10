@@ -1,5 +1,8 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
+#1.3 Beta 4#
+
+
 ## about
 
 bbDKP is a Dragon Kill Points Mod for your phpBB3 Bulletin board.
@@ -18,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-v1.3.0-b3
+v1.3.0-b4
 
 
 ## Installation
@@ -71,12 +74,9 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
     
 ## Changelog 
 
-1.3.0-b3
+1.3.0
 
--	[NEW] Added support for FFXIV (@author: Brytor)
--	[FIX] fix bug 212 : add a raid and only put in say one person, it gives the raid value to everyone on the roster not just the person attending
--	[FIX] fix bug 213 : html issue : Incorrect URL in listraids
-
+@todo
 
 1.2.8-pl2 30-07-2012
 
