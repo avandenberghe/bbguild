@@ -35,83 +35,82 @@ if (!class_exists('\bbdkp\admin\Admin'))
  */
 class Adjust extends \bbdkp\admin\Admin
 {
+
 	/**
 	 * Pk adjustmnent identifier
 	 * @var int
 	 */
 	public $adjustment_id;
-
 	/**
 	 * id of member to adjust
 	 * @var int
 	 */
-	public $member_id = 0;
+	private $member_id = 0;
 	/**
 	 * name of member to be adjusted
 	 * @var int
 	 */
-	public $member_name = '';
+    private $member_name = '';
 	/**
 	 * adjustment dkp id
 	 * @var int
 	 */
-	public $adjustment_dkpid = 0;
-
+    private $adjustment_dkpid = 0;
 	/**
 	 * value of the adjustment
 	 * @var float signed
 	 */
-	public $adjustment_value = 0.0;
+    private $adjustment_value = 0.0;
 	/**
 	 * date of adjustment
 	 * @var int
 	 */
-	public $adjustment_date;
+    private $adjustment_date;
 	/**
 	 * reason for the adjustment
 	 * @var string
 	 */
-	public $adjustment_reason = '';
+    private $adjustment_reason = '';
 	/**
 	 * reason for adjustment
 	 * @var string
 	 */
-	public $adjustment_added_by = '';
+    private $adjustment_added_by = '';
 	/**
 	 * who updated
 	 * @var string
 	 */
-	public $adjustment_updated_by = '';
+    private $adjustment_updated_by = '';
 	/**
 	 * unique key for identifying group of adjustments
-	 * @var unknown
+	 * @var string
 	 */
-	public $adjustment_groupkey = '';
+    private $adjustment_groupkey = '';
 	/**
 	 * amount of adjustment decay
 	 * @var float
 	 */
-	public $adj_decay = 0.0;
+    private $adj_decay = 0.0;
 	/**
 	 * bool to indicate if this can be decayed
 	 * @var bool
 	 */
-	public $can_decay = 0;
+    private $can_decay = 0;
 	/**
 	 * time if decay
 	 * @var int
 	 */
-	public $decay_time = 0;
+    private $decay_time = 0;
 	/**
 	 * array with members sharing adjustment
-	 * @var unknown
+	 * @var array
 	 */
-	public $members_samegroupkey = array();
+    private $members_samegroupkey = array();
 	/**
 	 * dkp pool for adjust
-	 * @var unknown
+	 * @var array
 	 */
-	public $dkpsys;
+    private $dkpsys = array();
 
 	/**
 	 * Adjustment class constructor
@@ -137,6 +136,214 @@ class Adjust extends \bbdkp\admin\Admin
 		}
 		$db->sql_freeresult($result);
 	}
+
+    /**
+     * @return int
+     */
+    public function getAdjustmentDate()
+    {
+        return $this->adjustment_date;
+    }
+
+    /**
+     * @param int $adjustment_date
+     */
+    public function setAdjustmentDate($adjustment_date)
+    {
+        $this->adjustment_date = $adjustment_date;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdjustmentUpdatedBy()
+    {
+        return $this->adjustment_updated_by;
+    }
+
+    /**
+     * @param string $adjustment_updated_by
+     */
+    public function setAdjustmentUpdatedBy($adjustment_updated_by)
+    {
+        $this->adjustment_updated_by = $adjustment_updated_by;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdjustmentReason()
+    {
+        return $this->adjustment_reason;
+    }
+
+    /**
+     * @param string $adjustment_reason
+     */
+    public function setAdjustmentReason($adjustment_reason)
+    {
+        $this->adjustment_reason = $adjustment_reason;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAdjustmentId()
+    {
+        return $this->adjustment_id;
+    }
+
+    /**
+     * @param int $adjustment_id
+     */
+    public function setAdjustmentId($adjustment_id)
+    {
+        $this->adjustment_id = $adjustment_id;
+    }
+
+    /**
+     * @return \bbdkp\controller\adjustments\unknown
+     */
+    public function getAdjustmentGroupkey()
+    {
+        return $this->adjustment_groupkey;
+    }
+
+    /**
+     * @param \bbdkp\controller\adjustments\unknown $adjustment_groupkey
+     */
+    public function setAdjustmentGroupkey($adjustment_groupkey)
+    {
+        $this->adjustment_groupkey = $adjustment_groupkey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdjustmentAddedBy()
+    {
+        return $this->adjustment_added_by;
+    }
+
+    /**
+     * @param string $adjustment_added_by
+     */
+    public function setAdjustmentAddedBy($adjustment_added_by)
+    {
+        $this->adjustment_added_by = $adjustment_added_by;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdjDecay()
+    {
+        return $this->adj_decay;
+    }
+
+    /**
+     * @param float $adj_decay
+     */
+    public function setAdjDecay($adj_decay)
+    {
+        $this->adj_decay = $adj_decay;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMemberId()
+    {
+        return $this->member_id;
+    }
+
+    /**
+     * @param int $member_id
+     */
+    public function setMemberId($member_id)
+    {
+        $this->member_id = $member_id;
+    }
+
+    /**
+     * @return int
+     */
+    public function getMemberName()
+    {
+        return $this->member_name;
+    }
+
+    /**
+     * @param int $member_name
+     */
+    public function setMemberName($member_name)
+    {
+        $this->member_name = $member_name;
+    }
+
+    /**
+     * @return int
+     */
+    public function getAdjustmentDkpid()
+    {
+        return $this->adjustment_dkpid;
+    }
+
+    /**
+     * @param int $adjustment_dkpid
+     */
+    public function setAdjustmentDkpid($adjustment_dkpid)
+    {
+        $this->adjustment_dkpid = $adjustment_dkpid;
+    }
+
+    /**
+     * @return float
+     */
+    public function getAdjustmentValue()
+    {
+        return $this->adjustment_value;
+    }
+
+    /**
+     * @param float $adjustment_value
+     */
+    public function setAdjustmentValue($adjustment_value)
+    {
+        $this->adjustment_value = $adjustment_value;
+    }
+    /**
+     * @param array $dkpsys
+     */
+    public function setDkpsys($dkpsys)
+    {
+        $this->dkpsys = $dkpsys;
+    }
+
+    /**
+     * @return array
+     */
+    public function getDkpsys()
+    {
+        return $this->dkpsys;
+    }
+
+    /**
+     * @param boolean $can_decay
+     */
+    public function setCanDecay($can_decay)
+    {
+        $this->can_decay = $can_decay;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getCanDecay()
+    {
+        return $this->can_decay;
+    }
+
 
 	/**
 	 * add a new dkp adjustment
@@ -202,73 +409,6 @@ class Adjust extends \bbdkp\admin\Admin
 	}
 
 	/**
-	 * get an adjustment from database
-	 * @param integer $adjust_id
-	 * @return Adjust
-	 */
-	public function get($adjust_id)
-	{
-		global $user, $db;
-
-		$sql_array = array(
-				'SELECT' => 'a.adjustment_id,
-							a.adjustment_value,
-							a.adjustment_dkpid,
-							a.adjustment_date,
-							a.adjustment_reason,
-							a.member_id,
-							m.member_name,
-							a.adjustment_group_key,
-							a.adjustment_added_by,
-							a.adjustment_updated_by,
-							a.adj_decay,
-							a.decay_time,
-							a.can_decay' ,
-				'FROM' => array(
-						ADJUSTMENTS_TABLE => 'a' ,
-						MEMBER_LIST_TABLE => 'm') ,
-				'WHERE' => 'a.member_id = m.member_id
-					AND a.adjustment_id = ' . $adjust_id
-			);
-		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
-		if (! $row = $db->sql_fetchrow($result))
-		{
-			trigger_error($user->lang['ERROR_INVALID_ADJUSTMENT'], E_USER_NOTICE);
-		}
-		$db->sql_freeresult($result);
-
-		$this->adjustment_id = $row['adjustment_id'];
-		$this->adjustment_value = $row['adjustment_value'];
-		$this->adjustment_dkpid = $row['adjustment_dkpid'];
-		$this->adjustment_date = $row['adjustment_date'];
-		$this->adjustment_reason = $row['adjustment_reason'];
-		$this->member_id = $row['member_id'];
-		$this->member_name = $row['member_name'];
-		$this->adjustment_groupkey = $row['adjustment_group_key'];
-		$this->adjustment_added_by = $row['adjustment_added_by'];
-		$this->adjustment_updated_by = $row['adjustment_updated_by'];
-		$this->adj_decay = $row['adj_decay'];
-		$this->decay_time = $row['decay_time'];
-		$this->can_decay = $row['can_decay'];
-
-
-		$members = array();
-		$sql = 'SELECT member_id from ' . ADJUSTMENTS_TABLE . " WHERE adjustment_group_key = '" . $this->adjustment_groupkey . "'";
-		$result = $db->sql_query($sql);
-		while ($row = $db->sql_fetchrow($result))
-		{
-			$members[] = $row['member_id'];
-		}
-
-		$this->members_samegroupkey = $members;
-		unset($members);
-		return $this;
-
-	}
-
-
-	/**
 	 * deletes adjustment
 	 */
 	function delete()
@@ -290,7 +430,6 @@ class Adjust extends \bbdkp\admin\Admin
 
 		$db->sql_transaction('commit');
 	}
-
 
 	/**
 	 * deletes all adjustments foer one member
@@ -399,7 +538,6 @@ class Adjust extends \bbdkp\admin\Admin
 		return $result;
 	}
 
-
 	/**
 	 *
 	 * function to decay one specific adjustment
@@ -468,6 +606,72 @@ class Adjust extends \bbdkp\admin\Admin
 		unset ($oldadj);
 
 		return true;
+	}
+
+	/**
+	 * get an adjustment from database
+	 * @param integer $adjust_id
+	 * @return Adjust
+	 */
+	public function get($adjust_id)
+	{
+		global $user, $db;
+
+		$sql_array = array(
+				'SELECT' => 'a.adjustment_id,
+							a.adjustment_value,
+							a.adjustment_dkpid,
+							a.adjustment_date,
+							a.adjustment_reason,
+							a.member_id,
+							m.member_name,
+							a.adjustment_group_key,
+							a.adjustment_added_by,
+							a.adjustment_updated_by,
+							a.adj_decay,
+							a.decay_time,
+							a.can_decay' ,
+				'FROM' => array(
+						ADJUSTMENTS_TABLE => 'a' ,
+						MEMBER_LIST_TABLE => 'm') ,
+				'WHERE' => 'a.member_id = m.member_id
+					AND a.adjustment_id = ' . $adjust_id
+			);
+		$sql = $db->sql_build_query('SELECT', $sql_array);
+		$result = $db->sql_query($sql);
+		if (! $row = $db->sql_fetchrow($result))
+		{
+			trigger_error($user->lang['ERROR_INVALID_ADJUSTMENT'], E_USER_NOTICE);
+		}
+		$db->sql_freeresult($result);
+
+		$this->adjustment_id = $row['adjustment_id'];
+		$this->adjustment_value = $row['adjustment_value'];
+		$this->adjustment_dkpid = $row['adjustment_dkpid'];
+		$this->adjustment_date = $row['adjustment_date'];
+		$this->adjustment_reason = $row['adjustment_reason'];
+		$this->member_id = $row['member_id'];
+		$this->member_name = $row['member_name'];
+		$this->adjustment_groupkey = $row['adjustment_group_key'];
+		$this->adjustment_added_by = $row['adjustment_added_by'];
+		$this->adjustment_updated_by = $row['adjustment_updated_by'];
+		$this->adj_decay = $row['adj_decay'];
+		$this->decay_time = $row['decay_time'];
+		$this->can_decay = $row['can_decay'];
+
+
+		$members = array();
+		$sql = 'SELECT member_id from ' . ADJUSTMENTS_TABLE . " WHERE adjustment_group_key = '" . $this->adjustment_groupkey . "'";
+		$result = $db->sql_query($sql);
+		while ($row = $db->sql_fetchrow($result))
+		{
+			$members[] = $row['member_id'];
+		}
+
+		$this->members_samegroupkey = $members;
+		unset($members);
+		return $this;
+
 	}
 
 
