@@ -131,44 +131,45 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 				}
 
 				/* dkp pool */
-				$this->adjustment->adjustment_dkpid =0;
-				if (isset($_GET[URI_DKPSYS]) OR isset ( $_POST[URI_DKPSYS]))
+				$this->adjustment->setAdjustmentDkpid(0);
+                if (isset($_GET[URI_DKPSYS]) OR isset ( $_POST[URI_DKPSYS]))
 				{
-					$this->adjustment->adjustment_dkpid = request_var ( URI_DKPSYS, 0 );
+                    $this->adjustment->setAdjustmentDkpid(request_var ( URI_DKPSYS, 0 ));
 				}
 
-				if($this->adjustment->adjustment_dkpid==0)
+				if($this->adjustment->getAdjustmentDkpid() == 0)
 				{
 
-					if( count((array) $this->adjustment->dkpsys) == 0 )
+					if( count((array) $this->adjustment->getDkpsys()) == 0 )
 					{
 						trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
 					}
 
 					//get default dkp pool
-					foreach ($this->adjustment->dkpsys as $pool)
+					foreach ($this->adjustment->getDkpsys() as $pool)
 					{
 						if ($pool['default'] == 'Y' )
 						{
-							$this->adjustment->adjustment_dkpid = $pool['id'];
+							$this->adjustment->setAdjustmentDkpid($pool['id']);
 							break;
 						}
 					}
 					//if still 0 then get first one
-					if($this->adjustment->adjustment_dkpid==0)
+					if($this->adjustment->getAdjustmentDkpid() == 0)
 					{
-						foreach ($this->adjustment->dkpsys as $pool)
+						foreach ($this->adjustment->getDkpsys() as $pool)
 						{
-							$this->adjustment->adjustment_dkpid = $pool['id'];
+                            $this->adjustment->setAdjustmentDkpid($pool['id']);
 							break;
 						}
 					}
 				}
-				foreach ($this->adjustment->dkpsys as $pool)
+
+				foreach ($this->adjustment->getDkpsys() as $pool)
 				{
 					$template->assign_block_vars ( 'dkpsys_row', array (
 							'VALUE' 	=> $pool['id'],
-							'SELECTED' 	=> ($pool['id'] == $this->adjustment->adjustment_dkpid) ? ' selected="selected"' : '',
+							'SELECTED' 	=> ($pool['id'] == $this->adjustment->getAdjustmentDkpid()) ? ' selected="selected"' : '',
 							'OPTION' 	=> (! empty ( $pool['name'] )) ? $pool['name'] : '(None)' )
 					);
 				}
@@ -236,7 +237,7 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 				$listadj_footcount = sprintf($user->lang['LISTADJ_FOOTCOUNT'], $total_adjustments, $config['bbdkp_user_alimit']);
 
 				$pagination = \generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj&amp;dkpsys_id=" .
-					$this->adjustment->adjustment_dkpid) . '&amp;' . URI_PAGE,
+					$this->adjustment->getAdjustmentDkpid()) . '&amp;' . URI_PAGE,
 					$total_adjustments,
 					$config['bbdkp_user_alimit'],
 					$start, true);
@@ -291,7 +292,7 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 					{
 						$template->assign_block_vars('adj_dkpid_row', array(
 							'VALUE' => $row2['dkpsys_id'] ,
-							'SELECTED' => ($row2['dkpsys_id'] == $showadj->adjustment_dkpid ? ' selected="selected"' : '' ),
+							'SELECTED' => ($row2['dkpsys_id'] == $showadj->getAdjustmentDkpid() ? ' selected="selected"' : '' ),
 							'OPTION' => (! empty($row2['dkpsys_name'])) ? $row2['dkpsys_name'] : '(None)'));
 					}
 
@@ -327,7 +328,7 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 				$now = getdate();
 				$s_day_options = '';
 
-				$day = $showadj->adjustment_date > 0 ? date('j', $showadj->adjustment_date) : $now['mday'] ;
+				$day = $showadj->getAdjustmentDate() > 0 ? date('j', $showadj->getAdjustmentDate()) : $now['mday'] ;
 				for ($i = 1; $i < 32; $i++)
 				{
 					$selected = ($i == $day ) ? ' selected="selected"' : '';
@@ -335,7 +336,7 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 				}
 
 				$s_month_options = '';
-				$month = $showadj->adjustment_date > 0 ? date('n', $showadj->adjustment_date) : $now['mon'] ;
+				$month = $showadj->getAdjustmentDate() > 0 ? date('n', $showadj->getAdjustmentDate()) : $now['mon'] ;
 				for ($i = 1; $i < 13; $i++)
 				{
 					$selected = ($i == $month ) ? ' selected="selected"' : '';
@@ -343,7 +344,7 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 				}
 
 				$s_year_options = '';
-				$yr = $showadj->adjustment_date > 0 ? date('Y', $showadj->adjustment_date) : $now['year'] ;
+				$yr = $showadj->getAdjustmentDate() > 0 ? date('Y', $showadj->getAdjustmentDate()) : $now['year'] ;
 				for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
 				{
 					$selected = ($i == $yr ) ? ' selected="selected"' : '';
@@ -361,10 +362,10 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 					$temp = str_replace(".", "", request_var('adjustment_value', 0.0));
 					$temp2 = (float) str_replace(",", ".", $temp);
 
-					$newadjust->adjustment_value = $temp2;
-					$newadjust->adjustment_reason = utf8_normalize_nfc(request_var('adjustment_reason', '', true));
-					$newadjust->can_decay = request_var('adj_decayable', 1);
-					$newadjust->adj_decay = 0;
+					$newadjust->setAdjustmentValue($temp2);
+					$newadjust->setAdjustmentReason(utf8_normalize_nfc(request_var('adjustment_reason', '', true)) )  ;
+					$newadjust->setCanDecay(request_var('adj_decayable', 1));
+					$newadjust->setAdjDecay(0);
 					$newadjust->decay_time = 0;
 					$newadjust->adjustment_date = mktime(12, 0, 0, request_var('adjustment_month', 0), request_var('adjustment_day', 0), request_var('adjustment_year', 0));
 					$newadjust->adjustment_dkpid = request_var('adj_dkpid', 0);
