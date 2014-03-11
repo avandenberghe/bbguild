@@ -41,6 +41,8 @@ class Adjust extends \bbdkp\admin\Admin
 	 * @var int
 	 */
 	public $adjustment_id;
+
+
 	/**
 	 * id of member to adjust
 	 * @var int
@@ -101,6 +103,8 @@ class Adjust extends \bbdkp\admin\Admin
 	 * @var int
 	 */
     private $decay_time = 0;
+
+
 	/**
 	 * array with members sharing adjustment
 	 * @var array
@@ -343,9 +347,40 @@ class Adjust extends \bbdkp\admin\Admin
     {
         return $this->can_decay;
     }
+    /**
+     * @param int $decay_time
+     */
+    public function setDecayTime($decay_time)
+    {
+        $this->decay_time = $decay_time;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDecayTime()
+    {
+        return $this->decay_time;
+    }
+
+    /**
+     * @param array $members_samegroupkey
+     */
+    public function setMembersSamegroupkey($members_samegroupkey)
+    {
+        $this->members_samegroupkey[] = $members_samegroupkey;
+    }
+
+    /**
+     * @return array
+     */
+    public function getMembersSamegroupkey()
+    {
+        return $this->members_samegroupkey;
+    }
 
 
-	/**
+    /**
 	 * add a new dkp adjustment
 	 */
 	public function add()
