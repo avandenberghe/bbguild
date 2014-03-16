@@ -603,7 +603,7 @@ class acp_dkp extends \bbdkp\admin\Admin
 								'ENCODED_USER' => urlencode($log['username']) ,
 								'ENCODED_IP' => urlencode($log['log_ipaddress'])));
 						}
-						$logcount = $logs->total_logs;
+						$logcount = $logs->getTotalLogs();
 						$template->assign_vars(array(
 							'S_LIST' 	=> true ,
 							'L_TITLE' 	=> $user->lang['ACP_DKP_LOGS'] ,
