@@ -95,7 +95,7 @@ class viewMember implements iViews
         {
             $template->assign_block_vars('raids_row', array(
                 'DATE'			 => ( !empty($raid['raid_start']) ) ? date($config['bbdkp_date_format'], $raid['raid_start']) : '&nbsp;',
-                'U_VIEW_RAID'	 => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewraid&amp;' . URI_RAID . '='.$raid['raid_id']),
+                'U_VIEW_RAID'	 => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=raid&amp;' . URI_RAID . '='.$raid['raid_id']),
                 'NAME'			 => $raid['event_name'],
                 'NOTE'			 => ( !empty($raid['raid_note']) ) ? $raid['raid_note'] : '&nbsp;',
                 'RAIDVAL'		 => $raid['raid_value'],
@@ -147,8 +147,8 @@ class viewMember implements iViews
 
             $template->assign_block_vars('items_row', array(
                     'DATE'			=> ( !empty($item['item_date']) ) ? date($config['bbdkp_date_format'], $item['item_date']) : $item['item_date'] . '&nbsp;',
-                    'U_VIEW_ITEM'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewitem&amp;' . URI_ITEM . '=' . $item['item_id']),
-                    'U_VIEW_RAID'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;' . URI_RAID . '=' . $item['raid_id']),
+                    'U_VIEW_ITEM'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=item&amp;' . URI_ITEM . '=' . $item['item_id']),
+                    'U_VIEW_RAID'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=raid&amp;' . URI_RAID . '=' . $item['raid_id']),
                     'NAME'			=> $item_name,
                     'RAID'			=> ( !empty($item['event_name']) ) ? $item['event_name'] : '&lt;<i>Not Found</i>&gt;',
                     'SPENT'			=> $item['item_value'],

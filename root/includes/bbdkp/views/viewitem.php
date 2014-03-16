@@ -46,9 +46,9 @@ class viewItem implements iViews
 
         $title = $user->lang['ITEM'] . ' : '. $loot->item_name;
 
-        if ($this->bbtips == true && $loot->game_id == 'wow')
+        if ($Navigation->bbtips == true && $loot->game_id == 'wow')
         {
-            $valuename = '<strong>' . $this->bbtips->parse('[itemdkp]' .  $loot->item_name   . '[/itemdkp]') . '</strong>';
+            $valuename = '<strong>' . $this->$Navigation->parse('[itemdkp]' .  $loot->item_name   . '[/itemdkp]') . '</strong>';
         }
         else
         {
@@ -59,7 +59,7 @@ class viewItem implements iViews
             0 => array ('item_date desc, item_value desc', 'item_date asc, item_value desc'),
             1 => array ('member_name asc, item_value desc', 'member_name desc, item_value desc'),
             2 => array ('item_value desc', 'item_value asc'));
-        $current_order = $this->switch_order ($sort_order);
+        $current_order = $Navigation->switch_order ($sort_order);
 
         foreach($purchased_items as $key => $item)
         {
@@ -73,7 +73,7 @@ class viewItem implements iViews
                     'RACE' => $buyer->member_race,
                     'BUYER' => $buyer->member_name,
                     'U_VIEW_BUYER' => append_sid("{$phpbb_root_path}dkp.$phpEx" , "page=member&amp;" . URI_NAMEID . '='. $item['member_id']. '&amp;' . URI_DKPSYS . '=' . $item['dkpid']) ,
-                    'U_VIEW_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;' . URI_RAID . '='.$item['raid_id']) ,
+                    'U_VIEW_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=raid&amp;' . URI_RAID . '='.$item['raid_id']) ,
                     'EVENT_COLOR' => $raid->event_color,
                     'RAID' =>  $raid->event_name,
                     'VALUE' 	=> sprintf("%.2f", $item['item_value'])   ,
@@ -93,7 +93,7 @@ class viewItem implements iViews
 
             array(
                 'DKPPAGE' => $user->lang['MENU_VIEWITEM'],
-                'U_DKPPAGE' => append_sid("{$phpbb_root_path}dkp.$phpEx" , "page=viewitem&amp;" . URI_ITEM . '='. $item_id),
+                'U_DKPPAGE' => append_sid("{$phpbb_root_path}dkp.$phpEx" , "page=item&amp;" . URI_ITEM . '='. $item_id),
             ));
 
         foreach( $navlinks_array as $name )
@@ -110,7 +110,7 @@ class viewItem implements iViews
             'O_DATE' 				 => $current_order['uri'][0],
             'O_BUYER'				 => $current_order['uri'][1],
             'O_VALUE'			 	 => $current_order['uri'][2],
-            'U_VIEW_ITEM' 			 => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewitem&amp;' . URI_ITEM . '='. $item_id) ,
+            'U_VIEW_ITEM' 			 => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=item&amp;' . URI_ITEM . '='. $item_id) ,
             'VIEWITEM_FOOTCOUNT' 	 => sprintf($user->lang['VIEWITEM_FOOTCOUNT'], count($purchased_items)),
             'S_DISPLAY_VIEWITEM' 	 => true,
         ));

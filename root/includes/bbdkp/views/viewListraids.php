@@ -68,7 +68,7 @@ class viewListraids implements iViews
             $template->assign_block_vars('raids_row', array(
                     'DATE'			=> ( !empty($raid['raid_start']) ) ? date($config['bbdkp_date_format'], $raid['raid_start']) : '&nbsp;',
                     'NAME'			=> $raid['event_name'],
-                    'U_VIEW_RAID'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewraid&amp;' . URI_RAID . '='.$raid['raid_id'] . '&amp;guild_id=' . $Navigation->getGuildId() ),
+                    'U_VIEW_RAID'  	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=raid&amp;' . URI_RAID . '='.$raid['raid_id'] . '&amp;guild_id=' . $Navigation->getGuildId() ),
                     'U_VIEW_EVENT' 	=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=event&amp;' . URI_EVENT . '='.  $raid['event_id'] . '&amp;' . URI_DKPSYS . '=' .
                         $raid['event_dkpid'] . '&amp;guild_id=' . $Navigation->getGuildId()),
                     'POOL' 			=> 	$Navigation->getDkpsysName(),

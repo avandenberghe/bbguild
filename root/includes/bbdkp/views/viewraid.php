@@ -42,7 +42,7 @@ class viewRaid implements iViews
     public function buildpage(viewNavigation $Navigation)
     {
 
-        global $phpbb_root_path, $phpEx, $user, $template;
+        global $config, $phpbb_root_path, $phpEx, $user, $template;
         if ( !isset($_GET[URI_RAID]) )
         {
             trigger_error ($user->lang['RNOTFOUND']);
@@ -53,11 +53,11 @@ class viewRaid implements iViews
         $navlinks_array = array(
             array(
                 'DKPPAGE'		=> $user->lang['MENU_RAIDS'],
-                'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listraids&amp;guild_id=' . $this->guild_id),
+                'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listraids&amp;guild_id=' . $Navigation->getGuildId()),
             ),
             array(
                 'DKPPAGE'		=> $user->lang['MENU_VIEWRAID'],
-                'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listraids&amp;' . URI_RAID . '=' . $raid_id . '&amp;guild_id=' . $this->guild_id),
+                'U_DKPPAGE'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", '&amp;page=listraids&amp;' . URI_RAID . '=' . $raid_id . '&amp;guild_id=' . $Navigation->getGuildId()),
             ),
         );
 
@@ -89,7 +89,7 @@ class viewRaid implements iViews
             'S_SHOWTIME' 		=> ($config['bbdkp_timebased'] == '1') ? true : false,
             'S_SHOWDECAY' 		=> ($config['bbdkp_decay'] == '1') ? true : false,
             'S_SHOWEPGP' 		=> ($config['bbdkp_epgp'] == '1') ? true : false,
-            'F_RAID'			=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewraid&amp;'. URI_RAID . '=' . request_var(URI_RAID, 0))
+            'F_RAID'			=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=raid&amp;'. URI_RAID . '=' . request_var(URI_RAID, 0))
         ));
 
 // point listing
@@ -101,7 +101,7 @@ class viewRaid implements iViews
             4 => array ('raid_decay asc', 'raid_decay desc' ),
             5 => array ('total asc', 'total desc' ),
         );
-        $current_order = $this->switch_order ($sort_order);
+        $current_order = $Navigation->switch_order ($sort_order);
 
         $raid_details = new \bbdkp\controller\raids\Raiddetail($raid_id);
         $raid->raid_details = (array) $raid_details->raid_details;
@@ -160,7 +160,7 @@ class viewRaid implements iViews
                     $block_vars += array(
                         'COLUMN'.$j.'_NAME' => '<strong><a style="color: '. $raid->raid_details[$offset]['colorcode'].';" href="' .
                             append_sid("{$phpbb_root_path}dkp.$phpEx", "page=member&amp;" . URI_NAMEID . '=' .
-                                $raid->raid_details[$offset]['member_id'] . '&amp;' . URI_DKPSYS . '=' . $this->dkpsys_id) . '">' .
+                                $raid->raid_details[$offset]['member_id'] . '&amp;' . URI_DKPSYS . '=' . $Navigation->getDkpsysId()) . '">' .
                             $raid->raid_details[$offset]['member_name'] . '</a></strong>'
                     );
                 }
@@ -215,9 +215,9 @@ class viewRaid implements iViews
             2 => array ('i.item_value ', 'item_value desc' ),
         );
 
-        $icurrent_order = $this->switch_order ($isort_order, 'ui');
+        $icurrent_order = $Navigation->switch_order ($isort_order, 'ui');
         $loot = new \bbdkp\controller\loot\Loot();
-        $raid->loot_details = $loot->GetAllLoot( $icurrent_order ['sql'], 0, $this->dkpsys_id, $raid_id, 0, 0);
+        $raid->loot_details = $loot->GetAllLoot( $icurrent_order ['sql'], 0, $Navigation->getDkpsysId(), $raid_id, 0, 0);
 
         $number_items = 0;
         $item_value = 0.00;
@@ -225,15 +225,15 @@ class viewRaid implements iViews
         $item_total = 0.00;
         while ( $item = $db->sql_fetchrow($raid->loot_details))
         {
-            if ($this->bbtips == true)
+            if ($Navigation->bbtips == true)
             {
                 if ($item['item_gameid'] == 'wow' )
                 {
-                    $item_name = $this->bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]');
+                    $item_name = $Navigation->bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]');
                 }
                 else
                 {
-                    $item_name = $this->bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]');
+                    $item_name = $Navigation->bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]');
                 }
             }
             else
@@ -280,7 +280,7 @@ class viewRaid implements iViews
 
         // Class statistics
         $LootStats = new \bbdkp\controller\loot\LootController;
-        $LootStats->ClassLootStats($raid, 0, true, $this->dkpsys_id, false);
+        $LootStats->ClassLootStats($raid, 0, true, $Navigation->getDkpsysId(), false);
 
         // Output page
         page_header($title);

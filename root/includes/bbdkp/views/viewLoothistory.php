@@ -86,9 +86,9 @@ class viewLoothistory implements iViews
             $template->assign_block_vars ( 'items_row', array (
                 'DATE' 			=> (! empty ( $item ['item_date'] )) ? date($config['bbdkp_date_format'], $item ['item_date'] ) : '&nbsp;',
                 'ITEMNAME' 		=> $valuename,
-                'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewitem&amp;" . URI_ITEM . '=' . $item ['item_id'] ),
+                'U_VIEW_ITEM' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=item&amp;" . URI_ITEM . '=' . $item ['item_id'] ),
                 'RAID' 			=> (! empty ( $item ['event_name'] )) ? $item ['event_name'] : '&lt;<i>'. $user->lang['NOT_AVAILABLE'] .'</i>&gt;',
-                'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=viewraid&amp;" . URI_RAID . '=' . $item ['raid_id'] ),
+                'U_VIEW_RAID' 	=> append_sid ( "{$phpbb_root_path}dkp.$phpEx", "page=raid&amp;" . URI_RAID . '=' . $item ['raid_id'] ),
                 'EVENT_COLOR' => ( !empty($item['event_color']) ) ? $item['event_color'] : '#254689',
 
                 'ITEMVALUE' 	=> sprintf("%.2f", $item['item_value'])   ,

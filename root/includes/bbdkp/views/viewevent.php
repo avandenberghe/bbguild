@@ -162,7 +162,7 @@ class viewEvent implements iViews
                 $attendees_count = ( isset($raid['numattendees']) ) ? $raid['numattendees'] : 0;
 
                 $template->assign_block_vars('raids_row', array(
-                        'U_VIEW_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewraid&amp;'. URI_RAID . '='.$raid['raid_id']),
+                        'U_VIEW_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=raid&amp;'. URI_RAID . '='.$raid['raid_id']),
                         'DATE'        => date($config['bbdkp_date_format'], $raid['raid_start']),
                         'ATTENDEES'   => $attendees_count,
                         'DROPS'       => $drop_count,
@@ -229,7 +229,7 @@ class viewEvent implements iViews
                 $race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
                 $template->assign_block_vars('items_row', array(
                     'DATE'          => date($config['bbdkp_date_format'], $row['item_date']),
-                    'U_VIEW_RAID'   => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewraid&amp;' . URI_RAID . '=' . $row['raid_id']) ,
+                    'U_VIEW_RAID'   => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=raid&amp;' . URI_RAID . '=' . $row['raid_id']) ,
                     'COLORCODE'  	=> ($row['colorcode'] == '') ? '#254689' : $row['colorcode'],
                     'CLASS_IMAGE' 	=> (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
                     'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
@@ -238,7 +238,7 @@ class viewEvent implements iViews
                     'BUYER' 		=> (! empty ( $row ['member_name'] )) ? $row ['member_name'] : '&lt;<i>Not Found</i>&gt;',
                     'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=member&amp;' . URI_NAMEID . '=' . $row['member_id'] . '&amp;' . URI_DKPSYS . '='. $Navigation->getDkpsysId()) ,
                     'ITEMNAME'      => $item_name,
-                    'U_VIEW_ITEM'   => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewitem&amp;' . URI_ITEM . '=' . $row['item_id']) ,
+                    'U_VIEW_ITEM'   => append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=item&amp;' . URI_ITEM . '=' . $row['item_id']) ,
                     'ITEM_ZS'      	=> ($row['item_zs'] == 1) ? ' checked="checked"' : '',
                     'ITEMVALUE' 	=> $row['item_value'],
                     'DECAYVALUE' 	=> $row['item_decay'],

@@ -37,7 +37,7 @@ class viewFactory
 
     private $valid_views = ['news', 'roster', 'standings', 'loothistory', 'lootdb',
     'listevents', 'stats', 'listraids', 'event',
-    'viewitem', 'viewraid', 'member', 'bossprogress', 'planner'];
+    'viewitem', 'raid', 'member', 'bossprogress', 'planner'];
 
 	/**
 	 * load a page asked for by user
