@@ -48,10 +48,9 @@ if (!class_exists('\bbdkp\views\views'))
 	require("{$phpbb_root_path}includes/bbdkp/views/views.$phpEx");
 }
 
-$views = new \bbdkp\views\views();
+$viewFactory = new \bbdkp\views\viewFactory();
 $page =  request_var('page', 'standings');
-$views->load($page);
+
+$viewFactory->get_view($page);
 
 page_footer();
-
-?>

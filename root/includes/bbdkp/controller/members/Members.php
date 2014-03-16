@@ -1408,28 +1408,24 @@ class Members extends \bbdkp\admin\Admin
 		}
 	}
 
-
-
-	/**
-	 *
-	 * Frontview : member Roster listing
-	 * required class game property to be set before call
-	 *
-	 * @param int $start
-	 * @param string $mode ('listing' or 'class')
-	 * @param boolean $query_by_armor
-	 * @param boolean $query_by_class
-	 * @param string $filter
-	 * @param number $game_id
-	 * @param number $guild_id optional=0
-	 * @param number $class_id optional=0
-	 * @param number $race_id optional=0
-	 * @param number $level1 optional =1
-	 * @param number $level2 optional = 200
-	 * @param boolean $mycharsonly optional = false
-	 * @return array  (membercount, sql_fetchrowset of all rows)
-	 */
-	public function getmemberlist($start, $mode, $query_by_armor, $query_by_class, $filter,
+    /**
+     * Frontview : member Roster listing
+     *
+     * @param int $start
+     * @param string $mode ('listing' or 'class')
+     * @param boolean $query_by_armor
+     * @param boolean $query_by_class
+     * @param string $filter
+     * @param number $game_id
+     * @param int|number $guild_id optional=0
+     * @param int|number $class_id optional=0
+     * @param int|number $race_id optional=0
+     * @param int|number $level1 optional =1
+     * @param int|number $level2 optional = 200
+     * @param boolean $mycharsonly optional = false
+     * @return array  (membercount, sql_fetchrowset of all rows)
+     */
+    public function getmemberlist($start, $mode, $query_by_armor, $query_by_class, $filter,
 			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false)
 	{
 		global $db, $config, $user, $phpbb_root_path;

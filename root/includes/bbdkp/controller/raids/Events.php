@@ -586,7 +586,7 @@ public function __set($property, $value)
 			{
 			    $template->assign_block_vars(
 			    	'dkpsys_row.events_row', array(
-			        	'U_VIEW_EVENT' =>  append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=viewevent&amp;' . URI_EVENT . '='.$event['event_id'] . '&amp;'.URI_DKPSYS.'='.$event['event_dkpid'] . '&amp;guild_id=' . $guild_id   ) ,
+			        	'U_VIEW_EVENT' =>  append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=event&amp;' . URI_EVENT . '='.$event['event_id'] . '&amp;'.URI_DKPSYS.'='.$event['event_dkpid'] . '&amp;guild_id=' . $guild_id   ) ,
 			        	'NAME' 			=> $event['event_name'],
 			        	'VALUE' 		=> $event['event_value'],
 			        	'IMAGEPATH' 	=> $phpbb_root_path . "images/bbdkp/event_images/" . $event['event_imagename'] . ".png",
