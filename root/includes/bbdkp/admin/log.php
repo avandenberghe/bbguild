@@ -155,6 +155,7 @@ class log
 				'L_EARNED_BEFORE' ,
 				'L_EARNED_AFTER' ,
 				'L_SPENT_BEFORE' ,
+                'L_SPENT_AFTER' ,
 				'L_REALM_BEFORE',
 				'L_REALM_AFTER',
 				'L_NAME_BEFORE' ,
