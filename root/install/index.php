@@ -1020,6 +1020,10 @@ $versions = array(
         //beta4 10-03-2014
     ),
 
+    '1.3.0-b5' => array(
+        //beta5 16-03-2014
+    ),
+
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.
