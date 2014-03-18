@@ -1,6 +1,6 @@
 <?php
 /**
- * Module Viewevent
+ * Module viewEvent
  *
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com

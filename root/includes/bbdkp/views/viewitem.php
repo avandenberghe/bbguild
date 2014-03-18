@@ -26,7 +26,7 @@ class viewItem implements iViews
 
     public function buildpage(viewNavigation $Navigation)
     {
-        global $phpbb_root_path, $phpEx, $user, $template;
+        global $config, $phpbb_root_path, $phpEx, $user, $template;
 
         $item_id = request_var(URI_ITEM, 0);
         if (!class_exists('\bbdkp\controller\loot\Loot'))

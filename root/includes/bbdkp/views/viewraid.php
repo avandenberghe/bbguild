@@ -42,7 +42,7 @@ class viewRaid implements iViews
     public function buildpage(viewNavigation $Navigation)
     {
 
-        global $config, $phpbb_root_path, $phpEx, $user, $template;
+        global $db, $config, $phpbb_root_path, $phpEx, $user, $template;
         if ( !isset($_GET[URI_RAID]) )
         {
             trigger_error ($user->lang['RNOTFOUND']);
