@@ -144,6 +144,7 @@ $lang = array_merge($lang, array(
 'TANK' => 'Tank',
 'DPS' => 'Dps' ,
 'HEAL' => 'Heal',
+'HEALER' => 'Healer',
 'RECRUIT_MESSAGE' => 'Nous sommes actuellement à la recherche des classes suivantes:',
 
 
@@ -180,7 +181,7 @@ $lang = array_merge($lang, array(
 'SPENT' => 'Dépensé',
 'COMPARE_MEMBERS' => 'Comparer Membres',
 'LISTMEMBERS_FOOTCOUNT' => '... trouvé %d membres',
-
+'SURNAME' => 'Nom/Titre',
 'LISTADJ_TITLE' => 'Liste ajustements',
 'LISTEVENTS_TITLE' => 'Valeurs d’évènements',
 'LISTIADJ_TITLE' => 'Liste d’ajustements',

@@ -166,8 +166,8 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/adm/images/*.*" to="adm/images/*.*"/>
 			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
 			<file from="root/images/bbdkp/*.*" to="images/bbdkp/*.*"/>
-			
-			<file from="root/includes/hooks/hook_bbdkp.php" to="includes/hooks/hook_bbdkp.php"/>
+            <!-- acp -->
+			<file from="root/includes/acp/acp_dkp.php" to="includes/acp/acp_dkp.php"/>
 			<file from="root/includes/acp/acp_dkp_adj.php" to="includes/acp/acp_dkp_adj.php"/>
 			<file from="root/includes/acp/acp_dkp_game.php" to="includes/acp/acp_dkp_game.php"/>
 			<file from="root/includes/acp/acp_dkp_guild.php" to="includes/acp/acp_dkp_guild.php"/>
@@ -177,10 +177,10 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/includes/acp/acp_dkp_point.php" to="includes/acp/acp_dkp_point.php"/>
 			<file from="root/includes/acp/acp_dkp_raid.php" to="includes/acp/acp_dkp_raid.php"/>
 			<file from="root/includes/acp/acp_dkp_sys.php" to="includes/acp/acp_dkp_sys.php"/>
-			<file from="root/includes/acp/acp_dkp.php" to="includes/acp/acp_dkp.php"/>
+			<file from="root/includes/acp/info/acp_dkp.php" to="includes/acp/info/acp_dkp.php"/>
 			<file from="root/includes/acp/info/acp_dkp_adj.php" to="includes/acp/info/acp_dkp_adj.php"/>
-			<file from="root/includes/acp/info/acp_dkp_game.php" to="includes/acp/info/acp_dkp_game.php"/>
 			<file from="root/includes/acp/info/acp_dkp_event.php" to="includes/acp/info/acp_dkp_event.php"/>
+			<file from="root/includes/acp/info/acp_dkp_game.php" to="includes/acp/info/acp_dkp_game.php"/>
 			<file from="root/includes/acp/info/acp_dkp_guild.php" to="includes/acp/info/acp_dkp_guild.php"/>
 			<file from="root/includes/acp/info/acp_dkp_item.php" to="includes/acp/info/acp_dkp_item.php"/>
 			<file from="root/includes/acp/info/acp_dkp_mdkp.php" to="includes/acp/info/acp_dkp_mdkp.php"/>
@@ -188,9 +188,6 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/includes/acp/info/acp_dkp_point.php" to="includes/acp/info/acp_dkp_point.php"/>
 			<file from="root/includes/acp/info/acp_dkp_raid.php" to="includes/acp/info/acp_dkp_raid.php"/>
 			<file from="root/includes/acp/info/acp_dkp_sys.php" to="includes/acp/info/acp_dkp_sys.php"/>
-			<file from="root/includes/acp/info/acp_dkp.php" to="includes/acp/info/acp_dkp.php"/>
-			<file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>
-			<file from="root/includes/ucp/info/ucp_dkp.php" to="includes/ucp/info/ucp_dkp.php"/>
 			<!-- admin -->
 			<file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>
 			<file from="root/includes/bbdkp/admin/constants_bbdkp.php" to="includes/bbdkp/admin/constants_bbdkp.php"/>
@@ -209,12 +206,10 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/includes/bbdkp/block/userblock.php" to="includes/bbdkp/block/userblock.php"/>
 			<file from="root/includes/bbdkp/block/welcomeblock.php" to="includes/bbdkp/block/welcomeblock.php"/>
 			<file from="root/includes/bbdkp/block/whoisonline.php" to="includes/bbdkp/block/whoisonline.php"/>
-			<!-- controllers -->			
+			<!-- controllers -->
 			<file from="root/includes/bbdkp/controller/adjustments/Adjust.php" to= "includes/bbdkp/controller/adjustments/Adjust.php"/>
 			<file from="root/includes/bbdkp/controller/games/classes/Classes.php" to="includes/bbdkp/controller/games/classes/Classes.php"/>
 			<file from="root/includes/bbdkp/controller/games/factions/Faction.php" to="includes/bbdkp/controller/games/factions/Faction.php"/>
-			<file from="root/includes/bbdkp/controller/games/races/Races.php" to="includes/bbdkp/controller/games/races/Races.php"/>
-			<file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/GameInstall.php" to="includes/bbdkp/controller/games/library/GameInstall.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_aion.php" to="includes/bbdkp/controller/games/library/install_aion.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_custom.php" to="includes/bbdkp/controller/games/library/install_custom.php"/>
@@ -232,6 +227,8 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/includes/bbdkp/controller/games/library/install_vanguard.php" to="includes/bbdkp/controller/games/library/install_vanguard.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_warhammer.php" to="includes/bbdkp/controller/games/library/install_warhammer.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_wow.php" to="includes/bbdkp/controller/games/library/install_wow.php"/>
+			<file from="root/includes/bbdkp/controller/games/races/Races.php" to="includes/bbdkp/controller/games/races/Races.php"/>
+			<file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>
 			<file from="root/includes/bbdkp/controller/guilds/Guilds.php" to="includes/bbdkp/controller/guilds/Guilds.php"/>
 			<file from="root/includes/bbdkp/controller/guilds/Ranks.php" to="includes/bbdkp/controller/guilds/Ranks.php"/>
 			<file from="root/includes/bbdkp/controller/guilds/Roles.php" to="includes/bbdkp/controller/guilds/Roles.php"/>
@@ -244,29 +241,36 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/includes/bbdkp/controller/raids/Events.php" to="includes/bbdkp/controller/raids/Events.php"/>
 			<file from="root/includes/bbdkp/controller/raids/RaidController.php" to="includes/bbdkp/controller/raids/RaidController.php"/>
 			<file from="root/includes/bbdkp/controller/raids/Raiddetail.php" to="includes/bbdkp/controller/raids/Raiddetail.php"/>
-			<file from="root/includes/bbdkp/controller/raids/Raids.php"  to="includes/bbdkp/controller/raids/Raids.php"/> 
+			<file from="root/includes/bbdkp/controller/raids/Raids.php"  to="includes/bbdkp/controller/raids/Raids.php"/>
 			<file from="root/includes/bbdkp/controller/wowapi/BattleNet.php" to="includes/bbdkp/controller/wowapi/BattleNet.php"/>
 			<file from="root/includes/bbdkp/controller/wowapi/Character.php" to="includes/bbdkp/controller/wowapi/Character.php"/>
 			<file from="root/includes/bbdkp/controller/wowapi/Guild.php" to="includes/bbdkp/controller/wowapi/Guild.php"/>
 			<file from="root/includes/bbdkp/controller/wowapi/Realm.php" to="includes/bbdkp/controller/wowapi/Realm.php"/>
 			<file from="root/includes/bbdkp/controller/wowapi/Resource.php" to="includes/bbdkp/controller/wowapi/Resource.php"/>
 			<!-- views -->
-			<file from="root/includes/bbdkp/views/listevents.php"  to="includes/bbdkp/views/listevents.php"/>
-			<file from="root/includes/bbdkp/views/listraids.php" to="includes/bbdkp/views/listraids.php"/>
-			<file from="root/includes/bbdkp/views/lootdb.php" to="includes/bbdkp/views/lootdb.php"/>
-			<file from="root/includes/bbdkp/views/loothistory.php" to="includes/bbdkp/views/loothistory.php"/>
-			<file from="root/includes/bbdkp/views/navigation.php" to="includes/bbdkp/views/navigation.php"/>
-			<file from="root/includes/bbdkp/views/news.php" to="includes/bbdkp/views/news.php"/>
-			<file from="root/includes/bbdkp/views/roster.php" to="includes/bbdkp/views/roster.php"/>
-			<file from="root/includes/bbdkp/views/standings.php" to="includes/bbdkp/views/standings.php"/>
-			<file from="root/includes/bbdkp/views/stats.php" to="includes/bbdkp/views/stats.php"/>
-			<file from="root/includes/bbdkp/views/viewevent.php" to="includes/bbdkp/views/viewevent.php"/>
-			<file from="root/includes/bbdkp/views/viewitem.php" to="includes/bbdkp/views/viewitem.php"/>
-			<file from="root/includes/bbdkp/views/viewmember.php" to="includes/bbdkp/views/viewmember.php"/>
-			<file from="root/includes/bbdkp/views/viewraid.php" to="includes/bbdkp/views/viewraid.php"/>
-			<file from="root/includes/bbdkp/views/views.php" to="includes/bbdkp/views/views.php"/>
-			<!-- installer --> 
+            <file from="root/includes/bbdkp/views/iViews.php" to="includes/bbdkp/views/iViews.php"/>
+			<file from="root/includes/bbdkp/views/viewEvent.php" to="includes/bbdkp/views/viewEvent.php"/>
+			<file from="root/includes/bbdkp/views/viewFactory.php" to="includes/bbdkp/views/viewFactory.php"/>
+			<file from="root/includes/bbdkp/views/viewItem.php" to="includes/bbdkp/views/viewItem.php"/>
+			<file from="root/includes/bbdkp/views/viewListevents.php"  to="includes/bbdkp/views/viewListevents.php"/>
+			<file from="root/includes/bbdkp/views/viewListraids.php" to="includes/bbdkp/views/viewListraids.php"/>
+			<file from="root/includes/bbdkp/views/viewLootdb.php" to="includes/bbdkp/views/viewLootdb.php"/>
+			<file from="root/includes/bbdkp/views/viewLoothistory.php" to="includes/bbdkp/views/viewLoothistory.php"/>
+			<file from="root/includes/bbdkp/views/viewMember.php" to="includes/bbdkp/views/viewMember.php"/>
+			<file from="root/includes/bbdkp/views/viewNavigation.php" to="includes/bbdkp/views/viewNavigation.php"/>
+			<file from="root/includes/bbdkp/views/viewNews.php" to="includes/bbdkp/views/viewNews.php"/>
+			<file from="root/includes/bbdkp/views/viewRaid.php" to="includes/bbdkp/views/viewRaid.php"/>
+			<file from="root/includes/bbdkp/views/viewRoster.php" to="includes/bbdkp/views/viewRoster.php"/>
+			<file from="root/includes/bbdkp/views/viewStandings.php" to="includes/bbdkp/views/viewStandings.php"/>
+			<file from="root/includes/bbdkp/views/viewStats.php" to="includes/bbdkp/views/viewStats.php"/>
+            <!-- hooks -->
+			<file from="root/includes/hooks/hook_bbdkp.php" to="includes/hooks/hook_bbdkp.php"/>
+            <!-- ucp -->
+            <file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>
+			<file from="root/includes/ucp/info/ucp_dkp.php" to="includes/ucp/info/ucp_dkp.php"/>
+			<!-- installer -->
 			<file from="root/install/*.*" to="install/*.*"/>
+            <!-- language -->
 			<file from="root/language/en/mods/dkp_admin.php" to="language/en/mods/dkp_admin.php"/>
 			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>
 			<file from="root/language/en/mods/info_acp_dkp.php" to="language/en/mods/info_acp_dkp.php"/>
