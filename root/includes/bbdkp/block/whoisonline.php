@@ -14,7 +14,7 @@ if (!defined('IN_PHPBB'))
 {
    exit;
 }
-
+global $auth;
 // borrowed from phpbb viewonline.php
 
 // Grab group details for legend display

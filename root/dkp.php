@@ -43,9 +43,9 @@ $template->set_filenames(array(
 	'body' => 'dkp/dkpmain.html')
 );
 // load view class
-if (!class_exists('\bbdkp\views\views'))
+if (!class_exists('\bbdkp\views\viewFactory'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/views/views.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/views/viewFactory.$phpEx");
 }
 
 $viewFactory = new \bbdkp\views\viewFactory();

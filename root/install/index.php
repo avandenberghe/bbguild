@@ -989,11 +989,12 @@ $versions = array(
 	     			array('bbdkp_games_lineage2'),
 	     			array('bbdkp_games_tera'),
 	     			array('bbdkp_games_gw2'),
-     		),
+                ),
 
      	// add new parameters
      	'config_add' => array(
      				array('bbdkp_regid', '', true),
+                    array('bbdkp_portal_recent', 1, true),
 
      		),
 
@@ -1189,5 +1190,3 @@ function check_oldbbdkp()
     }
 }
 
-
-?>
