@@ -19,7 +19,10 @@
 <!-- ENDIF -->
 
 <!-- INCLUDE dkp/block/news.html -->
+
+<!-- IF S_DISPLAY_WHOISONLINE && S_DISPLAY_WHOISONLINE_BOTTOM -->
 <!-- INCLUDE dkp/block/whoisonlineblock.html -->
+<!-- ENDIF -->
 </div>
 
 <div style="float: right; width: 20%; margin:0.5%">
@@ -33,8 +36,9 @@
 <!-- INCLUDE dkp/block/userblock.html -->
 <!-- ENDIF -->
 
-
+    <!-- IF S_DISPLAY_WHOISONLINE && S_DISPLAY_WHOISONLINE_SIDE -->
 <!-- INCLUDE dkp/block/online.html -->
+<!-- ENDIF -->
 
 <!-- IF S_DISPLAY_RT -->
 <!-- INCLUDE dkp/block/recent.html -->
