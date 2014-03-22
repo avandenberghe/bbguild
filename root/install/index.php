@@ -989,13 +989,15 @@ $versions = array(
 	     			array('bbdkp_games_lineage2'),
 	     			array('bbdkp_games_tera'),
 	     			array('bbdkp_games_gw2'),
+                    array('bbdkp_portal_rtshow'),
                 ),
 
      	// add new parameters
      	'config_add' => array(
      				array('bbdkp_regid', '', true),
                     array('bbdkp_portal_recent', 1, true),
-
+                    array('bbdkp_portal_whoisonline', 1, true),
+                    array('bbdkp_portal_onlineblockposition', 1, true),
      		),
 
      ),

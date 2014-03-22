@@ -16,6 +16,7 @@ if (!defined('IN_PHPBB'))
    exit;
 }
 /**  begin recent topics block ***/
+global $auth;
 
 // get authorised forums
 $can_read_forum = $auth->acl_getf('f_read');	//Get the forums the user can read from

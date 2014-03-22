@@ -428,11 +428,13 @@ class acp_dkp extends \bbdkp\admin\Admin
 					set_config('bbdkp_portal_links', request_var('show_linkblock', 0), true);
 					set_config('bbdkp_portal_menu', request_var('show_menublock', 0), true);
 					set_config('bbdkp_portal_welcomemsg', request_var('show_welcomeblock', 0), true);
-					set_config('bbdkp_portal_rtshow', request_var('show_recenttopics', 0), true);
+					set_config('bbdkp_portal_recent', request_var('show_recenttopics', 0), true);
 					set_config('bbdkp_portal_rtlen', request_var('n_rclength', 0), true);
 					set_config('bbdkp_portal_rtno', request_var('n_rcno', 0), true);
 					set_config('bbdkp_portal_newmembers', request_var('show_newmembers', 0), true);
 					set_config('bbdkp_portal_maxnewmembers', request_var('num_newmembers', 0), true);
+                    set_config('bbdkp_portal_whoisonline', request_var('show_onlineblock', 0), true);
+                    set_config('bbdkp_portal_onlineblockposition', request_var('onlineblockposition', 0), true);
 
 					$cache->destroy('config');
 					$welcometext = utf8_normalize_nfc(request_var('welcome_message', '', true));
@@ -479,11 +481,19 @@ class acp_dkp extends \bbdkp\admin\Admin
 				}
 				$template->assign_vars(array(
 					'WELCOME_MESSAGE' => $textarr['text'] ,
-					'N_NEWS' => $n_news ,
+					'N_NEWS' => $n_news,
 					'FORUM_NEWS_OPTIONS' => make_forum_select($config['bbdkp_news_forumid'], false, false, true) ,
 					'FORUM_RECRUIT_OPTIONS' => make_forum_select($config['bbdkp_recruit_forumid'], false, false, true) ,
 					'SHOW_WELCOME_YES_CHECKED' => ($config['bbdkp_portal_welcomemsg'] == '1') ? 'checked="checked"' : '' ,
 					'SHOW_WELCOME_NO_CHECKED' => ($config['bbdkp_portal_welcomemsg'] == '0') ? 'checked="checked"' : '' ,
+                    'SHOW_ONLINE_YES_CHECKED' => ($config['bbdkp_portal_whoisonline'] == '1') ? 'checked="checked"' : '' ,
+                    'SHOW_ONLINE_NO_CHECKED' => ($config['bbdkp_portal_whoisonline'] == '0') ? 'checked="checked"' : '' ,
+
+                    'SHOW_ONLINE_BOTTOM_CHECKED' => ($config['bbdkp_portal_onlineblockposition'] == '1') ? 'checked="checked"' : '' ,
+                    'SHOW_ONLINE_SIDE_CHECKED' => ($config['bbdkp_portal_onlineblockposition'] == '0') ? 'checked="checked"' : '' ,
+
+
+
 					'SHOW_REC_YES_CHECKED' => ($config['bbdkp_portal_recruitment'] == '1') ? ' checked="checked"' : '' ,
 					'SHOW_REC_NO_CHECKED' => ($config['bbdkp_portal_recruitment'] == '0') ? ' checked="checked"' : '' ,
 					'SHOW_LOOT_YES_CHECKED' => ($config['bbdkp_portal_loot'] == '1') ? ' checked="checked"' : '' ,
@@ -491,8 +501,8 @@ class acp_dkp extends \bbdkp\admin\Admin
 					'N_ITEMS' => $n_items ,
 					'N_RTNO' 	=> $config['bbdkp_portal_rtno'],
 					'N_RTLENGTH' 	=> $config['bbdkp_portal_rtlen'],
-					'SHOW_RT_YES_CHECKED' => ($config['bbdkp_portal_rtshow'] == '1') ? ' checked="checked"' : '' ,
-					'SHOW_RT_NO_CHECKED' => ($config['bbdkp_portal_rtshow'] == '0') ? ' checked="checked"' : '' ,
+					'SHOW_RT_YES_CHECKED' => ($config['bbdkp_portal_recent'] == '1') ? ' checked="checked"' : '' ,
+					'SHOW_RT_NO_CHECKED' => ($config['bbdkp_portal_recent'] == '0') ? ' checked="checked"' : '' ,
 					'SHOW_LINK_YES_CHECKED' => ($config['bbdkp_portal_links'] == '1') ? ' checked="checked"' : '' ,
 					'SHOW_LINK_NO_CHECKED' => ($config['bbdkp_portal_links'] == '0') ? ' checked="checked"' : '' ,
 					'SHOW_MENU_YES_CHECKED' => ($config['bbdkp_portal_menu'] == '1') ? ' checked="checked"' : '' ,

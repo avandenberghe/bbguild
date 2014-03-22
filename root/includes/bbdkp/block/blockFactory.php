@@ -33,14 +33,13 @@ if (!class_exists('\bbdkp\admin\Admin'))
  */
 class blockFactory extends \bbdkp\admin\Admin
 {
-    private $variable_blocks = ['links', 'loot', 'newmembers', 'recent', 'recruitment', 'welcomemsg' ];
+    private $variable_blocks = ['menu', 'links', 'loot', 'newmembers', 'recent', 'recruitment', 'welcomemsg', 'whoisonline' ];
 
 	public function get_blocks()
 	{
 		global $phpbb_root_path, $phpEx, $user, $config, $template,$db;
 
         include($phpbb_root_path . 'includes/bbdkp/block/newsblock.' . $phpEx);
-        include($phpbb_root_path . 'includes/bbdkp/block/whoisonline.' . $phpEx);
 
         if ($user->data['is_registered'])
         {
