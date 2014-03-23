@@ -851,7 +851,7 @@ class Raids extends \bbdkp\admin\Admin
 
 			$template->assign_block_vars('attendance_row', array(
 					'NAME' 					=> $row['member_name'],
-					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $dkp_id . '&amp;' . URI_NAMEID . '='.$row['member_id']),
+					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=member&amp;' .URI_DKPSYS . '=' . $dkp_id . '&amp;' . URI_NAMEID . '='.$row['member_id']),
 					'COLORCODE'				=> $row['colorcode'],
 					'ID'            		=> $row['member_id'],
 					'FIRSTRAID' 			=> $row['member_firstraid'],

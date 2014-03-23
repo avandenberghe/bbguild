@@ -989,12 +989,15 @@ $versions = array(
 	     			array('bbdkp_games_lineage2'),
 	     			array('bbdkp_games_tera'),
 	     			array('bbdkp_games_gw2'),
-     		),
+                    array('bbdkp_portal_rtshow'),
+                ),
 
      	// add new parameters
      	'config_add' => array(
      				array('bbdkp_regid', '', true),
-
+                    array('bbdkp_portal_recent', 1, true),
+                    array('bbdkp_portal_whoisonline', 1, true),
+                    array('bbdkp_portal_onlineblockposition', 1, true),
      		),
 
      ),
@@ -1018,6 +1021,10 @@ $versions = array(
 
     '1.3.0-b4' => array(
         //beta4 10-03-2014
+    ),
+
+    '1.3.0-b5' => array(
+        //beta5 16-03-2014
     ),
 
 );
@@ -1185,5 +1192,3 @@ function check_oldbbdkp()
     }
 }
 
-
-?>

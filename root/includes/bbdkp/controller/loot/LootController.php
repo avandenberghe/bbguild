@@ -686,7 +686,7 @@ class LootController  extends \bbdkp\admin\Admin
 			$template->assign_block_vars('stats_row', array(
 
 					'NAME' 					=> $row['member_name'],
-					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),
+					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=member&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),
 					'COLORCODE'				=> $row['colorcode'],
 					'ID'            		=> $row['member_id'],
 					'COUNT'         		=> $line,
@@ -910,7 +910,7 @@ class LootController  extends \bbdkp\admin\Admin
 
 			$template->assign_block_vars('stats_row', array(
 					'NAME' 					=> $member->member_name,
-					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=viewmember&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),
+					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=member&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),
 					'COLORCODE'				=> $member->colorcode,
 					'ID'            		=> $row['member_id'],
 					'COUNT'         		=> $line,

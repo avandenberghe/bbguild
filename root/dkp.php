@@ -43,15 +43,14 @@ $template->set_filenames(array(
 	'body' => 'dkp/dkpmain.html')
 );
 // load view class
-if (!class_exists('\bbdkp\views\views'))
+if (!class_exists('\bbdkp\views\viewFactory'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/views/views.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/views/viewFactory.$phpEx");
 }
 
-$views = new \bbdkp\views\views();
+$viewFactory = new \bbdkp\views\viewFactory();
 $page =  request_var('page', 'standings');
-$views->load($page);
+
+$viewFactory->get_view($page);
 
 page_footer();
-
-?>

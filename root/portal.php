@@ -38,9 +38,9 @@ if (!isset($config['bbdkp_version']))
 	// THE CONFIGS AND DATABASE TABLES AREN'T INSTALLED, EXIT
 	trigger_error('GENERAL_ERROR', E_USER_WARNING);
 }
-if (!class_exists('\bbdkp\views\views'))
+if (!class_exists('\bbdkp\views\blockFactory'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/views/views.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/block/blockFactory.$phpEx");
 }
 
 $template->assign_var('S_PORTAL', true);
@@ -51,9 +51,8 @@ $template->set_filenames(array(
 		'body' => 'dkp/portal_body.html')
 );
 
-$views = new \bbdkp\views\views();
-$views->load('portal');
-
+$blockFactory = new \bbdkp\views\blockFactory();
+$blockFactory->get_blocks();
 make_jumpbox(append_sid("{$phpbb_root_path}viewforum.$phpEx"));
 
 // auto-refreshing portal is disabled

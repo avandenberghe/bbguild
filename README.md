@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3 Beta 4#
+#1.3 Beta 5#
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-v1.3.0-b4
+v1.3.0-b5
 
 
 ## Installation

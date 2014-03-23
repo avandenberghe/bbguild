@@ -130,7 +130,7 @@ class Admin
 				'ffxiv'	=> $user->lang ['FFXIV'],
 		);
 
-	    $boardtime = array();
+
 	    $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
 	    $this->time = $boardtime[0];
 
@@ -176,13 +176,13 @@ class Admin
 	}
 
     /**
-	 * creates a unique key, used as adjustments, import, items and raid identifier
-	 *
-	 * @param string $part1
-	 * @param string $part2
- 	 * @param string $part3
- 	 * @return $group_key
-	 */
+     * creates a unique key, used as adjustments, import, items and raid identifier
+     *
+     * @param string $part1
+     * @param string $part2
+     * @param string $part3
+     * @return string $group_key
+     */
     public final function gen_group_key($part1, $part2, $part3)
     {
         // Get the first 10-11 digits of each md5 hash
@@ -439,13 +439,13 @@ class Admin
 		return $info;
 	}
 
-	/**
+    /**
 	 * get plugin info
-	 * @param string $force_update
-	 * @param number $ttl
-	 * @return Ambigous <multitype:, multitype:unknown Ambigous <string, multitype:, boolean, array, mixed> >
-	 */
-	public final function get_plugin_info($force_update = false, $ttl = 86400)
+     * @param bool $force_update
+     * @param int $ttl
+     * @return array|bool
+     */
+    public final function get_plugin_info($force_update = false, $ttl = 86400)
 	{
 		global $cache, $db;
 		//get latest productversion from cache
@@ -569,20 +569,20 @@ class Admin
 		return $page_string;
 	}
 
-	/**
-	 * Switch array order
-	 * Switches the sorting order of a supplied array, prerserving key values
-	 * The array is in the format [number][0/1] (0 = the default, 1 = the opposite)
-	 * Returns an array containing the code to use in an SQL query and the code to
-	 * use to pass the sort value through the URI.  URI is in the format
-	 * checks that the 2nd element is either 0 or 1
-	 *
-	 * @param array $sort_order Sorting order array
-	 * @param string $arg
-	 * @param number $forcedorder
-	 * @return array
-	 */
-	public final function switch_order($sort_order, $arg = URI_ORDER, $forcedorder=0)
+    /**
+     * Switch array order
+     * Switches the sorting order of a supplied array, prerserving key values
+     * The array is in the format [number][0/1] (0 = the default, 1 = the opposite)
+     * Returns an array containing the code to use in an SQL query and the code to
+     * use to pass the sort value through the URI.  URI is in the format
+     * checks that the 2nd element is either 0 or 1
+     *
+     * @param array $sort_order
+     * @param string $arg
+     * @param int $forcedorder
+     * @return mixed
+     */
+    public final function switch_order($sort_order, $arg = URI_ORDER, $forcedorder=0)
 	{
 		$uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : '0.0';
 

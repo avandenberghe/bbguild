@@ -16,6 +16,7 @@ if (!defined('IN_PHPBB'))
    exit;
 }
 /**  begin recent topics block ***/
+global $auth;
 
 // get authorised forums
 $can_read_forum = $auth->acl_getf('f_read');	//Get the forums the user can read from
@@ -91,9 +92,8 @@ $template->assign_vars(array(
 	)
 );
 
-
 /**
-* Retrieve a set of topics and trim the names if necessary
+ * Retrieve a set of topics and trim the names if necessary
  *
  * @param array $forum_id_ary
  * @param int $num_topics
@@ -319,6 +319,3 @@ function fetch_topics($forum_id_ary, $num_topics, $num_chars)
 
 	return $topics;
 }
-/**  end recent topics block ***/
-
-?>

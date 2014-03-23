@@ -2,7 +2,7 @@
 /**
  * who's online block
  * 
- *   @package bbdkp
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
@@ -14,7 +14,7 @@ if (!defined('IN_PHPBB'))
 {
    exit;
 }
-
+global $auth;
 // borrowed from phpbb viewonline.php
 
 // Grab group details for legend display
@@ -63,7 +63,9 @@ $l_online_users = $online_userlist = $l_online_record = '';
 
 // Assign specific vars
 $template->assign_vars(array(
-	'S_DISPLAY_ONLINE_PORTAL_LIST'	=> true,
+	'S_DISPLAY_WHOISONLINE'	        => true,
+    'S_DISPLAY_WHOISONLINE_BOTTOM'  => $config['bbdkp_portal_onlineblockposition'] == '1' ? true:false,
+    'S_DISPLAY_WHOISONLINE_SIDE'    => $config['bbdkp_portal_onlineblockposition'] == '0' ? true:false,
 	'LEGEND'						=> $legend,
 ));
 
