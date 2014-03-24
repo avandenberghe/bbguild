@@ -195,17 +195,19 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<file from="root/includes/bbdkp/admin/validator.php" to="includes/bbdkp/admin/validator.php"/>
 			<file from="root/includes/bbdkp/admin/krequest.php" to="includes/bbdkp/admin/krequest.php"/>
 			<!-- blocks -->
+			
+			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>			
 			<file from="root/includes/bbdkp/block/linksblock.php" to="includes/bbdkp/block/linksblock.php"/>
 			<file from="root/includes/bbdkp/block/loginblock.php" to="includes/bbdkp/block/loginblock.php"/>
 			<file from="root/includes/bbdkp/block/lootblock.php" to="includes/bbdkp/block/lootblock.php"/>
-			<file from="root/includes/bbdkp/block/mainmenublock.php" to="includes/bbdkp/block/mainmenublock.php"/>
-			<file from="root/includes/bbdkp/block/newmembers.php" to="includes/bbdkp/block/newmembers.php"/>
+			<file from="root/includes/bbdkp/block/menublock.php" to="includes/bbdkp/block/menublock.php"/>
+			<file from="root/includes/bbdkp/block/newmembersblock.php" to="includes/bbdkp/block/newmembersblock.php"/>
 			<file from="root/includes/bbdkp/block/newsblock.php" to="includes/bbdkp/block/newsblock.php"/>
 			<file from="root/includes/bbdkp/block/recentblock.php" to="includes/bbdkp/block/recentblock.php"/>
 			<file from="root/includes/bbdkp/block/recruitmentblock.php" to="includes/bbdkp/block/recruitmentblock.php"/>
 			<file from="root/includes/bbdkp/block/userblock.php" to="includes/bbdkp/block/userblock.php"/>
-			<file from="root/includes/bbdkp/block/welcomeblock.php" to="includes/bbdkp/block/welcomeblock.php"/>
-			<file from="root/includes/bbdkp/block/whoisonline.php" to="includes/bbdkp/block/whoisonline.php"/>
+			<file from="root/includes/bbdkp/block/welcomemsgblock.php" to="includes/bbdkp/block/welcomemsgblock.php"/>
+			<file from="root/includes/bbdkp/block/whoisonlineblock.php" to="includes/bbdkp/block/whoisonlineblock.php"/>
 			<!-- controllers -->
 			<file from="root/includes/bbdkp/controller/adjustments/Adjust.php" to= "includes/bbdkp/controller/adjustments/Adjust.php"/>
 			<file from="root/includes/bbdkp/controller/games/classes/Classes.php" to="includes/bbdkp/controller/games/classes/Classes.php"/>
