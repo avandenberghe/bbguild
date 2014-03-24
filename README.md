@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3 Beta 5#
+#1.3 Beta 6#
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-v1.3.0-b5
+v1.3.0-b6
 
 
 ## Installation
@@ -76,7 +76,15 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
 
 1.3.0
 
-@todo
+-   [NEW] refactored and moved program logic to namespaced viewfactory, controller and domain classes.
+-   [NEW] minimum requirement is now php 5.3.20
+-   [NEW] new hooks, less core phpbb changes
+-   [NEW] games installers moved to acp.
+-   [NEW] added lineage2, ffxiv and custom games installer. updated other Game installers to latest info.
+-   [NEW] multi-guild aware. ranks and recruitment integrated in new Guild acp.
+-   [NEW] integrated Battle.NET Api, now also pulls guild emblem.
+-   [NEW] enhanced portal
+-   [NEW] Deathwing, Jade and pbWoW style mods included
 
 1.2.8-pl2 30-07-2012
 
