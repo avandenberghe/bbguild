@@ -34,7 +34,7 @@ if (!class_exists('\bbdkp\controller\raids\RaidController'))
 }
 if (!class_exists('\bbdkp\controller\loot\LootController'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/controller/loot/Lootcontroller.$phpEx");
+	require("{$phpbb_root_path}includes/bbdkp/controller/loot/LootController.$phpEx");
 }
 if (!class_exists('\bbdkp\controller\points\PointsController'))
 {
