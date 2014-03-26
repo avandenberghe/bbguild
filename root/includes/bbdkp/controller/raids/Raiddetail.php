@@ -20,9 +20,6 @@ if (! defined('IN_PHPBB'))
 	exit();
 }
 
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-global $phpbb_root_path;
-
 /**
  * Raid detail table Class
  * 
@@ -42,37 +39,37 @@ class Raiddetail
 	public $member_id;
 	/**
 	 * guild of the attendee
-	 * @var unknown_type
+	 * @var int
 	 */
 	public $member_guild_id;
 	/**
 	 * event value of this raid
-	 * @var decimal
+	 * @var float
 	 */
 	public $raid_value; 
 	/**
 	 * time bonus earned
-	 * @var decimal
+	 * @var float
 	 */
 	public $time_bonus;
 	/**
 	 * Zero sum value earned on loot
-	 * @var decimal
+	 * @var float
 	 */
 	public $zerosum_bonus;
 	/**
 	 * raid decay on sum of raiddertail, timebonus, zerosumbonus 
-	 * @var unknown
+	 * @var float
 	 */ 
 	public $raid_decay;
 	/**
 	 * time of decay
-	 * @var unknown
+	 * @var int
 	 */
 	public $raid_decay_time;
 	/**
 	 * dkp pool id
-	 * @var Int
+	 * @var int
 	 */
 	public $dkpid;
 	/**
@@ -82,12 +79,12 @@ class Raiddetail
 	public $member_name;
 	/**
 	 * hexadecimal value of class color
-	 * @var unknown
+	 * @var string
 	 */
 	public $colorcode;
 	/**
 	 * class image
-	 * @var unknown
+	 * @var string
 	 */
 	public $imagename;
 	/**
@@ -100,12 +97,12 @@ class Raiddetail
 	 * array with attendees for one raid
 	 * @var array
 	 */
-	public $raid_details; 
-	
-	/**
-	 * Constructor
-	 * @param number $raid_id
-	 */
+	public $raid_details;
+
+    /**
+     * Constructor
+     * @param int|number $raid_id
+     */
 	public function __construct($raid_id=0) 
 	{
 		if ($raid_id > 0)
@@ -114,16 +111,16 @@ class Raiddetail
 			$this->Get($raid_id); 
 		}
 	}
-	
 
-	/**
-	 * 
-	 * gets detail for one member or for all
-	 * @param number $raid_id
-	 * @param number $member_id
-	 * @param string $order
-	 * @return multitype:
-	 */
+
+    /**
+     *
+     * gets detail for one member or for all
+     * @param number $raid_id
+     * @param int|number $member_id
+     * @param string $order
+     * @return multitype:
+     */
 	public function Get($raid_id, $member_id = 0, $order = ' m.member_id' )
 	{
 		global $config, $db;

@@ -43,7 +43,7 @@ class install_tera extends \bbdkp\controller\games\GameInstall
 	 */
 	protected function Installfactions()
 	{
-		global $db, $table_prefix;
+		global $db;
 		// factions
 		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = 'tera'" );
 		$sql_ary = array();
@@ -58,7 +58,7 @@ class install_tera extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallClasses()
 	{
-		global $db, $table_prefix;
+		global $db;
 		// classes
 		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'tera'" );
 		$sql_ary = array ();
@@ -98,7 +98,7 @@ class install_tera extends \bbdkp\controller\games\GameInstall
 	*/
     protected function InstallRaces()
 	{
-		global $db, $table_prefix;
+		global $db;
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . "  where game_id = 'tera'");
 		$sql_ary = array ();
 		//Unknown

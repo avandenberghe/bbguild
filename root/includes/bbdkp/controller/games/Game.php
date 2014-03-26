@@ -100,7 +100,6 @@ class Game extends \bbdkp\admin\Admin
     function __construct()
     {
         parent::__construct();
-        global $db, $user;
     }
 
     /**

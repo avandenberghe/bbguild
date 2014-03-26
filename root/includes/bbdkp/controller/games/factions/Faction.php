@@ -254,7 +254,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Delete_all_factions()
 	{
-		global $db, $user, $cache;
+		global $db, $cache;
 		$sql = 'DELETE FROM ' . FACTION_TABLE . " WHERE game_id = '" .   $this->game_id . "'"  ;
 		$db->sql_query ( $sql );
 		$cache->destroy ( 'sql', FACTION_TABLE );

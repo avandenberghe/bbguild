@@ -39,7 +39,6 @@ if (! defined('EMED_BBDKP'))
  * Resource skeleton
  *
  *   @package bbdkp
- * @throws ResourceException If no methods are defined.
  */
 abstract class Resource extends \bbdkp\admin\Admin
 {
@@ -86,12 +85,12 @@ abstract class Resource extends \bbdkp\admin\Admin
 		$this->region = $region;
 	}
 
-	/**
-	 * get the uri property
-	 * @param char $region
-	 * @return string
-	 */
-	public function GetURI($region)
+    /**
+     * get the uri property
+     *
+     * @return string
+     */
+	public function GetURI()
 	{
 		return $this->api_url[$this->region];
 	}
@@ -104,7 +103,7 @@ abstract class Resource extends \bbdkp\admin\Admin
 	 */
 	private function getResourceUri($method)
 	{
-		$uri = $this->GetURI($this->region);
+		$uri = $this->GetURI();
 		$classname = get_class($this);
 		if (preg_match('@\\\\([\w]+)$@', $classname, $matches))
 		{
@@ -120,7 +119,6 @@ abstract class Resource extends \bbdkp\admin\Admin
 	 *
 	 * @param string $method Request method
 	 * @param array $params Parameters
-	 * @throws ResourceException If request method is not allowed
 	 * @return array Request data
 	 */
 	public function consume($method, $params=array())

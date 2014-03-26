@@ -9,7 +9,7 @@
  */
 namespace bbdkp\admin
 {
-	global $table_prefix, $phpbb_root_path;
+	global $table_prefix;
 	/**
 	 * @ignore
 	 */

@@ -37,7 +37,6 @@ if (!class_exists('\bbdkp\controller\wowapi\Resource'))
 /**
  * Realm resource.
  *   @package bbdkp
- * @throws ResourceException If no methods are defined.
  */
 class Realm extends \bbdkp\controller\wowapi\Resource 
 {
@@ -68,7 +67,7 @@ class Realm extends \bbdkp\controller\wowapi\Resource
 	
 	public function getRealmStatus($realms = array()) 
 	{
-		global $user, $phpbb_root_path, $phpEx;	
+		global $user;
 
 		if (empty($realms)) 
 		{

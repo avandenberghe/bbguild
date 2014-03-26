@@ -62,7 +62,6 @@ class install_aion extends \bbdkp\controller\games\GameInstall
 	{
 		global $db;
 
-		$sql_ary = array();
 		// class general
 		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " where game_id = 'aion'" );
 		$sql_ary = array();

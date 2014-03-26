@@ -94,14 +94,10 @@ class Roles
 	 */
 	protected $classreccolor= array();
 
-	/**
-	 * Roles class constructor
-	 *
-	 * @param number $guild_id
-	 * @param string $role
-	 * @param number $class_id
-	 * @param number $needed
-	 */
+    /**
+     * Roles class constructor
+     *
+     */
 	public function __construct()
 	{
 		global $user;
@@ -268,7 +264,7 @@ class Roles
 	 */
 	public function get_recruiting_guilds()
 	{
-		global $config, $db;
+		global  $db;
 		$sql_array = array(
 				'SELECT' => " g.id, g.name, g.emblemurl, rec_status ",
 				'FROM' => array(

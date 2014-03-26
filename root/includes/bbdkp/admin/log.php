@@ -17,8 +17,6 @@ if (! defined('IN_PHPBB'))
 	exit();
 }
 
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-
 
 /**
  * Singleton bbDKP Logging class
@@ -248,7 +246,7 @@ class log
 	 * A key-value list of built-in log types that cannot be overridden
 	 * @var array
 	 */
-	public static $valid_action_types = [
+	public static $valid_action_types = array(
         self::DKPSYS_ADDED => 'DKPSYS_ADDED' ,
         self::DKPSYS_UPDATED => 'DKPSYS_UPDATED' ,
         self::DKPSYS_DELETED =>'DKPSYS_DELETED' ,
@@ -298,7 +296,7 @@ class log
         self::RACE_UPDATED => 'RACE_UPDATED',
         self::CLASS_UPDATED => 'CLASS_UPDATED',
         self::MEMBER_DEACTIVATED => 'MEMBER_DEACTIVATED'
-        ];
+    );
 
 	/**
 	 * only these tags can be entered in logs
@@ -371,8 +369,7 @@ class log
 
 	/**
 	 * Call this method to get singleton log instance
-	 *
-	 * @return UserFactory
+	 * @return log
 	 */
 	public static function Instance()
 	{
@@ -565,7 +562,7 @@ class log
      */
     public function delete_log($marked)
     {
-        global $db, $user;
+        global $db;
 
         //they hit yes
         $sql = 'DELETE FROM ' . LOGS_TABLE . ' WHERE 1=1 ';
@@ -807,9 +804,6 @@ class log
 					break;
 				case 'RAID_DELETED':
 					$logline = sprintf($this->getLogMessage('RAID_DELETED', $verbose), $userstring, $log['L_EVENT'] );
-					break;
-				case 'LOG_DELETED':
-					$logline = sprintf($this->getLogMessage('LOG_DELETED', $verbose), $userstring, $log['L_LOG_ID'] );
 					break;
 				case 'RT_CONFIG_UPDATED':
 					$logline = sprintf($this->getLogMessage('RT_CONFIG_UPDATED', $verbose), $userstring );

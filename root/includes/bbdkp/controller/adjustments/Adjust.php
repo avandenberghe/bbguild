@@ -116,10 +116,10 @@ class Adjust extends \bbdkp\admin\Admin
 	 */
     private $dkpsys = array();
 
-	/**
-	 * Adjustment class constructor
-	 * @param number $adjustment_dkpid
-	 */
+    /**
+     * Adjustment class constructor
+     * @param int|number $adjustment_dkpid
+     */
 	function __construct($adjustment_dkpid = 0)
 	{
 		global $db;
@@ -489,7 +489,7 @@ class Adjust extends \bbdkp\admin\Admin
 	 */
 	function listadj($order, $member_id, $start=0, $guild_id = 0)
 	{
-		global $user, $db, $config;
+		global $db, $config;
 		$order = (string) $order;
 		$member_id = (int) $member_id;
 
@@ -544,7 +544,7 @@ class Adjust extends \bbdkp\admin\Admin
 	function countadjust($member_id)
 	{
 		$member_id = (int) $member_id;
-		global $user, $db;
+		global  $db;
 		$sql = 'SELECT count(*) as total_adjustments
 					FROM ' . ADJUSTMENTS_TABLE . '
 					WHERE member_id IS NOT NULL
@@ -564,7 +564,7 @@ class Adjust extends \bbdkp\admin\Admin
 	 */
 	function listAdjPools()
 	{
-		global $user, $db;
+		global $db;
 		$sql = 'SELECT dkpsys_id, dkpsys_name , dkpsys_default
 		          FROM ' . DKPSYS_TABLE . ' a, ' . ADJUSTMENTS_TABLE . ' j
 		          WHERE a.dkpsys_id = j.adjustment_dkpid

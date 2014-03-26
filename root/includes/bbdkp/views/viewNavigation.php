@@ -413,10 +413,8 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
      */
     private function dkppulldown()
     {
-        global $user, $db, $template, $query_by_pool;
+        global $user, $db, $template;
 
-
-        $defaultpool = 99;
         $dkpvalues = array();
 
         $dkpvalues[0] = $user->lang['ALL'];
@@ -488,7 +486,7 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
      */
     private function armor()
     {
-        global $config, $user, $db, $template, $query_by_pool;
+        global $config, $user, $db, $template;
         $this->filter = $user->lang['ALL'];
         /***** begin armor-class pulldown ****/
         $filtervalues = array();

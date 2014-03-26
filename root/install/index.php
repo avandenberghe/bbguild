@@ -149,7 +149,7 @@ $versions = array(
             array($table_prefix . 'bbdkp_language', array(
 	              'COLUMNS'            => array(
 	          		  'id'     	       => array('UINT', NULL, 'auto_increment'),
-                   	  'game_id' 	   => array('VCHAR', ''),
+                   	  'game_id' 	   => array('VCHAR:10', ''),
 	                  'attribute_id'   => array('UINT', 0),
 	                  'language'       => array('CHAR:2', ''),
 	          		  'attribute'	   => array('VCHAR:30', ''),
@@ -163,7 +163,7 @@ $versions = array(
 
 	      array($table_prefix . 'bbdkp_factions', array(
                     'COLUMNS'        => array(
-	      				'game_id' 			=> array('VCHAR', ''),
+	      				'game_id' 			=> array('VCHAR:10', ''),
                         'f_index'    		=> array('USINT', NULL, 'auto_increment'),
 	         			'game_id' 			=> array('VCHAR', ''),
 
@@ -179,7 +179,7 @@ $versions = array(
           array($table_prefix . 'bbdkp_classes', array(
                     'COLUMNS'        => array(
                         'c_index'    		=> array('USINT', NULL, 'auto_increment'),
-          				'game_id' 			=> array('VCHAR', ''),
+          				'game_id' 			=> array('VCHAR:10', ''),
                         'class_id'   		=> array('USINT', 0),
           				'class_faction_id' 	=> array('UINT', 0),
                         'class_min_level'	=> array('USINT', 0),
@@ -200,7 +200,7 @@ $versions = array(
 
 		  array($table_prefix . 'bbdkp_races', array(
                     'COLUMNS'				=> array(
-                        'game_id' 			=> array('VCHAR', ''),
+                        'game_id' 			=> array('VCHAR:10', ''),
                         'race_id'			=> array('USINT', 0),
                         'race_faction_id'	=> array('USINT', 0),
                         'race_hide'			=> array('BOOL', 0),
@@ -247,7 +247,7 @@ $versions = array(
 
 		array($table_prefix . 'bbdkp_memberlist', array(
                     'COLUMNS'        	   => array(
-						'game_id'  		   => array('VCHAR', ''),
+						'game_id'  		   => array('VCHAR:10', ''),
                         'member_id'        => array('UINT', NULL, 'auto_increment'),
                         'member_name'      => array('VCHAR_UNI:255', ''),
                         'member_status'    => array('BOOL', 0) ,
@@ -805,7 +805,7 @@ $versions = array(
        		array($table_prefix . 'bbdkp_games', array(
 	              'COLUMNS'            => array(
 	          		  'id'     	       => array('UINT', NULL, 'auto_increment'),
-                   	  'game_id' 	   => array('VCHAR', ''),
+                   	  'game_id' 	   => array('VCHAR:10', ''),
 	                  'game_name'      => array('VCHAR_UNI:255', ''),
 	          		  'status'	   	   => array('VCHAR:30', ''),
 	              	  'imagename'	   => array('VCHAR:20', ''),
@@ -822,8 +822,8 @@ $versions = array(
        				'COLUMNS'            	=> array(
 						'id'     	    => array('UINT', NULL, 'auto_increment'),
        					'guild_id'     	=> array('UINT', 0),
-       					'game_id'     	=> array('VCHAR', ''),
-       					'role' 	   		=> array('VCHAR', ''),
+       					'game_id'     	=> array('VCHAR:10', ''),
+       					'role' 	   		=> array('VCHAR:20', ''),
        					'class_id'      => array('UINT', 0),
 						'needed'	   	=> array('USINT', 0),
        				),
@@ -1024,9 +1024,12 @@ $versions = array(
     ),
 
     '1.3.0-b5' => array(
-        //beta5 16-03-2014
+        //beta5 23-03-2014
     ),
 
+    '1.3.0-b6' => array(
+        //beta6 wip
+    ),
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.

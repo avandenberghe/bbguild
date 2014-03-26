@@ -68,5 +68,3 @@ $template->assign_vars(array(
     'S_DISPLAY_WHOISONLINE_SIDE'    => $config['bbdkp_portal_onlineblockposition'] == '0' ? true:false,
 	'LEGEND'						=> $legend,
 ));
-
-?>

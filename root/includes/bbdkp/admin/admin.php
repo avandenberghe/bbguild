@@ -76,7 +76,7 @@ class Admin
      */
 	public function __construct()
 	{
-		global $user, $phpbb_root_path, $phpEx, $config, $user;
+		global $phpbb_root_path, $phpEx, $config, $user;
 
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
@@ -350,7 +350,6 @@ class Admin
 	 */
 	public final function post_register_request($regdata)
 	{
-		global $cache, $config;
 
 		$regcode = hash("sha256", serialize(array($regdata['domainname'],$regdata['phpbbversion'], $regdata['bbdkpversion'])));
 
@@ -413,7 +412,7 @@ class Admin
  	 */
 	public final function get_productversion($product, $force_update = false, $warn_fail = false, $ttl = 86400)
 	{
-		global $config, $cache;
+		global $cache;
 		//get latest productversion from cache
 		$info = $cache->get('version_' . $product);
 
@@ -421,7 +420,7 @@ class Admin
 		if ($info === false || $force_update)
 		{
 			$errstr = '';
-			$errno = 0;
+
 			$info = $this->curl(BBDKP_VERSIONURL . 'version_' . $product .'.txt' , false, false, false);
 
 			if (empty($info))

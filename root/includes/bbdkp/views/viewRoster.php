@@ -32,7 +32,7 @@ class viewRoster implements iViews
     public function buildpage(viewNavigation $Navigation)
     {
         global $config, $phpbb_root_path, $phpEx, $user, $template;
-
+        $classes=array();
         $members = new \bbdkp\controller\members\Members;
         $members->game_id = $Navigation->getGameId();
         $start = request_var('start' ,0);
@@ -59,7 +59,7 @@ class viewRoster implements iViews
              * Displays the listing
             */
             // use pagination
-            $t=0;
+
             foreach ($characters[0] as $char)
             {
                 $template->assign_block_vars('members_row', array(

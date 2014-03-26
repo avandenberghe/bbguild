@@ -41,13 +41,13 @@ class Pool extends \bbdkp\admin\Admin
  {
 	/**
 	 * array of pools
-	 * @var unknown_type
+	 * @var int
 	 */
  	public $dkpsys;
 
  	/**
  	 * Pool id
- 	 * @var integer
+ 	 * @var int
  	 */
  	public $dkpsys_id;
  	/**
@@ -82,10 +82,10 @@ class Pool extends \bbdkp\admin\Admin
  	 */
  	private $poolcount;
 
- 	/**
- 	 * Pool class constructor
- 	 * @param number $dkpsys
- 	 */
+    /**
+     * Pool class constructor
+     * @param int|number $dkpsys
+     */
 	function __construct($dkpsys = 0)
 	{
 		global $db;
@@ -243,14 +243,14 @@ class Pool extends \bbdkp\admin\Admin
 	}
 
 
-	/**
-	 *
-	 * list pools
-	 * @param string $order
-	 * @param number $start
-	 * @param number $mode
-	 * @return multitype:multitype:unknown
-	 */
+    /**
+     *
+     * list pools
+     * @param string $order
+     * @param int|number $start
+     * @param int|number $mode
+     * @return multitype:multitype:unknown
+     */
 	public function listpools($order = 'dkpsys_name', $start = 0, $mode = 0)
 	{
 		global $config, $db;

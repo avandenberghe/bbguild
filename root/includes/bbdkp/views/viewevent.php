@@ -27,7 +27,7 @@ class viewEvent implements iViews
     public function buildpage(viewNavigation $Navigation)
     {
         global $db, $config, $phpbb_root_path, $phpEx, $user, $template;
-
+        $raids =array();
         if ( !(isset($_GET[URI_EVENT]) && isset($_GET[URI_DKPSYS]) ))
         {
             trigger_error($user->lang['ERROR_EVENT_UNKNOWN']);

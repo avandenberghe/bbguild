@@ -133,10 +133,10 @@ class RaidController  extends \bbdkp\admin\Admin
 	 */
 	public $nonattendees;
 
-	/**
-	 * Raidcontroller constructor
-	 * @param number $dkpid
-	 */
+    /**
+     * Raidcontroller constructor
+     * @param int|number $dkpid
+     */
 	public function __construct($dkpid = 0)
 	{
 		parent::__construct();
@@ -232,26 +232,27 @@ class RaidController  extends \bbdkp\admin\Admin
 
 	}
 
-	/**
-	 * Add a raid
-	 *
-	 * @param array $raidinfo
-	 * @param array $raidattendees
-	 * raidinfo array
-	 *	 raid_note	string
-	 *	 raid_note	 string
-	 *	 event_id 	int
-	 *	 raid_start 	int
-	 *	 raid_end 	int
-	 * raiddetail array
-	 *   member_id		int
-	 *	 raid_value  	float
-	 *	 raid_timebonus	float
-	 *
-	 */
+    /**
+     * Add a raid
+     *
+     *  raidinfo array
+     *     raid_note    string
+     *     raid_note     string
+     *     event_id    int
+     *     raid_start    int
+     *     raid_end    int
+     *  raiddetail array
+     *   member_id        int
+     *     raid_value    float
+     *     raid_timebonus    float
+     *
+     * @param array $raidinfo
+     * @param array $raiddetails
+     * @return int|null|number
+     */
 	public function add_raid($raidinfo, $raiddetails)
 	{
-		global $user, $config;
+		global $user;
 		$i = 1;
 		$raidvalue_avg = 0.0;
 		if(sizeof($raidinfo) == 0)
@@ -321,15 +322,15 @@ class RaidController  extends \bbdkp\admin\Admin
 	}
 
 
-	/**
-	 * duplicates a passed raid x
-	 * @todo attached loot.
-	 *
-	 * @param int $old_raid_id
-	 */
+    /**
+     * duplicates a passed raid x
+     * @todo attached loot.
+     *
+     * @param int $old_raid_id
+     * @return int|number
+     */
 	public function duplicateraid($old_raid_id)
 	{
-		global $db, $user, $config, $phpbb_admin_path, $phpEx;
 
 		$new_raid = new \bbdkp\controller\raids\Raids($old_raid_id);
 		$new_raid_id  = $new_raid->Create();
@@ -359,7 +360,7 @@ class RaidController  extends \bbdkp\admin\Admin
 	 */
 	public function update_raid(array $raidinfo)
 	{
-		global $user, $config;
+		global $user;
 		$old_raid = new \bbdkp\controller\raids\Raids($raidinfo['raid_id']);
 		$new_raid = new \bbdkp\controller\raids\Raids($raidinfo['raid_id']);
 
@@ -404,7 +405,6 @@ class RaidController  extends \bbdkp\admin\Admin
 	 */
 	public function delete_raid($raid_id)
 	{
-		global $db, $config, $user, $phpEx, $phpbb_root_path;
 		$old_raid = new \bbdkp\controller\raids\Raids($raid_id);
 		$old_raid->Get();
 		$old_raid->Delete();
@@ -456,10 +456,10 @@ class RaidController  extends \bbdkp\admin\Admin
      * delete 1 raider from raid
      * @param int $raid_id
      * @param int $member_id
+     * @return bool
      */
 	public function deleteraider($raid_id, $member_id)
 	{
-		$raid = new \bbdkp\controller\raids\Raids($raid_id);
 		$raiddetail = new \bbdkp\controller\raids\Raiddetail($raid_id);
 		$raiddetail->Get($raid_id, $member_id);
 		$raiddetail->delete();
@@ -479,7 +479,7 @@ class RaidController  extends \bbdkp\admin\Admin
 	public function listraids($dkpsys_id=0, $start = 0, $member_id=0, $guild_id=0)
 	{
 
-		global $user, $config, $db, $phpEx;
+		global $config, $db, $phpEx;
 
 		$sort_order = array (
 				0 => array ('r.raid_id desc', 'raid_id' ),
@@ -500,6 +500,7 @@ class RaidController  extends \bbdkp\admin\Admin
 		$raids_result = $raids->getRaids($this->raidlistorder['sql'], $dkpsys_id, 0, $start, $member_id, $this->guildid);
 		if($member_id>0)
 		{
+            //@todo fix
 			$this->totalraidcount = $raids->raidcount($dkpsys_id, $days, $member_id, 0, true);
 		}
 		else

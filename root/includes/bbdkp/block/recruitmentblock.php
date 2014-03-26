@@ -93,5 +93,3 @@ $db->sql_freeresult($guildrecruitingresult);
 $template->assign_vars(array(
 		'S_DISPLAY_RECRUIT' => true,
 		));
-
-?>

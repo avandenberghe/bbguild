@@ -343,6 +343,7 @@ class install_wow extends GameInstall
 
 	/**
 	* inserts demo data 3 dummy members, 3 dkp accounts, 3 dummy items, and 1 dummy raid
+     * unused!
 	*/
 	private function populate_wow()
 	{

@@ -20,7 +20,7 @@ if (!function_exists('generate_text_for_display'))
 {
 	include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 }
-
+$text="";
 $sql = 'SELECT welcome_msg, bbcode_uid, bbcode_bitfield, bbcode_options FROM ' . WELCOME_MSG_TABLE;
 $db->sql_query($sql);
 $result = $db->sql_query($sql);
