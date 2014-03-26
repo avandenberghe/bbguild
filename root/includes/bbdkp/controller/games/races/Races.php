@@ -90,7 +90,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Get()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $db, $config;
 
 		$sql_array = array (
 			'SELECT' => ' r.game_id, r.race_id, l.name AS race_name, r.race_faction_id,  r.image_female, r.image_male, r.race_hide ',
@@ -122,7 +122,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Make()
 	{
-		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;
+		global $user, $db, $config, $cache;
 
 		$sql = 'SELECT COUNT(race_id) AS countrace
 			FROM ' . RACE_TABLE . '
@@ -281,7 +281,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Update(Races $old_race)
 	{
-		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;
+		global  $db, $config, $cache;
 
 		// note you cannot change the game to which a race belongs
 		$data = array (
@@ -331,7 +331,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function listraces($order = 'r.race_id')
 	{
-		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;
+		global $db, $config;
 
 		$sql_array = array (
 				'SELECT' => ' r.game_id, r.race_id, r.race_faction_id, r.race_hide, r.image_female, r.image_male,

@@ -225,12 +225,12 @@ class install_ffxiv extends \bbdkp\controller\games\GameInstall
 	}
 
 
-	/**
-	 * Install Events
-	 * an Event answers the 'what' question
-	 * @author Brytor
-	 * @param integer $dkpid
-	 */
+    /**
+     * Install Events
+     * an Event answers the 'what' question
+     * @author Brytor
+     * @param $ffxivpdkpid
+     */
 	private function InstallEvents($ffxivpdkpid)
 	{
 		global $db;

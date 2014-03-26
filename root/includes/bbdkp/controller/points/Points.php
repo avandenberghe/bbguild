@@ -20,9 +20,6 @@ if (! defined('IN_PHPBB'))
 	exit();
 }
 
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-global $phpbb_root_path;
-
 /**
  * Points Class
  *
@@ -241,11 +238,11 @@ class Points
 	 */
 	public $pool;
 
-	/**
-	 * Points Class constructor
-	 * @param number $member_id
-	 * @param number $dkpid
-	 */
+    /**
+     * Points Class constructor
+     * @param int|number $member_id
+     * @param int|number $dkpid
+     */
 	function __construct($member_id=0, $dkpid=0)
 	{
 		global $phpbb_root_path, $phpEx;
@@ -448,7 +445,7 @@ class Points
 	 */
 	public function update_account()
 	{
-		global $user, $db;
+		global $db;
 
 		$query = $db->sql_build_array ( 'UPDATE', array (
 			'member_dkpid'       	=> $this->dkpid,

@@ -34,9 +34,9 @@ if (!class_exists('\bbdkp\admin\Admin'))
 class viewFactory extends \bbdkp\admin\Admin
 {
 
-    private $valid_views = ['news', 'roster', 'standings', 'loothistory', 'lootdb',
+    private $valid_views = array('news', 'roster', 'standings', 'loothistory', 'lootdb',
     'listevents', 'stats', 'listraids', 'event',
-    'item', 'raid', 'member', 'bossprogress', 'planner'];
+    'item', 'raid', 'member', 'bossprogress', 'planner');
 
 	/**
 	 * load a page asked for by user
@@ -46,7 +46,6 @@ class viewFactory extends \bbdkp\admin\Admin
 	public function get_view($page)
 	{
 		global $phpbb_root_path, $phpEx ;
-        global $user, $config, $template;
 
         if (in_array($page, $this->valid_views))
         {

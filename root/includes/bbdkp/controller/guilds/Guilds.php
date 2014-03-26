@@ -299,7 +299,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	public function MakeGuild()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $user, $db, $phpEx, $phpbb_root_path;
 
 		$error = array ();
 
@@ -382,7 +382,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	public function Guildupdate($old_guild, $params)
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $user, $db, $phpEx, $phpbb_root_path;
 
 		// check if already exists
 		if($this->name != $old_guild->name || $this->realm != $old_guild->realm)
@@ -485,7 +485,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	public function Guildelete()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $user, $db;
 
 		if($this->guildid == 0)
 		{
@@ -528,8 +528,6 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	public function Armory_get($params)
 	{
-		global $phpEx, $phpbb_root_path;
-
 		switch ($this->game_id)
 		{
 			case 'wow':
@@ -574,7 +572,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	private function createEmblem($showlevel=TRUE, $width=115)
 	{
-		global $phpEx, $phpbb_root_path;
+		global $phpbb_root_path;
 
 		//location to create the file
 		$imgfile = $phpbb_root_path . "images/bbdkp/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
@@ -723,18 +721,22 @@ class Guilds extends \bbdkp\admin\Admin
 	}
 
 
-	/**
-	 * returns a member listing for this guild
-	 *
-	 * @param string $order
-	 * @param number $start
-	 * @param number $mode
-	 * @return array
-	 */
+    /**
+     * returns a member listing for this guild
+     *
+     * @param string $order
+     * @param int $start
+     * @param int $mode
+     * @param int $minlevel
+     * @param int $maxlevel
+     * @param int $selectactive
+     * @param int $selectnonactive
+     * @return array
+     */
 	public function listmembers($order = 'm.member_name', $start=0, $mode = 0, $minlevel=1, $maxlevel=200, $selectactive=1, $selectnonactive=1)
 	{
 
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $db, $config;
 		$sql_array = array(
 				'SELECT' => 'm.* , u.username, u.user_id, u.user_colour, g.name, l.name as member_class, r.rank_id,
 			    				r.rank_name, r.rank_prefix, r.rank_suffix,
@@ -832,7 +834,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	private function countmembers()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $db, $config;
 		//get total members
 		$sql_array = array(
 				'SELECT' => 'count(*) as membercount ' ,

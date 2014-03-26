@@ -135,10 +135,10 @@ class Raids extends \bbdkp\admin\Admin
 	 */
 	public $loot_details;
 
-	/**
-	 * Raid Constructor
-	 * @param number $raid_id
-	 */
+    /**
+     * Raid Constructor
+     * @param int|number $raid_id
+     */
 	function __construct($raid_id = 0)
 	{
 		parent::__construct();
@@ -409,18 +409,18 @@ class Raids extends \bbdkp\admin\Admin
 
 	}
 
-	/**
-	* returns raid count, or attendance percentage for a range member/pool
-	* used by listmembers.php and viewmember.php
-	 *
-	 * @param number $dkpsys_id
-	 * @param number $days
-	 * @param number $member_id
-	 * @param number $mode indiv raidcount, 1 -> total rc, 2 -> attendancepct
-	 * @param string $all  if true then get count forever, otherwise since x days
-	 * @param number $guild_id
-	 * @return number
-	 */
+    /**
+     * returns raid count, or attendance percentage for a range member/pool
+     * used by listmembers.php and viewmember.php
+     *
+     * @param number $dkpsys_id
+     * @param number $days
+     * @param int|number $member_id
+     * @param int|number $mode indiv raidcount, 1 -> total rc, 2 -> attendancepct
+     * @param bool|string $all if true then get count forever, otherwise since x days
+     * @param int|number $guild_id
+     * @return number
+     */
 	public function raidcount($dkpsys_id, $days, $member_id=0, $mode=1, $all = false, $guild_id=0)
 	{
 		$start_date = mktime(0, 0, 0, date('m'), date('d')-$days, date('Y'));

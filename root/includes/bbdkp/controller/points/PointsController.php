@@ -79,10 +79,10 @@ class PointsController  extends \bbdkp\admin\Admin
 	 */
 	public $guild_id;
 
-	/**
-	 * pointscontroller constructor
-	 * @param number $dkpsys_id
-	 */
+    /**
+     * pointscontroller constructor
+     * @param int|number $dkpsys_id
+     */
 	function __construct($dkpsys_id = 0)
 	{
 		//load model
@@ -822,8 +822,8 @@ class PointsController  extends \bbdkp\admin\Admin
 			require("{$phpbb_root_path}includes/bbdkp/controller/adjustments/Adjust.$phpEx");
 		}
 		$Adjust = new \bbdkp\controller\adjustments\Adjust($this->dkpsys_id);
-		$Adjust->member_id = $member_id;
-		$Adjust->adjustment_dkpid = $this->dkpsys_id;
+        $Adjust->setMemberId($member_id);
+        $Adjust->setAdjustmentDkpid($this->dkpsys_id);
 		$Adjust->delete_memberadjustments();
 
 
@@ -856,16 +856,16 @@ class PointsController  extends \bbdkp\admin\Admin
 
 	}
 
-	/**
-	 * add dkp points.
-	 * this must be called after the raid and raid detail tables are filled.
-	 *
-	 * @param int $raid_id
-	 * @param number $member_id
-	 */
+    /**
+     * add dkp points.
+     * this must be called after the raid and raid detail tables are filled.
+     *
+     * @param int $raid_id
+     * @param int|number $member_id
+     */
 	public function add_points($raid_id, $member_id = 0)
 	{
-		global $config, $db;
+		global $config;
 
 		$new_raid = new \bbdkp\controller\raids\Raids($raid_id);
 		$raiddetail = new \bbdkp\controller\raids\Raiddetail($raid_id);
@@ -963,7 +963,6 @@ class PointsController  extends \bbdkp\admin\Admin
 			$old_raid = new \bbdkp\controller\raids\Raids($raid_id);
 			$raiddetail = new \bbdkp\controller\raids\Raiddetail($raid_id);
 			$raiddetail->Get($raid_id);
-			$members = array();
 			foreach ((array) $raiddetail->raid_details as $member_id => $attendee)
 			{
 				$this->Points->dkpid = $old_raid->event_dkpid;
@@ -1050,7 +1049,7 @@ class PointsController  extends \bbdkp\admin\Admin
 	 */
 	private function update_raiddate($member_id, $dkpid)
 	{
-		global $db, $user;
+		global $db;
 
 		// get first & last raids
 		$sql_array = array (
@@ -1172,7 +1171,6 @@ class PointsController  extends \bbdkp\admin\Admin
 		if (sizeof ( $inactive_members ) > 0)
 		{
 			$adj_value = (float) $config ['bbdkp_inactive_point_adj'];
-			$adj_reason = 'Inactive adjustment';
 
 			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
 		SET member_status = 0, member_adjustment = member_adjustment + ' . (string) $adj_value . '
@@ -1538,8 +1536,7 @@ class PointsController  extends \bbdkp\admin\Admin
 	 */
 	public function syncdkpsys()
 	{
-		global $user, $db, $phpbb_admin_path, $phpEx, $config;
-		$link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_sys&amp;mode=listdkpsys" ) . '"><h3>'. $user->lang['RETURN_DKPPOOLINDEX'].'</h3></a>';
+		global $user, $db;
 
 		/* start transaction */
 
@@ -1845,7 +1842,7 @@ class PointsController  extends \bbdkp\admin\Admin
 	 */
 	public function decay($value, $timediff, $mode)
 	{
-		global $user, $config, $db;
+		global $user, $config;
 		$i=0;
 		switch ($mode)
 		{
@@ -1918,8 +1915,6 @@ class PointsController  extends \bbdkp\admin\Admin
 				// update dkp account, deduct old, add new decay
 				$sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET member_raid_decay = 0, member_item_decay = 0';
 				$db->sql_query ( $sql );
-			//now loop raid items detail
-			$items= array();
 
 				$sql = 'UPDATE ' . RAID_ITEMS_TABLE . ' SET item_decay = 0';
 				$db->sql_query ( $sql);
@@ -1981,16 +1976,17 @@ class PointsController  extends \bbdkp\admin\Admin
 	}
 
 
-	/**
-	 * function to decay one specific raid
-	 * calling this function multiple time will not lead to cumulative decays, just the delta is applied.
-	 *
-	 * @param int $raid_id the raid id to decay
-	 * @param int $dkpid dkpid for adapting accounts
-	 */
+    /**
+     * function to decay one specific raid
+     * calling this function multiple time will not lead to cumulative decays, just the delta is applied.
+     *
+     * @param int $raid_id the raid id to decay
+     * @param int $dkpid dkpid for adapting accounts
+     * @return bool
+     */
 	public function decayraid($raid_id, $dkpid)
 	{
-		global $config, $db;
+		global  $db;
 		//loop raid detail, pass earned and timediff to decay function, update raid detail
 
 		//get old raidinfo

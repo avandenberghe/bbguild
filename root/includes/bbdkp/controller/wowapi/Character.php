@@ -106,16 +106,16 @@ class Character extends \bbdkp\controller\wowapi\Resource
 	 	return $this->extrafields;
 	 }
 
-	/**
-	 * fetch character results
-	 * example : http://eu.battle.net/api/wow/character/Lightbringer/Sajaki
-	 * example : http://eu.battle.net/api/wow/character/Lightbringer/Sajaki?fields=progression,professions
-	 * 
-	 * @param (string) $name
-	 * @param (string) $realm
-	 * @param (array) $fields
-	 * @return mixed
-	 */
+    /**
+     * fetch character results
+     * example : http://eu.battle.net/api/wow/character/Lightbringer/Sajaki
+     * example : http://eu.battle.net/api/wow/character/Lightbringer/Sajaki?fields=progression,professions
+     *
+     * @param string $name
+     * @param string $realm
+     * @param array $fields
+     * @return mixed
+     */
 	public function getCharacter($name = '', $realm = '', $fields=array()) 
 	{
 		global $user;

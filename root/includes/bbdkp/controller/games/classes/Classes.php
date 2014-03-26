@@ -100,7 +100,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	public $imagename;
 	/**
 	 * class color hex
-	 * @var streing
+	 * @var string
 	 */
 	public $colorcode;
 	/**
@@ -213,7 +213,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 		$sql = 'INSERT INTO ' . CLASS_TABLE . ' ' . $db->sql_build_array ( 'INSERT', $data );
 		$db->sql_query ( $sql );
 
-		$id = $db->sql_nextid ();
 
 		$names = array (
 				'game_id' => ( string ) $this->game_id,
@@ -304,7 +303,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Update(Classes $oldclass)
 	{
-		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;
+		global $user, $db, $config, $cache;
 
 		// check for unique classid exception : if the new class id exists already
 		$sql = 'SELECT count(*) AS countclass FROM ' . CLASS_TABLE . '
@@ -352,13 +351,13 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	}
 
 
-	/**
-	 *
-	 * lists all classes
-	 * @param string $order
-	 * @param number $mode
-	 * @return multitype:multitype:number string unknown
-	 */
+     /**
+      *
+      * lists all classes
+      * @param string $order
+      * @param int|number $mode
+      * @return array
+      */
 	public function listclasses($order= 'class_id', $mode = 0)
 	{
 		global $user, $db, $config;

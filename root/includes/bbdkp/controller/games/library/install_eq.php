@@ -66,7 +66,6 @@ class install_eq extends \bbdkp\controller\games\GameInstall
 		global  $db;
 		
 		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = 'eq'" );
-		$sql_ary = array();
 		
 		// Everquest classes - level cap raised to 100
 		$sql_ary = array();

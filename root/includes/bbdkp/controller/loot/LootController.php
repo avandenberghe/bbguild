@@ -267,17 +267,17 @@ class LootController  extends \bbdkp\admin\Admin
 	}
 
 
-
-	/**
-	 * adds loot to a group of buyers
-	 *
-	 * @param int $raid_id
-	 * @param array $item_buyers
-	 * @param float $item_value
-	 * @param string $item_name
-	 * @param int $loottime optional
-	 * @return boolean
-	 */
+    /**
+     * adds loot to a group of buyers
+     *
+     * @param int $raid_id
+     * @param array $item_buyers
+     * @param float $item_value
+     * @param string $item_name
+     * @param int $loottime optional
+     * @param int $wowhead_id
+     * @return boolean
+     */
 	public function addloot($raid_id, $item_buyers, $item_value, $item_name, $loottime = 0, $wowhead_id=0)
 	{
 		global $user, $config;
@@ -324,7 +324,10 @@ class LootController  extends \bbdkp\admin\Admin
 			$this->loot->insert();
 
 			$PointsController->addloot_update_dkprecord($this->loot->item_value, $this_member_id);
-			$buyernames == '' ? '': $buyernames .= ', ';
+			if($buyernames != '')
+            {
+               $buyernames .= ', ';
+            }
 			$buyernames .= $buyer->member_name;
 			unset ($buyer);
 		}
@@ -365,7 +368,7 @@ class LootController  extends \bbdkp\admin\Admin
 	 */
 	public function deleteloot($item_id)
 	{
-		global $config, $db;
+		global $config;
 		$this->loot = new \bbdkp\controller\loot\Loot($item_id);
 		$this->loot->delete_loot();
 
@@ -407,23 +410,23 @@ class LootController  extends \bbdkp\admin\Admin
 
 	}
 
-	/**
-	 * update loot
-	 *
-	 * @param int $item_id
-	 * @param int $dkp_id
-	 * @param int $raid_id
-	 * @param array $item_buyers
-	 * @param float $item_value
-	 * @param string $item_name
-	 * @param int $loot_time
-	 * @param string $itemgameid
-	 *
-	 * @todo fix this
-	 */
+    /**
+     * update loot
+     *
+     * @param int $item_id
+     * @param int $dkp_id
+     * @param int $raid_id
+     * @param array $item_buyers
+     * @param float $item_value
+     * @param string $item_name
+     * @param int $loot_time
+     * @param int $wowhead_id
+     *
+     * @todo fix this
+     */
 	public function updateloot($item_id, $dkp_id, $raid_id, $item_buyers, $item_value, $item_name, $loot_time, $wowhead_id=0)
 	{
-		global $user, $db;
+		global $user;
 
 		$oldloot = new \bbdkp\controller\loot\Loot($item_id);
 		$item_ids = $oldloot->GetGroupLoot($item_id);
@@ -464,9 +467,8 @@ class LootController  extends \bbdkp\admin\Admin
 	public function Countloot($raid_id, $member_id, $guild_id=0 )
 	{
 
-		return $this->loot->countloot('history' , 0, 0,$member_id, $raid_id, $guild_id);
+		return $this->loot->countloot('history', $guild_id, 0, $member_id, $raid_id);
 	}
-
 
 
 	/**
@@ -1012,7 +1014,6 @@ class LootController  extends \bbdkp\admin\Admin
 			{
 				$sql_array['WHERE'] .= ' AND m.member_dkpid = '. $dkp_id;
 			}
-			$sql = $db->sql_build_query ( 'SELECT', $sql_array );
 
 			if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 			{

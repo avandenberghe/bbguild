@@ -93,10 +93,10 @@ class Events extends \bbdkp\admin\Admin
 	 */
 	public $events;
 
-	/**
-	 * Event class constructor
-	 * @param number $event_id
-	 */
+    /**
+     * Event class constructor
+     * @param int|number $event_id
+     */
 	function __construct($event_id = 0)
 	{
 		global $db;
@@ -202,7 +202,7 @@ public function __set($property, $value)
 	/**
 	 * Get Event instance from database
 	 *
-	 * @param integer $event_id
+	 * @param int $event_id
 	 */
 	public function get($event_id = 0)
 	{
@@ -366,10 +366,11 @@ public function __set($property, $value)
 
 	}
 
-	/**
-	 * counts number of events, evtl per dkp pool
-	 * @param number $dkpid
-	 */
+    /**
+     * counts number of events, evtl per dkp pool
+     *
+     * @param int|number $dkpid
+     */
 	public function countevents($dkpid = 0)
 	{
 		global $db;
@@ -389,10 +390,11 @@ public function __set($property, $value)
 
 	}
 
-	/**
-	 * counts number of events, evtl per dkp pool
-	 * @param number $dkpid
-	 */
+    /**
+     * counts number of events, evtl per dkp pool
+     * @param int|number $dkpid
+     * @return float
+     */
 	public function getmax($dkpid = 0)
 	{
 		global $db;
@@ -404,17 +406,17 @@ public function __set($property, $value)
 		return $max_value;
 	}
 
-	/**
-	 * Get all events from pool
-	 *
-	 * @param number $start
-	 * @param string $order
-	 * @param number $dkpid
-	 * @param boolean $all
-	 */
+    /**
+     * Get all events from pool
+     *
+     * @param int|number $start
+     * @param string $order
+     * @param int|number $dkpid
+     * @param boolean $all
+     */
 	public function listevents($start = 0, $order = 'b.dkpsys_id, a.event_name' , $dkpid=0, $all=true  )
 	{
-		global $config, $db, $user;
+		global $config, $db;
 
 		$sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename, a.event_status
 				FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b

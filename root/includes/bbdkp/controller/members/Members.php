@@ -256,12 +256,12 @@ class Members extends \bbdkp\admin\Admin
 	public $guildlist;
 
 
-	/**
-	 * Member class constructor
-	 *
-	 * @param unknown_type $member_id
-	 * @param array $guildlist
-	 */
+    /**
+     * Member class constructor
+     *
+     * @param int $member_id
+     * @param array $guildlist
+     */
 	function __construct($member_id = 0, $guildlist = null)
 	{
 		global $phpbb_root_path, $phpEx;
@@ -347,7 +347,7 @@ class Members extends \bbdkp\admin\Admin
 	 */
 	public function Getmember()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $user, $db, $config, $phpbb_root_path;
 
 		$sql_array = array(
 			'SELECT' => 'm.*, c.colorcode , c.imagename,  c1.name AS member_class, l1.name AS member_race,
@@ -465,7 +465,6 @@ class Members extends \bbdkp\admin\Admin
 			$this->member_status = 1;
 			$this->member_achiev = 0;
 			$this->colorcode = "#8899aa";
-			$race_image = '';
 			$this->race_image = '';
 			$this->class_image = '';
 			$this->member_title = '';
@@ -523,10 +522,9 @@ class Members extends \bbdkp\admin\Admin
 	 */
 	public function Makemember()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $user, $db, $config;
 
 		$error = array ();
-		$found=false;
 
 		//perform checks
 
@@ -676,7 +674,7 @@ class Members extends \bbdkp\admin\Admin
 	 */
 	public function Updatemember(\bbdkp\controller\members\Members $old_member)
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $user, $db;
 
 		if ($this->member_id == 0)
 		{
@@ -727,7 +725,7 @@ class Members extends \bbdkp\admin\Admin
 			case 'aion':
 				if(trim($this->member_portrait_url) == '')
 				{
-					$this->member_portrait_url = $this->generate_portraitlink();
+					$this->generate_portraitlink();
 				}
 				break;
 		}
@@ -951,10 +949,6 @@ class Members extends \bbdkp\admin\Admin
 				$found=false;
 				foreach($this->guildlist as $guild)
 				{
-					if($data['name'] == 'Xeeni')
-					{
-						$debug =1;
-					}
 					if($guild['name'] == $data['guild']['name'])
 					{
 						$this->member_guild_id = $guild['id'];
@@ -1043,7 +1037,7 @@ class Members extends \bbdkp\admin\Admin
 	public function Activatemembers(array $mlist, array $mwindow)
 	{
 
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $db;
 
 		$db->sql_transaction('begin');
 		//if checkbox set then activate
@@ -1067,10 +1061,8 @@ class Members extends \bbdkp\admin\Admin
 	private function generate_portraitlink()
 	{
 		global $phpbb_root_path;
-		if ($this->game_id == 'aion')
-		{
-			$this->member_portrait_url = $phpbb_root_path . 'images/roster_portraits/aion/' . $this->member_race_id . '_' . $this->member_gender_id . '.jpg';
-		}
+	    $this->member_portrait_url = $phpbb_root_path . 'images/roster_portraits/aion/' . $this->member_race_id . '_' . $this->member_gender_id . '.jpg';
+
 	}
 
 	/**
@@ -1082,7 +1074,7 @@ class Members extends \bbdkp\admin\Admin
 	 */
 	public function GuildKick($member_name, $guild_id)
 	{
-		global $db, $user, $config;
+		global $db, $user;
 		// find id for existing member name
 		$sql = "SELECT *
 				FROM " . MEMBER_LIST_TABLE . "
@@ -1134,8 +1126,8 @@ class Members extends \bbdkp\admin\Admin
 	 */
 	public function WoWArmoryUpdate($memberdata, $guild_id, $region, $min_armory)
 	{
-		global $user, $db, $phpEx, $phpbb_root_path;
-		$member_id = 0;
+		global $user, $db;
+
 		$member_ids = array();
 		$oldmembers = array();
 		$newmembers = array();
@@ -1317,11 +1309,13 @@ class Members extends \bbdkp\admin\Admin
 	}
 
 
-	/**
-	 * ACP listmembers grid
-	 * get a member list for given guild
-	 * @param int $guild_id
-	 */
+    /**
+     * ACP listmembers grid
+     * get a member list for given guild
+     *
+     * @param int $guild_id
+     * @param bool $assignedonly
+     */
 	public function listallmembers($guild_id = 0, $assignedonly=false)
 	{
 		global $db;

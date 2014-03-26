@@ -70,11 +70,11 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 	 */
 	public $RankSuffix;
 
-	/**
-	 * rank class constructor
-	 * @param int $RankGuild
-	 * @param number $RankId
-	 */
+    /**
+     * rank class constructor
+     * @param int $RankGuild
+     * @param int $RankId
+     */
 	public function __construct($RankGuild, $RankId = 0)
 	{
 		if (($RankGuild >= 0 && $RankId = 0) or ($RankGuild == 0 && $RankId = 99) )
@@ -100,7 +100,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 	 */
 	public function Getrank()
 	{
-	    global $user, $db, $config, $phpEx, $phpbb_root_path;
+	    global $db;
 	    $sql = 'SELECT rank_name, rank_hide, rank_prefix, rank_suffix
     			FROM ' . MEMBER_RANKS_TABLE . '
     			WHERE rank_id = ' . (int) $this->RankId . ' and guild_id = ' . (int) $this->RankGuild;
@@ -121,7 +121,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 	 */
 	public function Makerank()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $user, $db;
 
 		if ($this->RankName == '')
 		{
@@ -175,12 +175,12 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 
 	}
 
-	/**
-	 * deletes a rank
-	 *
-	 * @param int $override
-	 * @return boolean
-	 */
+    /**
+     * deletes a rank
+     *
+     * @param bool $override
+     * @return bool
+     */
 	public function Rankdelete($override=false)
 	{
 		global $user, $db, $phpEx, $phpbb_root_path;
@@ -235,7 +235,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 	public function Rankupdate(Ranks $old_rank)
 	{
 
-		global $user, $db, $phpEx, $phpbb_root_path;
+		global $user, $db;
 
 		$sql_ary = array(
 				'rank_id' => $this->RankId ,
@@ -317,7 +317,7 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 	 */
 	public function WoWArmoryUpdate($memberdata, $guild_id, $region)
 	{
-		global $user, $db, $phpEx, $phpbb_root_path;
+		global  $db;
 
 		$newranks = array();
 

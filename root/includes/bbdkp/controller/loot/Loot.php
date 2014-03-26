@@ -20,9 +20,6 @@ if (! defined('IN_PHPBB'))
 	exit();
 }
 
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-global $phpbb_root_path;
-
 /**
  * this class manages the Item transaction table (phpbb_bbdkp_raid_items)
  * Items do not have to be tied to raids
@@ -168,10 +165,10 @@ class Loot
 	 */
 	public $lootdetails;
 
-	/**
-	 * Loot class constructor
-	 * @param number $item_id
-	 */
+    /**
+     * Loot class constructor
+     * @param int|number $item_id
+     */
 	function __construct($item_id = 0)
 	{
 		if($item_id > 0)
@@ -244,17 +241,18 @@ class Loot
 	}
 
 
-	/**
-	 * get array of all loot for 1 guild, raid or member
-	 *
-	 * note: member_name is only included for sorting
-	 * @param string $order
-	 * @param number $guild_id
-	 * @param number $dkpsys_id
-	 * @param number $raid_id
-	 * @param number $istart
-	 * @param number $member_id
-	 */
+    /**
+     * get array of all loot for 1 guild, raid or member
+     *
+     * note: member_name is only included for sorting
+     * @param string $order
+     * @param int|number $guild_id
+     * @param int|number $dkpsys_id
+     * @param int|number $raid_id
+     * @param int|number $istart
+     * @param int|number $member_id
+     * @return
+     */
 	public function GetAllLoot($order = ' i.item_date desc', $guild_id=0, $dkpsys_id=0, $raid_id = 0, $istart = 0, $member_id = 0)
 	{
 		global $config, $db;
@@ -303,11 +301,13 @@ class Loot
 
 	}
 
-	/**
-	 * get all purchased items with the same name
-	 * @usedby views
-	 * @param int $item_id
-	 */
+    /**
+     * get all purchased items with the same name
+     * @usedby views
+     * @param $item_name
+     * @return array
+     * @internal param int $item_id
+     */
 	public function Loothistory($item_name)
 	{
 		global $db;
@@ -442,17 +442,17 @@ class Loot
 		$this->insert();
 	}
 
-	/**
-	 * count loot per pool/guild/raid/member
-	 *
-	 * @param string $mode
-	 * @param int $guild_id
-	 * @param int $dkp_id
-	 * @param int $member_id
-	 * @param int $raid_id
-	 * @return unknown
-	 */
-	public function countloot($mode, $guild_id=0, $dkp_id=0, $member_id=0, $raid_id=0, $guild_id=0)
+    /**
+     * count loot per pool/guild/raid/member
+     *
+     * @param $mode
+     * @param int $guild_id
+     * @param int $dkp_id
+     * @param int $member_id
+     * @param int $raid_id
+     * @return mixed
+     */
+    public function countloot($mode, $guild_id=0, $dkp_id=0, $member_id=0, $raid_id=0)
 	{
 		global $db;
 		$sql_array = array();
@@ -511,17 +511,17 @@ class Loot
 	}
 
 
-	/**
-	 * get statistic of all loot drops
-	 * note: member_name is only included for sorting
-	 *
-	 * @param string $order
-	 * @param number $guild_id
-	 * @param number $dkpsys_id
-	 * @param number $raid_id
-	 * @param number $istart
-	 * @return array
-	 */
+    /**
+     * get statistic of all loot drops
+     * note: member_name is only included for sorting
+     *
+     * @param string $order
+     * @param int|number $guild_id
+     * @param int|number $dkpsys_id
+     * @param int|number $raid_id
+     * @param int|number $istart
+     * @return array
+     */
 	public function Lootstat($order = ' MAX(i.item_date) desc', $guild_id=0, $dkpsys_id=0, $raid_id = 0, $istart = 0)
 	{
 		global $config, $db;

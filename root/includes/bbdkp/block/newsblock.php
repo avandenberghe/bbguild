@@ -246,6 +246,3 @@ $template->assign_vars(
 	'NEWS_PAGINATION' => $pagination, 
 
 ));
-
-
-?>

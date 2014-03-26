@@ -276,18 +276,18 @@ class krequest
 		}
 	}
 
-	/**
-	* This function allows overwriting or setting a value in one of the super global arrays.
-	*
-	* Changes which are performed on the super globals directly will not have any effect on the results of
-	* other methods this class provides. Using this function should be avoided if possible! It will
-	* consume twice the the amount of memory of the value
-	*
-	* @param string	$var_name	The name of the variable that shall be overwritten
-	* @param mixed	$value		The value which the variable shall contain.
-	* 							If this is null the variable will be unset.
-	* @param krequest::POST|krequest::GET|krequest::REQUEST|krequest::COOKIE	$super_global	Specifies which super global shall be changed
-	*/
+    /**
+     * This function allows overwriting or setting a value in one of the super global arrays.
+     *
+     * Changes which are performed on the super globals directly will not have any effect on the results of
+     * other methods this class provides. Using this function should be avoided if possible! It will
+     * consume twice the the amount of memory of the value
+     *
+     * @param string $var_name The name of the variable that shall be overwritten
+     * @param mixed $value The value which the variable shall contain.
+     *                            If this is null the variable will be unset.
+     * @param int $super_global
+     */
 	public function overwrite($var_name, $value, $super_global = krequest::REQUEST)
 	{
 		if (!isset(self::$super_globals[$super_global]))
@@ -415,23 +415,23 @@ class krequest
 		}
 	}
 
-	/**
-	* Central type safe input handling function.
-	* All variables in GET or POST requests should be retrieved through this function to maximise security.
-	*
-	* @param string|array	$var_name	The form variable's name from which data shall be retrieved.
-	* 									If the value is an array this may be an array of indizes which will give
-	* 									direct access to a value at any depth. E.g. if the value of "var" is array(1 => "a")
-	* 									then specifying array("var", 1) as the name will return "a".
-	* @param mixed			$default	A default value that is returned if the variable was not set.
-	* 									This function will always return a value of the same type as the default.
-	* @param bool			$multibyte	If $default is a string this paramater has to be true if the variable may contain any UTF-8 characters
-	*									Default is false, causing all bytes outside the ASCII range (0-127) to be replaced with question marks
-	* @param krequest::POST|krequest::GET|krequest::REQUEST|krequest::COOKIE	$super_global	Specifies which super global should be used
-	*
-	* @return mixed	The value of $_REQUEST[$var_name] run through {@link set_var set_var} to ensure that the type is the
-	*				the same as that of $default. If the variable is not set $default is returned.
-	*/
+    /**
+     * Central type safe input handling function.
+     * All variables in GET or POST requests should be retrieved through this function to maximise security.
+     *
+     * @param string|array $var_name The form variable's name from which data shall be retrieved.
+     *                                    If the value is an array this may be an array of indizes which will give
+     *                                    direct access to a value at any depth. E.g. if the value of "var" is array(1 => "a")
+     *                                    then specifying array("var", 1) as the name will return "a".
+     * @param mixed $default A default value that is returned if the variable was not set.
+     *                                    This function will always return a value of the same type as the default.
+     * @param bool $multibyte If $default is a string this paramater has to be true if the variable may contain any UTF-8 characters
+     *                                    Default is false, causing all bytes outside the ASCII range (0-127) to be replaced with question marks
+     * @param int $super_global    Specifies which super global should be used
+     *
+     * @return mixed    The value of $_REQUEST[$var_name] run through {@link set_var set_var} to ensure that the type is the
+     *                the same as that of $default. If the variable is not set $default is returned.
+     */
 	public function variable($var_name, $default, $multibyte = false, $super_global = krequest::REQUEST)
 	{
 		$path = false;
@@ -491,30 +491,28 @@ class krequest
 		return $this->is_set($name, krequest::POST);
 	}
 
-	/**
-	* Checks whether a certain variable is set in one of the super global
-	* arrays.
-	*
-	* @param string	$var	Name of the variable
-	* @param krequest::POST|krequest::GET|krequest::REQUEST|krequest::COOKIE	$super_global
-	*						Specifies the super global which shall be checked
-	*
-	* @return bool	True if the variable was sent as input
-	*/
+    /**
+     * Checks whether a certain variable is set in one of the super global
+     * arrays.
+     *
+     * @param string $var Name of the variable
+     * @param int   $super_global  Specifies the super global which shall be checked
+     *
+     * @return bool    True if the variable was sent as input
+     */
 	public function is_set($var, $super_global = krequest::REQUEST)
 	{
 		return isset($this->input[$super_global][$var]);
 	}
 
-	/**
-	* Returns all variable names for a given super global
-	*
-	* @param krequest::POST|krequest::GET|krequest::REQUEST|krequest::COOKIE	$super_global
-	*					The super global from which names shall be taken
-	*
-	* @return array	All variable names that are set for the super global.
-	*				Pay attention when using these, they are unsanitised!
-	*/
+    /**
+     * Returns all variable names for a given super global
+     *
+     * @param int  $super_global   The super global from which names shall be taken
+     *
+     * @return array    All variable names that are set for the super global.
+     *                Pay attention when using these, they are unsanitised!
+     */
 	public function variable_names($super_global = krequest::REQUEST)
 	{
 		if (!isset($this->input[$super_global]))

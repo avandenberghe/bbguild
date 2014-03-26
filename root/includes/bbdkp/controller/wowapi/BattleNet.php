@@ -32,7 +32,6 @@ if (!defined('IN_PHPBB'))
  * Battle.net WoW API PHP SDK
  * 
  * @package bbdkp
- * @throws Exception If requirements are not met.
  */
 class BattleNet
 {

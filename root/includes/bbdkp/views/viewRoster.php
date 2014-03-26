@@ -59,7 +59,7 @@ class viewRoster implements iViews
              * Displays the listing
             */
             // use pagination
-            $t=0;
+
             foreach ($characters[0] as $char)
             {
                 $template->assign_block_vars('members_row', array(

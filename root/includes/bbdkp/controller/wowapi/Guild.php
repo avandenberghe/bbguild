@@ -82,17 +82,17 @@ class Guild extends \bbdkp\controller\wowapi\Resource
 	 	return $this->extrafields;
 	 }
 
-	/**
-	 * fetch guild results
-	 * example : http://eu.battle.net/api/wow/guild/Lightbringer/Godless
-	 * example : http://eu.battle.net/api/wow/guild/Lightbringer/Bête Noire?fields=achievements,members
-	 * becomes : http://eu.battle.net/api/wow/guild/Lightbringer/b%C3%AAte%20noire?fields=achievements,members	
-	 * 
-	 * @param (string) $name
-	 * @param (string) $realm
-	 * @param (array) $fields
-	 * @return mixed
-	 */
+    /**
+     * fetch guild results
+     * example : http://eu.battle.net/api/wow/guild/Lightbringer/Godless
+     * example : http://eu.battle.net/api/wow/guild/Lightbringer/Bête Noire?fields=achievements,members
+     * becomes : http://eu.battle.net/api/wow/guild/Lightbringer/b%C3%AAte%20noire?fields=achievements,members
+     *
+     * @param string $name
+     * @param string $realm
+     * @param array $fields
+     * @return mixed
+     */
 	public function getGuild($name = '', $realm = '', $fields=array()) 
 	{
 		global $user;
