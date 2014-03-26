@@ -479,7 +479,7 @@ class RaidController  extends \bbdkp\admin\Admin
 	public function listraids($dkpsys_id=0, $start = 0, $member_id=0, $guild_id=0)
 	{
 
-		global $user, $config, $db, $phpEx;
+		global $config, $db, $phpEx;
 
 		$sort_order = array (
 				0 => array ('r.raid_id desc', 'raid_id' ),
@@ -500,6 +500,7 @@ class RaidController  extends \bbdkp\admin\Admin
 		$raids_result = $raids->getRaids($this->raidlistorder['sql'], $dkpsys_id, 0, $start, $member_id, $this->guildid);
 		if($member_id>0)
 		{
+            //@todo fix
 			$this->totalraidcount = $raids->raidcount($dkpsys_id, $days, $member_id, 0, true);
 		}
 		else
