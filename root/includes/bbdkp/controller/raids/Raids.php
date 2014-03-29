@@ -668,7 +668,7 @@ class Raids extends \bbdkp\admin\Admin
 		}
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 		{
-			$sql .= " AND d.member_status='1'";
+			$sql .= " AND l.member_status='1'";
 		}
 		$sql .= "
 				AND ev.event_id = r.event_id
@@ -711,7 +711,7 @@ class Raids extends \bbdkp\admin\Admin
 					AND( - r.raid_start + " . $time . "  )/(3600 * 24) < ". (int) $config['bbdkp_list_p3'];
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 		{
-			$sql .= " AND d.member_status='1'";
+			$sql .= " AND l.member_status='1'";
 		}
 		$sql .= "
 					AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . "
@@ -752,7 +752,7 @@ class Raids extends \bbdkp\admin\Admin
 				AND(  - r.raid_start + " . $time . " ) /(3600 * 24) < ". (int) $config['bbdkp_list_p2'];
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 		{
-			$sql .= " AND d.member_status='1'";
+			$sql .= " AND l.member_status='1'";
 		}
 		$sql .= " AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . "
 				AND l.member_joindate < r.raid_start
@@ -792,7 +792,7 @@ class Raids extends \bbdkp\admin\Admin
 				AND( - r.raid_start + " . $time . " )/(3600 * 24) < ". (int) $config['bbdkp_list_p1'];
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 		{
-			$sql .= " AND d.member_status='1'";
+			$sql .= " AND l.member_status='1'";
 		}
 		$sql .= " AND l.member_id = rd.member_id AND l.member_guild_id = " . $guild_id . "
 				AND l.member_joindate < r.raid_start
@@ -823,6 +823,7 @@ class Raids extends \bbdkp\admin\Admin
 		$u_stats = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=stats&amp;' .URI_GUILD . '=' . $guild_id);
 
 		$startatt = request_var ( 'startatt', 0 );
+
 		$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $startatt );
 
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
