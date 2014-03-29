@@ -419,6 +419,8 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					$newmember->member_achiev = 0;
 					$newmember->member_armory_url = utf8_normalize_nfc(request_var('member_armorylink', '', true));
 					$newmember->phpbb_user_id = request_var('phpbb_user_id', 0);
+                    $newmember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
+
 					$newmember->Armory_getmember();
 					$newmember->Makemember();
 
@@ -542,7 +544,9 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 				$S_ADD = ($member_id > 0) ? false: true;
 				if ($S_ADD)
 				{
+                    // set defaults
 					$editmember->member_guild_id = request_var(URI_GUILD, 0);
+
 				}
 
 				$Guild = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
@@ -551,6 +555,9 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 				if ($S_ADD)
 				{
 					$editmember->game_id = $Guild->game_id;
+                    $editmember->member_rank_id = $Guild->raidtrackerrank;
+                    $editmember->member_status = 1;
+                    $editmember->member_gender_id = 0;
 				}
 
 				foreach ($guildlist as $g)
