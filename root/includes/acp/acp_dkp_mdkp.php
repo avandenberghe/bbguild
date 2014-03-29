@@ -609,7 +609,6 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 				'L_EXPLAIN' => $user->lang ['ACP_MM_LISTMEMBERDKP_EXPLAIN'],
 				'BUTTON_NAME' => 'delete',
 				'BUTTON_VALUE' => $user->lang ['DELETE_SELECTED_MEMBERS'],
-				'O_STATUS' => $current_order ['uri'] [0],
 				'O_NAME' => $current_order ['uri'] [1],
 				'O_RANK' => $current_order ['uri'] [2],
 				'O_LEVEL' => $current_order ['uri'] [3],

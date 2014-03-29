@@ -835,10 +835,12 @@ $versions = array(
 
     	// remove copyright info from plugin table
 	    // remove roles from class table
+        // remove status from dkp table
      	'table_column_remove' => array(
      			array($table_prefix . 'bbdkp_classes', 'dps'),
      			array($table_prefix . 'bbdkp_classes', 'tank'),
      			array($table_prefix . 'bbdkp_classes', 'heal'),
+                array($table_prefix . 'bbdkp_memberdkp', 'status'),
       		),
 
      	// add guild columns

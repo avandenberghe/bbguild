@@ -43,7 +43,6 @@ class Points
 	`member_spent` decimal(11,2) NOT NULL DEFAULT '0.00',
 	`member_item_decay` decimal(11,2) NOT NULL DEFAULT '0.00',
 	`member_adjustment` decimal(11,2) NOT NULL DEFAULT '0.00',
-	`member_status` tinyint(1) unsigned NOT NULL DEFAULT '0',
 	`member_firstraid` int(11) unsigned NOT NULL DEFAULT '0',
 	`member_lastraid` int(11) unsigned NOT NULL DEFAULT '0',
 	`member_raidcount` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -205,15 +204,6 @@ class Points
 	 */
 	public $pr_net;
 
-
-	/******************************/
-
-	/**
-	 * status of this account
-	 * @var int
-	 */
-	public $status;
-
 	/**
 	 * start date of this account
 	 * @var date
@@ -302,7 +292,7 @@ class Points
 	{
 		global $config, $db;
 
-		$sql_array['SELECT'] = 'm.member_id, m.member_status, m.member_firstraid, m.member_lastraid,
+		$sql_array['SELECT'] = 'm.member_id, m.member_firstraid, m.member_lastraid,
 				sum(m.member_raid_value) as member_raid_value,
 				sum(m.member_time_bonus) as member_time_bonus,
 				sum(m.member_zerosum_bonus) as member_zerosum_bonus,
@@ -313,10 +303,10 @@ class Points
 				sum(m.adj_decay) as adj_decay,
 				sum(m.member_raidcount) as member_raidcount ';
 		$sql_array['FROM'] =
-			array (
-					MEMBER_DKP_TABLE 	=> 'm',
-					DKPSYS_TABLE		=> 'd',
-				  );
+            array (
+                    MEMBER_DKP_TABLE 	=> 'm',
+                    DKPSYS_TABLE		=> 'd',
+                  );
 		$sql_array['WHERE'] = " d.dkpsys_id=m.member_dkpid AND d.dkpsys_status != 'N' and m.member_id = " . (int) $this->member_id;
 		if ($this->dkpid > 0)
 		{
@@ -329,7 +319,6 @@ class Points
 		while ( ($row = $db->sql_fetchrow ( $result )) )
 		{
 			$this->member_id = $row['member_id'];
-			$this->status = $row['member_status'];
 			$this->firstraid = $row['member_firstraid'];
 			$this->lastraid = $row['member_lastraid'];
 			$this->raidcount = $row['member_raidcount'];
@@ -419,7 +408,6 @@ class Points
 		$query = $db->sql_build_array('INSERT', array(
 			'member_dkpid'       	=> $this->dkpid,
 			'member_id'          	=> $this->member_id,
-			'member_status'      	=> $this->status,
 			'member_raid_value'  	=> $this->raid_value ,
 			'member_time_bonus'  	=> $this->time_bonus ,
 			'member_zerosum_bonus'  => $this->zerosum_bonus,
@@ -450,7 +438,6 @@ class Points
 		$query = $db->sql_build_array ( 'UPDATE', array (
 			'member_dkpid'       	=> $this->dkpid,
 			'member_id'          	=> $this->member_id,
-			'member_status'      	=> $this->status,
 			'member_raid_value'  	=> $this->raid_value ,
 			'member_time_bonus'  	=> $this->time_bonus ,
 			'member_zerosum_bonus'  => $this->zerosum_bonus,
