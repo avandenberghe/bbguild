@@ -424,7 +424,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					$newmember->Armory_getmember();
 					$newmember->Makemember();
 
-					if ($newmember->member_id > 0)
+                    if ($newmember->member_id > 0)
 					{
 						//record added. now update some stats
 						meta_refresh(2, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $newmember->member_guild_id ));

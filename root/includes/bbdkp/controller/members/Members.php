@@ -517,157 +517,6 @@ class Members extends \bbdkp\admin\Admin
 	}
 
 	/**
-	 * Insert new member
-	 * @return number
-	 */
-	public function Makemember()
-	{
-		global $user, $db, $config;
-
-		$error = array ();
-
-		//perform checks
-
-		// check if membername exists
-		$sql = 'SELECT count(*) as memberexists
-				FROM ' . MEMBER_LIST_TABLE . "
-				WHERE member_name= '" . $db->sql_escape(ucwords($this->member_name)) . "'
-				AND member_guild_id = " . $this->member_guild_id;
-		$result = $db->sql_query($sql);
-		$countm = $db->sql_fetchfield('memberexists');
-		$db->sql_freeresult($result);
-		if ($countm != 0)
-		{
-			$error[]= $user->lang['ERROR_MEMBEREXIST'];
-		}
-
-		if($this->member_rank_id === null)
-		{
-			$error[]= $user->lang['ERROR_INCORRECTRANK'];
-		}
-
-		if($this->member_status === null )
-		{
-			$this->member_status = 1;
-		}
-
-		if($this->member_title === null )
-		{
-			$this->member_title = ' ';
-		}
-
-		// check if rank exists
-		$sql = 'SELECT count(*) as rankccount
-			FROM ' . MEMBER_RANKS_TABLE . '
-			WHERE rank_id=' . (int) $this->member_rank_id . '
-			AND guild_id = ' . (int) $this->member_guild_id;
-		$result = $db->sql_query($sql);
-		$countm = $db->sql_fetchfield('rankccount');
-		$db->sql_freeresult($result);
-		if ($countm == 0)
-		{
-			$error[]= $user->lang['ERROR_INCORRECTRANK'];
-		}
-
-		if (count($error) > 0)
-		{
-			$log_action = array(
-				'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
-				'L_NAME' 	 => ucwords($this->member_name) . implode(',', $error)  ,
-				'L_GAME' 	 => $this->game_id,
-				'L_LEVEL' 	 => $this->member_level,
-				'L_RACE' 	 => $this->member_race_id,
-				'L_CLASS' 	 => $this->member_class_id,
-				'L_ADDED_BY' => $user->data['username']);
-
-			$this->log_insert(array(
-				'log_type' 		=> 'L_ACTION_MEMBER_ADDED' ,
-				'log_result' 	=> 'L_FAILED' ,
-				'log_action' 	=> $log_action));
-
-			return 0;
-		}
-
-		// check level
-		$sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE;
-		$result = $db->sql_query($sql);
-		$maxlevel = $db->sql_fetchfield('maxlevel');
-		$db->sql_freeresult($result);
-		if ($this->member_level > $maxlevel)
-		{
-			$this->member_level = $maxlevel;
-		}
-
-		// if region/realm is nil then default it from guild
-		if($this->member_realm =='' or  $this->member_region =='')
-		{
-			$sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $this->member_guild_id;
-			$result = $db->sql_query($sql);
-			$this->member_realm  = $config['bbdkp_default_realm'];
-			$this->member_region = '';
-			while ($row = $db->sql_fetchrow($result))
-			{
-				$this->member_realm = $row['realm'];
-				$this->member_region = $row['region'];
-			}
-		}
-
-		$game = new \bbdkp\controller\games\Game;
-		$game->game_id = $this->game_id;
-		$game->Get();
-
-		switch ($this->game_id)
-		{
-			case 'aion':
-				$this->member_portrait_url = $this->generate_portraitlink();
-		}
-
-
-		$query = $db->sql_build_array('INSERT', array(
-			'member_name' => ucwords($this->member_name) ,
-			'member_status' => $this->member_status ,
-			'member_level' => $this->member_level,
-			'member_race_id' => $this->member_race_id ,
-			'member_class_id' => $this->member_class_id ,
-			'member_rank_id' => $this->member_rank_id ,
-			'member_role' => $this->member_role,
-			'member_realm' => $this->member_realm,
-			'member_region' => $this->member_region,
-			'member_comment' => (string) $this->member_comment ,
-			'member_joindate' => (int) $this->member_joindate ,
-			'member_outdate' => (int) $this->member_outdate ,
-			'member_guild_id' => $this->member_guild_id ,
-			'member_gender_id' => $this->member_gender_id ,
-			'member_achiev' => $this->member_achiev ,
-			'member_armory_url' => (string) $this->member_armory_url ,
-			'phpbb_user_id' => (int) $this->phpbb_user_id ,
-			'game_id' => (string) $this->game_id ,
-			'member_portrait_url' => (string) $this->member_portrait_url,
-			'member_title' => $this->member_title
-			));
-
-		$db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
-
-		$this->member_id = $db->sql_nextid();
-
-		$log_action = array(
-			'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
-			'L_NAME' 	 => ucwords($this->member_name)  ,
-			'L_GAME' 	 => $this->game_id,
-			'L_LEVEL' 	 => $this->member_level,
-			'L_RACE' 	 => $this->member_race_id,
-			'L_CLASS' 	 => $this->member_class_id,
-			'L_ADDED_BY' => $user->data['username']);
-
-		$this->log_insert(array(
-			'log_type' => 'L_ACTION_MEMBER_ADDED' ,
-			'log_action' => $log_action));
-
-		return $this->member_id;
-
-	}
-
-	/**
 	 * update member
 	 * @param \bbdkp\controller\members\Members $old_member
 	 * @return boolean
@@ -851,6 +700,181 @@ class Members extends \bbdkp\admin\Admin
 			'log_action' => $log_action));
 
 	}
+
+    /**
+     * Insert new member
+     * @return number
+     */
+    public function Makemember()
+    {
+        global $user, $db, $config;
+
+        $error = array ();
+
+        //perform checks
+
+        // check if membername exists
+        $sql = 'SELECT count(*) as memberexists
+				FROM ' . MEMBER_LIST_TABLE . "
+				WHERE member_name= '" . $db->sql_escape(ucwords($this->member_name)) . "'
+				AND member_guild_id = " . $this->member_guild_id;
+        $result = $db->sql_query($sql);
+        $countm = $db->sql_fetchfield('memberexists');
+        $db->sql_freeresult($result);
+        if ($countm != 0)
+        {
+            $error[]= $user->lang['ERROR_MEMBEREXIST'];
+        }
+
+        if($this->member_rank_id === null)
+        {
+            $error[]= $user->lang['ERROR_INCORRECTRANK'];
+        }
+
+        if($this->member_status === null )
+        {
+            $this->member_status = 1;
+        }
+
+        if($this->member_title === null )
+        {
+            $this->member_title = ' ';
+        }
+
+        // check if rank exists
+        $sql = 'SELECT count(*) as rankccount
+			FROM ' . MEMBER_RANKS_TABLE . '
+			WHERE rank_id=' . (int) $this->member_rank_id . '
+			AND guild_id = ' . (int) $this->member_guild_id;
+        $result = $db->sql_query($sql);
+        $countm = $db->sql_fetchfield('rankccount');
+        $db->sql_freeresult($result);
+        if ($countm == 0)
+        {
+            $error[]= $user->lang['ERROR_INCORRECTRANK'];
+        }
+
+        if (count($error) > 0)
+        {
+            $log_action = array(
+                'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
+                'L_NAME' 	 => ucwords($this->member_name) . implode(',', $error)  ,
+                'L_GAME' 	 => $this->game_id,
+                'L_LEVEL' 	 => $this->member_level,
+                'L_RACE' 	 => $this->member_race_id,
+                'L_CLASS' 	 => $this->member_class_id,
+                'L_ADDED_BY' => $user->data['username']);
+
+            $this->log_insert(array(
+                'log_type' 		=> 'L_ACTION_MEMBER_ADDED' ,
+                'log_result' 	=> 'L_FAILED' ,
+                'log_action' 	=> $log_action));
+
+            return 0;
+        }
+
+        // check level
+        $sql = 'SELECT max(class_max_level) as maxlevel FROM ' . CLASS_TABLE;
+        $result = $db->sql_query($sql);
+        $maxlevel = $db->sql_fetchfield('maxlevel');
+        $db->sql_freeresult($result);
+        if ($this->member_level > $maxlevel)
+        {
+            $this->member_level = $maxlevel;
+        }
+
+        // if region/realm is nil then default it from guild
+        if($this->member_realm =='' or  $this->member_region =='')
+        {
+            $sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $this->member_guild_id;
+            $result = $db->sql_query($sql);
+            $this->member_realm  = $config['bbdkp_default_realm'];
+            $this->member_region = '';
+            while ($row = $db->sql_fetchrow($result))
+            {
+                $this->member_realm = $row['realm'];
+                $this->member_region = $row['region'];
+            }
+        }
+
+        $game = new \bbdkp\controller\games\Game;
+        $game->game_id = $this->game_id;
+        $game->Get();
+
+        switch ($this->game_id)
+        {
+            case 'aion':
+                $this->member_portrait_url = $this->generate_portraitlink();
+        }
+
+
+        $query = $db->sql_build_array('INSERT', array(
+            'member_name' => ucwords($this->member_name) ,
+            'member_status' => $this->member_status ,
+            'member_level' => $this->member_level,
+            'member_race_id' => $this->member_race_id ,
+            'member_class_id' => $this->member_class_id ,
+            'member_rank_id' => $this->member_rank_id ,
+            'member_role' => $this->member_role,
+            'member_realm' => $this->member_realm,
+            'member_region' => $this->member_region,
+            'member_comment' => (string) $this->member_comment ,
+            'member_joindate' => (int) $this->member_joindate ,
+            'member_outdate' => (int) $this->member_outdate ,
+            'member_guild_id' => $this->member_guild_id ,
+            'member_gender_id' => $this->member_gender_id ,
+            'member_achiev' => $this->member_achiev ,
+            'member_armory_url' => (string) $this->member_armory_url ,
+            'phpbb_user_id' => (int) $this->phpbb_user_id ,
+            'game_id' => (string) $this->game_id ,
+            'member_portrait_url' => (string) $this->member_portrait_url,
+            'member_title' => $this->member_title
+        ));
+
+        $db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
+
+        $this->member_id = $db->sql_nextid();
+
+        // add starting points
+        if (!class_exists('\bbdkp\controller\adjustments\Adjust'))
+        {
+            global $phpbb_root_path, $phpEx;
+            require("{$phpbb_root_path}includes/bbdkp/controller/adjustments/Adjust.$phpEx");
+        }
+
+        $newadjust = new \bbdkp\controller\adjustments\Adjust;
+        $newadjust->setMemberId($this->member_id);
+        $newadjust->setAdjustmentValue($config['bbdkp_starting_dkp']);
+        $newadjust->setAdjustmentReason($user->lang['STARTING_DKP'])  ;
+        $newadjust->setCanDecay(0);
+        $newadjust->setAdjDecay(0);
+        $newadjust->setDecayTime(0);
+        $newadjust->setAdjustmentDate($this->member_joindate);
+        $newadjust->setAdjustmentGroupkey($this->gen_group_key($newadjust->getAdjustmentDate(), $newadjust->getAdjustmentReason(), $newadjust->getAdjustmentValue()));
+        $newadjust->setAdjustmentAddedBy($user->data['username']);
+        foreach ($newadjust->getDkpsys() as $pool)
+        {
+            $newadjust->setAdjustmentDkpid($pool['id'] );
+            $newadjust->add();
+        }
+
+        $log_action = array(
+            'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
+            'L_NAME' 	 => ucwords($this->member_name)  ,
+            'L_GAME' 	 => $this->game_id,
+            'L_LEVEL' 	 => $this->member_level,
+            'L_RACE' 	 => $this->member_race_id,
+            'L_CLASS' 	 => $this->member_class_id,
+            'L_ADDED_BY' => $user->data['username']);
+
+        $this->log_insert(array(
+            'log_type' => 'L_ACTION_MEMBER_ADDED' ,
+            'log_action' => $log_action));
+
+        return $this->member_id;
+
+    }
+
 
 	/**
 	 * fetch info from Armory
@@ -1187,6 +1211,7 @@ class Members extends \bbdkp\admin\Admin
 				$this->member_achiev = (int) $mb['character']['achievementPoints'];
 				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $region) . 'character/' . $realm . '/' . $this->member_name . '/simple';
 				$this->member_status = 1;
+                $this->member_role = 'NA';
 				$this->member_comment = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], $this->member_name, date("F j, Y, g:i a") );
 				$this->member_joindate = $this->time;
 				$this->member_outdate = mktime ( 0, 0, 0, 12, 31, 2030 );
@@ -1202,36 +1227,10 @@ class Members extends \bbdkp\admin\Admin
 						}
 					}
 				}
-
-				$query [] = array (
-					'member_region' => $this->member_region,
-					'member_name' => ucwords($this->member_name) ,
-					'member_status' => $this->member_status ,
-					'member_level' => $this->member_level,
-					'member_race_id' => $this->member_race_id ,
-					'member_guild_id' => $this->member_guild_id ,
-					'member_class_id' => $this->member_class_id ,
-					'member_rank_id' => $this->member_rank_id ,
-					'member_comment' => (string) $this->member_comment ,
-					'member_joindate' => (int) $this->member_joindate ,
-					'member_outdate' => (int) $this->member_outdate ,
-					'member_gender_id' => $this->member_gender_id ,
-					'member_realm' => $this->member_realm,
-					'member_achiev' => $this->member_achiev ,
-					'member_armory_url' => (string) $this->member_armory_url ,
-					'phpbb_user_id' => 0 ,
-					'game_id' => (string) $this->game_id ,
-					'member_portrait_url' => (string) $this->member_portrait_url,
-
-				);
+                $this->Makemember();
 			}
 		}
 
-		if(count($query) > 0)
-		{
-			$db->sql_multi_insert(MEMBER_LIST_TABLE, $query);
-			$db->sql_transaction('commit');
-		}
 
 		// get the members to update
 		$to_update = array_intersect($newmembers, $oldmembers);
