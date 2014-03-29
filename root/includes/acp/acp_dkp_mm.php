@@ -143,7 +143,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 				{
 				// default pageloading
 
-					$guildlist = $Guild->guildlist();
+					$guildlist = $Guild->guildlist(1);
 
 					if( count((array) $guildlist) == 0  )
 					{
@@ -210,7 +210,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					{
 						$s_hidden_fields = build_hidden_fields(array(
 								'charapicall' => true ,
-								'hidden_guildid' => request_var('hidden_guildid', 0)
+								'hidden_guildid' => request_var('member_guild_id', 0)
 								));
 						confirm_box(false, $user->lang['WARNING_BATTLENET'], $s_hidden_fields);
 					}
