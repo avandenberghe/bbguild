@@ -74,7 +74,7 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
     
 ## Changelog 
 
-1.3.0
+1.3.0-RC1 30-03-2014
 
 -   [NEW] refactored and moved program logic to namespaced viewfactory, controller and domain classes.
 -   [NEW] minimum requirement is now php 5.3.20
