@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3 Beta 6#
+#1.3 Beta 7#
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-v1.3.0-b6
+v1.3.0-b7
 
 
 ## Installation
@@ -48,14 +48,14 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 
 #### Upgrading from 1.2.8-pl2 to 1.3.0
 
-* Uninstall 1.2.8-pl2 and re-install 1.3.0-b3 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.3.0 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first. So uninstall them from Automod, but don't run the plugin database uninstallers.
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2.
 	3. now install bbDKP, as described in new install procedure
     4. update database: goto /install, press the "update"
 * Manually
 	1. download your forum to localhost, as we will make the changes locally and then upload the new/changed
-	2.	follow the diff steps described here : 1.2.8-pl2 to 1.3.0-b3
+	2.	follow the diff steps described here : 1.2.8-pl2 to 1.3.0
 	3.	copy the new files, replacing any old files.
 	4.	delete the old files mentioned in the delete section
 	5.	apply the changes to the core phpbb files. use a good text editor
@@ -74,7 +74,7 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
     
 ## Changelog 
 
-1.3.0
+1.3.0-RC1 30-03-2014
 
 -   [NEW] refactored and moved program logic to namespaced viewfactory, controller and domain classes.
 -   [NEW] minimum requirement is now php 5.3.20
