@@ -240,7 +240,7 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
 
     private function buildNavigation()
     {
-        global $phpbb_root_path, $phpEx, $user, $template;
+        global $phpbb_root_path, $phpEx, $user, $db, $template;
 
         // get inputs
         $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
@@ -295,7 +295,6 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
             trigger_error('ERROR_NOGUILD', E_USER_WARNING );
         }
 
-
         $guilds->guildid = $this->guild_id;
         $guilds->Getguild();
         $this->game_id = $guilds->game_id;
@@ -332,6 +331,39 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
         $this->query_by_pool = false;
         $this->dkpsys_id = 0;
         $this->dkpsys_name = $user->lang['ALL'];
+
+        $sql_array = array(
+            'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
+            'FROM'		=> array(
+                DKPSYS_TABLE => 'a',
+                MEMBER_DKP_TABLE => 'd',
+                MEMBER_LIST_TABLE => 'l'
+            ),
+
+            'WHERE'  => " a.dkpsys_id = d.member_dkpid
+							AND a.dkpsys_status != 'N'
+							AND d.member_id = l.member_id
+							AND l.member_guild_id = " . $this->guild_id ,
+            'GROUP_BY'  => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
+            'ORDER_BY'  => 'a.dkpsys_id '
+        );
+        $sql = $db->sql_build_query('SELECT', $sql_array);
+        $result = $db->sql_query ($sql);
+        $index = 3;
+        $dkpvalues = array();
+        while ( $row = $db->sql_fetchrow ( $result ) )
+        {
+            $dkpvalues[$index]['id'] = $row ['dkpsys_id'];
+            $dkpvalues[$index]['text'] = $row ['dkpsys_name'];
+            $index +=1;
+            if (strtoupper ( $row ['dkpsys_default'] ) == 'Y')
+            {
+                $this->defaultpool = $row ['dkpsys_id'];
+                break;
+            }
+        }
+        $db->sql_freeresult ( $result );
+
         if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
         {
             if (isset( $_POST ['pool']) )
@@ -362,12 +394,12 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
         }
         else
         {
-            // if no parameters passed to this page then show all points
-            $this->query_by_pool = false;
+            // if no parameters passed to this page then show default pool
+            $this->query_by_pool = true;
             $this->dkpsys_id = $this->defaultpool;
         }
 
-        $this->dkppulldown();
+        $this->dkppulldown($dkpvalues);
 
         $mode = request_var('rosterlayout', 0);
 
@@ -408,81 +440,44 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
     }
 
     /**
-     * build dkp dropdown, for standings/stats, called by navigation
-     * @return int $dkpsys_id
+     * build dkp dropdown, for standings/stats
+     *
+     * @param $dkpvalues
      */
-    private function dkppulldown()
+    private function dkppulldown($dkpvalues)
     {
-        global $user, $db, $template;
-
-        $dkpvalues = array();
-
-        $dkpvalues[0] = $user->lang['ALL'];
-        $dkpvalues[1] = '--------';
+        global $user, $template;
+        $template->assign_block_vars ( 'pool_row', array (
+            'VALUE' => $user->lang['ALL'],
+            'SELECTED' => (!$this->query_by_pool) ? ' selected="selected"' : '',
+            'OPTION' => $user->lang['ALL'],
+        ));
+        $template->assign_block_vars ( 'pool_row', array (
+            'VALUE' => '--------',
+            'SELECTED' => '',
+            'DISABLED' => ' disabled="disabled"',
+            'OPTION' => '--------',
+        ));
 
         // find only pools with dkp records that are active
-
-        $sql_array = array(
-            'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
-            'FROM'		=> array(
-                DKPSYS_TABLE => 'a',
-                MEMBER_DKP_TABLE => 'd',
-                MEMBER_LIST_TABLE => 'l'
-            ),
-
-            'WHERE'  => " a.dkpsys_id = d.member_dkpid
-							AND a.dkpsys_status != 'N'
-							AND d.member_id = l.member_id
-							AND l.member_guild_id = " . $this->guild_id ,
-            'GROUP_BY'  => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
-            'ORDER_BY'  => 'a.dkpsys_id '
-        );
-        $sql = $db->sql_build_query('SELECT', $sql_array);
-
-        $result = $db->sql_query ($sql);
-        $index = 3;
-        while ( $row = $db->sql_fetchrow ( $result ) )
-        {
-            $dkpvalues[$index]['id'] = $row ['dkpsys_id'];
-            $dkpvalues[$index]['text'] = $row ['dkpsys_name'];
-            if (strtoupper ( $row ['dkpsys_default'] ) == 'Y')
-            {
-                $this->defaultpool = $row ['dkpsys_id'];
-            }
-            $index +=1;
-        }
-        $db->sql_freeresult ( $result );
-
+        sort($dkpvalues);
         foreach ($dkpvalues as $key => $value)
         {
-            if(!is_array($value))
-            {
-                $template->assign_block_vars ( 'pool_row', array (
-                    'VALUE' => $value,
-                    'SELECTED' => (!$this->query_by_pool && $value != '--------') ? ' selected="selected"' : '',
-                    'DISABLED' => ($value == '--------' ) ? ' disabled="disabled"' : '',
-                    'OPTION' => $value,
-                ));
-            }
-            else
-            {
-                $template->assign_block_vars ( 'pool_row', array (
-                    'VALUE' => $value['id'],
-                    'SELECTED' => ($this->dkpsys_id == $value['id']  && $this->query_by_pool ) ? ' selected="selected"' : '',
-                    'OPTION' => $value['text'],
-                ));
+            $template->assign_block_vars ( 'pool_row', array (
+                'VALUE' => $value['id'],
+                'SELECTED' => ($this->dkpsys_id == $value['id']  && $this->query_by_pool ) ? ' selected="selected"' : '',
+                'OPTION' => $value['text'],
+            ));
 
-                if($this->dkpsys_id == $value['id'] && $this->query_by_pool )
-                {
-                    $this->dkpsys_name = $value['text'];
-                }
-
+            if($this->dkpsys_id == $value['id'] && $this->query_by_pool )
+            {
+                $this->dkpsys_name = $value['text'];
             }
         }
     }
 
     /**
-     *
+     * Armor listing
      */
     private function armor()
     {
