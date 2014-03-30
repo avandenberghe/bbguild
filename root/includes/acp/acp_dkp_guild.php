@@ -82,6 +82,8 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 	{
 		global $user, $template, $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 		$this->tpl_name = 'dkp/acp_' . $mode;
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
+
 		switch ($mode)
 		{
 
@@ -89,8 +91,6 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 			// List Guilds
 			/***************************************/
 			case 'listguilds':
-
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 
 				if(count($this->games) == 0)
 				{
@@ -137,7 +137,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 				$previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
 				$show_all = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
 
-				$sql = 'SELECT id, name, realm, region, roster, game_id FROM ' . GUILD_TABLE . ' WHERE id >= 0 ORDER BY ' . $current_order['sql'];
+				$sql = 'SELECT id, name, realm, region, roster, game_id FROM ' . GUILD_TABLE . ' WHERE id > 0 ORDER BY ' . $current_order['sql'];
 				if (! ($guild_result = $db->sql_query($sql)))
 				{
 					trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
@@ -208,6 +208,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 					$addguild->showroster = (isset($_POST['showroster'])) ? true : false;
 					$addguild->min_armory = request_var('min_armorylevel', 0);
 					$addguild->armory_enabled = request_var('armory_enabled', 0);
+                    $addguild->recstatus = request_var('switchon_recruitment', 0);
 
 					if ($addguild->MakeGuild() == true)
 					{
@@ -260,7 +261,6 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 			 *************************************/
 			case 'editguild':
 
-				$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 				$this->url_id = request_var(URI_GUILD, 0);
 				$add= false;
 
@@ -321,7 +321,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 					$updateguild->Guildupdate($old_guild, $armoryparams);
 
 					$success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
-					trigger_error($success_message . $this->link);
+					trigger_error($success_message . $this->link, E_USER_NOTICE);
 				}
 
 
@@ -333,7 +333,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 						$deleteguild->Getguild();
 						$deleteguild->Guildelete();
 						$success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guildid);
-						trigger_error($success_message . adm_back_link($this->u_action), E_USER_NOTICE);
+						trigger_error($success_message . $this->link, E_USER_NOTICE);
 					}
 					else
 					{

@@ -27,7 +27,6 @@
 <!-- IF .members_row -->
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
-    <th style="text-align:left; width:1%"><a href="{U_LIST_MEMBERDKP}o={O_STATUS}">{L_ACTIVE}</a></th>
     <th style="text-align:left; width:1%">&nbsp;</th>
     <th style="text-align:left; width:15%"><a href="{U_LIST_MEMBERDKP}o={O_NAME}">{L_NAME}</a></th>
     <th style="text-align:left; width:5%"><a href="{U_LIST_MEMBERDKP}o={O_RANK}">{L_RANK}</a></th>
@@ -63,7 +62,6 @@
   <!-- ELSE -->
   <tr class="row2">
   <!-- ENDIF -->
-    <td style="text-align:center; white-space: nowrap"><input type="checkbox" name="activate_ids[{members_row.ID}]" value="{members_row.ID}" {members_row.STATUS} /></td>
     <td style="text-align:center; white-space: nowrap">{members_row.ID}</td>
     <td style="text-align:left; white-space: nowrap"><strong><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" />&nbsp;<!-- ENDIF -->{members_row.NAME}</a></strong></td>
     <td style="text-align:center; white-space: nowrap">{members_row.RANK}</td>
@@ -80,7 +78,6 @@
     <!-- ENDIF -->
 
     <td class="row2" style="text-align:right; white-space: nowrap" ><span class="<!-- IF members_row.EARNED > 0 --> positive <!-- ELSE -->negative<!-- ENDIF -->"><strong>{members_row.EARNED}</strong></span></td>
-
 
     <!-- IF S_SHOWDECAY -->
     <td style="text-align:right; white-space: nowrap" class="negative">{members_row.SPENT}</td>
@@ -117,9 +114,6 @@
 	<input type="hidden" name="idlist" value="{IDLIST}" />
 	<input type="hidden" name="dkpsys" value="{DKPSYS}" />
     {S_FORM_TOKEN}
-	<input type="submit" name="submit_activate" value="{L_CHANGE_ACTIVATION}" class="button1" />
-	<span class="small"><a href="#" onclick="marklist('acp_dkp_memberlist', 'activate_id', true); return false;">{L_MARK_ALL}</a> &bull; <a href="#" onclick="marklist('acp_dkp_memberlist', 'activate_id', false); return false;">{L_UNMARK_ALL}</a></span>
-	<br /><br />
 </fieldset>
 
 <br />

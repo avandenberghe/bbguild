@@ -531,7 +531,7 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
             if ($config ['bbdkp_hide_inactive'] == '1' && ! $this->show_all )
             {
                 // don't show inactive members
-                $sql_array['WHERE'] .= ' AND d.member_status = 1 ';
+                $sql_array['WHERE'] .= ' AND i.member_status = 1 ';
             }
         }
 

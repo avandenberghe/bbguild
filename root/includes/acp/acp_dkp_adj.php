@@ -80,7 +80,7 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
 		$this->adjustment = new \bbdkp\controller\adjustments\Adjust;  //always late binding in php
-		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
+		$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
 		$this->tpl_name = 'dkp/acp_' . $mode;
 
 		switch ($mode)
@@ -176,13 +176,15 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 
 				/*** end DKPSYS drop-down ***/
 				$sort_order = array(
-					0 => array('adjustment_date desc' , 'adjustment_date') ,
-					1 => array('adjustment_dkpid' , 'adjustment_dkpid desc') ,
-					2 => array('dkpsys_name' , 'dkpsys_name desc') ,
-					3 => array('member_name' , 'member_name desc') ,
-					4 => array('adjustment_reason' , 'adjustment_reason desc') ,
-					5 => array('adjustment_value desc' , 'adjustment_value') ,
-					6 => array('adjustment_added_by' , 'adjustment_added_by desc'));
+                    0 => array('adjustment_id desc' , 'adjustment_id asc'),
+					1 => array('adjustment_date desc, member_name asc' , 'adjustment_date asc, member_name asc') ,
+					2 => array('adjustment_dkpid' , 'adjustment_dkpid desc') ,
+					3 => array('dkpsys_name' , 'dkpsys_name desc') ,
+					4 => array('member_name' , 'member_name desc') ,
+					5 => array('adjustment_reason' , 'adjustment_reason desc') ,
+					6 => array('adjustment_value desc' , 'adjustment_value') ,
+					7 => array('adjustment_added_by' , 'adjustment_added_by desc'),
+                );
 
 				$members = new \bbdkp\controller\members\Members();
 				$member_filter = utf8_normalize_nfc(request_var('member_name', '', true));
@@ -216,7 +218,8 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 					$template->assign_block_vars('adjustments_row', array(
 						'U_ADD_ADJUSTMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj") . '&amp;' . URI_ADJUSTMENT . '=' . $adj['adjustment_id'] . '&amp;' . URI_DKPSYS . '=' . $adj['adjustment_dkpid'] ,
 						'DATE' => date($config['bbdkp_date_format'], $adj['adjustment_date']) ,
-						'DKPID' => $adj['adjustment_dkpid'] ,
+                        'ADJID' => $adj['adjustment_id'] ,
+                        'DKPID' => $adj['adjustment_dkpid'] ,
 						'DKPPOOL' => $adj['dkpsys_name'] ,
 						'COLORCODE' => ($adj['colorcode'] == '') ? '#254689' : $adj['colorcode'] ,
 						'CLASS_IMAGE' => (strlen($adj['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $adj['imagename'] . ".png" : '' ,
@@ -246,13 +249,14 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 					'L_TITLE' => $user->lang['ACP_LISTIADJ'] ,
 					'L_EXPLAIN' => $user->lang['ACP_LISTIADJ_EXPLAIN'] ,
 					'S_SHOW' => ($hasrows == true) ? true : false ,
-					'O_DATE' => $current_order['uri'][0] ,
-					'O_DKPID' => $current_order['uri'][1] ,
-					'O_DKPPOOL' => $current_order['uri'][2] ,
-					'O_MEMBER' => $current_order['uri'][3] ,
-					'O_REASON' => $current_order['uri'][4] ,
-					'O_ADJUSTMENT' => $current_order['uri'][5] ,
-					'O_ADDED_BY' => $current_order['uri'][6] ,
+                    'O_ADJID' => $current_order['uri'][0] ,
+                    'O_DATE' => $current_order['uri'][1] ,
+					'O_DKPID' => $current_order['uri'][2] ,
+					'O_DKPPOOL' => $current_order['uri'][3] ,
+					'O_MEMBER' => $current_order['uri'][4] ,
+					'O_REASON' => $current_order['uri'][5] ,
+					'O_ADJUSTMENT' => $current_order['uri'][6] ,
+					'O_ADDED_BY' => $current_order['uri'][7] ,
 					'U_LIST_ADJUSTMENTS' => $u_list_adjustments ,
 					'MEMBER_NAME' => $member_filter ,
 					'START' => $start ,

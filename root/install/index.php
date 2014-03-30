@@ -835,10 +835,12 @@ $versions = array(
 
     	// remove copyright info from plugin table
 	    // remove roles from class table
+        // remove status from dkp table
      	'table_column_remove' => array(
      			array($table_prefix . 'bbdkp_classes', 'dps'),
      			array($table_prefix . 'bbdkp_classes', 'tank'),
      			array($table_prefix . 'bbdkp_classes', 'heal'),
+                array($table_prefix . 'bbdkp_memberdkp', 'member_status'),
       		),
 
      	// add guild columns
@@ -960,7 +962,7 @@ $versions = array(
      			),
 
 
-     		 	),
+            ),
 
      	'custom' => array(
 				'tableupdates',
@@ -1029,6 +1031,91 @@ $versions = array(
 
     '1.3.0-b6' => array(
         //beta6 wip
+    ),
+
+    '1.3.0-b7' => array(
+        //beta7 30-03-2014
+
+        'module_remove' => array(
+
+            //add edit dkp pool, addevent
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_sys',
+                'modes'           => array('editdkpsys', 'addevent', 'adddkpsys', 'listdkpsys' ),
+            ),
+            ),
+
+
+            // re-add dkp list
+            array('acp', 'ACP_DKP_MDKP', array(
+                'module_basename' => 'dkp_mdkp',
+                'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
+            ),
+            ),
+
+            //re-add the dkp adjustments
+            array('acp', 'ACP_DKP_MDKP', array(
+                'module_basename' => 'dkp_adj',
+                'modes'           => array('addiadj', 'listiadj'),
+            ),
+            ),
+
+            // remove item modules
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_item',
+                'modes'           => array('listitems', 'additem', 'search', 'viewitem'),
+            ),
+            ),
+
+            //raid modules
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_raid',
+                'modes'           => array('addraid', 'editraid', 'listraids'),
+            ),
+            ),
+            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MDKP'),
+            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS'),
+        ),
+
+        'module_add' => array(
+
+            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MDKP'),
+
+            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS'),
+            //raid modules
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_raid',
+                'modes'           => array('addraid', 'editraid', 'listraids'),
+            )),
+
+            //item module
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_item',
+                'modes'           => array('listitems', 'additem', 'search', 'viewitem'),
+            )),
+
+            //add edit dkp pool, addevent
+            array('acp', 'ACP_DKP_MDKP', array(
+                'module_basename' => 'dkp_sys',
+                'modes'           => array('editdkpsys', 'addevent', 'adddkpsys', 'listdkpsys' ),
+            )),
+
+            // re-add dkp list
+            array('acp', 'ACP_DKP_MDKP', array(
+                'module_basename' => 'dkp_mdkp',
+                'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
+            )),
+
+            //re-add the dkp adjustments
+            array('acp', 'ACP_DKP_MDKP', array(
+                'module_basename' => 'dkp_adj',
+                'modes'           => array('addiadj', 'listiadj'),
+            )),
+
+        ),
+
+
+
     ),
 );
 

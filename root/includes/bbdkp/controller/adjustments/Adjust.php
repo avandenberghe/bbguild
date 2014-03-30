@@ -420,7 +420,6 @@ class Adjust extends \bbdkp\admin\Admin
 					'member_earned' => 0.00 ,
 					'member_spent' => 0.00 ,
 					'member_adjustment' => $this->adjustment_value ,
-					'member_status' => 1 ,
 					'member_firstraid' => 0 ,
 					'member_lastraid' => 0 ,
 					'member_raidcount' => 0));

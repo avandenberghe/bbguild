@@ -40,6 +40,7 @@
 <br />
 <table cellspacing="1">
   <tr class="rowhead">
+    <th style="text-align:left; width:5%; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_ADJID}&amp;start={START}">{L_ID}</a></th>
     <th style="text-align:left; width:10%; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_DATE}&amp;start={START}">{L_DATE}</a></th>
     <th style="text-align:left; width:20%; white-space: nowrap"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_MEMBER}&amp;start={START}">{L_MEMBER}</a></th>
     <th style="text-align:left; width:20%"><a href="{U_LIST_ADJUSTMENTS}&amp;o={O_REASON}&amp;start={START}">{L_REASON}</a></th>
@@ -54,6 +55,7 @@
   <!-- IF menu_row.S_ROW_COUNT is even --><tr class="row1">
   <!-- ELSE -->
   <tr class="row2"><!-- ENDIF -->
+    <td style="text-align:left;">{adjustments_row.ADJID}</td>
     <td style="text-align:left;">{adjustments_row.DATE}</td>
     <td style="text-align:left;"><!-- IF adjustments_row.S_CLASS_IMAGE_EXISTS --><img src="{adjustments_row.CLASS_IMAGE}" alt="{adjustments_row.CLASS}" /><!-- ELSE -->&nbsp;<!-- ENDIF -->&nbsp;<strong><a style="color:{adjustments_row.COLORCODE}" href="{adjustments_row.U_VIEW_MEMBER}">{adjustments_row.MEMBER}</a></strong></td>
     <td style="text-align:left;">{adjustments_row.REASON}</td>

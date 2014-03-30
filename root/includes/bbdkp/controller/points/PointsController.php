@@ -94,33 +94,6 @@ class PointsController  extends \bbdkp\admin\Admin
 	}
 
 	/**
-	 * activate member dkp account
-	 * @param array $all_members
-	 * @param array $active_members
-	 */
-	public function activate($all_members, $active_members)
-	{
-		global $db;
-
-		$db->sql_transaction ( 'begin' );
-
-		$sql1 = 'UPDATE ' . MEMBER_DKP_TABLE . "
-                        SET member_status = '1'
-                        WHERE  member_dkpid  = " . $dkpsys_id . '
-                        AND ' . $db->sql_in_set ( 'member_id', $active_members, false, true );
-		$db->sql_query ( $sql1 );
-
-		$sql2 = 'UPDATE ' . MEMBER_DKP_TABLE . "
-                        SET member_status = '0'
-                        WHERE  member_dkpid  = " . $dkpsys_id . '
-                        AND ' . $db->sql_in_set ( 'member_id', array_diff($all_members, $active_members) , false, true );
-		$db->sql_query ( $sql2 );
-
-		$db->sql_transaction ( 'commit' );
-	}
-
-
-	/**
 	 * returns an array to list all dkp accounts
 	 *
 	 */
@@ -135,7 +108,7 @@ class PointsController  extends \bbdkp\admin\Admin
 						m.member_spent, m.member_item_decay, m.member_spent- m.member_item_decay as net_spent,
 						m.member_adjustment,  m.adj_decay,
 						(m.member_earned - m.member_raid_decay - (m.member_spent - m.member_item_decay) + m.member_adjustment - m.adj_decay) AS member_current,
-						m.member_status, m.member_lastraid,
+                        m.member_lastraid,
 						s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename',
 				'FROM' => array (
 						MEMBER_LIST_TABLE 	=> 'a',
@@ -159,8 +132,8 @@ class PointsController  extends \bbdkp\admin\Admin
 
 		$previous_data = '';
 		$sort_order = array (
-				0 => array ('member_status desc, member_name asc', 'member_status asc, member_name asc' ),
-				1 => array ('member_name', 'member_name desc' ),
+                0 => array ('member_name', 'member_name desc' ),
+                1 => array ('member_name', 'member_name desc' ),
 				2 => array ('rank_name', 'rank_name desc' ),
 				3 => array ('member_level desc', 'member_level' ),
 				4 => array ('member_class', 'member_class desc' ),
@@ -196,7 +169,6 @@ class PointsController  extends \bbdkp\admin\Admin
 			++ $lines;
 
 			$members_row [$row ['member_id']] = array (
-					'STATUS' => ($row ['member_status'] == 1) ? 'checked="checked" ' : '',
 					'ID' => $row ['member_id'],
 					'DKPID' => $row ['member_dkpid'],
 					'DKPSYS_S' => $this->dkpsys_id,
@@ -224,8 +196,6 @@ class PointsController  extends \bbdkp\admin\Admin
 
 		$db->sql_freeresult ($members_result);
 		return array($members_row, $current_order);
-
-
 	}
 
 
@@ -239,8 +209,8 @@ class PointsController  extends \bbdkp\admin\Admin
 
 		$sql_array = array (
 				'SELECT' => 's.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename,
-						m.member_id,  a.member_name, a.member_level, m.member_dkpid, m.member_status, m.member_lastraid,
-						m.member_raid_value,  m.member_time_bonus, m.member_raid_decay, m.member_spent, m.member_item_decay,  m.member_adjustment,  m.adj_decay,
+						m.member_id,  a.member_name, a.member_level, m.member_dkpid, m.member_lastraid,
+						m.member_raid_value, m.member_time_bonus, m.member_raid_decay, m.member_spent, m.member_item_decay,  m.member_adjustment,  m.adj_decay,
 						(m.member_raid_value + m.member_time_bonus - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep,
 						(m.member_spent - m.member_item_decay  + ' . max ( 0, $config ['bbdkp_basegp'] ) . ' ) AS gp,
 						CASE when (m.member_spent - m.member_item_decay + ' . max ( 0, $config ['bbdkp_basegp'] ) . ' ) = 0 then 1
@@ -266,7 +236,7 @@ class PointsController  extends \bbdkp\admin\Admin
 		/***  sort  ***/
 
 		$sort_order = array (
-				0 => array ('member_status desc, member_name asc', 'member_status asc, member_name asc'),
+                0 => array ('member_name', 'member_name desc' ),
 				1 => array ('member_name', 'member_name desc' ),
 				2 => array ('rank_name', 'rank_name desc' ),
 				3 => array ('member_level desc', 'member_level' ),
@@ -300,7 +270,6 @@ class PointsController  extends \bbdkp\admin\Admin
 			++ $lines;
 
 			$members_row [$row ['member_id']] = array (
-					'STATUS' => ($row ['member_status'] == 1) ? 'checked="checked" ' : '',
 					'ID' => $row ['member_id'],
 					'DKPID' => $row ['member_dkpid'],
 					'DKPSYS_S' => $this->dkpsys_id,
@@ -358,7 +327,7 @@ class PointsController  extends \bbdkp\admin\Admin
 
 		$sql_array = array(
 				'SELECT'    => 	'l.game_id, m.member_id,
-					m.member_status,
+					l.member_status,
 					max(m.member_lastraid) as member_lastraid,
 					sum(m.member_raidcount) as member_raidcount,
 					sum(m.member_raid_value) as member_raid_value,
@@ -404,7 +373,7 @@ class PointsController  extends \bbdkp\admin\Admin
 					AND r.rank_hide = 0
 					AND d.dkpsys_status != 'N'
 				" ,
-				'GROUP_BY' => 'l.game_id, m.member_id, m.member_status,
+				'GROUP_BY' => 'l.game_id, m.member_id, l.member_status,
 						 l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
 							 r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix,
 							 l1.name, c.class_id,
@@ -429,7 +398,7 @@ class PointsController  extends \bbdkp\admin\Admin
 		if ($config ['bbdkp_hide_inactive'] == '1' && !$show_all )
 		{
 			// don't show inactive members
-			$sql_array[ 'WHERE'] .= ' AND m.member_status = 1 ';
+			$sql_array[ 'WHERE'] .= ' AND l.member_status = 1 ';
 		}
 
 		if  (isset($_POST['compare']) && isset($_POST['compare_ids']))
@@ -1114,7 +1083,7 @@ class PointsController  extends \bbdkp\admin\Admin
 		{
 			// adapt status and set adjustment points
 			$sql_array = array (
-					'SELECT' => 'a.member_id, b.member_name, a.member_status, a.member_lastraid',
+					'SELECT' => 'a.member_id, b.member_name, b.member_status, a.member_lastraid',
 					'FROM' => array (
 							MEMBER_DKP_TABLE => 'a',
 							MEMBER_LIST_TABLE => 'b'
@@ -1151,79 +1120,75 @@ class PointsController  extends \bbdkp\admin\Admin
 				// Insert individual adjustment
 				if ((isset ( $adj_value )) && (isset ( $adj_reason )))
 				{
-				$group_key = $this->gen_group_key ( $this->time, $adj_reason, $adj_value );
-				$query = $db->sql_build_array ( 'INSERT',
-				array (
-					'adjustment_dkpid' 		=> $dkpid,
-					'adjustment_value' 		=> $adj_value,
-					'adjustment_date' 		=> $this->time,
-					'member_id' 			=> $row['member_id'],
-					'adjustment_reason' 	=> $adj_reason,
-					'adjustment_group_key' 	=> $group_key,
-					'adjustment_added_by' 	=> $user->data ['username'] ));
+                    $group_key = $this->gen_group_key ( $this->time, $adj_reason, $adj_value );
+                    $query = $db->sql_build_array ( 'INSERT',
+                    array (
+                        'adjustment_dkpid' 		=> $dkpid,
+                        'adjustment_value' 		=> $adj_value,
+                        'adjustment_date' 		=> $this->time,
+                        'member_id' 			=> $row['member_id'],
+                        'adjustment_reason' 	=> $adj_reason,
+                        'adjustment_group_key' 	=> $group_key,
+                        'adjustment_added_by' 	=> $user->data ['username'] ));
 
-				$db->sql_query ( 'INSERT INTO ' . ADJUSTMENTS_TABLE . $query );
-		}
-		}
-		$db->sql_freeresult( $result );
+                    $db->sql_query ( 'INSERT INTO ' . ADJUSTMENTS_TABLE . $query );
+                }
+            }
+            $db->sql_freeresult( $result );
 
-		// Update members to inactive and put dkp adjustment
-		if (sizeof ( $inactive_members ) > 0)
-		{
-			$adj_value = (float) $config ['bbdkp_inactive_point_adj'];
+            // Update members to inactive and put dkp adjustment
+            if (sizeof ( $inactive_members ) > 0)
+            {
+                $adj_value = (float) $config ['bbdkp_inactive_point_adj'];
 
-			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-		SET member_status = 0, member_adjustment = member_adjustment + ' . (string) $adj_value . '
-		WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $inactive_members ) ;
-			$db->sql_query($sql);
+                $sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+                    SET member_adjustment = member_adjustment + ' . (string) $adj_value . '
+                    WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $inactive_members ) ;
+                $db->sql_query($sql);
 
-			$log_action = array (
-					'header' 		=> 'L_ACTION_INDIVADJ_ADDED',
-					'L_ADJUSTMENT' 	=> $config ['bbdkp_inactive_point_adj'],
-					'L_MEMBERS' 	=> implode ( ', ', $inactive_membernames ),
-					'L_REASON' 		=> $user->lang['INACTIVE_POINT_ADJ'],
-					'L_ADDED_BY'	=> $user->data ['username'] );
+                $sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
+                    SET member_status = 0
+                    WHERE ' . $db->sql_in_set ( 'member_id', $inactive_members) ;
+                $db->sql_query($sql);
 
-			$this->log_insert ( array (
-					'log_type' 		=> $log_action ['header'],
-					'log_action' 	=> $log_action ));
-		}
+                $log_action = array (
+                        'header' 		=> 'L_ACTION_INDIVADJ_ADDED',
+                        'L_ADJUSTMENT' 	=> $config ['bbdkp_inactive_point_adj'],
+                        'L_MEMBERS' 	=> implode ( ', ', $inactive_membernames ),
+                        'L_REASON' 		=> $user->lang['INACTIVE_POINT_ADJ'],
+                        'L_ADDED_BY'	=> $user->data ['username'] );
 
-		// Update active members' adjustment
-		if (sizeof ( $active_members ) > 0)
-		{
-			$adj_value = (float) $config ['bbdkp_active_point_adj'];
+                $this->log_insert ( array (
+                        'log_type' 		=> $log_action ['header'],
+                        'log_action' 	=> $log_action ));
+            }
 
-			$sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
-			SET member_status = 1, member_adjustment = member_adjustment + ' . (string) $adj_value . '
-			WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $active_members );
+            // Update active members' adjustment
+            if (sizeof ( $active_members ) > 0)
+            {
+                $adj_value = (float) $config ['bbdkp_active_point_adj'];
+                $sql = 'UPDATE ' . MEMBER_DKP_TABLE . '
+                SET member_adjustment = member_adjustment + ' . (string) $adj_value . '
+                WHERE member_dkpid = ' . $dkpid . '  AND ' . $db->sql_in_set ( 'member_id', $active_members );
+                $db->sql_query($sql);
 
-			$db->sql_query($sql);
+                $sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
+                    SET member_status = 1
+                    WHERE ' . $db->sql_in_set ( 'member_id', $inactive_members) ;
+                $db->sql_query($sql);
 
-			$log_action = array (
-					'header' 		=> 'L_ACTION_INDIVADJ_ADDED',
-					'L_ADJUSTMENT' 	=> $config ['bbdkp_active_point_adj'],
-					'L_MEMBERS' 	=> implode ( ', ', $active_membernames ),
-					'L_REASON' 		=> $user->lang['ACTIVE_POINT_ADJ'],
-					'L_ADDED_BY' 	=> $user->data ['username'] );
+                $log_action = array (
+                        'header' 		=> 'L_ACTION_INDIVADJ_ADDED',
+                        'L_ADJUSTMENT' 	=> $config ['bbdkp_active_point_adj'],
+                        'L_MEMBERS' 	=> implode ( ', ', $active_membernames ),
+                        'L_REASON' 		=> $user->lang['ACTIVE_POINT_ADJ'],
+                        'L_ADDED_BY' 	=> $user->data ['username'] );
 
-			$this->log_insert ( array ('log_type' => $log_action ['header'], 'log_action' => $log_action ) );
-		}
-		}
-		else
-		{
-			// only adapt status
+                $this->log_insert ( array ('log_type' => $log_action ['header'], 'log_action' => $log_action ) );
+            }
+        }
 
-			// Active -> Inactive
-			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . " SET member_status = 0 WHERE member_dkpid = " . $dkpid . "
-			AND (member_lastraid <  " . $inactive_time . ") AND (member_status= 1)" );
-
-			// Inactive -> Active
-			$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . " SET member_status = 1 WHERE member_dkpid = " . $dkpid . "
-			AND (member_lastraid >= " . $inactive_time . ") AND (member_status= 0)" );
-		}
-
-		return true;
+       return true;
 	}
 
 	/**
@@ -1560,7 +1525,6 @@ class PointsController  extends \bbdkp\admin\Admin
 					'member_earned'       =>  0.00,
 					'member_spent'        =>  0.00,
 					'member_adjustment'   =>  $row['adjustment_value'],
-					'member_status'       =>  1,
 					'member_firstraid'    =>  0,
 					'member_lastraid'     =>  0,
 					'member_raidcount'    =>  0 )
@@ -1677,7 +1641,6 @@ class PointsController  extends \bbdkp\admin\Admin
 				$data = array(
 						'member_dkpid'      	=> $event_dkpid,
 						'member_id'      		=> $member_id,
-						'member_status'      	=> 1,
 						'member_firstraid'      => $first_raid,
 						'member_lastraid'       => $last_raid,
 						'member_raidcount'      => $raidcount,
@@ -2257,7 +2220,6 @@ class PointsController  extends \bbdkp\admin\Admin
 					'adj_decay' => (isset ( $transfer ['adj_decay'] ) ? $transfer ['adj_decay'] : 0.00),
 					'member_spent' => (isset ( $transfer ['itemcost'] ) ? $transfer ['itemcost'] : 0.00) + (isset ( $transfer ['item_zs'] ) ? $transfer ['item_zs'] : 0.00),
 					'member_item_decay' => (isset ( $transfer ['item_decay'] ) ? $transfer ['item_decay'] : 0.00),
-					'member_status' => 1,
 					'member_firstraid' => (isset ( $transfer ['minraiddate'] ) ? $transfer ['minraiddate'] : 0),
 					'member_lastraid' => (isset ( $transfer ['maxraiddate'] ) ? $transfer ['maxraiddate'] : 0),
 					'member_raidcount' => (isset ( $transfer ['raidcount'] ) ? $transfer ['raidcount'] : 0) ) );

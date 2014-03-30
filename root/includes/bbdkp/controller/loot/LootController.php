@@ -659,7 +659,7 @@ class LootController  extends \bbdkp\admin\Admin
 
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 		{
-			$sql .= " AND d.member_status='1'";
+			$sql .= " AND l.member_status='1'";
 		}
 
 		$sql .= " GROUP BY c.game_id,  c.colorcode,  c.imagename, c.class_id, d.member_dkpid, l.member_id, l.member_name ";
@@ -878,7 +878,7 @@ class LootController  extends \bbdkp\admin\Admin
 
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 		{
-			$sql .= " AND d.member_status='1'";
+			$sql .= " AND l.member_status='1'";
 		}
 
 		$sql .= " GROUP BY d.member_dkpid, l.member_id, l.member_name ";
@@ -1017,7 +1017,7 @@ class LootController  extends \bbdkp\admin\Admin
 
 			if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 			{
-				$sql_array['WHERE'] .= " AND m.member_status='1'";
+				$sql_array['WHERE'] .= " AND l.member_status='1'";
 			}
 
 			$sql = $db->sql_build_query ( 'SELECT', $sql_array );
@@ -1124,7 +1124,7 @@ class LootController  extends \bbdkp\admin\Admin
 
 		if ( ($config['bbdkp_hide_inactive'] == 1) && (!$show_all) )
 		{
-			$sql .= " AND d.member_status='1'";
+			$sql .= " AND l.member_status='1'";
 		}
 
 

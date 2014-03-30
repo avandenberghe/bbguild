@@ -143,7 +143,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 				{
 				// default pageloading
 
-					$guildlist = $Guild->guildlist();
+					$guildlist = $Guild->guildlist(1);
 
 					if( count((array) $guildlist) == 0  )
 					{
@@ -210,7 +210,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					{
 						$s_hidden_fields = build_hidden_fields(array(
 								'charapicall' => true ,
-								'hidden_guildid' => request_var('hidden_guildid', 0)
+								'hidden_guildid' => request_var('member_guild_id', 0)
 								));
 						confirm_box(false, $user->lang['WARNING_BATTLENET'], $s_hidden_fields);
 					}
@@ -419,10 +419,12 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					$newmember->member_achiev = 0;
 					$newmember->member_armory_url = utf8_normalize_nfc(request_var('member_armorylink', '', true));
 					$newmember->phpbb_user_id = request_var('phpbb_user_id', 0);
+                    $newmember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
+
 					$newmember->Armory_getmember();
 					$newmember->Makemember();
 
-					if ($newmember->member_id > 0)
+                    if ($newmember->member_id > 0)
 					{
 						//record added. now update some stats
 						meta_refresh(2, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $newmember->member_guild_id ));
@@ -456,7 +458,6 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 						$updatemember->member_id = request_var(URI_NAMEID, 0);
 					}
 					$updatemember->Getmember();
-					$old_member = $updatemember;
 
 					$updatemember->game_id = request_var('game_id', '');
 					$updatemember->member_class_id = request_var('member_class_id', 0);
@@ -481,7 +482,6 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					}
 
 					$updatemember->member_achiev = request_var('member_achiev', 0);
-					$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
 					$updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
 					$updatemember->phpbb_user_id = request_var('phpbb_user_id', 0);
 					if($updatemember->member_rank_id < 90)
@@ -489,7 +489,13 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 						$updatemember->Armory_getmember();
 					}
 
-					$updatemember->Updatemember($old_member);
+					$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
+
+                    $old_member = new \bbdkp\controller\members\Members();
+                    $old_member->member_id = $updatemember->member_id;
+                    $old_member->Getmember();
+
+                    $updatemember->Updatemember($old_member);
 
 					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $updatemember->member_guild_id ));
 					$this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $updatemember->member_guild_id ) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
@@ -542,7 +548,9 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 				$S_ADD = ($member_id > 0) ? false: true;
 				if ($S_ADD)
 				{
+                    // set defaults
 					$editmember->member_guild_id = request_var(URI_GUILD, 0);
+
 				}
 
 				$Guild = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
@@ -551,6 +559,9 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 				if ($S_ADD)
 				{
 					$editmember->game_id = $Guild->game_id;
+                    $editmember->member_rank_id = $Guild->raidtrackerrank;
+                    $editmember->member_status = 1;
+                    $editmember->member_gender_id = 0;
 				}
 
 				foreach ($guildlist as $g)

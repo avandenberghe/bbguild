@@ -339,6 +339,7 @@ class Guilds extends \bbdkp\admin\Admin
 				'min_armory' => $this->min_armory,
 				'guilddefault' => $this->guilddefault,
 				'armory_enabled' => $this->armory_enabled,
+                'rec_status' => $this->recstatus,
 				'members' => 0,
 			));
 
