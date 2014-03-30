@@ -2,7 +2,7 @@
 /**
  * Member class file
  *
- *   @package bbdkp
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
@@ -487,24 +487,25 @@ class Members extends \bbdkp\admin\Admin
 		if($guild_id !=0)
 		{
 			$sql = 'SELECT member_id
-					FROM ' . MEMBER_LIST_TABLE . "
-					WHERE member_name ='" . $db->sql_escape($membername) . "'
-					AND member_guild_id = " . (int) $db->sql_escape($guild_id);
-
+                FROM ' . MEMBER_LIST_TABLE . '
+                WHERE member_name ' . $db->sql_like_expression($db->any_char . $db->sql_escape($membername) . $db->any_char) . '
+                AND member_guild_id = ' . (int) $db->sql_escape($guild_id);
 		}
 		else
 		{
 			$sql = 'SELECT member_id
-					FROM ' . MEMBER_LIST_TABLE . "
-					WHERE member_name ='" . $db->sql_escape($membername) . "'";
+                FROM ' . MEMBER_LIST_TABLE . '
+                WHERE member_name ' . $db->sql_like_expression($db->any_char . $db->sql_escape($membername) . $db->any_char);
 		}
 
 		$result = $db->sql_query($sql);
+        //take first one
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$membid = $row['member_id'];
 			break;
 		}
+
 		$db->sql_freeresult($result);
 		if (isset($membid))
 		{
@@ -524,6 +525,7 @@ class Members extends \bbdkp\admin\Admin
 	public function Updatemember(\bbdkp\controller\members\Members $old_member)
 	{
 		global $user, $db;
+        global $phpbb_root_path, $phpEx, $config;
 
 		if ($this->member_id == 0)
 		{
@@ -631,19 +633,38 @@ class Members extends \bbdkp\admin\Admin
 		$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
 			WHERE member_id= ' . $this->member_id);
 
-		// if status was 1 before then add a line in user comments
+		// if status was 1 before then add a line in user comments and set an adjustment
 		if ($this->member_status == 0 && $old_member->member_status == 1)
 		{
 			// update the comment including the phpbb userid
 			$query = $db->sql_build_array('UPDATE', array(
-				'member_comment' => $this->member_comment . '
+				'member_comment' => $this->member_comment . '<br />
 ' . sprintf($user->lang['BBDKP_MEMBERDEACTIVATED'] , $user->data['username'], date( 'd.m.y G:i:s', $this->time ))  ,
 			));
+
 			$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
 				WHERE member_id= ' . $this->member_id);
+
+            $this->AddMemberAdjustment($config['bbdkp_inactive_point_adj'],$user->lang['ACTION_MEMBER_DEACTIVATED'] );
 		}
 
-		$log_action = array(
+        // if status was 0 before then add a line in user comments and set an adjustment
+        if ($this->member_status == 1 && $old_member->member_status == 0)
+        {
+            // update the comment including the phpbb userid
+            $query = $db->sql_build_array('UPDATE', array(
+                'member_comment' => $this->member_comment . '<br />
+' . sprintf($user->lang['BBDKP_MEMBERACTIVATED'] , $user->data['username'], date( 'd.m.y G:i:s', $this->time ))  ,
+            ));
+            $db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
+				WHERE member_id= ' . $this->member_id);
+
+            $this->AddMemberAdjustment($config['bbdkp_active_point_adj'],$user->lang['ACTION_MEMBER_ACTIVATED'] );
+        }
+
+
+
+        $log_action = array(
 			'header' => 'L_ACTION_MEMBER_UPDATED' ,
 			'L_NAME' => $this->member_name ,
 			'L_NAME_BEFORE' => $old_member->member_name,
@@ -836,27 +857,7 @@ class Members extends \bbdkp\admin\Admin
         $this->member_id = $db->sql_nextid();
 
         // add starting points
-        if (!class_exists('\bbdkp\controller\adjustments\Adjust'))
-        {
-            global $phpbb_root_path, $phpEx;
-            require("{$phpbb_root_path}includes/bbdkp/controller/adjustments/Adjust.$phpEx");
-        }
-
-        $newadjust = new \bbdkp\controller\adjustments\Adjust;
-        $newadjust->setMemberId($this->member_id);
-        $newadjust->setAdjustmentValue($config['bbdkp_starting_dkp']);
-        $newadjust->setAdjustmentReason($user->lang['STARTING_DKP'])  ;
-        $newadjust->setCanDecay(0);
-        $newadjust->setAdjDecay(0);
-        $newadjust->setDecayTime(0);
-        $newadjust->setAdjustmentDate($this->member_joindate);
-        $newadjust->setAdjustmentGroupkey($this->gen_group_key($newadjust->getAdjustmentDate(), $newadjust->getAdjustmentReason(), $newadjust->getAdjustmentValue()));
-        $newadjust->setAdjustmentAddedBy($user->data['username']);
-        foreach ($newadjust->getDkpsys() as $pool)
-        {
-            $newadjust->setAdjustmentDkpid($pool['id'] );
-            $newadjust->add();
-        }
+        $this->AddMemberAdjustment($config['bbdkp_starting_dkp'],$user->lang['STARTING_DKP'] );
 
         $log_action = array(
             'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
@@ -884,7 +885,6 @@ class Members extends \bbdkp\admin\Admin
 	public function Armory_getmember()
 	{
 		global $phpEx, $phpbb_root_path;
-
 
 		$game = new \bbdkp\controller\games\Game;
 		$game->game_id = $this->game_id;
@@ -1014,7 +1014,7 @@ class Members extends \bbdkp\admin\Admin
 				if($diff > 90 && $this->member_status == 1)
 				{
 					$this->deactivate_wow($diff);
-					return 0;
+                   	return 0;
 				}
 
 			}
@@ -1024,6 +1024,7 @@ class Members extends \bbdkp\admin\Admin
 		}
 		else
 		{
+            //not found in armory
 			$this->deactivate_wow('API Error');
 			return - 1;
 		}
@@ -1032,52 +1033,87 @@ class Members extends \bbdkp\admin\Admin
 
 
 	/**
-	 * called when user is deactivated because of wow inactivity > 90 days
+	 * if player not found in BATTLE.NET or if last activity > 90 days ago
+     * then deactivate member if currently active.
+     *
 	 * @param (integer or string) $daysago
 	 */
 	private function deactivate_wow($daysago)
 	{
-		global $user;
-		$this->member_status = 0;
-		$log_action = array(
-			'header' 	 => 'L_ACTION_MEMBER_DEACTIVATED' ,
-			'L_NAME' 	 => \ucwords($this->member_name)  ,
-			'L_DAYSAGO'  => $daysago,
-			'L_ADDED_BY' => $user->data['username']);
+		global $config, $user;
+        if($this->member_status == "1" )
+        {
+            $this->member_status = 0;
+            $log_action = array(
+                'header' 	 => 'L_ACTION_MEMBER_DEACTIVATED' ,
+                'L_NAME' 	 => \ucwords($this->member_name)  ,
+                'L_DAYSAGO'  => $daysago,
+                'L_ADDED_BY' => $user->data['username']);
 
-		$this->log_insert(array(
-			'log_type' 		=> 'L_ACTION_MEMBER_DEACTIVATED' ,
-			'log_result' 	=> 'L_SUCCESS' ,
-			'log_action' 	=> $log_action));
-
+            $this->log_insert(array(
+                'log_type' 		=> 'L_ACTION_MEMBER_DEACTIVATED' ,
+                'log_result' 	=> 'L_SUCCESS' ,
+                'log_action' 	=> $log_action));
+        }
 
 	}
 
 	/**
 	 * activates all checked members
-	 * @param array $mlist
+     *
+     *  for each member in $mwindow
+     *   get member
+     *   if member is in $mlist
+     *       add activation dkp
+     *   else
+     *      if member status was active then deactivate and add deactivation dkp
+     *
+     * @param array $mlist
 	 * @param array $mwindow
 	 */
 	public function Activatemembers(array $mlist, array $mwindow)
 	{
+        global $config, $db, $user;
+		foreach($mwindow as $member_id)
+        {
+            $changed = false;
+            $this->member_id = $member_id;
+            $this->Getmember();
+            if (in_array($member_id,$mlist))
+            {
+                //found in $POST, so if inactive before then activate
+                if($this->member_status == "0")
+                {
+                    $changed = true;
+                    $this->member_status = "1";
+                    $this->AddMemberAdjustment($config['bbdkp_active_point_adj'],$user->lang['ACTION_MEMBER_ACTIVATED'] );
+                }
+            }
+            else
+            {
+                //not found in $POST, so if active before then deactivate
+                if($this->member_status == "1")
+                {
+                    $changed = true;
+                    $this->member_status = "0";
+                    $this->AddMemberAdjustment($config['bbdkp_inactive_point_adj'],$user->lang['ACTION_MEMBER_DEACTIVATED'] );
+                }
+            }
 
-		global $db;
+            if ($changed)
+            {
+                $query = $db->sql_build_array('UPDATE', array(
+                    'member_status' => $this->member_status ,
+                ));
 
-		$db->sql_transaction('begin');
-		//if checkbox set then activate
-		$sql1 = 'UPDATE ' . MEMBER_LIST_TABLE . "
-			SET member_status = '1'
-			WHERE " . $db->sql_in_set('member_id', $mlist, false, true);
-		$db->sql_query($sql1);
-		//if checkbox not set and in window then deactivate
-		$sql2 = 'UPDATE ' . MEMBER_LIST_TABLE . "
-			SET member_status = '0'
-			WHERE  " . $db->sql_in_set('member_id', $mlist, true, true) . "
-			AND  " . $db->sql_in_set('member_id', $mwindow, false, true);
-		$db->sql_query($sql2);
-		$db->sql_transaction('commit');
+                $db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
+                WHERE member_id= ' . $this->member_id);
+            }
+
+        }
+
+
 	}
-
 
 	/**
 	 * generates a standard portrait image url for aion based on characterdata
@@ -1425,7 +1461,7 @@ class Members extends \bbdkp\admin\Admin
 		$sql_array = array();
 
 		$sql_array['SELECT'] =  'm.member_id, m.game_id, m.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name,
-    		m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url, m.member_portrait_url,
+    		m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url, m.member_portrait_url, m.member_status,
     		r.rank_prefix , r.rank_name, r.rank_suffix, e.image_female, e.image_male,
     		g.name as guildname, g.realm, g.region, c1.name as class_name, c.colorcode, c.imagename, m.phpbb_user_id, u.username, u.user_colour  ';
 
@@ -1474,6 +1510,7 @@ class Members extends \bbdkp\admin\Admin
 		{
 			$sql_array['WHERE'] .= ' AND m.phpbb_user_id =  ' . $user->data['user_id'];
 		}
+
 		if($guild_id > 0)
 		{
 			$sql_array['WHERE'] .= " AND m.member_guild_id =  " . $guild_id;
@@ -1580,6 +1617,7 @@ class Members extends \bbdkp\admin\Admin
 					'member_portrait_url' => $row['member_portrait_url'],
 					'member_armory_url' => $row['member_armory_url'],
 					'member_achiev' => $row['member_achiev'],
+                    'member_status' => $row['member_status'],
 			);
 		}
 		$db->sql_freeresult($result);
@@ -1663,10 +1701,33 @@ class Members extends \bbdkp\admin\Admin
 		return $dataset;
 	}
 
+    /**
+     * @param float $adj
+     * @param string $reason
+     */
+    private function AddMemberAdjustment($adj, $reason)
+    {
+        global $user;
+        if (!class_exists('\bbdkp\controller\adjustments\Adjust')) {
+            global $phpbb_root_path, $phpEx;
+            require("{$phpbb_root_path}includes/bbdkp/controller/adjustments/Adjust.$phpEx");
+        }
 
-
-
+        $newadjust = new \bbdkp\controller\adjustments\Adjust;
+        $newadjust->setMemberId($this->member_id);
+        $newadjust->setAdjustmentValue($adj);
+        $newadjust->setAdjustmentReason($reason);
+        $newadjust->setCanDecay(0);
+        $newadjust->setAdjDecay(0);
+        $newadjust->setDecayTime(0);
+        $newadjust->setAdjustmentDate($this->member_joindate);
+        $newadjust->setAdjustmentGroupkey($this->gen_group_key($newadjust->getAdjustmentDate(), $newadjust->getAdjustmentReason(), $newadjust->getAdjustmentValue()));
+        $newadjust->setAdjustmentAddedBy($user->data['username']);
+        foreach ($newadjust->getDkpsys() as $pool) {
+            $newadjust->setAdjustmentDkpid($pool['id']);
+            $newadjust->add();
+        }
+        unset($newadjust);
+    }
 
 }
-
-?>
