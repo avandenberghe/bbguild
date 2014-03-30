@@ -638,7 +638,7 @@ class Members extends \bbdkp\admin\Admin
 		{
 			// update the comment including the phpbb userid
 			$query = $db->sql_build_array('UPDATE', array(
-				'member_comment' => $this->member_comment . '<br />
+				'member_comment' => $this->member_comment . '
 ' . sprintf($user->lang['BBDKP_MEMBERDEACTIVATED'] , $user->data['username'], date( 'd.m.y G:i:s', $this->time ))  ,
 			));
 
@@ -653,7 +653,7 @@ class Members extends \bbdkp\admin\Admin
         {
             // update the comment including the phpbb userid
             $query = $db->sql_build_array('UPDATE', array(
-                'member_comment' => $this->member_comment . '<br />
+                'member_comment' => $this->member_comment . '
 ' . sprintf($user->lang['BBDKP_MEMBERACTIVATED'] , $user->data['username'], date( 'd.m.y G:i:s', $this->time ))  ,
             ));
             $db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '

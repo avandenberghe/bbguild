@@ -482,13 +482,14 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 					}
 
 					$updatemember->member_achiev = request_var('member_achiev', 0);
-					$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
 					$updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
 					$updatemember->phpbb_user_id = request_var('phpbb_user_id', 0);
 					if($updatemember->member_rank_id < 90)
 					{
 						$updatemember->Armory_getmember();
 					}
+
+					$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
 
                     $old_member = new \bbdkp\controller\members\Members();
                     $old_member->member_id = $updatemember->member_id;
