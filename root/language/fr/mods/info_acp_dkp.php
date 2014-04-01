@@ -2,10 +2,10 @@
 /**
  * bbdkp acp language file for mainmenu (FR)
  * 
- * @package bbDkp
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * 
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
+ * @version 1.3
  * 
  */
 
@@ -26,11 +26,9 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
     'ACP_CAT_DKP'			=> 'bbDKP',
-	'ACP_DKP_MAINPAGE'		=> 'Réglages générals',  
-	'ACP_DKP_PANEL'		    => 'Statistiques DKP',  
-	'ACP_DKP_CONFIG'		=> 'Réglages générals',
+	'ACP_DKP_MAINPAGE'		=> 'Paramètres généraux',  
+	'ACP_DKP_PANEL'		    	=> 'Statistiques',  
+	'ACP_DKP_CONFIG'		=> 'Réglages bbdkp',
 	'ACP_DKP_INDEX'			=> 'Réglages portail',
 	'ACP_DKP_LOGS'			=> 'Consulter les Logs',
 ));
-
-?>

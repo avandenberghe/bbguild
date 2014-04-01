@@ -1,20 +1,12 @@
 <?php
 /**
-* This class manages Items 
-* 
-* Powered by bbdkp, ported from Eqdkp
-* If you use this software and find it to be useful, we ask that you
-* retain the copyright notice below.  While not required for free use,
-* it will help build interest in the bbDKP project.
-*
-* @package bbDKP.acp
+* ACP info class acp_dkp_item_info 
 * @author ippehe
-* @version $Id$
+* @version 1.3.0
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* 
+*   @package bbdkp
 */
-
 
 /**
 * @ignore
@@ -26,32 +18,36 @@ if (!defined('IN_PHPBB'))
 
 
 /**
-* @package module_install
+ * info class for acp module dkp_item
+*   @package bbdkp
 */
-
-
 class acp_dkp_item_info
 {
+	/**
+	 * phpbb module function
+	 */
 	function module()
 	{
 		return array(
 			'filename'	=> 'acp_dkp_item',
 			'title'		=> 'ACP_DKP_ITEM',
-			'version'	=> '1.2.8',
+			'version'	=> '1.3.0',
 			'modes'		=> array(
-				'edititem'			=> array('title' => 'ACP_DKP_ITEM_EDIT', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => false ),
+				'additem'			=> array('title' => 'ACP_DKP_ITEM_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => false ),
 				'listitems'			=> array('title' => 'ACP_DKP_ITEM_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS') , 'display' => true ),
 				),
 		);
 	}
-
+	/**
+	 * phpbb module function
+	 */
 	function install()
 	{
 	}
-
+	/**
+	 * phpbb module function
+	 */
 	function uninstall()
 	{
 	}
 }
-
-?>

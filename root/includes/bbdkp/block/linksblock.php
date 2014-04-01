@@ -2,9 +2,13 @@
 /**
  * links block
  * 
- * @package bbDkp
- * @copyright 2009 bbdkp <https://github.com/bbDKP>
+ *   @package bbdkp
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.3.0
+ 
  * 
  */
 
@@ -17,5 +21,3 @@ if (!defined('IN_PHPBB'))
 $template->assign_var('S_DISPLAY_LINKS', true);
 
 
-/**  end links block ***/
-?>

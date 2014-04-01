@@ -1,11 +1,14 @@
 <?php
 /**
  * returns rank xml based on ajax call 
- * @package bbDkp.acp
+ * 
+ * @package acp\ajax
  * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-
+ * @link http://www.bbdkp.com
+ * 
  */
+
 define('IN_PHPBB', true);
 define('ADMIN_START', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../../../';
@@ -31,4 +34,3 @@ $xml .= '</factionlist>';
 $db->sql_freeresult($result);
 //return xml to ajax
 echo($xml); 
-?>

@@ -22,6 +22,30 @@
      }
      return true;
 }
+
+function isValidChar(char, e){
+
+	    var txt = char;
+	    var found = false;
+	    var validChars = "0123456789"; //List of valid characters
+
+	    for(j=0;j<txt.length;j++){ //Will look through the value of text
+	        var c = txt.charAt(j);
+	        found = false;
+	        for(x=0;x<validChars.length;x++){
+	            if(c==validChars.charAt(x)){
+	                found=true;
+	                break;
+	            }
+	        }
+	        if(!found){
+	            //If invalid character is found remove it and return the valid character(s).
+	            document.getElementById(e).value = char.substring(0, char.length -1);
+	            break;
+	        }
+	    }
+}
+
 //]]>
 </script>
 
@@ -32,27 +56,16 @@
 
 <form id="acp_addclass" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
 <div>
-<input type="hidden" name="class_id0" value="{CLASS_ID}" />
-<input type="hidden" name="c_index" value="{C_INDEX}" />
 
 <fieldset>
 <legend>{L_ADD_CLASS_TITLE}</legend>
-    
     <dl>
 	    <dt><label>{L_GAME}:</label><br />{L_GAME_CLASSRACEUPDATE_EXPLAIN}</dt>
-	  		<dd>
-	  		<!-- IF S_ADD -->
-	  		<select name="game_id" class="input" onchange="return Getfaction(this.value)">
-	       		<!-- BEGIN game_row -->
-	      		 <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
-	        	<!-- END game_row -->
-	      	</select>
-	      	<!-- ELSE -->
-	      		{GAME_ID}
-	      	<!-- ENDIF -->
+	  	   <dd>
+	      		{GAME_NAME}
 	      </dd>
 	 </dl>
-	 
+
 	 <dl>
 		<dt><label for="class_name">{L_CLASS_NAME}:</label></dt>
 		<dd><input class="medium" type="text" id="class_name" name="class_name" value="{CLASS_NAME}" /></dd>
@@ -60,14 +73,14 @@
 
 	<dl>
 		<dt><label for="class_id">{L_CLASS_ID}:</label><br/>{L_CLASS_ID_EXPLAIN}</dt>
-		<dd><input class="medium" type="text" id="class_id" name="class_id" value="{CLASS_ID}" /></dd>
+		<dd><input class="medium" type="text" id="class_id" name="class_id" value="{CLASS_ID}" onKeyup="isValidChar(this.value, 'class_id');" /></dd>
 	</dl>
 
 	<dl>
 		<dt><label>{L_CLASS_LEVEL}:</label><br/></dt>
 		<dd>
-			<input class="small" type="text" id="class_level_min" name="class_level_min" value="{CLASS_MIN}" />
-			<input class="small" type="text" id="class_level_max" name="class_level_max" value="{CLASS_MAX}" />
+			<input class="small" type="text" id="class_level_min" name="class_level_min" value="{CLASS_MIN}" onKeyup="isValidChar(this.value, 'class_level_min');"/>
+			<input class="small" type="text" id="class_level_max" name="class_level_max" value="{CLASS_MAX}" onKeyup="isValidChar(this.value, 'class_level_max');"/>
 		</dd>
 	</dl>
 
@@ -76,7 +89,7 @@
 		<dt><label for="armory">{L_CLASS_ARMORY}:</label><br/>{L_CLASS_ARMORY_EXPLAIN}</dt>
 		<dd><select id="armory" name="armory">{S_ARMOR_OPTIONS}</select></dd>
 	</dl>
-	
+
 	<dl>
 		<dt><label for="image">{L_CLASS_IMAGE}:</label><br/>{L_CLASS_IMAGE_EXPLAIN}</dt>
 		<dd><input class="medium" type="text" id="image" name="image" value="{CLASS_IMAGENAME}" />
@@ -87,7 +100,7 @@
 	<dl>
 		<dt><label>{L_CLASS_COLOR}</label><br />{L_CLASS_COLOR_EXPLAIN}</dt>
 		<dd>
-			<table style=" border-width: 0px;"> 
+			<table style=" border-width: 0px;">
 			<tr>
 				<td>
 				<span id="nojquery" style="color: red; font-size: 1.4em">{L_JQUERY_MISSING}</span>
@@ -101,13 +114,16 @@
 		</dd>
 	</dl>
 </fieldset>
-   
+
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
    {S_FORM_TOKEN}
+    <input type="hidden" name="class_id0" value="{CLASS_ID}" />
+	<input type="hidden" name="c_index" value="{C_INDEX}" />
+    <input type="hidden" name="hidden_game_id" value="{GAME_ID}" />
     <!-- IF S_ADD -->
     <input type="submit" name="add" value="{L_ADD_CLASS}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
-    <input type="submit" name="update" value="{L_UPDATE_CLASS}" class="button1" /> 
+    <input type="submit" name="update" value="{L_UPDATE_CLASS}" class="button1" />
     <!-- ENDIF -->
 	</fieldset>
 </div>

@@ -43,17 +43,16 @@ function check_form()
 		<dd><input class="medium" type="text" id="dkpsys_status" name="dkpsys_status" value="{DKPSYS_STATUS}" /></dd>
 	</dl>
 
+	  <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+	  {S_FORM_TOKEN}
+	   <!-- IF S_ADD -->
+	   <input type="submit" name="add" value="{L_ADD_DKPSYS}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+	   <!-- ELSE -->
+	   <input type="submit" name="update" value="{L_UPDATE_DKPSYS}" class="button1" /> 
+	   <!-- ENDIF -->
+	</fieldset>
 </fieldset>
 
-   <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-   {S_FORM_TOKEN}
-    <!-- IF S_ADD -->
-    <input type="submit" name="add" value="{L_ADD_DKPSYS}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
-    <!-- ELSE -->
-    <input type="submit" name="update" value="{L_UPDATE_DKPSYS}" class="button1" /> 
-    <!-- ENDIF -->
-	</fieldset>
-	
 </div>
 </form>
 
