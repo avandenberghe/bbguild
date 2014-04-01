@@ -669,3 +669,7 @@ EQDkp (c) 2003 The EqDkp Project Team
 
 [![Foo](https://www.paypal.com/en_US/BE/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=sajaki9%40gmail%2ecom&lc=BE&item_name=bbDKP%20Guild%20management&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
 
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/bbDKP/bbdkp/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
