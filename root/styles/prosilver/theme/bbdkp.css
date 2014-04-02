@@ -91,7 +91,7 @@ ul.portalmenu li {
     list-style-type: none;
     padding-left: 20px;
     text-align: left;
-    background-image: url("{T_THEME_PATH}/images/dkp/list.png");
+    background-image: url("{T_THEME_PATH}/images/dkp/menu.png");
 }
 
 .portalmenu a {
