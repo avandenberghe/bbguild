@@ -151,9 +151,6 @@ Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
 			<link type="language" href="contrib/de.xml" lang="en">German</link>
 			<link type="language" href="contrib/de.xml" lang="fr">Allemand</link>
 			<link type="language" href="contrib/de.xml" lang="de">Deutsch</link>
-			<link type="text" href="docs/INSTALL.html" lang="en">Read me</link>
-			<link type="text" href="docs/INSTALL.html" lang="fr">Lisez moi</link>
-			<link type="text" href="docs/INSTALL.html" lang="de">Lies mich</link>
 			<link type="template" href="contrib/prosilver.xml" lang="en">Prosilver</link>
 		</link-group>
 	</header>
