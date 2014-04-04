@@ -21,7 +21,7 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.3.0-b7</mod-version>
+		<mod-version>1.3.0-RC1</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>600</time>
@@ -50,7 +50,6 @@
 			<file from="root/language/de/mods/info_acp_dkp_sys.php" to="language/de/mods/info_acp_dkp_sys.php"/>
 			<file from="root/language/de/mods/info_ucp_dkpcharacter.php" to="language/de/mods/info_ucp_dkpcharacter.php"/>
 			<file from="root/language/de/mods/permissions_bbdkp.php" to="language/de/mods/permissions_bbdkp.php"/>
-			
 		</copy>
 		<diy-instructions lang="en"><![CDATA[See general install.xml file]]></diy-instructions>
 		<diy-instructions lang="de"><![CDATA[Siehe install.xml]]></diy-instructions>
