@@ -61,7 +61,7 @@ class blockFactory extends \bbdkp\admin\Admin
         $template->assign_var('S_BPSHOW', false);
         if (isset($config['bbdkp_gameworld_version']))
         {
-            if ($config['bbdkp_portal_bossprogress'] == 1)
+            if ($config['bbdkp_zone_block_show'] == 1)
             {
                 include($phpbb_root_path . 'includes/bbdkp/block/bossprogressblock.' . $phpEx);
                 $template->assign_var('S_BPSHOW', true);
