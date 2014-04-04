@@ -57,6 +57,7 @@ a.dkpmenu,a.dkpmenu:link,a.dkpmenu:visited,a.dkpmenu:active {
     font-family: Arial,Helvetica,Verdana,sans-serif;
     font-variant:small-caps;
     text-transform: none;
+    color: white;
 }
 
 ul.portalmenu {
