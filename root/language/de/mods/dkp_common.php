@@ -46,7 +46,7 @@ $lang = array_merge($lang, array(
 	'FOOTERBBDKP' => 'bbDKP 1.3.0',
 //---- Portal blocks -----
 	'PORTAL'	=> 'Portal',
-	'USER_MENU'			=> 'Dein menu',
+	'USER_MENU'			=> 'Dein Menu',
 	'RECENTLOOT'	=> 'Letzte Beute',
 	'REMEMBERME'	=> 'Login merken',
 	'INFORUM'	=> 'in',
@@ -56,7 +56,7 @@ $lang = array_merge($lang, array(
 	'LIST_NEWS'	=> 'Nachrichtenliste',
 	'NO_NEWS'	=> 'Keine Nachrichten gefunden.',
 	'NEWS_PER_PAGE'	=> 'Nachrichten pro Seite',
-	'ERROR_INVALID_NEWS_PROVIDED'	=> 'Ungültige Nachricht.',
+	'ERROR_INVALID_NEWS_PROVIDED'	=> 'Ungültige Nachricht',
 	'BOSSPROGRESS'	=> 'Instanz-Fortschritt',
 	'WELCOME'	=> 'Willkommen',
 	'RECENT_LENGTH' 	=> 'Anzahl angezeigte Buchstaben',
@@ -140,7 +140,7 @@ $lang = array_merge($lang, array(
 
 //Recruitment
 	'RECRUITMENT_BLOCK'	=> 'Rekrutierungs Status',
-	'RECRUIT_CLOSED'	=> 'Geschlossen !',
+	'RECRUIT_CLOSED'	=> 'Geschlossen!',
 	'TANK'	=> 'Schutz',
 	'DPS'	=> 'Schaden',
 	'HEAL'	=> 'Heilung',
@@ -148,7 +148,7 @@ $lang = array_merge($lang, array(
 	'RECRUIT_MESSAGE'	=> 'Wir sind zurzeit auf der Suche nach neuen Mitstreitern folgender Klassen und Spezialisierungen:',
 
 //ROSTER
-	'GUILDROSTER'	=> 'Mitgliedsbuch',
+	'GUILDROSTER'	=> 'Mitgliedsliste',
 	'RANK'		=> 'Rang',
 	'CLASS'		=> 'Klasse',
 	'LVL'		=> 'Niveau',
@@ -383,7 +383,7 @@ $lang = array_merge($lang, array(
 	'VIEWRAID_DROPS_FOOTCOUNT'	=> '... %d Drop(s) gefunden',
 
 // Submit Buttons
-	'LOG_ADD_DATA'	=> 'Daten zufügen',
+	'LOG_ADD_DATA'	=> 'Daten hinzufügen',
 	'PROCEED'	=> 'Fortfahren',
 	'UPGRADE'	=> 'Upgrade',
 
@@ -411,7 +411,7 @@ $lang = array_merge($lang, array(
 	'NOAUTH_U_RAID_VIEW'	=> 'Du hast keine Berechtigung Raids zu sehen.',
 
 // Miscellaneous
-	'ADDED'	=> 'Zugefügt',
+	'ADDED'	=> 'Hinzugefügt',
 	'BOSSKILLCOUNT'	=> 'Anzahl Bosskills',
 	'CLOSED'	=> 'Geschlossen',
 	'DELETED'	=> 'Gelöscht',
