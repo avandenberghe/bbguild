@@ -45,7 +45,7 @@ class viewFactory extends \bbdkp\admin\Admin
 	 */
 	public function get_view($page)
 	{
-		global $phpbb_root_path, $phpEx ;
+		global $user, $phpbb_root_path, $phpEx ;
 
         if (in_array($page, $this->valid_views))
         {
@@ -69,7 +69,7 @@ class viewFactory extends \bbdkp\admin\Admin
         }
         else
         {
-            trigger_error('Wrong viewname : ' . $page);
+            trigger_error(sprintf($user->lang['NOVIEW'], $page ));
         }
     }
 
