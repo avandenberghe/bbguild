@@ -402,6 +402,7 @@ $lang = array_merge($lang, array(
 'ACTION_MEMBER_DELETED' => 'Mitglied erfolgreich gelöscht',
 'ACTION_MEMBER_UPDATED' => 'Mitglied aktualisiert',
 'ACTION_MEMBER_DEACTIVATED' => 'Mitglied ausgeschaltet',
+'ACTION_MEMBER_ACTIVATED' => 'Mitglied eingeschaltet',
 'ACTION_MEMBERDKP_DELETED' => 'Mitgliedspunktekonto erfolgreich gelöscht',
 'ACTION_MEMBERDKP_UPDATED' => 'Mitgliedspunktekonto erfolgreich aktualisiert',
 'ACTION_NEWS_ADDED' => 'Nachricht erfolgreich hinzugefügt',

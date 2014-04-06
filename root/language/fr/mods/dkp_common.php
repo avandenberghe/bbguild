@@ -211,7 +211,7 @@ $lang = array_merge($lang, array(
 'ADMINISTRATION' => 'Administration',
 'ADMINISTRATIVE_OPTIONS' => 'Options Administratives',
 'ADMIN_INDEX' => 'Index Admin',
-'ATTENDANCE_BY_EVENT' => 'Parricipation par Evènement',
+'ATTENDANCE_BY_EVENT' => 'Participation par Evènement',
 'ATTENDED' => 'Participé',
 'ATTENDEES' => 'Participants',
 'ATTENDANCE' => 'Participation',
@@ -448,6 +448,7 @@ $lang = array_merge($lang, array(
 'REQUIRED_FIELD_NOTE' => 'Champs marqué par un * sont requis.',
 'SELECT_EXISTING' => 'Sélectionner existant',
 'UPDATED' => 'Mis à jour',
+'NOVIEW' => 'Page inconnue: %s',
 
 //---- About --- do not change anything here
 'ABOUT' => 'Au sujet de',

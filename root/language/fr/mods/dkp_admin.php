@@ -153,8 +153,7 @@ $lang = array_merge($lang, array(
 'SHOW_ONLINE_BLOCK_POSITION'  => 'positionne au milieu ou par le coté',
 'BOTTOM'  => 'au milieu',
 'SIDE'  => 'par le coté',
-'NUMNEWMEMBERS' => 'Number of members to show',
-'NUMNEWMEMBERS' => 'Nombres de nouveax membres à montrer',
+'NUMNEWMEMBERS' => 'nouveax membres',
 
 'RANK_INSERTED' => 'Grade inseré : %s. ',
 'TOTAL_RANKS_INSERTED' => 'Nombre de grades inserés : %s. ',
@@ -407,6 +406,7 @@ $lang = array_merge($lang, array(
 'ACTION_MEMBER_DELETED' => 'Membre supprimé',
 'ACTION_MEMBER_UPDATED' => 'Membre mis à jour',
 'ACTION_MEMBER_DEACTIVATED' => 'Membre déactivé',
+'ACTION_MEMBER_ACTIVATED' => 'Membre Activé',
 'ACTION_MEMBERDKP_DELETED' => 'Compte Dkp de membre supprimé',
 'ACTION_MEMBERDKP_UPDATED' => 'Compte DKP de membre mis à jour',
 'ACTION_NEWS_ADDED' => 'Actualité ajoutée',
