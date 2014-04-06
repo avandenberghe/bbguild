@@ -2,11 +2,10 @@
 /**
  * bbdkp acp language file for Ajdustments (FR)
  * 
- * @package bbDkp
+ * 
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
- * 
+ * @version 1.3.0
  */
 
 /**
@@ -26,8 +25,6 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
   	'ACP_DKP_MDKP'	        => 'Gestion Comptes DKP', 
-	'ACP_DKP_ADDADJ'		=> 'Ajouter ajustement',
-	'ACP_DKP_LISTADJ'		=> 'Liste des Ajustements',
+	'ACP_DKP_ADDADJ'	=> 'Ajouter ajustement',
+	'ACP_DKP_LISTADJ'	=> 'Liste des Ajustements',
 ));
-
-?>

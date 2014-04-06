@@ -1,10 +1,11 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
+ * bbdkp acp language file for  DKP accounts (en)
  * 
- * @package bbDKP
+ * 
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.3.0
  * 
  */
 
@@ -24,10 +25,8 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-  	'ACP_DKP_MDKP'	        => 'Member DKP Management', 
-    'ACP_DKP_EDITMEMBERDKP'		=> 'Edit member DKP',
-	'ACP_DKP_LISTMEMBERDKP'		=> 'Member DKP',  
-	'ACP_DKP_MEMBER_TRF'		=> 'DKP Transfer',
+  	'ACP_DKP_MDKP'	        	=> 'Member Points Management', 
+    	'ACP_DKP_EDITMEMBERDKP'		=> 'Edit member Points',
+	'ACP_DKP_LISTMEMBERDKP'		=> 'DKP Accounts',
+	'ACP_DKP_MEMBER_TRF'		=> 'Point Transfer',
 ));
-
-?>

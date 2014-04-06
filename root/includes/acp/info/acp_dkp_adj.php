@@ -1,16 +1,10 @@
 <?php
 /**
-* This class manages guildmembers dkp adjustments
-* 
-* Powered by bbdkp © 2009 The bbDKP Project Team
-* If you use this software and find it to be useful, we ask that you
-* retain the copyright notice below.  While not required for free use,
-* it will help build interest in the bbDKP project.
-* 
-* @package bbDKP.acp
+* ACP info class acp_dkp_adj_info
+*   @package bbdkp
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @version $Id$
+* @version 1.3.0
 * 
 **/
 
@@ -22,18 +16,22 @@ if (!defined('IN_PHPBB'))
 	exit;
 }
 
-/**
-* @package module_install
-*/
 
+/**
+ * info class for acp module dkp_adj
+ *   @package bbdkp
+ */
 class acp_dkp_adj_info
 {
+	/**
+	 * phpbb module function
+	 */
 	function module()
 	{
 		return array(
 			'filename'	=> 'acp_dkp_adj',
 		    'title'	=> 'ACP_DKP_MDKP',
-			'version'	=> '1.2.8',
+			'version'	=> '1.3.0',
 			'modes'		=> array(			
 				'addiadj'	=> array('title' => 'ACP_DKP_ADDADJ', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MDKP'), 'display' => false),
 				'listiadj'	=> array('title' => 'ACP_DKP_LISTADJ', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MDKP'), 'display' => true),
@@ -41,10 +39,16 @@ class acp_dkp_adj_info
 		);
 	}
 
+	/**
+	 * phpbb module function
+	 */
 	function install()
 	{
 	}
 
+	/**
+	 * phpbb module function
+	 */
 	function uninstall()
 	{
 	}

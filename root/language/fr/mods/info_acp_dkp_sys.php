@@ -1,11 +1,11 @@
 <?php
 /**
- * bbdkp acp language file for DKP Pool (FR)
+ * bbdkp acp language file for mainmenu - French
  * 
- * @package bbDkp
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * 
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
+ * @version 1.3.0
  * 
  */
 
@@ -26,11 +26,7 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
 	'ACP_DKP_POOL_ADD'		=> 'Ajouter groupe DKP',  
+	'ACP_DKP_POOL_EDIT'		=> 'Editer groupe Dkp',
 	'ACP_DKP_POOL_LIST'		=> 'Groupes DKP',
-	'ACP_DKP_LOOTSYSTEM'	=> 'Systeme Loot',
-	'ACP_DKP_LOOTSYSTEM_EXPLAIN'	=> 'Ici vous pouvez selectionnner le système de distribution de Loot',
-	'ACP_DKP_LOOTSYSTEMOPTIONS'	=> 'Réglages Systemes de Loot',
-	'ACP_DKP_LOOTSYSTEMEXPLAIN'	=> 'Guide Systemes de Loot',	
+	'ACP_DKP_EVENT_ADD'		=> 'Ajoute évènement' ,
 ));
-
-?>

@@ -1,10 +1,11 @@
 <?php
 /**
- * returns rank xml based on ajax call 
- * @package bbDkp.acp
+ * Returns rank xml based on ajax call 
+ * 
+ * @package acp\ajax
  * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-
+ * 
  */
 define('IN_PHPBB', true);
 define('ADMIN_START', true);
@@ -42,5 +43,4 @@ while ( $row = $db->sql_fetchrow($result))
 $xml .= '</ranklist>';
 $db->sql_freeresult($result);
 //return xml to ajax
-echo($xml); 
-?>
+echo($xml);

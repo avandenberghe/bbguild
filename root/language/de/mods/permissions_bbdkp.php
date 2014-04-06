@@ -3,7 +3,7 @@
  * bbDkp Permission Set (German-Informal)
  * 
  * @author sajaki
- * @package bbDkp
+ * 
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
@@ -40,5 +40,3 @@ $lang = array_merge($lang, array(
 	'acl_u_dkp_charupdate'	=> array('lang' => 'Kann eigene Charaktere im Benutzermenü bearbeiten', 'cat' => 'bbdkp'),
 	'acl_u_dkp_chardelete'	=> array('lang' => 'Kann eigene Charaktere im Benutzermenü löschen', 'cat' => 'bbdkp'),
 ));
-
-?>

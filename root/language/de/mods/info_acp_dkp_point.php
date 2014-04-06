@@ -2,7 +2,7 @@
 /**
  * bbdkp acp language file for mainmenu
  * 
- * @package bbDKP
+ * 
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 
@@ -27,4 +27,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_POINT_CONFIG'		=> 'Punkte Einstellungen',
 ));
 
-?>

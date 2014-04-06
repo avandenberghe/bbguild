@@ -2,7 +2,7 @@
 /**
  * bbdkp ucp language file (German-Informal)
  * 
- * @package bbDKP
+ * 
  * @copyright 2010 bbdkp <https://www.github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
@@ -32,5 +32,3 @@ $lang = array_merge($lang, array(
 	'UCP_DKP'				=> 'bbDKP Benutzermenü', 
 
 ));
-
-?>
