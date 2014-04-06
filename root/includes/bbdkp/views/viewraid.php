@@ -41,7 +41,6 @@ class viewRaid implements iViews
 
     public function buildpage(viewNavigation $Navigation)
     {
-
         global $db, $config, $phpbb_root_path, $phpEx, $user, $template;
         if ( !isset($_GET[URI_RAID]) )
         {
@@ -78,11 +77,11 @@ class viewRaid implements iViews
             'S_DISPLAY_VIEWRAIDS' => true,
             'L_RAID_ON' 		  => sprintf($user->lang['RAID_ON'], $raid->event_name, date('F j, Y', $raid->raid_start)),
             'RAIDSTART' 		  => date('H:i:s', $raid->raid_start),
-            'RAIDEND' 		  	  => (!empty($raid->raid_end) ) ? date('H:i:s', $raid->raid_end): ' '  ,
+            'RAIDEND' 		  	  => date('H:i:s', $raid->raid_end) ,
             'DURATION' 		  	  => $raid->raid_duration,
-            'RAID_ADDED_BY'		  => sprintf($user->lang['ADDED_BY'], 	(!empty($raid->raid_added_by) ) ? $raid->raid_added_by : 'N/A'),
-            'RAID_UPDATED_BY'	  => ($raid->raid_updated_by != ' ') ? sprintf ( $user->lang ['UPDATED_BY'], $raid->raid_updated_by) : ' ',
-            'RAID_NOTE'			  => ( !empty($raid->raid_note) ) ? $raid->raid_note : '&nbsp;',
+            'RAID_ADDED_BY'		  => sprintf($user->lang['ADDED_BY'], $raid->raid_added_by ),
+            'RAID_UPDATED_BY'	  => (trim($raid->raid_updated_by) != '') ? sprintf ( $user->lang ['UPDATED_BY'], $raid->raid_updated_by) : ' ',  
+            'RAID_NOTE'			  => $raid->raid_note,
             'IMAGEPATH' 			=> $phpbb_root_path . "images/bbdkp/event_images/" . $raid->event_imagename . ".png",
             'S_EVENT_IMAGE_EXISTS' 	=> (strlen($raid->event_imagename) > 1) ? true : false,
             'S_SHOWZS' 			=> ($config['bbdkp_zerosum'] == '1') ? true : false,
