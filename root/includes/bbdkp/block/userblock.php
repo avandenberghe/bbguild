@@ -2,11 +2,12 @@
 /**
  * user block
  * 
- * @package bbDkp
- * @copyright 2009 bbdkp <https://github.com/bbDKP>
+ *   @package bbdkp
+ * @link http://www.bbdkp.com
+ * @author Sajaki@gmail.com
+ * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * 
- * credits to angelside phpbb3portal
+ * @version 1.3.0
  * 
  */
 if (!defined('IN_PHPBB'))
@@ -76,10 +77,3 @@ $template->assign_vars(array(
 	'U_UM_MAIN_SUBSCRIBED'	=> append_sid($phpbb_root_path . 'ucp.' . $phpEx . '?i=main&amp;mode=subscribed'),
 	'U_PRIVATE_MESSAGES'	=> append_sid($phpbb_root_path . 'ucp.' . $phpEx . '?i=pm&amp;folder=inbox'),
 ));
-
-
-
-
-
-
-?>

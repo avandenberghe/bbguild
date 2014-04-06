@@ -1,13 +1,12 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
+ * bbdkp acp language file for  Ajdustments (en)
  * 
- * @package bbDKP
+ * 
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * 
+ * @version 1.3.0
  */
-
 /**
 * @ignore
 */
@@ -26,7 +25,5 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
   	'ACP_DKP_MDKP'	        => 'Member DKP Management', 
 	'ACP_DKP_ADDADJ'		=> 'Add Adjustments',
-	'ACP_DKP_LISTADJ'		=> 'Adjustments',
+	'ACP_DKP_LISTADJ'		=> 'Manual Points',
 ));
-
-?>

@@ -15,25 +15,25 @@ function check_form()
         alert('{MSG_RACE_EMPTY}');
         return false;
     }
-    
-    
+
+
     return true;
 }
 
 /*  make a XMLHTTP Request object */
-function GetXmlHttpObject() 
-{ 
-	var xmlhttp=false;	
-	
+function GetXmlHttpObject()
+{
+	var xmlhttp=false;
+
 	try
-	{ 
+	{
 		//  IE7+, Firefox, Chrome, Opera, Safari
 		xmlhttp=new XMLHttpRequest();
 	}
-	catch(e)	
+	catch(e)
 	{	// activex code for IE6, IE5
 		try
-		{			
+		{
 			xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
 		}
 		catch(e)
@@ -51,14 +51,14 @@ function GetXmlHttpObject()
 	return xmlhttp;
 }
 
-/* ajax function to find faction array based on game */ 
+/* ajax function to find faction array based on game */
 function Getfaction(game_id)
 {
    xmlhttp = GetXmlHttpObject();
    if (xmlhttp == null)
    {
 	   alert("{LA_ALERT_OLDBROWSER}");
-	   return;  
+	   return;
    }
     var strURL="{UA_FINDFACTION}&game_id="+game_id;
     xmlhttp.onreadystatechange=stateChanged;
@@ -80,23 +80,47 @@ function stateChanged()
 			var factionlist = xmlDoc.getElementsByTagName('factionlist')[0];
 			var factions = factionlist.getElementsByTagName("faction")
 			//now modify html : first remove old select options
-			var rsel = document.getElementById('faction'); 
-			rsel.options.length = 0; 
+			var rsel = document.getElementById('faction');
+			rsel.options.length = 0;
 			for (var i = 0; i < factions.length; i++)
 			{
-				var faction = factions[i]; 
+				var faction = factions[i];
 				var factionid = faction.getElementsByTagName("faction_id")[0].firstChild.nodeValue;
 				var factionname = faction.getElementsByTagName("faction_name")[0].firstChild.nodeValue;
 			    // add the options
-			    rsel.options[i] = new Option(factionname,factionid, true, false); 
+			    rsel.options[i] = new Option(factionname,factionid, true, false);
 			}
 		}
-		else 
+		else
 		{
    	   		alert("xx {LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
 	 	}
 	}
 }
+
+function isValidChar(char, e){
+
+    var txt = char;
+    var found = false;
+    var validChars = "0123456789"; //List of valid characters
+
+    for(j=0;j<txt.length;j++){ //Will look through the value of text
+        var c = txt.charAt(j);
+        found = false;
+        for(x=0;x<validChars.length;x++){
+            if(c==validChars.charAt(x)){
+                found=true;
+                break;
+            }
+        }
+        if(!found){
+            //If invalid character is found remove it and return the valid character(s).
+            document.getElementById(e).value = char.substring(0, char.length -1);
+            break;
+        }
+    }
+}
+
 //]]>
 
 </script>
@@ -107,30 +131,20 @@ function stateChanged()
 <p>{L_ACP_ADDRACE_EXPLAIN}</p>
 <form id="acp_addrace" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
 <div>
-<input type="hidden" name="race_id" value="{RACE_ID}" />
-
 <fieldset>
     <!-- IF S_ADD -->
 <legend>{L_ADD_RACE_TITLE}</legend>
     <!-- ELSE -->
-<legend>{L_EDIT_RACE_TITLE}</legend>    
+<legend>{L_EDIT_RACE_TITLE}</legend>
     <!-- ENDIF -->
-    
+
     <dl>
 	    <dt><label for="game_id">{L_GAME}:</label><br /> {L_GAME_CLASSRACEUPDATE_EXPLAIN}</dt>
 	  		<dd>
-	  		<!-- IF S_ADD -->
-	  		<select id="game_id" name="game_id" class="input" onchange="return Getfaction(this.value)">
-	       <!-- BEGIN game_row -->
-	       <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
-	        <!-- END game_row -->
-	      </select>
-	      <!-- ELSE -->
-	      	{GAME_ID}
-	      <!-- ENDIF -->
+	      	{GAME_NAME}
 	      </dd>
 	 </dl>
-	 
+
 	<dl>
 		<dt><label for="faction">{L_FACTION}:</label></dt>
 		<dd>
@@ -146,25 +160,25 @@ function stateChanged()
 	<dd>
 	<br />
 		<!-- IF S_ADD -->
-		<input class="medium" type="text" id="race_id" name="race_id" value="{RACE_ID}" />
+		<input class="medium" type="text" id="race_id" name="race_id" value="{RACE_ID}" onKeyup="isValidChar(this.value, 'race_id');" />
 		<!-- ELSE -->
 		{RACE_ID}
 		<!-- ENDIF -->
 		</dd>
 	</dl>
-	
-	
+
+
 	<dl>
 		<dt><label>{L_RACE_IMAGE}:</label><br/>{L_RACE_IMAGE_EXPLAIN}</dt>
 		<dd>
 			<table style="border-color:#FFFFFF">
 			<tr>
 			<td>{L_MALE}&nbsp;</td>
-			<td><input class="medium" type="text" id="image_male_small" name="image_male_small" value="{RACE_IMAGENAME_M}" />
+			<td><input class="medium" type="text" id="image_male" name="image_male" value="{RACE_IMAGENAME_M}" />
 			<!-- IF S_RACE_IMAGE_M_EXISTS --><img src="{RACE_IMAGE_M}" alt="{RACE_IMAGE_M}" />  <!-- ENDIF --></td></tr>
 			<tr>
 			<td>{L_FEMALE}&nbsp;</td>
-			<td><input class="medium" type="text" id="image_female_small" name="image_female_small" value="{RACE_IMAGENAME_F}" />
+			<td><input class="medium" type="text" id="image_female" name="image_female" value="{RACE_IMAGENAME_F}" />
 			<!-- IF S_RACE_IMAGE_F_EXISTS --><img src="{RACE_IMAGE_F}" alt="{RACE_IMAGE_F}" />  <!-- ENDIF --></td></tr>
 			</table>
 		</dd>
@@ -175,11 +189,12 @@ function stateChanged()
 
    <p class="quick">
    {S_FORM_TOKEN}
+   <input type="hidden" name="hidden_race_id" value="{RACE_ID}" />
    <input type="hidden" name="hidden_game_id" value="{GAME_ID}" />
     <!-- IF S_ADD -->
     <input type="submit" name="add" value="{L_ADD_RACE}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
     <!-- ELSE -->
-    <input type="submit" name="update" value="{L_UPDATE_RACE}" class="button1" /> 
+    <input type="submit" name="update" value="{L_UPDATE_RACE}" class="button1" />
     <!-- ENDIF -->
 	</p>
 </div>

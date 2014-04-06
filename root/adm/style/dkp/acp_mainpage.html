@@ -3,23 +3,22 @@
 <a name="maincontent"></a>
 <h1>{L_BBDKP_WELCOME}</h1>
 
-<!-- IF S_UP_TO_DATE -->
-	<div class="successbox">
-		<p>{BBDKPVERSION}</p>
+<!-- IF S_VERSIONCHECK_FAIL -->
+	<div class="errorbox notice">
+		<p>{L_VERSIONCHECK_FAIL}</p>
+		<p><a href="{U_VERSIONCHECK_FORCE}">{L_VERSIONCHECK_FORCE_UPDATE}</a> </p>
 	</div>
-<!-- ELSE -->
+<!-- ELSEIF not S_VERSION_UP_TO_DATE -->
 	<div class="errorbox">
-		<p>{BBDKPVERSION}</p>
-		<p>{UPDATEINSTR}</p>
+		<p>{BBDKP_NOT_UP_TO_DATE_TITLE} {L_BBDKP_LATESTVERSION} {BBDKP_LATESTVERSION}</p>
+		<p><a href="{U_VERSIONCHECK_FORCE}">{L_VERSIONCHECK_FORCE_UPDATE}</a></p>
 	</div>
 <!-- ENDIF -->
 
-
 <table cellspacing="1">
-		<caption>{L_STATISTICS}</caption>
-		<col class="col1" /><col class="col2" /><col class="col1" /><col class="col2" />
-		
-		<thead>
+	<caption>{L_STATISTICS}</caption>
+	<col class="col1" /><col class="col2" /><col class="col1" /><col class="col2" />
+	<thead>
 	<tr>
 		<th>{L_STATISTIC}</th>
 		<th>{L_VALUE}</th>
@@ -70,119 +69,62 @@
     <td class="row2" style="width:25%">{L_GAMES_INST}:</td>
     <td class="row1" style="width:25%">{GAMES_INSTALLED}</td>
   </tr>
+  
+  <tr>
+  	<td class="row2" style="width:25%">{L_BBDKP_VERSION}: </td>
+	<td class="row1" style="width:25%"><strong>
+		<a href="{U_VERSIONCHECK}" <!-- IF S_VERSION_UP_TO_DATE -->style="color: #228822;"<!-- ELSE -->style="color: #BC2A4D;"<!-- ENDIF --> title="{L_MORE_INFORMATION}">{BBDKP_VERSION}</a>
+		</strong> [&nbsp;<a href="{U_VERSIONCHECK_FORCE}">{L_VERSIONCHECK_FORCE_UPDATE}</a>&nbsp;]
+	</td>
+	<td class="row2" style="width:25%"></td>
+	<td class="row1" style="width:25%"></td>
+   </tr>
+  
   </tbody>
 </table>
 
+<!-- IF .plugin_row -->
 <table cellspacing="1">
-		<col class="col1" /><col class="col2" />
-		
-		<thead>
+<col class="col1" /><col class="col2" />
+<thead>
 	<tr>
 		<th>{L_PLUGINS_INSTALLED}</th>
 		<th>{L_PLUGINS_STATUS}</th>
 	</tr>
-	</thead>
-	<tbody>
-
-  <tr>
-<!-- IF S_ANY_PLUGINS_INSTALLED -->  
-    <td class="row1" style="width:50%"><B>{L_NO_PLUGINS_INSTALLED}</B></td>
-    <td class="row1" style="width:50%"><a href="{PLUGINLINK}"><B>{L_DOWNLOAD_PLUGINS}</B></a></td>
-<!-- ENDIF -->    
-  </tr>
-
-  <tr>
-<!-- IF S_APPLY_INSTALLED -->
-    <td class="row2" style="width:50%">{L_APPLY_TITLE}: {APPLYVERSION}</td>
-    <!-- IF S_APPLY_UP_TO_DATE -->         
-    <td class="row1" style="width:50%"><font color="green">{L_PLUGIN_UP_TO_DATE}</font></td>
+</thead>
+<tbody>
+<!-- BEGIN plugin_row -->
+<!-- IF plugin_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+    <!-- IF plugin_row.ISUPTODATE -->
+    <td class="row2" style="width:50%"><strong><span style="color: #228822;">{plugin_row.PLUGINNAME} {plugin_row.VERSION}</span></strong></td>
+    <td class="row1" style="width:50%"><span style="color: #228822;">{L_PLUGIN_UP_TO_DATE}</span></td>
 	<!-- ELSE -->
-    <td class="row1" style="width:50%"><font color="red">{APPLYUPDATEINSTR}</font></td>
+	<td class="row2" style="width:50%"><strong><span style="color: #BC2A4D;">{plugin_row.PLUGINNAME} {plugin_row.VERSION}</span></strong></td>
+    <td class="row1" style="width:50%"><span style="color: #BC2A4D;">{plugin_row.UPDATEINSTR}</span></td>
     <!-- ENDIF -->
-<!-- ENDIF -->
-  </tr>
-
-   <tr>
-<!-- IF S_ARMORY_UPDATER_INSTALLED -->
-    <td class="row2" style="width:50%">{L_ARMORY_IMPORTER_TITLE}: {ARMORYUPDATERVERSION}</td>
-    <!-- IF S_ARMORYUPDATER_UP_TO_DATE -->         
-    <td class="row1" style="width:50%">{L_PLUGIN_UP_TO_DATE}</font></td>
-	<!-- ELSE -->
-    <td class="row1" style="width:50%"><font color="red">{ARMORYUPDATERUPDATEINSTR}</td>
-    <!-- ENDIF -->
-<!-- ENDIF -->
-  </tr>  
-
-  <tr>
-<!-- IF S_BBTIPS_INSTALLED -->  
-    <td class="row2" style="width:50%">{L_BBTIPS_TITLE}: {BBTIPSVERSION}</td>
-    <!-- IF S_BBTIPS_UP_TO_DATE -->     
-    <td class="row1" style="width:50%"><font color="green">{L_PLUGIN_UP_TO_DATE}</font></td>
-	<!-- ELSE -->
-    <td class="row1" style="width:50%"><font color="red">{BBTIPSUPDATEINSTR}</font></td>    
-	<!-- ENDIF -->    
-<!-- ENDIF -->    
-  </tr>
-
-  <tr>
-<!-- IF S_BOSSPROGRESS_INSTALLED -->
-    <td class="row2" style="width:50%">{L_BOSSPROGRESS_TITLE}: {BOSSPROGRESSVERSION}</td>
-    <!-- IF S_BOSSPROGRESS_UP_TO_DATE -->         
-    <td class="row1" style="width:50%"><font color="green">{L_PLUGIN_UP_TO_DATE}</font></td>
-	<!-- ELSE -->
-    <td class="row1" style="width:50%"><font color="red">{BOSSPROGRESSUPDATEINSTR}</font></td>
-    <!-- ENDIF -->
-<!-- ENDIF -->
-  </tr>
-
-   <tr>
-<!-- IF S_RAID_PLANNER_INSTALLED -->
-    <td class="row2" style="width:50%">{L_RAIDPLANNER_TITLE}: {RAIDPLANNERVERSION}</td>
-    <!-- IF S_RAIDPLANNER_UP_TO_DATE -->         
-    <td class="row1" style="width:50%"><font color="green">{L_PLUGIN_UP_TO_DATE}</font></td>
-	<!-- ELSE -->
-    <td class="row1" style="width:50%"><font color="red">{RAIDPLANNERUPDATEINSTR}</font></td>
-    <!-- ENDIF -->
-<!-- ENDIF -->
-  </tr>
-
-  <tr>  
-<!-- IF S_RAID_TRACKER_INSTALLED -->
-    <td class="row2" style="width:50%">{L_RAIDTRACKER_TITLE}: {RAIDTRACKVERSION}</td>
-    <!-- IF S_RAIDTRACKER_UP_TO_DATE -->     
-    <td class="row1" style="width:50%"><font color="green">{L_PLUGIN_UP_TO_DATE}</font></td>
-	<!-- ELSE -->
-    <td class="row1" style="width:50%"><font color="red">{RAIDTRACKUPDATEINSTR}</font></td>
-    <!-- ENDIF -->
-<!-- ENDIF -->    
-  </tr>
-  
-  <tr>
-<!-- IF S_ANY_PLUGINS_AVAIL -->  
-    <td class="row1" style="width:50%"><B>{L_ADD_PLUGINS_AVAIL}: {NUMBOFPLUGINS}</B></td>
-    <td class="row1" style="width:50%"><a href="{PLUGINLINK}"><B>{L_DOWNLOAD_HERE}</B></a></td>
-<!-- ENDIF -->    
-  </tr>
-  
-  </tbody>
+</tr>
+<!-- END plugin_row -->
+</tbody>
 </table>
-<BR />
+<!-- ENDIF --> 
 
-<!-- IF S_LOGS -->
+
+<!-- IF .actions_row -->
+
 <table cellspacing="1">
 <caption>{L_NEW_ACTIONS}</caption>
-
-
   <!-- BEGIN actions_row -->
-  <!-- IF actions_row.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
-    <td  style="text-align: center; width:16; white-space: nowrap"><a href="{actions_row.U_VIEW_LOG}">
-    	<img src="{ROOT_PATH}images/glyphs/view.gif" width="16" height="16" alt="View" /></a>
+  <!-- IF actions_row.S_ROW_COUNT is even -->
+  	<tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+    	<td style="text-align: left; width:10%; white-space: nowrap">
+    		<a href="{actions_row.U_VIEW_LOG}"><img src="{ROOT_PATH}images/glyphs/view.gif" width="16" height="16" alt="View" /></a>
     	</td>
-    <td>{actions_row.ACTION}</td>
+    	<td style="text-align: left; width:20%; white-space: nowrap">  {actions_row.LOGDATE}</td>
+    	<td style="text-align: left; width:70%; white-space: nowrap">{actions_row.ACTION}</td>
   </tr>
   <!-- END actions_row -->
 </table>
-<br />
-<!-- ENDIF -->
+<!-- ENDIF --> 
 
+<br />
 <!-- INCLUDE dkp/overall_footer.html -->

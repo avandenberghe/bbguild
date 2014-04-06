@@ -2,7 +2,7 @@
 /**
  * bbdkp acp language file for mainmenu (German-Informal)
  * 
- * @package bbDKP
+ * 
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version $Id$
@@ -32,5 +32,3 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_NEWS_LIST'			=> 'Nachrichten',
 	'ACP_DKP_NEWS_LIST_EXPLAIN'	=> 'Liste der Gildennachrichten ',
 ));
-
-?>

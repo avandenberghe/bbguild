@@ -1,8 +1,7 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
- * 
- * @package bbDKP
+ * bbdkp acp language file for point settings - english
+ *  
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * 
@@ -26,5 +25,3 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, array(
 	'ACP_DKP_POINT_CONFIG'		=> 'Point Settings',
 ));
-
-?>

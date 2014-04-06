@@ -3,10 +3,10 @@
  * bbDkp Permission Set French
  * 
  * @author sajaki
- * @package bbDkp
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * 
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
+ * @version 1.3.0
  * 
  */
 
@@ -30,7 +30,7 @@ $lang['permission_cat']['bbdkp'] = 'bbDKP';
 $lang['permission_type']['bbdkp_'] = 'Permissions bbDKP';
 
 
-// bbDkp Permissions
+// bbDKP Permissions
 $lang = array_merge($lang, array(
 	'acl_a_dkp'		=> array('lang' => 'Accès PCA bbDKP', 'cat' => 'bbdkp'),
 	'acl_u_dkp'		=> array('lang' => 'Accès pages DKP', 'cat' => 'bbdkp'),
@@ -39,5 +39,3 @@ $lang = array_merge($lang, array(
 	'acl_u_dkp_charupdate'	=> array('lang' => 'Peut mettre à jour ses charactères en PCU', 'cat' => 'bbdkp'),
 	'acl_u_dkp_chardelete'	=> array('lang' => 'Peut supprimer ses charactères en PCU', 'cat' => 'bbdkp'),
 	));
-
-?>
