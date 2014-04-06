@@ -441,9 +441,9 @@ $lang = array_merge($lang, array(
 'REQUIRED_FIELD_NOTE' => 'Items marked with a * are required fields.',
 'SELECT_EXISTING' => 'Select Existing',
 'UPDATED' => 'Updated',
+'NOVIEW' => 'Unknown Viewname %s',
 
-
-//---- About --- do not change anything here
+//---- About --- here be dragons
 //tabs
 'ABOUT' => 'About',
 'MAINIMG' => 'bbdkp.png',
