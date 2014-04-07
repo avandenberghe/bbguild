@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0-RC1#
+#1.3.0-RC2#
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0-RC1
+1.3.0-RC2
 
 
 ## Installation
@@ -74,7 +74,7 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
     
 ## Changelog 
 
-1.3.0-RC1 30-03-2014
+1.3.0-RC2 30-03-2014
 
 -   [NEW] refactored and moved program logic to namespaced viewfactory, controller and domain classes.
 -   [NEW] minimum requirement is now php 5.3.20
