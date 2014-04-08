@@ -80,7 +80,7 @@ class viewRaid implements iViews
             'RAIDEND' 		  	  => date('H:i:s', $raid->raid_end) ,
             'DURATION' 		  	  => $raid->raid_duration,
             'RAID_ADDED_BY'		  => sprintf($user->lang['ADDED_BY'], $raid->raid_added_by ),
-            'RAID_UPDATED_BY'	  => (trim($raid->raid_updated_by) != '') ? sprintf ( $user->lang ['UPDATED_BY'], $raid->raid_updated_by) : ' ',  
+            'RAID_UPDATED_BY'	  => (trim($raid->raid_updated_by) != '') ? sprintf ( $user->lang ['UPDATED_BY'], $raid->raid_updated_by) : ' ',
             'RAID_NOTE'			  => $raid->raid_note,
             'IMAGEPATH' 			=> $phpbb_root_path . "images/bbdkp/event_images/" . $raid->event_imagename . ".png",
             'S_EVENT_IMAGE_EXISTS' 	=> (strlen($raid->event_imagename) > 1) ? true : false,

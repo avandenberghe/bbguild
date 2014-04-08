@@ -804,11 +804,11 @@ class Guilds extends \bbdkp\admin\Admin
 		$sql = 'SELECT c.class_id, ';
 		$sql .= ' l.name                   AS classname, ';
 		$sql .= ' Count(m.member_class_id) AS classcount ';
-		$sql .= ' FROM  phpbb_bbdkp_classes c ';
-		$sql .= ' INNER JOIN phpbb_bbdkp_memberguild g ON c.game_id = g.game_id ';
-		$sql .= ' LEFT OUTER JOIN (SELECT * FROM phpbb_bbdkp_memberlist WHERE member_level >= ' . $this->min_armory . ') m';
+		$sql .= ' FROM  ' . CLASS_TABLE . ' c ';
+		$sql .= ' INNER JOIN ' . GUILD_TABLE . ' g ON c.game_id = g.game_id ';
+		$sql .= ' LEFT OUTER JOIN (SELECT * FROM ' . MEMBER_LIST_TABLE . ' WHERE member_level >= ' . $this->min_armory . ') m';
 		$sql .= '   ON m.game_id = c.game_id  AND m.member_class_id = c.class_id  ';
-		$sql .= ' INNER JOIN phpbb_bbdkp_language l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
+		$sql .= ' INNER JOIN ' . BB_LANGUAGE . ' l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
 		$sql .= ' WHERE  1=1 ';
 		$sql .= " AND l.language = 'en' AND l.attribute = 'class' ";
 		$sql .= ' AND g.id =  ' . $this->guildid;
