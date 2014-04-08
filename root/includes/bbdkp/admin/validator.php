@@ -11,6 +11,14 @@
  */
 namespace bbdkp\admin;
 /**
+ * @ignore
+ */
+if (! defined('IN_PHPBB'))
+{
+	exit();
+}
+
+/**
  * validator class
  */
 class validator

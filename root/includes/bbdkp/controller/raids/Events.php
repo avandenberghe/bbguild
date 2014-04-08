@@ -515,7 +515,7 @@ public function __set($property, $value)
 			{
 				$sql = 'SELECT e.event_dkpid, e.event_id, e.event_name, e.event_value, e.event_color, e.event_imagename,
 						rr.raidcount, rr.newest, rr.oldest
-					FROM phpbb_bbdkp_events e
+					FROM ' . EVENTS_TABLE . ' e
 					LEFT JOIN
 					(
 						SELECT
@@ -523,9 +523,9 @@ public function __set($property, $value)
 							COUNT( DISTINCT r.raid_id) as raidcount,
 							MAX(r.raid_start) as newest,
 							MIN(r.raid_start) as oldest
-						FROM phpbb_bbdkp_raids r
-						INNER JOIN phpbb_bbdkp_raid_detail dt ON (r.raid_id = dt.raid_id)
-						INNER JOIN phpbb_bbdkp_memberlist l ON dt.member_id = l.member_id AND member_guild_id = ' . $guild_id . '
+						FROM ' . RAIDS_TABLE . ' r
+						INNER JOIN ' . RAID_DETAIL_TABLE . ' dt ON (r.raid_id = dt.raid_id)
+						INNER JOIN ' . MEMBER_LIST_TABLE . ' l ON dt.member_id = l.member_id AND member_guild_id = ' . $guild_id . '
 						GROUP BY r.event_id
 					) rr
 					ON rr.event_id = e.event_id
