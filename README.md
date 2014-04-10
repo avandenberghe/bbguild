@@ -54,8 +54,8 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 	3. now install bbDKP, as described in new install procedure
     4. update database: goto /install, press the "update"
 * Manually
-	1. download your forum to localhost, as we will make the changes locally and then upload the new/changed
-	2.	follow the diff steps described here : 1.2.8-pl2 to 1.3.0
+	1. 	download your forum to localhost, as we will make the changes locally and then upload the new/changed
+	2. 	uninstall 1.2.8 and any plugins. 
 	3.	copy the new files, replacing any old files.
 	4.	delete the old files mentioned in the delete section
 	5.	apply the changes to the core phpbb files. use a good text editor
