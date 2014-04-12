@@ -64,10 +64,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 * Manually
 	*	Localhost	 	
 		1. 	download your forum to localhost, as we will make the changes locally and then upload the new/changed
-		
 		2. 	uninstall 1.2.8 and any plugins. 
 			* first uninstall any plugins : follow the install.xml instructions for in reverse, then run the database uninstaller. 
-			* then uninstall bbdkp 1.2.8-pl2, by following the install.xml instructions in reverse. 
+			* then uninstall bbdkp 1.2.8-pl2, by following the install.xml instructions in reverse. (but leave database). 
 		3.	follow the install.xml instruction in install.xml
 			*	copy the new files, replacing any old files.
 			*	delete the old files mentioned in the delete section
