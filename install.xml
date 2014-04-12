@@ -72,13 +72,13 @@ bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
 		<author-notes lang="en"><![CDATA[bbDKP 1.3.0-RC4
 		Requirements : phpBB3 v3.0.x, Automod, UMIL,  PHP 5.3.3, Curl
-Please read docs\INSTALL.html before beginning]]></author-notes>
+Please read /docs/readme.pdf before beginning]]></author-notes>
 	<author-notes lang="fr"><![CDATA[bbDKP 1.3.0-RC4
 Requis : phpBB3 v3.0.x, Automod, UMIL, PHP 5.3.3, Curl
-Veuillez lire docs\INSTALL.html avant de commencer]]></author-notes>
+Veuillez lire /docs/readme.pdf avant de commencer]]></author-notes>
 		<author-notes lang="de"><![CDATA[bbDKP 1.3.0-RC4
 Benötigt : phpBB3 v3.0.x, Automod, UMIL, PHP 5.3.3, Curl
-Bitte lesen sie docs\INSTALL.html bevor.]]></author-notes>
+Bitte lesen sie /docs/readme.pdf bevor.]]></author-notes>
 		<author-group>
 			<author>
 				<realname><![CDATA[Andreas]]></realname>
