@@ -1127,6 +1127,10 @@ $versions = array(
 	'1.3.0-RC3' => array(
     	//08-04-2014
 	),
+	'1.3.0-RC4' => array(
+    	//12-04-2014
+	),
+
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.

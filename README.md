@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0-RC3#
+#1.3.0-RC4#
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0-RC3
+1.3.0-RC4
 
 
 ## Installation
@@ -75,7 +75,10 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
 ## Changelog 
 
 
-1.3.0-RC3 08-04-2014
+1.3.0-RC4 12-04-2014
+-   [FIX] #187 fix custom game installer
+
+1.3.0-RC4 08-04-2014
 -   [FIX] #186 fix hardcoded filenames
 
 1.3.0-RC2 07-04-2014
