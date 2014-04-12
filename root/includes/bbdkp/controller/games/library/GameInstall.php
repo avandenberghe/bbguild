@@ -83,13 +83,18 @@ abstract class GameInstall
 	}
 
 
+    /**
+     * Uninstall a game
+     * @param $game_id
+     * @param $gamename
+     */
     Public final function Uninstall($game_id, $gamename)
     {
         global $cache, $db;
         $this->game_id = $game_id;
         $this->gamename = $gamename;
 
-        $db->sql_transaction ( 'begin' );
+        $db->sql_transaction('begin');
 
         $factions = new \bbdkp\controller\games\Faction();
         $factions->game_id = $this->game_id;

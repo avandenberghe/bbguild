@@ -124,11 +124,13 @@ pre code {
     }
 }
 </style>
-<title>about</title>
+<title>1.3.0-RC4</title>
 
 </head>
 <body>
 <p><a href="http://www.bbDKP.com"><img src="http://www.bbDKP.com/images/site_logo.png" alt="bbDKP" /></a></p>
+
+<h1>1.3.0-RC4</h1>
 
 <h2>about</h2>
 
@@ -148,7 +150,7 @@ pre code {
 
 <h2>Current</h2>
 
-<p>v1.3.0-b3</p>
+<p>1.3.0-RC4</p>
 
 <h2>Installation</h2>
 
@@ -182,30 +184,62 @@ pre code {
 <h4>Upgrading from 1.2.8-pl2 to 1.3.0</h4>
 
 <ul>
-<li>Uninstall 1.2.8-pl2 and re-install 1.3.0-b3 using Automod
+<li>make a secure backup of all files</li>
+<li><p>backup your database</p></li>
+<li><p>Uninstall 1.2.8-pl2 and re-install 1.3.0 using Automod</p>
 
 <ol>
-<li> If you installed any bbDKP plugins, these have to be uninstalled first. So uninstall them from Automod, but don't run the plugin database uninstallers.</li>
+<li> If you installed any bbDKP plugins, these have to be uninstalled first.
+
+<ul>
+<li>  upload the install folder for any bbdkp1.2.8 plugin, and run the UMIL uninstaller.</li>
+<li>  make sure the module was uninstalled by checking the ACP modules.</li>
+<li>  run plugin uninstall from Automod.</li>
+</ul>
+</li>
 <li> then, from Automod, do uninstall bbDKP 1.2.8-pl2.</li>
-<li> now install bbDKP, as described in new install procedure</li>
-<li> update database: goto /install, press the "update"</li>
+<li> upload the unzipped bbdkp folder to /store/mods</li>
+<li> from Automod, run file installer</li>
+<li> Click on the blue link given, this will redirect you to /install/index.php, then click "update".</li>
 </ol>
 </li>
-<li>Manually
+<li><p>Manually</p>
+
+<ul>
+<li>  Localhost
 
 <ol>
-<li> download your forum to localhost, as we will make the changes locally and then upload the new/changed</li>
-<li>  follow the diff steps described here : 1.2.8-pl2 to 1.3.0-b3</li>
+<li><p>  download your forum to localhost, as we will make the changes locally and then upload the new/changed</p></li>
+<li><p>  uninstall 1.2.8 and any plugins.</p>
+
+<ul>
+<li>first uninstall any plugins : follow the install.xml instructions for in reverse, then run the database uninstaller.</li>
+<li>then uninstall bbdkp 1.2.8-pl2, by following the install.xml instructions in reverse.</li>
+</ul>
+</li>
+<li>  follow the install.xml instruction in install.xml
+
+<ul>
 <li>  copy the new files, replacing any old files.</li>
 <li>  delete the old files mentioned in the delete section</li>
 <li>  apply the changes to the core phpbb files. use a good text editor</li>
-<li>  Make sure your (prosilver based) custom style is updated aswell.</li>
-<li>  launch the DB updater locally (/install/index.php)</li>
-<li>  Now you see the Umil updater.</li>
-<li>  Click submit. This will update to 1.3.0 and clear the caches (template, theme, imagesets)</li>
-<li>. FTP the whole folder to to your webserver.</li>
-<li>. launch the DB updater on your webserver (/install/index.php) and redo the db changes on live.</li>
+</ul>
+</li>
+<li>  launch the DB updater locally (/install/index.php)
+  <em>.  Now you see the Umil updater.
+  </em>.  Click update. This will update to 1.3.0 and clear the caches (template, theme, imagesets)</li>
+<li>  Update your Custom styles, or install a premodded style. Jade, Deathwing and pbWoW2 have premods.</li>
 </ol>
+</li>
+<li>  live server
+
+<ol>
+<li> upload the install folder for any bbdkp1.2.8 plugin that you installed, and run uninstall.</li>
+<li>  FTP the whole folder to to your webserver, after deleting your remote files.</li>
+<li>  launch the bbdkp 1.3.0 DB updater on your webserver (/install/index.php) and redo the db changes on live.</li>
+</ol>
+</li>
+</ul>
 </li>
 </ul>
 
@@ -220,12 +254,41 @@ pre code {
 
 <h2>Changelog</h2>
 
-<p>1.3.0-b3</p>
+<p>1.3.0-RC4 12-04-2014</p>
 
 <ul>
-<li>[NEW] Added support for FFXIV (@author: Brytor)</li>
-<li>[FIX] fix bug 212 : add a raid and only put in say one person, it gives the raid value to everyone on the roster not just the person attending</li>
-<li>[FIX] fix bug 213 : html issue : Incorrect URL in listraids</li>
+<li>[FIX] #187 fix custom game installer</li>
+<li>[FIX] #190 restyling recruitment block acp</li>
+</ul>
+
+
+<p>1.3.0-RC4 08-04-2014</p>
+
+<ul>
+<li>[FIX] #186 fix hardcoded filenames</li>
+</ul>
+
+
+<p>1.3.0-RC2 07-04-2014</p>
+
+<ul>
+<li>[FIX] #184 fix german language file error</li>
+</ul>
+
+
+<p>1.3.0-RC1 06-04-2014</p>
+
+<ul>
+<li>[NEW] refactored and moved program logic to namespaced viewfactory, controller and domain classes.</li>
+<li>[NEW] minimum requirement is now php 5.3.20</li>
+<li>[NEW] new hooks, less core phpbb changes</li>
+<li>[NEW] games installers moved to acp.</li>
+<li>[NEW] added lineage2, ffxiv and custom games installer. updated other Game installers to latest info.</li>
+<li>[NEW] multi-guild aware. ranks and recruitment integrated in new Guild acp.</li>
+<li>[NEW] integrated Battle.NET Api, now also pulls guild emblem.</li>
+<li>[NEW] enhanced portal</li>
+<li>[NEW] Deathwing, Jade and pbWoW2 style mods included</li>
+<li>[CHG] UMIL was removed from core. user needs to install it before.</li>
 </ul>
 
 

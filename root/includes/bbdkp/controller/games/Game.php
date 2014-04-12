@@ -218,43 +218,66 @@ class Game extends \bbdkp\admin\Admin
         {
             //game id is one of the preinstallable games
             $this->name= $this->preinstalled_games[$this->game_id];
+            //fetch installer
+            if (!class_exists('\bbdkp\controller\games\install_' . $this->game_id))
+            {
+                include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_' . $this->game_id . '.' . $phpEx);
+            }
+
+            //build name of the namespaced game installer class
+            $classname = '\bbdkp\controller\games\install_' . $this->game_id;
+
+            $installgame = new $classname;
+            //call the game installer
+            $installgame->Install($this->game_id, $this->name,
+                $installgame->getBossbaseurl(), $installgame->getZonebaseurl() );
+
+            //is gameworld installed ?
+            if(isset($config['bbdkp_gameworld_version']))
+            {
+                if ($config['bbdkp_gameworld_version'] >= '1.1')
+                {
+                    if (!class_exists('\bbdkp\controller\games\world_' . $this->game_id))
+                    {
+                        include($phpbb_root_path .'includes/bbdkp/controller/games/library/world_' . $this->game_id . '.' . $phpEx);
+                    }
+                    $classname = '\bbdkp\controller\games\world_' . $this->game_id;
+                    $installworld = new $classname;
+                    $installworld->Install($this->game_id);
+
+                }
+            }
+
         }
         else
         {
             //custom game, this is dispatched to dummy game installer
-            $this->game_id = 'custom';
             if ($this->name == '')
             {
                 $this->name='Custom';
             }
-        }
-
-        //fetch installer
-        if (!class_exists('\bbdkp\controller\games\install_' . $this->game_id))
-        {
-            include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_' . $this->game_id . '.' . $phpEx);
-        }
-
-        //build name of the namespaced game installer class
-        $classname = '\bbdkp\controller\games\install_' . $this->game_id;
-        $installgame = new $classname;
-        //call the game installer
-        $installgame->Install($this->game_id, $this->name,
-            $installgame->getBossbaseurl(), $installgame->getZonebaseurl() );
-
-        //is gameworld installed ?
-        if(isset($config['bbdkp_gameworld_version']))
-        {
-            if ($config['bbdkp_gameworld_version'] >= '1.1')
+            //fetch installer
+            if (!class_exists('\bbdkp\controller\games\install_custom'))
             {
-                if (!class_exists('\bbdkp\controller\games\world_' . $this->game_id))
-                {
-                    include($phpbb_root_path .'includes/bbdkp/controller/games/library/world_' . $this->game_id . '.' . $phpEx);
-                }
-                $classname = '\bbdkp\controller\games\world_' . $this->game_id;
-                $installworld = new $classname;
-                $installworld->Install($this->game_id);
+                include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_custom.' . $phpEx);
+            }
+            $installgame = new \bbdkp\controller\games\install_custom;
+            //call the game installer
+            $installgame->Install($this->game_id, $this->name, $installgame->getBossbaseurl(), $installgame->getZonebaseurl() );
 
+            //is gameworld installed ?
+            if(isset($config['bbdkp_gameworld_version']))
+            {
+                if ($config['bbdkp_gameworld_version'] >= '1.1')
+                {
+                    if (!class_exists('\bbdkp\controller\games\world_custom'))
+                    {
+                        include($phpbb_root_path .'includes/bbdkp/controller/games/library/world_custom.' . $phpEx);
+                    }
+                    $installworld = new \bbdkp\controller\games\world_custom;
+                    $installworld->Install($this->game_id);
+
+                }
             }
         }
 
@@ -283,32 +306,55 @@ class Game extends \bbdkp\admin\Admin
             \trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALL_GAME_FAILURE'], $this->name ) . E_USER_WARNING );
         }
 
-        //fetch installer
-        if (!class_exists('\bbdkp\controller\games\install_' . $this->game_id))
+        if(array_key_exists($this->game_id, $this->preinstalled_games))
         {
-            include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_' . $this->game_id . '.' . $phpEx);
+            //fetch installer
+            if (!class_exists('\bbdkp\controller\games\install_' . $this->game_id))
+            {
+                include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_' . $this->game_id . '.' . $phpEx);
+            }
+            $gameclassname = '\bbdkp\controller\games\install_' . $this->game_id;
         }
-
-        //build name of the namespaced game installer class
-        $classname = '\bbdkp\controller\games\install_' . $this->game_id;
-        $installgame = new $classname;
-        //call the game installer
-        $installgame->Uninstall($this->game_id, $this->name );
+        else
+        {
+            if (!class_exists('\bbdkp\controller\games\install_custom'))
+            {
+                include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_custom.' . $phpEx);
+            }
+            $gameclassname = '\bbdkp\controller\games\install_custom';
+        }
 
         //is bossprogress installed ?
         if(isset($config['bbdkp_gameworld_version']))
         {
             if ($config['bbdkp_gameworld_version'] >= '1.1')
             {
-                if (!class_exists('\bbdkp\controller\games\world_' . $this->game_id))
+                if(array_key_exists($this->game_id, $this->preinstalled_games))
                 {
-                    include($phpbb_root_path .'includes/bbdkp/controller/games/library/world_' . $this->game_id . '.' . $phpEx);
+                    if (!class_exists('\bbdkp\controller\games\world_' . $this->game_id))
+                    {
+                        include($phpbb_root_path .'includes/bbdkp/controller/games/library/world_' . $this->game_id . '.' . $phpEx);
+                    }
+                    $gameworld_classname = '\bbdkp\controller\games\world_' . $this->game_id;
                 }
-                $classname = '\bbdkp\controller\games\world_' . $this->game_id;
-                $installworld = new $classname;
-                $installworld->Uninstall($this->game_id);
+                else
+                {
+                    if (!class_exists('\bbdkp\controller\games\install_custom'))
+                    {
+                        include($phpbb_root_path .'includes/bbdkp/controller/games/library/install_custom.' . $phpEx);
+                    }
+                    $gameworld_classname = '\bbdkp\controller\games\install_custom';
+                }
+
+                $installworld = new $gameworld_classname;
+                $installworld->Uninstall($this->game_id, $this->getName());
             }
         }
+
+        //build name of the namespaced game installer class
+        $installgame = new $gameclassname;
+        //call the game installer
+        $installgame->Uninstall($this->game_id, $this->name );
 
         //
         // Logging

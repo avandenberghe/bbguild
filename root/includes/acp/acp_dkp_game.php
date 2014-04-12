@@ -252,20 +252,21 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					{
 						$deletegame = new \bbdkp\controller\games\Game;
 						$deletegame->game_id = request_var ( 'hidden_game_id','' );
-						$deletegame->setName(request_var ( 'hidden_game_name','' ));
+                        $deletegame->Get();
 						$deletegame->Delete();
 
-						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") );
+						//meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") );
 						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->getName() ) , E_USER_WARNING);
 					}
 					else
 					{
+
 						// get field content
 						$s_hidden_fields = build_hidden_fields ( array (
 								'gamedelete' => true,
-								'hidden_game_name' => $editgame->getName(),
 								'hidden_game_id' => $editgame->game_id,
 						));
+
 						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_DELETE_GAME'], $editgame->getName() ), $s_hidden_fields );
 					}
 				}
@@ -459,7 +460,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 						$template->assign_vars ( array (
 							'GAME_ID' => $listraces->game_id,
-							'GAME_NAME' => $editgame->name,
+							'GAME_NAME' => $editgame->getName(),
 							'S_FACTIONLIST_OPTIONS' => $s_faction_options,
 							'S_ADD' => TRUE,
 							'U_ACTION' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addrace' ),
@@ -538,7 +539,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 						// send parameters to template
 						$template->assign_vars ( array (
 							'GAME_ID' => $listclasses->game_id,
-							'GAME_NAME' => $editgame->name,
+							'GAME_NAME' => $editgame->getName(),
 							'S_ARMOR_OPTIONS' => $s_armor_options,
 							'S_ADD' => TRUE,
 							'COLORCODE' => '#EE8611',
