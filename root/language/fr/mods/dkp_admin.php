@@ -754,7 +754,9 @@ $lang = array_merge($lang, array(
 'POINT_NAME_NOTE' => 'Ex: DKP, RP, etc.',
 'RAIDS' => 'Raids',
 'RAIDS_PER_PAGE' => 'Raids par Page',
-
+'RECRUITMENT_BLOCK_EXPLAIN' => 'Allumer recrutement.  ',
+'RECRUITMENT_BLOCK_SETTING' => 'Réglages bloc de recrutement',
+'RECRUITMENT_BLOCK_EXPLAIN_BELOW' => 'Ici vous pouvez ajouter les rôles désirés pour votre Guilde. Ils s’affichent sur le Portail.',
 'REGION' => 'Région',
 'REGIONEU' => 'Europe',
 'REGIONUS' => 'Amériques',

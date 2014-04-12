@@ -749,6 +749,9 @@ $lang = array_merge($lang, array(
 'POINT_NAME_NOTE' => 'Bsp: DKP, RP, etc.',
 'RAIDS' => 'Raids',
 'RAIDS_PER_PAGE' => 'Raids pro Seite',
+'RECRUITMENT_BLOCK_EXPLAIN' => 'Rekrutierung angeschaltet.',
+'RECRUITMENT_BLOCK_SETTING' => 'Rekrutierungsblock',
+'RECRUITMENT_BLOCK_EXPLAIN_BELOW' => 'Hier kannst du die Rollen einstellen die du benötigst für deine Gilde. Diese werden angezeigt ins Rekrutierungsblock. ',
 'REGION' => 'Region',
 'REGIONEU' => 'Europa',
 'REGIONUS' => 'Amerika',
@@ -886,6 +889,7 @@ $lang = array_merge($lang, array(
 'DATE_FORMAT' => ' Datumsformat in Anzeigeliste',
 
 'BBDKP_MEMBERDEACTIVATED' => 'Deaktiviert von %s on %s',
+'BBDKP_MEMBERACTIVATED' => 'Activiert von %s on %s',
 'DEFAULT_DKP_POOL' => 'Standard DKP Pool',
 'DEFAULT_GUILD' => 'Voreingestellte Gilde',
 'DKPPERTIME' => '%s DKP pro %s Minuten.',

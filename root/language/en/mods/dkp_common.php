@@ -236,8 +236,8 @@ $lang = array_merge($lang, array(
 'CLASSMAX' => 'Max level',
 'CLASS_DISTRIBUTION' => 'Class Distribution',
 'CLASS_SUMMARY' => 'Class Summary: %s to %s',
-
 'CONFIGURATION' => 'Configuration',
+'CLOSED' => 'Closed',
 'DATE' => 'Date',
 'DELETE' => 'Delete',
 'DELETE_CONFIRMATION' => 'Delete Confirmation',
