@@ -72,8 +72,8 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 			*	delete the old files mentioned in the delete section
 			*	apply the changes to the core phpbb files. use a good text editor
 		4.	launch the DB updater locally (/install/index.php)
-			*.	Now you see the Umil updater.
-			*.	Click update. This will update to 1.3.0 and clear the caches (template, theme, imagesets)
+			*	Now you see the Umil updater.
+			*	Click update. This will update to 1.3.0 and clear the caches (template, theme, imagesets)
 		5.	Update your Custom styles, or install a premodded style. Jade, Deathwing and pbWoW2 have premods.
 	*	live server
 		1. upload the install folder for any bbdkp1.2.8 plugin that you installed, and run uninstall.
@@ -87,6 +87,14 @@ Please upgrade to v1.2.8-pl2 first
 #### Quick Deactivation
 should you wish to Deactivate this Mod quickly you can open configdkp.php and comment out the trigger : change @define('EMED_BBDKP', true); to //@define('EMED_BBDKP', true); 
     
+    
+## Community
+
+Find support and more on 
+
+*	Forums : [bbDKP.com](http://www.bbdkp.com)
+*	IRC : Freenode #bbdkp
+
 ## Changelog 
 
 
@@ -672,10 +680,6 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
 
 -	first release
     
-    
-## Community
-
-Find support and more on [bbDKP.com](http://www.bbdkp.com)
 
 ## contribute
 
