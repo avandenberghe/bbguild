@@ -31,26 +31,6 @@ if (! defined('IN_PHPBB'))
  */
 class Points
 {
-	/*
-	CREATE TABLE `phpbb_bbdkp_memberdkp` (
-	`member_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-	`member_dkpid` smallint(4) unsigned NOT NULL DEFAULT '0',
-	`member_raid_value` decimal(11,2) NOT NULL DEFAULT '0.00',
-	`member_time_bonus` decimal(11,2) NOT NULL DEFAULT '0.00',
-	`member_zerosum_bonus` decimal(11,2) NOT NULL DEFAULT '0.00',
-	`member_earned` decimal(11,2) NOT NULL DEFAULT '0.00',
-	`member_raid_decay` decimal(11,2) NOT NULL DEFAULT '0.00',
-	`member_spent` decimal(11,2) NOT NULL DEFAULT '0.00',
-	`member_item_decay` decimal(11,2) NOT NULL DEFAULT '0.00',
-	`member_adjustment` decimal(11,2) NOT NULL DEFAULT '0.00',
-	`member_firstraid` int(11) unsigned NOT NULL DEFAULT '0',
-	`member_lastraid` int(11) unsigned NOT NULL DEFAULT '0',
-	`member_raidcount` mediumint(8) unsigned NOT NULL DEFAULT '0',
-	`adj_decay` decimal(11,2) NOT NULL DEFAULT '0.00',
-	PRIMARY KEY (`member_dkpid`,`member_id`)
-	) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-	*/
-
 	/**
 	 * pk for points class
 	 * @var int

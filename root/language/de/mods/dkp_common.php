@@ -436,7 +436,8 @@ $lang = array_merge($lang, array(
 	'REQUIRED_FIELD_NOTE'	=> 'Mit * gekennzeichnete Felder sind Pflichtfelder.',
 	'SELECT_EXISTING'	=> 'Wähle vorhandene',
 	'UPDATED'	=> 'Aktualisiert',
-
+	'NOVIEW' => 'Seite %s kann nicht geladen werden.',
+	
 //---- About --- do not change anything here
 //tabs
 	'ABOUT'	=> 'Über',
