@@ -124,11 +124,13 @@ pre code {
     }
 }
 </style>
-<title>about</title>
+<title>1.3.0-RC4</title>
 
 </head>
 <body>
 <p><a href="http://www.bbDKP.com"><img src="http://www.bbDKP.com/images/site_logo.png" alt="bbDKP" /></a></p>
+
+<h1>1.3.0-RC4</h1>
 
 <h2>about</h2>
 
@@ -148,7 +150,7 @@ pre code {
 
 <h2>Current</h2>
 
-<p>v1.3.0-b3</p>
+<p>1.3.0-RC4</p>
 
 <h2>Installation</h2>
 
@@ -182,7 +184,7 @@ pre code {
 <h4>Upgrading from 1.2.8-pl2 to 1.3.0</h4>
 
 <ul>
-<li>Uninstall 1.2.8-pl2 and re-install 1.3.0-b3 using Automod
+<li>Uninstall 1.2.8-pl2 and re-install 1.3.0 using Automod
 
 <ol>
 <li> If you installed any bbDKP plugins, these have to be uninstalled first. So uninstall them from Automod, but don't run the plugin database uninstallers.</li>
@@ -194,8 +196,8 @@ pre code {
 <li>Manually
 
 <ol>
-<li> download your forum to localhost, as we will make the changes locally and then upload the new/changed</li>
-<li>  follow the diff steps described here : 1.2.8-pl2 to 1.3.0-b3</li>
+<li>  download your forum to localhost, as we will make the changes locally and then upload the new/changed</li>
+<li>  uninstall 1.2.8 and any plugins.</li>
 <li>  copy the new files, replacing any old files.</li>
 <li>  delete the old files mentioned in the delete section</li>
 <li>  apply the changes to the core phpbb files. use a good text editor</li>
@@ -220,12 +222,41 @@ pre code {
 
 <h2>Changelog</h2>
 
-<p>1.3.0-b3</p>
+<p>1.3.0-RC4 12-04-2014</p>
 
 <ul>
-<li>[NEW] Added support for FFXIV (@author: Brytor)</li>
-<li>[FIX] fix bug 212 : add a raid and only put in say one person, it gives the raid value to everyone on the roster not just the person attending</li>
-<li>[FIX] fix bug 213 : html issue : Incorrect URL in listraids</li>
+<li>[FIX] #187 fix custom game installer</li>
+<li>[FIX] #190 restyling recruitment block acp</li>
+</ul>
+
+
+<p>1.3.0-RC4 08-04-2014</p>
+
+<ul>
+<li>[FIX] #186 fix hardcoded filenames</li>
+</ul>
+
+
+<p>1.3.0-RC2 07-04-2014</p>
+
+<ul>
+<li>[FIX] #184 fix german language file error</li>
+</ul>
+
+
+<p>1.3.0-RC1 06-04-2014</p>
+
+<ul>
+<li>[NEW] refactored and moved program logic to namespaced viewfactory, controller and domain classes.</li>
+<li>[NEW] minimum requirement is now php 5.3.20</li>
+<li>[NEW] new hooks, less core phpbb changes</li>
+<li>[NEW] games installers moved to acp.</li>
+<li>[NEW] added lineage2, ffxiv and custom games installer. updated other Game installers to latest info.</li>
+<li>[NEW] multi-guild aware. ranks and recruitment integrated in new Guild acp.</li>
+<li>[NEW] integrated Battle.NET Api, now also pulls guild emblem.</li>
+<li>[NEW] enhanced portal</li>
+<li>[NEW] Deathwing, Jade and pbWoW2 style mods included</li>
+<li>[CHG] UMIL was removed from core. user needs to install it before.</li>
 </ul>
 
 

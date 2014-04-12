@@ -76,15 +76,20 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
 
 
 1.3.0-RC4 12-04-2014
--   [FIX] #187 fix custom game installer
 
+-   [FIX] #187 fix custom game installer
+-   [FIX] #190 restyling recruitment block acp
+   
 1.3.0-RC4 08-04-2014
+
 -   [FIX] #186 fix hardcoded filenames
 
 1.3.0-RC2 07-04-2014
+
 -   [FIX] #184 fix german language file error
 
 1.3.0-RC1 06-04-2014
+
 -   [NEW] refactored and moved program logic to namespaced viewfactory, controller and domain classes.
 -   [NEW] minimum requirement is now php 5.3.20
 -   [NEW] new hooks, less core phpbb changes
