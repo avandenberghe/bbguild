@@ -227,6 +227,7 @@ $lang = array_merge($lang, array(
 'ACP_ADDRAID' => 'Add Raid',
 'ACP_LISTRAIDS' => 'List Raids',
 'ACP_ADDGAME' => 'Add Game',
+'ACP_EDITGAME' => 'Edit Game',
 'ACP_LISTGAME' => 'List Games',
 'ACP_GAMESETTINGS' => 'Game Settings',
 'ACP_ADDRACE' => 'Add Race',
@@ -300,6 +301,8 @@ $lang = array_merge($lang, array(
 'ACP_ADDCLASS_EXPLAIN' => 'Here you can add/edit the game Classes.',
 'ACP_ADDFACTIONS_EXPLAIN' => 'Here you can add/edit the Factions',
 'ACP_ADDRACE_EXPLAIN' => 'Here you can add/edit the Races.',
+'ACP_ADDRANK_EXPLAIN' => 'Here you can add/edit the Guild ranks. For wow you can download them from the Armory',
+
 'RACEID_EXPLAIN' =>'Note. the ID is unique. for Wow, it should match the raceId XML Armory tag. ',
 'RACE_EXPLAIN' =>'Race name',
 'CLASS_ID_EXPLAIN' => 'Note. the ID is unique. for Wow, it should match the ClassId XML Armory tag.',
@@ -744,7 +747,9 @@ $lang = array_merge($lang, array(
 'POINT_NAME_NOTE' => 'Ex: DKP, RP, etc.',
 'RAIDS' => 'Raids',
 'RAIDS_PER_PAGE' => 'Raids per Page',
-
+'RECRUITMENT_BLOCK_EXPLAIN' => 'Set to On to show the roles ro recruit.  ',
+'RECRUITMENT_BLOCK_SETTING' => 'Recruitment block Setting',
+'RECRUITMENT_BLOCK_EXPLAIN_BELOW' => 'Here you can add the roles you need to recruit for your Guild. They show up in your recruitment portal block',
 'REGION' => 'Region',
 'REGIONEU' => 'Europe',
 'REGIONUS' => 'America',
@@ -1008,9 +1013,9 @@ $lang = array_merge($lang, array(
 'JQUERY_MISSING' => 'jquery.js is not present. You must install jquery.js in adm/style/dkp for the colorwheel to work.',
 
 'ZONEBASEURL' => 'Zone base Url',
-'ZONEBASEURL_EXPLAIN' => 'url: %s ',
+'ZONEBASEURL_EXPLAIN' => 'url: ',
 'BOSSBASEURL' => 'Bossbase Url',
-'BOSSBASEURL_EXPLAIN' => 'url: %s ',
+'BOSSBASEURL_EXPLAIN' => 'url: ',
 
 // LOOTSYSTEM
 'DESCRIPTION' => 'lootsystem',
