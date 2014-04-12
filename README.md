@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0-RC3#
+#1.3.0-RC4#
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0-RC3
+1.3.0-RC4
 
 
 ## Installation
@@ -48,40 +48,71 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 
 #### Upgrading from 1.2.8-pl2 to 1.3.0
 
+* make a secure backup of all files
+* backup your database
+
 * Uninstall 1.2.8-pl2 and re-install 1.3.0 using Automod
-	1. If you installed any bbDKP plugins, these have to be uninstalled first. So uninstall them from Automod, but don't run the plugin database uninstallers.
-    2. then, from Automod, do uninstall bbDKP 1.2.8-pl2.
-	3. now install bbDKP, as described in new install procedure
-    4. update database: goto /install, press the "update"
+	1. If you installed any bbDKP plugins, these have to be uninstalled first.
+		*	upload the install folder for any bbdkp1.2.8 plugin, and run the UMIL uninstaller.
+		*	make sure the module was uninstalled by checking the ACP modules.
+		*	run plugin uninstall from Automod.
+    2. then, from Automod, do uninstall bbDKP 1.2.8-pl2. 
+	3. upload the unzipped bbdkp folder to /store/mods
+	4. from Automod, run file installer
+	5. Click on the blue link given, this will redirect you to /install/index.php, then click "update". 
+
 * Manually
-	1. download your forum to localhost, as we will make the changes locally and then upload the new/changed
-	2.	follow the diff steps described here : 1.2.8-pl2 to 1.3.0
-	3.	copy the new files, replacing any old files.
-	4.	delete the old files mentioned in the delete section
-	5.	apply the changes to the core phpbb files. use a good text editor
-	6.	Make sure your (prosilver based) custom style is updated aswell.
-	7.	launch the DB updater locally (/install/index.php)
-	8.	Now you see the Umil updater.
-	9.	Click submit. This will update to 1.3.0 and clear the caches (template, theme, imagesets)
-	10.	FTP the whole folder to to your webserver.
-	11.	launch the DB updater on your webserver (/install/index.php) and redo the db changes on live.
-	
+	*	Localhost	 	
+		1. 	download your forum to localhost, as we will make the changes locally and then upload the new/changed
+		2. 	uninstall 1.2.8 and any plugins. 
+			* first uninstall any plugins : follow the install.xml instructions for in reverse, then run the database uninstaller. 
+			* then uninstall bbdkp 1.2.8-pl2, by following the install.xml instructions in reverse. (but leave database). 
+		3.	follow the install.xml instruction in install.xml
+			*	copy the new files, replacing any old files.
+			*	delete the old files mentioned in the delete section
+			*	apply the changes to the core phpbb files. use a good text editor
+		4.	launch the DB updater locally (/install/index.php)
+			*	Now you see the Umil updater.
+			*	Click update. This will update to 1.3.0 and clear the caches (template, theme, imagesets)
+		5.	Update your Custom styles, or install a premodded style. Jade, Deathwing and pbWoW2 have premods.
+	*	live server
+		1. upload the install folder for any bbdkp1.2.8 plugin that you installed, and run uninstall.
+		2.	FTP the whole folder to to your webserver, after deleting your remote files.
+		3.	launch the bbdkp 1.3.0 DB updater on your webserver (/install/index.php) and redo the db changes on live.
+
+
 #### Upgrading from earlier version
 Please upgrade to v1.2.8-pl2 first
 
 #### Quick Deactivation
 should you wish to Deactivate this Mod quickly you can open configdkp.php and comment out the trigger : change @define('EMED_BBDKP', true); to //@define('EMED_BBDKP', true); 
     
+    
+## Community
+
+Find support and more on 
+
+*	Forums : [bbDKP.com](http://www.bbdkp.com)
+*	IRC : Freenode #bbdkp
+
 ## Changelog 
 
 
-1.3.0-RC3 08-04-2014
+1.3.0-RC4 12-04-2014
+
+-   [FIX] #187 fix custom game installer
+-   [FIX] #190 restyling recruitment block acp
+   
+1.3.0-RC4 08-04-2014
+
 -   [FIX] #186 fix hardcoded filenames
 
 1.3.0-RC2 07-04-2014
+
 -   [FIX] #184 fix german language file error
 
 1.3.0-RC1 06-04-2014
+
 -   [NEW] refactored and moved program logic to namespaced viewfactory, controller and domain classes.
 -   [NEW] minimum requirement is now php 5.3.20
 -   [NEW] new hooks, less core phpbb changes
@@ -649,10 +680,6 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
 
 -	first release
     
-    
-## Community
-
-Find support and more on [bbDKP.com](http://www.bbdkp.com)
 
 ## contribute
 

@@ -36,7 +36,8 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_custom extends \bbdkp\controller\games\GameInstall
 {
-
+    protected $bossbaseurl = '';
+    protected $zonebaseurl = '';
 	public $game_id;
 
 	/**
