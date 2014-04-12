@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0-RC1#
+#1.3.0-RC4#
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0-RC1
+1.3.0-RC4
 
 
 ## Installation
@@ -54,8 +54,8 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 	3. now install bbDKP, as described in new install procedure
     4. update database: goto /install, press the "update"
 * Manually
-	1. download your forum to localhost, as we will make the changes locally and then upload the new/changed
-	2.	follow the diff steps described here : 1.2.8-pl2 to 1.3.0
+	1. 	download your forum to localhost, as we will make the changes locally and then upload the new/changed
+	2. 	uninstall 1.2.8 and any plugins. 
 	3.	copy the new files, replacing any old files.
 	4.	delete the old files mentioned in the delete section
 	5.	apply the changes to the core phpbb files. use a good text editor
@@ -74,8 +74,17 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
     
 ## Changelog 
 
-1.3.0-RC1 30-03-2014
 
+1.3.0-RC4 12-04-2014
+-   [FIX] #187 fix custom game installer
+
+1.3.0-RC4 08-04-2014
+-   [FIX] #186 fix hardcoded filenames
+
+1.3.0-RC2 07-04-2014
+-   [FIX] #184 fix german language file error
+
+1.3.0-RC1 06-04-2014
 -   [NEW] refactored and moved program logic to namespaced viewfactory, controller and domain classes.
 -   [NEW] minimum requirement is now php 5.3.20
 -   [NEW] new hooks, less core phpbb changes
@@ -84,7 +93,8 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
 -   [NEW] multi-guild aware. ranks and recruitment integrated in new Guild acp.
 -   [NEW] integrated Battle.NET Api, now also pulls guild emblem.
 -   [NEW] enhanced portal
--   [NEW] Deathwing, Jade and pbWoW style mods included
+-   [NEW] Deathwing, Jade and pbWoW2 style mods included
+-   [CHG] UMIL was removed from core. user needs to install it before. 
 
 1.2.8-pl2 30-07-2012
 
