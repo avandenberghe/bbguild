@@ -1008,9 +1008,9 @@ $lang = array_merge($lang, array(
 'JQUERY_MISSING' => 'jquery.js is not present. You must install jquery.js in adm/style/dkp for the colorwheel to work.',
 
 'ZONEBASEURL' => 'Zone base Url',
-'ZONEBASEURL_EXPLAIN' => 'url: %s ',
+'ZONEBASEURL_EXPLAIN' => 'url: ',
 'BOSSBASEURL' => 'Bossbase Url',
-'BOSSBASEURL_EXPLAIN' => 'url: %s ',
+'BOSSBASEURL_EXPLAIN' => 'url: ',
 
 // LOOTSYSTEM
 'DESCRIPTION' => 'lootsystem',
