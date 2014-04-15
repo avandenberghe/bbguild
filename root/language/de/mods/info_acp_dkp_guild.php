@@ -1,10 +1,12 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
+ * bbdkp acp language file for guilds -german
  *
  *
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.3.0
+ * @translation unknown author, killerpommes
  *
  */
 
@@ -24,9 +26,8 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-	'ACP_DKP_GUILD'			=> 'Gilden',
- 	'ACP_DKP_GUILD_ADD'	    => 'Neue Gilde ',
+	'ACP_DKP_GUILD'		=> 'Gilden',
+ 	'ACP_DKP_GUILD_ADD'	=> 'Neue Gilde',
 	'ACP_DKP_GUILD_EDIT'	=> 'Gilde bearbeiten',
-	'ACP_DKP_GUILD_LIST'	=> 'Gilden liste',
-	
+	'ACP_DKP_GUILD_LIST'	=> 'Gildenliste',
 ));

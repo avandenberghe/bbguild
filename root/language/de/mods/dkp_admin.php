@@ -40,6 +40,7 @@ $lang = array();
 //
 // Some characters you may want to copy&paste:
 // ‚Äô ¬ª ‚Äú ‚Äù ‚Ä¶
+//
 
 // DKP
 $lang = array_merge($lang, array(
@@ -61,6 +62,7 @@ $lang = array_merge($lang, array(
 'REGISTRATIONID' => 'bbDKP Registrierungsschlüssel',
 'NOTREGISTERED' => 'Nicht registriert',
 'REGISTRATION_EXPLAIN' => 'Wenn du die Registrierung Taste drückst, werden dein Domainname, phpBB-Version, bbDKP-Version nach bbDKP.com gesendet und du bekommst ein Registrierungsschlüssel. Dies ist kostenlos.',
+
 //JAVASCRIPT
 'B_HELP' => 'fetter Text: [b]text[/b]',
 'I_HELP' => 'kursiver Text: [i]text[/i]',
@@ -103,7 +105,6 @@ $lang = array_merge($lang, array(
 'FV_REQUIRED_MEMBER' => 'Ein Mitglied muss ausgewählt sein.',
 'FV_REQUIRED_MEMBERS' => 'Mindestens ein Mitglied muss ausgewählt sein.',
 'FV_REQUIRED_DKPSYS_NAME' => 'Das DKP Pool-Feld ist notwendig',
-'FV_REQUIRED_NAME' => 'Das Namensfeld ist notwendig.',
 'FV_REQUIRED_PASSWORD' => 'Das Passwort-Feld ist notwendig.',
 'FV_REQUIRED_RAIDID' => 'Ein Raid muss ausgewählt sein.',
 'FV_REQUIRED_USER' => 'Das Benutzernamen-Feld ist notwendig.',
@@ -153,6 +154,7 @@ $lang = array_merge($lang, array(
 'BOTTOM'  => 'Unten',
 'SIDE'  => 'an der Seite',
 'NUMNEWMEMBERS' => 'Anzahl Neue Mitglieder',
+
 'RANK_INSERTED' => 'Neuer Rang eingefügt : %s. ',
 'TOTAL_RANKS_INSERTED' => 'Anzahl der eingefügten Ränge : %s.',
 'MEMBER_INSERTED' => 'Mitglied hinzugefügt: %s. ',
@@ -278,8 +280,8 @@ $lang = array_merge($lang, array(
 'ACP_EDITRAID_EXPLAIN'  => 'Hier kannst du deinen Raid bearbeiten.',
 'ACP_LISTRAIDS_EXPLAIN' => 'Hier ist die Raid Liste pro DKP Pool. Wenn du den Raidnamen anklickst, gelangst du in den Verwaltungsmodus',
 'ACP_DKP_LOGS_EXPLAIN'  => 'Diese Liste zeigt alle bbDKP-Vorgänge. Du kannst nach Benutzername, Datum, IP oder Aktion sortieren.',
-'ACP_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenränke und Präfix/Suffixe einstellen. (Zum Hinzufügen, die letzte Zeile eintippen und bestätigen. Zum Löschen, entferne den Namen und bestätige). Rang 99 (der ‘out‘ Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch das Arsenal-Plugin.',
-'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Gildenmitgliederliste. Hier kannst du Mitglieder verwalten oder löschen. ACHTUNG: Löschung bedeutet dass die ganze Mitgliedraidgeschichte in allen DKP Pools gelöscht wird!',
+'ACP_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenränke und Präfix/Suffixe einstellen. (Zum Hinzufügen, die letzte Zeile eintippen und bestätigen. Zum Löschen, entferne den Namen und bestätige). Rang 99 (der ‘out‘ Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch das Arsenal-Plugin. ',
+'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Gildenmitgliederliste. Hier kannst du Mitglieder verwalten oder löschen. ACHTUNG: Löschung bedeutet dass die ganze Mitgliedraidgeschichte in allen DKP Pools gelöscht wird! ',
 
 'ACP_LISTGUILDS_EXPLAIN' => 'Gildenliste. Bevor du Mitglieder einfügen kannst, musst du eine Gilde hinzufügen.',
 'ACP_ADDGUILD_EXPLAIN' => 'Hier kannst du Gilden löschen oder hinzufügen.',
@@ -296,10 +298,11 @@ $lang = array_merge($lang, array(
 'ACP_LISTCLASS_EXPLAIN' => 'Hier kannst du die Spielklassen anpassen. Bitte achte darauf, dass die WoW Klassen-ID übereinstimmen muss mit der Blizzard XML',
 'ACP_GAMESETTINGS_EXPLAIN' => 'Hier kannst du die Spieleeinstellungen anpassen: Klassen, Rasses, Faktionen.',
 'ACP_LISTFACTIONS_EXPLAIN' => 'Hier kannst du die Faktionen verwalten.',
-'ACP_ADDRACE_EXPLAIN' => 'Hier kannst du die Spielrassen verwalten',
 'ACP_ADDCLASS_EXPLAIN' => 'Hier kannst du die Spielklassen anpassen. Bitte achte darauf dass die WoW Rassen-ID übereinstimmen muss mit der vom Arsenal.',
 'ACP_ADDFACTIONS_EXPLAIN' => 'Hier kannst du die Faktionen verwalten.',
-'ACP_ADDRACE_EXPLAIN'  => 'Hier kannst du die Rassen verwalten.',
+'ACP_ADDRACE_EXPLAIN' => 'Hier kannst du die Spielrassen verwalten',
+'ACP_ADDRANK_EXPLAIN' => 'Hier kannst du Gildenränge verwalten. Für WoW kannst du sie aus dem Arsenal herunterladen',
+
 'RACEID_EXPLAIN' => 'Die ID ist einmalig und sollte (für WoW) mit der Blizzard-XML übereinstimmen',
 'RACE_EXPLAIN' => 'Namen',
 'CLASS_ID_EXPLAIN' => 'Die ID ist einmalig und sollte (für WoW) mit der Blizzard-XML übereinstimmen',
@@ -321,7 +324,6 @@ $lang = array_merge($lang, array(
 'ACP_GAME_EXPLAIN' => 'Hier kannst du ein Spiel auf Standard-Einstellung zurücksetzen',
 'ACP_GAME_RESET' => 'Spieleinstellungen zurücksetzen. ',
 'ACP_GAME_DELETE' => 'Spiel löschen.',
-
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'Du hast keine Berechtigung Ereignisse hinzuzufügen.',
@@ -356,7 +358,6 @@ $lang = array_merge($lang, array(
 'ROLE' => 'Rolle', 
 'NEEDED' => 'Benötigt',
 'DIFFERENCE' => 'Differenz',
-'TRANSFER_HISTORY' => 'Mitglied verschieben',
 
 
 // Delete Confirmation Texts
@@ -383,7 +384,6 @@ $lang = array_merge($lang, array(
 'CONFIRM_DELETE_GAME' => 'Bitte bestätige die Löschung des Spieles "%s".',
 
 // Log Actions
-'ACTION_DEFAULT_DKP_CHANGED' => 'Standard DKP Pool erfolgreich geändert',
 'ACTION_DKPSYS_ADDED' => 'DKP Pool erfolgreich hinzugefügt',
 'ACTION_DKPSYS_DELETED' => 'DKP Pool erfolgreich gelöscht',
 'ACTION_DKPSYS_UPDATED' => 'DKP Pool erfolgreich aktualisiert',
@@ -588,7 +588,6 @@ $lang = array_merge($lang, array(
 'FORM_ERROR' => 'Eingabefehler : Bitte Eingaben kontrollieren <br />',
 'ERROR_RAID_NOATTENDEES' => 'Fehler: Alter Raid hat keine Teilnehmer. Gewinnwerte der alten Teilnehmer können nicht gelöscht werden. ',
 'ERROR_NODKPACCOUNT' => 'Achtung : Keine DKP Konten gefunden zur Überweisung',
-'ERROR_NOEVENTSDEFINED' => 'Achtung : Keine Ereignisse definiert. Kann keinen Raid hinzufügen. ',
 'ERROR_NOGUILDMEMBERSDEFINED' => 'Achtung : Keine Gildenmitglieder, kann keinen Raid hinzufügen.',
 'ERROR_RANKMEMBERS' => 'Achtung : Kann Rang nicht löschen, denn es gibt noch immer Mitglieder mit diesen Rang.',
 'ERROR_NOSELECT' => 'Bitte wähle einen VON und einen ZU Mitgliedsnamen',
@@ -620,7 +619,6 @@ $lang = array_merge($lang, array(
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Teilnehmer %s konnte nicht aus dem Raid %s gelöscht werden.',
-
 'ADMIN_ADD_ADJ_SUCCESS' => 'Die %s Punkteanpassung von %.2f wurde erfolgreich hinzugefügt.',
 'ADMIN_ADD_DKPSYS_SUCCESS' => 'Der neuen DKP Pool %s wurde erfolgreich hinzugefügt.',
 'ADMIN_ADD_EVENT_SUCCESS' => 'Der Standardwert von %s für Ereignisse auf %s wurde erfolgreich hinzugefügt.',
@@ -688,7 +686,6 @@ $lang = array_merge($lang, array(
 'ADMIN_DELETE_GAME_SUCCESS' => 'Spiel "%s" wurde gelöscht.',
 'ADMIN_INSTALL_GAME_FAILED'  => 'Spielname fehlt. Spiel kann nicht installiert werden.',
 
-
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Aktiv Punkteanpassung',
 'ACTIVE_POINT_ADJ_NOTE' => 'Punkteanpassung wenn ein Mitglied wieder aktiv wird.',
@@ -727,6 +724,7 @@ $lang = array_merge($lang, array(
 'WHO_ONLINE' => 'Wer ist online?',
 'LISTMEMBERS_PER_PAGE' => 'Mitgliederanzahl pro Seite',
 
+// menus
 'MENU_RAIDS' => 'Raids',
 'MENU_EVENTS' => 'Ereignisse',
 'MENU_ITEMHIST' => 'Item Geschichte',
@@ -968,12 +966,13 @@ $lang = array_merge($lang, array(
 'X_MEMBERS_S' => '%d Mitglied',
 'X_MEMBERS_P' => '%d Mitglieder',
 'SELECT_1OFX_MEMBERS' => 'Wähle 1 von %d Mitgliedern ...',
+
 'ZEROSUMBANKER' => 'Nullsummen Konto',
 'ZEROSUMBANKER_EXPLAIN' => 'Wähle den Spieler zu dem überschüssige Gewinnpunkte über Nullsummen DKP addiert werden sollen so dass die Bilanz gleich null bleibt.',
 'ZEROSUM_DISTRIBUTEOTHER'  => 'Bonusausgleich',
 'ZEROSUM_DISTRIBUTEOTHER_EXPLAIN' => 'Ankreuzen um Raid und Zeit Boni mit Gildenbank Konto auszugleichen.',
 'ZS_CHECKED_EXPLAIN' => 'Angekreuzt wenn Nullsumme berechnet wurde.',
-'LANG_DE'  => 'Deutsch',
+'LANG_DE' => 'Deutsch',
 'LANG_FR' => 'Français',
 'LANG_EN' => 'English',
 'FREQ0' => 'Tage',
@@ -991,7 +990,6 @@ $lang = array_merge($lang, array(
 'LAST_UPDATE' => 'Letztes Update',
 'LOCATION' => 'Ort',
 
-'NUMBER_OF_ITEMS' => 'Anzahl an Items',
 'NUMBER_OF_LOGS' => 'Protokollanzahl',
 'NUMBER_OF_MEMBERS' => 'Mitgliederanzahl (Aktiv / Inaktiv)',
 'NUMBER_OF_RAIDS' => 'Anzahl der Raids',
