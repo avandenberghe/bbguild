@@ -1,7 +1,6 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu
- * 
+ * bbdkp acp language file for point settings - german
  * 
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License

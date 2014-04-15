@@ -1,11 +1,11 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu (German-Informal)
+ * bbdkp acp language file for mainmenu - german
  * 
  * 
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
+ * @version 1.3.0
  * @translation various unknown authors, killerpommes
  * 
  */
@@ -29,5 +29,5 @@ $lang = array_merge($lang, array(
 	'ACP_DKP_POOL_ADD'		=> 'DKP Pool hinzufügen',  
 	'ACP_DKP_POOL_EDIT'		=> 'DKP Pool bearbeiten',
 	'ACP_DKP_POOL_LIST'		=> 'DKP Pools',
-	'ACP_DKP_EVENT_ADD'		=> 'Ereignis zufügen',
+	'ACP_DKP_EVENT_ADD'		=> 'Ereignis hinzufügen',
 ));

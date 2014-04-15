@@ -1,13 +1,13 @@
 <?php
 /**
- * bbDkp Permission Set (German-Informal)
+ * bbDKP Permission Set - german
  * 
  * @author sajaki
  * 
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
-  * @translation various unknown authors, killerpommes
+ * @version 1.3.0
+ * @translation various unknown authors, killerpommes
  * 
  */
 
