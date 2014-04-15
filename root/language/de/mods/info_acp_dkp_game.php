@@ -1,13 +1,12 @@
 <?php
 /**
- * bbdkp acp language file for Game, Race and Class (German-Informal)
+ * bbdkp acp language file for Game, Race and Class - german
  * 
  * 
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
+ * @version 1.3.0
  * @translation unknown author, killerpommes
- * 
  */
 
 /**
@@ -27,7 +26,7 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
     'ACP_DKP_GAME'			=> 'Spieleinstellungen',
-	'ACP_DKP_FACTION_ADD'	=> 'Faktion hinzufügen',
+	'ACP_DKP_FACTION_ADD'		=> 'Faktion hinzufügen',
 	'ACP_DKP_RACE_ADD'		=> 'Rasse hinzufügen',
 	'ACP_DKP_CLASS_ADD'		=> 'Klasse hinzufügen',  
 	'ACP_DKP_GAME_LIST'		=> 'Spielliste',
