@@ -46,15 +46,6 @@ class viewItem implements iViews
 
         $title = $user->lang['ITEM'] . ' : '. $loot->item_name;
 
-        if ($Navigation->bbtips == true && $loot->game_id == 'wow')
-        {
-            $valuename = '<strong>' . $this->$Navigation->parse('[itemdkp]' .  $loot->item_name   . '[/itemdkp]') . '</strong>';
-        }
-        else
-        {
-            $item_name = '<strong>' . $loot->item_name . '</strong>';
-        }
-
         $sort_order = array (
             0 => array ('item_date desc, item_value desc', 'item_date asc, item_value desc'),
             1 => array ('member_name asc, item_value desc', 'member_name desc, item_value desc'),

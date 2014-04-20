@@ -229,6 +229,7 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
 
     function __construct($page)
     {
+
         $this->page = $page;
         $this->buildNavigation();
     }
@@ -240,7 +241,20 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
 
     private function buildNavigation()
     {
-        global $phpbb_root_path, $phpEx, $user, $db, $template;
+        global $phpbb_root_path, $phpEx, $user, $db, $template, $config;
+
+        if (isset($config['bbdkp_plugin_bbtips_version']))
+        {
+            //check if config value and parser file exist.
+            if($config['bbdkp_plugin_bbtips_version'] >= '1.0.4')
+            {
+                if ( !class_exists('bbtips_parser'))
+                {
+                    require($phpbb_root_path . 'includes/bbdkp/bbtips/bbtips_parser.' . $phpEx);
+                }
+                $this->bbtips = new \bbtips_parser;
+            }
+        }
 
         // get inputs
         $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
