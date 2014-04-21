@@ -224,20 +224,13 @@ class viewRaid implements iViews
         $item_total = 0.00;
         while ( $item = $db->sql_fetchrow($raid->loot_details))
         {
-            if ($Navigation->bbtips == true)
+            if ($Navigation->bbtips == true && $item['item_gameid'] == 'wow')
             {
-                if ($item['item_gameid'] == 'wow' )
-                {
-                    $item_name = $Navigation->bbtips->parse('[itemdkp]' . $item['item_gameid']  . '[/itemdkp]');
-                }
-                else
-                {
-                    $item_name = $Navigation->bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]');
-                }
+                $item_name = '<strong>' . $Navigation->bbtips->parse('[itemdkp]' . $item['item_name']  . '[/itemdkp]')  . '</strong>';
             }
             else
             {
-                $item_name = $item['item_name'];
+                $item_name = '<strong>' . $item ['item_name'] . '</strong>';
             }
 
             $buyer = new \bbdkp\controller\members\Members( $item['member_id']);
