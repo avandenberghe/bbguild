@@ -190,7 +190,7 @@ while ( $news = $db->sql_fetchrow($result) )
     }
     $db->sql_freeresult($result2);
     
-	$template->assign_block_vars('news_row', array( 
+	$template->assign_block_vars('postrow', array(
 		'DATE' => date('F j, Y', $news['topic_time']),
 		'HEADLINE' 	=> censor_text($news['topic_title']), 
 		'AUTHOR' 	=> get_username_string('full', $news['topic_poster'], $news['topic_first_poster_name'], $news['topic_first_poster_colour']), 

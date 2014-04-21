@@ -131,6 +131,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 * guild emblem image path
 	 */
 	protected $emblempath = '';
+
 	/**
 	 * battle net emblem info so we can make the image
 	 * @var array
@@ -279,7 +280,6 @@ class Guilds extends \bbdkp\admin\Admin
 				if (property_exists($this, $property))
 				{
 					$this->$property = $value;
-					//@todo persist change in db
 				}
 				else
 				{
@@ -414,16 +414,19 @@ class Guilds extends \bbdkp\admin\Admin
 				'members' => $this->membercount,
 				'guilddefault' => $this->guilddefault,
 				'armory_enabled' => $this->armory_enabled,
+                'emblemurl' => $this->emblempath,
 		));
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
-		// update from armory
+		// get more info from armory
 		if ($this->guildid > 0)
 		{
 			$game = new \bbdkp\controller\games\Game;
 			$game->game_id = $this->game_id;
 			$game->Get();
+
+            //is both game and guild armory-enabled ?
 			if ($game->getArmoryEnabled() == 1 && $this->armory_enabled ==1 )
 			{
 				switch ($this->game_id)
@@ -576,8 +579,8 @@ class Guilds extends \bbdkp\admin\Admin
 		global $phpbb_root_path;
 
 		//location to create the file
-		$imgfile = $phpbb_root_path . "images/bbdkp/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
-		$outputpath = "images/bbdkp/wowapi/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
+		$imgfile = $phpbb_root_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
+		$outputpath = "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
 		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time())
 		{
 			$finalimg = imagecreatefrompng($imgfile);
