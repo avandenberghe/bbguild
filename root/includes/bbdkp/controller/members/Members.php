@@ -1487,8 +1487,9 @@ class Members extends \bbdkp\admin\Admin
 			AND e.race_id = m.member_race_id
 			AND e.game_id = m.game_id
 			AND g.id = m.member_guild_id
+			AND m.member_status = 1
 			AND r.guild_id = m.member_guild_id
-			AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
+			AND r.rank_id = m.member_rank_id AND r.rank_hide = 0 
 			 ";
 
 		if ($mycharsonly ==false)
