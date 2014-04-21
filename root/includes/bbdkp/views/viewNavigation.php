@@ -229,6 +229,7 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
 
     function __construct($page)
     {
+
         $this->page = $page;
         $this->buildNavigation();
     }
@@ -240,7 +241,20 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
 
     private function buildNavigation()
     {
-        global $phpbb_root_path, $phpEx, $user, $db, $template;
+        global $phpbb_root_path, $phpEx, $user, $db, $template, $config;
+
+        if (isset($config['bbdkp_plugin_bbtips_version']))
+        {
+            //check if config value and parser file exist.
+            if($config['bbdkp_plugin_bbtips_version'] >= '1.0.4')
+            {
+                if ( !class_exists('bbtips_parser'))
+                {
+                    require($phpbb_root_path . 'includes/bbdkp/bbtips/bbtips_parser.' . $phpEx);
+                }
+                $this->bbtips = new \bbtips_parser;
+            }
+        }
 
         // get inputs
         $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
@@ -415,9 +429,10 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
             'U_VIEWITEM'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=item&amp;guild_id=' . $this->guild_id),
             'U_VIEWMEMBER'   	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=member&amp;guild_id=' . $this->guild_id),
             'U_VIEWRAID'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=raid&amp;guild_id=' . $this->guild_id),
-            'U_BP'   			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=bossprogress&ampg;uild_id=' . $this->guild_id),
+            'U_BP'   			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=bossprogress&amp;guild_id=' . $this->guild_id),
             'U_ROSTER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id . '&amp;rosterlayout='.$mode),
             'U_STATS'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;guild_id=' . $this->guild_id),
+            'U_PLANNER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=planner&amp;guild_id=' . $this->guild_id),
             'U_ABOUT'         	=> append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
             'GAME_ID'			=> $guilds->game_id,
             'GUILD_ID' 			=> $this->guild_id,

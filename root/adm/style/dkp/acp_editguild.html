@@ -80,15 +80,14 @@
         </dd>
     </dl>
 
-    <!-- IF S_WOW -->
     <dl>
-        <dt><label for="guild_emblem">{L_GUILD_EMBLEM}:</label>{L_GUILD_EMBLEM_EXPLAIN}</dt>
+        <dt><label for="guild_emblem">{L_GUILD_EMBLEM}:</label>{L_GUILD_EMBLEM_EXPLAIN}
+        </dt>
         <dd>
-            <img src="{EMBLEM}" alt="{GUILD_NAME}" /><br />
+            <img src="{EMBLEM}" alt="{L_GUILD_EMBLEM_NF}" /><br />
             <input type="text" size="40" id="guild_emblem" name="guild_emblem" value="{EMBLEMFILE}" />
         </dd>
     </dl>
-    <!-- ENDIF -->
 
     <dl>
         <dt><label for="game_id">{L_GAME}:</label></dt>
@@ -104,18 +103,20 @@
         <dt><label>{L_MEMBERCOUNT}:</label></dt>
         <dd>{MEMBERCOUNT}</dd>
     </dl>
+
     <!-- IF S_WOW -->
     <dl>
         <dt><label for="">{L_ARMORY_URL}:</label></dt>
         <dd><a href="{ARMORY_URL}">{ARMORY_URL}</a></dd>
     </dl>
     <!-- ENDIF -->
+
     <dl>
         <dt><label for="showroster">{L_SHOWONROSTER}:</label></dt>
         <dd style="text-align: left">
             <input type="checkbox" id="showroster" name="showroster" value="1" {SHOW_ROSTER} /></dd>
     </dl>
-
+    <!-- IF S_WOW -->
     <!-- IF F_ENABLGAMEEARMORY -->
     <dl>
         <dt><label for="enable_armory">{L_ARMORY_ENABLED}:</label>{L_ARMORY_ENABLED_GUILD_EXPLAIN}</dt>
@@ -125,7 +126,7 @@
         </dd>
     </dl>
     <!-- ENDIF -->
-
+    <!-- ENDIF -->
     <!-- IF S_WOW -->
     <dl>
         <dt><label for="min_armorylevel">{L_MIN_ARMORYLEVEL}</label></dt>
