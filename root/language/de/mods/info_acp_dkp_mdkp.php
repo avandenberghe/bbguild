@@ -1,13 +1,13 @@
 <?php
 /**
- * bbdkp acp language file for mainmenu (German-Informal)
- *
- *
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * bbdkp acp language file for  DKP accounts - german
+ * 
+ * 
+ * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version $Id$
+ * @version 1.3.0
  * @translation various unknown authors, killerpommes
- *
+ * 
  */
 
 /**

@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0-RC4#
+#1.3.0
 
 
 ## about
@@ -21,8 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0-RC4
-
+1.3.0
 
 ## Installation
 
@@ -34,7 +33,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 4.	ftp and founder admin access on your phpbb installation.
 5.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### MODX installation
+#### MODX installation 
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
@@ -57,9 +56,10 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 		*	make sure the module was uninstalled by checking the ACP modules.
 		*	run plugin uninstall from Automod.
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2. 
-	3. upload the unzipped bbdkp folder to /store/mods
-	4. from Automod, run file installer
-	5. Click on the blue link given, this will redirect you to /install/index.php, then click "update". 
+    3. delete /store/mods/bbdkp  
+	4. upload the unzipped bbdkp folder to /store/mods
+	5. from Automod, run file installer
+	6. Click on the blue link given, this will redirect you to /install/index.php, then click "update". 
 
 * Manually
 	*	Localhost	 	
@@ -97,13 +97,19 @@ Find support and more on
 
 ## Changelog 
 
+1.3.0 21-04-2014
 
+-   [FIX] #197 fix bossprogress & raidplanner url in viewnavigation
+-   [FIX] #195 guild emblem acp field is now editable 
+-	[FIX] In news block, news_row template variable changed to 'postrow' to enable calling bbtips to build wowhead links 
+-	[FIX] bbtips class call is moved to viewnavigation
+   
 1.3.0-RC4 12-04-2014
 
 -   [FIX] #187 fix custom game installer
 -   [FIX] #190 restyling recruitment block acp
    
-1.3.0-RC4 08-04-2014
+1.3.0-RC3 08-04-2014
 
 -   [FIX] #186 fix hardcoded filenames
 
