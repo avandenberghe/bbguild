@@ -429,7 +429,7 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
             'U_VIEWITEM'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=item&amp;guild_id=' . $this->guild_id),
             'U_VIEWMEMBER'   	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=member&amp;guild_id=' . $this->guild_id),
             'U_VIEWRAID'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=raid&amp;guild_id=' . $this->guild_id),
-            'U_BP'   			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=bossprogress&ampg;uild_id=' . $this->guild_id),
+            'U_BP'   			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=bossprogress&amp;guild_id=' . $this->guild_id),
             'U_ROSTER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id . '&amp;rosterlayout='.$mode),
             'U_STATS'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;guild_id=' . $this->guild_id),
             'U_ABOUT'         	=> append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
