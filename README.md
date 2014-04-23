@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0
+#1.3.0.1
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0
+1.3.0.1
 
 ## Installation
 
@@ -33,7 +33,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 4.	ftp and founder admin access on your phpbb installation.
 5.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### MODX installation 
+#### New installation 1.3.0
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
@@ -45,8 +45,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 4. Click on the blue link given, this will redirect you to /install/index.php
 5. Click submit. This will install 1.3.0 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.2.8-pl2 to 1.3.0
+#### Upgrading from 1.2.8-pl2 to 1.3.0.1
 
+* 1.3.0.1 was released to make upgrading possible from 1.2.8-PL2 to 1.3 as this was not tested with 1.3.0
 * make a secure backup of all files
 * backup your database
 
@@ -57,9 +58,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 		*	run plugin uninstall from Automod.
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2. 
     3. delete /store/mods/bbdkp  
-	4. upload the unzipped bbdkp folder to /store/mods
+	4. upload the unzipped bbdkp 1.3.0.1 folder to /store/mods
 	5. from Automod, run file installer
-	6. Click on the blue link given, this will redirect you to /install/index.php, then click "update". 
+	6. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.1.  
 
 * Manually
 	*	Localhost	 	
@@ -73,12 +74,12 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 			*	apply the changes to the core phpbb files. use a good text editor
 		4.	launch the DB updater locally (/install/index.php)
 			*	Now you see the Umil updater.
-			*	Click update. This will update to 1.3.0 and clear the caches (template, theme, imagesets)
+			*	Click update. This will update to 1.3.0.1 and clear the caches (template, theme, imagesets)
 		5.	Update your Custom styles, or install a premodded style. Jade, Deathwing and pbWoW2 have premods.
 	*	live server
 		1. upload the install folder for any bbdkp1.2.8 plugin that you installed, and run uninstall.
 		2.	FTP the whole folder to to your webserver, after deleting your remote files.
-		3.	launch the bbdkp 1.3.0 DB updater on your webserver (/install/index.php) and redo the db changes on live.
+		3.	launch the bbdkp 1.3.0.1 DB updater on your webserver (/install/index.php) and redo the db changes on live.
 
 
 #### Upgrading from earlier version
@@ -96,6 +97,9 @@ Find support and more on
 *	IRC : Freenode #bbdkp
 
 ## Changelog 
+
+1.3.0.1 24-04-2014
+-	[FIX] #200 Module issue when updating 1.2.8->1.3.0. 1.3 Umil changes were 		merged into 1 diff, omitting all betas and RC. fixes fix #100, #200
 
 1.3.0 21-04-2014
 
