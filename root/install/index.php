@@ -80,14 +80,9 @@ if (!file_exists($phpbb_root_path . 'umil/umil_auto.' . $phpEx))
     trigger_error('Please download the latest UMIL (Unified MOD Install Library) from: <a href="http://www.phpbb.com/mods/umil/">phpBB.com/mods/umil</a>', E_USER_WARNING);
 }
 
-if (!file_exists($phpbb_root_path . 'install/index.' . $phpEx))
-{
-    trigger_error('Warning! Install directory has wrong name. it must be \'install\'. Please rename it and launch again.', E_USER_WARNING);
-}
 
 //check old version. if lower then 128 then trigger error
 check_oldbbdkp();
-
 
 // The name of the mod to be displayed during installation.
 $mod_name = 'bbDKP';
@@ -792,347 +787,229 @@ $versions = array(
 		// dev version, never released
 	),
 
-	'1.3.0-a1' => array(
-				// dev version, never released
-		),
-
-    '1.3.0-a2' => array(
-
-     	// oop release, now requires 553
-
-       'table_add' => array(
-			// add the new game table
-       		array($table_prefix . 'bbdkp_games', array(
-	              'COLUMNS'            => array(
-	          		  'id'     	       => array('UINT', NULL, 'auto_increment'),
-                   	  'game_id' 	   => array('VCHAR:10', ''),
-	                  'game_name'      => array('VCHAR_UNI:255', ''),
-	          		  'status'	   	   => array('VCHAR:30', ''),
-	              	  'imagename'	   => array('VCHAR:20', ''),
-	              	  'armory_enabled' => array('UINT', 0),
-                      'bossbaseurl'    => array('VCHAR:255', ''),
-                      'zonebaseurl'    => array('VCHAR:255', ''),
-	          		),
-	                'PRIMARY_KEY'     => array('id'),
-	          		'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id')))
-       			)),
-
-       		// add the new recruitment table
-       		array($table_prefix . 'bbdkp_roles', array(
-       				'COLUMNS'            	=> array(
-						'id'     	    => array('UINT', NULL, 'auto_increment'),
-       					'guild_id'     	=> array('UINT', 0),
-       					'game_id'     	=> array('VCHAR:10', ''),
-       					'role' 	   		=> array('VCHAR:20', ''),
-       					'class_id'      => array('UINT', 0),
-						'needed'	   	=> array('USINT', 0),
-       				),
-       				'PRIMARY_KEY'     => array('id'),
-       				'KEYS'            => array('bbdkp_roles' => array('UNIQUE', array('guild_id', 'game_id', 'role', 'class_id' ))),
-       			)),
-
-       		),
-
-    	// remove copyright info from plugin table
-	    // remove roles from class table
-        // remove status from dkp table
-     	'table_column_remove' => array(
-     			array($table_prefix . 'bbdkp_classes', 'dps'),
-     			array($table_prefix . 'bbdkp_classes', 'tank'),
-     			array($table_prefix . 'bbdkp_classes', 'heal'),
-                array($table_prefix . 'bbdkp_memberdkp', 'member_status'),
-      		),
-
-     	// add guild columns
-     	'table_column_add' => array(
-     				array($table_prefix . 'bbdkp_plugins', 'installdate', array('TIMESTAMP', 0)),
-     				array($table_prefix . 'bbdkp_raid_items', 'wowhead_id', array('UINT', 0)),
-     				array($table_prefix . 'bbdkp_memberlist', 'member_title', array('VCHAR_UNI:255', '')),
-     				array($table_prefix . 'bbdkp_memberlist', 'member_role', array('VCHAR:20', '')),
-     				array($table_prefix . 'bbdkp_memberlist', 'member_region', array('VCHAR', '')),
-     				array($table_prefix . 'bbdkp_memberlist', 'member_realm', array('VCHAR', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'level', array('UINT', 0) ),
-     				array($table_prefix . 'bbdkp_memberguild', 'members', array('UINT', 0)),
-     				array($table_prefix . 'bbdkp_memberguild', 'achievementpoints', array('UINT', 0)),
-     				array($table_prefix . 'bbdkp_memberguild', 'battlegroup', array('VCHAR:255', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'guildarmoryurl', array('VCHAR:255', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'emblemurl', array('VCHAR:255', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'game_id', array('VCHAR:10', '')),
-     				array($table_prefix . 'bbdkp_memberguild', 'min_armory', array('UINT', 90)),
-     				array($table_prefix . 'bbdkp_memberguild', 'rec_status', array('BOOL', 0)),
-     				array($table_prefix . 'bbdkp_memberguild', 'guilddefault', array('BOOL', 0)),
-     			    array($table_prefix . 'bbdkp_memberguild', 'armory_enabled', array('BOOL', 0)),
-     		),
-
-     	'module_remove' => array(
-     			//remove guild modes from acp_dkp_mm
-	            array('acp', 'ACP_DKP_MEMBER', array(
-			           		 'module_basename' => 'dkp_mm',
-			            	 'modes'           => array('mm_ranks', 'mm_listguilds', 'mm_addguild', 'mm_listmembers', 'mm_addmember'),
-					)),
-
-     			//remove the game acp
-	     		array('acp', 'ACP_DKP_MEMBER', array(
-	     				'module_basename' => 'dkp_game',
-	     				'modes'           => array('listgames', 'addfaction', 'addrace', 'addclass'),
-	     		)),
-
-
-
-     			//remove the dkp adjustments
-     			array('acp', 'ACP_DKP_MDKP', array(
-     					'module_basename' => 'dkp_adj',
-     					'modes'           => array('addiadj', 'listiadj'),
-     			),
-     			),
-
-     			// remove dkp list
-     			array('acp', 'ACP_DKP_MDKP', array(
-     					'module_basename' => 'dkp_mdkp',
-     					'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
-     			),
-     			),
-
-
-     			// remove item modules
-     			array('acp', 'ACP_DKP_RAIDS', array(
-     					'module_basename' => 'dkp_item',
-     					'modes'           => array('listitems', 'edititem', 'search', 'viewitem'),
-     			),
-     			),
-
-
-     			// remove events module
-     			array('acp', 'ACP_DKP_RAIDS', array(
-     					'module_basename' => 'dkp_event',
-     					'modes'           => array('addevent', 'listevents'),
-     			),
-     			),
-
-     			),
-
-     	'module_add' => array(
-				//add the game acp
-     			array('acp', 'ACP_DKP_MAINPAGE', array(
-     						'module_basename' => 'dkp_game',
-     						'modes'           => array('listgames','editgames', 'addfaction', 'addrace', 'addclass'),
-     				)),
-
-     			// add guild acp
-     			array('acp', 'ACP_DKP_MEMBER', array(
-     					'module_basename' => 'dkp_guild',
-     					'modes'           => array(  'listguilds', 'addguild', 'editguild',  ),
-     			),
-     			),
-
-     			// add member acp
-     			array('acp', 'ACP_DKP_MEMBER', array(
-     					'module_basename' => 'dkp_mm',
-     					'modes'           => array(  'mm_listmembers', 'mm_addmember' ),
-     			),
-     			),
-
-     			//add edit dkp pool, addevent
-     			array('acp', 'ACP_DKP_RAIDS', array(
-     					'module_basename' => 'dkp_sys',
-     					'modes'           => array('editdkpsys', 'addevent' ),
-     			),
-     			),
-
-
-     			// re-add dkp list
-     			array('acp', 'ACP_DKP_MDKP', array(
-     					'module_basename' => 'dkp_mdkp',
-     					'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
-     			),
-     			),
-
-     			//re-add the dkp adjustments
-     			array('acp', 'ACP_DKP_MDKP', array(
-     					'module_basename' => 'dkp_adj',
-     					'modes'           => array('addiadj', 'listiadj'),
-     			),
-     			),
-
-     			// remove item modules
-     			array('acp', 'ACP_DKP_RAIDS', array(
-     					'module_basename' => 'dkp_item',
-     					'modes'           => array('listitems', 'additem', 'search', 'viewitem'),
-     			),
-     			),
-
-
-            ),
-
-     	'custom' => array(
-				'tableupdates',
-				'bbdkp_caches',
-     		),
-
-       	'config_update' => array(
-     				array('bbdkp_roster_layout', '0', true),
-     		),
-
-
-     	'config_remove' => array(
-     				array('bbdkp_guildtag') ,
-	     			array('bbdkp_recruitment'),
-	     			array('bbdkp_games_aion'),
-	     			array('bbdkp_games_daoc'),
-	     			array('bbdkp_games_eq'),
-	     			array('bbdkp_games_eq2'),
-	     			array('bbdkp_games_FFXI'),
-	     			array('bbdkp_games_lotro'),
-	     			array('bbdkp_games_rift'),
-	     			array('bbdkp_games_vanguard'),
-	     			array('bbdkp_games_wow'),
-	     			array('bbdkp_games_warhammer'),
-	     			array('bbdkp_games_swtor'),
-	     			array('bbdkp_games_lineage2'),
-	     			array('bbdkp_games_tera'),
-	     			array('bbdkp_games_gw2'),
-                    array('bbdkp_portal_rtshow'),
-                ),
-
-     	// add new parameters
-     	'config_add' => array(
-     				array('bbdkp_regid', '', true),
-                    array('bbdkp_portal_recent', 1, true),
-                    array('bbdkp_portal_whoisonline', 1, true),
-                    array('bbdkp_portal_onlineblockposition', 1, true),
-     		),
-
-     ),
-
-
-	'1.3.0-a3' => array(
-	//alpha3
-			),
-
-	'1.3.0-b1' => array(
-	//beta1 06-01-2014
-	),
-
-	'1.3.0-b2' => array(
-	//beta2 13-01-2014
-		),
-
-	'1.3.0-b3' => array(
-	//beta3 9-02-2014
-		),
-
-    '1.3.0-b4' => array(
-        //beta4 10-03-2014
-    ),
-
-    '1.3.0-b5' => array(
-        //beta5 23-03-2014
-    ),
-
-    '1.3.0-b6' => array(
-        //beta6 wip
-    ),
-
-    '1.3.0-b7' => array(
-        //beta7 30-03-2014
-
-        'module_remove' => array(
-
-            //add edit dkp pool, addevent
-            array('acp', 'ACP_DKP_RAIDS', array(
-                'module_basename' => 'dkp_sys',
-                'modes'           => array('editdkpsys', 'addevent', 'adddkpsys', 'listdkpsys' ),
-            ),
-            ),
-
-
-            // re-add dkp list
-            array('acp', 'ACP_DKP_MDKP', array(
-                'module_basename' => 'dkp_mdkp',
-                'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
-            ),
-            ),
-
-            //re-add the dkp adjustments
-            array('acp', 'ACP_DKP_MDKP', array(
-                'module_basename' => 'dkp_adj',
-                'modes'           => array('addiadj', 'listiadj'),
-            ),
-            ),
-
-            // remove item modules
-            array('acp', 'ACP_DKP_RAIDS', array(
-                'module_basename' => 'dkp_item',
-                'modes'           => array('listitems', 'additem', 'search', 'viewitem'),
-            ),
-            ),
-
-            //raid modules
-            array('acp', 'ACP_DKP_RAIDS', array(
-                'module_basename' => 'dkp_raid',
-                'modes'           => array('addraid', 'editraid', 'listraids'),
-            ),
-            ),
-            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MDKP'),
-            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS'),
-        ),
-
-        'module_add' => array(
-
-            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MDKP'),
-
-            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS'),
-            //raid modules
-            array('acp', 'ACP_DKP_RAIDS', array(
-                'module_basename' => 'dkp_raid',
-                'modes'           => array('addraid', 'editraid', 'listraids'),
-            )),
-
-            //item module
-            array('acp', 'ACP_DKP_RAIDS', array(
-                'module_basename' => 'dkp_item',
-                'modes'           => array('listitems', 'additem', 'search', 'viewitem'),
-            )),
-
-            //add edit dkp pool, addevent
-            array('acp', 'ACP_DKP_MDKP', array(
-                'module_basename' => 'dkp_sys',
-                'modes'           => array('editdkpsys', 'addevent', 'adddkpsys', 'listdkpsys' ),
-            )),
-
-            // re-add dkp list
-            array('acp', 'ACP_DKP_MDKP', array(
-                'module_basename' => 'dkp_mdkp',
-                'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
-            )),
-
-            //re-add the dkp adjustments
-            array('acp', 'ACP_DKP_MDKP', array(
-                'module_basename' => 'dkp_adj',
-                'modes'           => array('addiadj', 'listiadj'),
-            )),
-
-        ),
-
-    ),
-    
-  	'1.3.0-RC1' => array(
-    	//03-4-2014
-	),
-	  
-	'1.3.0-RC2' => array(
-    	//07-04-2014
-	),
-	
-	'1.3.0-RC3' => array(
-    	//08-04-2014
-	),
-	'1.3.0-RC4' => array(
-    	//12-04-2014
-	),
 	'1.3.0' => array(
     	//21-04-2014
+        'table_add' => array(
+            array($table_prefix . 'bbdkp_games', array(
+                'COLUMNS'            => array(
+                    'id'     	     => array('UINT', NULL, 'auto_increment'),
+                    'game_id' 	     => array('VCHAR:10', ''),
+                    'game_name'      => array('VCHAR_UNI:255', ''),
+                    'status'	   	 => array('VCHAR:30', ''),
+                    'imagename'	     => array('VCHAR:20', ''),
+                    'armory_enabled' => array('UINT', 0),
+                    'bossbaseurl'    => array('VCHAR:255', ''),
+                    'zonebaseurl'    => array('VCHAR:255', ''),
+                ),
+                'PRIMARY_KEY'     => array('id'),
+                'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id')))
+            )),
+
+            array($table_prefix . 'bbdkp_roles', array(
+                'COLUMNS'           => array(
+                    'id'     	    => array('UINT', NULL, 'auto_increment'),
+                    'guild_id'     	=> array('UINT', 0),
+                    'game_id'     	=> array('VCHAR:10', ''),
+                    'role' 	   		=> array('VCHAR:20', ''),
+                    'class_id'      => array('UINT', 0),
+                    'needed'	   	=> array('USINT', 0),
+                ),
+                'PRIMARY_KEY'     => array('id'),
+                'KEYS'            => array('bbdkp_roles' => array('UNIQUE', array('guild_id', 'game_id', 'role', 'class_id' ))),
+            )),
+
+        ),
+
+        'table_column_remove' => array(
+            array($table_prefix . 'bbdkp_classes', 'dps'),
+            array($table_prefix . 'bbdkp_classes', 'tank'),
+            array($table_prefix . 'bbdkp_classes', 'heal'),
+            array($table_prefix . 'bbdkp_memberdkp', 'member_status'),
+        ),
+
+
+        'table_column_add' => array(
+            array($table_prefix . 'bbdkp_plugins', 'installdate', array('TIMESTAMP', 0)),
+            array($table_prefix . 'bbdkp_raid_items', 'wowhead_id', array('UINT', 0)),
+            array($table_prefix . 'bbdkp_memberlist', 'member_title', array('VCHAR_UNI:255', '')),
+            array($table_prefix . 'bbdkp_memberlist', 'member_role', array('VCHAR:20', '')),
+            array($table_prefix . 'bbdkp_memberlist', 'member_region', array('VCHAR', '')),
+            array($table_prefix . 'bbdkp_memberlist', 'member_realm', array('VCHAR', '')),
+            array($table_prefix . 'bbdkp_memberguild', 'level', array('UINT', 0) ),
+            array($table_prefix . 'bbdkp_memberguild', 'members', array('UINT', 0)),
+            array($table_prefix . 'bbdkp_memberguild', 'achievementpoints', array('UINT', 0)),
+            array($table_prefix . 'bbdkp_memberguild', 'battlegroup', array('VCHAR:255', '')),
+            array($table_prefix . 'bbdkp_memberguild', 'guildarmoryurl', array('VCHAR:255', '')),
+            array($table_prefix . 'bbdkp_memberguild', 'emblemurl', array('VCHAR:255', '')),
+            array($table_prefix . 'bbdkp_memberguild', 'game_id', array('VCHAR:10', '')),
+            array($table_prefix . 'bbdkp_memberguild', 'min_armory', array('UINT', 90)),
+            array($table_prefix . 'bbdkp_memberguild', 'rec_status', array('BOOL', 0)),
+            array($table_prefix . 'bbdkp_memberguild', 'guilddefault', array('BOOL', 0)),
+            array($table_prefix . 'bbdkp_memberguild', 'armory_enabled', array('BOOL', 0)),
+        ),
+
+        'config_update' => array(
+            array('bbdkp_roster_layout', '0', true),
+        ),
+
+
+        'config_remove' => array(
+            array('bbdkp_guildtag') ,
+            array('bbdkp_recruitment'),
+            array('bbdkp_games_aion'),
+            array('bbdkp_games_daoc'),
+            array('bbdkp_games_eq'),
+            array('bbdkp_games_eq2'),
+            array('bbdkp_games_FFXI'),
+            array('bbdkp_games_lotro'),
+            array('bbdkp_games_rift'),
+            array('bbdkp_games_vanguard'),
+            array('bbdkp_games_wow'),
+            array('bbdkp_games_warhammer'),
+            array('bbdkp_games_swtor'),
+            array('bbdkp_games_lineage2'),
+            array('bbdkp_games_tera'),
+            array('bbdkp_games_gw2'),
+            array('bbdkp_portal_rtshow'),
+        ),
+
+        'config_add' => array(
+            array('bbdkp_regid', '', true),
+            array('bbdkp_portal_recent', 1, true),
+            array('bbdkp_portal_whoisonline', 1, true),
+            array('bbdkp_portal_onlineblockposition', 1, true),
+        ),
+
+        'module_remove' => array(
+            array('acp', 'ACP_DKP_MEMBER', array(
+                'module_basename' => 'dkp_mm',
+                'modes'           => array('mm_listmembers', 'mm_addmember'),
+            )),
+
+            array('acp', 'ACP_DKP_MEMBER', array(
+                'module_basename' => 'dkp_mm',
+                'modes'           => array('mm_ranks', 'mm_listguilds', 'mm_addguild' ),
+            )),
+
+
+            array('acp', 'ACP_DKP_MEMBER', array(
+                'module_basename' => 'dkp_game',
+                'modes'           => array('listgames', 'addfaction', 'addrace', 'addclass'),
+            )),
+
+            array('acp', 'ACP_DKP_MDKP', array(
+                'module_basename' => 'dkp_adj',
+                'modes'           => array('addiadj', 'listiadj'),
+            ),
+            ),
+
+            array('acp', 'ACP_DKP_MDKP', array(
+                'module_basename' => 'dkp_mdkp',
+                'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
+            ),
+            ),
+
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_sys',
+                'modes'           => array( 'adddkpsys', 'listdkpsys' ),
+            ),
+            ),
+
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_item',
+                'modes'           => array('listitems', 'search', 'viewitem'),
+            ),
+            ),
+
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_item',
+                'modes'           => array('edititem'),
+            ),
+            ),
+
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_raid',
+                'modes'           => array('addraid', 'editraid', 'listraids'),
+            ),
+            ),
+
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_event',
+                'modes'           => array('addevent', 'listevents'),
+            ),
+            ),
+
+            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS'),
+            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MDKP'),
+        ),
+
+
+        'module_add' => array(
+            array('acp', 'ACP_DKP_MAINPAGE', array(
+                'module_basename' => 'dkp_game',
+                'modes'           => array('listgames','editgames', 'addfaction', 'addrace', 'addclass'),
+            )),
+
+            array('acp', 'ACP_DKP_MEMBER', array(
+                'module_basename' => 'dkp_guild',
+                'modes'           => array(  'listguilds', 'addguild', 'editguild',  ),
+            ),
+            ),
+
+            array('acp', 'ACP_DKP_MEMBER', array(
+                'module_basename' => 'dkp_mm',
+                'modes'           => array(  'mm_listmembers', 'mm_addmember' ),
+            ),
+            ),
+
+
+            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MDKP'),
+
+            array('acp', 'ACP_DKP_MDKP', array(
+                'module_basename' => 'dkp_mdkp',
+                'modes'           => array('mm_listmemberdkp', 'mm_editmemberdkp', 'mm_transfer'),
+            ),
+            ),
+
+            array('acp', 'ACP_DKP_MDKP', array(
+                'module_basename' => 'dkp_adj',
+                'modes'           => array('addiadj', 'listiadj'),
+            ),
+            ),
+
+            array('acp', 'ACP_DKP_MDKP', array(
+                'module_basename' => 'dkp_sys',
+                'modes'           => array('adddkpsys', 'editdkpsys', 'listdkpsys', 'addevent' ),
+            )),
+
+            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS'),
+
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_raid',
+                'modes'           => array('addraid', 'editraid', 'listraids'),
+            )),
+
+            array('acp', 'ACP_DKP_RAIDS', array(
+                'module_basename' => 'dkp_item',
+                'modes'           => array('listitems', 'additem', 'search', 'viewitem'),
+            ),
+            ),
+
+        ),
+        
+        
+      'custom' => array(
+            'tableupdates',
+            'bbdkp_caches'
+        ),
+
+
 	),
+
+'1.3.0.1' => array(
+	// updateable version from 1.2.8-pl2 to 1.3.0.1
+	// 1.3 changes were merged into 1, omitting all betas and RC.
+),
 
 );
 
@@ -1177,7 +1054,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0-a2':
+				case '1.3.0':
 					// add double PK in members table
 
 					// remove unique index 'member_name' on member table
@@ -1211,7 +1088,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0-a2':
+				case '1.3.0':
 					// add double PK in members table
 					// remove unique index 'member_name' on member table
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
@@ -1244,7 +1121,7 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-				case '1.3.0-a2':
+				case '1.3.0':
 					//$sql= "DROP TABLE  " . $table_prefix . 'bbdkp_reporting ';
 					//$db->sql_query($sql);
 
@@ -1283,7 +1160,7 @@ function bbdkp_caches($action, $version)
  */
 function check_oldbbdkp()
 {
-	global $db, $table_prefix, $umil, $config, $phpbb_root_path, $phpEx;
+	global $user, $umil, $config, $phpbb_root_path, $phpEx;
 
 	include($phpbb_root_path . 'umil/umil.' . $phpEx);
 	$umil=new umil;
@@ -1298,4 +1175,3 @@ function check_oldbbdkp()
 		}
     }
 }
-
