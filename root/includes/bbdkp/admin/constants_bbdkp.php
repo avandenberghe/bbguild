@@ -18,8 +18,8 @@ namespace bbdkp\admin
 		exit;
 	}
 
-	define('BBDKP_VERSIONURL', 'http://bbdkp.googlecode.com/svn/trunk/');
-	define('BBDKP_PLUGINURL' , 'http://www.bbdkp.com/downloads.php?cat=2" target="_blank');
+	define('BBDKP_VERSIONURL', 'https://bbdkp.googlecode.com/svn/trunk/');
+	define('BBDKP_PLUGINURL' , 'https://www.bbdkp.com/downloads.php?cat=2" target="_blank');
 
 	//BBDKP
 	define('URI_ADJUSTMENT', 'adj');
