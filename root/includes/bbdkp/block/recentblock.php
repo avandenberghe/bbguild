@@ -50,6 +50,7 @@ if(!empty($fetchtopics))
 			'TOPIC_ICON_IMG_WIDTH'	=> $fetchtopics[$i]['topic_img_width'],
 			'TOPIC_ICON_IMG_HEIGHT'	=> $fetchtopics[$i]['topic_img_heigth'],
 			'UNREAD' 				=>  $fetchtopics[$i]['post_unread'],
+			'TOPIC_AUTHOR_COLOUR'	=> get_username_string('colour', $fetchtopics[$i]['topic_poster'], $fetchtopics[$i]['topic_first_poster_name'], $fetchtopics[$i]['topic_first_poster_colour']),
 			'POSTED_BY'				=> sprintf($user->lang['POSTED_BY_ON'], $fetchtopics[$i]['user_link'], $fetchtopics[$i]['topic_last_post_time']),
 			'S_TOPIC_UNAPPROVED'	=> $fetchtopics[$i]['topic_unapproved'],
 			'S_POSTS_UNAPPROVED'	=> $fetchtopics[$i]['posts_unapproved'],
@@ -277,7 +278,10 @@ function fetch_topics($forum_id_ary, $num_topics, $num_chars)
 				$attachmenticon = $user->img('icon_topic_attach', $user->lang['TOTAL_ATTACHMENTS']);
 			}
     	}
-
+	
+		$topics[$i]['topic_first_poster_colour'] = $topic['topic_first_poster_colour'];	
+		$topics[$i]['topic_first_poster_name'] = $topic['topic_first_poster_name'];
+		$topics[$i]['topic_poster'] = $topic['topic_poster'];
 		$topics[$i]['forum_id'] = $topic['forum_id'];
 		$topics[$i]['post_id'] = $topic['topic_last_post_id'];
 	    $topics[$i]['post_unread'] = $topic['unread'];
@@ -303,7 +307,6 @@ function fetch_topics($forum_id_ary, $num_topics, $num_chars)
 		$topics[$i]['forum_name'] = $topic['forum_name'];
 		$topics[$i]['attach_icon'] = $attachmenticon;
 		$topics[$i]['forum_parents'] = \get_forum_parents($topic);
-
 
 		$i++;
 	}
