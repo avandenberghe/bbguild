@@ -399,7 +399,7 @@ class Points
 			'adj_decay' 			=> $this->adj_decay,
 			'member_firstraid'   	=> $this->firstraid,
 			'member_lastraid'    	=> $this->lastraid,
-			'member_raidcount'   	=> $this->raidcount
+			'member_raidcount'   	=> max(0, $this->raidcount)
 		));
 
 		$db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
@@ -429,7 +429,7 @@ class Points
 			'adj_decay' 			=> $this->adj_decay,
 			'member_firstraid'   	=> $this->firstraid,
 			'member_lastraid'    	=> $this->lastraid,
-			'member_raidcount'   	=> $this->raidcount
+			'member_raidcount'   	=> max(0, $this->raidcount)
 		));
 
 		$db->sql_query ( 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' . $query . "

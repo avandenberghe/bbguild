@@ -942,7 +942,10 @@ class PointsController  extends \bbdkp\admin\Admin
 				$this->Points->time_bonus -= $attendee['time_bonus'];
 				$this->Points->zerosum_bonus -= $attendee['zerosum_bonus'];
 				$this->Points->earned_decay -= $raiddetail->raid_decay;
-				$this->Points->raidcount -= 1;
+                if ($this->Points->raidcount > 0)
+                {
+                    $this->Points->raidcount -= 1;
+                }
 				$this->Points->update_account();
 				$this->update_raiddate($member_id, $old_raid->event_dkpid);
 			}
@@ -963,8 +966,11 @@ class PointsController  extends \bbdkp\admin\Admin
 			$this->Points->time_bonus -= $raiddetail->time_bonus;
 			$this->Points->zerosum_bonus -= $raiddetail->zerosum_bonus;
 			$this->Points->earned_decay -= $raiddetail->raid_decay;
-			$this->Points->raidcount -= 1;
-			$this->Points->update_account();
+            if ($this->Points->raidcount > 0)
+            {
+                $this->Points->raidcount -= 1;
+            }
+            $this->Points->update_account();
 
 			$this->update_raiddate($member_id, $old_raid->event_dkpid);
 
@@ -1174,7 +1180,7 @@ class PointsController  extends \bbdkp\admin\Admin
 
                 $sql = 'UPDATE ' . MEMBER_LIST_TABLE . '
                     SET member_status = 1
-                    WHERE ' . $db->sql_in_set ( 'member_id', $inactive_members) ;
+                    WHERE ' . $db->sql_in_set ( 'member_id', $active_members) ;
                 $db->sql_query($sql);
 
                 $log_action = array (

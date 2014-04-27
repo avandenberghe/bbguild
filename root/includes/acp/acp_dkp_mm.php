@@ -188,13 +188,14 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 							$i +=1;
 							if($log != '') $log .= ', ';
 							$member = new \bbdkp\controller\members\Members($row['member_id']);
+                            $old_member = new \bbdkp\controller\members\Members($row['member_id']);
 							if(isset($member))
 							{
 								if($member->member_rank_id < 90)
 								{
 									$member->Armory_getmember();
 								}
-								$member->Updatemember($member);
+								$member->Updatemember($old_member);
 								unset($member);
 							}
 

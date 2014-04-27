@@ -298,10 +298,11 @@ class Members extends \bbdkp\admin\Admin
 	}
 
 
-	/**
-	 * member class property getter
-	 * @param string $fieldName
-	 */
+    /**
+     * member class property getter
+     * @param string $fieldName
+     * @return null
+     */
 	public function __get($fieldName)
 	{
 		global $user;
@@ -474,13 +475,13 @@ class Members extends \bbdkp\admin\Admin
 
 	}
 
-	/**
-	 * get member id given a membername and guild
-	 *
-	 * @param string $membername
-	 * @param int $guild_id optional
-	 * @return int
-	 */
+    /**
+     * get member id given a member name and guild
+     *
+     * @param string $membername
+     * @param int $guild_id optional
+     * @return int
+     */
 	public function get_member_id ($membername, $guild_id = 0)
 	{
 		global $db;
@@ -525,7 +526,7 @@ class Members extends \bbdkp\admin\Admin
 	public function Updatemember(\bbdkp\controller\members\Members $old_member)
 	{
 		global $user, $db;
-        global $phpbb_root_path, $phpEx, $config;
+        global $config;
 
 		if ($this->member_id == 0)
 		{
