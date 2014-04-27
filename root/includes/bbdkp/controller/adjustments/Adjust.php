@@ -478,7 +478,7 @@ class Adjust extends \bbdkp\admin\Admin
 	}
 
 	/**
-	 * returns list of adjustments to admin page
+	 * returns list of adjustments
 	 *
 	 * @param string $order
 	 * @param int $member_id
@@ -486,7 +486,7 @@ class Adjust extends \bbdkp\admin\Admin
 	 * @param int $guild_id
 	 * @return array
 	 */
-	function listadj($order, $member_id, $start=0, $guild_id = 0)
+	public function ListAdjustments($order, $member_id, $start=0, $guild_id = 0)
 	{
 		global $db, $config;
 		$order = (string) $order;
@@ -540,7 +540,7 @@ class Adjust extends \bbdkp\admin\Admin
 	 * @param int $member_id
 	 * @return array
 	 */
-	function countadjust($member_id)
+	public function countadjust($member_id)
 	{
 		$member_id = (int) $member_id;
 		global  $db;

@@ -33,6 +33,10 @@ if (!class_exists('\bbdkp\controller\loot\Loot'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/loot/Loot.$phpEx");
 }
+if (!class_exists('\bbdkp\controller\adjustments\Adjust'))
+{
+    require("{$phpbb_root_path}includes/bbdkp/controller/adjustments/Adjust.$phpEx");
+}
 
 class viewMember implements iViews
 {
@@ -52,6 +56,7 @@ class viewMember implements iViews
         $member = new \bbdkp\controller\members\Members($member_id);
         $points = new \bbdkp\controller\points\Points($member_id, $Navigation->getDkpsysId());
         $Raids = new \bbdkp\controller\raids\Raids();
+        $Adjustments = new \bbdkp\controller\adjustments\Adjust($Navigation->getDkpsysId());
 
         /* Get attendance */
         $range1 = $config['bbdkp_list_p1'];
@@ -79,7 +84,6 @@ class viewMember implements iViews
          *
          *
          **/
-
         $rstart = request_var('rstart',0);
         if($config['bbdkp_epgp'] == '1')
         {
@@ -110,11 +114,78 @@ class viewMember implements iViews
 
         /**
          *
+         * Adjustments
+         *
+         */
+        $sort_order = array(
+            0 => array('adjustment_id desc' , 'adjustment_id asc'),
+            1 => array('adjustment_date desc, member_name asc' , 'adjustment_date asc, member_name asc') ,
+            2 => array('adjustment_dkpid' , 'adjustment_dkpid desc') ,
+            3 => array('dkpsys_name' , 'dkpsys_name desc'),
+            4 => array('member_name' , 'member_name desc'),
+            5 => array('adjustment_reason' , 'adjustment_reason desc') ,
+            6 => array('adjustment_value desc' , 'adjustment_value') ,
+            7 => array('adjustment_added_by' , 'adjustment_added_by desc'),
+        );
+
+        $result2 = $Adjustments->countadjust($member_id);
+        $total_adjustments = (int) $db->sql_fetchfield('total_adjustments');
+        $db->sql_freeresult($result2);
+
+        $current_order = $Navigation->switch_order ($sort_order);
+        $astart = request_var('astart', 0);
+        $current_adj = $points->adjustment - $points->adj_decay;
+        $result = $Adjustments->ListAdjustments($current_order['sql'], $member_id, $astart );
+        while ($adj = $db->sql_fetchrow($result))
+        {
+            $template->assign_block_vars('adjustments_row', array(
+                'DATE' => date($config['bbdkp_date_format'], $adj['adjustment_date']) ,
+                'ADJID' => $adj['adjustment_id'] ,
+                'DKPID' => $adj['adjustment_dkpid'] ,
+                'DKPPOOL' => $adj['dkpsys_name'] ,
+                'REASON' => (isset($adj['adjustment_reason'])) ? $adj['adjustment_reason'] : '' ,
+                'COLOR' => ($adj['adjustment_value'] < 0) ? 'negative' : 'positive' ,
+                'ADJUSTMENT' => $adj['adjustment_value'] == 0 ? '' : number_format($adj['adjustment_value'],2) ,
+                'CAN_DECAY' => $adj['can_decay'],
+                'ADJ_DECAY' => -1 * $adj['adj_decay'] == 0 ? '0.00' : -1 * $adj['adj_decay'],
+                'ADJUSTMENT_NET' => ($adj['adjustment_value'] - $adj['adj_decay']) == 0 ? '' : number_format($adj['adjustment_value'] - $adj['adj_decay'], 2) ,
+                'CURRENT_ADJ' =>  sprintf("%.2f", $current_adj),
+                'COLORCURRENT' => ($current_adj > 0) ? 'positive' : 'nagative' ,
+                'ADDED_BY' => $adj['adjustment_added_by']
+            ));
+
+            $current_adj = $current_adj - ($adj['adjustment_value'] - $adj['adj_decay']);
+
+        }
+        $db->sql_freeresult($result);
+        $listadj_footcount = sprintf($user->lang['LISTADJ_FOOTCOUNT'], $total_adjustments, $config['bbdkp_user_alimit']);
+
+        $adjpagination = $Navigation->generate_pagination2(append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=member&amp;' .
+                URI_DKPSYS.'='. $Navigation->getDkpsysId(). '&amp;' . URI_NAMEID. '='.$member_id. '&amp;astart=' .$astart),
+            $total_adjustments, $config ['bbdkp_user_alimit'], $astart, 1, 'astart');
+
+        $template->assign_vars(array(
+            'S_SHOW' => ($total_adjustments > 0) ? true : false ,
+            'O_ADJID' => $current_order['uri'][0] ,
+            'O_DATE' => $current_order['uri'][1] ,
+            'O_DKPID' => $current_order['uri'][2] ,
+            'O_DKPPOOL' => $current_order['uri'][3] ,
+            'O_MEMBER' => $current_order['uri'][4] ,
+            'O_REASON' => $current_order['uri'][5] ,
+            'O_ADJUSTMENT' => $current_order['uri'][6] ,
+            'O_ADDED_BY' => $current_order['uri'][7] ,
+            'ASTART' => $astart ,
+            'LISTADJ_FOOTCOUNT' => $listadj_footcount ,
+            'ADJUSTMENTS_PAGINATION' => $adjpagination,
+            'PAGE_NUMBER'    => on_page($total_adjustments, $config['bbdkp_user_alimit'], $astart),
+        ));
+
+        /**
+         *
          * loot history
          *
          *
          **/
-
         $istart = request_var('istart', 0);
         if($config['bbdkp_epgp'] == '1')
         {
@@ -122,7 +193,7 @@ class viewMember implements iViews
         }
         else
         {
-            $current_spent = $points->earned_net;
+            $current_spent = $points->item_net;
         }
 
         $loot = new \bbdkp\controller\loot\Loot();
@@ -197,7 +268,7 @@ class viewMember implements iViews
             'ITEMS'				  => ( is_null($total_purchased_items) ) ? false : true,
         ));
 
-//output
+        //output
         $url = append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=member&amp;' . URI_NAMEID . '=' . $member_id .'&amp;' . URI_DKPSYS . '=' . $Navigation->getDkpsysId());
 
         $template->assign_vars(array(

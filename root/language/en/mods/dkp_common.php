@@ -4,7 +4,7 @@
  *
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3
+ * @version 1.3.0.2
  *
  *
  */
@@ -14,7 +14,7 @@
 */
 if (!defined('IN_PHPBB'))
 {
-exit;
+	exit;
 }
 
 /**
@@ -22,7 +22,7 @@ exit;
 */
 if (empty($lang) || !is_array($lang))
 {
-$lang = array();
+	$lang = array();
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -43,7 +43,7 @@ $lang = array();
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.',
-'FOOTERBBDKP' => 'bbDKP 1.3.0',
+'FOOTERBBDKP' => 'bbDKP 1.3.0.2',
 
 //---- Portal blocks -----
 'PORTAL' => 'Portal',
@@ -258,11 +258,9 @@ $lang = array_merge($lang, array(
 'FACTION' => 'Faction',
 'FACTIONID' => 'Faction ID',
 'FIRST' => 'First',
-'GROUP_ADJ' => 'Group Adj.',
-'GROUP_ADJUSTMENTS' => 'Group Adjustments',
 'HIGH' => 'High',
-'INDIVIDUAL_ADJUSTMENTS' => 'Individual Adjustments',
-'INDIVIDUAL_ADJUSTMENT_HISTORY' => 'Individual Adjustment History',
+'ADJUSTMENTS' => 'Adjustments',
+'ADJUSTMENT_HISTORY' => 'Adjustments History',
 'INDIV_ADJ' => 'Indiv. Adj.',
 'ITEM' => 'Item',
 'ITEMS' => 'Items',
@@ -284,10 +282,12 @@ $lang = array_merge($lang, array(
 'MEMBER' => 'Member',
 'MEMBERS' => 'Members',
 'NA' => 'N/A',
-'NETADJUSTMENT' => 'Net Adjustment',
+'NETADJUSTMENT' => 'Net',
+'NETSPENT' => 'Net',
 'NO_DATA' => 'No Data',
 'NO_LOOT' => 'No Loot',
 'NO_RAIDS' => 'No Raids',
+'NO_ADJUSTMENTS' => 'No Adjustments',
 'RAID_ON' => 'Raid on %s on %s',
 'MAX_CHARS_EXCEEDED' => 'Sorry, you can only have %s Characters bound to your phpBB account.',
 'MISCELLANEOUS' => 'Miscellaneous',
@@ -334,6 +334,7 @@ $lang = array_merge($lang, array(
 'TIME_BONUS' => 'Time bonus',
 'TOTAL' => 'Total',
 'TIMEVALUE' => 'Time Value',
+'TOTAL_ADJUSTMENTS' => 'Total Adjustments',
 'TOTAL_EARNED' => 'Total Earned',
 'TOTAL_ITEMS' => 'Total Items',
 'TOTAL_RAIDS' => 'Total Raids',

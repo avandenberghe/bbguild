@@ -1011,6 +1011,11 @@ $versions = array(
 	// 1.3 changes were merged into 1, omitting all betas and RC.
 ),
 
+'1.3.0.2' => array(
+	// just some file fixes, see changelog
+),
+
+
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.

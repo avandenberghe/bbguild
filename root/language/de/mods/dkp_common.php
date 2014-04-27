@@ -4,7 +4,7 @@
  *
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3
+ * @version 1.3.0.2
  * @translation various unknown authors, killerpommes
  *
  */
@@ -43,7 +43,7 @@ $lang = array();
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is zurzeit nicht erreichbar.',
-'FOOTERBBDKP' => 'bbDKP 1.3.0',
+'FOOTERBBDKP' => 'bbDKP 1.3.0.2',
 
 //---- Portal blocks -----
 'PORTAL' => 'Portal',
@@ -258,11 +258,9 @@ $lang = array_merge($lang, array(
 'FACTION' => 'Fraktion',
 'FACTIONID' => 'Fraktions ID',
 'FIRST' => 'Erster',
-'GROUP_ADJ' => 'Gruppen Korrektur.',
-'GROUP_ADJUSTMENTS' => 'Gruppenkorrekturen',
 'HIGH' => 'Hoch',
-'INDIVIDUAL_ADJUSTMENTS' => 'Individuelle Korrekturen',
-'INDIVIDUAL_ADJUSTMENT_HISTORY' => 'Individuelle Korrekturen Verlauf',
+'ADJUSTMENTS' => 'Korrekturen',
+'ADJUSTMENT_HISTORY' => 'Korrekturen Verlauf',
 'INDIV_ADJ' => 'Korr.',
 'ITEM' => 'Gegenstand',
 'ITEMS' => 'Gegenstände',
@@ -284,10 +282,12 @@ $lang = array_merge($lang, array(
 'MEMBER' => 'Mitglied',
 'MEMBERS' => 'Mitglieder',
 'NA' => 'n.v.',
-'NETADJUSTMENT' => 'Netto Ajustierung',
+'NETSPENT' => 'Netto',
+'NETADJUSTMENT' => 'Netto',
 'NO_DATA' => 'Keine Daten',
 'NO_LOOT' => 'Keine Beute',
 'NO_RAIDS' => 'Keine Raids',
+'NO_ADJUSTMENTS' => 'Keine Korrekturen',
 'RAID_ON' => 'Raid von %s in %s',
 'MAX_CHARS_EXCEEDED' => 'Du kannst höchstens %s Charaktere an dein Forumkonto koppeln.',
 'MISCELLANEOUS' => 'Verschiedenes',

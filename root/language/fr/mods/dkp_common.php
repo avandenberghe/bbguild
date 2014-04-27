@@ -5,7 +5,7 @@
 * @copyright (c) 2011 phpBB Group
 * @author Sajaki
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @version 1.3
+* @version 1.3.0.2
 *
 */
 
@@ -43,7 +43,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP est actuellement désactivé.',
-'FOOTERBBDKP' => 'bbDKP 1.3.0',
+'FOOTERBBDKP' => 'bbDKP 1.3.0.2',
 
 //---- Portal blocks -----
 'PORTAL' => 'Portail',
@@ -262,11 +262,9 @@ $lang = array_merge($lang, array(
 'FACTION' => 'Faction',
 'FACTIONID' => 'Faction ID',
 'FIRST' => 'Premier',
-'GROUP_ADJ' => 'Ajustements Groupe.',
-'GROUP_ADJUSTMENTS' => 'Ajustements Groupe',
 'HIGH' => 'Urgent',
-'INDIVIDUAL_ADJUSTMENTS' => 'Ajustements Individuels',
-'INDIVIDUAL_ADJUSTMENT_HISTORY' => 'Historique d’ajustements',
+'ADJUSTMENTS' => 'Ajustements',
+'ADJUSTMENT_HISTORY' => 'Historique d’ajustements',
 'INDIV_ADJ' => 'Hist. Ajust.',
 'ITEM' => 'Objet',
 'ITEMS' => 'Objets',
@@ -288,10 +286,12 @@ $lang = array_merge($lang, array(
 'MEMBER' => 'Membre',
 'MEMBERS' => 'Membres',
 'NA' => 'P/A',
-'NETADJUSTMENT' => 'Ajustement Net',
+'NETADJUSTMENT' => 'Net',
+'NETSPENT' => 'Net',
 'NO_DATA' => 'Pas de données',
 'NO_LOOT' => 'Pas de butin',
 'NO_RAIDS' => 'Pas de Raids',
+'NO_ADJUSTMENTS' => 'pas d’ajustments trouvés',
 'RAID_ON' => 'Raid sur %s le %s',
 'MAX_CHARS_EXCEEDED' => 'Vous ne pouvez avoir que %s charactères liés à votre compte forum',
 'MISCELLANEOUS' => 'Divers',

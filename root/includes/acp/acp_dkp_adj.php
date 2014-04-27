@@ -202,17 +202,7 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 				$current_order = $this->switch_order($sort_order);
 				$start = request_var('start', 0);
 
-				$result = $this->adjustment->listadj($current_order['sql'], $member_id_filter, 0, $Guild->guildid);
-				$hasrows = false;
-				$total_adjustments = 0;
-				while ($adj = $db->sql_fetchrow($result))
-				{
-					$hasrows = true;
-					$total_adjustments +=1;
-				}
-				$db->sql_freeresult($result);
-
-				$result = $this->adjustment->listadj($current_order['sql'], $member_id_filter, $start, $Guild->guildid);
+				$result = $this->adjustment->ListAdjustments($current_order['sql'], $member_id_filter, $start, $Guild->guildid);
 				while ($adj = $db->sql_fetchrow($result))
 				{
 					$template->assign_block_vars('adjustments_row', array(
@@ -248,7 +238,7 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 				$template->assign_vars(array(
 					'L_TITLE' => $user->lang['ACP_LISTIADJ'] ,
 					'L_EXPLAIN' => $user->lang['ACP_LISTIADJ_EXPLAIN'] ,
-					'S_SHOW' => ($hasrows == true) ? true : false ,
+					'S_SHOW' => ($total_adjustments > 0) ? true : false ,
                     'O_ADJID' => $current_order['uri'][0] ,
                     'O_DATE' => $current_order['uri'][1] ,
 					'O_DKPID' => $current_order['uri'][2] ,
