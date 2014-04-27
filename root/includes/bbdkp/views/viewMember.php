@@ -222,9 +222,9 @@ class viewMember implements iViews
                     'U_VIEW_RAID'	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=raid&amp;' . URI_RAID . '=' . $item['raid_id']),
                     'NAME'			=> $item_name,
                     'RAID'			=> ( !empty($item['event_name']) ) ? $item['event_name'] : '&lt;<i>Not Found</i>&gt;',
-                    'SPENT'			=> $item['item_value'],
-                    'DECAY'			=> $item['item_decay'],
-                    'SPENT_NET'		=> $item['item_net'],
+                    'SPENT'			=> sprintf("%.2f", $item['item_value']),
+                    'DECAY'			=> sprintf("%.2f", $item['item_decay']),
+                    'SPENT_NET'		=> sprintf("%.2f", $item['item_net']),
                     'CURRENT_SPENT' => sprintf("%.2f", $current_spent))
             );
             $current_spent -= $item['item_net'];
@@ -300,25 +300,25 @@ class viewMember implements iViews
         if($config['bbdkp_epgp'] == '0')
         {
             $template->assign_vars(array(
-                'RAIDVAL'       => $points->raid_value,
-                'TIMEBONUS'     => $points->time_bonus,
-                'ZEROSUM'      	=> $points->zerosum_bonus,
-                'RAIDDECAY'		=> $points->earned_decay,
-                'EARNED'        => $points->total_earned ,
-                'EARNED_NET'    => $points->earned_net,
+                'RAIDVAL'       => sprintf("%.2f", $points->raid_value),
+                'TIMEBONUS'     => sprintf("%.2f", $points->time_bonus),
+                'ZEROSUM'      	=> sprintf("%.2f", $points->zerosum_bonus),
+                'RAIDDECAY'		=> sprintf("%.2f", $points->earned_decay),
+                'EARNED'        => sprintf("%.2f", $points->total_earned) ,
+                'EARNED_NET'    => sprintf("%.2f", $points->earned_net),
 
-                'SPENT'         => $points->spent,
-                'ITEMDECAY'     => $points->item_decay,
-                'ITEMNET'		=> $points->item_net,
-                'CURRENT'       => $points->total,
+                'SPENT'         => sprintf("%.2f", $points->spent),
+                'ITEMDECAY'     => sprintf("%.2f", $points->item_decay),
+                'ITEMNET'		=> sprintf("%.2f", $points->item_net),
+                'CURRENT'       => sprintf("%.2f", $points->total),
                 'C_CURRENT'       => ($points->total > 0) ? 'positive' : 'negative',
-                'ADJUSTMENT'    => $points->adjustment,
+                'ADJUSTMENT'    => sprintf("%.2f", $points->adjustment),
                 'C_ADJUSTMENT'  => ($points->adjustment > 0) ? 'positive' : 'negative',
-                'ADJDECAY'		=> $points->adj_decay,
-                'ADJNET'		=> $points->adj_net,
-                'TOTAL_DECAY'	=> $points->total_decayed,
+                'ADJDECAY'		=> sprintf("%.2f", $points->adj_decay),
+                'ADJNET'		=> sprintf("%.2f", $points->adj_net),
+                'TOTAL_DECAY'	=> sprintf("%.2f", $points->total_decayed),
                 'C_TOTAL_DECAY'	=> $points->total_decayed > 0 ? 'negative' : 'positive',
-                'NETCURRENT'    => $points->total_net,
+                'NETCURRENT'    => sprintf("%.2f", $points->total_net),
                 'C_NETCURRENT'  => $points->total_net > 0 ? 'positive' : 'negative',
             ));
         }
