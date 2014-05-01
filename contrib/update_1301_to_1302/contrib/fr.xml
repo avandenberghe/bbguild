@@ -36,19 +36,6 @@
 		<copy>
 			<file from="root/language/fr/mods/dkp_admin.php" to="language/fr/mods/dkp_admin.php"/>
 			<file from="root/language/fr/mods/dkp_common.php" to="language/fr/mods/dkp_common.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp.php" to="language/fr/mods/info_acp_dkp.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp_adj.php" to="language/fr/mods/info_acp_dkp_adj.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp_game.php"  to="language/fr/mods/info_acp_dkp_game.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp_guild.php" to="language/fr/mods/info_acp_dkp_guild.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp_item.php" to="language/fr/mods/info_acp_dkp_item.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp_mdkp.php" to="language/fr/mods/info_acp_dkp_mdkp.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp_mm.php" to="language/fr/mods/info_acp_dkp_mm.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp_news.php" to="language/fr/mods/info_acp_dkp_news.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp_point.php" to="language/fr/mods/info_acp_dkp_point.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp_raid.php" to="language/fr/mods/info_acp_dkp_raid.php"/>
-			<file from="root/language/fr/mods/info_acp_dkp_sys.php" to="language/fr/mods/info_acp_dkp_sys.php"/>
-			<file from="root/language/fr/mods/info_ucp_dkpcharacter.php" to="language/fr/mods/info_ucp_dkpcharacter.php"/>
-			<file from="root/language/fr/mods/permissions_bbdkp.php" to="language/fr/mods/permissions_bbdkp.php"/>
 		</copy>
 		<diy-instructions lang="en"><![CDATA[See general install.xml file]]></diy-instructions>
 		<diy-instructions lang="fr"><![CDATA[Voir install.xml]]></diy-instructions>
