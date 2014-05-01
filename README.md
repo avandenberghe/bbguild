@@ -47,11 +47,11 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 
 #### Upgrading from 1.3.0.1 to 1.3.0.2
 
-There were no database changes, just file changes. Please follow the upgrade unstructions in /contrib/upgrade_1301_1302.xml
+There were no database changes, just file changes. Please follow the upgrade unstructions in /contrib/update_1301_to_1302/update.xml
 
 #### Upgrading from 1.3.0 to 1.3.0.2
 
-There were no database changes, just file changes. Please follow the upgrade unstructions in /contrib/upgrade_1300_1302.xml
+There were no database changes, just file changes. Please follow the upgrade unstructions in /contrib/update_130_to_1302/update.xml
 
 #### Upgrading from 1.2.8-pl2 to 1.3.0.2
 
@@ -109,7 +109,7 @@ Find support and more on
 1.3.0.2 27-04-2014
 
 -	[FIX] #203 calling wow charapi did not deduce inactive points from account-	[FIX] #204 raid value was not added to account for duplicated raid-	[FIX] #205 need to show adjustments on account page-	[FIX] #206 raid count was not increased for duplicated raid-	[FIX] #207 missing language "SPENTNET"-	[FIX] #208 issue in viewraid and pbwow. Page is nudged to high. -	[FIX] #209 total of raid value column should not have equal sign
-
+-	[FIX] #210 rewrite points transfer function
 
 1.3.0.1 24-04-2014
 
