@@ -39,8 +39,8 @@ Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbdkp zip file
-2. Upload it to your webserver, into /store/mods/
+1. Unzip the bbDKP_1302.zip file
+2. Upload bbDKP folder to your webserver, into /store/mods/
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
 5. Click submit. This will install 1.3.0.2 and clear the caches (template, theme, imagesets)
@@ -55,7 +55,7 @@ There were no database changes, just file changes. Please follow the upgrade uns
 
 #### Upgrading from 1.2.8-pl2 to 1.3.0.2
 
-* 1.3.0.1 was released to make upgrading possible from 1.2.8-PL2 to 1.3 as this was not yet tested with 1.3.0
+
 * make a secure backup of all files
 * backup your database
 
@@ -106,7 +106,7 @@ Find support and more on
 
 ## Changelog 
 
-1.3.0.2 27-04-2014
+1.3.0.2 01-05-2014
 
 -	[FIX] #203 calling wow charapi did not deduce inactive points from account-	[FIX] #204 raid value was not added to account for duplicated raid-	[FIX] #205 need to show adjustments on account page-	[FIX] #206 raid count was not increased for duplicated raid-	[FIX] #207 missing language "SPENTNET"-	[FIX] #208 issue in viewraid and pbwow. Page is nudged to high. -	[FIX] #209 total of raid value column should not have equal sign
 -	[FIX] #210 rewrite points transfer function
