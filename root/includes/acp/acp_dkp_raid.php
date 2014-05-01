@@ -1057,6 +1057,8 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 			$raid_id = request_var('raid_id', 0);
 
 			$new_id = $this->RaidController->duplicateraid($raid_id);
+            //fill dkp table
+            $this->PointsController->add_points($new_id);
 
 			$this->RaidController->displayraid($new_id);
 			$success_message = sprintf ($user->lang ['ADMIN_DUPLICATE_RAID_SUCCESS'],
