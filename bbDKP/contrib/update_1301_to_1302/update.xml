@@ -63,6 +63,7 @@
 			<file from="root/styles/prosilver/template/dkp/view/viewraid_loot.html" to="styles/prosilver/template/dkp/view/viewraid_loot.html" />
 			<file from="root/styles/prosilver/template/dkp/view/viewraid_loot_classdist.html" to="styles/prosilver/template/dkp/view/viewraid_loot_classdist.html" />														
 			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css" />
+			<file from="root/umil/*.*" to="umil/*.*"/>						
 		</copy>
 		<php-installer>install/index.php</php-installer>
 		<diy-instructions lang="fr"><![CDATA[navigue vers install/index.php et execute la mise à jour.]]></diy-instructions>

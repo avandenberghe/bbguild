@@ -250,6 +250,7 @@ EQDkp (c) 2003 The EqDkp Project Team]]></description>
 			<file from="root/includes/ucp/info/ucp_dkp.php" to="includes/ucp/info/ucp_dkp.php"/>
 			<!-- installer -->
 			<file from="root/install/*.*" to="install/*.*"/>
+			<file from="root/umil/*.*" to="umil/*.*"/>			
             <!-- language -->
 			<file from="root/language/en/mods/dkp_admin.php" to="language/en/mods/dkp_admin.php"/>
 			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>
