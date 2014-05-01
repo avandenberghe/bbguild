@@ -405,13 +405,13 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 				$db->sql_freeresult ( $result );
 				/***  end drop-down query ***/
 
-				if ($submit && $submitdkp == false)
-				{
-					$this->transfer_dkp ($dkpsys_id);
-				}
 
 				// build template
 
+                if ($submit && $submitdkp == false)
+                {
+                    $this->transfer_dkp ($dkpsys_id);
+                }
 				// from member dkp table
 
 				$member_from = request_var ( 'transfer_from', 0 );
