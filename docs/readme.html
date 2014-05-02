@@ -124,13 +124,13 @@ pre code {
     }
 }
 </style>
-<title>1.3.0</title>
+<title>1.3.0.2</title>
 
 </head>
 <body>
 <p><a href="http://www.bbDKP.com"><img src="http://www.bbDKP.com/images/site_logo.png" alt="bbDKP" /></a></p>
 
-<h1>1.3.0</h1>
+<h1>1.3.0.2</h1>
 
 <h2>about</h2>
 
@@ -150,7 +150,7 @@ pre code {
 
 <h2>Current</h2>
 
-<p>1.3.0</p>
+<p>1.3.0.2</p>
 
 <h2>Installation</h2>
 
@@ -166,7 +166,7 @@ pre code {
 </ol>
 
 
-<h4>MODX installation</h4>
+<h4>New installation 1.3.0.2</h4>
 
 <p>Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer.</p>
 
@@ -177,13 +177,22 @@ pre code {
 <li>Upload it to your webserver, into /store/mods/</li>
 <li>Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.</li>
 <li>Click on the blue link given, this will redirect you to /install/index.php</li>
-<li>Click submit. This will install 1.3.0 and clear the caches (template, theme, imagesets)</li>
+<li>Click submit. This will install 1.3.0.2 and clear the caches (template, theme, imagesets)</li>
 </ol>
 
 
-<h4>Upgrading from 1.2.8-pl2 to 1.3.0</h4>
+<h4>Upgrading from 1.3.0.1 to 1.3.0.2</h4>
+
+<p>There were no database changes, just file changes. Please follow the upgrade unstructions in /contrib/upgrade_1301_1302.xml</p>
+
+<h4>Upgrading from 1.3.0 to 1.3.0.2</h4>
+
+<p>There were no database changes, just file changes. Please follow the upgrade unstructions in /contrib/upgrade_1300_1302.xml</p>
+
+<h4>Upgrading from 1.2.8-pl2 to 1.3.0.2</h4>
 
 <ul>
+<li>1.3.0.1 was released to make upgrading possible from 1.2.8-PL2 to 1.3 as this was not yet tested with 1.3.0</li>
 <li>make a secure backup of all files</li>
 <li><p>backup your database</p></li>
 <li><p>Uninstall 1.2.8-pl2 and re-install 1.3.0 using Automod</p>
@@ -199,9 +208,9 @@ pre code {
 </li>
 <li> then, from Automod, do uninstall bbDKP 1.2.8-pl2.</li>
 <li> delete /store/mods/bbdkp</li>
-<li> upload the unzipped bbdkp folder to /store/mods</li>
+<li> upload the unzipped bbdkp 1.3.0.2 folder to /store/mods</li>
 <li> from Automod, run file installer</li>
-<li> Click on the blue link given, this will redirect you to /install/index.php, then click "update".</li>
+<li> Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update       the database from 1.2.8-PL2 to 1.3.0.2</li>
 </ol>
 </li>
 <li><p>Manually</p>
@@ -230,7 +239,7 @@ pre code {
 
 <ul>
 <li>  Now you see the Umil updater.</li>
-<li>  Click update. This will update to 1.3.0 and clear the caches (template, theme, imagesets)</li>
+<li>  Click update. This will update to 1.3.0.1 and clear the caches (template, theme, imagesets)</li>
 </ul>
 </li>
 <li>  Update your Custom styles, or install a premodded style. Jade, Deathwing and pbWoW2 have premods.</li>
@@ -241,7 +250,7 @@ pre code {
 <ol>
 <li> upload the install folder for any bbdkp1.2.8 plugin that you installed, and run uninstall.</li>
 <li>  FTP the whole folder to to your webserver, after deleting your remote files.</li>
-<li>  launch the bbdkp 1.3.0 DB updater on your webserver (/install/index.php) and redo the db changes on live.</li>
+<li>  launch the bbdkp 1.3.0.1 DB updater on your webserver (/install/index.php) and redo the db changes on live.</li>
 </ol>
 </li>
 </ul>
@@ -268,6 +277,26 @@ pre code {
 
 
 <h2>Changelog</h2>
+
+<p>1.3.0.2 27-04-2014</p>
+
+<ul>
+<li>[FIX] #203 calling wow charapi did not deduce inactive points from account</li>
+<li>[FIX] #204 raid value was not added to account for duplicated raid</li>
+<li>[FIX] #205 need to show adjustments on account page</li>
+<li>[FIX] #206 raid count was not increased for duplicated raid</li>
+<li>[FIX] #207 missing language "SPENTNET"</li>
+<li>[FIX] #208 issue in viewraid and pbwow. Page is nudged to high.</li>
+<li>[FIX] #209 total of raid value column should not have equal sign</li>
+</ul>
+
+
+<p>1.3.0.1 24-04-2014</p>
+
+<ul>
+<li>[FIX] #200 Module issue when updating 1.2.8->1.3.0. 1.3 Umil changes were       merged into 1 diff, omitting all betas and RC. fixes fix #100, #200</li>
+</ul>
+
 
 <p>1.3.0 21-04-2014</p>
 
