@@ -1322,6 +1322,11 @@ class Members extends \bbdkp\admin\Admin
 				$db->sql_query($sql);
 			}
 		}
+
+        $db->sql_transaction('commit');
+
+
+
 	}
 
 	/**
