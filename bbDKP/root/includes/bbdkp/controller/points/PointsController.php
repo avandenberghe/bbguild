@@ -97,12 +97,32 @@ class PointsController  extends \bbdkp\admin\Admin
 	 * returns an array to list all dkp accounts
 	 *
 	 */
-	public function listdkpaccounts()
+	public function listdkpaccounts($start = 0)
 	{
 		global $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
+        $sort_order = array (
+            0 => array ('member_name', 'member_name desc' ),
+            1 => array ('member_name', 'member_name desc' ),
+            2 => array ('rank_name', 'rank_name desc' ),
+            3 => array ('member_level desc', 'member_level' ),
+            4 => array ('member_class', 'member_class desc' ),
+            5 => array ('member_raid_value desc', 'member_raid_value' ),
+            6 => array ('member_time_bonus desc', 'member_time_bonus' ),
+            7 => array ('member_zerosum_bonus desc', 'member_zerosum_bonus' ),
+            8 => array ('member_earned', 'member_earned desc' ),
+            9 => array ('member_raid_decay desc', 'member_raid_decay' ),
+            10 => array ('member_adjustment desc', 'member_adjustment' ),
+            12 => array ('member_spent desc', 'member_spent' ),
+            13 => array ('member_item_decay desc', 'member_item_decay' ),
+            16 => array ('member_current desc', 'member_current' ),
+            17 => array ('member_lastraid desc', 'member_lastraid' ),
 
-		$sql_array = array (
+        );
+
+        $current_order = $this->switch_order ( $sort_order );
+
+        $sql_array = array (
 				'SELECT' => 'm.member_id,  a.member_name, a.member_level, m.member_dkpid,
 						m.member_raid_value, m.member_raid_decay,  m.member_time_bonus, m.member_zerosum_bonus, m.member_earned - m.member_raid_decay as member_earned,
 						m.member_spent, m.member_item_decay, m.member_spent- m.member_item_decay as net_spent,
@@ -125,49 +145,22 @@ class PointsController  extends \bbdkp\admin\Admin
 						AND l.attribute_id = c.class_id
 						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'
 						AND a.member_guild_id = " . $this->guild_id . "
-						AND (s.dkpsys_id = " . (int) $this->dkpsys_id . ')' );
+						AND (s.dkpsys_id = " . (int) $this->dkpsys_id . ')',
+                'ORDER_BY' => $current_order ['sql']
+        );
 
 
-		/***  sort  ***/
+        $sql = $db->sql_build_query('SELECT', $sql_array);
+        $count = 0;
+        $members_result = $db->sql_query($sql);
+        while ( $row = $db->sql_fetchrow ( $members_result ) )
+        {
+            $count+=1;
+        }
 
-		$previous_data = '';
-		$sort_order = array (
-                0 => array ('member_name', 'member_name desc' ),
-                1 => array ('member_name', 'member_name desc' ),
-				2 => array ('rank_name', 'rank_name desc' ),
-				3 => array ('member_level desc', 'member_level' ),
-				4 => array ('member_class', 'member_class desc' ),
-				5 => array ('member_raid_value desc', 'member_raid_value' ),
-				6 => array ('member_time_bonus desc', 'member_time_bonus' ),
-				7 => array ('member_zerosum_bonus desc', 'member_zerosum_bonus' ),
-				8 => array ('member_earned', 'member_earned desc' ),
-				9 => array ('member_raid_decay desc', 'member_raid_decay' ),
-				10 => array ('member_adjustment desc', 'member_adjustment' ),
-				12 => array ('member_spent desc', 'member_spent' ),
-				13 => array ('member_item_decay desc', 'member_item_decay' ),
-				16 => array ('member_current desc', 'member_current' ),
-				17 => array ('member_lastraid desc', 'member_lastraid' ),
-
-				);
-
-		$current_order = $this->switch_order ( $sort_order );
-		$previous_data = '';
-		$sort_index = explode ( '.', $current_order ['uri'] ['current'] );
-		$previous_source = preg_replace ( '/( (asc|desc))?/i', '', $sort_order [$sort_index [0]] [$sort_index [1]] );
-
-		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-		$sql = 'SELECT * FROM ( ' . $sql . ' ) as s  ORDER BY ' . $current_order ['sql'];
-
-		$members_result = $db->sql_query ( $sql );
-		$members_row = array();
-
-		$member_count = 0;
-		$lines = 0;
+        $members_result = $db->sql_query_limit($sql, $config['bbdkp_user_llimit'], $start);
 		while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{
-			++ $member_count;
-			++ $lines;
-
 			$members_row [$row ['member_id']] = array (
 					'ID' => $row ['member_id'],
 					'DKPID' => $row ['member_dkpid'],
@@ -195,7 +188,7 @@ class PointsController  extends \bbdkp\admin\Admin
 		}
 
 		$db->sql_freeresult ($members_result);
-		return array($members_row, $current_order);
+		return array($members_row, $current_order,$count );
 	}
 
 
