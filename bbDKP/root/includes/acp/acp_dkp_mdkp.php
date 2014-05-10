@@ -572,9 +572,8 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 
 		/***  end drop-down query ***/
 
-
         $start = request_var('start', 0, false);
-        $member_filter = request_var('member_name', '');
+        $member_filter = utf8_normalize_nfc(request_var('member_name', '', true)) ;
 		if ($config ['bbdkp_epgp'] == '1')
 		{
 			$memberlist = $this->PointsController->listEPGPaccounts($start, $member_filter);

@@ -184,7 +184,7 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
                     7 => array('adjustment_added_by' , 'adjustment_added_by desc'),
                 );
 
-                $member_filter = request_var('member_name', '');
+                $member_filter = utf8_normalize_nfc(request_var('member_name', '', true)) ;
 
                 $result2 = $this->adjustment->countadjust(0, $member_filter, $Guild->guildid);
                 $total_adjustments = (int) $db->sql_fetchfield('total_adjustments');
