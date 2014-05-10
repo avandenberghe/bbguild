@@ -526,6 +526,7 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 		$this->PointsController->guild_id = $Guild->guildid;
 
 		/* dkp pool */
+        $this->PointsController->query_by_pool= true;
 		$this->PointsController->dkpsys_id=0;
 		if (isset($_GET[URI_DKPSYS]) OR isset ( $_POST[URI_DKPSYS]))
 		{
@@ -573,14 +574,19 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 		/***  end drop-down query ***/
 
         $start = request_var('start', 0, false);
-        $member_filter = utf8_normalize_nfc(request_var('member_name', '', true)) ;
+        $this->PointsController->member_filter = utf8_normalize_nfc(request_var('member_name', '', true)) ;
+        if($this->PointsController->member_filter != '')
+        {
+            $this->PointsController->query_by_name= true;
+        }
+
 		if ($config ['bbdkp_epgp'] == '1')
 		{
-			$memberlist = $this->PointsController->listEPGPaccounts($start, $member_filter);
+			$memberlist = $this->PointsController->listEPGPaccounts($start, true);
 		}
 		else
 		{
-			$memberlist = $this->PointsController->listdkpaccounts($start, $member_filter);
+			$memberlist = $this->PointsController->listdkpaccounts($start, true);
 		}
 
         $current_order = $memberlist[1];
@@ -594,9 +600,9 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
                 $membersids[$member_id] = 1;
             }
 
-            if($member_filter != '')
+            if($this->PointsController->query_by_name  == true)
             {
-                $pagination = generate_pagination(append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp&amp;member_name=" . $member_filter . "&amp;o=" .
+                $pagination = generate_pagination(append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp&amp;member_name=" . $this->PointsController->member_filter . "&amp;o=" .
                     $current_order['uri']['current'] ) , $lines, $config['bbdkp_user_llimit'], $start, true, 'start' );
             }
             else
@@ -635,7 +641,7 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 				'DKPSYS' => $this->PointsController->dkpsys_id,
 				'DKPSYSNAME' => $this->PointsController->dkpsys[$this->PointsController->dkpsys_id]['name'],
                 'PAGINATION' => $pagination,
-                'MEMBER_NAME' => $member_filter,
+                'MEMBER_NAME' => $this->PointsController->member_filter,
 
         );
 

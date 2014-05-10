@@ -216,6 +216,7 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
                         'CLASS_IMAGE' => (strlen($adj['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $adj['imagename'] . ".png" : '' ,
                         'S_CLASS_IMAGE_EXISTS' => (strlen($adj['imagename']) > 1) ? true : false ,
                         'U_VIEW_MEMBER' => (isset($adj['member_name'])) ? append_sid("{$phpbb_root_path}dkp.$phpEx", "page=member&amp;" . URI_NAMEID . '=' . $adj['member_id'] . '&amp;' . URI_DKPSYS . '=' . $adj['adjustment_dkpid']) : '' ,
+                        'U_VIEW_MEMBER_ACP' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp" ) . '&amp;member_id=' . $adj ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $adj ['adjustment_dkpid'],
                         'MEMBER' => (isset($adj['member_name'])) ? $adj['member_name'] : '' ,
                         'REASON' => (isset($adj['adjustment_reason'])) ? $adj['adjustment_reason'] : '' ,
                         'CAN_DECAY' => $adj['can_decay'],
