@@ -5,7 +5,7 @@
  *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.3.0.3
  *
  */
 
@@ -284,7 +284,10 @@ $lang = array_merge($lang, array(
 'ACP_DKP_LOGS_EXPLAIN' => 'Ceci liste toutes les actions dans bbDKP. vous pouvez trier par nom de membre, date, IP ou action.',
 'ACP_RANKS_EXPLAIN' => 'Ici vous pouvez éditer les noms des grades et leur suffixe/préfixe. (Pour ajouter, entrer un grade sur la dernière ligne. Pour supprimer, effacez le nom du grade et appuyez le bouton). le grade 99 (Grade ’out’) n’est pas visible. Ces grades (hormis le 99) peuvent être écrasés par le plugin Armurerie. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Liste des Membres. Ici vous pouvez supprimer des membres. Ceci supprime aussi l’historique totale des raids du membre dans tous les groupes DKP! ainsi que son compte DKP.',
-
+'SHOW_VISIBLE_RANKS' => 'Montrer grades actifs seulement.',
+'CALL_BATTLENET_CHAR_API' => 'Appel Battle.NET Character API pour 50 membres WoW ayant la mise à jour la plus ancienne. Désactivation si la dernière actuvité sur l’armurerie remonte à 180 jours. ',
+'MASS_DELETE_CHAR' => 'Suppression en masse des membres selectionnés.',
+'TOGGLE_ACTIVE' => 'Activation/désactivation',
 'ACP_LISTGUILDS_EXPLAIN' => 'Liste de guildes. Avant d’jouter un membre, il faut ajouter une guilde.',
 'ACP_ADDGUILD_EXPLAIN' => 'Ici vous pouvez ajouter, editer ou supprimer une Guilde. ',
 'ACP_EDITGUILD_EXPLAIN' => 'Ici vous pouvez editer une Guilde. ',
@@ -495,6 +498,7 @@ $lang = array_merge($lang, array(
 'VLOG_RACE_DELETED' => '%s a supprimé race %s de %s',
 'VLOG_RACE_ADDED' => '%s a ajouté race %s to %s',
 'VLOG_RACE_UPDATED' => '%s a mis à jour race %s in %s',
+'VLOG_ARMORY_DOWN' => 'Armurerie ne peut être appellée',
 
 // Before/After
 'ADJUSTMENT_BEFORE' => 'Ajustment avant',
@@ -597,7 +601,8 @@ $lang = array_merge($lang, array(
 'ERROR_RANKMEMBERS' => 'Erreur : Suppression Grade impossible, il existe toujours de membres ayant ce grade.',
 'ERROR_NOSELECT' => 'Veuillez sélectionner un membre source et un membre destination.',
 'WARNING_BATTLENET' => 'la mise à jour de tous les membres depuis Battle.NET API peut durer une minute ou plus. svp confirmez.',
-
+'ERROR_ARMORY_DOWN' => 'Erreur: Connection Battle.NET API impossible',
+'GUILD_EMBLEM_NF' => 'Emblème Guilde pas trouvé',
 
 //Curl errors
 'ERR_UNKNOWN' => 'erreur Curl inconnue.',
@@ -652,6 +657,7 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_ADJ_SUCCESS' => 'L’ajustement %s de %.2f a été mis à jour.',
 'ADMIN_UPDATE_DKPSYS_SUCCESS' => 'Le nom et Statut du groupe DKP %s a été changé à : %s, %s',
 'ADMIN_UPDATE_GUILD_SUCCESS' => 'La guilde avec ID  %d a été mise à jour.',
+'ADMIN_UPDATE_GUILD_FAILED' => 'mise à jour guilde %d avec erreurs.',
 'ADMIN_UPDATE_EVENT_SUCCESS' => 'La valeur fixe de %s pour l’évenement %s a été mis à jour.',
 'ADMIN_UPDATE_IADJ_SUCCESS' => 'L’ajustement %s de %.2f pour %s a été mis à jour.',
 'ADMIN_UPDATE_ITEM_SUCCESS' => 'L’objet %s, acheté par %s pour %.2f a été mis à jour.',

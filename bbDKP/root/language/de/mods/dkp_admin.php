@@ -5,7 +5,7 @@
  *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.3.0.3
  * @translation various unknown authors, killerpommes
  *
  */
@@ -282,7 +282,10 @@ $lang = array_merge($lang, array(
 'ACP_DKP_LOGS_EXPLAIN'  => 'Diese Liste zeigt alle bbDKP-Vorgänge. Du kannst nach Benutzername, Datum, IP oder Aktion sortieren.',
 'ACP_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenränke und Präfix/Suffixe einstellen. (Zum Hinzufügen, die letzte Zeile eintippen und bestätigen. Zum Löschen, entferne den Namen und bestätige). Rang 99 (der ‘out‘ Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch das Arsenal-Plugin. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Gildenmitgliederliste. Hier kannst du Mitglieder verwalten oder löschen. ACHTUNG: Löschung bedeutet dass die ganze Mitgliedraidgeschichte in allen DKP Pools gelöscht wird! ',
-
+'SHOW_VISIBLE_RANKS' => 'Allein eingeschaltete Ränge sehen',
+'CALL_BATTLENET_CHAR_API' => 'Anruf Battle.NET Character API für 50 am ältesten bearbeitete WoW characters. Deaktivierung folgt indem das Charakter über 180 tage nicht aktulaisiert wurde im Armory.',
+'MASS_DELETE_CHAR' => 'Massenentfernung Charaktere.',
+'TOGGLE_ACTIVE' => 'Aktivstatus ein- oder ausschalten',
 'ACP_LISTGUILDS_EXPLAIN' => 'Gildenliste. Bevor du Mitglieder einfügen kannst, musst du eine Gilde hinzufügen.',
 'ACP_ADDGUILD_EXPLAIN' => 'Hier kannst du Gilden löschen oder hinzufügen.',
 'ACP_EDITGUILD_EXPLAIN' => 'Hier kannst du Gilden bearbeiten.',
@@ -592,7 +595,8 @@ $lang = array_merge($lang, array(
 'ERROR_RANKMEMBERS' => 'Achtung : Kann Rang nicht löschen, denn es gibt noch immer Mitglieder mit diesen Rang.',
 'ERROR_NOSELECT' => 'Bitte wähle einen VON und einen ZU Mitgliedsnamen',
 'WARNING_BATTLENET' => 'Alle Mitglieder von der Battle.NET Character API aktuallisieren? Dies kann einige Minuten dauern. Bitte bestätigen.',
-
+'ERROR_ARMORY_DOWN' => 'Fehler: Keine Verbindung zur Battle.NET API',
+'GUILD_EMBLEM_NF' => 'Gildenwappe nicht gefunden',
 //Curl errors
 'ERR_UNKNOWN' => 'UUnbekannter Fehler aufgetreten.',
 'CURL_REQUIRED' => 'Curl wird zur Nutzung der SDK benötigt.',
@@ -646,6 +650,7 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_ADJ_SUCCESS' => 'Die Punkteanpassung %s für %.2f wurde aktualisiert.',
 'ADMIN_UPDATE_DKPSYS_SUCCESS' => 'Den Namen und Status des DKP Pools %s wurde geändert nach: %s, %s.',
 'ADMIN_UPDATE_GUILD_SUCCESS' => 'Die Gilde mit der ID %d wurde aktualisiert.',
+'ADMIN_UPDATE_GUILD_FAILED' => 'Die Gilde mit der ID %d wurde fehlerhaft aktualisiert.',
 'ADMIN_UPDATE_EVENT_SUCCESS' => 'Der Standardwert %s für Ereignisse auf %s wurde aktualisiert.',
 'ADMIN_UPDATE_IADJ_SUCCESS' => 'Die Punkteanpassung %s von %.2f für %s wurde aktualisiert.',
 'ADMIN_UPDATE_ITEM_SUCCESS' => 'Der Ankauf von %s, durch %s für %.2f wurde aktualisiert.',

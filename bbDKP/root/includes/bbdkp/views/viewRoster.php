@@ -37,10 +37,11 @@ class viewRoster implements iViews
         $members->game_id = $Navigation->getGameId();
         $start = request_var('start' ,0);
         $mode = request_var('rosterlayout', 0);
+        $member_filter = utf8_normalize_nfc(request_var('member_name', '', true)) ;
         $url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;rosterlayout=' . $mode .'&amp;guild_id=' . $Navigation->getGuildId());
 
         $characters = $members->getmemberlist($start, $mode, $Navigation->getQueryByArmor(), $Navigation->getQueryByClass(), $Navigation->getFilter(),
-            $Navigation->getGameId(), $Navigation->getGuildId(), $Navigation->getClassId(), $Navigation->getRaceId(), $Navigation->getLevel1(), $Navigation->getLevel2(), false);
+            $Navigation->getGameId(), $Navigation->getGuildId(), $Navigation->getClassId(), $Navigation->getRaceId(), $Navigation->getLevel1(), $Navigation->getLevel2(), false, $member_filter);
 
         $rosterlayoutlist = array(
             0 => $user->lang['ARM_STAND'] ,
@@ -219,6 +220,7 @@ class viewRoster implements iViews
         }
 
         $template->assign_vars(array(
+            'MEMBER_NAME'       => $member_filter,
             'S_MULTIGAME'		=> (sizeof($Navigation->games) > 1) ? true:false,
             'S_DISPLAY_ROSTER'  => true,
             'F_ROSTER'			=> $url,

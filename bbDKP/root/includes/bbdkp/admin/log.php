@@ -240,7 +240,14 @@ class log
      * a previously inactive member was reactivated
      */
     const MEMBER_DEACTIVATED = 49;
-
+    /**
+     * a guild was updated
+     */
+    const GUILD_UPDATED = 50;
+    /**
+     * battle.NET is down
+     */
+    const ARMORY_DOWN = 51;
 
 	/**
 	 * A key-value list of built-in log types that cannot be overridden
@@ -295,7 +302,9 @@ class log
         self::CLASS_DELETED => 'CLASS_DELETED',
         self::RACE_UPDATED => 'RACE_UPDATED',
         self::CLASS_UPDATED => 'CLASS_UPDATED',
-        self::MEMBER_DEACTIVATED => 'MEMBER_DEACTIVATED'
+        self::MEMBER_DEACTIVATED => 'MEMBER_DEACTIVATED',
+        self::GUILD_UPDATED => 'GUILD_UPDATED',
+        self::ARMORY_DOWN => 'ARMORY_DOWN'
     );
 
 	/**
@@ -403,7 +412,7 @@ class log
 	}
 
 	/**
-	 * nobody else can instance this
+	 * SINGLETON CLASS !
 	 */
 	private function __construct()
 	{
@@ -433,12 +442,16 @@ class log
         $log = $db->sql_fetchrow($result);
         $db->sql_freeresult($result);
         $log['colouruser'] = get_username_string('full', $log['user_id'], $log['username'], $log['user_colour']);
-        $log['log_type'] = str_replace( 'L_ACTION_', '', $log['log_type']);
-        $log['log_type'] = str_replace( 'L_', '', $log['log_type']);
-        $log['log_action'] = str_replace( 'L_ACTION_', '', $log['log_action']);
-        $log['log_action'] = str_replace( 'L_', '', $log['log_action']);
-        $log['log_result'] = str_replace( 'L_', '', $log['log_result']);
 
+        $log['log_type'] = str_replace( 'L_ACTION_', '', $log['log_type']);
+        $log['log_type'] = str_replace( 'L_ERROR_', '', $log['log_type']);
+        $log['log_type'] = str_replace( 'L_', '', $log['log_type']);
+
+        $log['log_action'] = str_replace( 'L_ACTION_', '', $log['log_action']);
+        $log['log_action'] = str_replace( 'L_ERROR_', '', $log['log_action']);
+        $log['log_action'] = str_replace( 'L_', '', $log['log_action']);
+
+        $log['log_result'] = str_replace( 'L_', '', $log['log_result']);
 
         return $log;
 
@@ -504,9 +517,14 @@ class log
                         $log_type = str_replace( 'L_ACTION_', '', $values['log_type']);
                         if (!in_array($log_type,  (array) self::$valid_action_types ))
                         {
-                            //wrong logging type, can't log
-                            return false;
+                            $log_type = str_replace( 'L_ERROR_', '', $values['log_type']);
+                            if (!in_array($log_type,  (array) self::$valid_action_types ))
+                            {
+                                //wrong logging type, can't log
+                                return false;
+                            }
                         }
+
                         break;
                     case 'log_action':
 
@@ -604,11 +622,13 @@ class log
 		if ($search)
 		{
 
-			// Check if it's an action
-			if (array_search($search_term, self::$valid_action_types))
-			{
-				$sql_array['WHERE'] = " u.user_id=l.log_userid AND l.log_type='" . $db->sql_escape( 'L_ACTION_' . $search_term  ) . "'";
-			}
+			// Check if it's a valid log type
+            if (array_search($search_term, self::$valid_action_types))
+            {
+                $sql_array['WHERE'] = " u.user_id=l.log_userid
+                    AND ( l.log_type='" . $db->sql_escape( 'L_ACTION_' . $search_term  ) . "'
+                          OR  l.log_type='" . $db->sql_escape( 'L_ERROR_' . $search_term  ) . "')";
+            }
 			// Check it's an IP
 			elseif (preg_match("/[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}/", $search_term))
 			{
@@ -641,9 +661,9 @@ class log
 		$outlog = array();
 		while ($row = $db->sql_fetchrow($result))
 		{
-			//$log = json_decode( $row['log_action']);
 			$log = $this->getxmltag($row['log_action']);
 			$log_type = str_replace( 'L_ACTION_', '', $row['log_type']);
+            $log_type = str_replace( 'L_ERROR_', '', $log_type);
 			$logline = $this->get_logmessage($log_type, $row['log_action'], $row['log_userid'], $row['username'], $row['user_colour'], $verbose);
 			$outlog[] = array(
 				'log_id' 		=> $row['log_id'],
@@ -912,9 +932,11 @@ class log
 					$logline = sprintf($this->getLogMessage('CLASS_UPDATED', $verbose), $userstring , $log['L_CLASS'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME']) ;
 					break;
 				case 'MEMBER_DEACTIVATED':
-					$logline = sprintf($this->getLogMessage('MEMBER_DEACTIVATED', $verbose), $userstring , $log['L_NAME'], $log['L_DAYSAGO']  ) ;
+					$logline = sprintf($this->getLogMessage('MEMBER_DEACTIVATED', $verbose), $userstring , $log['L_NAME'], '' ) ;
 					break;
-
+                case 'ARMORY_DOWN':
+                    $logline = sprintf($this->getLogMessage('ARMORY_DOWN', $verbose), $userstring , ' ', ' ' ) ;
+                    break;
 			}
 
 			return $logline;

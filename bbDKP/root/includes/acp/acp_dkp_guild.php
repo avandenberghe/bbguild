@@ -225,7 +225,6 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 				$form_key = 'addguild';
 				add_form_key($form_key);
 
-				$debug=1;
 				break;
 			/*************************************
 			 *  Edit Guild
@@ -233,7 +232,6 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 			case 'editguild':
 
 				$this->url_id = request_var(URI_GUILD, 0);
-				$add= false;
 
 				$memberadd = (isset($_POST['memberadd'])) ? true : false;
 				if ($memberadd)
@@ -509,7 +507,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
     /**
      * @param $addguild
      */
-    private function AddGuild($addguild)
+    private function AddGuild(\bbdkp\controller\guilds\Guilds $addguild)
     {
         global $user;
 
@@ -543,7 +541,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
      * update the default flag
      * @param $updateguild
      */
-    private function UpdateDefaultGuild($updateguild)
+    private function UpdateDefaultGuild(\bbdkp\controller\guilds\Guilds $updateguild)
     {
         global $user;
         $id = request_var('defaultguild', 0);
@@ -557,9 +555,9 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
      * @param $getarmorymembers
      * @return void
      */
-    private function UpdateGuild($updateguild, $getarmorymembers)
+    private function UpdateGuild(\bbdkp\controller\guilds\Guilds $updateguild, $getarmorymembers)
     {
-        global $phpbb_root_path, $user;
+        global $user;
 
         $updateguild->guildid = $this->url_id;
         $updateguild->Getguild();
@@ -585,10 +583,18 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
         {
             $armoryparams = array('members');
         }
-        $updateguild->Guildupdate($old_guild, $armoryparams);
 
-        $success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
-        trigger_error($success_message . $this->link, E_USER_NOTICE);
+        if($updateguild->Guildupdate($old_guild, $armoryparams))
+        {
+            $success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
+            trigger_error($success_message . $this->link, E_USER_NOTICE);
+        }
+        else
+        {
+            $success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_FAILED'], $this->url_id);
+            trigger_error($success_message . $this->link, E_USER_WARNING);
+        }
+
 
     }
 
@@ -596,8 +602,9 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
      * Update a guild
      * @param $updateguild
      *
+     * @return int|string
      */
-    private function UpdateRank($updateguild)
+    private function UpdateRank(\bbdkp\controller\guilds\Guilds $updateguild)
     {
         global $user;
         $newrank = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
@@ -671,7 +678,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
      * delete a guild
      * @param $updateguild
      */
-    private function DeleteGuild($updateguild)
+    private function DeleteGuild(\bbdkp\controller\guilds\Guilds $updateguild)
     {
 
         global $user, $template;
@@ -702,7 +709,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
      * Add a guild rank
      * @param $updateguild
      */
-    private function AddRank($updateguild)
+    private function AddRank(\bbdkp\controller\guilds\Guilds $updateguild)
     {
         global $user;
 
@@ -720,4 +727,4 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 
 
 }
-?>
+

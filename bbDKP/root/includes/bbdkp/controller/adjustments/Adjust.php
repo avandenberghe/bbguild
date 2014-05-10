@@ -477,16 +477,17 @@ class Adjust extends \bbdkp\admin\Admin
 
 	}
 
-	/**
-	 * returns list of adjustments
-	 *
-	 * @param string $order
-	 * @param int $member_id
-	 * @param int $start
-	 * @param int $guild_id
-	 * @return array
-	 */
-	public function ListAdjustments($order, $member_id, $start=0, $guild_id = 0)
+    /**
+     * returns list of adjustments
+     *
+     * @param string $order
+     * @param int|string $member_id
+     * @param int $start
+     * @param int $guild_id
+     * @param string $member_filter
+     * @return array
+     */
+	public function ListAdjustments($order, $member_id = 0, $start=0, $guild_id = 0, $member_filter= '')
 	{
 		global $db, $config;
 		$order = (string) $order;
@@ -521,37 +522,56 @@ class Adjust extends \bbdkp\admin\Admin
 			$sql_array['WHERE'] .= ' AND l.member_guild_id = ' . $guild_id;
 		}
 
-		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-		if ($start > 0)
-		{
-			$result = $db->sql_query_limit($sql, $config['bbdkp_user_alimit'], $start, 0);
-		}
-		else
-		{
-			$result = $db->sql_query ( $sql );
-		}
+        if ($member_filter != '')
+        {
+            $sql_array['WHERE'] .= ' AND l.member_name ' . $db->sql_like_expression($db->any_char . $db->sql_escape($member_filter) . $db->any_char);
+        }
+
+        $sql = $db->sql_build_query ( 'SELECT', $sql_array );
+        $result = $db->sql_query_limit($sql, $config['bbdkp_user_alimit'], $start, 0);
 		return $result;
 
 	}
 
-	/**
-	 * Counts adjustments for a pool/member
-	 *
-	 * @param int $member_id
-	 * @return array
-	 */
-	public function countadjust($member_id)
+    /**
+     * Counts adjustments for a pool/member
+     *
+     * @param $GuildId
+     * @param int $member_id
+     * @param string $member_filter
+     * @return array
+     */
+	public function countadjust($member_id = 0, $member_filter='', $GuildId = 0)
 	{
 		$member_id = (int) $member_id;
 		global  $db;
-		$sql = 'SELECT count(*) as total_adjustments
-					FROM ' . ADJUSTMENTS_TABLE . '
-					WHERE member_id IS NOT NULL
-					and adjustment_dkpid 	= ' . (int) $this->adjustment_dkpid;
+
+        $sql_array = array (
+            'SELECT' => 'count(*) as total_adjustments',
+            'FROM' => array (
+                MEMBER_LIST_TABLE 	=> 'a',
+                ADJUSTMENTS_TABLE 	=> 'j',
+             ),
+            'WHERE' => " a.member_id = j.member_id AND j.adjustment_dkpid = " . (int) $this->adjustment_dkpid,
+        );
+
 		if ($member_id != 0)
 		{
-			$sql .= ' and member_id  = ' . $member_id;
+            $sql_array['WHERE'] .= ' AND j.member_id  = ' . $member_id;
 		}
+
+        if ($member_filter != '')
+        {
+            $sql_array['WHERE'] .= ' AND a.member_name ' . $db->sql_like_expression($db->any_char . $db->sql_escape($member_filter) . $db->any_char);
+        }
+
+        if ($GuildId != 0)
+        {
+            $sql_array['WHERE'] .= ' AND a.member_guild_id  = ' . $GuildId;
+        }
+
+
+        $sql = $db->sql_build_query ( 'SELECT', $sql_array );
 		$result = $db->sql_query($sql);
 		return $result;
 
