@@ -574,13 +574,22 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 
 
         $start = request_var('start', 0, false);
+
+        $members = new \bbdkp\controller\members\Members();
+        $member_filter = utf8_normalize_nfc(request_var('member_name', '', true));
+        $member_id_filter = '';
+        if ($member_filter != '')
+        {
+            $member_id_filter = $members->get_member_id(trim($member_filter));
+        }
+
 		if ($config ['bbdkp_epgp'] == '1')
 		{
-			//$memberlist = $this->PointsController->listEPGPaccounts($start);
+			$memberlist = $this->PointsController->listEPGPaccounts($start, $member_id_filter);
 		}
 		else
 		{
-			$memberlist = $this->PointsController->listdkpaccounts($start);
+			$memberlist = $this->PointsController->listdkpaccounts($start, $member_id_filter);
 		}
 
         $current_order = $memberlist[1];

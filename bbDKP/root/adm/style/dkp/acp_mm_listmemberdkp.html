@@ -22,6 +22,10 @@
         <!-- END guild_row -->
 </select>
 
+<label>&nbsp;&nbsp;{L_NAME}:</label>
+<input type="text" name="member_name" id="member_name" size="20" maxlength="30" value="{MEMBER_NAME}" class="input" />
+<input type="submit" name="submit_options" value="{L_FILTER}" class="button1" />
+
 </fieldset>
 
 <!-- IF .members_row -->
@@ -35,7 +39,7 @@
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
   <tr>
     <th style="text-align:left; width:1%">&nbsp;</th>
-    <th  style="text-align:left; width:15%"><a href="{U_LIST_MEMBERDKP}o={O_NAME}">{L_NAME}</a></th>
+    <th style="text-align:left; width:15%"><a href="{U_LIST_MEMBERDKP}o={O_NAME}">{L_NAME}</a></th>
     <th style="text-align:left; width:5%"><a href="{U_LIST_MEMBERDKP}o={O_RANK}">{L_RANK}</a></th>
     <th style="text-align:left; width:5%; white-space: nowrap"><a href="{U_LIST_MEMBERDKP}o={O_LEVEL}">{L_LEVEL}</a></th>
     <th style="text-align:right; width:10%; white-space: nowrap"><a href="{U_LIST_MEMBERDKP}o={O_RAIDVALUE}">{L_RAIDVALUE}</a></th>
@@ -49,8 +53,6 @@
     <th style="text-align:right; width:10%; white-space: nowrap"><a href="{U_LIST_MEMBERDKP}o={O_RDECAY}">{L_DECAY}</a></th>
     <!-- ENDIF -->
     <th style="text-align:right; width:10%; white-space: nowrap"><a href="{U_LIST_MEMBERDKP}o={O_EARNED}">{L_EARNED}</a></th>
-
-
     <!-- IF S_SHOWDECAY -->
     <th style="text-align:right; width:10%; white-space: nowrap"><a href="{U_LIST_MEMBERDKP}o={O_SPENT}">{L_SPENT}</a></th>
     <th style="text-align:right; width:10%; white-space: nowrap"><a href="{U_LIST_MEMBERDKP}o={O_IDECAY}">{L_DECAY}</a></th>
@@ -70,7 +72,7 @@
   <tr class="row2">
   <!-- ENDIF -->
     <td style="text-align:center; white-space: nowrap">{members_row.ID}</td>
-    <td class="row3" style="text-align:left; white-space: nowrap"><strong><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" />&nbsp;<!-- ENDIF -->{members_row.NAME}</a></strong></td>
+    <td class="row2" style="text-align:left; white-space: nowrap"><strong><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><!-- IF members_row.S_CLASS_IMAGE_EXISTS --><img src="{members_row.CLASS_IMAGE}" alt="{members_row.CLASS}" />&nbsp;<!-- ENDIF -->{members_row.NAME}</a></strong></td>
     <td style="text-align:center; white-space: nowrap">{members_row.RANK}</td>
     <td style="text-align:center; white-space: nowrap">{members_row.LEVEL}</td>
     <td style="text-align:right; white-space: nowrap" class="positive">{members_row.RAIDVAL}</td>
