@@ -574,34 +574,39 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 
 
         $start = request_var('start', 0, false);
-
-        $members = new \bbdkp\controller\members\Members();
-        $member_filter = utf8_normalize_nfc(request_var('member_name', '', true));
-        $member_id_filter = '';
-        if ($member_filter != '')
-        {
-            $member_id_filter = $members->get_member_id(trim($member_filter));
-        }
-
+        $member_filter = request_var('member_name', '');
 		if ($config ['bbdkp_epgp'] == '1')
 		{
-			$memberlist = $this->PointsController->listEPGPaccounts($start, $member_id_filter);
+			$memberlist = $this->PointsController->listEPGPaccounts($start, $member_filter);
 		}
 		else
 		{
-			$memberlist = $this->PointsController->listdkpaccounts($start, $member_id_filter);
+			$memberlist = $this->PointsController->listdkpaccounts($start, $member_filter);
 		}
 
         $current_order = $memberlist[1];
         $lines = $memberlist[2]; // all accounts
 		$membersids = array();
-		foreach ($memberlist[0]  as $member_id => $dkp)
-		{
-			$template->assign_block_vars ('members_row', $dkp);
-			$membersids[$member_id] = 1;
-  		}
-        $pagination = generate_pagination(append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp&amp;o=" .
-            $current_order['uri']['current'] ) , $lines, $config['bbdkp_user_llimit'], $start, true, 'start' );
+        if($lines >0)
+        {
+            foreach ($memberlist[0]  as $member_id => $dkp)
+            {
+                $template->assign_block_vars ('members_row', $dkp);
+                $membersids[$member_id] = 1;
+            }
+
+            if($member_filter != '')
+            {
+                $pagination = generate_pagination(append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp&amp;member_name=" . $member_filter . "&amp;o=" .
+                    $current_order['uri']['current'] ) , $lines, $config['bbdkp_user_llimit'], $start, true, 'start' );
+            }
+            else
+            {
+                $pagination = generate_pagination(append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp&amp;o=" .
+                    $current_order['uri']['current'] ) , $lines, $config['bbdkp_user_llimit'], $start, true, 'start' );
+            }
+
+        }
 
 		/***  Labels  ***/
 		$footcount_text = sprintf ( $user->lang ['LISTMEMBERS_FOOTCOUNT'], $lines );
@@ -631,6 +636,8 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 				'DKPSYS' => $this->PointsController->dkpsys_id,
 				'DKPSYSNAME' => $this->PointsController->dkpsys[$this->PointsController->dkpsys_id]['name'],
                 'PAGINATION' => $pagination,
+                'MEMBER_NAME' => $member_filter,
+
         );
 
 		if ($config ['bbdkp_timebased'] == 1)

@@ -481,7 +481,7 @@ class Admin
 		$per_page = ($per_page <= 0) ? 1 : $per_page;
 		$total_pages = ceil($num_items / $per_page);
 
-		$seperator = '<span class="page-sep">' . $user->lang['COMMA_SEPARATOR'] . '</span>';
+		$separator = '<span class="page-sep">' . $user->lang['COMMA_SEPARATOR'] . '</span>';
 
 		if ($total_pages == 1 || !$num_items)
 		{
@@ -498,29 +498,29 @@ class Admin
 			$start_cnt = min(max(1, $on_page - 4), $total_pages - 5);
 			$end_cnt = max(min($total_pages, $on_page + 4), 6);
 
-			$page_string .= ($start_cnt > 1) ? ' ... ' : $seperator;
+			$page_string .= ($start_cnt > 1) ? ' ... ' : $separator;
 
 			for ($i = $start_cnt + 1; $i < $end_cnt; $i++)
 			{
 				$page_string .= ($i == $on_page) ? '<strong>' . $i . '</strong>' : '<a href="' . $base_url . "{$url_delim}" . $tpl_prefix  . "=" . (($i - 1) * $per_page) . '">' . $i . '</a>';
 				if ($i < $end_cnt - 1)
 				{
-					$page_string .= $seperator;
+					$page_string .= $separator;
 				}
 			}
 
-			$page_string .= ($end_cnt < $total_pages) ? ' ... ' : $seperator;
+			$page_string .= ($end_cnt < $total_pages) ? ' ... ' : $separator;
 		}
 		else
 		{
-			$page_string .= $seperator;
+			$page_string .= $separator;
 
 			for ($i = 2; $i < $total_pages; $i++)
 			{
 				$page_string .= ($i == $on_page) ? '<strong>' . $i . '</strong>' : '<a href="' . $base_url . "{$url_delim}" . $tpl_prefix  . "=" . (($i - 1) * $per_page) . '">' . $i . '</a>';
 				if ($i < $total_pages)
 				{
-					$page_string .= $seperator;
+					$page_string .= $separator;
 				}
 			}
 		}

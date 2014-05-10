@@ -86,182 +86,183 @@ class acp_dkp_adj extends \bbdkp\admin\Admin
 		switch ($mode)
 		{
 			case 'listiadj':
+                if(count($this->games) == 0)
+                {
+                    trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+                }
 
-				if(count($this->games) == 0)
-				{
-					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
-				}
+                $showadd = (isset($_POST['addiadj'])) ? true : false;
+                if ($showadd)
+                {
+                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj"));
+                    break;
+                }
 
-				$showadd = (isset($_POST['addiadj'])) ? true : false;
-				if ($showadd)
-				{
-					redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj"));
-					break;
-				}
+                // guild dropdown
+                $submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
+                $Guild = new \bbdkp\controller\guilds\Guilds();
+                $guildlist = $Guild->guildlist(1);
 
-				// guild dropdown
-				$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
-				$Guild = new \bbdkp\controller\guilds\Guilds();
-				$guildlist = $Guild->guildlist(1);
+                if($submit)
+                {
+                    $Guild->guildid = request_var('member_guild_id', 0);
+                }
+                else
+                {
+                    foreach ($guildlist as $g)
+                    {
+                        $Guild->guildid = $g['id'];
+                        $Guild->name = $g['name'];
+                        if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+                        {
+                            trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+                        }
+                        break;
+                    }
+                }
 
-				if($submit)
-				{
-					$Guild->guildid = request_var('member_guild_id', 0);
-				}
-				else
-				{
-					foreach ($guildlist as $g)
-					{
-						$Guild->guildid = $g['id'];
-						$Guild->name = $g['name'];
-						if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
-						{
-							trigger_error('ERROR_NOGUILD', E_USER_WARNING );
-						}
-						break;
-					}
-				}
+                foreach ($guildlist as $g)
+                {
+                    $template->assign_block_vars('guild_row', array(
+                        'VALUE' => $g['id'] ,
+                        'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
+                        'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+                }
 
-				foreach ($guildlist as $g)
-				{
-					$template->assign_block_vars('guild_row', array(
-							'VALUE' => $g['id'] ,
-							'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
-							'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
-				}
-
-				/* dkp pool */
-				$this->adjustment->setAdjustmentDkpid(0);
+                $this->adjustment->setAdjustmentDkpid(0);
                 if (isset($_GET[URI_DKPSYS]) OR isset ( $_POST[URI_DKPSYS]))
-				{
+                {
                     $this->adjustment->setAdjustmentDkpid(request_var ( URI_DKPSYS, 0 ));
-				}
+                }
 
-				if($this->adjustment->getAdjustmentDkpid() == 0)
-				{
+                if($this->adjustment->getAdjustmentDkpid() == 0)
+                {
 
-					if( count((array) $this->adjustment->getDkpsys()) == 0 )
-					{
-						trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
-					}
+                    if( count((array) $this->adjustment->getDkpsys()) == 0 )
+                    {
+                        trigger_error('ERROR_NOPOOLS', E_USER_WARNING );
+                    }
 
-					//get default dkp pool
-					foreach ($this->adjustment->getDkpsys() as $pool)
-					{
-						if ($pool['default'] == 'Y' )
-						{
-							$this->adjustment->setAdjustmentDkpid($pool['id']);
-							break;
-						}
-					}
-					//if still 0 then get first one
-					if($this->adjustment->getAdjustmentDkpid() == 0)
-					{
-						foreach ($this->adjustment->getDkpsys() as $pool)
-						{
+                    //get default dkp pool
+                    foreach ($this->adjustment->getDkpsys() as $pool)
+                    {
+                        if ($pool['default'] == 'Y' )
+                        {
                             $this->adjustment->setAdjustmentDkpid($pool['id']);
-							break;
-						}
-					}
-				}
+                            break;
+                        }
+                    }
+                    //if still 0 then get first one
+                    if($this->adjustment->getAdjustmentDkpid() == 0)
+                    {
+                        foreach ($this->adjustment->getDkpsys() as $pool)
+                        {
+                            $this->adjustment->setAdjustmentDkpid($pool['id']);
+                            break;
+                        }
+                    }
+                }
 
-				foreach ($this->adjustment->getDkpsys() as $pool)
-				{
-					$template->assign_block_vars ( 'dkpsys_row', array (
-							'VALUE' 	=> $pool['id'],
-							'SELECTED' 	=> ($pool['id'] == $this->adjustment->getAdjustmentDkpid()) ? ' selected="selected"' : '',
-							'OPTION' 	=> (! empty ( $pool['name'] )) ? $pool['name'] : '(None)' )
-					);
-				}
+                foreach ($this->adjustment->getDkpsys() as $pool)
+                {
+                    $template->assign_block_vars ( 'dkpsys_row', array (
+                            'VALUE' 	=> $pool['id'],
+                            'SELECTED' 	=> ($pool['id'] == $this->adjustment->getAdjustmentDkpid()) ? ' selected="selected"' : '',
+                            'OPTION' 	=> (! empty ( $pool['name'] )) ? $pool['name'] : '(None)' )
+                    );
+                }
 
-				/*** end DKPSYS drop-down ***/
-				$sort_order = array(
+                /*** end DKPSYS drop-down ***/
+                $sort_order = array(
                     0 => array('adjustment_id desc' , 'adjustment_id asc'),
-					1 => array('adjustment_date desc, member_name asc' , 'adjustment_date asc, member_name asc') ,
-					2 => array('adjustment_dkpid' , 'adjustment_dkpid desc') ,
-					3 => array('dkpsys_name' , 'dkpsys_name desc') ,
-					4 => array('member_name' , 'member_name desc') ,
-					5 => array('adjustment_reason' , 'adjustment_reason desc') ,
-					6 => array('adjustment_value desc' , 'adjustment_value') ,
-					7 => array('adjustment_added_by' , 'adjustment_added_by desc'),
+                    1 => array('adjustment_date desc, member_name asc' , 'adjustment_date asc, member_name asc') ,
+                    2 => array('adjustment_dkpid' , 'adjustment_dkpid desc') ,
+                    3 => array('dkpsys_name' , 'dkpsys_name desc') ,
+                    4 => array('member_name' , 'member_name desc') ,
+                    5 => array('adjustment_reason' , 'adjustment_reason desc') ,
+                    6 => array('adjustment_value desc' , 'adjustment_value') ,
+                    7 => array('adjustment_added_by' , 'adjustment_added_by desc'),
                 );
 
-				$members = new \bbdkp\controller\members\Members();
-				$member_filter = utf8_normalize_nfc(request_var('member_name', '', true));
-				$member_id_filter = '';
-				if ($member_filter != '')
-				{
-					$member_id_filter = $members->get_member_id(trim($member_filter));
-				}
+                $member_filter = request_var('member_name', '');
 
-				$result2 = $this->adjustment->countadjust($member_id_filter);
-				$total_adjustments = (int) $db->sql_fetchfield('total_adjustments');
-				$db->sql_freeresult($result2);
+                $result2 = $this->adjustment->countadjust(0, $member_filter, $Guild->guildid);
+                $total_adjustments = (int) $db->sql_fetchfield('total_adjustments');
+                $db->sql_freeresult($result2);
+                $start = request_var('start', 0);
 
-				$u_list_adjustments = append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj") . '&amp;' . URI_PAGE;
-				$current_order = $this->switch_order($sort_order);
-				$start = request_var('start', 0);
+                if($member_filter != '')
+                {
+                    $u_list_adjustments = append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj&amp;".URI_DKPSYS."=" .
+                            $this->adjustment->getAdjustmentDkpid()) . '&amp;member_name=' . $member_filter;
+                }
+                else
+                {
+                    $u_list_adjustments = append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj&amp;".URI_DKPSYS."=" .
+                        $this->adjustment->getAdjustmentDkpid() );
+                }
+                $current_order = $this->switch_order($sort_order);
 
-				$result = $this->adjustment->ListAdjustments($current_order['sql'], $member_id_filter, $start, $Guild->guildid);
-				while ($adj = $db->sql_fetchrow($result))
-				{
-					$template->assign_block_vars('adjustments_row', array(
-						'U_ADD_ADJUSTMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj") . '&amp;' . URI_ADJUSTMENT . '=' . $adj['adjustment_id'] . '&amp;' . URI_DKPSYS . '=' . $adj['adjustment_dkpid'] ,
-						'DATE' => date($config['bbdkp_date_format'], $adj['adjustment_date']) ,
+                $result = $this->adjustment->ListAdjustments($current_order['sql'], 0, $start, $Guild->guildid, $member_filter);
+                while ($adj = $db->sql_fetchrow($result))
+                {
+                    $template->assign_block_vars('adjustments_row', array(
+                        'U_ADD_ADJUSTMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=addiadj") . '&amp;' . URI_ADJUSTMENT . '=' . $adj['adjustment_id'] . '&amp;' . URI_DKPSYS . '=' . $adj['adjustment_dkpid'] ,
+                        'DATE' => date($config['bbdkp_date_format'], $adj['adjustment_date']) ,
                         'ADJID' => $adj['adjustment_id'] ,
                         'DKPID' => $adj['adjustment_dkpid'] ,
-						'DKPPOOL' => $adj['dkpsys_name'] ,
-						'COLORCODE' => ($adj['colorcode'] == '') ? '#254689' : $adj['colorcode'] ,
-						'CLASS_IMAGE' => (strlen($adj['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $adj['imagename'] . ".png" : '' ,
-						'S_CLASS_IMAGE_EXISTS' => (strlen($adj['imagename']) > 1) ? true : false ,
-						'U_VIEW_MEMBER' => (isset($adj['member_name'])) ? append_sid("{$phpbb_root_path}dkp.$phpEx", "page=member&amp;" . URI_NAMEID . '=' . $adj['member_id'] . '&amp;' . URI_DKPSYS . '=' . $adj['adjustment_dkpid']) : '' ,
-						'MEMBER' => (isset($adj['member_name'])) ? $adj['member_name'] : '' ,
-						'REASON' => (isset($adj['adjustment_reason'])) ? $adj['adjustment_reason'] : '' ,
-						'CAN_DECAY' => $adj['can_decay'],
-						'ADJUSTMENT' => $adj['adjustment_value'] == 0 ? '' : number_format($adj['adjustment_value'],2) ,
-						'ADJ_DECAY' => -1 * $adj['adj_decay'] == 0 ? '' : -1 * $adj['adj_decay'],
-						'ADJUSTMENT_NET' => ($adj['adjustment_value'] - $adj['adj_decay']) == 0 ? '' : number_format($adj['adjustment_value'] - $adj['adj_decay'], 2) ,
-						'DECAY_TIME' => ($adj['decay_time'] != 0 ?  date($config['bbdkp_date_format'], $adj['decay_time']) : '') ,
-						'ADDED_BY' => $adj['adjustment_added_by']
-					));
+                        'DKPPOOL' => $adj['dkpsys_name'] ,
+                        'COLORCODE' => ($adj['colorcode'] == '') ? '#254689' : $adj['colorcode'] ,
+                        'CLASS_IMAGE' => (strlen($adj['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $adj['imagename'] . ".png" : '' ,
+                        'S_CLASS_IMAGE_EXISTS' => (strlen($adj['imagename']) > 1) ? true : false ,
+                        'U_VIEW_MEMBER' => (isset($adj['member_name'])) ? append_sid("{$phpbb_root_path}dkp.$phpEx", "page=member&amp;" . URI_NAMEID . '=' . $adj['member_id'] . '&amp;' . URI_DKPSYS . '=' . $adj['adjustment_dkpid']) : '' ,
+                        'MEMBER' => (isset($adj['member_name'])) ? $adj['member_name'] : '' ,
+                        'REASON' => (isset($adj['adjustment_reason'])) ? $adj['adjustment_reason'] : '' ,
+                        'CAN_DECAY' => $adj['can_decay'],
+                        'ADJUSTMENT' => $adj['adjustment_value'] == 0 ? '' : number_format($adj['adjustment_value'],2) ,
+                        'ADJ_DECAY' => -1 * $adj['adj_decay'] == 0 ? '' : -1 * $adj['adj_decay'],
+                        'ADJUSTMENT_NET' => ($adj['adjustment_value'] - $adj['adj_decay']) == 0 ? '' : number_format($adj['adjustment_value'] - $adj['adj_decay'], 2) ,
+                        'DECAY_TIME' => ($adj['decay_time'] != 0 ?  date($config['bbdkp_date_format'], $adj['decay_time']) : '') ,
+                        'ADDED_BY' => $adj['adjustment_added_by'],
+                        'MEMBER_NAME' => $member_filter,
+                    ));
 
-				}
-				$db->sql_freeresult($result);
-				$listadj_footcount = sprintf($user->lang['LISTADJ_FOOTCOUNT'], $total_adjustments, $config['bbdkp_user_alimit']);
+                }
+                $db->sql_freeresult($result);
+                $listadj_footcount = sprintf($user->lang['LISTADJ_FOOTCOUNT'], $total_adjustments, $config['bbdkp_user_alimit']);
 
-				$pagination = \generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj&amp;dkpsys_id=" .
-					$this->adjustment->getAdjustmentDkpid()) . '&amp;' . URI_PAGE,
-					$total_adjustments,
-					$config['bbdkp_user_alimit'],
-					$start, true);
+                $pagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_adj&amp;mode=listiadj&amp;dkpsys_id=" . $this->adjustment->getAdjustmentDkpid()),
+                    $total_adjustments,
+                    $config['bbdkp_user_alimit'],
+                    $start, true);
 
-				$template->assign_vars(array(
-					'L_TITLE' => $user->lang['ACP_LISTIADJ'] ,
-					'L_EXPLAIN' => $user->lang['ACP_LISTIADJ_EXPLAIN'] ,
-					'S_SHOW' => ($total_adjustments > 0) ? true : false ,
+                $template->assign_vars(array(
+                    'L_TITLE' => $user->lang['ACP_LISTIADJ'] ,
+                    'L_EXPLAIN' => $user->lang['ACP_LISTIADJ_EXPLAIN'] ,
+                    'S_SHOW' => ($total_adjustments > 0) ? true : false ,
                     'O_ADJID' => $current_order['uri'][0] ,
                     'O_DATE' => $current_order['uri'][1] ,
-					'O_DKPID' => $current_order['uri'][2] ,
-					'O_DKPPOOL' => $current_order['uri'][3] ,
-					'O_MEMBER' => $current_order['uri'][4] ,
-					'O_REASON' => $current_order['uri'][5] ,
-					'O_ADJUSTMENT' => $current_order['uri'][6] ,
-					'O_ADDED_BY' => $current_order['uri'][7] ,
-					'U_LIST_ADJUSTMENTS' => $u_list_adjustments ,
-					'MEMBER_NAME' => $member_filter ,
-					'START' => $start ,
-					'S_GROUP_ADJ' => false ,
-					'LISTADJ_FOOTCOUNT' => $listadj_footcount ,
-					'ADJUSTMENT_PAGINATION' => $pagination,
-					'TOTAL_ADJUSTMENTS' => 'Total Adjustments',
-					'PAGE_NUMBER'    => on_page($total_adjustments, $config['bbdkp_user_alimit'], $start),
-						));
+                    'O_DKPID' => $current_order['uri'][2] ,
+                    'O_DKPPOOL' => $current_order['uri'][3] ,
+                    'O_MEMBER' => $current_order['uri'][4] ,
+                    'O_REASON' => $current_order['uri'][5] ,
+                    'O_ADJUSTMENT' => $current_order['uri'][6] ,
+                    'O_ADDED_BY' => $current_order['uri'][7] ,
+                    'U_LIST_ADJUSTMENTS' => $u_list_adjustments ,
+                    'MEMBER_NAME' => $member_filter ,
+                    'START' => $start ,
+                    'S_GROUP_ADJ' => false ,
+                    'LISTADJ_FOOTCOUNT' => $listadj_footcount ,
+                    'ADJUSTMENT_PAGINATION' => $pagination,
+                    'TOTAL_ADJUSTMENTS' => 'Total Adjustments',
+                    'PAGE_NUMBER'    => on_page($total_adjustments, $config['bbdkp_user_alimit'], $start),
+                ));
 
 				$this->page_title = 'ACP_LISTIADJ';
-
 				break;
 
 			case 'addiadj':
+
 				$form_key = 'acp_dkp_adj';
 				add_form_key($form_key);
 
