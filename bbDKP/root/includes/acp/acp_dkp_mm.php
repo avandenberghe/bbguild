@@ -317,7 +317,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                     'MINLEVEL' => $minlevel,
                     'MAXLEVEL' => $maxlevel,
                     'START' => $start,
-                    'MEMBER_NAME' => $member_filter, 
+                    'MEMBER_NAME' => $member_filter,
                     'F_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember' ,
                     'F_MEMBERS_LIST' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers' ,
                     'L_TITLE' => $user->lang['ACP_MM_LISTMEMBERS'] ,

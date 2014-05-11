@@ -1493,7 +1493,7 @@ class Members extends \bbdkp\admin\Admin
      * @return array  (membercount, sql_fetchrowset of all rows)
      */
     public function getmemberlist($start, $mode, $query_by_armor, $query_by_class, $filter,
-			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false)
+			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false, $member_filter)
 	{
 		global $db, $config, $user, $phpbb_root_path;
 		$sql_array = array();
@@ -1535,7 +1535,12 @@ class Members extends \bbdkp\admin\Admin
 			$sql_array['WHERE'] .= " AND m.member_level >= ".  intval($config['bbdkp_minrosterlvl']) ;
 		}
 
-		$sql_array['WHERE'] .= " AND m.member_rank_id != 99
+        if ($member_filter != '')
+        {
+            $sql_array['WHERE'] .= ' AND lcase(m.member_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($member_filter)) . $db->any_char);
+        }
+
+        $sql_array['WHERE'] .= " AND m.member_rank_id != 99
 			AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "'
 			AND e1.attribute = 'race' and e1.game_id = e.game_id";
 

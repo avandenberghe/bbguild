@@ -197,7 +197,8 @@ class PointsController  extends \bbdkp\admin\Admin
 						m.member_adjustment,  m.adj_decay,  m.member_raidcount,
 						(m.member_earned - m.member_raid_decay - (m.member_spent - m.member_item_decay) + m.member_adjustment - m.adj_decay) AS member_current,
                         m.member_lastraid,
-						s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename',
+						s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename,
+                        c.class_id, a.member_status, a.game_id',
 				'FROM' => array (
 						MEMBER_LIST_TABLE 	=> 'a',
 						MEMBER_DKP_TABLE 	=> 'm',
@@ -279,10 +280,13 @@ class PointsController  extends \bbdkp\admin\Admin
 
             $members_row [$row ['member_id']] = array (
 					'ID' => $row ['member_id'],
+                    'STATUS' => $row ['member_status'],
+                    'GAME_ID' => $row ['game_id'],
 					'DKPID' => $row ['member_dkpid'],
 					'DKPSYS_S' => $this->dkpsys_id,
 					'DKPSYS_NAME' => $row ['dkpsys_name'],
 					'CLASS' => ($row ['member_class'] != 'NULL') ? $row ['member_class'] : '&nbsp;',
+                    'CLASS_ID' => $row ['class_id'],
 					'COLORCODE' => ($row ['colorcode'] == '') ? '#254689' : $row ['colorcode'],
 					'CLASS_IMAGE' => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row ['imagename'] . ".png" : '',
 					'NAME' => $row ['rank_prefix'] . $row ['member_name'] . $row ['rank_suffix'],
@@ -352,7 +356,8 @@ class PointsController  extends \bbdkp\admin\Admin
 						(m.member_spent - m.member_item_decay  + ' . max ( 0, $config ['bbdkp_basegp'] ) . ' ) AS gp,
 						CASE when (m.member_spent - m.member_item_decay + ' . max ( 0, $config ['bbdkp_basegp'] ) . ' ) = 0 then 1
 						ELSE round( (m.member_raid_value + m.member_time_bonus - m.member_raid_decay + m.member_adjustment - m.adj_decay) /
-						(' . max ( 0, $config ['bbdkp_basegp'] ) . ' + m.member_spent - m.member_item_decay),2) end as pr ',
+						(' . max ( 0, $config ['bbdkp_basegp'] ) . ' + m.member_spent - m.member_item_decay),2) end as pr,
+						 c.class_id, a.member_status, a.game_id',
 				'FROM' => array (
 						MEMBER_LIST_TABLE 	=> 'a',
 						MEMBER_DKP_TABLE 	=> 'm',
@@ -434,10 +439,13 @@ class PointsController  extends \bbdkp\admin\Admin
 
 			$members_row [$row ['member_id']] = array (
 					'ID' => $row ['member_id'],
+                    'STATUS' => $row ['member_status'],
+                    'GAME_ID' => $row ['game_id'],
 					'DKPID' => $row ['member_dkpid'],
 					'DKPSYS_S' => $this->dkpsys_id,
 					'DKPSYS_NAME' => $row ['dkpsys_name'],
 					'CLASS' => ($row ['member_class'] != 'NULL') ? $row ['member_class'] : '&nbsp;',
+                    'CLASS_ID' => $row ['class_id'],
 					'COLORCODE' => ($row ['colorcode'] == '') ? '#254689' : $row ['colorcode'],
 					'CLASS_IMAGE' => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row ['imagename'] . ".png" : '',
 					'NAME' => $row ['rank_prefix'] . $row ['member_name'] . $row ['rank_suffix'],
@@ -459,7 +467,7 @@ class PointsController  extends \bbdkp\admin\Admin
 					'PR' => $row ['pr'],
                     'RAIDS_P1_DAYS' => $row ['member_raidcount'],
 					'U_VIEW_MEMBER_ACP' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp" ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'],
-                    'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx",'page=member&amp;' . URI_NAMEID . '=' . $ROW ['member_id'] .'&amp;' . URI_DKPSYS . '=' .$row ['member_dkpid']) ,
+                    'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx",'page=member&amp;' . URI_NAMEID . '=' . $row ['member_id'] .'&amp;' . URI_DKPSYS . '=' .$row ['member_dkpid']) ,
 
             );
 

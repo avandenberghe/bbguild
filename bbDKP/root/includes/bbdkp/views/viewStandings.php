@@ -77,7 +77,11 @@ class viewStandings implements iViews
 
         $this->start = request_var('start', 0, false);
 
-        $this->u_listmemberdkp = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings' . '&amp;guild_id=' . $Navigation->getGuildId() . '&amp;' . URI_DKPSYS . '=' . $this->PointsController->dkpsys_id );
+        $this->u_listmemberdkp = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings' .
+            '&amp;guild_id=' . $Navigation->getGuildId() .
+            '&amp;' . URI_DKPSYS . '=' . $this->PointsController->dkpsys_id .
+            '&amp;' . member_name . '=' . urlencode($this->PointsController->member_filter)
+         );
 
         $this->buildpage($Navigation);
 
@@ -86,14 +90,14 @@ class viewStandings implements iViews
     public function buildpage(viewNavigation $Navigation)
     {
         global $user;
-        $this->leaderboard();
+        $this->leaderboard($Navigation);
         $this->dkplisting();
         page_header ( $user->lang ['LISTMEMBERS_TITLE'] );
     }
 
-    private function leaderboard()
+    private function leaderboard(viewNavigation $Navigation)
     {
-        global $config;
+        global $template, $config, $phpbb_root_path, $phpEx;
 
         if ($config ['bbdkp_epgp'] == '1')
         {
@@ -103,12 +107,68 @@ class viewStandings implements iViews
         {
             $this->memberlist = $this->PointsController->listdkpaccounts(0, false);
         }
+        // loop sorted member array and dump to template
+        $classes = array();
+        foreach ( $this->memberlist[0] as $member_id => $member )
+        {
+            $classes [] = $member['CLASS_ID'];
+        }
+
+        $classes = array_unique($classes);
+        sort($classes);
+
+
+        foreach ($Navigation->getClassarray() as $k => $class)
+        {
+            if(in_array( $class['class_id'], $classes))
+            {
+                $template->assign_block_vars ( 'class',
+                    array (
+                        'CLASSNAME' 	=> $class ['class_name'],
+                        'CLASSIMGPATH'	=> (strlen($class['imagename']) > 1) ? $class['imagename'] . ".png" : '',
+                        'COLORCODE' 	=> $class['colorcode']
+                    )
+                );
+
+                foreach ($this->memberlist[0] as $member)
+                {
+                    if($member['CLASS_ID'] == $class['class_id'] && $member['GAME_ID'] == $class['game_id'])
+                    {
+                        //dkp data per class
+                        $dkprowarray= array (
+                            'NAME' => ($member ['STATUS'] == '0') ? '<em>' . $member ['NAME'] . '</em>' : $member ['NAME'] ,
+                            'DKPCOLOUR' => $member ['DKPCOLOUR1'],
+                            'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=member&amp;'.
+                                URI_NAMEID . '=' . $member ['ID'] . '&amp;' .
+                                URI_DKPSYS . '=' . $Navigation->getDkpsysId() ) );
+
+                        if($config['bbdkp_epgp'] == 1)
+                        {
+                            $dkprowarray[ 'PR'] = $member ['PR'] ;
+                        }
+                        else
+                        {
+                            $dkprowarray[ 'CURRENT'] = $member ['CURRENT'] ;
+                        }
+
+                        $template->assign_block_vars ( 'class.dkp_row', $dkprowarray );
+                    }
+                }
+
+            }
+        }
+
+
+        $template->assign_vars(array(
+            'S_SHOWLEAD' 		=> true ,
+        ));
+
 
     }
 
     private function dkplisting()
     {
-        global $user, $config, $template;
+        global $user, $config, $template, $phpbb_root_path, $phpEx;
 
         if ($config ['bbdkp_epgp'] == '1')
         {
@@ -149,14 +209,14 @@ class viewStandings implements iViews
             'L_EXPLAIN' => $user->lang ['ACP_MM_LISTMEMBERDKP_EXPLAIN'],
             'BUTTON_NAME' => $user->lang['DELETE'],
             'BUTTON_VALUE' => $user->lang ['DELETE_SELECTED_MEMBERS'],
-            'O_NAME' => $current_order ['uri'] [1],
-            'O_RANK' => $current_order ['uri'] [2],
-            'O_LEVEL' => $current_order ['uri'] [3],
-            'O_CLASS' => $current_order ['uri'] [4],
-            'O_RAIDVALUE' => $current_order ['uri'] [5],
-            'O_ADJUSTMENT' => $current_order ['uri'] [10],
-            'O_SPENT' => $current_order ['uri'] [12],
-            'O_LASTRAID' => $current_order ['uri'] [17],
+            'O_NAME' => $this->u_listmemberdkp . "&amp;o=" . $current_order ['uri'] [1],
+            'O_RANK' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [2],
+            'O_LEVEL' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [3],
+            'O_CLASS' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [4],
+            'O_RAIDVALUE' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [5],
+            'O_ADJUSTMENT' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [10],
+            'O_SPENT' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [12],
+            'O_LASTRAID' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [17],
             'S_SHOWZS' => ($config ['bbdkp_zerosum'] == '1') ? true : false,
             'S_SHOWDECAY' => ($config ['bbdkp_decay'] == '1') ? true : false,
             'S_SHOWEPGP' => ($config ['bbdkp_epgp'] == '1') ? true : false,
@@ -170,36 +230,37 @@ class viewStandings implements iViews
             'DKPPAGINATION' => $pagination,
             'MEMBER_NAME' =>  $this->PointsController->member_filter,
 
+
         );
 
         if ($config ['bbdkp_timebased'] == 1)
         {
-            $output ['O_TIMEBONUS'] = $current_order ['uri'] [6];
+            $output ['O_TIMEBONUS'] = $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [6];
 
         }
 
         if ($config ['bbdkp_zerosum'] == 1)
         {
-            $output ['O_ZSBONUS'] = $current_order ['uri'] [7];
+            $output ['O_ZSBONUS'] = $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [7];
 
         }
 
         if ($config ['bbdkp_decay'] == 1)
         {
-            $output ['O_RDECAY'] = $current_order ['uri'] [9];
-            $output ['O_IDECAY'] = $current_order ['uri'] [13];
+            $output ['O_RDECAY'] = $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [9];
+            $output ['O_IDECAY'] = $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [13];
         }
 
         if ($config ['bbdkp_epgp'] == 1)
         {
-            $output ['O_EP'] = $current_order ['uri'] [11];
-            $output ['O_GP'] = $current_order ['uri'] [14];
-            $output ['O_PR'] = $current_order ['uri'] [15];
+            $output ['O_EP'] = $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [11];
+            $output ['O_GP'] = $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [14];
+            $output ['O_PR'] = $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [15];
         }
         else
         {
-            $output ['O_EARNED'] = $current_order ['uri'] [8];
-            $output ['O_CURRENT'] = $current_order ['uri'] [16];
+            $output ['O_EARNED'] = $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [8];
+            $output ['O_CURRENT'] = $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [16];
         }
 
         $template->assign_vars ( $output );
