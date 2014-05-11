@@ -91,22 +91,34 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx","i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
                 $Guild = new \bbdkp\controller\guilds\Guilds();
 
-                // add member button redirect
-                $showadd = (isset($_POST['memberadd'])) ? true : false;
-                $activate = (isset($_POST['deactivate'])) ? true : false;
-                $del_batch = (isset($_POST['delete'])) ? true : false;
-                $submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
-                $sortlink = isset ( $_GET [URI_GUILD] )  ? true : false;
-                $charapicall = (isset($_POST['charapicall'])) ? true : false;
-
-                if ($showadd)
+                $guildlist = $Guild->guildlist(1);
+                if( count((array) $guildlist) == 0  )
                 {
-                    $a = request_var('member_guild_id', request_var('hidden_guildid', 0));
-                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;guild_id=" . $a ));
+                    trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+                }
+
+                if( count((array) $guildlist) == 1 )
+                {
+                    foreach ($guildlist as $g)
+                    {
+                        $Guild->guildid = $g['id'];
+                        $Guild->name = $g['name'];
+                        if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+                        {
+                            trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+                        }
+                        break;
+                    }
+
+                }
+
+                foreach ($guildlist as $g)
+                {
+                    $Guild->guildid = $g['id'];
                     break;
                 }
 
-                // set activation flag
+                $activate = (isset($_POST['deactivate'])) ? true : false;
                 if ($activate)
                 {
                     if (! check_form_key('mm_listmembers'))
@@ -121,6 +133,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 }
 
                 // batch delete
+                $del_batch = (isset($_POST['delete'])) ? true : false;
                 if ($del_batch)
                 {
                     $members_tbdel = request_var('delete_id', array(0));
@@ -129,49 +142,21 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 }
 
                 // guild dropdown query
-                if ($submit)
+                $getguild_dropdown = isset ( $_POST ['member_guild_id'] )  ? true : false;
+                if ($getguild_dropdown)
                 {
                     // user selected dropdow - get guildid
                     $Guild->guildid = request_var('member_guild_id', 0);
                 }
-                elseif($sortlink)
+
+                $sortlink = isset ( $_GET [URI_GUILD] )  ? true : false;
+                if($sortlink)
                 {
                     // user selected dropdow - get guildid
                     $Guild->guildid = request_var(URI_GUILD, 0);
                 }
-                else
-                {
-                    // default pageloading
 
-                    $guildlist = $Guild->guildlist(1);
-
-                    if( count((array) $guildlist) == 0  )
-                    {
-                        trigger_error('ERROR_NOGUILD', E_USER_WARNING );
-                    }
-
-                    if( count((array) $guildlist) == 1 )
-                    {
-                        foreach ($guildlist as $g)
-                        {
-                            $Guild->guildid = $g['id'];
-                            $Guild->name = $g['name'];
-                            if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
-                            {
-                                trigger_error('ERROR_NOGUILD', E_USER_WARNING );
-                            }
-                            break;
-                        }
-
-                    }
-
-                    foreach ($guildlist as $g)
-                    {
-                        $Guild->guildid = $g['id'];
-                        break;
-                    }
-                }
-
+                $charapicall = (isset($_POST['charapicall'])) ? true : false;                // set activation flag
                 if($charapicall)
                 {
 
@@ -211,14 +196,22 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                     {
                         $s_hidden_fields = build_hidden_fields(array(
                             'charapicall' => true ,
-                            'hidden_guildid' => request_var('member_guild_id', 0)
+                            'hidden_guildid' => $Guild->guildid
                         ));
                         confirm_box(false, $user->lang['WARNING_BATTLENET'], $s_hidden_fields);
                     }
-
-
                 }
 
+                // add member button redirect
+                $showadd = (isset($_POST['memberadd'])) ? true : false;
+                if ($showadd)
+                {
+                    $a = request_var('member_guild_id', request_var('hidden_guildid', 0));
+                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;guild_id=" . $a ));
+                    break;
+                }
+
+                // pageloading
 
                 // fill popup and set selected to default selection
                 $Guild->Getguild();
@@ -241,6 +234,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 $selectactive = isset($_POST['active']) ? 1 : request_var('active', 1);;
                 //hide nonactive by default
                 $selectnonactive = isset($_POST['nonactive']) ? 1 : request_var('nonactive', 0);;
+                $member_filter = utf8_normalize_nfc(request_var('member_name', '', true)) ;
 
                 $sort_order = array(
                     0 => array('member_name', 'member_name desc') ,
@@ -258,7 +252,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
                 $show_all = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
 
-                $result = $Guild->listmembers($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive);
+                $result = $Guild->listmembers($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter);
                 $member_count = 0;
                 while ($row = $db->sql_fetchrow($result))
                 {
@@ -271,7 +265,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 }
                 $db->sql_freeresult($result);
 
-                $members_result = $Guild->listmembers($current_order['sql'], $start, 1, $minlevel, $maxlevel, $selectactive, $selectnonactive);
+                $members_result = $Guild->listmembers($current_order['sql'], $start, 1, $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter);
                 $lines = 0;
                 while ($row = $db->sql_fetchrow($members_result))
                 {
@@ -323,6 +317,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                     'MINLEVEL' => $minlevel,
                     'MAXLEVEL' => $maxlevel,
                     'START' => $start,
+                    'MEMBER_NAME' => $member_filter, 
                     'F_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember' ,
                     'F_MEMBERS_LIST' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers' ,
                     'L_TITLE' => $user->lang['ACP_MM_LISTMEMBERS'] ,

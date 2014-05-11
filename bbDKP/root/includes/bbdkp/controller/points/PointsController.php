@@ -476,9 +476,6 @@ class PointsController  extends \bbdkp\admin\Admin
 
 	}
 
-
-
-
 	/**
 	 * updates a dkp account
  	 * @param int $member_id
