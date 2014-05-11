@@ -284,7 +284,10 @@ $lang = array_merge($lang, array(
 'ACP_DKP_LOGS_EXPLAIN' => 'Ceci liste toutes les actions dans bbDKP. vous pouvez trier par nom de membre, date, IP ou action.',
 'ACP_RANKS_EXPLAIN' => 'Ici vous pouvez éditer les noms des grades et leur suffixe/préfixe. (Pour ajouter, entrer un grade sur la dernière ligne. Pour supprimer, effacez le nom du grade et appuyez le bouton). le grade 99 (Grade ’out’) n’est pas visible. Ces grades (hormis le 99) peuvent être écrasés par le plugin Armurerie. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Liste des Membres. Ici vous pouvez supprimer des membres. Ceci supprime aussi l’historique totale des raids du membre dans tous les groupes DKP! ainsi que son compte DKP.',
-
+'SHOW_VISIBLE_RANKS' => 'Montrer grades actifs seulement.',
+'CALL_BATTLENET_CHAR_API' => 'Appel Battle.NET Character API pour 50 membres WoW ayant la mise à jour la plus ancienne. Désactivation si la dernière actuvité sur l’armurerie remonte à 180 jours. ',
+'MASS_DELETE_CHAR' => 'Suppression en masse des membres selectionnés.',
+'TOGGLE_ACTIVE' => 'Activation/désactivation',
 'ACP_LISTGUILDS_EXPLAIN' => 'Liste de guildes. Avant d’jouter un membre, il faut ajouter une guilde.',
 'ACP_ADDGUILD_EXPLAIN' => 'Ici vous pouvez ajouter, editer ou supprimer une Guilde. ',
 'ACP_EDITGUILD_EXPLAIN' => 'Ici vous pouvez editer une Guilde. ',

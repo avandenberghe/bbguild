@@ -281,8 +281,11 @@ $lang = array_merge($lang, array(
 'ACP_LISTRAIDS_EXPLAIN' => 'Here is a list of Raids per DKP pool. Clicking on the raidname or the green wheel brings you in Edit/delete-mode. The Duplicate button creates a copy of the selected raid without the loot.',
 'ACP_DKP_LOGS_EXPLAIN' => 'This lists all the actions in bbDKP. You can sort by username, date, IP or action.',
 'ACP_RANKS_EXPLAIN' => 'Here you can add/edit/delete raid ranks and name prefix/suffix. Ranks can be overwritten by the in-game ranks through the armorylink plugin. Custom ranks (90 and 99) are read-only. ',
-'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Guild member list. Shows only visible ranks. You can add new guild members or update existing ones or remove them (green/red buttons). <br /> &#8853; If you have the Armory plugin (only for WoW) you can add new members in batch from Battle.NET. <br /> &#8853; The left checkboxes are for (de)activating members. Only active members show on Roster. Click ’Change Status’ to save your changes. <br />  &#8853; The right checkboxes are for mass deleting members. Click Mark All/Unmark all to toggle the checkboxes. Then click Delete Marked to proceed. A confirmation will be asked. <br/> &#8853; The Guild selector switches between guilds. ',
-
+'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Guild member list. ',
+'SHOW_VISIBLE_RANKS' => 'Shows only visible ranks.',
+'CALL_BATTLENET_CHAR_API' => 'Call Battle.NET Character API for selected WoW characters. toggles inactive if  ',
+'MASS_DELETE_CHAR' => 'Mass delete selected characters.',
+'TOGGLE_ACTIVE' => 'Toggle active status',
 'ACP_LISTGUILDS_EXPLAIN' => 'List of guilds. before you add members, you have to add a guild.',
 'ACP_ADDGUILD_EXPLAIN' => 'Here you can add a guild. ',
 'ACP_EDITGUILD_EXPLAIN' => 'Here you can edit or delete a guild. ',
@@ -841,7 +844,7 @@ $lang = array_merge($lang, array(
 'DELETE_DKPSYS' => 'Delete DKP system',
 'DELETE_GUILD' => 'Delete Guild',
 'DELETE_ITEM' => 'Delete Item',
-'DELETE_MEMBER' => 'Delete Member',
+'DELETE_MEMBER' => 'Delete selected Member',
 'DELETE_MEMBER_DKP' => 'Delete Member dkp',
 'DELETE_RAID' => 'Delete Raid',
 'DELETE_SELECTED_MEMBERS' => 'Delete Selected Member(s)',
@@ -1117,5 +1120,3 @@ So the loot would go to player 2 <br />',
 'RESYNC_DKP_CONFIRM' => 'Are you SURE you wish to resynchronise DKP values ? ',
 
 ));
-
-?>

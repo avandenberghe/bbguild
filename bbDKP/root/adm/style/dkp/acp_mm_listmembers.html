@@ -27,22 +27,27 @@ function isValidChar(char){
 //]]>
 </script>
 <a name="maincontent"></a>
-<h1>{L_TITLE}</h1>
-
+<span><h1>{L_TITLE}</h1></span>
 <div>
 <form id="mm_listmembers" method="post" action="{F_MEMBERS_LIST}">
+
 <fieldset style="background-color: #EEEEEE">
-<p>{L_EXPLAIN}</p>
 
 <dl>
 	<dt><label for="member_guild_id">{L_GUILD}:</label></dt>
 	<dd>
-		<a href="{U_VIEW_GUILD}">{GUILDNAME}</a>
-		<select id="member_guild_id" name="member_guild_id" class="input" onchange="javascript:form.submit();" >
-		       	<!-- BEGIN guild_row -->
-		       <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
-		        <!-- END guild_row -->
-		</select>
+		<div style="display: table;">
+            <div style="width:50%; float: left"><a href="{U_VIEW_GUILD}"><img style="width:80px; height:80px" src="{GUILD_EMBLEM}" alt="{GUILD_NAME}" /></a></div>
+            <div style="width:50%; vertical-align: middle; display: table-cell;">
+                <select id="member_guild_id" name="member_guild_id" class="input" onchange="javascript:form.submit();" >
+                    <!-- BEGIN guild_row -->
+                    <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
+                    <!-- END guild_row -->
+                </select>
+
+            </div>
+
+        </div>
    	</dd>
 </dl>
 <dl>
@@ -64,7 +69,7 @@ function isValidChar(char){
  <input type="submit" name="add" value="{L_SEARCH}" class="button1" />
 </p>
 </fieldset>
-<img style="width:80px; height:80px" src="{GUILD_EMBLEM}" alt="{GUILD_NAME}" />
+
 <!-- IF .members_row -->
 <!-- IF MEMBER_PAGINATION -->
 <div class="pagination">
@@ -75,6 +80,9 @@ function isValidChar(char){
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
 	<thead>
   <tr>
+  	<th style="text-align:center; width:6%">{L_ACTION}
+  	<span class="small"><a href="#" onclick="marklist('mm_listmembers', 'delete_id', true); return false;">{L_MARK_ALL}</a> <br />
+	<a href="#" onclick="marklist('mm_listmembers', 'delete_id', false); return false;">{L_UNMARK_ALL}</a></span>
     <th style="text-align:center; width:3%; white-space: nowrap;">{L_ACTIVE}<br />
     <span class="small"><a href="#" onclick="marklist('mm_listmembers', 'activate_id', true); return false;">{L_MARK_ALL}</a> <br />
     <a href="#" onclick="marklist('mm_listmembers', 'activate_id', false); return false;">{L_UNMARK_ALL}</a></span>
@@ -87,9 +95,6 @@ function isValidChar(char){
     <th style="text-align:left; width:10%"><a href="{O_RANK}">{L_RANK}</a></th>
     <th style="text-align:left; width:10%"><a href="{O_JOINDATE}">{L_JOINDATE}</a></th>
     <th style="text-align:left; width:10%"><a href="{O_OUTDATE}">{L_OUTDATE}</a></th>
-  	<th style="text-align:center; width:6%">{L_ACTION}
-  	<span class="small"><a href="#" onclick="marklist('mm_listmembers', 'delete_id', true); return false;">{L_MARK_ALL}</a> <br />
-	<a href="#" onclick="marklist('mm_listmembers', 'delete_id', false); return false;">{L_UNMARK_ALL}</a></span>
 
   	</th>
   </tr>
@@ -110,6 +115,11 @@ function isValidChar(char){
   <!-- IF members_row.S_READONLY  == 1 -->
   <tr class="highlight">
   <!-- ENDIF -->
+	<td style="text-align:center; white-space: nowrap;">
+		<a href="{members_row.U_VIEW_MEMBER}">{ICON_EDIT}</a>
+		<!-- IF members_row.S_READONLY == 0 --> <a href="{members_row.U_DELETE_MEMBER}">{ICON_DELETE}</a> <!-- ENDIF -->
+    	<input type="checkbox" class="radio" name="delete_id[{members_row.ID}]" value="1" {members_row.DELETED} />
+	</td>
     <td style="text-align:center;"><input type="checkbox" class="radio" name="activate_id[{members_row.ID}]" value="{members_row.ID}" {members_row.STATUS} /></td>
     <td style="text-align:center;">{members_row.ID}</td>
     <td class="row2" style="text-align:left;" ><a style="color:{members_row.COLORCODE}"  href="{members_row.U_VIEW_MEMBER}"><strong>{members_row.NAME}</strong></a></td>
@@ -119,11 +129,6 @@ function isValidChar(char){
     <td style="text-align:left;" >{members_row.RANK}</td>
     <td style="text-align:left;" >{members_row.JOINDATE}</td>
     <td style="text-align:left;" >{members_row.OUTDATE}</td>
-	<td style="text-align:center; white-space: nowrap;">
-		<a href="{members_row.U_VIEW_MEMBER}">{ICON_EDIT}</a>
-		<!-- IF members_row.S_READONLY == 0 --> <a href="{members_row.U_DELETE_MEMBER}">{ICON_DELETE}</a> <!-- ENDIF -->
-    	<input type="checkbox" class="radio" name="delete_id[{members_row.ID}]" value="1" {members_row.DELETED} />
-	</td>
   </tr>
   <!-- END members_row -->
   </tbody>
@@ -142,15 +147,15 @@ function isValidChar(char){
   	<input type="hidden" name="hidden_member[{members_row.ID}]" value="{members_row.ID}" />
   	<!-- END members_row -->
   	<input type="hidden" name="start" value="{START}" />
- 	<input class="button2" type="submit" name="deactivate" value="{L_CHANGE_STATUS}" />
-	<input class="button2" name="memberadd" type="submit" value="{L_ADD_MEMBER}" />
+ 	<input class="button2" type="submit" name="deactivate" value="{L_CHANGE_STATUS}" title="{L_TOGGLE_ACTIVE}" />
+	<input class="button2" name="memberadd" type="submit" value="{L_ADD_MEMBER}"  />
 	<!-- IF S_WOW -->
-	<input class="button2" name="charapicall" type="submit" value="{L_CHARACTERAPICALL}" />
+	<input class="button2" name="charapicall" type="submit" value="{L_CHARACTERAPICALL}" title="{L_CALL_BATTLENET_CHAR_API}"/>
 	<!-- ENDIF -->
 	<br /><br />
 </fieldset>
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-	<input class="button2" type="submit" name="delete" value="{L_DELETE_MEMBER}" />
+	<input class="button2" type="submit" name="delete" value="{L_DELETE_MEMBER}" title="{L_MASS_DELETE_CHAR}"/>
 </fieldset>
 
 <!-- ELSE -->
