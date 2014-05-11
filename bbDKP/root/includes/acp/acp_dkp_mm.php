@@ -71,7 +71,6 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
      */
     public $link = ' ';
 
-
     /**
      * main acp_dkp_mm function
      * @param integer $id
@@ -162,18 +161,16 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 
                     if (confirm_box(true))
                     {
-                        $Guild = new \bbdkp\controller\guilds\Guilds();
-                        $Guild->guildid = request_var('hidden_guildid', 0);
-                        $Guild->Getguild();
-                        $members_result = $Guild->listmembers();
+
+                        $members_result = request_var('hidden_members_toupdate', array(0));
                         $log = '';
                         $i = 0;
-                        while ($row = $db->sql_fetchrow($members_result))
+                        foreach ($members_result as $member_id => $key)
                         {
                             $i +=1;
                             if($log != '') $log .= ', ';
-                            $member = new \bbdkp\controller\members\Members($row['member_id']);
-                            $old_member = new \bbdkp\controller\members\Members($row['member_id']);
+                            $member = new \bbdkp\controller\members\Members($member_id);
+                            $old_member = new \bbdkp\controller\members\Members($member_id);
                             if(isset($member))
                             {
                                 if($member->member_rank_id < 90)
@@ -184,9 +181,9 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                                 unset($member);
                             }
 
-                            $log .= $row['member_name'];
+                            $log .= $old_member->member_name;
                         }
-                        $db->sql_freeresult($members_result);
+
                         unset ($members_result);
 
                         trigger_error(sprintf($user->lang['CHARAPIDONE'] , $i, $log), E_USER_NOTICE);
@@ -196,7 +193,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                     {
                         $s_hidden_fields = build_hidden_fields(array(
                             'charapicall' => true ,
-                            'hidden_guildid' => $Guild->guildid
+                            'hidden_members_toupdate' => request_var('delete_id', array(0))
                         ));
                         confirm_box(false, $user->lang['WARNING_BATTLENET'], $s_hidden_fields);
                     }

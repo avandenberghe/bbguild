@@ -164,7 +164,7 @@ class PointsController  extends \bbdkp\admin\Admin
 	 * returns an array to list all dkp accounts
 	 *
 	 */
-	public function listdkpaccounts($start = 0, $pages=false)
+	public function listdkpaccounts($start = 0, $pages=false, $leader=false)
 	{
 		global $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
@@ -213,8 +213,7 @@ class PointsController  extends \bbdkp\admin\Admin
 						AND (m.member_dkpid = s.dkpsys_id)
 						AND l.attribute_id = c.class_id
 						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'
-						AND a.member_guild_id = " . $this->guild_id,
-                'ORDER_BY' => $current_order ['sql']
+						AND a.member_guild_id = " . $this->guild_id
         );
 
         if ($this->query_by_name && $this->member_filter != '')
@@ -256,6 +255,16 @@ class PointsController  extends \bbdkp\admin\Admin
         }
 
         $sql = $db->sql_build_query('SELECT', $sql_array);
+
+        if($leader)
+        {
+            $sql = ' SELECT * FROM ( ' . $sql . ')  x ORDER BY x.class_id asc, x.member_current desc ';
+        }
+        else
+        {
+            $sql = ' SELECT * FROM ( ' . $sql . ') x ORDER BY ' . $current_order ['sql'];
+        }
+
         $count = 0;
         $members_result = $db->sql_query($sql);
         while ( $row = $db->sql_fetchrow ( $members_result ) )
@@ -324,7 +333,7 @@ class PointsController  extends \bbdkp\admin\Admin
 	/**
 	 * returns an array to list all EPGP accounts
 	 */
-	public function listEPGPaccounts($start = 0, $pages=false)
+	public function listEPGPaccounts($start = 0, $pages=false,  $leader=false)
 	{
 		global $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
@@ -373,7 +382,7 @@ class PointsController  extends \bbdkp\admin\Admin
 						AND l.attribute_id = c.class_id
 						AND a.member_guild_id = " . $this->guild_id . "
 						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class' ",
-                'ORDER_BY' => $current_order ['sql']
+
         );
 
         if ($this->query_by_name && $this->member_filter != '')
@@ -415,6 +424,16 @@ class PointsController  extends \bbdkp\admin\Admin
         }
 
         $sql = $db->sql_build_query('SELECT', $sql_array);
+
+        if($leader)
+        {
+            $sql = ' SELECT * FROM ( ' . $sql . ')  x ORDER BY x.class_id asc, x.PR desc ';
+        }
+        else
+        {
+            $sql = ' SELECT * FROM ( ' . $sql . ') x ORDER BY ' . $current_order ['sql'];
+        }
+
         $count = 0;
         $members_result = $db->sql_query($sql);
         while ( $row = $db->sql_fetchrow ( $members_result ) )
@@ -430,7 +449,6 @@ class PointsController  extends \bbdkp\admin\Admin
         {
             $members_result = $db->sql_query($sql);
         }
-
 
         while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{

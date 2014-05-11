@@ -101,14 +101,19 @@ class viewStandings implements iViews
 
         if ($config ['bbdkp_epgp'] == '1')
         {
-            $this->memberlist = $this->PointsController->listEPGPaccounts(0, false);
+            $this->memberlist = $this->PointsController->listEPGPaccounts(0, false, true);
         }
         else
         {
-            $this->memberlist = $this->PointsController->listdkpaccounts(0, false);
+            $this->memberlist = $this->PointsController->listdkpaccounts(0, false, true);
         }
         // loop sorted member array and dump to template
         $classes = array();
+        if(count($this->memberlist[0]) == 0)
+        {
+            return false;
+        }
+
         foreach ( $this->memberlist[0] as $member_id => $member )
         {
             $classes [] = $member['CLASS_ID'];
@@ -130,9 +135,10 @@ class viewStandings implements iViews
                     )
                 );
 
+                $leaderboard = 0;
                 foreach ($this->memberlist[0] as $member)
                 {
-                    if($member['CLASS_ID'] == $class['class_id'] && $member['GAME_ID'] == $class['game_id'])
+                    if($member['CLASS_ID'] == $class['class_id'] && $member['GAME_ID'] == $class['game_id'] && $leaderboard <= 5 )
                     {
                         //dkp data per class
                         $dkprowarray= array (
@@ -152,6 +158,8 @@ class viewStandings implements iViews
                         }
 
                         $template->assign_block_vars ( 'class.dkp_row', $dkprowarray );
+
+                        $leaderboard +=1;
                     }
                 }
 
@@ -177,6 +185,11 @@ class viewStandings implements iViews
         else
         {
             $this->memberlist = $this->PointsController->listdkpaccounts($this->start, true);
+        }
+
+        if(count($this->memberlist[0]) == 0)
+        {
+            return false;
         }
 
         $current_order = $this->memberlist[1];

@@ -1012,12 +1012,12 @@ class Members extends \bbdkp\admin\Admin
 			{
 				$latest = $data['lastModified']/1000;
 				$diff = \round( \abs ( \time() - $latest) / 60 / 60 / 24, 2) ;
-				if($diff > 180 && $this->member_status == 1)
+				if($diff > 90 && $this->member_status == 1)
 				{
                     $this->Deactivate_member($diff);
 
 				}
-                if($diff < 180 && $this->member_status == 0)
+                if($diff < 90 && $this->member_status == 0)
                 {
                     $this->Activate_member($diff);
 
