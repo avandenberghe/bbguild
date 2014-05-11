@@ -65,6 +65,9 @@ function isValidChar(char){
  	</dd>
 </dl>
 
+
+
+
 <p class="submit-buttons">
  <input type="submit" name="add" value="{L_SEARCH}" class="button1" />
 </p>
@@ -140,23 +143,40 @@ function isValidChar(char){
 </div>
 <!-- ENDIF -->
 
-<br />
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
-    {S_FORM_TOKEN}
-  	<!-- BEGIN members_row -->
-  	<input type="hidden" name="hidden_member[{members_row.ID}]" value="{members_row.ID}" />
-  	<!-- END members_row -->
-  	<input type="hidden" name="start" value="{START}" />
- 	<input class="button2" type="submit" name="deactivate" value="{L_CHANGE_STATUS}" title="{L_TOGGLE_ACTIVE}" />
-	<input class="button2" name="memberadd" type="submit" value="{L_ADD_MEMBER}"  />
-	<!-- IF S_WOW -->
-	<input class="button2" name="charapicall" type="submit" value="{L_CHARACTERAPICALL}" title="{L_CALL_BATTLENET_CHAR_API}"/>
-	<!-- ENDIF -->
-	<br /><br />
-</fieldset>
-<fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-	<input class="button2" type="submit" name="delete" value="{L_DELETE_MEMBER}" title="{L_MASS_DELETE_CHAR}"/>
-</fieldset>
+    <fieldset>
+        <!-- IF S_WOW -->
+        <dl>
+            <dt><label for="activemembers">{L_CHARACTERAPICALL}:</label>{L_CALL_BATTLENET_CHAR_API}</dt>
+            <dd>
+                <input class="button2" name="charapicall" type="submit" value="{L_UPDATE}" title="{L_CHARACTERAPICALL}"/>
+            </dd>
+        </dl>
+        <!-- ENDIF -->
+        <dl>
+            <dt><label for="deactivate">{L_CHANGE_STATUS}:</label>{L_TOGGLE_ACTIVE}</dt>
+            <dd>
+                <input class="button2" name="deactivate" type="submit" value="{L_UPDATE}" title="{L_CHANGE_STATUS}"/>
+            </dd>
+        </dl>
+        <dl>
+            <dt><label for="delete">{L_MASS_DELETE_CHAR}:</label></dt>
+            <dd>
+                <input class="button2" name="delete" type="submit" value="{L_DELETE_MEMBER}" title="{L_DELETE_MEMBER}"/>
+            </dd>
+        </dl>
+        <dl>
+            <dt><label for="memberadd">{L_ADD_MEMBER}:</label></dt>
+            <dd>
+                <input class="button2" name="memberadd" type="submit" value="{L_ADD_MEMBER}" title="{L_ADD_MEMBER}"/>
+            </dd>
+        </dl>
+        {S_FORM_TOKEN}
+
+        <!-- BEGIN members_row -->
+        <input type="hidden" name="hidden_member[{members_row.ID}]" value="{members_row.ID}" />
+        <!-- END members_row -->
+        <input type="hidden" name="start" value="{START}" />
+    </fieldset>
 
 <!-- ELSE -->
 
