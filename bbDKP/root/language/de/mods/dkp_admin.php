@@ -282,7 +282,10 @@ $lang = array_merge($lang, array(
 'ACP_DKP_LOGS_EXPLAIN'  => 'Diese Liste zeigt alle bbDKP-Vorgänge. Du kannst nach Benutzername, Datum, IP oder Aktion sortieren.',
 'ACP_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenränke und Präfix/Suffixe einstellen. (Zum Hinzufügen, die letzte Zeile eintippen und bestätigen. Zum Löschen, entferne den Namen und bestätige). Rang 99 (der ‘out‘ Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch das Arsenal-Plugin. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Gildenmitgliederliste. Hier kannst du Mitglieder verwalten oder löschen. ACHTUNG: Löschung bedeutet dass die ganze Mitgliedraidgeschichte in allen DKP Pools gelöscht wird! ',
-
+'SHOW_VISIBLE_RANKS' => 'Allein eingeschaltete Ränge sehen',
+'CALL_BATTLENET_CHAR_API' => 'Anruf Battle.NET Character API für 50 am ältesten bearbeitete WoW characters. Deaktivierung folgt indem das Charakter über 180 tage nicht aktulaisiert wurde im Armory.',
+'MASS_DELETE_CHAR' => 'Massenentfernung Charaktere.',
+'TOGGLE_ACTIVE' => 'Aktivstatus ein- oder ausschalten',
 'ACP_LISTGUILDS_EXPLAIN' => 'Gildenliste. Bevor du Mitglieder einfügen kannst, musst du eine Gilde hinzufügen.',
 'ACP_ADDGUILD_EXPLAIN' => 'Hier kannst du Gilden löschen oder hinzufügen.',
 'ACP_EDITGUILD_EXPLAIN' => 'Hier kannst du Gilden bearbeiten.',

@@ -71,7 +71,7 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 	 */
 	public function main($id, $mode)
 	{
-		global $db, $user, $auth, $template, $sid, $cache;
+		global $db, $user, $template;
 		global $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
 		$this->PointsController = new \bbdkp\controller\points\PointsController();
@@ -526,6 +526,7 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 		$this->PointsController->guild_id = $Guild->guildid;
 
 		/* dkp pool */
+        $this->PointsController->query_by_pool= true;
 		$this->PointsController->dkpsys_id=0;
 		if (isset($_GET[URI_DKPSYS]) OR isset ( $_POST[URI_DKPSYS]))
 		{
@@ -560,7 +561,8 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 				}
 			}
 		}
-		foreach ($this->PointsController->dkpsys as $pool)
+
+        foreach ($this->PointsController->dkpsys as $pool)
 		{
 			$template->assign_block_vars ( 'dkpsys_row', array (
 					'VALUE' 	=> $pool['id'],
@@ -571,33 +573,45 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 
 		/***  end drop-down query ***/
 
-		$activate = (isset ( $_POST ['submit_activate'] )) ? true : false;
-		if ($activate)
-		{
-			// all members in this window
-			$all_members = explode(',', request_var ( 'idlist', ''));
-			// all checked members in this window
-			$active_members = request_var ( 'activate_ids', array (0));
-			$this->PointsController->activate($all_members, $active_members);
-		}
+        $start = request_var('start', 0, false);
+        $this->PointsController->member_filter = utf8_normalize_nfc(request_var('member_name', '', true)) ;
+        if($this->PointsController->member_filter != '')
+        {
+            $this->PointsController->query_by_name= true;
+        }
 
 		if ($config ['bbdkp_epgp'] == '1')
 		{
-			$memberlist = $this->PointsController->listEPGPaccounts();
+			$memberlist = $this->PointsController->listEPGPaccounts($start, true);
 		}
 		else
 		{
-			$memberlist = $this->PointsController->listdkpaccounts();
+			$memberlist = $this->PointsController->listdkpaccounts($start, true);
 		}
-		$current_order = $memberlist[1];
+
+        $current_order = $memberlist[1];
+        $lines = $memberlist[2]; // all accounts
 		$membersids = array();
-		$lines = 0;
-		foreach ($memberlist[0]  as $member_id => $dkp)
-		{
-			$lines += 1;
-			$template->assign_block_vars ('members_row', $dkp);
-			$membersids[$member_id] = 1;
-		}
+        if($lines >0)
+        {
+            foreach ($memberlist[0]  as $member_id => $dkp)
+            {
+                $template->assign_block_vars ('members_row', $dkp);
+                $membersids[$member_id] = 1;
+            }
+
+            if($this->PointsController->query_by_name  == true)
+            {
+                $pagination = generate_pagination(append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp&amp;member_name=" . $this->PointsController->member_filter . "&amp;o=" .
+                    $current_order['uri']['current'] ) , $lines, $config['bbdkp_user_llimit'], $start, true, 'start' );
+            }
+            else
+            {
+                $pagination = generate_pagination(append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp&amp;o=" .
+                    $current_order['uri']['current'] ) , $lines, $config['bbdkp_user_llimit'], $start, true, 'start' );
+            }
+
+        }
 
 		/***  Labels  ***/
 		$footcount_text = sprintf ( $user->lang ['LISTMEMBERS_FOOTCOUNT'], $lines );
@@ -609,7 +623,7 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 				'L_EXPLAIN' => $user->lang ['ACP_MM_LISTMEMBERDKP_EXPLAIN'],
 				'BUTTON_NAME' => 'delete',
 				'BUTTON_VALUE' => $user->lang ['DELETE_SELECTED_MEMBERS'],
-				'O_NAME' => $current_order ['uri'] [1],
+                'O_NAME' => $current_order ['uri'] [1],
 				'O_RANK' => $current_order ['uri'] [2],
 				'O_LEVEL' => $current_order ['uri'] [3],
 				'O_CLASS' => $current_order ['uri'] [4],
@@ -625,7 +639,11 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 				'S_NOTMM' => false,
 				'LISTMEMBERS_FOOTCOUNT' => $footcount_text,
 				'DKPSYS' => $this->PointsController->dkpsys_id,
-				'DKPSYSNAME' => $this->PointsController->dkpsys[$this->PointsController->dkpsys_id]['name'] );
+				'DKPSYSNAME' => $this->PointsController->dkpsys[$this->PointsController->dkpsys_id]['name'],
+                'PAGINATION' => $pagination,
+                'MEMBER_NAME' => $this->PointsController->member_filter,
+
+        );
 
 		if ($config ['bbdkp_timebased'] == 1)
 		{

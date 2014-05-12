@@ -73,6 +73,13 @@ class PointsController  extends \bbdkp\admin\Admin
 	 */
 	public $dkpsys_id;
 
+
+    /**
+     * limit to one dkp pool?
+     * @var
+     */
+    public $query_by_pool;
+
 	/**
 	 * guild id
 	 * @var int
@@ -80,10 +87,67 @@ class PointsController  extends \bbdkp\admin\Admin
 	public $guild_id;
 
     /**
-     * pointscontroller constructor
-     * @param int|number $dkpsys_id
+     * show inactive members
+     * @var bool
      */
-	function __construct($dkpsys_id = 0)
+    public $show_inactive;
+
+    /**
+     * query by name string ?
+     * @var
+     */
+    public $query_by_name;
+
+    /**
+     * holds the active name filter
+     * @var
+     */
+    public $member_filter;
+
+    /**
+     * is the armor string
+     * @var string
+     */
+    public $armor_filter;
+
+    /**
+     * query by armor string ?
+     * @var
+     */
+    public $query_by_armor;
+
+
+    /**
+     * is the class id
+     * @var int
+     */
+    public $class_id;
+
+    /**
+     * query by class
+     * @var bool
+     */
+    public $query_by_class;
+
+
+    /**
+     * name of rank
+     * @var string
+     */
+    public $rankfilter;
+
+    /**
+     * query by name of rank
+     * @var
+     */
+    public $query_by_rank;
+
+
+    /**
+     * pointscontroller constructor
+     * @param int $dkpsys_id
+     */
+    function __construct($dkpsys_id = 0)
 	{
 		//load model
 		parent::__construct();
@@ -91,25 +155,50 @@ class PointsController  extends \bbdkp\admin\Admin
 		$this->Points = new \bbdkp\controller\points\Points(0, $dkpsys_id);
 		$this->Pools = new \bbdkp\controller\points\Pool($dkpsys_id);
 		$this->dkpsys = $this->Pools->dkpsys;
-	}
+        $this->show_inactive= false;
+
+
+    }
 
 	/**
 	 * returns an array to list all dkp accounts
 	 *
 	 */
-	public function listdkpaccounts()
+	public function listdkpaccounts($start = 0, $pages=false, $leader=false)
 	{
 		global $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
+        $sort_order = array (
+            0 => array ('member_name', 'member_name desc' ),
+            1 => array ('member_name', 'member_name desc' ),
+            2 => array ('rank_name', 'rank_name desc' ),
+            3 => array ('member_level desc', 'member_level' ),
+            4 => array ('member_class', 'member_class desc' ),
+            5 => array ('member_raid_value desc', 'member_raid_value' ),
+            6 => array ('member_time_bonus desc', 'member_time_bonus' ),
+            7 => array ('member_zerosum_bonus desc', 'member_zerosum_bonus' ),
+            8 => array ('member_earned', 'member_earned desc' ),
+            9 => array ('member_raid_decay desc', 'member_raid_decay' ),
+            10 => array ('member_adjustment desc', 'member_adjustment' ),
+            12 => array ('member_spent desc', 'member_spent' ),
+            13 => array ('member_item_decay desc', 'member_item_decay' ),
+            16 => array ('member_current desc', 'member_current' ),
+            17 => array ('member_lastraid desc', 'member_lastraid' ),
 
-		$sql_array = array (
+        );
+
+        $current_order = $this->switch_order ( $sort_order );
+
+        $sql_array = array (
 				'SELECT' => 'm.member_id,  a.member_name, a.member_level, m.member_dkpid,
-						m.member_raid_value, m.member_raid_decay,  m.member_time_bonus, m.member_zerosum_bonus, m.member_earned - m.member_raid_decay as member_earned,
+						m.member_raid_value, m.member_raid_decay,  m.member_time_bonus,
+						 m.member_zerosum_bonus, m.member_earned - m.member_raid_decay as member_earned,
 						m.member_spent, m.member_item_decay, m.member_spent- m.member_item_decay as net_spent,
-						m.member_adjustment,  m.adj_decay,
+						m.member_adjustment,  m.adj_decay,  m.member_raidcount,
 						(m.member_earned - m.member_raid_decay - (m.member_spent - m.member_item_decay) + m.member_adjustment - m.adj_decay) AS member_current,
                         m.member_lastraid,
-						s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename',
+						s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename,
+                        c.class_id, a.member_status, a.game_id',
 				'FROM' => array (
 						MEMBER_LIST_TABLE 	=> 'a',
 						MEMBER_DKP_TABLE 	=> 'm',
@@ -124,61 +213,96 @@ class PointsController  extends \bbdkp\admin\Admin
 						AND (m.member_dkpid = s.dkpsys_id)
 						AND l.attribute_id = c.class_id
 						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'
-						AND a.member_guild_id = " . $this->guild_id . "
-						AND (s.dkpsys_id = " . (int) $this->dkpsys_id . ')' );
+						AND a.member_guild_id = " . $this->guild_id
+        );
 
+        if ($this->query_by_name && $this->member_filter != '')
+        {
+            $sql_array['WHERE'] .= ' AND lcase(a.member_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($this->member_filter)) . $db->any_char);
+        }
 
-		/***  sort  ***/
+        //check if inactive members will be shown
+        if ($config ['bbdkp_hide_inactive'] == '1' && ! $this->show_inactive )
+        {
+            // don't show inactive members
+            $sql_array[ 'WHERE'] .= ' AND a.member_status = 1 ';
+        }
 
-		$previous_data = '';
-		$sort_order = array (
-                0 => array ('member_name', 'member_name desc' ),
-                1 => array ('member_name', 'member_name desc' ),
-				2 => array ('rank_name', 'rank_name desc' ),
-				3 => array ('member_level desc', 'member_level' ),
-				4 => array ('member_class', 'member_class desc' ),
-				5 => array ('member_raid_value desc', 'member_raid_value' ),
-				6 => array ('member_time_bonus desc', 'member_time_bonus' ),
-				7 => array ('member_zerosum_bonus desc', 'member_zerosum_bonus' ),
-				8 => array ('member_earned', 'member_earned desc' ),
-				9 => array ('member_raid_decay desc', 'member_raid_decay' ),
-				10 => array ('member_adjustment desc', 'member_adjustment' ),
-				12 => array ('member_spent desc', 'member_spent' ),
-				13 => array ('member_item_decay desc', 'member_item_decay' ),
-				16 => array ('member_current desc', 'member_current' ),
-				17 => array ('member_lastraid desc', 'member_lastraid' ),
+        if ($this->query_by_armor && $this->armor_filter != '')
+        {
+            $sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $this->armor_filter ) . "'";
+        }
 
-				);
+        if ($this->query_by_pool)
+        {
+            $sql_array['WHERE'] .= ' AND m.member_dkpid = ' . (int) $this->dkpsys_id;
+        }
 
-		$current_order = $this->switch_order ( $sort_order );
-		$previous_data = '';
-		$sort_index = explode ( '.', $current_order ['uri'] ['current'] );
-		$previous_source = preg_replace ( '/( (asc|desc))?/i', '', $sort_order [$sort_index [0]] [$sort_index [1]] );
+        if ($this->query_by_rank && $this->rankfilter != '')
+        {
+            $sql_array['WHERE'] .= " AND r.rank_name='" . $db->sql_escape($this->rankfilter) . "'";
+        }
 
-		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-		$sql = 'SELECT * FROM ( ' . $sql . ' ) as s  ORDER BY ' . $current_order ['sql'];
+        if ($this->query_by_class)
+        {
+            $sql_array['WHERE'] .= " AND c.class_id =  " .  (int) $this->class_id . " ";
+        }
 
-		$members_result = $db->sql_query ( $sql );
-		$members_row = array();
+        if  (isset($_POST['compare']) && isset($_POST['compare_ids']))
+        {
+            $compare =  request_var('compare_ids', array('' => 0)) ;
+            $sql_array['WHERE'] .= ' AND ' . $db->sql_in_set('m.member_id', $compare, false, true);
+        }
 
-		$member_count = 0;
-		$lines = 0;
+        $sql = $db->sql_build_query('SELECT', $sql_array);
+
+        if($leader)
+        {
+            $sql = ' SELECT * FROM ( ' . $sql . ')  x ORDER BY x.class_id asc, x.member_current desc ';
+        }
+        else
+        {
+            $sql = ' SELECT * FROM ( ' . $sql . ') x ORDER BY ' . $current_order ['sql'];
+        }
+
+        $count = 0;
+        $members_result = $db->sql_query($sql);
+        while ( $row = $db->sql_fetchrow ( $members_result ) )
+        {
+            $count+=1;
+        }
+
+        if($pages)
+        {
+            $members_result = $db->sql_query_limit($sql, $config['bbdkp_user_llimit'], $start);
+        }
+        else
+        {
+            $members_result = $db->sql_query($sql);
+        }
+
 		while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{
-			++ $member_count;
-			++ $lines;
 
-			$members_row [$row ['member_id']] = array (
+            $u_rank_search = append_sid ( "{$phpbb_root_path}dkp.$phpEx" , 'page=standings&amp;rank=' . urlencode ( $row ['rank_name'] ) .'&amp;guild_id=' . $this->guild_id) ;
+            $u_rank_search .= (($config ['bbdkp_hide_inactive'] == 1) && ! $this->show_inactive  ) ? '' : '&amp;show=all';
+
+            $members_row [$row ['member_id']] = array (
 					'ID' => $row ['member_id'],
+                    'STATUS' => $row ['member_status'],
+                    'GAME_ID' => $row ['game_id'],
 					'DKPID' => $row ['member_dkpid'],
 					'DKPSYS_S' => $this->dkpsys_id,
 					'DKPSYS_NAME' => $row ['dkpsys_name'],
 					'CLASS' => ($row ['member_class'] != 'NULL') ? $row ['member_class'] : '&nbsp;',
+                    'CLASS_ID' => $row ['class_id'],
 					'COLORCODE' => ($row ['colorcode'] == '') ? '#254689' : $row ['colorcode'],
 					'CLASS_IMAGE' => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row ['imagename'] . ".png" : '',
 					'NAME' => $row ['rank_prefix'] . $row ['member_name'] . $row ['rank_suffix'],
 					'S_CLASS_IMAGE_EXISTS' => (strlen ( $row ['imagename'] ) > 1) ? true : false,
-					'RANK' => $row ['rank_name'],
+                    'RANK_NAME' => $row ['rank_name'],
+                    'RANK_HIDE' => $row ['rank_hide'],
+                    'RANK_SEARCH' => $u_rank_search,
 					'LEVEL' => ($row ['member_level'] > 0) ? $row ['member_level'] : '&nbsp;',
 					'RAIDVAL' => $row ['member_raid_value'],
 					'RAIDDECAY' => - $row ['member_raid_decay'],
@@ -190,32 +314,59 @@ class PointsController  extends \bbdkp\admin\Admin
 					'ITEMDECAY' =>  $row ['member_item_decay'] != 0 ?  $row ['member_item_decay'] : '',
 					'NETSPENT' =>  ($row ['member_spent'] -$row ['member_item_decay']) != 0 ? - ($row ['member_spent'] -$row ['member_item_decay']) : '',
 					'CURRENT' => $row ['member_current'],
+                    'DKPCOLOUR1' 	=> ($row ['member_adjustment'] >= 0) ? 'positive' : 'negative',
+                    'DKPCOLOUR2' 	=> ($row ['member_current'] >= 0) ? 'positive' : 'negative',
+                    'RAIDS_P1_DAYS' => $row ['member_raidcount'],
 					'LASTRAID' => (! empty ( $row ['member_lastraid'] )) ? date ( $config ['bbdkp_date_format'], $row ['member_lastraid'] ) : '&nbsp;',
-					'U_VIEW_MEMBER' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp" ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'] );
+					'U_VIEW_MEMBER_ACP' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp" ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'],
+                    'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx",'page=member&amp;' . URI_NAMEID . '=' . $row ['member_id'] .'&amp;' . URI_DKPSYS . '=' .$row ['member_dkpid']) ,
+
+
+            );
 		}
 
 		$db->sql_freeresult ($members_result);
-		return array($members_row, $current_order);
+		return array($members_row, $current_order,$count );
 	}
 
 
 	/**
 	 * returns an array to list all EPGP accounts
 	 */
-	public function listEPGPaccounts()
+	public function listEPGPaccounts($start = 0, $pages=false,  $leader=false)
 	{
 		global $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
+        $sort_order = array (
+            0 => array ('member_name', 'member_name desc' ),
+            1 => array ('member_name', 'member_name desc' ),
+            2 => array ('rank_name', 'rank_name desc' ),
+            3 => array ('member_level desc', 'member_level' ),
+            4 => array ('member_class', 'member_class desc' ),
+            5 => array ('member_raid_value desc', 'member_raid_value' ),
+            6 => array ('member_time_bonus desc', 'member_time_bonus' ),
+            9 => array ('member_raid_decay desc', 'member_raid_decay' ),
+            10 => array ('member_adjustment desc', 'member_adjustment' ),
+            11 => array ('ep desc', 'ep ' ),
+            12 => array ('member_spent desc', 'member_spent' ),
+            13 => array ('member_item_decay desc', 'member_item_decay' ),
+            14 => array ('gp desc', 'gp ' ),
+            15 => array ('pr desc', 'pr ' ),
+            17 => array ('member_lastraid desc', 'member_lastraid' ),
+        );
+
+        $current_order = $this->switch_order ( $sort_order );
 
 		$sql_array = array (
 				'SELECT' => 's.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename,
-						m.member_id,  a.member_name, a.member_level, m.member_dkpid, m.member_lastraid,
+						m.member_id,  a.member_name, a.member_level, m.member_dkpid, m.member_lastraid, m.member_raidcount,
 						m.member_raid_value, m.member_time_bonus, m.member_raid_decay, m.member_spent, m.member_item_decay,  m.member_adjustment,  m.adj_decay,
 						(m.member_raid_value + m.member_time_bonus - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep,
 						(m.member_spent - m.member_item_decay  + ' . max ( 0, $config ['bbdkp_basegp'] ) . ' ) AS gp,
 						CASE when (m.member_spent - m.member_item_decay + ' . max ( 0, $config ['bbdkp_basegp'] ) . ' ) = 0 then 1
 						ELSE round( (m.member_raid_value + m.member_time_bonus - m.member_raid_decay + m.member_adjustment - m.adj_decay) /
-						(' . max ( 0, $config ['bbdkp_basegp'] ) . ' + m.member_spent - m.member_item_decay),2) end as pr ',
+						(' . max ( 0, $config ['bbdkp_basegp'] ) . ' + m.member_spent - m.member_item_decay),2) end as pr,
+						 c.class_id, a.member_status, a.game_id',
 				'FROM' => array (
 						MEMBER_LIST_TABLE 	=> 'a',
 						MEMBER_DKP_TABLE 	=> 'm',
@@ -230,67 +381,113 @@ class PointsController  extends \bbdkp\admin\Admin
 						AND (m.member_dkpid = s.dkpsys_id)
 						AND l.attribute_id = c.class_id
 						AND a.member_guild_id = " . $this->guild_id . "
-						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class'
-						AND (s.dkpsys_id = " . (int) $this->dkpsys_id . ')' );
+						AND l.game_id = c.game_id AND l.language= '" . $config ['bbdkp_lang'] . "' AND l.attribute = 'class' ",
 
-		/***  sort  ***/
+        );
 
-		$sort_order = array (
-                0 => array ('member_name', 'member_name desc' ),
-				1 => array ('member_name', 'member_name desc' ),
-				2 => array ('rank_name', 'rank_name desc' ),
-				3 => array ('member_level desc', 'member_level' ),
-				4 => array ('member_class', 'member_class desc' ),
-				5 => array ('member_raid_value desc', 'member_raid_value' ),
-				6 => array ('member_time_bonus desc', 'member_time_bonus' ),
-				9 => array ('member_raid_decay desc', 'member_raid_decay' ),
-				10 => array ('member_adjustment desc', 'member_adjustment' ),
-				11 => array ('ep desc', 'ep ' ),
-				12 => array ('member_spent desc', 'member_spent' ),
-				13 => array ('member_item_decay desc', 'member_item_decay' ),
-				14 => array ('gp desc', 'gp ' ),
-				15 => array ('pr desc', 'pr ' ),
-				17 => array ('member_lastraid desc', 'member_lastraid' ),
-		);
+        if ($this->query_by_name && $this->member_filter != '')
+        {
+            $sql_array['WHERE'] .= ' AND lcase(a.member_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($this->member_filter)) . $db->any_char);
+        }
 
-		$current_order = $this->switch_order ( $sort_order );
-		$sort_index = explode ( '.', $current_order ['uri'] ['current'] );
-		$previous_source = preg_replace ( '/( (asc|desc))?/i', '', $sort_order [$sort_index [0]] [$sort_index [1]] );
+        //check if inactive members will be shown
+        if ($config ['bbdkp_hide_inactive'] == '1' && ! $this->show_inactive )
+        {
+            // don't show inactive members
+            $sql_array[ 'WHERE'] .= ' AND a.member_status = 1 ';
+        }
 
-		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
-		$sql = 'SELECT * FROM ( ' . $sql . ' ) as s  ORDER BY ' . $current_order ['sql'];
-		$members_result = $db->sql_query ( $sql );
-		$members_row = array();
+        if ($this->query_by_armor && $this->armor_filter != '')
+        {
+            $sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $this->armor_filter ) . "'";
+        }
 
-		$member_count = 0;
-		$lines = 0;
-		while ( $row = $db->sql_fetchrow ( $members_result ) )
+        if ($this->query_by_pool)
+        {
+            $sql_array['WHERE'] .= ' AND m.member_dkpid = ' . (int) $this->dkpsys_id;
+        }
+
+        if ($this->query_by_rank && $this->rankfilter != '')
+        {
+            $sql_array['WHERE'] .= " AND r.rank_name='" . $db->sql_escape($this->rankfilter) . "'";
+        }
+
+        if ($this->query_by_class)
+        {
+            $sql_array['WHERE'] .= " AND c.class_id =  " .  (int) $this->class_id . " ";
+        }
+
+        if  (isset($_POST['compare']) && isset($_POST['compare_ids']))
+        {
+            $compare =  request_var('compare_ids', array('' => 0)) ;
+            $sql_array['WHERE'] .= ' AND ' . $db->sql_in_set('m.member_id', $compare, false, true);
+        }
+
+        $sql = $db->sql_build_query('SELECT', $sql_array);
+
+        if($leader)
+        {
+            $sql = ' SELECT * FROM ( ' . $sql . ')  x ORDER BY x.class_id asc, x.PR desc ';
+        }
+        else
+        {
+            $sql = ' SELECT * FROM ( ' . $sql . ') x ORDER BY ' . $current_order ['sql'];
+        }
+
+        $count = 0;
+        $members_result = $db->sql_query($sql);
+        while ( $row = $db->sql_fetchrow ( $members_result ) )
+        {
+            $count+=1;
+        }
+
+        if($pages)
+        {
+            $members_result = $db->sql_query_limit($sql, $config['bbdkp_user_llimit'], $start);
+        }
+        else
+        {
+            $members_result = $db->sql_query($sql);
+        }
+
+        while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{
-			++ $member_count;
-			++ $lines;
+            $u_rank_search = append_sid ( "{$phpbb_root_path}dkp.$phpEx" , 'page=standings&amp;rank=' . urlencode ( $row ['rank_name'] ) .'&amp;guild_id=' . $this->guild_id) ;
+            $u_rank_search .= (($config ['bbdkp_hide_inactive'] == 1) && ! $this->show_inactive  ) ? '' : '&amp;show=all';
 
 			$members_row [$row ['member_id']] = array (
 					'ID' => $row ['member_id'],
+                    'STATUS' => $row ['member_status'],
+                    'GAME_ID' => $row ['game_id'],
 					'DKPID' => $row ['member_dkpid'],
 					'DKPSYS_S' => $this->dkpsys_id,
 					'DKPSYS_NAME' => $row ['dkpsys_name'],
 					'CLASS' => ($row ['member_class'] != 'NULL') ? $row ['member_class'] : '&nbsp;',
+                    'CLASS_ID' => $row ['class_id'],
 					'COLORCODE' => ($row ['colorcode'] == '') ? '#254689' : $row ['colorcode'],
 					'CLASS_IMAGE' => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row ['imagename'] . ".png" : '',
 					'NAME' => $row ['rank_prefix'] . $row ['member_name'] . $row ['rank_suffix'],
 					'S_CLASS_IMAGE_EXISTS' => (strlen ( $row ['imagename'] ) > 1) ? true : false,
-					'RANK' => $row ['rank_name'],
-					'LEVEL' => ($row ['member_level'] > 0) ? $row ['member_level'] : '&nbsp;',
+                    'RANK_NAME' => $row ['rank_name'],
+                    'RANK_HIDE' => $row ['rank_hide'],
+                    'RANK_SEARCH' => $u_rank_search,
+                    'LEVEL' => ($row ['member_level'] > 0) ? $row ['member_level'] : '&nbsp;',
 					'RAIDVAL' => $row ['member_raid_value'],
 					'LASTRAID' => (! empty ( $row ['member_lastraid'] )) ? date ( $config ['bbdkp_date_format'], $row ['member_lastraid'] ) : '&nbsp;',
 					'RAIDDECAY' => $row ['member_raid_decay'] != 0 ?  $row ['member_raid_decay'] : '',
 					'ADJUSTMENT' => ($row ['member_adjustment'] - $row ['adj_decay']) != 0 ? ($row ['member_adjustment'] - $row ['adj_decay']) : '',
+                    'DKPCOLOUR1' 	=> ($row ['member_adjustment'] >= 0) ? 'positive' : 'negative',
+                    'DKPCOLOUR2' 	=> ($row ['pr'] >= 0) ? 'positive' : 'negative',
 					'EP' => $row ['ep'],
 					'SPENT' => $row ['member_spent'] != 0 ? $row ['member_spent'] : '',
 					'ITEMDECAY' =>  $row ['member_item_decay'] != 0 ?  $row ['member_item_decay'] : '',
 					'GP' => $row ['gp'],
 					'PR' => $row ['pr'],
-					'U_VIEW_MEMBER' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp" ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'] );
+                    'RAIDS_P1_DAYS' => $row ['member_raidcount'],
+					'U_VIEW_MEMBER_ACP' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp" ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'],
+                    'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx",'page=member&amp;' . URI_NAMEID . '=' . $row ['member_id'] .'&amp;' . URI_DKPSYS . '=' .$row ['member_dkpid']) ,
+
+            );
 
 			if ($config ['bbdkp_timebased'] == 1)
 			{
@@ -300,417 +497,9 @@ class PointsController  extends \bbdkp\admin\Admin
 		}
 
 		$db->sql_freeresult ($members_result);
-		return array($members_row, $current_order);
+		return array($members_row, $current_order, $count);
 
 
-	}
-
-
-	/**
-	 * used by standings view
-	 * gets array with members to display
-	 *
-	 * @param int $guild_id
-	 * @param int $dkpsys_id
-	 * @param string $game_id
-	 * @param int $startd
-	 * @param boolean $show_all
-	 * @param boolean $query_by_armor
-	 * @param boolean $query_by_class
-	 * @param string $filter
-	 * @param boolean $query_by_pool
-	 * @return Ambigous <multitype:, unknown>
-	 */
-	public function get_standings($guild_id, $dkpsys_id, $game_id, $startd, $show_all, $query_by_armor, $query_by_class, $filter, $query_by_pool)
-	{
-		global $config, $user, $db, $template, $phpbb_root_path;
-
-		$sql_array = array(
-				'SELECT'    => 	'l.game_id, m.member_id,
-					l.member_status,
-					max(m.member_lastraid) as member_lastraid,
-					sum(m.member_raidcount) as member_raidcount,
-					sum(m.member_raid_value) as member_raid_value,
-					sum(m.member_time_bonus) as member_time_bonus,
-					sum(m.member_zerosum_bonus) as member_zerosum_bonus,
-					sum(m.member_earned) as member_earned,
-					sum(m.member_raid_decay) as member_raid_decay,
-					sum(m.member_spent) as member_spent,
-					sum(m.member_item_decay) as member_item_decay,
-					sum(m.member_adjustment - m.adj_decay) as member_adjustment,
-					sum(m.member_earned - m.member_raid_decay + m.member_adjustment - m.member_spent - m.adj_decay ) AS member_current,
-					l.member_name, l.member_level,
-					l.member_race_id ,
-					l.member_class_id,
-					l.member_rank_id ,
-					r.rank_name,
-					r.rank_hide,
-					r.rank_prefix,
-					r.rank_suffix,
-					l1.name AS member_class, c.class_id,
-					c.colorcode, c.class_armor_type AS armor_type, c.imagename,
-					l.member_gender_id, a.image_female, a.image_male,
-					c.class_min_level AS min_level,
-					c.class_max_level AS max_level',
-				'FROM'      => array(
-						MEMBER_DKP_TABLE 	=> 'm',
-						DKPSYS_TABLE 		=> 'd',
-						MEMBER_LIST_TABLE 	=> 'l',
-						MEMBER_RANKS_TABLE  => 'r',
-						RACE_TABLE  		=> 'a',
-						CLASS_TABLE    		=> 'c',
-						BB_LANGUAGE			=> 'l1',
-				),
-
-				'WHERE'     =>  "(m.member_id = l.member_id)
-					AND l1.attribute_id =  c.class_id AND l1.language= '" . $config['bbdkp_lang'] . "'
-					AND l1.attribute = 'class' and c.game_id = l1.game_id
-					AND (c.class_id = l.member_class_id and c.game_id=l.game_id)
-					AND (l.member_race_id =  a.race_id and a.game_id=l.game_id)
-					AND (r.rank_id = l.member_rank_id)
-					AND (m.member_dkpid = d.dkpsys_id)
-					AND (l.member_guild_id = r.guild_id)
-					AND r.rank_hide = 0
-					AND d.dkpsys_status != 'N'
-				" ,
-				'GROUP_BY' => 'l.game_id, m.member_id, l.member_status,
-						 l.member_name, l.member_level, l.member_race_id ,l.member_class_id, l.member_rank_id ,
-							 r.rank_name, r.rank_hide, r.rank_prefix, r.rank_suffix,
-							 l1.name, c.class_id,
-							 c.colorcode, c.class_armor_type , c.imagename,
-							 l.member_gender_id, a.image_female, a.image_male,
-					c.class_min_level ,
-					c.class_max_level ',
-		);
-
-		if($config['bbdkp_epgp'] == 1)
-		{
-			$sql_array[ 'SELECT'] .= ",
-			sum(m.member_earned - m.member_raid_decay + m.member_adjustment - m.adj_decay) AS ep,
-			sum(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . " ) AS gp,
-		CASE  WHEN SUM(m.member_spent - m.member_item_decay  + " . max(0, $config['bbdkp_basegp']) . " ) = 0
-		THEN  1
-		ELSE  ROUND(SUM(m.member_earned - m.member_raid_decay +  m.member_adjustment - m.adj_decay) /
-				SUM(" . max(0, $config['bbdkp_basegp']) . " + m.member_spent - m.member_item_decay),2) END AS pr " ;
-		}
-
-		//check if inactive members will be shown
-		if ($config ['bbdkp_hide_inactive'] == '1' && !$show_all )
-		{
-			// don't show inactive members
-			$sql_array[ 'WHERE'] .= ' AND l.member_status = 1 ';
-		}
-
-		if  (isset($_POST['compare']) && isset($_POST['compare_ids']))
-		{
-			$compare =  request_var('compare_ids', array('' => 0)) ;
-			$sql_array['WHERE'] .= ' AND ' . $db->sql_in_set('m.member_id', $compare, false, true);
-		}
-
-		$sql_array['WHERE'] .= ' AND l.member_guild_id = ' . $guild_id . ' ';
-
-		if ($query_by_pool)
-		{
-			$sql_array['WHERE'] .= ' AND m.member_dkpid = ' . $dkpsys_id . ' ';
-		}
-
-		if (isset ( $_GET ['rank'] ))
-		{
-			$sql_array['WHERE'] .= " AND r.rank_name='" . request_var ( 'rank', '' ) . "'";
-		}
-
-		if ($query_by_class)
-		{
-			//wow_class_8 = Mage
-			//lotro_class_5=Hunter
-			//x is for avoiding output zero which may be outcome of false
-			if (strpos('x'.$filter, $game_id) > 0)
-			{
-				$class_id = substr($filter, strlen($game_id)+7);
-				$sql_array['WHERE'] .= " AND c.class_id =  '" . $db->sql_escape ($class_id) . "' ";
-				$sql_array['WHERE'] .= " AND c.game_id =  '" . $db->sql_escape ($game_id) . "' ";
-			}
-
-		}
-
-		if ($query_by_armor)
-		{
-			$sql_array['WHERE'] .= " AND c.class_armor_type =  '" . $db->sql_escape ( $filter ) . "'";
-		}
-
-		// default sorting
-		if($config['bbdkp_epgp'] == 1)
-		{
-			$sql_array[ 'ORDER_BY'] = "CASE WHEN SUM(m.member_spent - m.member_item_decay  + ". floatval($config['bbdkp_basegp']) . "  ) = 0
-			THEN 1
-			ELSE ROUND(SUM(m.member_earned + m.member_adjustment - m.adj_decay) /
-			SUM(" . max(0, $config['bbdkp_basegp']) .' + m.member_spent - m.member_item_decay),2) END DESC ' ;
-		}
-		else
-		{
-			$sql_array[ 'ORDER_BY'] = 'sum(m.member_earned + m.member_adjustment - m.member_spent - m.adj_decay) desc, l.member_name asc ' ;
-		}
-
-		$sql = $db->sql_build_query('SELECT_DISTINCT', $sql_array);
-
-		if (! ($members_result = $db->sql_query ( $sql )))
-		{
-			trigger_error ($user->lang['MNOTFOUND']);
-		}
-
-		global $allmember_count;
-		$allmember_count = 0;
-		while ( $row = $db->sql_fetchrow ( $members_result ) )
-		{
-			++$allmember_count;
-		}
-
-		$members_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $startd );
-		$memberarray = array ();
-		$member_count =0;
-		while ( $row = $db->sql_fetchrow ( $members_result ) )
-		{
-			$race_image = (string) (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']);
-
-			++$member_count;
-			$memberarray [$member_count] ['game_id'] = $row ['game_id'];
-			$memberarray [$member_count] ['class_id'] = $row ['class_id'];
-			$memberarray [$member_count] ['member_id'] = $row ['member_id'];
-			$memberarray [$member_count] ['count'] = $member_count;
-			$memberarray [$member_count] ['member_name'] = $row ['member_name'];
-			$memberarray [$member_count] ['member_status'] = $row ['member_status'];
-			$memberarray [$member_count] ['rank_prefix'] = $row ['rank_prefix'];
-			$memberarray [$member_count] ['rank_suffix'] = $row ['rank_suffix'];
-			$memberarray [$member_count] ['rank_name'] = $row ['rank_name'];
-			$memberarray [$member_count] ['rank_hide'] = $row ['rank_hide'];
-			$memberarray [$member_count] ['member_level'] = $row ['member_level'];
-			$memberarray [$member_count] ['member_class'] = $row ['member_class'];
-			$memberarray [$member_count] ['colorcode'] = $row ['colorcode'];
-			$memberarray [$member_count] ['class_image'] = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '';
-			$memberarray [$member_count] ['class_image_exists'] = (strlen($row['imagename']) > 1) ? true : false;
-			$memberarray [$member_count] ['race_image'] = (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '';
-			$memberarray [$member_count] ['race_image_exists'] = (strlen($race_image) > 1) ? true : false;
-			$memberarray [$member_count] ['armor_type'] = $row ['armor_type'];
-			$memberarray [$member_count] ['member_raid_value'] = $row ['member_raid_value'];
-			if($config['bbdkp_timebased'] == 1)
-			{
-				$memberarray [$member_count] ['member_time_bonus'] = $row ['member_time_bonus'];
-
-			}
-			if($config['bbdkp_zerosum'] == 1)
-			{
-				$memberarray [$member_count] ['member_zerosum_bonus'] = $row ['member_zerosum_bonus'];
-			}
-			$memberarray [$member_count] ['member_earned'] = $row ['member_earned'];
-
-			$memberarray [$member_count] ['member_adjustment'] = $row ['member_adjustment'];
-
-			if($config['bbdkp_decay'] == 1)
-			{
-				$memberarray [$member_count] ['member_raid_decay'] = $row ['member_raid_decay'];
-				$memberarray [$member_count] ['member_item_decay'] = $row ['member_item_decay'];
-			}
-
-			$memberarray [$member_count] ['member_spent'] = $row ['member_spent'];
-			$memberarray [$member_count] ['member_current'] = $row ['member_current'];
-
-			if($config['bbdkp_epgp'] == 1)
-			{
-				$memberarray [$member_count] ['ep'] = $row ['ep'];
-				$memberarray [$member_count] ['gp'] = $row ['gp'];
-				$memberarray [$member_count] ['pr'] = $row ['pr'];
-			}
-
-			$memberarray [$member_count] ['member_lastraid'] = $row ['member_lastraid'];
-			$memberarray [$member_count] ['attendanceP1'] = $row ['member_raidcount'];
-			//raidcount ( true, $row ['member_dkpid'], $config ['bbdkp_list_p1'], $row ['member_id'],2,false );
-
-		}
-		$db->sql_freeresult ( $members_result );
-
-
-		// Obtain a list of columns for sorting the array
-		if (count ($memberarray))
-		{
-			foreach ($memberarray as $key => $member)
-			{
-				$member_name [$key] = $member ['member_name'];
-				$rank_name [$key] = $member ['rank_name'];
-				$member_level [$key] = $member ['member_level'];
-				$member_class [$key] = $member ['member_class'];
-				$armor_type [$key] = $member ['armor_type'];
-				$member_raid_value [$key] = $member ['member_raid_value'];
-
-				if($config['bbdkp_timebased'] == 1)
-				{
-					$member_time_bonus [$key] ['member_time_bonus'] = $member ['member_time_bonus'];
-				}
-
-				if($config['bbdkp_zerosum'] == 1)
-				{
-					$member_zerosum_bonus [$key] ['member_zerosum_bonus'] = $member ['member_zerosum_bonus'];
-				}
-
-				$member_earned [$key] = $member ['member_earned']; //*
-				$member_adjustment [$key] = $member ['member_adjustment']; //*
-
-				if($config['bbdkp_decay'] == 1)
-				{
-					$member_raid_decay[$key]['member_raid_decay'] = $member['member_raid_decay'];
-					$member_item_decay[$key]['member_item_decay'] = $member['member_item_decay'];
-				}
-
-				if($config['bbdkp_epgp'] == 1)
-				{
-					$ep[$key]['ep'] = $member['ep'];
-					$gp[$key]['gp'] = $member['gp'];
-					$pr[$key]['pr'] = $member['pr'];
-				}
-
-				$member_spent [$key] = $member ['member_spent'];
-				$member_current [$key] = $member ['member_current'];
-				$member_lastraid [$key] = $member ['member_lastraid'];
-				$attendanceP1 [$key] = $member ['attendanceP1'];
-			}
-
-
-			// do the multi-dimensional sorting
-			$sortorder = request_var ( URI_ORDER, 0 );
-			switch ($sortorder)
-			{
-				case - 1 : //name
-					array_multisort ( $member_name, SORT_DESC, $memberarray );
-					break;
-				case 1 : //name
-					array_multisort ( $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 2 : //rank
-					array_multisort ( $rank_name, SORT_DESC, $member_name, SORT_DESC, $memberarray );
-					break;
-				case 2 : //rank
-					array_multisort ( $rank_name, SORT_ASC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 3 : //level
-					array_multisort ( $member_level, SORT_DESC, $member_name, SORT_DESC, $memberarray );
-					break;
-				case 3 : //level
-					array_multisort ( $member_level, SORT_ASC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case 4 : //class
-					array_multisort ( $member_class, SORT_ASC, $member_level, SORT_ASC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 4 : //class
-					array_multisort ( $member_class, SORT_DESC, $member_level, SORT_DESC, $member_name, SORT_DESC, $memberarray );
-					break;
-				case 5 : //armor
-					array_multisort ( $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 5 : //armor
-					array_multisort ( $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 6 : //member_raid_value
-					array_multisort ( $member_raid_value, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 6 : //member_raid_value
-					array_multisort ( $member_raid_value , SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 7 : //bbdkp_dkphour
-					array_multisort ( $member_time_bonus, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 7 : //bbdkp_dkphour
-					array_multisort ( $member_time_bonus , SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 8 : //member_zerosum_bonus
-					array_multisort ( $member_zerosum_bonus, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 8 : //member_zerosum_bonus
-					array_multisort ( $member_zerosum_bonus , SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 9 : //earned
-					array_multisort ( $member_earned, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 9 : //earned
-					array_multisort ( $member_earned, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 10 : //adjustment
-					array_multisort ( $member_adjustment, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 10 : //adjustment
-					array_multisort ( $member_adjustment, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 11 : //ep decay
-					array_multisort ( $member_raid_decay, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 11 : //ep decay
-					array_multisort ( $member_raid_decay, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 12 : //ep
-					array_multisort ( $ep, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 12 : //ep
-					array_multisort ( $ep, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 13 : //spent
-					array_multisort ( $member_spent, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 13 : //spent
-					array_multisort ( $member_spent, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 14 : //item_decay
-					array_multisort ( $member_item_decay, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 14 : //item_decay
-					array_multisort ( $member_item_decay, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 15 : // gp
-					array_multisort ( $gp, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 15 : // gp
-					array_multisort ( $gp, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 16 : // Pr
-					array_multisort ( $pr, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 16 : // Pr
-					array_multisort ( $pr, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 17 : //current
-					array_multisort ( $member_current, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 17 : //current
-					array_multisort ( $member_current, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 18 : //lastraid
-					array_multisort ( $member_lastraid, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 18 : //lastraid
-					array_multisort ( $member_lastraid, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-				case 19 : //raidattendance P1
-					array_multisort ( $attendanceP1, SORT_DESC, $member_name, SORT_ASC, $memberarray );
-					break;
-				case - 19 : //raidattendance P1
-					array_multisort ( $attendanceP1, SORT_ASC, $member_name, SORT_DESC, $memberarray );
-					break;
-
-			}
-		}
-
-		return $memberarray;
 	}
 
 	/**
@@ -1753,11 +1542,12 @@ class PointsController  extends \bbdkp\admin\Admin
 
 	}
 
-	/**
-	 * Recalculates and updates adjustment decay
-	 * @param $mode 1 for recalculating, 0 for setting decay to zero.
-	 * @param string $origin
-	 */
+    /**
+     * Recalculates and updates adjustment decay
+     * @param $mode 1 for recalculating, 0 for setting decay to zero.
+     * @param string $origin
+     * @return bool|int
+     */
 	public function sync_adjdecay ($mode, $origin = '')
 	{
 		global $user, $db;

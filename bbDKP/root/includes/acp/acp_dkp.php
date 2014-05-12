@@ -472,8 +472,8 @@ class acp_dkp extends \bbdkp\admin\Admin
 				{
 					$template->assign_vars(array(
 						'S_BP_SHOW' => true ,
-						'SHOW_BOSS_YES_CHECKED' => ($config['bbdkp_zone_block_show'] == '1') ? ' checked="checked"' : '' ,
-						'SHOW_BOSS_NO_CHECKED' => ($config['bbdkp_zone_block_show'] == '0') ? ' checked="checked"' : ''));
+						'SHOW_BOSS_YES_CHECKED' => ($config['bbdkp_portal_bossprogress'] == '1') ? ' checked="checked"' : '' ,
+						'SHOW_BOSS_NO_CHECKED' => ($config['bbdkp_portal_bossprogress'] == '0') ? ' checked="checked"' : ''));
 				}
 				else
 				{

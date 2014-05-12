@@ -737,7 +737,7 @@ class Guilds extends \bbdkp\admin\Admin
      * @param int $selectnonactive
      * @return array
      */
-	public function listmembers($order = 'm.member_name', $start=0, $mode = 0, $minlevel=1, $maxlevel=200, $selectactive=1, $selectnonactive=1)
+	public function listmembers($order = 'm.member_name', $start=0, $mode = 0, $minlevel=1, $maxlevel=200, $selectactive=1, $selectnonactive=1, $member_filter= '')
 	{
 
 		global $db, $config;
@@ -779,6 +779,11 @@ class Guilds extends \bbdkp\admin\Admin
 		{
 			$sql_array['WHERE'] .= ' AND m.member_status = 1 ';
 		}
+
+        if ($member_filter != '')
+        {
+            $sql_array['WHERE'] .= ' AND lcase(m.member_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($member_filter)) . $db->any_char);
+        }
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 
