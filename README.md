@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0.2
+#1.3.0.3
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0.2
+1.3.0.3-dev
 
 ## Installation
 
@@ -33,28 +33,26 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 4.	ftp and founder admin access on your phpbb installation.
 5.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### New installation 1.3.0.2
+#### New installation 1.3.0.3
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP_1302.zip file
+1. Unzip the bbDKP_1303.zip file
 2. Upload bbDKP folder to your webserver, into /store/mods/
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
-5. Click submit. This will install 1.3.0.2 and clear the caches (template, theme, imagesets)
+5. Click submit. This will install 1.3.0.3 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.1 to 1.3.0.2
+#### Upgrading from 1.3.0.2 to 1.3.0.3
 
-There were no database changes, just file changes. Please follow the upgrade unstructions in /contrib/update_1301_to_1302/update.xml
+Automod: copy the bbDKP/bbDKP folder into /store/mods. if there already a bbdkp folder there, replace it.
+Then go into automod, click on bbdkp, click on apply changes 1.3.0.2 to 1.3.0.3
 
-#### Upgrading from 1.3.0 to 1.3.0.2
+manually: Please follow the upgrade unstructions in /contrib/update_1302_to_1303/update.xml. Then run the database update in /install/index.php
 
-There were no database changes, just file changes. Please follow the upgrade unstructions in /contrib/update_130_to_1302/update.xml
-
-#### Upgrading from 1.2.8-pl2 to 1.3.0.2
-
+#### Upgrading from 1.2.8-pl2 to 1.3.0.3
 
 * make a secure backup of all files
 * backup your database
@@ -66,9 +64,9 @@ There were no database changes, just file changes. Please follow the upgrade uns
 		*	run plugin uninstall from Automod.
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2. 
     3. delete /store/mods/bbdkp  
-	4. upload the unzipped bbdkp 1.3.0.2 folder to /store/mods
+	4. upload the unzipped bbdkp 1.3.0.3 folder to /store/mods
 	5. from Automod, run file installer
-	6. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.2  
+	6. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.3  
 
 * Manually
 	*	Localhost	 	
@@ -82,12 +80,12 @@ There were no database changes, just file changes. Please follow the upgrade uns
 			*	apply the changes to the core phpbb files. use a good text editor
 		4.	launch the DB updater locally (/install/index.php)
 			*	Now you see the Umil updater.
-			*	Click update. This will update to 1.3.0.1 and clear the caches (template, theme, imagesets)
+			*	Click update. This will update to 1.3.0.3 and clear the caches (template, theme, imagesets)
 		5.	Update your Custom styles, or install a premodded style. Jade, Deathwing and pbWoW2 have premods.
 	*	live server
 		1. upload the install folder for any bbdkp1.2.8 plugin that you installed, and run uninstall.
 		2.	FTP the whole folder to to your webserver, after deleting your remote files.
-		3.	launch the bbdkp 1.3.0.1 DB updater on your webserver (/install/index.php) and redo the db changes on live.
+		3.	launch the bbdkp 1.3.0.3 DB updater on your webserver (/install/index.php) and redo the db changes on live.
 
 
 #### Upgrading from earlier version
@@ -106,6 +104,15 @@ Find support and more on
 
 ## Changelog 
 
+1.3.0.3 1x-05-2014
+
+-   [NEW] if wow guild not found on armory, show message. 
+-   [NEW] new member table columns: inactivereason, last_update; 
+-	[CHG] #219 leaderboard only hows 5 biggest accounts per class. 
+-	[CHG] #219 leaderboard class names aligned to class image-	[NEW] #218 add member search to roster
+-	[NEW] #218 add member search to standings
+-	[NEW] #218 add member search to listmembers, listaccounts acp -	[FIX] #216 Refactor standings page, show all accounts-	[FIX] #215 Refactor standings page, add pagination-	[FIX] fixed count, shading in adjustment acp, -	[FIX] #214 add pagination to dkp account acp. 
+
 1.3.0.2 01-05-2014
 
 -	[FIX] #203 calling wow charapi did not deduce inactive points from account-	[FIX] #204 raid value was not added to account for duplicated raid-	[FIX] #205 need to show adjustments on account page-	[FIX] #206 raid count was not increased for duplicated raid-	[FIX] #207 missing language "SPENTNET"-	[FIX] #208 issue in viewraid and pbwow. Page is nudged to high. -	[FIX] #209 total of raid value column should not have equal sign
