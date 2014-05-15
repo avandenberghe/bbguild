@@ -237,6 +237,22 @@ class Members extends \bbdkp\admin\Admin
 	 */
 	protected $member_title;
 
+
+    /**
+     * reason for deactivating account
+     * choice between
+     * - "inactivity" (>90 days)
+     * - "other"
+     * @var string
+     */
+    protected $deactivate_reason;
+
+    /**
+     * datetime of last update of this member account
+     * @var timestamp
+     */
+    protected $last_update;
+
 	/**
 	 * the role (for possible roles see role class)
 	 * @var string
@@ -348,7 +364,7 @@ class Members extends \bbdkp\admin\Admin
 	 */
 	public function Getmember()
 	{
-		global $user, $db, $config, $phpbb_root_path;
+		global $db, $config, $phpbb_root_path;
 
 		$sql_array = array(
 			'SELECT' => 'm.*, c.colorcode , c.imagename,  c1.name AS member_class, l1.name AS member_race,
@@ -415,6 +431,8 @@ class Members extends \bbdkp\admin\Admin
 			$this->member_status = $row['member_status'];
 			$this->member_achiev = $row['member_achiev'];
 			$this->game_id = $row['game_id'];
+            $this->last_update = $row['last_update'];
+            $this->deactivate_reason = $row['deactivate_reason'];
 			$this->colorcode = $row['colorcode'];
 			$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 			$this->race_image = (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '';
@@ -469,10 +487,10 @@ class Members extends \bbdkp\admin\Admin
 			$this->race_image = '';
 			$this->class_image = '';
 			$this->member_title = '';
+            $this->last_update =  $this->time;
+            $this->deactivate_reason = '';
             return 0;
 		}
-
-
 	}
 
     /**
@@ -628,7 +646,9 @@ class Members extends \bbdkp\admin\Admin
 			'member_portrait_url' => $this->member_portrait_url,
 			'member_achiev' => $this->member_achiev,
 			'game_id' => $this->game_id,
-			'member_title' => $this->member_title
+			'member_title' => $this->member_title,
+            'deactivate_reason' => $this->deactivate_reason,
+            'last_update'   => $this->time
 			));
 
 		$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
