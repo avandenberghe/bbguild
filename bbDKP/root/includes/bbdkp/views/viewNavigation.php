@@ -25,7 +25,6 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
      */
     private $guild_id;
 
-
     /**
      * game id
      * @var string
@@ -95,6 +94,8 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
     private $level2;
 
     private $page;
+
+    public $guilds;
 
     /**
      * @return array
@@ -266,7 +267,7 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
         $this->show_all = ( request_var ( 'show', request_var ( 'hidden_show', '' )) == $user->lang['ALL']) ? true : false;
 
         $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
-        $this->getGuildinfo();
+        $guildlist = $this->getGuildinfo();
 
         $this->race_id =  request_var('race_id',0);
         $this->level1 =  request_var('level1',0);
@@ -388,19 +389,19 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
             'U_STATS'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;guild_id=' . $this->guild_id),
             'U_PLANNER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=planner&amp;guild_id=' . $this->guild_id),
             'U_ABOUT'         	=> append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
-            'GAME_ID'			=> $guilds->game_id,
+            'GAME_ID'			=> $this->guilds->game_id,
             'GUILD_ID' 			=> $this->guild_id,
-            'GUILD_NAME' 		=> $guilds->name,
-            'REALM' 			=> $guilds->realm,
-            'REGION' 			=> $guilds->region,
-            'MEMBERCOUNT' 		=> $guilds->membercount ,
-            'ARMORY_URL' 		=> $guilds->guildarmoryurl ,
-            'MIN_ARMORYLEVEL' 	=> $guilds->min_armory ,
-            'SHOW_ROSTER' 		=> $guilds->showroster,
-            'EMBLEM'			=> $guilds->emblempath,
-            'EMBLEMFILE' 		=> basename($guilds->emblempath),
-            'ARMORY'			=> $guilds->guildarmoryurl,
-            'ACHIEV'			=> $guilds->achievementpoints,
+            'GUILD_NAME' 		=> $this->guilds->name,
+            'REALM' 			=> $this->guilds->realm,
+            'REGION' 			=> $this->guilds->region,
+            'MEMBERCOUNT' 		=> $this->guilds->membercount ,
+            'ARMORY_URL' 		=> $this->guilds->guildarmoryurl ,
+            'MIN_ARMORYLEVEL' 	=> $this->guilds->min_armory ,
+            'SHOW_ROSTER' 		=> $this->guilds->showroster,
+            'EMBLEM'			=> $this->guilds->emblempath,
+            'EMBLEMFILE' 		=> basename($this->guilds->emblempath),
+            'ARMORY'			=> $this->guilds->guildarmoryurl,
+            'ACHIEV'			=> $this->guilds->achievementpoints,
             'SHOWALL'			=> ($this->show_all) ? $user->lang['ALL']: '',
             'F_NAVURL' 			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id),
         ));
@@ -454,9 +455,9 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
         {
             require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
         }
-        $guilds = new \bbdkp\controller\guilds\Guilds();
+        $this->guilds = new \bbdkp\controller\guilds\Guilds();
 
-        $guildlist = $guilds->guildlist(1);
+        $guildlist = $this->guilds->guildlist(1);
         if(count($guildlist) > 0)
         {
             foreach ($guildlist as $g)
@@ -497,9 +498,11 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
             trigger_error('ERROR_NOGUILD', E_USER_WARNING );
         }
 
-        $guilds->guildid = $this->guild_id;
-        $guilds->Getguild();
-        $this->game_id = $guilds->game_id;
+        $this->guilds->guildid = $this->guild_id;
+        $this->guilds->Getguild();
+        $this->game_id = $this->guilds->game_id;
+
+        return $guildlist;
     }
 
     /**

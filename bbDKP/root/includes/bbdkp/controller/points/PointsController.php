@@ -188,7 +188,6 @@ class PointsController  extends \bbdkp\admin\Admin
         );
 
         $current_order = $this->switch_order ( $sort_order );
-
         $sql_array = array (
 				'SELECT' => 'm.member_id,  a.member_name, a.member_level, m.member_dkpid,
 						m.member_raid_value, m.member_raid_decay,  m.member_time_bonus,
@@ -197,7 +196,7 @@ class PointsController  extends \bbdkp\admin\Admin
 						m.member_adjustment,  m.adj_decay,  m.member_raidcount,
 						(m.member_earned - m.member_raid_decay - (m.member_spent - m.member_item_decay) + m.member_adjustment - m.adj_decay) AS member_current,
                         m.member_lastraid,
-						s.dkpsys_name, l.name AS member_class, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename,
+						s.dkpsys_name, l.name AS member_class, r.rank_hide, r.rank_name, r.rank_prefix, r.rank_suffix, c.colorcode , c.imagename,
                         c.class_id, a.member_status, a.game_id',
 				'FROM' => array (
 						MEMBER_LIST_TABLE 	=> 'a',
@@ -280,6 +279,8 @@ class PointsController  extends \bbdkp\admin\Admin
         {
             $members_result = $db->sql_query($sql);
         }
+
+        $members_row = array();
 
 		while ( $row = $db->sql_fetchrow ( $members_result ) )
 		{

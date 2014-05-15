@@ -491,7 +491,7 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 	private function list_memberdkp()
 	{
 		global $user, $template, $config, $phpbb_admin_path, $phpEx;
-
+        $pagination = '';
 		// guild dropdown
 		$submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
 		$Guild = new \bbdkp\controller\guilds\Guilds();
@@ -524,7 +524,7 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 		}
 
 		$this->PointsController->guild_id = $Guild->guildid;
-
+        $this->PointsController->show_inactive = false;
 		/* dkp pool */
         $this->PointsController->query_by_pool= true;
 		$this->PointsController->dkpsys_id=0;

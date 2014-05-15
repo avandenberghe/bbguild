@@ -6,7 +6,8 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.3.0.3
+ *
  */
 namespace bbdkp\views;
 /**
@@ -80,7 +81,7 @@ class viewStandings implements iViews
         $this->u_listmemberdkp = append_sid ( "{$phpbb_root_path}dkp.$phpEx", 'page=standings' .
             '&amp;guild_id=' . $Navigation->getGuildId() .
             '&amp;' . URI_DKPSYS . '=' . $this->PointsController->dkpsys_id .
-            '&amp;' . member_name . '=' . urlencode($this->PointsController->member_filter)
+            '&amp;member_name=' . urlencode($this->PointsController->member_filter)
          );
 
         $this->buildpage($Navigation);
@@ -91,7 +92,7 @@ class viewStandings implements iViews
     {
         global $user;
         $this->leaderboard($Navigation);
-        $this->dkplisting();
+        $this->dkplisting($Navigation);
         page_header ( $user->lang ['LISTMEMBERS_TITLE'] );
     }
 
@@ -170,11 +171,12 @@ class viewStandings implements iViews
         $template->assign_vars(array(
             'S_SHOWLEAD' 		=> true ,
         ));
-
-
     }
 
-    private function dkplisting()
+    /**
+     * @return bool
+     */
+    private function dkplisting(viewNavigation $Navigation)
     {
         global $user, $config, $template, $phpbb_root_path, $phpEx;
 
@@ -187,9 +189,17 @@ class viewStandings implements iViews
             $this->memberlist = $this->PointsController->listdkpaccounts($this->start, true);
         }
 
+        $output = array ();
+
         if(count($this->memberlist[0]) == 0)
         {
-            return false;
+            $output = array (
+                'S_DISPLAY_STANDINGS' => true,
+            );
+
+            $template->assign_vars ( $output );
+            return;
+
         }
 
         $current_order = $this->memberlist[1];
@@ -216,10 +226,9 @@ class viewStandings implements iViews
 
         }
 
+        $a=1;
         $output = array (
             'IDLIST'	=> implode(",", $membersids),
-            'L_TITLE' => $user->lang ['ACP_DKP_LISTMEMBERDKP'],
-            'L_EXPLAIN' => $user->lang ['ACP_MM_LISTMEMBERDKP_EXPLAIN'],
             'BUTTON_NAME' => $user->lang['DELETE'],
             'BUTTON_VALUE' => $user->lang ['DELETE_SELECTED_MEMBERS'],
             'O_NAME' => $this->u_listmemberdkp . "&amp;o=" . $current_order ['uri'] [1],
@@ -238,8 +247,8 @@ class viewStandings implements iViews
             'S_NOTMM' => false,
             'S_DISPLAY_STANDINGS' => true,
             'LISTMEMBERS_FOOTCOUNT' => sprintf ( $user->lang ['LISTMEMBERS_FOOTCOUNT'], $lines ),
-            'DKPSYS' => $this->PointsController->dkpsys_id,
-            'DKPSYSNAME' => $this->PointsController->dkpsys[$this->PointsController->dkpsys_id]['name'],
+            'DKPSYS' => $Navigation->getDkpsysId(),
+            'DKPSYSNAME' => $Navigation->getDkpsysName(),
             'DKPPAGINATION' => $pagination,
             'MEMBER_NAME' =>  $this->PointsController->member_filter,
 
