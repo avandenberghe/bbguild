@@ -5,7 +5,7 @@
  *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.3.0.3
  * @translation various unknown authors, killerpommes
  *
  */
@@ -595,7 +595,8 @@ $lang = array_merge($lang, array(
 'ERROR_RANKMEMBERS' => 'Achtung : Kann Rang nicht löschen, denn es gibt noch immer Mitglieder mit diesen Rang.',
 'ERROR_NOSELECT' => 'Bitte wähle einen VON und einen ZU Mitgliedsnamen',
 'WARNING_BATTLENET' => 'Alle Mitglieder von der Battle.NET Character API aktuallisieren? Dies kann einige Minuten dauern. Bitte bestätigen.',
-
+'ERROR_ARMORY_DOWN' => 'Fehler: Keine Verbindung zur Battle.NET API',
+'GUILD_EMBLEM_NF' => 'Gildenwappe nicht gefunden',
 //Curl errors
 'ERR_UNKNOWN' => 'UUnbekannter Fehler aufgetreten.',
 'CURL_REQUIRED' => 'Curl wird zur Nutzung der SDK benötigt.',
@@ -649,6 +650,7 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_ADJ_SUCCESS' => 'Die Punkteanpassung %s für %.2f wurde aktualisiert.',
 'ADMIN_UPDATE_DKPSYS_SUCCESS' => 'Den Namen und Status des DKP Pools %s wurde geändert nach: %s, %s.',
 'ADMIN_UPDATE_GUILD_SUCCESS' => 'Die Gilde mit der ID %d wurde aktualisiert.',
+'ADMIN_UPDATE_GUILD_FAILED' => 'Die Gilde mit der ID %d wurde fehlerhaft aktualisiert.',
 'ADMIN_UPDATE_EVENT_SUCCESS' => 'Der Standardwert %s für Ereignisse auf %s wurde aktualisiert.',
 'ADMIN_UPDATE_IADJ_SUCCESS' => 'Die Punkteanpassung %s von %.2f für %s wurde aktualisiert.',
 'ADMIN_UPDATE_ITEM_SUCCESS' => 'Der Ankauf von %s, durch %s für %.2f wurde aktualisiert.',

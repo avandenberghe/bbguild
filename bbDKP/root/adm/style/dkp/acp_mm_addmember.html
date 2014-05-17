@@ -243,7 +243,14 @@ function classracestateChanged()
  <dl>
 
  <dt><label for="activated">{L_ACTIVE}:</label></dt>
- <dd><input type="checkbox" class="checkbox" name="activated" id="activated" {STATUS} required = "required" /></dd>
+ <dd><input type="checkbox" class="checkbox" name="activated" <!-- IF STATUS_LOCK --> disabled="disabled" <!-- ENDIF -->id="activated" {STATUS} required = "required" />
+
+<!-- IF ! S_ADD -->
+ <span style="color:red"> {DEACTIVATE_REASON}</span>
+<!-- ENDIF -->
+ </dd>
+
+
  </dl>
 
  <dl>
@@ -282,9 +289,7 @@ function classracestateChanged()
 </dd>
 </dl>
 
-
-
-  <dl>
+<dl>
     <dt><label for="member_race_id">{L_RACE}:</label></dt>
   		<dd><select id="member_race_id" name="member_race_id" class="input">
        <!-- BEGIN race_row -->

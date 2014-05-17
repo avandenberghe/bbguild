@@ -668,7 +668,8 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                     'MEMBER_ID' => $editmember->member_id,
                     'MEMBER_LEVEL' => $editmember->member_level,
                     'REALM' =>  $editmember->member_realm,
-
+                    'DEACTIVATE_REASON' => $editmember->deactivate_reason == '' ? '' : $user->lang[$editmember->deactivate_reason],
+                    'STATUS_LOCK' => $editmember->deactivate_reason == '' ? false : true,
                     'MEMBER_ACHIEV' => $editmember->member_achiev,
                     'MEMBER_TITLE' => $editmember->member_title,
                     'MALE_CHECKED' => ( $editmember->member_gender_id == '0') ? ' checked="checked"' : '' ,
@@ -952,7 +953,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
         $j=0;
         while ($row = $db->sql_fetchrow($members_result))
         {
-            if ($j > 4900)
+            if ($j > 100)
             {
                 break;
             }
