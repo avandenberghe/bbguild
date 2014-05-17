@@ -9,7 +9,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.0
  */
-use bbdkp\controller;
+
 
 // don't add this file to namespace bbdkp
 /**
@@ -95,17 +95,12 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 
                 if( count((array) $guildlist) == 1 )
                 {
-                    foreach ($guildlist as $g)
+                    $Guild->guildid = $guildlist[0]['id'];
+                    $Guild->name = $guildlist[0]['name'];
+                    if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
                     {
-                        $Guild->guildid = $g['id'];
-                        $Guild->name = $g['name'];
-                        if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
-                        {
-                            trigger_error('ERROR_NOGUILD', E_USER_WARNING );
-                        }
-                        break;
+                        trigger_error('ERROR_NOGUILD', E_USER_WARNING );
                     }
-
                 }
 
                 foreach ($guildlist as $g)
@@ -764,7 +759,8 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 'delete' => true ,
                 'delete_id' => $members_to_delete ,
                 'members' => $member_names));
-            $str_members = implode($member_names, ',');
+            $str_members = implode($member_names, ', ');
+
             confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_MEMBER'], $str_members), $s_hidden_fields);
         }
     }
@@ -963,8 +959,8 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
 
             $diff = \round( \abs ( (\time() - $last_update)) / 86400, 2) ;
 
-            // 10 days ago ? call armory
-            if($diff > 10)
+            // 1 days ago ? call armory
+            if($diff > 1)
             {
                 $i += 1;
                 if ($log != '') $log .= ', ';
