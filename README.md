@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0.3-dev
+1.3.0.3
 
 ## Installation
 
@@ -47,26 +47,24 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 
 #### Upgrading from 1.3.0.2 to 1.3.0.3
 
-Automod: copy the bbDKP/bbDKP folder into /store/mods. if there already a bbdkp folder there, replace it.
-Then go into automod, click on bbdkp, click on apply changes 1.3.0.2 to 1.3.0.3
-
-manually: Please follow the upgrade unstructions in /contrib/update_1302_to_1303/update.xml. Then run the database update in /install/index.php
+Download and Install the Upgrade mod 1.3.0.2 to 1.3.0.3
 
 #### Upgrading from 1.2.8-pl2 to 1.3.0.3
 
 * make a secure backup of all files
 * backup your database
 
-* Uninstall 1.2.8-pl2 and re-install 1.3.0 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.3.0.3 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first.
-		*	upload the install folder for any bbdkp1.2.8 plugin, and run the UMIL uninstaller.
+		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
 		*	make sure the module was uninstalled by checking the ACP modules.
 		*	run plugin uninstall from Automod.
-    2. then, from Automod, do uninstall bbDKP 1.2.8-pl2. 
-    3. delete /store/mods/bbdkp  
-	4. upload the unzipped bbdkp 1.3.0.3 folder to /store/mods
-	5. from Automod, run file installer
-	6. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.3  
+    2. then, from Automod, do uninstall bbDKP 1.2.8-pl2 to uninstall the files and phpbb edits. 
+    3. purge the board cache, verify your board is running    
+    4. delete /store/mods/bbdkp  
+	5. upload the unzipped bbdkp 1.3.0.3 folder to /store/mods
+	6. from Automod, run file installer
+	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.3  
 
 * Manually
 	*	Localhost	 	
@@ -104,14 +102,25 @@ Find support and more on
 
 ## Changelog 
 
-1.3.0.3 1x-05-2014
 
--   [NEW] if wow guild not found on armory, show message. 
+1.3.0.3 17-05-2014
+
+-	[NEW] add new log types for armory down error, Guild updated
+-	[FIX] #220 refactored acp_dkp_mm by extraction into methods
+-	[FIX] refactored acp_dkp_guild by extraction into methods
+-	[FIX] “activated” checkbox in acp_mm_addmember.html
+-	[removed]  “joindate” columns in member list acp
+-	[NEW] last_update column in member list acp
+-	[NEW] top search criteria in in member list acp now apply for armory update
+-	[NEW] added DEACTIVATED_BY_API deactivation reason
+-	[NEW] Character api limited to 100 calls per time and to members where last_update was > 15 minutes ago
+-	[NEW] lock status if member disabled by API call
+-   [FIX] #213 if wow guild not found on armory, show message. 
 -   [NEW] new member table columns: inactivereason, last_update; 
 -	[CHG] #219 leaderboard only hows 5 biggest accounts per class. 
 -	[CHG] #219 leaderboard class names aligned to class image-	[NEW] #218 add member search to roster
 -	[NEW] #218 add member search to standings
--	[NEW] #218 add member search to listmembers, listaccounts acp -	[FIX] #216 Refactor standings page, show all accounts-	[FIX] #215 Refactor standings page, add pagination-	[FIX] fixed count, shading in adjustment acp, -	[FIX] #214 add pagination to dkp account acp. 
+-	[NEW] #218 add member search to listmembers, listaccounts acp -	[FIX] #216 Refactor standings page, show all accounts-	[FIX] #215 add pagination to standings page-	[FIX] fixed count, shading in adjustment acp, -	[FIX] #214 add pagination to dkp account acp. 
 
 1.3.0.2 01-05-2014
 
