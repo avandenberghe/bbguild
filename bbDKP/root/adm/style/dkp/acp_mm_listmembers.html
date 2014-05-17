@@ -116,7 +116,6 @@
                 <th style="text-align:center; width:6%">{L_DELETE}
   	<span class="small"><a href="#" onclick="marklist('mm_listmembers', 'delete_id', true); return false;">{L_MARK_ALL}</a> <br />
 	<a href="#" onclick="marklist('mm_listmembers', 'delete_id', false); return false;">{L_UNMARK_ALL}</a></span>
-
                 </th>
             </tr>
             </thead>
@@ -155,6 +154,14 @@
                 </td>
             </tr>
             <!-- END members_row -->
+            <tr class="highlight">
+                <td style="text-align:center;"><input class="button2" name="deactivate"
+                    type="submit" value="{L_UPDATE}" title="{L_CHANGE_STATUS}" {L_TOGGLE_ACTIVE} /></td>
+                <td colspan="8"></td>
+                <td style="text-align:center;"> <input class="button2" name="delete" type="submit"
+                                                       value="{L_DELETE_SELECTED_MEMBERS}" title="{L_MASS_DELETE_CHAR}"/></td>
+            </tr>
+
             </tbody>
         </table>
 
@@ -179,25 +186,12 @@
             </dl>
             <!-- ENDIF -->
             <dl>
-                <dt style="width: 55%;"><label for="deactivate">{L_CHANGE_STATUS}:</label>{L_TOGGLE_ACTIVE}</dt>
-                <dd style="margin-left: 55%;">
-                    <input class="button2" name="deactivate" type="submit" value="{L_UPDATE}" title="{L_CHANGE_STATUS}"/>
-                </dd>
-            </dl>
-            <dl>
-                <dt style="width: 55%;"><label for="delete">{L_MASS_DELETE_CHAR}:</label></dt>
-                <dd style="margin-left: 55%;">
-                    <input class="button2" name="delete" type="submit" value="{L_DELETE_MEMBER}" title="{L_DELETE_MEMBER}"/>
-                </dd>
-            </dl>
-            <dl>
                 <dt style="width: 55%;"><label for="memberadd">{L_ADD_MEMBER}:</label></dt>
                 <dd style="margin-left: 55%;">
                     <input class="button2" name="memberadd" type="submit" value="{L_ADD_MEMBER}" title="{L_ADD_MEMBER}"/>
                 </dd>
             </dl>
             {S_FORM_TOKEN}
-
             <!-- BEGIN members_row -->
             <input type="hidden" name="hidden_member[{members_row.ID}]" value="{members_row.ID}" />
             <!-- END members_row -->

@@ -932,7 +932,7 @@ class log
 					$logline = sprintf($this->getLogMessage('CLASS_UPDATED', $verbose), $userstring , $log['L_CLASS'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME']) ;
 					break;
 				case 'MEMBER_DEACTIVATED':
-					$logline = sprintf($this->getLogMessage('MEMBER_DEACTIVATED', $verbose), $userstring , $log['L_NAME'], $log['L_DAYSAGO']  ) ;
+					$logline = sprintf($this->getLogMessage('MEMBER_DEACTIVATED', $verbose), $userstring , $log['L_NAME'], '' ) ;
 					break;
                 case 'ARMORY_DOWN':
                     $logline = sprintf($this->getLogMessage('ARMORY_DOWN', $verbose), $userstring , ' ', ' ' ) ;
