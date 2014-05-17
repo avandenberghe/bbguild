@@ -237,6 +237,22 @@ class Members extends \bbdkp\admin\Admin
 	 */
 	protected $member_title;
 
+
+    /**
+     * reason for deactivating account
+     * choice between
+     * - "inactivity" (>90 days)
+     * - "other"
+     * @var string
+     */
+    protected $deactivate_reason;
+
+    /**
+     * datetime of last update of this member account
+     * @var timestamp
+     */
+    protected $last_update;
+
 	/**
 	 * the role (for possible roles see role class)
 	 * @var string
@@ -348,7 +364,7 @@ class Members extends \bbdkp\admin\Admin
 	 */
 	public function Getmember()
 	{
-		global $user, $db, $config, $phpbb_root_path;
+		global $db, $config, $phpbb_root_path;
 
 		$sql_array = array(
 			'SELECT' => 'm.*, c.colorcode , c.imagename,  c1.name AS member_class, l1.name AS member_race,
@@ -415,6 +431,8 @@ class Members extends \bbdkp\admin\Admin
 			$this->member_status = $row['member_status'];
 			$this->member_achiev = $row['member_achiev'];
 			$this->game_id = $row['game_id'];
+            $this->last_update = $row['last_update'];
+            $this->deactivate_reason = $row['deactivate_reason'];
 			$this->colorcode = $row['colorcode'];
 			$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
 			$this->race_image = (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '';
@@ -469,10 +487,10 @@ class Members extends \bbdkp\admin\Admin
 			$this->race_image = '';
 			$this->class_image = '';
 			$this->member_title = '';
+            $this->last_update =  $this->time;
+            $this->deactivate_reason = '';
             return 0;
 		}
-
-
 	}
 
     /**
@@ -628,7 +646,9 @@ class Members extends \bbdkp\admin\Admin
 			'member_portrait_url' => $this->member_portrait_url,
 			'member_achiev' => $this->member_achiev,
 			'game_id' => $this->game_id,
-			'member_title' => $this->member_title
+			'member_title' => $this->member_title,
+            'deactivate_reason' => $this->deactivate_reason,
+            'last_update'   => $this->time
 			));
 
 		$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
@@ -662,8 +682,6 @@ class Members extends \bbdkp\admin\Admin
 
             $this->AddMemberAdjustment($config['bbdkp_active_point_adj'],$user->lang['ACTION_MEMBER_ACTIVATED'] );
         }
-
-
 
         $log_action = array(
 			'header' => 'L_ACTION_MEMBER_UPDATED' ,
@@ -829,7 +847,7 @@ class Members extends \bbdkp\admin\Admin
                 $this->member_portrait_url = $this->generate_portraitlink();
         }
 
-
+        $this->last_update = $this->time;
         $query = $db->sql_build_array('INSERT', array(
             'member_name' => ucwords($this->member_name) ,
             'member_status' => $this->member_status ,
@@ -850,7 +868,8 @@ class Members extends \bbdkp\admin\Admin
             'phpbb_user_id' => (int) $this->phpbb_user_id ,
             'game_id' => (string) $this->game_id ,
             'member_portrait_url' => (string) $this->member_portrait_url,
-            'member_title' => $this->member_title
+            'member_title' => $this->member_title,
+            'last_update' => $this->last_update,
         ));
 
         $db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
@@ -885,7 +904,7 @@ class Members extends \bbdkp\admin\Admin
 	 */
 	public function Armory_getmember()
 	{
-		global $phpEx, $phpbb_root_path;
+		global $phpEx, $phpbb_root_path, $user;
 
 		$game = new \bbdkp\controller\games\Game;
 		$game->game_id = $this->game_id;
@@ -1010,15 +1029,21 @@ class Members extends \bbdkp\admin\Admin
 			//if the last logged-in date is > 3 months ago then disable the account
 			if( isset($data['lastModified']))
 			{
-				$latest = $data['lastModified']/1000;
-				$diff = \round( \abs ( \time() - $latest) / 60 / 60 / 24, 2) ;
+				$latest = $data['lastModified'];
+				$diff = \round( \abs ( \time() - ($latest/1000)) / 60 / 60 / 24, 2) ;
 				if($diff > 90 && $this->member_status == 1)
 				{
-					$this->deactivate_wow($diff);
-                   	return 0;
-				}
+                    $this->member_status = 0;
+                    $this->deactivate_reason = 'DEACTIVATED_BY_API';
 
-			}
+				}
+                if($diff < 90 && $this->member_status == 0 && $this->deactivate_reason == 'DEACTIVATED_BY_API')
+                {
+                    $this->member_status = 1;
+                    $this->deactivate_reason = '';
+
+                }
+            }
 
 			return 1;
 
@@ -1026,41 +1051,13 @@ class Members extends \bbdkp\admin\Admin
 		else
 		{
             //not found in armory
-			$this->deactivate_wow('API Error');
-			return - 1;
+            $this->member_status = 0;
+            $this->deactivate_reason = 'DEACTIVATED_BY_API';
 		}
 
 	}
 
-
-	/**
-	 * if player not found in BATTLE.NET or if last activity > 90 days ago
-     * then deactivate member if currently active.
-     *
-	 * @param (integer or string) $daysago
-	 */
-	private function deactivate_wow($daysago)
-	{
-		global $config, $user;
-        if($this->member_status == "1" )
-        {
-            $this->member_status = 0;
-            $log_action = array(
-                'header' 	 => 'L_ACTION_MEMBER_DEACTIVATED' ,
-                'L_NAME' 	 => \ucwords($this->member_name)  ,
-                'L_DAYSAGO'  => $daysago,
-                'L_ADDED_BY' => $user->data['username']);
-
-            $this->log_insert(array(
-                'log_type' 		=> 'L_ACTION_MEMBER_DEACTIVATED' ,
-                'log_result' 	=> 'L_SUCCESS' ,
-                'log_action' 	=> $log_action));
-        }
-
-	}
-
-	/**
-	 * activates all checked members
+     /* activates all checked members
      *
      *  for each member in $mwindow
      *   get member
@@ -1070,51 +1067,105 @@ class Members extends \bbdkp\admin\Admin
      *      if member status was active then deactivate and add deactivation dkp
      *
      * @param array $mlist
-	 * @param array $mwindow
-	 */
-	public function Activatemembers(array $mlist, array $mwindow)
-	{
-        global $config, $db, $user;
-		foreach($mwindow as $member_id)
+     * @param array $mwindow
+     */
+    public function Activatemembers(array $mlist, array $mwindow)
+    {
+        foreach($mwindow as $member_id)
         {
-            $changed = false;
             $this->member_id = $member_id;
             $this->Getmember();
             if (in_array($member_id,$mlist))
             {
-                //found in $POST, so if inactive before then activate
-                if($this->member_status == "0")
-                {
-                    $changed = true;
-                    $this->member_status = "1";
-                    $this->AddMemberAdjustment($config['bbdkp_active_point_adj'],$user->lang['ACTION_MEMBER_ACTIVATED'] );
-                }
+                $this->Activate_member();
             }
             else
             {
-                //not found in $POST, so if active before then deactivate
-                if($this->member_status == "1")
-                {
-                    $changed = true;
-                    $this->member_status = "0";
-                    $this->AddMemberAdjustment($config['bbdkp_inactive_point_adj'],$user->lang['ACTION_MEMBER_DEACTIVATED'] );
-                }
+                $this->Deactivate_member();
             }
+        }
+    }
 
-            if ($changed)
-            {
-                $query = $db->sql_build_array('UPDATE', array(
-                    'member_status' => $this->member_status ,
-                ));
-
-                $db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
-                WHERE member_id= ' . $this->member_id);
-            }
+    /**
+     * @internal param $config
+     * @internal param $user
+     * @return bool
+     */
+    private function Activate_member()
+    {
+        global $config, $user,  $db;
+        $changed = false;
+        if ($this->member_status == "0")
+        {
+            $changed = true;
+            $this->member_status = "1";
+            $this->AddMemberAdjustment($config['bbdkp_active_point_adj'], $user->lang['ACTION_MEMBER_ACTIVATED']);
 
         }
 
+        if ($changed)
+        {
+            $query = $db->sql_build_array('UPDATE', array(
+                'member_status' => $this->member_status ,
+            ));
 
-	}
+            $db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
+                WHERE member_id= ' . $this->member_id);
+        }
+
+        $log_action = array(
+            'header' 	 => 'L_ACTION_MEMBER_ACTIVATED' ,
+            'L_NAME' 	 => \ucwords($this->member_name)  ,
+            'L_ADDED_BY' => $user->data['username']);
+
+        $this->log_insert(array(
+            'log_type' 		=> 'L_ACTION_MEMBER_ACTIVATED' ,
+            'log_result' 	=> 'L_SUCCESS' ,
+            'log_action' 	=> $log_action));
+
+
+        return $changed;
+    }
+
+    /**
+     * @internal param $config
+     * @internal param $user
+     * @return bool
+     */
+    private function Deactivate_member()
+    {
+        global $config, $user, $db;
+        $changed = false;
+        if ($this->member_status == "1")
+        {
+            $changed = true;
+            $this->member_status = "0";
+            $this->AddMemberAdjustment($config['bbdkp_inactive_point_adj'], $user->lang['ACTION_MEMBER_DEACTIVATED']);
+        }
+
+        if ($changed)
+        {
+            $query = $db->sql_build_array('UPDATE', array(
+                'member_status' => $this->member_status ,
+            ));
+
+            $db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
+                WHERE member_id= ' . $this->member_id);
+        }
+
+        $log_action = array(
+            'header' 	 => 'L_ACTION_MEMBER_DEACTIVATED' ,
+            'L_NAME' 	 => \ucwords($this->member_name)  ,
+            'L_ADDED_BY' => $user->data['username']);
+
+        $this->log_insert(array(
+            'log_type' 		=> 'L_ACTION_MEMBER_DEACTIVATED' ,
+            'log_result' 	=> 'L_SUCCESS' ,
+            'log_action' 	=> $log_action));
+
+        return $changed;
+    }
+
 
 	/**
 	 * generates a standard portrait image url for aion based on characterdata
@@ -1267,6 +1318,7 @@ class Members extends \bbdkp\admin\Admin
                 $this->Makemember();
 			}
 		}
+
 
 
 		// get the members to update
@@ -1458,10 +1510,11 @@ class Members extends \bbdkp\admin\Admin
      * @param int|number $level1 optional =1
      * @param int|number $level2 optional = 200
      * @param boolean $mycharsonly optional = false
+     * @param $member_filter
      * @return array  (membercount, sql_fetchrowset of all rows)
      */
     public function getmemberlist($start, $mode, $query_by_armor, $query_by_class, $filter,
-			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false)
+			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false, $member_filter)
 	{
 		global $db, $config, $user, $phpbb_root_path;
 		$sql_array = array();
@@ -1503,7 +1556,12 @@ class Members extends \bbdkp\admin\Admin
 			$sql_array['WHERE'] .= " AND m.member_level >= ".  intval($config['bbdkp_minrosterlvl']) ;
 		}
 
-		$sql_array['WHERE'] .= " AND m.member_rank_id != 99
+        if ($member_filter != '')
+        {
+            $sql_array['WHERE'] .= ' AND lcase(m.member_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($member_filter)) . $db->any_char);
+        }
+
+        $sql_array['WHERE'] .= " AND m.member_rank_id != 99
 			AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "'
 			AND e1.attribute = 'race' and e1.game_id = e.game_id";
 
@@ -1736,5 +1794,7 @@ class Members extends \bbdkp\admin\Admin
         }
         unset($newadjust);
     }
+
+
 
 }

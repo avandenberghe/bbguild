@@ -207,7 +207,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	public function Getguild()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $db, $phpbb_root_path;
 
 		$sql = 'SELECT id, name, realm, region, roster, game_id, members,
 				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled
@@ -243,10 +243,11 @@ class Guilds extends \bbdkp\admin\Admin
 
 	}
 
-	/**
-	 * guild class property setter
-	 * @param string $fieldName
-	 */
+    /**
+     * guild class property setter
+     * @param string $fieldName
+     * @return null
+     */
 	public function __get($fieldName)
 	{
 		global $user;
@@ -300,8 +301,6 @@ class Guilds extends \bbdkp\admin\Admin
 	public function MakeGuild()
 	{
 		global $user, $db, $phpEx, $phpbb_root_path;
-
-		$error = array ();
 
 		if ($this->name == null || $this->realm == null)
 		{
@@ -375,16 +374,17 @@ class Guilds extends \bbdkp\admin\Admin
 
 	}
 
-	/**
-	 * updates a guild to database
-	 *
-	 * @param Guild $old_guild
-	 * @param array $params
-	 */
-	public function Guildupdate($old_guild, $params)
+    /**
+     * updates a guild to database
+     *
+     * @param \bbdkp\controller\guilds\Guilds $old_guild
+     * @param array $params
+     * @return bool
+     */
+	public function Guildupdate(\bbdkp\controller\guilds\Guilds $old_guild, $params)
 	{
 		global $user, $db, $phpEx, $phpbb_root_path;
-
+        $apiupdate=true;
 		// check if already exists
 		if($this->name != $old_guild->name || $this->realm != $old_guild->realm)
 		{
@@ -432,8 +432,23 @@ class Guilds extends \bbdkp\admin\Admin
 				switch ($this->game_id)
 				{
 					case 'wow':
-						//$params = array('members', 'achievements','news');
-						$this->Armory_get($params);
+						$apiupdate = $this->Armory_get($params);
+
+						if(! $apiupdate)
+                        {
+
+                            $log_action = array(
+                                'header' => 'L_ERROR_ARMORY_DOWN' ,
+                                'L_UPDATED_BY' => $user->data['username']);
+
+                            $this->log_insert(array(
+                                'log_type' => $log_action['header'] ,
+                                'log_action' => $log_action,
+                                'log_result' => 'L_ERROR'
+                            ));
+
+                            break;
+                        }
 
 						$query = $db->sql_build_array('UPDATE', array(
 								'achievementpoints' => $this->achievementpoints,
@@ -481,8 +496,16 @@ class Guilds extends \bbdkp\admin\Admin
 
 		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
-				'log_action' => $log_action));
-	}
+				'log_action' => $log_action,
+                'log_result' => (!$apiupdate ? 'L_ERROR' : 'L_SUCCESS')
+        ));
+
+        if(!$apiupdate)
+        {
+            return false;
+        }
+        return true;
+    }
 
 	/**
 	 * deletes a guild from database
@@ -542,6 +565,10 @@ class Guilds extends \bbdkp\admin\Admin
 
 				$data = $api->Guild->getGuild($this->name, $this->realm, $params);
 				unset($api);
+                if (!isset ($data))
+                {
+                    return false;
+                }
 				$this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0;
 				$this->level = isset($data['level']) ? $data['level']: 0;
 				$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
@@ -556,11 +583,11 @@ class Guilds extends \bbdkp\admin\Admin
 					$this->guildarmoryurl = '';
 				}
 
-				//$this->emblemurl = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
-
 				$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
 				$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(true)  : '';
 				$this->memberdata = isset($data['members']) ? $data['members']: '';
+
+                return true;
 		}
 
 	}
@@ -735,9 +762,11 @@ class Guilds extends \bbdkp\admin\Admin
      * @param int $maxlevel
      * @param int $selectactive
      * @param int $selectnonactive
+     * @param string $member_filter
+     * @param bool $last_update
      * @return array
      */
-	public function listmembers($order = 'm.member_name', $start=0, $mode = 0, $minlevel=1, $maxlevel=200, $selectactive=1, $selectnonactive=1)
+	public function listmembers($order = 'm.member_name', $start=0, $mode = 0, $minlevel=1, $maxlevel=200, $selectactive=1, $selectnonactive=1, $member_filter= '', $last_update = false)
 	{
 
 		global $db, $config;
@@ -779,6 +808,24 @@ class Guilds extends \bbdkp\admin\Admin
 		{
 			$sql_array['WHERE'] .= ' AND m.member_status = 1 ';
 		}
+        elseif($selectactive == 1 && $selectnonactive == 1)
+        {
+            $sql_array['WHERE'] .= ' AND 1=1 ';
+        }
+        elseif($selectactive == 0 && $selectnonactive == 0)
+        {
+            $sql_array['WHERE'] .= ' AND 1=0 ';
+        }
+
+        if ($last_update)
+        {
+            $sql_array['WHERE'] .= ' AND m.last_update >= 0 and m.last_update < ' . ($this->time - 900) ;
+        }
+
+        if ($member_filter != '')
+        {
+            $sql_array['WHERE'] .= ' AND lcase(m.member_name) ' . $db->sql_like_expression($db->any_char . $db->sql_escape(mb_strtolower($member_filter)) . $db->any_char);
+        }
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
 
@@ -790,6 +837,7 @@ class Guilds extends \bbdkp\admin\Admin
 		{
 			$members_result = $db->sql_query($sql);
 		}
+
 		return $members_result;
 
 	}
@@ -802,7 +850,7 @@ class Guilds extends \bbdkp\admin\Admin
 	public function classdistribution()
 	{
 
-		global $user, $db, $config, $phpEx, $phpbb_root_path;
+		global $db;
 
 		$sql = 'SELECT c.class_id, ';
 		$sql .= ' l.name                   AS classname, ';
@@ -947,5 +995,3 @@ class Guilds extends \bbdkp\admin\Admin
 
 
 }
-
-?>

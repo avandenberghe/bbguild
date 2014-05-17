@@ -19,6 +19,83 @@ if ( !defined('IN_PHPBB') OR !defined('IN_BBDKP') )
 
 class viewNavigation extends \bbdkp\admin\Admin implements iViews
 {
+    /**
+     * guild id
+     * @var int
+     */
+    private $guild_id;
+
+    /**
+     * game id
+     * @var string
+     */
+    private $game_id;
+
+    /**
+     * filter by pool ?
+     * @var boolean
+     */
+    private $query_by_pool = true;
+
+    /**
+     * pool id
+     * @var integer
+     */
+    private $dkpsys_id = 0;
+    private $defaultpool = 0;
+
+    /**
+     * name of pool
+     * @var string
+     */
+    private $dkpsys_name = '';
+
+    /**
+     * filter by armor ?
+     * @var boolean
+     */
+    private $query_by_armor = false;
+    /**
+     * values of armor types
+     * @var array
+     */
+    private $armor_type = array();
+
+    /**
+     * filter by class ?
+     * @var unknown
+     */
+    private $query_by_class = false;
+    private $classname = array();
+    private $classarray = array();
+    /**
+     * class id from pulldown
+     */
+    private $class_id = 0;
+
+    /**
+     * race id from pulldown
+     */
+    private $race_id = 0;
+
+    /**
+     * the filter string
+     * @var string
+     */
+    private $filter = '';
+
+    /**
+     * show all members even not active ?
+     * @var boolean
+     */
+    private $show_all = false;
+
+    private $level1;
+    private $level2;
+
+    private $page;
+
+    public $guilds;
 
     /**
      * @return array
@@ -156,76 +233,6 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
         return $this->level2;
     }
 
-    /**
-     * guild id
-     * @var int
-     */
-    private $guild_id;
-    /**
-     * game id
-     * @var string
-     */
-    private $game_id;
-    /**
-     * filter by pool ?
-     * @var boolean
-     */
-    private $query_by_pool = true;
-    /**
-     * filter by armor ?
-     * @var boolean
-     */
-    private $query_by_armor = false;
-    /**
-     * filter by class ?
-     * @var unknown
-     */
-    private $query_by_class = false;
-    /**
-     * the filter string
-     * @var string
-     */
-    private $filter = '';
-    /**
-     * show all members even not active ?
-     * @var boolean
-     */
-    private $show_all = false;
-
-    /**
-     * pool id
-     * @var integer
-     */
-    private $dkpsys_id = 0;
-    private $defaultpool = 0;
-
-    /**
-     * name of pool
-     * @var string
-     */
-    private $dkpsys_name = '';
-
-    private $level1;
-    private $level2;
-
-    /**
-     * values of armor types
-     * @var array
-     */
-    private $armor_type = array();
-    private $classname = array();
-    private $classarray = array();
-    /**
-     * race id from pulldown
-     */
-    private $race_id = 0;
-
-    /**
-     * class id from pulldown
-     */
-    private $class_id = 0;
-
-    private $page;
 
     function __construct($page)
     {
@@ -257,73 +264,21 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
         }
 
         // get inputs
-        $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
-
         $this->show_all = ( request_var ( 'show', request_var ( 'hidden_show', '' )) == $user->lang['ALL']) ? true : false;
 
-        //include the guilds class
-        if (!class_exists('\bbdkp\controller\guilds\Guilds'))
-        {
-            require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
-        }
-        $guilds = new \bbdkp\controller\guilds\Guilds();
-
-        $guildlist = $guilds->guildlist(1);
-        if(count($guildlist) > 0)
-        {
-            foreach ($guildlist as $g)
-            {
-                //assign guild_id property
-                if($this->guild_id==0)
-                {
-                    //if there is a default guild
-                    if($g['guilddefault'] == 1)
-                    {
-                        $this->guild_id = $g['id'];
-                    }
-                    elseif($g['membercount'] > 1)
-                    {
-                        $this->guild_id = $g['id'];
-                    }
-
-                    //if guild id field still 0
-                    if($this->guild_id == 0 && $g['id'] > 0)
-                    {
-                        $this->guild_id = $g['id'];
-                    }
-                }
-
-                //populate guild popup
-                if($g['id'] > 0) // exclude guildless
-                {
-                    $template->assign_block_vars('guild_row', array(
-                        'VALUE' => $g['id'] ,
-                        'SELECTED' => ($g['id'] == $this->guild_id ) ? ' selected="selected"' : '' ,
-                        'OPTION' =>  $g['name']));
-                }
-            }
-
-        }
-        else
-        {
-            trigger_error('ERROR_NOGUILD', E_USER_WARNING );
-        }
-
-        $guilds->guildid = $this->guild_id;
-        $guilds->Getguild();
-        $this->game_id = $guilds->game_id;
-
+        $this->guild_id = request_var(URI_GUILD, request_var('hidden_guild_id', 0) );
+        $guildlist = $this->getGuildinfo();
 
         $this->race_id =  request_var('race_id',0);
-        $this->level1 =  request_var('$level1',0);
-        $this->level2 =  request_var('classid', 200);
+        $this->level1 =  request_var('level1',0);
+        $this->level2 =  request_var('level2', 200);
+        $this->filter = request_var('filter', $user->lang['ALL']);
 
-        $this->filter= request_var('filter', $user->lang['ALL']);
         $this->query_by_armor = false;
         $this->query_by_class = false;
-
         $this->armor();
-        if ($this->filter!= $user->lang['ALL'])
+
+        if ($this->filter != $user->lang['ALL'])
         {
             if (array_key_exists ( $this->filter, $this->armor_type ))
             {
@@ -434,19 +389,19 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
             'U_STATS'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;guild_id=' . $this->guild_id),
             'U_PLANNER'   		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=planner&amp;guild_id=' . $this->guild_id),
             'U_ABOUT'         	=> append_sid("{$phpbb_root_path}aboutbbdkp.$phpEx"),
-            'GAME_ID'			=> $guilds->game_id,
+            'GAME_ID'			=> $this->guilds->game_id,
             'GUILD_ID' 			=> $this->guild_id,
-            'GUILD_NAME' 		=> $guilds->name,
-            'REALM' 			=> $guilds->realm,
-            'REGION' 			=> $guilds->region,
-            'MEMBERCOUNT' 		=> $guilds->membercount ,
-            'ARMORY_URL' 		=> $guilds->guildarmoryurl ,
-            'MIN_ARMORYLEVEL' 	=> $guilds->min_armory ,
-            'SHOW_ROSTER' 		=> $guilds->showroster,
-            'EMBLEM'			=> $guilds->emblempath,
-            'EMBLEMFILE' 		=> basename($guilds->emblempath),
-            'ARMORY'			=> $guilds->guildarmoryurl,
-            'ACHIEV'			=> $guilds->achievementpoints,
+            'GUILD_NAME' 		=> $this->guilds->name,
+            'REALM' 			=> $this->guilds->realm,
+            'REGION' 			=> $this->guilds->region,
+            'MEMBERCOUNT' 		=> $this->guilds->membercount ,
+            'ARMORY_URL' 		=> $this->guilds->guildarmoryurl ,
+            'MIN_ARMORYLEVEL' 	=> $this->guilds->min_armory ,
+            'SHOW_ROSTER' 		=> $this->guilds->showroster,
+            'EMBLEM'			=> $this->guilds->emblempath,
+            'EMBLEMFILE' 		=> basename($this->guilds->emblempath),
+            'ARMORY'			=> $this->guilds->guildarmoryurl,
+            'ACHIEV'			=> $this->guilds->achievementpoints,
             'SHOWALL'			=> ($this->show_all) ? $user->lang['ALL']: '',
             'F_NAVURL' 			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=roster&amp;guild_id=' . $this->guild_id),
         ));
@@ -491,16 +446,73 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
         }
     }
 
+
+    private function getGuildinfo()
+    {
+        global $phpbb_root_path, $phpEx, $template;
+        //include the guilds class
+        if (!class_exists('\bbdkp\controller\guilds\Guilds'))
+        {
+            require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
+        }
+        $this->guilds = new \bbdkp\controller\guilds\Guilds();
+
+        $guildlist = $this->guilds->guildlist(1);
+        if(count($guildlist) > 0)
+        {
+            foreach ($guildlist as $g)
+            {
+                //assign guild_id property
+                if($this->guild_id==0)
+                {
+                    //if there is a default guild
+                    if($g['guilddefault'] == 1)
+                    {
+                        $this->guild_id = $g['id'];
+                    }
+                    elseif($g['membercount'] > 1)
+                    {
+                        $this->guild_id = $g['id'];
+                    }
+
+                    //if guild id field still 0
+                    if($this->guild_id == 0 && $g['id'] > 0)
+                    {
+                        $this->guild_id = $g['id'];
+                    }
+                }
+
+                //populate guild popup
+                if($g['id'] > 0) // exclude guildless
+                {
+                    $template->assign_block_vars('guild_row', array(
+                        'VALUE' => $g['id'] ,
+                        'SELECTED' => ($g['id'] == $this->guild_id ) ? ' selected="selected"' : '' ,
+                        'OPTION' =>  $g['name']));
+                }
+            }
+
+        }
+        else
+        {
+            trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+        }
+
+        $this->guilds->guildid = $this->guild_id;
+        $this->guilds->Getguild();
+        $this->game_id = $this->guilds->game_id;
+
+        return $guildlist;
+    }
+
     /**
      * Armor listing
      */
     private function armor()
     {
         global $config, $user, $db, $template;
-        $this->filter = $user->lang['ALL'];
-        /***** begin armor-class pulldown ****/
-        $filtervalues = array();
 
+        $filtervalues = array();
         $filtervalues ['all'] = $user->lang['ALL'];
         $filtervalues ['separator1'] = '--------';
 
@@ -566,7 +578,6 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
                 'OPTION' => (! empty ( $fname )) ? $fname : $user->lang['ALL'] ) );
         }
 
-        /***** end armor - class pulldown ****/
 
     }
 
