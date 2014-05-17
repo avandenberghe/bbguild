@@ -683,8 +683,6 @@ class Members extends \bbdkp\admin\Admin
             $this->AddMemberAdjustment($config['bbdkp_active_point_adj'],$user->lang['ACTION_MEMBER_ACTIVATED'] );
         }
 
-
-
         $log_action = array(
 			'header' => 'L_ACTION_MEMBER_UPDATED' ,
 			'L_NAME' => $this->member_name ,
@@ -849,7 +847,7 @@ class Members extends \bbdkp\admin\Admin
                 $this->member_portrait_url = $this->generate_portraitlink();
         }
 
-
+        $this->last_update = $this->time;
         $query = $db->sql_build_array('INSERT', array(
             'member_name' => ucwords($this->member_name) ,
             'member_status' => $this->member_status ,
@@ -870,7 +868,8 @@ class Members extends \bbdkp\admin\Admin
             'phpbb_user_id' => (int) $this->phpbb_user_id ,
             'game_id' => (string) $this->game_id ,
             'member_portrait_url' => (string) $this->member_portrait_url,
-            'member_title' => $this->member_title
+            'member_title' => $this->member_title,
+            'last_update' => $this->last_update,
         ));
 
         $db->sql_query('INSERT INTO ' . MEMBER_LIST_TABLE . $query);
@@ -1030,16 +1029,18 @@ class Members extends \bbdkp\admin\Admin
 			//if the last logged-in date is > 3 months ago then disable the account
 			if( isset($data['lastModified']))
 			{
-				$latest = $data['lastModified']/1000;
-				$diff = \round( \abs ( \time() - $latest) / 60 / 60 / 24, 2) ;
+				$latest = $data['lastModified'];
+				$diff = \round( \abs ( \time() - ($latest/1000)) / 60 / 60 / 24, 2) ;
 				if($diff > 90 && $this->member_status == 1)
 				{
-                    $this->Deactivate_member($diff);
+                    $this->member_status = 0;
+                    $this->deactivate_reason = 'DEACTIVATED_BY_API';
 
 				}
-                if($diff < 90 && $this->member_status == 0)
+                if($diff < 90 && $this->member_status == 0 && $this->deactivate_reason == 'DEACTIVATED_BY_API')
                 {
-                    $this->Activate_member($diff);
+                    $this->member_status = 1;
+                    $this->deactivate_reason = '';
 
                 }
             }
@@ -1050,7 +1051,8 @@ class Members extends \bbdkp\admin\Admin
 		else
 		{
             //not found in armory
-			$this->Deactivate_member('API Error');
+            $this->member_status = 0;
+            $this->deactivate_reason = 'DEACTIVATED_BY_API';
 		}
 
 	}
@@ -1075,21 +1077,21 @@ class Members extends \bbdkp\admin\Admin
             $this->Getmember();
             if (in_array($member_id,$mlist))
             {
-                $this->Activate_member('');
+                $this->Activate_member();
             }
             else
             {
-                $this->Deactivate_member('');
+                $this->Deactivate_member();
             }
         }
     }
 
     /**
-     * @param $config
-     * @param $user
+     * @internal param $config
+     * @internal param $user
      * @return bool
      */
-    private function Activate_member($message)
+    private function Activate_member()
     {
         global $config, $user,  $db;
         $changed = false;
@@ -1114,7 +1116,6 @@ class Members extends \bbdkp\admin\Admin
         $log_action = array(
             'header' 	 => 'L_ACTION_MEMBER_ACTIVATED' ,
             'L_NAME' 	 => \ucwords($this->member_name)  ,
-            'L_DAYSAGO'  => $message,
             'L_ADDED_BY' => $user->data['username']);
 
         $this->log_insert(array(
@@ -1127,11 +1128,11 @@ class Members extends \bbdkp\admin\Admin
     }
 
     /**
-     * @param $config
-     * @param $user
+     * @internal param $config
+     * @internal param $user
      * @return bool
      */
-    private function Deactivate_member($message)
+    private function Deactivate_member()
     {
         global $config, $user, $db;
         $changed = false;
@@ -1155,7 +1156,6 @@ class Members extends \bbdkp\admin\Admin
         $log_action = array(
             'header' 	 => 'L_ACTION_MEMBER_DEACTIVATED' ,
             'L_NAME' 	 => \ucwords($this->member_name)  ,
-            'L_DAYSAGO'  => $message,
             'L_ADDED_BY' => $user->data['username']);
 
         $this->log_insert(array(
@@ -1510,6 +1510,7 @@ class Members extends \bbdkp\admin\Admin
      * @param int|number $level1 optional =1
      * @param int|number $level2 optional = 200
      * @param boolean $mycharsonly optional = false
+     * @param $member_filter
      * @return array  (membercount, sql_fetchrowset of all rows)
      */
     public function getmemberlist($start, $mode, $query_by_armor, $query_by_class, $filter,
