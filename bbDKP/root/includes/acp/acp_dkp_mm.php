@@ -156,7 +156,6 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                             'hidden_active' => request_var('active', request_var('hidden_active', 0)),
                             'hidden_nonactive' => request_var('nonactive', request_var('hidden_nonactive', 0)),
                             'hidden_member_name' => utf8_normalize_nfc(request_var('member_name', request_var('hidden_member_name', '', true), true)),
-
                         ));
                         confirm_box(false, $user->lang['WARNING_BATTLENET'], $s_hidden_fields);
 
@@ -192,16 +191,17 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 $minlevel = request_var('minlevel', 0);
                 $maxlevel = request_var('maxlevel', 200);
 
-                if( ! isset($_POST['search']) )
+                if( isset($_POST['search'])  || isset($_GET['active']) || isset($_GET['nonactive'])  )
+                {
+                    $selectactive = request_var('active', 0);
+                    $selectnonactive = request_var('nonactive', 0);
+                }
+                else
                 {
                     // set standard
                     $selectactive = 1;
                     $selectnonactive = 1;
-                }
-                else
-                {
-                    $selectactive = request_var('active', 0);
-                    $selectnonactive = request_var('nonactive', 0);
+
                 }
 
                 $member_filter = utf8_normalize_nfc(request_var('member_name', '', true)) ;
