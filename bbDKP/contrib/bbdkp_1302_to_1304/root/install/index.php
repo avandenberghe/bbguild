@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.3
+ * @version 1.3.0.4
  */
 
 // anything lower than php 5.3.3 not supported (we use namespaces since v1.3)
@@ -1020,6 +1020,16 @@ $versions = array(
             array($table_prefix . 'bbdkp_memberlist', 'last_update', array('TIMESTAMP', 0)),
         ),
 ),
+
+'1.3.0.4' => array(
+		// fix #221
+      'custom' => array(
+            'tableupdates',
+            'bbdkp_caches'
+        ),
+
+),
+
 
 );
 
