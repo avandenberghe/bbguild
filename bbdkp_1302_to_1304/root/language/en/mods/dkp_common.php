@@ -4,7 +4,7 @@
  *
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.3
+ * @version 1.3.0.4
  *
  *
  */
@@ -43,7 +43,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.',
-'FOOTERBBDKP' => 'bbDKP 1.3.0.3',
+'FOOTERBBDKP' => 'bbDKP 1.3.0.4',
 
 //---- Portal blocks -----
 'PORTAL' => 'Portal',
