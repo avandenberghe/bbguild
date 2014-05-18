@@ -5,7 +5,7 @@
  *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.3.0.3
  *
  */
 
@@ -177,8 +177,8 @@ $lang = array_merge($lang, array(
 'IMPORT_EQDKP140_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ',
 'IMPORT_EQDKPPLUS' => 'Import EQDKP-PLUS data Into bbdkp 1.1.1',
 'IMPORT_EQDKPPLUS_CONFIRM' => 'Are you ready to import ? Your EQDKP-PLUS tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ',
-'UMIL_INSERT_COMMON_ROW' => 'Insert common bbdkp data for index/ranks/Bprogress',
-'UMIL_REMOVE_COMMON_ROW' => 'Remove common bbdkp data for index/ranks/Bprogress',
+'UMIL_INSERT_COMMON_ROW' => 'Insert common bbdkp data for index/ranks/Bossprogress',
+'UMIL_REMOVE_COMMON_ROW' => 'Remove common bbdkp data for index/ranks/Bossprogress',
 'UMIL_INSERT_GAME_ROW' => 'Insert game data',
 'UMIL_INSERT_DAOCDATA' => 'Inserted Dark Age of Camelot Data',
 'UMIL_INSERT_EQDATA' => 'Inserted EverQuest Data',
@@ -283,7 +283,7 @@ $lang = array_merge($lang, array(
 'ACP_RANKS_EXPLAIN' => 'Here you can add/edit/delete raid ranks and name prefix/suffix. Ranks can be overwritten by the in-game ranks through the armorylink plugin. Custom ranks (90 and 99) are read-only. ',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Guild member list. ',
 'SHOW_VISIBLE_RANKS' => 'Shows only visible ranks.',
-'CALL_BATTLENET_CHAR_API' => 'Call Battle.NET Character API for selected WoW characters. toggles inactive if Lastmodified flag was > 180 days ago, reactivates if < 180 and the chracter is marked closed.',
+'CALL_BATTLENET_CHAR_API' => 'Call Battle.NET Character API for this Guild. toggles to inactive if lastModified flag was > 90 days ago, reactivates if < 90 and character deactivation status was ’API’.',
 'MASS_DELETE_CHAR' => 'Mass delete selected characters.',
 'TOGGLE_ACTIVE' => 'Toggles active status for selected members',
 'ACP_LISTGUILDS_EXPLAIN' => 'List of guilds. before you add members, you have to add a guild.',
@@ -439,6 +439,7 @@ $lang = array_merge($lang, array(
 'ACTION_RACE_DELETED' => 'Race deleted',
 'ACTION_RACE_ADDED' => 'Race added',
 'ACTION_RACE_UPDATED' => 'Race Updated',
+ 'ACTION_RACE_UPDATED' => 'Race Updated',
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Newest Admin Actions',
@@ -459,7 +460,7 @@ $lang = array_merge($lang, array(
 'VLOG_MEMBER_ADDED' => '%s added the member %s.',
 'VLOG_MEMBER_UPDATED' => '%s updated the member %s.',
 'VLOG_MEMBER_DELETED' => '%s deleted the member %s.',
-'VLOG_MEMBER_DEACTIVATED' => '%s deactivated the member %s due to inactivity (%s) ',
+'VLOG_MEMBER_DEACTIVATED' => '%s deactivated the member %s due to inactivity ',
 'VLOG_MEMBERDKP_UPDATED' => '%s updated the dkp points of %s : earned: %.2f -> %.2f, spent: %.2f -> %.2f',
 'VLOG_MEMBERDKP_DELETED' => '%s deleted the dkp points of %s !',
 'VLOG_NEWS_ADDED' => '%s added the news entry %s.',
@@ -493,6 +494,7 @@ $lang = array_merge($lang, array(
 'VLOG_RACE_DELETED' => '%s deleted race %s from %s',
 'VLOG_RACE_ADDED' => '%s added race %s to %s',
 'VLOG_RACE_UPDATED' => '%s updated race %s in %s',
+'VLOG_ARMORY_DOWN' => 'Could not call Guild API',
 
 // Before/After
 'ADJUSTMENT_BEFORE' => 'Adjustment Before',
@@ -595,6 +597,8 @@ $lang = array_merge($lang, array(
 'ERROR_RANKMEMBERS' => 'Cannot delete this rank. There are still members with this rank. ',
 'ERROR_NOSELECT' => 'Please select a From and a To-member.',
 'WARNING_BATTLENET' => 'Updating all members from Battle.NET Character API may take several minutes. Please confirm.',
+'ERROR_ARMORY_DOWN' => 'Error: Could not connect to Battle.NET API',
+'GUILD_EMBLEM_NF' => 'Guild emblem not found',
 
 //Curl errors
 'ERR_UNKNOWN' => 'Unknown error occurred.',
@@ -648,7 +652,8 @@ $lang = array_merge($lang, array(
 'ADMIN_TRANSFER_HISTORY_SUCCESS' => 'All of %s’s points, items, history was transferred to %s and %s dkp account for pool %s was set to zero.',
 'ADMIN_UPDATE_ADJ_SUCCESS' => 'The %s adjustment of %.2f has been updated in the database for your guild.',
 'ADMIN_UPDATE_DKPSYS_SUCCESS' => 'The name,status of DKP pool %s was changed to : %s, %s',
-'ADMIN_UPDATE_GUILD_SUCCESS' => 'the guild with id %d has been updated in your database.',
+'ADMIN_UPDATE_GUILD_SUCCESS' => 'the guild with id %d has been updated.',
+'ADMIN_UPDATE_GUILD_FAILED' => 'the guild with id %d has been updated with errors.',
 'ADMIN_UPDATE_EVENT_SUCCESS' => 'The value preset of %s for a event on %s has been updated in the database for your guild.',
 'ADMIN_UPDATE_IADJ_SUCCESS' => 'The individual %s adjustment of %.2f for %s has been updated in the database for your guild.',
 'ADMIN_UPDATE_ITEM_SUCCESS' => 'The item purchase entry for %s, purchased by %s for %.2f has been updated in the database for your guild.',
@@ -847,7 +852,7 @@ $lang = array_merge($lang, array(
 'DELETE_MEMBER' => 'Delete selected Member',
 'DELETE_MEMBER_DKP' => 'Delete Member dkp',
 'DELETE_RAID' => 'Delete Raid',
-'DELETE_SELECTED_MEMBERS' => 'Delete Selected Member(s)',
+'DELETE_SELECTED_MEMBERS' => 'Mass Delete',
 'DELETE_SELECTED_GUILDS' => 'Delete Selected Guild(s)',
 'DUPLICATE_RAID' => 'Duplicate Raid',
 'EDIT_GUILD' => 'Edit Guild',

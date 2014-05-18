@@ -7,9 +7,14 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.3.0.4
  */
 
+// anything lower than php 5.3.3 not supported (we use namespaces since v1.3)
+if (version_compare(PHP_VERSION, '5.3.3') < 0)
+{
+    die('You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.3.3 or higher before trying to install bbDKP. <br />');
+}
 define('UMIL_AUTO', true);
 define('IN_PHPBB', true);
 define('IN_INSTALL', true);
@@ -24,12 +29,6 @@ $user->setup();
 $user->add_lang ( array ('mods/dkp_admin'));
 
 $error= array();
-// anything lower than php 5.3.3 not supported (we use namespaces since v1.3)
-if (version_compare(PHP_VERSION, '5.3.3') < 0)
-{
-	$error[] = 'You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.3.3 or higher before trying to install bbDKP. <br />';
-}
-
 switch ($db->sql_layer)
 {
 	case 'mysqli':
@@ -1014,6 +1013,24 @@ $versions = array(
 '1.3.0.2' => array(
 	// just some file fixes, see changelog
 ),
+
+'1.3.0.3' => array(
+        'table_column_add' => array(
+            array($table_prefix . 'bbdkp_memberlist', 'deactivate_reason', array('VCHAR_UNI:255', '')),
+            array($table_prefix . 'bbdkp_memberlist', 'last_update', array('TIMESTAMP', 0)),
+        ),
+),
+
+'1.3.0.4' => array(
+	// fix for issue #221
+      'custom' => array(
+            'tableupdates',
+            'bbdkp_caches'
+        ),
+
+
+),
+
 
 
 );

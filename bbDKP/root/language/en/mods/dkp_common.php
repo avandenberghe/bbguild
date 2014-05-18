@@ -4,7 +4,7 @@
  *
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.2
+ * @version 1.3.0.3
  *
  *
  */
@@ -43,7 +43,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.',
-'FOOTERBBDKP' => 'bbDKP 1.3.0.2',
+'FOOTERBBDKP' => 'bbDKP 1.3.0.4',
 
 //---- Portal blocks -----
 'PORTAL' => 'Portal',
@@ -272,6 +272,7 @@ $lang = array_merge($lang, array(
 'LAST' => 'Last',
 'LASTLOOT' => 'Last Loot',
 'LAST_VISIT' => 'Last Visit',
+'LAST_UPDATE' => 'Last Update',
 'LOG_DATE_TIME' => 'Date/Time of this Log',
 'LOOT_FACTOR' => 'Loot Factor',
 'LOOTS' => 'Loots',
@@ -417,6 +418,9 @@ $lang = array_merge($lang, array(
 'NOAUTH_U_RAID_VIEW' => 'You do not have permission to view raids.',
 
 // Miscellaneous
+'DEACTIVATED_BY_API' => 'Deactivated by API',
+'DEACTIVATED_BY_USR' => 'Deactivated by User',
+
 'ADDED' => 'Added',
 'BOSSKILLCOUNT' => 'Bosskills',
 'CLOSED' => 'closed',

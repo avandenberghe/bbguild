@@ -4,7 +4,7 @@
  *
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.2
+ * @version 1.3.0.3
  * @translation various unknown authors, killerpommes
  *
  */
@@ -43,7 +43,7 @@ $lang = array();
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is zurzeit nicht erreichbar.',
-'FOOTERBBDKP' => 'bbDKP 1.3.0.2',
+'FOOTERBBDKP' => 'bbDKP 1.3.0.4',
 
 //---- Portal blocks -----
 'PORTAL' => 'Portal',
@@ -334,6 +334,7 @@ $lang = array_merge($lang, array(
 'TOTAL' => 'Gesamt',
 'TIMEVALUE' => 'Zeitwert',
 'TOTAL_EARNED' => 'Gesamt verdient',
+'TOTAL_ADJUSTMENTS' => 'Gesamt Ajustierungen',
 'TOTAL_ITEMS' => 'Gesamt Gegenstände',
 'TOTAL_RAIDS' => 'Gesamt Raids',
 'TOTAL_SPENT' => 'Gesamt ausgegeben',
@@ -415,6 +416,9 @@ $lang = array_merge($lang, array(
 'NOAUTH_U_RAID_VIEW' => 'Du hast keine Berechtigung Raids zu sehen.',
 
 // Miscellaneous
+'DEACTIVATED_BY_API' => 'Deaktiviert durch API',
+'DEACTIVATED_BY_USR' => 'Deaktiviert durch Gebraucher',
+
 'ADDED' => 'Hinzugefügt',
 'BOSSKILLCOUNT' => 'Anzahl Bosskills',
 'CLOSED' => 'Geschlossen',

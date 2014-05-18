@@ -5,7 +5,7 @@
 * @copyright (c) 2011 phpBB Group
 * @author Sajaki
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @version 1.3.0.2
+* @version 1.3.0.3
 *
 */
 
@@ -43,7 +43,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP est actuellement désactivé.',
-'FOOTERBBDKP' => 'bbDKP 1.3.0.2',
+'FOOTERBBDKP' => 'bbDKP 1.3.0.4',
 
 //---- Portal blocks -----
 'PORTAL' => 'Portail',
@@ -276,6 +276,7 @@ $lang = array_merge($lang, array(
 'LAST' => 'Dernier',
 'LASTLOOT' => 'Dernier Loot',
 'LAST_VISIT' => 'Dernière Visite',
+'LAST_UPDATE' => 'Dernière mise à jour',
 'LOG_DATE_TIME' => 'Temps/date de ce Log',
 'LOOT_FACTOR' => 'Facteur de Loot',
 'LOOTS' => 'Trésors',
@@ -338,6 +339,7 @@ $lang = array_merge($lang, array(
 'TIME_BONUS' => 'Bonus Temps',
 'TOTAL' => 'Total',
 'TIMEVALUE' => 'Points par temps',
+'TOTAL_ADJUSTMENTS' => 'Total Ajustments',
 'TOTAL_EARNED' => 'Total Gagné',
 'TOTAL_ITEMS' => 'Total Objets',
 'TOTAL_RAIDS' => 'Total Raids',
