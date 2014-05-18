@@ -124,15 +124,12 @@ EQDkp (c) 2003 The EqDkp Project Team]]></description>
 			<target-version>3.0.12</target-version>
 		</installation>
 		<link-group>
-			<link type="language" href="contrib/fr.xml" lang="en">French</link>
+
 			<link type="language" href="contrib/fr.xml" lang="fr">Français</link>
-			<link type="language" href="contrib/fr.xml" lang="de">Franzözisch</link>
-			<link type="language" href="contrib/de.xml" lang="en">German</link>
-			<link type="language" href="contrib/de.xml" lang="fr">Allemand</link>
 			<link type="language" href="contrib/de.xml" lang="de">Deutsch</link>
 			<link type="template" href="contrib/prosilver.xml" lang="en">Prosilver</link>
-			<link type="template" href="contrib/bbdkp_1302_to_1304/update.xml" lang="en">Update 1.3.0.2->1.3.0.4</link>
-			<link type="template" href="contrib/bbdkp_1303_to_1304/update.xml" lang="en">Update 1.3.0.3->1.3.0.4</link>			
+			<link type="contrib" href="contrib/bbdkp_1302_to_1304/update.xml" lang="en">Update 1.3.0.2->1.3.0.4</link>
+			<link type="contrib" href="contrib/bbdkp_1303_to_1304/update.xml" lang="en">Update 1.3.0.3->1.3.0.4</link>			
 		</link-group>
 	</header>
 	<action-group>
