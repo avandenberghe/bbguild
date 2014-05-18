@@ -7,7 +7,7 @@
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<meta name="generator" content="MODX file generated with PP MODX Creator 1.0.1 by tumba25 (offline version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
-		<title lang="de"><![CDATA[bbDKP]]></title>
+		<title lang="de"><![CDATA[bbDKP 1.3.0.4]]></title>
 		<description lang="de"><![CDATA[Deutsche Sprachdateien für bbDKP]]></description>
 		<author-notes lang="de"><![CDATA[Bitte machen Sie einen datenbank backup bevor Sie diesen Mod installieren.]]></author-notes>
 		<author-group>
@@ -21,35 +21,22 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.3.0.4</mod-version>
+		<mod-version>1.3.0.3</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>600</time>
 			<target-version>3.0.12</target-version>
 		</installation>
 		<link-group>
-			<link type="parent" href="../install.xml" lang="en">Installation manual</link>
-			<link type="parent" href="../install.xml" lang="fr">Manuel d’installation</link>
-			<link type="parent" href="../install.xml" lang="de">Installationshinweise</link>
+			<link type="parent" href="../update.xml" lang="en">Upgrade manual</link>
+			<link type="parent" href="../update.xml" lang="fr">Manuel de mise à jour</link>
+			<link type="parent" href="../update.xml" lang="de">Aktualisierungshinweise</link>
 		</link-group>
 	</header>
 	<action-group>
 		<copy>
 			<file from="root/language/de/mods/dkp_admin.php" to="language/de/mods/dkp_admin.php"/>
 			<file from="root/language/de/mods/dkp_common.php" to="language/de/mods/dkp_common.php"/>
-			<file from="root/language/de/mods/info_acp_dkp.php" to="language/de/mods/info_acp_dkp.php"/>
-			<file from="root/language/de/mods/info_acp_dkp_adj.php" to="language/de/mods/info_acp_dkp_adj.php"/>
-			<file from="root/language/de/mods/info_acp_dkp_game.php"  to="language/de/mods/info_acp_dkp_game.php"/>
-			<file from="root/language/de/mods/info_acp_dkp_guild.php" to="language/de/mods/info_acp_dkp_guild.php"/>
-			<file from="root/language/de/mods/info_acp_dkp_item.php" to="language/de/mods/info_acp_dkp_item.php"/>
-			<file from="root/language/de/mods/info_acp_dkp_mdkp.php" to="language/de/mods/info_acp_dkp_mdkp.php"/>
-			<file from="root/language/de/mods/info_acp_dkp_mm.php" to="language/de/mods/info_acp_dkp_mm.php"/>
-			<file from="root/language/de/mods/info_acp_dkp_news.php" to="language/de/mods/info_acp_dkp_news.php"/>
-			<file from="root/language/de/mods/info_acp_dkp_point.php" to="language/de/mods/info_acp_dkp_point.php"/>
-			<file from="root/language/de/mods/info_acp_dkp_raid.php" to="language/de/mods/info_acp_dkp_raid.php"/>
-			<file from="root/language/de/mods/info_acp_dkp_sys.php" to="language/de/mods/info_acp_dkp_sys.php"/>
-			<file from="root/language/de/mods/info_ucp_dkpcharacter.php" to="language/de/mods/info_ucp_dkpcharacter.php"/>
-			<file from="root/language/de/mods/permissions_bbdkp.php" to="language/de/mods/permissions_bbdkp.php"/>
 		</copy>
 		<diy-instructions lang="en"><![CDATA[See general install.xml file]]></diy-instructions>
 		<diy-instructions lang="de"><![CDATA[Siehe install.xml]]></diy-instructions>

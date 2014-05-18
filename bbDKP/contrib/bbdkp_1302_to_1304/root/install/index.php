@@ -1022,15 +1022,13 @@ $versions = array(
 ),
 
 '1.3.0.4' => array(
-	// fix for issue #221
+		// fix #221
       'custom' => array(
             'tableupdates',
             'bbdkp_caches'
         ),
 
-
 ),
-
 
 
 );

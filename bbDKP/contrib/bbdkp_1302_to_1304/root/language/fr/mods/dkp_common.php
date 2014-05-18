@@ -5,7 +5,7 @@
 * @copyright (c) 2011 phpBB Group
 * @author Sajaki
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @version 1.3.0.3
+* @version 1.3.0.4
 *
 */
 
