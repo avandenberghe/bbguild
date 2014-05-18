@@ -5,7 +5,7 @@
 * @copyright (c) 2011 phpBB Group
 * @author Sajaki
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
-* @version 1.3.0.3
+* @version 1.3.0.4
 *
 */
 
@@ -43,7 +43,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP est actuellement désactivé.',
-'FOOTERBBDKP' => 'bbDKP 1.3.0.3',
+'FOOTERBBDKP' => 'bbDKP 1.3.0.4',
 
 //---- Portal blocks -----
 'PORTAL' => 'Portail',
