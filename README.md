@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0.3
+#1.3.0.4
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0.3
+1.3.0.4
 
 ## Installation
 
@@ -33,7 +33,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 4.	ftp and founder admin access on your phpbb installation.
 5.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### New installation 1.3.0.3
+#### New installation 1.3.0.4
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
@@ -43,18 +43,24 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 2. Upload bbDKP folder to your webserver, into /store/mods/
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
-5. Click submit. This will install 1.3.0.3 and clear the caches (template, theme, imagesets)
+5. Click submit. This will install 1.3.0.4 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.2 to 1.3.0.3
+#### Upgrading from 1.3.0.3 to 1.3.0.4
 
-Download and Install the Upgrade mod 1.3.0.2 to 1.3.0.3
+*	Download and Install the Upgrade mod 1.3.0.2 to 1.3.0.4
+*	Or apply the update from Automod "available changes" after uploading bbdkp 1.3.0.4 full
 
-#### Upgrading from 1.2.8-pl2 to 1.3.0.3
+#### Upgrading from 1.3.0.2 to 1.3.0.4
+
+*	Download and Install the Upgrade mod 1.3.0.2 to 1.3.0.4
+*	Or apply the update from Automod "available changes" after uploading bbdkp 1.3.0.4 full
+
+#### Upgrading from 1.2.8-pl2 to 1.3.0.4
 
 * make a secure backup of all files
 * backup your database
 
-* Uninstall 1.2.8-pl2 and re-install 1.3.0.3 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.3.0.4 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first.
 		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
 		*	make sure the module was uninstalled by checking the ACP modules.
@@ -62,9 +68,9 @@ Download and Install the Upgrade mod 1.3.0.2 to 1.3.0.3
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2 to uninstall the files and phpbb edits. 
     3. purge the board cache, verify your board is running    
     4. delete /store/mods/bbdkp  
-	5. upload the unzipped bbdkp 1.3.0.3 folder to /store/mods
+	5. upload the unzipped bbdkp 1.3.0.4 folder to /store/mods
 	6. from Automod, run file installer
-	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.3  
+	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.4  
 
 * Manually
 	*	Localhost	 	
@@ -78,12 +84,12 @@ Download and Install the Upgrade mod 1.3.0.2 to 1.3.0.3
 			*	apply the changes to the core phpbb files. use a good text editor
 		4.	launch the DB updater locally (/install/index.php)
 			*	Now you see the Umil updater.
-			*	Click update. This will update to 1.3.0.3 and clear the caches (template, theme, imagesets)
+			*	Click update. This will update to 1.3.0.4 and clear the caches (template, theme, imagesets)
 		5.	Update your Custom styles, or install a premodded style. Jade, Deathwing and pbWoW2 have premods.
 	*	live server
 		1. upload the install folder for any bbdkp1.2.8 plugin that you installed, and run uninstall.
 		2.	FTP the whole folder to to your webserver, after deleting your remote files.
-		3.	launch the bbdkp 1.3.0.3 DB updater on your webserver (/install/index.php) and redo the db changes on live.
+		3.	launch the bbdkp 1.3.0.4 DB updater on your webserver (/install/index.php) and redo the db changes on live.
 
 
 #### Upgrading from earlier version
@@ -102,6 +108,9 @@ Find support and more on
 
 ## Changelog 
 
+1.3.0.4 18-05-2014
+
+-	[FIX] #221 ucp call to members class was missing memberfilter argument 
 
 1.3.0.3 17-05-2014
 

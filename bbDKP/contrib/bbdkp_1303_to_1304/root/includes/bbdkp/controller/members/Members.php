@@ -1510,11 +1510,11 @@ class Members extends \bbdkp\admin\Admin
      * @param int|number $level1 optional =1
      * @param int|number $level2 optional = 200
      * @param boolean $mycharsonly optional = false
-     * @param $member_filter optional = ''
+     * @param $member_filter
      * @return array  (membercount, sql_fetchrowset of all rows)
      */
     public function getmemberlist($start, $mode, $query_by_armor, $query_by_class, $filter,
-			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false, $member_filter = '' )
+			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false, $member_filter)
 	{
 		global $db, $config, $user, $phpbb_root_path;
 		$sql_array = array();

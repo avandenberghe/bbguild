@@ -43,7 +43,7 @@ if (empty($lang) || !is_array($lang))
 
 $lang = array_merge($lang, array(
 'BBDKPDISABLED' => 'bbDKP is currently disabled.',
-'FOOTERBBDKP' => 'bbDKP 1.3.0.4',
+'FOOTERBBDKP' => 'bbDKP 1.3.0.3',
 
 //---- Portal blocks -----
 'PORTAL' => 'Portal',
