@@ -4,32 +4,12 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
 	<header>
 		<license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-		<title lang="en">bbDKP 1.3.0.4 - Update from bbdkp 1.3.0.2</title>
-		<title lang="de">bbDKP 1.3.0.4 - Update von bbdkp 1.3.0.2</title>
-		<title lang="fr">bbDKP 1.3.0.4 - mise à jour depuis bbdkp 1.3.0.2</title>
-		<description lang="en">bbDKP 1.3.0.4 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
-		1.3.0.4 18-05-2014
+		<title lang="en">bbDKP 1.3.0.5 - Update from bbdkp 1.3.0.4</title>
+		<title lang="de">bbDKP 1.3.0.5 - Update von bbdkp 1.3.0.4</title>
+		<title lang="fr">bbDKP 1.3.0.5 - mise à jour depuis bbdkp 1.3.0.4</title>
+		<description lang="en">bbDKP 1.3.0.5 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
+		1.3.0.5 29-05-2014
 -	[FIX] ucp call to members class is missing memberfilter argument		
--	[NEW] add new log types for armory down error, Guild updated
--	[FIX] #220 refactored acp_dkp_mm by extraction into methods
--	[FIX] refactored acp_dkp_guild by extraction into methods
--	[FIX] “activated” checkbox in acp_mm_addmember.html
--	[removed] “joindate” columns in member list acp
--	[NEW] last_update column in member list acp
--	[NEW] top search criteria in in member list acp now apply for armory update
--	[NEW] added DEACTIVATED_BY_API deactivation reason
--	[NEW] Character api limited to 100 calls per time and to members where last_update was > 15 minutes ago
--	[NEW] lock status if member disabled by API call
--	[FIX] #213 if wow guild not found on armory, show message.
--	[NEW] new member table columns: inactivereason, last_update;
--	[CHG] #219 leaderboard only hows 5 biggest accounts per class.
--	[CHG] #219 leaderboard class names aligned to class image
--	[NEW] #218 add member search to roster
--	[NEW] #218 add member search to standings
--	[NEW] #218 add member search to listmembers, listaccounts acp - [FIX] #216 Refactor standings page, show all accounts
--	[FIX] #215 add pagination to standings page
--	[FIX] fixed count, shading in adjustment acp,
--	[FIX] #214 add pagination to dkp account acp.
 
 </description>
 		<author-notes lang="en">I hope you get everything working. Further developement or questions are welcome at www.bbdkp.com
@@ -50,26 +30,23 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.3.0.4</mod-version>
+		<mod-version>1.3.0.5</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>60</time>
 			<target-version>3.0.12</target-version>
 		</installation>
 		<link-group>
-			<link type="language" lang="de" href="contrib/de.xml">Sprachdateien für bbdkp 1.3.0.4</link>
-			<link type="language" lang="fr" href="contrib/fr.xml">mise à jour fichiers langue 1.3.0.4</link>
+			<link type="language" lang="de" href="contrib/de.xml">Sprachdateien für bbdkp 1.3.0.5</link>
+			<link type="language" lang="fr" href="contrib/fr.xml">mise à jour fichiers langue 1.3.0.5</link>
 		</link-group>	
 	</header>
 	<action-group>
 		<copy>
-			<file from="root/adm/style/dkp/*.*" to="adm/style/dkp/*.*"/>
-			<file from="root/includes/acp/*.*" to="includes/acp/*.*"/>
 			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
 			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
 			<file from="root/install/*.*" to="install/*.*"/>
 			<file from="root/language/en/*.*" to="language/en/*.*"/>
-			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>								
 		</copy>
 		<php-installer>install/index.php</php-installer>
 		<diy-instructions lang="fr"><![CDATA[navigue vers install/index.php et execute la mise à jour.]]></diy-instructions>

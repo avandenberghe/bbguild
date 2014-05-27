@@ -73,12 +73,11 @@ class blockFactory extends \bbdkp\admin\Admin
             if ($config['rp_show_portal'] == 1)
             {
                 $user->add_lang(array('mods/raidplanner'));
-                if (!class_exists('\bbdkp\raidplanner\rpblocks', false))
+                if (!class_exists('\bbdkp\views\raidplanner\rpblocks', false))
                 {
-                    //display the blocks
-                    include($phpbb_root_path . 'includes/bbdkp/raidplanner/rpblocks.' . $phpEx);
+                    include($phpbb_root_path . 'includes/bbdkp/views/raidplanner/block/rpblocks.' . $phpEx);
                 }
-                $blocks = new \bbdkp\raidplanner\rpblocks();
+                $blocks = new \bbdkp\views\raidplanner\rpblocks();
                 $blocks->display();
             }
         }

@@ -54,16 +54,9 @@ class viewFactory extends \bbdkp\admin\Admin
             include($phpbb_root_path . 'includes/bbdkp/views/viewNavigation.'. $phpEx);
             $Navigation = new viewNavigation($page);
 
-            if ($page != 'planner')
-            {
-                include($phpbb_root_path . 'includes/bbdkp/views/view'. ucfirst($page) . '.' . $phpEx);
-                $viewtype = "\\bbdkp\\views\\view". ucfirst($page);
-            }
-            else
-            {
-                include($phpbb_root_path . 'includes/bbdkp/raidplanner/viewPlanner.'. $phpEx);
-                $viewtype = "\\bbdkp\\views\\view". ucfirst($page);
-            }
+            include($phpbb_root_path . 'includes/bbdkp/views/view'. ucfirst($page) . '.' . $phpEx);
+            $viewtype = "\\bbdkp\\views\\view". ucfirst($page);
+
             return new $viewtype($Navigation);
 
         }
@@ -72,8 +65,5 @@ class viewFactory extends \bbdkp\admin\Admin
             trigger_error(sprintf($user->lang['NOVIEW'], $page ));
         }
     }
-
-
-
 }
 
