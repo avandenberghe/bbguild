@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0.5
+1.3.0.5 (in development)
 
 ## Installation
 
@@ -106,6 +106,7 @@ Find support and more on
 1.3.0.5 29-05-2014
 
 -	[FIX] #222 sql error in UCP when updating non-wow character 
+-	[FIX] #223 make constants unique
 
 1.3.0.4 18-05-2014
 
