@@ -1,6 +1,6 @@
 1.3.0.5[![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0.5
+#1.3.0.5 (development)
 
 
 ## about
@@ -127,13 +127,24 @@ Find support and more on
 -   [FIX] #213 if wow guild not found on armory, show message. 
 -   [NEW] new member table columns: inactivereason, last_update; 
 -	[CHG] #219 leaderboard only hows 5 biggest accounts per class. 
--	[CHG] #219 leaderboard class names aligned to class image-	[NEW] #218 add member search to roster
+-	[CHG] #219 leaderboard class names aligned to class image
+-	[NEW] #218 add member search to roster
 -	[NEW] #218 add member search to standings
--	[NEW] #218 add member search to listmembers, listaccounts acp -	[FIX] #216 Refactor standings page, show all accounts-	[FIX] #215 add pagination to standings page-	[FIX] fixed count, shading in adjustment acp, -	[FIX] #214 add pagination to dkp account acp. 
-
+-	[NEW] #218 add member search to listmembers, listaccounts acp -	[FIX] #216 Refactor standings page, show all accounts
+-	[FIX] #215 add pagination to standings page
+-	[FIX] fixed count, shading in adjustment acp, 
+-	[FIX] #214 add pagination to dkp account acp. 
+
+
 1.3.0.2 01-05-2014
 
--	[FIX] #203 calling wow charapi did not deduce inactive points from account-	[FIX] #204 raid value was not added to account for duplicated raid-	[FIX] #205 need to show adjustments on account page-	[FIX] #206 raid count was not increased for duplicated raid-	[FIX] #207 missing language "SPENTNET"-	[FIX] #208 issue in viewraid and pbwow. Page is nudged to high. -	[FIX] #209 total of raid value column should not have equal sign
+-	[FIX] #203 calling wow charapi did not deduce inactive points from account
+-	[FIX] #204 raid value was not added to account for duplicated raid
+-	[FIX] #205 need to show adjustments on account page
+-	[FIX] #206 raid count was not increased for duplicated raid
+-	[FIX] #207 missing language "SPENTNET"
+-	[FIX] #208 issue in viewraid and pbwow. Page is nudged to high. 
+-	[FIX] #209 total of raid value column should not have equal sign
 -	[FIX] #210 rewrite points transfer function
 
 1.3.0.1 24-04-2014
