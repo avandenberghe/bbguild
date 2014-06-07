@@ -31,6 +31,7 @@ if (!class_exists('\bbdkp\controller\members\Members'))
     // Include the member class
 	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
+
 /**
  * bbDKP ucp class
  * @package bbdkp
@@ -116,7 +117,14 @@ class ucp_dkp extends \bbdkp\admin\Admin
 		switch ($mode)
 		{
 			case 'characters':
-				$this->link = '';
+                /***
+                 *
+                 * ucp tab 1
+                 * list of characters
+                 *
+                 *
+                 */
+                $this->link = '';
 				$submit = (isset($_POST['submit'])) ? true : false;
 				$member = new \bbdkp\controller\members\Members();
 				if ($submit)
@@ -195,9 +203,15 @@ class ucp_dkp extends \bbdkp\admin\Admin
 
 				break;
 			case 'characteradd':
+                /**
+                 *
+                 * ucp tab 2
+                 * character add/edit
+                 *
+                 */
 
-				//get member_id if selected from pulldown
-				$member_id =  request_var('hidden_member_id',  request_var(URI_NAMEID, 0));
+                //get member_id if selected from pulldown
+                $member_id =  request_var('hidden_member_id',  request_var(URI_NAMEID, 0));
 				$submit	 = (isset($_POST['add'])) ? true : false;
 				$update	 = (isset($_POST['update'])) ? true : false;
 				$delete	 = (isset($_POST['delete'])) ? true : false;
@@ -240,6 +254,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 
 					if($submit)
 					{
+                        // add/update character
 						if (!check_form_key('characteradd'))
 						{
 							trigger_error('FORM_INVALID');
@@ -255,6 +270,8 @@ class ucp_dkp extends \bbdkp\admin\Admin
 					    // get member name
 					    $newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
 					    $newmember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
+                        $newmember->member_realm = utf8_normalize_nfc(request_var('realm', '', true));
+                        $newmember->member_region = request_var('region_id', '');
 					    $newmember->member_guild_id = request_var('member_guild_id', 0);
 					    $newmember->member_rank_id = request_var('member_rank_id', 99);
 					    $newmember->member_level = request_var('member_level', 1);
@@ -272,7 +289,8 @@ class ucp_dkp extends \bbdkp\admin\Admin
 					    $newmember->member_achiev = 0;
 					    $newmember->member_armory_url = utf8_normalize_nfc(request_var('member_armorylink', '', true));
 					    $newmember->phpbb_user_id = $user->data['user_id'];
-					    $member_status = request_var('activated', 0) > 0 ? 1 : 0;
+                        $newmember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
+
 					    $newmember->Armory_getmember();
 					    $newmember->Makemember();
 
@@ -315,9 +333,11 @@ class ucp_dkp extends \bbdkp\admin\Admin
 						// get member name
 						$updatemember->member_name = utf8_normalize_nfc(request_var('member_name', '',true));
 						$updatemember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
+                        $updatemember->member_realm = utf8_normalize_nfc(request_var('realm', '', true));
+                        $updatemember->member_region = request_var('region_id', '');
 						$updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
 						$updatemember->member_guild_id =request_var('member_guild_id', 0);
-						$updatemember->member_rank_id =request_var('member_rank_id',99);
+						$updatemember->member_rank_id = request_var('member_rank_id',99);
 						$updatemember->member_level = request_var('member_level', 0);
 						$updatemember->game_id = request_var('game_id', '');
 						$updatemember->member_race_id = request_var('member_race_id', 0);
@@ -567,12 +587,21 @@ class ucp_dkp extends \bbdkp\admin\Admin
 			$S_DELETE = false;
 		}
 
+
+        foreach ($this->regions as $key => $regionname)
+        {
+            $template->assign_block_vars('region_row', array(
+                'VALUE' => $key ,
+                'SELECTED' => ($members->member_region == $key) ? ' selected="selected"' : '' ,
+                'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
+        }
+
+
 		$form_key = 'characteradd';
 		add_form_key($form_key);
 
-
 		$template->assign_vars(array(
-			'STATUS'				=> ($members->member_status == 1) ? 'Checked ' : '',
+			'STATUS'				=> ($members->member_status == 1) ? ' checked="checked"' : '',
 			'MEMBER_NAME'			=> $members->member_name,
 			'MEMBER_TITLE'			=> $members->member_title,
 			'MEMBER_ID'				=> $members->member_id,
@@ -580,14 +609,12 @@ class ucp_dkp extends \bbdkp\admin\Admin
 			'MALE_CHECKED'			=> ($members->member_gender_id  == '0') ? ' checked="checked"' : '' ,
 			'FEMALE_CHECKED'		=> ($members->member_gender_id  == '1') ? ' checked="checked"' : '' ,
 			'MEMBER_COMMENT'		=> $members->member_comment,
-
+            'REALM'                 => $members->member_realm,
 			'S_CAN_HAVE_ARMORY'		=>  $members->game_id == 'wow' || $members->game_id == 'aion'  ? true : false,
 			'MEMBER_URL'			=>  $members->member_armory_url,
 			'MEMBER_PORTRAIT'		=>  $members->member_portrait_url,
-
 			'S_MEMBER_PORTRAIT_EXISTS'  => strlen( $members->member_portrait_url ) > 1 ? true : false,
 			'S_CAN_GENERATE_ARMORY'		=> $members->game_id == 'wow' ? true : false,
-
 			'COLORCODE' 			=> $members->colorcode == '' ? '#254689' : $members->colorcode,
 
 			'CLASS_IMAGE' 			=> $members->class_image,
