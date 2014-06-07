@@ -39,8 +39,8 @@ Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP_1303.zip file
-2. Upload bbDKP folder to your webserver, into /store/mods/
+1. Unzip the bbDKP_1305.zip file
+2. Upload bbDKP_1305/bbDKP folder to your webserver, into /store/mods/
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
 5. Click submit. This will install 1.3.0.5 and clear the caches (template, theme, imagesets)
@@ -48,7 +48,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 #### Upgrading from 1.3.0.4 to 1.3.0.5
 
 *	Apply the update from Automod "Available Changes" after uploading bbdkp 1.3.0.5 full
-*	Download and Install the Upgrade mod 1.3.0.4 to 1.3.0.5
+*	or do the changes manually, described in /contrib/bbdkp_1304_to_1305/update.xml
 
 #### Upgrading from 1.2.8-pl2 to 1.3.0.5
 
@@ -63,7 +63,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2 to uninstall the files and phpbb edits. 
     3. purge the board cache, verify your board is running    
     4. delete /store/mods/bbdkp  
-	5. upload the unzipped bbdkp 1.3.0.5 folder to /store/mods
+	5. upload the unzipped bbDKP_1305/bbDKP folder to /store/mods
 	6. from Automod, run file installer
 	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.5  
 
@@ -105,6 +105,7 @@ Find support and more on
 
 1.3.0.5 07-06-2014
 
+-	[UPD] #224 paths adapted to Planner 0.12
 -	[FIX] #222 sql error in UCP: fields were missing in ACP and UCP, affected every game.  
 -	[UPD] Updated SWTOR max. level to 55.  
 
@@ -125,8 +126,8 @@ Find support and more on
 -	[NEW] added DEACTIVATED_BY_API deactivation reason
 -	[NEW] Character api limited to 100 calls per time and to members where last_update was > 15 minutes ago
 -	[NEW] lock status if member disabled by API call
--   [FIX] #213 if wow guild not found on armory, show message. 
--   [NEW] new member table columns: inactivereason, last_update; 
+-   	[FIX] #213 if wow guild not found on armory, show message. 
+-   	[NEW] new member table columns: inactivereason, last_update; 
 -	[CHG] #219 leaderboard only hows 5 biggest accounts per class. 
 -	[CHG] #219 leaderboard class names aligned to class image
 -	[NEW] #218 add member search to roster
@@ -150,7 +151,7 @@ Find support and more on
 
 1.3.0.1 24-04-2014
 
--	[FIX] #200 Module issue when updating 1.2.8->1.3.0. 1.3 Umil changes were 		merged into 1 diff, omitting all betas and RC. fixes fix #100, #200
+-	[FIX] #200 Module issue when updating 1.2.8->1.3.0. 1.3 Umil changes were merged into 1 diff, omitting all betas and RC. fixes fix #100, #200
 
 1.3.0 21-04-2014
 
