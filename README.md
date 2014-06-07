@@ -48,7 +48,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 #### Upgrading from 1.3.0.4 to 1.3.0.5
 
 *	Apply the update from Automod "Available Changes" after uploading bbdkp 1.3.0.5 full
-*	Download and Install the Upgrade mod 1.3.0.4 to 1.3.0.5
+*	or do the changes manually, described in /contrib/bbdkp_1304_to_1305/update.xml
 
 #### Upgrading from 1.2.8-pl2 to 1.3.0.5
 
@@ -105,6 +105,7 @@ Find support and more on
 
 1.3.0.5 07-06-2014
 
+-	[UPD] #224 paths adapted to Planner 0.12
 -	[FIX] #222 sql error in UCP: fields were missing in ACP and UCP, affected every game.  
 -	[UPD] Updated SWTOR max. level to 55.  
 
@@ -125,8 +126,8 @@ Find support and more on
 -	[NEW] added DEACTIVATED_BY_API deactivation reason
 -	[NEW] Character api limited to 100 calls per time and to members where last_update was > 15 minutes ago
 -	[NEW] lock status if member disabled by API call
--   [FIX] #213 if wow guild not found on armory, show message. 
--   [NEW] new member table columns: inactivereason, last_update; 
+-   	[FIX] #213 if wow guild not found on armory, show message. 
+-   	[NEW] new member table columns: inactivereason, last_update; 
 -	[CHG] #219 leaderboard only hows 5 biggest accounts per class. 
 -	[CHG] #219 leaderboard class names aligned to class image
 -	[NEW] #218 add member search to roster
@@ -150,7 +151,7 @@ Find support and more on
 
 1.3.0.1 24-04-2014
 
--	[FIX] #200 Module issue when updating 1.2.8->1.3.0. 1.3 Umil changes were 		merged into 1 diff, omitting all betas and RC. fixes fix #100, #200
+-	[FIX] #200 Module issue when updating 1.2.8->1.3.0. 1.3 Umil changes were merged into 1 diff, omitting all betas and RC. fixes fix #100, #200
 
 1.3.0 21-04-2014
 
