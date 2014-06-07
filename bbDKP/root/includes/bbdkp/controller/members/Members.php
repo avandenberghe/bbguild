@@ -912,6 +912,8 @@ class Members extends \bbdkp\admin\Admin
 
 		if ($this->game_id != 'wow')
 		{
+            $this->member_portrait_url = '';
+            $this->deactivate_reason = '';
 			return -1;
 		}
 
@@ -1510,11 +1512,12 @@ class Members extends \bbdkp\admin\Admin
      * @param int|number $level1 optional =1
      * @param int|number $level2 optional = 200
      * @param boolean $mycharsonly optional = false
-     * @param $member_filter optional = ''
+     * @param \bbdkp\controller\members\optional|string $member_filter optional = ''
+     * @param int $all
      * @return array  (membercount, sql_fetchrowset of all rows)
      */
     public function getmemberlist($start, $mode, $query_by_armor, $query_by_class, $filter,
-			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false, $member_filter = '' )
+			$game_id, $guild_id = 0, $class_id = 0, $race_id = 0, $level1=0, $level2=200, $mycharsonly=false, $member_filter = '' , $all=1)
 	{
 		global $db, $config, $user, $phpbb_root_path;
 		$sql_array = array();
@@ -1546,10 +1549,15 @@ class Members extends \bbdkp\admin\Admin
 			AND e.race_id = m.member_race_id
 			AND e.game_id = m.game_id
 			AND g.id = m.member_guild_id
-			AND m.member_status = 1
+
 			AND r.guild_id = m.member_guild_id
 			AND r.rank_id = m.member_rank_id AND r.rank_hide = 0 
 			 ";
+
+        if($all != 1)
+        {
+            $sql_array['WHERE'] .= " m.member_status = '1' ";
+        }
 
 		if ($mycharsonly ==false)
 		{

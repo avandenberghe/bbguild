@@ -41,7 +41,7 @@ class viewRoster implements iViews
         $url = append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=roster&amp;rosterlayout=' . $mode .'&amp;guild_id=' . $Navigation->getGuildId());
 
         $characters = $members->getmemberlist($start, $mode, $Navigation->getQueryByArmor(), $Navigation->getQueryByClass(), $Navigation->getFilter(),
-            $Navigation->getGameId(), $Navigation->getGuildId(), $Navigation->getClassId(), $Navigation->getRaceId(), $Navigation->getLevel1(), $Navigation->getLevel2(), false, $member_filter);
+            $Navigation->getGameId(), $Navigation->getGuildId(), $Navigation->getClassId(), $Navigation->getRaceId(), $Navigation->getLevel1(), $Navigation->getLevel2(), false, $member_filter, 0);
 
         $rosterlayoutlist = array(
             0 => $user->lang['ARM_STAND'] ,
