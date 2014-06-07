@@ -1556,7 +1556,7 @@ class Members extends \bbdkp\admin\Admin
 
         if($all != 1)
         {
-            $sql_array['WHERE'] .= " m.member_status = '1' ";
+            $sql_array['WHERE'] .= " AND m.member_status = '1' ";
         }
 
 		if ($mycharsonly ==false)
