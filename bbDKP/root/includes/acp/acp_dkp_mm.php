@@ -850,9 +850,11 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
         {
             $updatemember->member_region = '';
         }
+
         $updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
         $updatemember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
         $updatemember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
+        $updatemember->member_guild_id = request_var('member_guild_id', 0);
         $updatemember->member_rank_id = request_var('member_rank_id', 99);
         $updatemember->member_level = request_var('member_level', 0);
         $updatemember->member_joindate = mktime(0, 0, 0, request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
@@ -872,7 +874,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
             $updatemember->Armory_getmember();
         }
 
-        $updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
+        $updatemember->member_status = request_var('activated', '') == 'on' ? 1 : 0;
 
         $old_member = new \bbdkp\controller\members\Members();
         $old_member->member_id = $updatemember->member_id;

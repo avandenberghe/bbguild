@@ -46,11 +46,6 @@ class ucp_dkp extends \bbdkp\admin\Admin
 	var $u_action;
 
 	/**
-	 * guild id
-	 * @var int
-	 */
-	private $guild_id;
-	/**
 	 * game id
 	 * @var string
 	 */
@@ -68,49 +63,14 @@ class ucp_dkp extends \bbdkp\admin\Admin
 		// Attach the language files
 		$user->add_lang(array('mods/dkp_admin', 'mods/dkp_common', 'acp/common'));
 
-		//guild dropdown
-		$guilds = new \bbdkp\controller\guilds\Guilds();
 
-		$guildlist = $guilds->guildlist(1);
-		if(count($guildlist) == 0)
-		{
-			trigger_error('ERROR_NOGUILD', E_USER_WARNING );
-		}
+        $guilds = new \bbdkp\controller\guilds\Guilds();
 
-		foreach ($guildlist as $g)
-		{
-			//assign guild_id property
-			if($this->guild_id == 0)
-			{
-				//if there is a default guild
-				if($g['guilddefault'] == 1)
-				{
-					$this->guild_id = $g['id'];
-				}
-
-				//if member count > 0
-				if($this->guild_id == 0 && $g['membercount'] > 1)
-				{
-					$this->guild_id = $g['id'];
-				}
-
-				//if guild id field > 0
-				if($this->guild_id == 0 && $g['id'] > 0)
-				{
-					$this->guild_id = $g['id'];
-				}
-			}
-
-			//populate guild popup
-			if($g['id'] > 0) // exclude guildless
-			{
-				$template->assign_block_vars('guild_row', array(
-						'VALUE' => $g['id'] ,
-						'SELECTED' => ($g['id'] == $this->guild_id ) ? ' selected="selected"' : '' ,
-						'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
-			}
-		}
-		$guilds->guildid = $this->guild_id;
+        $guildlist = $guilds->guildlist(1);
+        if(count($guildlist) == 0)
+        {
+            trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+        }
 
 		// GET processing logic
 		add_form_key('cocoa');
@@ -121,7 +81,6 @@ class ucp_dkp extends \bbdkp\admin\Admin
                  *
                  * ucp tab 1
                  * list of characters
-                 *
                  *
                  */
                 $this->link = '';
@@ -344,7 +303,8 @@ class ucp_dkp extends \bbdkp\admin\Admin
 						$updatemember->member_class_id = request_var('member_class_id', 0);
 						$updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
 						$updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
-						$updatemember->Armory_getmember();
+
+                        $updatemember->Armory_getmember();
 						$updatemember->Updatemember($oldmember);
 
 						meta_refresh(1, $this->u_action . '&amp;member_id=' . $updatemember->member_id);
@@ -355,7 +315,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 				}
 
 				//template fill
-				$this->fill_addmember($member_id);
+				$this->fill_addmember($member_id, $guildlist);
 
 				$template->assign_vars(array(
 					// javascript
@@ -371,12 +331,13 @@ class ucp_dkp extends \bbdkp\admin\Admin
 	}
 
 
-	/**
-	 * shows add/edit character form
-	 *
-	 * @param int $member_id
-	 */
-	private function fill_addmember($member_id)
+    /**
+     * shows add/edit character form
+     *
+     * @param int $member_id
+     * @param array $guildlist
+     */
+	private function fill_addmember($member_id, $guildlist)
 	{
 		global $db, $auth, $user, $template, $config, $phpbb_root_path;
 		$members = new \bbdkp\controller\members\Members();
@@ -386,7 +347,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 		$user->add_lang(array('mods/dkp_admin'));
 		$show=true;
 
-		if($member_id == 0)
+        if($member_id == 0)
 		{
 			// check if user can add character
 			if(!$auth->acl_get('u_dkp_charadd') )
@@ -432,15 +393,52 @@ class ucp_dkp extends \bbdkp\admin\Admin
 
 		}
 
+
+        foreach ($guildlist as $g)
+        {
+            //assign guild_id property
+            if($members->member_guild_id == 0)
+            {
+                //if there is a default guild
+                if($g['guilddefault'] == 1)
+                {
+                    $members->member_guild_id = $g['id'];
+                }
+
+                //if member count > 0
+                if($members->member_guild_id == 0 && $g['membercount'] > 1)
+                {
+                    $members->member_guild_id = $g['id'];
+                }
+
+                //if guild id field > 0
+                if($members->member_guild_id == 0 && $g['id'] > 0)
+                {
+                    $members->member_guild_id = $g['id'];
+                }
+            }
+
+            //populate guild popup
+            if($g['id'] > 0) // exclude guildless
+            {
+                $template->assign_block_vars('guild_row', array(
+                    'VALUE' => $g['id'] ,
+                    'SELECTED' => ($g['id'] == $members->member_guild_id ) ? ' selected="selected"' : '' ,
+                    'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+            }
+        }
+
 		// Rank drop-down -> for initial load
 		// reloading is done from ajax to prevent redraw
-		$Ranks = new \bbdkp\controller\guilds\Ranks($this->guild_id);
+		$Ranks = new \bbdkp\controller\guilds\Ranks($members->member_guild_id);
+
 		$result = $Ranks->listranks();
+
 		while ($row = $db->sql_fetchrow($result))
 		{
 			$template->assign_block_vars('rank_row', array(
 				'VALUE' => $row['rank_id'] ,
-				'SELECTED' => ($this->guild_id == $row['rank_id']) ? ' selected="selected"' : '' ,
+				'SELECTED' => ($members->member_rank_id == $row['rank_id']) ? ' selected="selected"' : '' ,
 				'OPTION' => (! empty($row['rank_name'])) ? $row['rank_name'] : '(None)'));
 		}
 
