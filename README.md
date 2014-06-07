@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0.5 (development)
+#1.3.0.5
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0.5 (in development)
+1.3.0.5
 
 ## Installation
 
@@ -103,10 +103,11 @@ Find support and more on
 
 ## Changelog 
 
-1.3.0.5 29-05-2014
+1.3.0.5 07-06-2014
 
--	[FIX] #222 sql error in UCP when updating non-wow character 
--	[FIX] #223 make constants unique
+-	[FIX] #222 sql error in UCP: fields were missing in ACP and UCP, affected every game.  
+-	[UPD] Updated SWTOR max. level to 55.  
+
 
 1.3.0.4 18-05-2014
 

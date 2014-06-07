@@ -29,7 +29,6 @@
 		</installation>
 		<link-group>
 			<link type="parent" href="../update.xml" lang="en">Upgrade manual</link>
-			<link type="parent" href="../update.xml" lang="fr">Manuel de mise à jour</link>
 			<link type="parent" href="../update.xml" lang="de">Aktualisierungshinweise</link>
 		</link-group>
 	</header>

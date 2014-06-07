@@ -43,10 +43,19 @@
 	</header>
 	<action-group>
 		<copy>
-			<file from="root/includes/ucp/*.*" to="includes/ucp/*.*"/>			
-			<file from="root/includes/bbdkp/*.*" to="includes/bbdkp/*.*"/>
-			<file from="root/install/*.*" to="install/*.*"/>
-			<file from="root/language/en/*.*" to="language/en/*.*"/>
+			<file from="root/adm/style/dkp/acp_mm_addmember.html" to="adm/style/dkp/acp_mm_addmember.html"/>			
+			<file from="root/includes/acp/acp_dkp_mm.php" to="includes/acp/acp_dkp_mm.php"/>			
+			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>
+			<file from="root/includes/bbdkp/controller/games/library/install_swtor.php" to="includes/bbdkp/controller/games/library/install_swtor.php"/>
+			<file from="root/includes/bbdkp/controller/members/Members.php" to="includes/bbdkp/controller/members/Members.php"/>
+			<file from="root/includes/bbdkp/views/viewFactory.php" to="includes/bbdkp/views/viewFactory.php"/>
+			<file from="root/includes/bbdkp/views/viewRoster.php" to="includes/bbdkp/views/viewRoster.php"/>			
+			<file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>						
+			<file from="root/install/index.php" to="install/index.php"/>						
+			<file from="root/language/de/mods/dkp_common.php" to="language/de/mods/dkp_common.php"/>						
+			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>						
+			<file from="root/language/fr/mods/dkp_common.php" to="language/fr/mods/dkp_common.php"/>												
+			<file from="root/styles/prosilver/template/dkp/ucp_dkp_charadd.html" to="styles/prosilver/template/dkp/ucp_dkp_charadd.html"/>																					
 		</copy>
 		<php-installer>install/index.php</php-installer>
 		<diy-instructions lang="fr"><![CDATA[navigue vers install/index.php et execute la mise à jour.]]></diy-instructions>
