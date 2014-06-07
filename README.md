@@ -1,4 +1,4 @@
-1.3.0.5[![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
+[![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
 #1.3.0.5 (development)
 
