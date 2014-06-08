@@ -1,15 +1,15 @@
 <?php
 /**
  * Returns rank xml based on ajax call 
- * 
- * @package acp\ajax
- * @copyright (c) 2009 bbDkp <https://github.com/bbDKP>
+ * test url http://localhost:8082/qi/boards/test13/styles/prosilver/template/dkp/findGameRank.php?guild=2
+ * @package bbdkp
+ * @copyright (c) 2011 https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
+ * @version 1.3.0.5
  * 
  */
 define('IN_PHPBB', true);
-define('ADMIN_START', true);
-$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../../../';
+$phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './../../../../';
 $phpEx = substr(strrchr(__FILE__, '.'), 1);
 include($phpbb_root_path . 'common.' . $phpEx);
 
@@ -24,14 +24,15 @@ header('Content-type: text/xml');
 // preparing xml
 $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <ranklist>';
-while ( $row = $db->sql_fetchrow($result)) 
+while ( $row = $db->sql_fetchrow($result))
 {
-	 $xml .= '<rank>';
-     $xml .= "<rank_game_id>" . $row['game_id'] . "</rank_game_id>";
-     $xml .= "<rank_id>" . $row['rank_id'] . "</rank_id>";
-	 $xml .= "<rank_name>" . $row['rank_name'] . "</rank_name>";
-	 $xml .= '</rank>'; 	 
+    $xml .= '<rank>';
+    $xml .= "<rank_game_id>" . $row['game_id'] . "</rank_game_id>";
+    $xml .= "<rank_id>" . $row['rank_id'] . "</rank_id>";
+    $xml .= "<rank_name>" . $row['rank_name'] . "</rank_name>";
+    $xml .= '</rank>';
 }
+
 $xml .= '</ranklist>';
 $db->sql_freeresult($result);
 //return xml to ajax
