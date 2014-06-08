@@ -58,7 +58,8 @@
 			<file from="root/language/de/mods/dkp_common.php" to="language/de/mods/dkp_common.php"/>						
 			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>						
 			<file from="root/language/fr/mods/dkp_common.php" to="language/fr/mods/dkp_common.php"/>												
-			<file from="root/styles/prosilver/template/dkp/ucp_dkp_charadd.html" to="styles/prosilver/template/dkp/ucp_dkp_charadd.html"/>																					
+			<file from="root/styles/prosilver/template/dkp/ucp_dkp_charadd.html" to="styles/prosilver/template/dkp/ucp_dkp_charadd.html"/>	
+			<file from="root/styles/prosilver/template/dkp/ucp_dkp.html" to="styles/prosilver/template/dkp/ucp_dkp.html"/>																								
 		</copy>
 		<php-installer>install/index.php</php-installer>
 		<diy-instructions lang="fr"><![CDATA[navigue vers install/index.php et execute la mise à jour.]]></diy-instructions>
