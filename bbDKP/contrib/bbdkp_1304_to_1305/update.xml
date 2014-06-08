@@ -8,9 +8,11 @@
 		<title lang="de">bbDKP 1.3.0.5 - Update von bbdkp 1.3.0.4</title>
 		<title lang="fr">bbDKP 1.3.0.5 - mise à jour depuis bbdkp 1.3.0.4</title>
 		<description lang="en">bbDKP 1.3.0.5 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
-		1.3.0.5 29-05-2014
--	[FIX] ucp call to members class is missing memberfilter argument		
+1.3.0.5 07-06-2014
 
+-	[UPD] #224 paths adapted to Planner 0.12
+-	[FIX] #222 sql error in UCP: fields were missing in ACP and UCP, affected every game.  
+-	[UPD] Updated SWTOR max. level to 55.  
 </description>
 		<author-notes lang="en">I hope you get everything working. Further developement or questions are welcome at www.bbdkp.com
 		</author-notes>
@@ -48,6 +50,7 @@
 			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_swtor.php" to="includes/bbdkp/controller/games/library/install_swtor.php"/>
 			<file from="root/includes/bbdkp/controller/members/Members.php" to="includes/bbdkp/controller/members/Members.php"/>
+			<file from="root/includes/bbdkp/controller/guilds/Guilds.php" to="includes/bbdkp/controller/guilds/Guilds.php"/>			
 			<file from="root/includes/bbdkp/views/viewFactory.php" to="includes/bbdkp/views/viewFactory.php"/>
 			<file from="root/includes/bbdkp/views/viewRoster.php" to="includes/bbdkp/views/viewRoster.php"/>			
 			<file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>						

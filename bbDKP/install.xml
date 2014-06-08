@@ -124,7 +124,6 @@ EQDkp (c) 2003 The EqDkp Project Team]]></description>
 			<target-version>3.0.12</target-version>
 		</installation>
 		<link-group>
-
 			<link type="language" href="contrib/fr.xml" lang="fr">Français</link>
 			<link type="language" href="contrib/de.xml" lang="de">Deutsch</link>
 			<link type="template" href="contrib/prosilver.xml" lang="en">Prosilver</link>
