@@ -35,39 +35,39 @@
     /*  make a XMLHTTP Request object */
     function GetXmlHttpObject()
     {
-        var xmlhttp=false;
+        var myvar=false;
 
         try
         {
             //  IE7+, Firefox, Chrome, Opera, Safari
-            xmlhttp=new XMLHttpRequest();
+            myvar=new XMLHttpRequest();
         }
         catch(e)
         {	// activex code for IE6, IE5
             try
             {
-                xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
+                myvar= new ActiveXObject("Microsoft.XMLHTTP");
             }
             catch(e)
             {
                 try
                 {
-                    xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+                    myvar = new ActiveXObject("Msxml2.XMLHTTP");
                 }
                 catch(e1)
                 {
-                    xmlhttp=false;
+                    myvar=false;
                 }
             }
         }
-        return xmlhttp;
+        return myvar;
     }
 
 
     /* ajax function to find rank */
 
     var xmlhttp;
-    function GetRank(guildid)
+    function GetGameRank(guildid)
     {
         xmlhttp = GetXmlHttpObject();
         if (xmlhttp == null)
@@ -75,11 +75,29 @@
             alert("{LA_ALERT_OLDBROWSER}");
             return;
         }
-        var strURL="{UA_FINDRANK}?guild="+guildid;
+        var strURL="{UA_FINDGAMERANK}?guild="+guildid;
         xmlhttp.onreadystatechange=stateChanged;
         xmlhttp.open("GET", strURL, true);
         // send to server
         xmlhttp.send(null);
+    }
+
+    /* ajax function to find class and race array based on game */
+
+    function GetClassRace(game_id)
+    {
+        xmlhttp = GetXmlHttpObject();
+        if (xmlhttp == null)
+        {
+            alert("{LA_ALERT_OLDBROWSER}");
+            return;
+        }
+        var strURL="{UA_FINDCLASSRACE}?game_id="+game_id;
+        xmlhttp.onreadystatechange=classracestateChanged;
+        xmlhttp.open("GET", strURL, true);
+        // send to server
+        xmlhttp.send(null);
+
     }
 
 
@@ -94,19 +112,31 @@
                 var rsel = document.getElementById('rankselect');
                 rsel.options.length = 0;
 
+
                 //receive xml
                 xmlDoc=xmlhttp.responseXML;
-
+                var game_id = '';
                 var root = xmlDoc.getElementsByTagName('ranklist')[0];
                 var ranks = root.getElementsByTagName("rank")
                 for (var i = 0; i < ranks.length; i++)
                 {
                     var rank = ranks[i];
+                    var game_id = rank.getElementsByTagName("rank_game_id")[0].firstChild.nodeValue;
                     var rankid = rank.getElementsByTagName("rank_id")[0].firstChild.nodeValue;
                     var rankname = rank.getElementsByTagName("rank_name")[0].firstChild.nodeValue;
                     // add the options
                     rsel.options[i] = new Option(rankname,rankid, true, false);
                 }
+
+                var oFormObject = document.forms['character_add'];
+                oFormObject.elements["game_id"].value = game_id;
+
+                document.getElementById('game_id').value = game_id;
+                GetClassRace(game_id);
+
+
+
+                var a = 1;
             }
             else
             {
@@ -114,24 +144,6 @@
             }
         }
     }
-
-
-    /* ajax function to find class and race array based on game */
-    function GetClassRace(game_id)
-    {
-        xmlhttp = GetXmlHttpObject();
-        if (xmlhttp == null)
-        {
-            alert("{LA_ALERT_OLDBROWSER}");
-            return;
-        }
-        var strURL="{UA_FINDCLASSRACE}?game_id="+game_id;
-        xmlhttp.onreadystatechange=classracestateChanged;
-        xmlhttp.open("GET", strURL, true);
-        // send to server
-        xmlhttp.send(null);
-    }
-
 
 
     /* called from GetClassRace when state changed */
@@ -176,19 +188,13 @@
                     // add the options
                     csel.options[j] = new Option(classname,classid, true, false);
                 }
-
-
-
             }
             else
             {
-                alert("{LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+                alert("{LA_ALERT_AJAX}:\n" + xmlhttp2.statusText);
             }
         }
     }
-
-
-
 
     // ]]>
 </script>
@@ -206,25 +212,11 @@
                 <!-- IF S_SHOW -->
                 <br />
 
-                <dl>
-                    <dt><label for="game_id">{L_GAME}:</label></dt>
-                    <dd>
-                        <select name="game_id" id="game_id" class="input" onchange="return GetClassRace(this.value)">
-                            <!-- BEGIN game_row -->
-                            <option value="{game_row.VALUE}"{game_row.SELECTED}>{game_row.OPTION}</option>
-                            <!-- END game_row -->
-                        </select></dd>
-                </dl>
 
                 <dl>
                     <dt><label for="member_name">{L_NAME}:</label></dt>
                     <dd><input type="text" name="member_name" id="member_name" size="18" maxlength="30" value="{MEMBER_NAME}" class="input" />
                         <input type="text" name="member_title" id="member_title" size="23" maxlength="30" value="{MEMBER_TITLE}" class="input" /></dd>
-                </dl>
-
-                <dl>
-                    <dt><label for="realm">{L_REALM_NAME}:</label></dt>
-                    <dd><input type="text" id="realm" size="20" maxlength="30" name="realm" value="{REALM}" /></dd>
                 </dl>
 
                 <dl>
@@ -238,33 +230,15 @@
                         </select>
                     </dd>
                 </dl>
-
                 <dl>
-                    <dt><label for="activated">{L_ACTIVE}:</label></dt>
-                    <dd><input type="checkbox" class="radio" name="activated" id="activated" value="{MEMBER_ID}" <!-- IF STATUS_LOCK --> disabled="disabled" <!-- ENDIF --> {STATUS} />
-                    <!-- IF ! S_ADD -->
-                    <span style="color:red"> {DEACTIVATE_REASON}</span>
-                    <!-- ENDIF -->
-                    </dd>
-                </dl>
-
-                <dl>
-                    <dt><label for="member_level">{L_LEVEL}:</label></dt>
-                    <dd><input type="text" name="member_level" id="member_level" size="5" maxlength="3" value="{MEMBER_LEVEL}" class="input" />
-                        <a id="levelup"  href="{F_ADD_MEMBER}" target="_blank"><img src="./adm/images/icon_up.gif" /></a>
-                        <a id="leveldown" href="{F_ADD_MEMBER}" target="_blank"><img src="./adm/images/icon_down.gif" /></a>
-                    </dd>
-                </dl>
-
-                <dl>
-                    <dt><label for="member_level">{L_ACHIEV}:</label></dt>
-                    <dd><input type="text" name="member_achiev" id="member_achiev" size="6" maxlength="6" value="{MEMBER_ACHIEV}" class="input" /></dd>
+                    <dt><label for="realm">{L_REALM_NAME}:</label></dt>
+                    <dd><input type="text" id="realm" size="20" maxlength="30" name="realm" value="{REALM}" /></dd>
                 </dl>
 
                 <dl>
                     <dt><label for="member_guild_id">{L_GUILD}:</label></dt>
                     <dd>
-                        <select name="member_guild_id" id="member_guild_id"  class="input" onchange="return GetRank(this.value)">
+                        <select name="member_guild_id" id="member_guild_id"  class="input" onchange="return GetGameRank(this.value)">
                             <!-- BEGIN guild_row -->
                             <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
                             <!-- END guild_row -->
@@ -284,11 +258,29 @@
                     </dd>
                 </dl>
 
+                <dl>
+                    <dt><label for="game_id">{L_GAME}:</label></dt>
 
+                    <dd><input type="hidden" name="game_id" id="game_id"  value="{GAME_ID}"  />&nbsp; {GAME_ID} &nbsp;
+                     <input readonly type="text" name="gamename" id="gamename" size="50" value="{GAME}" class="input" /></dd>
+                </dl>
 
                 <dl>
-                    <dt><label for="member_race_id">{L_RACE}:</label></dt>
-                    <dd><select id="raceselect" name="member_race_id" id="member_race_id" class="input">
+                    <dt><label for="member_level">{L_LEVEL}:</label></dt>
+                    <dd><input type="text" name="member_level" id="member_level" size="5" maxlength="3" value="{MEMBER_LEVEL}" class="input" />
+                        <a id="levelup"  href="{F_ADD_MEMBER}" target="_blank"><img src="./adm/images/icon_up.gif" /></a>
+                        <a id="leveldown" href="{F_ADD_MEMBER}" target="_blank"><img src="./adm/images/icon_down.gif" /></a>
+                    </dd>
+                </dl>
+
+                <dl>
+                    <dt><label for="member_level">{L_ACHIEV}:</label></dt>
+                    <dd><input type="text" name="member_achiev" id="member_achiev" size="6" maxlength="6" value="{MEMBER_ACHIEV}" class="input" /></dd>
+                </dl>
+
+                <dl>
+                    <dt><label for="raceselect">{L_RACE}:</label></dt>
+                    <dd><select id="raceselect" name="member_race_id" class="input">
                         <!-- BEGIN race_row -->
                         <option value="{race_row.VALUE}"{race_row.SELECTED}>{race_row.OPTION}</option>
                         <!-- END race_row -->
@@ -330,6 +322,15 @@
                     </dd>
                 </dl>
 
+                <dl>
+                    <dt><label for="activated">{L_ACTIVE}:</label></dt>
+                    <dd><input type="checkbox" class="radio" name="activated" id="activated" value="{MEMBER_ID}" <!-- IF STATUS_LOCK --> disabled="disabled" <!-- ENDIF --> {STATUS} />
+                    <!-- IF ! S_ADD -->
+                    <span style="color:red"> {DEACTIVATE_REASON}</span>
+                    <!-- ENDIF -->
+                    </dd>
+                </dl>
+
                 <!-- IF S_ADD -->
                 <dl>
                     <dt><label>{L_JOINDATE} (YYYY-MM-DD):</label></dt>
@@ -347,7 +348,7 @@
 
                 </dl>
 
-                </p>
+
 
 
                 <input type="hidden" name="hidden_member_id" value="{MEMBER_ID}" />
