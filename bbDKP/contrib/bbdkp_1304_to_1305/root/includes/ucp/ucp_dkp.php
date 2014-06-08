@@ -136,9 +136,17 @@ class ucp_dkp extends \bbdkp\admin\Admin
 					// note if someone picks a guildmember that does not belong to them then the guild admin can override this in acp
 
 					$member->listallmembers($guilds->guildid, true);
-					foreach ($member->guildmemberlist as $id => $m  )
+
+                    if(count($member->guildmemberlist ) > 0)
                     {
-						$s_guildmembers .= '<option value="' . $m['member_id'] .'">'. $m['rank_name']  . ' ' . $m['member_name'] . '</option>';
+                        foreach ($member->guildmemberlist as $id => $m  )
+                        {
+                            $s_guildmembers .= '<option value="' . $m['member_id'] .'">'. $m['rank_name']  . ' ' . $m['member_name'] . '</option>';
+                        }
+                    }
+                    else
+                    {
+                        $show_buttons = false;
                     }
 
 				}
@@ -644,7 +652,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
 		global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpEx;
 		$members = new \bbdkp\controller\members\Members();
 
-		$mycharacters = $members->getmemberlist(0, 0, false, false, '', '', 0, 0, 0, 0, 200, true, '');
+		$mycharacters = $members->getmemberlist(0, 0, false, false, '', '', 0, 0, 0, 0, 200, true, '', 1);
 
 		$lines = 0;
 		foreach ($mycharacters[0] as $char)
