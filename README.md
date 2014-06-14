@@ -41,7 +41,7 @@ Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP-1305.zip file
+1. Unzip the bbDKP-1306.zip file
 2. Upload bbDKP-1306/bbDKP folder to your webserver, into /store/mods/
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
@@ -49,7 +49,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 
 #### Upgrading from 1.3.0.x to 1.3.0.6
 
-1. Unzip the bbDKP-1305.zip file
+1. Unzip the bbDKP-1306.zip file
 2. Upload bbDKP-1306/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
 3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1305_to_1306/update.xml)
  ![Automod update](http://i.imgur.com/9IRfrTD.png)
@@ -96,6 +96,7 @@ Find support and more on
 1.3.0.6 14-06-2014
 
 -	[FIX] #229 issues in ucp 
+-	[FIX] issue in updating from 1.2.8
 
 
 1.3.0.5 07-06-2014
