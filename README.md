@@ -751,7 +751,9 @@ You can see all the amazing people contributing to this project [here](https://g
 [GNU General Public License v2](http://opensource.org/licenses/gpl-2.0.php)
 
 This application is opensource software released under the GPL. Please see source code and the docs directory for more details. Powered by bbDkp (c) 2009 The bbDkp Project Team bbDkp
-If you use this software and find it to be useful, we ask that you retain the copyright notice below. While not required for free use, it will help build interest in the bbDkp project and is required for obtaining support. bbdkp SVN : http://code.google.com/p/bbdkp/
+If you use this software and find it to be useful, we ask that you retain the copyright notice below. While not required for free use, it will help build interest in the bbDkp project and is required for obtaining support. 
+bbDKP (c) 2014 Sajaki, Killerpommes, frederikkunze, Cecilius
+bbDKP (c) 2011 Sajaki, Blazeflack
 bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team 
