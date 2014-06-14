@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0.5
+#1.3.0.6
 
 
 ## about
@@ -21,7 +21,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 
 ## Current
 
-1.3.0.5
+1.3.0.6
 
 ## Installation
 
@@ -33,7 +33,7 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 4.	ftp and founder admin access on your phpbb installation.
 5.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### New installation 1.3.0.5
+#### New installation 1.3.0.6
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
@@ -45,17 +45,17 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 4. Click on the blue link given, this will redirect you to /install/index.php
 5. Click submit. This will install 1.3.0.5 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.4 to 1.3.0.5
+#### Upgrading from 1.3.0.x to 1.3.0.6
 
-*	Apply the update from Automod "Available Changes" after uploading bbdkp 1.3.0.5 full
+*	Apply the update from Automod "Available Changes" after uploading bbdkp 1.3.0.6 full
 *	or do the changes manually, described in /contrib/bbdkp_1304_to_1305/update.xml
 
-#### Upgrading from 1.2.8-pl2 to 1.3.0.5
+#### Upgrading from 1.2.8-pl2 to 1.3.0.6
 
 * make a secure backup of all files
 * backup your database
 
-* Uninstall 1.2.8-pl2 and re-install 1.3.0.5 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.3.0.6 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first.
 		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
 		*	make sure the module was uninstalled by checking the ACP modules.
@@ -65,7 +65,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     4. delete /store/mods/bbdkp  
 	5. upload the unzipped bbDKP_1305/bbDKP folder to /store/mods
 	6. from Automod, run file installer
-	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.5  
+	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.6  
 
 * Manually
 	*	Localhost	 	
@@ -79,12 +79,12 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 			*	apply the changes to the core phpbb files. use a good text editor
 		4.	launch the DB updater locally (/install/index.php)
 			*	Now you see the Umil updater.
-			*	Click update. This will update to 1.3.0.5 and clear the caches (template, theme, imagesets)
+			*	Click update. This will update to 1.3.0.6 and clear the caches (template, theme, imagesets)
 		5.	Update your Custom styles, or install a premodded style. Jade, Deathwing and pbWoW2 have premods.
 	*	live server
 		1. upload the install folder for any bbdkp1.2.8 plugin that you installed, and run uninstall.
 		2.	FTP the whole folder to to your webserver, after deleting your remote files.
-		3.	launch the bbdkp 1.3.0.5 DB updater on your webserver (/install/index.php) and redo the db changes on live.
+		3.	launch the bbdkp 1.3.0.6 DB updater on your webserver (/install/index.php) and redo the db changes on live.
 
 
 #### Upgrading from earlier version
@@ -103,12 +103,16 @@ Find support and more on
 
 ## Changelog 
 
+1.3.0.6 14-06-2014
+
+-	[FIX] #229 issues in ucp 
+
+
 1.3.0.5 07-06-2014
 
 -	[UPD] #224 paths adapted to Planner 0.12
 -	[FIX] #222 sql error in UCP: fields were missing in ACP and UCP, affected every game.  
 -	[UPD] Updated SWTOR max. level to 55.  
-
 
 1.3.0.4 18-05-2014
 
@@ -126,8 +130,8 @@ Find support and more on
 -	[NEW] added DEACTIVATED_BY_API deactivation reason
 -	[NEW] Character api limited to 100 calls per time and to members where last_update was > 15 minutes ago
 -	[NEW] lock status if member disabled by API call
--   	[FIX] #213 if wow guild not found on armory, show message. 
--   	[NEW] new member table columns: inactivereason, last_update; 
+-   FIX] #213 if wow guild not found on armory, show message. 
+-   [NEW] new member table columns: inactivereason, last_update; 
 -	[CHG] #219 leaderboard only hows 5 biggest accounts per class. 
 -	[CHG] #219 leaderboard class names aligned to class image
 -	[NEW] #218 add member search to roster
