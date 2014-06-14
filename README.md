@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0.5
+#1.3.0.6
 
 
 ## about
@@ -15,13 +15,15 @@ bbDKP has Game, Guild and DKP management functions built into your phpBB3 Forum.
 
 This way, your users gain single signon to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches.
 
-Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games can be installed : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, Star Wars -ToR, Guildwars 2, Tera.
+Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games can be installed : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, Star Wars -ToR, Guildwars 2, Tera, Custome game designer
 
-There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory import, Apply, and other standalone mods that work well together.
+There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory import, Apply, and other standalone mods that work well together. 
+
+Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have premod versions. 
 
 ## Current
 
-1.3.0.5
+1.3.0.6
 
 ## Installation
 
@@ -33,29 +35,35 @@ There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory imp
 4.	ftp and founder admin access on your phpbb installation.
 5.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### New installation 1.3.0.5
+#### New installation 1.3.0.6
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP_1305.zip file
-2. Upload bbDKP_1305/bbDKP folder to your webserver, into /store/mods/
+1. Unzip the bbDKP-1305.zip file
+2. Upload bbDKP-1306/bbDKP folder to your webserver, into /store/mods/
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
 5. Click submit. This will install 1.3.0.5 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.4 to 1.3.0.5
+#### Upgrading from 1.3.0.x to 1.3.0.6
 
-*	Apply the update from Automod "Available Changes" after uploading bbdkp 1.3.0.5 full
-*	or do the changes manually, described in /contrib/bbdkp_1304_to_1305/update.xml
+1. Unzip the bbDKP-1305.zip file
+2. Upload bbDKP-1306/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
+3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1305_to_1306/update.xml)
+ ![Automod update](http://i.imgur.com/9IRfrTD.png)
+4. Apply the update from Automod "Available Changes" 
+  ![Imgur](http://i.imgur.com/J7VjfY7.png)
+6. Click on the dtaabase upgrade link
+  ![database upgrade](http://i.imgur.com/4G3DKV2.png)
 
-#### Upgrading from 1.2.8-pl2 to 1.3.0.5
+#### Upgrading from 1.2.8-pl2 to 1.3.0.6
 
 * make a secure backup of all files
 * backup your database
 
-* Uninstall 1.2.8-pl2 and re-install 1.3.0.5 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.3.0.6 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first.
 		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
 		*	make sure the module was uninstalled by checking the ACP modules.
@@ -63,30 +71,12 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2 to uninstall the files and phpbb edits. 
     3. purge the board cache, verify your board is running    
     4. delete /store/mods/bbdkp  
-	5. upload the unzipped bbDKP_1305/bbDKP folder to /store/mods
+	5. upload the unzipped bbDKP-1306/bbDKP folder to /store/mods
 	6. from Automod, run file installer
-	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.5  
-
-* Manually
-	*	Localhost	 	
-		1. 	download your forum to localhost, as we will make the changes locally and then upload the new/changed
-		2. 	uninstall 1.2.8 and any plugins. 
-			* first uninstall any plugins : follow the install.xml instructions for in reverse, then run the database uninstaller. 
-			* then uninstall bbdkp 1.2.8-pl2, by following the install.xml instructions in reverse. (but leave database). 
-		3.	follow the install.xml instruction in install.xml
-			*	copy the new files, replacing any old files.
-			*	delete the old files mentioned in the delete section
-			*	apply the changes to the core phpbb files. use a good text editor
-		4.	launch the DB updater locally (/install/index.php)
-			*	Now you see the Umil updater.
-			*	Click update. This will update to 1.3.0.5 and clear the caches (template, theme, imagesets)
-		5.	Update your Custom styles, or install a premodded style. Jade, Deathwing and pbWoW2 have premods.
-	*	live server
-		1. upload the install folder for any bbdkp1.2.8 plugin that you installed, and run uninstall.
-		2.	FTP the whole folder to to your webserver, after deleting your remote files.
-		3.	launch the bbdkp 1.3.0.5 DB updater on your webserver (/install/index.php) and redo the db changes on live.
-
-
+	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.6  
+		![database upgrade](http://i.imgur.com/8gvmkwQ.png)
+		![after upgrade](http://i.imgur.com/qywrgj1.png)
+		
 #### Upgrading from earlier version
 Please upgrade to v1.2.8-pl2 first
 
@@ -103,12 +93,16 @@ Find support and more on
 
 ## Changelog 
 
+1.3.0.6 14-06-2014
+
+-	[FIX] #229 issues in ucp 
+
+
 1.3.0.5 07-06-2014
 
 -	[UPD] #224 paths adapted to Planner 0.12
 -	[FIX] #222 sql error in UCP: fields were missing in ACP and UCP, affected every game.  
 -	[UPD] Updated SWTOR max. level to 55.  
-
 
 1.3.0.4 18-05-2014
 
@@ -126,8 +120,8 @@ Find support and more on
 -	[NEW] added DEACTIVATED_BY_API deactivation reason
 -	[NEW] Character api limited to 100 calls per time and to members where last_update was > 15 minutes ago
 -	[NEW] lock status if member disabled by API call
--   	[FIX] #213 if wow guild not found on armory, show message. 
--   	[NEW] new member table columns: inactivereason, last_update; 
+-   FIX] #213 if wow guild not found on armory, show message. 
+-   [NEW] new member table columns: inactivereason, last_update; 
 -	[CHG] #219 leaderboard only hows 5 biggest accounts per class. 
 -	[CHG] #219 leaderboard class names aligned to class image
 -	[NEW] #218 add member search to roster
