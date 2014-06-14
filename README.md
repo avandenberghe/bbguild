@@ -53,9 +53,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 2. Upload bbDKP-1306/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
 3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1305_to_1306/update.xml)
  ![Automod update](http://i.imgur.com/9IRfrTD.png)
-3. Apply the update from Automod "Available Changes" 
+4. Apply the update from Automod "Available Changes" 
   ![Imgur](http://i.imgur.com/J7VjfY7.png)
-4. Click on the dtaabase upgrade link
+6. Click on the dtaabase upgrade link
   ![database upgrade](http://i.imgur.com/4G3DKV2.png)
 
 #### Upgrading from 1.2.8-pl2 to 1.3.0.6
@@ -76,6 +76,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.6  
 		![database upgrade](http://i.imgur.com/8gvmkwQ.png)
 		![after upgrade](http://i.imgur.com/qywrgj1.png)
+		
 #### Upgrading from earlier version
 Please upgrade to v1.2.8-pl2 first
 
