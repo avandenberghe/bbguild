@@ -850,7 +850,7 @@ class Guilds extends \bbdkp\admin\Admin
 	public function classdistribution()
 	{
 
-		global $db;
+		global $config, $db;
 
 		$sql = 'SELECT c.class_id, ';
 		$sql .= ' l.name                   AS classname, ';
@@ -861,7 +861,7 @@ class Guilds extends \bbdkp\admin\Admin
 		$sql .= '   ON m.game_id = c.game_id  AND m.member_class_id = c.class_id  ';
 		$sql .= ' INNER JOIN ' . BB_LANGUAGE . ' l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
 		$sql .= ' WHERE  1=1 ';
-		$sql .= " AND l.language = 'en' AND l.attribute = 'class' ";
+		$sql .= " AND l.language = '" . $config['bbdkp_lang']."' AND l.attribute = 'class' ";
 		$sql .= ' AND g.id =  ' . $this->guildid;
 		$sql .= ' GROUP  BY c.class_id, l.name ';
 		$sql .= ' ORDER  BY c.class_id ASC ';

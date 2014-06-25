@@ -15,18 +15,9 @@ include($phpbb_root_path . 'common.' . $phpEx);
 
 $guild_id = request_var('guild', 0);
 
-if ($guild_id == 0 )
-{
-	$sql = 'SELECT rank_id, rank_name  
-			FROM ' . MEMBER_RANKS_TABLE . ' WHERE 
-			guild_id = 0 ORDER BY rank_id desc';
-}
-else 
-{
-	$sql = 'SELECT rank_id, rank_name  
-			FROM ' . MEMBER_RANKS_TABLE . ' WHERE rank_hide = 0 and 
-			guild_id =  '. $guild_id . ' ORDER BY rank_id desc';
-}
+$sql = 'SELECT a.rank_id, a.rank_name, b.game_id
+        FROM ' . MEMBER_RANKS_TABLE . ' a, ' . GUILD_TABLE. ' b WHERE a.rank_hide = 0 and
+        a.guild_id =  '. $guild_id . ' AND a.guild_id = b.id ORDER BY rank_id desc';
 
 $result = $db->sql_query($sql);
 header('Content-type: text/xml');
@@ -35,8 +26,9 @@ $xml = '<?xml version="1.0" encoding="UTF-8"?>
 <ranklist>';
 while ( $row = $db->sql_fetchrow($result)) 
 {
-	 $xml .= '<rank>'; 
-	 $xml .= "<rank_id>" . $row['rank_id'] . "</rank_id>";
+	 $xml .= '<rank>';
+     $xml .= "<rank_game_id>" . $row['game_id'] . "</rank_game_id>";
+     $xml .= "<rank_id>" . $row['rank_id'] . "</rank_id>";
 	 $xml .= "<rank_name>" . $row['rank_name'] . "</rank_name>";
 	 $xml .= '</rank>'; 	 
 }
