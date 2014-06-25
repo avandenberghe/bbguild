@@ -105,7 +105,13 @@ class Raiddetail
      */
 	public function __construct($raid_id=0) 
 	{
-		if ($raid_id > 0)
+        $this->raid_value = 0;
+        $this->zerosum_bonus = 0;
+        $this->time_bonus = 0;
+        $this->raid_decay_time = 0;
+        $this->raid_decay = 0;
+
+        if ($raid_id > 0)
 		{
 			$this->raid_id = $raid_id;
 			$this->Get($raid_id); 
@@ -177,11 +183,11 @@ class Raiddetail
 				$this->colorcode = $row['colorcode'];
 				$this->imagename = $row['imagename'];
 				$this->member_name = $row['member_name'];
-				$this->raid_value = $row['raid_value'];
-				$this->time_bonus = $row['time_bonus'];
-				$this->zerosum_bonus = $row['zerosum_bonus'];
-				$this->raid_decay = $row['raid_decay'];
-				$this->raid_decay_time = $row['decay_time']; 
+				$this->raid_value = isset($row['raid_value']) ? $row['raid_value'] : 0;
+				$this->time_bonus = isset($row['time_bonus']) ? $row['time_bonus'] : 0;
+				$this->zerosum_bonus = isset($row['zerosum_bonus']) ? $row['zerosum_bonus'] : 0;
+				$this->raid_decay = isset($row['raid_decay']) ? $row['raid_decay'] : 0;
+				$this->raid_decay_time = isset($row['decay_time']) ? $row['decay_time'] : 0;
 			}
 		}
 		
@@ -201,9 +207,9 @@ class Raiddetail
 				'member_id'     =>  $this->member_id,
 				'raid_value'    => $this->raid_value,
 				'time_bonus'    => $this->time_bonus,
-				'zerosum_bonus' => $this->zerosum_bonus, 
-				'raid_decay' 	=> $this->raid_decay, 
-		);
+				'zerosum_bonus' => $this->zerosum_bonus,
+				'raid_decay' 	=> $this->raid_decay,
+        );
 		
 		$sql = 'INSERT INTO ' . RAID_DETAIL_TABLE . ' ' . $db->sql_build_array('INSERT', $raid_detail);
 		$db->sql_query($sql);
