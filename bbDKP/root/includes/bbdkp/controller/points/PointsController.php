@@ -1831,7 +1831,6 @@ class PointsController  extends \bbdkp\admin\Admin
 
 	}
 
-
 	/**
 	 * Transfer points from member a to b
 	 * @param int $member_from
@@ -1893,16 +1892,30 @@ class PointsController  extends \bbdkp\admin\Admin
 					AND adjustment_dkpid = ' . $dkpsys_id;
         $db->sql_query ( $sql );
 
+        /* 6) update points for b to 0 */
+        $data = array(
+            'member_earned'       =>  0.00,
+            'member_spent'        =>  0.00,
+            'member_adjustment'  =>  0.00,
 
-        // 6) delete the 2 point accounts
-        $sql = "DELETE from " . MEMBER_DKP_TABLE . ' WHERE  member_id  = ' . $member_from . ' AND member_dkpid = ' . $dkpsys_id ;
+            'member_firstraid'      => 0,
+            'member_lastraid'       => 0,
+            'member_raidcount'      => 0,
+
+            'member_raid_value'     => 0,
+            'member_time_bonus'     => 0,
+            'member_raid_decay'     => 0,
+            'member_zerosum_bonus'	=> 0,
+        );
+
+        $sql = 'UPDATE ' . MEMBER_DKP_TABLE . ' SET ' .$db->sql_build_array('UPDATE', $data) . ' WHERE  member_id  = ' . $member_from . ' AND member_dkpid = ' . $dkpsys_id;
         $db->sql_query ($sql);
 
+        /* 7) delete b account */
         $sql = "DELETE from " . MEMBER_DKP_TABLE . ' WHERE  member_id  = ' . $member_to . ' AND member_dkpid = ' . $dkpsys_id;
         $db->sql_query ($sql);
 
-
-        /* 7)  INSERT Adjustments */
+        /* 8)  ...and re-insert b with adjustments */
         $sql = "SELECT member_id, SUM(adjustment_value) AS adjustment_value
 			FROM " . ADJUSTMENTS_TABLE . ' WHERE member_id = ' . $member_to . '
 			AND adjustment_dkpid = ' . $dkpsys_id . '
@@ -1912,21 +1925,26 @@ class PointsController  extends \bbdkp\admin\Admin
         while ($row = $db->sql_fetchrow ( $result))
         {
             $query = $db->sql_build_array('INSERT', array(
+                    'member_id'            =>  $member_to,
                     'member_dkpid'     	   => $dkpsys_id,
-                    'member_id'           =>  $member_to,
-                    'member_earned'       =>  0.00,
-                    'member_spent'        =>  0.00,
-                    'member_adjustment'   =>  $row['adjustment_value'],
-                    'member_firstraid'    =>  0,
-                    'member_lastraid'     =>  0,
-                    'member_raidcount'    =>  0 )
+                    'member_raid_value'    => 0,
+                    'member_time_bonus'    => 0,
+                    'member_zerosum_bonus' => 0,
+                    'member_earned'        => 0.00,
+                    'member_raid_decay'    => 0,
+                    'member_spent'         => 0.00,
+                    'member_item_decay'    => 0.00,
+                    'member_adjustment'    => isset($row['adjustment_value']) ? $row['adjustment_value'] : 0,
+                    'member_firstraid'     => 0,
+                    'member_lastraid'      => 0,
+                    'member_raidcount'     => 0,
+                )
             );
             $db->sql_query('INSERT INTO ' . MEMBER_DKP_TABLE . $query);
         }
         $db->sql_freeresult ( $result);
 
-
-        /* 8) select raids for member b */
+        /* 9) update b with raid points  */
         $sql = 'SELECT
             MIN(r.raid_start) as first_raid,
             MAX(r.raid_start) as last_raid,
@@ -1954,8 +1972,6 @@ class PointsController  extends \bbdkp\admin\Admin
 
             /* 9) insert in points table */
             $data = array(
-                'member_dkpid'      	=> $dkpsys_id,
-                'member_id'      		=> $member_to,
                 'member_firstraid'      => isset($first_raid) ? $first_raid:0,
                 'member_lastraid'       => isset($last_raid) ? $last_raid:0,
                 'member_raidcount'      => isset($raidcount) ? $raidcount:0,
@@ -1974,8 +1990,6 @@ class PointsController  extends \bbdkp\admin\Admin
 
         }
         $db->sql_freeresult ( $result);
-
-
 
         // 10) now process loot
         $item_value = 0;
@@ -2006,12 +2020,6 @@ class PointsController  extends \bbdkp\admin\Admin
 
         }
         $db->sql_freeresult ( $result);
-
-
-        // 11) copy the activity status of member 1 to member 2
-        $sql = ' UPDATE ' . MEMBER_LIST_TABLE . ' set member_status = ' . $member1->member_status . ' WHERE member_id = ' . $member_to ;
-        $db->sql_query ($sql);
-
 
   		//log the action
 		$log_action = array (
