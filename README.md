@@ -29,11 +29,11 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 
 #### Requirements
 1.	phpbb 3.0.12
+	1. databases : Mysql 5, MSSQL, postgresql, Oracle
+	2. PHP 5.3.3 or higher. Curl should be available on your server.
 2.	UMIL 1.0.5, Automod 1.0.2
-2.	databases : Mysql 5, MSSQL, postgresql, Oracle
-3.	PHP 5.3.3 or higher. Curl should be available on your server.
-4.	ftp and founder admin access on your phpbb installation.
-5.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
+3.	ftp and founder admin access on your phpbb installation.
+4.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
 #### recommended development setup 
 1.	phpBB QuickInstall
