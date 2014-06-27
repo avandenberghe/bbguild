@@ -35,6 +35,14 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 4.	ftp and founder admin access on your phpbb installation.
 5.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
+#### local development setup
+
+recommended setup
+1.	phpBB QuickInstall
+2.	phpStorm IDE
+2.	LAMP installation
+2.	Github app, or use Atlassian Sourcetree
+
 #### New installation 1.3.0.6
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
