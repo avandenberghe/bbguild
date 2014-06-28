@@ -565,9 +565,9 @@ class Admin
      * @param int $forcedorder
      * @return mixed
      */
-    public final function switch_order($sort_order, $arg = URI_ORDER, $forcedorder=0)
+    public final function switch_order($sort_order, $arg = URI_ORDER, $defaultorder = '0.0')
 	{
-		$uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : '0.0';
+		$uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : $defaultorder;
 
 		$uri_order = explode('.', $uri_order);
 

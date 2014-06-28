@@ -594,7 +594,7 @@ class Raids extends \bbdkp\admin\Admin
 	/**
 	 *
 	 * Guild Raid Attendance Statistics
-	 * @param int $time
+	 * @param int $time current timestamp
 	 * @param string $u_stats
 	 * @param int $guild_id
 	 * @param bool $query_by_pool
@@ -814,6 +814,7 @@ class Raids extends \bbdkp\admin\Admin
 		ORDER BY " . $att_current_order ['sql'];
 
 		$attendance = 0;
+
 		$result = $db->sql_query($sql);
 		while ( $row = $db->sql_fetchrow($result))
 		{
@@ -861,6 +862,7 @@ class Raids extends \bbdkp\admin\Admin
 					'IRCTLIFE' 				=> $row['iraidcountlife'],
 					'ATTLIFESTR' 			=> sprintf("%.2f%%", $row['attendancelife']),
 					'ATTLIFE' 				=> sprintf("%.2f", $row['attendancelife']),
+
 					'GRCT90' 				=> $row['gloraidcount90'],
 					'IRCT90' 				=> $row['iraidcount90'],
 					'ATT90STR' 				=> sprintf("%.2f%%", $row['attendance90']),
@@ -901,8 +903,8 @@ class Raids extends \bbdkp\admin\Admin
 	/**
 	 * gets overall raid count in interval of N days before today
 	 *
-	 * @param int $interval
-	 * @param int $time
+	 * @param int $interval = 0 for lifetime, 30, 60 or 90
+	 * @param int $time  current timestamp
 	 * @param int $guild_id
 	 * @param bool $query_by_pool
 	 * @param int $dkp_id
@@ -913,7 +915,7 @@ class Raids extends \bbdkp\admin\Admin
 		global $db;
 		// get raidcount
 		$sql_array = array (
-				'SELECT' => ' count(r.raid_id) AS raidcount ',
+				'SELECT' => ' r.raid_id  ',
 				'FROM' => array (
 						DKPSYS_TABLE =>  's' ,
 						EVENTS_TABLE => 'e',
@@ -937,7 +939,11 @@ class Raids extends \bbdkp\admin\Admin
 		{
 			$sql_array['WHERE'] .= " AND ( - r.raid_start + " . (int) $time . " ) / (3600 * 24) < ". (int) $interval;
 		}
+
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
+
+        $sql = ' SELECT count(*) as raidcount FROM ( ' . $sql . ' ) a';
+
 		$result = $db->sql_query($sql);
 		$rc = (int) $db->sql_fetchfield('raidcount');
 

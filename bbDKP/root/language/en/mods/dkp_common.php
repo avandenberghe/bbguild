@@ -212,12 +212,16 @@ $lang = array_merge($lang, array(
 'ATTENDED' => 'Attended',
 'ATTENDEES' => 'Attendees',
 'ATTENDANCE' => 'Attendance',
+'ATT' => 'Att.',
 'AVERAGE' => 'Average',
 'BOSS' => 'Boss',
 'BUYER' => 'Buyer',
 'BUYERS' => 'Buyers',
 'ARMOR' => 'Armor',
 'TYPE' => 'Armor',
+'STATS_SOCIAL' => 'less than 20% Attendance',
+'STATS_RAIDER' => 'less than 50% Attendance',
+'STATS_CORERAIDER' => 'more than 70% Attendance',
 
 // TYPES of armor are static across games, no need to put it in DB
 'CLOTH' => 'Very light / Cloth',
@@ -447,6 +451,18 @@ $lang = array_merge($lang, array(
 'SELECT_EXISTING' => 'Select Existing',
 'UPDATED' => 'Updated',
 'NOVIEW' => 'Unknown Viewname %s',
+'IRCTLIFE' => 'Ind.Raidcount Life',
+'GRCTLIFE' => 'All.Raidcount Life',
+'ATTLIFE' => 'Attendance Life',
+'IRCT90' => 'Ind.Raidcount 90d',
+'GRCT90' => 'All.Raidcount 90d',
+'ATT90' => 'Attendance 90d',
+'IRCT60' => 'Ind.Raidcount 60d',
+'GRCT60' => 'All.Raidcount 60d',
+'ATT60' => 'Attendance 60d',
+'IRCT30' => 'Ind.Raidcount 30d',
+'GRCT30' => 'All.Raidcount 30d',
+'ATT30' => 'Attendance 30d',
 
 //---- About --- here be dragons
 //tabs

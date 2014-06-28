@@ -61,14 +61,32 @@ class viewStats implements iViews
 
         if($config['bbdkp_epgp'] == '1')
         {
-            $LootStats->EPGPMemberLootStats($time, $Navigation->getGuildId(), $Navigation->getQueryByPool(), $Navigation->getDkpsysId(), $Navigation->getShowAll());
+            $LootStats->EPGPMemberLootStats($time,
+                $Navigation->getGuildId(),
+                $Navigation->getQueryByPool(),
+                $Navigation->getDkpsysId(),
+                $Navigation->getShowAll());
         }
         else
         {
-            $LootStats->MemberLootStats($time, $Navigation->getGuildId(), $Navigation->getQueryByPool(), $Navigation->getDkpsysId(), $Navigation->getShowAll());
+            $LootStats->MemberLootStats($time,
+                $Navigation->getGuildId(),
+                $Navigation->getQueryByPool(),
+                $Navigation->getDkpsysId(),
+                $Navigation->getShowAll());
         }
-        $LootStats->ClassLootStats(NULL, $Navigation->getGuildId(), $Navigation->getQueryByPool(), $Navigation->getDkpsysId(), $Navigation->getShowAll());
-        $RaidStats->attendance_statistics($time, $u_stats, $Navigation->getGuildId(), $Navigation->getQueryByPool(), $Navigation->getDkpsysId(), $Navigation->getShowAll());
+
+        $LootStats->ClassLootStats(NULL,
+                $Navigation->getGuildId(),
+                $Navigation->getQueryByPool(),
+                $Navigation->getDkpsysId(),
+                $Navigation->getShowAll());
+
+        $RaidStats->attendance_statistics($time, $u_stats,
+                $Navigation->getGuildId(),
+                $Navigation->getQueryByPool(),
+                $Navigation->getDkpsysId(),
+                $Navigation->getShowAll());
 
         // Output page
         page_header($title);
