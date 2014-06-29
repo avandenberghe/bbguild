@@ -446,7 +446,10 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
         }
     }
 
-
+    /**
+     * build sidebar
+     * @return array
+     */
     private function getGuildinfo()
     {
         global $phpbb_root_path, $phpEx, $template;

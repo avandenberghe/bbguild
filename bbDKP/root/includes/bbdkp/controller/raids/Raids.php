@@ -423,12 +423,13 @@ class Raids extends \bbdkp\admin\Admin
      */
 	public function raidcount($dkpsys_id, $days, $member_id=0, $mode=1, $all = false, $guild_id=0)
 	{
-		$start_date = mktime(0, 0, 0, date('m'), date('d')-$days, date('Y'));
+
 		$end_date = time();
 		// member joined in the last $days ?
 
 		if($member_id > 0)
 		{
+            $start_date = mktime(0, 0, 0, date('m'), date('d')-$days, date('Y'));
 			$attendee = new \bbdkp\controller\members\Members($member_id);
 			$joindate = $attendee->get_joindate($member_id);
 			if ($all==true || $joindate > $start_date)
@@ -461,6 +462,7 @@ class Raids extends \bbdkp\admin\Admin
 		}
 		else
 		{
+            $start_date = mktime(0, 0, 0, 1, 1, 2000);
 			return $this->getraidcount($start_date, $end_date, $dkpsys_id, true, 0, $guild_id);
 		}
 
@@ -507,7 +509,7 @@ class Raids extends \bbdkp\admin\Admin
 			$sql_array['WHERE'] .= ' AND ra.member_id = ' . (int) $member_id;
 		}
 
-		if ($all == true)
+		if ($all != true)
 		{
 			$sql_array['WHERE'] .= ' AND r.raid_start >= ' . $start_date;
 		}

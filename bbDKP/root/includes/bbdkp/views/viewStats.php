@@ -61,7 +61,7 @@ class viewStats implements iViews
 
         if($config['bbdkp_epgp'] == '1')
         {
-            $LootStats->EPGPMemberLootStats($time,
+            $LootStats->MemberEPGPStats($time,
                 $Navigation->getGuildId(),
                 $Navigation->getQueryByPool(),
                 $Navigation->getDkpsysId(),
@@ -69,7 +69,7 @@ class viewStats implements iViews
         }
         else
         {
-            $LootStats->MemberLootStats($time,
+            $LootStats->MemberDKPStats($time,
                 $Navigation->getGuildId(),
                 $Navigation->getQueryByPool(),
                 $Navigation->getDkpsysId(),

@@ -202,47 +202,6 @@ class Guilds extends \bbdkp\admin\Admin
 
 	}
 
-	/**
-	 * gets a guild from database
-	 */
-	public function Getguild()
-	{
-		global $db, $phpbb_root_path;
-
-		$sql = 'SELECT id, name, realm, region, roster, game_id, members,
-				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled
-				FROM ' . GUILD_TABLE . '
-				WHERE id = ' . $this->guildid;
-		$result = $db->sql_query($sql);
-		$row = $db->sql_fetchrow($result);
-		$db->sql_freeresult($result);
-		if ($row)
-		{
-			// load guild object
-			$this->game_id = $row['game_id'];
-			$this->guildid = $row['id'];
-			$this->name = $row['name'];
-			$this->realm = $row['realm'];
-			$this->region = $row['region'];
-			$this->showroster = $row['roster'];
-			$this->achievementpoints = $row['achievementpoints'];
-			$this->level = $row['level'];
-			$this->battlegroup = $row['battlegroup'];
-			$this->guildarmoryurl = $row['guildarmoryurl'];
-			$this->emblempath = $phpbb_root_path . $row['emblemurl'];
-			$this->min_armory = $row['min_armory'];
-			$this->recstatus = $row['rec_status'];
-			$this->armory_enabled = $row['armory_enabled'];
-
-			$this->countmembers();
-			$this->guilddefault = $row['guilddefault'];
-			$this->raidtrackerrank = $this->maxrank();
-			$this->applyrank = $this->maxrank();
-		}
-
-
-	}
-
     /**
      * guild class property setter
      * @param string $fieldName
@@ -300,12 +259,13 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	public function MakeGuild()
 	{
-		global $user, $db, $phpEx, $phpbb_root_path;
+		global $cache, $user, $db, $phpEx, $phpbb_root_path;
 
 		if ($this->name == null || $this->realm == null)
 		{
 			trigger_error($user->lang['ERROR_GUILDEMPTY'], E_USER_WARNING);
 		}
+        $cache->destroy('sql', GUILD_TABLE);
 
 		// check existing guild-realmname
 		$result = $db->sql_query("SELECT count(*) as evcount from " . GUILD_TABLE . "
@@ -383,8 +343,11 @@ class Guilds extends \bbdkp\admin\Admin
      */
 	public function Guildupdate(\bbdkp\controller\guilds\Guilds $old_guild, $params)
 	{
-		global $user, $db, $phpEx, $phpbb_root_path;
+		global $user, $cache, $db, $phpEx, $phpbb_root_path;
         $apiupdate=true;
+
+        $cache->destroy('sql', GUILD_TABLE);
+
 		// check if already exists
 		if($this->name != $old_guild->name || $this->realm != $old_guild->realm)
 		{
@@ -507,18 +470,35 @@ class Guilds extends \bbdkp\admin\Admin
         return true;
     }
 
+
+    /**
+     * updates the default guild flag
+     * @param int $id
+     */
+    public function update_guilddefault($id)
+    {
+        global $cache, $db;
+        $cache->destroy('sql', GUILD_TABLE);
+        $sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 1 WHERE id = ' . (int) $id;
+        $db->sql_query ( $sql );
+
+        $sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 0 WHERE id != ' . (int) $id;
+        $db->sql_query ( $sql );
+
+    }
+
 	/**
 	 * deletes a guild from database
 	 */
 	public function Guildelete()
 	{
-		global $user, $db;
+		global $user, $cache, $db;
 
 		if($this->guildid == 0)
 		{
 			trigger_error($user->lang['ERROR_INVALID_GUILD_PROVIDED'], E_USER_WARNING);
 		}
-
+        $cache->destroy('sql', GUILD_TABLE);
 		// check if guild has members
 		$sql = 'SELECT COUNT(*) as mcount FROM ' . MEMBER_LIST_TABLE . '
            WHERE member_guild_id = ' . $this->guildid;
@@ -753,6 +733,50 @@ class Guilds extends \bbdkp\admin\Admin
 
 
     /**
+     * gets a guild from database
+     * used in sidebar
+     * cached for 7 days
+     */
+    public function Getguild()
+    {
+        global $db, $phpbb_root_path;
+
+        $sql = 'SELECT id, name, realm, region, roster, game_id, members,
+				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled
+				FROM ' . GUILD_TABLE . '
+				WHERE id = ' . $this->guildid;
+        $result = $db->sql_query($sql, 604800);
+
+        $row = $db->sql_fetchrow($result);
+        $db->sql_freeresult($result);
+        if ($row)
+        {
+            // load guild object
+            $this->game_id = $row['game_id'];
+            $this->guildid = $row['id'];
+            $this->name = $row['name'];
+            $this->realm = $row['realm'];
+            $this->region = $row['region'];
+            $this->showroster = $row['roster'];
+            $this->achievementpoints = $row['achievementpoints'];
+            $this->level = $row['level'];
+            $this->battlegroup = $row['battlegroup'];
+            $this->guildarmoryurl = $row['guildarmoryurl'];
+            $this->emblempath = $phpbb_root_path . $row['emblemurl'];
+            $this->min_armory = $row['min_armory'];
+            $this->recstatus = $row['rec_status'];
+            $this->armory_enabled = $row['armory_enabled'];
+
+            $this->countmembers();
+            $this->guilddefault = $row['guilddefault'];
+            $this->raidtrackerrank = $this->maxrank();
+            $this->applyrank = $this->maxrank();
+        }
+
+
+    }
+
+    /**
      * returns a member listing for this guild
      *
      * @param string $order
@@ -934,6 +958,7 @@ class Guilds extends \bbdkp\admin\Admin
 		$db->sql_freeresult($result);
 		return $defaultrank_id;
 	}
+
 	/**
 	 * gets list of guilds, used in dropdowns
 	 * @param int $minimum optional
@@ -959,7 +984,7 @@ class Guilds extends \bbdkp\admin\Admin
 				);
 
 		$sql = $db->sql_build_query('SELECT', $sql_array);
-		$result = $db->sql_query($sql);
+		$result = $db->sql_query($sql, 604800);
 		$guild = array();
 		while ($row = $db->sql_fetchrow($result))
 		{
@@ -977,21 +1002,6 @@ class Guilds extends \bbdkp\admin\Admin
 		return $guild;
 	}
 
-	/**
-	 * updates the default guild flag
-	 * @param int $id
-	 */
-	public function update_guilddefault($id)
-	{
-		global $db;
-
-		$sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 1 WHERE id = ' . (int) $id;
-		$db->sql_query ( $sql );
-
-		$sql = 'UPDATE ' . GUILD_TABLE . ' SET guilddefault = 0 WHERE id != ' . (int) $id;
-		$db->sql_query ( $sql );
-
-	}
 
 
 }

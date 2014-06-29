@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0.6
+#1.3.0.7
 
 
 ## about
@@ -23,7 +23,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 
 ## Current
 
-1.3.0.6
+1.3.0.7
 
 ## Installation
 
@@ -41,7 +41,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 3.	LAMP installation
 4.	Github app, or use Atlassian Sourcetree
 
-#### New installation 1.3.0.6
+#### New installation 1.3.0.7
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
@@ -53,7 +53,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 4. Click on the blue link given, this will redirect you to /install/index.php
 5. Click submit. This will install 1.3.0.5 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.x to 1.3.0.6
+#### Upgrading from 1.3.0.x to 1.3.0.7
 
 1. Unzip the bbDKP-1306.zip file
 2. Upload bbDKP-1306/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
@@ -64,7 +64,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 6. Click on the dtaabase upgrade link
   ![database upgrade](http://i.imgur.com/4G3DKV2.png)
 
-#### Upgrading from 1.2.8-pl2 to 1.3.0.6
+#### Upgrading from 1.2.8-pl2 to 1.3.0.7
 
 * make a secure backup of all files
 * backup your database
@@ -98,6 +98,14 @@ Find support and more on
 *	IRC : Freenode #bbdkp
 
 ## Changelog 
+
+1.3.0.7 30-06-2014
+
+-	[FIX] #238 points transfer acp is now multi-guild
+-	[CHG] game class no longer inherits from admin class
+-	[FIX] #234 sql queries for guild, ranks, games, classes, race, faction are cached 
+-	[FIX] #237 Statistics page was redone. Graphics are now responsive, Flot library updated to 0.8.3
+-	[CHG] #237 Standings page renamed to Leaderboard, attendance, raidcount columns fixed 
 
 1.3.0.6 14-06-2014
 

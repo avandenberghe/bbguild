@@ -128,7 +128,6 @@ class viewStandings implements iViews
         $classes = array_unique($classes);
         sort($classes);
 
-
         foreach ($Navigation->getClassarray() as $k => $class)
         {
             if(in_array( $class['class_id'], $classes))
@@ -194,9 +193,6 @@ class viewStandings implements iViews
             $this->memberlist = $this->PointsController->listdkpaccounts($this->start, true);
         }
 
-        $output = array ();
-
-
         if(count($this->memberlist[0]) == 0)
         {
             $output = array (
@@ -205,7 +201,6 @@ class viewStandings implements iViews
 
             $template->assign_vars ( $output );
             return;
-
         }
 
         //all time guild raidcount

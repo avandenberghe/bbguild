@@ -3,7 +3,6 @@
     <div id="memberstats" class="plot"></div>
 </div>
 
-
 <script type="text/javascript">
     //<![CDATA[
     jQuery(function ()
@@ -14,7 +13,7 @@
 
         var plotarea = jQuery("#memberstats");
         plotarea.css("height", "350px");
-        plotarea.css("width", "100%");
+        plotarea.css("width", "102%");
 
         var dkpoptions = {
             series: {
@@ -26,7 +25,7 @@
                 hoverable: true
             },
             xaxis: {
-                ticks:  members,
+                ticks:  [],
                 autoscaleMargin: 0.05
 
                 },
@@ -56,16 +55,15 @@
                 {
                     data: memberdkp,
                     bars: { show: true,
-                            barWidth: 1,
-                            fill: 0.30 },
-                    yaxis:1
-
+                        barWidth: 1,
+                        fill: 0.30 },
+                    yaxis: 1
                 },
                 {
                     data: attendance,
                     lines: { show: true, fill: false,  },
                     points: { show: true } ,
-                    yaxis:2
+                    yaxis: 2
                 }],
             dkpoptions );
 
