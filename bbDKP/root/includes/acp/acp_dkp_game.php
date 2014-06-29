@@ -91,6 +91,17 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 						$editgame->game_id = request_var ( 'hidden_game_id','' );
 						$editgame->setName(utf8_normalize_nfc(request_var('hidden_game_name', '', true)));
 						$editgame->install();
+                        //
+                        // Logging
+                        //
+                        $log_action = array(
+                            'header' => 'L_ACTION_GAME_ADDED' ,
+                            'L_GAME' => $editgame->game_id ,
+                        );
+
+                        $this->log_insert(array(
+                            'log_type' =>  'L_ACTION_GAME_ADDED',
+                            'log_action' => $log_action));
 
 						trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALLED_GAME_SUCCESS'], $editgame->getName() ) . $this->link, E_USER_NOTICE );
 					}
@@ -255,6 +266,18 @@ class acp_dkp_game extends \bbdkp\admin\Admin
                         $deletegame->Get();
 						$deletegame->Delete();
 
+                        //
+                        // Logging
+                        //
+                        $log_action = array(
+                            'header' => 'L_ACTION_GAME_DELETED' ,
+                            'L_GAME' => $deletegame->game_id ,
+                        );
+
+                        $this->log_insert(array(
+                            'log_type' =>  'L_ACTION_GAME_DELETED',
+                            'log_action' => $log_action));
+
 						//meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") );
 						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->getName() ) , E_USER_WARNING);
 					}
@@ -282,6 +305,20 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 						$faction->faction_id = request_var ( 'hidden_faction_id', 0 );
 						$faction->get();
 						$faction->Delete();
+
+                        //
+                        // Logging
+                        //
+                        $log_action = array(
+                            'header' 	=> 'L_ACTION_FACTION_DELETED' ,
+                            'L_GAME' 	=> $faction->game_id ,
+                            'L_FACTION' => $faction->faction_name ,
+                        );
+
+                        $this->log_insert(array(
+                            'log_type' 		=> 'L_ACTION_FACTION_DELETED',
+                            'log_result' 	=> 'L_SUCCESS',
+                            'log_action' 	=> $log_action));
 
 						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$faction->game_id}" ) );
 						trigger_error ( sprintf ( $user->lang ['ADMIN_DELETE_FACTION_SUCCESS'], $faction->game_id , $faction->faction_name ) . $this->link, E_USER_WARNING );
@@ -316,6 +353,21 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 						$deleterace->game_id = request_var ( 'hidden_gameid', '' );
 						$deleterace->get();
 						$deleterace->Delete();
+
+                        //
+                        // Logging
+                        //
+                        $log_action = array(
+                            'header' 	=> 'L_ACTION_RACE_DELETED' ,
+                            'L_GAME' 	=> $deleterace->game_id ,
+                            'L_RACE' => $deleterace->race_name ,
+                        );
+                        $this->log_insert(array(
+                            'log_type' 		=> 'L_ACTION_RACE_DELETED',
+                            'log_result' 	=> 'L_SUCCESS',
+                            'log_action' 	=> $log_action));
+
+
 
 						$success_message = sprintf($user->lang['ADMIN_DELETE_RACE_SUCCESS'], $deleterace->game_id, $deleterace->race_name);
 						meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$deleterace->game_id}" ) );
@@ -578,6 +630,20 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					$faction->faction_name = utf8_normalize_nfc ( request_var ( 'factionname', '', true ) );
 					$faction->Make();
 
+                    //
+                    // Logging
+                    //
+                    $log_action = array(
+                        'header' 	=> 'L_ACTION_FACTION_ADDED' ,
+                        'L_GAME' 	=> $editgame->game_id ,
+                        'L_FACTION' => $faction->faction_name ,
+                    );
+
+                    $this->log_insert(array(
+                        'log_type' 		=> 'L_ACTION_FACTION_ADDED',
+                        'log_result' 	=> 'L_SUCCESS',
+                        'log_action' 	=> $log_action));
+
 					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$faction->game_id}" ) );
 					trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $faction->faction_name ), E_USER_NOTICE );
 				}
@@ -616,6 +682,19 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					$race->image_female = utf8_normalize_nfc ( request_var ( 'image_female', '', true ) );
 					$race->Make();
 
+                    //
+                    // Logging
+                    //
+                    $log_action = array(
+                        'header' 	=> 'L_ACTION_RACE_ADDED' ,
+                        'L_GAME' 	=> $race->game_id ,
+                        'L_RACE' 	=> $race->race_name ,
+                    );
+                    $this->log_insert(array(
+                        'log_type' 		=> 'L_ACTION_RACE_ADDED',
+                        'log_result' 	=> 'L_SUCCESS',
+                        'log_action' 	=> $log_action));
+
 					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$race->game_id}" ) );
 					trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_RACE_SUCCESS'], $race->race_name ) . $this->link, E_USER_NOTICE );
 				}
@@ -637,7 +716,22 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					$race->image_female = utf8_normalize_nfc ( request_var ( 'image_female', '', true ) );
 					$race->Update($oldrace);
 
-					meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$race->game_id}" ) );
+                    //
+                    // Logging
+                    //
+                    $log_action = array(
+                        'header' 	=> 'L_ACTION_RACE_UPDATED' ,
+                        'L_GAME' 	=> $race->game_id ,
+                        'L_RACE' 	=> $race->race_name ,
+                    );
+
+                    $this->log_insert(array(
+                        'log_type' 		=> 'L_ACTION_RACE_UPDATED',
+                        'log_result' 	=> 'L_SUCCESS',
+                        'log_action' 	=> $log_action));
+
+
+                    meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$race->game_id}" ) );
 					trigger_error ( sprintf ( $user->lang ['ADMIN_UPDATE_RACE_SUCCESS'], $race->race_name ) . $this->link, E_USER_NOTICE );
 				}
 

@@ -88,6 +88,11 @@ class viewStats implements iViews
                 $Navigation->getDkpsysId(),
                 $Navigation->getShowAll());
 
+        $template->assign_vars(
+            array(
+            'S_STATS' => true,
+        ));
+
         // Output page
         page_header($title);
 

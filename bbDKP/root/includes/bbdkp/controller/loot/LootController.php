@@ -1171,12 +1171,12 @@ class LootController  extends \bbdkp\admin\Admin
 					'CLASS_NAME'		=> $row['class_name'],
 					'CLASS_COUNT' 		=> (int) $class_count,
 					'CLASS_PCT' 		=> $classpct,
-					'CLASS_PCT_STR' 	=> sprintf("%s %%", $classpct ),
+					'CLASS_PCT_STR' 	=> sprintf("%s%%", $classpct ),
 					'LOOT_COUNT' 		=> $loot_drops,
 					'CLASS_DROP_PCT'	=> $class_drop_pct,
-					'CLASS_DROP_PCT_STR' => sprintf("%s %%", $class_drop_pct  ),
+					'CLASS_DROP_PCT_STR' => sprintf("%s%%", $class_drop_pct  ),
 					'C_LOOT_FACTOR'		=> ($lootoverrun < 	0) ? 'negative' : 'positive',
-					'LOOTOVERRUN'		=> sprintf("%s %%", $lootoverrun),
+					'LOOTOVERRUN'		=> sprintf("%s%%", $lootoverrun),
 			)
 			);
 		}
@@ -1184,6 +1184,7 @@ class LootController  extends \bbdkp\admin\Admin
 		/* send information to template */
 		$template->assign_vars(array(
 				'CLASSPCTCUMUL'		=> round($class_drop_pct_cum),
+
 		)
 		);
 

@@ -52,7 +52,7 @@ abstract class GameInstall
 	 */
     public final function Install($game_id, $gamename, $bossbaseurl, $zonebaseurl)
 	{
-		global $db;
+		global $cache, $db;
 		$this->game_id = $game_id;
 		$this->gamename = $gamename;
         $this->bossbaseurl = $bossbaseurl;
@@ -79,6 +79,13 @@ abstract class GameInstall
 		$db->sql_query ( $sql );
 
 		$db->sql_transaction ( 'commit' );
+        $cache->destroy( 'sql', GAMES_TABLE );
+        $cache->destroy( 'sql', CLASS_TABLE );
+        $cache->destroy( 'sql', BB_LANGUAGE );
+        $cache->destroy( 'sql', RACE_TABLE );
+        $cache->destroy( 'sql', DKPSYS_TABLE );
+        $cache->destroy( 'sql', EVENTS_TABLE );
+        $cache->destroy( 'sql', MEMBER_LIST_TABLE );
 
 	}
 
@@ -113,10 +120,13 @@ abstract class GameInstall
 
         $db->sql_transaction ( 'commit' );
 
-        $cache->destroy ( 'sql', GAMES_TABLE );
-
-
-
+        $cache->destroy( 'sql', GAMES_TABLE );
+        $cache->destroy( 'sql', CLASS_TABLE );
+        $cache->destroy( 'sql', BB_LANGUAGE );
+        $cache->destroy( 'sql', RACE_TABLE );
+        $cache->destroy( 'sql', DKPSYS_TABLE );
+        $cache->destroy( 'sql', EVENTS_TABLE );
+        $cache->destroy( 'sql', MEMBER_LIST_TABLE );
     }
 
 
