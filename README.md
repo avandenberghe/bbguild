@@ -47,29 +47,28 @@ Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP-1306.zip file
-2. Upload bbDKP-1306/bbDKP folder to your webserver, into /store/mods/
+1. Unzip the bbDKP-1307.zip file
+2. Upload bbDKP-1307/bbDKP folder to your webserver, into /store/mods/
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
 5. Click submit. This will install 1.3.0.5 and clear the caches (template, theme, imagesets)
 
 #### Upgrading from 1.3.0.x to 1.3.0.7
 
-1. Unzip the bbDKP-1306.zip file
-2. Upload bbDKP-1306/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
-3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1305_to_1306/update.xml)
- ![Automod update](http://i.imgur.com/9IRfrTD.png)
+1. Unzip the bbDKP-1307.zip file
+2. Upload bbDKP-1307/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
+3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1306_to_1307/update.xml)
+ ![Automod update](http://i.imgur.com/eZww133.png)
 4. Apply the update from Automod "Available Changes" 
-  ![Imgur](http://i.imgur.com/J7VjfY7.png)
-6. Click on the dtaabase upgrade link
-  ![database upgrade](http://i.imgur.com/4G3DKV2.png)
+  ![Imgur](http://i.imgur.com/1mKPLq5.png)
+6. Click on the database upgrade link
+  ![database upgrade](http://i.imgur.com/9c0lNad.png)
 
 #### Upgrading from 1.2.8-pl2 to 1.3.0.7
 
 * make a secure backup of all files
 * backup your database
-
-* Uninstall 1.2.8-pl2 and re-install 1.3.0.6 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.3.0.7 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first.
 		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
 		*	make sure the module was uninstalled by checking the ACP modules.
@@ -77,9 +76,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2 to uninstall the files and phpbb edits. 
     3. purge the board cache, verify your board is running    
     4. delete /store/mods/bbdkp  
-	5. upload the unzipped bbDKP-1306/bbDKP folder to /store/mods
+	5. upload the unzipped bbDKP-1307/bbDKP folder to /store/mods
 	6. from Automod, run file installer
-	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.6  
+	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.7   
 		![database upgrade](http://i.imgur.com/8gvmkwQ.png)
 		![after upgrade](http://i.imgur.com/qywrgj1.png)
 		

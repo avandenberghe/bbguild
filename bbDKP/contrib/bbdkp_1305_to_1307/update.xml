@@ -38,7 +38,7 @@
 			<file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>	
 											
 			<file from="root/includes/bbdkp/controller/games/classes/Classes.php" to="includes/bbdkp/controller/games/classes/Classes.php"/>
-			<file from="root/includes/bbdkp/controller/games/faction/Faction.php" to="includes/bbdkp/controller/games/faction/Faction.php"/>
+			<file from="root/includes/bbdkp/controller/games/factions/Faction.php" to="includes/bbdkp/controller/games/factions/Faction.php"/>
 			<file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/GameInstall.php" to="includes/bbdkp/controller/games/library/GameInstall.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_wow.php" to="includes/bbdkp/controller/games/library/install_wow.php"/>
