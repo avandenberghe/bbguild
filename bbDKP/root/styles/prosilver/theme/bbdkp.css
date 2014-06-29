@@ -139,7 +139,6 @@ ul.portalmenu li {
 }
 
 /**** portal tooltip css ****/
-/* http://www.webmonkey.com/2010/02/make_css_rounded_corners  */
 
 .bbtooltip {
     display: none;
@@ -246,10 +245,63 @@ ul.portalmenu li {
     color: #FF3344;
 }
 
-/* bar graph */
-.bargraph {
-    background-color: #9900AA;
+
+/*** stats css **/
+table .bbdkpstats
+{
+    font-size: 1em;
 }
+.membercontainer {
+    box-sizing: border-box;
+    width: 85%;
+    height: 380px;
+    padding: 20px 15px 15px 15px;
+    margin: 15px auto 30px auto;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    -o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+.plot {
+    width: 100%;
+    height: 24%;
+    font-size: 14px;
+    line-height: 1.2em;
+}
+.attendancecontainer {
+    box-sizing: border-box;
+    width: 80%;
+    height: 1800px;
+    padding: 20px 15px 15px 15px;
+    margin: 15px auto 30px auto;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    -o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+.classcontainer {
+    box-sizing: border-box;
+    width: 100%;
+    height: 550px;
+    padding: 20px 15px 15px 15px;
+    margin: 15px auto 30px auto;
+    border: 1px solid #ddd;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    -o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+}
+
+
+.legend table, .legend > div { height: 55px !important; opacity: 1 !important; left: 45px; top: 10px; width: 85px !important; }
+.legend table { border: 1px solid #555; padding: 5px; }
+
+
 
 span.corners-inner-top, span.corners-inner-bottom, span.corners-inner-top span, span.corners-inner-bottom span {
     font-size: 1px;

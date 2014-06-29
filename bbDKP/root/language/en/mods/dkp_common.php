@@ -310,7 +310,7 @@ $lang = array_merge($lang, array(
 'PCT_EARNED_LOST_TO' => '% Earned Lost to',
 'PREFERENCES' => 'Preferences',
 'PURCHASE_HISTORY_FOR' => 'Purchase History for %s',
-
+'LEADERBOARDSTAT' => 'Leaderboard vs. Raidcount',
 'QUOTE' => 'Quote',
 'RACE' => 'Race',
 'RACEID' => 'Race ID',

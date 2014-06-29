@@ -1,34 +1,6 @@
-<style>
-    .attendancecontainer {
-        box-sizing: border-box;
-        width: 80%;
-        height: 1800px;
-        padding: 20px 15px 15px 15px;
-        margin: 15px auto 30px auto;
-        border: 1px solid #ddd;
-        box-shadow: 0 3px 10px rgba(0,0,0,0.15);
-        -o-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        -ms-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        -moz-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-        -webkit-box-shadow: 0 3px 10px rgba(0,0,0,0.1);
-    }
-
-    .attendanceplot {
-        width: 100%;
-        height: 24%;
-        font-size: 14px;
-        line-height: 1.2em;
-    }
-
-    .legend table, .legend > div { height: 55px !important; opacity: 1 !important; left: 45px; top: 10px; width: 85px !important; }
-    .legend table { border: 1px solid #555; padding: 5px; }
-
-</style>
-
 <div class="forabg" style="width:95%;">
 <div class="inner">
 <span class="corners-inner-top"><span></span></span>
-
     <table id="choiceContainer" class="table1" width="90%" border="0" cellspacing="0" cellpadding="0">
         <thead>
         <tr>
@@ -96,7 +68,16 @@
 </div>
 </div>
 
-<hr />
+<div class="attendancecontainer">
+    <h4>{L_ATT90}</h4>
+    <div id="attendanceplot90" class="plot"></div>
+    <h4>{L_ATT60}</h4>
+    <div id="attendanceplot60" class="plot"></div>
+    <h4>{L_ATT30}</h4>
+    <div id="attendanceplot30" class="plot"></div>
+    <h4>{L_ATTLIFE}</h4>
+    <div id="attendanceplotlife" class="plot"></div>
+</div>
 
 <script type="text/javascript">
     /*
@@ -128,9 +109,10 @@
         var series_life = [<!-- BEGIN attendance_row -->[{attendance_row.IRCTLIFE}, {attendance_row.ATTLIFE}]<!-- IF ! attendance_row.S_LAST_ROW -->,<!-- ENDIF --><!-- END attendance_row -->];
 
         var att90options = {
-            grid: { markings: markings},
-            lines: { show: true, steps: false, fill: true },
-            points: { show: true, fill: true,radius: 5, fillColor: "#058DC7" },
+
+            grid: {markings: markings},
+            lines: {show: true, steps: false, fill: true },
+            points: {show: true, fill: true,radius: 5, fillColor: "#058DC7"},
             xaxis: {
                 tickSize: 1,
                 tickLength: 1,
@@ -278,26 +260,8 @@
         jQuery.plot("#attendanceplot30", [ d2, dataset30 ], att30options);
         jQuery.plot("#attendanceplotlife", [ d2, datasetlife ], attlifeoptions);
 
-        window.onresize = function(event) {
-            jQuery.plot("#attendanceplot90", [ d2, dataset90 ], att90options);
-            jQuery.plot("#attendanceplot60", [ d2, dataset60 ], att60options);
-            jQuery.plot("#attendanceplot30", [ d2, dataset30 ], att30options);
-            jQuery.plot("#attendanceplotlife", [ d2, datasetlife ], attlifeoptions);
-        }
-
-        /*$("#attendanceplot").prepend("Flot " + $.plot.version + " &ndash; ");*/
     });
 </script>
-<div class="attendancecontainer">
-    <h4>{L_ATT90}</h4>
-    <div id="attendanceplot90" class="attendanceplot"></div>
-    <h4>{L_ATT60}</h4>
-    <div id="attendanceplot60" class="attendanceplot"></div>
-    <h4>{L_ATT30}</h4>
-    <div id="attendanceplot30" class="attendanceplot"></div>
-    <h4>{L_ATTLIFE}</h4>
-    <div id="attendanceplotlife" class="attendanceplot"></div>
-</div>
 
 
 
