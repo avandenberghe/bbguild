@@ -537,7 +537,7 @@ class LootController  extends \bbdkp\admin\Admin
 	 * @param int $dkp_id
 	 * @param boolean $show_all
 	 */
-	public function EPGPMemberLootStats($time, $guild_id, $query_by_pool, $dkp_id, $show_all)
+	public function MemberEPGPStats($time, $guild_id, $query_by_pool, $dkp_id, $show_all)
 	{
 		global $db, $template, $config, $phpEx, $phpbb_root_path, $user;
 
@@ -674,7 +674,8 @@ class LootController  extends \bbdkp\admin\Admin
 		}
 
 		$startd = request_var ( 'startdkp', 0 );
-		$members_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $startd );
+        //$config ['bbdkp_user_llimit'] ==> set to 50
+		$members_result = $db->sql_query_limit ( $sql, 50, $startd );
 		$totalcount = $db->sql_affectedrows($members_result);
 
 		$raid_count=  0;
@@ -720,7 +721,7 @@ class LootController  extends \bbdkp\admin\Admin
 
 			$dkppagination = $this->generate_pagination2(
 					$url . '&amp;o1=' . $current_order ['uri'] ['current'] ,
-					$member_count, $config ['bbdkp_user_llimit'], $startd, true, 'startdkp'  );
+					$member_count, 50, $startd, true, 'startdkp'  );
 
 		}
 
@@ -730,7 +731,7 @@ class LootController  extends \bbdkp\admin\Admin
 					'<a href="' . $url . '&amp;o1='. $current_order['uri']['current'] . '" class="rowfoot">' );
 
 			$dkppagination = $this->generate_pagination2($url . '&amp;o1=' . $current_order ['uri'] ['current']. '&amp;show=all' ,
-					$member_count, $config ['bbdkp_user_llimit'], $startd, true, 'startdkp'  );
+					$member_count,50 , $startd, true, 'startdkp'  );
 		}
 
 		$db->sql_freeresult($members_result);
@@ -767,7 +768,7 @@ class LootController  extends \bbdkp\admin\Admin
 	 * @param int $dkp_id
 	 * @param boolean $show_all
 	 */
-	public function MemberLootStats($time, $guild_id, $query_by_pool, $dkp_id, $show_all)
+	public function MemberDKPStats($time, $guild_id, $query_by_pool, $dkp_id, $show_all)
 	{
 		global $db, $template, $config, $phpEx, $phpbb_root_path, $user;
 
@@ -893,7 +894,7 @@ class LootController  extends \bbdkp\admin\Admin
 		}
 
 		$startd = request_var ( 'startdkp', 0 );
-		$members_result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $startd );
+		$members_result = $db->sql_query_limit ( $sql, 50, $startd );
 		$totalcount = $db->sql_affectedrows($members_result);
 
 
@@ -911,18 +912,17 @@ class LootController  extends \bbdkp\admin\Admin
 			$member_drop_pct = (float) ( $this->total_drops > 0 ) ? round( ( (int) $row['itemcount'] / $this->total_drops) * 100, 1 ) : 0;
 
 			$template->assign_block_vars('stats_row', array(
-					'NAME' 					=> $member->member_name,
-					'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=member&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),
-					'COLORCODE'				=> $member->colorcode,
-					'ID'            		=> $row['member_id'],
-					'COUNT'         		=> $line,
-					'ATTENDED_COUNT' 		=> $row['member_raidcount'],
-					'ITEM_COUNT' 			=> $row['itemcount'],
-					'MEMBER_DROP_PCT'		=> sprintf("%s %%", $member_drop_pct),
-					'CURRENT' 				=> intval($row['member_current']),
-					'C_CURRENT'				=> ($row['member_current'] > 0 ? 'positive' : 'negative'),
-			)
-			);
+                'NAME' 					=> $member->member_name,
+                'U_VIEW_MEMBER' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx" , 'page=member&amp;' .URI_DKPSYS . '=' . $row['member_dkpid'] . '&amp;' . URI_NAMEID . '='.$row['member_id']),
+                'COLORCODE'				=> $member->colorcode,
+                'ID'            		=> $row['member_id'],
+                'COUNT'         		=> $line,
+                'ATTENDED_COUNT' 		=> $row['member_raidcount'],
+                'ITEM_COUNT' 			=> $row['itemcount'],
+                'MEMBER_DROP_PCT'		=> sprintf("%s %%", $member_drop_pct),
+                'CURRENT' 				=> intval($row['member_current']),
+                'C_CURRENT'				=> ($row['member_current'] > 0 ? 'positive' : 'negative'),
+			    ));
 			$previous_data = $row[$previous_source];
 
 		}
@@ -936,8 +936,7 @@ class LootController  extends \bbdkp\admin\Admin
 
 			$dkppagination = $this->generate_pagination2(
 					$url . '&amp;o1=' . $current_order ['uri'] ['current'] ,
-					$member_count, $config ['bbdkp_user_llimit'], $startd, true, 'startdkp'  );
-
+					$member_count, 50, $startd, true, 'startdkp'  );
 		}
 
 		else
@@ -946,7 +945,7 @@ class LootController  extends \bbdkp\admin\Admin
 					'<a href="' . $url . '&amp;o1='. $current_order['uri']['current'] . '" class="rowfoot">' );
 
 			$dkppagination = $this->generate_pagination2($url . '&amp;o1=' . $current_order ['uri'] ['current']. '&amp;show=all' ,
-					$member_count, $config ['bbdkp_user_llimit'], $startd, true, 'startdkp'  );
+					$member_count, 50, $startd, true, 'startdkp'  );
 		}
 
 		$db->sql_freeresult($members_result);
@@ -962,17 +961,11 @@ class LootController  extends \bbdkp\admin\Admin
 		/* send information to template */
 		$template->assign_vars(array(
 				'DKPPAGINATION' 	=> $dkppagination ,
-				'O_CURRENT' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-				'O_NAME'       		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][2] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')),
-				'O_EARNED' 			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][0] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-				/*'O_EARNED_PER_DAY' 	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][5] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-				'O_EARNED_PER_RAID' => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][6] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-				'O_SPENT' 			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][7] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-				'O_SPENT_PER_DAY' 	=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][8] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-				'O_SPENT_PER_RAID'  => append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][9] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-				*/
-				'O_RAIDCOUNT' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][1] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
-				'O_ITEMCOUNT' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][3] . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'O_CURRENT' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][1] . '&amp;' . URI_GUILD . '=' . $guild_id . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'O_NAME'       		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][2] . '&amp;' . URI_GUILD . '=' . $guild_id .  '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')),
+				'O_EARNED' 			=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][0] . '&amp;' . URI_GUILD . '=' . $guild_id . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'O_RAIDCOUNT' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][1] . '&amp;' . URI_GUILD . '=' . $guild_id . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
+				'O_ITEMCOUNT' 		=> append_sid("{$phpbb_root_path}dkp.$phpEx", 'page=stats&amp;o1=' . $current_order['uri'][3] . '&amp;' . URI_GUILD . '=' . $guild_id . '&amp;' . URI_DKPSYS . '=' . ($query_by_pool ? $dkp_id : 'All')) ,
 				'STATS_FOOTCOUNT' 	=> $footcount_text,
 				'TOTAL_RAIDS' 		=> $raid_count,
 				'TOTAL_DROPS' 		=> $this->total_drops,
@@ -1171,12 +1164,12 @@ class LootController  extends \bbdkp\admin\Admin
 					'CLASS_NAME'		=> $row['class_name'],
 					'CLASS_COUNT' 		=> (int) $class_count,
 					'CLASS_PCT' 		=> $classpct,
-					'CLASS_PCT_STR' 	=> sprintf("%s %%", $classpct ),
+					'CLASS_PCT_STR' 	=> sprintf("%s%%", $classpct ),
 					'LOOT_COUNT' 		=> $loot_drops,
 					'CLASS_DROP_PCT'	=> $class_drop_pct,
-					'CLASS_DROP_PCT_STR' => sprintf("%s %%", $class_drop_pct  ),
+					'CLASS_DROP_PCT_STR' => sprintf("%s%%", $class_drop_pct  ),
 					'C_LOOT_FACTOR'		=> ($lootoverrun < 	0) ? 'negative' : 'positive',
-					'LOOTOVERRUN'		=> sprintf("%s %%", $lootoverrun),
+					'LOOTOVERRUN'		=> sprintf("%s%%", $lootoverrun),
 			)
 			);
 		}
@@ -1184,6 +1177,7 @@ class LootController  extends \bbdkp\admin\Admin
 		/* send information to template */
 		$template->assign_vars(array(
 				'CLASSPCTCUMUL'		=> round($class_drop_pct_cum),
+
 		)
 		);
 

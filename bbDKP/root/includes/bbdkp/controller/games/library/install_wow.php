@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.3.0.7
  *
  */
 namespace bbdkp\controller\games;
@@ -48,7 +48,6 @@ class install_wow extends GameInstall
     protected function Installfactions()
 	{
 		global $db;
-
 		// factions
 		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " WHERE game_id = 'wow'" );
 		$sql_ary = array();
@@ -56,8 +55,6 @@ class install_wow extends GameInstall
 		$sql_ary [] = array ('game_id' => 'wow','faction_id' => 2, 'faction_name' => 'Horde' );
 		$db->sql_multi_insert ( FACTION_TABLE, $sql_ary );
 		unset ( $sql_ary );
-
-
 	}
 
 	/**
@@ -71,18 +68,18 @@ class install_wow extends GameInstall
 		// note class 10 does not exist
 		$db->sql_query('DELETE FROM ' . CLASS_TABLE . " WHERE game_id = 'wow'" );
 		$sql_ary = array ();
-		$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');
-		$sql_ary [] = array ('game_id' => 'wow','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_warrior');
-		$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_rogue');
-		$sql_ary [] = array ('game_id' => 'wow','class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_hunter');
-		$sql_ary [] = array ('game_id' => 'wow','class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_paladin');
-		$sql_ary [] = array ('game_id' => 'wow','class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_shaman');
-		$sql_ary [] = array ('game_id' => 'wow','class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_druid');
-		$sql_ary [] = array ('game_id' => 'wow','class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_warlock');
-		$sql_ary [] = array ('game_id' => 'wow','class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_mage');
-		$sql_ary [] = array ('game_id' => 'wow','class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_priest');
-		$sql_ary [] = array ('game_id' => 'wow','class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 90 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_death_knight');
-		$sql_ary [] = array ('game_id' => 'wow','class_id' => 10, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 90 ,  'colorcode' =>  '#008467', 'imagename' => 'wow_monk');
+		$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 0, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#999', 'imagename' => 'wow_unknown');
+		$sql_ary [] = array ('game_id' => 'wow','class_id' => 1, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#C79C6E', 'imagename' => 'wow_warrior');
+		$sql_ary [] = array ('game_id' => 'wow', 'class_id' => 4, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 100, 'colorcode' =>  '#FFF569',  'imagename' => 'wow_rogue');
+		$sql_ary [] = array ('game_id' => 'wow','class_id' => 3, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#ABD473',  'imagename' => 'wow_hunter');
+		$sql_ary [] = array ('game_id' => 'wow','class_id' => 2, 'class_armor_type' => 'PLATE', 'class_min_level' => 1, 'class_max_level' => 100 ,  'colorcode' =>  '#F58CBA',  'imagename' => 'wow_paladin');
+		$sql_ary [] = array ('game_id' => 'wow','class_id' => 7, 'class_armor_type' => 'MAIL', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#0070DE',  'imagename' => 'wow_shaman');
+		$sql_ary [] = array ('game_id' => 'wow','class_id' => 11, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#FF7D0A',  'imagename' => 'wow_druid');
+		$sql_ary [] = array ('game_id' => 'wow','class_id' => 9, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#9482C9',  'imagename' => 'wow_warlock');
+		$sql_ary [] = array ('game_id' => 'wow','class_id' => 8, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 100 , 'colorcode' =>  '#69CCF0',  'imagename' => 'wow_mage');
+		$sql_ary [] = array ('game_id' => 'wow','class_id' => 5, 'class_armor_type' => 'CLOTH', 'class_min_level' => 1, 'class_max_level' => 100 ,  'colorcode' =>  '#FFFFFF', 'imagename' => 'wow_priest');
+		$sql_ary [] = array ('game_id' => 'wow','class_id' => 6, 'class_armor_type' => 'PLATE', 'class_min_level' => 55, 'class_max_level' => 100 , 'colorcode' =>  '#C41F3B',  'imagename' => 'wow_death_knight');
+		$sql_ary [] = array ('game_id' => 'wow','class_id' => 10, 'class_armor_type' => 'LEATHER', 'class_min_level' => 1, 'class_max_level' => 100 ,  'colorcode' =>  '#008467', 'imagename' => 'wow_monk');
 		$db->sql_multi_insert ( CLASS_TABLE, $sql_ary );
 		unset ( $sql_ary );
 
@@ -142,7 +139,6 @@ class install_wow extends GameInstall
     protected function InstallRaces()
 	{
 		global $db;
-
 		// races
 		$db->sql_query('DELETE FROM ' .  RACE_TABLE . " WHERE game_id = 'wow'");
 		$sql_ary = array ();
@@ -236,7 +232,7 @@ class install_wow extends GameInstall
 		if($dkpid == 0)
 		{
 			$sql_ary = array ();
-			$sql_ary [] = array ('dkpsys_name' => 'Wotlk', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+			$sql_ary [] = array ('dkpsys_name' => 'Wotlk', 'dkpsys_status' => 'N', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 			$db->sql_multi_insert (  DKPSYS_TABLE  , $sql_ary );
 			unset ( $sql_ary );
 		}
@@ -248,7 +244,7 @@ class install_wow extends GameInstall
 		if($dkpid == 0)
 		{
 			$sql_ary = array ();
-			$sql_ary [] = array ('dkpsys_name' => 'Cataclysm', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+			$sql_ary [] = array ('dkpsys_name' => 'Cataclysm', 'dkpsys_status' => 'N', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
 			$db->sql_multi_insert (  DKPSYS_TABLE  , $sql_ary );
 			$result = $db->sql_query('select dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name='Cataclysm'" );
 			$dkpid = (int) $db->sql_fetchfield('dkpsys_id');
@@ -262,13 +258,12 @@ class install_wow extends GameInstall
 		if($dkpid == 0)
 		{
 			$sql_ary = array ();
-			$sql_ary [] = array ('dkpsys_name' => 'Pandaria', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'N' );
+			$sql_ary [] = array ('dkpsys_name' => 'Pandaria', 'dkpsys_status' => 'Y', 'dkpsys_addedby' => 'admin', 'dkpsys_default' => 'Y' );
 			$db->sql_multi_insert (  DKPSYS_TABLE  , $sql_ary );
 			$result = $db->sql_query('select dkpsys_id FROM ' .  DKPSYS_TABLE ."  WHERE dkpsys_name='Pandaria'" );
 			$dkpid = (int) $db->sql_fetchfield('dkpsys_id');
 			$this->InstallEventsPandaria($dkpid);
 		}
-
 	}
 
 
@@ -340,8 +335,7 @@ class install_wow extends GameInstall
 
 	}
 
-
-	/**
+    /**
 	* inserts demo data 3 dummy members, 3 dkp accounts, 3 dummy items, and 1 dummy raid
      * unused!
 	*/
@@ -355,7 +349,7 @@ class install_wow extends GameInstall
 				'game_id'  		   => 'wow',
 				'member_name'      => 'wow1',
 				'member_status'    => 1 ,
-				'member_level'     => 90,
+				'member_level'     => 100,
 				'member_race_id'   => 1,
 				'member_class_id'  => 1,
 				'member_rank_id'   => 0,
@@ -373,7 +367,7 @@ class install_wow extends GameInstall
 				'game_id'  		   => 'wow',
 				'member_name'      => 'wow2',
 				'member_status'    => 1 ,
-				'member_level'     => 90,
+				'member_level'     => 100,
 				'member_race_id'   => 2,
 				'member_class_id'  => 2,
 				'member_rank_id'   => 0,
@@ -391,7 +385,7 @@ class install_wow extends GameInstall
 				'game_id'  		   => 'wow',
 				'member_name'      => 'wow3',
 				'member_status'    => 1 ,
-				'member_level'     => 90,
+				'member_level'     => 100,
 				'member_race_id'   => 3,
 				'member_class_id'  => 3,
 				'member_rank_id'   => 0,

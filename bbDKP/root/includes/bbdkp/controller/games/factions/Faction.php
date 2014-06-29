@@ -92,7 +92,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 			$this->faction_hide	= $row['faction_hide'];
 		}
 		$db->sql_freeresult($result);
-		
 	}
 	
 	/**
@@ -144,7 +143,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Make()
 	{
-		global $db, $user, $cache;
+		global $db, $cache;
 	
 		$sql = 'SELECT max(faction_id) as faction_id FROM ' . FACTION_TABLE . "
 				WHERE game_id = '" . $this->game_id . "' ";
@@ -166,21 +165,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	
 		$db->sql_transaction ( 'commit' );
 		$cache->destroy ( 'sql', FACTION_TABLE );
-		
-		//
-		// Logging
-		//
-		$log_action = array(
-				'header' 	=> 'L_ACTION_FACTION_ADDED' ,
-				'L_GAME' 	=> $this->game_id ,
-				'L_FACTION' => $this->faction_name ,
-		);
-		
-		$this->log_insert(array(
-			'log_type' 		=> 'L_ACTION_FACTION_ADDED',
-			'log_result' 	=> 'L_SUCCESS',
-			'log_action' 	=> $log_action));
-	
 	}
 	
 	/**
@@ -188,7 +172,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Delete()
 	{
-		global $db, $user, $cache; 
+		global $db, $user, $phpbb_root_path, $cache;
 		
 		/* check if there are races tied to this faction */
 		$sql_array = array (
@@ -208,43 +192,9 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 			$sql = 'DELETE FROM ' . FACTION_TABLE . ' WHERE f_index =' . $this->faction_id . " AND game_id = '" .   $this->game_id . "'"  ;
 			$db->sql_query ( $sql );
 			$cache->destroy ( 'sql', FACTION_TABLE );
-			//
-			// Logging
-			//
-			$log_action = array(
-					'header' 	=> 'L_ACTION_FACTION_DELETED' ,
-					'L_GAME' 	=> $this->game_id ,
-					'L_FACTION' => $this->faction_name ,
-			);
-				
-			$this->log_insert(array(
-			'log_type' 		=> 'L_ACTION_FACTION_DELETED',
-			'log_result' 	=> 'L_SUCCESS',
-			'log_action' 	=> $log_action));
-			
-				
 		}
 		else
 		{
-			//
-			// Logging failure
-			//
-			if (!class_exists('\bbdkp\admin\Admin'))
-			{
-				require("{$phpbb_root_path}includes/bbdkp/bbdkp.$phpEx");
-			}
-			
-			$log_action = array(
-					'header' => 'L_ACTION_FACTION_DELETED' ,
-					'L_GAME' => $this->game_id ,
-					'L_FACTION' => $this->faction_name ,
-			);
-			
-			$this->log_insert(array(
-			'log_type' 		=> 'L_ACTION_FACTION_DELETED',
-			'log_result' 	=> 'L_FAILED', 
-			'log_action' 	=> $log_action));
-			
 			trigger_error (sprintf ( $user->lang ['ADMIN_DELETE_FACTION_FAILED'], $this->game_id, $this->faction_name), E_USER_WARNING );
 		}
 	}
@@ -266,7 +216,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function getfactions()
 	{
-		global $db, $user, $cache;
+		global $db;
 		$sql_array = array (
 				'SELECT' => ' f.game_id, f.f_index, f.faction_id, f.faction_name, f.faction_hide ',
 				'FROM' => array (FACTION_TABLE => 'f' ),

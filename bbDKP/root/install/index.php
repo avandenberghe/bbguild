@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.6
+ * @version 1.3.0.7
  */
 
 // anything lower than php 5.3.3 not supported (we use namespaces since v1.3)
@@ -789,37 +789,37 @@ $versions = array(
             'bbdkp_caches'
         ),
 	),
-	
+
 	'1.3.0' => array(
-		'module_remove' => array(    	
-	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_MEMBER_ADD'), 	 
-	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_MEMBER_LIST'), 
-	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_GAME_LIST'), 	
-	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_FACTION_ADD'), 
-	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_RACE_ADD'), 		         	         
-	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_CLASS_ADD'), 	 
+		'module_remove' => array(
+	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_MEMBER_ADD'),
+	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_MEMBER_LIST'),
+	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_GAME_LIST'),
+	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_FACTION_ADD'),
+	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_RACE_ADD'),
+	        array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_CLASS_ADD'),
 
-	        array('acp', 'ACP_DKP_MDKP', 'ACP_DKP_EDITMEMBERDKP'),  
-	        array('acp', 'ACP_DKP_MDKP', 'ACP_DKP_LISTMEMBERDKP'), 
-	        array('acp', 'ACP_DKP_MDKP', 'ACP_DKP_MEMBER_TRF'),   	
-	        array('acp', 'ACP_DKP_MDKP', 'ACP_DKP_ADDADJ'),  		
-	        array('acp', 'ACP_DKP_MDKP', 'ACP_DKP_LISTADJ'), 		     
+	        array('acp', 'ACP_DKP_MDKP', 'ACP_DKP_EDITMEMBERDKP'),
+	        array('acp', 'ACP_DKP_MDKP', 'ACP_DKP_LISTMEMBERDKP'),
+	        array('acp', 'ACP_DKP_MDKP', 'ACP_DKP_MEMBER_TRF'),
+	        array('acp', 'ACP_DKP_MDKP', 'ACP_DKP_ADDADJ'),
+	        array('acp', 'ACP_DKP_MDKP', 'ACP_DKP_LISTADJ'),
 
-            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_POOL_ADD'),		
-            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_POOL_LIST'),		
-            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_EVENT_ADD'),		
-            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_EVENT_LIST'),	                        
-            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_RAID_ADD'),  	                                  
-            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_RAID_EDIT'),     
-            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_RAID_LIST'),         
-            			
-			array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_ITEM_LIST'),            
+            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_POOL_ADD'),
+            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_POOL_LIST'),
+            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_EVENT_ADD'),
+            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_EVENT_LIST'),
+            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_RAID_ADD'),
+            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_RAID_EDIT'),
+            array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_RAID_LIST'),
+
+			array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_ITEM_LIST'),
 
 	        array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS'),
             array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MEMBER'),
-            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MDKP'),            
+            array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MDKP'),
         ),
-	
+
     	//21-04-2014
         'module_add' => array(
             array('acp', 'ACP_DKP_MAINPAGE', array(
@@ -1008,6 +1008,10 @@ $versions = array(
 	// just some file fixes, see changelog
 ),
 
+'1.3.0.7' => array(
+  // just some file fixes, see changelog
+),
+
 
 );
 
@@ -1088,19 +1092,19 @@ function tableupdates($action, $version)
 			{
 				case '1.2.8':
 					break;
-					
+
 				case '1.2.9':
-						
-					$umil->module_remove( 
-					array(			
-						array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_GUILD_ADD'), 	 
-						array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_GUILD_LIST'), 	 
-						array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_MEMBER_RANK'), 	 
-						array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_ITEM_EDIT'), 	 
-					)); 
+
+					$umil->module_remove(
+					array(
+						array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_GUILD_ADD'),
+						array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_GUILD_LIST'),
+						array('acp', 'ACP_DKP_MEMBER', 'ACP_DKP_MEMBER_RANK'),
+						array('acp', 'ACP_DKP_RAIDS', 'ACP_DKP_ITEM_EDIT'),
+					));
 					break;
-					
-				case '1.3.0':						
+
+				case '1.3.0':
 					// add double PK in members table
 					// remove unique index 'member_name' on member table
 					$sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";

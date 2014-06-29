@@ -121,7 +121,9 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 	 */
 	public function Makerank()
 	{
-		global $user, $db;
+		global $user, $db, $cache;
+
+        $cache->destroy('sql', MEMBER_RANKS_TABLE);
 
 		if ($this->RankName == '')
 		{
@@ -156,7 +158,6 @@ class Ranks extends \bbdkp\controller\guilds\Guilds
 		// insert new rank
 		$db->sql_query('INSERT INTO ' . MEMBER_RANKS_TABLE . $query);
 		// log the action
-
 
 		$log_action = array(
 				'header' => 'L_ACTION_RANK_ADDED',

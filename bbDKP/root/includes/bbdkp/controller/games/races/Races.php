@@ -162,21 +162,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 		$db->sql_transaction ( 'commit' );
 		$cache->destroy ( 'sql', BB_LANGUAGE );
 		$cache->destroy ( 'sql', RACE_TABLE );
-
-		//
-		// Logging
-		//
-		$log_action = array(
-				'header' 	=> 'L_ACTION_RACE_ADDED' ,
-				'L_GAME' 	=> $this->game_id ,
-				'L_RACE' 	=> $this->race_name ,
-		);
-
-		$this->log_insert(array(
-				'log_type' 		=> 'L_ACTION_RACE_ADDED',
-				'log_result' 	=> 'L_SUCCESS',
-				'log_action' 	=> $log_action));
-
 	}
 
 
@@ -185,7 +170,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	*/
 	public function Delete()
 	{
-		global $user, $db, $config, $phpEx, $phpbb_root_path, $cache;
+		global $user, $db, $config, $cache;
 
 		/* check if there are members with this raceid */
 		$sql_array = array (
@@ -204,18 +189,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 
 		if ($racecount != 0)
 		{
-
-			$log_action = array(
-					'header' 	=> 'L_ACTION_RACE_DELETED' ,
-					'L_GAME' 	=> $this->game_id ,
-					'L_RACE' 	=> $this->race_name ,
-			);
-
-			$this->log_insert(array(
-			'log_type' 		=> 'L_ACTION_RACE_DELETED',
-			'log_result' 	=> 'L_FAILED',
-			'log_action' 	=> $log_action));
-
 			trigger_error (sprintf ( $user->lang ['ADMIN_DELETE_RACE_FAILED'], $this->race_name), E_USER_WARNING );
 		}
 		else
@@ -236,21 +209,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 			$cache->destroy ( 'sql', BB_LANGUAGE );
 
 			$db->sql_transaction ( 'commit' );
-
-			//
-			// Logging
-			//
-			$log_action = array(
-					'header' 	=> 'L_ACTION_RACE_DELETED' ,
-					'L_GAME' 	=> $this->game_id ,
-					'L_RACE' => $this->race_name ,
-			);
-
-			$this->log_insert(array(
-			'log_type' 		=> 'L_ACTION_RACE_DELETED',
-			'log_result' 	=> 'L_SUCCESS',
-			'log_action' 	=> $log_action));
-
 		}
 
 	}
@@ -304,24 +262,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 		$db->sql_transaction ( 'commit' );
 		$cache->destroy ( 'sql', BB_LANGUAGE );
 		$cache->destroy ( 'sql', RACE_TABLE );
-
-
-		//
-		// Logging
-		//
-		$log_action = array(
-				'header' 	=> 'L_ACTION_RACE_UPDATED' ,
-				'L_GAME' 	=> $this->game_id ,
-				'L_RACE' 	=> $this->race_name ,
-		);
-
-		$this->log_insert(array(
-				'log_type' 		=> 'L_ACTION_RACE_UPDATED',
-				'log_result' 	=> 'L_SUCCESS',
-				'log_action' 	=> $log_action));
-
-
-
 	}
 
 	/**

@@ -18,22 +18,14 @@ if (! defined('IN_PHPBB'))
     exit();
 }
 
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-global $phpbb_root_path;
-
-if (!class_exists('\bbdkp\admin\Admin'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
-}
-
 /**
  * Games
  *
  * Manages creation of Game
  *
- *   @package bbdkp
+ * @package bbdkp
  */
-class Game extends \bbdkp\admin\Admin
+class Game
 {
 
     /**
@@ -92,14 +84,45 @@ class Game extends \bbdkp\admin\Admin
      */
     protected $zonebaseurl;
 
+    /**
+     * pre-installable games
+     * @var array
+     */
+    public $preinstalled_games;
 
+    /**
+     * installed games
+     * @var array
+     */
+    public $games;
 
     /**
      * Game class constructor
      */
     function __construct()
     {
-        parent::__construct();
+        global $user;
+
+        $this->preinstalled_games = array (
+            'aion' 	=> $user->lang ['AION'],
+            'daoc' 	=> $user->lang ['DAOC'],
+            'eq' 	=> $user->lang ['EQ'],
+            'eq2' 	=> $user->lang ['EQ2'],
+            'FFXI' 	=> $user->lang ['FFXI'],
+            'gw2' 	=> $user->lang ['GW2'],
+            'lineage2' => $user->lang ['LINEAGE2'],
+            'lotro' => $user->lang ['LOTRO'],
+            'rift' 	=> $user->lang ['RIFT'],
+            'swtor' => $user->lang ['SWTOR'],
+            'tera' 	=> $user->lang ['TERA'],
+            'vanguard' => $user->lang ['VANGUARD'],
+            'warhammer' => $user->lang ['WARHAMMER'],
+            'wow' 	=> $user->lang ['WOW'],
+            'ffxiv'	=> $user->lang ['FFXIV'],
+        );
+
+        //fill the games array
+        $this->games = $this->gamesarray();
     }
 
     /**
@@ -280,18 +303,6 @@ class Game extends \bbdkp\admin\Admin
                 }
             }
         }
-
-        //
-        // Logging
-        //
-        $log_action = array(
-            'header' => 'L_ACTION_GAME_ADDED' ,
-            'L_GAME' => $this->game_id  ,
-        );
-
-        $this->log_insert(array(
-            'log_type' =>  'L_ACTION_GAME_ADDED',
-            'log_action' => $log_action));
     }
 
     /**
@@ -355,19 +366,6 @@ class Game extends \bbdkp\admin\Admin
         $installgame = new $gameclassname;
         //call the game installer
         $installgame->Uninstall($this->game_id, $this->name );
-
-        //
-        // Logging
-        //
-        $log_action = array(
-            'header' => 'L_ACTION_GAME_DELETED' ,
-            'L_GAME' => $this->game_id  ,
-        );
-
-        $this->log_insert(array(
-            'log_type' =>  'L_ACTION_GAME_DELETED',
-            'log_action' => $log_action));
-
     }
 
     /**
@@ -402,9 +400,8 @@ class Game extends \bbdkp\admin\Admin
      */
     public function update()
     {
-
-        //delete from phpbb_bbdkp_games table
-        global $db;
+        //update phpbb_bbdkp_games table
+        global $cache, $db;
 
         $db->sql_transaction ( 'begin' );
 
@@ -419,10 +416,35 @@ class Game extends \bbdkp\admin\Admin
         $db->sql_query($sql);
 
         $db->sql_transaction ('commit');
+        $cache->destroy( 'sql', GAMES_TABLE );
     }
 
     /**
-     * lists all games
+     * exposed games array
+     * @return array|void
+     */
+    private function gamesarray()
+    {
+        global $db;
+
+        $sql = ' SELECT g.id, g.game_id, g.game_name, g.status, g.imagename, g.bossbaseurl, g.zonebaseurl ';
+        $sql .= ' FROM ' . GAMES_TABLE . '  g';
+        $sql .= ' INNER JOIN '. RACE_TABLE . ' r ON r.game_id = g.game_id';
+        $sql .= ' INNER JOIN  ' . CLASS_TABLE . ' c ON c.game_id= g.game_id';
+        $sql .= ' GROUP BY g.id, g.game_id, g.game_name';
+        $sql .= ' ORDER BY g.game_id';
+        // cache for 7 days
+        $result = $db->sql_query ( $sql, 604800 );
+        while($row = $db->sql_fetchrow($result))
+        {
+            $this->games[$row['game_id']] = $row['game_name'];
+        }
+        $db->sql_freeresult($result);
+        return $this->games;
+    }
+
+    /**
+     * lists all games (used in game acp)
      *
      * @param string $order
      * @return array
@@ -432,7 +454,7 @@ class Game extends \bbdkp\admin\Admin
         global $db;
         $gamelist = array();
         $sql = 'SELECT id, game_id, game_name, status, imagename, bossbaseurl, zonebaseurl FROM ' . GAMES_TABLE . ' ORDER BY ' . $order;
-        $result = $db->sql_query ( $sql );
+        $result = $db->sql_query ($sql);
         while ($row = $db->sql_fetchrow($result))
         {
             $gamelist[$row['game_id']] = array(
@@ -450,6 +472,8 @@ class Game extends \bbdkp\admin\Admin
         return $gamelist;
 
     }
+
+
 
 
 
