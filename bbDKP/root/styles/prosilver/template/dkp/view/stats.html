@@ -35,7 +35,6 @@
 <span class="corners-bottom"><span></span></span>
 </div>
 
-<hr />
 
 <!-- ************** Member statistics ************** -->
 <h3>{L_MEMBERS}</h3>
@@ -46,27 +45,6 @@
 
 	<!-- IF .stats_row -->
 		<!-- INCLUDE dkp/view/stats_members.html -->
-	<!-- ELSE -->
-	<p class= "error">{L_NO_DATA}</p>
-	<!-- ENDIF -->
-
-	<span class="corners-bottom"><span></span></span>
-	</div>
-</div>
-
-<div style="clear:both;"></div>
-<hr />
-
-<!-- ************** Class statistics **************** -->
-
-<h3>{L_LOOTDIST_CLASS}</h3>
-
-<div class="panel bg2">
-	<div class="inner">
-	<span class="corners-top"><span></span></span>
-
-	<!-- IF .class_row -->
-				<!-- INCLUDE dkp/view/stats_classes.html -->
 	<!-- ELSE -->
 	<p class= "error">{L_NO_DATA}</p>
 	<!-- ENDIF -->
@@ -94,6 +72,29 @@
 	<span class="corners-bottom"><span></span></span>
 	</div>
 </div>
+
+<!-- ************** Class statistics **************** -->
+
+<h3>{L_LOOTDIST_CLASS}</h3>
+
+<div class="panel bg2">
+	<div class="inner">
+	<span class="corners-top"><span></span></span>
+
+	<!-- IF .class_row -->
+				<!-- INCLUDE dkp/view/stats_classes.html -->
+	<!-- ELSE -->
+	<p class= "error">{L_NO_DATA}</p>
+	<!-- ENDIF -->
+
+	<span class="corners-bottom"><span></span></span>
+	</div>
+</div>
+
+<div style="clear:both;"></div>
+<hr />
+
+
 
 
 <span class="corners-bottom"><span></span></span>
