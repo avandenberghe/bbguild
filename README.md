@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0.7
+#1.3.0.8
 
 
 ## about
@@ -23,7 +23,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 
 ## Current
 
-1.3.0.7
+1.3.0.8
 
 ## Installation
 
@@ -41,7 +41,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 3.	LAMP installation
 4.	Github app, or use Atlassian Sourcetree
 
-#### New installation 1.3.0.7
+#### New installation 1.3.0.8
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
@@ -53,7 +53,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 4. Click on the blue link given, this will redirect you to /install/index.php
 5. Click submit. This will install 1.3.0.5 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.x to 1.3.0.7
+#### Upgrading from 1.3.0.x to 1.3.0.8
 
 1. Unzip the bbDKP-1307.zip file
 2. Upload bbDKP-1307/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
@@ -64,11 +64,11 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 6. Click on the database upgrade link
   ![database upgrade](http://i.imgur.com/9c0lNad.png)
 
-#### Upgrading from 1.2.8-pl2 to 1.3.0.7
+#### Upgrading from 1.2.8-pl2 to 1.3.0.8
 
 * make a secure backup of all files
 * backup your database
-* Uninstall 1.2.8-pl2 and re-install 1.3.0.7 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.3.0.8 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first.
 		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
 		*	make sure the module was uninstalled by checking the ACP modules.
@@ -78,6 +78,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     4. delete /store/mods/bbdkp  
 	5. upload the unzipped bbDKP-1307/bbDKP folder to /store/mods
 	6. from Automod, run file installer
+	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.8   
 		![database upgrade](http://i.imgur.com/8gvmkwQ.png)
 		![after upgrade](http://i.imgur.com/qywrgj1.png)
 		
@@ -96,6 +97,11 @@ Find support and more on
 *	IRC : Freenode #bbdkp
 
 ## Changelog 
+
+1.3.0.8 01-07-2014
+
+-	[FIX] #239 fix reference to raidplanner block path (1 file)
+
 
 1.3.0.7 30-06-2014
 

@@ -4,10 +4,10 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
 	<header>
 		<license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-		<title lang="en">bbDKP 1.3.0.7 - Update from bbdkp 1.3.0.6</title>
-		<title lang="de">bbDKP 1.3.0.7 - Update von bbdkp 1.3.0.6</title>
-		<title lang="fr">bbDKP 1.3.0.7 - mise à jour depuis bbdkp 1.3.0.6</title>
-		<description lang="en">bbDKP 1.3.0.7 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
+		<title lang="en">bbDKP 1.3.0.8 - Update from bbdkp 1.3.0.5</title>
+		<title lang="de">bbDKP 1.3.0.8 - Update von bbdkp 1.3.0.5</title>
+		<title lang="fr">bbDKP 1.3.0.8 - mise à jour depuis bbdkp 1.3.0.7</title>
+		<description lang="en">bbDKP 1.3.0.8 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
 </description>
 		<github>https://github.com/bbdkp/bbdkp</github>
 		<author-group>
@@ -21,7 +21,7 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.3.0.7</mod-version>
+		<mod-version>1.3.0.8</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>60</time>
@@ -33,7 +33,8 @@
 			<file from="root/adm/style/dkp/acp_mm_transfer.html" to="adm/style/dkp/acp_mm_transfer.html"/>		
 			<file from="root/includes/acp/acp_dkp_game.php" to="includes/acp/acp_dkp_game.php"/>			
 			<file from="root/includes/acp/acp_dkp_mdkp.php" to="includes/acp/acp_dkp_mdkp.php"/>
-			
+			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>	
+			<file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>	
 			<file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>	
 											
 			<file from="root/includes/bbdkp/controller/games/classes/Classes.php" to="includes/bbdkp/controller/games/classes/Classes.php"/>
@@ -86,6 +87,8 @@
 			<file from="root/styles/prosilver/template/dkp/view/stats_classes.html" 	to="styles/prosilver/template/dkp/view/stats_classes.html"/>
 			<file from="root/styles/prosilver/template/dkp/view/stats_members.html" 	to="styles/prosilver/template/dkp/view/stats_members.html"/>						
 			<file from="root/styles/prosilver/template/dkp/view/stats_members_sidebar.html" 	to="styles/prosilver/template/dkp/view/stats_members_sidebar.html"/>
+			<file from="root/styles/prosilver/template/dkp/ucp_dkp_charadd.html" to="styles/prosilver/template/dkp/ucp_dkp_charadd.html"/>	
+			<file from="root/styles/prosilver/template/dkp/findGameRank.php" to="styles/prosilver/template/dkp/findGameRank.php"/>		
 			<file from="root/styles/prosilver/theme/bbdkp.css" 		to="styles/prosilver/theme/bbdkp.css"/>			
 		</copy>
 		<delete>		
