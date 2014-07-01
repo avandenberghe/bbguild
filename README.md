@@ -47,7 +47,7 @@ Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP-1307.zip file
+1. Unzip the bbDKP-1308.zip file
 2. Upload bbDKP-1307/bbDKP folder to your webserver, into /store/mods/
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
@@ -55,7 +55,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 
 #### Upgrading from 1.3.0.x to 1.3.0.8
 
-1. Unzip the bbDKP-1307.zip file
+1. Unzip the bbDKP-1308.zip file
 2. Upload bbDKP-1307/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
 3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1306_to_1307/update.xml)
  ![Automod update](http://i.imgur.com/eZww133.png)
@@ -76,7 +76,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2 to uninstall the files and phpbb edits. 
     3. purge the board cache, verify your board is running    
     4. delete /store/mods/bbdkp  
-	5. upload the unzipped bbDKP-1307/bbDKP folder to /store/mods
+	5. upload the unzipped bbDKP-1308/bbDKP folder to /store/mods
 	6. from Automod, run file installer
 	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.8   
 		![database upgrade](http://i.imgur.com/8gvmkwQ.png)
