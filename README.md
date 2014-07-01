@@ -56,8 +56,8 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 #### Upgrading from 1.3.0.x to 1.3.0.8
 
 1. Unzip the bbDKP-1308.zip file
-2. Upload bbDKP-1307/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
-3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1306_to_1307/update.xml)
+2. Upload bbDKP-1308/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
+3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1307_to_1308/update.xml)
  ![Automod update](http://i.imgur.com/eZww133.png)
 4. Apply the update from Automod "Available Changes" 
   ![Imgur](http://i.imgur.com/1mKPLq5.png)
