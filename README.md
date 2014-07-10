@@ -47,17 +47,17 @@ Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP-1307.zip file
-2. Upload bbDKP-1307/bbDKP folder to your webserver, into /store/mods/
+1. Unzip the bbDKP-1308.zip file
+2. Upload bbDKP-1308/bbDKP folder to your webserver, into /store/mods/
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
 5. Click submit. This will install 1.3.0.5 and clear the caches (template, theme, imagesets)
 
 #### Upgrading from 1.3.0.x to 1.3.0.8
 
-1. Unzip the bbDKP-1307.zip file
-2. Upload bbDKP-1307/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
-3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1306_to_1307/update.xml)
+1. Unzip the bbDKP-1308.zip file
+2. Upload bbDKP-1308/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
+3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1307_to_1308/update.xml)
  ![Automod update](http://i.imgur.com/eZww133.png)
 4. Apply the update from Automod "Available Changes" 
   ![Imgur](http://i.imgur.com/1mKPLq5.png)
@@ -76,7 +76,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2 to uninstall the files and phpbb edits. 
     3. purge the board cache, verify your board is running    
     4. delete /store/mods/bbdkp  
-	5. upload the unzipped bbDKP-1307/bbDKP folder to /store/mods
+	5. upload the unzipped bbDKP-1308/bbDKP folder to /store/mods
 	6. from Automod, run file installer
 	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.8   
 		![database upgrade](http://i.imgur.com/8gvmkwQ.png)
@@ -769,7 +769,9 @@ You can see all the amazing people contributing to this project [here](https://g
 [GNU General Public License v2](http://opensource.org/licenses/gpl-2.0.php)
 
 This application is opensource software released under the GPL. Please see source code and the docs directory for more details. Powered by bbDkp (c) 2009 The bbDkp Project Team bbDkp
-If you use this software and find it to be useful, we ask that you retain the copyright notice below. While not required for free use, it will help build interest in the bbDkp project and is required for obtaining support. bbdkp SVN : http://code.google.com/p/bbdkp/
+If you use this software and find it to be useful, we ask that you retain the copyright notice below. While not required for free use, it will help build interest in the bbDkp project and is required for obtaining support. 
+bbDKP (c) 2014 Sajaki, Killerpommes, frederikkunze, Cecilius
+bbDKP (c) 2011 Sajaki, Blazeflack
 bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team 
