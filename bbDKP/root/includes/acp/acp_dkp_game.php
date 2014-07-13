@@ -58,6 +58,14 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 	 * @var string
 	 */
 	private $link;
+
+
+    /**
+     * partly installed games
+     * @var string
+     */
+    private $gamelist;
+
 	/**
 	 * main ACP game function
 	 * @param int $id the id of the node who parent has to be returned by function
@@ -71,15 +79,25 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 		$form_key = 'acp_dkp_game';
 		add_form_key ( $form_key );
 		$this->tpl_name = 'dkp/acp_' . $mode;
+
+        //list installed games
+        $listgames = new \bbdkp\controller\games\Game;
+        $sort_order = array(
+            0 => array(	'id' , 'id desc') ,
+            1 => array('game_id' , 'game_id desc') ,
+            2 => array('game_name' , 'game_name desc'));
+        $current_order = $this->switch_order($sort_order);
+        $sort_index = explode('.', $current_order['uri']['current']);
+        $this->gamelist = $listgames->listgames($current_order['sql']);
+
 		switch ($mode)
 		{
 			case 'listgames' :
 
 				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames" ) . '"><h3>' .
 								$user->lang ['RETURN_GAMELIST'] . '</h3></a>';
-				//game dropdown
-				$listgames = new \bbdkp\controller\games\Game;
 
+				//game dropdown
 				$newpresetgame = (isset ( $_POST ['addgame1'] )) ? true : false;
 				$newcustomgame = (isset ( $_POST ['addgame2'] )) ? true : false;
 				if ($newpresetgame || $newcustomgame)
@@ -133,9 +151,9 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				$can_install_count = 0;
 
 				//is anything isntalled ?
-				if(count($this->games) > 0)
+				if(count($this->gamelist) > 0)
 				{
-					$not_installed = array_diff($listgames->preinstalled_games, $listgames->games);
+					$not_installed = array_diff($listgames->preinstalled_games, $this->gamelist);
 				}
 				else
 				{
@@ -153,16 +171,9 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 			        ));
 			    }
 
-			    //list installed games
-			    $sort_order = array(
-			    		0 => array(	'id' , 'id desc') ,
-			    		1 => array('game_id' , 'game_id desc') ,
-			    		2 => array('game_name' , 'game_name desc'));
-			    $current_order = $this->switch_order($sort_order);
-			    $sort_index = explode('.', $current_order['uri']['current']);
-			    $gamelist = $listgames->listgames($current_order['sql']);
 
-				foreach($gamelist as $game_id => $game)
+
+				foreach($this->gamelist as $game_id => $game)
 			    {
 			    	$template->assign_block_vars('gamerow', array(
 			    			'ID' => $game['id'] ,
@@ -447,7 +458,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 						$listraces->game_id = $editgame->game_id;
 						$listraces->get();
 
-						foreach ($this->games as $key => $gamename )
+						foreach ($this->gamelist as $key => $gamename )
 						{
 							$template->assign_block_vars ( 'game_row', array (
 								'VALUE' => $key,
@@ -541,7 +552,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 						$listclasses->game_id = $editgame->game_id;
 
 						// list installed games
-						foreach ($this->games as $key => $gamename )
+						foreach ($this->gamelist as $key => $gamename )
 						{
 							$template->assign_block_vars ( 'game_row', array (
 									'VALUE' => $key,
@@ -817,7 +828,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 		global $user, $phpbb_admin_path, $phpbb_root_path, $phpEx, $config, $template;
 
 		//populate dropdown
-		foreach ($this->games as $key => $game)
+		foreach ($this->gamelist as $key => $game)
 		{
 			$template->assign_block_vars('gamelistrow', array(
 					'VALUE'      => $key,
