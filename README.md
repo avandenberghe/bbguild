@@ -1,6 +1,6 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0.6
+#1.3.0.8
 
 
 ## about
@@ -23,47 +23,52 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 
 ## Current
 
-1.3.0.6
+1.3.0.8
 
 ## Installation
 
 #### Requirements
 1.	phpbb 3.0.12
+	1. databases : Mysql 5, MSSQL, postgresql, Oracle
+	2. PHP 5.3.3 or higher. Curl should be available on your server.
 2.	UMIL 1.0.5, Automod 1.0.2
-2.	databases : Mysql 5, MSSQL, postgresql, Oracle
-3.	PHP 5.3.3 or higher. Curl should be available on your server.
-4.	ftp and founder admin access on your phpbb installation.
-5.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
+3.	ftp and founder admin access on your phpbb installation.
+4.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### New installation 1.3.0.6
+#### recommended development setup 
+1.	phpBB QuickInstall
+2.	phpStorm IDE
+3.	LAMP installation
+4.	Github app, or use Atlassian Sourcetree
+
+#### New installation 1.3.0.8
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP-1306.zip file
-2. Upload bbDKP-1306/bbDKP folder to your webserver, into /store/mods/
+1. Unzip the bbDKP-1308.zip file
+2. Upload bbDKP-1308/bbDKP folder to your webserver, into /store/mods/
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
 5. Click submit. This will install 1.3.0.5 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.x to 1.3.0.6
+#### Upgrading from 1.3.0.x to 1.3.0.8
 
-1. Unzip the bbDKP-1306.zip file
-2. Upload bbDKP-1306/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
-3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1305_to_1306/update.xml)
- ![Automod update](http://i.imgur.com/9IRfrTD.png)
+1. Unzip the bbDKP-1308.zip file
+2. Upload bbDKP-1308/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
+3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1307_to_1308/update.xml)
+ ![Automod update](http://i.imgur.com/eZww133.png)
 4. Apply the update from Automod "Available Changes" 
-  ![Imgur](http://i.imgur.com/J7VjfY7.png)
-6. Click on the dtaabase upgrade link
-  ![database upgrade](http://i.imgur.com/4G3DKV2.png)
+  ![Imgur](http://i.imgur.com/1mKPLq5.png)
+6. Click on the database upgrade link
+  ![database upgrade](http://i.imgur.com/9c0lNad.png)
 
-#### Upgrading from 1.2.8-pl2 to 1.3.0.6
+#### Upgrading from 1.2.8-pl2 to 1.3.0.8
 
 * make a secure backup of all files
 * backup your database
-
-* Uninstall 1.2.8-pl2 and re-install 1.3.0.6 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.3.0.8 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first.
 		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
 		*	make sure the module was uninstalled by checking the ACP modules.
@@ -71,9 +76,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     2. then, from Automod, do uninstall bbDKP 1.2.8-pl2 to uninstall the files and phpbb edits. 
     3. purge the board cache, verify your board is running    
     4. delete /store/mods/bbdkp  
-	5. upload the unzipped bbDKP-1306/bbDKP folder to /store/mods
+	5. upload the unzipped bbDKP-1308/bbDKP folder to /store/mods
 	6. from Automod, run file installer
-	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.6  
+	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.8   
 		![database upgrade](http://i.imgur.com/8gvmkwQ.png)
 		![after upgrade](http://i.imgur.com/qywrgj1.png)
 		
@@ -92,6 +97,19 @@ Find support and more on
 *	IRC : Freenode #bbdkp
 
 ## Changelog 
+
+1.3.0.8 01-07-2014
+
+-	[FIX] #239 fix reference to raidplanner block path (1 file)
+
+
+1.3.0.7 30-06-2014
+
+-	[FIX] #238 points transfer acp is now multi-guild
+-	[CHG] game class no longer inherits from admin class
+-	[FIX] #234 sql queries for guild, ranks, games, classes, race, faction are cached 
+-	[FIX] #237 Statistics page was redone. Graphics are now responsive, Flot library updated to 0.8.3
+-	[CHG] #237 Standings page renamed to Leaderboard, attendance, raidcount columns fixed 
 
 1.3.0.6 14-06-2014
 
@@ -751,7 +769,9 @@ You can see all the amazing people contributing to this project [here](https://g
 [GNU General Public License v2](http://opensource.org/licenses/gpl-2.0.php)
 
 This application is opensource software released under the GPL. Please see source code and the docs directory for more details. Powered by bbDkp (c) 2009 The bbDkp Project Team bbDkp
-If you use this software and find it to be useful, we ask that you retain the copyright notice below. While not required for free use, it will help build interest in the bbDkp project and is required for obtaining support. bbdkp SVN : http://code.google.com/p/bbdkp/
+If you use this software and find it to be useful, we ask that you retain the copyright notice below. While not required for free use, it will help build interest in the bbDkp project and is required for obtaining support. 
+bbDKP (c) 2014 Sajaki, Killerpommes, frederikkunze, Cecilius
+bbDKP (c) 2011 Sajaki, Blazeflack
 bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team 

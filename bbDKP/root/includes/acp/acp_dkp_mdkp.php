@@ -357,8 +357,39 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 					trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
 				}
 
+                // guild dropdown
+                $submit = isset ( $_POST ['member_guild_id'] )  ? true : false;
+                $Guild = new \bbdkp\controller\guilds\Guilds();
+                $guildlist = $Guild->guildlist(1);
 
-				$submit = (isset ( $_POST ['transfer'] )) ? true : false;
+                if($submit)
+                {
+                    $Guild->guildid = request_var('member_guild_id', 0);
+                }
+                else
+                {
+                    foreach ($guildlist as $g)
+                    {
+                        $Guild->guildid = $g['id'];
+                        $Guild->name = $g['name'];
+                        if ($Guild->guildid == 0 && $Guild->name == 'Guildless' )
+                        {
+                            trigger_error('ERROR_NOGUILD', E_USER_WARNING );
+                        }
+                        break;
+                    }
+                }
+
+                foreach ($guildlist as $g)
+                {
+                    $template->assign_block_vars('guild_row', array(
+                        'VALUE' => $g['id'] ,
+                        'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
+                        'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
+                }
+
+                $this->PointsController->guild_id = $Guild->guildid;
+
 				$submitdkp = (isset ( $_POST ['dkpsys_id'] ) || isset ( $_GET ['dkpsys_id'] )) ? true : false;
 
 				/***  DKPSYS drop-down query ***/
@@ -408,25 +439,33 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 
 				// build template
 
+                $submit = (isset ( $_POST ['transfer'] )) ? true : false;
+
                 if ($submit && $submitdkp == false)
                 {
                     $this->transfer_dkp ($dkpsys_id);
                 }
 				// from member dkp table
-
 				$member_from = request_var ( 'transfer_from', 0 );
 				$member_to = request_var ( 'transfer_to', 0 );
 
-				$sql = 'SELECT m.member_id, l.member_name
-						FROM ' . MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m
-						WHERE m.member_id = l.member_id
+                $sql = 'SELECT m.member_id, l.member_name FROM ' .
+                    MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_RANKS_TABLE . ' k
+						WHERE l.member_rank_id = k.rank_id
+						AND k.rank_hide != 1
+						AND l.member_guild_id = k.guild_id
+						AND l.member_guild_id = ' . $Guild->guildid . '
+						AND m.member_id = l.member_id
 						AND m.member_dkpid = ' . $dkpsys_id . '
 						ORDER BY l.member_name';
+
 				$resultfrom = $db->sql_query ($sql);
-				$maara = 0;
+
+                // © ippehe //
+                $total = 0;
 				while ( $row = $db->sql_fetchrow ( $resultfrom ) )
 				{
-					$maara ++;
+                    $total ++;
 					$template->assign_block_vars ( 'transfer_from_row', array (
 						'VALUE' => $row ['member_id'],
 						'SELECTED' => ($member_from == $row ['member_id']) ? ' selected="selected"' : '',
@@ -436,14 +475,16 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 				$db->sql_freeresult ( $resultfrom );
 
 				// to member table
-
 				$sql = 'SELECT m.member_id, l.member_name FROM ' .
 						 MEMBER_LIST_TABLE . ' l, ' . MEMBER_DKP_TABLE . ' m, ' . MEMBER_RANKS_TABLE . ' k
 						WHERE l.member_rank_id = k.rank_id
 						AND k.rank_hide != 1
+						AND l.member_guild_id = k.guild_id
+						AND l.member_guild_id = ' . $Guild->guildid . '
 						AND m.member_id = l.member_id
 						AND m.member_dkpid = ' . $dkpsys_id . '
 						ORDER BY l.member_name';
+                
 				$resultto = $db->sql_query ( $sql );
 				$teller_to = 0;
 				while ( $row = $db->sql_fetchrow ( $resultto ) )
@@ -454,10 +495,10 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 						'SELECTED' => ($member_to == $row ['member_id']) ? ' selected="selected"' : '',
 						'OPTION' => $row ['member_name']));
 				}
-				$db->sql_freeresult ( $resultto );
+				$db->sql_freeresult ($resultto);
 
 				$show = true;
-				if ($maara == 0)
+				if ($total == 0)
 				{
 					$show = false;
 				}
@@ -469,7 +510,7 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 					'S_SHOW' => $show,
 					'F_TRANSFER' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_transfer" ),
 					'F_DKP' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_transfer&ampi=setdkp" ),
-					'L_SELECT_1_OF_X_MEMBERS' => sprintf ( $user->lang ['SELECT_1OFX_MEMBERS'], $maara ),
+					'L_SELECT_1_OF_X_MEMBERS' => sprintf ( $user->lang ['SELECT_1OFX_MEMBERS'], $total ),
 					'L_SELECT_1_OF_Y_MEMBERS' => sprintf ( $user->lang ['SELECT_1OFX_MEMBERS'], $teller_to ) ) );
 				$this->page_title = 'ACP_MM_TRANSFER';
 				$this->tpl_name = 'dkp/acp_' . $mode;
@@ -689,6 +730,9 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 	{
 		global $user, $db;
 
+
+
+
 		if (confirm_box ( true ))
 		{
 			//fetch hidden variables
@@ -714,7 +758,6 @@ class acp_dkp_mdkp extends \bbdkp\admin\Admin
 			}
 
 			// prepare some logging information
-
 			$sql = 'SELECT member_name FROM ' . MEMBER_LIST_TABLE . '
 					WHERE member_id =  ' . $member_from;
 			$result = $db->sql_query ( $sql, 0 );

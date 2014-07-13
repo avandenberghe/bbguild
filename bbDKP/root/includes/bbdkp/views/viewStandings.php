@@ -22,7 +22,10 @@ if (!class_exists('\bbdkp\controller\points\PointsController'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/points/PointsController.$phpEx");
 }
-
+if (!class_exists('\bbdkp\controller\raids\Raids'))
+{
+    require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raids.$phpEx");
+}
 class viewStandings implements iViews
 {
 
@@ -34,11 +37,13 @@ class viewStandings implements iViews
     private $memberlist;
     private $start;
     private $u_listmemberdkp;
+    private $Raids;
 
     function __construct(viewNavigation $Navigation)
     {
         global $phpbb_root_path, $phpEx;
 
+        $this->Raids = new \bbdkp\controller\raids\Raids();
         $this->PointsController = new \bbdkp\controller\points\PointsController();
         $this->PointsController->guild_id =  $Navigation->getGuildId();
 
@@ -123,7 +128,6 @@ class viewStandings implements iViews
         $classes = array_unique($classes);
         sort($classes);
 
-
         foreach ($Navigation->getClassarray() as $k => $class)
         {
             if(in_array( $class['class_id'], $classes))
@@ -151,11 +155,11 @@ class viewStandings implements iViews
 
                         if($config['bbdkp_epgp'] == 1)
                         {
-                            $dkprowarray[ 'PR'] = $member ['PR'] ;
+                            $dkprowarray[ 'PR'] = number_format($member ['PR'],2) ;
                         }
                         else
                         {
-                            $dkprowarray[ 'CURRENT'] = $member ['CURRENT'] ;
+                            $dkprowarray[ 'CURRENT'] = number_format ($member ['CURRENT'],2) ;
                         }
 
                         $template->assign_block_vars ( 'class.dkp_row', $dkprowarray );
@@ -178,7 +182,7 @@ class viewStandings implements iViews
      */
     private function dkplisting(viewNavigation $Navigation)
     {
-        global $user, $config, $template, $phpbb_root_path, $phpEx;
+        global $user, $config, $template;
 
         if ($config ['bbdkp_epgp'] == '1')
         {
@@ -189,8 +193,6 @@ class viewStandings implements iViews
             $this->memberlist = $this->PointsController->listdkpaccounts($this->start, true);
         }
 
-        $output = array ();
-
         if(count($this->memberlist[0]) == 0)
         {
             $output = array (
@@ -199,8 +201,10 @@ class viewStandings implements iViews
 
             $template->assign_vars ( $output );
             return;
-
         }
+
+        //all time guild raidcount
+        $Guild_raidcount = $this->Raids->raidcount($this->PointsController->dkpsys_id, 0, 0, 1, true,  $this->PointsController->guild_id );
 
         $current_order = $this->memberlist[1];
         $lines = $this->memberlist[2]; // all accounts
@@ -209,6 +213,7 @@ class viewStandings implements iViews
         {
             foreach ($this->memberlist[0]  as $member_id => $dkp)
             {
+                $dkp['ATTENDANCE'] = $Guild_raidcount > 0 ? number_format($dkp['RAIDCOUNT'] / $Guild_raidcount, 4 ) * 100 : 0 ;
                 $template->assign_block_vars ('members_row', $dkp);
                 $membersids[$member_id] = 1;
             }
@@ -226,7 +231,7 @@ class viewStandings implements iViews
 
         }
 
-        $a=1;
+
         $output = array (
             'IDLIST'	=> implode(",", $membersids),
             'BUTTON_NAME' => $user->lang['DELETE'],
@@ -239,6 +244,7 @@ class viewStandings implements iViews
             'O_ADJUSTMENT' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [10],
             'O_SPENT' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [12],
             'O_LASTRAID' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [17],
+            'O_RAIDCOUNT' => $this->u_listmemberdkp . "&amp;o=". $current_order ['uri'] [18],
             'S_SHOWZS' => ($config ['bbdkp_zerosum'] == '1') ? true : false,
             'S_SHOWDECAY' => ($config ['bbdkp_decay'] == '1') ? true : false,
             'S_SHOWEPGP' => ($config ['bbdkp_epgp'] == '1') ? true : false,
