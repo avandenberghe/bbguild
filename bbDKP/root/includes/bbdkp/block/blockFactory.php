@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.3.0.8
  *
  */
 namespace bbdkp\views;
@@ -73,10 +73,10 @@ class blockFactory extends \bbdkp\admin\Admin
             if ($config['rp_show_portal'] == 1)
             {
                 $user->add_lang(array('mods/raidplanner'));
-                if (!class_exists('\bbdkp\views\raidplanner\rpblocks', false))
+                if (!class_exists('\bbdkp\block\rpblocks', false))
                 {
                     //display the blocks
-                    include($phpbb_root_path . 'includes/bbdkp/block/rpblocks.' . $phpEx);
+                    include($phpbb_root_path . 'includes/bbdkp/block/Rpblocks.' . $phpEx);
                 }
                 $blocks = new \bbdkp\views\raidplanner\rpblocks();
                 $blocks->display();
@@ -88,4 +88,3 @@ class blockFactory extends \bbdkp\admin\Admin
 
 
 }
-

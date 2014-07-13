@@ -148,7 +148,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Get()
 	{
-		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;
+		global $db, $config;
 
 		$sql_array = array (
 				'SELECT' => ' c.c_index, c.class_id, l.name AS class_name, c.class_min_level, c.class_max_level, c.class_faction_id,
@@ -185,7 +185,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Make()
 	{
-		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;
+		global $user, $db, $config, $cache;
 
 		$sql = 'SELECT count(*) AS countclass FROM ' . CLASS_TABLE . ' WHERE class_id  = ' .
 			$this->class_id . " AND game_id = '" . $this->game_id . "'";
@@ -235,7 +235,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Delete()
 	{
-		global $user, $db, $config, $phpEx, $cache, $phpbb_root_path;
+		global $user, $db, $config, $cache;
 
 		// see if there are members in this class
 		$sql_array = array (
@@ -283,7 +283,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 */
 	public function Delete_all_classes()
 	{
-		global $db, $user, $cache;
+		global $db, $cache;
 
 		$sql = 'DELETE FROM ' . CLASS_TABLE . " WHERE game_id = '" .   $this->game_id . "'"  ;
 		$db->sql_query ( $sql );
@@ -360,7 +360,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
       */
 	public function listclasses($order= 'class_id', $mode = 0)
 	{
-		global $user, $db, $config;
+		global $db, $config;
 
 		$sql_array = array (
 				'SELECT' => ' c.game_id, c.c_index, c.class_id, l.name AS class_name, c.class_min_level, c.class_hide,

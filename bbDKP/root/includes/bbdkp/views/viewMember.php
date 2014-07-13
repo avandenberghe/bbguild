@@ -63,16 +63,19 @@ class viewMember implements iViews
         $range2 = $config['bbdkp_list_p2'];
         $range3 = $config['bbdkp_list_p3'];
 
+        //member raidcount
         $mc1 = $Raids->raidcount($Navigation->getDkpsysId(), $range1, $member_id, 0, false, $member->member_guild_id);
         $mc2 = $Raids->raidcount($Navigation->getDkpsysId(), $range2, $member_id, 0, false, $member->member_guild_id);
         $mc3 = $Raids->raidcount($Navigation->getDkpsysId(), $range3, $member_id, 0, false, $member->member_guild_id);
         $mclife = $Raids->raidcount($Navigation->getDkpsysId(), 0, $member_id, 0, true, $member->member_guild_id);
 
+        //guild raidcount
         $pc1	= $Raids->raidcount($Navigation->getDkpsysId(), $range1, $member_id, 1, false, $member->member_guild_id);
         $pc2	= $Raids->raidcount($Navigation->getDkpsysId(), $range2, $member_id, 1, false, $member->member_guild_id);
         $pc3	= $Raids->raidcount($Navigation->getDkpsysId(), $range3, $member_id, 1, false, $member->member_guild_id);
         $pclife = $Raids->raidcount($Navigation->getDkpsysId(), 0, $member_id, 1, true, $member->member_guild_id);
 
+        //attendances
         $pct1 =	 ( $pc1 > 0 ) ? round(($mc1 / $pc1) * 100, 1) : 0;
         $pct2 =	 ( $pc2 > 0 ) ? round(($mc2 / $pc2) * 100, 1) : 0;
         $pct3 =	 ( $pc3 > 0 ) ? round(($mc3 / $pc3) * 100, 1) : 0;

@@ -26,7 +26,6 @@ if (!class_exists('\bbdkp\admin\log'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/admin/log.$phpEx");
 }
-
 /**
  *
  * bbDKP Admin foundation
@@ -54,12 +53,6 @@ class Admin
     public $languagecodes;
 
     /**
-     * games that come pre-installed with bbDKP
-     * @var array
-     */
-    public $preinstalled_games;
-
-    /**
      * bbtips is installed ?
      * @var boolean
      */
@@ -76,7 +69,7 @@ class Admin
      */
 	public function __construct()
 	{
-		global $user;
+		global $phpbb_root_path, $phpEx, $user;
 
 		$user->add_lang ( array ('mods/dkp_admin' ) );
 		$user->add_lang ( array ('mods/dkp_common' ) );
@@ -90,7 +83,6 @@ class Admin
 		if (!function_exists('curl_init'))
 		{
 			trigger_error($user->lang['CURL_REQUIRED'], E_USER_WARNING);
-
 		}
 
 		if (!function_exists('json_decode'))
@@ -112,51 +104,18 @@ class Admin
 				'en' => $user->lang['LANG_EN'] ,
 				'fr' => $user->lang['LANG_FR']);
 
-		$this->preinstalled_games = array (
-				'aion' 	=> $user->lang ['AION'],
-				'daoc' 	=> $user->lang ['DAOC'],
-				'eq' 	=> $user->lang ['EQ'],
-				'eq2' 	=> $user->lang ['EQ2'],
-				'FFXI' 	=> $user->lang ['FFXI'],
-				'gw2' 	=> $user->lang ['GW2'],
-				'lineage2' => $user->lang ['LINEAGE2'],
-				'lotro' => $user->lang ['LOTRO'],
-				'rift' 	=> $user->lang ['RIFT'],
-				'swtor' => $user->lang ['SWTOR'],
-				'tera' 	=> $user->lang ['TERA'],
-				'vanguard' => $user->lang ['VANGUARD'],
-				'warhammer' => $user->lang ['WARHAMMER'],
-				'wow' 	=> $user->lang ['WOW'],
-				'ffxiv'	=> $user->lang ['FFXIV'],
-		);
-
-
 	    $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
+
 	    $this->time = $boardtime[0];
 
-	    $this->gamesarray();
-	    $debug=1;
-	}
+        if (!class_exists('\bbdkp\controller\games\Game'))
+        {
+            require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
+        }
+        $listgames = new \bbdkp\controller\games\Game;
+        $this->games = $listgames->games;
+        unset($listgames);
 
-	/**
-	 * constructs the games array
-	 */
-	private function gamesarray()
-	{
-		global $db;
-		$this->games= array();
-		$sql = ' SELECT g.id, g.game_id, g.game_name, status';
-		$sql .= ' FROM ' . GAMES_TABLE . '  g';
-		$sql .= ' INNER JOIN '. RACE_TABLE . ' r ON r.game_id = g.game_id';
-		$sql .= ' INNER JOIN  ' . CLASS_TABLE . ' c ON c.game_id= g.game_id';
-		$sql .= ' GROUP BY g.id, g.game_id, g.game_name';
-		$sql .= ' ORDER BY g.game_id';
-		$result = $db->sql_query ( $sql );
-		while($row = $db->sql_fetchrow($result))
-		{
-			$this->games[$row['game_id']] = $row['game_name'];
-		}
-		$db->sql_freeresult($result);
 	}
 
     /**
@@ -192,7 +151,6 @@ class Admin
   	public final function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
 	{
 
-        //@todo log all curl calls
 		global $user;
 
 		if ( function_exists ( 'curl_init' ))
@@ -214,8 +172,6 @@ class Admin
 				CURLOPT_VERBOSE => false,
 				CURLOPT_HEADER => false,
 			));
-
-			//@todo : setup authentication keys
 
 			// Execute
 			$response = curl_exec($curl);
@@ -267,8 +223,6 @@ class Admin
 						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_CONNECT ";
 				}
 			}
-
-
 
 			if (isset($data['response_headers']['http_code']))
 			{
@@ -565,9 +519,9 @@ class Admin
      * @param int $forcedorder
      * @return mixed
      */
-    public final function switch_order($sort_order, $arg = URI_ORDER, $forcedorder=0)
+    public final function switch_order($sort_order, $arg = URI_ORDER, $defaultorder = '0.0')
 	{
-		$uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : '0.0';
+		$uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : $defaultorder;
 
 		$uri_order = explode('.', $uri_order);
 
