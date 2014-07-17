@@ -218,6 +218,9 @@ $lang = array_merge($lang, array(
 'BUYERS' => 'Käufer',
 'ARMOR' => 'Rüstung',
 'TYPE' => 'Typ',
+'STATS_SOCIAL' => '< 20% Teilnahme',
+'STATS_RAIDER' => '< 50% Teilnahme',
+'STATS_CORERAIDER' => '> 70% Teilnahme',
 
 // TYPES of armor are static across games, no need to put it in DB
 'CLOTH' => 'Stoff',
@@ -272,6 +275,7 @@ $lang = array_merge($lang, array(
 'LAST' => 'Letzter',
 'LASTLOOT' => 'Letztes Beute',
 'LAST_VISIT' => 'Letzter Besuch',
+'LAST_UPDATE' => 'Letzte Aktualisierung',
 'LOG_DATE_TIME' => 'Datum/Zeit dieses Logs',
 'LOOT_FACTOR' => 'Beute Faktor',
 'LOOTS' => 'Beute',
@@ -416,8 +420,8 @@ $lang = array_merge($lang, array(
 'NOAUTH_U_RAID_VIEW' => 'Du hast keine Berechtigung Raids zu sehen.',
 
 // Miscellaneous
-'DEACTIVATED_BY_API' => 'Deaktiviert durch API',
-'DEACTIVATED_BY_USR' => 'Deaktiviert durch Gebraucher',
+'DEACTIVATED_BY_API' => 'API Deaktivierung',
+'DEACTIVATED_BY_USR' => 'Gebraucher Deaktivierung',
 
 'ADDED' => 'Hinzugefügt',
 'BOSSKILLCOUNT' => 'Anzahl Bosskills',
@@ -445,7 +449,19 @@ $lang = array_merge($lang, array(
 'SELECT_EXISTING' => 'Wähle vorhandene',
 'UPDATED' => 'Aktualisiert',
 'NOVIEW' => 'Seite %s kann nicht geladen werden.',
- 
+'IRCTLIFE' => 'Raidanzahl',
+'GRCTLIFE' => 'Gilden Raidanzahl',
+'ATTLIFE' => 'Anwesenheit',
+'IRCT90' => 'Raidanzahl 90d',
+'GRCT90' => 'Gilden Raidanzahl 90d',
+'ATT90' => 'Anwesenheit 90d',
+'IRCT60' => 'Raidanzahl 60d',
+'GRCT60' => 'Gilden Raidanzahl 60d',
+'ATT60' => 'Anwesenheit 60d',
+'IRCT30' => 'Raidanzahl 30d',
+'GRCT30' => 'Gilden Raidanzahl 30d',
+'ATT30' => 'Anwesenheit 30d',
+
 //---- About --- do not change anything here
 //tabs
 'ABOUT' => 'Über',

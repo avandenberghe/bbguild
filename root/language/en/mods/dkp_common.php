@@ -219,9 +219,9 @@ $lang = array_merge($lang, array(
 'BUYERS' => 'Buyers',
 'ARMOR' => 'Armor',
 'TYPE' => 'Armor',
-'STATS_SOCIAL' => 'less than 20% Attendance',
-'STATS_RAIDER' => 'less than 50% Attendance',
-'STATS_CORERAIDER' => 'more than 70% Attendance',
+'STATS_SOCIAL' => '< 20% Attendance',
+'STATS_RAIDER' => '< 50% Attendance',
+'STATS_CORERAIDER' => '> 70% Attendance',
 
 // TYPES of armor are static across games, no need to put it in DB
 'CLOTH' => 'Very light / Cloth',

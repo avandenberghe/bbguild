@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.8
+ * @version 1.3.0.9
  */
 
 // anything lower than php 5.3.3 not supported (we use namespaces since v1.3)
@@ -1013,6 +1013,10 @@ $versions = array(
 ),
 
 '1.3.0.8' => array(
+  // just some file fixes, see changelog
+),
+
+'1.3.0.9' => array(
   // just some file fixes, see changelog
 ),
 

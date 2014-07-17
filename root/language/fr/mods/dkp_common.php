@@ -174,8 +174,8 @@ $lang = array_merge($lang, array(
 'POOL' => 'Groupe DKP',
 'RAID_ATTENDANCE_HISTORY' => 'Historique Participation',
 'RAIDS_LIFETIME' => 'à Vie (%s - %s)',
-'ATTENDANCE_LIFETIME' => 'Participation globale',
-'ATTENDANCE' => 'Particip.',
+'ATTENDANCE_LIFETIME' => 'Participation totale',
+'ATTENDANCE' => 'Participation',
 'MEMBERS_PRESENT_AT' => 'Membres Présent à %s sur %s',
 'RAIDS_X_DAYS' => 'Derniers %d Jours',
 'SPENT' => 'Dépensé',
@@ -221,6 +221,9 @@ $lang = array_merge($lang, array(
 'BUYERS' => 'Acheteurs',
 'ARMOR' => 'Armure',
 'TYPE' => 'Armure',
+'STATS_SOCIAL' => '< 20% participation',
+'STATS_RAIDER' => '< 50% participation',
+'STATS_CORERAIDER' => '> 70% participation',
 
 // TYPES of armor are static across games, no need to put it in DB
 'CLOTH' => 'Tissu',
@@ -310,6 +313,7 @@ $lang = array_merge($lang, array(
 'PCT_EARNED_LOST_TO' => '% Gagné Perdu à',
 'PREFERENCES' => 'Préferences',
 'PURCHASE_HISTORY_FOR' => 'Historique d’achats for %s',
+'LEADERBOARDSTAT' => 'Points vs. Nombre de Raids',
 
 'QUOTE' => 'Quote',
 'RACE' => 'Race',
@@ -451,6 +455,18 @@ $lang = array_merge($lang, array(
 'SELECT_EXISTING' => 'Sélectionner existant',
 'UPDATED' => 'Mis à jour',
 'NOVIEW' => 'Page inconnue: %s',
+'IRCTLIFE' => '#Raids',
+'GRCTLIFE' => '# Raids Guilde',
+'ATTLIFE' => 'Partipation',
+'IRCT90' => '#Raids 90d',
+'GRCT90' => '#Raids Guilde 90d',
+'ATT90' => 'Participation 90d',
+'IRCT60' => '#Raids 60d',
+'GRCT60' => '#Raids Guilde 60d',
+'ATT60' => 'Participation 60d',
+'IRCT30' => '#Raids 30d',
+'GRCT30' => '#Raids Guilde 30d',
+'ATT30' => 'Participation 30d',
 
 //---- About --- do not change anything here
 'ABOUT' => 'Au sujet de',
