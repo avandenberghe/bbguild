@@ -17,7 +17,7 @@ This way, your users gain single signon to dkp and phpBB3, and you as an adminis
 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games can be installed : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, Star Wars -ToR, Guildwars 2, Tera, Custome game designer
 
-There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory import, Apply, and other standalone mods that work well together. 
+Plugins available : Raidplanner, Raidtracker, bbTips, Apply 
 
 Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have premod versions. 
 
