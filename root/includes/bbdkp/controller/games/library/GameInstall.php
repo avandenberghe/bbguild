@@ -75,11 +75,11 @@ abstract class GameInstall
 				'status' => 1
 		);
 
-		$sql = 'INSERT INTO ' . GAMES_TABLE . ' ' . $db->sql_build_array ( 'INSERT', $data );
+		$sql = 'INSERT INTO ' . BBGAMES_TABLE . ' ' . $db->sql_build_array ( 'INSERT', $data );
 		$db->sql_query ( $sql );
 
 		$db->sql_transaction ( 'commit' );
-        $cache->destroy( 'sql', GAMES_TABLE );
+        $cache->destroy( 'sql', BBGAMES_TABLE );
         $cache->destroy( 'sql', CLASS_TABLE );
         $cache->destroy( 'sql', BB_LANGUAGE );
         $cache->destroy( 'sql', RACE_TABLE );
@@ -115,12 +115,12 @@ abstract class GameInstall
         $classes->game_id = $this->game_id;
         $classes->Delete_all_classes();
 
-        $sql = 'DELETE FROM ' . GAMES_TABLE . " WHERE game_id = '" .   $this->game_id . "'";
+        $sql = 'DELETE FROM ' . BBGAMES_TABLE . " WHERE game_id = '" .   $this->game_id . "'";
         $db->sql_query ($sql);
 
         $db->sql_transaction ( 'commit' );
 
-        $cache->destroy( 'sql', GAMES_TABLE );
+        $cache->destroy( 'sql', BBGAMES_TABLE );
         $cache->destroy( 'sql', CLASS_TABLE );
         $cache->destroy( 'sql', BB_LANGUAGE );
         $cache->destroy( 'sql', RACE_TABLE );

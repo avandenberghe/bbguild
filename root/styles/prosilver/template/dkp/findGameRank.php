@@ -16,7 +16,7 @@ include($phpbb_root_path . 'common.' . $phpEx);
 $guild_id = request_var('guild', 0);
 
 $sql = 'SELECT a.rank_id, a.rank_name, b.game_id, g.game_name
-        FROM ' . MEMBER_RANKS_TABLE . ' a, ' . GUILD_TABLE. ' b, ' . GAMES_TABLE . ' g
+        FROM ' . MEMBER_RANKS_TABLE . ' a, ' . GUILD_TABLE. ' b, ' . BBGAMES_TABLE . ' g
         WHERE a.rank_hide = 0
         AND a.guild_id =  '. $guild_id . '
         AND a.guild_id = b.id

@@ -431,7 +431,7 @@ class log
         global $db;
         $sql_array = array(
             'SELECT' 	=> 'l.*, u.username, u.user_id, u.user_colour' ,
-            'FROM' 		=> 	array(LOGS_TABLE => 'l') ,
+            'FROM' 		=> 	array(BBLOGS_TABLE => 'l') ,
             'LEFT_JOIN' => array(
                 array(
                     'FROM' => array(USERS_TABLE => 'u') ,
@@ -564,7 +564,7 @@ class log
                 }
             }
             $query = $db->sql_build_array('INSERT', $values);
-            $sql = 'INSERT INTO ' . LOGS_TABLE . $query;
+            $sql = 'INSERT INTO ' . BBLOGS_TABLE . $query;
             $db->sql_query($sql);
             return true;
         }
@@ -583,7 +583,7 @@ class log
         global $db;
 
         //they hit yes
-        $sql = 'DELETE FROM ' . LOGS_TABLE . ' WHERE 1=1 ';
+        $sql = 'DELETE FROM ' . BBLOGS_TABLE . ' WHERE 1=1 ';
         $sql_in = array();
         foreach ($marked as $mark)
         {
@@ -614,7 +614,7 @@ class log
 		$sql_array = array(
 				'SELECT' => 'l.*, u.username, u.user_colour ' ,
 				'FROM' => array(
-						LOGS_TABLE => 'l' ,
+						BBLOGS_TABLE => 'l' ,
 						USERS_TABLE => 'u') ,
 				'WHERE' => 'u.user_id=l.log_userid');
 
@@ -714,7 +714,7 @@ class log
     private function logcount()
     {
         global $db;
-        $sql6 = 'SELECT count(*) as log_count FROM ' . LOGS_TABLE;
+        $sql6 = 'SELECT count(*) as log_count FROM ' . BBLOGS_TABLE;
         $result6 = $db->sql_query($sql6);
         $this->total_logs = (int) $db->sql_fetchfield('log_count');
         $db->sql_freeresult($result6);

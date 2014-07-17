@@ -280,7 +280,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 						RACE_TABLE => 'r',
 						FACTION_TABLE => 'f',
 						BB_LANGUAGE => 'l',
-						GAMES_TABLE => 'g'
+						BBGAMES_TABLE => 'g'
 					),
 				'WHERE' => " r.race_faction_id = f.faction_id
 					AND f.game_id = r.game_id AND r.game_id = g.game_id AND r.game_id = '" . $this->game_id . "'

@@ -38,12 +38,12 @@ namespace bbdkp\admin
 	define('USER_LLIMIT', 40);  // LOG LIMIT
 
 	// TABLE DEFINITIONS
-	define('GAMES_TABLE',        	   $table_prefix . 'bbdkp_games');
+	define('BBGAMES_TABLE',        	   $table_prefix . 'bbdkp_games');
 	define('NEWS_TABLE',        	   $table_prefix . 'bbdkp_news');
 	define('ADJUSTMENTS_TABLE',        $table_prefix . 'bbdkp_adjustments');
 	define('EVENTS_TABLE',             $table_prefix . 'bbdkp_events');
 	define('RAID_ITEMS_TABLE',         $table_prefix . 'bbdkp_raid_items');
-	define('LOGS_TABLE',               $table_prefix . 'bbdkp_logs');
+	define('BBLOGS_TABLE',               $table_prefix . 'bbdkp_logs');
 	define('MEMBER_RANKS_TABLE',       $table_prefix . 'bbdkp_member_ranks');
 	define('MEMBER_LIST_TABLE',        $table_prefix . 'bbdkp_memberlist');
 	define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_memberdkp');

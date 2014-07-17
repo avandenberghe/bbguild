@@ -368,7 +368,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 				'FROM' => array (
 						CLASS_TABLE => 'c',
 						BB_LANGUAGE => 'l',
-						GAMES_TABLE => 'g'  ),
+						BBGAMES_TABLE => 'g'  ),
 				'WHERE' => " c.class_id = l.attribute_id
 							AND c.game_id = g.game_id AND c.game_id = l.game_id AND l.game_id = '" . $db->sql_escape ( $this->game_id ) . "'
 							AND l.attribute='class' AND l.language= '" . $config ['bbdkp_lang'] . "'",

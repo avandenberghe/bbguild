@@ -377,7 +377,7 @@ class Game
     {
         global $db;
         $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl
-    			FROM ' . GAMES_TABLE . "
+    			FROM ' . BBGAMES_TABLE . "
     			WHERE game_id = '" . $this->game_id . "'";
 
         $result = $db->sql_query($sql);
@@ -412,11 +412,11 @@ class Game
             'zonebaseurl'    => $this->zonebaseurl
         ));
 
-        $sql = 'UPDATE ' . GAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";
+        $sql = 'UPDATE ' . BBGAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";
         $db->sql_query($sql);
 
         $db->sql_transaction ('commit');
-        $cache->destroy( 'sql', GAMES_TABLE );
+        $cache->destroy( 'sql', BBGAMES_TABLE );
     }
 
     /**
@@ -428,7 +428,7 @@ class Game
         global $db;
 
         $sql = ' SELECT g.id, g.game_id, g.game_name, g.status, g.imagename, g.bossbaseurl, g.zonebaseurl ';
-        $sql .= ' FROM ' . GAMES_TABLE . '  g';
+        $sql .= ' FROM ' . BBGAMES_TABLE . '  g';
         $sql .= ' INNER JOIN '. RACE_TABLE . ' r ON r.game_id = g.game_id';
         $sql .= ' INNER JOIN  ' . CLASS_TABLE . ' c ON c.game_id= g.game_id';
         $sql .= ' GROUP BY g.id, g.game_id, g.game_name';
@@ -453,7 +453,7 @@ class Game
     {
         global $db;
         $gamelist = array();
-        $sql = 'SELECT id, game_id, game_name, status, imagename, bossbaseurl, zonebaseurl FROM ' . GAMES_TABLE . ' ORDER BY ' . $order;
+        $sql = 'SELECT id, game_id, game_name, status, imagename, bossbaseurl, zonebaseurl FROM ' . BBGAMES_TABLE . ' ORDER BY ' . $order;
         $result = $db->sql_query ($sql);
         while ($row = $db->sql_fetchrow($result))
         {
