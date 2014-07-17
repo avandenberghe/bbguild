@@ -96,6 +96,8 @@ Find support and more on
 
 -	[CHG] Repackaging 
 -	[FIX] missing language entries in german/french
+-	[CHG] #223 GAMES_TABLE constant updated to BBGAMES_TABLE
+-	[CHG] #223 LOGS_TABLE constant updated to BBLOGS_TABLE
 
 1.3.0.8 01-07-2014
 
