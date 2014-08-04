@@ -40,7 +40,8 @@
 			<file from="root/includes/acp/acp_dkp_mdkp.php" to="includes/acp/acp_dkp_mdkp.php"/>
 			
 			<file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>	
-											
+			<file from="root/includes/bbdkp/admin/constants_bbdkp.php" to="includes/bbdkp/admin/constants_bbdkp.php"/>		
+														
 			<file from="root/includes/bbdkp/controller/games/classes/Classes.php" to="includes/bbdkp/controller/games/classes/Classes.php"/>
 			<file from="root/includes/bbdkp/controller/games/factions/Faction.php" to="includes/bbdkp/controller/games/factions/Faction.php"/>
 			<file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>

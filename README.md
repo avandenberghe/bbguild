@@ -92,16 +92,18 @@ Find support and more on
 
 ## Changelog 
 
-1.3.0.9 17-07-2014
+1.3.0.9 04-08-2014
 
 -	[CHG] Repackaging 
 -	[FIX] missing language entries in german/french
--	[CHG] #223 GAMES_TABLE constant updated to BBGAMES_TABLE
--	[CHG] #223 LOGS_TABLE constant updated to BBLOGS_TABLE
-
+-	[CHG] #223 GAMES_TABLE constant updated to BBGAMES_TABLE (old constant remains but is deprecated)
+-	[CHG] #223 LOGS_TABLE constant updated to BBLOGS_TABLE (old constant remains but is deprecated)
+-	[CHG] #223 EVENTS_TABLE constant updated to BBEVENTS_TABLE (old constant remains but is deprecated)
+-	[CHG] #239 added correct classpath to rpblocks class in class_exists checker in block factory
+	
 1.3.0.8 01-07-2014
 
--	[FIX] #239 fix reference to raidplanner block path (1 file)
+-	[FIX] #239 fix raidplanner block file path reference in blockFactory class
 
 1.3.0.7 30-06-2014
 

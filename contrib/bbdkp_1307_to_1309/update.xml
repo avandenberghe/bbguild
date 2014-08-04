@@ -35,7 +35,9 @@
 	</header>
 	<action-group>
 		<copy>
-			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>			
+			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>
+			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>
+			<file from="root/includes/bbdkp/admin/constants_bbdkp.php" to="includes/bbdkp/admin/constants_bbdkp.php"/>			
 			<file from="root/install/index.php" to="install/index.php"/>
 		</copy>
 		<php-installer>install/index.php</php-installer>

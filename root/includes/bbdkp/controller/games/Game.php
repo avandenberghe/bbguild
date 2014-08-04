@@ -1,7 +1,7 @@
 <?PHP
 /**
  * Game clas file
- *   @package bbdkp
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp

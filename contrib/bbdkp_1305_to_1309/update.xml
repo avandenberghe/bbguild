@@ -41,8 +41,10 @@
 			<file from="root/includes/acp/acp_dkp_mdkp.php" to="includes/acp/acp_dkp_mdkp.php"/>
 			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>	
 			<file from="root/includes/ucp/ucp_dkp.php" to="includes/ucp/ucp_dkp.php"/>	
+			
 			<file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>	
-											
+			<file from="root/includes/bbdkp/admin/constants_bbdkp.php" to="includes/bbdkp/admin/constants_bbdkp.php"/>		
+														
 			<file from="root/includes/bbdkp/controller/games/classes/Classes.php" to="includes/bbdkp/controller/games/classes/Classes.php"/>
 			<file from="root/includes/bbdkp/controller/games/factions/Faction.php" to="includes/bbdkp/controller/games/factions/Faction.php"/>
 			<file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>
@@ -59,9 +61,7 @@
 			<file from="root/includes/bbdkp/views/viewNavigation.php" to="includes/bbdkp/views/viewNavigation.php"/>
 			<file from="root/includes/bbdkp/views/viewStandings.php" to="includes/bbdkp/views/viewStandings.php"/>
 			<file from="root/includes/bbdkp/views/viewStats.php" to="includes/bbdkp/views/viewStats.php"/>
-			<file from="root/install/index.php" to="install/index.php"/>
-			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>
-			
+			<file from="root/install/index.php" to="install/index.php"/>		
 			<file from="root/language/de/mods/dkp_common.php" to="language/de/mods/dkp_common.php"/>						
 			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>						
 			<file from="root/language/fr/mods/dkp_common.php" to="language/fr/mods/dkp_common.php"/>												
