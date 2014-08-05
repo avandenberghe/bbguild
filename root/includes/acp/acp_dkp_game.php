@@ -90,6 +90,13 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $sort_index = explode('.', $current_order['uri']['current']);
         $this->gamelist = $listgames->listgames($current_order['sql']);
 
+
+        foreach( $this->gamelist as $game)
+        {
+            $installed[$game['game_id']] = $game['name'];
+        }
+
+
 		switch ($mode)
 		{
 			case 'listgames' :
@@ -151,9 +158,10 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				$can_install_count = 0;
 
 				//is anything isntalled ?
-				if(count($this->gamelist) > 0)
+                $not_installed = array();
+				if(count($installed) > 0)
 				{
-					$not_installed = array_diff($listgames->preinstalled_games, $this->gamelist);
+					$not_installed = array_diff($listgames->preinstalled_games, $installed);
 				}
 				else
 				{
