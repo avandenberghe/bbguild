@@ -69,8 +69,16 @@
 
     //add tooltip event
     jQuery("#memberstats").bind("plothover", function (event, pos, item) {
+
+        var previousPoint;
+
         if (item)
         {
+            if(! previousPoint)
+            {
+                previousPoint = item.datapoint;
+            }
+
             if (previousPoint != item.datapoint)
             {
                 previousPoint = item.datapoint;
