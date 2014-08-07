@@ -323,7 +323,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
                     'LA_ALERT_AJAX'		  => $user->lang['ALERT_AJAX'],
                     'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'],
                     'LA_MSG_NAME_EMPTY'	  => $user->lang['FV_REQUIRED_NAME'],
-                    'UA_FINDGAMERANK'		  => append_sid("{$phpbb_root_path}styles/" . rawurlencode($user->theme['template_path']) . '/template/dkp/findGameRank.'. $phpEx ),
+                    'UA_FINDGAMERANK'     => append_sid("{$phpbb_root_path}styles/" . rawurlencode($user->theme['template_path']) . '/template/dkp/findGameRank.'. $phpEx ),
                     'UA_FINDCLASSRACE'	  => append_sid("{$phpbb_root_path}styles/" . rawurlencode($user->theme['template_path']) . '/template/dkp/findclassrace.'. $phpEx ),
                 ));
                 $this->tpl_name 	= 'dkp/ucp_dkp_charadd';
@@ -676,8 +676,9 @@ class ucp_dkp extends \bbdkp\admin\Admin
                 'FROM'      => array(
                     MEMBER_DKP_TABLE 	=> 'm',
                     DKPSYS_TABLE 		=> 'd',
+                    MEMBER_LIST_TABLE 	=> 'l',
                 ),
-                'WHERE'     => " m.member_dkpid = d.dkpsys_id and m.member_id = " . $char['member_id'],
+                'WHERE'     => "l.member_id = m.member_id and l.member_status = 1 and m.member_dkpid = d.dkpsys_id and d.dkpsys_status='Y' and m.member_id = " . $char['member_id'],
                 'GROUP_BY'  => " d.dkpsys_id, d.dkpsys_name " ,
                 'ORDER_BY'	=> " d.dkpsys_name ",
             );
@@ -689,7 +690,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
                 $template->assign_block_vars('members_row.dkp_row', array(
                         'DKPSYS'        => $row2['dkpsys_name'],
                         'U_VIEW_MEMBER' => append_sid("{$phpbb_root_path}dkp.$phpEx",
-                            "page=viewmember&amp;". URI_NAMEID . '=' . $char['member_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id'] ),
+                            "page=member&amp;". URI_NAMEID . '=' . $char['member_id'] . '&amp;' . URI_DKPSYS . '= ' . $row2['dkpsys_id'] ),
                         'EARNED'       => $row2['ep'],
                         'SPENT'        => $row2['gp'],
                         'PR'           => $row2['pr'],
