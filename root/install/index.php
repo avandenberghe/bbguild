@@ -1016,10 +1016,50 @@ $versions = array(
   // just some file fixes, see changelog
 ),
 
-'1.3.0.9' => array(
-  // just some file fixes, see changelog
-),
+'1.3.1' => array(
 
+    //adding some tables
+    'table_add' => array(
+
+        // game roles
+        array(
+            $table_prefix . 'bbdkp_gameroles' , array(
+            'COLUMNS'        => array(
+                'role_pkid'  	   => array('INT:8', NULL, 'auto_increment'),
+                'game_id'  		   => array('VCHAR:10', ''),
+                'role_id'    	   => array('INT:8', 0),
+                'role_color'       => array('VCHAR', ''),
+                'role_icon'    	   => array('VCHAR', ''),
+            ),
+            'PRIMARY_KEY'    => 'role_pkid',
+            'KEYS'         => array('bbroles'    => array('UNIQUE', array('game_id', 'role_id'))),
+        )),
+
+        // guild recruitment table
+        array(
+            $table_prefix . 'bbdkp_recruit' , array(
+            'COLUMNS'        => array(
+                'recruit_pkid'     => array('INT:8', NULL, 'auto_increment'),
+                'guild_id'		   => array('USINT', 0),
+                'role_id'    	   => array('INT:8', 0),
+                'class_id'         => array('UINT', 0),
+                'needed'	       => array('USINT', 0),
+            ),
+            'PRIMARY_KEY'          => 'recruit_pkid',
+            'KEYS'                 => array('bb_recruit'    => array('UNIQUE', array('guild_id', 'role_id', 'class_id'))),
+        )),
+    ),
+
+    'custom' => array(
+        'tableupdates',
+        'bbdkp_caches'
+    ),
+
+
+    'table_remove' => array(
+        $table_prefix . 'bbdkp_roles'),
+
+    ),
 
 );
 
@@ -1090,8 +1130,6 @@ function tableupdates($action, $version)
 					$db->sql_query($sql);
 
 					break;
-
-
 			}
 			break;
 
@@ -1138,6 +1176,165 @@ function tableupdates($action, $version)
 					$db->sql_query($sql);
 					break;
 
+                case '1.3.1':
+
+                    $sql = 'SELECT game_id FROM ' . $table_prefix . 'bbdkp_games';
+                    $result = $db->sql_query ($sql);
+                    while ( $row = $db->sql_fetchrow ($result))
+                    {
+                        $i=0;
+                        $umil->table_row_insert($table_prefix . 'bbdkp_gameroles', array(
+                            array(
+                                // dps
+                                'game_id'  		   => $row['game_id'],
+                                'role_id'    	   => $i,
+                                'role_color'       => '#FF4455',
+                                'role_icon'    	   => 'dps_icon',
+                            ),
+                            array(
+                                // healer
+                                'game_id'  		   => $row['game_id'],
+                                'role_id'    	   => $i+1,
+                                'role_color'       => '#11FF77',
+                                'role_icon'    	   => 'healer_icon',
+                            ),
+                            array(
+                                // tank
+                                'game_id'  		   => $row['game_id'],
+                                'role_id'    	   => $i+2,
+                                'role_color'       => '#c3834c',
+                                'role_icon'    	   => 'tank_icon',
+                            ),
+                        ));
+
+                        //english
+                        $umil->table_row_insert($table_prefix . 'bbdkp_language', array(
+                            array(
+                                // dps
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i,
+                                'language'          => 'en',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Damage',
+                                'name_short'        => 'DPS',
+                            ),
+                            array(
+                                // healer
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i+1,
+                                'language'          => 'en',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Healer',
+                                'name_short'        => 'HPS',
+                            ),
+                            array(
+                                // defense
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i+2,
+                                'language'          => 'en',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Defense',
+                                'name_short'        => 'DEF',
+                            ),
+                        ));
+
+                        //french
+                        $umil->table_row_insert($table_prefix . 'bbdkp_language', array(
+                            array(
+                                // dps
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i,
+                                'language'          => 'fr',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Dégats',
+                                'name_short'        => 'DPS',
+                            ),
+                            array(
+                                // healer
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i+1,
+                                'language'          => 'fr',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Soigneur',
+                                'name_short'        => 'HPS',
+                            ),
+                            array(
+                                // tank
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i+2,
+                                'language'          => 'fr',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Défense',
+                                'name_short'        => 'DEF',
+                            ),
+                        ));
+
+                        //german
+                        $umil->table_row_insert($table_prefix . 'bbdkp_language', array(
+                            array(
+                                // dps
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i,
+                                'language'          => 'de',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Kämpfer',
+                                'name_short'        => 'Schaden',
+                            ),
+                            array(
+                                // healer
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i+1,
+                                'language'          => 'de',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Heiler',
+                                'name_short'        => 'Heil',
+                            ),
+                            array(
+                                // tank
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i+2,
+                                'language'          => 'de',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Verteidigung',
+                                'name_short'        => 'Schutz',
+                            ),
+                        ));
+
+                        //Italian
+                        $umil->table_row_insert($table_prefix . 'bbdkp_language', array(
+                            array(
+                                // dps
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i,
+                                'language'          => 'it',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Danni',
+                                'name_short'        => 'Danni',
+                            ),
+                            array(
+                                // healer
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i+1,
+                                'language'          => 'it',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Cura',
+                                'name_short'        => 'Cura',
+                            ),
+                            array(
+                                // tank
+                                'game_id'  		    => $row['game_id'],
+                                'attribute_id'    	=> $i+2,
+                                'language'          => 'it',
+                                'attribute'    	    => 'role',
+                                'name'    	        => 'Difeza',
+                                'name_short'        => 'Tank',
+                            ),
+                        ));
+
+                    }
+
+                    break;
+
 			}
 			break;
 		case 'uninstall' :
@@ -1146,10 +1343,9 @@ function tableupdates($action, $version)
 				case '1.2.8':
 					break;
 				case '1.3.0':
-					//$sql= "DROP TABLE  " . $table_prefix . 'bbdkp_reporting ';
-					//$db->sql_query($sql);
-
 					break;
+                case '1.3.1':
+                    break;
 
 			}
 			break;
