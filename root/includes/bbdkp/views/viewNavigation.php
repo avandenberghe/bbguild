@@ -331,6 +331,13 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
                 break;
             }
         }
+
+        if(count($dkpvalues) == 1)
+        {
+            $this->defaultpool = $dkpvalues[3]['id'];
+        }
+
+
         $db->sql_freeresult ( $result );
 
         if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
