@@ -305,6 +305,8 @@ $lang = array_merge($lang, array(
 'ACP_ADDFACTIONS_EXPLAIN' => 'Here you can add/edit the Factions',
 'ACP_ADDRACE_EXPLAIN' => 'Here you can add/edit the Races.',
 'ACP_ADDRANK_EXPLAIN' => 'Here you can add/edit the Guild ranks. For wow you can download them from the Armory',
+'ACP_ROLES_EXPLAIN' => 'Here you can edit the roles for this game.',
+
 
 'RACEID_EXPLAIN' =>'Note. the ID is unique. for Wow, it should match the raceId XML Armory tag. ',
 'RACE_EXPLAIN' =>'Race name',
@@ -693,6 +695,8 @@ $lang = array_merge($lang, array(
 'ADMIN_INSTALLED_GAME_SUCCESS' => 'Game "%s" was installed successfully.',
 'ADMIN_DELETE_GAME_SUCCESS' => 'Game "%s" was deleted successfully.',
 'ADMIN_INSTALL_GAME_FAILED'  => 'Game name is missing. Game could not be installed.',
+'ADMIN_ADD_ROLE_FAILED'  => 'Role %s could not be added',
+'ADMIN_ADD_ROLE_SUCCESS'  => 'Role %s was created successfully.',
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Active Point Adjustment',
@@ -983,7 +987,7 @@ $lang = array_merge($lang, array(
 'LANG_DE' => 'Deutsch',
 'LANG_FR' => 'Français',
 'LANG_EN' => 'English',
-'LANG_IT' => 'Italiano',
+'LANG_IT' => 'Italian',
 'FREQ0'    => 'Days',
 'FREQ1'    => 'Weeks',
 'FREQ2'    => 'Months',
