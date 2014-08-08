@@ -25,10 +25,11 @@ if (! defined('IN_PHPBB'))
 abstract class GameInstall
 {
 
-	private $game_id;
-	private $gamename;
+    protected $game_id;
     protected $bossbaseurl;
     protected $zonebaseurl;
+
+    private $gamename;
 
     /**
      * @return string
@@ -63,6 +64,7 @@ abstract class GameInstall
 		$this->InstallClasses();
 		$this->InstallRaces();
 		$this->InstallEventGroup();
+        $this->InstallRoles();
 
 		//insert a new entry in the game table
 		$data = array (
@@ -86,6 +88,7 @@ abstract class GameInstall
         $cache->destroy( 'sql', DKPSYS_TABLE );
         $cache->destroy( 'sql', EVENTS_TABLE );
         $cache->destroy( 'sql', MEMBER_LIST_TABLE );
+        $cache->destroy( 'sql', BB_GAMEROLE_TABLE );
 
 	}
 
@@ -156,7 +159,11 @@ abstract class GameInstall
 	 */
     abstract protected function InstallEventGroup();
 
-
+    /**
+     * Install sample roles
+     * must be implemented
+     */
+    abstract protected function InstallRoles();
 }
 
 ?>
