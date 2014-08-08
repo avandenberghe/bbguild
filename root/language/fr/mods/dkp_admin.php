@@ -5,7 +5,7 @@
  *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.3
+ * @version 1.3.1
  *
  */
 
@@ -984,9 +984,10 @@ $lang = array_merge($lang, array(
 'ZEROSUM_DISTRIBUTEOTHER' => 'Décalage des bonus',
 'ZEROSUM_DISTRIBUTEOTHER_EXPLAIN' => 'Cochez pour décaler les bonus temps et raids vers le compte DKP de la Guilde.',
 'ZS_CHECKED_EXPLAIN' => 'Coché si Somme zero est calculé',
-'LANG_DE' => 'Deutsch',
+'LANG_DE' => 'Allemand',
 'LANG_FR' => 'Français',
-'LANG_EN' => 'English',
+'LANG_EN' => 'Anglais',
+'LANG_IT' => 'Italien',
 'FREQ0' => 'Days',
 'FREQ1' => 'Weeks',
 'FREQ2' => 'Months',

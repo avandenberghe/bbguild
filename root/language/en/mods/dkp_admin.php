@@ -3,9 +3,9 @@
  * bbdkp admin language file [English]
  * @author Sajaki@bbdkp.com
  *
- * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
+ * @copyright 2014 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.3
+ * @version 1.3.1
  *
  */
 
@@ -983,6 +983,7 @@ $lang = array_merge($lang, array(
 'LANG_DE' => 'Deutsch',
 'LANG_FR' => 'Français',
 'LANG_EN' => 'English',
+'LANG_IT' => 'Italiano',
 'FREQ0'    => 'Days',
 'FREQ1'    => 'Weeks',
 'FREQ2'    => 'Months',

@@ -1,12 +1,13 @@
 <?php
 /**
- * bbdkp acp language file for  Ajdustments (en)
- * 
- * 
- * @copyright 2009 bbdkp <https://github.com/bbDKP>
+ * bbdkp ucp language file
+ * @author lucasari
+ * @author Sajaki@bbdkp.com
+ * @copyright 2014 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.3.1
- */
+ * */
+
 /**
 * @ignore
 */
@@ -23,7 +24,9 @@ if (empty($lang) || !is_array($lang))
 
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
-  	'ACP_DKP_MDKP'	        => 'Member DKP Management', 
-	'ACP_DKP_ADDADJ'		=> 'Add Adjustments',
-	'ACP_DKP_LISTADJ'		=> 'Manual Points',
+    'UCP_DKP_CHARACTERS'		=> 'Personaggi',
+	'UCP_DKP'			=> 'bbDKP',  
+	'UCP_DKP_CHARACTER_LIST'	=> 'I Miei Personaggi',
+	'UCP_DKP_CHARACTER_ADD'		=> 'Aggiungi Personaggio'
+
 ));
