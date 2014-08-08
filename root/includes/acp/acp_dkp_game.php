@@ -7,9 +7,10 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.3.1
  */
 // don't add this file to namespace bbdkp
+
 /**
  * @ignore
  */
@@ -74,7 +75,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 	 */
 	function main($id, $mode)
 	{
-		global $user, $template, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
+		global $user, $template, $phpbb_admin_path, $phpEx;
 
 		$form_key = 'acp_dkp_game';
 		add_form_key ( $form_key );
@@ -90,12 +91,10 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $sort_index = explode('.', $current_order['uri']['current']);
         $this->gamelist = $listgames->listgames($current_order['sql']);
 
-
         foreach( $this->gamelist as $game)
         {
             $installed[$game['game_id']] = $game['name'];
         }
-
 
 		switch ($mode)
 		{
@@ -215,6 +214,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 				$gamereset = (isset ( $_POST ['gamereset'] )) ? true : false;
 				$gamedelete = (isset ( $_POST ['gamedelete'] )) ? true : false;
+				$gamesettings = (isset ( $_POST ['gamesettings'] )) ? true : false;
 
 				$addfaction = (isset ( $_POST ['showfactionadd'] )) ? true : false;
 				$deletefaction = (isset ( $_GET ['factiondelete'] )) ? true : false;
@@ -226,8 +226,6 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				$addclass = (isset ( $_POST ['showclassadd'] )) ? true : false;
 				$classedit = (isset ( $_GET ['classedit'] )) ? true : false;
 				$classdelete = (isset ( $_GET ['classdelete'] )) ? true : false;
-
-				$gamesettings = (isset ( $_POST ['gamesettings'] )) ? true : false;
 
                 $template->assign_vars ( array (
                     'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") ,
@@ -290,16 +288,8 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					}
 					else
 					{
-                        $this->BuildTemplate_Add_Race($editgame);
+                        $this->BuildTemplateAddRace($editgame);
                     }
-
-					$template->assign_vars ( array (
-						'LA_ALERT_AJAX' => $user->lang ['ALERT_AJAX'],
-						'LA_ALERT_OLDBROWSER' => $user->lang ['ALERT_OLDBROWSER'],
-						'UA_FINDFACTION' => append_sid ( $phpbb_admin_path . "style/dkp/findfaction.$phpEx" ) ) );
-
-					$this->page_title = 'ACP_LISTGAME';
-					$this->tpl_name = 'dkp/acp_addrace';
 					break;
 				}
 
@@ -308,15 +298,12 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					// Load template for adding/editing
 					if (isset ( $_GET ['id'] ))
 					{
-                        $this->BuildTemplate_EditClass($editgame);
+                        $this->BuildTemplateEditClass($editgame);
                     }
 					else
 					{
                         $this->BuildTemplateAddClass($editgame);
                     }
-
-					$this->page_title = 'ACP_LISTGAME';
-					$this->tpl_name = 'dkp/acp_addclass';
 					break;
 				}
 
@@ -781,7 +768,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
      *
      * @param \bbdkp\controller\games\Game $editgame
      */
-    private function BuildTemplate_Add_Race(\bbdkp\controller\games\Game  $editgame)
+    private function BuildTemplateAddRace(\bbdkp\controller\games\Game  $editgame)
     {
         global $template, $phpbb_admin_path, $phpEx, $user;
 
@@ -807,7 +794,13 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             'S_FACTIONLIST_OPTIONS' => $s_faction_options,
             'S_ADD'                 => true,
             'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addrace'),
+            'LA_ALERT_AJAX' => $user->lang ['ALERT_AJAX'],
+            'LA_ALERT_OLDBROWSER' => $user->lang ['ALERT_OLDBROWSER'],
+            'UA_FINDFACTION' => append_sid ( $phpbb_admin_path . "style/dkp/findfaction.$phpEx" ),
             'MSG_NAME_EMPTY'        => $user->lang ['FV_REQUIRED_NAME']));
+
+        $this->page_title = 'ACP_LISTGAME';
+        $this->tpl_name = 'dkp/acp_addrace';
     }
 
     /**
@@ -853,9 +846,15 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             'S_RACE_IMAGE_F_EXISTS' => (strlen($listraces->image_female) > 1) ? true : false,
             'S_FACTIONLIST_OPTIONS' => $s_faction_options,
             'S_ADD'                 => false,
+            'LA_ALERT_AJAX' => $user->lang ['ALERT_AJAX'],
+            'LA_ALERT_OLDBROWSER' => $user->lang ['ALERT_OLDBROWSER'],
+            'UA_FINDFACTION' => append_sid ( $phpbb_admin_path . "style/dkp/findfaction.$phpEx" ),
             'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addrace'),
             'MSG_NAME_EMPTY'        => $user->lang ['FV_REQUIRED_NAME']));
         unset($listraces);
+
+        $this->page_title = 'ACP_LISTGAME';
+        $this->tpl_name = 'dkp/acp_addrace';
     }
 
 
@@ -863,7 +862,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
      * Load Template Edit Classes
      * @param \bbdkp\controller\games\Game $editgame
      */
-    private function BuildTemplate_EditClass(\bbdkp\controller\games\Game $editgame)
+    private function BuildTemplateEditClass(\bbdkp\controller\games\Game $editgame)
     {
         global $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $user;
 
@@ -902,6 +901,9 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             'U_ACTION'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addclass'),
             'MSG_NAME_EMPTY'       => $user->lang ['FV_REQUIRED_NAME'],
             'MSG_ID_EMPTY'         => $user->lang ['FV_REQUIRED_ID']));
+
+        $this->page_title = 'ACP_LISTGAME';
+        $this->tpl_name = 'dkp/acp_addclass';
     }
 
     /**
@@ -929,6 +931,9 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             'U_ACTION'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addclass'),
             'MSG_NAME_EMPTY'  => $user->lang ['FV_REQUIRED_NAME'],
             'MSG_ID_EMPTY'    => $user->lang ['FV_REQUIRED_ID']));
+
+        $this->page_title = 'ACP_LISTGAME';
+        $this->tpl_name = 'dkp/acp_addclass';
     }
 
 
@@ -999,6 +1004,30 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 		}
 		unset($listraces, $ra);
 
+
+        // list the roles
+
+/*        $sql = 'SELECT * FROM ' . RP_ROLES . ' WHERE ORDER BY role_id';
+        $db->sql_query($sql);
+        $result = $db->sql_query($sql);
+        $total_roles = 0;
+        while ( $row = $db->sql_fetchrow($result) )
+        {
+            $total_roles++;
+            $template->assign_block_vars('role_row', array(
+                'ROLE_ID' 		=> $row['role_id'],
+                'ROLENAME' 		=> $row['role_name'],
+                'ROLECOLOR' 	=> $row['role_color'],
+                'ROLEICON' 		=> $row['role_icon'],
+                'S_ROLE_ICON_EXISTS'	=>  (strlen($row['role_icon']) > 1) ? true : false,
+                'ROLE_ICON' 	=> (strlen($row['role_icon']) > 1) ? $phpbb_root_path . "images/bbdkp/raidrole_images/" . $row['role_icon'] . ".png" : '',
+                'U_DELETE' 		=> $this->u_action. '&amp;roledelete=1&amp;delrole_id=' . $row['role_id'],
+            ));
+        }
+        $db->sql_freeresult($result);*/
+
+
+
 		// list the classes
 		$sort_order2 = array(
 			0 => array ('c.game_id asc, c.class_id asc', 'c.game_id desc, c.class_id asc'),
@@ -1067,7 +1096,4 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				'U_ACTION' => $this->u_action ) );
 	}
 
-
 }
-
-?>

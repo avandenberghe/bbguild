@@ -35,11 +35,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  */
  class Races extends \bbdkp\controller\games\Game
 {
-	/**
-	 * game id
-	 * @var string
-	 */
-	public $game_id;
 
 	/**
 	 * race id
