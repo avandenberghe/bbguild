@@ -1030,6 +1030,7 @@ $versions = array(
                 'role_id'    	   => array('INT:8', 0),
                 'role_color'       => array('VCHAR', ''),
                 'role_icon'    	   => array('VCHAR', ''),
+                'role_cat_icon'    => array('VCHAR', ''),
             ),
             'PRIMARY_KEY'    => 'role_pkid',
             'KEYS'         => array('bbroles'    => array('UNIQUE', array('game_id', 'role_id'))),

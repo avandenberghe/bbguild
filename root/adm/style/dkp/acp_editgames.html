@@ -35,6 +35,13 @@
     <fieldset>
         <legend>{L_ACP_GAMESETTINGS}</legend>
         <dl>
+            <dt><label for="game_name">{L_GAME}:</label>{L_GAME_NAME_EXPLAIN}</dt>
+            <dd><input class="medium" type="text" name="game_name" id="game_name" value="{GAME_NAME}" /><br />
+            </dd>
+        </dl>
+
+
+        <dl>
             <dt><label for="imagename">{L_CLASS_IMAGE}:</label>{GAMEIMAGEEXPLAIN}</dt>
             <dd><input class="medium" type="text" name="imagename" id="imagename" value="{GAMEIMAGE}" /><br />
                 <!-- IF S_GAMEIMAGE_EXISTS --><img src="{GAMEPATH}" alt="{GAMEIMAGE}" /><!-- ENDIF -->
@@ -79,7 +86,6 @@
 
             <thead>
             <tr>
-                <th style="text-align:left; width: 10%">{L_GAME}</th>
                 <th style="text-align:left; width: 10%">{L_FACTIONID}</th>
                 <th style="text-align:left; width: 70%">{L_FACTION}</th>
                 <th style="text-align:center; width: 5%">{L_ACTION}</th>
@@ -92,9 +98,8 @@
                 <!-- ELSE -->
             <tr class="row2">
                 <!-- ENDIF -->
-                <td><input type="text" name="factiongame[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONGAME}"/></td>
                 <td><input type="text" name="factionid[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONID}"/></td>
-                <td><input type="text" name="factionname[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONNAME}"/></td>
+                <td><input type="text" name="factionname[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONNAME}" class="full" /></td>
                 <td><a href="{faction_row.U_DELETE}">{ICON_DELETE}</a></td>
             </tr>
             <!-- END faction_row -->
@@ -123,7 +128,6 @@
         <table cellspacing="1">
             <thead>
             <tr>
-                <th style="text-align: left; width: 15%"><a href="{U_ADD_GAMES}&amp;o={O_RACEGAMEID}&amp;">{L_GAME}</a></th>
                 <th style="text-align: left; width: 10%"><a href="{U_ADD_GAMES}&amp;o={O_RACEID}&amp;">{L_RACEID}</a></th>
                 <th style="text-align: left; width: 25%"><a href="{U_ADD_GAMES}&amp;o={O_RACENAME}&amp;">{L_RACE}</a></th>
                 <th style="text-align: left; width: 15%">{L_MALE}</th>
@@ -139,11 +143,10 @@
                 <!-- ELSE -->
             <tr class="row2">
                 <!-- ENDIF -->
-                <td>{race_row.GAME}</td>
                 <td>{race_row.RACEID}</td>
                 <td><a href="{race_row.U_EDIT}">{race_row.RACENAME}</a></td>
-                <td><!-- IF race_row.S_RACE_IMAGE_M_EXISTS -->  <img src="{race_row.RACE_IMAGE_M}" alt="{race_row.RACE_IMAGE_M}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
-                <td><!-- IF race_row.S_RACE_IMAGE_F_EXISTS -->  <img src="{race_row.RACE_IMAGE_F}" alt="{race_row.RACE_IMAGE_F}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
+                <td><!-- IF race_row.S_RACE_IMAGE_M_EXISTS -->  <img style="vertical-align: middle;" src="{race_row.RACE_IMAGE_M}" alt="{race_row.RACE_IMAGE_M}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
+                <td><!-- IF race_row.S_RACE_IMAGE_F_EXISTS -->  <img style="vertical-align: middle;" src="{race_row.RACE_IMAGE_F}" alt="{race_row.RACE_IMAGE_F}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
                 <td>{race_row.FACTIONNAME}</td>
                 <td  style="white-space: nowrap;">
                     <a href="{race_row.U_DELETE}">{ICON_DELETE}</a>
@@ -152,7 +155,7 @@
             </tr>
             <!-- END race_row -->
             <tr>
-                <th colspan="7" class="footer">{LISTRACE_FOOTCOUNT}</th>
+                <th colspan="6" class="footer">{LISTRACE_FOOTCOUNT}</th>
             </tr>
             </tbody>
         </table>
@@ -167,14 +170,15 @@
         <p>{L_ACP_ROLES_EXPLAIN}</p>
 
         <!-- IF .role_row -->
-        <table width="50%" cellspacing="1">
+        <table cellspacing="1">
             <thead>
             <tr>
-                <th style="text-align:left; width: 10%">{L_ID}</th>
-                <th style="text-align:left; width: 50%">{L_RAIDROLE}</th>
-                <th style="text-align:left; width: 20%">{L_COLOR}</th>
-                <th style="text-align:left; width: 15%">{L_ROLEICON}</th>
-                <th style="text-align:center; width: 5%">{L_ACTION}</th>
+                <th style="text-align:left; vertical-align: middle; width:5%">{L_ID}</th>
+                <th style="text-align:left; vertical-align: middle;width:28%">{L_ROLE}</th>
+                <th style="text-align:left; vertical-align: middle;width:18%">{L_ROLE_COLOR}</th>
+                <th style="text-align:left; vertical-align: middle;width:22%">{L_ROLE_ICON}</th>
+                <th style="text-align:left; vertical-align: middle; width:22%">{L_ROLE_CAT_ICON}</th>
+                <th style="text-align:center; vertical-align: middle; width:5%">{L_ACTION}</th>
             </tr>
             </thead>
             <tbody>
@@ -184,28 +188,28 @@
                 <!-- ELSE -->
             <tr class="row2">
                 <!-- ENDIF -->
-                <td><input type="text" name="rolename[{role_row.ROLE_ID}]"  maxlength="255" value="{role_row.ROLENAME}" class="autowidth" /></td>
-                <td><input type="text" name="role_color[{role_row.ROLE_ID}]"  maxlength="255" value="{role_row.ROLECOLOR}" class="medium"/></td>
-                <td><input type="text" name="role_icon[{role_row.ROLE_ID}]"  maxlength="255" value="{role_row.ROLEICON}" class="medium"/>
-                    <!-- IF role_row.S_ROLE_ICON_EXISTS --><img src="{role_row.ROLE_ICON}" alt="image" /><!-- ENDIF -->
-                </td>
+                <td><input style="vertical-align: middle; width:90%" type="text" name="rolename[{role_row.ROLE_ID}]"  length="2" value="{role_row.ROLE_ID}"  /></td>
+                <td><input style="vertical-align: middle;width:90%" type="text" name="rolename[{role_row.ROLE_ID}]"  maxlength="255" value="{role_row.ROLE_NAME}" class="full" /></td>
+                <td style="background-color: {role_row.ROLE_COLOR}"><input style="vertical-align: middle;width:95%" type="text" name="role_color[{role_row.ROLE_ID}]"  maxlength="50" value="{role_row.ROLE_COLOR}" /></td>
+                <td><input style="vertical-align: middle;width:60%" type="text" name="role_icon[{role_row.ROLE_ID}]"  maxlength="50" value="{role_row.ROLE_ICON}" /><!-- IF role_row.S_ROLE_ICON_EXISTS -->&nbsp;<img style="vertical-align: middle;" src="{role_row.U_ROLE_ICON}" alt="image" /><!-- ENDIF --></td>
+                <td><input style="vertical-align: middle;width:60%" type="text" name="role_cat_icon[{role_row.ROLE_ID}]"  maxlength="50" value="{role_row.ROLE_CAT_ICON}" /><!-- IF role_row.S_ROLE_CAT_ICON_EXISTS -->&nbsp;<img style="vertical-align: middle;" src="{role_row.U_ROLE_CAT_ICON}" alt="image" /><!-- ENDIF --></td>
                 <td><a href="{role_row.U_DELETE}">{ICON_DELETE}</a></td>
             </tr>
             <!-- END role_row -->
 
             <tr>
-                <th colspan="4" class="footer">{LISTFROLES_FOOTCOUNT}</th>
+                <th colspan="6" class="footer">{LISTFROLES_FOOTCOUNT}</th>
             </tr>
             </tbody>
         </table>
-        <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+        <fieldset class="quick" style="float:{S_CONTENT_FLOW_END};">
             <input type="submit" name="rolessave" id="rolessave" value="{L_SUBMIT}" class="button1" />
             &nbsp;
             <input class="button2" type="reset" id="rolereset" name="rolereset" value="{L_RESET}" />
             {S_FORM_TOKEN}
         </fieldset>
         <!-- ENDIF -->
-        <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+        <fieldset class="quick" style="float:{S_CONTENT_FLOW_BEGIN};">
             <input class="button2" name="showrolesadd" type="submit" value="{L_ADD}" />
         </fieldset>
 
@@ -220,8 +224,6 @@
         <table cellspacing="1">
             <thead>
             <tr>
-
-                <th  style="text-align: left; width: 15%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSGAMEID}&amp;">{L_GAME}</a></th>
                 <th  style="text-align: left; width: 5%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSID}">{L_CLASSID}</a></th>
                 <th  style="text-align: left; width: 15%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSNAME}">{L_CLASS}</a></th>
                 <th  style="text-align: left; width: 10%"><a href="{U_ADD_GAMES}&amp;o1={O_CLASSNAME}">{L_CLASSIMAGE}</a></th>
@@ -238,10 +240,9 @@
                 <!-- ELSE -->
             <tr class="row2">
                 <!-- ENDIF -->
-                <td>{class_row.GAME}</td>
                 <td>{class_row.CLASSID}</td>
-                <td><strong><a style="color:{class_row.COLORCODE}" href="{class_row.U_EDIT}">{class_row.CLASSNAME}</a></strong></td>
-                <td><!-- IF class_row.S_CLASS_IMAGE_EXISTS -->  <img src="{class_row.CLASSIMAGE}" alt="{class_row.CLASSNAME}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> </td>
+                <td style="background-color: {class_row.COLORCODE}"><strong><a href="{class_row.U_EDIT}">{class_row.CLASSNAME}</a></strong></td>
+                <td><!-- IF class_row.S_CLASS_IMAGE_EXISTS -->  <img style="vertical-align: middle;" src="{class_row.CLASSIMAGE}" alt="{class_row.CLASSNAME}" />  <!-- ELSE -->{L_NO_IMAGE}<!-- ENDIF --> {class_row.CLASSIMGSIZE}</td>
                 <td>{class_row.CLASSARMOR}</td>
                 <td>{class_row.CLASSMIN}</td>
                 <td>{class_row.CLASSMAX}</td>
@@ -251,7 +252,7 @@
             </tr>
             <!-- END class_row -->
             <tr>
-                <th colspan="8" class="footer">{LISTCLASS_FOOTCOUNT}</th>
+                <th colspan="7" class="footer">{LISTCLASS_FOOTCOUNT}</th>
             </tr>
             </tbody>
         </table>

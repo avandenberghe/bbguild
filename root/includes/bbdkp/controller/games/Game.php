@@ -408,6 +408,7 @@ class Game
         $query = $db->sql_build_array('UPDATE', array(
             'imagename'      => substr($this->imagename, 0, 20) ,
             'armory_enabled' => $this->armory_enabled,
+            'game_name'      => $this->name,
             'bossbaseurl'    => $this->bossbaseurl,
             'zonebaseurl'    => $this->zonebaseurl
         ));

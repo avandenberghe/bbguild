@@ -325,10 +325,11 @@ $lang = array_merge($lang, array(
 'SYNCDKP_EXPLAIN' => 'Truncates the member DKP Table, rebuilds the values from the source Raid, Raid detail, Items, Adjustments table. Use only when necessary.',
 'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Here you can configure the Points system for your Guild.',
 'ACP_NEWGAME_EXPLAIN' => 'Here you can add new custom or preconfigured MMO games and maintain your installed games.',
-'ACP_EDITGAME_EXPLAIN' => 'Here you can edit the static elements of any MMO game: Factions, classes, races. <br /><em>Currently not included are professions, skills, PVP, and geography including raids, dungeons and bosses.</em>',
+'ACP_EDITGAME_EXPLAIN' => 'Here you can edit the static elements of any MMO game: Factions, Races, Roles, Classes  <br />',
 'ACP_GAME_EXPLAIN' => 'Here you can reset a game to its default settings or delete a game.',
 'ACP_GAME_RESET' => 'Reset the game settings. ',
 'ACP_GAME_DELETE' => 'Delete this game.',
+'GAME_NAME_EXPLAIN' => 'Name of the Game',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'You do not have permission to add events.',
@@ -601,7 +602,7 @@ $lang = array_merge($lang, array(
 'WARNING_BATTLENET' => 'Updating all members from Battle.NET Character API may take several minutes. Please confirm.',
 'ERROR_ARMORY_DOWN' => 'Error: Could not connect to Battle.NET API',
 'GUILD_EMBLEM_NF' => 'Guild emblem not found',
-
+'IMAGESIZE_WARNING' => 'Warning, width/height sould be max 32/32px, you have %s/%s',
 //Curl errors
 'ERR_UNKNOWN' => 'Unknown error occurred.',
 'CURL_REQUIRED' => 'Curl is required for SDK usage.',
@@ -960,7 +961,9 @@ $lang = array_merge($lang, array(
 'OVERRIDE' => 'Override',
 'RACE_IMAGE' => 'Race imagename small',
 'RACE_IMAGE_EXPLAIN' => 'race imagename, without extension. png file should exist in /images/bbdkp/race_images',
-
+'ROLE_COLOR' => 'Role Color',
+'ROLE_ICON' => 'Role Icon',
+'ROLE_CAT_ICON' => 'Role Category Icon',
 'RESULTS' => '%d Results (%s)',
 'SEARCH' => 'Search',
 'SEARCH_MEMBERS' => 'Search Members',

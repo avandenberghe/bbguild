@@ -100,9 +100,11 @@ class Admin
 				);
 
 		$this->languagecodes = array(
-				'de' => $user->lang['LANG_DE'] ,
-				'en' => $user->lang['LANG_EN'] ,
-				'fr' => $user->lang['LANG_FR']);
+				'de' => $user->lang['LANG_DE'],
+				'en' => $user->lang['LANG_EN'],
+				'fr' => $user->lang['LANG_FR'],
+                'it' => $user->lang['LANG_IT']
+        );
 
 	    $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
 

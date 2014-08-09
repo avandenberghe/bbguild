@@ -41,6 +41,10 @@ if (!class_exists('\bbdkp\controller\games\Races'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/games/races/Races.$phpEx");
 }
+if (!class_exists('\bbdkp\controller\games\Roles'))
+{
+    require("{$phpbb_root_path}includes/bbdkp/controller/games/roles/Roles.$phpEx");
+}
 if (!class_exists('\bbdkp\controller\games\Game'))
 {
 	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
@@ -207,7 +211,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 				$editgame = new \bbdkp\controller\games\Game;
 				$editgame->game_id = request_var(URI_GAME, request_var ( 'hidden_game_id','' ));
-				$editgame->Get();
+                $editgame->Get();
 
 				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$editgame->game_id}" ) . '"><h3>' .
 						$user->lang ['RETURN_GAMEVIEW'] . '</h3></a>';
@@ -402,6 +406,8 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $editgame->setArmoryEnabled(request_var('enable_armory', 0));
         $editgame->setBossbaseurl(request_var('bossbaseurl','' ));
         $editgame->setZonebaseurl(request_var('zonebaseurl','' ));
+        $editgame->setName(utf8_normalize_nfc (request_var ( 'game_name', ' ', true )));
+
         $editgame->update();
     }
 
@@ -423,7 +429,6 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             $editgame->install();
             meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames"));
             trigger_error(sprintf($user->lang ['ADMIN_RESET_GAME_SUCCESS'], $editgame->getName()) . $this->link, E_USER_WARNING);
-
         }
         else
         {
@@ -811,15 +816,15 @@ class acp_dkp_game extends \bbdkp\admin\Admin
     {
         global $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $user;
 
-        $listraces          = new \bbdkp\controller\games\Races();
-        $listraces->race_id = request_var('id', 0);
-        $listraces->game_id = $editgame->game_id;
-        $listraces->get();
+        $races = new \bbdkp\controller\games\Races();
+        $races->race_id = request_var('id', 0);
+        $races->game_id = $editgame->game_id;
+        $races->get();
         foreach ($this->gamelist as $key => $gamename)
         {
             $template->assign_block_vars('game_row', array(
                 'VALUE'    => $key,
-                'SELECTED' => ($listraces->game_id == $key) ? ' selected="selected"' : '',
+                'SELECTED' => ($races->game_id == $key) ? ' selected="selected"' : '',
                 'OPTION'   => $gamename));
         }
         // faction dropdown
@@ -829,21 +834,39 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $s_faction_options = '';
         foreach ($fa as $faction_id => $faction)
         {
-            $selected = ($faction_id == $listraces->race_faction_id) ? ' selected="selected"' : '';
+            $selected = ($faction_id == $races->race_faction_id) ? ' selected="selected"' : '';
             $s_faction_options .= '<option value="' . $faction['faction_id'] . '" ' . $selected . '> ' . $faction['faction_name'] . '</option>';
         }
         unset($listfactions);
+
+        $femalesize = getimagesize($phpbb_root_path . "images/bbdkp/race_images/" . $races->image_female . ".png" , $info);
+        $malesize = getimagesize($phpbb_root_path . "images/bbdkp/race_images/" . $races->image_male . ".png" , $info);
+        $femalesizewarning ='';
+        $malesizewarning ='';
+        if($femalesize[0] > 32 || $femalesize[0] >32)
+        {
+            $femalesizewarning = sprintf($user->lang['IMAGESIZE_WARNING'], $femalesize[0], $femalesize[1]);
+        }
+        if($malesize[0] > 32 || $femalesize[0] >32)
+        {
+            $malesizewarning = sprintf($user->lang['IMAGESIZE_WARNING'], $malesize[0], $malesize[1]);
+        }
+
+
         // send parameters to template
         $template->assign_vars(array(
-            'GAME_ID'               => $listraces->game_id,
-            'RACE_ID'               => $listraces->race_id,
-            'RACE_NAME'             => $listraces->race_name,
-            'RACE_IMAGENAME_M'      => $listraces->image_male,
-            'RACE_IMAGE_M'          => (strlen($listraces->image_male) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $listraces->image_male . ".png" : '',
-            'RACE_IMAGENAME_F'      => $listraces->image_female,
-            'RACE_IMAGE_F'          => (strlen($listraces->image_female) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $listraces->image_female . ".png" : '',
-            'S_RACE_IMAGE_M_EXISTS' => (strlen($listraces->image_male) > 1) ? true : false,
-            'S_RACE_IMAGE_F_EXISTS' => (strlen($listraces->image_female) > 1) ? true : false,
+            'GAME_ID'               => $races->game_id,
+            'GAME_NAME'             => $editgame->getName(),
+            'RACE_ID'               => $races->race_id,
+            'RACE_NAME'             => $races->race_name,
+            'RACE_IMAGENAME_M'      => $races->image_male,
+            'FIMAGEWARNING'         => $femalesizewarning,
+            'MIMAGEWARNING'         => $malesizewarning,
+            'RACE_IMAGE_M'          => (strlen($races->image_male) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $races->image_male . ".png" : '',
+            'RACE_IMAGENAME_F'      => $races->image_female,
+            'RACE_IMAGE_F'          => (strlen($races->image_female) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $races->image_female . ".png" : '',
+            'S_RACE_IMAGE_M_EXISTS' => (strlen($races->image_male) > 1) ? true : false,
+            'S_RACE_IMAGE_F_EXISTS' => (strlen($races->image_female) > 1) ? true : false,
             'S_FACTIONLIST_OPTIONS' => $s_faction_options,
             'S_ADD'                 => false,
             'LA_ALERT_AJAX' => $user->lang ['ALERT_AJAX'],
@@ -851,7 +874,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             'UA_FINDFACTION' => append_sid ( $phpbb_admin_path . "style/dkp/findfaction.$phpEx" ),
             'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addrace'),
             'MSG_NAME_EMPTY'        => $user->lang ['FV_REQUIRED_NAME']));
-        unset($listraces);
+        unset($races);
 
         $this->page_title = 'ACP_LISTGAME';
         $this->tpl_name = 'dkp/acp_addrace';
@@ -866,37 +889,50 @@ class acp_dkp_game extends \bbdkp\admin\Admin
     {
         global $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $user;
 
-        $listclasses           = new \bbdkp\controller\games\Classes;
-        $listclasses->class_id = request_var('id', 0);
-        $listclasses->game_id  = $editgame->game_id;
+        $GameClass           = new \bbdkp\controller\games\Classes;
+        $GameClass->class_id = request_var('id', 0);
+        $GameClass->game_id  = $editgame->game_id;
+        $GameClass->Get();
+
         // list installed games
         foreach ($this->gamelist as $key => $gamename)
         {
             $template->assign_block_vars('game_row', array(
                 'VALUE'    => $key,
-                'SELECTED' => ($listclasses->game_id == $key) ? ' selected="selected"' : '',
+                'SELECTED' => ($GameClass->game_id == $key) ? ' selected="selected"' : '',
                 'OPTION'   => $gamename));
         }
+
         //list armor types
         $s_armor_options = '';
-        foreach ($listclasses->armortypes as $armor => $armorname)
+        foreach ($GameClass->armortypes as $armor => $armorname)
         {
-            $selected = ($armor == $armorname['class_armor_type']) ? ' selected="selected"' : '';
+            $selected = ($armor == $GameClass->armor_type) ? ' selected="selected"' : '';
             $s_armor_options .= '<option value="' . $armor . '" ' . $selected . '> ' . $armorname . '</option>';
         }
-        $cl = $listclasses->listclasses();
+        $size = getimagesize($phpbb_root_path . "images/bbdkp/class_images/" . $GameClass->imagename . ".png" , $info);
+
+        $warning ='';
+        if($size[0] > 32 || $size[0] >32)
+        {
+            $warning = sprintf($user->lang['IMAGESIZE_WARNING'], $size[0], $size[1]);
+        }
+
         $template->assign_vars(array(
-            'GAME_ID'              => $listclasses->game_id,
-            'C_INDEX'              => $cl[$listclasses->class_id]['c_index'],
-            'CLASS_ID'             => $cl[$listclasses->class_id]['class_id'],
-            'CLASS_NAME'           => $cl[$listclasses->class_id]['class_name'],
-            'CLASS_MIN'            => $cl[$listclasses->class_id]['class_min_level'],
-            'CLASS_MAX'            => $cl[$listclasses->class_id]['class_max_level'],
+            'GAME_ID'              => $GameClass->game_id,
+            'GAME_NAME'            => $editgame->getName(),
+            'C_INDEX'              => $GameClass->c_index,
+            'CLASS_ID'             => $GameClass->class_id,
+            'CLASS_NAME'           => $GameClass->classname,
+            'CLASS_MIN'            => $GameClass->min_level,
+            'CLASS_MAX'            => $GameClass->max_level,
             'S_ARMOR_OPTIONS'      => $s_armor_options,
-            'CLASS_IMAGENAME'      => $cl[$listclasses->class_id]['imagename'],
-            'COLORCODE'            => ($cl[$listclasses->class_id]['colorcode'] == '') ? '#254689' : $cl[$listclasses->class_id]['colorcode'],
-            'CLASS_IMAGE'          => (strlen($cl[$listclasses->class_id]['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $cl[$listclasses->class_id]['imagename'] . ".png" : '',
-            'S_CLASS_IMAGE_EXISTS' => (strlen($cl[$listclasses->class_id]['imagename']) > 1) ? true : false,
+            'IMAGESIZE'            => $size[3],
+            'IMAGEWARNING'         => $warning,
+            'CLASS_IMAGENAME'      => $GameClass->imagename,
+            'COLORCODE'            => ($GameClass->colorcode == '') ? '#254689' : $GameClass->colorcode,
+            'CLASS_IMAGE'          => (strlen($GameClass->imagename) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $GameClass->imagename . ".png" : '',
+            'S_CLASS_IMAGE_EXISTS' => (strlen($GameClass->imagename) > 1) ? true : false,
             'S_ADD'                => false,
             'U_ACTION'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addclass'),
             'MSG_NAME_EMPTY'       => $user->lang ['FV_REQUIRED_NAME'],
@@ -1006,26 +1042,33 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 
         // list the roles
+        $sort_order = array (
+            0 => array ('game_id asc, role_id asc', 'game_id desc, role_id asc' ),
+            1 => array ('role_id', 'role_id desc' ),
+            2 => array ('rolename', 'rolename desc' ));
 
-/*        $sql = 'SELECT * FROM ' . RP_ROLES . ' WHERE ORDER BY role_id';
-        $db->sql_query($sql);
-        $result = $db->sql_query($sql);
-        $total_roles = 0;
-        while ( $row = $db->sql_fetchrow($result) )
+        $current_order3 = $this->switch_order ( $sort_order );
+        $total_races = 0;
+        $listroles = new \bbdkp\controller\games\Roles();
+        $listroles->game_id = $editgame->game_id;
+        $total_roles=0;
+        $roles = $listroles->listroles($current_order3 ['sql']);
+        foreach ( $roles as $role_id => $role )
         {
             $total_roles++;
             $template->assign_block_vars('role_row', array(
-                'ROLE_ID' 		=> $row['role_id'],
-                'ROLENAME' 		=> $row['role_name'],
-                'ROLECOLOR' 	=> $row['role_color'],
-                'ROLEICON' 		=> $row['role_icon'],
-                'S_ROLE_ICON_EXISTS'	=>  (strlen($row['role_icon']) > 1) ? true : false,
-                'ROLE_ICON' 	=> (strlen($row['role_icon']) > 1) ? $phpbb_root_path . "images/bbdkp/raidrole_images/" . $row['role_icon'] . ".png" : '',
-                'U_DELETE' 		=> $this->u_action. '&amp;roledelete=1&amp;delrole_id=' . $row['role_id'],
+                'ROLE_ID' 		=> $role['role_id'],
+                'ROLE_NAME' 		=> $role['rolename'],
+                'ROLE_COLOR' 	=> $role['role_color'],
+                'ROLE_ICON' 		=> $role['role_icon'],
+                'S_ROLE_ICON_EXISTS'	=>  (strlen($role['role_icon']) > 0) ? true : false,
+                'U_ROLE_ICON' 	=> (strlen($role['role_icon']) > 0) ? $phpbb_root_path . "images/bbdkp/role_icons/" . $role['role_icon'] . ".png" : '',
+                'ROLE_CAT_ICON' 		=> $role['role_cat_icon'],
+                'S_ROLE_CAT_ICON_EXISTS'	=>  (strlen($role['role_cat_icon']) > 0) ? true : false,
+                'U_ROLE_CAT_ICON' 	=> (strlen($role['role_cat_icon']) > 0) ? $phpbb_root_path . "images/bbdkp/role_icons/" . $role['role_cat_icon'] . ".png" : '',
+                'U_DELETE' 		=> $this->u_action. '&amp;roledelete=1&amp;delrole_id=' . $role['role_id'],
             ));
         }
-        $db->sql_freeresult($result);*/
-
 
 
 		// list the classes
@@ -1066,16 +1109,18 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 		$imgexists = file_exists($phpbb_root_path. 'images/bbdkp/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png');
 
+        //set the other fields
 		$template->assign_vars ( array (
 				'F_ENABLEARMORY' => $editgame->getArmoryEnabled() ,
 				'GAMEIMAGEEXPLAIN' => sprintf($user->lang['GAME_IMAGE_EXPLAIN'], $editgame->game_id),
 				'GAMEIMAGE' => $editgame->getImagename(),
+                'GAME_NAME' => $editgame->getName(),
 				'GAMEPATH' => $phpbb_root_path. 'images/bbdkp/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png',
 				'S_GAMEIMAGE_EXISTS' => (strlen($editgame->getImagename()) > 0 && $imgexists  ) ? true : false,
 				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->getName()  ) ,
                 'BOSSBASEURL' => $editgame->getBossbaseurl(),
                 'ZONEBASEURL' => $editgame->getZonebaseurl(),
-				'GAME_ID' => $editgame->game_id,
+				'GAME_ID' => $editgame->getName(),
 				'URI_GAME' => URI_GAME,
 				'O_RACEGAMEID' => $current_order ['uri'] [0],
 				'O_RACEID' => $current_order ['uri'] [1],

@@ -55,12 +55,20 @@ class Roles extends \bbdkp\controller\games\Game
     public $rolename;
 
     /**
-     * name of image file
+     * name of image file without extension
      * @var unknown
      */
     public $role_icon;
+
+    /**
+     * name of role category icon without extension
+     * @var
+     */
+    public $role_cat_icon;
+
     /**
      * class color hex
+     * used in raid planner
      * @var string
      */
     public $role_color;
@@ -74,6 +82,7 @@ class Roles extends \bbdkp\controller\games\Game
         $this->role_id = 0;
         $this->rolename = '';
         $this->role_icon = '';
+        $this->role_cat_icon = '';
         $this->role_color = '';
     }
 
@@ -96,7 +105,7 @@ class Roles extends \bbdkp\controller\games\Game
         global $db, $config;
 
         $sql_array = array (
-            'SELECT' => ' r.role_pkid, r.game_id, l.name AS rolename, r.role_icon, r.role_color ',
+            'SELECT' => ' r.role_pkid, r.game_id, l.name AS rolename, r.role_icon, r.role_cat_icon, r.role_color ',
             'FROM' => array (
                 BB_GAMEROLE_TABLE => 'r', BB_LANGUAGE => 'l' ),
             'WHERE' => " c.role_id = l.attribute_id
@@ -114,6 +123,7 @@ class Roles extends \bbdkp\controller\games\Game
             $this->role_id = (int) $row['role_id'];
             $this->rolename = (string) $row['rolename'];
             $this->role_icon = (string) $row['role_icon'];
+            $this->role_cat_icon = (string) $row['role_cat_icon'];
             $this->role_color = (string) $row['role_color'];
         }
         $db->sql_freeresult ( $result );
@@ -142,6 +152,7 @@ class Roles extends \bbdkp\controller\games\Game
             'game_id' => ( string ) $this->game_id,
             'role_id' => ( int ) $this->role_id,
             'role_icon' => $this->role_icon,
+            'role_cat_icon' => $this->role_cat_icon,
             'role_color' => $this->role_color );
 
         $db->sql_transaction ( 'begin' );
@@ -191,6 +202,7 @@ class Roles extends \bbdkp\controller\games\Game
             'game_id' => ( string ) $this->game_id,
             'role_id' => ( int ) $this->role_id,
             'role_icon' => $this->role_icon,
+            'role_cat_icon' => $this->role_cat_icon,
             'role_color' => $this->role_color );
 
         $db->sql_transaction ( 'begin' );
@@ -252,7 +264,7 @@ class Roles extends \bbdkp\controller\games\Game
         $sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE attribute = 'role' AND game_id = '" . $this->game_id . "'";
         $db->sql_query ($sql);
 
-        $cache->destroy ( 'sql', CLASS_TABLE );
+        $cache->destroy ( 'sql', BB_GAMEROLE_TABLE );
         $cache->destroy ( 'sql', BB_LANGUAGE );
     }
 
@@ -265,25 +277,20 @@ class Roles extends \bbdkp\controller\games\Game
      * @param int|number $mode
      * @return array
      */
-    public function listroles($order= 'role_id', $mode = 0)
+    public function listroles($order= 'role_id')
     {
         global $db, $config;
 
         $sql_array = array (
-            'SELECT' => ' r.game_id, r.role_pkid, r.role_id, l.name AS rolename, r.role_icon, r.role_color, g.game_name ',
+            'SELECT' => ' r.game_id, r.role_pkid, r.role_id, l.name AS rolename, r.role_icon, r.role_cat_icon, r.role_color, g.game_name ',
             'FROM' => array (
-                CLASS_TABLE => 'c',
+                BB_GAMEROLE_TABLE => 'r',
                 BB_LANGUAGE => 'l',
                 BBGAMES_TABLE => 'g' ),
-            'WHERE' => " r.class_id = l.attribute_id AND r.game_id = g.game_id
+            'WHERE' => " r.role_id = l.attribute_id AND r.game_id = g.game_id
                             AND r.game_id = l.game_id AND l.game_id = '" . $db->sql_escape ( $this->game_id ) . "'
 							AND l.attribute='role' AND l.language= '" . $config ['bbdkp_lang'] . "'",
-            'ORDER_BY' => $order );
-
-        if($mode == 0)
-        {
-            $sql_array['WHERE'] .=	'AND r.role_id = ' . $this->role_id;
-        }
+            'ORDER_BY' => $order);
 
         $sql = $db->sql_build_query ( 'SELECT', $sql_array );
         $result = $db->sql_query ( $sql );
@@ -296,6 +303,7 @@ class Roles extends \bbdkp\controller\games\Game
                 'role_id'       => (int) $row['role_id'],
                 'rolename'      => (string) $row['rolename'],
                 'role_icon'     => (string) $row['role_icon'],
+                'role_cat_icon'     => (string) $row['role_cat_icon'],
                 'role_color'    => (string) $row['role_color'],
             );
         }

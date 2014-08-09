@@ -139,7 +139,7 @@ function isValidChar(char, e){
     <!-- ENDIF -->
 
     <dl>
-	    <dt><label for="game_id">{L_GAME}:</label><br /> {L_GAME_CLASSRACEUPDATE_EXPLAIN}</dt>
+	    <dt><label>{L_GAME}:</label><br /> {L_GAME_CLASSRACEUPDATE_EXPLAIN}</dt>
 	  		<dd>
 	      	{GAME_NAME}
 	      </dd>
@@ -175,11 +175,13 @@ function isValidChar(char, e){
 			<tr>
 			<td>{L_MALE}&nbsp;</td>
 			<td><input class="medium" type="text" id="image_male" name="image_male" value="{RACE_IMAGENAME_M}" />
-			<!-- IF S_RACE_IMAGE_M_EXISTS --><img src="{RACE_IMAGE_M}" alt="{RACE_IMAGE_M}" />  <!-- ENDIF --></td></tr>
+			<!-- IF S_RACE_IMAGE_M_EXISTS -->&nbsp;<img style="vertical-align: middle;" src="{RACE_IMAGE_M}" alt="{RACE_IMAGE_M}" />  <!-- ENDIF --> <br/><span style="color: red">{MIMAGEWARNING}</span></td>
+            </tr>
 			<tr>
 			<td>{L_FEMALE}&nbsp;</td>
 			<td><input class="medium" type="text" id="image_female" name="image_female" value="{RACE_IMAGENAME_F}" />
-			<!-- IF S_RACE_IMAGE_F_EXISTS --><img src="{RACE_IMAGE_F}" alt="{RACE_IMAGE_F}" />  <!-- ENDIF --></td></tr>
+			<!-- IF S_RACE_IMAGE_F_EXISTS -->&nbsp;<img style="vertical-align: middle;" src="{RACE_IMAGE_F}" alt="{RACE_IMAGE_F}" />  <!-- ENDIF --> <br/><span style="color: red">{FIMAGEWARNING}</span></td>
+            </tr>
 			</table>
 		</dd>
 	</dl>
