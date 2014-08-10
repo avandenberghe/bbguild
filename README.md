@@ -92,7 +92,7 @@ Find support and more on
 
 ## Changelog 
 
-1.3.1 04-08-2014
+1.3.1 08-2014
 
 -	[CHG] Repackaging 
 -	[CHG] #247 moved all js to subfolder /template/dkp/js 
