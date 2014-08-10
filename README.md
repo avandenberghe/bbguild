@@ -23,7 +23,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 
 ## Current
 
-1.3.1
+1.3.1-dev
 
 ## Installation
 
