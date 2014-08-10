@@ -36,7 +36,12 @@ if (!class_exists('\bbdkp\controller\games\GameInstall'))
  */
 class install_warhammer extends GameInstall
 {
-	/**
+
+    protected $bossbaseurl = ' ';
+    protected $zonebaseurl = ' ';
+
+
+    /**
 	 * Installs factions
 	 */
     protected function Installfactions()
@@ -45,7 +50,7 @@ class install_warhammer extends GameInstall
 		
 		// factions
 		unset ($sql_ary);
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " WHERE game_id = $this->game_id" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " WHERE game_id = '" . $this->game_id . "'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 1, 'faction_name' => 'Order' );
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 2, 'faction_name' => 'Destruction' );
@@ -201,7 +206,7 @@ class install_warhammer extends GameInstall
 		 
 		$db->sql_multi_insert(  RACE_TABLE , $sql_ary);
 		
-		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  WHERE game_id = $this->game_id AND attribute = 'race' ");
+		$db->sql_query('DELETE FROM ' . BB_LANGUAGE . "  WHERE game_id = '" . $this->game_id . "' AND attribute = 'race' ");
 		unset ( $sql_ary );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 0, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Unknown' ,  'name_short' =>  'Unknown' );
 		$sql_ary[] = array( 'game_id' => $this->game_id,'attribute_id' => 1, 'language' =>  'en' , 'attribute' =>  'race' , 'name' =>  'Dwarf' ,  'name_short' =>  'Dwarf' );
@@ -256,7 +261,8 @@ class install_warhammer extends GameInstall
     protected function InstallRoles()
     {
 
-        global $umil, $db;
+        global $db;
+        $umil = new \umil();
         $db->sql_query('DELETE FROM ' .  BB_GAMEROLE_TABLE . " WHERE role_id < 3 and game_id = '" . $this->game_id . "'");
 
         $umil->table_row_insert(BB_GAMEROLE_TABLE, array(

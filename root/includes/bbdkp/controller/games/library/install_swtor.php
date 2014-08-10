@@ -135,6 +135,8 @@ class install_swtor extends GameInstall
 		$sql_ary [] = array ('game_id' => $this->game_id,'race_id' => 6, 'race_faction_id' => 3, 'image_female' => 'swtor_chiss_female',  'image_male' => 'swtor_chiss_male'  );
 		$sql_ary [] = array ('game_id' => $this->game_id,'race_id' => 7, 'race_faction_id' => 3, 'image_female' => 'swtor_rattataki_female',  'image_male' => 'swtor_rattataki_male' );
 		$sql_ary [] = array ('game_id' => $this->game_id,'race_id' => 8, 'race_faction_id' => 3, 'image_female' => 'swtor_redsith_female',  'image_male' => 'swtor_redsith_male' );
+        $sql_ary [] = array ('game_id' => $this->game_id,'race_id' => 9, 'race_faction_id' => 3, 'image_female' => 'swtor_cathar_female',  'image_male' => 'swtor_cathar_male' );
+        $sql_ary [] = array ('game_id' => $this->game_id,'race_id' => 10, 'race_faction_id' => 3, 'image_female' => 'swtor_cyborg_female',  'image_male' => 'swtor_cyborg_male' );
 		$db->sql_multi_insert ( RACE_TABLE , $sql_ary);
 		unset ( $sql_ary );
 		
@@ -152,8 +154,8 @@ class install_swtor extends GameInstall
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 6, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Chiss' ,  'name_short' =>  'Chiss' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Rattataki' ,  'name_short' =>  'Rattataki' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Red Siths' ,  'name_short' =>  'Siths' );
-        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Cathar' ,  'name_short' =>  'Cathar' );
-        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Cyborg' ,  'name_short' =>  'Cyborg' );
+        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 9, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Cathar' ,  'name_short' =>  'Cathar' );
+        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 10, 'language' => 'en' , 'attribute' =>  'race' , 'name' =>  'Cyborg' ,  'name_short' =>  'Cyborg' );
 		
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'unbekannt' ,  'name_short' =>  'T7-01' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 1, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Miraluka' ,  'name_short' =>  'Miraluka' );
@@ -164,8 +166,8 @@ class install_swtor extends GameInstall
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 6, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Chiss' ,  'name_short' =>  'Chiss' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Rattataki' ,  'name_short' =>  'Rattataki' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Reinblütige Sith' ,  'name_short' =>  'Sith' );
-        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Cathar' ,  'name_short' =>  'Cathar' );
-        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Cyborg' ,  'name_short' =>  'Cyborg' );
+        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 9, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Cathar' ,  'name_short' =>  'Cathar' );
+        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 10, 'language' => 'de' , 'attribute' =>  'race' , 'name' =>  'Cyborg' ,  'name_short' =>  'Cyborg' );
 
         $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 0, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'unbekannt' ,  'name_short' =>  'T7-01' );
         $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 1, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Miraluka' ,  'name_short' =>  'Miraluka' );
@@ -176,8 +178,8 @@ class install_swtor extends GameInstall
         $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 6, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Chiss' ,  'name_short' =>  'Chiss' );
         $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 7, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Rattataki' ,  'name_short' =>  'Rattataki' );
         $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Sith au sang pur' ,  'name_short' =>  'Sith' );
-        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Cathar' ,  'name_short' =>  'Cathar' );
-        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 8, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Cyborg' ,  'name_short' =>  'Cyborg' );
+        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 9, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Cathar' ,  'name_short' =>  'Cathar' );
+        $sql_ary[] = array('game_id' => $this->game_id, 'attribute_id' => 10, 'language' => 'fr' , 'attribute' =>  'race' , 'name' =>  'Cyborg' ,  'name_short' =>  'Cyborg' );
 
 		$db->sql_multi_insert ( BB_LANGUAGE , $sql_ary );
 		unset ( $sql_ary );
@@ -255,7 +257,8 @@ class install_swtor extends GameInstall
      */
     protected function InstallRoles()
     {
-        global $umil, $db;
+        global $db;
+        $umil = new \umil();
         $db->sql_query('DELETE FROM ' .  BB_GAMEROLE_TABLE . " WHERE game_id = '" . $this->game_id . "'");
 
         $umil->table_row_insert(BB_GAMEROLE_TABLE, array(

@@ -49,7 +49,7 @@ class install_eq extends GameInstall
 	{
 		global  $db;
 		// Everquest factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = $this->game_id" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = '". $this->game_id . "'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id, 'faction_id' => 1, 'faction_name' => 'Good' );
 		$sql_ary[] = array('game_id' => $this->game_id, 'faction_id' => 2, 'faction_name' => 'Evil' );
@@ -187,7 +187,8 @@ class install_eq extends GameInstall
     protected function InstallRoles()
     {
 
-        global $umil, $db;
+        global $db;
+        $umil = new \umil();
         $db->sql_query('DELETE FROM ' .  BB_GAMEROLE_TABLE . " WHERE role_id < 3 and game_id = '" . $this->game_id . "'");
 
         $umil->table_row_insert(BB_GAMEROLE_TABLE, array(

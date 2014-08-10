@@ -95,6 +95,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $sort_index = explode('.', $current_order['uri']['current']);
         $this->gamelist = $listgames->listgames($current_order['sql']);
 
+        $installed = array();
         foreach( $this->gamelist as $game)
         {
             $installed[$game['game_id']] = $game['name'];
@@ -399,7 +400,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
     private function SaveGameSettings()
     {
         $editgame = new \bbdkp\controller\games\Game;
-        $editgame->game_id = request_var ( 'game_id','' );
+        $editgame->game_id = request_var(URI_GAME, request_var ( 'hidden_game_id','' ));
         $editgame->Get();
 
         $editgame->setImagename(request_var('imagename',''));
@@ -1120,7 +1121,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->getName()  ) ,
                 'BOSSBASEURL' => $editgame->getBossbaseurl(),
                 'ZONEBASEURL' => $editgame->getZonebaseurl(),
-				'GAME_ID' => $editgame->getName(),
+				'GAME_ID' => $editgame->game_id,
 				'URI_GAME' => URI_GAME,
 				'O_RACEGAMEID' => $current_order ['uri'] [0],
 				'O_RACEID' => $current_order ['uri'] [1],

@@ -185,7 +185,8 @@ class install_vanguard extends GameInstall
     protected function InstallRoles()
     {
 
-        global $umil, $db;
+        global $db;
+        $umil = new \umil();
         $db->sql_query('DELETE FROM ' .  BB_GAMEROLE_TABLE . " WHERE role_id < 3 and game_id = '" . $this->game_id . "'");
 
         $umil->table_row_insert(BB_GAMEROLE_TABLE, array(

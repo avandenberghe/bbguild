@@ -48,7 +48,7 @@ class install_lotro extends GameInstall
 		global  $db;
 		
 		// factions
-		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = $this->game_id" );
+		$db->sql_query('DELETE FROM ' . FACTION_TABLE . " where game_id = '" . $this->game_id . "'" );
 		$sql_ary = array();
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 1, 'faction_name' => 'Free Peoples' );
 		$sql_ary[] = array('game_id' => $this->game_id,'faction_id' => 2, 'faction_name' => 'Servants of the Eye' );
@@ -396,7 +396,8 @@ class install_lotro extends GameInstall
     protected function InstallRoles()
     {
 
-        global $umil, $db;
+        global $db;
+        $umil = new \umil();
         $db->sql_query('DELETE FROM ' .  BB_GAMEROLE_TABLE . " WHERE game_id = '" . $this->game_id . "'");
 
         $umil->table_row_insert(BB_GAMEROLE_TABLE, array(

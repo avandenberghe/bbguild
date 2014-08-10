@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.9
+ * @version 1.3.1
  */
 
 // anything lower than php 5.3.3 not supported (we use namespaces since v1.3)
@@ -1040,11 +1040,12 @@ $versions = array(
         array(
             $table_prefix . 'bbdkp_recruit' , array(
             'COLUMNS'        => array(
-                'recruit_pkid'     => array('INT:8', NULL, 'auto_increment'),
+                'id'               => array('INT:8', NULL, 'auto_increment'),
                 'guild_id'		   => array('USINT', 0),
                 'role_id'    	   => array('INT:8', 0),
                 'class_id'         => array('UINT', 0),
-                'needed'	       => array('USINT', 0),
+                'positions'	       => array('USINT', 0),
+                'applicants'	   => array('USINT', 0),
             ),
             'PRIMARY_KEY'          => 'recruit_pkid',
             'KEYS'                 => array('bb_recruit'    => array('UNIQUE', array('guild_id', 'role_id', 'class_id'))),

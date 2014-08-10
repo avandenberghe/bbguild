@@ -17,6 +17,7 @@ if (! defined('IN_PHPBB'))
 {
 	exit();
 }
+include($phpbb_root_path . 'umil/umil.' . $phpEx);
 /**
  * Game interface
  * this abstract class is the framework for all game installers
@@ -117,6 +118,10 @@ abstract class GameInstall
         $classes = new \bbdkp\controller\games\Classes();
         $classes->game_id = $this->game_id;
         $classes->Delete_all_classes();
+
+        $roles = new \bbdkp\controller\games\Roles();
+        $roles->game_id = $this->game_id;
+        $roles->Delete_all_roles();
 
         $sql = 'DELETE FROM ' . BBGAMES_TABLE . " WHERE game_id = '" .   $this->game_id . "'";
         $db->sql_query ($sql);

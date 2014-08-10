@@ -91,13 +91,16 @@ class Admin
 		}
 
 		$this->regions = array(
-				'eu' => $user->lang['REGIONEU'],
-				'us' => $user->lang['REGIONUS'],
-				'tw' => $user->lang['REGIONTW'],
-				'kr' => $user->lang['REGIONKR'],
 				'cn' => $user->lang['REGIONCN'],
+				'eu' => $user->lang['REGIONEU'],
+				'kr' => $user->lang['REGIONKR'],
 				'sea' => $user->lang['REGIONSEA'],
+				'tw' => $user->lang['REGIONTW'],
+				'us' => $user->lang['REGIONUS'],
 				);
+
+        //sort alphabetically
+        asort($this->regions);
 
 		$this->languagecodes = array(
 				'de' => $user->lang['LANG_DE'],
