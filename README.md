@@ -49,9 +49,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 
 #### Upgrading from 1.3.0.x to 1.3.1
 
-1. Unzip the bbDKP-1309.zip file
+1. Unzip the bbDKP-131.zip file
 2. Upload bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there. note that the folder name must be "bbDKP", without version number.
-3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1308_to_1309/update.xml)
+3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1308_to_131/update.xml)
  ![Automod update](http://i.imgur.com/eZww133.png)
 4. Apply the update from Automod "Available Changes" 
   ![Imgur](http://i.imgur.com/1mKPLq5.png)
