@@ -94,17 +94,17 @@ Find support and more on
 
 1.4.0 08-2014
 
--	[CHG] Repackaging 
+-	[NEW] #248 2 new races were added in SWToR : Cyborg and Cathar. they should be included in the installer.
 -	[CHG] #247 moved all js to subfolder /template/dkp/js 
--	[CHG] #246 Added Sliders to statistics page, for easier navigation
+-	[NEW] #246 Added Sliders to statistics page, for easier navigation
 -	[FIX] missing language entries in german/french
--	[CHG] #240 update Aion game parameters game 
+-	[NEW] #240 update Aion game parameters game 
 -	[CHG] #239 added correct classpath to rpblocks class in class_exists checker in block factory
 -	[NEW] #226 new Roles & Recruitment class/table 
 -	[CHG] #223 deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
--	[CHG] #212 added Italian translation
--	[CHG] #196 Implemented Guildwars Guild API
--	[CHG] #192 Can now unlink a character from UCP
+-	[NEW] #212 added Italian translation
+-	[NEW] #196 Implemented Guildwars Guild API
+-	[NEW] #192 Can now unlink a character from UCP
 
 1.3.0.8 01-07-2014
 
