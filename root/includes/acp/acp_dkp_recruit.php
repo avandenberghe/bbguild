@@ -1,6 +1,6 @@
 <?php
 /**
- * Guild ACP file
+ * Recruitment ACP file
  *
  * @package bbdkp
  * @link http://www.bbdkp.com
@@ -46,6 +46,11 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
     require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
 }
 
+//include the Recruitment class
+if (!class_exists('\bbdkp\controller\guilds\Recruitment'))
+{
+    require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Recruitment.$phpEx");
+}
 use \bbdkp\controller\guilds\Guilds;
 
 /**
@@ -192,6 +197,33 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 
                         $this->tpl_name = 'dkp/acp_editguild_ranks';
                         $this->BuildTemplateEditGuildRanks($updateguild);
+                        break;
+
+                    case 'guildrecruitment':
+
+                        $addrecruitment = (isset($_POST['addrecruitment'])) ? true : false;
+                        if ($addrecruitment)
+                        {
+                            if (! check_form_key('editguildrecruitment'))
+                            {
+                                trigger_error('FORM_INVALID');
+                            }
+                        }
+                        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildrecruitment&amp;" . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
+                        $updateroles = (isset($_POST['updateroles'])) ? true : false;
+
+                        if($addrecruitment)
+                        {
+                            $this->AddRole();
+                        }
+
+                        if($updateroles)
+                        {
+                            $this->UpdateRole();
+                        }
+
+                        $this->tpl_name = 'dkp/acp_editguild_recruitment';
+                        $this->BuildTemplateEditGuildRecruitment($updateguild);
                         break;
 
                     default:
@@ -460,6 +492,36 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
     }
 
     /**
+     * insert a row in roles table
+     */
+    private function AddRole()
+    {
+        //
+        $addrole = new \bbdkp\controller\guilds\Roles();
+        $addrole->guild_id = request_var(URI_GUILD, 0);
+        $addrole->role = request_var('recruitrole', '');
+        $addrole->class_id = request_var('recruitclass', 0);
+        $addrole->needed = request_var('recruitneeded', 0);
+        $addrole->make();
+        unset($addrole);
+    }
+
+    /**
+     * Update a role
+     */
+    private function UpdateRole()
+    {
+        $updaterole = new \bbdkp\controller\guilds\Roles();
+        $modroles = utf8_normalize_nfc(request_var('needed', array(0 => 0), true));
+        foreach ($modroles as $id => $needed)
+        {
+            $updaterole->id = $id;
+            $updaterole->needed = $needed;
+            $updaterole->update();
+        }
+    }
+
+    /**
      * @param $updateguild
      */
     private function BuildTemplateEditGuild($updateguild)
@@ -590,6 +652,93 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
         ));
 
         $form_key = 'editguildranks';
+        add_form_key($form_key);
+        $this->page_title = $user->lang['ACP_EDITGUILD'];
+    }
+
+    /**
+     * list the recruitment status per role/class for this guild
+     * @param $updateguild
+     */
+    private function BuildTemplateEditGuildRecruitment($updateguild)
+    {
+        global $phpbb_root_path, $phpEx, $template, $db, $phpbb_admin_path, $user;
+
+        /*
+        while ($row = $db->sql_fetchrow($result))
+        {
+            $role = isset($row['role']) ?
+                (isset($user->lang[$row['role']]) ? $user->lang[$row['role']] : $row['role']) :
+                $listroles->roles['NA'];
+            $current += (int)$classdistribution[$row['class_id']]['classcount'];
+            $needed += (int)isset($row['needed']) ? (int)$row['needed'] : 0;
+            $template->assign_block_vars('roles_row', array(
+                'GUILDID'              => $row['guild_id'],
+                'GAME_ID'              => $row['game_id'],
+                'ROLEID'               => $row['roleid'],
+                'ROLE'                 => $role,
+                'STIJL'                => 'positive',
+                'CLASS_ID'             => $row['class_id'],
+                'CLASS'                => $row['class_name'],
+                'IMAGENAME'            => $row['imagename'],
+                'COLORCODE'            => $row['colorcode'],
+                'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
+                'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
+                'CURRENT'              => $classdistribution[$row['class_id']]['classcount'],
+                'NEEDED'               => isset($row['needed']) ? $row['needed'] : '0',
+                'TARGET'               => (int)$classdistribution[$row['class_id']]['classcount'] + (isset($row['needed']) ? (int)$row['needed'] : 0),
+            ));
+        }
+        $db->sql_freeresult($result);
+        */
+        $game          = new \bbdkp\controller\games\Game;
+        $game->game_id = $updateguild->game_id;
+        $game->Get();
+
+        //print all other static info
+        $template->assign_vars(array(
+            // Form values
+            'S_GUILDLESS'        => ($updateguild->guildid == 0) ? true : false,
+            'F_ENABLGAMEEARMORY' => $game->getArmoryEnabled(),
+            'F_ENABLEARMORY'     => $updateguild->armory_enabled,
+            ///'CURRENT'            => $current,
+            //'NEEDED'             => $needed,
+            // 'TARGET'             => ($current + $needed),
+            'RECSTATUS'          => $updateguild->recstatus,
+            'GAME_ID'            => $updateguild->game_id,
+            'GUILDID'            => $updateguild->guildid,
+            'GUILD_NAME'         => $updateguild->name,
+            'REALM'              => $updateguild->realm,
+            'REGION'             => $updateguild->region,
+            'MEMBERCOUNT'        => $updateguild->membercount,
+            'ARMORY_URL'         => $updateguild->guildarmoryurl,
+            'MIN_ARMORYLEVEL'    => $updateguild->min_armory,
+            'SHOW_ROSTER'        => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
+            'U_ADD_RANK'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;addrank=1&amp;guild=" . $updateguild->guildid),
+            // Language
+            'L_TITLE'            => ($this->url_id < 0) ? $user->lang['ACP_ADDGUILD'] : $user->lang['ACP_EDITGUILD'],
+            'L_EXPLAIN'          => ($this->url_id < 0) ? $user->lang['ACP_ADDGUILD_EXPLAIN'] : $user->lang['ACP_EDITGUILD_EXPLAIN'],
+            'L_ADD_GUILD_TITLE'  => ($this->url_id < 0) ? $user->lang['ADD_GUILD'] : $user->lang['EDIT_GUILD'],
+            // Javascript messages
+            'MSG_NAME_EMPTY'     => $user->lang['FV_REQUIRED_NAME'],
+            'EMBLEM'             => $updateguild->emblempath,
+            'EMBLEMFILE'         => basename($updateguild->emblempath),
+            'S_ADD'              => ($this->url_id < 0) ? true : false,
+            'U_EDIT_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=editguild&amp;" . URI_GUILD . '=' . $updateguild->guildid),
+            'U_EDIT_GUILDRANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildranks&amp;" . URI_GUILD . '=' . $updateguild->guildid),
+            'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildrecruitment&amp;" . URI_GUILD . '=' . $updateguild->guildid)
+        ));
+        // extra
+        if ($updateguild->game_id == 'wow')
+        {
+            $template->assign_vars(array(
+                'S_WOW'  => true,
+                'ARMORY' => $updateguild->guildarmoryurl,
+                'ACHIEV' => $updateguild->achievementpoints,
+            ));
+        }
+
+        $form_key = 'editguildrecruitment';
         add_form_key($form_key);
         $this->page_title = $user->lang['ACP_EDITGUILD'];
     }

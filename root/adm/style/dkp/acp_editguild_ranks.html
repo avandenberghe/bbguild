@@ -10,7 +10,6 @@
         <ul>
             <li class="permissions-preset-yes"><a href="{U_EDIT_GUILD}" onclick=""><span class="tabbg"><span class="colour"></span>{L_EDIT_GUILD}</span></a></li>
             <li class="permissions-preset-never activetab"><a href="{U_EDIT_GUILDRANKS}" onclick=""><span class="tabbg"><span class="colour"></span>{L_EDIT_RANKS}</span></a></li>
-            <li class="permissions-preset-yes"><a href="{U_EDIT_GUILDRECRUITMENT}" onclick=""><span class="tabbg"><span class="colour"></span>{L_RECRUITMENT_BLOCK_SETTING}</span></a></li>
         </ul>
     </div>
 
@@ -125,10 +124,8 @@
                         </dl>
 
                         <fieldset class="quick" style="float: {S_CONTENT_FLOW_END}">
+                            {S_FORM_TOKEN}
                             <input type="submit" name="addrank" value="{L_ADD_RANK}" class="button1"/>
-                            <!-- IF F_ENABLEARMORY == 1 -->
-                            <input type="submit" name="armory" value="{L_ARMORY_GUILD}" class="button1" />
-                            <!-- ENDIF -->
                         </fieldset>
                     </div>
                 </fieldset>

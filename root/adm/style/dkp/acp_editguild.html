@@ -23,7 +23,6 @@
         <ul>
             <li class="permissions-preset-never activetab"><a href="{U_EDIT_GUILD}" onclick=""><span class="tabbg"><span class="colour"></span>{L_EDIT_GUILD}</span></a></li>
             <li class="permissions-preset-yes"><a href="{U_EDIT_GUILDRANKS}" onclick=""><span class="tabbg"><span class="colour"></span>{L_EDIT_RANKS}</span></a></li>
-            <li class="permissions-preset-yes"><a href="{U_EDIT_GUILDRECRUITMENT}" onclick=""><span class="tabbg"><span class="colour"></span>{L_RECRUITMENT_BLOCK_SETTING}</span></a></li>
         </ul>
     </div>
 
@@ -78,33 +77,11 @@
                             <dd>{MEMBERCOUNT}</dd>
                         </dl>
 
-                        <!-- IF S_WOW -->
-                        <dl>
-                            <dt><label for="">{L_ARMORY_URL}:</label></dt>
-                            <dd><a href="{ARMORY_URL}">{ARMORY_URL}</a></dd>
-                        </dl>
-                        <!-- ENDIF -->
-
                         <dl>
                             <dt><label for="showroster">{L_SHOWONROSTER}:</label></dt>
                             <dd style="text-align: left">
                                 <input type="checkbox" style="cursor: default"  id="showroster" name="showroster" value="1" {SHOW_ROSTER} /></dd>
                         </dl>
-                        <!-- IF S_WOW -->
-                        <!-- IF F_ENABLGAMEEARMORY -->
-                        <dl>
-                            <dt><label for="armory_enabled">{L_ARMORY_ENABLED}:</label>{L_ARMORY_ENABLED_GUILD_EXPLAIN}</dt>
-                            <dd>
-                                <input type="radio" name="armory_enabled" value="1"<!-- IF F_ENABLEARMORY == 1 --> checked="checked"<!-- ENDIF -->/> {L_ON}&nbsp;&nbsp;
-                                <input type="radio" name="armory_enabled" value="0"<!-- IF F_ENABLEARMORY == 0 --> checked="checked"<!-- ENDIF -->/> {L_OFF}
-                            </dd>
-                        </dl>
-                        <!-- ENDIF -->
-                        <dl>
-                            <dt><label for="min_armorylevel">{L_MIN_ARMORYLEVEL}</label></dt>
-                            <dd><input type="text" id="min_armorylevel" name="min_armorylevel" class="text" size="5" maxlength="3" value="{MIN_ARMORYLEVEL}" /></dd>
-                        </dl>
-                        <!-- ENDIF -->
                         <dl>
                             <dt style="width: 35%;"><label>{L_RECSTATUS}</label><br />{L_RECRUITMENT_BLOCK_EXPLAIN}
                             </dt>
@@ -113,15 +90,41 @@
                                 <input type="radio" name="switchon_recruitment" value="0"<!-- IF RECSTATUS == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
                             </dd>
                         </dl>
-
-                        <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-                            {S_FORM_TOKEN}
-                            <input type="hidden" name="guild_id" value="{GUILDID}" />
-                            <input type="hidden" name="{URI_GUILD}" value="{GUILD_ID}" />
-                            <input type="submit" name="updateguild" value="{L_UPDATE_GUILD}" class="button1" />
-                            <input type="submit"  name="deleteguild" value="{L_DELETE_GUILD}" class="button2" />
-                        </fieldset>
+                        <hr/>
+                        <!-- IF S_WOW && F_ENABLGAMEEARMORY -->
+                        <dl>
+                            <dt><label>{L_ARMORY_ENABLED}:</label>{L_ARMORY_ENABLED_GUILD_EXPLAIN}</dt>
+                            <dd>
+                                <input type="radio" name="armory_enabled" value="1"<!-- IF F_ENABLEARMORY == 1 --> checked="checked"<!-- ENDIF -->/> {L_ON}&nbsp;&nbsp;
+                                <input type="radio" name="armory_enabled" value="0"<!-- IF F_ENABLEARMORY == 0 --> checked="checked"<!-- ENDIF -->/> {L_OFF}
+                            </dd>
+                        </dl>
+                        <!-- ENDIF -->
+                        <!-- IF F_ENABLEARMORY -->
+                        <dl>
+                            <dt><label>{L_ARMORY_URL}:</label></dt>
+                            <dd><a href="{ARMORY_URL}">{ARMORY_URL}</a></dd>
+                        </dl>
+                        <dl>
+                            <dt><label for="min_armorylevel">{L_MIN_ARMORYLEVEL}</label></dt>
+                            <dd><input type="text" id="min_armorylevel" name="min_armorylevel" class="text" size="5" maxlength="3" value="{MIN_ARMORYLEVEL}" /></dd>
+                        </dl>
+                        <dl>
+                            <dt style="width: 35%;"><label>{L_ARMORY_GUILD}</label><br />
+                            </dt>
+                            <dd>
+                                <input type="submit" id="armory" name="armory" value="{L_ARMORY_GUILD}" class="button1" />
+                            </dd>
+                        </dl>
+                        <!-- ENDIF -->
                     </div>
+                </fieldset>
+                <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
+                    {S_FORM_TOKEN}
+                    <input type="hidden" name="guild_id" value="{GUILDID}" />
+                    <input type="hidden" name="{URI_GUILD}" value="{GUILD_ID}" />
+                    <input type="submit" name="updateguild" value="{L_UPDATE_GUILD}" class="button1" />
+                    <input type="submit"  name="deleteguild" value="{L_DELETE_GUILD}" class="button2" />
                 </fieldset>
             </div>
         </form>

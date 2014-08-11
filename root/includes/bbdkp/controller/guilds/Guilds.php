@@ -57,7 +57,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 * guild name
 	 * @var string
 	 */
-	protected $name = '';
+	private $name = '';
 	/**
 	 * guiled realm
 	 * @var string
