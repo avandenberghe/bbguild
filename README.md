@@ -1,11 +1,11 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.0.8
+#1.4.0-dev
 
 
 ## about
 
-bbDKP is a Dragon Kill Points Mod for your phpBB3 Bulletin board.
+bbDKP is a Dragon Kill Points Mod for your phpBB3 Bulletin board. It was originally forked from EQDKP in 2008. 
 
 Dragon kill points are a form of currency in guilds, where members bid on game loot and buy the items, paying in DKP.
 
@@ -17,13 +17,13 @@ This way, your users gain single signon to dkp and phpBB3, and you as an adminis
 
 Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games can be installed : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, Star Wars -ToR, Guildwars 2, Tera, Custome game designer
 
-There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory import, Apply, and other standalone mods that work well together. 
+Plugins available : Raidplanner, Raidtracker, bbTips, Apply 
 
 Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have premod versions. 
 
 ## Current
 
-1.3.0.8
+1.4.0
 
 ## Installation
 
@@ -35,40 +35,34 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 3.	ftp and founder admin access on your phpbb installation.
 4.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### recommended development setup 
-1.	phpBB QuickInstall
-2.	phpStorm IDE
-3.	LAMP installation
-4.	Github app, or use Atlassian Sourcetree
-
-#### New installation 1.3.0.8
+#### New installation 1.4.0
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP-1308.zip file
-2. Upload bbDKP-1308/bbDKP folder to your webserver, into /store/mods/
+1. Unzip the bbDKP-140.zip file
+2. Upload bbDKP folder to your webserver, into /store/mods. note that the folder name must be "bbDKP", without version number.
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
-5. Click submit. This will install 1.3.0.5 and clear the caches (template, theme, imagesets)
+5. Click submit. This will install 1.4.0 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.x to 1.3.0.8
+#### Upgrading from 1.3.0.x to 1.4.0
 
-1. Unzip the bbDKP-1308.zip file
-2. Upload bbDKP-1308/bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there
-3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1307_to_1308/update.xml)
- ![Automod update](http://i.imgur.com/eZww133.png)
+1. Unzip the bbDKP-140.zip file
+2. Upload bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there. note that the folder name must be "bbDKP", without version number.
+3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1308_to_140/update.xml)
+ ![Automod update]()
 4. Apply the update from Automod "Available Changes" 
-  ![Imgur](http://i.imgur.com/1mKPLq5.png)
+  ![Imgur]()
 6. Click on the database upgrade link
-  ![database upgrade](http://i.imgur.com/9c0lNad.png)
+  ![database upgrade]()
 
-#### Upgrading from 1.2.8-pl2 to 1.3.0.8
+#### Upgrading from 1.2.8-pl2 to 1.4.0
 
 * make a secure backup of all files
 * backup your database
-* Uninstall 1.2.8-pl2 and re-install 1.3.0.8 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.4.0 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first.
 		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
 		*	make sure the module was uninstalled by checking the ACP modules.
@@ -78,9 +72,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     4. delete /store/mods/bbdkp  
 	5. upload the unzipped bbDKP-1308/bbDKP folder to /store/mods
 	6. from Automod, run file installer
-	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.0.8   
-		![database upgrade](http://i.imgur.com/8gvmkwQ.png)
-		![after upgrade](http://i.imgur.com/qywrgj1.png)
+	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.4.0   
+		![database upgrade]()
+		![after upgrade]()
 		
 #### Upgrading from earlier version
 Please upgrade to v1.2.8-pl2 first
@@ -98,10 +92,23 @@ Find support and more on
 
 ## Changelog 
 
+1.4.0 08-2014
+
+-	[CHG] Repackaging 
+-	[CHG] #247 moved all js to subfolder /template/dkp/js 
+-	[CHG] #246 Added Sliders to statistics page, for easier navigation
+-	[FIX] missing language entries in german/french
+-	[CHG] #240 update Aion game parameters game 
+-	[CHG] #239 added correct classpath to rpblocks class in class_exists checker in block factory
+-	[NEW] #226 new Roles & Recruitment class/table 
+-	[CHG] #223 deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
+-	[CHG] #212 added Italian translation
+-	[CHG] #196 Implemented Guildwars Guild API
+-	[CHG] #192 Can now unlink a character from UCP
+
 1.3.0.8 01-07-2014
 
--	[FIX] #239 fix reference to raidplanner block path (1 file)
-
+-	[FIX] #239 fix raidplanner block file path reference in blockFactory class
 
 1.3.0.7 30-06-2014
 
@@ -758,7 +765,7 @@ Find support and more on
 
 ## contribute
 
-You can see all the amazing people contributing to this project [here](https://github.com/bbdkp/bbdkp/graphs/contributors).
+You can see all the awesome people contributing to this project [here](https://github.com/bbdkp/bbdkp/graphs/contributors).
 
 1. [Create a ticket (unless there already is one)] : https://github.com/bbDKP/bbDKP/issues or http://www.bbdkp.com/tracker.php
 2. [Read our Git Contribution Guidelines](http://www.bbdkp.com/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.bbdkp.com/viewtopic.php?f=60&t=1853)
