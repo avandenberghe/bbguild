@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.1
+ * @version 1.4
  */
 
 // anything lower than php 5.3.3 not supported (we use namespaces since v1.3)
@@ -1016,7 +1016,7 @@ $versions = array(
   // just some file fixes, see changelog
 ),
 
-'1.3.1' => array(
+'1.4' => array(
 
     //adding some tables
     'table_add' => array(
@@ -1043,9 +1043,12 @@ $versions = array(
                 'id'               => array('INT:8', NULL, 'auto_increment'),
                 'guild_id'		   => array('USINT', 0),
                 'role_id'    	   => array('INT:8', 0),
-                'class_id'         => array('UINT', 0),
+                'class_id'         => array('UINT',  0),
                 'positions'	       => array('USINT', 0),
                 'applicants'	   => array('USINT', 0),
+                'status'	       => array('USINT', 0),
+                'last_update'      => array('TIMESTAMP', 0),
+                'note'   		   => array('VCHAR_UNI:255', ''),
             ),
             'PRIMARY_KEY'          => 'recruit_pkid',
             'KEYS'                 => array('bb_recruit'    => array('UNIQUE', array('guild_id', 'role_id', 'class_id'))),
@@ -1178,7 +1181,7 @@ function tableupdates($action, $version)
 					$db->sql_query($sql);
 					break;
 
-                case '1.3.1':
+                case '1.4':
 
                     $sql = 'SELECT game_id FROM ' . $table_prefix . 'bbdkp_games';
                     $result = $db->sql_query ($sql);
@@ -1346,7 +1349,7 @@ function tableupdates($action, $version)
 					break;
 				case '1.3.0':
 					break;
-                case '1.3.1':
+                case '1.4':
                     break;
 
 			}
@@ -1357,7 +1360,7 @@ function tableupdates($action, $version)
 
 /**
  * global function for clearing cache
- *   @package bbdkp
+ * @package bbdkp
  * @param string $action
  * @param string $version
  * @return string
