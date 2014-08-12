@@ -41,6 +41,8 @@ if (!class_exists('\bbdkp\controller\games\Roles'))
 
 /**
  * holds vacancies per guild, game, role and class
+ *
+ * class hierarchy Game --> Roles --> Recruitment
  *   @package bbdkp
  *
  */
@@ -52,60 +54,68 @@ class Recruitment extends Roles
     public $id;
 
     /**
-     * game for which we want to recruit (from guild)
-     *
-     * @var string
-     */
-    public $game_id;
-
-    /**
      * guild for which we want to recruit
      *
      * @var int
      */
-    public $guild_id;
-
-    /**
-     * role needed.
-     *
-     * @var string
-     */
-    public $role_id;
+    protected $guild_id;
 
     /**
      * Class id needed
      *
      * @var int
      */
-    public $class_id;
+    protected $class_id;
 
     /**
      * how many are needed ?
      *
      * @var int
      */
-    public $positions;
+    protected $positions;
 
     /**
      * how many did apply ?
      *
      * @var int
      */
-    public $applicants;
+    protected $applicants;
+
+    /**
+     * date last update -- epoch date
+     *
+     * @var int
+     */
+    protected $lest_update;
+
+    /**
+     * a note on this recruitment
+     *
+     * @var int
+     */
+    protected $note;
+
+    /**
+     * status of recruitment
+     * 0 to 3
+     *
+     * @var int
+     */
+    protected $status;
 
     /**
      * possible recruitment statuses
      *
      * @var array
      */
-    protected $recruitstatus = array();
+    private $recruitstatus = array();
 
     /**
-     * possible recruitment colors
+     * possible recruitment status colors
      *
      * @var array
      */
-    protected $classreccolor = array();
+    private $classreccolor = array();
 
     /**
      * Recruitment class constructor
@@ -114,18 +124,17 @@ class Recruitment extends Roles
     public function __construct()
     {
         global $user;
-        $this->classrecstatus = array(
-            0 => $user->lang['NA'],
-            1 => $user->lang['CLOSED'],
-            2 => $user->lang['LOW'],
-            3 => $user->lang['MEDIUM'],
-            4 => $user->lang['HIGH']);
+        $this->recruitstatus = array(
+            0 => $user->lang['CLOSED'],
+            1 => $user->lang['LOW'],
+            2 => $user->lang['MEDIUM'],
+            3 => $user->lang['HIGH']);
+
         $this->classreccolor = array(
             0 => "bullet_white.png",
-            1 => "bullet_white.png",
-            2 => "bullet_yellow.png",
-            3 => "bullet_red.png",
-            4 => "bullet_purple.png");
+            1 => "bullet_yellow.png",
+            2 => "bullet_red.png",
+            3 => "bullet_purple.png");
     }
 
     /**
@@ -138,7 +147,7 @@ class Recruitment extends Roles
     {
         global $config, $db;
         $sql_array = array(
-            'SELECT'   => " u.id, u.game_id, u.guild_id, u.role_id, u.class_id, u.positions, u.applicants ,
+            'SELECT'   => " u.id, u.game_id, u.guild_id, u.role_id, u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note,
                 r.role_color, r.role_icon, role_cat_icon, l.name as role_name ",
             'FROM'     => array(
                 BBRECRUIT_TABLE   => 'u',
@@ -173,6 +182,9 @@ class Recruitment extends Roles
             $this->role_cat_icon = $row['role_cat_icon'];
             $this->positions     = $row['positions'];
             $this->applicants    = $row['applicants'];
+            $this->note          = $row['note'];
+            $this->last_update   = $row['last_update'];
+            $this->status        = $row['status'];
             return 1;
         }
     }
@@ -189,6 +201,9 @@ class Recruitment extends Roles
             'class_id'   => $this->class_id,
             'positions'  => $this->positions,
             'applicants' => $this->applicants,
+            'note'       => $this->note,
+            'last_update' => $this->last_update,
+            'status'     => $this->status,
         ));
         $db->sql_query('INSERT INTO ' . BBRECRUIT_TABLE . $query);
         return 1;
@@ -201,15 +216,17 @@ class Recruitment extends Roles
     {
         global $db;
         $query = $db->sql_build_array('UPDATE', array(
-            'needed' => $this->guild_id,
-            'needed' => $this->role_id,
-            'needed' => $this->class_id,
-            'needed' => $this->positions,
-            'needed' => $this->applicants,
+            'guild_id'   => $this->guild_id,
+            'role_id'    => $this->role_id,
+            'class_id'   => $this->class_id,
+            'positions'  => $this->positions,
+            'applicants' => $this->applicants,
+            'note'       => $this->note,
+            'last_update' => $this->last_update,
+            'status'     => $this->status,
         ));
         $db->sql_query('UPDATE ' . BBRECRUIT_TABLE . ' SET ' . $query . ' WHERE id = ' . $this->id);
     }
-
 
     /**
      * deletes a role
@@ -228,20 +245,15 @@ class Recruitment extends Roles
     public function ListRecruitments()
     {
         global $config, $db;
-        $sql = 'SELECT a.id as roleid, c.class_id, l.name as class_name, c.colorcode, c.imagename, ';
-        $sql .= ' a.game_id, g.id as guild_id,  a.role, a.needed ';
-        $sql .= ' FROM ' . CLASS_TABLE . ' c ';
-        $sql .= ' INNER JOIN ' . BB_LANGUAGE . ' l ON l.attribute_id = c.class_id AND c.game_id = l.game_id ';
-        $sql .= ' INNER JOIN ' . GUILD_TABLE . ' g ON c.game_id = g.game_id ';
-        $sql .= ' LEFT OUTER JOIN ' . BBRECRUIT_TABLE . ' a ON c.class_id = a.class_id AND a.game_id = c.game_id  ';
-        $sql .= " WHERE c.class_id > 0 AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ";
-        $sql .= " ORDER BY c.game_id, c.class_id ";
+
         $sql_array = array(
+
             'SELECT'   => " u.id, u.game_id, u.guild_id, u.role_id,
-                u.class_id, u.positions, u.applicants,
-                r.role_color, r.role_icon, rrole_cat_icon, r1.name as role_name,
+                u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note,
+                r.role_color, r.role_icon, r.role_cat_icon, r1.name as role_name,
                 c1.name as class_name, c.colorcode, c.imagename
                  ",
+
             'FROM'     => array(
                 BBRECRUIT_TABLE   => 'u',
                 GUILD_TABLE       => 'g',
@@ -250,6 +262,7 @@ class Recruitment extends Roles
                 CLASS_TABLE       => 'c',
                 BB_LANGUAGE       => 'c1',
             ),
+
             'WHERE'    => " 1=1
                 AND u.guild_id = g.id
                 AND u.role_id = r.role_id
