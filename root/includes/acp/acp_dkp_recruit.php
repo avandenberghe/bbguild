@@ -58,7 +58,7 @@ use \bbdkp\controller\guilds\Guilds;
  *
  *   @package bbdkp
  */
-class acp_dkp_guild extends \bbdkp\admin\Admin
+class acp_dkp_recruit extends \bbdkp\admin\Admin
 {
     /**
      * url action
@@ -93,9 +93,9 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
         {
 
             /***************************************/
-            // List Guilds
+            // List recruitments
             /***************************************/
-            case 'listguilds':
+            case 'listrecruit':
 
                 $this->BuildTemplateListGuilds();
                 break;
@@ -103,7 +103,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
             /*************************************
              *  Add Guild
              *************************************/
-            case 'addguild':
+            case 'addrecruit':
 
                 $addguild = new Guilds();
 
@@ -151,9 +151,9 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
                 break;
 
             /*************************************
-             *  Edit Guild
+             *  Edit Recruit
              *************************************/
-            case 'editguild':
+            case 'editrecruit':
 
                 $this->url_id = request_var(URI_GUILD, 0);
                 $updateguild = new Guilds($this->url_id);

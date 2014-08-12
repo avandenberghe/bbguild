@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.3.0
  */
 namespace bbdkp\controller\members;
@@ -969,8 +969,19 @@ class Members extends \bbdkp\admin\Admin
 			{
 				$buildid = 1;
 			}
+
 			$role = isset($data['talents'][$buildid]['spec']['role']) ? $data['talents'][$buildid]['spec']['role'] : 'NA';
-			$this->member_role = $role;
+
+            $conversion_array = array(
+                'DPS' => 0,
+                'HEALING' => 1,
+                'TANK' => 2,
+            );
+
+            if (isset($role) && in_array($role,$conversion_array))
+            {
+                $this->member_role = $conversion_array[$role];
+            }
 
 			$this->member_gender_id = isset($data['gender']) ? $data['gender'] : $this->member_gender_id;
 			$this->member_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->member_achiev;
