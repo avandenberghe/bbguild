@@ -219,22 +219,9 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$editgame->game_id}" ) . '"><h3>' .
 						$user->lang ['RETURN_GAMEVIEW'] . '</h3></a>';
 
-
                 $gamereset = (isset ( $_POST ['gamereset'] )) ? true : false;
 				$gamedelete = (isset ( $_POST ['gamedelete'] )) ? true : false;
 				$gamesettings = (isset ( $_POST ['gamesettings'] )) ? true : false;
-
-
-                $addrole = (isset ( $_POST ['showroleadd'] )) ? true : false;
-                $deleterole = (isset ( $_GET ['roledelete'] )) ? true : false;
-
-				$addrace = (isset ( $_POST ['showraceadd'] )) ? true : false;
-				$raceedit = (isset ( $_GET ['raceedit'] )) ? true : false;
-				$racedelete = (isset ( $_GET ['racedelete'] )) ? true : false;
-
-				$addclass = (isset ( $_POST ['showclassadd'] )) ? true : false;
-				$classedit = (isset ( $_GET ['classedit'] )) ? true : false;
-				$classdelete = (isset ( $_GET ['classdelete'] )) ? true : false;
 
                 $template->assign_vars ( array (
                     'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") ,
@@ -251,11 +238,29 @@ class acp_dkp_game extends \bbdkp\admin\Admin
                     $this->SaveGameSettings();
 				}
 
-				// delete actions
 				if($gamedelete)
 				{
                     $this->DeleteGame($editgame);
                 }
+
+                $addrole = (isset ( $_POST ['showrolesadd'] )) ? true : false;
+                if ($addrole)
+                {
+                    $this->BuildTemplateRole($editgame);
+                    break;
+                }
+
+                if ($action=='deleterole')
+                {
+                    $this->DeleteRole($editgame);
+                    break;
+                }
+                elseif ($action=='editrole')
+                {
+                    $this->BuildTemplateRole($editgame);
+                    break;
+                }
+
 
                 $addfaction = (isset ( $_POST ['showfactionadd'] )) ? true : false;
                 if ($addfaction)
@@ -275,12 +280,13 @@ class acp_dkp_game extends \bbdkp\admin\Admin
                     break;
                 }
 
-				// user pressed race add / edit, load acp_addrace
+                $addrace = (isset ( $_POST ['showraceadd'] )) ? true : false;
+                $raceedit = (isset ( $_GET ['raceedit'] )) ? true : false;
+                $racedelete = (isset ( $_GET ['racedelete'] )) ? true : false;
+
 				if ($raceedit || $addrace)
 				{
 					// Load template for adding/editing
-
-					//Edit
 					if (isset ( $_GET ['id'] ))
 					{
 						// edit this race
@@ -298,7 +304,11 @@ class acp_dkp_game extends \bbdkp\admin\Admin
                     $this->DeleteRace($editgame);
                 }
 
-				if ($classedit || $addclass)
+                $addclass = (isset ( $_POST ['showclassadd'] )) ? true : false;
+                $classedit = (isset ( $_GET ['classedit'] )) ? true : false;
+                $classdelete = (isset ( $_GET ['classdelete'] )) ? true : false;
+
+                if ($classedit || $addclass)
 				{
 					// Load template for adding/editing
 					if (isset ( $_GET ['id'] ))
@@ -323,7 +333,27 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 				break;
 
-			case 'addfaction' :
+            case 'addrole' :
+
+                $role = new \bbdkp\controller\games\Roles();
+                $role->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', ''));
+                $editgame = new \bbdkp\controller\games\Game;
+                $editgame->game_id = $role->game_id;
+                $editgame->Get();
+
+                $addnew = (isset ( $_POST ['addrole'] )) ? true : false;
+                $editfaction = (isset ( $_POST ['editrole'] )) ? true : false;
+                if ($addnew)
+                {
+                    $this->AddRole($role, $editgame);
+                }
+                if ($editfaction)
+                {
+                    $this->EditRole($role, $editgame);
+                }
+                break;
+
+            case 'addfaction' :
 
 				$faction = new \bbdkp\controller\games\Faction();
 				$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
@@ -341,9 +371,6 @@ class acp_dkp_game extends \bbdkp\admin\Admin
                 {
                     $this->EditFaction($faction, $editgame);
                 }
-
-
-
 				break;
 
 			case 'addrace' :
@@ -492,12 +519,131 @@ class acp_dkp_game extends \bbdkp\admin\Admin
     }
 
     /**
+     * Add Role
+     *
+     * @param $role
+     * @param $editgame
+     */
+    private function AddRole(\bbdkp\controller\games\Roles $role, $editgame)
+    {
+        global $phpbb_admin_path, $phpEx, $user;
+
+        if (!check_form_key('acp_dkp_game'))
+        {
+            trigger_error('FORM_INVALID');
+        }
+        $role->rolename = utf8_normalize_nfc(request_var('rolename', '', true));
+        $role->role_id = request_var('role_id', 0);
+        $role->role_color = request_var('role_color', '');
+        $role->role_icon = request_var('role_icon', '');
+        $role->role_cat_icon = request_var('role_cat_icon', '');
+        $role->Make();
+
+        $log_action = array(
+            'header'    => 'L_ACTION_ROLE_ADDED',
+            'L_GAME'    => $editgame->game_id,
+            'L_ROLE'    => $role->rolename,
+        );
+
+        $this->log_insert(array(
+            'log_type'   => 'L_ACTION_ROLE_ADDED',
+            'log_result' => 'L_SUCCESS',
+            'log_action' => $log_action));
+
+        meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME . "={$role->game_id}"));
+        trigger_error(sprintf($user->lang ['ADMIN_ADD_ROLE_SUCCESS'], $role->rolename), E_USER_NOTICE);
+    }
+
+    private function EditRole(\bbdkp\controller\games\Game $editgame)
+    {
+        global $phpbb_admin_path, $phpEx, $user;
+
+        $oldrole             = new \bbdkp\controller\games\Roles();
+        $oldrole->game_id    = $editgame->game_id;
+        $oldrole->role_id    = request_var('hidden_role_id', 0);
+        $oldrole->get();
+
+        $newrole               = new \bbdkp\controller\games\Roles();
+        $newrole->game_id      = $editgame->game_id;
+        $newrole->role_id   = request_var('hidden_role_id', 0);
+        $newrole->get(); // in order to get the pk
+
+        $newrole->rolename = utf8_normalize_nfc(request_var('rolename', '', true));
+        $newrole->role_color = request_var('role_color', '');
+        $newrole->role_icon = request_var('role_icon', '');
+        $newrole->role_cat_icon = request_var('role_cat_icon', '');
+
+        $newrole->Update($oldrole);
+
+        $log_action = array(
+            'header'    => 'L_ACTION_ROLE_UPDATED',
+            'L_GAME'    => $editgame->game_id,
+            'L_ROLE'    => $newrole->rolename,
+        );
+
+        $this->log_insert(array(
+            'log_type'   => 'L_ACTION_ROLE_UPDATED',
+            'log_result' => 'L_SUCCESS',
+            'log_action' => $log_action));
+
+        meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME . "={$newrole->game_id}"));
+        trigger_error(sprintf($user->lang ['ADMIN_UPDATE_ROLE_SUCCESS'], $newrole->rolename), E_USER_NOTICE);
+
+    }
+
+    private function DeleteRole(\bbdkp\controller\games\Game $editgame)
+    {
+        global $phpbb_admin_path, $phpEx, $user;
+
+        if (confirm_box(true))
+        {
+            $deleterole               = new \bbdkp\controller\games\Roles();
+            $deleterole->game_id      =  request_var('hidden_game_id', '');
+            $deleterole->role_id    = request_var('hidden_role_id', 0);
+            $deleterole->get(); // in order to get the pk
+            $deleterole->Delete();
+
+            $log_action = array(
+                'header'    => 'L_ACTION_FACTION_DELETED',
+                'L_GAME'    => $deleterole->game_id,
+                'L_FACTION' => $deleterole->rolename,
+            );
+            $this->log_insert(array(
+                'log_type'   => 'L_ACTION_FACTION_DELETED',
+                'log_result' => 'L_SUCCESS',
+                'log_action' => $log_action));
+
+
+            meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME . "={$deleterole->game_id}"));
+
+            trigger_error(sprintf($user->lang ['ADMIN_DELETE_ROLE_SUCCESS'], $deleterole->rolename) . $this->link, E_USER_WARNING);
+
+        }
+        else
+        {
+            $deleterole               = new \bbdkp\controller\games\Roles();
+            $deleterole->game_id      = $editgame->game_id;
+            $deleterole->role_id      = request_var('role_id', 0);
+            $deleterole->get(); // in order to get the pk
+
+            $s_hidden_fields = build_hidden_fields(array(
+                'factiondelete'     => true,
+                'hidden_role_id'    => $deleterole->role_id,
+                'hidden_game_id'    => $deleterole->game_id,
+            ));
+            confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_ROLE'], $deleterole->rolename), $s_hidden_fields);
+
+        }
+    }
+
+
+    /**
      * Add Faction
      *
      * @param $faction
      * @param $editgame
      */
-    private function AddFaction($faction, $editgame)
+    private function AddFaction(\bbdkp\controller\games\Faction $faction, \bbdkp\controller\games\Game $editgame)
     {
         global $phpbb_admin_path, $phpEx, $user;
 
@@ -518,6 +664,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             'log_result' => 'L_SUCCESS',
             'log_action' => $log_action));
         meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME . "={$faction->game_id}"));
+
         trigger_error(sprintf($user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $faction->faction_name), E_USER_NOTICE);
     }
 
@@ -1017,8 +1164,40 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $this->tpl_name = 'dkp/acp_addfaction';
     }
 
+    private function BuildTemplateRole(\bbdkp\controller\games\Game $editgame)
+    {
+        global $template, $phpbb_admin_path, $phpEx, $user;
 
-	/**
+        $role = new \bbdkp\controller\games\Roles();
+        $role->game_id = $editgame->game_id;
+        $add=true;
+        if( isset($_POST['role_id']) ||isset($_GET['role_id']) )
+        {
+            $role->role_id = request_var('role_id', 0);
+            $role->Get();
+            $add=false;
+        }
+
+        // send parameters to template
+        $template->assign_vars(array(
+            'ROLE_NAME'          => $role->rolename,
+            'ROLE_ID'            => $role->role_id,
+            'ROLE_CAT_ICON'      => $role->role_cat_icon,
+            'ROLE_ICON'          => $role->role_icon,
+            'ROLE_COLOR'         => $role->role_color,
+            'GAME_ID'            => $role->game_id,
+            'GAME_NAME'          => $editgame->getName(),
+            'IS_ADD'             => $add,
+            'U_ACTION'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addrole&amp;game_id=' . $editgame->game_id),
+            'MSG_NAME_EMPTY'     => $user->lang ['FV_REQUIRED_NAME']));
+        unset($role);
+
+        $this->page_title = $user->lang['ROLE'];
+        $this->tpl_name = 'dkp/acp_addrole';
+    }
+
+
+    /**
 	 * lists game parameters
 	 *
 	 * @param \bbdkp\controller\games\game $editgame
@@ -1082,8 +1261,9 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				'S_RACE_IMAGE_M_EXISTS' => (strlen ( $race['image_male'] ) > 1) ? true : false,
 				'S_RACE_IMAGE_F_EXISTS' => (strlen ( $race['image_female'] ) > 1) ? true : false,
 				'U_VIEW_RACE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addrace&amp;r=" . $race['race_id'] . "&amp;" . URI_GAME ."={$listraces->game_id}" ),
-				'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;racedelete=1&amp;id={$race['race_id']}&amp;" . URI_GAME ."={$listraces->game_id}" ),
-				'U_EDIT' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;raceedit=1&amp;id={$race['race_id']}&amp;" . URI_GAME ."={$listraces->game_id}" ) ) );
+                'U_DELETE' =>  $this->u_action. "&amp;racedelete=1&amp;id={$race['race_id']}&amp;" . URI_GAME ."={$listraces->game_id}",
+                'U_EDIT' =>  $this->u_action.   "&amp;raceedit=1&amp;id={$race['race_id']}&amp;" . URI_GAME ."={$listraces->game_id}",
+            ) );
 		}
 		unset($listraces, $ra);
 
@@ -1095,7 +1275,6 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             2 => array ('rolename', 'rolename desc' ));
 
         $current_order3 = $this->switch_order ( $sort_order );
-        $total_roles = 0;
         $listroles = new \bbdkp\controller\games\Roles();
         $listroles->game_id = $editgame->game_id;
         $total_roles=0;
@@ -1113,7 +1292,8 @@ class acp_dkp_game extends \bbdkp\admin\Admin
                 'ROLE_CAT_ICON' 		=> $role['role_cat_icon'],
                 'S_ROLE_CAT_ICON_EXISTS'	=>  (strlen($role['role_cat_icon']) > 0) ? true : false,
                 'U_ROLE_CAT_ICON' 	=> (strlen($role['role_cat_icon']) > 0) ? $phpbb_root_path . "images/bbdkp/role_icons/" . $role['role_cat_icon'] . ".png" : '',
-                'U_DELETE' 		=> $this->u_action. '&amp;roledelete=1&amp;delrole_id=' . $role['role_id'],
+                'U_DELETE' 		=> $this->u_action. '&amp;action=deleterole&amp;role_id=' . $role['role_id'] . '&amp;' .URI_GAME . "=" . $editgame->game_id  ,
+                'U_EDIT' 		=> $this->u_action. '&amp;action=editrole&amp;role_id=' . $role['role_id'] . '&amp;' .URI_GAME . "=" . $editgame->game_id,
             ));
         }
 

@@ -105,15 +105,15 @@ class Roles extends \bbdkp\controller\games\Game
         global $db, $config;
 
         $sql_array = array (
-            'SELECT' => ' r.role_pkid, r.game_id, l.name AS rolename, r.role_icon, r.role_cat_icon, r.role_color ',
+            'SELECT' => ' r.role_pkid, r.game_id, r.role_id, l.name AS rolename, r.role_icon, r.role_cat_icon, r.role_color ',
             'FROM' => array (
                 BB_GAMEROLE_TABLE => 'r', BB_LANGUAGE => 'l' ),
-            'WHERE' => " c.role_id = l.attribute_id
+            'WHERE' => " r.role_id = l.attribute_id
 							AND l.attribute='role'
 							AND l.game_id = '" . $this->game_id . "'
 							AND r.game_id = l.game_id
 							AND l.language= '" . $config ['bbdkp_lang'] . "'
-							AND r.class_id = " . $this->role_id);
+							AND r.role_id = " . $this->role_id);
 
         $sql = $db->sql_build_query ( 'SELECT', $sql_array );
         $result = $db->sql_query ( $sql );
@@ -183,20 +183,7 @@ class Roles extends \bbdkp\controller\games\Game
      */
     public function Update(Roles $oldrole)
     {
-        global $user, $db, $config, $cache;
-
-        // check for unique role pk exception : if the new role id exists already
-        $sql = 'SELECT count(*) AS countrole FROM ' . BB_GAMEROLE_TABLE . '
-				WHERE role_pkid != ' . $this->role_pkid . "
-				AND role_id = '" . $db->sql_escape ( $oldrole->role_id ) . "'
-				AND game_id = '" . $this->game_id. "'";
-
-        $result = $db->sql_query ( $sql );
-        if (( int ) $db->sql_fetchfield ( 'countrole', false, $result ) > 0)
-        {
-            trigger_error ( sprintf ( $user->lang ['ADMIN_ADD_ROLE_FAILED'], $this->rolename ), E_USER_WARNING );
-        }
-        $db->sql_freeresult ( $result );
+        global $db, $config, $cache;
 
         $data = array (
             'game_id' => ( string ) $this->game_id,
@@ -208,13 +195,13 @@ class Roles extends \bbdkp\controller\games\Game
         $db->sql_transaction ( 'begin' );
 
         $sql = 'UPDATE ' . BB_GAMEROLE_TABLE . ' SET ' . $db->sql_build_array ( 'UPDATE', $data ) . '
-			    WHERE c_index = ' . $this->c_index;
+			    WHERE role_pkid = ' . $this->role_pkid;
 
         $db->sql_query($sql);
 
         // now update the language table!
         $names = array (
-            'attribute_id' => ( string ) $this->role_id, //new classid
+            'attribute_id' => ( string ) $this->role_id,
             'name' => ( string ) $this->rolename,
             'name_short' => ( string ) $this->rolename);
 
@@ -224,6 +211,7 @@ class Roles extends \bbdkp\controller\games\Game
         $db->sql_query ( $sql );
 
         $db->sql_transaction ( 'commit' );
+
         $cache->destroy ( 'sql', BB_LANGUAGE );
         $cache->destroy ( 'sql', BB_GAMEROLE_TABLE );
 

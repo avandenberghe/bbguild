@@ -264,6 +264,8 @@ $lang = array_merge($lang, array(
 'POINT_SETTINGS' => 'Point Settings',
 'ACP_NEWGAME' => 'Game List',
 'ACP_EDITGAME' => 'Edit Game: %s',
+'ACP_ADDROLE' => 'Add Role',
+'ACP_EDITROLE' => 'Edit Role %s',
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Adminpanel Index',
@@ -356,6 +358,7 @@ $lang = array_merge($lang, array(
 'LIST_EDIT_DEL_MEMBER' => 'List, Edit or Delete Members',
 'EDIT_RANKS' => 'Edit Ranks',
 'EDIT_ROLES' => 'Edit Roles',
+'EDIT_ROLE' => 'Edit Role',
 'ADD_RANKS' => 'Add Ranks',
 'ADD_RANK' => 'Add Rank',
 'ADD_ROLES' => 'Add Roles',
@@ -388,6 +391,7 @@ $lang = array_merge($lang, array(
 'CONFIRM_RESET_GAME' => 'Please confirm resetting factions, classes and races of game "%s" to default settings. (Events are not resetted automatically)',
 'CONFIRM_INSTALL_GAME' => 'Please confirm installation of Game "%s". ',
 'CONFIRM_DELETE_GAME' => 'Please confirm deletion of game "%s".',
+'CONFIRM_DELETE_ROLE' => 'Please confirm deletion of role "%s".',
 
 // Log Actions
 'ACTION_DKPSYS_ADDED' => 'dkpsys Added',
@@ -442,7 +446,12 @@ $lang = array_merge($lang, array(
 'ACTION_RACE_DELETED' => 'Race deleted',
 'ACTION_RACE_ADDED' => 'Race added',
 'ACTION_RACE_UPDATED' => 'Race Updated',
- 'ACTION_RACE_UPDATED' => 'Race Updated',
+'ACTION_RACE_UPDATED' => 'Race Updated',
+'ACTION_FACTION_UPDATED' => 'Faction Updated',
+'ACTION_ROLE_ADDED' => 'Role Added',
+'ACTION_ROLE_UPDATED' => 'Role Updated',
+'ACTION_ROLE_DELETED' => 'Role deleted',
+
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Newest Admin Actions',
@@ -498,6 +507,10 @@ $lang = array_merge($lang, array(
 'VLOG_RACE_ADDED' => '%s added race %s to %s',
 'VLOG_RACE_UPDATED' => '%s updated race %s in %s',
 'VLOG_ARMORY_DOWN' => 'Could not call Guild API',
+'VLOG_FACTION_UPDATED' => '%s update Faction %s to %s',
+'VLOG_ROLE_ADDED' => '%s added role %s to %s',
+'VLOG_ROLE_UPDATED' => '%s updated role %s in %s',
+'VLOG_ROLE_UPDATED' => '%s deleted role %s',
 
 // Before/After
 'ADJUSTMENT_BEFORE' => 'Adjustment Before',
@@ -699,6 +712,8 @@ $lang = array_merge($lang, array(
 'ADMIN_ADD_ROLE_FAILED'  => 'Role %s could not be added',
 'ADMIN_ADD_ROLE_SUCCESS'  => 'Role %s was created successfully.',
 'ADMIN_UPDATE_FACTION_SUCCESS' => 'Faction %s was updated successfully',
+'ADMIN_UPDATE_ROLE_SUCCESS' => 'Role %s was updated successfully',
+'ADMIN_DELETE_ROLE_SUCCESS' => 'Role %s was deleted',
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Active Point Adjustment',
@@ -968,6 +983,8 @@ $lang = array_merge($lang, array(
 'RACE_IMAGE_EXPLAIN' => 'race imagename, without extension. png file should exist in /images/bbdkp/race_images',
 'ROLE_COLOR' => 'Role Color',
 'ROLE_ICON' => 'Role Icon',
+'ROLE_NAME' => 'Role Name',
+'ROLE_ID' => 'Role Id',
 'ROLE_CAT_ICON' => 'Role Category Icon',
 'RESULTS' => '%d Results (%s)',
 'SEARCH' => 'Search',

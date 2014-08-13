@@ -1072,7 +1072,12 @@ $versions = array(
                 'module_basename' => 'dkp_recruit',
                 'modes'           => array('listrecruit', 'addrecruit', 'editrecruit'),
             )),
+            array('acp', 'ACP_DKP_MAINPAGE', array(
+                'module_basename' => 'dkp_game',
+                'modes'           => array('addrole'),
+            )),
         ),
+
     ),
 
 );
