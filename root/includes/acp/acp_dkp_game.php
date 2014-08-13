@@ -210,6 +210,8 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
 			case 'editgames' :
 
+                $action = request_var('action', '');
+
 				$editgame = new \bbdkp\controller\games\Game;
 				$editgame->game_id = request_var(URI_GAME, request_var ( 'hidden_game_id','' ));
                 $editgame->Get();
@@ -217,12 +219,14 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$editgame->game_id}" ) . '"><h3>' .
 						$user->lang ['RETURN_GAMEVIEW'] . '</h3></a>';
 
-				$gamereset = (isset ( $_POST ['gamereset'] )) ? true : false;
+
+                $gamereset = (isset ( $_POST ['gamereset'] )) ? true : false;
 				$gamedelete = (isset ( $_POST ['gamedelete'] )) ? true : false;
 				$gamesettings = (isset ( $_POST ['gamesettings'] )) ? true : false;
 
-				$addfaction = (isset ( $_POST ['showfactionadd'] )) ? true : false;
-				$deletefaction = (isset ( $_GET ['factiondelete'] )) ? true : false;
+
+                $addrole = (isset ( $_POST ['showroleadd'] )) ? true : false;
+                $deleterole = (isset ( $_GET ['roledelete'] )) ? true : false;
 
 				$addrace = (isset ( $_POST ['showraceadd'] )) ? true : false;
 				$raceedit = (isset ( $_GET ['raceedit'] )) ? true : false;
@@ -253,32 +257,23 @@ class acp_dkp_game extends \bbdkp\admin\Admin
                     $this->DeleteGame($editgame);
                 }
 
-				// user pressed delete faction
-				if ($deletefaction)
-				{
+                $addfaction = (isset ( $_POST ['showfactionadd'] )) ? true : false;
+                if ($addfaction)
+                {
+                    $this->BuildTemplateFaction($editgame);
+                    break;
+                }
+
+                if ($action=='deletefaction')
+                {
                     $this->DeleteFaction($editgame);
+                    break;
                 }
-
-				// user pressed delete race
-				if ($racedelete)
-				{
-
-                    $this->DeleteRace($editgame);
+                elseif ($action=='editfaction')
+                {
+                    $this->BuildTemplateFaction($editgame);
+                    break;
                 }
-
-				// user pressed delete class
-				if ($classdelete)
-				{
-                    $this->DeleteClass($editgame);
-                }
-
-				//add actions
-				if ($addfaction)
-				{
-					redirect ( append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addfaction&amp;". URI_GAME . '=' . $editgame->game_id  ) );
-					break;
-				}
-
 
 				// user pressed race add / edit, load acp_addrace
 				if ($raceedit || $addrace)
@@ -298,6 +293,11 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					break;
 				}
 
+				if ($racedelete)
+				{
+                    $this->DeleteRace($editgame);
+                }
+
 				if ($classedit || $addclass)
 				{
 					// Load template for adding/editing
@@ -312,13 +312,19 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 					break;
 				}
 
+				if ($classdelete)
+				{
+                    // user pressed delete class
+                    $this->DeleteClass($editgame);
+                }
+
 				$this->showgame($editgame);
 				$this->page_title = 'ACP_ADDGAME';
 
 				break;
 
 			case 'addfaction' :
-				//action
+
 				$faction = new \bbdkp\controller\games\Faction();
 				$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
 				$editgame = new \bbdkp\controller\games\Game;
@@ -326,19 +332,18 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				$editgame->Get();
 
 				$addnew = (isset ( $_POST ['factionadd'] )) ? true : false;
+                $editfaction = (isset ( $_POST ['factionedit'] )) ? true : false;
 				if ($addnew)
 				{
                     $this->AddFaction($faction, $editgame);
 				}
+                if ($editfaction)
+                {
+                    $this->EditFaction($faction, $editgame);
+                }
 
-				// send parameters to template
-				$template->assign_vars ( array (
-					'GAME_ID' => $faction->game_id,
-					'GAME_NAME' => $editgame->getName(),
-					'U_ACTION' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addfaction' ),
-					'MSG_NAME_EMPTY' => $user->lang ['FV_REQUIRED_NAME'] ) );
 
-				$this->page_title = 'ACP_LISTGAME';
+
 				break;
 
 			case 'addrace' :
@@ -365,8 +370,9 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				$this->page_title = 'ACP_LISTGAME';
 				break;
 
-			case 'addclass' :
-				// collects data, calls class updater
+			case 'addclass':
+				// collects data after BuildTemplateEditClass, calls class updater
+
 				$classadd = (isset ( $_POST ['add'] )) ? true : false;
 				$classupdate = (isset ( $_POST ['update'] )) ? true : false;
 
@@ -515,11 +521,25 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         trigger_error(sprintf($user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $faction->faction_name), E_USER_NOTICE);
     }
 
-    /**
-     * Delete Faction
-     * @param \bbdkp\controller\games\Game $editgame
-     *
-     */
+    private function EditFaction(\bbdkp\controller\games\Game $editgame)
+    {
+        global $user;
+
+        $oldfaction             = new \bbdkp\controller\games\Faction();
+        $oldfaction->game_id    = $editgame->game_id;
+        $oldfaction->faction_id = request_var('hidden_faction_id', 0);
+        $oldfaction->get();
+
+        $newfaction               = new \bbdkp\controller\games\Faction();
+        $newfaction->game_id      = $editgame->game_id;
+        $newfaction->faction_name = utf8_normalize_nfc(request_var('factionname', '', true));
+        $newfaction->faction_id   = request_var('hidden_faction_id', 0);
+        $newfaction->update();
+
+        trigger_error(sprintf($user->lang ['ADMIN_UPDATE_FACTION_SUCCESS'], $newfaction->faction_name), E_USER_WARNING);
+
+    }
+
     private function DeleteFaction(\bbdkp\controller\games\Game $editgame)
     {
         global $phpbb_admin_path, $phpEx, $user;
@@ -973,6 +993,30 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $this->tpl_name = 'dkp/acp_addclass';
     }
 
+    private function BuildTemplateFaction(\bbdkp\controller\games\Game $editgame)
+    {
+        global $template, $phpbb_admin_path, $phpEx, $user;
+
+        $faction = new \bbdkp\controller\games\Faction();
+        $faction->game_id = $editgame->game_id;
+        $faction->faction_id = request_var('id', 0);
+        $faction->Get();
+
+        // send parameters to template
+        $template->assign_vars(array(
+            'FACTION_NAME'          => $faction->faction_name,
+            'FACTION_ID'            => $faction->faction_id,
+            'GAME_ID'               => $faction->game_id,
+            'GAME_NAME'             => $editgame->getName(),
+            'IS_ADD'                => $faction->faction_id == 0 ? true : false,
+            'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addfaction'),
+            'MSG_NAME_EMPTY'        => $user->lang ['FV_REQUIRED_NAME']));
+        unset($races);
+
+        $this->page_title = $user->lang['FACTION'];
+        $this->tpl_name = 'dkp/acp_addfaction';
+    }
+
 
 	/**
 	 * lists game parameters
@@ -1007,8 +1051,10 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 			'FACTIONID' => $faction['faction_id'],
 			'FACTIONNAME' => $faction['faction_name'],
 			'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx",
-                    "i=dkp_game&amp;mode=editgames&amp;factiondelete=1&amp;id={$faction['f_index']}&amp;" . URI_GAME . '=' . $editgame->game_id)
-				));
+                    "i=dkp_game&amp;mode=editgames&amp;action=deletefaction&amp;id={$faction['f_index']}&amp;" . URI_GAME . '=' . $editgame->game_id),
+			'U_EDIT' => append_sid ( "{$phpbb_admin_path}index.$phpEx",
+            "i=dkp_game&amp;mode=editgames&amp;action=editfaction&amp;id={$faction['f_index']}&amp;" . URI_GAME . '=' . $editgame->game_id),
+        ));
 		}
 
 		// list the races
@@ -1049,7 +1095,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             2 => array ('rolename', 'rolename desc' ));
 
         $current_order3 = $this->switch_order ( $sort_order );
-        $total_races = 0;
+        $total_roles = 0;
         $listroles = new \bbdkp\controller\games\Roles();
         $listroles->game_id = $editgame->game_id;
         $total_roles=0;
@@ -1139,6 +1185,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				'LISTFACTION_FOOTCOUNT' => sprintf ( $user->lang ['LISTFACTION_FOOTCOUNT'], $total_factions ),
 				'LISTRACE_FOOTCOUNT' => sprintf ( $user->lang ['LISTRACE_FOOTCOUNT'], $total_races ),
 				'LISTCLASS_FOOTCOUNT' => sprintf ( $user->lang ['LISTCLASS_FOOTCOUNT'], $total_classes ),
+                'LISTROLES_FOOTCOUNT' => sprintf ( $user->lang ['LISTROLES_FOOTCOUNT'], $total_roles ),
 				'U_ACTION' => $this->u_action ) );
 	}
 

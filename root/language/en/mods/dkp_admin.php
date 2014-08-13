@@ -698,6 +698,7 @@ $lang = array_merge($lang, array(
 'ADMIN_INSTALL_GAME_FAILED'  => 'Game name is missing. Game could not be installed.',
 'ADMIN_ADD_ROLE_FAILED'  => 'Role %s could not be added',
 'ADMIN_ADD_ROLE_SUCCESS'  => 'Role %s was created successfully.',
+'ADMIN_UPDATE_FACTION_SUCCESS' => 'Faction %s was updated successfully',
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Active Point Adjustment',
@@ -815,6 +816,7 @@ $lang = array_merge($lang, array(
 'EDIT_RAIDER_TITLE' => 'Edit a Raider',
 'ADD_RACE_TITLE' => 'Race Parameters',
 'ADD_CLASS_TITLE' => 'Class parameters',
+'EDIT_FACTION' => 'Edit Faction',
 
 // Page Foot Counts
 'LISTMEMBERS_FOOTCOUNT' => '... found %d members',
@@ -832,6 +834,8 @@ $lang = array_merge($lang, array(
 'LISTCLASS_FOOTCOUNT' => '... found %d classes',
 'LISTFACTION_FOOTCOUNT' => '... found %d Factions',
 'RAIDITEMS_FOOTCOUNT' => '... found %d Items acquired',
+'LISTROLES_FOOTCOUNT' => '... found %d roles',
+
 
 // Submit Buttons
 'ADD_ADJUSTMENT' => 'Add Adjustment',
@@ -843,6 +847,7 @@ $lang = array_merge($lang, array(
 'ADD_RAID' => 'Add Raid',
 'ADD_RACE' => 'Add Race',
 'ADD_CLASS' => 'Add Class',
+'ADD_ROLE' => 'Add Role',
 'ADD_GAME' => 'Add Game',
 'ADD_PRECONFIGGAME' => 'Add Game from template',
 'ADD_CUSTOMGAME' => 'Add Custom Game',

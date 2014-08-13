@@ -87,9 +87,9 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
         switch ($mode)
         {
 
-            /***************************************/
-            // List Guilds
-            /***************************************/
+            /***************************************
+             List Guilds
+            ***************************************/
             case 'listguilds':
 
                 $this->BuildTemplateListGuilds();
