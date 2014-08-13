@@ -98,9 +98,10 @@
                 <!-- ELSE -->
             <tr class="row2">
                 <!-- ENDIF -->
-                <td><input type="text" name="factionid[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONID}"/></td>
-                <td><input type="text" name="factionname[{faction_row.FACTIONID}]"  maxlength="255" value="{faction_row.FACTIONNAME}" class="full" /></td>
-                <td><a href="{faction_row.U_DELETE}">{ICON_DELETE}</a></td>
+                <td>{faction_row.FACTIONID}</td>
+                <td>{faction_row.FACTIONNAME}</td>
+                <td><a href="{faction_row.U_DELETE}">{ICON_DELETE}</a>
+                <a href="{faction_row.U_EDIT}">{ICON_EDIT}</a></td>
             </tr>
             <!-- END faction_row -->
             <tr>
@@ -108,14 +109,9 @@
             </tr>
             </tbody>
         </table>
-        <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
-            <input type="submit" name="factionsave" value="{L_SUBMIT}" class="button1" />
-            &nbsp;
-            <input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-            {S_FORM_TOKEN}
-        </fieldset>
         <!-- ENDIF -->
         <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+            {S_FORM_TOKEN}
             <input class="button2" name="showfactionadd" type="submit" value="{L_ACP_DKP_FACTION_ADD}" />
         </fieldset>
 
@@ -188,29 +184,24 @@
                 <!-- ELSE -->
             <tr class="row2">
                 <!-- ENDIF -->
-                <td><input style="vertical-align: middle; width:90%" type="text" name="rolename[{role_row.ROLE_ID}]"  length="2" value="{role_row.ROLE_ID}"  /></td>
-                <td><input style="vertical-align: middle;width:90%" type="text" name="rolename[{role_row.ROLE_ID}]"  maxlength="255" value="{role_row.ROLE_NAME}" class="full" /></td>
-                <td style="background-color: {role_row.ROLE_COLOR}"><input style="vertical-align: middle;width:95%" type="text" name="role_color[{role_row.ROLE_ID}]"  maxlength="50" value="{role_row.ROLE_COLOR}" /></td>
-                <td><input style="vertical-align: middle;width:60%" type="text" name="role_icon[{role_row.ROLE_ID}]"  maxlength="50" value="{role_row.ROLE_ICON}" /><!-- IF role_row.S_ROLE_ICON_EXISTS -->&nbsp;<img style="vertical-align: middle;" src="{role_row.U_ROLE_ICON}" alt="image" /><!-- ENDIF --></td>
-                <td><input style="vertical-align: middle;width:60%" type="text" name="role_cat_icon[{role_row.ROLE_ID}]"  maxlength="50" value="{role_row.ROLE_CAT_ICON}" /><!-- IF role_row.S_ROLE_CAT_ICON_EXISTS -->&nbsp;<img style="vertical-align: middle;" src="{role_row.U_ROLE_CAT_ICON}" alt="image" /><!-- ENDIF --></td>
-                <td><a href="{role_row.U_DELETE}">{ICON_DELETE}</a></td>
+                <td>{role_row.ROLE_ID}</td>
+                <td>{role_row.ROLE_NAME}</td>
+                <td style="background-color: {role_row.ROLE_COLOR}">{role_row.ROLE_COLOR}</td>
+                <td><!-- IF role_row.S_ROLE_ICON_EXISTS -->&nbsp;<img style="vertical-align: middle;" src="{role_row.U_ROLE_ICON}" alt="image" /><!-- ELSE -->{role_row.ROLE_ICON}<!-- ENDIF --></td>
+                <td><!-- IF role_row.S_ROLE_CAT_ICON_EXISTS -->&nbsp;<img style="vertical-align: middle;" src="{role_row.U_ROLE_CAT_ICON}" alt="image" /><!-- ELSE -->{role_row.U_ROLE_CAT_ICON}<!-- ENDIF --></td>
+                <td><a href="{role_row.U_DELETE}">{ICON_DELETE}</a><a href="{role_row.U_EDIT}">{ICON_EDIT}</a></td>
             </tr>
             <!-- END role_row -->
 
             <tr>
-                <th colspan="6" class="footer">{LISTFROLES_FOOTCOUNT}</th>
+                <th colspan="6" class="footer">{LISTROLES_FOOTCOUNT}</th>
             </tr>
             </tbody>
         </table>
-        <fieldset class="quick" style="float:{S_CONTENT_FLOW_END};">
-            <input type="submit" name="rolessave" id="rolessave" value="{L_SUBMIT}" class="button1" />
-            &nbsp;
-            <input class="button2" type="reset" id="rolereset" name="rolereset" value="{L_RESET}" />
-            {S_FORM_TOKEN}
-        </fieldset>
         <!-- ENDIF -->
         <fieldset class="quick" style="float:{S_CONTENT_FLOW_BEGIN};">
-            <input class="button2" name="showrolesadd" type="submit" value="{L_ADD}" />
+            {S_FORM_TOKEN}
+            <input class="button2" name="showrolesadd" type="submit" value="{L_ADD_ROLE}" />
         </fieldset>
 
     </fieldset>
