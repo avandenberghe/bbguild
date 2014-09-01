@@ -266,6 +266,8 @@ $lang = array_merge($lang, array(
 'ACP_EDITGAME' => 'Edit Game: %s',
 'ACP_ADDROLE' => 'Add Role',
 'ACP_EDITROLE' => 'Edit Role %s',
+'ACP_LISTRECRUITS' => 'List Recruitments',
+'RETURN_RECLIST'  => 'Return to Recruitment List. ',
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Adminpanel Index',
@@ -308,7 +310,7 @@ $lang = array_merge($lang, array(
 'ACP_ADDRACE_EXPLAIN' => 'Here you can add/edit the Races.',
 'ACP_ADDRANK_EXPLAIN' => 'Here you can add/edit the Guild ranks. For wow you can download them from the Armory',
 'ACP_ROLES_EXPLAIN' => 'Here you can edit the roles for this game.',
-
+'ACP_LISTRECRUITS_EXPLAIN' => 'Here you can edit Recruitments',
 
 'RACEID_EXPLAIN' =>'Note. the ID is unique. for Wow, it should match the raceId XML Armory tag. ',
 'RACE_EXPLAIN' =>'Race name',
@@ -639,6 +641,8 @@ $lang = array_merge($lang, array(
 'IERROTH' => 'Other error',
 'WOWAPI_NO_CHARACTER' => 'Character name not specified.',
 'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
+'WARNING_NORECRUITMENTS'   =>  'No Recruitments found.',
+
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',
@@ -850,7 +854,7 @@ $lang = array_merge($lang, array(
 'LISTFACTION_FOOTCOUNT' => '... found %d Factions',
 'RAIDITEMS_FOOTCOUNT' => '... found %d Items acquired',
 'LISTROLES_FOOTCOUNT' => '... found %d roles',
-
+'RECRUIT_FOOTCOUNT' => '... found %d recruitments',
 
 // Submit Buttons
 'ADD_ADJUSTMENT' => 'Add Adjustment',

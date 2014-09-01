@@ -60,7 +60,7 @@ if (!function_exists('json_decode'))
 
 if(count($error) > 0)
 {
-    trigger_error(implode($error,"<br /> "), E_USER_WARNING);
+    trigger_error(implode($error,"<br /> "), E_USER_ERROR);
 }
 
 // We only allow a founder install this MOD

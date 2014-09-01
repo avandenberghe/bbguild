@@ -48,6 +48,7 @@ if (!class_exists('\bbdkp\controller\games\Roles'))
  */
 class Recruitment extends Roles
 {
+
     /**
      * primary key
      */
@@ -61,11 +62,43 @@ class Recruitment extends Roles
     protected $guild_id;
 
     /**
+     * @return int
+     */
+    public function getGuildId()
+    {
+        return $this->guild_id;
+    }
+
+    /**
+     * @param int $guild_id
+     */
+    public function setGuildId($guild_id)
+    {
+        $this->guild_id = $guild_id;
+    }
+
+    /**
      * Class id needed
      *
      * @var int
      */
     protected $class_id;
+
+    /**
+     * @return int
+     */
+    public function getClassId()
+    {
+        return $this->class_id;
+    }
+
+    /**
+     * @param int $class_id
+     */
+    public function setClassId($class_id)
+    {
+        $this->class_id = $class_id;
+    }
 
     /**
      * how many are needed ?
@@ -75,11 +108,43 @@ class Recruitment extends Roles
     protected $positions;
 
     /**
+     * @return int
+     */
+    public function getPositions()
+    {
+        return $this->positions;
+    }
+
+    /**
+     * @param int $positions
+     */
+    public function setPositions($positions)
+    {
+        $this->positions = $positions;
+    }
+
+    /**
      * how many did apply ?
      *
      * @var int
      */
     protected $applicants;
+
+    /**
+     * @return int
+     */
+    public function getApplicants()
+    {
+        return $this->applicants;
+    }
+
+    /**
+     * @param int $applicants
+     */
+    public function setApplicants($applicants)
+    {
+        $this->applicants = $applicants;
+    }
 
     /**
      * date last update -- epoch date
@@ -89,11 +154,43 @@ class Recruitment extends Roles
     protected $lest_update;
 
     /**
+     * @return int
+     */
+    public function getLestUpdate()
+    {
+        return $this->lest_update;
+    }
+
+    /**
+     * @param int $lest_update
+     */
+    public function setLestUpdate($lest_update)
+    {
+        $this->lest_update = $lest_update;
+    }
+
+    /**
      * a note on this recruitment
      *
      * @var int
      */
     protected $note;
+
+    /**
+     * @return int
+     */
+    public function getNote()
+    {
+        return $this->note;
+    }
+
+    /**
+     * @param int $note
+     */
+    public function setNote($note)
+    {
+        $this->note = $note;
+    }
 
     /**
      * status of recruitment
@@ -102,6 +199,23 @@ class Recruitment extends Roles
      * @var int
      */
     protected $status;
+
+    /**
+     * @return int
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @param int $status
+     */
+    public function setStatus($status)
+    {
+        $this->status = $status;
+    }
+
 
     /**
      * possible recruitment statuses
@@ -116,6 +230,7 @@ class Recruitment extends Roles
      * @var array
      */
     private $classreccolor = array();
+
 
     /**
      * Recruitment class constructor
@@ -152,7 +267,7 @@ class Recruitment extends Roles
             'FROM'     => array(
                 BBRECRUIT_TABLE   => 'u',
                 GUILD_TABLE       => 'g',
-                BBDKP_ROLES_TABLE => 'r',
+                BB_GAMEROLE_TABLE => 'r',
                 BB_LANGUAGE       => 'l',
             ),
             'WHERE'    => " 1=1
@@ -248,7 +363,7 @@ class Recruitment extends Roles
 
         $sql_array = array(
 
-            'SELECT'   => " u.id, u.game_id, u.guild_id, u.role_id,
+            'SELECT'   => " u.id, u.guild_id, u.role_id,
                 u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note,
                 r.role_color, r.role_icon, r.role_cat_icon, r1.name as role_name,
                 c1.name as class_name, c.colorcode, c.imagename
@@ -257,27 +372,30 @@ class Recruitment extends Roles
             'FROM'     => array(
                 BBRECRUIT_TABLE   => 'u',
                 GUILD_TABLE       => 'g',
-                BBDKP_ROLES_TABLE => 'r',
-                BB_LANGUAGE       => 'r1',
+                BB_GAMEROLE_TABLE => 'r',
                 CLASS_TABLE       => 'c',
-                BB_LANGUAGE       => 'c1',
+                BB_LANGUAGE       => 'r1',
+            ),
+
+            'LEFT_JOIN' => array(
+                array(
+                    'FROM'  => array(BB_LANGUAGE => 'c1'),
+                    'ON'    => "c.game_id=c1.game_id AND c1.attribute_id = c.class_id  AND c1.language = '" . $config['bbdkp_lang'] . "' and c1.attribute='class'",
+                )
             ),
 
             'WHERE'    => " 1=1
                 AND u.guild_id = g.id
                 AND u.role_id = r.role_id
-                AND l.attribute='role' and
-                AND r.game_id=l.game_id AND l.attribute_id = r.role_id  AND l.language = '" . $config['bbdkp_lang'] . "' and l.attribute='role'
+                AND r1.attribute = 'role'
+                AND r.game_id = r1.game_id AND r1.attribute_id = r.role_id  AND r1.language = '" . $config['bbdkp_lang'] . "' and r1.attribute='role'
                 AND c.class_id > 0 AND c.class_id = u.class_id AND c.game_id = g.game_id
-                AND c.game_id=c1.game_id AND c1.attribute_id = c.class_id  AND l.language = '" . $config['bbdkp_lang'] . "' and l.attribute='class'
                 AND g.id =  " . $this->guild_id,
             'ORDER_BY' => 'c.game_id, c.class_id '
         );
         $sql          = $db->sql_build_query('SELECT', $sql_array);
         $result       = $db->sql_query($sql);
-        $recruitments = (array)$result;
-        $db->sql_freeresult($result);
-        return $recruitments;
+        return $result;
     }
 
 

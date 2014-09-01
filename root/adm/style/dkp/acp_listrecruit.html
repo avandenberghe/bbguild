@@ -1,0 +1,82 @@
+<!-- INCLUDE overall_header.html -->
+<a name="maincontent"></a>
+<h1>{L_ACP_LISTRECRUITS}</h1>
+<p>{L_ACP_LISTRECRUITS_EXPLAIN}</p>
+
+<!-- IF .guild_row -->
+<form method="post" action="{U_RECRUIT}" id="listguild">
+
+<fieldset style="background-color: #EEEEEE">
+<legend>{L_GUILD}</legend>
+	<dl>
+	<dt>
+		{L_GUILD}
+	</dt>
+	<dd>
+		<select name="guild_id" class="input" id="defaultguild">
+	      <!-- BEGIN guild_row -->
+	         <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
+	      <!-- END guild_row -->
+		</select>
+	</dd>
+</dl>
+</fieldset>
+
+</form>
+<form method="post" action="{U_RECRUIT}" id="listrecruit">
+
+<fieldset class="tabulated">
+<table width="100%" border="0" cellspacing="1" cellpadding="2">
+  <thead>
+  <tr>
+    <th style="text-align: left; width:5%">{L_ID}</th>
+    <th colspan=2 style="text-align: left; width:20%; white-space: nowrap">{L_ROLE}</th>
+    <th colspan=2 style="text-align: left; width:10%; white-space: nowrap">{L_CLASS}</a></th>
+    <th style="text-align: left; width:10%; white-space: nowrap">{L_POSITIONS}</th>
+    <th style="text-align: left; width:10%; white-space: nowrap">{L_APPLICANTS}</th>
+    <th style="text-align: left; width:10%; white-space: nowrap">{L_STATUS}</th>
+    <th style="text-align: center; width:5%;">{L_ACTION}</th>
+  </tr>
+  </thead>
+  <tfoot>
+   <tr>
+    <th colspan="9" class="footer">{RECRUIT_FOOTCOUNT}</th>
+    </tr>
+  </tfoot>
+  <tbody>
+  <!-- BEGIN recruit_row -->
+  <!-- IF recruit_row.S_ROW_COUNT is even -->
+  <tr class="row1">
+  <!-- ELSE -->
+  <tr class="row2">
+  <!-- ENDIF -->
+    <td>{recruit_row.ID}</td>
+    <td>{recruit_row.ROLE_ID}</td>
+    <td style="color: {recruit_row.ROLE_COLOR}"><strong>{recruit_row.ROLE_NAME}</strong></td>
+    <td style="background-color: {recruit_row.COLOR_CODE}"><strong>{recruit_row.CLASS_NAME}</strong></td>
+    <td><img style="vertical-align: middle;" src="{recruit_row.CLASS_IMAGE}" alt="{recruit_row.CLASS_NAME}" /></td>
+    <td>{recruit_row.POSITIONS}</td>
+    <td>{recruit_row.APPLICANTS}</td>
+    <td>{recruit_row.STATUS}</td>
+	<td style="text-align: center;"><a href="{recruit_row.U_VIEW_RECRUIT}">{ICON_EDIT}</a></td>
+  </tr>
+  <!-- END recruit_row -->
+</tbody>
+</table>
+</fieldset>
+</form>
+<!-- ELSE -->
+<div class="errorbox">
+<h3>{L_ERROR}</h3>
+<p>{L_ERROR_NOGUILD}</p>
+</div>
+
+<!-- ENDIF -->
+
+
+<form method="post" action="{U_ADDGUILD}" id="addguildform">
+<fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
+	<input class="button2" name="addguild" type="submit" value="{L_ADD}" />
+</fieldset>
+</form>
+<!-- INCLUDE dkp/overall_footer.html -->

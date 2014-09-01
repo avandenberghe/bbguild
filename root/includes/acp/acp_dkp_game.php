@@ -302,6 +302,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				if ($racedelete)
 				{
                     $this->DeleteRace($editgame);
+                    break;
                 }
 
                 $addclass = (isset ( $_POST ['showclassadd'] )) ? true : false;
@@ -326,6 +327,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				{
                     // user pressed delete class
                     $this->DeleteClass($editgame);
+                    break;
                 }
 
 				$this->showgame($editgame);
@@ -516,6 +518,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_GAME'], $editgame->getName()), $s_hidden_fields);
 
         }
+
     }
 
     /**
@@ -634,6 +637,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_ROLE'], $deleterole->rolename), $s_hidden_fields);
 
         }
+        $this->showgame($editgame);
     }
 
 
@@ -727,6 +731,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_FACTION'], $faction->faction_name), $s_hidden_fields);
 
         }
+        $this->showgame($editgame);
     }
 
     /**
@@ -819,6 +824,8 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             );
             confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_CLASS'], $deleteclass->classname), $s_hidden_fields);
         }
+        $this->showgame($editgame);
+
     }
 
     /**
@@ -933,6 +940,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_RACE'], $deleterace->game_id, $deleterace->race_name), $s_hidden_fields);
 
         }
+        $this->showgame($editgame);
     }
 
 

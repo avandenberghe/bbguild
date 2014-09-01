@@ -87,7 +87,7 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
     {
         global $user, $template, $db, $phpbb_admin_path, $phpEx;
         $this->tpl_name = 'dkp/acp_' . $mode;
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=listrecruit") . '"><h3>'.$user->lang['RETURN_RECLIST'].'</h3></a>';
 
         switch ($mode)
         {
@@ -97,7 +97,7 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
             /***************************************/
             case 'listrecruit':
 
-                $this->BuildTemplateListGuilds();
+                $this->BuildTemplateListRecruits();
                 break;
 
             /*************************************
@@ -745,85 +745,75 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
 
     /**
      *
-     * list the guilds
+     * list the recruitments
      */
-    private function BuildTemplateListGuilds()
+    private function BuildTemplateListRecruits()
     {
         global $user, $template, $phpbb_admin_path, $phpEx, $db;
         if (count($this->games) == 0)
         {
             trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
         }
-        $updateguild = new \bbdkp\controller\guilds\Guilds();
-        $guildlist   = $updateguild->guildlist(1);
+
+        $guild_id = request_var(URI_GUILD, 0);
+        $guilds = new \bbdkp\controller\guilds\Guilds();
+        $guildlist   = $guilds->guildlist(1);
         foreach ($guildlist as $g)
         {
-            $template->assign_block_vars('defaultguild_row', array(
+            $template->assign_block_vars('guild_row', array(
                 'VALUE'    => $g['id'],
-                'SELECTED' => ($g['guilddefault'] == '1') ? ' selected="selected"' : '',
+                'SELECTED' => ($guild_id == $g['id']) ? ' selected="selected"' : '',
                 'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
         }
-        $guilddefaultupdate = (isset($_POST['upddefaultguild'])) ? true : false;
-        if ($guilddefaultupdate)
+
+        $recruits = new \bbdkp\controller\guilds\Recruitment();
+
+        $guild_id = 1;
+
+        $recruits->setGuildId($guild_id);
+        $result   = $recruits->ListRecruitments();
+        $recruit_count= 0;
+
+        while ($row = $db->sql_fetchrow($result))
         {
-            $this->UpdateDefaultGuild($updateguild);
-        }
-        $guildadd = (isset($_POST['addguild'])) ? true : false;
-        if ($guildadd)
-        {
-            redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=addguild"));
-        }
-        $sort_order = array(
-            0 => array('id', 'id desc'),
-            1 => array('name', 'name desc'),
-            2 => array('realm desc', 'realm desc'),
-            3 => array('region', 'region desc'),
-            4 => array('roster', 'roster desc'));
-        $current_order   = $this->switch_order($sort_order);
-        $guild_count     = 0;
-        $previous_data   = '';
-        $sort_index      = explode('.', $current_order['uri']['current']);
-        $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
-        $show_all        = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
-        $sql = 'SELECT id, name, realm, region, roster, game_id FROM ' . GUILD_TABLE . ' WHERE id > 0 ORDER BY ' . $current_order['sql'];
-        if (!($guild_result = $db->sql_query($sql)))
-        {
-            trigger_error($user->lang['ERROR_GUILDNOTFOUND'], E_USER_WARNING);
-        }
-        $lines = 0;
-        while ($row = $db->sql_fetchrow($guild_result))
-        {
-            $guild_count++;
-            $listguild = new \bbdkp\controller\guilds\Guilds($row['id']);
-            $template->assign_block_vars('guild_row', array(
-                    'ID'           => $listguild->guildid,
-                    'NAME'         => $listguild->name,
-                    'REALM'        => $listguild->realm,
-                    'REGION'       => $listguild->region,
-                    'GAME'         => $listguild->game_id,
-                    'MEMBERCOUNT'  => $listguild->membercount,
-                    'SHOW_ROSTER'  => ($listguild->showroster == 1 ? 'yes' : 'no'),
-                    'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $listguild->guildid)
+            $recruit_count++;
+            $template->assign_block_vars('recruit_row', array(
+                    'ID'            => $row['id'],
+                    'GUILD_ID'      => $row['guild_id'],
+                    'ROLE_ID'       => $row['role_id'],
+                    'CLASS_ID'      => $row['class_id'],
+                    'CLASS_NAME'    => $row['class_name'],
+                    'COLOR_CODE'    => $row['colorcode'],
+                    'CLASS_IMAGE'   => $row['imagename'],
+                    'POSITIONS'     => $row['positions'],
+                    'APPLICANTS'    => $row['applicants'],
+                    'STATUS'        => $row['status'],
+                    'ROLE_COLOR'    => $row['role_color'],
+                    'ROLE_NAME'     => $row['role_name'],
+                    'U_VIEW_RECRUIT'  => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=addrecruit&amp;" . URI_GUILD . '=' . $row['guild_id'])
                 )
             );
-            $previous_data = $row[$previous_source];
         }
-        $form_key = 'listguilds';
+        if (!$row)
+        {
+           // trigger_error(sprintf($user->lang ['WARNING_NORECRUITMENTS']) . $this->link, E_USER_WARNING);
+        }
+
+        $recruitadd = (isset($_POST['addrecruit'])) ? true : false;
+        if ($recruitadd)
+        {
+            redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=addrecruit&amp;" . URI_GUILD . '=' . $recruitlist['guild_id']));
+        }
+
+        $form_key = 'listrecruits';
         add_form_key($form_key);
         $template->assign_vars(array(
-            'U_GUILDLIST'            => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=listguilds',
-            'U_ADDGUILD'             => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=addguild',
-            'U_GUILD'                => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=editguild',
-            'L_TITLE'                => $user->lang['ACP_LISTGUILDS'],
-            'L_EXPLAIN'              => $user->lang['ACP_LISTGUILDS_EXPLAIN'],
+            'U_RECRUITLIST'            => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=listguilds',
+            'U_ADDRECRUIT'             => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=addguild',
+            'U_RECRUIT'                => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=editguild',
             'BUTTON_VALUE'           => $user->lang['DELETE_SELECTED_GUILDS'],
-            'O_ID'                   => $current_order['uri'][0],
-            'O_NAME'                 => $current_order['uri'][1],
-            'O_REALM'                => $current_order['uri'][2],
-            'O_REGION'               => $current_order['uri'][3],
-            'O_ROSTER'               => $current_order['uri'][4],
             'U_LIST_GUILD'           => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds"),
-            'GUILDMEMBERS_FOOTCOUNT' => sprintf($user->lang['GUILD_FOOTCOUNT'], $guild_count)));
+            'RECRUIT_FOOTCOUNT'      => sprintf($user->lang['RECRUIT_FOOTCOUNT'], $recruit_count)));
         $this->page_title = 'ACP_LISTGUILDS';
     }
 }

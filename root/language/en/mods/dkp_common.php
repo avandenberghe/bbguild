@@ -357,6 +357,8 @@ $lang = array_merge($lang, array(
 'VIEW_LOGS' => 'View Logs',
 'ZSVALUE' => 'Zerosum',
 'ZEROSUM' => 'Zerosum bonus',
+'APPLICANTS' => 'Applicants',
+'POSITIONS' => 'Positions',
 
 //lootsystems
 'EP' => 'EP',
