@@ -137,7 +137,6 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                     $Guild->guildid = request_var(URI_GUILD, 0);
                 }
 
-
                 $charapicall = (isset($_POST['charapicall'])) ? true : false;
                 if($charapicall)
                 {

@@ -1,0 +1,50 @@
+<!-- INCLUDE overall_header.html -->
+<a name="maincontent"></a>
+<h1>{L_ACP_LISTRECRUITS}</h1>
+<p>{L_ACP_LISTRECRUITS_EXPLAIN}</p>
+
+<form method="post" action="{U_RECRUITLIST}" id="listguild">
+
+    <fieldset style="background-color: #EEEEEE">
+        <legend>{L_GUILD}</legend>
+        <dl>
+            <dt>
+                {L_GUILD}
+            </dt>
+            <dd>
+                <div style="display: table;">
+                    <div style="width:50%; float: left"><a href="{U_VIEW_GUILD}"><img style="width:80px; height:80px" src="{GUILD_EMBLEM}" alt="" /></a></div>
+                    <div style="width:50%; vertical-align: middle; display: table-cell;">
+                        <select name="guild_id" class="input" id="defaultguild" onchange="javascript:form.submit();" >
+                            <!-- BEGIN guild_row -->
+                            <option value="{guild_row.VALUE}"{guild_row.SELECTED}>{guild_row.OPTION}</option>
+                            <!-- END guild_row -->
+                        </select>
+                    </div>
+                </div>
+            </dd>
+        </dl>
+    </fieldset>
+</form>
+
+<div id="advanced00">
+    <div class="permissions-category">
+        <ul>
+            <li class="permissions-preset-yes"><a href="{U_EDIT_GUILDRECRUITMENT}" onclick=""><span class="tabbg"><span class="colour"></span>{L_ACP_LISTRECRUITS}</span></a></li>
+            <li class="permissions-preset-yes never activetab "><a href="{U_ADDRECRUIT}" onclick=""><span class="tabbg"><span class="colour"></span>{L_ACP_ADDRECRUITS}</span></a></li>
+        </ul>
+    </div>
+
+    <div class="permissions-panel" id="options001">
+        <span class="corners-top"><span></span></span>
+
+        <form method="post" action="{U_RECRUITLIST}" id="listrecruit">
+
+
+        </form>
+        <span class="corners-bottom"><span></span></span>
+    </div>
+</div>
+
+
+<!-- INCLUDE dkp/overall_footer.html -->

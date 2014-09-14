@@ -267,6 +267,7 @@ $lang = array_merge($lang, array(
 'ACP_ADDROLE' => 'Add Role',
 'ACP_EDITROLE' => 'Edit Role %s',
 'ACP_LISTRECRUITS' => 'List Recruitments',
+'ACP_ADDRECRUITS' => 'Add Recruitment',
 'RETURN_RECLIST'  => 'Return to Recruitment List. ',
 
 // Explains
@@ -310,7 +311,7 @@ $lang = array_merge($lang, array(
 'ACP_ADDRACE_EXPLAIN' => 'Here you can add/edit the Races.',
 'ACP_ADDRANK_EXPLAIN' => 'Here you can add/edit the Guild ranks. For wow you can download them from the Armory',
 'ACP_ROLES_EXPLAIN' => 'Here you can edit the roles for this game.',
-'ACP_LISTRECRUITS_EXPLAIN' => 'Here you can edit Recruitments',
+'ACP_LISTRECRUITS_EXPLAIN' => 'Here you can add or edit Recruitments',
 
 'RACEID_EXPLAIN' =>'Note. the ID is unique. for Wow, it should match the raceId XML Armory tag. ',
 'RACE_EXPLAIN' =>'Race name',
