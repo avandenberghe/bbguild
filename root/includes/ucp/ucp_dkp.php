@@ -133,7 +133,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
                     {
                         foreach ($member->guildmemberlist as $id => $m  )
                         {
-                            $s_guildmembers .= '<option value="' . $m['member_id'] .'">'. $m['rank_name']  . ' ' . $m['member_name'] . '</option>';
+                            $s_guildmembers .= '<option value="' . $m['member_id'] .'">'. $m['rank_name']  . ' ' . $m['member_name'] . '-' . $m['member_realm'] '</option>';
                         }
                     }
                     else

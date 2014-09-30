@@ -1,4 +1,4 @@
-<?php
+﻿<?php
 /**
  * bbDKP Umil Installer
  *
@@ -261,7 +261,7 @@ $versions = array(
 
                 ),
                 'PRIMARY_KEY'  => 'member_id',
-                'KEYS'         => array('member_name'    => array('UNIQUE', 'member_name')),
+                'KEYS'         => array('member_name_member_realm'    => array('UNIQUE', 'member_name', 'member_realm')),
             ),
             ),
 

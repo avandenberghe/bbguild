@@ -497,10 +497,11 @@ class Members extends \bbdkp\admin\Admin
      * get member id given a member name and guild
      *
      * @param string $membername
+     * @param string $memberrealm
      * @param int $guild_id optional
      * @return int
      */
-	public function get_member_id ($membername, $guild_id = 0)
+	public function get_member_id ($membername, $memberrealm, $guild_id = 0)
 	{
 		global $db;
 		if($guild_id !=0)
@@ -508,13 +509,15 @@ class Members extends \bbdkp\admin\Admin
 			$sql = 'SELECT member_id
                 FROM ' . MEMBER_LIST_TABLE . '
                 WHERE member_name ' . $db->sql_like_expression($db->any_char . $db->sql_escape($membername) . $db->any_char) . '
+                AND member_realm ' . $db->sql_like_expression($db->any_char . $db->sql_escape($memberrealm) . $db->any_char) . '
                 AND member_guild_id = ' . (int) $db->sql_escape($guild_id);
 		}
 		else
 		{
 			$sql = 'SELECT member_id
                 FROM ' . MEMBER_LIST_TABLE . '
-                WHERE member_name ' . $db->sql_like_expression($db->any_char . $db->sql_escape($membername) . $db->any_char);
+                WHERE member_name ' . $db->sql_like_expression($db->any_char . $db->sql_escape($membername) . $db->any_char) . '
+                AND member_realm ' . $db->sql_like_expression($db->any_char . $db->sql_escape($memberrealm) . $db->any_char);
 		}
 
 		$result = $db->sql_query($sql);
@@ -757,6 +760,7 @@ class Members extends \bbdkp\admin\Admin
         $sql = 'SELECT count(*) as memberexists
 				FROM ' . MEMBER_LIST_TABLE . "
 				WHERE member_name= '" . $db->sql_escape(ucwords($this->member_name)) . "'
+				AND member_realm= '" . $db->sql_escape(ucwords($this->member_realm)) . "'
 				AND member_guild_id = " . $this->member_guild_id;
         $result = $db->sql_query($sql);
         $countm = $db->sql_fetchfield('memberexists');
@@ -1258,13 +1262,13 @@ class Members extends \bbdkp\admin\Admin
 		$newmembers = array();
 
 		/* GET OLD RANKS */
-		$sql = ' select member_name, member_id FROM ' . MEMBER_LIST_TABLE . '
+		$sql = ' select member_name, member_id, member_realm FROM ' . MEMBER_LIST_TABLE . '
 				WHERE member_guild_id =  ' . (int) $guild_id . "
 				AND game_id='wow' order by member_name ASC";
 		$result = $db->sql_query ($sql);
 		while ($row = $db->sql_fetchrow ($result))
 		{
-			$oldmembers[] = $row['member_name'];
+			$oldmembers[] = $row['member_name'] . '-' . $row['member_realm'];
 
 			//this is to find the memberindex when updating
 			$member_ids[ bin2hex($row['member_name'])] = $row['member_id'];
@@ -1274,7 +1278,7 @@ class Members extends \bbdkp\admin\Admin
 
 		foreach($memberdata as $mb)
 		{
-			$newmembers[] = $mb['character']['name'];
+			$newmembers[] = $mb['character']['name'] . '-' . $mb['character']['realm'];
 		}
 
 		// get the new members to insert
@@ -1285,7 +1289,7 @@ class Members extends \bbdkp\admin\Admin
 		$query = array();
 		foreach($memberdata as $mb)
 		{
-			if (in_array($mb['character']['name'], $to_add) && $mb['character']['level'] >= $min_armory )
+			if (in_array($mb['character']['name'] . '-' . $mb['character']['realm'], $to_add) && $mb['character']['level'] >= $min_armory )
 			{
 				if(!isset( $mb['character']['realm']))
 				{
@@ -1348,7 +1352,7 @@ class Members extends \bbdkp\admin\Admin
 				$realm = $mb['character']['realm'];
 			}
 
-			if (in_array($mb['character']['name'], $to_update))
+			if (in_array($mb['character']['name'] . '-' . $mb['character']['realm'], $to_update))
 			{
 				$member_id =  (int) $member_ids[bin2hex($mb['character']['name'])];
 				$this->game_id ='wow';
@@ -1427,7 +1431,7 @@ class Members extends \bbdkp\admin\Admin
 		global $db;
 
 		$sql_array = array(
-			'SELECT'    => 'r.rank_name, m.member_id ,m.member_name ',
+			'SELECT'    => 'r.rank_name, m.member_id ,m.member_name, m.member_realm ',
 			'FROM'      => array(
 					MEMBER_LIST_TABLE 	  => 'm',
 					MEMBER_RANKS_TABLE    => 'r',
@@ -1458,6 +1462,7 @@ class Members extends \bbdkp\admin\Admin
 				'member_id' 	=> $row['member_id'],
 				'member_name' 	=> $row['member_name'],
 				'rank_name'  	=> $row['rank_name'],
+				'member_realm'	=> $row['member_realm'],
 			);
 		}
 
@@ -1536,7 +1541,7 @@ class Members extends \bbdkp\admin\Admin
 		$sql_array['SELECT'] =  'm.member_id, m.game_id, m.member_guild_id,  m.member_name, m.member_level, m.member_race_id, e1.name as race_name,
     		m.member_class_id, m.member_gender_id, m.member_rank_id, m.member_achiev, m.member_armory_url, m.member_portrait_url, m.member_status,
     		r.rank_prefix , r.rank_name, r.rank_suffix, e.image_female, e.image_male,
-    		g.name as guildname, g.realm, g.region, c1.name as class_name, c.colorcode, c.imagename, m.phpbb_user_id, u.username, u.user_colour  ';
+    		g.name as guildname, m.member_realm, g.region, c1.name as class_name, c.colorcode, c.imagename, m.phpbb_user_id, u.username, u.user_colour  ';
 
 		$sql_array['FROM'] = array(
 				MEMBER_LIST_TABLE    =>  'm',
@@ -1684,7 +1689,7 @@ class Members extends \bbdkp\admin\Admin
 					'member_id' => $row['member_id'],
 					'member_name' => $row['member_name'],
 					'guildname' => $row['guildname'],
-					'realm'	=> $row['realm'],
+					'realm'	=> $row['member_realm'],
 					'region'	=> $row['region'],
 					'colorcode' => $row['colorcode'],
 					'member_class_id' => $row['member_class_id'],
