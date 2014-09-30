@@ -1271,7 +1271,7 @@ class Members extends \bbdkp\admin\Admin
 			$oldmembers[] = $row['member_name'] . '-' . $row['member_realm'];
 
 			//this is to find the memberindex when updating
-			$member_ids[ bin2hex($row['member_name'])] = $row['member_id'];
+			$member_ids[ bin2hex($row['member_name'] . '-' . $row['member_realm'])] = $row['member_id'];
 
 		}
 		$db->sql_freeresult ( $result );
@@ -1354,7 +1354,7 @@ class Members extends \bbdkp\admin\Admin
 
 			if (in_array($mb['character']['name'] . '-' . $mb['character']['realm'], $to_update))
 			{
-				$member_id =  (int) $member_ids[bin2hex($mb['character']['name'])];
+				$member_id =  (int) $member_ids[bin2hex($mb['character']['name'] . '-' . $mb['character']['realm'])];
 				$this->game_id ='wow';
 				$this->member_region = $region;
 				$this->member_realm = $mb['character']['realm'];
