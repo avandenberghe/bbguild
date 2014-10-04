@@ -30,6 +30,7 @@
 		<link-group>
 			<link type="language" href="../fr.xml" lang="en">Français</link>
 			<link type="language" href="../de.xml" lang="en">Deutsch</link>	
+			<link type="language" href="../it.xml" lang="en">Italiano</link>				
 			<link type="parent" href="../../install.xml" lang="en">bbdkp Install Instructions</link>	
 		</link-group>	
 	</header>
@@ -43,6 +44,7 @@
 		<php-installer>install/index.php</php-installer>
 		<diy-instructions lang="fr"><![CDATA[navigue vers install/index.php et execute la mise à jour.]]></diy-instructions>
 		<diy-instructions lang="de"><![CDATA[Rufe install/index.php auf und führe die Aktualisierung aus.]]></diy-instructions>
+		<diy-instructions lang="it"><![CDATA[Chiamate install/index.php on ed eseguire l'aggiornamento.]]></diy-instructions>		
 		<diy-instructions lang="en"><![CDATA[Browse to install/index.php and run the Updater.]]></diy-instructions>
 	</action-group>
 </mod>
