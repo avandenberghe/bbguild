@@ -177,9 +177,14 @@ EQDkp (c) 2003 The EqDkp Project Team]]></description>
 			<file from="root/includes/bbdkp/block/whoisonlineblock.php" to="includes/bbdkp/block/whoisonlineblock.php"/>
 			<!-- controllers -->
 			<file from="root/includes/bbdkp/controller/adjustments/Adjust.php" to= "includes/bbdkp/controller/adjustments/Adjust.php"/>
+
+            <file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>
 			<file from="root/includes/bbdkp/controller/games/classes/Classes.php" to="includes/bbdkp/controller/games/classes/Classes.php"/>
 			<file from="root/includes/bbdkp/controller/games/factions/Faction.php" to="includes/bbdkp/controller/games/factions/Faction.php"/>
-			<file from="root/includes/bbdkp/controller/games/library/GameInstall.php" to="includes/bbdkp/controller/games/library/GameInstall.php"/>
+            <file from="root/includes/bbdkp/controller/games/races/Races.php" to="includes/bbdkp/controller/games/races/Races.php"/>
+            <file from="root/includes/bbdkp/controller/games/roles/Roles.php" to="includes/bbdkp/controller/games/roles/Roles.php"/>
+
+            <file from="root/includes/bbdkp/controller/games/library/GameInstall.php" to="includes/bbdkp/controller/games/library/GameInstall.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_aion.php" to="includes/bbdkp/controller/games/library/install_aion.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_custom.php" to="includes/bbdkp/controller/games/library/install_custom.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_daoc.php" to="includes/bbdkp/controller/games/library/install_daoc.php"/>
@@ -196,13 +201,14 @@ EQDkp (c) 2003 The EqDkp Project Team]]></description>
 			<file from="root/includes/bbdkp/controller/games/library/install_vanguard.php" to="includes/bbdkp/controller/games/library/install_vanguard.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_warhammer.php" to="includes/bbdkp/controller/games/library/install_warhammer.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_wow.php" to="includes/bbdkp/controller/games/library/install_wow.php"/>
-			<file from="root/includes/bbdkp/controller/games/races/Races.php" to="includes/bbdkp/controller/games/races/Races.php"/>
-			<file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>
+
 			<file from="root/includes/bbdkp/controller/guilds/Guilds.php" to="includes/bbdkp/controller/guilds/Guilds.php"/>
 			<file from="root/includes/bbdkp/controller/guilds/Ranks.php" to="includes/bbdkp/controller/guilds/Ranks.php"/>
-			<file from="root/includes/bbdkp/controller/guilds/Roles.php" to="includes/bbdkp/controller/guilds/Roles.php"/>
+			<file from="root/includes/bbdkp/controller/guilds/Recruitment.php" to="includes/bbdkp/controller/guilds/Recruitment.php"/>
+
 			<file from="root/includes/bbdkp/controller/loot/Loot.php"  to="includes/bbdkp/controller/loot/Loot.php"/>
 			<file from="root/includes/bbdkp/controller/loot/LootController.php"  to="includes/bbdkp/controller/loot/LootController.php"/>
+
 			<file from="root/includes/bbdkp/controller/members/Members.php" to="includes/bbdkp/controller/members/Members.php"/>
 			<file from="root/includes/bbdkp/controller/points/Points.php" to="includes/bbdkp/controller/points/Points.php"/>
 			<file from="root/includes/bbdkp/controller/points/PointsController.php"  to="includes/bbdkp/controller/points/PointsController.php"/>
