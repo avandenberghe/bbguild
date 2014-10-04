@@ -161,6 +161,7 @@ EQDkp (c) 2003 The EqDkp Project Team]]]></description>
 			<file from="root/includes/acp/acp_dkp_point.php" to="includes/acp/acp_dkp_point.php"/>
 			<file from="root/includes/acp/acp_dkp_raid.php" to="includes/acp/acp_dkp_raid.php"/>
 			<file from="root/includes/acp/acp_dkp_sys.php" to="includes/acp/acp_dkp_sys.php"/>
+            <file from="root/includes/acp/acp_dkp_recruit.php" to="includes/acp/acp_dkp_recruit.php"/>
 			<file from="root/includes/acp/info/acp_dkp.php" to="includes/acp/info/acp_dkp.php"/>
 			<file from="root/includes/acp/info/acp_dkp_adj.php" to="includes/acp/info/acp_dkp_adj.php"/>
 			<file from="root/includes/acp/info/acp_dkp_event.php" to="includes/acp/info/acp_dkp_event.php"/>
@@ -172,6 +173,7 @@ EQDkp (c) 2003 The EqDkp Project Team]]]></description>
 			<file from="root/includes/acp/info/acp_dkp_point.php" to="includes/acp/info/acp_dkp_point.php"/>
 			<file from="root/includes/acp/info/acp_dkp_raid.php" to="includes/acp/info/acp_dkp_raid.php"/>
 			<file from="root/includes/acp/info/acp_dkp_sys.php" to="includes/acp/info/acp_dkp_sys.php"/>
+            <file from="root/includes/acp/info/acp_dkp_recruit.php" to="includes/acp/info/acp_dkp_recruit.php"/>
 			<!-- admin -->
 			<file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>
 			<file from="root/includes/bbdkp/admin/constants_bbdkp.php" to="includes/bbdkp/admin/constants_bbdkp.php"/>
@@ -277,6 +279,7 @@ EQDkp (c) 2003 The EqDkp Project Team]]]></description>
 			<file from="root/language/en/mods/info_acp_dkp_point.php" to="language/en/mods/info_acp_dkp_point.php"/>
 			<file from="root/language/en/mods/info_acp_dkp_raid.php" to="language/en/mods/info_acp_dkp_raid.php"/>
 			<file from="root/language/en/mods/info_acp_dkp_sys.php" to="language/en/mods/info_acp_dkp_sys.php"/>
+            <file from="root/language/en/mods/info_acp_dkp_recruit.php" to="language/en/mods/info_acp_dkp_recruit.php"/>
 			<file from="root/language/en/mods/info_ucp_dkpcharacter.php" to="language/en/mods/info_ucp_dkpcharacter.php"/>
 			<file from="root/language/en/mods/permissions_bbdkp.php" to="language/en/mods/permissions_bbdkp.php"/>
 			<!-- prosilver --> 
