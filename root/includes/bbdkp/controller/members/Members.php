@@ -369,7 +369,7 @@ class Members extends \bbdkp\admin\Admin
 		$sql_array = array(
 			'SELECT' => 'm.*, c.colorcode , c.imagename,  c1.name AS member_class, l1.name AS member_race,
 						r.image_female, r.image_male,
-						g.id as guild_id, g.name as guild_name, g.realm , g.region' ,
+						g.id as guild_id, g.name as guild_name, m.member_realm , g.region' ,
 			'FROM' => array(
 					MEMBER_LIST_TABLE => 'm' ,
 					CLASS_TABLE => 'c' ,
@@ -423,7 +423,7 @@ class Members extends \bbdkp\admin\Admin
 			$this->member_outdate_y = date('Y', $row['member_outdate']);
 			$this->member_guild_name = $row['guild_name'];
 			$this->member_guild_id = $row['guild_id'];
-			$this->member_realm = $row['realm'];
+			$this->member_realm = $row['member_realm'];
 			$this->member_region = $row['region'];
 			$this->member_armory_url = $row['member_armory_url'];
 			$this->member_portrait_url = $row['member_portrait_url'];
