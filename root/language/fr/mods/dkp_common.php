@@ -175,7 +175,6 @@ $lang = array_merge($lang, array(
 'RAID_ATTENDANCE_HISTORY' => 'Historique Participation',
 'RAIDS_LIFETIME' => 'à Vie (%s - %s)',
 'ATTENDANCE_LIFETIME' => 'Participation totale',
-'ATTENDANCE' => 'Participation',
 'MEMBERS_PRESENT_AT' => 'Membres Présent à %s sur %s',
 'RAIDS_X_DAYS' => 'Derniers %d Jours',
 'SPENT' => 'Dépensé',
@@ -220,7 +219,6 @@ $lang = array_merge($lang, array(
 'BUYER' => 'Acheteur',
 'BUYERS' => 'Acheteurs',
 'ARMOR' => 'Armure',
-'TYPE' => 'Armure',
 'STATS_SOCIAL' => '< 20% participation',
 'STATS_RAIDER' => '< 50% participation',
 'STATS_CORERAIDER' => '> 70% participation',
@@ -244,7 +242,6 @@ $lang = array_merge($lang, array(
 'CLASS_SUMMARY' => 'Summaire par Classe: %s à %s',
 
 'CONFIGURATION' => 'Configuration',
-'CLOSED' => 'Fermé',
 'DATE' => 'Date',
 'DELETE' => 'Supprimer',
 'DELETE_CONFIRMATION' => 'Confirmation de Suppression',
@@ -335,9 +332,7 @@ $lang = array_merge($lang, array(
 
 'SESSION_ID' => 'ID de Session',
 
-'TANK' => 'Tank',
 'DAMAGE' => 'Damage',
-'HEAL' => 'Heal',
 'SUMMARY_DATES' => 'Sommaire du Raid: %s à %s',
 'TIME' => 'Temps',
 'TIME_BONUS' => 'Bonus Temps',

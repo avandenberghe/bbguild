@@ -219,7 +219,6 @@ $lang = array_merge($lang, array(
 'BUYER' => 'Buyer',
 'BUYERS' => 'Buyers',
 'ARMOR' => 'Armor',
-'TYPE' => 'Armor',
 'STATS_SOCIAL' => '< 20% Attendance',
 'STATS_RAIDER' => '< 50% Attendance',
 'STATS_CORERAIDER' => '> 70% Attendance',
@@ -242,7 +241,6 @@ $lang = array_merge($lang, array(
 'CLASS_DISTRIBUTION' => 'Class Distribution',
 'CLASS_SUMMARY' => 'Class Summary: %s to %s',
 'CONFIGURATION' => 'Configuration',
-'CLOSED' => 'Closed',
 'DATE' => 'Date',
 'DELETE' => 'Delete',
 'DELETE_CONFIRMATION' => 'Delete Confirmation',
@@ -332,9 +330,6 @@ $lang = array_merge($lang, array(
 
 'SESSION_ID' => 'Session ID',
 
-'TANK' => 'Tanking',
-'DAMAGE' => 'Damage',
-'HEAL' => 'Healing',
 'SUMMARY_DATES' => 'Raid Summary: %s to %s',
 'TIME' => 'Time',
 'TIME_BONUS' => 'Time bonus',
@@ -430,7 +425,7 @@ $lang = array_merge($lang, array(
 
 'ADDED' => 'Added',
 'BOSSKILLCOUNT' => 'Bosskills',
-'CLOSED' => 'closed',
+'CLOSED' => 'Closed',
 'DELETED' => 'Deleted',
 'ENTER_NEW' => 'Enter New Name',
 'ENTER_NEW_GAMEITEMID' => 'Game item ID',
@@ -535,5 +530,3 @@ bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'CONTRIB' => 'Contributions',
 
 ));
-
-?>

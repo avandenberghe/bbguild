@@ -145,7 +145,7 @@ $lang = array_merge($lang, array(
 'RECRUIT_CLOSED' => 'Chiusa !',
 'TANK' => 'Difensore',
 'DPS' => 'Assaltatore' ,
-'HEAL' => 'Cura',
+'HEAL' => 'Curatore',
 'HEALER' => 'Curatore',
 'RECRUIT_MESSAGE' => 'Attualmente stiamo cercando giocatori per le seguenti specializzazioni:',
 
@@ -219,7 +219,6 @@ $lang = array_merge($lang, array(
 'BUYER' => 'Compratore',
 'BUYERS' => 'Compratori',
 'ARMOR' => 'Armatura',
-'TYPE' => 'Armatura',
 'STATS_SOCIAL' => '< 20% Presenza',
 'STATS_RAIDER' => '< 50% Presenza',
 'STATS_CORERAIDER' => '> 70% Presenza',
@@ -332,9 +331,7 @@ $lang = array_merge($lang, array(
 
 'SESSION_ID' => 'ID Sessione',
 
-'TANK' => 'Difensore',
 'DAMAGE' => 'Assaltatore',
-'HEAL' => 'Curatore',
 'SUMMARY_DATES' => 'Sommario Incursione: %s a %s',
 'TIME' => 'Orario',
 'TIME_BONUS' => 'Orario Bonus',
@@ -428,7 +425,6 @@ $lang = array_merge($lang, array(
 
 'ADDED' => 'Aggiunto',
 'BOSSKILLCOUNT' => 'Bosskills',
-'CLOSED' => 'chiuso',
 'DELETED' => 'Cancellato',
 'ENTER_NEW' => 'inserisci nuovo nome',
 'ENTER_NEW_GAMEITEMID' => 'ID Oggetto (gioco)',
@@ -533,5 +529,3 @@ bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'CONTRIB' => 'Contributions',
 
 ));
-
-?>

@@ -108,7 +108,6 @@ $lang = array_merge($lang, array(
 'FV_REQUIRED_RAIDID' => 'Devi selezionare un incursione.',
 'FV_REQUIRED_USER' => 'Il campo username è obbligatorio.',
 'FV_REQUIRED_VALUE' => 'Il campo valore è obbligatorio.',
-'FV_REQUIRED_STATUS' => 'Il campo stato è obbligatorio.',
 'FV_REQUIRED_MESSAGE' => 'Il campo Messaggio è obbligatorio.',
 'FV_REQUIRED_NAME' => 'Il campo nome è obbligatorio.',
 'FV_REQUIRED_ID' => 'Il campo ID è obbligatorio.',
@@ -227,7 +226,6 @@ $lang = array_merge($lang, array(
 'ACP_ADDRAID' => 'Aggiungi Incursione',
 'ACP_LISTRAIDS' => 'Elenco Incursioni',
 'ACP_ADDGAME' => 'Aggiungi Gioco',
-'ACP_EDITGAME' => 'Modifica Gioco',
 'ACP_LISTGAME' => 'Elenco Giochi',
 'ACP_GAMESETTINGS' => 'Impostazioni Gioco',
 'ACP_ADDRACE' => 'Aggiungi Razza',
@@ -282,7 +280,7 @@ $lang = array_merge($lang, array(
 'ACP_RANKS_EXPLAIN' => 'Qui puoi aggiungere/modificare/cancellare i gradi nelle incursioni e i prefissi/suffissi del nome. I Gradi possono essere sovrascritti dai gradi presenti in game attraverso il plugin armorylink. I gradi di default (90 e 99) sono di sola lettura.',
 'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Lista Membri di Gilda. Mostra solo i gradi visibili. Puoi aggiungere un nuovo membro o aggiornare un esistente o rimuoverlo. (tasti verde o rosso).<br /> &#8853; Se hai il plugin armorylink (solo per wow) puoi aggiungere i player in automatico da battle.NET<br /> &#8853; La spunta a sinistra serve a (de)attivate i membri. Solo i giocatori attivi sono visualizzati nel roster. Clicca su  ’cambia Status’ per salvare le modifiche.<br />  &#8853; La spunta a destra è per una cancellazione massiva dei player. Clicca Seleziona/Deseleziona tutti per spuntare tutte le caselle. Successivamente clicca su Cancella Selezionati per procedere. Ti verrà richiesta una conferma<br/> &#8853; Il Selettore di Gilda ti permette di navigare per le gilde. ',
 'SHOW_VISIBLE_RANKS' => 'Mostra ranghi visibili solo.',
-'CALL_BATTLENET_CHAR_API' => 'Chiamare Battle.NET API di caratteri per questa gilda. alterna a inattivo se lastModified bandiera era > 90 giorni fa, riattiva se < 90 e il carattere disattivazione dello stato era 'API'.',
+'CALL_BATTLENET_CHAR_API' => "Chiamare Battle.NET API di caratteri per questa gilda. alterna a inattivo se lastModified bandiera era > 90 giorni fa, riattiva se < 90 e il carattere disattivazione dello stato era 'API'.",
 'MASS_DELETE_CHAR' => 'Messa eliminare i caratteri selezionati.',
 'TOGGLE_ACTIVE' => 'Attiva o disattiva lo stato attivo per membri selezionati',
 'ACP_LISTGUILDS_EXPLAIN' => 'Lista delle Gilde. Prima di aggiungere un nuovo giocatore, devi aggiungere una gilda.',
@@ -348,7 +346,6 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_LOGS_VIEW' => 'Non hai i permessi per visualizzare i logs bbDKP.',
 
 // Manage Members Menu (yes, MMM)
-'ADD_MEMBER' => 'Aggiungi nuovo Giocatore',
 'LIST_EDIT_DEL_MEMBER' => 'Elenca, Modifica or Cancella Giocatori',
 'EDIT_RANKS' => 'Modifica Grado',
 'EDIT_ROLES' => 'Modifica Ruolo',
@@ -1116,5 +1113,3 @@ Il bottino va al player 2 <br />',
 'RESYNC_DKP_CONFIRM' => 'Sei Veramente SICURO di voler risincronizzare i valori DKP ? ',
 
 ));
-
-?>
