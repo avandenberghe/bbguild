@@ -217,7 +217,6 @@ $lang = array_merge($lang, array(
 'BUYER' => 'Käufer',
 'BUYERS' => 'Käufer',
 'ARMOR' => 'Rüstung',
-'TYPE' => 'Typ',
 'STATS_SOCIAL' => '< 20% Teilnahme',
 'STATS_RAIDER' => '< 50% Teilnahme',
 'STATS_CORERAIDER' => '> 70% Teilnahme',
@@ -240,7 +239,6 @@ $lang = array_merge($lang, array(
 'CLASS_DISTRIBUTION' => 'Klassenverteilung',
 'CLASS_SUMMARY' => 'Klassen Übersicht: %s zu %s',
 'CONFIGURATION' => 'Konfiguration',
-'CLOSED' => 'Geschlossen',
 'DATE' => 'Datum',
 'DELETE' => 'Löschen',
 'DELETE_CONFIRMATION' => 'Bestätige Löschung',
@@ -329,9 +327,6 @@ $lang = array_merge($lang, array(
 
 'SESSION_ID' => 'Session ID',
 
-'TANK' => 'Tanking',
-'DAMAGE' => 'Damage',
-'HEAL' => 'Healing',
 'SUMMARY_DATES' => 'Raid Zusammenfassung: %s bis %s',
 'TIME' => 'Zeit',
 'TIME_BONUS' => 'Zeitbonus',
