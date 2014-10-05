@@ -109,7 +109,6 @@ $lang = array_merge($lang, array(
 'FV_REQUIRED_RAIDID' => 'Ein Raid muss ausgewählt sein.',
 'FV_REQUIRED_USER' => 'Das Benutzernamen-Feld ist notwendig.',
 'FV_REQUIRED_VALUE' => 'Das Werte-Feld ist notwendig.',
-'FV_REQUIRED_STATUS' => 'Das Statusfeld ist notwendig.',
 'FV_REQUIRED_MESSAGE' => 'Das Nachrichtenfeld ist notwendig.',
 'FV_REQUIRED_NAME'  => 'Das Namensfeld ist notwendig.',
 'FV_REQUIRED_ID' => 'Das ID-Feld ist notwendig.',
@@ -228,7 +227,6 @@ $lang = array_merge($lang, array(
 'ACP_ADDRAID' => 'Raid hinzufügen',
 'ACP_LISTRAIDS' => 'Raidübersicht',
 'ACP_ADDGAME' => 'Spiel hinzufügen',
-'ACP_EDITGAME' => 'Spiel bearbeiten',
 'ACP_LISTGAME' => 'Spiele',
 'ACP_GAMESETTINGS' => 'Spiele Einstellungen',
 'ACP_ADDRACE' => 'Rasse hinzufügen',
@@ -349,7 +347,6 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_LOGS_VIEW' => 'Du hast keine Berechtigung Protokolle zu sehen.',
 
 // Manage Members Menu (yes, MMM)
-'ADD_MEMBER' => 'Füge Mitglied zu',
 'LIST_EDIT_DEL_MEMBER' => 'Mitglieder Auflisten, bearbeiten oder löschen',
 'EDIT_RANKS' => 'Gildenränge bearbeiten',
 'EDIT_ROLES' => 'Rollen bearbeiten',
