@@ -51,7 +51,7 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-		<description lang="de"><![CDATA[bbDKP 1.4.0 è una modifica per phpBB3.
+		<description lang="it"><![CDATA[bbDKP 1.4.0 è una modifica per phpBB3.
 lineamenti : Integrazione di Game, Gilda e DKP gestione facilites nel tuo forum phpBB3.
 Single Sign-On per dkp e phpBB3, schermi puliti rapporto, robusto amministratore offrono, nessun mal di testa di integrazione.
 Sistema di distribuzione bottino multi-gruppo: DKP standard, basato Tempo DKP, Zero somma e EPGP.
@@ -69,10 +69,10 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]]></description>
-
-		<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, Automod, UMIL,  PHP 5.3.3, Curl; Please read /docs/readme.pdf before beginning]]></author-notes>
+	<author-notes lang="en"><![CDATA[Requirements : phpBB3 v3.0.x, Automod, UMIL,  PHP 5.3.3, Curl; Please read /docs/readme.pdf before beginning]]></author-notes>
 	<author-notes lang="fr"><![CDATA[Requis : phpBB3 v3.0.x, Automod, UMIL, PHP 5.3.3, Curl; Veuillez lire /docs/readme.pdf avant de commencer]]></author-notes>
-		<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, Automod, UMIL, PHP 5.3.3, Curl; Bitte lesen sie /docs/readme.pdf bevor.]]></author-notes>
+	<author-notes lang="de"><![CDATA[Benötigt : phpBB3 v3.0.x, Automod, UMIL, PHP 5.3.3, Curl; Bitte lesen sie /docs/readme.pdf bevor.]]></author-notes>
+	<author-notes lang="it"><![CDATA[Richiede : phpBB3 v3.0.x, Automod, UMIL, PHP 5.3.3, Curl; Si prega di leggere /docs/readme.pdf bevor.]]></author-notes>
 	<github>https://github.com/bbdkp/bbdkp</github>
 		<author-group>
 			<author>
@@ -579,8 +579,7 @@ function pop_aboutbbdkp()
 		</open>
 
 <!-- end prosilver edits -->
-		
-		
+
 		<php-installer><![CDATA[install/index.php]]></php-installer>
 		<diy-instructions lang="en"><![CDATA[Please run the database installer at /install/index.php
 Please see the full installation notes here: /docs/readme.pdf

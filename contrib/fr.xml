@@ -28,7 +28,6 @@
 			<target-version>3.0.12</target-version>
 		</installation>
 		<link-group>
-			<link type="parent" href="../install.xml" lang="en">Installation manual</link>
 			<link type="parent" href="../install.xml" lang="fr">Manuel d’installation</link>
 		</link-group>
 	</header>
@@ -50,7 +49,6 @@
 			<file from="root/language/fr/mods/info_ucp_dkpcharacter.php" to="language/fr/mods/info_ucp_dkpcharacter.php"/>
 			<file from="root/language/fr/mods/permissions_bbdkp.php" to="language/fr/mods/permissions_bbdkp.php"/>
 		</copy>
-		<diy-instructions lang="en"><![CDATA[See general install.xml file]]></diy-instructions>
 		<diy-instructions lang="fr"><![CDATA[Voir install.xml]]></diy-instructions>
 	</action-group>
 </mod>
