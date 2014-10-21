@@ -272,18 +272,11 @@ class Admin
 		}
 
 		//report errors?
-		if ($data['error'] != 0)
+		if($loud == true)
 		{
-			if($loud == true)
-			{
-				trigger_error($data['error'], E_USER_WARNING);
-			}
-	        return false;
+			trigger_error($data['error'], E_USER_WARNING);
 		}
-		else
-		{
-			return $data['response'];
-		}
+		return $data['response'];
 
 	}
 

@@ -594,6 +594,8 @@ $lang = array_merge($lang, array(
 'WARNING_BATTLENET' => 'Alle Mitglieder von der Battle.NET Character API aktuallisieren? Dies kann einige Minuten dauern. Bitte bestätigen.',
 'ERROR_ARMORY_DOWN' => 'Fehler: Keine Verbindung zur Battle.NET API',
 'GUILD_EMBLEM_NF' => 'Gildenwappe nicht gefunden',
+'ERROR_ARMORY_NOTFOUND' => 'Eure Gilde wurde nicht gefunden in Battle.NET',
+
 //Curl errors
 'ERR_UNKNOWN' => 'UUnbekannter Fehler aufgetreten.',
 'CURL_REQUIRED' => 'Curl wird zur Nutzung der SDK benötigt.',
@@ -767,6 +769,7 @@ $lang = array_merge($lang, array(
 'BBDKP_YOURVERSION' => 'Deine bbDKP Version:',
 
 // roster
+'ARMORYSTATUS' => 'Armory Status',
 'ARM_LAYOUT' => 'Anordnung der Anzeigetafel',
 'ARM_LAYOUTDO' => 'Wähle die Anordnung',
 'ARM_SHOWACH' => 'Sollen Erfolgspunkte angezeigt werden?',

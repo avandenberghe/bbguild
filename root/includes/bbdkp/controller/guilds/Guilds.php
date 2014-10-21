@@ -183,7 +183,12 @@ class Guilds extends \bbdkp\admin\Admin
 	 * @var int
 	 */
 	public $applyrank;
-
+	/**
+	 * search result Battle.NET
+	 *
+	 * @var char
+	 */
+	public $armoryresult;
 
 	/**
 	 * guild class constructor
@@ -419,6 +424,7 @@ class Guilds extends \bbdkp\admin\Admin
 								'guildarmoryurl' => $this->guildarmoryurl,
 								'emblemurl' => $this->emblempath,
 								'battlegroup' => $this->battlegroup,
+								'armoryresult' => $this->armoryresult,
 						));
 
 						$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
@@ -535,6 +541,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	public function Armory_get($params)
 	{
+		global $user;
 		switch ($this->game_id)
 		{
 			case 'wow':
@@ -549,6 +556,7 @@ class Guilds extends \bbdkp\admin\Admin
                 {
                     return false;
                 }
+
 				$this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0;
 				$this->level = isset($data['level']) ? $data['level']: 0;
 				$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
@@ -566,7 +574,14 @@ class Guilds extends \bbdkp\admin\Admin
 				$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
 				$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(true)  : '';
 				$this->memberdata = isset($data['members']) ? $data['members']: '';
-
+				if (isset($data['status']))
+				{
+					$this->armoryresult = $data['reason'];
+				}
+				else
+				{
+					$this->armoryresult = 'OK';
+				}
                 return true;
 		}
 
@@ -586,8 +601,8 @@ class Guilds extends \bbdkp\admin\Admin
 		global $phpbb_root_path;
 
 		//location to create the file
-		$imgfile = $phpbb_root_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
-		$outputpath = "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
+		$imgfile = $phpbb_root_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
+		$outputpath = "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name).".png";
 		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time())
 		{
 			$finalimg = imagecreatefrompng($imgfile);
@@ -731,6 +746,25 @@ class Guilds extends \bbdkp\admin\Admin
 		return $outputpath;
 	}
 
+	/**
+	 * replace string in utf8 string
+	 * @param $needle
+	 * @param $replacement
+	 * @param $haystack
+	 * @return string
+	 */
+	function mb_str_replace( $needle, $replacement, $haystack ) {
+		$needle_len = mb_strlen($needle);
+		$pos = mb_strpos( $haystack, $needle);
+		while (!($pos ===false)) {
+			$front = mb_substr( $haystack, 0, $pos );
+			$back  = mb_substr( $haystack, $pos + $needle_len);
+			$haystack = $front.$replacement.$back;
+			$pos = mb_strpos( $haystack, $needle);
+		}
+		return $haystack;
+	}
+
 
     /**
      * gets a guild from database
@@ -742,7 +776,7 @@ class Guilds extends \bbdkp\admin\Admin
         global $db, $phpbb_root_path;
 
         $sql = 'SELECT id, name, realm, region, roster, game_id, members,
-				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled
+				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled, armoryresult
 				FROM ' . GUILD_TABLE . '
 				WHERE id = ' . $this->guildid;
         $result = $db->sql_query($sql, 604800);
@@ -766,7 +800,7 @@ class Guilds extends \bbdkp\admin\Admin
             $this->min_armory = $row['min_armory'];
             $this->recstatus = $row['rec_status'];
             $this->armory_enabled = $row['armory_enabled'];
-
+			$this->armoryresult = $row['armoryresult'];
             $this->countmembers();
             $this->guilddefault = $row['guilddefault'];
             $this->raidtrackerrank = $this->maxrank();

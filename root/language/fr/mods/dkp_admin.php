@@ -594,6 +594,7 @@ $lang = array_merge($lang, array(
 'WARNING_BATTLENET' => 'la mise à jour de tous les membres depuis Battle.NET API peut durer une minute ou plus. svp confirmez.',
 'ERROR_ARMORY_DOWN' => 'Erreur: Connection Battle.NET API impossible',
 'GUILD_EMBLEM_NF' => 'Emblème Guilde pas trouvé',
+'ERROR_ARMORY_NOTFOUND' => 'Votre Guilde n’a pas été trouvé dans Battle.NET',
 
 //Curl errors
 'ERR_UNKNOWN' => 'erreur Curl inconnue.',
@@ -768,6 +769,7 @@ $lang = array_merge($lang, array(
 'BBDKP_YOURVERSION' => 'Votre version bbDKP :',
 
 // roster
+'ARMORYSTATUS' => 'Statut Armurerie',
 'ARM_LAYOUT' => 'Style du Tableau des membres',
 'ARM_LAYOUTDO' => 'Choisis le style',
 'ARM_SHOWACH' => 'Montrer les points des Haut Faits ?',

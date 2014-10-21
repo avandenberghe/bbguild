@@ -615,6 +615,8 @@ $lang = array_merge($lang, array(
 'ERROR_ARMORY_DOWN' => 'Error: Could not connect to Battle.NET API',
 'GUILD_EMBLEM_NF' => 'Guild emblem not found',
 'IMAGESIZE_WARNING' => 'Warning, width/height sould be max 32/32px, you have %s/%s',
+'ERROR_ARMORY_NOTFOUND' => 'Guild not found on Battle.NET',
+
 //Curl errors
 'ERR_UNKNOWN' => 'Unknown error occurred.',
 'CURL_REQUIRED' => 'Curl is required for SDK usage.',
@@ -795,6 +797,7 @@ $lang = array_merge($lang, array(
 'BBDKP_YOURVERSION'   => 'Your bbDKP Version :',
 
 // roster
+'ARMORYSTATUS' => 'Armory Status',
 'ARM_LAYOUT' => 'Roster Layout',
 'ARM_LAYOUTDO' => 'Choose the style of Roster',
 'ARM_SHOWACH' => 'Show Achievement points ?',

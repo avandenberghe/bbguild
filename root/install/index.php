@@ -1021,6 +1021,10 @@ $versions = array(
     ),
     '1.4' => array(
 
+        'table_column_add' => array(
+            array($table_prefix . 'bbdkp_memberguild', 'armoryresult', array('VCHAR_UNI:255', '')),
+        ),
+
         //adding some tables
         'table_add' => array(
 

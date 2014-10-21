@@ -593,6 +593,7 @@ $lang = array_merge($lang, array(
 'WARNING_BATTLENET' => 'Aggiorna tutti i personaggi tramite l’API di  Battle.NET. Può richiedere alcuni minuti. Conferma la scelta.',
 'ERROR_ARMORY_DOWN' => 'Errore: Impossibile connettersi a Battle.NET API',
 'GUILD_EMBLEM_NF' => 'Guild emblema non trovato',
+'ERROR_ARMORY_NOTFOUND' => 'La tua gilda non è stato trovato in Battle.NET',
 
 //Curl errors
 'ERR_UNKNOWN' => 'Errore sconosciuto CURL.',
@@ -767,6 +768,7 @@ $lang = array_merge($lang, array(
 'BBDKP_YOURVERSION'   => 'La tua versione di bbDKP :',
 
 // roster
+'ARMORYSTATUS' => 'Stato della Armeria',
 'ARM_LAYOUT' => 'Layout del Roster',
 'ARM_LAYOUTDO' => 'Scegli lo stile del Roster',
 'ARM_SHOWACH' => 'Vuoi Mostrare i Punti impresa ?',

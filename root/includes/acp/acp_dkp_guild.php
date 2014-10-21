@@ -307,7 +307,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
         $updateguild->armory_enabled = request_var('armory_enabled', 0);
 
         //in the request we expect the file name here including extension, no path
-        $updateguild->emblempath = "images/bbdkp/guildemblem/".  request_var('guild_emblem', '');
+        $updateguild->emblempath = "images/bbdkp/guildemblem/". utf8_normalize_nfc(request_var('guild_emblem', '', true));
 
         $updateguild->aionlegionid = 0;
         $updateguild->aionserverid = 0;
@@ -507,6 +507,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
             'ARMORY_URL'         => $updateguild->guildarmoryurl,
             'MIN_ARMORYLEVEL'    => $updateguild->min_armory,
             'SHOW_ROSTER'        => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
+            'ARMORYSTATUS'       => $updateguild->armoryresult,
             // Language
             'L_TITLE'            => $user->lang['ACP_EDITGUILD'],
             'L_EXPLAIN'          => $user->lang['ACP_EDITGUILD_EXPLAIN'],
@@ -536,12 +537,12 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
     }
 
     /**
+     * list the ranks for this guild
      * @param $updateguild
      */
     private function BuildTemplateEditGuildRanks($updateguild)
     {
-        global $phpbb_root_path, $phpEx, $template, $db, $phpbb_admin_path, $user;
-        // list the ranks for this guild
+        global $phpEx, $template, $db, $phpbb_admin_path, $user;
         // everything from rank 90 is readonly
         $listranks          = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
         $listranks->game_id = $updateguild->game_id;
