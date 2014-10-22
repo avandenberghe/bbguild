@@ -1055,7 +1055,7 @@ $versions = array(
                     'applicants'       => array('USINT', 0),
                     'status'           => array('USINT', 0),
                     'last_update'      => array('TIMESTAMP', 0),
-                    'note'             => array('VCHAR_UNI:255', ''),
+                    'note'             => array('TEXT_UNI', ''),
                 ),
                 'PRIMARY_KEY'          => 'id',
                 'KEYS'                 => array('bb_recruit'    => array('UNIQUE', array('guild_id', 'role_id', 'class_id'))),

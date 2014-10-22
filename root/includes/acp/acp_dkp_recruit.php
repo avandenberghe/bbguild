@@ -89,34 +89,42 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
         $this->tpl_name = 'dkp/acp_' . $mode;
         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=listrecruit") . '"><h3>'.$user->lang['RETURN_RECLIST'].'</h3></a>';
 
+        $guild_id = request_var(URI_GUILD, 1);
+        $Guild = new \bbdkp\controller\guilds\Guilds();
+        $guildlist   = $Guild->guildlist(1);
+        foreach ($guildlist as $g)
+        {
+            $template->assign_block_vars('guild_row', array(
+                'VALUE'    => $g['id'],
+                'SELECTED' => ($guild_id == $g['id']) ? ' selected="selected"' : '',
+                'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
+        }
+        $Guild->guildid= $guild_id;
+        $Guild->Getguild();
+
+        $template->assign_vars(array(
+            'GUILD_EMBLEM'          => $Guild->emblempath,
+            'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid),
+            'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=addrecruit&amp;" . URI_GUILD . '=' . $Guild->guildid),
+            'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=listrecruit&amp;" . URI_GUILD . '=' . $Guild->guildid),
+            'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=editrecruit"),
+            'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds"),
+        ));
+
         switch ($mode)
         {
-
             /***************************************
-            * List recruitments
-            ***************************************/
+             * List recruitments
+             ***************************************/
             case 'listrecruit':
 
-                $this->BuildTemplateListRecruits();
+                $this->BuildTemplateListRecruits($guild_id );
                 break;
 
             /*************************************
              *  Add recruit
              *************************************/
             case 'addrecruit':
-
-                $guild_id = request_var(URI_GUILD, 1);
-                $Guild = new \bbdkp\controller\guilds\Guilds();
-                $guildlist   = $Guild->guildlist(1);
-                foreach ($guildlist as $g)
-                {
-                    $template->assign_block_vars('guild_row', array(
-                        'VALUE'    => $g['id'],
-                        'SELECTED' => ($guild_id == $g['id']) ? ' selected="selected"' : '',
-                        'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
-                }
-                $Guild->guildid= $guild_id;
-                $Guild->Getguild();
 
                 $recruit = new \bbdkp\controller\guilds\Recruitment();
 
@@ -134,14 +142,12 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
                     'GUILD_EMBLEM'          => $Guild->emblempath,
                     'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid),
                     'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=addrecruit&amp;" . URI_GUILD . '=' . $Guild->guildid),
-                    'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=listrecruit"),
+                    'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=listrecruit&amp;" . URI_GUILD . '=' . $Guild->guildid),
                     'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds"),
                     )
                 );
 
                 $this->page_title = $user->lang['ACP_ADDGUILD'];
-
-
                 break;
 
             /*************************************
@@ -160,40 +166,7 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
                 $action = request_var('action', '');
                 switch($action)
                 {
-                    case 'guildranks':
-                        $updaterank = (isset($_POST['updaterank'])) ? true : false;
-                        $deleterank = (isset($_GET['deleterank'])) ? true : false;
-                        $addrank = (isset($_POST['addrank'])) ? true : false;
-                        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildranks&amp;" . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
-                        if ($updaterank || $addrank)
-                        {
-                            if (! check_form_key('editguildranks'))
-                            {
-                                trigger_error('FORM_INVALID');
-                            }
-                        }
-                        if ($addrank)
-                        {
-                            $this->AddRank($updateguild);
-                        }
-                        if ($addrank)
-                        {
-                            $this->AddRank($updateguild);
-                        }
-                        if ($updaterank)
-                        {
-                            $this->UpdateRank($updateguild);
-                        }
-                        if ($deleterank)
-                        {
-                            $this->DeleteRank();
-                        }
-
-                        $this->tpl_name = 'dkp/acp_editguild_ranks';
-                        $this->BuildTemplateEditGuildRanks($updateguild);
-                        break;
-
-                    case 'guildrecruitment':
+                     case 'guildrecruitment':
 
                         $addrecruitment = (isset($_POST['addrecruitment'])) ? true : false;
                         if ($addrecruitment)
@@ -740,27 +713,17 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
     /**
      *
      * list the recruitments
+     * @param $Guild
+     * @param $guild_id
+     *
      */
-    private function BuildTemplateListRecruits()
+    private function BuildTemplateListRecruits($guild_id)
     {
         global $user, $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $db;
         if (count($this->games) == 0)
         {
             trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
         }
-
-        $guild_id = request_var(URI_GUILD, 1);
-        $Guild = new \bbdkp\controller\guilds\Guilds();
-        $guildlist   = $Guild->guildlist(1);
-        foreach ($guildlist as $g)
-        {
-            $template->assign_block_vars('guild_row', array(
-                'VALUE'    => $g['id'],
-                'SELECTED' => ($guild_id == $g['id']) ? ' selected="selected"' : '',
-                'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
-        }
-        $Guild->guildid= $guild_id;
-        $Guild->Getguild();
 
         $recruits = new \bbdkp\controller\guilds\Recruitment();
         $recruits->setGuildId($guild_id);
@@ -770,41 +733,30 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
         {
             $recruit_count++;
             $template->assign_block_vars('recruit_row', array(
-                    'ID'            => $row['id'],
-                    'GUILD_ID'      => $row['guild_id'],
-                    'ROLE_ID'       => $row['role_id'],
-                    'CLASS_ID'      => $row['class_id'],
-                    'CLASS_NAME'    => $row['class_name'],
-                    'COLOR_CODE'    => $row['colorcode'],
-                    'CLASS_IMAGE'   => $row['imagename'],
+                    'ID'                => $row['id'],
+                    'GUILD_ID'          => $row['guild_id'],
+                    'ROLE_ID'           => $row['role_id'],
+                    'CLASS_ID'          => $row['class_id'],
+                    'CLASS_NAME'        => $row['class_name'],
+                    'COLOR_CODE'        => $row['colorcode'],
+                    'CLASS_IMAGE'       => $row['imagename'],
                     'S_CLASS_IMAGE_EXISTS' => (strlen ( $row ['imagename'] ) > 1) ? true : false,
-                    'CLASS_IMAGE'   => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row ['imagename'] . ".png" : '',
-                    'POSITIONS'     => $row['positions'],
-                    'APPLICANTS'    => $row['applicants'],
-                    'STATUS'        => $row['status'],
-                    'ROLE_COLOR'    => $row['role_color'],
-                    'ROLE_NAME'     => $row['role_name'],
-                    'U_VIEW_RECRUIT'    => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=editrecruit&amp;action=view&amp;" . URI_GUILD . '=' . $row['guild_id']),
-                    'U_DELETE_RECRUIT'  => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_recruit&amp;mode=editrecruit&amp;action=edit&amp;id=' . $row['id'])
+                    'CLASS_IMAGE'       => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row ['imagename'] . ".png" : '',
+                    'POSITIONS'         => $row['positions'],
+                    'APPLICANTS'        => $row['applicants'],
+                    'STATUS'            => $row['status'],
+                    'NOTE'              => $row['note'],
+                    'ROLE_COLOR'        => $row['role_color'],
+                    'ROLE_NAME'         => $row['role_name'],
+                    'U_VIEW_RECRUIT'    => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=editrecruit&amp;action=edit&amp;" . URI_GUILD . '=' . $row['guild_id']),
+                    'U_DELETE_RECRUIT'  => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_recruit&amp;mode=editrecruit&amp;action=delete&amp;id=' . $row['id'])
                 )
             );
-        }
-
-        $recruitadd = (isset($_POST['addrecruit'])) ? true : false;
-        if ($recruitadd)
-        {
-            redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=addrecruit&amp;" . URI_GUILD . '=' . $recruitlist['guild_id']));
         }
 
         $form_key = 'listrecruits';
         add_form_key($form_key);
         $template->assign_vars(array(
-            'GUILD_EMBLEM'          => $Guild->emblempath,
-            'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid),
-            'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=addrecruit&amp;" . URI_GUILD . '=' . $Guild->guildid),
-            'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=listrecruit"),
-            'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=editrecruit"),
-            'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds"),
             'RECRUIT_FOOTCOUNT'     => sprintf($user->lang['RECRUIT_FOOTCOUNT'], $recruit_count)));
         $this->page_title = 'ACP_LISTRECRUITS';
     }

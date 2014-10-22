@@ -1,8 +1,18 @@
 <!-- INCLUDE overall_header.html -->
 <a name="maincontent"></a>
-<h1>{L_ACP_LISTRECRUITS}</h1>
+<h1>{L_ACP_ADDRECRUITS}</h1>
 <p>{L_ACP_LISTRECRUITS_EXPLAIN}</p>
+<style>
+    fieldset dt
+    {
+        width: 25%;
+    }
 
+    fieldset dd
+    {
+        margin-left: 25%;
+    }
+</style>
 <form method="post" action="{U_RECRUITLIST}" id="listguild">
 
     <fieldset style="background-color: #EEEEEE">
@@ -29,15 +39,25 @@
 <div id="advanced00">
     <div class="permissions-category">
         <ul>
-            <li class="permissions-preset-yes"><a href="{U_EDIT_GUILDRECRUITMENT}" onclick=""><span class="tabbg"><span class="colour"></span>{L_ACP_LISTRECRUITS}</span></a></li>
+            <li class="permissions-preset-yes"><a href="{U_RECRUITLIST}" onclick=""><span class="tabbg"><span class="colour"></span>{L_ACP_LISTRECRUITS}</span></a></li>
             <li class="permissions-preset-yes never activetab "><a href="{U_ADDRECRUIT}" onclick=""><span class="tabbg"><span class="colour"></span>{L_ACP_ADDRECRUITS}</span></a></li>
         </ul>
     </div>
 
     <div class="permissions-panel" id="options001">
         <span class="corners-top"><span></span></span>
+        <form method="post" action="{U_ADDRECRUIT}" id="addrecruit">
 
-        <form method="post" action="{U_RECRUITLIST}" id="listrecruit">
+            <fieldset style="background-color: #EEEEEE">
+                <dl>
+                    <dt>
+                        <label>{L_GUILD}:</label>
+                    </dt>
+                    <dd>
+
+                    </dd>
+                </dl>
+            </fieldset>
 
 
         </form>
