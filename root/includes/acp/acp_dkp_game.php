@@ -235,7 +235,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				// save game settings
 				if($gamesettings)
 				{
-                    $this->SaveGameSettings();
+                    $editgame = $this->SaveGameSettings();
 				}
 
 				if($gamedelete)
@@ -445,6 +445,8 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $editgame->setName(utf8_normalize_nfc (request_var ( 'game_name', ' ', true )));
         $editgame->setApikey(request_var('apikey','' ));
         $editgame->update();
+
+        return $editgame;
     }
 
     /**
@@ -1355,7 +1357,8 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->getName()  ) ,
                 'BOSSBASEURL' => $editgame->getBossbaseurl(),
                 'ZONEBASEURL' => $editgame->getZonebaseurl(),
-				'GAME_ID' => $editgame->game_id,
+                'APIKEY'    => $editgame->getApikey(),
+				'GAME_ID'   => $editgame->game_id,
 				'URI_GAME' => URI_GAME,
 				'O_RACEGAMEID' => $current_order ['uri'] [0],
 				'O_RACEID' => $current_order ['uri'] [1],

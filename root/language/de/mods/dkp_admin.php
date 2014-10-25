@@ -5,7 +5,7 @@
  *
  * @copyright 2014 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.1
+ * @version 1.4.0
  * @translation various unknown authors, killerpommes
  *
  */
@@ -619,6 +619,8 @@ $lang = array_merge($lang, array(
 'IERROTH' => 'Other error',
 'WOWAPI_NO_CHARACTER' => 'Es wurde kein Charaktername eingetragen.',
 'CURL_NOT_AVAILABLE' => 'Curl auf deinem Server nicht verfügbar. :< ',
+'WOWAPIKEY' => 'API Schlüssel',
+'WOWAPIKEY_EXPLAIN' => 'bitte registrieren auf dev.battle.net um den Schlüssel zu bekommen',
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Teilnehmer %s konnte nicht aus dem Raid %s gelöscht werden.',

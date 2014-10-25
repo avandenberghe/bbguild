@@ -5,7 +5,7 @@
  *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.1
+ * @version 1.4.0
  *
  */
 
@@ -619,6 +619,8 @@ $lang = array_merge($lang, array(
 'IERROTH' => 'Autre erreur',
 'WOWAPI_NO_CHARACTER' => 'Character name not specified.',
 'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
+'WOWAPIKEY' => 'clef API',
+'WOWAPIKEY_EXPLAIN' => 'registrez sur dev.battle.net pour obtenir la clef',
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Participant %s ne pouvat pas être supprimé du raid %s.',
