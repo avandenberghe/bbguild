@@ -6,7 +6,7 @@
  * @link http://www.bbdkp.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  * @author Sajaki, Blazeflack, Malfate
  *
  */

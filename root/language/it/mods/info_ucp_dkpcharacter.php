@@ -5,7 +5,7 @@
  * @author Sajaki@bbdkp.com
  * @copyright 2014 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.1
+ * @version 1.4.0
  * */
 
 /**

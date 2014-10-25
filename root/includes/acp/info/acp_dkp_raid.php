@@ -2,7 +2,7 @@
 /**
 * ACP info class acp_dkp_raid_info 
 * @author Ippehe, Sajaki
-* @version 1.3.0
+* @version 1.4.0
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 *   @package bbdkp

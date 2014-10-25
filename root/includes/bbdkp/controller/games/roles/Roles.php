@@ -7,8 +7,8 @@
  * @author Sajaki@gmail.com
  * @copyright 2014 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.1
- * @since 1.3.1
+ * @version 1.4.0
+ * @since 1.4.0
  */
 namespace bbdkp\controller\games;
 
