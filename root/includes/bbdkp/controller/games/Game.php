@@ -27,7 +27,6 @@ if (! defined('IN_PHPBB'))
  */
 class Game
 {
-
     /**
      * primary key in games table
      * @var unknown_type
@@ -85,6 +84,12 @@ class Game
     protected $zonebaseurl;
 
     /**
+     * api key for game armory
+     * @var string
+     */
+    protected $apikey;
+
+    /**
      * pre-installable games
      * @var array
      */
@@ -123,6 +128,22 @@ class Game
 
         //fill the games array
         $this->games = $this->gamesarray();
+    }
+
+    /**
+     * @param string $apikey
+     */
+    public function setApikey($apikey)
+    {
+        $this->apikey = $apikey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApikey()
+    {
+        return $this->apikey;
     }
 
     /**
@@ -376,7 +397,7 @@ class Game
     public function Get()
     {
         global $db;
-        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl
+        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl, apikey
     			FROM ' . BBGAMES_TABLE . "
     			WHERE game_id = '" . $this->game_id . "'";
 
@@ -390,6 +411,7 @@ class Game
             $this->armory_enabled = $row['armory_enabled'];
             $this->bossbaseurl = $row['bossbaseurl'];
             $this->zonebaseurl = $row['zonebaseurl'];
+            $this->apikey = $row['apikey'];
         }
         $db->sql_freeresult($result);
 
@@ -410,7 +432,8 @@ class Game
             'armory_enabled' => $this->armory_enabled,
             'game_name'      => $this->name,
             'bossbaseurl'    => $this->bossbaseurl,
-            'zonebaseurl'    => $this->zonebaseurl
+            'zonebaseurl'    => $this->zonebaseurl,
+            'apikey'         => $this->apikey
         ));
 
         $sql = 'UPDATE ' . BBGAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";

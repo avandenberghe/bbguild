@@ -443,7 +443,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $editgame->setBossbaseurl(request_var('bossbaseurl','' ));
         $editgame->setZonebaseurl(request_var('zonebaseurl','' ));
         $editgame->setName(utf8_normalize_nfc (request_var ( 'game_name', ' ', true )));
-
+        $editgame->setApikey(request_var('apikey','' ));
         $editgame->update();
     }
 

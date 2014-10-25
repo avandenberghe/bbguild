@@ -641,7 +641,8 @@ $lang = array_merge($lang, array(
 'WOWAPI_NO_CHARACTER' => 'Character name not specified.',
 'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
 'WARNING_NORECRUITMENTS'   =>  'No Recruitments found.',
-
+'WOWAPIKEY' => 'API key',
+'WOWAPIKEY_EXPLAIN' => 'register on dev.battle.net to obtain key',
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',
