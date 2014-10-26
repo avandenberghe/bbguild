@@ -444,6 +444,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $editgame->setZonebaseurl(request_var('zonebaseurl','' ));
         $editgame->setName(utf8_normalize_nfc (request_var ( 'game_name', ' ', true )));
         $editgame->setApikey(request_var('apikey','' ));
+		$editgame->setApilocale(request_var('apilocale','' ));
         $editgame->update();
 
         return $editgame;

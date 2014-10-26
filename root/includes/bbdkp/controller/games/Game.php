@@ -27,6 +27,7 @@ if (! defined('IN_PHPBB'))
  */
 class Game
 {
+
     /**
      * primary key in games table
      * @var unknown_type
@@ -90,6 +91,12 @@ class Game
     protected $apikey;
 
     /**
+     * locale string for the language in which api data are returned. en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU
+     * @var string
+     */
+    protected $apilocale;
+
+    /**
      * pre-installable games
      * @var array
      */
@@ -130,21 +137,6 @@ class Game
         $this->games = $this->gamesarray();
     }
 
-    /**
-     * @param string $apikey
-     */
-    public function setApikey($apikey)
-    {
-        $this->apikey = $apikey;
-    }
-
-    /**
-     * @return string
-     */
-    public function getApikey()
-    {
-        return $this->apikey;
-    }
 
     /**
      * @param boolean $basebossurl
@@ -244,6 +236,37 @@ class Game
     }
 
 
+    /**
+     * @param string $apikey
+     */
+    public function setApikey($apikey)
+    {
+        $this->apikey = $apikey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApikey()
+    {
+        return $this->apikey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApilocale()
+    {
+        return $this->apilocale;
+    }
+
+    /**
+     * @param string $apilocale
+     */
+    public function setApilocale($apilocale)
+    {
+        $this->apilocale = $apilocale;
+    }
 
     /**
      * adds a Game to database
@@ -397,7 +420,7 @@ class Game
     public function Get()
     {
         global $db;
-        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl, apikey
+        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl, apikey, apilocale
     			FROM ' . BBGAMES_TABLE . "
     			WHERE game_id = '" . $this->game_id . "'";
 
@@ -412,6 +435,7 @@ class Game
             $this->bossbaseurl = $row['bossbaseurl'];
             $this->zonebaseurl = $row['zonebaseurl'];
             $this->apikey = $row['apikey'];
+            $this->apilocale = $row['apilocale'];
         }
         $db->sql_freeresult($result);
 
@@ -433,7 +457,8 @@ class Game
             'game_name'      => $this->name,
             'bossbaseurl'    => $this->bossbaseurl,
             'zonebaseurl'    => $this->zonebaseurl,
-            'apikey'         => $this->apikey
+            'apikey'         => $this->apikey,
+            'apilocale'      => $this->apilocale,
         ));
 
         $sql = 'UPDATE ' . BBGAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";

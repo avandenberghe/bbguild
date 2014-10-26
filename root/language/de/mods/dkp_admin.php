@@ -621,6 +621,8 @@ $lang = array_merge($lang, array(
 'CURL_NOT_AVAILABLE' => 'Curl auf deinem Server nicht verfügbar. :< ',
 'WOWAPIKEY' => 'API Schlüssel',
 'WOWAPIKEY_EXPLAIN' => 'bitte registrieren auf dev.battle.net um den Schlüssel zu bekommen',
+'WOWAPILOCALE' => 'Locale',
+'WOWAPILOCALE_EXPLAIN' => 'choose : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Teilnehmer %s konnte nicht aus dem Raid %s gelöscht werden.',

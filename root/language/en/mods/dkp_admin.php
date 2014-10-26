@@ -643,6 +643,8 @@ $lang = array_merge($lang, array(
 'WARNING_NORECRUITMENTS'   =>  'No Recruitments found.',
 'WOWAPIKEY' => 'API key',
 'WOWAPIKEY_EXPLAIN' => 'register on dev.battle.net to obtain key',
+'WOWAPILOCALE' => 'Locale',
+'WOWAPILOCALE_EXPLAIN' => 'choose : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Attendee %s could not be deleted from raid %s',

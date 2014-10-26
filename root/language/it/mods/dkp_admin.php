@@ -620,6 +620,8 @@ $lang = array_merge($lang, array(
 'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
 'WOWAPIKEY' => 'chiave API',
 'WOWAPIKEY_EXPLAIN' => 'Si prega di registrarsi per dev.battle.net per ottenere la chiave',
+'WOWAPILOCALE' => 'Locale',
+'WOWAPILOCALE_EXPLAIN' => 'en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
 
 
 // Submission Success Messages
