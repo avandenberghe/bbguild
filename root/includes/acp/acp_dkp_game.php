@@ -1359,6 +1359,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
                 'BOSSBASEURL' => $editgame->getBossbaseurl(),
                 'ZONEBASEURL' => $editgame->getZonebaseurl(),
                 'APIKEY'    => $editgame->getApikey(),
+				'LOCALE'  => $editgame->getApilocale(),
 				'GAME_ID'   => $editgame->game_id,
 				'URI_GAME' => URI_GAME,
 				'O_RACEGAMEID' => $current_order ['uri'] [0],
