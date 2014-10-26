@@ -1053,6 +1053,7 @@ $versions = array(
                     'guild_id'         => array('USINT', 0),
                     'role_id'          => array('INT:8', 0),
                     'class_id'         => array('UINT',  0),
+                    'level'            => array('UINT',  0),
                     'positions'        => array('USINT', 0),
                     'applicants'       => array('USINT', 0),
                     'status'           => array('USINT', 0),
@@ -1060,7 +1061,6 @@ $versions = array(
                     'note'             => array('TEXT_UNI', ''),
                 ),
                 'PRIMARY_KEY'          => 'id',
-                'KEYS'                 => array('bb_recruit'    => array('UNIQUE', array('guild_id', 'role_id', 'class_id'))),
             )),
         ),
 

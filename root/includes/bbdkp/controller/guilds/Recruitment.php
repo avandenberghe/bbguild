@@ -124,6 +124,30 @@ class Recruitment extends Roles
     }
 
     /**
+     * minimum level required ?
+     *
+     * @var level
+     */
+    protected $level;
+
+    /**
+     * @return level
+     */
+    public function getLevel()
+    {
+        return $this->level;
+    }
+
+    /**
+     * @param level $level
+     */
+    public function setLevel($level)
+    {
+        $this->level = $level;
+    }
+
+
+    /**
      * how many did apply ?
      *
      * @var int
@@ -151,22 +175,22 @@ class Recruitment extends Roles
      *
      * @var int
      */
-    protected $lest_update;
+    protected $last_update;
 
     /**
      * @return int
      */
-    public function getLestUpdate()
+    public function getLastUpdate()
     {
-        return $this->lest_update;
+        return $this->last_update;
     }
 
     /**
-     * @param int $lest_update
+     * @param int $last_update
      */
-    public function setLestUpdate($lest_update)
+    public function setLastUpdate($last_update)
     {
-        $this->lest_update = $lest_update;
+        $this->last_update = $last_update;
     }
 
     /**
@@ -262,7 +286,7 @@ class Recruitment extends Roles
     {
         global $config, $db;
         $sql_array = array(
-            'SELECT'   => " u.id, u.game_id, u.guild_id, u.role_id, u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note,
+            'SELECT'   => " u.id, g.game_id, u.guild_id, u.role_id, u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note, u.level,
                 r.role_color, r.role_icon, role_cat_icon, l.name as role_name ",
             'FROM'     => array(
                 BBRECRUIT_TABLE   => 'u',
@@ -273,7 +297,7 @@ class Recruitment extends Roles
             'WHERE'    => " 1=1
                 AND u.guild_id = g.id
                 AND u.role_id = r.role_id
-                AND l.attribute='role' and
+                AND l.attribute='role'
                 AND r.game_id=l.game_id AND l.attribute_id = r.role_id  AND l.language = '" . $config['bbdkp_lang'] . "' and l.attribute='role'
                 AND u.id = " . (int)$this->id,
             'ORDER_BY' => ' u.role_id '
@@ -297,6 +321,7 @@ class Recruitment extends Roles
             $this->role_cat_icon = $row['role_cat_icon'];
             $this->positions     = $row['positions'];
             $this->applicants    = $row['applicants'];
+            $this->level         = $row['level'];
             $this->note          = $row['note'];
             $this->last_update   = $row['last_update'];
             $this->status        = $row['status'];
@@ -310,6 +335,7 @@ class Recruitment extends Roles
     public function make()
     {
         global $db;
+
         $query = $db->sql_build_array('INSERT', array(
             'guild_id'   => $this->guild_id,
             'role_id'    => $this->role_id,
@@ -318,6 +344,7 @@ class Recruitment extends Roles
             'applicants' => $this->applicants,
             'note'       => $this->note,
             'last_update' => $this->last_update,
+            'level'      => $this->level,
             'status'     => $this->status,
         ));
         $db->sql_query('INSERT INTO ' . BBRECRUIT_TABLE . $query);
@@ -337,6 +364,7 @@ class Recruitment extends Roles
             'positions'  => $this->positions,
             'applicants' => $this->applicants,
             'note'       => $this->note,
+            'level'      => $this->level,
             'last_update' => $this->last_update,
             'status'     => $this->status,
         ));
@@ -364,7 +392,7 @@ class Recruitment extends Roles
         $sql_array = array(
 
             'SELECT'   => " u.id, u.guild_id, u.role_id,
-                u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note,
+                u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note, u.level,
                 r.role_color, r.role_icon, r.role_cat_icon, r1.name as role_name,
                 c1.name as class_name, c.colorcode, c.imagename
                  ",

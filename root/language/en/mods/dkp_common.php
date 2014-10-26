@@ -142,7 +142,8 @@ $lang = array_merge($lang, array(
 
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status',
-'RECRUIT_CLOSED' => 'Closed !',
+'RECRUIT_CLOSED' => 'Closed',
+'RECRUIT_OPEN' => 'Open',
 'TANK' => 'Tank',
 'DPS' => 'Dps' ,
 'HEAL' => 'Heal',

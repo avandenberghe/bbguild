@@ -720,6 +720,10 @@ $lang = array_merge($lang, array(
 'ADMIN_UPDATE_FACTION_SUCCESS' => 'Faction %s was updated successfully',
 'ADMIN_UPDATE_ROLE_SUCCESS' => 'Role %s was updated successfully',
 'ADMIN_DELETE_ROLE_SUCCESS' => 'Role %s was deleted',
+'ADMIN_ADD_RECRUITMENT_SUCCESS' => 'Recruitment %s was added',
+'ADMIN_UPDATE_RECRUITMENT_SUCCESS' => 'Recruitment %s was updated',
+'ADMIN_DELETE_RECRUITMENT_SUCCESS' => 'Recruitment %s was deleted',
+
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Active Point Adjustment',

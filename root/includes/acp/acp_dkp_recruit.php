@@ -85,7 +85,7 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
      */
     public function main ($id, $mode)
     {
-        global $user, $template, $db, $phpbb_admin_path, $phpEx;
+        global $user, $config, $template, $db, $phpbb_admin_path, $phpEx;
         $this->tpl_name = 'dkp/acp_' . $mode;
         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=listrecruit") . '"><h3>'.$user->lang['RETURN_RECLIST'].'</h3></a>';
 
@@ -127,106 +127,100 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
             case 'addrecruit':
 
                 $recruit = new \bbdkp\controller\guilds\Recruitment();
+                $recruit->setGuildId($Guild->guildid);
+                $recruit->setLastUpdate($this->time);
 
-                $add = (isset($_POST['newrecruitment'])) ? true : false;
-                if ($add)
+                $add = (isset($_POST['add'])) ? true : false;
+                $update = (isset($_POST['update'])) ? true : false;
+
+                $action = request_var('action', '');
+
+                if($action=='delete')
                 {
+                    $recruit->id = request_var('id', 0);
+                    $recruit->get($recruit->id);
+                    $recruit->delete();
+
+                    $success_message = sprintf($user->lang['ADMIN_DELETE_RECRUITMENT_SUCCESS'], $recruit->id);
+                    trigger_error($success_message . $this->link, E_USER_WARNING);
 
                 }
+                elseif ($action=='edit')
+                {
+                    $recruit->id = request_var('id', 0);
+                    $recruit->get($recruit->id);
+
+                    $template->assign_vars(array(
+                            'S_UPDATE'              => true,
+                            'RECRUIT_ID'            => $recruit->id,
+                            'RECSTATUS'             => $recruit->getStatus() == '1' ? 'checked="checked"' : '',
+                            'RECRUIT_STATUS'        => $recruit->getStatus() == '1' ? $user->lang['RECRUIT_OPEN'] : $user->lang['RECRUIT_CLOSED'],
+                            'NUMPOSITIONS'          => $recruit->getPositions(),
+                            'APPLICANTS'            => $recruit->getApplicants(),
+                            'RECRUIT_LEVEL'         => $recruit->getLevel(),
+                            'APPLICANTS'            => $recruit->getApplicants(),
+                            'NOTE'                  => $recruit->getNote(),
+                        )
+                    );
+                }
+                else
+                {
+                    //add
+                    $template->assign_vars(array(
+                        'RECSTATUS'             => 'checked="checked"',
+                        'S_ADD'                 => true,
+                        'NUMPOSITIONS'          => '1',
+                        'RECRUIT_LEVEL'         => $Guild->min_armory,
+                        )
+                    );
+
+                }
+
+                if ($add || $update)
+                {
+
+                    if (!check_form_key('addrecruit'))
+                    {
+                        trigger_error('FORM_INVALID');
+                    }
+
+                    $recruit->id = request_var('hidden_recruit_id', 0);
+                    $recruit->role_id = request_var('role', 0);
+                    $recruit->setClassId(request_var('class_id', 0));
+                    $recruit->setPositions(request_var('numpositions', 0));
+                    $recruit->setApplicants(request_var('applicants', 0));
+                    $recruit->setStatus(request_var('recruitstatus', '') == 'on' ? 1 : 0 );
+                    $recruit->setLevel(request_var('recruit_level', 0));
+                    $recruit->setNote(utf8_normalize_nfc(request_var('note', '', true)));
+                }
+
+                if ($add)
+                {
+                    $recruit->Make();
+
+                    $success_message = sprintf($user->lang['ADMIN_ADD_RECRUITMENT_SUCCESS'], $recruit->id);
+                    trigger_error($success_message . $this->link, E_USER_NOTICE);
+
+                }
+                elseif($update)
+                {
+                    $recruit->update();
+                    $success_message = sprintf($user->lang['ADMIN_UPDATE_RECRUITMENT_SUCCESS'], $recruit->id);
+                    trigger_error($success_message . $this->link, E_USER_NOTICE);
+
+                }
+                else
+                {
+                    $this->BuildDropDowns($Guild, $recruit);
+                }
+
+
 
                 $form_key = 'addrecruit';
                 add_form_key($form_key);
 
-                $template->assign_vars(array(
-                    'RECSTATUS'         => true,
-                    'GUILD_EMBLEM'          => $Guild->emblempath,
-                    'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid),
-                    'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=addrecruit&amp;" . URI_GUILD . '=' . $Guild->guildid),
-                    'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=listrecruit&amp;" . URI_GUILD . '=' . $Guild->guildid),
-                    'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds"),
-                    )
-                );
 
-                $this->page_title = $user->lang['ACP_ADDGUILD'];
-                break;
-
-            /*************************************
-             *  Edit Recruit
-             *************************************/
-            case 'editrecruit':
-
-                $this->url_id = request_var(URI_GUILD, 0);
-                $updateguild = new Guilds($this->url_id);
-                $memberadd = (isset($_POST['memberadd'])) ? true : false;
-                if ($memberadd)
-                {
-                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;" . URI_GUILD . "=" . $this->url_id  ));
-                }
-
-                $action = request_var('action', '');
-                switch($action)
-                {
-                     case 'guildrecruitment':
-
-                        $addrecruitment = (isset($_POST['addrecruitment'])) ? true : false;
-                        if ($addrecruitment)
-                        {
-                            if (! check_form_key('editguildrecruitment'))
-                            {
-                                trigger_error('FORM_INVALID');
-                            }
-                        }
-                        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildrecruitment&amp;" . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
-                        $updateroles = (isset($_POST['updateroles'])) ? true : false;
-
-                        if($addrecruitment)
-                        {
-                            $this->AddRole();
-                        }
-
-                        if($updateroles)
-                        {
-                            $this->UpdateRole();
-                        }
-
-                        $this->tpl_name = 'dkp/acp_editguild_recruitment';
-                        $this->BuildTemplateEditGuildRecruitment($updateguild);
-                        break;
-
-                    default:
-                        $submit = (isset($_POST['updateguild'])) ? true : false;
-                        $delete = (isset($_POST['deleteguild'])) ? true : false;
-                        $armory = (isset($_POST['armory'])) ? true : false;
-                        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildedit&amp;" . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
-                        // POST check
-
-                        if ($submit)
-                        {
-                            if (! check_form_key('editguild'))
-                            {
-                                trigger_error('FORM_INVALID');
-                            }
-                        }
-
-                        if ($submit)
-                        {
-                            $this->UpdateGuild($updateguild, false);
-                        }
-
-                        if($armory)
-                        {
-                            $this->UpdateGuild($updateguild, true);
-                        }
-
-                        if ($delete)
-                        {
-                            $this->DeleteGuild($updateguild);
-                        }
-                        // start template loading
-                        $this->BuildTemplateEditGuild($updateguild);
-                        break;
-                }
-
+                $this->page_title = $user->lang['ACP_ADDRECRUITS'];
                 break;
 
             default:
@@ -237,483 +231,7 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
     }
 
     /**
-     * @param $addguild
-     */
-    private function AddGuild(\bbdkp\controller\guilds\Guilds $addguild)
-    {
-        global $user;
-
-        if (!check_form_key('addguild')) {
-            trigger_error('FORM_INVALID');
-        }
-
-        $addguild->name = utf8_normalize_nfc(request_var('guild_name', '', true));
-        $addguild->realm = utf8_normalize_nfc(request_var('realm', '', true));
-        $addguild->region = request_var('region_id', '');
-        $addguild->game_id = request_var('game_id', '');
-        $addguild->showroster = (isset($_POST['showroster'])) ? true : false;
-        $addguild->min_armory = request_var('min_armorylevel', 0);
-        $addguild->armory_enabled = request_var('armory_enabled', 0);
-        $addguild->recstatus = request_var('switchon_recruitment', 0);
-
-        if ($addguild->MakeGuild() == true)
-        {
-            $addguild->Guildupdate($addguild, array());
-            $success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
-            trigger_error($success_message . $this->link, E_USER_NOTICE);
-        }
-        else
-        {
-            $success_message = sprintf($user->lang['ADMIN_ADD_GUILD_FAIL'], $addguild->name);
-            trigger_error($success_message . $this->link, E_USER_WARNING);
-        }
-    }
-
-    /**
-     * update the default flag
-     * @param $updateguild
-     */
-    private function UpdateDefaultGuild(\bbdkp\controller\guilds\Guilds $updateguild)
-    {
-        global $user;
-        $id = request_var('defaultguild', 0);
-        $updateguild->update_guilddefault($id);
-        $success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $id);
-        trigger_error($success_message . $this->link, E_USER_NOTICE);
-    }
-
-    /**
-     * @param $updateguild
-     * @param $updateArmory
-     * @return void
-     */
-    private function UpdateGuild(\bbdkp\controller\guilds\Guilds $updateguild, $updateArmory)
-    {
-        global $user;
-
-        $updateguild->guildid = $this->url_id;
-        $updateguild->Getguild();
-        $old_guild = new \bbdkp\controller\guilds\Guilds($this->url_id);
-        $old_guild->Getguild();
-
-        $updateguild->game_id = request_var('game_id', '');
-        $updateguild->name = utf8_normalize_nfc(request_var('guild_name', '', true));
-        $updateguild->realm = utf8_normalize_nfc(request_var('realm', '', true));
-        $updateguild->region = request_var('region_id', ' ');
-        $updateguild->showroster = request_var('showroster', 0);
-        $updateguild->min_armory = request_var('min_armorylevel', 0);
-        $updateguild->recstatus = request_var('switchon_recruitment', 0);
-        $updateguild->armory_enabled = request_var('armory_enabled', 0);
-
-        //in the request we expect the file name here including extension, no path
-        $updateguild->emblempath = "images/bbdkp/guildemblem/".  request_var('guild_emblem', '');
-
-        $updateguild->aionlegionid = 0;
-        $updateguild->aionserverid = 0;
-
-        $GuildAPIParameters= array();
-
-        if($updateArmory)
-        {
-            $GuildAPIParameters = array('members');
-        }
-
-        if($updateguild->Guildupdate($old_guild, $GuildAPIParameters))
-        {
-            $success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $this->url_id);
-            trigger_error($success_message . $this->link, E_USER_NOTICE);
-        }
-        else
-        {
-            $success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_FAILED'], $this->url_id);
-            trigger_error($success_message . $this->link, E_USER_WARNING);
-        }
-
-    }
-
-    /**
-     *
-     * delete a guild
-     * @param $updateguild
-     */
-    private function DeleteGuild(\bbdkp\controller\guilds\Guilds $updateguild)
-    {
-
-        global $user, $template;
-        if (confirm_box(true))
-        {
-            $deleteguild = new \bbdkp\controller\guilds\Guilds(request_var('guildid', 0));
-            $deleteguild->Getguild();
-            $deleteguild->Guildelete();
-            $success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guildid);
-            trigger_error($success_message . $this->link, E_USER_NOTICE);
-
-        }
-        else
-        {
-            $s_hidden_fields = build_hidden_fields(array(
-                'deleteguild' => true,
-                'guildid' => $updateguild->guildid));
-
-            $template->assign_vars(array(
-                'S_HIDDEN_FIELDS' => $s_hidden_fields));
-
-            confirm_box(false, $user->lang['CONFIRM_DELETE_GUILD'], $s_hidden_fields);
-
-        }
-    }
-
-    /**
-     * Add a guild rank
-     * @param $updateguild
-     */
-    private function AddRank(\bbdkp\controller\guilds\Guilds $updateguild)
-    {
-        global $user;
-
-        $newrank = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
-        $newrank->RankName = utf8_normalize_nfc(request_var('nrankname', '', true));
-        $newrank->RankId = request_var('nrankid', 0);
-        $newrank->RankGuild = $updateguild->guildid;
-        $newrank->RankHide = (isset($_POST['nhide'])) ? 1 : 0;
-        $newrank->RankPrefix = utf8_normalize_nfc(request_var('nprefix', '', true));
-        $newrank->RankSuffix = utf8_normalize_nfc(request_var('nsuffix', '', true));
-        $newrank->Makerank();
-        $success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
-        trigger_error($success_message . $this->link);
-    }
-
-    /**
-     * Update a rank
-     * @param $updateguild
-     *
-     * @return int|string
-     */
-    private function UpdateRank(\bbdkp\controller\guilds\Guilds $updateguild)
-    {
-        global $user;
-        $newrank = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
-        $oldrank = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
-
-        // template
-        $modrank = utf8_normalize_nfc(request_var('ranks', array(0 => ''), true));
-        foreach ($modrank as $rank_id => $rank_name)
-        {
-            $oldrank->RankId = $rank_id;
-            $oldrank->RankGuild = $updateguild->guildid;
-            $oldrank->Getrank();
-
-            $newrank->RankId = $rank_id;
-            $newrank->RankGuild = $oldrank->RankGuild;
-            $newrank->RankName = $rank_name;
-            $newrank->RankHide = (isset($_POST['hide'][$rank_id])) ? 1 : 0;
-
-            $rank_prefix = utf8_normalize_nfc(request_var('prefix', array((int) $rank_id => ''), true));
-            $newrank->RankPrefix = $rank_prefix[$rank_id];
-
-            $rank_suffix = utf8_normalize_nfc(request_var('suffix', array((int) $rank_id => ''), true));
-            $newrank->RankSuffix = $rank_suffix[$rank_id];
-
-            // compare old with new,
-            if ($oldrank != $newrank)
-            {
-                $newrank->Rankupdate($oldrank);
-            }
-        }
-        $success_message = $user->lang['ADMIN_RANKS_UPDATE_SUCCESS'];
-        trigger_error($success_message . $this->link);
-        return $rank_id;
-    }
-
-    /**
-     * delete a guild rank
-     */
-    private function DeleteRank()
-    {
-        global $user;
-
-        if (confirm_box(true))
-        {
-            $guildid = request_var('hidden_guildid', 0);
-            $rank_id = request_var('hidden_rank_id', 999);
-            $deleterank = new \bbdkp\controller\guilds\Ranks($guildid, $rank_id);
-            $deleterank->Rankdelete(false);
-        }
-        else
-        {
-            // delete the rank only if there are no members left
-            $rank_id = request_var('ranktodelete', 999);
-            $guildid = request_var(URI_GUILD, 0);
-            $old_guild = new \bbdkp\controller\guilds\Guilds($guildid);
-            $deleterank = new \bbdkp\controller\guilds\Ranks($guildid, $rank_id);
-
-            $s_hidden_fields = build_hidden_fields(array(
-                'deleterank' => true,
-                'hidden_rank_id' => $rank_id,
-                'hidden_guildid' => $guildid
-            ));
-
-            confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_RANKS'],
-                $deleterank->RankName, $old_guild->name), $s_hidden_fields);
-        }
-    }
-
-    /**
-     * insert a row in roles table
-     */
-    private function AddRole()
-    {
-        //
-        $addrole = new \bbdkp\controller\guilds\Roles();
-        $addrole->guild_id = request_var(URI_GUILD, 0);
-        $addrole->role = request_var('recruitrole', '');
-        $addrole->class_id = request_var('recruitclass', 0);
-        $addrole->needed = request_var('recruitneeded', 0);
-        $addrole->make();
-        unset($addrole);
-    }
-
-    /**
-     * Update a role
-     */
-    private function UpdateRole()
-    {
-        $updaterole = new \bbdkp\controller\guilds\Roles();
-        $modroles = utf8_normalize_nfc(request_var('needed', array(0 => 0), true));
-        foreach ($modroles as $id => $needed)
-        {
-            $updaterole->id = $id;
-            $updaterole->needed = $needed;
-            $updaterole->update();
-        }
-    }
-
-    /**
-     * @param $updateguild
-     */
-    private function BuildTemplateEditGuild($updateguild)
-    {
-        global $phpEx, $template, $db, $phpbb_admin_path, $user;
-
-        foreach ($this->regions as $key => $regionname)
-        {
-            $template->assign_block_vars('region_row', array(
-                'VALUE'    => $key,
-                'SELECTED' => ($updateguild->region == $key) ? ' selected="selected"' : '',
-                'OPTION'   => (!empty($regionname)) ? $regionname : '(None)'));
-        }
-
-        if (isset($this->games))
-        {
-            foreach ($this->games as $key => $gamename)
-            {
-                $template->assign_block_vars('game_row', array(
-                    'VALUE'    => $key,
-                    'SELECTED' => ($updateguild->game_id == $key) ? ' selected="selected"' : '',
-                    'OPTION'   => (!empty($gamename)) ? $gamename : '(None)'));
-            }
-        }
-        else
-        {
-            trigger_error('ERROR_NOGAMES', E_USER_WARNING);
-        }
-
-        $game          = new \bbdkp\controller\games\Game;
-        $game->game_id = $updateguild->game_id;
-        $game->Get();
-
-        $template->assign_vars(array(
-            'F_ENABLGAMEEARMORY' => $game->getArmoryEnabled(),
-            'F_ENABLEARMORY'     => $updateguild->armory_enabled,
-
-            'RECSTATUS'          => $updateguild->recstatus,
-            'GAME_ID'            => $updateguild->game_id,
-            'GUILDID'            => $updateguild->guildid,
-            'GUILD_NAME'         => $updateguild->name,
-            'REALM'              => $updateguild->realm,
-            'REGION'             => $updateguild->region,
-            'MEMBERCOUNT'        => $updateguild->membercount,
-            'ARMORY_URL'         => $updateguild->guildarmoryurl,
-            'MIN_ARMORYLEVEL'    => $updateguild->min_armory,
-            'SHOW_ROSTER'        => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
-            // Language
-            'L_TITLE'            => $user->lang['ACP_EDITGUILD'],
-            'L_EXPLAIN'          => $user->lang['ACP_EDITGUILD_EXPLAIN'],
-            'L_EDIT_GUILD_TITLE'  => $user->lang['EDIT_GUILD'],
-            // Javascript messages
-            'MSG_NAME_EMPTY'     => $user->lang['FV_REQUIRED_NAME'],
-            'EMBLEM'             => $updateguild->emblempath,
-            'EMBLEMFILE'         => basename($updateguild->emblempath),
-
-            'U_EDIT_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=editguild&amp;" . URI_GUILD . '=' . $updateguild->guildid),
-            'U_EDIT_GUILDRANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildranks&amp;" . URI_GUILD . '=' . $updateguild->guildid),
-            'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildrecruitment&amp;" . URI_GUILD . '=' . $updateguild->guildid)
-        ));
-        // extra
-        if ($updateguild->game_id == 'wow')
-        {
-            $template->assign_vars(array(
-                'S_WOW'  => true,
-                'ARMORY' => $updateguild->guildarmoryurl,
-                'ACHIEV' => $updateguild->achievementpoints,
-            ));
-        }
-
-        $form_key = 'editguild';
-        add_form_key($form_key);
-        $this->page_title = $user->lang['ACP_EDITGUILD'];
-    }
-
-    /**
-     * @param $updateguild
-     */
-    private function BuildTemplateEditGuildRanks($updateguild)
-    {
-        global $phpbb_root_path, $phpEx, $template, $db, $phpbb_admin_path, $user;
-        // list the ranks for this guild
-        // everything from rank 90 is readonly
-        $listranks          = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
-        $listranks->game_id = $updateguild->game_id;
-        $result             = $listranks->listranks();
-        while ($row = $db->sql_fetchrow($result))
-        {
-            $prefix = $row['rank_prefix'];
-            $suffix = $row['rank_suffix'];
-            $template->assign_block_vars('ranks_row', array(
-                'RANK_ID'       => $row['rank_id'],
-                'RANK_NAME'     => $row['rank_name'],
-                'RANK_PREFIX'   => $prefix,
-                'RANK_SUFFIX'   => $suffix,
-                'HIDE_CHECKED'  => ($row['rank_hide'] == 1) ? 'checked="checked"' : '',
-                'S_READONLY'    => ($row['rank_id'] >= 90) ? true : false,
-                'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;deleterank=1&amp;ranktodelete=" . $row['rank_id'] . "&amp;" . URI_GUILD . "=" . $updateguild->guildid)
-            ));
-        }
-        $db->sql_freeresult($result);
-
-        $game          = new \bbdkp\controller\games\Game;
-        $game->game_id = $updateguild->game_id;
-        $game->Get();
-
-        $template->assign_vars(array(
-            // Form values
-            'S_GUILDLESS'        => ($updateguild->guildid == 0) ? true : false,
-            'F_ENABLGAMEEARMORY' => $game->getArmoryEnabled(),
-            'F_ENABLEARMORY'     => $updateguild->armory_enabled,
-            'GAME_ID'            => $updateguild->game_id,
-            'GUILDID'            => $updateguild->guildid,
-            'GUILD_NAME'         => $updateguild->name,
-            'U_ADD_RANK'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;addrank=1&amp;guild=" . $updateguild->guildid),
-            // Language
-            'L_TITLE'            => ($this->url_id < 0) ? $user->lang['ACP_ADDGUILD'] : $user->lang['ACP_EDITGUILD'],
-            'L_EXPLAIN'          => ($this->url_id < 0) ? $user->lang['ACP_ADDGUILD_EXPLAIN'] : $user->lang['ACP_EDITGUILD_EXPLAIN'],
-            'L_ADD_GUILD_TITLE'  => ($this->url_id < 0) ? $user->lang['ADD_GUILD'] : $user->lang['EDIT_GUILD'],
-            // Javascript messages
-            'MSG_NAME_EMPTY'     => $user->lang['FV_REQUIRED_NAME'],
-            'EMBLEM'             => $updateguild->emblempath,
-            'EMBLEMFILE'         => basename($updateguild->emblempath),
-            'S_ADD'              => ($this->url_id < 0) ? true : false,
-            'U_EDIT_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=editguild&amp;" . URI_GUILD . '=' . $updateguild->guildid),
-            'U_EDIT_GUILDRANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildranks&amp;" . URI_GUILD . '=' . $updateguild->guildid),
-            'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildrecruitment&amp;" . URI_GUILD . '=' . $updateguild->guildid)
-        ));
-
-        $form_key = 'editguildranks';
-        add_form_key($form_key);
-        $this->page_title = $user->lang['ACP_EDITGUILD'];
-    }
-
-    /**
-     * list the recruitment status per role/class for this guild
-     * @param $updateguild
-     */
-    private function BuildTemplateEditGuildRecruitment($updateguild)
-    {
-        global $phpbb_root_path, $phpEx, $template, $db, $phpbb_admin_path, $user;
-
-        /*
-        while ($row = $db->sql_fetchrow($result))
-        {
-            $role = isset($row['role']) ?
-                (isset($user->lang[$row['role']]) ? $user->lang[$row['role']] : $row['role']) :
-                $listroles->roles['NA'];
-            $current += (int)$classdistribution[$row['class_id']]['classcount'];
-            $needed += (int)isset($row['needed']) ? (int)$row['needed'] : 0;
-            $template->assign_block_vars('roles_row', array(
-                'GUILDID'              => $row['guild_id'],
-                'GAME_ID'              => $row['game_id'],
-                'ROLEID'               => $row['roleid'],
-                'ROLE'                 => $role,
-                'STIJL'                => 'positive',
-                'CLASS_ID'             => $row['class_id'],
-                'CLASS'                => $row['class_name'],
-                'IMAGENAME'            => $row['imagename'],
-                'COLORCODE'            => $row['colorcode'],
-                'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
-                'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-                'CURRENT'              => $classdistribution[$row['class_id']]['classcount'],
-                'NEEDED'               => isset($row['needed']) ? $row['needed'] : '0',
-                'TARGET'               => (int)$classdistribution[$row['class_id']]['classcount'] + (isset($row['needed']) ? (int)$row['needed'] : 0),
-            ));
-        }
-        $db->sql_freeresult($result);
-        */
-        $game          = new \bbdkp\controller\games\Game;
-        $game->game_id = $updateguild->game_id;
-        $game->Get();
-
-        //print all other static info
-        $template->assign_vars(array(
-            // Form values
-            'S_GUILDLESS'        => ($updateguild->guildid == 0) ? true : false,
-            'F_ENABLGAMEEARMORY' => $game->getArmoryEnabled(),
-            'F_ENABLEARMORY'     => $updateguild->armory_enabled,
-            ///'CURRENT'            => $current,
-            //'NEEDED'             => $needed,
-            // 'TARGET'             => ($current + $needed),
-            'RECSTATUS'          => $updateguild->recstatus,
-            'GAME_ID'            => $updateguild->game_id,
-            'GUILDID'            => $updateguild->guildid,
-            'GUILD_NAME'         => $updateguild->name,
-            'REALM'              => $updateguild->realm,
-            'REGION'             => $updateguild->region,
-            'MEMBERCOUNT'        => $updateguild->membercount,
-            'ARMORY_URL'         => $updateguild->guildarmoryurl,
-            'MIN_ARMORYLEVEL'    => $updateguild->min_armory,
-            'SHOW_ROSTER'        => ($updateguild->showroster == 1) ? 'checked="checked"' : '',
-            'U_ADD_RANK'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;addrank=1&amp;guild=" . $updateguild->guildid),
-            // Language
-            'L_TITLE'            => ($this->url_id < 0) ? $user->lang['ACP_ADDGUILD'] : $user->lang['ACP_EDITGUILD'],
-            'L_EXPLAIN'          => ($this->url_id < 0) ? $user->lang['ACP_ADDGUILD_EXPLAIN'] : $user->lang['ACP_EDITGUILD_EXPLAIN'],
-            'L_ADD_GUILD_TITLE'  => ($this->url_id < 0) ? $user->lang['ADD_GUILD'] : $user->lang['EDIT_GUILD'],
-            // Javascript messages
-            'MSG_NAME_EMPTY'     => $user->lang['FV_REQUIRED_NAME'],
-            'EMBLEM'             => $updateguild->emblempath,
-            'EMBLEMFILE'         => basename($updateguild->emblempath),
-            'S_ADD'              => ($this->url_id < 0) ? true : false,
-            'U_EDIT_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=editguild&amp;" . URI_GUILD . '=' . $updateguild->guildid),
-            'U_EDIT_GUILDRANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildranks&amp;" . URI_GUILD . '=' . $updateguild->guildid),
-            'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildrecruitment&amp;" . URI_GUILD . '=' . $updateguild->guildid)
-        ));
-        // extra
-        if ($updateguild->game_id == 'wow')
-        {
-            $template->assign_vars(array(
-                'S_WOW'  => true,
-                'ARMORY' => $updateguild->guildarmoryurl,
-                'ACHIEV' => $updateguild->achievementpoints,
-            ));
-        }
-
-        $form_key = 'editguildrecruitment';
-        add_form_key($form_key);
-        $this->page_title = $user->lang['ACP_EDITGUILD'];
-    }
-
-    /**
-     *
      * list the recruitments
-     * @param $Guild
      * @param $guild_id
      *
      */
@@ -744,12 +262,12 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
                     'CLASS_IMAGE'       => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row ['imagename'] . ".png" : '',
                     'POSITIONS'         => $row['positions'],
                     'APPLICANTS'        => $row['applicants'],
-                    'STATUS'            => $row['status'],
+                    'STATUS'            => $row['status'] == '1' ? $user->lang['RECRUIT_OPEN'] : $user->lang['RECRUIT_CLOSED'],
                     'NOTE'              => $row['note'],
                     'ROLE_COLOR'        => $row['role_color'],
                     'ROLE_NAME'         => $row['role_name'],
-                    'U_VIEW_RECRUIT'    => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=editrecruit&amp;action=edit&amp;" . URI_GUILD . '=' . $row['guild_id']),
-                    'U_DELETE_RECRUIT'  => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_recruit&amp;mode=editrecruit&amp;action=delete&amp;id=' . $row['id'])
+                    'U_DELETE_RECRUIT'  => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_recruit&amp;mode=addrecruit&amp;action=delete&amp;id=' . $row['id']),
+                    'U_VIEW_RECRUIT'    => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_recruit&amp;mode=addrecruit&amp;action=edit&amp;id=' . $row['id']),
                 )
             );
         }
@@ -759,6 +277,50 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
         $template->assign_vars(array(
             'RECRUIT_FOOTCOUNT'     => sprintf($user->lang['RECRUIT_FOOTCOUNT'], $recruit_count)));
         $this->page_title = 'ACP_LISTRECRUITS';
+    }
+
+    /**
+     * @param $Guild
+     * @param $recruit
+     */
+    private function BuildDropDowns($Guild, $recruit)
+    {
+        global $config, $db, $template;
+
+        // Class dropdown
+        // reloading is done from ajax to prevent redraw
+        $sql_array = array(
+            'SELECT'   => ' c.class_id, l.name as class_name, c.class_hide,
+									  c.class_min_level, class_max_level, c.class_armor_type, c.imagename ',
+            'FROM'     => array(
+                CLASS_TABLE => 'c',
+                BB_LANGUAGE => 'l'),
+            'WHERE'    => " l.game_id = c.game_id  AND c.game_id = '" . $Guild->game_id . "'
+					AND l.attribute_id = c.class_id  AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",
+            'ORDER_BY' => 'l.name asc'
+        );
+        $sql    = $db->sql_build_query('SELECT', $sql_array);
+        $result = $db->sql_query($sql);
+        while ($row = $db->sql_fetchrow($result))
+        {
+            $template->assign_block_vars('class_row', array(
+                'VALUE'    => $row['class_id'],
+                'SELECTED' => ($recruit->getClassId() == $row['class_id']) ? ' selected="selected"' : '',
+                'OPTION'   => $row['class_name']));
+        }
+        $db->sql_freeresult($result);
+        // get roles
+        $Roles           = new \bbdkp\controller\games\Roles();
+        $Roles->game_id  = $Guild->game_id;
+        $Roles->guild_id = $Guild->guildid;
+        $listroles       = $Roles->listroles();
+        foreach ($listroles as $roleid => $Role)
+        {
+            $template->assign_block_vars('role_row', array(
+                'VALUE'    => $Role['role_id'],
+                'SELECTED' => ($recruit->role_id == $Role['role_id']) ? ' selected="selected"' : '',
+                'OPTION'   => $Role['rolename']));
+        }
     }
 }
 
