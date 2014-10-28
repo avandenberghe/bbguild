@@ -1024,7 +1024,7 @@ $versions = array(
         'table_column_add' => array(
             array($table_prefix . 'bbdkp_memberguild', 'armoryresult', array('VCHAR_UNI:255', '')),
             array($table_prefix . 'bbdkp_games', 'apikey', array('VCHAR:255', '')),
-            array($table_prefix . 'bbdkp_games', 'api_locale', array('VCHAR:5', '')),
+            array($table_prefix . 'bbdkp_games', 'apilocale', array('VCHAR:5', '')),
         ),
 
         //adding some tables
