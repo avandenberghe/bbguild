@@ -383,9 +383,10 @@ class Recruitment extends Roles
 
     /**
      * get all current recruitments for a guild
-     *
+     * @param int $mode
+     * @return mixed
      */
-    public function ListRecruitments()
+    public function ListRecruitments($mode=0)
     {
         global $config, $db;
 
@@ -421,8 +422,17 @@ class Recruitment extends Roles
                 AND g.id =  " . $this->guild_id,
             'ORDER_BY' => 'c.game_id, c.class_id '
         );
+
+        if ($mode ==1)
+        {
+            $sql_array['WHERE'] == ' AND u.status = 1 ';
+        }
+
+
         $sql          = $db->sql_build_query('SELECT', $sql_array);
         $result       = $db->sql_query($sql);
+
+
         return $result;
     }
 
@@ -440,12 +450,13 @@ class Recruitment extends Roles
             'FROM'     => array(
                 GUILD_TABLE     => 'g',
                 BBRECRUIT_TABLE => 'r'),
-            'WHERE'    => "r.guild_id = g.id AND r.needed > 0 ",
+            'WHERE'    => "r.guild_id = g.id ",
             'GROUP_BY' => ' g.name ',
             'ORDER_BY' => ' g.name ');
         $sql    = $db->sql_build_query('SELECT', $sql_array);
         $result = $db->sql_query($sql);
         return $result;
+
     }
 }
 
