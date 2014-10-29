@@ -28,6 +28,7 @@ $lang = array_merge($lang, array(
     'ACP_DKP_GAME'			=> 'Spieleinstellungen',
 	'ACP_DKP_FACTION_ADD'		=> 'Faktion hinzufügen',
 	'ACP_DKP_RACE_ADD'		=> 'Rasse hinzufügen',
+    'ACP_DKP_ROLE_ADD'		=> 'Rolle hinzufügen',
 	'ACP_DKP_CLASS_ADD'		=> 'Klasse hinzufügen',  
 	'ACP_DKP_GAME_LIST'		=> 'Spielliste',
 	'ACP_DKP_GAME_EDIT'		=> 'Spiel bearbeiten',

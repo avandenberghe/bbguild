@@ -1,8 +1,9 @@
 <?php
 /**
  * bbdkp common language file - de German
- *
- * @copyright 2009 bbdkp <https://github.com/bbDKP>
+
+ * @author Sajaki@bbdkp.com
+ * @copyright 2014 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @version 1.4.0
  * @translation various unknown authors, killerpommes
@@ -142,6 +143,7 @@ $lang = array_merge($lang, array(
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Rekrutierungs Status',
 'RECRUIT_CLOSED' => 'Geschlossen!',
+'RECRUIT_OPEN' => 'Offen',
 'TANK' => 'Schutz',
 'DPS' => 'Schaden',
 'HEAL' => 'Heilung',
@@ -212,6 +214,7 @@ $lang = array_merge($lang, array(
 'ATTENDED' => 'Teilgenommen',
 'ATTENDEES' => 'Teilnehmer',
 'ATTENDANCE' => 'Teilnahme',
+'ATT' => 'Teiln.',
 'AVERAGE' => 'Durchschnitt',
 'BOSS' => 'Boss',
 'BUYER' => 'Käufer',
@@ -307,6 +310,7 @@ $lang = array_merge($lang, array(
 'PCT_EARNED_LOST_TO' => '% Verdientes verringert durch',
 'PREFERENCES' => 'Voreinstellungen',
 'PURCHASE_HISTORY_FOR' => 'Kauf-Historie für %s',
+'LEADERBOARDSTAT' => 'Leaderboard gegen Raidcount',
 'QUOTE' => 'Zitat',
 'RACE' => 'Rasse',
 'RACEID' => 'Rassen ID',
@@ -349,6 +353,8 @@ $lang = array_merge($lang, array(
 'VIEW_LOGS' => 'Logs ansehen',
 'ZSVALUE' => 'Nullsumme',
 'ZEROSUM' => 'Nullsummenbonus',
+'APPLICANTS' => 'Bewerber',
+'POSITIONS' => 'Positionen',
 
 //lootsystems
 'EP' => 'LP',
@@ -526,4 +532,3 @@ $lang = array_merge($lang, array(
 
 ));
 
-?>
