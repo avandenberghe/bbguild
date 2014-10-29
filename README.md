@@ -2,6 +2,23 @@
 
 #1.4.0-dev
 duedate nov 02 2014
+change log 1.4 
+
+- #252 Implement new WOW API 
+- #249 allow two users from different realms in the same guild :white_check_mark:
+- #196 Implement Guildwars API 
+- #192 bbdkp user panel - kicking characters 
+- #189 Edit armor types 
+- #188 translate faction name  
+- #248 update SWTOR races  :white_check_mark:
+- #246 Add Sliders to statistics page :white_check_mark:
+- #242 enable icon uploads in acp :white_check_mark:
+- #241 roster acp should use outer joins  :white_check_mark:
+- #240 update Aion game parameters :white_check_mark:
+- #226 move role acp from raidplanner to bbdkp :white_check_mark:
+- #223 update constants file:white_check_mark:
+- #212 Italian translation :white_check_mark:
+
 
 ## about
 
