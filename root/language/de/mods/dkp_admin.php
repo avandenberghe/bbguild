@@ -260,9 +260,14 @@ $lang = array_merge($lang, array(
 'ACP_DKP' => 'bbDKP Einstellungsbereich',
 'ACP_ITEMSTATS' => 'Tooltip Einstellungen',
 'ACP_INDEXPAGE' => 'Portal Einstellungen',
-'POINT_SETTINGS' => 'Point Settings',
+'POINT_SETTINGS' => 'Punkteinstellungen',
 'ACP_NEWGAME' => 'Spieleliste',
 'ACP_EDITGAME' => 'Spiel bearbeiten: %s',
+'ACP_ADDROLE' => 'Rolle hinzufügen',
+'ACP_EDITROLE' => '%s Rolle bearbeiten',
+'ACP_LISTRECRUITS' => 'Rekrutierungen auflisten',
+'ACP_ADDRECRUITS' => 'Rekrutierung hinzufügen',
+'RETURN_RECLIST'  => 'Zurück zur Rekrutierungsliste.',
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Adminpanel Index',
@@ -270,6 +275,7 @@ $lang = array_merge($lang, array(
 'ACP_LISTDKPSYS_EXPLAIN' => 'DKP Pool Liste. Ein DKP Pool gruppiert eine Serie von Ereignisse, Raids und Gegenstände, sodass du verschiedene Tiers einzeln behandeln kannst. ',
 'ACP_ADDEVENT_EXPLAIN' => 'Hier kannst du Ereignisinformation ändern. DKP Pools müssen schon existieren.',
 'ACP_LISTEVENTS_EXPLAIN' => 'Ereignisliste. Für jeden Raid der zu diesem Ereignis hinzugefügt wird werden die Standardwerte genutzt.',
+
 'ACP_ADDIADJ_EXPLAIN' => 'Hier kannst du individuelle Punkte Anpassungen verwalten.',
 'ACP_LISTIADJ_EXPLAIN' => 'Individuelle Punkte Anpassungen.',
 'ACP_ADDITEM_EXPLAIN' => 'Hier kannst du Gegenständs Informationen ändern oder hinzufügen.',
@@ -278,8 +284,8 @@ $lang = array_merge($lang, array(
 'ACP_EDITRAID_EXPLAIN'  => 'Hier kannst du deinen Raid bearbeiten.',
 'ACP_LISTRAIDS_EXPLAIN' => 'Hier ist die Raid Liste pro DKP Pool. Wenn du den Raidnamen anklickst, gelangst du in den Verwaltungsmodus',
 'ACP_DKP_LOGS_EXPLAIN'  => 'Diese Liste zeigt alle bbDKP-Vorgänge. Du kannst nach Benutzername, Datum, IP oder Aktion sortieren.',
-'ACP_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenränke und Präfix/Suffixe einstellen. (Zum Hinzufügen, die letzte Zeile eintippen und bestätigen. Zum Löschen, entferne den Namen und bestätige). Rang 99 (der ‘out‘ Rang) ist nicht sichtbar. Die Ränge können überschrieben werden durch das Arsenal-Plugin. ',
-'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Gildenmitgliederliste. Hier kannst du Mitglieder verwalten oder löschen. ACHTUNG: Löschung bedeutet dass die ganze Mitgliedraidgeschichte in allen DKP Pools gelöscht wird! ',
+'ACP_RANKS_EXPLAIN' => 'Hier kannst du einzelne Gildenränke und Präfix/Suffixe einstellen. (Zum Hinzufügen, die letzte Zeile eintippen und bestätigen. Zum Löschen, entferne den Namen und bestätige). Die Ränge können überschrieben werden durch das Arsenal-Plugin. Eigene Ränge (90 und 99) sind nur lesbar.',
+'ACP_MM_LISTMEMBERS_EXPLAIN' => 'Gilden Mitgliederliste ',
 'SHOW_VISIBLE_RANKS' => 'Allein eingeschaltete Ränge sehen',
 'CALL_BATTLENET_CHAR_API' => 'Anruf Battle.NET Character API für 50 am ältesten bearbeitete WoW characters. Deaktivierung folgt indem das Charakter über 180 tage nicht aktulaisiert wurde im Armory.',
 'MASS_DELETE_CHAR' => 'Massenentfernung Charaktere.',
@@ -303,6 +309,8 @@ $lang = array_merge($lang, array(
 'ACP_ADDFACTIONS_EXPLAIN' => 'Hier kannst du die Faktionen verwalten.',
 'ACP_ADDRACE_EXPLAIN' => 'Hier kannst du die Spielrassen verwalten',
 'ACP_ADDRANK_EXPLAIN' => 'Hier kannst du Gildenränge verwalten. Für WoW kannst du sie aus dem Arsenal herunterladen',
+'ACP_ROLES_EXPLAIN' => 'Hier kannst du die Rollen für das Spiel bearbeiten.',
+'ACP_LISTRECRUITS_EXPLAIN' => 'Hier kannst du Rekrutierungen hinzufügen oder bearbeiten',
 
 'RACEID_EXPLAIN' => 'Die ID ist einmalig und sollte (für WoW) mit der Blizzard-XML übereinstimmen',
 'RACE_EXPLAIN' => 'Namen',
@@ -325,6 +333,7 @@ $lang = array_merge($lang, array(
 'ACP_GAME_EXPLAIN' => 'Hier kannst du ein Spiel auf Standard-Einstellung zurücksetzen',
 'ACP_GAME_RESET' => 'Spieleinstellungen zurücksetzen. ',
 'ACP_GAME_DELETE' => 'Spiel löschen.',
+'GAME_NAME_EXPLAIN' => 'Name des Spieles',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'Du hast keine Berechtigung Ereignisse hinzuzufügen.',
@@ -350,6 +359,7 @@ $lang = array_merge($lang, array(
 'LIST_EDIT_DEL_MEMBER' => 'Mitglieder Auflisten, bearbeiten oder löschen',
 'EDIT_RANKS' => 'Gildenränge bearbeiten',
 'EDIT_ROLES' => 'Rollen bearbeiten',
+'EDIT_ROLE' => 'Rolle bearbeiten',
 'ADD_RANKS' => 'Gildenränge hinzufügen',
 'ADD_RANK' => 'Neuer Rang',
 'ADD_ROLES' => 'Rollen hinzufügen',
@@ -382,6 +392,7 @@ $lang = array_merge($lang, array(
 'CONFIRM_RESET_GAME' => 'Bitte bestätige die Rücksetzung der Faktionen, Klasses und Rassen des Spieles "%s".)',
 'CONFIRM_INSTALL_GAME' => 'Bitte bestätige die Installation des Spieles "%s".',
 'CONFIRM_DELETE_GAME' => 'Bitte bestätige die Löschung des Spieles "%s".',
+'CONFIRM_DELETE_ROLE' => 'Bitte bestätige die Löschung der Rolle "%s".',
 
 // Log Actions
 'ACTION_DKPSYS_ADDED' => 'DKP Pool erfolgreich hinzugefügt',
@@ -436,6 +447,11 @@ $lang = array_merge($lang, array(
 'ACTION_RACE_DELETED' => 'Rasse gelöscht',
 'ACTION_RACE_ADDED' => 'Rasse hinzugefügt',
 'ACTION_RACE_UPDATED' => 'Rasse aktualisiert',
+'ACTION_FACTION_UPDATED' => 'Fraktion aktualisiert',
+'ACTION_ROLE_ADDED' => 'Rolle hinzugefügt',
+'ACTION_ROLE_UPDATED' => 'Rolle aktualisiert',
+'ACTION_ROLE_DELETED' => 'Rolle gelöscht',
+
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Neueste Vorgänge von bbDKP-Administratoren',
@@ -490,6 +506,11 @@ $lang = array_merge($lang, array(
 'VLOG_RACE_DELETED' => '%s hat die Rasse %s gelöscht in %s',
 'VLOG_RACE_ADDED' => '%s hat die Rasse %s hinzugefügt in %s',
 'VLOG_RACE_UPDATED' => '%s hat die Rasse %s bearbeitet in %s',
+'VLOG_ARMORY_DOWN' => 'Kann Gilden API nicht erreichen',
+'VLOG_FACTION_UPDATED' => '%s aktualisiert Fraktion %s zu %s',
+'VLOG_ROLE_ADDED' => '%s fügte Rolle %s zu %s hinzu',
+'VLOG_ROLE_UPDATED' => '%s bearbeitete Rolle %s zu %s',
+'VLOG_ROLE_DELETED' => '%s löschte Rolle %s',
 
 // Before/After
 'ADJUSTMENT_BEFORE' => 'Punkteanpassung vorher',
@@ -594,6 +615,7 @@ $lang = array_merge($lang, array(
 'WARNING_BATTLENET' => 'Alle Mitglieder von der Battle.NET Character API aktuallisieren? Dies kann einige Minuten dauern. Bitte bestätigen.',
 'ERROR_ARMORY_DOWN' => 'Fehler: Keine Verbindung zur Battle.NET API',
 'GUILD_EMBLEM_NF' => 'Gildenwappe nicht gefunden',
+'IMAGESIZE_WARNING' => 'Warnung, Breite/Höhe sollte maximal 32/32px sein. Es sind %s/%s',
 'ERROR_ARMORY_NOTFOUND' => 'Eure Gilde wurde nicht gefunden in Battle.NET',
 
 //Curl errors
@@ -619,6 +641,7 @@ $lang = array_merge($lang, array(
 'IERROTH' => 'Other error',
 'WOWAPI_NO_CHARACTER' => 'Es wurde kein Charaktername eingetragen.',
 'CURL_NOT_AVAILABLE' => 'Curl auf deinem Server nicht verfügbar. :< ',
+'WARNING_NORECRUITMENTS'   =>  'Keine Rekrutierungen gefunden.',
 'WOWAPIKEY' => 'API Schlüssel',
 'WOWAPIKEY_EXPLAIN' => 'bitte registrieren auf dev.battle.net um den Schlüssel zu bekommen',
 'WOWAPILOCALE' => 'Locale',
@@ -693,6 +716,15 @@ $lang = array_merge($lang, array(
 'ADMIN_INSTALLED_GAME_SUCCESS' => 'Spiel "%s" wurde installiert.',
 'ADMIN_DELETE_GAME_SUCCESS' => 'Spiel "%s" wurde gelöscht.',
 'ADMIN_INSTALL_GAME_FAILED'  => 'Spielname fehlt. Spiel kann nicht installiert werden.',
+'ADMIN_ADD_ROLE_FAILED'  => 'Rolle %s kann nicht hinzugefügt werden',
+'ADMIN_ADD_ROLE_SUCCESS'  => 'Rolle %s wurde erfolgreich erstellt.',
+'ADMIN_UPDATE_FACTION_SUCCESS' => 'Fraktion %s wurde erfolgreich aktualisiert',
+'ADMIN_UPDATE_ROLE_SUCCESS' => 'Rolle %s wurde erfolgreich aktualisiert',
+'ADMIN_DELETE_ROLE_SUCCESS' => 'Rolle %s wurde gelöscht',
+'ADMIN_ADD_RECRUITMENT_SUCCESS' => 'Rekrutierung %s wurde hinzugefügt',
+'ADMIN_UPDATE_RECRUITMENT_SUCCESS' => 'Rekrutierung %s wurde aktualisiert',
+'ADMIN_DELETE_RECRUITMENT_SUCCESS' => 'Rekrutierung %s wurde gelöscht',
+
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Aktiv Punkteanpassung',
@@ -764,7 +796,7 @@ $lang = array_merge($lang, array(
 'REGIONKR' => 'Korea',
 'REGIONTW' => 'Taiwan',
 'REGIONCN' => 'China',
-'REGIONSEA' => 'Süd-Asien',
+'REGIONSEA' => 'Südost-Asien',
 
 'SITE_NAME' => 'Seitenname',
 'SITE_DESCRIPTION' => 'Seitenbeschreibung',
@@ -811,6 +843,7 @@ $lang = array_merge($lang, array(
 'EDIT_RAIDER_TITLE' => 'Raid Teilnehmer bearbeiten.',
 'ADD_RACE_TITLE' => 'Spielrasse Einstellungen',
 'ADD_CLASS_TITLE' => 'Spielklasse Einstellungen',
+'EDIT_FACTION' => 'Bearbeite Fraktion',
 
 // Page Foot Counts
 'LISTMEMBERS_FOOTCOUNT' => '... %d Mitglied(er) gefunden',
@@ -828,6 +861,8 @@ $lang = array_merge($lang, array(
 'LISTCLASS_FOOTCOUNT' => '... %d Spielklasse(n) gefunden',
 'LISTFACTION_FOOTCOUNT' => '... %d Spielfaktione(n) gefunden',
 'RAIDITEMS_FOOTCOUNT' => '... %d Item(s) gefunden',
+'LISTROLES_FOOTCOUNT' => '... %d Spielrolle(n) gefunden',
+'RECRUIT_FOOTCOUNT' => '... %d Spielrekrutierung(en) gefunden',
 
 // Submit Buttons
 'ADD_ADJUSTMENT' => 'Füge Punkte Anpassung hinzu',
@@ -894,7 +929,6 @@ $lang = array_merge($lang, array(
 'CONTACT' => 'Kontakt',
 'CREATE' => 'Erstelle',
 'DATE_FORMAT' => ' Datumsformat in Anzeigeliste',
-
 'BBDKP_MEMBERDEACTIVATED' => 'Deaktiviert von %s on %s',
 'BBDKP_MEMBERACTIVATED' => 'Activiert von %s on %s',
 'DEFAULT_DKP_POOL' => 'Standard DKP Pool',
@@ -958,6 +992,11 @@ $lang = array_merge($lang, array(
 'OVERRIDE' => 'Überschreiben',
 'RACE_IMAGE' => 'Rassenbild klein',
 'RACE_IMAGE_EXPLAIN' => 'PNG Rassen Bildname, ohne Datenendung. Datei muss in /images/race_images kopiert werden.',
+'ROLE_COLOR' => 'Rollenfarbe',
+'ROLE_ICON' => 'Rollensymbol',
+'ROLE_NAME' => 'Rollenname',
+'ROLE_ID' => 'Rollen Id',
+'ROLE_CAT_ICON' => 'Rollen Kategoriesymbol',
 'RESULTS' => '%d Ergebnisse (%s)',
 'SEARCH' => 'Suche',
 'SEARCH_MEMBERS' => 'Suche Teilnehmer',
@@ -1128,4 +1167,3 @@ Also würde die Beute an Spieler 2 gehen <br />',
 
 ));
 
-?>
