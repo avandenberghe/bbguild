@@ -90,6 +90,18 @@
                                 <input type="radio" name="switchon_recruitment" value="0"<!-- IF RECSTATUS == 0 --> checked="checked"<!-- ENDIF --> /> {L_OFF}
                             </dd>
                         </dl>
+
+                        <dl>
+                            <dt>
+                                <label>{L_FORUM}:</label>
+                            </dt>
+                            <dd>
+                                <select name="recruitforum" id="recruitforum" class="input" >
+                                    {RECRUITFORUM_OPTIONS}
+                                </select>
+                            </dd>
+                        </dl>
+
                         <hr/>
                         <!-- IF S_WOW && F_ENABLGAMEEARMORY -->
                         <dl>

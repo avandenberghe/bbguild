@@ -43,6 +43,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  */
 class Guilds extends \bbdkp\admin\Admin
 {
+
 	/**
 	 * guild game id
 	 * @var string
@@ -191,6 +192,14 @@ class Guilds extends \bbdkp\admin\Admin
 	public $armoryresult;
 
 	/**
+	 * default recruitment forum. this is the forum linked to in the recruitment block
+	 * you can install the Apply plugin to further customise the application process.
+	 *
+	 * @var int
+	 */
+	public $recruitforum;
+
+	/**
 	 * guild class constructor
 	 * @param int $guild_id
 	 */
@@ -304,6 +313,7 @@ class Guilds extends \bbdkp\admin\Admin
 				'guilddefault' => $this->guilddefault,
 				'armory_enabled' => $this->armory_enabled,
                 'rec_status' => $this->recstatus,
+				'recruitforum' => $this->recruitforum,
 				'members' => 0,
 			));
 
@@ -383,6 +393,7 @@ class Guilds extends \bbdkp\admin\Admin
 				'guilddefault' => $this->guilddefault,
 				'armory_enabled' => $this->armory_enabled,
                 'emblemurl' => $this->emblempath,
+				'recruitforum' => $this->recruitforum,
 		));
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
@@ -776,7 +787,7 @@ class Guilds extends \bbdkp\admin\Admin
         global $db, $phpbb_root_path;
 
         $sql = 'SELECT id, name, realm, region, roster, game_id, members,
-				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled, armoryresult
+				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled, armoryresult, recruitforum
 				FROM ' . GUILD_TABLE . '
 				WHERE id = ' . $this->guildid;
         $result = $db->sql_query($sql, 604800);
@@ -805,6 +816,7 @@ class Guilds extends \bbdkp\admin\Admin
             $this->guilddefault = $row['guilddefault'];
             $this->raidtrackerrank = $this->maxrank();
             $this->applyrank = $this->maxrank();
+			$this->recruitforum = $row['recruitforum'];
         }
 
 

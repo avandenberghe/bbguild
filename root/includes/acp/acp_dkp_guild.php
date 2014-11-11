@@ -86,7 +86,6 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 
         switch ($mode)
         {
-
             /***************************************
              List Guilds
             ***************************************/
@@ -256,6 +255,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
         $addguild->min_armory = request_var('min_armorylevel', 0);
         $addguild->armory_enabled = request_var('armory_enabled', 0);
         $addguild->recstatus = request_var('switchon_recruitment', 0);
+        $addguild->recruitforum = request_var('recruitforum', 0);
 
         if ($addguild->MakeGuild() == true)
         {
@@ -305,6 +305,7 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
         $updateguild->min_armory = request_var('min_armorylevel', 0);
         $updateguild->recstatus = request_var('switchon_recruitment', 0);
         $updateguild->armory_enabled = request_var('armory_enabled', 0);
+        $updateguild->recruitforum = request_var('recruitforum', 0);
 
         //in the request we expect the file name here including extension, no path
         $updateguild->emblempath = "images/bbdkp/guildemblem/". utf8_normalize_nfc(request_var('guild_emblem', '', true));
@@ -493,10 +494,11 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
         $game->game_id = $updateguild->game_id;
         $game->Get();
 
+
         $template->assign_vars(array(
             'F_ENABLGAMEEARMORY' => $game->getArmoryEnabled(),
             'F_ENABLEARMORY'     => $updateguild->armory_enabled,
-
+            'RECRUITFORUM_OPTIONS' => make_forum_select ($updateguild->recruitforum, false, false, true ),
             'RECSTATUS'          => $updateguild->recstatus,
             'GAME_ID'            => $updateguild->game_id,
             'GUILDID'            => $updateguild->guildid,

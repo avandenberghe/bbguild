@@ -958,6 +958,7 @@ $versions = array(
             array('bbdkp_games_tera'),
             array('bbdkp_games_gw2'),
             array('bbdkp_portal_rtshow'),
+            array('bbdkp_recruit_forumid'),
         ),
 
         'config_add' => array(
@@ -1023,6 +1024,7 @@ $versions = array(
 
         'table_column_add' => array(
             array($table_prefix . 'bbdkp_memberguild', 'armoryresult', array('VCHAR_UNI:255', '')),
+            array($table_prefix . 'bbdkp_memberguild', 'recruitforum', array('UINT', 0)),            
             array($table_prefix . 'bbdkp_games', 'apikey', array('VCHAR:255', '')),
             array($table_prefix . 'bbdkp_games', 'apilocale', array('VCHAR:5', '')),
         ),
@@ -1080,6 +1082,11 @@ $versions = array(
                 'modes'           => array('addrole'),
             )),
         ),
+
+        'config_remove' => array(
+            array('bbdkp_recruit_forumid'),
+        ),
+
 
         'custom' => array(
             'tableupdates',

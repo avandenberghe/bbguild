@@ -286,7 +286,8 @@ class Recruitment extends Roles
     {
         global $config, $db;
         $sql_array = array(
-            'SELECT'   => " u.id, g.game_id, u.guild_id, u.role_id, u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note, u.level,
+            'SELECT'   => " u.id, g.game_id, u.guild_id, u.role_id, u.class_id, u.positions,
+                u.applicants, u.status, u.last_update, u.note, u.level,
                 r.role_color, r.role_icon, role_cat_icon, l.name as role_name ",
             'FROM'     => array(
                 BBRECRUIT_TABLE   => 'u',
@@ -366,7 +367,7 @@ class Recruitment extends Roles
             'note'       => $this->note,
             'level'      => $this->level,
             'last_update' => $this->last_update,
-            'status'     => $this->status,
+            'status'      => $this->status,
         ));
         $db->sql_query('UPDATE ' . BBRECRUIT_TABLE . ' SET ' . $query . ' WHERE id = ' . $this->id);
     }
@@ -446,7 +447,7 @@ class Recruitment extends Roles
     {
         global $db;
         $sql_array = array(
-            'SELECT'   => " g.id, g.name, g.emblemurl, rec_status ",
+        'SELECT'   => " g.id, g.name, g.emblemurl, rec_status, recruitforum  ",
             'FROM'     => array(
                 GUILD_TABLE     => 'g',
                 BBRECRUIT_TABLE => 'r'),

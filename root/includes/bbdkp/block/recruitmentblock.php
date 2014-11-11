@@ -19,8 +19,6 @@ if (! defined('IN_PHPBB'))
 
 $template->assign_block_vars('status', array('MESSAGE' => $user->lang['RECRUIT_MESSAGE']));
 
-$rec_forum_id = $config['bbdkp_recruit_forumid'];
-
 // Include the abstract base
 if (!class_exists('\bbdkp\controller\guilds\Recruitment'))
 {
@@ -49,6 +47,11 @@ while ($row = $db->sql_fetchrow($guildrecruitingresult))
 	));
 
     $recruit->setGuildId($guild_id);
+
+	$Guild = new \bbdkp\controller\guilds\Guilds();
+	$Guild->guildid= $guild_id;
+	$Guild->Getguild();
+
 	$blockresult = $recruit->ListRecruitments(1);
 	while ($row = $db->sql_fetchrow($blockresult))
 	{
@@ -78,6 +81,7 @@ while ($row = $db->sql_fetchrow($guildrecruitingresult))
                 'ROLENAME' => $row['role_name'] ,
                 'ROLEICON' => $phpbb_root_path . "images/bbdkp/role_icons/" .$row['role_icon'] . ".png",
                 'POSITIONS' => $row['positions'] ,
+				'FORUMLINK' => append_sid ("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $Guild->recruitforum),
 				'POSITIONSICON' => $phpbb_root_path . "images/bbdkp/recruitblock/" .$pos_icon,
                 'NOTE' => $row['note'] ,
 				'COLOR' => $color[$row['positions'] > 3 ? 3 : $row['positions']][2],

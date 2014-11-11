@@ -272,8 +272,6 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
             );
         }
 
-        $form_key = 'listrecruits';
-        add_form_key($form_key);
         $template->assign_vars(array(
             'RECRUIT_FOOTCOUNT'     => sprintf($user->lang['RECRUIT_FOOTCOUNT'], $recruit_count)));
         $this->page_title = 'ACP_LISTRECRUITS';
