@@ -53,6 +53,22 @@ while ($row = $db->sql_fetchrow($guildrecruitingresult))
 	while ($row = $db->sql_fetchrow($blockresult))
 	{
 
+		switch ($row['positions'])
+		{
+			case 0:
+				$pos_icon= 'rec_closed.png';
+				break;
+			case 1:
+				$pos_icon= 'rec_low.png';
+				break;
+			case 2:
+				$pos_icon= 'rec_med.png';
+				break;
+			default:
+				$pos_icon= 'rec_high.png';
+				break;
+		}
+
 		$template->assign_block_vars('guild.rec', array(
 				'CLASS_IMAGE' =>  (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '' ,
 				'CLASSID' => $row['class_id'] ,
@@ -62,10 +78,9 @@ while ($row = $db->sql_fetchrow($guildrecruitingresult))
                 'ROLENAME' => $row['role_name'] ,
                 'ROLEICON' => $phpbb_root_path . "images/bbdkp/role_icons/" .$row['role_icon'] . ".png",
                 'POSITIONS' => $row['positions'] ,
+				'POSITIONSICON' => $phpbb_root_path . "images/bbdkp/recruitblock/" .$pos_icon,
                 'NOTE' => $row['note'] ,
 				'COLOR' => $color[$row['positions'] > 3 ? 3 : $row['positions']][2],
-
-
 		));
 
 	}

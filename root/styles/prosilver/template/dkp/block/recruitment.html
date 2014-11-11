@@ -17,7 +17,6 @@
 
                     <!-- BEGIN guild -->
                     <div>
-
                         <div>
                             <div style="width: 50%; float: left;">
                                 <span><img style="width:60%; height:60%" src="{guild.EMBLEM}" alt="{guild.GUILD_NAME}" /></span>
@@ -29,62 +28,40 @@
                         <div style="width: 90%; clear: both; moz-box-shadow: inset 0 0 30px #000f; -webkit-box-shadow: inset 0 0 30px #000f; box-shadow: inset 0 0 30px #000f; margin:auto;">
 
                             <!-- IF guild.S_CLOSED -->
-                            <p style="text-align:center; text-shadow: 1px 1px;">{L_RECRUIT_CLOSED}</p>
+                            <span style="text-align:center;">{L_RECRUIT_CLOSED}</span>
                             <!-- ELSE -->
-                            <p style="text-align:center; text-shadow: 1px 1px;">{L_RECRUIT_MESSAGE}</p>
+                            <span style="text-align:center;">{L_RECRUIT_MESSAGE}</span><br/>
 
                             <table width="100%" cellpadding="2" cellspacing="1" border="0" class="forumline">
                                 <tr>
                                     <th style="text-align:center;"></th>
-                                    <th style="text-align:center;"><img src="{ROOT_PATH}/images/bbdkp/recruitblock/looking_icon.gif" alt="{MESSAGE}" title="{MESSAGE}"  /></th>
+                                    <th style="text-align:center;"></th>
+                                    <th style="text-align:left;"></th>
+                                    <th style="text-align:center;"></th>
                                 </tr>
 
                                 <!-- BEGIN rec -->
-                                <script type="text/javascript">
-jQuery.noConflict();
-jQuery(document).ready( function()
-{
-	jQuery("a.tool{guild.rec.CLASSID}").tooltip({
-		 position:'top center',
-		 relative:true,
-		 effect: 'fade',
-		 onShow: function() {
-			 var $trigger = this.getTrigger();
-			 this.getTip().css({
-		           'margin-top' : $trigger.css('margin-top'),
-		           'margin-left' : $trigger.css('margin-left')
-		     });
-			 $trigger.fadeTo("slow", 0.55);
-		 },
-		 onHide: function() {this.getTrigger().fadeTo(1,1);}
-	}).dynamic(
-		{
-				bottom:
-				 { direction: 'up', bounce: true }
-		});
-}
-);
-</script>
                                 <tr style="text-align:center;">
-                                    <td class="row1"><span class="genmed"><img src="{guild.rec.CLASS_IMAGE}" alt="" title="{L_NEEDED} {guild.rec.POSITIONS} {guild.rec.ROLENAME}: {guild.rec.NOTE}" /> </span></td>
-                                    <td class="row1" align="center">
-    <span style="color:{guild.rec.COLOR}"><strong><a class="tool{guild.rec.CLASSID}"  href="{guild.rec.FORUM}">
-        <img src="{guild.rec.ROLEICON}" alt="{guild.rec.ROLENAME}" title="{guild.rec.ROLENAME}" /></a>
-        <div class="bbtooltip">
-            <div class="bbinner">
-                <div class="t"></div>
-                <div style="text-align: left">
-                    <br/><img src="{guild.rec.CLASS_IMAGE}" alt="" title="{guild.rec.CLASS}" />
-                    <span style="color:{guild.rec.CLASSCOLOR}">
-                        <strong>{guild.rec.CLASS}</strong></span><br/>{L_NEEDED} {guild.rec.POSITIONS} {guild.rec.ROLENAME}. {guild.rec.NOTE}
-                </div>
-            </div>
-            <div class="b"><div></div></div>
-        </div>
-    </strong></span>
+                                    <td class="row1">
+                                        <span class="genmed">
+                                            <a class="tool{guild.rec.CLASSID}"  href="{guild.rec.FORUM}">
+                                            <img src="{guild.rec.CLASS_IMAGE}" alt="" title="{L_NEEDED} {guild.rec.POSITIONS} {guild.rec.CLASS} {guild.rec.ROLENAME}: {guild.rec.NOTE}" />
+                                            </a>
+                                        </span>
                                     </td>
-
-
+                                    <td class="row1" align="center">
+                                            <a class="tool{guild.rec.CLASSID}"  href="{guild.rec.FORUM}">
+                                            <img src="{guild.rec.ROLEICON}" alt="{guild.rec.ROLENAME}" title="{guild.rec.ROLENAME}" />
+                                            </a>
+                                    </td>
+                                    <td class="row1" align="left">
+                                        <strong>
+                                            &nbsp;<a style="color: {guild.rec.CLASSCOLOR}" href="{guild.rec.FORUM}">{guild.rec.CLASS}</a>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <img src="{guild.rec.POSITIONSICON}" alt="{guild.rec.ROLENAME}" title="{L_NEEDED} {guild.rec.POSITIONS} " /></a>
+                                    </td>
                                 </tr>
                                 <!-- END rec -->
                             </table>
