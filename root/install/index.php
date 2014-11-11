@@ -958,7 +958,6 @@ $versions = array(
             array('bbdkp_games_tera'),
             array('bbdkp_games_gw2'),
             array('bbdkp_portal_rtshow'),
-            array('bbdkp_recruit_forumid'),
         ),
 
         'config_add' => array(
