@@ -48,12 +48,23 @@ abstract class Resource extends \bbdkp\admin\Admin
 	 * @var string
 	 */
 	protected $api_url = array(
-		'eu' => 'http://eu.battle.net/api/wow/',
-		'us' => 'http://us.battle.net/api/wow/',
-		'kr' => 'http://kr.battle.net/api/wow/',
-		'tw' => 'http://tw.battle.net/api/wow/',
-		'cn' => 'http://www.battlenet.com.cn/api/wow/',
-		'sea' => 'http://sea.battle.net/api/wow/'
+		'eu' => 'http://eu.api.battle.net/wow/',
+		'us' => 'http://us.api.battle.net/wow/',
+		'kr' => 'http://kr.api.battle.net/wow/',
+		'tw' => 'http://tw.api.battle.net/wow/',
+		'sea' => 'http://sea.api.battle.net/wow/'
+	);
+
+	/**
+	 * List of possible locales
+	 * @var string
+	 */
+	protected $locales_allowed = array(
+		'eu' => array('en_GB', 'de_DE', 'es_ES', 'fr_FR', 'it_IT', 'pl_PL', 'pt_PT', 'ru_RU'),
+		'us' => array('en_US', 'es_MX', 'pt_BR'),
+		'kr' => array('ko_KR'),
+		'tw' => array('zh_TW'),
+		'sea' => array('en_US'),
 	);
 
 	/**
@@ -62,6 +73,19 @@ abstract class Resource extends \bbdkp\admin\Admin
 	 * @var string
 	 */
 	public $region;
+
+	/**
+	 * locale
+	 *
+	 * @var string
+	 */
+	public $locale;
+
+	/**
+	 * Battle.net API key
+	 *
+	 */
+	public $apikey;
 
 	/**
 	 * Methods allowed by this resource (or available).
@@ -85,35 +109,6 @@ abstract class Resource extends \bbdkp\admin\Admin
 		$this->region = $region;
 	}
 
-    /**
-     * get the uri property
-     *
-     * @return string
-     */
-	public function GetURI()
-	{
-		return $this->api_url[$this->region];
-	}
-
-	/**
-	 * Returns the URI for use with the request object
-	 *
-	 * @param string $method
-	 * @return string API URI
-	 */
-	private function getResourceUri($method)
-	{
-		$uri = $this->GetURI();
-		$classname = get_class($this);
-		if (preg_match('@\\\\([\w]+)$@', $classname, $matches))
-		{
-			$classname = strtolower($matches[1]);
-		}
-		$uri .= $classname ;
-		$uri .= '/'.$method;
-		return $uri;
-	}
-
 	/**
 	 * Consumes the resource by method and returns the results of the request.
 	 *
@@ -125,12 +120,35 @@ abstract class Resource extends \bbdkp\admin\Admin
 	{
 		global $user;
 
+		//check if has api
+		if($this->apikey == '')
+		{
+			trigger_error($user->lang['WOWAPI_KEY_MISSING']);
+		}
+
+		//check if locale is allowed
+		if (!in_array($this->locale, $this->locales_allowed[$this->region] ))
+		{
+			trigger_error($user->lang['WOWAPI_LOCALE_NOTALLOWED']);
+		}
+
 		// either a valid method is required or an asterisk
 		if (!in_array($method, $this->methods_allowed)  && !in_array('*', $this->methods_allowed) )
 		{
 			trigger_error($user->lang['WOWAPI_METH_NOTALLOWED']);
 		}
-		$url = $this->getResourceUri($method);
+
+		//get base url
+		$url = $this->api_url[$this->region];
+
+		//append method
+		$classname = get_class($this);
+		if (preg_match('@\\\\([\w]+)$@', $classname, $matches))
+		{
+			$classname = strtolower($matches[1]);
+		}
+
+		$url .= $classname . '/'. $method;
 
 		//process parameters
 		if (isset($params['data']) && !empty($params['data']))
@@ -143,16 +161,23 @@ abstract class Resource extends \bbdkp\admin\Admin
 					$optfields .= $key.'='.$value.'&';
 				}
 				$optfields = rtrim($data, '&');
-				//@debug tis
 			}
 			else
 			{
 				$optfields = $params['data'];
 			}
 
-			$url .= '?' . $optfields;
+			$url .= '&' . $optfields;
 		}
 
+		//append locale
+		$url .= '&locale=' . $this->locale;
+
+		//return json
+		$url .= '&jsonp=data';
+
+		//append apikey
+		$url .= '&apikey=' . $this->apikey;
 
 		$data = $this->Curl($url, false, false, true);
 		return $data;
