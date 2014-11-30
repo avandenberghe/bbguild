@@ -91,6 +91,12 @@ class Game
     protected $apikey;
 
     /**
+     * private api key for game armory
+     * @var string
+     */
+    protected $privkey;
+
+    /**
      * locale string for the language in which api data are returned. en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU
      * @var string
      */
@@ -269,6 +275,22 @@ class Game
     }
 
     /**
+     * @return string
+     */
+    public function getPrivkey()
+    {
+        return $this->privkey;
+    }
+
+    /**
+     * @param string $privkey
+     */
+    public function setPrivkey($privkey)
+    {
+        $this->privkey = $privkey;
+    }
+
+    /**
      * adds a Game to database
      */
     public function install()
@@ -420,7 +442,7 @@ class Game
     public function Get()
     {
         global $db;
-        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl, apikey, apilocale
+        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl, apikey, apilocale, privkey
     			FROM ' . BBGAMES_TABLE . "
     			WHERE game_id = '" . $this->game_id . "'";
 
@@ -436,6 +458,7 @@ class Game
             $this->zonebaseurl = $row['zonebaseurl'];
             $this->apikey = $row['apikey'];
             $this->apilocale = $row['apilocale'];
+            $this->privkey = $row['privkey'];
         }
         $db->sql_freeresult($result);
 
@@ -459,6 +482,7 @@ class Game
             'zonebaseurl'    => $this->zonebaseurl,
             'apikey'         => $this->apikey,
             'apilocale'      => $this->apilocale,
+            'privkey'        => $this->privkey,
         ));
 
         $sql = 'UPDATE ' . BBGAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";

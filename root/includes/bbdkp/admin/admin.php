@@ -173,102 +173,22 @@ class Admin
 				CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
 				CURLOPT_SSL_VERIFYHOST => false,
 				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_FOLLOWLOCATION, true,
 				CURLOPT_TIMEOUT => 60,
-				CURLOPT_VERBOSE => false,
-				CURLOPT_HEADER => false,
+				CURLOPT_VERBOSE => true,
+				CURLOPT_HEADER => $return_Server_Response_Header,
 			));
 
-			// Execute
 			$response = curl_exec($curl);
 			$headers = curl_getinfo($curl);
-			$error = 0;
-
 			$data = array(
 					'response'		    => $json ? json_decode($response, true) : $response,
 					'response_headers'  => (array) $headers,
 					'error'				=> '',
 			);
-
-			//errorhandler
-			if (!$response)
-			{
-				$error = curl_errno ($curl);
-				/*
-				 CURLE_OK = 0,
-				CURLE_UNSUPPORTED_PROTOCOL,     1
-				CURLE_FAILED_INIT,              2
-				CURLE_URL_MALFORMAT,            3
-				CURLE_URL_MALFORMAT_USER,       4 - NOT USED
-				CURLE_COULDNT_RESOLVE_PROXY,    5
-				CURLE_COULDNT_RESOLVE_HOST,     6
-				CURLE_COULDNT_CONNECT,          7
-				CURLE_FTP_WEIRD_SERVER_REPLY,   8
-				*/
-				switch ($error)
-				{
-					case "28" :
-						$data['error'] = 'cURL error :' . $url . ": No response after 30 second timeout : err " . $error . "  ";
-						break;
-					case "1" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : UNSUPPORTED_PROTOCOL ";
-						break;
-					case "2" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : FAILED_INIT ";
-						break;
-					case "3" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : URL_MALFORMAT ";
-						break;
-					case "5" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_RESOLVE_PROXY ";
-						break;
-					case "6" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_RESOLVE_HOST ";
-						break;
-					case "7" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_CONNECT ";
-				}
-			}
-
-			if (isset($data['response_headers']['http_code']))
-			{
-				switch ($data['response_headers']['http_code'] )
-				{
-					case 400:
-						$data['error'] .= $user->lang['ERR400'] . ': ' . $data['response']['reason'];
-						break;
-					case 401:
-						$data['error'] .= $user->lang['ERR401'] . ': ' . $data['response']['reason'];
-						break;
-					case 403:
-						$data['error'] .= $user->lang['ERR403'] . ': ' . $data['response']['reason'];
-						break;
-					case 404:
-                        $data['error'] .= $user->lang['ERR404'];
-                        if(isset($data['response']['reason']))
-                        {
-                            $data['error'] .=  ': ' . $data['response']['reason'];
-                        }
-						break;
-					case 500:
-						$data['error'] .= $user->lang['ERR500'] . ': ' . $data['response']['reason'];
-						break;
-					case 501:
-						$data['error'] .= $user->lang['ERR501'] . ': ' . $data['response']['reason'];
-						break;
-					case 502:
-						$data['error'] .= $user->lang['ERR502'] . ': ' . $data['response']['reason'];
-						break;
-					case 503:
-						$data['error'] .= $user->lang['ERR503'] . ': ' . $data['response']['reason'];
-						break;
-					case 504:
-						$data['error'] .= $user->lang['ERR504'] . ': ' . $data['response']['reason'];
-						break;
-				}
-			}
-
-			//close conection
 			curl_close ($curl);
+			return $data;
+
 		}
 
 		//report errors?

@@ -88,6 +88,12 @@ abstract class Resource extends \bbdkp\admin\Admin
 	public $apikey;
 
 	/**
+	 * Battle.net private API key
+	 *
+	 */
+	public $privkey;
+
+	/**
 	 * Methods allowed by this resource (or available).
 	 *
 	 * @var array
@@ -160,7 +166,7 @@ abstract class Resource extends \bbdkp\admin\Admin
 				{
 					$optfields .= $key.'='.$value.'&';
 				}
-				$optfields = rtrim($data, '&');
+				$optfields = rtrim($optfields, '&');
 			}
 			else
 			{
@@ -176,7 +182,12 @@ abstract class Resource extends \bbdkp\admin\Admin
 		//append apikey
 		$url .= '&apikey=' . $this->apikey;
 
-		$data = $this->Curl($url, false, false, true);
+		$date = date('D, d M Y G:i:s T',time());
+		$string_to_sign = "GET\n".$date."\n".$url."\n";
+		$signature = base64_encode(hash_hmac('sha1', $string_to_sign, $this->privkey,true));
+		$header = array("Host: ".$this->region,"Date: ". $date,"\nAuthorization: BNET ". $this->apikey.":". $signature)."\n");
+
+		$data = $this->Curl($url, $header, false, true);
 		return $data;
 	}
 
