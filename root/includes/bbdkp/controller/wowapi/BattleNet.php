@@ -113,8 +113,6 @@ class BattleNet
 
 		$this->API = $API;
 		$this->region = $region;
-		$this->apikey = $apikey;
-		$this->locale = $locale;
 
 		switch ($this->API)
 		{
@@ -124,6 +122,8 @@ class BattleNet
 					require($phpbb_root_path . "includes/bbdkp/controller/wowapi/Realm.$phpEx");
 				}
 				$this->Realm = new \bbdkp\controller\wowapi\Realm($region);
+				$this->Realm->apikey = $apikey;
+				$this->Realm->locale = $locale;
 				break;
 			case 'guild':
 				if (!class_exists('\bbdkp\controller\wowapi\Guild'))
@@ -131,6 +131,8 @@ class BattleNet
 					require($phpbb_root_path . "includes/bbdkp/controller/wowapi/Guild.$phpEx");
 				}
 				$this->Guild = new \bbdkp\controller\wowapi\Guild($region);
+				$this->Guild->apikey = $apikey;
+				$this->Guild->locale = $locale;
 				break;
 			case 'character':
 				if (!class_exists('\bbdkp\controller\wowapi\Character'))
@@ -138,6 +140,8 @@ class BattleNet
 					require($phpbb_root_path . "includes/bbdkp/controller/wowapi/Character.$phpEx");
 				}
 				$this->Character = new \bbdkp\controller\wowapi\Character($region);
+				$this->Guild->apikey = $apikey;
+				$this->Guild->locale = $locale;
 				break;
 
 		}

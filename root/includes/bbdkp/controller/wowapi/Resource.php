@@ -48,11 +48,11 @@ abstract class Resource extends \bbdkp\admin\Admin
 	 * @var string
 	 */
 	protected $api_url = array(
-		'eu' => 'http://eu.api.battle.net/wow/',
-		'us' => 'http://us.api.battle.net/wow/',
-		'kr' => 'http://kr.api.battle.net/wow/',
-		'tw' => 'http://tw.api.battle.net/wow/',
-		'sea' => 'http://sea.api.battle.net/wow/'
+		'eu' => 'https://eu.api.battle.net/wow/',
+		'us' => 'https://us.api.battle.net/wow/',
+		'kr' => 'https://kr.api.battle.net/wow/',
+		'tw' => 'https://tw.api.battle.net/wow/',
+		'sea' => 'https://sea.api.battle.net/wow/'
 	);
 
 	/**
@@ -172,9 +172,6 @@ abstract class Resource extends \bbdkp\admin\Admin
 
 		//append locale
 		$url .= '&locale=' . $this->locale;
-
-		//return json
-		$url .= '&jsonp=data';
 
 		//append apikey
 		$url .= '&apikey=' . $this->apikey;

@@ -941,7 +941,7 @@ class Guilds extends \bbdkp\admin\Admin
 			return false;
 		}
 
-		if ($this->guildid > 0)
+		if ($this->guildid == "0")
 		{
 			return false;
 		}
@@ -958,9 +958,7 @@ class Guilds extends \bbdkp\admin\Admin
 		{
 
 			//available extra fields : 'members', 'achievements','news'
-			$api = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region);
-			$api->apikey = $game->getApikey();
-			$api->apilocale = $game->getApilocale();
+			$api = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region, $game->getApikey(),$game->getApilocale());
 			$data = $api->Guild->getGuild($this->name, $this->realm, $params);
 
 			unset($api);
