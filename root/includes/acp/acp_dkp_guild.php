@@ -259,7 +259,6 @@ class acp_dkp_guild extends \bbdkp\admin\Admin
 
         if ($addguild->MakeGuild() == true)
         {
-            $addguild->Guildupdate($addguild, array());
             $success_message = sprintf($user->lang['ADMIN_ADD_GUILD_SUCCESS'], $addguild->name);
             trigger_error($success_message . $this->link, E_USER_NOTICE);
         }
