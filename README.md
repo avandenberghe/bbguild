@@ -5,7 +5,7 @@ duedate nov 02 2014
 change log 1.4 
 
 - #253 missing language entries in german/french/italian
-- #252 Implement new WOW API 
+- #252 Implement new WOW API :white_check_mark:
 - #249 allow two users from different realms in the same guild :white_check_mark:
 - #248 update SWTOR races  :white_check_mark:
 - #247 moved all js to subfolder /template/dkp/js :white_check_mark:
