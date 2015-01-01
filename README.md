@@ -1,22 +1,25 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
+
 #1.4.0-dev
 duedate nov 02 2014
 change log 1.4 
 
 - #253 missing language entries in german/french/italian
-- #252 Implement new WOW API :white_check_mark:
-- #249 allow two users from different realms in the same guild :white_check_mark:
-- #248 update SWTOR races  :white_check_mark:
-- #247 moved all js to subfolder /template/dkp/js :white_check_mark:
-- #246 Add Sliders to statistics page :white_check_mark:
-- #242 enable icon uploads in acp :white_check_mark:
-- #241 roster acp should use outer joins  :white_check_mark:
-- #240 update Aion game parameters :white_check_mark:
-- #239 added correct classpath to rpblocks class in class_exists checker in block factory :white_check_mark:
-- #226 move role acp from raidplanner to bbdkp : new Roles & Recruitment class/table: The roles are now in a separate class and table. A new 'recruitment' class/table holds number of positions and applicants. the Apply plugin will update the recruitment table and so you have a live view of recruitments through the recruitment block. Also, Raidplanner will use the bbdkp roles table to fill in raidroles.  :white_check_mark:
+- #252 Implement new WOW API
+- #249 allow two users from different realms in the same guild
+- #248 update SWTOR races 
+- #247 moved all js to subfolder /template/dkp/js
+- #246 Add Sliders to statistics page
+- #242 enable icon uploads in acp
+- #241 roster acp should use outer joins
+- #240 update Aion game parameters
+- #239 added correct classpath to rpblocks class in class_exists checker in block factory
+- #226 move role acp from raidplanner to bbdkp : new Roles & Recruitment class/table: The roles are now in a separate class and table. A new 'recruitment' class/table holds number of positions and applicants. the Apply plugin will update the recruitment table and so you have a live view of recruitments through the recruitment block. Also, Raidplanner will use the bbdkp roles table to fill in raidroles.
 - #223 update constants file:white_check_mark: deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
-- #212 Italian translation :white_check_mark:
+- #212 Italian translation
+
+###reported to later version
 - #196 Implement Guildwars API 
 - #192 bbdkp user panel - kicking characters 
 - #189 Edit armor types 
