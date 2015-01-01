@@ -6,7 +6,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.3.0
  */
 namespace bbdkp\controller\games;
@@ -35,11 +35,6 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  */
  class Races extends \bbdkp\controller\games\Game
 {
-	/**
-	 * game id
-	 * @var string
-	 */
-	public $game_id;
 
 	/**
 	 * race id

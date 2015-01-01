@@ -6,7 +6,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.5
+ * @version 1.4.0
  */
 
 /**
@@ -133,7 +133,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
                     {
                         foreach ($member->guildmemberlist as $id => $m  )
                         {
-                            $s_guildmembers .= '<option value="' . $m['member_id'] .'">'. $m['rank_name']  . ' ' . $m['member_name'] . '</option>';
+                            $s_guildmembers .= '<option value="' . $m['member_id'] .'">'. $m['rank_name']  . ' ' . $m['member_name'] . '-' . $m['member_realm'] '</option>';
                         }
                     }
                     else

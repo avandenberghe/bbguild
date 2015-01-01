@@ -4,10 +4,10 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
 	<header>
 		<license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-		<title lang="en">bbDKP 1.3.1 - Update from bbdkp 1.3.0.8</title>
-		<title lang="de">bbDKP 1.3.1 - Update von bbdkp 1.3.0.8</title>
-		<title lang="fr">bbDKP 1.3.1 - mise à jour depuis bbdkp 1.3.0.8</title>
-		<description lang="en">bbDKP 1.3.1 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
+		<title lang="en">bbDKP 1.4.0 - Update from bbdkp 1.3.0.8</title>
+		<title lang="de">bbDKP 1.4.0 - Update von bbdkp 1.3.0.8</title>
+		<title lang="fr">bbDKP 1.4.0 - mise à jour depuis bbdkp 1.3.0.8</title>
+		<description lang="en">bbDKP 1.4.0 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
 </description>
 		<github>https://github.com/bbdkp/bbdkp</github>
 		<author-group>
@@ -21,7 +21,7 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.3.1</mod-version>
+		<mod-version>1.4.0</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>60</time>
@@ -30,6 +30,7 @@
 		<link-group>
 			<link type="language" href="../fr.xml" lang="en">Français</link>
 			<link type="language" href="../de.xml" lang="en">Deutsch</link>	
+			<link type="language" href="../it.xml" lang="en">Italiano</link>				
 			<link type="parent" href="../../install.xml" lang="en">bbdkp Install Instructions</link>	
 		</link-group>	
 	</header>
@@ -43,6 +44,7 @@
 		<php-installer>install/index.php</php-installer>
 		<diy-instructions lang="fr"><![CDATA[navigue vers install/index.php et execute la mise à jour.]]></diy-instructions>
 		<diy-instructions lang="de"><![CDATA[Rufe install/index.php auf und führe die Aktualisierung aus.]]></diy-instructions>
+		<diy-instructions lang="it"><![CDATA[Chiamate install/index.php on ed eseguire l'aggiornamento.]]></diy-instructions>		
 		<diy-instructions lang="en"><![CDATA[Browse to install/index.php and run the Updater.]]></diy-instructions>
 	</action-group>
 </mod>

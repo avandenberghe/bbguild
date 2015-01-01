@@ -93,7 +93,7 @@ function isValidChar(char, e){
 	<dl>
 		<dt><label for="image">{L_CLASS_IMAGE}:</label><br/>{L_CLASS_IMAGE_EXPLAIN}</dt>
 		<dd><input class="medium" type="text" id="image" name="image" value="{CLASS_IMAGENAME}" />
-			<!-- IF S_CLASS_IMAGE_EXISTS -->   <img src="{CLASS_IMAGE}" alt="{CLASS_NAME}" />  <!-- ENDIF -->
+			<!-- IF S_CLASS_IMAGE_EXISTS --> &nbsp;<img style="vertical-align: middle;" src="{CLASS_IMAGE}" alt="{CLASS_NAME}" />  <!-- ENDIF --> <br />{IMAGEWARNING}
 		</dd>
 	</dl>
 

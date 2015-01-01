@@ -1,10 +1,11 @@
 <?php
 /**
- * bbdkp common language file - en
- *
- * @copyright 2009 bbdkp <https://github.com/bbDKP>
+ * bbdkp common language file - [en]
+
+ * @author Sajaki@bbdkp.com
+ * @copyright 2014 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.5
+ * @version 1.4.0
  *
  *
  */
@@ -141,7 +142,8 @@ $lang = array_merge($lang, array(
 
 //Recruitment
 'RECRUITMENT_BLOCK' => 'Recruitment Status',
-'RECRUIT_CLOSED' => 'Closed !',
+'RECRUIT_CLOSED' => 'Closed',
+'RECRUIT_OPEN' => 'Open',
 'TANK' => 'Tank',
 'DPS' => 'Dps' ,
 'HEAL' => 'Heal',
@@ -218,7 +220,6 @@ $lang = array_merge($lang, array(
 'BUYER' => 'Buyer',
 'BUYERS' => 'Buyers',
 'ARMOR' => 'Armor',
-'TYPE' => 'Armor',
 'STATS_SOCIAL' => '< 20% Attendance',
 'STATS_RAIDER' => '< 50% Attendance',
 'STATS_CORERAIDER' => '> 70% Attendance',
@@ -241,7 +242,6 @@ $lang = array_merge($lang, array(
 'CLASS_DISTRIBUTION' => 'Class Distribution',
 'CLASS_SUMMARY' => 'Class Summary: %s to %s',
 'CONFIGURATION' => 'Configuration',
-'CLOSED' => 'Closed',
 'DATE' => 'Date',
 'DELETE' => 'Delete',
 'DELETE_CONFIRMATION' => 'Delete Confirmation',
@@ -331,9 +331,6 @@ $lang = array_merge($lang, array(
 
 'SESSION_ID' => 'Session ID',
 
-'TANK' => 'Tanking',
-'DAMAGE' => 'Damage',
-'HEAL' => 'Healing',
 'SUMMARY_DATES' => 'Raid Summary: %s to %s',
 'TIME' => 'Time',
 'TIME_BONUS' => 'Time bonus',
@@ -356,6 +353,8 @@ $lang = array_merge($lang, array(
 'VIEW_LOGS' => 'View Logs',
 'ZSVALUE' => 'Zerosum',
 'ZEROSUM' => 'Zerosum bonus',
+'APPLICANTS' => 'Applicants',
+'POSITIONS' => 'Positions',
 
 //lootsystems
 'EP' => 'EP',
@@ -427,7 +426,7 @@ $lang = array_merge($lang, array(
 
 'ADDED' => 'Added',
 'BOSSKILLCOUNT' => 'Bosskills',
-'CLOSED' => 'closed',
+'CLOSED' => 'Closed',
 'DELETED' => 'Deleted',
 'ENTER_NEW' => 'Enter New Name',
 'ENTER_NEW_GAMEITEMID' => 'Game item ID',
@@ -532,5 +531,3 @@ bbDKP (c) 2008, 2009 Sajaki, Malfate, Kapli, Hroar',
 'CONTRIB' => 'Contributions',
 
 ));
-
-?>

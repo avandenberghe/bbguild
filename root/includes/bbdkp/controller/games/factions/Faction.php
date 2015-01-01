@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.3.0
  */
 namespace bbdkp\controller\games;
@@ -63,8 +63,53 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	 * @var int
 	 */
 	protected $faction_hide;
-	
-	/**
+
+
+     /**
+      * faction property getter
+      * @param $fieldName
+      * @return null
+      */
+     public function __get($fieldName)
+     {
+         global $user;
+         if (property_exists($this, $fieldName))
+         {
+             return $this->$fieldName;
+         }
+         else
+         {
+             trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
+         }
+         return null;
+     }
+
+     /**
+      * faction property setter
+      * @param string $property
+      * @param string $value
+      */
+     public function __set($property, $value)
+     {
+         global $user;
+
+         switch ($property)
+         {
+             case 'f_index':
+                 break;
+             default:
+                 if (property_exists($this, $property))
+                 {
+                     $this->$property = $value;
+                 }
+                 else
+                 {
+                     trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
+                 }
+         }
+     }
+
+     /**
 	 * Faction class constructor
 	 */
 	public function __construct() 
@@ -76,10 +121,10 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	}
 
 	/**
-	 * get faction info
+	 * build a full object
 	 * 
 	 */
-	public function Get()
+     public function Get()
 	{
 		global $db;
 		$sql = 'SELECT game_id, f_index, faction_id, faction_name, faction_hide
@@ -88,55 +133,13 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 		$result = $db->sql_query($sql);
 		while ($row = $db->sql_fetchrow($result))
 		{
-			$this->faction_name = $row['faction_name'];
+            $this->faction_id = $row['faction_id'];
+            $this->faction_name = $row['faction_name'];
 			$this->faction_hide	= $row['faction_hide'];
 		}
 		$db->sql_freeresult($result);
 	}
-	
-	/**
-	 * faction property getter
-	 * @param string $fieldName
-	 */
-	public function __get($fieldName)
-	{
-		global $user;
-		if (property_exists($this, $fieldName))
-		{
-			return $this->$fieldName;
-		}
-		else
-		{
-			trigger_error($user->lang['ERROR'] . '  '. $fieldName, E_USER_WARNING);
-		}
-        return null;
-	}
-	
-	/**
-	 * faction property setter
-	 * @param string $property
-	 * @param string $value
-	 */
-	public function __set($property, $value)
-	{
-		global $user; 
-		
-		switch ($property)
-		{
-			case 'f_index':
-				break;
-			default:
-				if (property_exists($this, $property))
-				{
-					$this->$property = $value;
-				}
-				else
-				{
-					trigger_error($user->lang['ERROR'] . '  '. $property, E_USER_WARNING);
-				}
-		}
-	}
-	
+
 	
 	/**
 	 * adds a faction
@@ -166,13 +169,37 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 		$db->sql_transaction ( 'commit' );
 		$cache->destroy ( 'sql', FACTION_TABLE );
 	}
-	
-	/**
-	 * deletes a specific factions
+
+
+     /**
+      * Update a faction
+      */
+     public function update()
+     {
+         global $db, $cache;
+
+         $data = array (
+             'game_id' => $this->game_id,
+             'faction_name' => ( string ) $this->faction_name,
+             'faction_id' => (int ) $this->faction_id,
+             'faction_hide' => 0 );
+
+         $db->sql_transaction ('begin');
+
+         $sql = 'UPDATE ' . FACTION_TABLE . ' SET ' . $db->sql_build_array ( 'UPDATE', $data ) . ' WHERE faction_id = ' . $this->faction_id . " AND game_id = '" . $this->game_id . "'";
+         $db->sql_query ( $sql );
+
+         $db->sql_transaction ( 'commit' );
+         $cache->destroy ( 'sql', FACTION_TABLE );
+     }
+
+
+     /**
+	 * delete a faction
 	 */
 	public function Delete()
 	{
-		global $db, $user, $phpbb_root_path, $cache;
+		global $db, $user, $cache;
 		
 		/* check if there are races tied to this faction */
 		$sql_array = array (
@@ -200,7 +227,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	}
 	
 	/**
-	 * deletes factions from a game
+	 * deletes all factions from a game
 	 */
 	public function Delete_all_factions()
 	{

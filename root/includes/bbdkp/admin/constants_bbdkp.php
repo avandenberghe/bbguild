@@ -5,7 +5,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.9
+ * @version 1.4.0
  */
 namespace bbdkp\admin
 {
@@ -39,14 +39,14 @@ namespace bbdkp\admin
 
 	// TABLE DEFINITIONS
 	define('BBGAMES_TABLE',        	   $table_prefix . 'bbdkp_games');
-	define('GAMES_TABLE',        	   $table_prefix . 'bbdkp_games');	// deprecated, will be removed in 1.3.1
+	define('GAMES_TABLE',        	   $table_prefix . 'bbdkp_games');	// deprecated as of 1.4.0
 	define('NEWS_TABLE',        	   $table_prefix . 'bbdkp_news');
 	define('ADJUSTMENTS_TABLE',        $table_prefix . 'bbdkp_adjustments');
-	define('EVENTS_TABLE',             $table_prefix . 'bbdkp_events');	 // deprecated, will be removed in 1.3.1
-	define('BBEVENTS_TABLE',           $table_prefix . 'bbdkp_events');	 
+	define('EVENTS_TABLE',             $table_prefix . 'bbdkp_events');	 // deprecated as of 1.4.0
+	define('BBEVENTS_TABLE',           $table_prefix . 'bbdkp_events');
 	define('RAID_ITEMS_TABLE',         $table_prefix . 'bbdkp_raid_items');
-	define('LOGS_TABLE',               $table_prefix . 'bbdkp_logs');	// deprecated, will be removed in 1.3.1
-	define('BBLOGS_TABLE',             $table_prefix . 'bbdkp_logs');  
+	define('LOGS_TABLE',               $table_prefix . 'bbdkp_logs');	// deprecated as of 1.4.0
+	define('BBLOGS_TABLE',             $table_prefix . 'bbdkp_logs');
 	define('MEMBER_RANKS_TABLE',       $table_prefix . 'bbdkp_member_ranks');
 	define('MEMBER_LIST_TABLE',        $table_prefix . 'bbdkp_memberlist');
 	define('MEMBER_DKP_TABLE',         $table_prefix . 'bbdkp_memberdkp');
@@ -63,8 +63,11 @@ namespace bbdkp\admin
 	define('BOSSBASE',          	   $table_prefix . 'bbdkp_bosstable');
 	define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable');
 	define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');
-	define('BBDKP_ROLES_TABLE',        $table_prefix . 'bbdkp_roles');
+	define('BBDKP_ROLES_TABLE',        $table_prefix . 'bbdkp_roles');      // deprecated as of 1.4.0
     define('GUILD_BOSS',               $table_prefix . 'bbdkp_guildboss');
+    define('BBRECRUIT_TABLE',          $table_prefix . 'bbdkp_recruit');  //new in 1.4.0
+    define('BB_GAMEROLE_TABLE',        $table_prefix . 'bbdkp_gameroles');  //new in 1.4.0
+
 	// plugin anchors
 
 	// RAIDTRACKER

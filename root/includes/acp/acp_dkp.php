@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  *
  */
 
@@ -145,8 +145,7 @@ class acp_dkp extends \bbdkp\admin\Admin
 				}
 				else
 				{
-					$latest_version_info = explode("\n", $latest_version_info);
-					if(phpbb_version_compare(trim($latest_version_info[0]), $config['bbdkp_version'], '<='))
+					if(phpbb_version_compare($latest_version_info, $config['bbdkp_version'], '<='))
 					{
 						$template->assign_vars(array(
 								'S_VERSION_UP_TO_DATE'	=> true,
@@ -419,7 +418,6 @@ class acp_dkp extends \bbdkp\admin\Admin
 						set_config('bbdkp_portal_bossprogress', request_var('show_bosspblock', 0), true);
 					}
 					set_config('bbdkp_news_forumid', request_var('news_id', 0), true);
-					set_config('bbdkp_recruit_forumid', request_var('rec_id', 0), true);
 					set_config('bbdkp_n_news', request_var('n_news', 0), true);
 					set_config('bbdkp_n_items', request_var('n_items', 0), true);
 					set_config('bbdkp_recruitment', request_var('bbdkp_recruitment', 0), true);
@@ -483,7 +481,6 @@ class acp_dkp extends \bbdkp\admin\Admin
 					'WELCOME_MESSAGE' => $textarr['text'] ,
 					'N_NEWS' => $n_news,
 					'FORUM_NEWS_OPTIONS' => make_forum_select($config['bbdkp_news_forumid'], false, false, true) ,
-					'FORUM_RECRUIT_OPTIONS' => make_forum_select($config['bbdkp_recruit_forumid'], false, false, true) ,
 					'SHOW_WELCOME_YES_CHECKED' => ($config['bbdkp_portal_welcomemsg'] == '1') ? 'checked="checked"' : '' ,
 					'SHOW_WELCOME_NO_CHECKED' => ($config['bbdkp_portal_welcomemsg'] == '0') ? 'checked="checked"' : '' ,
                     'SHOW_ONLINE_YES_CHECKED' => ($config['bbdkp_portal_whoisonline'] == '1') ? 'checked="checked"' : '' ,

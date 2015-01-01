@@ -6,7 +6,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.3.0
  */
 namespace bbdkp\controller\games;
@@ -85,6 +85,24 @@ class Game
     protected $zonebaseurl;
 
     /**
+     * api key for game armory
+     * @var string
+     */
+    protected $apikey;
+
+    /**
+     * private api key for game armory
+     * @var string
+     */
+    protected $privkey;
+
+    /**
+     * locale string for the language in which api data are returned. en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU
+     * @var string
+     */
+    protected $apilocale;
+
+    /**
      * pre-installable games
      * @var array
      */
@@ -124,6 +142,7 @@ class Game
         //fill the games array
         $this->games = $this->gamesarray();
     }
+
 
     /**
      * @param boolean $basebossurl
@@ -223,6 +242,53 @@ class Game
     }
 
 
+    /**
+     * @param string $apikey
+     */
+    public function setApikey($apikey)
+    {
+        $this->apikey = $apikey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApikey()
+    {
+        return $this->apikey;
+    }
+
+    /**
+     * @return string
+     */
+    public function getApilocale()
+    {
+        return $this->apilocale;
+    }
+
+    /**
+     * @param string $apilocale
+     */
+    public function setApilocale($apilocale)
+    {
+        $this->apilocale = $apilocale;
+    }
+
+    /**
+     * @return string
+     */
+    public function getPrivkey()
+    {
+        return $this->privkey;
+    }
+
+    /**
+     * @param string $privkey
+     */
+    public function setPrivkey($privkey)
+    {
+        $this->privkey = $privkey;
+    }
 
     /**
      * adds a Game to database
@@ -376,7 +442,7 @@ class Game
     public function Get()
     {
         global $db;
-        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl
+        $sql = 'SELECT id, game_id, game_name, status, imagename, armory_enabled, bossbaseurl, zonebaseurl, apikey, apilocale, privkey
     			FROM ' . BBGAMES_TABLE . "
     			WHERE game_id = '" . $this->game_id . "'";
 
@@ -390,6 +456,9 @@ class Game
             $this->armory_enabled = $row['armory_enabled'];
             $this->bossbaseurl = $row['bossbaseurl'];
             $this->zonebaseurl = $row['zonebaseurl'];
+            $this->apikey = $row['apikey'];
+            $this->apilocale = $row['apilocale'];
+            $this->privkey = $row['privkey'];
         }
         $db->sql_freeresult($result);
 
@@ -408,8 +477,12 @@ class Game
         $query = $db->sql_build_array('UPDATE', array(
             'imagename'      => substr($this->imagename, 0, 20) ,
             'armory_enabled' => $this->armory_enabled,
+            'game_name'      => $this->name,
             'bossbaseurl'    => $this->bossbaseurl,
-            'zonebaseurl'    => $this->zonebaseurl
+            'zonebaseurl'    => $this->zonebaseurl,
+            'apikey'         => $this->apikey,
+            'apilocale'      => $this->apilocale,
+            'privkey'        => $this->privkey,
         ));
 
         $sql = 'UPDATE ' . BBGAMES_TABLE . ' SET ' . $query . " WHERE game_id = '" . $this->game_id . "'";

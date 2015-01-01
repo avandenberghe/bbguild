@@ -6,7 +6,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  */
 namespace bbdkp\controller\guilds;
 /**
@@ -43,6 +43,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  */
 class Guilds extends \bbdkp\admin\Admin
 {
+
 	/**
 	 * guild game id
 	 * @var string
@@ -57,7 +58,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 * guild name
 	 * @var string
 	 */
-	protected $name = '';
+	private $name = '';
 	/**
 	 * guiled realm
 	 * @var string
@@ -183,7 +184,20 @@ class Guilds extends \bbdkp\admin\Admin
 	 * @var int
 	 */
 	public $applyrank;
+	/**
+	 * search result Battle.NET
+	 *
+	 * @var char
+	 */
+	public $armoryresult;
 
+	/**
+	 * default recruitment forum. this is the forum linked to in the recruitment block
+	 * you can install the Apply plugin to further customise the application process.
+	 *
+	 * @var int
+	 */
+	public $recruitforum;
 
 	/**
 	 * guild class constructor
@@ -299,6 +313,7 @@ class Guilds extends \bbdkp\admin\Admin
 				'guilddefault' => $this->guilddefault,
 				'armory_enabled' => $this->armory_enabled,
                 'rec_status' => $this->recstatus,
+				'recruitforum' => $this->recruitforum,
 				'members' => 0,
 			));
 
@@ -317,6 +332,9 @@ class Guilds extends \bbdkp\admin\Admin
 		$newrank->RankPrefix = '';
 		$newrank->RankSuffix = '';
 		$newrank->Makerank();
+
+
+		$this->ApiUpdateBattleNet(array());
 
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_ADDED' ,
@@ -378,76 +396,12 @@ class Guilds extends \bbdkp\admin\Admin
 				'guilddefault' => $this->guilddefault,
 				'armory_enabled' => $this->armory_enabled,
                 'emblemurl' => $this->emblempath,
+				'recruitforum' => $this->recruitforum,
 		));
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
-		// get more info from armory
-		if ($this->guildid > 0)
-		{
-			$game = new \bbdkp\controller\games\Game;
-			$game->game_id = $this->game_id;
-			$game->Get();
-
-            //is both game and guild armory-enabled ?
-			if ($game->getArmoryEnabled() == 1 && $this->armory_enabled ==1 )
-			{
-				switch ($this->game_id)
-				{
-					case 'wow':
-						$apiupdate = $this->Armory_get($params);
-
-						if(! $apiupdate)
-                        {
-
-                            $log_action = array(
-                                'header' => 'L_ERROR_ARMORY_DOWN' ,
-                                'L_UPDATED_BY' => $user->data['username']);
-
-                            $this->log_insert(array(
-                                'log_type' => $log_action['header'] ,
-                                'log_action' => $log_action,
-                                'log_result' => 'L_ERROR'
-                            ));
-
-                            break;
-                        }
-
-						$query = $db->sql_build_array('UPDATE', array(
-								'achievementpoints' => $this->achievementpoints,
-								'level' => $this->level,
-								'guildarmoryurl' => $this->guildarmoryurl,
-								'emblemurl' => $this->emblempath,
-								'battlegroup' => $this->battlegroup,
-						));
-
-						$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-
-						if (in_array("members", $params))
-						{
-							// update ranks table
-							if (!class_exists('\bbdkp\controller\guilds\Ranks'))
-							{
-								require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
-							}
-
-							$rank = new \bbdkp\controller\guilds\Ranks($this->guildid);
-							$rank->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region);
-
-							//update member table
-							if (!class_exists('\bbdkp\controller\members\Members'))
-							{
-								require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
-							}
-
-							$mb = new \bbdkp\controller\members\Members();
-							$mb->WoWArmoryUpdate($this->memberdata, $this->guildid,  $this->region, $this->min_armory);
-						}
-						break;
-				}
-			}
-
-		}
+		$this->ApiUpdateBattleNet($params);
 
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_UPDATED' ,
@@ -460,13 +414,9 @@ class Guilds extends \bbdkp\admin\Admin
 		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action,
-                'log_result' => (!$apiupdate ? 'L_ERROR' : 'L_SUCCESS')
+                'log_result' => 'L_SUCCESS'
         ));
 
-        if(!$apiupdate)
-        {
-            return false;
-        }
         return true;
     }
 
@@ -528,51 +478,6 @@ class Guilds extends \bbdkp\admin\Admin
 	}
 
 	/**
-	 * Calls api to pull more information. Currently only the WoW API is available
-	 *
-	 * @param array $params
-	 * @return void
-	 */
-	public function Armory_get($params)
-	{
-		switch ($this->game_id)
-		{
-			case 'wow':
-				//Initialising the class
-
-				 //available extra fields : 'members', 'achievements','news'
-				$api = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region);
-
-				$data = $api->Guild->getGuild($this->name, $this->realm, $params);
-				unset($api);
-                if (!isset ($data))
-                {
-                    return false;
-                }
-				$this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0;
-				$this->level = isset($data['level']) ? $data['level']: 0;
-				$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
-				$this->side = isset($data['side']) ? $data['side']: '';
-
-				if(isset($data['name']))
-				{
-					$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
-				}
-				else
-				{
-					$this->guildarmoryurl = '';
-				}
-
-				$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
-				$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(true)  : '';
-				$this->memberdata = isset($data['members']) ? $data['members']: '';
-
-                return true;
-		}
-
-	}
-
-	/**
 	 * function to create a Wow Guild emblem, adapted for phpBB from http://us.battle.net/wow/en/forum/topic/3082248497#8
 	 *
  	 * @author Thomas Andersen <acoon@acoon.dk>
@@ -586,8 +491,8 @@ class Guilds extends \bbdkp\admin\Admin
 		global $phpbb_root_path;
 
 		//location to create the file
-		$imgfile = $phpbb_root_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
-		$outputpath = "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'.$this->name.".png";
+		$imgfile = $phpbb_root_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
+		$outputpath = "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name).".png";
 		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time())
 		{
 			$finalimg = imagecreatefrompng($imgfile);
@@ -731,6 +636,25 @@ class Guilds extends \bbdkp\admin\Admin
 		return $outputpath;
 	}
 
+	/**
+	 * replace string in utf8 string
+	 * @param $needle
+	 * @param $replacement
+	 * @param $haystack
+	 * @return string
+	 */
+	function mb_str_replace( $needle, $replacement, $haystack ) {
+		$needle_len = mb_strlen($needle);
+		$pos = mb_strpos( $haystack, $needle);
+		while (!($pos ===false)) {
+			$front = mb_substr( $haystack, 0, $pos );
+			$back  = mb_substr( $haystack, $pos + $needle_len);
+			$haystack = $front.$replacement.$back;
+			$pos = mb_strpos( $haystack, $needle);
+		}
+		return $haystack;
+	}
+
 
     /**
      * gets a guild from database
@@ -742,7 +666,7 @@ class Guilds extends \bbdkp\admin\Admin
         global $db, $phpbb_root_path;
 
         $sql = 'SELECT id, name, realm, region, roster, game_id, members,
-				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled
+				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled, armoryresult, recruitforum
 				FROM ' . GUILD_TABLE . '
 				WHERE id = ' . $this->guildid;
         $result = $db->sql_query($sql, 604800);
@@ -766,11 +690,12 @@ class Guilds extends \bbdkp\admin\Admin
             $this->min_armory = $row['min_armory'];
             $this->recstatus = $row['rec_status'];
             $this->armory_enabled = $row['armory_enabled'];
-
+			$this->armoryresult = $row['armoryresult'];
             $this->countmembers();
             $this->guilddefault = $row['guilddefault'];
             $this->raidtrackerrank = $this->maxrank();
             $this->applyrank = $this->maxrank();
+			$this->recruitforum = $row['recruitforum'];
         }
 
 
@@ -1002,6 +927,109 @@ class Guilds extends \bbdkp\admin\Admin
 		return $guild;
 	}
 
+	/**
+	 * fetch Guild API information
+	 * @param $params
+	 * @return bool
+	 */
+	private function ApiUpdateBattleNet($params)
+	{
+		global $user, $db, $phpbb_root_path, $phpEx;
 
+		if ($this->game_id != 'wow')
+		{
+			return false;
+		}
+
+		if ($this->guildid == "0")
+		{
+			return false;
+		}
+
+		$game          = new \bbdkp\controller\games\Game;
+		$game->game_id = $this->game_id;
+		$game->Get();
+
+		//is both game and guild armory-enabled and has api key and locale ?
+		if ($game->getArmoryEnabled() == 1 &&
+			$this->armory_enabled == 1 &&
+			trim($game->getApikey()) != '' &&
+			trim($game->getApilocale()) != '')
+		{
+
+			//available extra fields : 'members', 'achievements','news'
+			$api = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region, $game->getApikey(),$game->getApilocale()  );
+			$data = $api->Guild->getGuild($this->name, $this->realm, $params);
+
+			unset($api);
+			if (!isset ($data))
+			{
+				$this->armoryresult = 'KO';
+				$log_action = array(
+					'header'       => 'L_ERROR_ARMORY_DOWN',
+					'L_UPDATED_BY' => $user->data['username']);
+
+				$this->log_insert(array(
+					'log_type'   => $log_action['header'],
+					'log_action' => $log_action,
+					'log_result' => 'L_ERROR'
+				));
+				return false;
+			}
+
+			$this->armoryresult = 'OK';
+			$this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0;
+			$this->level = isset($data['level']) ? $data['level']: 0;
+			$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
+			$this->side = isset($data['side']) ? $data['side']: '';
+
+			if(isset($data['name']))
+			{
+				$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
+			}
+			else
+			{
+				$this->guildarmoryurl = '';
+			}
+
+			$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
+			$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(true)  : '';
+			$this->memberdata = isset($data['members']) ? $data['members']: '';
+
+			$query = $db->sql_build_array('UPDATE', array(
+				'achievementpoints' => $this->achievementpoints,
+				'level'             => $this->level,
+				'guildarmoryurl'    => $this->guildarmoryurl,
+				'emblemurl'         => $this->emblempath,
+				'battlegroup'       => $this->battlegroup,
+				'armoryresult'      => $this->armoryresult,
+			));
+
+			$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
+			if (in_array("members", $params))
+			{
+				// update ranks table
+				if (!class_exists('\bbdkp\controller\guilds\Ranks'))
+				{
+					require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
+				}
+				$rank = new \bbdkp\controller\guilds\Ranks($this->guildid);
+				$rank->WoWArmoryUpdate($this->memberdata, $this->guildid, $this->region);
+				//update member table
+				if (!class_exists('\bbdkp\controller\members\Members'))
+				{
+					require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
+				}
+				$mb = new \bbdkp\controller\members\Members();
+				$mb->WoWArmoryUpdate($this->memberdata, $this->guildid, $this->region, $this->min_armory);
+			}
+
+		}
+		else
+		{
+			return false;
+		}
+	}
 
 }
+

@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  *
  */
 namespace bbdkp\admin;
@@ -91,18 +91,23 @@ class Admin
 		}
 
 		$this->regions = array(
-				'eu' => $user->lang['REGIONEU'],
-				'us' => $user->lang['REGIONUS'],
-				'tw' => $user->lang['REGIONTW'],
-				'kr' => $user->lang['REGIONKR'],
 				'cn' => $user->lang['REGIONCN'],
+				'eu' => $user->lang['REGIONEU'],
+				'kr' => $user->lang['REGIONKR'],
 				'sea' => $user->lang['REGIONSEA'],
+				'tw' => $user->lang['REGIONTW'],
+				'us' => $user->lang['REGIONUS'],
 				);
 
+        //sort alphabetically
+        asort($this->regions);
+
 		$this->languagecodes = array(
-				'de' => $user->lang['LANG_DE'] ,
-				'en' => $user->lang['LANG_EN'] ,
-				'fr' => $user->lang['LANG_FR']);
+				'de' => $user->lang['LANG_DE'],
+				'en' => $user->lang['LANG_EN'],
+				'fr' => $user->lang['LANG_FR'],
+                'it' => $user->lang['LANG_IT']
+        );
 
 	    $boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
 
@@ -168,117 +173,30 @@ class Admin
 				CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
 				CURLOPT_SSL_VERIFYHOST => false,
 				CURLOPT_SSL_VERIFYPEER => false,
+				CURLOPT_FOLLOWLOCATION, true,
 				CURLOPT_TIMEOUT => 60,
-				CURLOPT_VERBOSE => false,
-				CURLOPT_HEADER => false,
+				CURLOPT_VERBOSE => true,
+				CURLOPT_HEADER => $return_Server_Response_Header,
 			));
 
-			// Execute
 			$response = curl_exec($curl);
 			$headers = curl_getinfo($curl);
-			$error = 0;
-
-			$data = array(
-					'response'		    => $json ? json_decode($response, true) : $response,
-					'response_headers'  => (array) $headers,
-					'error'				=> '',
-			);
-
-			//errorhandler
-			if (!$response)
-			{
-				$error = curl_errno ($curl);
-				/*
-				 CURLE_OK = 0,
-				CURLE_UNSUPPORTED_PROTOCOL,     1
-				CURLE_FAILED_INIT,              2
-				CURLE_URL_MALFORMAT,            3
-				CURLE_URL_MALFORMAT_USER,       4 - NOT USED
-				CURLE_COULDNT_RESOLVE_PROXY,    5
-				CURLE_COULDNT_RESOLVE_HOST,     6
-				CURLE_COULDNT_CONNECT,          7
-				CURLE_FTP_WEIRD_SERVER_REPLY,   8
-				*/
-				switch ($error)
-				{
-					case "28" :
-						$data['error'] = 'cURL error :' . $url . ": No response after 30 second timeout : err " . $error . "  ";
-						break;
-					case "1" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : UNSUPPORTED_PROTOCOL ";
-						break;
-					case "2" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : FAILED_INIT ";
-						break;
-					case "3" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : URL_MALFORMAT ";
-						break;
-					case "5" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_RESOLVE_PROXY ";
-						break;
-					case "6" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_RESOLVE_HOST ";
-						break;
-					case "7" :
-						$data['error'] = 'cURL error :' . $url . " : error " . $error . " : COULDNT_CONNECT ";
-				}
-			}
-
-			if (isset($data['response_headers']['http_code']))
-			{
-				switch ($data['response_headers']['http_code'] )
-				{
-					case 400:
-						$data['error'] .= $user->lang['ERR400'] . ': ' . $data['response']['reason'];
-						break;
-					case 401:
-						$data['error'] .= $user->lang['ERR401'] . ': ' . $data['response']['reason'];
-						break;
-					case 403:
-						$data['error'] .= $user->lang['ERR403'] . ': ' . $data['response']['reason'];
-						break;
-					case 404:
-                        $data['error'] .= $user->lang['ERR404'];
-                        if(isset($data['response']['reason']))
-                        {
-                            $data['error'] .=  ': ' . $data['response']['reason'];
-                        }
-						break;
-					case 500:
-						$data['error'] .= $user->lang['ERR500'] . ': ' . $data['response']['reason'];
-						break;
-					case 501:
-						$data['error'] .= $user->lang['ERR501'] . ': ' . $data['response']['reason'];
-						break;
-					case 502:
-						$data['error'] .= $user->lang['ERR502'] . ': ' . $data['response']['reason'];
-						break;
-					case 503:
-						$data['error'] .= $user->lang['ERR503'] . ': ' . $data['response']['reason'];
-						break;
-					case 504:
-						$data['error'] .= $user->lang['ERR504'] . ': ' . $data['response']['reason'];
-						break;
-				}
-			}
-
-			//close conection
+            $data = array(
+                'response'		    => $json ? json_decode($response, true) : $response,
+                'response_headers'  => (array) $headers,
+                'error'				=> '',
+            );
 			curl_close ($curl);
+			return $data;
+
 		}
 
 		//report errors?
-		if ($data['error'] != 0)
+		if($loud == true)
 		{
-			if($loud == true)
-			{
-				trigger_error($data['error'], E_USER_WARNING);
-			}
-	        return false;
+			trigger_error($data['error'], E_USER_WARNING);
 		}
-		else
-		{
-			return $data['response'];
-		}
+		return $data['response'];
 
 	}
 
@@ -333,7 +251,9 @@ class Admin
 		$url .= '?' . $fields_string;
 
 		$data = $this->Curl($url, 'GET');
-		$regID = isset($data['registration']) ? $data['registration'] : '';
+
+
+		$regID = isset($data['response']) ? $data['response']['registration']: '';
 		set_config('bbdkp_regid', $regID, true);
 		$cache->destroy('config');
 		trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
@@ -352,16 +272,16 @@ class Admin
 	{
 		global $cache;
 		//get latest productversion from cache
-		$info = $cache->get('version_' . $product);
+        $latest = $cache->get('version_' . $product);
 
 		//if update is forced or cache expired then make the call to refresh latest productversion
-		if ($info === false || $force_update)
+		if ($latest === false || $force_update)
 		{
 			$errstr = '';
 
-			$info = $this->curl(BBDKP_VERSIONURL . 'version_' . $product .'.txt' , false, false, false);
+			$data = $this->curl(BBDKP_VERSIONURL . 'version_' . $product .'.txt' , false, false, false);
 
-			if (empty($info))
+			if (empty($data))
 			{
 				$cache->destroy($product. '_version');
 				if ($warn_fail)
@@ -370,10 +290,11 @@ class Admin
 				}
 				return false;
 			}
+            $latest = $data['response'];
 			//put this info in the cache
-			$cache->put('version_' . $product , $info, $ttl);
+			$cache->put('version_' . $product , $latest, $ttl);
 		}
-		return $info;
+		return $latest;
 	}
 
     /**
@@ -396,14 +317,14 @@ class Admin
 			$result = $db->sql_query ($sql);
 			while($row = $db->sql_fetchrow($result))
 			{
-				$info = $this->curl(BBDKP_VERSIONURL . 'version_' . $row['name'] .'.txt' , false, false, false);
+				$data = $this->curl(BBDKP_VERSIONURL . 'version_' . $row['name'] .'.txt' , false, false, false);
 
 				//get latest
 				$plugins[$row['name']] = array(
 					'name' => $row['name'],
 					'value' => $row['value'],
 					'version' => $row['version'],
-					'latest' =>  empty($info) ? '?' : $info,
+					'latest' =>  empty($info) ? '?' : $data['response'],
 					'installdate' => $row['installdate']
 				);
 			}

@@ -5,7 +5,7 @@
  *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0.3
+ * @version 1.4.0
  *
  */
 
@@ -104,12 +104,10 @@ $lang = array_merge($lang, array(
 'FV_REQUIRED_MEMBER' => 'un membre doit être sélectionné.',
 'FV_REQUIRED_MEMBERS' => 'Au moins un membre doit être sélectionné.',
 'FV_REQUIRED_DKPSYS_NAME' => 'Le nom du Groupe Dkp est requis.',
-'FV_REQUIRED_NAME' => 'le nom est requis.',
 'FV_REQUIRED_PASSWORD' => 'le mot de passe est requis.',
 'FV_REQUIRED_RAIDID' => 'Un raid doit être sélectionné.',
 'FV_REQUIRED_USER' => 'le nom d’utilisateur est requis.',
 'FV_REQUIRED_VALUE' => 'la valeur est requise.',
-'FV_REQUIRED_STATUS' => 'Le statut est requis.',
 'FV_REQUIRED_MESSAGE' => 'le message est requis.',
 'FV_REQUIRED_NAME' => 'The nom est requis.',
 'FV_REQUIRED_ID' => 'l’id est requis.',
@@ -228,7 +226,6 @@ $lang = array_merge($lang, array(
 'ACP_ADDRAID' => 'Ajouter un Raid',
 'ACP_LISTRAIDS' => 'Liste des Raids',
 'ACP_ADDGAME' => 'Ajouter Jeu',
-'ACP_EDITGAME' => 'Edition Jeu',
 'ACP_LISTGAME' => 'Liste Jeux',
 'ACP_GAMESETTINGS' => 'Règles de Jeux',
 'ACP_ADDRACE' => 'Maintien Races',
@@ -265,6 +262,11 @@ $lang = array_merge($lang, array(
 'POINT_SETTINGS' => 'Système de Points.',
 'ACP_NEWGAME' => 'Liste de Jeux',
 'ACP_EDITGAME' => 'Editer Jeux: %s',
+'ACP_ADDROLE' => 'Ajout Rôle',
+'ACP_EDITROLE' => 'Edition Rôle %s',
+'ACP_LISTRECRUITS' => 'Liste Recruitements',
+'ACP_ADDRECRUITS' => 'Ajouter Recruitement',
+'RETURN_RECLIST'  => 'Retour page recruitement.',
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Panneau de réglage',
@@ -306,7 +308,6 @@ $lang = array_merge($lang, array(
 'ACP_ADDRACE_EXPLAIN' => 'Ici vous pouvez Ajouter/éditer des Races.',
 'ACP_ADDCLASS_EXPLAIN' => 'Ici vous pouvez Ajouter/éditer les Classes du jeu. Faites attention que pour WOW, les ID doivent être identiques à ceux de l’armurerie de Blizzard',
 'ACP_ADDFACTIONS_EXPLAIN' => 'Ici vous pouvez Ajouter des factions',
-'ACP_ADDRACE_EXPLAIN' => 'Ici vous pouvez Ajouter des races',
 'RACEID_EXPLAIN' => 'Note. le ID est unique. pour Wow, il doit correspondre au raceId de l’XML de l’armurerie.  ',
 'RACE_EXPLAIN' => 'Nom de la Race. ',
 'CLASS_ID_EXPLAIN' => 'Note. le ID est unique. pour Wow, il doit correspondre au classId de l’XML de l’armurerie. ',
@@ -321,8 +322,6 @@ $lang = array_merge($lang, array(
 'ACP_DKP_LOOTSYSTEMEXPLAIN' => 'Guide sur les systemes de distribution de butin.',
 'EDIT_RAIDER_EXPLAIN' => 'Ici vous pouvez éditer les points du joueur.',
 'GAME_CLASSRACEUPDATE_EXPLAIN' => 'Note : Jeu ne peut pas être changé une fois qu’il est mis.',
-'SYNCDKP' => 'Synchronisation des Groupes DKP',
-'SYNC' => 'Synchronise',
 'SYNCDKP_EXPLAIN' => 'Vide et reconstruit la table des points DKP sur base des tables de base des raids, detail des raids, Objets, Adjustements. A utiliser uniquement en cas de necessité ou si demandé par le support de bbDKP.',
 'ACP_DKP_POINTCONFIG_EXPLAIN' => 'Ici vous pouvez régler le système d’allocation de points.',
 'ACP_NEWGAME_EXPLAIN' => 'Ici vous pouvez ajouter un jeu nouveau ou préconfiguré et maintenir vous jeux installés.',
@@ -352,10 +351,10 @@ $lang = array_merge($lang, array(
 'NOAUTH_A_LOGS_VIEW' => 'Vous n’avez pas la permission de consulter les logs',
 
 // Manage Members Menu (yes, MMM)
-'ADD_MEMBER' => 'Ajouter Membre',
 'LIST_EDIT_DEL_MEMBER' => 'Lister, Editer ou supprimer des Membres',
 'EDIT_RANKS' => 'Editer les Grades',
 'EDIT_ROLES' => 'Editer les Rôles',
+'EDIT_ROLE' => 'Edition Rôle',
 'ADD_RANKS' => 'Ajouter les Grades',
 'ADD_RANK' => 'Nouveau grade',
 'ADD_ROLES' => 'Ajouter les Rôles',
@@ -364,7 +363,6 @@ $lang = array_merge($lang, array(
 'ROLE' => 'Rôle' ,
 'NEEDED' => 'Requis' ,
 'DIFFERENCE' => 'Difference' ,
-'TRANSFER_HISTORY' => 'Transfert d’ Historique',
 
 // Delete Confirmation Texts
 'CONFIRM_DELETE_EVENT' => 'êtes-vous sûr de vouloir supprimer cet évènement?',
@@ -388,6 +386,7 @@ $lang = array_merge($lang, array(
 'CONFIRM_RESET_GAME' => 'Veuillez confirmer la réinitialisation (factions, classes et races du jeu "%s" à défaut. (pools et évènements restent intouchés )',
 'CONFIRM_INSTALL_GAME' => 'Veuillez confirmer l’installation du jeu "%s". ',
 'CONFIRM_DELETE_GAME' => 'Veuillez confirmer la suppression du jeu "%s".',
+'CONFIRM_DELETE_ROLE' => 'Veuillez confirmer la suppression du rôle "%s".',
 
 // Log Actions
 'ACTION_DEFAULT_DKP_CHANGED' => 'le groupe DKP par défaut est changé',
@@ -425,7 +424,7 @@ $lang = array_merge($lang, array(
 'ACTION_DECAYSYNC' => 'Amortissement recalculé',
 'ACTION_ZSYNC' => 'Sommezero recalculé',
 'ACTION_DKPSYNC' => 'DKP recalculé',
-'ACTION_DEFAULT_DKP_CHANGED' => 'Pool par défault mis à jour',
+'ACTION_DEFAULT_DKP_CHANGED' => 'DKP par defaut changé',
 'ACTION_GUILD_ADDED' => 'Une guilde a été ajoutée',
 'ACTION_GUILD_UPDATED' => 'une Guilde a été mise à jour',
 'ACTION_GUILD_DELETED' => 'une Guilde a été supprimée',
@@ -499,6 +498,10 @@ $lang = array_merge($lang, array(
 'VLOG_RACE_ADDED' => '%s a ajouté race %s to %s',
 'VLOG_RACE_UPDATED' => '%s a mis à jour race %s in %s',
 'VLOG_ARMORY_DOWN' => 'Armurerie ne peut être appellée',
+'VLOG_FACTION_UPDATED' => '%s a mis à jour Faction %s to %s',
+'VLOG_ROLE_ADDED' => '%s a ajouté rôle %s to %s',
+'VLOG_ROLE_UPDATED' => '%s a mis à jour rôle %s in %s',
+'VLOG_ROLE_DELETED' => '%s a supprimé rôle %s',
 
 // Before/After
 'ADJUSTMENT_BEFORE' => 'Ajustment avant',
@@ -603,6 +606,7 @@ $lang = array_merge($lang, array(
 'WARNING_BATTLENET' => 'la mise à jour de tous les membres depuis Battle.NET API peut durer une minute ou plus. svp confirmez.',
 'ERROR_ARMORY_DOWN' => 'Erreur: Connection Battle.NET API impossible',
 'GUILD_EMBLEM_NF' => 'Emblème Guilde pas trouvé',
+'ERROR_ARMORY_NOTFOUND' => 'Votre Guilde n’a pas été trouvé dans Battle.NET',
 
 //Curl errors
 'ERR_UNKNOWN' => 'erreur Curl inconnue.',
@@ -627,6 +631,13 @@ $lang = array_merge($lang, array(
 'IERROTH' => 'Autre erreur',
 'WOWAPI_NO_CHARACTER' => 'Character name not specified.',
 'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
+'WARNING_NORECRUITMENTS'   =>  'pas de recrutements trouvés.',
+'WOWAPIKEY' => 'clef API',
+'WOWAPIKEY_EXPLAIN' => 'registrez sur dev.battle.net pour obtenir la clef (https://dev.battle.net/apps/mykeys)',
+'WOWPRIVKEY' => 'Clef secrète',
+'WOWPRIVKEY_EXPLAIN' => 'Clef secrète Mashery',
+'WOWAPILOCALE' => 'Locale',
+'WOWAPILOCALE_EXPLAIN' => 'choose : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
 
 // Submission Success Messages
 'ADMIN_RAID_ATTENDEE_DELETED_FAILED' => 'Participant %s ne pouvat pas être supprimé du raid %s.',
@@ -697,6 +708,14 @@ $lang = array_merge($lang, array(
 'ADMIN_INSTALLED_GAME_SUCCESS' => 'Jeu "%s" est installé.',
 'ADMIN_DELETE_GAME_SUCCESS' => 'Jeu "%s" est supprimé.',
 'ADMIN_INSTALL_GAME_FAILED'  => 'Nom de jeu manquant. Jeu ne peut être installé.',
+'ADMIN_ADD_ROLE_FAILED'  => 'Rôle %s n’a pas pu être ajouté',
+'ADMIN_ADD_ROLE_SUCCESS'  => 'Rôle %s a été ajouté.',
+'ADMIN_UPDATE_FACTION_SUCCESS' => 'Faction %s est mise à jour',
+'ADMIN_UPDATE_ROLE_SUCCESS' => 'Rôle %s est mis à jour',
+'ADMIN_DELETE_ROLE_SUCCESS' => 'Role %s est supprimé deleted',
+'ADMIN_ADD_RECRUITMENT_SUCCESS' => 'Recruitement %s was ajouté',
+'ADMIN_UPDATE_RECRUITMENT_SUCCESS' => 'Recruitement %s est mis à jour',
+'ADMIN_DELETE_RECRUITMENT_SUCCESS' => 'Recruitement %s est supprimé',
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Ajustement pour réactivation',
@@ -751,7 +770,6 @@ $lang = array_merge($lang, array(
 'PARSETAGS' => 'tag guilde à parser',
 'PARSETAGS_NOTE' => '.',
 'PLUGINS' => 'Plugins',
-'DOWNLOAD_LATEST_PLUGINS' => 'Download plugins ',
 'PLUGINS_INSTALLED' => 'Plugins Installé',
 'PLUGINS_STATUS' => 'Statut Plugins',
 'DOWNLOAD_LATEST_PLUGINS' => 'télécharger plugins ',
@@ -778,6 +796,7 @@ $lang = array_merge($lang, array(
 'BBDKP_YOURVERSION' => 'Votre version bbDKP :',
 
 // roster
+'ARMORYSTATUS' => 'Statut Armurerie',
 'ARM_LAYOUT' => 'Style du Tableau des membres',
 'ARM_LAYOUTDO' => 'Choisis le style',
 'ARM_SHOWACH' => 'Montrer les points des Haut Faits ?',
@@ -815,6 +834,7 @@ $lang = array_merge($lang, array(
 'EDIT_RAIDER_TITLE' => 'Editer un Raider',
 'ADD_RACE_TITLE' => 'Paramètres de la Race',
 'ADD_CLASS_TITLE' => 'Paramètres de la classe',
+'EDIT_FACTION' => 'Edition Faction',
 
 // Page Foot Counts
 'LISTMEMBERS_FOOTCOUNT' => '... trouvé %d membres',
@@ -832,6 +852,8 @@ $lang = array_merge($lang, array(
 'LISTCLASS_FOOTCOUNT' => '... trouvé %d classes',
 'LISTFACTION_FOOTCOUNT' => '... trouvé%d Factions',
 'RAIDITEMS_FOOTCOUNT' => '... trouvé %d butins gagnés',
+'LISTROLES_FOOTCOUNT' => '... trouvé %d rôles',
+'RECRUIT_FOOTCOUNT' => '... trouvé %d recruitements',
 
 // Submit Buttons
 'ADD_ADJUSTMENT' => 'Ajouter un Ajustement',
@@ -961,6 +983,11 @@ $lang = array_merge($lang, array(
 'OVERRIDE' => 'Outrepasser',
 'RACE_IMAGE' => 'Nom d‘image petit Race',
 'RACE_IMAGE_EXPLAIN' => 'Nom de fichier couleur png sans extension, fichier doit exister en /images/race_images',
+'ROLE_COLOR' => 'Coleur rôle',
+'ROLE_ICON' => 'Icône rôle',
+'ROLE_NAME' => 'Nom du röle',
+'ROLE_ID' => 'id du rôle',
+'ROLE_CAT_ICON' => 'Icône de categorie Rôle',
 'RESULTS' => '%d Résultats (%s)',
 'SEARCH' => 'Rachercher',
 'SEARCH_MEMBERS' => 'Recherchez les membres',
@@ -984,9 +1011,10 @@ $lang = array_merge($lang, array(
 'ZEROSUM_DISTRIBUTEOTHER' => 'Décalage des bonus',
 'ZEROSUM_DISTRIBUTEOTHER_EXPLAIN' => 'Cochez pour décaler les bonus temps et raids vers le compte DKP de la Guilde.',
 'ZS_CHECKED_EXPLAIN' => 'Coché si Somme zero est calculé',
-'LANG_DE' => 'Deutsch',
+'LANG_DE' => 'Allemand',
 'LANG_FR' => 'Français',
-'LANG_EN' => 'English',
+'LANG_EN' => 'Anglais',
+'LANG_IT' => 'Italien',
 'FREQ0' => 'Days',
 'FREQ1' => 'Weeks',
 'FREQ2' => 'Months',
@@ -1002,7 +1030,6 @@ $lang = array_merge($lang, array(
 'LAST_UPDATE' => 'Dernière mise à jour',
 'LOCATION' => 'Location',
 
-'NUMBER_OF_ITEMS' => 'Nombre d’objets',
 'NUMBER_OF_LOGS' => 'Nombre de Logs',
 'NUMBER_OF_MEMBERS' => 'Nombre de Membres (Actifs / Inactifs)',
 'NUMBER_OF_RAIDS' => 'Nombre de Raids',

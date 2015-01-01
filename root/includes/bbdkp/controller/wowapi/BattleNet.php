@@ -40,7 +40,7 @@ class BattleNet
 	 * @var array
 	 */
 	protected $region = array(
-		'us', 'eu', 'kr', 'tw', 'cn', 'sea'
+		'us', 'eu', 'kr', 'tw', 'sea'
 	);
 	
 	/**
@@ -72,52 +72,82 @@ class BattleNet
 	 * @var class
 	 */
 	public $Character;
-	
+
+	/**
+	 * locale
+	 *
+	 * @var string
+	 */
+	public $locale;
+
+	/**
+	 * Battle.net API key
+	 *
+	 */
+	public $apikey;
+
 	/**
 	 * WoWAPI Class constructor
 	 * 
 	 * @param string $API
 	 * @param string $region
+	 * @param string $apikey
+	 * @param string $locale
+	 *
 	 */
-	public function __construct($API, $region) 
+	public function __construct($API, $region, $apikey, $locale, $privkey)
 	{
-		global $user, $phpEx, $phpbb_root_path; 
-		
+		global $user, $phpEx, $phpbb_root_path;
+
+
 		// check for correct API call
-		if (!in_array($API, $this->API)) 
+		if (!in_array($API, $this->API))
 		{
 			trigger_error($user->lang['WOWAPI_API_NOTIMPLEMENTED']);
 		}
-		
+
 		if (!in_array($region, $this->region))
 		{
 			trigger_error($user->lang['WOWAPI_REGION_NOTALLOWED']);
 		}
-		
-		switch ($API)
+
+		$this->API = $API;
+		$this->region = $region;
+
+		switch ($this->API)
 		{
 			case 'realm':
-				if (!class_exists('\bbdkp\controller\wowapi\Realm')) 
+				if (!class_exists('\bbdkp\controller\wowapi\Realm'))
 				{
 					require($phpbb_root_path . "includes/bbdkp/controller/wowapi/Realm.$phpEx");
 				}
 				$this->Realm = new \bbdkp\controller\wowapi\Realm($region);
+				$this->Realm->apikey = $apikey;
+				$this->Realm->locale = $locale;
+				$this->Realm->privkey = $privkey;
 				break;
 			case 'guild':
-				if (!class_exists('\bbdkp\controller\wowapi\Guild')) 
+				if (!class_exists('\bbdkp\controller\wowapi\Guild'))
 				{
 					require($phpbb_root_path . "includes/bbdkp/controller/wowapi/Guild.$phpEx");
-				}				
+				}
 				$this->Guild = new \bbdkp\controller\wowapi\Guild($region);
+				$this->Guild->apikey = $apikey;
+				$this->Guild->locale = $locale;
+				$this->Guild->privkey = $privkey;
 				break;
 			case 'character':
-				if (!class_exists('\bbdkp\controller\wowapi\Character')) 
+				if (!class_exists('\bbdkp\controller\wowapi\Character'))
 				{
 					require($phpbb_root_path . "includes/bbdkp/controller/wowapi/Character.$phpEx");
-				}				
+				}
 				$this->Character = new \bbdkp\controller\wowapi\Character($region);
+				$this->Character->apikey = $apikey;
+				$this->Character->locale = $locale;
+				$this->Character->privkey = $privkey;
 				break;
-				
+
 		}
+
 	}
 }

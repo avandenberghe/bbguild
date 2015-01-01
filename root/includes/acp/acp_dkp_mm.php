@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  */
 
 
@@ -43,15 +43,15 @@ if (!class_exists('\bbdkp\controller\members\Members'))
 {
     require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
 }
-//include the roles class
-if (!class_exists('\bbdkp\controller\guilds\Roles'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Roles.$phpEx");
-}
 //include the guilds class
 if (!class_exists('\bbdkp\controller\guilds\Guilds'))
 {
     require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
+}
+//include the roles class
+if (!class_exists('\bbdkp\controller\games\Roles'))
+{
+    require("{$phpbb_root_path}includes/bbdkp/controller/games/roles/Roles.$phpEx");
 }
 
 /**
@@ -126,17 +126,16 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 $getguild_dropdown = isset ( $_POST ['member_guild_id'] )  ? true : false;
                 if ($getguild_dropdown)
                 {
-                    // user selected dropdow - get guildid
+                    // user selected dropdown - get guildid
                     $Guild->guildid = request_var('member_guild_id', 0);
                 }
 
                 $sortlink = isset ( $_GET [URI_GUILD] )  ? true : false;
                 if($sortlink)
                 {
-                    // user selected dropdow - get guildid
+                    // user selected dropdown - get guildid
                     $Guild->guildid = request_var(URI_GUILD, 0);
                 }
-
 
                 $charapicall = (isset($_POST['charapicall'])) ? true : false;
                 if($charapicall)
@@ -172,162 +171,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 }
 
                 // pageloading
-
-                // fill popup and set selected to default selection
-                $Guild->Getguild();
-                $guildlist = $Guild->guildlist(0);
-                foreach ($guildlist as $g)
-                {
-                    $template->assign_block_vars('guild_row', array(
-                        'VALUE' => $g['id'] ,
-                        'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '' ,
-                        'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
-                }
-
-                $previous_data = '';
-
-                //get window
-                $start = request_var('start', 0, false);
-                $minlevel = request_var('minlevel', 0);
-                $maxlevel = request_var('maxlevel', 200);
-
-                if( isset($_POST['search'])  || isset($_GET['active']) || isset($_GET['nonactive'])  )
-                {
-                    $selectactive = request_var('active', 0);
-                    $selectnonactive = request_var('nonactive', 0);
-                }
-                else
-                {
-                    // set standard
-                    $selectactive = 1;
-                    $selectnonactive = 1;
-
-                }
-
-                $member_filter = utf8_normalize_nfc(request_var('member_name', '', true)) ;
-
-                $sort_order = array(
-                    0 => array('member_name', 'member_name desc') ,
-                    1 => array('username', 'username desc') ,
-                    2 => array('member_level', 'member_level desc') ,
-                    3 => array('member_class', 'member_class desc') ,
-                    4 => array('rank_name', 'rank_name desc'),
-                    5 => array('last_update', 'last_update desc'),
-                    7 => array('member_id', 'member_id desc')
-                );
-
-                $current_order = $this->switch_order($sort_order);
-                $sort_index = explode('.', $current_order['uri']['current']);
-                $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
-                $show_all = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
-
-                $result = $Guild->listmembers($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter);
-                $member_count = 0;
-                while ($row = $db->sql_fetchrow($result))
-                {
-                    $member_count += 1;
-                }
-
-                if (! ($result))
-                {
-                    trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
-                }
-                $db->sql_freeresult($result);
-
-                $members_result = $Guild->listmembers($current_order['sql'], $start, 1, $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter);
-                $lines = 0;
-                while ($row = $db->sql_fetchrow($members_result))
-                {
-                    $phpbb_user_id = (int) $row['phpbb_user_id'];
-                    $race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
-                    $lines +=1;
-                    $template->assign_block_vars('members_row', array(
-                        'S_READONLY' => ($row['rank_id'] == 90 || $row['rank_id'] == 99) ? true : false ,
-                        'STATUS' => ($row['member_status'] == 1) ? 'checked="checked" ' : '' ,
-                        'ID' => $row['member_id'],
-                        'COUNT' => $member_count,
-                        'NAME' => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'] ,
-                        'USERNAME' => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']) ,
-                        'RANK' => $row['rank_name'] ,
-                        'LEVEL' => ($row['member_level'] > 0) ? $row['member_level'] : '&nbsp;' ,
-                        'ARMOR' => (! empty($row['armor_type'])) ? $row['armor_type'] : '&nbsp;' ,
-                        'COLORCODE' => ($row['colorcode'] == '') ? '#254689' : $row['colorcode'] ,
-                        'CLASS_IMAGE' => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '' ,
-                        'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false ,
-                        'RACE_IMAGE' => (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '' ,
-                        'S_RACE_IMAGE_EXISTS' => (strlen($race_image) > 1) ? true : false ,
-                        'CLASS' => ($row['member_class'] != 'NULL') ? $row['member_class'] : '&nbsp;' ,
-                        'LAST_UPDATE' => ($row['last_update'] == 0) ? '' : date($config['bbdkp_date_format'] . ' H:i:s' , $row['last_update']) ,
-                        'U_VIEW_USER' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id") ,
-                        'U_VIEW_MEMBER' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_mm&amp;mode=mm_addmember&amp;' . URI_NAMEID . '=' . $row['member_id']) ,
-                        'U_DELETE_MEMBER' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_mm&amp;mode=mm_addmember&amp;delete=1&amp;' . URI_NAMEID . '=' . $row['member_id'])));
-                    $previous_data = $row[$previous_source];
-                }
-
-                $db->sql_freeresult($members_result);
-                $footcount_text = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $member_count);
-                $memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx",
-                        "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] .
-                        "&amp;". URI_GUILD ."=".$Guild->guildid .
-                        "&amp;minlevel=".$minlevel .
-                        "&amp;maxlevel=".$maxlevel .
-                        "&amp;active=".$selectactive .
-                        "&amp;nonactive=".$selectnonactive ),
-                    $member_count, $config['bbdkp_user_llimit'], $start, true);
-                $form_key = 'mm_listmembers';
-                add_form_key($form_key);
-
-                $template->assign_vars(array(
-                    'F_SELECTACTIVE'  => $selectactive,
-                    'F_SELECTNONACTIVE'  => $selectnonactive,
-                    'GUILDID' => $Guild->guildid,
-                    'GUILDNAME' => $Guild->name,
-                    'MINLEVEL' => $minlevel,
-                    'MAXLEVEL' => $maxlevel,
-                    'START' => $start,
-                    'MEMBER_NAME' => $member_filter,
-                    'F_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember' ,
-                    'F_MEMBERS_LIST' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers' ,
-                    'L_TITLE' => $user->lang['ACP_MM_LISTMEMBERS'] ,
-                    'L_EXPLAIN' => $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'] ,
-                    'O_NAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
-                        "&amp;maxlevel=".$maxlevel .
-                        "&amp;active=".$selectactive .
-                        "&amp;nonactive=".$selectnonactive) ,
-                    'O_USERNAME' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->guildid. "&amp;minlevel=".$minlevel .
-                        "&amp;maxlevel=".$maxlevel .
-                        "&amp;active=".$selectactive .
-                        "&amp;nonactive=".$selectnonactive) ,
-                    'O_LEVEL' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->guildid. "&amp;minlevel=".$minlevel .
-                        "&amp;maxlevel=".$maxlevel .
-                        "&amp;active=".$selectactive .
-                        "&amp;nonactive=".$selectnonactive) ,
-                    'O_CLASS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
-                        "&amp;maxlevel=".$maxlevel .
-                        "&amp;active=".$selectactive .
-                        "&amp;nonactive=".$selectnonactive) ,
-                    'O_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
-                        "&amp;maxlevel=".$maxlevel .
-                        "&amp;active=".$selectactive .
-                        "&amp;nonactive=".$selectnonactive) ,
-                    'O_LAST_UPDATE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
-                        "&amp;maxlevel=".$maxlevel .
-                        "&amp;active=".$selectactive .
-                        "&amp;nonactive=".$selectnonactive) ,
-                    'O_ID' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=".$minlevel .
-                        "&amp;maxlevel=".$maxlevel .
-                        "&amp;active=".$selectactive .
-                        "&amp;nonactive=".$selectnonactive),
-                    'U_LIST_MEMBERS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;") ,
-                    'LISTMEMBERS_FOOTCOUNT' => $footcount_text ,
-                    'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid ),
-                    'S_WOW'  => ($Guild->game_id  == 'wow') ? true: false,
-                    'MEMBER_PAGINATION' => $memberpagination,
-                    'GUILD_EMBLEM'      => $Guild->emblempath,
-                    'GUILD_NAME'        => $Guild->name,
-                ));
-                $this->page_title = 'ACP_MM_LISTMEMBERS';
-                $this->tpl_name = 'dkp/acp_' . $mode;
+                $this->BuildTemplateListMembers($mode, $Guild);
                 break;
 
             /***************************************/
@@ -349,25 +193,17 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                     }
                 }
 
-                // add guild member
                 if ($add)
                 {
                     $this->Addmember();
 
                 }
 
-                //
-                // update guild member
-                //
                 if ($update)
                 {
                     $this->UpdateMember();
                 }
 
-
-                //
-                // delete guild member
-                //
                 if ($delete)
                 {
 
@@ -389,317 +225,8 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                     unset($deletemember);
                 }
 
-                /*
-                 * fill template
-                 */
-                $member_id = request_var('hidden_member_id', request_var(URI_NAMEID, 0));
-                $editmember = new \bbdkp\controller\members\Members($member_id);
-
-                $S_ADD = ($member_id > 0) ? false: true;
-                if ($S_ADD)
-                {
-                    // set defaults
-                    $editmember->member_guild_id = request_var(URI_GUILD, 0);
-
-                }
-
-                $Guild = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
-                $guildlist = $Guild->guildlist();
-
-                if ($S_ADD)
-                {
-                    $editmember->game_id = $Guild->game_id;
-                    $editmember->member_rank_id = $Guild->raidtrackerrank;
-                    $editmember->member_status = 1;
-                    $editmember->member_gender_id = 0;
-                }
-
-                foreach ($guildlist as $g)
-                {
-                    //populate guild popup
-                    $template->assign_block_vars('guild_row', array(
-                        'VALUE' => $g['id'] ,
-                        'SELECTED' => ($g['id'] == $editmember->member_guild_id ) ? ' selected="selected"' : '' ,
-                        'OPTION' => (! empty($g['name'])) ? $g['name'] : '(None)'));
-
-                }
-
-                // Game dropdown
-                if(isset($this->games))
-                {
-                    foreach ($this->games as $gameid => $gamename)
-                    {
-                        $template->assign_block_vars('game_row', array(
-                            'VALUE' => $gameid ,
-                            'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '' ,
-                            'OPTION' => $gamename));
-                    }
-
-                }
-                else
-                {
-                    trigger_error('ERROR_NOGAMES', E_USER_WARNING );
-                }
-
-                foreach ($this->regions as $key => $regionname)
-                {
-                    $template->assign_block_vars('region_row', array(
-                        'VALUE' => $key ,
-                        'SELECTED' => ($editmember->member_region == $key) ? ' selected="selected"' : '' ,
-                        'OPTION' => (! empty($regionname)) ? $regionname : '(None)'));
-                }
-
-                // Rank drop-down -> for initial load
-                // reloading is done from ajax to prevent redraw
-                $Ranks = new \bbdkp\controller\guilds\Ranks($editmember->member_guild_id);
-                $result = $Ranks->listranks();
-                while ($row = $db->sql_fetchrow($result))
-                {
-                    $template->assign_block_vars('rank_row', array(
-                        'VALUE' => $row['rank_id'] ,
-                        'SELECTED' => ($editmember->member_rank_id == $row['rank_id']) ? ' selected="selected"' : '' ,
-                        'OPTION' => (! empty($row['rank_name'])) ? $row['rank_name'] : '(None)'));
-                }
-
-                // Race dropdown
-                // reloading is done from ajax to prevent redraw
-                $sql_array = array(
-                    'SELECT' => '  r.race_id, l.name as race_name ' ,
-                    'FROM' => array(
-                        RACE_TABLE => 'r' ,
-                        BB_LANGUAGE => 'l') ,
-                    'WHERE' => " r.race_id = l.attribute_id
-								AND r.game_id = '" . $editmember->game_id . "'
-								AND l.attribute='race'
-								AND l.game_id = r.game_id
-								AND l.language= '" . $config['bbdkp_lang'] . "'",
-                    'ORDER_BY'	=> 'l.name asc');
-                $sql = $db->sql_build_query('SELECT', $sql_array);
-                $result = $db->sql_query($sql);
-                if ($editmember->member_id > 0)
-                {
-                    while ($row = $db->sql_fetchrow($result))
-                    {
-                        $template->assign_block_vars('race_row', array(
-                            'VALUE' => $row['race_id'] ,
-                            'SELECTED' => ($editmember->member_race_id == $row['race_id']) ? ' selected="selected"' : '' ,
-                            'OPTION' => (! empty($row['race_name'])) ? $row['race_name'] : '(None)'));
-                    }
-                }
-                else
-                {
-                    while ($row = $db->sql_fetchrow($result))
-                    {
-                        $template->assign_block_vars('race_row', array(
-                            'VALUE' => $row['race_id'] ,
-                            'SELECTED' => '' ,
-                            'OPTION' => (! empty($row['race_name'])) ? $row['race_name'] : '(None)'));
-                    }
-                }
-                $db->sql_freeresult($result);
-
-
-                //
-                // Class dropdown
-                // reloading is done from ajax to prevent redraw
-                $sql_array = array(
-                    'SELECT' => ' c.class_id, l.name as class_name, c.class_hide,
-									  c.class_min_level, class_max_level, c.class_armor_type , c.imagename ' ,
-                    'FROM' => array(
-                        CLASS_TABLE => 'c' ,
-                        BB_LANGUAGE => 'l') ,
-                    'WHERE' => " l.game_id = c.game_id  AND c.game_id = '" . $editmember->game_id . "'
-					AND l.attribute_id = c.class_id  AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",
-                    'ORDER_BY'	=> 'l.name asc'
-                );
-                $sql = $db->sql_build_query('SELECT', $sql_array);
-                $result = $db->sql_query($sql);
-
-                while ($row = $db->sql_fetchrow($result))
-                {
-                    if ($row['class_min_level'] <= 1)
-                    {
-                        $option = (! empty($row['class_name'])) ? $row['class_name'] . "
-						 Level (" . $row['class_min_level'] . " - " . $row['class_max_level'] . ")" : '(None)';
-                    }
-                    else
-                    {
-                        $option = (! empty($row['class_name'])) ? $row['class_name'] . "
-						 Level " . $row['class_min_level'] . "+" : '(None)';
-                    }
-                    if ($editmember->member_id <> 0)
-                    {
-                        $template->assign_block_vars('class_row', array(
-                            'VALUE' => $row['class_id'] ,
-                            'SELECTED' => ($editmember->member_class_id == $row['class_id']) ? ' selected="selected"' : '' ,
-                            'OPTION' => $option));
-                    }
-                    else
-                    {
-                        $template->assign_block_vars('class_row', array(
-                            'VALUE' => $row['class_id'] ,
-                            'SELECTED' => '' ,
-                            'OPTION' => $option));
-                    }
-                }
-                $db->sql_freeresult($result);
-
-                //Role dropdown
-                $Roles = new \bbdkp\controller\guilds\Roles();
-                $Roles->guild_id = $editmember->member_guild_id;
-                foreach($Roles->roles as $roleid => $Role )
-                {
-                    $template->assign_block_vars('role_row', array(
-                        'VALUE' => $roleid ,
-                        'SELECTED' => ($editmember->member_role == $roleid) ? ' selected="selected"' : '' ,
-                        'OPTION' => $Role ));
-                }
-
-
-                // build presets for joindate pulldowns
-                $now = getdate();
-                $s_memberjoin_day_options = '<option value="0"	>--</option>';
-                for ($i = 1; $i < 32; $i ++)
-                {
-                    $day = $editmember->member_id > 0 ? $editmember->member_joindate_d : $now['mday'];
-                    $selected = ($i == $day) ? ' selected="selected"' : '';
-                    $s_memberjoin_day_options .= "<option value=\"$i\"$selected>$i</option>";
-                }
-                $s_memberjoin_month_options = '<option value="0">--</option>';
-                for ($i = 1; $i < 13; $i ++)
-                {
-                    $month = $editmember->member_id > 0 ? $editmember->member_joindate_mo : $now['mon'];
-                    $selected = ($i == $month) ? ' selected="selected"' : '';
-                    $s_memberjoin_month_options .= "<option value=\"$i\"$selected>$i</option>";
-                }
-                $s_memberjoin_year_options = '<option value="0">--</option>';
-                for ($i = $now['year'] - 10; $i <= $now['year']; $i ++)
-                {
-                    $yr = $editmember->member_id > 0 ? $editmember->member_joindate_y : $now['year'];
-                    $selected = ($i == $yr) ? ' selected="selected"' : '';
-                    $s_memberjoin_year_options .= "<option value=\"$i\"$selected>$i</option>";
-                }
-
-
-                // build presets for outdate pulldowns
-                $s_memberout_day_options = '<option value="0"' . ($editmember->member_id > 0 ? (($editmember->member_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
-                for ($i = 1; $i < 32; $i ++)
-                {
-                    if ($editmember->member_id > 0 && $editmember->member_outdate != 0)
-                    {
-                        $day = $editmember->member_outdate_d;
-                        $selected = ($i == $day) ? ' selected="selected"' : '';
-                    }
-                    else
-                    {
-                        $selected = '';
-                    }
-                    $s_memberout_day_options .= "<option value=\"$i\"$selected>$i</option>";
-                }
-
-
-                $s_memberout_month_options = '<option value="0"' . ($editmember->member_id > 0 ? (($editmember->member_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
-
-                for ($i = 1; $i < 13; $i ++)
-                {
-                    if ($editmember->member_id > 0 && $editmember->member_outdate != 0)
-                    {
-                        $month = $editmember->member_outdate_mo;
-                        $selected = ($i == $month) ? ' selected="selected"' : '';
-                    }
-                    else
-                    {
-                        $selected = '';
-                    }
-                    $s_memberout_month_options .= "<option value=\"$i\"$selected>$i</option>";
-                }
-
-                $s_memberout_year_options = '<option value="0"' . ($editmember->member_id > 0 ? (($editmember->member_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
-
-                for ($i = $now['year'] - 10; $i <= $now['year'] + 10; $i ++)
-                {
-                    if ($editmember->member_id > 0 && $editmember->member_outdate != 0)
-                    {
-                        $yr = $editmember->member_outdate_y;
-                        $selected = ($i == $yr) ? ' selected="selected"' : '';
-                    }
-                    else
-                    {
-                        $selected = '';
-                    }
-                    $s_memberout_year_options .= "<option value=\"$i\"$selected>$i</option>";
-                }
-
-                // phpbb User dropdown
-                $phpbb_user_id = $editmember->member_id > 0  ? $editmember->phpbb_user_id : 0;
-                $sql_array = array(
-                    'SELECT' => ' u.user_id, u.username ' ,
-                    'FROM' => array(
-                        USERS_TABLE => 'u') ,
-                    // exclude bots and guests, order by name -- ticket  129
-                    'WHERE' => " u.group_id != 6 and u.group_id != 1 " ,
-                    'ORDER_BY' => " u.username ASC");
-                $sql = $db->sql_build_query('SELECT', $sql_array);
-                $result = $db->sql_query($sql);
-                $s_phpbb_user = '<option value="0"' . (($phpbb_user_id == 0) ? ' selected="selected"' : '') . '>--</option>';
-                while ($row = $db->sql_fetchrow($result))
-                {
-                    $selected = ($row['user_id'] == $phpbb_user_id) ? ' selected="selected"' : '';
-                    $s_phpbb_user .= '<option value="' . $row['user_id'] . '"' . $selected . '>' . $row['username'] . '</option>';
-                }
-
-                unset($now);
-
-
-
-                $form_key = 'mm_addmember';
-                add_form_key($form_key);
-                $template->assign_vars(array(
-                    'L_TITLE' => $user->lang['ACP_MM_ADDMEMBER'] ,
-                    'L_EXPLAIN' => $user->lang['ACP_MM_ADDMEMBER_EXPLAIN'] ,
-                    'F_ADD_MEMBER' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;") ,
-                    'STATUS' => $editmember->member_status == 1 ? 'checked="checked"' : '' ,
-                    'MEMBER_NAME' => $editmember->member_name,
-                    'MEMBER_ID' => $editmember->member_id,
-                    'MEMBER_LEVEL' => $editmember->member_level,
-                    'REALM' =>  $editmember->member_realm,
-                    'DEACTIVATE_REASON' => $editmember->deactivate_reason == '' ? '' : $user->lang[$editmember->deactivate_reason],
-                    'STATUS_LOCK' => $editmember->deactivate_reason == '' ? false : true,
-                    'MEMBER_ACHIEV' => $editmember->member_achiev,
-                    'MEMBER_TITLE' => $editmember->member_title,
-                    'MALE_CHECKED' => ( $editmember->member_gender_id == '0') ? ' checked="checked"' : '' ,
-                    'FEMALE_CHECKED' => ( $editmember->member_gender_id == '1') ? ' checked="checked"' : '' ,
-                    'MEMBER_COMMENT' => $editmember->member_comment,
-                    'S_CAN_HAVE_ARMORY' => $editmember->game_id == 'wow' || $editmember->game_id == 'aion' ? true : false,
-                    'MEMBER_URL' => $editmember->member_armory_url,
-                    'MEMBER_PORTRAIT' => $editmember->member_portrait_url,
-                    'S_MEMBER_PORTRAIT_EXISTS' => (strlen($editmember->member_portrait_url) > 1) ? true : false ,
-                    'S_CAN_GENERATE_ARMORY' => $editmember->game_id == 'wow' ? true : false,
-                    'COLORCODE' => ($editmember->colorcode== '') ? '#254689' : $editmember->colorcode ,
-                    'CLASS_IMAGE' => $editmember->class_image ,
-                    'S_CLASS_IMAGE_EXISTS' => (strlen($editmember->class_image) > 1) ? true : false ,
-                    'RACE_IMAGE' => $editmember->race_image ,
-                    'S_RACE_IMAGE_EXISTS' => (strlen($editmember->race_image) > 1) ? true : false ,
-                    'S_JOINDATE_DAY_OPTIONS' => $s_memberjoin_day_options ,
-                    'S_JOINDATE_MONTH_OPTIONS' => $s_memberjoin_month_options ,
-                    'S_JOINDATE_YEAR_OPTIONS' => $s_memberjoin_year_options ,
-                    'S_OUTDATE_DAY_OPTIONS' => $s_memberout_day_options ,
-                    'S_OUTDATE_MONTH_OPTIONS' => $s_memberout_month_options ,
-                    'S_OUTDATE_YEAR_OPTIONS' => $s_memberout_year_options ,
-                    'S_PHPBBUSER_OPTIONS' => $s_phpbb_user ,
-                    'TITLE_NAME' => ($editmember->game_id == 'wow') ? sprintf($editmember->member_title, $editmember->member_name) : '' ,
-                    // javascript
-                    'LA_ALERT_AJAX' => $user->lang['ALERT_AJAX'] ,
-                    'LA_ALERT_OLDBROWSER' => $user->lang['ALERT_OLDBROWSER'] ,
-                    'LA_MSG_NAME_EMPTY' => $user->lang['FV_REQUIRED_NAME'] ,
-                    'UA_FINDRANK' => append_sid($phpbb_admin_path . "style/dkp/findrank.$phpEx") ,
-                    'UA_FINDCLASSRACE' => append_sid($phpbb_admin_path . "style/dkp/findclassrace.$phpEx") ,
-                    'S_ADD' => $S_ADD));
-                $this->page_title = 'ACP_MM_ADDMEMBER';
-                $this->tpl_name = 'dkp/acp_' . $mode;
+                $this->BuildTemplateAddEditmembers($mode);
                 break;
-
-
 
             default:
                 $this->page_title = 'ACP_DKP_MAINPAGE';
@@ -782,17 +309,19 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
         $newmember->member_level = request_var('member_level', 1);
         $newmember->member_realm = request_var('realm', '');
         $newmember->member_region = request_var('region_id', '');
-        if (!in_array($newmember->member_region, $newmember->regionlist)) {
+        if (!in_array($newmember->member_region, $newmember->regionlist))
+        {
             $newmember->member_region = '';
         }
         $newmember->member_race_id = request_var('member_race_id', 1);
         $newmember->member_class_id = request_var('member_class_id', 1);
-        $newmember->member_role = request_var('member_role', '');
+        $newmember->member_role = request_var('member_role', 0);
         $newmember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
         $newmember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
         $newmember->member_joindate = mktime(0, 0, 0, request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
         $newmember->member_outdate = 0;
-        if (request_var('member_outdate_mo', 0) + request_var('member_outdate_d', 0) != 0) {
+        if (request_var('member_outdate_mo', 0) + request_var('member_outdate_d', 0) != 0)
+        {
             $newmember->member_outdate = mktime(0, 0, 0, request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0));
         }
         $newmember->member_achiev = 0;
@@ -842,7 +371,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
         $updatemember->game_id = request_var('game_id', '');
         $updatemember->member_class_id = request_var('member_class_id', 0);
         $updatemember->member_race_id = request_var('member_race_id', 0);
-        $updatemember->member_role = request_var('member_role', '');
+        $updatemember->member_role = request_var('member_role', 0);
         $updatemember->member_realm = request_var('realm', '');
         $updatemember->member_region = request_var('region_id', '');
 
@@ -991,5 +520,445 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
         return array($i, $log);
 
 
+    }
+
+    /**
+     * List Members
+     *
+     * @param $mode
+     * @param $Guild
+     */
+    private function BuildTemplateListMembers($mode, $Guild)
+    {
+        global  $template, $db, $user, $phpbb_root_path, $config, $phpbb_admin_path, $phpEx;
+
+        // fill popup and set selected to default selection
+        $Guild->Getguild();
+        $guildlist = $Guild->guildlist(0);
+        foreach ($guildlist as $g)
+        {
+            $template->assign_block_vars('guild_row', array(
+                'VALUE'    => $g['id'],
+                'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '',
+                'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
+        }
+        $previous_data = '';
+        //get window
+        $start    = request_var('start', 0, false);
+        $minlevel = request_var('minlevel', 0);
+        $maxlevel = request_var('maxlevel', 200);
+        if (isset($_POST['search']) || isset($_GET['active']) || isset($_GET['nonactive']))
+        {
+            $selectactive    = request_var('active', 0);
+            $selectnonactive = request_var('nonactive', 0);
+        } else
+        {
+            // set standard
+            $selectactive    = 1;
+            $selectnonactive = 1;
+        }
+        $member_filter = utf8_normalize_nfc(request_var('member_name', '', true));
+        $sort_order = array(
+            0 => array('member_name', 'member_name desc'),
+            1 => array('username', 'username desc'),
+            2 => array('member_level', 'member_level desc'),
+            3 => array('member_class', 'member_class desc'),
+            4 => array('rank_name', 'rank_name desc'),
+            5 => array('last_update', 'last_update desc'),
+            7 => array('member_id', 'member_id desc')
+        );
+        $current_order   = $this->switch_order($sort_order);
+        $sort_index      = explode('.', $current_order['uri']['current']);
+        $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
+        $show_all        = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
+        $result       = $Guild->listmembers($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter);
+        $member_count = 0;
+        while ($row = $db->sql_fetchrow($result))
+        {
+            $member_count += 1;
+        }
+        if (!($result))
+        {
+            trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
+        }
+        $db->sql_freeresult($result);
+        $members_result = $Guild->listmembers($current_order['sql'], $start, 1, $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter);
+        $lines          = 0;
+        while ($row = $db->sql_fetchrow($members_result))
+        {
+            $phpbb_user_id = (int)$row['phpbb_user_id'];
+            $race_image    = (string)(($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
+            $lines += 1;
+            $template->assign_block_vars('members_row', array(
+                'S_READONLY'           => ($row['rank_id'] == 90 || $row['rank_id'] == 99) ? true : false,
+                'STATUS'               => ($row['member_status'] == 1) ? 'checked="checked" ' : '',
+                'ID'                   => $row['member_id'],
+                'COUNT'                => $member_count,
+                'NAME'                 => $row['rank_prefix'] . $row['member_name'] . $row['rank_suffix'],
+                'USERNAME'             => get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
+                'RANK'                 => $row['rank_name'],
+                'LEVEL'                => ($row['member_level'] > 0) ? $row['member_level'] : '&nbsp;',
+                'ARMOR'                => (!empty($row['armor_type'])) ? $row['armor_type'] : '&nbsp;',
+                'COLORCODE'            => ($row['colorcode'] == '') ? '#254689' : $row['colorcode'],
+                'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
+                'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
+                'RACE_IMAGE'           => (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '',
+                'S_RACE_IMAGE_EXISTS'  => (strlen($race_image) > 1) ? true : false,
+                'CLASS'                => ($row['member_class'] != 'NULL') ? $row['member_class'] : '&nbsp;',
+                'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : date($config['bbdkp_date_format'] . ' H:i:s', $row['last_update']),
+                'U_VIEW_USER'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"),
+                'U_VIEW_MEMBER'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_mm&amp;mode=mm_addmember&amp;' . URI_NAMEID . '=' . $row['member_id']),
+                'U_DELETE_MEMBER'      => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_mm&amp;mode=mm_addmember&amp;delete=1&amp;' . URI_NAMEID . '=' . $row['member_id'])));
+            $previous_data = $row[$previous_source];
+        }
+        $db->sql_freeresult($members_result);
+        $footcount_text   = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $member_count);
+        $memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx",
+                "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] .
+                "&amp;" . URI_GUILD . "=" . $Guild->guildid .
+                "&amp;minlevel=" . $minlevel .
+                "&amp;maxlevel=" . $maxlevel .
+                "&amp;active="   . $selectactive .
+                "&amp;nonactive=" . $selectnonactive),
+            $member_count, $config['bbdkp_user_llimit'], $start, true);
+        $form_key         = 'mm_listmembers';
+        add_form_key($form_key);
+        $template->assign_vars(array(
+            'F_SELECTACTIVE'        => $selectactive,
+            'F_SELECTNONACTIVE'     => $selectnonactive,
+            'GUILDID'               => $Guild->guildid,
+            'GUILDNAME'             => $Guild->name,
+            'MINLEVEL'              => $minlevel,
+            'MAXLEVEL'              => $maxlevel,
+            'START'                 => $start,
+            'MEMBER_NAME'           => $member_filter,
+            'F_MEMBERS'             => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember',
+            'F_MEMBERS_LIST'        => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers',
+            'L_TITLE'               => $user->lang['ACP_MM_LISTMEMBERS'],
+            'L_EXPLAIN'             => $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'],
+            'O_NAME'                => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+                "&amp;maxlevel=" . $maxlevel .
+                "&amp;active=" . $selectactive .
+                "&amp;nonactive=" . $selectnonactive),
+            'O_USERNAME'            => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+                "&amp;maxlevel=" . $maxlevel .
+                "&amp;active=" . $selectactive .
+                "&amp;nonactive=" . $selectnonactive),
+            'O_LEVEL'               => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+                "&amp;maxlevel=" . $maxlevel .
+                "&amp;active=" . $selectactive .
+                "&amp;nonactive=" . $selectnonactive),
+            'O_CLASS'               => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+                "&amp;maxlevel=" . $maxlevel .
+                "&amp;active=" . $selectactive .
+                "&amp;nonactive=" . $selectnonactive),
+            'O_RANK'                => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+                "&amp;maxlevel=" . $maxlevel .
+                "&amp;active=" . $selectactive .
+                "&amp;nonactive=" . $selectnonactive),
+            'O_LAST_UPDATE'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+                "&amp;maxlevel=" . $maxlevel .
+                "&amp;active=" . $selectactive .
+                "&amp;nonactive=" . $selectnonactive),
+            'O_ID'                  => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+                "&amp;maxlevel=" . $maxlevel .
+                "&amp;active=" . $selectactive .
+                "&amp;nonactive=" . $selectnonactive),
+            'U_LIST_MEMBERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;"),
+            'LISTMEMBERS_FOOTCOUNT' => $footcount_text,
+            'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid),
+            'S_WOW'                 => ($Guild->game_id == 'wow') ? true : false,
+            'MEMBER_PAGINATION'     => $memberpagination,
+            'GUILD_EMBLEM'          => $Guild->emblempath,
+            'GUILD_NAME'            => $Guild->name,
+        ));
+        $this->page_title = 'ACP_MM_LISTMEMBERS';
+        $this->tpl_name   = 'dkp/acp_' . $mode;
+    }
+
+    /**
+     * Build addmember template
+     *
+     * @param $mode
+     */
+    private function BuildTemplateAddEditmembers($mode)
+    {
+        global $template, $db, $config, $user, $phpbb_admin_path, $phpEx;
+
+        $member_id  = request_var('hidden_member_id', request_var(URI_NAMEID, 0));
+        $editmember = new \bbdkp\controller\members\Members($member_id);
+        $S_ADD = ($member_id > 0) ? false : true;
+        if ($S_ADD)
+        {
+            // set defaults
+            $editmember->member_guild_id = request_var(URI_GUILD, 0);
+        }
+        $Guild     = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
+        $guildlist = $Guild->guildlist();
+        if ($S_ADD)
+        {
+            $editmember->game_id          = $Guild->game_id;
+            $editmember->member_rank_id   = $Guild->raidtrackerrank;
+            $editmember->member_status    = 1;
+            $editmember->member_gender_id = 0;
+        }
+        foreach ($guildlist as $g)
+        {
+            //populate guild popup
+            $template->assign_block_vars('guild_row', array(
+                'VALUE'    => $g['id'],
+                'SELECTED' => ($g['id'] == $editmember->member_guild_id) ? ' selected="selected"' : '',
+                'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
+        }
+        // Game dropdown
+        if (isset($this->games))
+        {
+            foreach ($this->games as $gameid => $gamename)
+            {
+                $template->assign_block_vars('game_row', array(
+                    'VALUE'    => $gameid,
+                    'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '',
+                    'OPTION'   => $gamename));
+            }
+        } else
+        {
+            trigger_error('ERROR_NOGAMES', E_USER_WARNING);
+        }
+        foreach ($this->regions as $key => $regionname)
+        {
+            $template->assign_block_vars('region_row', array(
+                'VALUE'    => $key,
+                'SELECTED' => ($editmember->member_region == $key) ? ' selected="selected"' : '',
+                'OPTION'   => (!empty($regionname)) ? $regionname : '(None)'));
+        }
+        // Rank drop-down -> for initial load
+        // reloading is done from ajax to prevent redraw
+        $Ranks  = new \bbdkp\controller\guilds\Ranks($editmember->member_guild_id);
+        $result = $Ranks->listranks();
+        while ($row = $db->sql_fetchrow($result))
+        {
+            $template->assign_block_vars('rank_row', array(
+                'VALUE'    => $row['rank_id'],
+                'SELECTED' => ($editmember->member_rank_id == $row['rank_id']) ? ' selected="selected"' : '',
+                'OPTION'   => (!empty($row['rank_name'])) ? $row['rank_name'] : '(None)'));
+        }
+        // Race dropdown
+        // reloading is done from ajax to prevent redraw
+        $sql_array = array(
+            'SELECT'   => '  r.race_id, l.name as race_name ',
+            'FROM'     => array(
+                RACE_TABLE  => 'r',
+                BB_LANGUAGE => 'l'),
+            'WHERE'    => " r.race_id = l.attribute_id
+								AND r.game_id = '" . $editmember->game_id . "'
+								AND l.attribute='race'
+								AND l.game_id = r.game_id
+								AND l.language= '" . $config['bbdkp_lang'] . "'",
+            'ORDER_BY' => 'l.name asc');
+        $sql       = $db->sql_build_query('SELECT', $sql_array);
+        $result    = $db->sql_query($sql);
+        if ($editmember->member_id > 0)
+        {
+            while ($row = $db->sql_fetchrow($result))
+            {
+                $template->assign_block_vars('race_row', array(
+                    'VALUE'    => $row['race_id'],
+                    'SELECTED' => ($editmember->member_race_id == $row['race_id']) ? ' selected="selected"' : '',
+                    'OPTION'   => (!empty($row['race_name'])) ? $row['race_name'] : '(None)'));
+            }
+        } else
+        {
+            while ($row = $db->sql_fetchrow($result))
+            {
+                $template->assign_block_vars('race_row', array(
+                    'VALUE'    => $row['race_id'],
+                    'SELECTED' => '',
+                    'OPTION'   => (!empty($row['race_name'])) ? $row['race_name'] : '(None)'));
+            }
+        }
+        $db->sql_freeresult($result);
+
+        //
+        // Class dropdown
+        // reloading is done from ajax to prevent redraw
+        $sql_array = array(
+            'SELECT'   => ' c.class_id, l.name as class_name, c.class_hide,
+									  c.class_min_level, class_max_level, c.class_armor_type , c.imagename ',
+            'FROM'     => array(
+                CLASS_TABLE => 'c',
+                BB_LANGUAGE => 'l'),
+            'WHERE'    => " l.game_id = c.game_id  AND c.game_id = '" . $editmember->game_id . "'
+					AND l.attribute_id = c.class_id  AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class' ",
+            'ORDER_BY' => 'l.name asc'
+        );
+
+        $sql       = $db->sql_build_query('SELECT', $sql_array);
+        $result    = $db->sql_query($sql);
+        while ($row = $db->sql_fetchrow($result))
+        {
+            if ($row['class_min_level'] <= 1)
+            {
+                $option = (!empty($row['class_name'])) ? $row['class_name'] . "
+						 Level (" . $row['class_min_level'] . " - " . $row['class_max_level'] . ")" : '(None)';
+            } else
+            {
+                $option = (!empty($row['class_name'])) ? $row['class_name'] . "
+						 Level " . $row['class_min_level'] . "+" : '(None)';
+            }
+            if ($editmember->member_id <> 0)
+            {
+                $template->assign_block_vars('class_row', array(
+                    'VALUE'    => $row['class_id'],
+                    'SELECTED' => ($editmember->member_class_id == $row['class_id']) ? ' selected="selected"' : '',
+                    'OPTION'   => $option));
+            } else
+            {
+                $template->assign_block_vars('class_row', array(
+                    'VALUE'    => $row['class_id'],
+                    'SELECTED' => '',
+                    'OPTION'   => $option));
+            }
+        }
+        $db->sql_freeresult($result);
+
+        // get roles
+        $Roles = new \bbdkp\controller\games\Roles();
+        $Roles->game_id = $Guild->game_id;
+        $Roles->guild_id = $editmember->member_guild_id;
+        $listroles = $Roles->listroles();
+        foreach($listroles as $roleid => $Role )
+        {
+             $template->assign_block_vars('role_row', array(
+                 'VALUE' => $Role['role_id'] ,
+                 'SELECTED' => ($editmember->member_role == $Role['role_id']) ? ' selected="selected"' : '' ,
+                 'OPTION' => $Role['rolename'] ));
+        }
+
+        // build presets for joindate pulldowns
+        $now                      = getdate();
+        $s_memberjoin_day_options = '<option value="0"	>--</option>';
+        for ($i = 1; $i < 32; $i++)
+        {
+            $day      = $editmember->member_id > 0 ? $editmember->member_joindate_d : $now['mday'];
+            $selected = ($i == $day) ? ' selected="selected"' : '';
+            $s_memberjoin_day_options .= "<option value=\"$i\"$selected>$i</option>";
+        }
+        $s_memberjoin_month_options = '<option value="0">--</option>';
+        for ($i = 1; $i < 13; $i++)
+        {
+            $month    = $editmember->member_id > 0 ? $editmember->member_joindate_mo : $now['mon'];
+            $selected = ($i == $month) ? ' selected="selected"' : '';
+            $s_memberjoin_month_options .= "<option value=\"$i\"$selected>$i</option>";
+        }
+        $s_memberjoin_year_options = '<option value="0">--</option>';
+        for ($i = $now['year'] - 10; $i <= $now['year']; $i++)
+        {
+            $yr       = $editmember->member_id > 0 ? $editmember->member_joindate_y : $now['year'];
+            $selected = ($i == $yr) ? ' selected="selected"' : '';
+            $s_memberjoin_year_options .= "<option value=\"$i\"$selected>$i</option>";
+        }
+        // build presets for outdate pulldowns
+        $s_memberout_day_options = '<option value="0"' . ($editmember->member_id > 0 ? (($editmember->member_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
+        for ($i = 1; $i < 32; $i++)
+        {
+            if ($editmember->member_id > 0 && $editmember->member_outdate != 0)
+            {
+                $day      = $editmember->member_outdate_d;
+                $selected = ($i == $day) ? ' selected="selected"' : '';
+            } else
+            {
+                $selected = '';
+            }
+            $s_memberout_day_options .= "<option value=\"$i\"$selected>$i</option>";
+        }
+        $s_memberout_month_options = '<option value="0"' . ($editmember->member_id > 0 ? (($editmember->member_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
+        for ($i = 1; $i < 13; $i++)
+        {
+            if ($editmember->member_id > 0 && $editmember->member_outdate != 0)
+            {
+                $month    = $editmember->member_outdate_mo;
+                $selected = ($i == $month) ? ' selected="selected"' : '';
+            } else
+            {
+                $selected = '';
+            }
+            $s_memberout_month_options .= "<option value=\"$i\"$selected>$i</option>";
+        }
+        $s_memberout_year_options = '<option value="0"' . ($editmember->member_id > 0 ? (($editmember->member_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
+        for ($i = $now['year'] - 10; $i <= $now['year'] + 10; $i++)
+        {
+            if ($editmember->member_id > 0 && $editmember->member_outdate != 0)
+            {
+                $yr       = $editmember->member_outdate_y;
+                $selected = ($i == $yr) ? ' selected="selected"' : '';
+            } else
+            {
+                $selected = '';
+            }
+            $s_memberout_year_options .= "<option value=\"$i\"$selected>$i</option>";
+        }
+        // phpbb User dropdown
+        $phpbb_user_id = $editmember->member_id > 0 ? $editmember->phpbb_user_id : 0;
+        $sql_array     = array(
+            'SELECT'   => ' u.user_id, u.username ',
+            'FROM'     => array(
+                USERS_TABLE => 'u'),
+            // exclude bots and guests, order by name -- ticket  129
+            'WHERE'    => " u.group_id != 6 and u.group_id != 1 ",
+            'ORDER_BY' => " u.username ASC");
+        $sql           = $db->sql_build_query('SELECT', $sql_array);
+        $result        = $db->sql_query($sql);
+        $s_phpbb_user  = '<option value="0"' . (($phpbb_user_id == 0) ? ' selected="selected"' : '') . '>--</option>';
+        while ($row = $db->sql_fetchrow($result))
+        {
+            $selected = ($row['user_id'] == $phpbb_user_id) ? ' selected="selected"' : '';
+            $s_phpbb_user .= '<option value="' . $row['user_id'] . '"' . $selected . '>' . $row['username'] . '</option>';
+        }
+        unset($now);
+        $form_key = 'mm_addmember';
+        add_form_key($form_key);
+        $template->assign_vars(array(
+            'L_TITLE'                  => $user->lang['ACP_MM_ADDMEMBER'],
+            'L_EXPLAIN'                => $user->lang['ACP_MM_ADDMEMBER_EXPLAIN'],
+            'F_ADD_MEMBER'             => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;"),
+            'STATUS'                   => $editmember->member_status == 1 ? 'checked="checked"' : '',
+            'MEMBER_NAME'              => $editmember->member_name,
+            'MEMBER_ID'                => $editmember->member_id,
+            'MEMBER_LEVEL'             => $editmember->member_level,
+            'REALM'                    => $editmember->member_realm,
+            'DEACTIVATE_REASON'        => $editmember->deactivate_reason == '' ? '' : $user->lang[$editmember->deactivate_reason],
+            'STATUS_LOCK'              => $editmember->deactivate_reason == '' ? false : true,
+            'MEMBER_ACHIEV'            => $editmember->member_achiev,
+            'MEMBER_TITLE'             => $editmember->member_title,
+            'MALE_CHECKED'             => ($editmember->member_gender_id == '0') ? ' checked="checked"' : '',
+            'FEMALE_CHECKED'           => ($editmember->member_gender_id == '1') ? ' checked="checked"' : '',
+            'MEMBER_COMMENT'           => $editmember->member_comment,
+            'S_CAN_HAVE_ARMORY'        => $editmember->game_id == 'wow' || $editmember->game_id == 'aion' ? true : false,
+            'MEMBER_URL'               => $editmember->member_armory_url,
+            'MEMBER_PORTRAIT'          => $editmember->member_portrait_url,
+            'S_MEMBER_PORTRAIT_EXISTS' => (strlen($editmember->member_portrait_url) > 1) ? true : false,
+            'S_CAN_GENERATE_ARMORY'    => $editmember->game_id == 'wow' ? true : false,
+            'COLORCODE'                => ($editmember->colorcode == '') ? '#254689' : $editmember->colorcode,
+            'CLASS_IMAGE'              => $editmember->class_image,
+            'S_CLASS_IMAGE_EXISTS'     => (strlen($editmember->class_image) > 1) ? true : false,
+            'RACE_IMAGE'               => $editmember->race_image,
+            'S_RACE_IMAGE_EXISTS'      => (strlen($editmember->race_image) > 1) ? true : false,
+            'S_JOINDATE_DAY_OPTIONS'   => $s_memberjoin_day_options,
+            'S_JOINDATE_MONTH_OPTIONS' => $s_memberjoin_month_options,
+            'S_JOINDATE_YEAR_OPTIONS'  => $s_memberjoin_year_options,
+            'S_OUTDATE_DAY_OPTIONS'    => $s_memberout_day_options,
+            'S_OUTDATE_MONTH_OPTIONS'  => $s_memberout_month_options,
+            'S_OUTDATE_YEAR_OPTIONS'   => $s_memberout_year_options,
+            'S_PHPBBUSER_OPTIONS'      => $s_phpbb_user,
+            'TITLE_NAME'               => ($editmember->game_id == 'wow') ? sprintf($editmember->member_title, $editmember->member_name) : '',
+            // javascript
+            'LA_ALERT_AJAX'            => $user->lang['ALERT_AJAX'],
+            'LA_ALERT_OLDBROWSER'      => $user->lang['ALERT_OLDBROWSER'],
+            'LA_MSG_NAME_EMPTY'        => $user->lang['FV_REQUIRED_NAME'],
+            'UA_FINDRANK'              => append_sid($phpbb_admin_path . "style/dkp/findrank.$phpEx"),
+            'UA_FINDCLASSRACE'         => append_sid($phpbb_admin_path . "style/dkp/findclassrace.$phpEx"),
+            'S_ADD'                    => $S_ADD));
+        $this->page_title = 'ACP_MM_ADDMEMBER';
+        $this->tpl_name   = 'dkp/acp_' . $mode;
     }
 }

@@ -1,8 +1,8 @@
 <?php
 /**
 * ACP info class acp_dkp_game_info 
-*   @package bbdkp
-* @version 1.3.0
+* @package bbdkp
+* @version 1.4.0
 * @copyright (c) 2009 bbdkp https://github.com/bbDKP
 * @license http://opensource.org/licenses/gpl-license.php GNU Public License
 
@@ -37,6 +37,7 @@ class acp_dkp_game_info
 				'addfaction'	=> array('title' => 'ACP_DKP_FACTION_ADD',   'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_GAME') , 'display' => false),
 				'addrace'		=> array('title' => 'ACP_DKP_RACE_ADD',   'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_GAME') , 'display' => false),
 				'addclass'		=> array('title' => 'ACP_DKP_CLASS_ADD',  'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_GAME') , 'display' => false),
+                'addrole'		=> array('title' => 'ACP_DKP_ROLE_ADD',  'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_GAME') , 'display' => false),
 				),
 		);
 	}

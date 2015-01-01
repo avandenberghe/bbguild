@@ -6,7 +6,7 @@
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author sajaki <sajaki@gmail.com>
  * @link http://www.bbdkp.com
- * @version 1.3.0
+ * @version 1.4.0
  *
  */
 

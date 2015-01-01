@@ -1,6 +1,30 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.3.1-dev
+
+#1.4.0-dev
+
+change log 1.4 
+
+- #253 missing language entries in german/french/italian
+- #252 Implement new WOW API
+- #249 allow two users from different realms in the same guild
+- #248 update SWTOR races 
+- #247 moved all js to subfolder /template/dkp/js
+- #246 Add Sliders to statistics page
+- #242 enable icon uploads in acp
+- #241 roster acp should use outer joins
+- #240 update Aion game parameters
+- #239 added correct classpath to rpblocks class in class_exists checker in block factory
+- #226 move role acp from raidplanner to bbdkp : new Roles & Recruitment class/table: The roles are now in a separate class and table. A new 'recruitment' class/table holds number of positions and applicants. the Apply plugin will update the recruitment table and so you have a live view of recruitments through the recruitment block. Also, Raidplanner will use the bbdkp roles table to fill in raidroles.
+- #223 update constants file:white_check_mark: deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
+- #212 Italian translation
+
+###reported to later version
+- #196 Implement Guildwars API 
+- #192 bbdkp user panel - kicking characters 
+- #189 Edit armor types 
+- #188 translate faction name  
+
 
 
 ## about
@@ -23,7 +47,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 
 ## Current
 
-1.3.1
+1.4.0
 
 ## Installation
 
@@ -35,34 +59,34 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 3.	ftp and founder admin access on your phpbb installation.
 4.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### New installation 1.3.1
+#### New installation 1.4.0
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP-1309.zip file
+1. Unzip the bbDKP-140.zip file
 2. Upload bbDKP folder to your webserver, into /store/mods. note that the folder name must be "bbDKP", without version number.
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
-5. Click submit. This will install 1.3.1 and clear the caches (template, theme, imagesets)
+5. Click submit. This will install 1.4.0 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.x to 1.3.1
+#### Upgrading from 1.3.0.x to 1.4.0
 
-1. Unzip the bbDKP-1309.zip file
+1. Unzip the bbDKP-140.zip file
 2. Upload bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there. note that the folder name must be "bbDKP", without version number.
-3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1308_to_1309/update.xml)
- ![Automod update](http://i.imgur.com/eZww133.png)
+3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1308_to_140/update.xml)
+ ![Automod update]()
 4. Apply the update from Automod "Available Changes" 
-  ![Imgur](http://i.imgur.com/1mKPLq5.png)
+  ![Imgur]()
 6. Click on the database upgrade link
-  ![database upgrade](http://i.imgur.com/9c0lNad.png)
+  ![database upgrade]()
 
-#### Upgrading from 1.2.8-pl2 to 1.3.1
+#### Upgrading from 1.2.8-pl2 to 1.4.0
 
 * make a secure backup of all files
 * backup your database
-* Uninstall 1.2.8-pl2 and re-install 1.3.1 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.4.0 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first.
 		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
 		*	make sure the module was uninstalled by checking the ACP modules.
@@ -72,9 +96,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     4. delete /store/mods/bbdkp  
 	5. upload the unzipped bbDKP-1308/bbDKP folder to /store/mods
 	6. from Automod, run file installer
-	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.3.1   
-		![database upgrade](http://i.imgur.com/8gvmkwQ.png)
-		![after upgrade](http://i.imgur.com/qywrgj1.png)
+	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.4.0   
+		![database upgrade]()
+		![after upgrade]()
 		
 #### Upgrading from earlier version
 Please upgrade to v1.2.8-pl2 first
@@ -92,17 +116,20 @@ Find support and more on
 
 ## Changelog 
 
-1.3.1 04-08-2014
+1.4.0 08-2014
 
--	[CHG] Repackaging 
--	[FIX] missing language entries in german/french
--	[CHG] #223 GAMES_TABLE constant updated to BBGAMES_TABLE (old constant remains but is deprecated)
--	[CHG] #223 LOGS_TABLE constant updated to BBLOGS_TABLE (old constant remains but is deprecated)
--	[CHG] #223 EVENTS_TABLE constant updated to BBEVENTS_TABLE (old constant remains but is deprecated)
--	[CHG] #239 added correct classpath to rpblocks class in class_exists checker in block factory
--	[CHG] #246 Added Sliders to statistics page, for easier navigation
+-	[NEW] #248 2 new races were added in SWToR : Cyborg and Cathar. they should be included in the installer.
 -	[CHG] #247 moved all js to subfolder /template/dkp/js 
-	
+-	[NEW] #246 Added Sliders to statistics page, for easier navigation
+-	[FIX] missing language entries in german/french
+-	[NEW] #240 update Aion game parameters game 
+-	[CHG] #239 added correct classpath to rpblocks class in class_exists checker in block factory
+-	[NEW] #226 new Roles & Recruitment class/table 
+-	[CHG] #223 deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
+-	[NEW] #212 added Italian translation
+-	[NEW] #196 Implemented Guildwars Guild API
+-	[NEW] #192 Can now unlink a character from UCP
+
 1.3.0.8 01-07-2014
 
 -	[FIX] #239 fix raidplanner block file path reference in blockFactory class

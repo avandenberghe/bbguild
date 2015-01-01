@@ -6,7 +6,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  */
 namespace bbdkp\admin;
 /**
@@ -248,6 +248,23 @@ class log
      * battle.NET is down
      */
     const ARMORY_DOWN = 51;
+    /**
+     * a faction was updated
+     */
+    const FACTION_UPDATED = 52;
+    /**
+     * A role was added
+     */
+    const ROLE_ADDED = 53;
+    /**
+     * a role was updated
+     */
+    const ROLE_UPDATED = 54;
+    /**
+     * a role was updated
+     */
+    const ROLE_DELETED = 55;
+
 
 	/**
 	 * A key-value list of built-in log types that cannot be overridden
@@ -304,7 +321,12 @@ class log
         self::CLASS_UPDATED => 'CLASS_UPDATED',
         self::MEMBER_DEACTIVATED => 'MEMBER_DEACTIVATED',
         self::GUILD_UPDATED => 'GUILD_UPDATED',
-        self::ARMORY_DOWN => 'ARMORY_DOWN'
+        self::ARMORY_DOWN => 'ARMORY_DOWN',
+        self::FACTION_UPDATED => 'FACTION_UPDATED',
+        self::ROLE_ADDED => 'ROLE_ADDED',
+        self::ROLE_UPDATED => 'ROLE_UPDATED',
+        self::ROLE_DELETED => 'ROLE_DELETED',
+
     );
 
 	/**
@@ -373,6 +395,7 @@ class log
 				'L_RAID_ID',
 				'L_VALUE',
 				'L_DAYSAGO',
+                'L_ROLE',
 
 	);
 
@@ -936,6 +959,18 @@ class log
 					break;
                 case 'ARMORY_DOWN':
                     $logline = sprintf($this->getLogMessage('ARMORY_DOWN', $verbose), $userstring , ' ', ' ' ) ;
+                    break;
+                case 'FACTION_UPDATED':
+                    $logline = sprintf($this->getLogMessage('FACTION_UPDATED', $verbose), $userstring , $log['L_FACTION'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
+                    break;
+                case 'ROLE_ADDED':
+                    $logline = sprintf($this->getLogMessage('ROLE_ADDED', $verbose), $userstring , $log['L_ROLE'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
+                    break;
+                case 'ROLE_UPDATED':
+                    $logline = sprintf($this->getLogMessage('ROLE_UPDATED', $verbose), $userstring , $log['L_ROLE'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
+                    break;
+                case 'ROLE_DELETED':
+                    $logline = sprintf($this->getLogMessage('ROLE_DELETED', $verbose), $userstring , $log['L_ROLE'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
                     break;
 			}
 

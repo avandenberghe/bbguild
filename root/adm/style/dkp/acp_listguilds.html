@@ -2,9 +2,19 @@
 <a name="maincontent"></a>
 <h1>{L_TITLE}</h1>
 <p>{L_EXPLAIN}</p>
+<style>
+  fieldset dt
+  {
+    width: 25%;
+  }
 
+  fieldset dd
+  {
+    margin-left: 25%;
+  }
+</style>
 <!-- IF .guild_row -->
-<form method="post" action="{F_GUILDLIST}" id="listguilddefault">
+<form method="post" action="{U_GUILDLIST}" id="listguilddefault">
 
 <fieldset style="background-color: #EEEEEE">
 <legend>{L_DEFAULT_GUILD}</legend>
@@ -24,7 +34,7 @@
 </fieldset>
 
 </form>
-<form method="post" action="{F_GUILD}" id="listguilds">
+<form method="post" action="{U_GUILD}" id="listguilds">
 
 <fieldset class="tabulated">
 <table width="100%" border="0" cellspacing="1" cellpadding="2">
@@ -78,7 +88,7 @@
 <!-- ENDIF -->
 
 
-<form method="post" action="{F_ADDGUILD}" id="addguildform">
+<form method="post" action="{U_ADDGUILD}" id="addguildform">
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_BEGIN};">
 	<input class="button2" name="addguild" type="submit" value="{L_ADD}" />
 </fieldset>

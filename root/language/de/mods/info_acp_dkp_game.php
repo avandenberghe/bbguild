@@ -5,7 +5,7 @@
  * 
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  * @translation unknown author, killerpommes
  */
 
@@ -28,6 +28,7 @@ $lang = array_merge($lang, array(
     'ACP_DKP_GAME'			=> 'Spieleinstellungen',
 	'ACP_DKP_FACTION_ADD'		=> 'Faktion hinzufügen',
 	'ACP_DKP_RACE_ADD'		=> 'Rasse hinzufügen',
+    'ACP_DKP_ROLE_ADD'		=> 'Rolle hinzufügen',
 	'ACP_DKP_CLASS_ADD'		=> 'Klasse hinzufügen',  
 	'ACP_DKP_GAME_LIST'		=> 'Spielliste',
 	'ACP_DKP_GAME_EDIT'		=> 'Spiel bearbeiten',

@@ -6,7 +6,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  */
 namespace bbdkp\controller\games;
 use bbdkp\controller\games;
@@ -17,6 +17,7 @@ if (! defined('IN_PHPBB'))
 {
 	exit();
 }
+include($phpbb_root_path . 'umil/umil.' . $phpEx);
 /**
  * Game interface
  * this abstract class is the framework for all game installers
@@ -25,10 +26,11 @@ if (! defined('IN_PHPBB'))
 abstract class GameInstall
 {
 
-	private $game_id;
-	private $gamename;
+    protected $game_id;
     protected $bossbaseurl;
     protected $zonebaseurl;
+
+    private $gamename;
 
     /**
      * @return string
@@ -63,6 +65,7 @@ abstract class GameInstall
 		$this->InstallClasses();
 		$this->InstallRaces();
 		$this->InstallEventGroup();
+        $this->InstallRoles();
 
 		//insert a new entry in the game table
 		$data = array (
@@ -86,6 +89,7 @@ abstract class GameInstall
         $cache->destroy( 'sql', DKPSYS_TABLE );
         $cache->destroy( 'sql', EVENTS_TABLE );
         $cache->destroy( 'sql', MEMBER_LIST_TABLE );
+        $cache->destroy( 'sql', BB_GAMEROLE_TABLE );
 
 	}
 
@@ -114,6 +118,10 @@ abstract class GameInstall
         $classes = new \bbdkp\controller\games\Classes();
         $classes->game_id = $this->game_id;
         $classes->Delete_all_classes();
+
+        $roles = new \bbdkp\controller\games\Roles();
+        $roles->game_id = $this->game_id;
+        $roles->Delete_all_roles();
 
         $sql = 'DELETE FROM ' . BBGAMES_TABLE . " WHERE game_id = '" .   $this->game_id . "'";
         $db->sql_query ($sql);
@@ -156,7 +164,11 @@ abstract class GameInstall
 	 */
     abstract protected function InstallEventGroup();
 
-
+    /**
+     * Install sample roles
+     * must be implemented
+     */
+    abstract protected function InstallRoles();
 }
 
 ?>

@@ -14,7 +14,12 @@ function check_form()
 //]]>
 </script>
 
+<!-- IF ! IS_ADD -->
+<h1>{L_EDIT_FACTION}</h1>
+<!-- ELSE -->
 <h1>{L_ACP_ADDFACTION}</h1>
+<!-- ENDIF -->
+
 <p>{L_ACP_ADDFACTIONS_EXPLAIN}</p>
 <form id="acp_addfaction" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
 <div>
@@ -34,7 +39,12 @@ function check_form()
  <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
    {S_FORM_TOKEN}
     <input type="hidden" name="hidden_game_id" value="{GAME_ID}" />
+    <input type="hidden" name="hidden_faction_id" value="{FACTION_ID}" />
+     <!-- IF ! IS_ADD -->
+    <input type="submit" name="factionedit" value="{L_EDIT_FACTION}" class="button1" />
+     <!-- ELSE -->
     <input type="submit" name="factionadd" value="{L_ACP_DKP_FACTION_ADD}" class="button1" />
+     <!-- ENDIF -->
     <input type="reset" name="reset" value="{L_RESET}" class="button1" />
 	</fieldset>
 

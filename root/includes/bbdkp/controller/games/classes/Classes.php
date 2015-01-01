@@ -6,7 +6,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.3.0
+ * @version 1.4.0
  * @since 1.3.0
  */
 namespace bbdkp\controller\games;
@@ -36,84 +36,78 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  class Classes extends \bbdkp\controller\games\Game
  {
 
- 	/**
- 	 * game identifier
- 	 * @var string
- 	 */
-	public $game_id;
+     /**
+      * Class id
+      * @var INT
+      */
+     public $class_id;
 
-	/**
-	 * Class id
-	 * @var INT
-	 */
-	public $class_id;
+     /**
+      * Primary key
+      * @var int
+      */
+     public $c_index;
+     /**
+      * game faction ID
+      * @var int
+      */
+     public $faction_id;
+     /**
+      * minimum level
+      * @var number
+      */
+     public $min_level;
+     /**
+      * maximum level
+      * @var int
+      */
+     public $max_level;
+     /**
+      * name of class
+      * @var String
+      */
+     public $classname;
+     /**
+      * class is hidden or not?
+      * @var bool
+      */
+     public $hide;
+     /**
+      * how many needed of this class in the Dps role ?
+      * @var number
+      */
+     public $dps;
+     /**
+      * how many needed of this class in the tank role ?
+      * @var int
+      */
+     public $tank;
+     /**
+      * how many needed of this class in the heal role ?
+      * @var int
+      */
+     public $heal;
+     /**
+      * name of image file
+      * @var unknown
+      */
+     public $imagename;
+     /**
+      * class color hex
+      * @var string
+      */
+     public $colorcode;
+     /**
+      * armor type
+      * @var String
+      */
+     public $armor_type;
 
-	/**
-	 * Primary key
-	 * @var int
-	 */
-	public $c_index;
-	/**
-	 * game faction ID
-	 * @var int
-	 */
-	public $faction_id;
-	/**
-	 * minimum level
-	 * @var number
-	 */
-	public $min_level;
-	/**
-	 * maximum level
-	 * @var int
-	 */
-	public $max_level;
-	/**
-	 * name of class
-	 * @var String
-	 */
-	public $classname;
-	/**
-	 * class is hidden or not?
-	 * @var bool
-	 */
-	public $hide;
-	/**
-	 * how many needed of this class in the Dps role ?
-	 * @var number
-	 */
-	public $dps;
-	/**
-	 * how many needed of this class in the tank role ?
-	 * @var int
-	 */
-	public $tank;
-	/**
-	 * how many needed of this class in the heal role ?
-	 * @var int
-	 */
-	public $heal;
-	/**
-	 * name of image file
-	 * @var unknown
-	 */
-	public $imagename;
-	/**
-	 * class color hex
-	 * @var string
-	 */
-	public $colorcode;
-	/**
-	 * armor type
-	 * @var String
-	 */
-	public $armor_type;
-
-	/**
-	 * array of all armor types
-	 * @var array
-	 */
-	public $armortypes;
+     /**
+      * array of all armor types
+      * @var array
+      */
+     public $armortypes;
 
 	/**
 	 * Classes Class constructor
