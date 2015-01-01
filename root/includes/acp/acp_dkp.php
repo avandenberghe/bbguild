@@ -145,8 +145,7 @@ class acp_dkp extends \bbdkp\admin\Admin
 				}
 				else
 				{
-					$latest_version_info = explode("\n", $latest_version_info);
-					if(phpbb_version_compare(trim($latest_version_info[0]), $config['bbdkp_version'], '<='))
+					if(phpbb_version_compare($latest_version_info, $config['bbdkp_version'], '<='))
 					{
 						$template->assign_vars(array(
 								'S_VERSION_UP_TO_DATE'	=> true,

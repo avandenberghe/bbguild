@@ -181,11 +181,11 @@ class Admin
 
 			$response = curl_exec($curl);
 			$headers = curl_getinfo($curl);
-			$data = array(
-					'response'		    => $json ? json_decode($response, true) : $response,
-					'response_headers'  => (array) $headers,
-					'error'				=> '',
-			);
+            $data = array(
+                'response'		    => $json ? json_decode($response, true) : $response,
+                'response_headers'  => (array) $headers,
+                'error'				=> '',
+            );
 			curl_close ($curl);
 			return $data;
 
@@ -270,16 +270,16 @@ class Admin
 	{
 		global $cache;
 		//get latest productversion from cache
-		$info = $cache->get('version_' . $product);
+        $latest = $cache->get('version_' . $product);
 
 		//if update is forced or cache expired then make the call to refresh latest productversion
-		if ($info === false || $force_update)
+		if ($latest === false || $force_update)
 		{
 			$errstr = '';
 
-			$info = $this->curl(BBDKP_VERSIONURL . 'version_' . $product .'.txt' , false, false, false);
+			$data = $this->curl(BBDKP_VERSIONURL . 'version_' . $product .'.txt' , false, false, false);
 
-			if (empty($info))
+			if (empty($data))
 			{
 				$cache->destroy($product. '_version');
 				if ($warn_fail)
@@ -288,10 +288,11 @@ class Admin
 				}
 				return false;
 			}
+            $latest = $data['response'];
 			//put this info in the cache
-			$cache->put('version_' . $product , $info, $ttl);
+			$cache->put('version_' . $product , $latest, $ttl);
 		}
-		return $info;
+		return $latest;
 	}
 
     /**
@@ -314,14 +315,14 @@ class Admin
 			$result = $db->sql_query ($sql);
 			while($row = $db->sql_fetchrow($result))
 			{
-				$info = $this->curl(BBDKP_VERSIONURL . 'version_' . $row['name'] .'.txt' , false, false, false);
+				$data = $this->curl(BBDKP_VERSIONURL . 'version_' . $row['name'] .'.txt' , false, false, false);
 
 				//get latest
 				$plugins[$row['name']] = array(
 					'name' => $row['name'],
 					'value' => $row['value'],
 					'version' => $row['version'],
-					'latest' =>  empty($info) ? '?' : $info,
+					'latest' =>  empty($info) ? '?' : $data['response'],
 					'installdate' => $row['installdate']
 				);
 			}
