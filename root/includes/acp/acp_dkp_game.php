@@ -445,6 +445,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
         $editgame->setName(utf8_normalize_nfc (request_var ( 'game_name', ' ', true )));
         $editgame->setApikey(request_var('apikey','' ));
 		$editgame->setApilocale(request_var('apilocale','' ));
+        $editgame->setPrivkey(request_var('privkey','' ));
         $editgame->update();
 
         return $editgame;
@@ -1358,7 +1359,9 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->getName()  ) ,
                 'BOSSBASEURL' => $editgame->getBossbaseurl(),
                 'ZONEBASEURL' => $editgame->getZonebaseurl(),
+                'ISWOW'     => $editgame->game_id == 'wow' ? 1: 0,
                 'APIKEY'    => $editgame->getApikey(),
+                'PRIVKEY'    => $editgame->getPrivkey(),
 				'LOCALE'  => $editgame->getApilocale(),
 				'GAME_ID'   => $editgame->game_id,
 				'URI_GAME' => URI_GAME,

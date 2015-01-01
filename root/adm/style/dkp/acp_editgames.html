@@ -48,7 +48,7 @@
             </dd>
         </dl>
 
-
+        <!-- IF ISWOW -->
         <dl>
             <dt><label for="enable_armory">{L_ARMORY_ENABLED}:</label>{L_ARMORY_ENABLED_EXPLAIN}</dt>
             <dd>
@@ -63,10 +63,16 @@
         </dl>
 
         <dl>
+            <dt><label for="privkey">{L_WOWPRIVKEY}:</label><br /><span>{L_WOWPRIVKEY_EXPLAIN} </span></dt>
+            <dd><input name="privkey" type="text" id="privkey" size="60" maxlength="100" value="{PRIVKEY}"/></dd>
+        </dl>
+
+        <dl>
             <dt><label for="apilocale">{L_WOWAPILOCALE}:</label><br /><span>{L_WOWAPILOCALE_EXPLAIN} </span></dt>
             <dd><input name="apilocale" type="text" id="apilocale" size="60" maxlength="100" value="{LOCALE}"/></dd>
         </dl>
-
+        <!-- ENDIF -->
+        
         <dl>
             <dt><label for="bossbaseurl">{L_BOSSBASEURL}:</label><br /><span>{L_BOSSBASEURL_EXPLAIN} <a href="{BOSSBASEURL}">{BOSSBASEURL}</a></span></dt>
             <dd><input name="bossbaseurl" type="text" id="bossbaseurl" size="60" maxlength="100" value="{BOSSBASEURL}"/></dd>
