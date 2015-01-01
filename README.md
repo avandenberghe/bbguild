@@ -2,7 +2,7 @@
 
 
 #1.4.0-dev
-duedate nov 02 2014
+
 change log 1.4 
 
 - #253 missing language entries in german/french/italian
