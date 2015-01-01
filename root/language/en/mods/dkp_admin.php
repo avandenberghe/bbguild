@@ -642,7 +642,9 @@ $lang = array_merge($lang, array(
 'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
 'WARNING_NORECRUITMENTS'   =>  'No Recruitments found.',
 'WOWAPIKEY' => 'API key',
-'WOWAPIKEY_EXPLAIN' => 'register on dev.battle.net to obtain key',
+'WOWAPIKEY_EXPLAIN' => 'register on dev.battle.net to obtain key (https://dev.battle.net/apps/mykeys)',
+'WOWPRIVKEY' => 'Secret key',
+'WOWPRIVKEY_EXPLAIN' => 'your Secret Mashery key',
 'WOWAPILOCALE' => 'Locale',
 'WOWAPILOCALE_EXPLAIN' => 'choose : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
 

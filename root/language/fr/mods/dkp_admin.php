@@ -262,6 +262,11 @@ $lang = array_merge($lang, array(
 'POINT_SETTINGS' => 'Système de Points.',
 'ACP_NEWGAME' => 'Liste de Jeux',
 'ACP_EDITGAME' => 'Editer Jeux: %s',
+'ACP_ADDROLE' => 'Ajout Rôle',
+'ACP_EDITROLE' => 'Edition Rôle %s',
+'ACP_LISTRECRUITS' => 'Liste Recruitements',
+'ACP_ADDRECRUITS' => 'Ajouter Recruitement',
+'RETURN_RECLIST'  => 'Retour page recruitement.',
 
 // Explains
 'ACP_DKP_MAINPAGE_EXPLAIN' => 'Panneau de réglage',
@@ -349,6 +354,7 @@ $lang = array_merge($lang, array(
 'LIST_EDIT_DEL_MEMBER' => 'Lister, Editer ou supprimer des Membres',
 'EDIT_RANKS' => 'Editer les Grades',
 'EDIT_ROLES' => 'Editer les Rôles',
+'EDIT_ROLE' => 'Edition Rôle',
 'ADD_RANKS' => 'Ajouter les Grades',
 'ADD_RANK' => 'Nouveau grade',
 'ADD_ROLES' => 'Ajouter les Rôles',
@@ -380,6 +386,7 @@ $lang = array_merge($lang, array(
 'CONFIRM_RESET_GAME' => 'Veuillez confirmer la réinitialisation (factions, classes et races du jeu "%s" à défaut. (pools et évènements restent intouchés )',
 'CONFIRM_INSTALL_GAME' => 'Veuillez confirmer l’installation du jeu "%s". ',
 'CONFIRM_DELETE_GAME' => 'Veuillez confirmer la suppression du jeu "%s".',
+'CONFIRM_DELETE_ROLE' => 'Veuillez confirmer la suppression du rôle "%s".',
 
 // Log Actions
 'ACTION_DEFAULT_DKP_CHANGED' => 'le groupe DKP par défaut est changé',
@@ -417,6 +424,7 @@ $lang = array_merge($lang, array(
 'ACTION_DECAYSYNC' => 'Amortissement recalculé',
 'ACTION_ZSYNC' => 'Sommezero recalculé',
 'ACTION_DKPSYNC' => 'DKP recalculé',
+'ACTION_DEFAULT_DKP_CHANGED' => 'DKP par defaut changé',
 'ACTION_GUILD_ADDED' => 'Une guilde a été ajoutée',
 'ACTION_GUILD_UPDATED' => 'une Guilde a été mise à jour',
 'ACTION_GUILD_DELETED' => 'une Guilde a été supprimée',
@@ -490,6 +498,10 @@ $lang = array_merge($lang, array(
 'VLOG_RACE_ADDED' => '%s a ajouté race %s to %s',
 'VLOG_RACE_UPDATED' => '%s a mis à jour race %s in %s',
 'VLOG_ARMORY_DOWN' => 'Armurerie ne peut être appellée',
+'VLOG_FACTION_UPDATED' => '%s a mis à jour Faction %s to %s',
+'VLOG_ROLE_ADDED' => '%s a ajouté rôle %s to %s',
+'VLOG_ROLE_UPDATED' => '%s a mis à jour rôle %s in %s',
+'VLOG_ROLE_DELETED' => '%s a supprimé rôle %s',
 
 // Before/After
 'ADJUSTMENT_BEFORE' => 'Ajustment avant',
@@ -619,8 +631,11 @@ $lang = array_merge($lang, array(
 'IERROTH' => 'Autre erreur',
 'WOWAPI_NO_CHARACTER' => 'Character name not specified.',
 'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
+'WARNING_NORECRUITMENTS'   =>  'pas de recrutements trouvés.',
 'WOWAPIKEY' => 'clef API',
-'WOWAPIKEY_EXPLAIN' => 'registrez sur dev.battle.net pour obtenir la clef',
+'WOWAPIKEY_EXPLAIN' => 'registrez sur dev.battle.net pour obtenir la clef (https://dev.battle.net/apps/mykeys)',
+'WOWPRIVKEY' => 'Clef secrète',
+'WOWPRIVKEY_EXPLAIN' => 'Clef secrète Mashery',
 'WOWAPILOCALE' => 'Locale',
 'WOWAPILOCALE_EXPLAIN' => 'choose : en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
 
@@ -693,6 +708,14 @@ $lang = array_merge($lang, array(
 'ADMIN_INSTALLED_GAME_SUCCESS' => 'Jeu "%s" est installé.',
 'ADMIN_DELETE_GAME_SUCCESS' => 'Jeu "%s" est supprimé.',
 'ADMIN_INSTALL_GAME_FAILED'  => 'Nom de jeu manquant. Jeu ne peut être installé.',
+'ADMIN_ADD_ROLE_FAILED'  => 'Rôle %s n’a pas pu être ajouté',
+'ADMIN_ADD_ROLE_SUCCESS'  => 'Rôle %s a été ajouté.',
+'ADMIN_UPDATE_FACTION_SUCCESS' => 'Faction %s est mise à jour',
+'ADMIN_UPDATE_ROLE_SUCCESS' => 'Rôle %s est mis à jour',
+'ADMIN_DELETE_ROLE_SUCCESS' => 'Role %s est supprimé deleted',
+'ADMIN_ADD_RECRUITMENT_SUCCESS' => 'Recruitement %s was ajouté',
+'ADMIN_UPDATE_RECRUITMENT_SUCCESS' => 'Recruitement %s est mis à jour',
+'ADMIN_DELETE_RECRUITMENT_SUCCESS' => 'Recruitement %s est supprimé',
 
  // Configuration
 'ACTIVE_POINT_ADJ' => 'Ajustement pour réactivation',
@@ -811,6 +834,7 @@ $lang = array_merge($lang, array(
 'EDIT_RAIDER_TITLE' => 'Editer un Raider',
 'ADD_RACE_TITLE' => 'Paramètres de la Race',
 'ADD_CLASS_TITLE' => 'Paramètres de la classe',
+'EDIT_FACTION' => 'Edition Faction',
 
 // Page Foot Counts
 'LISTMEMBERS_FOOTCOUNT' => '... trouvé %d membres',
@@ -828,6 +852,8 @@ $lang = array_merge($lang, array(
 'LISTCLASS_FOOTCOUNT' => '... trouvé %d classes',
 'LISTFACTION_FOOTCOUNT' => '... trouvé%d Factions',
 'RAIDITEMS_FOOTCOUNT' => '... trouvé %d butins gagnés',
+'LISTROLES_FOOTCOUNT' => '... trouvé %d rôles',
+'RECRUIT_FOOTCOUNT' => '... trouvé %d recruitements',
 
 // Submit Buttons
 'ADD_ADJUSTMENT' => 'Ajouter un Ajustement',
@@ -957,6 +983,11 @@ $lang = array_merge($lang, array(
 'OVERRIDE' => 'Outrepasser',
 'RACE_IMAGE' => 'Nom d‘image petit Race',
 'RACE_IMAGE_EXPLAIN' => 'Nom de fichier couleur png sans extension, fichier doit exister en /images/race_images',
+'ROLE_COLOR' => 'Coleur rôle',
+'ROLE_ICON' => 'Icône rôle',
+'ROLE_NAME' => 'Nom du röle',
+'ROLE_ID' => 'id du rôle',
+'ROLE_CAT_ICON' => 'Icône de categorie Rôle',
 'RESULTS' => '%d Résultats (%s)',
 'SEARCH' => 'Rachercher',
 'SEARCH_MEMBERS' => 'Recherchez les membres',

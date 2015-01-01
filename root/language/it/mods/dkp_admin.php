@@ -302,6 +302,8 @@ $lang = array_merge($lang, array(
 'ACP_ADDFACTIONS_EXPLAIN' => 'Qui puoi aggiungere/modificare le Fazioni.',
 'ACP_ADDRACE_EXPLAIN' => 'Qui puoi aggiungere/modificare le Razze.',
 'ACP_ADDRANK_EXPLAIN' => 'Qui puoi aggiungere/modificare i gradi di Gilda. Per wow li puoi scaricare dall’armory.',
+'ACP_ROLES_EXPLAIN' => 'Here you can edit the roles for this game.',
+'ACP_LISTRECRUITS_EXPLAIN' => 'Here you can add or edit Recruitments',
 
 'RACEID_EXPLAIN' =>'Nota. L’ID è unico. Per Wow, dovrebbe combaciare con il raceId XML dell’armory tag.',
 'RACE_EXPLAIN' =>'Nome Razza',
@@ -324,6 +326,7 @@ $lang = array_merge($lang, array(
 'ACP_GAME_EXPLAIN' => 'Qui puoi resettare i dati di gioco alle impostazioni di default oppure cancellarlo.',
 'ACP_GAME_RESET' => 'Resetta le impostazioni di gioco. ',
 'ACP_GAME_DELETE' => 'Cancella questo gioco.',
+'GAME_NAME_EXPLAIN' => 'Name of the Game',
 
 // Permission Messages
 'NOAUTH_A_EVENT_ADD' => 'Non hai i permessi per aggiungere l’evento.',
@@ -349,6 +352,7 @@ $lang = array_merge($lang, array(
 'LIST_EDIT_DEL_MEMBER' => 'Elenca, Modifica or Cancella Giocatori',
 'EDIT_RANKS' => 'Modifica Grado',
 'EDIT_ROLES' => 'Modifica Ruolo',
+'EDIT_ROLE' => 'Modifica Ruolo',
 'ADD_RANKS' => 'Aggiungi Gradi',
 'ADD_RANK' => 'Aggiungi Grado',
 'ADD_ROLES' => 'Aggiungi Ruolo',
@@ -381,6 +385,7 @@ $lang = array_merge($lang, array(
 'CONFIRM_RESET_GAME' => 'Per piace conferma il reset delle Fazioni, classi e razze dal gioco "%s" alle impostazioni di default. (Gli eventi non vengono azzerati automaticamente)',
 'CONFIRM_INSTALL_GAME' => 'Per piace conferma l’installazione del gioco "%s". ',
 'CONFIRM_DELETE_GAME' => 'Per piace conferma la cancellazione del gioco "%s".',
+'CONFIRM_DELETE_ROLE' => 'Please confirm deletion of role "%s".',
 
 // Log Actions
 'ACTION_DKPSYS_ADDED' => 'dkpsys Aggiunto',
@@ -619,7 +624,9 @@ $lang = array_merge($lang, array(
 'WOWAPI_NO_CHARACTER' => 'Il nome del personaggio non è stato specificato.',
 'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
 'WOWAPIKEY' => 'chiave API',
-'WOWAPIKEY_EXPLAIN' => 'Si prega di registrarsi per dev.battle.net per ottenere la chiave',
+'WOWAPIKEY_EXPLAIN' => 'Si prega di registrarsi per dev.battle.net per ottenere la chiave (https://dev.battle.net/apps/mykeys)',
+'WOWPRIVKEY' => 'Secret key',
+'WOWPRIVKEY_EXPLAIN' => 'your Secret Mashery key',
 'WOWAPILOCALE' => 'Locale',
 'WOWAPILOCALE_EXPLAIN' => 'en_GB, en_US, de_DE, es_ES, fr_FR, it_IT, pt_PT, pt_BR, or ru_RU',
 
@@ -811,6 +818,7 @@ $lang = array_merge($lang, array(
 'EDIT_RAIDER_TITLE' => 'Cambia un giocatore',
 'ADD_RACE_TITLE' => 'Parametri Razza',
 'ADD_CLASS_TITLE' => 'Parametri Classe',
+'EDIT_FACTION' => 'Edit Faction',
 
 // Page Foot Counts
 'LISTMEMBERS_FOOTCOUNT' => '... trovati %d giocatori',
@@ -828,6 +836,8 @@ $lang = array_merge($lang, array(
 'LISTCLASS_FOOTCOUNT' => '... trovati %d classi',
 'LISTFACTION_FOOTCOUNT' => '... trovati %d Fazioni',
 'RAIDITEMS_FOOTCOUNT' => '... trovati %d Oggetti Acquistati',
+'LISTROLES_FOOTCOUNT' => '... found %d roles',
+'RECRUIT_FOOTCOUNT' => '... found %d recruitments',
 
 // Submit Buttons
 'ADD_ADJUSTMENT' => 'Aggiungi Modifica',
@@ -957,7 +967,11 @@ $lang = array_merge($lang, array(
 'OVERRIDE' => 'Sovrascrivi',
 'RACE_IMAGE' => 'Immagine razza small',
 'RACE_IMAGE_EXPLAIN' => 'Immagine razza, senza estensione. png il file deve esistere in /images/bbdkp/race_images',
-
+'ROLE_COLOR' => 'Role Color',
+'ROLE_ICON' => 'Role Icon',
+'ROLE_NAME' => 'Role Name',
+'ROLE_ID' => 'Role Id',
+'ROLE_CAT_ICON' => 'Role Category Icon',
 'RESULTS' => '%d Risultati (%s)',
 'SEARCH' => 'Cerca',
 'SEARCH_MEMBERS' => 'Cerca Membri',
