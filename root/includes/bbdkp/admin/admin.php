@@ -251,7 +251,9 @@ class Admin
 		$url .= '?' . $fields_string;
 
 		$data = $this->Curl($url, 'GET');
-		$regID = isset($data['registration']) ? $data['registration'] : '';
+
+
+		$regID = isset($data['response']) ? $data['response']['registration']: '';
 		set_config('bbdkp_regid', $regID, true);
 		$cache->destroy('config');
 		trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
