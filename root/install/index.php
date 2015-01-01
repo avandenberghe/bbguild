@@ -1025,6 +1025,7 @@ $versions = array(
             array($table_prefix . 'bbdkp_memberguild', 'armoryresult', array('VCHAR_UNI:255', '')),
             array($table_prefix . 'bbdkp_memberguild', 'recruitforum', array('UINT', 0)),            
             array($table_prefix . 'bbdkp_games', 'apikey', array('VCHAR:255', '')),
+            array($table_prefix . 'bbdkp_games', 'privkey', array('VCHAR:255', '')),
             array($table_prefix . 'bbdkp_games', 'apilocale', array('VCHAR:5', '')),
         ),
 
