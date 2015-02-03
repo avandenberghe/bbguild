@@ -937,7 +937,8 @@ class Members extends \bbdkp\admin\Admin
 		 * 'guild','stats','talents','items','reputation','titles','professions','appearance',
 		 * 'companions','mounts','pets','achievements','progression','pvp','quests'
 		 */
-		$api = new \bbdkp\controller\wowapi\BattleNet('character', $this->member_region);
+
+		$api = new \bbdkp\controller\wowapi\BattleNet('character', $this->member_region, $game->getApikey(),$game->getApilocale() , $game->getPrivkey() );
 		$params = array('guild', 'titles', 'talents' );
 
 		$data = $api->Character->getCharacter($this->member_name, $this->member_realm, $params);

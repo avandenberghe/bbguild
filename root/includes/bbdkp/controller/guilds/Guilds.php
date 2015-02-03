@@ -958,11 +958,11 @@ class Guilds extends \bbdkp\admin\Admin
 		{
 
 			//available extra fields : 'members', 'achievements','news'
-			$api = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region, $game->getApikey(),$game->getApilocale()  );
+			$api = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region, $game->getApikey(),$game->getApilocale() , $game->getPrivkey() );
 			$data = $api->Guild->getGuild($this->name, $this->realm, $params);
-
+            $data = $data['response'];
 			unset($api);
-			if (!isset ($data))
+			if (isset ($data))
 			{
 				$this->armoryresult = 'KO';
 				$log_action = array(

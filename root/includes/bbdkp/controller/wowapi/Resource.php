@@ -185,7 +185,7 @@ abstract class Resource extends \bbdkp\admin\Admin
 		$date = date('D, d M Y G:i:s T',time());
 		$string_to_sign = "GET\n".$date."\n".$url."\n";
 		$signature = base64_encode(hash_hmac('sha1', $string_to_sign, $this->privkey,true));
-		$header = array("Host: ".$this->region,"Date: ". $date,"\nAuthorization: BNET ". $this->apikey.":". $signature)."\n");
+		$header = array("Host: ".$this->region,"Date: ". $date,"Authorization: BNET ". $this->apikey.":". $signature);
 
 		$data = $this->Curl($url, $header, false, true);
 		return $data;
