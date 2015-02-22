@@ -156,6 +156,9 @@ abstract class Resource extends \bbdkp\admin\Admin
 
 		$url .= $classname . '/'. $method;
 
+        //append locale
+        $url .= '?locale=' . $this->locale;
+
 		//process parameters
 		if (isset($params['data']) && !empty($params['data']))
 		{
@@ -175,9 +178,6 @@ abstract class Resource extends \bbdkp\admin\Admin
 
 			$url .= '&' . $optfields;
 		}
-
-		//append locale
-		$url .= '&locale=' . $this->locale;
 
 		//append apikey
 		$url .= '&apikey=' . $this->apikey;

@@ -84,9 +84,6 @@ class Guild extends \bbdkp\controller\wowapi\Resource
 
     /**
      * fetch guild results
-     * example : http://eu.battle.net/api/wow/guild/Lightbringer/Godless
-     * example : http://eu.battle.net/api/wow/guild/Lightbringer/Bête Noire?fields=achievements,members
-     * becomes : http://eu.battle.net/api/wow/guild/Lightbringer/b%C3%AAte%20noire?fields=achievements,members
      *
      * @param string $name
      * @param string $realm
@@ -102,20 +99,15 @@ class Guild extends \bbdkp\controller\wowapi\Resource
 			trigger_error($user->lang['WOWAPI_NO_GUILD']);
 		}
 		
-		/* caution input has to be utf8 */
-		/* replace space with %20 as per RFC 3986 URI encoding http://us.battle.net/wow/en/forum/topic/3050125211 */
-		$name = rawurlencode($name);
-		if (empty($realm)) 
+		if (empty($realm))
 		{
 			trigger_error($user->lang['WOWAPI_NO_REALMS']);
 		}
-		
-		//$name = str_replace(' ', '_', $realm);
-		$realm = rawurlencode($realm);
-		
-		// URL = Host + "/api/wow/guild/" + Realm + "/" + GuildName
-		$field_str = '';
-		if (is_array($fields) && count($fields) > 0) 
+
+        $realm = str_replace(' ', '%20', $realm);
+        $name = str_replace(' ', '%20', $name);
+
+		if (is_array($fields) && count($fields) > 0)
 		{
 			$field_str = 'fields=' . implode(',', $fields);
 			//check if correct keys were requested
