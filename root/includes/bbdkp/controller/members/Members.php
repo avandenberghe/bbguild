@@ -654,8 +654,10 @@ class Members extends \bbdkp\admin\Admin
             'last_update'   => $this->time
 			));
 
-		$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
-			WHERE member_id= ' . $this->member_id);
+        $sql = 'UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
+			WHERE member_id= ' . $this->member_id;
+
+		$db->sql_query($sql);
 
 		// if status was 1 before then add a line in user comments and set an adjustment
 		if ($this->member_status == 0 && $old_member->member_status == 1)
@@ -945,133 +947,174 @@ class Members extends \bbdkp\admin\Admin
 		unset($api);
 
 		// if $data == false then there is no character data, so
-		if($data != false)
-		{
-			$this->member_level = isset($data['level']) ? $data['level'] : $this->member_level;
-			$this->member_race_id = isset($data['race']) ? $data['race'] : $this->member_race_id;
-			$this->member_class_id = isset($data['class']) ? $data['class'] : $this->member_class_id;
-
-			/*
-			 * select the build
-			*/
-			$buildid = 0;
-			if(isset($data['talents'][0]) && isset( $data['talents'][1]) )
-			{
-				if( isset($data['talents'][0]['selected']))
-				{
-					$buildid = 0;
-				}
-				elseif(isset($data['talents'][1]['selected']))
-				{
-					$buildid = 1;
-				}
-			}
-			elseif(isset( $data['talents'][0]))
-			{
-				$buildid = 0;
-			}
-			elseif(isset( $data['talents'][1]))
-			{
-				$buildid = 1;
-			}
-
-			$role = isset($data['talents'][$buildid]['spec']['role']) ? $data['talents'][$buildid]['spec']['role'] : 'NA';
-
-            $conversion_array = array(
-                'DPS' => 0,
-                'HEALING' => 1,
-                'TANK' => 2,
+        if (!isset ($data) || !isset($data['response']))
+        {
+            $this->armoryresult = 'KO';
+            $log_action = array(
+                'header'       => 'L_ERROR_ARMORY_DOWN',
+                'L_UPDATED_BY' => $user->data['username'],
+                'L_GUILD' => $this->name . '-' . $this->realm,
             );
 
-            if (isset($role) && in_array($role,$conversion_array))
+            $this->log_insert(array(
+                'log_type'   => $log_action['header'],
+                'log_action' => $log_action,
+                'log_result' => 'L_ERROR'
+            ));
+            return -1;
+        }
+
+        $data = $data['response'];
+
+        //if we get error code
+        if (isset($data['code']))
+        {
+            if($data['code'] == '403')
             {
-                $this->member_role = $conversion_array[$role];
+                // even if we have active API account, it may be that Blizzard account is inactive
+                $this->armoryresult = 'KO';
+                $log_action = array(
+                    'header'       => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
+                    'L_UPDATED_BY' => $user->data['username'],
+                    'L_GUILD' => $this->name . '-' . $this->realm,
+                );
+
+                $this->log_insert(array(
+                    'log_type'   => $log_action['header'],
+                    'log_action' => $log_action,
+                    'log_result' => 'L_ERROR'
+                ));
+                return -1;
+
             }
+        }
 
-			$this->member_gender_id = isset($data['gender']) ? $data['gender'] : $this->member_gender_id;
-			$this->member_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->member_achiev;
-
-			if(isset($data['name']))
-			{
-				$this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $data ['name'] . '/simple';
-			}
-
-			if(isset($data['thumbnail']))
-			{
-				$this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
-			}
-
-			if(isset($data['realm']))
-			{
-				$this->member_realm = $data['realm'];
-			}
-
-			if (isset($data['guild']))
-			{
-				$found=false;
-				foreach($this->guildlist as $guild)
-				{
-					if($guild['name'] == $data['guild']['name'])
-					{
-						$this->member_guild_id = $guild['id'];
-						$this->member_guild_name = $guild['name'];
-						$this->member_rank_id = $guild['joinrank'];
-						$found=true;
-						break;
-					}
-				}
-				if($found==false)
-				{
-					$this->member_guild_id = 0;
-					$this->member_rank_id = 99;
-				}
-			}
-			else
-			{
-				$this->member_guild_id = 0;
-				$this->member_rank_id = 99;
-			}
-
-			if (isset($data['titles']))
-			{
-				foreach($data['titles'] as $key => $title)
-				{
-					if (isset($title['selected']))
-					{
-						$this->member_title = $title['name'];
-						break;
-					}
-				}
-			}
-
-			//if the last logged-in date is > 3 months ago then disable the account
-			if( isset($data['lastModified']))
-			{
-				$latest = $data['lastModified'];
-				$diff = \round( \abs ( \time() - ($latest/1000)) / 60 / 60 / 24, 2) ;
-				if($diff > 90 && $this->member_status == 1)
-				{
-                    $this->member_status = 0;
-                    $this->deactivate_reason = 'DEACTIVATED_BY_API';
-
-				}
-                if($diff < 90 && $this->member_status == 0 && $this->deactivate_reason == 'DEACTIVATED_BY_API')
-                {
-                    $this->member_status = 1;
-                    $this->deactivate_reason = '';
-
-                }
-            }
-
-			return 1;
-
-		}
-		else
-		{
+        if (isset($data['reason']))
+        {
             //not found in armory
             $this->member_status = 0;
             $this->deactivate_reason = 'DEACTIVATED_BY_API';
-		}
+            return -1;
+
+        }
+
+        $this->member_level = isset($data['level']) ? $data['level'] : $this->member_level;
+        $this->member_race_id = isset($data['race']) ? $data['race'] : $this->member_race_id;
+        $this->member_class_id = isset($data['class']) ? $data['class'] : $this->member_class_id;
+
+        /*
+         * select the build
+        */
+        $buildid = 0;
+        if(isset($data['talents'][0]) && isset( $data['talents'][1]) )
+        {
+            if( isset($data['talents'][0]['selected']))
+            {
+                $buildid = 0;
+            }
+            elseif(isset($data['talents'][1]['selected']))
+            {
+                $buildid = 1;
+            }
+        }
+        elseif(isset( $data['talents'][0]))
+        {
+            $buildid = 0;
+        }
+        elseif(isset( $data['talents'][1]))
+        {
+            $buildid = 1;
+        }
+
+        $role = isset($data['talents'][$buildid]['spec']['role']) ? $data['talents'][$buildid]['spec']['role'] : 'NA';
+
+        $conversion_array = array(
+            'DPS' => 0,
+            'HEALING' => 1,
+            'TANK' => 2,
+        );
+
+        if (isset($role) && in_array($role,$conversion_array))
+        {
+            $this->member_role = $conversion_array[$role];
+        }
+
+        $this->member_gender_id = isset($data['gender']) ? $data['gender'] : $this->member_gender_id;
+        $this->member_achiev = isset($data['achievementPoints']) ? $data['achievementPoints'] : $this->member_achiev;
+
+        if(isset($data['name']))
+        {
+            $this->member_armory_url = sprintf('http://%s.battle.net/wow/en/', $this->member_region) . 'character/' . $this->member_realm . '/' . $data ['name'] . '/simple';
+        }
+
+        if(isset($data['thumbnail']))
+        {
+            $this->member_portrait_url = sprintf('http://%s.battle.net/static-render/%s/', $this->member_region, $this->member_region) . $data['thumbnail'];
+        }
+
+        if(isset($data['realm']))
+        {
+            $this->member_realm = $data['realm'];
+        }
+
+        if (isset($data['guild']))
+        {
+            $found=false;
+            foreach($this->guildlist as $guild)
+            {
+                if($guild['name'] == $data['guild']['name'])
+                {
+                    $this->member_guild_id = $guild['id'];
+                    $this->member_guild_name = $guild['name'];
+                    $this->member_rank_id = $guild['joinrank'];
+                    $found=true;
+                    break;
+                }
+            }
+            if($found==false)
+            {
+                $this->member_guild_id = 0;
+                $this->member_rank_id = 99;
+            }
+        }
+        else
+        {
+            $this->member_guild_id = 0;
+            $this->member_rank_id = 99;
+        }
+
+        if (isset($data['titles']))
+        {
+            foreach($data['titles'] as $key => $title)
+            {
+                if (isset($title['selected']))
+                {
+                    $this->member_title = $title['name'];
+                    break;
+                }
+            }
+        }
+
+        //if the last logged-in date is > 3 months ago then disable the account
+        if( isset($data['lastModified']))
+        {
+            $latest = $data['lastModified'];
+            $diff = \round( \abs ( \time() - ($latest/1000)) / 60 / 60 / 24, 2) ;
+            if($diff > 90 && $this->member_status == 1)
+            {
+                $this->member_status = 0;
+                $this->deactivate_reason = 'DEACTIVATED_BY_API';
+
+            }
+            if($diff < 90 && $this->member_status == 0 && $this->deactivate_reason == 'DEACTIVATED_BY_API')
+            {
+                $this->member_status = 1;
+                $this->deactivate_reason = '';
+
+            }
+        }
+
+        return 1;
 
 	}
 
