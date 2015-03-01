@@ -1032,6 +1032,7 @@ class Members extends \bbdkp\admin\Admin
             'DPS' => 0,
             'HEALING' => 1,
             'TANK' => 2,
+            'NA' => 3
         );
 
         if (isset($role) && in_array($role,$conversion_array))
