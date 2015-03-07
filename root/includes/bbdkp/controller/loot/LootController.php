@@ -894,7 +894,7 @@ class LootController  extends \bbdkp\admin\Admin
 		}
 
 		$startd = request_var ( 'startdkp', 0 );
-		$members_result = $db->sql_query_limit ( $sql, 50, $startd );
+		$members_result = $db->sql_query_limit ( $sql, 25, $startd );
 		$totalcount = $db->sql_affectedrows($members_result);
 
 
@@ -936,7 +936,7 @@ class LootController  extends \bbdkp\admin\Admin
 
 			$dkppagination = $this->generate_pagination2(
 					$url . '&amp;o1=' . $current_order ['uri'] ['current'] ,
-					$member_count, 50, $startd, true, 'startdkp'  );
+					$member_count, 25, $startd, true, 'startdkp'  );
 		}
 
 		else
@@ -945,7 +945,7 @@ class LootController  extends \bbdkp\admin\Admin
 					'<a href="' . $url . '&amp;o1='. $current_order['uri']['current'] . '" class="rowfoot">' );
 
 			$dkppagination = $this->generate_pagination2($url . '&amp;o1=' . $current_order ['uri'] ['current']. '&amp;show=all' ,
-					$member_count, 50, $startd, true, 'startdkp'  );
+					$member_count, 25, $startd, true, 'startdkp'  );
 		}
 
 		$db->sql_freeresult($members_result);
