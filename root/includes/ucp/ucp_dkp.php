@@ -21,11 +21,17 @@ if (!class_exists('\bbdkp\controller\guilds\Ranks'))
     // include ranks class
     require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
 }
-if (!class_exists('\bbdkp\controller\guilds\Roles'))
+//include the roles class
+if (!class_exists('\bbdkp\controller\games\Roles'))
 {
-    // include roles class
-    require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Roles.$phpEx");
+    require("{$phpbb_root_path}includes/bbdkp/controller/games/roles/Roles.$phpEx");
 }
+
+if (!class_exists('\bbdkp\controller\guilds\Recruitment'))
+{
+    require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Recruitment.$phpEx");
+}
+
 if (!class_exists('\bbdkp\controller\members\Members'))
 {
     // Include the member class
@@ -63,6 +69,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
         {
             trigger_error('ERROR_NOGUILD', E_USER_WARNING );
         }
+        $mode = ($mode == '' ? 'characters' :$mode);
 
         // GET processing logic
         add_form_key('cocoa');
@@ -133,7 +140,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
                     {
                         foreach ($member->guildmemberlist as $id => $m  )
                         {
-                            $s_guildmembers .= '<option value="' . $m['member_id'] .'">'. $m['rank_name']  . ' ' . $m['member_name'] . '-' . $m['member_realm'] '</option>';
+                            $s_guildmembers .= '<option value="' . $m['member_id'] .'">'. $m['rank_name']  . ' ' . $m['member_name'] . '-' . $m['member_realm'] . '</option>';
                         }
                     }
                     else
@@ -380,8 +387,6 @@ class ucp_dkp extends \bbdkp\admin\Admin
         }
 
 
-
-
         foreach ($guildlist as $g)
         {
             //assign guild_id property
@@ -528,15 +533,17 @@ class ucp_dkp extends \bbdkp\admin\Admin
         $db->sql_freeresult($result);
 
         //Role dropdown
-        $Roles = new \bbdkp\controller\guilds\Roles($members->member_guild_id);
-        foreach($Roles->roles as $roleid => $Role )
+        $Roles = new \bbdkp\controller\games\Roles();
+        $Roles->game_id = $guilds->game_id;
+        $Roles->guild_id = $members->member_guild_id;
+        $listroles = $Roles->listroles();
+        foreach($listroles as $roleid => $Role )
         {
             $template->assign_block_vars('role_row', array(
-                'VALUE' => $roleid ,
-                'SELECTED' => ($members->member_role == $roleid) ? ' selected="selected"' : '' ,
-                'OPTION' => $Role ));
+                'VALUE' => $Role['role_id'] ,
+                'SELECTED' => ($members->member_role == $Role['role_id']) ? ' selected="selected"' : '' ,
+                'OPTION' => $Role['rolename'] ));
         }
-
 
         // build presets for joindate pulldowns
         $now = getdate();
@@ -563,6 +570,48 @@ class ucp_dkp extends \bbdkp\admin\Admin
             $selected = ($i == $yr ) ? ' selected="selected"' : '';
             $s_memberjoin_year_options .= "<option value=\"$i\"$selected>$i</option>";
         }
+
+        // build presets for outdate pulldowns
+        $s_memberout_day_options = '<option value="0"' . ($members->member_id > 0 ? (($members->member_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
+        for ($i = 1; $i < 32; $i++)
+        {
+            if ($members->member_id > 0 && $members->member_outdate != 0)
+            {
+                $day      = $members->member_outdate_d;
+                $selected = ($i == $day) ? ' selected="selected"' : '';
+            } else
+            {
+                $selected = '';
+            }
+            $s_memberout_day_options .= "<option value=\"$i\"$selected>$i</option>";
+        }
+        $s_memberout_month_options = '<option value="0"' . ($members->member_id > 0 ? (($members->member_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
+        for ($i = 1; $i < 13; $i++)
+        {
+            if ($members->member_id > 0 && $members->member_outdate != 0)
+            {
+                $month    = $members->member_outdate_mo;
+                $selected = ($i == $month) ? ' selected="selected"' : '';
+            } else
+            {
+                $selected = '';
+            }
+            $s_memberout_month_options .= "<option value=\"$i\"$selected>$i</option>";
+        }
+        $s_memberout_year_options = '<option value="0"' . ($members->member_id > 0 ? (($members->member_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
+        for ($i = $now['year'] - 10; $i <= $now['year'] + 10; $i++)
+        {
+            if ($members->member_id > 0 && $members->member_outdate != 0)
+            {
+                $yr       = $members->member_outdate_y;
+                $selected = ($i == $yr) ? ' selected="selected"' : '';
+            } else
+            {
+                $selected = '';
+            }
+            $s_memberout_year_options .= "<option value=\"$i\"$selected>$i</option>";
+        }
+
 
         // check if user can add character
         $S_UPDATE = true;
@@ -619,6 +668,11 @@ class ucp_dkp extends \bbdkp\admin\Admin
             'S_JOINDATE_DAY_OPTIONS'	=> $s_memberjoin_day_options,
             'S_JOINDATE_MONTH_OPTIONS'	=> $s_memberjoin_month_options,
             'S_JOINDATE_YEAR_OPTIONS'	=> $s_memberjoin_year_options,
+
+            'S_OUTDATE_DAY_OPTIONS'    => $s_memberout_day_options,
+            'S_OUTDATE_MONTH_OPTIONS'  => $s_memberout_month_options,
+            'S_OUTDATE_YEAR_OPTIONS'   => $s_memberout_year_options,
+
             'S_SHOW' => $show,
             'S_ADD' => $S_ADD,
             'S_CANDELETE' => $S_DELETE,
