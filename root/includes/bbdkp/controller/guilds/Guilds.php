@@ -333,9 +333,6 @@ class Guilds extends \bbdkp\admin\Admin
 		$newrank->RankSuffix = '';
 		$newrank->Makerank();
 
-
-		$this->ApiUpdateBattleNet(array());
-
 		$log_action = array(
 				'header' => 'L_ACTION_GUILD_ADDED' ,
 				'id' =>  $this->guildid ,
@@ -348,6 +345,9 @@ class Guilds extends \bbdkp\admin\Admin
 		$this->log_insert(array(
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
+
+		$this->ApiUpdateBattleNet(array());
+
 		return true;
 
 	}
@@ -402,20 +402,6 @@ class Guilds extends \bbdkp\admin\Admin
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
 		$this->ApiUpdateBattleNet($params);
-
-		$log_action = array(
-				'header' => 'L_ACTION_GUILD_UPDATED' ,
-				'L_NAME_BEFORE' => $old_guild->name ,
-				'L_REALM_BEFORE' => $old_guild->realm ,
-				'L_NAME_AFTER' => $this->name,
-				'L_REALM_AFTER' => $this->realm,
-				'L_UPDATED_BY' => $user->data['username']);
-
-		$this->log_insert(array(
-				'log_type' => $log_action['header'] ,
-				'log_action' => $log_action,
-                'log_result' => 'L_SUCCESS'
-        ));
 
         return true;
     }
@@ -958,16 +944,19 @@ class Guilds extends \bbdkp\admin\Admin
 		{
 
 			//available extra fields : 'members', 'achievements','news'
-			$api = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region, $game->getApikey(),$game->getApilocale()  );
+			$api = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region, $game->getApikey(),$game->getApilocale() , $game->getPrivkey());
 			$data = $api->Guild->getGuild($this->name, $this->realm, $params);
-
+            $data = $data['response'];
 			unset($api);
+
 			if (!isset ($data))
 			{
 				$this->armoryresult = 'KO';
 				$log_action = array(
 					'header'       => 'L_ERROR_ARMORY_DOWN',
-					'L_UPDATED_BY' => $user->data['username']);
+					'L_UPDATED_BY' => $user->data['username'],
+                    'L_GUILD' => $this->name . '-' . $this->realm,
+                );
 
 				$this->log_insert(array(
 					'log_type'   => $log_action['header'],
@@ -976,6 +965,29 @@ class Guilds extends \bbdkp\admin\Admin
 				));
 				return false;
 			}
+
+            //if we get error code
+            if (isset($data['code']))
+            {
+                if($data['code'] == '403')
+                {
+                    // even if we have active API account, it may be that Blizzard account is inactive
+                    $this->armoryresult = 'KO';
+                    $log_action = array(
+                        'header'       => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
+                        'L_UPDATED_BY' => $user->data['username'],
+                        'L_GUILD' => $this->name . '-' . $this->realm,
+                    );
+
+                    $this->log_insert(array(
+                        'log_type'   => $log_action['header'],
+                        'log_action' => $log_action,
+                        'log_result' => 'L_ERROR'
+                    ));
+                    return false;
+
+                }
+            }
 
 			$this->armoryresult = 'OK';
 			$this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0;

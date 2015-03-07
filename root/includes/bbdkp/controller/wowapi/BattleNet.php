@@ -93,6 +93,7 @@ class BattleNet
 	 * @param string $region
 	 * @param string $apikey
 	 * @param string $locale
+     * @param string $privkey
 	 *
 	 */
 	public function __construct($API, $region, $apikey, $locale, $privkey)

@@ -181,8 +181,10 @@ class Admin
 
 			$response = curl_exec($curl);
 			$headers = curl_getinfo($curl);
+
+
             $data = array(
-                'response'		    => $json ? json_decode($response, true) : $response,
+                'response'		    => $json && $this->isJSON($response) ? json_decode($response, true) : $response,
                 'response_headers'  => (array) $headers,
                 'error'				=> '',
             );
@@ -200,7 +202,16 @@ class Admin
 
 	}
 
-	/**
+    /**
+     * @param $string
+     * @return boolcheck if is json
+     */
+    function isJSON($string){
+        return is_string($string) && is_object(json_decode($string)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
+    }
+
+
+    /**
 	 * sends POST request to bbdkp.com for registration
 	 * @param array $regdata
 	 */
