@@ -623,6 +623,7 @@ $lang = array_merge($lang, array(
 'IERROTH' => 'Other error',
 'WOWAPI_NO_CHARACTER' => 'Il nome del personaggio non è stato specificato.',
 'CURL_NOT_AVAILABLE' => 'Curl is not available on your server. :< ',
+'WARNING_NORECRUITMENTS'   =>  'Nessun Assunzioni trovato. ',
 'WOWAPIKEY' => 'chiave API',
 'WOWAPIKEY_EXPLAIN' => 'Si prega di registrarsi per dev.battle.net per ottenere la chiave (https://dev.battle.net/apps/mykeys)',
 'WOWPRIVKEY' => 'Secret key',
