@@ -417,6 +417,7 @@ class Recruitment extends Roles
             'WHERE'    => " 1=1
                 AND u.guild_id = g.id
                 AND u.role_id = r.role_id
+                AND r.game_id= g.game_id
                 AND r1.attribute = 'role'
                 AND r.game_id = r1.game_id AND r1.attribute_id = r.role_id  AND r1.language = '" . $config['bbdkp_lang'] . "' and r1.attribute='role'
                 AND c.class_id > 0 AND c.class_id = u.class_id AND c.game_id = g.game_id
