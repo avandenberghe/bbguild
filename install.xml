@@ -132,7 +132,7 @@ EQDkp (c) 2003 The EqDkp Project Team]]]></description>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
-			<target-version>3.0.12</target-version>
+			<target-version>3.0.13-PL1</target-version>
 		</installation>
 		<link-group>
 			<link type="language" href="contrib/fr.xml" lang="en">Français</link>

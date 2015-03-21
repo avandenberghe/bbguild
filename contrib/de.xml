@@ -25,7 +25,7 @@
 		<installation>
 			<level>easy</level>
 			<time>600</time>
-			<target-version>3.0.12</target-version>
+			<target-version>3.0.13-PL1</target-version>
 		</installation>
 		<link-group>
 			<link type="parent" href="../install.xml" lang="de">Installationshinweise</link>
