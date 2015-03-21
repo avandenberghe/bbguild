@@ -23,9 +23,7 @@ change log 1.4
 - #196 Implement Guildwars API 
 - #192 bbdkp user panel - kicking characters 
 - #189 Edit armor types 
-- #188 translate faction name  
-
-
+- #188 translate faction name
 
 ## about
 
