@@ -1062,11 +1062,10 @@ class Members extends \bbdkp\admin\Admin
             $found=false;
             foreach($this->guildlist as $guild)
             {
-                if($guild['name'] == $data['guild']['name'])
+                if(strtolower($guild['name']) == strtolower($data['guild']['name']))
                 {
                     $this->member_guild_id = $guild['id'];
                     $this->member_guild_name = $guild['name'];
-                    $this->member_rank_id = $guild['joinrank'];
                     $found=true;
                     break;
                 }

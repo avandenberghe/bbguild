@@ -380,14 +380,14 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
             $updatemember->member_region = '';
         }
 
-        $updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
         $updatemember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
+        $updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
         $updatemember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
         $updatemember->member_guild_id = request_var('member_guild_id', 0);
         $updatemember->member_rank_id = request_var('member_rank_id', 99);
         $updatemember->member_level = request_var('member_level', 0);
         $updatemember->member_joindate = mktime(0, 0, 0, request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
-        $updatemember->member_outdate = 0;
+        $updatemember->member_outdate = mktime ( 0, 0, 0, 12, 31, 2030 );
 
         if (request_var('member_outdate_mo', 0) + request_var('member_outdate_d', 0) != 0)
         {
@@ -695,6 +695,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
         }
         $Guild     = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
         $guildlist = $Guild->guildlist();
+
         if ($S_ADD)
         {
             $editmember->game_id          = $Guild->game_id;
@@ -710,6 +711,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                 'SELECTED' => ($g['id'] == $editmember->member_guild_id) ? ' selected="selected"' : '',
                 'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
         }
+
         // Game dropdown
         if (isset($this->games))
         {
@@ -720,10 +722,12 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                     'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '',
                     'OPTION'   => $gamename));
             }
-        } else
+        }
+        else
         {
             trigger_error('ERROR_NOGAMES', E_USER_WARNING);
         }
+
         foreach ($this->regions as $key => $regionname)
         {
             $template->assign_block_vars('region_row', array(
@@ -834,6 +838,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
                  'OPTION' => $Role['rolename'] ));
         }
 
+
         // build presets for joindate pulldowns
         $now                      = getdate();
         $s_memberjoin_day_options = '<option value="0"	>--</option>';
@@ -857,6 +862,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
             $selected = ($i == $yr) ? ' selected="selected"' : '';
             $s_memberjoin_year_options .= "<option value=\"$i\"$selected>$i</option>";
         }
+
         // build presets for outdate pulldowns
         $s_memberout_day_options = '<option value="0"' . ($editmember->member_id > 0 ? (($editmember->member_outdate != 0) ? '' : ' selected="selected"') : ' selected="selected"') . '>--</option>';
         for ($i = 1; $i < 32; $i++)
@@ -897,6 +903,7 @@ class acp_dkp_mm extends \bbdkp\admin\Admin
             }
             $s_memberout_year_options .= "<option value=\"$i\"$selected>$i</option>";
         }
+
         // phpbb User dropdown
         $phpbb_user_id = $editmember->member_id > 0 ? $editmember->phpbb_user_id : 0;
         $sql_array     = array(

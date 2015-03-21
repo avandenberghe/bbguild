@@ -234,17 +234,18 @@ class ucp_dkp extends \bbdkp\admin\Admin
 
                         $newmember->game_id = request_var('game_id', '');
                         // get member name
+                        $newmember->member_region = request_var('region_id', '');
                         $newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
+                        $newmember->member_class_id = request_var('member_class_id', 1);
+                        $newmember->member_race_id = request_var('member_race_id', 1);
+                        $newmember->member_role = request_var('member_role', '');
+                        $newmember->member_region = request_var('region_id', '');
+                        $newmember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
                         $newmember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
                         $newmember->member_realm = utf8_normalize_nfc(request_var('realm', '', true));
-                        $newmember->member_region = request_var('region_id', '');
                         $newmember->member_guild_id = request_var('member_guild_id', 0);
                         $newmember->member_rank_id = request_var('member_rank_id', 99);
                         $newmember->member_level = request_var('member_level', 1);
-                        $newmember->member_race_id = request_var('member_race_id', 1);
-                        $newmember->member_class_id = request_var('member_class_id', 1);
-                        $newmember->member_role = request_var('member_role', '');
-                        $newmember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
                         $newmember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
                         $newmember->member_joindate = mktime(0, 0, 0, request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
                         $newmember->member_outdate = mktime ( 0, 0, 0, 12, 31, 2030 );
@@ -252,7 +253,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
                         {
                             $newmember->member_outdate = mktime(0, 0, 0, request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0));
                         }
-                        $newmember->member_achiev = 0;
+                        $newmember->member_achiev = request_var('member_achiev', 0);
                         $newmember->member_armory_url = utf8_normalize_nfc(request_var('member_armorylink', '', true));
                         $newmember->phpbb_user_id = $user->data['user_id'];
                         $newmember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
@@ -289,31 +290,7 @@ class ucp_dkp extends \bbdkp\admin\Admin
                         {
                             trigger_error($user->lang['NOUCPUPDCHARS']);
                         }
-
-                        $updatemember = new \bbdkp\controller\members\Members();
-                        $updatemember->member_id = $member_id;
-                        $updatemember->Getmember();
-                        $oldmember = new \bbdkp\controller\members\Members();
-
-                        // get member name
-                        $updatemember->member_name = utf8_normalize_nfc(request_var('member_name', '',true));
-                        $updatemember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
-                        $updatemember->member_realm = utf8_normalize_nfc(request_var('realm', '', true));
-                        $updatemember->member_region = request_var('region_id', '');
-                        $updatemember->member_guild_id =request_var('member_guild_id', 0);
-                        $updatemember->member_rank_id = request_var('member_rank_id',99);
-                        $updatemember->member_level = request_var('member_level', 0);
-                        $updatemember->game_id = request_var('game_id', '');
-                        $updatemember->member_race_id = request_var('member_race_id', 0);
-                        $updatemember->member_class_id = request_var('member_class_id', 0);
-                        $updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
-                        $updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
-
-                        $updatemember->Armory_getmember();
-
-                        //override armory status
-                        $updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
-                        $updatemember->Updatemember($oldmember);
+                        $updatemember = $this->UpdateMyCharacter($member_id);
 
                         meta_refresh(1, $this->u_action . '&amp;member_id=' . $updatemember->member_id);
                         //$success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], ucwords($updatemember->member_name))  . '<br /><br />' . sprintf($user->lang['RETURN_UCP'], '<a href="' . $this->u_action . '">', '</a>');
@@ -336,6 +313,49 @@ class ucp_dkp extends \bbdkp\admin\Admin
                 $this->tpl_name 	= 'dkp/ucp_dkp_charadd';
                 break;
         }
+    }
+
+
+    /**
+     * @param $member_id
+     * @return \bbdkp\controller\members\Members
+     */
+    private function UpdateMyCharacter($member_id)
+    {
+        $updatemember = new \bbdkp\controller\members\Members();
+        $updatemember->member_id = $member_id;
+        $updatemember->Getmember();
+        // get member name
+        $updatemember->game_id          = request_var('game_id', '');
+        $updatemember->member_race_id   = request_var('member_race_id', 0);
+        $updatemember->member_class_id  = request_var('member_class_id', 0);
+        $updatemember->member_role      = request_var('member_role', '');
+        $updatemember->member_realm     = utf8_normalize_nfc(request_var('realm', '', true));
+        $updatemember->member_region    = request_var('region_id', '');
+
+        $updatemember->member_name      = utf8_normalize_nfc(request_var('member_name', '', true));
+        $updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
+        $updatemember->member_title     = utf8_normalize_nfc(request_var('member_title', '', true));
+        $updatemember->member_guild_id  = request_var('member_guild_id', 0);
+        $updatemember->member_rank_id   = request_var('member_rank_id', 99);
+        $updatemember->member_level     = request_var('member_level', 0);
+
+        $updatemember->member_achiev    = request_var('member_achiev', 0);
+        $updatemember->member_comment   = utf8_normalize_nfc(request_var('member_comment', '', true));
+
+        if ($updatemember->member_rank_id < 90)
+        {
+            $updatemember->Armory_getmember();
+        }
+        //override armory status
+        $updatemember->member_status = request_var('activated', 0) > 0 ? 1 : 0;
+
+        $oldmember = new \bbdkp\controller\members\Members();
+        $oldmember->member_id = $updatemember->member_id;
+        $oldmember->Getmember();
+        $updatemember->Updatemember($oldmember);
+
+        return $updatemember;
     }
 
 
