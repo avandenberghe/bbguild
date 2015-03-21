@@ -428,7 +428,7 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	public function Guildelete()
 	{
-		global $user, $cache, $db;
+		global $user, $cache, $phpbb_root_path, $db;
 
 		if($this->guildid == 0)
 		{
@@ -450,7 +450,21 @@ class Guilds extends \bbdkp\admin\Admin
 		$sql = 'DELETE FROM ' . GUILD_TABLE . ' WHERE id = ' .  $this->guildid;
 		$db->sql_query($sql);
 
-		$log_action = array(
+        $imgfile = $phpbb_root_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
+        if (file_exists($imgfile))
+        {
+            $fp = fopen($imgfile, "r+");
+            // try to  acquire an exclusive lock
+            if (flock($fp, LOCK_EX))
+            {
+                unlink($imgfile);
+                flock($fp, LOCK_UN);
+                // release the lock
+            }
+            unset($fp);
+        }
+
+        $log_action = array(
 				'header' => sprintf($user->lang['ACTION_GUILD_DELETED'], $this->name) ,
 				'L_NAME' => $this->name ,
 				'L_UPDATED_BY' => $user->data['username'],
@@ -475,6 +489,8 @@ class Guilds extends \bbdkp\admin\Admin
 	private function createEmblem($showlevel=TRUE, $width=115)
 	{
 		global $phpbb_root_path;
+
+
 
 		//location to create the file
 		$imgfile = $phpbb_root_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
@@ -574,7 +590,9 @@ class Guilds extends \bbdkp\admin\Admin
 			$size = getimagesize($hooksURL);
 			imagecopy($imgOut,$hooks,$x-2,$y,0,0, $size[0],$size[1]);
 
-			if ($showlevel)
+            //Blizzard disabled guild levels
+            /*
+            if ($showlevel)
 			{
 				$level = $this->level;
 				if ($level < 10)
@@ -606,6 +624,8 @@ class Guilds extends \bbdkp\admin\Admin
 				imagecopy($levelemblem,$levelIMG,(215/2)-($size[0]/2),(215/2)-($size[1]/2),0,0,$size[0],$size[1]);
 				imagecopyresampled($imgOut, $levelemblem, 143, 150,0,0, 215/3, 215/3, 215, 215);
 			}
+            */
+            //endregion
 
 			if ($width > 1 AND $width < 215)
 			{
@@ -1005,7 +1025,7 @@ class Guilds extends \bbdkp\admin\Admin
 			}
 
 			$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
-			$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(true)  : '';
+			$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(false)  : '';
 			$this->memberdata = isset($data['members']) ? $data['members']: '';
 
 			$query = $db->sql_build_array('UPDATE', array(
