@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**  
  * bbdkp admin language file [Italian]
  * @author lucasari

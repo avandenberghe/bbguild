@@ -1026,14 +1026,13 @@ class Members extends \bbdkp\admin\Admin
             $buildid = 1;
         }
 
-        $role = isset($data['talents'][$buildid]['spec']['role']) ? $data['talents'][$buildid]['spec']['role'] : 'NA';
-
         $conversion_array = array(
             'DPS' => 0,
             'HEALING' => 1,
             'TANK' => 2,
-            'NA' => 3
         );
+
+        $role = isset($data['talents'][$buildid]['spec']['role']) ? $data['talents'][$buildid]['spec']['role'] : 'DPS';
 
         if (isset($role) && in_array($role,$conversion_array))
         {

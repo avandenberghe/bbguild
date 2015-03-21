@@ -264,7 +264,10 @@ class log
      * a role was updated
      */
     const ROLE_DELETED = 55;
-
+    /**
+     * inactive account
+     */
+    const  BATTLENET_ACCOUNT_INACTIVE = 56;
 
 	/**
 	 * A key-value list of built-in log types that cannot be overridden
@@ -326,7 +329,7 @@ class log
         self::ROLE_ADDED => 'ROLE_ADDED',
         self::ROLE_UPDATED => 'ROLE_UPDATED',
         self::ROLE_DELETED => 'ROLE_DELETED',
-
+        self::BATTLENET_ACCOUNT_INACTIVE => 'BATTLENET_ACCOUNT_INACTIVE',
     );
 
 	/**
@@ -396,6 +399,8 @@ class log
 				'L_VALUE',
 				'L_DAYSAGO',
                 'L_ROLE',
+                'L_GUILD',
+                'L_ACTION_BATTLENET_ACCOUNT_INACTIVE'
 
 	);
 
@@ -952,13 +957,16 @@ class log
 					$logline = sprintf($this->getLogMessage('CLASS_DELETED', $verbose), $userstring , $log['L_CLASS'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;
 					break;
 				case 'CLASS_UPDATED':
-					$logline = sprintf($this->getLogMessage('CLASS_UPDATED', $verbose), $userstring , $log['L_CLASS'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME']) ;
+					$logline = sprintf($this->getLogMessage('CLASS_UPDATED', $verbose), $userstring , $log['L_CLASS'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME']  ) ;
 					break;
 				case 'MEMBER_DEACTIVATED':
 					$logline = sprintf($this->getLogMessage('MEMBER_DEACTIVATED', $verbose), $userstring , $log['L_NAME'], '' ) ;
 					break;
                 case 'ARMORY_DOWN':
                     $logline = sprintf($this->getLogMessage('ARMORY_DOWN', $verbose), $userstring , ' ', ' ' ) ;
+                    break;
+                case 'BATTLENET_ACCOUNT_INACTIVE':
+                    $logline = sprintf($this->getLogMessage('BATTLENET_ACCOUNT_INACTIVE', $verbose), $userstring , isset($user->lang[strtoupper($log['L_GUILD'])]) ? $user->lang[strtoupper($log['L_GUILD'])] : $log['L_GUILD'], ' ' ) ;
                     break;
                 case 'FACTION_UPDATED':
                     $logline = sprintf($this->getLogMessage('FACTION_UPDATED', $verbose), $userstring , $log['L_FACTION'], isset($user->lang[strtoupper($log['L_GAME'])]) ? $user->lang[strtoupper($log['L_GAME'])] : $log['L_GAME'] ) ;

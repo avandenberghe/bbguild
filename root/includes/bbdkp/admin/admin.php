@@ -158,6 +158,12 @@ class Admin
 
 		global $user;
 
+        $data = array(
+            'response'		    => '',
+            'response_headers'  => '',
+            'error'				=> '',
+        );
+
 		if ( function_exists ( 'curl_init' ))
 		{
 			 /* Create a CURL handle. */
@@ -177,17 +183,25 @@ class Admin
 				CURLOPT_TIMEOUT => 60,
 				CURLOPT_VERBOSE => true,
 				CURLOPT_HEADER => $return_Server_Response_Header,
+                CURLOPT_HEADER => false
 			));
 
 			$response = curl_exec($curl);
 			$headers = curl_getinfo($curl);
 
+            if($response === FALSE || $response === "" )
+            {
+                trigger_error(curl_error($curl), E_USER_WARNING);
+            }
+            else
+            {
+                $data = array(
+                    'response'		    => $json && $this->isJSON($response) ? json_decode($response, true) : $response,
+                    'response_headers'  => (array) $headers,
+                    'error'				=> '',
+                );
+            }
 
-            $data = array(
-                'response'		    => $json && $this->isJSON($response) ? json_decode($response, true) : $response,
-                'response_headers'  => (array) $headers,
-                'error'				=> '',
-            );
 			curl_close ($curl);
 			return $data;
 

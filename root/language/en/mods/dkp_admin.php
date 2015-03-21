@@ -450,7 +450,7 @@ $lang = array_merge($lang, array(
 'ACTION_ROLE_ADDED' => 'Role Added',
 'ACTION_ROLE_UPDATED' => 'Role Updated',
 'ACTION_ROLE_DELETED' => 'Role deleted',
-
+'ACTION_BATTLENET_ACCOUNT_INACTIVE' => 'Battle.NET Account inactive',
 
 // Verbose log entry lines
 'NEW_ACTIONS' => 'Newest Admin Actions',
@@ -510,6 +510,7 @@ $lang = array_merge($lang, array(
 'VLOG_ROLE_ADDED' => '%s added role %s to %s',
 'VLOG_ROLE_UPDATED' => '%s updated role %s in %s',
 'VLOG_ROLE_DELETED' => '%s deleted role %s',
+'VLOG_BATTLENET_ACCOUNT_INACTIVE' => 'Battle.NET Account inactive',
 
 // Before/After
 'ADJUSTMENT_BEFORE' => 'Adjustment Before',
@@ -616,6 +617,7 @@ $lang = array_merge($lang, array(
 'GUILD_EMBLEM_NF' => 'Guild emblem not found',
 'IMAGESIZE_WARNING' => 'Warning, width/height sould be max 32/32px, you have %s/%s',
 'ERROR_ARMORY_NOTFOUND' => 'Guild not found on Battle.NET',
+'ERROR_BATTLENET_ACCOUNT_INACTIVE' => 'Error:  Battle.NET Account inactive',
 
 //Curl errors
 'ERR_UNKNOWN' => 'Unknown error occurred.',
