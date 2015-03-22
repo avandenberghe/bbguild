@@ -1,31 +1,31 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-
-#1.4.0-dev
+#1.4.0
 
 change log 1.4 
 
-- #253 missing language entries in german/french/italian
-- #252 Implement new WOW API
-- #249 allow two users from different realms in the same guild
-- #248 update SWTOR races 
-- #247 moved all js to subfolder /template/dkp/js
-- #246 Add Sliders to statistics page
-- #242 enable icon uploads in acp
-- #241 roster acp should use outer joins
-- #240 update Aion game parameters
-- #239 added correct classpath to rpblocks class in class_exists checker in block factory
-- #226 move role acp from raidplanner to bbdkp : new Roles & Recruitment class/table: The roles are now in a separate class and table. A new 'recruitment' class/table holds number of positions and applicants. the Apply plugin will update the recruitment table and so you have a live view of recruitments through the recruitment block. Also, Raidplanner will use the bbdkp roles table to fill in raidroles.
-- #223 update constants file:white_check_mark: deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
-- #212 Italian translation
+New and updated features 
+- #252 [NEW] Implement new WOW API
+- #212 [NEW] Italian translation
+- #246 [NEW] Add Sliders to statistics page
+- #242 [NEW] enable icon uploads in acp
+- #248 [UPD] update SWTOR races 
+- #240 [UPD] update Aion game parameters
 
-###reported to later version
-- #196 Implement Guildwars API 
-- #192 bbdkp user panel - kicking characters 
-- #189 Edit armor types 
-- #188 translate faction name
+Changes
+- #249 [CHG] allow two users from different realms in the same guild
+- #223 [CHG] update constants file:white_check_mark: deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
+- #258 [CHG] migrate versions url from Googlecode 
 
-## about
+bugfixes
+- #253 [FIX] missing language entries in german/french/italian
+- #247 [FIX] moved all js to subfolder /template/dkp/js
+- #241 [FIX] roster acp should use outer joins
+- #239 [FIX] added correct classpath to rpblocks class in class_exists checker in block factory
+- #226 [FIX] move role acp from raidplanner to bbdkp : new Roles & Recruitment class/table: The roles are now in a separate class and table. A new 'recruitment' class/table holds number of positions and applicants. the Apply plugin will update the recruitment table and so you have a live view of recruitments through the recruitment block. Also, Raidplanner will use the bbdkp roles table to fill in raidroles.
+
+
+## About
 
 bbDKP is a Dragon Kill Points Mod for your phpBB3 Bulletin board. It was originally forked from EQDKP in 2008. 
 
