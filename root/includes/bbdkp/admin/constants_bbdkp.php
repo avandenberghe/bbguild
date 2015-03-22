@@ -18,7 +18,7 @@ namespace bbdkp\admin
 		exit;
 	}
 
-	define('BBDKP_VERSIONURL', 'https://bbdkp.googlecode.com/svn/trunk/');
+	define('BBDKP_VERSIONURL', 'https://raw.githubusercontent.com/bbDKP/bbDKP/master/contrib/');
 	define('BBDKP_PLUGINURL' , 'https://www.bbdkp.com/downloads.php?cat=2" target="_blank');
 
 	//BBDKP
