@@ -13,6 +13,7 @@ New and updated features
 - #240 [UPD] update Aion game parameters
 
 Changes
+- #226 [FIX] move role acp from raidplanner to bbdkp : new Roles & Recruitment class/table: The roles are now in a separate class and table. A new 'recruitment' class/table holds number of positions and applicants. the Apply plugin will update the recruitment table and so you have a live view of recruitments through the recruitment block. Also, Raidplanner will use the bbdkp roles table to fill in raidroles.
 - #249 [CHG] allow two users from different realms in the same guild
 - #258 [CHG] migrate versions url from Googlecode 
 
@@ -21,7 +22,6 @@ Bugfixes
 - #247 [FIX] moved all js to subfolder /template/dkp/js
 - #241 [FIX] roster acp should use outer joins
 - #239 [FIX] added correct classpath to rpblocks class in class_exists checker in block factory
-- #226 [FIX] move role acp from raidplanner to bbdkp : new Roles & Recruitment class/table: The roles are now in a separate class and table. A new 'recruitment' class/table holds number of positions and applicants. the Apply plugin will update the recruitment table and so you have a live view of recruitments through the recruitment block. Also, Raidplanner will use the bbdkp roles table to fill in raidroles.
 - #223 [FIX] update constants file:white_check_mark: deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
 
 ## About
