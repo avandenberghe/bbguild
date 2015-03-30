@@ -243,6 +243,13 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
             trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
         }
 
+        $plugin_versioninfo = (array) parent::get_plugin_info(request_var('versioncheck_force', false));
+        if (isset($plugin_versioninfo['apply'] ))
+        {
+            // apply is installed
+            // insert an extra column in recruitment listing to indicate the template to be used for that arecruitment.
+        }
+
         $recruits = new \bbdkp\controller\guilds\Recruitment();
         $recruits->setGuildId($guild_id);
         $result   = $recruits->ListRecruitments();
