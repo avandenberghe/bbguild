@@ -244,11 +244,6 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
         }
 
         $plugin_versioninfo = (array) parent::get_plugin_info(request_var('versioncheck_force', false));
-        if (isset($plugin_versioninfo['apply'] ))
-        {
-            // apply is installed
-            // insert an extra column in recruitment listing to indicate the template to be used for that arecruitment.
-        }
 
         $recruits = new \bbdkp\controller\guilds\Recruitment();
         $recruits->setGuildId($guild_id);
@@ -273,14 +268,18 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
                     'NOTE'              => $row['note'],
                     'ROLE_COLOR'        => $row['role_color'],
                     'ROLE_NAME'         => $row['role_name'],
+                    'APPLYTEMPLATE_ID'  => $row['applytemplate_id'],
                     'U_DELETE_RECRUIT'  => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_recruit&amp;mode=addrecruit&amp;action=delete&amp;id=' . $row['id']),
                     'U_VIEW_RECRUIT'    => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_recruit&amp;mode=addrecruit&amp;action=edit&amp;id=' . $row['id']),
                 )
             );
         }
-
+        
+        // if apply is installed insert an extra column in recruitment listing to indicate the template to be used for that recruitment.
         $template->assign_vars(array(
-            'RECRUIT_FOOTCOUNT'     => sprintf($user->lang['RECRUIT_FOOTCOUNT'], $recruit_count)));
+            'RECRUIT_FOOTCOUNT'     => sprintf($user->lang['RECRUIT_FOOTCOUNT'], $recruit_count),
+            'APPLY_INSTALLED'       => isset($plugin_versioninfo['apply']) ? 1 : 0,
+        ));
         $this->page_title = 'ACP_LISTRECRUITS';
     }
 
