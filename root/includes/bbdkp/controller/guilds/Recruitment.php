@@ -394,7 +394,7 @@ class Recruitment extends Roles
         $sql_array = array(
 
             'SELECT'   => " u.id, u.guild_id, u.role_id,
-                u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note, u.level,
+                u.class_id, u.positions, u.applicants, u.status, u.last_update, u.note, u.level, u.applytemplate_id,
                 r.role_color, r.role_icon, r.role_cat_icon, r1.name as role_name,
                 c1.name as class_name, c.colorcode, c.imagename
                  ",
