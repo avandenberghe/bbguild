@@ -1025,7 +1025,6 @@ $versions = array(
             array($table_prefix . 'bbdkp_memberguild', 'armoryresult', array('VCHAR_UNI:255', '')),
             array($table_prefix . 'bbdkp_memberguild', 'recruitforum', array('UINT', 0)),            
             array($table_prefix . 'bbdkp_games', 'apikey', array('VCHAR:255', '')),
-            array($table_prefix . 'bbdkp_games', 'privkey', array('VCHAR:255', '')),
             array($table_prefix . 'bbdkp_games', 'apilocale', array('VCHAR:5', '')),
         ),
 
@@ -1048,6 +1047,22 @@ $versions = array(
             )),
 
             // guild recruitment table
+            /*
+             * CREATE TABLE `phpbb_bbdkp_recruit` (
+                  `id` int(8) NOT NULL AUTO_INCREMENT,
+                  `guild_id` smallint(4) unsigned NOT NULL DEFAULT '0',
+                  `role_id` int(8) NOT NULL DEFAULT '0',
+                  `class_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+                  `level` mediumint(8) unsigned NOT NULL DEFAULT '0',
+                  `positions` smallint(4) unsigned NOT NULL DEFAULT '0',
+                  `applicants` smallint(4) unsigned NOT NULL DEFAULT '0',
+                  `status` smallint(4) unsigned NOT NULL DEFAULT '0',
+                  `last_update` int(11) unsigned NOT NULL DEFAULT '0',
+                  `note` text COLLATE utf8_bin NOT NULL,
+                  `applytemplate_id` int(11) unsigned NOT NULL DEFAULT '0',
+                  PRIMARY KEY (`id`)
+                ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+             */
             array(
                 $table_prefix . 'bbdkp_recruit' , array(
                 'COLUMNS'        => array(
@@ -1059,6 +1074,7 @@ $versions = array(
                     'positions'        => array('USINT', 0),
                     'applicants'       => array('USINT', 0),
                     'status'           => array('USINT', 0),
+                    'applytemplate_id' => array('UINT',  0),
                     'last_update'      => array('TIMESTAMP', 0),
                     'note'             => array('TEXT_UNI', ''),
                 ),
