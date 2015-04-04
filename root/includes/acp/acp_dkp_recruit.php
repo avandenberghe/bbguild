@@ -78,6 +78,12 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
      */
     public  $url_id;
 
+
+    /**
+     *
+     */
+    private  $apply_installed;
+
     /**
      * main acp function
      * @param integer $id
@@ -88,6 +94,14 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
         global $user, $config, $template, $db, $phpbb_admin_path, $phpEx;
         $this->tpl_name = 'dkp/acp_' . $mode;
         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=listrecruit") . '"><h3>'.$user->lang['RETURN_RECLIST'].'</h3></a>';
+
+        $this->apply_installed = false;
+        $plugin_versioninfo = (array) parent::get_plugin_info(request_var('versioncheck_force', false));
+
+        if(isset($plugin_versioninfo['apply']))
+        {
+            $this->apply_installed = true;
+        }
 
         $guild_id = request_var(URI_GUILD, 1);
         $Guild = new \bbdkp\controller\guilds\Guilds();
@@ -103,6 +117,7 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
         $Guild->Getguild();
 
         $template->assign_vars(array(
+            'APPLY_INSTALLED'       => $this->apply_installed ? 1 : 0,
             'GUILD_EMBLEM'          => $Guild->emblempath,
             'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid),
             'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_recruit&amp;mode=addrecruit&amp;" . URI_GUILD . '=' . $Guild->guildid),
@@ -134,6 +149,19 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
                 $update = (isset($_POST['update'])) ? true : false;
 
                 $action = request_var('action', '');
+
+                if($this->apply_installed)
+                {
+                    //if apply is installed then fetch list of templates
+                    $result = $db->sql_query ( 'SELECT * FROM ' . APPTEMPLATELIST_TABLE );
+                    $templates = array();
+                    while ( $row = $db->sql_fetchrow ( $result ) )
+                    {
+                        $templates[$row ['template_id']] = $row ['template_name'];
+                    }
+                    $db->sql_freeresult ( $result );
+                }
+
 
                 if($action=='delete')
                 {
@@ -176,6 +204,19 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
 
                 }
 
+                if($this->apply_installed)
+                {
+                    foreach($templates as $template_id => $value)
+                    {
+                        $template->assign_block_vars('applytemplates_row', array(
+                            'VALUE'    => $template_id,
+                            'SELECTED' => ($template_id ==  $recruit->getApplytemplateid()) ? ' selected="selected"' : '',
+                            'OPTION'   => $value
+                        ));
+
+                    }
+                }
+
                 if ($add || $update)
                 {
 
@@ -192,6 +233,8 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
                     $recruit->setStatus(request_var('recruitstatus', '') == 'on' ? 1 : 0 );
                     $recruit->setLevel(request_var('recruit_level', 0));
                     $recruit->setNote(utf8_normalize_nfc(request_var('note', '', true)));
+                    $recruit->setApplytemplateid(request_var('applytemplateid', 1));
+
                 }
 
                 if ($add)
@@ -243,11 +286,9 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
             trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
         }
 
-        $plugin_versioninfo = (array) parent::get_plugin_info(request_var('versioncheck_force', false));
-
         $recruits = new \bbdkp\controller\guilds\Recruitment();
         $recruits->setGuildId($guild_id);
-        $result   = $recruits->ListRecruitments();
+        $result   = $recruits->ListRecruitments(1);
         $recruit_count= 0;
         while ($row = $db->sql_fetchrow($result))
         {
@@ -273,12 +314,12 @@ class acp_dkp_recruit extends \bbdkp\admin\Admin
                     'U_VIEW_RECRUIT'    => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_recruit&amp;mode=addrecruit&amp;action=edit&amp;id=' . $row['id']),
                 )
             );
+
         }
-        
+
         // if apply is installed insert an extra column in recruitment listing to indicate the template to be used for that recruitment.
         $template->assign_vars(array(
             'RECRUIT_FOOTCOUNT'     => sprintf($user->lang['RECRUIT_FOOTCOUNT'], $recruit_count),
-            'APPLY_INSTALLED'       => isset($plugin_versioninfo['apply']) ? 1 : 0,
         ));
         $this->page_title = 'ACP_LISTRECRUITS';
     }

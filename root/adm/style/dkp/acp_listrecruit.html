@@ -43,7 +43,6 @@
             <li class="permissions-preset-yes"><a href="{U_ADDRECRUIT}" onclick=""><span class="tabbg"><span class="colour"></span>{L_ACP_ADDRECRUITS}</span></a></li>
         </ul>
     </div>
-
     <div class="permissions-panel" id="options001">
         <span class="corners-top"><span></span></span>
         <form method="post" action="{U_RECRUITLIST}" id="listrecruit">
@@ -58,13 +57,16 @@
                         <th style="text-align: left; width:5%; white-space: nowrap">{L_POSITIONS}</th>
                         <th style="text-align: left; width:5%; white-space: nowrap">{L_APPLICANTS}</th>
                         <th style="text-align: left; width:60%; white-space: nowrap">{L_NOTE}</th>
+                        <!-- IF APPLY_INSTALLED == 1 -->
+                        <th style="text-align: middle; white-space: nowrap">{L_TEMPLATE}</th>
+                        <!-- ENDIF -->
                         <th style="text-align: left; width:5%; white-space: nowrap">{L_STATUS}</th>
                         <th style="text-align: center; width:5%;">{L_ACTION}</th>
                     </tr>
                     </thead>
                     <tfoot>
                     <tr>
-                        <th colspan="10" class="footer">{RECRUIT_FOOTCOUNT}</th>
+                        <th colspan=<!-- IF APPLY_INSTALLED == 1 -->"11"<!-- ELSE -->"10"<!-- ENDIF --> class="footer">{RECRUIT_FOOTCOUNT}</th>
                     </tr>
                     </tfoot>
                     <tbody>
@@ -81,6 +83,9 @@
                         <td>{recruit_row.POSITIONS}</td>
                         <td>{recruit_row.APPLICANTS}</td>
                         <td style="text-align: left;">{recruit_row.NOTE}</td>
+                        <!-- IF APPLY_INSTALLED == 1 -->
+                            <td>{recruit_row.APPLYTEMPLATE_ID}</td>
+                        <!-- ENDIF -->
                         <td>{recruit_row.STATUS}</td>
                         <td style="text-align: center;"><a href="{recruit_row.U_VIEW_RECRUIT}">{ICON_EDIT}</a>
                             <a href="{recruit_row.U_DELETE_RECRUIT}">{ICON_DELETE}</a>

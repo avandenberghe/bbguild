@@ -255,6 +255,29 @@ class Recruitment extends Roles
      */
     private $classreccolor = array();
 
+    /**
+     * Apply template ID
+     *
+     * @var int
+     */
+    protected $applytemplate_id;
+
+    /**
+     * @return int
+     */
+    public function getApplytemplateid()
+    {
+        return $this->applytemplate_id;
+    }
+
+    /**
+     * @param $applytemplate_id
+     */
+    public function setApplytemplateid($applytemplate_id)
+    {
+        $this->applytemplate_id = $applytemplate_id;
+    }
+
 
     /**
      * Recruitment class constructor
@@ -286,7 +309,7 @@ class Recruitment extends Roles
     {
         global $config, $db;
         $sql_array = array(
-            'SELECT'   => " u.id, g.game_id, u.guild_id, u.role_id, u.class_id, u.positions,
+            'SELECT'   => " u.id, g.game_id, u.guild_id, u.role_id, u.class_id, u.positions, u.applytemplate_id,
                 u.applicants, u.status, u.last_update, u.note, u.level,
                 r.role_color, r.role_icon, role_cat_icon, l.name as role_name ",
             'FROM'     => array(
@@ -310,7 +333,8 @@ class Recruitment extends Roles
         if (!$row)
         {
             return 0;
-        } else
+        }
+        else
         {
             $this->guild_id      = $row['guild_id'];
             $this->game_id       = $row['game_id'];
@@ -326,6 +350,7 @@ class Recruitment extends Roles
             $this->note          = $row['note'];
             $this->last_update   = $row['last_update'];
             $this->status        = $row['status'];
+            $this->applytemplate_id = $row['applytemplate_id'];
             return 1;
         }
     }
@@ -347,6 +372,7 @@ class Recruitment extends Roles
             'last_update' => $this->last_update,
             'level'      => $this->level,
             'status'     => $this->status,
+            'applytemplate_id' => $this->applytemplate_id,
         ));
         $db->sql_query('INSERT INTO ' . BBRECRUIT_TABLE . $query);
         return 1;
@@ -368,6 +394,7 @@ class Recruitment extends Roles
             'level'      => $this->level,
             'last_update' => $this->last_update,
             'status'      => $this->status,
+            'applytemplate_id' => $this->applytemplate_id,
         ));
         $db->sql_query('UPDATE ' . BBRECRUIT_TABLE . ' SET ' . $query . ' WHERE id = ' . $this->id);
     }
@@ -427,7 +454,7 @@ class Recruitment extends Roles
 
         if ($mode ==1)
         {
-            $sql_array['WHERE'] == ' AND u.status = 1 ';
+            $sql_array['WHERE'] .= ' AND u.status = 1 ';
         }
 
 

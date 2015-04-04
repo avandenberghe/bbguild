@@ -149,6 +149,23 @@
                 </dl>
                 <!-- ENDIF -->
 
+                <!-- IF APPLY_INSTALLED  == 1 -->
+                <dl>
+                    <dt>
+                        <label>{L_APPLY} {L_TEMPLATE}:</label>
+                    </dt>
+                    <dd>
+                    <dd>
+                        <select id="applytemplateid" name="applytemplateid" class="input">
+                            <!-- BEGIN applytemplates_row -->
+                            <option value="{applytemplates_row.VALUE}"{applytemplates_row.SELECTED}>{applytemplates_row.OPTION}</option>
+                            <!-- END applytemplates_row -->
+                        </select>
+                    </dd>
+                </dl>
+                <!-- ENDIF -->
+
+
                 <dl>
                     <dt>
                         <label>{L_STATUS}:</label>
@@ -165,6 +182,7 @@
                     <dd><textarea name="note" id="note" rows="5" cols="30" style="width: 100%" class="input">{NOTE}</textarea></dd>
                     </dd>
                 </dl>
+
 
 
                 <p class="quick">
