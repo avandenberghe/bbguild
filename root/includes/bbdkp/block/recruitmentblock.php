@@ -35,6 +35,14 @@ $recruit = new \bbdkp\controller\guilds\Recruitment;
 
 $guildrecruitingresult = $recruit->get_recruiting_guilds();
 
+$this->apply_installed = false;
+$plugin_versioninfo = (array) parent::get_plugin_info(request_var('versioncheck_force', false));
+
+if(isset($plugin_versioninfo['apply']))
+{
+    $this->apply_installed = true;
+}
+
 while ($row = $db->sql_fetchrow($guildrecruitingresult))
 {
 
@@ -55,7 +63,6 @@ while ($row = $db->sql_fetchrow($guildrecruitingresult))
 	$blockresult = $recruit->ListRecruitments(1);
 	while ($row = $db->sql_fetchrow($blockresult))
 	{
-
 		switch ($row['positions'])
 		{
 			case 0:
@@ -72,6 +79,13 @@ while ($row = $db->sql_fetchrow($guildrecruitingresult))
 				break;
 		}
 
+        $forumlink = append_sid ("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $Guild->recruitforum);
+
+        if($this->apply_installed)
+        {
+            $forumlink = append_sid ("{$phpbb_root_path}apply.$phpEx", 'template_id=' . $row['applytemplate_id']);
+        }
+
 		$template->assign_block_vars('guild.rec', array(
 				'CLASS_IMAGE' =>  (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '' ,
 				'CLASSID' => $row['class_id'] ,
@@ -81,7 +95,7 @@ while ($row = $db->sql_fetchrow($guildrecruitingresult))
                 'ROLENAME' => $row['role_name'] ,
                 'ROLEICON' => $phpbb_root_path . "images/bbdkp/role_icons/" .$row['role_icon'] . ".png",
                 'POSITIONS' => $row['positions'] ,
-				'FORUMLINK' => append_sid ("{$phpbb_root_path}viewforum.$phpEx", 'f=' . $Guild->recruitforum),
+				'FORUMLINK' => $forumlink,
 				'POSITIONSICON' => $phpbb_root_path . "images/bbdkp/recruitblock/" .$pos_icon,
                 'NOTE' => $row['note'] ,
 				'COLOR' => $color[$row['positions'] > 3 ? 3 : $row['positions']][2],
