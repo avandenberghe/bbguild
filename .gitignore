@@ -15,3 +15,5 @@ README.md
 .idea/bbDKP.iml
 
 *.iml
+
+.idea/workspace.xml

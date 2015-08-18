@@ -1,0 +1,78 @@
+<div class="forabg">
+    <div class="inner">
+        <span class="corners-top"><span></span></span>
+        <div class="bbdkpblock">
+            <ul class="topiclist" style="padding: 4px">
+                <li class="header">
+                    <dl>
+                        <dt style="padding: 0px 0px 2px; white-space: nowrap; margin-bottom: 0px; margin-top: 0px;">
+                            {L_RECRUITMENT_BLOCK}
+                        </dt>
+                    </dl>
+                </li>
+            </ul>
+
+            <ul class="topiclist forums" style="padding: 4px">
+                <li style="list-style:none" >
+
+                    <!-- BEGIN guild -->
+                    <div>
+                        <div>
+                            <div style="width: 50%; float: left;">
+                                <span><img style="width:60%; height:60%" src="{guild.EMBLEM}" alt="{guild.GUILD_NAME}" /></span>
+                            </div>
+                            <div style="width: 40%; float: left; text-align:left;">
+                                <h4>{guild.NAME}</h4>
+                            </div>
+                        </div>
+                        <div style="width: 90%; clear: both; moz-box-shadow: inset 0 0 30px #000f; -webkit-box-shadow: inset 0 0 30px #000f; box-shadow: inset 0 0 30px #000f; margin:auto;">
+
+                            <!-- IF guild.S_CLOSED -->
+                            <span style="text-align:center;">{L_RECRUIT_CLOSED}</span>
+                            <!-- ELSE -->
+                            <span style="text-align:center;">{L_RECRUIT_MESSAGE}</span><br/>
+
+                            <table width="100%" cellpadding="2" cellspacing="1" border="0" class="forumline">
+                                <tr>
+                                    <th style="text-align:center;"></th>
+                                    <th style="text-align:center;"></th>
+                                    <th style="text-align:left;"></th>
+                                    <th style="text-align:center;"></th>
+                                </tr>
+
+                                <!-- BEGIN rec -->
+                                <tr style="text-align:center;">
+                                    <td class="row1">
+                                        <span class="genmed">
+                                            <a class="tool{guild.rec.CLASSID}"  href="{guild.rec.FORUMLINK}">
+                                            <img src="{guild.rec.CLASS_IMAGE}" alt="" title="{L_NEEDED} {guild.rec.POSITIONS} {guild.rec.CLASS} {guild.rec.ROLENAME}: {guild.rec.NOTE}" />
+                                            </a>
+                                        </span>
+                                    </td>
+                                    <td class="row1" align="center">
+                                            <a class="tool{guild.rec.CLASSID}"  href="{guild.rec.FORUMLINK}">
+                                            <img src="{guild.rec.ROLEICON}" alt="{guild.rec.ROLENAME}" title="{guild.rec.ROLENAME}" />
+                                            </a>
+                                    </td>
+                                    <td class="row1" align="left">
+                                        <strong>
+                                            &nbsp;<a style="color: {guild.rec.CLASSCOLOR}" href="{guild.rec.FORUMLINK}">{guild.rec.CLASS}</a>
+                                        </strong>
+                                    </td>
+                                    <td>
+                                        <img src="{guild.rec.POSITIONSICON}" alt="{guild.rec.ROLENAME}" title="{L_NEEDED} {guild.rec.POSITIONS} " /></a>
+                                    </td>
+                                </tr>
+                                <!-- END rec -->
+                            </table>
+                            <!-- ENDIF -->
+                        </div>
+                    </div>
+                    <!-- END guild -->
+                </li>
+            </ul>
+
+        </div>
+        <span class="corners-bottom"><span></span></span>
+    </div>
+</div>
