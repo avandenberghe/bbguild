@@ -1026,6 +1026,7 @@ $versions = array(
             array($table_prefix . 'bbdkp_memberguild', 'recruitforum', array('UINT', 0)),            
             array($table_prefix . 'bbdkp_games', 'apikey', array('VCHAR:255', '')),
             array($table_prefix . 'bbdkp_games', 'apilocale', array('VCHAR:5', '')),
+            array($table_prefix . 'bbdkp_games', 'privkey', array('VCHAR:255', '')),
         ),
 
         //adding some tables
