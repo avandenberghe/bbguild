@@ -5,7 +5,7 @@
  *
  * @copyright 2014 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.0
+ * @version 1.4.1
  * @translation various unknown authors, killerpommes
  *
  */
@@ -173,7 +173,7 @@ $lang = array_merge($lang, array(
 // installer
 'IMPORT_EQDKP132' => 'Lese EQDKP 1.3.2 Daten in bbDKP 1.1.2 ein',
 'IMPORT_EQDKP132_CONFIRM' => 'Bist du bereit die Daten einzulesen? Die EQDKP Tabellennamen sollen mit ‘EQDKP‘ beginnen, nur variable Daten werden importiert, nicht die statischen Daten wie Klassen usw.',
-'IMPORT_EQDKP140' => 'Lese EQDKP 1.4.0 Daten in bbdkp 1.1.2 ein',
+'IMPORT_EQDKP140' => 'Lese EQDKP 1.4.1 Daten in bbdkp 1.1.2 ein',
 'IMPORT_EQDKP140_CONFIRM' => 'Bist du bereit die Daten einzulesen? die EQDKP Tabellennamen sollen mit ‘EQDKP‘ beginnen, nur variable Daten werden importiert, nicht die statischen Daten wie Klassen usw.',
 'IMPORT_EQDKPPLUS' => 'Lese EQDKP-PLUS Daten in bbDKP 1.1.2 ein',
 'IMPORT_EQDKPPLUS_CONFIRM' => 'Bist du bereit die Daten einzulesen? die EQDKP+ Tabellennamen sollen mit ‘EQDKP‘ beginnen, nur variable Daten werden importiert, nicht die statischen Daten wie Klassen usw.',

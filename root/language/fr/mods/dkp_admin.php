@@ -5,7 +5,7 @@
  *
  * @copyright 2009 bbdkp <http://code.google.com/p/bbdkp/>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.0
+ * @version 1.4.1
  *
  */
 
@@ -172,7 +172,7 @@ $lang = array_merge($lang, array(
 // installer
 'IMPORT_EQDKP132' => 'Importation de données EQDKP 1.3.2 en bbdkp 1.1.2',
 'IMPORT_EQDKP132_CONFIRM' => 'Êtes-vous prêt à importer ? Vos tables EQDKP doivent commencer avec ’EQDKP’, et nous importons seulement les données dynamiques, hormis les informations statiques comme des noms des classes. Il est conseillé de lancer une mise à jour avec le plugin bbDKP "Armurerie"',
-'IMPORT_EQDKP140' => 'Importation de données EQDKP 1.4.0 en bbdkp 1.1.2',
+'IMPORT_EQDKP140' => 'Importation de données EQDKP 1.4.1 en bbdkp 1.1.2',
 'IMPORT_EQDKP140_CONFIRM' => 'Êtes-vous prêt à importer ? Vos tables EQDKP doivent commencer avec ’EQDKP’, et nous importons seulement les données dynamiques, hormis les informations statiques comme des noms des classes. Il est conseillé de lancer une mise à jour avec le plugin bbDKP "Armurerie"',
 'IMPORT_EQDKPPLUS' => 'Importation de données EQDKP-plus en bbdkp 1.1.2',
 'IMPORT_EQDKPPLUS_CONFIRM' => 'Êtes-vous prêt à importer ? Vos tables EQDKP doivent commencer avec ’EQDKP’, et nous importons seulement les données dynamiques, hormis les informations statiques comme des noms des classes. Il est conseillé de lancer une mise à jour avec le plugin bbDKP "Armurerie"',

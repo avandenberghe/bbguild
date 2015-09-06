@@ -5,7 +5,7 @@
  *
  * @copyright 2009 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.0
+ * @version 1.4.1
  * @translation killerpommes
  *
  */
@@ -27,7 +27,7 @@ if (empty($lang) || !is_array($lang))
 // Merge the following language entries into the lang array
 $lang = array_merge($lang, array(
 	'ACP_DKP_RECRUIT'		=> 'Rekrutierungen',
- 	'ACP_DKP_RECRUIT_ADD'	=> 'Rekrutierung hinzufügen',
+ 	'ACP_DKP_RECRUIT_ADD'	=> 'Rekrutierung hinzufï¿½gen',
 	'ACP_DKP_RECRUIT_EDIT'	=> 'Rekrutierung bearbeiten',
 	'ACP_DKP_RECRUIT_LIST'	=> 'Rekrutierungen',
 ));

@@ -1182,7 +1182,7 @@ function tableupdates($action, $version)
                     $db->sql_query($sql);
 
                     break;
-                case '1.4.0':
+                case '1.4.1':
                     //drop old composite index
                     $sql = "ALTER TABLE " . $table_prefix . 'bbdkp_memberlist' . " DROP INDEX member_name";
                     $db->sql_query($sql);

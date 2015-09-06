@@ -5,7 +5,7 @@
  * @package bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  * @author Sajaki
- * @version 1.4.0
+ * @version 1.4.1
  * 
  */
 
