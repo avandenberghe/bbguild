@@ -204,6 +204,7 @@ $lang = array_merge($lang, array(
 // Various
 'ACCOUNT' => 'Account',
 'ACTION' => 'Action',
+'ACHIEVED' => 'earned the achievement ',
 'ADD' => 'Add',
 'ADDED_BY' => 'Added by %s',
 
@@ -262,6 +263,7 @@ $lang = array_merge($lang, array(
 'FACTION' => 'Faction',
 'FACTIONID' => 'Faction ID',
 'FIRST' => 'First',
+'FORNPOINTS' => ' for %s points.',
 'HIGH' => 'High',
 'ADJUSTMENTS' => 'Adjustments',
 'ADJUSTMENT_HISTORY' => 'Adjustments History',
@@ -281,6 +283,7 @@ $lang = array_merge($lang, array(
 'LOOT_FACTOR' => 'Loot Factor',
 'LOOTS' => 'Loots',
 'LOOTDIST_CLASS' => 'Loot distribution per Class',
+'LOOTED' => 'obtained',
 'LOW' => 'Low',
 'MANAGE' => 'Manage',
 'MEDIUM' => 'Medium',
