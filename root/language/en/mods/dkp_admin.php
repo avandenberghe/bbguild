@@ -5,7 +5,7 @@
  *
  * @copyright 2014 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.0
+ * @version 1.4.1
  *
  */
 
@@ -172,7 +172,7 @@ $lang = array_merge($lang, array(
 // installer
 'IMPORT_EQDKP132' => 'Import EQDKP 1.3.2 data Into bbdkp 1.1.1',
 'IMPORT_EQDKP132_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ',
-'IMPORT_EQDKP140' => 'Import EQDKP 1.4.0 data Into bbdkp 1.1.1',
+'IMPORT_EQDKP140' => 'Import EQDKP 1.4.1 data Into bbdkp 1.1.1',
 'IMPORT_EQDKP140_CONFIRM' => 'Are you ready to import ? Your EQDKP tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ',
 'IMPORT_EQDKPPLUS' => 'Import EQDKP-PLUS data Into bbdkp 1.1.1',
 'IMPORT_EQDKPPLUS_CONFIRM' => 'Are you ready to import ? Your EQDKP-PLUS tables need to begin with ’EQDKP’, and only dynamic data will be imported, not static data like class definitions etc. ',

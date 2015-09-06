@@ -5,7 +5,7 @@
  * @package bbdkp
  * @copyright (c) 2011 https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.0
+ * @version 1.4.1
  * 
  */
 define('IN_PHPBB', true);

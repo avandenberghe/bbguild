@@ -5,7 +5,7 @@
  * 
  * @copyright 2010 bbdkp <https://www.github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.0
+ * @version 1.4.1
  * */
 
 /**

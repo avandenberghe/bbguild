@@ -5,7 +5,7 @@
  * @author Sajaki@bbdkp.com
  * @copyright 2014 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.0
+ * @version 1.4.1
  *
  */
 
@@ -172,7 +172,7 @@ $lang = array_merge($lang, array(
 // installer
 'IMPORT_EQDKP132' => 'Importa i dati di EQDKP 1.3.2 in bbdkp 1.1.1',
 'IMPORT_EQDKP132_CONFIRM' => 'Sei pronto all‘import dei dati ? Le tue tabelle EQDKP devono iniziare con ’EQDKP’, e solo i dati dinamici verranno importati ma non i dati statici come le definizioni di classe ecc. ',
-'IMPORT_EQDKP140' => 'Importa i dati di EQDKP 1.4.0 in bbdkp 1.1.1',
+'IMPORT_EQDKP140' => 'Importa i dati di EQDKP 1.4.1 in bbdkp 1.1.1',
 'IMPORT_EQDKP140_CONFIRM' => 'Sei pronto all‘import dei dati ? Le tue tabelle EQDKP devono iniziare con ’EQDKP’, e solo i dati dinamici verranno importati ma non i dati statici come le definizioni di classe ecc. ',
 'IMPORT_EQDKPPLUS' => 'Importa i dati EQDKP-PLUS in bbdkp 1.1.1',
 'IMPORT_EQDKPPLUS_CONFIRM' => 'Sei pronto all‘import dei dati ? Le tue tabelle EQDKP-PLUS devono iniziare con ’EQDKP’, e solo i dati dinamici verranno importati ma non i dati statici come le definizioni di classe ecc.',

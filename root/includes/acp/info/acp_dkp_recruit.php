@@ -1,7 +1,7 @@
 <?php
 /**
  * ACP info class acp_dkp_recruit_info
- * @version 1.4.0
+ * @version 1.4.1
  * @copyright (c) 2009 bbdkp https://github.com/bbDKP
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
  *   @package bbdkp
@@ -29,7 +29,7 @@ class acp_dkp_recruit_info
         return array(
             'filename'	=> 'acp_dkp_recruit',
             'title'		=> 'ACP_DKP_RECRUIT',
-            'version'	=> '1.4.0',
+            'version'	=> '1.4.1',
             'modes'		=> array(
                 'addrecruit'	    => array('title' => 'ACP_DKP_RECRUIT_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER'), 'display' => false),
                 'editrecruit'	    => array('title' => 'ACP_DKP_RECRUIT_EDIT', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER'), 'display' => false),
