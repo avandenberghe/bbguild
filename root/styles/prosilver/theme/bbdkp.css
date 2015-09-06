@@ -382,3 +382,55 @@ div.tickLabel {
     font-size: 11px;
 }
 
+.guildinfo
+{
+    font-family: Arial,Verdana,sans-serif;
+}
+.activity-feed
+li {
+    background-position: 5px 50%;
+    background-repeat: no-repeat;
+    border-top-color: #371b0d;
+    border-top-style: solid;
+    border-top-width: 1px;
+    padding-bottom: 9px;
+    padding-left: 29px;
+    padding-right: 0;
+    padding-top: 9px;
+    position: relative;
+    font-family: Verdana,Helvetica,Arial,sans-serif;
+    font-size: 12px;
+}
+
+.activity-feed
+ol, ul {
+    list-style-type: none;
+}
+
+.activity-feed dd {
+    padding-right: 4px;
+}
+.activity-feed dd {
+    display: inline;
+}
+.activity-feed dt {
+    color: #71401f;
+    display: inline;
+    font-size: 11px;
+    white-space: nowrap;
+}
+.guildname {
+    color: #71401f;
+    font-size: 56px;
+    font-weight: bold;
+    letter-spacing: -0.05em;
+    line-height: 1.1em;
+    white-space: nowrap;
+}
+.undername
+{
+    font-size: 14px;
+    font-weight: normal;
+    letter-spacing: normal;
+    line-height: 14px;
+}
