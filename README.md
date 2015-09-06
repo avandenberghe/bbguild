@@ -5,6 +5,7 @@
 change log 1.4 
 
 New and updated features 
+- #259 [NEW] new welcome page
 - #252 [NEW] Implement new WOW API
 - #212 [NEW] Italian translation
 - #246 [NEW] Add Sliders to statistics page
