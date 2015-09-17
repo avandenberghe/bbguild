@@ -21,7 +21,7 @@ if (!function_exists('generate_text_for_display'))
 {
     include($phpbb_root_path . 'includes/functions_display.' . $phpEx);
 }
-$text="";
+$text='';
 $sql = 'SELECT welcome_msg, bbcode_uid, bbcode_bitfield, bbcode_options FROM ' . WELCOME_MSG_TABLE;
 $db->sql_query($sql);
 $result = $db->sql_query($sql);
@@ -78,7 +78,7 @@ foreach ($newsarr['news'] as $id => $news)
                     'TIMESTAMP' => ( !empty($news['timestamp']) ) ? dateDiff($news['timestamp']) . '&nbsp;' : '&nbsp;',
                     'ACHIEVEMENT' =>  $news['achievement']['id'],
                     'TITLE' =>  $news['achievement']['title'],
-                    'POINTS' =>  printf($user->lang['FORNPOINTS'], $news['achievement']['points'] ),
+                    'POINTS' =>  sprintf($user->lang['FORNPOINTS'], $news['achievement']['points'] ),
                 )
             );
             break;
