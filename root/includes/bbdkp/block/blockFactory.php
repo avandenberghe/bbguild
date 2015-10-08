@@ -26,6 +26,14 @@ if (!class_exists('\bbdkp\admin\Admin'))
 	require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
 }
 
+include($phpbb_root_path . 'includes/bbdkp/views/iViews.' . $phpEx);
+
+if (!class_exists('\bbdkp\views\viewNavigation'))
+{
+    require("{$phpbb_root_path}includes/bbdkp/views/viewNavigation.$phpEx");
+}
+
+
 /**
  * load blocks
  * @package bbdkp
@@ -33,11 +41,14 @@ if (!class_exists('\bbdkp\admin\Admin'))
  */
 class blockFactory extends \bbdkp\admin\Admin
 {
+
     private $variable_blocks = array('menu', 'links', 'loot', 'newmembers', 'recent', 'recruitment', 'welcomemsg', 'whoisonline' );
 
 	public function get_blocks()
 	{
 		global $phpbb_root_path, $phpEx, $user, $config, $template, $db;
+
+        $Navigation = new viewNavigation('portal');
 
         include($phpbb_root_path . 'includes/bbdkp/block/newsblock.' . $phpEx);
 
@@ -78,7 +89,7 @@ class blockFactory extends \bbdkp\admin\Admin
                     //display the blocks
                     include($phpbb_root_path . 'includes/bbdkp/block/rpblocks.' . $phpEx);
                 }
-                $blocks = new \bbdkp\raidplanner\rpblocks();
+                $blocks = new \bbdkp\raidplanner\rpblocks($Navigation);
                 $blocks->display();
             }
         }
