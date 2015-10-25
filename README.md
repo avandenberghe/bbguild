@@ -114,7 +114,7 @@ Find support and more on
 
 ## Changelog 
 
-1.4.1 08-2014
+1.4.1 25-10-2015
 
 -	[NEW] #248 2 new races were added in SWToR : Cyborg and Cathar. they should be included in the installer.
 -	[CHG] #247 moved all js to subfolder /template/dkp/js 
