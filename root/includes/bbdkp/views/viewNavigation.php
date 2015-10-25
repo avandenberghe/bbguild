@@ -236,7 +236,6 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
 
     function __construct($page)
     {
-
         $this->page = $page;
         $this->buildNavigation();
     }
@@ -262,7 +261,6 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
                 $this->bbtips = new \bbtips_parser;
             }
         }
-
         // get inputs
         $this->show_all = ( request_var ( 'show', request_var ( 'hidden_show', '' )) == $user->lang['ALL']) ? true : false;
 
@@ -300,80 +298,41 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
         $this->query_by_pool = false;
         $this->dkpsys_id = 0;
         $this->dkpsys_name = $user->lang['ALL'];
+        if(isset( $_POST ['pool']) )
+        {
+            $this->dkpsys_id = intval($_POST ['pool']);
+        }
+        if(isset ( $_GET [URI_DKPSYS] ) )
+        {
+            $this->dkpsys_id = intval($_GET [URI_DKPSYS]);
+        }
 
         $sql_array = array(
             'SELECT'    => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
             'FROM'		=> array(
                 DKPSYS_TABLE => 'a',
-                MEMBER_DKP_TABLE => 'd',
-                MEMBER_LIST_TABLE => 'l'
             ),
-
-            'WHERE'  => " a.dkpsys_id = d.member_dkpid
-							AND a.dkpsys_status != 'N'
-							AND d.member_id = l.member_id
-							AND l.member_guild_id = " . $this->guild_id ,
-            'GROUP_BY'  => 'a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
-            'ORDER_BY'  => 'a.dkpsys_id '
+            'WHERE'     => " a.dkpsys_status != 'N' ",
+            'GROUP_BY'  => ' a.dkpsys_id, a.dkpsys_name, a.dkpsys_default',
+            'ORDER_BY'  => ' a.dkpsys_default desc, a.dkpsys_id '
         );
+
         $sql = $db->sql_build_query('SELECT', $sql_array);
         $result = $db->sql_query ($sql);
-        $index = 3;
         $dkpvalues = array();
         while ( $row = $db->sql_fetchrow ( $result ) )
         {
-            $dkpvalues[$index]['id'] = $row ['dkpsys_id'];
-            $dkpvalues[$index]['text'] = $row ['dkpsys_name'];
-            $index +=1;
-            if (strtoupper ( $row ['dkpsys_default'] ) == 'Y')
+            $dkpvalues[$row ['dkpsys_id']]['id'] = $row ['dkpsys_id'];
+            $dkpvalues[$row ['dkpsys_id']]['text'] = $row ['dkpsys_name'];
+            $dkpvalues[$row ['dkpsys_id']]['default'] = $row ['dkpsys_default'];
+            if($row ['dkpsys_default'] =='Y')
             {
                 $this->defaultpool = $row ['dkpsys_id'];
-                break;
+                $this->dkpsys_id = $this->defaultpool;
             }
         }
-
-        if(count($dkpvalues) == 1)
-        {
-            $this->defaultpool = $dkpvalues[3]['id'];
-        }
-
-
         $db->sql_freeresult ( $result );
-
-        if(isset( $_POST ['pool']) or isset ( $_GET [URI_DKPSYS] ) )
-        {
-            if (isset( $_POST ['pool']) )
-            {
-                //user changed pulldown
-                $pulldownval = request_var('pool',  $user->lang['ALL']);
-                if(is_numeric($pulldownval))
-                {
-                    $this->query_by_pool = true;
-                    $this->dkpsys_id = intval($pulldownval);
-                }
-            }
-            elseif (isset ( $_GET [URI_DKPSYS] ))
-            {
-                //use get value
-                $pulldownval = request_var(URI_DKPSYS,  $user->lang['ALL']);
-                if(is_numeric($pulldownval))
-                {
-                    $this->query_by_pool = true;
-                    $this->dkpsys_id = request_var(URI_DKPSYS, 0);
-                }
-                else
-                {
-                    $this->query_by_pool = false;
-                    $this->dkpsys_id = $this->defaultpool;
-                }
-            }
-        }
-        else
-        {
-            // if no parameters passed to this page then show default pool
-            $this->query_by_pool = true;
-            $this->dkpsys_id = $this->defaultpool;
-        }
+        $this->query_by_pool = true;
 
         $this->dkppulldown($dkpvalues);
 
@@ -417,7 +376,7 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
     }
 
     /**
-     * build dkp dropdown, for standings/stats
+     * build dkp drop down for standings/stats
      *
      * @param $dkpvalues
      */
@@ -430,13 +389,12 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
             'OPTION' => $user->lang['ALL'],
         ));
         $template->assign_block_vars ( 'pool_row', array (
-            'VALUE' => '--------',
+            'VALUE' => '------',
             'SELECTED' => '',
             'DISABLED' => ' disabled="disabled"',
-            'OPTION' => '--------',
+            'OPTION' => '------',
         ));
 
-        // find only pools with dkp records that are active
         sort($dkpvalues);
         foreach ($dkpvalues as $key => $value)
         {

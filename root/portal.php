@@ -12,8 +12,8 @@
  */
 
 /**
-* @ignore
-*/
+ * @ignore
+ */
 define('IN_PHPBB', true);
 define('IN_BBDKP', true);
 $phpbb_root_path = (defined('PHPBB_ROOT_PATH')) ? PHPBB_ROOT_PATH : './';
@@ -27,20 +27,20 @@ $user->setup('mods/dkp_common');
 
 if(!defined("EMED_BBDKP"))
 {
-	trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
+    trigger_error($user->lang['BBDKPDISABLED'], E_USER_WARNING);
 }
 if (!$auth->acl_get('u_dkp'))
 {
-	trigger_error('NOT_AUTHORISED');
+    trigger_error('NOT_AUTHORISED');
 }
 if (!isset($config['bbdkp_version']))
 {
-	// THE CONFIGS AND DATABASE TABLES AREN'T INSTALLED, EXIT
-	trigger_error('GENERAL_ERROR', E_USER_WARNING);
+    // THE CONFIGS AND DATABASE TABLES AREN'T INSTALLED, EXIT
+    trigger_error('GENERAL_ERROR', E_USER_WARNING);
 }
 if (!class_exists('\bbdkp\views\blockFactory'))
 {
-	require("{$phpbb_root_path}includes/bbdkp/block/blockFactory.$phpEx");
+    require("{$phpbb_root_path}includes/bbdkp/block/blockFactory.$phpEx");
 }
 
 $template->assign_var('S_PORTAL', true);
@@ -48,7 +48,7 @@ $template->assign_var('S_PORTAL', true);
 page_header($user->lang['NEWS']);
 
 $template->set_filenames(array(
-		'body' => 'dkp/portal_body.html')
+        'body' => 'dkp/portal_body.html')
 );
 
 $blockFactory = new \bbdkp\views\blockFactory();

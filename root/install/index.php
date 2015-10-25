@@ -1019,7 +1019,7 @@ $versions = array(
     '1.3.0.9' => array(
         // just some file fixes, see changelog
     ),
-    '1.4' => array(
+    '1.4.1' => array(
 
         'table_column_add' => array(
             array($table_prefix . 'bbdkp_memberguild', 'armoryresult', array('VCHAR_UNI:255', '')),

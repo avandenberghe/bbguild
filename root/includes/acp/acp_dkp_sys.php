@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ * @version 1.4.0
  */
 
 // don't add this file to namespace bbdkp
@@ -352,7 +352,7 @@ if (!class_exists('\bbdkp\controller\raids\Events'))
 
 				$current_order = $this->switch_order($sort_order);
 				$start = request_var('start',0);
-				$event->listevents($start, $current_order['sql'], $dkpsys_id, true);
+				$event->listevents($start, $current_order['sql'], $dkpsys_id, 0, false);
 
 				$idlist = array();
 

@@ -6,7 +6,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ * @version 1.4.0
  * @since 1.3.0
  */
 namespace bbdkp\controller\Raids;
@@ -163,7 +163,7 @@ class RaidController  extends \bbdkp\admin\Admin
 	}
 
 	/**
-	 * prepares objects to crate new raid
+	 * prepares objects to create new raid
 	 */
 	public function init_newraid()
 	{
@@ -174,7 +174,7 @@ class RaidController  extends \bbdkp\admin\Admin
 		{
 			trigger_error ( $user->lang['ERROR_NOEVENTSDEFINED'], E_USER_WARNING );
 		}
-		$events->listevents(0, 'event_name', $this->dkpid, false);
+		$events->listevents(0, 'event_name', $this->dkpid, 1, false);
 		$this->eventinfo = $events->events;
 
 		$members = new \bbdkp\controller\members\Members();
@@ -199,7 +199,7 @@ class RaidController  extends \bbdkp\admin\Admin
 
 		$events = new \bbdkp\controller\raids\Events();
 		$events->countevents($this->raid->event_dkpid);
-		$events->listevents(0, 'event_name', $this->raid->event_dkpid);
+		$events->listevents(0, 'event_name', $this->raid->event_dkpid, 1, false);
 		$this->eventinfo = $events->events;
 
 		$sort_order = array (

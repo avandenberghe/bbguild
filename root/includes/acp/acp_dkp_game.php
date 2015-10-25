@@ -1178,7 +1178,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
 
     private function BuildTemplateRole(\bbdkp\controller\games\Game $editgame)
     {
-        global $template, $phpbb_admin_path, $phpEx, $user;
+        global $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $user;
 
         $role = new \bbdkp\controller\games\Roles();
         $role->game_id = $editgame->game_id;
@@ -1196,6 +1196,7 @@ class acp_dkp_game extends \bbdkp\admin\Admin
             'ROLE_ID'            => $role->role_id,
             'ROLE_CAT_ICON'      => $role->role_cat_icon,
             'ROLE_ICON'          => $role->role_icon,
+            'ROLE_ICON_IMG' 	 => (strlen($role->role_icon) > 1) ? $phpbb_root_path . "images/bbdkp/role_icons/" . $role->role_icon . ".png" : '',
             'ROLE_COLOR'         => $role->role_color,
             'GAME_ID'            => $role->game_id,
             'GAME_NAME'          => $editgame->getName(),

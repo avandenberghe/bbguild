@@ -409,38 +409,53 @@ public function __set($property, $value)
     /**
      * Get all events from pool
      *
-     * @param int|number $start
+     * @param int    $start
      * @param string $order
-     * @param int|number $dkpid
-     * @param boolean $all
+     * @param int    $dkpid
+     * @param int    $dkpsys_status
+     * @param bool   $all
+     * @return array
      */
-	public function listevents($start = 0, $order = 'b.dkpsys_id, a.event_name' , $dkpid=0, $all=true  )
+	public function listevents($start = 0, $order = 'b.dkpsys_id, a.event_name', $dkpid=0, $dkpsys_status = 0, $all = true  )
 	{
 		global $config, $db;
 
-		$sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename, a.event_status
+		$sql = 'SELECT b.dkpsys_name, b.dkpsys_id, a.event_name, a.event_value, a.event_id, a.event_color, a.event_imagename, a.event_status, b.dkpsys_status
 				FROM ' . EVENTS_TABLE . ' a, ' . DKPSYS_TABLE . " b
-				WHERE b.dkpsys_id = a.event_dkpid AND b.dkpsys_status != 'N' ";
+				WHERE b.dkpsys_id = a.event_dkpid AND b.dkpsys_status != '$dkpsys_status' ";
 
 		if (!$all)
 		{
 			$sql .= ' AND a.event_status= 1 ';
 		}
-
 		if($dkpid != 0)
 		{
 			$sql .= " AND b.dkpsys_id = " . $dkpid;
 		}
 
+        switch($dkpsys_status)
+        {
+            case -1;
+                $sql .= " AND b.dkpsys_status = 'N'";
+                break;
+            case 1;
+                $sql .= " AND b.dkpsys_status = 'Y'";
+                break;
+            default:
+                break;
+        }
+
+
 		$sql .= " ORDER BY " . $order;
 
-		$result = $db->sql_query_limit($sql, $config['bbdkp_user_elimit'], $start,0);
+		$result = $db->sql_query_limit($sql, $config['bbdkp_user_elimit'], $start, 0);
 
 		while ($row = $db->sql_fetchrow($result) )
 		{
 			$this->events[$row['event_id']] =  array(
 					'event_id'				 => $row['event_id'],
 					'dkpsys_id'		 		 => $row['dkpsys_id'],
+                    'dkpsys_status'          => $row['dkpsys_status'],
 					'event_name'			 => $row['event_name'],
 					'dkpsys_name'	 	 	 => $row['dkpsys_name'],
 					'event_value'			 => $row['event_value'],
@@ -450,6 +465,7 @@ public function __set($property, $value)
 			);
 		}
 		$db->sql_freeresult($result);
+        return $this->events;
 	}
 
 
