@@ -1,29 +1,11 @@
 [![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
 
-#1.4.1
+##change log 
 
-change log 1.4 
+1.4.2
 
-New and updated features 
-- #259 [NEW] new welcome page
-- #252 [NEW] Implement new WOW API
-- #212 [NEW] Italian translation
-- #246 [NEW] Add Sliders to statistics page
-- #242 [NEW] enable icon uploads in acp
-- #248 [UPD] update SWTOR races 
-- #240 [UPD] update Aion game parameters
-
-Changes
-- #226 [FIX] move role acp from raidplanner to bbdkp : new Roles & Recruitment class/table: The roles are now in a separate class and table. A new 'recruitment' class/table holds number of positions and applicants. the Apply plugin will update the recruitment table and so you have a live view of recruitments through the recruitment block. Also, Raidplanner will use the bbdkp roles table to fill in raidroles.
-- #249 [CHG] allow two users from different realms in the same guild
-- #258 [CHG] migrate versions url from Googlecode 
-
-Bugfixes
-- #253 [FIX] missing language entries in german/french/italian
-- #247 [FIX] moved all js to subfolder /template/dkp/js
-- #241 [FIX] roster acp should use outer joins
-- #239 [FIX] added correct classpath to rpblocks class in class_exists checker in block factory
-- #223 [FIX] update constants file:white_check_mark: deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
+fixed
+- [FIX] #259 forgot to commit guildnews backend code to build new welcome page
 
 ## About
 
@@ -45,7 +27,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 
 ## Current
 
-1.4.1
+1.4.2
 
 ## Installation
 
@@ -57,7 +39,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 3.	ftp and founder admin access on your phpbb installation.
 4.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### New installation 1.4.1
+#### New installation 1.4.2
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
@@ -67,9 +49,13 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 2. Upload bbDKP folder to your webserver, into /store/mods. note that the folder name must be "bbDKP", without version number.
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
-5. Click submit. This will install 1.4.1 and clear the caches (template, theme, imagesets)
+5. Click submit. This will install 1.4.2 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.x to 1.4.1
+#### Upgrading from 1.4.1 to 1.4.2
+just replace 2 files as in commit https://github.com/bbDKP/bbDKP/commit/d985801fe151
+
+
+#### Upgrading from 1.3.0.x to 1.4.2
 
 1. Unzip the bbDKP-140.zip file
 2. Upload bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there. note that the folder name must be "bbDKP", without version number.
@@ -80,11 +66,11 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 6. Click on the database upgrade link
   ![database upgrade]()
 
-#### Upgrading from 1.2.8-pl2 to 1.4.1
+#### Upgrading from 1.2.8-pl2 to 1.4.2
 
 * make a secure backup of all files
 * backup your database
-* Uninstall 1.2.8-pl2 and re-install 1.4.1 using Automod
+* Uninstall 1.2.8-pl2 and re-install 1.4.2 using Automod
 	1. If you installed any bbDKP plugins, these have to be uninstalled first.
 		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
 		*	make sure the module was uninstalled by checking the ACP modules.
@@ -94,7 +80,7 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
     4. delete /store/mods/bbdkp  
 	5. upload the unzipped bbDKP-1308/bbDKP folder to /store/mods
 	6. from Automod, run file installer
-	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.4.1
+	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.4.2
 		![database upgrade]()
 		![after upgrade]()
 		
@@ -114,16 +100,26 @@ Find support and more on
 
 ## Changelog 
 
-1.4.1 08-2014
+1.4.2 08-11-2015
+-  [FIX] #259 forgot to commit guildnews backend code to build new welcome page
 
+1.4.1 25-10-2015
+
+-   [NEW] #259 new welcome page
+-   [CHG] #258 migrate versions url from Googlecode 
+-   [FIX] #253 missing language entries in german/french/italian
+-   [NEW] #252 Implement new WOW API
+-   [CHG] #249 allow two users from different realms in the same guild
 -	[NEW] #248 2 new races were added in SWToR : Cyborg and Cathar. they should be included in the installer.
--	[CHG] #247 moved all js to subfolder /template/dkp/js 
+- 	[CHG] #247 moved all js to subfolder /template/dkp/js 
 -	[NEW] #246 Added Sliders to statistics page, for easier navigation
 -	[FIX] missing language entries in german/french
+-   [NEW] #242 enable icon uploads in acp
+-   [FIX] #241 roster acp should use outer joins
 -	[NEW] #240 update Aion game parameters game 
 -	[CHG] #239 added correct classpath to rpblocks class in class_exists checker in block factory
--	[NEW] #226 new Roles & Recruitment class/table 
--	[CHG] #223 deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
+-   [CHG] #226 move role acp from raidplanner to bbdkp : new Roles & Recruitment class/table: The roles are now in a separate class and table. A new 'recruitment' class/table holds number of positions and applicants. the Apply plugin will update the recruitment table and so you have a live view of recruitments through the recruitment block. Also, Raidplanner will use the bbdkp roles table to fill in raidroles.
+-	[CHG] #223 update constants file : deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
 -	[NEW] #212 added Italian translation
 -	[NEW] #196 Implemented Guildwars Guild API
 -	[NEW] #192 Can now unlink a character from UCP
