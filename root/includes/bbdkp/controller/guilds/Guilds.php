@@ -199,6 +199,14 @@ class Guilds extends \bbdkp\admin\Admin
 	 */
 	public $recruitforum;
 
+    /**
+     * guildnews array from battle.NET
+     *
+     * @var array
+     */
+    public $guildnews;
+
+
 	/**
 	 * guild class constructor
 	 * @param int $guild_id
@@ -346,7 +354,7 @@ class Guilds extends \bbdkp\admin\Admin
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-		$this->ApiUpdateBattleNet(array());
+		$this->ApiUpdateBattleNet($this->GetApiInfo(array()), array() );
 
 		return true;
 
@@ -401,7 +409,7 @@ class Guilds extends \bbdkp\admin\Admin
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
-		$this->ApiUpdateBattleNet($params);
+        $this->ApiUpdateBattleNet($this->GetApiInfo($params));
 
         return true;
     }
@@ -933,135 +941,161 @@ class Guilds extends \bbdkp\admin\Admin
 		return $guild;
 	}
 
-	/**
-	 * fetch Guild API information
-	 * @param $params
-	 * @return bool
-	 */
-	private function ApiUpdateBattleNet($params)
-	{
-		global $user, $db, $phpbb_root_path, $phpEx;
 
-		if ($this->game_id != 'wow')
-		{
-			return false;
-		}
-
-		if ($this->guildid == "0")
-		{
-			return false;
-		}
-
-		$game          = new \bbdkp\controller\games\Game;
-		$game->game_id = $this->game_id;
-		$game->Get();
-
-		//is both game and guild armory-enabled and has api key and locale ?
-		if ($game->getArmoryEnabled() == 1 &&
-			$this->armory_enabled == 1 &&
-			trim($game->getApikey()) != '' &&
-			trim($game->getApilocale()) != '')
-		{
-
-			//available extra fields : 'members', 'achievements','news'
-			$api = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region, $game->getApikey(),$game->getApilocale() , $game->getPrivkey());
-			$data = $api->Guild->getGuild($this->name, $this->realm, $params);
+    /**
+     * get api info
+     *
+     * @param $params
+     * @return bool
+     */
+    public function GetApiInfo($params)
+    {
+        global $user;
+        $data= 0;
+        if ($this->game_id != 'wow')
+        {
+            return false;
+        }
+        if ($this->guildid == "0")
+        {
+            return false;
+        }
+        $game          = new \bbdkp\controller\games\Game;
+        $game->game_id = $this->game_id;
+        $game->Get();
+        //is both game and guild armory-enabled and has api key and locale ?
+        if ($game->getArmoryEnabled() == 1 &&
+            $this->armory_enabled == 1 &&
+            trim($game->getApikey()) != '' &&
+            trim($game->getApilocale()) != ''
+        )
+        {
+            //available extra fields : 'members', 'achievements','news'
+            $api  = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region, $game->getApikey(), $game->getApilocale(), $game->getPrivkey());
+            $data = $api->Guild->getGuild($this->name, $this->realm, $params);
             $data = $data['response'];
-			unset($api);
-
-			if (!isset ($data))
-			{
-				$this->armoryresult = 'KO';
-				$log_action = array(
-					'header'       => 'L_ERROR_ARMORY_DOWN',
-					'L_UPDATED_BY' => $user->data['username'],
-                    'L_GUILD' => $this->name . '-' . $this->realm,
+            unset($api);
+            if (!isset ($data))
+            {
+                $this->armoryresult = 'KO';
+                $log_action         = array(
+                    'header'       => 'L_ERROR_ARMORY_DOWN',
+                    'L_UPDATED_BY' => $user->data['username'],
+                    'L_GUILD'      => $this->name . '-' . $this->realm,
                 );
-
-				$this->log_insert(array(
-					'log_type'   => $log_action['header'],
-					'log_action' => $log_action,
-					'log_result' => 'L_ERROR'
-				));
-				return false;
-			}
-
+                $this->log_insert(array(
+                    'log_type'   => $log_action['header'],
+                    'log_action' => $log_action,
+                    'log_result' => 'L_ERROR'
+                ));
+                return false;
+            }
             //if we get error code
             if (isset($data['code']))
             {
-                if($data['code'] == '403')
+                if ($data['code'] == '403')
                 {
                     // even if we have active API account, it may be that Blizzard account is inactive
                     $this->armoryresult = 'KO';
-                    $log_action = array(
+                    $log_action         = array(
                         'header'       => 'L_ERROR_BATTLENET_ACCOUNT_INACTIVE',
                         'L_UPDATED_BY' => $user->data['username'],
-                        'L_GUILD' => $this->name . '-' . $this->realm,
+                        'L_GUILD'      => $this->name . '-' . $this->realm,
                     );
-
                     $this->log_insert(array(
                         'log_type'   => $log_action['header'],
                         'log_action' => $log_action,
                         'log_result' => 'L_ERROR'
                     ));
                     return false;
-
                 }
             }
+            $this->armoryresult = 'OK';
+        }
+        else
+        {
+            $this->armoryresult = 'KO';
+        }
 
-			$this->armoryresult = 'OK';
-			$this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0;
-			$this->level = isset($data['level']) ? $data['level']: 0;
-			$this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
-			$this->side = isset($data['side']) ? $data['side']: '';
+        return $data;
+    }
 
-			if(isset($data['name']))
-			{
-				$this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
-			}
-			else
-			{
-				$this->guildarmoryurl = '';
-			}
 
-			$this->emblem = isset($data['emblem']) ? $data['emblem']: '';
-			$this->emblempath = isset($data['emblem']) ?  $this->createEmblem(false)  : '';
-			$this->memberdata = isset($data['members']) ? $data['members']: '';
+	/**
+	 * fetch Guild API information
+     * @param $data
+     */
+	private function ApiUpdateBattleNet($data, $params)
+	{
+            global $db, $phpbb_root_path, $phpEx;
 
-			$query = $db->sql_build_array('UPDATE', array(
-				'achievementpoints' => $this->achievementpoints,
-				'level'             => $this->level,
-				'guildarmoryurl'    => $this->guildarmoryurl,
-				'emblemurl'         => $this->emblempath,
-				'battlegroup'       => $this->battlegroup,
-				'armoryresult'      => $this->armoryresult,
-			));
+        if($this->armoryresult = 'KO')
+        {
+            return;
+        }
 
-			$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
-			if (in_array("members", $params))
-			{
-				// update ranks table
-				if (!class_exists('\bbdkp\controller\guilds\Ranks'))
-				{
-					require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
-				}
-				$rank = new \bbdkp\controller\guilds\Ranks($this->guildid);
-				$rank->WoWArmoryUpdate($this->memberdata, $this->guildid, $this->region);
-				//update member table
-				if (!class_exists('\bbdkp\controller\members\Members'))
-				{
-					require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
-				}
-				$mb = new \bbdkp\controller\members\Members();
-				$mb->WoWArmoryUpdate($this->memberdata, $this->guildid, $this->region, $this->min_armory);
-			}
+        $this->achievementpoints = isset( $data['achievementPoints']) ? $data['achievementPoints'] : 0;
+        $this->level = isset($data['level']) ? $data['level']: 0;
+        $this->battlegroup = isset($data['battlegroup']) ? $data['battlegroup']: '';
+        $this->side = isset($data['side']) ? $data['side']: '';
 
-		}
-		else
-		{
-			return false;
-		}
+        if(isset($data['name']))
+        {
+            $this->guildarmoryurl = sprintf('http://%s.battle.net/wow/en/', $this->region) . 'guild/' . $this->realm. '/' . $data['name'] . '/';
+        }
+        else
+        {
+            $this->guildarmoryurl = '';
+        }
+
+        $this->emblem = isset($data['emblem']) ? $data['emblem']: '';
+        $this->emblempath = isset($data['emblem']) ?  $this->createEmblem(false)  : '';
+        $this->memberdata = isset($data['members']) ? $data['members']: '';
+
+        $query = $db->sql_build_array('UPDATE', array(
+            'achievementpoints' => $this->achievementpoints,
+            'level'             => $this->level,
+            'guildarmoryurl'    => $this->guildarmoryurl,
+            'emblemurl'         => $this->emblempath,
+            'battlegroup'       => $this->battlegroup,
+            'armoryresult'      => $this->armoryresult,
+        ));
+
+        $db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
+        if (in_array("members", $params))
+        {
+            // update ranks table
+            if (!class_exists('\bbdkp\controller\guilds\Ranks'))
+            {
+                require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
+            }
+            $rank = new \bbdkp\controller\guilds\Ranks($this->guildid);
+            $rank->WoWArmoryUpdate($this->memberdata, $this->guildid, $this->region);
+            //update member table
+            if (!class_exists('\bbdkp\controller\members\Members'))
+            {
+                require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
+            }
+            $mb = new \bbdkp\controller\members\Members();
+            $mb->WoWArmoryUpdate($this->memberdata, $this->guildid, $this->region, $this->min_armory);
+        }
+
 	}
+
+    /**
+     * get news from Battle.NET
+     * @param $data
+     */
+    public function GetGuildNews($data)
+    {
+        if($this->armoryresult == 'KO')
+        {
+            return;
+        }
+
+        $this->guildnews = isset($data['news']) ? $data['news']: array();
+    }
+
 
 }
 
