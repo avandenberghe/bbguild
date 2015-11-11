@@ -2,10 +2,10 @@
 
 ##change log 
 
-1.4.2
+1.4.3
 
 fixed
-- [FIX] #259 forgot to commit guildnews backend code to build new welcome page
+- [FIX] #260 MODX update to 1.4.3 is incomplete
 
 ## About
 
@@ -27,7 +27,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 
 ## Current
 
-1.4.2
+1.4.3
 
 ## Installation
 
@@ -39,53 +39,28 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 3.	ftp and founder admin access on your phpbb installation.
 4.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### New installation 1.4.2
+#### New installation 1.4.3
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
 Note : we advise you to do all php, html upgrades on localhost before uploading it to your web server. Then run the database installer/upgrader on your webserver
 
-1. Unzip the bbDKP-140.zip file
+1. Unzip the zip file
 2. Upload bbDKP folder to your webserver, into /store/mods. note that the folder name must be "bbDKP", without version number.
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
-5. Click submit. This will install 1.4.2 and clear the caches (template, theme, imagesets)
+5. Click submit. This will install 1.4.3 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.4.1 to 1.4.2
-just replace 2 files as in commit https://github.com/bbDKP/bbDKP/commit/d985801fe151
+#### Upgrading from 1.3.0.8 to 1.4.3
 
-
-#### Upgrading from 1.3.0.x to 1.4.2
-
-1. Unzip the bbDKP-140.zip file
+1. Unzip the zip file
 2. Upload bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there. note that the folder name must be "bbDKP", without version number.
-3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1308_to_140/update.xml)
+3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1308_to_143/update.xml)
  ![Automod update]()
 4. Apply the update from Automod "Available Changes" 
   ![Imgur]()
 6. Click on the database upgrade link
   ![database upgrade]()
-
-#### Upgrading from 1.2.8-pl2 to 1.4.2
-
-* make a secure backup of all files
-* backup your database
-* Uninstall 1.2.8-pl2 and re-install 1.4.2 using Automod
-	1. If you installed any bbDKP plugins, these have to be uninstalled first.
-		*	upload the install folder for any bbdkp 1.2.8 plugin, and run the UMIL uninstaller.
-		*	make sure the module was uninstalled by checking the ACP modules.
-		*	run plugin uninstall from Automod.
-    2. then, from Automod, do uninstall bbDKP 1.2.8-pl2 to uninstall the files and phpbb edits. 
-    3. purge the board cache, verify your board is running    
-    4. delete /store/mods/bbdkp  
-	5. upload the unzipped bbDKP-1308/bbDKP folder to /store/mods
-	6. from Automod, run file installer
-	7. Click on the blue link given, this will redirect you to /install/index.php, then click "update". This will update 	   the database from 1.2.8-PL2 to 1.4.2
-		![database upgrade]()
-		![after upgrade]()
-		
-#### Upgrading from earlier version
-Please upgrade to v1.2.8-pl2 first
 
 #### Quick Deactivation
 should you wish to Deactivate this Mod quickly you can open configdkp.php and comment out the trigger : change @define('EMED_BBDKP', true); to //@define('EMED_BBDKP', true); 
@@ -100,10 +75,13 @@ Find support and more on
 
 ## Changelog 
 
-1.4.2 08-11-2015
+1.4.3 11-11-2015
+- [FIX] #260 MODX update to 1.4.3 is incomplete
+
+1.4.3 (prerelease) 08-11-2015
 -  [FIX] #259 forgot to commit guildnews backend code to build new welcome page
 
-1.4.1 25-10-2015
+1.4.3 (prerelease) 25-10-2015
 
 -   [NEW] #259 new welcome page
 -   [CHG] #258 migrate versions url from Googlecode 
