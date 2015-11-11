@@ -182,17 +182,17 @@
 			<file from="root/styles/prosilver/theme/images/dkp/*.*" to="styles/prosilver/theme/images/dkp/*.*"/>
 		</copy>
 		<delete>
-			<file name="images/bbdkp/portal/recruitblock_images/dps_icon.png">
-			<file name="images/bbdkp/portal/recruitblock_images/healer_icon.png">
-			<file name="images/bbdkp/portal/recruitblock_images/looking_icon.png">
-			<file name="images/bbdkp/portal/recruitblock_images/rec.png">
-			<file name="images/bbdkp/portal/recruitblock_images/rec_closed.png">
-			<file name="images/bbdkp/portal/recruitblock_images/rec_high.png">
-			<file name="images/bbdkp/portal/recruitblock_images/rec_low.png">
-			<file name="images/bbdkp/portal/recruitblock_images/rec_med.png">			
-			<file name="images/bbdkp/portal/recruitblock_images/tank_icon.png">																										
-			<file name="root/styles/prosilver/template/dkp/flot/*.*" />			
-			<file name="root/styles/prosilver/template/dkp/jquery*.js" />						
+			<file name="images/bbdkp/portal/recruitblock_images/dps_icon.png"/>
+			<file name="images/bbdkp/portal/recruitblock_images/healer_icon.png"/>
+			<file name="images/bbdkp/portal/recruitblock_images/looking_icon.png"/>
+			<file name="images/bbdkp/portal/recruitblock_images/rec.png"/>
+			<file name="images/bbdkp/portal/recruitblock_images/rec_closed.png"/>
+			<file name="images/bbdkp/portal/recruitblock_images/rec_high.png"/>
+			<file name="images/bbdkp/portal/recruitblock_images/rec_low.png"/>
+			<file name="images/bbdkp/portal/recruitblock_images/rec_med.png"/>			
+			<file name="images/bbdkp/portal/recruitblock_images/tank_icon.png"/>																										
+			<file name="styles/prosilver/template/dkp/flot/*.*" />			
+			<file name="styles/prosilver/template/dkp/jquery*.js" />						
 		</delete>
 		<php-installer>install/index.php</php-installer>
 		<diy-instructions lang="fr"><![CDATA[navigue vers install/index.php et execute la mise à jour.]]></diy-instructions>
