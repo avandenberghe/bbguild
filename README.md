@@ -5,7 +5,7 @@
 1.4.3
 
 fixed
-- [FIX] #260 MODX update to 1.4.3 is incomplete
+- [FIX] #260 MODX update to 1.4.2 was incomplete
 
 ## About
 
@@ -76,7 +76,7 @@ Find support and more on
 ## Changelog 
 
 1.4.3 11-11-2015
-- [FIX] #260 MODX update to 1.4.3 is incomplete
+- [FIX] #260 MODX update to 1.4.2 was incomplete
 
 1.4.3 (prerelease) 08-11-2015
 -  [FIX] #259 forgot to commit guildnews backend code to build new welcome page
