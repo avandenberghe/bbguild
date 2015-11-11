@@ -81,7 +81,7 @@ Find support and more on
 1.4.3 (prerelease) 08-11-2015
 -  [FIX] #259 forgot to commit guildnews backend code to build new welcome page
 
-1.4.3 (prerelease) 25-10-2015
+1.4.2 (prerelease) 25-10-2015
 
 -   [NEW] #259 new welcome page
 -   [CHG] #258 migrate versions url from Googlecode 
