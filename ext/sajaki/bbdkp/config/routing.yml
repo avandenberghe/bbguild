@@ -1,0 +1,6 @@
+sajaki_bbdkp:
+    pattern: /dkp
+    defaults: { _controller: sajaki.bbdkp.controller:base }
+sajaki_bbdkp2:
+    pattern: /dkp.php
+    defaults: { _controller: sajaki.bbdkp.controller:redirect }

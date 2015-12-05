@@ -1,0 +1,20 @@
+services:
+    sajaki.bbdkp.controller:
+        class: sajaki\bbdkp\controller\main
+        arguments:
+            - @config
+            - @config_text
+            - @controller.helper
+            - @template
+            - @user
+            - %core.php_ext%
+    sajaki.bbdkp.listener:
+        class: sajaki\bbdkp\event\main_listener
+        arguments:
+            - @config
+            - @controller.helper
+            - @template
+            - @user
+            - %core.php_ext%
+        tags:
+            - { name: event.listener }

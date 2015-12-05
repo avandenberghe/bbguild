@@ -1,0 +1,61 @@
+{
+	"fname": "sajaki/bbdkp",
+	"type": "phpbb-extension",
+	"description": "bbDKP Extension for phpBB 3.1.",
+	"homepage": "https://github.com/bbdkp/bbdkp",
+	"version": "0.0.1",
+	"time": "2015-12-04",
+	"license": "GPL-2.0",
+
+	"authors": [
+      {
+        "name": "Andreas Vandenberghe (Sajaki)",
+        "email": "sajaki9@gmail.com",
+        "homepage": "https://github.com/Sajaki",
+        "role": "extension developer"
+	  },
+      {
+        "name": "Blazeflack (Steffen)",
+        "role": "3.0 Modification Developer"
+      },
+      {
+        "name": "Kevin Rushin (Malfate)",
+        "role": "3.0 Modification Developer"
+      },
+      {
+        "name": "Kapli",
+        "role": "3.0 Modification Developer"
+      },
+      {
+        "name": "Teksonic",
+        "role": "3.0 Modification Developer"
+      }
+      ,{
+        "name": "Ippeh",
+        "role": "bbDKP Project Founder, Previous Developer"
+      },
+      {
+        "name": "Tsigo",
+        "role": "original developer of EQDKP, on which the PHPBB integration MOD was inspired."
+      }
+    ],
+
+	"require": {
+		"php": ">=5.3.3"
+	},
+
+	"require-dev": {
+		"phpbb/epv": "dev-master"
+	},
+	"extra": {
+		"display-name": "Bulletin Board DKP",
+		"soft-require": {
+			"phpbb/phpbb": ">=3.1.0-RC2,<3.2.*@dev"
+		}
+	},
+    "version-check": {
+    "host": "www.bbdkp.com",
+    "directory": "/versioncheck",
+    "filename": "foobar.json"
+  }
+}
