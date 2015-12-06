@@ -1,6 +1,4 @@
-sajaki_bbdkp:
-    pattern: /dkp
-    defaults: { _controller: sajaki.bbdkp.controller:base }
-sajaki_bbdkp2:
-    pattern: /dkp.php
-    defaults: { _controller: sajaki.bbdkp.controller:redirect }
+# ./app.php/dkp will be handled by class sajaki.bbdkp.controller and method(), passing name as argument.
+sajaki_bbdkp_controller:
+    path: /dkp/{name}
+    defaults: { _controller: sajaki.bbdkp.controller:handle }

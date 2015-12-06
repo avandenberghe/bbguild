@@ -6,29 +6,28 @@
 	"version": "0.0.1",
 	"time": "2015-12-04",
 	"license": "GPL-2.0",
-
 	"authors": [
       {
         "name": "Andreas Vandenberghe (Sajaki)",
         "email": "sajaki9@gmail.com",
-        "homepage": "https://github.com/Sajaki",
-        "role": "extension developer"
+        "homepage": "http://www.avathar.be",
+        "role": "3.1 Ext developer"
 	  },
       {
-        "name": "Blazeflack (Steffen)",
-        "role": "3.0 Modification Developer"
+        "name": "Steffen (Blazeflack)",
+        "role": "3.0 Mod Developer"
       },
       {
         "name": "Kevin Rushin (Malfate)",
-        "role": "3.0 Modification Developer"
+        "role": "3.0 Mod Developer"
       },
       {
         "name": "Kapli",
-        "role": "3.0 Modification Developer"
+        "role": "3.0 Mod Developer"
       },
       {
         "name": "Teksonic",
-        "role": "3.0 Modification Developer"
+        "role": "3.0 Mod Developer"
       }
       ,{
         "name": "Ippeh",
@@ -54,7 +53,7 @@
 		}
 	},
     "version-check": {
-    "host": "www.bbdkp.com",
+    "host": "www.avathar.be",
     "directory": "/versioncheck",
     "filename": "foobar.json"
   }

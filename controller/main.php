@@ -1,10 +1,8 @@
 <?php
 /**
- * @package phpBB Extension - bbdkp
- * @copyright 2011 bbdkp <https://github.com/bbDKP>
+ * @package bbdkp
+ * @copyright 2015 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
- * @author sajaki <sajaki@gmail.com>
- * @link http://www.bbdkp.com
  *
  */
 
@@ -29,6 +27,7 @@ class main
 
 	/* @var string phpEx */
 	protected $php_ext;
+
 	/**
 	* Constructor
 	*
@@ -59,41 +58,20 @@ class main
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-	public function base()
-	{
-		// Adding links to the breadcrumbs
-		$this->template->assign_block_vars('navlinks', array(
-			'FORUM_NAME'		=> $this->user->lang['ABOUTUS'],
-			'U_VIEW_FORUM'		=> $this->helper->route('crizzo_aboutus'),
-		));
-		
-		$aboutus_data			= $this->config_text->get_array(array(
-				'aboutus_info',
-				'aboutus_info_uid',
-				'aboutus_info_bitfield',
-				'aboutus_info_flags',
-		));
-
-		$aboutus_text = generate_text_for_display(
-			$aboutus_data['aboutus_info'],
-			$aboutus_data['aboutus_info_uid'],
-			$aboutus_data['aboutus_info_bitfield'],
-			$aboutus_data['aboutus_info_flags']
-		);
-
-		$this->template->assign_vars(array(
-			'ABOUTUS_OUTPUT'	=> $aboutus_text,
-			'TERMS_OF_USE'		=> $this->config['acp_aboutus_termsofuse_enable'],
-			'PRIVACY'			=> $this->config['acp_aboutus_privacy_enable'],
-			'ABOUTUS_ENABLE'	=> $this->config['acp_aboutus_enable'],
-		));
-
-		return $this->helper->render('aboutus.html', $this->user->lang('ABOUTUS'));
-	}
-
-	public function redirect()
-	{
-		redirect($this->helper->route('crizzo_aboutus'));
-	}
-
+	public function handle($name)
+    {
+        if ($this->config['acme_demo_goodbye'] == 'DEMO_HELLO')
+        {
+            $l_message = 'DEMO_GOODBYE';
+        } else
+        {
+            $l_message = 'DEMO_HELLO';
+        }
+        $a = $this->user->lang($l_message, $name);
+        $this->template->assign_var('DEMO_MESSAGE', $a);
+        $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
+        // full rendered page source that will be output on the screen.
+        $response = $this->helper->render('demo_body.html', $name);
+        return $response;
+    }
 }
