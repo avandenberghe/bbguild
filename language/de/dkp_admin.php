@@ -173,6 +173,12 @@ $lang = array_merge($lang, array(
 'TOTAL_RAIDATTENDEES_INSERTED' => 'Gesamtanzahl der hinzu gefügten Teilnehmer : %s.',
 
 // installer
+'IMPORT_EQDKP132' => 'Lese EQDKP 1.3.2 Daten in bbDKP 1.1.2 ein',
+'IMPORT_EQDKP132_CONFIRM' => 'Bist du bereit die Daten einzulesen? Die EQDKP Tabellennamen sollen mit ‘EQDKP‘ beginnen, nur variable Daten werden importiert, nicht die statischen Daten wie Klassen usw.',
+'IMPORT_EQDKP140' => 'Lese EQDKP 1.4.1 Daten in bbdkp 1.1.2 ein',
+'IMPORT_EQDKP140_CONFIRM' => 'Bist du bereit die Daten einzulesen? die EQDKP Tabellennamen sollen mit ‘EQDKP‘ beginnen, nur variable Daten werden importiert, nicht die statischen Daten wie Klassen usw.',
+'IMPORT_EQDKPPLUS' => 'Lese EQDKP-PLUS Daten in bbDKP 1.1.2 ein',
+'IMPORT_EQDKPPLUS_CONFIRM' => 'Bist du bereit die Daten einzulesen? die EQDKP+ Tabellennamen sollen mit ‘EQDKP‘ beginnen, nur variable Daten werden importiert, nicht die statischen Daten wie Klassen usw.',
 'UMIL_INSERT_COMMON_ROW' => 'Lese gemeinschaftliche bbDKP Daten ein für Menü,Mitgliedsrang,Monstervorgang',
 'UMIL_REMOVE_COMMON_ROW' => 'Entferne gemeinschaftliche bbDKP Daten für Menü,Mitgliedsrang,Monstervorgang',
 'UMIL_INSERT_GAME_ROW' => 'Füge Spieldaten ein',
