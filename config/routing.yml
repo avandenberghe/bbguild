@@ -8,22 +8,22 @@
 #dkp.php?page=standings&guild_id=1
 #dkp/standings/1
 sajaki_bbdkp_01:
-    path: /dkp/standings/{guild_id}
+    path: /dkp/standings/guild/{guild_id}
     defaults: { _controller: sajaki.bbdkp.controller:handleGuild, guild_id: 1    }
     requirements:
      guild_id: \d*
 #dkp.php?page=news&guild_id=1
-#dkp/news/1
+#dkp/news/guild/1
 sajaki_bbdkp_02:
-    path: /dkp/news/{guild_id}
+    path: /dkp/news/guild/{guild_id}
     defaults: { _controller: sajaki.bbdkp.controller:handleGuild, guild_id: 1    }
     requirements:
      guild_id: \d*
 #dkp.php?page=roster&guild_id=1&rosterlayout=0
-#dkp/roster/1
-#dkp/roster/1?rosterlayout=1
+#dkp/roster/guild/1
+#dkp/roster/guild/1?rosterlayout=1
 sajaki_bbdkp_03:
-    path: /dkp/roster/{guild_id}
+    path: /dkp/roster/guild/{guild_id}
     defaults: { _controller: sajaki.bbdkp.controller:handleGuild, guild_id: 1 }
     requirements:
      guild_id: \d*
@@ -35,21 +35,21 @@ sajaki_bbdkp_04:
     requirements:
      member_id: \d*
 #dkp.php?page=stats&guild_id=1
-#dkp/stats/1
+#dkp/stats/guild/1
 sajaki_bbdkp_05:
-    path: /dkp/stats/{guild_id}
+    path: /dkp/stats/guild/{guild_id}
     defaults: { _controller: sajaki.bbdkp.controller:handleGuild, guild_id: 1 }
     requirements:
      guild_id:  \d*
 #dkp.php?page=listevents&guild_id=1
-#dkp/listevents/1
+#dkp/listevents/guild/1
 sajaki_bbdkp_06:
-    path: /dkp/listevents/{guild_id}
+    path: /dkp/listevents/guild/{guild_id}
     defaults: { _controller: sajaki.bbdkp.controller:handleGuild, guild_id: 1 }
     requirements:
      guild_id:  \d*
 #dkp.php?page=listraids&guild_id=1
-#dkp/listraids/1
+#dkp/listraids/guild/1
 sajaki_bbdkp_07:
     path: /dkp/listraids/{guild_id}
     defaults: { _controller: sajaki.bbdkp.controller:handleGuild, guild_id: 1 }
@@ -63,22 +63,22 @@ sajaki_bbdkp_08:
     requirements:
      raid_id:  \d*
 #dkp.php?page=loothistory&guild_id=1
-#dkp/loothistory/1
+#dkp/loothistory/guild/1
 sajaki_bbdkp_09:
-    path: /dkp/loothistory/{guild_id}
+    path: /dkp/loothistory/guild/{guild_id}
     defaults: { _controller: sajaki.bbdkp.controller:handleGuild, guild_id: 1 }
     requirements:
      guild_id:  \d*
 #dkp.php?page=lootdb&guild_id=1
-#dkp/lootdb/1
+#dkp/lootdb/guild/1
 sajaki_bbdkp_10:
-    path: /dkp/lootdb/{guild_id}
+    path: /dkp/lootdb/guild/{guild_id}
     defaults: { _controller: sajaki.bbdkp.controller:handleGuild, guild_id: 1 }
     requirements:
      guild_id:  \d*
-#portal.php
+#portal.php/guild/1
 sajaki_bbdkp_43:
-    path: /dkpportal/{guild_id}
+    path: /dkpportal/guild/{guild_id}
     defaults: { _controller: sajaki.bbdkp.portalcontroller:handlePortal, guild_id: 1 }
 
 
