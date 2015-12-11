@@ -68,7 +68,8 @@ This code is not ready for testing yet...
 Find support and more on 
 
 *	Forums : [www.avathar.be/bbdkp](http://www.avathar.be/bbdkp)
-*	IRC : Freenode #bbdkp
+*	IRC : [https://webchat.freenode.net](Freenode) #bbdkp
+*	Twitter @bbDKP
 
 ## Changelog 
 
