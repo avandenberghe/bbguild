@@ -3,11 +3,40 @@
 
 ## About
 
-bbDKP 2 is a Dragon Kill Points Extension for your phpBB3 Bulletin board. 
-
+bbDKP is a ‘Dragon Kill system’ for your phpBB3 Bulletin board. 
 It was originally forked from EQDKP to phpBB in 2008. the 2.0 version is rebuild on the Symfony 2 framework to be compatible with phpBB.
 
+Features : 
+- Integration of Game, Guild and DKP management facilities; 
+- Single sign on to dkp and phpBB3, 
+- Clean report screens, 
+- Multiple loot distribution systems supported : Multi-pool, Standard DKP, Time based DKP, Zero sum, EPGP. 
+- Portal with widgets
+- Leaderboard, Statistics, Events, Raids, Member, Items, Roster
+- ACP and UCP modules. 
+- Games supported : 
+  - World of Warcraft, 
+  - The Lord of the Rings Online, 
+  - Dark Age of Camelot, 
+  - Vanguard, 
+  - EverQuest I/II,  
+  - Warhammer Online, 
+  - Final Fantasy XI, 
+  - AION, 
+  - Rift, 
+  - SW:Tor, 
+  - Lineage 2, 
+  - TERA, 
+  - FFXIV 
+  - and Custom Game. 
+- Languages supported : English, French, German, Italian. 
+- Robust admin features, no Installation headaches, just copy into ext folder and enable the extension.  
 
+There will be a number of extension plugins, Raidtracker, bbTips, Apply, Bossprogress, Raidplanner. 
+
+Further development requests, support questions are welcome at http://www.avathar.be/bbdkp or @bbDKP on Twitter.",
+	
+	
 ## Current
 
 2.0.0-DEV
