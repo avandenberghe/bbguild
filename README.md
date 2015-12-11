@@ -1,4 +1,4 @@
-[![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
+[![bbDKP](http://www.avathar.be/bbdkp/images/site_logo.png)](http://www.avathar.be/bbdkp)
 
 
 ## About
@@ -54,7 +54,7 @@ This code is not ready for testing yet...
 
 #### Uninstall
 1. Navigate in the ACP to `Customise -> Extension Management -> Extensions`.
-2. Look for `Ultimate Points Extension` under the Enabled Extensions list, and click its `Disable` link.
+2. Look for `bbDKP Extension` under the Enabled Extensions list, and click its `Disable` link.
 3. To permanently uninstall, click `Delete Data` and then delete the `/ext/sajaki/bbdkp` folder.
 
 
@@ -67,8 +67,9 @@ This code is not ready for testing yet...
 
 Find support and more on 
 
-*	Forums : [bbDKP.com](http://www.bbdkp.com)
-*	IRC : Freenode #bbdkp
+*	Forums : [www.avathar.be/bbdkp](http://www.avathar.be/bbdkp)
+*	IRC : [Freenode](https://webchat.freenode.net) #bbdkp
+*	Twitter @bbDKP
 
 ## Changelog 
 
