@@ -1,4 +1,4 @@
-[![bbDKP](http://www.avathar.be/bbdkp/images/site_logo.png)](http://www.bbDKP.com)
+[![bbDKP](http://www.avathar.be/bbdkp/images/site_logo.png)](http://www.avathar.be/bbdkp)
 
 
 ## About
