@@ -67,7 +67,7 @@ This code is not ready for testing yet...
 
 Find support and more on 
 
-*	Forums : [bbDKP.com](http://www.bbdkp.com)
+*	Forums : [bbDKP.com](http://www.avathar.be/bbdkp)
 *	IRC : Freenode #bbdkp
 
 ## Changelog 
