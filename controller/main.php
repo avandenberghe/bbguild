@@ -58,7 +58,7 @@ class main
      *
      * @return \Symfony\Component\HttpFoundation\Response
      */
-	public function handle($name)
+	public function handle($guild_id)
     {
         if ($this->config['acme_demo_goodbye'] == 'DEMO_HELLO')
         {
@@ -67,11 +67,34 @@ class main
         {
             $l_message = 'DEMO_HELLO';
         }
-        $a = $this->user->lang($l_message, $name);
+        $a = $this->user->lang($l_message, $guild_id);
         $this->template->assign_var('DEMO_MESSAGE', $a);
         $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
         // full rendered page source that will be output on the screen.
-        $response = $this->helper->render('demo_body.html', $name);
+        $response = $this->helper->render('demo_body.html', $guild_id);
+        return $response;
+    }
+
+
+    /**
+     * Controller for route app.php/dkp.php and /dkp
+     *
+     * @return \Symfony\Component\HttpFoundation\Response
+     */
+    public function handlemember($member_id)
+    {
+        if ($this->config['acme_demo_goodbye'] == 'DEMO_HELLO')
+        {
+            $l_message = 'DEMO_GOODBYE';
+        } else
+        {
+            $l_message = 'DEMO_HELLO';
+        }
+        $a = $this->user->lang($l_message, $member_id);
+        $this->template->assign_var('DEMO_MESSAGE', $a);
+        $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
+        // full rendered page source that will be output on the screen.
+        $response = $this->helper->render('demo_body.html', $member_id);
         return $response;
     }
 }
