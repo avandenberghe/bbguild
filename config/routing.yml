@@ -1,14 +1,4 @@
-
 # ./app.php/dkp will be handled by class sajaki.bbdkp.controller and method(), passing name as argument.
-#list of paths
-#dkp.php?page=standings
 sajaki_bbdkp_controller:
-    path: /dkp/
+    path: /dkp/{name}
     defaults: { _controller: sajaki.bbdkp.controller:handle }
-
-dl_ext_controller:
-    path: /dl_ext/
-    defaults: { _controller: oxpus.dl_ext.controller:handle }
-dl_ext_page_controller:
-    path: /dl_ext/
-    defaults: { _controller: oxpus.dl_ext.controller:handle }
