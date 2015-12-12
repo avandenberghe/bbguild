@@ -6,7 +6,7 @@
  *
  */
 
-namespace sajaki\bbdkp\controller;
+namespace sajaki\bbdkp\acp;
 
 /**
  * info class for acp module dkp_item

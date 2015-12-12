@@ -2,27 +2,13 @@
 /**
  * Raid acp file
  *
- * @package acp\bbdkp
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2009 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ * @package bbdkp v2.0
+ * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
  */
 
-// don't add this file to namespace bbdkp
-/**
- * @ignore
- */
-if (! defined ( 'IN_PHPBB' ))
-{
-	exit ();
-}
-if (! defined('EMED_BBDKP'))
-{
-	$user->add_lang ( array ('mods/dkp_admin' ));
-	trigger_error ( $user->lang['BBDKPDISABLED'] , E_USER_WARNING );
-}
+namespace sajaki\bbdkp\acp;
 
 
 if (!class_exists('\bbdkp\admin\Admin'))

@@ -9,7 +9,7 @@
  *
  */
 
-namespace sajaki\bbdkp\controller;
+namespace sajaki\bbdkp\acp;
 
 // Include the base class
 if (!class_exists('\bbdkp\admin\Admin'))

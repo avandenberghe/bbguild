@@ -8,7 +8,7 @@
  *
  */
 
-namespace sajaki\bbdkp\controller;
+namespace sajaki\bbdkp\acp;
 
 
 // Include the abstract base

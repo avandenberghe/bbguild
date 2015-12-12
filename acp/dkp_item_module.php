@@ -8,7 +8,7 @@
  *
  */
 
-namespace sajaki\bbdkp\controller;
+namespace sajaki\bbdkp\acp;
 
 if (!class_exists('\bbdkp\admin\Admin'))
 {

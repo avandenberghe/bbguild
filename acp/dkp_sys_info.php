@@ -6,7 +6,7 @@
  *
  */
 
-namespace sajaki\bbdkp\controller;
+namespace sajaki\bbdkp\acp;
 
 /**
  * Class dkp_sys_info
