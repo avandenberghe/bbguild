@@ -409,7 +409,7 @@ class Guilds extends \bbdkp\admin\Admin
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
-        $this->ApiUpdateBattleNet($this->GetApiInfo($params));
+        $this->ApiUpdateBattleNet($this->GetApiInfo($params), array());
 
         return true;
     }
@@ -1027,9 +1027,9 @@ class Guilds extends \bbdkp\admin\Admin
      */
 	private function ApiUpdateBattleNet($data, $params)
 	{
-            global $db, $phpbb_root_path, $phpEx;
+        global $db, $phpbb_root_path, $phpEx;
 
-        if($this->armoryresult = 'KO')
+        if($this->armoryresult == 'KO')
         {
             return;
         }
