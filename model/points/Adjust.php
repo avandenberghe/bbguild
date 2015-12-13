@@ -8,7 +8,7 @@
  *
  */
 
-namespace sajaki\bbdkp\acp;
+namespace sajaki\bbdkp\model\points;
 
 
 /**
