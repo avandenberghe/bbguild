@@ -4,10 +4,10 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
 	<header>
 		<license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-		<title lang="en">bbDKP 1.4.3 - Update from bbdkp 1.4.2</title>
-		<title lang="de">bbDKP 1.4.3 - Update von bbdkp 1.4.2</title>
-		<title lang="fr">bbDKP 1.4.3 - mise à jour depuis bbdkp 1.4.2</title>
-		<description lang="en">bbDKP 1.4.3 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
+		<title lang="en">bbDKP 1.4.4 - Update from bbdkp 1.4.2</title>
+		<title lang="de">bbDKP 1.4.4 - Update von bbdkp 1.4.2</title>
+		<title lang="fr">bbDKP 1.4.4 - mise à jour depuis bbdkp 1.4.2</title>
+		<description lang="en">bbDKP 1.4.4 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
 </description>
 		<github>https://github.com/bbdkp/bbdkp</github>
 		<author-group>
@@ -21,7 +21,7 @@
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.4.3</mod-version>
+		<mod-version>1.4.4</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>60</time>
@@ -29,10 +29,10 @@
 		</installation>
 		<link-group>
 			<link type="language" href="../fr.xml" lang="en">Français</link>
-			<link type="language" href="../de.xml" lang="en">Deutsch</link>	
-			<link type="language" href="../it.xml" lang="en">Italiano</link>				
-			<link type="parent" href="../../install.xml" lang="en">bbdkp Install Instructions</link>	
-		</link-group>	
+			<link type="language" href="../de.xml" lang="en">Deutsch</link>
+			<link type="language" href="../it.xml" lang="en">Italiano</link>
+			<link type="parent" href="../../install.xml" lang="en">bbdkp Install Instructions</link>
+		</link-group>
 	</header>
 	<action-group>
 		<copy>
@@ -66,7 +66,7 @@
 			<file from="root/includes/acp/info/acp_dkp_point.php" to="includes/acp/info/acp_dkp_point.php"/>
 			<file from="root/includes/acp/info/acp_dkp_raid.php" to="includes/acp/info/acp_dkp_raid.php"/>
 			<file from="root/includes/acp/info/acp_dkp_sys.php" to="includes/acp/info/acp_dkp_sys.php"/>
-            <file from="root/includes/acp/info/acp_dkp_recruit.php" to="includes/acp/info/acp_dkp_recruit.php"/>
+      <file from="root/includes/acp/info/acp_dkp_recruit.php" to="includes/acp/info/acp_dkp_recruit.php"/>
 			<!-- admin -->
 			<file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>
 			<file from="root/includes/bbdkp/admin/constants_bbdkp.php" to="includes/bbdkp/admin/constants_bbdkp.php"/>
@@ -74,8 +74,8 @@
 			<file from="root/includes/bbdkp/admin/validator.php" to="includes/bbdkp/admin/validator.php"/>
 			<file from="root/includes/bbdkp/admin/krequest.php" to="includes/bbdkp/admin/krequest.php"/>
 			<!-- blocks -->
-			
-			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>			
+
+			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>
 			<file from="root/includes/bbdkp/block/linksblock.php" to="includes/bbdkp/block/linksblock.php"/>
 			<file from="root/includes/bbdkp/block/loginblock.php" to="includes/bbdkp/block/loginblock.php"/>
 			<file from="root/includes/bbdkp/block/lootblock.php" to="includes/bbdkp/block/lootblock.php"/>
@@ -90,13 +90,13 @@
 			<!-- controllers -->
 			<file from="root/includes/bbdkp/controller/adjustments/Adjust.php" to= "includes/bbdkp/controller/adjustments/Adjust.php"/>
 
-            <file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>
+      <file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>
 			<file from="root/includes/bbdkp/controller/games/classes/Classes.php" to="includes/bbdkp/controller/games/classes/Classes.php"/>
 			<file from="root/includes/bbdkp/controller/games/factions/Faction.php" to="includes/bbdkp/controller/games/factions/Faction.php"/>
-            <file from="root/includes/bbdkp/controller/games/races/Races.php" to="includes/bbdkp/controller/games/races/Races.php"/>
-            <file from="root/includes/bbdkp/controller/games/roles/Roles.php" to="includes/bbdkp/controller/games/roles/Roles.php"/>
+      <file from="root/includes/bbdkp/controller/games/races/Races.php" to="includes/bbdkp/controller/games/races/Races.php"/>
+      <file from="root/includes/bbdkp/controller/games/roles/Roles.php" to="includes/bbdkp/controller/games/roles/Roles.php"/>
 
-            <file from="root/includes/bbdkp/controller/games/library/GameInstall.php" to="includes/bbdkp/controller/games/library/GameInstall.php"/>
+      <file from="root/includes/bbdkp/controller/games/library/GameInstall.php" to="includes/bbdkp/controller/games/library/GameInstall.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_aion.php" to="includes/bbdkp/controller/games/library/install_aion.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_custom.php" to="includes/bbdkp/controller/games/library/install_custom.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_daoc.php" to="includes/bbdkp/controller/games/library/install_daoc.php"/>
@@ -157,7 +157,7 @@
 			<file from="root/includes/ucp/info/ucp_dkp.php" to="includes/ucp/info/ucp_dkp.php"/>
 			<!-- installer -->
 			<file from="root/install/*.*" to="install/*.*"/>
-			<file from="root/umil/*.*" to="umil/*.*"/>			
+			<file from="root/umil/*.*" to="umil/*.*"/>
             <!-- language -->
 			<file from="root/language/en/mods/dkp_admin.php" to="language/en/mods/dkp_admin.php"/>
 			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>
@@ -175,7 +175,7 @@
             <file from="root/language/en/mods/info_acp_dkp_recruit.php" to="language/en/mods/info_acp_dkp_recruit.php"/>
 			<file from="root/language/en/mods/info_ucp_dkpcharacter.php" to="language/en/mods/info_ucp_dkpcharacter.php"/>
 			<file from="root/language/en/mods/permissions_bbdkp.php" to="language/en/mods/permissions_bbdkp.php"/>
-			<!-- prosilver --> 
+			<!-- prosilver -->
 			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
 			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
 			<file from="root/styles/prosilver/theme/jquery-ui-1.8.4.custom.css" to="styles/prosilver/theme/jquery-ui-1.8.4.custom.css"/>
@@ -189,15 +189,15 @@
 			<file name="images/bbdkp/portal/recruitblock_images/rec_closed.png"/>
 			<file name="images/bbdkp/portal/recruitblock_images/rec_high.png"/>
 			<file name="images/bbdkp/portal/recruitblock_images/rec_low.png"/>
-			<file name="images/bbdkp/portal/recruitblock_images/rec_med.png"/>			
-			<file name="images/bbdkp/portal/recruitblock_images/tank_icon.png"/>																										
-			<file name="styles/prosilver/template/dkp/flot/*.*" />			
-			<file name="styles/prosilver/template/dkp/jquery*.js" />						
+			<file name="images/bbdkp/portal/recruitblock_images/rec_med.png"/>
+			<file name="images/bbdkp/portal/recruitblock_images/tank_icon.png"/>
+			<file name="styles/prosilver/template/dkp/flot/*.*" />
+			<file name="styles/prosilver/template/dkp/jquery*.js" />
 		</delete>
 		<php-installer>install/index.php</php-installer>
 		<diy-instructions lang="fr"><![CDATA[navigue vers install/index.php et execute la mise à jour.]]></diy-instructions>
 		<diy-instructions lang="de"><![CDATA[Rufe install/index.php auf und führe die Aktualisierung aus.]]></diy-instructions>
-		<diy-instructions lang="it"><![CDATA[Chiamate install/index.php on ed eseguire l'aggiornamento.]]></diy-instructions>		
+		<diy-instructions lang="it"><![CDATA[Chiamate install/index.php on ed eseguire l'aggiornamento.]]></diy-instructions>
 		<diy-instructions lang="en"><![CDATA[Browse to install/index.php and run the Updater.]]></diy-instructions>
 	</action-group>
 </mod>

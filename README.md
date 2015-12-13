@@ -1,25 +1,37 @@
-[![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
-
-##change log 
-
-1.4.3
-
-fixed
-- [FIX] #260 MODX update to 1.4.2 was incomplete
+[![bbDKP](http://www.avathar.be/bbdkp/images/site_logo.png)](http://www.avathar.be/bbdkp)
 
 ## About
 
-bbDKP is a Dragon Kill Points Mod for your phpBB3 Bulletin board. It was originally forked from EQDKP in 2008. 
+bbDKP is a ‘Dragon Kill system’ for your phpBB3 Bulletin board. It was originally forked from EQDKP to phpBB in 2008.
 
-Dragon kill points are a form of currency in guilds, where members bid on game loot and buy the items, paying in DKP.
+Dragon kill points are a form of currency in guilds, where members bid on game loot and buy the items, paying in points.
 
-Different forms of DKP exist and bbDKP supports four point systems : Standard DKP, Time based DKP, Zero sum and EPGP. they can be combined with each other, except zero sum can't be combined with EPGP.
+Features :
 
-bbDKP has Game, Guild and DKP management functions built into your phpBB3 Forum.
-
-This way, your users gain single signon to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches.
-
-Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games can be installed : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, Star Wars -ToR, Guildwars 2, Tera, Custome game designer
+    Integration of Game, Guild and DKP management facilities;
+    Single sign on to dkp and phpBB3,
+    Clean report screens,
+    Multiple loot distribution systems supported : Multi-pool, Standard DKP, Time based DKP, Zero sum, EPGP.
+    Portal with widgets
+    Leaderboard, Statistics, Events, Raids, Member, Items, Roster
+    ACP and UCP modules.
+    Games supported :
+        World of Warcraft,
+        The Lord of the Rings Online,
+        Dark Age of Camelot,
+        Vanguard,
+        EverQuest I/II,
+        Warhammer Online,
+        Final Fantasy XI,
+        AION,
+        Rift,
+        SW:Tor,
+        Lineage 2,
+        TERA,
+        FFXIV
+        and Custom Game.
+    Languages supported : English, French, German, Italian.
+    Robust admin features, no Installation headaches, just copy into ext folder and enable the extension.
 
 Plugins available : Raidplanner, Raidtracker, bbTips, Apply 
 
@@ -27,7 +39,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 
 ## Current
 
-1.4.3
+1.4.4
 
 ## Installation
 
@@ -39,7 +51,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 3.	ftp and founder admin access on your phpbb installation.
 4.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### New installation 1.4.3
+#### New installation 1.4.4
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
@@ -49,13 +61,13 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 2. Upload bbDKP folder to your webserver, into /store/mods. note that the folder name must be "bbDKP", without version number.
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
-5. Click submit. This will install 1.4.3 and clear the caches (template, theme, imagesets)
+5. Click submit. This will install 1.4.4 and clear the caches (template, theme, imagesets)
 
-#### Upgrading from 1.3.0.8 to 1.4.3
+#### Upgrading to 1.4.4
 
 1. Unzip the zip file
 2. Upload bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there. note that the folder name must be "bbDKP", without version number.
-3. go to Details, and down below you see the available upgrades. (or do the changes manually, described in /contrib/bbdkp_1308_to_143/update.xml)
+3. go to Details, and down below you see the available upgrades.
  ![Automod update]()
 4. Apply the update from Automod "Available Changes" 
   ![Imgur]()
@@ -70,10 +82,14 @@ should you wish to Deactivate this Mod quickly you can open configdkp.php and co
 
 Find support and more on 
 
-*	Forums : [bbDKP.com](http://www.bbdkp.com)
-*	IRC : Freenode #bbdkp
+*   Forums : [www.avathar.be/bbdkp](http://www.avathar.be/bbdkp)
+*   IRC : [Freenode](https://webchat.freenode.net) #bbdkp
+*   Twitter @bbDKP
 
 ## Changelog 
+
+1.4.4 13-12-2015
+- [FIX] #261 bug in guild.php when trying to update Battle.NET guild. 
 
 1.4.3 11-11-2015
 - [FIX] #260 MODX update to 1.4.2 was incomplete

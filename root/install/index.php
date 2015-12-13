@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.2
+ * @version 1.4.4
  */
 
 // anything lower than php 5.3.3 not supported (we use namespaces since v1.3)
@@ -1119,7 +1119,9 @@ $versions = array(
     '1.4.3' => array(
         // update modx was missing
     ),
-
+    '1.4.4' => array(
+        // fix bug #261, no database update
+    ),
 );
 
 // Include the UMIF Auto file and everything else will be handled automatically.

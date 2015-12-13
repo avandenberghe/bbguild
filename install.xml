@@ -7,7 +7,7 @@
 		<meta name="generator" content="MODX file generated with PP MODX Creator by tumba25 (online version)"/>
 		<license><![CDATA[http://opensource.org/licenses/gpl-license.php GNU General Public License v2]]></license>
 		<title lang="en"><![CDATA[bbDKP]]></title>
-		<description lang="en"><![CDATA[bbDKP 1.4.3 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
+		<description lang="en"><![CDATA[bbDKP 1.4.4 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
 features : Integration of Game, Guild and DKP management facilites into your phpBB3 Forum.
 Single sign on to dkp and phpBB3, clean report screens, robust admin facilitie, no integration headaches.
 Multi-pool loot distribution system, Multiple loot systems : Standard DKP, Time based DKP, Zero sum and EPGP.
@@ -25,7 +25,7 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-<description lang="fr"><![CDATA[bbDKP 1.4.3 est une système DKP pour votre forum PHPBB3; Fonctionnalités: multi-pool, DKP Standard, points par temps passé, Somme Zéro et EPGP. Il aide les administrateurs à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft, Rift, SW:Tor, Lineage 2, TERA, FFXIV. Liste non exhaustive des fonctionnalités : Multiples groupes DKP et guildes, Tribune des points DKP, Raids, Evènements, Valeurs des Objets, Historique des Objets, Statistique des Raids, Page d’avancée des Boss, Armurerie, module PCA avec Backup, Import de EQDKP+.
+<description lang="fr"><![CDATA[bbDKP 1.4.4 est une système DKP pour votre forum PHPBB3; Fonctionnalités: multi-pool, DKP Standard, points par temps passé, Somme Zéro et EPGP. Il aide les administrateurs à gérer leur Guilde, à savoir le suivi de la participation des membres au raids, la gestion des achats d‘objets, et bien d’autres statistiques. Il met à jour et incorpore ces fonctions de gestion, et les intègre dans PHPBB3. Ceci apportera à vos utilisateurs un point d’accès centralisé à DKP ainsi qu’au forum, et vous comme Administrateur ou leader de Raid recoit une interface claire et robuste et pas de soucis d’integration. Nous supportons les Jeux Aion, Daoc, Eq, Eq2, ffxi, lotro, vanguard, warhammer, World of Warcraft, Rift, SW:Tor, Lineage 2, TERA, FFXIV. Liste non exhaustive des fonctionnalités : Multiples groupes DKP et guildes, Tribune des points DKP, Raids, Evènements, Valeurs des Objets, Historique des Objets, Statistique des Raids, Page d’avancée des Boss, Armurerie, module PCA avec Backup, Import de EQDKP+.
 Les Plugins : bbTips (Wow), Raidtracker (wow), Bossprogress, Formulaire de Recrutement, Calendrier
 Pour de plus amples détails, veuillez consulter le changelog. Demandes de développement, questions de support sont les bienvenues à http://www.bbdkp.com ou chez @bbDKP sur Twitter.
 
@@ -36,7 +36,7 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-		<description lang="de"><![CDATA[bbDKP 1.4.3 ist eine DKP Lösung für ihr PHPBB3 Forum.
+		<description lang="de"><![CDATA[bbDKP 1.4.4 ist eine DKP Lösung für ihr PHPBB3 Forum.
 		Funktionen: multi-pool, Standard DKP, Zeitpunkteverwaltung,
 		Nullpunkteverwaltung, und EPGP. Gildenmitgliederverwaltung, Raidteilnahme, Gegenstandsankäufe, DKP Konten, GildenStatistiken.
 		Einziges Angriffspunkt zum DKP und zum forum, mit überschauliche interface ohne Integrationsschwierigkeiten.
@@ -51,7 +51,7 @@ bbDKP (c) 2009 Sajaki, Kapli, Hroar, Malfate
 bbDKP (c) 2008 Sajaki, Malfate, Kapli
 bbDKP (c) 2007 Ippeh, Teksonic, Monkeytech, DWKN
 EQDkp (c) 2003 The EqDkp Project Team]]></description>
-		<description lang="it"><![CDATA[bbDKP 1.4.3 è una modifica per phpBB3.
+		<description lang="it"><![CDATA[bbDKP 1.4.4è una modifica per phpBB3.
 lineamenti : Integrazione di Game, Gilda e DKP gestione facilites nel tuo forum phpBB3.
 Single Sign-On per dkp e phpBB3, schermi puliti rapporto, robusto amministratore offrono, nessun mal di testa di integrazione.
 Sistema di distribuzione bottino multi-gruppo: DKP standard, basato Tempo DKP, Zero somma e EPGP.
@@ -107,7 +107,7 @@ EQDkp (c) 2003 The EqDkp Project Team]]]></description>
 			</author>
 			<author>
 				<realname><![CDATA[Teksonic]]></realname>
-				<username><![CDATA[Teksonic]]></username>				
+				<username><![CDATA[Teksonic]]></username>
 				<contributions-group>
 					<contributions status="past" from="2008-04-06" to="2008-06-01" position="Developer"/>
 				</contributions-group>
@@ -128,7 +128,7 @@ EQDkp (c) 2003 The EqDkp Project Team]]]></description>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.4.3</mod-version>
+		<mod-version>1.4.4</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>
@@ -137,9 +137,10 @@ EQDkp (c) 2003 The EqDkp Project Team]]]></description>
 		<link-group>
 			<link type="language" href="contrib/fr.xml" lang="en">Français</link>
 			<link type="language" href="contrib/it.xml" lang="en">Italiano</link>
-			<link type="language" href="contrib/de.xml" lang="en">Deutsch</link>	
-			<link type="contrib" href="contrib/bbdkp_1308_to_143/update.xml" lang="en">Update 1.3.0.8->1.4.3</link>
-			<link type="contrib" href="contrib/bbdkp_142_to_143/update.xml" lang="en">Update 1.4.2->1.4.3</link>
+			<link type="language" href="contrib/de.xml" lang="en">Deutsch</link>
+			<link type="contrib" href="contrib/bbdkp_1308_to_144/update.xml" lang="en">Update 1.3.0.8->1.4.4</link>
+			<link type="contrib" href="contrib/bbdkp_142_to_144/update.xml" lang="en">Update 1.4.2->1.4.4</link>
+			<link type="contrib" href="contrib/bbdkp_143_to_144/update.xml" lang="en">Update 1.4.2->1.4.4</link>
         </link-group>
 	</header>
 	<action-group>
@@ -182,8 +183,8 @@ EQDkp (c) 2003 The EqDkp Project Team]]]></description>
 			<file from="root/includes/bbdkp/admin/validator.php" to="includes/bbdkp/admin/validator.php"/>
 			<file from="root/includes/bbdkp/admin/krequest.php" to="includes/bbdkp/admin/krequest.php"/>
 			<!-- blocks -->
-			
-			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>			
+
+			<file from="root/includes/bbdkp/block/blockFactory.php" to="includes/bbdkp/block/blockFactory.php"/>
 			<file from="root/includes/bbdkp/block/linksblock.php" to="includes/bbdkp/block/linksblock.php"/>
 			<file from="root/includes/bbdkp/block/loginblock.php" to="includes/bbdkp/block/loginblock.php"/>
 			<file from="root/includes/bbdkp/block/lootblock.php" to="includes/bbdkp/block/lootblock.php"/>
@@ -265,7 +266,7 @@ EQDkp (c) 2003 The EqDkp Project Team]]]></description>
 			<file from="root/includes/ucp/info/ucp_dkp.php" to="includes/ucp/info/ucp_dkp.php"/>
 			<!-- installer -->
 			<file from="root/install/*.*" to="install/*.*"/>
-			<file from="root/umil/*.*" to="umil/*.*"/>			
+			<file from="root/umil/*.*" to="umil/*.*"/>
             <!-- language -->
 			<file from="root/language/en/mods/dkp_admin.php" to="language/en/mods/dkp_admin.php"/>
 			<file from="root/language/en/mods/dkp_common.php" to="language/en/mods/dkp_common.php"/>
@@ -283,7 +284,7 @@ EQDkp (c) 2003 The EqDkp Project Team]]]></description>
             <file from="root/language/en/mods/info_acp_dkp_recruit.php" to="language/en/mods/info_acp_dkp_recruit.php"/>
 			<file from="root/language/en/mods/info_ucp_dkpcharacter.php" to="language/en/mods/info_ucp_dkpcharacter.php"/>
 			<file from="root/language/en/mods/permissions_bbdkp.php" to="language/en/mods/permissions_bbdkp.php"/>
-			<!-- prosilver --> 
+			<!-- prosilver -->
 			<file from="root/styles/prosilver/template/dkp/*.*" to="styles/prosilver/template/dkp/*.*"/>
 			<file from="root/styles/prosilver/theme/bbdkp.css" to="styles/prosilver/theme/bbdkp.css"/>
 			<file from="root/styles/prosilver/theme/jquery-ui-1.8.4.custom.css" to="styles/prosilver/theme/jquery-ui-1.8.4.custom.css"/>
@@ -301,7 +302,7 @@ Deny from All
 				<action type="after-add"><![CDATA[DirectoryIndex portal.php index.php index.html index.htm]]></action>
 			</edit>
 		</open>
-	
+
 		<open src="includes/functions.php">
 			<edit>
 				<comment lang="en"><![CDATA[ preloading dkp language file in functions.php]]></comment>
@@ -311,8 +312,8 @@ Deny from All
 				<action type="before-add"><![CDATA[$user->add_lang(array('mods/dkp_common'));
 ]]></action>
 			</edit>
-			
-			
+
+
 			<edit>
 				<comment lang="en"><![CDATA[adding cronjobs in footer function]]></comment>
 				<comment lang="en"><![CDATA[ajouter cronjobs dans la fonction footer]]></comment>
@@ -502,9 +503,9 @@ function get_bbchar($bbresult)
 		}]]></action>
 		</edit>
 		</open>
-		
-		
-<!-- prosilver edits -->		
+
+
+<!-- prosilver edits -->
 
 		<open src="styles/prosilver/template/overall_header.html">
 			<edit>

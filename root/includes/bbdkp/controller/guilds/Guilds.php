@@ -1,12 +1,12 @@
 <?php
 /**
  * Guilds class file
- *   @package bbdkp
+ * @package bbdkp
  * @link http://www.bbdkp.com
  * @author Sajaki@gmail.com
  * @copyright 2013 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ * @version 1.4.4
  */
 namespace bbdkp\controller\guilds;
 /**
@@ -1098,4 +1098,3 @@ class Guilds extends \bbdkp\admin\Admin
 
 
 }
-
