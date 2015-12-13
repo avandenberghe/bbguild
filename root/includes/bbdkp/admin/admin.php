@@ -235,7 +235,7 @@ class Admin
 		$regcode = hash("sha256", serialize(array($regdata['domainname'],$regdata['phpbbversion'], $regdata['bbdkpversion'])));
 
 		// bbdkp registration url
-		$url = "https://www.bbdkp.com/services/registerbbdkp.php";
+		$url = "http://www.avathar.be/services/registerbbdkp.php";
 		// Create URL parameter string
 		$fields_string = '';
 		foreach( $regdata as $key => $value )
