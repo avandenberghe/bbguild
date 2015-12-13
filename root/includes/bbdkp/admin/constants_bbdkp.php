@@ -18,7 +18,7 @@ namespace bbdkp\admin
 		exit;
 	}
 
-	define('BBDKP_VERSIONURL', 'https://raw.githubusercontent.com/bbDKP/bbDKP/master/contrib/');
+	define('BBDKP_VERSIONURL', 'https://raw.githubusercontent.com/bbDKP/bbDKP/master/contrib/versions/');
 	define('BBDKP_PLUGINURL' , 'https://www.bbdkp.com/downloads.php?cat=2" target="_blank');
 
 	//BBDKP
@@ -75,6 +75,15 @@ namespace bbdkp\admin
 	// BBTIPS
 
 	// RAIDPLANNER
+define('RP_RAIDS_TABLE',		$table_prefix . 'rp_raids');
+define('RP_RECURRING',		$table_prefix . 'rp_recurring');
+define('RP_SIGNUPS',		$table_prefix . 'rp_signups');
+define('RP_RAIDPLAN_WATCH',	$table_prefix . 'rp_raidplans_watch'); //deprecated
+define('RP_WATCH',			$table_prefix . 'rp_watch');  //deprecated
+define('RP_RAIDPLAN_ROLES',		$table_prefix . 'rp_raidplanroles');
+define('RP_RAIDPLAN_ANNOUNCEMENT',		$table_prefix . 'rp_announcement');
+define('RP_TEAMS',		$table_prefix . 'rp_teams');
+define('RP_TEAMSIZE',		$table_prefix . 'rp_teamsizes');
 
 	// APPLY
 }
