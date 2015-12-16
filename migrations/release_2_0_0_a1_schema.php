@@ -89,9 +89,6 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
                         'class_max_level'	=> array('USINT', 0),
                         'class_armor_type'	=> array('VCHAR_UNI', ''),
                         'class_hide'		=> array('BOOL', 0),
-                        'dps'				=> array('USINT', 0),
-                        'tank'				=> array('USINT', 0),
-                        'heal'				=> array('USINT', 0),
                         'imagename'			=> array('VCHAR:255', ''),
                         'colorcode'			=> array('VCHAR:10', ''),
                     ),
@@ -114,13 +111,26 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
                 /*6*/
                 $this->table_prefix . 'bbdkp_memberguild'	=> array(
                     'COLUMNS'	=> array(
-                        'id'				=> array('USINT', 0),
-                        'name'			=> array('VCHAR_UNI:255', ''),
-                        'realm'			=> array('VCHAR_UNI:255', ''),
-                        'region'  		=> array('VCHAR:2', ''),
-                        'roster'  		=> array('BOOL', 0),
-                        'aion_legion_id' => array('USINT', 0),
-                        'aion_server_id' => array('USINT', 0),
+                        'id'			    => array('USINT', 0),
+                        'name'			    => array('VCHAR_UNI:255', ''),
+                        'realm'			    => array('VCHAR_UNI:255', ''),
+                        'region'  		    => array('VCHAR:2', ''),
+                        'battlegroup'       => array('VCHAR:255', ''),
+                        'roster'  		    => array('BOOL', 0),
+                        'aion_legion_id'    => array('USINT', 0),
+                        'aion_server_id'    => array('USINT', 0),
+                        'level'             => array('UINT', 0),
+                        'members'           => array('UINT', 0),
+                        'achievementpoints' =>  array('UINT', 0),
+                        'guildarmoryurl'    => array('VCHAR:255', ''),
+                        'emblemurl'         => array('VCHAR:255', ''),
+                        'game_id'           => array('VCHAR:10', ''),
+                        'min_armory'        => array('UINT', 90),
+                        'rec_status'        => array('BOOL', 0),
+                        'guilddefault'      => array('BOOL', 0),
+                        'armory_enabled'    => array('BOOL', 0),
+                        'armoryresult'      => array('VCHAR_UNI:255', ''),
+                        'recruitforum'      => array('UINT', 0),
                     ),
                     'PRIMARY_KEY'  	=> array('id'),
                     'KEYS'         => array('bbguild'    => array('UNIQUE', array('name', 'id') )),
@@ -143,14 +153,17 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
                 /*8*/
                 $this->table_prefix . 'bbdkp_memberlist'	=> array(
                     'COLUMNS'	=> array(
-                        'game_id'  		   => array('VCHAR:10', ''),
                         'member_id'        => array('UINT', NULL, 'auto_increment'),
+                        'game_id'  		   => array('VCHAR:10', ''),
                         'member_name'      => array('VCHAR_UNI:255', ''),
-                        'member_status'    => array('BOOL', 0) ,
+                        'member_region'     => array('VCHAR', ''),
+                        'member_realm'      => array('VCHAR', ''),
+                        'member_title'      => array('VCHAR_UNI:255', ''),
                         'member_level'     => array('USINT', 0),
                         'member_race_id'   => array('USINT', 0),
                         'member_class_id'  => array('USINT', 0),
                         'member_rank_id'   => array('USINT', 0),
+                        'member_role'       => array('VCHAR:20', ''),
                         'member_comment'   => array('VCHAR_UNI:255', ''),
                         'member_joindate'  => array('TIMESTAMP', 0),
                         'member_outdate'   => array('TIMESTAMP', 0),
@@ -159,7 +172,11 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
                         'member_achiev'    => array('UINT', 0),
                         'member_armory_url' => array('VCHAR:255', ''),
                         'member_portrait_url' => array('VCHAR', ''),
-                        'phpbb_user_id' 	=> array('UINT', 0)
+                        'phpbb_user_id' 	=> array('UINT', 0),
+                        'member_status'     => array('BOOL', 0) ,
+                        'deactivate_reason' => array('VCHAR_UNI:255', ''),
+                        'last_update'       => array('TIMESTAMP', 0)
+
                     ),
                     'PRIMARY_KEY'  => 'member_id',
                     'KEYS'         => array('member_name'    => array('UNIQUE', 'member_name')),
@@ -207,7 +224,6 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
                         'member_spent'		=> array('DECIMAL:11', 0),
                         'member_item_decay'	=> array('DECIMAL:11', 0),
                         'member_adjustment' => array('DECIMAL:11', 0),
-                        'member_status' 	=> array('BOOL', 0) ,
                         'member_firstraid'  => array('TIMESTAMP', 0),
                         'member_lastraid'	=> array('TIMESTAMP', 0),
                         'member_raidcount'	=> array('UINT', 0),
@@ -281,6 +297,7 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
                         'item_decay'      => array('DECIMAL:11', 0.00), // decay of itemvalue
                         'item_zs'      	  => array('BOOL', 0), 		// if this flag is set the itemvalue will be distributed over raid
                         'decay_time' 	  => array('DECIMAL:11', 0.00),
+                        'wowhead_id'      => array('UINT', 0)
                     ),
                     'PRIMARY_KEY'     => 'item_id',
                     'KEYS'         => array('raid_id'    => array('INDEX', 'raid_id')),
@@ -311,6 +328,7 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
                         'name'			=> array('VCHAR_UNI:255', ''),
                         'value'			=> array('BOOL', 0),
                         'version'  		=> array('VCHAR:50', ''),
+                        'installdate'   => array('TIMESTAMP', 0),
                         'orginal_copyright' => array('VCHAR_UNI:150', ''),
                         'bbdkp_copyright'  	=> array('VCHAR_UNI:150', ''),
                     ),
@@ -330,6 +348,55 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
                     ),
                     'PRIMARY_KEY'    => 'welcome_id'
                 ),
+                /*19*/
+                $this->table_prefix . 'bbdkp_games'	=> array(
+                    'COLUMNS'	=> array(
+                        'id'     	     => array('UINT', NULL, 'auto_increment'),
+                        'game_id' 	     => array('VCHAR:10', ''),
+                        'game_name'      => array('VCHAR_UNI:255', ''),
+                        'status'	   	 => array('VCHAR:30', ''),
+                        'imagename'	     => array('VCHAR:20', ''),
+                        'armory_enabled' => array('UINT', 0),
+                        'bossbaseurl'    => array('VCHAR:255', ''),
+                        'zonebaseurl'    => array('VCHAR:255', ''),
+                        'apikey'         => array('VCHAR:255', ''),
+                        'apilocale'      => array('VCHAR:5', ''),
+                        'privkey'        => array('VCHAR:255', '')
+                    ),
+                    'PRIMARY_KEY'     => array('id'),
+                    'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id')))
+                ),
+                /*20*/
+                $this->table_prefix . 'bbdkp_gameroles'	=> array(
+                    'COLUMNS'	=> array(
+                        'role_pkid'        => array('INT:8', NULL, 'auto_increment'),
+                        'game_id'          => array('VCHAR:10', ''),
+                        'role_id'          => array('INT:8', 0),
+                        'role_color'       => array('VCHAR', ''),
+                        'role_icon'        => array('VCHAR', ''),
+                        'role_cat_icon'    => array('VCHAR', ''),
+                    ),
+                    'PRIMARY_KEY'    => 'role_pkid',
+                    'KEYS'         => array('bbroles'    => array('UNIQUE', array('game_id', 'role_id')))
+                ),
+                /*22*/
+                $this->table_prefix . 'bbdkp_recruit'	=> array(
+                    'COLUMNS'	=> array(
+                        'id'               => array('INT:8', NULL, 'auto_increment'),
+                        'guild_id'         => array('USINT', 0),
+                        'role_id'          => array('INT:8', 0),
+                        'class_id'         => array('UINT',  0),
+                        'level'            => array('UINT',  0),
+                        'positions'        => array('USINT', 0),
+                        'applicants'       => array('USINT', 0),
+                        'status'           => array('USINT', 0),
+                        'applytemplate_id' => array('UINT',  0),
+                        'last_update'      => array('TIMESTAMP', 0),
+                        'note'             => array('TEXT_UNI', ''),
+                    ),
+                    'PRIMARY_KEY'          => 'id',
+                ),
+
 
             ),
         );
@@ -363,6 +430,9 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
                 $this->table_prefix . 'bbdkp_logs',
                 $this->table_prefix . 'bbdkp_plugins',
                 $this->table_prefix . 'bbdkp_welcomemsg',
+                $this->table_prefix . 'bbdkp_games',
+                $this->table_prefix . 'bbdkp_gameroles',
+                $this->table_prefix . 'bbdkp_recruit',
             ),
         );
     }
