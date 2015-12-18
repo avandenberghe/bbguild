@@ -46,9 +46,9 @@ branches:
 
 before_install:
   - sudo mkdir travis
-  - git clone "https://github.com/nickvergessen/phpbb-ext-acme-demo.git"
-  - sudo cp phpbb-ext-acme-demo/phpunit.xml.dist ./
-  - sudo cp phpbb-ext-acme-demo/travis/prepare-phpbb.sh travis
+  - git clone "https://github.com/bbdkp/bbdkp.git"
+  - sudo cp bbdkp/phpunit.xml.dist ./
+  - sudo cp bbdkp/travis/prepare-phpbb.sh travis
   - sudo rm -rf phpbb-ext-acme-demo
   - composer self-update
 
