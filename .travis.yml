@@ -40,20 +40,11 @@ env:
 
 branches:
   only:
-    - master
-    - develop
-    - /^develop-.*$/
+    - develop-2.0
 
-before_install:
-  - sudo mkdir travis
-  - git clone "https://github.com/bbdkp/bbdkp.git"
-  - sudo cp bbdkp/phpunit.xml.dist ./
-  - sudo cp bbdkp/travis/prepare-phpbb.sh travis
-  - sudo rm -rf phpbb-ext-acme-demo
-  - composer self-update
 
 install:
-  - composer install --no-interaction --prefer-source
+  - php composer.phar install --dev --no-interaction --prefer-source
   - travis/prepare-phpbb.sh $EXTNAME $PHPBB_BRANCH
   - cd ../../phpBB3
   - travis/prepare-extension.sh $EXTNAME $PHPBB_BRANCH
