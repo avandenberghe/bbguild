@@ -1,1 +1,11 @@
 images
+composer.phar
+vendor
+.DS_Store
+Thumbs.db
+.project
+com.zend.php.javabridge.core.prefs
+org.eclipse.php.core.projectOptions.prefs
+.dataModel
+.wsdlDataModelforum/cache/
+.idea
