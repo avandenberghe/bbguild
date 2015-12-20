@@ -92,7 +92,151 @@ class release_2_0_0_m02_data extends container_aware_migration
 
         $this->db->sql_multi_insert($this->table_prefix . 'bbdkp_welcomemsg', $welcome);
 
-    }
+        /*standard game roles */
+        $i=0;
+        $Standardoles= array(
+            array(
+                // dps
+                'game_id'          => 'wow',
+                'role_id'          => $i,
+                'role_color'       => '#FF4455',
+                'role_icon'        => 'dps_icon',
+            ),
+            array(
+                // healer
+                'game_id'          => 'wow',
+                'role_id'          => $i+1,
+                'role_color'       => '#11FF77',
+                'role_icon'        => 'healer_icon',
+            ),
+            array(
+                // tank
+                'game_id'          => 'wow',
+                'role_id'          => $i+2,
+                'role_color'       => '#c3834c',
+                'role_icon'        => 'tank_icon',
+            ),
+
+        );
+        $this->db->sql_multi_insert($this->table_prefix . 'bbdkp_gameroles', $Standardoles);
+
+        /* language strings for these roles */
+
+        $rolelangs = array(
+            array(
+                // dps
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i,
+                'language'          => 'en',
+                'attribute'         => 'role',
+                'name'              => 'Damage',
+                'name_short'        => 'DPS',
+            ),
+            array(
+                // healer
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i+1,
+                'language'          => 'en',
+                'attribute'         => 'role',
+                'name'              => 'Healer',
+                'name_short'        => 'HPS',
+            ),
+            array(
+                // defense
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i+2,
+                'language'          => 'en',
+                'attribute'         => 'role',
+                'name'              => 'Defense',
+                'name_short'        => 'DEF',
+            ),
+            array(
+                // dps
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i,
+                'language'          => 'fr',
+                'attribute'         => 'role',
+                'name'              => 'Dégats',
+                'name_short'        => 'DPS',
+            ),
+            array(
+                // healer
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i+1,
+                'language'          => 'fr',
+                'attribute'         => 'role',
+                'name'              => 'Soigneur',
+                'name_short'        => 'HPS',
+            ),
+            array(
+                // tank
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i+2,
+                'language'          => 'fr',
+                'attribute'         => 'role',
+                'name'              => 'Défense',
+                'name_short'        => 'DEF',
+            ),
+            array(
+                // dps
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i,
+                'language'          => 'de',
+                'attribute'         => 'role',
+                'name'              => 'Kämpfer',
+                'name_short'        => 'Schaden',
+            ),
+            array(
+                // healer
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i+1,
+                'language'          => 'de',
+                'attribute'         => 'role',
+                'name'              => 'Heiler',
+                'name_short'        => 'Heil',
+            ),
+            array(
+                // tank
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i+2,
+                'language'          => 'de',
+                'attribute'         => 'role',
+                'name'              => 'Verteidigung',
+                'name_short'        => 'Schutz',
+            ),
+            array(
+                // dps
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i,
+                'language'          => 'it',
+                'attribute'         => 'role',
+                'name'              => 'Danni',
+                'name_short'        => 'Danni',
+            ),
+            array(
+                // healer
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i+1,
+                'language'          => 'it',
+                'attribute'         => 'role',
+                'name'              => 'Cura',
+                'name_short'        => 'Cura',
+            ),
+            array(
+                // tank
+                'game_id'           => $row['game_id'],
+                'attribute_id'      => $i+2,
+                'language'          => 'it',
+                'attribute'         => 'role',
+                'name'              => 'Difeza',
+                'name_short'        => 'Tank',
+            ),
+
+        );
+        $this->db->sql_multi_insert($this->table_prefix . 'bbdkp_language', $rolelangs);
+
+
+        }
 
     /**
      * encode welcome text

@@ -114,7 +114,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'id'			    => array('USINT', 0),
                         'name'			    => array('VCHAR_UNI:255', ''),
                         'realm'			    => array('VCHAR_UNI:255', ''),
-                        'region'  		    => array('VCHAR:2', ''),
+                        'region'  		    => array('VCHAR:3', ''),
                         'battlegroup'       => array('VCHAR:255', ''),
                         'roster'  		    => array('BOOL', 0),
                         'aion_legion_id'    => array('USINT', 0),
@@ -164,7 +164,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'member_class_id'  => array('USINT', 0),
                         'member_rank_id'   => array('USINT', 0),
                         'member_role'       => array('VCHAR:20', ''),
-                        'member_comment'   => array('VCHAR_UNI:255', ''),
+                        'member_comment'   => array( 'TEXT_UNI' , ''),
                         'member_joindate'  => array('TIMESTAMP', 0),
                         'member_outdate'   => array('TIMESTAMP', 0),
                         'member_guild_id'  => array('USINT', 0),
@@ -179,7 +179,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
 
                     ),
                     'PRIMARY_KEY'  => 'member_id',
-                    'KEYS'         => array('member_name'    => array('UNIQUE', 'member_name')),
+                    'KEYS'         => array('member_name'    => array('UNIQUE', array('member_guild_id', 'member_name'))),
                 ),
                 /*9*/
                 $this->table_prefix . 'bbdkp_dkpsystem'	=> array(
@@ -256,7 +256,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                     'COLUMNS'	=> array(
                         'raid_id'			=> array('UINT', NULL, 'auto_increment'),
                         'event_id'			=> array('UINT', 0),
-                        'raid_note'   		=> array('VCHAR_UNI:255', ''),
+                        'raid_note'   		=> array('TEXT_UNI', ''),
                         'raid_start'  		=> array('TIMESTAMP', 0) ,
                         'raid_end'  		=> array('TIMESTAMP', 0) ,
                         'raid_added_by' 	=> array('VCHAR_UNI:255', ''),
@@ -292,7 +292,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'item_added_by'   => array('VCHAR_UNI:255', ''),
                         'item_updated_by' => array('VCHAR_UNI:255', ''),
                         'item_group_key'  => array('VCHAR', ''),
-                        'item_gameid' 	  => array('UINT', 0),
+                        'item_gameid' 	  => array('VCHAR:10', ''),
                         'item_value'      => array('DECIMAL:11', 0.00),
                         'item_decay'      => array('DECIMAL:11', 0.00), // decay of itemvalue
                         'item_zs'      	  => array('BOOL', 0), 		// if this flag is set the itemvalue will be distributed over raid
