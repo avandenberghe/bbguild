@@ -20,13 +20,13 @@ class dkp_adj_info
 	function module()
 	{
 		return array(
-			'filename'	=> 'acp_dkp_adj',
-		    'title'	=> 'ACP_DKP_MDKP',
-			'version'	=> '1.3.0',
-			'modes'		=> array(			
+			'filename'	=> '\sajaki\bbdkp\acp\dkp_adj_module',
+			'title'	    => 'ACP_DKP_MDKP',
+			'version'	=> '2.0.0',
+			'modes'		=> array(
 				'addiadj'	=> array('title' => 'ACP_DKP_ADDADJ', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MDKP'), 'display' => false),
 				'listiadj'	=> array('title' => 'ACP_DKP_LISTADJ', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MDKP'), 'display' => true),
-				),
+			),
 		);
 	}
 

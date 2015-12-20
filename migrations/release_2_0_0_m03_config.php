@@ -54,12 +54,14 @@ class release_2_0_0_m03_config extends \phpbb\db\migration\migration
 			array('config.add', array('bbdkp_epgp', 0)),
 			array('config.add', array('bbdkp_eqdkp_start', 1447196400)),
 			array('config.add', array('bbdkp_event_viewall', 1)),
+			// guildfaction : limit the possible races to be available to users to those available in the guild's chosen faction
 			array('config.add', array('bbdkp_guild_faction', 1)),
 			array('config.add', array('bbdkp_hide_inactive', 1)),
 			array('config.add', array('bbdkp_inactive_period', 150)),
 			array('config.add', array('bbdkp_inactive_point_adj', -10.00)),
 			array('config.add', array('bbdkp_itemdecaypct', 5)),
-			array('config.add', array('bbdkp_lang', 'EN')),
+			//default dkp language
+			array('config.add', array('bbdkp_lang', 'en')),
 			array('config.add', array('bbdkp_lastcron', 0)),
 			array('config.add', array('bbdkp_list_p1', 30)),
 			array('config.add', array('bbdkp_list_p2', 60)),
@@ -84,7 +86,9 @@ class release_2_0_0_m03_config extends \phpbb\db\migration\migration
 			array('config.add', array('bbdkp_portal_welcomemsg', 1)),
 			array('config.add', array('bbdkp_portal_whoisonline', 1)),
 			array('config.add', array('bbdkp_regid', 0)),
+			// roster layout: main parameter for steering roster layout
 			array('config.add', array('bbdkp_roster_layout', 0)),
+			// showachiev : show the achievement points
 			array('config.add', array('bbdkp_show_achiev', 0)),
 			array('config.add', array('bbdkp_standardduration', 1)),
 			array('config.add', array('bbdkp_starting_dkp', 15.00)),
