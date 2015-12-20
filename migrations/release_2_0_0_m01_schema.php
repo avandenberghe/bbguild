@@ -13,19 +13,19 @@ namespace sajaki\bbdkp\migrations;
 /**
  * Migration stage 1: Initial schema
  */
-class release_2_0_0_schema extends \phpbb\db\migration\migration
+class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
 {
 
     private $bbdkp_version = '2.0.0';
 
-    public function effectively_installed()
-    {
-        return isset($this->config['bbdkp_version']) && version_compare($this->config['bbdkp_version'], $this->bbdkp_version, '>=');
-    }
-
     static public function depends_on()
     {
         return array('\phpbb\db\migration\data\v310\gold');
+    }
+
+    public function effectively_installed()
+    {
+        return isset($this->config['bbdkp_version']) && version_compare($this->config['bbdkp_version'], $this->bbdkp_version, '>=');
     }
 
     /**
@@ -379,7 +379,7 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
                     'PRIMARY_KEY'    => 'role_pkid',
                     'KEYS'         => array('bbroles'    => array('UNIQUE', array('game_id', 'role_id')))
                 ),
-                /*22*/
+                /*21*/
                 $this->table_prefix . 'bbdkp_recruit'	=> array(
                     'COLUMNS'	=> array(
                         'id'               => array('INT:8', NULL, 'auto_increment'),
@@ -403,7 +403,7 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
     }
 
     /**
-     * Drop the pages table schema from the database
+     * Drop the bbdkp table schema from the database
      *
      * @return array Array of table schema
      * @access public
@@ -436,4 +436,6 @@ class release_2_0_0_schema extends \phpbb\db\migration\migration
             ),
         );
     }
+
+
 }
