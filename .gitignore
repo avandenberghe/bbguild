@@ -8,3 +8,4 @@ org.eclipse.php.core.projectOptions.prefs
 .dataModel
 .wsdlDataModelforum/cache/
 .idea
+composer.phar
