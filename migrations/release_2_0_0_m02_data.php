@@ -93,25 +93,26 @@ class release_2_0_0_m02_data extends container_aware_migration
         $this->db->sql_multi_insert($this->table_prefix . 'bbdkp_welcomemsg', $welcome);
 
         /*standard game roles */
+        $game_id = 'wow';
         $i=0;
         $Standardoles= array(
             array(
                 // dps
-                'game_id'          => 'wow',
+                'game_id'          => $game_id,
                 'role_id'          => $i,
                 'role_color'       => '#FF4455',
                 'role_icon'        => 'dps_icon',
             ),
             array(
                 // healer
-                'game_id'          => 'wow',
+                'game_id'          => $game_id,
                 'role_id'          => $i+1,
                 'role_color'       => '#11FF77',
                 'role_icon'        => 'healer_icon',
             ),
             array(
                 // tank
-                'game_id'          => 'wow',
+                'game_id'          => $game_id,
                 'role_id'          => $i+2,
                 'role_color'       => '#c3834c',
                 'role_icon'        => 'tank_icon',
@@ -125,7 +126,7 @@ class release_2_0_0_m02_data extends container_aware_migration
         $rolelangs = array(
             array(
                 // dps
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i,
                 'language'          => 'en',
                 'attribute'         => 'role',
@@ -134,7 +135,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // healer
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i+1,
                 'language'          => 'en',
                 'attribute'         => 'role',
@@ -143,7 +144,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // defense
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i+2,
                 'language'          => 'en',
                 'attribute'         => 'role',
@@ -152,7 +153,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // dps
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i,
                 'language'          => 'fr',
                 'attribute'         => 'role',
@@ -161,7 +162,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // healer
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i+1,
                 'language'          => 'fr',
                 'attribute'         => 'role',
@@ -170,7 +171,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // tank
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i+2,
                 'language'          => 'fr',
                 'attribute'         => 'role',
@@ -179,7 +180,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // dps
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i,
                 'language'          => 'de',
                 'attribute'         => 'role',
@@ -188,7 +189,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // healer
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i+1,
                 'language'          => 'de',
                 'attribute'         => 'role',
@@ -197,7 +198,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // tank
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i+2,
                 'language'          => 'de',
                 'attribute'         => 'role',
@@ -206,7 +207,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // dps
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i,
                 'language'          => 'it',
                 'attribute'         => 'role',
@@ -215,7 +216,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // healer
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i+1,
                 'language'          => 'it',
                 'attribute'         => 'role',
@@ -224,7 +225,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
             array(
                 // tank
-                'game_id'           => $row['game_id'],
+                'game_id'           => $game_id,
                 'attribute_id'      => $i+2,
                 'language'          => 'it',
                 'attribute'         => 'role',

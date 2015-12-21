@@ -48,6 +48,7 @@ class release_2_0_0_m05_mod extends \phpbb\db\migration\migration
 			 */
 			array('module.add', array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MAINPAGE')),
 
+
 			//adminpanel, portal settings, Logs
 			array('module.add', array(
 				'acp', 'ACP_DKP_MAINPAGE', array(
@@ -55,6 +56,7 @@ class release_2_0_0_m05_mod extends \phpbb\db\migration\migration
 					'modes'           => array('mainpage', 'dkp_config', 'dkp_logs', 'dkp_indexpageconfig') ,
 				)
 			)),
+
 
 			//Point settings
 			array('module.add', array(
@@ -73,6 +75,8 @@ class release_2_0_0_m05_mod extends \phpbb\db\migration\migration
 			/**
 			* Guild and Member management Category
 			*/
+
+
 			array('module.add', array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MEMBER')),
 
 
@@ -104,6 +108,7 @@ class release_2_0_0_m05_mod extends \phpbb\db\migration\migration
 			 * add dkp management Category
 			 *
 			 */
+
 			array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MDKP'),
 
 			// add dkp pool module
@@ -133,6 +138,7 @@ class release_2_0_0_m05_mod extends \phpbb\db\migration\migration
 			/**
 			 * add Raid management Category
 			 */
+
 			array('module.add', array('acp', 'ACP_CAT_DKP', 'ACP_DKP_RAIDS')),
 
 			//  add manual raid modules
@@ -156,6 +162,7 @@ class release_2_0_0_m05_mod extends \phpbb\db\migration\migration
 			 * link bbDKP memberids to phpbb accounts
 			 *
 			 */
+/*
 			array('module.add', array('ucp', '0', 'UCP_DKP')),
 
 			// Add one UCP module to the new category
@@ -165,7 +172,7 @@ class release_2_0_0_m05_mod extends \phpbb\db\migration\migration
 					'modes'           => array('characters', 'characteradd') ,
 				)
 			)),
-
+*/
 
 		);
 	}

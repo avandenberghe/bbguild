@@ -29,16 +29,5 @@ class dkp_item_info
 				),
 		);
 	}
-	/**
-	 * phpbb module function
-	 */
-	function install()
-	{
-	}
-	/**
-	 * phpbb module function
-	 */
-	function uninstall()
-	{
-	}
+
 }

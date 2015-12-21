@@ -62,7 +62,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'name_short' 	   => array('VCHAR_UNI:255', ''),
                     ),
                     'PRIMARY_KEY'     => array('id'),
-                    'KEYS'            => array('bbdkp_language' => array('UNIQUE', array('game_id', 'attribute_id', 'language', 'attribute')),
+                    'KEYS'            => array('UQ01' => array('UNIQUE', array('game_id', 'attribute_id', 'language', 'attribute')),
                     )),
                 /*3*/
                 $this->table_prefix . 'bbdkp_factions'	=> array(
@@ -76,7 +76,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'faction_hide'		=> array('BOOL', 0),
                     ),
                     'PRIMARY_KEY'    => 'f_index',
-                    'KEYS'         => array('bbdkp_factions'    => array('UNIQUE',  array('game_id', 'faction_id'))),
+                    'KEYS'         => array('UQ01'    => array('UNIQUE',  array('game_id', 'faction_id'))),
                 ),
                 /*4*/
                 $this->table_prefix . 'bbdkp_classes'	=> array(
@@ -93,7 +93,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'colorcode'			=> array('VCHAR:10', ''),
                     ),
                     'PRIMARY_KEY'    => 'c_index',
-                    'KEYS'         => array('bbclass'    => array('UNIQUE', array('game_id', 'class_id'))),
+                    'KEYS'         => array('UQ01'    => array('UNIQUE', array('game_id', 'class_id'))),
                 ),
                 /*5*/
                 $this->table_prefix . 'bbdkp_races'	=> array(
@@ -133,7 +133,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'recruitforum'      => array('UINT', 0),
                     ),
                     'PRIMARY_KEY'  	=> array('id'),
-                    'KEYS'         => array('bbguild'    => array('UNIQUE', array('name', 'id') )),
+                    'KEYS'         => array('UQ01'    => array('UNIQUE', array('name', 'id') )),
                 ),
 
                 /*7*/
@@ -179,7 +179,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
 
                     ),
                     'PRIMARY_KEY'  => 'member_id',
-                    'KEYS'         => array('member_name'    => array('UNIQUE', array('member_guild_id', 'member_name'))),
+                    'KEYS'         => array('UQ01'    => array('UNIQUE', array('member_guild_id', 'member_name'))),
                 ),
                 /*9*/
                 $this->table_prefix . 'bbdkp_dkpsystem'	=> array(
@@ -193,7 +193,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'adj_decay' 		=> array('DECIMAL:11', 0.00),
                     ),
                     'PRIMARY_KEY'    => 'dkpsys_id',
-                    'KEYS'         => array('dkpsys_name'    => array('UNIQUE', 'dkpsys_name')),
+                    'KEYS'         => array('UQ01'    => array('UNIQUE', 'dkpsys_name')),
                 ),
                 /*10*/
                 $this->table_prefix . 'bbdkp_events'	=> array(
@@ -209,7 +209,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'event_status' 		=> array('BOOL', 1),
                     ),
                     'PRIMARY_KEY'    => 'event_id',
-                    'KEYS'            => array('event_dkpid'    => array('INDEX', 'event_dkpid')),
+                    'KEYS'            => array('IX01'    => array('INDEX', 'event_dkpid')),
                 ),
                 /*11*/
                 $this->table_prefix . 'bbdkp_memberdkp'	=> array(
@@ -248,7 +248,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'decay_time' 			 => array('DECIMAL:11', 0.00),
                     ),
                     'PRIMARY_KEY'    => 'adjustment_id',
-                    'KEYS'         => array('member_id'    => array('INDEX', array('member_id', 'adjustment_dkpid'))),
+                    'KEYS'         => array('IX01'    => array('INDEX', array('member_id', 'adjustment_dkpid'))),
                 ),
 
                 /*13*/
@@ -263,7 +263,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'raid_updated_by' 	=> array('VCHAR_UNI:255', ''),
                     ),
                     'PRIMARY_KEY'  => array('raid_id'),
-                    'KEYS'         => array('event_id'    => array('INDEX', 'event_id')),
+                    'KEYS'         => array('IX01'    => array('INDEX', 'event_id')),
                 ),
 
                 /*14*/
@@ -300,7 +300,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'wowhead_id'      => array('UINT', 0)
                     ),
                     'PRIMARY_KEY'     => 'item_id',
-                    'KEYS'         => array('raid_id'    => array('INDEX', 'raid_id')),
+                    'KEYS'         => array('IX01'    => array('INDEX', 'raid_id')),
                 ),
 
                 /*16*/
@@ -364,7 +364,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'privkey'        => array('VCHAR:255', '')
                     ),
                     'PRIMARY_KEY'     => array('id'),
-                    'KEYS'            => array('bbdkp_games' => array('UNIQUE', array('game_id')))
+                    'KEYS'            => array('UQ01' => array('UNIQUE', array('game_id')))
                 ),
                 /*20*/
                 $this->table_prefix . 'bbdkp_gameroles'	=> array(
@@ -377,7 +377,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'role_cat_icon'    => array('VCHAR', ''),
                     ),
                     'PRIMARY_KEY'    => 'role_pkid',
-                    'KEYS'         => array('bbroles'    => array('UNIQUE', array('game_id', 'role_id')))
+                    'KEYS'         => array('UQ01'    => array('UNIQUE', array('game_id', 'role_id')))
                 ),
                 /*21*/
                 $this->table_prefix . 'bbdkp_recruit'	=> array(
