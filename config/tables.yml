@@ -1,0 +1,51 @@
+# table definitions
+# inserted through services.yml into classes
+#	BBGAMES_TABLE =>  bbdkp_games
+#	NEWS_TABLE =>  bbdkp_news
+#	ADJUSTMENTS_TABLE => bbdkp_adjustments
+#	BBEVENTS_TABLE => bbdkp_events
+#	RAID_ITEMS_TABLE => bbdkp_raid_items
+#	BBLOGS_TABLE =>    bbdkp_logs
+#	MEMBER_RANKS_TABLE => bbdkp_member_ranks
+#	MEMBER_LIST_TABLE => bbdkp_memberlist
+#	MEMBER_DKP_TABLE => bbdkp_memberdkp
+#	RAID_DETAIL_TABLE => bbdkp_raid_detail
+#	RAIDS_TABLE => bbdkp_raids
+#	CLASS_TABLE => bbdkp_classes
+#	RACE_TABLE => bbdkp_races
+#	FACTION_TABLE => bbdkp_factions
+#	DKPSYS_TABLE => bbdkp_dkpsystem
+#	BBDKPPLUGINS_TABLE => bbdkp_plugins
+#	GUILD_TABLE	 => bbdkp_memberguild
+#	LOOTSYS_TABLE => bbdkp_lootsystem
+#	BB_LANGUAGE	=> bbdkp_language
+#	BOSSBASE => bbdkp_bosstable
+#	ZONEBASE => bbdkp_zonetable
+#	WELCOME_MSG_TABLE => bbdkp_welcomemsg
+#   GUILD_BOSS => bbdkp_guildboss
+parameters:
+    sajaki.bbdkp.tables.games: %core.table_prefix%bbdkp_games
+    sajaki.bbdkp.tables.news: %core.table_prefix%bbdkp_news
+    sajaki.bbdkp.tables.adjustments: %core.table_prefix%bbdkp_adjustments
+    sajaki.bbdkp.tables.events: %core.table_prefix%bbdkp_events
+    sajaki.bbdkp.tables.raid_items: %core.table_prefix%bbdkp_raid_items
+    sajaki.bbdkp.tables.logs: %core.table_prefix%bbdkp_logs
+    sajaki.bbdkp.tables.member_ranks: %core.table_prefix%bbdkp_member_ranks
+    sajaki.bbdkp.tables.memberlist: %core.table_prefix%bbdkp_memberlist
+    sajaki.bbdkp.tables.memberdkp: %core.table_prefix%bbdkp_memberdkp
+    sajaki.bbdkp.tables.raid_detail: %core.table_prefix%bbdkp_raid_detail
+    sajaki.bbdkp.tables.raids: %core.table_prefix%bbdkp_raids
+    sajaki.bbdkp.tables.classes: %core.table_prefix%bbdkp_classes
+    sajaki.bbdkp.tables.races: %core.table_prefix%bbdkp_races
+    sajaki.bbdkp.tables.factions: %core.table_prefix%bbdkp_factions
+    sajaki.bbdkp.tables.dkpsystem: %core.table_prefix%bbdkp_dkpsystem
+    sajaki.bbdkp.tables.plugins: %core.table_prefix%bbdkp_plugins
+    sajaki.bbdkp.tables.memberguild: %core.table_prefix%bbdkp_memberguild
+    sajaki.bbdkp.tables.lootsystem: %core.table_prefix%bbdkp_lootsystem
+    sajaki.bbdkp.tables.language: %core.table_prefix%bbdkp_language
+    sajaki.bbdkp.tables.bosstable: %core.table_prefix%bbdkp_bosstable
+    sajaki.bbdkp.tables.zonetable: %core.table_prefix%bbdkp_zonetable
+    sajaki.bbdkp.tables.welcomemsg: %core.table_prefix%bbdkp_welcomemsg
+    sajaki.bbdkp.tables.guildboss: %core.table_prefix%bbdkp_guildboss
+
+

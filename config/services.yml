@@ -1,3 +1,6 @@
+imports:
+    - { resource: tables.yml }
+
 # mapping of service "sajaki.bbdkp.controller" to class sajaki\bbdkp\controller\main
 services:
     sajaki.bbdkp.controller:
