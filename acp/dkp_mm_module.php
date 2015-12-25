@@ -44,7 +44,7 @@ if (!class_exists('\bbdkp\controller\games\Roles'))
  *
  *   @package bbdkp
  */
-class dkp_mm_module extends \bbdkp\admin\Admin
+class dkp_mm_module
 {
 
     /**

@@ -30,7 +30,7 @@ if (!class_exists('\bbdkp\controller\raids\Events'))
  *
  *   @package bbdkp
  */
- class dkp_sys_module extends \bbdkp\admin\Admin
+ class dkp_sys_module
 {
 	/**
 	 * link in trigger window

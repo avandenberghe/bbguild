@@ -43,7 +43,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  *
  *   @package bbdkp
  */
-class dkp_game_module extends \bbdkp\admin\Admin
+class dkp_game_module
 {
 	/**
 	 * link in trigger window

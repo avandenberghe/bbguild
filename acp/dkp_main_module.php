@@ -28,7 +28,7 @@ if (!class_exists('\bbdkp\admin\log'))
  *
  *   @package bbdkp
  */
-class dkp_main_module extends \bbdkp\admin\Admin
+class dkp_main_module
 {
 
 	/**

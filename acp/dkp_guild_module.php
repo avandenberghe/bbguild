@@ -41,7 +41,7 @@ use \bbdkp\controller\guilds\Guilds;
  *
  *   @package bbdkp
  */
-class dkp_guild_module extends \bbdkp\admin\Admin
+class dkp_guild_module
 {
     /**
      * url action
@@ -668,4 +668,3 @@ class dkp_guild_module extends \bbdkp\admin\Admin
         $this->page_title = 'ACP_LISTGUILDS';
     }
 }
-

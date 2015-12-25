@@ -32,7 +32,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
  *
  *   @package bbdkp
  */
-class dkp_item_module extends \bbdkp\admin\Admin
+class dkp_loot_module 
 {
 	/**
 	 * url in triggers

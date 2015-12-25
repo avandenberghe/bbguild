@@ -41,7 +41,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
  *  This ACP class manages Raids
  *  @package acp\bbdkp
  */
- class dkp_raid_module extends \bbdkp\admin\Admin
+ class dkp_raid_module 
 {
 	/**
 	 * url in triggers

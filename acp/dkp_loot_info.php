@@ -12,7 +12,7 @@ namespace sajaki\bbdkp\acp;
  * info class for acp module dkp_item
 *   @package bbdkp
 */
-class dkp_item_info
+class dkp_loot_info
 {
 	/**
 	 * phpbb module function
@@ -20,12 +20,12 @@ class dkp_item_info
 	function module()
 	{
 		return array(
-            'filename'	=> '\sajaki\bbdkp\acp\dkp_item_module',
-            'title'		=> 'ACP_DKP_ITEM',
+            'filename'	=> '\sajaki\bbdkp\acp\dkp_loot_module',
+            'title'		=> 'ACP_DKP_LOOT',
 			'version'	=> '2.0.0',
 			'modes'		=> array(
-				'additem'			=> array('title' => 'ACP_DKP_ITEM_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => false ),
-				'listitems'			=> array('title' => 'ACP_DKP_ITEM_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS') , 'display' => true ),
+				'additem'			=> array('title' => 'ACP_DKP_LOOT_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS'), 'display' => false ),
+				'listitems'			=> array('title' => 'ACP_DKP_LOOT_LIST', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_RAIDS') , 'display' => true ),
 				),
 		);
 	}

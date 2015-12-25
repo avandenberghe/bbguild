@@ -46,7 +46,7 @@ use \bbdkp\controller\guilds\Guilds;
  *
  *   @package bbdkp
  */
-class dkp_recruit_module extends \bbdkp\admin\Admin
+class dkp_recruit_module
 {
     /**
      * url action
@@ -356,4 +356,3 @@ class dkp_recruit_module extends \bbdkp\admin\Admin
         }
     }
 }
-

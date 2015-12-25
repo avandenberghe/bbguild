@@ -30,7 +30,7 @@ if (!class_exists('\bbdkp\controller\guilds\Guilds'))
  *
  *   @package bbdkp
  */
-class dkp_mdkp_module extends \bbdkp\admin\Admin
+class dkp_mdkp_module
 {
 
 	/**
@@ -471,7 +471,7 @@ class dkp_mdkp_module extends \bbdkp\admin\Admin
 						AND m.member_id = l.member_id
 						AND m.member_dkpid = ' . $dkpsys_id . '
 						ORDER BY l.member_name';
-                
+
 				$resultto = $db->sql_query ( $sql );
 				$teller_to = 0;
 				while ( $row = $db->sql_fetchrow ( $resultto ) )

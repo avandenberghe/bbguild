@@ -26,14 +26,14 @@ if (!class_exists('\bbdkp\controller\points\PointsController'))
  *
  *   @package bbdkp
  */
- class dkp_point_module extends \bbdkp\admin\Admin
+ class dkp_point_module
 {
 	/**
 	 * instance of PointsController class
 	 * @var \bbdkp\controller\points\PointsController
-	 */	
+	 */
 	private $PointsController;
-	 
+
 	/**
 	 * Main points acp function
 	 * @param int $id
@@ -44,9 +44,9 @@ if (!class_exists('\bbdkp\controller\points\PointsController'))
 		global $user, $template, $cache, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
 
 		$link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_point&amp;mode=pointconfig") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
-		
-		$this->PointsController = new \bbdkp\controller\points\PointsController; 
-		
+
+		$this->PointsController = new \bbdkp\controller\points\PointsController;
+
 		switch ($mode)
 		{
 			case 'pointconfig':
@@ -57,7 +57,7 @@ if (!class_exists('\bbdkp\controller\points\PointsController'))
 					{
 						trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
 					}
-					//decay         
+					//decay
 					set_config('bbdkp_decay', request_var('decay_activate', 0), true);
 					set_config('bbdkp_itemdecaypct', request_var('itemdecaypct', 0), true);
 					set_config('bbdkp_raiddecaypct', request_var('raiddecaypct', 0), true);
@@ -155,10 +155,10 @@ if (!class_exists('\bbdkp\controller\points\PointsController'))
 						confirm_box(false, sprintf($user->lang['RESYNC_DECAY_CONFIRM']), $s_hidden_fields);
 					}
 				}
-				
+
 				$freqtypes = array(
-					0 => $user->lang['FREQ0'] , 
-					1 => $user->lang['FREQ1'] , 
+					0 => $user->lang['FREQ0'] ,
+					1 => $user->lang['FREQ1'] ,
 					2 => $user->lang['FREQ2']);
 				$s_freqtype_options = '';
 				foreach ($freqtypes as $key => $type)
@@ -166,7 +166,7 @@ if (!class_exists('\bbdkp\controller\points\PointsController'))
 					$selected = ($config['bbdkp_decayfreqtype'] == $key) ? ' selected="selected"' : '';
 					$s_freqtype_options .= '<option value="' . $key . '" ' . $selected . '> ' . $type . '</option>';
 				}
-				
+
 				$s_bankerlist_options = '';
 				global $db;
 				$sql = 'SELECT member_id, member_name FROM ' . MEMBER_LIST_TABLE . " WHERE member_status = '1' order by member_name asc";
@@ -180,28 +180,28 @@ if (!class_exists('\bbdkp\controller\points\PointsController'))
 				unset ($db, $result);
 				add_form_key('acp_dkp');
 				$template->assign_vars(array(
-					'DKP_NAME' => $config['bbdkp_dkp_name'] , 
+					'DKP_NAME' => $config['bbdkp_dkp_name'] ,
 					//epgp
-					'F_EPGPACTIVATE' => $config['bbdkp_epgp'] , 
-					'BASEGP' => $config['bbdkp_basegp'] , 
-					'MINEP' => $config['bbdkp_minep'] , 
+					'F_EPGPACTIVATE' => $config['bbdkp_epgp'] ,
+					'BASEGP' => $config['bbdkp_basegp'] ,
+					'MINEP' => $config['bbdkp_minep'] ,
 					//decay
-					'F_DECAYACTIVATE' => $config['bbdkp_decay'] , 
-					'ITEMDECAYPCT' => $config['bbdkp_itemdecaypct'] , 
-					'RAIDDECAYPCT' => $config['bbdkp_raiddecaypct'] , 
-					'ADJDECAYPCT' => $config['bbdkp_adjdecaypct'] , 
-					'DECAYFREQ' => $config['bbdkp_decayfrequency'] , 
-					'S_FREQTYPE_OPTIONS' => $s_freqtype_options , 
-					'F_DECAYSCHEDULER' => $config['bbdkp_decaycron'] , 
+					'F_DECAYACTIVATE' => $config['bbdkp_decay'] ,
+					'ITEMDECAYPCT' => $config['bbdkp_itemdecaypct'] ,
+					'RAIDDECAYPCT' => $config['bbdkp_raiddecaypct'] ,
+					'ADJDECAYPCT' => $config['bbdkp_adjdecaypct'] ,
+					'DECAYFREQ' => $config['bbdkp_decayfrequency'] ,
+					'S_FREQTYPE_OPTIONS' => $s_freqtype_options ,
+					'F_DECAYSCHEDULER' => $config['bbdkp_decaycron'] ,
 					//time dkp
-					'F_TIMEBONUSACTIVATE' => $config['bbdkp_timebased'] , 
-					'DKPTIMEUNIT' => $config['bbdkp_dkptimeunit'] , 
-					'TIMEUNIT' => $config['bbdkp_timeunit'] , 
-					'STANDARDDURATION' => $config['bbdkp_standardduration'] , 
+					'F_TIMEBONUSACTIVATE' => $config['bbdkp_timebased'] ,
+					'DKPTIMEUNIT' => $config['bbdkp_dkptimeunit'] ,
+					'TIMEUNIT' => $config['bbdkp_timeunit'] ,
+					'STANDARDDURATION' => $config['bbdkp_standardduration'] ,
 					//zs
-					'F_ZEROSUMACTIVATE' => $config['bbdkp_zerosum'] , 
-					'S_BANKER_OPTIONS' => $s_bankerlist_options , 
-					'F_ZEROSUM_DISTOTHER' => $config['bbdkp_zerosumdistother'] , 
+					'F_ZEROSUMACTIVATE' => $config['bbdkp_zerosum'] ,
+					'S_BANKER_OPTIONS' => $s_bankerlist_options ,
+					'F_ZEROSUM_DISTOTHER' => $config['bbdkp_zerosumdistother'] ,
 					'DECAYIMGEXAMPLE' => $phpbb_root_path . "adm/style/dkp/decayexample.png"));
 				$this->page_title = 'ACP_DKP_POINT_CONFIG';
 				$this->tpl_name = 'dkp/acp_dkp_' . $mode;

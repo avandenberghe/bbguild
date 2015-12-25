@@ -12,12 +12,12 @@ namespace sajaki\bbdkp;
 class ext extends \phpbb\extension\base
 {
     //where to place constants - https://www.phpbb.com/community/viewtopic.php?f=461&t=2339861&p=14228241&hilit=constant#p14228241
-    const BBDKP_VERSIONURL = 'https://raw.githubusercontent.com/bbDKP/bbDKP/master/contrib/');
+    const BBDKP_VERSIONURL = 'https://raw.githubusercontent.com/bbDKP/bbDKP/master/contrib/';
     const URI_ADJUSTMENT = 'adj';
     const URI_DKPSYS = 'dkpsys_id';
     const URI_EVENT = 'event_id';
     const URI_ITEM = 'item_id';
-    const URI_LOG = 'log':
+    const URI_LOG = 'log';
     const URI_NAME = 'name';
     const URI_NAMEID = 'member_id';
     const URI_NEWS = 'news';
@@ -44,6 +44,7 @@ class ext extends \phpbb\extension\base
      */
     function enable_step($old_state)
     {
-        return false;
+        ini_set('max_execution_time', 300);
+        return parent::enable_step($old_state);
     }
 }
