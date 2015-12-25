@@ -71,7 +71,7 @@ class main
         $this->template->assign_var('DEMO_MESSAGE', $a);
         $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
         // full rendered page source that will be output on the screen.
-        $response = $this->helper->render('demo_body.html', $raid_id);
+        $response = $this->helper->render('dkp/dkpmain.html', $raid_id);
         return $response;
     }
 
@@ -93,7 +93,7 @@ class main
         $this->template->assign_var('DEMO_MESSAGE', $a);
         $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
         // full rendered page source that will be output on the screen.
-        $response = $this->helper->render('demo_body.html', $guild_id);
+        $response = $this->helper->render('dkp/dkpmain.html', $guild_id);
         return $response;
     }
 
@@ -116,7 +116,7 @@ class main
         $this->template->assign_var('DEMO_MESSAGE', $a);
         $err = $this->helper->error('True is somehow identical to false. The world is over.', 500);
         // full rendered page source that will be output on the screen.
-        $response = $this->helper->render('demo_body.html', $member_id);
+        $response = $this->helper->render('dkp/dkpmain.html', $member_id);
         return $response;
     }
 }

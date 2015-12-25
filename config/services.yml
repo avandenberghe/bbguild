@@ -21,13 +21,12 @@ services:
             - @template
             - @user
             - %core.php_ext%
-# mapping of service "sajaki.bbdkp.listener" to class sajaki\bbdkp\event\main_listener
-#    sajaki.bbdkp.listener:
-#        class: sajaki\bbdkp\event\main_listener
-#        arguments:
-#            - @controller.helper
-#            - @template
-#            - @user
-#            - @config
-#        tags:
-#            - { name: event.listener }
+    sajaki.bbdkp.listener:
+        class: sajaki\bbdkp\event\main_listener
+        arguments:
+            - @controller.helper
+            - @template
+            - @user
+            - @config
+        tags:
+            - { name: event.listener }
