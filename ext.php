@@ -27,7 +27,7 @@ class ext extends \phpbb\extension\base
     const URI_GUILD = 'guild_id';
     const URI_GAME = 'game_id';
     const USER_LLIMIT =  40;
-    const VERSION =  2.0-Dev;
+    const VERSION =  '2.0-Dev';
 
     /**
      * override enable step
