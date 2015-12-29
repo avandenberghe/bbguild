@@ -7,7 +7,7 @@
          "eol":null,
          "security":false
       }
-   }
+   },
    "stable":{
       "3.1":{
          "current":"2.0.0-dev",
