@@ -4,7 +4,7 @@ imports:
 # mapping of service "sajaki.bbdkp.controller" to class sajaki\bbdkp\controller\main
 services:
     sajaki.bbdkp.controller:
-        class: sajaki\bbdkp\controller\main
+        class: sajaki\bbdkp\controller\dkp_main
         arguments:
             - @config
             - @config_text
@@ -13,7 +13,7 @@ services:
             - @user
             - %core.php_ext%
     sajaki.bbdkp.portalcontroller:
-        class: sajaki\bbdkp\controller\main
+        class: sajaki\bbdkp\controller\dkp_main
         arguments:
             - @config
             - @config_text

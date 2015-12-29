@@ -1,5 +1,6 @@
 # table definitions
 # inserted through services.yml into classes
+# this is not used yet...
 #	BBGAMES_TABLE =>  bbdkp_games
 #	NEWS_TABLE =>  bbdkp_news
 #	ADJUSTMENTS_TABLE => bbdkp_adjustments

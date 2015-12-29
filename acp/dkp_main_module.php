@@ -11,26 +11,13 @@
 
 namespace sajaki\bbdkp\acp;
 
-// Include the abstract base
-if (!class_exists('\bbdkp\admin\Admin'))
-{
-	require ("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
-}
-
-// Include the log class
-if (!class_exists('\bbdkp\admin\log'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/admin/log.$phpEx");
-}
-
 /**
  * This acp class manages setting configs, logging
  *
  *   @package bbdkp
  */
-class dkp_main_module
+class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
 {
-
 	/**
 	 * main Settings function
 	 *
@@ -39,14 +26,21 @@ class dkp_main_module
 	 */
 	function main ($id, $mode)
 	{
-		global $db, $user, $template, $cache, $config, $phpbb_admin_path, $phpEx;
-		$link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage") . '"><h3>' . $user->lang['RETURN_DKPINDEX'] . '</h3></a>';
+		global $db, $user, $template, $request;
+        global $config, $phpEx;
+
+        $form_key = 'sajaki/bbdkp';
+        add_form_key($form_key);
+
+        $this->page_title = 'ACP_DKP_MAINPAGE';
+        $this->tpl_name = 'acp_' . $mode;
+
 		switch ($mode)
 		{
 			/**
 			 * MAINPAGE
 			 */
-			case 'mainpage':
+			case 'dkp_panel':
 
 				$sql = 'SELECT count(*) as member_count FROM ' . MEMBER_LIST_TABLE . " WHERE member_status='0'";
 				$result = $db->sql_query($sql);
@@ -69,7 +63,7 @@ class dkp_main_module
 				$result = $db->sql_query($sql);
 				$total_adjustmentcount = (int) $db->sql_fetchfield('adjustment_count');
 
-				$sql = 'SELECT count(*) as event_count  FROM ' . EVENTS_TABLE;
+				$sql = 'SELECT count(*) as event_count  FROM ' . BBEVENTS_TABLE;
 				$result = $db->sql_query($sql);
 				$total_eventcount = (int) $db->sql_fetchfield('event_count');
 
@@ -108,7 +102,7 @@ class dkp_main_module
 				}
 
 				// read verbose log
-				$logs = \bbdkp\admin\log::Instance();
+				$logs = \sajaki\bbdkp\model\admin\log::Instance();
 
 				$listlogs = $logs->read_log('', false, true, '', '');
 				if(isset($listlogs))
@@ -123,15 +117,14 @@ class dkp_main_module
 					}
 				}
 
-
-				$latest_version_info = false;
-				if (($latest_version_info = parent::get_productversion('bbdkp', request_var('versioncheck_force', false))) === false)
+                $latest_version_info = parent::get_productversion($request->variable('versioncheck_force', false));
+				if ($latest_version_info === false)
 				{
 					$template->assign_var('S_VERSIONCHECK_FAIL', true);
 				}
 				else
 				{
-					if(phpbb_version_compare($latest_version_info, $config['bbdkp_version'], '<='))
+					if(phpbb_version_compare($latest_version_info, BBDKP_VERSION, '<='))
 					{
 						$template->assign_vars(array(
 								'S_VERSION_UP_TO_DATE'	=> true,
@@ -142,25 +135,10 @@ class dkp_main_module
 						// you have an old version
 						$template->assign_vars(array(
 							'BBDKP_NOT_UP_TO_DATE_TITLE' => sprintf($user->lang['NOT_UP_TO_DATE_TITLE'], 'bbDKP'),
-							'BBDKP_LATESTVERSION' => $latest_version_info[0],
-							'BBDKPVERSION' => $user->lang['BBDKP_YOURVERSION'] . $config['bbdkp_version'] ,
-							'UPDATEINSTR' => $user->lang['BBDKP_LATESTVERSION'] . $latest_version_info[0] . ', <a href="' . $user->lang['WEBURL'] . '">' . $user->lang['DOWNLOAD'] . '</a>'));
+							'BBDKP_LATESTVERSION' => $latest_version_info,
+							'BBDKPVERSION' => $user->lang['BBDKP_YOURVERSION'] . BBDKP_VERSION ,
+							'UPDATEINSTR' => $user->lang['BBDKP_LATESTVERSION'] . $latest_version_info . ', <a href="' . $user->lang['WEBURL'] . '">' . $user->lang['DOWNLOAD'] . '</a>'));
 					}
-				}
-
-				//LOOP PLUGINS TABLE
-				$plugin_versioninfo = (array) parent::get_plugin_info(request_var('versioncheck_force', false));
-				foreach($plugin_versioninfo as $pname => $pdetails)
-				{
-					$a = phpbb_version_compare(trim( $pdetails['latest'] ), $pdetails['version'] , '<=');
-					$template->assign_block_vars('plugin_row', array(
-							'PLUGINNAME' 	=> ucwords($pdetails['name']) ,
-							'VERSION' 		=> $pdetails['version'] ,
-							'ISUPTODATE'	=> phpbb_version_compare(trim( $pdetails['latest'] ), $pdetails['version'] , '<=') ,
-							'LATESTVERSION' => $pdetails['latest'] ,
-							'UPDATEINSTR' 	=> '<a href="' . BBDKP_PLUGINURL . '">' . $user->lang['DOWNLOAD_LATEST_PLUGINS'] . $pdetails['latest'] . '</a>',
-							'INSTALLDATE' 	=> $pdetails['installdate'],
-					));
 				}
 
 				$template->assign_vars(array(
@@ -176,13 +154,12 @@ class dkp_main_module
 					'RAIDS_PER_DAY' => $raids_per_day ,
 					'ITEMS_PER_DAY' => $items_per_day ,
 					'BBDKP_STARTED' => $bbdkp_started,
-					'BBDKP_VERSION'	=> $config['bbdkp_version'],
-					'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=mainpage&amp;versioncheck_force=1"),
+					'BBDKP_VERSION'	=> BBDKP_VERSION,
+					'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=-sajaki-bbdkp-acp-dkp_main_module&amp;mode=dkp_panel&amp;versioncheck_force=1"),
 					'GAMES_INSTALLED' => count($this->games) > 0 ? implode(", ", $this->games) : $user->lang['NA'],
 				));
 
-				$this->page_title = 'ACP_DKP_MAINPAGE';
-				$this->tpl_name = 'dkp/acp_mainpage';
+
 				break;
 
 			/**
@@ -376,7 +353,7 @@ class dkp_main_module
 					'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_config&amp;action=addconfig"),
 					'DOMAINNAME' => $_SERVER['HTTP_HOST'],
 					'PHPBBVER' => $config['version'],
-					'BBDKPVER' => $config['bbdkp_version'],
+					'BBDKPVER' => BBDKP_VERSION,
 					'REGID' => isset($config['bbdkp_regid']) ? $config['bbdkp_regid'] : '',
 					'S_BBDKPREGISTERED' => isset($config['bbdkp_regid']) ? $config['bbdkp_regid'] : '',
 
@@ -384,14 +361,13 @@ class dkp_main_module
 
 				add_form_key('acp_dkp');
 				$this->page_title = 'ACP_DKP_CONFIG';
-				$this->tpl_name = 'dkp/acp_' . $mode;
 
 				break;
 
 			/**
 			 * PORTAL CONFIG
 			 */
-			case 'dkp_indexpageconfig':
+			case 'dkp_index':
 				$submit = (isset($_POST['update'])) ? true : false;
 				if ($submit)
 				{
@@ -495,7 +471,7 @@ class dkp_main_module
 					'N_NUMNEWM' => $config['bbdkp_portal_maxnewmembers'],
 				));
 				$this->page_title = $user->lang['ACP_INDEXPAGE'];
-				$this->tpl_name = 'dkp/acp_' . $mode;
+
 				break;
 
 			/**
@@ -504,7 +480,7 @@ class dkp_main_module
 			 **/
 			case 'dkp_logs':
 				$this->page_title = 'ACP_DKP_LOGS';
-				$this->tpl_name = 'dkp/acp_' . $mode;
+
 				$logs = \bbdkp\admin\log::Instance();
 				$log_id = (isset($_GET[URI_LOG])) ? request_var(URI_LOG, 0) : false;
 				$search = (isset($_GET['search'])) ? true : false;

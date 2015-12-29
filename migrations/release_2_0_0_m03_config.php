@@ -99,7 +99,6 @@ class release_2_0_0_m03_config extends \phpbb\db\migration\migration
 			array('config.add', array('bbdkp_user_llimit', 30)),
 			array('config.add', array('bbdkp_user_nlimit', 20)),
 			array('config.add', array('bbdkp_user_rlimit', 20)),
-			array('config.add', array('bbdkp_version','2.0.0')),
 			array('config.add', array('bbdkp_zerosum', 0)),
 			array('config.add', array('bbdkp_zerosumdistother', 0)),
 		);

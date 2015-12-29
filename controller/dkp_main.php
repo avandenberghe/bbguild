@@ -8,7 +8,7 @@
 
 namespace sajaki\bbdkp\controller;
 
-class main
+class dkp_main
 {
 	/* @var \phpbb\config\config */
 	protected $config;

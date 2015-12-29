@@ -9,3 +9,4 @@ org.eclipse.php.core.projectOptions.prefs
 .wsdlDataModelforum/cache/
 .idea
 composer.phar
+phpunit.xml.dist

@@ -19,15 +19,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 */
 class main_listener implements EventSubscriberInterface
 {
-	static public function getSubscribedEvents()
-	{
-		return array(
-            // for all defined events, write a function below
-			'core.user_setup'						=> 'load_language_on_setup',
-			'core.page_header'						=> 'add_page_header_link',
-		);
-	}
-
 	/* @var \phpbb\controller\helper */
 	protected $helper;
 
@@ -48,8 +39,8 @@ class main_listener implements EventSubscriberInterface
 	*/
 	public function __construct(\phpbb\controller\helper $helper,
                                 \phpbb\template\template $template,
-																\phpbb\user $user,
-																\phpbb\config\config $config
+                                \phpbb\user $user,
+                                \phpbb\config\config $config
                                 )
 	{
 		$this->helper = $helper;
@@ -57,6 +48,21 @@ class main_listener implements EventSubscriberInterface
 		$this->user = $user;
 		$this->config = $config;
 	}
+
+
+    /**
+     * Assign functions defined in this class to event listeners in the core
+     *
+     * @return array
+     */
+    static public function getSubscribedEvents()
+    {
+        return array(
+            // for all defined events, write a function below
+            'core.user_setup'						=> 'load_language_on_setup',
+            'core.page_header'						=> 'add_page_header_link',
+        );
+    }
 
     /**
      * core.user_setup
