@@ -1,5 +1,5 @@
-images
-vendor
+/images/
+/vendor/
 .DS_Store
 Thumbs.db
 .project

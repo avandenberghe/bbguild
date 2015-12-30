@@ -13,14 +13,13 @@
     	<!-- IF S_BBDKPREGISTERED -->
     		&nbsp; {REGID} 
     	<!-- ELSE -->
-    		&nbsp; <input type="submit" name="update" value="{L_REGISTER}" class="button1" />
+    		&nbsp; <input type="submit" name="register" value="{L_REGISTER}" class="button1" />
     		{L_NOTREGISTERED}
     	<!-- ENDIF -->
     </dd>
   </dl>
   
  </fieldset>
-<input type="hidden" name="domainname" value="{DOMAINNAME}" />
 <input type="hidden" name="phpbbversion" value="{PHPBBVER}" />
 <input type="hidden" name="bbdkpversion" value="{BBDKPVER}" />
 </form>
@@ -222,8 +221,8 @@
 
 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
 	{S_FORM_TOKEN}
-  <input type="submit" name="update" value="{L_SUBMIT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
+  <input type="submit" name="updateconfig" value="{L_SUBMIT}" class="button1" /> <input type="reset" name="reset" value="{L_RESET}" class="button1" />
 </fieldset>
 
 </form>
-<!-- INCLUDE dkp/overall_footer.html -->
+<!-- INCLUDE overall_footer.html -->

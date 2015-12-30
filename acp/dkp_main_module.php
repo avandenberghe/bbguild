@@ -12,17 +12,23 @@ namespace sajaki\bbdkp\acp;
 class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
 {
     public $u_action;
+    public $link;
 
+    /**
+     * @param $id
+     * @param $mode
+     */
     function main ($id, $mode)
     {
-        global $db, $user, $template, $request, $phpbb_admin_path;
-        global $config, $phpEx;
+        global $db, $user, $template, $request, $phpbb_admin_path, $cache;
+        global $config, $phpEx, $phpbb_container;
 
         $form_key = 'sajaki/bbdkp';
         add_form_key($form_key);
 
         $this->page_title = 'ACP_DKP_MAINPAGE';
         $this->tpl_name = 'acp_' . $mode;
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module") . '"><h3>' . $user->lang['ACP_DKP'] . '</h3></a>';
 
         switch ($mode)
         {
@@ -134,7 +140,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                     foreach ($listlogs as $key => $log)
                     {
                         $template->assign_block_vars('actions_row', array(
-                            'U_VIEW_LOG' 	=> append_sid("{$this->ext_path}index.$phpEx", 'i=dkp&amp;mode=dkp_logs&amp;' . URI_LOG . '=' . $log['log_id']  ) ,
+                            'U_VIEW_LOG' 	=> append_sid("{$this->ext_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;' . URI_LOG . '=' . $log['log_id']  ) ,
                             'LOGDATE' 		=> $log['datestamp'],
                             'ACTION' 		=> $log['log_line'],
                         ));
@@ -155,7 +161,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                     'ITEMS_PER_DAY' => $items_per_day ,
                     'BBDKP_STARTED' => $bbdkp_started,
                     'BBDKP_VERSION'	=> BBDKP_VERSION,
-                    'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=-sajaki-bbdkp-acp-dkp_main_module&amp;mode=dkp_panel&amp;versioncheck_force=1"),
+                    'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_panel&amp;versioncheck_force=1"),
                     'GAMES_INSTALLED' => count($this->games) > 0 ? implode(", ", $this->games) : $user->lang['NA'],
                 ));
                 break;
@@ -165,120 +171,115 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
              * DKP CONFIG
              */
             case 'dkp_config':
-                $action	= request_var('action', '');
-                switch($action)
+
+                if ($request->is_set_post('updateconfig'))
                 {
-                    case 'addconfig':
-                        if (! check_form_key('acp_dkp'))
-                        {
-                            trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
-                        }
-                        $day = request_var('bbdkp_start_dd', 0);
-                        $month = request_var('bbdkp_start_mm', 0);
-                        $year = request_var('bbdkp_start_yy', 0);
-                        $bbdkp_start = mktime(0, 0, 0, $month, $day, $year);
-                        $settings = array(
-                            'bbdkp_default_realm' => utf8_normalize_nfc(request_var('realm', '', true)),
-                            'bbdkp_default_region' => utf8_normalize_nfc(request_var('region', '', true)),
-                            'bbdkp_dkp_name' => utf8_normalize_nfc(request_var('dkp_name', '', true)),
-                            'bbdkp_eqdkp_start' => $bbdkp_start,
-                            'bbdkp_user_nlimit' => request_var('bbdkp_user_nlimit', 0),
-                            'bbdkp_date_format' => request_var('date_format', ''),
-                            'bbdkp_date_format' => request_var('date_format', ''),
-                            'bbdkp_lang' => request_var('language', 'en'),
-                            'bbdkp_maxchars' => request_var('maxchars', 2),
-                            'bbdkp_minrosterlvl' => request_var('bbdkp_minrosterlvl', 0),
-                            'bbdkp_roster_layout' => request_var('rosterlayout', 0),
-                            'bbdkp_show_achiev' => request_var('showachievement', 0),
-                            'bbdkp_hide_inactive' =>  (isset($_POST['hide_inactive'])) ? request_var('hide_inactive', '') : '0',
-                            'bbdkp_inactive_period' => request_var('inactive_period', 0),
-                            'bbdkp_list_p1' => request_var('list_p1', 0),
-                            'bbdkp_list_p2' => request_var('list_p2', 0),
-                            'bbdkp_list_p3' => request_var('list_p3', 0),
-                            'bbdkp_user_llimit' => request_var('bbdkp_user_llimit', 0),
-                            'bbdkp_user_elimit' => request_var('bbdkp_user_elimit', 0),
-                            'bbdkp_event_viewall' => (isset($_POST['event_viewall'])) ? request_var('event_viewall', '') : '0',
-                            'bbdkp_user_elimit' => request_var('bbdkp_user_elimit', 0),
-                            'bbdkp_user_alimit' => request_var('bbdkp_user_alimit', 0),
-                            'bbdkp_active_point_adj' => request_var('bbdkp_active_point_adj', 0.0),
-                            'bbdkp_inactive_point_adj' => request_var('bbdkp_inactive_point_adj', 0.0),
-                            'bbdkp_starting_dkp' => request_var('starting_dkp', 0.0),
-                            'bbdkp_user_ilimit' => request_var('bbdkp_user_ilimit', 0),
-                            'bbdkp_user_rlimit' => request_var('bbdkp_user_rlimit', 0),
+                    if (! check_form_key('acp_dkp'))
+                    {
+                        trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
+                    }
+                    $day = $request->variable('bbdkp_start_dd', 0);
+                    $month = $request->variable('bbdkp_start_mm', 0);
+                    $year = $request->variable('bbdkp_start_yy', 0);
+                    $bbdkp_start = mktime(0, 0, 0, $month, $day, $year);
+                    $settings = array(
+                        'bbdkp_default_realm' => $request->variable('realm', '', true),
+                        'bbdkp_default_region' => $request->variable('region', '', true),
+                        'bbdkp_eqdkp_start' => $bbdkp_start,
+                        'bbdkp_date_format' => $request->variable('date_format', ''),
+                        'bbdkp_dkp_name' => $request->variable('dkp_name', '', true),
+                        'bbdkp_lang' => $request->variable('language', 'en'),
+                        'bbdkp_user_nlimit' => $request->variable('bbdkp_user_nlimit', 0),
+                        'bbdkp_user_llimit' => $request->variable('bbdkp_user_llimit', 0),
+                        'bbdkp_maxchars' => $request->variable('maxchars', 2),
+                        'bbdkp_roster_layout' => $request->variable('rosterlayout', 0),
+                        'bbdkp_show_achiev' => $request->variable('showachievement', 0),
+                        'bbdkp_minrosterlvl' => $request->variable('bbdkp_minrosterlvl', 0),
+                        'bbdkp_hide_inactive' =>  ($request->is_set_post('hide_inactive')) ? $request->variable('hide_inactive', '') : '0',
+                        'bbdkp_inactive_period' => $request->variable('inactive_period', 0),
+                        'bbdkp_list_p1' => $request->variable('list_p1', 0),
+                        'bbdkp_list_p2' => $request->variable('list_p2', 0),
+                        'bbdkp_list_p3' => $request->variable('list_p3', 0),
+                        'bbdkp_user_elimit' => $request->variable('bbdkp_user_elimit', 0),
+                        'bbdkp_event_viewall' => ($request->is_set_post('event_viewall')) ? $request->variable('event_viewall', '') : '0',
+                        'bbdkp_user_elimit' => $request->variable('bbdkp_user_elimit', 0),
+                        'bbdkp_user_alimit' => $request->variable('bbdkp_user_alimit', 0),
+                        'bbdkp_active_point_adj' => $request->variable('bbdkp_active_point_adj', 0.0),
+                        'bbdkp_inactive_point_adj' => $request->variable('bbdkp_inactive_point_adj', 0.0),
+                        'bbdkp_starting_dkp' => $request->variable('starting_dkp', 0.0),
+                        'bbdkp_user_ilimit' => $request->variable('bbdkp_user_ilimit', 0),
+                        'bbdkp_user_rlimit' => $request->variable('bbdkp_user_rlimit', 0),
 
-                        );
-                        set_config('bbdkp_default_realm', $settings['bbdkp_default_realm'], true);
-                        set_config('bbdkp_default_region', $settings['bbdkp_default_region'], true);
-                        set_config('bbdkp_dkp_name',  $settings['bbdkp_dkp_name'], true);
-                        set_config('bbdkp_eqdkp_start', $settings['bbdkp_eqdkp_start'], true);
+                    );
+                    // reg id
+                    $config->set('bbdkp_regid', 1, true);
 
-                        set_config('bbdkp_user_nlimit', $settings['bbdkp_user_nlimit'] , true);
-                        set_config('bbdkp_date_format', $settings['bbdkp_date_format'] , true);
-                        set_config('bbdkp_lang', $settings['bbdkp_lang'] , true);
-                        set_config('bbdkp_maxchars', $settings['bbdkp_maxchars'], true);
+                    $config->set('bbdkp_default_realm', $settings['bbdkp_default_realm'], true);
+                    $config->set('bbdkp_default_region', $settings['bbdkp_default_region'], true);
+                    $config->set('bbdkp_dkp_name',  $settings['bbdkp_dkp_name'], true);
+                    $config->set('bbdkp_eqdkp_start', $settings['bbdkp_eqdkp_start'], true);
 
-                        //roster
-                        set_config('bbdkp_minrosterlvl', $settings['bbdkp_minrosterlvl'], true);
-                        set_config('bbdkp_roster_layout', $settings['bbdkp_roster_layout'], true);
-                        set_config('bbdkp_show_achiev', $settings['bbdkp_show_achiev'], true);
+                    $config->set('bbdkp_user_nlimit', $settings['bbdkp_user_nlimit'] , true);
+                    $config->set('bbdkp_date_format', $settings['bbdkp_date_format'] , true);
+                    $config->set('bbdkp_lang', $settings['bbdkp_lang'] , true);
+                    $config->set('bbdkp_maxchars', $settings['bbdkp_maxchars'], true);
 
-                        //standings
-                        set_config('bbdkp_hide_inactive', $settings['bbdkp_hide_inactive'], true);
-                        set_config('bbdkp_inactive_period', $settings['bbdkp_inactive_period'], true);
-                        set_config('bbdkp_list_p1', $settings['bbdkp_list_p1'] , true);
-                        set_config('bbdkp_list_p2', $settings['bbdkp_list_p2'] , true);
-                        set_config('bbdkp_list_p3', $settings['bbdkp_list_p3'] , true);
-                        set_config('bbdkp_user_llimit', $settings['bbdkp_user_llimit'], true);
+                    //roster
+                    $config->set('bbdkp_minrosterlvl', $settings['bbdkp_minrosterlvl'], true);
+                    $config->set('bbdkp_roster_layout', $settings['bbdkp_roster_layout'], true);
+                    $config->set('bbdkp_show_achiev', $settings['bbdkp_show_achiev'], true);
 
-                        //events
-                        set_config('bbdkp_user_elimit', $settings['bbdkp_user_elimit'], true);
-                        set_config('bbdkp_event_viewall', $settings['bbdkp_event_viewall'], true);
+                    //standings
+                    $config->set('bbdkp_hide_inactive', $settings['bbdkp_hide_inactive'], true);
+                    $config->set('bbdkp_inactive_period', $settings['bbdkp_inactive_period'], true);
+                    $config->set('bbdkp_list_p1', $settings['bbdkp_list_p1'] , true);
+                    $config->set('bbdkp_list_p2', $settings['bbdkp_list_p2'] , true);
+                    $config->set('bbdkp_list_p3', $settings['bbdkp_list_p3'] , true);
+                    $config->set('bbdkp_user_llimit', $settings['bbdkp_user_llimit'], true);
 
-                        //adjustments
-                        set_config('bbdkp_user_alimit', $settings['bbdkp_user_alimit'], true);
-                        set_config('bbdkp_active_point_adj',  $settings['bbdkp_active_point_adj'], true);
-                        set_config('bbdkp_inactive_point_adj',  $settings['bbdkp_inactive_point_adj'], true);
-                        set_config('bbdkp_starting_dkp', $settings['bbdkp_starting_dkp'] , true);
+                    //events
+                    $config->set('bbdkp_user_elimit', $settings['bbdkp_user_elimit'], true);
+                    $config->set('bbdkp_event_viewall', $settings['bbdkp_event_viewall'], true);
 
-                        //items
-                        set_config('bbdkp_user_ilimit', $settings['bbdkp_user_ilimit'], true);
+                    //raids
+                    $config->set('bbdkp_user_rlimit', $settings['bbdkp_user_rlimit'], true);
 
-                        //raids
-                        set_config('bbdkp_user_rlimit', $settings['bbdkp_user_rlimit'], true);
+                    //items
+                    $config->set('bbdkp_user_ilimit', $settings['bbdkp_user_ilimit'], true);
 
-                        // reg id
-                        set_config('bbdkp_regid', 1, true);
+                    //adjustments
+                    $config->set('bbdkp_user_alimit', $settings['bbdkp_user_alimit'], true);
+                    $config->set('bbdkp_active_point_adj',  $settings['bbdkp_active_point_adj'], true);
+                    $config->set('bbdkp_inactive_point_adj',  $settings['bbdkp_inactive_point_adj'], true);
+                    $config->set('bbdkp_starting_dkp', $settings['bbdkp_starting_dkp'] , true);
 
-                        $cache->destroy('config');
+                    // Purge config cache
+                    $cache->destroy('config');
 
-                        //
-                        // Logging
-                        //
-                        $log_action = array(
-                            'header' => 'L_ACTION_SETTINGS_CHANGED'	 ,
-                            'L_SETTINGS' => json_encode ($settings),
-                        );
+                    //
+                    // Logging
+                    //
+                    $log_action = array(
+                        'header' => 'L_ACTION_SETTINGS_CHANGED'	 ,
+                        'L_SETTINGS' => json_encode ($settings),
+                    );
 
-                        $this->log_insert(array(
-                            'log_type' =>  'L_ACTION_SETTINGS_CHANGED',
-                            'log_action' => $log_action));
+                    $this->log_insert(array(
+                        'log_type' =>  'L_ACTION_SETTINGS_CHANGED',
+                        'log_action' => $log_action));
 
-
-                        trigger_error($user->lang['ACTION_SETTINGS_CHANGED']. $link, E_USER_NOTICE);
-
-                        break;
-
-                    case 'register' :
-
-                        $regdata = array(
-                            'domainname'	=> request_var('domainname', ''),
-                            'phpbbversion'	=> request_var('phpbbversion', ''),
-                            'bbdkpversion' 	=> request_var('bbdkpversion', ''),
-                        );
-                        $this->post_register_request($regdata);
-
+                    trigger_error($user->lang['ACTION_SETTINGS_CHANGED']. $this->link, E_USER_NOTICE);
                 }
 
+                if ($request->is_set_post('register'))
+                {
+                    $regdata = array(
+                        'domainname'	=> $request->variable('domainname', ''),
+                        'phpbbversion'	=> $request->variable('phpbbversion', ''),
+                        'bbdkpversion' 	=> $request->variable('bbdkpversion', ''),
+                    );
+                    $this->post_register_request($regdata);
+                }
 
                 $s_lang_options = '';
                 foreach ($this->languagecodes as $lang => $langname)
@@ -319,7 +320,10 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                 }
 
                 $template->assign_vars(array(
-                    'S_LANG_OPTIONS' => $s_lang_options ,
+                    'REGID' => isset($config['bbdkp_regid']) ? $config['bbdkp_regid'] : '',
+                    'S_BBDKPREGISTERED' => isset($config['bbdkp_regid']) ? $config['bbdkp_regid'] : '',
+                    'U_REGISTER' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_config&amp;action=register"),
+
                     'REALM' => $config['bbdkp_default_realm'] ,
                     'EQDKP_START_DD' => date('d', $config['bbdkp_eqdkp_start']) ,
                     'EQDKP_START_MM' => date('m', $config['bbdkp_eqdkp_start']) ,
@@ -327,34 +331,35 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                     'DATE_FORMAT' => $config['bbdkp_date_format'] ,
                     'DKP_NAME' => $config['bbdkp_dkp_name'] ,
                     'DEFAULT_GAME' =>  count($this->games) > 0 ? implode(", ", $this->games) : $user->lang['NA'],
+                    'S_LANG_OPTIONS' => $s_lang_options,
+                    'USER_NLIMIT' => $config['bbdkp_user_nlimit'] ,
+                    'USER_LLIMIT' => $config['bbdkp_user_llimit'] ,
+                    'MAXCHARS' => $config['bbdkp_maxchars'] ,
+                    'F_SHOWACHIEV' => $config['bbdkp_show_achiev'] ,
+                    'MINLEVEL' => $config['bbdkp_minrosterlvl'],
+
                     'HIDE_INACTIVE_YES_CHECKED' => ($config['bbdkp_hide_inactive'] == '1') ? ' checked="checked"' : '' ,
                     'HIDE_INACTIVE_NO_CHECKED' => ($config['bbdkp_hide_inactive'] == '0') ? ' checked="checked"' : '' ,
-                    'USER_ELIMIT' => $config['bbdkp_user_elimit'] ,
-                    'EVENT_VIEWALL_YES_CHECKED' => ($config['bbdkp_event_viewall'] == '1') ? ' checked="checked"' : '' ,
-                    'EVENT_VIEWALL_NO_CHECKED' => ($config['bbdkp_event_viewall'] == '0') ? ' checked="checked"' : '' ,
-                    'USER_NLIMIT' => $config['bbdkp_user_nlimit'] ,
                     'INACTIVE_PERIOD' => $config['bbdkp_inactive_period'] ,
                     'LIST_P1' => $config['bbdkp_list_p1'] ,
                     'LIST_P2' => $config['bbdkp_list_p2'] ,
                     'LIST_P3' => $config['bbdkp_list_p3'] ,
-                    'F_SHOWACHIEV' => $config['bbdkp_show_achiev'] ,
+
+                    'USER_ELIMIT' => $config['bbdkp_user_elimit'] ,
+                    'EVENT_VIEWALL_YES_CHECKED' => ($config['bbdkp_event_viewall'] == '1') ? ' checked="checked"' : '' ,
+                    'EVENT_VIEWALL_NO_CHECKED' => ($config['bbdkp_event_viewall'] == '0') ? ' checked="checked"' : '' ,
+
+                    'USER_RLIMIT' => $config['bbdkp_user_rlimit'] ,
+                    'USER_ILIMIT' => $config['bbdkp_user_ilimit'] ,
+
                     'USER_ALIMIT' => $config['bbdkp_user_alimit'] ,
                     'STARTING_DKP' => $config['bbdkp_starting_dkp'] ,
                     'INACTIVE_POINT' => $config['bbdkp_inactive_point_adj'] ,
                     'ACTIVE_POINT' => $config['bbdkp_active_point_adj'] ,
-                    'USER_ILIMIT' => $config['bbdkp_user_ilimit'] ,
-                    'USER_RLIMIT' => $config['bbdkp_user_rlimit'] ,
-                    'MAXCHARS' => $config['bbdkp_maxchars'] ,
-                    'USER_LLIMIT' => $config['bbdkp_user_llimit'] ,
-                    'MINLEVEL' => $config['bbdkp_minrosterlvl'],
-                    'U_REGISTER' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_config&amp;action=register"),
-                    'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_config&amp;action=addconfig"),
-                    'DOMAINNAME' => $_SERVER['HTTP_HOST'],
+
+                    'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_config&amp;action=addconfig"),
                     'PHPBBVER' => $config['version'],
                     'BBDKPVER' => BBDKP_VERSION,
-                    'REGID' => isset($config['bbdkp_regid']) ? $config['bbdkp_regid'] : '',
-                    'S_BBDKPREGISTERED' => isset($config['bbdkp_regid']) ? $config['bbdkp_regid'] : '',
-
                 ));
 
                 add_form_key('acp_dkp');
@@ -366,7 +371,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
              * PORTAL CONFIG
              */
             case 'dkp_index':
-                $submit = (isset($_POST['update'])) ? true : false;
+                $submit = $request->is_set_post('update');
                 if ($submit)
                 {
                     if (! check_form_key('acp_dkp_portal'))
@@ -375,30 +380,32 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                     }
                     if (isset($config['bbdkp_gameworld_version']))
                     {
-                        set_config('bbdkp_portal_bossprogress', request_var('show_bosspblock', 0), true);
+                        $config->set('bbdkp_portal_bossprogress', $request->variable('show_bosspblock', 0), true);
                     }
-                    set_config('bbdkp_news_forumid', request_var('news_id', 0), true);
-                    set_config('bbdkp_n_news', request_var('n_news', 0), true);
-                    set_config('bbdkp_n_items', request_var('n_items', 0), true);
-                    set_config('bbdkp_recruitment', request_var('bbdkp_recruitment', 0), true);
-                    set_config('bbdkp_portal_loot', request_var('show_lootblock', 0), true);
-                    set_config('bbdkp_portal_recruitment', request_var('show_recrblock', 0), true);
-                    set_config('bbdkp_portal_links', request_var('show_linkblock', 0), true);
-                    set_config('bbdkp_portal_menu', request_var('show_menublock', 0), true);
-                    set_config('bbdkp_portal_welcomemsg', request_var('show_welcomeblock', 0), true);
-                    set_config('bbdkp_portal_recent', request_var('show_recenttopics', 0), true);
-                    set_config('bbdkp_portal_rtlen', request_var('n_rclength', 0), true);
-                    set_config('bbdkp_portal_rtno', request_var('n_rcno', 0), true);
-                    set_config('bbdkp_portal_newmembers', request_var('show_newmembers', 0), true);
-                    set_config('bbdkp_portal_maxnewmembers', request_var('num_newmembers', 0), true);
-                    set_config('bbdkp_portal_whoisonline', request_var('show_onlineblock', 0), true);
-                    set_config('bbdkp_portal_onlineblockposition', request_var('onlineblockposition', 0), true);
+                    $config->set('bbdkp_news_forumid', $request->variable('news_id', 0), true);
+                    $config->set('bbdkp_n_news', $request->variable('n_news', 0), true);
+                    $config->set('bbdkp_n_items', $request->variable('n_items', 0), true);
+                    $config->set('bbdkp_recruitment', $request->variable('bbdkp_recruitment', 0), true);
+                    $config->set('bbdkp_portal_loot', $request->variable('show_lootblock', 0), true);
+                    $config->set('bbdkp_portal_recruitment', $request->variable('show_recrblock', 0), true);
+                    $config->set('bbdkp_portal_links', $request->variable('show_linkblock', 0), true);
+                    $config->set('bbdkp_portal_menu', $request->variable('show_menublock', 0), true);
+                    $config->set('bbdkp_portal_welcomemsg', $request->variable('show_welcomeblock', 0), true);
+                    $config->set('bbdkp_portal_recent', $request->variable('show_recenttopics', 0), true);
+                    $config->set('bbdkp_portal_rtlen', $request->variable('n_rclength', 0), true);
+                    $config->set('bbdkp_portal_rtno', $request->variable('n_rcno', 0), true);
+                    $config->set('bbdkp_portal_newmembers', $request->variable('show_newmembers', 0), true);
+                    $config->set('bbdkp_portal_maxnewmembers', $request->variable('num_newmembers', 0), true);
+                    $config->set('bbdkp_portal_whoisonline', $request->variable('show_onlineblock', 0), true);
+                    $config->set('bbdkp_portal_onlineblockposition', $request->variable('onlineblockposition', 0), true);
 
                     $cache->destroy('config');
-                    $welcometext = utf8_normalize_nfc(request_var('welcome_message', '', true));
+                    $welcometext = $request->variable('welcome_message', '', true);
+
                     $uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
                     $allow_bbcode = $allow_urls = $allow_smilies = true;
                     generate_text_for_storage($welcometext, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
+
                     $sql = 'UPDATE ' . WELCOME_MSG_TABLE . " SET
 							welcome_msg = '" . (string) $db->sql_escape($welcometext) . "' ,
 							welcome_timestamp = " . (int) time() . " ,
@@ -406,7 +413,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
 							bbcode_uid = 		'" . (string) $uid . "'
 							WHERE welcome_id = 1";
                     $db->sql_query($sql);
-                    trigger_error($user->lang['ADMIN_PORTAL_SETTINGS_SAVED'] . $link, E_USER_NOTICE);
+                    trigger_error($user->lang['ADMIN_PORTAL_SETTINGS_SAVED'] . $this->link, E_USER_NOTICE);
                 }
 
                 // get welcome msg
@@ -437,6 +444,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                 {
                     $template->assign_var('S_BP_SHOW', false);
                 }
+
                 $template->assign_vars(array(
                     'WELCOME_MESSAGE' => $textarr['text'] ,
                     'N_NEWS' => $n_news,
@@ -448,8 +456,6 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
 
                     'SHOW_ONLINE_BOTTOM_CHECKED' => ($config['bbdkp_portal_onlineblockposition'] == '1') ? 'checked="checked"' : '' ,
                     'SHOW_ONLINE_SIDE_CHECKED' => ($config['bbdkp_portal_onlineblockposition'] == '0') ? 'checked="checked"' : '' ,
-
-
 
                     'SHOW_REC_YES_CHECKED' => ($config['bbdkp_portal_recruitment'] == '1') ? ' checked="checked"' : '' ,
                     'SHOW_REC_NO_CHECKED' => ($config['bbdkp_portal_recruitment'] == '0') ? ' checked="checked"' : '' ,
@@ -479,8 +485,8 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
             case 'dkp_logs':
                 $this->page_title = 'ACP_DKP_LOGS';
 
-                $logs = \bbdkp\admin\log::Instance();
-                $log_id = (isset($_GET[URI_LOG])) ? request_var(URI_LOG, 0) : false;
+                $logs =  \sajaki\bbdkp\model\admin\log::Instance();
+                $log_id = (isset($_GET[URI_LOG])) ? $request->variable(URI_LOG, 0) : false;
                 $search = (isset($_GET['search'])) ? true : false;
                 if ($log_id)
                 {
@@ -496,23 +502,21 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                 {
                     case 'list':
 
-                        $deletemark = (isset($_POST['delmarked'])) ? true : false;
-                        $marked = request_var('mark', array(0));
-                        $search_term = request_var('search', '');
-                        $start = request_var('start', 0);
+                        $deletemark = ($request->is_set_post('delmarked')) ? true : false;
+                        $marked = $request->variable('mark', array(0));
+                        $search_term = $request->variable('search', '');
+                        $start = $request->variable('start', 0);
 
                         if ($deletemark)
                         {
-
-
                             global $db, $user, $phpEx;
                             //if marked array isnt empty
                             if (sizeof($marked) && is_array($marked))
                             {
                                 if (confirm_box(true))
                                 {
-                                    $marked = request_var('mark', array(0));
-                                    $logs = \bbdkp\admin\log::Instance();
+                                    $marked = $request->variable('mark', array(0));
+                                    $logs = \sajaki\bbdkp\model\admin\log::Instance();
                                     $log_action = array(
                                         'header' => 'L_ACTION_LOG_DELETED' ,
                                         'L_ADDED_BY' => $user->data['username'] ,
@@ -523,9 +527,9 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                                         'log_action' => $log_action));
 
                                     //redirect to listing
-                                    $meta_info = append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs");
+                                    $meta_info = append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs");
                                     meta_refresh(3, $meta_info);
-                                    $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '">' . $user->lang['RETURN_LOG'] . '</a><br />' . sprintf($user->lang['ADMIN_LOG_DELETE_SUCCESS'], implode($marked));
+                                    $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs") . '">' . $user->lang['RETURN_LOG'] . '</a><br />' . sprintf($user->lang['ADMIN_LOG_DELETE_SUCCESS'], implode($marked));
                                     trigger_error($message, E_USER_WARNING);
                                 }
                                 else
@@ -536,7 +540,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                                         'mark' 		=> $marked)));
                                 }
                                 // they hit no
-                                $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs") . '">' . $user->lang['RETURN_LOG'] . '</a><br />' . sprintf($user->lang['ADMIN_LOG_DELETE_FAIL'], implode($marked));
+                                $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs") . '">' . $user->lang['RETURN_LOG'] . '</a><br />' . sprintf($user->lang['ADMIN_LOG_DELETE_FAIL'], implode($marked));
                                 trigger_error($message, E_USER_WARNING);
                             }
                         }
@@ -559,7 +563,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                                 'ID'		=> $log['log_id'],
                                 'DATE' 		=> $log['datestamp'],
                                 'TYPE' 		=> $log['log_type'],
-                                'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;" . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ) ,
+                                'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;" . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ) ,
                                 'VERBOSE'	=> $verbose,
                                 'USER' 		=> $log['username'],
                                 'ACTION' 	=> $log['log_line'],
@@ -571,6 +575,12 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                                 'ENCODED_IP' => urlencode($log['log_ipaddress'])));
                         }
                         $logcount = $logs->getTotalLogs();
+
+                        $pagination = $phpbb_container->get('pagination');
+
+                        $pagination_url = append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;o=' . $current_order['uri']['current'];
+                        $pagination->generate_template_pagination($pagination_url, 'pagination', 'page', $logcount, USER_LLIMIT, $start);
+
                         $template->assign_vars(array(
                             'S_LIST' 	=> true ,
                             'L_TITLE' 	=> $user->lang['ACP_DKP_LOGS'] ,
@@ -580,20 +590,20 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                             'O_USER' 	=> $current_order['uri'][2] ,
                             'O_IP' 		=> $current_order['uri'][3] ,
                             'O_RESULT' 	=> $current_order['uri'][4] ,
-                            'U_LOGS' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
-                            'U_LOGS_SEARCH' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs"),
+                            'U_LOGS' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
+                            'U_LOGS_SEARCH' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs"),
                             'CURRENT_ORDER' => $current_order['uri']['current'] ,
                             'START' => $start ,
                             'VIEWLOGS_FOOTCOUNT' => sprintf($user->lang['VIEWLOGS_FOOTCOUNT'], $logcount, USER_LLIMIT) ,
-                            'VIEWLOGS_PAGINATION' => generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;") .
-                                '&amp;search=' . $search_term . '&amp;o=' . $current_order['uri']['current'], $logcount, USER_LLIMIT, $start)));
+                            'PAGE_NUMBER'        => $pagination->on_page($logcount, USER_LLIMIT, $start)
+                        ));
                         break;
 
                     case 'view':
                         $viewlog = $logs->get_logentry($log_id);
                         $log_actionxml = $viewlog['log_action'];
-                        $search_term = request_var('search', '');
-                        $start = request_var('start', 0);
+                        $search_term = $request->variable('search', '');
+                        $start = $request->variable('start', 0);
                         $log_action = (array) simplexml_load_string($log_actionxml);
                         // loop the action elements and fill template
                         foreach ($log_action as $key => $value)
@@ -635,14 +645,11 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                 }
 
                 $template->assign_vars(array(
-                    'U_BACK'    => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
+                    'U_BACK'    => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
                 ));
                 break;
         }
 
 
     }
-
-
 }
-?>
