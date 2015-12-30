@@ -9,27 +9,6 @@
 
 namespace sajaki\bbdkp\model\points;
 
-/*
-if (!class_exists('\bbdkp\controller\points\Points'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/points/Points.$phpEx");
-}
-if (!class_exists('\bbdkp\controller\points\Pool'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/points/Pool.$phpEx");
-}
-// Include the member class
-if (!class_exists('\bbdkp\controller\members\Members'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
-}
-// Include the Adjustments class
-if (!class_exists('\bbdkp\controller\adjustments\Adjust'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/adjustments/Adjust.$phpEx");
-}
-*/
-
 /**
  * Points controller
  *
@@ -301,7 +280,7 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
                     'DKPCOLOUR2' 	=> ($row ['member_current'] >= 0) ? 'positive' : 'negative',
                     'RAIDCOUNT' => number_format($row ['member_raidcount'] , 0, '', ''),
 					'LASTRAID' => (! empty ( $row ['member_lastraid'] )) ? date ( $config ['bbdkp_date_format'], $row ['member_lastraid'] ) : '&nbsp;',
-					'U_VIEW_MEMBER_ACP' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp" ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'],
+					'U_VIEW_MEMBER_ACP' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mdkp_module&amp;mode=mm_editmemberdkp' ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'],
                     'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx",'page=member&amp;' . URI_NAMEID . '=' . $row ['member_id'] .'&amp;' . URI_DKPSYS . '=' .$row ['member_dkpid']) ,
 
 
@@ -462,7 +441,7 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
                     'DKPCOLOUR2' 	=> ($row ['pr'] >= 0) ? 'positive' : 'negative',
 					'LASTRAID' => (! empty ( $row ['member_lastraid'] )) ? date ( $config ['bbdkp_date_format'], $row ['member_lastraid'] ) : '&nbsp;',
                     'RAIDCOUNT' => number_format($row ['member_raidcount'] , 0, '', ''),
-					'U_VIEW_MEMBER_ACP' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&amp;mode=mm_editmemberdkp" ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'],
+					'U_VIEW_MEMBER_ACP' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mdkp_module&amp;mode=mm_editmemberdkp' ) . '&amp;member_id=' . $row ['member_id'] . '&amp;' . URI_DKPSYS . '=' . $row ['member_dkpid'],
                     'U_VIEW_MEMBER' => append_sid ( "{$phpbb_root_path}dkp.$phpEx",'page=member&amp;' . URI_NAMEID . '=' . $row ['member_id'] .'&amp;' . URI_DKPSYS . '=' .$row ['member_dkpid']) ,
             );
 
@@ -486,22 +465,22 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 	 */
 	public function update_dkpaccount($member_id)
 	{
-		global $phpbb_admin_path, $user, $phpEx;
-		$member= new \bbdkp\controller\members\Members($member_id);
-		$oldpoints = new \bbdkp\controller\points\Points($member_id, $this->dkpsys_id);
+		global $phpbb_admin_path, $user, $phpEx, $request;
+		$member= new \sajaki\bbdkp\model\player\Members($member_id);
+		$oldpoints = new \sajaki\bbdkp\model\points\Points($member_id, $this->dkpsys_id);
 		$oldpoints->dkpid = $this->dkpsys_id;
 		$oldpoints->member_id = $member_id;
 
-		$newpoints = new \bbdkp\controller\points\Points($member_id, $this->dkpsys_id);
+		$newpoints = new \sajaki\bbdkp\model\points\Points($member_id, $this->dkpsys_id);
 		$newpoints->dkpid = $this->dkpsys_id;
 		$newpoints->member_id = $member_id;
 
-		$newpoints->raid_value = request_var ( 'raid_value', 0.00 );
-		$newpoints->time_bonus = request_var ( 'time_value', 0.00 );
-		$newpoints->zerosum_bonus = request_var ( 'zerosum', 0.00 );
-		$newpoints->earned_decay = request_var ( 'rdecay', 0.00 );
-		$newpoints->spent = request_var ( 'spent', 0.00 );
-		$newpoints->item_decay = request_var ( 'idecay', 0.00 );
+		$newpoints->raid_value = $request->variable( 'raid_value', 0.00 );
+		$newpoints->time_bonus = $request->variable( 'time_value', 0.00 );
+		$newpoints->zerosum_bonus = $request->variable( 'zerosum', 0.00 );
+		$newpoints->earned_decay = $request->variable( 'rdecay', 0.00 );
+		$newpoints->spent = $request->variable( 'spent', 0.00 );
+		$newpoints->item_decay = $request->variable( 'idecay', 0.00 );
 
 		$newpoints->update_account();
 
@@ -525,9 +504,8 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 		unset($oldpoints);
 		unset($newpoints);
 
-		$link =  '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp" ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
+		$link =  '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mdkp_module&mode=mm_listmemberdkp' ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
 		trigger_error ($success_message . ' ' . $link , E_USER_NOTICE );
-
 
 	}
 
@@ -586,7 +564,7 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 		unset($Adjust);
 		unset($oldpoints);
 
-		$link =  '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_mdkp&mode=mm_listmemberdkp" ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
+		$link =  '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mdkp_module&mode=mm_listmemberdkp' ) . '"><h3>' . $user->lang ['RETURN_DKPINDEX'] . '</h3></a>';
 		trigger_error ($success_message . ' ' . $link , E_USER_NOTICE );
 
 	}

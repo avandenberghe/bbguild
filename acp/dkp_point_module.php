@@ -36,7 +36,7 @@ class dkp_point_module extends \sajaki\bbdkp\model\admin\Admin
                 $submit = ($request->is_set_post('update')) ? true : false;
                 if ($submit)
                 {
-                    if (! check_form_key('acp_dkp'))
+                    if (! check_form_key('sajaki/bbdkp'))
                     {
                         trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
                     }
