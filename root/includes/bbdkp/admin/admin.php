@@ -224,25 +224,23 @@ class Admin
         return is_string($string) && is_object(json_decode($string)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
     }
 
-
     /**
-	 * sends POST request to bbdkp.com for registration
-	 * @param array $regdata
-	 */
+	 * sends POST request for registration
+     * @param $regdata
+     * @return string
+     */
 	public final function post_register_request($regdata)
 	{
 
-		$regcode = hash("sha256", serialize(array($regdata['domainname'],$regdata['phpbbversion'], $regdata['bbdkpversion'])));
-
 		// bbdkp registration url
 		$url = "http://www.avathar.be/services/registerbbdkp.php";
+
 		// Create URL parameter string
 		$fields_string = '';
 		foreach( $regdata as $key => $value )
 		{
 			$fields_string .= $key.'='.$value.'&';
 		}
-		$fields_string .= 'regcode='.$regcode;
 
 		$ch = curl_init();
 		curl_setopt( $ch, CURLOPT_URL, $url);
@@ -252,17 +250,16 @@ class Admin
 		$result = curl_exec($ch);
 		curl_close( $ch );
 
-		$this->get_register_request($regdata, $url, $regcode);
+        $this->get_register_request($regdata, $url);
 	}
 
 
 	/**
-	 * GET reauests for registration ID
+	 * GET request for registration ID
 	 * @param array $regdata
 	 * @param string $url
-	 * @param string $regcode
 	 */
-	private final function get_register_request($regdata, $url, $regcode)
+	public final function get_register_request($regdata, $url)
 	{
 		global $cache, $config;
 
@@ -271,19 +268,17 @@ class Admin
 		{
 			$fields_string .= $key.'='.$value.'&';
 		}
-		$fields_string .= 'regcode='.$regcode;
 
 		$url .= '?' . $fields_string;
 
 		$data = $this->Curl($url, 'GET');
 
-
 		$regID = isset($data['response']) ? $data['response']['registration']: '';
+
 		set_config('bbdkp_regid', $regID, true);
 		$cache->destroy('config');
 		trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
 	}
-
 
 	/**
 	 * retrieve latest bbdkp productversion
