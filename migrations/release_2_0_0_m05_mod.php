@@ -53,7 +53,7 @@ class release_2_0_0_m05_mod extends \phpbb\db\migration\migration
 			array('module.add', array(
 				'acp', 'ACP_DKP_MAINPAGE', array(
 					'module_basename' => '\sajaki\bbdkp\acp\dkp_main_module',
-					'modes'           => array('mainpage', 'dkp_config', 'dkp_logs', 'dkp_indexpageconfig') ,
+					'modes'           => array('dkp_panel', 'dkp_config', 'dkp_logs', 'dkp_index') ,
 				)
 			)),
 
