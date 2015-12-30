@@ -64,7 +64,7 @@ class Admin
      */
     public function __construct()
     {
-        global $user, $phpEx, $phpbb_extension_manager, $request;
+        global $user, $phpEx, $phpbb_extension_manager;
         $this->ext_path = $phpbb_extension_manager->get_extension_path('sajaki/bbdkp', true);
         $user->add_lang_ext('sajaki/bbdkp', array('dkp_admin','dkp_common'));
         include_once($this->ext_path . 'model/admin/constants_bbdkp.' . $phpEx);
@@ -120,14 +120,13 @@ class Admin
      */
     public final function gen_group_key($part1, $part2, $part3)
     {
-        // Get the first 10-11 digits of each md5 hash
-        $part1 = substr(md5($part1), 0, 10);
-        $part2 = substr(md5($part2), 0, 11);
-        $part3 = substr(md5($part3), 0, 11);
-
+        // Get the first 10-11 digits of each password_hash
+        $part1 = substr(password_hash($part1, PASSWORD_DEFAULT), 0, 10);
+        $part2 = substr(password_hash($part2, PASSWORD_DEFAULT), 0, 11);
+        $part3 = substr(password_hash($part3, PASSWORD_DEFAULT), 0, 11);
         // Group the hashes together and create a new hash based on uniqid()
         $group_key = $part1 . $part2 . $part3;
-        $group_key = md5(uniqid($group_key));
+        $group_key = password_hash(uniqid($group_key), PASSWORD_DEFAULT);
 
         return $group_key;
     }
@@ -266,7 +265,7 @@ class Admin
 
 
         $regID = isset($data['response']) ? $data['response']['registration']: '';
-        set_config('bbdkp_regid', $regID, true);
+        $config->set('bbdkp_regid', $regID, true);
         $cache->destroy('config');
         trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
     }
@@ -282,7 +281,7 @@ class Admin
      */
     public final function get_productversion($force_update = false, $warn_fail = false, $ttl = 86400)
     {
-        global $request, $user, $cache, $config;
+        global $user, $cache;
 
         //get latest productversion from cache
         $latest_version_a = $cache->get('latest_bbdkp');
@@ -343,7 +342,8 @@ class Admin
      */
     public final function switch_order($sort_order, $arg = URI_ORDER, $defaultorder = '0.0')
     {
-        $uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : $defaultorder;
+        global $request;
+        $uri_order = ( isset($_GET[$arg]) ) ? $request->variable($arg, 0.0) : $defaultorder;
 
         $uri_order = explode('.', $uri_order);
 
