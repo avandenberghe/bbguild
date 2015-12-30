@@ -267,7 +267,7 @@ class dkp_loot_module
 	    'SELECT'    => 'd.dkpsys_id, d.dkpsys_name, d.dkpsys_default',
 	    'FROM'      => array(
 	        DKPSYS_TABLE => 'd',
-	        EVENTS_TABLE => 'e',
+	        BBEVENTS_TABLE => 'e',
 	        RAIDS_TABLE => 'r',
 	    ),
 	    'WHERE'     =>  'd.dkpsys_id = e.event_dkpid

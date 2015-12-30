@@ -28,7 +28,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
 
         $this->page_title = 'ACP_DKP_MAINPAGE';
         $this->tpl_name = 'acp_' . $mode;
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module") . '"><h3>' . $user->lang['ACP_DKP'] . '</h3></a>';
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module') . '"><h3>' . $user->lang['ACP_DKP'] . '</h3></a>';
 
         switch ($mode)
         {
@@ -161,7 +161,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                     'ITEMS_PER_DAY' => $items_per_day ,
                     'BBDKP_STARTED' => $bbdkp_started,
                     'BBDKP_VERSION'	=> BBDKP_VERSION,
-                    'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_panel&amp;versioncheck_force=1"),
+                    'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_panel&amp;versioncheck_force=1'),
                     'GAMES_INSTALLED' => count($this->games) > 0 ? implode(", ", $this->games) : $user->lang['NA'],
                 ));
                 break;
@@ -322,7 +322,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                 $template->assign_vars(array(
                     'REGID' => isset($config['bbdkp_regid']) ? $config['bbdkp_regid'] : '',
                     'S_BBDKPREGISTERED' => isset($config['bbdkp_regid']) ? $config['bbdkp_regid'] : '',
-                    'U_REGISTER' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_config&amp;action=register"),
+                    'U_REGISTER' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_config&amp;action=register'),
 
                     'REALM' => $config['bbdkp_default_realm'] ,
                     'EQDKP_START_DD' => date('d', $config['bbdkp_eqdkp_start']) ,
@@ -357,7 +357,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                     'INACTIVE_POINT' => $config['bbdkp_inactive_point_adj'] ,
                     'ACTIVE_POINT' => $config['bbdkp_active_point_adj'] ,
 
-                    'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_config&amp;action=addconfig"),
+                    'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_config&amp;action=addconfig'),
                     'PHPBBVER' => $config['version'],
                     'BBDKPVER' => BBDKP_VERSION,
                 ));
@@ -486,8 +486,8 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                 $this->page_title = 'ACP_DKP_LOGS';
 
                 $logs =  \sajaki\bbdkp\model\admin\log::Instance();
-                $log_id = (isset($_GET[URI_LOG])) ? $request->variable(URI_LOG, 0) : false;
-                $search = (isset($_GET['search'])) ? true : false;
+                $log_id = $request->variable(URI_LOG, 0);
+                $search = $request->variable('search', 0);
                 if ($log_id)
                 {
                     $action = 'view';
@@ -527,9 +527,9 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                                         'log_action' => $log_action));
 
                                     //redirect to listing
-                                    $meta_info = append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs");
+                                    $meta_info = append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs');
                                     meta_refresh(3, $meta_info);
-                                    $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs") . '">' . $user->lang['RETURN_LOG'] . '</a><br />' . sprintf($user->lang['ADMIN_LOG_DELETE_SUCCESS'], implode($marked));
+                                    $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs') . '">' . $user->lang['RETURN_LOG'] . '</a><br />' . sprintf($user->lang['ADMIN_LOG_DELETE_SUCCESS'], implode($marked));
                                     trigger_error($message, E_USER_WARNING);
                                 }
                                 else
@@ -540,7 +540,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                                         'mark' 		=> $marked)));
                                 }
                                 // they hit no
-                                $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs") . '">' . $user->lang['RETURN_LOG'] . '</a><br />' . sprintf($user->lang['ADMIN_LOG_DELETE_FAIL'], implode($marked));
+                                $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs') . '">' . $user->lang['RETURN_LOG'] . '</a><br />' . sprintf($user->lang['ADMIN_LOG_DELETE_FAIL'], implode($marked));
                                 trigger_error($message, E_USER_WARNING);
                             }
                         }
@@ -563,7 +563,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                                 'ID'		=> $log['log_id'],
                                 'DATE' 		=> $log['datestamp'],
                                 'TYPE' 		=> $log['log_type'],
-                                'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;" . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start ) ,
+                                'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;' . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start ) ,
                                 'VERBOSE'	=> $verbose,
                                 'IMGPATH'    => $this->ext_path . 'adm/images/glyphs/view.gif',
                                 'USER' 		=> $log['username'],
@@ -579,7 +579,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
 
                         $pagination = $phpbb_container->get('pagination');
 
-                        $pagination_url = append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;o=' . $current_order['uri']['current'];
+                        $pagination_url = append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;') . '&amp;search=' . $search_term . '&amp;o=' . $current_order['uri']['current'];
                         $pagination->generate_template_pagination($pagination_url, 'pagination', 'page', $logcount, USER_LLIMIT, $start);
 
                         $template->assign_vars(array(
@@ -591,8 +591,8 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                             'O_USER' 	=> $current_order['uri'][2] ,
                             'O_IP' 		=> $current_order['uri'][3] ,
                             'O_RESULT' 	=> $current_order['uri'][4] ,
-                            'U_LOGS' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start ,
-                            'U_LOGS_SEARCH' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs"),
+                            'U_LOGS' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;') . '&amp;search=' . $search_term . '&amp;start=' . $start ,
+                            'U_LOGS_SEARCH' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs'),
                             'CURRENT_ORDER' => $current_order['uri']['current'] ,
                             'START' => $start ,
                             'VIEWLOGS_FOOTCOUNT' => sprintf($user->lang['VIEWLOGS_FOOTCOUNT'], $logcount, USER_LLIMIT) ,
@@ -646,7 +646,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                 }
 
                 $template->assign_vars(array(
-                    'U_BACK'    => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
+                    'U_BACK'    => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs') . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
                 ));
                 break;
         }

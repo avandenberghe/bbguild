@@ -14,23 +14,23 @@ namespace sajaki\bbdkp\acp;
  */
 class dkp_point_info
 {
-	/**
-	 * phpbb module function
-	 */
-	function module()
-	{
-		return array(
+    /**
+     * phpbb module function
+     */
+    function module()
+    {
+        return array(
             'filename'	=> '\sajaki\bbdkp\acp\dkp_point_module',
-			'title'		=> 'ACP_DKP_POINT_CONFIG',
-			'version'	=> '2.0.0',
-			'modes'		=> array(
-				'pointconfig'			=> array(
-					'title' => 'ACP_DKP_POINT_CONFIG', 	
-					'auth' => 'acl_a_dkp', 
-					'cat' => array('ACP_DKP_MAINPAGE')),
-				),
-		);
-	}
+            'title'		=> 'ACP_DKP_POINT_CONFIG',
+            'version'	=> '2.0.0',
+            'modes'		=> array(
+                'pointconfig'			=> array(
+                    'title' => 'ACP_DKP_POINT_CONFIG',
+                    'auth' => 'acl_a_dkp',
+                    'cat' => array('ACP_DKP_MAINPAGE')),
+            ),
+        );
+    }
 
 }
 
