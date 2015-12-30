@@ -317,7 +317,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                         'log_date'      => array('TIMESTAMP', 0),
                         'log_type'      => array('VCHAR_UNI:255', ''),
                         'log_action'    => array('TEXT_UNI', ''),
-                        'log_ipaddress' => array('VCHAR:15', ''),
+                        'log_ipaddress' => array('VCHAR:45', ''), // ipv6 is 45 char
                         'log_sid'       => array('VCHAR:32', ''),
                         'log_result'    => array('VCHAR', ''),
                         'log_userid'    => array('UINT', 0),
