@@ -140,7 +140,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                     foreach ($listlogs as $key => $log)
                     {
                         $template->assign_block_vars('actions_row', array(
-                            'U_VIEW_LOG' 	=> append_sid("{$this->ext_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;' . URI_LOG . '=' . $log['log_id']  ) ,
+                            'U_VIEW_LOG' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;' . URI_LOG . '=' . $log['log_id']  ) ,
                             'LOGDATE' 		=> $log['datestamp'],
                             'ACTION' 		=> $log['log_line'],
                         ));
@@ -148,7 +148,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                 }
 
                 $template->assign_vars(array(
-                    'GLYPH' => "$this->ext_path/adm/images/glyphs/view.gif" ,
+                    'GLYPH' => $this->ext_path . "adm/images/glyphs/view.gif" ,
                     'NUMBER_OF_MEMBERS' => $total_members ,
                     'NUMBER_OF_RAIDS' => $total_raids ,
                     'NUMBER_OF_ITEMS' => $total_items ,
@@ -563,8 +563,9 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                                 'ID'		=> $log['log_id'],
                                 'DATE' 		=> $log['datestamp'],
                                 'TYPE' 		=> $log['log_type'],
-                                'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;" . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ) ,
+                                'U_VIEW_LOG' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;" . URI_LOG . '=' . $log['log_id'] . '&amp;search=' . $search_term . '&amp;start=' . $start ) ,
                                 'VERBOSE'	=> $verbose,
+                                'IMGPATH'    => $this->ext_path . 'adm/images/glyphs/view.gif',
                                 'USER' 		=> $log['username'],
                                 'ACTION' 	=> $log['log_line'],
                                 'IP' 		=> $log['log_ipaddress'],
@@ -590,7 +591,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                             'O_USER' 	=> $current_order['uri'][2] ,
                             'O_IP' 		=> $current_order['uri'][3] ,
                             'O_RESULT' 	=> $current_order['uri'][4] ,
-                            'U_LOGS' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
+                            'U_LOGS' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start ,
                             'U_LOGS_SEARCH' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs"),
                             'CURRENT_ORDER' => $current_order['uri']['current'] ,
                             'START' => $start ,
@@ -645,7 +646,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                 }
 
                 $template->assign_vars(array(
-                    'U_BACK'    => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs&amp;") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
+                    'U_BACK'    => append_sid("{$phpbb_admin_path}index.$phpEx", "i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_logs") . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
                 ));
                 break;
         }
