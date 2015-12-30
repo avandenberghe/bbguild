@@ -16,7 +16,7 @@ namespace sajaki\bbdkp\migrations;
 class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
 {
 
-    private $bbdkp_version = '2.0.0';
+    private $bbdkp_version = '2.0.0-dev';
 
     static public function depends_on()
     {
@@ -25,7 +25,14 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
 
     public function effectively_installed()
     {
-        return isset($this->config['bbdkp_version']) && version_compare($this->config['bbdkp_version'], $this->bbdkp_version, '>=');
+
+        if ($this->db_tools->sql_table_exists($this->table_prefix . 'bbdkp_news') &&
+        isset($this->config['bbdkp_version']) && version_compare($this->config['bbdkp_version'], $this->bbdkp_version, '>='))
+        {
+            return true;
+        }
+
+        return false;
     }
 
     /**

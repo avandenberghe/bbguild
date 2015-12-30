@@ -18,16 +18,14 @@ namespace sajaki\bbdkp\model\admin;
  */
 class Admin
 {
+    private $phpbb_root_path;
+    private $php_ext;
+    private $path;
 
-	private $phpbb_root_path;
-	private $php_ext;
-	private $path;
-
-
-	/**
-	 * bbdkp timestamp
-	 * @var integer
-	 */
+    /**
+     * bbdkp timestamp
+     * @var integer
+     */
     public $time = 0;
     /**
      * game ragions
@@ -56,38 +54,44 @@ class Admin
     public $games;
 
     /**
+     * extension path
+     * @var
+     */
+    public $ext_path;
+
+    /**
      * Admin class constructor
      */
-	public function __construct()
-	{
+    public function __construct()
+    {
         global $user, $phpEx, $phpbb_extension_manager, $request;
-        $ext_path = $phpbb_extension_manager->get_extension_path('sajaki/bbdkp', true);
+        $this->ext_path = $phpbb_extension_manager->get_extension_path('sajaki/bbdkp', true);
         $user->add_lang_ext('sajaki/bbdkp', array('dkp_admin','dkp_common'));
-        include_once($ext_path . 'model/admin/constants_bbdkp.' . $phpEx);
+        include_once($this->ext_path . 'model/admin/constants_bbdkp.' . $phpEx);
 
-		// Check for required extensions
-		if (!function_exists('curl_init'))
-		{
-			trigger_error($user->lang['CURL_REQUIRED'], E_USER_WARNING);
-		}
+        // Check for required extensions
+        if (!function_exists('curl_init'))
+        {
+            trigger_error($user->lang['CURL_REQUIRED'], E_USER_WARNING);
+        }
 
-		$this->regions = array(
-				'cn' => $user->lang['REGIONCN'],
-				'eu' => $user->lang['REGIONEU'],
-				'kr' => $user->lang['REGIONKR'],
-				'sea' => $user->lang['REGIONSEA'],
-				'tw' => $user->lang['REGIONTW'],
-				'us' => $user->lang['REGIONUS'],
-				);
+        $this->regions = array(
+            'cn' => $user->lang['REGIONCN'],
+            'eu' => $user->lang['REGIONEU'],
+            'kr' => $user->lang['REGIONKR'],
+            'sea' => $user->lang['REGIONSEA'],
+            'tw' => $user->lang['REGIONTW'],
+            'us' => $user->lang['REGIONUS'],
+        );
 
         //sort alphabetically
         asort($this->regions);
 
-		$this->languagecodes = array(
-				'de' => $user->lang['LANG_DE'],
-				'en' => $user->lang['LANG_EN'],
-				'fr' => $user->lang['LANG_FR'],
-                'it' => $user->lang['LANG_IT']
+        $this->languagecodes = array(
+            'de' => $user->lang['LANG_DE'],
+            'en' => $user->lang['LANG_EN'],
+            'fr' => $user->lang['LANG_FR'],
+            'it' => $user->lang['LANG_IT']
         );
 
         $a = $user;
@@ -95,19 +99,16 @@ class Admin
         //$boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
         //$boardtime = getdate(time());
         $boardtime = (!empty($user->time_now) && is_int($user->time_now)) ? $user->time_now : time();
-
-
-	    $this->time = $boardtime[0];
+        $this->time = $boardtime[0];
 
         if (!class_exists('\sajaki\bbdkp\model\games\Game'))
         {
-            require("{$ext_path}/model/games/Game.$phpEx");
+            require("{$this->ext_path}/model/games/Game.$phpEx");
         }
         //$listgames = new \sajaki\bbdkp\model\games\Game;
-       // $this->games = $listgames->games;
+        // $this->games = $listgames->games;
         unset($listgames);
-
-	}
+    }
 
     /**
      * creates a unique key, used as adjustments, import, items and raid identifier
@@ -132,17 +133,17 @@ class Admin
     }
 
     /**
-	 * connects to remote site and gets xml or html using Curl
-	 * @param char $url
-	 * @param bool $return_Server_Response_Header default false
-	 * @param bool $loud default false
-	 * @param bool $json default true
-	 * @return array response
+     * connects to remote site and gets xml or html using Curl
+     * @param char $url
+     * @param bool $return_Server_Response_Header default false
+     * @param bool $loud default false
+     * @param bool $json default true
+     * @return array response
      */
-  	public final function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
-	{
+    public final function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
+    {
 
-		global $user;
+        global $user;
 
         $data = array(
             'response'		    => '',
@@ -150,30 +151,30 @@ class Admin
             'error'				=> '',
         );
 
-		if ( function_exists ( 'curl_init' ))
-		{
-			 /* Create a CURL handle. */
-			if (($curl = curl_init($url)) === false)
-			{
-				trigger_error('curl_init Failed' , E_USER_WARNING);
-			}
+        if ( function_exists ( 'curl_init' ))
+        {
+            /* Create a CURL handle. */
+            if (($curl = curl_init($url)) === false)
+            {
+                trigger_error('curl_init Failed' , E_USER_WARNING);
+            }
 
-			// set options
-			curl_setopt_array($curl, array(
-				CURLOPT_RETURNTRANSFER => 1,
-				CURLOPT_URL => $url,
-				CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
-				CURLOPT_SSL_VERIFYHOST => false,
-				CURLOPT_SSL_VERIFYPEER => false,
-				CURLOPT_FOLLOWLOCATION, true,
-				CURLOPT_TIMEOUT => 60,
-				CURLOPT_VERBOSE => true,
-				CURLOPT_HEADER => $return_Server_Response_Header,
+            // set options
+            curl_setopt_array($curl, array(
+                CURLOPT_RETURNTRANSFER => 1,
+                CURLOPT_URL => $url,
+                CURLOPT_USERAGENT => 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10.8; rv:21.0) Gecko/20100101 Firefox/21.0',
+                CURLOPT_SSL_VERIFYHOST => false,
+                CURLOPT_SSL_VERIFYPEER => false,
+                CURLOPT_FOLLOWLOCATION, true,
+                CURLOPT_TIMEOUT => 60,
+                CURLOPT_VERBOSE => true,
+                CURLOPT_HEADER => $return_Server_Response_Header,
                 CURLOPT_HEADER => false
-			));
+            ));
 
-			$response = curl_exec($curl);
-			$headers = curl_getinfo($curl);
+            $response = curl_exec($curl);
+            $headers = curl_getinfo($curl);
 
             if($response === FALSE || $response === "" )
             {
@@ -188,19 +189,19 @@ class Admin
                 );
             }
 
-			curl_close ($curl);
-			return $data;
+            curl_close ($curl);
+            return $data;
 
-		}
+        }
 
-		//report errors?
-		if($loud == true)
-		{
-			trigger_error($data['error'], E_USER_WARNING);
-		}
-		return $data['response'];
+        //report errors?
+        if($loud == true)
+        {
+            trigger_error($data['error'], E_USER_WARNING);
+        }
+        return $data['response'];
 
-	}
+    }
 
     /**
      * @param $string
@@ -212,104 +213,104 @@ class Admin
 
 
     /**
-	 * sends POST request to bbdkp.com for registration
-	 * @param array $regdata
-	 */
-	public final function post_register_request($regdata)
-	{
+     * sends POST request to bbdkp.com for registration
+     * @param array $regdata
+     */
+    public final function post_register_request($regdata)
+    {
 
-		$regcode = hash("sha256", serialize(array($regdata['domainname'],$regdata['phpbbversion'], $regdata['bbdkpversion'])));
+        $regcode = hash("sha256", serialize(array($regdata['domainname'],$regdata['phpbbversion'], $regdata['bbdkpversion'])));
 
-		// bbdkp registration url
-		$url = "https://www.bbdkp.com/services/registerbbdkp.php";
-		// Create URL parameter string
-		$fields_string = '';
-		foreach( $regdata as $key => $value )
-		{
-			$fields_string .= $key.'='.$value.'&';
-		}
-		$fields_string .= 'regcode='.$regcode;
+        // bbdkp registration url
+        $url = "https://www.bbdkp.com/services/registerbbdkp.php";
+        // Create URL parameter string
+        $fields_string = '';
+        foreach( $regdata as $key => $value )
+        {
+            $fields_string .= $key.'='.$value.'&';
+        }
+        $fields_string .= 'regcode='.$regcode;
 
-		$ch = curl_init();
-		curl_setopt( $ch, CURLOPT_URL, $url);
-		curl_setopt( $ch, CURLOPT_POST, 4 );
-		curl_setopt( $ch, CURLOPT_HEADER , false);
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields_string );
-		$result = curl_exec($ch);
-		curl_close( $ch );
+        $ch = curl_init();
+        curl_setopt( $ch, CURLOPT_URL, $url);
+        curl_setopt( $ch, CURLOPT_POST, 4 );
+        curl_setopt( $ch, CURLOPT_HEADER , false);
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields_string );
+        $result = curl_exec($ch);
+        curl_close( $ch );
 
-		$this->get_register_request($regdata, $url, $regcode);
-	}
-
-
-	/**
-	 * GET reauests for registration ID
-	 * @param array $regdata
-	 * @param string $url
-	 * @param string $regcode
-	 */
-	private final function get_register_request($regdata, $url, $regcode)
-	{
-		global $cache, $config;
-
-		$fields_string = '';
-		foreach( $regdata as $key => $value )
-		{
-			$fields_string .= $key.'='.$value.'&';
-		}
-		$fields_string .= 'regcode='.$regcode;
-
-		$url .= '?' . $fields_string;
-
-		$data = $this->Curl($url, 'GET');
+        $this->get_register_request($regdata, $url, $regcode);
+    }
 
 
-		$regID = isset($data['response']) ? $data['response']['registration']: '';
-		set_config('bbdkp_regid', $regID, true);
-		$cache->destroy('config');
-		trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
-	}
+    /**
+     * GET reauests for registration ID
+     * @param array $regdata
+     * @param string $url
+     * @param string $regcode
+     */
+    private final function get_register_request($regdata, $url, $regcode)
+    {
+        global $cache, $config;
+
+        $fields_string = '';
+        foreach( $regdata as $key => $value )
+        {
+            $fields_string .= $key.'='.$value.'&';
+        }
+        $fields_string .= 'regcode='.$regcode;
+
+        $url .= '?' . $fields_string;
+
+        $data = $this->Curl($url, 'GET');
 
 
-	/**
-	 * retrieve latest bbdkp productversion
-	 * @param string $product productname
-	 * @param bool $force_update Ignores cached data. Defaults to false.
-	 * @param bool $warn_fail Trigger a warning if obtaining the latest version information fails. Defaults to false.
-	 * @param int $ttl Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
-	 * @return string | false Version info on success, false on failure.
- 	 */
-	public final function get_productversion($force_update = false, $warn_fail = false, $ttl = 86400)
-	{
-		global $request, $user, $cache, $config;
+        $regID = isset($data['response']) ? $data['response']['registration']: '';
+        set_config('bbdkp_regid', $regID, true);
+        $cache->destroy('config');
+        trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
+    }
 
-		//get latest productversion from cache
+
+    /**
+     * retrieve latest bbdkp productversion
+     * @param string $product productname
+     * @param bool $force_update Ignores cached data. Defaults to false.
+     * @param bool $warn_fail Trigger a warning if obtaining the latest version information fails. Defaults to false.
+     * @param int $ttl Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
+     * @return string | false Version info on success, false on failure.
+     */
+    public final function get_productversion($force_update = false, $warn_fail = false, $ttl = 86400)
+    {
+        global $request, $user, $cache, $config;
+
+        //get latest productversion from cache
         $latest_version_a = $cache->get('latest_bbdkp');
 
-		//if update is forced or cache expired then make the call to refresh latest productversion
-		if ($latest_version_a === false || $force_update)
-		{
-			$data = $this->curl(BBDKP_VERSIONURL . 'bbdkp.json', false, false, false);
-			if (empty($data))
-			{
-				$cache->destroy('latest_bbdkp');
-				if ($warn_fail)
-				{
-					trigger_error($user->lang['VERSION_NOTONLINE'], E_USER_WARNING);
-				}
-				return false;
-			}
+        //if update is forced or cache expired then make the call to refresh latest productversion
+        if ($latest_version_a === false || $force_update)
+        {
+            $data = $this->curl(BBDKP_VERSIONURL . 'bbdkp.json', false, false, false);
+            if (empty($data))
+            {
+                $cache->destroy('latest_bbdkp');
+                if ($warn_fail)
+                {
+                    trigger_error($user->lang['VERSION_NOTONLINE'], E_USER_WARNING);
+                }
+                return false;
+            }
 
             $response = $data['response'];
             $latest_version = json_decode($response, true);
             $latest_version_a = $latest_version['stable']['3.1']['current'];
 
-			//put this info in the cache
+            //put this info in the cache
             $cache->put('latest_bbdkp' , $latest_version_a, $ttl);
-		}
+        }
 
-		return $latest_version_a;
-	}
+        return $latest_version_a;
+    }
 
     private function version_check(\phpbb\extension\metadata_manager $md_manager, $force_update = false, $force_cache = false)
     {
@@ -341,53 +342,53 @@ class Admin
      * @return mixed
      */
     public final function switch_order($sort_order, $arg = URI_ORDER, $defaultorder = '0.0')
-	{
-		$uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : $defaultorder;
+    {
+        $uri_order = ( isset($_GET[$arg]) ) ? request_var($arg, 0.0) : $defaultorder;
 
-		$uri_order = explode('.', $uri_order);
+        $uri_order = explode('.', $uri_order);
 
-		$element1 = ( isset($uri_order[0]) ) ? $uri_order[0] : 0;
-		$element2 = ( isset($uri_order[1]) ) ? $uri_order[1] : 0;
-		// check if correct input
-		if ( $element2 != 1 )
-		{
-			$element2 = 0;
-		}
+        $element1 = ( isset($uri_order[0]) ) ? $uri_order[0] : 0;
+        $element2 = ( isset($uri_order[1]) ) ? $uri_order[1] : 0;
+        // check if correct input
+        if ( $element2 != 1 )
+        {
+            $element2 = 0;
+        }
 
-		foreach((array) $sort_order as $key => $value )
-		{
-			if ( $element1 == $key )
-			{
-				$uri_element2 = ( $element2 == 0 ) ? 1 : 0;
-			}
-			else
-			{
-				$uri_element2 = 0;
-			}
-			$current_order['uri'][$key] = $key . '.' . $uri_element2;
-		}
+        foreach((array) $sort_order as $key => $value )
+        {
+            if ( $element1 == $key )
+            {
+                $uri_element2 = ( $element2 == 0 ) ? 1 : 0;
+            }
+            else
+            {
+                $uri_element2 = 0;
+            }
+            $current_order['uri'][$key] = $key . '.' . $uri_element2;
+        }
 
-		$current_order['uri']['current'] = $element1.'.'.$element2;
-		$current_order['sql'] = $sort_order[$element1][$element2];
+        $current_order['uri']['current'] = $element1.'.'.$element2;
+        $current_order['sql'] = $sort_order[$element1][$element2];
 
-		return $current_order;
-	}
+        return $current_order;
+    }
 
 
-	/**
-	 * remove end of a string
-	 * @param string $string
-	 * @param string $stringToRemove
-	 * @return string
-	 */
-	public function removeFromEnd($string, $stringToRemove)
-	{
-		$stringToRemoveLen = strlen($stringToRemove);
-		$stringLen = strlen($string);
-		$pos = $stringLen - $stringToRemoveLen;
-		$out = substr($string, 0, $pos);
-		return $out;
-	}
+    /**
+     * remove end of a string
+     * @param string $string
+     * @param string $stringToRemove
+     * @return string
+     */
+    public function removeFromEnd($string, $stringToRemove)
+    {
+        $stringToRemoveLen = strlen($stringToRemove);
+        $stringLen = strlen($string);
+        $pos = $stringLen - $stringToRemoveLen;
+        $out = substr($string, 0, $pos);
+        return $out;
+    }
 
     /**
      * makes an entry in the bbdkp log table
@@ -405,12 +406,12 @@ class Admin
      * @param array $values
      * @return bool
      */
-	public final function log_insert($values = array())
-	{
-		$logs = \sajaki\bbdkp\model\admin\log::Instance();
-		return $logs->log_insert($values);
+    public final function log_insert($values = array())
+    {
+        $logs = \sajaki\bbdkp\model\admin\log::Instance();
+        return $logs->log_insert($values);
 
-	}
+    }
 
 }
 

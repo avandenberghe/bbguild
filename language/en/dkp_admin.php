@@ -46,6 +46,7 @@ $lang = array();
 // DKP
 $lang = array_merge($lang, array(
 'NOT_UP_TO_DATE_TITLE' => 'Your %s is out of date.',
+'PRELELEASE_TITLE' => 'Your %s is a prelease version.',
 'BBDKP_LATESTVERSION' => 'Latest Version:',
 'BBDKPDISABLED' => 'bbDKP is currently disabled.',
 'BBDKPSCRIPTALERT' => 'bbDKP includes embedded Javascript. You are invited to use a javascript-enabled browser.',
