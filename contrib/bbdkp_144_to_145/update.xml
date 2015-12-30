@@ -37,6 +37,8 @@
 	<action-group>
 		<copy>
 			<file from="root/install/*.*" to="install/*.*"/>
+			<file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>
+			<file from="root/includes/bbdkp/views/viewNavigation.php" to="includes/bbdkp/views/viewNavigation.php"/>
 		</copy>
 		<php-installer>install/index.php</php-installer>
 		<diy-instructions lang="fr"><![CDATA[navigue vers install/index.php et execute la mise à jour de la version.]]></diy-instructions>

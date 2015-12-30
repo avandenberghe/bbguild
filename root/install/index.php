@@ -10,11 +10,7 @@
  * @version 1.4.4
  */
 
-// anything lower than php 5.3.3 not supported (we use namespaces since v1.3)
-if (version_compare(PHP_VERSION, '5.3.3') < 0)
-{
-    die('You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.3.3 or higher before trying to install bbDKP. <br />');
-}
+
 define('UMIL_AUTO', true);
 define('IN_PHPBB', true);
 define('IN_INSTALL', true);
@@ -26,8 +22,14 @@ require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
 $user->session_begin();
 $auth->acl($user->data);
 $user->setup();
-$user->add_lang ( array ('mods/dkp_admin'));
 
+// anything lower than php 5.3.3 not supported (we use namespaces since bbDKP v1.3)
+if (version_compare(PHP_VERSION, '5.3.3') < 0)
+{
+    trigger_error('You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.3.3 or higher before trying to install bbDKP. <br />', E_USER_WARNING);
+}
+
+$user->add_lang ( array ('mods/dkp_admin'));
 $error= array();
 switch ($db->sql_layer)
 {

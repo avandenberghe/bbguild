@@ -300,11 +300,11 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
         $this->dkpsys_name = $user->lang['ALL'];
         if(isset( $_POST ['pool']) )
         {
-            $this->dkpsys_id = intval($_POST ['pool']);
+            $this->dkpsys_id = request_var('pool', 0);
         }
         if(isset ( $_GET [URI_DKPSYS] ) )
         {
-            $this->dkpsys_id = intval($_GET [URI_DKPSYS]);
+            $this->dkpsys_id = request_var(URI_DKPSYS, 0); 
         }
 
         $sql_array = array(
@@ -554,6 +554,3 @@ class viewNavigation extends \bbdkp\admin\Admin implements iViews
 
 
 }
-
-
-
