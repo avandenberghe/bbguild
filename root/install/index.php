@@ -1104,7 +1104,6 @@ $versions = array(
             array('bbdkp_recruit_forumid'),
         ),
 
-
         'custom' => array(
             'tableupdates',
             'bbdkp_caches'
@@ -1121,6 +1120,13 @@ $versions = array(
     ),
     '1.4.4' => array(
         // fix bug #261, no database update
+    ),
+    '1.4.5' => array(
+        // fix bug #262, logging table width
+        'custom' => array(
+            'tableupdates',
+            'bbdkp_caches'
+        ),
     ),
 );
 
@@ -1200,8 +1206,10 @@ function tableupdates($action, $version)
                     $sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_realm, member_name) ";
                     $db->sql_query($sql);
                     break;
-
-
+                case '1.4.5':
+                    $sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_logs MODIFY log_ipaddress VARCHAR(45) ';
+                    $db->sql_query($sql);
+                    break;
             }
             break;
 
@@ -1413,6 +1421,10 @@ function tableupdates($action, $version)
                     }
 
                     break;
+                case '1.4.5':
+                    $sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_logs MODIFY log_ipaddress VARCHAR(45) ';
+                    $db->sql_query($sql);
+                    break;
 
             }
             break;
@@ -1422,9 +1434,6 @@ function tableupdates($action, $version)
                 case '1.2.8':
                     break;
                 case '1.3.0':
-                    //$sql= "DROP TABLE  " . $table_prefix . 'bbdkp_reporting ';
-                    //$db->sql_query($sql);
-
                     break;
 
             }

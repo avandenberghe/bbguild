@@ -4,24 +4,24 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
 	<header>
 		<license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-		<title lang="en">bbDKP 1.4.4 - Update from bbdkp 1.4.2</title>
-		<title lang="de">bbDKP 1.4.4 - Update von bbdkp 1.4.2</title>
-		<title lang="fr">bbDKP 1.4.4 - mise à jour depuis bbdkp 1.4.2</title>
-		<description lang="en">bbDKP 1.4.4 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
+		<title lang="en">bbDKP 1.4.5 - Update from bbdkp 1.3.0.8</title>
+		<title lang="de">bbDKP 1.4.5 - Update von bbdkp 1.3.0.8</title>
+		<title lang="fr">bbDKP 1.4.5 - mise à jour depuis bbdkp 1.3.0.8</title>
+		<description lang="en">bbDKP 1.4.5 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
 </description>
 		<github>https://github.com/bbdkp/bbdkp</github>
 		<author-group>
 		<author>
 				<realname><![CDATA[Andreas]]></realname>
 				<username><![CDATA[Sajaki]]></username>
-				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
+				<homepage><![CDATA[http://www.avathar.be/bbdkp]]></homepage>
 				<email><![CDATA[sajaki9@gmail.com]]></email>
 				<contributions-group>
 					<contributions status="current" from="2008-04-04" position="Developer"/>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.4.4</mod-version>
+		<mod-version>1.4.5</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>60</time>
@@ -66,7 +66,7 @@
 			<file from="root/includes/acp/info/acp_dkp_point.php" to="includes/acp/info/acp_dkp_point.php"/>
 			<file from="root/includes/acp/info/acp_dkp_raid.php" to="includes/acp/info/acp_dkp_raid.php"/>
 			<file from="root/includes/acp/info/acp_dkp_sys.php" to="includes/acp/info/acp_dkp_sys.php"/>
-      <file from="root/includes/acp/info/acp_dkp_recruit.php" to="includes/acp/info/acp_dkp_recruit.php"/>
+            <file from="root/includes/acp/info/acp_dkp_recruit.php" to="includes/acp/info/acp_dkp_recruit.php"/>
 			<!-- admin -->
 			<file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>
 			<file from="root/includes/bbdkp/admin/constants_bbdkp.php" to="includes/bbdkp/admin/constants_bbdkp.php"/>
@@ -90,13 +90,13 @@
 			<!-- controllers -->
 			<file from="root/includes/bbdkp/controller/adjustments/Adjust.php" to= "includes/bbdkp/controller/adjustments/Adjust.php"/>
 
-      <file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>
+            <file from="root/includes/bbdkp/controller/games/Game.php" to="includes/bbdkp/controller/games/Game.php"/>
 			<file from="root/includes/bbdkp/controller/games/classes/Classes.php" to="includes/bbdkp/controller/games/classes/Classes.php"/>
 			<file from="root/includes/bbdkp/controller/games/factions/Faction.php" to="includes/bbdkp/controller/games/factions/Faction.php"/>
-      <file from="root/includes/bbdkp/controller/games/races/Races.php" to="includes/bbdkp/controller/games/races/Races.php"/>
-      <file from="root/includes/bbdkp/controller/games/roles/Roles.php" to="includes/bbdkp/controller/games/roles/Roles.php"/>
+            <file from="root/includes/bbdkp/controller/games/races/Races.php" to="includes/bbdkp/controller/games/races/Races.php"/>
+            <file from="root/includes/bbdkp/controller/games/roles/Roles.php" to="includes/bbdkp/controller/games/roles/Roles.php"/>
 
-      <file from="root/includes/bbdkp/controller/games/library/GameInstall.php" to="includes/bbdkp/controller/games/library/GameInstall.php"/>
+            <file from="root/includes/bbdkp/controller/games/library/GameInstall.php" to="includes/bbdkp/controller/games/library/GameInstall.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_aion.php" to="includes/bbdkp/controller/games/library/install_aion.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_custom.php" to="includes/bbdkp/controller/games/library/install_custom.php"/>
 			<file from="root/includes/bbdkp/controller/games/library/install_daoc.php" to="includes/bbdkp/controller/games/library/install_daoc.php"/>
