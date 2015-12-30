@@ -7,7 +7,7 @@
  * @author Sajaki@gmail.com
  * @copyright 2009 bbdkp
  * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ * @version 1.4.5
  *
  */
 namespace bbdkp\admin;
@@ -133,16 +133,15 @@ class Admin
      */
     public final function gen_group_key($part1, $part2, $part3)
     {
-        // Get the first 10-11 digits of each md5 hash
-        $part1 = substr(md5($part1), 0, 10);
-        $part2 = substr(md5($part2), 0, 11);
-        $part3 = substr(md5($part3), 0, 11);
+			// Get the first 10-11 digits of each password_hash
+			$part1 = substr(password_hash($part1, PASSWORD_DEFAULT), 0, 10);
+			$part2 = substr(password_hash($part2, PASSWORD_DEFAULT), 0, 11);
+			$part3 = substr(password_hash($part3, PASSWORD_DEFAULT), 0, 11);
+			// Group the hashes together and create a new hash based on uniqid()
+			$group_key = $part1 . $part2 . $part3;
+			$group_key = password_hash(uniqid($group_key), PASSWORD_DEFAULT);
 
-        // Group the hashes together and create a new hash based on uniqid()
-        $group_key = $part1 . $part2 . $part3;
-        $group_key = md5(uniqid($group_key));
-
-        return $group_key;
+			return $group_key;
     }
 
     /**
