@@ -19,8 +19,7 @@ namespace sajaki\bbdkp\model\admin;
 class Admin
 {
     private $phpbb_root_path;
-    private $php_ext;
-    private $path;
+    protected $php_ext;
 
     /**
      * bbdkp timestamp
@@ -343,8 +342,7 @@ class Admin
     public final function switch_order($sort_order, $arg = URI_ORDER, $defaultorder = '0.0')
     {
         global $request;
-        $uri_order = ( isset($_GET[$arg]) ) ? $request->variable($arg, 0.0) : $defaultorder;
-
+        $uri_order = $request->variable($arg, $defaultorder);
         $uri_order = explode('.', $uri_order);
 
         $element1 = ( isset($uri_order[0]) ) ? $uri_order[0] : 0;

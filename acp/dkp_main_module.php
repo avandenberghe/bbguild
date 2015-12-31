@@ -12,7 +12,7 @@ namespace sajaki\bbdkp\acp;
 class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
 {
     public $u_action;
-    public $link;
+    private $link;
 
     /**
      * @param $id

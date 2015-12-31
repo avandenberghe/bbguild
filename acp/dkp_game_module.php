@@ -2,7 +2,6 @@
 /**
  * Game ACP file
  *
- *
  * @package bbdkp v2.0
  * @copyright 2015 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
@@ -11,39 +10,18 @@
 
 namespace sajaki\bbdkp\acp;
 
-// Include the base class
-if (!class_exists('\bbdkp\admin\Admin'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
-}
-if (!class_exists('\bbdkp\controller\games\Faction'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/games/factions/Faction.$phpEx");
-}
-if (!class_exists('\bbdkp\controller\games\Classes'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/games/classes/Classes.$phpEx");
-}
-if (!class_exists('\bbdkp\controller\games\Races'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/games/races/Races.$phpEx");
-}
-if (!class_exists('\bbdkp\controller\games\Roles'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/controller/games/roles/Roles.$phpEx");
-}
-if (!class_exists('\bbdkp\controller\games\Game'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
-}
-
 /**
- *
  * This class manages Game settings
- *
- *   @package bbdkp
+ * @package sajaki\bbdkp\acp
  */
-class dkp_game_module
+use sajaki\bbdkp\model\admin\Admin;
+use sajaki\bbdkp\model\games\Classes;
+use sajaki\bbdkp\model\games\Faction;
+use sajaki\bbdkp\model\games\Game;
+use sajaki\bbdkp\model\games\Races;
+use sajaki\bbdkp\model\games\Roles;
+
+class dkp_game_module extends Admin
 {
 	/**
 	 * link in trigger window
@@ -51,12 +29,13 @@ class dkp_game_module
 	 */
 	private $link;
 
-
     /**
      * partly installed games
      * @var string
      */
     private $gamelist;
+
+    public $u_action;
 
 	/**
 	 * main ACP game function
@@ -67,18 +46,22 @@ class dkp_game_module
 	function main($id, $mode)
 	{
 		global $user, $template, $phpbb_admin_path, $phpEx;
+        global $request, $phpbb_container;
 
-		$form_key = 'acp_dkp_game';
+		$form_key = 'sajaki/bbdkp';
 		add_form_key ( $form_key );
-		$this->tpl_name = 'dkp/acp_' . $mode;
+		$this->tpl_name = 'acp_' . $mode;
 
         //list installed games
-        $listgames = new \bbdkp\controller\games\Game;
+        $listgames = new Game;
+
         $sort_order = array(
             0 => array(	'id' , 'id desc') ,
             1 => array('game_id' , 'game_id desc') ,
             2 => array('game_name' , 'game_name desc'));
+
         $current_order = $this->switch_order($sort_order);
+
         $sort_index = explode('.', $current_order['uri']['current']);
         $this->gamelist = $listgames->listgames($current_order['sql']);
 
@@ -92,20 +75,20 @@ class dkp_game_module
 		{
 			case 'listgames' :
 
-				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames" ) . '"><h3>' .
-								$user->lang ['RETURN_GAMELIST'] . '</h3></a>';
+				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames" ) . '"><h3>' . $user->lang['RETURN_GAMELIST'] . '</h3></a>';
 
 				//game dropdown
-				$newpresetgame = (isset ( $_POST ['addgame1'] )) ? true : false;
-				$newcustomgame = (isset ( $_POST ['addgame2'] )) ? true : false;
+				$newpresetgame = $request->is_set_post('addgame1');
+				$newcustomgame = $request->is_set_post('addgame2');
+
 				if ($newpresetgame || $newcustomgame)
 				{
 					// ask for permission
 					if (confirm_box ( true ))
 					{
-						$editgame = new \bbdkp\controller\games\Game;
-						$editgame->game_id = request_var ( 'hidden_game_id','' );
-						$editgame->setName(utf8_normalize_nfc(request_var('hidden_game_name', '', true)));
+						$editgame = new Game;
+						$editgame->game_id = $request->variable( 'hidden_game_id','' );
+						$editgame->setName($request->variable('hidden_game_name', '', true));
 						$editgame->install();
                         //
                         // Logging
@@ -124,14 +107,14 @@ class dkp_game_module
 					else
 					{
 						// get field content
-						$listgames->game_id = request_var('ngame_id' , '');
+						$listgames->game_id = $request->variable('ngame_id' , '');
 						if($newpresetgame)
 						{
 							$listgames->setName($listgames->preinstalled_games[$listgames->game_id]) ;
 						}
 						elseif($newcustomgame)
 						{
-							$listgames->setName(utf8_normalize_nfc(request_var('ngame_name', '', true)));
+							$listgames->setName($request->variable('ngame_name', '', true));
 						}
 
 						$s_hidden_fields = build_hidden_fields ( array (
@@ -189,7 +172,7 @@ class dkp_game_module
 			    		'O_GAMENAME' => $current_order['uri'][2] ,
 					));
 
-			    $form_key = '30U05YJ4IfeHxY';
+			    $form_key = 'sajaki/bbdkp';
 			    add_form_key($form_key);
 
 			    $this->page_title = 'ACP_LISTGAME';
@@ -197,18 +180,18 @@ class dkp_game_module
 
 			case 'editgames' :
 
-                $action = request_var('action', '');
+                $action = $request->variable('action', '');
 
-				$editgame = new \bbdkp\controller\games\Game;
-				$editgame->game_id = request_var(URI_GAME, request_var ( 'hidden_game_id','' ));
+				$editgame = new Game;
+				$editgame->game_id = $request->variable(URI_GAME, $request->variable ( 'hidden_game_id','' ));
                 $editgame->Get();
 
 				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME ."={$editgame->game_id}" ) . '"><h3>' .
 						$user->lang ['RETURN_GAMEVIEW'] . '</h3></a>';
 
-                $gamereset = (isset ( $_POST ['gamereset'] )) ? true : false;
-				$gamedelete = (isset ( $_POST ['gamedelete'] )) ? true : false;
-				$gamesettings = (isset ( $_POST ['gamesettings'] )) ? true : false;
+                $gamereset = $request->is_set_post('gamereset');
+				$gamedelete = $request->is_set_post('gamedelete');
+				$gamesettings = $request->is_set_post('gamesettings');
 
                 $template->assign_vars ( array (
                     'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=listgames") ,
@@ -216,58 +199,58 @@ class dkp_game_module
 
 				if($gamereset)
 				{
-                    $this->ResetGame($editgame);
+                    $this->ResetGame($editgame, $request);
                 }
 
 				// save game settings
 				if($gamesettings)
 				{
-                    $editgame = $this->SaveGameSettings();
+                    $editgame = $this->SaveGameSettings($request);
 				}
 
 				if($gamedelete)
 				{
-                    $this->DeleteGame($editgame);
+                    $this->DeleteGame($editgame, $request);
                 }
 
-                $addrole = (isset ( $_POST ['showrolesadd'] )) ? true : false;
+                $addrole = $request->is_set_post('showrolesadd');
                 if ($addrole)
                 {
-                    $this->BuildTemplateRole($editgame);
+                    $this->BuildTemplateRole($editgame, $request);
                     break;
                 }
 
                 if ($action=='deleterole')
                 {
-                    $this->DeleteRole($editgame);
+                    $this->DeleteRole($editgame, $request);
                     break;
                 }
                 elseif ($action=='editrole')
                 {
-                    $this->BuildTemplateRole($editgame);
+                    $this->BuildTemplateRole($editgame, $request);
                     break;
                 }
 
 
-                $addfaction = (isset ( $_POST ['showfactionadd'] )) ? true : false;
+                $addfaction = $request->is_set_post('showfactionadd');
                 if ($addfaction)
                 {
-                    $this->BuildTemplateFaction($editgame);
+                    $this->BuildTemplateFaction($editgame, $request);
                     break;
                 }
 
                 if ($action=='deletefaction')
                 {
-                    $this->DeleteFaction($editgame);
+                    $this->DeleteFaction($editgame, $request);
                     break;
                 }
                 elseif ($action=='editfaction')
                 {
-                    $this->BuildTemplateFaction($editgame);
+                    $this->BuildTemplateFaction($editgame, $request);
                     break;
                 }
 
-                $addrace = (isset ( $_POST ['showraceadd'] )) ? true : false;
+                $addrace = $request->is_set_post('showraceadd');
                 $raceedit = (isset ( $_GET ['raceedit'] )) ? true : false;
                 $racedelete = (isset ( $_GET ['racedelete'] )) ? true : false;
 
@@ -277,22 +260,22 @@ class dkp_game_module
 					if (isset ( $_GET ['id'] ))
 					{
 						// edit this race
-                        $this->BuildTemplateEditRace($editgame);
+                        $this->BuildTemplateEditRace($editgame, $request);
 					}
 					else
 					{
-                        $this->BuildTemplateAddRace($editgame);
+                        $this->BuildTemplateAddRace($editgame, $request);
                     }
 					break;
 				}
 
 				if ($racedelete)
 				{
-                    $this->DeleteRace($editgame);
+                    $this->DeleteRace($editgame, $request);
                     break;
                 }
 
-                $addclass = (isset ( $_POST ['showclassadd'] )) ? true : false;
+                $addclass = $request->is_set_post('showclassadd');
                 $classedit = (isset ( $_GET ['classedit'] )) ? true : false;
                 $classdelete = (isset ( $_GET ['classdelete'] )) ? true : false;
 
@@ -301,7 +284,7 @@ class dkp_game_module
 					// Load template for adding/editing
 					if (isset ( $_GET ['id'] ))
 					{
-                        $this->BuildTemplateEditClass($editgame);
+                        $this->BuildTemplateEditClass($editgame, $request);
                     }
 					else
 					{
@@ -313,7 +296,7 @@ class dkp_game_module
 				if ($classdelete)
 				{
                     // user pressed delete class
-                    $this->DeleteClass($editgame);
+                    $this->DeleteClass($editgame, $request);
                     break;
                 }
 
@@ -324,51 +307,51 @@ class dkp_game_module
 
             case 'addrole' :
 
-                $role = new \bbdkp\controller\games\Roles();
-                $role->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', ''));
-                $editgame = new \bbdkp\controller\games\Game;
+                $role = new Roles();
+                $role->game_id = $request->variable ( 'game_id', $request->variable ( 'hidden_game_id', ''));
+                $editgame = new Game;
                 $editgame->game_id = $role->game_id;
                 $editgame->Get();
 
-                $addnew = (isset ( $_POST ['addrole'] )) ? true : false;
-                $editfaction = (isset ( $_POST ['editrole'] )) ? true : false;
+                $addnew = $request->is_set_post('addrole');
+                $editfaction = $request->is_set_post('editrole');
                 if ($addnew)
                 {
-                    $this->AddRole($role, $editgame);
+                    $this->AddRole($role, $editgame, $request);
                 }
                 if ($editfaction)
                 {
-                    $this->EditRole($role, $editgame);
+                    $this->EditRole($role, $editgame, $request);
                 }
                 break;
 
             case 'addfaction' :
 
-				$faction = new \bbdkp\controller\games\Faction();
-				$faction->game_id = request_var ( 'game_id', request_var ( 'hidden_game_id', '' ) );
-				$editgame = new \bbdkp\controller\games\Game;
+				$faction = new Faction();
+				$faction->game_id = $request->variable ( 'game_id', $request->variable ( 'hidden_game_id', '' ) );
+				$editgame = new Game;
 				$editgame->game_id = $faction->game_id;
 				$editgame->Get();
 
-				$addnew = (isset ( $_POST ['factionadd'] )) ? true : false;
-                $editfaction = (isset ( $_POST ['factionedit'] )) ? true : false;
+				$addnew = $request->is_set_post('factionadd');
+                $editfaction = $request->is_set_post('factionedit');
 				if ($addnew)
 				{
-                    $this->AddFaction($faction, $editgame);
+                    $this->AddFaction($faction, $editgame, $request);
 				}
                 if ($editfaction)
                 {
-                    $this->EditFaction($faction, $editgame);
+                    $this->EditFaction($faction, $editgame, $request);
                 }
 				break;
 
 			case 'addrace' :
-				$raceadd = (isset ( $_POST ['add'] )) ? true : false;
-				$raceupdate = (isset ( $_POST ['update'] )) ? true : false;
+				$raceadd = $request->is_set_post('add');
+				$raceupdate = $request->is_set_post('update');
 
 				if ($raceadd || $raceupdate)
 				{
-					if (! check_form_key ( 'acp_dkp_game' ))
+					if (! check_form_key ( 'sajaki/bbdkp' ))
 					{
 						trigger_error ( 'FORM_INVALID' );
 					}
@@ -376,11 +359,11 @@ class dkp_game_module
 
 				if ($raceadd)
 				{
-                    $this->AddRace();
+                    $this->AddRace($request);
 				}
 				elseif ($raceupdate)
 				{
-                    $this->RaceUpdate();
+                    $this->RaceUpdate($request);
 				}
 
 				$this->page_title = 'ACP_LISTGAME';
@@ -389,12 +372,12 @@ class dkp_game_module
 			case 'addclass':
 				// collects data after BuildTemplateEditClass, calls class updater
 
-				$classadd = (isset ( $_POST ['add'] )) ? true : false;
-				$classupdate = (isset ( $_POST ['update'] )) ? true : false;
+				$classadd = $request->is_set_post('add');
+				$classupdate = $request->is_set_post('update');
 
 				if ($classadd || $classupdate)
 				{
-					if (! check_form_key ( 'acp_dkp_game' ))
+					if (! check_form_key ( 'sajaki/bbdkp' ))
 					{
 						trigger_error ( 'FORM_INVALID' );
 					}
@@ -402,11 +385,11 @@ class dkp_game_module
 
 				if ($classadd)
 				{
-                    $this->AddClass();
+                    $this->AddClass($request);
 				}
 				elseif ($classupdate)
 				{
-                    $this->EditClass();
+                    $this->EditClass($request);
 
 				}
 				$this->page_title = 'ACP_LISTGAME';
@@ -418,21 +401,23 @@ class dkp_game_module
 
     /**
      * Save Game Settings
+     * @param $request
+     * @return Game
      */
-    private function SaveGameSettings()
+    private function SaveGameSettings($request)
     {
-        $editgame = new \bbdkp\controller\games\Game;
-        $editgame->game_id = request_var(URI_GAME, request_var ( 'hidden_game_id','' ));
+        $editgame = new Game;
+        $editgame->game_id = $request->variable(URI_GAME, $request->variable( 'hidden_game_id','' ));
         $editgame->Get();
 
-        $editgame->setImagename(request_var('imagename',''));
-        $editgame->setArmoryEnabled(request_var('enable_armory', 0));
-        $editgame->setBossbaseurl(request_var('bossbaseurl','' ));
-        $editgame->setZonebaseurl(request_var('zonebaseurl','' ));
-        $editgame->setName(utf8_normalize_nfc (request_var ( 'game_name', ' ', true )));
-        $editgame->setApikey(request_var('apikey','' ));
-		$editgame->setApilocale(request_var('apilocale','' ));
-        $editgame->setPrivkey(request_var('privkey','' ));
+        $editgame->setImagename($request->variable('imagename',''));
+        $editgame->setArmoryEnabled($request->variable('enable_armory', 0));
+        $editgame->setBossbaseurl($request->variable('bossbaseurl','' ));
+        $editgame->setZonebaseurl($request->variable('zonebaseurl','' ));
+        $editgame->setName($request->variable ( 'game_name', ' ', true ));
+        $editgame->setApikey($request->variable('apikey','' ));
+		$editgame->setApilocale($request->variable('apilocale','' ));
+        $editgame->setPrivkey($request->variable('privkey','' ));
         $editgame->update();
 
         return $editgame;
@@ -440,17 +425,17 @@ class dkp_game_module
 
     /**
      * Reset Game
-     * @param \bbdkp\controller\games\Game $editgame
-     *
+     * @param Game $editgame
+     * @param $request
      */
-    private function ResetGame(\bbdkp\controller\games\Game $editgame)
+    private function ResetGame(Game $editgame, $request)
     {
         global $phpbb_admin_path, $phpEx, $user;
 
         if (confirm_box(true))
         {
-            $editgame          = new \bbdkp\controller\games\Game;
-            $editgame->game_id = request_var('hidden_game_id', '');
+            $editgame          = new Game;
+            $editgame->game_id = $request->variable('hidden_game_id', '');
             $editgame->get();
             $editgame->Delete();
             $editgame->install();
@@ -472,17 +457,17 @@ class dkp_game_module
 
     /**
      * Delete Game from bbDKP
-     * @param \bbdkp\controller\games\Game $editgame
-     *
+     * @param Game $editgame
+     * @param $request
      */
-    private function DeleteGame(\bbdkp\controller\games\Game  $editgame)
+    private function DeleteGame(Game $editgame, $request)
     {
         global $user;
 
         if (confirm_box(true))
         {
-            $deletegame          = new \bbdkp\controller\games\Game;
-            $deletegame->game_id = request_var('hidden_game_id', '');
+            $deletegame          = new Game;
+            $deletegame->game_id = $request->variable('hidden_game_id', '');
             $deletegame->Get();
             $deletegame->Delete();
 
@@ -514,23 +499,23 @@ class dkp_game_module
 
     /**
      * Add Role
-     *
-     * @param $role
-     * @param $editgame
+     * @param Roles $role
+     * @param Game $editgame
+     * @param $request
      */
-    private function AddRole(\bbdkp\controller\games\Roles $role, $editgame)
+    private function AddRole(Roles $role, Game $editgame, $request)
     {
         global $phpbb_admin_path, $phpEx, $user;
 
-        if (!check_form_key('acp_dkp_game'))
+        if (!check_form_key('sajaki/bbdkp'))
         {
             trigger_error('FORM_INVALID');
         }
-        $role->rolename = utf8_normalize_nfc(request_var('rolename', '', true));
-        $role->role_id = request_var('role_id', 0);
-        $role->role_color = request_var('role_color', '');
-        $role->role_icon = request_var('role_icon', '');
-        $role->role_cat_icon = request_var('role_cat_icon', '');
+        $role->rolename = $request->variable('rolename', '', true);
+        $role->role_id = $request->variable('role_id', 0);
+        $role->role_color = $request->variable('role_color', '');
+        $role->role_icon = $request->variable('role_icon', '');
+        $role->role_cat_icon = $request->variable('role_cat_icon', '');
         $role->Make();
 
         $log_action = array(
@@ -548,24 +533,28 @@ class dkp_game_module
         trigger_error(sprintf($user->lang ['ADMIN_ADD_ROLE_SUCCESS'], $role->rolename), E_USER_NOTICE);
     }
 
-    private function EditRole(\bbdkp\controller\games\Game $editgame)
+    /**
+     * @param Game $editgame
+     * @param $request
+     */
+    private function EditRole(Roles $role, Game $editgame, $request)
     {
         global $phpbb_admin_path, $phpEx, $user;
 
-        $oldrole             = new \bbdkp\controller\games\Roles();
+        $oldrole             = new Roles();
         $oldrole->game_id    = $editgame->game_id;
-        $oldrole->role_id    = request_var('hidden_role_id', 0);
+        $oldrole->role_id    = $request->variable('hidden_role_id', 0);
         $oldrole->get();
 
-        $newrole               = new \bbdkp\controller\games\Roles();
+        $newrole               = new Roles();
         $newrole->game_id      = $editgame->game_id;
-        $newrole->role_id   = request_var('hidden_role_id', 0);
+        $newrole->role_id   = $request->variable('hidden_role_id', 0);
         $newrole->get(); // in order to get the pk
 
-        $newrole->rolename = utf8_normalize_nfc(request_var('rolename', '', true));
-        $newrole->role_color = request_var('role_color', '');
-        $newrole->role_icon = request_var('role_icon', '');
-        $newrole->role_cat_icon = request_var('role_cat_icon', '');
+        $newrole->rolename = $request->variable('rolename', '', true);
+        $newrole->role_color = $request->variable('role_color', '');
+        $newrole->role_icon = $request->variable('role_icon', '');
+        $newrole->role_cat_icon = $request->variable('role_cat_icon', '');
 
         $newrole->Update($oldrole);
 
@@ -585,15 +574,19 @@ class dkp_game_module
 
     }
 
-    private function DeleteRole(\bbdkp\controller\games\Game $editgame)
+    /**
+     * @param Game $editgame
+     * @param $request
+     */
+    private function DeleteRole(Game $editgame, $request)
     {
         global $phpbb_admin_path, $phpEx, $user;
 
         if (confirm_box(true))
         {
-            $deleterole               = new \bbdkp\controller\games\Roles();
-            $deleterole->game_id      =  request_var('hidden_game_id', '');
-            $deleterole->role_id    = request_var('hidden_role_id', 0);
+            $deleterole               = new Roles();
+            $deleterole->game_id      =  $request->variable('hidden_game_id', '');
+            $deleterole->role_id    = $request->variable('hidden_role_id', 0);
             $deleterole->get(); // in order to get the pk
             $deleterole->Delete();
 
@@ -615,9 +608,9 @@ class dkp_game_module
         }
         else
         {
-            $deleterole               = new \bbdkp\controller\games\Roles();
+            $deleterole               = new Roles();
             $deleterole->game_id      = $editgame->game_id;
-            $deleterole->role_id      = request_var('role_id', 0);
+            $deleterole->role_id      = $request->variable('role_id', 0);
             $deleterole->get(); // in order to get the pk
 
             $s_hidden_fields = build_hidden_fields(array(
@@ -631,22 +624,21 @@ class dkp_game_module
         $this->showgame($editgame);
     }
 
-
     /**
      * Add Faction
-     *
-     * @param $faction
-     * @param $editgame
+     * @param Faction $faction
+     * @param Game $editgame
+     * @param $request
      */
-    private function AddFaction(\bbdkp\controller\games\Faction $faction, \bbdkp\controller\games\Game $editgame)
+    private function AddFaction(Faction $faction, Game $editgame, $request)
     {
         global $phpbb_admin_path, $phpEx, $user;
 
-        if (!check_form_key('acp_dkp_game'))
+        if (!check_form_key('sajaki/bbdkp'))
         {
             trigger_error('FORM_INVALID');
         }
-        $faction->faction_name = utf8_normalize_nfc(request_var('factionname', '', true));
+        $faction->faction_name = $request->variable('factionname', '', true);
         $faction->Make();
 
         $log_action = array(
@@ -663,34 +655,42 @@ class dkp_game_module
         trigger_error(sprintf($user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $faction->faction_name), E_USER_NOTICE);
     }
 
-    private function EditFaction(\bbdkp\controller\games\Game $editgame)
+    /**
+     * @param Game $editgame
+     * @param $request
+     */
+    private function EditFaction(Faction $faction, Game $editgame, $request)
     {
         global $user;
 
-        $oldfaction             = new \bbdkp\controller\games\Faction();
+        $oldfaction             = new Faction();
         $oldfaction->game_id    = $editgame->game_id;
-        $oldfaction->faction_id = request_var('hidden_faction_id', 0);
+        $oldfaction->faction_id = $request->variable('hidden_faction_id', 0);
         $oldfaction->get();
 
-        $newfaction               = new \bbdkp\controller\games\Faction();
+        $newfaction               = new Faction();
         $newfaction->game_id      = $editgame->game_id;
-        $newfaction->faction_name = utf8_normalize_nfc(request_var('factionname', '', true));
-        $newfaction->faction_id   = request_var('hidden_faction_id', 0);
+        $newfaction->faction_name = $request->variable('factionname', '', true);
+        $newfaction->faction_id   = $request->variable('hidden_faction_id', 0);
         $newfaction->update();
 
         trigger_error(sprintf($user->lang ['ADMIN_UPDATE_FACTION_SUCCESS'], $newfaction->faction_name), E_USER_WARNING);
 
     }
 
-    private function DeleteFaction(\bbdkp\controller\games\Game $editgame)
+    /**
+     * @param Game $editgame
+     * @param $request
+     */
+    private function DeleteFaction(Game $editgame, $request)
     {
         global $phpbb_admin_path, $phpEx, $user;
 
         if (confirm_box(true))
         {
-            $faction             = new \bbdkp\controller\games\Faction();
-            $faction->game_id    = request_var('hidden_game_id', '');
-            $faction->faction_id = request_var('hidden_faction_id', 0);
+            $faction             = new Faction();
+            $faction->game_id    = $request->variable('hidden_game_id', '');
+            $faction->faction_id = $request->variable('hidden_faction_id', 0);
             $faction->get();
             $faction->Delete();
 
@@ -709,9 +709,9 @@ class dkp_game_module
         }
         else
         {
-            $faction             = new \bbdkp\controller\games\Faction();
+            $faction             = new Faction();
             $faction->game_id    = $editgame->game_id;
-            $faction->faction_id = request_var('id', 0);
+            $faction->faction_id = $request->variable('id', 0);
             $faction->get();
 
             $s_hidden_fields = build_hidden_fields(array(
@@ -727,19 +727,20 @@ class dkp_game_module
 
     /**
      * Add Class
+     * @param $request
      */
-    private function AddClass()
+    private function AddClass($request)
     {
         global $phpbb_admin_path, $phpEx, $user;
-        $newclass             = new \bbdkp\controller\games\Classes();
-        $newclass->game_id    = request_var('game_id', request_var('hidden_game_id', ''));
-        $newclass->classname  = utf8_normalize_nfc(request_var('class_name', '', true));
-        $newclass->class_id   = request_var('class_id', 0);
-        $newclass->min_level  = request_var('class_level_min', 0);
-        $newclass->max_level  = request_var('class_level_max', 0);
-        $newclass->armor_type = request_var('armory', '');
-        $newclass->imagename  = request_var('image', '');
-        $newclass->colorcode  = request_var('classcolor', '');
+        $newclass             = new Classes();
+        $newclass->game_id    = $request->variable('game_id', $request->variable('hidden_game_id', ''));
+        $newclass->classname  = $request->variable('class_name', '', true);
+        $newclass->class_id   = $request->variable('class_id', 0);
+        $newclass->min_level  = $request->variable('class_level_min', 0);
+        $newclass->max_level  = $request->variable('class_level_max', 0);
+        $newclass->armor_type = $request->variable('armory', '');
+        $newclass->imagename  = $request->variable('image', '');
+        $newclass->colorcode  = $request->variable('classcolor', '');
         $newclass->faction_id = '';
         $newclass->dps        = '';
         $newclass->heal       = '';
@@ -751,29 +752,29 @@ class dkp_game_module
 
     /**
      * Edit Class
-     *
+     * @param $request
      */
-    private function EditClass()
+    private function EditClass($request)
     {
         global $phpbb_admin_path, $phpEx, $user;
-        $oldclass           = new \bbdkp\controller\games\Classes();
-        $oldclass->game_id  = request_var('game_id', request_var('hidden_game_id', ''));
-        $oldclass->class_id = request_var('class_id0', 0);
-        $oldclass->c_index  = request_var('c_index', 0);
+        $oldclass           = new Classes();
+        $oldclass->game_id  = $request->variable('game_id', $request->variable('hidden_game_id', ''));
+        $oldclass->class_id = $request->variable('class_id0', 0);
+        $oldclass->c_index  = $request->variable('c_index', 0);
         $oldclass->Get();
 
-        $newclass           = new \bbdkp\controller\games\Classes();
-        $newclass->game_id  = request_var('game_id', request_var('hidden_game_id', ''));
-        $newclass->class_id = request_var('class_id0', 0);
-        $newclass->c_index  = request_var('c_index', 0);
+        $newclass           = new Classes();
+        $newclass->game_id  = $request->variable('game_id', $request->variable('hidden_game_id', ''));
+        $newclass->class_id = $request->variable('class_id0', 0);
+        $newclass->c_index  = $request->variable('c_index', 0);
         $newclass->Get();
-        $newclass->class_id   = request_var('class_id', 0);
-        $newclass->classname  = utf8_normalize_nfc(request_var('class_name', '', true));
-        $newclass->min_level  = request_var('class_level_min', 0);
-        $newclass->max_level  = request_var('class_level_max', 0);
-        $newclass->armor_type = request_var('armory', '');
-        $newclass->imagename  = request_var('image', '');
-        $newclass->colorcode  = request_var('classcolor', '');
+        $newclass->class_id   = $request->variable('class_id', 0);
+        $newclass->classname  = $request->variable('class_name', '', true);
+        $newclass->min_level  = $request->variable('class_level_min', 0);
+        $newclass->max_level  = $request->variable('class_level_max', 0);
+        $newclass->armor_type = $request->variable('armory', '');
+        $newclass->imagename  = $request->variable('image', '');
+        $newclass->colorcode  = $request->variable('classcolor', '');
         $newclass->faction_id = '';
         $newclass->dps        = '';
         $newclass->heal       = '';
@@ -785,26 +786,26 @@ class dkp_game_module
 
     /**
      * Delete Class
-     *
-     * @param \bbdkp\controller\games\Game $editgame
+     * @param Game $editgame
+     * @param $request
      */
-    private function DeleteClass(\bbdkp\controller\games\Game $editgame)
+    private function DeleteClass(Game $editgame, $request)
     {
         global $phpbb_admin_path, $phpEx, $user;
 
         if (confirm_box(true))
         {
-            $deleteclass           = new \bbdkp\controller\games\Classes();
-            $deleteclass->class_id = request_var('hidden_class_id', 0);
-            $deleteclass->game_id  = request_var('hidden_game_id', '');
+            $deleteclass           = new Classes();
+            $deleteclass->class_id = $request->variable('hidden_class_id', 0);
+            $deleteclass->game_id  = $request->variable('hidden_game_id', '');
             $deleteclass->get();
             $deleteclass->Delete();
             meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;" . URI_GAME . "={$deleteclass->game_id}"));
             trigger_error(sprintf($user->lang ['ADMIN_DELETE_CLASS_SUCCESS'], $deleteclass->classname) . $this->link, E_USER_WARNING);
         } else
         {
-            $deleteclass           = new \bbdkp\controller\games\Classes();
-            $deleteclass->class_id = request_var('id', 0);
+            $deleteclass           = new Classes();
+            $deleteclass->class_id = $request->variable('id', 0);
             $deleteclass->game_id  = $editgame->game_id;
             $deleteclass->get();
 
@@ -821,23 +822,24 @@ class dkp_game_module
 
     /**
      * Update a Race
+     * @param $request
      */
-    private function RaceUpdate()
+    private function RaceUpdate($request)
     {
         global $phpbb_admin_path, $phpEx, $user;
 
-        $oldrace          = new \bbdkp\controller\games\Races();
-        $oldrace->game_id = request_var('game_id', request_var('hidden_game_id', ''));
-        $oldrace->race_id = request_var('race_id', 0);
+        $oldrace          = new Races();
+        $oldrace->game_id = $request->variable('game_id', $request->variable('hidden_game_id', ''));
+        $oldrace->race_id = $request->variable('race_id', 0);
         $oldrace->Get();
-        $race          = new \bbdkp\controller\games\Races();
+        $race          = new Races();
         $race->game_id = $oldrace->game_id;
         $race->race_id = $oldrace->race_id;
         $race->Get();
-        $race->race_name       = utf8_normalize_nfc(request_var('racename', '', true));
-        $race->race_faction_id = request_var('faction', 0);
-        $race->image_male      = utf8_normalize_nfc(request_var('image_male', '', true));
-        $race->image_female    = utf8_normalize_nfc(request_var('image_female', '', true));
+        $race->race_name       = $request->variable('racename', '', true);
+        $race->race_faction_id = $request->variable('faction', 0);
+        $race->image_male      = $request->variable('image_male', '', true);
+        $race->image_female    = $request->variable('image_female', '', true);
         $race->Update($oldrace);
         //
         // Logging
@@ -857,17 +859,18 @@ class dkp_game_module
 
     /**
      * Add a Race
+     * @param $request
      */
-    private function AddRace()
+    private function AddRace($request)
     {
         global $phpbb_admin_path, $phpEx, $user;
-        $race                  = new \bbdkp\controller\games\Races();
-        $race->game_id         = request_var('game_id', request_var('hidden_game_id', ''));
-        $race->race_id         = request_var('race_id', request_var('hidden_race_id', ''));
-        $race->race_name       = utf8_normalize_nfc(request_var('racename', '', true));
-        $race->race_faction_id = request_var('faction', 0);
-        $race->image_male      = utf8_normalize_nfc(request_var('image_male', '', true));
-        $race->image_female    = utf8_normalize_nfc(request_var('image_female', '', true));
+        $race                  = new Races();
+        $race->game_id         = $request->variable('game_id', $request->variable('hidden_game_id', ''));
+        $race->race_id         = $request->variable('race_id', $request->variable('hidden_race_id', ''));
+        $race->race_name       = $request->variable('racename', '', true);
+        $race->race_faction_id = $request->variable('faction', 0);
+        $race->image_male      = $request->variable('image_male', '', true);
+        $race->image_female    = $request->variable('image_female', '', true);
         $race->Make();
 
         $log_action = array(
@@ -885,10 +888,10 @@ class dkp_game_module
 
     /**
      * Delete Race
-     *
-     * @param \bbdkp\controller\games\Game $editgame
+     * @param Game $editgame
+     * @param $request
      */
-    private function DeleteRace(\bbdkp\controller\games\Game $editgame)
+    private function DeleteRace(Game $editgame, $request)
     {
 
         global $user, $phpbb_admin_path, $phpEx;
@@ -896,9 +899,9 @@ class dkp_game_module
 
         if (confirm_box(true))
         {
-            $deleterace          = new \bbdkp\controller\games\Races();
-            $deleterace->race_id = request_var('hidden_raceid', 0);
-            $deleterace->game_id = request_var('hidden_gameid', '');
+            $deleterace          = new Races();
+            $deleterace->race_id = $request->variable('hidden_raceid', 0);
+            $deleterace->game_id = $request->variable('hidden_gameid', '');
             $deleterace->get();
             $deleterace->Delete();
 
@@ -917,9 +920,9 @@ class dkp_game_module
 
         } else
         {
-            $deleterace          = new \bbdkp\controller\games\Races;
-            $deleterace->race_id = request_var('id', 0);
-            $deleterace->game_id = request_var('game_id', '');
+            $deleterace          = new Races;
+            $deleterace->race_id = $request->variable('id', 0);
+            $deleterace->game_id = $request->variable('game_id', '');
             $deleterace->get();
 
             $s_hidden_fields = build_hidden_fields(array(
@@ -934,20 +937,19 @@ class dkp_game_module
         $this->showgame($editgame);
     }
 
-
     /**
      * load template add race
-     *
-     * @param \bbdkp\controller\games\Game $editgame
+     * @param Game $editgame
+     * @param $request
      */
-    private function BuildTemplateAddRace(\bbdkp\controller\games\Game  $editgame)
+    private function BuildTemplateAddRace(Game  $editgame, $request)
     {
         global $template, $phpbb_admin_path, $phpEx, $user;
 
-        $listraces          = new \bbdkp\controller\games\Races();
+        $listraces          = new Races();
         $listraces->game_id = $editgame->game_id;
 
-        $listfactions          = new \bbdkp\controller\games\Faction();
+        $listfactions          = new Faction();
         $listfactions->game_id = $editgame->game_id;
         $fa = $listfactions->getfactions();
         if (count($fa) == 0)
@@ -972,30 +974,33 @@ class dkp_game_module
             'MSG_NAME_EMPTY'        => $user->lang ['FV_REQUIRED_NAME']));
 
         $this->page_title = 'ACP_LISTGAME';
-        $this->tpl_name = 'dkp/acp_addrace';
+        $this->tpl_name = 'acp_addrace';
     }
 
     /**
      * Load Template Edit Race
-     * @param \bbdkp\controller\games\Game $editgame
+     * @param Game $editgame
+     * @param $request
      */
-    private function BuildTemplateEditRace(\bbdkp\controller\games\Game $editgame)
+    private function BuildTemplateEditRace(Game $editgame, $request)
     {
         global $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $user;
 
-        $races = new \bbdkp\controller\games\Races();
-        $races->race_id = request_var('id', 0);
+        $races = new Races();
+        $races->race_id = $request->variable('id', 0);
         $races->game_id = $editgame->game_id;
         $races->get();
-        foreach ($this->gamelist as $key => $gamename)
-        {
-            $template->assign_block_vars('game_row', array(
-                'VALUE'    => $key,
-                'SELECTED' => ($races->game_id == $key) ? ' selected="selected"' : '',
-                'OPTION'   => $gamename));
+        if (!empty($this)) {
+            foreach ($this->gamelist as $key => $gamename)
+            {
+                $template->assign_block_vars('game_row', array(
+                    'VALUE'    => $key,
+                    'SELECTED' => ($races->game_id == $key) ? ' selected="selected"' : '',
+                    'OPTION'   => $gamename));
+            }
         }
         // faction dropdown
-        $listfactions          = new \bbdkp\controller\games\Faction();
+        $listfactions          = new Faction();
         $listfactions->game_id = $editgame->game_id;
         $fa                    = $listfactions->getfactions();
         $s_faction_options = '';
@@ -1006,8 +1011,8 @@ class dkp_game_module
         }
         unset($listfactions);
 
-        $femalesize = getimagesize($phpbb_root_path . "images/bbdkp/race_images/" . $races->image_female . ".png" , $info);
-        $malesize = getimagesize($phpbb_root_path . "images/bbdkp/race_images/" . $races->image_male . ".png" , $info);
+        $femalesize = getimagesize($this->ext_path . "images/race_images/" . $races->image_female . ".png" , $info);
+        $malesize = getimagesize($this->ext_path . "images/race_images/" . $races->image_male . ".png" , $info);
         $femalesizewarning ='';
         $malesizewarning ='';
         if($femalesize[0] > 32 || $femalesize[0] >32)
@@ -1029,9 +1034,9 @@ class dkp_game_module
             'RACE_IMAGENAME_M'      => $races->image_male,
             'FIMAGEWARNING'         => $femalesizewarning,
             'MIMAGEWARNING'         => $malesizewarning,
-            'RACE_IMAGE_M'          => (strlen($races->image_male) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $races->image_male . ".png" : '',
+            'RACE_IMAGE_M'          => (strlen($races->image_male) > 1) ? $this->ext_path . "images/race_images/" . $races->image_male . ".png" : '',
             'RACE_IMAGENAME_F'      => $races->image_female,
-            'RACE_IMAGE_F'          => (strlen($races->image_female) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $races->image_female . ".png" : '',
+            'RACE_IMAGE_F'          => (strlen($races->image_female) > 1) ? $this->ext_path . "images/race_images/" . $races->image_female . ".png" : '',
             'S_RACE_IMAGE_M_EXISTS' => (strlen($races->image_male) > 1) ? true : false,
             'S_RACE_IMAGE_F_EXISTS' => (strlen($races->image_female) > 1) ? true : false,
             'S_FACTIONLIST_OPTIONS' => $s_faction_options,
@@ -1044,30 +1049,32 @@ class dkp_game_module
         unset($races);
 
         $this->page_title = 'ACP_LISTGAME';
-        $this->tpl_name = 'dkp/acp_addrace';
+        $this->tpl_name = 'acp_addrace';
     }
-
 
     /**
      * Load Template Edit Classes
-     * @param \bbdkp\controller\games\Game $editgame
+     * @param Game $editgame
+     * @param $request
      */
-    private function BuildTemplateEditClass(\bbdkp\controller\games\Game $editgame)
+    private function BuildTemplateEditClass(Game $editgame, $request)
     {
         global $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $user;
 
-        $GameClass           = new \bbdkp\controller\games\Classes;
-        $GameClass->class_id = request_var('id', 0);
+        $GameClass           = new Classes;
+        $GameClass->class_id = $request->variable('id', 0);
         $GameClass->game_id  = $editgame->game_id;
         $GameClass->Get();
 
         // list installed games
-        foreach ($this->gamelist as $key => $gamename)
-        {
-            $template->assign_block_vars('game_row', array(
-                'VALUE'    => $key,
-                'SELECTED' => ($GameClass->game_id == $key) ? ' selected="selected"' : '',
-                'OPTION'   => $gamename));
+        if (!empty($this)) {
+            foreach ($this->gamelist as $key => $gamename)
+            {
+                $template->assign_block_vars('game_row', array(
+                    'VALUE'    => $key,
+                    'SELECTED' => ($GameClass->game_id == $key) ? ' selected="selected"' : '',
+                    'OPTION'   => $gamename));
+            }
         }
 
         //list armor types
@@ -1077,7 +1084,7 @@ class dkp_game_module
             $selected = ($armor == $GameClass->armor_type) ? ' selected="selected"' : '';
             $s_armor_options .= '<option value="' . $armor . '" ' . $selected . '> ' . $armorname . '</option>';
         }
-        $size = getimagesize($phpbb_root_path . "images/bbdkp/class_images/" . $GameClass->imagename . ".png" , $info);
+        $size = getimagesize($this->ext_path . "images/class_images/" . $GameClass->imagename . ".png" , $info);
 
         $warning ='';
         if($size[0] > 32 || $size[0] >32)
@@ -1098,7 +1105,7 @@ class dkp_game_module
             'IMAGEWARNING'         => $warning,
             'CLASS_IMAGENAME'      => $GameClass->imagename,
             'COLORCODE'            => ($GameClass->colorcode == '') ? '#254689' : $GameClass->colorcode,
-            'CLASS_IMAGE'          => (strlen($GameClass->imagename) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $GameClass->imagename . ".png" : '',
+            'CLASS_IMAGE'          => (strlen($GameClass->imagename) > 1) ? $this->ext_path . "images/class_images/" . $GameClass->imagename . ".png" : '',
             'S_CLASS_IMAGE_EXISTS' => (strlen($GameClass->imagename) > 1) ? true : false,
             'S_ADD'                => false,
             'U_ACTION'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_game&amp;mode=addclass'),
@@ -1106,18 +1113,18 @@ class dkp_game_module
             'MSG_ID_EMPTY'         => $user->lang ['FV_REQUIRED_ID']));
 
         $this->page_title = 'ACP_LISTGAME';
-        $this->tpl_name = 'dkp/acp_addclass';
+        $this->tpl_name = 'acp_addclass';
     }
 
     /**
      * Load Template Add Classes
-     * @param \bbdkp\controller\games\Game $editgame
+     * @param Game $editgame
      */
-    private function BuildTemplateAddClass(\bbdkp\controller\games\Game $editgame)
+    private function BuildTemplateAddClass(Game $editgame)
     {
         global $template, $phpbb_admin_path, $phpEx, $user;
 
-        $listclasses          = new \bbdkp\controller\games\Classes;
+        $listclasses          = new Classes;
         $listclasses->game_id = $editgame->game_id;
         $s_armor_options = '';
         foreach ($listclasses->armortypes as $armor => $armorname)
@@ -1136,16 +1143,21 @@ class dkp_game_module
             'MSG_ID_EMPTY'    => $user->lang ['FV_REQUIRED_ID']));
 
         $this->page_title = 'ACP_LISTGAME';
-        $this->tpl_name = 'dkp/acp_addclass';
+        $this->tpl_name = 'acp_addclass';
     }
 
-    private function BuildTemplateFaction(\bbdkp\controller\games\Game $editgame)
+
+    /**
+     * @param Game $editgame
+     * @param $request
+     */
+    private function BuildTemplateFaction(Game $editgame, $request)
     {
         global $template, $phpbb_admin_path, $phpEx, $user;
 
-        $faction = new \bbdkp\controller\games\Faction();
+        $faction = new Faction();
         $faction->game_id = $editgame->game_id;
-        $faction->faction_id = request_var('id', 0);
+        $faction->faction_id = $request->variable('id', 0);
         $faction->Get();
 
         // send parameters to template
@@ -1160,19 +1172,24 @@ class dkp_game_module
         unset($races);
 
         $this->page_title = $user->lang['FACTION'];
-        $this->tpl_name = 'dkp/acp_addfaction';
+        $this->tpl_name = 'acp_addfaction';
     }
 
-    private function BuildTemplateRole(\bbdkp\controller\games\Game $editgame)
+
+    /**
+     * @param Game $editgame
+     * @param $request
+     */
+    private function BuildTemplateRole(Game $editgame, $request)
     {
         global $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $user;
 
-        $role = new \bbdkp\controller\games\Roles();
+        $role = new Roles();
         $role->game_id = $editgame->game_id;
         $add=true;
         if( isset($_POST['role_id']) ||isset($_GET['role_id']) )
         {
-            $role->role_id = request_var('role_id', 0);
+            $role->role_id = $request->variable('role_id', 0);
             $role->Get();
             $add=false;
         }
@@ -1183,7 +1200,7 @@ class dkp_game_module
             'ROLE_ID'            => $role->role_id,
             'ROLE_CAT_ICON'      => $role->role_cat_icon,
             'ROLE_ICON'          => $role->role_icon,
-            'ROLE_ICON_IMG' 	 => (strlen($role->role_icon) > 1) ? $phpbb_root_path . "images/bbdkp/role_icons/" . $role->role_icon . ".png" : '',
+            'ROLE_ICON_IMG' 	 => (strlen($role->role_icon) > 1) ? $this->ext_path . "images/role_icons/" . $role->role_icon . ".png" : '',
             'ROLE_COLOR'         => $role->role_color,
             'GAME_ID'            => $role->game_id,
             'GAME_NAME'          => $editgame->getName(),
@@ -1193,18 +1210,16 @@ class dkp_game_module
         unset($role);
 
         $this->page_title = $user->lang['ROLE'];
-        $this->tpl_name = 'dkp/acp_addrole';
+        $this->tpl_name = 'acp_addrole';
     }
-
 
     /**
 	 * lists game parameters
-	 *
-	 * @param \bbdkp\controller\games\game $editgame
-	 */
-	private function showgame( \bbdkp\controller\games\game $editgame)
+     * @param Game $editgame
+     */
+	private function showgame( Game $editgame)
 	{
-		global $user, $phpbb_admin_path, $phpbb_root_path, $phpEx, $config, $template;
+		global $user, $phpbb_admin_path, $phpbb_root_path, $phpEx, $template;
 
 		//populate dropdown
 		foreach ($this->gamelist as $key => $game)
@@ -1217,7 +1232,7 @@ class dkp_game_module
 		}
 
 		// list the factions
-		$listfactions = new \bbdkp\controller\games\Faction();
+		$listfactions = new Faction();
 		$listfactions->game_id = $editgame->game_id;
 		$fa = $listfactions->getfactions();
 		$total_factions = 0;
@@ -1245,7 +1260,7 @@ class dkp_game_module
 		$current_order = $this->switch_order ( $sort_order );
 		$total_races = 0;
 
-		$listraces = new \bbdkp\controller\games\Races();
+		$listraces = new Races();
 		$listraces->game_id = $editgame->game_id;
 		$ra = $listraces->listraces($current_order ['sql']);
 		foreach ( $ra as $race_id => $race )
@@ -1256,8 +1271,8 @@ class dkp_game_module
 				'RACEID' => $race['race_id'],
 				'RACENAME' => $race['race_name'],
 				'FACTIONNAME' => $race['faction_name'],
-				'RACE_IMAGE_M' => (strlen ( $race['image_male'] ) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race['image_male'] . ".png" : '',
-				'RACE_IMAGE_F' => (strlen ( $race['image_female'] ) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race['image_female'] . ".png" : '',
+				'RACE_IMAGE_M' => (strlen ( $race['image_male'] ) > 1) ? $this->ext_path . "images/race_images/" . $race['image_male'] . ".png" : '',
+				'RACE_IMAGE_F' => (strlen ( $race['image_female'] ) > 1) ? $this->ext_path . "images/race_images/" . $race['image_female'] . ".png" : '',
 				'S_RACE_IMAGE_M_EXISTS' => (strlen ( $race['image_male'] ) > 1) ? true : false,
 				'S_RACE_IMAGE_F_EXISTS' => (strlen ( $race['image_female'] ) > 1) ? true : false,
 				'U_VIEW_RACE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addrace&amp;r=" . $race['race_id'] . "&amp;" . URI_GAME ."={$listraces->game_id}" ),
@@ -1275,7 +1290,7 @@ class dkp_game_module
             2 => array ('rolename', 'rolename desc' ));
 
         $current_order3 = $this->switch_order ( $sort_order );
-        $listroles = new \bbdkp\controller\games\Roles();
+        $listroles = new Roles();
         $listroles->game_id = $editgame->game_id;
         $total_roles=0;
         $roles = $listroles->listroles($current_order3 ['sql']);
@@ -1288,10 +1303,10 @@ class dkp_game_module
                 'ROLE_COLOR' 	=> $role['role_color'],
                 'ROLE_ICON' 		=> $role['role_icon'],
                 'S_ROLE_ICON_EXISTS'	=>  (strlen($role['role_icon']) > 0) ? true : false,
-                'U_ROLE_ICON' 	=> (strlen($role['role_icon']) > 0) ? $phpbb_root_path . "images/bbdkp/role_icons/" . $role['role_icon'] . ".png" : '',
+                'U_ROLE_ICON' 	=> (strlen($role['role_icon']) > 0) ? $this->ext_path . "images/role_icons/" . $role['role_icon'] . ".png" : '',
                 'ROLE_CAT_ICON' 		=> $role['role_cat_icon'],
                 'S_ROLE_CAT_ICON_EXISTS'	=>  (strlen($role['role_cat_icon']) > 0) ? true : false,
-                'U_ROLE_CAT_ICON' 	=> (strlen($role['role_cat_icon']) > 0) ? $phpbb_root_path . "images/bbdkp/role_icons/" . $role['role_cat_icon'] . ".png" : '',
+                'U_ROLE_CAT_ICON' 	=> (strlen($role['role_cat_icon']) > 0) ? $this->ext_path . "images/role_icons/" . $role['role_cat_icon'] . ".png" : '',
                 'U_DELETE' 		=> $this->u_action. '&amp;action=deleterole&amp;role_id=' . $role['role_id'] . '&amp;' .URI_GAME . "=" . $editgame->game_id  ,
                 'U_EDIT' 		=> $this->u_action. '&amp;action=editrole&amp;role_id=' . $role['role_id'] . '&amp;' .URI_GAME . "=" . $editgame->game_id,
             ));
@@ -1309,7 +1324,7 @@ class dkp_game_module
 		$current_order2 = $this->switch_order ( $sort_order2, "o1" );
 		$total_classes = 0;
 
-		$listclasses = new  \bbdkp\controller\games\Classes();
+		$listclasses = new  Classes();
 		$listclasses->game_id = $editgame->game_id;
 		$cl = $listclasses->listclasses($current_order2['sql'], 1);
 		foreach ( $cl as $c_index => $class )
@@ -1326,7 +1341,7 @@ class dkp_game_module
 				'CLASSMAX' => $class ['class_max_level'],
 				'CLASSHIDE' => $class ['class_hide'],
 				'S_CLASS_IMAGE_EXISTS' => (strlen ( $class ['imagename'] ) > 1) ? true : false,
-				'CLASSIMAGE' => (strlen ( $class ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $class ['imagename'] . ".png" : '',
+				'CLASSIMAGE' => (strlen ( $class ['imagename'] ) > 1) ? $this->ext_path . "images/class_images/" . $class ['imagename'] . ".png" : '',
 				'U_VIEW_CLASS' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=addclass&amp;r=" . $class ['class_id'] . "&amp;game_id={$listclasses->game_id}" ),
 				'U_DELETE' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;classdelete=1&amp;id={$class['class_id']}&amp;game_id={$listclasses->game_id }" ),
 				'U_EDIT' => append_sid ( "{$phpbb_admin_path}index.$phpEx", "i=dkp_game&amp;mode=editgames&amp;classedit=1&amp;id={$class['class_id']}&amp;game_id={$listclasses->game_id}" ) ) );

@@ -21,7 +21,7 @@ class dkp_game_info
 	{
 		return array(
             'filename'	=> '\sajaki\bbdkp\acp\dkp_game_module',
-			'title'		=> 'ACP_DKP_GAME',
+			'title'		=> 'ACP_DKP_MAINPAGE',
 			'version'	=> '2.0.0',
 			'modes'		=> array(
 				'listgames'		=> array('title' => 'ACP_DKP_GAME_LIST',  'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_GAME') , 'display' => true),
@@ -35,5 +35,3 @@ class dkp_game_info
 	}
 
 }
-
-?>
