@@ -1,62 +1,14 @@
 <!-- INCLUDE overall_header.html -->
-
-<script  type="text/javascript">
-//<![CDATA[
- $(document).ready(function() {
-   $('#nojquery').hide();
-   $('#picker').farbtastic('#classcolor');
-
- });
-
- function check_form()
-{
-	 if (document.getElementById('class_name').value.length < 2)
-     {
-        alert('{MSG_NAME_EMPTY}');
-        return false;
-     }
-	 if (document.getElementById('class_id').value.length < 1)
-     {
-        alert('{MSG_ID_EMPTY}');
-        return false;
-     }
-     return true;
-}
-
-function isValidChar(char, e){
-
-	    var txt = char;
-	    var found = false;
-	    var validChars = "0123456789"; //List of valid characters
-
-	    for(j=0;j<txt.length;j++){ //Will look through the value of text
-	        var c = txt.charAt(j);
-	        found = false;
-	        for(x=0;x<validChars.length;x++){
-	            if(c==validChars.charAt(x)){
-	                found=true;
-	                break;
-	            }
-	        }
-	        if(!found){
-	            //If invalid character is found remove it and return the valid character(s).
-	            document.getElementById(e).value = char.substring(0, char.length -1);
-	            break;
-	        }
-	    }
-}
-
-//]]>
-</script>
-
+<!-- INCLUDEJS @sajaki_bbdkp/addclass.js -->
+<!-- INCLUDEJS @sajaki_bbdkp/lib/farbtastic.js -->
+<!-- INCLUDECSS @sajaki_bbdkp/css/farbtastic.css -->
+<link rel="stylesheet" href="../ext/sajaki/bbdkp/adm/style/css/farbtastic.css" type="text/css" />
 <a name="maincontent"></a>
 
 <h1>{L_ACP_ADDCLASS}</h1>
 <p>{L_ACP_ADDCLASS_EXPLAIN}</p>
-
 <form id="acp_addclass" method="post" action="{U_ACTION}" onsubmit="return check_form(this)">
 <div>
-
 <fieldset>
 <legend>{L_ADD_CLASS_TITLE}</legend>
     <dl>

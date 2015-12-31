@@ -1,22 +1,5 @@
 <!-- INCLUDE overall_header.html -->
-<script type="text/javascript">
-    //<![CDATA[
-    function check_form()
-    {
-        if (document.getElementById('game_name').value.length < 2)
-        {
-            alert('{LA_FV_REQUIRED_GAME_NAME}');
-            return false;
-        }
-        if (document.getElementById('game_id').value.length < 2)
-        {
-            alert('{LA_FV_REQUIRED_GAME_ID}');
-            return false;
-        }
-        return true;
-    }
-    //]]>
-</script>
+
 <style>
 
     fieldset dt
@@ -130,4 +113,24 @@
 </div>
 
 <!-- ENDIF -->
+
+<script type="text/javascript">
+    //<![CDATA[
+    function check_form()
+    {
+        if (document.getElementById('game_name').value.length < 2)
+        {
+            alert('{LA_FV_REQUIRED_GAME_NAME}');
+            return false;
+        }
+        if (document.getElementById('game_id').value.length < 2)
+        {
+            alert('{LA_FV_REQUIRED_GAME_ID}');
+            return false;
+        }
+        return true;
+    }
+    //]]>
+</script>
 <!-- INCLUDE overall_footer.html -->
+
