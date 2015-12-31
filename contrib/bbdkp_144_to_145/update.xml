@@ -4,24 +4,24 @@
 <mod xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://www.phpbb.com/mods/xml/modx-1.2.6.xsd">
 	<header>
 		<license>http://opensource.org/licenses/gpl-license.php GNU General Public License v2</license>
-		<title lang="en">bbDKP 1.4.4 - Update from bbdkp 1.4.3</title>
-		<title lang="de">bbDKP 1.4.4 - Update von bbdkp 1.4.3</title>
-		<title lang="fr">bbDKP 1.4.4 - mise à jour depuis bbdkp 1.4.3</title>
-		<description lang="en">bbDKP 1.4.3 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
+		<title lang="en">bbDKP 1.4.5 - Update from bbdkp 1.4.4</title>
+		<title lang="de">bbDKP 1.4.5 - Update von bbdkp 1.4.4</title>
+		<title lang="fr">bbDKP 1.4.5 - mise à jour depuis bbdkp 1.4.4</title>
+		<description lang="en">bbDKP 1.4.5 is a Dragon Kill system Mod for your phpBB3 Bulletin board.
 </description>
 		<github>https://github.com/bbdkp/bbdkp</github>
 		<author-group>
 		<author>
 				<realname><![CDATA[Andreas]]></realname>
 				<username><![CDATA[Sajaki]]></username>
-				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
+				<homepage><![CDATA[http://www.avathar.be/bbdkp]]></homepage>
 				<email><![CDATA[sajaki9@gmail.com]]></email>
 				<contributions-group>
 					<contributions status="current" from="2008-04-04" position="Developer"/>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.4.4</mod-version>
+		<mod-version>1.4.5</mod-version>
 		<installation>
 			<level>easy</level>
 			<time>60</time>
@@ -36,9 +36,9 @@
 	</header>
 	<action-group>
 		<copy>
-			<file from="root/includes/bbdkp/controller/guilds/Guilds.php" to="includes/bbdkp/controller/guilds/Guilds.php"/>
-		  <file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>
 			<file from="root/install/*.*" to="install/*.*"/>
+			<file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>
+			<file from="root/includes/bbdkp/views/viewNavigation.php" to="includes/bbdkp/views/viewNavigation.php"/>
 		</copy>
 		<php-installer>install/index.php</php-installer>
 		<diy-instructions lang="fr"><![CDATA[navigue vers install/index.php et execute la mise à jour de la version.]]></diy-instructions>

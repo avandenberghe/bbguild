@@ -10,11 +10,7 @@
  * @version 1.4.4
  */
 
-// anything lower than php 5.3.3 not supported (we use namespaces since v1.3)
-if (version_compare(PHP_VERSION, '5.3.3') < 0)
-{
-    die('You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.3.3 or higher before trying to install bbDKP. <br />');
-}
+
 define('UMIL_AUTO', true);
 define('IN_PHPBB', true);
 define('IN_INSTALL', true);
@@ -26,8 +22,14 @@ require($phpbb_root_path . 'includes/functions_install.' . $phpEx);
 $user->session_begin();
 $auth->acl($user->data);
 $user->setup();
-$user->add_lang ( array ('mods/dkp_admin'));
 
+// anything lower than php 5.3.3 not supported (we use namespaces since bbDKP v1.3)
+if (version_compare(PHP_VERSION, '5.3.3') < 0)
+{
+    trigger_error('You are running an unsupported PHP version ('. PHP_VERSION . '). Please upgrade to PHP 5.3.3 or higher before trying to install bbDKP. <br />', E_USER_WARNING);
+}
+
+$user->add_lang ( array ('mods/dkp_admin'));
 $error= array();
 switch ($db->sql_layer)
 {
@@ -1104,7 +1106,6 @@ $versions = array(
             array('bbdkp_recruit_forumid'),
         ),
 
-
         'custom' => array(
             'tableupdates',
             'bbdkp_caches'
@@ -1121,6 +1122,13 @@ $versions = array(
     ),
     '1.4.4' => array(
         // fix bug #261, no database update
+    ),
+    '1.4.5' => array(
+        // fix bug #262, logging table width
+        'custom' => array(
+            'tableupdates',
+            'bbdkp_caches'
+        ),
     ),
 );
 
@@ -1200,8 +1208,10 @@ function tableupdates($action, $version)
                     $sql= "CREATE UNIQUE INDEX member_name ON " . $table_prefix . 'bbdkp_memberlist' . " (member_realm, member_name) ";
                     $db->sql_query($sql);
                     break;
-
-
+                case '1.4.5':
+                    $sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_logs MODIFY log_ipaddress VARCHAR(45) ';
+                    $db->sql_query($sql);
+                    break;
             }
             break;
 
@@ -1413,6 +1423,10 @@ function tableupdates($action, $version)
                     }
 
                     break;
+                case '1.4.5':
+                    $sql= "ALTER TABLE  " . $table_prefix . 'bbdkp_logs MODIFY log_ipaddress VARCHAR(45) ';
+                    $db->sql_query($sql);
+                    break;
 
             }
             break;
@@ -1422,9 +1436,6 @@ function tableupdates($action, $version)
                 case '1.2.8':
                     break;
                 case '1.3.0':
-                    //$sql= "DROP TABLE  " . $table_prefix . 'bbdkp_reporting ';
-                    //$db->sql_query($sql);
-
                     break;
 
             }

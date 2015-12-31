@@ -1,21 +1,17 @@
 # ************************************************************
-# MYSQL BBDKP TABLE STRUCTURE DUMP
+# Sequel Pro SQL dump
+# Version 4499
+#
+# http://www.sequelpro.com/
+# https://github.com/sequelpro/sequelpro
+#
+# Host: localhost (MySQL 5.5.42)
+# Database: qi30_test01
+# Generation Time: 2015-12-30 23:02:07 +0000
 # ************************************************************
-
-
-/*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
-/*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
-/*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
-/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
-/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
-/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
-
 
 # Dump of table phpbb_bbdkp_adjustments
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_adjustments`;
 
 CREATE TABLE `phpbb_bbdkp_adjustments` (
   `adjustment_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -34,77 +30,12 @@ CREATE TABLE `phpbb_bbdkp_adjustments` (
   KEY `member_id` (`member_id`,`adjustment_dkpid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
-
-
-# Dump of table phpbb_bbdkp_apphdr
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_apphdr`;
-
-CREATE TABLE `phpbb_bbdkp_apphdr` (
-  `announcement_id` int(8) NOT NULL AUTO_INCREMENT,
-  `announcement_title` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `announcement_msg` text COLLATE utf8_bin NOT NULL,
-  `announcement_timestamp` int(11) unsigned NOT NULL DEFAULT '0',
-  `bbcode_bitfield` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `bbcode_uid` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `user_id` int(8) NOT NULL DEFAULT '0',
-  `bbcode_options` mediumint(8) unsigned NOT NULL DEFAULT '7',
-  `template_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`announcement_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-
-
-# Dump of table phpbb_bbdkp_apptemplate
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_apptemplate`;
-
-CREATE TABLE `phpbb_bbdkp_apptemplate` (
-  `id` int(8) NOT NULL AUTO_INCREMENT,
-  `qorder` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `header` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `question` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `type` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `mandatory` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `options` mediumtext COLLATE utf8_bin NOT NULL,
-  `template_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `lineid` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `showquestion` tinyint(1) unsigned NOT NULL DEFAULT '1',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `template` (`template_id`,`lineid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-
-
-# Dump of table phpbb_bbdkp_apptemplatelist
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_apptemplatelist`;
-
-CREATE TABLE `phpbb_bbdkp_apptemplatelist` (
-  `template_id` int(8) NOT NULL AUTO_INCREMENT,
-  `template_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `forum_id` int(8) NOT NULL DEFAULT '0',
-  `guild_id` int(8) NOT NULL DEFAULT '1',
-  `status` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  `question_color` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `answer_color` varchar(8) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `gchoice` tinyint(1) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`template_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-
-
 # Dump of table phpbb_bbdkp_classes
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_classes`;
-
 CREATE TABLE `phpbb_bbdkp_classes` (
   `c_index` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
-  `game_id` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `game_id` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
   `class_id` smallint(4) unsigned NOT NULL DEFAULT '0',
   `class_faction_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `class_min_level` smallint(4) unsigned NOT NULL DEFAULT '0',
@@ -122,8 +53,6 @@ CREATE TABLE `phpbb_bbdkp_classes` (
 # Dump of table phpbb_bbdkp_dkpsystem
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_dkpsystem`;
-
 CREATE TABLE `phpbb_bbdkp_dkpsystem` (
   `dkpsys_id` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
   `dkpsys_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
@@ -140,8 +69,6 @@ CREATE TABLE `phpbb_bbdkp_dkpsystem` (
 
 # Dump of table phpbb_bbdkp_events
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_events`;
 
 CREATE TABLE `phpbb_bbdkp_events` (
   `event_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -162,8 +89,6 @@ CREATE TABLE `phpbb_bbdkp_events` (
 # Dump of table phpbb_bbdkp_factions
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_factions`;
-
 CREATE TABLE `phpbb_bbdkp_factions` (
   `game_id` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `f_index` smallint(4) unsigned NOT NULL AUTO_INCREMENT,
@@ -176,18 +101,37 @@ CREATE TABLE `phpbb_bbdkp_factions` (
 
 
 
+# Dump of table phpbb_bbdkp_gameroles
+# ------------------------------------------------------------
+
+CREATE TABLE `phpbb_bbdkp_gameroles` (
+  `role_pkid` int(8) NOT NULL AUTO_INCREMENT,
+  `game_id` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `role_id` int(8) NOT NULL DEFAULT '0',
+  `role_color` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `role_icon` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `role_cat_icon` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  PRIMARY KEY (`role_pkid`),
+  UNIQUE KEY `bbroles` (`game_id`,`role_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+
+
 # Dump of table phpbb_bbdkp_games
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_games`;
-
 CREATE TABLE `phpbb_bbdkp_games` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `game_id` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `game_id` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
   `game_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `status` varchar(30) COLLATE utf8_bin NOT NULL DEFAULT '',
   `imagename` varchar(20) COLLATE utf8_bin NOT NULL DEFAULT '',
   `armory_enabled` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `bossbaseurl` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `zonebaseurl` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `apikey` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `apilocale` varchar(5) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `privkey` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `bbdkp_games` (`game_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -197,11 +141,9 @@ CREATE TABLE `phpbb_bbdkp_games` (
 # Dump of table phpbb_bbdkp_language
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_language`;
-
 CREATE TABLE `phpbb_bbdkp_language` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `game_id` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `game_id` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
   `attribute_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `language` char(2) COLLATE utf8_bin NOT NULL DEFAULT '',
   `attribute` varchar(30) COLLATE utf8_bin NOT NULL DEFAULT '',
@@ -216,14 +158,12 @@ CREATE TABLE `phpbb_bbdkp_language` (
 # Dump of table phpbb_bbdkp_logs
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_logs`;
-
 CREATE TABLE `phpbb_bbdkp_logs` (
   `log_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `log_date` int(11) unsigned NOT NULL DEFAULT '0',
   `log_type` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `log_action` text COLLATE utf8_bin NOT NULL,
-  `log_ipaddress` varchar(15) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `log_ipaddress` varchar(45) COLLATE utf8_bin NOT NULL DEFAULT '',
   `log_sid` varchar(32) COLLATE utf8_bin NOT NULL DEFAULT '',
   `log_result` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `log_userid` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -237,8 +177,6 @@ CREATE TABLE `phpbb_bbdkp_logs` (
 
 # Dump of table phpbb_bbdkp_member_ranks
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_member_ranks`;
 
 CREATE TABLE `phpbb_bbdkp_member_ranks` (
   `guild_id` smallint(4) unsigned NOT NULL DEFAULT '0',
@@ -255,8 +193,6 @@ CREATE TABLE `phpbb_bbdkp_member_ranks` (
 # Dump of table phpbb_bbdkp_memberdkp
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_memberdkp`;
-
 CREATE TABLE `phpbb_bbdkp_memberdkp` (
   `member_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
   `member_dkpid` smallint(4) unsigned NOT NULL DEFAULT '0',
@@ -268,7 +204,6 @@ CREATE TABLE `phpbb_bbdkp_memberdkp` (
   `member_spent` decimal(11,2) NOT NULL DEFAULT '0.00',
   `member_item_decay` decimal(11,2) NOT NULL DEFAULT '0.00',
   `member_adjustment` decimal(11,2) NOT NULL DEFAULT '0.00',
-  `member_status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `member_firstraid` int(11) unsigned NOT NULL DEFAULT '0',
   `member_lastraid` int(11) unsigned NOT NULL DEFAULT '0',
   `member_raidcount` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -280,8 +215,6 @@ CREATE TABLE `phpbb_bbdkp_memberdkp` (
 
 # Dump of table phpbb_bbdkp_memberguild
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_memberguild`;
 
 CREATE TABLE `phpbb_bbdkp_memberguild` (
   `id` smallint(4) unsigned NOT NULL DEFAULT '0',
@@ -302,6 +235,8 @@ CREATE TABLE `phpbb_bbdkp_memberguild` (
   `rec_status` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `guilddefault` tinyint(1) unsigned NOT NULL DEFAULT '0',
   `armory_enabled` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  `armoryresult` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `recruitforum` mediumint(8) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   UNIQUE KEY `bbguild` (`name`,`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -311,10 +246,8 @@ CREATE TABLE `phpbb_bbdkp_memberguild` (
 # Dump of table phpbb_bbdkp_memberlist
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_memberlist`;
-
 CREATE TABLE `phpbb_bbdkp_memberlist` (
-  `game_id` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `game_id` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
   `member_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `member_name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `member_status` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -335,6 +268,8 @@ CREATE TABLE `phpbb_bbdkp_memberlist` (
   `member_role` varchar(20) COLLATE utf8_bin NOT NULL DEFAULT '',
   `member_region` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `member_realm` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `deactivate_reason` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `last_update` int(11) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`member_id`),
   UNIQUE KEY `member_name` (`member_guild_id`,`member_name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
@@ -343,8 +278,6 @@ CREATE TABLE `phpbb_bbdkp_memberlist` (
 
 # Dump of table phpbb_bbdkp_news
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_news`;
 
 CREATE TABLE `phpbb_bbdkp_news` (
   `news_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -363,8 +296,6 @@ CREATE TABLE `phpbb_bbdkp_news` (
 # Dump of table phpbb_bbdkp_plugins
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_plugins`;
-
 CREATE TABLE `phpbb_bbdkp_plugins` (
   `name` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
   `value` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -379,10 +310,8 @@ CREATE TABLE `phpbb_bbdkp_plugins` (
 # Dump of table phpbb_bbdkp_races
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_races`;
-
 CREATE TABLE `phpbb_bbdkp_races` (
-  `game_id` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+  `game_id` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
   `race_id` smallint(4) unsigned NOT NULL DEFAULT '0',
   `race_faction_id` smallint(4) unsigned NOT NULL DEFAULT '0',
   `race_hide` tinyint(1) unsigned NOT NULL DEFAULT '0',
@@ -395,8 +324,6 @@ CREATE TABLE `phpbb_bbdkp_races` (
 
 # Dump of table phpbb_bbdkp_raid_detail
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_raid_detail`;
 
 CREATE TABLE `phpbb_bbdkp_raid_detail` (
   `raid_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -413,8 +340,6 @@ CREATE TABLE `phpbb_bbdkp_raid_detail` (
 
 # Dump of table phpbb_bbdkp_raid_items
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_raid_items`;
 
 CREATE TABLE `phpbb_bbdkp_raid_items` (
   `item_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
@@ -440,8 +365,6 @@ CREATE TABLE `phpbb_bbdkp_raid_items` (
 # Dump of table phpbb_bbdkp_raids
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_raids`;
-
 CREATE TABLE `phpbb_bbdkp_raids` (
   `raid_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `event_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
@@ -456,48 +379,28 @@ CREATE TABLE `phpbb_bbdkp_raids` (
 
 
 
-# Dump of table phpbb_bbdkp_roles
+# Dump of table phpbb_bbdkp_recruit
 # ------------------------------------------------------------
 
-DROP TABLE IF EXISTS `phpbb_bbdkp_roles`;
-
-CREATE TABLE `phpbb_bbdkp_roles` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `guild_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `game_id` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-  `role` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
+CREATE TABLE `phpbb_bbdkp_recruit` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `guild_id` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `role_id` int(8) NOT NULL DEFAULT '0',
   `class_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `needed` smallint(4) unsigned NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `bbdkp_roles` (`guild_id`,`game_id`,`role`,`class_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-
-
-# Dump of table phpbb_bbdkp_transactions
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_transactions`;
-
-CREATE TABLE `phpbb_bbdkp_transactions` (
-  `trans_id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `member_dkpid` smallint(4) unsigned NOT NULL DEFAULT '0',
-  `member_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `account` mediumint(8) unsigned NOT NULL DEFAULT '0',
-  `amount` decimal(11,2) NOT NULL DEFAULT '0.00',
-  PRIMARY KEY (`trans_id`),
-  KEY `member_id` (`member_id`),
-  KEY `member_dkp` (`member_dkpid`),
-  KEY `memberiddkp` (`member_id`,`member_dkpid`),
-  KEY `memberidaccount` (`member_id`,`member_dkpid`,`account`)
+  `level` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `positions` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `applicants` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `status` smallint(4) unsigned NOT NULL DEFAULT '0',
+  `applytemplate_id` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `last_update` int(11) unsigned NOT NULL DEFAULT '0',
+  `note` text COLLATE utf8_bin NOT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 
 
 # Dump of table phpbb_bbdkp_welcomemsg
 # ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `phpbb_bbdkp_welcomemsg`;
 
 CREATE TABLE `phpbb_bbdkp_welcomemsg` (
   `welcome_id` int(8) NOT NULL AUTO_INCREMENT,
@@ -510,13 +413,3 @@ CREATE TABLE `phpbb_bbdkp_welcomemsg` (
   `bbcode_options` mediumint(8) unsigned NOT NULL DEFAULT '7',
   PRIMARY KEY (`welcome_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
-
-
-
-
-/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
-/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
-/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
-/*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
-/*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
-/*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

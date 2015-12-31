@@ -14,14 +14,14 @@
 			<author>
 				<realname><![CDATA[Andreas]]></realname>
 				<username><![CDATA[Sajaki]]></username>
-				<homepage><![CDATA[http://www.bbdkp.com]]></homepage>
+				<homepage><![CDATA[http://www.avathar.be/bbdkp]]></homepage>
 				<email><![CDATA[sajaki9@gmail.com]]></email>
 				<contributions-group>
 					<contributions status="current" from="2008-04-04" position="Developer"/>
 				</contributions-group>
 			</author>
 		</author-group>
-		<mod-version>1.4.4</mod-version>
+		<mod-version>1.4.5</mod-version>
 		<installation>
 			<level>advanced</level>
 			<time>1200</time>

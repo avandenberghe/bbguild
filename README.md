@@ -8,30 +8,30 @@ Dragon kill points are a form of currency in guilds, where members bid on game l
 
 Features :
 
-    Integration of Game, Guild and DKP management facilities;
-    Single sign on to dkp and phpBB3,
-    Clean report screens,
-    Multiple loot distribution systems supported : Multi-pool, Standard DKP, Time based DKP, Zero sum, EPGP.
-    Portal with widgets
-    Leaderboard, Statistics, Events, Raids, Member, Items, Roster
-    ACP and UCP modules.
-    Games supported :
-        World of Warcraft,
-        The Lord of the Rings Online,
-        Dark Age of Camelot,
-        Vanguard,
-        EverQuest I/II,
-        Warhammer Online,
-        Final Fantasy XI,
-        AION,
-        Rift,
-        SW:Tor,
-        Lineage 2,
-        TERA,
-        FFXIV
-        and Custom Game.
-    Languages supported : English, French, German, Italian.
-    Robust admin features, no Installation headaches, just copy into ext folder and enable the extension.
+* Integration of Game, Guild and DKP management facilities;
+* Single sign on to dkp and phpBB3,
+* Clean report screens,
+* Multiple loot distribution systems supported : Multi-pool, Standard DKP, Time based DKP, Zero sum, EPGP.
+* Portal with widgets
+* Leaderboard, Statistics, Events, Raids, Member, Items, Roster
+* ACP and UCP modules.
+* Games supported :
+	* World of Warcraft,
+	* The Lord of the Rings Online,
+	* Dark Age of Camelot,
+	* Vanguard,
+	* EverQuest I/II,
+	* Warhammer Online,
+	* Final Fantasy XI,
+	* AION,
+	* Rift,
+	* SW:Tor,
+	* Lineage 2,
+	* TERA,
+	* FFXIV
+	* and Custom Game.
+* Languages supported : English, French, German, Italian.
+* Robust admin features, no Installation headaches, just copy into ext folder and enable the extension.
 
 Plugins available : Raidplanner, Raidtracker, bbTips, Apply 
 
@@ -39,7 +39,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 
 ## Current
 
-1.4.4
+1.4.5
 
 ## Installation
 
@@ -51,7 +51,7 @@ Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have 
 3.	ftp and founder admin access on your phpbb installation.
 4.	Make sure you have [Automod 1.0.2](https://www.phpbb.com/mods/automod/) or do the changes manually as described in INSTALL.XML
 
-#### New installation 1.4.4
+#### New installation 1.4.5
 
 Adding bbDKP to phpBB3 is easy. like any other mod, you need to do the edits in your core phpbb files, copy the files to your webserver, and then run the database installer. 
 
@@ -61,9 +61,9 @@ Note : we advise you to do all php, html upgrades on localhost before uploading 
 2. Upload bbDKP folder to your webserver, into /store/mods. note that the folder name must be "bbDKP", without version number.
 3. Launch automod, click in "bbDKP", and click the "Install" link. this will copy the files, and perform the necessary edits.
 4. Click on the blue link given, this will redirect you to /install/index.php
-5. Click submit. This will install 1.4.4 and clear the caches (template, theme, imagesets)
+5. Click submit. This will install 1.4.5 and clear the caches (template, theme, imagesets)
 
-#### Upgrading to 1.4.4
+#### Upgrading to 1.4.5
 
 1. Unzip the zip file
 2. Upload bbDKP folder to your webserver, into /store/mods/, replacing the bbDKP folder that is there. note that the folder name must be "bbDKP", without version number.
@@ -87,6 +87,9 @@ Find support and more on
 *   Twitter @bbDKP
 
 ## Changelog 
+
+1.4.5 30-12-2015
+- [FIX] #262 Log table does not support IPv6 clients. length now set to 45char
 
 1.4.4 13-12-2015
 - [FIX] #261 bug in guild.php when trying to update Battle.NET guild. 
