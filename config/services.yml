@@ -1,0 +1,32 @@
+imports:
+    - { resource: tables.yml }
+
+# mapping of service "sajaki.bbdkp.controller" to class sajaki\bbdkp\controller\main
+services:
+    sajaki.bbdkp.controller:
+        class: sajaki\bbdkp\controller\dkp_main
+        arguments:
+            - @config
+            - @config_text
+            - @controller.helper
+            - @template
+            - @user
+            - %core.php_ext%
+    sajaki.bbdkp.portalcontroller:
+        class: sajaki\bbdkp\controller\dkp_main
+        arguments:
+            - @config
+            - @config_text
+            - @controller.helper
+            - @template
+            - @user
+            - %core.php_ext%
+    sajaki.bbdkp.listener:
+        class: sajaki\bbdkp\event\main_listener
+        arguments:
+            - @controller.helper
+            - @template
+            - @user
+            - @config
+        tags:
+            - { name: event.listener }

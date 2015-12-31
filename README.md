@@ -1,62 +1,114 @@
-[![bbDKP](http://www.bbDKP.com/images/site_logo.png)](http://www.bbDKP.com)
+[![bbDKP](http://www.avathar.be/bbdkp/images/site_logo.png)](http://www.avathar.be/bbdkp)
 
-#2.0-dev
 
-## about
+## About
 
-bbDKP is a Dragon Kill Points Mod for your phpBB3 Bulletin board.
+bbDKP is a ‘Dragon Kill system’ for your phpBB3 Bulletin board. 
+It was originally forked from EQDKP to phpBB in 2008. the 2.0 version is rebuild on the Symfony 2 framework to be compatible with phpBB.
 
-Dragon kill points are a form of currency in guilds, where members bid on game loot and buy the items, paying in DKP.
+[![Build Status](https://travis-ci.org/bbDKP/bbDKP.svg?branch=develop-2.0)](https://travis-ci.org/bbDKP/bbDKP)
 
-Different forms of DKP exist and bbDKP supports four point systems : Standard DKP, Time based DKP, Zero sum and EPGP. they can be combined with each other, except zero sum can't be combined with EPGP.
 
-bbDKP has Game, Guild and DKP management functions built into your phpBB3 Forum.
+Features : 
+- Integration of Game, Guild and DKP management facilities; 
+- Single sign on to dkp and phpBB3, 
+- Clean report screens, 
+- Multiple loot distribution systems supported : Multi-pool, Standard DKP, Time based DKP, Zero sum, EPGP. 
+- Portal with widgets
+- Leaderboard, Statistics, Events, Raids, Member, Items, Roster
+- ACP and UCP modules. 
+- Games supported : 
+  - World of Warcraft, 
+  - The Lord of the Rings Online, 
+  - Dark Age of Camelot, 
+  - Vanguard, 
+  - EverQuest I/II,  
+  - Warhammer Online, 
+  - Final Fantasy XI, 
+  - AION, 
+  - Rift, 
+  - SW:Tor, 
+  - Lineage 2, 
+  - TERA, 
+  - FFXIV 
+  - and Custom Game. 
+- Languages supported : English, French, German, Italian. 
+- Robust admin features, no Installation headaches, just copy into ext folder and enable the extension.  
 
-This way, your users gain single signon to dkp and phpBB3, and you as an administrator or raidleader get a clean interface, robust admin facilities and less integration headaches.
+There will be a number of extension plugins, Raidtracker, bbTips, Apply, Bossprogress, Raidplanner. 
 
-Feature list : Portal with widgets, Dashboard, Statistics, Events, Raids, Member, Items, Roster, Bossprogress page, ACP and UCP modules. multiple games can be installed : World of Warcraft, The Lord of the Rings Online, Dark Age of Camelot, Vanguard - Saga of Heroes, EverQuest I/II, Warhammer Online, Final Fantasy XI, AION, Rift, Star Wars -ToR, Guildwars 2, Tera, Custome game designer
-
-There are a number of plugins, like Raidplanner, Raidtracker, bbTips, Armory import, Apply, and other standalone mods that work well together. 
-
-Prosilver styles files are included. The Jade, Deathwing and pbWoW2 styles have premod versions. 
-
+Further development requests, support questions are welcome at http://www.avathar.be/bbdkp or @bbDKP on Twitter.",
+	
+	
 ## Current
 
-dev
+2.0.0-DEV
+
+This code is not ready for testing yet...
 
 ## Installation
 
-#### Requirements
-1.	phpbb 3.1.x
-2.	databases : Mysql 5, MSSQL, postgresql, Oracle
-3.	PHP 5.3.3 or higher. Curl should be available on your server.
+#### Install
+1. Download the latest release.
+2. In the `ext` directory of your phpBB board, create a new directory named `sajaki` (if it does not already exist).
+3. Copy the `bbdkp` folder to `/ext/sajaki/` (if done correctly, you'll have the main extension class at (your forum root)/ext/sajaki/bbdkp/composer.json).
+4. Navigate in the ACP to `Customise -> Manage extensions`.
+5. Look for `bbDKP Extension` under the Disabled Extensions list, and click its `Enable` link.
 
-#### recommended development setup 
-2.	phpStorm IDE
-3.	LAMP installation
-4.	Github app, or use Atlassian Sourcetree
+#### Uninstall
+1. Navigate in the ACP to `Customise -> Extension Management -> Extensions`.
+2. Look for `bbDKP Extension` under the Enabled Extensions list, and click its `Disable` link.
+3. To permanently uninstall, click `Delete Data` and then delete the `/ext/sajaki/bbdkp` folder.
+
+
+#### Requirements
+1.	phpbb > 3.1.*
+2.	ftp and acp access to your phpbb forum.  
+
    
-    
 ## Community
 
 Find support and more on 
 
-*	Forums : [bbDKP.com](http://www.bbdkp.com)
-*	IRC : Freenode #bbdkp
+*	Forums : [www.avathar.be/bbdkp](http://www.avathar.be/bbdkp)
+*	IRC : [Freenode](https://webchat.freenode.net) #bbdkp
+*	Twitter @bbDKP
 
 ## Changelog 
 
-2.0
+2.0.0 06-12-2015
+- [NEW] Conversion to extension
 
-- extension in development
+1.4.3 11-11-2015
+- [FIX] #260 MODX update to 1.4.2 was incomplete
 
-1.3.0.x
+1.4.3 (prerelease) 08-11-2015
+-  [FIX] #259 forgot to commit guildnews backend code to build new welcome page
 
-- in development
+1.4.2 (prerelease) 25-10-2015
+
+-   [NEW] #259 new welcome page
+-   [CHG] #258 migrate versions url from Googlecode 
+-   [FIX] #253 missing language entries in german/french/italian
+-   [NEW] #252 Implement new WOW API
+-   [CHG] #249 allow two users from different realms in the same guild
+-	[NEW] #248 2 new races were added in SWToR : Cyborg and Cathar. they should be included in the installer.
+- 	[CHG] #247 moved all js to subfolder /template/dkp/js 
+-	[NEW] #246 Added Sliders to statistics page, for easier navigation
+-	[FIX] missing language entries in german/french
+-   [NEW] #242 enable icon uploads in acp
+-   [FIX] #241 roster acp should use outer joins
+-	[NEW] #240 update Aion game parameters game 
+-	[CHG] #239 added correct classpath to rpblocks class in class_exists checker in block factory
+-   [CHG] #226 move role acp from raidplanner to bbdkp : new Roles & Recruitment class/table: The roles are now in a separate class and table. A new 'recruitment' class/table holds number of positions and applicants. the Apply plugin will update the recruitment table and so you have a live view of recruitments through the recruitment block. Also, Raidplanner will use the bbdkp roles table to fill in raidroles.
+-	[CHG] #223 update constants file : deprecated GAMES_TABLE, LOGS_TABLE, EVENTS_TABLE constant updated to BBGAMES_TABLE, BBLOGS_TABLE, BBEVENTS_TABLE constants
+-	[NEW] #212 added Italian translation
+-	[NEW] #196 Implemented Guildwars Guild API
+-	[NEW] #192 Can now unlink a character from UCP
 
 1.3.0.8 01-07-2014
 
--	[FIX] #239 fix reference to raidplanner block path (1 file)
+-	[FIX] #239 fix raidplanner block file path reference in blockFactory class
 
 1.3.0.7 30-06-2014
 
@@ -713,7 +765,7 @@ Find support and more on
 
 ## contribute
 
-You can see all the amazing people contributing to this project [here](https://github.com/bbdkp/bbdkp/graphs/contributors).
+You can see all the awesome people contributing to this project [here](https://github.com/bbdkp/bbdkp/graphs/contributors).
 
 1. [Create a ticket (unless there already is one)] : https://github.com/bbDKP/bbDKP/issues or http://www.bbdkp.com/tracker.php
 2. [Read our Git Contribution Guidelines](http://www.bbdkp.com/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.bbdkp.com/viewtopic.php?f=60&t=1853)
@@ -735,4 +787,3 @@ EQDkp (c) 2003 The EqDkp Project Team
 
 [![Foo](https://www.paypal.com/en_US/BE/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_donations&business=sajaki9%40gmail%2ecom&lc=BE&item_name=bbDKP%20Guild%20management&currency_code=EUR&bn=PP%2dDonationsBF%3abtn_donateCC_LG%2egif%3aNonHosted)
 
->>>>>>> develop
