@@ -54,3 +54,5 @@ define('BOSSBASE',          	   $table_prefix . 'bbdkp_bosstable');
 define('ZONEBASE',         		   $table_prefix . 'bbdkp_zonetable');
 define('WELCOME_MSG_TABLE',        $table_prefix . 'bbdkp_welcomemsg');
 define('GUILD_BOSS',               $table_prefix . 'bbdkp_guildboss');
+define('BBRECRUIT_TABLE',          $table_prefix . 'bbdkp_recruit');
+define('BB_GAMEROLE_TABLE',        $table_prefix . 'bbdkp_gameroles');

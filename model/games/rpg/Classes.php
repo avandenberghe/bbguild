@@ -10,14 +10,6 @@
 
 namespace sajaki\bbdkp\model\games\rpg;
 
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-global $phpbb_root_path;
-
-// Include the abstract base
-if (!class_exists('\bbdkp\controller\games\Game'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
-}
 /**
  * Classes
  *
@@ -25,7 +17,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  *
  *   @package bbdkp
  */
- class Classes extends \bbdkp\controller\games\Game
+ class Classes //extends \sajaki\bbdkp\model\games\Game
  {
 
      /**
@@ -81,7 +73,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
      public $heal;
      /**
       * name of image file
-      * @var unknown
+      * @var String
       */
      public $imagename;
      /**
@@ -282,11 +274,10 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 		$cache->destroy ( 'sql', BB_LANGUAGE );
 	}
 
-
-
-	/**
+     /**
 	 * updates a class to database
-	 */
+     * @param Classes $oldclass
+     */
 	public function Update(Classes $oldclass)
 	{
 		global $user, $db, $config, $cache;
@@ -389,4 +380,3 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 
 }
 
-?>

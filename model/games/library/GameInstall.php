@@ -2,14 +2,13 @@
 /**
  * abstract class aGameInstall
  *
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2013 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ * @package bbdkp v2.0
+ * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
  */
-namespace sajaki\bbdkp\controller\games;
-use bbdkp\controller\games;
+namespace sajaki\bbdkp\model\games\library;
+
 /**
  * @ignore
  */
@@ -17,11 +16,11 @@ if (! defined('IN_PHPBB'))
 {
 	exit();
 }
-include($phpbb_root_path . 'umil/umil.' . $phpEx);
+
 /**
  * Game interface
  * this abstract class is the framework for all game installers
- *
+ * @package sajaki\bbdkp\model\games\library
  */
 abstract class GameInstall
 {
@@ -51,7 +50,11 @@ abstract class GameInstall
     /**
 	 * Install a game
      * can be implemented, this is the default install
-	 */
+     * @param $game_id
+     * @param $gamename
+     * @param $bossbaseurl
+     * @param $zonebaseurl
+     */
     public final function Install($game_id, $gamename, $bossbaseurl, $zonebaseurl)
 	{
 		global $cache, $db;
@@ -93,7 +96,6 @@ abstract class GameInstall
 
 	}
 
-
     /**
      * Uninstall a game
      * @param $game_id
@@ -107,19 +109,19 @@ abstract class GameInstall
 
         $db->sql_transaction('begin');
 
-        $factions = new \bbdkp\controller\games\Faction();
+        $factions = new \sajaki\bbdkp\model\games\rpg\Faction;
         $factions->game_id = $this->game_id;
         $factions->Delete_all_factions();
 
-        $races = new \bbdkp\controller\games\Races();
+        $races = new \sajaki\bbdkp\model\games\rpg\Races;
         $races->game_id = $this->game_id;
         $races->Delete_all_races();
 
-        $classes = new \bbdkp\controller\games\Classes();
+        $classes = new \sajaki\bbdkp\model\games\rpg\Classes;
         $classes->game_id = $this->game_id;
         $classes->Delete_all_classes();
 
-        $roles = new \bbdkp\controller\games\Roles();
+        $roles = new \sajaki\bbdkp\model\games\rpg\Roles;
         $roles->game_id = $this->game_id;
         $roles->Delete_all_roles();
 
@@ -136,8 +138,6 @@ abstract class GameInstall
         $cache->destroy( 'sql', BBEVENTS_TABLE );
         $cache->destroy( 'sql', MEMBER_LIST_TABLE );
     }
-
-
 
 	/**
 	 * Installs factions
@@ -165,10 +165,157 @@ abstract class GameInstall
     abstract protected function InstallEventGroup();
 
     /**
-     * Install sample roles
-     * must be implemented
+     * Install sample roles.
+     * if a game needs a special role, then implement that role in the game installer class.
+     * the only game needing special roles is GW2 due to it not following the holy trinity
+     * http://www.mmo-champion.com/threads/1125142-GW2-Roles-An-explanation
+     *
+     * can be implemented
      */
-    abstract protected function InstallRoles();
-}
+    protected function InstallRoles()
+    {
 
-?>
+        global $db;
+
+        $db->sql_query('DELETE FROM ' .  BB_GAMEROLE_TABLE . " WHERE role_id < 3 and game_id = '" . $this->game_id . "'");
+        $db->sql_query('DELETE FROM ' .  BB_LANGUAGE . " WHERE attribute_id < 3 and  attribute = 'role' and game_id = '" . $this->game_id  . "'");
+
+        $sql_ary = array(
+            array(
+                // dps
+                'game_id'  		   => $this->game_id ,
+                'role_id'    	   => 0,
+                'role_color'       => '#FF4455',
+                'role_icon'    	   => 'dps_icon',
+            ),
+            array(
+                // healer
+                'game_id'  		   => $this->game_id ,
+                'role_id'    	   => 1,
+                'role_color'       => '#11FF77',
+                'role_icon'    	   => 'healer_icon',
+            ),
+            array(
+                // tank
+                'game_id'  		   => $this->game_id ,
+                'role_id'    	   => 2,
+                'role_color'       => '#c3834c',
+                'role_icon'    	   => 'tank_icon',
+            ),
+        );
+        $db->sql_multi_insert(BB_GAMEROLE_TABLE, $sql_ary);
+
+        //english
+        $sql_ary = array(
+            array(
+                // dps
+                'game_id'  		    => $this->game_id ,
+                'attribute_id'    	=>  0,
+                'language'          => 'en',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Damage',
+                'name_short'        => 'DPS',
+            ),
+            array(
+                // healer
+                'game_id'  		    => $this->game_id ,
+                'attribute_id'    	=>  1,
+                'language'          => 'en',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Healer',
+                'name_short'        => 'HPS',
+            ),
+            array(
+                // defense
+                'game_id'  		    => $this->game_id ,
+                'attribute_id'    	=>  2,
+                'language'          => 'en',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Defense',
+                'name_short'        => 'DEF',
+            ),
+            array(
+                // dps
+                'game_id'  		    => $this->game_id ,
+                'attribute_id'    	=>  0,
+                'language'          => 'fr',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Dégats',
+                'name_short'        => 'DPS',
+            ),
+            array(
+                // healer
+                'game_id'  		    => $this->game_id ,
+                'attribute_id'    	=> 1,
+                'language'          => 'fr',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Soigneur',
+                'name_short'        => 'HPS',
+            ),
+            array(
+                // tank
+                'game_id'  		    => $this->game_id ,
+                'attribute_id'    	=> 2,
+                'language'          => 'fr',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Défense',
+                'name_short'        => 'DEF',
+            ),
+            array(
+                // dps
+                'game_id'  		    => $this->game_id ,
+                'attribute_id'    	=> 0,
+                'language'          => 'de',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Kämpfer',
+                'name_short'        => 'Schaden',
+            ),
+            array(
+                // healer
+                'game_id'  		    => $this->game_id ,
+                'attribute_id'    	=>  1,
+                'language'          => 'de',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Heiler',
+                'name_short'        => 'Heil',
+            ),
+            array(
+                // tank
+                'game_id'  		    => $this->game_id ,
+                'attribute_id'    	=>  2,
+                'language'          => 'de',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Verteidigung',
+                'name_short'        => 'Schutz',
+            ),
+            array(
+                // dps
+                'game_id'  		    => $this->game_id ,
+                'attribute_id'    	=> 0,
+                'language'          => 'it',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Danni',
+                'name_short'        => 'Danni',
+            ),
+            array(
+                // healer
+                'game_id'  		    =>  $this->game_id ,
+                'attribute_id'    	=> 1,
+                'language'          => 'it',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Cura',
+                'name_short'        => 'Cura',
+            ),
+            array(
+                // tank
+                'game_id'  		    =>  $this->game_id ,
+                'attribute_id'    	=>  2,
+                'language'          => 'it',
+                'attribute'    	    => 'role',
+                'name'    	        => 'Difeza',
+                'name_short'        => 'Tank',
+            ),
+        );
+        $db->sql_multi_insert(BB_LANGUAGE, $sql_ary);
+    }
+}

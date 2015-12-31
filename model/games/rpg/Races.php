@@ -9,14 +9,6 @@
 
 namespace sajaki\bbdkp\model\games\rpg;
 
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-global $phpbb_root_path;
-
-if (!class_exists('\bbdkp\controller\games\Game'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
-}
-
 /**
  * Races
  *
@@ -24,7 +16,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  *
  *   @package bbdkp
  */
- class Races extends \bbdkp\controller\games\Game
+ class Races //extends \sajaki\bbdkp\model\games\Game
 {
 
 	/**
@@ -59,7 +51,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 
 	/**
 	 * race nam
-	 * @var unknown
+	 * @var String
 	 */
 	public $race_name;
 
@@ -250,11 +242,11 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 		$cache->destroy ( 'sql', RACE_TABLE );
 	}
 
-	/**
+     /**
 	 * get array with races
-	 * @param string $order
-	 * @return multitype:multitype:string
-	 */
+      * @param string $order
+      * @return array
+      */
 	public function listraces($order = 'r.race_id')
 	{
 		global $db, $config;
@@ -293,4 +285,3 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 
 }
 
-?>

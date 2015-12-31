@@ -10,14 +10,6 @@
 
 namespace sajaki\bbdkp\model\games\rpg;
 
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-global $phpbb_root_path;
-
-if (!class_exists('\bbdkp\controller\games\Game'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
-}
-
 /**
  * Faction Class
  * 
@@ -25,7 +17,7 @@ if (!class_exists('\bbdkp\controller\games\Game'))
  * 
  *   @package bbdkp
  */
- class Faction extends \bbdkp\controller\games\Game 
+ class Faction //extends \sajaki\bbdkp\model\games\Game
 {
 	/**
 	 * game id 
@@ -259,4 +251,3 @@ if (!class_exists('\bbdkp\controller\games\Game'))
 	
 }
 
-?>

@@ -1,17 +1,13 @@
 <?php
 /**
  * bbdkp LOTRO install file
- * 
- * @package bbdkp
- * @link http://www.bbdkp.com
- * @author Sajaki@gmail.com
- * @copyright 2013 bbdkp
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
+ *
+ * @package bbdkp v2.0
+ * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-namespace sajaki\bbdkp\controller\games;
-use bbdkp\controller\games;
+namespace sajaki\bbdkp\model\games\library;
 
 /**
  * @ignore
@@ -21,21 +17,11 @@ if (! defined ( 'IN_PHPBB' ))
 	exit ();
 }
 
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-global $phpbb_root_path;
-
-if (!class_exists('\bbdkp\controller\games\GameInstall'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/games/library/GameInstall.$phpEx");
-}
-
 /**
  * Lotro Installer class
- * 
- *   @package bbdkp
- *
+ * @package sajaki\bbdkp\model\games\library
  */
-class install_lotro extends GameInstall
+class install_lotro extends \sajaki\bbdkp\model\games\library\GameInstall
 {
     protected $bossbaseurl = 'http://lotro.allakhazam.com/db/bestiary.html?lotrmob=%s';
     protected $zonebaseurl = 'http://lotro.allakhazam.com/db/geography.html?lotrarea=%s';
@@ -388,168 +374,5 @@ class install_lotro extends GameInstall
 		
 	}
 
-
-
-    /**
-     * installs default game roles
-     */
-    protected function InstallRoles()
-    {
-
-        global $db;
-        $umil = new \umil();
-        $db->sql_query('DELETE FROM ' .  BB_GAMEROLE_TABLE . " WHERE game_id = '" . $this->game_id . "'");
-
-        $umil->table_row_insert(BB_GAMEROLE_TABLE, array(
-            array(
-                // dps
-                'game_id'  		   => $this->game_id ,
-                'role_id'    	   => 0,
-                'role_color'       => '#FF4455',
-                'role_icon'    	   => 'dps_icon',
-            ),
-            array(
-                // healer
-                'game_id'  		   => $this->game_id ,
-                'role_id'    	   => 1,
-                'role_color'       => '#11FF77',
-                'role_icon'    	   => 'healer_icon',
-            ),
-            array(
-                // tank
-                'game_id'  		   => $this->game_id ,
-                'role_id'    	   => 2,
-                'role_color'       => '#c3834c',
-                'role_icon'    	   => 'tank_icon',
-            ),
-        ));
-
-        $db->sql_query('DELETE FROM ' .  BB_LANGUAGE . " WHERE attribute = 'role' and game_id = '" . $this->game_id  . "'");
-
-        //english
-        $umil->table_row_insert( BB_LANGUAGE, array(
-            array(
-                // dps
-                'game_id'  		    => $this->game_id ,
-                'attribute_id'    	=>  0,
-                'language'          => 'en',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Damage',
-                'name_short'        => 'DPS',
-            ),
-            array(
-                // healer
-                'game_id'  		    => $this->game_id ,
-                'attribute_id'    	=>  1,
-                'language'          => 'en',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Healer',
-                'name_short'        => 'HPS',
-            ),
-            array(
-                // defense
-                'game_id'  		    => $this->game_id ,
-                'attribute_id'    	=>  2,
-                'language'          => 'en',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Defense',
-                'name_short'        => 'DEF',
-            ),
-        ));
-
-        //french
-        $umil->table_row_insert( BB_LANGUAGE, array(
-            array(
-                // dps
-                'game_id'  		    => $this->game_id ,
-                'attribute_id'    	=>  0,
-                'language'          => 'fr',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Dégats',
-                'name_short'        => 'DPS',
-            ),
-            array(
-                // healer
-                'game_id'  		    => $this->game_id ,
-                'attribute_id'    	=> 1,
-                'language'          => 'fr',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Soigneur',
-                'name_short'        => 'HPS',
-            ),
-            array(
-                // tank
-                'game_id'  		    => $this->game_id ,
-                'attribute_id'    	=> 2,
-                'language'          => 'fr',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Défense',
-                'name_short'        => 'DEF',
-            ),
-        ));
-
-        //german
-        $umil->table_row_insert(BB_LANGUAGE, array(
-            array(
-                // dps
-                'game_id'  		    => $this->game_id ,
-                'attribute_id'    	=> 0,
-                'language'          => 'de',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Kämpfer',
-                'name_short'        => 'Schaden',
-            ),
-            array(
-                // healer
-                'game_id'  		    => $this->game_id ,
-                'attribute_id'    	=>  1,
-                'language'          => 'de',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Heiler',
-                'name_short'        => 'Heil',
-            ),
-            array(
-                // tank
-                'game_id'  		    => $this->game_id ,
-                'attribute_id'    	=>  2,
-                'language'          => 'de',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Verteidigung',
-                'name_short'        => 'Schutz',
-            ),
-        ));
-
-        //Italian
-        $umil->table_row_insert(BB_LANGUAGE, array(
-            array(
-                // dps
-                'game_id'  		    => $this->game_id ,
-                'attribute_id'    	=> 0,
-                'language'          => 'it',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Danni',
-                'name_short'        => 'Danni',
-            ),
-            array(
-                // healer
-                'game_id'  		    =>  $this->game_id ,
-                'attribute_id'    	=> 1,
-                'language'          => 'it',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Cura',
-                'name_short'        => 'Cura',
-            ),
-            array(
-                // tank
-                'game_id'  		    =>  $this->game_id ,
-                'attribute_id'    	=>  2,
-                'language'          => 'it',
-                'attribute'    	    => 'role',
-                'name'    	        => 'Difeza',
-                'name_short'        => 'Tank',
-            ),
-        ));
-
-    }
 
 }

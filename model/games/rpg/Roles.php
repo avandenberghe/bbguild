@@ -6,25 +6,13 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-
 namespace sajaki\bbdkp\model\games\rpg;
 
-$phpEx = substr(strrchr(__FILE__, '.'), 1);
-global $phpbb_root_path;
-
-// Include the abstract base
-if (!class_exists('\bbdkp\controller\games\Game'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
-}
 /**
- * Classes
- *
- * Manages all Game Classes
- *
- *   @package bbdkp
+ * Roles
+ * @package sajaki\bbdkp\model\games\rpg
  */
-class Roles extends \bbdkp\controller\games\Game
+class Roles // extends \sajaki\bbdkp\model\games\Game
 {
     /**
      * Primary key
@@ -46,7 +34,7 @@ class Roles extends \bbdkp\controller\games\Game
 
     /**
      * name of image file without extension
-     * @var unknown
+     * @var String
      */
     public $role_icon;
 
@@ -78,16 +66,6 @@ class Roles extends \bbdkp\controller\games\Game
 
     /**
      * gets 1 class from database
-     *
-     * CREATE TABLE `phpbb_bbdkp_gameroles` (
-     * `role_pkid` int(8) NOT NULL AUTO_INCREMENT,
-     * `game_id` varchar(10) COLLATE utf8_bin NOT NULL DEFAULT '',
-     * `role_id` int(8) NOT NULL DEFAULT '0',
-     * `role_color` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-     * `role_icon` varchar(255) COLLATE utf8_bin NOT NULL DEFAULT '',
-     * PRIMARY KEY (`role_pkid`),
-     * UNIQUE KEY `bbroles` (`game_id`,`role_id`)
-     * ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
      *
      */
     public function Get()
@@ -166,10 +144,9 @@ class Roles extends \bbdkp\controller\games\Game
         $cache->destroy ( 'sql', BB_GAMEROLE_TABLE );
     }
 
-
-
     /**
      * updates a class to database
+     * @param Roles $oldrole
      */
     public function Update(Roles $oldrole)
     {
@@ -246,13 +223,9 @@ class Roles extends \bbdkp\controller\games\Game
         $cache->destroy ( 'sql', BB_LANGUAGE );
     }
 
-
-
     /**
-     *
      * lists all roles
      * @param string $order
-     * @param int|number $mode
      * @return array
      */
     public function listroles($order= 'role_id')
