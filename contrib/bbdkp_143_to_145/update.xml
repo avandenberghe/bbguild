@@ -38,6 +38,7 @@
 		<copy>
 			<file from="root/includes/bbdkp/controller/guilds/Guilds.php" to="includes/bbdkp/controller/guilds/Guilds.php"/>
 		  <file from="root/includes/bbdkp/admin/admin.php" to="includes/bbdkp/admin/admin.php"/>
+			<file from="root/includes/bbdkp/views/viewNavigation.php" to="includes/bbdkp/views/viewNavigation.php"/>
 			<file from="root/install/*.*" to="install/*.*"/>
 		</copy>
 		<php-installer>install/index.php</php-installer>
