@@ -1,130 +1,4 @@
 <!-- INCLUDE overall_header.html -->
-
-<script  type="text/javascript">
-//<![CDATA[
-function check_form()
-{
-    if (document.getElementById('racename').value.length < 2)
-    {
-        alert('{MSG_NAME_EMPTY}');
-        return false;
-    }
-
-    if (document.getElementById('race_id').value.length < 1 )
-    {
-        alert('{MSG_RACE_EMPTY}');
-        return false;
-    }
-
-
-    return true;
-}
-
-/*  make a XMLHTTP Request object */
-function GetXmlHttpObject()
-{
-	var xmlhttp=false;
-
-	try
-	{
-		//  IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp=new XMLHttpRequest();
-	}
-	catch(e)
-	{	// activex code for IE6, IE5
-		try
-		{
-			xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
-		}
-		catch(e)
-		{
-			try
-			{
-				xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
-			}
-			catch(e1)
-			{
-				xmlhttp=false;
-			}
-		}
-	}
-	return xmlhttp;
-}
-
-/* ajax function to find faction array based on game */
-function Getfaction(game_id)
-{
-   xmlhttp = GetXmlHttpObject();
-   if (xmlhttp == null)
-   {
-	   alert("{LA_ALERT_OLDBROWSER}");
-	   return;
-   }
-    var strURL="{UA_FINDFACTION}&game_id="+game_id;
-    xmlhttp.onreadystatechange=stateChanged;
-    xmlhttp.open("GET", strURL, true);
-    // send to server
-    xmlhttp.send(null);
-}
-
-
-/* called from Getfaction when state changed */
-function stateChanged()
-{
-	if (xmlhttp.readyState==4) //request complete
-	{
-		if (xmlhttp.status == 200)
-		{
-			//receive xml
-			xmlDoc=xmlhttp.responseXML;
-			var factionlist = xmlDoc.getElementsByTagName('factionlist')[0];
-			var factions = factionlist.getElementsByTagName("faction")
-			//now modify html : first remove old select options
-			var rsel = document.getElementById('faction');
-			rsel.options.length = 0;
-			for (var i = 0; i < factions.length; i++)
-			{
-				var faction = factions[i];
-				var factionid = faction.getElementsByTagName("faction_id")[0].firstChild.nodeValue;
-				var factionname = faction.getElementsByTagName("faction_name")[0].firstChild.nodeValue;
-			    // add the options
-			    rsel.options[i] = new Option(factionname,factionid, true, false);
-			}
-		}
-		else
-		{
-   	   		alert("xx {LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
-	 	}
-	}
-}
-
-function isValidChar(char, e){
-
-    var txt = char;
-    var found = false;
-    var validChars = "0123456789"; //List of valid characters
-
-    for(j=0;j<txt.length;j++){ //Will look through the value of text
-        var c = txt.charAt(j);
-        found = false;
-        for(x=0;x<validChars.length;x++){
-            if(c==validChars.charAt(x)){
-                found=true;
-                break;
-            }
-        }
-        if(!found){
-            //If invalid character is found remove it and return the valid character(s).
-            document.getElementById(e).value = char.substring(0, char.length -1);
-            break;
-        }
-    }
-}
-
-//]]>
-
-</script>
-
 <a name="maincontent"></a>
 
 <h1>{L_ACP_ADDRACE}</h1>
@@ -201,5 +75,128 @@ function isValidChar(char, e){
 	</p>
 </div>
 </form>
+<script  type="text/javascript">
+    //<![CDATA[
+    function check_form()
+    {
+        if (document.getElementById('racename').value.length < 2)
+        {
+            alert('{MSG_NAME_EMPTY}');
+            return false;
+        }
 
+        if (document.getElementById('race_id').value.length < 1 )
+        {
+            alert('{MSG_RACE_EMPTY}');
+            return false;
+        }
+
+
+        return true;
+    }
+
+    /*  make a XMLHTTP Request object */
+    function GetXmlHttpObject()
+    {
+        var xmlhttp=false;
+
+        try
+        {
+            //  IE7+, Firefox, Chrome, Opera, Safari
+            xmlhttp=new XMLHttpRequest();
+        }
+        catch(e)
+        {	// activex code for IE6, IE5
+            try
+            {
+                xmlhttp= new ActiveXObject("Microsoft.XMLHTTP");
+            }
+            catch(e)
+            {
+                try
+                {
+                    xmlhttp = new ActiveXObject("Msxml2.XMLHTTP");
+                }
+                catch(e1)
+                {
+                    xmlhttp=false;
+                }
+            }
+        }
+        return xmlhttp;
+    }
+
+    /* ajax function to find faction array based on game */
+    function Getfaction(game_id)
+    {
+        xmlhttp = GetXmlHttpObject();
+        if (xmlhttp == null)
+        {
+            alert("{LA_ALERT_OLDBROWSER}");
+            return;
+        }
+        var strURL="{UA_FINDFACTION}&game_id="+game_id;
+        xmlhttp.onreadystatechange=stateChanged;
+        xmlhttp.open("GET", strURL, true);
+        // send to server
+        xmlhttp.send(null);
+    }
+
+
+    /* called from Getfaction when state changed */
+    function stateChanged()
+    {
+        if (xmlhttp.readyState==4) //request complete
+        {
+            if (xmlhttp.status == 200)
+            {
+                //receive xml
+                xmlDoc=xmlhttp.responseXML;
+                var factionlist = xmlDoc.getElementsByTagName('factionlist')[0];
+                var factions = factionlist.getElementsByTagName("faction")
+                //now modify html : first remove old select options
+                var rsel = document.getElementById('faction');
+                rsel.options.length = 0;
+                for (var i = 0; i < factions.length; i++)
+                {
+                    var faction = factions[i];
+                    var factionid = faction.getElementsByTagName("faction_id")[0].firstChild.nodeValue;
+                    var factionname = faction.getElementsByTagName("faction_name")[0].firstChild.nodeValue;
+                    // add the options
+                    rsel.options[i] = new Option(factionname,factionid, true, false);
+                }
+            }
+            else
+            {
+                alert("xx {LA_ALERT_AJAX}:\n" + xmlhttp.statusText);
+            }
+        }
+    }
+
+    function isValidChar(char, e){
+
+        var txt = char;
+        var found = false;
+        var validChars = "0123456789"; //List of valid characters
+
+        for(j=0;j<txt.length;j++){ //Will look through the value of text
+            var c = txt.charAt(j);
+            found = false;
+            for(x=0;x<validChars.length;x++){
+                if(c==validChars.charAt(x)){
+                    found=true;
+                    break;
+                }
+            }
+            if(!found){
+                //If invalid character is found remove it and return the valid character(s).
+                document.getElementById(e).value = char.substring(0, char.length -1);
+                break;
+            }
+        }
+    }
+
+    //]]>
+
+</script>
 <!-- INCLUDE overall_footer.html -->

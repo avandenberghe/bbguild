@@ -21,17 +21,17 @@
 }
 .farbtastic * {
   position: absolute;
-  cursor: crosshair;
+  cursor: crosshair !important;
 }
 .farbtastic, .farbtastic .wheel {
-  width: 195px;
-  height: 195px;
+  width: 100px;
+  height: 100px;
 }
 .farbtastic .color, .farbtastic .overlay {
-  top: 47px;
-  left: 47px;
-  width: 101px;
-  height: 101px;
+  top: 40px;
+  left: 40px;
+  width: 80px;
+  height: 80px;
 }
 .farbtastic .wheel {
   background: url(../../images/wheel.png) no-repeat;

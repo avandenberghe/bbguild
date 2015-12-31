@@ -1,18 +1,5 @@
 <!-- INCLUDE overall_header.html -->
 
-<script  type="text/javascript">
-//<![CDATA[
-function check_form()
-{
-    if (document.getElementById('factionname').value.length < 2)
-    {
-        alert('{MSG_NAME_EMPTY}');
-        return false;
-    }
-    return true;
-}
-//]]>
-</script>
 
 <!-- IF ! IS_ADD -->
 <h1>{L_EDIT_FACTION}</h1>
@@ -50,5 +37,18 @@ function check_form()
 
 </div>
 </form>
-
+<script  type="text/javascript">
+    //<![CDATA[
+    function check_form()
+    {
+        if (document.getElementById('factionname').value.length < 2)
+        {
+            alert('{MSG_NAME_EMPTY}');
+            return false;
+        }
+        return true;
+    }
+    //]]>
+</script>
 <!-- INCLUDE overall_footer.html -->
+
