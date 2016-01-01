@@ -9,6 +9,7 @@
  */
 
 namespace sajaki\bbdkp\model\points;
+use sajaki\bbdkp\model\points\Pool;
 
 /**
  * Class Points
@@ -17,6 +18,35 @@ namespace sajaki\bbdkp\model\points;
  *  transaction tables are centralised (phpbb_bbdkp_memberdkp)
  *  transaction tables : raid_detail, adjustments, items
  * @package sajaki\bbdkp\model\points
+ * @property int $member_id
+ * @property int $dkpid
+ * @property string $dksys_name
+ * @property float $raid_value
+ * @property float $time_bonus
+ * @property float $zerosum_bonus
+ * @property float $total_earned
+ * @property float $earned_decay
+ * @property float $earned_net
+ * @property float $spent
+ * @property float $item_decay
+ * @property float $item_net
+ * @property float $adjustment
+ * @property float $adj_decay
+ * @property float $adj_net
+ * @property float $total
+ * @property float $total_decayed
+ * @property float $total_net
+ * @property float $ep
+ * @property float $ep_net
+ * @property float $gp
+ * @property float $gp_net
+ * @property float $pr
+ * @property float $pr_net
+ * @property int $firstraid
+ * @property int $lastraid
+ * @property int $raidcount
+ * @property Pool $pool
+ *
  */
 class Points
 {
@@ -34,7 +64,7 @@ class Points
 
 	/**
 	 * name of dkp pool
-	 * @var unknown
+	 * @var string
 	 */
 	public $dksys_name;
 
@@ -175,13 +205,13 @@ class Points
 
 	/**
 	 * start date of this account
-	 * @var date
+	 * @var int
 	 */
 	public $firstraid;
 
 	/**
 	 * last raid recording
-	 * @var date
+	 * @var int
 	 */
 	public $lastraid;
 
@@ -193,7 +223,7 @@ class Points
 
 	/**
 	 * instance of Pool class
-	 * @var unknown_type
+	 * @var Pool
 	 */
 	public $pool;
 
@@ -204,19 +234,18 @@ class Points
      */
 	function __construct($member_id=0, $dkpid=0)
 	{
-		global $phpbb_root_path, $phpEx;
 
 		if($member_id > 0 && $dkpid > 0)
 		{
 			$this->member_id = $member_id;
 			$this->dkpid = $dkpid;
-			$this->pool = new \sajaki\bbdkp\model\points\Pool($dkpid);
+			$this->pool = new Pool($dkpid);
 			$this->read_account();
 		}
 		elseif  ($dkpid > 0)
 		{
 			$this->dkpid = $dkpid;
-			$this->pool = new \sajaki\bbdkp\model\points\Pool($dkpid);
+			$this->pool = new Pool($dkpid);
 		}
 
 	}
