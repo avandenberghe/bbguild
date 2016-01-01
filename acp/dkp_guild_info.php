@@ -21,7 +21,7 @@ class dkp_guild_info
 	{
 		return array(
             'filename'	=> '\sajaki\bbdkp\acp\dkp_guild_module',
-			'title'		=> 'ACP_DKP_GUILD',
+			'title'		=> 'ACP_DKP_MEMBER',
 			'version'	=> '2.0.0',
 			'modes'		=> array(
 				'addguild'	    => array('title' => 'ACP_DKP_GUILD_ADD', 'auth' => 'acl_a_dkp', 'cat' => array('ACP_DKP_MEMBER'), 'display' => false),

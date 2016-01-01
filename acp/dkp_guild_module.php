@@ -2,7 +2,6 @@
 /**
  * Guild ACP file
  *
- *
  * @package bbdkp v2.0
  * @copyright 2015 bbdkp <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
@@ -10,38 +9,17 @@
  */
 
 namespace sajaki\bbdkp\acp;
-
-// Include the base class
-if (!class_exists('\bbdkp\admin\Admin'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
-}
-
-// include ranks class
-if (!class_exists('\bbdkp\controller\guilds\Ranks'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
-}
-
-if (!class_exists('\bbdkp\controller\games\Game'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
-}
-
-//include the guilds class
-if (!class_exists('\bbdkp\controller\guilds\Guilds'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
-}
-
-use \bbdkp\controller\guilds\Guilds;
+use sajaki\bbdkp\model\admin\Admin;
+use sajaki\bbdkp\model\games\Game;
+use sajaki\bbdkp\model\player\Guilds;
+use sajaki\bbdkp\model\player\Ranks;
 
 /**
  * This class manages guilds
  *
  *   @package bbdkp
  */
-class dkp_guild_module
+class dkp_guild_module extends Admin
 {
     /**
      * url action
@@ -56,41 +34,34 @@ class dkp_guild_module
     public $link = ' ';
 
     /**
-     * current rul
+     * current url
      * @var string
      */
     public  $url_id;
 
     /**
-     * main acp function
-     * @param integer $id
-     * @param string $mode
+     * ACP guild function
+     * @param int $id the id of the node who parent has to be returned by function
+     * @param int $mode id of the submenu
      */
     public function main ($id, $mode)
     {
         global $user, $template, $db, $phpbb_admin_path, $phpEx;
-        $this->tpl_name = 'dkp/acp_' . $mode;
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds") . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
+        global $request, $phpbb_container;
+        $form_key = 'sajaki/bbdkp';
+        add_form_key ( $form_key );
+        $this->tpl_name = 'acp_' . $mode;
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=listguilds') . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
 
         switch ($mode)
         {
-            /***************************************
-             List Guilds
-            ***************************************/
             case 'listguilds':
-
                 $this->BuildTemplateListGuilds();
                 break;
-
-            /*************************************
-             *  Add Guild
-             *************************************/
             case 'addguild':
-
                 $addguild = new Guilds();
 
-                $add = (isset($_POST['newguild'])) ? true : false;
-                if ($add)
+                if ($request->is_set_post('newguild'))
                 {
                     $this->AddGuild($addguild);
                 }
@@ -112,7 +83,6 @@ class dkp_guild_module
                             'SELECTED' => ($addguild->game_id == $key) ? ' selected="selected"' : '' ,
                             'OPTION' => (! empty($gamename)) ? $gamename : '(None)'));
                     }
-
                 }
                 else
                 {
@@ -123,36 +93,25 @@ class dkp_guild_module
                     'F_ENABLEARMORY'	=> $addguild->armory_enabled,
                     'RECSTATUS'         => true,
                 ));
-
-
                 $this->page_title = $user->lang['ACP_ADDGUILD'];
-
-                $form_key = 'addguild';
-                add_form_key($form_key);
-
                 break;
-
-            /*************************************
-             *  Edit Guild
-             *************************************/
             case 'editguild':
 
-                $this->url_id = request_var(URI_GUILD, 0);
+                $this->url_id = $request->variable(URI_GUILD, 0);
                 $updateguild = new Guilds($this->url_id);
-                $memberadd = (isset($_POST['memberadd'])) ? true : false;
-                if ($memberadd)
+                if ($request->is_set_post('memberadd'))
                 {
-                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;" . URI_GUILD . "=" . $this->url_id  ));
+                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_addmember&amp;' . URI_GUILD . "=" . $this->url_id  ));
                 }
 
-                $action = request_var('action', '');
+                $action = $request->variable('action', '');
                 switch($action)
                 {
                     case 'guildranks':
-                        $updaterank = (isset($_POST['updaterank'])) ? true : false;
-                        $deleterank = (isset($_GET['deleterank'])) ? true : false;
-                        $addrank = (isset($_POST['addrank'])) ? true : false;
-                        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildranks&amp;" . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
+                        $updaterank = $request->is_set_post('updaterank');
+                        $deleterank = ($request->variable('deleterank', '')) != '' ? true : false;
+                        $addrank = $request->is_set_post('addrank');
+                        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
                         if ($updaterank || $addrank)
                         {
                             if (! check_form_key('editguildranks'))
@@ -182,22 +141,17 @@ class dkp_guild_module
                         break;
 
                     default:
-                        $submit = (isset($_POST['updateguild'])) ? true : false;
-                        $delete = (isset($_POST['deleteguild'])) ? true : false;
-                        $armory = (isset($_POST['armory'])) ? true : false;
-                        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildedit&amp;" . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
+                        $submit = ($request->is_set_post('updateguild')) ? true : false;
+                        $delete = ($request->is_set_post('deleteguild')) ? true : false;
+                        $armory = ($request->is_set_post('armory')) ? true : false;
+                        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildedit&amp;' . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
                         // POST check
-
                         if ($submit)
                         {
-                            if (! check_form_key('editguild'))
+                            if (! check_form_key('sajaki/bbdkp'))
                             {
-                                trigger_error('FORM_INVALID');
+                                trigger_error('FORM_INVALID', E_USER_NOTICE);
                             }
-                        }
-
-                        if ($submit)
-                        {
                             $this->UpdateGuild($updateguild, false);
                         }
 
@@ -225,25 +179,26 @@ class dkp_guild_module
     }
 
     /**
-     * @param $addguild
+     * @param Guilds $addguild
      */
-    private function AddGuild(\bbdkp\controller\guilds\Guilds $addguild)
+    private function AddGuild(\sajaki\bbdkp\model\Player\Guilds $addguild)
     {
-        global $user;
+        global $user, $request;
 
-        if (!check_form_key('addguild')) {
+        if (!check_form_key('sajaki/bbdkp'))
+        {
             trigger_error('FORM_INVALID');
         }
 
-        $addguild->name = utf8_normalize_nfc(request_var('guild_name', '', true));
-        $addguild->realm = utf8_normalize_nfc(request_var('realm', '', true));
-        $addguild->region = request_var('region_id', '');
-        $addguild->game_id = request_var('game_id', '');
-        $addguild->showroster = (isset($_POST['showroster'])) ? true : false;
-        $addguild->min_armory = request_var('min_armorylevel', 0);
-        $addguild->armory_enabled = request_var('armory_enabled', 0);
-        $addguild->recstatus = request_var('switchon_recruitment', 0);
-        $addguild->recruitforum = request_var('recruitforum', 0);
+        $addguild->name = $request->variable('guild_name', '', true);
+        $addguild->realm = $request->variable('realm', '', true);
+        $addguild->region = $request->variable('region_id', '');
+        $addguild->game_id = $request->variable('game_id', '');
+        $addguild->showroster = $request->is_set_post('showroster');
+        $addguild->min_armory = $request->variable('min_armorylevel', 0);
+        $addguild->armory_enabled = $request->variable('armory_enabled', 0);
+        $addguild->recstatus = $request->variable('switchon_recruitment', 0);
+        $addguild->recruitforum = $request->variable('recruitforum', 0);
 
         if ($addguild->MakeGuild() == true)
         {
@@ -261,10 +216,10 @@ class dkp_guild_module
      * update the default flag
      * @param $updateguild
      */
-    private function UpdateDefaultGuild(\bbdkp\controller\guilds\Guilds $updateguild)
+    private function UpdateDefaultGuild(\sajaki\bbdkp\model\Player\Guilds $updateguild)
     {
-        global $user;
-        $id = request_var('defaultguild', 0);
+        global $user, $request;
+        $id = $request->variable('defaultguild', 0);
         $updateguild->update_guilddefault($id);
         $success_message = sprintf($user->lang['ADMIN_UPDATE_GUILD_SUCCESS'], $id);
         trigger_error($success_message . $this->link, E_USER_NOTICE);
@@ -275,27 +230,27 @@ class dkp_guild_module
      * @param $updateArmory
      * @return void
      */
-    private function UpdateGuild(\bbdkp\controller\guilds\Guilds $updateguild, $updateArmory)
+    private function UpdateGuild(\sajaki\bbdkp\model\Player\Guilds $updateguild, $updateArmory)
     {
-        global $user;
+        global $user, $request;
 
         $updateguild->guildid = $this->url_id;
         $updateguild->Getguild();
-        $old_guild = new \bbdkp\controller\guilds\Guilds($this->url_id);
+        $old_guild = new \sajaki\bbdkp\model\Player\Guilds($this->url_id);
         $old_guild->Getguild();
 
-        $updateguild->game_id = request_var('game_id', '');
-        $updateguild->name = utf8_normalize_nfc(request_var('guild_name', '', true));
-        $updateguild->realm = utf8_normalize_nfc(request_var('realm', '', true));
-        $updateguild->region = request_var('region_id', ' ');
-        $updateguild->showroster = request_var('showroster', 0);
-        $updateguild->min_armory = request_var('min_armorylevel', 0);
-        $updateguild->recstatus = request_var('switchon_recruitment', 0);
-        $updateguild->armory_enabled = request_var('armory_enabled', 0);
-        $updateguild->recruitforum = request_var('recruitforum', 0);
+        $updateguild->game_id = $request->variable('game_id', '');
+        $updateguild->name = $request->variable('guild_name', '', true);
+        $updateguild->realm = $request->variable('realm', '', true);
+        $updateguild->region = $request->variable('region_id', ' ');
+        $updateguild->showroster = $request->variable('showroster', 0);
+        $updateguild->min_armory = $request->variable('min_armorylevel', 0);
+        $updateguild->recstatus = $request->variable('switchon_recruitment', 0);
+        $updateguild->armory_enabled = $request->variable('armory_enabled', 0);
+        $updateguild->recruitforum = $request->variable('recruitforum', 0);
 
         //in the request we expect the file name here including extension, no path
-        $updateguild->emblempath = "images/bbdkp/guildemblem/". utf8_normalize_nfc(request_var('guild_emblem', '', true));
+        $updateguild->emblempath = $this->ext_path . "images/guildemblem/". $request->variable('guild_emblem', '', true);
 
         $updateguild->aionlegionid = 0;
         $updateguild->aionserverid = 0;
@@ -325,13 +280,13 @@ class dkp_guild_module
      * delete a guild
      * @param $updateguild
      */
-    private function DeleteGuild(\bbdkp\controller\guilds\Guilds $updateguild)
+    private function DeleteGuild(\sajaki\bbdkp\model\Player\Guilds $updateguild)
     {
+        global $user, $template, $request;
 
-        global $user, $template;
         if (confirm_box(true))
         {
-            $deleteguild = new \bbdkp\controller\guilds\Guilds(request_var('guildid', 0));
+            $deleteguild = new \sajaki\bbdkp\model\Player\Guilds($request->variable('guildid', 0));
             $deleteguild->Getguild();
             $deleteguild->Guildelete();
             $success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guildid);
@@ -356,17 +311,17 @@ class dkp_guild_module
      * Add a guild rank
      * @param $updateguild
      */
-    private function AddRank(\bbdkp\controller\guilds\Guilds $updateguild)
+    private function AddRank(\sajaki\bbdkp\model\Player\Guilds $updateguild)
     {
-        global $user;
+        global $request, $user;
 
-        $newrank = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
-        $newrank->RankName = utf8_normalize_nfc(request_var('nrankname', '', true));
-        $newrank->RankId = request_var('nrankid', 0);
+        $newrank = new \sajaki\bbdkp\model\Player\Ranks($updateguild->guildid);
+        $newrank->RankName = $request->variable('nrankname', '', true);
+        $newrank->RankId = $request->variable('nrankid', 0);
         $newrank->RankGuild = $updateguild->guildid;
-        $newrank->RankHide = (isset($_POST['nhide'])) ? 1 : 0;
-        $newrank->RankPrefix = utf8_normalize_nfc(request_var('nprefix', '', true));
-        $newrank->RankSuffix = utf8_normalize_nfc(request_var('nsuffix', '', true));
+        $newrank->RankHide = $request->is_set_post('nhide');
+        $newrank->RankPrefix = $request->variable('nprefix', '', true);
+        $newrank->RankSuffix = $request->variable('nsuffix', '', true);
         $newrank->Makerank();
         $success_message = $user->lang['ADMIN_RANKS_ADDED_SUCCESS'];
         trigger_error($success_message . $this->link);
@@ -378,14 +333,14 @@ class dkp_guild_module
      *
      * @return int|string
      */
-    private function UpdateRank(\bbdkp\controller\guilds\Guilds $updateguild)
+    private function UpdateRank(\sajaki\bbdkp\model\Player\Guilds $updateguild)
     {
-        global $user;
-        $newrank = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
-        $oldrank = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
+        global $request, $user;
+        $newrank = new \sajaki\bbdkp\model\Player\Ranks($updateguild->guildid);
+        $oldrank = new \sajaki\bbdkp\model\Player\Ranks($updateguild->guildid);
 
         // template
-        $modrank = utf8_normalize_nfc(request_var('ranks', array(0 => ''), true));
+        $modrank = $request->variable('ranks', array(0 => ''), true);
         foreach ($modrank as $rank_id => $rank_name)
         {
             $oldrank->RankId = $rank_id;
@@ -397,10 +352,10 @@ class dkp_guild_module
             $newrank->RankName = $rank_name;
             $newrank->RankHide = (isset($_POST['hide'][$rank_id])) ? 1 : 0;
 
-            $rank_prefix = utf8_normalize_nfc(request_var('prefix', array((int) $rank_id => ''), true));
+            $rank_prefix = $request->variable('prefix', array((int) $rank_id => ''), true);
             $newrank->RankPrefix = $rank_prefix[$rank_id];
 
-            $rank_suffix = utf8_normalize_nfc(request_var('suffix', array((int) $rank_id => ''), true));
+            $rank_suffix = $request->variable('suffix', array((int) $rank_id => ''), true);
             $newrank->RankSuffix = $rank_suffix[$rank_id];
 
             // compare old with new,
@@ -419,22 +374,22 @@ class dkp_guild_module
      */
     private function DeleteRank()
     {
-        global $user;
+        global $request, $user;
 
         if (confirm_box(true))
         {
-            $guildid = request_var('hidden_guildid', 0);
-            $rank_id = request_var('hidden_rank_id', 999);
-            $deleterank = new \bbdkp\controller\guilds\Ranks($guildid, $rank_id);
+            $guildid = $request->variable('hidden_guildid', 0);
+            $rank_id = $request->variable('hidden_rank_id', 999);
+            $deleterank = new \sajaki\bbdkp\model\Player\Ranks($guildid, $rank_id);
             $deleterank->Rankdelete(false);
         }
         else
         {
             // delete the rank only if there are no members left
-            $rank_id = request_var('ranktodelete', 999);
-            $guildid = request_var(URI_GUILD, 0);
-            $old_guild = new \bbdkp\controller\guilds\Guilds($guildid);
-            $deleterank = new \bbdkp\controller\guilds\Ranks($guildid, $rank_id);
+            $rank_id = $request->variable('ranktodelete', 999);
+            $guildid = $request->variable(URI_GUILD, 0);
+            $old_guild = new \sajaki\bbdkp\model\Player\Guilds($guildid);
+            $deleterank = new \sajaki\bbdkp\model\Player\Ranks($guildid, $rank_id);
 
             $s_hidden_fields = build_hidden_fields(array(
                 'deleterank' => true,
@@ -442,8 +397,7 @@ class dkp_guild_module
                 'hidden_guildid' => $guildid
             ));
 
-            confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_RANKS'],
-                $deleterank->RankName, $old_guild->name), $s_hidden_fields);
+            confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_RANKS'], $deleterank->RankName, $old_guild->name), $s_hidden_fields);
         }
     }
 
@@ -477,7 +431,7 @@ class dkp_guild_module
             trigger_error('ERROR_NOGAMES', E_USER_WARNING);
         }
 
-        $game          = new \bbdkp\controller\games\Game;
+        $game          = new \sajaki\bbdkp\model\games\Game;
         $game->game_id = $updateguild->game_id;
         $game->Get();
 
@@ -506,10 +460,11 @@ class dkp_guild_module
             'EMBLEM'             => $updateguild->emblempath,
             'EMBLEMFILE'         => basename($updateguild->emblempath),
 
-            'U_EDIT_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=editguild&amp;" . URI_GUILD . '=' . $updateguild->guildid),
-            'U_EDIT_GUILDRANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildranks&amp;" . URI_GUILD . '=' . $updateguild->guildid),
-            'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildrecruitment&amp;" . URI_GUILD . '=' . $updateguild->guildid)
+            'U_EDIT_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", '"i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $updateguild->guildid),
+            'U_EDIT_GUILDRANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildranks&amp;'. URI_GUILD . '=' . $updateguild->guildid),
+            'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . URI_GUILD . '=' . $updateguild->guildid)
         ));
+
         // extra
         if ($updateguild->game_id == 'wow')
         {
@@ -533,7 +488,7 @@ class dkp_guild_module
     {
         global $phpEx, $template, $db, $phpbb_admin_path, $user;
         // everything from rank 90 is readonly
-        $listranks          = new \bbdkp\controller\guilds\Ranks($updateguild->guildid);
+        $listranks          = new \sajaki\bbdkp\model\player\Ranks($updateguild->guildid);
         $listranks->game_id = $updateguild->game_id;
         $result             = $listranks->listranks();
         while ($row = $db->sql_fetchrow($result))
@@ -547,12 +502,12 @@ class dkp_guild_module
                 'RANK_SUFFIX'   => $suffix,
                 'HIDE_CHECKED'  => ($row['rank_hide'] == 1) ? 'checked="checked"' : '',
                 'S_READONLY'    => ($row['rank_id'] >= 90) ? true : false,
-                'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;deleterank=1&amp;ranktodelete=" . $row['rank_id'] . "&amp;" . URI_GUILD . "=" . $updateguild->guildid)
+                'U_DELETE_RANK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;deleterank=1&amp;ranktodelete=' . $row['rank_id'] . "&amp;" . URI_GUILD . "=" . $updateguild->guildid)
             ));
         }
         $db->sql_freeresult($result);
 
-        $game          = new \bbdkp\controller\games\Game;
+        $game          = new \sajaki\bbdkp\model\games\Game;
         $game->game_id = $updateguild->game_id;
         $game->Get();
 
@@ -564,7 +519,7 @@ class dkp_guild_module
             'GAME_ID'            => $updateguild->game_id,
             'GUILDID'            => $updateguild->guildid,
             'GUILD_NAME'         => $updateguild->name,
-            'U_ADD_RANK'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;addrank=1&amp;guild=" . $updateguild->guildid),
+            'U_ADD_RANK'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;addrank=1&amp;guild=' . $updateguild->guildid),
             // Language
             'L_TITLE'            => ($this->url_id < 0) ? $user->lang['ACP_ADDGUILD'] : $user->lang['ACP_EDITGUILD'],
             'L_EXPLAIN'          => ($this->url_id < 0) ? $user->lang['ACP_ADDGUILD_EXPLAIN'] : $user->lang['ACP_EDITGUILD_EXPLAIN'],
@@ -574,9 +529,9 @@ class dkp_guild_module
             'EMBLEM'             => $updateguild->emblempath,
             'EMBLEMFILE'         => basename($updateguild->emblempath),
             'S_ADD'              => ($this->url_id < 0) ? true : false,
-            'U_EDIT_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=editguild&amp;" . URI_GUILD . '=' . $updateguild->guildid),
-            'U_EDIT_GUILDRANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildranks&amp;" . URI_GUILD . '=' . $updateguild->guildid),
-            'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;action=guildrecruitment&amp;" . URI_GUILD . '=' . $updateguild->guildid)
+            'U_EDIT_GUILD'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $updateguild->guildid),
+            'U_EDIT_GUILDRANKS'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . URI_GUILD . '=' . $updateguild->guildid),
+            'U_EDIT_GUILDRECRUITMENT'   => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . URI_GUILD . '=' . $updateguild->guildid)
         ));
 
         $form_key = 'editguildranks';
@@ -590,12 +545,13 @@ class dkp_guild_module
      */
     private function BuildTemplateListGuilds()
     {
-        global $user, $template, $phpbb_admin_path, $phpEx, $db;
+        global $user, $template, $phpbb_admin_path, $phpEx, $db, $request;
         if (count($this->games) == 0)
         {
             trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
         }
-        $updateguild = new \bbdkp\controller\guilds\Guilds();
+
+        $updateguild = new \sajaki\bbdkp\model\Player\Guilds();
         $guildlist   = $updateguild->guildlist(1);
         foreach ($guildlist as $g)
         {
@@ -612,8 +568,9 @@ class dkp_guild_module
         $guildadd = (isset($_POST['addguild'])) ? true : false;
         if ($guildadd)
         {
-            redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=addguild"));
+            redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=addguild'));
         }
+
         $sort_order = array(
             0 => array('id', 'id desc'),
             1 => array('name', 'name desc'),
@@ -625,7 +582,8 @@ class dkp_guild_module
         $previous_data   = '';
         $sort_index      = explode('.', $current_order['uri']['current']);
         $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
-        $show_all        = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
+        $show_all        = ((isset($_GET['show'])) && $request->variable('show', '') == 'all') ? true : false;
+
         $sql = 'SELECT id, name, realm, region, roster, game_id FROM ' . GUILD_TABLE . ' WHERE id > 0 ORDER BY ' . $current_order['sql'];
         if (!($guild_result = $db->sql_query($sql)))
         {
@@ -635,7 +593,7 @@ class dkp_guild_module
         while ($row = $db->sql_fetchrow($guild_result))
         {
             $guild_count++;
-            $listguild = new \bbdkp\controller\guilds\Guilds($row['id']);
+            $listguild = new \sajaki\bbdkp\model\Player\Guilds($row['id']);
             $template->assign_block_vars('guild_row', array(
                     'ID'           => $listguild->guildid,
                     'NAME'         => $listguild->name,
@@ -644,7 +602,7 @@ class dkp_guild_module
                     'GAME'         => $listguild->game_id,
                     'MEMBERCOUNT'  => $listguild->membercount,
                     'SHOW_ROSTER'  => ($listguild->showroster == 1 ? 'yes' : 'no'),
-                    'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $listguild->guildid)
+                    'U_VIEW_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $listguild->guildid)
                 )
             );
             $previous_data = $row[$previous_source];
@@ -652,9 +610,9 @@ class dkp_guild_module
         $form_key = 'listguilds';
         add_form_key($form_key);
         $template->assign_vars(array(
-            'U_GUILDLIST'            => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=listguilds',
-            'U_ADDGUILD'             => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=addguild',
-            'U_GUILD'                => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild") . '&amp;mode=editguild',
+            'U_GUILDLIST'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module') . '&amp;mode=listguilds',
+            'U_ADDGUILD'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module') . '&amp;mode=addguild',
+            'U_GUILD'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module') . '&amp;mode=editguild',
             'L_TITLE'                => $user->lang['ACP_LISTGUILDS'],
             'L_EXPLAIN'              => $user->lang['ACP_LISTGUILDS_EXPLAIN'],
             'BUTTON_VALUE'           => $user->lang['DELETE_SELECTED_GUILDS'],
@@ -663,7 +621,7 @@ class dkp_guild_module
             'O_REALM'                => $current_order['uri'][2],
             'O_REGION'               => $current_order['uri'][3],
             'O_ROSTER'               => $current_order['uri'][4],
-            'U_LIST_GUILD'           => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=listguilds"),
+            'U_LIST_GUILD'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=listguilds'),
             'GUILDMEMBERS_FOOTCOUNT' => sprintf($user->lang['GUILD_FOOTCOUNT'], $guild_count)));
         $this->page_title = 'ACP_LISTGUILDS';
     }
