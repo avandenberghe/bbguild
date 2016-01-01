@@ -181,7 +181,7 @@ class dkp_guild_module extends Admin
     /**
      * @param Guilds $addguild
      */
-    private function AddGuild(\sajaki\bbdkp\model\Player\Guilds $addguild)
+    private function AddGuild(Guilds $addguild)
     {
         global $user, $request;
 
@@ -216,7 +216,7 @@ class dkp_guild_module extends Admin
      * update the default flag
      * @param $updateguild
      */
-    private function UpdateDefaultGuild(\sajaki\bbdkp\model\Player\Guilds $updateguild)
+    private function UpdateDefaultGuild(Guilds $updateguild)
     {
         global $user, $request;
         $id = $request->variable('defaultguild', 0);
@@ -230,13 +230,13 @@ class dkp_guild_module extends Admin
      * @param $updateArmory
      * @return void
      */
-    private function UpdateGuild(\sajaki\bbdkp\model\Player\Guilds $updateguild, $updateArmory)
+    private function UpdateGuild(Guilds $updateguild, $updateArmory)
     {
         global $user, $request;
 
         $updateguild->guildid = $this->url_id;
         $updateguild->Getguild();
-        $old_guild = new \sajaki\bbdkp\model\Player\Guilds($this->url_id);
+        $old_guild = new Guilds($this->url_id);
         $old_guild->Getguild();
 
         $updateguild->game_id = $request->variable('game_id', '');
@@ -280,13 +280,13 @@ class dkp_guild_module extends Admin
      * delete a guild
      * @param $updateguild
      */
-    private function DeleteGuild(\sajaki\bbdkp\model\Player\Guilds $updateguild)
+    private function DeleteGuild(Guilds $updateguild)
     {
         global $user, $template, $request;
 
         if (confirm_box(true))
         {
-            $deleteguild = new \sajaki\bbdkp\model\Player\Guilds($request->variable('guildid', 0));
+            $deleteguild = new Guilds($request->variable('guildid', 0));
             $deleteguild->Getguild();
             $deleteguild->Guildelete();
             $success_message = sprintf($user->lang['ADMIN_DELETE_GUILD_SUCCESS'], $deleteguild->guildid);
@@ -311,11 +311,11 @@ class dkp_guild_module extends Admin
      * Add a guild rank
      * @param $updateguild
      */
-    private function AddRank(\sajaki\bbdkp\model\Player\Guilds $updateguild)
+    private function AddRank(Guilds $updateguild)
     {
         global $request, $user;
 
-        $newrank = new \sajaki\bbdkp\model\Player\Ranks($updateguild->guildid);
+        $newrank = new Ranks($updateguild->guildid);
         $newrank->RankName = $request->variable('nrankname', '', true);
         $newrank->RankId = $request->variable('nrankid', 0);
         $newrank->RankGuild = $updateguild->guildid;
@@ -333,11 +333,11 @@ class dkp_guild_module extends Admin
      *
      * @return int|string
      */
-    private function UpdateRank(\sajaki\bbdkp\model\Player\Guilds $updateguild)
+    private function UpdateRank(Guilds $updateguild)
     {
         global $request, $user;
-        $newrank = new \sajaki\bbdkp\model\Player\Ranks($updateguild->guildid);
-        $oldrank = new \sajaki\bbdkp\model\Player\Ranks($updateguild->guildid);
+        $newrank = new Ranks($updateguild->guildid);
+        $oldrank = new Ranks($updateguild->guildid);
 
         // template
         $modrank = $request->variable('ranks', array(0 => ''), true);
@@ -380,7 +380,7 @@ class dkp_guild_module extends Admin
         {
             $guildid = $request->variable('hidden_guildid', 0);
             $rank_id = $request->variable('hidden_rank_id', 999);
-            $deleterank = new \sajaki\bbdkp\model\Player\Ranks($guildid, $rank_id);
+            $deleterank = new Ranks($guildid, $rank_id);
             $deleterank->Rankdelete(false);
         }
         else
@@ -388,8 +388,8 @@ class dkp_guild_module extends Admin
             // delete the rank only if there are no members left
             $rank_id = $request->variable('ranktodelete', 999);
             $guildid = $request->variable(URI_GUILD, 0);
-            $old_guild = new \sajaki\bbdkp\model\Player\Guilds($guildid);
-            $deleterank = new \sajaki\bbdkp\model\Player\Ranks($guildid, $rank_id);
+            $old_guild = new Guilds($guildid);
+            $deleterank = new Ranks($guildid, $rank_id);
 
             $s_hidden_fields = build_hidden_fields(array(
                 'deleterank' => true,
@@ -431,7 +431,7 @@ class dkp_guild_module extends Admin
             trigger_error('ERROR_NOGAMES', E_USER_WARNING);
         }
 
-        $game          = new \sajaki\bbdkp\model\games\Game;
+        $game          = new Game;
         $game->game_id = $updateguild->game_id;
         $game->Get();
 
@@ -488,7 +488,7 @@ class dkp_guild_module extends Admin
     {
         global $phpEx, $template, $db, $phpbb_admin_path, $user;
         // everything from rank 90 is readonly
-        $listranks          = new \sajaki\bbdkp\model\player\Ranks($updateguild->guildid);
+        $listranks          = new Ranks($updateguild->guildid);
         $listranks->game_id = $updateguild->game_id;
         $result             = $listranks->listranks();
         while ($row = $db->sql_fetchrow($result))
@@ -507,7 +507,7 @@ class dkp_guild_module extends Admin
         }
         $db->sql_freeresult($result);
 
-        $game          = new \sajaki\bbdkp\model\games\Game;
+        $game          = new Game;
         $game->game_id = $updateguild->game_id;
         $game->Get();
 
@@ -551,7 +551,7 @@ class dkp_guild_module extends Admin
             trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
         }
 
-        $updateguild = new \sajaki\bbdkp\model\Player\Guilds();
+        $updateguild = new Guilds();
         $guildlist   = $updateguild->guildlist(1);
         foreach ($guildlist as $g)
         {
@@ -593,7 +593,7 @@ class dkp_guild_module extends Admin
         while ($row = $db->sql_fetchrow($guild_result))
         {
             $guild_count++;
-            $listguild = new \sajaki\bbdkp\model\Player\Guilds($row['id']);
+            $listguild = new Guilds($row['id']);
             $template->assign_block_vars('guild_row', array(
                     'ID'           => $listguild->guildid,
                     'NAME'         => $listguild->name,
