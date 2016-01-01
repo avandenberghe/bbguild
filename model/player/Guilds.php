@@ -289,7 +289,7 @@ class Guilds extends Admin
 	 */
 	public function MakeGuild()
 	{
-		global $cache, $user, $db, $phpEx, $phpbb_root_path;
+		global $cache, $user, $db;
 
 		if ($this->name == null || $this->realm == null)
 		{
@@ -372,7 +372,7 @@ class Guilds extends Admin
      */
 	public function Guildupdate(Guilds $old_guild, $params)
 	{
-		global $user, $cache, $db, $phpEx, $phpbb_root_path;
+		global $user, $cache, $db;
         $apiupdate=true;
 
         $cache->destroy('sql', GUILD_TABLE);
@@ -973,7 +973,7 @@ class Guilds extends Admin
         )
         {
             //available extra fields : 'members', 'achievements','news'
-            $api  = new BattleNet('guild', $this->region, $game->getApikey(), $game->getApilocale(), $game->getPrivkey());
+            $api  = new BattleNet('guild', $this->region, $game->getApikey(), $game->getApilocale(), $game->getPrivkey(), $this->ext_path);
             $data = $api->Guild->getGuild($this->name, $this->realm, $params);
             $data = $data['response'];
             unset($api);
