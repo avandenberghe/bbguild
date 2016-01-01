@@ -18,7 +18,6 @@ use sajaki\bbdkp\model\wowapi\BattleNet;
 /**
  * Manages Guild creation
  * @package sajaki\bbdkp\model\player
- * @property mixed $regular regular read/write property
  * @property int $game_id
  * @property int $guildid
  * @property string $name
