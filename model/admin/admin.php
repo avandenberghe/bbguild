@@ -10,6 +10,11 @@
  */
 
 namespace sajaki\bbdkp\model\admin;
+use sajaki\bbdkp\model\games\Game;
+use phpbb\extension\metadata_manager;
+use phpbb\version_helper;
+use sajaki\bbdkp\model\admin\log;
+use phpbb\file_downloader;
 
 /**
  *
@@ -18,7 +23,6 @@ namespace sajaki\bbdkp\model\admin;
  */
 class Admin
 {
-    private $phpbb_root_path;
 
     /**
      * bbdkp timestamp
@@ -92,18 +96,10 @@ class Admin
             'it' => $user->lang['LANG_IT']
         );
 
-        $a = $user;
-
         $boardtime = getdate(time() + $user->timezone + $user->timezone->getOffset(new \DateTime('UTC')));
-
-        //$boardtime = (!empty($user->time_now) && is_int($user->time_now)) ? $user->time_now : time();
         $this->time = $boardtime[0];
 
-        if (!class_exists('\sajaki\bbdkp\model\games\Game'))
-        {
-            require("{$this->ext_path}/model/games/Game.$phpEx");
-        }
-        $listgames = new \sajaki\bbdkp\model\games\Game;
+        $listgames = new Game;
         $this->games = $listgames->games;
         unset($listgames);
     }
@@ -131,16 +127,14 @@ class Admin
 
     /**
      * connects to remote site and gets xml or html using Curl
-     * @param char $url
-     * @param bool $return_Server_Response_Header default false
-     * @param bool $loud default false
-     * @param bool $json default true
-     * @return array response
+     * @param $url
+     * @param bool $return_Server_Response_Header
+     * @param bool $loud
+     * @param bool $json
+     * @return array
      */
     public final function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
     {
-
-        global $user;
 
         $data = array(
             'response'		    => '',
@@ -202,7 +196,7 @@ class Admin
 
     /**
      * @param $string
-     * @return boolcheck if is json
+     * @return bool check if is json
      */
     function isJSON($string){
         return is_string($string) && is_object(json_decode($string)) && (json_last_error() == JSON_ERROR_NONE) ? true : false;
@@ -231,18 +225,15 @@ class Admin
         curl_setopt( $ch, CURLOPT_POST, 4 );
         curl_setopt( $ch, CURLOPT_HEADER , false);
         curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields_string );
-        $result = curl_exec($ch);
+        curl_exec($ch);
         curl_close( $ch );
 
         $this->get_register_request($rndhash);
     }
 
-
     /**
      * GET requests for registration ID
-     * @param array $regdata
-     * @param string $url
-     * @param string $regcode
+     * @param $regcode
      */
     private final function get_register_request($regcode)
     {
@@ -255,14 +246,12 @@ class Admin
         trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
     }
 
-
     /**
      * retrieve latest bbdkp productversion
-     * @param string $product productname
-     * @param bool $force_update Ignores cached data. Defaults to false.
+     * @param bool $force_update  Ignores cached data. Defaults to false.
      * @param bool $warn_fail Trigger a warning if obtaining the latest version information fails. Defaults to false.
-     * @param int $ttl Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
-     * @return string | false Version info on success, false on failure.
+     * @param int $ttl  Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
+     * @return bool
      */
     public final function get_productversion($force_update = false, $warn_fail = false, $ttl = 86400)
     {
@@ -296,7 +285,7 @@ class Admin
         return $latest_version_a;
     }
 
-    private function version_check(\phpbb\extension\metadata_manager $md_manager, $force_update = false, $force_cache = false)
+    private function version_check(metadata_manager $md_manager, $force_update = false, $force_cache = false)
     {
         global $cache, $config, $user;
         $meta = $md_manager->get_metadata('all');
@@ -305,7 +294,7 @@ class Admin
             throw new \RuntimeException($this->user->lang('NO_VERSIONCHECK'), 1);
         }
         $version_check = $meta['extra']['version-check'];
-        $version_helper = new \phpbb\version_helper($cache, $config, new \phpbb\file_downloader(), $user);
+        $version_helper = new version_helper($cache, $config, new file_downloader(), $user);
         $version_helper->set_current_version($meta['version']);
         $version_helper->set_file_location($version_check['host'], $version_check['directory'], $version_check['filename']);
         $version_helper->force_stability($this->config['extension_force_unstable'] ? 'unstable' : null);
@@ -320,9 +309,9 @@ class Admin
      * use to pass the sort value through the URI.  URI is in the format
      * checks that the 2nd element is either 0 or 1
      *
-     * @param array $sort_order
+     * @param $sort_order
      * @param string $arg
-     * @param int $forcedorder
+     * @param string $defaultorder
      * @return mixed
      */
     public final function switch_order($sort_order, $arg = URI_ORDER, $defaultorder = '0.0')
@@ -392,7 +381,7 @@ class Admin
      */
     public final function log_insert($values = array())
     {
-        $logs = \sajaki\bbdkp\model\admin\log::Instance();
+        $logs = log::Instance();
         return $logs->log_insert($values);
 
     }
