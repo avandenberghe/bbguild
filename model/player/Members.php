@@ -12,6 +12,7 @@ namespace sajaki\bbdkp\model\player;
 
 use sajaki\bbdkp\model\admin\Admin;
 use sajaki\bbdkp\model\games\Game;
+use sajaki\bbdkp\model\player\Guilds;
 use sajaki\bbdkp\model\points\Adjust;
 use sajaki\bbdkp\model\wowapi\BattleNet;
 
@@ -218,7 +219,7 @@ class Members extends Admin
 
 	/**
 	 * (wow) battle.net portrait url
-	 * @var unknown
+	 * @var string
 	 */
 	protected $member_portrait_url;
 
@@ -318,7 +319,7 @@ class Members extends Admin
 		$this->guildmemberlist = array();
 		if($guildlist == null)
 		{
-			$guild = new \sajaki\bbdkp\model\player\Guilds();
+			$guild = new Guilds();
 			$this->guildlist = $guild->guildlist(1);
 		}
 		else
@@ -1241,6 +1242,7 @@ class Members extends Admin
 	private function generate_portraitlink()
 	{
 	    $this->member_portrait_url = $this->ext_path . 'images/roster_portraits/aion/' . $this->member_race_id . '_' . $this->member_gender_id . '.jpg';
+        return $this->member_portrait_url;
 	}
 
 	/**
@@ -1337,7 +1339,7 @@ class Members extends Admin
 
 		// start transaction
 		$db->sql_transaction('begin');
-		$query = array();
+
 		foreach($memberdata as $mb)
 		{
 			if (in_array($mb['character']['name'] . '-' . $mb['character']['realm'], $to_add) && $mb['character']['level'] >= $min_armory )
@@ -1449,13 +1451,13 @@ class Members extends Admin
 
 	}
 
-	/**
+
+    /**
 	 * Enter joindate for guildmember (query is cached for 1 week !)
-	 *
-	 * @param int $member_id
-	 * @return unknown
-	 *
-	 */
+     *
+     * @param $member_id
+     * @return bool|mixed
+     */
 	public function get_joindate($member_id)
 	{
 		// get member joindate
