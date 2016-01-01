@@ -372,7 +372,6 @@ class Guilds extends Admin
 	public function Guildupdate(Guilds $old_guild, $params)
 	{
 		global $user, $cache, $db;
-        $apiupdate=true;
 
         $cache->destroy('sql', GUILD_TABLE);
 
@@ -454,6 +453,7 @@ class Guilds extends Admin
 		{
 			trigger_error($user->lang['ERROR_GUILDHASMEMBERS'], E_USER_WARNING);
 		}
+        $db->sql_freeresult($result);
 
 		$sql = 'DELETE FROM ' . MEMBER_RANKS_TABLE . ' WHERE guild_id = ' .  $this->guildid;
 		$db->sql_query($sql);
@@ -462,6 +462,7 @@ class Guilds extends Admin
 		$db->sql_query($sql);
 
         $imgfile = $this->ext_path . "images/guildemblem/". $this->region.'_'. $this->realm .'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
+
         if (file_exists($imgfile))
         {
             $fp = fopen($imgfile, "r+");
@@ -499,8 +500,6 @@ class Guilds extends Admin
      */
 	private function createEmblem($showlevel=TRUE, $width=115)
 	{
-		global $phpbb_root_path;
-
 		//location to create the file
 		$imgfile = $this->ext_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
 		$outputpath = "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name).".png";
@@ -540,7 +539,7 @@ class Guilds extends Admin
 			$bgURL = $this->ext_path  ."images/wowapi/static/bg_00.png";
 			$overlayURL = $this->ext_path  ."images/wowapi//static/overlay_00.png";
 			$hooksURL = $this->ext_path  ."images/wowapi/static/hooks.png";
-			$levelURL = $this->ext_path  ."images/wowapi/static/";
+			//$levelURL = $this->ext_path  ."images/wowapi/static/";
 
 			imagesavealpha($imgOut,true);
 			imagealphablending($imgOut, true);
