@@ -224,15 +224,6 @@ class Admin
     }
 
     /**
-	 * sends POST request for registration
-     * @param $regdata
-     * @return string
-     */
-    /**
-     * sends POST request to bbdkp.com for registration
-     * @param array $regdata
-     */
-    /**
      * sends POST request to bbdkp.com for registration
      * @param array $regdata
      */
@@ -316,7 +307,7 @@ class Admin
 	}
 
     /**
-	 * get plugin info
+     * get plugin info
      * @param bool $force_update
      * @param int $ttl
      * @return array|bool
