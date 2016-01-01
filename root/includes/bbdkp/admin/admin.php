@@ -228,56 +228,55 @@ class Admin
      * @param $regdata
      * @return string
      */
-	public final function post_register_request($regdata)
-	{
+    /**
+     * sends POST request to bbdkp.com for registration
+     * @param array $regdata
+     */
+    /**
+     * sends POST request to bbdkp.com for registration
+     * @param array $regdata
+     */
+    public final function post_register_request($regdata)
+    {
+        $rndhash = base_convert(mt_rand(5, 60466175) . mt_rand(5, 60466175), 10, 36);
+        // bbdkp registration url
+        $url = "http://www.avathar.be/services/registerbbdkp.php";
+        // Create URL parameter string
+        $fields_string = '';
+        foreach( $regdata as $key => $value )
+        {
+            $fields_string .= $key.'='.$value.'&';
+        }
+        $fields_string .= 'rndhash='.$rndhash;
 
-		// bbdkp registration url
-		$url = "http://www.avathar.be/services/registerbbdkp.php";
+        $ch = curl_init();
+        curl_setopt( $ch, CURLOPT_URL, $url);
+        curl_setopt( $ch, CURLOPT_POST, 4 );
+        curl_setopt( $ch, CURLOPT_HEADER , false);
+        curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields_string );
+        $result = curl_exec($ch);
+        curl_close( $ch );
 
-		// Create URL parameter string
-		$fields_string = '';
-		foreach( $regdata as $key => $value )
-		{
-			$fields_string .= $key.'='.$value.'&';
-		}
+        $this->get_register_request($rndhash);
+    }
 
-		$ch = curl_init();
-		curl_setopt( $ch, CURLOPT_URL, $url);
-		curl_setopt( $ch, CURLOPT_POST, 4 );
-		curl_setopt( $ch, CURLOPT_HEADER , false);
-		curl_setopt( $ch, CURLOPT_POSTFIELDS, $fields_string );
-		$result = curl_exec($ch);
-		curl_close( $ch );
+    /**
+     * GET requests for registration ID
+     * @param array $regdata
+     * @param string $url
+     * @param string $regcode
+     */
+    private final function get_register_request($regcode)
+    {
+        global $cache, $config;
+        $url = 'http://www.avathar.be/services/registerbbdkp.php?rndhash=' . $regcode;
+        $data = $this->Curl($url, 'GET');
+        $regID = isset($data['response']) ? $data['response']['registration']: '';
+        $config->set('bbdkp_regid', $regID, true);
+        $cache->destroy('config');
+        trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
+    }
 
-        $this->get_register_request($regdata, $url);
-	}
-
-
-	/**
-	 * GET request for registration ID
-	 * @param array $regdata
-	 * @param string $url
-	 */
-	public final function get_register_request($regdata, $url)
-	{
-		global $cache, $config;
-
-		$fields_string = '';
-		foreach( $regdata as $key => $value )
-		{
-			$fields_string .= $key.'='.$value.'&';
-		}
-
-		$url .= '?' . $fields_string;
-
-		$data = $this->Curl($url, 'GET');
-
-		$regID = isset($data['response']) ? $data['response']['registration']: '';
-
-		set_config('bbdkp_regid', $regID, true);
-		$cache->destroy('config');
-		trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
-	}
 
 	/**
 	 * retrieve latest bbdkp productversion
