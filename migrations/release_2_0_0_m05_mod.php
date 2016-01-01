@@ -74,6 +74,21 @@ class release_2_0_0_m05_mod extends \phpbb\db\migration\migration
                 )
             )),
 
+            /**
+             * Guild and Member management Category
+             */
+
+            array('module.add', array('acp', 'ACP_CAT_DKP', 'ACP_DKP_MEMBER')),
+
+            // add GuildList
+            array('module.add', array(
+                'acp', 'ACP_DKP_MEMBER', array(
+                    'module_basename' => '\sajaki\bbdkp\acp\dkp_guild_module',
+                    'modes'           => array('addguild', 'editguild', 'listguilds') ,
+                )
+            )),
+
+
 
         );
 	}
