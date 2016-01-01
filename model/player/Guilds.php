@@ -10,26 +10,48 @@
 
 namespace sajaki\bbdkp\model\player;
 use sajaki\bbdkp\model\admin\Admin;
-
-if (!class_exists('\bbdkp\controller\wowapi\BattleNet'))
-{
-	require($phpbb_root_path . 'includes/bbdkp/controller/wowapi/BattleNet.' . $phpEx);
-}
-if (!class_exists('\bbdkp\controller\games\Game'))
-{
-	require("{$phpbb_root_path}includes/bbdkp/controller/games/Game.$phpEx");
-}
+use sajaki\bbdkp\model\games\Game;
+use sajaki\bbdkp\model\player\Members;
+use sajaki\bbdkp\model\player\Ranks;
+use sajaki\bbdkp\model\wowapi\BattleNet;
 
 /**
- * Guild
- *
  * Manages Guild creation
+ * @package sajaki\bbdkp\model\player
+ * @property mixed $regular regular read/write property
+ * @property int $game_id
+ * @property int $guildid
+ * @property string $name
+ * @property string $realm
+ * @property string $region
+ * @property int $achievements
+ * @property int $membercount
+ * @property int $startdate
+ * @property int $showroster
+ * @property int $min_armory
+ * @property int $recstatus
+ * @property int $guilddefault
+ * @property int $aionlegionid
+ * @property int $aionserverid
+ * @property int $achievementpoints
+ * @property int $level
+ * @property string $emblempath
+ * @property array $emblem
+ * @property string $battlegroup
+ * @property string $guildarmoryurl
+ * @property array $memberdata
+ * @property int $side
+ * @property array $possible_recstatus
+ * @property boolean $armory_enabled
+ * @property int $raidtrackerrank
+ * @property int $applyrank
+ * @property string $armoryresult
+ * @property int $recruitforum
+ * @property array $guildnews
  *
- *   @package bbdkp
  */
 class Guilds extends Admin
 {
-
 	/**
 	 * guild game id
 	 * @var string
@@ -173,7 +195,7 @@ class Guilds extends Admin
 	/**
 	 * search result Battle.NET
 	 *
-	 * @var char
+	 * @var string
 	 */
 	public $armoryresult;
 
@@ -313,11 +335,6 @@ class Guilds extends Admin
 
 		$db->sql_query('INSERT INTO ' . GUILD_TABLE . $query);
 
-		//add a default rank
-		if (!class_exists('\bbdkp\controller\guilds\Ranks'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
-		}
 		$newrank = new Ranks($this->guildid);
 		// add guildleader rank
 		$newrank->RankName = $user->lang['GUILDLEADER'];
@@ -340,7 +357,8 @@ class Guilds extends Admin
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-		$this->ApiUpdateBattleNet($this->GetApiInfo(array()), array() );
+        $data =  $this->GetApiInfo(array());
+		$this->ApiUpdateBattleNet($data, array() );
 
 		return true;
 
@@ -348,12 +366,11 @@ class Guilds extends Admin
 
     /**
      * updates a guild to database
-     *
-     * @param \bbdkp\controller\guilds\Guilds $old_guild
-     * @param array $params
+     * @param Guilds $old_guild
+     * @param $params
      * @return bool
      */
-	public function Guildupdate(\bbdkp\controller\guilds\Guilds $old_guild, $params)
+	public function Guildupdate(Guilds $old_guild, $params)
 	{
 		global $user, $cache, $db, $phpEx, $phpbb_root_path;
         $apiupdate=true;
@@ -395,7 +412,8 @@ class Guilds extends Admin
 
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
-        $this->ApiUpdateBattleNet($this->GetApiInfo($params));
+        $data = $this->GetApiInfo($params);
+        $this->ApiUpdateBattleNet($data, $params);
 
         return true;
     }
@@ -422,7 +440,7 @@ class Guilds extends Admin
 	 */
 	public function Guildelete()
 	{
-		global $user, $cache, $phpbb_root_path, $db;
+		global $user, $cache, $db;
 
 		if($this->guildid == 0)
 		{
@@ -444,7 +462,7 @@ class Guilds extends Admin
 		$sql = 'DELETE FROM ' . GUILD_TABLE . ' WHERE id = ' .  $this->guildid;
 		$db->sql_query($sql);
 
-        $imgfile = $phpbb_root_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
+        $imgfile = $this->ext_path . "images/guildemblem/". $this->region.'_'. $this->realm .'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
         if (file_exists($imgfile))
         {
             $fp = fopen($imgfile, "r+");
@@ -471,23 +489,21 @@ class Guilds extends Admin
 
 	}
 
-	/**
+    /**
 	 * function to create a Wow Guild emblem, adapted for phpBB from http://us.battle.net/wow/en/forum/topic/3082248497#8
 	 *
  	 * @author Thomas Andersen <acoon@acoon.dk>
 	 * @copyright Copyright (c) 2011, Thomas Andersen, http://sourceforge.net/projects/wowarmoryapi
-	 * @param boolean $showlevel
-	 * @param int $width
-	 * @return resource
-	 */
+     * @param bool $showlevel
+     * @param int $width
+     * @return string
+     */
 	private function createEmblem($showlevel=TRUE, $width=115)
 	{
 		global $phpbb_root_path;
 
-
-
 		//location to create the file
-		$imgfile = $phpbb_root_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
+		$imgfile = $this->ext_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
 		$outputpath = "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name).".png";
 		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time())
 		{
@@ -518,14 +534,14 @@ class Guilds extends Admin
 
 			$imgOut = imagecreatetruecolor(215, 230);
 
-			$emblemURL = $phpbb_root_path ."images/bbdkp/wowapi/emblems/emblem_".sprintf("%02s",$this->emblem['icon']).".png";
-			$borderURL = $phpbb_root_path ."images/bbdkp/wowapi/borders/border_".sprintf("%02s",$this->emblem['border']).".png";
-			$ringURL = $phpbb_root_path ."images/bbdkp/wowapi/static/ring-".$ring.".png";
-			$shadowURL = $phpbb_root_path ."images/bbdkp/wowapi/static/shadow_00.png";
-			$bgURL = $phpbb_root_path ."images/bbdkp/wowapi/static/bg_00.png";
-			$overlayURL = $phpbb_root_path ."images/bbdkp/wowapi//static/overlay_00.png";
-			$hooksURL = $phpbb_root_path ."images/bbdkp/wowapi/static/hooks.png";
-			$levelURL = $phpbb_root_path ."images/bbdkp/wowapi/static/";
+			$emblemURL = $this->ext_path  ."images/wowapi/emblems/emblem_".sprintf("%02s",$this->emblem['icon']).".png";
+			$borderURL = $this->ext_path  ."images/wowapi/borders/border_".sprintf("%02s",$this->emblem['border']).".png";
+			$ringURL = $this->ext_path  ."images/wowapi/static/ring-".$ring.".png";
+			$shadowURL = $this->ext_path  ."images/wowapi/static/shadow_00.png";
+			$bgURL = $this->ext_path  ."images/wowapi/static/bg_00.png";
+			$overlayURL = $this->ext_path  ."images/wowapi//static/overlay_00.png";
+			$hooksURL = $this->ext_path  ."images/wowapi/static/hooks.png";
+			$levelURL = $this->ext_path  ."images/wowapi/static/";
 
 			imagesavealpha($imgOut,true);
 			imagealphablending($imgOut, true);
@@ -663,7 +679,7 @@ class Guilds extends Admin
      */
     public function Getguild()
     {
-        global $db, $phpbb_root_path;
+        global $db;
 
         $sql = 'SELECT id, name, realm, region, roster, game_id, members,
 				achievementpoints, level, battlegroup, guildarmoryurl, emblemurl, min_armory, rec_status, guilddefault, armory_enabled, armoryresult, recruitforum
@@ -686,7 +702,7 @@ class Guilds extends Admin
             $this->level = $row['level'];
             $this->battlegroup = $row['battlegroup'];
             $this->guildarmoryurl = $row['guildarmoryurl'];
-            $this->emblempath = $phpbb_root_path . $row['emblemurl'];
+            $this->emblempath = $this->ext_path  . $row['emblemurl'];
             $this->min_armory = $row['min_armory'];
             $this->recstatus = $row['rec_status'];
             $this->armory_enabled = $row['armory_enabled'];
@@ -946,10 +962,10 @@ class Guilds extends Admin
         {
             return false;
         }
-        $game          = new \bbdkp\controller\games\Game;
+        $game          = new Game;
         $game->game_id = $this->game_id;
         $game->Get();
-        //is both game and guild armory-enabled and has api key and locale ?
+        // are both game and guild armory-enabled and does player have Wow Mashery Account api key and locale ?
         if ($game->getArmoryEnabled() == 1 &&
             $this->armory_enabled == 1 &&
             trim($game->getApikey()) != '' &&
@@ -957,7 +973,7 @@ class Guilds extends Admin
         )
         {
             //available extra fields : 'members', 'achievements','news'
-            $api  = new \bbdkp\controller\wowapi\BattleNet('guild', $this->region, $game->getApikey(), $game->getApilocale(), $game->getPrivkey());
+            $api  = new BattleNet('guild', $this->region, $game->getApikey(), $game->getApilocale(), $game->getPrivkey());
             $data = $api->Guild->getGuild($this->name, $this->realm, $params);
             $data = $data['response'];
             unset($api);
@@ -1010,10 +1026,11 @@ class Guilds extends Admin
 	/**
 	 * fetch Guild API information
      * @param $data
+     * @param $params
      */
 	private function ApiUpdateBattleNet($data, $params)
 	{
-            global $db, $phpbb_root_path, $phpEx;
+        global $db;
 
         if($this->armoryresult = 'KO')
         {
@@ -1051,18 +1068,10 @@ class Guilds extends Admin
         if (in_array("members", $params))
         {
             // update ranks table
-            if (!class_exists('\bbdkp\controller\guilds\Ranks'))
-            {
-                require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
-            }
-            $rank = new \bbdkp\controller\guilds\Ranks($this->guildid);
+            $rank = new Ranks($this->guildid);
             $rank->WoWArmoryUpdate($this->memberdata, $this->guildid, $this->region);
             //update member table
-            if (!class_exists('\bbdkp\controller\members\Members'))
-            {
-                require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
-            }
-            $mb = new \bbdkp\controller\members\Members();
+            $mb = new Members();
             $mb->WoWArmoryUpdate($this->memberdata, $this->guildid, $this->region, $this->min_armory);
         }
 
