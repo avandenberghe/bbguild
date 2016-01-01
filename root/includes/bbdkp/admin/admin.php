@@ -263,7 +263,7 @@ class Admin
         $url = 'http://www.avathar.be/services/registerbbdkp.php?rndhash=' . $regcode;
         $data = $this->Curl($url, 'GET');
         $regID = isset($data['response']) ? $data['response']['registration']: '';
-        $config->set('bbdkp_regid', $regID, true);
+        set_config('bbdkp_regid', $regID, true);
         $cache->destroy('config');
         trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
     }
