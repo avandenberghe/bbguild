@@ -9,6 +9,7 @@
  */
 
 namespace sajaki\bbdkp\model\points;
+use sajaki\bbdkp\model\admin\Admin;
 
 /**
  *  Pool Class
@@ -16,9 +17,17 @@ namespace sajaki\bbdkp\model\points;
  *  Pools are a superset for events and dkp accounts.
  *  this class needs no controller so it extends admin.
  *
- *   @package bbdkp
+ * @package sajaki\bbdkp\model\points
+ * @property int $dkpsys
+ * @property int $dkpsys_id
+ * @property string $dkpsys_name
+ * @property string $dkpsys_status
+ * @property string $dkpsys_addedby
+ * @property string $dkpsys_updatedby
+ * @property string $dkpsys_default
+ * @property int $poolcount
  */
-class Pool extends \sajaki\bbdkp\model\admin\Admin
+class Pool extends Admin
  {
 	/**
 	 * array of pools

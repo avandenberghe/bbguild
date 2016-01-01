@@ -8,18 +8,43 @@
  */
 
 namespace sajaki\bbdkp\model\points;
+use sajaki\bbdkp\model\admin\Admin;
+use sajaki\bbdkp\model\loot\Loot;
+use sajaki\bbdkp\model\player\Members;
+use sajaki\bbdkp\model\points\Adjust;
+use sajaki\bbdkp\model\points\Points;
+use sajaki\bbdkp\model\points\Pool;
+use sajaki\bbdkp\model\raids\Raiddetail;
+use sajaki\bbdkp\model\raids\Raids;
 
 /**
- * Points controller
+ * Class PointsController
+ * This class manages Points creation
  *
- *   @package bbdkp
+ * @package sajaki\bbdkp\model\points
+ * @property Points $Points
+ * @property Pool $Pools
+ * @property int $dkpsys
+ * @property int $dkpsys_id
+ * @property bool $query_by_pool
+ * @property bool $query_by_name
+ * @property bool $query_by_armor
+ * @property bool $query_by_rank
+ * @property bool $query_by_class
+ * @property int $guild_id
+ * @property bool $show_inactive
+ * @property string $member_filter
+ * @property string $class_id
+ * @property string $rankfilter
+ *
+ *
  */
-class PointsController extends \sajaki\bbdkp\model\admin\Admin
+class PointsController extends Admin
 {
 
 	/**
 	 * instance of points object
-	 * @var unknown_type
+	 * @var Points
 	 */
 	private $Points;
 
@@ -29,10 +54,10 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
      */
 	private $Pools;
 
-	/**
-	 * object
-	 * @var object
-	 */
+    /**
+     * id of pool
+     * @var int
+     */
 	public $dkpsys;
 
 	/**
@@ -44,9 +69,33 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 
     /**
      * limit to one dkp pool?
-     * @var
+     * @var bool
      */
     public $query_by_pool;
+
+    /**
+     * query by name string ?
+     * @var
+     */
+    public $query_by_name;
+
+    /**
+     * query by armor string ?
+     * @var
+     */
+    public $query_by_armor;
+
+    /**
+     * query by name of rank
+     * @var bool
+     */
+    public $query_by_rank;
+
+    /**
+     * query by class
+     * @var bool
+     */
+    public $query_by_class;
 
 	/**
 	 * guild id
@@ -61,12 +110,6 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
     public $show_inactive;
 
     /**
-     * query by name string ?
-     * @var
-     */
-    public $query_by_name;
-
-    /**
      * holds the active name filter
      * @var
      */
@@ -78,12 +121,6 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
      */
     public $armor_filter;
 
-    /**
-     * query by armor string ?
-     * @var
-     */
-    public $query_by_armor;
-
 
     /**
      * is the class id
@@ -91,25 +128,12 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
      */
     public $class_id;
 
-    /**
-     * query by class
-     * @var bool
-     */
-    public $query_by_class;
-
 
     /**
      * name of rank
      * @var string
      */
     public $rankfilter;
-
-    /**
-     * query by name of rank
-     * @var
-     */
-    public $query_by_rank;
-
 
     /**
      * pointscontroller constructor
@@ -120,16 +144,19 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 		//load model
 		parent::__construct();
 		$this->dkpsys_id = $dkpsys_id;
-		$this->Points = new \sajaki\bbdkp\model\points\Points(0, $dkpsys_id);
-		$this->Pools = new \sajaki\bbdkp\model\points\Pool($dkpsys_id);
+		$this->Points = new Points(0, $dkpsys_id);
+		$this->Pools = new Pool($dkpsys_id);
 		$this->dkpsys = $this->Pools->dkpsys;
         $this->show_inactive= false;
     }
 
-	/**
+    /**
 	 * returns an array to list all dkp accounts
-	 *
-	 */
+     * @param int $start
+     * @param bool $pages
+     * @param bool $leader
+     * @return array
+     */
 	public function listdkpaccounts($start = 0, $pages=false, $leader=false)
 	{
 		global $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
@@ -291,10 +318,13 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 		return array($members_row, $current_order,$count );
 	}
 
-
-	/**
+    /**
 	 * returns an array to list all EPGP accounts
-	 */
+     * @param int $start
+     * @param bool $pages
+     * @param bool $leader
+     * @return array
+     */
 	public function listEPGPaccounts($start = 0, $pages=false,  $leader=false)
 	{
 		global $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
@@ -466,12 +496,12 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 	public function update_dkpaccount($member_id)
 	{
 		global $phpbb_admin_path, $user, $phpEx, $request;
-		$member= new \sajaki\bbdkp\model\player\Members($member_id);
-		$oldpoints = new \sajaki\bbdkp\model\points\Points($member_id, $this->dkpsys_id);
+		$member= new Members($member_id);
+		$oldpoints = new Points($member_id, $this->dkpsys_id);
 		$oldpoints->dkpid = $this->dkpsys_id;
 		$oldpoints->member_id = $member_id;
 
-		$newpoints = new \sajaki\bbdkp\model\points\Points($member_id, $this->dkpsys_id);
+		$newpoints = new Points($member_id, $this->dkpsys_id);
 		$newpoints->dkpid = $this->dkpsys_id;
 		$newpoints->member_id = $member_id;
 
@@ -516,32 +546,23 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 	 */
 	public function delete_dkpaccount($member_id)
 	{
-		global $user, $phpbb_admin_path, $phpbb_root_path, $phpEx;
-		$member= new \sajaki\bbdkp\model\player\Members($member_id);
+		global $user, $phpbb_admin_path, $phpEx;
+		$member= new Members($member_id);
 
 		//delete player from raiddetail table
-		if (!class_exists('\bbdkp\controller\raids\Raiddetail'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/controller/raids/Raiddetail.$phpEx");
-		}
-
-		$raiddetail = new \sajaki\bbdkp\model\raids\Raiddetail();
+		$raiddetail = new Raiddetail();
 		$raiddetail->deleteaccount($member_id, $this->dkpsys_id);
 
 
 		//delete player from adjustments table
-		if (!class_exists('\bbdkp\controller\adjustments\Adjust'))
-		{
-			require("{$phpbb_root_path}includes/bbdkp/controller/adjustments/Adjust.$phpEx");
-		}
-		$Adjust = new \sajaki\bbdkp\model\points\Adjust($this->dkpsys_id);
+		$Adjust = new Adjust($this->dkpsys_id);
         $Adjust->setMemberId($member_id);
         $Adjust->setAdjustmentDkpid($this->dkpsys_id);
 		$Adjust->delete_memberadjustments();
 
 
 		//delete player dkp points
-		$oldpoints = new \sajaki\bbdkp\model\points\Points($member_id, $this->dkpsys_id);
+		$oldpoints = new Points($member_id, $this->dkpsys_id);
 		$oldpoints->dkpid = $this->dkpsys_id;
 		$oldpoints->member_id = $member_id;
 		$oldpoints->delete_account();
@@ -580,8 +601,8 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 	{
 		global $config;
 
-		$new_raid = new \sajaki\bbdkp\model\raids\Raids($raid_id);
-		$raiddetail = new \sajaki\bbdkp\model\raids\Raiddetail($raid_id);
+		$new_raid = new Raids($raid_id);
+		$raiddetail = new Raiddetail($raid_id);
 		if ($member_id > 0)
 		{
 		    $raiddetail->Get($raid_id, $member_id);
@@ -605,14 +626,14 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 
     /**
 	 * add points to record
-     * @param \sajaki\bbdkp\model\raids\Raids $new_raid
+     * @param Raids $new_raid
      * @param $raiddetail
      * @param $member_id
      */
-	private function addpoint(\sajaki\bbdkp\model\raids\Raids $new_raid, $raiddetail, $member_id)
+	private function addpoint(Raids $new_raid, $raiddetail, $member_id)
 	{
 
-	    $this->Points = new \sajaki\bbdkp\model\points\Points($member_id, $new_raid->event_dkpid);
+	    $this->Points = new Points($member_id, $new_raid->event_dkpid);
 	    $this->Points->dkpid = $new_raid->event_dkpid;
 	    $this->Points->member_id = $member_id;
 
@@ -673,8 +694,8 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 		if($member_id == 0)
 		{
 		    // remove whole raid
-			$old_raid = new \sajaki\bbdkp\model\raids\Raids($raid_id);
-			$raiddetail = new \sajaki\bbdkp\model\raids\Raiddetail($raid_id);
+			$old_raid = new Raids($raid_id);
+			$raiddetail = new Raiddetail($raid_id);
 			$raiddetail->Get($raid_id);
 			foreach ((array) $raiddetail->raid_details as $member_id => $attendee)
 			{
@@ -698,8 +719,8 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 		else
 		{
 		    // remove 1 member
-			$old_raid = new \sajaki\bbdkp\model\raids\Raids($raid_id);
-			$raiddetail = new \sajaki\bbdkp\model\raids\Raiddetail($raid_id);
+			$old_raid = new Raids($raid_id);
+			$raiddetail = new Raiddetail($raid_id);
 			$raiddetail->Get($raid_id, $member_id);
 
 			$this->Points->dkpid = $old_raid->event_dkpid;
@@ -745,17 +766,15 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 
     /**
 	 * update a dkp account to remove loot
-     * @param \sajaki\bbdkp\model\loot\Loot $loot
+     * @param Loot $loot
      */
-	public function removeloot_update_dkprecord(\sajaki\bbdkp\model\loot\Loot $loot)
+	public function removeloot_update_dkprecord(Loot $loot)
 	{
 		$this->Points->dkpid = $this->dkpsys_id;
 		$this->Points->member_id = $loot->member_id;
 		$this->Points->read_account();
 
 		$this->Points->spent -= $loot->item_value;
-		$this->Points->decay -= $loot->item_decay;
-
 		$this->Points->update_account();
 	}
 
@@ -957,7 +976,7 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 	public function zero_balance($looter_id, $raid_id, $itemvalue)
 	{
 		global $db;
-		$raiddetail = new \sajaki\bbdkp\model\raids\Raiddetail($raid_id);
+		$raiddetail = new Raiddetail($raid_id);
 
 		$zerosumdkp = round( $itemvalue / max(1, count($raiddetail->raid_details)) , 2);
 
@@ -1001,10 +1020,10 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
     /**
      * delete zero sum points for this item
      *
-     * @param \sajaki\bbdkp\model\loot\Loot $Loot
+     * @param Loot $Loot
      * @return bool
      */
-	public function zero_balance_delete(\sajaki\bbdkp\model\loot\Loot $Loot)
+	public function zero_balance_delete(Loot $Loot)
 	{
 		global $db;
 		if ($Loot->item_zs == 0)
@@ -1013,7 +1032,7 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 		}
 
 		//get raid detail of this loot
-		$raiddetail = new \sajaki\bbdkp\model\raids\Raiddetail($Loot->raid_id);
+		$raiddetail = new Raiddetail($Loot->raid_id);
 		$zerosumdkp = round( $Loot->item_value / max(1, count($raiddetail->raid_details)) , 2);
 
 		// decrease values raid detail table
@@ -1089,7 +1108,7 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 
 				\trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_DELETED']) , E_USER_NOTICE );
 
-				return true;
+				return 1;
 				break;
 
 			case 1:
@@ -1241,6 +1260,9 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 				\trigger_error ( sprintf($user->lang ['RESYNC_ZEROSUM_SUCCESS'], $itemcount, $accountupdates ) , E_USER_NOTICE );
 				return $countraids;
 				break;
+
+            default:
+                return 0;
 		}
 
 	}
@@ -1531,7 +1553,7 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 			case 1:
 				// Decay is ON : synchronise
 				// loop all ajustments
-				$adj = new \sajaki\bbdkp\model\points\Adjust();
+				$adj = new Adjust();
 				$sql = 'SELECT adjustment_dkpid, adjustment_id, member_id , adjustment_date, adjustment_value, adj_decay FROM ' . ADJUSTMENTS_TABLE . ' WHERE can_decay = 1';
 				$result = $db->sql_query($sql);
 				$countadj = 0;
@@ -1543,6 +1565,8 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 				$db->sql_freeresult($result);
 				return $countadj;
 				break;
+            default:
+                return 0;
 		}
 	}
 
@@ -1684,6 +1708,8 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 				return $countraids;
 
 				break;
+            default:
+                return 0;
 
 		}
 
@@ -1799,8 +1825,8 @@ class PointsController extends \sajaki\bbdkp\model\admin\Admin
 
 		//declare transfer array
 		$transfer = array ();
-		$member1= new \sajaki\bbdkp\model\player\Members($member_from);
-		$member2= new \sajaki\bbdkp\model\player\Members($member_to);
+		$member1= new Members($member_from);
+		$member2= new Members($member_to);
 
         // get all raids where old member participated
         /* 1) transfer old attendee name to new member */
