@@ -19,7 +19,6 @@ namespace sajaki\bbdkp\model\admin;
 class Admin
 {
     private $phpbb_root_path;
-    protected $php_ext;
 
     /**
      * bbdkp timestamp
@@ -95,17 +94,17 @@ class Admin
 
         $a = $user;
 
-        //$boardtime = getdate(time() + $user->timezone + $user->dst - date('Z'));
-        //$boardtime = getdate(time());
-        $boardtime = (!empty($user->time_now) && is_int($user->time_now)) ? $user->time_now : time();
+        $boardtime = getdate(time() + $user->timezone + $user->timezone->getOffset(new \DateTime('UTC')));
+
+        //$boardtime = (!empty($user->time_now) && is_int($user->time_now)) ? $user->time_now : time();
         $this->time = $boardtime[0];
 
         if (!class_exists('\sajaki\bbdkp\model\games\Game'))
         {
             require("{$this->ext_path}/model/games/Game.$phpEx");
         }
-        //$listgames = new \sajaki\bbdkp\model\games\Game;
-        // $this->games = $listgames->games;
+        $listgames = new \sajaki\bbdkp\model\games\Game;
+        $this->games = $listgames->games;
         unset($listgames);
     }
 
@@ -216,18 +215,16 @@ class Admin
      */
     public final function post_register_request($regdata)
     {
-
-        $regcode = hash("sha256", serialize(array($regdata['domainname'],$regdata['phpbbversion'], $regdata['bbdkpversion'])));
-
+        $rndhash = base_convert(mt_rand(5, 60466175) . mt_rand(5, 60466175), 10, 36);
         // bbdkp registration url
-        $url = "https://www.avathar.be/services/registerbbdkp.php";
+        $url = "http://www.avathar.be/services/registerbbdkp.php";
         // Create URL parameter string
         $fields_string = '';
         foreach( $regdata as $key => $value )
         {
             $fields_string .= $key.'='.$value.'&';
         }
-        $fields_string .= 'regcode='.$regcode;
+        $fields_string .= 'rndhash='.$rndhash;
 
         $ch = curl_init();
         curl_setopt( $ch, CURLOPT_URL, $url);
@@ -237,32 +234,21 @@ class Admin
         $result = curl_exec($ch);
         curl_close( $ch );
 
-        $this->get_register_request($regdata, $url, $regcode);
+        $this->get_register_request($rndhash);
     }
 
 
     /**
-     * GET reauests for registration ID
+     * GET requests for registration ID
      * @param array $regdata
      * @param string $url
      * @param string $regcode
      */
-    private final function get_register_request($regdata, $url, $regcode)
+    private final function get_register_request($regcode)
     {
         global $cache, $config;
-
-        $fields_string = '';
-        foreach( $regdata as $key => $value )
-        {
-            $fields_string .= $key.'='.$value.'&';
-        }
-        $fields_string .= 'regcode='.$regcode;
-
-        $url .= '?' . $fields_string;
-
+        $url = 'http://www.avathar.be/services/registerbbdkp.php?rndhash=' . $regcode;
         $data = $this->Curl($url, 'GET');
-
-
         $regID = isset($data['response']) ? $data['response']['registration']: '';
         $config->set('bbdkp_regid', $regID, true);
         $cache->destroy('config');

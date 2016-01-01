@@ -22,10 +22,9 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
     {
         global $db, $user, $template, $request, $phpbb_admin_path, $cache;
         global $config, $phpEx, $phpbb_container;
-
+        parent::__construct();
         $form_key = 'sajaki/bbdkp';
         add_form_key($form_key);
-
         $this->page_title = 'ACP_DKP_MAINPAGE';
         $this->tpl_name = 'acp_' . $mode;
         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module') . '"><h3>' . $user->lang['ACP_DKP'] . '</h3></a>';
@@ -172,6 +171,16 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
              */
             case 'dkp_config':
 
+                if ($request->is_set_post('register'))
+                {
+                    $regdata = array(
+                        'domainname'	=> $config['server_name'],
+                        'phpbbversion'	=> $request->variable('phpbbversion', ''),
+                        'bbdkpversion' 	=> $request->variable('bbdkpversion', ''),
+                    );
+                    $this->post_register_request($regdata);
+                }
+
                 if ($request->is_set_post('updateconfig'))
                 {
                     if (! check_form_key('acp_dkp'))
@@ -271,16 +280,6 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                     trigger_error($user->lang['ACTION_SETTINGS_CHANGED']. $this->link, E_USER_NOTICE);
                 }
 
-                if ($request->is_set_post('register'))
-                {
-                    $regdata = array(
-                        'domainname'	=> $request->variable('domainname', ''),
-                        'phpbbversion'	=> $request->variable('phpbbversion', ''),
-                        'bbdkpversion' 	=> $request->variable('bbdkpversion', ''),
-                    );
-                    $this->post_register_request($regdata);
-                }
-
                 $s_lang_options = '';
                 foreach ($this->languagecodes as $lang => $langname)
                 {
@@ -360,6 +359,7 @@ class dkp_main_module extends \sajaki\bbdkp\model\admin\Admin
                     'U_ADDCONFIG' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_main_module&amp;mode=dkp_config&amp;action=addconfig'),
                     'PHPBBVER' => $config['version'],
                     'BBDKPVER' => BBDKP_VERSION,
+
                 ));
 
                 add_form_key('acp_dkp');

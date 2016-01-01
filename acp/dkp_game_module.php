@@ -7,20 +7,18 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-
 namespace sajaki\bbdkp\acp;
 
-/**
- * This class manages Game settings
- * @package sajaki\bbdkp\acp
- */
 use sajaki\bbdkp\model\admin\Admin;
 use sajaki\bbdkp\model\games\Game;
 use sajaki\bbdkp\model\games\rpg\Classes;
 use sajaki\bbdkp\model\games\rpg\Faction;
 use sajaki\bbdkp\model\games\rpg\Races;
 use sajaki\bbdkp\model\games\rpg\Roles;
-
+/**
+ * This class manages Game settings
+ * @package sajaki\bbdkp\acp
+ */
 class dkp_game_module extends Admin
 {
 	/**
@@ -47,7 +45,7 @@ class dkp_game_module extends Admin
 	{
 		global $user, $template, $phpbb_admin_path, $phpEx;
         global $request, $phpbb_container;
-
+        parent::__construct();
 		$form_key = 'sajaki/bbdkp';
 		add_form_key ( $form_key );
 		$this->tpl_name = 'acp_' . $mode;

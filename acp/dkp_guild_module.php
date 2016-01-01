@@ -48,10 +48,12 @@ class dkp_guild_module extends Admin
     {
         global $user, $template, $db, $phpbb_admin_path, $phpEx;
         global $request, $phpbb_container;
+        parent::__construct();
         $form_key = 'sajaki/bbdkp';
         add_form_key ( $form_key );
         $this->tpl_name = 'acp_' . $mode;
         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=listguilds') . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
+        $this->page_title = 'ACP_LISTGUILDS';
 
         switch ($mode)
         {
