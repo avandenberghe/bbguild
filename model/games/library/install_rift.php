@@ -8,6 +8,7 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
 
 /**
  * @ignore
@@ -21,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
  * Rift Installer class
  * @package sajaki\bbdkp\model\games\library
  */
-class install_rift extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_rift extends GameInstall
 {
     protected $bossbaseurl = 'http://rift.zam.com/en/npc.html?riftnpc=%s';
     protected $zonebaseurl = 'ttp://rift.zam.com/en/zone/%s';

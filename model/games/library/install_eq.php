@@ -12,6 +12,8 @@ namespace sajaki\bbdkp\model\games\library;
 /**
  * @ignore
  */
+use sajaki\bbdkp\model\games\library\GameInstall;
+
 if (! defined ( 'IN_PHPBB' ))
 {
 	exit ();
@@ -21,7 +23,7 @@ if (! defined ( 'IN_PHPBB' ))
  * Everquest Installer Class
  * @package sajaki\bbdkp\controller\games
  */
-class install_eq extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_eq extends GameInstall
 {
     // credit shadowfox  http://www.avathar.be/bbdkp/viewtopic.php?f=33&t=2676
     protected $bossbaseurl = 'http://everquest.allakhazam.com/db/npc.html?id=%s';

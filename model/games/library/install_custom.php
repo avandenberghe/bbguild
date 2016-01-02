@@ -8,6 +8,7 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
 
 /**
  * @ignore
@@ -21,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
  * Custom Installer Class
  * @package sajaki\bbdkp\model\games\library
  */
-class install_custom extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_custom extends GameInstall
 {
     protected $bossbaseurl = '';
     protected $zonebaseurl = '';

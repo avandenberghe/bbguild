@@ -10,6 +10,8 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
+
 /**
  * @ignore
  */
@@ -22,7 +24,7 @@ if (! defined ( 'IN_PHPBB' ))
  * ffxiv Installer Class
  * @package sajaki\bbdkp\model\games\library
  */
-class install_ffxiv extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_ffxiv extends GameInstall
 {
     protected $bossbaseurl = 'http://na.finalfantasyxiv.com/lodestone/playguide/db/npc/enemy/%s/';
     protected $zonebaseurl = 'http://na.finalfantasyxiv.com/lodestone/playguide/db/npc/?category2=enemy&area=%s';

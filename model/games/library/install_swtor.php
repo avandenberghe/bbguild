@@ -8,6 +8,8 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
+
 /**
  * @ignore
  */
@@ -20,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
  * SwTor Installer class
  * @package sajaki\bbdkp\model\games\library
  */
-class install_swtor extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_swtor extends GameInstall
 {
     protected $bossbaseurl = 'http://www.swtor-spy.com/codex/%s';
     protected $zonebaseurl = 'http://www.swtor-spy.com/codex/%s';

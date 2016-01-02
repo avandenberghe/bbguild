@@ -8,6 +8,8 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
+
 
 /**
  * @ignore
@@ -21,7 +23,7 @@ if (! defined ( 'IN_PHPBB' ))
  * Vanguard Installer class
  * @package sajaki\bbdkp\controller\games
  */
-class install_vanguard extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_vanguard extends GameInstall
 {
     protected $bossbaseurl = 'http://vg.mmodb.com/bestiary/%s.php';
     protected $zonebaseurl = 'http://vg.mmodb.com/zones/%s.php';

@@ -8,6 +8,7 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
 
 /**
  * @ignore
@@ -21,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
  * Lotro Installer class
  * @package sajaki\bbdkp\model\games\library
  */
-class install_lotro extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_lotro extends GameInstall
 {
     protected $bossbaseurl = 'http://lotro.allakhazam.com/db/bestiary.html?lotrmob=%s';
     protected $zonebaseurl = 'http://lotro.allakhazam.com/db/geography.html?lotrarea=%s';

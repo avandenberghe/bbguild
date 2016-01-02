@@ -8,6 +8,8 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
+
 /**
  * @ignore
  */
@@ -20,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
  * Lineage 2 Installer class
  * @package sajaki\bbdkp\model\games\library
  */
-class install_lineage2 extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_lineage2 extends GameInstall
 {
     protected $bossbaseurl = 'http://www.lineage2-online.com/database/en/monsters/%s.php';
     protected $zonebaseurl = 'http://www.lineage2-online.com/database/en/quests/%s.php';
