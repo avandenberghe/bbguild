@@ -116,7 +116,7 @@ class dkp_guild_module extends Admin
                         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
                         if ($updaterank || $addrank)
                         {
-                            if (! check_form_key('editguildranks'))
+                            if (! check_form_key('sajaki/bbdkp'))
                             {
                                 trigger_error('FORM_INVALID');
                             }
@@ -145,7 +145,7 @@ class dkp_guild_module extends Admin
                     default:
                         $submit = ($request->is_set_post('updateguild')) ? true : false;
                         $delete = ($request->is_set_post('deleteguild')) ? true : false;
-                        $armory = ($request->is_set_post('armory')) ? true : false;
+                        $armory = ($request->is_set_post('armory_enabled')) ? true : false;
                         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildedit&amp;' . URI_GUILD . '=' . $updateguild->guildid) . '"><h3>'.$user->lang['RETURN_GUILDLIST'].'</h3></a>';
                         // POST check
                         if ($submit)
@@ -154,12 +154,15 @@ class dkp_guild_module extends Admin
                             {
                                 trigger_error('FORM_INVALID', E_USER_NOTICE);
                             }
-                            $this->UpdateGuild($updateguild, false);
-                        }
 
-                        if($armory)
-                        {
-                            $this->UpdateGuild($updateguild, true);
+                            if($armory)
+                            {
+                                $this->UpdateGuild($updateguild, true);
+                            }
+                            else
+                            {
+                                $this->UpdateGuild($updateguild, false);
+                            }
                         }
 
                         if ($delete)
@@ -408,7 +411,7 @@ class dkp_guild_module extends Admin
      */
     private function BuildTemplateEditGuild($updateguild)
     {
-        global $phpEx, $template, $db, $phpbb_admin_path, $user;
+        global $phpEx, $template, $phpbb_admin_path, $user;
 
         foreach ($this->regions as $key => $regionname)
         {
@@ -462,7 +465,7 @@ class dkp_guild_module extends Admin
             'EMBLEM'             => $updateguild->emblempath,
             'EMBLEMFILE'         => basename($updateguild->emblempath),
 
-            'U_EDIT_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", '"i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $updateguild->guildid),
+            'U_EDIT_GUILD' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $updateguild->guildid),
             'U_EDIT_GUILDRANKS' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildranks&amp;'. URI_GUILD . '=' . $updateguild->guildid),
             'U_EDIT_GUILDRECRUITMENT' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . URI_GUILD . '=' . $updateguild->guildid)
         ));
@@ -477,8 +480,6 @@ class dkp_guild_module extends Admin
             ));
         }
 
-        $form_key = 'editguild';
-        add_form_key($form_key);
         $this->page_title = $user->lang['ACP_EDITGUILD'];
     }
 
@@ -529,15 +530,13 @@ class dkp_guild_module extends Admin
             // Javascript messages
             'MSG_NAME_EMPTY'     => $user->lang['FV_REQUIRED_NAME'],
             'EMBLEM'             => $updateguild->emblempath,
-            'EMBLEMFILE'         => basename($updateguild->emblempath),
+            'EMBLEMFILE'         => basename($updateguild->emblempath), //only filename
             'S_ADD'              => ($this->url_id < 0) ? true : false,
             'U_EDIT_GUILD'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=editguild&amp;' . URI_GUILD . '=' . $updateguild->guildid),
             'U_EDIT_GUILDRANKS'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildranks&amp;' . URI_GUILD . '=' . $updateguild->guildid),
             'U_EDIT_GUILDRECRUITMENT'   => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module&amp;mode=editguild&amp;action=guildrecruitment&amp;' . URI_GUILD . '=' . $updateguild->guildid)
         ));
 
-        $form_key = 'editguildranks';
-        add_form_key($form_key);
         $this->page_title = $user->lang['ACP_EDITGUILD'];
     }
 
@@ -609,8 +608,7 @@ class dkp_guild_module extends Admin
             );
             $previous_data = $row[$previous_source];
         }
-        $form_key = 'listguilds';
-        add_form_key($form_key);
+
         $template->assign_vars(array(
             'U_GUILDLIST'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module') . '&amp;mode=listguilds',
             'U_ADDGUILD'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_guild_module') . '&amp;mode=addguild',

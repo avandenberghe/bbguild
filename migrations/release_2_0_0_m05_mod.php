@@ -88,6 +88,14 @@ class release_2_0_0_m05_mod extends \phpbb\db\migration\migration
                 )
             )),
 
+            // add Roster
+            array('module.add', array(
+                'acp', 'ACP_DKP_MEMBER', array(
+                    'module_basename' => '\sajaki\bbdkp\acp\dkp_mm_module',
+                    'modes'           => array('mm_addmember', 'mm_listmembers') ,
+                )
+            )),
+
 
 
         );
