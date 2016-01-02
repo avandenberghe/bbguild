@@ -9,6 +9,8 @@
  */
 namespace sajaki\bbdkp\model\games\library;
 
+use sajaki\bbdkp\model\games\library\GameInstall;
+
 /**
  * @ignore
  */
@@ -21,7 +23,7 @@ if (! defined ( 'IN_PHPBB' ))
  * Aion Installer Class
  * @package sajaki\bbdkp\model\games\library
  */
-class install_aion extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_aion extends GameInstall
 {
     protected $bossbaseurl = 'http://db.aion.ign.com/npc/%s';
     protected $zonebaseurl = 'http://db.aion.ign.com/%s';

@@ -8,6 +8,7 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
 
 /**
  * @ignore
@@ -21,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
  * Installs Everquest 2
  * @package sajaki\bbdkp\controller\games
  */
-class install_eq2 extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_eq2 extends GameInstall
 {
 
     protected $bossbaseurl = 'http://eq2.zam.com/db/mob.html?eq2mob=%s';

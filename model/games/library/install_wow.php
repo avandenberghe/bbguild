@@ -7,6 +7,7 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
 
 /**
  * @ignore
@@ -20,9 +21,8 @@ if (! defined ( 'IN_PHPBB' ))
  * Wow installer Class
  * @package sajaki\bbdkp\model\games\library
  */
-class install_wow extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_wow extends GameInstall
 {
-
     protected $bossbaseurl = 'http://www.wowhead.com/?npc=%s';
     protected $zonebaseurl = 'http://www.wowhead.com/?zone=%s';
 

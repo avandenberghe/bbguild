@@ -128,12 +128,12 @@ class Admin
     /**
      * connects to remote site and gets xml or html using Curl
      * @param $url
-     * @param bool $return_Server_Response_Header
+     * @param array $return_Server_Response_Header
      * @param bool $loud
      * @param bool $json
      * @return array
      */
-    public final function curl($url, $return_Server_Response_Header = false, $loud= false, $json=true)
+    public final function curl($url, $return_Server_Response_Header, $loud= false, $json=true)
     {
 
         $data = array(
@@ -248,7 +248,7 @@ class Admin
 
     /**
      * retrieve latest bbdkp productversion
-     * @param bool $force_update  Ignores cached data. Defaults to false.
+     * @param bool $force_update Ignores cached data. Defaults to false.
      * @param bool $warn_fail Trigger a warning if obtaining the latest version information fails. Defaults to false.
      * @param int $ttl  Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
      * @return bool

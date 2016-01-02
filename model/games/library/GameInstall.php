@@ -12,6 +12,11 @@ namespace sajaki\bbdkp\model\games\library;
 /**
  * @ignore
  */
+use sajaki\bbdkp\model\games\rpg\Classes;
+use sajaki\bbdkp\model\games\rpg\Faction;
+use sajaki\bbdkp\model\games\rpg\Races;
+use sajaki\bbdkp\model\games\rpg\Roles;
+
 if (! defined('IN_PHPBB'))
 {
 	exit();
@@ -109,19 +114,19 @@ abstract class GameInstall
 
         $db->sql_transaction('begin');
 
-        $factions = new \sajaki\bbdkp\model\games\rpg\Faction;
+        $factions = new Faction;
         $factions->game_id = $this->game_id;
         $factions->Delete_all_factions();
 
-        $races = new \sajaki\bbdkp\model\games\rpg\Races;
+        $races = new Races;
         $races->game_id = $this->game_id;
         $races->Delete_all_races();
 
-        $classes = new \sajaki\bbdkp\model\games\rpg\Classes;
+        $classes = new Classes;
         $classes->game_id = $this->game_id;
         $classes->Delete_all_classes();
 
-        $roles = new \sajaki\bbdkp\model\games\rpg\Roles;
+        $roles = new Roles;
         $roles->game_id = $this->game_id;
         $roles->Delete_all_roles();
 

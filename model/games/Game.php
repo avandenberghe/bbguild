@@ -9,6 +9,8 @@
 
 namespace sajaki\bbdkp\model\games;
 
+use sajaki\bbdkp\model\games\library\install_custom;
+
 /**
  * @ignore
  */
@@ -329,7 +331,7 @@ class Game
                 {
                     if (!class_exists('\sajaki\bbdkp\model\games\library\world_' . $this->game_id))
                     {
-                        include($this->ext_path .'model\games\library\world_' . $this->game_id . '.' . $phpEx);
+                        include($this->ext_path .'model/games/library/world_' . $this->game_id . '.' . $phpEx);
                     }
                     $classname = '\sajaki\bbdkp\model\games\library\world_' . $this->game_id;
                     $installworld = new $classname;
@@ -345,7 +347,7 @@ class Game
             {
                 $this->name='Custom';
             }
-            $installgame = new \sajaki\bbdkp\model\games\library\install_custom;
+            $installgame = new install_custom;
             //call the game installer
             $installgame->Install($this->game_id, $this->name, $installgame->getBossbaseurl(), $installgame->getZonebaseurl() );
 

@@ -9,6 +9,8 @@
  */
 namespace sajaki\bbdkp\model\games\library;
 
+use sajaki\bbdkp\model\games\library\GameInstall;
+
 /**
  * @ignore
  */
@@ -21,7 +23,7 @@ if (! defined ( 'IN_PHPBB' ))
  * Tera Installer class
  * @package sajaki\bbdkp\controller\games
  */
-class install_tera extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_tera extends GameInstall
 {
 
     protected $bossbaseurl = 'http://teracodex.com/npc/%s';

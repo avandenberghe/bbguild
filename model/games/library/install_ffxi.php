@@ -8,6 +8,8 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
+
 /**
  * @ignore
  */
@@ -20,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
  * FFXI Installer Class
  * @package sajaki\bbdkp\model\games\library
  */
-class install_ffxi extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_ffxi extends GameInstall
 {
     protected $bossbaseurl = 'http://ffxi.allakhazam.com/db/bestiary.html?fmob=%s';
     protected $zonebaseurl = 'http://ffxi.allakhazam.com/db/areas.html?farea=%s';

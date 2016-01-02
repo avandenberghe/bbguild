@@ -8,6 +8,8 @@
  *
  */
 namespace sajaki\bbdkp\model\games\library;
+use sajaki\bbdkp\model\games\library\GameInstall;
+
 /**
  * @ignore
  */
@@ -20,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
  * Guildwars2 Installer Class
  * @package sajaki\bbdkp\model\games\library
  */
-class install_gw2 extends \sajaki\bbdkp\model\games\library\GameInstall
+class install_gw2 extends GameInstall
 {
     protected $bossbaseurl = '';
     protected $zonebaseurl = '';
