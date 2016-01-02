@@ -2,65 +2,46 @@
 /**
  * members acp file
  *
- *
  * @package bbdkp v2.0
  * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @author Ippehe, Malfate, Sajaki
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
 namespace sajaki\bbdkp\acp;
-
-// Include the base class
-if (!class_exists('\bbdkp\admin\Admin'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/admin/admin.$phpEx");
-}
-
-// include ranks class
-if (!class_exists('\bbdkp\controller\guilds\Ranks'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Ranks.$phpEx");
-}
-
-// Include the member class
-if (!class_exists('\bbdkp\controller\members\Members'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/controller/members/Members.$phpEx");
-}
-//include the guilds class
-if (!class_exists('\bbdkp\controller\guilds\Guilds'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/controller/guilds/Guilds.$phpEx");
-}
-//include the roles class
-if (!class_exists('\bbdkp\controller\games\Roles'))
-{
-    require("{$phpbb_root_path}includes/bbdkp/controller/games/roles/Roles.$phpEx");
-}
+use sajaki\bbdkp\model\admin\Admin;
+use sajaki\bbdkp\model\player\Members;
+use sajaki\bbdkp\model\player\Guilds;
+use sajaki\bbdkp\model\games\rpg\Roles;
+use sajaki\bbdkp\model\player\Ranks;
 
 /**
  * This class manages member general info
  *
- *   @package bbdkp
+ * @package sajaki\bbdkp\acp
  */
-class dkp_mm_module
+class dkp_mm_module extends Admin
 {
-
     /**
      * trigger link
      * @var string
      */
-    public $link = ' ';
+    public $link = '';
 
     /**
-     * main acp_dkp_mm function
-     * @param integer $id
-     * @param string $mode
+     * global request object
+     *
+     * @var \phpbb\request\request_interface
      */
+    public $request;
+
     public function main ($id, $mode)
     {
-        global $user, $template, $db, $config, $phpbb_root_path, $phpbb_admin_path, $phpEx;
+        global $user, $phpbb_admin_path, $phpEx;
+        global $request;
+
+        $this->request = $request;
 
         switch ($mode)
         {
@@ -69,8 +50,8 @@ class dkp_mm_module
              */
             case 'mm_listmembers':
 
-                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx","i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>Return to Index</h3></a>';
-                $Guild = new \bbdkp\controller\guilds\Guilds();
+                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx",'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers') . '"><h3>Return to Index</h3></a>';
+                $Guild = new Guilds();
 
                 $guildlist = $Guild->guildlist(1);
                 if( count((array) $guildlist) == 0  )
@@ -94,14 +75,14 @@ class dkp_mm_module
                     break;
                 }
 
-                $activate = (isset($_POST['deactivate'])) ? true : false;
+                $activate = $request->is_set_post('deactivate');
                 if ($activate)
                 {
                     $this->ActivateList();
                 }
 
                 // batch delete
-                $del_batch = (isset($_POST['delete'])) ? true : false;
+                $del_batch = $request->is_set_post('delete');
                 if ($del_batch)
                 {
                     $this->member_batch_delete();
@@ -112,17 +93,17 @@ class dkp_mm_module
                 if ($getguild_dropdown)
                 {
                     // user selected dropdown - get guildid
-                    $Guild->guildid = request_var('member_guild_id', 0);
+                    $Guild->guildid = $this->request->variable('member_guild_id', 0);
                 }
 
                 $sortlink = isset ( $_GET [URI_GUILD] )  ? true : false;
                 if($sortlink)
                 {
                     // user selected dropdown - get guildid
-                    $Guild->guildid = request_var(URI_GUILD, 0);
+                    $Guild->guildid = $this->request->variable(URI_GUILD, 0);
                 }
 
-                $charapicall = (isset($_POST['charapicall'])) ? true : false;
+                $charapicall = $request->is_set_post('charapicall');
                 if($charapicall)
                 {
                     if (confirm_box(true))
@@ -134,12 +115,12 @@ class dkp_mm_module
                     {
                         $s_hidden_fields = build_hidden_fields(array(
                             'charapicall' => true ,
-                            'hidden_guildid' => request_var('member_guild_id', 0),
-                            'hidden_minlevel' => request_var('hidden_minlevel', request_var('minlevel', 0)),
-                            'hidden_maxlevel' => request_var('maxlevel', request_var('hidden_maxlevel', 200)),
-                            'hidden_active' => request_var('active', request_var('hidden_active', 0)),
-                            'hidden_nonactive' => request_var('nonactive', request_var('hidden_nonactive', 0)),
-                            'hidden_member_name' => utf8_normalize_nfc(request_var('member_name', request_var('hidden_member_name', '', true), true)),
+                            'hidden_guildid' => $this->request->variable('member_guild_id', 0),
+                            'hidden_minlevel' => $this->request->variable('hidden_minlevel', $this->request->variable('minlevel', 0)),
+                            'hidden_maxlevel' => $this->request->variable('maxlevel', $this->request->variable('hidden_maxlevel', 200)),
+                            'hidden_active' => $this->request->variable('active', $this->request->variable('hidden_active', 0)),
+                            'hidden_nonactive' => $this->request->variable('nonactive', $this->request->variable('hidden_nonactive', 0)),
+                            'hidden_member_name' => $this->request->variable('member_name', $this->request->variable('hidden_member_name', '', true), true)
                         ));
                         confirm_box(false, $user->lang['WARNING_BATTLENET'], $s_hidden_fields);
 
@@ -147,11 +128,11 @@ class dkp_mm_module
                 }
 
                 // add member button redirect
-                $showadd = (isset($_POST['memberadd'])) ? true : false;
+                $showadd = $request->is_set_post('memberadd');
                 if ($showadd)
                 {
-                    $a = request_var('member_guild_id', request_var('hidden_guildid', 0));
-                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;guild_id=" . $a ));
+                    $a = $this->request->variable('member_guild_id', $this->request->variable('hidden_guildid', 0));
+                    redirect(append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_addmember&amp;guild_id=' . $a ));
                     break;
                 }
 
@@ -164,11 +145,11 @@ class dkp_mm_module
             /***************************************/
             case 'mm_addmember' :
 
-                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers") . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers') . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 
-                $add = (isset($_POST['add'])) ? true : false;
-                $update = (isset($_POST['update'])) ? true : false;
-                $delete = (isset($_GET['delete']) || isset($_POST['delete'])) ? true : false;
+                $add = $request->is_set_post('add');
+                $update = $request->is_set_post('update');
+                $delete = $request->variable('delete', '')  != '' ? true : false;
 
                 if ($add || $update)
                 {
@@ -191,15 +172,14 @@ class dkp_mm_module
 
                 if ($delete)
                 {
-
                     if (confirm_box(true))
                     {
                         $deletemember = $this->DeleteMember();
                     }
                     else
                     {
-                        $deletemember = new \bbdkp\controller\members\Members();
-                        $deletemember->member_id = request_var('member_id', 0);
+                        $deletemember = new Members();
+                        $deletemember->member_id = $this->request->variable('member_id', 0);
                         $deletemember->Getmember();
                         $s_hidden_fields = build_hidden_fields(array(
                             'delete' => true ,
@@ -229,7 +209,7 @@ class dkp_mm_module
     {
         global $db, $user;
 
-        $members_to_delete = request_var('delete_id', array(0));
+        $members_to_delete = $this->request->variable('delete_id', array(0));
 
         if (! is_array($members_to_delete))
         {
@@ -244,11 +224,11 @@ class dkp_mm_module
         if (confirm_box(true))
         {
             // recall hidden vars
-            $members_to_delete = request_var('delete_id', array(0 => 0));
-            $member_names = utf8_normalize_nfc(request_var('members', array(0 => ''), true));
+            $members_to_delete = $this->request->variable('delete_id', array(0 => 0));
+            $member_names = $this->request->variable('members', array(0 => ''), true);
             foreach ($members_to_delete as $memberid => $value)
             {
-                $delmember = new \bbdkp\controller\members\Members();
+                $delmember = new Members();
                 $delmember->member_id = $memberid;
                 $delmember->Getmember();
                 $delmember->Deletemember();
@@ -285,34 +265,34 @@ class dkp_mm_module
     {
         global $phpbb_admin_path, $phpEx, $user;
 
-        $newmember = new \bbdkp\controller\members\Members();
-        $newmember->game_id = request_var('game_id', '');
-        $newmember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
-        $newmember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
-        $newmember->member_guild_id = request_var('member_guild_id', 0);
-        $newmember->member_rank_id = request_var('member_rank_id', 99);
-        $newmember->member_level = request_var('member_level', 1);
-        $newmember->member_realm = request_var('realm', '');
-        $newmember->member_region = request_var('region_id', '');
+        $newmember = new Members();
+        $newmember->game_id = $this->request->variable('game_id', '');
+        $newmember->member_name = $this->request->variable('member_name', '', true);
+        $newmember->member_title = $this->request->variable('member_title', '', true);
+        $newmember->member_guild_id = $this->request->variable('member_guild_id', 0);
+        $newmember->member_rank_id = $this->request->variable('member_rank_id', 99);
+        $newmember->member_level = $this->request->variable('member_level', 1);
+        $newmember->member_realm = $this->request->variable('realm', '');
+        $newmember->member_region = $this->request->variable('region_id', '');
         if (!in_array($newmember->member_region, $newmember->regionlist))
         {
             $newmember->member_region = '';
         }
-        $newmember->member_race_id = request_var('member_race_id', 1);
-        $newmember->member_class_id = request_var('member_class_id', 1);
-        $newmember->member_role = request_var('member_role', 0);
-        $newmember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
-        $newmember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
-        $newmember->member_joindate = mktime(0, 0, 0, request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
+        $newmember->member_race_id = $this->request->variable('member_race_id', 1);
+        $newmember->member_class_id = $this->request->variable('member_class_id', 1);
+        $newmember->member_role = $this->request->variable('member_role', 0);
+        $newmember->member_gender_id = $this->request->variable('gender', 0);
+        $newmember->member_comment = $this->request->variable('member_comment', '', true);
+        $newmember->member_joindate = mktime(0, 0, 0, $this->request->variable('member_joindate_mo', 0), $this->request->variable('member_joindate_d', 0), $this->request->variable('member_joindate_y', 0));
         $newmember->member_outdate = 0;
-        if (request_var('member_outdate_mo', 0) + request_var('member_outdate_d', 0) != 0)
+        if ($this->request->variable('member_outdate_mo', 0) + $this->request->variable('member_outdate_d', 0) != 0)
         {
-            $newmember->member_outdate = mktime(0, 0, 0, request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0));
+            $newmember->member_outdate = mktime(0, 0, 0, $this->request->variable('member_outdate_mo', 0), $this->request->variable('member_outdate_d', 0), $this->request->variable('member_outdate_y', 0));
         }
         $newmember->member_achiev = 0;
-        $newmember->member_armory_url = utf8_normalize_nfc(request_var('member_armorylink', '', true));
-        $newmember->phpbb_user_id = request_var('phpbb_user_id', 0);
-        $newmember->member_status = request_var('activated', '') == 'on' ? 1 : 0;
+        $newmember->member_armory_url = $this->request->variable('member_armorylink', '', true);
+        $newmember->phpbb_user_id = $this->request->variable('phpbb_user_id', 0);
+        $newmember->member_status = $this->request->variable('activated', '') == 'on' ? 1 : 0;
 
         $newmember->Armory_getmember();
         $newmember->Makemember();
@@ -320,16 +300,16 @@ class dkp_mm_module
         if ($newmember->member_id > 0)
         {
             //record added. now update some stats
-            meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $newmember->member_guild_id));
+            meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id));
             $success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name), date("F j, Y, g:i a"));
 
-            $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $newmember->member_guild_id) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+            $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
             trigger_error($success_message . $this->link, E_USER_NOTICE);
 
         }
         else
         {
-            meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $newmember->member_guild_id));
+            meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id));
 
             $failure_message = sprintf($user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($newmember->member_name));
             trigger_error($failure_message . $this->link, E_USER_WARNING);
@@ -344,59 +324,59 @@ class dkp_mm_module
     {
         global $phpbb_admin_path, $phpEx, $user;
 
-        $updatemember = new \bbdkp\controller\members\Members();
-        $updatemember->member_id = request_var('hidden_member_id', 0);
+        $updatemember = new Members();
+        $updatemember->member_id = $this->request->variable('hidden_member_id', 0);
 
         if ($updatemember->member_id == 0)
         {
-            $updatemember->member_id = request_var(URI_NAMEID, 0);
+            $updatemember->member_id = $this->request->variable(URI_NAMEID, 0);
         }
         $updatemember->Getmember();
 
-        $updatemember->game_id = request_var('game_id', '');
-        $updatemember->member_class_id = request_var('member_class_id', 0);
-        $updatemember->member_race_id = request_var('member_race_id', 0);
-        $updatemember->member_role = request_var('member_role', 0);
-        $updatemember->member_realm = request_var('realm', '');
-        $updatemember->member_region = request_var('region_id', '');
+        $updatemember->game_id = $this->request->variable('game_id', '');
+        $updatemember->member_class_id = $this->request->variable('member_class_id', 0);
+        $updatemember->member_race_id = $this->request->variable('member_race_id', 0);
+        $updatemember->member_role = $this->request->variable('member_role', 0);
+        $updatemember->member_realm = $this->request->variable('realm', '');
+        $updatemember->member_region = $this->request->variable('region_id', '');
 
         if (!in_array($updatemember->member_region, $updatemember->regionlist))
         {
             $updatemember->member_region = '';
         }
 
-        $updatemember->member_name = utf8_normalize_nfc(request_var('member_name', '', true));
-        $updatemember->member_gender_id = isset($_POST['gender']) ? request_var('gender', '') : '0';
-        $updatemember->member_title = utf8_normalize_nfc(request_var('member_title', '', true));
-        $updatemember->member_guild_id = request_var('member_guild_id', 0);
-        $updatemember->member_rank_id = request_var('member_rank_id', 99);
-        $updatemember->member_level = request_var('member_level', 0);
-        $updatemember->member_joindate = mktime(0, 0, 0, request_var('member_joindate_mo', 0), request_var('member_joindate_d', 0), request_var('member_joindate_y', 0));
+        $updatemember->member_name = $this->request->variable('member_name', '', true);
+        $updatemember->member_gender_id = $this->request->variable('gender', 0);
+        $updatemember->member_title = $this->request->variable('member_title', '', true);
+        $updatemember->member_guild_id = $this->request->variable('member_guild_id', 0);
+        $updatemember->member_rank_id = $this->request->variable('member_rank_id', 99);
+        $updatemember->member_level = $this->request->variable('member_level', 0);
+        $updatemember->member_joindate = mktime(0, 0, 0, $this->request->variable('member_joindate_mo', 0), $this->request->variable('member_joindate_d', 0), $this->request->variable('member_joindate_y', 0));
         $updatemember->member_outdate = mktime ( 0, 0, 0, 12, 31, 2030 );
 
-        if (request_var('member_outdate_mo', 0) + request_var('member_outdate_d', 0) != 0)
+        if ($this->request->variable('member_outdate_mo', 0) + $this->request->variable('member_outdate_d', 0) != 0)
         {
-            $updatemember->member_outdate = mktime(0, 0, 0, request_var('member_outdate_mo', 0), request_var('member_outdate_d', 0), request_var('member_outdate_y', 0));
+            $updatemember->member_outdate = mktime(0, 0, 0, $this->request->variable('member_outdate_mo', 0), $this->request->variable('member_outdate_d', 0), $this->request->variable('member_outdate_y', 0));
         }
 
-        $updatemember->member_achiev = request_var('member_achiev', 0);
-        $updatemember->member_comment = utf8_normalize_nfc(request_var('member_comment', '', true));
-        $updatemember->phpbb_user_id = request_var('phpbb_user_id', 0);
+        $updatemember->member_achiev = $this->request->variable('member_achiev', 0);
+        $updatemember->member_comment = $this->request->variable('member_comment', '', true);
+        $updatemember->phpbb_user_id = $this->request->variable('phpbb_user_id', 0);
 
         if ($updatemember->member_rank_id < 90)
         {
             $updatemember->Armory_getmember();
         }
 
-        $updatemember->member_status = request_var('activated', '') == 'on' ? 1 : 0;
+        $updatemember->member_status = $this->request->variable('activated', '') == 'on' ? 1 : 0;
 
-        $old_member = new \bbdkp\controller\members\Members();
+        $old_member = new Members();
         $old_member->member_id = $updatemember->member_id;
         $old_member->Getmember();
         $updatemember->Updatemember($old_member);
 
-        meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $updatemember->member_guild_id));
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $updatemember->member_guild_id) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+        meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $updatemember->member_guild_id));
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $updatemember->member_guild_id) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
         $success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], $updatemember->member_name);
         trigger_error($success_message . $this->link);
 
@@ -410,14 +390,14 @@ class dkp_mm_module
     private function DeleteMember()
     {
         global $user, $phpbb_admin_path, $phpEx;
-        $deletemember = new \bbdkp\controller\members\Members();
-        $deletemember->member_id = request_var('del_member_id', 0);
+        $deletemember = new Members();
+        $deletemember->member_id = $this->request->variable('del_member_id', 0);
         $deletemember->Getmember();
         $deletemember->Deletemember();
         $success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $deletemember->member_name);
 
-        meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" . URI_GUILD . "=" . $deletemember->member_guild_id));
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;" .
+        meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $deletemember->member_guild_id));
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;' .
                 URI_GUILD . "=" . $deletemember->member_guild_id) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 
         trigger_error($success_message . $this->link, E_USER_WARNING);
@@ -433,9 +413,9 @@ class dkp_mm_module
         {
             trigger_error('FORM_INVALID');
         }
-        $activatemember = new \bbdkp\controller\members\Members();
-        $activate_members = request_var('activate_id', array(0));
-        $member_window = request_var('hidden_member', array(0));
+        $activatemember = new Members();
+        $activate_members = $this->request->variable('activate_id', array(0));
+        $member_window = $this->request->variable('hidden_member', array(0));
         $activatemember->Activatemembers($activate_members, $member_window);
         unset($activatemember);
     }
@@ -448,15 +428,15 @@ class dkp_mm_module
     {
         global $db;
 
-        $Guild = new \bbdkp\controller\guilds\Guilds();
-        $Guild->guildid = request_var('hidden_guildid', 0);
+        $Guild = new Guilds();
+        $Guild->guildid = $this->request->variable('hidden_guildid', 0);
         $Guild->Getguild();
 
-        $minlevel = request_var('hidden_minlevel', 0);
-        $maxlevel = request_var('hidden_maxlevel', 200);
-        $selectactive = request_var('hidden_active', 0);
-        $selectnonactive = request_var('hidden_nonactive', 0);
-        $member_filter = utf8_normalize_nfc(request_var('hidden_member_name', '', true)) ;
+        $minlevel = $this->request->variable('hidden_minlevel', 0);
+        $maxlevel = $this->request->variable('hidden_maxlevel', 200);
+        $selectactive = $this->request->variable('hidden_active', 0);
+        $selectnonactive = $this->request->variable('hidden_nonactive', 0);
+        $member_filter = $this->request->variable('hidden_member_name', '', true) ;
 
         $members_result = $Guild->listmembers('member_id', 0, 0 , $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter, true);
 
@@ -469,7 +449,7 @@ class dkp_mm_module
             {
                 break;
             }
-            $member = new \bbdkp\controller\members\Members($row['member_id']);
+            $member = new Members($row['member_id']);
 
             $last_update = $member->last_update;
 
@@ -480,7 +460,7 @@ class dkp_mm_module
             {
                 $i += 1;
                 if ($log != '') $log .= ', ';
-                $old_member = new \bbdkp\controller\members\Members($row['member_id']);
+                $old_member = new Members($row['member_id']);
 
 
                 if (isset($member))
@@ -511,9 +491,9 @@ class dkp_mm_module
      * List Members
      *
      * @param $mode
-     * @param $Guild
+     * @param Guilds $Guild
      */
-    private function BuildTemplateListMembers($mode, $Guild)
+    private function BuildTemplateListMembers($mode, Guilds $Guild)
     {
         global  $template, $db, $user, $phpbb_root_path, $config, $phpbb_admin_path, $phpEx;
 
@@ -529,20 +509,22 @@ class dkp_mm_module
         }
         $previous_data = '';
         //get window
-        $start    = request_var('start', 0, false);
-        $minlevel = request_var('minlevel', 0);
-        $maxlevel = request_var('maxlevel', 200);
-        if (isset($_POST['search']) || isset($_GET['active']) || isset($_GET['nonactive']))
+        $start    = $this->request->variable('start', 0, false);
+        $minlevel = $this->request->variable('minlevel', 0);
+        $maxlevel = $this->request->variable('maxlevel', 200);
+
+        if ($this->request->is_set_post('search') || isset($_GET['active']) || isset($_GET['nonactive']))
         {
-            $selectactive    = request_var('active', 0);
-            $selectnonactive = request_var('nonactive', 0);
-        } else
+            $selectactive    = $this->request->variable('active', 0);
+            $selectnonactive = $this->request->variable('nonactive', 0);
+        }
+        else
         {
             // set standard
             $selectactive    = 1;
             $selectnonactive = 1;
         }
-        $member_filter = utf8_normalize_nfc(request_var('member_name', '', true));
+        $member_filter = $this->request->variable('member_name', '', true);
         $sort_order = array(
             0 => array('member_name', 'member_name desc'),
             1 => array('username', 'username desc'),
@@ -555,7 +537,7 @@ class dkp_mm_module
         $current_order   = $this->switch_order($sort_order);
         $sort_index      = explode('.', $current_order['uri']['current']);
         $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
-        $show_all        = ((isset($_GET['show'])) && request_var('show', '') == 'all') ? true : false;
+        $show_all        = ((isset($_GET['show'])) && $this->request->variable('show', '') == 'all') ? true : false;
         $result       = $Guild->listmembers($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter);
         $member_count = 0;
         while ($row = $db->sql_fetchrow($result))
@@ -592,14 +574,14 @@ class dkp_mm_module
                 'CLASS'                => ($row['member_class'] != 'NULL') ? $row['member_class'] : '&nbsp;',
                 'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : date($config['bbdkp_date_format'] . ' H:i:s', $row['last_update']),
                 'U_VIEW_USER'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=users&amp;icat=13&amp;mode=overview&amp;u=$phpbb_user_id"),
-                'U_VIEW_MEMBER'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_mm&amp;mode=mm_addmember&amp;' . URI_NAMEID . '=' . $row['member_id']),
-                'U_DELETE_MEMBER'      => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=dkp_mm&amp;mode=mm_addmember&amp;delete=1&amp;' . URI_NAMEID . '=' . $row['member_id'])));
+                'U_VIEW_MEMBER'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_addmember&amp;' . URI_NAMEID . '=' . $row['member_id']),
+                'U_DELETE_MEMBER'      => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_addmember&amp;delete=1&amp;' . URI_NAMEID . '=' . $row['member_id'])));
             $previous_data = $row[$previous_source];
         }
         $db->sql_freeresult($members_result);
         $footcount_text   = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $member_count);
         $memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx",
-                "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri']['current'] .
+                'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri']['current'] .
                 "&amp;" . URI_GUILD . "=" . $Guild->guildid .
                 "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
@@ -617,39 +599,39 @@ class dkp_mm_module
             'MAXLEVEL'              => $maxlevel,
             'START'                 => $start,
             'MEMBER_NAME'           => $member_filter,
-            'F_MEMBERS'             => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_addmember',
-            'F_MEMBERS_LIST'        => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm") . '&amp;mode=mm_listmembers',
+            'F_MEMBERS'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module') . '&amp;mode=mm_addmember',
+            'F_MEMBERS_LIST'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module') . '&amp;mode=mm_listmembers',
             'L_TITLE'               => $user->lang['ACP_MM_LISTMEMBERS'],
             'L_EXPLAIN'             => $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'],
-            'O_NAME'                => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_NAME'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_USERNAME'            => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_USERNAME'            => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][1] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_LEVEL'               => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_LEVEL'               => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][2] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_CLASS'               => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_CLASS'               => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][3] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_RANK'                => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_RANK'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][4] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_LAST_UPDATE'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_LAST_UPDATE'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][5] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'O_ID'                  => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;o=" . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
+            'O_ID'                  => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][7] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
                 "&amp;nonactive=" . $selectnonactive),
-            'U_LIST_MEMBERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_listmembers&amp;"),
+            'U_LIST_MEMBERS'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;'),
             'LISTMEMBERS_FOOTCOUNT' => $footcount_text,
             'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid),
             'S_WOW'                 => ($Guild->game_id == 'wow') ? true : false,
@@ -670,15 +652,15 @@ class dkp_mm_module
     {
         global $template, $db, $config, $user, $phpbb_admin_path, $phpEx;
 
-        $member_id  = request_var('hidden_member_id', request_var(URI_NAMEID, 0));
-        $editmember = new \bbdkp\controller\members\Members($member_id);
+        $member_id  = $this->request->variable('hidden_member_id', $this->request->variable(URI_NAMEID, 0));
+        $editmember = new Members($member_id);
         $S_ADD = ($member_id > 0) ? false : true;
         if ($S_ADD)
         {
             // set defaults
-            $editmember->member_guild_id = request_var(URI_GUILD, 0);
+            $editmember->member_guild_id = $this->request->variable(URI_GUILD, 0);
         }
-        $Guild     = new \bbdkp\controller\guilds\Guilds($editmember->member_guild_id);
+        $Guild     = new Guilds($editmember->member_guild_id);
         $guildlist = $Guild->guildlist();
 
         if ($S_ADD)
@@ -722,7 +704,7 @@ class dkp_mm_module
         }
         // Rank drop-down -> for initial load
         // reloading is done from ajax to prevent redraw
-        $Ranks  = new \bbdkp\controller\guilds\Ranks($editmember->member_guild_id);
+        $Ranks  = new Ranks($editmember->member_guild_id);
         $result = $Ranks->listranks();
         while ($row = $db->sql_fetchrow($result))
         {
@@ -811,7 +793,7 @@ class dkp_mm_module
         $db->sql_freeresult($result);
 
         // get roles
-        $Roles = new \bbdkp\controller\games\Roles();
+        $Roles = new Roles();
         $Roles->game_id = $Guild->game_id;
         $Roles->guild_id = $editmember->member_guild_id;
         $listroles = $Roles->listroles();
@@ -912,7 +894,7 @@ class dkp_mm_module
         $template->assign_vars(array(
             'L_TITLE'                  => $user->lang['ACP_MM_ADDMEMBER'],
             'L_EXPLAIN'                => $user->lang['ACP_MM_ADDMEMBER_EXPLAIN'],
-            'F_ADD_MEMBER'             => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_mm&amp;mode=mm_addmember&amp;"),
+            'F_ADD_MEMBER'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_addmember&amp;'),
             'STATUS'                   => $editmember->member_status == 1 ? 'checked="checked"' : '',
             'MEMBER_NAME'              => $editmember->member_name,
             'MEMBER_ID'                => $editmember->member_id,

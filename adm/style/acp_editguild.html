@@ -1,17 +1,4 @@
 <!-- INCLUDE overall_header.html -->
-<script type="text/javascript">
-    //<![CDATA[
-    function check_form()
-    {
-        if (document.getElementById('guild_name').value.length < 2)
-        {
-            alert('{LA_FV_REQUIRED_NAME}');
-            return false;
-        }
-        return true;
-    }
-    //]]>
-</script>
 <a name="maincontent"></a>
 <h1>{L_TITLE}&nbsp;{GUILD_NAME}</h1>
 <p>{L_EXPLAIN}</p>
@@ -29,9 +16,7 @@
         <form method="post" action="{U_EDIT_GUILD}" onsubmit="return check_form(this)" id="editguild">
             <div class="tablewrap">
                 <fieldset>
-
                     <legend>{L_EDIT_GUILD_TITLE}</legend>
-
                     <div class="tablewrap">
                         <dl>
                             <dt><label for="guild_name">{L_GUILD_NAME}:</label></dt>
@@ -137,7 +122,6 @@
                 <fieldset class="quick" style="float: {S_CONTENT_FLOW_END};">
                     {S_FORM_TOKEN}
                     <input type="hidden" name="guild_id" value="{GUILDID}" />
-                    <input type="hidden" name="{URI_GUILD}" value="{GUILD_ID}" />
                     <input type="submit" name="updateguild" value="{L_UPDATE_GUILD}" class="button1" />
                     <input type="submit"  name="deleteguild" value="{L_DELETE_GUILD}" class="button2" />
                 </fieldset>
@@ -147,4 +131,17 @@
         <span class="corners-bottom"><span></span></span>
     </div>
 </div>
+<script type="text/javascript">
+    //<![CDATA[
+    function check_form()
+    {
+        if (document.getElementById('guild_name').value.length < 2)
+        {
+            alert('{LA_FV_REQUIRED_NAME}');
+            return false;
+        }
+        return true;
+    }
+    //]]>
+</script>
 <!-- INCLUDE overall_footer.html -->
