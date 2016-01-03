@@ -34,14 +34,19 @@ class dkp_mm_module extends Admin
      *
      * @var \phpbb\request\request_interface
      */
-    public $request;
+    private $request;
+    private $phpbb_container;
 
     public function main ($id, $mode)
     {
+        parent::__construct();
         global $user, $phpbb_admin_path, $phpEx;
-        global $request;
-
+        global $request, $phpbb_container;
+        $form_key = 'sajaki/bbdkp';
+        add_form_key($form_key);
         $this->request = $request;
+        $this->phpbb_container = $phpbb_container;
+        $this->tpl_name   = 'acp_' . $mode;
 
         switch ($mode)
         {
@@ -153,7 +158,7 @@ class dkp_mm_module extends Admin
 
                 if ($add || $update)
                 {
-                    if (! check_form_key('mm_addmember'))
+                    if (! check_form_key('sajaki/bbdkp'))
                     {
                         trigger_error('FORM_INVALID');
                     }
@@ -194,9 +199,8 @@ class dkp_mm_module extends Admin
                 break;
 
             default:
-                $this->page_title = 'ACP_DKP_MAINPAGE';
-                $this->tpl_name = 'dkp/acp_mainpage';
-                $success_message = 'Error';
+                $this->page_title = 'ACP_DKP_MEMBER_ADD';
+                $success_message = $user->lang['L_ERROR'];
                 trigger_error($success_message . $this->link, E_USER_WARNING);
         }
     }
@@ -409,7 +413,7 @@ class dkp_mm_module extends Admin
      */
     private function ActivateList()
     {
-        if (!check_form_key('mm_listmembers'))
+        if (!check_form_key('sajaki/bbdkp'))
         {
             trigger_error('FORM_INVALID');
         }
@@ -495,7 +499,7 @@ class dkp_mm_module extends Admin
      */
     private function BuildTemplateListMembers($mode, Guilds $Guild)
     {
-        global  $template, $db, $user, $phpbb_root_path, $config, $phpbb_admin_path, $phpEx;
+        global  $template, $db, $user, $config, $phpbb_admin_path, $phpEx;
 
         // fill popup and set selected to default selection
         $Guild->Getguild();
@@ -538,8 +542,10 @@ class dkp_mm_module extends Admin
         $sort_index      = explode('.', $current_order['uri']['current']);
         $previous_source = preg_replace('/( (asc|desc))?/i', '', $sort_order[$sort_index[0]][$sort_index[1]]);
         $show_all        = ((isset($_GET['show'])) && $this->request->variable('show', '') == 'all') ? true : false;
+
         $result       = $Guild->listmembers($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter);
         $member_count = 0;
+
         while ($row = $db->sql_fetchrow($result))
         {
             $member_count += 1;
@@ -567,9 +573,9 @@ class dkp_mm_module extends Admin
                 'LEVEL'                => ($row['member_level'] > 0) ? $row['member_level'] : '&nbsp;',
                 'ARMOR'                => (!empty($row['armor_type'])) ? $row['armor_type'] : '&nbsp;',
                 'COLORCODE'            => ($row['colorcode'] == '') ? '#254689' : $row['colorcode'],
-                'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '',
+                'CLASS_IMAGE'          => (strlen($row['imagename']) > 1) ? $this->ext_path . "images/class_images/" . $row['imagename'] . ".png" : '',
                 'S_CLASS_IMAGE_EXISTS' => (strlen($row['imagename']) > 1) ? true : false,
-                'RACE_IMAGE'           => (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '',
+                'RACE_IMAGE'           => (strlen($race_image) > 1) ? $this->ext_path . "images/race_images/" . $race_image . ".png" : '',
                 'S_RACE_IMAGE_EXISTS'  => (strlen($race_image) > 1) ? true : false,
                 'CLASS'                => ($row['member_class'] != 'NULL') ? $row['member_class'] : '&nbsp;',
                 'LAST_UPDATE'          => ($row['last_update'] == 0) ? '' : date($config['bbdkp_date_format'] . ' H:i:s', $row['last_update']),
@@ -579,17 +585,21 @@ class dkp_mm_module extends Admin
             $previous_data = $row[$previous_source];
         }
         $db->sql_freeresult($members_result);
+
         $footcount_text   = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $member_count);
-        $memberpagination = generate_pagination(append_sid("{$phpbb_admin_path}index.$phpEx",
-                'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri']['current'] .
-                "&amp;" . URI_GUILD . "=" . $Guild->guildid .
-                "&amp;minlevel=" . $minlevel .
-                "&amp;maxlevel=" . $maxlevel .
-                "&amp;active="   . $selectactive .
-                "&amp;nonactive=" . $selectnonactive),
-            $member_count, $config['bbdkp_user_llimit'], $start, true);
-        $form_key         = 'mm_listmembers';
-        add_form_key($form_key);
+
+        $memberpagination = $this->phpbb_container->get('pagination');
+
+        $pagination_url = append_sid("{$phpbb_admin_path}index.$phpEx",
+            'i=\sajaki\bbdkp\acp\dkp_mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri']['current'] .
+            "&amp;" . URI_GUILD . "=" . $Guild->guildid .
+            "&amp;minlevel=" . $minlevel .
+            "&amp;maxlevel=" . $maxlevel .
+            "&amp;active="   . $selectactive .
+            "&amp;nonactive=" . $selectnonactive);
+
+        $memberpagination->generate_template_pagination($pagination_url, 'pagination', 'start', $member_count, $config['bbdkp_user_llimit'], $start, true);
+
         $template->assign_vars(array(
             'F_SELECTACTIVE'        => $selectactive,
             'F_SELECTNONACTIVE'     => $selectnonactive,
@@ -635,12 +645,12 @@ class dkp_mm_module extends Admin
             'LISTMEMBERS_FOOTCOUNT' => $footcount_text,
             'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=dkp_guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid),
             'S_WOW'                 => ($Guild->game_id == 'wow') ? true : false,
-            'MEMBER_PAGINATION'     => $memberpagination,
+            'PAGE_NUMBER'           => $memberpagination->on_page($member_count, $config['bbdkp_user_llimit'], $start),
             'GUILD_EMBLEM'          => $Guild->emblempath,
             'GUILD_NAME'            => $Guild->name,
         ));
-        $this->page_title = 'ACP_MM_LISTMEMBERS';
-        $this->tpl_name   = 'dkp/acp_' . $mode;
+        $this->page_title = 'ACP_DKP_MEMBER_LIST';
+
     }
 
     /**
@@ -889,8 +899,8 @@ class dkp_mm_module extends Admin
             $s_phpbb_user .= '<option value="' . $row['user_id'] . '"' . $selected . '>' . $row['username'] . '</option>';
         }
         unset($now);
-        $form_key = 'mm_addmember';
-        add_form_key($form_key);
+
+        $this->page_title = 'ACP_MM_ADDMEMBER';
         $template->assign_vars(array(
             'L_TITLE'                  => $user->lang['ACP_MM_ADDMEMBER'],
             'L_EXPLAIN'                => $user->lang['ACP_MM_ADDMEMBER_EXPLAIN'],
@@ -932,7 +942,7 @@ class dkp_mm_module extends Admin
             'UA_FINDRANK'              => append_sid($phpbb_admin_path . "style/dkp/findrank.$phpEx"),
             'UA_FINDCLASSRACE'         => append_sid($phpbb_admin_path . "style/dkp/findclassrace.$phpEx"),
             'S_ADD'                    => $S_ADD));
-        $this->page_title = 'ACP_MM_ADDMEMBER';
-        $this->tpl_name   = 'dkp/acp_' . $mode;
+
+
     }
 }
