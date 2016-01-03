@@ -7,7 +7,7 @@ bbDKP is a ‘Dragon Kill system’ for your phpBB3 Bulletin board.
 It was originally forked from EQDKP to phpBB in 2008. the 2.0 version is rebuild on the Symfony 2 framework to be compatible with phpBB.
 
 [![Build Status](https://travis-ci.org/bbDKP/bbDKP.svg?branch=develop-2.0)](https://travis-ci.org/bbDKP/bbDKP)
-
+[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 Features : 
 - Integration of Game, Guild and DKP management facilities; 
