@@ -47,7 +47,7 @@ class dkp_guild_module extends Admin
     public function main ($id, $mode)
     {
         global $user, $template, $db, $phpbb_admin_path, $phpEx;
-        global $request, $phpbb_container;
+        global $request;
         parent::__construct();
         $form_key = 'sajaki/bbdkp';
         add_form_key ( $form_key );
@@ -138,7 +138,7 @@ class dkp_guild_module extends Admin
                             $this->DeleteRank();
                         }
 
-                        $this->tpl_name = 'dkp/acp_editguild_ranks';
+                        $this->tpl_name = 'acp_editguild_ranks';
                         $this->BuildTemplateEditGuildRanks($updateguild);
                         break;
 
