@@ -1,47 +1,34 @@
-[![bbDKP](http://www.avathar.be/bbguild/images/site_logo.png)](http://www.avathar.be/bbguild)
-
+[![bbDKP](http://www.avathar.be/bbdkp/images/site_logo.png)](http://www.avathar.be/bbdkp)
 
 ## About
 
-bbGuild is a MMO Guild mamager for your phpBB3 Bulletin board. 
-It was originally forked from EQDKP to phpBB in 2008. the 2.0 version is rebuild on the Symfony 2 framework to be compatible with phpBB 3.1.
+bbGuild is a MMO Guild manager for your phpBB3 Bulletin board. It was originally forked from EQDKP to phpBB in 2008. 
+
+The 2.0 version is rebuild on the Symfony 2 framework to be compatible with phpBB 3.1. The name is changed from bbDKP to reflect that dkp functions are now removed from the core and will return as an addon extension. 
 
 [![Build Status](https://travis-ci.org/bbDKP/bbDKP.svg?branch=develop-2.0)](https://travis-ci.org/bbDKP/bbDKP)
+[![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 Features : 
-- MMO Game and Guild maangement facilities; 
+- MMO Game and Guild management facilities; 
 - Clean report screens, 
 - ACP and UCP modules. 
 - Games supported : 
-  - World of Warcraft, 
-  - The Lord of the Rings Online, 
-  - Dark Age of Camelot, 
-  - Vanguard, 
-  - EverQuest I/II,  
-  - Warhammer Online, 
-  - Final Fantasy XI, 
-  - AION, 
-  - Rift, 
-  - SW:Tor, 
-  - Lineage 2, 
-  - TERA, 
-  - FFXIV 
-  - and Custom Game. 
+  - World of Warcraft, the Lord of the Rings Online, Dark Age of Camelot, Vanguard, EverQuest I/II,  Warhammer Online, Final Fantasy XI, AION, Rift, SW:Tor, Lineage 2, TERA, FFXIV and Custom Game. 
 - Languages supported : English, French, German, Italian. 
 - Robust admin features, no Installation headaches, just copy into ext folder and enable the extension.  
 
 There will be a number of extensions that enhance bbGuild
- - bbDKP manager
- - bbRaid Wow Lua plugin and extension 
- - bbBoss Raid progress extension
+ - bbDKP manager, with different loot systems, and raid tracking.
+ - bbRaidtracker Wow Lua plugin and extension
+ - bbGameWorld Raid progress extension 
  - bbRaidCalendar extension. 
 
-Further development requests, support questions are welcome at http://www.avathar.be/bbdkp or @bbDKP on Twitter.",
-	
+Further development requests, support questions are welcome at http://www.avathar.be/bbdkp or in the phpbb.com extension development topic. 
 	
 ## Current
 
-2.0.0-a1
+2.0.0-a1-dev
 
 This code is not ready for testing yet...
 
