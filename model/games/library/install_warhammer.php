@@ -1,15 +1,15 @@
 <?php
 /**
- * bbdkp vanguard install data
+ * bbguild vanguard install data
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-namespace sajaki\bbdkp\model\games\library;
+namespace sajaki\bbguild\model\games\library;
 
-use sajaki\bbdkp\model\games\library\GameInstall;
+use sajaki\bbguild\model\games\library\GameInstall;
 
 /**
  * @ignore
@@ -21,7 +21,7 @@ if (! defined ( 'IN_PHPBB' ))
 
 /**
  * Warhammer installer class
- * @package sajaki\bbdkp\controller\games
+ * @package sajaki\bbguild\controller\games
  */
 class install_warhammer extends GameInstall
 {

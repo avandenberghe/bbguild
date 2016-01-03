@@ -2,20 +2,20 @@
 /**
  * abstract class aGameInstall
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-namespace sajaki\bbdkp\model\games\library;
+namespace sajaki\bbguild\model\games\library;
 
 /**
  * @ignore
  */
-use sajaki\bbdkp\model\games\rpg\Classes;
-use sajaki\bbdkp\model\games\rpg\Faction;
-use sajaki\bbdkp\model\games\rpg\Races;
-use sajaki\bbdkp\model\games\rpg\Roles;
+use sajaki\bbguild\model\games\rpg\Classes;
+use sajaki\bbguild\model\games\rpg\Faction;
+use sajaki\bbguild\model\games\rpg\Races;
+use sajaki\bbguild\model\games\rpg\Roles;
 
 if (! defined('IN_PHPBB'))
 {
@@ -25,7 +25,7 @@ if (! defined('IN_PHPBB'))
 /**
  * Game interface
  * this abstract class is the framework for all game installers
- * @package sajaki\bbdkp\model\games\library
+ * @package sajaki\bbguild\model\games\library
  */
 abstract class GameInstall
 {

@@ -2,7 +2,7 @@
 /**
  * bbDKP WoW Battle.net API
  *
- * @package bbdkp v2.0
+ * @package bbguild v2.0
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author	  Andreas Vandenberghe <sajaki9@gmail.com>
  * @author	  Chris Saylor
@@ -13,15 +13,15 @@
  *
  */
 
-namespace sajaki\bbdkp\model\wowapi;
-use sajaki\bbdkp\model\wowapi\Realm;
-use sajaki\bbdkp\model\wowapi\Guild;
-use sajaki\bbdkp\model\wowapi\Character;
+namespace sajaki\bbguild\model\wowapi;
+use sajaki\bbguild\model\wowapi\Realm;
+use sajaki\bbguild\model\wowapi\Guild;
+use sajaki\bbguild\model\wowapi\Character;
 
 /**
  * Battle.net WoW API PHP SDK
  * 
- * @package bbdkp
+ * @package bbguild
  */
 class BattleNet
 {

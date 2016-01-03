@@ -1,13 +1,13 @@
 <?php
 /**
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp;
+namespace sajaki\bbguild;
 
 class ext extends \phpbb\extension\base
 {

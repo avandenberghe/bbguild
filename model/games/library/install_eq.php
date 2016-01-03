@@ -2,17 +2,17 @@
 /**
  * everquest install data
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-namespace sajaki\bbdkp\model\games\library;
+namespace sajaki\bbguild\model\games\library;
 
 /**
  * @ignore
  */
-use sajaki\bbdkp\model\games\library\GameInstall;
+use sajaki\bbguild\model\games\library\GameInstall;
 
 if (! defined ( 'IN_PHPBB' ))
 {
@@ -21,11 +21,11 @@ if (! defined ( 'IN_PHPBB' ))
 
 /**
  * Everquest Installer Class
- * @package sajaki\bbdkp\controller\games
+ * @package sajaki\bbguild\controller\games
  */
 class install_eq extends GameInstall
 {
-    // credit shadowfox  http://www.avathar.be/bbdkp/viewtopic.php?f=33&t=2676
+    // credit shadowfox  http://www.avathar.be/bbguild/viewtopic.php?f=33&t=2676
     protected $bossbaseurl = 'http://everquest.allakhazam.com/db/npc.html?id=%s';
     protected $zonebaseurl = 'http://everquest.allakhazam.com/db/zone.html?zstrat=%s';
 

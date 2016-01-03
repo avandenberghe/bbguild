@@ -1,18 +1,18 @@
 <?php
 /**
  * Role class
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
-namespace sajaki\bbdkp\model\games\rpg;
+namespace sajaki\bbguild\model\games\rpg;
 
 /**
  * Roles
- * @package sajaki\bbdkp\model\games\rpg
+ * @package sajaki\bbguild\model\games\rpg
  */
-class Roles // extends \sajaki\bbdkp\model\games\Game
+class Roles // extends \sajaki\bbguild\model\games\Game
 {
     /**
      * Primary key
@@ -80,7 +80,7 @@ class Roles // extends \sajaki\bbdkp\model\games\Game
 							AND l.attribute='role'
 							AND l.game_id = '" . $this->game_id . "'
 							AND r.game_id = l.game_id
-							AND l.language= '" . $config ['bbdkp_lang'] . "'
+							AND l.language= '" . $config ['bbguild_lang'] . "'
 							AND r.role_id = " . $this->role_id);
 
         $sql = $db->sql_build_query ( 'SELECT', $sql_array );
@@ -132,7 +132,7 @@ class Roles // extends \sajaki\bbdkp\model\games\Game
         $names = array (
             'game_id' => ( string ) $this->game_id,
             'attribute_id' => $this->role_id,
-            'language' => $config ['bbdkp_lang'],
+            'language' => $config ['bbguild_lang'],
             'attribute' => 'role',
             'name' => ( string ) $this->rolename,
             'name_short' => ( string ) $this->rolename );
@@ -174,7 +174,7 @@ class Roles // extends \sajaki\bbdkp\model\games\Game
 
         $sql = 'UPDATE ' . BB_LANGUAGE . ' SET ' . $db->sql_build_array ( 'UPDATE', $names ) . '
              WHERE attribute_id = ' . $oldrole->role_id . " AND attribute='role'
-             AND language= '" . $config ['bbdkp_lang'] . "' AND game_id = '" . $this->game_id . "'";
+             AND language= '" . $config ['bbguild_lang'] . "' AND game_id = '" . $this->game_id . "'";
         $db->sql_query ( $sql );
 
         $db->sql_transaction ( 'commit' );
@@ -197,7 +197,7 @@ class Roles // extends \sajaki\bbdkp\model\games\Game
         $sql = 'DELETE FROM ' . BB_GAMEROLE_TABLE . ' WHERE role_id  = ' . $this->role_id . " and game_id = '" . $this->game_id . "'";
         $db->sql_query ( $sql );
 
-        $sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config ['bbdkp_lang'] . "' AND attribute = 'role'
+        $sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config ['bbguild_lang'] . "' AND attribute = 'role'
                 and attribute_id= " . $this->role_id . " and game_id = '" . $this->game_id . "'";
         $db->sql_query ( $sql );
 
@@ -240,7 +240,7 @@ class Roles // extends \sajaki\bbdkp\model\games\Game
                 BBGAMES_TABLE => 'g' ),
             'WHERE' => " r.role_id = l.attribute_id AND r.game_id = g.game_id
                             AND r.game_id = l.game_id AND l.game_id = '" . $db->sql_escape ( $this->game_id ) . "'
-							AND l.attribute='role' AND l.language= '" . $config ['bbdkp_lang'] . "'",
+							AND l.attribute='role' AND l.language= '" . $config ['bbguild_lang'] . "'",
             'ORDER_BY' => $order);
 
         $sql = $db->sql_build_query ( 'SELECT', $sql_array );

@@ -2,20 +2,20 @@
 /**
  * Ranks class file
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp\model\player;
-use sajaki\bbdkp\model\player\Guilds;
+namespace sajaki\bbguild\model\player;
+use sajaki\bbguild\model\player\Guilds;
 
 /**
  * Ranks Class
  *
  * Manages Guildranks, extends the guild class
- *   @package bbdkp
+ *   @package bbguild
  *
  */
 class Ranks extends Guilds
@@ -151,7 +151,7 @@ class Ranks extends Guilds
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-		unset($bbdkp);
+		unset($bbguild);
 
 
 
@@ -202,7 +202,7 @@ class Ranks extends Guilds
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-		unset($bbdkp);
+		unset($bbguild);
 
 		return true;
 
@@ -251,7 +251,7 @@ class Ranks extends Guilds
 				'log_type' => $log_action['header'] ,
 				'log_action' => $log_action));
 
-		unset($bbdkp);
+		unset($bbguild);
 		return true;
 
 	}

@@ -5,7 +5,7 @@
  * This Character Profile API can be used to fetch a single character at a time through an
  * HTTP GET request to a URL describing the character profile resource.
 
- * @package bbdkp v2.0
+ * @package bbguild v2.0
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author	  Andreas Vandenberghe <sajaki9@gmail.com>
  * @author	  Chris Saylor
@@ -16,9 +16,9 @@
  *
  */
 
-namespace sajaki\bbdkp\model\wowapi;
+namespace sajaki\bbguild\model\wowapi;
 
-use sajaki\bbdkp\model\wowapi\Resource;
+use sajaki\bbguild\model\wowapi\Resource;
 
 /**
  * @ignore
@@ -30,7 +30,7 @@ if (!defined('IN_PHPBB'))
 
 /**
  * Character resource.
- *   @package bbdkp
+ *   @package bbguild
  */
 class Character extends Resource
 {

@@ -2,22 +2,22 @@
 /**
  * Guilds class
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp\model\player;
-use sajaki\bbdkp\model\admin\Admin;
-use sajaki\bbdkp\model\games\Game;
-use sajaki\bbdkp\model\player\Members;
-use sajaki\bbdkp\model\player\Ranks;
-use sajaki\bbdkp\model\wowapi\BattleNet;
+namespace sajaki\bbguild\model\player;
+use sajaki\bbguild\model\admin\Admin;
+use sajaki\bbguild\model\games\Game;
+use sajaki\bbguild\model\player\Members;
+use sajaki\bbguild\model\player\Ranks;
+use sajaki\bbguild\model\wowapi\BattleNet;
 
 /**
  * Manages Guild creation
- * @package sajaki\bbdkp\model\player
+ * @package sajaki\bbguild\model\player
  * @property int $game_id
  * @property int $guildid
  * @property string $name
@@ -411,6 +411,7 @@ class Guilds extends Admin
 		$db->sql_query('UPDATE ' . GUILD_TABLE . ' SET ' . $query . ' WHERE id= ' . $this->guildid);
 
         $data = $this->GetApiInfo($params);
+
         $this->ApiUpdateBattleNet($data, $params);
 
         return true;
@@ -501,8 +502,9 @@ class Guilds extends Admin
 	private function createEmblem($showlevel=TRUE, $width=115)
 	{
 		//location to create the file
-		$imgfile = $this->ext_path . "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
-		$outputpath = "images/bbdkp/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name).".png";
+		$imgfile = $this->ext_path . "images/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name) .".png";
+		$outputpath = $this->ext_path . "images/guildemblem/".$this->region.'_'.$this->realm.'_'. $this->mb_str_replace(' ', '_', $this->name).".png";
+
 		if (file_exists($imgfile) AND $width==(imagesx(imagecreatefrompng($imgfile))) AND (filemtime($imgfile)+86000) > time())
 		{
 			$finalimg = imagecreatefrompng($imgfile);
@@ -700,7 +702,7 @@ class Guilds extends Admin
             $this->level = $row['level'];
             $this->battlegroup = $row['battlegroup'];
             $this->guildarmoryurl = $row['guildarmoryurl'];
-            $this->emblempath = $this->ext_path  . $row['emblemurl'];
+            $this->emblempath = $row['emblemurl'];
             $this->min_armory = $row['min_armory'];
             $this->recstatus = $row['rec_status'];
             $this->armory_enabled = $row['armory_enabled'];
@@ -751,7 +753,7 @@ class Guilds extends Admin
 								'ON' => 'u.user_id = m.phpbb_user_id ')) ,
 				'WHERE' => " (m.member_rank_id = r.rank_id)
 			    				and m.game_id = l.game_id
-			    				AND l.attribute_id = c.class_id and l.game_id = c.game_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+			    				AND l.attribute_id = c.class_id and l.game_id = c.game_id AND l.language= '" . $config['bbguild_lang'] . "' AND l.attribute = 'class'
 								AND (m.member_guild_id = g.id)
 								AND (m.member_guild_id = r.guild_id)
 								AND (m.member_guild_id = " . $this->guildid . ')
@@ -794,7 +796,7 @@ class Guilds extends Admin
 
 		if($mode == 1)
 		{
-			$members_result = $db->sql_query_limit($sql, $config['bbdkp_user_llimit'], $start);
+			$members_result = $db->sql_query_limit($sql, $config['bbguild_user_llimit'], $start);
 		}
 		else
 		{
@@ -824,7 +826,7 @@ class Guilds extends Admin
 		$sql .= '   ON m.game_id = c.game_id  AND m.member_class_id = c.class_id  ';
 		$sql .= ' INNER JOIN ' . BB_LANGUAGE . ' l ON  l.attribute_id = c.class_id AND l.game_id = c.game_id ';
 		$sql .= ' WHERE  1=1 ';
-		$sql .= " AND l.language = '" . $config['bbdkp_lang']."' AND l.attribute = 'class' ";
+		$sql .= " AND l.language = '" . $config['bbguild_lang']."' AND l.attribute = 'class' ";
 		$sql .= ' AND g.id =  ' . $this->guildid;
 		$sql .= ' GROUP  BY c.class_id, l.name ';
 		$sql .= ' ORDER  BY c.class_id ASC ';
@@ -867,7 +869,7 @@ class Guilds extends Admin
 								'ON' => 'u.user_id = m.phpbb_user_id ')) ,
 				'WHERE' => " (m.member_rank_id = r.rank_id)
 				    				and m.game_id = l.game_id
-				    				AND l.attribute_id = c.class_id and l.game_id = c.game_id AND l.language= '" . $config['bbdkp_lang'] . "' AND l.attribute = 'class'
+				    				AND l.attribute_id = c.class_id and l.game_id = c.game_id AND l.language= '" . $config['bbguild_lang'] . "' AND l.attribute = 'class'
 									AND (m.member_guild_id = g.id)
 									AND (m.member_guild_id = r.guild_id)
 									AND (m.member_guild_id = " . $this->guildid . ')
@@ -1030,7 +1032,7 @@ class Guilds extends Admin
 	{
         global $db;
 
-        if($this->armoryresult = 'KO')
+        if($this->armoryresult == 'KO')
         {
             return;
         }

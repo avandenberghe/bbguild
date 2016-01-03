@@ -13,59 +13,82 @@ namespace sajaki\bbdkp\migrations;
 use \phpbb\db\migration\container_aware_migration;
 
 /**
-* Migration stage 2: Initial data
-*/
+ * Migration stage 2: Initial data
+ */
 class release_2_0_0_m02_data extends container_aware_migration
 {
+    protected $guild_table;
+    protected $member_ranks_table;
+    protected $bb_gamerole_table;
+    protected $bb_language;
+    protected $welcome_msg_table;
+    /*
+    protected $bbgames_table;
+    protected $news_table;
+    protected $bblogs_table;
+    protected $member_list_table;
+    protected $class_table;
+    protected $race_table;
+    protected $faction_table;
+    protected $bbrecruit_table;
+    protected $bbdkpplugins_table;
+    */
 
-	static public function depends_on()
-	{
-		return array('\sajaki\bbdkp\migrations\release_2_0_0_m01_schema');
-	}
+    static public function depends_on()
+    {
+        return array('\sajaki\bbdkp\migrations\release_2_0_0_m01_schema');
+    }
 
-	public function update_data()
-	{
-		return array(
-			array('custom', array(array($this, 'insert_sample_data'))),
-		);
-	}
+    public function update_data()
+    {
+        return array(
+            array('custom', array(array($this, 'insert_sample_data'))),
+        );
+    }
 
     /**
      * populate with staring data.
      */
+    /**
+     * populate with starting data.
+     */
     public function insert_sample_data()
     {
         $user = $this->container->get('user');
-        $user->add_lang_ext('sajaki/bbdkp', 'dkp_admin');
-
+        $user->add_lang_ext('sajaki/bbguild', 'admin');
         $welcome_message = $this->encode_message($user->lang['WELCOME_DEFAULT']);
+
+        $this->bbgames_table = $this->table_prefix  . 'bbguild_games';
+        $this->news_table = $this->table_prefix  . 'bbguild_news';
+        $this->bblogs_table = $this->table_prefix  . 'bbguild_logs';
+        $this->member_ranks_table = $this->table_prefix  . 'bbguild_ranks';
 
         $guildless = array(
             array(
-            'id'	        => 0,
-            'name'          => 'Guildless',
-            'realm'         => 'default',
-            'region'        => 'us',
-            'battlegroup'   => ' ',
-            'roster'        =>  0,
-            'aion_legion_id'    => 0,
-            'aion_server_id'    => 0,
-            'level'             => 0,
-            'members'           => 0,
-            'achievementpoints' =>  0,
-            'guildarmoryurl'    => '',
-            'emblemurl'         => '',
-            'game_id'           => 'wow',
-            'min_armory'        => 0,
-            'rec_status'        => 0,
-            'guilddefault'      => 0,
-            'armory_enabled'    => 0,
-            'armoryresult'      => '',
-            'recruitforum'      => 0,
+                'id'	        => 0,
+                'name'          => 'Guildless',
+                'realm'         => 'default',
+                'region'        => 'us',
+                'battlegroup'   => ' ',
+                'roster'        =>  0,
+                'aion_legion_id'    => 0,
+                'aion_server_id'    => 0,
+                'level'             => 0,
+                'members'           => 0,
+                'achievementpoints' =>  0,
+                'guildarmoryurl'    => '',
+                'emblemurl'         => '',
+                'game_id'           => 'wow',
+                'min_armory'        => 0,
+                'rec_status'        => 0,
+                'guilddefault'      => 0,
+                'armory_enabled'    => 0,
+                'armoryresult'      => '',
+                'recruitforum'      => 0,
             )
         );
 
-        $this->db->sql_multi_insert($this->table_prefix . 'bbdkp_memberguild', $guildless);
+        $this->db->sql_multi_insert($this->guild_table, $guildless);
 
         $outrank = array(
             array(
@@ -77,20 +100,20 @@ class release_2_0_0_m02_data extends container_aware_migration
                 'rank_suffix'	=> '',
             ));
 
-        $this->db->sql_multi_insert($this->table_prefix . 'bbdkp_member_ranks', $outrank);
+        $this->db->sql_multi_insert($this->member_ranks_table, $outrank);
 
         $welcome = array(
             array(
-            'welcome_title' => 'Welcome to our guild',
-            'welcome_timestamp' => (int) time(),
-            'welcome_msg' => $welcome_message['text'],
-            'bbcode_uid' => $welcome_message['uid'],
-            'bbcode_bitfield' => $welcome_message['bitfield'],
-            'user_id' => $user->data['user_id']
+                'welcome_title' => 'Welcome to our guild',
+                'welcome_timestamp' => (int) time(),
+                'welcome_msg' => $welcome_message['text'],
+                'bbcode_uid' => $welcome_message['uid'],
+                'bbcode_bitfield' => $welcome_message['bitfield'],
+                'user_id' => $user->data['user_id']
             )
         );
 
-        $this->db->sql_multi_insert($this->table_prefix . 'bbdkp_welcomemsg', $welcome);
+        $this->db->sql_multi_insert($this->welcome_msg_table, $welcome);
 
         /*standard game roles */
         $game_id = 'wow';
@@ -119,7 +142,7 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
 
         );
-        $this->db->sql_multi_insert($this->table_prefix . 'bbdkp_gameroles', $Standardoles);
+        $this->db->sql_multi_insert($this->bb_gamerole_table, $Standardoles);
 
         /* language strings for these roles */
 
@@ -234,10 +257,10 @@ class release_2_0_0_m02_data extends container_aware_migration
             ),
 
         );
-        $this->db->sql_multi_insert($this->table_prefix . 'bbdkp_language', $rolelangs);
+        $this->db->sql_multi_insert($this->bb_language, $rolelangs);
 
 
-        }
+    }
 
     /**
      * encode welcome text
@@ -256,6 +279,5 @@ class release_2_0_0_m02_data extends container_aware_migration
         $welcome_message['bitfield']=$bitfield;
         return $welcome_message;
     }
-
 
 }

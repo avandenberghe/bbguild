@@ -1,12 +1,12 @@
 <?php
 /**
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp\event;
+namespace sajaki\bbguild\event;
 
 
 /**
@@ -72,8 +72,8 @@ class main_listener implements EventSubscriberInterface
 	{
 		$lang_set_ext = $event['lang_set_ext'];
 		$lang_set_ext[] = array(
-			'ext_name' => 'sajaki/bbdkp',
-			'lang_set' => array('dkp_common','dkp_admin') ,
+			'ext_name' => 'sajaki/bbguild',
+			'lang_set' => array('common','admin') ,
 		);
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
@@ -86,7 +86,7 @@ class main_listener implements EventSubscriberInterface
     public function add_page_header_link($event)
     {
         $this->template->assign_vars(array(
-            'U_DKP'	=> $this->helper->route('sajaki_bbdkp_01a',
+            'U_DKP'	=> $this->helper->route('sajaki_bbguild_01a',
                 array('guild_id' => 1)),
         ));
     }

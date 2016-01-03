@@ -1,22 +1,22 @@
 <?php
 /**
  * Races Class
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp\model\games\rpg;
+namespace sajaki\bbguild\model\games\rpg;
 
 /**
  * Races
  *
  * Manages creation of Game races
  *
- *   @package bbdkp
+ *   @package bbguild
  */
- class Races //extends \sajaki\bbdkp\model\games\Game
+ class Races //extends \sajaki\bbguild\model\games\Game
 {
 
 	/**
@@ -76,7 +76,7 @@ namespace sajaki\bbdkp\model\games\rpg;
 			'WHERE' => "   r.game_id = l.game_id
 						AND r.race_id = l.attribute_id
 						AND l.attribute='race'
-						AND l.language= '" . $config ['bbdkp_lang'] . "'
+						AND l.language= '" . $config ['bbguild_lang'] . "'
 						AND l.game_id = '" . $this->game_id . "'
 						AND r.race_id = " . $this->race_id
 			);
@@ -129,7 +129,7 @@ namespace sajaki\bbdkp\model\games\rpg;
 		$names = array (
 				'attribute_id' => $this->race_id,
 				'game_id' => $this->game_id,
-				'language' => $config ['bbdkp_lang'],
+				'language' => $config ['bbguild_lang'],
 				'attribute' => 'race',
 				'name' => ( string ) $this->race_name,
 				'name_short' => ( string ) $this->race_name);
@@ -176,7 +176,7 @@ namespace sajaki\bbdkp\model\games\rpg;
 			$sql = 'DELETE FROM ' . RACE_TABLE . ' WHERE race_id =' . $this->race_id . " AND game_id = '" . $this->game_id . "'";
 			$db->sql_query ( $sql );
 
-			$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config ['bbdkp_lang'] . "'
+			$sql = 'DELETE FROM ' . BB_LANGUAGE . " WHERE language= '" . $config ['bbguild_lang'] . "'
 							AND attribute = 'race'
 							AND attribute_id= " . $this->race_id . "
 							AND game_id = '" . $this->game_id . "'";
@@ -234,7 +234,7 @@ namespace sajaki\bbdkp\model\games\rpg;
 				'name' => ( string ) $this->race_name, 'name_short' => ( string ) $this->race_name );
 
 		$sql = 'UPDATE ' . BB_LANGUAGE . ' SET ' . $db->sql_build_array ( 'UPDATE', $names ) . '
-			WHERE attribute_id = ' . $this->race_id . " AND attribute='race'  AND language= '" . $config ['bbdkp_lang'] . "' AND game_id =   '" . $db->sql_escape ( $this->game_id  ) . "'";
+			WHERE attribute_id = ' . $this->race_id . " AND attribute='race'  AND language= '" . $config ['bbguild_lang'] . "' AND game_id =   '" . $db->sql_escape ( $this->game_id  ) . "'";
 		$db->sql_query ( $sql );
 
 		$db->sql_transaction ( 'commit' );
@@ -262,7 +262,7 @@ namespace sajaki\bbdkp\model\games\rpg;
 					),
 				'WHERE' => " r.race_faction_id = f.faction_id
 					AND f.game_id = r.game_id AND r.game_id = g.game_id AND r.game_id = '" . $this->game_id . "'
-		    		AND l.attribute_id = r.race_id AND l.game_id = r.game_id and l.language= '" . $config ['bbdkp_lang'] . "'
+		    		AND l.attribute_id = r.race_id AND l.game_id = r.game_id and l.language= '" . $config ['bbguild_lang'] . "'
 		    		AND l.attribute = 'race' ", 'ORDER_BY' => $order );
 
 		$sql = $db->sql_build_query ( 'SELECT', $sql_array );
