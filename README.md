@@ -1,7 +1,6 @@
 [![bbDKP](http://www.avathar.be/bbdkp/images/site_logo.png)](http://www.avathar.be/bbdkp)
 
 ## About
-[![stable](http://badges.github.io/stability-badges/dist/stable.svg)](http://github.com/badges/stability-badges)
 [![frozen](http://badges.github.io/stability-badges/dist/frozen.svg)](http://github.com/badges/stability-badges)
 
 bbDKP is a ‘Dragon Kill system’ for your phpBB3 Bulletin board. It was originally forked from EQDKP to phpBB in 2008.
