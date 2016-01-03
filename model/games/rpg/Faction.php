@@ -2,22 +2,22 @@
 /**
  * Faction Class
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp\model\games\rpg;
+namespace sajaki\bbguild\model\games\rpg;
 
 /**
  * Faction Class
  * 
  * Manages all Game Factions
  * 
- *   @package bbdkp
+ *   @package bbguild
  */
- class Faction //extends \sajaki\bbdkp\model\games\Game
+ class Faction //extends \sajaki\bbguild\model\games\Game
 {
 	/**
 	 * game id 

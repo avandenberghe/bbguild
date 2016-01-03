@@ -1,16 +1,16 @@
 <?php
 /**
- * bbdkp ffxiv install data
+ * bbguild ffxiv install data
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author Brytor (Legion of Altana)
  * @author Sajaki
  *
  */
-namespace sajaki\bbdkp\model\games\library;
-use sajaki\bbdkp\model\games\library\GameInstall;
+namespace sajaki\bbguild\model\games\library;
+use sajaki\bbguild\model\games\library\GameInstall;
 
 /**
  * @ignore
@@ -22,7 +22,7 @@ if (! defined ( 'IN_PHPBB' ))
 
 /**
  * ffxiv Installer Class
- * @package sajaki\bbdkp\model\games\library
+ * @package sajaki\bbguild\model\games\library
  */
 class install_ffxiv extends GameInstall
 {

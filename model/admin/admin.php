@@ -1,31 +1,31 @@
 <?php
 /**
- * bbDKP Admin class file
+ * bbGuild Admin class file
  *
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp\model\admin;
-use sajaki\bbdkp\model\games\Game;
+namespace sajaki\bbguild\model\admin;
+use sajaki\bbguild\model\games\Game;
 use phpbb\extension\metadata_manager;
 use phpbb\version_helper;
-use sajaki\bbdkp\model\admin\log;
+use sajaki\bbguild\model\admin\log;
 use phpbb\file_downloader;
 
 /**
  *
  * bbDKP Admin foundation
- *   @package bbdkp
+ *   @package bbguild
  */
 class Admin
 {
 
     /**
-     * bbdkp timestamp
+     * bbguild timestamp
      * @var integer
      */
     public $time = 0;
@@ -67,9 +67,9 @@ class Admin
     public function __construct()
     {
         global $user, $phpEx, $phpbb_extension_manager;
-        $this->ext_path = $phpbb_extension_manager->get_extension_path('sajaki/bbdkp', true);
-        $user->add_lang_ext('sajaki/bbdkp', array('dkp_admin','dkp_common'));
-        include_once($this->ext_path . 'model/admin/constants_bbdkp.' . $phpEx);
+        $this->ext_path = $phpbb_extension_manager->get_extension_path('sajaki/bbguild', true);
+        $user->add_lang_ext('sajaki/bbguild', array('admin','common'));
+        include_once($this->ext_path . 'model/admin/constants.' . $phpEx);
 
         // Check for required extensions
         if (!function_exists('curl_init'))
@@ -98,7 +98,6 @@ class Admin
 
         $boardtime = getdate(time() + $user->timezone + $user->timezone->getOffset(new \DateTime('UTC')));
         $this->time = $boardtime[0];
-
         $listgames = new Game;
         $this->games = $listgames->games;
         unset($listgames);
@@ -204,14 +203,14 @@ class Admin
 
 
     /**
-     * sends POST request to bbdkp.com for registration
+     * sends POST request to bbguild.com for registration
      * @param array $regdata
      */
     public final function post_register_request($regdata)
     {
         $rndhash = base_convert(mt_rand(5, 60466175) . mt_rand(5, 60466175), 10, 36);
-        // bbdkp registration url
-        $url = "http://www.avathar.be/services/registerbbdkp.php";
+        // bbguild registration url
+        $url = "http://www.avathar.be/services/registerbbguild.php";
         // Create URL parameter string
         $fields_string = '';
         foreach( $regdata as $key => $value )
@@ -238,16 +237,58 @@ class Admin
     private final function get_register_request($regcode)
     {
         global $cache, $config;
-        $url = 'http://www.avathar.be/services/registerbbdkp.php?rndhash=' . $regcode;
+        $url = 'http://www.avathar.be/services/registerbbguild.php?rndhash=' . $regcode;
         $data = $this->Curl($url, 'GET');
         $regID = isset($data['response']) ? $data['response']['registration']: '';
-        $config->set('bbdkp_regid', $regID, true);
+        $config->set('bbguild_regid', $regID, true);
         $cache->destroy('config');
-        trigger_error('Registration Successful : ' . $config['bbdkp_regid'], E_USER_NOTICE );
+        trigger_error('Registration Successful : ' . $config['bbguild_regid'], E_USER_NOTICE );
     }
 
     /**
-     * retrieve latest bbdkp productversion
+     * get latest plugin info
+     * @param bool $force_update
+     * @param int $ttl
+     * @return array|bool
+     */
+    public final function get_plugin_info($force_update = false, $ttl = 86400)
+    {
+        global $cache, $db;
+        //get latest productversion from cache
+        $plugins = $cache->get('bbguildplugins');
+
+        //if update is forced or cache expired then make the query to refresh latest productversion
+        if ($plugins === false || $force_update)
+        {
+            $plugins = array();
+            $sql = 'SELECT name, value, version, installdate FROM ' . BBDKPPLUGINS_TABLE . ' ORDER BY installdate DESC ';
+            $result = $db->sql_query ($sql);
+            while($row = $db->sql_fetchrow($result))
+            {
+                $data = $this->curl(BBGUILD_VERSIONURL . $row['name'] .'.json' , false, false, false);
+                $response = $data['response'];
+                $latest_version = json_decode($response, true);
+                $latest_version_a = $latest_version['stable']['3.1']['current'];
+
+                $plugins[$row['name']] = array(
+                    'name' => $row['name'],
+                    'value' => $row['value'],
+                    'version' => $row['version'],
+                    'latest' =>  $latest_version_a,
+                    'installdate' => $row['installdate']
+                );
+            }
+            $db->sql_freeresult($result);
+
+            $cache->destroy('bbguildplugins');
+            $cache->put( 'bbguildplugins', $plugins, $ttl);
+        }
+        return $plugins;
+
+    }
+
+    /**
+     * retrieve latest bbguild productversion
      * @param bool $force_update Ignores cached data. Defaults to false.
      * @param bool $warn_fail Trigger a warning if obtaining the latest version information fails. Defaults to false.
      * @param int $ttl  Cache version information for $ttl seconds. Defaults to 86400 (24 hours).
@@ -258,15 +299,15 @@ class Admin
         global $user, $cache;
 
         //get latest productversion from cache
-        $latest_version_a = $cache->get('latest_bbdkp');
+        $latest_version_a = $cache->get('latest_bbguild');
 
         //if update is forced or cache expired then make the call to refresh latest productversion
         if ($latest_version_a === false || $force_update)
         {
-            $data = $this->curl(BBDKP_VERSIONURL . 'bbdkp.json', false, false, false);
+            $data = $this->curl(BBGUILD_VERSIONURL . 'bbguild.json', false, false, false);
             if (empty($data))
             {
-                $cache->destroy('latest_bbdkp');
+                $cache->destroy('latest_bbguild');
                 if ($warn_fail)
                 {
                     trigger_error($user->lang['VERSION_NOTONLINE'], E_USER_WARNING);
@@ -279,7 +320,7 @@ class Admin
             $latest_version_a = $latest_version['stable']['3.1']['current'];
 
             //put this info in the cache
-            $cache->put('latest_bbdkp' , $latest_version_a, $ttl);
+            $cache->put('latest_bbguild' , $latest_version_a, $ttl);
         }
 
         return $latest_version_a;
@@ -364,7 +405,7 @@ class Admin
     }
 
     /**
-     * makes an entry in the bbdkp log table
+     * makes an entry in the bbguild log table
      * log_action is an xml containing the log
      *
      * log_id    int(11)        UNSIGNED    No        auto_increment
@@ -386,6 +427,6 @@ class Admin
 
     }
 
+
+
 }
-
-

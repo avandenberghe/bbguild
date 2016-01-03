@@ -2,23 +2,23 @@
 /**
  * Member class file
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp\model\player;
+namespace sajaki\bbguild\model\player;
 
-use sajaki\bbdkp\model\admin\Admin;
-use sajaki\bbdkp\model\games\Game;
-use sajaki\bbdkp\model\player\Guilds;
-use sajaki\bbdkp\model\points\Adjust;
-use sajaki\bbdkp\model\wowapi\BattleNet;
+use sajaki\bbguild\model\admin\Admin;
+use sajaki\bbguild\model\games\Game;
+use sajaki\bbguild\model\player\Guilds;
+use sajaki\bbguild\model\points\Adjust;
+use sajaki\bbguild\model\wowapi\BattleNet;
 
 /**
  * manages member creation
- * @package sajaki\bbdkp\model\player
+ * @package sajaki\bbguild\model\player
  * @property array $memberdata
  * @property int $game_id
  * @property int $member_id
@@ -398,10 +398,10 @@ class Members extends Admin
 							BB_LANGUAGE => 'c1') ,
 						'ON' => "c1.attribute_id = c.class_id
 						AND c1.game_id = c.game_id
-						AND c1.language= '" . $config['bbdkp_lang'] . "'
+						AND c1.language= '" . $config['bbguild_lang'] . "'
 						AND c1.attribute = 'class'")) ,
 			'WHERE' => "
-					l1.attribute_id = r.race_id AND l1.game_id = r.game_id AND l1.language= '" . $config['bbdkp_lang'] . "' AND l1.attribute = 'race'
+					l1.attribute_id = r.race_id AND l1.game_id = r.game_id AND l1.language= '" . $config['bbguild_lang'] . "' AND l1.attribute = 'race'
 					AND m.game_id = c.game_id
 					AND m.member_class_id = c.class_id
 					AND m.game_id = r.game_id
@@ -449,8 +449,8 @@ class Members extends Admin
             $this->deactivate_reason = $row['deactivate_reason'];
 			$this->colorcode = $row['colorcode'];
 			$race_image = (string) (($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
-			$this->race_image = (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbdkp/race_images/" . $race_image . ".png" : '';
-			$this->class_image = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbdkp/class_images/" . $row['imagename'] . ".png" : '';
+			$this->race_image = (strlen($race_image) > 1) ? $phpbb_root_path . "images/bbguild/race_images/" . $race_image . ".png" : '';
+			$this->class_image = (strlen($row['imagename']) > 1) ? $phpbb_root_path . "images/bbguild/class_images/" . $row['imagename'] . ".png" : '';
 			$this->member_title  = $row['member_title'];
 
 			return $this->member_id;
@@ -680,13 +680,13 @@ class Members extends Admin
 			// update the comment including the phpbb userid
 			$query = $db->sql_build_array('UPDATE', array(
 				'member_comment' => $this->member_comment . '
-' . sprintf($user->lang['BBDKP_MEMBERDEACTIVATED'] , $user->data['username'], date( 'd.m.y G:i:s', $this->time ))  ,
+' . sprintf($user->lang['BBGUILD_MEMBERDEACTIVATED'] , $user->data['username'], date( 'd.m.y G:i:s', $this->time ))  ,
 			));
 
 			$db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
 				WHERE member_id= ' . $this->member_id);
 
-            $this->AddMemberAdjustment($config['bbdkp_inactive_point_adj'],$user->lang['ACTION_MEMBER_DEACTIVATED'] );
+            $this->AddMemberAdjustment($config['bbguild_inactive_point_adj'],$user->lang['ACTION_MEMBER_DEACTIVATED'] );
 		}
 
         // if status was 0 before then add a line in user comments and set an adjustment
@@ -695,12 +695,12 @@ class Members extends Admin
             // update the comment including the phpbb userid
             $query = $db->sql_build_array('UPDATE', array(
                 'member_comment' => $this->member_comment . '
-' . sprintf($user->lang['BBDKP_MEMBERACTIVATED'] , $user->data['username'], date( 'd.m.y G:i:s', $this->time ))  ,
+' . sprintf($user->lang['BBGUILD_MEMBERACTIVATED'] , $user->data['username'], date( 'd.m.y G:i:s', $this->time ))  ,
             ));
             $db->sql_query('UPDATE ' . MEMBER_LIST_TABLE . ' SET ' . $query . '
 				WHERE member_id= ' . $this->member_id);
 
-            $this->AddMemberAdjustment($config['bbdkp_active_point_adj'],$user->lang['ACTION_MEMBER_ACTIVATED'] );
+            $this->AddMemberAdjustment($config['bbguild_active_point_adj'],$user->lang['ACTION_MEMBER_ACTIVATED'] );
         }
 
         $log_action = array(
@@ -849,7 +849,7 @@ class Members extends Admin
         {
             $sql = 'SELECT realm, region FROM ' . GUILD_TABLE . ' WHERE id = ' . (int) $this->member_guild_id;
             $result = $db->sql_query($sql);
-            $this->member_realm  = $config['bbdkp_default_realm'];
+            $this->member_realm  = $config['bbguild_default_realm'];
             $this->member_region = '';
             while ($row = $db->sql_fetchrow($result))
             {
@@ -898,7 +898,7 @@ class Members extends Admin
         $this->member_id = $db->sql_nextid();
 
         // add starting points
-        $this->AddMemberAdjustment($config['bbdkp_starting_dkp'],$user->lang['STARTING_DKP'] );
+        $this->AddMemberAdjustment($config['bbguild_starting_dkp'],$user->lang['STARTING_DKP'] );
 
         $log_action = array(
             'header' 	 => 'L_ACTION_MEMBER_ADDED' ,
@@ -1168,7 +1168,7 @@ class Members extends Admin
         {
             $changed = true;
             $this->member_status = "1";
-            $this->AddMemberAdjustment($config['bbdkp_active_point_adj'], $user->lang['ACTION_MEMBER_ACTIVATED']);
+            $this->AddMemberAdjustment($config['bbguild_active_point_adj'], $user->lang['ACTION_MEMBER_ACTIVATED']);
 
         }
 
@@ -1209,7 +1209,7 @@ class Members extends Admin
         {
             $changed = true;
             $this->member_status = "0";
-            $this->AddMemberAdjustment($config['bbdkp_inactive_point_adj'], $user->lang['ACTION_MEMBER_DEACTIVATED']);
+            $this->AddMemberAdjustment($config['bbguild_inactive_point_adj'], $user->lang['ACTION_MEMBER_DEACTIVATED']);
         }
 
         if ($changed)
@@ -1544,7 +1544,7 @@ class Members extends Admin
 	 *
 	 * @return boolean
 	 */
-	public function has_reached_maxbbdkpaccounts()
+	public function has_reached_maxbbguildaccounts()
 	{
 		global $config, $user, $db;
 		$sql = 'SELECT count(*) as charcount
@@ -1554,7 +1554,7 @@ class Members extends Admin
 		$countc = $db->sql_fetchfield('charcount');
 		$db->sql_freeresult($result);
 
-		if ($countc >= $config['bbdkp_maxchars'])
+		if ($countc >= $config['bbguild_maxchars'])
 		{
 			return true;
 		}
@@ -1609,7 +1609,7 @@ class Members extends Admin
 						'ON'    => 'u.user_id = m.phpbb_user_id '),
 				array(
 						'FROM'  => array(BB_LANGUAGE => 'c1'),
-						'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'  and c1.game_id = c.game_id "
+						'ON'    => "c1.attribute_id = c.class_id AND c1.language= '" . $config['bbguild_lang'] . "' AND c1.attribute = 'class'  and c1.game_id = c.game_id "
 				));
 
 		$sql_array['WHERE'] = " c.class_id = m.member_class_id
@@ -1629,7 +1629,7 @@ class Members extends Admin
 
 		if ($mycharsonly ==false)
 		{
-			$sql_array['WHERE'] .= " AND m.member_level >= ".  intval($config['bbdkp_minrosterlvl']) ;
+			$sql_array['WHERE'] .= " AND m.member_level >= ".  intval($config['bbguild_minrosterlvl']) ;
 		}
 
         if ($member_filter != '')
@@ -1638,7 +1638,7 @@ class Members extends Admin
         }
 
         $sql_array['WHERE'] .= " AND m.member_rank_id != 99
-			AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbdkp_lang'] . "'
+			AND e1.attribute_id = e.race_id AND e1.language= '" . $config['bbguild_lang'] . "'
 			AND e1.attribute = 'race' and e1.game_id = e.game_id";
 
 
@@ -1719,7 +1719,7 @@ class Members extends Admin
 			}
 
 			//now get wanted window
-			$result = $db->sql_query_limit ( $sql, $config ['bbdkp_user_llimit'], $start );
+			$result = $db->sql_query_limit ( $sql, $config ['bbguild_user_llimit'], $start );
 			$dataset = $db->sql_fetchrowset($result);
 		}
 		elseif ($mode == 1)
@@ -1746,10 +1746,10 @@ class Members extends Admin
 					'colorcode' => $row['colorcode'],
 					'member_class_id' => $row['member_class_id'],
 					'class_name' => $row['class_name'],
-					'class_image' => $phpbb_root_path . 'images/bbdkp/class_images/' . $row['imagename'] . '.png',
+					'class_image' => $phpbb_root_path . 'images/bbguild/class_images/' . $row['imagename'] . '.png',
 					'race_name' => $row['race_name'],
 					'member_gender_id' => $row['member_gender_id'],
-					'race_image' =>  $phpbb_root_path . 'images/bbdkp/race_images/' . (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']) . '.png',
+					'race_image' =>  $phpbb_root_path . 'images/bbguild/race_images/' . (($row['member_gender_id']==0) ? $row['image_male'] : $row['image_female']) . '.png',
 					'image_female' => $row['image_female'],
 					'image_male' => $row['image_male'],
 					'member_rank'	=> $row['rank_prefix'] . ' ' . $row['rank_name'] . ' ' . $row['rank_suffix'],
@@ -1794,7 +1794,7 @@ class Members extends Admin
     							AND c.game_id = m.game_id
     							AND r.guild_id = m.member_guild_id
     							AND r.rank_id = m.member_rank_id AND r.rank_hide = 0
-    							AND c1.attribute_id =  c.class_id AND c1.language= '" . $config['bbdkp_lang'] . "' AND c1.attribute = 'class'
+    							AND c1.attribute_id =  c.class_id AND c1.language= '" . $config['bbguild_lang'] . "' AND c1.attribute = 'class'
     							AND (c.game_id = '" . $db->sql_escape($game_id) . "')
     							AND c1.game_id=c.game_id
 

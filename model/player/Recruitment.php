@@ -2,14 +2,14 @@
 /**
  * Recruitment Class
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp\model\player;
-use sajaki\bbdkp\model\games\rpg\Roles;
+namespace sajaki\bbguild\model\player;
+use sajaki\bbguild\model\games\rpg\Roles;
 
 if (! defined('IN_PHPBB'))
 {
@@ -20,7 +20,7 @@ if (! defined('IN_PHPBB'))
  * holds vacancies per guild, game, role and class
  *
  * class hierarchy Game --> Roles --> Recruitment
- *   @package bbdkp
+ *   @package bbguild
  *
  */
 class Recruitment extends Roles
@@ -299,7 +299,7 @@ class Recruitment extends Roles
                 AND u.guild_id = g.id
                 AND u.role_id = r.role_id
                 AND l.attribute='role'
-                AND r.game_id=l.game_id AND l.attribute_id = r.role_id  AND l.language = '" . $config['bbdkp_lang'] . "' and l.attribute='role'
+                AND r.game_id=l.game_id AND l.attribute_id = r.role_id  AND l.language = '" . $config['bbguild_lang'] . "' and l.attribute='role'
                 AND u.id = " . (int)$this->id,
             'ORDER_BY' => ' u.role_id '
         );
@@ -414,7 +414,7 @@ class Recruitment extends Roles
             'LEFT_JOIN' => array(
                 array(
                     'FROM'  => array(BB_LANGUAGE => 'c1'),
-                    'ON'    => "c.game_id=c1.game_id AND c1.attribute_id = c.class_id  AND c1.language = '" . $config['bbdkp_lang'] . "' and c1.attribute='class'",
+                    'ON'    => "c.game_id=c1.game_id AND c1.attribute_id = c.class_id  AND c1.language = '" . $config['bbguild_lang'] . "' and c1.attribute='class'",
                 )
             ),
 
@@ -423,7 +423,7 @@ class Recruitment extends Roles
                 AND u.role_id = r.role_id
                 AND r.game_id= g.game_id
                 AND r1.attribute = 'role'
-                AND r.game_id = r1.game_id AND r1.attribute_id = r.role_id  AND r1.language = '" . $config['bbdkp_lang'] . "' and r1.attribute='role'
+                AND r.game_id = r1.game_id AND r1.attribute_id = r.role_id  AND r1.language = '" . $config['bbguild_lang'] . "' and r1.attribute='role'
                 AND c.class_id > 0 AND c.class_id = u.class_id AND c.game_id = g.game_id
                 AND g.id =  " . $this->guild_id,
             'ORDER_BY' => 'c.game_id, c.class_id '

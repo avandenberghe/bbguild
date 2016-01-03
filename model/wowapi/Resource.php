@@ -2,7 +2,7 @@
 /**
  * Battle.net WoW API PHP SDK
  *
- * @package bbdkp v2.0
+ * @package bbguild v2.0
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author	  Andreas Vandenberghe <sajaki9@gmail.com>
  * @author	  Chris Saylor
@@ -13,13 +13,13 @@
  *
  */
 
-namespace sajaki\bbdkp\model\wowapi;
-use sajaki\bbdkp\model\Admin\admin;
+namespace sajaki\bbguild\model\wowapi;
+use sajaki\bbguild\model\Admin\admin;
 
 /**
  * Resource skeleton
  *
- *   @package bbdkp
+ *   @package bbguild
  */
 abstract class Resource extends admin
 {

@@ -1,10 +1,7 @@
-imports:
-    - { resource: tables.yml }
-
-# mapping of service "sajaki.bbdkp.controller" to class sajaki\bbdkp\controller\main
+# mapping of service "sajaki.bbguild.controller" to class sajaki\bbguild\controller\main
 services:
-    sajaki.bbdkp.controller:
-        class: sajaki\bbdkp\controller\dkp_main
+    sajaki.bbguild.controller:
+        class: sajaki\bbguild\controller\main
         arguments:
             - @config
             - @config_text
@@ -12,8 +9,8 @@ services:
             - @template
             - @user
             - %core.php_ext%
-    sajaki.bbdkp.portalcontroller:
-        class: sajaki\bbdkp\controller\dkp_main
+    sajaki.bbguild.portalcontroller:
+        class: sajaki\bbguild\controller\main
         arguments:
             - @config
             - @config_text
@@ -21,8 +18,8 @@ services:
             - @template
             - @user
             - %core.php_ext%
-    sajaki.bbdkp.listener:
-        class: sajaki\bbdkp\event\main_listener
+    sajaki.bbguild.listener:
+        class: sajaki\bbguild\event\main_listener
         arguments:
             - @controller.helper
             - @template

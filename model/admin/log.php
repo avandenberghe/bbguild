@@ -2,17 +2,17 @@
 /**
  * Logging class file
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp\model\admin;
+namespace sajaki\bbguild\model\admin;
 
 /**
  * Singleton bbDKP Logging class
- * @package bbdkp
+ * @package bbguild
  *
  */
 class log
@@ -197,7 +197,7 @@ class log
      */
     const FACTION_DELETED = 40;
     /**
-     * bbdkp logs were purged
+     * bbguild logs were purged
      */
     const LOG_DELETED = 41;
     /**
@@ -476,7 +476,7 @@ class log
     }
 
     /**
-     * makes an entry in the bbdkp log table
+     * makes an entry in the bbguild log table
      * log_action is an xml containing the log
      *
      * @param array $values

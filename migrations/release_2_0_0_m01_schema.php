@@ -2,13 +2,13 @@
 /**
  * bbDKP database installer
  *
- * @package bbdkp v2.0
- * @copyright 2015 bbdkp <https://github.com/bbDKP>
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
 
-namespace sajaki\bbdkp\migrations;
+namespace sajaki\bbguild\migrations;
 
 /**
  * Migration stage 1: Initial schema
@@ -16,27 +16,68 @@ namespace sajaki\bbdkp\migrations;
 class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
 {
 
-    private $bbdkp_version = '2.0.0-dev';
+    protected $bbguild_version = '2.0.0-a1-dev';
+    protected $table_prefix;
+
+    protected $bbgames_table;
+    protected $news_table;
+    protected $bblogs_table;
+    protected $member_ranks_table;
+
+    protected $member_list_table;
+    protected $class_table;
+    protected $race_table;
+    protected $faction_table;
+    protected $guild_table;
+    protected $bb_language;
+    protected $welcome_msg_table;
+    protected $bbrecruit_table;
+    protected $bb_gamerole_table;
+    protected $bbdkpplugins_table;
+
 
     static public function depends_on()
     {
         return array('\phpbb\db\migration\data\v310\gold');
     }
 
+    /**
+     * custom constructor
+     *
+     * @param \phpbb\config\config $config
+     * @param \phpbb\db\driver\driver_interface $db
+     * @param \phpbb\db\tools\tools_interface $db_tools
+     * @param string $phpbb_root_path
+     * @param string $php_ext
+     * @param string $table_prefix
+     */
+    public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\db\tools\tools_interface $db_tools, $phpbb_root_path, $php_ext, $table_prefix)
+    {
+        parent::__construct($config, $db, $db_tools,  $phpbb_root_path, $php_ext, $table_prefix);
+
+        $this->bbgames_table = $this->table_prefix  . 'bbguild_games';
+        $this->news_table = $this->table_prefix  . 'bbguild_news';
+        $this->bblogs_table = $this->table_prefix  . 'bbguild_logs';
+        $this->member_ranks_table = $this->table_prefix  . 'bbguild_ranks';
+        $this->member_list_table = $this->table_prefix  . 'bbguild_members';
+        $this->class_table = $this->table_prefix  . 'bbguild_classes';
+        $this->race_table = $this->table_prefix  . 'bbguild_races';
+        $this->faction_table = $this->table_prefix  . 'bbguild_factions';
+        $this->guild_table = $this->table_prefix  . 'bbguild_guild';
+        $this->bb_language = $this->table_prefix  . 'bbguild_language';
+        $this->welcome_msg_table = $this->table_prefix  . 'bbguild_welcomemsg';
+        $this->bbrecruit_table = $this->table_prefix  . 'bbguild_recruit';
+        $this->bb_gamerole_table = $this->table_prefix  . 'bbguild_gameroles';
+        $this->bbdkpplugins_table = $this->table_prefix  . 'bbdkp_plugins';
+    }
+
     public function effectively_installed()
     {
-
-        if ($this->db_tools->sql_table_exists($this->table_prefix . 'bbdkp_news') &&
-        isset($this->config['bbdkp_version']) && version_compare($this->config['bbdkp_version'], $this->bbdkp_version, '>='))
-        {
-            return true;
-        }
-
-        return false;
+        return phpbb_version_compare($this->config['bbguild_version'], $this->bbguild_version, '>=');
     }
 
     /**
-     * Add the bbdkp table schema to the database:
+     * Add the bbguild table schema to the database:
      * @return array Array of table schema
      */
     public function update_schema()
@@ -44,7 +85,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
         return array(
             'add_tables'	=> array(
                 /*1*/
-                $this->table_prefix . 'bbdkp_news'	=> array(
+                $this->news_table	=> array(
                     'COLUMNS'	=> array(
                         'news_id'			=> array('UINT', NULL, 'auto_increment'),
                         'news_headline'		=> array('VCHAR_UNI', ''),
@@ -58,7 +99,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                     'PRIMARY_KEY'	=> 'news_id',
                 ),
                 /*2*/
-                $this->table_prefix . 'bbdkp_language'	=> array(
+                $this->bb_language	=> array(
                     'COLUMNS'	=> array(
                         'id'     	       => array('UINT', NULL, 'auto_increment'),
                         'game_id' 	   => array('VCHAR:10', ''),
@@ -72,7 +113,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                     'KEYS'            => array('UQ01' => array('UNIQUE', array('game_id', 'attribute_id', 'language', 'attribute')),
                     )),
                 /*3*/
-                $this->table_prefix . 'bbdkp_factions'	=> array(
+                $this->faction_table  => array(
                     'COLUMNS'	=> array(
                         'game_id' 			=> array('VCHAR:10', ''),
                         'f_index'    		=> array('USINT', NULL, 'auto_increment'),
@@ -86,7 +127,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                     'KEYS'         => array('UQ01'    => array('UNIQUE',  array('game_id', 'faction_id'))),
                 ),
                 /*4*/
-                $this->table_prefix . 'bbdkp_classes'	=> array(
+                $this->class_table	=> array(
                     'COLUMNS'	=> array(
                         'c_index'    		=> array('USINT', NULL, 'auto_increment'),
                         'game_id' 			=> array('VCHAR:10', ''),
@@ -103,7 +144,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                     'KEYS'         => array('UQ01'    => array('UNIQUE', array('game_id', 'class_id'))),
                 ),
                 /*5*/
-                $this->table_prefix . 'bbdkp_races'	=> array(
+                $this->race_table	=> array(
                     'COLUMNS'	=> array(
                         'game_id' 			=> array('VCHAR:10', ''),
                         'race_id'			=> array('USINT', 0),
@@ -116,7 +157,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                 ),
 
                 /*6*/
-                $this->table_prefix . 'bbdkp_memberguild'	=> array(
+                $this->guild_table	=> array(
                     'COLUMNS'	=> array(
                         'id'			    => array('USINT', 0),
                         'name'			    => array('VCHAR_UNI:255', ''),
@@ -144,7 +185,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                 ),
 
                 /*7*/
-                $this->table_prefix . 'bbdkp_member_ranks'	=> array(
+                $this->member_ranks_table	=> array(
                     'COLUMNS'	=> array(
                         //rank_id is not auto-increment
                         'guild_id'		=> array('USINT', 0),
@@ -158,7 +199,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                 ),
 
                 /*8*/
-                $this->table_prefix . 'bbdkp_memberlist'	=> array(
+                $this->member_list_table	=> array(
                     'COLUMNS'	=> array(
                         'member_id'        => array('UINT', NULL, 'auto_increment'),
                         'game_id'  		   => array('VCHAR:10', ''),
@@ -188,161 +229,9 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                     'PRIMARY_KEY'  => 'member_id',
                     'KEYS'         => array('UQ01'    => array('UNIQUE', array('member_guild_id', 'member_name'))),
                 ),
-                /*9*/
-                $this->table_prefix . 'bbdkp_dkpsystem'	=> array(
-                    'COLUMNS'	=> array(
-                        'dkpsys_id'    		=> array('USINT', NULL, 'auto_increment'),
-                        'dkpsys_name'   	=> array('VCHAR_UNI:255', ''),
-                        'dkpsys_status'     => array('VCHAR:2', 'Y'),
-                        'dkpsys_addedby'	=> array('VCHAR_UNI:255', ''),
-                        'dkpsys_updatedby'	=> array('VCHAR_UNI:255', ''),
-                        'dkpsys_default'	=> array('VCHAR:2', 'N'),
-                        'adj_decay' 		=> array('DECIMAL:11', 0.00),
-                    ),
-                    'PRIMARY_KEY'    => 'dkpsys_id',
-                    'KEYS'         => array('UQ01'    => array('UNIQUE', 'dkpsys_name')),
-                ),
-                /*10*/
-                $this->table_prefix . 'bbdkp_events'	=> array(
-                    'COLUMNS'	=> array(
-                        'event_id'    		=> array('UINT', NULL, 'auto_increment'),
-                        'event_dkpid'   	=> array('USINT', 0),
-                        'event_name'     	=> array('VCHAR_UNI:255', ''),
-                        'event_color'     	=> array('VCHAR:8', ''),
-                        'event_imagename'   => array('VCHAR:255', ''),
-                        'event_value'		=> array('DECIMAL:11', 0),
-                        'event_added_by'	=> array('VCHAR_UNI:255', ''),
-                        'event_updated_by'	=> array('VCHAR_UNI:255', ''),
-                        'event_status' 		=> array('BOOL', 1),
-                    ),
-                    'PRIMARY_KEY'    => 'event_id',
-                    'KEYS'            => array('IX01'    => array('INDEX', 'event_dkpid')),
-                ),
-                /*11*/
-                $this->table_prefix . 'bbdkp_memberdkp'	=> array(
-                    'COLUMNS'	=> array(
-                        'member_id'			=> array('UINT', 0),
-                        'member_dkpid'		=> array('USINT', 0),
-                        'member_raid_value'	=> array('DECIMAL:11', 0),
-                        'member_time_bonus'	=> array('DECIMAL:11', 0),
-                        'member_zerosum_bonus'	=> array('DECIMAL:11', 0),
-                        'member_earned'		=> array('DECIMAL:11', 0),
-                        'member_raid_decay'	=> array('DECIMAL:11', 0),
-                        'member_spent'		=> array('DECIMAL:11', 0),
-                        'member_item_decay'	=> array('DECIMAL:11', 0),
-                        'member_adjustment' => array('DECIMAL:11', 0),
-                        'member_firstraid'  => array('TIMESTAMP', 0),
-                        'member_lastraid'	=> array('TIMESTAMP', 0),
-                        'member_raidcount'	=> array('UINT', 0),
-                        'adj_decay' 		=> array('DECIMAL:11', 0.00),
-                    ),
-                    'PRIMARY_KEY'  => array('member_dkpid', 'member_id'),
-                ),
-                /*12*/
-                $this->table_prefix . 'bbdkp_adjustments'	=> array(
-                    'COLUMNS'	=> array(
-                        'adjustment_id'        => array('UINT', NULL, 'auto_increment'),
-                        'member_id'        	 => array('UINT', 0),
-                        'adjustment_dkpid'     => array('USINT', 0),
-                        'adjustment_value'     => array('DECIMAL:11', 0),
-                        'adjustment_date'      => array('TIMESTAMP', 0),
-                        'adjustment_reason'    => array('VCHAR_UNI', ''),
-                        'adjustment_added_by'  => array('VCHAR_UNI:255', ''),
-                        'adjustment_updated_by'=> array('VCHAR_UNI:255', ''),
-                        'adjustment_group_key' => array('VCHAR', ''),
-                        'adj_decay' 			 => array('DECIMAL:11', 0.00),
-                        'can_decay' 			 => array('BOOL', 0),
-                        'decay_time' 			 => array('DECIMAL:11', 0.00),
-                    ),
-                    'PRIMARY_KEY'    => 'adjustment_id',
-                    'KEYS'         => array('IX01'    => array('INDEX', array('member_id', 'adjustment_dkpid'))),
-                ),
-
-                /*13*/
-                $this->table_prefix . 'bbdkp_raids'	=> array(
-                    'COLUMNS'	=> array(
-                        'raid_id'			=> array('UINT', NULL, 'auto_increment'),
-                        'event_id'			=> array('UINT', 0),
-                        'raid_note'   		=> array('TEXT_UNI', ''),
-                        'raid_start'  		=> array('TIMESTAMP', 0) ,
-                        'raid_end'  		=> array('TIMESTAMP', 0) ,
-                        'raid_added_by' 	=> array('VCHAR_UNI:255', ''),
-                        'raid_updated_by' 	=> array('VCHAR_UNI:255', ''),
-                    ),
-                    'PRIMARY_KEY'  => array('raid_id'),
-                    'KEYS'         => array('IX01'    => array('INDEX', 'event_id')),
-                ),
-
-                /*14*/
-                $this->table_prefix . 'bbdkp_raid_detail'	=> array(
-                    'COLUMNS'	=> array(
-                        'raid_id'		=> array('UINT', 0),
-                        'member_id'		=> array('UINT', 0),
-                        'raid_value' 	=> array('DECIMAL:11', 0),
-                        'time_bonus' 	=> array('DECIMAL:11', 0),
-                        'zerosum_bonus' => array('DECIMAL:11', 0),
-                        'raid_decay' 	=> array('DECIMAL:11', 0),
-                        'decay_time' 	=> array('DECIMAL:11', 0.00),
-                    ),
-                    'PRIMARY_KEY'  => array('raid_id', 'member_id'),
-                ),
-
-
-                /*15*/
-                $this->table_prefix . 'bbdkp_raid_items'	=> array(
-                    'COLUMNS'	=> array(
-                        'item_id'         => array('UINT', NULL, 'auto_increment'),
-                        'raid_id'         => array('UINT', 0),
-                        'item_name'       => array('VCHAR_UNI:255', ''),
-                        'member_id'		  => array('UINT', 0),
-                        'item_date'       => array('TIMESTAMP', 0),
-                        'item_added_by'   => array('VCHAR_UNI:255', ''),
-                        'item_updated_by' => array('VCHAR_UNI:255', ''),
-                        'item_group_key'  => array('VCHAR', ''),
-                        'item_gameid' 	  => array('VCHAR:10', ''),
-                        'item_value'      => array('DECIMAL:11', 0.00),
-                        'item_decay'      => array('DECIMAL:11', 0.00), // decay of itemvalue
-                        'item_zs'      	  => array('BOOL', 0), 		// if this flag is set the itemvalue will be distributed over raid
-                        'decay_time' 	  => array('DECIMAL:11', 0.00),
-                        'wowhead_id'      => array('UINT', 0)
-                    ),
-                    'PRIMARY_KEY'     => 'item_id',
-                    'KEYS'         => array('IX01'    => array('INDEX', 'raid_id')),
-                ),
-
-                /*16*/
-                $this->table_prefix . 'bbdkp_logs'	=> array(
-                    'COLUMNS'	=> array(
-                        'log_id'        => array('UINT', NULL, 'auto_increment'),
-                        'log_date'      => array('TIMESTAMP', 0),
-                        'log_type'      => array('VCHAR_UNI:255', ''),
-                        'log_action'    => array('TEXT_UNI', ''),
-                        'log_ipaddress' => array('VCHAR:45', ''), // ipv6 is 45 char
-                        'log_sid'       => array('VCHAR:32', ''),
-                        'log_result'    => array('VCHAR', ''),
-                        'log_userid'    => array('UINT', 0),
-                    ),
-                    'PRIMARY_KEY'  => 'log_id',
-                    'KEYS'         => array(
-                        'log_userid'	=> array('INDEX', 'log_userid'),
-                        'log_type'		=> array('INDEX', 'log_type'),
-                        'log_ipaddress'	=> array('INDEX', 'log_ipaddress')),
-                ),
-
-                /*17*/
-                $this->table_prefix . 'bbdkp_plugins'	=> array(
-                    'COLUMNS'	=> array(
-                        'name'			=> array('VCHAR_UNI:255', ''),
-                        'value'			=> array('BOOL', 0),
-                        'version'  		=> array('VCHAR:50', ''),
-                        'installdate'   => array('TIMESTAMP', 0),
-                        'orginal_copyright' => array('VCHAR_UNI:150', ''),
-                        'bbdkp_copyright'  	=> array('VCHAR_UNI:150', ''),
-                    ),
-                ),
 
                 /*18*/
-                $this->table_prefix . 'bbdkp_welcomemsg'	=> array(
+                $this->welcome_msg_table	=> array(
                     'COLUMNS'	=> array(
                         'welcome_id'    		=> array('INT:8', NULL, 'auto_increment'),
                         'welcome_title' 		=> array('VCHAR_UNI', ''),
@@ -355,8 +244,9 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                     ),
                     'PRIMARY_KEY'    => 'welcome_id'
                 ),
+
                 /*19*/
-                $this->table_prefix . 'bbdkp_games'	=> array(
+                $this->bbgames_table	=> array(
                     'COLUMNS'	=> array(
                         'id'     	     => array('UINT', NULL, 'auto_increment'),
                         'game_id' 	     => array('VCHAR:10', ''),
@@ -374,7 +264,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                     'KEYS'            => array('UQ01' => array('UNIQUE', array('game_id')))
                 ),
                 /*20*/
-                $this->table_prefix . 'bbdkp_gameroles'	=> array(
+                $this->bb_gamerole_table	=> array(
                     'COLUMNS'	=> array(
                         'role_pkid'        => array('INT:8', NULL, 'auto_increment'),
                         'game_id'          => array('VCHAR:10', ''),
@@ -387,7 +277,7 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                     'KEYS'         => array('UQ01'    => array('UNIQUE', array('game_id', 'role_id')))
                 ),
                 /*21*/
-                $this->table_prefix . 'bbdkp_recruit'	=> array(
+                $this->bbrecruit_table	=> array(
                     'COLUMNS'	=> array(
                         'id'               => array('INT:8', NULL, 'auto_increment'),
                         'guild_id'         => array('USINT', 0),
@@ -404,13 +294,44 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
                     'PRIMARY_KEY'          => 'id',
                 ),
 
+                /*16*/
+                $this->bblogs_table	=> array(
+                    'COLUMNS'	=> array(
+                        'log_id'        => array('UINT', NULL, 'auto_increment'),
+                        'log_date'      => array('TIMESTAMP', 0),
+                        'log_type'      => array('VCHAR_UNI:255', ''),
+                        'log_action'    => array('TEXT_UNI', ''),
+                        'log_ipaddress' => array('VCHAR:45', ''), // ipv6 is 45 char
+                        'log_sid'       => array('VCHAR:32', ''),
+                        'log_result'    => array('VCHAR', ''),
+                        'log_userid'    => array('UINT', 0),
+                    ),
+                    'PRIMARY_KEY'  => 'log_id',
+                    'KEYS'         => array(
+                        'I01'	=> array('INDEX', 'log_userid'),
+                        'I02'		=> array('INDEX', 'log_type'),
+                        'I03'	=> array('INDEX', 'log_ipaddress')),
+                ),
+
+                $this->bbdkpplugins_table	=> array(
+                    'COLUMNS'	=> array(
+                        'name'			=> array('VCHAR_UNI:255', ''),
+                        'value'			=> array('BOOL', 0),
+                        'version'  		=> array('VCHAR:50', ''),
+                        'installdate'   => array('TIMESTAMP', 0),
+                        'orginal_copyright' => array('VCHAR_UNI:150', ''),
+                        'bbdkp_copyright'  	=> array('VCHAR_UNI:150', ''),
+                    ),
+                ),
+
 
             ),
+
         );
     }
 
     /**
-     * Drop the bbdkp table schema from the database
+     * Drop the bbguild table schema from the database
      *
      * @return array Array of table schema
      * @access public
@@ -419,30 +340,21 @@ class release_2_0_0_m01_schema extends \phpbb\db\migration\migration
     {
         return array(
             'drop_tables'	=> array(
-                $this->table_prefix . 'bbdkp_news',
-                $this->table_prefix . 'bbdkp_language',
-                $this->table_prefix . 'bbdkp_factions',
-                $this->table_prefix . 'bbdkp_classes',
-                $this->table_prefix . 'bbdkp_races',
-                $this->table_prefix . 'bbdkp_memberguild',
-                $this->table_prefix . 'bbdkp_member_ranks',
-                $this->table_prefix . 'bbdkp_memberlist',
-                $this->table_prefix . 'bbdkp_dkpsystem',
-                $this->table_prefix . 'bbdkp_events',
-                $this->table_prefix . 'bbdkp_memberdkp',
-                $this->table_prefix . 'bbdkp_adjustments',
-                $this->table_prefix . 'bbdkp_raids',
-                $this->table_prefix . 'bbdkp_raid_detail',
-                $this->table_prefix . 'bbdkp_raid_items',
-                $this->table_prefix . 'bbdkp_logs',
-                $this->table_prefix . 'bbdkp_plugins',
-                $this->table_prefix . 'bbdkp_welcomemsg',
-                $this->table_prefix . 'bbdkp_games',
-                $this->table_prefix . 'bbdkp_gameroles',
-                $this->table_prefix . 'bbdkp_recruit',
+                $this->news_table,
+                $this->bb_language,
+                $this->faction_table,
+                $this->class_table,
+                $this->race_table,
+                $this->guild_table,
+                $this->member_ranks_table,
+                $this->member_list_table,
+                $this->welcome_msg_table,
+                $this->bbgames_table,
+                $this->bb_gamerole_table,
+                $this->bbrecruit_table,
+                $this->bblogs_table,
+                $this->bbdkpplugins_table,
             ),
         );
     }
-
-
 }

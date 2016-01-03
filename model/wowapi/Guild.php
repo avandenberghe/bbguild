@@ -2,7 +2,7 @@
 /**
  * Battle.net WoW API PHP SDK
  *
- * @package bbdkp v2.0
+ * @package bbguild v2.0
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  * @author	  Andreas Vandenberghe <sajaki9@gmail.com>
  * @author	  Chris Saylor
@@ -23,12 +23,12 @@
  *
  */
 
-namespace sajaki\bbdkp\model\wowapi;
-use sajaki\bbdkp\model\wowapi\Resource;
+namespace sajaki\bbguild\model\wowapi;
+use sajaki\bbguild\model\wowapi\Resource;
 
 /**
  * Guild resource.
- * @package sajaki\bbdkp\model\wowapi
+ * @package sajaki\bbguild\model\wowapi
  */
 class Guild extends Resource
 {
