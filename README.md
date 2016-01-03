@@ -3,6 +3,7 @@
 ## About
 
 [![frozen](http://badges.github.io/stability-badges/dist/frozen.svg)](http://github.com/badges/stability-badges)
+
 bbDKP is a ‘Dragon Kill system’ for your phpBB3 Bulletin board. It was originally forked from EQDKP to phpBB in 2008.
 
 Dragon kill points are a form of currency in guilds, where members bid on game loot and buy the items, paying in points.
