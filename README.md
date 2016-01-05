@@ -24,7 +24,7 @@ There will be a number of extensions that enhance bbGuild
  - bbGameWorld Raid progress extension 
  - bbRaidCalendar extension. 
 
-Further development requests, support questions are welcome at http://www.avathar.be/bbdkp or in the phpbb.com extension development topic. 
+Further development requests, support questions are welcome at http://www.avathar.be/bbdkp or in the [phpbb.com extension development topic] https://www.phpbb.com/community/viewtopic.php?f=456&t=2258141)
 	
 ## Current
 
