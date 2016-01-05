@@ -64,7 +64,7 @@ Find support and more on
 
 2.0.0a1 06-12-2015
 - [NEW] Conversion to extension
-- [CHG] Functionaity reductions : DKP no longer part of core Mod. 
+- [CHG] Functionality reductions : DKP no longer part of core. 
     
 
 ## contribute
