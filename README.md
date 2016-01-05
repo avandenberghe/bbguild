@@ -69,11 +69,11 @@ Find support and more on
 
 ## contribute
 
-You can see all the awesome people contributing to this project [here](https://github.com/bbguild/bbDKP/graphs/contributors).
+You can see all the awesome people contributing to this project [here](https://github.com/bbdkp/bbDKP/graphs/contributors).
 
-1. [Create a ticket (unless there already is one)] : https://github.com/bbDKP/bbDKP/issues or http://www.avathar.be/bbguild/tracker.php
-2. [Read our Git Contribution Guidelines](http://www.avathar.be/bbguild/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.avathar.be/bbguild/viewtopic.php?f=60&t=1853)
-3. Send us a pull request
+1. [Create a ticket (unless there already is one)] : https://github.com/bbDKP/bbDKP/issues
+2. [Read our Git Contribution Guidelines](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1854); if you're new to git, also read [Git Primer](http://www.avathar.be/bbdkp/viewtopic.php?f=60&t=1853)
+3. Make a pull request.
 
 ## License
 
