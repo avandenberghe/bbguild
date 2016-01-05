@@ -34,6 +34,10 @@ This code is not ready for testing yet...
 
 ## Installation
 
+#### Requirements
+1.	phpbb > 3.1.*
+2.	ftp and acp access to your phpbb forum.  
+
 #### Install
 1. Download the latest release.
 2. In the `ext` directory of your phpBB board, create a new directory named `sajaki` (if it does not already exist).
@@ -45,11 +49,6 @@ This code is not ready for testing yet...
 1. Navigate in the ACP to `Customise -> Extension Management -> Extensions`.
 2. Look for `bbGuild Extension` under the Enabled Extensions list, and click its `Disable` link.
 3. To permanently uninstall, click `Delete Data` and then delete the `/ext/sajaki/bbguild` folder.
-
-
-#### Requirements
-1.	phpbb > 3.1.*
-2.	ftp and acp access to your phpbb forum.  
 
    
 ## Community
