@@ -11,42 +11,17 @@
 
 namespace sajaki\bbguild\acp;
 
-// Include the base class
-if (!class_exists('\bbguild\admin\Admin'))
-{
-    require("{$phpbb_root_path}includes/bbguild/admin/admin.$phpEx");
-}
-
-// include ranks class
-if (!class_exists('\bbguild\controller\guilds\Ranks'))
-{
-    require("{$phpbb_root_path}includes/bbguild/controller/guilds/Ranks.$phpEx");
-}
-
-if (!class_exists('\bbguild\controller\games\Game'))
-{
-    require("{$phpbb_root_path}includes/bbguild/controller/games/Game.$phpEx");
-}
-
-//include the guilds class
-if (!class_exists('\bbguild\controller\guilds\Guilds'))
-{
-    require("{$phpbb_root_path}includes/bbguild/controller/guilds/Guilds.$phpEx");
-}
-
-//include the Recruitment class
-if (!class_exists('\bbguild\controller\guilds\Recruitment'))
-{
-    require("{$phpbb_root_path}includes/bbguild/controller/guilds/Recruitment.$phpEx");
-}
-use \bbguild\controller\guilds\Guilds;
+use sajaki\bbguild\model\admin\Admin;
+use sajaki\bbguild\model\player\Guilds;
+use sajaki\bbguild\model\games\rpg\roles;
+use sajaki\bbguild\model\player\Recruitment;
 
 /**
  * This class manages guilds
  *
  *   @package bbguild
  */
-class recruit_module
+class recruit_module  extends Admin
 {
     /**
      * url action
@@ -79,20 +54,24 @@ class recruit_module
      */
     public function main ($id, $mode)
     {
-        global $user, $config, $template, $db, $phpbb_admin_path, $phpEx;
+        global $user, $template, $db, $phpbb_admin_path, $phpEx;
+        global $request;
+        parent::__construct();
         $this->tpl_name = 'dkp/acp_' . $mode;
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", "i=recruit&amp;mode=listrecruit") . '"><h3>'.$user->lang['RETURN_RECLIST'].'</h3></a>';
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\recruit_module&amp;mode=listrecruit') . '"><h3>'.$user->lang['RETURN_RECLIST'].'</h3></a>';
+        $form_key = 'sajaki/bbguild';
+        add_form_key($form_key);
 
         $this->apply_installed = false;
-        $plugin_versioninfo = (array) parent::get_plugin_info(request_var('versioncheck_force', false));
+        $plugin_versioninfo = (array) parent::get_plugin_info($request->variable('versioncheck_force', false));
 
         if(isset($plugin_versioninfo['apply']))
         {
             $this->apply_installed = true;
         }
 
-        $guild_id = request_var(URI_GUILD, 1);
-        $Guild = new \bbguild\controller\guilds\Guilds();
+        $guild_id = $request->variable(URI_GUILD, 1);
+        $Guild = new Guilds();
         $guildlist   = $Guild->guildlist(1);
         foreach ($guildlist as $g)
         {
@@ -107,11 +86,11 @@ class recruit_module
         $template->assign_vars(array(
             'APPLY_INSTALLED'       => $this->apply_installed ? 1 : 0,
             'GUILD_EMBLEM'          => $Guild->emblempath,
-            'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=guild&amp;mode=editguild&amp;" . URI_GUILD . '=' . $Guild->guildid),
-            'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=recruit&amp;mode=addrecruit&amp;" . URI_GUILD . '=' . $Guild->guildid),
-            'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=recruit&amp;mode=listrecruit&amp;" . URI_GUILD . '=' . $Guild->guildid),
-            'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", "i=recruit&amp;mode=editrecruit"),
-            'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", "i=guild&amp;mode=listguilds"),
+            'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->guildid),
+            'U_ADDRECRUIT'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\recruit_module&amp;mode=addrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
+            'U_RECRUITLIST'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\recruit_module&amp;mode=listrecruit&amp;' . URI_GUILD . '=' . $Guild->guildid),
+            'U_EDITRECRUIT'         => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\recruit_module&amp;mode=editrecruit'),
+            'U_LIST_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\guild_module&amp;mode=listguilds'),
         ));
 
         switch ($mode)
@@ -129,15 +108,12 @@ class recruit_module
              *************************************/
             case 'addrecruit':
 
-                $recruit = new \bbguild\controller\guilds\Recruitment();
+                $recruit = new Recruitment();
                 $recruit->setGuildId($Guild->guildid);
                 $recruit->setLastUpdate($this->time);
-
-                $add = (isset($_POST['add'])) ? true : false;
-                $update = (isset($_POST['update'])) ? true : false;
-
-                $action = request_var('action', '');
-
+                $add = $request->is_set_post('add');
+                $update = $request->is_set_post('update');
+                $action = $request->variable('action', '');
                 if($this->apply_installed)
                 {
                     //if apply is installed then fetch list of templates
@@ -153,7 +129,7 @@ class recruit_module
 
                 if($action=='delete')
                 {
-                    $recruit->id = request_var('id', 0);
+                    $recruit->id = $request->variable('id', 0);
                     $recruit->get($recruit->id);
                     $recruit->delete();
 
@@ -163,7 +139,7 @@ class recruit_module
                 }
                 elseif ($action=='edit')
                 {
-                    $recruit->id = request_var('id', 0);
+                    $recruit->id = $request->variable('id', 0);
                     $recruit->get($recruit->id);
 
                     $template->assign_vars(array(
@@ -174,7 +150,6 @@ class recruit_module
                             'NUMPOSITIONS'          => $recruit->getPositions(),
                             'APPLICANTS'            => $recruit->getApplicants(),
                             'RECRUIT_LEVEL'         => $recruit->getLevel(),
-                            'APPLICANTS'            => $recruit->getApplicants(),
                             'NOTE'                  => $recruit->getNote(),
                         )
                     );
@@ -208,20 +183,20 @@ class recruit_module
                 if ($add || $update)
                 {
 
-                    if (!check_form_key('addrecruit'))
+                    if (!check_form_key('sajaki/bbguild'))
                     {
                         trigger_error('FORM_INVALID');
                     }
 
-                    $recruit->id = request_var('hidden_recruit_id', 0);
-                    $recruit->role_id = request_var('role', 0);
-                    $recruit->setClassId(request_var('class_id', 0));
-                    $recruit->setPositions(request_var('numpositions', 0));
-                    $recruit->setApplicants(request_var('applicants', 0));
-                    $recruit->setStatus(request_var('recruitstatus', '') == 'on' ? 1 : 0 );
-                    $recruit->setLevel(request_var('recruit_level', 0));
-                    $recruit->setNote(utf8_normalize_nfc(request_var('note', '', true)));
-                    $recruit->setApplytemplateid(request_var('applytemplateid', 1));
+                    $recruit->id = $request->variable('hidden_recruit_id', 0);
+                    $recruit->role_id = $request->variable('role', 0);
+                    $recruit->setClassId($request->variable('class_id', 0));
+                    $recruit->setPositions($request->variable('numpositions', 0));
+                    $recruit->setApplicants($request->variable('applicants', 0));
+                    $recruit->setStatus($request->variable('recruitstatus', '') == 'on' ? 1 : 0 );
+                    $recruit->setLevel($request->variable('recruit_level', 0));
+                    $recruit->setNote(utf8_normalize_nfc($request->variable('note', '', true)));
+                    $recruit->setApplytemplateid($request->variable('applytemplateid', 1));
 
                 }
 
@@ -244,13 +219,6 @@ class recruit_module
                 {
                     $this->BuildDropDowns($Guild, $recruit);
                 }
-
-
-
-                $form_key = 'addrecruit';
-                add_form_key($form_key);
-
-
                 $this->page_title = $user->lang['ACP_ADDRECRUITS'];
                 break;
 
@@ -268,13 +236,13 @@ class recruit_module
      */
     private function BuildTemplateListRecruits($guild_id)
     {
-        global $user, $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $db;
+        global $user, $template, $phpbb_admin_path, $phpEx, $db;
         if (count($this->games) == 0)
         {
             trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
         }
 
-        $recruits = new \bbguild\controller\guilds\Recruitment();
+        $recruits = new Recruitment();
         $recruits->setGuildId($guild_id);
         $result   = $recruits->ListRecruitments(1);
         $recruit_count= 0;
@@ -288,9 +256,8 @@ class recruit_module
                     'CLASS_ID'          => $row['class_id'],
                     'CLASS_NAME'        => $row['class_name'],
                     'COLOR_CODE'        => $row['colorcode'],
-                    'CLASS_IMAGE'       => $row['imagename'],
                     'S_CLASS_IMAGE_EXISTS' => (strlen ( $row ['imagename'] ) > 1) ? true : false,
-                    'CLASS_IMAGE'       => (strlen ( $row ['imagename'] ) > 1) ? $phpbb_root_path . "images/bbguild/class_images/" . $row ['imagename'] . ".png" : '',
+                    'CLASS_IMAGE'       => (strlen ( $row ['imagename'] ) > 1) ? $this->ext_path . "images/class_images/" . $row ['imagename'] . ".png" : '',
                     'POSITIONS'         => $row['positions'],
                     'APPLICANTS'        => $row['applicants'],
                     'STATUS'            => $row['status'] == '1' ? $user->lang['RECRUIT_OPEN'] : $user->lang['RECRUIT_CLOSED'],
@@ -316,7 +283,7 @@ class recruit_module
      * @param $Guild
      * @param $recruit
      */
-    private function BuildDropDowns($Guild, $recruit)
+    private function BuildDropDowns($Guild, Recruitment $recruit)
     {
         global $config, $db, $template;
 
@@ -343,7 +310,7 @@ class recruit_module
         }
         $db->sql_freeresult($result);
         // get roles
-        $Roles           = new \bbguild\controller\games\Roles();
+        $Roles           = new Roles();
         $Roles->game_id  = $Guild->game_id;
         $Roles->guild_id = $Guild->guildid;
         $listroles       = $Roles->listroles();
