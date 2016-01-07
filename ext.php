@@ -9,7 +9,9 @@
 
 namespace sajaki\bbguild;
 
-class ext extends \phpbb\extension\base
+use phpbb\extension\base;
+
+class ext extends base
 {
     /**
      * override enable step

@@ -8,14 +8,12 @@
  *
  */
 
-namespace sajaki\bbdkp\migrations;
-
-use \phpbb\db\migration\container_aware_migration;
+namespace sajaki\bbguild\migrations;
 
 /**
  * Migration stage 2: Initial data
  */
-class release_2_0_0_m02_data extends container_aware_migration
+class release_2_0_0_m02_data extends \phpbb\db\migration\container_aware_migration
 {
     protected $guild_table;
     protected $member_ranks_table;
@@ -36,7 +34,7 @@ class release_2_0_0_m02_data extends container_aware_migration
 
     static public function depends_on()
     {
-        return array('\sajaki\bbdkp\migrations\release_2_0_0_m01_schema');
+        return array('\sajaki\bbguild\migrations\release_2_0_0_m01_schema');
     }
 
     public function update_data()

@@ -11,11 +11,6 @@
 namespace sajaki\bbguild\model\player;
 use sajaki\bbguild\model\games\rpg\Roles;
 
-if (! defined('IN_PHPBB'))
-{
-	exit();
-}
-
 /**
  * holds vacancies per guild, game, role and class
  *

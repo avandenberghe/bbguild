@@ -9,11 +9,12 @@
  */
 
 namespace sajaki\bbguild\migrations;
+use phpbb\db\migration\migration;
 
 /**
 * Migration stage 4: module setup
 */
-class release_2_0_0_m04_mod extends \phpbb\db\migration\migration
+class release_2_0_0_m04_mod extends migration
 {
 	/**
 	* Assign migration file dependencies for this migration

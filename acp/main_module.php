@@ -9,7 +9,10 @@
 
 namespace sajaki\bbguild\acp;
 
-class main_module extends \sajaki\bbguild\model\admin\Admin
+use sajaki\bbguild\model\admin\Admin;
+use sajaki\bbguild\model\admin\log;
+
+class main_module extends Admin
 {
     public $u_action;
     private $link;
@@ -94,7 +97,7 @@ class main_module extends \sajaki\bbguild\model\admin\Admin
                 }
 
                 // read verbose log
-                $logs = \sajaki\bbguild\model\admin\log::Instance();
+                $logs = log::Instance();
                 $listlogs = $logs->read_log('', false, true, '', '');
                 if(isset($listlogs))
                 {
@@ -419,7 +422,7 @@ class main_module extends \sajaki\bbguild\model\admin\Admin
             case 'logs':
                 $this->page_title = 'ACP_BBGUILD_LOGS';
 
-                $logs =  \sajaki\bbguild\model\admin\log::Instance();
+                $logs =  log::Instance();
                 $log_id = $request->variable(URI_LOG, 0);
                 $search = $request->variable('search', 0);
                 if ($log_id)
@@ -450,7 +453,7 @@ class main_module extends \sajaki\bbguild\model\admin\Admin
                                 if (confirm_box(true))
                                 {
                                     $marked = $request->variable('mark', array(0));
-                                    $logs = \sajaki\bbguild\model\admin\log::Instance();
+                                    $logs = log::Instance();
                                     $log_action = array(
                                         'header' => 'L_ACTION_LOG_DELETED' ,
                                         'L_ADDED_BY' => $user->data['username'] ,

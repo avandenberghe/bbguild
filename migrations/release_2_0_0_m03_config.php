@@ -9,11 +9,12 @@
  */
 
 namespace sajaki\bbguild\migrations;
+use phpbb\db\migration\migration;
 
 /**
 * Migration stage 2: config data
 */
-class release_2_0_0_m03_config extends \phpbb\db\migration\migration
+class release_2_0_0_m03_config extends migration
 {
 
     protected $bbguild_version = '2.0.0-a1-dev';
