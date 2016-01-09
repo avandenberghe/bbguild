@@ -9,6 +9,7 @@
  */
 
 namespace sajaki\bbguild\model\games\rpg;
+use sajaki\bbguild\model\games\Game;
 
 /**
  * Faction Class
@@ -17,7 +18,7 @@ namespace sajaki\bbguild\model\games\rpg;
  * 
  *   @package bbguild
  */
- class Faction //extends \sajaki\bbguild\model\games\Game
+ class Faction extends Game
 {
 	/**
 	 * game id 

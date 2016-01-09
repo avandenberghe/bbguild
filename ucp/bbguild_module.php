@@ -1,69 +1,93 @@
 <?php
 /**
- * bbDKP ucp class file
- * @package bbguild
- * @link http://www.avathar.be/bbguild
- * @author Sajaki@gmail.com
- * @copyright 2009 bbguild
- * @license http://opensource.org/licenses/gpl-license.php GNU Public License
- * @version 1.4.1
- */
-
-/**
- * @package ucp
- */
-if (!defined('IN_PHPBB'))
-{
-    exit;
-}
-if (!class_exists('\bbguild\controller\guilds\Ranks'))
-{
-    // include ranks class
-    require("{$phpbb_root_path}includes/bbguild/controller/guilds/Ranks.$phpEx");
-}
-//include the roles class
-if (!class_exists('\bbguild\controller\games\Roles'))
-{
-    require("{$phpbb_root_path}includes/bbguild/controller/games/roles/Roles.$phpEx");
-}
-
-if (!class_exists('\bbguild\controller\guilds\Recruitment'))
-{
-    require("{$phpbb_root_path}includes/bbguild/controller/guilds/Recruitment.$phpEx");
-}
-
-if (!class_exists('\bbguild\controller\members\Members'))
-{
-    // Include the member class
-    require("{$phpbb_root_path}includes/bbguild/controller/members/Members.$phpEx");
-}
-
-/**
- * bbDKP ucp class
- * @package bbguild
+ * bbGuild ucp class file
  *
+ * @package bbguild v2.0
+ * @copyright 2016 bbDKP <https://github.com/bbDKP>
+ * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  */
-class ucp_dkp extends \bbguild\admin\Admin
-{
-    /**
-     * module action
-     * @var string
-     */
-    var $u_action;
 
-   /**
-     * main ucp function
-     * @param int $id
-     * @param string $mode
+namespace sajaki\bbguild\ucp;
+
+use sajaki\bbguild\model\admin\Admin;
+use sajaki\bbguild\model\player\Guilds;
+use sajaki\bbguild\model\games\Game;
+use sajaki\bbguild\model\games\rpg\Classes;
+use sajaki\bbguild\model\games\rpg\Faction;
+use sajaki\bbguild\model\games\rpg\Races;
+use sajaki\bbguild\model\games\rpg\Roles;
+
+/**
+ * Class bbguild_module
+ * @package sajaki\bbguild\acp
+ */
+class bbguild_module extends Admin
+{
+    /** @var string */
+    public $u_action;
+
+    /** @var int */
+    protected $id;
+
+    /** @var int */
+    protected $mode;
+
+    /** @var \phpbb\config\config */
+    protected $config;
+    /** @var \phpbb\db\driver\driver_interface */
+    protected $db;
+    /** @var \phpbb\request\request */
+    protected $request;
+    /** @var \phpbb\symfony_request */
+    protected $symfony_request;
+    /** @var \phpbb\template\template */
+    protected $template;
+    /** @var \phpbb\user */
+    protected $user;
+
+    protected $module;
+    protected $p_master;
+
+    /**
+     * Constructor
      */
-    function main($id, $mode)
+    public function __construct($p_master)
     {
-        global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpEx;
+        global $db, $user, $auth, $template, $config, $phpbb_root_path, $phpEx, $pagination;
+        global $phpbb_container, $request, $symfony_request, $module;
+        $this->module   = $module;
+        $this->p_master = $p_master;
+        $this->phpEx = $phpEx;
+        $this->root_path = $phpbb_root_path;
+
+        $this->config    = $config;
+        $this->db        = $db;
+        $this->user      = $user;
+        $this->request   = $request;
+        $this->symfony_request = $symfony_request;
+        $this->template  = $template;
+
+        $this->pagination = $phpbb_container->get('pagination');
+
+        parent::__construct();
+    }
+
+    /**
+     * Entry point for module
+     *
+     * @param int $id     The id of the module.
+     * @param int $mode   The mode of the module to enter.
+     */
+    public function main($id, $mode)
+    {
+        $this->id = $id;
+        $this->mode = $mode;
 
         // Attach the language files
-        $user->add_lang(array('mods/admin', 'mods/common', 'acp/common'));
-        $guilds = new \bbguild\controller\guilds\Guilds();
+        $this->user->add_lang(array('acp/groups', 'acp/common'));
+        $guilds = new Guilds(0);
 
+        // list all guild except noguild
         $guildlist = $guilds->guildlist(1);
         if(count($guildlist) == 0)
         {
@@ -72,15 +96,15 @@ class ucp_dkp extends \bbguild\admin\Admin
         $mode = ($mode == '' ? 'characters' :$mode);
 
         // GET processing logic
-        add_form_key('cocoa');
-        switch ($mode)
+        $form_key = 'sajaki/bbguild';
+        add_form_key ( $form_key );
+
+        switch ($this->mode)
         {
             case 'characters':
                 /***
-                 *
                  * ucp tab 1
                  * list of characters
-                 *
                  */
                 $this->link = '';
                 $submit = (isset($_POST['submit'])) ? true : false;

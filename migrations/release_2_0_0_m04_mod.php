@@ -88,6 +88,20 @@ class release_2_0_0_m04_mod extends migration
                 )
             )),
 
+            /**
+             * Add the UCP Category
+             * link bbDKP memberids to phpbb accounts
+             *
+             */
+            array('module.add', array('ucp', '0', 'UCP_BBGUILD')),
+
+            // Add one UCP module to the new category
+            array('module.add', array(
+                'ucp', 'UCP_BBGUILD', array(
+                    'module_basename' => '\sajaki\bbguild\ucp\bbguild_module',
+                    'modes'           => array('char', 'add') ,
+                )
+            )),
 
 
         );

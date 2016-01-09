@@ -17,6 +17,18 @@ class main_module extends Admin
     public $u_action;
     private $link;
 
+    /** @var \phpbb\request\request **/
+    protected $request;
+    /** @var \phpbb\template\template **/
+    protected $template;
+    /** @var \phpbb\user **/
+    protected $user;
+    /** @var \phpbb\db\driver\driver_interface */
+    protected $db;
+
+    public $id;
+    public $mode;
+
     /**
      * @param $id
      * @param $mode
@@ -25,12 +37,21 @@ class main_module extends Admin
     {
         global $db, $user, $template, $request, $phpbb_admin_path, $cache;
         global $config, $phpEx, $phpbb_container;
+
+        $this->id = $id;
+        $this->mode = $mode;
+        $this->request=$request;
+        $this->template=$template;
+        $this->user=$user;
+        $this->db=$db;
+
         parent::__construct();
+
         $form_key = 'sajaki/bbguild';
         add_form_key($form_key);
         $this->page_title = 'ACP_BBGUILD_MAINPAGE';
         $this->tpl_name = 'acp_' . $mode;
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module') . '"><h3>' . $user->lang['ACP_BBGUILD'] . '</h3></a>';
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module') . '"><h3>' . $this->user->lang['ACP_BBGUILD'] . '</h3></a>';
 
         switch ($mode)
         {
@@ -38,18 +59,18 @@ class main_module extends Admin
             case 'panel':
                 // get inactive members
                 $sql = 'SELECT count(*) as member_count FROM ' . MEMBER_LIST_TABLE . " WHERE member_status='0'";
-                $result = $db->sql_query($sql);
-                $total_members_inactive = (int) $db->sql_fetchfield('member_count');
+                $result = $this->db->sql_query($sql);
+                $total_members_inactive = (int) $this->db->sql_fetchfield('member_count');
                 //get the active members
                 $sql = 'SELECT count(*) as member_count FROM ' . MEMBER_LIST_TABLE . " WHERE member_status='1'";
-                $result = $db->sql_query($sql);
-                $total_members_active = (int) $db->sql_fetchfield('member_count');
+                $result = $this->db->sql_query($sql);
+                $total_members_active = (int) $this->db->sql_fetchfield('member_count');
                 // active member kpi
                 $total_members = $total_members_active . ' / ' . $total_members_inactive;
                 //number of guilds
                 $sql = 'SELECT count(*) as guild_count  FROM ' . GUILD_TABLE;
-                $result = $db->sql_query($sql);
-                $total_guildcount = (int) $db->sql_fetchfield('guild_count');
+                $result = $this->db->sql_query($sql);
+                $total_guildcount = (int) $this->db->sql_fetchfield('guild_count');
                 //start date
                 if ($config['bbguild_eqdkp_start'] != 0)
                 {
@@ -60,39 +81,39 @@ class main_module extends Admin
                     $bbguild_started = '';
                 }
 
-                $latest_version_info = parent::get_productversion($request->variable('versioncheck_force', false));
+                $latest_version_info = parent::get_productversion($this->request->variable('versioncheck_force', false));
                 if ($latest_version_info === false)
                 {
-                    $template->assign_var('S_VERSIONCHECK_FAIL', true);
+                    $this->template->assign_var('S_VERSIONCHECK_FAIL', true);
                 }
                 else
                 {
                     if(phpbb_version_compare($latest_version_info, BBGUILD_VERSION, '='))
                     {
-                        $template->assign_vars(array(
+                        $this->template->assign_vars(array(
                             'S_VERSION_UP_TO_DATE'	=> true,
                         ));
                     }
                     elseif(phpbb_version_compare($latest_version_info, BBGUILD_VERSION, '>'))
                     {
                         // you have an old version
-                        $template->assign_vars(array(
-                            'BBGUILD_NOT_UP_TO_DATE_TITLE' => sprintf($user->lang['NOT_UP_TO_DATE_TITLE'], 'bbGuild'),
+                        $this->template->assign_vars(array(
+                            'BBGUILD_NOT_UP_TO_DATE_TITLE' => sprintf($this->user->lang['NOT_UP_TO_DATE_TITLE'], 'bbGuild'),
                             'S_PRERELEASE'	=> false,
                             'BBGUILD_LATESTVERSION' => $latest_version_info,
-                            'BBDKPVERSION' => $user->lang['BBGUILD_YOURVERSION'] . BBGUILD_VERSION ,
-                            'UPDATEINSTR' => $user->lang['BBGUILD_LATESTVERSION'] . $latest_version_info . ', <a href="' . $user->lang['WEBURL'] . '">' . $user->lang['DOWNLOAD'] . '</a>'));
+                            'BBDKPVERSION' => $this->user->lang['BBGUILD_YOURVERSION'] . BBGUILD_VERSION ,
+                            'UPDATEINSTR' => $this->user->lang['BBGUILD_LATESTVERSION'] . $latest_version_info . ', <a href="' . $this->user->lang['WEBURL'] . '">' . $this->user->lang['DOWNLOAD'] . '</a>'));
 
                     }
                     else
                     {
                         // you have a prerelease or development version
-                        $template->assign_vars(array(
-                            'BBGUILD_NOT_UP_TO_DATE_TITLE' => sprintf($user->lang['PRELELEASE_TITLE'], 'bbGuild'),
+                        $this->template->assign_vars(array(
+                            'BBGUILD_NOT_UP_TO_DATE_TITLE' => sprintf($this->user->lang['PRELELEASE_TITLE'], 'bbGuild'),
                             'BBGUILD_LATESTVERSION' => $latest_version_info,
                             'S_PRERELEASE'	=> true,
-                            'BBDKPVERSION' => $user->lang['BBGUILD_YOURVERSION'] . BBGUILD_VERSION ,
-                            'UPDATEINSTR' => $user->lang['BBGUILD_LATESTVERSION'] . $latest_version_info . ', <a href="' . $user->lang['WEBURL'] . '">' . $user->lang['DOWNLOAD'] . '</a>'));
+                            'BBDKPVERSION' => $this->user->lang['BBGUILD_YOURVERSION'] . BBGUILD_VERSION ,
+                            'UPDATEINSTR' => $this->user->lang['BBGUILD_LATESTVERSION'] . $latest_version_info . ', <a href="' . $this->user->lang['WEBURL'] . '">' . $this->user->lang['DOWNLOAD'] . '</a>'));
                     }
                 }
 
@@ -103,7 +124,7 @@ class main_module extends Admin
                 {
                     foreach ($listlogs as $key => $log)
                     {
-                        $template->assign_block_vars('actions_row', array(
+                        $this->template->assign_block_vars('actions_row', array(
                             'U_VIEW_LOG' 	=> append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs&amp;' . URI_LOG . '=' . $log['log_id']  ) ,
                             'LOGDATE' 		=> $log['datestamp'],
                             'ACTION' 		=> $log['log_line'],
@@ -113,29 +134,29 @@ class main_module extends Admin
 
                 //LOOP PLUGINS TABLE
                 $plugins_installed = 0;
-                $plugin_versioninfo = (array) parent::get_plugin_info($request->variable('versioncheck_force', false));
+                $plugin_versioninfo = (array) parent::get_plugin_info($this->request->variable('versioncheck_force', false));
                 foreach($plugin_versioninfo as $pname => $pdetails)
                 {
                     $a = phpbb_version_compare(trim( $pdetails['latest'] ), $pdetails['version'] , '<=');
-                    $template->assign_block_vars('plugin_row', array(
+                    $this->template->assign_block_vars('plugin_row', array(
                         'PLUGINNAME' 	=> ucwords($pdetails['name']) ,
                         'VERSION' 		=> $pdetails['version'] ,
                         'ISUPTODATE'	=> phpbb_version_compare(trim( $pdetails['latest'] ), $pdetails['version'] , '<=') ,
                         'LATESTVERSION' => $pdetails['latest'] ,
-                        'UPDATEINSTR' 	=> '<a href="' . BBDKP_PLUGINURL . '">' . $user->lang['DOWNLOAD_LATEST_PLUGINS'] . $pdetails['latest'] . '</a>',
+                        'UPDATEINSTR' 	=> '<a href="' . BBDKP_PLUGINURL . '">' . $this->user->lang['DOWNLOAD_LATEST_PLUGINS'] . $pdetails['latest'] . '</a>',
                         'INSTALLDATE' 	=> $pdetails['installdate'],
                     ));
                     $plugins_installed +=1;
                 }
 
-                $template->assign_vars(array(
+                $this->template->assign_vars(array(
                     'GLYPH' => $this->ext_path . "adm/images/glyphs/view.gif" ,
                     'NUMBER_OF_MEMBERS' => $total_members ,
                     'NUMBER_OF_GUILDS' => $total_guildcount ,
                     'BBGUILD_STARTED' => $bbguild_started,
                     'BBGUILD_VERSION'	=> BBGUILD_VERSION,
                     'U_VERSIONCHECK_FORCE' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=panel&amp;versioncheck_force=1'),
-                    'GAMES_INSTALLED' => count($this->games) > 0 ? implode(", ", $this->games) : $user->lang['NA'],
+                    'GAMES_INSTALLED' => count($this->games) > 0 ? implode(", ", $this->games) : $this->user->lang['NA'],
                     'PLUGINS_INSTALLED' => $plugins_installed,
                 ));
                 break;
@@ -146,39 +167,39 @@ class main_module extends Admin
              */
             case 'config':
 
-                if ($request->is_set_post('register'))
+                if ($this->request->is_set_post('register'))
                 {
                     $regdata = array(
                         'domainname'	=> $config['server_name'],
-                        'phpbbversion'	=> $request->variable('phpbbversion', ''),
-                        'bbguildversion' 	=> $request->variable('bbguildversion', ''),
+                        'phpbbversion'	=> $this->request->variable('phpbbversion', ''),
+                        'bbguildversion' 	=> $this->request->variable('bbguildversion', ''),
                     );
                     $this->post_register_request($regdata);
                 }
 
-                if ($request->is_set_post('updateconfig'))
+                if ($this->request->is_set_post('updateconfig'))
                 {
                     if (! check_form_key('acp_dkp'))
                     {
-                        trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
+                        trigger_error($this->user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
                     }
-                    $day = $request->variable('bbguild_start_dd', 0);
-                    $month = $request->variable('bbguild_start_mm', 0);
-                    $year = $request->variable('bbguild_start_yy', 0);
+                    $day = $this->request->variable('bbguild_start_dd', 0);
+                    $month = $this->request->variable('bbguild_start_mm', 0);
+                    $year = $this->request->variable('bbguild_start_yy', 0);
                     $bbguild_start = mktime(0, 0, 0, $month, $day, $year);
                     $settings = array(
-                        'bbguild_default_realm' => $request->variable('realm', '', true),
-                        'bbguild_default_region' => $request->variable('region', '', true),
+                        'bbguild_default_realm' => $this->request->variable('realm', '', true),
+                        'bbguild_default_region' => $this->request->variable('region', '', true),
                         'bbguild_eqdkp_start' => $bbguild_start,
-                        'bbguild_date_format' => $request->variable('date_format', ''),
-                        'bbguild_name' => $request->variable('name', '', true),
-                        'bbguild_lang' => $request->variable('language', 'en'),
-                        'bbguild_user_nlimit' => $request->variable('bbguild_user_nlimit', 0),
-                        'bbguild_user_llimit' => $request->variable('bbguild_user_llimit', 0),
-                        'bbguild_maxchars' => $request->variable('maxchars', 2),
-                        'bbguild_roster_layout' => $request->variable('rosterlayout', 0),
-                        'bbguild_show_achiev' => $request->variable('showachievement', 0),
-                        'bbguild_minrosterlvl' => $request->variable('bbguild_minrosterlvl', 0),
+                        'bbguild_date_format' => $this->request->variable('date_format', ''),
+                        'bbguild_name' => $this->request->variable('name', '', true),
+                        'bbguild_lang' => $this->request->variable('language', 'en'),
+                        'bbguild_user_nlimit' => $this->request->variable('bbguild_user_nlimit', 0),
+                        'bbguild_user_llimit' => $this->request->variable('bbguild_user_llimit', 0),
+                        'bbguild_maxchars' => $this->request->variable('maxchars', 2),
+                        'bbguild_roster_layout' => $this->request->variable('rosterlayout', 0),
+                        'bbguild_show_achiev' => $this->request->variable('showachievement', 0),
+                        'bbguild_minrosterlvl' => $this->request->variable('bbguild_minrosterlvl', 0),
                     );
                     // reg id
                     $config->set('bbguild_regid', 1, true);
@@ -213,7 +234,7 @@ class main_module extends Admin
                         'log_type' =>  'L_ACTION_SETTINGS_CHANGED',
                         'log_action' => $log_action));
 
-                    trigger_error($user->lang['ACTION_SETTINGS_CHANGED']. $this->link, E_USER_NOTICE);
+                    trigger_error($this->user->lang['ACTION_SETTINGS_CHANGED']. $this->link, E_USER_NOTICE);
                 }
 
                 $s_lang_options = '';
@@ -223,12 +244,12 @@ class main_module extends Admin
                     $s_lang_options .= '<option value="' . $lang . '" ' . $selected . '> ' . $langname . '</option>';
                 }
 
-                $template->assign_block_vars('hide_row', array(
+                $this->template->assign_block_vars('hide_row', array(
                     'VALUE' => "YES" ,
                     'SELECTED' => ($config['bbguild_hide_inactive'] == 1) ? ' selected="selected"' : '' ,
                     'OPTION' => "YES"));
 
-                $template->assign_block_vars('hide_row', array(
+                $this->template->assign_block_vars('hide_row', array(
                     'VALUE' => "NO" ,
                     'SELECTED' => ($config['bbguild_hide_inactive'] == 0) ? ' selected="selected"' : '' ,
                     'OPTION' => "NO"));
@@ -236,7 +257,7 @@ class main_module extends Admin
                 // Default Region
                 foreach ($this->regions as $regionid => $regionvalue)
                 {
-                    $template->assign_block_vars('region_row', array(
+                    $this->template->assign_block_vars('region_row', array(
                         'VALUE' => $regionid ,
                         'SELECTED' => ($regionid == $config['bbguild_default_region']) ? ' selected="selected"' : '' ,
                         'OPTION' => $regionvalue));
@@ -244,18 +265,18 @@ class main_module extends Admin
 
                 //roster layout
                 $rosterlayoutlist = array(
-                    0 => $user->lang['ARM_STAND'] ,
-                    1 => $user->lang['ARM_CLASS']);
+                    0 => $this->user->lang['ARM_STAND'] ,
+                    1 => $this->user->lang['ARM_CLASS']);
 
                 foreach ($rosterlayoutlist as $lid => $lname)
                 {
-                    $template->assign_block_vars('rosterlayout_row', array(
+                    $this->template->assign_block_vars('rosterlayout_row', array(
                         'VALUE' => $lid ,
                         'SELECTED' => ($lid == $config['bbguild_roster_layout']) ? ' selected="selected"' : '' ,
                         'OPTION' => $lname));
                 }
 
-                $template->assign_vars(array(
+                $this->template->assign_vars(array(
                     'REGID' => isset($config['bbguild_regid']) ? $config['bbguild_regid'] : '',
                     'S_BBDKPREGISTERED' => isset($config['bbguild_regid']) ? $config['bbguild_regid'] : '',
                     'U_REGISTER' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=config&amp;action=register'),
@@ -266,7 +287,7 @@ class main_module extends Admin
                     'EQDKP_START_YY' => date('Y', $config['bbguild_eqdkp_start']) ,
                     'DATE_FORMAT' => $config['bbguild_date_format'] ,
                     'DKP_NAME' => $config['bbguild_name'] ,
-                    'DEFAULT_GAME' =>  count($this->games) > 0 ? implode(", ", $this->games) : $user->lang['NA'],
+                    'DEFAULT_GAME' =>  count($this->games) > 0 ? implode(", ", $this->games) : $this->user->lang['NA'],
                     'S_LANG_OPTIONS' => $s_lang_options,
                     'USER_NLIMIT' => $config['bbguild_user_nlimit'] ,
                     'USER_LLIMIT' => $config['bbguild_user_llimit'] ,
@@ -308,56 +329,56 @@ class main_module extends Admin
              * PORTAL CONFIG
              */
             case 'index':
-                $submit = $request->is_set_post('update');
+                $submit = $this->request->is_set_post('update');
                 if ($submit)
                 {
                     if (! check_form_key('acp_portal'))
                     {
-                        trigger_error($user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
+                        trigger_error($this->user->lang['FV_FORMVALIDATION'], E_USER_WARNING);
                     }
                     if (isset($config['bbguild_gameworld_version']))
                     {
-                        $config->set('bbguild_portal_bossprogress', $request->variable('show_bosspblock', 0), true);
+                        $config->set('bbguild_portal_bossprogress', $this->request->variable('show_bosspblock', 0), true);
                     }
-                    $config->set('bbguild_news_forumid', $request->variable('news_id', 0), true);
-                    $config->set('bbguild_n_news', $request->variable('n_news', 0), true);
-                    $config->set('bbguild_n_items', $request->variable('n_items', 0), true);
-                    $config->set('bbguild_recruitment', $request->variable('bbguild_recruitment', 0), true);
-                    $config->set('bbguild_portal_loot', $request->variable('show_lootblock', 0), true);
-                    $config->set('bbguild_portal_recruitment', $request->variable('show_recrblock', 0), true);
-                    $config->set('bbguild_portal_links', $request->variable('show_linkblock', 0), true);
-                    $config->set('bbguild_portal_menu', $request->variable('show_menublock', 0), true);
-                    $config->set('bbguild_portal_welcomemsg', $request->variable('show_welcomeblock', 0), true);
-                    $config->set('bbguild_portal_recent', $request->variable('show_recenttopics', 0), true);
-                    $config->set('bbguild_portal_rtlen', $request->variable('n_rclength', 0), true);
-                    $config->set('bbguild_portal_rtno', $request->variable('n_rcno', 0), true);
-                    $config->set('bbguild_portal_newmembers', $request->variable('show_newmembers', 0), true);
-                    $config->set('bbguild_portal_maxnewmembers', $request->variable('num_newmembers', 0), true);
-                    $config->set('bbguild_portal_whoisonline', $request->variable('show_onlineblock', 0), true);
-                    $config->set('bbguild_portal_onlineblockposition', $request->variable('onlineblockposition', 0), true);
+                    $config->set('bbguild_news_forumid', $this->request->variable('news_id', 0), true);
+                    $config->set('bbguild_n_news', $this->request->variable('n_news', 0), true);
+                    $config->set('bbguild_n_items', $this->request->variable('n_items', 0), true);
+                    $config->set('bbguild_recruitment', $this->request->variable('bbguild_recruitment', 0), true);
+                    $config->set('bbguild_portal_loot', $this->request->variable('show_lootblock', 0), true);
+                    $config->set('bbguild_portal_recruitment', $this->request->variable('show_recrblock', 0), true);
+                    $config->set('bbguild_portal_links', $this->request->variable('show_linkblock', 0), true);
+                    $config->set('bbguild_portal_menu', $this->request->variable('show_menublock', 0), true);
+                    $config->set('bbguild_portal_welcomemsg', $this->request->variable('show_welcomeblock', 0), true);
+                    $config->set('bbguild_portal_recent', $this->request->variable('show_recenttopics', 0), true);
+                    $config->set('bbguild_portal_rtlen', $this->request->variable('n_rclength', 0), true);
+                    $config->set('bbguild_portal_rtno', $this->request->variable('n_rcno', 0), true);
+                    $config->set('bbguild_portal_newmembers', $this->request->variable('show_newmembers', 0), true);
+                    $config->set('bbguild_portal_maxnewmembers', $this->request->variable('num_newmembers', 0), true);
+                    $config->set('bbguild_portal_whoisonline', $this->request->variable('show_onlineblock', 0), true);
+                    $config->set('bbguild_portal_onlineblockposition', $this->request->variable('onlineblockposition', 0), true);
 
                     $cache->destroy('config');
-                    $welcometext = $request->variable('welcome_message', '', true);
+                    $welcometext = $this->request->variable('welcome_message', '', true);
 
                     $uid = $bitfield = $options = ''; // will be modified by generate_text_for_storage
                     $allow_bbcode = $allow_urls = $allow_smilies = true;
                     generate_text_for_storage($welcometext, $uid, $bitfield, $options, $allow_bbcode, $allow_urls, $allow_smilies);
 
                     $sql = 'UPDATE ' . WELCOME_MSG_TABLE . " SET
-							welcome_msg = '" . (string) $db->sql_escape($welcometext) . "' ,
+							welcome_msg = '" . (string) $this->db->sql_escape($welcometext) . "' ,
 							welcome_timestamp = " . (int) time() . " ,
 							bbcode_bitfield = 	'" . (string) $bitfield . "' ,
 							bbcode_uid = 		'" . (string) $uid . "'
 							WHERE welcome_id = 1";
-                    $db->sql_query($sql);
-                    trigger_error($user->lang['ADMIN_PORTAL_SETTINGS_SAVED'] . $this->link, E_USER_NOTICE);
+                    $this->db->sql_query($sql);
+                    trigger_error($this->user->lang['ADMIN_PORTAL_SETTINGS_SAVED'] . $this->link, E_USER_NOTICE);
                 }
 
                 // get welcome msg
                 $sql = 'SELECT welcome_msg, bbcode_bitfield, bbcode_uid FROM ' . WELCOME_MSG_TABLE;
-                $db->sql_query($sql);
-                $result = $db->sql_query($sql);
-                while ($row = $db->sql_fetchrow($result))
+                $this->db->sql_query($sql);
+                $result = $this->db->sql_query($sql);
+                while ($row = $this->db->sql_fetchrow($result))
                 {
                     $welcometext = $row['welcome_msg'];
                     $bitfield = $row['bbcode_bitfield'];
@@ -372,17 +393,17 @@ class main_module extends Admin
                 add_form_key('acp_portal');
                 if (isset($config['bbguild_gameworld_version']))
                 {
-                    $template->assign_vars(array(
+                    $this->template->assign_vars(array(
                         'S_BP_SHOW' => true ,
                         'SHOW_BOSS_YES_CHECKED' => ($config['bbguild_portal_bossprogress'] == '1') ? ' checked="checked"' : '' ,
                         'SHOW_BOSS_NO_CHECKED' => ($config['bbguild_portal_bossprogress'] == '0') ? ' checked="checked"' : ''));
                 }
                 else
                 {
-                    $template->assign_var('S_BP_SHOW', false);
+                    $this->template->assign_var('S_BP_SHOW', false);
                 }
 
-                $template->assign_vars(array(
+                $this->template->assign_vars(array(
                     'WELCOME_MESSAGE' => $textarr['text'] ,
                     'N_NEWS' => $n_news,
                     'FORUM_NEWS_OPTIONS' => make_forum_select($config['bbguild_news_forumid'], false, false, true) ,
@@ -411,7 +432,7 @@ class main_module extends Admin
                     'SHOW_NEWM_NO_CHECKED' => ($config['bbguild_portal_newmembers'] == '0') ? ' checked="checked"' : '' ,
                     'N_NUMNEWM' => $config['bbguild_portal_maxnewmembers'],
                 ));
-                $this->page_title = $user->lang['ACP_INDEXPAGE'];
+                $this->page_title = $this->user->lang['ACP_INDEXPAGE'];
 
                 break;
 
@@ -423,8 +444,8 @@ class main_module extends Admin
                 $this->page_title = 'ACP_BBGUILD_LOGS';
 
                 $logs =  log::Instance();
-                $log_id = $request->variable(URI_LOG, 0);
-                $search = $request->variable('search', 0);
+                $log_id = $this->request->variable(URI_LOG, 0);
+                $search = $this->request->variable('search', 0);
                 if ($log_id)
                 {
                     $action = 'view';
@@ -439,24 +460,23 @@ class main_module extends Admin
                 {
                     case 'list':
 
-                        $deletemark = ($request->is_set_post('delmarked')) ? true : false;
-                        $marked = $request->variable('mark', array(0));
-                        $search_term = $request->variable('search', '');
-                        $start = $request->variable('start', 0);
+                        $deletemark = ($this->request->is_set_post('delmarked')) ? true : false;
+                        $marked = $this->request->variable('mark', array(0));
+                        $search_term = $this->request->variable('search', '');
+                        $start = $this->request->variable('start', 0);
 
                         if ($deletemark)
                         {
-                            global $db, $user, $phpEx;
                             //if marked array isnt empty
                             if (sizeof($marked) && is_array($marked))
                             {
                                 if (confirm_box(true))
                                 {
-                                    $marked = $request->variable('mark', array(0));
+                                    $marked = $this->request->variable('mark', array(0));
                                     $logs = log::Instance();
                                     $log_action = array(
                                         'header' => 'L_ACTION_LOG_DELETED' ,
-                                        'L_ADDED_BY' => $user->data['username'] ,
+                                        'L_ADDED_BY' => $this->user->data['username'] ,
                                         'L_LOG_ID' => implode(",", $logs->delete_log($marked)  ));
 
                                     $this->log_insert(array(
@@ -466,18 +486,18 @@ class main_module extends Admin
                                     //redirect to listing
                                     $meta_info = append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs');
                                     meta_refresh(3, $meta_info);
-                                    $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs') . '">' . $user->lang['RETURN_LOG'] . '</a><br />' . sprintf($user->lang['ADMIN_LOG_DELETE_SUCCESS'], implode($marked));
+                                    $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs') . '">' . $this->user->lang['RETURN_LOG'] . '</a><br />' . sprintf($this->user->lang['ADMIN_LOG_DELETE_SUCCESS'], implode($marked));
                                     trigger_error($message, E_USER_WARNING);
                                 }
                                 else
                                 {
                                     // display confirmation
-                                    confirm_box(false, $user->lang['CONFIRM_DELETE_BBDKPLOG'], build_hidden_fields(array(
+                                    confirm_box(false, $this->user->lang['CONFIRM_DELETE_BBDKPLOG'], build_hidden_fields(array(
                                         'delmarked' => true ,
                                         'mark' 		=> $marked)));
                                 }
                                 // they hit no
-                                $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs') . '">' . $user->lang['RETURN_LOG'] . '</a><br />' . sprintf($user->lang['ADMIN_LOG_DELETE_FAIL'], implode($marked));
+                                $message = '<a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs') . '">' . $this->user->lang['RETURN_LOG'] . '</a><br />' . sprintf($this->user->lang['ADMIN_LOG_DELETE_FAIL'], implode($marked));
                                 trigger_error($message, E_USER_WARNING);
                             }
                         }
@@ -496,7 +516,7 @@ class main_module extends Admin
 
                         foreach ($listlogs as $key => $log)
                         {
-                            $template->assign_block_vars('logs_row', array(
+                            $this->template->assign_block_vars('logs_row', array(
                                 'ID'		=> $log['log_id'],
                                 'DATE' 		=> $log['datestamp'],
                                 'TYPE' 		=> $log['log_type'],
@@ -519,10 +539,10 @@ class main_module extends Admin
                         $pagination_url = append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs&amp;') . '&amp;search=' . $search_term . '&amp;o=' . $current_order['uri']['current'];
                         $pagination->generate_template_pagination($pagination_url, 'pagination', 'page', $logcount, USER_LLIMIT, $start);
 
-                        $template->assign_vars(array(
+                        $this->template->assign_vars(array(
                             'S_LIST' 	=> true ,
-                            'L_TITLE' 	=> $user->lang['ACP_BBGUILD_LOGS'] ,
-                            'L_EXPLAIN' => $user->lang['ACP_BBGUILD_LOGS_EXPLAIN'] ,
+                            'L_TITLE' 	=> $this->user->lang['ACP_BBGUILD_LOGS'] ,
+                            'L_EXPLAIN' => $this->user->lang['ACP_BBGUILD_LOGS_EXPLAIN'] ,
                             'O_DATE' 	=> $current_order['uri'][0] ,
                             'O_TYPE' 	=> $current_order['uri'][1] ,
                             'O_USER' 	=> $current_order['uri'][2] ,
@@ -532,7 +552,7 @@ class main_module extends Admin
                             'U_LOGS_SEARCH' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs'),
                             'CURRENT_ORDER' => $current_order['uri']['current'] ,
                             'START' => $start ,
-                            'VIEWLOGS_FOOTCOUNT' => sprintf($user->lang['VIEWLOGS_FOOTCOUNT'], $logcount, USER_LLIMIT) ,
+                            'VIEWLOGS_FOOTCOUNT' => sprintf($this->user->lang['VIEWLOGS_FOOTCOUNT'], $logcount, USER_LLIMIT) ,
                             'PAGE_NUMBER'        => $pagination->on_page($logcount, USER_LLIMIT, $start)
                         ));
                         break;
@@ -540,8 +560,8 @@ class main_module extends Admin
                     case 'view':
                         $viewlog = $logs->get_logentry($log_id);
                         $log_actionxml = $viewlog['log_action'];
-                        $search_term = $request->variable('search', '');
-                        $start = $request->variable('start', 0);
+                        $search_term = $this->request->variable('search', '');
+                        $start = $this->request->variable('start', 0);
                         $log_action = (array) simplexml_load_string($log_actionxml);
                         // loop the action elements and fill template
                         foreach ($log_action as $key => $value)
@@ -558,8 +578,8 @@ class main_module extends Admin
                                     }
                                     break;
                                 default:
-                                    $template->assign_block_vars('logaction_row', array(
-                                        'KEY' 	=> 	(isset($user->lang[$key]))  ? $user->lang[$key] . ': ' : $key,
+                                    $this->template->assign_block_vars('logaction_row', array(
+                                        'KEY' 	=> 	(isset($this->user->lang[$key]))  ? $this->user->lang[$key] . ': ' : $key,
                                         'VALUE' => 	$value));
 
 
@@ -568,11 +588,11 @@ class main_module extends Admin
 
 
                         // fill constant template elements
-                        $template->assign_vars(array(
+                        $this->template->assign_vars(array(
                             'S_LIST' => false ,
-                            'L_TITLE' => $user->lang['ACP_BBGUILD_LOGS'] ,
-                            'L_EXPLAIN' => $user->lang['ACP_BBGUILD_LOGS_EXPLAIN'] ,
-                            'LOG_DATE' => (! empty($viewlog['log_date'])) ? $user->format_date($viewlog['log_date'])  : '&nbsp;' ,
+                            'L_TITLE' => $this->user->lang['ACP_BBGUILD_LOGS'] ,
+                            'L_EXPLAIN' => $this->user->lang['ACP_BBGUILD_LOGS_EXPLAIN'] ,
+                            'LOG_DATE' => (! empty($viewlog['log_date'])) ? $this->user->format_date($viewlog['log_date'])  : '&nbsp;' ,
                             'LOG_USERNAME' => $viewlog['colouruser'],
                             'LOG_IP_ADDRESS' => $viewlog['log_ipaddress'] ,
                             'LOG_SESSION_ID' => $viewlog['log_sid'] ,
@@ -582,7 +602,7 @@ class main_module extends Admin
                         break;
                 }
 
-                $template->assign_vars(array(
+                $this->template->assign_vars(array(
                     'U_BACK'    => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\main_module&amp;mode=logs') . '&amp;search=' . $search_term . '&amp;start=' . $start . '&amp;' ,
                 ));
                 break;

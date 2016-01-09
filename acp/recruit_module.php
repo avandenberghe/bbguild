@@ -41,6 +41,17 @@ class recruit_module  extends Admin
      */
     public  $url_id;
 
+    /** @var \phpbb\request\request **/
+    protected $request;
+    /** @var \phpbb\template\template **/
+    protected $template;
+    /** @var \phpbb\user **/
+    protected $user;
+    /** @var \phpbb\db\driver\driver_interface */
+    protected $db;
+
+    public $id;
+    public $mode;
 
     /**
      *
@@ -56,26 +67,34 @@ class recruit_module  extends Admin
     {
         global $user, $template, $db, $phpbb_admin_path, $phpEx;
         global $request;
+
+        $this->id = $id;
+        $this->mode = $mode;
+        $this->request=$request;
+        $this->template=$template;
+        $this->user=$user;
+        $this->db=$db;
+
         parent::__construct();
         $this->tpl_name = 'dkp/acp_' . $mode;
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\recruit_module&amp;mode=listrecruit') . '"><h3>'.$user->lang['RETURN_RECLIST'].'</h3></a>';
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\recruit_module&amp;mode=listrecruit') . '"><h3>'.$this->user->lang['RETURN_RECLIST'].'</h3></a>';
         $form_key = 'sajaki/bbguild';
         add_form_key($form_key);
 
         $this->apply_installed = false;
-        $plugin_versioninfo = (array) parent::get_plugin_info($request->variable('versioncheck_force', false));
+        $plugin_versioninfo = (array) parent::get_plugin_info($this->request->variable('versioncheck_force', false));
 
         if(isset($plugin_versioninfo['apply']))
         {
             $this->apply_installed = true;
         }
 
-        $guild_id = $request->variable(URI_GUILD, 1);
+        $guild_id = $this->request->variable(URI_GUILD, 1);
         $Guild = new Guilds();
         $guildlist   = $Guild->guildlist(1);
         foreach ($guildlist as $g)
         {
-            $template->assign_block_vars('guild_row', array(
+            $this->template->assign_block_vars('guild_row', array(
                 'VALUE'    => $g['id'],
                 'SELECTED' => ($guild_id == $g['id']) ? ' selected="selected"' : '',
                 'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
@@ -83,7 +102,7 @@ class recruit_module  extends Admin
         $Guild->guildid= $guild_id;
         $Guild->Getguild();
 
-        $template->assign_vars(array(
+        $this->template->assign_vars(array(
             'APPLY_INSTALLED'       => $this->apply_installed ? 1 : 0,
             'GUILD_EMBLEM'          => $Guild->emblempath,
             'U_VIEW_GUILD'          => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\guild_module&amp;mode=editguild&amp;' . URI_GUILD . '=' . $Guild->guildid),
@@ -111,42 +130,42 @@ class recruit_module  extends Admin
                 $recruit = new Recruitment();
                 $recruit->setGuildId($Guild->guildid);
                 $recruit->setLastUpdate($this->time);
-                $add = $request->is_set_post('add');
-                $update = $request->is_set_post('update');
-                $action = $request->variable('action', '');
+                $add = $this->request->is_set_post('add');
+                $update = $this->request->is_set_post('update');
+                $action = $this->request->variable('action', '');
                 if($this->apply_installed)
                 {
                     //if apply is installed then fetch list of templates
-                    $result = $db->sql_query ( 'SELECT * FROM ' . APPTEMPLATELIST_TABLE );
-                    $templates = array();
-                    while ( $row = $db->sql_fetchrow ( $result ) )
+                    $result = $this->db->sql_query ( 'SELECT * FROM ' . APPTEMPLATELIST_TABLE );
+                    $apply_templates = array();
+                    while ( $row = $this->db->sql_fetchrow ( $result ) )
                     {
-                        $templates[$row ['template_id']] = $row ['template_name'];
+                        $apply_templates[$row ['template_id']] = $row ['template_name'];
                     }
-                    $db->sql_freeresult ( $result );
+                    $this->db->sql_freeresult ( $result );
                 }
 
 
                 if($action=='delete')
                 {
-                    $recruit->id = $request->variable('id', 0);
+                    $recruit->id = $this->request->variable('id', 0);
                     $recruit->get($recruit->id);
                     $recruit->delete();
 
-                    $success_message = sprintf($user->lang['ADMIN_DELETE_RECRUITMENT_SUCCESS'], $recruit->id);
+                    $success_message = sprintf($this->user->lang['ADMIN_DELETE_RECRUITMENT_SUCCESS'], $recruit->id);
                     trigger_error($success_message . $this->link, E_USER_WARNING);
 
                 }
                 elseif ($action=='edit')
                 {
-                    $recruit->id = $request->variable('id', 0);
+                    $recruit->id = $this->request->variable('id', 0);
                     $recruit->get($recruit->id);
 
-                    $template->assign_vars(array(
+                    $this->template->assign_vars(array(
                             'S_UPDATE'              => true,
                             'RECRUIT_ID'            => $recruit->id,
                             'RECSTATUS'             => $recruit->getStatus() == '1' ? 'checked="checked"' : '',
-                            'RECRUIT_STATUS'        => $recruit->getStatus() == '1' ? $user->lang['RECRUIT_OPEN'] : $user->lang['RECRUIT_CLOSED'],
+                            'RECRUIT_STATUS'        => $recruit->getStatus() == '1' ? $this->user->lang['RECRUIT_OPEN'] : $this->user->lang['RECRUIT_CLOSED'],
                             'NUMPOSITIONS'          => $recruit->getPositions(),
                             'APPLICANTS'            => $recruit->getApplicants(),
                             'RECRUIT_LEVEL'         => $recruit->getLevel(),
@@ -157,7 +176,7 @@ class recruit_module  extends Admin
                 else
                 {
                     //add
-                    $template->assign_vars(array(
+                    $this->template->assign_vars(array(
                         'RECSTATUS'             => 'checked="checked"',
                         'S_ADD'                 => true,
                         'NUMPOSITIONS'          => '1',
@@ -169,11 +188,11 @@ class recruit_module  extends Admin
 
                 if($this->apply_installed)
                 {
-                    foreach($templates as $template_id => $value)
+                    foreach($apply_templates as $apply_template_id => $value)
                     {
-                        $template->assign_block_vars('applytemplates_row', array(
-                            'VALUE'    => $template_id,
-                            'SELECTED' => ($template_id ==  $recruit->getApplytemplateid()) ? ' selected="selected"' : '',
+                        $this->template->assign_block_vars('applytemplates_row', array(
+                            'VALUE'    => $apply_template_id,
+                            'SELECTED' => ($apply_template_id ==  $recruit->getApplytemplateid()) ? ' selected="selected"' : '',
                             'OPTION'   => $value
                         ));
 
@@ -188,15 +207,15 @@ class recruit_module  extends Admin
                         trigger_error('FORM_INVALID');
                     }
 
-                    $recruit->id = $request->variable('hidden_recruit_id', 0);
-                    $recruit->role_id = $request->variable('role', 0);
-                    $recruit->setClassId($request->variable('class_id', 0));
-                    $recruit->setPositions($request->variable('numpositions', 0));
-                    $recruit->setApplicants($request->variable('applicants', 0));
-                    $recruit->setStatus($request->variable('recruitstatus', '') == 'on' ? 1 : 0 );
-                    $recruit->setLevel($request->variable('recruit_level', 0));
-                    $recruit->setNote(utf8_normalize_nfc($request->variable('note', '', true)));
-                    $recruit->setApplytemplateid($request->variable('applytemplateid', 1));
+                    $recruit->id = $this->request->variable('hidden_recruit_id', 0);
+                    $recruit->role_id = $this->request->variable('role', 0);
+                    $recruit->setClassId($this->request->variable('class_id', 0));
+                    $recruit->setPositions($this->request->variable('numpositions', 0));
+                    $recruit->setApplicants($this->request->variable('applicants', 0));
+                    $recruit->setStatus($this->request->variable('recruitstatus', '') == 'on' ? 1 : 0 );
+                    $recruit->setLevel($this->request->variable('recruit_level', 0));
+                    $recruit->setNote(utf8_normalize_nfc($this->request->variable('note', '', true)));
+                    $recruit->setApplytemplateid($this->request->variable('applytemplateid', 1));
 
                 }
 
@@ -204,14 +223,14 @@ class recruit_module  extends Admin
                 {
                     $recruit->Make();
 
-                    $success_message = sprintf($user->lang['ADMIN_ADD_RECRUITMENT_SUCCESS'], $recruit->id);
+                    $success_message = sprintf($this->user->lang['ADMIN_ADD_RECRUITMENT_SUCCESS'], $recruit->id);
                     trigger_error($success_message . $this->link, E_USER_NOTICE);
 
                 }
                 elseif($update)
                 {
                     $recruit->update();
-                    $success_message = sprintf($user->lang['ADMIN_UPDATE_RECRUITMENT_SUCCESS'], $recruit->id);
+                    $success_message = sprintf($this->user->lang['ADMIN_UPDATE_RECRUITMENT_SUCCESS'], $recruit->id);
                     trigger_error($success_message . $this->link, E_USER_NOTICE);
 
                 }
@@ -219,7 +238,7 @@ class recruit_module  extends Admin
                 {
                     $this->BuildDropDowns($Guild, $recruit);
                 }
-                $this->page_title = $user->lang['ACP_ADDRECRUITS'];
+                $this->page_title = $this->user->lang['ACP_ADDRECRUITS'];
                 break;
 
             default:
@@ -236,20 +255,20 @@ class recruit_module  extends Admin
      */
     private function BuildTemplateListRecruits($guild_id)
     {
-        global $user, $template, $phpbb_admin_path, $phpEx, $db;
+        global $phpbb_admin_path, $phpEx;
         if (count($this->games) == 0)
         {
-            trigger_error($user->lang['ERROR_NOGAMES'], E_USER_WARNING);
+            trigger_error($this->user->lang['ERROR_NOGAMES'], E_USER_WARNING);
         }
 
         $recruits = new Recruitment();
         $recruits->setGuildId($guild_id);
         $result   = $recruits->ListRecruitments(1);
         $recruit_count= 0;
-        while ($row = $db->sql_fetchrow($result))
+        while ($row = $this->db->sql_fetchrow($result))
         {
             $recruit_count++;
-            $template->assign_block_vars('recruit_row', array(
+            $this->template->assign_block_vars('recruit_row', array(
                     'ID'                => $row['id'],
                     'GUILD_ID'          => $row['guild_id'],
                     'ROLE_ID'           => $row['role_id'],
@@ -260,7 +279,7 @@ class recruit_module  extends Admin
                     'CLASS_IMAGE'       => (strlen ( $row ['imagename'] ) > 1) ? $this->ext_path . "images/class_images/" . $row ['imagename'] . ".png" : '',
                     'POSITIONS'         => $row['positions'],
                     'APPLICANTS'        => $row['applicants'],
-                    'STATUS'            => $row['status'] == '1' ? $user->lang['RECRUIT_OPEN'] : $user->lang['RECRUIT_CLOSED'],
+                    'STATUS'            => $row['status'] == '1' ? $this->user->lang['RECRUIT_OPEN'] : $this->user->lang['RECRUIT_CLOSED'],
                     'NOTE'              => $row['note'],
                     'ROLE_COLOR'        => $row['role_color'],
                     'ROLE_NAME'         => $row['role_name'],
@@ -273,8 +292,8 @@ class recruit_module  extends Admin
         }
 
         // if apply is installed insert an extra column in recruitment listing to indicate the template to be used for that recruitment.
-        $template->assign_vars(array(
-            'RECRUIT_FOOTCOUNT'     => sprintf($user->lang['RECRUIT_FOOTCOUNT'], $recruit_count),
+        $this->template->assign_vars(array(
+            'RECRUIT_FOOTCOUNT'     => sprintf($this->user->lang['RECRUIT_FOOTCOUNT'], $recruit_count),
         ));
         $this->page_title = 'ACP_LISTRECRUITS';
     }
@@ -285,7 +304,7 @@ class recruit_module  extends Admin
      */
     private function BuildDropDowns($Guild, Recruitment $recruit)
     {
-        global $config, $db, $template;
+        global $config;
 
         // Class dropdown
         // reloading is done from ajax to prevent redraw
@@ -299,16 +318,16 @@ class recruit_module  extends Admin
 					AND l.attribute_id = c.class_id  AND l.language= '" . $config['bbguild_lang'] . "' AND l.attribute = 'class' ",
             'ORDER_BY' => 'l.name asc'
         );
-        $sql    = $db->sql_build_query('SELECT', $sql_array);
-        $result = $db->sql_query($sql);
-        while ($row = $db->sql_fetchrow($result))
+        $sql    = $this->db->sql_build_query('SELECT', $sql_array);
+        $result = $this->db->sql_query($sql);
+        while ($row = $this->db->sql_fetchrow($result))
         {
-            $template->assign_block_vars('class_row', array(
+            $this->template->assign_block_vars('class_row', array(
                 'VALUE'    => $row['class_id'],
                 'SELECTED' => ($recruit->getClassId() == $row['class_id']) ? ' selected="selected"' : '',
                 'OPTION'   => $row['class_name']));
         }
-        $db->sql_freeresult($result);
+        $this->db->sql_freeresult($result);
         // get roles
         $Roles           = new Roles();
         $Roles->game_id  = $Guild->game_id;
@@ -316,7 +335,7 @@ class recruit_module  extends Admin
         $listroles       = $Roles->listroles();
         foreach ($listroles as $roleid => $Role)
         {
-            $template->assign_block_vars('role_row', array(
+            $this->template->assign_block_vars('role_row', array(
                 'VALUE'    => $Role['role_id'],
                 'SELECTED' => ($recruit->role_id == $Role['role_id']) ? ' selected="selected"' : '',
                 'OPTION'   => $Role['rolename']));

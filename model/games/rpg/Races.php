@@ -8,6 +8,7 @@
  */
 
 namespace sajaki\bbguild\model\games\rpg;
+use sajaki\bbguild\model\games\Game;
 
 /**
  * Races
@@ -16,7 +17,7 @@ namespace sajaki\bbguild\model\games\rpg;
  *
  *   @package bbguild
  */
- class Races //extends \sajaki\bbguild\model\games\Game
+ class Races extends Game
 {
 
 	/**

@@ -3,7 +3,7 @@
 #valid_views = array('news', 'roster',
 #
 # default route
-#dkp
+#guild/guild/1
 sajaki_bbguild_00:
     path: /guild
     defaults: { _controller: sajaki.bbguild.controller:handleGuild, guild_id: 1    }

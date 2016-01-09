@@ -33,7 +33,17 @@ class game_module extends Admin
      */
     private $gamelist;
 
+    /** @var \phpbb\request\request **/
+    protected $request;
+    /** @var \phpbb\template\template **/
+    protected $template;
+    /** @var \phpbb\user **/
+    protected $user;
+
     public $u_action;
+
+    public $id;
+    public $mode;
 
 	/**
 	 * main ACP game function
@@ -43,12 +53,20 @@ class game_module extends Admin
 	 */
 	function main($id, $mode)
 	{
+
 		global $user, $template, $phpbb_admin_path, $phpEx;
-        global $request, $phpbb_container;
+        global $request,  $phpbb_container;
+
+        $this->id = $id;
+        $this->mode = $mode;
+        $this->request=$request;
+        $this->template=$template;
+        $this->user=$user;
+
         parent::__construct();
 		$form_key = 'sajaki/bbguild';
 		add_form_key ( $form_key );
-		$this->tpl_name = 'acp_' . $mode;
+		$this->tpl_name = 'acp_' . $this->mode;
 
         //list installed games
         $listgames = new Game;
@@ -68,15 +86,15 @@ class game_module extends Admin
             $installed[$game['game_id']] = $game['name'];
         }
 
-		switch ($mode)
+		switch ($this->mode)
 		{
 			case 'listgames' :
 
-				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=listgames' ) . '"><h3>' . $user->lang['RETURN_GAMELIST'] . '</h3></a>';
+				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=listgames' ) . '"><h3>' . $this->user->lang['RETURN_GAMELIST'] . '</h3></a>';
 
 				//game dropdown
-				$newpresetgame = $request->is_set_post('addgame1');
-				$newcustomgame = $request->is_set_post('addgame2');
+				$newpresetgame = $this->request->is_set_post('addgame1');
+				$newcustomgame = $this->request->is_set_post('addgame2');
 
 				if ($newpresetgame || $newcustomgame)
 				{
@@ -84,8 +102,8 @@ class game_module extends Admin
 					if (confirm_box ( true ))
 					{
 						$editgame = new Game;
-						$editgame->game_id = $request->variable( 'hidden_game_id','' );
-						$editgame->setName($request->variable('hidden_game_name', '', true));
+						$editgame->game_id = $this->request->variable( 'hidden_game_id','' );
+						$editgame->setName($this->request->variable('hidden_game_name', '', true));
 						$editgame->install();
                         //
                         // Logging
@@ -99,19 +117,19 @@ class game_module extends Admin
                             'log_type' =>  'L_ACTION_GAME_ADDED',
                             'log_action' => $log_action));
 
-						trigger_error ( sprintf ( $user->lang ['ADMIN_INSTALLED_GAME_SUCCESS'], $editgame->getName() ) . $this->link, E_USER_NOTICE );
+						trigger_error ( sprintf ( $this->user->lang ['ADMIN_INSTALLED_GAME_SUCCESS'], $editgame->getName() ) . $this->link, E_USER_NOTICE );
 					}
 					else
 					{
 						// get field content
-						$listgames->game_id = $request->variable('ngame_id' , '');
+						$listgames->game_id = $this->request->variable('ngame_id' , '');
 						if($newpresetgame)
 						{
 							$listgames->setName($listgames->preinstalled_games[$listgames->game_id]) ;
 						}
 						elseif($newcustomgame)
 						{
-							$listgames->setName($request->variable('ngame_name', '', true));
+							$listgames->setName($this->request->variable('ngame_name', '', true));
 						}
 
 						$s_hidden_fields = build_hidden_fields ( array (
@@ -121,7 +139,7 @@ class game_module extends Admin
 								'hidden_game_name' => $listgames->getName(),
 
 						));
-						confirm_box ( false, sprintf ( $user->lang ['CONFIRM_INSTALL_GAME'], $listgames->getName() ), $s_hidden_fields );
+						confirm_box ( false, sprintf ( $this->user->lang ['CONFIRM_INSTALL_GAME'], $listgames->getName() ), $s_hidden_fields );
 					}
 				}
 
@@ -143,7 +161,7 @@ class game_module extends Admin
 				foreach ($not_installed as $key => $game)
 			    {
 					$can_install_count +=1;
-			        $template->assign_block_vars('gamelistrow', array(
+			        $this->template->assign_block_vars('gamelistrow', array(
 			            'VALUE'      => $key,
 			            'OPTION'     => $game,
 			        	'SELECTED'   => '',
@@ -152,7 +170,7 @@ class game_module extends Admin
 
 				foreach($this->gamelist as $game_id => $game)
 			    {
-			    	$template->assign_block_vars('gamerow', array(
+			    	$this->template->assign_block_vars('gamerow', array(
 			    			'ID' => $game['id'] ,
 			    			'NAME' => $game['name'] ,
 			    			'GAME_ID' => $game['game_id'] ,
@@ -161,7 +179,7 @@ class game_module extends Admin
 			    	));
 			    }
 
-			    $template->assign_vars ( array (
+			    $this->template->assign_vars ( array (
 			    		'U_LIST_GAME' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=listgames') ,
 			    		'CANINSTALL' => ($can_install_count == 0) ? false : true,
 			    		'O_ID' => $current_order['uri'][0] ,
@@ -177,77 +195,77 @@ class game_module extends Admin
 
 			case 'editgames' :
 
-                $action = $request->variable('action', '');
+                $action = $this->request->variable('action', '');
 
 				$editgame = new Game;
-				$editgame->game_id = $request->variable(URI_GAME, $request->variable ( 'hidden_game_id','' ));
+				$editgame->game_id = $this->request->variable(URI_GAME, $this->request->variable ( 'hidden_game_id','' ));
                 $editgame->Get();
 
 				$this->link = '<br /><a href="' . append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME ."={$editgame->game_id}" ) . '"><h3>' .
-						$user->lang ['RETURN_GAMEVIEW'] . '</h3></a>';
+						$this->user->lang ['RETURN_GAMEVIEW'] . '</h3></a>';
 
-                $gamereset = $request->is_set_post('gamereset');
-				$gamedelete = $request->is_set_post('gamedelete');
-				$gamesettings = $request->is_set_post('gamesettings');
+                $gamereset = $this->request->is_set_post('gamereset');
+				$gamedelete = $this->request->is_set_post('gamedelete');
+				$gamesettings = $this->request->is_set_post('gamesettings');
 
-                $template->assign_vars ( array (
+                $this->template->assign_vars ( array (
                     'U_BACK' => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=listgames') ,
                 ));
 
 				if($gamereset)
 				{
-                    $this->ResetGame($editgame, $request);
+                    $this->ResetGame($editgame, $this->request);
                 }
 
 				// save game settings
 				if($gamesettings)
 				{
-                    $editgame = $this->SaveGameSettings($request);
+                    $editgame = $this->SaveGameSettings($this->request);
 				}
 
 				if($gamedelete)
 				{
-                    $this->DeleteGame($editgame, $request);
+                    $this->DeleteGame($editgame, $this->request);
                 }
 
-                $addrole = $request->is_set_post('showrolesadd');
+                $addrole = $this->request->is_set_post('showrolesadd');
                 if ($addrole)
                 {
-                    $this->BuildTemplateRole($editgame, $request);
+                    $this->BuildTemplateRole($editgame, $this->request);
                     break;
                 }
 
                 if ($action=='deleterole')
                 {
-                    $this->DeleteRole($editgame, $request);
+                    $this->DeleteRole($editgame, $this->request);
                     break;
                 }
                 elseif ($action=='editrole')
                 {
-                    $this->BuildTemplateRole($editgame, $request);
+                    $this->BuildTemplateRole($editgame, $this->request);
                     break;
                 }
 
 
-                $addfaction = $request->is_set_post('showfactionadd');
+                $addfaction = $this->request->is_set_post('showfactionadd');
                 if ($addfaction)
                 {
-                    $this->BuildTemplateFaction($editgame, $request);
+                    $this->BuildTemplateFaction($editgame, $this->request);
                     break;
                 }
 
                 if ($action=='deletefaction')
                 {
-                    $this->DeleteFaction($editgame, $request);
+                    $this->DeleteFaction($editgame, $this->request);
                     break;
                 }
                 elseif ($action=='editfaction')
                 {
-                    $this->BuildTemplateFaction($editgame, $request);
+                    $this->BuildTemplateFaction($editgame, $this->request);
                     break;
                 }
 
-                $addrace = $request->is_set_post('showraceadd');
+                $addrace = $this->request->is_set_post('showraceadd');
                 $raceedit = (isset ( $_GET ['raceedit'] )) ? true : false;
                 $racedelete = (isset ( $_GET ['racedelete'] )) ? true : false;
 
@@ -257,22 +275,22 @@ class game_module extends Admin
 					if (isset ( $_GET ['id'] ))
 					{
 						// edit this race
-                        $this->BuildTemplateEditRace($editgame, $request);
+                        $this->BuildTemplateEditRace($editgame, $this->request);
 					}
 					else
 					{
-                        $this->BuildTemplateAddRace($editgame, $request);
+                        $this->BuildTemplateAddRace($editgame, $this->request);
                     }
 					break;
 				}
 
 				if ($racedelete)
 				{
-                    $this->DeleteRace($editgame, $request);
+                    $this->DeleteRace($editgame, $this->request);
                     break;
                 }
 
-                $addclass = $request->is_set_post('showclassadd');
+                $addclass = $this->request->is_set_post('showclassadd');
                 $classedit = (isset ( $_GET ['classedit'] )) ? true : false;
                 $classdelete = (isset ( $_GET ['classdelete'] )) ? true : false;
 
@@ -281,7 +299,7 @@ class game_module extends Admin
 					// Load template for adding/editing
 					if (isset ( $_GET ['id'] ))
 					{
-                        $this->BuildTemplateEditClass($editgame, $request);
+                        $this->BuildTemplateEditClass($editgame, $this->request);
                     }
 					else
 					{
@@ -293,7 +311,7 @@ class game_module extends Admin
 				if ($classdelete)
 				{
                     // user pressed delete class
-                    $this->DeleteClass($editgame, $request);
+                    $this->DeleteClass($editgame, $this->request);
                     break;
                 }
 
@@ -305,46 +323,46 @@ class game_module extends Admin
             case 'addrole' :
 
                 $role = new Roles();
-                $role->game_id = $request->variable ( 'game_id', $request->variable ( 'hidden_game_id', ''));
+                $role->game_id = $this->request->variable ( 'game_id', $this->request->variable ( 'hidden_game_id', ''));
                 $editgame = new Game;
                 $editgame->game_id = $role->game_id;
                 $editgame->Get();
 
-                $addnew = $request->is_set_post('addrole');
-                $editfaction = $request->is_set_post('editrole');
+                $addnew = $this->request->is_set_post('addrole');
+                $editfaction = $this->request->is_set_post('editrole');
                 if ($addnew)
                 {
-                    $this->AddRole($role, $editgame, $request);
+                    $this->AddRole($role, $editgame, $this->request);
                 }
                 if ($editfaction)
                 {
-                    $this->EditRole($role, $editgame, $request);
+                    $this->EditRole($role, $editgame, $this->request);
                 }
                 break;
 
             case 'addfaction' :
 
 				$faction = new Faction();
-				$faction->game_id = $request->variable ( 'game_id', $request->variable ( 'hidden_game_id', '' ) );
+				$faction->game_id = $this->request->variable ( 'game_id', $this->request->variable ( 'hidden_game_id', '' ) );
 				$editgame = new Game;
 				$editgame->game_id = $faction->game_id;
 				$editgame->Get();
 
-				$addnew = $request->is_set_post('factionadd');
-                $editfaction = $request->is_set_post('factionedit');
+				$addnew = $this->request->is_set_post('factionadd');
+                $editfaction = $this->request->is_set_post('factionedit');
 				if ($addnew)
 				{
-                    $this->AddFaction($faction, $editgame, $request);
+                    $this->AddFaction($faction, $editgame, $this->request);
 				}
                 if ($editfaction)
                 {
-                    $this->EditFaction($faction, $editgame, $request);
+                    $this->EditFaction($faction, $editgame, $this->request);
                 }
 				break;
 
 			case 'addrace' :
-				$raceadd = $request->is_set_post('add');
-				$raceupdate = $request->is_set_post('update');
+				$raceadd = $this->request->is_set_post('add');
+				$raceupdate = $this->request->is_set_post('update');
 
 				if ($raceadd || $raceupdate)
 				{
@@ -356,11 +374,11 @@ class game_module extends Admin
 
 				if ($raceadd)
 				{
-                    $this->AddRace($request);
+                    $this->AddRace($this->request);
 				}
 				elseif ($raceupdate)
 				{
-                    $this->RaceUpdate($request);
+                    $this->RaceUpdate($this->request);
 				}
 
 				$this->page_title = 'ACP_LISTGAME';
@@ -369,8 +387,8 @@ class game_module extends Admin
 			case 'addclass':
 				// collects data after BuildTemplateEditClass, calls class updater
 
-				$classadd = $request->is_set_post('add');
-				$classupdate = $request->is_set_post('update');
+				$classadd = $this->request->is_set_post('add');
+				$classupdate = $this->request->is_set_post('update');
 
 				if ($classadd || $classupdate)
 				{
@@ -382,11 +400,11 @@ class game_module extends Admin
 
 				if ($classadd)
 				{
-                    $this->AddClass($request);
+                    $this->AddClass($this->request);
 				}
 				elseif ($classupdate)
 				{
-                    $this->EditClass($request);
+                    $this->EditClass($this->request);
 
 				}
 				$this->page_title = 'ACP_LISTGAME';
@@ -398,23 +416,22 @@ class game_module extends Admin
 
     /**
      * Save Game Settings
-     * @param $request
      * @return Game
      */
-    private function SaveGameSettings($request)
+    private function SaveGameSettings()
     {
         $editgame = new Game;
-        $editgame->game_id = $request->variable(URI_GAME, $request->variable( 'hidden_game_id','' ));
+        $editgame->game_id = $this->request->variable(URI_GAME, $this->request->variable( 'hidden_game_id','' ));
         $editgame->Get();
 
-        $editgame->setImagename($request->variable('imagename',''));
-        $editgame->setArmoryEnabled($request->variable('enable_armory', 0));
-        $editgame->setBossbaseurl($request->variable('bossbaseurl','' ));
-        $editgame->setZonebaseurl($request->variable('zonebaseurl','' ));
-        $editgame->setName($request->variable ( 'game_name', ' ', true ));
-        $editgame->setApikey($request->variable('apikey','' ));
-		$editgame->setApilocale($request->variable('apilocale','' ));
-        $editgame->setPrivkey($request->variable('privkey','' ));
+        $editgame->setImagename($this->request->variable('imagename',''));
+        $editgame->setArmoryEnabled($this->request->variable('enable_armory', 0));
+        $editgame->setBossbaseurl($this->request->variable('bossbaseurl','' ));
+        $editgame->setZonebaseurl($this->request->variable('zonebaseurl','' ));
+        $editgame->setName($this->request->variable ( 'game_name', ' ', true ));
+        $editgame->setApikey($this->request->variable('apikey','' ));
+		$editgame->setApilocale($this->request->variable('apilocale','' ));
+        $editgame->setPrivkey($this->request->variable('privkey','' ));
         $editgame->update();
 
         return $editgame;
@@ -423,21 +440,20 @@ class game_module extends Admin
     /**
      * Reset Game
      * @param Game $editgame
-     * @param $request
      */
-    private function ResetGame(Game $editgame, $request)
+    private function ResetGame(Game $editgame)
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         if (confirm_box(true))
         {
             $editgame          = new Game;
-            $editgame->game_id = $request->variable('hidden_game_id', '');
+            $editgame->game_id = $this->request->variable('hidden_game_id', '');
             $editgame->get();
             $editgame->Delete();
             $editgame->install();
             meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=listgames'));
-            trigger_error(sprintf($user->lang ['ADMIN_RESET_GAME_SUCCESS'], $editgame->getName()) . $this->link, E_USER_WARNING);
+            trigger_error(sprintf($this->user->lang ['ADMIN_RESET_GAME_SUCCESS'], $editgame->getName()) . $this->link, E_USER_WARNING);
         }
         else
         {
@@ -447,7 +463,7 @@ class game_module extends Admin
                 'hidden_game_id' => $editgame->game_id,
             ));
 
-            confirm_box(false, sprintf($user->lang ['CONFIRM_RESET_GAME'], $editgame->getName()), $s_hidden_fields);
+            confirm_box(false, sprintf($this->user->lang ['CONFIRM_RESET_GAME'], $editgame->getName()), $s_hidden_fields);
 
         }
     }
@@ -455,16 +471,14 @@ class game_module extends Admin
     /**
      * Delete Game from bbGuild
      * @param Game $editgame
-     * @param $request
      */
-    private function DeleteGame(Game $editgame, $request)
+    private function DeleteGame(Game $editgame)
     {
-        global $user;
 
         if (confirm_box(true))
         {
             $deletegame          = new Game;
-            $deletegame->game_id = $request->variable('hidden_game_id', '');
+            $deletegame->game_id = $this->request->variable('hidden_game_id', '');
             $deletegame->Get();
             $deletegame->Delete();
 
@@ -477,7 +491,7 @@ class game_module extends Admin
                 'log_type'   => 'L_ACTION_GAME_DELETED',
                 'log_action' => $log_action));
             //meta_refresh(1, append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=listgames') );
-            trigger_error(sprintf($user->lang ['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->getName()), E_USER_WARNING);
+            trigger_error(sprintf($this->user->lang ['ADMIN_DELETE_GAME_SUCCESS'], $deletegame->getName()), E_USER_WARNING);
 
         } else
         {
@@ -488,7 +502,7 @@ class game_module extends Admin
                 'hidden_game_id' => $editgame->game_id,
 
             ));
-            confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_GAME'], $editgame->getName()), $s_hidden_fields);
+            confirm_box(false, sprintf($this->user->lang ['CONFIRM_DELETE_GAME'], $editgame->getName()), $s_hidden_fields);
 
         }
 
@@ -498,21 +512,20 @@ class game_module extends Admin
      * Add Role
      * @param Roles $role
      * @param Game $editgame
-     * @param $request
      */
-    private function AddRole(Roles $role, Game $editgame, $request)
+    private function AddRole(Roles $role, Game $editgame)
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         if (!check_form_key('sajaki/bbguild'))
         {
             trigger_error('FORM_INVALID');
         }
-        $role->rolename = $request->variable('rolename', '', true);
-        $role->role_id = $request->variable('role_id', 0);
-        $role->role_color = $request->variable('role_color', '');
-        $role->role_icon = $request->variable('role_icon', '');
-        $role->role_cat_icon = $request->variable('role_cat_icon', '');
+        $role->rolename = $this->request->variable('rolename', '', true);
+        $role->role_id = $this->request->variable('role_id', 0);
+        $role->role_color = $this->request->variable('role_color', '');
+        $role->role_icon = $this->request->variable('role_icon', '');
+        $role->role_cat_icon = $this->request->variable('role_cat_icon', '');
         $role->Make();
 
         $log_action = array(
@@ -527,32 +540,31 @@ class game_module extends Admin
             'log_action' => $log_action));
 
         meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$role->game_id}"));
-        trigger_error(sprintf($user->lang ['ADMIN_ADD_ROLE_SUCCESS'], $role->rolename), E_USER_NOTICE);
+        trigger_error(sprintf($this->user->lang ['ADMIN_ADD_ROLE_SUCCESS'], $role->rolename), E_USER_NOTICE);
     }
 
     /**
      * @param Roles $role
      * @param Game $editgame
-     * @param $request
      */
-    private function EditRole(Roles $role, Game $editgame, $request)
+    private function EditRole(Roles $role, Game $editgame)
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         $oldrole             = new Roles();
         $oldrole->game_id    = $editgame->game_id;
-        $oldrole->role_id    = $request->variable('hidden_role_id', 0);
+        $oldrole->role_id    = $this->request->variable('hidden_role_id', 0);
         $oldrole->get();
 
         $newrole               = new Roles();
         $newrole->game_id      = $editgame->game_id;
-        $newrole->role_id   = $request->variable('hidden_role_id', 0);
+        $newrole->role_id   = $this->request->variable('hidden_role_id', 0);
         $newrole->get(); // in order to get the pk
 
-        $newrole->rolename = $request->variable('rolename', '', true);
-        $newrole->role_color = $request->variable('role_color', '');
-        $newrole->role_icon = $request->variable('role_icon', '');
-        $newrole->role_cat_icon = $request->variable('role_cat_icon', '');
+        $newrole->rolename = $this->request->variable('rolename', '', true);
+        $newrole->role_color = $this->request->variable('role_color', '');
+        $newrole->role_icon = $this->request->variable('role_icon', '');
+        $newrole->role_cat_icon = $this->request->variable('role_cat_icon', '');
 
         $newrole->Update($oldrole);
 
@@ -568,23 +580,22 @@ class game_module extends Admin
             'log_action' => $log_action));
 
         meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newrole->game_id}"));
-        trigger_error(sprintf($user->lang ['ADMIN_UPDATE_ROLE_SUCCESS'], $newrole->rolename), E_USER_NOTICE);
+        trigger_error(sprintf($this->user->lang ['ADMIN_UPDATE_ROLE_SUCCESS'], $newrole->rolename), E_USER_NOTICE);
 
     }
 
     /**
      * @param Game $editgame
-     * @param $request
      */
-    private function DeleteRole(Game $editgame, $request)
+    private function DeleteRole(Game $editgame)
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         if (confirm_box(true))
         {
             $deleterole               = new Roles();
-            $deleterole->game_id      =  $request->variable('hidden_game_id', '');
-            $deleterole->role_id    = $request->variable('hidden_role_id', 0);
+            $deleterole->game_id      =  $this->request->variable('hidden_game_id', '');
+            $deleterole->role_id    = $this->request->variable('hidden_role_id', 0);
             $deleterole->get(); // in order to get the pk
             $deleterole->Delete();
 
@@ -601,14 +612,14 @@ class game_module extends Admin
 
             meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$deleterole->game_id}"));
 
-            trigger_error(sprintf($user->lang ['ADMIN_DELETE_ROLE_SUCCESS'], $deleterole->rolename) . $this->link, E_USER_WARNING);
+            trigger_error(sprintf($this->user->lang ['ADMIN_DELETE_ROLE_SUCCESS'], $deleterole->rolename) . $this->link, E_USER_WARNING);
 
         }
         else
         {
             $deleterole               = new Roles();
             $deleterole->game_id      = $editgame->game_id;
-            $deleterole->role_id      = $request->variable('role_id', 0);
+            $deleterole->role_id      = $this->request->variable('role_id', 0);
             $deleterole->get(); // in order to get the pk
 
             $s_hidden_fields = build_hidden_fields(array(
@@ -616,7 +627,7 @@ class game_module extends Admin
                 'hidden_role_id'    => $deleterole->role_id,
                 'hidden_game_id'    => $deleterole->game_id,
             ));
-            confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_ROLE'], $deleterole->rolename), $s_hidden_fields);
+            confirm_box(false, sprintf($this->user->lang ['CONFIRM_DELETE_ROLE'], $deleterole->rolename), $s_hidden_fields);
 
         }
         $this->showgame($editgame);
@@ -626,17 +637,16 @@ class game_module extends Admin
      * Add Faction
      * @param Faction $faction
      * @param Game $editgame
-     * @param $request
      */
-    private function AddFaction(Faction $faction, Game $editgame, $request)
+    private function AddFaction(Faction $faction, Game $editgame)
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         if (!check_form_key('sajaki/bbguild'))
         {
             trigger_error('FORM_INVALID');
         }
-        $faction->faction_name = $request->variable('factionname', '', true);
+        $faction->faction_name = $this->request->variable('factionname', '', true);
         $faction->Make();
 
         $log_action = array(
@@ -650,46 +660,42 @@ class game_module extends Admin
             'log_action' => $log_action));
         meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$faction->game_id}"));
 
-        trigger_error(sprintf($user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $faction->faction_name), E_USER_NOTICE);
+        trigger_error(sprintf($this->user->lang ['ADMIN_ADD_FACTION_SUCCESS'], $faction->faction_name), E_USER_NOTICE);
     }
 
     /**
      * @param Faction $faction
      * @param Game $editgame
-     * @param $request
      */
-    private function EditFaction(Faction $faction, Game $editgame, $request)
+    private function EditFaction(Faction $faction, Game $editgame)
     {
-        global $user;
-
         $oldfaction             = new Faction();
         $oldfaction->game_id    = $editgame->game_id;
-        $oldfaction->faction_id = $request->variable('hidden_faction_id', 0);
+        $oldfaction->faction_id = $this->request->variable('hidden_faction_id', 0);
         $oldfaction->get();
 
         $newfaction               = new Faction();
         $newfaction->game_id      = $editgame->game_id;
-        $newfaction->faction_name = $request->variable('factionname', '', true);
-        $newfaction->faction_id   = $request->variable('hidden_faction_id', 0);
+        $newfaction->faction_name = $this->request->variable('factionname', '', true);
+        $newfaction->faction_id   = $this->request->variable('hidden_faction_id', 0);
         $newfaction->update();
 
-        trigger_error(sprintf($user->lang ['ADMIN_UPDATE_FACTION_SUCCESS'], $newfaction->faction_name), E_USER_WARNING);
+        trigger_error(sprintf($this->user->lang ['ADMIN_UPDATE_FACTION_SUCCESS'], $newfaction->faction_name), E_USER_WARNING);
 
     }
 
     /**
      * @param Game $editgame
-     * @param $request
      */
-    private function DeleteFaction(Game $editgame, $request)
+    private function DeleteFaction(Game $editgame)
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         if (confirm_box(true))
         {
             $faction             = new Faction();
-            $faction->game_id    = $request->variable('hidden_game_id', '');
-            $faction->faction_id = $request->variable('hidden_faction_id', 0);
+            $faction->game_id    = $this->request->variable('hidden_game_id', '');
+            $faction->faction_id = $this->request->variable('hidden_faction_id', 0);
             $faction->get();
             $faction->Delete();
 
@@ -703,14 +709,14 @@ class game_module extends Admin
                 'log_result' => 'L_SUCCESS',
                 'log_action' => $log_action));
             meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$faction->game_id}"));
-            trigger_error(sprintf($user->lang ['ADMIN_DELETE_FACTION_SUCCESS'], $faction->game_id, $faction->faction_name) . $this->link, E_USER_WARNING);
+            trigger_error(sprintf($this->user->lang ['ADMIN_DELETE_FACTION_SUCCESS'], $faction->game_id, $faction->faction_name) . $this->link, E_USER_WARNING);
 
         }
         else
         {
             $faction             = new Faction();
             $faction->game_id    = $editgame->game_id;
-            $faction->faction_id = $request->variable('id', 0);
+            $faction->faction_id = $this->request->variable('id', 0);
             $faction->get();
 
             $s_hidden_fields = build_hidden_fields(array(
@@ -718,7 +724,7 @@ class game_module extends Admin
                 'hidden_faction_id' => $faction->faction_id,
                 'hidden_game_id'    => $faction->game_id,
             ));
-            confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_FACTION'], $faction->faction_name), $s_hidden_fields);
+            confirm_box(false, sprintf($this->user->lang ['CONFIRM_DELETE_FACTION'], $faction->faction_name), $s_hidden_fields);
 
         }
         $this->showgame($editgame);
@@ -726,85 +732,82 @@ class game_module extends Admin
 
     /**
      * Add Class
-     * @param $request
      */
-    private function AddClass($request)
+    private function AddClass()
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
         $newclass             = new Classes();
-        $newclass->game_id    = $request->variable('game_id', $request->variable('hidden_game_id', ''));
-        $newclass->classname  = $request->variable('class_name', '', true);
-        $newclass->class_id   = $request->variable('class_id', 0);
-        $newclass->min_level  = $request->variable('class_level_min', 0);
-        $newclass->max_level  = $request->variable('class_level_max', 0);
-        $newclass->armor_type = $request->variable('armory', '');
-        $newclass->imagename  = $request->variable('image', '');
-        $newclass->colorcode  = $request->variable('classcolor', '');
+        $newclass->game_id    = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
+        $newclass->classname  = $this->request->variable('class_name', '', true);
+        $newclass->class_id   = $this->request->variable('class_id', 0);
+        $newclass->min_level  = $this->request->variable('class_level_min', 0);
+        $newclass->max_level  = $this->request->variable('class_level_max', 0);
+        $newclass->armor_type = $this->request->variable('armory', '');
+        $newclass->imagename  = $this->request->variable('image', '');
+        $newclass->colorcode  = $this->request->variable('classcolor', '');
         $newclass->faction_id = '';
         $newclass->dps        = '';
         $newclass->heal       = '';
         $newclass->tank       = '';
         $newclass->Make();
         meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newclass->game_id}"));
-        trigger_error(sprintf($user->lang ['ADMIN_ADD_CLASS_SUCCESS'], $newclass->classname) . $this->link, E_USER_NOTICE);
+        trigger_error(sprintf($this->user->lang ['ADMIN_ADD_CLASS_SUCCESS'], $newclass->classname) . $this->link, E_USER_NOTICE);
     }
 
     /**
      * Edit Class
-     * @param $request
      */
-    private function EditClass($request)
+    private function EditClass()
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
         $oldclass           = new Classes();
-        $oldclass->game_id  = $request->variable('game_id', $request->variable('hidden_game_id', ''));
-        $oldclass->class_id = $request->variable('class_id0', 0);
-        $oldclass->c_index  = $request->variable('c_index', 0);
+        $oldclass->game_id  = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
+        $oldclass->class_id = $this->request->variable('class_id0', 0);
+        $oldclass->c_index  = $this->request->variable('c_index', 0);
         $oldclass->Get();
 
         $newclass           = new Classes();
-        $newclass->game_id  = $request->variable('game_id', $request->variable('hidden_game_id', ''));
-        $newclass->class_id = $request->variable('class_id0', 0);
-        $newclass->c_index  = $request->variable('c_index', 0);
+        $newclass->game_id  = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
+        $newclass->class_id = $this->request->variable('class_id0', 0);
+        $newclass->c_index  = $this->request->variable('c_index', 0);
         $newclass->Get();
-        $newclass->class_id   = $request->variable('class_id', 0);
-        $newclass->classname  = $request->variable('class_name', '', true);
-        $newclass->min_level  = $request->variable('class_level_min', 0);
-        $newclass->max_level  = $request->variable('class_level_max', 0);
-        $newclass->armor_type = $request->variable('armory', '');
-        $newclass->imagename  = $request->variable('image', '');
-        $newclass->colorcode  = $request->variable('classcolor', '');
+        $newclass->class_id   = $this->request->variable('class_id', 0);
+        $newclass->classname  = $this->request->variable('class_name', '', true);
+        $newclass->min_level  = $this->request->variable('class_level_min', 0);
+        $newclass->max_level  = $this->request->variable('class_level_max', 0);
+        $newclass->armor_type = $this->request->variable('armory', '');
+        $newclass->imagename  = $this->request->variable('image', '');
+        $newclass->colorcode  = $this->request->variable('classcolor', '');
         $newclass->faction_id = '';
         $newclass->dps        = '';
         $newclass->heal       = '';
         $newclass->tank       = '';
         $newclass->Update($oldclass);
         meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$newclass->game_id}"));
-        trigger_error(sprintf($user->lang ['ADMIN_UPDATE_CLASS_SUCCESS'], $newclass->classname) . $this->link, E_USER_NOTICE);
+        trigger_error(sprintf($this->user->lang ['ADMIN_UPDATE_CLASS_SUCCESS'], $newclass->classname) . $this->link, E_USER_NOTICE);
     }
 
     /**
      * Delete Class
      * @param Game $editgame
-     * @param $request
      */
-    private function DeleteClass(Game $editgame, $request)
+    private function DeleteClass(Game $editgame)
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         if (confirm_box(true))
         {
             $deleteclass           = new Classes();
-            $deleteclass->class_id = $request->variable('hidden_class_id', 0);
-            $deleteclass->game_id  = $request->variable('hidden_game_id', '');
+            $deleteclass->class_id = $this->request->variable('hidden_class_id', 0);
+            $deleteclass->game_id  = $this->request->variable('hidden_game_id', '');
             $deleteclass->get();
             $deleteclass->Delete();
             meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$deleteclass->game_id}"));
-            trigger_error(sprintf($user->lang ['ADMIN_DELETE_CLASS_SUCCESS'], $deleteclass->classname) . $this->link, E_USER_WARNING);
+            trigger_error(sprintf($this->user->lang ['ADMIN_DELETE_CLASS_SUCCESS'], $deleteclass->classname) . $this->link, E_USER_WARNING);
         } else
         {
             $deleteclass           = new Classes();
-            $deleteclass->class_id = $request->variable('id', 0);
+            $deleteclass->class_id = $this->request->variable('id', 0);
             $deleteclass->game_id  = $editgame->game_id;
             $deleteclass->get();
 
@@ -813,7 +816,7 @@ class game_module extends Admin
                     'hidden_game_id'  => $deleteclass->game_id,
                     'hidden_class_id' => $deleteclass->class_id)
             );
-            confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_CLASS'], $deleteclass->classname), $s_hidden_fields);
+            confirm_box(false, sprintf($this->user->lang ['CONFIRM_DELETE_CLASS'], $deleteclass->classname), $s_hidden_fields);
         }
         $this->showgame($editgame);
 
@@ -821,24 +824,23 @@ class game_module extends Admin
 
     /**
      * Update a Race
-     * @param $request
      */
-    private function RaceUpdate($request)
+    private function RaceUpdate()
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         $oldrace          = new Races();
-        $oldrace->game_id = $request->variable('game_id', $request->variable('hidden_game_id', ''));
-        $oldrace->race_id = $request->variable('race_id', 0);
+        $oldrace->game_id = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
+        $oldrace->race_id = $this->request->variable('race_id', 0);
         $oldrace->Get();
         $race          = new Races();
         $race->game_id = $oldrace->game_id;
         $race->race_id = $oldrace->race_id;
         $race->Get();
-        $race->race_name       = $request->variable('racename', '', true);
-        $race->race_faction_id = $request->variable('faction', 0);
-        $race->image_male      = $request->variable('image_male', '', true);
-        $race->image_female    = $request->variable('image_female', '', true);
+        $race->race_name       = $this->request->variable('racename', '', true);
+        $race->race_faction_id = $this->request->variable('faction', 0);
+        $race->image_male      = $this->request->variable('image_male', '', true);
+        $race->image_female    = $this->request->variable('image_female', '', true);
         $race->Update($oldrace);
         //
         // Logging
@@ -853,23 +855,22 @@ class game_module extends Admin
             'log_result' => 'L_SUCCESS',
             'log_action' => $log_action));
         meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$race->game_id}"));
-        trigger_error(sprintf($user->lang ['ADMIN_UPDATE_RACE_SUCCESS'], $race->race_name) . $this->link, E_USER_NOTICE);
+        trigger_error(sprintf($this->user->lang ['ADMIN_UPDATE_RACE_SUCCESS'], $race->race_name) . $this->link, E_USER_NOTICE);
     }
 
     /**
      * Add a Race
-     * @param $request
      */
-    private function AddRace($request)
+    private function AddRace()
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
         $race                  = new Races();
-        $race->game_id         = $request->variable('game_id', $request->variable('hidden_game_id', ''));
-        $race->race_id         = $request->variable('race_id', $request->variable('hidden_race_id', ''));
-        $race->race_name       = $request->variable('racename', '', true);
-        $race->race_faction_id = $request->variable('faction', 0);
-        $race->image_male      = $request->variable('image_male', '', true);
-        $race->image_female    = $request->variable('image_female', '', true);
+        $race->game_id         = $this->request->variable('game_id', $this->request->variable('hidden_game_id', ''));
+        $race->race_id         = $this->request->variable('race_id', $this->request->variable('hidden_race_id', ''));
+        $race->race_name       = $this->request->variable('racename', '', true);
+        $race->race_faction_id = $this->request->variable('faction', 0);
+        $race->image_male      = $this->request->variable('image_male', '', true);
+        $race->image_female    = $this->request->variable('image_female', '', true);
         $race->Make();
 
         $log_action = array(
@@ -882,25 +883,24 @@ class game_module extends Admin
             'log_result' => 'L_SUCCESS',
             'log_action' => $log_action));
         meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$race->game_id}"));
-        trigger_error(sprintf($user->lang ['ADMIN_ADD_RACE_SUCCESS'], $race->race_name) . $this->link, E_USER_NOTICE);
+        trigger_error(sprintf($this->user->lang ['ADMIN_ADD_RACE_SUCCESS'], $race->race_name) . $this->link, E_USER_NOTICE);
     }
 
     /**
      * Delete Race
      * @param Game $editgame
-     * @param $request
      */
-    private function DeleteRace(Game $editgame, $request)
+    private function DeleteRace(Game $editgame)
     {
 
-        global $user, $phpbb_admin_path, $phpEx;
+        global $phpbb_admin_path, $phpEx;
 
 
         if (confirm_box(true))
         {
             $deleterace          = new Races();
-            $deleterace->race_id = $request->variable('hidden_raceid', 0);
-            $deleterace->game_id = $request->variable('hidden_gameid', '');
+            $deleterace->race_id = $this->request->variable('hidden_raceid', 0);
+            $deleterace->game_id = $this->request->variable('hidden_gameid', '');
             $deleterace->get();
             $deleterace->Delete();
 
@@ -913,15 +913,15 @@ class game_module extends Admin
                 'log_type'   => 'L_ACTION_RACE_DELETED',
                 'log_result' => 'L_SUCCESS',
                 'log_action' => $log_action));
-            $success_message = sprintf($user->lang['ADMIN_DELETE_RACE_SUCCESS'], $deleterace->game_id, $deleterace->race_name);
+            $success_message = sprintf($this->user->lang['ADMIN_DELETE_RACE_SUCCESS'], $deleterace->game_id, $deleterace->race_name);
             meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' . URI_GAME . "={$deleterace->game_id}"));
             trigger_error($success_message . $this->link, E_USER_WARNING);
 
         } else
         {
             $deleterace          = new Races;
-            $deleterace->race_id = $request->variable('id', 0);
-            $deleterace->game_id = $request->variable('game_id', '');
+            $deleterace->race_id = $this->request->variable('id', 0);
+            $deleterace->game_id = $this->request->variable('game_id', '');
             $deleterace->get();
 
             $s_hidden_fields = build_hidden_fields(array(
@@ -930,7 +930,7 @@ class game_module extends Admin
                 'hidden_gameid' => $editgame->game_id
             ));
 
-            confirm_box(false, sprintf($user->lang ['CONFIRM_DELETE_RACE'], $deleterace->game_id, $deleterace->race_name), $s_hidden_fields);
+            confirm_box(false, sprintf($this->user->lang ['CONFIRM_DELETE_RACE'], $deleterace->game_id, $deleterace->race_name), $s_hidden_fields);
 
         }
         $this->showgame($editgame);
@@ -939,11 +939,10 @@ class game_module extends Admin
     /**
      * load template add race
      * @param Game $editgame
-     * @param $request
      */
-    private function BuildTemplateAddRace(Game  $editgame, $request)
+    private function BuildTemplateAddRace(Game  $editgame)
     {
-        global $template, $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         $listraces          = new Races();
         $listraces->game_id = $editgame->game_id;
@@ -961,16 +960,16 @@ class game_module extends Admin
             $s_faction_options .= '<option value="' . $faction['faction_id'] . '" > ' . $faction['faction_name'] . '</option>';
         }
         unset($listfactions);
-        $template->assign_vars(array(
+        $this->template->assign_vars(array(
             'GAME_ID'               => $listraces->game_id,
             'GAME_NAME'             => $editgame->getName(),
             'S_FACTIONLIST_OPTIONS' => $s_faction_options,
             'S_ADD'                 => true,
             'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=addrace'),
-            'LA_ALERT_AJAX' => $user->lang ['ALERT_AJAX'],
-            'LA_ALERT_OLDBROWSER' => $user->lang ['ALERT_OLDBROWSER'],
+            'LA_ALERT_AJAX' => $this->user->lang ['ALERT_AJAX'],
+            'LA_ALERT_OLDBROWSER' => $this->user->lang ['ALERT_OLDBROWSER'],
             'UA_FINDFACTION' => append_sid ( $phpbb_admin_path . "style/dkp/findfaction.$phpEx" ),
-            'MSG_NAME_EMPTY'        => $user->lang ['FV_REQUIRED_NAME']));
+            'MSG_NAME_EMPTY'        => $this->user->lang ['FV_REQUIRED_NAME']));
 
         $this->page_title = 'ACP_LISTGAME';
         $this->tpl_name = 'acp_addrace';
@@ -979,20 +978,19 @@ class game_module extends Admin
     /**
      * Load Template Edit Race
      * @param Game $editgame
-     * @param $request
      */
-    private function BuildTemplateEditRace(Game $editgame, $request)
+    private function BuildTemplateEditRace(Game $editgame)
     {
-        global $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         $races = new Races();
-        $races->race_id = $request->variable('id', 0);
+        $races->race_id = $this->request->variable('id', 0);
         $races->game_id = $editgame->game_id;
         $races->get();
         if (!empty($this)) {
             foreach ($this->gamelist as $key => $gamename)
             {
-                $template->assign_block_vars('game_row', array(
+                $this->template->assign_block_vars('game_row', array(
                     'VALUE'    => $key,
                     'SELECTED' => ($races->game_id == $key) ? ' selected="selected"' : '',
                     'OPTION'   => $gamename));
@@ -1016,16 +1014,16 @@ class game_module extends Admin
         $malesizewarning ='';
         if($femalesize[0] > 32 || $femalesize[0] >32)
         {
-            $femalesizewarning = sprintf($user->lang['IMAGESIZE_WARNING'], $femalesize[0], $femalesize[1]);
+            $femalesizewarning = sprintf($this->user->lang['IMAGESIZE_WARNING'], $femalesize[0], $femalesize[1]);
         }
         if($malesize[0] > 32 || $femalesize[0] >32)
         {
-            $malesizewarning = sprintf($user->lang['IMAGESIZE_WARNING'], $malesize[0], $malesize[1]);
+            $malesizewarning = sprintf($this->user->lang['IMAGESIZE_WARNING'], $malesize[0], $malesize[1]);
         }
 
 
         // send parameters to template
-        $template->assign_vars(array(
+        $this->template->assign_vars(array(
             'GAME_ID'               => $races->game_id,
             'GAME_NAME'             => $editgame->getName(),
             'RACE_ID'               => $races->race_id,
@@ -1040,11 +1038,11 @@ class game_module extends Admin
             'S_RACE_IMAGE_F_EXISTS' => (strlen($races->image_female) > 1) ? true : false,
             'S_FACTIONLIST_OPTIONS' => $s_faction_options,
             'S_ADD'                 => false,
-            'LA_ALERT_AJAX' => $user->lang ['ALERT_AJAX'],
-            'LA_ALERT_OLDBROWSER' => $user->lang ['ALERT_OLDBROWSER'],
+            'LA_ALERT_AJAX' => $this->user->lang ['ALERT_AJAX'],
+            'LA_ALERT_OLDBROWSER' => $this->user->lang ['ALERT_OLDBROWSER'],
             'UA_FINDFACTION' => append_sid ( $phpbb_admin_path . "style/dkp/findfaction.$phpEx" ),
             'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=addrace'),
-            'MSG_NAME_EMPTY'        => $user->lang ['FV_REQUIRED_NAME']));
+            'MSG_NAME_EMPTY'        => $this->user->lang ['FV_REQUIRED_NAME']));
         unset($races);
 
         $this->page_title = 'ACP_LISTGAME';
@@ -1054,14 +1052,13 @@ class game_module extends Admin
     /**
      * Load Template Edit Classes
      * @param Game $editgame
-     * @param $request
      */
-    private function BuildTemplateEditClass(Game $editgame, $request)
+    private function BuildTemplateEditClass(Game $editgame)
     {
-        global $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $user;
+       global  $phpbb_admin_path, $phpEx;
 
         $GameClass           = new Classes;
-        $GameClass->class_id = $request->variable('id', 0);
+        $GameClass->class_id = $this->request->variable('id', 0);
         $GameClass->game_id  = $editgame->game_id;
         $GameClass->Get();
 
@@ -1069,7 +1066,7 @@ class game_module extends Admin
         if (!empty($this)) {
             foreach ($this->gamelist as $key => $gamename)
             {
-                $template->assign_block_vars('game_row', array(
+                $this->template->assign_block_vars('game_row', array(
                     'VALUE'    => $key,
                     'SELECTED' => ($GameClass->game_id == $key) ? ' selected="selected"' : '',
                     'OPTION'   => $gamename));
@@ -1088,10 +1085,10 @@ class game_module extends Admin
         $warning ='';
         if($size[0] > 32 || $size[0] >32)
         {
-            $warning = sprintf($user->lang['IMAGESIZE_WARNING'], $size[0], $size[1]);
+            $warning = sprintf($this->user->lang['IMAGESIZE_WARNING'], $size[0], $size[1]);
         }
 
-        $template->assign_vars(array(
+        $this->template->assign_vars(array(
             'GAME_ID'              => $GameClass->game_id,
             'GAME_NAME'            => $editgame->getName(),
             'C_INDEX'              => $GameClass->c_index,
@@ -1108,8 +1105,8 @@ class game_module extends Admin
             'S_CLASS_IMAGE_EXISTS' => (strlen($GameClass->imagename) > 1) ? true : false,
             'S_ADD'                => false,
             'U_ACTION'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=addclass'),
-            'MSG_NAME_EMPTY'       => $user->lang ['FV_REQUIRED_NAME'],
-            'MSG_ID_EMPTY'         => $user->lang ['FV_REQUIRED_ID']));
+            'MSG_NAME_EMPTY'       => $this->user->lang ['FV_REQUIRED_NAME'],
+            'MSG_ID_EMPTY'         => $this->user->lang ['FV_REQUIRED_ID']));
 
         $this->page_title = 'ACP_LISTGAME';
         $this->tpl_name = 'acp_addclass';
@@ -1121,7 +1118,7 @@ class game_module extends Admin
      */
     private function BuildTemplateAddClass(Game $editgame)
     {
-        global $template, $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         $listclasses          = new Classes;
         $listclasses->game_id = $editgame->game_id;
@@ -1131,15 +1128,15 @@ class game_module extends Admin
             $s_armor_options .= '<option value="' . $armor . '" > ' . $armorname . '</option>';
         }
         // send parameters to template
-        $template->assign_vars(array(
+        $this->template->assign_vars(array(
             'GAME_ID'         => $listclasses->game_id,
             'GAME_NAME'       => $editgame->getName(),
             'S_ARMOR_OPTIONS' => $s_armor_options,
             'S_ADD'           => true,
             'COLORCODE'       => '#EE8611',
             'U_ACTION'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=addclass'),
-            'MSG_NAME_EMPTY'  => $user->lang ['FV_REQUIRED_NAME'],
-            'MSG_ID_EMPTY'    => $user->lang ['FV_REQUIRED_ID']));
+            'MSG_NAME_EMPTY'  => $this->user->lang ['FV_REQUIRED_NAME'],
+            'MSG_ID_EMPTY'    => $this->user->lang ['FV_REQUIRED_ID']));
 
         $this->page_title = 'ACP_LISTGAME';
         $this->tpl_name = 'acp_addclass';
@@ -1148,53 +1145,51 @@ class game_module extends Admin
 
     /**
      * @param Game $editgame
-     * @param $request
      */
-    private function BuildTemplateFaction(Game $editgame, $request)
+    private function BuildTemplateFaction(Game $editgame)
     {
-        global $template, $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         $faction = new Faction();
         $faction->game_id = $editgame->game_id;
-        $faction->faction_id = $request->variable('id', 0);
+        $faction->faction_id = $this->request->variable('id', 0);
         $faction->Get();
 
         // send parameters to template
-        $template->assign_vars(array(
+        $this->template->assign_vars(array(
             'FACTION_NAME'          => $faction->faction_name,
             'FACTION_ID'            => $faction->faction_id,
             'GAME_ID'               => $faction->game_id,
             'GAME_NAME'             => $editgame->getName(),
             'IS_ADD'                => $faction->faction_id == 0 ? true : false,
             'U_ACTION'              => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=addfaction'),
-            'MSG_NAME_EMPTY'        => $user->lang ['FV_REQUIRED_NAME']));
+            'MSG_NAME_EMPTY'        => $this->user->lang ['FV_REQUIRED_NAME']));
         unset($races);
 
-        $this->page_title = $user->lang['FACTION'];
+        $this->page_title = $this->user->lang['FACTION'];
         $this->tpl_name = 'acp_addfaction';
     }
 
 
     /**
      * @param Game $editgame
-     * @param $request
      */
-    private function BuildTemplateRole(Game $editgame, $request)
+    private function BuildTemplateRole(Game $editgame)
     {
-        global $template, $phpbb_root_path, $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         $role = new Roles();
         $role->game_id = $editgame->game_id;
         $add=true;
         if( isset($_POST['role_id']) ||isset($_GET['role_id']) )
         {
-            $role->role_id = $request->variable('role_id', 0);
+            $role->role_id = $this->request->variable('role_id', 0);
             $role->Get();
             $add=false;
         }
 
         // send parameters to template
-        $template->assign_vars(array(
+        $this->template->assign_vars(array(
             'ROLE_NAME'          => $role->rolename,
             'ROLE_ID'            => $role->role_id,
             'ROLE_CAT_ICON'      => $role->role_cat_icon,
@@ -1205,10 +1200,10 @@ class game_module extends Admin
             'GAME_NAME'          => $editgame->getName(),
             'IS_ADD'             => $add,
             'U_ACTION'           => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=addrole&amp;game_id=' . $editgame->game_id),
-            'MSG_NAME_EMPTY'     => $user->lang ['FV_REQUIRED_NAME']));
+            'MSG_NAME_EMPTY'     => $this->user->lang ['FV_REQUIRED_NAME']));
         unset($role);
 
-        $this->page_title = $user->lang['ROLE'];
+        $this->page_title = $this->user->lang['ROLE'];
         $this->tpl_name = 'acp_addrole';
     }
 
@@ -1218,12 +1213,12 @@ class game_module extends Admin
      */
 	private function showgame( Game $editgame)
 	{
-		global $user, $phpbb_admin_path, $phpbb_root_path, $phpEx, $template;
+		global $phpbb_admin_path, $phpbb_root_path, $phpEx;
 
 		//populate dropdown
 		foreach ($this->gamelist as $key => $game)
 		{
-			$template->assign_block_vars('gamelistrow', array(
+			$this->template->assign_block_vars('gamelistrow', array(
 					'VALUE'      => $key,
 					'OPTION'     => $game,
 					'SELECTED'   => $editgame->game_id == $key ? ' selected="selected"' : '' ,
@@ -1238,7 +1233,7 @@ class game_module extends Admin
 		foreach($fa as $faction_id => $faction)
 		{
 			$total_factions ++;
-			$template->assign_block_vars ( 'faction_row', array (
+			$this->template->assign_block_vars ( 'faction_row', array (
 			'ID' => $faction['f_index'],
 			'FACTIONGAME' => $editgame->game_id,
 			'FACTIONID' => $faction['faction_id'],
@@ -1265,7 +1260,7 @@ class game_module extends Admin
 		foreach ( $ra as $race_id => $race )
 		{
 			$total_races ++;
-			$template->assign_block_vars ( 'race_row', array (
+			$this->template->assign_block_vars ( 'race_row', array (
 				'GAME' => $race['game_name'],
 				'RACEID' => $race['race_id'],
 				'RACENAME' => $race['race_name'],
@@ -1296,7 +1291,7 @@ class game_module extends Admin
         foreach ( $roles as $role_id => $role )
         {
             $total_roles++;
-            $template->assign_block_vars('role_row', array(
+            $this->template->assign_block_vars('role_row', array(
                 'ROLE_ID' 		=> $role['role_id'],
                 'ROLE_NAME' 		=> $role['rolename'],
                 'ROLE_COLOR' 	=> $role['role_color'],
@@ -1329,13 +1324,13 @@ class game_module extends Admin
 		foreach ( $cl as $c_index => $class )
 		{
 			$total_classes ++;
-			$template->assign_block_vars ( 'class_row', array (
+			$this->template->assign_block_vars ( 'class_row', array (
 				'GAME' => $class['game_name'],
 				'C_INDEX' => $c_index,
 				'CLASSID' => $class ['class_id'],
 				'CLASSNAME' => $class ['class_name'],
 				'COLORCODE' => $class ['colorcode'],
-				'CLASSARMOR' => (isset ( $user->lang [$class ['class_armor_type']] ) ? $user->lang [$class ['class_armor_type']] : ' '),
+				'CLASSARMOR' => (isset ( $this->user->lang [$class ['class_armor_type']] ) ? $this->user->lang [$class ['class_armor_type']] : ' '),
 				'CLASSMIN' => $class ['class_min_level'],
 				'CLASSMAX' => $class ['class_max_level'],
 				'CLASSHIDE' => $class ['class_hide'],
@@ -1351,14 +1346,14 @@ class game_module extends Admin
 		$imgexists = file_exists($phpbb_root_path. 'images/bbguild/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png');
 
         //set the other fields
-		$template->assign_vars ( array (
+		$this->template->assign_vars ( array (
 				'F_ENABLEARMORY' => $editgame->getArmoryEnabled() ,
-				'GAMEIMAGEEXPLAIN' => sprintf($user->lang['GAME_IMAGE_EXPLAIN'], $editgame->game_id),
+				'GAMEIMAGEEXPLAIN' => sprintf($this->user->lang['GAME_IMAGE_EXPLAIN'], $editgame->game_id),
 				'GAMEIMAGE' => $editgame->getImagename(),
                 'GAME_NAME' => $editgame->getName(),
 				'GAMEPATH' => $phpbb_root_path. 'images/bbguild/gameworld/'. $editgame->game_id. '/'. $editgame->getImagename() . '.png',
 				'S_GAMEIMAGE_EXISTS' => (strlen($editgame->getImagename()) > 0 && $imgexists  ) ? true : false,
-				'EDITGAME' => sprintf($user->lang['ACP_EDITGAME'], $editgame->getName()  ) ,
+				'EDITGAME' => sprintf($this->user->lang['ACP_EDITGAME'], $editgame->getName()  ) ,
                 'BOSSBASEURL' => $editgame->getBossbaseurl(),
                 'ZONEBASEURL' => $editgame->getZonebaseurl(),
                 'ISWOW'     => $editgame->game_id == 'wow' ? 1: 0,
@@ -1380,10 +1375,10 @@ class game_module extends Admin
 				'O_CLASSMAX' => $current_order2 ['uri'] [5],
 
 				'U_ADD_GAMES' => append_sid ( "{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\game_module&amp;mode=editgames&amp;' ),
-				'LISTFACTION_FOOTCOUNT' => sprintf ( $user->lang ['LISTFACTION_FOOTCOUNT'], $total_factions ),
-				'LISTRACE_FOOTCOUNT' => sprintf ( $user->lang ['LISTRACE_FOOTCOUNT'], $total_races ),
-				'LISTCLASS_FOOTCOUNT' => sprintf ( $user->lang ['LISTCLASS_FOOTCOUNT'], $total_classes ),
-        'LISTROLES_FOOTCOUNT' => sprintf ( $user->lang ['LISTROLES_FOOTCOUNT'], $total_roles ),
+				'LISTFACTION_FOOTCOUNT' => sprintf ( $this->user->lang ['LISTFACTION_FOOTCOUNT'], $total_factions ),
+				'LISTRACE_FOOTCOUNT' => sprintf ( $this->user->lang ['LISTRACE_FOOTCOUNT'], $total_races ),
+				'LISTCLASS_FOOTCOUNT' => sprintf ( $this->user->lang ['LISTCLASS_FOOTCOUNT'], $total_classes ),
+        'LISTROLES_FOOTCOUNT' => sprintf ( $this->user->lang ['LISTROLES_FOOTCOUNT'], $total_roles ),
 				'U_ACTION' => $this->u_action ) );
 	}
 

@@ -10,25 +10,31 @@ namespace sajaki\bbguild\acp;
 
 /**
  * info class for acp module mm
-*   @package bbguild
-*/
+ *   @package bbguild
+ */
 class mm_info
 {
-	/**
-	 * phpbb module function
-	 */
-	function module()
-	{
-		return array(
+    /**
+     * phpbb module function
+     */
+    function module()
+    {
+        return array(
             'filename'	=> '\sajaki\bbguild\acp\mm_module',
-			'title'		=> 'ACP_BBGUILD_MEMBER',
-			'version'	=> '2.0.0',
-			'modes'		=> array(
-				'mm_addmember'	    => array('title' => 'ACP_BBGUILD_MEMBER_ADD', 'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_MEMBER'), 'display' => false ),
-				'mm_listmembers'	=> array('title' => 'ACP_BBGUILD_MEMBER_LIST', 'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_MEMBER')),
-			),
-		);
-	}
+            'title'		=> 'ACP_BBGUILD_MEMBER',
+            'version'	=> '2.0.0',
+            'modes'		=> array(
+                'mm_addmember'	    => array(
+                    'title' => 'ACP_BBGUILD_MEMBER_ADD',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_MEMBER'), 'display' => false ),
+                'mm_listmembers'	=> array(
+                    'title' => 'ACP_BBGUILD_MEMBER_LIST',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_MEMBER')),
+            ),
+        );
+    }
 
 }
 
