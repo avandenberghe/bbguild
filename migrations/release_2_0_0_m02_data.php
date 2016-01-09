@@ -60,6 +60,10 @@ class release_2_0_0_m02_data extends \phpbb\db\migration\container_aware_migrati
         $this->news_table = $this->table_prefix  . 'bbguild_news';
         $this->bblogs_table = $this->table_prefix  . 'bbguild_logs';
         $this->member_ranks_table = $this->table_prefix  . 'bbguild_ranks';
+        $this->guild_table = $this->table_prefix  . 'bbguild_guild';
+        $this->welcome_msg_table = $this->table_prefix  . 'bbguild_welcomemsg';
+        $this->bb_gamerole_table = $this->table_prefix  . 'bbguild_gameroles';
+        $this->bb_language = $this->table_prefix  . 'bbguild_language';
 
         $guildless = array(
             array(
