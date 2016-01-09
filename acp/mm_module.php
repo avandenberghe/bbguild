@@ -29,23 +29,36 @@ class mm_module extends Admin
      */
     public $link = '';
 
-    /**
-     * global request object
-     *
-     * @var \phpbb\request\request_interface
-     */
-    private $request;
-    private $phpbb_container;
+    protected $phpbb_container;
+    /** @var \phpbb\request\request **/
+    protected $request;
+    /** @var \phpbb\template\template **/
+    protected $template;
+    /** @var \phpbb\user **/
+    protected $user;
+    /** @var \phpbb\db\driver\driver_interface */
+    protected $db;
+
+    public $id;
+    public $mode;
 
     public function main ($id, $mode)
     {
-        parent::__construct();
-        global $user, $phpbb_admin_path, $phpEx;
+        global $user, $db, $template, $phpbb_admin_path, $phpEx;
         global $request, $phpbb_container;
+
+        $this->id = $id;
+        $this->mode = $mode;
+        $this->request=$request;
+        $this->template=$template;
+        $this->user=$user;
+        $this->db=$db;
+        $this->phpbb_container = $phpbb_container;
+
+        parent::__construct();
+
         $form_key = 'sajaki/bbguild';
         add_form_key($form_key);
-        $this->request = $request;
-        $this->phpbb_container = $phpbb_container;
         $this->tpl_name   = 'acp_' . $mode;
 
         switch ($mode)
@@ -80,14 +93,14 @@ class mm_module extends Admin
                     break;
                 }
 
-                $activate = $request->is_set_post('deactivate');
+                $activate = $this->request->is_set_post('deactivate');
                 if ($activate)
                 {
                     $this->ActivateList();
                 }
 
                 // batch delete
-                $del_batch = $request->is_set_post('delete');
+                $del_batch = $this->request->is_set_post('delete');
                 if ($del_batch)
                 {
                     $this->member_batch_delete();
@@ -108,13 +121,13 @@ class mm_module extends Admin
                     $Guild->guildid = $this->request->variable(URI_GUILD, 0);
                 }
 
-                $charapicall = $request->is_set_post('charapicall');
+                $charapicall = $this->request->is_set_post('charapicall');
                 if($charapicall)
                 {
                     if (confirm_box(true))
                     {
                         list($i, $log) = $this->CallCharacterAPI();
-                        trigger_error(sprintf($user->lang['CHARAPIDONE'], $i, $log), E_USER_NOTICE);
+                        trigger_error(sprintf($this->user->lang['CHARAPIDONE'], $i, $log), E_USER_NOTICE);
                     }
                     else
                     {
@@ -127,13 +140,13 @@ class mm_module extends Admin
                             'hidden_nonactive' => $this->request->variable('nonactive', $this->request->variable('hidden_nonactive', 0)),
                             'hidden_member_name' => $this->request->variable('member_name', $this->request->variable('hidden_member_name', '', true), true)
                         ));
-                        confirm_box(false, $user->lang['WARNING_BATTLENET'], $s_hidden_fields);
+                        confirm_box(false, $this->user->lang['WARNING_BATTLENET'], $s_hidden_fields);
 
                     }
                 }
 
                 // add member button redirect
-                $showadd = $request->is_set_post('memberadd');
+                $showadd = $this->request->is_set_post('memberadd');
                 if ($showadd)
                 {
                     $a = $this->request->variable('member_guild_id', $this->request->variable('hidden_guildid', 0));
@@ -150,11 +163,11 @@ class mm_module extends Admin
             /***************************************/
             case 'mm_addmember' :
 
-                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers') . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+                $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers') . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 
-                $add = $request->is_set_post('add');
-                $update = $request->is_set_post('update');
-                $delete = $request->variable('delete', '')  != '' ? true : false;
+                $add = $this->request->is_set_post('add');
+                $update = $this->request->is_set_post('update');
+                $delete = $this->request->variable('delete', '')  != '' ? true : false;
 
                 if ($add || $update)
                 {
@@ -190,7 +203,7 @@ class mm_module extends Admin
                             'delete' => true ,
                             'del_member_id' => $deletemember->member_id));
 
-                        confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_MEMBER'], $deletemember->member_name), $s_hidden_fields);
+                        confirm_box(false, sprintf($this->user->lang['CONFIRM_DELETE_MEMBER'], $deletemember->member_name), $s_hidden_fields);
                     }
                     unset($deletemember);
                 }
@@ -200,7 +213,7 @@ class mm_module extends Admin
 
             default:
                 $this->page_title = 'ACP_BBGUILD_MEMBER_ADD';
-                $success_message = $user->lang['L_ERROR'];
+                $success_message = $this->user->lang['L_ERROR'];
                 trigger_error($success_message . $this->link, E_USER_WARNING);
         }
     }
@@ -211,8 +224,6 @@ class mm_module extends Admin
      */
     private function member_batch_delete ()
     {
-        global $db, $user;
-
         $members_to_delete = $this->request->variable('delete_id', array(0));
 
         if (! is_array($members_to_delete))
@@ -239,25 +250,25 @@ class mm_module extends Admin
                 unset($delmember);
             }
             $str_members = implode($member_names, ',');
-            $success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $str_members);
+            $success_message = sprintf($this->user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $str_members);
             trigger_error($success_message . $this->link, E_USER_NOTICE);
         }
         else
         {
-            $sql = "SELECT member_name, member_id FROM " . MEMBER_LIST_TABLE . " WHERE " . $db->sql_in_set('member_id', array_keys($members_to_delete));
-            $result = $db->sql_query($sql);
-            while ($row = $db->sql_fetchrow($result))
+            $sql = "SELECT member_name, member_id FROM " . MEMBER_LIST_TABLE . " WHERE " . $this->db->sql_in_set('member_id', array_keys($members_to_delete));
+            $result = $this->db->sql_query($sql);
+            while ($row = $this->db->sql_fetchrow($result))
             {
                 $member_names[] = $row['member_name'];
             }
-            $db->sql_freeresult($result);
+            $this->db->sql_freeresult($result);
             $s_hidden_fields = build_hidden_fields(array(
                 'delete' => true ,
                 'delete_id' => $members_to_delete ,
                 'members' => $member_names));
             $str_members = implode($member_names, ', ');
 
-            confirm_box(false, sprintf($user->lang['CONFIRM_DELETE_MEMBER'], $str_members), $s_hidden_fields);
+            confirm_box(false, sprintf($this->user->lang['CONFIRM_DELETE_MEMBER'], $str_members), $s_hidden_fields);
         }
     }
 
@@ -267,7 +278,7 @@ class mm_module extends Admin
      */
     private function Addmember()
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         $newmember = new Members();
         $newmember->game_id = $this->request->variable('game_id', '');
@@ -305,9 +316,9 @@ class mm_module extends Admin
         {
             //record added. now update some stats
             meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id));
-            $success_message = sprintf($user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name), date("F j, Y, g:i a"));
+            $success_message = sprintf($this->user->lang['ADMIN_ADD_MEMBER_SUCCESS'], ucwords($newmember->member_name), date("F j, Y, g:i a"));
 
-            $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+            $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id) . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
             trigger_error($success_message . $this->link, E_USER_NOTICE);
 
         }
@@ -315,7 +326,7 @@ class mm_module extends Admin
         {
             meta_refresh(2, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $newmember->member_guild_id));
 
-            $failure_message = sprintf($user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($newmember->member_name));
+            $failure_message = sprintf($this->user->lang['ADMIN_ADD_MEMBER_FAIL'], ucwords($newmember->member_name));
             trigger_error($failure_message . $this->link, E_USER_WARNING);
         }
     }
@@ -326,7 +337,7 @@ class mm_module extends Admin
      */
     private function UpdateMember()
     {
-        global $phpbb_admin_path, $phpEx, $user;
+        global $phpbb_admin_path, $phpEx;
 
         $updatemember = new Members();
         $updatemember->member_id = $this->request->variable('hidden_member_id', 0);
@@ -380,8 +391,8 @@ class mm_module extends Admin
         $updatemember->Updatemember($old_member);
 
         meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $updatemember->member_guild_id));
-        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $updatemember->member_guild_id) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
-        $success_message = sprintf($user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], $updatemember->member_name);
+        $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $updatemember->member_guild_id) . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+        $success_message = sprintf($this->user->lang['ADMIN_UPDATE_MEMBER_SUCCESS'], $updatemember->member_name);
         trigger_error($success_message . $this->link);
 
     }
@@ -393,16 +404,16 @@ class mm_module extends Admin
      */
     private function DeleteMember()
     {
-        global $user, $phpbb_admin_path, $phpEx;
+        global $phpbb_admin_path, $phpEx;
         $deletemember = new Members();
         $deletemember->member_id = $this->request->variable('del_member_id', 0);
         $deletemember->Getmember();
         $deletemember->Deletemember();
-        $success_message = sprintf($user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $deletemember->member_name);
+        $success_message = sprintf($this->user->lang['ADMIN_DELETE_MEMBERS_SUCCESS'], $deletemember->member_name);
 
         meta_refresh(1, append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' . URI_GUILD . "=" . $deletemember->member_guild_id));
         $this->link = '<br /><a href="' . append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;' .
-                URI_GUILD . "=" . $deletemember->member_guild_id) . '"><h3>' . $user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
+                URI_GUILD . "=" . $deletemember->member_guild_id) . '"><h3>' . $this->user->lang['RETURN_MEMBERLIST'] . '</h3></a>';
 
         trigger_error($success_message . $this->link, E_USER_WARNING);
 
@@ -430,8 +441,6 @@ class mm_module extends Admin
      */
     private function CallCharacterAPI()
     {
-        global $db;
-
         $Guild = new Guilds();
         $Guild->guildid = $this->request->variable('hidden_guildid', 0);
         $Guild->Getguild();
@@ -447,7 +456,7 @@ class mm_module extends Admin
         $log = '';
         $i = 0;
         $j=0;
-        while ($row = $db->sql_fetchrow($members_result))
+        while ($row = $this->db->sql_fetchrow($members_result))
         {
             if ($j > 100)
             {
@@ -484,7 +493,7 @@ class mm_module extends Admin
             $j++;
 
         }
-        $db->sql_freeresult($members_result);
+        $this->db->sql_freeresult($members_result);
         unset ($members_result);
         return array($i, $log);
 
@@ -499,14 +508,14 @@ class mm_module extends Admin
      */
     private function BuildTemplateListMembers($mode, Guilds $Guild)
     {
-        global  $template, $db, $user, $config, $phpbb_admin_path, $phpEx;
+        global  $config, $phpbb_admin_path, $phpEx;
 
         // fill popup and set selected to default selection
         $Guild->Getguild();
         $guildlist = $Guild->guildlist(0);
         foreach ($guildlist as $g)
         {
-            $template->assign_block_vars('guild_row', array(
+            $this->template->assign_block_vars('guild_row', array(
                 'VALUE'    => $g['id'],
                 'SELECTED' => ($g['id'] == $Guild->guildid) ? ' selected="selected"' : '',
                 'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
@@ -546,23 +555,23 @@ class mm_module extends Admin
         $result       = $Guild->listmembers($current_order['sql'], 0, 0, $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter);
         $member_count = 0;
 
-        while ($row = $db->sql_fetchrow($result))
+        while ($row = $this->db->sql_fetchrow($result))
         {
             $member_count += 1;
         }
         if (!($result))
         {
-            trigger_error($user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
+            trigger_error($this->user->lang['ERROR_MEMBERNOTFOUND'], E_USER_WARNING);
         }
-        $db->sql_freeresult($result);
+        $this->db->sql_freeresult($result);
         $members_result = $Guild->listmembers($current_order['sql'], $start, 1, $minlevel, $maxlevel, $selectactive, $selectnonactive, $member_filter);
         $lines          = 0;
-        while ($row = $db->sql_fetchrow($members_result))
+        while ($row = $this->db->sql_fetchrow($members_result))
         {
             $phpbb_user_id = (int)$row['phpbb_user_id'];
             $race_image    = (string)(($row['member_gender_id'] == 0) ? $row['image_male'] : $row['image_female']);
             $lines += 1;
-            $template->assign_block_vars('members_row', array(
+            $this->template->assign_block_vars('members_row', array(
                 'S_READONLY'           => ($row['rank_id'] == 90 || $row['rank_id'] == 99) ? true : false,
                 'STATUS'               => ($row['member_status'] == 1) ? 'checked="checked" ' : '',
                 'ID'                   => $row['member_id'],
@@ -584,9 +593,9 @@ class mm_module extends Admin
                 'U_DELETE_MEMBER'      => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;delete=1&amp;' . URI_NAMEID . '=' . $row['member_id'])));
             $previous_data = $row[$previous_source];
         }
-        $db->sql_freeresult($members_result);
+        $this->db->sql_freeresult($members_result);
 
-        $footcount_text   = sprintf($user->lang['LISTMEMBERS_FOOTCOUNT'], $member_count);
+        $footcount_text   = sprintf($this->user->lang['LISTMEMBERS_FOOTCOUNT'], $member_count);
 
         $memberpagination = $this->phpbb_container->get('pagination');
 
@@ -600,7 +609,7 @@ class mm_module extends Admin
 
         $memberpagination->generate_template_pagination($pagination_url, 'pagination', 'start', $member_count, $config['bbguild_user_llimit'], $start, true);
 
-        $template->assign_vars(array(
+        $this->template->assign_vars(array(
             'F_SELECTACTIVE'        => $selectactive,
             'F_SELECTNONACTIVE'     => $selectnonactive,
             'GUILDID'               => $Guild->guildid,
@@ -611,8 +620,8 @@ class mm_module extends Admin
             'MEMBER_NAME'           => $member_filter,
             'F_MEMBERS'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module') . '&amp;mode=mm_addmember',
             'F_MEMBERS_LIST'        => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module') . '&amp;mode=mm_listmembers',
-            'L_TITLE'               => $user->lang['ACP_MM_LISTMEMBERS'],
-            'L_EXPLAIN'             => $user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'],
+            'L_TITLE'               => $this->user->lang['ACP_MM_LISTMEMBERS'],
+            'L_EXPLAIN'             => $this->user->lang['ACP_MM_LISTMEMBERS_EXPLAIN'],
             'O_NAME'                => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_listmembers&amp;o=' . $current_order['uri'][0] . "&amp;" . URI_GUILD . "=" . $Guild->guildid . "&amp;minlevel=" . $minlevel .
                 "&amp;maxlevel=" . $maxlevel .
                 "&amp;active=" . $selectactive .
@@ -660,7 +669,7 @@ class mm_module extends Admin
      */
     private function BuildTemplateAddEditmembers($mode)
     {
-        global $template, $db, $config, $user, $phpbb_admin_path, $phpEx;
+        global $config, $phpbb_admin_path, $phpEx;
 
         $member_id  = $this->request->variable('hidden_member_id', $this->request->variable(URI_NAMEID, 0));
         $editmember = new Members($member_id);
@@ -683,7 +692,7 @@ class mm_module extends Admin
         foreach ($guildlist as $g)
         {
             //populate guild popup
-            $template->assign_block_vars('guild_row', array(
+            $this->template->assign_block_vars('guild_row', array(
                 'VALUE'    => $g['id'],
                 'SELECTED' => ($g['id'] == $editmember->member_guild_id) ? ' selected="selected"' : '',
                 'OPTION'   => (!empty($g['name'])) ? $g['name'] : '(None)'));
@@ -694,7 +703,7 @@ class mm_module extends Admin
         {
             foreach ($this->games as $gameid => $gamename)
             {
-                $template->assign_block_vars('game_row', array(
+                $this->template->assign_block_vars('game_row', array(
                     'VALUE'    => $gameid,
                     'SELECTED' => ($editmember->game_id == $gameid) ? ' selected="selected"' : '',
                     'OPTION'   => $gamename));
@@ -707,7 +716,7 @@ class mm_module extends Admin
 
         foreach ($this->regions as $key => $regionname)
         {
-            $template->assign_block_vars('region_row', array(
+            $this->template->assign_block_vars('region_row', array(
                 'VALUE'    => $key,
                 'SELECTED' => ($editmember->member_region == $key) ? ' selected="selected"' : '',
                 'OPTION'   => (!empty($regionname)) ? $regionname : '(None)'));
@@ -716,9 +725,9 @@ class mm_module extends Admin
         // reloading is done from ajax to prevent redraw
         $Ranks  = new Ranks($editmember->member_guild_id);
         $result = $Ranks->listranks();
-        while ($row = $db->sql_fetchrow($result))
+        while ($row = $this->db->sql_fetchrow($result))
         {
-            $template->assign_block_vars('rank_row', array(
+            $this->template->assign_block_vars('rank_row', array(
                 'VALUE'    => $row['rank_id'],
                 'SELECTED' => ($editmember->member_rank_id == $row['rank_id']) ? ' selected="selected"' : '',
                 'OPTION'   => (!empty($row['rank_name'])) ? $row['rank_name'] : '(None)'));
@@ -736,28 +745,28 @@ class mm_module extends Admin
 								AND l.game_id = r.game_id
 								AND l.language= '" . $config['bbguild_lang'] . "'",
             'ORDER_BY' => 'l.name asc');
-        $sql       = $db->sql_build_query('SELECT', $sql_array);
-        $result    = $db->sql_query($sql);
+        $sql       = $this->db->sql_build_query('SELECT', $sql_array);
+        $result    = $this->db->sql_query($sql);
         if ($editmember->member_id > 0)
         {
-            while ($row = $db->sql_fetchrow($result))
+            while ($row = $this->db->sql_fetchrow($result))
             {
-                $template->assign_block_vars('race_row', array(
+                $this->template->assign_block_vars('race_row', array(
                     'VALUE'    => $row['race_id'],
                     'SELECTED' => ($editmember->member_race_id == $row['race_id']) ? ' selected="selected"' : '',
                     'OPTION'   => (!empty($row['race_name'])) ? $row['race_name'] : '(None)'));
             }
         } else
         {
-            while ($row = $db->sql_fetchrow($result))
+            while ($row = $this->db->sql_fetchrow($result))
             {
-                $template->assign_block_vars('race_row', array(
+                $this->template->assign_block_vars('race_row', array(
                     'VALUE'    => $row['race_id'],
                     'SELECTED' => '',
                     'OPTION'   => (!empty($row['race_name'])) ? $row['race_name'] : '(None)'));
             }
         }
-        $db->sql_freeresult($result);
+        $this->db->sql_freeresult($result);
 
         //
         // Class dropdown
@@ -773,9 +782,9 @@ class mm_module extends Admin
             'ORDER_BY' => 'l.name asc'
         );
 
-        $sql       = $db->sql_build_query('SELECT', $sql_array);
-        $result    = $db->sql_query($sql);
-        while ($row = $db->sql_fetchrow($result))
+        $sql       = $this->db->sql_build_query('SELECT', $sql_array);
+        $result    = $this->db->sql_query($sql);
+        while ($row = $this->db->sql_fetchrow($result))
         {
             if ($row['class_min_level'] <= 1)
             {
@@ -788,19 +797,19 @@ class mm_module extends Admin
             }
             if ($editmember->member_id <> 0)
             {
-                $template->assign_block_vars('class_row', array(
+                $this->template->assign_block_vars('class_row', array(
                     'VALUE'    => $row['class_id'],
                     'SELECTED' => ($editmember->member_class_id == $row['class_id']) ? ' selected="selected"' : '',
                     'OPTION'   => $option));
             } else
             {
-                $template->assign_block_vars('class_row', array(
+                $this->template->assign_block_vars('class_row', array(
                     'VALUE'    => $row['class_id'],
                     'SELECTED' => '',
                     'OPTION'   => $option));
             }
         }
-        $db->sql_freeresult($result);
+        $this->db->sql_freeresult($result);
 
         // get roles
         $Roles = new Roles();
@@ -809,7 +818,7 @@ class mm_module extends Admin
         $listroles = $Roles->listroles();
         foreach($listroles as $roleid => $Role )
         {
-             $template->assign_block_vars('role_row', array(
+             $this->template->assign_block_vars('role_row', array(
                  'VALUE' => $Role['role_id'] ,
                  'SELECTED' => ($editmember->member_role == $Role['role_id']) ? ' selected="selected"' : '' ,
                  'OPTION' => $Role['rolename'] ));
@@ -890,10 +899,10 @@ class mm_module extends Admin
             // exclude bots and guests, order by name -- ticket  129
             'WHERE'    => " u.group_id != 6 and u.group_id != 1 ",
             'ORDER_BY' => " u.username ASC");
-        $sql           = $db->sql_build_query('SELECT', $sql_array);
-        $result        = $db->sql_query($sql);
+        $sql           = $this->db->sql_build_query('SELECT', $sql_array);
+        $result        = $this->db->sql_query($sql);
         $s_phpbb_user  = '<option value="0"' . (($phpbb_user_id == 0) ? ' selected="selected"' : '') . '>--</option>';
-        while ($row = $db->sql_fetchrow($result))
+        while ($row = $this->db->sql_fetchrow($result))
         {
             $selected = ($row['user_id'] == $phpbb_user_id) ? ' selected="selected"' : '';
             $s_phpbb_user .= '<option value="' . $row['user_id'] . '"' . $selected . '>' . $row['username'] . '</option>';
@@ -901,16 +910,16 @@ class mm_module extends Admin
         unset($now);
 
         $this->page_title = 'ACP_MM_ADDMEMBER';
-        $template->assign_vars(array(
-            'L_TITLE'                  => $user->lang['ACP_MM_ADDMEMBER'],
-            'L_EXPLAIN'                => $user->lang['ACP_MM_ADDMEMBER_EXPLAIN'],
+        $this->template->assign_vars(array(
+            'L_TITLE'                  => $this->user->lang['ACP_MM_ADDMEMBER'],
+            'L_EXPLAIN'                => $this->user->lang['ACP_MM_ADDMEMBER_EXPLAIN'],
             'F_ADD_MEMBER'             => append_sid("{$phpbb_admin_path}index.$phpEx", 'i=\sajaki\bbguild\acp\mm_module&amp;mode=mm_addmember&amp;'),
             'STATUS'                   => $editmember->member_status == 1 ? 'checked="checked"' : '',
             'MEMBER_NAME'              => $editmember->member_name,
             'MEMBER_ID'                => $editmember->member_id,
             'MEMBER_LEVEL'             => $editmember->member_level,
             'REALM'                    => $editmember->member_realm,
-            'DEACTIVATE_REASON'        => $editmember->deactivate_reason == '' ? '' : $user->lang[$editmember->deactivate_reason],
+            'DEACTIVATE_REASON'        => $editmember->deactivate_reason == '' ? '' : $this->user->lang[$editmember->deactivate_reason],
             'STATUS_LOCK'              => $editmember->deactivate_reason == '' ? false : true,
             'MEMBER_ACHIEV'            => $editmember->member_achiev,
             'MEMBER_TITLE'             => $editmember->member_title,
@@ -936,9 +945,9 @@ class mm_module extends Admin
             'S_PHPBBUSER_OPTIONS'      => $s_phpbb_user,
             'TITLE_NAME'               => ($editmember->game_id == 'wow') ? sprintf($editmember->member_title, $editmember->member_name) : '',
             // javascript
-            'LA_ALERT_AJAX'            => $user->lang['ALERT_AJAX'],
-            'LA_ALERT_OLDBROWSER'      => $user->lang['ALERT_OLDBROWSER'],
-            'LA_MSG_NAME_EMPTY'        => $user->lang['FV_REQUIRED_NAME'],
+            'LA_ALERT_AJAX'            => $this->user->lang['ALERT_AJAX'],
+            'LA_ALERT_OLDBROWSER'      => $this->user->lang['ALERT_OLDBROWSER'],
+            'LA_MSG_NAME_EMPTY'        => $this->user->lang['FV_REQUIRED_NAME'],
             'UA_FINDRANK'              => append_sid($phpbb_admin_path . "style/dkp/findrank.$phpEx"),
             'UA_FINDCLASSRACE'         => append_sid($phpbb_admin_path . "style/dkp/findclassrace.$phpEx"),
             'S_ADD'                    => $S_ADD));

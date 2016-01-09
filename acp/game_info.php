@@ -14,24 +14,48 @@ namespace sajaki\bbguild\acp;
  */
 class game_info
 {
-	/**
-	 * phpbb module function
-	 */
-	function module()
-	{
-		return array(
+    /**
+     * phpbb module function
+     */
+    function module()
+    {
+        return array(
             'filename'	=> '\sajaki\bbguild\acp\game_module',
-			'title'		=> 'ACP_BBGUILD_MAINPAGE',
-			'version'	=> '2.0.0',
-			'modes'		=> array(
-				'listgames'		=> array('title' => 'ACP_BBGUILD_GAME_LIST',  'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_GAME') , 'display' => true),
-				'editgames'		=> array('title' => 'ACP_BBGUILD_GAME_EDIT',  'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_GAME') , 'display' => false),
-				'addfaction'	=> array('title' => 'ACP_BBGUILD_FACTION_ADD',   'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_GAME') , 'display' => false),
-				'addrace'		=> array('title' => 'ACP_BBGUILD_RACE_ADD',   'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_GAME') , 'display' => false),
-				'addclass'		=> array('title' => 'ACP_BBGUILD_CLASS_ADD',  'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_GAME') , 'display' => false),
-        'addrole'		=> array('title' => 'ACP_BBGUILD_ROLE_ADD',  'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_GAME') , 'display' => false),
-				),
-		);
-	}
+            'title'		=> 'ACP_BBGUILD_MAINPAGE',
+            'version'	=> '2.0.0',
+            'modes'		=> array(
+                'listgames'		=> array(
+                    'title' => 'ACP_BBGUILD_GAME_LIST',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_GAME') ,
+                    'display' => true),
+                'editgames'		=> array(
+                    'title' => 'ACP_BBGUILD_GAME_EDIT',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_GAME') ,
+                    'display' => false),
+                'addfaction'	=> array(
+                    'title' => 'ACP_BBGUILD_FACTION_ADD',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_GAME') ,
+                    'display' => false),
+                'addrace'		=> array(
+                    'title' => 'ACP_BBGUILD_RACE_ADD',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_GAME') ,
+                    'display' => false),
+                'addclass'		=> array(
+                    'title' => 'ACP_BBGUILD_CLASS_ADD',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_GAME') ,
+                    'display' => false),
+                'addrole'		=> array(
+                    'title' => 'ACP_BBGUILD_ROLE_ADD',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_GAME') ,
+                    'display' => false),
+            ),
+        );
+    }
 
 }

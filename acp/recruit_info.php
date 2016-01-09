@@ -24,9 +24,21 @@ class recruit_info
             'title'		=> 'ACP_BBGUILD_RECRUIT',
             'version'	=> '2.0.0',
             'modes'		=> array(
-                'addrecruit'	    => array('title' => 'ACP_BBGUILD_RECRUIT_ADD', 'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_MEMBER'), 'display' => false),
-                'editrecruit'	    => array('title' => 'ACP_BBGUILD_RECRUIT_EDIT', 'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_MEMBER'), 'display' => false),
-                'listrecruit'	    => array('title' => 'ACP_BBGUILD_RECRUIT_LIST', 'auth' => 'acl_a_bbguild', 'cat' => array('ACP_BBGUILD_MEMBER'), 'display' => true),
+                'addrecruit'	    => array(
+                    'title' => 'ACP_BBGUILD_RECRUIT_ADD',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_MEMBER'),
+                    'display' => false),
+                'editrecruit'	    => array(
+                    'title' => 'ACP_BBGUILD_RECRUIT_EDIT',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_MEMBER'),
+                    'display' => false),
+                'listrecruit'	    => array(
+                    'title' => 'ACP_BBGUILD_RECRUIT_LIST',
+                    'auth' => 'ext_sajaki/bbguild && acl_a_board && a_bbguild',
+                    'cat' => array('ACP_BBGUILD_MEMBER'),
+                    'display' => true),
             ));
     }
 

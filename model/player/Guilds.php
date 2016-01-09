@@ -900,12 +900,13 @@ class Guilds extends Admin
 		return $defaultrank_id;
 	}
 
-	/**
-	 * gets list of guilds, used in dropdowns
-	 * @param int $minimum optional
-	 * @return array
-	 */
-	public function guildlist($minimum = 0)
+    /**
+     * gets list of guilds, used in dropdowns
+     *
+     * @param int $guild_id, defqults to zero, to include noguild
+     * @return array
+     */
+	public function guildlist($guild_id = 0)
 	{
 		global $db;
 		$sql_array = array(
@@ -919,7 +920,7 @@ class Guilds extends Admin
 								'ON'    => 'a.id = c.member_guild_id '
 						)
 				),
-				'WHERE' => " a.id = b.guild_id AND b.rank_id != 90 and b.guild_id >= " . $minimum,
+				'WHERE' => " a.id = b.guild_id AND b.rank_id != 90 and b.guild_id >= " . $guild_id,
 				'GROUP_BY' => ' a.guilddefault, a.id, a.name, a.realm, a.region ',
  				'ORDER_BY' => ' a.guilddefault desc,  count(c.member_id) desc, a.id asc'
 				);

@@ -82,8 +82,6 @@ class release_2_0_0_m03_config extends migration
             array('permission.add', array('f_bbguild', true)),
             array('permission.add', array('u_charclaim', true)),
             array('permission.add', array('u_charadd', true)),
-            array('permission.add', array('u_chardelete', true)),
-            array('permission.add', array('u_charupdate', true)),
 
             // Set permissions
 
@@ -98,29 +96,17 @@ class release_2_0_0_m03_config extends migration
             array('permission.permission_set', array('BOTS', 'f_bbguild', 'group')),
             array('permission.permission_set', array('NEWLY_REGISTERED', 'f_bbguild', 'group')),
 
-            //can claim a character
+            //can claim/unclaim a character
             array('permission.permission_set', array('ADMINISTRATORS', 'u_charclaim', 'group')),
             array('permission.permission_set', array('GLOBAL_MODERATORS', 'u_charclaim', 'group')),
             array('permission.permission_set', array('REGISTERED', 'u_charclaim', 'group')),
             array('permission.permission_set', array('REGISTERED_COPPA', 'u_charclaim', 'group')),
 
-            // can delete their own character in ucp
-            array('permission.permission_set', array('ADMINISTRATORS', 'u_chardelete', 'group')),
-            array('permission.permission_set', array('GLOBAL_MODERATORS', 'u_chardelete', 'group')),
-            array('permission.permission_set', array('REGISTERED', 'u_chardelete', 'group')),
-            array('permission.permission_set', array('REGISTERED_COPPA', 'u_chardelete', 'group')),
-
-            // can add own character in ucp
+            // can add/update/delete own character in ucp
             array('permission.permission_set', array('ADMINISTRATORS', 'u_charadd', 'group')),
             array('permission.permission_set', array('GLOBAL_MODERATORS', 'u_charadd', 'group')),
             array('permission.permission_set', array('REGISTERED', 'u_charadd', 'group')),
             array('permission.permission_set', array('REGISTERED_COPPA', 'u_charadd', 'group')),
-
-            // can update own character in ucp
-            array('permission.permission_set', array('ADMINISTRATORS', 'u_charupdate', 'group')),
-            array('permission.permission_set', array('GLOBAL_MODERATORS', 'u_charupdate', 'group')),
-            array('permission.permission_set', array('REGISTERED', 'u_charupdate', 'group')),
-            array('permission.permission_set', array('REGISTERED_COPPA', 'u_charupdate', 'group')),
 
         );
 	}

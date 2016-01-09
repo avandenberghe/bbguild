@@ -12,14 +12,6 @@ namespace sajaki\bbguild\model\games;
 use sajaki\bbguild\model\games\library\install_custom;
 
 /**
- * @ignore
- */
-if (! defined('IN_PHPBB'))
-{
-    exit();
-}
-
-/**
  * Games
  *
  * Manages creation of Game
@@ -128,7 +120,6 @@ class Game
         global $user, $phpEx, $phpbb_extension_manager;
         $this->ext_path = $phpbb_extension_manager->get_extension_path('sajaki/bbguild', true);
 
-
         $this->preinstalled_games = array (
             'aion' 	=> $user->lang ['AION'],
             'daoc' 	=> $user->lang ['DAOC'],
@@ -155,7 +146,7 @@ class Game
     /**
      * @param boolean $basebossurl
      */
-    public function setBossbaseurl($basebossurl)
+    public  function setBossbaseurl($basebossurl)
     {
         $this->bossbaseurl = $basebossurl;
     }
@@ -163,7 +154,7 @@ class Game
     /**
      * @return boolean
      */
-    public function getBossbaseurl()
+    public  function getBossbaseurl()
     {
         return $this->bossbaseurl;
     }
@@ -316,9 +307,7 @@ class Game
             //game id is one of the preinstallable games
             $this->name= $this->preinstalled_games[$this->game_id];
             //build name of the namespaced game installer class
-
             $classname = '\sajaki\bbguild\model\games\library\install_' . $this->game_id;
-
             $installgame = new $classname;
             //call the game installer
             $installgame->Install($this->game_id, $this->name,
@@ -329,10 +318,6 @@ class Game
             {
                 if ($config['bbguild_gameworld_version'] >= '2.0')
                 {
-                    if (!class_exists('\sajaki\bbguild\model\games\library\world_' . $this->game_id))
-                    {
-                        include($this->ext_path .'model/games/library/world_' . $this->game_id . '.' . $phpEx);
-                    }
                     $classname = '\sajaki\bbguild\model\games\library\world_' . $this->game_id;
                     $installworld = new $classname;
                     $installworld->Install($this->game_id);
@@ -360,7 +345,7 @@ class Game
                     {
                         include($this->ext_path .'model/games/library/world_custom.' . $phpEx);
                     }
-                    $installworld = new \sajaki\bbguild\model\games\library\world_custom;
+                    $installworld = new \sajaki\bbworld\model\games\library\world_custom;
                     $installworld->Install($this->game_id);
 
                 }
@@ -404,20 +389,12 @@ class Game
             {
                 if(array_key_exists($this->game_id, $this->preinstalled_games))
                 {
-                    if (!class_exists('\sajaki\bbguild\model\games\library\world_' . $this->game_id))
-                    {
-                        include($this->ext_path .'model/games/library/world_' . $this->game_id . '.' . $phpEx);
-                    }
-                    $gameworld_classname = '\sajaki\bbguild\model\games\library\world_' . $this->game_id;
+                    $gameworld_classname = '\sajaki\bbworld\model\games\library\world_' . $this->game_id;
                     $installworld = new $gameworld_classname;
                 }
                 else
                 {
-                    if (!class_exists('\sajaki\bbguild\model\games\library\world_custom'))
-                    {
-                        include($this->ext_path .'model/games/library/world_custom.' . $phpEx);
-                    }
-                    $installworld = new \sajaki\bbguild\model\games\library\world_custom;
+                    $installworld = new \sajaki\bbworld\model\games\library\world_custom;
                 }
                 $installworld->Uninstall($this->game_id, $this->getName());
             }

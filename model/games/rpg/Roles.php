@@ -7,12 +7,13 @@
  *
  */
 namespace sajaki\bbguild\model\games\rpg;
+use sajaki\bbguild\model\games\Game;
 
 /**
  * Roles
  * @package sajaki\bbguild\model\games\rpg
  */
-class Roles // extends \sajaki\bbguild\model\games\Game
+class Roles extends Game
 {
     /**
      * Primary key
