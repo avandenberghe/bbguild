@@ -5,15 +5,21 @@
  * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
  *
  */
+namespace sajaki\bbguild\ucp;
 
 /**
- * info class for ucp module dkp
- *   @package bbguild
+ * @ignore
  */
-class ucp_info
-{	/**
- * phpbb module function
+if (!defined('IN_PHPBB'))
+{
+    exit;
+}
+
+/**
+ * Class bbguild_info
  */
+class bbguild_info
+{
     function module()
     {
         return array(
