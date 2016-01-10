@@ -96,7 +96,7 @@ x
     public function add_page_header_link($event)
     {
         $this->template->assign_vars(array(
-            'U_DKP'	=> $this->helper->route('sajaki_bbguild_01a',
+            'U_DKP'	=> $this->helper->route('sajaki_bbguild_00',
                 array('guild_id' => 1)),
         ));
     }
