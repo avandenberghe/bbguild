@@ -23,7 +23,7 @@ class bbguild_info
     function module()
     {
         return array(
-            'filename'	=> '\sajaki\bbguild\acp\bbguild_module',
+            'filename'	=> '\sajaki\bbguild\ucp\bbguild_module',
             'title'		=> 'UCP_BBGUILD',
             'version'	=> '2.0.0',
             'modes'		=> array(
