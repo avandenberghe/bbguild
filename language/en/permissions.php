@@ -12,16 +12,16 @@
  */
 
 /**
-* DO NOT CHANGE
-*/
+ * DO NOT CHANGE
+ */
 if (!defined('IN_PHPBB'))
 {
-	exit;
+    exit;
 }
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+    $lang = array();
 }
 
 // Define categories
@@ -33,10 +33,10 @@ $lang['permission_type']['bbguild_'] = 'bbGuild Permissions';
 
 // bbDKP Permissions
 $lang = array_merge($lang, array(
-	'acl_a_bbguild'		=> array('lang' => 'Can access bbDKP ACP', 'cat' => 'bbguild'),
-	'acl_u_bbguild'		=> array('lang' => 'Can see DKP pages', 'cat' => 'bbguild'),
-	'acl_u_charclaim'	=> array('lang' => 'Can claim characters in UCP', 'cat' => 'bbguild'),
-	'acl_u_charadd'	=> array('lang' => 'Can add own characters in UCP', 'cat' => 'bbguild'),
-	'acl_u_charupdate'	=> array('lang' => 'Can update own characters in UCP', 'cat' => 'bbguild'),
-	'acl_u_chardelete'	=> array('lang' => 'Can delete own characters in UCP', 'cat' => 'bbguild'),
+    'ACL_A_BBGUILD'		=> array('lang' => 'Can access bbDKP ACP', 'cat' => 'bbguild'),
+    'ACL_U_BBGUILD'		=> array('lang' => 'Can see DKP pages', 'cat' => 'bbguild'),
+    'ACL_U_CHARCLAIM'	=> array('lang' => 'Can claim characters in UCP', 'cat' => 'bbguild'),
+    'ACL_U_CHARADD'	    => array('lang' => 'Can add own characters in UCP', 'cat' => 'bbguild'),
+    'ACL_U_CHARUPDATE'	=> array('lang' => 'Can update own characters in UCP', 'cat' => 'bbguild'),
+    'ACL_U_CHARDELETE'	=> array('lang' => 'Can delete own characters in UCP', 'cat' => 'bbguild'),
 ));

@@ -101,5 +101,20 @@ x
         ));
     }
 
+    /**
+     * Add administrative permissions to manage board rules
+     *
+     * @param object $event The event object
+     * @return null
+     * @access public
+     */
+    public function add_permission($event)
+    {
+        $permissions = $event['permissions'];
+        $permissions['a_boardrules'] = array('lang' => 'ACL_A_BOARDRULES', 'cat' => 'misc');
+        $event['permissions'] = $permissions;
+    }
+
+
 
 }
