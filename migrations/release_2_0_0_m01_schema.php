@@ -118,8 +118,6 @@ class release_2_0_0_m01_schema extends migration
                     'COLUMNS'	=> array(
                         'game_id' 			=> array('VCHAR:10', ''),
                         'f_index'    		=> array('USINT', NULL, 'auto_increment'),
-                        'game_id' 			=> array('VCHAR', ''),
-
                         'faction_id'   		=> array('USINT', 0),
                         'faction_name'     	=> array('VCHAR_UNI', ''),
                         'faction_hide'		=> array('BOOL', 0),

@@ -391,7 +391,6 @@ $lang = array_merge($lang, array(
 'CONFIRM_DELETE_ROLE' => 'Veuillez confirmer la suppression du rôle "%s".',
 
 // Log Actions
-'ACTION_DEFAULT_DKP_CHANGED' => 'le groupe DKP par défaut est changé',
 'ACTION_DKPSYS_ADDED' => 'le groupe DKP a été ajouté',
 'ACTION_DKPSYS_DELETED' => 'le groupe DKP a été supprimé',
 'ACTION_DKPSYS_UPDATED' => 'le groupe DKP a été mis à jour',
@@ -426,7 +425,7 @@ $lang = array_merge($lang, array(
 'ACTION_DECAYSYNC' => 'Amortissement recalculé',
 'ACTION_ZSYNC' => 'Sommezero recalculé',
 'ACTION_DKPSYNC' => 'DKP recalculé',
-'ACTION_DEFAULT_DKP_CHANGED' => 'DKP par defaut changé',
+'ACTION_DEFAULT_DKP_CHANGED' => 'groupe DKP par defaut est changé',
 'ACTION_GUILD_ADDED' => 'Une guilde a été ajoutée',
 'ACTION_GUILD_UPDATED' => 'une Guilde a été mise à jour',
 'ACTION_GUILD_DELETED' => 'une Guilde a été supprimée',
