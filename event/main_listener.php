@@ -15,24 +15,24 @@ use phpbb\user;
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
-* Event listener
-*/
+ * Event listener
+ */
 class main_listener implements EventSubscriberInterface
 {
-	/* @var helper */
-	protected $helper;
+    /* @var helper */
+    protected $helper;
 
-	/* @var template */
-	protected $template;
+    /* @var template */
+    protected $template;
 
-	/* @var user */
-	protected $user;
+    /* @var user */
+    protected $user;
 
-	/* @var config */
-	protected $config;
+    /* @var config */
+    protected $config;
 
     /**
-x
+    x
      *
      * @param helper $helper Controller helper object
      * @param \phpbb\template|template $template Template object
@@ -47,17 +47,17 @@ x
      * @param user $user
      * @param config $config
      */
-	public function __construct(helper $helper,
+    public function __construct(helper $helper,
                                 template $template,
                                 user $user,
                                 config $config
-                                )
-	{
-		$this->helper = $helper;
-		$this->template = $template;
-		$this->user = $user;
-		$this->config = $config;
-	}
+    )
+    {
+        $this->helper = $helper;
+        $this->template = $template;
+        $this->user = $user;
+        $this->config = $config;
+    }
 
 
     /**
@@ -69,6 +69,7 @@ x
     {
         return array(
             // for all defined events, write a function below
+            'core.permissions'						=> 'add_permission_cat',
             'core.user_setup'						=> 'load_language_on_setup',
             'core.page_header'						=> 'add_page_header_link',
         );
@@ -77,44 +78,49 @@ x
     /**
      * core.user_setup
      * @param $event
-    */
-	public function load_language_on_setup($event)
-	{
-		$lang_set_ext = $event['lang_set_ext'];
-		$lang_set_ext[] = array(
-			'ext_name' => 'sajaki/bbguild',
-			'lang_set' => array('common','admin') ,
-		);
-		$event['lang_set_ext'] = $lang_set_ext;
-	}
+     */
+    public function load_language_on_setup($event)
+    {
+        $lang_set_ext = $event['lang_set_ext'];
+        $lang_set_ext[] = array(
+            'ext_name' => 'sajaki/bbguild',
+            'lang_set' => array('common','admin') ,
+        );
+        $event['lang_set_ext'] = $lang_set_ext;
+    }
 
 
     /**
      * core.page_header
      * @param $event
-    */
+     */
     public function add_page_header_link($event)
     {
         $this->template->assign_vars(array(
-            'U_DKP'	=> $this->helper->route('sajaki_bbguild_00',
+            'U_BBGUILD'	=> $this->helper->route('sajaki_bbguild_00',
                 array('guild_id' => 1)),
         ));
     }
 
+
     /**
-     * Add administrative permissions to manage board rules
-     *
-     * @param object $event The event object
-     * @return null
-     * @access public
+     * bbGuild permission category
+     * @param $event
      */
-    public function add_permission($event)
+    public function add_permission_cat($event)
     {
-        $permissions = $event['permissions'];
-        $permissions['a_boardrules'] = array('lang' => 'ACL_A_BOARDRULES', 'cat' => 'misc');
-        $event['permissions'] = $permissions;
+        $perm_cat = $event['categories'];
+        $perm_cat['bbguild'] = 'ACP_BBGUILD';
+        $event['categories'] = $perm_cat;
+
+        $permission = $event['permissions'];
+        $permission['a_bbguild']	= array('lang' => 'ACL_A_BBGUILD',		'cat' => 'bbguild');
+        $permission['f_bbguild']	= array('lang' => 'ACL_U_BBGUILD',		'cat' => 'bbguild');
+        $permission['u_charclaim']	= array('lang' => 'ACL_U_CHARCLAIM',	'cat' => 'bbguild');
+        $permission['u_charadd']	= array('lang' => 'ACL_U_CHARADD',	    'cat' => 'bbguild');
+        $permission['u_chardelete']	= array('lang' => 'ACL_U_CHARUPDATE',	'cat' => 'bbguild');
+        $permission['u_charupdate']	= array('lang' => 'ACL_U_CHARDELETE',	'cat' => 'bbguild');
+        $event['permissions'] = $permission;
     }
-
-
 
 }

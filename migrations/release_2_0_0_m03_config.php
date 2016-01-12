@@ -81,6 +81,8 @@ class release_2_0_0_m03_config extends migration
             array('permission.add', array('f_bbguild', true)),
             array('permission.add', array('u_charclaim', true)),
             array('permission.add', array('u_charadd', true)),
+            array('permission.add', array('u_chardelete', true)),
+            array('permission.add', array('u_charupdate', true)),
         );
 
         //admin role can access bbguild acp
@@ -94,15 +96,16 @@ class release_2_0_0_m03_config extends migration
             $data_sets[] =  array('permission.permission_set', array('ROLE_ADMIN_STANDARD', 'a_bbguild'));
         }
 
-        //normal user can ccess pages
+        //user can access pages
         if($this->role_exists('ROLE_USER_STANDARD'))
         {
-            $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('f_bbguild', 'u_charclaim', 'u_charadd')));
+            $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('f_bbguild',)));
         }
 
+        //full user can access pages and ucp
         if($this->role_exists('ROLE_USER_FULL'))
         {
-            $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('f_bbguild', 'u_charclaim', 'u_charadd')));
+            $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('f_bbguild', 'u_charclaim', 'u_charadd', 'u_chardelete', 'u_charupdate')));
         }
 
         return $data_sets;
