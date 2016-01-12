@@ -76,55 +76,10 @@ class release_2_0_0_m03_config extends migration
             array('config.add', array('bbguild_portal_welcomemsg', 1)),
             array('config.add', array('bbguild_portal_whoisonline', 1)),
 
-            // Add permission
-            array('permission.add', array('a_bbguild', true)),
-            array('permission.add', array('f_bbguild', true)),
-            array('permission.add', array('u_charclaim', true)),
-            array('permission.add', array('u_charadd', true)),
-            array('permission.add', array('u_chardelete', true)),
-            array('permission.add', array('u_charupdate', true)),
         );
-
-        //admin role can access bbguild acp
-        if($this->role_exists('ROLE_ADMIN_FULL'))
-        {
-            $data_sets[] =  array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_bbguild'));
-        }
-
-        if($this->role_exists('ROLE_ADMIN_STANDARD'))
-        {
-            $data_sets[] =  array('permission.permission_set', array('ROLE_ADMIN_STANDARD', 'a_bbguild'));
-        }
-
-        //user can access pages
-        if($this->role_exists('ROLE_USER_STANDARD'))
-        {
-            $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('f_bbguild',)));
-        }
-
-        //full user can access pages and ucp
-        if($this->role_exists('ROLE_USER_FULL'))
-        {
-            $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('f_bbguild', 'u_charclaim', 'u_charadd', 'u_chardelete', 'u_charupdate')));
-        }
 
         return $data_sets;
     }
 
-    /**
-     * check if role exists
-     *
-     * @param $role
-     * @return bool
-     */
-    protected function role_exists($role)
-    {
-        $sql = 'SELECT COUNT(role_id) AS role_count
-	        FROM ' . ACL_ROLES_TABLE . "
-	        WHERE role_name = '" . $this->db->sql_escape($role) . "'";
-        $result = $this->db->sql_query_limit($sql, 1);
-        $role_count = $this->db->sql_fetchfield('role_count');
-        $this->db->sql_freeresult($result);
-        return $role_count > 0;
-    }
+
 }
