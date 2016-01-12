@@ -53,6 +53,7 @@ $lang = array_merge($lang, array(
 'RECENTLOOT' => 'Recent Loot',
 'REMEMBERME' => 'Remember me',
 'INFORUM' => 'Posted in',
+'BBGUILD' => 'Guild',
 'DKP' => 'DKP',
 'NEWS' => 'News',
 'COMMENT' => 'Comment',
