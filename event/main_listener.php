@@ -41,7 +41,6 @@ class main_listener implements EventSubscriberInterface
      */
 
     /**
-     * admin@gov.be
      * @param helper $helper
      * @param template $template
      * @param user $user
