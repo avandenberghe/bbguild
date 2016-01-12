@@ -66,7 +66,7 @@ class bbguild_module extends Admin
         $this->request   = $request;
         $this->symfony_request = $symfony_request;
         $this->template  = $template;
-        $this->auth  = $this->auth;
+        $this->auth  = $auth;
 
         $this->pagination = $phpbb_container->get('pagination');
 
@@ -191,7 +191,9 @@ class bbguild_module extends Admin
                     )
                 );
 
-                $this->tpl_name 	= 'dkp/ucp_dkp';
+
+                // Dear phpbb, please display the templates for us.
+                $this->tpl_name 	= 'ucp_bbguild';
                 $this->page_title 	= $this->user->lang['UCP_DKP_CHARACTERS'];
 
                 break;
@@ -337,7 +339,7 @@ class bbguild_module extends Admin
                     'UA_FINDGAMERANK'     => append_sid("{$phpbb_root_path}styles/" . rawurlencode($this->user->theme['template_path']) . '/template/dkp/findGameRank.'. $phpEx ),
                     'UA_FINDCLASSRACE'	  => append_sid("{$phpbb_root_path}styles/" . rawurlencode($this->user->theme['template_path']) . '/template/dkp/findclassrace.'. $phpEx ),
                 ));
-                $this->tpl_name 	= 'dkp/ucp_charadd';
+                $this->tpl_name 	= 'ucp_bbguild_charadd';
                 break;
         }
     }
