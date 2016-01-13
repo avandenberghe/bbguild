@@ -90,7 +90,10 @@ class release_2_0_0_m02_data extends \phpbb\db\migration\container_aware_migrati
             )
         );
 
-        $this->db->sql_multi_insert($this->guild_table, $guildless);
+        if ( $this->db_tools->sql_table_exists($this->guild_table))
+        {
+            $this->db->sql_multi_insert($this->guild_table, $guildless);
+        }
 
         $outrank = array(
             array(
@@ -102,7 +105,10 @@ class release_2_0_0_m02_data extends \phpbb\db\migration\container_aware_migrati
                 'rank_suffix'	=> '',
             ));
 
-        $this->db->sql_multi_insert($this->member_ranks_table, $outrank);
+        if ( $this->db_tools->sql_table_exists($this->member_ranks_table))
+        {
+            $this->db->sql_multi_insert($this->member_ranks_table, $outrank);
+        }
 
         $welcome = array(
             array(
@@ -115,7 +121,10 @@ class release_2_0_0_m02_data extends \phpbb\db\migration\container_aware_migrati
             )
         );
 
-        $this->db->sql_multi_insert($this->welcome_msg_table, $welcome);
+        if ( $this->db_tools->sql_table_exists($this->welcome_msg_table))
+        {
+            $this->db->sql_multi_insert($this->welcome_msg_table, $welcome);
+        }
 
         /*standard game roles */
         $game_id = 'wow';
@@ -144,7 +153,12 @@ class release_2_0_0_m02_data extends \phpbb\db\migration\container_aware_migrati
             ),
 
         );
-        $this->db->sql_multi_insert($this->bb_gamerole_table, $Standardoles);
+
+        if ( $this->db_tools->sql_table_exists($this->bb_gamerole_table))
+        {
+            $this->db->sql_multi_insert($this->bb_gamerole_table, $Standardoles);
+        }
+
 
         /* language strings for these roles */
 
@@ -259,8 +273,11 @@ class release_2_0_0_m02_data extends \phpbb\db\migration\container_aware_migrati
             ),
 
         );
-        $this->db->sql_multi_insert($this->bb_language, $rolelangs);
 
+        if ( $this->db_tools->sql_table_exists($this->bb_language))
+        {
+            $this->db->sql_multi_insert($this->bb_language, $rolelangs);
+        }
 
     }
 

@@ -28,7 +28,7 @@ class release_2_0_0_m5_permissions extends migration
      */
     static public function depends_on()
     {
-        return array('\sajaki\bbguild\migrations\release_2_0_0_m04_mod');
+        return array('\sajaki\bbguild\migrations\release_2_0_0_m03_config');
     }
 
     /**
@@ -43,7 +43,7 @@ class release_2_0_0_m5_permissions extends migration
         $data_sets = array(
             // Add permission
             array('permission.add', array('a_bbguild', true)),
-            array('permission.add', array('f_bbguild', true)),
+            array('permission.add', array('u_bbguild', true)),
             array('permission.add', array('u_charclaim', true)),
             array('permission.add', array('u_charadd', true)),
             array('permission.add', array('u_chardelete', true)),
@@ -64,13 +64,13 @@ class release_2_0_0_m5_permissions extends migration
         //user can access pages
         if($this->role_exists('ROLE_USER_STANDARD'))
         {
-            $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('f_bbguild',)));
+            $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('u_bbguild',)));
         }
 
         //full user can access pages and ucp
         if($this->role_exists('ROLE_USER_FULL'))
         {
-            $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('f_bbguild', 'u_charclaim', 'u_charadd', 'u_chardelete', 'u_charupdate')));
+            $data_sets[] = array('permission.permission_set', array('ROLE_USER_STANDARD', array('u_bbguild', 'u_charclaim', 'u_charadd', 'u_chardelete', 'u_charupdate')));
         }
         return $data_sets;
 
