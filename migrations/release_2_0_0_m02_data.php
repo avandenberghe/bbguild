@@ -9,18 +9,19 @@
  */
 
 namespace sajaki\bbguild\migrations;
+use phpbb\db\migration\container_aware_migration;
 
 /**
  * Migration stage 2: Initial data
  */
-class release_2_0_0_m02_data extends \phpbb\db\migration\container_aware_migration
+class release_2_0_0_m02_data extends container_aware_migration
 {
     protected $guild_table;
     protected $member_ranks_table;
     protected $bb_gamerole_table;
     protected $bb_language;
     protected $welcome_msg_table;
-    /*
+
     protected $bbgames_table;
     protected $news_table;
     protected $bblogs_table;
@@ -30,7 +31,7 @@ class release_2_0_0_m02_data extends \phpbb\db\migration\container_aware_migrati
     protected $faction_table;
     protected $bbrecruit_table;
     protected $bbdkpplugins_table;
-    */
+
 
     static public function depends_on()
     {
@@ -56,14 +57,14 @@ class release_2_0_0_m02_data extends \phpbb\db\migration\container_aware_migrati
         $user->add_lang_ext('sajaki/bbguild', 'admin');
         $welcome_message = $this->encode_message($user->lang['WELCOME_DEFAULT']);
 
-        $this->bbgames_table = $this->table_prefix  . 'bbguild_games';
-        $this->news_table = $this->table_prefix  . 'bbguild_news';
-        $this->bblogs_table = $this->table_prefix  . 'bbguild_logs';
-        $this->member_ranks_table = $this->table_prefix  . 'bbguild_ranks';
-        $this->guild_table = $this->table_prefix  . 'bbguild_guild';
-        $this->welcome_msg_table = $this->table_prefix  . 'bbguild_welcomemsg';
-        $this->bb_gamerole_table = $this->table_prefix  . 'bbguild_gameroles';
-        $this->bb_language = $this->table_prefix  . 'bbguild_language';
+        $this->bbgames_table = $this->table_prefix  . 'bb_games';
+        $this->news_table = $this->table_prefix  . 'bb_news';
+        $this->bblogs_table = $this->table_prefix  . 'bb_logs';
+        $this->member_ranks_table = $this->table_prefix  . 'bb_ranks';
+        $this->guild_table = $this->table_prefix  . 'bb_guild';
+        $this->welcome_msg_table = $this->table_prefix  . 'bb_welcomemsg';
+        $this->bb_gamerole_table = $this->table_prefix  . 'bb_gameroles';
+        $this->bb_language = $this->table_prefix  . 'bb_language';
 
         $guildless = array(
             array(

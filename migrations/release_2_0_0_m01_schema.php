@@ -9,13 +9,17 @@
  */
 
 namespace sajaki\bbguild\migrations;
+use phpbb\config\config;
+use phpbb\db\driver\driver_interface;
 use phpbb\db\migration\migration;
+use phpbb\db\tools\tools_interface;
 
 /**
  * Migration stage 1: Initial schema
  */
 class release_2_0_0_m01_schema extends migration
 {
+    protected $bbguild_version = '2.0.0-a1-dev';
 
     protected $table_prefix;
 
@@ -35,7 +39,6 @@ class release_2_0_0_m01_schema extends migration
     protected $bb_gamerole_table;
     protected $bbdkpplugins_table;
 
-
     static public function depends_on()
     {
         return array('\phpbb\db\migration\data\v310\gold');
@@ -44,36 +47,41 @@ class release_2_0_0_m01_schema extends migration
     /**
      * custom constructor
      *
-     * @param \phpbb\config\config $config
-     * @param \phpbb\db\driver\driver_interface $db
-     * @param \phpbb\db\tools\tools_interface $db_tools
+     * @param config $config
+     * @param driver_interface $db
+     * @param tools_interface $db_tools
      * @param string $phpbb_root_path
      * @param string $php_ext
      * @param string $table_prefix
      */
-    public function __construct(\phpbb\config\config $config, \phpbb\db\driver\driver_interface $db, \phpbb\db\tools\tools_interface $db_tools, $phpbb_root_path, $php_ext, $table_prefix)
+    public function __construct(config $config, driver_interface $db, tools_interface $db_tools, $phpbb_root_path, $php_ext, $table_prefix)
     {
         parent::__construct($config, $db, $db_tools,  $phpbb_root_path, $php_ext, $table_prefix);
 
-        $this->bbgames_table = $this->table_prefix  . 'bbguild_games';
-        $this->news_table = $this->table_prefix  . 'bbguild_news';
-        $this->bblogs_table = $this->table_prefix  . 'bbguild_logs';
-        $this->member_ranks_table = $this->table_prefix  . 'bbguild_ranks';
-        $this->member_list_table = $this->table_prefix  . 'bbguild_members';
-        $this->class_table = $this->table_prefix  . 'bbguild_classes';
-        $this->race_table = $this->table_prefix  . 'bbguild_races';
-        $this->faction_table = $this->table_prefix  . 'bbguild_factions';
-        $this->guild_table = $this->table_prefix  . 'bbguild_guild';
-        $this->bb_language = $this->table_prefix  . 'bbguild_language';
-        $this->welcome_msg_table = $this->table_prefix  . 'bbguild_welcomemsg';
-        $this->bbrecruit_table = $this->table_prefix  . 'bbguild_recruit';
-        $this->bb_gamerole_table = $this->table_prefix  . 'bbguild_gameroles';
-        $this->bbdkpplugins_table = $this->table_prefix  . 'bbdkp_plugins';
+        $this->bbgames_table = $this->table_prefix  . 'bb_games';
+        $this->news_table = $this->table_prefix  . 'bb_news';
+        $this->bblogs_table = $this->table_prefix  . 'bb_logs';
+        $this->member_ranks_table = $this->table_prefix  . 'bb_ranks';
+        $this->member_list_table = $this->table_prefix  . 'bb_members';
+        $this->class_table = $this->table_prefix  . 'bb_classes';
+        $this->race_table = $this->table_prefix  . 'bb_races';
+        $this->faction_table = $this->table_prefix  . 'bb_factions';
+        $this->guild_table = $this->table_prefix  . 'bb_guild';
+        $this->bb_language = $this->table_prefix  . 'bb_language';
+        $this->welcome_msg_table = $this->table_prefix  . 'bb_welcomemsg';
+        $this->bbrecruit_table = $this->table_prefix  . 'bb_recruit';
+        $this->bb_gamerole_table = $this->table_prefix  . 'bb_gameroles';
+        $this->bbguild_plugins_table = $this->table_prefix  . 'bb_plugins';
     }
 
     public function effectively_installed()
     {
-        return phpbb_version_compare($this->config['bbguild_version'], $this->bbguild_version, '>=');
+        $installed = false;
+        if ( $this->db_tools->sql_table_exists($this->guild_table))
+        {
+            $installed = phpbb_version_compare($this->config['bbguild_version'], $this->bbguild_version, '>=');
+        }
+        return $installed;
     }
 
     /**
@@ -311,7 +319,7 @@ class release_2_0_0_m01_schema extends migration
                         'I03'	=> array('INDEX', 'log_ipaddress')),
                 ),
 
-                $this->bbdkpplugins_table	=> array(
+                $this->bbguild_plugins_table	=> array(
                     'COLUMNS'	=> array(
                         'name'			=> array('VCHAR_UNI:255', ''),
                         'value'			=> array('BOOL', 0),
