@@ -12,7 +12,7 @@ namespace sajaki\bbguild\migrations;
 use phpbb\db\migration\migration;
 
 /**
- * Migration stage 2: config data
+ * Migration stage 3: config data
  */
 class release_2_0_0_m03_config extends migration
 {

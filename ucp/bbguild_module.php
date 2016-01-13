@@ -132,7 +132,7 @@ class bbguild_module extends Admin
                 $show_buttons = true;
                 $s_guildmembers = ' ';
                 //if user has no access to claiming chars, don't show the add button.
-                if(!$this->auth->acl_get('u_dkpucp'))
+                if(!$this->auth->acl_get('u_charclaim'))
                 {
                     $show_buttons = false;
                 }
@@ -412,7 +412,7 @@ class bbguild_module extends Admin
                 trigger_error($this->user->lang['NOUCPADDCHARS']);
             }
 
-            if(!$this->auth->acl_get('u_dkpucp'))
+            if(!$this->auth->acl_get('u_charclaim'))
             {
                 trigger_error($this->user->lang['NOUCPADDCHARS']);
             }
