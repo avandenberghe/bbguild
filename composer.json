@@ -20,7 +20,7 @@
     "phpbb/epv": "dev-master"
   },
   "extra": {
-    "display-name": "bbGuild Guild Manager",
+    "display-name": "bbGuild",
     "soft-require": {
       "phpbb/phpbb": ">=3.1.0"
     },
