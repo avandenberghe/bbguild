@@ -12,9 +12,9 @@
 use phpbb\db\migration\migration;
 
 /**
- * Migration stage 4: module setup
+ * Migration stage 5: module setup
  */
-class release_2_0_0_m04_mod //extends migration
+class release_2_0_0_m05_mod extends migration
 {
     /**
      * Assign migration file dependencies for this migration
@@ -25,7 +25,7 @@ class release_2_0_0_m04_mod //extends migration
      */
     static public function depends_on()
     {
-        return array('\sajaki\bbguild\migrations\release_2_0_0_m03_config');
+        return array('\sajaki\bbguild\migrations\release_2_0_0_m04_permissions');
     }
 
     /**
