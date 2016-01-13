@@ -8,13 +8,13 @@
  *
  */
 
-namespace sajaki\bbguild\migrations;
+//namespace sajaki\bbguild\migrations;
 use phpbb\db\migration\migration;
 
 /**
  * Migration stage 4: module setup
  */
-class release_2_0_0_m04_mod extends migration
+class release_2_0_0_m04_mod //extends migration
 {
     /**
      * Assign migration file dependencies for this migration
@@ -84,15 +84,7 @@ class release_2_0_0_m04_mod extends migration
                 )
             )),
 
-            array('module.add', array('ucp', '', 'UCP_BBGUILD')),
-            array('module.add', array(
-                'ucp',
-                'UCP_BBGUILD',
-                array(
-                    'module_basename' => '\sajaki\bbguild\ucp\bbguild_module',
-                    'modes'           => array('char', 'add') ,
-                )
-            )),
+
 
 
         );

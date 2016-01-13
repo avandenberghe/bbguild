@@ -12,12 +12,10 @@ namespace sajaki\bbguild\migrations;
 use phpbb\db\migration\migration;
 
 /**
- * Migration stage 2: config data
+ * Migration stage 4 permissions
  */
-class release_2_0_0_m5_permissions extends migration
+class release_2_0_0_m04_permissions extends migration
 {
-
-    protected $bbguild_version = '2.0.0-a1-dev';
 
     /**
      * Assign migration file dependencies for this migration
