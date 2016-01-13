@@ -28,11 +28,11 @@ class bbguild_info
             'version'	=> '2.0.0',
             'modes'		=> array(
                 'char'	=> array(
-                    'title' => 'CHARACTERS',
+                    'title' => 'UCP_CHARACTERS',
                     'auth' => 'ext_sajaki/bbguild && u_charclaim',
                     'cat' => array('UCP_BBGUILD')),
                 'add'	=> array(
-                    'title' => 'CHARACTER_ADD',
+                    'title' => 'UCP_CHARACTER_ADD',
                     'auth' => 'ext_sajaki/bbguild && u_charadd',
                     'cat' => array('UCP_BBGUILD')),
             ),

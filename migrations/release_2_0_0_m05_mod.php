@@ -8,11 +8,11 @@
  *
  */
 
-//namespace sajaki\bbguild\migrations;
+namespace sajaki\bbguild\migrations;
 use phpbb\db\migration\migration;
 
 /**
- * Migration stage 5: module setup
+ * Migration stage 5 module setup
  */
 class release_2_0_0_m05_mod extends migration
 {
@@ -36,16 +36,16 @@ class release_2_0_0_m05_mod extends migration
      */
     public function update_data()
     {
-        return array(
 
-            /**
-             * First, lets add bbguild category to the root.
-             */
+        $categories = array(
             //array('module.add', array('acp', 'ACP_CAT_DOT_MODS', 'ACP_CAT_BBGUILD')),
             array('module.add', array('acp', 0, 'ACP_CAT_BBGUILD')),
-
             array('module.add', array('acp', 'ACP_CAT_BBGUILD', 'ACP_BBGUILD_MAINPAGE')),
+            array('module.add', array('acp', 'ACP_CAT_BBGUILD', 'ACP_BBGUILD_MEMBER')),
+            array('module.add', array('ucp', '0', 'UCP_BBGUILD')),
+        );
 
+        $modules = array(
             array('module.add', array(
                 'acp',
                 'ACP_BBGUILD_MAINPAGE',
@@ -63,8 +63,6 @@ class release_2_0_0_m05_mod extends migration
                     'modes'           => array('listgames', 'editgames', 'addfaction', 'addrace', 'addclass', 'addrole'),
                 )
             )),
-
-            array('module.add', array('acp', 'ACP_CAT_BBGUILD', 'ACP_BBGUILD_MEMBER')),
 
             array('module.add', array(
                 'acp',
@@ -84,9 +82,15 @@ class release_2_0_0_m05_mod extends migration
                 )
             )),
 
-
-
-
+            array('module.add', array(
+                'ucp', 'UCP_BBGUILD', array(
+                    'module_basename' => '\sajaki\bbguild\ucp\bbguild_module',
+                    'modes'           => array('char', 'add') ,
+                )
+            )),
         );
+
+        return array_merge($categories, $modules);
+
     }
 }
