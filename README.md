@@ -6,7 +6,7 @@ bbGuild is a MMO Guild manager for your phpBB3 Bulletin board. It was originally
 
 The 2.0 version is rebuild on the Symfony 2 framework to be compatible with phpBB 3.1. The name is changed from bbDKP to reflect that dkp functions are now removed from the core and will return as an addon extension. 
 
-[![Build Status](https://travis-ci.org/bbDKP/bbDKP.svg?branch=develop-2.0)](https://travis-ci.org/bbDKP/bbDKP)
+[![Build Status](https://travis-ci.org/bbDKP/bbguild.svg?branch=develop-2.0)](https://travis-ci.org/bbDKP/bbguild)
 [![experimental](http://badges.github.io/stability-badges/dist/experimental.svg)](http://github.com/badges/stability-badges)
 
 Features : 
@@ -40,15 +40,15 @@ This code is not ready for testing yet...
 
 #### Install
 1. Download the latest release.
-2. In the `ext` directory of your phpBB board, create a new directory named `sajaki` (if it does not already exist).
-3. Copy the `bbguild` folder to `/ext/sajaki/` (if done correctly, you'll have the main extension class at (your forum root)/ext/sajaki/bbguild/composer.json).
+2. In the `ext` directory of your phpBB board, create a new directory named `bbdkp` (if it does not already exist).
+3. Copy the `bbguild` folder to `/ext/bbdkp/` (if done correctly, you'll have the main extension class at (your forum root)/ext/sajaki/bbguild/composer.json).
 4. Navigate in the ACP to `Customise -> Manage extensions`.
 5. Look for `bbGuild Extension` under the Disabled Extensions list, and click its `Enable` link.
 
 #### Uninstall
 1. Navigate in the ACP to `Customise -> Extension Management -> Extensions`.
 2. Look for `bbGuild Extension` under the Enabled Extensions list, and click its `Disable` link.
-3. To permanently uninstall, click `Delete Data` and then delete the `/ext/sajaki/bbguild` folder.
+3. To permanently uninstall, click `Delete Data` and then delete the `/ext/bbdkp/bbguild` folder.
 
    
 ## Community
