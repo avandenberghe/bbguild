@@ -26,17 +26,17 @@ class guild_info
             'modes'		=> array(
                 'addguild'	    => array(
                     'title' => 'ACP_BBGUILD_GUILD_ADD',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER'),
                     'display' => false),
                 'editguild'	    => array(
                     'title' => 'ACP_BBGUILD_GUILD_EDIT',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER'),
                     'display' => false),
                 'listguilds'	    => array(
                     'title' => 'ACP_BBGUILD_GUILD_LIST',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER')),
             ),
         );

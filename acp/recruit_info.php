@@ -26,17 +26,17 @@ class recruit_info
             'modes'		=> array(
                 'addrecruit'	    => array(
                     'title' => 'ACP_BBGUILD_RECRUIT_ADD',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER'),
                     'display' => false),
                 'editrecruit'	    => array(
                     'title' => 'ACP_BBGUILD_RECRUIT_EDIT',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER'),
                     'display' => false),
                 'listrecruit'	    => array(
                     'title' => 'ACP_BBGUILD_RECRUIT_LIST',
-                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && a_bbguild',
+                    'auth' => 'ext_bbdkp/bbguild && acl_a_board && acl_a_bbguild',
                     'cat' => array('ACP_BBGUILD_MEMBER'),
                     'display' => true),
             ));
